@@ -1,0 +1,18 @@
+{
+ "timeline": "tokyo-morph-demo.timeline.json",
+ "html_sha256": "7b7b63904754c40b17db4dacb0f063704d9e30223a9182fb1f81c353460cd5b3",
+ "scenes": {
+  "s02": {
+   "centroid_shift": 0.0009992653418475544,
+   "centroid_ok": true,
+   "axis_deg": 2.824332557139603e-12,
+   "axis_ok": true,
+   "area_ratio": 0.6886446239386899,
+   "area_ok": true,
+   "end_error": 0,
+   "min_det": 0.0561221648770832,
+   "n": 96,
+   "u": 0.5000000000000001
+  }
+ }
+}

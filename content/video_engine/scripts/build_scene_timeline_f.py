@@ -49,7 +49,7 @@ import ledger_page as LPG  # noqa: E402  (series.json -> ledger_page.v1 spec, do
 
 LEDGER_PREFIX = "ledger:"          # shot-table plate id prefix for a LEDGER PAGE world (s9.28 surface = page)
 LEDGER_ID_PARTS = (3, 7)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]  enter = spiral | mount=<seconds>; exit = cut
-LEDGER_ENTERS = ("spiral", "mount")   # enter=spiral: the page RETURNS - unwinds from its point, no roll/soak/ink/build (E25; 2026-09-05)
+LEDGER_ENTERS = ("spiral", "mount", "morph")   # enter=morph[=<s>]: the page's prop outline (world.morph) becomes the chart by ARAP (P47 T3); enter=spiral: the page RETURNS - unwinds from its point, no roll/soak/ink/build (E25; 2026-09-05)
                                       # enter=mount: no roll-out - the outgoing scene fades while the cream plate MOUNTS over it, then the page draws (operator, 2026-09-05)
 KINETICS: dict = {}                # timeline.kinetics - the template's capability flags a build turns on (P39 kill switch; default all off)
 CAPTION_STYLE: str | None = None   # timeline.caption_style - "phrase" on a short: the page lands as one readable phrase, only k-words punctuated (2026-09-05)
@@ -67,7 +67,8 @@ IDLE_KINDS = ("none", "breath", "drift", "pulse", "figure")   # E49 / P47 T5: th
 IDLE_OPT = ";idle="
 ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page's pills ARRIVE (spring = E45's pop, the default)
 MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets (stopaction.mjs MASS) a throw or a landing settles by
-PLATE_OPTS = ("idle", "arrive", "mass")           # the `;key=value` options a plate id may carry
+MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
+PLATE_OPTS = ("idle", "arrive", "mass", "morph")  # the `;key=value` options a plate id may carry
 DOCK_OPTS = ("arrive", "mass")                    # the optional 5th element of a shot row's dock tuple: a dict of these
 TIMED_EXITS = ("dip", "blurzoom")   # ... and only these two read the suffix as SECONDS (suck's is a point)
 DEFAULT_EXIT_DOCKS = "dip"          # E47 #3: was "wipe_right" until 2026-09-06
@@ -335,7 +336,8 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
     if enter:
         page["enter"] = enter.split("=")[0]   # the player: a returning page unwinds from its point (LP_RETRACT.IN); a mount builds its cream first
         if "=" in enter:
-            page["mount_s"] = float(enter.split("=", 1)[1])   # the mount phase (world fades, cream builds) before the page's own clock starts
+            key = "morph_s" if enter.startswith("morph") else "mount_s"   # the mount phase (world fades, cream builds) before the page's own clock starts; a morph's seconds
+            page[key] = float(enter.split("=", 1)[1])
     if exit_:
         page["exit"] = exit_    # the player: no retract, the page leaves on the cut
     # the evidence dock's authored badges for this asset land on the page too (the key for the
@@ -350,7 +352,7 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
 
 
 def _check_opt(key: str, value, where: str) -> None:
-    allowed = {"idle": IDLE_KINDS, "arrive": ARRIVALS, "mass": MASSES}[key]
+    allowed = {"idle": IDLE_KINDS, "arrive": ARRIVALS, "mass": MASSES, "morph": MORPH_SHAPES}[key]
     if value not in allowed:
         raise ValueError(f"{where}: {key} {value!r} is not one of {'|'.join(allowed)}")
 
@@ -656,7 +658,7 @@ def build_kinetics() -> dict:
     """The flags a compiled timeline carries. P39: every capability defaults OFF in the template. E49 (P47 T5): the
     IDLE is on for every timeline this compiler writes - a build that wants stillness says so (``KINETICS["idle"] =
     False``); the goldens' frozen sources carry no flag and stay byte-identical."""
-    return {"idle": True, "stop_action": True, **KINETICS}   # P47 T1: an authored `arrive` is the switch; the flag only guards the goldens
+    return {"idle": True, "stop_action": True, "arap_morph": True, **KINETICS}   # P47 T1: an authored `arrive` is the switch; the flag only guards the goldens
 
 
 def main() -> int:

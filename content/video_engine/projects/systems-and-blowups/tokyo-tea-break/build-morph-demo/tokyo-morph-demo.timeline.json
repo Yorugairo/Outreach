@@ -1,0 +1,6640 @@
+{
+ "schema_version": "scene_evidence_timeline.v1",
+ "runtime_s": 88.823,
+ "title": "Tokyo Tea Break",
+ "subtitle": "Money Physics \u00b7 short",
+ "episode_id": "tokyo-tea-break",
+ "project_id": "systems-and-blowups",
+ "aspect": "9:16",
+ "narration": {
+  "canonical_hash": "056552d3ba6726d5d42a6f320e53b0ebeebe26930e9634aeb49af07c643b331e",
+  "words_path": "build-short/timeline.json"
+ },
+ "captions": [
+  {
+   "at": 0.0,
+   "until": 1.93,
+   "text": "Tokyo took a tea break. And"
+  },
+  {
+   "at": 1.99,
+   "until": 3.22,
+   "text": "left America with an"
+  },
+  {
+   "at": 3.29,
+   "until": 5.54,
+   "text": "unfunded bar tab. The Fed"
+  },
+  {
+   "at": 5.6,
+   "until": 6.79,
+   "text": "hasn't moved, but your"
+  },
+  {
+   "at": 6.83,
+   "until": 7.95,
+   "text": "borrowing costs climbed"
+  },
+  {
+   "at": 7.99,
+   "until": 9.93,
+   "text": "anyway. Three men in blue"
+  },
+  {
+   "at": 9.96,
+   "until": 11.61,
+   "text": "ties blame the deficit, the"
+  },
+  {
+   "at": 11.68,
+   "until": 13.28,
+   "text": "Fed, or the vibes at Jackson"
+  },
+  {
+   "at": 13.33,
+   "until": 15.3,
+   "text": "Hole. On YouTube, it's"
+  },
+  {
+   "at": 15.34,
+   "until": 16.8,
+   "text": "sixty-three stick figures."
+  },
+  {
+   "at": 17.26,
+   "until": 18.42,
+   "text": "Here's what nobody on that"
+  },
+  {
+   "at": 18.49,
+   "until": 19.85,
+   "text": "panel is watching: our"
+  },
+  {
+   "at": 19.92,
+   "until": 21.21,
+   "text": "biggest lender. The"
+  },
+  {
+   "at": 21.25,
+   "until": 22.75,
+   "text": "Treasury's table shows Japan"
+  },
+  {
+   "at": 22.82,
+   "until": 23.92,
+   "text": "holds over a trillion"
+  },
+  {
+   "at": 23.98,
+   "until": 25.19,
+   "text": "dollars of our debt, and"
+  },
+  {
+   "at": 25.23,
+   "until": 26.15,
+   "text": "it's been selling since"
+  },
+  {
+   "at": 26.19,
+   "until": 28.36,
+   "text": "February. I ran risk at"
+  },
+  {
+   "at": 28.41,
+   "until": 30.12,
+   "text": "JPMorgan; when your biggest"
+  },
+  {
+   "at": 30.16,
+   "until": 31.69,
+   "text": "customer walks, the auction"
+  },
+  {
+   "at": 31.75,
+   "until": 33.26,
+   "text": "sets your price. The"
+  },
+  {
+   "at": 33.31,
+   "until": 34.98,
+   "text": "opponent isn't the Fed; it's"
+  },
+  {
+   "at": 35.02,
+   "until": 36.41,
+   "text": "a Japanese balance sheet."
+  },
+  {
+   "at": 36.58,
+   "until": 37.88,
+   "text": "Two numbers show where the"
+  },
+  {
+   "at": 37.93,
+   "until": 40.08,
+   "text": "money went: a Treasury page,"
+  },
+  {
+   "at": 40.14,
+   "until": 42.25,
+   "text": "and your phone. By the end"
+  },
+  {
+   "at": 42.63,
+   "until": 43.71,
+   "text": "you'll read both numbers"
+  },
+  {
+   "at": 43.75,
+   "until": 44.4,
+   "text": "yourself."
+  },
+  {
+   "at": 45.0,
+   "until": 46.38,
+   "text": "Since February, Japan has"
+  },
+  {
+   "at": 46.43,
+   "until": 47.16,
+   "text": "sold a hundred and"
+  },
+  {
+   "at": 47.18,
+   "until": 48.39,
+   "text": "twenty-two billion dollars"
+  },
+  {
+   "at": 48.44,
+   "until": 49.41,
+   "text": "of it, a tenth of the"
+  },
+  {
+   "at": 49.45,
+   "until": 51.17,
+   "text": "pile. The Treasury prints"
+  },
+  {
+   "at": 51.22,
+   "until": 52.55,
+   "text": "the new total monthly, and"
+  },
+  {
+   "at": 52.62,
+   "until": 53.59,
+   "text": "that print is your first"
+  },
+  {
+   "at": 53.65,
+   "until": 55.66,
+   "text": "number. Tokyo has pledged"
+  },
+  {
+   "at": 55.71,
+   "until": 57.27,
+   "text": "ten trillion yen to chips,"
+  },
+  {
+   "at": 57.29,
+   "until": 58.77,
+   "text": "and if that works, it beats"
+  },
+  {
+   "at": 58.81,
+   "until": 60.12,
+   "text": "our bonds. And here's what"
+  },
+  {
+   "at": 60.18,
+   "until": 61.94,
+   "text": "nobody says: the money went"
+  },
+  {
+   "at": 61.99,
+   "until": 63.29,
+   "text": "home, and the tab stayed"
+  },
+  {
+   "at": 63.35,
+   "until": 65.96,
+   "text": "here. So, the second number:"
+  },
+  {
+   "at": 66.41,
+   "until": 68.17,
+   "text": "it's on your phone. Pull up"
+  },
+  {
+   "at": 68.23,
+   "until": 69.31,
+   "text": "Meta and find its"
+  },
+  {
+   "at": 69.35,
+   "until": 70.78,
+   "text": "price-to-earnings multiple:"
+  },
+  {
+   "at": 71.22,
+   "until": 72.08,
+   "text": "that's the share of the"
+  },
+  {
+   "at": 72.14,
+   "until": 73.44,
+   "text": "price that's profit not yet"
+  },
+  {
+   "at": 73.5,
+   "until": 74.69,
+   "text": "earned, and a higher yield"
+  },
+  {
+   "at": 74.76,
+   "until": 76.47,
+   "text": "discounts it. The Fed still"
+  },
+  {
+   "at": 76.51,
+   "until": 78.59,
+   "text": "hasn't moved. Tokyo is still"
+  },
+  {
+   "at": 78.68,
+   "until": 80.12,
+   "text": "on its tea break. And that"
+  },
+  {
+   "at": 80.2,
+   "until": 81.81,
+   "text": "unfunded bar tab is still"
+  },
+  {
+   "at": 81.89,
+   "until": 82.72,
+   "text": "ours."
+  }
+ ],
+ "caption_pages": [
+  {
+   "s": 0.0,
+   "e": 1.93,
+   "t": [
+    {
+     "w": "Tokyo",
+     "s": 0.0,
+     "e": 0.45,
+     "k": false
+    },
+    {
+     "w": "took",
+     "s": 0.51,
+     "e": 0.66,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 0.71,
+     "e": 0.73,
+     "k": false
+    },
+    {
+     "w": "tea",
+     "s": 0.78,
+     "e": 0.93,
+     "k": false
+    },
+    {
+     "w": "break.",
+     "s": 0.97,
+     "e": 1.45,
+     "k": false
+    },
+    {
+     "w": "And",
+     "s": 1.78,
+     "e": 1.93,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 1.99,
+   "e": 3.22,
+   "t": [
+    {
+     "w": "left",
+     "s": 1.99,
+     "e": 2.18,
+     "k": false
+    },
+    {
+     "w": "America",
+     "s": 2.23,
+     "e": 2.76,
+     "k": true
+    },
+    {
+     "w": "with",
+     "s": 2.91,
+     "e": 3.11,
+     "k": false
+    },
+    {
+     "w": "an",
+     "s": 3.16,
+     "e": 3.22,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 3.29,
+   "e": 5.54,
+   "t": [
+    {
+     "w": "unfunded",
+     "s": 3.29,
+     "e": 3.83,
+     "k": false
+    },
+    {
+     "w": "bar",
+     "s": 3.88,
+     "e": 4.06,
+     "k": false
+    },
+    {
+     "w": "tab.",
+     "s": 4.13,
+     "e": 4.74,
+     "k": false
+    },
+    {
+     "w": "The",
+     "s": 5.18,
+     "e": 5.28,
+     "k": false
+    },
+    {
+     "w": "Fed",
+     "s": 5.34,
+     "e": 5.54,
+     "k": true
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 5.6,
+   "e": 6.79,
+   "t": [
+    {
+     "w": "hasn't",
+     "s": 5.6,
+     "e": 5.85,
+     "k": false
+    },
+    {
+     "w": "moved,",
+     "s": 5.9,
+     "e": 6.37,
+     "k": false
+    },
+    {
+     "w": "but",
+     "s": 6.49,
+     "e": 6.64,
+     "k": false
+    },
+    {
+     "w": "your",
+     "s": 6.68,
+     "e": 6.79,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 6.83,
+   "e": 7.95,
+   "t": [
+    {
+     "w": "borrowing",
+     "s": 6.83,
+     "e": 7.26,
+     "k": false
+    },
+    {
+     "w": "costs",
+     "s": 7.33,
+     "e": 7.59,
+     "k": false
+    },
+    {
+     "w": "climbed",
+     "s": 7.64,
+     "e": 7.95,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 7.99,
+   "e": 9.93,
+   "t": [
+    {
+     "w": "anyway.",
+     "s": 7.99,
+     "e": 8.58,
+     "k": false
+    },
+    {
+     "w": "Three",
+     "s": 9.09,
+     "e": 9.33,
+     "k": true
+    },
+    {
+     "w": "men",
+     "s": 9.38,
+     "e": 9.53,
+     "k": false
+    },
+    {
+     "w": "in",
+     "s": 9.59,
+     "e": 9.66,
+     "k": false
+    },
+    {
+     "w": "blue",
+     "s": 9.72,
+     "e": 9.93,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 9.96,
+   "e": 11.61,
+   "t": [
+    {
+     "w": "ties",
+     "s": 9.96,
+     "e": 10.3,
+     "k": false
+    },
+    {
+     "w": "blame",
+     "s": 10.36,
+     "e": 10.63,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 10.67,
+     "e": 10.74,
+     "k": false
+    },
+    {
+     "w": "deficit,",
+     "s": 10.79,
+     "e": 11.39,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 11.51,
+     "e": 11.61,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 11.68,
+   "e": 13.28,
+   "t": [
+    {
+     "w": "Fed,",
+     "s": 11.68,
+     "e": 12.01,
+     "k": true
+    },
+    {
+     "w": "or",
+     "s": 12.04,
+     "e": 12.14,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 12.19,
+     "e": 12.26,
+     "k": false
+    },
+    {
+     "w": "vibes",
+     "s": 12.31,
+     "e": 12.74,
+     "k": false
+    },
+    {
+     "w": "at",
+     "s": 12.77,
+     "e": 12.85,
+     "k": false
+    },
+    {
+     "w": "Jackson",
+     "s": 12.91,
+     "e": 13.28,
+     "k": true
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 13.33,
+   "e": 15.3,
+   "t": [
+    {
+     "w": "Hole.",
+     "s": 13.33,
+     "e": 13.8,
+     "k": true
+    },
+    {
+     "w": "On",
+     "s": 14.24,
+     "e": 14.42,
+     "k": false
+    },
+    {
+     "w": "YouTube,",
+     "s": 14.49,
+     "e": 15.05,
+     "k": true
+    },
+    {
+     "w": "it's",
+     "s": 15.09,
+     "e": 15.3,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 15.34,
+   "e": 16.8,
+   "t": [
+    {
+     "w": "sixty-three",
+     "s": 15.34,
+     "e": 15.92,
+     "k": false
+    },
+    {
+     "w": "stick",
+     "s": 15.94,
+     "e": 16.16,
+     "k": false
+    },
+    {
+     "w": "figures.",
+     "s": 16.22,
+     "e": 16.8,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 17.26,
+   "e": 18.42,
+   "t": [
+    {
+     "w": "Here's",
+     "s": 17.26,
+     "e": 17.49,
+     "k": false
+    },
+    {
+     "w": "what",
+     "s": 17.53,
+     "e": 17.65,
+     "k": false
+    },
+    {
+     "w": "nobody",
+     "s": 17.72,
+     "e": 18.09,
+     "k": false
+    },
+    {
+     "w": "on",
+     "s": 18.16,
+     "e": 18.25,
+     "k": false
+    },
+    {
+     "w": "that",
+     "s": 18.29,
+     "e": 18.42,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 18.49,
+   "e": 19.85,
+   "t": [
+    {
+     "w": "panel",
+     "s": 18.49,
+     "e": 18.76,
+     "k": false
+    },
+    {
+     "w": "is",
+     "s": 18.81,
+     "e": 18.88,
+     "k": false
+    },
+    {
+     "w": "watching:",
+     "s": 18.95,
+     "e": 19.46,
+     "k": false
+    },
+    {
+     "w": "our",
+     "s": 19.71,
+     "e": 19.85,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 19.92,
+   "e": 21.21,
+   "t": [
+    {
+     "w": "biggest",
+     "s": 19.92,
+     "e": 20.21,
+     "k": false
+    },
+    {
+     "w": "lender.",
+     "s": 20.27,
+     "e": 20.77,
+     "k": false
+    },
+    {
+     "w": "The",
+     "s": 21.09,
+     "e": 21.21,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 21.25,
+   "e": 22.75,
+   "t": [
+    {
+     "w": "Treasury's",
+     "s": 21.25,
+     "e": 21.68,
+     "k": true
+    },
+    {
+     "w": "table",
+     "s": 21.73,
+     "e": 22.03,
+     "k": false
+    },
+    {
+     "w": "shows",
+     "s": 22.07,
+     "e": 22.31,
+     "k": false
+    },
+    {
+     "w": "Japan",
+     "s": 22.37,
+     "e": 22.75,
+     "k": true
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 22.82,
+   "e": 23.92,
+   "t": [
+    {
+     "w": "holds",
+     "s": 22.82,
+     "e": 23.05,
+     "k": false
+    },
+    {
+     "w": "over",
+     "s": 23.1,
+     "e": 23.3,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 23.36,
+     "e": 23.4,
+     "k": false
+    },
+    {
+     "w": "trillion",
+     "s": 23.47,
+     "e": 23.92,
+     "k": true
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 23.98,
+   "e": 25.19,
+   "t": [
+    {
+     "w": "dollars",
+     "s": 23.98,
+     "e": 24.32,
+     "k": false
+    },
+    {
+     "w": "of",
+     "s": 24.35,
+     "e": 24.41,
+     "k": false
+    },
+    {
+     "w": "our",
+     "s": 24.47,
+     "e": 24.58,
+     "k": false
+    },
+    {
+     "w": "debt,",
+     "s": 24.64,
+     "e": 24.99,
+     "k": false
+    },
+    {
+     "w": "and",
+     "s": 25.04,
+     "e": 25.19,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 25.23,
+   "e": 26.15,
+   "t": [
+    {
+     "w": "it's",
+     "s": 25.23,
+     "e": 25.35,
+     "k": false
+    },
+    {
+     "w": "been",
+     "s": 25.39,
+     "e": 25.51,
+     "k": false
+    },
+    {
+     "w": "selling",
+     "s": 25.56,
+     "e": 25.87,
+     "k": false
+    },
+    {
+     "w": "since",
+     "s": 25.93,
+     "e": 26.15,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 26.19,
+   "e": 28.36,
+   "t": [
+    {
+     "w": "February.",
+     "s": 26.19,
+     "e": 26.99,
+     "k": true
+    },
+    {
+     "w": "I",
+     "s": 27.5,
+     "e": 27.57,
+     "k": false
+    },
+    {
+     "w": "ran",
+     "s": 27.68,
+     "e": 27.87,
+     "k": false
+    },
+    {
+     "w": "risk",
+     "s": 27.96,
+     "e": 28.23,
+     "k": false
+    },
+    {
+     "w": "at",
+     "s": 28.29,
+     "e": 28.36,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 28.41,
+   "e": 30.12,
+   "t": [
+    {
+     "w": "JPMorgan;",
+     "s": 28.41,
+     "e": 29.33,
+     "k": true
+    },
+    {
+     "w": "when",
+     "s": 29.51,
+     "e": 29.66,
+     "k": false
+    },
+    {
+     "w": "your",
+     "s": 29.7,
+     "e": 29.81,
+     "k": false
+    },
+    {
+     "w": "biggest",
+     "s": 29.86,
+     "e": 30.12,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 30.16,
+   "e": 31.69,
+   "t": [
+    {
+     "w": "customer",
+     "s": 30.16,
+     "e": 30.54,
+     "k": false
+    },
+    {
+     "w": "walks,",
+     "s": 30.6,
+     "e": 31.11,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 31.19,
+     "e": 31.31,
+     "k": false
+    },
+    {
+     "w": "auction",
+     "s": 31.36,
+     "e": 31.69,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 31.75,
+   "e": 33.26,
+   "t": [
+    {
+     "w": "sets",
+     "s": 31.75,
+     "e": 31.97,
+     "k": false
+    },
+    {
+     "w": "your",
+     "s": 31.99,
+     "e": 32.1,
+     "k": false
+    },
+    {
+     "w": "price.",
+     "s": 32.14,
+     "e": 32.65,
+     "k": false
+    },
+    {
+     "w": "The",
+     "s": 33.15,
+     "e": 33.26,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 33.31,
+   "e": 34.98,
+   "t": [
+    {
+     "w": "opponent",
+     "s": 33.31,
+     "e": 33.68,
+     "k": false
+    },
+    {
+     "w": "isn't",
+     "s": 33.73,
+     "e": 33.95,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 33.98,
+     "e": 34.05,
+     "k": false
+    },
+    {
+     "w": "Fed;",
+     "s": 34.11,
+     "e": 34.55,
+     "k": true
+    },
+    {
+     "w": "it's",
+     "s": 34.8,
+     "e": 34.98,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 35.02,
+   "e": 36.41,
+   "t": [
+    {
+     "w": "a",
+     "s": 35.02,
+     "e": 35.05,
+     "k": false
+    },
+    {
+     "w": "Japanese",
+     "s": 35.13,
+     "e": 35.61,
+     "k": true
+    },
+    {
+     "w": "balance",
+     "s": 35.65,
+     "e": 36.03,
+     "k": false
+    },
+    {
+     "w": "sheet.",
+     "s": 36.05,
+     "e": 36.41,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 36.58,
+   "e": 37.88,
+   "t": [
+    {
+     "w": "Two",
+     "s": 36.58,
+     "e": 36.77,
+     "k": true
+    },
+    {
+     "w": "numbers",
+     "s": 36.84,
+     "e": 37.22,
+     "k": false
+    },
+    {
+     "w": "show",
+     "s": 37.35,
+     "e": 37.58,
+     "k": false
+    },
+    {
+     "w": "where",
+     "s": 37.62,
+     "e": 37.78,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 37.81,
+     "e": 37.88,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 37.93,
+   "e": 40.08,
+   "t": [
+    {
+     "w": "money",
+     "s": 37.93,
+     "e": 38.13,
+     "k": false
+    },
+    {
+     "w": "went:",
+     "s": 38.17,
+     "e": 38.59,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 39.05,
+     "e": 39.13,
+     "k": false
+    },
+    {
+     "w": "Treasury",
+     "s": 39.19,
+     "e": 39.56,
+     "k": true
+    },
+    {
+     "w": "page,",
+     "s": 39.62,
+     "e": 40.08,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 40.14,
+   "e": 42.25,
+   "t": [
+    {
+     "w": "and",
+     "s": 40.14,
+     "e": 40.32,
+     "k": false
+    },
+    {
+     "w": "your",
+     "s": 40.39,
+     "e": 40.51,
+     "k": false
+    },
+    {
+     "w": "phone.",
+     "s": 40.56,
+     "e": 41.08,
+     "k": false
+    },
+    {
+     "w": "By",
+     "s": 41.58,
+     "e": 41.73,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 41.78,
+     "e": 41.87,
+     "k": false
+    },
+    {
+     "w": "end",
+     "s": 41.95,
+     "e": 42.25,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 42.63,
+   "e": 43.71,
+   "t": [
+    {
+     "w": "you'll",
+     "s": 42.63,
+     "e": 42.84,
+     "k": false
+    },
+    {
+     "w": "read",
+     "s": 42.89,
+     "e": 43.06,
+     "k": false
+    },
+    {
+     "w": "both",
+     "s": 43.13,
+     "e": 43.34,
+     "k": false
+    },
+    {
+     "w": "numbers",
+     "s": 43.4,
+     "e": 43.71,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 43.75,
+   "e": 44.4,
+   "t": [
+    {
+     "w": "yourself.",
+     "s": 43.75,
+     "e": 44.4,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 45.0,
+   "e": 46.38,
+   "t": [
+    {
+     "w": "Since",
+     "s": 45.0,
+     "e": 45.24,
+     "k": false
+    },
+    {
+     "w": "February,",
+     "s": 45.29,
+     "e": 45.77,
+     "k": true
+    },
+    {
+     "w": "Japan",
+     "s": 45.8,
+     "e": 46.2,
+     "k": true
+    },
+    {
+     "w": "has",
+     "s": 46.27,
+     "e": 46.38,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 46.43,
+   "e": 47.16,
+   "t": [
+    {
+     "w": "sold",
+     "s": 46.43,
+     "e": 46.67,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 46.72,
+     "e": 46.74,
+     "k": false
+    },
+    {
+     "w": "hundred",
+     "s": 46.8,
+     "e": 47.07,
+     "k": true
+    },
+    {
+     "w": "and",
+     "s": 47.09,
+     "e": 47.16,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 47.18,
+   "e": 48.39,
+   "t": [
+    {
+     "w": "twenty-two",
+     "s": 47.18,
+     "e": 47.61,
+     "k": false
+    },
+    {
+     "w": "billion",
+     "s": 47.68,
+     "e": 47.98,
+     "k": true
+    },
+    {
+     "w": "dollars",
+     "s": 48.04,
+     "e": 48.39,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 48.44,
+   "e": 49.41,
+   "t": [
+    {
+     "w": "of",
+     "s": 48.44,
+     "e": 48.51,
+     "k": false
+    },
+    {
+     "w": "it,",
+     "s": 48.55,
+     "e": 48.72,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 48.76,
+     "e": 48.83,
+     "k": false
+    },
+    {
+     "w": "tenth",
+     "s": 48.92,
+     "e": 49.2,
+     "k": false
+    },
+    {
+     "w": "of",
+     "s": 49.24,
+     "e": 49.3,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 49.34,
+     "e": 49.41,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 49.45,
+   "e": 51.17,
+   "t": [
+    {
+     "w": "pile.",
+     "s": 49.45,
+     "e": 49.91,
+     "k": false
+    },
+    {
+     "w": "The",
+     "s": 50.3,
+     "e": 50.41,
+     "k": false
+    },
+    {
+     "w": "Treasury",
+     "s": 50.46,
+     "e": 50.83,
+     "k": true
+    },
+    {
+     "w": "prints",
+     "s": 50.9,
+     "e": 51.17,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 51.22,
+   "e": 52.55,
+   "t": [
+    {
+     "w": "the",
+     "s": 51.22,
+     "e": 51.29,
+     "k": false
+    },
+    {
+     "w": "new",
+     "s": 51.35,
+     "e": 51.47,
+     "k": false
+    },
+    {
+     "w": "total",
+     "s": 51.53,
+     "e": 51.82,
+     "k": false
+    },
+    {
+     "w": "monthly,",
+     "s": 51.87,
+     "e": 52.35,
+     "k": false
+    },
+    {
+     "w": "and",
+     "s": 52.4,
+     "e": 52.55,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 52.62,
+   "e": 53.59,
+   "t": [
+    {
+     "w": "that",
+     "s": 52.62,
+     "e": 52.78,
+     "k": false
+    },
+    {
+     "w": "print",
+     "s": 52.85,
+     "e": 53.03,
+     "k": false
+    },
+    {
+     "w": "is",
+     "s": 53.07,
+     "e": 53.14,
+     "k": false
+    },
+    {
+     "w": "your",
+     "s": 53.19,
+     "e": 53.29,
+     "k": false
+    },
+    {
+     "w": "first",
+     "s": 53.35,
+     "e": 53.59,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 53.65,
+   "e": 55.66,
+   "t": [
+    {
+     "w": "number.",
+     "s": 53.65,
+     "e": 54.09,
+     "k": false
+    },
+    {
+     "w": "Tokyo",
+     "s": 54.62,
+     "e": 55.05,
+     "k": false
+    },
+    {
+     "w": "has",
+     "s": 55.12,
+     "e": 55.24,
+     "k": false
+    },
+    {
+     "w": "pledged",
+     "s": 55.31,
+     "e": 55.66,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 55.71,
+   "e": 57.27,
+   "t": [
+    {
+     "w": "ten",
+     "s": 55.71,
+     "e": 55.94,
+     "k": true
+    },
+    {
+     "w": "trillion",
+     "s": 56.0,
+     "e": 56.38,
+     "k": true
+    },
+    {
+     "w": "yen",
+     "s": 56.45,
+     "e": 56.65,
+     "k": false
+    },
+    {
+     "w": "to",
+     "s": 56.72,
+     "e": 56.79,
+     "k": false
+    },
+    {
+     "w": "chips,",
+     "s": 56.85,
+     "e": 57.27,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 57.29,
+   "e": 58.77,
+   "t": [
+    {
+     "w": "and",
+     "s": 57.29,
+     "e": 57.43,
+     "k": false
+    },
+    {
+     "w": "if",
+     "s": 57.49,
+     "e": 57.57,
+     "k": false
+    },
+    {
+     "w": "that",
+     "s": 57.62,
+     "e": 57.78,
+     "k": false
+    },
+    {
+     "w": "works,",
+     "s": 57.84,
+     "e": 58.32,
+     "k": false
+    },
+    {
+     "w": "it",
+     "s": 58.36,
+     "e": 58.5,
+     "k": false
+    },
+    {
+     "w": "beats",
+     "s": 58.56,
+     "e": 58.77,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 58.81,
+   "e": 60.12,
+   "t": [
+    {
+     "w": "our",
+     "s": 58.81,
+     "e": 58.93,
+     "k": false
+    },
+    {
+     "w": "bonds.",
+     "s": 58.97,
+     "e": 59.5,
+     "k": false
+    },
+    {
+     "w": "And",
+     "s": 59.57,
+     "e": 59.72,
+     "k": false
+    },
+    {
+     "w": "here's",
+     "s": 59.79,
+     "e": 59.96,
+     "k": false
+    },
+    {
+     "w": "what",
+     "s": 60.0,
+     "e": 60.12,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 60.18,
+   "e": 61.94,
+   "t": [
+    {
+     "w": "nobody",
+     "s": 60.18,
+     "e": 60.47,
+     "k": false
+    },
+    {
+     "w": "says:",
+     "s": 60.53,
+     "e": 61.11,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 61.35,
+     "e": 61.45,
+     "k": false
+    },
+    {
+     "w": "money",
+     "s": 61.51,
+     "e": 61.7,
+     "k": false
+    },
+    {
+     "w": "went",
+     "s": 61.76,
+     "e": 61.94,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 61.99,
+   "e": 63.29,
+   "t": [
+    {
+     "w": "home,",
+     "s": 61.99,
+     "e": 62.38,
+     "k": false
+    },
+    {
+     "w": "and",
+     "s": 62.4,
+     "e": 62.54,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 62.59,
+     "e": 62.66,
+     "k": false
+    },
+    {
+     "w": "tab",
+     "s": 62.7,
+     "e": 62.95,
+     "k": false
+    },
+    {
+     "w": "stayed",
+     "s": 63.0,
+     "e": 63.29,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 63.35,
+   "e": 65.96,
+   "t": [
+    {
+     "w": "here.",
+     "s": 63.35,
+     "e": 63.78,
+     "k": false
+    },
+    {
+     "w": "So,",
+     "s": 64.29,
+     "e": 64.79,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 64.97,
+     "e": 65.08,
+     "k": false
+    },
+    {
+     "w": "second",
+     "s": 65.15,
+     "e": 65.43,
+     "k": false
+    },
+    {
+     "w": "number:",
+     "s": 65.49,
+     "e": 65.96,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 66.41,
+   "e": 68.17,
+   "t": [
+    {
+     "w": "it's",
+     "s": 66.41,
+     "e": 66.59,
+     "k": false
+    },
+    {
+     "w": "on",
+     "s": 66.64,
+     "e": 66.74,
+     "k": false
+    },
+    {
+     "w": "your",
+     "s": 66.8,
+     "e": 66.94,
+     "k": false
+    },
+    {
+     "w": "phone.",
+     "s": 66.98,
+     "e": 67.44,
+     "k": false
+    },
+    {
+     "w": "Pull",
+     "s": 67.82,
+     "e": 68.03,
+     "k": false
+    },
+    {
+     "w": "up",
+     "s": 68.09,
+     "e": 68.17,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 68.23,
+   "e": 69.31,
+   "t": [
+    {
+     "w": "Meta",
+     "s": 68.23,
+     "e": 68.54,
+     "k": true
+    },
+    {
+     "w": "and",
+     "s": 68.62,
+     "e": 68.8,
+     "k": false
+    },
+    {
+     "w": "find",
+     "s": 68.88,
+     "e": 69.13,
+     "k": false
+    },
+    {
+     "w": "its",
+     "s": 69.19,
+     "e": 69.31,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 69.35,
+   "e": 70.78,
+   "t": [
+    {
+     "w": "price-to-earnings",
+     "s": 69.35,
+     "e": 70.14,
+     "k": false
+    },
+    {
+     "w": "multiple:",
+     "s": 70.21,
+     "e": 70.78,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 71.22,
+   "e": 72.08,
+   "t": [
+    {
+     "w": "that's",
+     "s": 71.22,
+     "e": 71.48,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 71.53,
+     "e": 71.61,
+     "k": false
+    },
+    {
+     "w": "share",
+     "s": 71.65,
+     "e": 71.89,
+     "k": false
+    },
+    {
+     "w": "of",
+     "s": 71.91,
+     "e": 71.97,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 72.01,
+     "e": 72.08,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 72.14,
+   "e": 73.44,
+   "t": [
+    {
+     "w": "price",
+     "s": 72.14,
+     "e": 72.42,
+     "k": false
+    },
+    {
+     "w": "that's",
+     "s": 72.45,
+     "e": 72.64,
+     "k": false
+    },
+    {
+     "w": "profit",
+     "s": 72.69,
+     "e": 73.03,
+     "k": false
+    },
+    {
+     "w": "not",
+     "s": 73.1,
+     "e": 73.24,
+     "k": false
+    },
+    {
+     "w": "yet",
+     "s": 73.29,
+     "e": 73.44,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 73.5,
+   "e": 74.69,
+   "t": [
+    {
+     "w": "earned,",
+     "s": 73.5,
+     "e": 73.85,
+     "k": false
+    },
+    {
+     "w": "and",
+     "s": 73.87,
+     "e": 73.97,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 74.02,
+     "e": 74.06,
+     "k": false
+    },
+    {
+     "w": "higher",
+     "s": 74.13,
+     "e": 74.38,
+     "k": false
+    },
+    {
+     "w": "yield",
+     "s": 74.45,
+     "e": 74.69,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 74.76,
+   "e": 76.47,
+   "t": [
+    {
+     "w": "discounts",
+     "s": 74.76,
+     "e": 75.24,
+     "k": false
+    },
+    {
+     "w": "it.",
+     "s": 75.29,
+     "e": 75.46,
+     "k": false
+    },
+    {
+     "w": "The",
+     "s": 75.79,
+     "e": 75.92,
+     "k": false
+    },
+    {
+     "w": "Fed",
+     "s": 75.99,
+     "e": 76.2,
+     "k": true
+    },
+    {
+     "w": "still",
+     "s": 76.26,
+     "e": 76.47,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 76.51,
+   "e": 78.59,
+   "t": [
+    {
+     "w": "hasn't",
+     "s": 76.51,
+     "e": 76.78,
+     "k": false
+    },
+    {
+     "w": "moved.",
+     "s": 76.83,
+     "e": 77.33,
+     "k": false
+    },
+    {
+     "w": "Tokyo",
+     "s": 77.6,
+     "e": 78.07,
+     "k": false
+    },
+    {
+     "w": "is",
+     "s": 78.16,
+     "e": 78.25,
+     "k": false
+    },
+    {
+     "w": "still",
+     "s": 78.3,
+     "e": 78.59,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 78.68,
+   "e": 80.12,
+   "t": [
+    {
+     "w": "on",
+     "s": 78.68,
+     "e": 78.81,
+     "k": false
+    },
+    {
+     "w": "its",
+     "s": 78.86,
+     "e": 78.98,
+     "k": false
+    },
+    {
+     "w": "tea",
+     "s": 79.03,
+     "e": 79.19,
+     "k": false
+    },
+    {
+     "w": "break.",
+     "s": 79.23,
+     "e": 79.61,
+     "k": false
+    },
+    {
+     "w": "And",
+     "s": 79.7,
+     "e": 79.86,
+     "k": false
+    },
+    {
+     "w": "that",
+     "s": 79.92,
+     "e": 80.12,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 80.2,
+   "e": 81.81,
+   "t": [
+    {
+     "w": "unfunded",
+     "s": 80.2,
+     "e": 80.69,
+     "k": false
+    },
+    {
+     "w": "bar",
+     "s": 80.74,
+     "e": 80.91,
+     "k": false
+    },
+    {
+     "w": "tab",
+     "s": 80.98,
+     "e": 81.25,
+     "k": false
+    },
+    {
+     "w": "is",
+     "s": 81.34,
+     "e": 81.5,
+     "k": false
+    },
+    {
+     "w": "still",
+     "s": 81.55,
+     "e": 81.81,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 81.89,
+   "e": 82.72,
+   "t": [
+    {
+     "w": "ours.",
+     "s": 81.89,
+     "e": 82.72,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  }
+ ],
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "sound": [
+  {
+   "slot": "suck 3",
+   "at": 38.96,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_0_A__",
+    "B": "__snd_0_B__",
+    "C": "__snd_0_C__",
+    "D": "__snd_0_D__"
+   }
+  },
+  {
+   "slot": "page enter 4 (spiral)",
+   "at": 44.88,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_1_A__",
+    "B": "__snd_1_B__",
+    "C": "__snd_1_C__"
+   }
+  },
+  {
+   "slot": "page enter 6 (spiral)",
+   "at": 75.73,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_2_A__",
+    "B": "__snd_2_B__",
+    "C": "__snd_2_C__"
+   }
+  },
+  {
+   "slot": "hook bed",
+   "at": 0.0,
+   "gain": 0.0226,
+   "fade_in": 1.5,
+   "variants": {
+    "A": "__snd_3_A__",
+    "B": "__snd_3_B__"
+   }
+  },
+  {
+   "slot": "turn bed",
+   "at": 40.0,
+   "gain": 0.0226,
+   "fade_in": 3.0,
+   "variants": {
+    "A": "__snd_4_A__",
+    "B": "__snd_4_B__"
+   }
+  }
+ ],
+ "evidence": {
+  "dock-c-blue-ties-panel": {
+   "kind": "video",
+   "title": "Three men in blue ties",
+   "source": "@StickMike \u00b7 Money Physics",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-c-blue-ties-panel-v2.mp4",
+    "sha256": "99843fa781833cf1373d61dd5d03626aa20c4494cc0068af6e5337f3e612ab72"
+   },
+   "badges": []
+  },
+  "dock-a2-counter-colder": {
+   "kind": "video",
+   "title": "The host at the counter",
+   "source": "@StickMike \u00b7 Money Physics",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-a2-counter-colder-v2.mp4",
+    "sha256": "97bc38ff5cf12ffdbfb5df4a18a5f5d37ef5aeb7068747e42d72fe88175fd153"
+   },
+   "badges": []
+  },
+  "dock-g-two-fingers": {
+   "kind": "video",
+   "title": "Two numbers",
+   "source": "@StickMike \u00b7 Money Physics",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-g-two-fingers-v2.mp4",
+    "sha256": "a6be50e2541d4086a08fe7ad5d1d72925fc91ea78c6874373c3c54c998cc484b"
+   },
+   "badges": []
+  },
+  "dock-f-toll-gate-to-fab": {
+   "kind": "video",
+   "title": "The gate to the fab",
+   "source": "@StickMike \u00b7 Money Physics",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-f-toll-gate-to-fab-v2.mp4",
+    "sha256": "ceb472b41d8a0687b20f29b448ec669b74d95b9c4cb2707218108b1c94631a7d"
+   },
+   "badges": []
+  }
+ },
+ "scenes": [
+  {
+   "scene_id": "s01",
+   "world": {
+    "kind": "clip",
+    "asset_id": "clip-a-counter-tab-v2",
+    "sha256": "596a48a2fa2a7c522823b3232850fdc017778e8523122a0018e9fddb9be026d1",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "cut",
+   "span": [
+    0.0,
+    1.99
+   ],
+   "docks": [],
+   "species": []
+  },
+  {
+   "scene_id": "s02",
+   "world": {
+    "kind": "ledger",
+    "page": {
+     "schema_version": "ledger_page.v1",
+     "surface": "page",
+     "builder": "dense-line",
+     "variant": "line",
+     "title": "Our biggest customer is selling",
+     "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06",
+     "source": "US Treasury TIC Table 5, Major Foreign Holders \u00b7 fetched 2026-09-05",
+     "quiet_zone": "right",
+     "labels": [
+      "Japan"
+     ],
+     "values": [],
+     "value_strings": [],
+     "colors": [],
+     "series": [
+      {
+       "label": "-9.9%",
+       "name": "Japan",
+       "color": "crimson",
+       "pts": [
+        [
+         "2000.1667",
+         "325.8"
+        ],
+        [
+         "2000.25",
+         "322.4"
+        ],
+        [
+         "2000.3333",
+         "319.4"
+        ],
+        [
+         "2000.4167",
+         "318.8"
+        ],
+        [
+         "2000.5",
+         "319.6"
+        ],
+        [
+         "2000.5833",
+         "317.8"
+        ],
+        [
+         "2000.6667",
+         "317.3"
+        ],
+        [
+         "2000.75",
+         "317.7"
+        ],
+        [
+         "2000.8333",
+         "321.7"
+        ],
+        [
+         "2000.9167",
+         "317.7"
+        ],
+        [
+         "2001.0",
+         "312.3"
+        ],
+        [
+         "2001.0833",
+         "312.5"
+        ],
+        [
+         "2001.1667",
+         "307.1"
+        ],
+        [
+         "2001.25",
+         "305.9"
+        ],
+        [
+         "2001.3333",
+         "306.7"
+        ],
+        [
+         "2001.4167",
+         "300.8"
+        ],
+        [
+         "2001.5",
+         "295.3"
+        ],
+        [
+         "2001.5833",
+         "293.1"
+        ],
+        [
+         "2001.6667",
+         "292.9"
+        ],
+        [
+         "2001.75",
+         "314.5"
+        ],
+        [
+         "2001.8333",
+         "315.4"
+        ],
+        [
+         "2001.9167",
+         "317.9"
+        ],
+        [
+         "2002.0",
+         "310.6"
+        ],
+        [
+         "2002.0833",
+         "311.9"
+        ],
+        [
+         "2002.1667",
+         "312.6"
+        ],
+        [
+         "2002.25",
+         "314.6"
+        ],
+        [
+         "2002.3333",
+         "317.8"
+        ],
+        [
+         "2002.4167",
+         "335.8"
+        ],
+        [
+         "2002.5",
+         "361.8"
+        ],
+        [
+         "2002.5833",
+         "364.6"
+        ],
+        [
+         "2002.6667",
+         "373.8"
+        ],
+        [
+         "2002.75",
+         "373.1"
+        ],
+        [
+         "2002.8333",
+         "374.9"
+        ],
+        [
+         "2002.9167",
+         "378.1"
+        ],
+        [
+         "2003.0",
+         "385.0"
+        ],
+        [
+         "2003.0833",
+         "391.1"
+        ],
+        [
+         "2003.1667",
+         "399.3"
+        ],
+        [
+         "2003.25",
+         "401.8"
+        ],
+        [
+         "2003.3333",
+         "441.4"
+        ],
+        [
+         "2003.4167",
+         "453.1"
+        ],
+        [
+         "2003.5",
+         "463.1"
+        ],
+        [
+         "2003.5833",
+         "471.4"
+        ],
+        [
+         "2003.6667",
+         "491.2"
+        ],
+        [
+         "2003.75",
+         "507.7"
+        ],
+        [
+         "2003.8333",
+         "531.1"
+        ],
+        [
+         "2003.9167",
+         "550.8"
+        ],
+        [
+         "2004.0",
+         "582.6"
+        ],
+        [
+         "2004.0833",
+         "613.2"
+        ],
+        [
+         "2004.1667",
+         "645.3"
+        ],
+        [
+         "2004.25",
+         "651.8"
+        ],
+        [
+         "2004.3333",
+         "666.4"
+        ],
+        [
+         "2004.4167",
+         "688.4"
+        ],
+        [
+         "2004.5",
+         "675.4"
+        ],
+        [
+         "2004.5833",
+         "699.4"
+        ],
+        [
+         "2004.6667",
+         "698.9"
+        ],
+        [
+         "2004.75",
+         "692.3"
+        ],
+        [
+         "2004.8333",
+         "693.1"
+        ],
+        [
+         "2004.9167",
+         "689.9"
+        ],
+        [
+         "2005.0",
+         "679.5"
+        ],
+        [
+         "2005.0833",
+         "680.8"
+        ],
+        [
+         "2005.1667",
+         "681.6"
+        ],
+        [
+         "2005.25",
+         "688.2"
+        ],
+        [
+         "2005.3333",
+         "686.8"
+        ],
+        [
+         "2005.4167",
+         "681.2"
+        ],
+        [
+         "2005.5",
+         "669.4"
+        ],
+        [
+         "2005.5833",
+         "670.0"
+        ],
+        [
+         "2005.6667",
+         "672.8"
+        ],
+        [
+         "2005.75",
+         "667.6"
+        ],
+        [
+         "2005.8333",
+         "667.9"
+        ],
+        [
+         "2005.9167",
+         "670.0"
+        ],
+        [
+         "2006.0",
+         "653.4"
+        ],
+        [
+         "2006.0833",
+         "656.4"
+        ],
+        [
+         "2006.1667",
+         "639.0"
+        ],
+        [
+         "2006.25",
+         "639.4"
+        ],
+        [
+         "2006.3333",
+         "636.1"
+        ],
+        [
+         "2006.4167",
+         "635.4"
+        ],
+        [
+         "2006.5",
+         "614.9"
+        ],
+        [
+         "2006.5833",
+         "623.5"
+        ],
+        [
+         "2006.6667",
+         "618.1"
+        ],
+        [
+         "2006.75",
+         "618.1"
+        ],
+        [
+         "2006.8333",
+         "615.9"
+        ],
+        [
+         "2006.9167",
+         "622.9"
+        ],
+        [
+         "2007.0",
+         "627.2"
+        ],
+        [
+         "2007.0833",
+         "616.4"
+        ],
+        [
+         "2007.1667",
+         "611.4"
+        ],
+        [
+         "2007.25",
+         "614.6"
+        ],
+        [
+         "2007.3333",
+         "615.0"
+        ],
+        [
+         "2007.4167",
+         "612.9"
+        ],
+        [
+         "2007.5",
+         "620.6"
+        ],
+        [
+         "2007.5833",
+         "595.8"
+        ],
+        [
+         "2007.6667",
+         "591.9"
+        ],
+        [
+         "2007.75",
+         "601.8"
+        ],
+        [
+         "2007.8333",
+         "589.6"
+        ],
+        [
+         "2007.9167",
+         "579.9"
+        ],
+        [
+         "2008.0",
+         "585.6"
+        ],
+        [
+         "2008.0833",
+         "583.3"
+        ],
+        [
+         "2008.1667",
+         "597.4"
+        ],
+        [
+         "2008.25",
+         "588.8"
+        ],
+        [
+         "2008.3333",
+         "575.3"
+        ],
+        [
+         "2008.4167",
+         "580.4"
+        ],
+        [
+         "2008.5",
+         "637.6"
+        ],
+        [
+         "2008.5833",
+         "630.3"
+        ],
+        [
+         "2008.6667",
+         "617.5"
+        ],
+        [
+         "2008.75",
+         "629.6"
+        ],
+        [
+         "2008.8333",
+         "625.2"
+        ],
+        [
+         "2008.9167",
+         "626.0"
+        ],
+        [
+         "2009.0",
+         "634.8"
+        ],
+        [
+         "2009.0833",
+         "661.9"
+        ],
+        [
+         "2009.1667",
+         "686.7"
+        ],
+        [
+         "2009.25",
+         "685.9"
+        ],
+        [
+         "2009.3333",
+         "677.2"
+        ],
+        [
+         "2009.4167",
+         "711.2"
+        ],
+        [
+         "2009.5",
+         "720.9"
+        ],
+        [
+         "2009.5833",
+         "727.5"
+        ],
+        [
+         "2009.6667",
+         "747.9"
+        ],
+        [
+         "2009.75",
+         "742.9"
+        ],
+        [
+         "2009.8333",
+         "754.3"
+        ],
+        [
+         "2009.9167",
+         "765.7"
+        ],
+        [
+         "2010.0",
+         "765.2"
+        ],
+        [
+         "2010.0833",
+         "768.2"
+        ],
+        [
+         "2010.1667",
+         "783.3"
+        ],
+        [
+         "2010.25",
+         "793.8"
+        ],
+        [
+         "2010.3333",
+         "784.8"
+        ],
+        [
+         "2010.4167",
+         "801.2"
+        ],
+        [
+         "2010.5",
+         "817.2"
+        ],
+        [
+         "2010.5833",
+         "832.4"
+        ],
+        [
+         "2010.6667",
+         "860.8"
+        ],
+        [
+         "2010.75",
+         "873.6"
+        ],
+        [
+         "2010.8333",
+         "875.9"
+        ],
+        [
+         "2010.9167",
+         "882.3"
+        ],
+        [
+         "2011.0",
+         "886.0"
+        ],
+        [
+         "2011.0833",
+         "890.4"
+        ],
+        [
+         "2011.1667",
+         "908.1"
+        ],
+        [
+         "2011.25",
+         "906.7"
+        ],
+        [
+         "2011.3333",
+         "912.4"
+        ],
+        [
+         "2011.4167",
+         "911.1"
+        ],
+        [
+         "2011.5",
+         "884.9"
+        ],
+        [
+         "2011.5833",
+         "906.7"
+        ],
+        [
+         "2011.6667",
+         "984.0"
+        ],
+        [
+         "2011.75",
+         "1006.2"
+        ],
+        [
+         "2011.8333",
+         "1066.2"
+        ],
+        [
+         "2011.9167",
+         "1058.1"
+        ],
+        [
+         "2012.0",
+         "1080.8"
+        ],
+        [
+         "2012.0833",
+         "1088.6"
+        ],
+        [
+         "2012.1667",
+         "1080.4"
+        ],
+        [
+         "2012.25",
+         "1087.9"
+        ],
+        [
+         "2012.3333",
+         "1107.2"
+        ],
+        [
+         "2012.4167",
+         "1108.4"
+        ],
+        [
+         "2012.5",
+         "1119.8"
+        ],
+        [
+         "2012.5833",
+         "1120.9"
+        ],
+        [
+         "2012.6667",
+         "1128.5"
+        ],
+        [
+         "2012.75",
+         "1131.9"
+        ],
+        [
+         "2012.8333",
+         "1117.7"
+        ],
+        [
+         "2012.9167",
+         "1111.2"
+        ],
+        [
+         "2013.0",
+         "1103.9"
+        ],
+        [
+         "2013.0833",
+         "1105.5"
+        ],
+        [
+         "2013.1667",
+         "1114.3"
+        ],
+        [
+         "2013.25",
+         "1112.7"
+        ],
+        [
+         "2013.3333",
+         "1103.7"
+        ],
+        [
+         "2013.4167",
+         "1083.3"
+        ],
+        [
+         "2013.5",
+         "1135.4"
+        ],
+        [
+         "2013.5833",
+         "1149.1"
+        ],
+        [
+         "2013.6667",
+         "1178.1"
+        ],
+        [
+         "2013.75",
+         "1174.4"
+        ],
+        [
+         "2013.8333",
+         "1186.4"
+        ],
+        [
+         "2013.9167",
+         "1182.5"
+        ],
+        [
+         "2014.0",
+         "1201.4"
+        ],
+        [
+         "2014.0833",
+         "1210.8"
+        ],
+        [
+         "2014.1667",
+         "1200.2"
+        ],
+        [
+         "2014.25",
+         "1209.7"
+        ],
+        [
+         "2014.3333",
+         "1220.1"
+        ],
+        [
+         "2014.4167",
+         "1219.3"
+        ],
+        [
+         "2014.5",
+         "1219.0"
+        ],
+        [
+         "2014.5833",
+         "1230.1"
+        ],
+        [
+         "2014.6667",
+         "1221.8"
+        ],
+        [
+         "2014.75",
+         "1222.4"
+        ],
+        [
+         "2014.8333",
+         "1241.5"
+        ],
+        [
+         "2014.9167",
+         "1230.9"
+        ],
+        [
+         "2015.0",
+         "1238.6"
+        ],
+        [
+         "2015.0833",
+         "1224.4"
+        ],
+        [
+         "2015.1667",
+         "1224.7"
+        ],
+        [
+         "2015.25",
+         "1215.9"
+        ],
+        [
+         "2015.3333",
+         "1214.9"
+        ],
+        [
+         "2015.4167",
+         "1197.1"
+        ],
+        [
+         "2015.5",
+         "1200.8"
+        ],
+        [
+         "2015.5833",
+         "1197.0"
+        ],
+        [
+         "2015.6667",
+         "1177.1"
+        ],
+        [
+         "2015.75",
+         "1149.2"
+        ],
+        [
+         "2015.8333",
+         "1144.9"
+        ],
+        [
+         "2015.9167",
+         "1122.4"
+        ],
+        [
+         "2016.0",
+         "1123.6"
+        ],
+        [
+         "2016.0833",
+         "1133.2"
+        ],
+        [
+         "2016.1667",
+         "1137.1"
+        ],
+        [
+         "2016.25",
+         "1142.8"
+        ],
+        [
+         "2016.3333",
+         "1133.2"
+        ],
+        [
+         "2016.4167",
+         "1147.1"
+        ],
+        [
+         "2016.5",
+         "1154.6"
+        ],
+        [
+         "2016.5833",
+         "1144.0"
+        ],
+        [
+         "2016.6667",
+         "1136.4"
+        ],
+        [
+         "2016.75",
+         "1131.9"
+        ],
+        [
+         "2016.8333",
+         "1108.6"
+        ],
+        [
+         "2016.9167",
+         "1090.8"
+        ],
+        [
+         "2017.0",
+         "1102.5"
+        ],
+        [
+         "2017.0833",
+         "1115.7"
+        ],
+        [
+         "2017.1667",
+         "1120.7"
+        ],
+        [
+         "2017.25",
+         "1106.9"
+        ],
+        [
+         "2017.3333",
+         "1111.5"
+        ],
+        [
+         "2017.4167",
+         "1090.3"
+        ],
+        [
+         "2017.5",
+         "1113.3"
+        ],
+        [
+         "2017.5833",
+         "1101.7"
+        ],
+        [
+         "2017.6667",
+         "1096.0"
+        ],
+        [
+         "2017.75",
+         "1094.0"
+        ],
+        [
+         "2017.8333",
+         "1084.1"
+        ],
+        [
+         "2017.9167",
+         "1061.6"
+        ],
+        [
+         "2018.0",
+         "1066.0"
+        ],
+        [
+         "2018.0833",
+         "1060.1"
+        ],
+        [
+         "2018.1667",
+         "1044.4"
+        ],
+        [
+         "2018.25",
+         "1031.8"
+        ],
+        [
+         "2018.3333",
+         "1048.9"
+        ],
+        [
+         "2018.4167",
+         "1032.5"
+        ],
+        [
+         "2018.5",
+         "1035.5"
+        ],
+        [
+         "2018.5833",
+         "1029.9"
+        ],
+        [
+         "2018.6667",
+         "1028.0"
+        ],
+        [
+         "2018.75",
+         "1018.5"
+        ],
+        [
+         "2018.8333",
+         "1036.6"
+        ],
+        [
+         "2018.9167",
+         "1039.7"
+        ],
+        [
+         "2019.0",
+         "1064.9"
+        ],
+        [
+         "2019.0833",
+         "1068.8"
+        ],
+        [
+         "2019.1667",
+         "1078.1"
+        ],
+        [
+         "2019.25",
+         "1064.0"
+        ],
+        [
+         "2019.3333",
+         "1101.0"
+        ],
+        [
+         "2019.4167",
+         "1122.8"
+        ],
+        [
+         "2019.5",
+         "1131.2"
+        ],
+        [
+         "2019.5833",
+         "1174.6"
+        ],
+        [
+         "2019.6667",
+         "1146.2"
+        ],
+        [
+         "2019.75",
+         "1168.5"
+        ],
+        [
+         "2019.8333",
+         "1160.6"
+        ],
+        [
+         "2019.9167",
+         "1155.2"
+        ],
+        [
+         "2020.0",
+         "1211.8"
+        ],
+        [
+         "2020.0833",
+         "1268.6"
+        ],
+        [
+         "2020.1667",
+         "1272.6"
+        ],
+        [
+         "2020.25",
+         "1266.5"
+        ],
+        [
+         "2020.3333",
+         "1260.4"
+        ],
+        [
+         "2020.4167",
+         "1261.6"
+        ],
+        [
+         "2020.5",
+         "1293.0"
+        ],
+        [
+         "2020.5833",
+         "1278.4"
+        ],
+        [
+         "2020.6667",
+         "1276.2"
+        ],
+        [
+         "2020.75",
+         "1273.1"
+        ],
+        [
+         "2020.8333",
+         "1260.8"
+        ],
+        [
+         "2020.9167",
+         "1251.3"
+        ],
+        [
+         "2021.0",
+         "1276.9"
+        ],
+        [
+         "2021.0833",
+         "1258.0"
+        ],
+        [
+         "2021.1667",
+         "1240.5"
+        ],
+        [
+         "2021.25",
+         "1276.8"
+        ],
+        [
+         "2021.3333",
+         "1266.2"
+        ],
+        [
+         "2021.4167",
+         "1279.7"
+        ],
+        [
+         "2021.5",
+         "1310.2"
+        ],
+        [
+         "2021.5833",
+         "1319.7"
+        ],
+        [
+         "2021.6667",
+         "1299.6"
+        ],
+        [
+         "2021.75",
+         "1320.4"
+        ],
+        [
+         "2021.8333",
+         "1325.5"
+        ],
+        [
+         "2021.9167",
+         "1300.8"
+        ],
+        [
+         "2022.0",
+         "1299.9"
+        ],
+        [
+         "2022.0833",
+         "1303.0"
+        ],
+        [
+         "2022.1667",
+         "1229.0"
+        ],
+        [
+         "2022.25",
+         "1215.0"
+        ],
+        [
+         "2022.3333",
+         "1219.9"
+        ],
+        [
+         "2022.4167",
+         "1232.7"
+        ],
+        [
+         "2022.5",
+         "1230.7"
+        ],
+        [
+         "2022.5833",
+         "1196.0"
+        ],
+        [
+         "2022.6667",
+         "1116.4"
+        ],
+        [
+         "2022.75",
+         "1064.4"
+        ],
+        [
+         "2022.8333",
+         "1081.8"
+        ],
+        [
+         "2022.9167",
+         "1075.1"
+        ],
+        [
+         "2023.0",
+         "1102.9"
+        ],
+        [
+         "2023.0833",
+         "1080.7"
+        ],
+        [
+         "2023.1667",
+         "1086.6"
+        ],
+        [
+         "2023.25",
+         "1125.8"
+        ],
+        [
+         "2023.3333",
+         "1096.1"
+        ],
+        [
+         "2023.4167",
+         "1104.1"
+        ],
+        [
+         "2023.5",
+         "1111.8"
+        ],
+        [
+         "2023.5833",
+         "1115.5"
+        ],
+        [
+         "2023.6667",
+         "1086.4"
+        ],
+        [
+         "2023.75",
+         "1098.2"
+        ],
+        [
+         "2023.8333",
+         "1127.5"
+        ],
+        [
+         "2023.9167",
+         "1115.3"
+        ],
+        [
+         "2024.0",
+         "1140.6"
+        ],
+        [
+         "2024.0833",
+         "1147.6"
+        ],
+        [
+         "2024.1667",
+         "1167.0"
+        ],
+        [
+         "2024.25",
+         "1126.1"
+        ],
+        [
+         "2024.3333",
+         "1106.0"
+        ],
+        [
+         "2024.4167",
+         "1091.4"
+        ],
+        [
+         "2024.5",
+         "1093.5"
+        ],
+        [
+         "2024.5833",
+         "1106.0"
+        ],
+        [
+         "2024.6667",
+         "1095.5"
+        ],
+        [
+         "2024.75",
+         "1101.5"
+        ],
+        [
+         "2024.8333",
+         "1087.1"
+        ],
+        [
+         "2024.9167",
+         "1061.5"
+        ],
+        [
+         "2025.0",
+         "1079.3"
+        ],
+        [
+         "2025.0833",
+         "1125.9"
+        ],
+        [
+         "2025.1667",
+         "1130.8"
+        ],
+        [
+         "2025.25",
+         "1134.5"
+        ],
+        [
+         "2025.3333",
+         "1135.0"
+        ],
+        [
+         "2025.4167",
+         "1154.8"
+        ],
+        [
+         "2025.5",
+         "1155.4"
+        ],
+        [
+         "2025.5833",
+         "1183.9"
+        ],
+        [
+         "2025.6667",
+         "1189.3"
+        ],
+        [
+         "2025.75",
+         "1200.0"
+        ],
+        [
+         "2025.8333",
+         "1202.7"
+        ],
+        [
+         "2025.9167",
+         "1185.5"
+        ],
+        [
+         "2026.0",
+         "1225.3"
+        ],
+        [
+         "2026.0833",
+         "1239.3"
+        ],
+        [
+         "2026.1667",
+         "1191.6"
+        ],
+        [
+         "2026.25",
+         "1209.9"
+        ],
+        [
+         "2026.3333",
+         "1143.1"
+        ],
+        [
+         "2026.4167",
+         "1116.7"
+        ]
+       ]
+      }
+     ],
+     "axes": {
+      "ylabel": "$bn",
+      "xticks": [
+       [
+        "2000.0",
+        "2000"
+       ],
+       [
+        "2005.0",
+        "2005"
+       ],
+       [
+        "2010.0",
+        "2010"
+       ],
+       [
+        "2015.0",
+        "2015"
+       ],
+       [
+        "2020.0",
+        "2020"
+       ],
+       [
+        "2025.0",
+        "2025"
+       ]
+      ],
+      "highlight_from": "2026.0833"
+     },
+     "unit": "",
+     "judge": [],
+     "badges": [],
+     "emphasize": 0,
+     "enter": "morph",
+     "exit": "cut",
+     "morph_s": 2.0
+    },
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "morph": "tab"
+   },
+   "exit": "cut",
+   "span": [
+    1.99,
+    38.96
+   ],
+   "docks": [
+    {
+     "slide": "dock-c-blue-ties-panel",
+     "slot": 0,
+     "enter": 9.09,
+     "exit": 15.34,
+     "badge_at": [],
+     "kind": "video",
+     "place": {
+      "x": 594,
+      "y": 297,
+      "w": 270,
+      "h": 175
+     },
+     "read_s": 1.2,
+     "park_s": 0.7,
+     "park": true,
+     "arrive": "throw",
+     "mass": "paper"
+    },
+    {
+     "slide": "dock-a2-counter-colder",
+     "slot": 0,
+     "enter": 15.34,
+     "exit": 18.95,
+     "badge_at": [],
+     "kind": "video",
+     "place": {
+      "x": 594,
+      "y": 297,
+      "w": 270,
+      "h": 175
+     },
+     "read_s": 1.2,
+     "park_s": 0.7,
+     "park": true
+    },
+    {
+     "slide": "dock-g-two-fingers",
+     "slot": 0,
+     "enter": 36.58,
+     "exit": 38.96,
+     "badge_at": [],
+     "kind": "video",
+     "place": {
+      "x": 594,
+      "y": 297,
+      "w": 270,
+      "h": 175
+     },
+     "read_s": 1.2,
+     "park_s": 0.7,
+     "park": true,
+     "arrive": "land",
+     "mass": "metal"
+    }
+   ],
+   "species": [
+    {
+     "kind": "build_to",
+     "at": 7.69,
+     "dur": 3.0,
+     "target": {
+      "kind": "datum",
+      "index": 311
+     }
+    },
+    {
+     "kind": "build_to",
+     "at": 18.95,
+     "dur": 1.2,
+     "target": {
+      "kind": "datum",
+      "index": 315
+     }
+    },
+    {
+     "kind": "spotlight",
+     "at": 19.71,
+     "dur": 2.0,
+     "target": {
+      "kind": "datum",
+      "index": 315
+     }
+    },
+    {
+     "kind": "callout",
+     "at": 23.1,
+     "dur": 2.0,
+     "target": {
+      "kind": "datum",
+      "index": 311
+     }
+    },
+    {
+     "kind": "retitle",
+     "at": 33.15,
+     "dur": 2.4,
+     "text": "The opponent: a balance sheet"
+    }
+   ]
+  },
+  {
+   "scene_id": "s03",
+   "world": {
+    "asset_id": "plate-p-viewers-desk",
+    "sha256": "67626425ab5ba3e5e208f7eed89b0eec5d4e645f6d08fbb4ec7c422247fa0138",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "suck:0.49,0.55",
+   "span": [
+    38.96,
+    44.88
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "steam",
+     "at": 38.96,
+     "dur": 5.92,
+     "target": {
+      "kind": "region",
+      "x0": 0.8,
+      "y0": 0.55,
+      "x1": 0.95,
+      "y1": 0.6
+     }
+    },
+    {
+     "kind": "trace",
+     "at": 39.26,
+     "dur": 5.62,
+     "target": {
+      "kind": "region",
+      "x0": 0.117,
+      "y0": 0.39,
+      "x1": 0.26,
+      "y1": 0.485
+     }
+    },
+    {
+     "kind": "ticker",
+     "at": 39.160000000000004,
+     "dur": 5.72,
+     "density": 0.3,
+     "paper": "#EFE8D5",
+     "tilt": -4,
+     "col_lines": [
+      0.602,
+      0.681,
+      0.75,
+      0.812
+     ],
+     "row_lines": [
+      0.409,
+      0.431,
+      0.454,
+      0.477,
+      0.501,
+      0.525,
+      0.548
+     ],
+     "target": {
+      "kind": "region",
+      "x0": 0.602,
+      "y0": 0.409,
+      "x1": 0.812,
+      "y1": 0.548
+     }
+    }
+   ]
+  },
+  {
+   "scene_id": "s04",
+   "world": {
+    "kind": "ledger",
+    "page": {
+     "schema_version": "ledger_page.v1",
+     "surface": "page",
+     "builder": "dense-line",
+     "variant": "line",
+     "title": "Our biggest customer is selling",
+     "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06",
+     "source": "US Treasury TIC Table 5, Major Foreign Holders \u00b7 fetched 2026-09-05",
+     "quiet_zone": "right",
+     "labels": [
+      "Japan"
+     ],
+     "values": [],
+     "value_strings": [],
+     "colors": [],
+     "series": [
+      {
+       "label": "-9.9%",
+       "name": "Japan",
+       "color": "crimson",
+       "pts": [
+        [
+         "2000.1667",
+         "325.8"
+        ],
+        [
+         "2000.25",
+         "322.4"
+        ],
+        [
+         "2000.3333",
+         "319.4"
+        ],
+        [
+         "2000.4167",
+         "318.8"
+        ],
+        [
+         "2000.5",
+         "319.6"
+        ],
+        [
+         "2000.5833",
+         "317.8"
+        ],
+        [
+         "2000.6667",
+         "317.3"
+        ],
+        [
+         "2000.75",
+         "317.7"
+        ],
+        [
+         "2000.8333",
+         "321.7"
+        ],
+        [
+         "2000.9167",
+         "317.7"
+        ],
+        [
+         "2001.0",
+         "312.3"
+        ],
+        [
+         "2001.0833",
+         "312.5"
+        ],
+        [
+         "2001.1667",
+         "307.1"
+        ],
+        [
+         "2001.25",
+         "305.9"
+        ],
+        [
+         "2001.3333",
+         "306.7"
+        ],
+        [
+         "2001.4167",
+         "300.8"
+        ],
+        [
+         "2001.5",
+         "295.3"
+        ],
+        [
+         "2001.5833",
+         "293.1"
+        ],
+        [
+         "2001.6667",
+         "292.9"
+        ],
+        [
+         "2001.75",
+         "314.5"
+        ],
+        [
+         "2001.8333",
+         "315.4"
+        ],
+        [
+         "2001.9167",
+         "317.9"
+        ],
+        [
+         "2002.0",
+         "310.6"
+        ],
+        [
+         "2002.0833",
+         "311.9"
+        ],
+        [
+         "2002.1667",
+         "312.6"
+        ],
+        [
+         "2002.25",
+         "314.6"
+        ],
+        [
+         "2002.3333",
+         "317.8"
+        ],
+        [
+         "2002.4167",
+         "335.8"
+        ],
+        [
+         "2002.5",
+         "361.8"
+        ],
+        [
+         "2002.5833",
+         "364.6"
+        ],
+        [
+         "2002.6667",
+         "373.8"
+        ],
+        [
+         "2002.75",
+         "373.1"
+        ],
+        [
+         "2002.8333",
+         "374.9"
+        ],
+        [
+         "2002.9167",
+         "378.1"
+        ],
+        [
+         "2003.0",
+         "385.0"
+        ],
+        [
+         "2003.0833",
+         "391.1"
+        ],
+        [
+         "2003.1667",
+         "399.3"
+        ],
+        [
+         "2003.25",
+         "401.8"
+        ],
+        [
+         "2003.3333",
+         "441.4"
+        ],
+        [
+         "2003.4167",
+         "453.1"
+        ],
+        [
+         "2003.5",
+         "463.1"
+        ],
+        [
+         "2003.5833",
+         "471.4"
+        ],
+        [
+         "2003.6667",
+         "491.2"
+        ],
+        [
+         "2003.75",
+         "507.7"
+        ],
+        [
+         "2003.8333",
+         "531.1"
+        ],
+        [
+         "2003.9167",
+         "550.8"
+        ],
+        [
+         "2004.0",
+         "582.6"
+        ],
+        [
+         "2004.0833",
+         "613.2"
+        ],
+        [
+         "2004.1667",
+         "645.3"
+        ],
+        [
+         "2004.25",
+         "651.8"
+        ],
+        [
+         "2004.3333",
+         "666.4"
+        ],
+        [
+         "2004.4167",
+         "688.4"
+        ],
+        [
+         "2004.5",
+         "675.4"
+        ],
+        [
+         "2004.5833",
+         "699.4"
+        ],
+        [
+         "2004.6667",
+         "698.9"
+        ],
+        [
+         "2004.75",
+         "692.3"
+        ],
+        [
+         "2004.8333",
+         "693.1"
+        ],
+        [
+         "2004.9167",
+         "689.9"
+        ],
+        [
+         "2005.0",
+         "679.5"
+        ],
+        [
+         "2005.0833",
+         "680.8"
+        ],
+        [
+         "2005.1667",
+         "681.6"
+        ],
+        [
+         "2005.25",
+         "688.2"
+        ],
+        [
+         "2005.3333",
+         "686.8"
+        ],
+        [
+         "2005.4167",
+         "681.2"
+        ],
+        [
+         "2005.5",
+         "669.4"
+        ],
+        [
+         "2005.5833",
+         "670.0"
+        ],
+        [
+         "2005.6667",
+         "672.8"
+        ],
+        [
+         "2005.75",
+         "667.6"
+        ],
+        [
+         "2005.8333",
+         "667.9"
+        ],
+        [
+         "2005.9167",
+         "670.0"
+        ],
+        [
+         "2006.0",
+         "653.4"
+        ],
+        [
+         "2006.0833",
+         "656.4"
+        ],
+        [
+         "2006.1667",
+         "639.0"
+        ],
+        [
+         "2006.25",
+         "639.4"
+        ],
+        [
+         "2006.3333",
+         "636.1"
+        ],
+        [
+         "2006.4167",
+         "635.4"
+        ],
+        [
+         "2006.5",
+         "614.9"
+        ],
+        [
+         "2006.5833",
+         "623.5"
+        ],
+        [
+         "2006.6667",
+         "618.1"
+        ],
+        [
+         "2006.75",
+         "618.1"
+        ],
+        [
+         "2006.8333",
+         "615.9"
+        ],
+        [
+         "2006.9167",
+         "622.9"
+        ],
+        [
+         "2007.0",
+         "627.2"
+        ],
+        [
+         "2007.0833",
+         "616.4"
+        ],
+        [
+         "2007.1667",
+         "611.4"
+        ],
+        [
+         "2007.25",
+         "614.6"
+        ],
+        [
+         "2007.3333",
+         "615.0"
+        ],
+        [
+         "2007.4167",
+         "612.9"
+        ],
+        [
+         "2007.5",
+         "620.6"
+        ],
+        [
+         "2007.5833",
+         "595.8"
+        ],
+        [
+         "2007.6667",
+         "591.9"
+        ],
+        [
+         "2007.75",
+         "601.8"
+        ],
+        [
+         "2007.8333",
+         "589.6"
+        ],
+        [
+         "2007.9167",
+         "579.9"
+        ],
+        [
+         "2008.0",
+         "585.6"
+        ],
+        [
+         "2008.0833",
+         "583.3"
+        ],
+        [
+         "2008.1667",
+         "597.4"
+        ],
+        [
+         "2008.25",
+         "588.8"
+        ],
+        [
+         "2008.3333",
+         "575.3"
+        ],
+        [
+         "2008.4167",
+         "580.4"
+        ],
+        [
+         "2008.5",
+         "637.6"
+        ],
+        [
+         "2008.5833",
+         "630.3"
+        ],
+        [
+         "2008.6667",
+         "617.5"
+        ],
+        [
+         "2008.75",
+         "629.6"
+        ],
+        [
+         "2008.8333",
+         "625.2"
+        ],
+        [
+         "2008.9167",
+         "626.0"
+        ],
+        [
+         "2009.0",
+         "634.8"
+        ],
+        [
+         "2009.0833",
+         "661.9"
+        ],
+        [
+         "2009.1667",
+         "686.7"
+        ],
+        [
+         "2009.25",
+         "685.9"
+        ],
+        [
+         "2009.3333",
+         "677.2"
+        ],
+        [
+         "2009.4167",
+         "711.2"
+        ],
+        [
+         "2009.5",
+         "720.9"
+        ],
+        [
+         "2009.5833",
+         "727.5"
+        ],
+        [
+         "2009.6667",
+         "747.9"
+        ],
+        [
+         "2009.75",
+         "742.9"
+        ],
+        [
+         "2009.8333",
+         "754.3"
+        ],
+        [
+         "2009.9167",
+         "765.7"
+        ],
+        [
+         "2010.0",
+         "765.2"
+        ],
+        [
+         "2010.0833",
+         "768.2"
+        ],
+        [
+         "2010.1667",
+         "783.3"
+        ],
+        [
+         "2010.25",
+         "793.8"
+        ],
+        [
+         "2010.3333",
+         "784.8"
+        ],
+        [
+         "2010.4167",
+         "801.2"
+        ],
+        [
+         "2010.5",
+         "817.2"
+        ],
+        [
+         "2010.5833",
+         "832.4"
+        ],
+        [
+         "2010.6667",
+         "860.8"
+        ],
+        [
+         "2010.75",
+         "873.6"
+        ],
+        [
+         "2010.8333",
+         "875.9"
+        ],
+        [
+         "2010.9167",
+         "882.3"
+        ],
+        [
+         "2011.0",
+         "886.0"
+        ],
+        [
+         "2011.0833",
+         "890.4"
+        ],
+        [
+         "2011.1667",
+         "908.1"
+        ],
+        [
+         "2011.25",
+         "906.7"
+        ],
+        [
+         "2011.3333",
+         "912.4"
+        ],
+        [
+         "2011.4167",
+         "911.1"
+        ],
+        [
+         "2011.5",
+         "884.9"
+        ],
+        [
+         "2011.5833",
+         "906.7"
+        ],
+        [
+         "2011.6667",
+         "984.0"
+        ],
+        [
+         "2011.75",
+         "1006.2"
+        ],
+        [
+         "2011.8333",
+         "1066.2"
+        ],
+        [
+         "2011.9167",
+         "1058.1"
+        ],
+        [
+         "2012.0",
+         "1080.8"
+        ],
+        [
+         "2012.0833",
+         "1088.6"
+        ],
+        [
+         "2012.1667",
+         "1080.4"
+        ],
+        [
+         "2012.25",
+         "1087.9"
+        ],
+        [
+         "2012.3333",
+         "1107.2"
+        ],
+        [
+         "2012.4167",
+         "1108.4"
+        ],
+        [
+         "2012.5",
+         "1119.8"
+        ],
+        [
+         "2012.5833",
+         "1120.9"
+        ],
+        [
+         "2012.6667",
+         "1128.5"
+        ],
+        [
+         "2012.75",
+         "1131.9"
+        ],
+        [
+         "2012.8333",
+         "1117.7"
+        ],
+        [
+         "2012.9167",
+         "1111.2"
+        ],
+        [
+         "2013.0",
+         "1103.9"
+        ],
+        [
+         "2013.0833",
+         "1105.5"
+        ],
+        [
+         "2013.1667",
+         "1114.3"
+        ],
+        [
+         "2013.25",
+         "1112.7"
+        ],
+        [
+         "2013.3333",
+         "1103.7"
+        ],
+        [
+         "2013.4167",
+         "1083.3"
+        ],
+        [
+         "2013.5",
+         "1135.4"
+        ],
+        [
+         "2013.5833",
+         "1149.1"
+        ],
+        [
+         "2013.6667",
+         "1178.1"
+        ],
+        [
+         "2013.75",
+         "1174.4"
+        ],
+        [
+         "2013.8333",
+         "1186.4"
+        ],
+        [
+         "2013.9167",
+         "1182.5"
+        ],
+        [
+         "2014.0",
+         "1201.4"
+        ],
+        [
+         "2014.0833",
+         "1210.8"
+        ],
+        [
+         "2014.1667",
+         "1200.2"
+        ],
+        [
+         "2014.25",
+         "1209.7"
+        ],
+        [
+         "2014.3333",
+         "1220.1"
+        ],
+        [
+         "2014.4167",
+         "1219.3"
+        ],
+        [
+         "2014.5",
+         "1219.0"
+        ],
+        [
+         "2014.5833",
+         "1230.1"
+        ],
+        [
+         "2014.6667",
+         "1221.8"
+        ],
+        [
+         "2014.75",
+         "1222.4"
+        ],
+        [
+         "2014.8333",
+         "1241.5"
+        ],
+        [
+         "2014.9167",
+         "1230.9"
+        ],
+        [
+         "2015.0",
+         "1238.6"
+        ],
+        [
+         "2015.0833",
+         "1224.4"
+        ],
+        [
+         "2015.1667",
+         "1224.7"
+        ],
+        [
+         "2015.25",
+         "1215.9"
+        ],
+        [
+         "2015.3333",
+         "1214.9"
+        ],
+        [
+         "2015.4167",
+         "1197.1"
+        ],
+        [
+         "2015.5",
+         "1200.8"
+        ],
+        [
+         "2015.5833",
+         "1197.0"
+        ],
+        [
+         "2015.6667",
+         "1177.1"
+        ],
+        [
+         "2015.75",
+         "1149.2"
+        ],
+        [
+         "2015.8333",
+         "1144.9"
+        ],
+        [
+         "2015.9167",
+         "1122.4"
+        ],
+        [
+         "2016.0",
+         "1123.6"
+        ],
+        [
+         "2016.0833",
+         "1133.2"
+        ],
+        [
+         "2016.1667",
+         "1137.1"
+        ],
+        [
+         "2016.25",
+         "1142.8"
+        ],
+        [
+         "2016.3333",
+         "1133.2"
+        ],
+        [
+         "2016.4167",
+         "1147.1"
+        ],
+        [
+         "2016.5",
+         "1154.6"
+        ],
+        [
+         "2016.5833",
+         "1144.0"
+        ],
+        [
+         "2016.6667",
+         "1136.4"
+        ],
+        [
+         "2016.75",
+         "1131.9"
+        ],
+        [
+         "2016.8333",
+         "1108.6"
+        ],
+        [
+         "2016.9167",
+         "1090.8"
+        ],
+        [
+         "2017.0",
+         "1102.5"
+        ],
+        [
+         "2017.0833",
+         "1115.7"
+        ],
+        [
+         "2017.1667",
+         "1120.7"
+        ],
+        [
+         "2017.25",
+         "1106.9"
+        ],
+        [
+         "2017.3333",
+         "1111.5"
+        ],
+        [
+         "2017.4167",
+         "1090.3"
+        ],
+        [
+         "2017.5",
+         "1113.3"
+        ],
+        [
+         "2017.5833",
+         "1101.7"
+        ],
+        [
+         "2017.6667",
+         "1096.0"
+        ],
+        [
+         "2017.75",
+         "1094.0"
+        ],
+        [
+         "2017.8333",
+         "1084.1"
+        ],
+        [
+         "2017.9167",
+         "1061.6"
+        ],
+        [
+         "2018.0",
+         "1066.0"
+        ],
+        [
+         "2018.0833",
+         "1060.1"
+        ],
+        [
+         "2018.1667",
+         "1044.4"
+        ],
+        [
+         "2018.25",
+         "1031.8"
+        ],
+        [
+         "2018.3333",
+         "1048.9"
+        ],
+        [
+         "2018.4167",
+         "1032.5"
+        ],
+        [
+         "2018.5",
+         "1035.5"
+        ],
+        [
+         "2018.5833",
+         "1029.9"
+        ],
+        [
+         "2018.6667",
+         "1028.0"
+        ],
+        [
+         "2018.75",
+         "1018.5"
+        ],
+        [
+         "2018.8333",
+         "1036.6"
+        ],
+        [
+         "2018.9167",
+         "1039.7"
+        ],
+        [
+         "2019.0",
+         "1064.9"
+        ],
+        [
+         "2019.0833",
+         "1068.8"
+        ],
+        [
+         "2019.1667",
+         "1078.1"
+        ],
+        [
+         "2019.25",
+         "1064.0"
+        ],
+        [
+         "2019.3333",
+         "1101.0"
+        ],
+        [
+         "2019.4167",
+         "1122.8"
+        ],
+        [
+         "2019.5",
+         "1131.2"
+        ],
+        [
+         "2019.5833",
+         "1174.6"
+        ],
+        [
+         "2019.6667",
+         "1146.2"
+        ],
+        [
+         "2019.75",
+         "1168.5"
+        ],
+        [
+         "2019.8333",
+         "1160.6"
+        ],
+        [
+         "2019.9167",
+         "1155.2"
+        ],
+        [
+         "2020.0",
+         "1211.8"
+        ],
+        [
+         "2020.0833",
+         "1268.6"
+        ],
+        [
+         "2020.1667",
+         "1272.6"
+        ],
+        [
+         "2020.25",
+         "1266.5"
+        ],
+        [
+         "2020.3333",
+         "1260.4"
+        ],
+        [
+         "2020.4167",
+         "1261.6"
+        ],
+        [
+         "2020.5",
+         "1293.0"
+        ],
+        [
+         "2020.5833",
+         "1278.4"
+        ],
+        [
+         "2020.6667",
+         "1276.2"
+        ],
+        [
+         "2020.75",
+         "1273.1"
+        ],
+        [
+         "2020.8333",
+         "1260.8"
+        ],
+        [
+         "2020.9167",
+         "1251.3"
+        ],
+        [
+         "2021.0",
+         "1276.9"
+        ],
+        [
+         "2021.0833",
+         "1258.0"
+        ],
+        [
+         "2021.1667",
+         "1240.5"
+        ],
+        [
+         "2021.25",
+         "1276.8"
+        ],
+        [
+         "2021.3333",
+         "1266.2"
+        ],
+        [
+         "2021.4167",
+         "1279.7"
+        ],
+        [
+         "2021.5",
+         "1310.2"
+        ],
+        [
+         "2021.5833",
+         "1319.7"
+        ],
+        [
+         "2021.6667",
+         "1299.6"
+        ],
+        [
+         "2021.75",
+         "1320.4"
+        ],
+        [
+         "2021.8333",
+         "1325.5"
+        ],
+        [
+         "2021.9167",
+         "1300.8"
+        ],
+        [
+         "2022.0",
+         "1299.9"
+        ],
+        [
+         "2022.0833",
+         "1303.0"
+        ],
+        [
+         "2022.1667",
+         "1229.0"
+        ],
+        [
+         "2022.25",
+         "1215.0"
+        ],
+        [
+         "2022.3333",
+         "1219.9"
+        ],
+        [
+         "2022.4167",
+         "1232.7"
+        ],
+        [
+         "2022.5",
+         "1230.7"
+        ],
+        [
+         "2022.5833",
+         "1196.0"
+        ],
+        [
+         "2022.6667",
+         "1116.4"
+        ],
+        [
+         "2022.75",
+         "1064.4"
+        ],
+        [
+         "2022.8333",
+         "1081.8"
+        ],
+        [
+         "2022.9167",
+         "1075.1"
+        ],
+        [
+         "2023.0",
+         "1102.9"
+        ],
+        [
+         "2023.0833",
+         "1080.7"
+        ],
+        [
+         "2023.1667",
+         "1086.6"
+        ],
+        [
+         "2023.25",
+         "1125.8"
+        ],
+        [
+         "2023.3333",
+         "1096.1"
+        ],
+        [
+         "2023.4167",
+         "1104.1"
+        ],
+        [
+         "2023.5",
+         "1111.8"
+        ],
+        [
+         "2023.5833",
+         "1115.5"
+        ],
+        [
+         "2023.6667",
+         "1086.4"
+        ],
+        [
+         "2023.75",
+         "1098.2"
+        ],
+        [
+         "2023.8333",
+         "1127.5"
+        ],
+        [
+         "2023.9167",
+         "1115.3"
+        ],
+        [
+         "2024.0",
+         "1140.6"
+        ],
+        [
+         "2024.0833",
+         "1147.6"
+        ],
+        [
+         "2024.1667",
+         "1167.0"
+        ],
+        [
+         "2024.25",
+         "1126.1"
+        ],
+        [
+         "2024.3333",
+         "1106.0"
+        ],
+        [
+         "2024.4167",
+         "1091.4"
+        ],
+        [
+         "2024.5",
+         "1093.5"
+        ],
+        [
+         "2024.5833",
+         "1106.0"
+        ],
+        [
+         "2024.6667",
+         "1095.5"
+        ],
+        [
+         "2024.75",
+         "1101.5"
+        ],
+        [
+         "2024.8333",
+         "1087.1"
+        ],
+        [
+         "2024.9167",
+         "1061.5"
+        ],
+        [
+         "2025.0",
+         "1079.3"
+        ],
+        [
+         "2025.0833",
+         "1125.9"
+        ],
+        [
+         "2025.1667",
+         "1130.8"
+        ],
+        [
+         "2025.25",
+         "1134.5"
+        ],
+        [
+         "2025.3333",
+         "1135.0"
+        ],
+        [
+         "2025.4167",
+         "1154.8"
+        ],
+        [
+         "2025.5",
+         "1155.4"
+        ],
+        [
+         "2025.5833",
+         "1183.9"
+        ],
+        [
+         "2025.6667",
+         "1189.3"
+        ],
+        [
+         "2025.75",
+         "1200.0"
+        ],
+        [
+         "2025.8333",
+         "1202.7"
+        ],
+        [
+         "2025.9167",
+         "1185.5"
+        ],
+        [
+         "2026.0",
+         "1225.3"
+        ],
+        [
+         "2026.0833",
+         "1239.3"
+        ],
+        [
+         "2026.1667",
+         "1191.6"
+        ],
+        [
+         "2026.25",
+         "1209.9"
+        ],
+        [
+         "2026.3333",
+         "1143.1"
+        ],
+        [
+         "2026.4167",
+         "1116.7"
+        ]
+       ]
+      }
+     ],
+     "axes": {
+      "ylabel": "$bn",
+      "xticks": [
+       [
+        "2000.0",
+        "2000"
+       ],
+       [
+        "2005.0",
+        "2005"
+       ],
+       [
+        "2010.0",
+        "2010"
+       ],
+       [
+        "2015.0",
+        "2015"
+       ],
+       [
+        "2020.0",
+        "2020"
+       ],
+       [
+        "2025.0",
+        "2025"
+       ]
+      ],
+      "highlight_from": "2026.0833"
+     },
+     "unit": "",
+     "judge": [],
+     "badges": [],
+     "emphasize": 0,
+     "enter": "spiral",
+     "exit": "cut"
+    },
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "cut",
+   "span": [
+    44.88,
+    61.76
+   ],
+   "docks": [
+    {
+     "slide": "dock-f-toll-gate-to-fab",
+     "slot": 0,
+     "enter": 55.31,
+     "exit": 61.76,
+     "badge_at": [],
+     "kind": "video",
+     "place": {
+      "x": 594,
+      "y": 297,
+      "w": 270,
+      "h": 175
+     },
+     "read_s": 1.2,
+     "park_s": 0.7,
+     "park": true
+    }
+   ],
+   "species": [
+    {
+     "kind": "retitle",
+     "at": 41.88,
+     "dur": 2.4,
+     "text": "The opponent: a balance sheet"
+    },
+    {
+     "kind": "punch",
+     "at": 45.0,
+     "dur": 0.9,
+     "target": {
+      "kind": "datum",
+      "index": 311
+     }
+    },
+    {
+     "kind": "bracket",
+     "at": 46.72,
+     "dur": 2.4,
+     "from": 311,
+     "to": 315,
+     "label": "\u2212$122.6B",
+     "sub": "a tenth of the pile",
+     "color": "neg"
+    }
+   ]
+  },
+  {
+   "scene_id": "s05",
+   "world": {
+    "kind": "ledger",
+    "page": {
+     "schema_version": "ledger_page.v1",
+     "surface": "page",
+     "builder": "story",
+     "variant": "bars",
+     "title": "What a Meta share is worth as the 10-year moves",
+     "sub": "The same trailing profit per share ($26.83), priced at each 10-year yield; today's 4.77% gives the 23.0x multiple and the $617 price. Arithmetic on the discount identity - no growth assumed, no forecast",
+     "source": "META price, trailing EPS and P/E: Yahoo Finance via yfinance; US 10-year: FRED DGS10 (2026-09) - fetched 2026-09-04",
+     "quiet_zone": "right",
+     "labels": [
+      "4%",
+      "4.5%",
+      "5%",
+      "5.5%"
+     ],
+     "values": [
+      665.0,
+      633.0,
+      604.0,
+      577.0
+     ],
+     "value_strings": [
+      "665",
+      "633",
+      "604",
+      "577"
+     ],
+     "colors": [
+      "cobalt",
+      "cobalt",
+      "crimson",
+      "crimson"
+     ],
+     "unit": "$",
+     "judge": [],
+     "badges": [
+      {
+       "label": "META NOW",
+       "value": "$617",
+       "tag": "23.0x at a 4.77% 10-year",
+       "accent": "cobalt",
+       "inline": false
+      },
+      {
+       "label": "AT 5.5%",
+       "value": "-$40",
+       "tag": "a share, -6.5%, same profit",
+       "accent": "crimson",
+       "inline": false
+      },
+      {
+       "label": "ON $10,000",
+       "value": "-$647",
+       "tag": "of Meta, at 5.5%",
+       "accent": "crimson",
+       "inline": false
+      }
+     ],
+     "emphasize": 3,
+     "enter": "mount",
+     "mount_s": 2.43,
+     "exit": "cut"
+    },
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "cut",
+   "span": [
+    61.76,
+    75.73
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "callout",
+     "at": 69.35,
+     "dur": 2.0,
+     "target": {
+      "kind": "datum",
+      "index": 0
+     }
+    },
+    {
+     "kind": "punch",
+     "at": 74.76,
+     "dur": 0.9,
+     "target": {
+      "kind": "datum",
+      "index": 3
+     }
+    }
+   ]
+  },
+  {
+   "scene_id": "s06",
+   "world": {
+    "kind": "ledger",
+    "page": {
+     "schema_version": "ledger_page.v1",
+     "surface": "page",
+     "builder": "dense-line",
+     "variant": "line",
+     "title": "Our biggest customer is selling",
+     "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06",
+     "source": "US Treasury TIC Table 5, Major Foreign Holders \u00b7 fetched 2026-09-05",
+     "quiet_zone": "right",
+     "labels": [
+      "Japan"
+     ],
+     "values": [],
+     "value_strings": [],
+     "colors": [],
+     "series": [
+      {
+       "label": "-9.9%",
+       "name": "Japan",
+       "color": "crimson",
+       "pts": [
+        [
+         "2000.1667",
+         "325.8"
+        ],
+        [
+         "2000.25",
+         "322.4"
+        ],
+        [
+         "2000.3333",
+         "319.4"
+        ],
+        [
+         "2000.4167",
+         "318.8"
+        ],
+        [
+         "2000.5",
+         "319.6"
+        ],
+        [
+         "2000.5833",
+         "317.8"
+        ],
+        [
+         "2000.6667",
+         "317.3"
+        ],
+        [
+         "2000.75",
+         "317.7"
+        ],
+        [
+         "2000.8333",
+         "321.7"
+        ],
+        [
+         "2000.9167",
+         "317.7"
+        ],
+        [
+         "2001.0",
+         "312.3"
+        ],
+        [
+         "2001.0833",
+         "312.5"
+        ],
+        [
+         "2001.1667",
+         "307.1"
+        ],
+        [
+         "2001.25",
+         "305.9"
+        ],
+        [
+         "2001.3333",
+         "306.7"
+        ],
+        [
+         "2001.4167",
+         "300.8"
+        ],
+        [
+         "2001.5",
+         "295.3"
+        ],
+        [
+         "2001.5833",
+         "293.1"
+        ],
+        [
+         "2001.6667",
+         "292.9"
+        ],
+        [
+         "2001.75",
+         "314.5"
+        ],
+        [
+         "2001.8333",
+         "315.4"
+        ],
+        [
+         "2001.9167",
+         "317.9"
+        ],
+        [
+         "2002.0",
+         "310.6"
+        ],
+        [
+         "2002.0833",
+         "311.9"
+        ],
+        [
+         "2002.1667",
+         "312.6"
+        ],
+        [
+         "2002.25",
+         "314.6"
+        ],
+        [
+         "2002.3333",
+         "317.8"
+        ],
+        [
+         "2002.4167",
+         "335.8"
+        ],
+        [
+         "2002.5",
+         "361.8"
+        ],
+        [
+         "2002.5833",
+         "364.6"
+        ],
+        [
+         "2002.6667",
+         "373.8"
+        ],
+        [
+         "2002.75",
+         "373.1"
+        ],
+        [
+         "2002.8333",
+         "374.9"
+        ],
+        [
+         "2002.9167",
+         "378.1"
+        ],
+        [
+         "2003.0",
+         "385.0"
+        ],
+        [
+         "2003.0833",
+         "391.1"
+        ],
+        [
+         "2003.1667",
+         "399.3"
+        ],
+        [
+         "2003.25",
+         "401.8"
+        ],
+        [
+         "2003.3333",
+         "441.4"
+        ],
+        [
+         "2003.4167",
+         "453.1"
+        ],
+        [
+         "2003.5",
+         "463.1"
+        ],
+        [
+         "2003.5833",
+         "471.4"
+        ],
+        [
+         "2003.6667",
+         "491.2"
+        ],
+        [
+         "2003.75",
+         "507.7"
+        ],
+        [
+         "2003.8333",
+         "531.1"
+        ],
+        [
+         "2003.9167",
+         "550.8"
+        ],
+        [
+         "2004.0",
+         "582.6"
+        ],
+        [
+         "2004.0833",
+         "613.2"
+        ],
+        [
+         "2004.1667",
+         "645.3"
+        ],
+        [
+         "2004.25",
+         "651.8"
+        ],
+        [
+         "2004.3333",
+         "666.4"
+        ],
+        [
+         "2004.4167",
+         "688.4"
+        ],
+        [
+         "2004.5",
+         "675.4"
+        ],
+        [
+         "2004.5833",
+         "699.4"
+        ],
+        [
+         "2004.6667",
+         "698.9"
+        ],
+        [
+         "2004.75",
+         "692.3"
+        ],
+        [
+         "2004.8333",
+         "693.1"
+        ],
+        [
+         "2004.9167",
+         "689.9"
+        ],
+        [
+         "2005.0",
+         "679.5"
+        ],
+        [
+         "2005.0833",
+         "680.8"
+        ],
+        [
+         "2005.1667",
+         "681.6"
+        ],
+        [
+         "2005.25",
+         "688.2"
+        ],
+        [
+         "2005.3333",
+         "686.8"
+        ],
+        [
+         "2005.4167",
+         "681.2"
+        ],
+        [
+         "2005.5",
+         "669.4"
+        ],
+        [
+         "2005.5833",
+         "670.0"
+        ],
+        [
+         "2005.6667",
+         "672.8"
+        ],
+        [
+         "2005.75",
+         "667.6"
+        ],
+        [
+         "2005.8333",
+         "667.9"
+        ],
+        [
+         "2005.9167",
+         "670.0"
+        ],
+        [
+         "2006.0",
+         "653.4"
+        ],
+        [
+         "2006.0833",
+         "656.4"
+        ],
+        [
+         "2006.1667",
+         "639.0"
+        ],
+        [
+         "2006.25",
+         "639.4"
+        ],
+        [
+         "2006.3333",
+         "636.1"
+        ],
+        [
+         "2006.4167",
+         "635.4"
+        ],
+        [
+         "2006.5",
+         "614.9"
+        ],
+        [
+         "2006.5833",
+         "623.5"
+        ],
+        [
+         "2006.6667",
+         "618.1"
+        ],
+        [
+         "2006.75",
+         "618.1"
+        ],
+        [
+         "2006.8333",
+         "615.9"
+        ],
+        [
+         "2006.9167",
+         "622.9"
+        ],
+        [
+         "2007.0",
+         "627.2"
+        ],
+        [
+         "2007.0833",
+         "616.4"
+        ],
+        [
+         "2007.1667",
+         "611.4"
+        ],
+        [
+         "2007.25",
+         "614.6"
+        ],
+        [
+         "2007.3333",
+         "615.0"
+        ],
+        [
+         "2007.4167",
+         "612.9"
+        ],
+        [
+         "2007.5",
+         "620.6"
+        ],
+        [
+         "2007.5833",
+         "595.8"
+        ],
+        [
+         "2007.6667",
+         "591.9"
+        ],
+        [
+         "2007.75",
+         "601.8"
+        ],
+        [
+         "2007.8333",
+         "589.6"
+        ],
+        [
+         "2007.9167",
+         "579.9"
+        ],
+        [
+         "2008.0",
+         "585.6"
+        ],
+        [
+         "2008.0833",
+         "583.3"
+        ],
+        [
+         "2008.1667",
+         "597.4"
+        ],
+        [
+         "2008.25",
+         "588.8"
+        ],
+        [
+         "2008.3333",
+         "575.3"
+        ],
+        [
+         "2008.4167",
+         "580.4"
+        ],
+        [
+         "2008.5",
+         "637.6"
+        ],
+        [
+         "2008.5833",
+         "630.3"
+        ],
+        [
+         "2008.6667",
+         "617.5"
+        ],
+        [
+         "2008.75",
+         "629.6"
+        ],
+        [
+         "2008.8333",
+         "625.2"
+        ],
+        [
+         "2008.9167",
+         "626.0"
+        ],
+        [
+         "2009.0",
+         "634.8"
+        ],
+        [
+         "2009.0833",
+         "661.9"
+        ],
+        [
+         "2009.1667",
+         "686.7"
+        ],
+        [
+         "2009.25",
+         "685.9"
+        ],
+        [
+         "2009.3333",
+         "677.2"
+        ],
+        [
+         "2009.4167",
+         "711.2"
+        ],
+        [
+         "2009.5",
+         "720.9"
+        ],
+        [
+         "2009.5833",
+         "727.5"
+        ],
+        [
+         "2009.6667",
+         "747.9"
+        ],
+        [
+         "2009.75",
+         "742.9"
+        ],
+        [
+         "2009.8333",
+         "754.3"
+        ],
+        [
+         "2009.9167",
+         "765.7"
+        ],
+        [
+         "2010.0",
+         "765.2"
+        ],
+        [
+         "2010.0833",
+         "768.2"
+        ],
+        [
+         "2010.1667",
+         "783.3"
+        ],
+        [
+         "2010.25",
+         "793.8"
+        ],
+        [
+         "2010.3333",
+         "784.8"
+        ],
+        [
+         "2010.4167",
+         "801.2"
+        ],
+        [
+         "2010.5",
+         "817.2"
+        ],
+        [
+         "2010.5833",
+         "832.4"
+        ],
+        [
+         "2010.6667",
+         "860.8"
+        ],
+        [
+         "2010.75",
+         "873.6"
+        ],
+        [
+         "2010.8333",
+         "875.9"
+        ],
+        [
+         "2010.9167",
+         "882.3"
+        ],
+        [
+         "2011.0",
+         "886.0"
+        ],
+        [
+         "2011.0833",
+         "890.4"
+        ],
+        [
+         "2011.1667",
+         "908.1"
+        ],
+        [
+         "2011.25",
+         "906.7"
+        ],
+        [
+         "2011.3333",
+         "912.4"
+        ],
+        [
+         "2011.4167",
+         "911.1"
+        ],
+        [
+         "2011.5",
+         "884.9"
+        ],
+        [
+         "2011.5833",
+         "906.7"
+        ],
+        [
+         "2011.6667",
+         "984.0"
+        ],
+        [
+         "2011.75",
+         "1006.2"
+        ],
+        [
+         "2011.8333",
+         "1066.2"
+        ],
+        [
+         "2011.9167",
+         "1058.1"
+        ],
+        [
+         "2012.0",
+         "1080.8"
+        ],
+        [
+         "2012.0833",
+         "1088.6"
+        ],
+        [
+         "2012.1667",
+         "1080.4"
+        ],
+        [
+         "2012.25",
+         "1087.9"
+        ],
+        [
+         "2012.3333",
+         "1107.2"
+        ],
+        [
+         "2012.4167",
+         "1108.4"
+        ],
+        [
+         "2012.5",
+         "1119.8"
+        ],
+        [
+         "2012.5833",
+         "1120.9"
+        ],
+        [
+         "2012.6667",
+         "1128.5"
+        ],
+        [
+         "2012.75",
+         "1131.9"
+        ],
+        [
+         "2012.8333",
+         "1117.7"
+        ],
+        [
+         "2012.9167",
+         "1111.2"
+        ],
+        [
+         "2013.0",
+         "1103.9"
+        ],
+        [
+         "2013.0833",
+         "1105.5"
+        ],
+        [
+         "2013.1667",
+         "1114.3"
+        ],
+        [
+         "2013.25",
+         "1112.7"
+        ],
+        [
+         "2013.3333",
+         "1103.7"
+        ],
+        [
+         "2013.4167",
+         "1083.3"
+        ],
+        [
+         "2013.5",
+         "1135.4"
+        ],
+        [
+         "2013.5833",
+         "1149.1"
+        ],
+        [
+         "2013.6667",
+         "1178.1"
+        ],
+        [
+         "2013.75",
+         "1174.4"
+        ],
+        [
+         "2013.8333",
+         "1186.4"
+        ],
+        [
+         "2013.9167",
+         "1182.5"
+        ],
+        [
+         "2014.0",
+         "1201.4"
+        ],
+        [
+         "2014.0833",
+         "1210.8"
+        ],
+        [
+         "2014.1667",
+         "1200.2"
+        ],
+        [
+         "2014.25",
+         "1209.7"
+        ],
+        [
+         "2014.3333",
+         "1220.1"
+        ],
+        [
+         "2014.4167",
+         "1219.3"
+        ],
+        [
+         "2014.5",
+         "1219.0"
+        ],
+        [
+         "2014.5833",
+         "1230.1"
+        ],
+        [
+         "2014.6667",
+         "1221.8"
+        ],
+        [
+         "2014.75",
+         "1222.4"
+        ],
+        [
+         "2014.8333",
+         "1241.5"
+        ],
+        [
+         "2014.9167",
+         "1230.9"
+        ],
+        [
+         "2015.0",
+         "1238.6"
+        ],
+        [
+         "2015.0833",
+         "1224.4"
+        ],
+        [
+         "2015.1667",
+         "1224.7"
+        ],
+        [
+         "2015.25",
+         "1215.9"
+        ],
+        [
+         "2015.3333",
+         "1214.9"
+        ],
+        [
+         "2015.4167",
+         "1197.1"
+        ],
+        [
+         "2015.5",
+         "1200.8"
+        ],
+        [
+         "2015.5833",
+         "1197.0"
+        ],
+        [
+         "2015.6667",
+         "1177.1"
+        ],
+        [
+         "2015.75",
+         "1149.2"
+        ],
+        [
+         "2015.8333",
+         "1144.9"
+        ],
+        [
+         "2015.9167",
+         "1122.4"
+        ],
+        [
+         "2016.0",
+         "1123.6"
+        ],
+        [
+         "2016.0833",
+         "1133.2"
+        ],
+        [
+         "2016.1667",
+         "1137.1"
+        ],
+        [
+         "2016.25",
+         "1142.8"
+        ],
+        [
+         "2016.3333",
+         "1133.2"
+        ],
+        [
+         "2016.4167",
+         "1147.1"
+        ],
+        [
+         "2016.5",
+         "1154.6"
+        ],
+        [
+         "2016.5833",
+         "1144.0"
+        ],
+        [
+         "2016.6667",
+         "1136.4"
+        ],
+        [
+         "2016.75",
+         "1131.9"
+        ],
+        [
+         "2016.8333",
+         "1108.6"
+        ],
+        [
+         "2016.9167",
+         "1090.8"
+        ],
+        [
+         "2017.0",
+         "1102.5"
+        ],
+        [
+         "2017.0833",
+         "1115.7"
+        ],
+        [
+         "2017.1667",
+         "1120.7"
+        ],
+        [
+         "2017.25",
+         "1106.9"
+        ],
+        [
+         "2017.3333",
+         "1111.5"
+        ],
+        [
+         "2017.4167",
+         "1090.3"
+        ],
+        [
+         "2017.5",
+         "1113.3"
+        ],
+        [
+         "2017.5833",
+         "1101.7"
+        ],
+        [
+         "2017.6667",
+         "1096.0"
+        ],
+        [
+         "2017.75",
+         "1094.0"
+        ],
+        [
+         "2017.8333",
+         "1084.1"
+        ],
+        [
+         "2017.9167",
+         "1061.6"
+        ],
+        [
+         "2018.0",
+         "1066.0"
+        ],
+        [
+         "2018.0833",
+         "1060.1"
+        ],
+        [
+         "2018.1667",
+         "1044.4"
+        ],
+        [
+         "2018.25",
+         "1031.8"
+        ],
+        [
+         "2018.3333",
+         "1048.9"
+        ],
+        [
+         "2018.4167",
+         "1032.5"
+        ],
+        [
+         "2018.5",
+         "1035.5"
+        ],
+        [
+         "2018.5833",
+         "1029.9"
+        ],
+        [
+         "2018.6667",
+         "1028.0"
+        ],
+        [
+         "2018.75",
+         "1018.5"
+        ],
+        [
+         "2018.8333",
+         "1036.6"
+        ],
+        [
+         "2018.9167",
+         "1039.7"
+        ],
+        [
+         "2019.0",
+         "1064.9"
+        ],
+        [
+         "2019.0833",
+         "1068.8"
+        ],
+        [
+         "2019.1667",
+         "1078.1"
+        ],
+        [
+         "2019.25",
+         "1064.0"
+        ],
+        [
+         "2019.3333",
+         "1101.0"
+        ],
+        [
+         "2019.4167",
+         "1122.8"
+        ],
+        [
+         "2019.5",
+         "1131.2"
+        ],
+        [
+         "2019.5833",
+         "1174.6"
+        ],
+        [
+         "2019.6667",
+         "1146.2"
+        ],
+        [
+         "2019.75",
+         "1168.5"
+        ],
+        [
+         "2019.8333",
+         "1160.6"
+        ],
+        [
+         "2019.9167",
+         "1155.2"
+        ],
+        [
+         "2020.0",
+         "1211.8"
+        ],
+        [
+         "2020.0833",
+         "1268.6"
+        ],
+        [
+         "2020.1667",
+         "1272.6"
+        ],
+        [
+         "2020.25",
+         "1266.5"
+        ],
+        [
+         "2020.3333",
+         "1260.4"
+        ],
+        [
+         "2020.4167",
+         "1261.6"
+        ],
+        [
+         "2020.5",
+         "1293.0"
+        ],
+        [
+         "2020.5833",
+         "1278.4"
+        ],
+        [
+         "2020.6667",
+         "1276.2"
+        ],
+        [
+         "2020.75",
+         "1273.1"
+        ],
+        [
+         "2020.8333",
+         "1260.8"
+        ],
+        [
+         "2020.9167",
+         "1251.3"
+        ],
+        [
+         "2021.0",
+         "1276.9"
+        ],
+        [
+         "2021.0833",
+         "1258.0"
+        ],
+        [
+         "2021.1667",
+         "1240.5"
+        ],
+        [
+         "2021.25",
+         "1276.8"
+        ],
+        [
+         "2021.3333",
+         "1266.2"
+        ],
+        [
+         "2021.4167",
+         "1279.7"
+        ],
+        [
+         "2021.5",
+         "1310.2"
+        ],
+        [
+         "2021.5833",
+         "1319.7"
+        ],
+        [
+         "2021.6667",
+         "1299.6"
+        ],
+        [
+         "2021.75",
+         "1320.4"
+        ],
+        [
+         "2021.8333",
+         "1325.5"
+        ],
+        [
+         "2021.9167",
+         "1300.8"
+        ],
+        [
+         "2022.0",
+         "1299.9"
+        ],
+        [
+         "2022.0833",
+         "1303.0"
+        ],
+        [
+         "2022.1667",
+         "1229.0"
+        ],
+        [
+         "2022.25",
+         "1215.0"
+        ],
+        [
+         "2022.3333",
+         "1219.9"
+        ],
+        [
+         "2022.4167",
+         "1232.7"
+        ],
+        [
+         "2022.5",
+         "1230.7"
+        ],
+        [
+         "2022.5833",
+         "1196.0"
+        ],
+        [
+         "2022.6667",
+         "1116.4"
+        ],
+        [
+         "2022.75",
+         "1064.4"
+        ],
+        [
+         "2022.8333",
+         "1081.8"
+        ],
+        [
+         "2022.9167",
+         "1075.1"
+        ],
+        [
+         "2023.0",
+         "1102.9"
+        ],
+        [
+         "2023.0833",
+         "1080.7"
+        ],
+        [
+         "2023.1667",
+         "1086.6"
+        ],
+        [
+         "2023.25",
+         "1125.8"
+        ],
+        [
+         "2023.3333",
+         "1096.1"
+        ],
+        [
+         "2023.4167",
+         "1104.1"
+        ],
+        [
+         "2023.5",
+         "1111.8"
+        ],
+        [
+         "2023.5833",
+         "1115.5"
+        ],
+        [
+         "2023.6667",
+         "1086.4"
+        ],
+        [
+         "2023.75",
+         "1098.2"
+        ],
+        [
+         "2023.8333",
+         "1127.5"
+        ],
+        [
+         "2023.9167",
+         "1115.3"
+        ],
+        [
+         "2024.0",
+         "1140.6"
+        ],
+        [
+         "2024.0833",
+         "1147.6"
+        ],
+        [
+         "2024.1667",
+         "1167.0"
+        ],
+        [
+         "2024.25",
+         "1126.1"
+        ],
+        [
+         "2024.3333",
+         "1106.0"
+        ],
+        [
+         "2024.4167",
+         "1091.4"
+        ],
+        [
+         "2024.5",
+         "1093.5"
+        ],
+        [
+         "2024.5833",
+         "1106.0"
+        ],
+        [
+         "2024.6667",
+         "1095.5"
+        ],
+        [
+         "2024.75",
+         "1101.5"
+        ],
+        [
+         "2024.8333",
+         "1087.1"
+        ],
+        [
+         "2024.9167",
+         "1061.5"
+        ],
+        [
+         "2025.0",
+         "1079.3"
+        ],
+        [
+         "2025.0833",
+         "1125.9"
+        ],
+        [
+         "2025.1667",
+         "1130.8"
+        ],
+        [
+         "2025.25",
+         "1134.5"
+        ],
+        [
+         "2025.3333",
+         "1135.0"
+        ],
+        [
+         "2025.4167",
+         "1154.8"
+        ],
+        [
+         "2025.5",
+         "1155.4"
+        ],
+        [
+         "2025.5833",
+         "1183.9"
+        ],
+        [
+         "2025.6667",
+         "1189.3"
+        ],
+        [
+         "2025.75",
+         "1200.0"
+        ],
+        [
+         "2025.8333",
+         "1202.7"
+        ],
+        [
+         "2025.9167",
+         "1185.5"
+        ],
+        [
+         "2026.0",
+         "1225.3"
+        ],
+        [
+         "2026.0833",
+         "1239.3"
+        ],
+        [
+         "2026.1667",
+         "1191.6"
+        ],
+        [
+         "2026.25",
+         "1209.9"
+        ],
+        [
+         "2026.3333",
+         "1143.1"
+        ],
+        [
+         "2026.4167",
+         "1116.7"
+        ]
+       ]
+      }
+     ],
+     "axes": {
+      "ylabel": "$bn",
+      "xticks": [
+       [
+        "2000.0",
+        "2000"
+       ],
+       [
+        "2005.0",
+        "2005"
+       ],
+       [
+        "2010.0",
+        "2010"
+       ],
+       [
+        "2015.0",
+        "2015"
+       ],
+       [
+        "2020.0",
+        "2020"
+       ],
+       [
+        "2025.0",
+        "2025"
+       ]
+      ],
+      "highlight_from": "2026.0833"
+     },
+     "unit": "",
+     "judge": [],
+     "badges": [],
+     "emphasize": 0,
+     "enter": "spiral",
+     "exit": "cut"
+    },
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "cut",
+   "span": [
+    75.73,
+    81.55
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "retitle",
+     "at": 72.73,
+     "dur": 2.4,
+     "text": "The opponent: a balance sheet"
+    },
+    {
+     "kind": "bracket",
+     "at": 75.73,
+     "dur": 0.8,
+     "from": 311,
+     "to": 315,
+     "label": "\u2212$122.6B",
+     "sub": "a tenth of the pile",
+     "color": "neg"
+    },
+    {
+     "kind": "relight",
+     "at": 79.92,
+     "dur": 1.0,
+     "ref": "bracket",
+     "index": 0
+    }
+   ]
+  },
+  {
+   "scene_id": "s07",
+   "world": {
+    "kind": "clip",
+    "asset_id": "clip-a2-counter-colder-v2",
+    "sha256": "a9250428bb36bade662efd71fa5a6926b119a7b7d346716946de2c46ac3fe272",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "dip",
+   "span": [
+    81.55,
+    82.62
+   ],
+   "docks": [],
+   "species": []
+  },
+  {
+   "scene_id": "s08",
+   "world": {
+    "kind": "clip",
+    "asset_id": "outro-v2",
+    "sha256": "e87be3bf3b3cd81ee9090d5e93cf0820589a6dd5fbd277395f7f0be9eff8da2e",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "dip",
+   "span": [
+    82.62,
+    88.82
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "life",
+     "at": 82.623,
+     "dur": 6.2
+    }
+   ]
+  }
+ ],
+ "species": [
+  "ledger",
+  "build_to",
+  "spotlight",
+  "callout",
+  "retitle",
+  "steam",
+  "trace",
+  "ticker",
+  "punch",
+  "bracket",
+  "relight",
+  "life"
+ ],
+ "kinetics": {
+  "idle": true,
+  "stop_action": true,
+  "analytic_spring": true,
+  "min_jerk": true,
+  "area_squash": true,
+  "km_ink": false,
+  "curvature_stroke": true,
+  "arap_morph": true
+ },
+ "caption_style": "phrase"
+}

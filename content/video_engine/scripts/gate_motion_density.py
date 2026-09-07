@@ -49,6 +49,8 @@ captions do NOT count - they are what a viewer reads as stillness.
        between two caps, listed by name
   M20  the cadence rule per arrival (P47 T1): a thrown card  INFO   (only when a dock arrives by throw|land)
        steps on 1s above 250 px/s, on 2s below
+  M17  the morph's match-cut invariants (P47 T3): centroid WARN   (only when a page enters by morph; INFO until
+       <= 6 % W, axis <= 15 deg, area >= 60 %, det J > 0        measure_morph.py has run)
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -66,6 +68,10 @@ from pathlib import Path
 STILL_FAIL_S = 12.0        # doc 29 s8.19 MAX_BARE, s9.25 ceiling
 FROZEN_MAX_S = 0.5         # E49: the longest run of bit-identical rendered frames [DERIVED: HyperFrames' "the final 1-2 seconds"; halved]
 FRAME_HASHES_NAME = "frame-hashes.json"   # written by measure_frozen_frames.py beside the timeline
+MORPH_S = 2.0              # P47 T3 [DERIVED: the template MORPH.S] - a morph page's prop becomes the chart over this, then the build
+MORPH_STEP_S = 0.5         # a morph is continuous motion: one event every half second of its window
+MORPH_INVARIANTS_NAME = "morph-invariants.json"   # written by measure_morph.py beside the timeline
+SRC_M17 = "P47 T3 / the brief B4 [DERIVED: :390-396]: a morph reads as one thing changing when its centroid moves <= 6 % of W, its dominant axis turns <= 15 deg and its bounding area keeps >= 60 % - measured in the player by measure_morph.py"
 STOP_FLIGHT_S = 0.45       # P47 T1 [DERIVED: stopaction.mjs STOP.FLIGHT_S] - a thrown card lands this long after its enter
 STOP_LAND_S = 0.32         # P47 T1 [DERIVED: STOP.ANTIC_S + STOP.DROP_S] - a landed card hits its spot this long after its enter
 STOP_ON1_PX_S = 250        # P47 T1 [DERIVED: CADENCE.ON1_PX_S, the brief :185-193] - faster than this steps on 1s
@@ -236,7 +242,13 @@ def _page_events(scenes: list[dict]) -> tuple[list[float], list[float]]:
             continue
         a, z = float(s["span"][0]), float(s["span"][1])
         starts.append(a)
-        spiral = ((s.get("world", {}).get("page") or {}).get("enter") == "spiral")
+        page = (s.get("world", {}).get("page") or {})
+        spiral = page.get("enter") == "spiral"
+        if page.get("enter") == "morph":   # P47 T3: the morph is continuous motion, then the build starts and lands
+            ms = float(page.get("morph_s") or MORPH_S)
+            offs = [k * MORPH_STEP_S for k in range(int(ms // MORPH_STEP_S) + 1)] + [ms, ms + LP_BUILD_S]
+            beats += [round(a + off, 2) for off in offs if a + off < z]
+            continue
         beats += [round(a + off, 2) for off in ((0.0, LP_SPIRAL_IN_S) if spiral else PAGE_BEAT_OFFSETS) if a + off < z]
         # the retract: the colours start winding in, then the charcoal - two beats at the page's end (none on exit=cut)
         if (s.get("world", {}).get("page") or {}).get("exit") != "cut":
@@ -455,7 +467,7 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
                             or any(isinstance(pg, dict) and "cap_mode" in pg for pg in pages)}
 
 
-def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None = None) -> tuple[list[Gate], dict]:
+def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None = None, morph: dict | str | None = None) -> tuple[list[Gate], dict]:
     A = analyse(tl, docks, mp)
     R = A["runtime"]
     mm = lambda s: f"{int(s // 60)}:{int(s % 60):02d}"
@@ -534,6 +546,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
         g.append(bt)                                                      # M19 (P47 T2: the build_to holds, INFO)
     if (cg := _cadence_gate(tl.get("scenes", []))) is not None:
         g.append(cg)                                                      # M20 (P47 T1: the cadence rule per arrival, INFO)
+    if (mg := _morph_gate(tl.get("scenes", []), morph)) is not None:
+        g.append(mg)                                                      # M17 (P47 T3: the match-cut invariants per morph page)
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
     return g, _stats(A, tot)
 
@@ -597,6 +611,8 @@ def _page_land_offset(scene: dict) -> float:
     if page.get("enter") == "mount":
         mount_s = float(page.get("mount_s") or LP_FIELD_S)
         return mount_s + PAGE_BUILD_END_S - LP_ROLL_S
+    if page.get("enter") == "morph":   # P47 T3: the morph replaces the roll, the savor, the soak and the punch; the build starts as it ends
+        return float(page.get("morph_s") or MORPH_S) + LP_BUILD_S
     return PAGE_BUILD_END_S
 
 def _first_chart_window(tl: dict) -> tuple[float, float, str]:
@@ -841,6 +857,44 @@ def _cadence_gate(scenes: list[dict]) -> Gate | None:
     return Gate("M20", "INFO", f"{len(arr)} arrival(s): " + "; ".join(rows[:8]), SRC_M20)
 
 
+def load_morph_invariants(build: Path) -> dict | str | None:
+    """The per-scene invariants measure_morph.py wrote beside the timeline; None when it has not run; "stale" when the
+    player was rebuilt since."""
+    p = Path(build) / MORPH_INVARIANTS_NAME
+    if not p.exists():
+        return None
+    doc = json.loads(p.read_text(encoding="utf-8"))
+    html = Path(build) / "player.html"
+    if doc.get("html_sha256") and html.exists() and hashlib.sha256(html.read_bytes()).hexdigest() != doc["html_sha256"]:
+        return "stale"
+    return doc
+
+
+def _morph_gate(scenes: list[dict], inv: dict | str | None) -> Gate | None:
+    """M17 (P47 T3): the three match-cut invariants per morph page, measured in the player - INFO until measured (no silent
+    skip), WARN naming the invariant that failed, PASS with the numbers. No morph page, no row."""
+    morphs = [s for s in scenes if _is_page(s) and (s.get("world", {}).get("page") or {}).get("enter") == "morph"]
+    if not morphs:
+        return None
+    if inv is None:
+        return Gate("M17", "INFO", f"{len(morphs)} morph page(s), invariants not measured - run measure_morph.py <build> (writes {MORPH_INVARIANTS_NAME})", SRC_M17)
+    if inv == "stale":
+        return Gate("M17", "INFO", f"{MORPH_INVARIANTS_NAME} measured another player.html - re-run measure_morph.py <build>", SRC_M17)
+    rows, bad = [], []
+    for sc in morphs:
+        r = (inv.get("scenes") or {}).get(sc.get("scene_id"))
+        if not r:
+            bad.append(f"{sc.get('scene_id')}: not in the measurement"); continue
+        fails = [n for n, ok in (("centroid", r.get("centroid_ok")), ("axis", r.get("axis_ok")), ("area", r.get("area_ok"))) if not ok]
+        if r.get("min_det", 1) <= 0:
+            fails.append("det J <= 0")
+        txt = f"{sc.get('scene_id')}: centroid {100 * float(r.get('centroid_shift', 0)):.1f} % W, axis {float(r.get('axis_deg', 0)):.1f} deg, area {float(r.get('area_ratio', 0)):.2f}, min det {float(r.get('min_det', 0)):.3f}"
+        (bad if fails else rows).append(txt + (" - FAILS " + ", ".join(fails) if fails else ""))
+    if bad:
+        return Gate("M17", "WARN", "; ".join(bad + rows) + " - the morph does not read as one thing changing (move the prop onto the chart's box, keep its axis, keep its area)", SRC_M17)
+    return Gate("M17", "PASS", "; ".join(rows), SRC_M17)
+
+
 def _stats(A: dict, still_total: float) -> dict:
     R = A["runtime"]
     mm = lambda s: f"{int(s // 60)}:{int(s % 60):02d}"
@@ -881,7 +935,7 @@ def write_report(build_dir: Path, timeline_name: str | None = None) -> tuple[Pat
     build_dir = Path(build_dir)
     tl, docks, mp = _load(build_dir, timeline_name)
     tl_path = _timeline_path(build_dir, timeline_name)
-    gates, stats = run(tl, docks, mp, load_frames(build_dir))
+    gates, stats = run(tl, docks, mp, load_frames(build_dir), load_morph_invariants(build_dir))
     n_fail = fail_count(gates)
     verdict = "FAIL" if n_fail else "PASS"
     # the timeline hash keys the report to the build it measured; render_episode refuses a
@@ -903,7 +957,7 @@ def main() -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     tl, docks, mp = _load(args.build, args.timeline)
-    gates, stats = run(tl, docks, mp, load_frames(args.build))
+    gates, stats = run(tl, docks, mp, load_frames(args.build), load_morph_invariants(args.build))
     print(report_text(gates, stats, args.build))
     return 1 if fail_count(gates) else 0
 
