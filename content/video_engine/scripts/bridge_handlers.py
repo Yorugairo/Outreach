@@ -51,7 +51,9 @@ REPLAY_DIR = "replay"
 # tokens - the REPAIR ROUND. SUBSTANCE - the work itself (a marker absent from a file, no proof line, an [UNVERIFIED] verdict, a
 # failed command, a failed verify): a follow-up would only invite invention (the operator, 2026-09-07: an evidence quota "gets
 # Gemini to write us bad numbers"), so it goes to tier 1. A repair is asked for FORM only, never for evidence.
-FORM_CHECKS = ("paths-named", "reply-whole", "report-named", "not-found-block", "docs-layers", "command-named", "shape", "exists")
+FORM_CHECKS = ("paths-named", "reply-whole", "report-named", "not-found-block", "docs-layers", "command-named", "shape", "exists",
+               "fetch-dir-named", "manifest", "manifest-parses", "entries", "entry", "outputs-named", "verify-named", "csv-named",
+               "intake-named", "section")   # P46 T8: the file shapes' FORM checks; sha256 / schema / rows / required-cells / claims-* / dedupe-* are substance
 CLASS_FORM, CLASS_SUBSTANCE = "form", "substance"
 DETAIL_CHARS = 400
 
@@ -492,6 +494,162 @@ HANDLERS: dict[str, Callable[[dict[str, Any], str, Path], Tier0Result]] = {
     "test-run": check_test_run,
     "free": check_free,
 }
+
+
+# --------------------------------------------------------------------------- P46 T8: the file shapes (docs/runbooks/BRIDGE-SHAPES.md)
+
+INTAKE_SECTIONS = ("## Claims", "## Dedupe", "## Figures", NOT_FOUND_BLOCK)
+INTAKE_STATUS = ("held", "new", "contradicts", "unsourced")
+
+
+def _sha256(path: Path) -> str:
+    import hashlib
+    h = hashlib.sha256()
+    with path.open("rb") as fh:
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def check_fetch(order: dict[str, Any], text: str, repo: Path) -> Tier0Result:
+    """A fetch order's deliverable is files and a manifest, never a summary: the manifest parses, every entry has url / path /
+    sha256 / fetched_at, every path exists and hashes to its sha256; a `not-fetched` entry counts toward NOT FOUND, not here."""
+    fetch_dir = order.get("fetch_dir")
+    if not fetch_dir:
+        return result(False, "order names no fetch_dir", [check("fetch-dir-named", False, "order.json has no `fetch_dir`")])
+    manifest, ok = locate(str(Path(str(fetch_dir)) / "MANIFEST.json"), repo, order_roots(order, repo))
+    checks = [check("manifest", ok, f"{manifest}" if ok else f"not found where I looked: {manifest}")]
+    if not ok:
+        return result(False, checks[0]["detail"], checks)
+    try:
+        doc = json.loads(manifest.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        checks.append(check("manifest-parses", False, f"{manifest}: {exc}"))
+        return result(False, checks[-1]["detail"], checks)
+    entries = [e for e in (doc.get("entries") if isinstance(doc, dict) else doc) or [] if isinstance(e, dict)]
+    fetched = [e for e in entries if e.get("status") != "not-fetched"]
+    checks.append(check("entries", bool(fetched), f"{len(fetched)} fetched entr{'y' if len(fetched) == 1 else 'ies'}, {len(entries) - len(fetched)} not-fetched"))
+    if not fetched:
+        return result(False, checks[-1]["detail"], checks)
+    for i, e in enumerate(fetched):
+        missing = [k for k in ("url", "path", "sha256", "fetched_at") if not e.get(k)]
+        checks.append(check(f"entry:{i}", not missing, f"{e.get('path') or e.get('url') or i}: " + (f"missing {', '.join(missing)}" if missing else "url, path, sha256, fetched_at present")))
+        if missing:
+            continue
+        found, exists = locate(str(e["path"]), repo, [Path(str(fetch_dir))] + order_roots(order, repo))
+        checks.append(check(f"exists:{e['path']}", exists, f"{found}" if exists else f"not found where I looked: {found}"))
+        if exists and found.is_file():
+            actual = _sha256(found)
+            checks.append(check(f"sha256:{e['path']}", actual == str(e["sha256"]).lower(), f"{actual[:12]} {'==' if actual == str(e['sha256']).lower() else '!='} {str(e['sha256'])[:12]}"))
+    failure = _first_failure(checks)
+    return result(failure is None, "" if failure is None else failure, checks)
+
+
+def check_measure(order: dict[str, Any], text: str, repo: Path) -> Tier0Result:
+    """Our tool ran on a named input: every named output exists (form); then the order's `verify` (the tool) exits 0 (substance,
+    run by classify() after this passes)."""
+    outputs = [str(p) for p in (order.get("outputs") or []) if p]
+    if not outputs:
+        return result(False, "order names no outputs", [check("outputs-named", False, "order.json has no `outputs` list")])
+    if not order.get("verify"):
+        return result(False, "order names no verify", [check("verify-named", False, "a measure order carries the tool as `verify`")])
+    checks = []
+    for raw in outputs:
+        found, ok = locate(raw, repo, order_roots(order, repo))
+        checks.append(check(f"exists:{raw}", ok, f"{found}" if ok else f"not found where I looked: {found}"))
+    failure = _first_failure(checks)
+    return result(failure is None, "" if failure is None else failure, checks)
+
+
+def check_watch(order: dict[str, Any], text: str, repo: Path) -> Tier0Result:
+    """The /watch skill's table: the CSV's header IS the order's schema, verbatim and in order; rows >= min_rows; no empty cell in a
+    required column (an unjudged row writes UNVERIFIED, never a blank)."""
+    import csv
+    csv_path, schema = order.get("csv"), [str(c) for c in (order.get("schema") or [])]
+    if not csv_path or not schema:
+        return result(False, "order names no csv/schema", [check("csv-named", False, "a watch order carries `csv` and `schema`")])
+    found, ok = locate(str(csv_path), repo, order_roots(order, repo))
+    checks = [check(f"exists:{csv_path}", ok, f"{found}" if ok else f"not found where I looked: {found}")]
+    if not ok:
+        return result(False, checks[0]["detail"], checks)
+    with found.open(encoding="utf-8-sig", newline="") as fh:
+        rows = list(csv.reader(fh))
+    header = [c.strip() for c in (rows[0] if rows else [])]
+    checks.append(check("schema", header == schema, f"header {header} {'==' if header == schema else '!='} schema {schema}"))
+    body = [r for r in rows[1:] if any(c.strip() for c in r)]
+    min_rows = int(order.get("min_rows") or 1)
+    checks.append(check("rows", len(body) >= min_rows, f"{len(body)} row(s), min {min_rows}"))
+    required = [str(c) for c in (order.get("required") or [])]
+    if header == schema and required:
+        idx = {c: i for i, c in enumerate(header)}
+        blanks = sum(1 for r in body for c in required if c in idx and (len(r) <= idx[c] or not r[idx[c]].strip()))
+        checks.append(check("required-cells", blanks == 0, f"{blanks} empty cell(s) in {required} (write UNVERIFIED, never a blank)"))
+    failure = _first_failure(checks)
+    return result(failure is None, "" if failure is None else failure, checks)
+
+
+def check_intake_triage(order: dict[str, Any], text: str, repo: Path) -> Tier0Result:
+    """The skeleton a research drop comes with: the four sections; the claims table with its `ours` column filled on every row and a
+    status from the four; the dedupe rows naming a path or `new`."""
+    files = [p for p in named_paths(order, text) if p.replace("\\", "/").lower().endswith("-intake.md")]
+    if not files:
+        return result(False, "no *-INTAKE.md named", [check("intake-named", False, "the reply names no `<name>-INTAKE.md` under docs/research/<area>/")])
+    found, ok = locate(files[0], repo, order_roots(order, repo))
+    checks = [check(f"exists:{files[0]}", ok, f"{found}" if ok else f"not found where I looked: {found}")]
+    if not ok:
+        return result(False, checks[0]["detail"], checks)
+    body = found.read_text(encoding="utf-8", errors="replace")
+    for sec in INTAKE_SECTIONS:
+        checks.append(check(f"section:{sec.strip('# ')}", sec in body, f"`{sec}` {'present' if sec in body else 'absent'}"))
+    if _first_failure(checks) is None:
+        claims = _table_rows(body, "## Claims")
+        checks.append(check("claims-rows", bool(claims), f"{len(claims)} claim row(s)"))
+        bad_ours = [r for r in claims if len(r) < 5 or not r[3].strip()]
+        checks.append(check("claims-ours-filled", not bad_ours, f"{len(bad_ours)} claim row(s) with an empty `ours` column"))
+        bad_status = [r for r in claims if len(r) >= 5 and r[4].strip().lower() not in INTAKE_STATUS]
+        checks.append(check("claims-status", not bad_status, f"{len(bad_status)} row(s) with a status outside {INTAKE_STATUS}"))
+        dedupe = _table_rows(body, "## Dedupe")
+        bad_dup = [r for r in dedupe if len(r) < 3 or not r[2].strip()]
+        checks.append(check("dedupe-filled", not bad_dup, f"{len(dedupe)} dedupe row(s), {len(bad_dup)} without a path or `new`"))
+    failure = _first_failure(checks)
+    return result(failure is None, "" if failure is None else failure, checks)
+
+
+def _table_rows(body: str, heading: str) -> list[list[str]]:
+    """The cells of the first markdown table under `heading` (the header and the rule line dropped)."""
+    lines = body.splitlines()
+    try:
+        start = next(i for i, ln in enumerate(lines) if ln.strip().lower().startswith(heading.lower()))
+    except StopIteration:
+        return []
+    rows: list[list[str]] = []
+    seen_table = False
+    for ln in lines[start + 1:]:
+        s = ln.strip()
+        if s.startswith("|"):
+            seen_table = True
+            cells = [c.strip() for c in s.strip("|").split("|")]
+            if all(set(c) <= set("-: ") for c in cells) or not rows and cells and cells[0] in ("#",):
+                continue
+            rows.append(cells)
+        elif seen_table and s.startswith("## "):
+            break
+    return rows
+
+
+HANDLERS.update({"fetch": check_fetch, "measure": check_measure, "watch": check_watch, "intake-triage": check_intake_triage})
+TEMPLATES.update({
+    "fetch": ("POSITION: done | conditional | blocked\nPATHS WRITTEN:\n<the fetch_dir's MANIFEST.json first, then every fetched file, one bare absolute path per line>\n"
+              "DISAGREEMENTS:\n- none\nPREREQUISITES:\n- none\nNOT FOUND WHERE I LOOKED:\n- <every url that would not fetch, one per line>\n"),
+    "measure": ("POSITION: done | conditional | blocked\nPATHS WRITTEN:\n<every output the order named, one bare absolute path per line>\n"
+                "DISAGREEMENTS:\n- none\nPREREQUISITES:\n- none\nNOT FOUND WHERE I LOOKED:\n- none\n"),
+    "watch": ("POSITION: done | conditional | blocked\nPATHS WRITTEN:\n<the CSV the order named, one bare absolute path>\n"
+              "DISAGREEMENTS:\n- none\nPREREQUISITES:\n- none\nNOT FOUND WHERE I LOOKED:\n- <the frames or ranges you could not judge (those rows say UNVERIFIED)>\n"
+              "(the CSV's first line is the order's schema verbatim; never rename, reorder or add a column; the method goes here, not in the file)\n"),
+    "intake-triage": ("POSITION: done | conditional | blocked\nPATHS WRITTEN:\n<docs/research/<area>/<name>-INTAKE.md, one bare absolute path>\n"
+                      "DISAGREEMENTS:\n- none\nPREREQUISITES:\n- none\nNOT FOUND WHERE I LOOKED:\n- <the docs_find queries run, the registries opened>\n"
+                      "(the file carries ## Claims, ## Dedupe, ## Figures, ## NOT FOUND WHERE I LOOKED; every claim's `ours` column filled; status held | new | contradicts | unsourced)\n"),
+})
 
 
 def classify(order: dict[str, Any], reply_text: str, repo: Path | str = REPO) -> Tier0Result:

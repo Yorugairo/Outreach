@@ -35,7 +35,9 @@ import bridge_env as env_mod  # noqa: E402
 
 REPO = env_mod.REPO
 LANES = ("gemini", "claude")
-REPLY_SHAPES = ("paths-written", "contract-block", "report-landed", "review", "test-run", "free")
+REPLY_SHAPES = ("paths-written", "contract-block", "report-landed", "review", "test-run", "free",
+                "fetch", "measure", "watch", "intake-triage")   # P46 T8: the file shapes (docs/runbooks/BRIDGE-SHAPES.md)
+SHAPE_SKILLS = {"watch": ["watch"]}   # a shape's skill, named on every order of that shape (operator 2026-09-07: an agent deploys a skill only when the order cites it)
 DEFAULT_DEADLINE_MIN = 60
 BRIEF_CAP_BYTES = 6 * 1024
 CLOCK_SLACK_S = 5.0
@@ -56,6 +58,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--verify", default=None,
                         help="P46 T7: OUR verification command, run from the repo root once the reply passes on form; exit 0 closes the packet, else tier 1")
     parser.add_argument("--no-template", action="store_true", help="do not append the reply's fill-in grammar block to the brief")
+    parser.add_argument("--skill", action="append", default=[], dest="skills", help="a skill the order must cite (`/watch`); repeatable; a watch order always cites /watch")
+    parser.add_argument("--marker", default=None, help="paths-written: a string every written file must carry")
+    parser.add_argument("--fetch-dir", default=None, help="fetch: the absolute dir the files and MANIFEST.json land in")
+    parser.add_argument("--output", action="append", default=[], dest="outputs", help="measure: an absolute output path the tool writes (repeatable)")
+    parser.add_argument("--csv", default=None, help="watch: the absolute CSV path")
+    parser.add_argument("--schema", default=None, help="watch: the columns, comma-separated, in order")
+    parser.add_argument("--required", default=None, help="watch: the columns that may not be blank, comma-separated")
+    parser.add_argument("--min-rows", type=int, default=None, help="watch: the least rows the table must carry")
     parser.add_argument("--repo", type=Path, default=REPO)
     parser.add_argument("--dry-run", action="store_true", help="resolve and write, never call the CLI")
     parser.add_argument("--json", action="store_true", dest="as_json", help="one JSON object on stdout")
@@ -86,7 +96,23 @@ def build_order(args: argparse.Namespace, brief: str, packet_source: str | None 
         "createdAt": created.isoformat(timespec="seconds"),
         **({"roots": [str(Path(r).expanduser()) for r in args.roots]} if getattr(args, "roots", None) else {}),
         **({"verify": args.verify} if getattr(args, "verify", None) else {}),
+        **({"skills": skills} if (skills := sorted(set([*getattr(args, "skills", []), *SHAPE_SKILLS.get(args.reply_shape, [])]))) else {}),
+        **({"marker": args.marker} if getattr(args, "marker", None) else {}),
+        **({"fetch_dir": str(Path(args.fetch_dir).expanduser())} if getattr(args, "fetch_dir", None) else {}),
+        **({"outputs": [str(Path(o).expanduser()) for o in args.outputs]} if getattr(args, "outputs", None) else {}),
+        **({"csv": str(Path(args.csv).expanduser())} if getattr(args, "csv", None) else {}),
+        **({"schema": [c.strip() for c in args.schema.split(",") if c.strip()]} if getattr(args, "schema", None) else {}),
+        **({"required": [c.strip() for c in args.required.split(",") if c.strip()]} if getattr(args, "required", None) else {}),
+        **({"min_rows": args.min_rows} if getattr(args, "min_rows", None) else {}),
     }
+
+
+def with_skills(brief: str, skills: list[str]) -> str:
+    """P46 T8: the skills line at the TOP of the brief - an agent deploys a skill only when the order cites it (operator 2026-09-07)."""
+    if not skills:
+        return brief
+    line = "**Skills:** " + ", ".join(f"use the `/{sk}` skill" for sk in skills) + " - name it in your reply.\n\n"
+    return brief if line.strip() in brief else line + brief
 
 
 def with_template(brief: str, shape: str) -> str:
@@ -303,6 +329,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     raw = read_brief(args.brief_file)
     brief = raw if getattr(args, "no_template", False) else with_template(raw, args.reply_shape)   # P46 T7: the fill-in block rides every order
+    brief = with_skills(brief, sorted(set([*args.skills, *SHAPE_SKILLS.get(args.reply_shape, [])])))   # P46 T8: the skill line
     order = build_order(args, brief, packet_source=raw)
     lines: list[str] = [f"packetId {order['packetId'][:12]} lane {order['lane']} shape {order['replyShape']}"]
 
