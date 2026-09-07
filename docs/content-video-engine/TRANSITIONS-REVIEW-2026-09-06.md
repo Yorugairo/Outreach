@@ -180,5 +180,5 @@ It does say that for a WORLD CHANGE (clip to clip, plate to plate, page to a dif
 gap, dip through black in 0.47 s, or blur-zoom, and nothing else - and that the dip and the blur-zoom are what our kit lacks.
 The next measurement (TR-2) is the voice-to-picture offset on the same boundaries, now a Python job on data on disk.
 
-Rows: TR-1 done; TR-2 next; a new TR-12 (decision) - whether the dip through black and the blur-zoom enter our kit for world
+Rows: TR-1 done; TR-2 next; **TR-12 RULED (E47)**: the dip and the blur-zoom enter the kit for world changes, the mount / spiral / mount-dissolve stay as signatures, the wipe is retired as the world-change default (it was a workaround for clearing the photo page). Was: a new TR-12 (decision) - whether the dip through black and the blur-zoom enter our kit for world
 changes, with the 14-frame dip as the starting reference `[DERIVED: from the reference, measured]`.

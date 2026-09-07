@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3225 records across 254 files.
+3230 records across 255 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -3366,7 +3366,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L124 [3] 3. What the reference channel does (thin, and that is the finding) — Cadence and placement are measured (`bundle/01_wealth_logic_production_report.md:20,40,50,53`; doc 46). Transition kind is not: {Transition kind is not:} <unclassified; reference-derived; second-hand; quart-in-out; 29:659>
 - L132 [3] 4. What the player paints (`samples/scene-evidence-player.template.html`) — | exit / enter | painted at | duration | curve | cue from the build | <cut; :2879; wipe; wipe_right; :2939-2941; :2949; WIPE = 0.62; :830; quartIO; minJerk; kin("min_jerk"); dissolve>
 - L150 [3] 5. Not found where I looked — Roots: `docs/` (all), `content/video_engine/sources/` (incl. `reference_analyses/` and the bundle), `content/video_engine/scripts/`.
-- L157 [2] 6. TR-1 landed — the reference's transition mix, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_kinds.py` over the 720p upload (30 fps), all 99 boundaries in 2.4 s, calibrated on {dip through black; 14 frames (0.47 s) wide at every one; blur-zoom} <wealth_logic_transitions_measured.csv; one-frame; world-persists; Frame-level; non-cut; zoom-through; suck; voice-to-picture; [DERIVED: from the reference, measured]>
+- L157 [2] 6. TR-1 landed — the reference's transition mix, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_kinds.py` over the 720p upload (30 fps), all 99 boundaries in 2.4 s, calibrated on {dip through black; 14 frames (0.47 s) wide at every one; blur-zoom} <wealth_logic_transitions_measured.csv; one-frame; world-persists; Frame-level; non-cut; zoom-through; suck; voice-to-picture; mount-dissolve; world-change; [DERIVED: from the reference, measured]>
 
 ## docs/content-video-engine/TRIAGE-2026-09-05.md
 
@@ -3500,6 +3500,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1326 [2] E44 — The chart flexes on the hook: the first ledger page rolls out on the hook line, not after the archetype (2026-09-06) — Ruled on the Tokyo short's first Facebook read (`tokyo-tea-break/ANALYTICS-2026-09-06.md`, n = 8: the drop-off at 0:11, inside {The first ledger page lands on the hook line.} <drop-off; stick-figure; [DERIVED]; cut-on>
 - L1347 [2] E45 — A dock on a page is small and sits in the page's quiet space; the mount is the transition into a full-page ledger (2026-09-06) — Ruled on the first Tokyo v2 player with video docks (004698d). The operator: *"the dock needs to not cover the middle of the {A dock never covers the chart.} <quiet_zone; hand-placed; min-jerk; roll-out; full-frame; FADE-AND-MOUNT; SHORTS-SHAPE>
 - L1384 [2] E46 — E44/E45 are the shorts standard; the older transition rules were long-form and reactive; dissolves and Ken Burns are valid tools we misused (2026-09-06) — Ruled on the transitions review (`docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md`), which found doc 51 §51.4 (dissolves {On a short, E44 and E45 govern.} <roll-out; six-phase; full-frame>
+- L1405 [2] E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 dissolves, <blur-zooms; min-jerk; docks → dip; bare → cut; carried-light; cross-reveal; wipe_right; [DERIVED]>
 
 ## docs/portable/OUTRO-CTA-PLAYBOOK.md
 
@@ -3782,11 +3783,11 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
 - L1 [1] The bridge packet — one shape for Claude, Gemini and Astra (P46 T4, draft for Astra's review) — An order between lanes is a file and a send. Nobody polls a folder for orders; the sender emits the packet through the {a file and a send} <re-deriving; order.json; packetId; brief; lane; from; title; replyShape; paths-written; contract-block; report-landed; test-run>
 - L8 [2] 1. The packet (`order.json`) — | field | required | meaning | {≤ 6 KB} <packetId; brief; lane; gemini; claude; astra; from; title; replyShape; paths-written; contract-block; report-landed>
-- L31 [2] 2. The reply grammar — Every reply, whatever the lane, opens with one of these lines and keeps the order: <conditional; done>
-- L46 [2] 3. The lanes — | lane | how a packet reaches it | where its reply appears | <ANTIGRAVITY_LS_ADDRESS; ANTIGRAVITY_CSRF_TOKEN; ANTIGRAVITY_PROJECT_ID; PLANNER_RESPONSE; send-message <id> "<text>"; --resume>
-- L54 [2] 4. What happens when a reply lands (P46 T6) — `replied/<packetId>/reply.md` is written by the watcher. Then, in order: tier 0 — the deterministic handler for the {tier 0; tier 1; escalation} <replyShape; tier: 0; addressee-side; bridge_handler; follow-up; N bridge replies waiting>
-- L64 [2] 5. The ledger — `evals/BRIDGE-LOG.jsonl` (per machine, gitignored): one line per event — `sent`, `replied`, `tier0`, `tier1`, `timeout`, <sent; replied; tier0; tier1; timeout; escalated; lane; packetId; conversationId; sentAt>
-- L70 [2] 6. Open for Astra's review (sent through the bridge as a `review` packet) — 1. Field names: match P2's execution-order schema where one exists (`packetId` vs P2's run/task ids; `replyShape` vs P2's return schema). <execution-order; packetId; replyShape>
+- L35 [2] 2. The reply grammar — Every reply, whatever the lane, opens with one of these lines and keeps the order: <conditional; done>
+- L50 [2] 3. The lanes — | lane | how a packet reaches it | where its reply appears | <ANTIGRAVITY_LS_ADDRESS; ANTIGRAVITY_CSRF_TOKEN; ANTIGRAVITY_PROJECT_ID; PLANNER_RESPONSE; send-message <id> "<text>"; --resume>
+- L58 [2] 4. What happens when a reply lands (P46 T6) — `replied/<packetId>/reply.md` is written by the watcher. Then, in order: tier 0 — the deterministic handler for the {tier 0; tier 1; escalation} <replyShape; tier: 0; addressee-side; bridge_handler; follow-up; N bridge replies waiting>
+- L68 [2] 5. The ledger — `evals/BRIDGE-LOG.jsonl` (per machine, gitignored): one line per event — `sent`, `replied`, `tier0`, `tier1`, `timeout`, <sent; replied; tier0; tier1; timeout; escalated; lane; packetId; conversationId; sentAt>
+- L74 [2] 6. Open for Astra's review (sent through the bridge as a `review` packet) — 1. Field names: match P2's execution-order schema where one exists (`packetId` vs P2's run/task ids; `replyShape` vs P2's return schema). <execution-order; packetId; replyShape>
 
 ## docs/runbooks/BRIDGE-REPLY-HANDLER.md
 
@@ -3852,6 +3853,13 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1 [1] Work order — the research profiles run on the flash tier (2026-09-06) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`). {To:; From:} <Outreach Program; paths-written; video-researcher; animation-video-researcher; finance-narrative-researcher; model: pro; model: flash; model:; --model; POSITION: done | conditional | blocked; PATHS WRITTEN:; DISAGREEMENTS:>
 - L6 [2] The order — The operator's ruling (2026-09-06): bridge orders run on the flash tier. The current flash model (3.8) is stronger than the {flash} <video-researcher; animation-video-researcher; finance-narrative-researcher; model: pro; model: flash; model:; --model>
 - L18 [2] Reply — `POSITION: done | conditional | blocked`, `PATHS WRITTEN:` (the source path and every synced copy, absolute), <POSITION: done | conditional | blocked; PATHS WRITTEN:; DISAGREEMENTS:; PREREQUISITES:; NOT FOUND WHERE I LOOKED:>
+
+## docs/runbooks/WORK-ORDER-GEMINI-PROFILES-LOOP-2026-09-06.md
+
+- L1 [1] Work order — the research profiles carry loop discipline (2026-09-06) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`). {To:; From:; Skills:} <Outreach Program; paths-written; cut-classification; video-researcher; animation-video-researcher; finance-narrative-researcher; POSITION; PATHS WRITTEN; DISAGREEMENTS; PREREQUISITES; NOT FOUND WHERE I LOOKED>
+- L7 [2] Why — Today's cut-classification order came back with 2 of 99 boundaries verified and the note "exceeds the LLM vision fetch <cut-classification>
+- L13 [2] The order — Append this block, verbatim, to the "This repository's contract" section of `video-researcher`, `animation-video-researcher` <video-researcher; animation-video-researcher; finance-narrative-researcher>
+- L33 [2] Reply — `POSITION`, `PATHS WRITTEN` (the source path and every synced copy, absolute, one per line, no markdown links), <POSITION; PATHS WRITTEN; DISAGREEMENTS; PREREQUISITES; NOT FOUND WHERE I LOOKED>
 
 ## docs/runbooks/WORK-ORDER-GEMINI-WEALTH-LOGIC-CUTS-2026-09-06.md
 

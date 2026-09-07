@@ -25,6 +25,10 @@ Size caps are hard: a brief over 6 KB is split into two packets or points at a f
 **An order names its skills** (operator, 2026-09-06, after the first live order came back wrong): the addressee has a
 skills folder (`.agents/skills/`) it will not open on its own. Write *"use the `/watch` skill on <file>"*, or when the
 skill is not known, *"choose your best skills for <the job> and name the ones you used"* - never just the verb. The Wealth
+
+**Large jobs are loops with checkpoints** (operator, 2026-09-06): an order over many items names the batch size, the
+checkpoint ("append the row after each item") and says the budget is not a stopping reason - progress is written and the
+work continues in the next turn until every item is done or marked `[UNVERIFIED]` with its reason.
 Logic cut classification went out as "classify from the video" with the `watch` skill (download, scene-aware frames,
 transcript) sitting unused beside the profile, and came back as "all 99 hard cuts", which two frames refuted.
 

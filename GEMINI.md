@@ -87,6 +87,13 @@ retrievable and is not evidence.
    line per hit across manifest → index → topics → registries, cheapest first, ~12x fewer bytes than a raw `rg` on a
    layer; `--layer` to focus, `--limit` to widen) → `sed -n` the window it names → only then a new research order. Never search the live web for a fact already in the repo (Gemini protocol, golden rule).
 
+5. **Large jobs are loops with checkpoints.** An order over many items (frames, boundaries, pages, URLs) says how to batch
+   ("work boundary by boundary; view at most three frames per boundary"), where to checkpoint ("append the row to the csv
+   after each boundary"), and that the budget is not a stopping reason ("if a turn's context is full, write progress and
+   continue in the next turn until every item is done; an item you cannot resolve is `[UNVERIFIED]` with the reason, and
+   you move on"). The first cut-classification order (2026-09-06) had none of this and came back with 2 of 99 boundaries
+   verified, "exceeds the vision fetch constraints" - a stop by choice, not a wall.
+
 The order that commissions a report names: the question, the existing evidence (index hits), allowed
 sources, the output path, the proof-line rule, and the validation command (`build_docs_index.py --check`).
 Cross-harness contract: `docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md`; the Astra plan P2 supersedes

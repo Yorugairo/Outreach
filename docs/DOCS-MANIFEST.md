@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-254 documents across 13 kinds.
+255 documents across 13 kinds.
 
 ## doctrine
 
@@ -91,7 +91,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## ruling-ledger
 
-- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing corrections ledger — Portable, model-agnostic. Load alongside `DOCTRINE-CORE.md`. — defines: A3; E11; E12; E13; +33 more — terms: long-form; drop-off; YouTube; world-building; six-phase; high-paid
+- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing corrections ledger — Portable, model-agnostic. Load alongside `DOCTRINE-CORE.md`. — defines: A3; E11; E12; E13; +34 more — terms: long-form; drop-off; YouTube; world-building; six-phase; high-paid
 
 ## capabilities
 
@@ -134,6 +134,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/runbooks/RENDER-REGRESSION.md — When a render looks wrong — You do not need to read any animation math to use this page. — defines: — — terms: PASS 4 golden frames identical; dock-pair; mid-build; false; kinetics: unknown flag ignored; curvature_stroke
 - docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md — Work order — Gemini research profiles, corrections at t — To: the Gemini / Antigravity lane (the profile source, synced to every — defines: — — terms: Outreach Program; npm run research:index; closed-form; [DERIVED: from <sources>, <how>]; [UNVERIFIED]; ## NOT FOUND WHERE I LOOKED
 - docs/runbooks/WORK-ORDER-GEMINI-PROFILES-FLASH-2026-09-06.md — Work order — the research profiles run on the flash tie — To: the Gemini / Antigravity lane (the profile source, synced to every — defines: — — terms: video-researcher; animation-video-researcher; finance-narrative-researcher; model: pro; model: flash; --model
+- docs/runbooks/WORK-ORDER-GEMINI-PROFILES-LOOP-2026-09-06.md — Work order — the research profiles carry loop disciplin — To: the Gemini / Antigravity lane (the profile source, synced to every — defines: — — terms: cut-classification; video-researcher; animation-video-researcher; finance-narrative-researcher; POSITION; PATHS WRITTEN
 - docs/runbooks/WORK-ORDER-GEMINI-WEALTH-LOGIC-CUTS-2026-09-06.md — Work order — classify every cut in the Wealth Logic ref — To: the Gemini research lane (profile `video-researcher`). — defines: — — terms: unclassified; re-deriving; video.en.vtt; word-timed; hard-cut; dissolve
 
 ## spec

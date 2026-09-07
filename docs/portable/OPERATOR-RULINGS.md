@@ -1401,3 +1401,28 @@ shorts; old docs largely focused on long format, and to be honest a lot of it wa
    yet build were reactive to that failure; they bind the long form until a long-form curve says otherwise, and they do not
    bind a short against E44/E45. When a doc-29 rule is lifted into the shorts shape, it is lifted by name in doc 51, not
    assumed.
+
+## E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06)
+
+Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 dissolves,
+0 wipes). The operator: *"we should add both. The mount and spiral are signatures; the dissolve is needed when we're doing the
+mount through a video and it works precisely because of the rising texture. We're not wrong about our effects, we're wrong about
+the wipe, which we only implemented as a solution because we didn't know how to make sense of wiping the OG scenery plates
+together, so we did a page wipe, because that's one of the only ways it makes sense to clear what is essentially a photo page."*
+
+1. **Two new world-change transitions, from the reference.** `dip` - a fade to black and back, **14 frames / 0.47 s** as the
+   starting reference `[DERIVED: from the reference, measured on all 35]`, the cut in the black; `blur-zoom` - the outgoing
+   plate magnifies until its detail is gone, the switch, the incoming plate scales up out of softness (the suck's shape, not
+   inverted). Both are for a WORLD CHANGE: clip to clip, plate to plate, page to a different page. Both are timed by the
+   engine's kinetics (min-jerk on the zoom, a plain ramp on the dip - the reference's dip is linear to the frame) and both
+   land in the caption gap like a cut (M13).
+2. **The signatures stay.** The mount (a page arriving for the first time), the spiral (a page returning), and the mount's own
+   dissolve - the outgoing video fading above while the cream rises beneath - are ours; the dissolve there works because of
+   the rising texture and is not the reference's dissolve (which it never uses).
+3. **The wipe is retired as the default world-change exit.** It was built (doc 29 §9.15) as the way to clear a plate that is
+   essentially a photo page when we could not make the scenery plates meet; the reference never wipes. The compiler's
+   mechanical default becomes `docks → dip`, `bare → cut` (9.16 §3's authored override stands). *"We made it the default because
+   it worked, but we need a better default, and it can be an effect at that point"* - the carried-light cross-reveal stays in
+   the kit as an EFFECT, reached by name (`wipe` / `wipe_right`) when a shot wants it, and is the default nowhere.
+4. **Gates.** A dip is a transition, not a still: M01/M10/M16 count its 14 frames as the boundary event, not as stillness; a
+   blur-zoom's magnification is motion. The gate constants carry the `[DERIVED]` tag.
