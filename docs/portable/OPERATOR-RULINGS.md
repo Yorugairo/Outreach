@@ -1485,3 +1485,28 @@ subtle idle."*
    (the encoder-size signal, HF-12, is its corroboration).
 4. **The nuance from the storyboards page.** A named subtle idle is allowed; an unnamed slow drift or "breathing" the plan did
    not ask for reads as unfinished. The idle is declared, sized, and the same at every seek.
+
+## E50 — A chart's deployed life: 6-8 s from its LAST data point on average, 12 s at most; then it un-draws or becomes the next thing (2026-09-07)
+
+The operator, on v3's second watch: *"One thing is we're leaving the chart up for too long. We should un-draw it or morph it into
+something else after it's been fully deployed for 6-8 seconds, depending on what the scene calls for - in this scene we start
+talking about the treasury number, we could reverse the draw / transform the graph into the treasury."* Then the clock, precisely:
+*"I think the rule should be about 6-8 seconds FULLY DEPLOYED though, so meaning 6-to-8 seconds after the final point in time
+of the chart/graph uses its last data point/series. Maybe 12 seconds is a better max with 6-8 seconds average. This allows for
+the chart to stay still while a video plays in a dock."*
+
+1. **The clock starts at the last data mark.** "Fully deployed" is the moment the chart's LAST data point or series has landed -
+   the end of its final `build_to`, the last bar of a bar page, the bracket's label written - not its first cap and not the
+   page's entry. Annotations that add no data (a spotlight, a callout, a retitle, a relight) do not restart the clock; a
+   mark that adds data (a build to a later datum, a bracket that writes a figure, a second series) does.
+2. **The life.** From that moment the chart has **6-8 s on average, 12 s at most** `[OPERATOR 2026-09-07]` before it
+   un-draws (the line unwinds from its tip back to a datum or to nothing, the reverse of the build) or BECOMES the next thing
+   (the figure the sentence turns to, a different display of the same object - bars, a comparison - or the next chart, by
+   the morph). The 12 s ceiling exists so a chart can hold still under a dock's clip; the average is the scene's, not the
+   ceiling's. E25 ("a chart proves one sentence and leaves") given a clock.
+3. **The gate.** Per ledger page: deployed = the page's exit (or its next data-changing transformation) minus its last data
+   mark. Over 8 s INFO with the number; over 12 s WARN; a page that exits within 8 s PASSes silently. v3 on this clock: row 2
+   18.9 s (WARN), row 4 12.7 s (WARN), row 5 6.6 s, row 6 5.0 s.
+4. **The species this needs.** `undraw` (the reverse of `build_to`, which is `Math.max`-guarded today and never retracts);
+   the figure written by the hand where the ink ends; the same object in another form (`bars`, a comparison) as a
+   transformation on the page rather than a new page - backlog R26-18 / R26-19.
