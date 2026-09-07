@@ -222,3 +222,12 @@ breather, the negative list, the schema and the callback):
 
 The seam table in `tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md` part D keeps its column but its "role" entries are the
 parent's draft, not a ruling: the hero is the spiral; the rest is measured.
+
+## 7. The harvest (2026-09-07)
+
+The operator: *"we might as well download all of these components, they're single-file HTML components ... don't modify our
+stuff that's already working with these components. These become references or tools we can quickly reach for, or fill gaps
+that we didn't have available, and also exploration/play objects and learning opportunities."* Twelve components pulled
+verbatim into the hyperframes lane with the pinned CLI; the index, the mechanism of each and its first read (tool / lesson /
+play object) is `content/video_engine/hyperframes/HARVEST-2026-09-07.md`; the lessons are backlog R26-15. Nothing in the
+engine changed.
