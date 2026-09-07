@@ -406,6 +406,7 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         "variant": variant, "title": series.get("title"), "sub": series.get("sub", ""),
         "source": series.get("src"), "quiet_zone": quiet_zone,
         **({"src_style": series["src_style"]} if series.get("src_style") in ("compact",) else {}),   # the design pass (2026-09-07): a citation takes minimal space
+        **({"line_unit": series["line_unit"]} if isinstance(series.get("line_unit"), str) else {}),   # P47 T9: a combo's lines take their own right axis in this unit
         "labels": [], "values": [], "value_strings": [], "colors": [],
     }
     if builder == "object":

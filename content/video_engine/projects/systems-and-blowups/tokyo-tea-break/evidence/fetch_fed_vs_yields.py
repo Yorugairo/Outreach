@@ -70,15 +70,31 @@ def main() -> int:
     while dec_year(d) <= x1 + 0.01:
         months.append([dec_year(d), d.strftime("%b")])
         d = dt.date(d.year + (d.month == 12), d.month % 12 + 1, 1)
+    # THE BARS (the fourth watch: "Japan's rate of selling should never have been an evidence dock, it should be a bar chart laid
+    # against the lines as a combo chart"): the month-on-month change in Japan's Treasury holdings inside the window, from the
+    # holdings object on disk (US Treasury TIC), each bar on the lines' time axis by its own x - a drop goes down and is red
+    hold = json.loads((HERE / "objects" / "ev-japan-holdings-v1.series.json").read_text(encoding="utf-8"))
+    hpts = hold["series"][0]["pts"]
+    x_start = dec_year(start)
+    bars = []
+    for (x0_, v0), (x1_, v1) in zip(hpts, hpts[1:]):
+        if x1_ < x_start:
+            continue
+        d = round(v1 - v0, 1); y, m = int(x1_), int(round((x1_ - int(x1_)) * 12)) + 1
+        bars.append({"label": dt.date(y, m, 1).strftime("%b"), "value": d, "color": "neg" if d < 0 else "pos", "x": round(x1_ + 1 / 24, 4),
+                     "note": f"{v0:,.1f} -> {v1:,.1f} $bn"})
     obj = {
         "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
-        "sub": f"Fed funds, unchanged since {last_move.strftime('%b %Y')}, against the 10-year Treasury, %",
+        "sub": f"Bars: Japan's monthly selling of Treasuries, $bn. Lines: Fed funds (grey), unchanged since {last_move.strftime('%b %Y')}, and the 10-year (red), %",
         "proof_sentence": (f"Fed funds target (upper) flat at {fed[-1][1]:.2f}% since {last_move.isoformat()}; the 10-year "
                 f"{ten_low[1]:.2f}% ({ten_low[0].isoformat()}) -> {ten_now[1]:.2f}% ({ten_now[0].isoformat()}); the 30-year mortgage "
                 f"{mort_low[1]:.2f}% ({mort_low[0].isoformat()}) -> {mort_now[1]:.2f}% ({mort_now[0].isoformat()})"),
-        "src": f"FRED · Freddie Mac · {dt.date.fromisoformat(today).strftime('%b %Y')}",   # the design pass: minimal; the IDs and the sha256 live in `proof`
+        "src": f"US Treasury TIC · FRED · {dt.date.fromisoformat(today).strftime('%b %Y')}",   # the design pass: minimal; the IDs and the sha256 live in `proof`
         "src_style": "compact",
-        "ylabel": "%",
+        "ylabel": "$bn",
+        "unit": "",
+        "line_unit": "%",
+        "bars": bars,
         "xticks": months[::2],
         # the design pass (operator, 2026-09-07: "charts need to make sense with no captions"): TWO lines that share one scale, each
         # named with its value at its end - the Fed's rate and the 10-year sit a point apart, so the flat step and the climb read
@@ -97,6 +113,7 @@ def main() -> int:
             "mortgage_at_move": mort_at[1], "mortgage_low_since_move": mort_low[1], "mortgage_low_date": mort_low[0].isoformat(),
             "mortgage_latest": mort_now[1], "mortgage_latest_date": mort_now[0].isoformat(), "mortgage_rise_bp_from_low": round((mort_now[1] - mort_low[1]) * 100, 1),
             "window_from": start.isoformat(),
+            "japan_bars": [(b["label"], b["value"]) for b in bars],
             # the bracket's data indices on series 1 (the 10-year): its low since the move -> its latest = "the math" (+80 bp)
             "dgs10_low_index": next(i for i, (d, _v) in enumerate(win["DGS10"]) if d == ten_low[0]),
             "dgs10_last_index": len(win["DGS10"]) - 1,

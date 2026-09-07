@@ -32,8 +32,9 @@ T_CAP2, CAP2_S = 12.0, 1.5
 T_BRACKET, BRACKET_S = 15.0, 2.0
 T_RETITLE, RETITLE_S = 19.0, 2.0
 T_RELIGHT, RELIGHT_S = 22.0, 1.0
-T_UNDRAW, UNDRAW_S = 24.0, 1.5         # E50: the line unwinds to nothing on a word
-T_FIGURE, FIGURE_S = 25.5, 1.5         # ... and the figure the sentence turns to writes at the peak's spot
+T_UNDRAW, UNDRAW_S = 23.2, 1.2         # E50: the line unwinds to nothing on a word
+T_FIGURE, FIGURE_S = 24.5, 1.2         # ... and the figure the sentence turns to writes at the peak's spot
+T_REDRAW, REDRAW_S = 25.8, 1.0         # P47 T9: then the TAIL redraws - the months the sentence is about - while the history stays un-drawn (all before the golden's own retract at 27.5)
 
 
 def _chromium_available() -> bool:
@@ -63,7 +64,8 @@ def test_the_four_page_species_are_kinds_and_take_their_own_fields():
           {"kind": "relight", "at": 22.0, "dur": 1.0, "ref": "bracket", "index": 0},
           {"kind": "undraw", "at": 24.0, "dur": 1.5, "target": {"kind": "datum", "index": 0}},
           {"kind": "figure", "at": 25.5, "dur": 1.5, "target": {"kind": "datum", "index": 5}, "text": "$1,239.3B", "sub": "February 2026", "dy": -0.5},
-          {"kind": "note", "at": 26.0, "dur": 1.2, "text": "Japan started selling in February."}]
+          {"kind": "note", "at": 26.0, "dur": 1.2, "text": "Japan started selling in February."},
+          {"kind": "build_to", "at": 27.0, "dur": 1.2, "target": {"kind": "datum", "index": 9}, "paths": "tail"}]
     assert B.validate_species(ok, (0.0, 0, 0), LEDGER) == []
 
 
@@ -80,6 +82,7 @@ def test_the_four_page_species_are_kinds_and_take_their_own_fields():
     ({"kind": "figure", "at": 1.0, "dur": 1.0, "target": {"kind": "datum", "index": 2}}, "non-empty string text"),
     ({"kind": "figure", "at": 1.0, "dur": 1.0, "target": {"kind": "datum", "index": 2}, "text": "$1B", "dy": "up"}, "dy must be a number"),
     ({"kind": "note", "at": 1.0, "dur": 1.0}, "non-empty string text"),
+    ({"kind": "undraw", "at": 1.0, "dur": 1.0, "target": {"kind": "datum", "index": 0}, "paths": "everything"}, "paths must be one of"),
 ])
 def test_a_page_species_missing_its_field_is_a_build_error_naming_the_field(entry, needle):
     errs = B.validate_species([entry], (0.0, 0, 0), LEDGER)
@@ -188,8 +191,11 @@ def _authored(tl: dict, pts: list) -> tuple[dict, int, int]:
         {"kind": "relight", "at": T_RELIGHT, "dur": RELIGHT_S, "ref": "bracket", "index": 0},
         {"kind": "undraw", "at": T_UNDRAW, "dur": UNDRAW_S, "target": {"kind": "datum", "index": 0}},
         {"kind": "figure", "at": T_FIGURE, "dur": FIGURE_S, "target": {"kind": "datum", "index": peak}, "text": "$1,239.3B", "sub": "February 2026"},
+        {"kind": "build_to", "at": T_REDRAW, "dur": REDRAW_S, "target": {"kind": "datum", "index": last}, "paths": "tail"},
     ]
-    scenes = [dict(sc, species=species, world=dict(sc["world"], ken_burns={"scale": 0, "x": 0, "y": 0}))]
+    pg0 = sc["world"]["page"]
+    page = dict(pg0, series=pg0["series"][:1], axes=dict(pg0.get("axes") or {}, highlight_from=pts[peak][0]))   # ONE series with a highlighted TAIL from the peak (k0 > 0), as the holdings page has - the split is single-series only
+    scenes = [dict(sc, species=species, world=dict(sc["world"], page=page, ken_burns={"scale": 0, "x": 0, "y": 0}))]
     return dict(tl, scenes=scenes, caption_pages=[], captions=[], kinetics={"min_jerk": True, "analytic_spring": True}), peak, last
 
 
@@ -317,6 +323,13 @@ def test_undraw_unwinds_the_line_to_nothing_and_the_figure_writes_at_the_datum()
         D = done["D"]; lp = P.probe(T_FIGURE + FIGURE_S)["linePts"][0][peak]
         assert abs(D[0] - lp[0]) < 1e-6 and abs(D[1] - lp[1]) < 1e-6, "pinned to the datum's exact position"
         assert (done["x"] > D[0]) == done["fits"], "beside the datum on the side with room"
+        # P47 T9: the tail redraws after the undraw; the history stays un-drawn
+        tail = [p for p in P.probe(T_REDRAW + REDRAW_S + 0.05)["paths"] if not p["muted"] and p["pts"] and p["k0"] > 0]
+        hist = [p for p in P.probe(T_REDRAW + REDRAW_S + 0.05)["paths"] if p["pts"] and p["k0"] == 0]
+        assert tail and all(p["frac"] > 0.99 for p in tail), f"the tail redrew to its end: {[round(p['frac'], 3) for p in tail]}"
+        assert all(p["frac"] < 0.005 and p["hidden"] for p in hist), "the history stays un-drawn (paths: tail)"
+        mid = [p for p in P.probe(T_REDRAW + REDRAW_S * 0.5)["paths"] if not p["muted"] and p["pts"] and p["k0"] > 0]
+        assert all(0.05 < p["frac"] < 0.95 for p in mid), "redrawing at the middle of the word"
     finally:
         P.close()
 

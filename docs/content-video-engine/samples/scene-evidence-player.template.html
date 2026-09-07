@@ -2710,9 +2710,11 @@
                      pts: s.pts.map(([x, v]) => [mx(x), my(v)]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted });   /* P47 T2: the path knows its data, so a build_to can cap it at a datum */
     });
     /* s9.23b inline names never overprint: push apart any two ends closer than one line */
-    const order = [...st.paths].sort((a, b) => a.ny - b.ny);
+    const order = [...st.paths].sort((a, b) => a.ny - b.ny), gap = P ? 50 : 28;   /* one line = the face's own size (44 px portrait), not the landscape 24 */
     for (let i = 1; i < order.length; i++)
-      if (order[i].ny - order[i - 1].ny < 28) order[i].ny = order[i - 1].ny + 28;
+      if (order[i].ny - order[i - 1].ny < gap) order[i].ny = order[i - 1].ny + gap;
+    const over = order.length ? order[order.length - 1].ny - (B - 12) : 0;   /* a name never sits on the axis line: lift the group */
+    if (over > 0) for (const pp of order) pp.ny -= over;
     for (const pp of order) pp.name.setAttribute("y", pp.ny.toFixed(1));
   };
   /* ---- the other builders (P35 T5): race / decline / combo, each ported from ITS OWN hyperframes
@@ -2917,25 +2919,41 @@
      inline at its end and its values are direct labels in its own colour (the halo keeps every label
      legible where the line crosses it; a label that would land on a bar's value stacks above it). */
   const buildLedgerCombo = (st, pg) => {
-    const n = Math.max(1, st.vals.length), maxV = Math.max(1e-9, ...st.vals.map((v) => Math.abs(v))) * 1.12, unit = lpUnit(pg);
-    const base = 470, top = 110, x0 = 96, x1 = 880, bw = (x1 - x0) / n * 0.62, cx = (i) => x0 + (x1 - x0) / n * (i + 0.5);
-    lpEl("line", "ax", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: base, y2: base });
-    lpYTicks(st, 0, maxV, (v) => base - v / maxV * (base - top), x0 - 20, x1 + 20, unit, x0 - 30);
-    lpYLabel(st, pg, x0 - 20, top - 16);
-    const bars = st.vals.map((v, i) => {
-      const h = Math.max(3, Math.abs(v) / maxV * (base - top)), emph = i === st.emph;
-      const bar = lpEl("rect", "bar" + (emph ? " emph" : ""), st.chart, { x: (cx(i) - bw / 2).toFixed(1), y: (base - h).toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 5 });
-      bar.style.transformOrigin = "0 " + base + "px"; bar.style.transform = "scaleY(0)";
-      const lab = lpText(st.chart, "lab", cx(i), base + 34, "middle", String((pg.labels || [])[i] ?? ""), { opacity: 0 });
-      const val = lpText(st.chart, "val", cx(i), base - h - 14, "middle", st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v),
-        { opacity: 0, style: LP_HALO + (emph ? "fill:#F5B72E;font-size:30px;font-weight:700" : "") });
-      return { bar, lab, val, valY: base - h - 14 };
-    });
-    const series = (pg.series || []).filter((s) => s.pts && s.pts.length);
+    /* P47 T9 (the fourth watch: "a bar chart laid against the lines as a combo chart"): the bars are SIGNED - a drop goes down
+       from a zero line and is blood red, a rise goes up and is green (E28) - and a bar that carries its own x sits on the
+       lines' time axis; the lines take their OWN scale on a right axis with unit ticks; their points are registered so a
+       bracket can measure them (the +80 bp on the ring). */
+    const n = Math.max(1, st.vals.length), unit = lpUnit(pg), P = !!st.portrait;
+    const vmax = Math.max(0, ...st.vals.map((v) => +v)), vmin = Math.min(0, ...st.vals.map((v) => +v)), span = Math.max(1e-9, vmax - vmin) * 1.12;
+    const top = 110, bot = 470, x0 = 96, x1 = 880;
+    const bmy = (v) => bot - (v - vmin * 1.12) / span * (bot - top), base = bmy(0);   /* the zero line, inside the scale */
+    const series = (pg.series || []).filter((s) => s.pts && s.pts.length), barsIn = pg.bars || [];
     let lo = Infinity, hi = -Infinity, xa = Infinity, xb = -Infinity;
     for (const s of series) for (const [x, v] of s.pts) { lo = Math.min(lo, +v); hi = Math.max(hi, +v); xa = Math.min(xa, +x); xb = Math.max(xb, +x); }
-    lo = Math.min(0, lo); hi = hi + (hi - lo) * 0.15 || 1;
-    const ly = (v) => base - (+v - lo) / (hi - lo) * (base - top);
+    for (const b of barsIn) if (b && b.x != null) { xa = Math.min(xa, +b.x); xb = Math.max(xb, +b.x); }
+    const slotW = (x1 - x0) / n, bw = Math.min(slotW * 0.62, barsIn.length && barsIn[0] && barsIn[0].x != null ? (x1 - x0) / Math.max(1, (xb - xa) * 12) * 0.62 : slotW * 0.62);
+    const cx = (i) => (barsIn[i] && barsIn[i].x != null && xb > xa) ? x0 + (+barsIn[i].x - xa) / (xb - xa) * (x1 - x0) : x0 + slotW * (i + 0.5);
+    lpYTicks(st, vmin * 1.12, vmax * 1.12, bmy, x0 - 20, x1 + 20, unit, x0 - 30);
+    lpYLabel(st, pg, x0 - 20, top - 16);
+    const bars = st.vals.map((v, i) => {
+      const h = Math.max(3, Math.abs(+v) / span * (bot - top)), emph = i === st.emph, neg = +v < 0;
+      const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (emph ? " emph" : ""), st.chart, { x: (cx(i) - bw / 2).toFixed(1), y: (neg ? base : base - h).toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 5 });
+      bar.style.transformOrigin = "0 " + base + "px"; bar.style.transform = "scaleY(0)";
+      const lab = lpText(st.chart, "lab", cx(i), bot + 34, "middle", String((pg.labels || [])[i] ?? ""), { opacity: 0 });
+      const valY = neg ? base + h + (P ? 30 : 26) : base - h - 14;   /* a drop's value sits under its bar */
+      const val = lpText(st.chart, "val", cx(i), valY, "middle", st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v),
+        { opacity: 0, style: LP_HALO + (emph ? "fill:#F5B72E;font-size:30px;font-weight:700" : "") });
+      return { bar, lab, val, valY };
+    });
+    const pad = (hi - lo) * 0.12 || 1; lo -= pad; hi += pad;
+    const ly = (v) => bot - (+v - lo) / (hi - lo) * (bot - top);
+    /* the lines' own axis, on the right, with the unit (pg.line_unit, else the first line's unit, else none) */
+    const lunit = pg.line_unit != null ? pg.line_unit : "";
+    { const step = lpNiceStep(Math.max(1e-9, (hi - lo) / 4));
+      for (let tv = Math.ceil(lo / step - 1e-9) * step; tv <= hi + 1e-9; tv += step) {
+        const v = Math.abs(tv) < step * 1e-6 ? 0 : tv;
+        lpText(st.chart, "lab", x1 + 30, ly(v) + (P ? 14 : 8), "start", lpWithUnit(lpTick(v), lunit), { style: "fill:#aeb6be" });
+      } }
     const lines = series.map((s) => {
       const aligned = s.pts.length === n, lx = (x, k) => aligned ? cx(k) : x0 + (+x - xa) / (xb - xa || 1) * (x1 - x0);   /* one point per bar sits on the bar */
       const pts = s.pts.map(([x, v], k) => [lx(x, k), ly(v), v]), col = LP_PAL[s.color] || LP_PAL.cobalt;
@@ -2948,10 +2966,18 @@
         const by = aligned ? bars[k].valY : -1e9, ly0 = y - 18, yy = Math.abs(ly0 - by) < 32 ? by - (k === st.emph ? 38 : 30) : ly0;
         return lpText(st.chart, "val", x, yy, "middle", "", { opacity: 0, style: LP_HALO + "fill:" + col + ";font-size:24px" });
       });
-      const last = pts[pts.length - 1];   /* the inline name clears the last point's own labels (half a 30px value + a gap) */
-      const name = lpText(st.chart, "sname", last[0] + 44, last[1] + 8, "start", (s.label ? s.label + " " : "") + (s.name || ""), { opacity: 0, style: LP_HALO + "fill:" + col });
-      return { p, len, dot, labels, name, pts };
+      const last = pts[pts.length - 1];   /* the inline name: right of the last point when there is room, else above it, ending at it */
+      const room = x1 + 200 <= (st.geom ? st.geom.W : 1000);
+      const name = lpText(st.chart, "sname", room ? last[0] + 44 : last[0], room ? last[1] + 8 : last[1] - 26, room ? "start" : "end", (s.label ? s.label + " " : "") + (s.name || ""), { opacity: 0, style: LP_HALO + "fill:" + col });
+      st.linePts.push(pts.map(([x, y]) => [x, y]));   /* the species' targets (a bracket on a line) */
+      return { p, len, dot, labels, name, pts, ny: room ? last[1] + 8 : last[1] - 26 };
     });
+    /* s9.23b: two names never overprint - push apart by one line, keep them off the zero line */
+    const ord = [...lines].sort((a, b) => a.ny - b.ny), ngap = P ? 50 : 28;
+    for (let i = 1; i < ord.length; i++) if (ord[i].ny - ord[i - 1].ny < ngap) ord[i].ny = ord[i - 1].ny + ngap;
+    for (const ln of ord) ln.name.setAttribute("y", ln.ny.toFixed(1));
+    /* the lines' daily labels would be a wall of numbers on a dense series: only a sparse series (one point per bar) labels its points */
+    for (const ln of lines) if (ln.pts.length > 2 * n) for (const lb of ln.labels) lb.remove(), ln.labels = [];
     st.combo = { bars, lines }; st.buildDur = LPX.COMBO_BUILD; st.paint = paintLedgerCombo;
   };
   const paintLedgerCombo = (st, c) => {
@@ -3378,21 +3404,21 @@
     st.paths.forEach((pp) => {
       const fr = clamp01((c - pp.stagger * 0.3) / 0.7);
       let f = strokeFrac(pp.p, pp.len, fr) ?? expoOut(fr);
-      const mine = pp.pts ? caps.filter((sp) => ((sp.target || {}).series | 0) === (pp.si | 0)) : [];
-      if (mine.length) {
-        f = f * capFrac(pp, mine[0].target.index);   /* the build beat is spent on the first cap */
-        for (let k = 1; k < mine.length; k++) {   /* each later cap draws from the one before it, on its own word */
-          const u = (t - mine[k].at) / Math.max(0.001, mine[k].dur || 1); if (u <= 0) break;
-          const c0 = capFrac(pp, mine[k - 1].target.index), c1 = capFrac(pp, mine[k].target.index);
-          f = Math.max(f, c0 + (c1 - c0) * segEase(clamp01(u)));
-        }
-      }
-      /* E50 (P47 T6): the UNDRAW - on its word the line unwinds from where it stands back to the datum (index 0 = to nothing),
-         the nib retracing its own stroke; the axes stay, the series name fades with the line */
-      const uds = pp.pts ? pageSpecies(scene, "undraw").filter((sp) => { const ss = sp.series ?? (sp.target || {}).series; return ss == null || (ss | 0) === (pp.si | 0); }) : [];   /* no series named = every series unwinds */
-      for (const ud of uds) {
-        const u = (t - ud.at) / Math.max(0.001, ud.dur || 1); if (u <= 0) break;
-        f = f + (capFrac(pp, (ud.target || {}).index | 0) - f) * segEase(clamp01(u));
+      /* P47 T2 / T6 / T9: the caps and the undraws are ONE sequence in time per path. The build beat is spent on the first cap;
+         every later event moves the level from the previous event's target to its own over its word - a build_to draws forward
+         (never below what stands), an undraw unwinds (index 0 = to nothing), and a build_to AFTER an undraw RE-DRAWS. `paths`
+         picks which strokes an event touches: all (default) | tail (the highlighted strokes, k0 > 0) | history (k0 = 0) - so a
+         page can un-draw everything and then draw back only the months the sentence is about. */
+      const forMe = (sp) => { const ss = sp.series ?? (sp.target || {}).series, pk = sp.paths || "all";
+        return pp.pts && (ss == null || (ss | 0) === (pp.si | 0)) && (pk === "all" || (pk === "tail" ? (pp.k0 | 0) > 0 : (pp.k0 | 0) === 0)); };
+      const evs = [...caps.filter((sp) => forMe(sp) && !!sp.target).map((sp) => ({ sp, kind: "build" })), ...pageSpecies(scene, "undraw").filter(forMe).map((sp) => ({ sp, kind: "undraw" }))].sort((a, b) => a.sp.at - b.sp.at);
+      let prev = 1;
+      if (evs.length && evs[0].kind === "build") { prev = capFrac(pp, evs[0].sp.target.index); f = f * prev; evs.shift(); }   /* the build beat is spent on the first cap */
+      for (const ev of evs) {
+        const u = (t - ev.sp.at) / Math.max(0.001, ev.sp.dur || 1); if (u <= 0) break;
+        const to = capFrac(pp, (ev.sp.target || {}).index | 0), lvl = prev + (to - prev) * segEase(clamp01(u));
+        f = ev.kind === "build" ? Math.max(Math.min(f, prev), lvl) : Math.min(f, lvl);
+        if (u >= 1) prev = to;
       }
       pp.p.setAttribute("stroke-dashoffset", (pp.len * (1 - f)).toFixed(1));
       pp.p.style.opacity = f > 0.004 ? "" : "0";   /* E50 (the third watch: "dots that linger"): a zero-length round-capped dash paints a dot at the path's start - an un-drawn line shows nothing */
@@ -3921,7 +3947,9 @@
     for (let s = 0; s < 2; s++) {
       const d = live.find((x) => x.slot === s);
       const el = docks[s];
-      if (!d) { el.style.opacity = 0; el.style.clipPath = "inset(0 100% 0 0)"; parkDockClips(el); continue; }
+      if (!d) { el.style.opacity = 0; el.style.clipPath = "inset(0 100% 0 0)"; parkDockClips(el);
+        const c0 = el.parentNode && el.parentNode.querySelector("#dock-contact-" + s); if (c0) c0.style.opacity = 0;   /* P47 T9: a card off its span takes its contact shadow with it (it lingered after the ring's snap) */
+        continue; }
       if (d.slide !== shown[s]) { fillDock(s, d.slide); shown[s] = d.slide; }
       drawRecord(s, t);
       drawChart(s, t, d);

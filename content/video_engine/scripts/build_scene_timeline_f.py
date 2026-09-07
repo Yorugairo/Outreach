@@ -112,7 +112,8 @@ SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                  "note")                       # the third watch (P47 T7): a line of handwriting in the page's quiet zone, on a word: a chart's deployed life is 6-8 s from its last data mark, 12 s at most - then it
                                                # UN-DRAWS (the line unwinds from where it stands back to a datum, index 0 = to nothing) or BECOMES
                                                # the next thing: a FIGURE the hand writes at a datum's spot (the treasury number the sentence turns to)
-PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note")   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
+PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note")
+PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
                                                                 # (a returning page keeps its retitle, its bracket standing); the gate credits no event before the span
 RELIGHT_REFS = ("bracket", "title")
 BRACKET_COLORS = ("crimson", "teal", "cobalt", "amber", "deemph", "neg", "pos")
@@ -201,6 +202,8 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     elif kind == "undraw":
         if "series" in entry and not is_idx(entry["series"]):
             errs.append("undraw: series must be a non-negative integer series index")
+    if kind in ("build_to", "undraw") and "paths" in entry and entry["paths"] not in PATH_SELECTORS:
+        errs.append(f"{kind}: paths must be one of {'|'.join(PATH_SELECTORS)} (the highlighted tail, the history, or all)")
     elif kind == "note":
         if not isinstance(entry.get("text"), str) or not entry["text"].strip():
             errs.append("note: needs a non-empty string text (a line the page writes in its quiet zone)")

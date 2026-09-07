@@ -268,8 +268,7 @@ DOCK_META = [
     {"asset": "dock-g-two-fingers", "title": "Two numbers", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
     {"asset": "dock-f-toll-gate-to-fab", "title": "The gate to the fab", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
     # R26-19 / E50: the hook's own proof as a CHART card on the ring - species "chart", so M11/M12 read it as the chart it is
-    {"asset": "dock-h-fed-vs-yields", "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.", "source": "FRED · Freddie Mac · Sep 2026", "species": "chart", "badges": []},
-    {"asset": "dock-i-japan-selling", "title": "Japan's rate of selling", "source": "US Treasury TIC · Sep 2026", "species": "chart", "badges": []},
+    {"asset": "dock-h-fed-vs-yields", "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.", "source": "US Treasury TIC · FRED · Sep 2026", "species": "chart", "badges": []},
 ]
 
 # the LEDGER PAGE's own clock, mirrored from the player's `const LP` (template :1724) exactly as the motion gate mirrors it:
@@ -322,7 +321,6 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     t_tea = word_in("still on its tea break", "tea")     # ... the second here
     t_bar_tab = word_in("bar tab is still ours", "bar")  # (the ring's last line)
     t_that = word_in("that unfunded bar tab is", "that")  # the host arrives CENTRED on the Fed page for its whole last line
-    t_nobody = at("here's what nobody says")             # the third perspective - Japan's RATE of selling - thrown here, over the June print
     # V3 words (P47 T2): the page performs on these
     t_build = round(t_page + PAGE_BUILD_START_S, 2)      # the page's own build beat (tr = t - t_page on a mount, E45 s2) - the line draws to the peak
     t_opponent = at("The opponent")                      # the title rewrites here
@@ -361,6 +359,9 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             {"kind": "undraw", "at": t_table, "dur": 1.2, "target": datum(0)},
             {"kind": "figure", "at": t_trillion, "dur": 1.6, "target": datum(PEAK_IDX), "text": _bn(FACTS["peak"]), "sub": MONTH(FACTS["peak_month"]), "dy": -0.7},
             {"kind": "figure", "at": t_since, "dur": 1.6, "target": datum(LAST_IDX), "text": _bn(FACTS["latest"]), "sub": MONTH(FACTS["latest_month"]), "color": "neg", "dy": 1.6},
+            # the fourth watch ("we undrew it and then added the labels but didn't re-draw the graph to show the time series we
+            # discuss"): the February-June TAIL redraws between the two figures on "selling since February" - the history stays un-drawn
+            {"kind": "build_to", "at": t_since, "dur": 1.4, "target": datum(LAST_IDX), "paths": "tail"},
             {"kind": "retitle", "at": t_opponent, "dur": 2.4, "text": RETITLE},                                       # the title rewrites by the hand on "The opponent"
         ]),
         # 3 the PROMISE plate: the viewer's desk, entered by SUCK - the page collapses into the black of the stick figure
@@ -376,10 +377,8 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
         #   and STAYS through the pledge, which docks the gate instead of cutting to it. exit=cut: the Meta page MOUNTS over
         #   this one at "went home", so there is no retract to double it, and the gate card does not ride one (E40 #5).
         (t_catalyst, t_second, hold + ":spiral:cut", (0, 0, 0), [
-            (dock_still("dock-f-toll-gate-to-fab"), 0, t_pledge, t_nobody - 0.4),   # its retract is done before the card is thrown (one slot)
-            # the design pass (operator: "a third perspective ... Japan's rate of selling"): the month-on-month change as SIGNED bars,
-            # built from the holdings object - thrown (paper) on "here's what nobody says" over the June print, gone as Meta mounts
-            (dock_card("dock-i-japan-selling", "ev-japan-selling-v1", variant="bars", aspect="9:16"), 0, t_nobody, t_second, {"arrive": "throw", "mass": "paper", "centre": True, "card_aspect": card_aspect("dock-i-japan-selling")}),
+            (dock_still("dock-f-toll-gate-to-fab"), 0, t_pledge, t_second),
+            # the fourth watch: the selling bars are no evidence dock - they are the ring page's own bars, laid against its lines (combo)
         ], "cut", [
             carried(t_catalyst),
             # E51 (the third watch): the punch on the peak here was tied to nothing - the page returns drawn - and is cut

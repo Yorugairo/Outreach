@@ -2115,8 +2115,8 @@
    }
   },
   {
-   "slot": "landing 4 (throw, paper)",
-   "at": 60.21,
+   "slot": "landing 5 (throw, paper)",
+   "at": 76.21,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
@@ -2125,22 +2125,12 @@
    }
   },
   {
-   "slot": "landing 5 (throw, paper)",
-   "at": 76.21,
-   "gain": 0.12,
-   "fade_in": 0.0,
-   "variants": {
-    "A": "__snd_5_A__",
-    "B": "__snd_5_B__"
-   }
-  },
-  {
    "slot": "page enter 6",
    "at": 76.83,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_6_A__"
+    "A": "__snd_5_A__"
    }
   },
   {
@@ -2149,8 +2139,8 @@
    "gain": 0.0226,
    "fade_in": 1.5,
    "variants": {
-    "A": "__snd_7_A__",
-    "B": "__snd_7_B__"
+    "A": "__snd_6_A__",
+    "B": "__snd_6_B__"
    }
   },
   {
@@ -2159,8 +2149,8 @@
    "gain": 0.0226,
    "fade_in": 3.0,
    "variants": {
-    "A": "__snd_8_A__",
-    "B": "__snd_8_B__"
+    "A": "__snd_7_A__",
+    "B": "__snd_7_B__"
    }
   }
  ],
@@ -2198,23 +2188,13 @@
    },
    "badges": []
   },
-  "dock-i-japan-selling": {
-   "title": "Japan's rate of selling",
-   "source": "US Treasury TIC \u00b7 Sep 2026",
-   "species": "chart",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short\\docks\\dock-i-japan-selling.png",
-    "sha256": "c608ecdbedea916fadeb588bddbce4be7bb7453170d47899157e8a3cebe44669"
-   },
-   "badges": []
-  },
   "dock-h-fed-vs-yields": {
    "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
-   "source": "FRED \u00b7 Freddie Mac \u00b7 Sep 2026",
+   "source": "US Treasury TIC \u00b7 FRED \u00b7 Sep 2026",
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short\\docks\\dock-h-fed-vs-yields.png",
-    "sha256": "26b54550baef513a9a2371edc2ca3f09994c90a5eb0eae8380c5783cc1db1b0f"
+    "sha256": "028465a8423aac6cb6f40f9e0335cb585f2c0c0dea245e87baf812f14242e075"
    },
    "badges": []
   },
@@ -3697,6 +3677,16 @@
      "dy": 1.6
     },
     {
+     "kind": "build_to",
+     "at": 25.56,
+     "dur": 1.4,
+     "target": {
+      "kind": "datum",
+      "index": 315
+     },
+     "paths": "tail"
+    },
+    {
      "kind": "retitle",
      "at": 33.15,
      "dur": 2.4,
@@ -5124,7 +5114,7 @@
      "slide": "dock-f-toll-gate-to-fab",
      "slot": 0,
      "enter": 55.31,
-     "exit": 59.39,
+     "exit": 61.76,
      "badge_at": [],
      "kind": "video",
      "place": {
@@ -5136,25 +5126,6 @@
      "read_s": 1.2,
      "park_s": 0.7,
      "park": true
-    },
-    {
-     "slide": "dock-i-japan-selling",
-     "slot": 0,
-     "enter": 59.79,
-     "exit": 61.76,
-     "badge_at": [],
-     "place": {
-      "x": 236,
-      "y": 57,
-      "w": 607,
-      "h": 1114
-     },
-     "read_s": 1.2,
-     "park_s": 0.7,
-     "park": true,
-     "arrive": "throw",
-     "mass": "paper",
-     "centre": true
     }
    ],
    "species": [
@@ -5314,20 +5285,54 @@
     "page": {
      "schema_version": "ledger_page.v1",
      "surface": "page",
-     "builder": "dense-line",
+     "builder": "combo",
      "variant": "line",
      "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
-     "sub": "Fed funds, unchanged since Dec 2025, against the 10-year Treasury, %",
-     "source": "FRED \u00b7 Freddie Mac \u00b7 Sep 2026",
+     "sub": "Bars: Japan's monthly selling of Treasuries, $bn. Lines: Fed funds (grey), unchanged since Dec 2025, and the 10-year (red), %",
+     "source": "US Treasury TIC \u00b7 FRED \u00b7 Sep 2026",
      "quiet_zone": "right",
      "src_style": "compact",
+     "line_unit": "%",
      "labels": [
-      "3.75%",
-      "4.77%"
+      "Nov",
+      "Dec",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun"
      ],
-     "values": [],
-     "value_strings": [],
-     "colors": [],
+     "values": [
+      2.7,
+      -17.2,
+      39.8,
+      14.0,
+      -47.7,
+      18.3,
+      -66.8,
+      -26.4
+     ],
+     "value_strings": [
+      "2.7",
+      "-17.2",
+      "39.8",
+      "14.0",
+      "-47.7",
+      "18.3",
+      "-66.8",
+      "-26.4"
+     ],
+     "colors": [
+      "pos",
+      "neg",
+      "pos",
+      "pos",
+      "neg",
+      "pos",
+      "neg",
+      "neg"
+     ],
      "series": [
       {
        "label": "Fed funds",
@@ -7469,7 +7474,7 @@
       }
      ],
      "axes": {
-      "ylabel": "%",
+      "ylabel": "$bn",
       "xticks": [
        [
         "2025.7479",

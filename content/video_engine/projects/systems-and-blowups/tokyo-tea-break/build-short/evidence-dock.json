@@ -30,14 +30,7 @@
  {
   "asset": "dock-h-fed-vs-yields",
   "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
-  "source": "FRED \u00b7 Freddie Mac \u00b7 Sep 2026",
-  "species": "chart",
-  "badges": []
- },
- {
-  "asset": "dock-i-japan-selling",
-  "title": "Japan's rate of selling",
-  "source": "US Treasury TIC \u00b7 Sep 2026",
+  "source": "US Treasury TIC \u00b7 FRED \u00b7 Sep 2026",
   "species": "chart",
   "badges": []
  }

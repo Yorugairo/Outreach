@@ -1,25 +1,65 @@
-Your costs jumped. Bond yields crossed critical levels this month, and the Fed didn't move an inch. [post-key]
+Tokyo took a tea break on American debt. [ring]
 
-[archetype] Turn on finance news: deficits, consumer debt, or the vibes in Jackson Hole. [stakes] Nobody looked across the Pacific.
+And left Washington holding an unfunded bar tab while your borrowing costs jumped. [post-key]
 
-[rehook] Here's what nobody's reporting: our biggest customer is selling.
+[archetype] Turn on finance news: analysts in matching blue ties blame deficits, consumer debt, or the vibes in Jackson Hole.
 
-[payoff] Japan holds over a trillion dollars of American debt — more than anyone. Since February, they have been selling it.
+[stakes] Nobody looked across the Pacific at what backs your mortgage.
 
-[promise] By the end of this minute you'll know the number that says whether they come back — and the one in your portfolio that pays for it.
+[rehook] But here's where the consensus breaks.
 
-[head-fake] But here's where everyone goes wrong: the hedge. Two years ago that was right — hedging a dollar cost more than our bonds paid.
+[opponent] The opponent isn't the Fed; it's a balance sheet in Japan.
 
-[debate] Not now. Hedging costs half what it did, and the trade pays two full points. [loop-close] They're selling into a trade that works.
-
-Tokyo took a tea break. [ring] And left Washington holding an unfunded bar tab.
-
-[opponent] The real question isn't why they're leaving. It's what they found that pays better.
-
-[rehook] But here's what you can watch. The variable: what Japan holds, published every month by the Treasury. The threshold: they were adding, now they're selling. Where we sit: down a hundred and twenty-two billion. The flip: they buy again — and if they do and yields don't fall, I was wrong.
-
-This was never a bond story. Tonight, pull up Meta — you're on it right now — and find its P E. That's how much of the price is profit that hasn't happened yet, and a high yield is what discounts it.
+[reflect] When your biggest customer steps away, the bond auction sets the rate, not the central bank.
 
 [tricolon] Not a panic. Not a plot. Mechanics.
 
-[ring] The Fed still hasn't moved an inch. Tokyo's still on its tea break. And the tab is ours.
+[desire] Every investor wants to know where the selling stops.
+
+[map] We'll trace the cash straight to your tech stocks.
+
+[payoff] [new] Japan holds over a trillion dollars of American debt.
+
+[pre-key] [promise] [foreshadow] In sixty seconds, you'll calculate the number that tracks their return — and two moves to protect your portfolio.
+
+[catalyst] [new] But since February, Japan dumped a hundred and twenty-two billion dollars of Treasuries.
+
+[head-fake] The standard explanation is currency hedging: two years ago, hedging wiped out the yield.
+
+[debate] [new] [loop] But that excuse expired: today Tokyo's tea break is in a trade paying two full points of profit.
+
+[rehook] But here's where it gets dangerous.
+
+[reflect] When primary dealers choke on inventory, yields jump.
+
+[loop] [new] Four straight months of selling drained liquidity from every desk.
+
+Therefore they are dumping paper into a trade that actually makes money.
+
+[signpost] That brings us to what actually drives the discount rate on your screen.
+
+The variable: what Japan holds, published monthly by the Treasury in TIC Table Five.
+
+The threshold: they were adding, now they're selling.
+
+Where we sit: down a hundred and twenty-two billion dollars since February.
+
+[loop-close] The flip: if they buy again and yields stay high, I was wrong — and I'll say it here.
+
+[dip]
+
+[rehook] This is where most people miss the connection.
+
+This was never just a bond story.
+
+Tonight, pull up Meta — you're probably on it right now — and check its price-to-earnings multiple.
+
+That multiple isn't a score; it's a time machine pricing profits ten years out.
+
+When the Treasury yield hits five percent, a dollar in ten years shrinks to sixty-one cents today.
+
+That is an eighteen percent haircut on the stock, without Meta losing a single customer.
+
+Two moves tonight: trim long-duration bond funds, and sell companies refinancing heavy corporate debt this year.
+
+[ring] The Fed still hasn't moved an inch. Tokyo is still on its tea break. And Washington's unfunded bar tab on American debt is coming due for you.
