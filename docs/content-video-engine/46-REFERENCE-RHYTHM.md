@@ -177,3 +177,14 @@ Our comparison data: `SHOT-TABLE-F.md`, `build-f/timeline.json`.
 series per boundary in `docs/research/motion/wealth_logic_transitions_measured.csv`; the rules and their `[DERIVED]` thresholds
 in `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md`. The earlier claim that kind was unmeasured (§46.1 and the
 transitions review) is closed by this section.
+
+## 46.6 Where the picture change sits in the pause — measured 2026-09-06 (TR-2)
+
+`measure_cut_offsets.py` on TR-1's 99 boundaries, caption and Whisper word times, pause ≥ 0.30 s: **the picture changes a
+median 100 ms (3 frames at 30 fps) before the next word's onset**, inside the pause (83 % captions / 66 % Whisper), position in
+the pause median 0.86 / 0.78 — §46.3's 0.80–0.83 corroborated on a different list. No split-edit grammar: picture leads the
+pause in 1 / 7 of 99 and then by whole shots, not frames; the trailing minority trails by 2–3 frames. **A dip through black is
+centred: its black midpoint sits +13 ms from the onset** (`dip_start = onset − 0.24 s` `[DERIVED]`). The engine form of M13
+that follows: land the cut 3 frames before the next word's onset; centre a dip's black on it. Series per boundary in
+`docs/research/motion/wealth_logic_cut_offsets.csv` (+ `_whisper.csv`); the report in
+`docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md`.

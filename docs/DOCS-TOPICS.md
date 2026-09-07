@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4146 topics, 3913 citation edges. The 200 largest topics follow,
+4147 topics, 3924 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (132)
@@ -623,6 +623,28 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:398 — 13.4 Primary Academic & Empirical Citations — - Viviani & Terzuolo (1982), Trajectory determines movement dynamics, Neuroscience: Two-Thirds Power Law ($v \propto \ka
 - … 12 more in `docs/DOCS-TOPICS.jsonl`
 
+## derived (23)
+
+- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:1 — 45 — Parallax and plate motion: what may move, how much, and what is banned — Extracted from `05_comfyui_parallax_technical_standards.md` and
+  cited by: docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:135
+- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:46 — 45.3 Our current dials, and what they should be — Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04.
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/RESEARCH-INDEX.md:35
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:1 — 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and
+  cited by: docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:124, docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md:16
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:60 — 46.3 The gap threshold — settled from the reference, 2026-09-04 — A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
+  cited by: docs/content-video-engine/46-REFERENCE-RHYTHM.md:181, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/BACKLOG.md:450, docs/content-video-engine/BACKLOG.md:504, docs/content-video-engine/FINDING-gaps-are-the-edit.md:171, +10 more
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:172 — 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:181 — 46.6 Where the picture change sits in the pause — measured 2026-09-06 (TR-2) — `measure_cut_offsets.py` on TR-1's 99 boundaries, caption and Whisper word times, pause ≥ 0.30 s: the picture changes a
+- docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:137 — 4. DEMOTED — knowledge, not doctrine — Named honestly, because a finding that cannot carry a check should not sit in a doc
+- docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:154 — 48.8 Harmonisation, in our own tokens — The document integrates with E22 rather than around it:
+- docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:1 — 50 — The phone is the screen: ep1's real analytics, and what they say — Operator-supplied YouTube analytics for ep1, 2026-09-04. This is ground truth, not
+  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10, docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:116, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:207, docs/content-video-engine/BACKLOG.md:225, +3 more
+- docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:30 — 50.2 The finding: our type is illegible on a phone — 75.2 % of watch time is a phone. Our stage is 1920 px wide. On a phone in portrait —
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:210, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:88, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:15, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:189, docs/content-video-engine/BACKLOG.md:97, +1 more
+- docs/content-video-engine/BACKLOG.md:493 — EXPLORE — the first step is a measurement or a read, not a build (6) — | id | item — what and where | why / evidence | cost |
+- docs/content-video-engine/BACKLOG.md:521 — D3 / D6 — ruled 2026-09-06 (E42): poses first; tag all thirteen — | id | item — what and where | why / evidence | cost |
+- … 11 more in `docs/DOCS-TOPICS.jsonl`
+
 ## strength (23)
 
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:27 — 1. Technical Anatomy of Our Current ComfyUI Stack — Our current pipeline executes the following graph in ComfyUI:
@@ -669,7 +691,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/46-REFERENCE-RHYTHM.md:43 — 46.2 What this means for M13 and for M10 — M13 (cut lands in an acoustic gap) is free. Since our cut frequency already matches,
   cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:21, docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:1
 - docs/content-video-engine/46-REFERENCE-RHYTHM.md:60 — 46.3 The gap threshold — settled from the reference, 2026-09-04 — A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/BACKLOG.md:450, docs/content-video-engine/BACKLOG.md:504, docs/content-video-engine/FINDING-gaps-are-the-edit.md:171, docs/content-video-engine/RESEARCH-INDEX.md:35, +8 more
+  cited by: docs/content-video-engine/46-REFERENCE-RHYTHM.md:181, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/BACKLOG.md:450, docs/content-video-engine/BACKLOG.md:504, docs/content-video-engine/FINDING-gaps-are-the-edit.md:171, +10 more
 - docs/content-video-engine/BACKLOG.md:366 — Explorations — what we still cannot answer — Landed 2026-09-04 from the research agent: [54](54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md)
 - docs/content-video-engine/FINDING-gaps-are-the-edit.md:81 — Test 3 — the question I should have asked first — Tests 1 and 2 asked "do gaps predict where we cut." That was backwards. The claim is
 - … 10 more in `docs/DOCS-TOPICS.jsonl`
@@ -688,28 +710,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:58 — 2.1 Mechanics Under the Hood — `Depthflow` is an image-space continuous heightfield ray marcher (`depthflow.glsl`). It projects camera rays from `camer
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:25 — 1. Master File & Artifact Inventory — All research, evidence frames, technical specifications, and mathematical treatises produced during this research cycle
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:29 — 1.1 Complete Evidence Bundle (`complete_research_evidence_bundle/`) — | File / Artifact | Size / Scope | Primary Role & Description | Recommended Agent / Consumer |
-- … 9 more in `docs/DOCS-TOPICS.jsonl`
-
-## derived (21)
-
-- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:1 — 45 — Parallax and plate motion: what may move, how much, and what is banned — Extracted from `05_comfyui_parallax_technical_standards.md` and
-  cited by: docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:135
-- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:46 — 45.3 Our current dials, and what they should be — Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04.
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/RESEARCH-INDEX.md:35
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:1 — 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and
-  cited by: docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:124, docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md:16
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:60 — 46.3 The gap threshold — settled from the reference, 2026-09-04 — A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/BACKLOG.md:450, docs/content-video-engine/BACKLOG.md:504, docs/content-video-engine/FINDING-gaps-are-the-edit.md:171, docs/content-video-engine/RESEARCH-INDEX.md:35, +8 more
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:172 — 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames
-- docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:137 — 4. DEMOTED — knowledge, not doctrine — Named honestly, because a finding that cannot carry a check should not sit in a doc
-- docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:154 — 48.8 Harmonisation, in our own tokens — The document integrates with E22 rather than around it:
-- docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:1 — 50 — The phone is the screen: ep1's real analytics, and what they say — Operator-supplied YouTube analytics for ep1, 2026-09-04. This is ground truth, not
-  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10, docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:116, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:207, docs/content-video-engine/BACKLOG.md:225, +3 more
-- docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:30 — 50.2 The finding: our type is illegible on a phone — 75.2 % of watch time is a phone. Our stage is 1920 px wide. On a phone in portrait —
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:210, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:88, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:15, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:189, docs/content-video-engine/BACKLOG.md:97, +1 more
-- docs/content-video-engine/BACKLOG.md:493 — EXPLORE — the first step is a measurement or a read, not a build (6) — | id | item — what and where | why / evidence | cost |
-- docs/content-video-engine/BACKLOG.md:521 — D3 / D6 — ruled 2026-09-06 (E42): poses first; tag all thirteen — | id | item — what and where | why / evidence | cost |
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:163 — 3. Track A — The Animator (Timing and Motion)
 - … 9 more in `docs/DOCS-TOPICS.jsonl`
 
 ## mask-pinned (21)
@@ -1448,6 +1448,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:98 — The 2D Affine Transformation Matrix (Homogeneous $3 \times 3$) — In 2D space, translation, rotation, scale, and shear are unified into a single $3 \times 3$ matrix:
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
+## l-cut (16)
+
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:350 — B3: L-Cuts / J-Cuts under Continuous Narration [RECLASSIFIED: Design Proposal] — - Source: E. Pincus & S. Ascher, The Filmmaker's Handbook (2013). (Classified as film craft doctrine).
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:605 — 9.2 Practitioner Doctrine (Editorial & Animation Craft) — 21. Walter Murch (1995). In the Blink of an Eye: A Perspective on Film Editing. Silman-James Press. (Practitioner doctri
+- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:370 — B3: L-Cuts / J-Cuts under Continuous Narration [RECLASSIFIED: Design Proposal] — - Source: E. Pincus & S. Ascher, The Filmmaker's Handbook (2013). (Classified as film craft doctrine). [DERIVED: from Pi
+- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:625 — 9.2 Practitioner Doctrine (Editorial & Animation Craft) — 21. Walter Murch (1995). In the Blink of an Eye: A Perspective on Film Editing. Silman-James Press. (Practitioner doctri
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118 — 2.3 Answer status after five passes (2026-09-04) — Recorded so a later pass does not redo settled work. Reference layer: docs 42–49.
+- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:163 — Track B — the editor (cutting and rhythm) — | # | question | why it matters here |
+- docs/content-video-engine/RESEARCH-INDEX.md:255 — `08_answers_animation_craft_brief.md` — 42 headings — | heading | disposition |
+- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:1 — Transitions — the review (2026-09-06) — The operator: "I think we should review our research on transitions also, I don't think we've gotten them nailed properl
+- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8 — 1. The judgment — The research asked the right questions and mostly did not answer them. The research brief's Track B (`briefs/RESEARCH-BR
+- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38 — What to do, in the operator's order (recent stumble → TOP; unbuilt → BACKLOG; unmeasured → EXPLORE) — | id | item | why | cost |
+- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:186 — 7. TR-2 landed — the voice-to-picture offset, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_offsets.py` over TR-1's 99 boundaries against the caption word onsets (`video.
+- docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:1 — Wealth Logic — where the picture change sits relative to the narration (J-cut / L-cut, measured) — Pass-1 · 2026-09-06 · sources: the measured boundaries, video.en.vtt · for: TR-2
+- … 4 more in `docs/DOCS-TOPICS.jsonl`
+
 ## memory-supercycle (16)
 
 - content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:339 — S01 · The Decadal Realignment — Opening source plate framing the structural shift in global semiconductor memory and the outlook through 2030.
@@ -1700,22 +1716,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/CAPABILITIES.md:28 — Kubelka-Munk ink — two-flux layer model per channel (44 §44.1), K/S from the ink's own colour; the soak's stains sum coverage (`mix-blend-m
 - … 3 more in `docs/DOCS-TOPICS.jsonl`
 
-## l-cut (15)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:350 — B3: L-Cuts / J-Cuts under Continuous Narration [RECLASSIFIED: Design Proposal] — - Source: E. Pincus & S. Ascher, The Filmmaker's Handbook (2013). (Classified as film craft doctrine).
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:605 — 9.2 Practitioner Doctrine (Editorial & Animation Craft) — 21. Walter Murch (1995). In the Blink of an Eye: A Perspective on Film Editing. Silman-James Press. (Practitioner doctri
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:370 — B3: L-Cuts / J-Cuts under Continuous Narration [RECLASSIFIED: Design Proposal] — - Source: E. Pincus & S. Ascher, The Filmmaker's Handbook (2013). (Classified as film craft doctrine). [DERIVED: from Pi
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:625 — 9.2 Practitioner Doctrine (Editorial & Animation Craft) — 21. Walter Murch (1995). In the Blink of an Eye: A Perspective on Film Editing. Silman-James Press. (Practitioner doctri
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118 — 2.3 Answer status after five passes (2026-09-04) — Recorded so a later pass does not redo settled work. Reference layer: docs 42–49.
-- docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:163 — Track B — the editor (cutting and rhythm) — | # | question | why it matters here |
-- docs/content-video-engine/RESEARCH-INDEX.md:255 — `08_answers_animation_craft_brief.md` — 42 headings — | heading | disposition |
-- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:1 — Transitions — the review (2026-09-06) — The operator: "I think we should review our research on transitions also, I don't think we've gotten them nailed properl
-- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8 — 1. The judgment — The research asked the right questions and mostly did not answer them. The research brief's Track B (`briefs/RESEARCH-BR
-- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38 — What to do, in the operator's order (recent stumble → TOP; unbuilt → BACKLOG; unmeasured → EXPLORE) — | id | item | why | cost |
-- docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:1 — Wealth Logic — where the picture change sits relative to the narration (J-cut / L-cut, measured) — Pass-1 · 2026-09-06 · sources: the measured boundaries, video.en.vtt · for: TR-2
-- docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:5 — The question — TR-2 (`docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md` §1, from research brief B3,
-- … 3 more in `docs/DOCS-TOPICS.jsonl`
-
 ## none (15)
 
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:27 — 1. Technical Anatomy of Our Current ComfyUI Stack — Our current pipeline executes the following graph in ComfyUI:
@@ -1933,7 +1933,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/46-REFERENCE-RHYTHM.md:172 — 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157 — 6. TR-1 landed — the reference's transition mix, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_kinds.py` over the 720p upload (30 fps), all 99 boundaries in 2.4 s, calibrate
 - docs/portable/OPERATOR-RULINGS.md:1405 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
-  cited by: docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157, docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:150, docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:189
+  cited by: docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:186, docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:150, docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:189
 - docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:150 — 4. By kind — the dip is the one real offset, and it is an offset of the *transition*, not of the cut — Caption timeline, rule (a) ≥ 0.30 s:
 - docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:1 — Wealth Logic Transitions, Measured From The Pixels — Pass-1 · 2026-09-06 · sources: the video on disk, the ledger · for: TR-1
 - docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:5 — The question — What KIND of transition does the Wealth Logic reference use at each of its 99 shot boundaries -

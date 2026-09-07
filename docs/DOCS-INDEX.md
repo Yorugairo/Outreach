@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3240 records across 256 files.
+3242 records across 256 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -2307,6 +2307,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L161 [2] 46.7 Captions — Reference captions: bottom centre, no container box, no frosted pill, no tint — white {no container box, no frosted pill, no tint} <floating-caption>
 - L167 [2] 46.8 Sources — Primary: `04` (recomputed), `01`, `MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md` §10.
 - L172 [2] 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames = {hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frame} <blur-zoom; world-persists; [DERIVED]>
+- L181 [2] 46.6 Where the picture change sits in the pause — measured 2026-09-06 (TR-2) — `measure_cut_offsets.py` on TR-1's 99 boundaries, caption and Whisper word times, pause ≥ 0.30 s: the picture changes a {the picture changes a median 100 ms (3 frames at 30 fps) bef; A dip through black is centred: its black midpoint sits +13} <split-edit; dip_start = onset − 0.24 s; [DERIVED]; _whisper.csv>
 
 ## docs/content-video-engine/47-FINDINGS-TO-CHECKS.md
 
@@ -3367,6 +3368,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L132 [3] 4. What the player paints (`samples/scene-evidence-player.template.html`) — | exit / enter | painted at | duration | curve | cue from the build | <cut; :2879; wipe; wipe_right; :2939-2941; :2949; WIPE = 0.62; :830; quartIO; minJerk; kin("min_jerk"); dissolve>
 - L150 [3] 5. Not found where I looked — Roots: `docs/` (all), `content/video_engine/sources/` (incl. `reference_analyses/` and the bundle), `content/video_engine/scripts/`.
 - L157 [2] 6. TR-1 landed — the reference's transition mix, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_kinds.py` over the 720p upload (30 fps), all 99 boundaries in 2.4 s, calibrated on {dip through black; 14 frames (0.47 s) wide at every one; blur-zoom} <wealth_logic_transitions_measured.csv; one-frame; world-persists; Frame-level; non-cut; zoom-through; suck; voice-to-picture; mount-dissolve; world-change; [DERIVED: from the reference, measured]>
+- L186 [2] 7. TR-2 landed — the voice-to-picture offset, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_offsets.py` over TR-1's 99 boundaries against the caption word onsets (`video.en.vtt`) {One placement rule, not a split-edit grammar.; median 100 ms = 3.0 frames before the next word's onset} <video.en.vtt; wealth-logic-6-ways.words.json; wealth_logic_cut_offsets.csv; mid-speech; L-cuts; [DERIVED]; dip_start = next_word_onset − 0.24 s; [DERIVED: from the reference, 35 dips]; picture-lead; L-cut>
 
 ## docs/content-video-engine/TRIAGE-2026-09-05.md
 

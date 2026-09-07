@@ -182,3 +182,28 @@ The next measurement (TR-2) is the voice-to-picture offset on the same boundarie
 
 Rows: TR-1 done; TR-2 next; **TR-12 RULED (E47)**: the dip and the blur-zoom enter the kit for world changes, the mount / spiral / mount-dissolve stay as signatures, the wipe is retired as the world-change default (it was a workaround for clearing the photo page). Was: a new TR-12 (decision) - whether the dip through black and the blur-zoom enter our kit for world
 changes, with the 14-frame dip as the starting reference `[DERIVED: from the reference, measured]`.
+
+## 7. TR-2 landed — the voice-to-picture offset, measured (2026-09-06, same day)
+
+`content/video_engine/scripts/measure_cut_offsets.py` over TR-1's 99 boundaries against the caption word onsets (`video.en.vtt`)
+and the Whisper word times (`wealth-logic-6-ways.words.json`), two pause rules (≥ 0.30 s, ≥ 0.45 s), reported side by side
+(`docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md`, `wealth_logic_cut_offsets.csv` + the Whisper sidecar):
+
+- **One placement rule, not a split-edit grammar.** 83 % (captions) / 66 % (Whisper) of the picture changes sit inside the
+  pause, one mode: the picture changes a **median 100 ms = 3.0 frames before the next word's onset** (identical under three of
+  the four timeline × rule combinations; −80 ms under the fourth). Position in the pause: median 0.86 (captions) / 0.78
+  (Whisper) — doc 46 §46.3's 0.80–0.83, corroborated on a different list of 99.
+- **Picture never leads by a shot's worth.** 1 of 99 (captions) / 7 of 99 (Whisper) boundaries lead the pause, and the seven
+  lead by 0.9–3.7 s — cuts mid-speech, not 6–10-frame L-cuts. The trailing population trails by a median 1.8–3.0 frames, half
+  the proposal's 4–8. The B3 design proposal (`briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:370-386`) is not what the
+  reference does; it stays `[DERIVED]` and unadopted.
+- **The dip is centred, not offset.** Its 14-frame black midpoint sits a median **+13 ms from the next word's onset** under
+  both transcripts (p25 −37/−47, p75 +73/+93), and it is the only kind that never trails. Implied placement if the dip enters
+  our kit (E47): `dip_start = next_word_onset − 0.24 s` `[DERIVED: from the reference, 35 dips]`.
+- **Caption timing error, measured:** caption onset vs Whisper onset differs by a median 40 ms, p90 120 ms (225 matched words)
+  — ±1 frame typically; enough to flip one boundary, not a median.
+
+**What it changes.** M13's rule ("the cut at 0.8 of the gap") is the right shape and now has a sharper form for the engine:
+**land the picture change 3 frames before the next word's onset**, and **centre a dip's black on the onset**. The mount's
+picture-lead (the cream rising under the outgoing sentence) is ours, not the reference's — it stays as a signature (E47 §2),
+not as an L-cut claim. Rows: TR-2 done; the placement form goes to M13 / the build's cue and cut plan as TR-13.
