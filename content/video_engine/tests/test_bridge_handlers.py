@@ -344,3 +344,23 @@ def test_paths_written_on_a_truncated_reply_verifies_the_whole_items_and_fails_o
     assert names[0] == "reply-whole"
     assert any(n == f"exists:{a}" and c["ok"] for n, c in zip(names, res["checks"]))
     assert not any("half/pa" in n for n in names)
+
+
+# ---- PATHS WRITTEN as bare absolute paths, one per line, no bullets (the loop-discipline reply) ----
+def test_paths_written_as_bare_absolute_lines_are_a_list_not_prose():
+    import bridge_handlers as H
+    lines = [
+        "POSITION: done",
+        "",
+        "PATHS WRITTEN:",
+        "C:/Users/Snipe/Downloads/WA JiuJitsu Registry-20260608T183757Z-3-001/.agents/agents/video-researcher.md",
+        "C:/Users/Snipe/Downloads/Outreach Program/.agents/agents/video-researcher.md",
+        "",
+        "DISAGREEMENTS: None.",
+    ]
+    g = H.parse_reply("\n".join(lines) + "\n")
+    assert g.paths_written == [
+        "C:/Users/Snipe/Downloads/WA JiuJitsu Registry-20260608T183757Z-3-001/.agents/agents/video-researcher.md",
+        "C:/Users/Snipe/Downloads/Outreach Program/.agents/agents/video-researcher.md",
+    ]
+    assert g.disagreements == []
