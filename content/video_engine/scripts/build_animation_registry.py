@@ -72,7 +72,8 @@ TESTS_DIR = "content/video_engine/tests"
 SCRIPTS_DIR = "content/video_engine/scripts"
 
 TEMPLATE_DIAL_OBJECTS = ("MARK", "SP", "LP")
-TEMPLATE_DIAL_SCALARS = ("MOUNT_STEPS", "DISSOLVE_S", "LP_MOUNT_RISE", "CAP_LAST_HOLD_S")
+TEMPLATE_DIAL_SCALARS = ("MOUNT_STEPS", "DISSOLVE_S", "LP_MOUNT_RISE", "CAP_LAST_HOLD_S",
+                         "DIP_S", "BLURZOOM_S", "BLURZOOM_SCALE", "BLURZOOM_BLUR", "BLURZOOM_IN")   # E47 transitions
 
 SIG_MAX = 200            # the cap on a signature, so a one-line object cannot flood the md
 VALUE_MAX = 120

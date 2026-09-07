@@ -56,6 +56,17 @@ CAPTION_STYLE: str | None = None   # timeline.caption_style - "phrase" on a shor
 LEDGER_EXITS = ("cut",)            # exit=cut: no retract - the page leaves on the cut (for a beat that must land on the last line, E40 #5)
 SPECIES_LEDGER = "ledger"          # timeline["species"] entry; the player keys on world.kind == "ledger"
 
+# SCENE EXITS (ruling E47, operator 2026-09-06). `exit` names the transition INTO the scene it
+# sits on - the player's law for the wipe, the suck and the dissolve alike. The two world-change
+# transitions off the measured reference (doc 46 s46.5) join the kit and take the mechanical
+# default; the carried-light cross-reveal stays reachable BY NAME as an effect and is the default
+# nowhere ("we made it the default because it worked, but we need a better default, and it can be
+# an effect at that point"). dip and blurzoom may carry their own length: `dip:<s>`, `blurzoom:<s>`.
+SCENE_EXITS = ("cut", "dip", "blurzoom", "dissolve", "wipe", "wipe_right", "suck")
+TIMED_EXITS = ("dip", "blurzoom")   # ... and only these two read the suffix as SECONDS (suck's is a point)
+DEFAULT_EXIT_DOCKS = "dip"          # E47 #3: was "wipe_right" until 2026-09-06
+DEFAULT_EXIT_BARE = "cut"
+
 TIMELINE_NAME = "steel-and-paper.timeline.json"  # the compiled scene_evidence_timeline.v1 the gate reads
 # Per-episode overrides (Tokyo, 2026-09-04): another episode's build script imports this module,
 # sets these, and calls main() - the compiler stays ONE thing rather than a fork per episode.
@@ -225,6 +236,37 @@ def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str, str | Non
     if exit_ is not None and exit_ not in LEDGER_EXITS:
         raise ValueError(f"{plate_id!r}: exit {exit_!r} is not one of {'|'.join(LEDGER_EXITS)}")
     return series_id, variant, emphasize, quiet_zone, enter, exit_
+
+
+def parse_exit(exit_id: str) -> tuple[str, float | None]:
+    """``cut`` | ``dip[:<s>]`` | ``blurzoom[:<s>]`` | ``wipe_right`` | ``suck:<x>,<y>`` -> (name, seconds or None).
+
+    Only dip and blurzoom read the suffix as a length; the suck's is the point it collapses into,
+    and every other exit is a bare name. ValueError names the exit; the caller names the row."""
+    name = str(exit_id).split(":")[0]
+    if name not in SCENE_EXITS:
+        raise ValueError(f"exit {exit_id!r} is not one of {'|'.join(SCENE_EXITS)}")
+    arg = str(exit_id).split(":")[1] if ":" in str(exit_id) else ""
+    if name not in TIMED_EXITS or arg == "":
+        return exit_id, None
+    try:
+        secs = float(arg)
+    except ValueError:
+        raise ValueError(f"exit {exit_id!r}: {arg!r} is not a length in seconds") from None
+    if secs <= 0:
+        raise ValueError(f"exit {exit_id!r}: a length must be positive")
+    return exit_id, secs
+
+
+def scene_exit(authored_exit: str | None, has_docks: bool) -> tuple[str, float | None]:
+    """The HYBRID exit rule (operator 2026-08-29), with E47's default (2026-09-06).
+
+    An authored 6th shot-table element wins - doc 29 s9.16 #3's override stands, and a row that
+    wants the carried-light cross-reveal still asks for it by name. Otherwise the MECHANICAL
+    default is ``dip`` when the scene carries docks and ``cut`` when it is bare (it was
+    ``wipe_right``/``cut``: the wipe is retired as the default world change, E47 #3).
+    Returns the exit as the timeline carries it and the seconds it declares, if any."""
+    return parse_exit(authored_exit or (DEFAULT_EXIT_DOCKS if has_docks else DEFAULT_EXIT_BARE))
 
 
 def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | None = None) -> dict:
@@ -533,9 +575,10 @@ def main() -> int:
     evidence, uris, scenes = {}, {}, []
     for i, row in enumerate(plan):
         # exit style is HYBRID (operator, 2026-08-29): mechanical default
-        # (docks -> wipe, bare -> cut), with an optional authored 6th element
-        # per window for boundaries where the MEANING differs - doc 29 Part 6:
-        # cut = contrast/correction, wipe = process continuation.
+        # (E47, 2026-09-06: docks -> DIP, bare -> cut; it was docks -> wipe),
+        # with an optional authored 6th element per window for boundaries where
+        # the MEANING differs - doc 29 Part 6: cut = contrast/correction, wipe =
+        # process continuation. The rule itself is `scene_exit` above.
         a, b, plate, ken, ds = row[:5]
         authored_exit = row[5] if len(row) > 5 else None
         # TARGETED SPECIES (doc 29 s9.27, P35 T7): the optional 7th element.
@@ -621,18 +664,27 @@ def main() -> int:
                 docks.append(dock_entry(aid, slot, enter, exitt, len(d["badges"]),
                                         evidence[aid].get("kind", DOCK_KIND_IMAGE),
                                         place if slot == 0 else None))
-        scenes.append({
+        try:
+            exit_id, exit_s = scene_exit(authored_exit, bool(docks))
+        except ValueError as exc:
+            raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
+        scene = {
             "scene_id": f"s{i+1:02d}",
             # Ken Burns is AUTHORED per shot in the table, not one constant.
             "world": world,
-            "exit": authored_exit or ("wipe_right" if docks else "cut"),
+            "exit": exit_id,
             "span": [round(a, 2), round(b, 2)],
             "docks": docks,
             # the row's targeted species, verbatim: the player resolves each
             # declared target to pixels at render time (resolveTarget), the
             # motion gate counts their events per the s9.27 gate column
             "species": row_species,
-        })
+        }
+        # E47: a timed exit publishes its length so the motion gate credits the right
+        # window without re-parsing the name; a bare `dip` leaves the gate on DIP_S.
+        if exit_s is not None:
+            scene["exit_s"] = exit_s
+        scenes.append(scene)
 
     # caption STAGE mode: stamp each page with the mode it takes at its first word (after the scenes exist)
     pages = [{**pg, "cap_mode": "anchor" if _dock_live_at(scenes, pg["s"]) else "stage"} for pg in pages]

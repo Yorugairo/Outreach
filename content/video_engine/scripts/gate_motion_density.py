@@ -121,6 +121,15 @@ LIFE_CONTINUOUS_S = 1.0    # a continuous life (steam) is one event per second o
 DOCK_KIND_VIDEO = "video"
 VIDEO_DOCK_STEP_S = LIFE_CONTINUOUS_S
 PLATE_LIFE_STEP_S = 0.1    # s9.27 plate life: quantize t to 10 fps; each step is an event
+# WORLD-CHANGE TRANSITIONS (ruling E47 #4, operator 2026-09-06): "a dip is a transition, not a still:
+# M01/M10/M16 count its 14 frames as the boundary event, not as stillness; a blur-zoom's magnification
+# is motion." Both straddle the boundary named by the scene's own `exit`, so the half before it is the
+# OUTGOING scene's tail - crediting the window's start, the boundary and its end is what stops that
+# tail reading as a hold. Lengths in seconds; a scene may override with `exit_s`.
+DIP_S = 0.47          # [DERIVED: the reference, 14 frames at 30 fps, measured on all 35 of its dips, 2026-09-06 -
+                      #  docs/research/motion/wealth_logic_transitions_measured.csv; doc 46 s46.5]
+BLURZOOM_S = 0.27     # [DERIVED: the MEDIAN duration_frames of the reference's 28 blur-zooms, 8 frames at 30 fps]
+TRANSITION_S = {"dip": DIP_S, "blurzoom": BLURZOOM_S}
 # s9.27 precedence / s9.28 C3: punch, focus zoom, pull-back and Ken Burns are
 # mutually exclusive per window. M09 mirrors the builder's validate_species so a
 # hand-edited timeline is caught too.
@@ -272,6 +281,30 @@ def _video_dock_events(scenes: list[dict], docks: list[dict]) -> list[float]:
     return out
 
 
+def _transition_events(scenes: list[dict]) -> list[float]:
+    """Visual events contributed by a DIP or a BLURZOOM world change (E47 #4).
+
+    `exit` names the transition INTO the scene it sits on (the player's law), so the window
+    straddles that scene's start: half in the outgoing scene's tail, the switch on the boundary,
+    half in the incoming scene. All three instants are events - the dip's black is the boundary
+    EVENT, never stillness, and the blur-zoom's magnification is motion. The first scene has no
+    boundary before it, so its exit credits nothing."""
+    out: list[float] = []
+    for i, s in enumerate(scenes):
+        if i == 0 or not s.get("span"):
+            continue
+        name = str(s.get("exit") or "").split(":")[0]
+        if name not in TRANSITION_S:
+            continue
+        try:
+            dur = float(s.get("exit_s") or TRANSITION_S[name])
+        except (TypeError, ValueError):
+            dur = TRANSITION_S[name]
+        b, half = float(s["span"][0]), dur / 2
+        out += [round(b - half, 3), round(b, 3), round(b + half, 3)]
+    return out
+
+
 def _camera_clashes(scenes: list[dict]) -> list[tuple[str, str]]:
     """(scene_id, why) for every scene that stacks two camera moves, or one over
     a Ken Burns drift (scale > 0) - s9.27 precedence / s9.28 C3."""
@@ -332,6 +365,7 @@ def _collect_events(tl: dict, mp: dict, spans: list, badges: list, page_beats: l
                     species_events: list = (), video_dock_events: list = ()) -> set[float]:
     events: set[float] = set()
     events.update(video_dock_events)
+    events.update(_transition_events(tl.get("scenes", [])))   # E47 #4: a dip / blur-zoom IS the boundary event
     for s in tl.get("scenes", []):
         events.add(float(s["span"][0])); events.add(float(s["span"][1]))
     for a, z in spans:

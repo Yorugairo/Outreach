@@ -95,7 +95,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## capabilities
 
-- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything. — defines: Area-preserving squash; Beds and the press pack; Caption pages regen; +85 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline; text-tier; per-word
+- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything. — defines: Area-preserving squash; Beds and the press pack; Caption pages regen; +86 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline; text-tier; per-word
 
 ## backlog
 

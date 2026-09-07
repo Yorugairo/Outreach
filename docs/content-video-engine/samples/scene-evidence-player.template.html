@@ -91,6 +91,12 @@
   #plife { position: absolute; inset: 0; pointer-events: none; }
   #plife img { position: absolute; will-change: transform; transform-origin: 50% 100%; }
   #species { position: absolute; inset: 0; width: var(--stage-w); height: var(--stage-h); pointer-events: none; overflow: visible; }
+  /* E47 world-change transitions (operator 2026-09-06). Two veils above everything the scene carries, so a
+     dip takes the docks, the stage captions and the species down with the world and a blur-zoom softens the
+     whole frame. Both are inert until a transition drives them: #dipveil at opacity 0 paints nothing and
+     #bzveil at backdrop-filter none filters nothing, so a build with neither exit renders as before. */
+  #bzveil { position: absolute; inset: 0; pointer-events: none; }
+  #dipveil { position: absolute; inset: 0; pointer-events: none; background: #000; opacity: 0; }
   #species .co { fill: none; stroke: #F5B72E; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
   #species .sq { fill: none; stroke: #F5B72E; stroke-width: 5; stroke-linecap: round; }
   #species .lab { font: 700 30px Inter, Arial, sans-serif; fill: #F5B72E; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 8px; }   /* inline series names may run past the plot (s9.23b) */
@@ -417,6 +423,8 @@
   <div id="seam"></div>
   <svg id="species" viewBox="0 0 1920 1080" aria-hidden="true"></svg>
   <div id="caption"></div>
+  <div id="bzveil"></div>
+  <div id="dipveil"></div>
 </div></div></div>
 
 <div id="bar">
@@ -827,8 +835,36 @@
   const vo = $("vo"); vo.src = A["__audio__"];
   const wA = $("wA"), wB = $("wB"), wash = $("wash"), seam = $("seam"), cap = $("caption");
   const docks = [$("dock-1"), $("dock-2")];
+  const bzveil = $("bzveil"), dipveil = $("dipveil");   /* E47: the blur-zoom's softness and the dip's black */
   const WIPE = 0.62, DISSOLVE_S = 0.8, MOUNT_STEPS = 5;   /* DISSOLVE_S: the cross-fade a row declares with exit dissolve (the outro card); MOUNT_STEPS: the DANCE - a mounting page fades in this many steps over its soak, the charcoal growing between them */
   const SUCK_S = 0.3, SUCK_TURN = 240;   /* the suck transition: 0.3 s, two thirds of a turn into the point */
+  /* THE TWO WORLD-CHANGE TRANSITIONS (ruling E47, operator 2026-09-06), taken off the measured reference
+     (doc 46 s46.5; docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md). Both straddle the boundary:
+     half in the outgoing scene, the switch on the boundary frame, half in the incoming scene.
+       DIP_S 0.47            [DERIVED: the reference, 14 frames at 30 fps, measured on all 35 of its dips,
+                              2026-09-06 - wealth_logic_transitions_measured.csv]. A fade to black and back,
+                              a plain LINEAR ramp (the reference's dip is linear to the frame), the cut in the black.
+       BLURZOOM_S 0.27       [DERIVED: the MEDIAN duration_frames of the reference's 28 blur-zooms, 8 frames at 30 fps]
+       BLURZOOM_SCALE 1.35   [DERIVED: the reference's detail loss - a starting reference, tune by eye]. The outgoing
+                              world magnifies 1 -> 1.35 on min-jerk while the frame softens.
+       BLURZOOM_BLUR 18      [DERIVED: with the scale, the point where the plate's detail is gone - tune by eye], px.
+       BLURZOOM_IN 1.10      [DERIVED: the .world layer's -5% inset - the widest crop a `cover` plate affords]. The
+                              incoming world rises 1/BLURZOOM_IN -> 1 (the ruling's shape: both plates magnify, the
+                              incoming is NOT the outgoing inverted). It rises from 1/1.10 and not from
+                              1/BLURZOOM_SCALE because a cover plate shown under 1/1.10 cannot fill the stage and
+                              would open a black border for four frames; the reference's plates escape that only
+                              because they are figures on an unbounded cream field. Flagged to the operator.
+     The blur is a BACKDROP-FILTER on a veil over the stage, never `filter` on the world: a filter on the world
+     fades its own edge inward by ~2 sigma, and at 18 px that reaches inside the frame once the world is not
+     magnified. The veil samples with edge clamping, so the frame stays filled, and it softens the docks, the
+     stage captions and the species with the plate - a world change takes the whole frame. */
+  const DIP_S = 0.47, BLURZOOM_S = 0.27, BLURZOOM_SCALE = 1.35, BLURZOOM_BLUR = 18, BLURZOOM_IN = 1.10;
+  /* `dip`, `dip:<s>`, `blurzoom`, `blurzoom:<s>`, `suck:<x>,<y>` - the name, and the seconds when the row declares them */
+  const exitName = (e) => (typeof e === "string" ? e.split(":")[0] : "");
+  const exitSecs = (e, dflt) => {
+    const v = parseFloat(typeof e === "string" ? (e.split(":")[1] || "") : "");
+    return v > 0 ? v : dflt;
+  };
   /* remotion-ui directional-wipe port (2026-08-30): FEATHER is the soft
      edge as a share of the frame (their edgeSoftness); DEPTH is the
      parallax the pages carry under the wipe. The mask edge travels from
@@ -2916,6 +2952,16 @@
        into that point of the new plate over SUCK_S, spinning - no wipe front, no seam */
     const suck = prev && typeof sc.exit === "string" && sc.exit.startsWith("suck") ? sc.exit : null;
     const su = suck ? clamp01((t - sc.span[0]) / SUCK_S) : 1;
+    /* E47 (operator 2026-09-06): DIP and BLURZOOM straddle the boundary, so a scene reads its OWN exit for the
+       half after its start and the NEXT scene's exit for the half before its end. `exit` names the transition INTO
+       the scene it sits on - the same law the wipe, the suck and the dissolve above already follow. The switch
+       itself is a cut: no wipe front, no seam (wk = 1 below), because the boundary frame is black (dip) or past
+       the plate's detail (blur-zoom). */
+    const nxt = TL.scenes[si + 1];
+    const dipIn  = prev && exitName(sc.exit) === "dip" ? exitSecs(sc.exit, DIP_S) : 0;
+    const dipOut = nxt && exitName(nxt.exit) === "dip" ? exitSecs(nxt.exit, DIP_S) : 0;
+    const bzIn   = prev && exitName(sc.exit) === "blurzoom" ? exitSecs(sc.exit, BLURZOOM_S) : 0;
+    const bzOut  = nxt && exitName(nxt.exit) === "blurzoom" ? exitSecs(nxt.exit, BLURZOOM_S) : 0;
     /* DISSOLVE (operator, 2026-09-05, on the wipe into the outro card - "what is this madness?"): a row whose exit reads dissolve
        arrives by a plain cross-fade over DISSOLVE_S - no front, no seam, the outgoing world keeps playing underneath */
     const mountIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "mount";   /* MOUNT (operator, 2026-09-05): the outgoing scene fades while the cream plate mounts over it - no page turn */
@@ -2927,7 +2973,7 @@
        clock begins. The hand-off itself is no wipe (wk = 1) and no cross-fade of the page (dk = 1). */
     const mountS = mountIn ? (sc.world.page.mount_s || LP.FIELD) : 0, mu = mountIn ? clamp01((t - sc.span[0]) / mountS) : 1;
     const dk = dissolve && !mountIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / DISSOLVE_S)) : 1;
-    const wk = prev && !spiralIn && !suck && !dissolve ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
+    const wk = prev && !spiralIn && !suck && !dissolve && !dipIn && !bzIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const seaming = prev && wk > 0 && wk < 1;
     /* THE HARD-EDGE CLIP WIPE (restored 2026-09-01). The remotion-ui
        directional-wipe port (dd9e476, 2026-08-30) replaced this with a
@@ -2945,6 +2991,33 @@
       ? `inset(0 0 0 ${(1-wk)*100}%)` : `inset(0 ${(1-wk)*100}% 0 0)`;
     paint(wA, prev || sc);
     paint(wB, sc);
+    /* THE BLURZOOM (E47 #1). wB always carries the scene the frame is showing, so the outgoing magnification and
+       the incoming rise are the same element on two clocks. min-jerk on the zoom (the ruling: the reference's
+       zoom neither snaps nor sags); the softness rides the same u, an explicit numeric radius per frame - no
+       random, no wall clock, so the frame stays a pure function of t. A scene shorter than the transition takes
+       its outgoing half first (no shot in the reference is under 1.7 s, so the two never fight in practice). */
+    let bzBlur = 0, bzScale = 1;
+    if (bzOut) {
+      const u = minJerk(clamp01((t - (nxt.span[0] - bzOut / 2)) / (bzOut / 2)));
+      bzScale = 1 + (BLURZOOM_SCALE - 1) * u; bzBlur = BLURZOOM_BLUR * u;
+    } else if (bzIn) {
+      const u = minJerk(clamp01((t - sc.span[0]) / (bzIn / 2))), from = 1 / BLURZOOM_IN;
+      bzScale = from + (1 - from) * u; bzBlur = BLURZOOM_BLUR * (1 - u);
+    }
+    if (bzScale !== 1) {
+      wB.style.transformOrigin = "50% 50%";
+      wB.style.transform = `scale(${bzScale.toFixed(4)}) ` + wB.style.transform;
+    } else if (wB.style.transformOrigin) wB.style.transformOrigin = "";
+    const bzCss = bzBlur > 0.001 ? `blur(${bzBlur.toFixed(2)}px)` : "none";
+    bzveil.style.backdropFilter = bzCss; bzveil.style.webkitBackdropFilter = bzCss;
+    /* THE DIP (E47 #1): a plain LINEAR ramp to black over the last DIP_S/2 of the outgoing scene and back over the
+       first DIP_S/2 of the incoming one. Both halves reach 1 at the boundary, so the boundary frame IS black and
+       the cut happens inside it. The veil sits above every layer, so the docks, the stage captions and the
+       species ride the ramp down with the world and rise with the next one. */
+    let dipA = 0;
+    if (dipOut) dipA = Math.max(dipA, 1 - clamp01((nxt.span[0] - t) / (dipOut / 2)));
+    if (dipIn)  dipA = Math.max(dipA, 1 - clamp01((t - sc.span[0]) / (dipIn / 2)));
+    dipveil.style.opacity = dipA.toFixed(4);
     if (suck && su < 1) {
       const [px, py] = (suck.split(":")[1] || "0.5,0.5").split(",").map(Number);
       const ox = px * STAGE_W - wA.offsetLeft, oy = py * STAGE_H - wA.offsetTop;   /* the point in wA's own box (the world overhangs the stage 5%) */

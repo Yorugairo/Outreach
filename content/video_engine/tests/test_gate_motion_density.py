@@ -664,3 +664,49 @@ def test_a_mounted_pages_landing_skips_only_the_roll():
     assert G._page_land_offset(rolled) == G.PAGE_BUILD_END_S
     assert abs(G._page_land_offset(mounted) - (1.51 + G.PAGE_BUILD_END_S - G.LP_ROLL_S)) < 1e-9
     assert abs(G._page_land_offset(defaulted) - (G.LP_FIELD_S + G.PAGE_BUILD_END_S - G.LP_ROLL_S)) < 1e-9
+
+
+# ---- E47 #4: a dip / blur-zoom is the boundary EVENT, never stillness (operator 2026-09-06) ----
+def _tail_build(exit_id: str, first_scene_s: float, runtime: float = 60.0) -> tuple[dict, list, dict]:
+    """One long opening scene whose tail is still, then 5s scenes to the end. The first boundary
+    carries `exit_id`; nothing else in the build moves, so M10's verdict is that boundary's alone."""
+    edges, t = [0.0, first_scene_s], first_scene_s
+    while t + 5.0 < runtime:
+        t = round(t + 5.0, 2); edges.append(t)
+    edges.append(runtime)
+    scenes = [{"scene_id": f"s{i:02d}", "world": {"asset_id": f"world-{i}"}, "span": [a, z], "exit": "cut"}
+              for i, (a, z) in enumerate(zip(edges, edges[1:]))]
+    scenes[1]["exit"] = exit_id
+    return {"runtime_s": runtime, "scenes": scenes, "caption_pages": []}, [], {}
+
+
+def test_a_dip_splits_the_still_tail_it_ends_so_m10_passes():
+    """A 6.2s still tail FAILs M10 on a cut and PASSes on a dip: the dip's 14 frames are the event."""
+    on_cut = _by_id(G.run(*_tail_build("cut", 6.2))[0])
+    assert on_cut["M10"].level == "FAIL", on_cut["M10"]
+    on_dip = _by_id(G.run(*_tail_build("dip", 6.2))[0])
+    assert on_dip["M10"].level == "PASS", on_dip["M10"]
+    tl = _tail_build("dip", 6.2)[0]
+    assert G._transition_events(tl["scenes"]) == [round(6.2 - G.DIP_S / 2, 3), 6.2, round(6.2 + G.DIP_S / 2, 3)]
+
+
+def test_a_blurzoom_splits_the_still_tail_it_ends_so_m10_passes():
+    on_cut = _by_id(G.run(*_tail_build("cut", 6.1))[0])
+    assert on_cut["M10"].level == "FAIL", on_cut["M10"]
+    on_bz = _by_id(G.run(*_tail_build("blurzoom", 6.1))[0])
+    assert on_bz["M10"].level == "PASS", on_bz["M10"]
+    tl = _tail_build("blurzoom", 6.1)[0]
+    assert G._transition_events(tl["scenes"]) == [round(6.1 - G.BLURZOOM_S / 2, 3), 6.1, round(6.1 + G.BLURZOOM_S / 2, 3)]
+
+
+def test_a_timed_exit_credits_the_length_it_declares_and_the_first_scene_credits_nothing():
+    tl = _tail_build("dip:1.0", 6.2)[0]
+    tl["scenes"][1]["exit_s"] = 1.0
+    assert G._transition_events(tl["scenes"]) == [5.7, 6.2, 6.7]
+    tl["scenes"][0]["exit"] = "dip"          # no boundary before the first scene
+    assert G._transition_events(tl["scenes"])[0] == 5.7
+
+
+def test_a_wipe_or_a_cut_credits_no_transition_window():
+    for name in ("cut", "wipe_right", "dissolve", "suck:0.5,0.5"):
+        assert G._transition_events(_tail_build(name, 6.2)[0]["scenes"]) == [], name
