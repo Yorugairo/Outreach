@@ -2732,6 +2732,7 @@
     RACE_TICKS: 14,      /* tick pool: the coarse set plus the finer set that fades out as the axis glides (never pops) */
     DECLINE_BUILD: 3.6, DECLINE_IN: 0.15, DECLINE_OUT: 0.08,   /* decline-chart: IN settles, HOLD draws + counts + darkens, OUT locks */
     COMBO_BUILD: 4.5, COMBO_BARS: 0.5, COMBO_LINE: 0.42,        /* data-chart: bars in reading order, then the line at one speed */
+    COMBO_LABEL_SHARE: 0.55,   /* [DERIVED, the fourth watch]: a combo prints a bar's value only for the emphasised bar or one at this share of the biggest move */
   };
   const LP_PAL = { crimson: "#ED6A4A", teal: "#178C83", cobalt: "#8fb3f0", amber: "#F5B72E", deemph: "#b8c4d0" };   /* the field's own tokens (cobalt lifted for the charcoal, as dense-line) */
   const pow2out = (x) => 1 - (1 - x) * (1 - x);
@@ -2925,7 +2926,7 @@
        bracket can measure them (the +80 bp on the ring). */
     const n = Math.max(1, st.vals.length), unit = lpUnit(pg), P = !!st.portrait;
     const vmax = Math.max(0, ...st.vals.map((v) => +v)), vmin = Math.min(0, ...st.vals.map((v) => +v)), span = Math.max(1e-9, vmax - vmin) * 1.12;
-    const top = 110, bot = 470, x0 = 96, x1 = 880;
+    const top = 110, bot = 470, x0 = 96, x1 = (pg.series || []).some((q) => q.pts && q.pts.length) ? 806 : 880;   /* the lines' right axis needs its own margin */
     const bmy = (v) => bot - (v - vmin * 1.12) / span * (bot - top), base = bmy(0);   /* the zero line, inside the scale */
     const series = (pg.series || []).filter((s) => s.pts && s.pts.length), barsIn = pg.bars || [];
     let lo = Infinity, hi = -Infinity, xa = Infinity, xb = -Infinity;
@@ -2940,11 +2941,13 @@
       const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (emph ? " emph" : ""), st.chart, { x: (cx(i) - bw / 2).toFixed(1), y: (neg ? base : base - h).toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 5 });
       bar.style.transformOrigin = "0 " + base + "px"; bar.style.transform = "scaleY(0)";
       const lab = lpText(st.chart, "lab", cx(i), bot + 34, "middle", String((pg.labels || [])[i] ?? ""), { opacity: 0 });
-      const valY = neg ? base + h + (P ? 30 : 26) : base - h - 14;   /* a drop's value sits under its bar */
-      const val = lpText(st.chart, "val", cx(i), valY, "middle", st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v),
-        { opacity: 0, style: LP_HALO + (emph ? "fill:#F5B72E;font-size:30px;font-weight:700" : "") });
-      return { bar, lab, val, valY };
+      const valY = neg ? Math.min(base + h + (P ? 30 : 26), bot - 8) : base - h - 14;   /* a drop's value sits under its bar, never on the month labels */
+      const tells = emph || Math.abs(+v) >= LPX.COMBO_LABEL_SHARE * Math.max(1e-9, ...st.vals.map((q) => Math.abs(+q)));   /* E52: the chart reads without printing every number */
+      const val = tells ? lpText(st.chart, "val", cx(i), valY, "middle", st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v),
+        { opacity: 0, style: LP_HALO + (emph ? "fill:#F5B72E;font-size:30px;font-weight:700" : "") }) : null;
+      return { bar, lab, val, valY: tells ? valY : -1e9, cx: cx(i) };
     });
+    const cxOf = (b) => b.cx;
     const pad = (hi - lo) * 0.12 || 1; lo -= pad; hi += pad;
     const ly = (v) => bot - (+v - lo) / (hi - lo) * (bot - top);
     /* the lines' own axis, on the right, with the unit (pg.line_unit, else the first line's unit, else none) */
@@ -2952,7 +2955,7 @@
     { const step = lpNiceStep(Math.max(1e-9, (hi - lo) / 4));
       for (let tv = Math.ceil(lo / step - 1e-9) * step; tv <= hi + 1e-9; tv += step) {
         const v = Math.abs(tv) < step * 1e-6 ? 0 : tv;
-        lpText(st.chart, "lab", x1 + 30, ly(v) + (P ? 14 : 8), "start", lpWithUnit(lpTick(v), lunit), { style: "fill:#aeb6be" });
+        lpText(st.chart, "lab", x1 + 14, ly(v) + (P ? 14 : 8), "start", lpWithUnit(lpTick(v), lunit), { style: "fill:#aeb6be" });
       } }
     const lines = series.map((s) => {
       const aligned = s.pts.length === n, lx = (x, k) => aligned ? cx(k) : x0 + (+x - xa) / (xb - xa || 1) * (x1 - x0);   /* one point per bar sits on the bar */
@@ -2966,16 +2969,25 @@
         const by = aligned ? bars[k].valY : -1e9, ly0 = y - 18, yy = Math.abs(ly0 - by) < 32 ? by - (k === st.emph ? 38 : 30) : ly0;
         return lpText(st.chart, "val", x, yy, "middle", "", { opacity: 0, style: LP_HALO + "fill:" + col + ";font-size:24px" });
       });
-      const last = pts[pts.length - 1];   /* the inline name: right of the last point when there is room, else above it, ending at it */
-      const room = x1 + 200 <= (st.geom ? st.geom.W : 1000);
-      const name = lpText(st.chart, "sname", room ? last[0] + 44 : last[0], room ? last[1] + 8 : last[1] - 26, room ? "start" : "end", (s.label ? s.label + " " : "") + (s.name || ""), { opacity: 0, style: LP_HALO + "fill:" + col });
+      const last = pts[pts.length - 1];   /* the inline name: right of the last point when there is room, else above it, ending at it.
+         A combo whose SUB names the lines by colour carries no inline name at all - it would repeat the sub and land in the bars
+         (the fourth watch: "we need better handling on text/labels"); the sub is the legend and a bracket carries the number. */
+      const room = x1 + 200 <= (st.geom ? st.geom.W : 1000), quiet = !!pg.legend_in_sub;
+      const name = lpText(st.chart, "sname", room ? last[0] + 44 : last[0], room ? last[1] + 8 : last[1] - 26, room ? "start" : "end", quiet ? "" : (s.label ? s.label + " " : "") + (s.name || ""), { opacity: 0, style: LP_HALO + "fill:" + col });
       st.linePts.push(pts.map(([x, y]) => [x, y]));   /* the species' targets (a bracket on a line) */
       return { p, len, dot, labels, name, pts, ny: room ? last[1] + 8 : last[1] - 26 };
     });
-    /* s9.23b: two names never overprint - push apart by one line, keep them off the zero line */
-    const ord = [...lines].sort((a, b) => a.ny - b.ny), ngap = P ? 50 : 28;
+    /* s9.23b: a name never overprints another name OR a bar's printed value. Each name lifts above every value within
+       NAME_CLEAR_X of its own x, then the names push apart; the group is clamped inside the plot. */
+    const ngap = P ? 50 : 28, clearX = P ? 150 : 90;
+    for (const ln of lines) {
+      const nx = ln.name.getAttribute("text-anchor") === "end" ? +ln.name.getAttribute("x") - clearX : +ln.name.getAttribute("x");
+      for (const b of bars) if (b.val && Math.abs(cxOf(b) - nx) < clearX && Math.abs(b.valY - ln.ny) < ngap) ln.ny = Math.min(ln.ny, b.valY - ngap);
+    }
+    const ord = [...lines].sort((a, b) => a.ny - b.ny);
     for (let i = 1; i < ord.length; i++) if (ord[i].ny - ord[i - 1].ny < ngap) ord[i].ny = ord[i - 1].ny + ngap;
-    for (const ln of ord) ln.name.setAttribute("y", ln.ny.toFixed(1));
+    const lift = ord.length ? Math.max(0, ord[ord.length - 1].ny - (bot - 8)) : 0;
+    for (const ln of ord) { ln.ny -= lift; ln.name.setAttribute("y", Math.max(top + ngap * 0.6, ln.ny).toFixed(1)); }
     /* the lines' daily labels would be a wall of numbers on a dense series: only a sparse series (one point per bar) labels its points */
     for (const ln of lines) if (ln.pts.length > 2 * n) for (const lb of ln.labels) lb.remove(), ln.labels = [];
     st.combo = { bars, lines }; st.buildDur = LPX.COMBO_BUILD; st.paint = paintLedgerCombo;
@@ -2986,7 +2998,7 @@
       const k = expoOut(clamp01((c - i * LPX.COMBO_BARS / nb) / 0.18));   /* reading order: each bar starts as the one before settles */
       b.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
       b.lab.setAttribute("opacity", clamp01((k - 0.5) / 0.3).toFixed(2));
-      b.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
+      if (b.val) b.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
     });
     C.lines.forEach((ln, si) => {
       const g = (c - LPX.COMBO_BARS - si * 0.1) / LPX.COMBO_LINE, f = strokeFrac(ln.p, ln.len, clamp01(g)) ?? clamp01(g);   /* ease none: one speed (a hand's under curvature_stroke); g runs on so the last label lands */

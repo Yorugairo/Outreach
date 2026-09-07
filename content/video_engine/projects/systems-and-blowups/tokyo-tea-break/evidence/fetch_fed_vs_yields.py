@@ -75,17 +75,20 @@ def main() -> int:
     # holdings object on disk (US Treasury TIC), each bar on the lines' time axis by its own x - a drop goes down and is red
     hold = json.loads((HERE / "objects" / "ev-japan-holdings-v1.series.json").read_text(encoding="utf-8"))
     hpts = hold["series"][0]["pts"]
-    x_start = dec_year(start)
+    # the bars are the SELLING months - from the peak Japan sold down from, not the whole rate window: the tallest bar on
+    # this page must be a sale, not a January purchase the page never mentions (E28: the chart's biggest mark is its story)
+    x_bars = round(2026 + 1 / 12, 4) - 1e-6
     bars = []
     for (x0_, v0), (x1_, v1) in zip(hpts, hpts[1:]):
-        if x1_ < x_start:
+        if x1_ < x_bars:
             continue
         d = round(v1 - v0, 1); y, m = int(x1_), int(round((x1_ - int(x1_)) * 12)) + 1
         bars.append({"label": dt.date(y, m, 1).strftime("%b"), "value": d, "color": "neg" if d < 0 else "pos", "x": round(x1_ + 1 / 24, 4),
                      "note": f"{v0:,.1f} -> {v1:,.1f} $bn"})
     obj = {
         "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
-        "sub": f"Bars: Japan's monthly selling of Treasuries, $bn. Lines: Fed funds (grey), unchanged since {last_move.strftime('%b %Y')}, and the 10-year (red), %",
+        # ONE clause: a portrait page cuts its sub at the first period (lpFirstClause), and this sub is the legend now
+        "sub": f"Bars: Japan's monthly Treasury selling, $bn · Lines: Fed funds (grey), flat since {last_move.strftime('%b %Y')}, and the 10-year (red), %",
         "proof_sentence": (f"Fed funds target (upper) flat at {fed[-1][1]:.2f}% since {last_move.isoformat()}; the 10-year "
                 f"{ten_low[1]:.2f}% ({ten_low[0].isoformat()}) -> {ten_now[1]:.2f}% ({ten_now[0].isoformat()}); the 30-year mortgage "
                 f"{mort_low[1]:.2f}% ({mort_low[0].isoformat()}) -> {mort_now[1]:.2f}% ({mort_now[0].isoformat()})"),
@@ -94,6 +97,7 @@ def main() -> int:
         "ylabel": "$bn",
         "unit": "",
         "line_unit": "%",
+        "legend_in_sub": True,   # the sub names both lines by colour; an inline name would repeat it and land in the bars
         "bars": bars,
         "xticks": months[::2],
         # the design pass (operator, 2026-09-07: "charts need to make sense with no captions"): TWO lines that share one scale, each

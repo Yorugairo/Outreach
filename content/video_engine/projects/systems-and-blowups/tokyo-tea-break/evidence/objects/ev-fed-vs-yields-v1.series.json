@@ -1,34 +1,14 @@
 {
  "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
- "sub": "Bars: Japan's monthly selling of Treasuries, $bn. Lines: Fed funds (grey), unchanged since Dec 2025, and the 10-year (red), %",
+ "sub": "Bars: Japan's monthly Treasury selling, $bn \u00b7 Lines: Fed funds (grey), flat since Dec 2025, and the 10-year (red), %",
  "proof_sentence": "Fed funds target (upper) flat at 3.75% since 2025-12-11; the 10-year 3.97% (2026-02-27) -> 4.77% (2026-09-03); the 30-year mortgage 5.98% (2026-02-26) -> 6.71% (2026-09-03)",
  "src": "US Treasury TIC \u00b7 FRED \u00b7 Sep 2026",
  "src_style": "compact",
  "ylabel": "$bn",
  "unit": "",
  "line_unit": "%",
+ "legend_in_sub": true,
  "bars": [
-  {
-   "label": "Nov",
-   "value": 2.7,
-   "color": "pos",
-   "x": 2025.875,
-   "note": "1,200.0 -> 1,202.7 $bn"
-  },
-  {
-   "label": "Dec",
-   "value": -17.2,
-   "color": "neg",
-   "x": 2025.9584,
-   "note": "1,202.7 -> 1,185.5 $bn"
-  },
-  {
-   "label": "Jan",
-   "value": 39.8,
-   "color": "pos",
-   "x": 2026.0417,
-   "note": "1,185.5 -> 1,225.3 $bn"
-  },
   {
    "label": "Feb",
    "value": 14.0,
@@ -2437,18 +2417,6 @@
   "mortgage_rise_bp_from_low": 73.0,
   "window_from": "2025-10-27",
   "japan_bars": [
-   [
-    "Nov",
-    2.7
-   ],
-   [
-    "Dec",
-    -17.2
-   ],
-   [
-    "Jan",
-    39.8
-   ],
    [
     "Feb",
     14.0

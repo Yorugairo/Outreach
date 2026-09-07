@@ -2194,7 +2194,7 @@
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short\\docks\\dock-h-fed-vs-yields.png",
-    "sha256": "028465a8423aac6cb6f40f9e0335cb585f2c0c0dea245e87baf812f14242e075"
+    "sha256": "ad6c8e4e97c90d8848eb522ac0a5a007ef20f401c4a176079cdfdfd14930cbf3"
    },
    "badges": []
   },
@@ -5288,15 +5288,13 @@
      "builder": "combo",
      "variant": "line",
      "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
-     "sub": "Bars: Japan's monthly selling of Treasuries, $bn. Lines: Fed funds (grey), unchanged since Dec 2025, and the 10-year (red), %",
+     "sub": "Bars: Japan's monthly Treasury selling, $bn \u00b7 Lines: Fed funds (grey), flat since Dec 2025, and the 10-year (red), %",
      "source": "US Treasury TIC \u00b7 FRED \u00b7 Sep 2026",
      "quiet_zone": "right",
      "src_style": "compact",
      "line_unit": "%",
+     "legend_in_sub": true,
      "labels": [
-      "Nov",
-      "Dec",
-      "Jan",
       "Feb",
       "Mar",
       "Apr",
@@ -5304,9 +5302,6 @@
       "Jun"
      ],
      "values": [
-      2.7,
-      -17.2,
-      39.8,
       14.0,
       -47.7,
       18.3,
@@ -5314,9 +5309,6 @@
       -26.4
      ],
      "value_strings": [
-      "2.7",
-      "-17.2",
-      "39.8",
       "14.0",
       "-47.7",
       "18.3",
@@ -5324,9 +5316,6 @@
       "-26.4"
      ],
      "colors": [
-      "pos",
-      "neg",
-      "pos",
       "pos",
       "neg",
       "pos",
@@ -7505,7 +7494,7 @@
      "unit": "",
      "judge": [],
      "badges": [],
-     "emphasize": 0,
+     "emphasize": 3,
      "enter": "snap",
      "snap_from": "dock-h-fed-vs-yields",
      "exit": "cut"

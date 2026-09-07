@@ -58,6 +58,7 @@ def _bn(v: float) -> str:
 FACTS = _holdings_facts()
 FED = json.loads((HERE / "evidence/objects/ev-fed-vs-yields-v1.series.json").read_text(encoding="utf-8"))   # the Fed page's object: its notes, its bracket indices
 FED_NOTES = FED["notes"]
+FED_MAY_IDX = max(range(len(FED["bars"])), key=lambda i: -FED["bars"][i]["value"])   # the emphasised bar is the biggest SELLING month, never the first
 
 
 def clip_dock(aid: str) -> str:
@@ -412,7 +413,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
         #   6b: on "moved" the card SNAPS up to the full stage and IS the last world - the Fed page, arrived built (E51: a push tied to
         #   a landing); its side notes write as the ring is spoken (from the object's facts); the host arrives CENTRED on it for
         #   "and that unfunded bar tab is still ours" and retracts before the dip to the card.
-        (t_moved, t_outro, "ledger:ev-fed-vs-yields-v1:line:0:right:snap=dock-h-fed-vs-yields:cut", (0, 0, 0), [
+        (t_moved, t_outro, f"ledger:ev-fed-vs-yields-v1:line:{FED_MAY_IDX}:right:snap=dock-h-fed-vs-yields:cut", (0, 0, 0), [
             (clip_dock("dock-a2-counter-colder"), 0, t_that, t_outro - 0.3, {"centre": True}),
         ], "cut", [   # the SNAP is this row's own transition (no dip into it); the outro row still dips
             # the three notes write in the quiet zone over "Tokyo is still on its tea break", staggered, before the host lands over the page
