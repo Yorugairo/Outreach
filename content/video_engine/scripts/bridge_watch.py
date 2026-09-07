@@ -141,16 +141,27 @@ def _pending(record: dict[str, Any]) -> bool:
     return bool(record.get("tool_calls")) or (record.get("status") or DONE) != DONE
 
 
+# P46 T8 (2026-09-07 03:00): a turn can END on a placeholder while a background task runs - "Waiting for task-289." as a
+# DONE planner record with no tool call. That is not a reply; the watcher landed two of them and the daemon repaired a reply
+# that never was. A wait placeholder is pending, and so is everything before the task it waits on finishes.
+_WAIT_PLACEHOLDER = re.compile(r"^\s*(?:please\s+)?wait(?:ing)?\s+(?:for|on)\s+task-\d+", re.IGNORECASE)
+
+
+def _placeholder(record: dict[str, Any]) -> bool:
+    return record.get("type") == "PLANNER_RESPONSE" and bool(_WAIT_PLACEHOLDER.match((record.get("content") or "").strip()))
+
+
 def gemini_reply(records: Sequence[dict[str, Any]]) -> dict[str, Any]:
-    """The last completed PLANNER_RESPONSE with text and no tool call, if nothing after it is pending."""
+    """The last completed PLANNER_RESPONSE with text and no tool call, if nothing after it is pending - and a
+    "Waiting for task-N" placeholder is never that reply."""
 
     index = None
     for position, record in enumerate(records):
-        if record.get("type") != "PLANNER_RESPONSE" or _pending(record):
+        if record.get("type") != "PLANNER_RESPONSE" or _pending(record) or _placeholder(record):
             continue
         if (record.get("content") or "").strip():
             index = position
-    if index is None or any(_pending(r) for r in records[index + 1 :]):
+    if index is None or any(_pending(r) or _placeholder(r) for r in records[index + 1 :]):
         return {"status": "working", "text": "", "record": None}
     return {"status": "done", "text": (records[index].get("content") or "").strip(), "record": records[index]}
 

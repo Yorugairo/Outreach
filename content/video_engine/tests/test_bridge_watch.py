@@ -376,3 +376,20 @@ def test_a_missing_packet_says_where_it_looked(tmp_path):
         BW.locate_packet(tmp_path, "deadbeef")
 
     assert "not found where I looked" in str(excinfo.value)
+
+
+def test_a_wait_for_task_placeholder_is_working_not_a_reply():
+    """2026-09-07 03:00: the sourcing-repair turn ended on "Waiting for task-289." with status DONE while a background task ran;
+    the watcher landed it, tier 0 failed it on form, the daemon repaired it - all on a reply that never was."""
+    import bridge_watch as BW
+    planner = lambda text, **kw: {"type": "PLANNER_RESPONSE", "content": text, "status": "DONE", **kw}
+    generic = lambda text: {"type": "GENERIC", "content": text, "status": "DONE"}
+    waiting = [planner("Wait for task-289 to complete.", tool_calls=[{"name": "schedule"}]),
+               generic("Tool is running as a background task with task id: c/task-326"),
+               planner("Waiting for task-289.")]
+    assert BW.gemini_reply(waiting)["status"] == "working"
+    assert BW.gemini_reply(waiting + [planner("Waiting for task-335 to finish.")])["status"] == "working"
+    done = waiting + [planner("POSITION: done\nPATHS WRITTEN:\nC:/x/report.md\n")]
+    out = BW.gemini_reply(done)
+    assert out["status"] == "done" and out["text"].startswith("POSITION: done")
+    assert BW.gemini_reply([planner("POSITION: done")])["status"] == "done", "a real reply is still a reply"
