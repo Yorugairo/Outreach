@@ -1471,7 +1471,10 @@ subtle idle."*
    badge, a bracket, a figure, a plate - carries a NAMED idle: a breathing scale of 1-2 % `[DERIVED: HyperFrames
    /prompting/motion, verified 2026-09-06; measure on ours]`, or a slow directional drift, or a luminance pulse; for a figure,
    the asymmetric breath doc 48 §48.4 already prescribes (0.20-0.30 Hz, inspiratory:expiratory 1:1.5-1:2). The idle is named
-   per element in the shot table or by the compiler's default, never left to chance, and it is a pure function of `t`.
+   per element in the shot table or by the compiler's default, never left to chance, and it is a pure function of `t`. The operator, the same minute: *"if each pill, each dock,
+   each caption is on a subtle idle instead of a complete still, that's how you get life everywhere without expensive
+   animation, or overly broad parallax / Ken Burns."* So: the pills (badges), the docks, the captions - each at its own idle
+   beneath its events (a caption's pops are its events, E21; its idle is under them, never instead of them).
 2. **What it replaces.** Ken Burns and the parallax push were reached for as the cure for stillness: a whole plate moving so
    the frame was not frozen. They are tools for when the camera should move (doc 29 §9.27; doc 45), not a stillness fix.
    A plate that should hold, holds - at its idle.
