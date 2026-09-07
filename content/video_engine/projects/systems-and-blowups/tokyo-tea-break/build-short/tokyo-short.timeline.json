@@ -2072,15 +2072,35 @@
  ],
  "sound": [
   {
+   "slot": "landing 2 (throw, paper)",
+   "at": 9.51,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_0_A__",
+    "B": "__snd_0_B__"
+   }
+  },
+  {
+   "slot": "landing 2 (land, metal)",
+   "at": 36.86,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_1_A__",
+    "B": "__snd_1_B__"
+   }
+  },
+  {
    "slot": "suck 3",
    "at": 38.96,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_0_A__",
-    "B": "__snd_0_B__",
-    "C": "__snd_0_C__",
-    "D": "__snd_0_D__"
+    "A": "__snd_2_A__",
+    "B": "__snd_2_B__",
+    "C": "__snd_2_C__",
+    "D": "__snd_2_D__"
    }
   },
   {
@@ -2089,9 +2109,9 @@
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_1_A__",
-    "B": "__snd_1_B__",
-    "C": "__snd_1_C__"
+    "A": "__snd_3_A__",
+    "B": "__snd_3_B__",
+    "C": "__snd_3_C__"
    }
   },
   {
@@ -2100,9 +2120,9 @@
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_2_A__",
-    "B": "__snd_2_B__",
-    "C": "__snd_2_C__"
+    "A": "__snd_4_A__",
+    "B": "__snd_4_B__",
+    "C": "__snd_4_C__"
    }
   },
   {
@@ -2111,8 +2131,8 @@
    "gain": 0.0226,
    "fade_in": 1.5,
    "variants": {
-    "A": "__snd_3_A__",
-    "B": "__snd_3_B__"
+    "A": "__snd_5_A__",
+    "B": "__snd_5_B__"
    }
   },
   {
@@ -2121,8 +2141,8 @@
    "gain": 0.0226,
    "fade_in": 3.0,
    "variants": {
-    "A": "__snd_4_A__",
-    "B": "__snd_4_B__"
+    "A": "__snd_6_A__",
+    "B": "__snd_6_B__"
    }
   }
  ],

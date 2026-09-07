@@ -1,7 +1,7 @@
 # MOTION GATE — build-short
 
 ```text
-=== MOTION DENSITY GATE: content\video_engine\projects\systems-and-blowups\tokyo-tea-break\build-short ===
+=== MOTION DENSITY GATE: projects\systems-and-blowups\tokyo-tea-break\build-short ===
                runtime: 1:28
          visual_events: 296 (199.9/min)
                  docks: 3
@@ -52,5 +52,5 @@
 RESULT: 0 FAIL / 1 WARN / 14 PASS / 1 JUDGE / 3 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:b0a0cf151d17561b4832e9b597a3da5ecdb61d87dd0ec3c8d716790b5ad5f69a
+TIMELINE: tokyo-short.timeline.json sha256:53d23f6bc962552c5671ff7080ce851be95e9e57fb5390df5251b7a22399b403
 VERDICT: PASS (0 FAIL)

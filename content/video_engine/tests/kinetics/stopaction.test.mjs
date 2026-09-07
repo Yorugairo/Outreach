@@ -2,7 +2,7 @@
 // its weight before the drop, the one-frame lag, the tensor's determinant. Every function a pure function of t.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { CADENCE, MASS, STOP, cadence, stepped, massParams, lag, throwXf, landXf, stopCss, impactSquash, contactShadow, groundShake, massImpact } from "../../scripts/kinetics/stopaction.mjs";
+import { CADENCE, MASS, STOP, cadence, stepped, massParams, lag, throwXf, landXf, stopCss, impactSquash, contactShadow, groundShake, groundDip, rebound, massImpact } from "../../scripts/kinetics/stopaction.mjs";
 import { squashMatrix, det2 } from "../../scripts/kinetics/squash.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
@@ -37,7 +37,7 @@ test("lag: what a thing drags reads the clock one frame late", () => {
   assert.equal(STOP.LAG_FRAMES, 1);
 });
 
-test("throw: starts at the offset, flies on a stepped clock, lands on the spot with an impact and settles to rest", () => {
+test("throw: starts at the offset, flies a ballistic chord on a stepped clock, arrives at speed, lands on the spot and rides the dip", () => {
   const from = { x: -400, y: -120 }, F = STOP.FLIGHT_S;
   const s0 = throwXf(from, "paper", 0);
   assert.equal(s0.x, from.x); assert.equal(s0.y, from.y); assert.equal(s0.phase, "flight");
@@ -50,14 +50,16 @@ test("throw: starts at the offset, flies on a stepped clock, lands on the spot w
     if (s.y < chordY - 1) above++;
   }
   assert.ok(above > 12, "the arc lifts above the chord for most of the flight");
-  const land = throwXf(from, "paper", F + 1e-6);
+  /* Q4: no deceleration into the contact - the last tenth of the flight covers a tenth of the chord */
+  const late = throwXf(from, "paper", 0.9 * F), end = throwXf(from, "paper", F - 1e-9);
+  assert.ok(Math.abs((end.x - late.x) - 0.1 * -from.x) < 2, "arrives at speed, never eases into the hit");
+  const land = throwXf(from, "paper", F + 1 / 24 + 1e-6);
   assert.equal(land.phase, "land"); assert.equal(land.x, 0);
-  assert.ok(land.alpha > 0, "the impact squashes");
-  let maxSink = 0;
-  for (let i = 0; i <= 60; i++) { const s = throwXf(from, "paper", F + i * 0.02); maxSink = Math.max(maxSink, s.y); }
-  assert.ok(maxSink > 0 && maxSink <= STOP.IMPACT_PX + 1e-9, "it sinks, never more than IMPACT_PX");
+  assert.ok(land.alpha > 0, "a card squashes on its one squash frame");
+  const chord = Math.hypot(from.x, from.y), hop = rebound(1 / 24 + 1e-6, "paper", -from.y + STOP.ARC * chord);
+  assert.ok(land.ground > 0 && near(land.y, land.ground + hop, 1e-9), "it rides the ground's dip and its own small hop");
   const rest = throwXf(from, "paper", F + STOP.SETTLE_S + 0.1);
-  assert.equal(rest.phase, "settled"); assert.ok(Math.abs(rest.y) < 0.2 && rest.alpha < 0.002, "at rest on the spot");
+  assert.equal(rest.phase, "settled"); assert.ok(Math.abs(rest.y) < 0.2 && rest.alpha === 0, "at rest on the spot");
   assert.deepEqual(throwXf(from, "paper", 1.0), throwXf(from, "paper", 1.0), "pure");
   const slow = throwXf({ x: -60, y: 0 }, "paper", 0);
   assert.equal(slow.hold, 2, "60 px in 0.45 s is 133 px/s: on 2s");
@@ -71,7 +73,7 @@ test("throw: the stepped flight holds its pose inside a frame pair on 2s", () =>
   assert.notEqual(a.x, c.x, "frame 4 is the next step");
 });
 
-test("land: weight before motion - the lift and the clamp precede the drop, the drop eases in, the impact settles by the material", () => {
+test("land: weight before motion - the lift and the clamp precede the drop, the drop eases in, the contact is one frame, then the material", () => {
   const w = landXf("metal", -0.1);
   assert.equal(w.phase, "waiting"); assert.equal(w.y, -STOP.DROP_PX);
   const a = landXf("metal", STOP.ANTIC_S / 2);
@@ -82,15 +84,23 @@ test("land: weight before motion - the lift and the clamp precede the drop, the 
   assert.equal(d1.phase, "drop");
   assert.ok((d1.y + STOP.DROP_PX) < 0.1 * STOP.DROP_PX, "easing IN: little travel early");
   assert.ok(d2.y > d1.y && d2.alpha > d1.alpha, "fast and stretching late");
-  const im = landXf("metal", STOP.ANTIC_S + STOP.DROP_S + 1e-6);
-  assert.equal(im.phase, "land"); assert.ok(im.alpha > 0.05, "the impact squash");
-  const rest = landXf("metal", STOP.ANTIC_S + STOP.DROP_S + STOP.SETTLE_S + 0.1);
+  const hit = STOP.ANTIC_S + STOP.DROP_S;
+  assert.equal(landXf("metal", hit + 1 / 24 + 1e-6).alpha, 0, "a rigid heavy thing does not squash (Williams p. 263)");
+  assert.ok(landXf("paper", hit + 1 / 24 + 1e-6).alpha > 0.05 && landXf("paper", hit + 2 / 24 + 1e-6).alpha === 0, "a card squashes on one frame and releases at once");
+  assert.equal(landXf("paper", hit + 1e-6).alpha, 0, "the contact frame itself is uncompressed (Williams pp. 93-94)");
+  const rest = landXf("metal", hit + STOP.SETTLE_S + 0.1);
   assert.equal(rest.phase, "settled"); assert.ok(Math.abs(rest.y) < 0.05);
-  // the materials differ in their settle: paper overshoots, liquid never does
-  let paperMin = 0, liquidMin = 0;
-  for (let i = 0; i <= 100; i++) { const ts = STOP.ANTIC_S + STOP.DROP_S + i * 0.01; paperMin = Math.min(paperMin, landXf("paper", ts).y); liquidMin = Math.min(liquidMin, landXf("liquid", ts).y); }
-  assert.ok(paperMin < -0.3, "paper springs back past rest (overshoot)");
-  assert.ok(liquidMin > -1e-9, "liquid never overshoots");
+  /* the receiver: metal dips the ground harder and recovers dead; paper's ground flutters back */
+  assert.ok(groundDip(0, "metal") > groundDip(0, "paper") && groundDip(0, "metal") <= 6 + 1e-9);
+  let metalMin = 0, paperMin = 0;
+  for (let i = 0; i <= 100; i++) { metalMin = Math.min(metalMin, groundDip(i * 0.01, "metal")); paperMin = Math.min(paperMin, groundDip(i * 0.01, "paper")); }
+  assert.ok(metalMin > -0.15, "dense: critically damped, no overshoot (Q4)");
+  assert.ok(paperMin < -0.1, "light: the ground flutters past rest (zeta 0.67 overshoots 5.8 %)");
+  assert.ok(groundDip(8 / 24, "metal") < 0.15 * groundDip(0, "metal"), "the dip settles within 4-8 frames");
+  /* restitution: a card hops a little, a heavy rigid thing not at all */
+  assert.equal(rebound(0.02, "metal", 48), 0);
+  let hop = 0; for (let i = 0; i <= 60; i++) hop = Math.min(hop, rebound(i * 0.005, "paper", 160));
+  assert.ok(hop < 0 && hop > -0.15 * 0.15 * 160 - 1e-9, "h1 = e^2 h0");
 });
 
 test("the tensor keeps det = 1 in every phase, and stopCss writes fixed decimals", () => {
@@ -105,33 +115,34 @@ test("the tensor keeps det = 1 in every phase, and stopCss writes fixed decimals
   assert.match(clamp, /matrix\(/, "a clamp goes through the tensor with the axis turned");
 });
 
-test("the hit (HG2): a stepped squash envelope about the contact, scaled by the material; a heavy thing hits harder than a light one", () => {
-  assert.equal(impactSquash(-0.01, "metal"), 0, "nothing before the hit");
-  const a0 = impactSquash(0, "metal"), a1 = impactSquash(1 / 24, "metal"), a4 = impactSquash(4 / 24, "metal"), a5 = impactSquash(5 / 24, "metal");
-  assert.ok(near(a0, STOP.IMPACT_SQUASH * massImpact("metal"), 1e-12), "step 0 is the full hit");
-  assert.ok(a0 > a1 && a1 > a4 && a4 > 0 && a5 === 0, "the envelope decays over five steps and ends at exactly zero");
-  assert.ok(impactSquash(0, "metal") > impactSquash(0, "paper") && impactSquash(0, "paper") > impactSquash(0, "liquid"), "metal > paper > liquid");
-  assert.ok(near(impactSquash(1 / 24, "metal", 2), a0, 1e-12), "on 2s the first step holds two frames");
-  const hit = landXf("metal", STOP.ANTIC_S + STOP.DROP_S + 1e-6);
-  assert.ok(hit.alpha >= a0 - 1e-9, "the landing's alpha carries the hit's envelope, not the two-frame decay");
+test("the hit (Q1): one squash frame for a deformable thing, none for a rigid one, the contact frame uncompressed, on 2s the frame holds two", () => {
+  assert.equal(impactSquash(-0.01, "paper"), 0);
+  assert.equal(impactSquash(0, "paper"), 0, "frame 0 is the contact drawing");
+  assert.ok(near(impactSquash(1 / 24, "paper"), STOP.IMPACT_SQUASH, 1e-12), "frame 1 is the squash");
+  assert.equal(impactSquash(2 / 24, "paper"), 0, "released at once - never a hold");
+  for (let f = 0; f < 6; f++) assert.equal(impactSquash(f / 24, "metal"), 0, "a rigid thing never squashes");
+  assert.ok(impactSquash(1 / 24, "liquid") > 0 && impactSquash(2 / 24, "liquid") > 0 && impactSquash(3 / 24, "liquid") === 0, "a liquid spreads over two");
+  assert.ok(near(impactSquash(3 / 24, "paper", 2), STOP.IMPACT_SQUASH, 1e-12), "on 2s the squash frame holds frames 2 and 3");
 });
 
-test("the contact shadow comes in: faint and small while high, dark and tight on the floor, spread by the hit", () => {
+test("the contact shadow comes in: wide and soft while high, a slit on the floor - the blur is the depth (Kersten 1997), the alpha stays narrow", () => {
   const far = contactShadow(STOP.SHADOW_H_PX), near0 = contactShadow(0), mid = contactShadow(STOP.SHADOW_H_PX / 2);
-  assert.ok(far.alpha < mid.alpha && mid.alpha < near0.alpha, "darkens as it nears the floor");
+  assert.ok(far.blur > mid.blur && mid.blur > near0.blur && near(far.blur, 16) && near(near0.blur, 0.8), "sigma 16 px high -> 0.8 px at contact");
+  assert.ok(far.alpha < mid.alpha && mid.alpha < near0.alpha && near0.alpha - far.alpha <= 0.35, "the alpha ramp is the weakest cue and stays narrow");
   assert.ok(far.scale < mid.scale && mid.scale < near0.scale, "grows as it nears the floor");
   assert.ok(near(near0.alpha, STOP.SHADOW_NEAR.alpha) && near(far.alpha, STOP.SHADOW_FAR.alpha));
   assert.ok(contactShadow(0, 0.2).scale > near0.scale, "the hit's squash spreads the shadow");
   assert.equal(contactShadow(1e9).alpha, STOP.SHADOW_FAR.alpha, "clamped high");
 });
 
-test("the ground answers: three frames of shake from the hit, scaled by the material, then exactly zero", () => {
+test("the ground answers with a DIP for mass; the shake is violence and only a violent hit gets it", () => {
   const f0 = groundShake(0, "metal"), f1 = groundShake(1 / 24 + 1e-4, "metal"), f3 = groundShake(3 / 24 + 1e-4, "metal");
   assert.ok(f0.x !== 0 && f1.x !== 0 && f0.x * f1.x < 0, "the shake alternates sides");
   assert.deepEqual(f3, { x: 0, y: 0 }, "and is gone by the fourth frame");
-  assert.ok(Math.abs(groundShake(0, "metal").x) > Math.abs(groundShake(0, "paper").x), "metal shakes the ground harder");
   assert.deepEqual(groundShake(-0.1, "metal"), { x: 0, y: 0 });
-  const l = landXf("metal", STOP.ANTIC_S + STOP.DROP_S + 1e-6), th = throwXf({ x: -400, y: -120 }, "paper", STOP.FLIGHT_S + 1e-6);
-  assert.ok(l.shake.x !== 0 && th.shake.x !== 0, "both arrivals report the ground's answer on the hit frame");
+  const hit = STOP.ANTIC_S + STOP.DROP_S + 1e-6;
+  assert.deepEqual(landXf("metal", hit).shake, { x: 0, y: 0 }, "no shake by default - mass is the dip");
+  assert.ok(landXf("metal", hit).ground > 0 && throwXf({ x: -400, y: -120 }, "paper", STOP.FLIGHT_S + 1e-6).ground > 0, "both arrivals dip the ground on the hit");
+  assert.ok(landXf("metal", hit, { violent: true }).shake.x !== 0, "a violent hit shakes the stage");
   assert.ok(throwXf({ x: -400, y: -120 }, "paper", 0.1).h > 0 && landXf("metal", 0.05).h > STOP.DROP_PX, "the height above rest is reported for the shadow");
 });

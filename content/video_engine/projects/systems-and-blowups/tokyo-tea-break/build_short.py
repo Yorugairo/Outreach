@@ -16,6 +16,7 @@ timed from the take, never typed.
 from __future__ import annotations
 
 import json
+import math
 import shutil
 import sys
 from pathlib import Path
@@ -119,6 +120,18 @@ OUTRO_S, OUTRO_LEAD = 6.2, 0.1   # the card's fade begins a tenth before the las
 # four CC0 shutters (sound/SOURCES.md) composed into a seeded pack the length of the panel clip - clusters of two or three
 # clicks, a cluster every ~1-1.6 s, the sample and its level varied per click; A dense, B sparse. One cue at the panel.
 SHUTTERS = ["fs-shutter-pentax-337229.mp3", "fs-shutter-manual-521854.mp3", "fs-shutter-sony-249750.mp3", "fs-shutter-dslr-539136.mp3"]
+
+
+def stop_dials() -> dict:
+    """The stop-action module's timing dials (FLIGHT_S, ANTIC_S, DROP_S), read from the source so the landing cue and the
+    landing itself share one clock. The module is the truth; this is a regex over its STOP block."""
+    import re
+    src = (SCRIPTS / "kinetics/stopaction.mjs").read_text(encoding="utf-8")
+    block = src.split("export const STOP", 1)[1].split("});", 1)[0]
+    out = {k: float(v) for k, v in re.findall(r"^\s*([A-Z_]+):\s*([0-9.]+)", block, flags=re.M)}
+    for k in ("FLIGHT_S", "ANTIC_S", "DROP_S"):
+        assert k in out, f"stopaction.mjs no longer names {k}"
+    return out
 
 
 def press_pack(window_s: float, out: Path, clusters: int, seed: int) -> Path:
@@ -403,6 +416,7 @@ def main() -> int:
     # level the operator set for the press pack on 2026-09-05), and the roll-out enter comes down from 0.18 to the same 0.12.
     ACCENT, RETRACT_S, WHIRL_S = 0.12, 2.0, 2.2   # the drain starts RETRACT_S before the row ends; the out-swirl and the drain warp run 2.2 s, timed to end on the cut
     ENTER_GAIN = 0.12                             # a roll-out page enter (was 0.18)
+    STOP = stop_dials()                           # FLIGHT_S / ANTIC_S / DROP_S from the kinetics module: the landing cue's clock
     cues = []
     for i, r in enumerate(rows):
         if r[2].startswith("ledger:"):
@@ -424,6 +438,21 @@ def main() -> int:
             press_pack(win, HERE / "sound/press-pack-B.mp3", clusters=6, seed=0xC1A56)
             cues.append({"slot": f"press {i + 1}", "at": round(r[0], 2), "gain": 0.16, "fade_in": 0.0, "variants": {"A": "press-pack-A.mp3", "B": "press-pack-B.mp3"},
                          "note": "the pack meters -16.6 LUFS; 0.16 puts the clicks ~14.5 dB under the voice (operator, 2026-09-05: 14-15 dB under)"})
+        # THE LANDING CUE (P47 T1 follow-up, the weight report Q5 - source on file: Williams pp. 263, 309-311): the sound lands ON the
+        # contact frame or one frame early, never two ahead. The contact is the dock's enter + the module's own flight (a throw)
+        # or anticipation + drop (a land), read from stopaction.mjs so the cue cannot drift from the motion. The file: the quiet
+        # page turn (documented, -19.1 LUFS) for both until the ear says; fs-riserhit-754771.mp3 sits in the folder with NO line in
+        # sound/SOURCES.md and is not used. The report's "+6 to +12 dB" for a hit is a doctrine line, not our measurement - the gain
+        # stays at ACCENT for the second watch.
+        for d in (r[4] or []):
+            opts = d[4] if len(d) > 4 and isinstance(d[4], dict) else {}
+            arr = opts.get("arrive")
+            if arr in ("throw", "land"):
+                # a throw flies on the STEPPED clock (round(t * 24)), so its contact is the first frame at or past FLIGHT_S; a land is continuous
+                contact = d[2] + (math.ceil(STOP["FLIGHT_S"] * 24 - 1e-9) / 24 if arr == "throw" else STOP["ANTIC_S"] + STOP["DROP_S"])
+                cues.append({"slot": f"landing {i + 1} ({arr}, {opts.get('mass', 'paper')})", "at": round(contact - 1 / 24, 2), "gain": ACCENT, "fade_in": 0.0,
+                             "variants": {"A": FLIP, "B": "fs-page-stroke-447925.mp3"},
+                             "note": f"contact at {contact:.2f}s, the cue one frame early (the report Q5: 0 to -1 frame); a documented hit file for metal is still to find"})
     # the beds, sub-threshold and continuous: the hook bed from 0, the turn bed fading in under it at 0:40 to the end
     cues.append({"slot": "hook bed", "at": 0.0, "gain": bed_gain("suno-hook-B.mp3"), "fade_in": 1.5, "variants": {"A": "suno-hook-B.mp3", "B": "suno-hook-A.mp3"},
                  "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO ({VO_LUFS} LUFS); B at {bed_gain('suno-hook-A.mp3')}"})
