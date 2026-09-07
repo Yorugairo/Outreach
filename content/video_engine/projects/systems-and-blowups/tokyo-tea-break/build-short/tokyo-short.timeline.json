@@ -1970,7 +1970,7 @@
      "k": false
     }
    ],
-   "cap_mode": "stage"
+   "cap_mode": "anchor"
   },
   {
    "s": 78.68,
@@ -2126,13 +2126,23 @@
    }
   },
   {
+   "slot": "landing 6 (throw, paper)",
+   "at": 76.21,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_5_A__",
+    "B": "__snd_5_B__"
+   }
+  },
+  {
    "slot": "hook bed",
    "at": 0.0,
    "gain": 0.0226,
    "fade_in": 1.5,
    "variants": {
-    "A": "__snd_5_A__",
-    "B": "__snd_5_B__"
+    "A": "__snd_6_A__",
+    "B": "__snd_6_B__"
    }
   },
   {
@@ -2141,8 +2151,8 @@
    "gain": 0.0226,
    "fade_in": 3.0,
    "variants": {
-    "A": "__snd_6_A__",
-    "B": "__snd_6_B__"
+    "A": "__snd_7_A__",
+    "B": "__snd_7_B__"
    }
   }
  ],
@@ -2177,6 +2187,16 @@
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-f-toll-gate-to-fab-v2.mp4",
     "sha256": "ceb472b41d8a0687b20f29b448ec669b74d95b9c4cb2707218108b1c94631a7d"
+   },
+   "badges": []
+  },
+  "dock-h-fed-vs-yields": {
+   "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
+   "source": "FRED DFEDTARU, DGS10, MORTGAGE30US \u00b7 fetched 2026-09-07",
+   "species": "chart",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short\\docks\\dock-h-fed-vs-yields.png",
+    "sha256": "ca65b5b9425ed6884983be91226aa1b71588f1df43ef63883835236234d00fd8"
    },
    "badges": []
   }
@@ -5111,6 +5131,26 @@
      "label": "\u2212$122.6B",
      "sub": "a tenth of the pile",
      "color": "neg"
+    },
+    {
+     "kind": "undraw",
+     "at": 50.3,
+     "dur": 1.2,
+     "target": {
+      "kind": "datum",
+      "index": 0
+     }
+    },
+    {
+     "kind": "figure",
+     "at": 53.19,
+     "dur": 1.6,
+     "target": {
+      "kind": "datum",
+      "index": 315
+     },
+     "text": "$1,116.7B",
+     "sub": "the June 2026 print"
     }
    ]
   },
@@ -6554,7 +6594,26 @@
     75.73,
     81.55
    ],
-   "docks": [],
+   "docks": [
+    {
+     "slide": "dock-h-fed-vs-yields",
+     "slot": 0,
+     "enter": 75.79,
+     "exit": 77.6,
+     "badge_at": [],
+     "place": {
+      "x": 594,
+      "y": 297,
+      "w": 270,
+      "h": 175
+     },
+     "read_s": 1.2,
+     "park_s": 0.7,
+     "park": false,
+     "arrive": "throw",
+     "mass": "paper"
+    }
+   ],
    "species": [
     {
      "kind": "retitle",

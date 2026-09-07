@@ -3159,8 +3159,12 @@
     const ns = Math.max(1, fg.sg.length), perS = 0.75 * 0.4 / ns, uS = u - 0.25 - 0.75 * 0.6;
     fg.sg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uS - j * perS) / (perS * 1.6)).toFixed(3)));
   };
-  const paintBracket = (b, t) => {
-    const sp = b.sp, dur = Math.max(0.001, sp.dur || 1), u = clamp01((t - sp.at) / dur);
+  const paintBracket = (b, t, ud) => {
+    const sp = b.sp, dur = Math.max(0.001, sp.dur || 1);
+    let u = clamp01((t - sp.at) / dur);
+    /* E50: an UNDRAW (no series named) after the bracket's word takes the bracket with the line - the label un-writes,
+       the ticks shrink, the span retracts, on the undraw's own clock */
+    if (ud && t >= ud.at && ud.at >= sp.at) u = Math.min(u, 1 - segEase(clamp01((t - ud.at) / Math.max(0.001, ud.dur || 1))));
     for (const side of [b.main, b.glow]) {
       const draw = segEase(u / PS.BRACKET_DRAW);
       side.line.setAttribute("stroke-dashoffset", (side.len * (1 - draw)).toFixed(1));
@@ -3180,7 +3184,8 @@
   const paintPerform = (st, scene, t, pg) => {
     if (!st.perform) st.perform = buildPerform(st, scene, pg);
     const PF = st.perform;
-    for (const b of PF.brackets) paintBracket(b, t);
+    const undrawAll = pageSpecies(scene, "undraw").filter((sp) => (sp.series ?? (sp.target || {}).series) == null);
+    for (const b of PF.brackets) paintBracket(b, t, undrawAll.find((sp) => sp.at >= b.sp.at));
     for (const fg of PF.figures || []) paintFigure(fg, t);   /* E50: the chart's next thing */
     /* RELIGHT: the sunflower twin rises and falls on a sine over dur */
     for (const b of PF.brackets) b.glow.g.setAttribute("opacity", "0");

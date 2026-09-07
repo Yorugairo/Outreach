@@ -26,5 +26,12 @@
   "source": "@StickMike \u00b7 Money Physics",
   "species": "deck",
   "badges": []
+ },
+ {
+  "asset": "dock-h-fed-vs-yields",
+  "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
+  "source": "FRED DFEDTARU, DGS10, MORTGAGE30US \u00b7 fetched 2026-09-07",
+  "species": "chart",
+  "badges": []
  }
 ]

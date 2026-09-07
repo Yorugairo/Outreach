@@ -58,6 +58,17 @@
    }
   },
   {
+   "slot": "landing 6 (throw, paper)",
+   "at": 76.21,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-pageturn-484968.mp3",
+    "B": "fs-page-stroke-447925.mp3"
+   },
+   "note": "contact at 76.25s, the cue one frame early (the report Q5: 0 to -1 frame); a documented hit file for metal is still to find"
+  },
+  {
    "slot": "hook bed",
    "at": 0.0,
    "gain": 0.0226,

@@ -228,6 +228,20 @@ def dock_still(aid: str) -> str:
     return aid
 
 
+def dock_card(aid: str, series: str, variant: str = "line") -> str:
+    """A CHART CARD (R26-19 / E50): the series object's ledger page rendered once at its landing by scripts/chart_card.py and
+    registered as a dock still, so a 2-3 s beat can carry a chart a fresh page could never land in time. Rebuilt when the
+    object or the renderer is newer than the card."""
+    import build_render_f as R
+    import chart_card as CC
+    src = HERE / "evidence/objects" / f"{series}.series.json"
+    out = BUILD / "docks" / f"{aid}.png"
+    if not out.exists() or out.stat().st_mtime < max(src.stat().st_mtime, Path(CC.__file__).stat().st_mtime):
+        CC.render_card(src, out, variant)
+    R.STAMPED[aid] = str(out)
+    return aid
+
+
 # the docked stills' evidence cards. species "deck": these are the channel's own drawn stills and never a chart, so the
 # opening-minute chart gates (M11 first chart, M12 chart hold) must not read one as the chart. No badges: ruling B3 - a badge
 # numeral must appear verbatim in the document behind it, and a drawn still carries no numerals.
@@ -236,6 +250,8 @@ DOCK_META = [
     {"asset": "dock-a2-counter-colder", "title": "The host at the counter", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
     {"asset": "dock-g-two-fingers", "title": "Two numbers", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
     {"asset": "dock-f-toll-gate-to-fab", "title": "The gate to the fab", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
+    # R26-19 / E50: the hook's own proof as a CHART card on the ring - species "chart", so M11/M12 read it as the chart it is
+    {"asset": "dock-h-fed-vs-yields", "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.", "source": "FRED DFEDTARU, DGS10, MORTGAGE30US · fetched 2026-09-07", "species": "chart", "badges": []},
 ]
 
 # the LEDGER PAGE's own clock, mirrored from the player's `const LP` (template :1724) exactly as the motion gate mirrors it:
@@ -281,10 +297,14 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     t_ring = cut_before(ws, "The Fed still hasn't moved")
     t_relit = at("that unfunded")                        # the second "unfunded bar tab" - the callout is re-lit on it
     t_ours = at("still ours")                            # the host mounts here as the last image before the card
+    t_fed_still = at("The Fed still")                    # R26-19: the Fed-vs-yields CARD is thrown on the ring's first half ...
+    t_tokyo_still = at("Tokyo is still")                 # ... and leaves as the sentence turns back to Tokyo
     # V3 words (P47 T2): the page performs on these
     t_build = round(t_page + PAGE_BUILD_START_S, 2)      # the page's own build beat (tr = t - t_page on a mount, E45 s2) - the line draws to the peak
     t_opponent = at("The opponent")                      # the title rewrites here
     t_hundred = at("a hundred and twenty-two billion")   # the bracket draws here, its sub landing on "a tenth of the pile"
+    t_prints = at("The Treasury prints")                 # E50: the line and the bracket un-draw here (the last data mark is the bracket)
+    t_first = at("your first number")                    # ... and the June print writes as the FIRST NUMBER
     RETITLE = "The opponent: a balance sheet"            # one line at 68 px, like the title it replaces (a second line would sit on the sub)
     carried = lambda t0: {"kind": "retitle", "at": round(t0 - 3.0, 2), "dur": 2.4, "text": RETITLE}   # a returning page ARRIVES retitled (a species before its scene is a state)
     meta = f"ledger:ev-meta-yield-v1:bars:3:right:mount={round(t_cut - t_second, 2)}:cut"   # as v1; the world it mounts over is now the page
@@ -339,6 +359,11 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # V3: the BRACKET measures the drop from the peak to June by the hand on the number; its label is the number and
             # its sub lands on "a tenth of the pile" - the callout that said the same is gone (one thing per sentence)
             {"kind": "bracket", "at": t_hundred, "dur": 2.4, "from": PEAK_IDX, "to": LAST_IDX, "label": "\u2212$122.6B", "sub": "a tenth of the pile", "color": "neg"},
+            # E50: the bracket is the page's last data mark (49.1); on "The Treasury prints" the line and the bracket un-draw and the
+            # June print writes on "your first number" - THE first number the promise named; it holds under the pledge and the
+            # money-went-home line (a figure is the next thing, not the chart) until the Meta page mounts over it
+            {"kind": "undraw", "at": t_prints, "dur": 1.2, "target": datum(0)},
+            {"kind": "figure", "at": t_first, "dur": 1.6, "target": datum(LAST_IDX), "text": _bn(FACTS["latest"]), "sub": "the " + MONTH(FACTS["latest_month"]) + " print"},
         ]),
         # 5 the second number: a Meta share priced at each yield, punch on the 5.5 % bar at "discounts" - as v1
         (t_second, t_ring, meta, (0, 0, 0), [], None, [
@@ -348,7 +373,13 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
         # 6 THE RING on the mechanism, not the phrase (G15b): the holdings page returns UNWOUND on "The Fed still hasn't
         #   moved" with the drop already drawn, and the -$122.6B is re-lit on the second "unfunded bar tab". exit=cut
         #   because the callout would otherwise ride the retract (M15 / E40 #5) and because the host mounts on top of it.
-        (t_ring, t_ours, hold + ":spiral:cut", (0, 0, 0), [], "cut", [
+        (t_ring, t_ours, hold + ":spiral:cut", (0, 0, 0), [
+            # R26-19 / E50 (operator, 2026-09-07: "there has to be another one that we can pull in of value"): the HOOK'S OWN PROOF -
+            # the Fed's target flat since its last move against the 10-year and the 30-year mortgage climbing (FRED, fetched, proof
+            # lines in the object) - THROWN onto the ring on "The Fed still hasn't moved" and gone as the sentence turns to Tokyo. A
+            # chart card (scripts/chart_card.py): a fresh page could not land in 2.3 s; the card carries the same painter's frame.
+            (dock_card("dock-h-fed-vs-yields", "ev-fed-vs-yields-v1"), 0, t_fed_still, t_tokyo_still, {"arrive": "throw", "mass": "paper"}),
+        ], "cut", [
             # V3: the page returns with the BRACKET STANDING (it draws in the unwind's first beat) and the second "unfunded bar
             # tab" RE-LIGHTS it in the sunflower - the same element, not a lookalike (E48 s4: the callback is the thread)
             carried(t_ring),
