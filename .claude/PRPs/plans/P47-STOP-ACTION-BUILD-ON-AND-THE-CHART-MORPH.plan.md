@@ -145,6 +145,17 @@ python content/video_engine/scripts/sync_kinetics.py --check
 python content/video_engine/scripts/build_docs_layers.py --check
 ```
 
+## Evidence And Handoff
+
+- Per slice: the verbatim test tail, the frame proofs (browser-measured rects / luminance / sharpness through
+  `render_baseline.render_frame`), the registry rows for every new dial with its `[DERIVED]` tag, and the goldens' byte-identity.
+- HG1/HG2/HG3: the operator's words on what the player showed, recorded in this plan's slice evidence and, when a call becomes
+  doctrine, as a ruling in `docs/portable/OPERATOR-RULINGS.md`.
+- Handoff: Tokyo v3 in `build-short/` (v2 preserved as `build-short.v2/`), the player served on :8731 for the watch; the render
+  only after the operator's word; the next post's analytics read against v3's scene list in `tokyo-tea-break/ANALYTICS-*.md`.
+- The transitions review (`docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md`) gains a §8 when T3 lands: the morph as
+  the match cut (TR-7 closed) and what the stepped clock did to the shorts' pulse (M16).
+
 ## Risks
 
 - The stepped clock on a translating dock can strobe (Watson 1986, the brief's failure signature); the cadence rule is the guard
