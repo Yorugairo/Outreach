@@ -3,12 +3,12 @@
 ```text
 === MOTION DENSITY GATE: content\video_engine\projects\systems-and-blowups\tokyo-tea-break\build-short ===
                runtime: 1:28
-         visual_events: 297 (200.6/min)
-                 docks: 4
+         visual_events: 296 (199.9/min)
+                 docks: 3
            dock_source: timeline
           ledger_pages: 4
   still_over_12s_share: 0%
-            per_minute: 0:00:211/6 1:00:177/4
+            per_minute: 0:00:210/5 1:00:177/4
 
   [WARN ] M11 first chart ledger:s02 enters at 2.0s, its build lands at 10.7s, with build_to landing on datum 311 at 10.7s (the cap is the annotation: the line ends on the datum); WARN no sound cue within 1.5s of the enter at 2.0s; window 0-10s (E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10)
           E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue
@@ -16,7 +16,7 @@
           doc 29 s8.19 / s9.25 stillness ceiling
   [PASS ] M02 0 stretches > 8s (working target)
           doc 29 s9.25
-  [PASS ] M03 longest wait for evidence to enter: 21s from 0:15
+  [PASS ] M03 longest wait for evidence to enter: 27s from 0:09
           doc 29: evidence every 15-45s, every phase incl. P1 and P6 (E21)
   [PASS ] M04 8 distinct plates; target runtime/12s = 7
           doc 29 s9.13 plate density
@@ -40,7 +40,7 @@
           doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
   [PASS ] M18 no run of bit-identical frames over 0.50s (1066 frames at 12 fps, 0:00-1:28); longest 0.00s at 0:00
           E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)
-  [INFO ] M07 short: 1 full minute(s) in 89s - opening 211.0 events/min, 6.0 evidence entries/min; tail from 1:00 176.9/min; whole runtime 199.3/min - no minute distribution to rank in (E21 is judged on the whole)
+  [INFO ] M07 short: 1 full minute(s) in 89s - opening 210.0 events/min, 5.0 evidence entries/min; tail from 1:00 176.9/min; whole runtime 198.6/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
   [INFO ] M19 1 build_to hold(s) - the line rests at a datum until the next word: 0:10+8.3s
           P47 T2 (SHOT-TABLE-V3-PROPOSAL part B): a cap is a hold the sentence asked for, not stillness
@@ -52,5 +52,5 @@
 RESULT: 0 FAIL / 1 WARN / 14 PASS / 1 JUDGE / 3 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:ac1d409b545c595bd2e8ff0d46e7f732c3bdb84b166bcc54eaa549384ef70e45
+TIMELINE: tokyo-short.timeline.json sha256:b0a0cf151d17561b4832e9b597a3da5ecdb61d87dd0ec3c8d716790b5ad5f69a
 VERDICT: PASS (0 FAIL)

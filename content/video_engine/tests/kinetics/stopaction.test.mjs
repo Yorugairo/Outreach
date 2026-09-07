@@ -2,7 +2,7 @@
 // its weight before the drop, the one-frame lag, the tensor's determinant. Every function a pure function of t.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { CADENCE, MASS, STOP, cadence, stepped, massParams, lag, throwXf, landXf, stopCss } from "../../scripts/kinetics/stopaction.mjs";
+import { CADENCE, MASS, STOP, cadence, stepped, massParams, lag, throwXf, landXf, stopCss, impactSquash, contactShadow, groundShake, massImpact } from "../../scripts/kinetics/stopaction.mjs";
 import { squashMatrix, det2 } from "../../scripts/kinetics/squash.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
@@ -103,4 +103,35 @@ test("the tensor keeps det = 1 in every phase, and stopCss writes fixed decimals
   assert.equal(stopCss({ x: 0, y: 0, alpha: 0 }), " translate(0.00px,0.00px)");
   const clamp = stopCss({ x: 0, y: 0, alpha: -0.05, theta: Math.PI / 2 });
   assert.match(clamp, /matrix\(/, "a clamp goes through the tensor with the axis turned");
+});
+
+test("the hit (HG2): a stepped squash envelope about the contact, scaled by the material; a heavy thing hits harder than a light one", () => {
+  assert.equal(impactSquash(-0.01, "metal"), 0, "nothing before the hit");
+  const a0 = impactSquash(0, "metal"), a1 = impactSquash(1 / 24, "metal"), a4 = impactSquash(4 / 24, "metal"), a5 = impactSquash(5 / 24, "metal");
+  assert.ok(near(a0, STOP.IMPACT_SQUASH * massImpact("metal"), 1e-12), "step 0 is the full hit");
+  assert.ok(a0 > a1 && a1 > a4 && a4 > 0 && a5 === 0, "the envelope decays over five steps and ends at exactly zero");
+  assert.ok(impactSquash(0, "metal") > impactSquash(0, "paper") && impactSquash(0, "paper") > impactSquash(0, "liquid"), "metal > paper > liquid");
+  assert.ok(near(impactSquash(1 / 24, "metal", 2), a0, 1e-12), "on 2s the first step holds two frames");
+  const hit = landXf("metal", STOP.ANTIC_S + STOP.DROP_S + 1e-6);
+  assert.ok(hit.alpha >= a0 - 1e-9, "the landing's alpha carries the hit's envelope, not the two-frame decay");
+});
+
+test("the contact shadow comes in: faint and small while high, dark and tight on the floor, spread by the hit", () => {
+  const far = contactShadow(STOP.SHADOW_H_PX), near0 = contactShadow(0), mid = contactShadow(STOP.SHADOW_H_PX / 2);
+  assert.ok(far.alpha < mid.alpha && mid.alpha < near0.alpha, "darkens as it nears the floor");
+  assert.ok(far.scale < mid.scale && mid.scale < near0.scale, "grows as it nears the floor");
+  assert.ok(near(near0.alpha, STOP.SHADOW_NEAR.alpha) && near(far.alpha, STOP.SHADOW_FAR.alpha));
+  assert.ok(contactShadow(0, 0.2).scale > near0.scale, "the hit's squash spreads the shadow");
+  assert.equal(contactShadow(1e9).alpha, STOP.SHADOW_FAR.alpha, "clamped high");
+});
+
+test("the ground answers: three frames of shake from the hit, scaled by the material, then exactly zero", () => {
+  const f0 = groundShake(0, "metal"), f1 = groundShake(1 / 24 + 1e-4, "metal"), f3 = groundShake(3 / 24 + 1e-4, "metal");
+  assert.ok(f0.x !== 0 && f1.x !== 0 && f0.x * f1.x < 0, "the shake alternates sides");
+  assert.deepEqual(f3, { x: 0, y: 0 }, "and is gone by the fourth frame");
+  assert.ok(Math.abs(groundShake(0, "metal").x) > Math.abs(groundShake(0, "paper").x), "metal shakes the ground harder");
+  assert.deepEqual(groundShake(-0.1, "metal"), { x: 0, y: 0 });
+  const l = landXf("metal", STOP.ANTIC_S + STOP.DROP_S + 1e-6), th = throwXf({ x: -400, y: -120 }, "paper", STOP.FLIGHT_S + 1e-6);
+  assert.ok(l.shake.x !== 0 && th.shake.x !== 0, "both arrivals report the ground's answer on the hit frame");
+  assert.ok(throwXf({ x: -400, y: -120 }, "paper", 0.1).h > 0 && landXf("metal", 0.05).h > STOP.DROP_PX, "the height above rest is reported for the shadow");
 });

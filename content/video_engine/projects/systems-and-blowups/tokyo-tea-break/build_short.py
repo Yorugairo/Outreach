@@ -272,8 +272,9 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # V3 second pass (P47 T1, HG2 - judged by eye): the panel is THROWN onto the page on "Three men" (a prop with a path,
             # paper), the two fingers LAND with weight on "Two numbers" (the lift, the drop, the impact, the settle); the host
             # keeps E45's spring so the three arrivals can be compared in one watch
-            (dock_still("dock-c-blue-ties-panel"), 0, t_panel, t_sixty, {"arrive": "throw", "mass": "paper"}),
-            (dock_still("dock-a2-counter-colder"), 0, t_sixty, t_watch),
+            # HG1 (operator, 2026-09-07): "the dock at 0:16 is useless, that's the tea clip but at that point we're not talking about tea" -
+            # the tea swap on "sixty-three" is gone; the panel holds parked through the joke and retracts on "watching" (part B row 4)
+            (dock_still("dock-c-blue-ties-panel"), 0, t_panel, t_watch, {"arrive": "throw", "mass": "paper"}),
             (dock_still("dock-g-two-fingers"), 0, t_two, t_promise, {"arrive": "land", "mass": "metal"}),
         ], "cut", [
             # V3: the build stops at the FEBRUARY PEAK ("The Fed hasn't moved, but your borrowing costs climbed anyway"); the coral

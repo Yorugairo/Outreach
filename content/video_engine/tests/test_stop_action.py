@@ -180,6 +180,14 @@ def test_a_thrown_dock_is_off_its_spot_in_flight_and_lands_where_the_spring_woul
             assert abs(landed[k] - spring[k]) < 1.0, f"landed {k} {landed[k]:.2f} vs the spring's {spring[k]:.2f}: the throw lands where the pop would"
         impact = P.rect("#dock-1", DOCK_IN + 0.46)
         assert "matrix(" in impact["tf"], "the impact squashes (the tensor is on the transform right after the landing)"
+        # HG2: the contact shadow comes in - faint while the card is high, dark on the hit; the ground answers with a shake
+        sh_flight = P.rect("#dock-contact-0", DOCK_IN + 0.15); sh_hit = P.rect("#dock-contact-0", DOCK_IN + 0.46)
+        assert sh_flight and sh_hit, "a contact shadow lives beneath an arriving card"
+        assert float(sh_hit["op"]) > float(sh_flight["op"]) + 0.3, f"the shadow darkens as the card lands: flight {sh_flight['op']} -> hit {sh_hit['op']}"
+        world_hit = pa.evaluate("() => document.getElementById('wB').style.transform + '|' + document.getElementById('wA').style.transform")
+        world_rest = P.rect("#dock-1", DOCK_IN + 2.5) and pa.evaluate("() => document.getElementById('wB').style.transform + '|' + document.getElementById('wA').style.transform")
+        assert "translate(" in world_hit and world_hit != world_rest, "the world takes the weight on the hit frame and is still afterwards"
+        assert "dock-contact" not in (Q.rect("#dock-1", DOCK_IN + 0.46) or {}).get("tf", "") and pb.evaluate("() => !document.getElementById('dock-contact-0')"), "a spring arrival casts no contact shadow (E45 untouched)"
         assert P.rect("#dock-1", DOCK_IN + 0.15) == flight, "a seek is the play"
     finally:
         BR.close()

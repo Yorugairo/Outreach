@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-260 documents across 13 kinds.
+261 documents across 13 kinds.
 
 ## doctrine
 
@@ -167,6 +167,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/research/2026-08-24-twenty-n8n-attio-evaluation.md — Twenty vs n8n vs Attio: Workflow Fit Evaluation — Three tools, three different seams, three different answers. — defines: — — terms: git-versioned; self-hosted; human-in-the-loop; SEOTarget; InsightReport; video-engine
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md — Acoustic Narrative Architecture: Integrating Class — Writing for spoken delivery requires a fundamental reorienta — defines: — — terms: McKee; long-form; Expectation-Reality; single-idea; Attribution-first; second-person
 - docs/research/audio/SUBTHRESHOLD_BACKGROUND_MUSIC_RESEARCH_BLUEPRINT.md — Sub-threshold Background Music — Research Blueprin — Pass-1 discovery brief · 2026-09-01 · sources: Exa semantic — defines: — — terms: room-tone; just-audible; subliminal-audio; Egermann et al.; SPL-verified; Greenwald et al.
+- docs/research/motion/BRIEF-WEIGHT-DENSITY-MASS-2026-09-07.md — Research brief — weight, density and mass in drawi — Asked by: the operator, 2026-09-07, on Tokyo v3's first thro — defines: — — terms: area-preserving; mass-spring-damper; HyperFrames; stop-motion-cadence; headline-slam; three-frame
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md — HyperFrames Motion, Transitions, and Kinetic Trans — How does HeyGen HyperFrames structure motion design, scene t — defines: — — terms: HyperFrames; HeyGen; on-twos; rules-and-anti-patterns; stop-motion; hand-drawn
 - docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md — Wealth Logic — where the picture change sits relat — TR-2 (`docs/content-video-engine/TRANSITIONS-REVIEW-2026-09- — defines: — — terms: YouTube; split-edit; L-cut-like; J-cut-like; auto-captions; mid-speech
 - docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md — Wealth Logic Transitions, Measured From The Pixels — What KIND of transition does the Wealth Logic reference use — defines: — — terms: blur-zoom; DIP_BRIGHT_FRAC 1.60; [t - 0.6 s, t + 0.8 s]; L_before; L_after; S_before

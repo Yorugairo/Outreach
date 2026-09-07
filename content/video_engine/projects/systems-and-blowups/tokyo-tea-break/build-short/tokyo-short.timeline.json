@@ -2138,17 +2138,6 @@
    },
    "badges": []
   },
-  "dock-a2-counter-colder": {
-   "kind": "video",
-   "title": "The host at the counter",
-   "source": "@StickMike \u00b7 Money Physics",
-   "species": "deck",
-   "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-a2-counter-colder-v2.mp4",
-    "sha256": "97bc38ff5cf12ffdbfb5df4a18a5f5d37ef5aeb7068747e42d72fe88175fd153"
-   },
-   "badges": []
-  },
   "dock-g-two-fingers": {
    "kind": "video",
    "title": "Two numbers",
@@ -3539,7 +3528,7 @@
      "slide": "dock-c-blue-ties-panel",
      "slot": 0,
      "enter": 9.09,
-     "exit": 15.34,
+     "exit": 18.95,
      "badge_at": [],
      "kind": "video",
      "place": {
@@ -3553,23 +3542,6 @@
      "park": true,
      "arrive": "throw",
      "mass": "paper"
-    },
-    {
-     "slide": "dock-a2-counter-colder",
-     "slot": 0,
-     "enter": 15.34,
-     "exit": 18.95,
-     "badge_at": [],
-     "kind": "video",
-     "place": {
-      "x": 594,
-      "y": 297,
-      "w": 270,
-      "h": 175
-     },
-     "read_s": 1.2,
-     "park_s": 0.7,
-     "park": true
     },
     {
      "slide": "dock-g-two-fingers",
@@ -6628,6 +6600,7 @@
  "kinetics": {
   "idle": true,
   "stop_action": true,
+  "arap_morph": true,
   "analytic_spring": true,
   "min_jerk": true,
   "area_squash": true,

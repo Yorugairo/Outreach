@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3314 records across 260 files.
+3315 records across 261 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -3746,6 +3746,10 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L94 [3] 4. Where to set the fader (industry numbers) — - General practice: music −18 to −22 dB nominal (WeVideo); under {under dialogue specifically −30 to −35 dB} <WeVideo; high-pass; Dialogue-anchored; YouTube; full-mix>
 - L103 [2] Operational spec for Steel and Paper (and MP default) — 1. VO anchor: master the mix so integrated loudness lands ≈ {VO anchor:; Bed level:; −28 LU below the VO} <YouTube; measured-interference; number-dense; high-load; complex-task; simple-task; purpose-made; LU-below-VO; Cross-checked; dense-analysis; error-masking; steady-state>
 - L148 [2] Confidence & gaps — - HIGH: subliminal-audio null result; lyrics-are-speech; instrumental <subliminal-audio; lyrics-are-speech; room-tone>
+
+## docs/research/motion/BRIEF-WEIGHT-DENSITY-MASS-2026-09-07.md
+
+- L1 [1] Research brief — weight, density and mass in drawing, animation and stop-motion — Asked by: the operator, 2026-09-07, on Tokyo v3's first throw and landing (P47 T1, HG2): *"The throw comes on, but it {Asked by:; What we already hold (do not re-research):} <area-preserving; mass-spring-damper; HyperFrames; stop-motion-cadence; headline-slam; three-frame; follow-up; impactSquash; impact; contactShadow; groundShake; hand-drawn>
 
 ## docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md
 
