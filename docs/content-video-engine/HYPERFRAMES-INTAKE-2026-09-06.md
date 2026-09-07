@@ -195,3 +195,30 @@ language, "don't invent transition names" (our compiler validates `SCENE_EXITS`)
 The motion page itself was extracted faithfully (nine of nine statements verified on the page), so pasting it adds nothing;
 the page that would add something is `/prompting/vocabulary` (the transitions table with its meanings) or
 `/prompting/specification-dial`, neither of which the report opened.
+
+## 6. Read by hand: the storyboards page (operator, same day) - and the amendment to E48
+
+The operator on the first E48: *"I thought what we just learned from Wealth Logic is that maybe the cut in the gap is actually
+supposed to be a fade in the gap? … it's too early to prescriptively see what our primaries and accents are. I know the swirl is
+the hero. I wouldn't consider the mount as a transition really, it's more of a build … cut minimally, because every cut is a
+disconnect … they keep one thread on the screen that ties everything together the whole time."* E48 is amended: the hero is
+the spiral, the primaries are decided by the next shorts' curves, the mount is a build, cut minimally, one thread.
+
+What the storyboards page adds beyond the report's §9 (which had the four invariants, the two-colour rule, the reveals, the
+breather, the negative list, the schema and the callback):
+
+- **The callback's contract**: say both halves in the plan - where the motif is planted and how it changes on return - and the
+  return is the *same element*, never a lookalike; the capstone's protagonist chip rides the whole film and is the thing that
+  finally renders. For us: the tab (the receipt) planted on the hook, the line it becomes, the bracket that measures it, the
+  ring where it returns - P47 T3's morph is the device. → E48 §4.
+- **A hold names its behaviour**: fully still, or a subtle idle - never a slow drift or "breathing", which reads as unfinished.
+  This is the nuance that resolves the report's Rule 1 vs Rule 9 contradiction: the vendor allows a *named subtle idle* and bans
+  an *unnamed drift*. HF-13's test is on the named idle only.
+- **"Never skip persuasion and beat"** on a frame: a scene that shows the stat versus a scene that proves it and says how it
+  feels to land. Ours already carries both (the craft map's devices, the beat tags); the per-frame `[focal]` and `[roles]`
+  remain HF-9.
+- **Prompt the plan, not the scenes** - the direction block every frame inherits is our doctrine layer; the light per-frame
+  spec is our shot row. Same shape; indexed.
+
+The seam table in `tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md` part D keeps its column but its "role" entries are the
+parent's draft, not a ruling: the hero is the spiral; the rest is measured.

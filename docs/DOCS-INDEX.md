@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3304 records across 260 files.
+3305 records across 260 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -665,8 +665,8 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1 [1] Tokyo short v3 — the cut ledger and the page's performance (proposal, 2026-09-06) — The operator on v2 (docks springing, dips, the page mounted on the hook): *"That is a cool effect. Now it's tougher because we <sell-off; blue-ties; sixty-three; two-fingers; toll-gate; re-lit; price-to-earnings; host-as-dock; build-to-datum; YouTube; focus-zoom; Jun 2026>
 - L14 [2] A. The cut ledger of v2 (mark: keep / cut / move) — | t | word | what happens | what it proves | parent's read | operator | {keep} <sell-off; blue-ties; sixty-three; two-fingers; toll-gate; re-lit; price-to-earnings; host-as-dock>
 - L47 [2] B. The page performs — the holdings page, sentence by sentence — The page is on screen 1.99–38.96, 44.88–61.76 and 75.73–81.55: 56 of 89 seconds. Today it does five things in that time. The <build-to-datum; YouTube; sixty-three; focus-zoom; Jun 2026; write-on; mid-page; twenty-two; x-axis; re-lit; re-lights>
-- L72 [2] D. The transition vocabulary (E48) - the seams of v3 by name — | seam | kind | role | {the hero}
-- L86 [2] C. What must be built for B (the backlog skills, in the order B needs them) → plan P47 — The operator (same hour): *"we need to operationalize stop-action mechanics to be able to throw things on page or land things with {V3-1 TOP; Build-to-datum on a word} <stop-action; build-on; arrive: spring|throw|land; LP.BUILD; build_to; {kind: "build_to", at, index}; re-lit; bracket; min-jerk; relight; re-fires; mid-page>
+- L72 [2] D. The transition vocabulary (E48) - the seams of v3 by name — | seam | kind | role | {the hero} <blur-zoom>
+- L88 [2] C. What must be built for B (the backlog skills, in the order B needs them) → plan P47 — The operator (same hour): *"we need to operationalize stop-action mechanics to be able to throw things on page or land things with {V3-1 TOP; Build-to-datum on a word} <stop-action; build-on; arrive: spring|throw|land; LP.BUILD; build_to; {kind: "build_to", at, index}; re-lit; bracket; min-jerk; relight; re-fires; mid-page>
 
 ## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md
 
@@ -2954,6 +2954,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L107 [2] 3. The claim table (explorer recall, 2026-09-06) — `R:` = the report; `T:` = the player template; `SK/` = `.agents/skills/hyperframes-animation/`; `OR:` = the rulings; `TR:` = the <OR:; TR:; dwell-and-sweep; T:2794; ink.mjs:157; Math.random; fade-to-black; HyperFrames; p ∈ [0,1]; T:2975-3004; push-in; PUNCH_SCALE 1.14>
 - L170 [2] 4. The lesson for the intake — A vendor's prompt guide is a second reference, not a calibration source (E38). Its verified numbers (the one-frame lag, the <one-frame; frame-index>
 - L178 [2] 5. Read by hand: the transitions page (operator, same day) — The operator pasted `hyperframes.heygen.com/prompting/transitions` and asked what it adds beyond the analysis. Two things the {One primary, accents, one hero; E48; The black-hole cut is a renderer artifact.} <cut-in-the-gap; blur-zoom; fade-out; two-tween; two-frame; per-seam; SCENE_EXITS>
+- L199 [2] 6. Read by hand: the storyboards page (operator, same day) - and the amendment to E48 — The operator on the first E48: *"I thought what we just learned from Wealth Logic is that maybe the cut in the gap is actually <two-colour; per-frame; [focal]; [roles]>
 
 ## docs/content-video-engine/P13-GATE-A-ARMBAR-REVIEW.md
 
@@ -3523,7 +3524,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1347 [2] E45 — A dock on a page is small and sits in the page's quiet space; the mount is the transition into a full-page ledger (2026-09-06) — Ruled on the first Tokyo v2 player with video docks (004698d). The operator: *"the dock needs to not cover the middle of the {A dock never covers the chart.} <quiet_zone; hand-placed; min-jerk; roll-out; full-frame; FADE-AND-MOUNT; SHORTS-SHAPE>
 - L1384 [2] E46 — E44/E45 are the shorts standard; the older transition rules were long-form and reactive; dissolves and Ken Burns are valid tools we misused (2026-09-06) — Ruled on the transitions review (`docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md`), which found doc 51 §51.4 (dissolves {On a short, E44 and E45 govern.} <roll-out; six-phase; full-frame>
 - L1405 [2] E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 dissolves, <blur-zooms; min-jerk; docks → dip; bare → cut; carried-light; cross-reveal; wipe_right; [DERIVED]>
-- L1430 [2] E48 — One primary transition, accents for the topic changes, one hero: the spiral (2026-09-06) — From the HyperFrames transitions page the operator brought in by hand (`hyperframes.heygen.com/prompting/transitions`, read {A short's transition vocabulary is declared, not improvised.} <HyperFrames; blur-zoom; black-hole; fade-out; two-tween>
+- L1430 [2] E48 — A declared transition vocabulary with one hero, the spiral; the primaries are not prescribed yet; the mount is a build; cut minimally, one thread (2026-09-06, amended the same hour) — From the HyperFrames transitions page the operator brought in by hand (`hyperframes.heygen.com/prompting/transitions`, read {A short's transition vocabulary is declared, not improvised.} <HyperFrames; blur-zooms; black-hole; fade-out; two-tween>
 
 ## docs/portable/OUTRO-CTA-PLAYBOOK.md
 

@@ -81,7 +81,9 @@ rule: every sentence the page is under, the chart does one thing that proves it 
 | page → card (82.62) | dip | accent (the chapter closes) |
 
 Docks arrive by the spring (E45), never by a seam. No wipe. Two spirals, one dip, two mounts, one suck: the whole vocabulary,
-declared. A seam that wants anything else is a plan defect.
+declared. A seam that wants anything else is a plan defect. **The "role" column is the parent's draft, not a ruling (E48 as
+amended): the hero is the spiral; the mount is a build, not a seam; which of cut / dip / blur-zoom is the primary for a world
+change is what the next shorts' curves decide. The thread through v3: the tab planted on the hook, the line, the bracket, the ring.**
 
 ## C. What must be built for B (the backlog skills, in the order B needs them) → plan P47
 

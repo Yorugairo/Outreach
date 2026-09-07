@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4241 topics, 4133 citation edges. The 200 largest topics follow,
+4241 topics, 4145 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (134)
@@ -841,6 +841,24 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:232 — 6.6 Perceptual Psychophysics & Audio-Visual Entrainment — - Apprehension Principle (Tversky et al. 2002): Continuous animation overwhelms working memory; mandates the $0.8 ext{s}
 - … 8 more in `docs/DOCS-TOPICS.jsonl`
 
+## blur-zoom (20)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:72 — D. The transition vocabulary (E48) - the seams of v3 by name — | seam | kind | role |
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:172 — 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames
+- docs/content-video-engine/CAPABILITIES.md:38 — Dip and blur-zoom exits, WIRED — (2026-09-06) — ruling E47 (operator: "we should add both ... we're wrong about the wipe, which we only implemented as a
+- docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:178 — 5. Read by hand: the transitions page (operator, same day) — The operator pasted `hyperframes.heygen.com/prompting/transitions` and asked what it adds beyond the analysis. Two thing
+- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157 — 6. TR-1 landed — the reference's transition mix, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_kinds.py` over the 720p upload (30 fps), all 99 boundaries in 2.4 s, calibrate
+- docs/portable/OPERATOR-RULINGS.md:1405 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
+  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:49, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:107, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157, +7 more
+- docs/portable/OPERATOR-RULINGS.md:1430 — E48 — A declared transition vocabulary with one hero, the spiral; the primaries are not prescribed yet; the mount is a build; cut minimally, one thread (2026-09-06, amended the same hour) — From the HyperFrames transitions page the operator brought in by hand (`hyperframes.heygen.com/prompting/transitions`, r
+  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:72, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:178, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:199
+- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:270 — 8. What HyperFrames Would Say About Our Open Transition Queries (`TRANSITIONS-REVIEW-2026-09-06.md`) — This section does not settle our open transition queries. Rather, it contrasts what HyperFrames doctrine would advise ag
+- docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:150 — 4. By kind — the dip is the one real offset, and it is an offset of the *transition*, not of the cut — Caption timeline, rule (a) ≥ 0.30 s:
+- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:1 — Wealth Logic Transitions, Measured From The Pixels — Pass-1 · 2026-09-06 · sources: the video on disk, the ledger · for: TR-1
+- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:5 — The question — What KIND of transition does the Wealth Logic reference use at each of its 99 shot boundaries -
+- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:12 — Verdict up front — The reference is not an all-hard-cut edit. Only 36 of its 99 boundaries are hard cuts.
+- … 8 more in `docs/DOCS-TOPICS.jsonl`
+
 ## point-in-time (20)
 
 - docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:1 — Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
@@ -908,24 +926,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:1 — NICHE BEND RESEARCH DOSSIER: WHY US BOND YIELDS ARE SURGING AGAIN — DO THIS ASAP! — > Strategic repositioning brief. Contrasts crowded competitor tropes with forensic mechanics,
 - content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:8 — 1. Top Competitor Cluster (The Crowded Mainstream) — | Competitor Title | Channel / Source | Core Hook Trope | Video URL |
 - content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:18 — Competitor Narrative & Art Style Patterns: — - Thumbnail & Title Trope: High-urgency doom ('Surging AGAIN - Do This ASAP!', 'Catastrophe ahead').
-- … 7 more in `docs/DOCS-TOPICS.jsonl`
-
-## blur-zoom (19)
-
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:172 — 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames
-- docs/content-video-engine/CAPABILITIES.md:38 — Dip and blur-zoom exits, WIRED — (2026-09-06) — ruling E47 (operator: "we should add both ... we're wrong about the wipe, which we only implemented as a
-- docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:178 — 5. Read by hand: the transitions page (operator, same day) — The operator pasted `hyperframes.heygen.com/prompting/transitions` and asked what it adds beyond the analysis. Two thing
-- docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157 — 6. TR-1 landed — the reference's transition mix, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_kinds.py` over the 720p upload (30 fps), all 99 boundaries in 2.4 s, calibrate
-- docs/portable/OPERATOR-RULINGS.md:1405 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
-  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:86, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:49, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:107, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157, +7 more
-- docs/portable/OPERATOR-RULINGS.md:1430 — E48 — One primary transition, accents for the topic changes, one hero: the spiral (2026-09-06) — From the HyperFrames transitions page the operator brought in by hand (`hyperframes.heygen.com/prompting/transitions`, r
-  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:72, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:178
-- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:270 — 8. What HyperFrames Would Say About Our Open Transition Queries (`TRANSITIONS-REVIEW-2026-09-06.md`) — This section does not settle our open transition queries. Rather, it contrasts what HyperFrames doctrine would advise ag
-- docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:150 — 4. By kind — the dip is the one real offset, and it is an offset of the *transition*, not of the cut — Caption timeline, rule (a) ≥ 0.30 s:
-- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:1 — Wealth Logic Transitions, Measured From The Pixels — Pass-1 · 2026-09-06 · sources: the video on disk, the ledger · for: TR-1
-- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:5 — The question — What KIND of transition does the Wealth Logic reference use at each of its 99 shot boundaries -
-- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:12 — Verdict up front — The reference is not an all-hard-cut edit. Only 36 of its 99 boundaries are hard cuts.
-- docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:30 — How it was measured, and every threshold in it — `content/video_engine/scripts/measure_cut_kinds.py` decodes `[t - 0.6 s, t + 0.8 s]` around each
 - … 7 more in `docs/DOCS-TOPICS.jsonl`
 
 ## dot-com (19)
