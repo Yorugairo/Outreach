@@ -3589,9 +3589,18 @@
    ],
    "species": [
     {
-     "kind": "callout",
-     "at": 10.79,
-     "dur": 2.0,
+     "kind": "build_to",
+     "at": 7.69,
+     "dur": 3.0,
+     "target": {
+      "kind": "datum",
+      "index": 311
+     }
+    },
+    {
+     "kind": "build_to",
+     "at": 18.95,
+     "dur": 1.2,
      "target": {
       "kind": "datum",
       "index": 315
@@ -3614,6 +3623,12 @@
       "kind": "datum",
       "index": 311
      }
+    },
+    {
+     "kind": "retitle",
+     "at": 33.15,
+     "dur": 2.4,
+     "text": "The opponent: a balance sheet"
     }
    ]
   },
@@ -5052,6 +5067,12 @@
    ],
    "species": [
     {
+     "kind": "retitle",
+     "at": 41.88,
+     "dur": 2.4,
+     "text": "The opponent: a balance sheet"
+    },
+    {
      "kind": "punch",
      "at": 45.0,
      "dur": 0.9,
@@ -5061,13 +5082,14 @@
      }
     },
     {
-     "kind": "callout",
-     "at": 48.76,
-     "dur": 2.0,
-     "target": {
-      "kind": "datum",
-      "index": 315
-     }
+     "kind": "bracket",
+     "at": 46.72,
+     "dur": 2.4,
+     "from": 311,
+     "to": 315,
+     "label": "\u2212$122.6B",
+     "sub": "a tenth of the pile",
+     "color": "neg"
     }
    ]
   },
@@ -6514,13 +6536,27 @@
    "docks": [],
    "species": [
     {
-     "kind": "callout",
+     "kind": "retitle",
+     "at": 72.73,
+     "dur": 2.4,
+     "text": "The opponent: a balance sheet"
+    },
+    {
+     "kind": "bracket",
+     "at": 75.73,
+     "dur": 0.8,
+     "from": 311,
+     "to": 315,
+     "label": "\u2212$122.6B",
+     "sub": "a tenth of the pile",
+     "color": "neg"
+    },
+    {
+     "kind": "relight",
      "at": 79.92,
-     "dur": 2.0,
-     "target": {
-      "kind": "datum",
-      "index": 315
-     }
+     "dur": 1.0,
+     "ref": "bracket",
+     "index": 0
     }
    ]
   },
@@ -6573,12 +6609,16 @@
  ],
  "species": [
   "ledger",
-  "callout",
+  "build_to",
   "spotlight",
+  "callout",
+  "retitle",
   "steam",
   "trace",
   "ticker",
   "punch",
+  "bracket",
+  "relight",
   "life"
  ],
  "kinetics": {

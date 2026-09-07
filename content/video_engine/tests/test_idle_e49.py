@@ -222,3 +222,15 @@ def test_the_page_body_breathes_under_two_percent_and_nothing_else_moves():
                 browser.close()
         finally:
             srv.shutdown()
+
+
+def test_m18_refuses_frame_hashes_measured_on_another_player(tmp_path: Path):
+    """A rebuilt player makes the hashes beside it stale: the row says so instead of passing on old evidence."""
+    (tmp_path / "player.html").write_text("<html>rebuilt</html>", encoding="utf-8")
+    (tmp_path / G.FRAME_HASHES_NAME).write_text(json.dumps({"fps": 12, "html_sha256": "0" * 64, "frames": _frames([f"{i:08x}" for i in range(30)])}), encoding="utf-8")
+    assert G.load_frames(tmp_path) == "stale"
+    g = G._frozen_gate("stale")
+    assert g.level == "INFO" and "another player.html" in g.message
+    good = hashlib.sha256((tmp_path / "player.html").read_bytes()).hexdigest()
+    (tmp_path / G.FRAME_HASHES_NAME).write_text(json.dumps({"fps": 12, "html_sha256": good, "frames": _frames([f"{i:08x}" for i in range(30)])}), encoding="utf-8")
+    assert isinstance(G.load_frames(tmp_path), list)

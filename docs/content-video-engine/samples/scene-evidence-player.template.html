@@ -114,6 +114,10 @@
   .lp-chart .cpill { fill: var(--lp-acc); }
   .lp-chart .ser { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
   .lp-chart .sname { font-size: 24px; font-weight: 700; }
+  .lp-chart .bk { fill: none; stroke-width: 3; stroke-linecap: round; }   /* P47 T2: the bracket's span and ticks */
+  .lp-chart .glow .bk { stroke-width: 7; }
+  .lp-chart .bklab, .lp-chart .bksub { font-family: Kalam, Inter, Arial, sans-serif; font-weight: 700; }
+  .lp-chart .bksub { font-weight: 400; opacity: .85; }
   .lp-chart .tagchip { font-size: 18px; font-weight: 600; letter-spacing: .04em; opacity: .85; text-transform: lowercase; }
   /* PORTRAIT (P41, doc 49 s49.1 amended 2026-09-05): in 9:16 the chart IS the world. The page fills the frame to
      its deckle, the charcoal fills the page to that edge, the series is re-laid for the tall frame in stage px
@@ -131,6 +135,8 @@
   html[data-aspect="9:16"] .lp-chart .lab { font-size: 40px; }
   html[data-aspect="9:16"] .lp-chart .callout { font-size: 59px; }
   html[data-aspect="9:16"] .lp-chart .sname { font-size: 44px; }
+  html[data-aspect="9:16"] .lp-chart .bk { stroke-width: 5; }
+  html[data-aspect="9:16"] .lp-chart .glow .bk { stroke-width: 12; }
   html[data-aspect="9:16"] .lp-chart .tagchip { font-size: 40px; }
   html[data-aspect="9:16"] .lp-chart .ser { stroke-width: 8; }
   .lp-chart .ser.muted { stroke-width: 2.5; }
@@ -2149,7 +2155,7 @@
     const st = { root, page, edge, blobs, strokes, nib, rect, goo, soakFx, soakFk: fk, seed, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, field, rail, inkEls: [title, subEl, src], kind: pg.builder || "story",
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1,
-                 geom, portrait: PORTRAIT, linePts: [] };   /* geom: the chart's drawing box (viewBox units); linePts: each series' points in it, for exact datum targets */   /* no emphasis declared = no datum styled (spec emits null) */
+                 geom, portrait: PORTRAIT, linePts: [], titleEl: title, titleGlyphs: [...title.querySelectorAll(".g")], rtGlyphs: [], perform: null };   /* geom: the chart's drawing box (viewBox units); linePts: each series' points in it, for exact datum targets */   /* no emphasis declared = no datum styled (spec emits null) */
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
     const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo };
     (builders[st.kind] || buildLedgerBars)(st, pg);
@@ -2220,12 +2226,12 @@
        26-year line that is up overall must not paint the last four months' selling green, nor the history red */
     const hfrom = Number.isFinite(+ax.highlight_from) && ax.highlight_from !== null && ax.highlight_from !== "" ? +ax.highlight_from : null;   /* the spec keeps tokens verbatim (strings) */
     const drawn = [];
-    series.forEach((s) => {
+    series.forEach((s, si) => {
       if (hfrom !== null && series.length === 1) {
         const k0 = Math.max(0, s.pts.findIndex(([x]) => +x >= hfrom) - 1);
-        drawn.push({ ...s, pts: s.pts, muted: true });
-        drawn.push({ ...s, pts: s.pts.slice(k0), muted: false });
-      } else drawn.push({ ...s, muted: false });
+        drawn.push({ ...s, pts: s.pts, muted: true, si, k0: 0 });
+        drawn.push({ ...s, pts: s.pts.slice(k0), muted: false, si, k0 });
+      } else drawn.push({ ...s, muted: false, si, k0: 0 });
     });
     drawn.forEach((s, i) => {
       const d = s.pts.map(([x, v], k) => (k ? "L" : "M") + mx(x).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
@@ -2247,7 +2253,8 @@
          reveal, one real estate (operator, 2026-09-03) */
       const ib = (st.inlineBadges || {})[s.color];
       if (ib && ib.tag) { const tg = lpEl("tspan", "tagchip", name, { dx: 12, fill: col }); tg.textContent = ib.tag; }
-      st.paths.push({ p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: nameBelow ? B - 28 : my(last[1]) + (P ? -30 : 8) });
+      st.paths.push({ p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: nameBelow ? B - 28 : my(last[1]) + (P ? -30 : 8),
+                     pts: s.pts.map(([x, v]) => [mx(x), my(v)]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted });   /* P47 T2: the path knows its data, so a build_to can cap it at a datum */
     });
     /* s9.23b inline names never overprint: push apart any two ends closer than one line */
     const order = [...st.paths].sort((a, b) => a.ny - b.ny);
@@ -2552,7 +2559,7 @@
   /* the particles, measured once at build (untransformed): page-px ones (glyphs, pills), chart ones (viewBox units),
      and the drain in each space - the chart's meet mapping and the field's stretch mapping are inverted from the page */
   const lpParticles = (st, page) => {
-    const glyphs = st.glyphs.map((g) => ({ el: g, ...lpHome(page, g) }));
+    const glyphs = [...st.glyphs, ...(st.rtGlyphs || [])].map((g) => ({ el: g, ...lpHome(page, g) }));   /* P47 T2: a retitle's glyphs ride the vortex too */
     const pills = (st.badges || []).map((b) => ({ el: b.el, ...lpHome(page, b.el) }));
     const skip = new Set([...st.paths.map((p) => p.p), ...st.paths.map((p) => p.tip)]);
     const svg = [...st.chart.children].filter((e) => !skip.has(e) && e.tagName !== "defs").map((e) => {
@@ -2608,6 +2615,119 @@
       /* else: the soak beat has already painted the blob's home transform this frame */
     }
     for (const sk of st.strokes || []) sk.p.style.opacity = uf > 0 ? (1 - uf).toFixed(3) : "";
+  };
+  /* ================= BUILD-ON (P47 T2; operator 2026-09-06: "we're being a bit too lazy with the world plates ... perform some
+     transformations on the chart"; SHOT-TABLE-V3-PROPOSAL part B). The page performs on a WORD: three PAGE species authored in the
+     scene's species list, painted here on the page's own surfaces (never in the overlay), every one a pure function of t.
+       build_to {at, dur, target: datum}  - the drawn series is CAPPED at the datum: the build beat is spent on the first cap
+                                            (the line draws to the February peak and stops), and each later build_to draws
+                                            from the previous cap to its own on its word, the same stroke, the nib visible.
+       bracket  {at, dur, from, to, label, sub?, series?, color?} - a measured vertical span between two data, beside them in
+                                            the plot's own room (the infographic's bracket): the span line draws by min-jerk,
+                                            the ticks land by the spring, the label writes in the hand, glyph by glyph.
+       retitle  {at, dur, text}           - the title erases glyph by glyph over PS.ERASE_S, then the new title writes per
+                                            glyph as the build did. A page may retitle more than once.
+       relight  {at, dur, ref: bracket|title, index?} - re-fires a bracket (or the title) in the sunflower on a word: a
+                                            sunflower twin beneath it rises and falls on a sine, the base never moves.
+     Dials, ours (42 s42.5): ERASE_S the title's wipe; BRACKET_DRAW / TICK / LABEL the bracket's phases as shares of its dur;
+     BRACKET_GAP the room between the data and the span, viewBox units. */
+  const PS = { ERASE_S: 0.4, BRACKET_DRAW: 0.5, BRACKET_TICK: 0.15, BRACKET_LABEL: 0.55, BRACKET_GAP: 34, BRACKET_TICK_W: 14,
+               BRACKET_ROOM: 200, RELIGHT_COL: "#F5B72E" };
+  const PS_PAL = { crimson: "#ED6A4A", teal: "#178C83", cobalt: "#8fb3f0", amber: "#F5B72E", deemph: "#b8c4d0", neg: "var(--lp-neg)", pos: "var(--lp-pos)" };
+  const pageSpecies = (scene, kind) => (scene.species || []).filter((sp) => sp && sp.kind === kind).sort((a, b) => a.at - b.at);
+  const polyLenTo = (pts, i) => { let L = 0; for (let k = 1; k <= i && k < pts.length; k++) L += Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]); return L; };
+  /* the length fraction of a drawn path up to a series datum index (a highlighted tail is offset by its k0; an index before
+     the tail's first point caps it at nothing) */
+  const capFrac = (pp, index) => {
+    const pts = pp.pts || []; if (pts.length < 2) return 1;
+    const i = Math.max(0, Math.min(pts.length - 1, (index | 0) - (pp.k0 || 0))), tot = polyLenTo(pts, pts.length - 1);
+    return tot > 0 ? polyLenTo(pts, i) / tot : 1;
+  };
+  const segEase = (u) => (kin("min_jerk") ? minJerk(u) : expoOut(clamp01(u)));
+  const buildPerform = (st, scene, pg) => {
+    const P = !!st.portrait, fs = P ? 40 : 26, fss = P ? 32 : 20, G = st.geom || { W: 1000, H: 560 };
+    const brackets = pageSpecies(scene, "bracket").map((sp, bi) => {
+      const pts = (st.linePts || [])[sp.series | 0] || [];
+      if (pts.length < 2) return null;
+      const A = pts[Math.max(0, Math.min(pts.length - 1, sp.from | 0))], B = pts[Math.max(0, Math.min(pts.length - 1, sp.to | 0))];
+      /* the span stands to the RIGHT of the two data (the ticks point back at them); when the chart's room there is too
+         narrow for the label (a series ending at the right edge - the holdings page), the label writes ABOVE the span,
+         anchored to it, where a peak has nothing over it - never over the line's own history to the left */
+      const xr = Math.max(A[0], B[0]) + PS.BRACKET_GAP, fits = xr + PS.BRACKET_ROOM <= G.W, inMargin = xr <= G.W;
+      const x = inMargin ? xr : Math.min(A[0], B[0]) - PS.BRACKET_GAP, dir = inMargin ? -1 : 1;
+      const anchor = fits ? "start" : "end";
+      const y0 = Math.min(A[1], B[1]), y1 = Math.max(A[1], B[1]), ym = (y0 + y1) / 2;
+      const yClear = Math.min(y0, ...pts.map((q) => q[1]));   /* a stacked label clears the WHOLE series - a record before the span can stand higher than the span's top */
+      const base = st.paths.filter((pp) => (pp.si | 0) === (sp.series | 0) && !pp.muted).map((pp) => pp.p.getAttribute("stroke"))[0] || "var(--lp-chalk)";
+      const col = sp.color ? (PS_PAL[sp.color] || sp.color) : base;
+      const mk = (cls, stroke, op) => {
+        const g = lpEl("g", "lp-bracket " + cls, st.chart, { opacity: op });
+        const line = lpEl("path", "bk", g, { d: "M" + x.toFixed(1) + " " + y0.toFixed(1) + " L" + x.toFixed(1) + " " + y1.toFixed(1), stroke });
+        const len = line.getTotalLength ? line.getTotalLength() : (y1 - y0);
+        line.setAttribute("stroke-dasharray", len); line.setAttribute("stroke-dashoffset", len);
+        const tick = (y) => lpEl("path", "bk", g, { d: "M" + x.toFixed(1) + " " + y.toFixed(1) + " l" + (dir * PS.BRACKET_TICK_W).toFixed(1) + " 0", stroke, "transform-origin": x.toFixed(1) + "px " + y.toFixed(1) + "px" });
+        const t0 = tick(y0), t1 = tick(y1);
+        const lx = fits ? x + 12 : x - 4, ly = fits ? ym + fs * 0.35 : yClear - (sp.sub ? fss * 1.3 : 0) - 10;   /* beside, or stacked above the whole line */
+        const label = lpEl("text", "bklab", g, { x: lx.toFixed(1), y: ly.toFixed(1), "text-anchor": anchor, style: "font-size:" + fs + "px;fill:" + stroke });   /* inline fill: the chart's class CSS outranks a fill attribute */
+        const lg = [...String(sp.label || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
+        let sub = null, sg = [];
+        if (sp.sub) { sub = lpEl("text", "bksub", g, { x: lx.toFixed(1), y: (fits ? ly + fss * 1.3 : yClear - 10).toFixed(1), "text-anchor": anchor, style: "font-size:" + fss + "px;fill:" + stroke });
+          sg = [...String(sp.sub)].map((ch) => { const ts = lpEl("tspan", "", sub, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; }); }
+        return { g, line, len, t0, t1, label, lg, sub, sg };
+      };
+      const main = mk("main", col, 0), glow = mk("glow", PS.RELIGHT_COL, 0);   /* the sunflower twin ABOVE the base: at full it covers span and label alike */
+      return { sp, x, y0, y1, A, B, fits, main, glow, bi };
+    }).filter(Boolean);
+    const retitles = pageSpecies(scene, "retitle").map((sp, ri) => {
+      const div = lpEl("div", "lp-ink lp-title lp-retitle", st.page);
+      if (st.titleEl && st.titleEl.getAttribute("style")) div.setAttribute("style", st.titleEl.getAttribute("style"));   /* the title's inline geometry (portrait sets it): the rewrite sits exactly where the title sat */
+      const glyphs = P ? lpGlyphsWrap(div, String(sp.text || ""), st.seed + 40 + ri) : lpGlyphs(div, String(sp.text || ""), st.seed + 40 + ri);
+      (st.rtGlyphs || (st.rtGlyphs = [])).push(...glyphs);
+      return { sp, div, glyphs };
+    });
+    return { brackets, retitles, relights: pageSpecies(scene, "relight") };
+  };
+  const paintBracket = (b, t) => {
+    const sp = b.sp, dur = Math.max(0.001, sp.dur || 1), u = clamp01((t - sp.at) / dur);
+    for (const side of [b.main, b.glow]) {
+      const draw = segEase(u / PS.BRACKET_DRAW);
+      side.line.setAttribute("stroke-dashoffset", (side.len * (1 - draw)).toFixed(1));
+      const tk = (kin("analytic_spring") ? springPop : stagePop)(clamp01((u - PS.BRACKET_DRAW) / PS.BRACKET_TICK));
+      for (const tp of [side.t0, side.t1]) tp.setAttribute("transform", "scale(" + tk.toFixed(4) + " 1)");
+      const nl = Math.max(1, side.lg.length), perL = (1 - PS.BRACKET_LABEL) * 0.7 / nl, uL = u - PS.BRACKET_LABEL;
+      side.lg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uL - j * perL) / (perL * 1.6)).toFixed(3)));
+      const ns = Math.max(1, side.sg.length), perS = (1 - PS.BRACKET_LABEL) * 0.3 / ns, uS = u - PS.BRACKET_LABEL - (1 - PS.BRACKET_LABEL) * 0.7;
+      side.sg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uS - j * perS) / (perS * 1.6)).toFixed(3)));
+    }
+    b.main.g.setAttribute("opacity", t >= sp.at ? 1 : 0);
+  };
+  /* the title glyphs' write-on: --w per glyph on a clock, the build's own stagger (per = share of the write per glyph) */
+  const writeGlyphs = (glyphs, tw, span) => { const n = Math.max(1, glyphs.length), per = span / n; glyphs.forEach((g, j) => g.style.setProperty("--w", clamp01((tw - j * per) / (per * 1.6)).toFixed(3))); };
+  /* an erase runs the wipe backwards, glyph after glyph, over ERASE_S: the factor each glyph's --w is multiplied by */
+  const eraseFactor = (n, j, ue) => 1 - clamp01((ue * (n + 3) - j) / 3);
+  const paintPerform = (st, scene, t, pg) => {
+    if (!st.perform) st.perform = buildPerform(st, scene, pg);
+    const PF = st.perform;
+    for (const b of PF.brackets) paintBracket(b, t);
+    /* RELIGHT: the sunflower twin rises and falls on a sine over dur */
+    for (const b of PF.brackets) b.glow.g.setAttribute("opacity", "0");
+    for (const rl of PF.relights) {
+      const u = (t - rl.at) / Math.max(0.001, rl.dur || 1); if (u < 0 || u > 1) continue;
+      const e = Math.sin(Math.PI * u);
+      if (rl.ref === "bracket") { const b = PF.brackets[rl.index | 0]; if (b) b.glow.g.setAttribute("opacity", e.toFixed(3)); }
+      else if (rl.ref === "title") { const tg = PF.retitles.length ? PF.retitles[PF.retitles.length - 1].glyphs : (st.titleGlyphs || []); for (const g of tg) g.style.color = e > 0.02 ? PS.RELIGHT_COL : ""; }
+    }
+    if (PF.retitles.length) {
+      const chain = [{ glyphs: st.titleGlyphs || [], at: -Infinity }, ...PF.retitles.map((r) => ({ glyphs: r.glyphs, at: r.sp.at, dur: Math.max(PS.ERASE_S + 0.01, r.sp.dur || 1) }))];
+      chain.forEach((c, k) => {
+        const next = chain[k + 1];
+        if (k > 0) writeGlyphs(c.glyphs, t - c.at - PS.ERASE_S, c.dur - PS.ERASE_S);   /* a retitle writes after its erase of the one before */
+        if (next && t >= next.at) {   /* and is erased, glyph by glyph, when the next one fires */
+          const ue = clamp01((t - next.at) / PS.ERASE_S), n = c.glyphs.length;
+          c.glyphs.forEach((g, j) => g.style.setProperty("--w", (parseFloat(g.style.getPropertyValue("--w") || "0") * eraseFactor(n, j, ue)).toFixed(3)));
+        }
+      });
+    }
   };
   const paintLedger = (el, scene, t) => {
     const st = ledgerState.get(el.id + "|" + scene.scene_id) || buildLedger(el, scene);
@@ -2678,8 +2798,19 @@
       st.callout.setAttribute("opacity", clamp01(ck / 0.3).toFixed(2));
       st.cval.textContent = ck >= 1 ? st.cfinal : lpWithUnit(lpFmt(st.cnum * expoOut(ck)), st.cunit || "");
     }
+    const caps = pageSpecies(scene, "build_to");   /* P47 T2: the line draws to a datum on a word, the rest on the next word */
     st.paths.forEach((pp) => {
-      const fr = clamp01((c - pp.stagger * 0.3) / 0.7), f = strokeFrac(pp.p, pp.len, fr) ?? expoOut(fr);
+      const fr = clamp01((c - pp.stagger * 0.3) / 0.7);
+      let f = strokeFrac(pp.p, pp.len, fr) ?? expoOut(fr);
+      const mine = pp.pts ? caps.filter((sp) => ((sp.target || {}).series | 0) === (pp.si | 0)) : [];
+      if (mine.length) {
+        f = f * capFrac(pp, mine[0].target.index);   /* the build beat is spent on the first cap */
+        for (let k = 1; k < mine.length; k++) {   /* each later cap draws from the one before it, on its own word */
+          const u = (t - mine[k].at) / Math.max(0.001, mine[k].dur || 1); if (u <= 0) break;
+          const c0 = capFrac(pp, mine[k - 1].target.index), c1 = capFrac(pp, mine[k].target.index);
+          f = Math.max(f, c0 + (c1 - c0) * segEase(clamp01(u)));
+        }
+      }
       pp.p.setAttribute("stroke-dashoffset", (pp.len * (1 - f)).toFixed(1));
       const drawing = f > 0.01 && f < 0.995;
       if (drawing && pp.p.getPointAtLength) { const q = pp.p.getPointAtLength(pp.len * f); pp.tip.setAttribute("cx", q.x); pp.tip.setAttribute("cy", q.y); }
@@ -2699,6 +2830,7 @@
       bd.el.style.transform = "translateY(" + (18 * (1 - e)).toFixed(1) + "px) scale(" + (0.94 + 0.06 * e).toFixed(4) + ")" + sq
         + idleCssFor("pill", pg.idle === "none" ? "none" : undefined, t, st.seed, 20 + (st.badges || []).indexOf(bd));   /* E49: each pill at its own phase */
     }
+    paintPerform(st, scene, t, pg);   /* P47 T2: the bracket, the retitle, the relight - on the page, on the word */
     lpSpiral(st, scene, t, pg);   /* the retract at the scene's end; the spiral entry at its start */
   };
 
@@ -3315,7 +3447,7 @@
       for (let i = 0; i < PG.length; i++) if (PG[i].s <= t) pi = i;
       /* a page holds the strip until the next page - except the LAST one: it clears CAP_LAST_HOLD_S after its own end, so a
          rendered outro after the last word (the Remotion kit card, 2026-09-05) shows nothing but itself */
-      if (pi === PG.length - 1 && PG[pi].e != null && t > PG[pi].e + CAP_LAST_HOLD_S) pi = -1;
+      if (pi >= 0 && pi === PG.length - 1 && PG[pi].e != null && t > PG[pi].e + CAP_LAST_HOLD_S) pi = -1;   /* an EMPTY page list (a bare-hold build) left pi = -1 = length - 1 and threw on PG[-1] - the throw at load skipped every later definition (P47 T2) */
       const pg = pi >= 0 ? PG[pi] : null;
       if (pi !== cap._pi) {
         cap._pi = pi;
@@ -3482,6 +3614,20 @@
      a cleaned stage clone (hidden scenes stripped - a raw outerHTML of
      the full stage is ~100MB of data URIs and OOMs the tab), and
      assembles one labeled strip PNG POSTed to :8732. */
+  /* P47 T2 test probe (read-only): the active ledger page's drawn state, in the chart's own units */
+  window.__lpProbe = () => {
+    const world = [wA, wB].find((e) => e.__lp && e.classList.contains("ledger")); if (!world) return null;
+    const st = world.__lp, PF = st.perform || { brackets: [], retitles: [] };
+    const paths = st.paths.map((pp) => { const off = parseFloat(pp.p.getAttribute("stroke-dashoffset") || "0"), drawn = pp.len - off;
+      const q = pp.p.getPointAtLength ? pp.p.getPointAtLength(Math.max(0, Math.min(pp.len, drawn))) : { x: 0, y: 0 };
+      return { si: pp.si | 0, k0: pp.k0 | 0, muted: !!pp.muted, len: pp.len, drawn, frac: pp.len ? drawn / pp.len : 1, tip: [q.x, q.y], pts: pp.pts || [] }; });
+    const brackets = PF.brackets.map((b) => { const bb = b.main.g.getBBox(); return { x: b.x, y0: b.y0, y1: b.y1, A: b.A, B: b.B, fits: b.fits,
+      opacity: parseFloat(b.main.g.getAttribute("opacity") || "0"), glow: parseFloat(b.glow.g.getAttribute("opacity") || "0"),
+      offset: parseFloat(b.main.line.getAttribute("stroke-dashoffset") || "0"), len: b.main.len,
+      label: b.main.lg.map((ts) => parseFloat(ts.getAttribute("opacity") || "0")), bbox: [bb.x, bb.y, bb.width, bb.height] }; });
+    const w = (gs) => gs.map((g) => parseFloat(g.style.getPropertyValue("--w") || "0"));
+    return { linePts: st.linePts, paths, brackets, title: w(st.titleGlyphs || []), retitles: PF.retitles.map((r) => w(r.glyphs)) };
+  };
   window.__filmstrip = async (t0, dur, n, name) => {
     const g = (id) => document.getElementById(id);
     const stage = g("stage"), vo = g("vo"), scrub = g("scrub"),

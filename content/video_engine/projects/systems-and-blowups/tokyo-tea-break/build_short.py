@@ -216,13 +216,18 @@ DOCK_META = [
 # ROLL .7 + SAVOR .8 + FIELD 2.4 + PUNCH .5 + BUILD 3.0. The chart LANDS at 7.4s after the page enters and the focus action
 # fires there - no highlight over the charcoal build (operator, 2026-09-04). A page cannot land a callout sooner than this.
 PAGE_BUILD_END_S = 7.4
+PAGE_BUILD_START_S, PAGE_BUILD_S = 4.4, 3.0   # LP: ROLL .7 + SAVOR .8 + FIELD 2.4 + PUNCH .5 -> the build beat, LP.BUILD 3.0 (P47 T2's first cap rides it)
 LP_ROLL_S = 0.7      # the roll-out beat; a MOUNT replaces it (E45: the mount IS the roll-out, the savor stays) and ends where the roll would have
 
 
 def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -> list[tuple]:
     """The authored rows, timed from the take. V2 (E44, operator 2026-09-06 on SHOT-TABLE-V2-PROPOSAL.md): the
     holdings page ROLLS OUT ON THE HOOK and stays; the clips stop being scenes and arrive as DOCKS over it; the ring
-    returns the page unwound and the host mounts on the last line. Clip b (dial and bill) has no slot in this cut."""
+    returns the page unwound and the host mounts on the last line. Clip b (dial and bill) has no slot in this cut.
+    V3 (P47 T2/T4, SHOT-TABLE-V3-PROPOSAL part B): THE PAGE PERFORMS ON A WORD - the line builds to the February peak
+    only and the coral drop draws on "watching"; the title rewrites on "The opponent"; the bracket "-$122.6B / a tenth
+    of the pile" draws from the peak to June on "a hundred and twenty-two billion" and stands on the ring, re-lit on the
+    second "unfunded bar tab". One thing per sentence; the callouts the bracket now says are gone."""
     clip = lambda name, src=None: f"clip:{seekable_clip(name, src).as_posix()}"
     t_outro = t_outro if t_outro is not None else runtime_s
     hold = f"ledger:ev-japan-holdings-v1:line:{LAST_IDX}:right"
@@ -248,6 +253,12 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     t_ring = cut_before(ws, "The Fed still hasn't moved")
     t_relit = at("that unfunded")                        # the second "unfunded bar tab" - the callout is re-lit on it
     t_ours = at("still ours")                            # the host mounts here as the last image before the card
+    # V3 words (P47 T2): the page performs on these
+    t_build = round(t_page + PAGE_BUILD_START_S, 2)      # the page's own build beat (tr = t - t_page on a mount, E45 s2) - the line draws to the peak
+    t_opponent = at("The opponent")                      # the title rewrites here
+    t_hundred = at("a hundred and twenty-two billion")   # the bracket draws here, its sub landing on "a tenth of the pile"
+    RETITLE = "The opponent: a balance sheet"            # one line at 68 px, like the title it replaces (a second line would sit on the sub)
+    carried = lambda t0: {"kind": "retitle", "at": round(t0 - 3.0, 2), "dur": 2.4, "text": RETITLE}   # a returning page ARRIVES retitled (a species before its scene is a state)
     meta = f"ledger:ev-meta-yield-v1:bars:3:right:mount={round(t_cut - t_second, 2)}:cut"   # as v1; the world it mounts over is now the page
     return [
         # 1 the hook: the counter, the steaming cup, the tab - as v1, ending where the page rolls out
@@ -262,9 +273,13 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             (dock_still("dock-a2-counter-colder"), 0, t_sixty, t_watch),
             (dock_still("dock-g-two-fingers"), 0, t_two, t_promise),
         ], "cut", [
-            {"kind": "callout", "at": round(t_page + PAGE_BUILD_END_S + 0.1, 2), "dur": 2.0, "target": datum(LAST_IDX)},   # -$122.6B, at the build's landing
+            # V3: the build stops at the FEBRUARY PEAK ("The Fed hasn't moved, but your borrowing costs climbed anyway"); the coral
+            # drop is its own stroke on "watching:", so the June datum is drawn the moment the sentence turns to the lender
+            {"kind": "build_to", "at": t_build, "dur": PAGE_BUILD_S, "target": datum(PEAK_IDX)},
+            {"kind": "build_to", "at": t_watch, "dur": 1.2, "target": datum(LAST_IDX)},
             {"kind": "spotlight", "at": t_lender, "dur": 2.0, "target": datum(LAST_IDX)},                                  # the June datum on "our biggest lender"
             {"kind": "callout", "at": t_trillion, "dur": 2.0, "target": datum(PEAK_IDX)},                                  # the February peak on "over a trillion"
+            {"kind": "retitle", "at": t_opponent, "dur": 2.4, "text": RETITLE},                                       # the title rewrites by the hand on "The opponent"
         ]),
         # 3 the PROMISE plate: the viewer's desk, entered by SUCK - the page collapses into the black of the stick figure
         #   (operator, 2026-09-05). Unchanged from v1 except that what gets sucked away is now the page, not a clip.
@@ -281,8 +296,11 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
         (t_catalyst, t_second, hold + ":spiral:cut", (0, 0, 0), [
             (dock_still("dock-f-toll-gate-to-fab"), 0, t_pledge, t_second),
         ], "cut", [
+            carried(t_catalyst),
             {"kind": "punch", "at": at("Since February, Japan"), "dur": 0.9, "target": datum(PEAK_IDX)},
-            {"kind": "callout", "at": at("a tenth of"), "dur": 2.0, "target": datum(LAST_IDX)},
+            # V3: the BRACKET measures the drop from the peak to June by the hand on the number; its label is the number and
+            # its sub lands on "a tenth of the pile" - the callout that said the same is gone (one thing per sentence)
+            {"kind": "bracket", "at": t_hundred, "dur": 2.4, "from": PEAK_IDX, "to": LAST_IDX, "label": "\u2212$122.6B", "sub": "a tenth of the pile", "color": "neg"},
         ]),
         # 5 the second number: a Meta share priced at each yield, punch on the 5.5 % bar at "discounts" - as v1
         (t_second, t_ring, meta, (0, 0, 0), [], None, [
@@ -293,7 +311,11 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
         #   moved" with the drop already drawn, and the -$122.6B is re-lit on the second "unfunded bar tab". exit=cut
         #   because the callout would otherwise ride the retract (M15 / E40 #5) and because the host mounts on top of it.
         (t_ring, t_ours, hold + ":spiral:cut", (0, 0, 0), [], "cut", [
-            {"kind": "callout", "at": t_relit, "dur": 2.0, "target": datum(LAST_IDX)},
+            # V3: the page returns with the BRACKET STANDING (it draws in the unwind's first beat) and the second "unfunded bar
+            # tab" RE-LIGHTS it in the sunflower - the same element, not a lookalike (E48 s4: the callback is the thread)
+            carried(t_ring),
+            {"kind": "bracket", "at": t_ring, "dur": 0.8, "from": PEAK_IDX, "to": LAST_IDX, "label": "\u2212$122.6B", "sub": "a tenth of the pile", "color": "neg"},
+            {"kind": "relight", "at": t_relit, "dur": 1.0, "ref": "bracket", "index": 0},
         ]),
         # 7 the host, mounted on "still ours" (s9.15: a mount is a dissolve on a word) - the last image before the card
         (t_ours, t_outro, clip("clip-a2-counter-colder-v2.mp4"), (0, 0, 0), [], "dip", None),   # E47: a world change (page -> clip) dips through black, 0.47 s

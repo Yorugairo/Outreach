@@ -45,6 +45,8 @@ captions do NOT count - they are what a viewer reads as stillness.
        <= 6s inside the opening minute (re-enter it instead)
   M18  frozen frames (E49): no run of bit-identical rendered  WARN   (E49 / P47 T5; INFO until
        frames longer than 0.5s, read from frame-hashes.json          measure_frozen_frames.py has run)
+  M19  build_to holds (P47 T2): the line resting at a datum   INFO   (only when a build_to is declared)
+       between two caps, listed by name
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -118,7 +120,8 @@ SPECIES_EVENTS = {"punch": ("at",), "callout": ("at",), "focus_zoom": ("at", "en
                   "plate_life": "stepping", "beat_freeze": ("at", "end"),
                   "radial": ("at",), "push": ("at",),
                   "steam": "continuous", "trace": ("at", "end"), "ticker": "stepping",   # STILL LIFE (2026-09-05)
-                  "life": "continuous"}   # a DECLARED self-animating world (a rendered outro): the claim is the author's, verified by eye, credited here
+                  "life": "continuous",   # a DECLARED self-animating world (a rendered outro): the claim is the author's, verified by eye, credited here
+                  "build_to": ("at", "end"), "bracket": ("at", "end"), "retitle": ("at", "end"), "relight": ("at",)}   # P47 T2: the page performs on a word
 LIFE_CONTINUOUS_S = 1.0    # a continuous life (steam) is one event per second of its window - it never lets the frame go still
 # VIDEO DOCK (ruling E44 / backlog R26-7, 2026-09-06): a dock whose asset is a clip is moving pictures on
 # the card, so the frame is never still while it is up - credited continuously, exactly like a "life"
@@ -248,7 +251,9 @@ def _species_events(scenes: list[dict]) -> list[float]:
             at, dur = float(sp.get("at", 0.0)), float(sp.get("dur", 0.0))
             # a species that runs past its scene stops with the scene: no event is credited beyond span end
             inside = a is not None and a <= at <= z
-            keep = (lambda t: t <= z) if inside else (lambda t: True)
+            # a species authored BEFORE its scene starts is a state the page arrives in (a retitle carried onto a returning page,
+            # P47 T2), not an event in another scene's window: nothing before the span is credited
+            keep = (lambda t: t <= z) if inside else ((lambda t: t >= a) if a is not None and at < a else (lambda t: True))
             if edges == "continuous":
                 n_ev = int(dur // LIFE_CONTINUOUS_S)
                 out += [round(at + k * LIFE_CONTINUOUS_S, 2) for k in range(n_ev + 1) if keep(at + k * LIFE_CONTINUOUS_S)]
@@ -257,7 +262,7 @@ def _species_events(scenes: list[dict]) -> list[float]:
                 steps = int(round(dur / PLATE_LIFE_STEP_S))
                 out += [round(at + k * PLATE_LIFE_STEP_S, 2) for k in range(steps + 1) if keep(at + k * PLATE_LIFE_STEP_S)]
                 continue
-            if "at" in edges:
+            if "at" in edges and keep(at):
                 out.append(round(at, 2))
             if "end" in edges and keep(at + dur):
                 out.append(round(at + dur, 2))
@@ -443,7 +448,7 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
                             or any(isinstance(pg, dict) and "cap_mode" in pg for pg in pages)}
 
 
-def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | None = None) -> tuple[list[Gate], dict]:
+def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None = None) -> tuple[list[Gate], dict]:
     A = analyse(tl, docks, mp)
     R = A["runtime"]
     mm = lambda s: f"{int(s // 60)}:{int(s % 60):02d}"
@@ -518,6 +523,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | None = None)
     # E24 / E25: the opening minute and the chart-as-proof rule
     g += [_opening_still_gate(A["still"]), _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
     g.append(_frozen_gate(frames))                                        # M18 (E49: nothing ever goes truly still)
+    if (bt := _build_to_gate(tl.get("scenes", []))) is not None:
+        g.append(bt)                                                      # M19 (P47 T2: the build_to holds, INFO)
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
     return g, _stats(A, tot)
 
@@ -619,6 +626,11 @@ def _first_chart_gate(tl: dict, docks: list[dict], mp: dict) -> Gate:
     hits = [sp for sp in (scene or {}).get("species", [])
             if sp.get("kind") in ANNOTATED_KINDS and (land - 1e-6 <= float(sp.get("at", -1e9)) <= land + ANNOTATE_TOL_S if is_page
                                                      else abs(float(sp.get("at", -1e9)) - t) <= ANNOTATE_TOL_S)]
+    # P47 T2: a build_to whose cap LANDS with the build is the annotation itself - the line ends ON the datum and the nib rests
+    # there (the page's build is spent on the first cap), which points at the divergence harder than a ring drawn around it
+    if is_page:
+        hits += [sp for sp in (scene or {}).get("species", []) if sp.get("kind") == "build_to"
+                 and abs(float(sp.get("at", -1e9)) + float(sp.get("dur", 0.0)) - land) <= ANNOTATE_TOL_S]
     if not hits:
         why.append("first chart enters full and unannotated - declare a spotlight/callout/punch on its divergence"
                    + (f" within {ANNOTATE_TOL_S:.1f}s AFTER the page's build lands at {land:.1f}s (never over the build)" if is_page else ""))
@@ -628,7 +640,10 @@ def _first_chart_gate(tl: dict, docks: list[dict], mp: dict) -> Gate:
     note = "" if known else " (no evidence species in the timeline - every dock treated as a chart candidate)"
     if why:
         return Gate("M11", "FAIL", "; ".join(why) + sound + note + win, SRC_M11)
-    msg = f"first chart {asset} enters at {t:.1f}s" + (f", its build lands at {land:.1f}s," if is_page else "") + f" with {hits[0]['kind']} at {float(hits[0]['at']):.1f}s"
+    h0 = hits[0]
+    how = (f"build_to landing on datum {(h0.get('target') or {}).get('index')} at {float(h0.get('at', 0)) + float(h0.get('dur', 0)):.1f}s (the cap is the annotation: the line ends on the datum)"
+           if h0.get("kind") == "build_to" else f"{h0['kind']} at {float(h0['at']):.1f}s")
+    msg = f"first chart {asset} enters at {t:.1f}s" + (f", its build lands at {land:.1f}s," if is_page else "") + f" with {how}"
     return Gate("M11", "PASS" if cue else "WARN", msg + sound + note + win, SRC_M11)
 
 
@@ -709,12 +724,16 @@ def _camera_gate(clashes: list[tuple[str, str]]) -> Gate:
     return Gate("M09", "FAIL" if clashes else "PASS", msg, "doc 29 s9.27 precedence / s9.28 C3: one camera move per window")
 
 
-def load_frames(build: Path) -> list[dict] | None:
+def load_frames(build: Path) -> list[dict] | str | None:
     """The per-frame hashes measure_frozen_frames.py wrote beside the timeline, or None when it has not run."""
     p = Path(build) / FRAME_HASHES_NAME
     if not p.exists():
         return None
     doc = json.loads(p.read_text(encoding="utf-8"))
+    if isinstance(doc, dict) and doc.get("html_sha256"):
+        html = Path(build) / "player.html"   # the hashes are keyed to the player they measured: a rebuilt player makes them stale
+        if html.exists() and hashlib.sha256(html.read_bytes()).hexdigest() != doc["html_sha256"]:
+            return "stale"
     return list(doc.get("frames") or []) if isinstance(doc, dict) else list(doc)
 
 
@@ -735,11 +754,13 @@ def frozen_runs(frames: list[dict], max_s: float = FROZEN_MAX_S) -> list[tuple[f
     return out
 
 
-def _frozen_gate(frames: list[dict] | None) -> Gate:
+def _frozen_gate(frames: list[dict] | str | None) -> Gate:
     """M18 (E49): the idle is not an event - it is the absence of a frozen frame. Measured, never inferred: without
     frame-hashes.json the row is INFO and says what to run (no silent skip)."""
     if frames is None:
         return Gate("M18", "INFO", f"frozen frames not measured - run measure_frozen_frames.py <build> (writes {FRAME_HASHES_NAME})", SRC_M18)
+    if frames == "stale":
+        return Gate("M18", "INFO", f"{FRAME_HASHES_NAME} measured another player.html (the build was rebuilt since) - re-run measure_frozen_frames.py <build>", SRC_M18)
     if len(frames) < 2:
         return Gate("M18", "INFO", f"{FRAME_HASHES_NAME} carries {len(frames)} frame(s) - nothing to compare", SRC_M18)
     ts = sorted(float(f["t"]) for f in frames)
@@ -755,6 +776,27 @@ def _frozen_gate(frames: list[dict] | None) -> Gate:
     # the longest run that stayed under the ceiling, for the record
     longest = max(frozen_runs(frames, -1.0), key=lambda r: r[1], default=(0.0, 0.0))
     return Gate("M18", "PASS", f"no run of bit-identical frames over {FROZEN_MAX_S:.2f}s ({span}); longest {longest[1]:.2f}s at {_mm(longest[0])}", SRC_M18)
+
+
+def _build_to_holds(scenes: list[dict]) -> list[tuple[float, float]]:
+    """P47 T2: between one build_to's landing and the next one's word the line HOLDS at a datum - the pen resting on the
+    cap is not stillness the author forgot, it is the hold the sentence asked for. Listed for the judge, never scored."""
+    out: list[tuple[float, float]] = []
+    for s in scenes:
+        caps = sorted((float(sp["at"]), float(sp.get("dur", 0.0))) for sp in s.get("species", []) if sp.get("kind") == "build_to")
+        for (a, d), (b, _) in zip(caps, caps[1:]):
+            if b > a + d:
+                out.append((round(a + d, 2), round(b - a - d, 2)))
+    return out
+
+
+def _build_to_gate(scenes: list[dict]) -> Gate | None:
+    """M19 (INFO): the build_to holds, by name, so M01/M02's still stretches can be read against them."""
+    if not any(sp.get("kind") == "build_to" for s in scenes for sp in s.get("species", [])):
+        return None
+    holds = _build_to_holds(scenes)
+    msg = (f"{len(holds)} build_to hold(s) - the line rests at a datum until the next word: " + ", ".join(f"{_mm(a)}+{d:.1f}s" for a, d in holds[:8])) if holds else "build_to caps declared; none holds between caps"
+    return Gate("M19", "INFO", msg, "P47 T2 (SHOT-TABLE-V3-PROPOSAL part B): a cap is a hold the sentence asked for, not stillness")
 
 
 def _stats(A: dict, still_total: float) -> dict:

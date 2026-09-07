@@ -94,9 +94,16 @@ KEN = {"scale": 0.04, "x": 14, "y": -10}
 SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                  "pull_back", "plate_life", "beat_freeze", "radial", "push",
                  "steam", "trace", "ticker",   # STILL LIFE on an approved still (2026-09-05): a region each
-                 "life")                       # a DECLARED claim: this world animates on its own for the window (a Remotion render, a
+                 "life",                       # a DECLARED claim: this world animates on its own for the window (a Remotion render, a
                                                # rendered outro) - the template draws nothing for it; the motion gate credits it as continuous;
                                                # the agent verifies the claim by eye before declaring it (CHECK-RESPONSIBILITIES: declared)
+                 "build_to", "bracket", "retitle", "relight")   # PAGE species (P47 T2, build-on): the page performs on a word - a ledger
+                                               # page only; build_to caps the drawn series at a datum, bracket spans two data, retitle
+                                               # rewrites the title, relight re-fires a bracket or the title (SHOT-TABLE-V3-PROPOSAL part B)
+PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight")   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
+                                                                # (a returning page keeps its retitle, its bracket standing); the gate credits no event before the span
+RELIGHT_REFS = ("bracket", "title")
+BRACKET_COLORS = ("crimson", "teal", "cobalt", "amber", "deemph", "neg", "pos")
 # s9.27 precedence / s9.28 C3: punch, focus zoom, pull-back and Ken Burns are
 # mutually exclusive per window - one camera move, never over a Ken Burns drift.
 CAMERA_MOVES = ("punch", "focus_zoom", "pull_back")
@@ -112,6 +119,7 @@ SPECIES_TARGETS = {
     "beat_freeze": ("point", "region"), "radial": ("point", "region"), "push": ("point", "region"),
     "steam": ("region",), "trace": ("region",), "ticker": ("region",),
     "life": (),
+    "build_to": ("datum",), "bracket": (), "retitle": (), "relight": (),   # P47 T2: the datum is the cap; the others carry their own fields
 }
 TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
                  "region": ("x0", "y0", "x1", "y1"), "span": ("from_word", "to_word")}
@@ -141,6 +149,34 @@ def _validate_target(kind: str, target, allowed: tuple) -> list[str]:
     return errs
 
 
+def _validate_page_fields(kind: str, entry: dict) -> list[str]:
+    """P47 T2: the page species' own fields. bracket: integer `from`/`to` (data indices), a `label`, optional `sub`,
+    `series`, `color`; retitle: a non-empty `text`; relight: `ref` bracket|title, optional `index`."""
+    errs: list[str] = []
+    is_idx = lambda v: isinstance(v, int) and not isinstance(v, bool) and v >= 0
+    if kind == "bracket":
+        for f in ("from", "to"):
+            if not is_idx(entry.get(f)):
+                errs.append(f"bracket: {f!r} must be a non-negative integer datum index")
+        if not isinstance(entry.get("label"), str) or not entry["label"].strip():
+            errs.append("bracket: needs a non-empty string label (the measured span says what it measures)")
+        if "sub" in entry and not isinstance(entry["sub"], str):
+            errs.append("bracket: sub must be a string")
+        if "series" in entry and not is_idx(entry["series"]):
+            errs.append("bracket: series must be a non-negative integer series index")
+        if "color" in entry and entry["color"] not in BRACKET_COLORS:
+            errs.append(f"bracket: color must be one of {'|'.join(BRACKET_COLORS)}")
+    elif kind == "retitle":
+        if not isinstance(entry.get("text"), str) or not entry["text"].strip():
+            errs.append("retitle: needs a non-empty string text")
+    elif kind == "relight":
+        if entry.get("ref") not in RELIGHT_REFS:
+            errs.append(f"relight: ref must be one of {'|'.join(RELIGHT_REFS)}")
+        if "index" in entry and not is_idx(entry["index"]):
+            errs.append("relight: index must be a non-negative integer (which bracket)")
+    return errs
+
+
 def _validate_entry(entry) -> list[str]:
     """Errors for one species entry: known kind, numeric at/dur, a target where the law requires one."""
     if not isinstance(entry, dict) or entry.get("kind") not in SPECIES_KINDS:
@@ -150,6 +186,7 @@ def _validate_entry(entry) -> list[str]:
             if isinstance(entry.get(f), bool) or not isinstance(entry.get(f), (int, float))]
     if not errs and entry["dur"] <= 0:
         errs.append(f"{kind}: dur must be > 0 (a species that lasts 0s does not fire)")
+    errs += _validate_page_fields(kind, entry)
     allowed = SPECIES_TARGETS[kind]
     if not allowed:
         return errs
@@ -175,6 +212,9 @@ def validate_species(row_species, ken, plate_id: str, pivot_span: tuple | None =
     if not isinstance(row_species, (list, tuple)):
         return [f"{plate_id}: species must be a list of species dicts"]
     errs = [e for entry in row_species for e in _validate_entry(entry)]
+    if not str(plate_id).startswith(LEDGER_PREFIX):   # P47 T2: the page species perform on a ledger page only
+        errs += [f"{plate_id}: {e['kind']} is a page species - it performs on a ledger page, not on {plate_id!r}"
+                 for e in row_species if isinstance(e, dict) and e.get("kind") in PAGE_SPECIES]
     moves = [e["kind"] for e in row_species if isinstance(e, dict) and e.get("kind") in CAMERA_MOVES]
     if len(moves) > 1:
         errs.append(f"{plate_id}: {' + '.join(moves)} on one row - one camera move per window (s9.28 C3)")
