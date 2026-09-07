@@ -1459,3 +1459,26 @@ transitions, then they have one 'hero' transition - glitch for them, in our case
    scene's final state, so an explicit fade-out followed by an entrance renders as a jump cut with a dip in the middle."* That
    is HyperFrames' two-tween artifact; the reference's dip through black is a single authored transition, 0.47 s, 35 of 99
    boundaries. E47 §1 stands; the intake's HF-R1 stands with this as its reason.
+
+## E49 — Nothing ever goes truly still: every held thing carries a named subtle idle; Ken Burns and parallax were the blunt answer (2026-09-06)
+
+The operator, closing the HyperFrames intake: *"Those are the big takeaways, along with 'nothing ever goes truly still.' This is
+what my eyes are seeing and my brain is searching for, but we've been trying to do it too complicatedly, or too bluntly.
+Parallax / Ken Burns was our answer to get enough motion - because we let things be completely still instead of being at a
+subtle idle."*
+
+1. **The rule.** A held thing is never bit-identical from frame to frame. Every element that holds - a page, a parked dock, a
+   badge, a bracket, a figure, a plate - carries a NAMED idle: a breathing scale of 1-2 % `[DERIVED: HyperFrames
+   /prompting/motion, verified 2026-09-06; measure on ours]`, or a slow directional drift, or a luminance pulse; for a figure,
+   the asymmetric breath doc 48 §48.4 already prescribes (0.20-0.30 Hz, inspiratory:expiratory 1:1.5-1:2). The idle is named
+   per element in the shot table or by the compiler's default, never left to chance, and it is a pure function of `t`.
+2. **What it replaces.** Ken Burns and the parallax push were reached for as the cure for stillness: a whole plate moving so
+   the frame was not frozen. They are tools for when the camera should move (doc 29 §9.27; doc 45), not a stillness fix.
+   A plate that should hold, holds - at its idle.
+3. **What it is not.** The idle is not a visual event: M01 / M10 / M16 keep counting events (a species, a caption pop, a page
+   landing), and an idle never satisfies them. What the idle removes is the frozen frame. The gate gains a separate row,
+   **frozen frames**: any run of bit-identical rendered frames longer than `FROZEN_MAX_S` (starting reference 0.5 s
+   `[DERIVED: HyperFrames' "the final 1-2 seconds"; halved]`) is a WARN, measured on the render or on the player's frame hashes
+   (the encoder-size signal, HF-12, is its corroboration).
+4. **The nuance from the storyboards page.** A named subtle idle is allowed; an unnamed slow drift or "breathing" the plan did
+   not ask for reads as unfinished. The idle is declared, sized, and the same at every seek.

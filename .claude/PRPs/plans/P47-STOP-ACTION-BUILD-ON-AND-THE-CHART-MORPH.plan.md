@@ -85,7 +85,7 @@ transition that is ours alone).
 
 ## Execution Path
 
-T2 (build-on) first - it is what Tokyo v3 needs to stop being lazy and it is authoring-adjacent; HG1. Then T1 (stop-action) -
+T5 (the idle, E49) and T2 (build-on) first - the idle is what stops the page freezing under a sentence and T2 is what makes it perform; HG1. Then T1 (stop-action) -
 the arrivals gain `throw` and `land`; HG2. Then T3 (the morph) - the largest, its own gate; HG3. T4 (Tokyo v3 authored) runs
 after T2 and again after T1/T3 land. Every slice: tests on synthetic series first, then the goldens (byte-identical), then the
 real page in the player.
@@ -136,6 +136,15 @@ real page in the player.
 - Write set: `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build_short.py` (the shot table + species), `sound/SOUND-PLAN.json` (cues follow the new arrivals: a throw's landing gets the press cue's successor at the E44 gain), the build outputs
 - Acceptance: part A's operator column applied (the cuts that add nothing removed, the two misplaced moved, the callout datum fixed); part B authored on the real species; motion gate PASS; the operator watches in the player (HG1) before any render; the analytics read of the next post is recorded against v3's scene list
 - Validate: `python build_short.py` from the project folder; `build-short/GATES-MOTION.md` VERDICT PASS; the player served on :8731
+- Evidence: pending
+
+### T5: The idle - nothing ever goes truly still (E49)
+- Status: pending
+- Owner: implementation_luna
+- Depends on: none (small; can run first)
+- Write set: the template (an `idle` on every held element: the page's body, a parked dock, badges, the bracket, a plate; kinds `breath` (scale 1-2 %, a slow sine or the stepped clock), `drift` (px/s along a direction), `pulse` (luminance); the figure's asymmetric breath from doc 48 §48.4 as the `figure` kind), `content/video_engine/scripts/kinetics/idle.mjs` (new, synced), `build_scene_timeline_f.py` (defaults per element class; an authored `idle` on a shot row overrides; `idle: none` is explicit), `gate_motion_density.py` (the `frozen frames` row: hashes of rendered frames or the player's per-frame state, a run of identical frames > `FROZEN_MAX_S` WARNs; an idle never counts as an event for M01/M10/M16), tests (`content/video_engine/tests/kinetics/test_idle.py`, the gate test), `CAPABILITIES.md`
+- Acceptance: on the golden ledger scene with no species, two frames 0.5 s apart differ by the idle alone (a measured 1-2 % scale on the page body, nothing else moving); the frozen-frames row WARNs on the pre-E49 build and passes after; the goldens stay byte-identical (idle off on golden timelines by an explicit `idle: none` written into their sources, or the default applies only to timelines that declare `idle`); the Tokyo v3 page never freezes while it holds under a sentence
+- Validate: `python -m pytest content/video_engine/tests/kinetics/test_idle.py content/video_engine/tests/test_gate_motion_density.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_render_determinism.py -q -p no:cacheprovider; python content/video_engine/scripts/sync_kinetics.py --check`
 - Evidence: pending
 
 ## Verification
