@@ -69,6 +69,20 @@ rule: every sentence the page is under, the chart does one thing that proves it 
 | 15–16 | the Meta page (67.8–75.5) | callout on the multiple; punch on the discount | ✓ (as v2) |
 | 17 | "The Fed still hasn't moved. Tokyo is still on its tea break. And that unfunded bar tab is still ours." (75.8–82.7) | the holdings page returns unwound with the bracket standing; "still ours" re-lights the bracket's label; the host springs in as a dock on "still ours" | ✓ spiral, ✓ dock; ◆ bracket |
 
+## D. The transition vocabulary (E48) - the seams of v3 by name
+
+| seam | kind | role |
+|---|---|---|
+| host → holdings page (1.99) | mount | primary (a page arriving) |
+| page → desk plate (38.96) | suck | the desk's own seam (kept) |
+| desk → holdings (44.88) | spiral | **the hero** (the return) |
+| holdings → Meta (moved to 64.29) | mount | primary |
+| Meta → holdings (75.73) | spiral | the hero's second and last use |
+| page → card (82.62) | dip | accent (the chapter closes) |
+
+Docks arrive by the spring (E45), never by a seam. No wipe. Two spirals, one dip, two mounts, one suck: the whole vocabulary,
+declared. A seam that wants anything else is a plan defect.
+
 ## C. What must be built for B (the backlog skills, in the order B needs them) → plan P47
 
 The operator (same hour): *"we need to operationalize stop-action mechanics to be able to throw things on page or land things with

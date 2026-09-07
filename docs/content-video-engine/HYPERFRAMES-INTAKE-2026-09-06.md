@@ -174,3 +174,24 @@ dwell, the stagger law, the frame-index quantisation) enter as `[DERIVED: HyperF
 dials; its beliefs enter as authored rules where doctrine had none; its "settlements" of our open items are read against our
 measurements and lose where they conflict. Gemini's next pass tags its figures or marks them unverified, and names OUR roots
 in its NOT FOUND block so the report can say what is new.
+
+## 5. Read by hand: the transitions page (operator, same day)
+
+The operator pasted `hyperframes.heygen.com/prompting/transitions` and asked what it adds beyond the analysis. Two things the
+report and the claim table did not carry:
+
+- **One primary, accents, one hero** - the structural rule for a short's transition vocabulary, now **E48**: cut-in-the-gap and
+  the mount as primaries, the dip and the blur-zoom as accents, the spiral as the hero spent once or twice. The report had the
+  tiers, the seams and the catalog; it never had the rule that governs them.
+- **The black-hole cut is a renderer artifact.** The page's own words: an explicit fade-out then an entrance "renders as a jump
+  cut with a dip in the middle" because the renderer holds each scene's final state. Gemini turned a two-tween tooling note
+  into a two-frame perceptual law. HF-R1 stands, with that as the reason (E48 §4).
+
+Indexed from the page (already ours or the skills'): the semantic table (a crossfade "continues", a whip pan "next point", a
+burn "something changed" - doc 29 Part 6 had the idea; E48 §3 maps it onto our measured kinds), the energy and mood
+catalogues, the knobs (duration by energy, blur 20-30 px calm / 3-6 px high, the easing presets), per-seam authoring
+language, "don't invent transition names" (our compiler validates `SCENE_EXITS`), "the transition IS the exit" (our law).
+
+The motion page itself was extracted faithfully (nine of nine statements verified on the page), so pasting it adds nothing;
+the page that would add something is `/prompting/vocabulary` (the transitions table with its meanings) or
+`/prompting/specification-dial`, neither of which the report opened.

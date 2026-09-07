@@ -1426,3 +1426,26 @@ together, so we did a page wipe, because that's one of the only ways it makes se
    the kit as an EFFECT, reached by name (`wipe` / `wipe_right`) when a shot wants it, and is the default nowhere.
 4. **Gates.** A dip is a transition, not a still: M01/M10/M16 count its 14 frames as the boundary event, not as stillness; a
    blur-zoom's magnification is motion. The gate constants carry the `[DERIVED]` tag.
+
+## E48 — One primary transition, accents for the topic changes, one hero: the spiral (2026-09-06)
+
+From the HyperFrames transitions page the operator brought in by hand (`hyperframes.heygen.com/prompting/transitions`, read
+2026-09-06): *"Pick ONE primary transition for most scene changes, plus one or two accents for topic changes and the climax.
+Never use a different transition on every seam - that reads as chaos, not design."* The operator: *"they standardize
+transitions, then they have one 'hero' transition - glitch for them, in our case, the spiral."*
+
+1. **A short's transition vocabulary is declared, not improvised.** Per short: ONE primary carries most seams; one or two
+   accents mark the topic changes and the climax; ONE hero is spent where the return is the point. A seam that wants a
+   fourth kind is a defect of the plan, not a request for a new effect.
+2. **Ours, on the measured kinds (E47) and the signatures (E45):** the primary for a WORLD CHANGE is the **cut in the gap**
+   (three frames before the next word's onset, doc 46 §46.6); the primary for a PAGE ARRIVING is the **mount**. The accents
+   are the **dip through black** (a chapter changes) and the **blur-zoom** (the punch into the detail). The hero is the
+   **spiral** - the page that comes back unwound, the channel's own move - spent once or twice a short, never on every return.
+   The suck is the desk plate's own seam and stays where it is. The wipe is an effect by name (E47 §3).
+3. **A transition says what two scenes are to each other** (the page's own table: a crossfade says "this continues", a whip
+   pan "next point", a burn "something changed"): cut = the same argument continues; dip = the chapter changed; blur-zoom
+   = into the detail; mount = the proof arrives; spiral = the proof returns. The shot table authors the seam by that meaning.
+4. **The "black-hole cut" is a renderer note, not a perceptual law.** The page's failure mode reads: *"The renderer holds each
+   scene's final state, so an explicit fade-out followed by an entrance renders as a jump cut with a dip in the middle."* That
+   is HyperFrames' two-tween artifact; the reference's dip through black is a single authored transition, 0.47 s, 35 of 99
+   boundaries. E47 §1 stands; the intake's HF-R1 stands with this as its reason.
