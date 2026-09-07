@@ -15,7 +15,7 @@ How does HeyGen HyperFrames structure motion design, scene transitions, stop-mot
    - **Persistent Elements:** At least one visual element (a baseline ruler, a data wire, a hero prop, or a HUD frame) that crosses the seam continuously.
    - **The Dwell-and-Sweep Camera Rhythm:** The camera sweeps across spaces between beats, but comes to a genuine **1.5–2.5 second rest (dwell)** at each hero moment. During a dwell, the *camera* rests while the *world* continues resolving (numbers tick, status indicators pulse, secondary motion lives).
 3. **Seeded Stop-Motion Determinism:** True hand-drawn or stop-motion cadence (on-twos / 12fps) requires quantizing motion to the **integer frame index** rather than the time domain, driven by a seeded 32-bit PRNG (Mulberry32). Time-domain quantization (`t / 0.0667`) drifts due to floating-point imprecision, causing irregular stutter.
-4. **WebGL Shader vs CSS Transitions:** HyperFrames introduces 14 typed WebGL shader transitions (`@hyperframes/shader-transitions`) for high-impact structural handoffs, while delegating 60–70% of standard scene continuations to lightweight CSS container transforms. The cardinal failure mode is fading scene A out to black/cream and then fading scene B in; transitions must be simultaneous handoffs.
+4. **WebGL Shader vs CSS Transitions:** HyperFrames introduces 14 typed WebGL shader transitions (`@hyperframes/shader-transitions`) for high-impact structural handoffs, while delegating 60–70% of standard scene continuations to lightweight CSS container transforms [DERIVED: from HyperFrames transition selection rule ('Pick ONE primary (60-70% of scene changes) + 1-2 accents', https://hyperframes.heygen.com/prompting/transitions), mapping primary scene continuations to CSS container transforms]. The cardinal failure mode is fading scene A out to black/cream and then fading scene B in (a 2-frame perceptual dip [DERIVED: inference]); transitions must be simultaneous handoffs.
 5. **Cross-Engine Interoperability:** Remotion's `<TransitionSeries>` (`@remotion/transitions`) and HyperFrames' `@hyperframes/shader-transitions` share identical underlying mathematics: both drive a normalized progress scalar ($p \in [0, 1]$) through a deterministic seek clock (`seekFrame(n)` vs `useCurrentFrame()`).
 
 ---
@@ -42,10 +42,13 @@ HyperFrames formalizes an eight-rule grammar governing execution within a scene.
 
 ### Rule 1 — Nothing Ever Fully Stops
 Every static "hold" must carry a subtle ambient idle: a 1–2% breathing scale, a slow directional drift, or a soft luminescence pulse. A bit-identical freeze frame across the final 1–2 seconds is the single most prevalent indicator of amateur production.
+[Ambient idle breathing scale on holds | 1–2% breathing scale, slow directional drift, or soft luminescence pulse | HeyGen HyperFrames Documentation | URL: https://hyperframes.heygen.com/prompting/motion | Verified 2026-09-06]
+*(Vendor doctrine contradiction: `/prompting/motion` mandates a 1–2% ambient breathing idle on every hold, whereas `/prompting/storyboards` commands that "holds must stay still; slow drifting or artificial breathing reads as unfinished work"; see Section 9).*
 [Final second encoder size difference | 211 KB (frozen) vs 2.5 MB (ambient live idle) | HeyGen HyperFrames Documentation | URL: https://hyperframes.heygen.com/prompting/motion | Verified 2026-09-06]
 
 ### Rule 2 — The Camera is an Actor
 Every scene must maintain a continuous camera movement: a 4–8% push-in, a slow orbital pan, or parallax translation. Camera motion must never decay to a dead stop at the scene boundary; eases must be computed over a temporal window slightly longer than the render span. Translating the entire scene content past a fixed viewport is mathematically identical to camera translation.
+[Continuous scene camera movement scale | 4–8% push-in, slow orbital pan, or parallax translation | HeyGen HyperFrames Documentation | URL: https://hyperframes.heygen.com/prompting/motion | Verified 2026-09-06]
 
 ### Rule 3 — Overlapping Action
 No two elements may share an identical start frame or end frame. Entrances must stagger at irregular offsets.
@@ -63,7 +66,7 @@ Animate multiple properties (position, scale, opacity, rotation) simultaneously 
   - *Impacts / Stamps:* Ease **in** (acceleration culminating at contact).
 
 ### Rule 5 — Overshoot and Follow-Through
-Overshoot communicates mass and kinetic momentum. Objects pass their resting target and settle back via spring or `back.out` physics.
+Overshoot communicates mass and kinetic momentum. Objects pass their resting target and settle back via spring or `back.out` physics (e.g. `back.out(1.5–5)` [UNVERIFIED: overshoot parameter range not quoted on /prompting/motion]).
 - **One-Frame Shadow Lag:** Dragged secondary elements (e.g. drop shadows, trailing brackets, support housings) must settle exactly **one frame later** than the primary object (a lag of 0.033s at 30 fps).
 - **The Numerical Metric Invariant:** Overshoot applies strictly to spatial transforms. **A numerical metric or financial counter must NEVER overshoot its target value.** An overshoot on a counter displays a figure that was never true, violating factual integrity.
 [Physical shadow follow-through lag | 0.033 s (exactly 1 frame at 30 fps) | HeyGen HyperFrames Documentation | URL: https://hyperframes.heygen.com/prompting/motion | Verified 2026-09-06]
@@ -77,7 +80,7 @@ Scene layers must translate at rates proportional to their virtual z-depth:
 The definitive cue for spatial depth is **occlusion** (a foreground element passing directly in front of and clipping behind-layer content), not Gaussian blur. A single blurred foreground occlusion element definitively establishes 3D spatial separation.
 
 ### Rule 7 — Match Pacing to Genre
-Showreel and fast-paced mobile shorts operate at **1.1 to 4.0 seconds per idea/beat**. Stretching an idea to 8 seconds produces perceptual lethargy regardless of ease fluidity.
+Showreel and fast-paced mobile shorts operate at **1.1 to 4.0 seconds per idea/beat** [DERIVED: compressed from HeyGen HyperFrames Documentation (/prompting/motion), which states "1.5–4 s per idea" for fast pacing and "1.1 s per beat" for rapid showreels]. Stretching an idea to 8 seconds produces perceptual lethargy regardless of ease fluidity.
 
 ### Rule 8 — Handmade Imperfection Stays Reproducible
 Handmade, woodblock, paper-cutout, or stop-motion aesthetics require discrete stepped holds (on-twos). To prevent non-deterministic render corruption, unseeded `Math.random()` is banned. Imperfections must be driven by a seeded PRNG (Section 5).
@@ -107,7 +110,7 @@ The fix for the slideshow defect is not more animation, but a strict **cinematog
 1. **Regions Change by Arriving, Not Cutting:**
    - The next region is already visible at the edge of frame before the camera reaches it.
    - The previous region leaves via **parallax**, not by fading out.
-   - Fading an outgoing card to black or cream and fading the incoming card in creates a 2-frame perceptual dip ("black hole cut") that resets viewer orientation.
+   - Fading an outgoing card to black or cream and fading the incoming card in creates a 2-frame perceptual dip ("black hole cut") [DERIVED: inference; not on /prompting/capstone] that resets viewer orientation.
 
 2. **The Dwell-and-Sweep Camera Rhythm:**
    The camera accelerates across the transition seam between regions, then settles into a **1.5 to 2.5 second dwell** at each region's hero moment. During the dwell:
@@ -169,7 +172,7 @@ HyperFrames exposes a specialized WebGL fragment-shader pipeline (`@hyperframes/
 [Transition duration ranges by energy tier | Calm: 0.5-0.8s, Medium: 0.3-0.5s, High: 0.15-0.3s | HeyGen HyperFrames Documentation | URL: https://hyperframes.heygen.com/prompting/transitions | Verified 2026-09-06]
 
 ### The Cardinal Transition Anti-Pattern:
-Never fade the outgoing scene to black or cream and subsequently fade the incoming scene in. That creates a 2-frame perceptual dip ("black hole cut"). A true transition must execute a simultaneous, continuous handoff where both scenes exist concurrently in the compositor.
+Never fade the outgoing scene to black or cream and subsequently fade the incoming scene in. That creates a 2-frame perceptual dip ("black hole cut") [DERIVED: inference; not on /prompting/capstone or /prompting/transitions]. A true transition must execute a simultaneous, continuous handoff where both scenes exist concurrently in the compositor.
 
 ---
 
@@ -178,7 +181,7 @@ Never fade the outgoing scene to black or cream and subsequently fade the incomi
 For paper-cutout, woodblock, and hand-animated aesthetics (e.g. Money Physics / Tokyo Tea Break), continuous floating-point tweens feel artificially computerized. The animation requires discrete holds ("on-twos").
 
 ### The Floating-Point Quantization Trap:
-Dividing time by duration (`Math.floor(t / 0.0667)`) fails because renderer seek-times do not land on exact $1/30\text{s}$ doubles. Over a 60-second timeline, IEEE-754 rounding errors drift across boundaries, causing the hold to alternate erratically between 1 frame, 2 frames, and 3 frames.
+Dividing time by duration (`Math.floor(t / 0.0667)`) fails because renderer seek-times do not land on exact $1/30\text{s}$ doubles. Over a 60-second timeline, IEEE-754 rounding errors drift across boundaries, causing the hold to alternate erratically between 1 frame, 2 frames, and 3 frames [UNVERIFIED: arithmetic holds for float boundaries, but 60-second drift rate is unmeasured].
 
 ### The Exact Frame Quantization Formula:
 Quantization must be evaluated strictly against the **integer frame index**:
@@ -222,10 +225,10 @@ Transforming an editorial metaphor (a tea cup, an index fund basket, a balance s
 [ARAP 2D morphing volume preservation proof | Jacobian polar decomposition J = R * S | Marc Alexa, Daniel Cohen-Or, David Levin (SIGGRAPH 2000) | URL: https://doi.org/10.1145/344779.344859 | Verified 2026-09-06]
 
 ### ARAP Invariants for Evidence Morphing:
-When morphing an inked prop into a data chart on the Ledger Page:
+When morphing an inked prop into a data chart on the Ledger Page [DERIVED: from this repo's internal doctrine, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md TR-7 and briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:390-396 (B4); these are our own repo invariants, not HyperFrames vendor metrics]:
 1. Centroid displacement: $\Delta C \le 0.06 \times W$.
 2. Principal axis rotation: $|\Delta \theta| \le 15^\circ$.
-3. Area preservation ratio: $A(t) / \min(A_0, A_1) \ge 0.60$.
+3. Area preservation ratio: $A(t) / \min(A_0, A_1) \ge 0.60$ (or bounding area continuity $\frac{\min(A(t))}{\max(A(t))} \ge 0.60$).
 
 ---
 
@@ -264,20 +267,29 @@ Seeking to frame $N$ must always produce the bit-identical DOM state regardless 
 
 ---
 
-## 8. Resolution of Video-Engine Transition Queries (`TRANSITIONS-REVIEW-2026-09-06.md`)
+## 8. What HyperFrames Would Say About Our Open Transition Queries (`TRANSITIONS-REVIEW-2026-09-06.md`)
 
-This research directly answers and settles the open transition queries tracked in `docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md`:
+This section does not settle our open transition queries. Rather, it contrasts what HyperFrames doctrine would advise against what this repository has already measured and ruled. Where vendor doctrine and repository measurements conflict, the disagreement is highlighted without unilateral resolution (resolution is reserved for parent rulings):
 
 1. **TR-1 & TR-11 (The "Slideshow" Retention Defect):**  
-   The Tokyo short's retention curve (holding 40% throughout the ledger page, but dipping at clip cuts) was caused by unmotivated cuts between disconnected spaces. Adopting HyperFrames' **Dwell-and-Sweep Rhythm** and carrying a **persistent horizontal evidence wire** through the seam eliminates the reset cost of the cut.
+   *What HyperFrames would say:* To eliminate retention drops at scene boundaries, HyperFrames prescribes an unbroken camera journey governed by the **Dwell-and-Sweep Rhythm** and threaded by a **persistent evidence wire** crossing every seam. HyperFrames explicitly rejects scene-clearing dips or fades to black as orientation-resetting anti-patterns ("black hole cuts" [DERIVED: inference; not on /prompting/capstone]).  
+   *What our measurement says:* TR-1 is closed by empirical measurement in `docs/content-video-engine/46-REFERENCE-RHYTHM.md` §46.5 (`content/video_engine/scripts/measure_cut_kinds.py` over 99 reference boundaries; `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md`). The reference channel actually utilizes **36 hard cuts (36.4%), 35 dips through black (35.4%, exactly 14 frames / 0.47 s wide at every one), and 28 blur-zooms (28.3%)**, with 0 dissolves and 0 wipes.  
+   *The disagreement:* HyperFrames insists that fading to black resets viewer orientation and is an amateur defect; yet the reference channel's retention curve relies heavily on 0.47 s dips through black at 35.4% of world changes. We do not resolve this conflict; the parent determines where each applies.
+
 2. **TR-3 (Unsourced Transition Constants):**  
-   - `DISSOLVE_S`: Previous value of $0.80\text{ s}$ was too slow. Calibrate to **$0.35\text{ s} - 0.45\text{ s}$** matching HyperFrames' Medium Explainer tier.
-   - `WIPE_S`: $0.62\text{ s}$ is validated against HyperFrames' $0.50\text{ s}$ calm / $0.35\text{ s}$ fast wipe benchmarks.
-   - `MIN_JERK`: Enable `min_jerk` as the default kinetic ease for all directional camera moves and wipes.
+   *What HyperFrames would say:* Transition timings should be selected strictly from calibrated energy tiers (`/prompting/transitions`): Calm ($0.50\text{ s} - 0.80\text{ s}$), Medium Explainer ($0.30\text{ s} - 0.50\text{ s}$), and High Promo ($0.15\text{ s} - 0.30\text{ s}$), with `min_jerk` kinetics applied to directional moves and wipes. For `DISSOLVE_S` ($0.80\text{ s}$), HyperFrames' Medium Explainer tier suggests calibrating to **$0.35\text{ s} - 0.45\text{ s}$** [DERIVED: interpolated from HyperFrames Medium / Explainer transition tier (0.30–0.50 s), URL: https://hyperframes.heygen.com/prompting/transitions; verified 2026-09-06]. For wipes, an earlier draft cited a $0.50\text{ s}$ calm / $0.35\text{ s}$ fast wipe benchmark [UNVERIFIED: wipe benchmarks absent from HyperFrames tier table; engine constant is WIPE = 0.62 in samples/scene-evidence-player.template.html:830, not WIPE_S].  
+   *What our measurement and rulings say:* The player template constant is `WIPE = 0.62` (`samples/scene-evidence-player.template.html:830`; `WIPE_S` is not a symbol in the engine). Crucially, ruling E47 §3 (`docs/portable/OPERATOR-RULINGS.md`) has **retired the wipe as the default world-change exit** (`docks → dip`, `bare → cut`), retaining it only as a specialized named effect (`wipe` / `wipe_right`). Furthermore, the reference channel measured 0 wipes and 0 dissolves across 99 boundaries (`46-REFERENCE-RHYTHM.md` §46.5).  
+   *The disagreement:* HyperFrames treats directional wipes/pushes as a standard medium-tier staple (60–70% primary continuations), whereas our empirical measurement and ruling E47 §3 demote wipes from default status entirely.
+
 3. **TR-8 (M13 Acoustic-Visual Alignment):**  
-   Major transition onsets must lock to acoustic silence intervals ($\ge 0.30\text{ s}$ Whisper gaps). The transition duration must fit within the gap window so speech never collides with a high-energy visual warp.
+   *What HyperFrames would say:* HyperFrames snaps cuts and scene handoffs directly to musical beat grids analyzed via `hyperframes beats` (`/prompting/capstone`), ensuring transitions fit cleanly within tempo divisions without vocal collision [DERIVED: inference from repo speech-gap constraint M13 and TR-8; not an authored HyperFrames specification].  
+   *What our measurement says:* M13's placement is determined by speech cadence rather than musical beats, measured in `docs/content-video-engine/46-REFERENCE-RHYTHM.md` §46.6 (TR-2 / `content/video_engine/scripts/measure_cut_offsets.py` across 99 boundaries; `docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md`). Picture changes occur at a **median 100 ms (3 frames at 30 fps) before the next word's onset**, inside speech pauses $\ge 0.30\text{ s}$ (83% of captions, 66% of Whisper), and dips through black are centered (+13 ms black midpoint to word onset).  
+   *The disagreement:* HyperFrames synchronizes scene transitions to musical beat grids; our video engine locks cuts to speech gaps 3 frames before word onset based on reference acoustic data.
+
 4. **TR-9 (The Wipe-Onto-Stable-Cream Mount):**  
-   Implement the simultaneous handoff: the outgoing scene wipes off via an inverted horizontal mask while the incoming cream washi board scales by $1.02 \to 1.00$ with an umber-tinted shadow.
+   *What HyperFrames would say:* HyperFrames requires simultaneous incoming/outgoing handoffs, previously drafted as an outgoing wipe paired with an incoming cream board scaling $1.02 \to 1.00$ [UNVERIFIED: unsourced scale values; not found in HyperFrames docs or repo player template].  
+   *What our rulings say:* Ruling E45 §2 and E47 §2 (`docs/portable/OPERATOR-RULINGS.md`) define the mount (a page arriving for the first time) and its rising-cream dissolve as an original signature, while E47 §3 retires the wipe as the default entry mechanism into stable cream.  
+   *The disagreement:* HyperFrames has no concept of a persistent 2.5D ledger page mount; its generic simultaneous handoff cannot replace our specialized ledger mount signatures.
 
 ---
 
@@ -298,7 +310,7 @@ Before authoring individual frames, four film-level invariants must be declared:
 A storyboard's direction block sets rules that every frame obeys without restating them:
 - **Two-Color Discipline:** Declare a ground color (e.g. deep navy `#0b1220`) and one ink color (e.g. warm off-white `#f4efe6`). Emphasis is achieved strictly through inversion, scale, weight, or spatial density — never by introducing a third hue.
   [Two-color brand constraint | Ground + 1 Ink color (emphasis via scale/density) | HeyGen HyperFrames Documentation | URL: https://hyperframes.heygen.com/prompting/storyboards | Verified 2026-09-06]
-- **VO-Paced vs. Timestamp Reveals:** At $t=0$, only the initial spoken element is visible. Subsequent elements arrive on their spoken cues. If the piece is silent, reveals land on explicit timestamps. Holds must stay still; slow drifting or artificial "breathing" reads as unfinished work.
+- **VO-Paced vs. Timestamp Reveals:** At $t=0$, only the initial spoken element is visible. Subsequent elements arrive on their spoken cues. If the piece is silent, reveals land on explicit timestamps. Holds must stay still; slow drifting or artificial "breathing" reads as unfinished work. *(Vendor doctrine contradiction: `/prompting/storyboards` commands that holds must stay still and bans artificial breathing, directly contradicting `/prompting/motion` which mandates a 1–2% breathing idle on every hold; see Rule 1).*
 - **The "One Breather" Rule:** Across the entire film, designate exactly **ONE frame** as the breather (the deliberately calmer, static beat or longest read). Naming it prevents over-animating the rest to compensate.
   [Single breather designation | Exactly 1 calmer/static frame across film | HeyGen HyperFrames Documentation | URL: https://hyperframes.heygen.com/prompting/storyboards | Verified 2026-09-06]
 - **The Negative List:** A standing blacklist of visual clichés (no purple-blue AI gradients, no bokeh, no faux browser/OS chrome, no drop-shadow cards, no unseeded randomness).
@@ -374,5 +386,29 @@ In programmatic video frameworks (Remotion, HyperFrames), headless render worker
 
 ## NOT FOUND WHERE I LOOKED
 
+### Vendor Roots Checked (`hyperframes.heygen.com`, `remotion.dev`, `gsap.com`)
 - **HeyGen Proprietary Neural Transition Weights:** Searched `hyperframes.heygen.com` documentation and packages for proprietary neural video-to-video AI transition models; not found. HyperFrames exclusively utilizes deterministic WebGL fragment shaders (`@hyperframes/shader-transitions`) and CSS container transforms.
 - **Native Real-Time Navier-Stokes Fluid Shaders in HyperFrames:** Searched HyperFrames catalog for native 3D Navier-Stokes fluid transition shaders; not found. All fluid/morph transitions (e.g. `domain-warp`, `swirl-vortex`, `ripple-waves`) utilize analytical 2D trigonometric and simplex noise equations rather than volumetric fluid simulations.
+- **Reference Transition Distributions or Acoustic Gap Alignments in Vendor Docs:** Searched HyperFrames prompt guides for empirical cut distributions or speech pause alignment rules; not found. HyperFrames provides visual design directives and musical beat-grid snapping, not empirical reference channel measurements.
+
+### Repository Roots & Doctrine Checked on OUR Side
+- **Queries and Tools Executed:**
+  - `python content/video_engine/scripts/docs_find.py "HYPERFRAMES"`
+  - `python content/video_engine/scripts/docs_find.py "46-REFERENCE-RHYTHM"`
+  - `python content/video_engine/scripts/docs_find.py "E47"`
+  - `python content/video_engine/scripts/docs_find.py "TR-7"`
+- **Documents Inspected by Path:**
+  - `docs/content-video-engine/46-REFERENCE-RHYTHM.md` (§46.5 transition mix, §46.6 voice-to-picture offset)
+  - `docs/portable/OPERATOR-RULINGS.md` (E47 §1–§4, E45 §1–§2, E44 §2)
+  - `docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md` (TR-1 through TR-12, inventory §§2–5)
+  - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md` (B4 ARAP invariants lines 390–396, C1)
+  - `docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md` (intake review and triage)
+  - `samples/scene-evidence-player.template.html` (`WIPE = 0.62` at :830, `DISSOLVE_S = 0.8`, `LIFE_FPS` at :2794)
+  - `.agents/skills/hyperframes-animation/` (`transitions/overview.md`, `adapters/gsap-easing-and-stagger.md`, `rules/svg-path-draw.md`)
+- **What Was NOT FOUND on OUR Side (New to this Repo from HyperFrames):**
+  - *Integer frame-index clock quantisation:* `Math.round(t * fps)` followed by `floor(frame / holdFrames)` was absent from our template (`samples/scene-evidence-player.template.html:2794`) and `ink.mjs:157` (both evaluated `t * fps` directly in float domain without frame-index integer rounding).
+  - *One-frame physical secondary lag (0.033 s at 30 fps):* Searched `docs/content-video-engine/` and `docs/portable/`; zero occurrences prior to this report.
+  - *Stagger inequality ($\tau_{\text{offset}} < \tau_{\text{duration}}$) and focal-element non-delay rule:* Not found in doc 29 or skills (only total stagger duration was capped at ~0.5 s).
+  - *SVG draw-on hazards:* The three failure modes (`stroke-linecap: round` zero-length dot, static `d` attribute required for `getTotalLength()` in Chromium, multi-value CSS dasharray conflicts) were completely absent from repo doctrine and skills (`svg-path-draw.md`).
+  - *Film-level 4-part invariant header (Message · Arc · Audience · Mood) and per-frame schema `[focal]`/`[roles]`:* Not found as an explicit structured contract in `SCRIPT-PATTERN-KIT.md` or shot table formats.
+  - *The "One Breather" rule per composition:* Not found in repository doctrine (we possessed per-page savor, but no whole-film breather invariant).

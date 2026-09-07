@@ -57,6 +57,12 @@ _GRAMMAR_HEADER = re.compile(
     r"\*{0,2}\s*:\s*(.*)$",
     re.IGNORECASE,
 )
+# the same header as a markdown heading (`### POSITION`, Gemini 2026-09-06): the colon is optional ONLY in this form,
+# so a bold prose label like `**Synced:**` never becomes a section
+_GRAMMAR_HEADING = re.compile(
+    r"^\s*#{1,6}\s*\*{0,2}(POSITION|PATHS WRITTEN|DISAGREEMENTS|PREREQUISITES|NOT FOUND WHERE I LOOKED)\*{0,2}\s*:?\s*(.*)$",
+    re.IGNORECASE,
+)
 NONE_WORDS = {"none", "(none)", "none.", "n/a", "-", "nothing"}
 PATH_SUFFIXES = {
     ".md", ".py", ".json", ".jsonl", ".yaml", ".yml", ".txt", ".ts", ".tsx", ".js", ".html", ".css",
@@ -98,7 +104,7 @@ def _collect(body: str) -> dict[str, list[str]]:
     buckets: dict[str, list[str]] = {}
     current: str | None = None
     for line in body.splitlines():
-        match = _GRAMMAR_HEADER.match(line)
+        match = _GRAMMAR_HEADER.match(line) or _GRAMMAR_HEADING.match(line)
         if match:
             current = match.group(1).upper()
             buckets.setdefault(current, [])
