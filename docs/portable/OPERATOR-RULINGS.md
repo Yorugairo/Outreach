@@ -1527,3 +1527,20 @@ anything."* And, naming it: *"the weak push-in I'm referencing is the 1:14 durin
    `snap` page enter, the third watch: "throw it, then immediately zoom/snap to it to bring it to the full world-stage").
 4. **Applied.** v3's two punches (the catalyst's on the returning peak; the Meta beat's on the 5.5 % bar) are cut; the
    ring's snap stands.
+
+## E52 — A page cites, it does not footnote; a chart reads with no caption (2026-09-07)
+
+The operator, opening the design pass on v3: *"cited sources should take up minimal space, not maximal. Charts need to make
+sense with no captions, so labels need to be better. And we should consider if there's better / more compact / more
+interesting ways to show the same information. We should spotlight the chart on both graphs showing the math."*
+
+1. **The citation.** One short line — institution · month — at the small size and low ink (`src_style: compact`, the
+   object's own key). The IDs, URLs, hashes and fetch dates live on the object (`proof`) and in the dossier, where a reader
+   can check them; the page names the source and moves on.
+2. **The chart alone.** Title = the claim; sub = what the lines are, one line; every series named inline with its value at
+   its end; the unit on the axis; the selection stated. If the sentence being spoken is the only thing that makes the chart
+   make sense, the chart is not finished.
+3. **The math on the page.** The number the sentence turns on is drawn — a bracket with its measured span, a figure at its
+   datum — not left to the voice (the +80 bp bracket on the Fed page; the −$122.6B on the holdings page).
+4. **Compact and honest over clever.** A different display of the same object (Japan's month-on-month selling as signed
+   bars) beats a combined chart that would break E28 (an unsigned combo, a second axis with no unit ticks).

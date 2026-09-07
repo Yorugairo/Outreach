@@ -2115,8 +2115,8 @@
    }
   },
   {
-   "slot": "landing 5 (throw, paper)",
-   "at": 76.21,
+   "slot": "landing 4 (throw, paper)",
+   "at": 60.21,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
@@ -2125,12 +2125,22 @@
    }
   },
   {
+   "slot": "landing 5 (throw, paper)",
+   "at": 76.21,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_5_A__",
+    "B": "__snd_5_B__"
+   }
+  },
+  {
    "slot": "page enter 6",
    "at": 76.83,
    "gain": 0.12,
    "fade_in": 0.0,
    "variants": {
-    "A": "__snd_5_A__"
+    "A": "__snd_6_A__"
    }
   },
   {
@@ -2139,8 +2149,8 @@
    "gain": 0.0226,
    "fade_in": 1.5,
    "variants": {
-    "A": "__snd_6_A__",
-    "B": "__snd_6_B__"
+    "A": "__snd_7_A__",
+    "B": "__snd_7_B__"
    }
   },
   {
@@ -2149,8 +2159,8 @@
    "gain": 0.0226,
    "fade_in": 3.0,
    "variants": {
-    "A": "__snd_7_A__",
-    "B": "__snd_7_B__"
+    "A": "__snd_8_A__",
+    "B": "__snd_8_B__"
    }
   }
  ],
@@ -2188,13 +2198,23 @@
    },
    "badges": []
   },
+  "dock-i-japan-selling": {
+   "title": "Japan's rate of selling",
+   "source": "US Treasury TIC \u00b7 Sep 2026",
+   "species": "chart",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short\\docks\\dock-i-japan-selling.png",
+    "sha256": "c608ecdbedea916fadeb588bddbce4be7bb7453170d47899157e8a3cebe44669"
+   },
+   "badges": []
+  },
   "dock-h-fed-vs-yields": {
    "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
-   "source": "FRED DFEDTARU, DGS10, MORTGAGE30US \u00b7 fetched 2026-09-07",
+   "source": "FRED \u00b7 Freddie Mac \u00b7 Sep 2026",
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short\\docks\\dock-h-fed-vs-yields.png",
-    "sha256": "0f77723baac17a7e765a4fe5821c049accc67fe9061755f9df859f5a041a73a9"
+    "sha256": "26b54550baef513a9a2371edc2ca3f09994c90a5eb0eae8380c5783cc1db1b0f"
    },
    "badges": []
   },
@@ -2242,8 +2262,9 @@
      "variant": "line",
      "title": "Our biggest customer is selling",
      "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06",
-     "source": "US Treasury TIC Table 5, Major Foreign Holders \u00b7 fetched 2026-09-05",
+     "source": "US Treasury TIC Table 5 \u00b7 2026-09",
      "quiet_zone": "right",
+     "src_style": "compact",
      "labels": [
       "Japan"
      ],
@@ -3600,16 +3621,17 @@
      "badge_at": [],
      "kind": "video",
      "place": {
-      "x": 594,
-      "y": 297,
-      "w": 270,
-      "h": 175
+      "x": 140,
+      "y": 378,
+      "w": 799,
+      "h": 473
      },
      "read_s": 1.2,
      "park_s": 0.7,
      "park": true,
      "arrive": "land",
-     "mass": "metal"
+     "mass": "metal",
+     "centre": true
     }
    ],
    "species": [
@@ -3767,8 +3789,9 @@
      "variant": "line",
      "title": "Our biggest customer is selling",
      "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06",
-     "source": "US Treasury TIC Table 5, Major Foreign Holders \u00b7 fetched 2026-09-05",
+     "source": "US Treasury TIC Table 5 \u00b7 2026-09",
      "quiet_zone": "right",
+     "src_style": "compact",
      "labels": [
       "Japan"
      ],
@@ -5101,7 +5124,7 @@
      "slide": "dock-f-toll-gate-to-fab",
      "slot": 0,
      "enter": 55.31,
-     "exit": 61.76,
+     "exit": 59.39,
      "badge_at": [],
      "kind": "video",
      "place": {
@@ -5113,6 +5136,25 @@
      "read_s": 1.2,
      "park_s": 0.7,
      "park": true
+    },
+    {
+     "slide": "dock-i-japan-selling",
+     "slot": 0,
+     "enter": 59.79,
+     "exit": 61.76,
+     "badge_at": [],
+     "place": {
+      "x": 236,
+      "y": 57,
+      "w": 607,
+      "h": 1114
+     },
+     "read_s": 1.2,
+     "park_s": 0.7,
+     "park": true,
+     "arrive": "throw",
+     "mass": "paper",
+     "centre": true
     }
    ],
    "species": [
@@ -5165,8 +5207,9 @@
      "variant": "bars",
      "title": "What a Meta share is worth as the 10-year moves",
      "sub": "The same trailing profit per share ($26.83), priced at each 10-year yield; today's 4.77% gives the 23.0x multiple and the $617 price. Arithmetic on the discount identity - no growth assumed, no forecast",
-     "source": "META price, trailing EPS and P/E: Yahoo Finance via yfinance; US 10-year: FRED DGS10 (2026-09) - fetched 2026-09-04",
+     "source": "Yahoo Finance \u00b7 FRED DGS10 \u00b7 2026-09",
      "quiet_zone": "right",
+     "src_style": "compact",
      "labels": [
       "4%",
       "4.5%",
@@ -5274,21 +5317,21 @@
      "builder": "dense-line",
      "variant": "line",
      "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
-     "sub": "Fed funds target flat at 3.75% since Dec 2025; the 10-year and the 30-year mortgage, %",
-     "source": "FRED DFEDTARU, DGS10, MORTGAGE30US (Federal Reserve Board; Freddie Mac PMMS) \u00b7 fetched 2026-09-07",
+     "sub": "Fed funds, unchanged since Dec 2025, against the 10-year Treasury, %",
+     "source": "FRED \u00b7 Freddie Mac \u00b7 Sep 2026",
      "quiet_zone": "right",
+     "src_style": "compact",
      "labels": [
-      "Fed target",
-      "10-year",
-      "30-yr mortgage"
+      "3.75%",
+      "4.77%"
      ],
      "values": [],
      "value_strings": [],
      "colors": [],
      "series": [
       {
-       "label": "flat",
-       "name": "Fed target",
+       "label": "Fed funds",
+       "name": "3.75%",
        "color": "deemph",
        "pts": [
         [
@@ -6558,8 +6601,8 @@
        ]
       },
       {
-       "label": "+0.80 pp",
-       "name": "10-year",
+       "label": "10-year",
+       "name": "4.77%",
        "color": "crimson",
        "pts": [
         [
@@ -7423,193 +7466,6 @@
          "4.77"
         ]
        ]
-      },
-      {
-       "label": "+0.73 pp",
-       "name": "30-yr mortgage",
-       "color": "amber",
-       "pts": [
-        [
-         "2025.8274",
-         "6.17"
-        ],
-        [
-         "2025.8466",
-         "6.22"
-        ],
-        [
-         "2025.8658",
-         "6.24"
-        ],
-        [
-         "2025.8849",
-         "6.26"
-        ],
-        [
-         "2025.9014",
-         "6.23"
-        ],
-        [
-         "2025.9233",
-         "6.19"
-        ],
-        [
-         "2025.9425",
-         "6.22"
-        ],
-        [
-         "2025.9616",
-         "6.21"
-        ],
-        [
-         "2025.9781",
-         "6.18"
-        ],
-        [
-         "2025.9973",
-         "6.15"
-        ],
-        [
-         "2026.0192",
-         "6.16"
-        ],
-        [
-         "2026.0384",
-         "6.06"
-        ],
-        [
-         "2026.0575",
-         "6.09"
-        ],
-        [
-         "2026.0767",
-         "6.1"
-        ],
-        [
-         "2026.0959",
-         "6.11"
-        ],
-        [
-         "2026.1151",
-         "6.09"
-        ],
-        [
-         "2026.1342",
-         "6.01"
-        ],
-        [
-         "2026.1534",
-         "5.98"
-        ],
-        [
-         "2026.1726",
-         "6.0"
-        ],
-        [
-         "2026.1918",
-         "6.11"
-        ],
-        [
-         "2026.211",
-         "6.22"
-        ],
-        [
-         "2026.2301",
-         "6.38"
-        ],
-        [
-         "2026.2493",
-         "6.46"
-        ],
-        [
-         "2026.2685",
-         "6.37"
-        ],
-        [
-         "2026.2877",
-         "6.3"
-        ],
-        [
-         "2026.3068",
-         "6.23"
-        ],
-        [
-         "2026.326",
-         "6.3"
-        ],
-        [
-         "2026.3452",
-         "6.37"
-        ],
-        [
-         "2026.3644",
-         "6.36"
-        ],
-        [
-         "2026.3836",
-         "6.51"
-        ],
-        [
-         "2026.4027",
-         "6.53"
-        ],
-        [
-         "2026.4219",
-         "6.48"
-        ],
-        [
-         "2026.4411",
-         "6.52"
-        ],
-        [
-         "2026.4603",
-         "6.47"
-        ],
-        [
-         "2026.4795",
-         "6.49"
-        ],
-        [
-         "2026.4986",
-         "6.43"
-        ],
-        [
-         "2026.5178",
-         "6.49"
-        ],
-        [
-         "2026.537",
-         "6.55"
-        ],
-        [
-         "2026.5562",
-         "6.58"
-        ],
-        [
-         "2026.5753",
-         "6.66"
-        ],
-        [
-         "2026.5945",
-         "6.69"
-        ],
-        [
-         "2026.6137",
-         "6.67"
-        ],
-        [
-         "2026.6329",
-         "6.65"
-        ],
-        [
-         "2026.6521",
-         "6.66"
-        ],
-        [
-         "2026.6712",
-         "6.71"
-        ]
-       ]
       }
      ],
      "axes": {
@@ -7669,17 +7525,29 @@
      "badge_at": [],
      "kind": "video",
      "place": {
-      "x": 547,
-      "y": 296,
-      "w": 317,
-      "h": 202
+      "x": 140,
+      "y": 378,
+      "w": 799,
+      "h": 473
      },
      "read_s": 1.2,
      "park_s": 0.7,
-     "park": true
+     "park": true,
+     "centre": true
     }
    ],
    "species": [
+    {
+     "kind": "bracket",
+     "at": 77.38,
+     "dur": 1.4,
+     "series": 1,
+     "from": 83,
+     "to": 214,
+     "label": "+80 bp",
+     "sub": "10-year Treasury, since its February low",
+     "color": "crimson"
+    },
     {
      "kind": "note",
      "at": 77.6,
@@ -7696,7 +7564,7 @@
      "kind": "note",
      "at": 79.39999999999999,
      "dur": 1.2,
-     "text": "10-year +80 bp, mortgage +73 bp since the February lows."
+     "text": "30-year mortgage 5.98% -> 6.71% over the same months."
     }
    ]
   },

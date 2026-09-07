@@ -145,7 +145,8 @@ def japan_holdings(months, rows) -> dict:
         "sub": f"Japan's holdings of US Treasuries, $bn, monthly since 2000; "
                f"{facts['peak_month']} ${facts['peak']:,.1f}B -> {facts['latest_month']} ${facts['latest']:,.1f}B. "
                f"TIC history to {facts['history_to']}, the current release from {facts['current_from']}",
-        "src": f"US Treasury TIC Table 5, Major Foreign Holders · fetched {FETCHED}",
+        "src": f"US Treasury TIC Table 5 · {FETCHED[:7]}",   # the design pass (2026-09-07): a citation takes minimal space
+        "src_style": "compact",
         "ylabel": "$bn",
         # the axis floors at the series' own low since 2000 (the builder pads from the min; operator, 2026-09-05: "start from the
         # lowest amount Japan has held since 2000"); the selected dates state their rule - every fifth year (E28)
@@ -302,7 +303,8 @@ def meta_yield(pe: dict) -> dict:
         "sub": f"The same trailing profit per share (${eps:.2f}), priced at each 10-year yield; today's "
                f"{now*100:.2f}% gives the {pe_now:.1f}x multiple and the ${price:,.0f} price. "
                f"Arithmetic on the discount identity - no growth assumed, no forecast",
-        "src": f"META price, trailing EPS and P/E: Yahoo Finance via yfinance; US 10-year: FRED DGS10 ({now_day}) - fetched {FETCHED}",
+        "src": f"Yahoo Finance · FRED DGS10 · {FETCHED[:7]}",   # the design pass: minimal; the full provenance stays in the facts and the dossier
+        "src_style": "compact",
         "unit": "$",
         # unsigned prices; heights fall as the yield rises - the signed change rides on badges (E28)
         "bars": [{"label": f"{r*100:g}%", "value": round(price_at[r]),   # whole dollars on the page (the badges and the dossier are); facts keep the cents

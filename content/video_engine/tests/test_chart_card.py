@@ -48,7 +48,7 @@ def test_page_box_finds_the_charcoal_page_between_the_black_stage_and_the_cream_
 def test_the_fed_object_carries_its_proof_lines_and_its_facts_are_read_not_typed():
     import json
     obj = json.loads(FED.read_text(encoding="utf-8"))
-    assert obj["status"] == "REAL" and len(obj["series"]) == 3
+    assert obj["status"] == "REAL" and len(obj["series"]) == 2 and obj["mortgage"]["pts"], "two lines on one scale; the mortgage kept on the object for a note"
     assert {p["series"] for p in obj["proof"]} == {"DFEDTARU", "DGS10", "MORTGAGE30US"}
     for p in obj["proof"]:
         assert p["url"].startswith("https://fred.stlouisfed.org/graph/fredgraph.csv?id=") and len(p["sha256"]) == 64

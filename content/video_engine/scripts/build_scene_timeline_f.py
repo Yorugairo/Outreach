@@ -69,7 +69,10 @@ ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page
 MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets (stopaction.mjs MASS) a throw or a landing settles by
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_OPTS = ("idle", "arrive", "mass", "morph")  # the `;key=value` options a plate id may carry
-DOCK_OPTS = ("arrive", "mass", "centre")          # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page
+DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect")   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
+CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
+CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
 TIMED_EXITS = ("dip", "blurzoom")   # ... and only these two read the suffix as SECONDS (suck's is a point)
 DEFAULT_EXIT_DOCKS = "dip"          # E47 #3: was "wipe_right" until 2026-09-06
 DEFAULT_EXIT_BARE = "cut"
@@ -417,6 +420,10 @@ def dock_opts(raw) -> dict:
             if v is not True:
                 raise ValueError("dock: centre must be True (the card parks centred on the page)")
             continue
+        if k == "card_aspect":
+            if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
+                raise ValueError("dock: card_aspect must be a positive number (the card's height over its width)")
+            continue
         _check_opt(k, v, "dock")
     return dict(raw)
 
@@ -621,16 +628,21 @@ def dock_place(world: dict, aspect: str | None) -> dict | None:
     return page_place(world["page"], aspect or "16:9")
 
 
-def centred_place(place: dict, aspect: str | None) -> dict:
+def centred_place(place: dict, aspect: str | None, card_aspect: float | None = None) -> dict:
     """The same card, parked at the stage's centre (the third watch, 2026-09-07: "center dock then retract the host on that
-    chart page"). The width is the page's own placement width; the box sits centred in the stage."""
+    chart page"). The width starts as the page's own placement width; a chart card names its own aspect (h / w), and the box
+    is capped at CENTRE_MAX_H of the stage - a portrait card shrinks to leave the page's title and source in view."""
     sw, sh = (1080, 1920) if (aspect or "16:9") == "9:16" else (1920, 1080)
-    w = place["w"]; h = dock_card_h(w)
-    return {"x": round((sw - w) / 2), "y": round((sh - h) / 2), "w": w, "h": h}
+    w = round(CENTRE_W * sw); h = round(w * card_aspect) if card_aspect else dock_card_h(w)   # the READING width (a parked card is the small one)
+    if h > CENTRE_MAX_H * sh:
+        h = round(CENTRE_MAX_H * sh); w = round(h / card_aspect) if card_aspect else w
+    band = CENTRE_BAND * sh if (aspect or "16:9") == "9:16" else sh   # portrait: the caption strip is below the band; landscape captions sit elsewhere
+    return {"x": round((sw - w) / 2), "y": round(max(0, (band - h) / 2)), "w": w, "h": h}
 
 
 def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
-               kind: str = DOCK_KIND_IMAGE, place: dict | None = None, arrive: str | None = None, mass: str | None = None) -> dict:
+               kind: str = DOCK_KIND_IMAGE, place: dict | None = None, arrive: str | None = None, mass: str | None = None,
+               centre: bool = False) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -650,6 +662,7 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         **({"place": place, "read_s": DOCK_READ_S, "park_s": DOCK_PARK_S,
             "park": span >= DOCK_READ_S + DOCK_PARK_S} if place else {}),
         **({"arrive": arrive} if arrive else {}), **({"mass": mass} if mass else {}),   # P47 T1: only when the row names them
+        **({"centre": True} if centre and place else {}),   # the design pass: a centred card sits at its box from its first frame - no reading size, no park
     }
 
 
@@ -755,7 +768,7 @@ def main() -> int:
                 raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
             d = META.get(aid, {"title": aid, "source": "", "species": "deck",
                                "badges": []})
-            dplace = centred_place(place, ASPECT) if (place and dopt.get("centre")) else place   # the third watch: the host centred on the last page
+            dplace = centred_place(place, ASPECT, dopt.get("card_aspect")) if (place and dopt.get("centre")) else place   # the third watch: the host centred on the last page
             if True:
                 if aid not in evidence:
                     try:
@@ -811,7 +824,7 @@ def main() -> int:
                     uris[aid] = dock_uri(ap)
                 docks.append(dock_entry(aid, slot, enter, exitt, len(d["badges"]),
                                         evidence[aid].get("kind", DOCK_KIND_IMAGE),
-                                        place if slot == 0 else None, dopt.get("arrive"), dopt.get("mass")))
+                                        dplace if slot == 0 else None, dopt.get("arrive"), dopt.get("mass"), bool(dopt.get("centre"))))
         try:
             exit_id, exit_s = scene_exit(authored_exit, bool(docks))
         except ValueError as exc:

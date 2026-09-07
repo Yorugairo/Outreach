@@ -1,7 +1,7 @@
 {
  "title": "What a Meta share is worth as the 10-year moves",
  "sub": "The same trailing profit per share ($26.83), priced at each 10-year yield; today's 4.77% gives the 23.0x multiple and the $617 price. Arithmetic on the discount identity - no growth assumed, no forecast",
- "src": "META price, trailing EPS and P/E: Yahoo Finance via yfinance; US 10-year: FRED DGS10 (2026-09) - fetched 2026-09-04",
+ "src": "Yahoo Finance \u00b7 FRED DGS10 \u00b7 2026-09",
  "unit": "$",
  "bars": [
   {
@@ -69,5 +69,6 @@
   "change_at_5_5_pct": -6.5,
   "change_at_5_5_per_share": -39.93,
   "change_at_5_5_on_10k": -647
- }
+ },
+ "src_style": "compact"
 }

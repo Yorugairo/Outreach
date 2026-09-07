@@ -56,7 +56,8 @@ def _bn(v: float) -> str:
 
 
 FACTS = _holdings_facts()
-FED_NOTES = json.loads((HERE / "evidence/objects/ev-fed-vs-yields-v1.series.json").read_text(encoding="utf-8"))["notes"]   # the Fed page's side notes, from its object
+FED = json.loads((HERE / "evidence/objects/ev-fed-vs-yields-v1.series.json").read_text(encoding="utf-8"))   # the Fed page's object: its notes, its bracket indices
+FED_NOTES = FED["notes"]
 
 
 def clip_dock(aid: str) -> str:
@@ -237,6 +238,13 @@ def dock_still(aid: str) -> str:
     return aid
 
 
+def card_aspect(aid: str) -> float:
+    """The rendered card's h / w, for a centred placement sized to the card (dock_card must have run)."""
+    from PIL import Image
+    w, h = Image.open(BUILD / "docks" / f"{aid}.png").size
+    return round(h / w, 4)
+
+
 def dock_card(aid: str, series: str, variant: str = "line", aspect: str | None = None) -> str:
     """A CHART CARD (R26-19 / E50): the series object's ledger page rendered once at its landing by scripts/chart_card.py and
     registered as a dock still, so a 2-3 s beat can carry a chart a fresh page could never land in time. Rebuilt when the
@@ -260,7 +268,8 @@ DOCK_META = [
     {"asset": "dock-g-two-fingers", "title": "Two numbers", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
     {"asset": "dock-f-toll-gate-to-fab", "title": "The gate to the fab", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
     # R26-19 / E50: the hook's own proof as a CHART card on the ring - species "chart", so M11/M12 read it as the chart it is
-    {"asset": "dock-h-fed-vs-yields", "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.", "source": "FRED DFEDTARU, DGS10, MORTGAGE30US · fetched 2026-09-07", "species": "chart", "badges": []},
+    {"asset": "dock-h-fed-vs-yields", "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.", "source": "FRED · Freddie Mac · Sep 2026", "species": "chart", "badges": []},
+    {"asset": "dock-i-japan-selling", "title": "Japan's rate of selling", "source": "US Treasury TIC · Sep 2026", "species": "chart", "badges": []},
 ]
 
 # the LEDGER PAGE's own clock, mirrored from the player's `const LP` (template :1724) exactly as the motion gate mirrors it:
@@ -313,6 +322,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     t_tea = word_in("still on its tea break", "tea")     # ... the second here
     t_bar_tab = word_in("bar tab is still ours", "bar")  # (the ring's last line)
     t_that = word_in("that unfunded bar tab is", "that")  # the host arrives CENTRED on the Fed page for its whole last line
+    t_nobody = at("here's what nobody says")             # the third perspective - Japan's RATE of selling - thrown here, over the June print
     # V3 words (P47 T2): the page performs on these
     t_build = round(t_page + PAGE_BUILD_START_S, 2)      # the page's own build beat (tr = t - t_page on a mount, E45 s2) - the line draws to the peak
     t_opponent = at("The opponent")                      # the title rewrites here
@@ -337,7 +347,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # HG1 (operator, 2026-09-07): "the dock at 0:16 is useless, that's the tea clip but at that point we're not talking about tea" -
             # the tea swap on "sixty-three" is gone; the panel holds parked through the joke and retracts on "watching" (part B row 4)
             (dock_still("dock-c-blue-ties-panel"), 0, t_panel, t_watch, {"arrive": "throw", "mass": "paper"}),
-            (dock_still("dock-g-two-fingers"), 0, t_two, t_promise, {"arrive": "land", "mass": "metal"}),
+            (dock_still("dock-g-two-fingers"), 0, t_two, t_promise, {"arrive": "land", "mass": "metal", "centre": True}),   # the design pass: the line is un-drawn by now - the card takes the page's centre
         ], "cut", [
             # V3: the build stops at the FEBRUARY PEAK ("The Fed hasn't moved, but your borrowing costs climbed anyway"); the coral
             # drop is its own stroke on "watching:", so the June datum is drawn the moment the sentence turns to the lender
@@ -366,7 +376,10 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
         #   and STAYS through the pledge, which docks the gate instead of cutting to it. exit=cut: the Meta page MOUNTS over
         #   this one at "went home", so there is no retract to double it, and the gate card does not ride one (E40 #5).
         (t_catalyst, t_second, hold + ":spiral:cut", (0, 0, 0), [
-            (dock_still("dock-f-toll-gate-to-fab"), 0, t_pledge, t_second),
+            (dock_still("dock-f-toll-gate-to-fab"), 0, t_pledge, t_nobody - 0.4),   # its retract is done before the card is thrown (one slot)
+            # the design pass (operator: "a third perspective ... Japan's rate of selling"): the month-on-month change as SIGNED bars,
+            # built from the holdings object - thrown (paper) on "here's what nobody says" over the June print, gone as Meta mounts
+            (dock_card("dock-i-japan-selling", "ev-japan-selling-v1", variant="bars", aspect="9:16"), 0, t_nobody, t_second, {"arrive": "throw", "mass": "paper", "centre": True, "card_aspect": card_aspect("dock-i-japan-selling")}),
         ], "cut", [
             carried(t_catalyst),
             # E51 (the third watch): the punch on the peak here was tied to nothing - the page returns drawn - and is cut
@@ -404,6 +417,9 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             (clip_dock("dock-a2-counter-colder"), 0, t_that, t_outro - 0.3, {"centre": True}),
         ], "cut", [   # the SNAP is this row's own transition (no dip into it); the outro row still dips
             # the three notes write in the quiet zone over "Tokyo is still on its tea break", staggered, before the host lands over the page
+            # the design pass ("spotlight the math"): the bracket from the 10-year's February low to its latest - +80 bp, measured
+            {"kind": "bracket", "at": t_moved + 0.55, "dur": 1.4, "series": 1, "from": FED["facts"]["dgs10_low_index"], "to": FED["facts"]["dgs10_last_index"],
+             "label": f"+{FED['facts']['dgs10_rise_bp_from_low']:.0f} bp", "sub": "10-year Treasury, since its February low", "color": "crimson"},
             {"kind": "note", "at": t_tokyo_still, "dur": 1.0, "text": FED_NOTES[0]},
             {"kind": "note", "at": t_tokyo_still + 0.9, "dur": 1.0, "text": FED_NOTES[1]},
             {"kind": "note", "at": t_tokyo_still + 1.8, "dur": 1.2, "text": FED_NOTES[2]},

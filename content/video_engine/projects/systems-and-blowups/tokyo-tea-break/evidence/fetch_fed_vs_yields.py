@@ -72,18 +72,22 @@ def main() -> int:
         d = dt.date(d.year + (d.month == 12), d.month % 12 + 1, 1)
     obj = {
         "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
-        "sub": f"Fed funds target flat at {fed[-1][1]:.2f}% since {last_move.strftime('%b %Y')}; the 10-year and the 30-year mortgage, %",
+        "sub": f"Fed funds, unchanged since {last_move.strftime('%b %Y')}, against the 10-year Treasury, %",
         "proof_sentence": (f"Fed funds target (upper) flat at {fed[-1][1]:.2f}% since {last_move.isoformat()}; the 10-year "
                 f"{ten_low[1]:.2f}% ({ten_low[0].isoformat()}) -> {ten_now[1]:.2f}% ({ten_now[0].isoformat()}); the 30-year mortgage "
                 f"{mort_low[1]:.2f}% ({mort_low[0].isoformat()}) -> {mort_now[1]:.2f}% ({mort_now[0].isoformat()})"),
-        "src": f"FRED DFEDTARU, DGS10, MORTGAGE30US (Federal Reserve Board; Freddie Mac PMMS) · fetched {today}",
+        "src": f"FRED · Freddie Mac · {dt.date.fromisoformat(today).strftime('%b %Y')}",   # the design pass: minimal; the IDs and the sha256 live in `proof`
+        "src_style": "compact",
         "ylabel": "%",
         "xticks": months[::2],
+        # the design pass (operator, 2026-09-07: "charts need to make sense with no captions"): TWO lines that share one scale, each
+        # named with its value at its end - the Fed's rate and the 10-year sit a point apart, so the flat step and the climb read
+        # in one frame; the mortgage (a point higher) is the third NOTE, not a third line that pushed the scale and stacked the names
         "series": [
-            {"label": "flat", "name": "Fed target", "color": "deemph", "pts": [[dec_year(d), v] for d, v in win["DFEDTARU"]]},
-            {"label": f"{ten_now[1] - ten_low[1]:+.2f} pp", "name": "10-year", "color": "crimson", "pts": [[dec_year(d), v] for d, v in win["DGS10"]]},
-            {"label": f"{mort_now[1] - mort_low[1]:+.2f} pp", "name": "30-yr mortgage", "color": "amber", "pts": [[dec_year(d), v] for d, v in win["MORTGAGE30US"]]},
+            {"label": "Fed funds", "name": f"{fed[-1][1]:.2f}%", "color": "deemph", "pts": [[dec_year(d), v] for d, v in win["DFEDTARU"]]},   # short names (s9.23b: named inline; two long names at one corner overprinted)
+            {"label": "10-year", "name": f"{ten_now[1]:.2f}%", "color": "crimson", "pts": [[dec_year(d), v] for d, v in win["DGS10"]]},
         ],
+        "mortgage": {"name": "30-year mortgage", "color": "amber", "pts": [[dec_year(d), v] for d, v in win["MORTGAGE30US"]]},   # kept on the object for a page that wants it
         "status": "REAL",
         "fetched": today,
         "facts": {
@@ -93,12 +97,14 @@ def main() -> int:
             "mortgage_at_move": mort_at[1], "mortgage_low_since_move": mort_low[1], "mortgage_low_date": mort_low[0].isoformat(),
             "mortgage_latest": mort_now[1], "mortgage_latest_date": mort_now[0].isoformat(), "mortgage_rise_bp_from_low": round((mort_now[1] - mort_low[1]) * 100, 1),
             "window_from": start.isoformat(),
+            # the bracket's data indices on series 1 (the 10-year): its low since the move -> its latest = "the math" (+80 bp)
+            "dgs10_low_index": next(i for i, (d, _v) in enumerate(win["DGS10"]) if d == ten_low[0]),
+            "dgs10_last_index": len(win["DGS10"]) - 1,
         },
         "notes": [   # the side notes the page writes as the ring is spoken (the third watch: "plenty of space on the side") - every figure from facts
             "Japan started selling in February.",
             "Rates went up immediately.",
-            f"10-year +{round((ten_now[1] - ten_low[1]) * 100)} bp, mortgage +{round((mort_now[1] - mort_low[1]) * 100)} bp since the February lows.",
-            f"The Fed's last move: {last_move.strftime('%B %Y')}.",
+            f"30-year mortgage {mort_low[1]:.2f}% -> {mort_now[1]:.2f}% over the same months.",
         ],
         "proof": proof,
         "note": ("R26-19 / E50 (2026-09-07): the hook's own claim, never charted until now. The window starts 45 days before the Fed's last move "

@@ -405,6 +405,7 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         "schema_version": SCHEMA_VERSION, "surface": "page", "builder": builder,
         "variant": variant, "title": series.get("title"), "sub": series.get("sub", ""),
         "source": series.get("src"), "quiet_zone": quiet_zone,
+        **({"src_style": series["src_style"]} if series.get("src_style") in ("compact",) else {}),   # the design pass (2026-09-07): a citation takes minimal space
         "labels": [], "values": [], "value_strings": [], "colors": [],
     }
     if builder == "object":

@@ -1,7 +1,7 @@
 {
  "title": "Our biggest customer is selling",
  "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06",
- "src": "US Treasury TIC Table 5, Major Foreign Holders · fetched 2026-09-05",
+ "src": "US Treasury TIC Table 5 \u00b7 2026-09",
  "ylabel": "$bn",
  "xticks": [
   [
@@ -1321,5 +1321,6 @@
   "low_since_2000_month": "2001-09",
   "low_since_2000": 292.9
  },
- "highlight_from": 2026.0833
+ "highlight_from": 2026.0833,
+ "src_style": "compact"
 }

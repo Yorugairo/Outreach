@@ -136,6 +136,8 @@
   html[data-aspect="9:16"] .lp-title { font-size: 68px; line-height: 1.12; white-space: normal; }
   html[data-aspect="9:16"] .lp-sub { font-size: 40px; line-height: 1.25; }
   html[data-aspect="9:16"] .lp-src { font-size: 40px; line-height: 1.25; white-space: normal; opacity: .9; }
+  .lp-src.compact { font-size: 17px; opacity: .6; letter-spacing: .01em; }   /* the design pass (operator, 2026-09-07): "cited sources should take up minimal space, not maximal" */
+  html[data-aspect="9:16"] .lp-src.compact { font-size: 26px; line-height: 1.2; opacity: .6; white-space: nowrap; }
   html[data-aspect="9:16"] .lp-title .w, html[data-aspect="9:16"] .lp-src .w { display: inline-block; white-space: nowrap; }
   html[data-aspect="9:16"] .lp-chart .val { font-size: 59px; }
   html[data-aspect="9:16"] .lp-chart .lab { font-size: 40px; }
@@ -1475,6 +1477,7 @@
   const dockGeom = (el, d, t) => {
     if (!d.place) return null;
     const R = dockReadRect(el, d), P = d.place;
+    if (d.centre) return { x: P.x, y: P.y, w: P.w };   /* a CENTRED card (the design pass): its box from the first frame, whatever its life */
     const readS = d.read_s != null ? d.read_s : DOCK_READ_S;
     const parkS = d.park_s != null ? d.park_s : DOCK_PARK_S;
     if (d.exit - d.enter < readS + parkS) return { x: R.x, y: R.y, w: R.w };   /* too short to park */
@@ -2559,7 +2562,7 @@
     if (fieldPlate) { fieldPlate.style.backgroundImage = 'url("' + A[pg.field_plate] + '")'; field.style.display = "none"; }
     const title = lpEl("div", "lp-ink lp-title", page);
     const subEl = lpEl("div", "lp-ink lp-sub", page);
-    const src = lpEl("div", "lp-ink lp-src", page);
+    const src = lpEl("div", "lp-ink lp-src" + (pg.src_style === "compact" ? " compact" : ""), page);   /* the design pass: a citation takes minimal space */
     const subText = PORTRAIT ? lpFirstClause(pg.sub || "", true) : (pg.sub || ""), srcText = PORTRAIT ? lpFirstClause(pg.source || "", false) : (pg.source || "");
     const glyphs = PORTRAIT
       ? [...lpGlyphsWrap(title, pg.title || "", seed), ...lpGlyphsWrap(subEl, subText, seed + 2), ...lpGlyphsWrap(src, srcText, seed + 1)]
@@ -4023,6 +4026,7 @@
         contact.style.transform = "scale(" + cs.scale.toFixed(3) + ", " + (cs.scale * 0.9).toFixed(3) + ")";
         contact.style.filter = "blur(" + cs.blur.toFixed(2) + "px)";   /* the depth cue: wide high up, a slit at contact */
         contact.style.opacity = (t >= d.enter && sx.phase !== "settled" ? cs.alpha * clamp01(1 - rk) : 0).toFixed(3);
+        contact.style.visibility = el.style.visibility;   /* a card hidden for a snap takes its shadow with it */
         /* the ground ANSWERS with a DIP the card rides (mass), and only a violent hit shakes it */
         if (sx.ground) worldAnswer.y += sx.ground;
         if (sx.shake && (sx.shake.x || sx.shake.y)) { worldAnswer.x += sx.shake.x; worldAnswer.y += sx.shake.y; }
