@@ -22,28 +22,60 @@ I looked at the three signature plates before proposing anything.
 Direction and repetition are inherently spatial. That is the whole case for a map
 here, and it is the only beat in the short that needs one.
 
-## Not MapLibre — the harvest already ruled on this
+## "Why not MapLibre?" — the honest answer, and a revision
 
-`remotion-ui/HARVEST-2026-09-07.md` RU-3 (`map-flight`) verdict was **index, not
-port**: it needs a browser map runtime, tile fetches and a per-frame
-`delayRender` handshake, and *"a dark tile map is the opposite of the cream
-ledger page."* It also wrote down the honest route for exactly this moment:
+Operator, 2026-09-08. Citing the harvest was not a reason, so here is the check.
 
-> *"If a script ever needs a trade route (a steel-and-paper supply line, a capital
-> flow), the honest route is a **pre-rendered still plate with our own `trace`
-> drawn over it**."*
+**MapLibre at RENDER time breaks the renderer, specifically.** `render_baseline.
+frame_png` sets the scrub and screenshots on the next tick; the only async thing
+it waits on is `__clipsSeeked` for video seeks. Remotion holds every frame with
+`delayRender()` until the map fires `idle` — **our player contains zero
+`delayRender`/`continueRender` calls**. A tile that lands one frame late is a
+different frame, and the contract is byte-identical seek-exactness (frame N
+evaluated directly == frames 0..N stepped). Add a network fetch at render time,
+which makes the visual unreproducible from the repo, and `maplibre-gl`'s weight
+inside a single-file player.
 
-A script now asks. So: **the plate is the ground, the engine draws the route.**
-That also keeps text out of the generated image, where it is unreliable.
+**That is an argument against MapLibre at RENDER time. I over-generalised it into
+"no map", and that was wrong.** Two options beat the generated image plate:
 
-**The recorded failure that applies here.** RU-3's altitude ramp carries its own
-note: at cruise the mid-Atlantic leg *"showed nothing but open water — a flat blue
-plate with a line across it, which reads as a failed render rather than a
-flight."* The lesson transfers: **a recognisable edge must stay in frame.** The
-Great Lakes silhouette is what makes Detroit and Ontario legible with no label,
-which is why the framing below is specified tight rather than continental.
+**(a) MapLibre at BUILD time.** Render the basemap once, headless, to a high-res
+PNG; commit it with its sha256. Real coastlines, styled to our tokens, no runtime
+dependency, no `delayRender` problem. The borrowed component used where it helps.
 
-## The plate
+**(b) The coastline as a PATH — recommended.** A simplified coastline is just an
+SVG path, and drawing paths in ink is the whole identity of this engine. Drawn
+with `stroke.mjs`, **the map draws itself on** like every other line on a ledger
+page: on-brand, seek-exact, no tiles, no network, no new dependency. And
+`greatCircleLine` from the harvested `map-utils.ts` is a **pure function** — it
+ports as a formula, which is the standing rule (mechanisms port, code does not).
+It gives the Tokyo→Detroit arc for free.
+
+(b) also makes the route and the map the same machinery, so the six crossings and
+the Pacific arc are the same species we already ship.
+
+## Four places in one frame — one map, two framings
+
+The operator wants Mexico, Detroit, Tokyo and Canada. All four in one frame is a
+hemisphere view, which walks straight back into RU-3's recorded failure: at that
+altitude it is mostly open water, and the Great Lakes detail — the thing that
+makes the six crossings legible — disappears.
+
+**So: one basemap, two camera framings**, which is RU-3's other transferable idea
+(*split the drawn route from the camera route*) and needs no new capability:
+
+| beat | framing | what draws |
+|---|---|---|
+| the six crossings (13.7 s) | tight on the Great Lakes, Mexico's border at the lower edge | `trace` hops + the 25% stamps |
+| Toyota crosses once (31.3 s) | `pull_back` to reveal the Pacific and Tokyo | one `greatCircleLine` arc, one 15% stamp |
+
+The pull-back IS the argument: the same map, and one crossing where there were
+six. `focus_zoom` and `pull_back` already exist as camera species.
+
+## The plate — ONLY if we take route (a) or the image fallback
+
+Route (b) needs no generated plate at all: the coastline is drawn. What follows
+is the fallback if we want a painted ground under the ink.
 
 Same house style, same character binding, same `no on-screen text` rule as the
 existing signature plates (`sig-b-six-gates_meta.json` is the format of record).
@@ -96,5 +128,11 @@ the plate framing follows from it.
 
 ## Status
 
-Prompt written, not dispatched. Needs the operator's word on the timing question
-above, because it changes what the plate has to hold.
+**Route not chosen.** (b) — the coastline as a drawn path — is the recommendation
+and it needs no image generation, only a simplified coastline (public geodata)
+and `greatCircleLine`, which we already hold. (a) is the fallback if a painted
+ground is wanted under the ink. The prompt above is written either way.
+
+Still open, and it changes the framing: the crossings beat is **4.57 s**, and six
+traced hops plus six stamps will not fit at a readable pace — the same rushing
+M21 now catches on the chart pages. Three round trips, or more seconds.
