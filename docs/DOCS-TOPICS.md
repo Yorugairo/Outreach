@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4508 topics, 4611 citation edges. The 200 largest topics follow,
+4508 topics, 4610 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (144)
@@ -1466,7 +1466,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:1 — Academic Literature Monograph: Mathematical Foundations of 2D & 2.5D Drawing and Animation Engines — Unified Academic Synthesis: Differential Geometry, Biomechanical Motor Control, Variational Continuum Mechanics, and Per
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:80 — 1. Mechanics of 2D/2.5D Drawing Engines
 - docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:1 — 43 — The scene graph, transforms, and the object→chart morph — Extracted from `02_drawing_engine_and_transforms_research.md` (§1, §3, §4) and
-  cited by: docs/portable/OPERATOR-RULINGS.md:1495
 - docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:13 — 43.1 Retained mode, and why we are already right — Immediate mode (raw Canvas/WebGL) issues draw calls per frame with no persistent object
 - docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:1 — Research brief — what the drawing engine's builder does not know — For the Gemini deep-research pass, 2026-09-04. Same process as speech (docs 32–37)
 - docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:10 — 1. The honest diagnosis — The operator's premise is that the math is already there. It is, and it is not the
@@ -2189,7 +2188,6 @@ at most 12 sections each - the JSONL holds every one.
 ## z-stack (15)
 
 - docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:1 — 43 — The scene graph, transforms, and the object→chart morph — Extracted from `02_drawing_engine_and_transforms_research.md` (§1, §3, §4) and
-  cited by: docs/portable/OPERATOR-RULINGS.md:1495
 - docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37 — 43.3 The Z-stack — Painter's algorithm, strictly back-to-front. Depth cue without 3D:
   cited by: docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:28, docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:99, docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:15, docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:167, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:296, +3 more
 - docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:1 — 45 — Parallax and plate motion: what may move, how much, and what is banned — Extracted from `05_comfyui_parallax_technical_standards.md` and

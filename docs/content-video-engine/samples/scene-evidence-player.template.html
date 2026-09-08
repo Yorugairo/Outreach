@@ -2405,13 +2405,15 @@
      rest and the page is off the top of the frame for the middle of the flight), the tumble is the pill's 9 deg, the flight a little
      longer than the pill's for the height, and the landing is the paper material's own: the receiver's dip on an underdamped spring
      (zeta 0.67 - that is the wobble) and the restitution hop h1 = e^2 h0, which the tall arc makes visible - the flop. Dials. */
-  const THROW_S = 0.6, THROW_ARC = 0.8, THROW_SPIN = 9, THROW_SETTLE_S = 1.2, THROW_CARD = 0.62;   /* THROW_CARD: the flat-growth law's card size (throw_grow: snap) [DERIVED: the dock's reading size] */
+  const THROW_S = 0.7, THROW_ARC = 1.5, THROW_SPIN = 9, THROW_SETTLE_S = 1.2, THROW_CARD = 0.62;   /* THROW_CARD: the flat-growth law's card size (throw_grow: snap) [DERIVED: the dock's reading size] */
   /* the DEPTH ARC's dials [DERIVED, HG2 tunes by eye]: Z0 0.55 = 1.8x the stage as the card passes the camera; Z_LIFT 0.6 = the apex
      at z ~1.35 (0.74x); PITCH 55 deg seen from below as it passes, flat at the contact; BEND 35 deg per unit of motion squash; the
      camera follows 35 % of the card's height; the perspective is a phone held at arm's length (1600 px on a 1080 stage) */
-  const THROW_Z0 = 0.55, THROW_Z_LIFT = 0.6, THROW_PITCH = 55, THROW_BEND = 35, THROW_FOLLOW = 0.35, THROW_PERSP = 1600;
-  const THROW_FROM = { below: { x: STAGE_W * 0.08, y: STAGE_H * 1.25 }, above: { x: -STAGE_W * 0.08, y: -STAGE_H * 1.25 },
-                       right: { x: STAGE_W * 1.25, y: STAGE_H * 0.08 }, left: { x: -STAGE_W * 1.25, y: STAGE_H * 0.08 } };
+  /* THROW_GROW_AT: the card starts growing into the world at this fraction of the flight (the descent); the ARC (1.5 x the chord,
+     set with THROW_ARC above) is what carries a 0.62 card clear of the top edge with the camera following a quarter of its height */
+  const THROW_GROW_AT = 0.5, THROW_PITCH = 45, THROW_BEND = 35, THROW_FOLLOW = 0.25, THROW_PERSP = 1600;
+  const THROW_FROM = { below: { x: STAGE_W * 0.06, y: STAGE_H * 1.1 }, above: { x: -STAGE_W * 0.06, y: -STAGE_H * 1.1 },
+                       right: { x: STAGE_W * 1.1, y: STAGE_H * 0.06 }, left: { x: -STAGE_W * 1.1, y: STAGE_H * 0.06 } };
   const LP_BADGE_COL = { coral: "crimson", teal: "teal", cobalt: "cobalt", ink: "deemph", sunflower: "amber" };   /* badge accent -> series colour (the key) */
   /* THE IDLE (E49, P47 T5): every held thing carries a NAMED subtle idle - a pure function of t, behind kinetics.idle.
      The class defaults below; a scene's world.idle overrides its page or plate ("none" is explicit stillness, declared);
@@ -3855,18 +3857,19 @@
       const from = THROW_FROM[pg.throw_from] || THROW_FROM.below, F = +pg.throw_s > 0 ? +pg.throw_s : THROW_S, tt = t - scene.span[0];
       const sx = throwXf(from, scene.world.mass || "paper", tt, { FLIGHT_S: F, ARC: THROW_ARC, SPIN_DEG: THROW_SPIN });
       const u = clamp01(tt / F), landed = tt >= F;
-      /* THE DEPTH ARC (operator, 2026-09-08: "the card has to throw up, entering/passing the frame partially and obscuring most of
-         it, then land with weight as the convincing world"). The card is thrown UP from the viewer's side: NEAR the camera as it
-         enters (z = THROW_Z0, so it is larger than the stage and only its top is in frame), receding as it rises (z climbs by
-         THROW_Z_LIFT at the apex, the card small and mostly above the frame), and coming down onto the world plane (z = 1) at the
-         contact. Apparent size is 1/z (43: the 2.5D camera; 24: planes scale by depth). It PITCHES with the flight - steep as
-         it passes the camera, flat at the landing - under a real perspective, and the motion squash (42 s42.3, from throwXf) is
-         read as paper FLEX about the same axis. `throw_grow: "snap"` keeps the flat min-jerk growth for comparison. */
+      /* THE CARD LEAVES THE FRAME (operator, 2026-09-08, on the depth-arc draft that passed the camera at 1.8x: "it shouldn't cut and
+         clip like that ... what it's supposed to do is LEAVE the frame, not cut and clip ON the frame"). So the page is a CARD for the
+         whole rise - THROW_CARD of the stage, the dock's size, seen whole - thrown up on an arc tall enough that it goes out of the
+         top of the frame entirely, and it GROWS into the world only on the way back down (z from 1/THROW_CARD to 1 by min-jerk over
+         the descent, apparent size 1/z), so that at the contact it is the stage. It pitches under a real perspective - steep as it
+         leaves the bottom edge, flat at the landing - and the motion squash (42 s42.3) reads as paper flex. `throw_grow: "snap"`
+         keeps the earlier flat growth timed to SNAP_S for comparison. */
       let scaleK, pitch = 0;
       if (pg.throw_grow === "snap") {
         scaleK = landed ? 1 : THROW_CARD + (1 - THROW_CARD) * minJerk(clamp01((tt - (F - SNAP_S)) / SNAP_S));
       } else {
-        const z = landed ? 1 : THROW_Z0 + (1 - THROW_Z0) * u + THROW_Z_LIFT * 4 * u * (1 - u);
+        const g = landed ? 1 : minJerk(clamp01((u - THROW_GROW_AT) / (1 - THROW_GROW_AT)));
+        const z = (1 / THROW_CARD) * (1 - g) + 1 * g;
         scaleK = 1 / z;
         pitch = landed ? 0 : -THROW_PITCH * Math.pow(1 - u, 1.5);
       }

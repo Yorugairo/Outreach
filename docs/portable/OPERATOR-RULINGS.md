@@ -1567,14 +1567,19 @@ motion watch: *"that throw isn't right, it's not bending/reacting with the world
 the evidence card it has the stop motion learnings that gave it weight, mass, etc … it has to go
 up, bend/warp, probably with a camera follow, then land"* and *"the card has to throw up,
 entering/passing the frame partially and obscuring most of it, then land with weight as the
-convincing world"*). A DEPTH ARC, not a scale-up: the card is thrown UP from the viewer's side —
-near the camera as it enters (z 0.55, 1.8× the stage, only its top in frame, obscuring most of
-it as it passes), receding at the apex (z ≈ 1.35), down onto the world plane at the contact
-(z = 1); apparent size 1/z (docs 43 / 24). It PITCHES under a real perspective — 55° seen from
-below as it passes, flat at the landing — and the motion squash (42 §42.3) reads as paper flex.
-The camera FOLLOWS 35 % of its height (the worlds ride the follow; the outgoing plate scales
-about its bottom edge so no black shows), the ground takes the paper dip, and the dock's
-contact shadow darkens the world beneath as it comes down. `throw_grow: "snap"` keeps the flat
+convincing world"*). The first cut of that passed the camera at 1.8× and was clipped by the
+frame edges; the operator: *"no, it shouldn't cut and clip like that, that's wrong; what it's
+supposed to do is LEAVE the frame, not cut and clip ON the frame."* So the page is a CARD for
+the whole rise — 0.62 of the stage, the dock's size, seen whole — thrown up on an arc tall
+enough (1.5× the chord) that it goes out of the top of the frame entirely, and it grows into
+the world only on the way back down (z from 1/0.62 to 1 by min-jerk over the descent, apparent
+size 1/z), so that at the contact it is the stage. It pitches under a real perspective — 45°
+as it leaves the bottom edge, flat at the landing — and the motion squash (42 §42.3) reads as
+paper flex. The camera FOLLOWS a quarter of its height (the worlds ride the follow; the
+outgoing plate scales about its bottom edge so no black shows), the ground takes the paper dip,
+and the dock's contact shadow darkens the world beneath as it comes down. Measured on the
+frames: whole card at 0.1 s, leaving the top at 0.2 s, gone at 0.4 s, back and growing at
+0.6 s, the world at 0.7 s. `throw_grow: "snap"` keeps the flat
 min-jerk growth for comparison. Dials, all `[DERIVED]`, HG2 tunes by eye; `throw_from` below |
 above | left | right, `throw_s` per page, `throw=<grow>,<from>,<s>` on the plate id.
 
