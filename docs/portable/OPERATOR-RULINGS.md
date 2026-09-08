@@ -1562,8 +1562,13 @@ the chart over, it 'wobbles' out of screen, before flopping back down."* So the 
 Tokyo dock's at page size: arc 0.8 (the page clears the top edge at the apex), the pill's 9°
 tumble, a 0.6 s flight, and the landing is the paper material's own — the receiver's dip on
 the underdamped spring (ζ 0.67, the wobble) and the restitution hop h1 = e²h0, which the tall
-arc makes visible (the flop). Dials, all `[DERIVED]`; `throw_from` below | above | left | right,
-`throw_s` per page.
+arc makes visible (the flop). **And the snap rides the landing** — *"the snap-in happens while
+the page is landing, that way it lands as a full page cleanly over the old world; by the time it
+lands the ledger page IS the new world."* The page flies as a CARD (`THROW_CARD` 0.62 of the
+stage, the dock's reading size) and grows to the stage by min-jerk over `SNAP_S`, finishing at
+the contact: the snap enter's growth timed to the throw's landing, so there is no seam and
+nothing to reveal — the plate entering the world is the whole transition. Dials, all
+`[DERIVED]`; `throw_from` below | above | left | right, `throw_s` per page.
 
 ## E51 — A push-in is only used tied to something that just landed; an untied zoom is filler (2026-09-07)
 

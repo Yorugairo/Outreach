@@ -2403,7 +2403,7 @@
      rest and the page is off the top of the frame for the middle of the flight), the tumble is the pill's 9 deg, the flight a little
      longer than the pill's for the height, and the landing is the paper material's own: the receiver's dip on an underdamped spring
      (zeta 0.67 - that is the wobble) and the restitution hop h1 = e^2 h0, which the tall arc makes visible - the flop. Dials. */
-  const THROW_S = 0.6, THROW_ARC = 0.8, THROW_SPIN = 9, THROW_SETTLE_S = 1.2;
+  const THROW_S = 0.6, THROW_ARC = 0.8, THROW_SPIN = 9, THROW_SETTLE_S = 1.2, THROW_CARD = 0.62;   /* THROW_CARD: the page's scale in flight - a dock-sized card [DERIVED: the dock's reading size] */
   const THROW_FROM = { below: { x: PORTRAIT ? 90 : 160, y: STAGE_H * 1.12 }, above: { x: PORTRAIT ? -90 : -160, y: -STAGE_H * 1.12 },
                        right: { x: STAGE_W * 1.12, y: PORTRAIT ? 120 : 80 }, left: { x: -STAGE_W * 1.12, y: PORTRAIT ? 120 : 80 } };
   const LP_BADGE_COL = { coral: "crimson", teal: "teal", cobalt: "cobalt", ink: "deemph", sunflower: "amber" };   /* badge accent -> series colour (the key) */
@@ -3846,10 +3846,15 @@
     }
     let throwCss = "";
     if (thrown) {   /* THROW_FROM is where the flight starts, as an offset from the page's rest (px); the arc lifts against it */
-      const from = THROW_FROM[pg.throw_from] || THROW_FROM.below;
-      const sx = throwXf(from, scene.world.mass || "paper", t - scene.span[0], { FLIGHT_S: +pg.throw_s > 0 ? +pg.throw_s : THROW_S, ARC: THROW_ARC, SPIN_DEG: THROW_SPIN });
+      const from = THROW_FROM[pg.throw_from] || THROW_FROM.below, F = +pg.throw_s > 0 ? +pg.throw_s : THROW_S, tt = t - scene.span[0];
+      const sx = throwXf(from, scene.world.mass || "paper", tt, { FLIGHT_S: F, ARC: THROW_ARC, SPIN_DEG: THROW_SPIN });
+      /* THE SNAP ON THE LANDING (operator, 2026-09-08: "the snap-in happens while the page is landing, that way it lands as a full
+         page cleanly over the old world - by the time it lands the ledger page IS the new world"): the page flies as a CARD
+         (THROW_CARD of the stage, the dock's size) and grows to the stage by min-jerk over SNAP_S, finishing exactly at the
+         contact - the snap enter's growth, timed to the throw's landing. */
+      const snapK = minJerk(clamp01((tt - (F - SNAP_S)) / SNAP_S)), cardScale = THROW_CARD + (1 - THROW_CARD) * snapK;
       st.page.style.transformOrigin = "50% 50%";
-      throwCss = stopCss(sx).trim() + " ";
+      throwCss = stopCss(sx).trim() + " scale(" + cardScale.toFixed(4) + ") ";
     }
     st.page.style.transform = snapCss + throwCss + "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")"
       + idleCssFor("page", pg.idle, t, st.seed, 1);   /* E49: the page breathes while it holds under a sentence */
