@@ -176,6 +176,51 @@ CTR and audience retention are separate metrics, so changing both is still
 attributable: CTR answers the package, retention past 1:30 answers the
 opening.
 
+## The host: an open EXPERIMENT, not a decision (operator, 2026-09-08)
+
+*"We don't know yet, we have to test retention over time."*
+
+**The record, corrected.** `packaging/TITLE-CANDIDATES.md`, locked 2026-09-01:
+*"Robo mascot kept (host stays in-episode/banner; per-video character swap would
+break mascot recognition — robo is the permanent thumbnail signature)."* Two
+roles, kept apart: **robo = mascot = the thumbnail signature**, **Mike = host =
+in-episode and banner**. There is no ruling that a host may not appear in a
+video, and putting the ROBOT in the episode is the character swap that note
+exists to prevent.
+
+**The gap.** Ep1 shipped with **73 unique worlds across 75 scenes and zero host
+plates**. The decision was recorded and never executed. `world-broadcast-set-v2`
+is in the build, unoccupied.
+
+**Why this is testable in the SAME upload as the rewrite.** Audience retention is
+a per-second curve, so a change confined to a narrow window is attributable even
+when other things changed elsewhere. The opening rewrite moves 0:00–1:30. The
+host's candidate windows are the script's genuinely first-person beats, which sit
+well clear of it:
+
+- the turn — *"I used to risk-score portfolios for a bank"* (~3:20)
+- the concede — *"Put my agreement on the record… Mine sits somewhere else entirely"*
+- the tripwire — *"I built a monitor for it"*, *"I own them on purpose"* (~10:00+),
+  which is also where G36/G44 fire and where the lifetime curve's late fade begins
+
+**How to read it — the trap.** A better opening means more people reach 3:20, so
+the absolute level there rises for reasons that have nothing to do with the host.
+**Judge the SLOPE through his window, not the level at it.** (This is the same
+error as reading ep1's flat body as a good body: flat measured retention, not
+quality.)
+
+**Prediction, written BEFORE the upload so this is a test and not a story told
+afterwards:** if the host earns his place, the curve's slope across his windows
+is flatter than the same windows in the ep1 baseline, and the late fade from
+~9:26 is shallower. If the slope is unchanged, he is costing real estate for
+recognition value only — which is a legitimate reason to keep him, but a
+different one, and it should then be stated as a brand decision rather than a
+retention one.
+
+**Not decided here, and it is the operator's:** whether Mike is the narrator on
+camera for those beats or a presenter who appears between them. That decides
+whether SHOT-TABLE-H reserves space for a character at all.
+
 ## Publication (operator decision — RECOMMENDED, not confirmed)
 
 Re-cut, **unlist** the original (never delete — it is the analytics baseline
