@@ -114,14 +114,34 @@ uncluttered and the three plants are far enough apart for six hops to be legible
 animation. A baked line cannot count, cannot accumulate, and cannot be timed to
 the VO — and a drawn arrow would fight the `trace` that follows it.
 
-## DISPATCH — blocked here, one call elsewhere
+## DISPATCH — one operator launch away (corrected 2026-09-08, post-compact)
 
-I cannot enqueue this from this session. `.mcp.json` carries `remotion-ui`,
-`video-engine` and `sigmap`; the **google-flow-driver MCP is not connected**, and
-`flow_enqueue_batch` needs a manifest whose `capability_snapshot` binds to an
-artifact only `flow_capture_capabilities` can produce. I am not able to fake
-either, so the prompt above is the deliverable and the enqueue is one call from a
-session that has the driver attached.
+**The blocker I recorded before was the wrong one.** I named `flow_enqueue_batch`
+and its `capability_snapshot`; that is the browser-extension bridge lane, **retired
+2026-09-03** (CAPABILITIES.md). The live lane is the CDP driver behind the
+`video-engine` MCP (`create_flow_image`), which is how the four `sig-*` plates
+were rolled on 2026-09-07 — and it does not need the MCP attached to a session:
+`mp-host-transitions-v1/dispatch_batch.py` set the precedent of speaking JSON-RPC
+to `mcp/server.mjs` over stdio. Verified here: the server answers `tools/list`
+with `create_flow_image` (2026-09-08).
+
+What IS missing is the browser. The driver connects to the dedicated automation
+profile `C:\Users\Snipe\.flow-chrome-profile` on **9223** (9222 default profile
+as fallback); neither is listening now (the profile was last touched 09:46
+today, so it was up this morning). Launching it means a signed-in Google
+session, which is the operator's — never entered by a script.
+
+- **Order, frozen:** `omni-video/sig-b-crossings-map.order.json` (prompt above,
+  `HollowStickMike`, 9:16, project `d171ec1f`, zero-credit Nano Banana Pro).
+- **Dispatcher:** `omni-video/dispatch_crossings_map.py` — checks the CDP
+  precondition and ABORTs (exit 2, proven) without it; refuses to overwrite an
+  existing plate (a re-roll is a new order file); logs to
+  `dispatch-crossings-map.log`; the frame lands quarantined in `stills/`.
+
+The two steps:
+
+    & "C:\Program Files\Google\Chrome\Application\chrome.exe" --user-data-dir=C:\Users\Snipe\.flow-chrome-profile --remote-debugging-port=9223
+    python content/video_engine/projects/systems-and-blowups/japan-tariff-trick/omni-video/dispatch_crossings_map.py
 
 ## The choreography over it — what the engine draws
 
@@ -153,6 +173,13 @@ seconds.
 ## Status
 
 Operator said generate (2026-09-08). The prompt is final and the beat has its
-9.5 s. **Dispatch is blocked in this session only** — see above. Route (b), the
-drawn coastline, remains the cheaper long-term answer and needs no plate at all;
-this order is route (a), the painted ground, which is what "generate" asked for.
+9.5 s. **Dispatch is one operator launch away** — see above; the order file and
+the dispatcher are on disk. Route (b), the drawn coastline, remains the cheaper
+long-term answer and needs no plate at all; this order is route (a), the painted
+ground, which is what "generate" asked for.
+
+**Lands together with the plate (not before):** `build_short.py:184`
+`t_gates = cut("When you buy")` → `cut("Auto parts")`, and `plate-gates` →
+the map plate (`build_short.py:59`), plus the six `trace` hops and stamps whose
+coordinates need the generated geometry. Moving the boundary onto the existing
+still alone trips M16.
