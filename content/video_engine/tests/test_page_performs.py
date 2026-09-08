@@ -445,3 +445,21 @@ def test_the_builders_the_goldens_do_not_cover_key_their_marks_too(kind, wanted)
         assert set(wanted) <= keys, f"{kind}: missing {sorted(set(wanted) - keys)} (got {sorted(keys)[:24]})"
     finally:
         P.close()
+
+
+def test_m21_has_a_FLOOR_too_and_a_page_that_undraws_is_exempt():
+    """E50 names 6-8s, and the gate only ever enforced the 12s ceiling - so a chart drawn and cut in the same breath
+    PASSED. Measured on the tariff short: the hook page scored 0.0s deployed and passed. The floor closes that.
+
+    The exemption is the distinction the operator's own ruling makes: 'then it UN-DRAWS or becomes the next thing'.
+    A page that ends its own life with an undraw is leaving on purpose; only a page cut short is being rushed."""
+    caps = [{"kind": "build_to", "at": 4.4, "dur": 3.0, "target": {"kind": "datum", "index": 3}}]
+    sc = _scene(caps); sc["span"] = [0.0, 8.0]          # the chart lands at 7.4 and the scene cuts at 8.0
+    g = G._deployed_gate([sc])
+    assert g.level == "WARN" and "short" in g.message and "RUSHED" in g.message, g.message
+    assert "arrive+build" in g.message, "the author needs the SPLIT - a span is arrival + build + deployed"
+    # ... and the same short life is fine when the page chose to leave
+    und = caps + [{"kind": "undraw", "at": 7.6, "dur": 0.4, "target": {"kind": "datum", "index": 0}}]
+    sc2 = _scene(und); sc2["span"] = [0.0, 30.0]
+    assert G._deployed_gate([sc2]).level == "PASS", "an undraw is a deliberate exit, not a rushed chart"
+    assert G.DEPLOY_MIN_S == 6.0, "the floor is E50's own lower bound, not a new threshold"

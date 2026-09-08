@@ -82,6 +82,11 @@ STOP_ON1_PX_S = 250        # P47 T1 [DERIVED: CADENCE.ON1_PX_S, the brief :185-1
 STOP_THROW_DX, STOP_THROW_DY, CARD_W_DEFAULT = 240, 160, 864   # the template's throw offsets and the .dock width, mirrored
 SRC_M20 = "P47 T1 (the brief :185-193, the cadence rule): a throw steps on 1s above 250 px/s, on 2s below - reported, not scored, until HG2 tunes it"
 DEPLOY_AVG_S, DEPLOY_MAX_S = 8.0, 12.0   # E50 [OPERATOR 2026-09-07]: a chart's deployed life - 6-8 s from its LAST data mark on average, 12 s at most
+DEPLOY_MIN_S = 6.0   # ... and 6 s is E50's own LOWER bound. The gate only ever enforced the ceiling, so a chart drawn and
+                     # cut in the same breath PASSED - the tariff short's hook page scored 0.0 s and passed (operator,
+                     # 2026-09-08: "it sounds more like our problem for rushing the charts"). The arrival is not the
+                     # thing to cut: a page that is short of deployed life needs a LONGER SPAN, and the gate now says
+                     # how many seconds short it is.
 PUSH_TIE_BEFORE_S, PUSH_TIE_AFTER_S = 1.5, 0.3   # [DERIVED] a push is TIED when a landing on its scene falls inside (at - 1.5 s, at + 0.3 s)
 SRC_M22 = "E51 (operator 2026-09-07): a push-in is only used tied to something - pushing into a newly landed badge or data series; a zoom on a thing that just sits there is filler"
 SRC_M21 = "E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing"
@@ -623,14 +628,17 @@ def _page_land_offset(scene: dict) -> float:
     (E45 s2: the mount IS the roll-out, the savor stays) mount_s + PAGE_BUILD_END_S - ROLL, the roll being the
     only beat a mount skips (the player defaults mount_s to the FIELD beat when the spec carries none)."""
     page = ((scene or {}).get("world") or {}).get("page") or {}
+    # a page may draw over its own seconds (page.build_s); the gate's landing must move with the player's, or the two
+    # disagree about when the chart is finished and the deployed life is measured against the wrong mark
+    extra = max(0.0, float(page.get("build_s") or LP_BUILD_S) - LP_BUILD_S)
     if page.get("enter") == "mount":
         mount_s = float(page.get("mount_s") or LP_FIELD_S)
-        return mount_s + PAGE_BUILD_END_S - LP_ROLL_S
+        return mount_s + PAGE_BUILD_END_S - LP_ROLL_S + extra
     if page.get("enter") == "morph":   # P47 T3: the morph replaces the roll, the savor, the soak and the punch; the build starts as it ends
-        return float(page.get("morph_s") or MORPH_S) + LP_BUILD_S
+        return float(page.get("morph_s") or MORPH_S) + LP_BUILD_S + extra
     if page.get("enter") in ("spiral", "snap"):   # a returning page, or a card become the world (P47 T7): arrives built
         return 0.0
-    return PAGE_BUILD_END_S
+    return PAGE_BUILD_END_S + extra
 
 def _first_chart_window(tl: dict) -> tuple[float, float, str]:
     """M11's window and the mode that set it: 0:00-0:10 on a SHORT (E44 - the first ledger page rolls
@@ -898,14 +906,47 @@ def _push_tie_gate(scenes: list[dict]) -> Gate | None:
     return Gate("M22", "PASS", "every push is tied to a landing on its scene", SRC_M22)
 
 
+def _end_of(scenes: list[dict], scene_id: str) -> float:
+    for s in scenes:
+        if str(s.get("scene_id", "?")) == scene_id and s.get("span"):
+            return float(s["span"][1])
+    return 0.0
+
+
+def _span_of(scenes: list[dict], scene_id: str) -> float:
+    for s in scenes:
+        if str(s.get("scene_id", "?")) == scene_id and s.get("span"):
+            return round(float(s["span"][1]) - float(s["span"][0]), 2)
+    return 0.0
+
+
+def _arrive_of(scenes: list[dict], scene_id: str) -> float:
+    """Arrival + build for one page - the part of the span that is NOT deployed life."""
+    for s in scenes:
+        if str(s.get("scene_id", "?")) == scene_id:
+            return round(_page_land_offset(s), 2)
+    return 0.0
+
+
 def _deployed_gate(scenes: list[dict]) -> Gate | None:
     """M21 (E50): the chart's deployed life per ledger page - over DEPLOY_MAX_S WARN, over DEPLOY_AVG_S INFO, else PASS."""
     lives = _deployed_lives(scenes)
     if not lives:
         return None
     row = lambda l: f"{l[0]} {l[3]:.1f}s ({_mm(l[1])} -> {_mm(l[2])})"
+    # the SPLIT the author needs: a span is arrival + build + deployed, and only the last of the three is E50's clock
+    split = lambda l: (f"{l[0]} {l[3]:.1f}s deployed of a {_span_of(scenes, l[0]):.1f}s span "
+                       f"(arrive+build {_arrive_of(scenes, l[0]):.1f}s), {DEPLOY_MIN_S - l[3]:.1f}s short")
+    # the floor applies only to a page CUT short. A page that ends its own life with an undraw is LEAVING on purpose -
+    # E50's "then it un-draws or becomes the next thing" - and a deliberate exit is not a rushed chart.
+    short = [l for l in lives if l[3] < DEPLOY_MIN_S and l[2] >= _end_of(scenes, l[0]) - 1e-6]
     over = [l for l in lives if l[3] > DEPLOY_MAX_S]
     long = [l for l in lives if DEPLOY_AVG_S < l[3] <= DEPLOY_MAX_S]
+    if short and not over:
+        return Gate("M21", "WARN", f"{len(short)} page(s) deployed under {DEPLOY_MIN_S:.0f}s after the last data mark: "
+                    + "; ".join(split(l) for l in short[:8])
+                    + " - the chart is being RUSHED, not held: give the span the seconds (the arrival is the art, so add"
+                      " to the span or to page.build_s rather than cutting the mount)", SRC_M21)
     if over:
         return Gate("M21", "WARN", f"{len(over)} page(s) deployed past {DEPLOY_MAX_S:.0f}s after the last data mark: " + "; ".join(row(l) for l in over[:8])
                     + " - un-draw it (undraw) or let it become the next thing (figure, another display, the morph)", SRC_M21)

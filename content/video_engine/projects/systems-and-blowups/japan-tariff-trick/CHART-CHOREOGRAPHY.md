@@ -102,6 +102,44 @@ example working as intended, not an error. The recast stands as a candidate.
 **C. #5 is the natural ring.** It is the widest claim in the short and it lands
 last; a `spiral` enter would mark it as a return rather than a sixth new thing.
 
+## The timing model (operator, 2026-09-08)
+
+*"The arrival is the art. It sounds more like our problem for rushing the charts…
+maybe we need to separate the timing of the build or transition vs the timing of
+the chart itself."*
+
+That is now how the gate reports it. **A span is three things, and only the last
+is E50's clock:**
+
+    span  =  arrival (mount + roll + savor + field + punch)  +  build  +  DEPLOYED
+
+Measured on this short, arrival+build is a near-constant **~7.5 s** (8.7 s on the
+hook page, whose mount is the longest at 2.02 s). That is the fixed cost of the
+art, and it is not the thing to cut. So the floor falls out as arithmetic:
+
+> **a ledger page needs roughly a 13.5 s span** — ~7.5 s to arrive and build,
+> plus E50's 6 s minimum to be read.
+
+Against that, four of five pages are short, and the gate now names the shortfall:
+
+| page | span | arrive+build | deployed | short by |
+|---|---|---|---|---|
+| s02 holdings | 11.9 s | 8.7 s | **0.0 s** | **6.0 s** |
+| s04 cascade | 13.0 s | 7.5 s | 5.4 s | 0.6 s |
+| s06 receipt | 10.8 s | 7.5 s | 3.3 s | 2.7 s |
+| s08 selling | 13.6 s | 7.5 s | 6.1 s | — passes |
+| s11 customs | 10.4 s | 7.6 s | 2.9 s | 3.1 s |
+
+Only s08, at 13.6 s, clears it — which is exactly the arithmetic above. The
+operator's instinct of "an extra ~2 seconds" is right in direction; for three of
+these pages the real number is 2.7–6.0 s.
+
+**M21 gained the floor it never had.** E50 says 6–8 s and 12 s at most; the gate
+only ever enforced the ceiling, so a chart drawn and cut in the same breath
+PASSED — which is how s02 shipped at 0.0 s. The floor is E50's own lower bound,
+not a new threshold. **A page that ends its own life with an `undraw` is exempt**:
+that is leaving on purpose, which is what the ruling asks for, not a rushed chart.
+
 ## The rule this ledger proposes
 
 Every chart declares its exit in the shot table, and `cut` is a choice that has
