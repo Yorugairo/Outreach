@@ -2314,7 +2314,7 @@
    "scene_id": "s01",
    "world": {
     "asset_id": "plate-podium",
-    "sha256": "5d983fd46dcf6728eecd4f1e7966c751ee4a387587cfeaaa690b49ad5bfe2749",
+    "sha256": "d0af89087b945c9a31aaff4a8321b59aee316681ee5af601e9fa11293043a2f1",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -3670,7 +3670,7 @@
    "exit": "cut",
    "span": [
     1.82,
-    13.73
+    11.78
    ],
    "docks": [],
    "species": [
@@ -3689,7 +3689,7 @@
    "scene_id": "s03",
    "world": {
     "asset_id": "plate-gates",
-    "sha256": "d114dbdf775358236a7a78b143d33768a305aad2f5297a598d370bb5968b3e14",
+    "sha256": "9bcfcb6fc83a3579bb3a0a23173faa9eab4ffea65eccfed988abaa8d6e4eaf41",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -3699,11 +3699,246 @@
    },
    "exit": "dip",
    "span": [
-    13.73,
+    11.78,
     18.3
    ],
    "docks": [],
-   "species": []
+   "species": [
+    {
+     "kind": "trace",
+     "at": 13.66,
+     "dur": 4.64,
+     "color": "#B0201F",
+     "target": {
+      "kind": "region",
+      "x0": 0.215,
+      "y0": 0.34,
+      "x1": 0.65,
+      "y1": 0.425
+     },
+     "hop": {
+      "from": [
+       0.215,
+       0.425
+      ],
+      "to": [
+       0.65,
+       0.34
+      ],
+      "bow": 0.16,
+      "draw_s": 0.55,
+      "width": 9
+     }
+    },
+    {
+     "kind": "callout",
+     "at": 14.21,
+     "dur": 4.09,
+     "label": "25%",
+     "pad": 22,
+     "label_scale": 2.2,
+     "target": {
+      "kind": "point",
+      "x": 0.65,
+      "y": 0.34
+     }
+    },
+    {
+     "kind": "trace",
+     "at": 14.18,
+     "dur": 4.12,
+     "color": "#B0201F",
+     "target": {
+      "kind": "region",
+      "x0": 0.215,
+      "y0": 0.34,
+      "x1": 0.65,
+      "y1": 0.425
+     },
+     "hop": {
+      "from": [
+       0.65,
+       0.34
+      ],
+      "to": [
+       0.215,
+       0.425
+      ],
+      "bow": 0.16,
+      "draw_s": 0.55,
+      "width": 9
+     }
+    },
+    {
+     "kind": "callout",
+     "at": 14.73,
+     "dur": 3.57,
+     "label": "25%",
+     "pad": 22,
+     "label_scale": 2.2,
+     "target": {
+      "kind": "point",
+      "x": 0.215,
+      "y": 0.425
+     }
+    },
+    {
+     "kind": "trace",
+     "at": 14.69,
+     "dur": 3.61,
+     "color": "#B0201F",
+     "target": {
+      "kind": "region",
+      "x0": 0.215,
+      "y0": 0.425,
+      "x1": 0.455,
+      "y1": 0.87
+     },
+     "hop": {
+      "from": [
+       0.215,
+       0.425
+      ],
+      "to": [
+       0.455,
+       0.87
+      ],
+      "bow": 0.16,
+      "draw_s": 0.55,
+      "width": 9
+     }
+    },
+    {
+     "kind": "callout",
+     "at": 15.24,
+     "dur": 3.06,
+     "label": "25%",
+     "pad": 22,
+     "label_scale": 2.2,
+     "target": {
+      "kind": "point",
+      "x": 0.455,
+      "y": 0.87
+     }
+    },
+    {
+     "kind": "trace",
+     "at": 15.21,
+     "dur": 3.09,
+     "color": "#B0201F",
+     "target": {
+      "kind": "region",
+      "x0": 0.215,
+      "y0": 0.425,
+      "x1": 0.455,
+      "y1": 0.87
+     },
+     "hop": {
+      "from": [
+       0.455,
+       0.87
+      ],
+      "to": [
+       0.215,
+       0.425
+      ],
+      "bow": 0.16,
+      "draw_s": 0.55,
+      "width": 9
+     }
+    },
+    {
+     "kind": "callout",
+     "at": 15.76,
+     "dur": 2.54,
+     "label": "25%",
+     "pad": 22,
+     "label_scale": 2.2,
+     "target": {
+      "kind": "point",
+      "x": 0.165,
+      "y": 0.38
+     }
+    },
+    {
+     "kind": "trace",
+     "at": 15.72,
+     "dur": 2.58,
+     "color": "#B0201F",
+     "target": {
+      "kind": "region",
+      "x0": 0.215,
+      "y0": 0.34,
+      "x1": 0.65,
+      "y1": 0.425
+     },
+     "hop": {
+      "from": [
+       0.215,
+       0.425
+      ],
+      "to": [
+       0.65,
+       0.34
+      ],
+      "bow": 0.16,
+      "draw_s": 0.55,
+      "width": 9
+     }
+    },
+    {
+     "kind": "callout",
+     "at": 16.27,
+     "dur": 2.03,
+     "label": "25%",
+     "pad": 22,
+     "label_scale": 2.2,
+     "target": {
+      "kind": "point",
+      "x": 0.705,
+      "y": 0.295
+     }
+    },
+    {
+     "kind": "trace",
+     "at": 16.24,
+     "dur": 2.06,
+     "color": "#B0201F",
+     "target": {
+      "kind": "region",
+      "x0": 0.215,
+      "y0": 0.34,
+      "x1": 0.65,
+      "y1": 0.425
+     },
+     "hop": {
+      "from": [
+       0.65,
+       0.34
+      ],
+      "to": [
+       0.215,
+       0.425
+      ],
+      "bow": 0.16,
+      "draw_s": 0.55,
+      "width": 9
+     }
+    },
+    {
+     "kind": "callout",
+     "at": 16.79,
+     "dur": 1.51,
+     "label": "25%",
+     "pad": 22,
+     "label_scale": 2.2,
+     "target": {
+      "kind": "point",
+      "x": 0.115,
+      "y": 0.335
+     }
+    }
+   ]
   },
   {
    "scene_id": "s04",
@@ -3807,7 +4042,7 @@
    "scene_id": "s05",
    "world": {
     "asset_id": "plate-ship",
-    "sha256": "0d0df8a7507dfe3eb0dbc507ad31b2239ad88099a6e61900eb0800080b4084a1",
+    "sha256": "7d3315432093b00904d8ed722793097dbab7480ebf28a5c2a11457abf5612c2e",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -3905,7 +4140,7 @@
    "scene_id": "s07",
    "world": {
     "asset_id": "plate-vault",
-    "sha256": "5d5c33d9c088c3b7e80cc80455b8d55d2ce7903aebd51b3f1ce7f8ea00f9f49e",
+    "sha256": "7117e1cedc941cca64d343699369cc3c9976134ab7f5be848645d32fba27197e",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -4041,7 +4276,7 @@
    "scene_id": "s10",
    "world": {
     "asset_id": "plate-check",
-    "sha256": "19ec7455789e69b1c9445aa168e8e20f8b6ff6680511cbfb96a042cfa92c1f59",
+    "sha256": "442150dd8c4fb5490aba8a36c86f8f9c5818a1602f3c657e457aff536c9093a2",
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -4418,6 +4653,7 @@
  "species": [
   "ledger",
   "spotlight",
+  "trace",
   "callout",
   "retitle",
   "build_to",

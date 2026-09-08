@@ -3,12 +3,12 @@
 ```text
 === MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\content\video_engine\projects\systems-and-blowups\japan-tariff-trick\build-short ===
                runtime: 1:29
-         visual_events: 299 (200.8/min)
+         visual_events: 310 (208.2/min)
                  docks: 4
            dock_source: timeline
           ledger_pages: 5
   still_over_12s_share: 0%
-            per_minute: 0:00:211/5 1:00:178/8
+            per_minute: 0:00:222/5 1:00:178/8
 
   [WARN ] M06 62 caption pages = 42/min, 4.0 words/page
           s9.15 r7 / build_caption_pages 4-6 words
@@ -38,13 +38,13 @@
           E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract
   [PASS ] M16 longest gap between visual events 2.3s at 0:28; 0 gap(s) over 2.5s
           doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
-  [INFO ] M07 short: 1 full minute(s) in 89s - opening 211.0 events/min, 5.0 evidence entries/min; tail from 1:00 177.8/min; whole runtime 199.4/min - no minute distribution to rank in (E21 is judged on the whole)
+  [INFO ] M07 short: 1 full minute(s) in 89s - opening 222.0 events/min, 5.0 evidence entries/min; tail from 1:00 177.8/min; whole runtime 206.8/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
   [INFO ] M18 frozen frames not measured - run measure_frozen_frames.py <build> (writes frame-hashes.json)
           E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)
   [INFO ] M19 build_to caps declared; none holds between caps
           P47 T2 (SHOT-TABLE-V3-PROPOSAL part B): a cap is a hold the sentence asked for, not stillness
-  [INFO ] M21 2 page(s) deployed 8-12s after the last data mark (a dock's clip may hold it): s02 11.9s (0:01 -> 0:13); s06 10.8s (0:36 -> 0:47)
+  [INFO ] M21 2 page(s) deployed 8-12s after the last data mark (a dock's clip may hold it): s02 10.0s (0:01 -> 0:11); s06 10.8s (0:36 -> 0:47)
           E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
@@ -52,5 +52,5 @@
 RESULT: 0 FAIL / 2 WARN / 12 PASS / 1 JUDGE / 4 INFO
 ```
 
-TIMELINE: japan-short.timeline.json sha256:636d1693746d7eb8f2b8f677996e8e5cf90f606c8b599c1dc43a945fe09df253
+TIMELINE: japan-short.timeline.json sha256:42728746451c587065a5c5f134121f8b2bd7bc715d7f5339dfa3a567ae1cde64
 VERDICT: PASS (0 FAIL)

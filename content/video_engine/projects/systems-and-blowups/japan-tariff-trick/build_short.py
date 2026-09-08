@@ -56,7 +56,7 @@ PAGE_BUILD_END_S, PAGE_BUILD_START_S, PAGE_BUILD_S, LP_ROLL_S = 7.4, 4.4, 3.0, 0
 # `-v2` retries replaced a first pass that lost or drifted the character in a busy frame (the operator picks; these are the picks).
 PLATE_FILES = {
     "plate-podium": {"still": "still-a-podium-victory", "sig": "sig-a-podium-victory"},     # the victory lap at the podium
-    "plate-gates": {"still": "still-b-six-gates", "sig": "sig-b-six-gates"},               # the red truck before six barriers
+    "plate-gates": {"still": "sig-b-crossings-map-v9-operator-edit", "sig": "sig-b-crossings-map-v9-operator-edit"},   # THE CROSSINGS MAP (2026-09-08): Detroit, Ontario across the water, Mexico below the border - the six hops are drawn over it (PLATE-ORDER-MAP-BEAT.md); the six-gates drawing it replaced was a metaphor for information. One frame for both arms: the operator's own edit of the v2 HollowStickMike ground
     "plate-ship": {"still": "still-d-ship-once", "sig": "sig-d-ship-once"},                # the car carrier, one ramp, one stamp (the v2 retry lost the character)
     "plate-vault": {"still": "still-e-vault", "sig": "sig-e-vault"},                       # the Treasury vault, shelves emptying
     "plate-check": {"still": "still-h-blank-check", "sig": "sig-h-blank-check"},           # the blank cheque pushed across the desk
@@ -161,6 +161,40 @@ def register_assets() -> None:
         R.STAMPED[aid] = str(p)
 
 
+MAP_PLANTS = {"D": (0.215, 0.425), "O": (0.65, 0.34), "M": (0.455, 0.87)}   # plant chip centres on the crossings map, stage fractions
+MAP_ROUTE = "DO OD DM MD DO OD".split()                                        # six crossings; each hop crosses a drawn line
+
+
+def crossings_species(t0: float, t_truck: float, t_six: float, t_end: float) -> list[dict]:
+    """The six hops and six stamps over the crossings map. The first hop leaves as the truck is named and the sixth STAMP
+    lands on "six"; the hops between are evenly spaced. Every hop is a held `trace` (hop mode) and every landing a `callout`
+    ring with the 25% label, both held to the cut so the picture accumulates into the count (M16: an event every ~0.9 s)."""
+    n = len(MAP_ROUTE)
+    draw_s = 0.55
+    first = round(t_truck - 0.2, 2)
+    last_land = round(t_six + 0.05, 2)                       # the sixth stamp ON "six"
+    step = (last_land - draw_s - first) / (n - 1)
+    out = []
+    landed: dict[str, int] = {}
+    for i, (a, b) in enumerate(MAP_ROUTE):
+        t = round(first + i * step, 2)
+        land = round(t + draw_s, 2)
+        (x0, y0), (x1, y1) = MAP_PLANTS[a], MAP_PLANTS[b]
+        # one bow sign for every hop: the bow is perpendicular to the DIRECTION, so the return already bows to the other side
+        # (an alternating sign cancels that and the return retraces the outbound - the first render showed three lines for six)
+        out.append({"kind": "trace", "at": t, "dur": round(t_end - t, 2), "color": "#B0201F",
+                    "target": {"kind": "region", "x0": min(x0, x1), "y0": min(y0, y1), "x1": max(x0, x1), "y1": max(y0, y1)},
+                    "hop": {"from": [x0, y0], "to": [x1, y1], "bow": 0.16, "draw_s": draw_s, "width": 9}})
+        # the stamps accumulate like passport stamps: a plant's second and third landings sit offset from the first, so Detroit
+        # shows three, Ontario two, Mexico one - six on the page, which IS the count (no counter)
+        k = landed.get(b, 0); landed[b] = k + 1
+        ddx = -0.05 if b == "D" else 0.055                  # Detroit stacks up-LEFT (clear of its smoke and the outbound arc), the others up-right
+        sx, sy = x1 + ddx * k, y1 - 0.045 * k
+        out.append({"kind": "callout", "at": land, "dur": round(t_end - land, 2), "label": "25%", "pad": 22, "label_scale": 2.2,
+                    "target": {"kind": "point", "x": round(sx, 4), "y": round(sy, 4)}})
+    return out
+
+
 def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
     """The authored rows. E44/E45/E50, the Tokyo v3 grammar: the REAL chart (Japan's Treasury holdings) mounts over the podium
     on the hook line and carries the -$122.6B bracket on "what nobody explained"; the six gates take the frame on "six separate
@@ -180,8 +214,13 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
     t_build = round(t_page + PAGE_BUILD_START_S, 2)                 # the line draws to the February peak
     t_land = round(t_page + PAGE_BUILD_END_S, 2)                     # ... and the June stroke follows the landing (no highlight over the charcoal build)
     t_but = at("But look")                                           # the bracket: WHAT NOBODY EXPLAINED is the drop
-    # 3 the six gates take the frame on "When you buy an American truck ... six separate times"
-    t_gates = cut("When you buy")
+    # 3 THE CROSSINGS MAP takes the frame on "But look at what nobody explained" and carries "When you buy an American truck, its
+    #   parts cross the border six separate times" - six hops drawn plant to plant, a 25% stamp on every landing, the sixth stamp
+    #   landing on "six". cut("Auto parts") at 8.88 was the plan (PLATE-ORDER-MAP-BEAT.md) and is not a legal cut: the voice runs
+    #   straight from "Toyota." into "Auto parts" with no M13 gap, so the boundary is the next breath, 11.78 (a 6.5 s beat).
+    t_gates = cut("But look")
+    t_truck = at("When you buy")
+    t_six_times = at("six separate times")                          # (t_six is the receipt row's "six thousand dollars", below)
     # 4 the parts page mounts over the gates on "An engine block"; its bars land as the harness sentence ends; the two lanes dock on the archetype
     t_engine = cut("An engine block")
     t_page2 = at("An engine block")
@@ -227,8 +266,12 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
             # to write the figure six and a half seconds after the voice said it.
             {"kind": "spotlight", "at": round(t_mount + 0.5, 2), "dur": 1.2, "target": datum(LAST_IDX)},
         ]),
-        # 3 the six gates: the truck stopped before six barriers - "its parts cross the border six separate times"
-        (t_gates, t_engine, "plate-gates;idle=drift", ken, [], "dip", None),
+        # 3 the crossings map: six hops, six stamps. Plant centres as stage fractions on sig-b-crossings-map-v9 (768x1376 -> 9:16):
+        #   Detroit (0.215, 0.425), Ontario (0.65, 0.34) across the water, Mexico (0.455, 0.87) below the border. The route is
+        #   D->O, O->D, D->M, M->D, D->O, O->D - every hop crosses a drawn line, and the sixth stamp lands on "six" (the count is
+        #   the stamps, no counter). Hops are held to the cut so the picture accumulates; the arcs alternate sides so the
+        #   return never retraces the outbound.
+        (t_gates, t_engine, "plate-gates;idle=drift", ken, [], "dip", crossings_species(t_gates, t_truck, t_six_times, t_engine)),
         # 4 the parts page mounts over the gates on "An engine block"; the engine bar is spotlit as the bars land, the harness
         #   called out after it (both after the landing - no highlight over the charcoal build); the two lanes DOCK on the
         #   archetype (E45: springs to reading size, then parks in the quiet zone) and leave with the page (E40 #5: exit=cut)

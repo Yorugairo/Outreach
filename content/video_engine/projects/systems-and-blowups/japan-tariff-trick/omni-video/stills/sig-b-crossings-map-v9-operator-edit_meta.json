@@ -1,0 +1,38 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-08T20:05:00Z",
+  "prompt": "OPERATOR, BY HAND IN FLOW (not captured by the driver): an edit of sig-b-crossings-map-v2-hollowstick replacing the three plants with 2.5D woodblock-print, rich-anime-colour plant chips. Operator's words: 'i can probably prompt to replace the buildings with 2.5d wood block print with rich anime colors'.",
+  "references": [
+    "sig-b-crossings-map-v2-hollowstick.png (the ground)",
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "dimensions": [
+    768,
+    1376
+  ],
+  "recovered": "Flow library image 86509336-cfb7-4bbc-b4f4-caed3196b1cc, the last image generated in project d171ec1f, pulled from the page by id (runtime/fetch_orphan.mjs) after the operator linked it (2026-09-08). Candidate plate of record for the crossings beat; the word 'approved' moves it out of quarantine.",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-b-crossings-map-v9-operator-edit.png",
+      "sha256": "9bcfcb6fc83a3579bb3a0a23173faa9eab4ffea65eccfed988abaa8d6e4eaf41"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-b-crossings-map-v9-operator-edit-raw.png",
+      "sha256": "9bcfcb6fc83a3579bb3a0a23173faa9eab4ffea65eccfed988abaa8d6e4eaf41"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-b-crossings-map-v9-operator-edit-raw.png",
+        "sha256": "9bcfcb6fc83a3579bb3a0a23173faa9eab4ffea65eccfed988abaa8d6e4eaf41"
+      }
+    ]
+  }
+}

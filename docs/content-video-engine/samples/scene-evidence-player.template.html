@@ -3993,8 +3993,9 @@
         drawOn(lpEl("path", "co", spSvg, { d: calloutPath(b, seed, pd) }), k * dur / SP.CALLOUT_DRAW);
         if (sp.label && k * dur > SP.CALLOUT_DRAW * 0.8) {
           const lx = b.x + b.w + 34 + pd, ly = b.y - 10 - pd * 0.4, pop = spEase((k * dur - SP.CALLOUT_DRAW * 0.8) / 0.25);
+          const ls = Number.isFinite(+sp.label_scale) && +sp.label_scale > 0 ? +sp.label_scale : 1;   /* opt-in (2026-09-08): a stamp on a plate reads at phone size */
           const tx = lpEl("text", "lab", spSvg, { x: lx.toFixed(1), y: ly.toFixed(1) }); tx.textContent = sp.label;
-          tx.setAttribute("transform", "translate(" + lx.toFixed(1) + " " + ly.toFixed(1) + ") scale(" + (0.7 + 0.3 * pop).toFixed(3) + ") translate(" + (-lx).toFixed(1) + " " + (-ly).toFixed(1) + ")");
+          tx.setAttribute("transform", "translate(" + lx.toFixed(1) + " " + ly.toFixed(1) + ") scale(" + ((0.7 + 0.3 * pop) * ls).toFixed(3) + ") translate(" + (-lx).toFixed(1) + " " + (-ly).toFixed(1) + ")");
         }
       } else if (sp.kind === "spotlight") { /* dim the frame except a feathered hole gliding between two declared targets */
         const a = resolveTarget(sp.target), z = resolveTarget(sp.target2) || a; if (!a) return;
@@ -4033,21 +4034,35 @@
       } else if (sp.kind === "trace") {   /* the arrow on the phone redraws: a seeded zigzag down the region's diagonal, drawn by dash over
            TRACE_DRAW, held, faded, again every TRACE_PERIOD */
         const b = resolveTarget(sp.target); if (!b) return;
-        const ph = (((t - sp.at) / SP.TRACE_PERIOD) % 1 + 1) % 1, drawK = clamp01(ph * SP.TRACE_PERIOD / SP.TRACE_DRAW);
+        const hop = sp.hop && sp.hop.from && sp.hop.to ? sp.hop : null;   /* opt-in (2026-09-08, the crossings map): ONE bowed hop from a
+           point to a point, drawn once over hop.draw_s (default TRACE_DRAW) and HELD to the end of dur - a crossing, not a still-life
+           redraw. The plain trace is untouched when `hop` is absent. Coordinates are stage fractions; bow is the arc's height as a
+           fraction of the chord, signed for the side. */
+        const ph = hop ? 0 : (((t - sp.at) / SP.TRACE_PERIOD) % 1 + 1) % 1;
+        const drawK = hop ? clamp01((t - sp.at) / Math.max(0.05, +hop.draw_s || SP.TRACE_DRAW)) : clamp01(ph * SP.TRACE_PERIOD / SP.TRACE_DRAW);
         const n = 7, pts = [];
-        for (let i = 0; i <= n; i++) {
-          const s2 = i / n, jag = i && i < n ? (lpHash(seed, i, 44) - 0.5) * b.h * 0.35 : 0;
-          pts.push([b.x + b.w * (0.08 + 0.84 * s2), b.y + b.h * (0.12 + 0.76 * s2) + jag]);
+        if (hop) {   /* a quadratic bow sampled to the same n points, so the arrowhead law below is shared */
+          const x0 = hop.from[0] * STAGE_W, y0 = hop.from[1] * STAGE_H, x1 = hop.to[0] * STAGE_W, y1 = hop.to[1] * STAGE_H;
+          const mx = (x0 + x1) / 2, my = (y0 + y1) / 2, dx = x1 - x0, dy = y1 - y0, L0 = Math.hypot(dx, dy) || 1;
+          const bow = Number.isFinite(+hop.bow) ? +hop.bow : 0.18, cx2 = mx - dy / L0 * bow * L0 * 2, cy2 = my + dx / L0 * bow * L0 * 2;
+          for (let i = 0; i <= n; i++) { const u = i / n, v = 1 - u;
+            pts.push([v * v * x0 + 2 * v * u * cx2 + u * u * x1, v * v * y0 + 2 * v * u * cy2 + u * u * y1]); }
+        } else {
+          for (let i = 0; i <= n; i++) {
+            const s2 = i / n, jag = i && i < n ? (lpHash(seed, i, 44) - 0.5) * b.h * 0.35 : 0;
+            pts.push([b.x + b.w * (0.08 + 0.84 * s2), b.y + b.h * (0.12 + 0.76 * s2) + jag]);
+          }
         }
         const d = pts.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
-        const p = lpEl("path", "", spSvg, { d, stroke: sp.color || "#B0201F", "stroke-width": Math.max(3, b.w * 0.045).toFixed(1), fill: "none", "stroke-linejoin": "round", "stroke-linecap": "round" });
-        const fade = ph > 0.82 ? 1 - (ph - 0.82) / 0.18 : 1;
-        p.setAttribute("opacity", (fade * clamp01(Math.min(k * dur / 0.4, (1 - k) * dur / 0.4))).toFixed(3));
+        const sw = hop ? (Number.isFinite(+hop.width) ? +hop.width : 7) : Math.max(3, b.w * 0.045);
+        const p = lpEl("path", "", spSvg, { d, stroke: sp.color || "#B0201F", "stroke-width": sw.toFixed(1), fill: "none", "stroke-linejoin": "round", "stroke-linecap": "round" });
+        const fade = hop ? 1 : (ph > 0.82 ? 1 - (ph - 0.82) / 0.18 : 1);
+        p.setAttribute("opacity", (fade * clamp01(Math.min(k * dur / 0.4, hop ? 1 : (1 - k) * dur / 0.4))).toFixed(3));
         drawOn(p, drawK);
         if (drawK >= 1) {   /* the arrowhead lands when the line does */
-          const [ax, ay] = pts[n], [bx2, by2] = pts[n - 1], ang = Math.atan2(ay - by2, ax - bx2), L2 = Math.max(8, b.w * 0.12);
+          const [ax, ay] = pts[n], [bx2, by2] = pts[n - 1], ang = Math.atan2(ay - by2, ax - bx2), L2 = hop ? sw * 3 : Math.max(8, b.w * 0.12);
           lpEl("path", "", spSvg, { d: "M" + (ax - L2 * Math.cos(ang - 0.5)).toFixed(1) + " " + (ay - L2 * Math.sin(ang - 0.5)).toFixed(1) + " L" + ax.toFixed(1) + " " + ay.toFixed(1) + " L" + (ax - L2 * Math.cos(ang + 0.5)).toFixed(1) + " " + (ay - L2 * Math.sin(ang + 0.5)).toFixed(1),
-                                     stroke: sp.color || "#B0201F", "stroke-width": Math.max(3, b.w * 0.045).toFixed(1), fill: "none", "stroke-linejoin": "round", "stroke-linecap": "round", opacity: p.getAttribute("opacity") });
+                                     stroke: sp.color || "#B0201F", "stroke-width": sw.toFixed(1), fill: "none", "stroke-linejoin": "round", "stroke-linecap": "round", opacity: p.getAttribute("opacity") });
         }
       } else if (sp.kind === "ticker") {   /* the numbers on the laptop tick: a rows x cols grid over the region; each cell flips on its own
            seeded clock (every TICK_STEP, phase per cell) - a paper patch (sp.paper) covers the drawn digit and a new one is

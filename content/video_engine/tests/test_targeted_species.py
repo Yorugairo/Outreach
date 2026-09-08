@@ -126,3 +126,25 @@ def test_missing_or_none_species_is_an_empty_list():
     assert B.validate_species(None, STILL, PLATE) == []
     assert B.validate_species([], (0.04, 10, -6), PLATE) == []
     assert B.validate_species("punch", STILL, PLATE) == [f"{PLATE}: species must be a list of species dicts"]
+
+
+# ---- the hop (2026-09-08, the crossings map): an opt-in on trace, validated when present ----
+
+def test_trace_hop_is_accepted_with_fraction_endpoints():
+    e = _sp("trace", target=REGION)
+    e["hop"] = {"from": [0.215, 0.425], "to": [0.65, 0.34], "bow": -0.16, "draw_s": 0.55, "width": 7}
+    assert B.validate_species([e], STILL, PLATE) == []
+
+
+def test_trace_hop_endpoints_must_be_stage_fractions():
+    e = _sp("trace", target=REGION)
+    e["hop"] = {"from": [0.2, 1.4], "to": "Ontario"}
+    errs = B.validate_species([e], STILL, PLATE)
+    assert any("hop.from must be [x, y]" in x for x in errs) and any("hop.to must be [x, y]" in x for x in errs), errs
+
+
+def test_trace_hop_draw_s_must_be_positive_and_plain_trace_is_untouched():
+    e = _sp("trace", target=REGION)
+    e["hop"] = {"from": [0.1, 0.1], "to": [0.5, 0.5], "draw_s": 0}
+    assert any("hop.draw_s must be > 0" in x for x in B.validate_species([e], STILL, PLATE))
+    assert B.validate_species([_sp("trace", target=REGION)], STILL, PLATE) == []

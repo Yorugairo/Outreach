@@ -258,6 +258,20 @@ def _validate_entry(entry) -> list[str]:
     if not errs and entry["dur"] <= 0:
         errs.append(f"{kind}: dur must be > 0 (a species that lasts 0s does not fire)")
     errs += _validate_page_fields(kind, entry)
+    if kind == "trace" and "hop" in entry:   # opt-in (2026-09-08): ONE bowed hop point-to-point, drawn once and held - a crossing
+        hop = entry["hop"]
+        if not isinstance(hop, dict):
+            errs.append("trace: hop must be a dict {from: [x, y], to: [x, y], bow?, draw_s?, width?}")
+        else:
+            for f in ("from", "to"):
+                v = hop.get(f)
+                if not (isinstance(v, (list, tuple)) and len(v) == 2 and all(isinstance(c, (int, float)) and not isinstance(c, bool) and 0 <= c <= 1 for c in v)):
+                    errs.append(f"trace: hop.{f} must be [x, y] as stage fractions 0..1")
+            for f in ("bow", "draw_s", "width"):
+                if f in hop and (isinstance(hop[f], bool) or not isinstance(hop[f], (int, float))):
+                    errs.append(f"trace: hop.{f} must be a number")
+            if isinstance(hop.get("draw_s"), (int, float)) and hop["draw_s"] <= 0:
+                errs.append("trace: hop.draw_s must be > 0")
     allowed = SPECIES_TARGETS[kind]
     if not allowed:
         return errs

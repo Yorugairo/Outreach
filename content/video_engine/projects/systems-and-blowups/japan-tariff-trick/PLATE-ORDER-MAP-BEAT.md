@@ -232,6 +232,40 @@ tracked); the JSON-RPC results sit beside the orders. The duplicate Mike2 result
 signature plates) once the operator picks one; then `build_short.py:59` `plate-gates` →
 that file.
 
+## THE PLATE OF RECORD and THE BEAT AS BUILT (2026-09-08, evening)
+
+**Plate:** `omni-video/stills/sig-b-crossings-map-v9-operator-edit.png` — the operator's own
+edit of the v2-HollowStickMike ground in Flow: v2's real coastline and boundary, the three
+plants replaced by 2.5D woodblock chips (*"i can probably prompt to replace the buildings
+with 2.5d wood block print with rich anime colors"*). Pulled from the library by id
+(`86509336…`), meta by hand. Candidate until the word "approved"; one flaw to know: the
+Detroit chip's base clips the DETROIT lettering. `build_short.py` `plate-gates` → this file,
+both arms.
+
+**Boundary:** `cut("But look")` = **11.78 s**, not `cut("Auto parts")`. The 9.5 s plan in
+the table above was never a legal cut — the voice runs straight from "Toyota." into "Auto
+parts" with no M13 gap (≥ 0.30 s), and `cut_before` refuses it. The next breath is 11.78, so
+the map carries *"But look at what nobody explained. When you buy an American truck, its
+parts cross the border six separate times"* — 6.5 s. "Auto parts taxes compounded" stays
+over the holdings chart; that mismatch survives and is the script's to fix, not the cut's.
+
+**The beat** (`crossings_species()` in `build_short.py`): six hops, six stamps.
+
+| what | species | law |
+|---|---|---|
+| a hop | `trace` with the new opt-in **`hop`** `{from, to, bow, draw_s, width}` — one bowed arc plant to plant, drawn once over 0.55 s and HELD to the cut | route D→O, O→D, D→M, M→D, D→O, O→D; every hop crosses a drawn line; one bow sign, so the return bows to the other side by itself (an alternating sign cancelled that and the first render showed three lines for six) |
+| a stamp | `callout` on a point, `label: "25%"`, `pad: 22`, the new opt-in **`label_scale: 2.2`** | lands 0.55 s after its hop leaves; repeat landings stack like passport stamps (Detroit up-left ×3, Ontario up-right ×2, Mexico ×1) — **six on the page, which IS the count**; the first render stacked them on one pixel and "six" never appeared |
+| timing | first hop leaves 0.2 s before "When you buy" (13.66); the sixth STAMP lands on "six" (16.79); the rest evenly between | the picture accumulates to the word |
+
+Both opt-ins ride through the validator (which now checks `hop`'s fields; three tests in
+`test_targeted_species.py`) and leave the goldens byte-identical (13 passed, twice). The
+motion gate on the rebuilt timeline: 0 FAIL, M16 longest gap 2.3 s.
+
+**Judged on the frame, not the diff** (four renders): the arcs and the count read at phone
+size; the caption strip sits mid-map over open land. Not done: a `focus_zoom`/`pull_back`
+pair (the Mexico plant is at 0.87, so the crossings need the whole frame — the pull-back
+idea belongs to the Toyota beat, which still carries `plate-ship`).
+
 ## The choreography over it — what the engine draws
 
 The beat runs 13.73 → 18.30 s, on *"when you buy an American truck, its parts
