@@ -59,13 +59,36 @@ so no existing frame moves.
 
 ## What should become what — the candidates, ranked
 
-**A. #1 → #4 is one series in two views, and it is a RECAST.** Holdings (the
-level) and the monthly change (the first difference) are the same TIC series.
-They currently sit 36 seconds and two unrelated charts apart, each mounted and
-cut. This is precisely the verb P48 T4 shipped: the level un-draws, the title
-rewrites, the change bars draw on, on the same page. It is also the operator's
-own description of the beat — *"re-draw, change chart types/shapes… morph on
-page."* Moving #4 next to #1 is a shot-table change, not new capability.
+**A. #4 RETURNS to #1 — it does not move next to it.** An earlier draft of this
+ledger wanted #4 relocated beside #1 because they are one TIC series in two
+views. **Withdrawn after reading the script**, which is deliberately built on two
+levers and separates them on purpose:
+
+> 0:00 hook — *"that tariff funded Japan's chip empire, and cost America a
+> hundred and twenty-two billion dollars"*
+> 0:18–0:48 lever one — the 25 % on parts, then the receipt
+> 0:48 — *"And that's where Tokyo pulled **the second lever**."*
+> 0:50 lever two — the Treasury selling
+
+The 36 seconds between them is the argument's architecture. Moving #4 forward
+would collapse a two-lever case into one. Optimising the chart order for the
+data relationship and against the story is the wrong trade.
+
+**What the script actually invites is a RETURN.** The same figure — $122.6B — is
+spoken at the hook *and* at the second lever, on the same series. So #4 should
+arrive as #1 coming back and becoming the monthly view, not as a fifth fresh
+mount: the `spiral` enter plus a `recast`. E40 §4 already says a returning page
+unwinds from its point rather than redrawing. **This costs no VO change**, which
+matters while ElevenLabs has not run.
+
+**And the pacing finding this turned up.** On #1 the beats are `build_to` at
+7.54 s, `build_to` at 10.64 s, then the `−$122.6B` bracket at 11.90 s for 1.8 s —
+landing at 13.70 s against a scene that cuts at **13.73 s**. The hook's payoff
+number finishes drawing and is cut 0.03 s later. That is what M21's 0.0 s means:
+not a hold that ran long, a payoff with no room after it. The page spends ~7.5 s
+arriving (mount 2.02 s, the longest of the five, plus roll/savor/field/punch) and
+~6 s delivering. Either the ceremony gives seconds back or the build starts
+earlier — `build_s` is the dial, and this is the page to spend it on.
 
 **B. #2 → #3 is detail → total.** The cascade names three components; the
 receipt is the whole stack. An earlier draft of this ledger flagged the two as
@@ -87,7 +110,7 @@ Where two charts share a series, the default is **recast**, not two mounts.
 
 ## Not decided
 
-- Whether #4 moves next to #1 (it changes the script's beat order).
+- Whether #4 becomes a spiral-return recast of #1 (no VO change) — recommended.
 - Which pages take `build_s`, and how long. #1 at 0.0 s deployed is the
   clearest candidate: it is drawn and cut in the same breath.
 - Whether this table becomes a standard artifact per short. It is cheap to
