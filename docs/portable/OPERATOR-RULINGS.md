@@ -1570,7 +1570,19 @@ rules below are CONFIRMED findings; the intake page records what was rejected an
    two scales, and then it is an OVERLAY, never separate tiers - separating them throws away the comparison that
    justified the second scale. In that overlay the bars keep the plot and their own zero, the line rides over them on
    its own scale, the bars own every gridline, and the line owns no axis, carrying a terminal tag instead.
-5. **The label lives at the line's end.** A detached legend costs the reader a saccade for every series; the cure is a tag at
+5. **A policy rate is a RULE, not a series.** A number an institution SETS - a policy rate, a target, a threshold, a
+   covenant - is a level to measure against, not a phenomenon that moves between its samples. Drawn as a line it is a
+   step, and a step at a chart's own scale reads as a fault. It takes a reference rule (`axes.hlines`): dashed, in its
+   own colour, named at its end, inside the scale. Where it can be, the window opens at its last change, so the rule
+   is a true constant across the page and there is nothing to step. Grey is our MUTED ink (a drawn history that is
+   not the story); a live reference takes a live colour.
+6. **The gap is the argument.** When a page compares what is set against what is paid, the region BETWEEN them is the
+   claim, and it is drawn: the `spread` species bleeds it full of the page's ink on a word, under the lines, at the
+   pen's pace. A number a viewer must subtract for themselves is a number they will not subtract.
+7. **A declared colour outranks a default.** The sign colour (a rise green, a fall blood red) is the default for a
+   lone series, never a law over one that names its own: a rising COST is not good news, and a page that says so in
+   its object must not be repainted green by the renderer.
+8. **The label lives at the line's end.** A detached legend costs the reader a saccade for every series; the cure is a tag at
    the series' terminal point in the series' colour, and a right gutter reserved for it - never a legend box, and never a
    sub that has quietly become one. Where a plot has no gutter the fallback is the sub, and that is a compromise to be fixed,
    not a pattern to copy. (This is doc 29 s9.23b, now with its reason and its source.)

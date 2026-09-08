@@ -62,10 +62,12 @@ def main() -> int:
         data[sid] = rows
         proof.append({"series": sid, "name": name, "url": FRED.format(sid=sid), "path": str(path.relative_to(HERE.parent)).replace("\\", "/"),
                       "sha256": sha, "fetched": today, "rows": len(rows), "first": rows[0][0].isoformat(), "last": rows[-1][0].isoformat()})
-    fed = data["DFEDTARU"]
+    fed = data["DFEDTARU"]   # the rule's value is fed[-1][1]; the window opens on the last move, so it holds across the page
     # the Fed's last move: the last date the target changed
     last_move = next(fed[i][0] for i in range(len(fed) - 1, 0, -1) if fed[i][1] != fed[i - 1][1])
-    start = last_move - dt.timedelta(days=45)   # a little run-in so the move itself is on the page
+    # the fifth watch: the window starts ON the Fed's last move, so its rate is a TRUE CONSTANT across the page and is drawn
+    # as a reference RULE, not a stepped line (a step at this scale read as a fault, and a policy rate is not a series)
+    start = last_move
     win = {sid: [(d, v) for d, v in rows if d >= start] for sid, rows in data.items()}
     ten_at, ten_now = at_or_before(data["DGS10"], last_move), data["DGS10"][-1]
     mort_at, mort_now = at_or_before(data["MORTGAGE30US"], last_move), data["MORTGAGE30US"][-1]
@@ -111,14 +113,15 @@ def main() -> int:
         # right margin back, so they carry DIRECT TERMINAL LABELS again and the sub stops being a legend.
         **({"tiers": True} if WITH_BARS else {}),
         **({"bars": bars} if WITH_BARS else {}),
-        "xticks": months[::2],
+        "xticks": months[::1] if len(months) <= 7 else months[::2],
         # the design pass (operator, 2026-09-07: "charts need to make sense with no captions"): TWO lines that share one scale, each
         # named with its value at its end - the Fed's rate and the 10-year sit a point apart, so the flat step and the climb read
         # in one frame; the mortgage (a point higher) is the third NOTE, not a third line that pushed the scale and stacked the names
+        # ONE drawn series - what America actually pays. The Fed's own rate is the RULE it is measured against (axes.hlines).
         "series": [
-            {"label": "Fed funds", "name": f"{fed[-1][1]:.2f}%, flat", "color": "deemph", "pts": [[dec_year(d), v] for d, v in win["DFEDTARU"]]},   # the terminal label IS the legend (E53 s5); it says what the grey line IS
             {"label": "10-year", "name": f"{ten_now[1]:.2f}%", "color": "crimson", "pts": [[dec_year(d), v] for d, v in win["DGS10"]]},
         ],
+        "hlines": [{"y": fed[-1][1], "label": f"Fed funds {fed[-1][1]:.2f}%, unchanged", "color": "cobalt"}],   # AXES_KEYS carries it onto the page's axes
         "mortgage": {"name": "30-year mortgage", "color": "amber", "pts": [[dec_year(d), v] for d, v in win["MORTGAGE30US"]]},   # kept on the object for a page that wants it
         "status": "REAL",
         "fetched": today,

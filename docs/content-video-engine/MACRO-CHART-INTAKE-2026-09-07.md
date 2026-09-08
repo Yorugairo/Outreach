@@ -106,3 +106,34 @@ stays exercised and can be watched again if the ear wants the bars back.
 
 Fixed on the way, in both options: with two drawn series a portrait page no longer parks BOTH inline names in the lower-right
 corner - that rule was written for a single line and stacked the second onto the axis. Each line is named at its own end.
+
+## The fifth watch: a policy rate is a rule, and the gap is the argument (2026-09-07)
+
+The operator: *"gray line is also just terrible, it should be a light blue or something, grey almost reads like a mistake."*
+Then: *"it's also just the step wise fashion because of the scale, I've never seen that on a chart before."* Then: *"is there
+a better way we can handle the gray fed funds line?"* And: *"maybe an animation on that screen is to simply just bleed the
+chart fill to red beneath the 10 year line and the fed rate."*
+
+All four are one answer. **A policy rate is not a series.** It is a constant that changes at a meeting - drawn as a line it
+is a step, and a step at this scale reads as a fault, which is exactly what the eye reported. MC-3's own rule says so: bars
+and steps are for discrete things, lines for continuous ones, and a rate the Fed sets is neither - it is a LEVEL to measure
+against. So:
+
+- **`axes.hlines` on a ledger line page** (new): `[{y, label, color}]` draws a reference RULE across the plot - dashed, in
+  its own colour, named at its right end, and part of the scale so no series can hide it. The Fed's rate is that rule.
+- **The window opens on the Fed's LAST MOVE** (2025-12-11), so the rule is a true constant across the whole page. The step
+  is not restyled, it is gone: there is nothing to step.
+- **The colour** is cobalt, a light blue, not `deemph` grey - grey is our muted-history ink, and using it for a live series
+  read as unfinished. (The fix generalises: a series that DECLARES a colour now keeps it. The lone-series sign rule - a rise
+  is green, a fall red - was overriding it, so a rising COST was painted green while its own gap was painted red.)
+- **`spread` (new page species)**: the region between a drawn series and a second series or a rule, bled full of the page's
+  ink on a word. `{at, dur, from: <series>, to: <series> | to_rule: <rule index>, color}`. The polygon is rebuilt per frame
+  from the two edges' own points, so the fill BLEEDS left to right at the pen's pace and a seek is still the play; it sits
+  under every line and label, because it is ground, not ink on top. Dials: `PS.SPREAD_A` 0.30, `PS.SPREAD_BLEED` 0.55.
+
+On the ring page the spread fires half a second after the snap and takes 1.8 s: the gap between what the Fed charges and what
+America actually pays fills blood red, left to right, as the ring lands. That gap IS the sentence. This is MC-8 / R26-26 (the
+intake's Archetype 4) built on a real beat rather than explored.
+
+**Watched:** one unit, one scale, one drawn line named at its end, the rule named at its own end in light blue, and the red
+area between them doing the arguing. No step, no spike, no ambiguous grey. Suites 141 pass; gate PASS.

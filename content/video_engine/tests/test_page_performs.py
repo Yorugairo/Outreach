@@ -54,7 +54,7 @@ needs_browser = pytest.mark.skipif(not _chromium_available(), reason="playwright
 
 
 def test_the_four_page_species_are_kinds_and_take_their_own_fields():
-    for k in ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note"):
+    for k in ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread"):
         assert k in B.SPECIES_KINDS and k in B.PAGE_SPECIES
     assert B.SPECIES_TARGETS["note"] == ()
     assert B.SPECIES_TARGETS["build_to"] == ("datum",) and B.SPECIES_TARGETS["undraw"] == ("datum",) and B.SPECIES_TARGETS["figure"] == ("datum",)
@@ -65,7 +65,8 @@ def test_the_four_page_species_are_kinds_and_take_their_own_fields():
           {"kind": "undraw", "at": 24.0, "dur": 1.5, "target": {"kind": "datum", "index": 0}},
           {"kind": "figure", "at": 25.5, "dur": 1.5, "target": {"kind": "datum", "index": 5}, "text": "$1,239.3B", "sub": "February 2026", "dy": -0.5},
           {"kind": "note", "at": 26.0, "dur": 1.2, "text": "Japan started selling in February."},
-          {"kind": "build_to", "at": 27.0, "dur": 1.2, "target": {"kind": "datum", "index": 9}, "paths": "tail"}]
+          {"kind": "build_to", "at": 27.0, "dur": 1.2, "target": {"kind": "datum", "index": 9}, "paths": "tail"},
+          {"kind": "spread", "at": 28.0, "dur": 1.6, "from": 0, "to": 1, "color": "neg"}]
     assert B.validate_species(ok, (0.0, 0, 0), LEDGER) == []
 
 
@@ -83,6 +84,9 @@ def test_the_four_page_species_are_kinds_and_take_their_own_fields():
     ({"kind": "figure", "at": 1.0, "dur": 1.0, "target": {"kind": "datum", "index": 2}, "text": "$1B", "dy": "up"}, "dy must be a number"),
     ({"kind": "note", "at": 1.0, "dur": 1.0}, "non-empty string text"),
     ({"kind": "undraw", "at": 1.0, "dur": 1.0, "target": {"kind": "datum", "index": 0}, "paths": "everything"}, "paths must be one of"),
+    ({"kind": "spread", "at": 1.0, "dur": 1.0, "from": 0}, "name exactly one of"),
+    ({"kind": "spread", "at": 1.0, "dur": 1.0, "from": 0, "to": 1, "to_rule": 0}, "name exactly one of"),
+    ({"kind": "spread", "at": 1.0, "dur": 1.0, "from": 1, "to": 1}, "must be different series"),
 ])
 def test_a_page_species_missing_its_field_is_a_build_error_naming_the_field(entry, needle):
     errs = B.validate_species([entry], (0.0, 0, 0), LEDGER)

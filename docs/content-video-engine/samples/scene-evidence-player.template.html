@@ -116,6 +116,7 @@
   .lp-chart .cpill { fill: var(--lp-acc); }
   .lp-chart .ser { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
   .lp-chart .sname { font-size: 24px; font-weight: 700; }
+  .lp-chart .hrule { stroke-width: 3; stroke-dasharray: 12 9; opacity: .9; }   /* a policy rate is a RULE, not a series (the fifth watch) */
   .lp-chart .bk { fill: none; stroke-width: 3; stroke-linecap: round; }   /* P47 T2: the bracket's span and ticks */
   .lp-morph { pointer-events: none; }   /* P47 T3: the morphing prop, beneath the chart's own svg */
   .dock-contact { position: absolute; height: 18px; border-radius: 50%; background: #141B22; pointer-events: none; opacity: 0; transform-origin: 50% 50%; }   /* HG2: the contact shadow a thrown or landed card casts on its spot; its blur is the depth cue, painted from t (Kersten 1997) */
@@ -2660,13 +2661,24 @@
     const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;   /* portrait (P41): stage px; no right margin for an inline name - it sits above the line's end */
     const L = P ? 150 : 70, R = P ? 70 : 220, T = P ? 90 : 40, B = P ? G.H - 80 : 470, W = G.W;
     const Y = (v) => ax.log ? Math.log10(v) : v;
+    /* REFERENCE RULES (the fifth watch, 2026-09-07). A POLICY rate is a constant, not a series: drawn as a line it is a step,
+       and a step at this scale reads as a fault. `axes.hlines: [{y, label, color}]` draws it as what it is - a labelled rule
+       across the plot, in its own colour, named at its right end - and it takes part in the scale so the series never hides it. */
+    const HL = (ax.hlines || (ax.hline ? [ax.hline] : [])).filter((h) => h && Number.isFinite(+h.y));
     let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
     for (const s of series) for (const [x, v] of s.pts) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, Y(v)); y1 = Math.max(y1, Y(v)); }
+    for (const h of HL) { y0 = Math.min(y0, Y(+h.y)); y1 = Math.max(y1, Y(+h.y)); }
     const pad = (y1 - y0) * 0.06 || 1; y0 -= pad; y1 += pad;
     if (ax.from_zero && !ax.log) y0 = 0;   /* E28 (operator, 2026-09-05): a truncated axis made a tenth look like a fall to nothing - the series declares its zero */
     const mx = (x) => L + (x - x0) / (x1 - x0 || 1) * (W - L - R), my = (v) => T + (1 - (Y(v) - y0) / (y1 - y0)) * (B - T);
     st.axisB = B;   /* P47 T3: the morph closes its target along the axis */
     lpEl("line", "ax", st.chart, { x1: L, x2: W - R, y1: B, y2: B });
+    st.hlines = HL.map((h) => {
+      const col = PAL[h.color] || h.color || "#8fb3f0", y = my(+h.y);
+      const line = lpEl("line", "hrule", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1), stroke: col });
+      const lab = h.label ? lpText(st.chart, "sname", W - R, y - (P ? 18 : 12), "end", String(h.label), { opacity: 0, style: LP_HALO + "fill:" + col + (P ? ";font-size:34px" : "") }) : null;
+      return { h, y, line, lab, col };
+    });
     /* both axes, always (operator, 2026-09-03): y ticks - on a log axis at doublings of a power of ten, else the nice-step helper */
     if (ax.log) {
       const lo = Math.pow(10, y0), hi = Math.pow(10, y1); let tv = Math.pow(10, Math.floor(y0));
@@ -2690,7 +2702,9 @@
       const d = s.pts.map(([x, v], k) => (k ? "L" : "M") + mx(x).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
       /* a single-metric line takes its SIGN colour (blood red down, green up); multi-line pages keep their series key */
       const endsDown = s.pts.length > 1 && +s.pts[s.pts.length - 1][1] < +s.pts[0][1];   /* numbers, never a string compare ('1116.7' < '325.8' is true) */
-      const col = s.muted ? "rgba(184,196,208,.55)" : series.length === 1 ? (endsDown ? "var(--lp-neg)" : "var(--lp-pos)") : (PAL[s.color] || PAL.deemph);
+      /* the sign colour (a rise is green, a fall blood red) is the DEFAULT for a lone series, not a law over it: a series that
+         declares its own colour keeps it. A COST that rises is not good news, and the page said so - the fifth watch. */
+      const col = s.muted ? "rgba(184,196,208,.55)" : (PAL[s.color] || (series.length === 1 ? (endsDown ? "var(--lp-neg)" : "var(--lp-pos)") : PAL.deemph));
       const p = lpEl("path", "ser" + (s.muted ? " muted" : ""), st.chart, { d, stroke: col });
       const len = p.getTotalLength ? p.getTotalLength() : 2000;
       p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
@@ -2699,7 +2713,8 @@
       const prev = s.pts.length > 1 ? s.pts[s.pts.length - 2] : last;   /* portrait: the name ends left of the last segment so a steep drop never runs through it */
       /* a line ending high takes its name in the empty lower right - but only when it is the ONLY line. With two, both would
          land in the same corner and stack onto the axis (the fourth watch); each is named at its own end instead. */
-      const nameBelow = P && drawn.length === 1 && my(last[1]) < T + 0.35 * (B - T);
+      /* ... and never when a reference RULE already owns the lower right for its own label (the fifth watch) */
+      const nameBelow = P && drawn.length === 1 && !HL.length && my(last[1]) < T + 0.35 * (B - T);
       const name = lpEl("text", "sname", st.chart, P ? { x: (nameBelow ? W - R : Math.min(mx(last[0]), mx(prev[0])) - 8).toFixed(1), y: (nameBelow ? B - 28 : my(last[1]) - 30).toFixed(1), "text-anchor": "end", fill: col, opacity: 0 }
                                                      : { x: (mx(last[0]) + 12).toFixed(1), y: (my(last[1]) + 8).toFixed(1), fill: col, opacity: 0 });
       st.linePts.push(s.pts.map(([x, v]) => [mx(x), my(v)]));   /* the exact datum positions, for the species' targets */
@@ -3140,7 +3155,8 @@
                                             sunflower twin beneath it rises and falls on a sine, the base never moves.
      Dials, ours (42 s42.5): ERASE_S the title's wipe; BRACKET_DRAW / TICK / LABEL the bracket's phases as shares of its dur;
      BRACKET_GAP the room between the data and the span, viewBox units. */
-  const PS = { ERASE_S: 0.4, BRACKET_DRAW: 0.5, BRACKET_TICK: 0.15, BRACKET_LABEL: 0.55, BRACKET_GAP: 34, BRACKET_TICK_W: 14,
+  const PS = { SPREAD_A: 0.30, SPREAD_BLEED: 0.55,   /* the fifth watch: the gap between two lines, bled full of ink - the alpha it lands at, and the share of the word the bleed takes to cross */
+               ERASE_S: 0.4, BRACKET_DRAW: 0.5, BRACKET_TICK: 0.15, BRACKET_LABEL: 0.55, BRACKET_GAP: 34, BRACKET_TICK_W: 14,
                BRACKET_ROOM: 200, RELIGHT_COL: "#F5B72E" };
   const PS_PAL = { crimson: "#ED6A4A", teal: "#178C83", cobalt: "#8fb3f0", amber: "#F5B72E", deemph: "#b8c4d0", neg: "var(--lp-neg)", pos: "var(--lp-pos)" };
   const pageSpecies = (scene, kind) => (scene.species || []).filter((sp) => sp && sp.kind === kind).sort((a, b) => a.at - b.at);
@@ -3229,7 +3245,40 @@
       const glyphs = P ? lpGlyphsWrap(div, String(sp.text || ""), st.seed + 70 + ni) : lpGlyphs(div, String(sp.text || ""), st.seed + 70 + ni);
       return { sp, div, glyphs };
     });
-    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes };
+    /* THE SPREAD (the fifth watch, 2026-09-07 - the operator: "bleed the chart fill to red beneath the 10 year line and the
+       fed rate"). The region between two drawn series, filled with the page's ink on a word: what the Fed charges against what
+       America pays, and the gap between them made visible. The polygon is rebuilt per frame from the two series' own points,
+       so the fill BLEEDS left to right at the pen's pace and a seek is still the play. */
+    const spreads = pageSpecies(scene, "spread").map((sp) => {
+      const A = (st.linePts || [])[sp.from | 0];
+      /* `to` is a second series; `to_rule` is a REFERENCE RULE's index (a policy rate is a constant, so the gap is the area
+         between the drawn line and the rule) - the fifth watch */
+      const rule = Number.isInteger(sp.to_rule) ? (st.hlines || [])[sp.to_rule] : null;
+      const B = rule ? [[-1e9, rule.y], [1e9, rule.y]] : (st.linePts || [])[sp.to | 0];
+      if (!A || !B || A.length < 2 || B.length < 2) return null;
+      const hi = A.length >= B.length ? A : B, lo = hi === A ? B : A;   /* walk the denser series; read the other at its x */
+      const yAt = (pts, x) => { let i = 1; while (i < pts.length - 1 && pts[i][0] < x) i++;
+        const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; return x1 === x0 ? y1 : y0 + (y1 - y0) * ((x - x0) / (x1 - x0)); };
+      const col = PS_PAL[sp.color] || sp.color || "var(--lp-neg)";
+      const path = lpEl("path", "lp-spread", st.chart, { fill: col, "fill-opacity": 0, stroke: "none" });
+      st.chart.insertBefore(path, st.chart.firstChild);   /* under every line and label: it is ground, not ink on top */
+      return { sp, hi, lo, path };
+    }).filter(Boolean);
+    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads };
+  };
+  /* the bleed: the region grows left to right over SPREAD_BLEED of the word, the ink deepens over the rest */
+  const paintSpread = (sd, t) => {
+    const sp = sd.sp, dur = Math.max(0.001, sp.dur || 1), u = clamp01((t - sp.at) / dur);
+    if (u <= 0) { sd.path.setAttribute("fill-opacity", 0); return; }
+    const k = minJerk(clamp01(u / PS.SPREAD_BLEED)), n = sd.hi.length, m = Math.max(2, Math.round(k * n));
+    const yAt = (pts, x) => { let i = 1; while (i < pts.length - 1 && pts[i][0] < x) i++;
+      const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; return x1 === x0 ? y1 : y0 + (y1 - y0) * ((x - x0) / (x1 - x0)); };
+    const top = [], bot = [];
+    for (let i = 0; i < m; i++) { const [x, y] = sd.hi[i]; top.push([x, y]); bot.push([x, yAt(sd.lo, x)]); }
+    const d = top.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ")
+      + bot.reverse().map(([x, y]) => "L" + x.toFixed(1) + " " + y.toFixed(1)).join(" ") + " Z";
+    sd.path.setAttribute("d", d);
+    sd.path.setAttribute("fill-opacity", (PS.SPREAD_A * clamp01(u / 0.35)).toFixed(3));
   };
   /* the figure's write: the figure writes glyph by glyph over the first 0.6 of its word, the sub over the rest */
   const paintFigure = (fg, t) => {
@@ -3267,6 +3316,7 @@
     const PF = st.perform;
     const undrawAll = pageSpecies(scene, "undraw").filter((sp) => (sp.series ?? (sp.target || {}).series) == null);
     for (const b of PF.brackets) paintBracket(b, t, undrawAll.find((sp) => sp.at >= b.sp.at));
+    for (const sd of PF.spreads || []) paintSpread(sd, t);   /* the fifth watch: the gap between the lines, bled full */
     for (const fg of PF.figures || []) paintFigure(fg, t);   /* E50: the chart's next thing */
     for (const nt of PF.notes || []) { nt.div.style.opacity = t >= nt.sp.at ? "" : "0"; writeGlyphs(nt.glyphs, t - nt.sp.at, Math.max(0.05, nt.sp.dur || 1)); }
     /* RELIGHT: the sunflower twin rises and falls on a sine over dur */
@@ -3457,6 +3507,7 @@
       pp.tip.setAttribute("opacity", drawing ? 1 : 0);
       pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));
     });
+    for (const hr of st.hlines || []) { const k = clamp01(c / 0.25); hr.line.setAttribute("opacity", (0.9 * k).toFixed(3)); if (hr.lab) hr.lab.setAttribute("opacity", clamp01((c - 0.25) / 0.2).toFixed(2)); }
     if (st.paint) st.paint(st, c, t3);   /* the builder's own build step (race / decline / combo) */
     if (morphOn) paintMorph(st, pg, scene.world, clamp01((t - scene.span[0]) / morphS), c);   /* P47 T3: the prop becomes the area under the line, then the line draws over it */
     /* badges: floored at the build's end, each springs in over LP_BADGE_IN with the dock's back-out overshoot */
@@ -4319,7 +4370,7 @@
   /* P47 T2 test probe (read-only): the active ledger page's drawn state, in the chart's own units */
   window.__lpProbe = () => {
     const world = [wA, wB].find((e) => e.__lp && e.classList.contains("ledger")); if (!world) return null;
-    const st = world.__lp, PF = st.perform || { brackets: [], retitles: [], figures: [] };
+    const st = world.__lp, PF = st.perform || { brackets: [], retitles: [], figures: [], spreads: [] };
     const paths = st.paths.map((pp) => { const off = parseFloat(pp.p.getAttribute("stroke-dashoffset") || "0"), drawn = pp.len - off;
       const q = pp.p.getPointAtLength ? pp.p.getPointAtLength(Math.max(0, Math.min(pp.len, drawn))) : { x: 0, y: 0 };
       return { si: pp.si | 0, k0: pp.k0 | 0, muted: !!pp.muted, len: pp.len, drawn, frac: pp.len ? drawn / pp.len : 1, tip: [q.x, q.y], pts: pp.pts || [], hidden: pp.p.style.opacity === "0" }; });
@@ -4329,9 +4380,10 @@
       label: b.main.lg.map((ts) => parseFloat(ts.getAttribute("opacity") || "0")), bbox: [bb.x, bb.y, bb.width, bb.height] }; });
     const w = (gs) => gs.map((g) => parseFloat(g.style.getPropertyValue("--w") || "0"));
     const M = st.morph; const mb = M ? M.path.getBBox() : null;
+    const spreads = (PF.spreads || []).map((sd) => ({ alpha: parseFloat(sd.path.getAttribute("fill-opacity") || "0"), d: (sd.path.getAttribute("d") || "").length, pts: sd.hi.length }));
     const figures = (PF.figures || []).map((fg) => ({ D: fg.D, x: fg.x, fits: fg.fits, opacity: parseFloat(fg.g.getAttribute("opacity") || "0"),
       label: fg.lg.map((ts) => parseFloat(ts.getAttribute("opacity") || "0")) }));
-    return { linePts: st.linePts, paths, brackets, figures, title: w(st.titleGlyphs || []), retitles: PF.retitles.map((r) => w(r.glyphs)),
+    return { linePts: st.linePts, paths, brackets, figures, spreads, title: w(st.titleGlyphs || []), retitles: PF.retitles.map((r) => w(r.glyphs)),
              morph: M ? { u: M.u, bbox: [mb.x, mb.y, mb.width, mb.height], fill: parseFloat(M.path.getAttribute("fill-opacity")), on: M.svg.style.opacity } : null };
   };
   window.__filmstrip = async (t0, dur, n, name) => {

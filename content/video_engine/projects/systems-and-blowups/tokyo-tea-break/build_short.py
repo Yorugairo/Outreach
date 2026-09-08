@@ -419,6 +419,9 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # the three notes write in the quiet zone over "Tokyo is still on its tea break", staggered, before the host lands over the page
             # the fourth watch: the bracket on this page drew a naked vertical span at the plot's edge - its label had no room in the
             # gutter the terminal tags now own - and read as an artifact. The +80 bp is in the notes below, in words, instead.
+            # the fifth watch (operator: "bleed the chart fill to red beneath the 10 year line and the fed rate"): the GAP between
+            # what the Fed charges and what America pays is the argument - it bleeds full of blood red as the ring lands
+            {"kind": "spread", "at": t_moved + 0.5, "dur": 1.8, "from": 0, "to_rule": 0, "color": "neg"},
             {"kind": "note", "at": t_tokyo_still, "dur": 1.0, "text": FED_NOTES[0]},
             {"kind": "note", "at": t_tokyo_still + 0.9, "dur": 1.0, "text": FED_NOTES[1]},
             {"kind": "note", "at": t_tokyo_still + 1.8, "dur": 1.2, "text": FED_NOTES[2]},

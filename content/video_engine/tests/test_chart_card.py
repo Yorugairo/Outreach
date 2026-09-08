@@ -48,14 +48,17 @@ def test_page_box_finds_the_charcoal_page_between_the_black_stage_and_the_cream_
 def test_the_fed_object_carries_its_proof_lines_and_its_facts_are_read_not_typed():
     import json
     obj = json.loads(FED.read_text(encoding="utf-8"))
-    assert obj["status"] == "REAL" and len(obj["series"]) == 2 and obj["mortgage"]["pts"], "two lines on one scale; the mortgage kept on the object for a note"
+    # the fifth watch: ONE drawn series (what America pays) measured against the Fed's rate as a reference RULE - a policy
+    # rate is a constant, not a series, and the window starts on the Fed's last move so the rule is true across the page
+    assert obj["status"] == "REAL" and len(obj["series"]) == 1 and obj["mortgage"]["pts"], "one drawn line; the mortgage kept on the object for a note"
+    assert obj["hlines"] and abs(obj["hlines"][0]["y"] - obj["facts"]["fed_target_upper"]) < 1e-9, "the rule IS the Fed's rate"
+    assert obj["facts"]["window_from"] == obj["facts"]["fed_last_move"], "the window opens on the last move, so the rule never steps"
     assert {p["series"] for p in obj["proof"]} == {"DFEDTARU", "DGS10", "MORTGAGE30US"}
     for p in obj["proof"]:
         assert p["url"].startswith("https://fred.stlouisfed.org/graph/fredgraph.csv?id=") and len(p["sha256"]) == 64
         assert (FED.parent.parent / p["path"].split("evidence/", 1)[1]).exists() or (ROOT / "content/video_engine/projects/systems-and-blowups/tokyo-tea-break" / p["path"]).exists()
     f = obj["facts"]
-    fed = obj["series"][0]["pts"]
-    assert all(abs(v - f["fed_target_upper"]) < 1e-9 for _x, v in fed[-5:]), "the Fed line is flat at the facts' target over its tail"
+    # series[0] is now the 10-year (what America pays); the Fed's rate is the RULE, checked above
     assert f["dgs10_rise_bp_from_low"] > 0 and f["mortgage_rise_bp_from_low"] > 0, "the borrowing costs climbed - measured, not asserted"
 
 
