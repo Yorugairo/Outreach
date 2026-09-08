@@ -2194,7 +2194,7 @@
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short\\docks\\dock-h-fed-vs-yields.png",
-    "sha256": "ad6c8e4e97c90d8848eb522ac0a5a007ef20f401c4a176079cdfdfd14930cbf3"
+    "sha256": "0dfb49da4debe6e5373b2d8f6d9f97181477905650d6ec5ad028b72d1db506b0"
    },
    "badges": []
   },
@@ -3602,9 +3602,9 @@
      "kind": "video",
      "place": {
       "x": 140,
-      "y": 378,
+      "y": 280,
       "w": 799,
-      "h": 473
+      "h": 208
      },
      "read_s": 1.2,
      "park_s": 0.7,
@@ -5288,12 +5288,12 @@
      "builder": "combo",
      "variant": "line",
      "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
-     "sub": "Bars: Japan's monthly Treasury selling, $bn \u00b7 Lines: Fed funds (grey), flat since Dec 2025, and the 10-year (red), %",
+     "sub": "Japan's monthly Treasury selling against what America pays to borrow, since Oct 2025",
      "source": "US Treasury TIC \u00b7 FRED \u00b7 Sep 2026",
      "quiet_zone": "right",
      "src_style": "compact",
      "line_unit": "%",
-     "legend_in_sub": true,
+     "tiers": true,
      "labels": [
       "Feb",
       "Mar",
@@ -7520,9 +7520,9 @@
      "kind": "video",
      "place": {
       "x": 140,
-      "y": 378,
+      "y": 280,
       "w": 799,
-      "h": 473
+      "h": 284
      },
      "read_s": 1.2,
      "park_s": 0.7,

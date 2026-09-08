@@ -408,6 +408,7 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         **({"src_style": series["src_style"]} if series.get("src_style") in ("compact",) else {}),   # the design pass (2026-09-07): a citation takes minimal space
         **({"line_unit": series["line_unit"]} if isinstance(series.get("line_unit"), str) else {}),   # P47 T9: a combo's lines take their own right axis in this unit
         **({"legend_in_sub": True} if series.get("legend_in_sub") else {}),   # the sub names the lines by colour: no inline name (it would repeat and collide)
+        **({"tiers": True} if series.get("tiers") else {}),   # the macro-chart intake: bars and lines in two bands sharing one x, each on its own scale
         "labels": [], "values": [], "value_strings": [], "colors": [],
     }
     if builder == "object":

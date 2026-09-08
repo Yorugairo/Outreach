@@ -88,7 +88,7 @@ def main() -> int:
     obj = {
         "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
         # ONE clause: a portrait page cuts its sub at the first period (lpFirstClause), and this sub is the legend now
-        "sub": f"Bars: Japan's monthly Treasury selling, $bn · Lines: Fed funds (grey), flat since {last_move.strftime('%b %Y')}, and the 10-year (red), %",
+        "sub": f"Japan's monthly Treasury selling against what America pays to borrow, since {start.strftime('%b %Y')}",
         "proof_sentence": (f"Fed funds target (upper) flat at {fed[-1][1]:.2f}% since {last_move.isoformat()}; the 10-year "
                 f"{ten_low[1]:.2f}% ({ten_low[0].isoformat()}) -> {ten_now[1]:.2f}% ({ten_now[0].isoformat()}); the 30-year mortgage "
                 f"{mort_low[1]:.2f}% ({mort_low[0].isoformat()}) -> {mort_now[1]:.2f}% ({mort_now[0].isoformat()})"),
@@ -97,14 +97,17 @@ def main() -> int:
         "ylabel": "$bn",
         "unit": "",
         "line_unit": "%",
-        "legend_in_sub": True,   # the sub names both lines by colour; an inline name would repeat it and land in the bars
+        # the macro-chart intake (2026-09-07): the lines are a LEVEL (4-4.8 %, zero meaningless) and the bars a signed FLOW
+        # (zero is the story) - two TIERS sharing one x, never one plot with a floated zero. The tiers give the lines their
+        # right margin back, so they carry DIRECT TERMINAL LABELS again and the sub stops being a legend.
+        "tiers": True,
         "bars": bars,
         "xticks": months[::2],
         # the design pass (operator, 2026-09-07: "charts need to make sense with no captions"): TWO lines that share one scale, each
         # named with its value at its end - the Fed's rate and the 10-year sit a point apart, so the flat step and the climb read
         # in one frame; the mortgage (a point higher) is the third NOTE, not a third line that pushed the scale and stacked the names
         "series": [
-            {"label": "Fed funds", "name": f"{fed[-1][1]:.2f}%", "color": "deemph", "pts": [[dec_year(d), v] for d, v in win["DFEDTARU"]]},   # short names (s9.23b: named inline; two long names at one corner overprinted)
+            {"label": "Fed funds", "name": f"{fed[-1][1]:.2f}%", "color": "deemph", "pts": [[dec_year(d), v] for d, v in win["DFEDTARU"]]},   # the terminal label IS the legend (the Economist standard; s9.23b)
             {"label": "10-year", "name": f"{ten_now[1]:.2f}%", "color": "crimson", "pts": [[dec_year(d), v] for d, v in win["DGS10"]]},
         ],
         "mortgage": {"name": "30-year mortgage", "color": "amber", "pts": [[dec_year(d), v] for d, v in win["MORTGAGE30US"]]},   # kept on the object for a page that wants it

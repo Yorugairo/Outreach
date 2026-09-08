@@ -1,0 +1,804 @@
+(~ ~ Computer Graphics, Volume 21, Number 4, July 1987 
+PRINCIPLES OF TRADITIONAL ANIMATION 
+APPLIED TO 3D COMPUTER ANIMATION 
+John Lasseter 
+Pixar 
+San Rafael 
+California 
+"There is no particular mystery in animation.., it's really very simple, and 
+like anything that is simple, it is about the hardest thing in the world to 
+do." Bill Tytla at the Walt Disney Studio, June 28, 1937. [14] 
+ABSTRACT 
+This paper describes the basic principles of traditional 2D hand drawn 
+animation and their application to 3D computer animation. After describing 
+how these principles evolved, the individual principles are detailed, 
+addressing their meanings in 2D hand drawn animation and their application 
+to 3D computer animation. This should demonstrate the importance of 
+these principles to quality 3D computer animation. 
+CR Categories and Subject Descriptors: 
+1.3.6 Computer Graphics : Methodology and Techniques - Interaction 
+techniques; 
+1.3.7 Computer Graphics : Three-dimensional Graphics and Realism - 
+Animation; 
+J.5 Computer Applications : Arts and Humanities - Arts, fine and 
+performing. 
+General Terms: Design, Human Factors. 
+Additional Keywords and Phrases: Animation Principles, Keyframe 
+Animation, Squash and Stretch, Luxo Jr. 
+I. INTRODUCTION 
+Early research in computer animation developed 2D animation techniques 
+based on traditional animation. [7] Techniques such as storyboarding [11], 
+key/tame animation, [4,5] inbetweening, [16,22] scan/paint, and multiplane 
+backgrounds [17] attempted to apply the eel animation process to the 
+computer. As 3D computer animation research matured, more resources 
+were devoted to image rendering than to animation. Because 3D computer 
+animation uses 3D models instead of 2D drawings, fewer techniques from 
+traditional animation were applied. Early 3D animation systems were script 
+based [6], followed by a few spline-interpolated key/rome systems. [22] But 
+these systems were developed by companies for internal use, and so very 
+few traditionally trained animators found their way into 3D computer 
+animation. 
+"Luxo" is a trademark of Jae Jacobsen Industries AS. 
+Permission to copy without fee all or part of this material is granted 
+provided that the copies are not made or distributed for direct 
+commercial advantage, the ACM copyright notice and the title of the 
+pubfication and its date appear, and notice is given that copying is by 
+permission of the Association for Computing Machinery. To copy 
+otherwise, or to republish, requires a fee and/or specific permission. 
+© 1987 ACM-0-89791-227-6/87/007/0035 $00.75 
+The last two years have seen the appearance of reliable, user friendly, 
+keyframe animation systems from such companies as Wavefront 
+Technologies Inc., [29] Alias Research Inc., [2] Abel Image Research (RIP), 
+[1] Vertigo Systems Inc., [28] Symbolics Inc., [251 and others. These 
+systems will enable people to produce more high quality computer 
+animation. Unfortunately, these systems will also enable people to produce 
+more bad computer animation. 
+Much of this bad animation will be due to unfamiliarity with the 
+fundamental principles that have been used for hand drawn character 
+animation for over 50 years. Understanding these principles of traditional 
+animation is essential to producing good computer animation. Such an 
+understanding should also be important to the designers of the systems used 
+by these animators. 
+In this paper, I will explain the fundamental principles of traditional 
+animation and how they apply to 3D keyframe computer animation. 
+2. PRINCIPLES OF ANIMATION 
+Between the late 1920's and the late 1930's animation grew from a novelty 
+to an art form at the Walt Disney Studio. With every picture, actions 
+became more convincing, and characters were emerging as true personalities. 
+Audiences were enthusiastic and many of the animators were satisfied, 
+however it was clear to Walt Disney that the level of animation and existing 
+characters were not adequate to pursue new story lines-- characters were 
+limited to certain types of action and, audience acceptance notwithstanding, 
+they were not appealing to the eye. It was apparent to Walt Disney that no 
+one could successfully animate a humanized figure or a life-like animal; a 
+new drawing approach was necessary to improve the level of animation 
+exemplified by the Three Little Pigs. [10] 
+FIGURE 1. Luxo Jr.'s hop with overlapping action on cord. Flip pages 
+from last page of paper to front. The top figures are frames 1-5, the bottom 
+are frames 6-10. 
+J ~ 
+35 
+
+~ SIGGRAPH '87, Anaheim, July 27-31, 1987 
+Disney set up drawing classes for his animators at the Chouinard Art 
+Institute in Los Angeles under instructor Don Graham. When the classes 
+were started, most of the animators were drawing using the old cartoon 
+formula of standardized shapes, sizes, actions, and gestures, with little or no 
+reference to nature. [12] Out of these classes grew a way of drawing 
+moving human figures and animals. The students studied models in 
+motion [20] as well as live action film, playing certain actions over and 
+over. [131 The analysis of action became important to the development of 
+animation. 
+Some of the animators began to apply the lessons of these classes to 
+production animation, which became more sophisticated and realistic. The 
+animators continually searched for better ways to communicate to one 
+mother the ideas learned from these lessons. Gradually, procedures were 
+isolated and named, analyzed and perfected, and new artists were taught these 
+practices as rules of the trade. [26] They became the fundamental principles 
+of traditional animation: 
+1. Squash and Stretch -- Defining the rigidity and mass of an object by 
+distorting its shape during an action. 
+2. Timing -- Spacing actions to define the weight and size of objects and 
+the personality of characters. 
+3. Anticipation -- The preparation for an action. 
+4. Staging ,. Presentating an idea so that it is unmistakably clear. 
+5. Follow Through and Overlapping Action -- The termination of an 
+action and establishing its relationship to the next action. 
+6. Straight Ahead Action and Pose-To-Pose Action -- The two contrasting 
+approaches to the creation of movement. 
+7. Slow In and Out -- The spacing of the inbetween frames to achieve 
+subtlety of timing and movement. 
+8. Arcs -- The visual path of action for natural movement. 
+9. Exaggeration -- Accentuating the essence of an idea via the design and 
+the action. 
+10. Secondary Action -- The action of an object resulting from another 
+action, 
+11. Appeal .- Creating a design or an action that the audience enjoys 
+watching. 
+The application of some of these principles mean the same regardless of the 
+medium of animation. 2D hand drawn animation deals with a sequence of 
+two dimensional drawings that simulate motion. 3D computer animation 
+involves creating a three dimensional model in the computer. Motion is 
+achieved by setting keyframe poses and having the computer generate the 
+inbetween frames. Timing, anticipation, staging, follow through, overlap, 
+exaggeration, and secondary action apply in the same way for both types of 
+animation. While the meanings of squash and stretch, slow in and out, arcs, 
+appeal, straight ahead action, and pose-to-pose action remain the same, their 
+application changes due to the difference in medium. 
+2.1 SQUASH AND STRETCH 
+The most important principle is called squash and stretch. When an object 
+is moved, the movement emphasizes any rigidity in the object. In real life, 
+only the most rigid shapes (such as chairs, dishes and pans) remain so 
+during motion. Anything composed of living flesh, no matter how bony, 
+will show considerable movement in its shape during an action. For 
+example, when a bent arm with swelling biceps straightens out, only the 
+long sinews are apparent. A face, whether chewing, smiling, talking, or 
+just showing a change of expression, is alive with changing shapes in the 
+cheeks, the lips, and the eyes. ]26] 
+The squashed position depicts the form either flattened out by an external 
+pressure or constricted by its own power. The stretched position always 
+shows the same form in a very extended condition. [26] 
+The most important rule to squash and stretch is that, no matter how 
+squashed or stretched out a particular object gets, its volume remains 
+constant. If an object squashed down without its sides stretching, it would 
+appear to shrink; if it stretched up without its sides squeezing in it would 
+appear to grow. Consider the shape and volume of a half filled flour sack: 
+when dropped on the floor, it squashed out to its fullest shape. If picked up 
+by the top comers, it stretched out to its longest shape. It never changes 
+volume. [26] 
+The standard animation test for all beginners is drawing a bouncing ball. 
+The assignment is to represent the ball by a simple circle, and then have it 
+drop, hit the ground, and bounce back into the air. A simple test, but it 
+teaches the basic mechanics of animating a scene, introducing timing as 
+well as squash and stretch. If the bottom drawing is flattened, it gives the 
+appearance of bouncing. Elongating the drawings before and after the 
+bounce increases the sense of speed, makes it easier to follow and gives 
+more snap to the action. [26,3] (figure 2) 
+FIGURE 2. Squash & stretch in bouncing ball. 
+Squash and stretch also defines the rigidity of the material making up an 
+object. When an object is squashed flat and stretches out drastically, it 
+gives the sense that the object is made out of a soft, pliable material and 
+vice versa. When the parts of an object are of different materials, they 
+should respond differently: flexible parts should squash more and rigid parts 
+less. 
+An object need not deform in order to squash and stretch. For instance, a 
+hinged object like Luxo Jr. (from the film, Lv, xo Jr. I21]), squashes by 
+folding over on itself, and stretches by extending out fully. (figure 3) 
+FIGURE 3. Squash & stretch in Luxo Jr.'s hop. 
+Squash and stretch is very important in facial animation, not only for 
+showing the flexibility of the flesh and muscle, but also for showing the 
+relationship of between the parts of the face. When a face smiles broadly, 
+the comers of the mouth push up into the cheeks. The cheeks squash and 
+push up into the eyes, making the eyes squint, which brings down the 
+eyebrows and stretches the forehead. When the face adopts a surprised 
+expression, the mouth opens, stretching down the cheeks. The wide open 
+eyes push the eyebrows up, squashing and wrinkling the forehead. 
+36 
+
+~)' Computer Graphics, Volume 21, Number 4, July 1987 
+Another use of squash and stretch is to help relieve the disturbing effect of 
+strobing that happens with very fast motion because sequencial positions of 
+an object become spaced far apart. When the action is slow enough, the 
+object's positions overlap, and the eye smooths the motion out. (figure 4a) 
+However, as the speed of the action increases, so does the distance between 
+positions. When the distance becomes far enough that the object does not 
+overlap from frame to frame, the eye then begins to perceive separate 
+images. (figure 4b) Accurate motion blur is the most realistic solution to 
+this problem of strobing, [8,9] but when motion blur is not available, 
+squash and stretch is an alternative: the object should be stretched enough so 
+that its positions do overlap from frame to frame (or nearly so), and the eye 
+will smooth the action out again. (figure 4c) 
+FIGURE 4a. In slow action, an object's position 
+overlaps from frame to frame which gives the 
+action a smooth appearance to the eye. 
+FIGURE 4b. Strobing occurs in a faster action 
+when the object's positions do not overlap and 
+the eye perceives seperate images. 
+FIGURE 4c. Stretching the object so that it's positions 
+overlap again will relieve the strobing effect. 
+In 3D keyframe computer animation, the scale transformation can be used 
+for squash and stretch. When scaling up in Z, the object should be scaled 
+down in X and Y to keep the volume the same. Since the direction of the 
+stretch should be along the path of action, a rotational transformation may 
+be required to align the object along an appropriate axis. 
+2.2 TIMING 
+Timing, or the speed of an action, is an important principle because it 
+gives meaning to movement-- the speed of an action defines how well the 
+idea behind the action will read to an audience. It reflects the weight and 
+size of an object, and can even carry emotional meaning. 
+Proper timing is critical to making ideas readable. It is important to spend 
+enough time (but no more) preparing the audience for: the anticipation of an 
+action; the action itself; and the reaction to the action. If too much time is 
+spent on any of these, the audience's attention will wander. If too little 
+time is spent, the movement may be finished before the audience notices it, 
+thus wasting the idea. [30] 
+The faster the movement, the more important it is to make sure the 
+audience can follow what is happening. The action must not be so fast that 
+the audience cannot read it and understand the meaning of it. [30] 
+More than any other principle, timing defines the weight of an object. Two 
+objects, identical in size and shape, can appear to be two vastly different 
+weights by manipulating timing alone. The heavier an object is, the greater 
+its mass, and the more force is required to change its motion. A heavy body 
+is slower to accelerate and decelerate than a light one. It takes a large force 
+to get a cannonball moving, but once moving, it tends to keep moving at 
+the same speed and requires some force to stop it. When dealing with heavy 
+objects, one must allow plenty of time and force to start, stop or change 
+their movements, in order to make their weight look convincing. [30] 
+Light objects have much less resistance to change of movement and so need 
+much less time to start moving. The flick of a finger is enough to make a 
+balloon accelerate quickly away. When moving, it has little momentum 
+and even the friction of the air quickly slows it up. [30] 
+Timing can also contribute greatly to the feeling of size or scale of an 
+object or character. A giant has much more weight, more mass, more 
+inertia than a normal man; therefore he moves more slowly. Like the 
+cannonball, he takes more time to get started and, once moving, takes more 
+time to stop. Any changes of movement take place more slowly. 
+Conversely, a tiny character has less inertia than normal, so his movements 
+tend to be quicker. [30] 
+The way an object behaves on the screen, the effect of weight that it gives, 
+depend entirely on the spacing of the poses and not on the poses 
+themselves. No matter how well rendered a cannonball may be, it does not 
+look like a cannonball if it does not behave like one when animated. The 
+same applies to any object or character. [30] 
+The emotional state of a character can also be defined more by its movement 
+than by its appearence, and the varying speed of those movements indicates 
+whether the character is lethargic, excited, nervous or relaxed. Thomas and 
+Johnston [26] describe how changing the timing of an action gives it new 
+meaning: 
+Just two drawings of a head, the first showing it leaning toward the right 
+shoulder and the second with it over on the left and its chin slightly raised, 
+can be made to communicate a multitute of ideas, depending entirely on the 
+Timing used. Each inbetween drawing added between these two "extremes" 
+gives a new meaning to the action. 
+NO inbetweens ........... The Character has been hit by a tremendous force. 
+His head is nearly snapped off. 
+ONE inbetweens ......... The Character has been hit by a brick, rolling pin, 
+frying pan. 
+TWO inbetweens ......... The Character has a nervous tic, a muscle spasm, 
+an uncontrollable twitch. 
+THREE inbetweens ..... The Character is dodging a brick, rolling pin, 
+frying pan. 
+FOUR inbetweens ........... The Character is giving a crisp order, "Get 
+going!" "Move it!" 
+FIVE inbetweens ........... The Character is more friendly, "Over here." 
+"Come on-hurry!" 
+SIX inbetweens ........... The Character sees a good looking girl, or the 
+sports car he has always wanted. 
+SEVEN inbetweens ........... The Character tries to get a better look at 
+something. 
+5< f J 
+37 
+
+"~ SIGGRAPH '87, Anaheim, July 27-31, 1987 
+EIGHT inbetweens ........... The Charaeter searches for the peanut butter on 
+the kitchen shelf. 
+NINE inbetweens ........... The Character appraises, considering thoughtfully. 
+TEN inbetweens ........... The Character stretches a sore muscle. 
+FIGURE 5. Wally B.'s zip off shows use of squash and stretch, 
+anticipation, follow through, overlapping action, and secondary action. 
+2.3 ANTICIPATION 
+An action occurs in three parts: the preparation for the action, the action 
+proper, and the termination of the action. Anticipation is the preparation 
+for the action; the latter two are discussed in the next sections. 
+There are several facets to Anticipation. In one sense, it is the anatomical 
+provision for an action. Since muscles in the body function through 
+contraction, each must be first be extended before it can contract. A foot 
+must be pulled back before it can be swung forward to kick a ball. [12] 
+Without anticipation many actions are abrupt, stiff and unnatural. 
+Anticipation is also a device to catch the audience's eye, to prepare them for 
+the next movement and lead them to expect it before it actually occurs. 
+Anticipation is often used to explain what the following action is going to 
+be. Before a character reaches to grab an object, he first raises his arms as 
+he stares at the article, broadcasting the fact that he is going to do 
+something with that particular object. The anticipatory moves may not 
+show why he is doing something, but there is no question about what he 
+is going to do next. [26] 
+Anticipation is also used to direct the attention of the audience to the fight 
+part of the screen at the fight moment. This is essential for preventing the 
+audience from missing some vital action. In the very beginning of Luxo Jr., 
+Dad is on screen alone looking offstage. He then reacts, anticipating 
+something happening there. When Jr. does hop in, the audience is prepared 
+for the action. 
+The amount of anticipation used considerably affects the speed of the action 
+which follows it. If the audience expects something to happen, then it can 
+be much faster without losing them. If they are not properly prepared for a 
+very fast action, they may miss it completely; the anticipation must be 
+made larger or the action slower. [30] In a slow action the anticipation is 
+often minimized and the meaning carried in the action proper. [121 In one 
+shot inThe Adventures of Andre and Wally B. , Wally B. zips off to the 
+right. The actual action of the zip off is only 3 or 4 frames long, but he 
+anticipates the zip long enough for the audience to know exactly what is 
+coming next. (figure 5) 
+Anticipation can also emphasize heavy weight, as for a character picking up 
+an object that is very heavy. An exaggerated anticipation, like bending way 
+down before picking up the object, helps the momentum of the character to 
+lift the heavy weight. Likewise for a fat character standing up from a seated 
+position: he will bend his upper body forward, with his hands on the 
+armrests of the chair, before pushing up with his arms and using the 
+momentum of his body. [31] 
+2.4 STAGING 
+Staging is the presentation of an idea so it is completely and unmistakably 
+clear; this principle translates directly from 2-D hand drawn animation. An 
+action is staged so that it is understood; a personality is staged so that it is 
+recognizable; an expression so that it can be seen; a mood so that it will 
+affect the audience. [26] 
+To stage an idea clearly, the audience's eye must be led to exactly where it 
+needs to be at the right moment, so that they will not miss the idea, 
+Staging, anticipation and timing are all integral to directing the eye. A 
+well-timed anticipation will be wasted if it is not staged clearly. 
+It is important, when staging an action, that only one idea be seen by the 
+audience at a time. If a lot of action is happening at once, the eye does not 
+know where to look and the main idea of the aclion will be "upstaged" and 
+overlooked. The object of interest should contrast from the rest of the 
+scene. In a still scene, the eye will be attracted to movement. In a very 
+busy scene, the eye will be attracted to something that is still. Each idea or 
+action must be staged in the strongest and the simplest way before going on 
+to the next idea or action. The animator is saying, in effect, "Look at this, 
+now look at this, and now look at this." [26] 
+38 
+
+(~ ~ Computer Graphics, Volume 21, Number 4, July 1987 
+In Luxo Jr. , it was very important that the audience was looking in the 
+right place at the right time, because the story, acting and emotion was 
+being put across with movement alone, in pantomime, and sometimes the 
+movement was very subtle. If the audience missed an action, an emotion 
+would be missed, and the story would suffer. So the action had to be paced 
+so that only Dad or Jr. was doing an important action at any one time, 
+never both. In the beginning of the film, Dad is on screen alone your eye 
+was on him. But as soon as Jr. hops on-screen, he is moving faster than 
+Dad, therefore the audience's eyes immediately goes to him and stays there. 
+Most of the time Jr. was on-screen, Dad's actions were very subtle, so the 
+attention of the audience was always on Jr. where most of the story was 
+being told. If Dad's actions were important, Jr.'s actions were toned down 
+and Dad's movements were emphasized and the attention of the audience 
+would transfer to Dad. For example, when Jr. looks up to Dad after he's 
+pol3q3eA the bali and Dad shakes his head, all eyes are on him. 
+Another idea developed in the early days at Disney was the importance of 
+staging an action in silhouette. In those days, all the characters were black 
+and white, with no gray values to soften the contrast or delineate a form. 
+Bodies, arms and hands were all black, so there was no way to stage an 
+action clearly except in silhouette. A hand in front of a chest would simply 
+disappear. Out of this limitation, the animators realized that it is always 
+better to show an action in silhouette. Charlie Chaplin maintained that if 
+an actor knew his emotion thoroughly, he could show it silhouette. [26] 
+In The Adventures of Andre and Wally B., Andre awakes and sits up, then 
+scratches his side. If he were to scratch his stomach instead of his side, the 
+action would happen in front of his body and would be unclear what was 
+happening. (figure 6) 
+FIGURE 6. Andre's scratch was staged to the side (in "silhouette") for 
+clarity and became that is where his itch was. 
+In Luxo Jr., all the action was animated with silhouette in mind. When 
+Dad and Jr. come face to face for the first time, it is easy to see what is 
+happening because it is staged to the side. If Jr. was in front of Dad 
+looking up at him, it would be difficult to read. (figure 7) Jr. hopping on 
+the ball would be confusing if the action was to happen with Jr. facing the 
+camera. Viewed from the side it is perfectly clear, (figure 8) 
+2.5 FOLLOW THROUGH AND OVERLAPPING ACTION 
+Just as the anticipation is the preparation of an action,follow through is 
+the termination of an action. Actions very rarely come to a sudden and 
+complete stop, but are generally carried past their termination point. For 
+example, a hand, after releasing a thrown ball, continues past the actual 
+point of release. 
+In the movement of any object or figure, the actions of the parts are not 
+simultaneous: some part must initiate the move, like the engine of a main. 
+This is called the lead. In walking, the action starts with the hips. As the 
+hip swings forward, it sets a leg in motion. The hip "leads", the leg 
+FIGURES 7-8. In Luxo Jr., all action was staged to the side for clarity. 
+"follows." As the hip twists, the torso follows, then the shoulder, the arm, 
+the wrist, and finally the fingers. Although most large body actions start in 
+the hips, the wrist will lead the fingers in a hand gestoxe, and the eyes will 
+usually lead the head in an action. [12] 
+Appendages or loose parts of a character or object will move at a slower 
+speed and "drag" behind the leading part of the figure. Then as the leading 
+part of the figure slows to a stop, these appeftdages will continue to move 
+and will take longer to settle down. As with squash and streteh, the objects 
+mass is shown in the way the object slows down. The degree that the 
+appendages drag behind and the time it takes for them to stop is directly 
+proportional to their weight. The heavier they are the farther behind they 
+drag and the longer they take to settle to a stop. Conversely, if they are 
+lighter, they will drag less and stop more quickly. 
+J' 
+39 
+
+'~ SIGGRAPH '87, Anaheim, July 27-31, 1987 i i n,i i 
+In The Adventures of Andre and Watly B., this principle was used 
+extensively on Wally B.'s feet, antennae and stinger. They all dragged 
+behind his head and body, and continued to move well after the body had 
+stopped. To convey that these loose appendages were made of different 
+materials and different masses, the rate of the follow through was different 
+for each type. His antennae were fairly light, so they dragged behind just 
+slightly. His stinger was like stainless steel, so it dragged behind the action 
+more than the antennae. And his feet were heavy and very flexible, as 
+though they were water balloons; therefore, they always followed far behind 
+the main action with a lot of squash and stretch. In the zip off illustrated 
+above (figure 5), the action of Wally B.'s body was so fast and the feet 
+weighed so much that they dragged far behind. They were even left on 
+screen frames after the body had disappeared. 
+Often, slight variations are added to the timing and speed of the loose parts 
+of objects. This overlapping action makes the object seem natural, the 
+action more interesting. In Wally's zip off (figure 5), his feet zipped off, 
+one after the other, about one or two frames apart. The action was so fast 
+that it was difficult to see each foot going off separately, but It made the 
+action as a whole more interesting. 
+Perhaps more important, overlapping is critical to conveying main ideas of 
+the story. An action should never be brought to a complete stop before 
+starting another action, and the second action should overlap the first. 
+Overlapping maintains a continual flow and continuity between whole 
+phrases of actions. 
+Walt Disney once explained overlapping this way, "It is not necessary for 
+an animator to take a character to one point, complete that action 
+completely, and then turn to the following action as if he had never given it 
+a thought until after completing the first action. When a character knows 
+what his is going to do he doesn't have to stop before each individual action 
+and think to do it. He has #planned in advance in his mind. For example, 
+the mind thinks, "I'll close the door - lock it - then I'm going to undress and 
+go to bed." Well, you walk over to the door - before the walk is finished 
+you're reaching for the door - before the door is closed you reach for the key 
+- before the door is lockedyou're turning away - while you're walking away 
+you undo your tie - and before you reach the bureau you have your tie off. 
+In other words, before you know it you're undressed - and you've done it in 
+one thought, "I'm going to bed.' " [12] 
+2.6 STRAIGHT AHEAD ACTION AND POSE-TO-POSE ACTION 
+(KEYFRAMES) 
+There are two main approaches to hand drawn animation. The first is 
+known as straight ahead action because the animator literally works straight 
+ahead from his first drawing in the scene. He knows where the scene fits in 
+the story and the business it has to include. He does one drawing after 
+another, getting new ideas as he goes along, until he reaches the end of the 
+scene. Thig process usually produces drawings and action that have a fresh 
+and slightly zany look, because the whole process was kept very creative. 
+Straight ahead action is used for wild, scrambling actions where spontaneity 
+is important. 
+The second approach is called pose-to-pose. Here the animator plans his 
+actions, figures out just what drawings will be needed to animate the 
+business, makes the drawings concentrating on the poses, relates them to 
+each other in size and action, and then draws the inbetweens. Pose-to-pose 
+is used for animation that requires good acting, where the poses and timing 
+are all important. 
+The pose-to-pose technique applies to keyframe computer animation with 
+timing and pose control of extremes and inbetweens. The difficulty in 
+controlling the inbetweens makes it incorrect to approach keyframe 
+computer animation exactly as one would pose-to-pose hand drawn 
+animation. In working with a complex model, creating a complete pose at 
+a time would make the inbetweens too unpredictable. The path of action 
+will in general be incorrect and objects will intersect one another. The result 
+is much time-consuming reworking of inbetweens. 
+There is a much better approach in the context of a hierarchical modelling 
+system, which works "layer by layer" down the hierarchy. Instead of 
+animating one complete pose to another, one transformation is animated at 
+a time, starting with the trunk of the hierarchical tree structure, working 
+transformation by transformation down the branches to the end. Fewer 
+extremes are used. Not all translates, rotates and scales have extremes on the 
+same frames; some have many extremes and others very few. With fewer 
+extremes, the importance of the inbetweens increases, Tension and direction 
+controls on the interpolating splines are helpful in controlling the spacing 
+of the inbetween and to achieve slow in and out. [16] (See Slow In and Out) 
+This layer approach to animation shares many important elements with the 
+pose-to-pose technique in hand drawn animation. Planning the animation 
+out in advance, as in pose-to-pose, becomes even more important. The 
+action must be well thought out, the timing and poses planned so that even 
+in the early layers, the poses and actions are clear. 
+The Aventures of Andre and Wally B. and Luxo Jr. were both animated 
+using a keyframe animation system called Md (Motion Doctor). [19] Luxo 
+Jr. was animated using this layered approach to the keyfranles. Jr.'s hop 
+(figure 1) was animated by first setting the keyframes for his forward 
+movement only: two keyframes were set for the X translation, the first 
+where the hop starts and the second where he lands. This defined the timing 
+of his hop. The height of his hop was then defined by setting a keyframe in 
+the Z translation (Z being up in this case). The next step, animating the 
+rotation of Jr.'s arms, was important because the arms define the 
+anticipation, squash and stretch, and follow through of the action. 
+Keyframes were set for just about every frame, rotating the arms together 
+before the hop for the anticipation, then immediately far apart for the stretch 
+of the jump. The arms were rotated together again at the top of the arc 
+where the action slows slightly, then rotated far apart, stretching to 
+anticipate the landing. To indicate the shock of the landing, the arms were 
+rotated quickly together two frames after the base lands on the floor. This is 
+the follow through of the action. His base and shade were animated in the 
+next two steps. Like the arms, many keyframes were set to define the 
+rotation of the base and shade because their movement was important for 
+anticipation and follow through. 
+2.7 SLOW IN AND OUT 
+Slow in and slow out deals with the spacing of the inbetween drawings 
+between the extreme poses. Mathematically, the term refers to second- and 
+third-order continuity of motion. 
+In early animation, the action was limited to mainly fast and slow moves, 
+the spacing from one drawing to the next fairly even. But when the poses 
+of pose-to-pose animation became more expressive, animators wanted the 
+audience to see them. They found that by grouping the inbetweens closer to 
+each extreme, with only one fleeting drawing halfway between, they could 
+achieve a very spirited result, with the character zipping from one attitude to 
+another. "Slowing out" of one pose, then "slowing in" to the next pose 
+simply refers to the timing of the inbetweens. 
+The animator indicates the placement of the inbetweens, the slow in or slow 
+out, with a "timing chart" drawn on the side of the drawing. This tells 
+himself, or his assistant who will be doing the inbetweens later, how he 
+wanted the timing to be and where he wanted the inbetween drawings placed. 
+(figur~ 9) 
+EXTREME 
+• EXTREME 
+FIGURE 9. Timing chart for ball bounce. 
+40 
+
+(~ ~ Computer Graphics, Volume 21, Number 4, July 1987 
+In most 3D keyframe computer animation systems, the inbetweening is 
+done automatically using spline interpolation. Slow in and slow out is 
+achieved by adjusting the tension, direction or bias, and continuity of the 
+splines. [16] This works well to give the affect of slow in and out, but a 
+graphical representation of the spline is required to see the effect of tension, 
+direction, and continuity have on its shape. 
+With this type of spline interpolation, a common problem is the spline 
+overshooting at extremes when there is a large change in value between 
+them, especially over a small number of frames. This also happens when 
+the direction control of an extreme is adjusted. The danger is that, 
+depending on the variable the spline controls (translate, rotate, or scale), the 
+value will shoot in the wrong direction just before (or just after) the large 
+change in value. Sometimes this effect works out well when it occurs just 
+before a large movement, it may appear to be an anticipation. However, 
+more often than not, it gives an undesirable effect. 
+In Luxo Jr., there was an example of this problem of overshooting splines. 
+Jr.'s base was very heavy and when he hopped, we wanted the base to start 
+stationary, then pop up in the air from the momentum of his jump, arc 
+over, then land with a thud, suddenly stationary again. For the up 
+translation, there were three keyframes, the two stationary positions and the 
+highest point of his jump. The spline software forced continuity, so that his 
+base would move down under the surface of the floor just before and after 
+the jump. (figure 10a) The solution was to put two new extremes, equal to 
+the two stationary extremes, on the frames just before and just after the 
+extremes. This "locked" down the spline, so that the up translation stayed 
+the same value, popped up in the air, landed and then stayed the same value 
+again. This gave the desired feeling of weight to his little base, (figure 10b) 
+The same solution can be achieved by breaking the spline using its 
+continuity parameter [16] at the two stationary extremes. This solution 
+requires a graphical display of the spline so that the correct shape can be 
+achieved. 
+FIGURE 10a. This spline controls the Z (up) translation of Luxo Jr. 
+Dips in the spline cause him to intersect the floor. 
+FIGURE 10b. Two extra extremes are added to the spline 
+which removes the dips and prevents Jr. from going into the basement. 
+2.8 ARCS 
+The visual path of action from one extreme to another is always described 
+by an arc. Arcs in nature are the most economical routes by which a form 
+can move from one position to another. In animation, such arcs are used 
+extensively, for they make animation much smoother and less stiff than a 
+straight line for the path of action. In certain cases, an arc may resolve 
+itself into a straight path, as for a falling object, but usually,, even in a 
+straight line action, the object rotates. [12] 
+In most 3D keyframe computer animation systems, the path of action from 
+one extreme to another is controlled by the same spline that controls the 
+timing (slow in and out) of the inbetween values. This may simplify 
+computating the inbetweens but it has unfortunate effects. When a motion 
+is slow, with many inbetweens, the arc of the path of action is curved, as 
+desired. But when the action is fast, the arc flattens out: the faster the 
+action, the flatter the arc. Sometimes this is desirable, but more often, the 
+path of even a fast motion should be curved or arced. Straight inbetweens 
+can completely kill the essence of an action. 
+The spline that defines the path of action should be separate from the spline 
+that defines the timing or spacing of the inbetweens for several reasons: so 
+that the arc of a fast acdon doesn't flatten out; so that you can adjust the 
+timing of the inbetweens without effecting the path of action; so that you 
+can use different splines to define the path of action (where a B-spline is 
+appropriate for its smoothness) and the timing (a CatmuU - Rom spline so 
+you can adjust it's tension and direction controls to get slow in and out). 
+This technique is not common, but research is being done in this area. [15] 
+2.9 EXAGGERATION 
+The meaning of exaggeration is, in general, obvious. However, the 
+principle of exaggeration in animation does not mean arbitrarily distorting 
+shapes or objects or making an action more violent or unrealistic. The 
+animator must go to the heart of anything or any idea and develop its 
+essence, understanding the reason for it, so that the audience will also 
+understand it. If a eharacter is sad, make him sadder; if he is bright, make 
+him shine; worried, make him fret; wild, make him frantic. 
+A scene has many components to it: the design, the shape of the objects, 
+the action, the emotion, the color, the sound. Exaggeration can work with 
+any component, but not in isolation. The exaggeration of the various 
+components should be balanced. If just one thing is exaggerated in an 
+otherwise lifelike scene, it will stick out and seem unrealistic. 
+f 
+41 
+
+~ SIGGRAPH '87, Anaheim, July 27-31, 1987 
+FIGURE 11. Varying the scale of different parts of Dad created the 
+child-like proportions of Luxo Jr. 
+V * 
+FIGURE 12. Andre's yawn was made more interesting by not duplicating 
+the poses and the action from one side of his body to the other. 
+However, exaggerating everything in a scene can be equally unrealistic to an 
+audience. Some elements must be based in nature, with others exaggerated 
+unnaturally. If there is an element that the audience can recognize, 
+something that seems natural to them, that becomes the ground for 
+comparison of the exaggeration of the other elements, and the whole scene 
+remains very realistic to them. 
+In Luxo Jr., all the components of the scene, some naturalistic, some 
+exaggerated, worked together to make it believable and realistic. The design 
+of the lamps was based on the real Luxo lamp, but certain parts were 
+exaggerated./r.'s proportions were exaggerated to give the feeling of a child 
+(See Appeal). 
+The movement had the sense of natural physics, yet almost every motion 
+and action was exaggerated to accentuate it: when Jr. he hit the ball, he 
+really whacked it, When he jumped up for a hop, his whole body movement 
+was exaggerated to give the feeling of realistic weight to his base. When he 
+landed after a hop, the impact was shown in the exaggeration of his body 
+movements. On the soundtrack, the lamp sounds were recorded from a real 
+Luxo lamp, then exaggerated sounds were added to accent certain actions. 
+[23] The ironic effect of all this exaggeration was to make the film more 
+realistic, while making it entertaining, 
+2.10 SECONDARY ACTION 
+A secondary action is an action that results directly from another action. 
+Secondary actions are important in heightening interest and adding a realistic 
+complexity to the animation. A secondary actions is always kept 
+subordinate to the primary action. If it conflicts, becomes more interesting, 
+or dominates in any way, it is either the wrong choice or is staged 
+improperly. [26] 
+Wally B.'s feet dragging behind the main action of his body is a secondary 
+action because the movement of the feet is a direct result of the movement 
+of the body. (fi~ure 5) The rippling movement of Luxo Jr.'s cord results 
+directly from the hopping action of his base. (figure 1) 
+The facial expression of a character will sometimes be a secondary action. 
+When the main idea of an action is being told in the movement of the body, 
+the facial expression become subordinate to the main idea. If this 
+expression is going to animate or change, the danger is not that the 
+expression will dominate the scene, but that it will never be seen. The 
+change must come before, or after, the move. A change in the middle of a 
+major move will go unnoticed, and value intended will be lost. It must 
+also be staged to be obvious, though secondary. [26] 
+2.11 APPEAL 
+The word appeal is often misrepresented to suggest cuddly bunnies and soft 
+kittens. It doesn't; it means anything that a person likes to see: a quality of 
+charm, pleasing design, simplicity, communication, or magnetism. Your 
+eye is drawn to the figure or object that has appeal, and, once there, it is 
+held while you appreciate the object. A weak drawing or design lacks 
+appeal. A design that is complicated or hard to read lacks appeal. Clumsy 
+shapes and awkward moves all have low appeal. Where the live action actor 
+has charisma, the animated character has appeal. [26] 
+The appeal in Laxo Jr. was achieved in different ways. In designing the 
+characters, the feeling of a baby lamp and a grown up lamp was very 
+important. The effect was achieved using exaggeration in proportion, in the 
+same way a puppy is proportioned very differently than an adult dog, or a 
+human baby is different from an adult. The light bulb is the same size on 
+Jr., while the shade is smaller. The springs and support rods are the same 
+diameter as Dad's, yet they are much shorter. (figure 11) 
+In creating an appealing pose for a character, one thing to avoid is called 
+"twins", where both arms and both legs are in the same position, doing the 
+same thing. This gives the pose a stiff, wooden, unappealling quality. If 
+each part of the body varies in some way from its corresponding part, the 
+character will look more natural and more appealing. Likewise one side of a 
+face should never mirror the other. 
+In The Aventures of Andre and Wally B. , Andre wakes up and yawns. The 
+yawn is more appealing because the poses and actions are not duplicated 
+from one side of his body to the other. His feet rotate with a slight 
+difference, the head rotates to one side, the upper part of his body rotates to 
+the right and tilts, which raises his right arm higher than his left. When he 
+stretches his arms, the right arm moves out first, followed by the left, and 
+the actions overlap. (figure 12) 
+42 
+
+@ Computer Graphics, Volume 21, Number 4, July 1987 
+3. PERSONAHTY 
+This final section discusses the underlying goal of all the principles 
+discussed earlier. Personality in character animation is not a principle unto 
+itself, but the intelligent application of all of the principles of animation. 
+When character animation is successful and the audience is thoroughly 
+entertained, it is because the characters and the story have become more 
+important and apparent than the technique that went into the animation. 
+Whether drawn by hand or computer, the success of character animation lies 
+in the personality of the characters 
+In character animation, all actions and movements of a character are the 
+result of its thought processes. "The thinking animation character becomes 
+a character." [12] Without a thought process, the actions of a character are 
+just a series of unrelated motions. With a thought process to connect them, 
+the actions bring a character to life. 
+In order to get a thought process into an animation, it is critical to have the 
+personality of a character clearly in mind at the outset, so that it makes 
+sense to ask at any moment, "What mood is the character in. How would 
+he do this action?" 
+One character would not do a particular action the same way in two different 
+emotional states. An example of this, in Luxo Jr., is the action of Jr. 
+hopping. When he is chasing the ball, he is very excited, happy, all his 
+thoughts on the ball. His hops are fast, his head up looking at the ball, 
+with very little time on the ground between hops because he can't wait to 
+get to the ball. After he pops the ball, however, his hop changes drastically, 
+reflecting his sadness that the object of all of his thoughts and energy just a 
+moment ago is now dead. As he hops off, each hop is slower, with much 
+more time on the ground between hops, his head down. Before, he had a 
+direction and purpose to his hop. Now he is just hopping off to nowhere. 
+No two characters would do the same action in the same way. For example, 
+in Luxo Jr., beth Dad and Jr. bat the ball with their heads. Yet Dad, who is 
+larger and older, leans over the ball and uses only his shade to bat it. Jr., 
+however, who is smaller, younger, and full of excited energy, whacks the 
+ball with his shade, putting his whole body into iL 
+When defining the character, it is important to make the personality 
+distinct, and at the same time have characteristics that are familiar to the 
+audience. If the actions of a character ring true, the audience will be able to 
+relate to the character, and he will be believable to them. 
+4. CONCLUSION 
+Whether it is generated by hand or by computer, the first goal of the 
+animator is to entertain. The animator must have two things: a clear 
+concept of exactly what will entertain the audience; and the tools and skills 
+to put those ideas across clearly and unambiguously. Tools, in the sense of 
+hardware and software, are simply not enough. The principles discussed in 
+this paper, so useful in producing 50 years of rich entertainment, are tools 
+as well.., tools which are just as important as the computers we work with. 
+5. ACKNOWLEDGMENTS 
+The author would like to express sincere thanks to Bill Reeves and Eben 
+Ostby for their unending support, education and creativity with the technical 
+aspects of computer animation. Steve Upstill for making it sound like I 
+know English. Nancy Tague for her ruthless editing even-on my birthday. 
+Kate Smith and Michael Shantzis for their assistance in editing this paper 
+even when they could have been watching Willie Wonka on video tape. 
+Craig Good for helping with the video tape portion of this paper. Joey 
+Tague for being pals and for telling us what happened in Willie Wonka. 
+And especially to Frank Thomas and Ollie Johnston for their instruction in 
+animation when the author was at the Disney Studio, and for their continued 
+inspiration with their book. [26] 
+6. REFERENCES 
+1. Abel Image Research, 953 N. Highland Ave., Los Angeles, CA 
+90038-2481 
+2. Alias Research Inc., 110 Richmond St. East, Suite 500, Toronto, 
+Ontario, Canada m5c- lpl 
+3. Blair, Preston, Animation, Walter T. Foster, Santa Ana CA, 1949. 
+4. Burmyk, Nester and Wein, Marceli, "Computer Generated Keyframe 
+Animation," Journal of the SMVrE 80, pp.149-153, March 1971. 
+5. Burtnyk, Nester and Wein, Marceli, "Interactive Skeleton Techniques 
+for Enhanced Motion Dynamics in Key Frame Animation," 
+Communications of the ACM 19 (10), pp 564-569, October, 1976. 
+6. Catmull, Edwin, "A System for Computer Generated Movies," 
+Proceedings ACM Annual Conference, pp. 422-431, August 1972. 
+7. Catmull, Edwin, "The problems of Computer- Assisted Animation," 
+SIGGRAPH '78, Computer Graphics, Vol. 12, No. 3, pp. 348-353, 
+August 1978. 
+8. Cook, Robert L., "Stochastic Sampling in Computer Graphics," ACM 
+Transactions on Graphics, Vol. 5, No. 1, pp. 51-72, January 1986. 
+9. Cook, Robert L., Porter, Thomas, and Carpenter, Loren, "Distributed 
+Ray Tracing," SIGGRAPH '84, Computer Graphics, Vol. 18, No. 3, 
+pp.137-145, July, 1984. 
+10. Walt Disney Productions, Three Little Pigs, (film), 1933. 
+11. Gracer, F., and Blagen, M. W., "Karma" A System for Storyboard 
+Animation," Procee.ding Ninth Annual UAIDE Meeting, pp. 210-255, 
+1970. 
+12. Graham, Don, The Art of Animation, unpublished. 
+13. Graham, Don, transcripts of action analysis class at the Walt Disney 
+Studio, June 21, 1937. 
+14. Graham, Don, transcripts of action analysis class with Bill Tytla at 
+the Walt Disney Studio, June 28, 1937. 
+15. Hardtke, lnes, and Bartels, Richard, "Kinetics for Key-Frame 
+Interpolation," unpublished. 
+16. Kochanek, Doris, and Barrels, Richard, "Interpolating Splines with 
+Local Tension, Continuity, and Bias Control," SIGGRAPH '84, 
+Computer Graphics, Vol. 18, No. 3, pp. 33-41, July, 1984. 
+17. I.~voy, Marc, "A Color Animation System Based on the Multi-Plane 
+Technique," SIGGRAPH '77, Computer Graphics, Vol. 11, No. 2, pp. 
+64-71, July, 1977. 
+43 
+
+. ~ SIGGRAPH '87, Anaheim, July 27-31, 1987 
+18. Lucasfilm Ltd. Computer Graphics Div., The Adventures of Andre 
+and Wally B., (fdm), 1984. 
+19. Ostby, Eben, Duff, Tom, and Reeves, William, Md (motion doctor), 
+animation program, Lucasfilm Ltd., 1982-1986. 
+20. Perine, Robert, Chouinard, An Art Vision Betrayed , Artra 
+Publishing, Encinitas CA, 1985. 
+21. Pixar, Luxo Jr., (film), 1986. 
+22. Reeves, William, "Inbetweening for Computer Animation Utilizing 
+Moving Point Constraints," SIGGRAPH '81, Computer Graphics, Vol. 
+15, NO. 3, pp. 263-270, August 1981. 
+23. Rydstrom, Gary, Soundtraek for Luxo Jr., Sprocket Systems Div., 
+Lucasfilm Ltd., July, 1986. 
+24. Stem, Garland, "Bboop--A System for 3D Keyframe Figure 
+Animation," Tutorial Notes: Introduction to Computer Animation , 
+SIGGRAPH '83, July 1983. 
+25. Symbolics Inc., 1401 Westwood Blvd., Los Angeles, CA 90024 
+26. Thomas, Frank and Johnston, Ollie, Disney Animation-- The Illusion 
+of Life, Abbeville Press, New York, 1981. 
+27. Thomas, Frank, "Can Classic Disney Animation Be Duplicated On 
+The Computer?" Computer Pictures, Vol. 2, Issue 4, pp. 20-26, 
+luly/August 1984. 
+28. Vertigo Systems International Inc., 119 W. Pender St., Suite 221, 
+Vancouver, BC, Canada v6b ls5 
+29. Wavefront Technologies, 530 East Montecito, Santa Barbara, CA 
+93101 
+30. Whitakcr, Harold and Halas, John, Timing for Animation , Focal 
+Press, London, 1981. 
+31. White, Tony, The Animator's Workbook, Watson-Gupfill, New 
+York, 1996. 
+44 

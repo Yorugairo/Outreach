@@ -631,15 +631,24 @@ def dock_place(world: dict, aspect: str | None) -> dict | None:
     return page_place(world["page"], aspect or "16:9")
 
 
-def centred_place(place: dict, aspect: str | None, card_aspect: float | None = None) -> dict:
-    """The same card, parked at the stage's centre (the third watch, 2026-09-07: "center dock then retract the host on that
-    chart page"). The width starts as the page's own placement width; a chart card names its own aspect (h / w), and the box
-    is capped at CENTRE_MAX_H of the stage - a portrait card shrinks to leave the page's title and source in view."""
+def centred_place(place: dict, aspect: str | None, card_aspect: float | None = None, page: dict | None = None) -> dict:
+    """The same card at the READING width, centred - horizontally on the stage, vertically in the page's own FREE space.
+
+    The third watch asked for a centred dock ("center dock then retract the host on that chart page"); the macro-chart intake
+    found the cost of centring on the STAGE instead of the PAGE - a two-tier chart occupies the upper half, so a stage-centred
+    card lands on the plot. The card is centred in the tallest band the page's ink leaves (`free_bands`: below the plot, or
+    the foot), and falls back to the caption-band centre only when the page reports no room."""
     sw, sh = (1080, 1920) if (aspect or "16:9") == "9:16" else (1920, 1080)
     w = round(CENTRE_W * sw); h = round(w * card_aspect) if card_aspect else dock_card_h(w)   # the READING width (a parked card is the small one)
     if h > CENTRE_MAX_H * sh:
         h = round(CENTRE_MAX_H * sh); w = round(h / card_aspect) if card_aspect else w
-    band = CENTRE_BAND * sh if (aspect or "16:9") == "9:16" else sh   # portrait: the caption strip is below the band; landscape captions sit elsewhere
+    bands = [bd for bd in free_bands(LPG.page_boxes(page, aspect or "16:9")) if page and bd["band"] in ("below", "foot", "above")] if page else []
+    room = max(bands, key=lambda bd: bd["h"], default=None)
+    if room and room["h"] >= 40:
+        if h > room["h"]:                                     # a tall card shrinks to the band rather than covering the page
+            h = round(room["h"]); w = round(h / card_aspect) if card_aspect else w
+        return {"x": round((sw - w) / 2), "y": round(room["y"] + (room["h"] - h) / 2), "w": w, "h": h}
+    band = CENTRE_BAND * sh if (aspect or "16:9") == "9:16" else sh   # portrait: the caption strip is below the band
     return {"x": round((sw - w) / 2), "y": round(max(0, (band - h) / 2)), "w": w, "h": h}
 
 
@@ -771,7 +780,7 @@ def main() -> int:
                 raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
             d = META.get(aid, {"title": aid, "source": "", "species": "deck",
                                "badges": []})
-            dplace = centred_place(place, ASPECT, dopt.get("card_aspect")) if (place and dopt.get("centre")) else place   # the third watch: the host centred on the last page
+            dplace = centred_place(place, ASPECT, dopt.get("card_aspect"), (world or {}).get("page")) if (place and dopt.get("centre")) else place   # the third watch: the host centred on the last page
             if True:
                 if aid not in evidence:
                     try:

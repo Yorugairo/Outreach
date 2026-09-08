@@ -1,5 +1,7 @@
 # **Acoustic Narrative Architecture: Integrating Classical Rhetorical, Screenwriting, and Broadcast Principles into Faceless Audio-Visual Media**
 
+*Research Synthesis · Date: 2026-08-24 · Last Verified: 2026-08-24 · Status: Active*
+
 ## **The Acoustic Imperative: Broadcast and Radio Writing Mechanics**
 
 Writing for spoken delivery requires a fundamental reorientation of linguistic mechanics. Unlike visual text, which permits the reader to pause, backtrack, and re-parse complex syntactical structures, auditory information is temporal, linear, and ephemeral1. When an audience listens to a script, cognitive processing occurs in real time; if a sentence fails to achieve immediate clarity, the listener's working memory suffers overload, resulting in narrative disconnection1. Professional broadcast standards—refined over decades by organizations such as the BBC, National Public Radio (NPR), and foundational broadcast theorists like Mervyn Block—offer precise linguistic frameworks designed to optimize auditory retention and cognitive processing1.

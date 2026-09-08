@@ -2750,8 +2750,8 @@
      best practices"): y gridlines carry TICK LABELS with the unit (nice step, 4-6 ticks, the zero line heavier), the
      unit comes from page.unit or axes.yunit, the basis (axes.ylabel) floats top-left inside the plot. */
   const lpUnit = (pg) => String(pg.unit || (pg.axes || {}).yunit || "");
-  const lpYTicks = (st, lo, hi, my, xa, xb, unit, labX) => {
-    const step = lpNiceStep(Math.max(1e-9, (hi - lo) / 5)), out = [];
+  const lpYTicks = (st, lo, hi, my, xa, xb, unit, labX, divs) => {
+    const step = lpNiceStep(Math.max(1e-9, (hi - lo) / (divs || 5))), out = [];
     for (let tv = Math.ceil(lo / step - 1e-9) * step; tv <= hi + 1e-9; tv += step) {
       const v = Math.abs(tv) < step * 1e-6 ? 0 : tv, y = my(v);
       out.push(lpEl("line", v === 0 ? "ax" : "grid", st.chart, { x1: xa, x2: xb, y1: y.toFixed(1), y2: y.toFixed(1) }));
@@ -2926,22 +2926,32 @@
        bracket can measure them (the +80 bp on the ring). */
     const n = Math.max(1, st.vals.length), unit = lpUnit(pg), P = !!st.portrait;
     const vmax = Math.max(0, ...st.vals.map((v) => +v)), vmin = Math.min(0, ...st.vals.map((v) => +v)), span = Math.max(1e-9, vmax - vmin) * 1.12;
-    const top = 110, bot = 470, x0 = 96, x1 = (pg.series || []).some((q) => q.pts && q.pts.length) ? 806 : 880;   /* the lines' right axis needs its own margin */
-    const bmy = (v) => bot - (v - vmin * 1.12) / span * (bot - top), base = bmy(0);   /* the zero line, inside the scale */
+    const top = 110, bot = 470, x0 = 96;
+    let x1 = (pg.series || []).some((q) => q.pts && q.pts.length) ? 806 : 880;   /* the lines' right axis needs its own margin */
+    /* TIERS (the macro-chart intake, 2026-09-07 - Cleveland & McGill's common-scale rule and the Economist's shared-x
+       subplots): when the lines are a LEVEL whose zero is meaningless (a 4 % yield) and the bars are a signed FLOW whose zero
+       is the story, one plot forces a false zero on one of them. Two bands sharing the x instead: the lines above, the bars
+       below, each on its own scale, each owning its own gridlines. `tiers` is the page's key; without it nothing changes. */
+    const TIER = { GAP: 0.10, LINE: 0.44 };   /* [DERIVED] the share of the plot each band takes, and the gutter between them */
+    const H = bot - top, tiers = !!pg.tiers && (pg.series || []).some((q) => q.pts && q.pts.length) && st.vals.length;
+    if (tiers) x1 = 700;   /* the tiered plot reserves a right GUTTER for the terminal labels - the Economist layout: the label replaces the axis */
+    const lineTop = top, lineBot = tiers ? top + H * TIER.LINE : bot;
+    const barTop = tiers ? top + H * (TIER.LINE + TIER.GAP) : top, barBot = bot;
+    const bmy = (v) => barBot - (v - vmin * 1.12) / span * (barBot - barTop), base = bmy(0);   /* the bars' own zero, inside their band */
     const series = (pg.series || []).filter((s) => s.pts && s.pts.length), barsIn = pg.bars || [];
     let lo = Infinity, hi = -Infinity, xa = Infinity, xb = -Infinity;
     for (const s of series) for (const [x, v] of s.pts) { lo = Math.min(lo, +v); hi = Math.max(hi, +v); xa = Math.min(xa, +x); xb = Math.max(xb, +x); }
     for (const b of barsIn) if (b && b.x != null) { xa = Math.min(xa, +b.x); xb = Math.max(xb, +b.x); }
     const slotW = (x1 - x0) / n, bw = Math.min(slotW * 0.62, barsIn.length && barsIn[0] && barsIn[0].x != null ? (x1 - x0) / Math.max(1, (xb - xa) * 12) * 0.62 : slotW * 0.62);
     const cx = (i) => (barsIn[i] && barsIn[i].x != null && xb > xa) ? x0 + (+barsIn[i].x - xa) / (xb - xa) * (x1 - x0) : x0 + slotW * (i + 0.5);
-    lpYTicks(st, vmin * 1.12, vmax * 1.12, bmy, x0 - 20, x1 + 20, unit, x0 - 30);
-    lpYLabel(st, pg, x0 - 20, top - 16);
+    lpYTicks(st, vmin * 1.12, vmax * 1.12, bmy, x0 - 20, x1 + 20, unit, x0 - 30, tiers ? 3 : 5);   /* a short band wants fewer ticks */
+    lpYLabel(st, pg, x0 - 20, (tiers ? barTop : top) - 16);   /* the unit belongs to the band it measures */
     const bars = st.vals.map((v, i) => {
-      const h = Math.max(3, Math.abs(+v) / span * (bot - top)), emph = i === st.emph, neg = +v < 0;
+      const h = Math.max(3, Math.abs(+v) / span * (barBot - barTop)), emph = i === st.emph, neg = +v < 0;
       const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (emph ? " emph" : ""), st.chart, { x: (cx(i) - bw / 2).toFixed(1), y: (neg ? base : base - h).toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 5 });
       bar.style.transformOrigin = "0 " + base + "px"; bar.style.transform = "scaleY(0)";
-      const lab = lpText(st.chart, "lab", cx(i), bot + 34, "middle", String((pg.labels || [])[i] ?? ""), { opacity: 0 });
-      const valY = neg ? Math.min(base + h + (P ? 30 : 26), bot - 8) : base - h - 14;   /* a drop's value sits under its bar, never on the month labels */
+      const lab = lpText(st.chart, "lab", cx(i), barBot + 34, "middle", String((pg.labels || [])[i] ?? ""), { opacity: 0 });
+      const valY = neg ? Math.min(base + h + (P ? 30 : 26), barBot - 8) : base - h - 14;   /* a drop's value sits under its bar, never on the month labels */
       const tells = emph || Math.abs(+v) >= LPX.COMBO_LABEL_SHARE * Math.max(1e-9, ...st.vals.map((q) => Math.abs(+q)));   /* E52: the chart reads without printing every number */
       const val = tells ? lpText(st.chart, "val", cx(i), valY, "middle", st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v),
         { opacity: 0, style: LP_HALO + (emph ? "fill:#F5B72E;font-size:30px;font-weight:700" : "") }) : null;
@@ -2949,14 +2959,17 @@
     });
     const cxOf = (b) => b.cx;
     const pad = (hi - lo) * 0.12 || 1; lo -= pad; hi += pad;
-    const ly = (v) => bot - (+v - lo) / (hi - lo) * (bot - top);
+    const ly = (v) => lineBot - (+v - lo) / (hi - lo) * (lineBot - lineTop);   /* the lines' own band: no zero is faked, no gridline is fought */
     /* the lines' own axis, on the right, with the unit (pg.line_unit, else the first line's unit, else none) */
     const lunit = pg.line_unit != null ? pg.line_unit : "";
-    { const step = lpNiceStep(Math.max(1e-9, (hi - lo) / 4));
+    { const step = lpNiceStep(Math.max(1e-9, (hi - lo) / (tiers ? 2 : 4)));
       for (let tv = Math.ceil(lo / step - 1e-9) * step; tv <= hi + 1e-9; tv += step) {
         const v = Math.abs(tv) < step * 1e-6 ? 0 : tv;
-        lpText(st.chart, "lab", x1 + 14, ly(v) + (P ? 14 : 8), "start", lpWithUnit(lpTick(v), lunit), { style: "fill:#aeb6be" });
-      } }
+        if (tiers) lpEl("line", "grid", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: ly(v).toFixed(1), y2: ly(v).toFixed(1) });   /* its own band, its own grid: the bands never overlap, so no prison bars */
+        else lpText(st.chart, "lab", x1 + 14, ly(v) + (P ? 14 : 8), "start", lpWithUnit(lpTick(v), lunit), { style: "fill:#aeb6be" });
+      }
+      /* the tier's scale is written ONCE, on its top gridline, instead of a whole second axis - the terminal labels carry the rest */
+      if (tiers) lpText(st.chart, "lab", x0 - 30, ly(Math.floor(hi / step) * step) + (P ? 14 : 8), "end", lpWithUnit(lpTick(Math.floor(hi / step) * step), lunit), { style: "fill:#aeb6be" }); }
     const lines = series.map((s) => {
       const aligned = s.pts.length === n, lx = (x, k) => aligned ? cx(k) : x0 + (+x - xa) / (xb - xa || 1) * (x1 - x0);   /* one point per bar sits on the bar */
       const pts = s.pts.map(([x, v], k) => [lx(x, k), ly(v), v]), col = LP_PAL[s.color] || LP_PAL.cobalt;
@@ -2972,8 +2985,11 @@
       const last = pts[pts.length - 1];   /* the inline name: right of the last point when there is room, else above it, ending at it.
          A combo whose SUB names the lines by colour carries no inline name at all - it would repeat the sub and land in the bars
          (the fourth watch: "we need better handling on text/labels"); the sub is the legend and a bracket carries the number. */
-      const room = x1 + 200 <= (st.geom ? st.geom.W : 1000), quiet = !!pg.legend_in_sub;
-      const name = lpText(st.chart, "sname", room ? last[0] + 44 : last[0], room ? last[1] + 8 : last[1] - 26, room ? "start" : "end", quiet ? "" : (s.label ? s.label + " " : "") + (s.name || ""), { opacity: 0, style: LP_HALO + "fill:" + col });
+      /* the intake (Economist / Axios): a DETACHED legend is the sin, a TERMINAL label is the cure. In tiers the line band has
+         no right axis, so the label sits just past the line's end; on one plot it keeps the old rule. */
+      const room = tiers || x1 + 200 <= (st.geom ? st.geom.W : 1000), quiet = !!pg.legend_in_sub;
+      const name = lpText(st.chart, "sname", room ? last[0] + (tiers ? 12 : 44) : last[0], room ? last[1] + 8 : last[1] - 26, room ? "start" : "end", quiet ? "" : (s.label ? s.label + " " : "") + (s.name || ""),
+        { opacity: 0, style: LP_HALO + "fill:" + col + (tiers ? ";font-size:" + (P ? 30 : 19) + "px" : "") });   /* the gutter's label is a tag, not a headline */
       st.linePts.push(pts.map(([x, y]) => [x, y]));   /* the species' targets (a bracket on a line) */
       return { p, len, dot, labels, name, pts, ny: room ? last[1] + 8 : last[1] - 26 };
     });
@@ -2986,8 +3002,8 @@
     }
     const ord = [...lines].sort((a, b) => a.ny - b.ny);
     for (let i = 1; i < ord.length; i++) if (ord[i].ny - ord[i - 1].ny < ngap) ord[i].ny = ord[i - 1].ny + ngap;
-    const lift = ord.length ? Math.max(0, ord[ord.length - 1].ny - (bot - 8)) : 0;
-    for (const ln of ord) { ln.ny -= lift; ln.name.setAttribute("y", Math.max(top + ngap * 0.6, ln.ny).toFixed(1)); }
+    const lift = ord.length ? Math.max(0, ord[ord.length - 1].ny - (lineBot - 8)) : 0;
+    for (const ln of ord) { ln.ny -= lift; ln.name.setAttribute("y", Math.max(lineTop + ngap * 0.6, ln.ny).toFixed(1)); }
     /* the lines' daily labels would be a wall of numbers on a dense series: only a sparse series (one point per bar) labels its points */
     for (const ln of lines) if (ln.pts.length > 2 * n) for (const lb of ln.labels) lb.remove(), ln.labels = [];
     st.combo = { bars, lines }; st.buildDur = LPX.COMBO_BUILD; st.paint = paintLedgerCombo;

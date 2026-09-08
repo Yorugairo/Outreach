@@ -1,13 +1,13 @@
 {
  "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
- "sub": "Bars: Japan's monthly Treasury selling, $bn \u00b7 Lines: Fed funds (grey), flat since Dec 2025, and the 10-year (red), %",
+ "sub": "Japan's monthly Treasury selling against what America pays to borrow, since Oct 2025",
  "proof_sentence": "Fed funds target (upper) flat at 3.75% since 2025-12-11; the 10-year 3.97% (2026-02-27) -> 4.77% (2026-09-03); the 30-year mortgage 5.98% (2026-02-26) -> 6.71% (2026-09-03)",
  "src": "US Treasury TIC \u00b7 FRED \u00b7 Sep 2026",
  "src_style": "compact",
  "ylabel": "$bn",
  "unit": "",
  "line_unit": "%",
- "legend_in_sub": true,
+ "tiers": true,
  "bars": [
   {
    "label": "Feb",

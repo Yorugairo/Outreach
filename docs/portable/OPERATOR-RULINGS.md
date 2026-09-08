@@ -1544,3 +1544,28 @@ interesting ways to show the same information. We should spotlight the chart on 
    datum — not left to the voice (the +80 bp bracket on the Fed page; the −$122.6B on the holdings page).
 4. **Compact and honest over clever.** A different display of the same object (Japan's month-on-month selling as signed
    bars) beats a combined chart that would break E28 (an unsigned combo, a second axis with no unit ticks).
+
+## E53 — Chart form is law, not taste: the perception hierarchy, the honest zero, and the label at the line's end (2026-09-07)
+
+From the macro-chart intake (`docs/content-video-engine/MACRO-CHART-INTAKE-2026-09-07.md`), gated the same day. The three
+rules below are CONFIRMED findings; the intake page records what was rejected and why.
+
+1. **The perception hierarchy** [Cleveland & McGill, JASA 1984]. A reader judges POSITION ON A COMMON SCALE most accurately,
+   then position on non-aligned scales, then length and angle, then area, then volume, shading and colour saturation. Our
+   page variants live in the top two tiers by construction - a line is position, a bar is length from a common zero - and
+   that is the reason `ledger_page` refuses a donut by name. A chart that asks the reader to compare areas, angles or
+   saturations is refused with this ruling cited.
+2. **Never a stacked bar** (baseline drift). Only the bottom segment of a stack sits on a stable zero; every segment above it
+   floats on a moving baseline and cannot be compared. Grouped bars, or tiers sharing an x, or small multiples - never a
+   stack. This is a never-build, not a backlog item.
+3. **Bars are discrete, lines are continuous.** A bar is an aggregated bucket (a month's net change, a year's maturities); a
+   line is a phenomenon that exists between its samples (a yield, a price, a holdings level). Interpolating between buckets
+   invents values that were never measured. A discrete series takes equidistant SLOTS; a continuous one takes the time axis;
+   uneven epochs (1936, 1946, 2026) never go on a continuous axis, where they become slivers in a void.
+4. **The honest zero.** Two series share a plot only when their zeros mean the same thing. A signed FLOW (zero is the story)
+   and a rate LEVEL (zero is meaningless and off-scale) do not: they take two TIERS sharing one x, each with its own scale
+   and its own gridlines, never one plot with a floated zero or two fighting grids. `tiers` on the page object.
+5. **The label lives at the line's end.** A detached legend costs the reader a saccade for every series; the cure is a tag at
+   the series' terminal point in the series' colour, and a right gutter reserved for it - never a legend box, and never a
+   sub that has quietly become one. Where a plot has no gutter the fallback is the sub, and that is a compromise to be fixed,
+   not a pattern to copy. (This is doc 29 s9.23b, now with its reason and its source.)
