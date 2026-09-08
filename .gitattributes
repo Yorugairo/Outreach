@@ -1,1 +1,5 @@
 episode-1-claude-design-handoff/plates-1080/** -filter=lfs -diff=lfs -merge=lfs
+
+# EVIDENCE SOURCES ARE BYTES, NOT TEXT. Each is hashed in its object every proof line; a line-ending
+# conversion on checkout would break that sha256 and make a re-fetch look like a changed source.
+content/video_engine/projects/**/evidence/sources/** -text
