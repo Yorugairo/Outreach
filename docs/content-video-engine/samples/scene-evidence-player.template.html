@@ -2662,7 +2662,10 @@
     const base = my(0);
     const bw = (x1 - x0) / n * (1 - gap);
     /* both axes, always (operator, 2026-09-03): y ticks with the unit from the shared helper, the zero line as the axis */
-    lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26);
+    /* six divisions, not the default five: lpNiceStep's 1-2-5 ladder rounds 21.8 up to 50, which left the tariff
+       short's monthly page with only two tick labels ($0 and -$50) and NO reference above zero for its one
+       positive bar. Asking for six lands step 20 and five labelled ticks. */
+    lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26, 6);
     st.vals.forEach((v, i) => {
       const x = x0 + (x1 - x0) / n * (i + gap / 2), yv = my(v), neg = v < 0;
       const h = Math.max(3, Math.abs(yv - base)), y = neg ? base : base - h;
@@ -2684,7 +2687,31 @@
     if (e) {
       const cg = lpEl("g", "", st.chart, { opacity: 0 });
       const CP = P ? { w: 160, h: 84, ty: 61, up: 128, dn: 40, rx: 14 } : { w: 128, h: 42, ty: 30, up: 66, dn: 24, rx: 8 };   /* portrait pill: 59px type, narrower than a bar pitch so the neighbours' values stay clear */
-      const py = e.neg ? e.end + CP.dn : e.end - CP.up;   /* the pill sits past the bar's far end, never over it */
+      /* the pill sits past the bar's far end - but NEVER in the x-label band. A negative bar that reaches the
+         plot floor put its own pill straight over its own month name (measured on the tariff short: the pill at
+         y 424-508, "May" at 429-473, fully buried). If there is no room below, the pill flips ABOVE the zero
+         line at the same x, where a negative bar leaves the plot empty. s9.23b: a label never overprints. */
+      const labTop = bottom + (P ? 52 : 34) - (P ? 40 : 26);   /* the top of the month-label row */
+      let py = e.neg ? e.end + CP.dn : e.end - CP.up;
+      if (e.neg && py + CP.h > labTop) {
+        /* The bar reaches the plot floor, so there is no room past its end. Above the zero line is not free either:
+           the y-rescale puts a small positive bar's own value up there. So the pill goes INSIDE its own bar - the
+           emphasised bar is the tallest mark on the page and sunflower on crimson is unmistakable - and any
+           NEIGHBOUR's value that it clips slides sideways to make room. The callout owns its position; the labels
+           around it yield. (Measured on the tariff short: -$66.8 sat squarely over "May".) */
+        const barH = Math.abs(e.end - base);
+        py = barH > CP.h * 1.3 ? base + (barH - CP.h) / 2 : Math.max(top, base - CP.up - CP.h * 0.15);
+        const px0 = e.x - CP.w / 2, px1 = e.x + CP.w / 2;
+        for (const o of st.bars) {
+          if (o === e || !o.val) continue;
+          const ox0 = o.x - CP.w / 2, ox1 = o.x + CP.w / 2;   /* a value is centred on its bar and is pill-wide at this type */
+          const oy = o.neg ? o.end + (P ? 62 : 26) : o.end - (P ? 22 : 14);
+          if (ox1 <= px0 || px1 <= ox0 || oy < py || oy > py + CP.h + (P ? 40 : 18)) continue;
+          const push = (o.x > e.x ? px1 - ox0 : ox1 - px0) + 8;
+          const nx = Math.max(x0 + CP.w / 2, Math.min(x1 + 20, o.x + (o.x > e.x ? push : -push)));
+          o.val.setAttribute("x", nx.toFixed(1));
+        }
+      }
       lpEl("rect", "cpill", cg, { x: (e.x - CP.w / 2).toFixed(1), y: py.toFixed(1), width: CP.w, height: CP.h, rx: CP.rx });
       const ct = lpEl("text", "callout", cg, { x: e.x.toFixed(1), y: (py + CP.ty).toFixed(1), "text-anchor": "middle" });
       e.val.setAttribute("opacity", 0); e.val.style.display = "none";

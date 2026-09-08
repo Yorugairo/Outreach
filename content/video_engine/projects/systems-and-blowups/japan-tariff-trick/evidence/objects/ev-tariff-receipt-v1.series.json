@@ -1,0 +1,37 @@
+{
+ "title": "The tariff bill on a $30,000 car",
+ "sub": "Toyota pays 15% once on the sticker, Detroit pays 25% on its parts at six border crossings - $1,740 more for building it at home",
+ "src": "DERIVED \u00b7 USTR + USITC HTS 8708 \u00b7 Sep 2026",
+ "unit": "$",
+ "bars": [
+  {
+   "label": "Toyota",
+   "value": 4500,
+   "color": "cobalt"
+  },
+  {
+   "label": "Detroit",
+   "value": 6240,
+   "color": "crimson"
+  }
+ ],
+ "badges": [
+  {
+   "label": "BUILT IN AMERICA",
+   "value": "+$1,740",
+   "tag": "more duty than the import",
+   "accent": "crimson"
+  }
+ ],
+ "status": "DERIVED",
+ "fetched": "2026-09-07",
+ "facts": {
+  "sticker": 30000,
+  "finished_auto_rate_pct": 15,
+  "toyota_duty": 4500,
+  "detroit_stacked_duty": 6240,
+  "penalty": 1740
+ },
+ "src_full": "DERIVED from $30,000 x 15% (USTR, the US-Japan finished-auto rate) and the hand-off's modelled stacked 25% parts duties (HTS 8708, CAR crossings)",
+ "src_style": "compact"
+}
