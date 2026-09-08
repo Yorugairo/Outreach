@@ -1555,6 +1555,14 @@ rules below are CONFIRMED findings; the intake page records what was rejected an
    page variants live in the top two tiers by construction - a line is position, a bar is length from a common zero - and
    that is the reason `ledger_page` refuses a donut by name. A chart that asks the reader to compare areas, angles or
    saturations is refused with this ruling cited.
+   **Amendment, 2026-09-07 (operator-approved).** The hierarchy's objection is to COMPARING many encoded angles. A
+   part-to-whole claim about ONE highlighted slice is not that, and a circle states it faster than any bar: "a tenth of
+   Japan's holding went" is read instantly as a tenth of a disc. A pie or donut is therefore allowed, and ONLY, when all
+   four hold: (a) the page's claim is about one named slice, never a ranking or a comparison across slices; (b) that
+   slice is highlighted and every other slice is muted context; (c) the figure the claim turns on is WRITTEN on the page,
+   so no angle has to be estimated (E52: the math is drawn); (d) the slice count is small enough to name - five or fewer.
+   Outside those four the refusal stands. First use: the top-five foreign holders of US Treasuries, with Japan's
+   -$122.6B peeling out as the sold wedge (P48 T4).
 2. **Never a stacked bar** (baseline drift). Only the bottom segment of a stack sits on a stable zero; every segment above it
    floats on a moving baseline and cannot be compared. Grouped bars, or tiers sharing an x, or small multiples - never a
    stack. This is a never-build, not a backlog item.

@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4468 topics, 4463 citation edges. The 200 largest topics follow,
+4469 topics, 4466 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (141)
@@ -1958,6 +1958,23 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:474 — 8.10 The hand follows the reveal-engine contract (correction, 2026-08-24) — The first hand pass slid a marker along a straight clip-path edge. That is
 - … 3 more in `docs/DOCS-TOPICS.jsonl`
 
+## operator-approved (15)
+
+- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:153 — Exclusion — Full-scene hand-draw replacement is not production-ready. A successful
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:1 — Script E — sentence-strength pass log — `patterns/SENTENCE-STRENGTH-CHECK.md`, run 2026-08-29. Every sentence
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:8 — Licensed exceptions claimed — | Where | Gate | Why |
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:78 — Round 4 — the ENUMERATED screens (operator audit, 2026-08-30) — The operator asked whether L1/L3 and the X1 orphan screen ran to the
+- docs/content-video-engine/01-PRD.md:140 — 8. Phases — | Phase | Contents | Exit criteria |
+- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:1 — Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
+  cited by: docs/portable/OPERATOR-RULINGS.md:1384
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:396 — The decisive test, run: `review_script` + `review_title` on our own work — 2026-08-24 — Phase 2 of the harvest plan. Fed the Alicia-format script (narration only,
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
+- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:518 — 20. THE TEMPO FIELD - one choreography across script AND video (operator-approved 2026-08-30) — The realization (obvious only in hindsight, and only reachable through
+- docs/content-video-engine/CAPABILITIES.md:80 — Evidence & assets — Martial Matters episode 1 (merged from p16, 2026-08-29): 192 asset files
+- docs/content-video-engine/patterns/STRENGTH-LOOP.md:108 — 7. The loop protocol — Operator rulings, 2026-08-29.
+- docs/content-video-engine/patterns/STRENGTH-LOOP.md:138 — Rewrite budget — the over-smoothing guard — Any sentence rewritten more than twice stops and goes to the operator
+- … 3 more in `docs/DOCS-TOPICS.jsonl`
+
 ## production-ready (15)
 
 - content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:153 — Exclusion — Full-scene hand-draw replacement is not production-ready. A successful
@@ -2333,23 +2350,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md:1 — Response to research pass 1 — what closed, what reopens — To: the research layer (Gemini deep-research pass)
 - docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md:69 — 3. RECLASSIFIED — kept, but relabelled as proposals — These are being used. They are not being recorded as findings, and no paper will be
 - docs/content-video-engine/README.md:20 — Start here, not at doc 00 — The working doctrine is not in this folder. It is three files in
-- … 2 more in `docs/DOCS-TOPICS.jsonl`
-
-## operator-approved (14)
-
-- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:153 — Exclusion — Full-scene hand-draw replacement is not production-ready. A successful
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:1 — Script E — sentence-strength pass log — `patterns/SENTENCE-STRENGTH-CHECK.md`, run 2026-08-29. Every sentence
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:8 — Licensed exceptions claimed — | Where | Gate | Why |
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:78 — Round 4 — the ENUMERATED screens (operator audit, 2026-08-30) — The operator asked whether L1/L3 and the X1 orphan screen ran to the
-- docs/content-video-engine/01-PRD.md:140 — 8. Phases — | Phase | Contents | Exit criteria |
-- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:1 — Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/portable/OPERATOR-RULINGS.md:1384
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:396 — The decisive test, run: `review_script` + `review_title` on our own work — 2026-08-24 — Phase 2 of the harvest plan. Fed the Alicia-format script (narration only,
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
-- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:518 — 20. THE TEMPO FIELD - one choreography across script AND video (operator-approved 2026-08-30) — The realization (obvious only in hindsight, and only reachable through
-- docs/content-video-engine/CAPABILITIES.md:80 — Evidence & assets — Martial Matters episode 1 (merged from p16, 2026-08-29): 192 asset files
-- docs/content-video-engine/patterns/STRENGTH-LOOP.md:108 — 7. The loop protocol — Operator rulings, 2026-08-29.
-- docs/content-video-engine/patterns/STRENGTH-LOOP.md:138 — Rewrite budget — the over-smoothing guard — Any sentence rewritten more than twice stops and goes to the operator
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
 ## quarter-billion (14)

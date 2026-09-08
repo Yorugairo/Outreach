@@ -1,7 +1,7 @@
 ---
 id: P48-CHART-TO-CHART-TRANSITIONS
 title: Chart-to-chart transitions as a first-rate feature - a chart changes STATE (redraw, rescale, extend, recast, morph) and never cuts
-status: draft
+status: approved
 operation: feature
 risk: elevated
 owner: parent
@@ -180,12 +180,16 @@ commented out in `build_short.py` giving this reason.
 
 ## Execution Path
 
-T1 alone (the mark model, zero behaviour change, goldens the proof) → then T2 and T3 in order (they share the scale
-interpolator) → HG1 → T4 (recast, the largest) → HG2 → T5 (morph_to; reuses T3 of P47) → HG3 → T6 (the gate and the
+**Reordered 2026-09-07 (operator-approved), because the beat that is waiting is a RECAST, not a window change:**
+T1 alone (the mark model, zero behaviour change, goldens the proof) → **T4 recast** with the pie/share builder and the
+top-five holders beat as its acceptance → **HG2** (does the line becoming a pie read as the same data?) → T2 and T3
+(rescale, extend - they share the scale interpolator) → HG1 → T5 (morph_to; reuses P47 T3) → HG3 → T6 (the gate and the
 grammar's legality, which can land beside T4/T5) → T7 (doctrine + Tokyo) → HG4 → render only on the operator's word.
 
-T1 is the only slice that touches every builder. It lands alone, on its own commit, with the golden suite as its acceptance -
-if a single golden byte moves, the model is wrong and nothing else starts.
+T1 is still the only slice that touches every builder. It lands alone, on its own commit, with the golden suite as its
+acceptance - if a single golden byte moves, the model is wrong and nothing else starts.
+
+
 
 ## Patterns To Mirror
 
