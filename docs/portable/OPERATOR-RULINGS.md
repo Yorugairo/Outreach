@@ -1577,9 +1577,16 @@ size 1/z), so that at the contact it is the stage. It pitches under a real persp
 as it leaves the bottom edge, flat at the landing — and the motion squash (42 §42.3) reads as
 paper flex. The camera FOLLOWS a quarter of its height (the worlds ride the follow; the
 outgoing plate scales about its bottom edge so no black shows), the ground takes the paper dip,
-and the dock's contact shadow darkens the world beneath as it comes down. Measured on the
-frames: whole card at 0.1 s, leaving the top at 0.2 s, gone at 0.4 s, back and growing at
-0.6 s, the world at 0.7 s. `throw_grow: "snap"` keeps the flat
+and the dock's contact shadow darkens the world beneath as it comes down. **Then two more, on the watch.** *"Way too fast"* — the flight is 1.1 s now, not the
+dock's 0.45 (a card that leaves the frame and comes back needs the air). And *"it is cut
+off"*, twice: first the motion squash — at page speed `squashAlpha` reaches ~0.25, which
+stretched the page to 120 % of the stage (measured: 2969 px tall in a 2485 px stage) and
+pushed its title out of the top; a page takes 15 % of the squash now. Then the growth: any
+growth before the card's centre reaches its rest puts its top out of frame (0.5 and 0.8 of
+the flight both did), so the card is card-sized for the whole flight and **grows to the stage
+after the contact, in place, over `SNAP_S`** — the snap on the landing, exactly as first
+described. Measured on the frames: whole card rising at 0.1 s, out of the top by 0.4 s, gone
+through the middle, back whole at 1.0 s, landed whole at 1.1 s, the world at 1.5 s. `throw_grow: "snap"` keeps the flat
 min-jerk growth for comparison. Dials, all `[DERIVED]`, HG2 tunes by eye; `throw_from` below |
 above | left | right, `throw_s` per page, `throw=<grow>,<from>,<s>` on the plate id.
 

@@ -3,16 +3,16 @@
 ```text
 === MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\content\video_engine\projects\systems-and-blowups\japan-tariff-trick\build-short ===
                runtime: 1:29
-         visual_events: 310 (208.2/min)
+         visual_events: 309 (207.5/min)
                  docks: 4
            dock_source: timeline
           ledger_pages: 5
   still_over_12s_share: 0%
-            per_minute: 0:00:222/5 1:00:178/8
+            per_minute: 0:00:221/5 1:00:178/8
 
   [WARN ] M06 62 caption pages = 42/min, 4.0 words/page
           s9.15 r7 / build_caption_pages 4-6 words
-  [WARN ] M11 first chart ledger:s02 enters at 1.8s, its build lands at 1.8s, with spotlight at 2.3s; WARN no sound cue within 1.5s of the enter at 1.8s; window 0-10s (E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10)
+  [WARN ] M11 first chart ledger:s02 enters at 1.8s, its build lands at 1.8s, with spotlight at 3.3s; WARN no sound cue within 1.5s of the enter at 1.8s; window 0-10s (E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10)
           E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue
   [PASS ] M01 longest still stretch 2.3s at 0:28
           doc 29 s8.19 / s9.25 stillness ceiling
@@ -38,7 +38,7 @@
           E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract
   [PASS ] M16 longest gap between visual events 2.3s at 0:28; 0 gap(s) over 2.5s
           doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
-  [INFO ] M07 short: 1 full minute(s) in 89s - opening 222.0 events/min, 5.0 evidence entries/min; tail from 1:00 177.8/min; whole runtime 206.8/min - no minute distribution to rank in (E21 is judged on the whole)
+  [INFO ] M07 short: 1 full minute(s) in 89s - opening 221.0 events/min, 5.0 evidence entries/min; tail from 1:00 177.8/min; whole runtime 206.1/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
   [INFO ] M18 frozen frames not measured - run measure_frozen_frames.py <build> (writes frame-hashes.json)
           E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)
@@ -52,5 +52,5 @@
 RESULT: 0 FAIL / 2 WARN / 12 PASS / 1 JUDGE / 4 INFO
 ```
 
-TIMELINE: japan-short.timeline.json sha256:a836a5a0a5cc84502a0ebe8344733a2cb89209402a96eef36303921d0e8f3147
+TIMELINE: japan-short.timeline.json sha256:eedc7f8437faa24bdf590231c3d43d5b0c9cd08a7e1b15db729360bfcfbc1f4c
 VERDICT: PASS (0 FAIL)

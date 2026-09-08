@@ -51,6 +51,7 @@ bed_gain = lambda f: round(10 ** ((VO_LUFS + BED_LU[PLATFORM] - BEDS[f]) / 20), 
 # the ledger page's own clock (mirrored from the player's LP block, as Tokyo mirrors it): the chart LANDS 7.4 s after the
 # page's clock starts; a mount replaces the 0.7 s roll and ends where the roll would have (E45)
 PAGE_BUILD_END_S, PAGE_BUILD_START_S, PAGE_BUILD_S, LP_ROLL_S = 7.4, 4.4, 3.0, 0.7
+THROW_LAND_S = 1.1   # the player's THROW_S: a thrown page (enter=throw) is in the air this long before it lands as the world
 
 # THE WORLDS - this story's stills (omni-video/stills/<arm>-<id>.png, 768x1376, Nano Banana Pro on HollowStickMike). The
 # `-v2` retries replaced a first pass that lost or drifted the character in a busy frame (the operator picks; these are the picks).
@@ -271,7 +272,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
             # M11: a page that ARRIVES full must be pointed at, or it is homework (E25). The spotlight lands on the June
             # low as the page appears - the divergence IS the mechanism, and pointing at it beats the bracket that used
             # to write the figure six and a half seconds after the voice said it.
-            {"kind": "spotlight", "at": round(t_mount + 0.5, 2), "dur": 1.2, "target": datum(LAST_IDX)},
+            {"kind": "spotlight", "at": round(t_mount + THROW_LAND_S + 0.4, 2), "dur": 1.2, "target": datum(LAST_IDX)},   # after the throw has LANDED (1.1 s flight), never mid-air
         ]),
         # 3 the crossings map: six hops, six stamps. Plant centres as stage fractions on sig-b-crossings-map-v9 (768x1376 -> 9:16):
         #   Detroit (0.215, 0.425), Ontario (0.65, 0.34) across the water, Mexico (0.455, 0.87) below the border. The route is

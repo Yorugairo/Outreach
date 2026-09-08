@@ -3676,7 +3676,7 @@
    "species": [
     {
      "kind": "spotlight",
-     "at": 2.32,
+     "at": 3.32,
      "dur": 1.2,
      "target": {
       "kind": "datum",

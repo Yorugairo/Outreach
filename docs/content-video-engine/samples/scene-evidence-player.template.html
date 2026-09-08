@@ -2405,13 +2405,16 @@
      rest and the page is off the top of the frame for the middle of the flight), the tumble is the pill's 9 deg, the flight a little
      longer than the pill's for the height, and the landing is the paper material's own: the receiver's dip on an underdamped spring
      (zeta 0.67 - that is the wobble) and the restitution hop h1 = e^2 h0, which the tall arc makes visible - the flop. Dials. */
-  const THROW_S = 0.7, THROW_ARC = 1.5, THROW_SPIN = 9, THROW_SETTLE_S = 1.2, THROW_CARD = 0.62;   /* THROW_CARD: the flat-growth law's card size (throw_grow: snap) [DERIVED: the dock's reading size] */
+  const THROW_S = 1.1, THROW_ARC = 1.5, THROW_SPIN = 9, THROW_SETTLE_S = 1.2, THROW_CARD = 0.62;   /* THROW_S: 0.7 was 'way too fast' on the watch (operator, 2026-09-08) - a card that leaves the frame and comes back as the world needs more air than the dock's 0.45; per page via throw_s */   /* THROW_CARD: the flat-growth law's card size (throw_grow: snap) [DERIVED: the dock's reading size] */
   /* the DEPTH ARC's dials [DERIVED, HG2 tunes by eye]: Z0 0.55 = 1.8x the stage as the card passes the camera; Z_LIFT 0.6 = the apex
      at z ~1.35 (0.74x); PITCH 55 deg seen from below as it passes, flat at the contact; BEND 35 deg per unit of motion squash; the
      camera follows 35 % of the card's height; the perspective is a phone held at arm's length (1600 px on a 1080 stage) */
-  /* THROW_GROW_AT: the card starts growing into the world at this fraction of the flight (the descent); the ARC (1.5 x the chord,
-     set with THROW_ARC above) is what carries a 0.62 card clear of the top edge with the camera following a quarter of its height */
-  const THROW_GROW_AT = 0.5, THROW_PITCH = 45, THROW_BEND = 35, THROW_FOLLOW = 0.25, THROW_PERSP = 1600;
+  /* THROW_GROW_AT: the card starts growing into the world at this fraction of the flight. 0.5 grew it through the whole descent, so
+     it was nearly stage-sized while still high and its title could not be in frame until it landed ("it is cut off", operator
+     2026-09-08); at 0.8 the card comes back WHOLE at card size and snaps up to the stage over the last fifth of the flight - the
+     snap on the landing. The ARC (1.5 x the chord, THROW_ARC above) carries a 0.62 card clear of the top edge with the camera
+     following a quarter of its height. */
+  const THROW_GROW_AT = 0.8, THROW_PITCH = 45, THROW_BEND = 35, THROW_FOLLOW = 0.25, THROW_PERSP = 1600, THROW_SQUASH = 0.15;   /* THROW_SQUASH: the page's share of the motion squash - 0.25 x 0.15 ~ 4 % at top speed */
   const THROW_FROM = { below: { x: STAGE_W * 0.06, y: STAGE_H * 1.1 }, above: { x: -STAGE_W * 0.06, y: -STAGE_H * 1.1 },
                        right: { x: STAGE_W * 1.1, y: STAGE_H * 0.06 }, left: { x: -STAGE_W * 1.1, y: STAGE_H * 0.06 } };
   const LP_BADGE_COL = { coral: "crimson", teal: "teal", cobalt: "cobalt", ink: "deemph", sunflower: "amber" };   /* badge accent -> series colour (the key) */
@@ -3868,14 +3871,21 @@
       if (pg.throw_grow === "snap") {
         scaleK = landed ? 1 : THROW_CARD + (1 - THROW_CARD) * minJerk(clamp01((tt - (F - SNAP_S)) / SNAP_S));
       } else {
-        const g = landed ? 1 : minJerk(clamp01((u - THROW_GROW_AT) / (1 - THROW_GROW_AT)));
+        /* the card is card-sized for the WHOLE flight and grows to the stage AFTER the contact, in place, over SNAP_S - the snap on
+           the landing. Growing any earlier puts its top out of the frame while it is still above its rest (0.5 and 0.8 both did,
+           "it is cut off"); a card that lands whole and then becomes the world is the only version that never clips. */
+        const g = landed ? minJerk(clamp01((tt - F) / SNAP_S)) : 0;
         const z = (1 / THROW_CARD) * (1 - g) + 1 * g;
         scaleK = 1 / z;
         pitch = landed ? 0 : -THROW_PITCH * Math.pow(1 - u, 1.5);
       }
       const bend = landed ? 0 : (sx.alpha || 0) * THROW_BEND;
       st.page.style.transformOrigin = "50% 50%";
-      throwCss = "perspective(" + THROW_PERSP + "px) " + stopCss(sx).trim() + " rotateX(" + (pitch + bend).toFixed(2) + "deg) scale(" + scaleK.toFixed(4) + ") ";
+      /* the motion squash is DAMPED for a page: at page speed (thousands of px/s) squashAlpha reaches ~0.25, which stretched the
+         page to 120 % of the stage and pushed its title out of the top of the frame ("it is cut off", operator 2026-09-08,
+         measured: page 2969 px tall in a 2485 px stage at u 0.94). A card the size of the stage flexes a few percent, not a quarter. */
+      const sxPage = Object.assign({}, sx, { alpha: (sx.alpha || 0) * THROW_SQUASH });
+      throwCss = "perspective(" + THROW_PERSP + "px) " + stopCss(sxPage).trim() + " rotateX(" + (pitch + bend).toFixed(2) + "deg) scale(" + scaleK.toFixed(4) + ") ";
       /* what the WORLD does about it, read by the transition block: the camera FOLLOWS the card (the worlds ride THROW_FOLLOW of its
          height, so the frame tilts up with the throw and settles with the landing), the ground takes the dip and any shake, and the
          contact shadow darkens the world beneath as the card comes down */
