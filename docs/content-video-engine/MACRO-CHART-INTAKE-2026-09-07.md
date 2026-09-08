@@ -149,3 +149,25 @@ area between them doing the arguing. No step, no spike, no ambiguous grey. Suite
 3. the note underneath says it in words: the 10-year +80 bp since February.
 
 The low is now the origin of the picture: circled, named, and the start of the red. Suites 134 pass; gate PASS.
+
+### The host leaves, the tea comes back (the sixth watch)
+
+*"Get rid of the host and just dock a small, centered image of the cup of tea on 'its tea break' that doesn't interfere with
+graph - should be easily clippable from the first entry scene approaching the tea cups."* And then: *"I wonder if we could
+even just zoom the video on it and play the steaming tea cup."*
+
+The second thought is the better one and it is what shipped. `zoom_clip()` crops a region of another clip's frame with ffmpeg
+and scales it back up, keyframed like every other dock clip, so the card is LIVE FOOTAGE - the steam keeps moving (E49) -
+rather than a still lifted out of it. `dock_zoom()` registers it as a video dock. The region is the opening scene's own cup,
+saucer, little card and steam (`TEA_CROP` on the clip's 720x1280), taken from the seconds before the host walks in, so the
+callback is the same cup the episode opened on.
+
+Placement took three tries and one real finding. `centre: True` alone put it over the sub; `centre_band: "foot"` put it
+inside the plot, because **`page_boxes` and the player's own layout disagree on a portrait page** - the compiler was handed
+y 536 for a band the player draws at 1250 (the x maths is exact, only y is wrong). That is now **R26-27**. Until it is
+reconciled a row may name the card's centre outright (`centre_y`), and this one does - measured off the rendered page, not
+estimated: the caption ends at 1440 and the first note starts at 1554, so the cup takes that gap at 1442-1552. Clear of the
+graph, the caption and the notes.
+
+New dock options: `centre_w` (the card's width as a share of the stage), `centre_band` (which free band), `centre_y` (the
+card's centre, when the band model cannot be trusted). Suites 141 pass; gate PASS, M16 longest event gap 1.1 s.

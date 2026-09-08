@@ -216,7 +216,32 @@ DOCK_STILLS = {                     # dock asset id -> (source clip, crop height
 }
 
 
+TEA_CROP = (424, 486, 272, 244)   # the cup, its saucer, the little card and the steam above it, on the clip's own 720x1280
 STILL_DOCKS = "--still-docks" in sys.argv   # the pre-video-dock fallback: dock each clip's first frame instead
+
+
+def zoom_clip(name: str, src_name: str, crop: tuple[int, int, int, int]) -> Path:
+    """A clip ZOOMED on a region of another clip's frame (the sixth watch: "I wonder if we could even just zoom the video on
+    it and play the steaming tea cup"). ffmpeg crops the region and scales it back up, keyframed like every other dock clip,
+    so the card is live footage - the steam keeps moving (E49) - not a still lifted out of it."""
+    import subprocess
+    x, y, w, h = crop
+    src, out = CLIPS / src_name, BUILD / "clips" / name
+    out.parent.mkdir(parents=True, exist_ok=True)
+    if not out.exists() or out.stat().st_mtime < src.stat().st_mtime:
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-an",
+                        "-vf", f"crop={w}:{h}:{x}:{y},scale={w * 2}:{h * 2}:flags=lanczos",
+                        "-c:v", "libx264", "-profile:v", "high", "-crf", "17", "-preset", "slow",
+                        "-g", str(KEYFRAME_EVERY), "-keyint_min", str(KEYFRAME_EVERY), "-sc_threshold", "0", "-bf", "0",
+                        "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(out)], check=True)
+    return out
+
+
+def dock_zoom(aid: str, src_name: str, crop: tuple[int, int, int, int]) -> str:
+    """Register a zoomed clip as a VIDEO dock asset (an .mp4 asset becomes a video dock in the compiler)."""
+    import build_render_f as R
+    R.STAMPED[aid] = str(zoom_clip(f"{aid}.mp4", src_name, crop))
+    return aid
 
 
 def dock_still(aid: str) -> str:
@@ -270,6 +295,8 @@ DOCK_META = [
     {"asset": "dock-f-toll-gate-to-fab", "title": "The gate to the fab", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
     # R26-19 / E50: the hook's own proof as a CHART card on the ring - species "chart", so M11/M12 read it as the chart it is
     {"asset": "dock-h-fed-vs-yields", "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.", "source": "US Treasury TIC · FRED · Sep 2026", "species": "chart", "badges": []},
+    # the sixth watch: the cup from the opening scene, zoomed and still steaming, on "its tea break"
+    {"asset": "dock-j-tea-cup", "title": "The tea, still going", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
 ]
 
 # the LEDGER PAGE's own clock, mirrored from the player's `const LP` (template :1724) exactly as the motion gate mirrors it:
@@ -319,7 +346,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     word_in = lambda phrase, word: next(round(w["start_s"], 2) for w in ws[phrase_start(ws, phrase)[0]:][:10] if w["w"].strip(".,;:!?").lower() == word)
     t_moved = word_in("still hasn't moved", "moved")     # ... and SNAPS up to become the last world on the ring's "moved" (the third watch; the hook says it first)
     t_tokyo_still = at("Tokyo is still")                 # the first side note writes here ...
-    t_tea = word_in("still on its tea break", "tea")     # ... the second here
+    t_tea = word_in("still on its tea break", "tea")     # ... the second here, and the cup docks on it
     t_bar_tab = word_in("bar tab is still ours", "bar")  # (the ring's last line)
     t_that = word_in("that unfunded bar tab is", "that")  # the host arrives CENTRED on the Fed page for its whole last line
     # V3 words (P47 T2): the page performs on these
@@ -414,7 +441,11 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
         #   a landing); its side notes write as the ring is spoken (from the object's facts); the host arrives CENTRED on it for
         #   "and that unfunded bar tab is still ours" and retracts before the dip to the card.
         (t_moved, t_outro, f"ledger:ev-fed-vs-yields-v1:line:{FED_MAY_IDX}:right:snap=dock-h-fed-vs-yields:cut", (0, 0, 0), [
-            (clip_dock("dock-a2-counter-colder"), 0, t_that, t_outro - 0.3, {"centre": True}),
+            # the sixth watch (operator: "get rid of the host and just dock a small, centered image of the cup of tea on 'its
+            # tea break' that doesn't interfere with graph ... I wonder if we could even just zoom the video on it and play the
+            # steaming tea cup"): the opening scene's own cup, zoomed out of that footage so the steam keeps moving, small and
+            # centred in the page's free space. The host is gone from this page - it was parking over the title.
+            (dock_zoom("dock-j-tea-cup", "clip-a-counter-tab-v2.mp4", TEA_CROP), 0, t_tea, t_outro - 0.3, {"centre": True, "centre_w": 0.14, "centre_y": 0.78}),   # MEASURED off the rendered page: the caption ends at 1440 and the first note starts at 1554, so the cup takes that gap   # the gap between the source line and the caption: clear of the graph, the notes and the words
         ], "cut", [   # the SNAP is this row's own transition (no dip into it); the outro row still dips
             # the three notes write in the quiet zone over "Tokyo is still on its tea break", staggered, before the host lands over the page
             # the fourth watch: the bracket on this page drew a naked vertical span at the plot's edge - its label had no room in the

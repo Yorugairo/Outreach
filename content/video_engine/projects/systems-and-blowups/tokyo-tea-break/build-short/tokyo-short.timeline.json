@@ -2198,14 +2198,14 @@
    },
    "badges": []
   },
-  "dock-a2-counter-colder": {
+  "dock-j-tea-cup": {
    "kind": "video",
-   "title": "The host at the counter",
+   "title": "The tea, still going",
    "source": "@StickMike \u00b7 Money Physics",
    "species": "deck",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-a2-counter-colder-v2.mp4",
-    "sha256": "97bc38ff5cf12ffdbfb5df4a18a5f5d37ef5aeb7068747e42d72fe88175fd153"
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short\\clips\\dock-j-tea-cup.mp4",
+    "sha256": "e044b5064852e7d5c3b75cf3ec999e3fafda8383b7759e90205d51388302c1fb"
    },
    "badges": []
   }
@@ -6097,17 +6097,17 @@
    ],
    "docks": [
     {
-     "slide": "dock-a2-counter-colder",
+     "slide": "dock-j-tea-cup",
      "slot": 0,
-     "enter": 79.92,
+     "enter": 79.03,
      "exit": 82.32,
      "badge_at": [],
      "kind": "video",
      "place": {
-      "x": 140,
-      "y": 280,
-      "w": 799,
-      "h": 284
+      "x": 464,
+      "y": 1443,
+      "w": 151,
+      "h": 109
      },
      "read_s": 1.2,
      "park_s": 0.7,
