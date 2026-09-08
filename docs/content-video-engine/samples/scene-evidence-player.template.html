@@ -53,8 +53,9 @@
      should have a shadow instead of a border"): a page declared `card` keeps the thrown card's rounded corners at full size and sits
      on the world with doc 29 s1.2's hard-edge paper shadow (14px 14px 0 ink at 1080p, scaled) and NO border - the world stays visible
      around it (.cardworld). Opt-in per page; a snapped page is a card by default. */
-  .lp-page.card { border-radius: 36px; box-shadow: 18px 18px 0 #25313C; }
+  .lp-page.card { border-radius: 36px; border: 6px solid #25313C; box-shadow: 18px 18px 0 #25313C; }   /* doc 29 s1.2: the ink border AND the hard shadow (operator: "both shadow and border") */
   html[data-aspect="9:16"] .lp-page.card { border-radius: 44px; }
+  .lp-page.card .lp-field { left: 4.5%; top: 6.5%; width: 91%; height: 87%; }   /* the cream edge a little SMALLER on a card (operator, 2026-09-08: "sorry i meant smaller") */
   .world.ledger.cardworld { background: transparent !important; }
   /* plain cream (operator, 2026-09-03: "just a plain cream background"); the newsprint grain stays barely there */
   .lp-grain { position: absolute; inset: 0; opacity: .08; mix-blend-mode: multiply; pointer-events: none; }
@@ -2404,7 +2405,7 @@
      value / tag with the series' accent as the key - spring in one at a time AFTER the build (the callout is the
      conclusion), in the page's quiet zone, painted as a function of t (never a CSS transition) */
   const LP_BADGE0 = 0.4, LP_BADGE_STEP = 0.9, LP_BADGE_IN = 0.36;
-  const SNAP_S = 0.45, SNAP_BLUR = 6, CARD_SCALE = 0.955;   /* CARD_SCALE: a card page's rest size [DERIVED: a phone in a hand] */   /* the third watch: the card snaps up to the full stage - a push tied to a landing [DERIVED: E45's spring-in span]; SNAP_BLUR: the whoosh's peak blur, px [DERIVED: zoom-through's blurPeak 8 at 1080p, scaled] */
+  const SNAP_S = 0.45, SNAP_BLUR = 6, CARD_SCALE = 1;   /* CARD_SCALE: a card page's rest size - the FRAME (operator, 2026-09-08: 'the holding page isn't supposed to show around it, it's supposed to land as the card/dock size, then zoom to fill' - the snap IS the punch-in to fill; the rounded corners survive at the frame's own corners) */   /* the third watch: the card snaps up to the full stage - a push tied to a landing [DERIVED: E45's spring-in span]; SNAP_BLUR: the whoosh's peak blur, px [DERIVED: zoom-through's blurPeak 8 at 1080p, scaled] */
   /* THE THROW (enter=throw, 2026-09-08): a full page is a card too - the Tokyo dock's throw at page size. The operator on the first
      damped draft (arc 0.12, "a page-sized card at the pill's arc would leave the frame"): "I actually think it would be cool if it DID
      leave the frame mid arc ... it 'wobbles' out of screen, before flopping back down." So the arc is tall enough that the page clears
