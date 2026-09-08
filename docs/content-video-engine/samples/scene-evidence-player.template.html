@@ -79,6 +79,8 @@
   .lp-sub { font-size: 21px; font-weight: 400; line-height: 1.25; color: var(--lp-chalk); opacity: .8; white-space: normal; }
   .lp-note { opacity: 1; }   /* a note is the page's own ink at the sub's size, in the quiet zone */
   .world.ledger.snapping { background: transparent !important; }   /* a SNAPPING page grows over the world beneath it: no cream until it covers the stage */
+  .page-contact { position: absolute; inset: 4% 3%; border-radius: 28px; pointer-events: none; transform-origin: 50% 62%;
+                  background: radial-gradient(ellipse at 50% 60%, rgba(0,0,0,.88) 0%, rgba(0,0,0,.42) 55%, rgba(0,0,0,0) 100%); }   /* the thrown page's contact shadow on the world beneath */
   .lp-sub .w { display: inline-block; white-space: nowrap; }
   /* the page's badge rail: the dock's pill, painted from t (no transition) */
   /* a TIGHT cluster (operator, 2026-09-03: 'tight, sleek grouping that doesn't eat up so much space'): pills sized
@@ -2403,9 +2405,13 @@
      rest and the page is off the top of the frame for the middle of the flight), the tumble is the pill's 9 deg, the flight a little
      longer than the pill's for the height, and the landing is the paper material's own: the receiver's dip on an underdamped spring
      (zeta 0.67 - that is the wobble) and the restitution hop h1 = e^2 h0, which the tall arc makes visible - the flop. Dials. */
-  const THROW_S = 0.6, THROW_ARC = 0.8, THROW_SPIN = 9, THROW_SETTLE_S = 1.2, THROW_CARD = 0.62;   /* THROW_CARD: the page's scale in flight - a dock-sized card [DERIVED: the dock's reading size] */
-  const THROW_FROM = { below: { x: PORTRAIT ? 90 : 160, y: STAGE_H * 1.12 }, above: { x: PORTRAIT ? -90 : -160, y: -STAGE_H * 1.12 },
-                       right: { x: STAGE_W * 1.12, y: PORTRAIT ? 120 : 80 }, left: { x: -STAGE_W * 1.12, y: PORTRAIT ? 120 : 80 } };
+  const THROW_S = 0.6, THROW_ARC = 0.8, THROW_SPIN = 9, THROW_SETTLE_S = 1.2, THROW_CARD = 0.62;   /* THROW_CARD: the flat-growth law's card size (throw_grow: snap) [DERIVED: the dock's reading size] */
+  /* the DEPTH ARC's dials [DERIVED, HG2 tunes by eye]: Z0 0.55 = 1.8x the stage as the card passes the camera; Z_LIFT 0.6 = the apex
+     at z ~1.35 (0.74x); PITCH 55 deg seen from below as it passes, flat at the contact; BEND 35 deg per unit of motion squash; the
+     camera follows 35 % of the card's height; the perspective is a phone held at arm's length (1600 px on a 1080 stage) */
+  const THROW_Z0 = 0.55, THROW_Z_LIFT = 0.6, THROW_PITCH = 55, THROW_BEND = 35, THROW_FOLLOW = 0.35, THROW_PERSP = 1600;
+  const THROW_FROM = { below: { x: STAGE_W * 0.08, y: STAGE_H * 1.25 }, above: { x: -STAGE_W * 0.08, y: -STAGE_H * 1.25 },
+                       right: { x: STAGE_W * 1.25, y: STAGE_H * 0.08 }, left: { x: -STAGE_W * 1.25, y: STAGE_H * 0.08 } };
   const LP_BADGE_COL = { coral: "crimson", teal: "teal", cobalt: "cobalt", ink: "deemph", sunflower: "amber" };   /* badge accent -> series colour (the key) */
   /* THE IDLE (E49, P47 T5): every held thing carries a NAMED subtle idle - a pure function of t, behind kinetics.idle.
      The class defaults below; a scene's world.idle overrides its page or plate ("none" is explicit stillness, declared);
@@ -3848,21 +3854,32 @@
     if (thrown) {   /* THROW_FROM is where the flight starts, as an offset from the page's rest (px); the arc lifts against it */
       const from = THROW_FROM[pg.throw_from] || THROW_FROM.below, F = +pg.throw_s > 0 ? +pg.throw_s : THROW_S, tt = t - scene.span[0];
       const sx = throwXf(from, scene.world.mass || "paper", tt, { FLIGHT_S: F, ARC: THROW_ARC, SPIN_DEG: THROW_SPIN });
-      /* THE SNAP ON THE LANDING (operator, 2026-09-08: "the snap-in happens while the page is landing, that way it lands as a full
-         page cleanly over the old world - by the time it lands the ledger page IS the new world"): the page flies as a CARD
-         (THROW_CARD of the stage, the dock's size) and grows to the stage by min-jerk over SNAP_S, finishing exactly at the
-         contact - the snap enter's growth, timed to the throw's landing. */
-      /* TWO GROWTH LAWS to test by eye (operator: "it might even need to be a time-matched zoom ... we might just have to test it"):
-         `throw_grow: "snap"` (default) - the snap enter's min-jerk over SNAP_S, finishing at the contact (rest-to-rest, 42 s42.2);
-         `throw_grow: "depth"` - PERSPECTIVE: the card is coming TOWARD the camera onto the world plane, so its apparent size is 1/z
-         with depth falling linearly over the whole flight (43: the 2.5D camera; 24: planes scale by depth) - hyperbolic, slow early,
-         fast into the landing, no separate clock to time-match because the flight IS the clock. Same endpoints, same contact. */
-      const grow = pg.throw_grow === "depth" ? THROW_CARD / (THROW_CARD + (1 - THROW_CARD) * (1 - clamp01(tt / F)))
-                                             : THROW_CARD + (1 - THROW_CARD) * minJerk(clamp01((tt - (F - SNAP_S)) / SNAP_S));
-      const cardScale = tt >= F ? 1 : grow;
+      const u = clamp01(tt / F), landed = tt >= F;
+      /* THE DEPTH ARC (operator, 2026-09-08: "the card has to throw up, entering/passing the frame partially and obscuring most of
+         it, then land with weight as the convincing world"). The card is thrown UP from the viewer's side: NEAR the camera as it
+         enters (z = THROW_Z0, so it is larger than the stage and only its top is in frame), receding as it rises (z climbs by
+         THROW_Z_LIFT at the apex, the card small and mostly above the frame), and coming down onto the world plane (z = 1) at the
+         contact. Apparent size is 1/z (43: the 2.5D camera; 24: planes scale by depth). It PITCHES with the flight - steep as
+         it passes the camera, flat at the landing - under a real perspective, and the motion squash (42 s42.3, from throwXf) is
+         read as paper FLEX about the same axis. `throw_grow: "snap"` keeps the flat min-jerk growth for comparison. */
+      let scaleK, pitch = 0;
+      if (pg.throw_grow === "snap") {
+        scaleK = landed ? 1 : THROW_CARD + (1 - THROW_CARD) * minJerk(clamp01((tt - (F - SNAP_S)) / SNAP_S));
+      } else {
+        const z = landed ? 1 : THROW_Z0 + (1 - THROW_Z0) * u + THROW_Z_LIFT * 4 * u * (1 - u);
+        scaleK = 1 / z;
+        pitch = landed ? 0 : -THROW_PITCH * Math.pow(1 - u, 1.5);
+      }
+      const bend = landed ? 0 : (sx.alpha || 0) * THROW_BEND;
       st.page.style.transformOrigin = "50% 50%";
-      throwCss = stopCss(sx).trim() + " scale(" + cardScale.toFixed(4) + ") ";
-    }
+      throwCss = "perspective(" + THROW_PERSP + "px) " + stopCss(sx).trim() + " rotateX(" + (pitch + bend).toFixed(2) + "deg) scale(" + scaleK.toFixed(4) + ") ";
+      /* what the WORLD does about it, read by the transition block: the camera FOLLOWS the card (the worlds ride THROW_FOLLOW of its
+         height, so the frame tilts up with the throw and settles with the landing), the ground takes the dip and any shake, and the
+         contact shadow darkens the world beneath as the card comes down */
+      const h = Math.max(0, -(sx.y || 0));
+      st.throw = { h, u, phase: sx.phase, landed, ground: sx.ground || 0, shake: sx.shake || { x: 0, y: 0 },
+                   follow: landed ? 0 : THROW_FOLLOW * h };
+    } else st.throw = null;
     st.page.style.transform = snapCss + throwCss + "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")"
       + idleCssFor("page", pg.idle, t, st.seed, 1);   /* E49: the page breathes while it holds under a sentence */
     /* beat 6: the build - crisp, landing on the exact strings - on the punched page */
@@ -4411,6 +4428,18 @@
     }
 
     const worldAnswer = { x: 0, y: 0 };   /* HG2: the sum of this frame's landings (the dip, and a violent hit's shake), applied to the world layer below */
+    /* a THROWN PAGE (enter=throw): the camera follows it up and settles with it, the ground takes its dip and shake, and its contact
+       shadow darkens the outgoing world beneath as it comes down - the dock's landing at page size */
+    const thr = wB.__lp && wB.__lp.throw;
+    let pageContact = wA.querySelector(".page-contact");
+    if (thr && thr.phase !== "settled") {
+      if (!pageContact) { pageContact = document.createElement("div"); pageContact.className = "page-contact"; wA.appendChild(pageContact); }
+      const cs = contactShadow(thr.h, thr.phase === "land" ? 0.1 : 0);
+      pageContact.style.opacity = (cs.alpha * (thr.landed ? 0.6 : 0.9)).toFixed(3);
+      pageContact.style.transform = "scale(" + cs.scale.toFixed(3) + ")";
+      pageContact.style.filter = "blur(" + (cs.blur * 3).toFixed(1) + "px)";
+      worldAnswer.y += thr.ground + thr.follow; worldAnswer.x += thr.shake.x; worldAnswer.y += thr.shake.y;
+    } else if (pageContact) pageContact.style.opacity = "0";
     for (let s = 0; s < 2; s++) {
       const d = live.find((x) => x.slot === s);
       const el = docks[s];
@@ -4554,7 +4583,14 @@
       });
     }
     if (worldAnswer.x || worldAnswer.y) {   /* the ground takes the weight: the dip (and a violent hit's shake) on the world, on top of its own transform */
-      for (const wl of [wA, wB]) if (wl.style.display !== "none") wl.style.transform = (wl.style.transform || "") + " translate(" + worldAnswer.x.toFixed(2) + "px," + worldAnswer.y.toFixed(2) + "px)";
+      for (const wl of [wA, wB]) if (wl.style.display !== "none") {
+        /* the OUTGOING world (wA) is a plate that must keep the frame covered while it rides down: a downward answer of y px also
+           scales it by 1 + y / H about its bottom edge, so its top edge stays at 0 (a thrown page's camera follow exposed a black band
+           above the podium, 2026-09-08). The incoming world (wB) rides plainly - it is the thing being thrown or is already the stage. */
+        const comp = wl === wA && worldAnswer.y > 0 ? " scale(" + (1 + worldAnswer.y / STAGE_H).toFixed(5) + ")" : "";
+        if (comp) wl.style.transformOrigin = "50% 100%";
+        wl.style.transform = (wl.style.transform || "") + " translate(" + worldAnswer.x.toFixed(2) + "px," + worldAnswer.y.toFixed(2) + "px)" + comp;
+      }
     }
     const active = live;
 

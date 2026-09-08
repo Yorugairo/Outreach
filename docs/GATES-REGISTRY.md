@@ -131,7 +131,7 @@ A gate whose rule text differs between branches has one line per distinct rule t
 - **M19** - P47 T2 (SHOT-TABLE-V3-PROPOSAL part B): a cap is a hold the sentence asked for, not stillness - levels: INFO - cites: none - tests: test_page_performs.py - gate_motion_density.py:971
 - **M20** - P47 T1 (the brief :185-193, the cadence rule): a throw steps on 1s above 250 px/s, on 2s below - reported, not scored, until HG2 tunes it - levels: INFO - cites: none - tests: test_stop_action.py - gate_motion_density.py:1004
 - **M21** - E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing - levels: WARN, PASS, INFO - cites: E50 -> docs/portable/OPERATOR-RULINGS.md:1495 - tests: test_page_performs.py - gate_motion_density.py:952
-- **M22** - E51 (operator 2026-09-07): a push-in is only used tied to something - pushing into a newly landed badge or data series; a zoom on a thing that just sits there is filler - levels: WARN, PASS - cites: E51 -> docs/portable/OPERATOR-RULINGS.md:1573 - tests: test_page_performs.py - gate_motion_density.py:909
+- **M22** - E51 (operator 2026-09-07): a push-in is only used tied to something - pushing into a newly landed badge or data series; a zoom on a thing that just sits there is filler - levels: WARN, PASS - cites: E51 -> docs/portable/OPERATOR-RULINGS.md:1581 - tests: test_page_performs.py - gate_motion_density.py:909
 
 ## audit
 

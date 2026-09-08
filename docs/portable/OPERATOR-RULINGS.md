@@ -1562,13 +1562,21 @@ the chart over, it 'wobbles' out of screen, before flopping back down."* So the 
 Tokyo dock's at page size: arc 0.8 (the page clears the top edge at the apex), the pill's 9°
 tumble, a 0.6 s flight, and the landing is the paper material's own — the receiver's dip on
 the underdamped spring (ζ 0.67, the wobble) and the restitution hop h1 = e²h0, which the tall
-arc makes visible (the flop). **And the snap rides the landing** — *"the snap-in happens while
-the page is landing, that way it lands as a full page cleanly over the old world; by the time it
-lands the ledger page IS the new world."* The page flies as a CARD (`THROW_CARD` 0.62 of the
-stage, the dock's reading size) and grows to the stage by min-jerk over `SNAP_S`, finishing at
-the contact: the snap enter's growth timed to the throw's landing, so there is no seam and
-nothing to reveal — the plate entering the world is the whole transition. Dials, all
-`[DERIVED]`; `throw_from` below | above | left | right, `throw_s` per page.
+arc makes visible (the flop). **Then the version with weight** (the operator, on the first
+motion watch: *"that throw isn't right, it's not bending/reacting with the world; when we throw
+the evidence card it has the stop motion learnings that gave it weight, mass, etc … it has to go
+up, bend/warp, probably with a camera follow, then land"* and *"the card has to throw up,
+entering/passing the frame partially and obscuring most of it, then land with weight as the
+convincing world"*). A DEPTH ARC, not a scale-up: the card is thrown UP from the viewer's side —
+near the camera as it enters (z 0.55, 1.8× the stage, only its top in frame, obscuring most of
+it as it passes), receding at the apex (z ≈ 1.35), down onto the world plane at the contact
+(z = 1); apparent size 1/z (docs 43 / 24). It PITCHES under a real perspective — 55° seen from
+below as it passes, flat at the landing — and the motion squash (42 §42.3) reads as paper flex.
+The camera FOLLOWS 35 % of its height (the worlds ride the follow; the outgoing plate scales
+about its bottom edge so no black shows), the ground takes the paper dip, and the dock's
+contact shadow darkens the world beneath as it comes down. `throw_grow: "snap"` keeps the flat
+min-jerk growth for comparison. Dials, all `[DERIVED]`, HG2 tunes by eye; `throw_from` below |
+above | left | right, `throw_s` per page, `throw=<grow>,<from>,<s>` on the plate id.
 
 ## E51 — A push-in is only used tied to something that just landed; an untied zoom is filler (2026-09-07)
 
