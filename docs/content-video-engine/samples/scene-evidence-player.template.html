@@ -53,7 +53,7 @@
      should have a shadow instead of a border"): a page declared `card` keeps the thrown card's rounded corners at full size and sits
      on the world with doc 29 s1.2's hard-edge paper shadow (14px 14px 0 ink at 1080p, scaled) and NO border - the world stays visible
      around it (.cardworld). Opt-in per page; a snapped page is a card by default. */
-  .lp-page.card { border-radius: 36px; border: 6px solid #25313C; box-shadow: 18px 18px 0 #25313C; }   /* doc 29 s1.2: the ink border AND the hard shadow (operator: "both shadow and border") */
+  .lp-page.card { border-radius: 36px; border: 0; box-shadow: 18px 18px 0 #25313C; }   /* operator, 2026-09-08, corrected: NO black frame on a page - "it should just be the very edge of the cream and/or deckle"; the corners stay rounded because when the page is not full-frame (in flight, as a card) its edges are on screen */
   html[data-aspect="9:16"] .lp-page.card { border-radius: 44px; }
   .lp-page.card .lp-field { left: 4.5%; top: 6.5%; width: 91%; height: 87%; }   /* the cream edge a little SMALLER on a card (operator, 2026-09-08: "sorry i meant smaller") */
   .world.ledger.cardworld { background: transparent !important; }
@@ -266,6 +266,12 @@
      pasted. Dark chart ground inside the washi frame, like the PNG. */
   .dock.chart .slide-frame img { display: none; }
   .dock.chart .slide-frame { background: #16181c; }
+  /* A CHART CARD thrown onto a plate (the card a page later snaps up from): not a dock in a player frame (Tokyo's docks keep
+     theirs) - "the corners have to be rounded, but the black frame should not be in play, it should just be the very edge of
+     the cream" (operator, 2026-09-08). The rendered card already carries its cream margin, so the dock's own frame, padding
+     and ground come off; the landing's contact shadow is its weight. */
+  .dock.chart.card-page { border: 0; padding: 0; background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; border-radius: 44px; overflow: hidden; }
+  .dock.chart.card-page .slide-frame { background: transparent; border-radius: 44px; overflow: hidden; }
   .chartbox { display: block; width: 100%; height: auto; background: #16181c;
               border-radius: 6px; }
   .chartbox .ct  { font: 800 34px/1.2 "Segoe UI", sans-serif; fill: #f4f6f8; }
@@ -4568,6 +4574,7 @@
       el.dataset.slide = d.slide;
       el.style.visibility = "";
       const snapSc = SNAP_FROM[d.slide];   /* the card a snapping page grows from: record its layout box, hide it once the page has it */
+      el.classList.toggle("card-page", !!snapSc);   /* a card the page will become: rounded, no frame, the cream is the edge */
       if (snapSc) {
         const im = el.querySelector("img, video") || el;
         if (im.offsetHeight > 2) SNAP_RECT[d.slide] = { x: el.offsetLeft + (im === el ? 0 : im.offsetLeft), y: el.offsetTop + (im === el ? 0 : im.offsetTop), w: im.offsetWidth, h: im.offsetHeight };   /* an image still loading has no height yet */

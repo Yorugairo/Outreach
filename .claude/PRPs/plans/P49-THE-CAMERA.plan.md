@@ -213,15 +213,19 @@ rendered.
 - Validate: `python content/video_engine/scripts/build_docs_layers.py --write`
 - Evidence: pending
 
-## Decisions For The Operator (Stage 1 of the grill, restated for the camera)
+## Decisions - SETTLED by the operator (2026-09-08)
 
-1. **Who drives the camera by default** - (a) attention: landings and declared targets pull it, authored keys override
-   (recommended: the eye follows what lands, which is what the operator described); (b) authored keys only, attention
-   opt-in.
-2. **The arrival** - (a) the camera arrival replaces `snap` for every chart card (recommended once HG1 passes);
-   (b) opt-in per page beside `snap`.
-3. **What rides the camera** - (a) worlds, docks, species; captions in screen space (recommended - Z5 is the viewer's
-   layer); (b) captions ride too.
+1. **Attention drives the camera by default; authored keys override.** (*"attention drives the camera by default with
+   authored keys overriding"*)
+2. **The camera arrival stays opt-in** beside `snap` until it has been watched. (*"camera arrival stays opt-in for now,
+   has to be tested"*) - HG2 stays open.
+3. **Captions do not ride the camera.** Z5 is the viewer's layer. (*"no, captions don't ride the camera"*) - HG3 closed.
+
+Also settled the same hour, on the card's flight (the tariff hook): the in-flight size change is PERSPECTIVE, not a
+snap - a few percent (4-6 %) following the arc's depth, enough to read as approach/flutter, never a warp - and the fill is
+the CAMERA's punch-to-fill, not the object growing. The card lands CENTRED over the imagery (Tokyo adapted its spot
+because its dock stayed; here the card lands and the eye goes to it fast). No black frame on a card or a page: the edge
+is the cream (or the deckle); corners rounded whenever the card is not full-frame.
 
 ## Rejected Alternatives
 

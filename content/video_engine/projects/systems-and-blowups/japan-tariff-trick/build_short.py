@@ -164,6 +164,13 @@ def chart_dock_card(aid: str, series: str, variant: str = "line", aspect: str = 
     return aid
 
 
+def card_aspect(aid: str) -> float:
+    """The rendered card's h / w, for a centred placement sized to the card (chart_dock_card must have run) - Tokyo's."""
+    from PIL import Image
+    w, h = Image.open(BUILD / "docks" / f"{aid}.png").size
+    return round(h / w, 4)
+
+
 def register_assets() -> None:
     """The resolver checks STAMPED first (build_render_f.find_asset): the stills, the dock cards and the dock clips land there by id."""
     import build_render_f as R
@@ -284,7 +291,9 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
         (0.0, t_mount, "plate-podium;idle=drift", ken, [
             # THE CARD, THROWN (the third watch, the Tokyo way): the holdings page as a portrait card flies onto the podium on the dock's
             # stop-action throw and lands with weight; the next row's page SNAPS up from where it landed and IS the world
-            (chart_dock_card("dock-b-holdings", "ev-japan-holdings-v1", "line"), 0, t_card, t_mount, {"arrive": "throw", "mass": "paper"}),
+            # it lands CENTRED over the imagery (operator: Tokyo adapted the spot because its dock stayed; here the card lands and
+            # zooms fast, so the middle is fine) on the dock's own stop-action throw
+            (chart_dock_card("dock-b-holdings", "ev-japan-holdings-v1", "line"), 0, t_card, t_mount, {"arrive": "throw", "mass": "paper", "centre": True, "card_aspect": card_aspect("dock-b-holdings")}),
         ], None, None),
         # 2 THE PAGE ON THE HOOK: Japan's holdings ARRIVE DRAWN over the podium (enter=built, operator 2026-09-08: "chart 1
         #   doesn't actually need a build... we have plenty of builds in the short"). The build was never what starved this
@@ -316,7 +325,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
         ]),
         # 5 the catalyst: the car carrier at one pier, one stamp - "Toyota crosses once. Tokyo pays a flat fifteen percent"
         (t_ship, t_math, "plate-ship;idle=drift", ken, [
-            (chart_dock_card("dock-g-receipt", "ev-tariff-receipt-v1", "bars"), 0, t_receipt_card, t_math, {"arrive": "throw", "mass": "paper"}),
+            (chart_dock_card("dock-g-receipt", "ev-tariff-receipt-v1", "bars"), 0, t_receipt_card, t_math, {"arrive": "throw", "mass": "paper", "centre": True, "card_aspect": card_aspect("dock-g-receipt")}),
         ], "dip", None),
         # 6 the receipt page mounts over the ship on "the math breaks Detroit"; Detroit's bar is spotlit as the number is spoken;
         #   the +$1,740 is the page's own badge (B3: the numeral is in the sub behind it)
