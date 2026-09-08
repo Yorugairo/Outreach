@@ -116,6 +116,8 @@
   .lp-chart .cpill { fill: var(--lp-acc); }
   .lp-chart .ser { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
   .lp-chart .sname { font-size: 24px; font-weight: 700; }
+  .lp-chart .wedge { stroke: #25313C; stroke-width: 3; stroke-linejoin: round; }
+  .lp-chart .wlab { font-family: var(--hand); paint-order: stroke; stroke: rgba(37,49,60,.35); stroke-width: 4px; stroke-linejoin: round; }
   .lp-chart .hrule { stroke-width: 3; stroke-dasharray: 12 9; opacity: .9; }   /* a policy rate is a RULE, not a series (the fifth watch) */
   .lp-chart .bk { fill: none; stroke-width: 3; stroke-linecap: round; }   /* P47 T2: the bracket's span and ticks */
   .lp-morph { pointer-events: none; }   /* P47 T3: the morphing prop, beneath the chart's own svg */
@@ -2611,7 +2613,7 @@
                  marks: [], markBy: {}, geom, portrait: PORTRAIT, linePts: [], titleEl: title, titleGlyphs: [...title.querySelectorAll(".g")], rtGlyphs: [], perform: null };   /* geom: the chart's drawing box (viewBox units); linePts: each series' points in it, for exact datum targets */   /* no emphasis declared = no datum styled (spec emits null) */
     lpMark(st, "title", "title", title, {}); lpMark(st, "sub", "sub", subEl, {}); lpMark(st, "src", "src", src, {});   /* P48 T1: the page's own ink is a mark too - a retitle and a recast both move it */
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
-    const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo };
+    const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo, share: buildLedgerShare };
     (builders[st.kind] || buildLedgerBars)(st, pg);
     /* keyed per world element: the wipe paints the same scene into wA and wB */
     ledgerState.set(el.id + "|" + scene.scene_id, st);
@@ -2766,6 +2768,8 @@
     DECLINE_BUILD: 3.6, DECLINE_IN: 0.15, DECLINE_OUT: 0.08,   /* decline-chart: IN settles, HOLD draws + counts + darkens, OUT locks */
     COMBO_BUILD: 4.5, COMBO_BARS: 0.5, COMBO_LINE: 0.42,        /* data-chart: bars in reading order, then the line at one speed */
     COMBO_LABEL_SHARE: 0.55,   /* [DERIVED, the fourth watch]: a combo prints a bar's value only for the emphasised bar or one at this share of the biggest move */
+    SHARE_BUILD: 3.2, SHARE_SWEEP: 0.78, SHARE_LABEL: 0.12,   /* [DERIVED, P48 T4] the pie's own envelope: the sweep takes most of it, each name writing as its slice completes */
+    SHARE_PEEL_OUT: 0.17,   /* [DERIVED] how far the piece slides from the pie, as a share of the radius: clear of its neighbours, still obviously OF the circle */
   };
   const LP_PAL = { crimson: "#ED6A4A", teal: "#178C83", cobalt: "#8fb3f0", amber: "#F5B72E", deemph: "#b8c4d0" };   /* the field's own tokens (cobalt lifted for the charcoal, as dense-line) */
   const pow2out = (x) => 1 - (1 - x) * (1 - x);
@@ -3106,6 +3110,122 @@
       });
       ln.name.setAttribute("opacity", clamp01((g - 1) / 0.05).toFixed(2));
     });
+  };
+  /* ---- SHARE (P48 T4): a PIE, and the piece of it that leaves --------------------------------------
+     `ledger_page.py` refuses a donut by name for every other variant. E53 s1's amendment (2026-09-07)
+     allows it here inside four bounds, which the compiler enforces: the claim is about ONE named slice,
+     that slice is the only coloured one and the rest are muted context, the figure the claim turns on is
+     WRITTEN so no angle has to be estimated, and there are five slices or fewer.
+     The page's payoff is the PEEL. The named slice is drawn as TWO adjacent wedges in one colour - what
+     stays and the piece the sentence is about - so at rest it reads as one wedge; on its word the piece
+     slides out along its own bisector and goes blood red (E28: the loss is geometry AND colour), and what
+     is left is exactly the figure the next sentence uses. The sweep starts at twelve o'clock with the
+     claim's slice, because the eye starts where the story is. */
+  const LP_TAU = Math.PI * 2;
+  const S_OUT = (R) => R * LPX.SHARE_PEEL_OUT;   /* how far the piece slides from the pie */
+  const pw_band = (P) => (P ? 132 : 82);   /* [DERIVED, P48 T4] the figure band under the circle: two lines of the claim */
+  /* a wedge from a0 to a1 (radians, 0 = twelve o'clock, clockwise), about (cx, cy) */
+  const lpWedge = (cx, cy, r, a0, a1) => {
+    const f = (v) => v.toFixed(1);
+    if (a1 - a0 >= LP_TAU - 1e-6)   /* a full turn has no chord: two half arcs */
+      return "M" + f(cx) + " " + f(cy - r) + " A" + f(r) + " " + f(r) + " 0 1 1 " + f(cx) + " " + f(cy + r)
+           + " A" + f(r) + " " + f(r) + " 0 1 1 " + f(cx) + " " + f(cy - r) + " Z";
+    const px = (a) => cx + r * Math.sin(a), py = (a) => cy - r * Math.cos(a);
+    return "M" + f(cx) + " " + f(cy) + " L" + f(px(a0)) + " " + f(py(a0))
+         + " A" + f(r) + " " + f(r) + " 0 " + (a1 - a0 > Math.PI ? 1 : 0) + " 1 " + f(px(a1)) + " " + f(py(a1)) + " Z";
+  };
+  const buildLedgerShare = (st, pg) => {
+    const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;
+    const vals = (st.vals || []).map((v) => Math.abs(+v) || 0), n = vals.length;
+    const total = vals.reduce((a, b) => a + b, 0) || 1;
+    const labels = pg.labels || [], cols = pg.colors || [];
+    const peel = (pg.peel && Number.isFinite(+pg.peel.value)) ? pg.peel : null;
+    const pi = peel && Number.isInteger(peel.index) ? peel.index : -1;
+    const cx = G.W * 0.5, top = P ? 96 : 34, bot = G.H - (P ? 30 : 18);
+    /* a band at the FOOT of the box belongs to the peel's figure. Written past the rim it landed on a neighbour's name
+       (s9.23b), and a pie has no margin to spare: the claim gets its own line under the circle instead, on the side the
+       piece leaves towards, so the red wedge points at its own number. */
+    const figH = pw_band(P);
+    const cy = (top + bot - figH) / 2;
+    const R = Math.max(60, Math.min(G.W * 0.5, (bot - figH - top) / 2) * 0.94);
+    /* the claim's slice opens the sweep at twelve o'clock: the emphasised index is drawn first, the rest in their order */
+    const order = []; if (st.emph >= 0 && st.emph < n) order.push(st.emph);
+    for (let i = 0; i < n; i++) if (i !== st.emph) order.push(i);
+    const wedges = []; let a = 0;
+    for (const i of order) {
+      const share = vals[i] / total, full = share * LP_TAU, emph = i === st.emph;
+      /* the claim's slice keeps its declared colour; the piece that LEAVES is what goes blood red (E28) - a wedge
+         already red could not then show a loss. Every other slice is muted, on a ramp so neighbours stay apart. */
+      const col = emph ? (LP_PAL[cols[i]] || cols[i] || LP_PAL.teal)
+                       : (cols[i] && cols[i] !== "deemph" ? (LP_PAL[cols[i]] || cols[i]) : LP_SHARE_GREY[Math.max(0, order.indexOf(i) - 1) % LP_SHARE_GREY.length]);
+      /* the named slice is TWO wedges of one colour: what stays, then the piece that will leave */
+      const cut = (i === pi && peel) ? Math.min(full, Math.abs(+peel.value) / total * LP_TAU) : 0;
+      const keep = lpEl("path", "wedge" + (emph ? " emph" : ""), st.chart, { d: lpWedge(cx, cy, R, a, a + full - cut), fill: col, opacity: 0 });
+      const w = { i, a0: a, a1: a + full, cut, keep, col, v: vals[i], emph };
+      lpMark(st, "w:" + i, "wedge", keep, { a0: a, a1: a + full - cut, cx, cy, r: R, v: vals[i] }, w);
+      if (cut > 0) {
+        w.piece = lpEl("path", "wedge peel", st.chart, { d: lpWedge(cx, cy, R, a + full - cut, a + full), fill: col, opacity: 0 });
+        w.pa = a + full - cut / 2;   /* the piece's own bisector: it leaves along it */
+        lpMark(st, "peel", "peel", w.piece, { a0: a + full - cut, a1: a + full, cx, cy, r: R, v: +peel.value, bisector: w.pa }, w);
+      }
+      /* the name lives ON its slice (E53 s8: never in a legend box), on the bisector; only the claim's slice
+         carries a figure, because printing five figures would make the page the ranking E53 s1 refuses */
+      const mid = a + full / 2, lx = cx + R * 0.60 * Math.sin(mid), ly = cy - R * 0.60 * Math.cos(mid);
+      /* every name is written in LIGHT ink with the charcoal halo the class carries: dark ink on a muted wedge was
+         unreadable, and a name a viewer has to hunt for is the same failure as no name. A slice may declare a `short`
+         name; a wedge is narrow and "China, Mainland" does not fit in one. */
+      const fs = (P ? 40 : 24) * (emph ? 1 : 0.86), ink = emph ? "#FDF6E3" : "#dfe6ec";
+      w.lab = lpText(st.chart, "wlab", lx, ly + (emph ? -fs * 0.2 : fs * 0.3), "middle", String((pg.short_labels || [])[i] ?? labels[i] ?? ""),
+        { opacity: 0, style: "fill:" + ink + ";font-size:" + fs.toFixed(0) + "px;font-weight:700" });
+      if (emph) w.val = lpText(st.chart, "wlab", lx, ly + fs * 0.95, "middle", String((pg.value_strings || [])[i] ?? lpFmt(vals[i])),
+        { opacity: 0, style: "fill:" + ink + ";font-size:" + (fs * 0.82).toFixed(0) + "px" });
+      lpMark(st, "wlab:" + i, "wedgelabel", w.lab, { x: lx, y: ly });
+      wedges.push(w); a += full;
+    }
+    /* the peel's own figure, written where the piece lands - the claim, in ink, so no angle is estimated (E53 s1c) */
+    const pw = wedges.find((w) => w.piece);
+    let ptext = null, psub = null;
+    if (pw) {
+      const fs = P ? 46 : 28, WID = fs * 3.4, pad = P ? 20 : 14;   /* the figure's own half-room, so the clamp knows what it places */
+      const ex = Math.max(WID + pad, Math.min(G.W - WID - pad, cx + R * 0.62 * Math.sin(pw.pa)));
+      const ey = bot - figH + fs * 0.92, anch = "middle";
+      ptext = lpText(st.chart, "callout", ex, ey, anch, String(peel.value_string ?? ""), { opacity: 0, style: LP_HALO + "fill:var(--lp-neg);font-size:" + fs + "px;font-weight:700" });
+      psub = lpText(st.chart, "lab", ex, ey + fs * 0.82, anch, String(peel.label ?? ""), { opacity: 0, style: LP_HALO + "fill:#aeb6be;font-size:" + (fs * 0.62).toFixed(0) + "px" });
+      lpMark(st, "peelfig", "value", ptext, { x: ex, y: ey, v: +peel.value });
+    }
+    st.share = { wedges, cx, cy, R, peel: pw || null, ptext, psub, out: S_OUT(R) };
+    st.buildDur = LPX.SHARE_BUILD; st.paint = paintLedgerShare;
+    st.plot = { L: cx - R, R: G.W - (cx + R), T: cy - R, B: cy + R, W: G.W, x0: 0, x1: 1, y0: 0, y1: total, log: false };
+  };
+  const LP_SHARE_GREY = ["rgba(184,196,208,.50)", "rgba(184,196,208,.41)", "rgba(184,196,208,.33)", "rgba(184,196,208,.26)"];   /* [DERIVED] muted context: light enough that the claim's slice is the only colour on the page, stepped so neighbours stay apart */
+  const paintLedgerShare = (st, c) => {
+    const S = st.share, sw = clamp01(c / LPX.SHARE_SWEEP);
+    const front = (sw >= 1 ? 1 : expoOut(sw)) * LP_TAU;   /* the sweep, clockwise from twelve; pinned at a closed circle so the last wedge has no hairline */
+    for (const w of S.wedges) {
+      const a1 = Math.min(w.a1, front), on = a1 > w.a0 + 1e-4;
+      const kEnd = Math.min(w.a1 - w.cut, a1);
+      w.keep.setAttribute("opacity", on ? 1 : 0);
+      if (on) w.keep.setAttribute("d", lpWedge(S.cx, S.cy, S.R, w.a0, Math.max(w.a0, kEnd)));
+      if (w.piece) { const p0 = w.a1 - w.cut, pOn = a1 > p0 + 1e-4;
+        w.piece.setAttribute("opacity", pOn ? 1 : 0);
+        if (pOn) w.piece.setAttribute("d", lpWedge(S.cx, S.cy, S.R, p0, a1)); }
+      /* the name writes AS its own slice completes, never before: a label over a wedge that is not there yet is a lie,
+         and one that waits for the sweep to pass its end never writes at all for the last slice (the sweep ends there). */
+      const fade = LPX.SHARE_LABEL * LP_TAU;
+      const o = clamp01((front - w.a1 + fade) / fade).toFixed(2);
+      w.lab.setAttribute("opacity", o);
+      if (w.val) w.val.setAttribute("opacity", o);
+    }
+  };
+  /* the piece leaves on its word (the `peel` species): it slides out along its own bisector, goes blood red, and its
+     figure writes beside it. u is a pure function of t, so a seek lands the identical frame. */
+  const lpPeelTo = (st, u) => {
+    const S = st.share; if (!S || !S.peel) return;
+    const w = S.peel, k = expoOut(clamp01(u)), d = S.out * k;
+    w.piece.style.transform = "translate(" + (d * Math.sin(w.pa)).toFixed(2) + "px," + (-d * Math.cos(w.pa)).toFixed(2) + "px)";
+    w.piece.setAttribute("fill", k > 0.001 ? "var(--lp-neg)" : w.col);
+    if (S.ptext) S.ptext.setAttribute("opacity", clamp01((k - 0.35) / 0.3).toFixed(2));
+    if (S.psub) S.psub.setAttribute("opacity", clamp01((k - 0.6) / 0.3).toFixed(2));
   };
   /* RETRACT as a VORTEX (operator, 2026-09-05: "a true spiral of everything getting sucked back into the cream as if a
      vortex / whirlpool"): every colour on the page is a PARTICLE - each ink glyph, each bar, value, tick and label, each
@@ -3568,7 +3688,12 @@
       pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));
     });
     for (const hr of st.hlines || []) { const k = clamp01(c / 0.25); hr.line.setAttribute("opacity", (0.9 * k).toFixed(3)); if (hr.lab) hr.lab.setAttribute("opacity", clamp01((c - 0.25) / 0.2).toFixed(2)); }
-    if (st.paint) st.paint(st, c, t3);   /* the builder's own build step (race / decline / combo) */
+    if (st.paint) st.paint(st, c, t3);   /* the builder's own build step (race / decline / combo / share) */
+    if (st.share) {   /* P48 T4: the piece the sentence is about leaves the pie on its word */
+      let pu = 0;
+      for (const sp of pageSpecies(scene, "peel")) pu = Math.max(pu, (t - sp.at) / Math.max(0.001, sp.dur || 1));
+      lpPeelTo(st, pu);
+    }
     if (morphOn) paintMorph(st, pg, scene.world, clamp01((t - scene.span[0]) / morphS), c);   /* P47 T3: the prop becomes the area under the line, then the line draws over it */
     /* badges: floored at the build's end, each springs in over LP_BADGE_IN with the dock's back-out overshoot */
     const tb = t3 - LP.PUNCH - (st.buildDur || LP.BUILD);

@@ -1,0 +1,109 @@
+{
+ "title": "Who owns America's debt",
+ "sub": "The five biggest foreign holders of US Treasuries, $3,732B of a $9,489B total, February 2026",
+ "src": "US Treasury TIC Table 5 - Sep 2026",
+ "src_style": "compact",
+ "unit": "$bn",
+ "shares": [
+  {
+   "label": "Japan",
+   "short": "Japan",
+   "value": 1239.3,
+   "value_string": "$1,239.3B",
+   "color": "teal"
+  },
+  {
+   "label": "United Kingdom",
+   "short": "UK",
+   "value": 897.3,
+   "value_string": "$897.3B",
+   "color": "deemph"
+  },
+  {
+   "label": "China, Mainland",
+   "short": "China",
+   "value": 694.2,
+   "value_string": "$694.2B",
+   "color": "deemph"
+  },
+  {
+   "label": "Belgium",
+   "short": "Belgium",
+   "value": 454.7,
+   "value_string": "$454.7B",
+   "color": "deemph"
+  },
+  {
+   "label": "Canada",
+   "short": "Canada",
+   "value": 446.4,
+   "value_string": "$446.4B",
+   "color": "deemph"
+  }
+ ],
+ "emphasize": 0,
+ "peel": {
+  "index": 0,
+  "value": -122.6,
+  "value_string": "-$122.6B",
+  "label": "sold since February 2026",
+  "of_pct": 9.9,
+  "leaves": 1116.7,
+  "leaves_string": "$1,116.7B left"
+ },
+ "status": "REAL",
+ "fetched": "2026-09-07",
+ "facts": {
+  "month": "2026-02",
+  "grand_total": 9489.4,
+  "top5_total": 3731.9,
+  "japan_latest_month": "2026-06",
+  "top5": [
+   {
+    "name": "Japan",
+    "value": 1239.3,
+    "share_of_total_pct": 13.1
+   },
+   {
+    "name": "United Kingdom",
+    "value": 897.3,
+    "share_of_total_pct": 9.5
+   },
+   {
+    "name": "China, Mainland",
+    "value": 694.2,
+    "share_of_total_pct": 7.3
+   },
+   {
+    "name": "Belgium",
+    "value": 454.7,
+    "share_of_total_pct": 4.8
+   },
+   {
+    "name": "Canada",
+    "value": 446.4,
+    "share_of_total_pct": 4.7
+   }
+  ],
+  "japan_index": 0,
+  "japan_now": 1116.7,
+  "japan_peak": 1239.3,
+  "japan_peak_month": "2026-02",
+  "sold_bn": 122.6,
+  "sold_pct_of_japan_peak": 9.9,
+  "sold_pct_of_top5": 3.3,
+  "country_rows_parsed": 20
+ },
+ "proof": [
+  {
+   "source": "US Treasury TIC Table 5",
+   "url": "https://ticdata.treasury.gov/resource-center/data-chart-center/tic/Documents/slt_table5.txt",
+   "path": "evidence/sources/tic-slt-table5.txt",
+   "sha256": "391f58ce7b290fdd149658a20a885ff1897d05eb80146f36dec75a06402e258a",
+   "fetched": "2026-09-07",
+   "month": "2026-02",
+   "country_rows": 20
+  }
+ ],
+ "note": "P48 T4 / E53 s1 as amended 2026-09-07: a pie is allowed here because the claim is about ONE named slice (Japan's), every other slice is muted, the figure is written on the page, and there are five slices. Japan's holdings figure is read from ev-japan-holdings-v1 so the two pages cannot disagree."
+}

@@ -29,9 +29,11 @@ def page(**over):
     d = dict(BASE); d.update(over); return d
 
 
-def test_object_is_a_variant_and_the_chart_variants_are_unchanged():
+def test_object_is_a_variant_and_the_chart_variants_are_pinned():
+    """The chart variants are pinned so a new one is a deliberate change, never a side effect. `share` joined them
+    with P48 T4 - the donut exception E53 s1 was amended to allow, and it is still refused for every other variant."""
     assert "object" in LP.VARIANTS
-    assert LP.CHART_VARIANTS == ("line", "bars", "race", "decline", "progress")
+    assert LP.CHART_VARIANTS == ("line", "bars", "race", "decline", "progress", "share")
 
 
 def test_a_prop_page_validates_without_any_values():

@@ -110,10 +110,11 @@ SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                                                # rewrites the title, relight re-fires a bracket or the title (SHOT-TABLE-V3-PROPOSAL part B)
                  "undraw", "figure",           # E50 (P47 T6)
                  "note",                       # the third watch (P47 T7): a line of handwriting in the page's quiet zone, on a word
+                 "peel",                       # P48 T4: the piece of a share page's named slice leaves the pie on its word, and goes blood red
                  "spread")                     # the fifth watch: the region between two drawn series, bled full of ink on a word (the divergence IS the argument): a chart's deployed life is 6-8 s from its last data mark, 12 s at most - then it
                                                # UN-DRAWS (the line unwinds from where it stands back to a datum, index 0 = to nothing) or BECOMES
                                                # the next thing: a FIGURE the hand writes at a datum's spot (the treasury number the sentence turns to)
-PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread")
+PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel")
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
                                                                 # (a returning page keeps its retitle, its bracket standing); the gate credits no event before the span
 RELIGHT_REFS = ("bracket", "title")
@@ -134,7 +135,7 @@ SPECIES_TARGETS = {
     "steam": ("region",), "trace": ("region",), "ticker": ("region",),
     "life": (),
     "build_to": ("datum",), "bracket": (), "retitle": (), "relight": (),   # P47 T2: the datum is the cap; the others carry their own fields
-    "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (),   # E50; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
+    "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
 TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
                  "region": ("x0", "y0", "x1", "y1"), "span": ("from_word", "to_word")}
@@ -205,6 +206,9 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             errs.append("undraw: series must be a non-negative integer series index")
     if kind in ("build_to", "undraw") and "paths" in entry and entry["paths"] not in PATH_SELECTORS:
         errs.append(f"{kind}: paths must be one of {'|'.join(PATH_SELECTORS)} (the highlighted tail, the history, or all)")
+    elif kind == "peel":
+        pass   # P48 T4: no fields of its own. WHICH piece leaves and what it is worth are the PAGE's (page.peel), validated
+               # by ledger_page against E53 s1's bounds; the species only says WHEN. A peel on a page with no peel is inert.
     elif kind == "note":
         if not isinstance(entry.get("text"), str) or not entry["text"].strip():
             errs.append("note: needs a non-empty string text (a line the page writes in its quiet zone)")

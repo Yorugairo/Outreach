@@ -18,7 +18,8 @@ Input shapes (every one needs ``title`` and a non-empty ``src``):
   decline  exactly one metric (a single dense series, or bars of >= DECLINE_MIN_VALUES);
            first and last are the endpoints
   progress story values in 0..PROGRESS_MAX, or non-negative with a numeric "denominator"
-Rejected clearly: "checklist" (a table) and "shares" (a donut; no page variant).
+Rejected clearly: "checklist" (a table). "shares" (a donut) is rejected for every variant EXCEPT
+  `share`, which E53 s1 as amended (2026-09-07) allows inside four bounds - see SHARE_BOUNDS.
 Builder (``pick_builder``): race/decline follow the variant; bars + a pts series ->
 combo; > STORY_MAX_VALUES points or > 1 pts series -> dense-line; else story.
 Output ``ledger_page.v1`` (ink/paper colours are NOT here - the template owns the
@@ -54,8 +55,8 @@ EXIT_INVALID = 2
 SCHEMA_VERSION = "ledger_page.v1"
 MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 YEAR_RANGE = (1900, 2100)   # a decimal x outside this is a number, not a date
-VARIANTS = ("line", "bars", "race", "decline", "progress", "object")
-CHART_VARIANTS = ("line", "bars", "race", "decline", "progress")
+VARIANTS = ("line", "bars", "race", "decline", "progress", "share", "object")
+CHART_VARIANTS = ("line", "bars", "race", "decline", "progress", "share")
 # `object` is the page as a WORKING surface rather than an evidence surface: it draws
 # a registered prop in ink on the cream instead of a chart. Same page clock, same
 # deckle, same focus - so an object page can transform into a chart page without a
@@ -66,8 +67,20 @@ AXES_KEYS = ("log", "ylabel", "xticks", "from_zero", "highlight_from", "hlines",
              "ymin", "ymax", "yfmt", "yunit", "panels")
 UNCHARTABLE = {
     "checklist": "no chartable values: 'checklist' is a table, not a chart (keep it a dock)",
-    "shares": f"no chartable values: 'shares' is a donut; no page variant takes it ({'|'.join(VARIANTS)})",
+    "shares": ("'shares' is a donut, and E53 s1 ranks angle and area at the bottom of the perception hierarchy: "
+               "it is refused for every variant except --variant share, which the ruling's amendment (2026-09-07) "
+               "allows only inside its four bounds - a part-to-whole claim about ONE named slice, that slice "
+               "highlighted and the rest muted, the figure WRITTEN on the page, and five slices or fewer"),
 }
+# E53 s1 as amended (2026-09-07). The hierarchy's objection is to COMPARING many encoded angles; a claim about one
+# highlighted slice is not that. These are the amendment's bounds, enforced here so the exception cannot widen by use.
+SHARE_MAX_SLICES = 5
+SHARE_BOUNDS = (
+    "a part-to-whole claim about ONE named slice, never a ranking or a comparison across slices",
+    "that slice highlighted, every other slice muted context",
+    "the figure the claim turns on WRITTEN on the page, so no angle has to be estimated",
+    f"{SHARE_MAX_SLICES} slices or fewer",
+)
 UNCHARTABLE_DEFAULT = "no chartable values: expected bars[], series[].pts, panels[], or periods + series[].values"
 
 
@@ -162,6 +175,8 @@ def race_rows(series: dict) -> list[dict]:
 def pick_builder(series: dict, variant: str) -> str:
     if variant == "object":
         return "object"
+    if variant == "share":
+        return "share"
     """Builder from the data shape and the variant (P35 Builder Architecture)."""
     if variant in ("race", "decline"):
         return variant
@@ -186,7 +201,11 @@ def validate(series: dict, variant: str) -> list[str]:
         errors.append("placeholder figures: 'placeholder': true marks values still under SOURCES-TO-VERIFY; a page never renders them")
     if variant == "object":
         return errors + _validate_object(series)
+    if variant == "share":
+        return errors + _validate_share(series)
     has_race = any(r["values"] for r in race_rows(series))
+    if variant != "share" and "shares" in series and not (_bars(series) or dense_series(series)):
+        return errors + [UNCHARTABLE["shares"]]
     if not (_bars(series) or dense_series(series) or has_race):
         return errors + [next((v for k, v in UNCHARTABLE.items() if k in series), UNCHARTABLE_DEFAULT)]
     if variant in CHART_VARIANTS:
@@ -199,6 +218,47 @@ def validate(series: dict, variant: str) -> list[str]:
 SIGNED_NOTE_RE = re.compile(r"^\s*[+\u2212-]\s*\d")
 MONTH_LABEL_RE = re.compile(r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s*'?(\d{2}|\d{4})$")
 MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+
+def _validate_share(series: dict) -> list[str]:
+    """A share page's contract - E53 s1's amendment, checked rather than trusted. Every failure names the bound it
+    broke, because the whole point of writing the exception down was that it not widen by use."""
+    errors: list[str] = []
+    shares = series.get("shares")
+    if not isinstance(shares, list) or len(shares) < 2:
+        return ["a share page needs 'shares': at least two slices, the whole they add up to being the page's subject"]
+    if len(shares) > SHARE_MAX_SLICES:
+        errors.append(f"{len(shares)} slices: E53 s1 allows {SHARE_MAX_SLICES} or fewer ({SHARE_BOUNDS[3]})")
+    for i, sh in enumerate(shares):
+        if not isinstance(sh, dict):
+            errors.append(f"shares[{i}] is not an object"); continue
+        if not _text(sh.get("label")):
+            errors.append(f"shares[{i}] has no label: a slice is named at its own edge, never in a legend (E53 s8)")
+        v = to_number(sh.get("value"))
+        if v is None or v <= 0:
+            errors.append(f"shares[{i}] value {sh.get('value')!r} is not a positive number: a part of a whole cannot be negative")
+    emph = series.get("emphasize")
+    if not isinstance(emph, int) or isinstance(emph, bool) or not 0 <= emph < len(shares):
+        errors.append(f"a share page must declare 'emphasize': the index of the ONE slice the claim is about ({SHARE_BOUNDS[0]}; {SHARE_BOUNDS[1]})")
+    peel = series.get("peel")
+    if not isinstance(peel, dict):
+        errors.append(f"a share page must declare 'peel': the piece of the named slice the claim is about, with its figure ({SHARE_BOUNDS[2]})")
+    else:
+        if not _text(peel.get("value_string")):
+            errors.append(f"peel.value_string is required: {SHARE_BOUNDS[2]}")
+        pv = to_number(peel.get("value"))
+        if pv is None:
+            errors.append("peel.value must be a number: the size of the piece, signed (a sale is negative - E28)")
+        pi = peel.get("index")
+        if not isinstance(pi, int) or isinstance(pi, bool) or not 0 <= pi < len(shares):
+            errors.append("peel.index must name one of the slices")
+        elif isinstance(emph, int) and not isinstance(emph, bool) and pi != emph:
+            errors.append(f"peel.index {pi} is not the emphasised slice {emph}: {SHARE_BOUNDS[0]}")
+        elif pv is not None:
+            whole = to_number(shares[pi].get("value")) or 0.0
+            if abs(pv) > whole:
+                errors.append(f"peel {pv} is larger than the slice it comes out of ({whole}): a piece cannot exceed its part")
+    return errors
 
 
 def _validate_object(series: dict) -> list[str]:
@@ -418,6 +478,13 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         spec["badges"] = badges_for(series)
         spec["emphasize"] = None
         return spec
+    if builder == "share":
+        spec.update(_share_block(series))
+        spec["unit"] = str(series["unit"]) if _text(series.get("unit")) else ""
+        spec["judge"] = review_notes(series)
+        spec["badges"] = badges_for(series)
+        spec["emphasize"] = int(series.get("emphasize") if emphasize is None else emphasize)
+        return spec
     if builder == "race":
         spec.update(_race_block(series))
     elif builder == "dense-line":
@@ -452,6 +519,21 @@ def _object_block(series: dict) -> dict:
                 entry[k] = p[k]
         props.append(entry)
     return {"props": props, "labels": [], "values": [], "value_strings": [], "colors": []}
+
+
+def _share_block(series: dict) -> dict:
+    """The slices verbatim, plus the peel. E53 s1(b): every slice but the claim's is muted context, so a slice that
+    declares no colour takes the de-emphasis token rather than a series accent it did not ask for."""
+    shares = series.get("shares") or []
+    emph = series.get("emphasize")
+    peel = dict(series.get("peel") or {})
+    return {"labels": [str(s.get("label")) for s in shares],
+            # a wedge is narrow: a slice may name itself short for the page and keep its full name for the record
+            "short_labels": [str(s.get("short") or s.get("label")) for s in shares],
+            "values": [to_number(s.get("value")) for s in shares],
+            "value_strings": [value_string(s.get("value_string", s.get("value"))) for s in shares],
+            "colors": [str(s.get("color") or ("crimson" if i == emph else "deemph")) for i, s in enumerate(shares)],
+            "peel": peel}
 
 
 def _decline_block(series: dict, spec: dict) -> dict:
@@ -634,7 +716,7 @@ def load_series(path: Path) -> dict:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="series.json -> ledger page spec (doc 29 s9.26)")
     parser.add_argument("series", help="the ev-*.series.json beside the asset")
-    parser.add_argument("--variant", required=True, choices=VARIANTS)
+    parser.add_argument("--variant", required=True, choices=VARIANTS)   # `share` is the donut exception; see SHARE_BOUNDS
     parser.add_argument("--emphasize", type=int, default=None, help="index of the emphasized datum")
     parser.add_argument("--quiet-zone", default="right", choices=QUIET_ZONES, help="where docks land (s9.28 B3)")
     parser.add_argument("--out", default=None, help="spec path; default <name>.page.json beside the input")
