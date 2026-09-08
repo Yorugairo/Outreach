@@ -251,6 +251,12 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
     t_customs_land = round(t_page5 + PAGE_BUILD_END_S + 0.05, 2)
     t_funded = at("while Tokyo funded")
     ken = (0, 0, 0)
+    # THE TRANSITION VOCABULARY (E48: declared, not improvised). PRIMARY for every world change = the DIP through black, the
+    # reference's 0.47 s `[DERIVED: measured on all 35]` (E47 s1) - the plates take it and so does a page that ARRIVES BUILT,
+    # because a built page is a world change, a deliberate transition to a chart, never a mount (operator, 2026-09-08). The
+    # MOUNT stays the signature for a page that draws (the cream rises under the outgoing world, then the ink). The HERO is the
+    # spiral, unspent here (the holdings page's return is the candidate, CHART-CHOREOGRAPHY.md A). No accent declared. The
+    # wipe appears nowhere: a `cut` row is a cut since 2026-09-08 (it used to fall through to the wipe, E47 s3).
     return [
         # 1 the hook: the victory lap at the podium - "Trump announced he beat Japan on tariffs"
         (0.0, t_mount, "plate-podium;idle=drift", ken, [], None, None),
@@ -260,7 +266,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
         #   seconds after the voice says it. The bracket is cut outright: operator, "a cheap, relatively bad way we use just
         #   to add some motion", and the figure is not lost - the selling page pays it off properly at 0:50. Deployed life
         #   goes 0.03s -> the whole span. exit=cut: the gates dip in.
-        (t_mount, t_gates, hold + ":built:cut", ken, [], "cut", [
+        (t_mount, t_gates, hold + ":built:cut", ken, [], "dip", [
             # M11: a page that ARRIVES full must be pointed at, or it is homework (E25). The spotlight lands on the June
             # low as the page appears - the divergence IS the mechanism, and pointing at it beats the bracket that used
             # to write the figure six and a half seconds after the voice said it.
@@ -286,7 +292,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
         (t_ship, t_math, "plate-ship;idle=drift", ken, [], "dip", None),
         # 6 the receipt page mounts over the ship on "the math breaks Detroit"; Detroit's bar is spotlit as the number is spoken;
         #   the +$1,740 is the page's own badge (B3: the numeral is in the sub behind it)
-        (t_math, t_lever, "ledger:ev-tariff-receipt-v1:bars:1:right:built:cut", ken, [], "cut", [
+        (t_math, t_lever, "ledger:ev-tariff-receipt-v1:bars:1:right:built:cut", ken, [], "dip", [
             {"kind": "spotlight", "at": t_six, "dur": 1.0, "target": datum(1)},
         ]),
         # 7 the second lever: the vault, shelves emptying (it returns on "Tokyo checked the Treasury vault" - E48, the callback is the thread)

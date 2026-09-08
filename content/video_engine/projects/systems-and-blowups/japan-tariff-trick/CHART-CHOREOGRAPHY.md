@@ -14,9 +14,9 @@ this ledger exists to make deliberate.
 
 | # | chart | on | span | **deployed (M21)** | arrives | leaves | becomes |
 |---|---|---|---|---|---|---|---|
-| 1 | `ev-japan-holdings-v1` — holdings since 2000 | 0:01.8 | 10.0 s | 10.0 s | **`built` — the house wipe, never a mount** | `cut` | the crossings map dips in |
+| 1 | `ev-japan-holdings-v1` — holdings since 2000 | 0:01.8 | 10.0 s | 10.0 s | **`built` by the dip (E47 primary), never a mount, never the wipe** | `cut` | the crossings map dips in |
 | 2 | `ev-parts-cascade-v1` — duty per component | 18.3 s | 13.0 s | 5.4 s | `mount` | `cut` | — |
-| 3 | `ev-tariff-receipt-v1` — Toyota vs Detroit | 36.9 s | 10.9 s | 10.8 s | **`built` — the house wipe, never a mount** | `cut` | — |
+| 3 | `ev-tariff-receipt-v1` — Toyota vs Detroit | 36.9 s | 10.9 s | 10.8 s | **`built` by the dip (E47 primary), never a mount, never the wipe** | `cut` | — |
 | 4 | `ev-japan-selling-v1` — the monthly change | 50.0 s | 13.6 s | 6.1 s | `mount` | `cut` | — |
 | 5 | `ev-customs-duties-v1` — what America paid | 72.7 s | 10.4 s | 2.9 s | `mount` | `cut` | — |
 
@@ -60,8 +60,13 @@ over the scene, and then drawing. Mount doesn't make any sense in any other situ
 are supposed to transition cleanly to the ledger plate."* And the distinction, in the operator's
 words: *"Mount to me is the cream plate 'mounting' on to the world over the previous scene. What
 we're doing here is a deliberate transition to a chart, there's a difference."* Charts 1 and 3
-had been folded into the mount by P48 T1; they now take the row's own transition — the hard-edge
-wipe — and the ledger plate is simply there when the front passes. E50 carries the amendment.
+had been folded into the mount by P48 T1; they now take the row's own transition. The first fix
+gave them the hard-edge wipe (a `cut` row still fell through to it in the player — the pre-E47
+default surviving in code); the operator: *"we shouldn't default to the hard-edge wipe, remember?"*
+E47 retired the wipe as the world-change default and named the kit — cut in the gap, dip through
+black (0.47 s, the reference's most common non-cut), blur-zoom — and E48 says a short declares
+ONE primary. This short's primary is the **dip**: the plates take it, and so do the two built
+pages now. A `cut` row is a one-frame cut in the player since today. E50 carries the amendment.
 
 ## The story each one tells
 

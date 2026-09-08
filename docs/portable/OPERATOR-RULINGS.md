@@ -1539,10 +1539,15 @@ reserved for cream coming through over the scene, and then drawing. Mount doesn'
 any other situation. Here, we are supposed to transition cleanly to the ledger plate."* The mount
 (E45 §2) is the roll-out: the world fades while the cream builds beneath it, and the ink follows.
 A chart that arrives standing has no ink to follow, so the cream coming through is a promise the
-page does not keep. `enter=built` therefore takes the row's declared transition like any plate —
-the house wipe, a dip, a dissolve — and the ledger plate is simply there when the front passes.
+page does not keep. `enter=built` therefore takes the row's declared transition like any plate — under E47 that is
+the world-change kit: a cut in the gap, the dip through black, the blur-zoom; the wipe is retired
+as a default and reached by name only — and the ledger plate is simply there on the far side.
 `enter=spiral` and `enter=snap` were already outside the mount; `built` had been folded into it
-(P48 T1) and is now out.
+(P48 T1) and is now out. **The same hour:** the first fix let the built pages fall through to the
+wipe, because a `cut` row in the player still painted the wipe (the pre-E47 default surviving in
+code). The operator: *"I think we learned that we shouldn't default to the hard-edge wipe,
+remember?"* A `cut` is now a cut in the player, and the tariff short's built pages take the dip,
+its declared primary (E48).
 
 ## E51 — A push-in is only used tied to something that just landed; an untied zoom is filler (2026-09-07)
 

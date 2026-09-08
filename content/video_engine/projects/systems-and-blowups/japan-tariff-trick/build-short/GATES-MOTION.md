@@ -3,12 +3,12 @@
 ```text
 === MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\content\video_engine\projects\systems-and-blowups\japan-tariff-trick\build-short ===
                runtime: 1:29
-         visual_events: 310 (208.2/min)
+         visual_events: 314 (210.8/min)
                  docks: 4
            dock_source: timeline
           ledger_pages: 5
   still_over_12s_share: 0%
-            per_minute: 0:00:222/5 1:00:178/8
+            per_minute: 0:00:226/5 1:00:178/8
 
   [WARN ] M06 62 caption pages = 42/min, 4.0 words/page
           s9.15 r7 / build_caption_pages 4-6 words
@@ -38,7 +38,7 @@
           E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract
   [PASS ] M16 longest gap between visual events 2.3s at 0:28; 0 gap(s) over 2.5s
           doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
-  [INFO ] M07 short: 1 full minute(s) in 89s - opening 222.0 events/min, 5.0 evidence entries/min; tail from 1:00 177.8/min; whole runtime 206.8/min - no minute distribution to rank in (E21 is judged on the whole)
+  [INFO ] M07 short: 1 full minute(s) in 89s - opening 226.0 events/min, 5.0 evidence entries/min; tail from 1:00 177.8/min; whole runtime 209.5/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
   [INFO ] M18 frozen frames not measured - run measure_frozen_frames.py <build> (writes frame-hashes.json)
           E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)
@@ -52,5 +52,5 @@
 RESULT: 0 FAIL / 2 WARN / 12 PASS / 1 JUDGE / 4 INFO
 ```
 
-TIMELINE: japan-short.timeline.json sha256:42728746451c587065a5c5f134121f8b2bd7bc715d7f5339dfa3a567ae1cde64
+TIMELINE: japan-short.timeline.json sha256:b2abd5be681f774c56918f5626a34ef10f8d049355093a0a88795e444acf21d8
 VERDICT: PASS (0 FAIL)

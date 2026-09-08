@@ -4275,7 +4275,11 @@
        clock begins. The hand-off itself is no wipe (wk = 1) and no cross-fade of the page (dk = 1). */
     const mountS = mountIn ? (sc.world.page.mount_s || sc.world.page.morph_s || LP.FIELD) : 0, mu = mountIn ? clamp01((t - sc.span[0]) / mountS) : 1;
     const dk = dissolve && !mountIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / DISSOLVE_S)) : 1;
-    const wk = prev && !spiralIn && !snapIn && !suck && !dissolve && !dipIn && !bzIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
+    /* E47 s3 (2026-09-06): the wipe is RETIRED as the world-change default and is reached by name only (wipe / wipe_right);
+       a row that says `cut` is a cut - one frame, both plates steady, the reference's own most common boundary. Until
+       2026-09-08 a `cut` row fell through to the wipe here, which is why two built pages arrived by a wipe nobody declared. */
+    const hardCut = prev && exitName(sc.exit) === "cut";
+    const wk = prev && !hardCut && !spiralIn && !snapIn && !suck && !dissolve && !dipIn && !bzIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const seaming = prev && wk > 0 && wk < 1;
     /* THE HARD-EDGE CLIP WIPE (restored 2026-09-01). The remotion-ui
        directional-wipe port (dd9e476, 2026-08-30) replaced this with a
