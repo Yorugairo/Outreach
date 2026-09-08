@@ -1,9 +1,22 @@
 # SCRIPT H — REWRITE ORDER (draft 2026-09-08, awaiting operator confirmation)
 
-**This is an OPENING rewrite, not a re-script.** Script G's body is measured
-to hold: audience retention is flat at 40–48 % from ~2:00 to ~11:00 on the
-lifetime curve. The body is not in scope. Everything below is the first ~90
-seconds and the package in front of it.
+**SCOPE CORRECTED 2026-09-08 (operator).** This began as an opening-only
+rewrite on the reasoning that "the body holds." That conflated two different
+claims: the flat 40–48 % from ~2:00 to ~11:00 says the body does not SHED
+viewers, not that it is good. The gate run settles it — **14 of the 23
+failures are outside P1** (G19/G21/G22/G24/G27 in P2, G34, G35, G41, G42,
+G36 and G44 late, and G15b on the close itself), and the blind viewer's
+unperceived beats sit at windows 12, 16 and 17 — minutes 3, 4 and 6.
+A spliced script would also seam prose written to today's standard onto prose
+written before the gates existed, and the take is being re-recorded either way.
+
+**So: a full SCRIPT-H pass.** P1 rebuilt for early conversion; P2–P6 repaired
+against the gate rows and the viewer's rows, keeping the argument and every
+verified figure. **And a companion SHOT-TABLE-H**, because the engine changed
+too: the August build held 30 of 43 docks past the E25 ceiling with no motion
+available to it. A chart can now build, spotlight, un-draw, recast and leave —
+the divergence chart becoming the index-concentration pie is the recast that
+landed 2026-09-07.
 
 Script G stays the frozen record of the recorded take (`build-f/timeline.json`
 and `RECORD-CHAIN-G.md` align to it word for word). H is a new letter.
