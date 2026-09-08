@@ -1,7 +1,7 @@
 {
  "title": "The second lever: Japan sold, month by month",
- "sub": "Change in Japan's US Treasury holdings, $bn a month, March to June 2026 - four months, -$122.6B, a tenth of the pile",
- "src": "US Treasury TIC Table 5 (slt_table5.txt), Major Foreign Holders - fetched 2026-09-07",
+ "sub": "Change in Japan's US Treasury holdings, $bn a month, March to June 2026",
+ "src": "US Treasury TIC \u00b7 Sep 2026",
  "unit": "$",
  "bars": [
   {
@@ -41,5 +41,7 @@
   "drop_bn": -122.6,
   "biggest_month": "May",
   "biggest_bn": -66.8
- }
+ },
+ "src_full": "US Treasury TIC Table 5 (slt_table5.txt), Major Foreign Holders - fetched 2026-09-07",
+ "src_style": "compact"
 }

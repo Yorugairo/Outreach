@@ -3,17 +3,19 @@
 ```text
 === MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\content\video_engine\projects\systems-and-blowups\japan-tariff-trick\build-short ===
                runtime: 1:29
-         visual_events: 302 (202.8/min)
+         visual_events: 299 (200.8/min)
                  docks: 4
            dock_source: timeline
           ledger_pages: 5
   still_over_12s_share: 0%
-            per_minute: 0:00:214/5 1:00:178/8
+            per_minute: 0:00:211/5 1:00:178/8
 
   [WARN ] M06 62 caption pages = 42/min, 4.0 words/page
           s9.15 r7 / build_caption_pages 4-6 words
-  [WARN ] M11 first chart ledger:s02 enters at 1.8s, its build lands at 10.5s, with build_to landing on datum 311 at 10.5s (the cap is the annotation: the line ends on the datum); WARN no sound cue within 1.5s of the enter at 1.8s; window 0-10s (E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10)
+  [WARN ] M11 first chart ledger:s02 enters at 1.8s, its build lands at 1.8s, with spotlight at 2.3s; WARN no sound cue within 1.5s of the enter at 1.8s; window 0-10s (E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10)
           E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue
+  [WARN ] M21 2 page(s) deployed under 6s after the last data mark: s04 5.4s deployed of a 13.0s span (arrive+build 7.5s), 0.6s short; s11 2.9s deployed of a 10.4s span (arrive+build 7.6s), 3.1s short - the chart is being RUSHED, not held: give the span the seconds (the arrival is the art, so add to the span or to page.build_s rather than cutting the mount)
+          E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing
   [PASS ] M01 longest still stretch 2.3s at 0:28
           doc 29 s8.19 / s9.25 stillness ceiling
   [PASS ] M02 0 stretches > 8s (working target)
@@ -38,19 +40,17 @@
           E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract
   [PASS ] M16 longest gap between visual events 2.3s at 0:28; 0 gap(s) over 2.5s
           doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
-  [PASS ] M21 every ledger page leaves or un-draws within 8s of its last data mark: s02 0.0s (0:13 -> 0:13); s04 5.4s (0:25 -> 0:31); s06 3.3s (0:44 -> 0:47); s08 6.1s (0:57 -> 1:03); s11 2.9s (1:20 -> 1:23)
-          E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing
-  [INFO ] M07 short: 1 full minute(s) in 89s - opening 214.0 events/min, 5.0 evidence entries/min; tail from 1:00 177.8/min; whole runtime 201.4/min - no minute distribution to rank in (E21 is judged on the whole)
+  [INFO ] M07 short: 1 full minute(s) in 89s - opening 211.0 events/min, 5.0 evidence entries/min; tail from 1:00 177.8/min; whole runtime 199.4/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
   [INFO ] M18 frozen frames not measured - run measure_frozen_frames.py <build> (writes frame-hashes.json)
           E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)
-  [INFO ] M19 1 build_to hold(s) - the line rests at a datum until the next word: 0:10+0.1s
+  [INFO ] M19 build_to caps declared; none holds between caps
           P47 T2 (SHOT-TABLE-V3-PROPOSAL part B): a cap is a hold the sentence asked for, not stillness
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
 
-RESULT: 0 FAIL / 2 WARN / 13 PASS / 1 JUDGE / 3 INFO
+RESULT: 0 FAIL / 3 WARN / 12 PASS / 1 JUDGE / 3 INFO
 ```
 
-TIMELINE: japan-short.timeline.json sha256:6e5d186eedc89fa75578b039ed8dec3e86fec6424d336d9f5b758ea4279b2330
+TIMELINE: japan-short.timeline.json sha256:636d1693746d7eb8f2b8f677996e8e5cf90f606c8b599c1dc43a945fe09df253
 VERDICT: PASS (0 FAIL)

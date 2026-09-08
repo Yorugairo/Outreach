@@ -1,7 +1,7 @@
 {
  "title": "Detroit's parts bill: 25% at every crossing",
  "sub": "Duty per component on one American pickup, $ - the 25% parts rate on a modelled cross-border bill of materials, three of six crossings named",
- "src": "DERIVED from USITC HTS ch 8708 (25% parts duty) and CAR (6-8 crossings) - component values are a model, not a quote",
+ "src": "DERIVED \u00b7 USITC HTS 8708 + CAR \u00b7 Sep 2026",
  "unit": "$",
  "bars": [
   {
@@ -29,5 +29,7 @@
   "named_parts_total": 3950,
   "hand_off_stacked_total": 6240,
   "note": "the three named parts sum to $3,950; the hand-off's $6,240 stacked total is its own model (an $18,000 BOM across six crossings) and does not reduce to these three"
- }
+ },
+ "src_full": "DERIVED from USITC HTS ch 8708 (25% parts duty) and CAR (6-8 crossings) - component values are a model, not a quote",
+ "src_style": "compact"
 }

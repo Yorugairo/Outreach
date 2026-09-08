@@ -1,7 +1,7 @@
 {
  "title": "The tariff: what America paid at its own border",
  "sub": "US customs duties, $bn a year (annual rate), quarterly since 2015 - $97bn in early 2025, $364bn by late 2025",
- "src": "FRED B235RC1Q027SBEA (BEA): federal customs duties, seasonally adjusted annual rate - fetched 2026-09-07",
+ "src": "FRED \u00b7 BEA \u00b7 Sep 2026",
  "ylabel": "$bn/yr",
  "from_zero": true,
  "highlight_from": 2025.0,
@@ -235,5 +235,7 @@
   "points": 46,
   "peak_idx": 43,
   "last_idx": 45
- }
+ },
+ "src_full": "FRED B235RC1Q027SBEA (BEA): federal customs duties, seasonally adjusted annual rate - fetched 2026-09-07",
+ "src_style": "compact"
 }

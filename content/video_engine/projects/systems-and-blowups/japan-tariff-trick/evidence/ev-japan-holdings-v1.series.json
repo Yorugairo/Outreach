@@ -1,7 +1,7 @@
 {
  "title": "Japan is selling America's debt",
  "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000 - Feb 2026 $1,239.3B to Jun 2026 $1,116.7B",
- "src": "US Treasury TIC Table 5, Major Foreign Holders - fetched 2026-09-05, re-checked 2026-09-07 against the live table",
+ "src": "US Treasury TIC \u00b7 Sep 2026",
  "ylabel": "$bn",
  "xticks": [
   [
@@ -1321,5 +1321,8 @@
   "low_since_2000_month": "2001-09",
   "low_since_2000": 292.9
  },
- "highlight_from": 2026.0833
+ "highlight_from": 2026.0833,
+ "src_full": "US Treasury TIC Table 5, Major Foreign Holders - fetched 2026-09-05, re-checked 2026-09-07 against the live table",
+ "src_style": "compact",
+ "name_clear": true
 }

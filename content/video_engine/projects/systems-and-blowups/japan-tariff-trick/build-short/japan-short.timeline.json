@@ -2341,8 +2341,9 @@
      "variant": "line",
      "title": "Japan is selling America's debt",
      "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000 - Feb 2026 $1,239.3B to Jun 2026 $1,116.7B",
-     "source": "US Treasury TIC Table 5, Major Foreign Holders - fetched 2026-09-05, re-checked 2026-09-07 against the live table",
+     "source": "US Treasury TIC \u00b7 Sep 2026",
      "quiet_zone": "right",
+     "src_style": "compact",
      "labels": [
       "Japan"
      ],
@@ -3650,14 +3651,14 @@
         "2025"
        ]
       ],
-      "highlight_from": "2026.0833"
+      "highlight_from": "2026.0833",
+      "name_clear": true
      },
      "unit": "",
      "judge": [],
      "badges": [],
      "emphasize": 0,
-     "enter": "mount",
-     "mount_s": 2.02,
+     "enter": "built",
      "exit": "cut"
     },
     "ken_burns": {
@@ -3674,32 +3675,13 @@
    "docks": [],
    "species": [
     {
-     "kind": "build_to",
-     "at": 7.54,
-     "dur": 3.0,
-     "target": {
-      "kind": "datum",
-      "index": 311
-     }
-    },
-    {
-     "kind": "build_to",
-     "at": 10.64,
+     "kind": "spotlight",
+     "at": 2.32,
      "dur": 1.2,
      "target": {
       "kind": "datum",
       "index": 315
      }
-    },
-    {
-     "kind": "bracket",
-     "from": 311,
-     "to": 315,
-     "label": "\u2212$122.6B",
-     "sub": "Feb to Jun 2026",
-     "color": "neg",
-     "at": 11.9,
-     "dur": 1.8
     }
    ]
   },
@@ -3734,8 +3716,9 @@
      "variant": "bars",
      "title": "Detroit's parts bill: 25% at every crossing",
      "sub": "Duty per component on one American pickup, $ - the 25% parts rate on a modelled cross-border bill of materials, three of six crossings named",
-     "source": "DERIVED from USITC HTS ch 8708 (25% parts duty) and CAR (6-8 crossings) - component values are a model, not a quote",
+     "source": "DERIVED \u00b7 USITC HTS 8708 + CAR \u00b7 Sep 2026",
      "quiet_zone": "right",
+     "src_style": "compact",
      "labels": [
       "Engine",
       "Harness",
@@ -3851,8 +3834,9 @@
      "variant": "bars",
      "title": "The tariff bill on a $30,000 car",
      "sub": "Toyota pays 15% once on the sticker, Detroit pays 25% on its parts at six border crossings - $1,740 more for building it at home",
-     "source": "DERIVED from $30,000 x 15% (USTR, the US-Japan finished-auto rate) and the hand-off's modelled stacked 25% parts duties (HTS 8708, CAR crossings)",
+     "source": "DERIVED \u00b7 USTR + USITC HTS 8708 \u00b7 Sep 2026",
      "quiet_zone": "right",
+     "src_style": "compact",
      "labels": [
       "Toyota",
       "Detroit"
@@ -3866,9 +3850,18 @@
       "6240"
      ],
      "colors": [
-      "cobalt",
+      "deemph",
       "crimson"
      ],
+     "axes": {
+      "hlines": [
+       {
+        "y": 4500,
+        "label": "Toyota's bill",
+        "color": "cobalt"
+       }
+      ]
+     },
      "unit": "$",
      "judge": [],
      "badges": [
@@ -3881,8 +3874,7 @@
       }
      ],
      "emphasize": 1,
-     "enter": "mount",
-     "mount_s": 0.85,
+     "enter": "built",
      "exit": "cut"
     },
     "ken_burns": {
@@ -3939,9 +3931,10 @@
      "builder": "story",
      "variant": "bars",
      "title": "The second lever: Japan sold, month by month",
-     "sub": "Change in Japan's US Treasury holdings, $bn a month, March to June 2026 - four months, -$122.6B, a tenth of the pile",
-     "source": "US Treasury TIC Table 5 (slt_table5.txt), Major Foreign Holders - fetched 2026-09-07",
+     "sub": "Change in Japan's US Treasury holdings, $bn a month, March to June 2026",
+     "source": "US Treasury TIC \u00b7 Sep 2026",
      "quiet_zone": "right",
+     "src_style": "compact",
      "labels": [
       "Mar",
       "Apr",
@@ -4002,10 +3995,10 @@
      "badge_at": [],
      "kind": "video",
      "place": {
-      "x": 412,
+      "x": 501,
       "y": 296,
-      "w": 452,
-      "h": 278
+      "w": 363,
+      "h": 228
      },
      "read_s": 1.2,
      "park_s": 0.7,
@@ -4075,8 +4068,9 @@
      "variant": "line",
      "title": "The tariff: what America paid at its own border",
      "sub": "US customs duties, $bn a year (annual rate), quarterly since 2015 - $97bn in early 2025, $364bn by late 2025",
-     "source": "FRED B235RC1Q027SBEA (BEA): federal customs duties, seasonally adjusted annual rate - fetched 2026-09-07",
+     "source": "FRED \u00b7 BEA \u00b7 Sep 2026",
      "quiet_zone": "right",
+     "src_style": "compact",
      "labels": [
       "Customs"
      ],
@@ -4423,11 +4417,10 @@
  ],
  "species": [
   "ledger",
-  "build_to",
-  "bracket",
   "spotlight",
   "callout",
   "retitle",
+  "build_to",
   "figure",
   "life"
  ],
