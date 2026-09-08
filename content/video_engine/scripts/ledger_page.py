@@ -470,6 +470,7 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         **({"line_unit": series["line_unit"]} if isinstance(series.get("line_unit"), str) else {}),   # P47 T9: a combo's lines take their own right axis in this unit
         **({"legend_in_sub": True} if series.get("legend_in_sub") else {}),   # the sub names the lines by colour: no inline name (it would repeat and collide)
         **({"tiers": True} if series.get("tiers") else {}),   # the macro-chart intake: bars and lines in two bands sharing one x, each on its own scale
+        **({"build_s": float(series["build_s"])} if isinstance(series.get("build_s"), (int, float)) and not isinstance(series.get("build_s"), bool) and series["build_s"] > 0 else {}),   # the page draws over its own seconds
         "labels": [], "values": [], "value_strings": [], "colors": [],
     }
     if builder == "object":

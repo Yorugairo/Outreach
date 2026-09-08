@@ -2616,6 +2616,13 @@
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
     const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo, share: buildLedgerShare };
     (builders[st.kind] || buildLedgerBars)(st, pg);
+    /* A page may declare its own BUILD length (operator, 2026-09-08: "the fix is to draw out the charts in a
+       slower/more animated fashion"). Measured on the tariff short, M21 puts the deployed lives at 0.0-6.1 s
+       against a 10-13 s span - the chart is not being HELD too long, it finishes drawing early and then waits.
+       Spending more of the span on the draw is motion where there was a wait. Opt-in: a page that declares
+       nothing keeps LP.BUILD, so no existing frame moves. Builders with their own envelope (race, decline,
+       combo, share) already set buildDur and are left alone. */
+    if (Number.isFinite(+pg.build_s) && +pg.build_s > 0 && !st.buildDur) st.buildDur = +pg.build_s;
     /* P48 T4: the OTHER charts this page can become (`;then=<series>:<variant>` on the plate id). Each gets its own
        <svg> in the same box, hidden until a chart_to reaches it; the deckle, the title, the badges and the rail are
        shared, because it is the same page. Built at load - nothing is constructed per frame. */

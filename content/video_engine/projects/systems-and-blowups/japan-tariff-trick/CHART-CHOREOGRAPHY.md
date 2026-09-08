@@ -12,13 +12,19 @@ this ledger exists to make deliberate.
 
 ## As built (2026-09-08)
 
-| # | chart | on | life | arrives | leaves | becomes |
-|---|---|---|---|---|---|---|
-| 1 | `ev-japan-holdings-v1` — Japan's holdings since 2000 | 1:02 | **11.9 s** | `mount` | `cut` | — |
-| 2 | `ev-parts-cascade-v1` — duty per component | 18.3 s | **13.0 s** | `mount` | `cut` | — |
-| 3 | `ev-tariff-receipt-v1` — Toyota vs Detroit | 36.9 s | **10.9 s** | `mount` | `cut` | — |
-| 4 | `ev-japan-selling-v1` — the monthly change | 50.0 s | **13.6 s** | `mount` | `cut` | — |
-| 5 | `ev-customs-duties-v1` — what America paid | 72.7 s | **10.4 s** | `mount` | `cut` | — |
+| # | chart | on | span | **deployed (M21)** | arrives | leaves | becomes |
+|---|---|---|---|---|---|---|---|
+| 1 | `ev-japan-holdings-v1` — holdings since 2000 | 1:02 | 11.9 s | **0.0 s** | `mount` | `cut` | — |
+| 2 | `ev-parts-cascade-v1` — duty per component | 18.3 s | 13.0 s | 5.4 s | `mount` | `cut` | — |
+| 3 | `ev-tariff-receipt-v1` — Toyota vs Detroit | 36.9 s | 10.9 s | 3.3 s | `mount` | `cut` | — |
+| 4 | `ev-japan-selling-v1` — the monthly change | 50.0 s | 13.6 s | 6.1 s | `mount` | `cut` | — |
+| 5 | `ev-customs-duties-v1` — what America paid | 72.7 s | 10.4 s | 2.9 s | `mount` | `cut` | — |
+
+**Span is not deployed life.** A span carries the mount, the roll, the savor,
+the field, the punch and the build; E50's clock starts at the LAST DATA MARK.
+`gate_motion_density` **M21 PASSES on all five** — an earlier draft of this
+ledger reported the spans as lives and called two of them over the ceiling.
+Wrong: they are the opposite of over.
 
 **Five mounts, five cuts, zero transitions.** Every chart in this short arrives
 the same way and leaves the same way, while the engine now carries `build_to`,
@@ -26,9 +32,16 @@ the same way and leaves the same way, while the engine now carries `build_to`,
 `snap` enters, and ARAP `morph`. None is used here. That is the gap this ledger
 was asked for.
 
-**Two are over E50's ceiling** (12 s from the last data mark): #4 at 13.6 s and
-#2 at 13.0 s. A chart held past its clock is the ep1 failure mode measured on a
-real retention curve — the drop-off sat on charts held static across plates.
+**They are UNDER-deployed, not over.** The average deployed life is ~3.5 s
+against E50's 6-8 s. **#1 is 0.0 s** — its last data mark lands as the scene
+cuts, so that chart is never read at all.
+
+**The fix is the draw, not the hold** (operator, 2026-09-08: *"with that sort of
+duration, I'm tempted to say that the fix is to draw out the charts in a
+slower/more animated fashion"*). The span is not being spent on a static hold;
+the chart finishes early and waits. `page.build_s` now lets a page draw over its
+own seconds instead of LP.BUILD's 3.0 — motion where there was a wait. Opt-in,
+so no existing frame moves.
 
 ## The story each one tells
 
@@ -54,12 +67,14 @@ rewrites, the change bars draw on, on the same page. It is also the operator's
 own description of the beat — *"re-draw, change chart types/shapes… morph on
 page."* Moving #4 next to #1 is a shot-table change, not new capability.
 
-**B. #2 → #3 is detail → total,** and it should be checked before it is used:
-the three named crossings are 1,450 + 820 + 1,680 = **$3,950**, while Detroit's
-receipt is **$6,240** across six crossings. The relationship is real but the
-arithmetic is not visible on either page, so a recast between them would imply a
-sum the frames do not show. **Fix the reconciliation first** (name the six, or
-state what the unnamed three carry), then recast.
+**B. #2 → #3 is detail → total.** The cascade names three components; the
+receipt is the whole stack. An earlier draft of this ledger flagged the two as
+failing to reconcile (3,950 against 6,240) and wanted the arithmetic shown.
+**Withdrawn** — operator, 2026-09-08: *"Parts can ship more than once across
+Detroit and Canada, and there's tons of other little parts. You're nit-picking
+the sources too much on a short. The $30k tariff story is for an easy to
+understand example."* A named subset costing less than the full stack is the
+example working as intended, not an error. The recast stands as a candidate.
 
 **C. #5 is the natural ring.** It is the widest claim in the short and it lands
 last; a `spiral` enter would mark it as a return rather than a sixth new thing.
