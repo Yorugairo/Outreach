@@ -49,7 +49,11 @@ import ledger_page as LPG  # noqa: E402  (series.json -> ledger_page.v1 spec, do
 
 LEDGER_PREFIX = "ledger:"          # shot-table plate id prefix for a LEDGER PAGE world (s9.28 surface = page)
 LEDGER_ID_PARTS = (3, 7)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]  enter = spiral | mount=<seconds>; exit = cut
-LEDGER_ENTERS = ("spiral", "mount", "morph", "snap")   # enter=snap=<dock asset>: the page arrives BUILT, grown from that landed card's rectangle to the stage (the third watch, 2026-09-07)   # enter=morph[=<s>]: the page's prop outline (world.morph) becomes the chart by ARAP (P47 T3); enter=spiral: the page RETURNS - unwinds from its point, no roll/soak/ink/build (E25; 2026-09-05)
+LEDGER_ENTERS = ("spiral", "mount", "morph", "snap", "built")   # enter=built: the page mounts with its chart ALREADY DRAWN.
+# The build is a device, not an obligation - five builds in one short is repetition, and a page that arrives complete spends
+# its whole span being read instead of being drawn (operator, 2026-09-08: "maybe chart 1 doesn't actually need a build, it
+# could enter built, the deconstruction/transformation is its own thing"). E49 keeps it alive; the transformation is the
+# motion. Unlike `spiral` this carries no RETURN meaning - it is for a chart's first appearance.   # enter=snap=<dock asset>: the page arrives BUILT, grown from that landed card's rectangle to the stage (the third watch, 2026-09-07)   # enter=morph[=<s>]: the page's prop outline (world.morph) becomes the chart by ARAP (P47 T3); enter=spiral: the page RETURNS - unwinds from its point, no roll/soak/ink/build (E25; 2026-09-05)
                                       # enter=mount: no roll-out - the outgoing scene fades while the cream plate MOUNTS over it, then the page draws (operator, 2026-09-05)
 KINETICS: dict = {}                # timeline.kinetics - the template's capability flags a build turns on (P39 kill switch; default all off)
 CAPTION_STYLE: str | None = None   # timeline.caption_style - "phrase" on a short: the page lands as one readable phrase, only k-words punctuated (2026-09-05)

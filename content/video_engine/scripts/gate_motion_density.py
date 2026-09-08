@@ -636,7 +636,7 @@ def _page_land_offset(scene: dict) -> float:
         return mount_s + PAGE_BUILD_END_S - LP_ROLL_S + extra
     if page.get("enter") == "morph":   # P47 T3: the morph replaces the roll, the savor, the soak and the punch; the build starts as it ends
         return float(page.get("morph_s") or MORPH_S) + LP_BUILD_S + extra
-    if page.get("enter") in ("spiral", "snap"):   # a returning page, or a card become the world (P47 T7): arrives built
+    if page.get("enter") in ("spiral", "snap", "built"):   # a returning page, a card become the world (P47 T7), or a page that mounts with its chart already drawn: arrives built
         return 0.0
     return PAGE_BUILD_END_S + extra
 
