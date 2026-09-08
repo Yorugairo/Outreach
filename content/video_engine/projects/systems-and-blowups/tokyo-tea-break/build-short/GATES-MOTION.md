@@ -3,12 +3,12 @@
 ```text
 === MOTION DENSITY GATE: projects\systems-and-blowups\tokyo-tea-break\build-short ===
                runtime: 1:28
-         visual_events: 306 (206.7/min)
+         visual_events: 305 (206.0/min)
                  docks: 5
            dock_source: timeline
           ledger_pages: 4
   still_over_12s_share: 0%
-            per_minute: 0:00:216/5 1:00:185/8
+            per_minute: 0:00:215/5 1:00:185/8
 
   [WARN ] M11 first chart ledger:s02 enters at 2.0s, its build lands at 10.7s, with build_to landing on datum 311 at 10.7s (the cap is the annotation: the line ends on the datum); WARN no sound cue within 1.5s of the enter at 2.0s; window 0-10s (E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10)
           E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue
@@ -40,19 +40,19 @@
           doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
   [PASS ] M18 no run of bit-identical frames over 0.50s (1066 frames at 12 fps, 0:00-1:28); longest 0.00s at 0:00
           E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)
-  [INFO ] M07 short: 1 full minute(s) in 89s - opening 216.0 events/min, 5.0 evidence entries/min; tail from 1:00 185.3/min; whole runtime 205.4/min - no minute distribution to rank in (E21 is judged on the whole)
+  [PASS ] M21 every ledger page leaves or un-draws within 8s of its last data mark: s02 0.9s (0:20 -> 0:21); s04 1.2s (0:49 -> 0:50); s05 5.9s (1:10 -> 1:16); s06 5.8s (1:16 -> 1:22)
+          E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing
+  [INFO ] M07 short: 1 full minute(s) in 89s - opening 215.0 events/min, 5.0 evidence entries/min; tail from 1:00 185.3/min; whole runtime 204.7/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
-  [INFO ] M19 2 build_to hold(s) - the line rests at a datum until the next word: 0:10+8.3s, 0:20+5.4s
+  [INFO ] M19 1 build_to hold(s) - the line rests at a datum until the next word: 0:10+8.3s
           P47 T2 (SHOT-TABLE-V3-PROPOSAL part B): a cap is a hold the sentence asked for, not stillness
   [INFO ] M20 3 arrival(s): dock-c-blue-ties-panel throw ~1188 px/s -> on 1s; dock-g-two-fingers land (metal) - weight sold 0.32s before the impact; dock-h-fed-vs-yields throw ~1386 px/s -> on 1s
           P47 T1 (the brief :185-193, the cadence rule): a throw steps on 1s above 250 px/s, on 2s below - reported, not scored, until HG2 tunes it
-  [INFO ] M21 1 page(s) deployed 8-12s after the last data mark (a dock's clip may hold it): s02 12.0s (0:26 -> 0:38)
-          E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
 
-RESULT: 0 FAIL / 1 WARN / 14 PASS / 1 JUDGE / 4 INFO
+RESULT: 0 FAIL / 1 WARN / 15 PASS / 1 JUDGE / 3 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:918acecc11ca2e85dbee6076b659211d36f5dabf566a6c48adf06b894976af38
+TIMELINE: tokyo-short.timeline.json sha256:8ccad1a46b8686326930a1b4316d6b09a9ddff9a1232ebbcadf5dffdbb508e16
 VERDICT: PASS (0 FAIL)

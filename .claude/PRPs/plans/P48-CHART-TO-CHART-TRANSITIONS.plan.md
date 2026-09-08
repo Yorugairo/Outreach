@@ -42,6 +42,64 @@ name for furniture (axis, tick, name, label). With keys, a transition is a pure 
 keys enter by the stroke or spring law, dropped keys exit - computed at `t` from two states that were both built at load.
 Nothing is rebuilt per frame, so a seek is still the play and the renderer is unchanged.
 
+## What row 2 was supposed to do, and why it does not (2026-09-07)
+
+The operator, on the row-2 frame: *"you still failed to actually make a new chart here. Why? Because we don't have
+morph/redraw/etc in the capabilities yet? Is that the plan?"* And then, precisely: *"the problem is that we were supposed to
+either morph or undraw that chart, which you did undraw it. Then we were supposed to re-draw or morph the chart to another
+entirely different chart/view, not just redraw and relabel the tail."*
+
+That is the correction, and it is a correction of MY reading, not only of the engine's reach. E50 says a chart un-draws **or
+becomes the next thing**. The beat is: un-draw the 26-year holdings line, then become a DIFFERENT chart or view. What I built
+instead was un-draw, then redraw a piece of the SAME line and label it - which is neither of the two things the ruling names.
+The stub was the visible symptom; the wrong choice was the cause.
+
+The measurement, for the record, because it also rules out the lazy fix: the February-June tail is **5 of 316 points, 1.27 %
+of a 26-year x-axis**, so redrawing it paints a ~10 px mark that reads as debris. A `focus_zoom` was probed as the only
+magnification the engine has and is a ~1.1x camera push; it does not rescue it. So even the thing I built cannot be dialled
+into working - the beat needs a different chart, not a better-drawn tail.
+
+**What "the next thing" could be here, and what each needs:**
+
+| the next thing | what it shows | built today? |
+|---|---|---|
+| the same series, **windowed to Feb-Jun** | the sell-off at full width, the two figures still pinned to their data | **no** - `rescale` (T2) |
+| **the monthly change as signed bars** (Feb +14.0, Mar -47.7, Apr +18.3, May -66.8, Jun -26.4 $bn) | the RATE of selling, sign as geometry | the object is derivable from the holdings data; putting it on the same page is `recast` (T4) |
+| the holdings line **morphing** into either of the above | one continuous thing, no cut | **no** - `morph_to` (T5) |
+| either of the above as a **chart card docked** over the page | the beat lands today | **yes** (`chart_card.py` + a dock) - but it is a card ARRIVING, not the page's chart BECOMING, and the operator has already ruled that a second chart of the same data should not arrive as an evidence dock |
+
+**The operator chose, the same hour:** *"rotate it into a pie chart for example that shows the holdings of top 5 foreign
+investors of USA including the japan holdings and animate it to show the 1/10 of the pie that got sold - it's literally all
+there for us."* And on the seam: *"we could type-writer backspace the fonts and re-write, then redraw the pie chart. There
+are hyperframes and remotion skills for animated pie charts if we need references."*
+
+**The data is there.** `evidence/build_tokyo_evidence.py:121` already receives `rows`, the whole US Treasury TIC Major
+Foreign Holders table (it reads `rows["Japan"]`, `rows["United Kingdom"]`, `rows["China, Mainland"]`, `rows["Grand Total"]`
+out of it today). The top five and Japan's -$122.6B are a few lines from an object; no fetch.
+
+**Half the seam is there too.** `retitle` already erases the old title glyph by glyph over `PS.ERASE_S` and writes the new
+one - the typewriter backspace is built for a page's title, and the same `eraseFactor` serves any glyph run.
+
+**What is NOT there, and one of it collides with our own doctrine:**
+
+1. A **pie/share builder**. `ledger_page.py` refuses it BY NAME today - `"shares": "no chartable values: 'shares' is a
+   donut; no page variant takes it"` - and **E53 §1** ranks angle and area at the bottom of the perception hierarchy, which
+   is the reason that refusal exists. This beat is a legitimate exception and must be written as one, not slipped past:
+   the hierarchy's objection is to COMPARING many slices, while this page makes a part-of-one-part claim ("a tenth of
+   Japan's holding went"), which a circle states instantly. **E53 §1 needs an amendment naming the exception and its
+   bounds** (a part-to-whole claim about ONE highlighted slice; never a general comparison; the sold wedge carries its own
+   figure so no angle has to be estimated) before the builder ships.
+2. The **recast into it** (T4): the line un-draws, the title backspaces and rewrites, the pie draws on, then the wedge equal
+   to Japan's -$122.6B peels out and goes blood red (E28: the loss is geometry AND colour). This is the plan's `recast`
+   with a new target builder, and it is now T4's acceptance case.
+3. References to read before building the wedge: the HyperFrames harvest's chart components
+   (`content/video_engine/hyperframes/compositions/components/`) and the remotion-ui intake - both are REFERENCES, and the
+   standing rule is that mechanisms port and code does not.
+
+So the first verb after T1 is **T4 (recast)**, not T2 (window), and its acceptance is this beat. Until it lands row 2 ships
+as the two treasury figures standing where the line was - honest, and not pretending to be a chart - with the redraw
+commented out in `build_short.py` giving this reason.
+
 ## Intent And Acceptance
 
 1. A ledger page declares `chart_to {at, dur, kind, …}` in its shot row's species list; the compiler resolves the target

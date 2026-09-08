@@ -389,9 +389,13 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             {"kind": "undraw", "at": t_table, "dur": 1.2, "target": datum(0)},
             {"kind": "figure", "at": t_trillion, "dur": 1.6, "target": datum(PEAK_IDX), "text": _bn(FACTS["peak"]), "sub": MONTH(FACTS["peak_month"]), "dy": -0.7},
             {"kind": "figure", "at": t_since, "dur": 1.6, "target": datum(LAST_IDX), "text": _bn(FACTS["latest"]), "sub": MONTH(FACTS["latest_month"]), "color": "neg", "dy": 1.6},
-            # the fourth watch ("we undrew it and then added the labels but didn't re-draw the graph to show the time series we
-            # discuss"): the February-June TAIL redraws between the two figures on "selling since February" - the history stays un-drawn
-            {"kind": "build_to", "at": t_since, "dur": 1.4, "target": datum(LAST_IDX), "paths": "tail"},
+            # THE BEAT IS UNFINISHED AND SAYS SO (2026-09-07). E50: a chart un-draws OR BECOMES THE NEXT THING. This page
+            # un-draws correctly and then becomes nothing - I redrew a piece of the SAME line (`paths: "tail"`) and labelled it,
+            # which is neither. It also could not read: February-June is 5 of 316 points, 1.27 % of a 26-year axis, so the
+            # redraw painted a ~10 px stub; a focus_zoom (the only magnification we have) is a ~1.1x push and does not rescue
+            # it. Both are removed. The honest frame is the two treasury figures standing where the line was. The beat wants a
+            # DIFFERENT chart - the Feb-Jun window, or the monthly change as signed bars - and which one is the operator's
+            # call; the capability is P48 (`rescale` T2 / `recast` T4).
             {"kind": "retitle", "at": t_opponent, "dur": 2.4, "text": RETITLE},                                       # the title rewrites by the hand on "The opponent"
         ]),
         # 3 the PROMISE plate: the viewer's desk, entered by SUCK - the page collapses into the black of the stick figure
