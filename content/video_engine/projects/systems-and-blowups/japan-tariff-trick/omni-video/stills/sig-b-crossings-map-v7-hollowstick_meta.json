@@ -1,0 +1,33 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-08T19:56:00Z",
+  "prompt": "9:16 vertical, full bleed. A light application of 2.5D woodblock print and vox newspaper meets rich anime colors. A hand-drawn map seen from directly above, filling the page. In the upper half, the Great Lakes with their real coastline, a long lake running left to right and the narrow river at its western end; a single thin line runs down the middle of the river and the lake, drawn as a line only, never written as a word. Each car plant is drawn in fine pen-and-ink hatching, isometric, brick walls with rows of small windows, a sawtooth roof, three or four tall smokestacks trailing smoke, a few tiny cars parked beside it, small against the land. Composition: the lake runs diagonally across the upper half of the page. Detroit's plant stands BELOW the lake, at the left, on United States ground. Ontario's plant stands ABOVE the lake, at the upper right, on Canadian ground, with open Canadian land above it to the top edge of the page. The water lies between the two plants, so a straight line from one plant to the other must cross the lake. In the lower quarter, the long southern edge of the United States drawn as a thin line, and a third car plant standing south of that line, inside Mexico. The only lettering anywhere on the page is four small hand-lettered place names, each written exactly once: DETROIT beside its plant, ONTARIO beside its plant, CANADA on the open Canadian land, MEXICO beside its plant. Every other feature is drawn, not named. The land warm, the water pale, the three plants widely separated with open, uncluttered land between them. No roads, no route lines, no arrows. The character, in his indigo suit and copper tie, stands small at the lower right corner looking up at the map. A single still frame.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "recovered": "The driver's download for this order landed v6's file again (seen-set was per process). This is the order's real output, Flow library image b87dc870-78ac-428f-b907-b06147314e78, pulled from the page by hand (runtime/fetch_orphan.mjs) and recorded here; the driver's own result for the order is sig-b-crossings-map-v7-hollowstick.result-INVALID-dup-of-v6.json.",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-b-crossings-map-v7-hollowstick.png",
+      "sha256": "dc6a34f8042e4260271a6da652ac307e6eb55b97b06440f2d1d25fdb75e28e89"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-b-crossings-map-v7-hollowstick-raw.png",
+      "sha256": "dc6a34f8042e4260271a6da652ac307e6eb55b97b06440f2d1d25fdb75e28e89"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-b-crossings-map-v7-hollowstick-raw.png",
+        "sha256": "dc6a34f8042e4260271a6da652ac307e6eb55b97b06440f2d1d25fdb75e28e89"
+      }
+    ]
+  }
+}

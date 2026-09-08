@@ -1,0 +1,17 @@
+{
+  "_contract": "Frozen WORK-ORDER v7 (2026-09-08). v6 got the geography and wrote the description as labels (BORDER LINE, GREAT LAKE, CANADA x3) and lost the coastline; v7 whitelists four place names written once each, says every other feature is drawn not named, restores the lakes' coastline. Same atom. Dispatch: python omni-video/dispatch_crossings_map.py sig-b-crossings-map-v7-hollowstick.order.json",
+  "_beat": "s02 -> s04, cut(\"Auto parts\") @ 8.88s to cut(\"But look\"), 9.5 s. The map is the ground; the six trace hops and the 25% stamps are drawn OVER it by the engine, which is why the plate carries no route, no arrows, no dashed borders.",
+  "prompt": "9:16 vertical, full bleed. A light application of 2.5D woodblock print and vox newspaper meets rich anime colors. A hand-drawn map seen from directly above, filling the page. In the upper half, the Great Lakes with their real coastline, a long lake running left to right and the narrow river at its western end; a single thin line runs down the middle of the river and the lake, drawn as a line only, never written as a word. Each car plant is drawn in fine pen-and-ink hatching, isometric, brick walls with rows of small windows, a sawtooth roof, three or four tall smokestacks trailing smoke, a few tiny cars parked beside it, small against the land. Composition: the lake runs diagonally across the upper half of the page. Detroit's plant stands BELOW the lake, at the left, on United States ground. Ontario's plant stands ABOVE the lake, at the upper right, on Canadian ground, with open Canadian land above it to the top edge of the page. The water lies between the two plants, so a straight line from one plant to the other must cross the lake. In the lower quarter, the long southern edge of the United States drawn as a thin line, and a third car plant standing south of that line, inside Mexico. The only lettering anywhere on the page is four small hand-lettered place names, each written exactly once: DETROIT beside its plant, ONTARIO beside its plant, CANADA on the open Canadian land, MEXICO beside its plant. Every other feature is drawn, not named. The land warm, the water pale, the three plants widely separated with open, uncluttered land between them. No roads, no route lines, no arrows. The character, in his indigo suit and copper tie, stands small at the lower right corner looking up at the map. A single still frame.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "ratio": "9:16",
+  "projectUrl": "https://labs.google/fx/tools/flow/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+  "outputPath": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/omni-video/stills/sig-b-crossings-map-v7-hollowstick.png",
+  "budget": {
+    "kind": "zero_credit",
+    "model": "Nano Banana Pro",
+    "note": "sig-b-six-gates recorded creditsText '' on the same settings"
+  },
+  "review_state": "quarantined until the operator approves the frame"
+}

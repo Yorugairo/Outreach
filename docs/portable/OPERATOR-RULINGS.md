@@ -1218,6 +1218,12 @@ Three linked rulings on the host's art:
 - The recognised Flow directive for our assets, verbatim: **"A light application of woodblock
   print and vox newspaper with rich anime colors."** It is in eight shipped Tokyo prompts beside
   `@Mike`; it is the host's single style atom.
+  **Amended 2026-09-08 (operator, on the crossings-map plate):** the atom carries the depth
+  word — **"A light application of 2.5D woodblock print and vox newspaper meets rich anime
+  colors."** The shipped Tokyo prompts and the four tariff signature plates were rolled without
+  "2.5D"; from this date every new plate order uses the amended sentence. Where a plate needs
+  planes for parallax, the *"Layered 2.5D … near plane / mid plane / far plane"* context phrasing
+  (two shipped Tokyo plates) is additional to the atom, not a substitute for it.
 - *"I agree we should try the cream. If cream works it gives us a unique space and opens up
   using the drawing lane to create both styles."* Stick Mike is a **stick figure on the cream
   `#F4E6C7` page with charcoal `#25313C` ink** — not white ground, not a flattened 2D Mike, not a

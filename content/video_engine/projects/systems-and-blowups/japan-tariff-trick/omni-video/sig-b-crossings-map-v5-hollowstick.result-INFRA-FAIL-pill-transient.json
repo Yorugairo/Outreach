@@ -1,0 +1,13 @@
+{
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"error\": \"Flow settings pill not found (composer button ending in x1..x4).\",\n  \"stack\": \"Error: Flow settings pill not found (composer button ending in x1..x4).\\n    at FlowCdpDriver.configureSettings (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/src/cdp-driver.mjs:405:41)\\n    at async FlowDagEngine.generateVideo (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/src/dag-engine.mjs:50:22)\\n    at async FlowDagEngine.generateImage (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/src/dag-engine.mjs:179:12)\\n    at async file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/mcp/server.mjs:292:22\\n    at async wrappedHandler (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/node_modules/@modelcontextprotocol/sdk/dist/esm/server/index.js:114:32)\"\n}"
+      }
+    ],
+    "isError": true
+  },
+  "jsonrpc": "2.0",
+  "id": 2
+}

@@ -1,0 +1,18 @@
+{
+  "_contract": "Frozen WORK-ORDER v8 (2026-09-08) - an EDIT of the v2-hollowstick frame, not a fresh roll. Operator: v2 'remains our best option because of its geographical accuracy, it just has the weakest buildings'. The v2 PNG rides as a file reference; only the three plants change. Known risk: the driver rejects a download whose dHash is within 12/256 bits of a reference; if the edit is too faithful it will time out - then pull the newest library image by id (runtime/fetch_orphan.mjs pattern) and record it by hand. Dispatch: python omni-video/dispatch_crossings_map.py sig-b-crossings-map-v8-hollowstick-edit.order.json",
+  "_beat": "s02 -> s04, cut(\"Auto parts\") @ 8.88s to cut(\"But look\"), 9.5 s. The map is the ground; the six trace hops and the 25% stamps are drawn OVER it by the engine, which is why the plate carries no route, no arrows, no dashed borders.",
+  "prompt": "9:16 vertical, full bleed. A light application of 2.5D woodblock print and vox newspaper meets rich anime colors. Use the attached map exactly as it is: the same coastline, the same coloured regions, the same boundary line through the water, the same four place names DETROIT, ONTARIO, CANADA, MEXICO in the same places, the same character standing at the lower right, the same layout edge to edge. Change only the three factories. Redraw each one, at its present position and about one and a half times its present size, as a detailed pen-and-ink isometric car plant: brick walls with rows of small windows, a sawtooth roof, three or four tall smokestacks trailing smoke, a few tiny cars parked beside it, with a soft drop shadow so it sits on the map like a placed object. Everything else is unchanged. A single still frame.",
+  "references": [
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-b-crossings-map-v2-hollowstick.png",
+    "HollowStickMike"
+  ],
+  "ratio": "9:16",
+  "projectUrl": "https://labs.google/fx/tools/flow/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+  "outputPath": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/omni-video/stills/sig-b-crossings-map-v8-hollowstick-edit.png",
+  "budget": {
+    "kind": "zero_credit",
+    "model": "Nano Banana Pro",
+    "note": "sig-b-six-gates recorded creditsText '' on the same settings"
+  },
+  "review_state": "quarantined until the operator approves the frame"
+}

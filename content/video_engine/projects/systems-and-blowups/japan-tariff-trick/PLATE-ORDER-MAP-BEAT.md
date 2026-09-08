@@ -169,6 +169,43 @@ north of it, the Mexico plant south of the Mexican border. **Place names allowed
 DETROIT, ONTARIO, CANADA, MEXICO only: the v1 labels were the part that helped, so the
 "no on-screen text" rule takes a recorded exception for place names on a map, nothing else.
 
+**The v2 → v7 ladder (HollowStickMike throughout, zero credits).** Operator on the v2
+pair: *"at the small size the HollowStick Mike character reads more clearly; the manufacturing
+plant stickers are better on Mike v2 though"* — and *"don't we need to prompt these to be
+2.5D?"*, settled as the style atom **"A light application of 2.5D woodblock print and vox
+newspaper meets rich anime colors."** (E39 amended 2026-09-08; the record had the atom without
+the depth word, and none of the twelve shipped prompts carried it).
+
+| order | change | landed | read |
+|---|---|---|---|
+| v2 | boundary through the water, Ontario on the north bank, place names allowed | `3cfd88a9…` | geography right, plants flat silhouettes |
+| v3 | + plants "like detailed pen-and-ink stickers" | `32851c87…` | "sticker" taken literally (white die-cut borders, huge); Ontario's plant back on the south shore |
+| v4 | + plant drawing described (brick, sawtooth, stacks, small against the land); *"Layered 2.5D … far/mid/near plane"* as on the two Tokyo plates | `a5271f61…` | plants right; Ontario south again; a misspelt sign ("ONTARIA") |
+| v5 | the amended atom, no layered-plane phrasing | — | **infra**: the pill was absent for a moment after v4 and the driver threw at 0 s; the pill was back when probed. `configureSettings` now retries four times with a growing wait |
+| v6 | + geography stated compositionally (Ontario ABOVE the lake, upper right, open Canada to the top edge; a line between the plants must cross water) | `87cf3ed1…` | **geography finally reads** and the plants are the good ones — but the description came back as lettering (BORDER LINE, GREAT LAKE, CANADA ×3) and the lakes flattened into one diagonal river |
+| v7 | four place names whitelisted, written once each; the boundary "drawn as a line only, never written as a word"; the lakes' real coastline back | `dc6a34f8…` (recovered) | the whitelist works (one leak: GREAT LAKE), the boundary is a line, geography reads, plants good — but the coastline never came back: a diagram, not the map. The driver downloaded v6's file again for this order; the real output was pulled from the library by id and recorded by hand (`_meta.json` says so) |
+| v8 | an EDIT of v2: the v2 PNG rides as a file reference, only the three plants change | written, **not rolled** | operator took the Flow session to prompt the building swap by hand (*"hold on"*); the order stays on disk |
+
+**Where it stands (operator, on the v2-hollowstick frame): *"remains our best option because
+of its geographical accuracy I think, it just has the weakest buildings."*** Six rolls later
+that is still the read: the fresh rolls trade the coastline for the buildings or the buildings
+for the coastline, and the two never arrive together. So the ground is v2 and the buildings
+are the remaining work — the operator is prompting that swap in Flow directly; v8 is the same
+idea as a driver order, unrolled.
+
+**A fourth driver defect, found on v7.** The observer's seen-set lived on the driver instance,
+and every stdio dispatch is a fresh process — so a previous roll's output was "new" to the next
+one whenever the baseline missed it (v7 downloaded v6's file, byte-identical; earlier the Mike2
+v1 downloaded MikeMasterV3's). The set now persists in `runtime/seen-image-ids.json`, seeded with
+every id this project has downloaded, and it is the one piece of state two sessions on the same
+Flow project must share — which is the multi-agent question in miniature.
+
+What the ladder taught, for the next map order: **"north bank" does not place a plant** — three
+of four rolls put it south; a compositional statement (above / upper right / open land to the
+edge) does. **Anything named in the prompt is liable to be lettered on the page**; the fix is a
+whitelist of what may be written, not a ban on text. And **"sticker" is a shape to this model,
+not a drawing style** — describe the drawing.
+
 **Two driver defects found and fixed on the way** (`tools/google-flow-driver/src/cdp-driver.mjs`):
 
 1. **Flow's composer now has an Agent mode** (a chat bar with *Agent instructions* and a

@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-08T19:53:29.101Z",
+  "prompt": "9:16 vertical, full bleed. A light application of 2.5D woodblock print and vox newspaper meets rich anime colors. A hand-drawn map seen from directly above, filling the page. In the upper half, the Great Lakes, with a long lake running left to right and the narrow Detroit River at its western end; the international boundary between the United States and Canada is drawn as a single line down the middle of the river and the lake. Each car plant is drawn in fine pen-and-ink hatching, isometric, brick walls with rows of small windows, a sawtooth roof, three or four tall smokestacks trailing smoke, a few tiny cars parked beside it, small against the land. Composition: the lake runs diagonally across the upper half of the page. Detroit's plant stands BELOW the lake, at the left, on United States ground. Ontario's plant stands ABOVE the lake, at the upper right, on Canadian ground, with open Canadian land above it to the top edge of the page. The water and the boundary line lie between the two plants, so a straight line from one plant to the other must cross the lake. In the lower quarter, the long southern border with Mexico, and a third car plant standing south of that border, inside Mexico. Small hand-lettered place names only: DETROIT, ONTARIO, CANADA, MEXICO. The land warm, the water pale, the three plants widely separated with open, uncluttered land between them. No roads, no route lines, no arrows. The character, in his indigo suit and copper tie, stands small at the lower right corner looking up at the map. A single still frame.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-b-crossings-map-v6-hollowstick.png",
+      "sha256": "87cf3ed17b27523abcc5baa55699ccbea97f096432b9dc9bdc3593470e8351ce"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-b-crossings-map-v6-hollowstick-raw.png",
+      "sha256": "87cf3ed17b27523abcc5baa55699ccbea97f096432b9dc9bdc3593470e8351ce"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-b-crossings-map-v6-hollowstick-raw.png",
+        "sha256": "87cf3ed17b27523abcc5baa55699ccbea97f096432b9dc9bdc3593470e8351ce"
+      }
+    ]
+  }
+}
