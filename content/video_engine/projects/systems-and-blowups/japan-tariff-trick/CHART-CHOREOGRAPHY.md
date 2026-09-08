@@ -88,7 +88,8 @@ Where two charts share a series, the default is **recast**, not two mounts.
 ## Not decided
 
 - Whether #4 moves next to #1 (it changes the script's beat order).
-- The #2/#3 reconciliation above.
+- Which pages take `build_s`, and how long. #1 at 0.0 s deployed is the
+  clearest candidate: it is drawn and cut in the same breath.
 - Whether this table becomes a standard artifact per short. It is cheap to
   maintain and it is the only place the *relationships between* charts are
   written down — the shot table records each chart alone.
