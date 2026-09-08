@@ -434,6 +434,17 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
         page["enter"] = enter.split("=")[0]   # the player: a returning page unwinds from its point (LP_RETRACT.IN); a mount builds its cream first
         if "=" in enter and enter.startswith("snap"):
             page["snap_from"] = enter.split("=", 1)[1]   # the dock asset the page grows from (the card thrown on the previous scene)
+        elif "=" in enter and enter.startswith("throw"):   # throw=<grow>[,<from>[,<s>]] - the growth law (snap | depth), the side, the flight
+            grow, *rest = enter.split("=", 1)[1].split(",")
+            if grow not in ("snap", "depth"):
+                raise ValueError(f"{plate_id!r}: throw grow {grow!r} is not snap|depth")
+            page["throw_grow"] = grow
+            if rest and rest[0]:
+                if rest[0] not in ("below", "above", "left", "right"):
+                    raise ValueError(f"{plate_id!r}: throw side {rest[0]!r} is not below|above|left|right")
+                page["throw_from"] = rest[0]
+            if len(rest) > 1 and rest[1]:
+                page["throw_s"] = float(rest[1])
         elif "=" in enter:
             key = "morph_s" if enter.startswith("morph") else "mount_s"   # the mount phase (world fades, cream builds) before the page's own clock starts; a morph's seconds
             page[key] = float(enter.split("=", 1)[1])
