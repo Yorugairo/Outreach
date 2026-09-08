@@ -1518,7 +1518,7 @@ EXEMPT from the floor; a page that arrives built (`enter=built`, `spiral`, `snap
 that ends its own life with an `undraw` is also exempt - that is leaving on purpose, which is what this ruling asks for.
 Gate **M21** carries the floor and reports the split, because a span is `arrival + build + deployed` and only the last is
 this clock: an author who is told "0.0 s deployed" needs to know whether to lengthen the span or let the page arrive drawn.
-The companion capability is `enter=built` (the page mounts with its chart already drawn) and `page.build_s` (a page draws
+The companion capability is `enter=built` (the page arrives with its chart already drawn, by the row's own transition — **never a mount**, see the 2026-09-08 amendment below) and `page.build_s` (a page draws
 over its own seconds instead of the fixed 3.0). Which of the two a page takes is an editorial call, never arithmetic.
 
 2. **The life.** From that moment the chart has **6-8 s on average, 12 s at most** `[OPERATOR 2026-09-07]` before it
@@ -1532,6 +1532,17 @@ over its own seconds instead of the fixed 3.0). Which of the two a page takes is
 4. **The species this needs.** `undraw` (the reverse of `build_to`, which is `Math.max`-guarded today and never retracts);
    the figure written by the hand where the ink ends; the same object in another form (`bars`, a comparison) as a
    transformation on the page rather than a new page - backlog R26-18 / R26-19.
+
+**Amended 2026-09-08 — a built page never mounts.** Operator, on the first watch of the tariff short
+with two `built` pages: *"When we're launching the chart already built we NEVER mount. Mounting is
+reserved for cream coming through over the scene, and then drawing. Mount doesn't make any sense in
+any other situation. Here, we are supposed to transition cleanly to the ledger plate."* The mount
+(E45 §2) is the roll-out: the world fades while the cream builds beneath it, and the ink follows.
+A chart that arrives standing has no ink to follow, so the cream coming through is a promise the
+page does not keep. `enter=built` therefore takes the row's declared transition like any plate —
+the house wipe, a dip, a dissolve — and the ledger plate is simply there when the front passes.
+`enter=spiral` and `enter=snap` were already outside the mount; `built` had been folded into it
+(P48 T1) and is now out.
 
 ## E51 — A push-in is only used tied to something that just landed; an untied zoom is filler (2026-09-07)
 

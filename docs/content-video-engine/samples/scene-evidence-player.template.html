@@ -4264,7 +4264,9 @@
        arrives by a plain cross-fade over DISSOLVE_S - no front, no seam, the outgoing world keeps playing underneath */
     const snapIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "snap";   /* the card becomes the world: the page grows over the outgoing scene, which stays until covered */
     wB.classList.toggle("snapping", !!snapIn && t - sc.span[0] < SNAP_S);
-    const mountIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && (sc.world.page.enter === "mount" || sc.world.page.enter === "morph" || sc.world.page.enter === "built");   /* MOUNT (operator, 2026-09-05): the outgoing scene fades while the cream plate mounts over it - no page turn; a MORPH page arrives the same way (P47 T3) */
+    const mountIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && (sc.world.page.enter === "mount" || sc.world.page.enter === "morph");   /* MOUNT (operator, 2026-09-05): the outgoing scene fades while the cream plate mounts over it - no page turn; a MORPH page arrives the same way (P47 T3).
+       NEVER a built page (operator, 2026-09-08: "when we're launching the chart already built we NEVER mount. Mounting is reserved for cream coming
+       through over the scene, and then drawing") - enter=built takes the row's own transition, like a plate, and arrives with the chart standing */
     const dissolve = prev && (sc.exit === "dissolve" || mountIn);
     /* THE DANCE (operator, 2026-09-05, corrected: "the fades should be the WORLD fading, beneath it the CREAM should be building,
        and by the time we reach the actual transition time the full cream should be built and the chart should start drawing"):

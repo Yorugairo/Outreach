@@ -14,8 +14,8 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 14 | 272 | 95.2% | 91.9% | 3 | 97.5 |
-| Process (everything else) | 268 | 3077 | 97.5% | 91.6% | 10 | 100.0 |
-| All docs | 282 | 3349 | 97.3% | 91.6% | 13 | 100.0 |
+| Process (everything else) | 268 | 3079 | 97.5% | 91.6% | 10 | 100.0 |
+| All docs | 282 | 3351 | 97.3% | 91.6% | 13 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -142,7 +142,7 @@ Headings that name a filing slot, not a concept (13).
 
 - `content/video_engine/projects/history-of-bjj/episode-2-research-questions.md:5` Questions
 - `content/video_engine/projects/history-of-bjj/episode-3-research-questions.md:5` Questions
-- `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:153` Status
+- `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:305` Status
 - `content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:7` Purpose
 - `docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md:6` Context
 - `docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:8` Purpose

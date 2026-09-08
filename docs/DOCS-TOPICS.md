@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4502 topics, 4588 citation edges. The 200 largest topics follow,
+4508 topics, 4601 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (144)
@@ -151,7 +151,7 @@ at most 12 sections each - the JSONL holds every one.
 
 ## elevenlabs (59)
 
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:71 — What should become what — the candidates, ranked — A. #4 RETURNS to #1 — it does not move next to it. An earlier draft of this
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:80 — What should become what — the candidates, ranked — A. #4 RETURNS to #1 — it does not move next to it. An earlier draft of this
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:55 — DECISIONS (each with a recommendation; the baseline ships as built) — 1. The $6,240. Recommend keeping the spoken line ("over six thousand dollars") only if the operator accepts the CAR-styl
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:158 — Production, same evening (stages 5-8) — - Take: ElevenLabs, one request (`record_short_take.py`), 81.2 s at 174 wpm, gaps intact; whisper
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10 — The bars this table is built to — - Worlds are 10 s Omni clips of `@StickMike` on the cream page (`#F4E6C7` ground,
@@ -215,7 +215,7 @@ at most 12 sections each - the JSONL holds every one.
 
 ## on-screen (41)
 
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:75 — The plate — READY TO GENERATE — The beat is now 9.5 s, not 4.57 s. Moving `t_gates` from `cut("When you buy")`
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:84 — The plate — READY TO GENERATE — The beat is now 9.5 s, not 4.57 s. Moving `t_gates` from `cut("When you buy")`
 - content/video_engine/projects/systems-and-blowups/registration/README.md:43 — Figures are on-screen assertions — Each `figures[].value` is transcribed exactly as typeset — symbols,
 - content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:1 — Work Order — Slide Semantic Registration + Figure Extraction — Register 86 approved source slides against a closed claim vocabulary and
 - content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:7 — Why this exists — Our narration is already semantically registered: every narration cue carries
@@ -225,7 +225,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/07-PILOT-SEASON.md:164 — 5. Per-episode definition of done — - [ ] Storyboard approved at Gate A (rubric scores recorded in `job.json`)
 - docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:219 — 6. Narration and citation behavior — Narration should be precise, conversational, and explicit about uncertainty.
 - docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:1 — Editorial Motion System — > STATUS: PARTIALLY SUPERSEDED. The production pattern is now the scene-evidence lane in 29. Sections that 29 does not r
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/portable/OPERATOR-RULINGS.md:1384
+  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/portable/OPERATOR-RULINGS.md:1390
 - docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:194 — 9. On-screen text and added-layer policy — - The default is no added text and no added prop. A layer must earn its place.
 - docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:251 — 8. Intent and action brief before generation — Each timestamped prompt also receives an editorial intent and an action brief
 - … 29 more in `docs/DOCS-TOPICS.jsonl`
@@ -429,7 +429,7 @@ at most 12 sections each - the JSONL holds every one.
 ## derived (30)
 
 - docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:1 — 45 — Parallax and plate motion: what may move, how much, and what is banned — Extracted from `05_comfyui_parallax_technical_standards.md` and
-  cited by: docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:135, docs/portable/OPERATOR-RULINGS.md:1463
+  cited by: docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:135, docs/portable/OPERATOR-RULINGS.md:1469
 - docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:46 — 45.3 Our current dials, and what they should be — Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04.
   cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/RESEARCH-INDEX.md:35
 - docs/content-video-engine/46-REFERENCE-RHYTHM.md:1 — 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and
@@ -501,7 +501,7 @@ at most 12 sections each - the JSONL holds every one.
 
 ## hand-drawn (28)
 
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:75 — The plate — READY TO GENERATE — The beat is now 9.5 s, not 4.57 s. Moving `t_gates` from `cut("When you buy")`
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:84 — The plate — READY TO GENERATE — The beat is now 9.5 s, not 4.57 s. Moving `t_gates` from `cut("When you buy")`
 - content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:153 — Exclusion — Full-scene hand-draw replacement is not production-ready. A successful
 - content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:159 — Evidence — `current-bubble-mechanism/fresh-60s-transition-evidence-v4` was accepted with
 - content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:7 — The Silicon Reality Gap (`silicon-reality-gap`)
@@ -914,9 +914,9 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/CAPABILITIES.md:38 — Dip and blur-zoom exits, WIRED — (2026-09-06) — ruling E47 (operator: "we should add both ... we're wrong about the wipe, which we only implemented as a
 - docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:178 — 5. Read by hand: the transitions page (operator, same day) — The operator pasted `hyperframes.heygen.com/prompting/transitions` and asked what it adds beyond the analysis. Two thing
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157 — 6. TR-1 landed — the reference's transition mix, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_kinds.py` over the 720p upload (30 fps), all 99 boundaries in 2.4 s, calibrate
-- docs/portable/OPERATOR-RULINGS.md:1405 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
+- docs/portable/OPERATOR-RULINGS.md:1411 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
   cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:49, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:107, docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md:50, +9 more
-- docs/portable/OPERATOR-RULINGS.md:1430 — E48 — A declared transition vocabulary with one hero, the spiral; the primaries are not prescribed yet; the mount is a build; cut minimally, one thread (2026-09-06, amended the same hour) — From the HyperFrames transitions page the operator brought in by hand (`hyperframes.heygen.com/prompting/transitions`, r
+- docs/portable/OPERATOR-RULINGS.md:1436 — E48 — A declared transition vocabulary with one hero, the spiral; the primaries are not prescribed yet; the mount is a build; cut minimally, one thread (2026-09-06, amended the same hour) — From the HyperFrames transitions page the operator brought in by hand (`hyperframes.heygen.com/prompting/transitions`, r
   cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:15, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:72, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:178, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:199, docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md:50
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:270 — 8. What HyperFrames Would Say About Our Open Transition Queries (`TRANSITIONS-REVIEW-2026-09-06.md`) — This section does not settle our open transition queries. Rather, it contrasts what HyperFrames doctrine would advise ag
 - docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:150 — 4. By kind — the dip is the one real offset, and it is an offset of the *transition*, not of the cut — Caption timeline, rule (a) ≥ 0.30 s:
@@ -950,14 +950,14 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/04-STORYBOARD-CONTRACT.md:1 — Storyboard Data Contract (v2) — Rationale and Usage — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/05-COMPETITIVE-BRIEF.md:1 — Competitive Brief — Animated Explainer Channels + 2026 Platform Economics — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:1 — Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/portable/OPERATOR-RULINGS.md:1384
+  cited by: docs/portable/OPERATOR-RULINGS.md:1390
 - docs/content-video-engine/07-PILOT-SEASON.md:1 — Pilot Season — Phase 0 Validation Cohort — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:1 — YouTube Reference Pack — P13 Visual-System Learnings — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
   cited by: docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118
 - docs/content-video-engine/12-HIGGSFIELD-EXPLAINER-LEARNINGS.md:1 — Higgsfield Explainer Learnings and Producer Orchestration — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:1 — P13 Higgsfield Audio-Driven Explainer Lane — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:1 — Living Scene Communication Language — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/AGENTS-VIDEO-ENGINE.md:5, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:521, docs/content-video-engine/TRIAGE-2026-09-05.md:147, docs/portable/OPERATOR-RULINGS.md:1384
+  cited by: docs/AGENTS-VIDEO-ENGINE.md:5, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:521, docs/content-video-engine/TRIAGE-2026-09-05.md:147, docs/portable/OPERATOR-RULINGS.md:1390
 - docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:1 — Graphic Silhouette + Combat Woodblock Explainer — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - … 8 more in `docs/DOCS-TOPICS.jsonl`
 
@@ -1173,14 +1173,14 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/04-STORYBOARD-CONTRACT.md:1 — Storyboard Data Contract (v2) — Rationale and Usage — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/05-COMPETITIVE-BRIEF.md:1 — Competitive Brief — Animated Explainer Channels + 2026 Platform Economics — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:1 — Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/portable/OPERATOR-RULINGS.md:1384
+  cited by: docs/portable/OPERATOR-RULINGS.md:1390
 - docs/content-video-engine/07-PILOT-SEASON.md:1 — Pilot Season — Phase 0 Validation Cohort — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:1 — YouTube Reference Pack — P13 Visual-System Learnings — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
   cited by: docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118
 - docs/content-video-engine/12-HIGGSFIELD-EXPLAINER-LEARNINGS.md:1 — Higgsfield Explainer Learnings and Producer Orchestration — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:1 — P13 Higgsfield Audio-Driven Explainer Lane — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:1 — Living Scene Communication Language — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/AGENTS-VIDEO-ENGINE.md:5, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:521, docs/content-video-engine/TRIAGE-2026-09-05.md:147, docs/portable/OPERATOR-RULINGS.md:1384
+  cited by: docs/AGENTS-VIDEO-ENGINE.md:5, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:521, docs/content-video-engine/TRIAGE-2026-09-05.md:147, docs/portable/OPERATOR-RULINGS.md:1390
 - docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:1 — Graphic Silhouette + Combat Woodblock Explainer — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - … 7 more in `docs/DOCS-TOPICS.jsonl`
 
@@ -1413,7 +1413,7 @@ at most 12 sections each - the JSONL holds every one.
 
 - content/video_engine/projects/systems-and-blowups/registration/README.md:50 — Open follow-ups — 1. Merge into the deck manifest in the p29 worktree (cross-branch — deliberate
 - docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:1 — Editorial Motion System — > STATUS: PARTIALLY SUPERSEDED. The production pattern is now the scene-evidence lane in 29. Sections that 29 does not r
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/portable/OPERATOR-RULINGS.md:1384
+  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/portable/OPERATOR-RULINGS.md:1390
 - docs/content-video-engine/28-AOY-MCP-EVALUATION.md:328 — Voiceover and title doctrine — probed 2026-08-24 — Follow-up probes after the fact-check, plus one live run of the
 - docs/content-video-engine/28-AOY-MCP-EVALUATION.md:333 — Voiceover — delivery rules exist; ElevenLabs settings do not — What came back, all chunk-stable:
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
@@ -1663,7 +1663,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:78 — Round 4 — the ENUMERATED screens (operator audit, 2026-08-30) — The operator asked whether L1/L3 and the X1 orphan screen ran to the
 - docs/content-video-engine/01-PRD.md:140 — 8. Phases — | Phase | Contents | Exit criteria |
 - docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:1 — Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/portable/OPERATOR-RULINGS.md:1384
+  cited by: docs/portable/OPERATOR-RULINGS.md:1390
 - docs/content-video-engine/28-AOY-MCP-EVALUATION.md:396 — The decisive test, run: `review_script` + `review_title` on our own work — 2026-08-24 — Phase 2 of the harvest plan. Fed the Alicia-format script (narration only,
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
 - docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:518 — 20. THE TEMPO FIELD - one choreography across script AND video (operator-approved 2026-08-30) — The realization (obvious only in hindsight, and only reachable through
@@ -1740,7 +1740,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:217 — 6.4 Analytic Second-Order Dynamical Systems — - Mass-Spring-Damper Governing ODE: $m\ddot{x} + c\dot{x} + k(x - x_{ ext{target}}) = 0$.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:287 — 9. Production Code Blueprints & Data Schemas — The research reports contain complete, production-ready TypeScript, Python, GLSL, and JSON modules:
 - docs/content-video-engine/42-DRAWING-KINETICS.md:63 — 42.2 The settle — closed-form second-order dynamics — Why iterative physics is not merely slow but wrong for us. We render frame-by-frame
-  cited by: docs/content-video-engine/44-INK-AND-SURFACE.md:71, docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:170, docs/content-video-engine/BACKLOG.md:407, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:49, docs/portable/OPERATOR-RULINGS.md:1347, +2 more
+  cited by: docs/content-video-engine/44-INK-AND-SURFACE.md:71, docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:170, docs/content-video-engine/BACKLOG.md:407, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:49, docs/portable/OPERATOR-RULINGS.md:1353, +2 more
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
 ## silicon-antidote (16)
@@ -2191,7 +2191,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37 — 43.3 The Z-stack — Painter's algorithm, strictly back-to-front. Depth cue without 3D:
   cited by: docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:28, docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:99, docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:15, docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:167, docs/content-video-engine/BACKLOG.md:225, docs/content-video-engine/BACKLOG.md:296, +3 more
 - docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:1 — 45 — Parallax and plate motion: what may move, how much, and what is banned — Extracted from `05_comfyui_parallax_technical_standards.md` and
-  cited by: docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:135, docs/portable/OPERATOR-RULINGS.md:1463
+  cited by: docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:135, docs/portable/OPERATOR-RULINGS.md:1469
 - docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:28 — 45.2 The viability matrix — a gate, not advice — | plate content | depth discontinuity | verdict |
   cited by: docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:113, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:120, docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:167, docs/content-video-engine/BACKLOG.md:354, docs/content-video-engine/BACKLOG.md:366
 - docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:1 — 52 — Construct, don't inherit — Operator, 2026-09-04:
@@ -2400,7 +2400,7 @@ at most 12 sections each - the JSONL holds every one.
 
 ## short-form (14)
 
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:145 — Timing — resolved — Six single crossings, not three round trips: at 9.5 s there is room. The boundary
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:297 — Timing — resolved — Six single crossings, not three round trips: at 9.5 s there is room. The boundary
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:161 — Part 4: 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:207 — 4.3 Short-Form vs. Long-Form Production Architecture — | Dimension | Short-Form (15–60s Shorts/TikTok) | Long-Form (8–20m+ Video Essay) |
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
@@ -2857,11 +2857,11 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:34 — Local-first contract — The current Episode 1 coverage contains 138 reviewed editorial slots and the
 - docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:63 — Provider preflight and task ledger — `seedance_2_0` is preferred only when a live capability snapshot confirms
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:1 — Living Scene Communication Language — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/AGENTS-VIDEO-ENGINE.md:5, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:521, docs/content-video-engine/TRIAGE-2026-09-05.md:147, docs/portable/OPERATOR-RULINGS.md:1384
+  cited by: docs/AGENTS-VIDEO-ENGINE.md:5, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/content-video-engine/BACKLOG.md:521, docs/content-video-engine/TRIAGE-2026-09-05.md:147, docs/portable/OPERATOR-RULINGS.md:1390
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:9 — 1. Product decision — P13 does not use a full-video generator as its default renderer. The observed
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:264 — 9. Cost control — Until a lower verified quote exists, estimates use 3.33 Higgsfield credits per
 - docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:1 — Editorial Motion System — > STATUS: PARTIALLY SUPERSEDED. The production pattern is now the scene-evidence lane in 29. Sections that 29 does not r
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/portable/OPERATOR-RULINGS.md:1384
+  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027, docs/portable/OPERATOR-RULINGS.md:1390
 - docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:24 — 2. Timing authority — The continuous, hash-matched canonical narration and its word timings are the
 - docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:99 — 3. Primary plate rule — For this lane:
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
@@ -3066,7 +3066,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:7 — Executive Architectural Synthesis — We are not merely patching a parallax shader or stringing together disparate AI tools. We are building a unified 2.5D Dr
 - content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:56 — 2. Engine 1: 2.5D Parallax Ray-Marcher (`Depthflow` + `Depth Anything v2`)
 - docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:1 — 45 — Parallax and plate motion: what may move, how much, and what is banned — Extracted from `05_comfyui_parallax_technical_standards.md` and
-  cited by: docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:135, docs/portable/OPERATOR-RULINGS.md:1463
+  cited by: docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:135, docs/portable/OPERATOR-RULINGS.md:1469
 
 ## insight-run (12)
 
@@ -3100,7 +3100,7 @@ at most 12 sections each - the JSONL holds every one.
 
 ## long-term (12)
 
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:153 — Status — Operator said generate (2026-09-08). The prompt is final and the beat has its
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:305 — Status — Operator said generate (2026-09-08). The prompt is final and the beat has its
 - content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:232 — Silicon Value in a Software Bubble (`silicon-value-software-bubble`)
 - content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:312 — S14 · Memory Is a Strategic Asset, Not a Cheap Input — Source moat plate showing long-term agreements, custom co-engineering, logic integration, and expanding bill-of-material
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:248 — 2.7 Natural Idling: Respiration Rhythms, Postural Sway, and Contrapposto
@@ -3126,9 +3126,9 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:1 — Transitions — the review (2026-09-06) — The operator: "I think we should review our research on transitions also, I don't think we've gotten them nailed properl
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8 — 1. The judgment — The research asked the right questions and mostly did not answer them. The research brief's Track B (`briefs/RESEARCH-BR
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38 — What to do, in the operator's order (recent stumble → TOP; unbuilt → BACKLOG; unmeasured → EXPLORE) — | id | item | why | cost |
-- docs/portable/OPERATOR-RULINGS.md:1347 — E45 — A dock on a page is small and sits in the page's quiet space; the mount is the transition into a full-page ledger (2026-09-06) — Ruled on the first Tokyo v2 player with video docks (004698d). The operator: *"the dock needs to not cover the middle of
-  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:93, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:123, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:15, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:1, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:14, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:32, +23 more
-- docs/portable/OPERATOR-RULINGS.md:1405 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
+- docs/portable/OPERATOR-RULINGS.md:1353 — E45 — A dock on a page is small and sits in the page's quiet space; the mount is the transition into a full-page ledger (2026-09-06) — Ruled on the first Tokyo v2 player with video docks (004698d). The operator: *"the dock needs to not cover the middle of
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:93, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:123, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:15, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:1, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:14, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:32, +24 more
+- docs/portable/OPERATOR-RULINGS.md:1411 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
   cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:49, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:107, docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md:50, +9 more
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:270 — 8. What HyperFrames Would Say About Our Open Transition Queries (`TRANSITIONS-REVIEW-2026-09-06.md`) — This section does not settle our open transition queries. Rather, it contrasts what HyperFrames doctrine would advise ag
 
