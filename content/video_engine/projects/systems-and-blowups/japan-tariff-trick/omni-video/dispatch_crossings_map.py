@@ -27,10 +27,10 @@ from pathlib import Path
 
 REPO = Path(r"C:/Users/Snipe/Downloads/Outreach Program")
 HERE = Path(__file__).resolve().parent
-ORDER = HERE / "sig-b-crossings-map.order.json"
+ORDER = HERE / (sys.argv[1] if len(sys.argv) > 1 else "sig-b-crossings-map.order.json")   # a variant is its own order file
 SERVER = REPO / "tools/google-flow-driver/mcp/server.mjs"
-LOG = HERE / "dispatch-crossings-map.log"
-RESULT = HERE / "dispatch-crossings-map.result.json"
+LOG = HERE / "dispatch-crossings-map.log"   # one log, every order appended
+RESULT = HERE / (ORDER.name.replace(".order.json", ".result.json"))
 FLOW_PROFILE = Path(r"C:/Users/Snipe/.flow-chrome-profile")   # the driver's dedicated automation profile
 
 
@@ -55,6 +55,7 @@ def cdp_up() -> str | None:
 
 
 def main() -> int:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")   # the pill text carries the banana emoji; cp1252 consoles choke on it
     endpoint = cdp_up()
     if not endpoint:
         print("ABORT: no Chrome CDP endpoint (9223 automation profile / 9222 fallback). Launch:\n"

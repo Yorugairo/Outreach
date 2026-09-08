@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-08T19:34:33.370Z",
+  "prompt": "9:16 vertical, full bleed. A light application of woodblock print and vox newspaper meets rich anime colors. A hand-drawn map seen from directly above, filling the page: the Great Lakes and the narrow river between Detroit and Ontario in the upper half, the long southern border with Mexico across the lower quarter, the land warm and the water pale. A car plant with smoking stacks stands on the Detroit side of the river, a second plant faces it across the water on the Ontario side, and a third plant sits below the southern border. The three plants are widely separated with open, uncluttered land between them. No roads, no route lines, no arrows, no borders drawn as dashes. The character, in his indigo suit and copper tie, stands very small at the lower right corner looking up at the map. A single still frame, no on-screen text.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-b-crossings-map.png",
+      "sha256": "f4c72ba527a1f228207c4560469b18f2ccd75b889892a77249bfe0903179ee53"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-b-crossings-map-raw.png",
+      "sha256": "f4c72ba527a1f228207c4560469b18f2ccd75b889892a77249bfe0903179ee53"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-b-crossings-map-raw.png",
+        "sha256": "f4c72ba527a1f228207c4560469b18f2ccd75b889892a77249bfe0903179ee53"
+      }
+    ]
+  }
+}

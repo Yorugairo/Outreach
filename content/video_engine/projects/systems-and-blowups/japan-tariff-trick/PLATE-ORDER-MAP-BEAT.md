@@ -143,6 +143,58 @@ The two steps:
     & "C:\Program Files\Google\Chrome\Application\chrome.exe" --user-data-dir=C:\Users\Snipe\.flow-chrome-profile --remote-debugging-port=9223
     python content/video_engine/projects/systems-and-blowups/japan-tariff-trick/omni-video/dispatch_crossings_map.py
 
+## ROLLED — the character A/B (operator, 2026-09-08)
+
+*"We should try the same prompts testing @MikeMasterV3 vs @Mike2 and @HollowStickMike."*
+Same frozen prompt, three references, zero credits, all via `dispatch_crossings_map.py`:
+
+| order | reference | landed | what came back |
+|---|---|---|---|
+| `sig-b-crossings-map.order.json` | HollowStickMike | `60a65258…` | the richest painting — but no Mexico at all; the third plant sits on open US ground, so a "Mexico crossing" would cross nothing (E28: sign is geometry) |
+| `…-mikemasterv3.order.json` | MikeMasterV3 | `2cbc69fe…` | a clean, near-real map: five lakes, Baja, the Gulf — but the Mexico plant landed in Texas, north of the line |
+| `…-mike2.order.json` | Mike2 | `38fbf595…` | the Mexico plant inside Mexico below a drawn border, a wide empty middle, place names DETROIT / GREAT LAKES / ONTARIO baked in — but the Ontario plant stands on the SOUTH shore and reads as US |
+
+The operator's calls, in order: *"HollowStickMike produced the best outcome"* →
+on the Mike2 re-roll, *"better because of the Detroit / Great Lakes / Ontario"* → then
+*"not great because it has Ontario's manufacturing plant looking like it's in the US"* →
+**"HollowStickMike is the truest."** So: **the reference is HollowStickMike** (the world it
+drags in is the channel's), and the geography is a PROMPT defect, not a character one —
+none of the v1 frames puts Ontario's plant on Canadian ground with a boundary between it
+and Detroit, which is the one thing a crossings map must do (E28: sign is geometry).
+
+**v2 orders** (`…-v2-hollowstick.order.json`, `…-v2-mike2.order.json`): the boundary drawn
+as a line through the river and the lake, Detroit's plant on the south bank / US side,
+Ontario's plant directly across on the north bank / Canadian side with Canada continuing
+north of it, the Mexico plant south of the Mexican border. **Place names allowed** —
+DETROIT, ONTARIO, CANADA, MEXICO only: the v1 labels were the part that helped, so the
+"no on-screen text" rule takes a recorded exception for place names on a map, nothing else.
+
+**Two driver defects found and fixed on the way** (`tools/google-flow-driver/src/cdp-driver.mjs`):
+
+1. **Flow's composer now has an Agent mode** (a chat bar with *Agent instructions* and a
+   `tune` icon) and it hides the settings pill the driver keys on (`🍌 Nano Banana Pro
+   crop_9_16 x1`). Every roll died with *"Flow settings pill not found"*. The chip sticks
+   per project, so `configureSettings` now toggles `flow-agent-mode-toggle-chip` OFF when
+   the pill is missing. Proven live: the log shows the toggle, then *Settings already match*.
+2. **`listProjectCharacters` scanned the All-media grid and returned on its first hit**, which
+   is the three tiles of the Characters strip — so `Mike2`, `Mike` and `StickMike` were
+   reported "not found" while live. It now reads the library's **Characters view**
+   (`flow-character-tile .character-tile-name`, six names) and puts the view back. The first
+   version of that fix introduced a third defect: leaving the view empties the media grid,
+   and the generation observer's baseline taken before it refilled saw MikeMasterV3's
+   output as "new" and downloaded it again as Mike2 (byte-identical sha). The driver now
+   waits for the grid to refill to its pre-navigation count before returning. The orphaned
+   real first Mike2 roll (`89337b8f…`, labelled "Detroit River", no Mexico) stays in the Flow
+   library; the re-roll is the one on disk.
+
+The three frames and their metas are in `omni-video/stills/` (PNGs gitignored, metas
+tracked); the JSON-RPC results sit beside the orders. The duplicate Mike2 result is kept as
+`…mike2.result-INVALID-dup-of-mikemasterv3.json`.
+
+**Plate of record: not yet chosen** — it will be a v2 frame (768×1376, same as the other
+signature plates) once the operator picks one; then `build_short.py:59` `plate-gates` →
+that file.
+
 ## The choreography over it — what the engine draws
 
 The beat runs 13.73 → 18.30 s, on *"when you buy an American truck, its parts

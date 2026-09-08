@@ -1,0 +1,12 @@
+{
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"success\": true,\n  \"mode\": \"image\",\n  \"imagePath\": \"C:\\\\Users\\\\Snipe\\\\Downloads\\\\Outreach Program\\\\content\\\\video_engine\\\\projects\\\\systems-and-blowups\\\\japan-tariff-trick\\\\omni-video\\\\stills\\\\sig-b-crossings-map-v2-hollowstick.png\",\n  \"rawPath\": \"C:\\\\Users\\\\Snipe\\\\Downloads\\\\Outreach Program\\\\content\\\\video_engine\\\\projects\\\\systems-and-blowups\\\\japan-tariff-trick\\\\omni-video\\\\stills\\\\sig-b-crossings-map-v2-hollowstick-raw.png\",\n  \"metadataPath\": \"C:\\\\Users\\\\Snipe\\\\Downloads\\\\Outreach Program\\\\content\\\\video_engine\\\\projects\\\\systems-and-blowups\\\\japan-tariff-trick\\\\omni-video\\\\stills\\\\sig-b-crossings-map-v2-hollowstick_meta.json\",\n  \"settings\": {\n    \"pillText\": \"\ud83c\udf4c Nano Banana Pro crop_9_16 x1\",\n    \"creditsText\": \"\",\n    \"modelText\": \"\",\n    \"credits\": null\n  }\n}"
+      }
+    ]
+  },
+  "jsonrpc": "2.0",
+  "id": 2
+}

@@ -1,0 +1,17 @@
+{
+  "_contract": "Frozen WORK-ORDER v2 (2026-09-08). Operator on the v1 Mike2 frame: 'its not great because it has ontarios manufacturing plant looking like its in US' - v2 draws the boundary through the water and puts Ontario's plant on the Canadian bank; place names allowed (the v1 labels were the part the operator liked). Dispatch: python omni-video/dispatch_crossings_map.py sig-b-crossings-map-v2-mike2.order.json",
+  "_beat": "s02 -> s04, cut(\"Auto parts\") @ 8.88s to cut(\"But look\"), 9.5 s. The map is the ground; the six trace hops and the 25% stamps are drawn OVER it by the engine, which is why the plate carries no route, no arrows, no dashed borders.",
+  "prompt": "9:16 vertical, full bleed. A light application of woodblock print and vox newspaper meets rich anime colors. A hand-drawn map seen from directly above, filling the page. In the upper half, the Great Lakes, with a long lake running left to right and the narrow Detroit River at its western end; the international boundary between the United States and Canada is drawn as a single line down the middle of the river and the lake. Detroit's car plant with smoking stacks stands on the south bank, on the United States side. Ontario's car plant stands directly across the water on the north bank, on the Canadian side, with Canadian land continuing north of it, so the two plants face each other with the water and the boundary line between them. In the lower quarter, the long southern border with Mexico, and a third car plant standing south of that border, inside Mexico. Small hand-lettered place names only: DETROIT, ONTARIO, CANADA, MEXICO. The land warm, the water pale, the three plants widely separated with open, uncluttered land between them. No roads, no route lines, no arrows. The character, in his indigo suit and copper tie, stands small at the lower right corner looking up at the map. A single still frame.",
+  "references": [
+    "Mike2"
+  ],
+  "ratio": "9:16",
+  "projectUrl": "https://labs.google/fx/tools/flow/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+  "outputPath": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/omni-video/stills/sig-b-crossings-map-v2-mike2.png",
+  "budget": {
+    "kind": "zero_credit",
+    "model": "Nano Banana Pro",
+    "note": "sig-b-six-gates recorded creditsText '' on the same settings"
+  },
+  "review_state": "quarantined until the operator approves the frame"
+}
