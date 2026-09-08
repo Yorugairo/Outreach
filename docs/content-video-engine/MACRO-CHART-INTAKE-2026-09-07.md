@@ -71,3 +71,38 @@ operator's call at the next watch.
 - MC-8 (the spread with a fill) — explore, on the Meta beat.
 - The blueprint's sources are summaries, not fetched pages. If any of these rules is ever contested, the fix is a `fetch`
   order for the two Observable pages and the Cleveland & McGill PDF, which puts them on disk with a sha256.
+
+## The fourth watch's answer: one unit beats two (2026-09-07, the same night)
+
+The operator on the tiered page: *"we still have that spike which is almost certainly an artifact. I also don't understand
+what the gray line actually is. And I think the line needs to overlay the bars, that's the whole point."* Then: *"if this
+doesn't work, we should fix data that does - now that we have better chart knowledge, is there a better presentation or
+different numbers to show?"*
+
+Three faults, all real:
+
+1. **The spike was ours, not the data's.** It was the `bracket` species: on the tiered page its label had no room in the
+   gutter the terminal tags now own, so it drew a naked vertical coral span at the plot's edge. The bracket is cut from that
+   page and its number (+80 bp) is in a note, in words.
+2. **The grey line had no identity.** The terminal tag carries it now - `Fed funds 3.75%, flat` - which is E53 s5 read
+   properly: the tag says what the line IS, not only what it reads.
+3. **Separating the tiers threw away the argument.** MC-1 was applied too hard. The intake's own Archetype 1 (a volume bar
+   with a rate line over it) is an OVERLAY; Archetype 3 (tiers) is for correlated series that need not be read against each
+   other. Ours must be. The overlay is restored: the bars keep the whole plot and their own zero, the line rides over them on
+   its own scale mapped into the upper share, the bars own every gridline, the line owns no axis at all.
+
+**Then the better question, which the operator asked.** Both versions still need two scales, and every two-scale chart pays
+for it - a zero that means one thing on the left and nothing on the right, and a reader asking what the second line is. This
+page's TITLE makes its claim in one unit. So the strongest version needs no second scale at all:
+
+| option | what it is | the cost |
+|---|---|---|
+| **A - the overlay** (`FED_WITH_BARS=1`) | Japan's monthly selling in $bn as signed bars, the 10-year over them in % | two units on one plot; the reader must be told which axis is which; the grey line reads as furniture |
+| **B - one unit** (the default) | the Fed's rate against the 10-year, both %, one scale, no second axis, each line named at its own end | Japan's selling leaves the page - it lives on the holdings page, where $bn is the unit, and in the notes in words |
+
+**B ships.** It proves the title literally (the Fed flat, the cost climbing), it has one scale so nothing can float, and the
+two lines are named where they end. A is kept behind an environment switch in `fetch_fed_vs_yields.py` so the combo path
+stays exercised and can be watched again if the ear wants the bars back.
+
+Fixed on the way, in both options: with two drawn series a portrait page no longer parks BOTH inline names in the lower-right
+corner - that rule was written for a single line and stacked the second onto the axis. Each line is named at its own end.

@@ -1,50 +1,12 @@
 {
  "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
- "sub": "Japan's monthly Treasury selling against what America pays to borrow, since Oct 2025",
+ "sub": "What the Fed charges against what America actually pays, %, since Oct 2025",
  "proof_sentence": "Fed funds target (upper) flat at 3.75% since 2025-12-11; the 10-year 3.97% (2026-02-27) -> 4.77% (2026-09-03); the 30-year mortgage 5.98% (2026-02-26) -> 6.71% (2026-09-03)",
  "src": "US Treasury TIC \u00b7 FRED \u00b7 Sep 2026",
  "src_style": "compact",
- "ylabel": "$bn",
+ "ylabel": "%",
  "unit": "",
  "line_unit": "%",
- "tiers": true,
- "bars": [
-  {
-   "label": "Feb",
-   "value": 14.0,
-   "color": "pos",
-   "x": 2026.125,
-   "note": "1,225.3 -> 1,239.3 $bn"
-  },
-  {
-   "label": "Mar",
-   "value": -47.7,
-   "color": "neg",
-   "x": 2026.2084,
-   "note": "1,239.3 -> 1,191.6 $bn"
-  },
-  {
-   "label": "Apr",
-   "value": 18.3,
-   "color": "pos",
-   "x": 2026.2917,
-   "note": "1,191.6 -> 1,209.9 $bn"
-  },
-  {
-   "label": "May",
-   "value": -66.8,
-   "color": "neg",
-   "x": 2026.375,
-   "note": "1,209.9 -> 1,143.1 $bn"
-  },
-  {
-   "label": "Jun",
-   "value": -26.4,
-   "color": "neg",
-   "x": 2026.4584,
-   "note": "1,143.1 -> 1,116.7 $bn"
-  }
- ],
  "xticks": [
   [
    2025.7479,
@@ -74,7 +36,7 @@
  "series": [
   {
    "label": "Fed funds",
-   "name": "3.75%",
+   "name": "3.75%, flat",
    "color": "deemph",
    "pts": [
     [
@@ -2443,7 +2405,7 @@
  },
  "notes": [
   "Japan started selling in February.",
-  "Rates went up immediately.",
+  "Rates went up immediately: the 10-year +80 bp since February.",
   "30-year mortgage 5.98% -> 6.71% over the same months."
  ],
  "proof": [

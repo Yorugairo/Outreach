@@ -17,6 +17,14 @@ import json
 import urllib.request
 from pathlib import Path
 
+import os
+
+# OPTION SWITCH (the fourth watch, 2026-09-07 - the operator: "is there a better presentation or different numbers to show?").
+# WITH_BARS=1 builds the COMBO (Japan's selling in $bn under the yield line, two scales - the intake's Archetype 1).
+# WITH_BARS=0 (the default) builds the page in ONE UNIT: the Fed's rate against the 10-year, both %, one scale, no second
+# axis and nothing to mislabel. Japan's selling then lives where its unit lives - the holdings page - and in the notes.
+WITH_BARS = os.environ.get("FED_WITH_BARS", "0") == "1"
+
 HERE = Path(__file__).resolve().parent
 SRC = HERE / "sources"
 OUT = HERE / "objects" / "ev-fed-vs-yields-v1.series.json"
@@ -88,26 +96,27 @@ def main() -> int:
     obj = {
         "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
         # ONE clause: a portrait page cuts its sub at the first period (lpFirstClause), and this sub is the legend now
-        "sub": f"Japan's monthly Treasury selling against what America pays to borrow, since {start.strftime('%b %Y')}",
+        "sub": (f"Bars: Japan's monthly Treasury selling, $bn · Line: the 10-year yield, % (the Fed's own rate in grey, flat since {last_move.strftime('%b %Y')})"
+                if WITH_BARS else f"What the Fed charges against what America actually pays, %, since {start.strftime('%b %Y')}"),
         "proof_sentence": (f"Fed funds target (upper) flat at {fed[-1][1]:.2f}% since {last_move.isoformat()}; the 10-year "
                 f"{ten_low[1]:.2f}% ({ten_low[0].isoformat()}) -> {ten_now[1]:.2f}% ({ten_now[0].isoformat()}); the 30-year mortgage "
                 f"{mort_low[1]:.2f}% ({mort_low[0].isoformat()}) -> {mort_now[1]:.2f}% ({mort_now[0].isoformat()})"),
         "src": f"US Treasury TIC · FRED · {dt.date.fromisoformat(today).strftime('%b %Y')}",   # the design pass: minimal; the IDs and the sha256 live in `proof`
         "src_style": "compact",
-        "ylabel": "$bn",
+        "ylabel": "%" if not WITH_BARS else "$bn",
         "unit": "",
         "line_unit": "%",
         # the macro-chart intake (2026-09-07): the lines are a LEVEL (4-4.8 %, zero meaningless) and the bars a signed FLOW
         # (zero is the story) - two TIERS sharing one x, never one plot with a floated zero. The tiers give the lines their
         # right margin back, so they carry DIRECT TERMINAL LABELS again and the sub stops being a legend.
-        "tiers": True,
-        "bars": bars,
+        **({"tiers": True} if WITH_BARS else {}),
+        **({"bars": bars} if WITH_BARS else {}),
         "xticks": months[::2],
         # the design pass (operator, 2026-09-07: "charts need to make sense with no captions"): TWO lines that share one scale, each
         # named with its value at its end - the Fed's rate and the 10-year sit a point apart, so the flat step and the climb read
         # in one frame; the mortgage (a point higher) is the third NOTE, not a third line that pushed the scale and stacked the names
         "series": [
-            {"label": "Fed funds", "name": f"{fed[-1][1]:.2f}%", "color": "deemph", "pts": [[dec_year(d), v] for d, v in win["DFEDTARU"]]},   # the terminal label IS the legend (the Economist standard; s9.23b)
+            {"label": "Fed funds", "name": f"{fed[-1][1]:.2f}%, flat", "color": "deemph", "pts": [[dec_year(d), v] for d, v in win["DFEDTARU"]]},   # the terminal label IS the legend (E53 s5); it says what the grey line IS
             {"label": "10-year", "name": f"{ten_now[1]:.2f}%", "color": "crimson", "pts": [[dec_year(d), v] for d, v in win["DGS10"]]},
         ],
         "mortgage": {"name": "30-year mortgage", "color": "amber", "pts": [[dec_year(d), v] for d, v in win["MORTGAGE30US"]]},   # kept on the object for a page that wants it
@@ -127,7 +136,7 @@ def main() -> int:
         },
         "notes": [   # the side notes the page writes as the ring is spoken (the third watch: "plenty of space on the side") - every figure from facts
             "Japan started selling in February.",
-            "Rates went up immediately.",
+            f"Rates went up immediately: the 10-year +{round((ten_now[1] - ten_low[1]) * 100)} bp since February.",
             f"30-year mortgage {mort_low[1]:.2f}% -> {mort_now[1]:.2f}% over the same months.",
         ],
         "proof": proof,

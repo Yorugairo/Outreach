@@ -2697,7 +2697,9 @@
       const tip = lpEl("circle", "", st.chart, { r: 6, fill: col, opacity: 0 });
       const last = s.pts[s.pts.length - 1];
       const prev = s.pts.length > 1 ? s.pts[s.pts.length - 2] : last;   /* portrait: the name ends left of the last segment so a steep drop never runs through it */
-      const nameBelow = P && my(last[1]) < T + 0.35 * (B - T);   /* a line ending high takes its name in the empty lower right, above the axis */
+      /* a line ending high takes its name in the empty lower right - but only when it is the ONLY line. With two, both would
+         land in the same corner and stack onto the axis (the fourth watch); each is named at its own end instead. */
+      const nameBelow = P && drawn.length === 1 && my(last[1]) < T + 0.35 * (B - T);
       const name = lpEl("text", "sname", st.chart, P ? { x: (nameBelow ? W - R : Math.min(mx(last[0]), mx(prev[0])) - 8).toFixed(1), y: (nameBelow ? B - 28 : my(last[1]) - 30).toFixed(1), "text-anchor": "end", fill: col, opacity: 0 }
                                                      : { x: (mx(last[0]) + 12).toFixed(1), y: (my(last[1]) + 8).toFixed(1), fill: col, opacity: 0 });
       st.linePts.push(s.pts.map(([x, v]) => [mx(x), my(v)]));   /* the exact datum positions, for the species' targets */
@@ -2932,11 +2934,11 @@
        subplots): when the lines are a LEVEL whose zero is meaningless (a 4 % yield) and the bars are a signed FLOW whose zero
        is the story, one plot forces a false zero on one of them. Two bands sharing the x instead: the lines above, the bars
        below, each on its own scale, each owning its own gridlines. `tiers` is the page's key; without it nothing changes. */
-    const TIER = { GAP: 0.10, LINE: 0.44 };   /* [DERIVED] the share of the plot each band takes, and the gutter between them */
+    const TIER = { LINE: 0.58 };   /* [DERIVED] the share of the plot the LINE's scale maps into, from the top - it overlays the bars */
     const H = bot - top, tiers = !!pg.tiers && (pg.series || []).some((q) => q.pts && q.pts.length) && st.vals.length;
     if (tiers) x1 = 700;   /* the tiered plot reserves a right GUTTER for the terminal labels - the Economist layout: the label replaces the axis */
     const lineTop = top, lineBot = tiers ? top + H * TIER.LINE : bot;
-    const barTop = tiers ? top + H * (TIER.LINE + TIER.GAP) : top, barBot = bot;
+    const barTop = top, barBot = bot;   /* the operator, 2026-09-07: "the line needs to overlay the bars, that's the whole point" - the bars keep the WHOLE plot and their own zero; the line rides over them on its own scale (the intake's Archetype 1), owning no axis and no gridline */
     const bmy = (v) => barBot - (v - vmin * 1.12) / span * (barBot - barTop), base = bmy(0);   /* the bars' own zero, inside their band */
     const series = (pg.series || []).filter((s) => s.pts && s.pts.length), barsIn = pg.bars || [];
     let lo = Infinity, hi = -Infinity, xa = Infinity, xb = -Infinity;

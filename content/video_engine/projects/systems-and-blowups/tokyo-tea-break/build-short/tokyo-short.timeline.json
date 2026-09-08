@@ -2194,7 +2194,7 @@
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short\\docks\\dock-h-fed-vs-yields.png",
-    "sha256": "0dfb49da4debe6e5373b2d8f6d9f97181477905650d6ec5ad028b72d1db506b0"
+    "sha256": "fefed95d79ffb44d6871a49b992349f9d98bcbaf24667ff15925a2c90483166a"
    },
    "badges": []
   },
@@ -5285,47 +5285,25 @@
     "page": {
      "schema_version": "ledger_page.v1",
      "surface": "page",
-     "builder": "combo",
+     "builder": "dense-line",
      "variant": "line",
      "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
-     "sub": "Japan's monthly Treasury selling against what America pays to borrow, since Oct 2025",
+     "sub": "What the Fed charges against what America actually pays, %, since Oct 2025",
      "source": "US Treasury TIC \u00b7 FRED \u00b7 Sep 2026",
      "quiet_zone": "right",
      "src_style": "compact",
      "line_unit": "%",
-     "tiers": true,
      "labels": [
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun"
+      "3.75%, flat",
+      "4.77%"
      ],
-     "values": [
-      14.0,
-      -47.7,
-      18.3,
-      -66.8,
-      -26.4
-     ],
-     "value_strings": [
-      "14.0",
-      "-47.7",
-      "18.3",
-      "-66.8",
-      "-26.4"
-     ],
-     "colors": [
-      "pos",
-      "neg",
-      "pos",
-      "neg",
-      "neg"
-     ],
+     "values": [],
+     "value_strings": [],
+     "colors": [],
      "series": [
       {
        "label": "Fed funds",
-       "name": "3.75%",
+       "name": "3.75%, flat",
        "color": "deemph",
        "pts": [
         [
@@ -7463,7 +7441,7 @@
       }
      ],
      "axes": {
-      "ylabel": "$bn",
+      "ylabel": "%",
       "xticks": [
        [
         "2025.7479",
@@ -7494,7 +7472,7 @@
      "unit": "",
      "judge": [],
      "badges": [],
-     "emphasize": 3,
+     "emphasize": 0,
      "enter": "snap",
      "snap_from": "dock-h-fed-vs-yields",
      "exit": "cut"
@@ -7532,17 +7510,6 @@
    ],
    "species": [
     {
-     "kind": "bracket",
-     "at": 77.38,
-     "dur": 1.4,
-     "series": 1,
-     "from": 83,
-     "to": 214,
-     "label": "+80 bp",
-     "sub": "10-year Treasury, since its February low",
-     "color": "crimson"
-    },
-    {
      "kind": "note",
      "at": 77.6,
      "dur": 1.0,
@@ -7552,7 +7519,7 @@
      "kind": "note",
      "at": 78.5,
      "dur": 1.0,
-     "text": "Rates went up immediately."
+     "text": "Rates went up immediately: the 10-year +80 bp since February."
     },
     {
      "kind": "note",

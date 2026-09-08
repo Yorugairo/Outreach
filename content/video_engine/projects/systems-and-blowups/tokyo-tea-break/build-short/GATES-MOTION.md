@@ -3,12 +3,12 @@
 ```text
 === MOTION DENSITY GATE: projects\systems-and-blowups\tokyo-tea-break\build-short ===
                runtime: 1:28
-         visual_events: 305 (206.0/min)
+         visual_events: 303 (204.7/min)
                  docks: 5
            dock_source: timeline
           ledger_pages: 4
   still_over_12s_share: 0%
-            per_minute: 0:00:216/5 1:00:183/8
+            per_minute: 0:00:216/5 1:00:179/8
 
   [WARN ] M11 first chart ledger:s02 enters at 2.0s, its build lands at 10.7s, with build_to landing on datum 311 at 10.7s (the cap is the annotation: the line ends on the datum); WARN no sound cue within 1.5s of the enter at 2.0s; window 0-10s (E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10)
           E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue
@@ -40,7 +40,7 @@
           doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
   [PASS ] M18 no run of bit-identical frames over 0.50s (1066 frames at 12 fps, 0:00-1:28); longest 0.00s at 0:00
           E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)
-  [INFO ] M07 short: 1 full minute(s) in 89s - opening 216.0 events/min, 5.0 evidence entries/min; tail from 1:00 183.2/min; whole runtime 204.7/min - no minute distribution to rank in (E21 is judged on the whole)
+  [INFO ] M07 short: 1 full minute(s) in 89s - opening 216.0 events/min, 5.0 evidence entries/min; tail from 1:00 179.0/min; whole runtime 203.3/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
   [INFO ] M19 2 build_to hold(s) - the line rests at a datum until the next word: 0:10+8.3s, 0:20+5.4s
           P47 T2 (SHOT-TABLE-V3-PROPOSAL part B): a cap is a hold the sentence asked for, not stillness
@@ -54,5 +54,5 @@
 RESULT: 0 FAIL / 1 WARN / 14 PASS / 1 JUDGE / 4 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:8a33d28e0e7f4e1e7bc630db0067cd6e74f5a2806ed7c034b75ef42c6d38297e
+TIMELINE: tokyo-short.timeline.json sha256:ccbec0d979e3b1fa9301b886739244ee548b0fbbcd1a95d9b39b0e7884082b72
 VERDICT: PASS (0 FAIL)

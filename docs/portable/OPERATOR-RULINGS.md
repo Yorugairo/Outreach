@@ -1562,9 +1562,14 @@ rules below are CONFIRMED findings; the intake page records what was rejected an
    line is a phenomenon that exists between its samples (a yield, a price, a holdings level). Interpolating between buckets
    invents values that were never measured. A discrete series takes equidistant SLOTS; a continuous one takes the time axis;
    uneven epochs (1936, 1946, 2026) never go on a continuous axis, where they become slivers in a void.
-4. **The honest zero.** Two series share a plot only when their zeros mean the same thing. A signed FLOW (zero is the story)
-   and a rate LEVEL (zero is meaningless and off-scale) do not: they take two TIERS sharing one x, each with its own scale
-   and its own gridlines, never one plot with a floated zero or two fighting grids. `tiers` on the page object.
+4. **The honest zero, and one unit before two.** Two series share a SCALE only when their zeros mean the same thing.
+   When they do not, the first question is not which layout to use - it is whether the page needs the second unit at
+   all. A page whose title makes its claim in one unit is strongest in that unit alone (the ring page: the Fed's rate
+   against the 10-year, both %, one scale, nothing to float and nothing to mislabel); the other quantity goes to the
+   page where its own unit lives, or into words. Only when the two must be read AGAINST each other does a page carry
+   two scales, and then it is an OVERLAY, never separate tiers - separating them throws away the comparison that
+   justified the second scale. In that overlay the bars keep the plot and their own zero, the line rides over them on
+   its own scale, the bars own every gridline, and the line owns no axis, carrying a terminal tag instead.
 5. **The label lives at the line's end.** A detached legend costs the reader a saccade for every series; the cure is a tag at
    the series' terminal point in the series' colour, and a right gutter reserved for it - never a legend box, and never a
    sub that has quietly become one. Where a plot has no gutter the fallback is the sub, and that is a compromise to be fixed,

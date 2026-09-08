@@ -58,7 +58,7 @@ def _bn(v: float) -> str:
 FACTS = _holdings_facts()
 FED = json.loads((HERE / "evidence/objects/ev-fed-vs-yields-v1.series.json").read_text(encoding="utf-8"))   # the Fed page's object: its notes, its bracket indices
 FED_NOTES = FED["notes"]
-FED_MAY_IDX = max(range(len(FED["bars"])), key=lambda i: -FED["bars"][i]["value"])   # the emphasised bar is the biggest SELLING month, never the first
+FED_MAY_IDX = max(range(len(FED["bars"])), key=lambda i: -FED["bars"][i]["value"]) if FED.get("bars") else 0   # the emphasised bar is the biggest SELLING month, never the first (a page with no bars emphasises nothing)
 
 
 def clip_dock(aid: str) -> str:
@@ -417,9 +417,8 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             (clip_dock("dock-a2-counter-colder"), 0, t_that, t_outro - 0.3, {"centre": True}),
         ], "cut", [   # the SNAP is this row's own transition (no dip into it); the outro row still dips
             # the three notes write in the quiet zone over "Tokyo is still on its tea break", staggered, before the host lands over the page
-            # the design pass ("spotlight the math"): the bracket from the 10-year's February low to its latest - +80 bp, measured
-            {"kind": "bracket", "at": t_moved + 0.55, "dur": 1.4, "series": 1, "from": FED["facts"]["dgs10_low_index"], "to": FED["facts"]["dgs10_last_index"],
-             "label": f"+{FED['facts']['dgs10_rise_bp_from_low']:.0f} bp", "sub": "10-year Treasury, since its February low", "color": "crimson"},
+            # the fourth watch: the bracket on this page drew a naked vertical span at the plot's edge - its label had no room in the
+            # gutter the terminal tags now own - and read as an artifact. The +80 bp is in the notes below, in words, instead.
             {"kind": "note", "at": t_tokyo_still, "dur": 1.0, "text": FED_NOTES[0]},
             {"kind": "note", "at": t_tokyo_still + 0.9, "dur": 1.0, "text": FED_NOTES[1]},
             {"kind": "note", "at": t_tokyo_still + 1.8, "dur": 1.2, "text": FED_NOTES[2]},
