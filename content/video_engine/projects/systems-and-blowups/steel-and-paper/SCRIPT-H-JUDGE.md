@@ -108,13 +108,22 @@ recording because they were newly placed or moved in this draft:
 
 - **G02** — *first word at 0.00s in the edit clock.* Not a script property; it is
   a lead-in at record and cannot be fixed in the text.
-- **G15b** — reports `close shares 0 content stem(s)`, but the gate's own helper
-  `ring_claim_stems`, given the P1 claim sentence and the close's ring sentence,
-  returns `{paper, steel}` — two shared stems, which is the threshold. A faithful
-  replication of the G15b block against this file also returns 2, standalone and
-  through the runner. **Suspected gate defect; do not paper over it in the prose.**
-  The ring does return the argument (the claim *"the steel got used, the paper
-  that paid for it went to nearly zero"* is restated at both close positions).
+- **G15b** — reports `close shares 1 content stem(s)` (needs 2). **I called this a
+  gate defect earlier and that was premature — retracted.** Changing the ring
+  token from `spike` to `certificate` moved the reading from 0 to 1, which means
+  the check responds to the script and is not simply broken. What remains is a
+  genuine disagreement I could not resolve: a faithful replication of the G15b
+  block against this file scores the close group at 4 shared stems
+  (`paper`, `safety`, `sold`, `steel`), and the gate scores 1 — and it does not
+  move when those stems are written into either close-window sentence. It looks
+  like the gate is not reaching the group my replication reaches. **Worth its own
+  investigation; not worth distorting the prose further.**
+  On the DOCTRINE the row exists to enforce (47 §2: a ring is a return of the
+  ARGUMENT, not an echo of a noun) the script is clean — the P1 claim is *"paper
+  sold as safety, while the steel it paid for is still carrying trains"* and the
+  close returns that argument twice, on the "more worried" beat and in the final
+  line, not merely the noun.
+
 - **The blind viewer (P36) has not run.** V01 blocks recording, and it is the row
   that caught Script G's opening. It needs a Codex batch — an operator cost call.
 - **SHOT-TABLE-H does not exist yet.**
