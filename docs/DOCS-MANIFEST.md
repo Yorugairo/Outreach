@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-266 documents across 13 kinds.
+277 documents across 13 kinds.
 
 ## doctrine
 
@@ -91,15 +91,15 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## ruling-ledger
 
-- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing corrections l — Portable, model-agnostic. Load alongside `DOCTRINE — defines: A3; E11; E12; +37 more — terms: long-form; drop-off; YouTube; world-building; six-phase
+- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing corrections l — Portable, model-agnostic. Load alongside `DOCTRINE — defines: A3; E11; E12; +41 more — terms: long-form; drop-off; YouTube; world-building; six-phase
 
 ## capabilities
 
-- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything. — defines: Area-preserving squash; Beds and the press pack; Build-on: the page performs on a word, WIRED; +90 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline; text-tier
+- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything. — defines: Area-preserving squash; Beds and the press pack; Build-on: the page performs on a word, WIRED; +92 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline; text-tier
 
 ## backlog
 
-- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is the auto-ge — defines: A0; A2a; A2a'; +84 more — terms: Z-stack; short-form; drawOn; G-g; V-a
+- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is the auto-ge — defines: A0; A2a; A2a'; +89 more — terms: Z-stack; short-form; drawOn; G-g; V-a
 
 ## pattern
 
@@ -171,6 +171,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/research/2026-08-24-twenty-n8n-attio-evaluation.md — Twenty vs n8n vs Attio: Workflow Fit Evaluati — Three tools, three different seams, three differen — defines: — — terms: git-versioned; self-hosted; human-in-the-loop; SEOTarget; InsightReport
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md — Acoustic Narrative Architecture: Integrating — Writing for spoken delivery requires a fundamental — defines: — — terms: McKee; long-form; Expectation-Reality; single-idea; Attribution-first
 - docs/research/audio/SUBTHRESHOLD_BACKGROUND_MUSIC_RESEARCH_BLUEPRINT.md — Sub-threshold Background Music — Research Blu — Pass-1 discovery brief · 2026-09-01 · sources: Exa — defines: — — terms: room-tone; just-audible; subliminal-audio; Egermann et al.; SPL-verified
+- docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md — Finance Combo & Comparison Charts — Design & — Why do automated systems and LLMs consistently fai — defines: — — terms: x-axis; ObservableHQ; x = 0, 1, ..., N-1; McGill; CapEx
 - docs/research/motion/BRIEF-WEIGHT-DENSITY-MASS-2026-09-07.md — Research brief — weight, density and mass in — Asked by: the operator, 2026-09-07, on Tokyo v3's — defines: — — terms: area-preserving; mass-spring-damper; HyperFrames; stop-motion-cadence; headline-slam
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md — HyperFrames Motion, Transitions, and Kinetic — How does HeyGen HyperFrames structure motion desig — defines: — — terms: HyperFrames; HeyGen; on-twos; rules-and-anti-patterns; stop-motion
 - docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md — Wealth Logic — where the picture change sits — TR-2 (`docs/content-video-engine/TRANSITIONS-REVIE — defines: — — terms: YouTube; split-edit; L-cut-like; J-cut-like; auto-captions
@@ -239,6 +240,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 - content/video_engine/projects/history-of-bjj/README.md — History of BJJ Series — This directory contains source-controlled editoria — defines: — — terms: source-controlled; .context; YouTube; visual-asset; creative-study
 - content/video_engine/projects/history-of-bjj/style-samples/combat-woodblock-graphic-silhouette-explainer-v1/README.md — Combat Woodblock Graphic Silhouette — Sample — Three original calibration plates for the versione — defines: — — terms: 01-threshold-hook.png; 02-community-route-correction.png; 03-leverage-metaphor.png; job-local; sample-set.manifest.v1.json
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/scratch/SCRATCH-INDEX.md — SCRATCH INDEX - jump points for the ear pass — kokoro 2.0 min for 1,616 chars -> 13.64 chars/s ac — defines: — — terms: twenty-five
 - content/video_engine/projects/systems-and-blowups/korea-memory-toll/scratch/SCRATCH-INDEX.md — SCRATCH INDEX - jump points for the ear pass — kokoro 2.1 min for 1,686 chars -> 13.11 chars/s ac — defines: — — terms: all-time; high-bandwidth; three-X; price-to-earnings; trillion-dollar
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/README.md — Finance Whiteboard Asset Blend Proof — An isolated, proof-only HyperFrames composition fo — defines: — — terms: proof-only; HyperFrames; PDF-derived; face-readable; source-bound
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/README.md — Finance Whiteboard Code-Drawn MVP — An isolated P27 HyperFrames proof for a warm white — defines: — — terms: HyperFrames; upper-left; code-assisted; whiteboard-explainer; draw-A
@@ -265,6 +267,12 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/martial-matters/pilots/marshall-monday-001/script-draft.md — Why Rap Violence is Actually a Sign of Peace — Target spoken runtime: 14–16 minutes Host: Marshal — defines: — — terms: PLAIN-LANGUAGE; scented-candle; hard-won; mm-agonistic-display; Natarajan & Caramaschi 2010
 - content/video_engine/projects/systems-and-blowups/ASSET-SPRINT-2026-08-25.md — Asset Sprint — 2026-08-25 (downtime batch) — All generation via the claim loop (codex, subscrip — defines: — — terms: collision-free; channel-asset; APPROVED as plate species; paid-gate; finance-host-in-world-exp
 - content/video_engine/projects/systems-and-blowups/EPISODE-SEEDS.md — EPISODE SEEDS — banked hooks and mechanisms ( — Operator, verbatim: "I don't have to be wrong for — defines: — — terms: thesis-correct; trade-broken; data-explosion; technology-survives-the; WorldCom
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/EVIDENCE-DOSSIER.md — How Japan Tricked Trump — evidence dossier — Every figure the script speaks, its source, and ve — defines: — — terms: US-Japan; cross-border; twenty-five; RO-RO; forty-five
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md — How Japan Tricked Trump — Production Hand-off — Project: `japan-tariff-trick` (Systems & Blowups / — defines: — — terms: @StickMike; top-performing; #F4E6C7; THE TARIFF TRAP; #25313C
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PACKAGING.md — How Japan Tricked Trump — Packaging & Distrib — Authored per `docs/portable/PACKAGING-PLAYBOOK.md` — defines: — — terms: top-performing; #F4E6C7; THE TARIFF TRAP; #25313C; +$6,240 TAX
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md — How Japan Tricked Trump — v3 build (own world — The short is BUILT and watchable, quarantined unti — defines: — — terms: HollowStickMike; re-using; CONTACT-SHEET.png; still-*; sig-*
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md — How Japan Tricked Trump — Shot Table (9:16 Ve — Authored per Doc 51 Shorts doctrine, Operator Ruli — defines: — — terms: @StickMike; TARIFF VICTORY DECLARED; StickMike; Fade-and-mount; [post-key]
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/sound/SOURCES.md — SOURCES — steel-and-paper sound — Per-asset licence ledger (SOUND-SOURCING.md rule: — defines: P35 — terms: gain-matched; highest-rated; preview-hq-mp3; -ss; sort=rating_desc
 - content/video_engine/projects/systems-and-blowups/korea-memory-toll/assets/characters/hollow-stick-mike/CHARACTER-PACK.md — @HollowStickMike — Character Asset Dossier & — Registered Asset: `content/video_engine/projects/s — defines: — — terms: Frames to Video; + Add start frame; Re-describing; @HollowStickMike; Step A: Generate Start Frame Keyframe (Nano Banana Pro / Ima
 - content/video_engine/projects/systems-and-blowups/korea-memory-toll/EVIDENCE-DOSSIER.md — The Trillion Dollar Toll Booth — Evidence Dos — Every figure the script speaks, its source, and th — defines: — — terms: YoY; forty-one; seventy-six; Reuters-KR-Customs-20260905; Real-time
 - content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md — The Trillion Dollar Toll Booth — Shot Table, — Authored 2026-09-05 against `SCRIPT-90S-VO.txt` (4 — defines: — — terms: ticker; steam; plate-01-busan-container-toll; [archetype]; plate-02-broadcast-newsroom
@@ -304,6 +312,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md — Style Spine v2 — woodblock vox newsprint (fin — Correction of record (operator, 2026-08-25): gener — defines: — — terms: Quiet-zone; steel-and-paper-plates-wave; woodblock vox newsprint; evidence-dock; world-plate
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/ANALYTICS-2026-09-06.md — Analytics — the Tokyo short on Facebook, firs — Operator screenshots, 2026-09-06 (Sunday, posted d — defines: — — terms: drop-off; camera-flash; stick-figure; Re-read; suck
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/CLOSE-CANDIDATES-2026-09-03.md — Tokyo Tea Break — the close, rewritten (2026- — What the old close did wrong, against the exemplar — defines: — — terms: loop-close; Five-and-a-half; SOURCES-TO-VERIFY; Break-mark; [promise]
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/DESIGN-PASS-2026-09-07.md — Tokyo v3 — the design pass (2026-09-07, `/des — The operator, after the third watch: "This is real — defines: — — terms: src_style: compact; deemph; mortgage; Fed funds 3.75%; 10-year 4.77%
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-AUDIT-2026-09-03.md — Tokyo Tea Break — evidence & chart audit, 202 — Every figure that reaches the screen, where it com — defines: — — terms: Hedged-yield; off-palette; Long-Duration; Zero-Coupon; ticker-level
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-DOSSIER.md — Tokyo Tea Break — evidence dossier — Every figure the script speaks, its source, and th — defines: — — terms: DGS10; ev-hedge-then-now-v1; twenty-two; sixty-three; DGS3MO
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-FINDING-2-the-real-story.md — The stronger story, from the Treasury's own r — Fetched 2026-09-03 from `ticdata.treasury.gov/…/sl — defines: — — terms: head-fake; re-fetchable; November 2024; load-bearing; hedge-cost
@@ -318,6 +327,8 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md — SOURCES — steel-and-paper sound — Per-asset licence ledger (SOUND-SOURCING.md rule: — defines: P35 — terms: gain-matched; highest-rated; preview-hq-mp3; -ss; sort=rating_desc
 - docs/agent-memory/explorer/MEMORY.md — explorer - durable memory (reviewed) — Promoted from worker scratch by the parent after r — defines: — — terms: path | heading or symbol | what; per-platform; tokyo-tea-break; il-tea-break
 - docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md — HyperFrames intake — the Gemini research, gat — The operator: "HyperFrames has a GREAT resource li — defines: — — terms: push-in; ## The question; ## Verdict up front; ## Sources; ## NOT FOUND WHERE I LOOKED
+- docs/content-video-engine/MACRO-CHART-INTAKE-2026-09-07.md — Macro-chart journalism research — the intake, — The Gemini lane's `docs/research/markets/MACRO_CHA — defines: — — terms: McGill; Verified 2026-09-07; Local Evidence; fetch; weight-and-mass
+- docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md — remotion-ui intake — seven components, gated — The same morning as the HyperFrames harvest, seven — defines: — — terms: snap; HyperFrames; badge-stamp; undraw; dip
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md — DOCTRINE CORE — portable content-operation co — Model-agnostic; paste whole into any system-instru — defines: — — terms: scene-setting; pause-framed; seed-locked; paragraph-shaped; quarter-billion
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md — Transitions — the review (2026-09-06) — The operator: "I think we should review our resear — defines: — — terms: [DERIVED]; L-cuts; unclassified; quart-in-out; evidence-free
 - docs/content-video-engine/TRIAGE-2026-09-05.md — TRIAGE 2026-09-05 — the corpus against what i — Counts as of the registry at 86c46f5. The animatio — defines: M13 — terms: recent-stumble; zero-slip; BACKLOG.md:218 (row 6); arc-length; motion-authoring
