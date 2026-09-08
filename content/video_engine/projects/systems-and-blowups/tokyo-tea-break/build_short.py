@@ -421,7 +421,13 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # gutter the terminal tags now own - and read as an artifact. The +80 bp is in the notes below, in words, instead.
             # the fifth watch (operator: "bleed the chart fill to red beneath the 10 year line and the fed rate"): the GAP between
             # what the Fed charges and what America pays is the argument - it bleeds full of blood red as the ring lands
-            {"kind": "spread", "at": t_moved + 0.5, "dur": 1.8, "from": 0, "to_rule": 0, "color": "neg"},
+            # the fifth watch, second read ("we should circle and call out the low more, now that we have room for it"): the page
+            # marks WHERE the climb started - the hand rings the February low and names it - and only then bleeds the gap that
+            # grew out of it. The order is the argument: the low, then the distance from it.
+            {"kind": "callout", "at": t_moved + 0.35, "dur": 2.2, "target": datum(FED["facts"]["dgs10_low_index"]), "pad": 26,
+             "label": f"{FED['facts']['dgs10_low_since_move']:.2f}% - the February low"},
+            # ... and the red begins AT the circled low, so the fill is exactly the distance the page just named
+            {"kind": "spread", "at": t_moved + 1.5, "dur": 1.8, "from": 0, "to_rule": 0, "from_index": FED["facts"]["dgs10_low_index"], "color": "neg"},
             {"kind": "note", "at": t_tokyo_still, "dur": 1.0, "text": FED_NOTES[0]},
             {"kind": "note", "at": t_tokyo_still + 0.9, "dur": 1.0, "text": FED_NOTES[1]},
             {"kind": "note", "at": t_tokyo_still + 1.8, "dur": 1.2, "text": FED_NOTES[2]},

@@ -3256,7 +3256,8 @@
       const rule = Number.isInteger(sp.to_rule) ? (st.hlines || [])[sp.to_rule] : null;
       const B = rule ? [[-1e9, rule.y], [1e9, rule.y]] : (st.linePts || [])[sp.to | 0];
       if (!A || !B || A.length < 2 || B.length < 2) return null;
-      const hi = A.length >= B.length ? A : B, lo = hi === A ? B : A;   /* walk the denser series; read the other at its x */
+      const hi0 = A.length >= B.length ? A : B, lo = hi0 === A ? B : A;   /* walk the denser series; read the other at its x */
+      const hi = Number.isInteger(sp.from_index) ? hi0.slice(Math.max(0, Math.min(hi0.length - 2, sp.from_index))) : hi0;   /* the fill may BEGIN at a datum - where the argument does */
       const yAt = (pts, x) => { let i = 1; while (i < pts.length - 1 && pts[i][0] < x) i++;
         const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; return x1 === x0 ? y1 : y0 + (y1 - y0) * ((x - x0) / (x1 - x0)); };
       const col = PS_PAL[sp.color] || sp.color || "var(--lp-neg)";
@@ -3608,8 +3609,9 @@
   const camCss = (xf) => xf.s === 1 ? "" :
     "translate(" + (xf.ox - 960).toFixed(1) + "px, " + (xf.oy - 540).toFixed(1) + "px) scale(" + xf.s.toFixed(4) + ") translate(" + (960 - xf.ox).toFixed(1) + "px, " + (540 - xf.oy).toFixed(1) + "px) ";
   /* a wobbled ellipse around a box (hw-callout-circle): seeded, drawn by dash-offset */
-  const calloutPath = (b, seed) => {
-    const cx = b.x + b.w / 2, cy = b.y + b.h / 2, rx = b.w / 2 + 22, ry = b.h / 2 + 18, n = 28, pts = [];
+  const calloutPath = (b, seed, pad) => {
+    const pd = Number.isFinite(+pad) ? +pad : 0;   /* a datum resolves to a point: `pad` is how wide the hand rings it (the fifth watch) */
+    const cx = b.x + b.w / 2, cy = b.y + b.h / 2, rx = b.w / 2 + 22 + pd, ry = b.h / 2 + 18 + pd, n = 28, pts = [];
     for (let i = 0; i <= n; i++) { const a = -Math.PI * 0.6 + i / n * Math.PI * 2.08; const j = 1 + (lpHash(seed, i, 21) - 0.5) * 0.12;
       pts.push([cx + Math.cos(a) * rx * j, cy + Math.sin(a) * ry * j]); }
     return pts.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
@@ -3657,9 +3659,10 @@
       const seed = 0x51EC1E5 ^ ((sc.scene_id || "").length * 131 + si);
       if (sp.kind === "callout") {
         const b = resolveTarget(sp.target); if (!b) return;
-        drawOn(lpEl("path", "co", spSvg, { d: calloutPath(b, seed) }), k * dur / SP.CALLOUT_DRAW);
+        const pd = Number.isFinite(+sp.pad) ? +sp.pad : 0;
+        drawOn(lpEl("path", "co", spSvg, { d: calloutPath(b, seed, pd) }), k * dur / SP.CALLOUT_DRAW);
         if (sp.label && k * dur > SP.CALLOUT_DRAW * 0.8) {
-          const lx = b.x + b.w + 34, ly = b.y - 10, pop = spEase((k * dur - SP.CALLOUT_DRAW * 0.8) / 0.25);
+          const lx = b.x + b.w + 34 + pd, ly = b.y - 10 - pd * 0.4, pop = spEase((k * dur - SP.CALLOUT_DRAW * 0.8) / 0.25);
           const tx = lpEl("text", "lab", spSvg, { x: lx.toFixed(1), y: ly.toFixed(1) }); tx.textContent = sp.label;
           tx.setAttribute("transform", "translate(" + lx.toFixed(1) + " " + ly.toFixed(1) + ") scale(" + (0.7 + 0.3 * pop).toFixed(3) + ") translate(" + (-lx).toFixed(1) + " " + (-ly).toFixed(1) + ")");
         }

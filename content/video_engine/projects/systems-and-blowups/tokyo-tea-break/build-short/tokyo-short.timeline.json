@@ -6117,11 +6117,23 @@
    ],
    "species": [
     {
+     "kind": "callout",
+     "at": 77.17999999999999,
+     "dur": 2.2,
+     "target": {
+      "kind": "datum",
+      "index": 52
+     },
+     "pad": 26,
+     "label": "3.97% - the February low"
+    },
+    {
      "kind": "spread",
-     "at": 77.33,
+     "at": 78.33,
      "dur": 1.8,
      "from": 0,
      "to_rule": 0,
+     "from_index": 52,
      "color": "neg"
     },
     {

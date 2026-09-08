@@ -137,3 +137,15 @@ intake's Archetype 4) built on a real beat rather than explored.
 
 **Watched:** one unit, one scale, one drawn line named at its end, the rule named at its own end in light blue, and the red
 area between them doing the arguing. No step, no spike, no ambiguous grey. Suites 141 pass; gate PASS.
+
+### ... and the low, circled (the same watch)
+
+*"We should circle and call out the low more, now that we have room for it."* Three moves, in the order of the argument:
+
+1. the hand RINGS the February low and names it - `callout` with a new `pad` (a datum resolves to a point, so the ring had
+   nothing to inflate; `pad` is how wide the hand draws around it) and the label `3.97% - the February low`;
+2. then the red BEGINS at that circled point - `spread` gains `from_index`, so the fill is exactly the distance the page
+   just named, not the whole window;
+3. the note underneath says it in words: the 10-year +80 bp since February.
+
+The low is now the origin of the picture: circled, named, and the start of the red. Suites 134 pass; gate PASS.

@@ -218,6 +218,8 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             errs.append("spread: from and to must be different series (a gap needs two lines)")
         if "color" in entry and entry["color"] not in BRACKET_COLORS:
             errs.append(f"spread: color must be one of {'|'.join(BRACKET_COLORS)}")
+        if "from_index" in entry and not is_idx(entry["from_index"]):
+            errs.append("spread: from_index must be a non-negative integer datum index (where the fill begins)")
     return errs
 
 
