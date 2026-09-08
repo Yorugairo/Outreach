@@ -72,32 +72,56 @@ makes the six crossings legible — disappears.
 The pull-back IS the argument: the same map, and one crossing where there were
 six. `focus_zoom` and `pull_back` already exist as camera species.
 
-## The plate — ONLY if we take route (a) or the image fallback
+## The plate — READY TO GENERATE
 
-Route (b) needs no generated plate at all: the coastline is drawn. What follows
-is the fallback if we want a painted ground under the ink.
+**The beat is now 9.5 s, not 4.57 s.** Moving `t_gates` from `cut("When you buy")`
+to `cut("Auto parts")` hands the map the whole crossings passage, and fixes a
+mismatch on the way: *"Auto parts taxes compounded against Detroit"* is currently
+spoken over the **Japan Treasury holdings chart**, which has nothing to do with
+it. On the map it is the caption for the picture.
 
-Same house style, same character binding, same `no on-screen text` rule as the
-existing signature plates (`sig-b-six-gates_meta.json` is the format of record).
+| boundary | s02 span | map beat |
+|---|---|---|
+| now — `cut("When you buy")` | 11.91 s | 4.57 s |
+| `cut("But look")` @ 11.90 | 10.08 s | 6.40 s |
+| **`cut("Auto parts")` @ 8.88** | **6.98 s** | **9.50 s** |
 
-**Prompt:**
+At 9.5 s the six hops and six stamps read at a human pace, and s02 still lands
+its whole hook claim (arriving built, spotlight at 2.3 s) above the 6 s floor.
+
+**Prompt** — same house style, same character binding, same `no on-screen text`
+rule as the other signature plates (`sig-b-six-gates_meta.json` is the format of
+record). Written for a route that will be drawn OVER it, so the geography is
+uncluttered and the three plants are far enough apart for six hops to be legible:
 
 > 9:16 vertical, full bleed. A light application of woodblock print and vox
-> newspaper meets rich anime colors. A hand-drawn map of the Great Lakes region
-> seen from above, the lakes and the river between Detroit and Ontario clearly
-> shaped, Mexico's border at the lower edge of the page. A car plant with smoking
-> stacks sits on the Detroit side, a second plant directly across the water on the
-> Ontario side, a third plant at the southern border. No roads or route lines are
-> drawn between them. The character, in his indigo suit and copper tie, stands at
-> the lower right corner of the map looking down at it, small against the
-> geography. A single still frame, no on-screen text.
+> newspaper meets rich anime colors. A hand-drawn map seen from directly above,
+> filling the page: the Great Lakes and the narrow river between Detroit and
+> Ontario in the upper half, the long southern border with Mexico across the
+> lower quarter, the land warm and the water pale. A car plant with smoking
+> stacks stands on the Detroit side of the river, a second plant faces it across
+> the water on the Ontario side, and a third plant sits below the southern
+> border. The three plants are widely separated with open, uncluttered land
+> between them. No roads, no route lines, no arrows, no borders drawn as dashes.
+> The character, in his indigo suit and copper tie, stands very small at the
+> lower right corner looking up at the map. A single still frame, no on-screen
+> text.
 
-- `references`: `["HollowStickMike"]`
-- `requested_ratio`: `9:16`, `mode`: `image`
+- `references`: `["HollowStickMike"]` · `requested_ratio`: `9:16` · `mode`: `image`
 - lands as `omni-video/stills/sig-b-crossings-map.png` + `_meta.json`
 
-**Why no route in the plate:** the route is the animation. A baked line cannot
-count, cannot accumulate, and cannot be timed to the VO.
+**Why no route, no arrows, no dashed borders in the plate:** all three are the
+animation. A baked line cannot count, cannot accumulate, and cannot be timed to
+the VO — and a drawn arrow would fight the `trace` that follows it.
+
+## DISPATCH — blocked here, one call elsewhere
+
+I cannot enqueue this from this session. `.mcp.json` carries `remotion-ui`,
+`video-engine` and `sigmap`; the **google-flow-driver MCP is not connected**, and
+`flow_enqueue_batch` needs a manifest whose `capability_snapshot` binds to an
+artifact only `flow_capture_capabilities` can produce. I am not able to fake
+either, so the prompt above is the deliverable and the enqueue is one call from a
+session that has the driver attached.
 
 ## The choreography over it — what the engine draws
 
@@ -118,21 +142,17 @@ single crossing, and `sig-c-two-lanes` carries the result. The map does not need
 to make the comparison — it only needs to make the *repetition* legible, and the
 existing plates finish the argument.
 
-## Timing note
+## Timing — resolved
 
-This beat's span is 4.57 s. Six traced hops plus six stamps will not fit at a
-readable pace — the same rushing M21 now catches on the chart pages. Either the
-beat takes seconds from the neighbouring gap, or the hops are shown as three
-round trips rather than six single crossings. **Decide before generating**, since
-the plate framing follows from it.
+Six single crossings, not three round trips: at 9.5 s there is room. The boundary
+move and the plate must land TOGETHER — handing 9.5 s to the existing static
+six-gates image would trip M16's short-form pulse (no gap over 2.5 s between
+visual events), because a still with idle drift cannot hold nine and a half
+seconds.
 
 ## Status
 
-**Route not chosen.** (b) — the coastline as a drawn path — is the recommendation
-and it needs no image generation, only a simplified coastline (public geodata)
-and `greatCircleLine`, which we already hold. (a) is the fallback if a painted
-ground is wanted under the ink. The prompt above is written either way.
-
-Still open, and it changes the framing: the crossings beat is **4.57 s**, and six
-traced hops plus six stamps will not fit at a readable pace — the same rushing
-M21 now catches on the chart pages. Three round trips, or more seconds.
+Operator said generate (2026-09-08). The prompt is final and the beat has its
+9.5 s. **Dispatch is blocked in this session only** — see above. Route (b), the
+drawn coastline, remains the cheaper long-term answer and needs no plate at all;
+this order is route (a), the painted ground, which is what "generate" asked for.
