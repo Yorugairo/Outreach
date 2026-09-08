@@ -1,12 +1,12 @@
 # SCRIPT GATES - SCRIPT-G-VO.txt
 
 script: SCRIPT-G-VO.txt
-generated: 2026-09-08T08:19:28+00:00
+generated: 2026-09-03T11:32:27+00:00
 script_hash: 4d2876620021c3d94387d761d442548d95f867afeb7be8db00f3ed3385dcf5f8
 timing_source: measured
 
-TOOLS      lint: exit 0, 0 fails | audit: exit 0, 0/0, timing=measured |
-           opening gate: exit 1, 23/2/21/8 | screens: SCRIPT-G-SCREENS.md, 186 items
+TOOLS      lint: exit 0, 0 fails | audit: exit 1, 1/0, timing=measured |
+           opening gate: exit 1, 22/2/21/8 | screens: SCRIPT-G-SCREENS.md, 186 items
 
 VIEWER     SCRIPT-G-VIEWER.md
   [FAIL ] V01 25/37 declared beats perceived (68%); unperceived: [payoff] w2, [reflect] w4, [opponent] w5, [rehook] w6, [concede] w12, [loop] w16, [loop-close] w17, [anaphora] w25 +4 more
@@ -24,7 +24,7 @@ RESULT: clean
 ```
 
 ## audit_script_doctrine.py
-exit 0
+exit 1
 
 ```
 === SCRIPT-G-VO.txt ===
@@ -33,7 +33,7 @@ exit 0
            runtime: 14m 11s
          sentences: 240
      sentence_mean: 10.1
-      break_ration: 0.43
+      break_ration: 3.1
   sentence_mean_carrying: 11.4
   short_figure_share: 16.2%
     sentence_stdev: 5.2
@@ -52,11 +52,12 @@ exit 0
    hook_measured_s: 2.42
   paradox_measured_s: 3.63
 
+  [FAIL] doc 37 sec 1: break ration 3.10/1k exceeds 3.0 — causes audible speed-ups
   [INFO] doc 37 sec 8: 13,883 chars exceeds the mv2 10,000 cap — chained take required, split at a phase boundary
   [INFO] estimator: the two rate estimates disagree by 10% on the first sentence (numerals read longer than they look) — record a take to settle it
   [INFO] doc 38 B1-B4: owned by gate_opening_structure - see content\video_engine\projects\systems-and-blowups\steel-and-paper\SCRIPT-G-GATES.md
 
-RESULT: 0 FAIL, 0 WARN
+RESULT: 1 FAIL, 0 WARN
 ```
 
 ## gate_opening_structure.py
@@ -71,7 +72,7 @@ exit 1
          a3_anchor: 1:20
              cycle: checked 0:00-13:25; longest gap 130s from 9:26
       unit_windows: ['P3 unit 1 2:16-4:09', 'P3 unit 2 4:09-6:02', 'P5 unit 3 7:23-9:32', 'P5 unit 4 9:32-11:40']
-      counterparty: Bravos Research
+      counterparty: Bravos
               ring: spike
          packaging: title='The AI Bubble Is Real. What Survives Is Steel.' thumb=None thumb_file=content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/thumbnail-FINAL-steelpaper.png
     not_gated_here: Truby Battle / Self-Revelation / New Equilibrium, Snyder midpoint, chiastic center, ring CLOSE (P4-P6)
@@ -89,8 +90,6 @@ exit 1
           PLATFORM rehook A2 ~1:00, template family (38 B5 / P1 QC)
   [FAIL ] G14 no [opponent] declared in P1
           Truby Opponent / McKee antagonism: the opponent named, a MECHANISM never a villain (38 B5)
-  [FAIL ] G15b close shares 0 content stem(s) with the P1 claim (need 2); claim stems: ['iron']
-          Ring MECHANISM: the claim planted with the token in P1 recurs in the close (47 s2 G-g)
   [FAIL ] G19 no [loop] within 60s of the catalyst at 1:43
           The catalyst is a micro loop CLOSED inside 30-60s, not exposition (P2)
   [FAIL ] G20 longest gap 44s
@@ -105,7 +104,7 @@ exit 1
           Ring composition: token TOUCHED exactly once in P2, unresolved (P2 / doc 32 s5)
   [FAIL ] G28 no [loop-close] declared
           Macro loop 1 CLOSES on a partial answer that opens the bigger question (P2 / MAP s4, LIFO ledger)
-  [FAIL ] G34 4 sentences, 3:16-3:24 (8s): 'Put my agreement on the record....'
+  [FAIL ] G34 5 sentences, 3:10-3:24 (13s): 'So Bravos' tripwire for this cycle: the Fed back above five ...'
           U6 / E20 concession budget: an agreement run never exceeds 2 sentences or 10s without a claim of ours
   [FAIL ] G35 proof at 2:44 hedged at 2:47: 'The yardstick is a new instrument for this channel — no threshold on i'
           U6 / E20: a delivered proof is never hedged in the next sentence
@@ -186,7 +185,7 @@ exit 1
   [JUDGE] J12 open content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/thumbnail-FINAL-steelpaper.png; sentence 1: 'The safest thing you own looks like this.'
           E24 / doc 29 s9.29: the first sentence answers what the thumbnail poses - open the thumbnail and read sentence 1 against it
 
-RESULT: 23 FAIL / 2 WARN / 21 PASS / 8 JUDGE (read these) / 0 INFO
+RESULT: 22 FAIL / 2 WARN / 21 PASS / 8 JUDGE (read these) / 0 INFO
 ```
 
 ## enumerate_strength_screens.py
@@ -196,4 +195,4 @@ exit 0
 SCRIPT-G-SCREENS.md: X1=86 deixis=32 junctions=24 anchors=44 declared=37
 ```
 
-VERDICT: FAIL (1 failing tools, 1 viewer)
+VERDICT: FAIL (2 failing tools, 1 viewer)

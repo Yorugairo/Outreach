@@ -32,6 +32,63 @@ fault outright: *"confirm the click, match the packaging, **never open on the
 full chart**."* G opens on Bravos' full chart and holds it from 0:27 to 1:16.
 **No new doctrine is required by this order — it is enforcement.**
 
+## The evidence holds (render timeline, 2026-09-08)
+
+Measured from `build-f/steel-and-paper.timeline.json` — runtime 806.5 s, which
+matches YouTube's 13:27 exactly. **`motion-plan.json` and `evidence-dock.json`
+are a 723 s time base and are STALE; do not measure from them.**
+
+| dock | on screen | E25 ceiling | |
+|---|---|---|---|
+| *(nothing)* | 0:00 – 0:09.5 | — | the entry bleed |
+| `ev-bravos-original-v1` | **0:09.5 – 0:50 (40.9 s)** | 6 s | **~7× over** |
+| `ev-divergence-v1` | 0:50 – 1:10 (20.5 s) | 6 s | over |
+| *(gap)* | 1:10 – 1:26 | — | |
+| `silicon-reality-gap-…` deck | 1:26 – 1:32 (5.4 s) | 10 s | ok |
+| *(gap)* | 1:32 – 1:44 | — | |
+| `ev-railway-index-v1` | 1:44 – 1:53 (9.4 s) | 10 s | ok |
+
+Whole video: **43 docks, median hold 11.5 s, longest 50.7 s, 30 of 43 past the
+E25 ceiling**, evidence on screen **81 % of runtime**.
+
+**Evidence was never scarce — it was never allowed to CHANGE.** The chart
+popping at 0:09.5 arrests the entry bleed; forty-one static seconds on that
+same chart start a slower one. The deck at 1:26 lifts, the chart at 1:44 lifts
+(46 % → 56.8 %). Arrival retains, holding leaks. That is E21 and E25 as one
+mechanism, and it is the thing the engine could not do in August: those charts
+had no motion available to them. A chart can now build, spotlight, un-draw and
+leave.
+
+## The gate run (2026-09-08, current code)
+
+Script G re-run through `run_script_gates.py` with today's gates:
+**23 FAIL / 2 WARN / 21 PASS / 8 JUDGE**, and the blind viewer FAILing V01.
+(The 2026-09-03 run at record time is preserved as
+`SCRIPT-G-GATES-2026-09-03-at-record.md`: 22 FAIL then, so one row is new —
+G15b shipped as a hard FAIL on 2026-09-04, after this script.)
+
+**Three instruments now name the same window.** The retention curve drops
+0:57 → 1:22; the dock table shows a 20.5 s static hold across it; and the
+opening gate fires twice inside it:
+
+- **G13** no rehook construction in **0:55 – 1:10**
+- **G38** no `[desire]` declared in **0:47 – 1:10**
+
+The opening rows this order must clear:
+
+- **G45** — *none of ['ai','bubble','real','surviv','steel'] in the first two sentences.* The package mismatch, stated as a rule.
+- **G09** — promise at 1:15. The gate's own text cites this video: *"(E24, decided 2026-09-03; Steel and Paper as recorded: 1:20)"*.
+- **G12** 0 declared in P1 · **G14** no `[opponent]` in P1 · **G10** missing · **G02** first word at 0.00 s.
+- **G15b** — the close shares 0 content stems with the P1 claim (needs 2; the claim's stem is `iron`). **G27** `spike` 0× in P2, **G28** no `[loop-close]`, **G19/G21** no `[loop]`.
+
+**And the gates predict the late fade too**, which the curve shows after ~11:00:
+**G36** (longest stretch with no cycle beat: 130 s from 9:26) and **G44** (no
+rehook in unit 4, 9:32–11:40) both land there. That stretch is in scope for
+this order even though the rest of the body is not.
+
+Two line-craft rows to fix while in there: **G35** (a proof at 2:44 hedged at
+2:47) and **G34** (4 sentences in 8 s at 3:16–3:24).
+
 ## Editorial changes (the reason for the rewrite)
 
 1. **The credit-first opening has been tested; it is retired as the OPENING.**
