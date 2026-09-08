@@ -2608,7 +2608,8 @@
     const st = { root, page, edge, blobs, strokes, nib, rect, goo, soakFx, soakFk: fk, seed, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, field, rail, inkEls: [title, subEl, src], kind: pg.builder || "story",
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1,
-                 geom, portrait: PORTRAIT, linePts: [], titleEl: title, titleGlyphs: [...title.querySelectorAll(".g")], rtGlyphs: [], perform: null };   /* geom: the chart's drawing box (viewBox units); linePts: each series' points in it, for exact datum targets */   /* no emphasis declared = no datum styled (spec emits null) */
+                 marks: [], markBy: {}, geom, portrait: PORTRAIT, linePts: [], titleEl: title, titleGlyphs: [...title.querySelectorAll(".g")], rtGlyphs: [], perform: null };   /* geom: the chart's drawing box (viewBox units); linePts: each series' points in it, for exact datum targets */   /* no emphasis declared = no datum styled (spec emits null) */
+    lpMark(st, "title", "title", title, {}); lpMark(st, "sub", "sub", subEl, {}); lpMark(st, "src", "src", src, {});   /* P48 T1: the page's own ink is a mark too - a retitle and a recast both move it */
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
     const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo };
     (builders[st.kind] || buildLedgerBars)(st, pg);
@@ -2642,7 +2643,11 @@
       const vy = neg ? base + h + (P ? 62 : 26) : base - h - (P ? 22 : 14);
       const val = lpEl("text", "val", st.chart, { x: (x + bw / 2).toFixed(1), y: vy.toFixed(1), "text-anchor": "middle", opacity: 0 });
       val.textContent = lpWithUnit(st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v), unit);
-      st.bars.push({ bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + h : base - h });
+      const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + h : base - h };
+      st.bars.push(rec);
+      lpMark(st, "b:" + i, "bar", bar, { x, y, w: bw, h, base, cx: x + bw / 2, end: rec.end, neg, v }, rec);
+      lpMark(st, "xlab:" + i, "xlabel", lab, { x: x + bw / 2, y: bottom + (P ? 52 : 34) });
+      lpMark(st, "val:b:" + i, "value", val, { x: x + bw / 2, y: vy, v });
     });
     const e = st.bars[Math.min(st.emph, st.bars.length - 1)];
     if (e) {
@@ -2653,6 +2658,7 @@
       const ct = lpEl("text", "callout", cg, { x: e.x.toFixed(1), y: (py + CP.ty).toFixed(1), "text-anchor": "middle" });
       e.val.setAttribute("opacity", 0); e.val.style.display = "none";
       st.callout = cg; st.cval = ct; st.cfinal = e.val.textContent; st.cnum = st.vals[e.i]; st.cunit = unit;
+      lpMark(st, "callout", "callout", cg, { x: e.x, y: py });
     }
   };
   const buildLedgerLine = (st, pg) => {
@@ -2672,20 +2678,27 @@
     if (ax.from_zero && !ax.log) y0 = 0;   /* E28 (operator, 2026-09-05): a truncated axis made a tenth look like a fall to nothing - the series declares its zero */
     const mx = (x) => L + (x - x0) / (x1 - x0 || 1) * (W - L - R), my = (v) => T + (1 - (Y(v) - y0) / (y1 - y0)) * (B - T);
     st.axisB = B;   /* P47 T3: the morph closes its target along the axis */
-    lpEl("line", "ax", st.chart, { x1: L, x2: W - R, y1: B, y2: B });
-    st.hlines = HL.map((h) => {
+    st.plot = { L, R, T, B, W, x0, x1, y0, y1, log: !!ax.log };   /* P48 T1: the scale a transition interpolates */
+    lpMark(st, "axis", "axis", lpEl("line", "ax", st.chart, { x1: L, x2: W - R, y1: B, y2: B }), { x1: L, x2: W - R, y: B });
+    st.hlines = HL.map((h, hix) => {
       const col = PAL[h.color] || h.color || "#8fb3f0", y = my(+h.y);
       const line = lpEl("line", "hrule", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1), stroke: col });
       const lab = h.label ? lpText(st.chart, "sname", W - R, y - (P ? 18 : 12), "end", String(h.label), { opacity: 0, style: LP_HALO + "fill:" + col + (P ? ";font-size:34px" : "") }) : null;
+      lpMark(st, "rule:" + hix, "rule", line, { y, v: +h.y, x1: L, x2: W - R });
+      if (lab) lpMark(st, "rulelab:" + hix, "rulelabel", lab, { x: W - R, y: y - (P ? 18 : 12) });
       return { h, y, line, lab, col };
     });
     /* both axes, always (operator, 2026-09-03): y ticks - on a log axis at doublings of a power of ten, else the nice-step helper */
     if (ax.log) {
       const lo = Math.pow(10, y0), hi = Math.pow(10, y1); let tv = Math.pow(10, Math.floor(y0));
-      while (tv <= hi) { if (tv >= lo) { const y = my(tv); lpEl("line", "grid", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1) }); lpText(st.chart, "lab", L - 10, y + 8, "end", lpTick(tv) + (ax.unit || "")); } tv *= 2; }
+      let n = 0;
+      while (tv <= hi) { if (tv >= lo) { const y = my(tv);
+        lpMark(st, "tick:" + n, "tick", lpEl("line", "grid", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1) }), { v: tv, y, x1: L, x2: W - R });
+        lpMark(st, "ylab:" + n, "ylabel", lpText(st.chart, "lab", L - 10, y + 8, "end", lpTick(tv) + (ax.unit || "")), { v: tv, x: L - 10, y: y + 8 }); n++; } tv *= 2; }
     } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10);
     lpYLabel(st, pg, L, T - 12);
-    (ax.xticks || []).forEach(([x, lab]) => { const tx = lpEl("text", "lab", st.chart, { x: mx(x).toFixed(1), y: B + (P ? 52 : 32), "text-anchor": "middle" }); tx.textContent = lab; });
+    (ax.xticks || []).forEach(([x, lab], i) => { const tx = lpEl("text", "lab", st.chart, { x: mx(x).toFixed(1), y: B + (P ? 52 : 32), "text-anchor": "middle" }); tx.textContent = lab;
+      lpMark(st, "xtick:" + i, "xtick", tx, { v: x, x: mx(x), y: B + (P ? 52 : 32) }); });
     /* HIGHLIGHT (operator, 2026-09-05, the since-2000 holdings page): axes.highlight_from = an x; the points from there
        are the STORY'S window and take the sign colour, the history before it is drawn muted and thinner beneath - a
        26-year line that is up overall must not paint the last four months' selling green, nor the history red */
@@ -2723,8 +2736,10 @@
          reveal, one real estate (operator, 2026-09-03) */
       const ib = (st.inlineBadges || {})[s.color];
       if (ib && ib.tag) { const tg = lpEl("tspan", "tagchip", name, { dx: 12, fill: col }); tg.textContent = ib.tag; }
-      st.paths.push({ p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: nameBelow ? B - 28 : my(last[1]) + (P ? -30 : 8),
-                     pts: s.pts.map(([x, v]) => [mx(x), my(v)]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted });   /* P47 T2: the path knows its data, so a build_to can cap it at a datum */
+      const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: nameBelow ? B - 28 : my(last[1]) + (P ? -30 : 8),
+                     pts: s.pts.map(([x, v]) => [mx(x), my(v)]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum */
+      st.paths.push(rec);
+      lpMark(st, "s" + rec.si + (rec.muted ? ":h" : ""), "line", p, { pts: rec.pts, vals: s.pts.map(([, v]) => +v), len, k0: rec.k0, muted: rec.muted, col }, rec);
     });
     /* s9.23b inline names never overprint: push apart any two ends closer than one line */
     const order = [...st.paths].sort((a, b) => a.ny - b.ny), gap = P ? 50 : 28;   /* one line = the face's own size (44 px portrait), not the landscape 24 */
@@ -2732,7 +2747,8 @@
       if (order[i].ny - order[i - 1].ny < gap) order[i].ny = order[i - 1].ny + gap;
     const over = order.length ? order[order.length - 1].ny - (B - 12) : 0;   /* a name never sits on the axis line: lift the group */
     if (over > 0) for (const pp of order) pp.ny -= over;
-    for (const pp of order) pp.name.setAttribute("y", pp.ny.toFixed(1));
+    for (const pp of order) { pp.name.setAttribute("y", pp.ny.toFixed(1));
+      lpMark(st, "name:s" + pp.si + (pp.muted ? ":h" : ""), "name", pp.name, { x: +pp.name.getAttribute("x"), y: pp.ny }, pp); }   /* the name's geom is its SETTLED y, after the push-apart */
   };
   /* ---- the other builders (P35 T5): race / decline / combo, each ported from ITS OWN hyperframes
      component (bar-chart-race, decline-chart, data-chart - mechanism only: no runtime, no gsap;
@@ -2758,6 +2774,28 @@
   const lpNiceStep = (x) => { const e = Math.pow(10, Math.floor(Math.log10(x))), f = x / e; return e * (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10); };
   const lpTick = (v) => String(Math.round(v * 100) / 100);
   const LP_HALO = "paint-order:stroke;stroke:#25313C;stroke-width:7px;stroke-linejoin:round;";   /* a field-coloured halo: a direct label stays legible where a line crosses it */
+  /* ---- THE MARK MODEL (P48 T1) ------------------------------------------------------------------
+     Every builder registers each thing it draws as a KEYED MARK: the ELEMENT it created and the GEOM
+     (the numbers that placed it), under a key that is stable across chart states - `b:<i>` for the i-th
+     bar datum, `s<si>` for a series' stroke (its geom.pts carrying datum `s<si>:<k>`), `r:<j>` for a race
+     row, and a role name for furniture (axis, tick, ylabel, rule, xtick, name, value, src).
+     A mark changes NOTHING about what is drawn - it is an index over geometry the builder already
+     computed - and it is what a transition matches on (P48 T2-T5): shared keys tween, new keys enter by
+     the stroke or spring law, dropped keys exit. Keys are unique per state; a collision would silently
+     drop a mark, so one is disambiguated rather than overwritten. */
+  const lpMark = (st, key, role, el, geom, rec) => {
+    if (!st.marks) { st.marks = []; st.markBy = {}; }
+    let k = key, n = 2; while (st.markBy[k]) k = key + "#" + n++;
+    const m = { key: k, role, el, geom: geom || {}, rec: rec || null };
+    st.marks.push(m); st.markBy[k] = m; return m;
+  };
+  /* a datum's position, from whichever mark owns it: its own mark (a bar) or its series' stroke (a line) */
+  const lpMarkDatum = (st, si, i) => {
+    const B = st.markBy || {}, own = B["s" + si + ":" + i] || (si === 0 ? B["b:" + i] : null);
+    if (own) return [own.geom.cx != null ? own.geom.cx : own.geom.x, own.geom.end != null ? own.geom.end : own.geom.y];
+    const str = B["s" + si]; if (!str || !str.geom.pts) return null;
+    return str.geom.pts[i - (str.geom.k0 | 0)] || null;
+  };
   /* stylesheet rules beat SVG presentation attributes, so colour/size overrides on text go through `style` */
   const lpText = (parent, cls, x, y, anchor, text, at) => {
     const e = lpEl("text", cls, parent, { x: (+x).toFixed(1), y: (+y).toFixed(1), "text-anchor": anchor, ...(at || {}) });
@@ -2769,14 +2807,21 @@
   const lpUnit = (pg) => String(pg.unit || (pg.axes || {}).yunit || "");
   const lpYTicks = (st, lo, hi, my, xa, xb, unit, labX, divs) => {
     const step = lpNiceStep(Math.max(1e-9, (hi - lo) / (divs || 5))), out = [];
+    let n = 0;
     for (let tv = Math.ceil(lo / step - 1e-9) * step; tv <= hi + 1e-9; tv += step) {
       const v = Math.abs(tv) < step * 1e-6 ? 0 : tv, y = my(v);
-      out.push(lpEl("line", v === 0 ? "ax" : "grid", st.chart, { x1: xa, x2: xb, y1: y.toFixed(1), y2: y.toFixed(1) }));
-      out.push(lpText(st.chart, "lab", labX, y + (st.portrait ? 14 : 8), "end", lpWithUnit(lpTick(v), unit)));
+      const gl = lpEl("line", v === 0 ? "ax" : "grid", st.chart, { x1: xa, x2: xb, y1: y.toFixed(1), y2: y.toFixed(1) });
+      const tl = lpText(st.chart, "lab", labX, y + (st.portrait ? 14 : 8), "end", lpWithUnit(lpTick(v), unit));
+      out.push(gl); out.push(tl);
+      lpMark(st, "tick:" + n, "tick", gl, { v, y, x1: xa, x2: xb });   /* P48 T1: a rescale retargets ticks by value, so the value rides with the mark */
+      lpMark(st, "ylab:" + n, "ylabel", tl, { v, x: labX, y: y + (st.portrait ? 14 : 8) });
+      n++;
     }
     return out;
   };
-  const lpYLabel = (st, pg, x, y, at) => { const t = (pg.axes || {}).ylabel; return t ? lpText(st.chart, "lab", x, y, "start", String(t), { style: "font-size:" + (st.portrait ? 40 : 22) + "px;fill:#aeb6be", ...(at || {}) }) : null; };
+  const lpYLabel = (st, pg, x, y, at) => { const t = (pg.axes || {}).ylabel; if (!t) return null;
+    const e = lpText(st.chart, "lab", x, y, "start", String(t), { style: "font-size:" + (st.portrait ? 40 : 22) + "px;fill:#aeb6be", ...(at || {}) });
+    lpMark(st, "axislabel", "axislabel", e, { x, y }); return e; };
   /* RACE (bar-chart-race): ranked horizontal bars per period. EVERYTHING is a smooth function of u (period units):
      a value eases (smoothstep) between consecutive period values over the WHOLE period - exact at every period,
      still at both ends of each; the rank order is read from those values every frame, and a row SWAP is a pair's
@@ -2820,7 +2865,9 @@
       lpText(g, "lab", G.NAME_X, G.PITCH / 2 + 9, "end", String((pg.labels || [])[j] ?? ""), { style: "font-weight:700;fill:#F2F2F2" });
       const bar = lpEl("rect", "bar", g, { x: G.TRACK_X, y: ((G.PITCH - G.BAR_H) / 2).toFixed(1), width: 0, height: G.BAR_H.toFixed(1), rx: 4 });
       const val = lpText(g, "val", G.TRACK_X, G.PITCH / 2 + 9, "start", "");
-      return { g, bar, val };
+      const rec = { g, bar, val };
+      lpMark(st, "r:" + j, "row", bar, { x: G.TRACK_X, h: G.BAR_H, pitch: G.PITCH, j }, rec);
+      return rec;
     });
     const period = lpText(st.chart, "callout", 985, 548, "end", "", { style: "fill:#F2F2F2;font-size:60px", opacity: 0 });   /* below the rows, clear of every bar */
     st.race = { G, periods, rows, T, N, unit, valueAt, ranks, swaps, ticks, items, period };
@@ -2911,6 +2958,10 @@
     const name = dl.series ? lpText(st.chart, "sname", mx(xs[0]) + 14, my(vals[0]) + 34, "start", String(dl.series), { opacity: 0, style: LP_HALO + "fill:#ED6A4A" }) : null;   /* named at the line's start, revealed with it */
     const big = lpText(st.chart, "callout", W - R, 70, "end", "", { style: "fill:#F2F2F2;font-size:64px", opacity: 0 });
     st.dec = { p, len, tip, end, ground, ghost, name, big, labels, start: vals[0], last: vals[n - 1], endStr: String(e.value_string ?? lpFmt(vals[n - 1])) };
+    st.plot = { L, R, T, B, W, x0: xa, x1: xb, y0, y1, log: false };
+    lpMark(st, "s0", "line", p, { pts: vals.map((v, i) => [mx(xs[i]), my(v)]), vals: vals.map((v) => +v), len, k0: 0, muted: false, col: "#ED6A4A" }, st.dec);
+    if (name) lpMark(st, "name:s0", "name", name, { x: mx(xs[0]) + 14, y: my(vals[0]) + 34 });
+    labels.forEach((l, i) => lpMark(st, "xlab:" + i, "xlabel", l, { x: +l.getAttribute("x"), y: +l.getAttribute("y") }));
     st.buildDur = LPX.DECLINE_BUILD; st.paint = paintLedgerDecline;
   };
   const paintLedgerDecline = (st, c) => {
@@ -2972,7 +3023,11 @@
       const tells = emph || Math.abs(+v) >= LPX.COMBO_LABEL_SHARE * Math.max(1e-9, ...st.vals.map((q) => Math.abs(+q)));   /* E52: the chart reads without printing every number */
       const val = tells ? lpText(st.chart, "val", cx(i), valY, "middle", st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v),
         { opacity: 0, style: LP_HALO + (emph ? "fill:#F5B72E;font-size:30px;font-weight:700" : "") }) : null;
-      return { bar, lab, val, valY: tells ? valY : -1e9, cx: cx(i) };
+      const rec = { bar, lab, val, valY: tells ? valY : -1e9, cx: cx(i) };
+      lpMark(st, "b:" + i, "bar", bar, { x: cx(i) - bw / 2, y: neg ? base : base - h, w: bw, h, base, cx: cx(i), end: neg ? base + h : base - h, neg, v: +v }, rec);
+      lpMark(st, "xlab:" + i, "xlabel", lab, { x: cx(i), y: barBot + 34 });
+      if (val) lpMark(st, "val:b:" + i, "value", val, { x: cx(i), y: valY, v: +v });
+      return rec;
     });
     const cxOf = (b) => b.cx;
     const pad = (hi - lo) * 0.12 || 1; lo -= pad; hi += pad;
@@ -2987,7 +3042,7 @@
       }
       /* the tier's scale is written ONCE, on its top gridline, instead of a whole second axis - the terminal labels carry the rest */
       if (tiers) lpText(st.chart, "lab", x0 - 30, ly(Math.floor(hi / step) * step) + (P ? 14 : 8), "end", lpWithUnit(lpTick(Math.floor(hi / step) * step), lunit), { style: "fill:#aeb6be" }); }
-    const lines = series.map((s) => {
+    const lines = series.map((s, si) => {
       const aligned = s.pts.length === n, lx = (x, k) => aligned ? cx(k) : x0 + (+x - xa) / (xb - xa || 1) * (x1 - x0);   /* one point per bar sits on the bar */
       const pts = s.pts.map(([x, v], k) => [lx(x, k), ly(v), v]), col = LP_PAL[s.color] || LP_PAL.cobalt;
       const p = lpEl("path", "ser", st.chart, { d: pts.map(([x, y], k) => (k ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" "), style: "stroke:" + col });
@@ -3008,7 +3063,9 @@
       const name = lpText(st.chart, "sname", room ? last[0] + (tiers ? 12 : 44) : last[0], room ? last[1] + 8 : last[1] - 26, room ? "start" : "end", quiet ? "" : (s.label ? s.label + " " : "") + (s.name || ""),
         { opacity: 0, style: LP_HALO + "fill:" + col + (tiers ? ";font-size:" + (P ? 30 : 19) + "px" : "") });   /* the gutter's label is a tag, not a headline */
       st.linePts.push(pts.map(([x, y]) => [x, y]));   /* the species' targets (a bracket on a line) */
-      return { p, len, dot, labels, name, pts, ny: room ? last[1] + 8 : last[1] - 26 };
+      const rec = { p, len, dot, labels, name, pts, ny: room ? last[1] + 8 : last[1] - 26 };
+      lpMark(st, "s" + si, "line", p, { pts: pts.map(([x, y]) => [x, y]), vals: pts.map(([, , v]) => +v), len, k0: 0, muted: false, col }, rec);
+      return rec;
     });
     /* s9.23b: a name never overprints another name OR a bar's printed value. Each name lifts above every value within
        NAME_CLEAR_X of its own x, then the names push apart; the group is clamped inside the plot. */
@@ -3020,10 +3077,12 @@
     const ord = [...lines].sort((a, b) => a.ny - b.ny);
     for (let i = 1; i < ord.length; i++) if (ord[i].ny - ord[i - 1].ny < ngap) ord[i].ny = ord[i - 1].ny + ngap;
     const lift = ord.length ? Math.max(0, ord[ord.length - 1].ny - (lineBot - 8)) : 0;
-    for (const ln of ord) { ln.ny -= lift; ln.name.setAttribute("y", Math.max(lineTop + ngap * 0.6, ln.ny).toFixed(1)); }
+    for (const ln of ord) { ln.ny -= lift; ln.name.setAttribute("y", Math.max(lineTop + ngap * 0.6, ln.ny).toFixed(1));
+      lpMark(st, "name:s" + lines.indexOf(ln), "name", ln.name, { x: +ln.name.getAttribute("x"), y: Math.max(lineTop + ngap * 0.6, ln.ny) }, ln); }
     /* the lines' daily labels would be a wall of numbers on a dense series: only a sparse series (one point per bar) labels its points */
     for (const ln of lines) if (ln.pts.length > 2 * n) for (const lb of ln.labels) lb.remove(), ln.labels = [];
     st.combo = { bars, lines }; st.buildDur = LPX.COMBO_BUILD; st.paint = paintLedgerCombo;
+    st.plot = { L: x0, R: st.geom ? st.geom.W - x1 : 1000 - x1, T: top, B: bot, W: st.geom ? st.geom.W : 1000, x0: xa, x1: xb, y0: lo, y1: hi, log: false };
   };
   const paintLedgerCombo = (st, c) => {
     const C = st.combo, nb = C.bars.length;
@@ -4386,7 +4445,8 @@
     const spreads = (PF.spreads || []).map((sd) => ({ alpha: parseFloat(sd.path.getAttribute("fill-opacity") || "0"), d: (sd.path.getAttribute("d") || "").length, pts: sd.hi.length }));
     const figures = (PF.figures || []).map((fg) => ({ D: fg.D, x: fg.x, fits: fg.fits, opacity: parseFloat(fg.g.getAttribute("opacity") || "0"),
       label: fg.lg.map((ts) => parseFloat(ts.getAttribute("opacity") || "0")) }));
-    return { linePts: st.linePts, paths, brackets, figures, spreads, title: w(st.titleGlyphs || []), retitles: PF.retitles.map((r) => w(r.glyphs)),
+    const marks = (st.marks || []).map((m) => ({ key: m.key, role: m.role, geom: m.geom }));   /* P48 T1: the keyed model, for the transition tests */
+    return { marks, linePts: st.linePts, paths, brackets, figures, spreads, title: w(st.titleGlyphs || []), retitles: PF.retitles.map((r) => w(r.glyphs)),
              morph: M ? { u: M.u, bbox: [mb.x, mb.y, mb.width, mb.height], fill: parseFloat(M.path.getAttribute("fill-opacity")), on: M.svg.style.opacity } : null };
   };
   window.__filmstrip = async (t0, dur, n, name) => {

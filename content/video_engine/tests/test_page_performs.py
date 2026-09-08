@@ -368,3 +368,80 @@ def test_a_page_species_authored_before_its_scene_is_a_state_and_credits_no_even
     ev = G._species_events([sc])
     assert all(t >= 44.88 for t in ev), ev
     assert 50.0 in ev and 50.8 in ev, "the bracket inside the span is credited as before"
+
+
+# ---- P48 T1: the mark model ----------------------------------------------------------------------
+
+
+@needs_browser
+def test_every_builder_emits_keyed_marks_over_the_geometry_it_already_drew():
+    """P48 T1. A mark is an INDEX, not a redraw: each builder registers the element it made under a stable
+    key with the numbers that placed it. The proof that it indexes the SAME geometry is that a series'
+    stroke mark carries exactly the points the species' targets resolve against (st.linePts / paths.pts),
+    and that the furniture every page has - the axis, its ticks, the page's own ink - is all keyed."""
+    name, tl, uris, aspect, pts = _line_golden()
+    authored, _peak, _last = _authored(tl, pts)
+    P = _Player(authored, uris, aspect)
+    try:
+        pr = P.probe(8.0)
+        marks = pr["marks"]
+        assert marks, "the page emitted no marks"
+        keys = [m["key"] for m in marks]
+        assert len(keys) == len(set(keys)), "mark keys are not unique: a collision silently drops a mark"
+        roles = {m["role"] for m in marks}
+        for r in ("title", "sub", "src", "axis", "tick", "ylabel", "line"):
+            assert r in roles, f"no {r} mark: {sorted(roles)}"
+        assert "axis" in keys and "tick:0" in keys and "ylab:0" in keys and "title" in keys
+        by = {m["key"]: m for m in marks}
+        # (3) the marks index the same geometry the species' targets resolve against
+        for pp in pr["paths"]:
+            k = "s" + str(pp["si"]) + (":h" if pp["muted"] else "")
+            assert k in by, f"a drawn stroke with no mark: {k} not in {keys}"
+            g = by[k]["geom"]
+            assert g["k0"] == pp["k0"] and len(g["pts"]) == len(pp["pts"])
+            assert all(abs(a[0] - b[0]) < 1e-6 and abs(a[1] - b[1]) < 1e-6 for a, b in zip(g["pts"], pp["pts"])), \
+                "the stroke's mark and its path disagree about where the data is"
+        # a tick mark carries the VALUE it stands for, which is what a rescale retargets
+        assert all("v" in m["geom"] for m in marks if m["role"] in ("tick", "ylabel"))
+    finally:
+        P.close()
+
+
+def _spec(kind: str) -> dict:
+    """One page spec per builder, straight through ledger_page's own contract."""
+    import ledger_page as L
+    bars = lambda vs: {"title": "t", "src": "our source",
+                       "bars": [{"label": f"L{i}", "value": v, "color": "crimson"} for i, v in enumerate(vs)]}
+    if kind == "story":
+        return L.build_spec(bars([-3.9, -12.4, 10.9, -8.7]), "bars", emphasize=1)
+    if kind == "combo":
+        line = [{"name": "10-year", "color": "cobalt", "pts": [[i, 3.9 + i * 0.12] for i in range(5)]}]
+        return L.build_spec({**bars([14.0, -47.7, 18.3, -66.8, -26.4]), "series": line}, "bars", emphasize=3)
+    if kind == "decline":
+        return L.build_spec(bars([88.0, 61.5, 28.0]), "decline")
+    return L.build_spec({"title": "Memory-maker share", "src": "Company filings", "periods": ["2023", "2024", "2025", "2026"],
+                         "series": [{"name": "hynix", "color": "crimson", "values": [10, 20, 30, 40]},
+                                    {"name": "Micron", "color": "teal", "values": [15, 18, 25, 35]},
+                                    {"name": "Samsung", "color": "cobalt", "values": [40, 35, 30, 25]}]}, "race")
+
+
+@needs_browser
+@pytest.mark.parametrize("kind, wanted", [
+    ("story", ("b:0", "xlab:0", "val:b:0", "tick:0", "title")),
+    ("combo", ("b:0", "xlab:0", "s0", "name:s0", "tick:0")),
+    ("decline", ("s0", "xlab:0", "tick:0")),
+    ("race", ("r:0", "r:2", "title")),
+])
+def test_the_builders_the_goldens_do_not_cover_key_their_marks_too(kind, wanted):
+    """P48 T1's real exposure: only dense-line is goldened, so bars / combo / race / decline are proven here.
+    The asserted keys are each builder's LAST registrations, so their presence means the builder ran to its
+    end - a throw inside it would leave the earlier marks and drop these."""
+    name, tl, uris, aspect, _pts = _line_golden()
+    sc = tl["scenes"][0]
+    scene = dict(sc, species=[], world=dict(sc["world"], page=_spec(kind), ken_burns={"scale": 0, "x": 0, "y": 0}))
+    P = _Player(dict(tl, scenes=[scene], caption_pages=[], captions=[]), uris, aspect)
+    try:
+        keys = {m["key"] for m in P.probe(8.0)["marks"]}
+        assert set(wanted) <= keys, f"{kind}: missing {sorted(set(wanted) - keys)} (got {sorted(keys)[:24]})"
+    finally:
+        P.close()

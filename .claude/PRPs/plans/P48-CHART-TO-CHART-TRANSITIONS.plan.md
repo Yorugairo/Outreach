@@ -207,7 +207,7 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
 ## Task Slices
 
 ### T1: The mark model - every builder emits keyed marks; nothing changes on screen
-- Status: pending
+- Status: complete (2026-09-07)
 - Owner: parent (the shared boundary; `implementation_luna` may take the bars/combo builders once the line's shape is set)
 - Depends on: none
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html` (`buildLedgerLine`, `buildLedgerBars`,
@@ -219,7 +219,20 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   the marks rather than from closures; (3) `st.linePts` and every species target still resolve; (4) the whole golden suite
   is byte-identical and `test_page_performs.py` passes unchanged
 - Validate: `python -m pytest content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_page_performs.py content/video_engine/tests/test_morph.py -q`
-- Evidence: pending
+- Evidence: `lpMark` / `lpMarkDatum` + `st.marks` / `st.markBy` / `st.plot` in the template; every builder registers as it
+  draws (`b:<i>` a bar datum, `s<si>` a series' stroke with its `geom.pts`, `r:<j>` a race row, and role keys `axis`,
+  `tick:<n>`, `ylab:<n>`, `axislabel`, `rule:<n>`, `rulelab:<n>`, `xtick:<n>`, `xlab:<i>`, `val:b:<i>`, `name:s<si>`,
+  `callout`, `title`, `sub`, `src`); `__lpProbe` reports `marks` as `{key, role, geom}`.
+  `python -m pytest ...test_golden_frames.py ...test_page_performs.py ...test_morph.py -q` -> **54 passed**, the goldens
+  byte-identical (49 before, +5 new). Two new tests in `test_page_performs.py`: the mark model over the line golden (keys
+  unique; the `title|sub|src|axis|tick|ylabel|line` roles all present; every stroke's mark carries EXACTLY the points its
+  path resolves targets against), and a parametrized browser proof for **the four builders no golden covers** - story,
+  combo, decline, race - asserting each builder's LAST registrations, so a throw inside one would fail it.
+- Deviation from acceptance (2), recorded rather than faked: **no `paintLedger*` read a builder closure to begin with.**
+  Every paint step already reads a builder-built record on `st` (`st.bars`, `st.paths`, `st.hlines`, `st.combo`, `st.dec`,
+  `st.race`), so the row asked for a change that the code had already made. T1 therefore keys those records instead of
+  rewriting the paint steps, and every mark carries `rec` - the record it indexes. That is also why the goldens could stay
+  byte-identical: not one attribute write moved.
 
 ### T2: The state store and `rescale` - two states on one page, the axes retarget
 - Status: pending
