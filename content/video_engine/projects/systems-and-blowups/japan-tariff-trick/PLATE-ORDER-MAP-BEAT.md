@@ -72,6 +72,15 @@ makes the six crossings legible — disappears.
 The pull-back IS the argument: the same map, and one crossing where there were
 six. `focus_zoom` and `pull_back` already exist as camera species.
 
+**WITHDRAWN 2026-09-08 (operator: *"when we say 'Toyota crosses once' after this visual I
+think that carries well enough alone"*).** The second framing is not built and no second
+plate is ordered. As built, 13 s of the parts chart sit between the map (ends 18.30) and
+`plate-ship` (31.28), so "the same map" would be a plate returning after a page — which the
+engine has for pages, not plates — and the hemisphere framing it needs is RU-3's recorded
+failure (mostly water). `plate-ship` already says "once" in its own drawing: one ramp, one
+clerk, one sheet stamped once. The echo is verbal and the ship is its anchor; a drawn 15%
+stamp over it would double the stamp the picture already carries. No plate is missing.
+
 ## The plate — READY TO GENERATE
 
 **The beat is now 9.5 s, not 4.57 s.** Moving `t_gates` from `cut("When you buy")`
