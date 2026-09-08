@@ -153,7 +153,9 @@ commented out in `build_short.py` giving this reason.
 - **HG1 (after T3):** the operator watches `rescale` and `extend` on a real page - do added points and a moving axis read
   as one continuous thing, or as a jump?
 - **HG2 (after T4):** the operator watches `recast` - does a line becoming bars read as the same data, or as a new chart?
-  This is the gate that decides whether recast ships or stays an experiment.
+  This is the gate that decides whether recast ships or stays an experiment. **Stills sent 2026-09-07** (the holdings
+  line leaving, the pie drawing on, the wedge peeled): the question for the watch is whether the hand-over reads as one
+  page thinking, and whether the keyed tween (T4b) is worth building at all after seeing it.
 - **HG3 (after T5):** the morph on page, on the planted element (R26-16's tie) - the seam's length, the source's honesty.
 - **HG4 (after T7):** the Tokyo cut with the verbs applied, before any render.
 
@@ -263,7 +265,7 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
 - Evidence: pending
 
 ### T4: `recast` - the chart type changes by a keyed tween
-- Status: pending
+- Status: **the beat ships; the keyed tween does not** (2026-09-07) - awaiting HG2
 - Owner: parent (the correspondence rules are architecture; HG2 decides whether it ships)
 - Depends on: T2 (and T3's dials)
 - Write set: `scripts/kinetics/chartxf.mjs` (the mark correspondence), `scripts/ledger_page.py` (`RECAST_PAIRS` and the
@@ -274,7 +276,25 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   (3) sign survives the recast (a drop is down and blood red in both forms - E28); (4) the labels never overprint through
   the middle of the tween (§9.23b holds at every `t`, not only at the ends); (5) the seek test; a flag golden
 - Validate: `python -m pytest content/video_engine/tests/test_chart_transitions.py content/video_engine/tests/test_golden_frames.py -q`; `node --test content/video_engine/tests/kinetics/chartxf.test.mjs`
-- Evidence: pending
+- Evidence: **196 passed**, the goldens byte-identical. Three commits: the mark model (T1), the share page and the
+  `peel` species, and the recast. Shipped: `;then=<series>:<variant>` on a plate id -> `world.page_states` (a second
+  FULL page spec, validated like the page's own, `STATE_MAX` 3 enforced by name); `chart_to {at, dur, to: "recast",
+  state}`; `lpPaintChart` (paintLedger's build beat, lifted out unchanged) + `lpPaintStates`; a new `share` builder and
+  the `peel` species; `fetch_top_holders.py` and `ev-top-holders-v1.series.json`.
+- **Deviation, named rather than pretended: the recast that shipped is a HAND-OVER, not a keyed tween.** The plan's own
+  Not Building refuses a tween between mark sets with no honest 1:1 correspondence - "a 316-point dense line has no
+  5-bar correspondence" - and the beat the operator chose is exactly that pair, 316 points becoming 5 wedges. So the
+  verb is built the way E50 already says a chart leaves: the standing state runs its own build law BACKWARDS (which is
+  what an un-draw is, for every builder, for free) and the named state then draws on by its own law, on the same page,
+  with the title, sub and source rewritten by the hand that rewrites a title. That is the operator's own description of
+  the beat - *"we could type-writer backspace the fonts and re-write, then redraw the pie chart"* - and it needs no
+  correspondence to be honest. **The keyed tween for LEGAL pairs (line <-> combo's line, story bars <-> combo's bars)
+  is not built** and is now T4b, after HG2: `RECAST_PAIRS`, the mark correspondence in `chartxf.mjs`, and the flag
+  golden. Acceptance rows (2) and (4) belong to T4b; (1), (3) and (5) are met by what shipped.
+- Two faults the FRAMES caught, both fixed at the cause: the sub and source went on describing the chart that had left
+  (a caption lying about the page - they are rewritten with the chart now), and the line's un-draw ran on the pen's
+  two-thirds law backwards, which on a dense series stands still for most of the clock and then vanishes (a line leaves
+  by LENGTH, and in the reverse order it was drawn, so a highlighted tail does not float off the end as a stray mark).
 
 ### T5: `morph_to` - ARAP between two shapes on the page
 - Status: pending

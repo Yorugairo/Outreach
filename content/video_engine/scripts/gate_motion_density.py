@@ -144,7 +144,8 @@ SPECIES_EVENTS = {"punch": ("at",), "callout": ("at",), "focus_zoom": ("at", "en
                   "life": "continuous",   # a DECLARED self-animating world (a rendered outro): the claim is the author's, verified by eye, credited here
                   "build_to": ("at", "end"), "bracket": ("at", "end"), "retitle": ("at", "end"), "relight": ("at",),   # P47 T2: the page performs on a word
                   "undraw": ("at", "end"), "figure": ("at", "end"), "note": ("at", "end"), "spread": ("at", "end"),
-                  "peel": ("at", "end")}   # P48 T4: the piece leaving is motion at both ends, and its landing is a push's tie (E51)   # E50 (P47 T6): the line unwinds; the figure writes; a note is handwriting
+                  "peel": ("at", "end"),
+                  "chart_to": ("at", "end")}   # P48: the chart leaving and the next one arriving are both motion, and the arrival is a landing (E51)   # P48 T4: the piece leaving is motion at both ends, and its landing is a push's tie (E51)   # E50 (P47 T6): the line unwinds; the figure writes; a note is handwriting
 LIFE_CONTINUOUS_S = 1.0    # a continuous life (steam) is one event per second of its window - it never lets the frame go still
 # VIDEO DOCK (ruling E44 / backlog R26-7, 2026-09-06): a dock whose asset is a clip is moving pictures on
 # the card, so the frame is never still while it is up - credited continuously, exactly like a "life"

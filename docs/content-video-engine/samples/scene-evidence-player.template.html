@@ -2611,10 +2611,39 @@
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1,
                  marks: [], markBy: {}, geom, portrait: PORTRAIT, linePts: [], titleEl: title, titleGlyphs: [...title.querySelectorAll(".g")], rtGlyphs: [], perform: null };   /* geom: the chart's drawing box (viewBox units); linePts: each series' points in it, for exact datum targets */   /* no emphasis declared = no datum styled (spec emits null) */
+    st.subGlyphs = [...subEl.querySelectorAll(".g")]; st.srcGlyphs = [...src.querySelectorAll(".g")];   /* P48 T4: a recast erases the words that described the chart that left */
     lpMark(st, "title", "title", title, {}); lpMark(st, "sub", "sub", subEl, {}); lpMark(st, "src", "src", src, {});   /* P48 T1: the page's own ink is a mark too - a retitle and a recast both move it */
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
     const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo, share: buildLedgerShare };
     (builders[st.kind] || buildLedgerBars)(st, pg);
+    /* P48 T4: the OTHER charts this page can become (`;then=<series>:<variant>` on the plate id). Each gets its own
+       <svg> in the same box, hidden until a chart_to reaches it; the deckle, the title, the badges and the rail are
+       shared, because it is the same page. Built at load - nothing is constructed per frame. */
+    st.states = [st];
+    for (const pg2 of (scene.world.page_states || []).slice(0, LP_STATE_MAX - 1)) {
+      const ch2 = lpEl("svg", "lp-chart", page, { viewBox: chart.getAttribute("viewBox") });
+      ch2.style.cssText = chart.style.cssText; ch2.style.opacity = 0;
+      const s2 = { root, page, chart: ch2, geom, portrait: PORTRAIT, seed, edge, field, rail,
+                   bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: {}, linePts: [],
+                   marks: [], markBy: {}, badges: [], inkEls: [],
+                   vals: pg2.values || [], vstr: pg2.value_strings || [],
+                   emph: Number.isInteger(pg2.emphasize) ? pg2.emphasize : -1, kind: pg2.builder || "story" };
+      (builders[s2.kind] || buildLedgerBars)(s2, pg2);
+      /* ... and its own SUB and SOURCE. A caption that goes on describing the chart that left is a lie on the page, so a
+         recast rewrites them with the same hand that rewrites the title: the old run erases glyph by glyph, the new one
+         writes. They sit exactly where the page's own sit, and carry nothing until the recast reaches them. */
+      const mkInk = (cls, from, text) => {
+        const d = lpEl("div", cls, page);
+        if (from.getAttribute("style")) d.setAttribute("style", from.getAttribute("style"));
+        const gs = PORTRAIT ? lpGlyphsWrap(d, text, seed + 60 + st.states.length) : lpGlyphs(d, text, seed + 60 + st.states.length);
+        for (const g of gs) g.style.setProperty("--w", "0");
+        return { div: d, glyphs: gs };
+      };
+      s2.subInk = mkInk("lp-ink lp-sub", subEl, PORTRAIT ? lpFirstClause(pg2.sub || "", true) : (pg2.sub || ""));
+      s2.srcInk = mkInk("lp-ink lp-src" + (pg2.src_style === "compact" ? " compact" : ""), src,
+                        PORTRAIT ? lpFirstClause(pg2.source || "", false) : (pg2.source || ""));
+      st.states.push(s2);
+    }
     /* keyed per world element: the wipe paints the same scene into wA and wB */
     ledgerState.set(el.id + "|" + scene.scene_id, st);
     el.__lp = st;   /* resolveTarget reads the active page's points from its world element */
@@ -3240,6 +3269,7 @@
      charcoal fades and the STAINS it settled over are sucked down the same drain. A page declared enter:"spiral"
      ARRIVES by the same map run backwards (E25: a returning chart is not drawn like new); exit:"cut" skips the retract
      (a punch that must land on the last line, E40 #5: no species over a spiral out). Idle frames touch nothing. */
+  const LP_STATE_MAX = 3;   /* P48: charts on one page. A fourth is a new page or a card - the player's size and the reader's memory both say so */
   const LP_MOUNT_RISE = 28;   /* px a mounting page rises while it dissolves in (enter=mount) */
   const LP_RETRACT = { COLOURS: 1.0, CHARCOAL: 1.0, IN: 1.6, TURNS: 3.0, LAG: 0.25, ALPHA: 0.85, RECT_FADE: 0.3 };   /* operator: "a way tighter vortex, almost celestial" - three turns, the core spinning four times the rim */
   const lpVortex = (x, y, c, Rmax, u) => {
@@ -3571,6 +3601,100 @@
     M.svg.style.opacity = (u < 1 || c < 1) ? "1" : "0";
     M.u = u;
   };
+  /* ---- ONE chart's build beat (P48 T4, lifted verbatim out of paintLedger) -------------------------
+     `cs` is a CHART STATE: the page's own (st) or one of the others it can become. Everything here was
+     already a pure function of the state's fraction c and the scene's species - lifting it changed no
+     law - and that purity is what makes a recast free: c running back to zero un-draws any builder. */
+  const lpPaintChart = (cs, c, t3, scene, t, leaving) => {
+      cs.chart.style.opacity = c > 0 ? 1 : 0;   /* axes and grid belong to the build, not the bleed */
+      cs.bars.forEach((bb, i) => {
+        const k = expoOut(clamp01((c - i * 0.1) / 0.55));
+        bb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
+        bb.lab.setAttribute("opacity", clamp01((c - i * 0.1 - 0.3) / 0.2).toFixed(2));
+        bb.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
+      });
+      if (cs.callout) {
+        const ck = c >= 1 ? 1 : clamp01((c - 0.55) / 0.45);   /* (1 - 0.55) / 0.45 is 0.999... in floating point: the count must LAND on the exact string (s9.23b), never one unit short forever */
+        cs.callout.setAttribute("opacity", clamp01(ck / 0.3).toFixed(2));
+        cs.cval.textContent = ck >= 1 ? cs.cfinal : lpWithUnit(lpFmt(cs.cnum * expoOut(ck)), cs.cunit || "");
+      }
+      const caps = pageSpecies(scene, "build_to");   /* P47 T2: the line draws to a datum on a word, the rest on the next word */
+      cs.paths.forEach((pp) => {
+        const fr = clamp01((c - pp.stagger * 0.3) / 0.7);
+        /* DRAWING runs on the pen (strokeFrac, the two-thirds law): the hand hurries through a smooth stretch and slows
+           through a jagged one. LEAVING must not - on a dense series the pen is already deep in the jagged tail at
+           two-thirds of the clock, so a backwards pen looks like a line that stands still and then disappears. A line
+           retreats by LENGTH, which is what the undraw species does. */
+        /* ... and it leaves in the REVERSE order it arrived: the last stroke drawn is the first to go, or a highlighted
+           tail retreats beside its own history and reads as a stray mark floating off the end of the line. */
+        let f = leaving ? clamp01((c - pp.stagger) / Math.max(0.2, 1 - pp.stagger))
+                        : (strokeFrac(pp.p, pp.len, fr) ?? expoOut(fr));
+        /* P47 T2 / T6 / T9: the caps and the undraws are ONE sequence in time per path. The build beat is spent on the first cap;
+           every later event moves the level from the previous event's target to its own over its word - a build_to draws forward
+           (never below what stands), an undraw unwinds (index 0 = to nothing), and a build_to AFTER an undraw RE-DRAWS. `paths`
+           picks which strokes an event touches: all (default) | tail (the highlighted strokes, k0 > 0) | history (k0 = 0) - so a
+           page can un-draw everything and then draw back only the months the sentence is about. */
+        const forMe = (sp) => { const ss = sp.series ?? (sp.target || {}).series, pk = sp.paths || "all";
+          return pp.pts && (ss == null || (ss | 0) === (pp.si | 0)) && (pk === "all" || (pk === "tail" ? (pp.k0 | 0) > 0 : (pp.k0 | 0) === 0)); };
+        const evs = [...caps.filter((sp) => forMe(sp) && !!sp.target).map((sp) => ({ sp, kind: "build" })), ...pageSpecies(scene, "undraw").filter(forMe).map((sp) => ({ sp, kind: "undraw" }))].sort((a, b) => a.sp.at - b.sp.at);
+        let prev = 1;
+        if (evs.length && evs[0].kind === "build") { prev = capFrac(pp, evs[0].sp.target.index); f = f * prev; evs.shift(); }   /* the build beat is spent on the first cap */
+        for (const ev of evs) {
+          const u = (t - ev.sp.at) / Math.max(0.001, ev.sp.dur || 1); if (u <= 0) break;
+          const to = capFrac(pp, (ev.sp.target || {}).index | 0), lvl = prev + (to - prev) * segEase(clamp01(u));
+          f = ev.kind === "build" ? Math.max(Math.min(f, prev), lvl) : Math.min(f, lvl);
+          if (u >= 1) prev = to;
+        }
+        pp.p.setAttribute("stroke-dashoffset", (pp.len * (1 - f)).toFixed(1));
+        pp.p.style.opacity = f > 0.004 ? "" : "0";   /* E50 (the third watch: "dots that linger"): a zero-length round-capped dash paints a dot at the path's start - an un-drawn line shows nothing */
+        const drawing = f > 0.01 && f < 0.995;
+        if (drawing && pp.p.getPointAtLength) { const q = pp.p.getPointAtLength(pp.len * f); pp.tip.setAttribute("cx", q.x); pp.tip.setAttribute("cy", q.y); }
+        pp.tip.setAttribute("opacity", drawing ? 1 : 0);
+        pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));
+      });
+      for (const hr of cs.hlines || []) { const k = clamp01(c / 0.25); hr.line.setAttribute("opacity", (0.9 * k).toFixed(3)); if (hr.lab) hr.lab.setAttribute("opacity", clamp01((c - 0.25) / 0.2).toFixed(2)); }
+      if (cs.paint) cs.paint(cs, c, t3);   /* the builder's own build step (race / decline / combo / share) */
+      if (cs.share) {   /* P48 T4: the piece the sentence is about leaves the pie on its word */
+        let pu = 0;
+        for (const sp of pageSpecies(scene, "peel")) pu = Math.max(pu, (t - sp.at) / Math.max(0.001, sp.dur || 1));
+        lpPeelTo(cs, pu);
+      }
+  };
+  /* the page's chart states over time. A `chart_to` is not a cut: the standing state runs its law BACKWARDS over the
+     transition's own clock, then the named state draws on by its own envelope. Before the first chart_to, and on a page
+     that declares none, this is exactly the single-chart behaviour it replaced. */
+  const lpPaintStates = (st, scene, cBase, t3, t) => {
+    const states = st.states || [st];
+    if (states.length < 2) { lpPaintChart(st, cBase, t3, scene, t); return; }   /* a page with one chart is exactly what it was */
+    let cur = 0, cCur = cBase, leaving = false;
+    for (const sp of pageSpecies(scene, "chart_to")) {
+      if (t < sp.at) break;
+      const d = Math.max(0.001, sp.dur || 1), k = Math.max(0, Math.min(states.length - 1, sp.state | 0));
+      if (t < sp.at + d) { cCur = 1 - segEase(clamp01((t - sp.at) / d)); leaving = true; break; }   /* the standing chart is leaving */
+      cur = k; cCur = clamp01((t - (sp.at + d)) / (states[k].buildDur || LP.BUILD));
+    }
+    for (let i = 0; i < states.length; i++) lpPaintChart(states[i], i === cur ? cCur : 0, t3, scene, t, i === cur && leaving);
+    /* the words that describe the chart move with it: the standing sub and source erase over the transition's first
+       PS.ERASE_S, the arriving state's write over the rest. State 0's are the page's own, written by the page's build. */
+    let ink = 0, ue = 0, uw = 1;
+    for (const sp of pageSpecies(scene, "chart_to")) {
+      if (t < sp.at) break;
+      const d = Math.max(PS.ERASE_S + 0.01, sp.dur || 1);
+      ue = clamp01((t - sp.at) / PS.ERASE_S);
+      uw = clamp01((t - sp.at - PS.ERASE_S) / (d - PS.ERASE_S));
+      ink = Math.max(0, Math.min(states.length - 1, sp.state | 0));
+    }
+    for (let i = 1; i < states.length; i++) {
+      const on = i === ink;
+      /* the write runs PAST the last glyph (writeGlyphs gives each one 1.6 slots): a run that stops exactly at n leaves
+         its final letters half-inked, which reads as a typo rather than as handwriting */
+      for (const r of [states[i].subInk, states[i].srcInk]) if (r) writeGlyphs(r.glyphs, on ? uw * (r.glyphs.length + 2) : -1, r.glyphs.length);
+    }
+    if (ink > 0) for (const r of [{ glyphs: st.subGlyphs || [] }, { glyphs: st.srcGlyphs || [] }]) {
+      const n = r.glyphs.length;
+      r.glyphs.forEach((g, j) => g.style.setProperty("--w", eraseFactor(n, j, ue).toFixed(3)));
+    }
+  };
   const paintLedger = (el, scene, t) => {
     const st = ledgerState.get(el.id + "|" + scene.scene_id) || buildLedger(el, scene);
     const pg = scene.world.page || {};
@@ -3648,52 +3772,10 @@
       + idleCssFor("page", pg.idle, t, st.seed, 1);   /* E49: the page breathes while it holds under a sentence */
     /* beat 6: the build - crisp, landing on the exact strings - on the punched page */
     const c = clamp01((t3 - LP.PUNCH) / (st.buildDur || LP.BUILD));   /* race/decline/combo declare their own envelope */
-    st.chart.style.opacity = c > 0 ? 1 : 0;   /* axes and grid belong to the build, not the bleed */
-    st.bars.forEach((bb, i) => {
-      const k = expoOut(clamp01((c - i * 0.1) / 0.55));
-      bb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
-      bb.lab.setAttribute("opacity", clamp01((c - i * 0.1 - 0.3) / 0.2).toFixed(2));
-      bb.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
-    });
-    if (st.callout) {
-      const ck = c >= 1 ? 1 : clamp01((c - 0.55) / 0.45);   /* (1 - 0.55) / 0.45 is 0.999... in floating point: the count must LAND on the exact string (s9.23b), never one unit short forever */
-      st.callout.setAttribute("opacity", clamp01(ck / 0.3).toFixed(2));
-      st.cval.textContent = ck >= 1 ? st.cfinal : lpWithUnit(lpFmt(st.cnum * expoOut(ck)), st.cunit || "");
-    }
-    const caps = pageSpecies(scene, "build_to");   /* P47 T2: the line draws to a datum on a word, the rest on the next word */
-    st.paths.forEach((pp) => {
-      const fr = clamp01((c - pp.stagger * 0.3) / 0.7);
-      let f = strokeFrac(pp.p, pp.len, fr) ?? expoOut(fr);
-      /* P47 T2 / T6 / T9: the caps and the undraws are ONE sequence in time per path. The build beat is spent on the first cap;
-         every later event moves the level from the previous event's target to its own over its word - a build_to draws forward
-         (never below what stands), an undraw unwinds (index 0 = to nothing), and a build_to AFTER an undraw RE-DRAWS. `paths`
-         picks which strokes an event touches: all (default) | tail (the highlighted strokes, k0 > 0) | history (k0 = 0) - so a
-         page can un-draw everything and then draw back only the months the sentence is about. */
-      const forMe = (sp) => { const ss = sp.series ?? (sp.target || {}).series, pk = sp.paths || "all";
-        return pp.pts && (ss == null || (ss | 0) === (pp.si | 0)) && (pk === "all" || (pk === "tail" ? (pp.k0 | 0) > 0 : (pp.k0 | 0) === 0)); };
-      const evs = [...caps.filter((sp) => forMe(sp) && !!sp.target).map((sp) => ({ sp, kind: "build" })), ...pageSpecies(scene, "undraw").filter(forMe).map((sp) => ({ sp, kind: "undraw" }))].sort((a, b) => a.sp.at - b.sp.at);
-      let prev = 1;
-      if (evs.length && evs[0].kind === "build") { prev = capFrac(pp, evs[0].sp.target.index); f = f * prev; evs.shift(); }   /* the build beat is spent on the first cap */
-      for (const ev of evs) {
-        const u = (t - ev.sp.at) / Math.max(0.001, ev.sp.dur || 1); if (u <= 0) break;
-        const to = capFrac(pp, (ev.sp.target || {}).index | 0), lvl = prev + (to - prev) * segEase(clamp01(u));
-        f = ev.kind === "build" ? Math.max(Math.min(f, prev), lvl) : Math.min(f, lvl);
-        if (u >= 1) prev = to;
-      }
-      pp.p.setAttribute("stroke-dashoffset", (pp.len * (1 - f)).toFixed(1));
-      pp.p.style.opacity = f > 0.004 ? "" : "0";   /* E50 (the third watch: "dots that linger"): a zero-length round-capped dash paints a dot at the path's start - an un-drawn line shows nothing */
-      const drawing = f > 0.01 && f < 0.995;
-      if (drawing && pp.p.getPointAtLength) { const q = pp.p.getPointAtLength(pp.len * f); pp.tip.setAttribute("cx", q.x); pp.tip.setAttribute("cy", q.y); }
-      pp.tip.setAttribute("opacity", drawing ? 1 : 0);
-      pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));
-    });
-    for (const hr of st.hlines || []) { const k = clamp01(c / 0.25); hr.line.setAttribute("opacity", (0.9 * k).toFixed(3)); if (hr.lab) hr.lab.setAttribute("opacity", clamp01((c - 0.25) / 0.2).toFixed(2)); }
-    if (st.paint) st.paint(st, c, t3);   /* the builder's own build step (race / decline / combo / share) */
-    if (st.share) {   /* P48 T4: the piece the sentence is about leaves the pie on its word */
-      let pu = 0;
-      for (const sp of pageSpecies(scene, "peel")) pu = Math.max(pu, (t - sp.at) / Math.max(0.001, sp.dur || 1));
-      lpPeelTo(st, pu);
-    }
+    /* P48 T4: a page may carry more than one chart. `lpPaintChart` is the build beat for ONE of them, at its own
+       fraction c - and because every builder's law is written as "at c the chart is this far drawn", running c back
+       to zero IS an un-draw, whatever the builder. That is what a recast leaves on. */
+    lpPaintStates(st, scene, c, t3, t);
     if (morphOn) paintMorph(st, pg, scene.world, clamp01((t - scene.span[0]) / morphS), c);   /* P47 T3: the prop becomes the area under the line, then the line draws over it */
     /* badges: floored at the build's end, each springs in over LP_BADGE_IN with the dock's back-out overshoot */
     const tb = t3 - LP.PUNCH - (st.buildDur || LP.BUILD);

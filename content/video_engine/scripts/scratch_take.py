@@ -32,16 +32,20 @@ import urllib.request
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
-EP = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
-OUT = EP / "vo-f/scratch"
+DEFAULT_EP = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
+DEFAULT_SCRIPT = DEFAULT_EP / "SCRIPT-G-VO.txt"
+DEFAULT_OUT = DEFAULT_EP / "vo-f/scratch"
 ENV_FILE = Path(r"C:\Users\Snipe\Downloads\Outreach Program\docs\local.env")
 CHIRP_VOICE = "en-US-Chirp3-HD-Charon"
 KOKORO_VOICE = "am_michael"
 SR = 24000
 
+SCRIPT_PATH = DEFAULT_SCRIPT
+OUT = DEFAULT_OUT
+
 
 def load_script() -> str:
-    t = (EP / "SCRIPT-G-VO.txt").read_text(encoding="utf-8")
+    t = SCRIPT_PATH.read_text(encoding="utf-8")
     return re.sub(r"`\[[a-z-]+\]`", "", t)
 
 
@@ -56,13 +60,14 @@ def env_key(name: str) -> str:
     raise SystemExit(f"{name} not in {ENV_FILE}")
 
 
-def run_chirp() -> None:
+def run_chirp(rate: float = 1.0) -> None:
     key = env_key("GEMINI_TTS_API_KEY")
-    paras = paragraphs(load_script())
-    # batch paragraphs into <4500-byte requests (API cap 5000)
+    text = SCRIPT_PATH.read_text(encoding="utf-8")
+    clean = re.sub(r"`?\[[a-z0-9_-]+\]`?", "", text)
+    paras = [p.strip() for p in clean.split("\n\n") if p.strip()]
     batches, cur = [], ""
     for p in paras:
-        if cur and len((cur + "\n\n" + p).encode()) > 4500:
+        if cur and len(cur) + len(p) + 2 > 4500:
             batches.append(cur); cur = p
         else:
             cur = (cur + "\n\n" + p) if cur else p
@@ -78,7 +83,8 @@ def run_chirp() -> None:
                 "input": {"text": b},
                 "voice": {"languageCode": "en-US", "name": CHIRP_VOICE},
                 "audioConfig": {"audioEncoding": "MP3",
-                                "sampleRateHertz": SR},
+                                "sampleRateHertz": SR,
+                                "speakingRate": rate},
             }).encode(),
             headers={"Content-Type": "application/json",
                      "X-Goog-Api-Key": key})
@@ -93,8 +99,8 @@ def run_chirp() -> None:
                    encoding="utf-8")
     out = OUT / "scratch-chirp.mp3"
     subprocess.run(["ffmpeg", "-y", "-v", "quiet", "-f", "concat", "-safe",
-                    "0", "-i", str(lst), "-c:a", "libmp3lame", "-b:a",
-                    "160k", str(out)], check=True, cwd=OUT)
+                    "0", "-i", lst.name, "-c:a", "libmp3lame", "-b:a",
+                    "160k", out.name], check=True, cwd=OUT)
     for s in segs:
         s.unlink()
     lst.unlink()
@@ -163,12 +169,27 @@ def run_kokoro() -> None:
 
 
 def main() -> int:
+    global SCRIPT_PATH, OUT
     ap = argparse.ArgumentParser()
     ap.add_argument("--engine", choices=["chirp", "kokoro", "both"],
                     default="both")
+    ap.add_argument("--script", type=Path, default=None,
+                    help="Path to script text file")
+    ap.add_argument("--out", type=Path, default=None,
+                    help="Output directory for scratch audio")
+    ap.add_argument("--rate", type=float, default=1.0,
+                    help="Speaking rate multiplier (e.g. 1.07 for ~170 WPM)")
     a = ap.parse_args()
+
+    if a.script:
+        SCRIPT_PATH = a.script
+    if a.out:
+        OUT = a.out
+    elif a.script:
+        OUT = a.script.parent / "scratch"
+
     if a.engine in ("chirp", "both"):
-        run_chirp()
+        run_chirp(rate=a.rate)
     if a.engine in ("kokoro", "both"):
         run_kokoro()
     return 0

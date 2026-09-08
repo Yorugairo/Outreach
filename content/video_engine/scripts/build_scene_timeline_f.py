@@ -68,7 +68,11 @@ IDLE_OPT = ";idle="
 ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page's pills ARRIVE (spring = E45's pop, the default)
 MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets (stopaction.mjs MASS) a throw or a landing settles by
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
-PLATE_OPTS = ("idle", "arrive", "mass", "morph")  # the `;key=value` options a plate id may carry
+PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then")  # the `;key=value` options a plate id may carry
+# P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
+# ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
+# option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
+STATE_MAX = 3
 DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x")   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
@@ -110,11 +114,15 @@ SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                                                # rewrites the title, relight re-fires a bracket or the title (SHOT-TABLE-V3-PROPOSAL part B)
                  "undraw", "figure",           # E50 (P47 T6)
                  "note",                       # the third watch (P47 T7): a line of handwriting in the page's quiet zone, on a word
+                 "chart_to",                   # P48: the page's chart BECOMES another chart - the standing state runs its own build
+                                               # law backwards (that is what an un-draw is) and the named state then draws on by its
+                                               # own law, on the same page, under a title a retitle carries across. Never a cut.
                  "peel",                       # P48 T4: the piece of a share page's named slice leaves the pie on its word, and goes blood red
                  "spread")                     # the fifth watch: the region between two drawn series, bled full of ink on a word (the divergence IS the argument): a chart's deployed life is 6-8 s from its last data mark, 12 s at most - then it
                                                # UN-DRAWS (the line unwinds from where it stands back to a datum, index 0 = to nothing) or BECOMES
                                                # the next thing: a FIGURE the hand writes at a datum's spot (the treasury number the sentence turns to)
-PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel")
+PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to")
+CHART_TO_KINDS = ("recast",)   # P48: rescale / extend / morph_to are T2, T3 and T5 - each lands with its own law
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
                                                                 # (a returning page keeps its retitle, its bracket standing); the gate credits no event before the span
 RELIGHT_REFS = ("bracket", "title")
@@ -135,7 +143,7 @@ SPECIES_TARGETS = {
     "steam": ("region",), "trace": ("region",), "ticker": ("region",),
     "life": (),
     "build_to": ("datum",), "bracket": (), "retitle": (), "relight": (),   # P47 T2: the datum is the cap; the others carry their own fields
-    "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
+    "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (), "chart_to": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
 TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
                  "region": ("x0", "y0", "x1", "y1"), "span": ("from_word", "to_word")}
@@ -206,6 +214,15 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             errs.append("undraw: series must be a non-negative integer series index")
     if kind in ("build_to", "undraw") and "paths" in entry and entry["paths"] not in PATH_SELECTORS:
         errs.append(f"{kind}: paths must be one of {'|'.join(PATH_SELECTORS)} (the highlighted tail, the history, or all)")
+    elif kind == "chart_to":
+        if entry.get("to") not in CHART_TO_KINDS:
+            errs.append(f"chart_to: 'to' must be one of {'|'.join(CHART_TO_KINDS)} (the verb the chart changes state by)")
+        idx = entry.get("state")
+        if not is_idx(idx) or idx == 0:
+            errs.append("chart_to: 'state' must be the index of one of the page's OTHER chart states (1..STATE_MAX-1, "
+                        "declared on the plate id as ';then=<series>:<variant>'); 0 is the page's own chart")
+        elif idx >= STATE_MAX:
+            errs.append(f"chart_to: state {idx} is past STATE_MAX ({STATE_MAX}): a fourth chart is a new page or a card")
     elif kind == "peel":
         pass   # P48 T4: no fields of its own. WHICH piece leaves and what it is worth are the PAGE's (page.peel), validated
                # by ledger_page against E53 s1's bounds; the species only says WHEN. A peel on a page with no peel is inert.
@@ -361,6 +378,23 @@ def scene_exit(authored_exit: str | None, has_docks: bool) -> tuple[str, float |
     return parse_exit(authored_exit or (DEFAULT_EXIT_DOCKS if has_docks else DEFAULT_EXIT_BARE))
 
 
+def _page_state(spec_id: str, ep_dir: Path, where: str) -> dict:
+    """`<series>:<variant>[:<emphasize>]` -> a second ledger_page.v1 spec, validated like the page's own."""
+    bits = spec_id.split(":")
+    if not 2 <= len(bits) <= 3:
+        raise ValueError(f"{where}: then={spec_id!r} must be <series>:<variant>[:<emphasize>]")
+    series_id, variant = bits[0], bits[1]
+    emph = int(bits[2]) if len(bits) == 3 and bits[2] else None
+    path = Path(ep_dir) / "evidence/objects" / f"{series_id}.series.json"
+    if not path.exists():
+        raise ValueError(f"{where}: then={spec_id!r}: series file missing: {path}")
+    series = LPG.load_series(path)
+    errors = LPG.validate(series, variant)
+    if errors:
+        raise ValueError(f"{where}: then={spec_id!r} is not a page ({variant}): " + "; ".join(errors))
+    return LPG.build_spec(series, variant, emph)
+
+
 def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | None = None) -> dict:
     """The LEDGER PAGE world for a ``ledger:`` plate id: ``world.page`` is the
     ``ledger_page.v1`` spec from ``<ep_dir>/evidence/objects/<series>.series.json``
@@ -415,6 +449,9 @@ def split_plate_opts(plate_id: str) -> tuple[str, dict]:
         if "=" not in part or part.split("=", 1)[0] not in PLATE_OPTS:
             raise ValueError(f"{plate_id!r}: plate option {part!r} is not one of {'|'.join(k + '=' for k in PLATE_OPTS)}")
         k, v = part.split("=", 1)
+        if k == "then":   # P48 T4: names another object, so it is checked by loading it, not against an enum; may repeat
+            opts.setdefault("then", []).append(v)
+            continue
         _check_opt(k, v, repr(plate_id))
         opts[k] = v
     return bare, opts
@@ -465,7 +502,15 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
     as ``world["idle"]`` (the player reads it for the page or the plate; absent = the class default)."""
     bare, opts = split_plate_opts(plate_id)
     world = _world_for_bare_plate(bare, ken, ep_dir, meta)
+    thens = opts.pop("then", [])
     world.update(opts)   # idle (E49), arrive / mass (P47 T1) - written only when the row names them
+    if thens:   # P48 T4: the other charts this page can become, each a full spec built at load
+        if world.get("kind") != SPECIES_LEDGER:
+            raise ValueError(f"{plate_id!r}: then= is a LEDGER PAGE option: only a page has chart states")
+        if len(thens) > STATE_MAX - 1:
+            raise ValueError(f"{plate_id!r}: {len(thens) + 1} chart states is past STATE_MAX ({STATE_MAX}): "
+                             "a fourth chart is a new page or a card")
+        world["page_states"] = [_page_state(t, ep_dir, repr(plate_id)) for t in thens]
     return world
 
 
