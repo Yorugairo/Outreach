@@ -1546,8 +1546,18 @@ as a default and reached by name only — and the ledger plate is simply there o
 (P48 T1) and is now out. **The same hour:** the first fix let the built pages fall through to the
 wipe, because a `cut` row in the player still painted the wipe (the pre-E47 default surviving in
 code). The operator: *"I think we learned that we shouldn't default to the hard-edge wipe,
-remember?"* A `cut` is now a cut in the player, and the tariff short's built pages take the dip,
-its declared primary (E48).
+remember?"* A `cut` is now a cut in the player. **And then the better answer, the same hour:** *"We could
+even 'throw' the chart onto the plate, that would be a pretty cool effect, and matches the
+transition demands to keep a continuous page aspect of a transition whenever possible — the
+transition is literally the plate entering the world."* Built: **`enter=throw`** — the whole
+page flies onto the world on the pills' own stop-action kinetics (`throwXf`, P47 T1: a
+ballistic chord, the tumble, the material's squash and settle on contact), the outgoing world
+staying beneath until it has landed, the chart standing when it does. The row's boundary is a
+cut; nothing wipes, nothing dips. Under E48 the tariff short's vocabulary is now: **primary**
+the dip (plate to plate), **accent** the throw (a chart arriving built), **hero** the spiral
+(a page returning). Dials `THROW_S 0.45 = STOP.FLIGHT_S`, arc 0.12 and spin 6° damped from the
+pill's 0.22 / 9° because the page is the stage `[DERIVED]`; `throw_from` below | above | left |
+right, `throw_s` per page.
 
 ## E51 — A push-in is only used tied to something that just landed; an untied zoom is filler (2026-09-07)
 

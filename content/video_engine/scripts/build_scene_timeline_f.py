@@ -49,7 +49,7 @@ import ledger_page as LPG  # noqa: E402  (series.json -> ledger_page.v1 spec, do
 
 LEDGER_PREFIX = "ledger:"          # shot-table plate id prefix for a LEDGER PAGE world (s9.28 surface = page)
 LEDGER_ID_PARTS = (3, 7)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]  enter = spiral | mount=<seconds>; exit = cut
-LEDGER_ENTERS = ("spiral", "mount", "morph", "snap", "built")   # enter=built: the page ARRIVES with its chart already drawn, by the row's own transition - it NEVER mounts (operator, 2026-09-08: mount is cream coming through over the scene, then drawing).
+LEDGER_ENTERS = ("spiral", "mount", "morph", "snap", "built", "throw")   # enter=throw (2026-09-08): the whole page is THROWN onto the world and arrives built - the transition IS the plate entering the world   # enter=built: the page ARRIVES with its chart already drawn, by the row's own transition - it NEVER mounts (operator, 2026-09-08: mount is cream coming through over the scene, then drawing).
 # The build is a device, not an obligation - five builds in one short is repetition, and a page that arrives complete spends
 # its whole span being read instead of being drawn (operator, 2026-09-08: "maybe chart 1 doesn't actually need a build, it
 # could enter built, the deconstruction/transformation is its own thing"). E49 keeps it alive; the transformation is the

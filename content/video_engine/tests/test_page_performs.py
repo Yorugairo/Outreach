@@ -478,3 +478,14 @@ def test_m21s_floor_applies_only_to_a_page_that_ARRIVES_BUILT():
     und["world"]["page"] = dict(und["world"]["page"], enter="built")
     assert G._deployed_gate([und]).level == "PASS", "an undraw is a deliberate exit"
     assert G.DEPLOY_MIN_S == 6.0, "the floor is E50's own lower bound, not a new threshold"
+
+
+def test_enter_throw_arrives_built_and_is_a_known_enter():
+    """enter=throw (2026-09-08): the whole page is thrown onto the world and lands with its chart standing -
+    the gate reads it as arriving built (the deployed floor binds), and the compiler accepts the enter name."""
+    import build_scene_timeline_f as B
+    assert "throw" in B.LEDGER_ENTERS
+    thrown = _scene([]); thrown["span"] = [0.0, 7.0]   # 6-8 s deployed: PASS (9 s would be the 8-12 s INFO band)
+    thrown["world"]["page"] = dict(thrown["world"]["page"], enter="throw")
+    assert G._arrive_of([thrown], "s01") == 0.0, "enter=throw arrives drawn"
+    assert G._deployed_gate([thrown]).level == "PASS"

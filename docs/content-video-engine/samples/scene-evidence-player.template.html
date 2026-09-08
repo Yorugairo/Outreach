@@ -2396,6 +2396,12 @@
      conclusion), in the page's quiet zone, painted as a function of t (never a CSS transition) */
   const LP_BADGE0 = 0.4, LP_BADGE_STEP = 0.9, LP_BADGE_IN = 0.36;
   const SNAP_S = 0.45;   /* the third watch: the card snaps up to the full stage - a push tied to a landing [DERIVED: E45's spring-in span] */
+  /* THE THROW (enter=throw, 2026-09-08): a full page is a card too. Flight 0.45 s = STOP.FLIGHT_S [DERIVED: P47 T1]; the arc and the
+     tumble are damped from the pill's (0.22 / 9 deg) because the page is the stage - a page-sized card at the pill's arc would leave
+     the frame at mid-flight. From off the bottom edge by default (the chart lands on the world from the viewer's side). Dials. */
+  const THROW_S = 0.45, THROW_ARC = 0.12, THROW_SPIN = 6, THROW_SETTLE_S = 1.2;
+  const THROW_FROM = { below: { x: PORTRAIT ? 90 : 160, y: STAGE_H * 1.12 }, above: { x: PORTRAIT ? -90 : -160, y: -STAGE_H * 1.12 },
+                       right: { x: STAGE_W * 1.12, y: PORTRAIT ? 120 : 80 }, left: { x: -STAGE_W * 1.12, y: PORTRAIT ? 120 : 80 } };
   const LP_BADGE_COL = { coral: "crimson", teal: "teal", cobalt: "cobalt", ink: "deemph", sunflower: "amber" };   /* badge accent -> series colour (the key) */
   /* THE IDLE (E49, P47 T5): every held thing carries a NAMED subtle idle - a pure function of t, behind kinetics.idle.
      The class defaults below; a scene's world.idle overrides its page or plate ("none" is explicit stillness, declared);
@@ -3765,9 +3771,11 @@
     const morphOn = pg.enter === "morph" && kin("arap_morph"), morphS = morphOn ? (pg.morph_s || MORPH.S) : 0;   /* P47 T3: the prop becomes the chart */
     const built = pg.enter === "built";   /* arrives with its chart drawn: the span is all deployed life, the idle keeps it alive */
     const snap = pg.enter === "snap";   /* the third watch: the thrown card BECOMES the world - the page arrives built and grows from the card's rectangle to the stage over SNAP_S */
+    const thrown = pg.enter === "throw";   /* operator, 2026-09-08: "throw the chart onto the plate ... the transition is literally the plate entering the world" -
+       the whole page flies in on the pills' own kinetics (throwXf: a ballistic chord, the tumble, the material's squash and settle) and arrives built */
     const mount = pg.enter === "mount" || (pg.enter === "morph" && !morphOn);   /* a morph with its flag off is a mount of the same length */
     const mountS = mount ? (pg.mount_s || pg.morph_s || LP.FIELD) : 0;   /* the mount phase: the world fades, the cream builds; then the page's clock starts at ROLL + SAVOR (no roll, no savor) */
-    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || built) ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : mount ? LP.ROLL - mountS : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2): its cream builds over mount_s, then the SAVOR holds the empty page before the ink; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
+    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || built || thrown) ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : mount ? LP.ROLL - mountS : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2): its cream builds over mount_s, then the SAVOR holds the empty page before the ink; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
     /* beat 1: roll-out */
     const rk = (mount || morphOn || snap) ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) with the cream steps */
     const mu = mount ? clamp01((t - scene.span[0]) / mountS) : 1;
@@ -3832,7 +3840,14 @@
         snapCss = "translate(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px) scale(" + sx.toFixed(5) + "," + sy.toFixed(5) + ") ";
       }
     }
-    st.page.style.transform = snapCss + "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")"
+    let throwCss = "";
+    if (thrown) {   /* THROW_FROM is where the flight starts, as an offset from the page's rest (px); the arc lifts against it */
+      const from = THROW_FROM[pg.throw_from] || THROW_FROM.below;
+      const sx = throwXf(from, scene.world.mass || "paper", t - scene.span[0], { FLIGHT_S: +pg.throw_s > 0 ? +pg.throw_s : THROW_S, ARC: THROW_ARC, SPIN_DEG: THROW_SPIN });
+      st.page.style.transformOrigin = "50% 50%";
+      throwCss = stopCss(sx).trim() + " ";
+    }
+    st.page.style.transform = snapCss + throwCss + "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")"
       + idleCssFor("page", pg.idle, t, st.seed, 1);   /* E49: the page breathes while it holds under a sentence */
     /* beat 6: the build - crisp, landing on the exact strings - on the punched page */
     const c = clamp01((t3 - LP.PUNCH) / (st.buildDur || LP.BUILD));   /* race/decline/combo declare their own envelope */
@@ -4263,7 +4278,8 @@
     /* DISSOLVE (operator, 2026-09-05, on the wipe into the outro card - "what is this madness?"): a row whose exit reads dissolve
        arrives by a plain cross-fade over DISSOLVE_S - no front, no seam, the outgoing world keeps playing underneath */
     const snapIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "snap";   /* the card becomes the world: the page grows over the outgoing scene, which stays until covered */
-    wB.classList.toggle("snapping", !!snapIn && t - sc.span[0] < SNAP_S);
+    const throwIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "throw";   /* the plate is thrown onto the world: the world stays beneath until it has landed */
+    wB.classList.toggle("snapping", (!!snapIn && t - sc.span[0] < SNAP_S) || (!!throwIn && t - sc.span[0] < THROW_S + THROW_SETTLE_S));
     const mountIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && (sc.world.page.enter === "mount" || sc.world.page.enter === "morph");   /* MOUNT (operator, 2026-09-05): the outgoing scene fades while the cream plate mounts over it - no page turn; a MORPH page arrives the same way (P47 T3).
        NEVER a built page (operator, 2026-09-08: "when we're launching the chart already built we NEVER mount. Mounting is reserved for cream coming
        through over the scene, and then drawing") - enter=built takes the row's own transition, like a plate, and arrives with the chart standing */
@@ -4279,7 +4295,7 @@
        a row that says `cut` is a cut - one frame, both plates steady, the reference's own most common boundary. Until
        2026-09-08 a `cut` row fell through to the wipe here, which is why two built pages arrived by a wipe nobody declared. */
     const hardCut = prev && exitName(sc.exit) === "cut";
-    const wk = prev && !hardCut && !spiralIn && !snapIn && !suck && !dissolve && !dipIn && !bzIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
+    const wk = prev && !hardCut && !spiralIn && !snapIn && !throwIn && !suck && !dissolve && !dipIn && !bzIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const seaming = prev && wk > 0 && wk < 1;
     /* THE HARD-EDGE CLIP WIPE (restored 2026-09-01). The remotion-ui
        directional-wipe port (dd9e476, 2026-08-30) replaced this with a
