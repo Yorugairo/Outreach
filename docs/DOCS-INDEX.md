@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3484 records across 277 files.
+3532 records across 282 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -69,6 +69,16 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L50 [2] The nine-month cycle anatomy (found 2026-08-30, Dec-window pull) — On the ledger's own tape, one complete steel/paper cycle Dec '25 - Aug {paper ANTICIPATES; steel CONFIRMS; the market trades the prints; paper OVERSHOOTS and panics anyway; steel keeps going} <Dec-Feb; ev-cycle-anatomy; May-window; memory-episode>
 - L66 [2] Act three: the print calendar is the metronome (backtest, 2026-08-30) — 25 months, Aug '24 - Aug '26, hynix+Micron vs the print calendar: {Anticipation drift; Good prints are pre-traded; THE ASYMMETRY} <half-month; post-print; half-months; ev-trim-proof; act-three>
 
+## content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md
+
+- L1 [1] CHART CHOREOGRAPHY — Japan Tariff Trick (short) — Operator, 2026-09-08: *"I think that choreography probably has to start being {the sentence it proves; what it arrives as; how long it is deployed; what it becomes} <re-draws; ev-japan-holdings-v1; mount; cut; ev-parts-cascade-v1; ev-tariff-receipt-v1; ev-japan-selling-v1; ev-customs-duties-v1; gate_motion_density; build_to; undraw; figure>
+- L13 [2] As built (2026-09-08) — | # | chart | on | span | deployed (M21) | arrives | leaves | becomes | {deployed (M21); 0.0 s} <ev-japan-holdings-v1; mount; cut; ev-parts-cascade-v1; ev-tariff-receipt-v1; ev-japan-selling-v1; ev-customs-duties-v1; gate_motion_density; build_to; undraw; figure; spread>
+- L57 [2] The story each one tells — 1. Holdings — "Japan is selling America's debt." A 26-year level, with the {Holdings; Parts cascade; Receipt; Selling}
+- L71 [2] What should become what — the candidates, ranked — A. #4 RETURNS to #1 — it does not move next to it. An earlier draft of this {A. #4 RETURNS to #1 — it does not move next to it.; Withdrawn after reading the script; the second lever} <twenty-two; two-lever; spiral; recast; ElevenLabs; build_to; −$122.6B; build_s; nit-picking>
+- L116 [2] The timing model (operator, 2026-09-08) — *"The arrival is the art. It sounds more like our problem for rushing the charts… {A span is three things, and only the last is E50's clock:; ~7.5 s} <near-constant; undraw>
+- L154 [2] The rule this ledger proposes — Every chart declares its exit in the shot table, and `cut` is a choice that has {recast} <cut>
+- L160 [2] Not decided — - Whether #4 becomes a spiral-return recast of #1 (no VO change) — recommended. <spiral-return; build_s>
+
 ## content/video_engine/projects/systems-and-blowups/japan-tariff-trick/EVIDENCE-DOSSIER.md
 
 - L1 [1] How Japan Tricked Trump — evidence dossier — Every figure the script speaks, its source, and verification provenance. Nothing here is estimated or fabricated. {Fetched and verified 2026-09-07.} <US-Japan; cross-border; twenty-five; RO-RO; forty-five; supply-chain; twenty-two; cargroup.org; t_f; a_i; t_i; state-backed>
@@ -102,6 +112,18 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L19 [2] 2. Thumbnail Composition (1080×1920 portrait preview / 1280×720 landscape master) — - Ground: Minimalist Cream Washi (`#F4E6C7`), charcoal border line. {Ground; Badge / Pill; Subject Elements; Left (Detroit); Right (Tokyo); Bottom Flow} <#F4E6C7; THE TARIFF TRAP; #25313C; +$6,240 TAX; $4,500 TARIFF; -$122B US DEBT; ¥10T CHIPS; @StickMike; bottom-left>
 - L32 [2] 3. Video Description (YouTube Shorts / Reels / TikTok)
 - L50 [2] 4. Pinned Comment (Engagement Driver) — > "Would you rather pay a flat 15% tariff once, or a 25% border tax six times on the same truck? And what happens when the competitor uses the difference to bui
+
+## content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md
+
+- L1 [1] PLATE ORDER — the crossings map (the geography beat) — Operator, 2026-09-08: *"One thing we didn't make use of that I think we should <sig-c-two-lanes; sig-d-ship-once; sig-b-six-gates; MapLibre; __clipsSeeked; delayRender(); idle; delayRender; continueRender; byte-identical; seek-exactness; maplibre-gl>
+- L7 [2] Why this beat and not the others — I looked at the three signature plates before proposing anything. {`sig-c-two-lanes` stays.; `sig-d-ship-once` stays.; `sig-b-six-gates` is the one to replace.; metaphor standing in for information}
+- L25 [2] "Why not MapLibre?" — the honest answer, and a revision — Operator, 2026-09-08. Citing the harvest was not a reason, so here is the check. {MapLibre at RENDER time breaks the renderer, specifically.; our player contains zero `delayRender`/`continueRender` call} <__clipsSeeked; delayRender(); idle; byte-identical; seek-exactness; maplibre-gl; single-file; over-generalised; high-res; on-brand; seek-exact; greatCircleLine>
+- L57 [2] Four places in one frame — one map, two framings — The operator wants Mexico, Detroit, Tokyo and Canada. All four in one frame is a {So: one basemap, two camera framings} <trace; pull_back; greatCircleLine; pull-back; focus_zoom>
+- L75 [2] The plate — READY TO GENERATE — The beat is now 9.5 s, not 4.57 s. Moving `t_gates` from `cut("When you buy")` {The beat is now 9.5 s, not 4.57 s.; Japan Treasury holdings chart; `cut("Auto parts")` @ 8.88; 6.98 s; 9.50 s} <t_gates; cut("When you buy"); cut("But look"); no on-screen text; sig-b-six-gates_meta.json; hand-drawn; on-screen; references; ["HollowStickMike"]; requested_ratio; 9:16; mode>
+- L117 [2] DISPATCH — blocked here, one call elsewhere — I cannot enqueue this from this session. `.mcp.json` carries `remotion-ui`, {google-flow-driver MCP is not connected} <.mcp.json; remotion-ui; video-engine; sigmap; flow_enqueue_batch; capability_snapshot; flow_capture_capabilities>
+- L126 [2] The choreography over it — what the engine draws — The beat runs 13.73 → 18.30 s, on *"when you buy an American truck, its parts {25%} <trace; back-and-forth; figure; region; counter-shot; plate-ship; sig-c-two-lanes>
+- L145 [2] Timing — resolved — Six single crossings, not three round trips: at 9.5 s there is room. The boundary <six-gates; short-form>
+- L153 [2] Status — Operator said generate (2026-09-08). The prompt is final and the beat has its {Dispatch is blocked in this session only} <long-term>
 
 ## content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md
 
@@ -463,6 +485,21 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L109 [2] Acceptance (added 2026-09-03, P34 close) - the two gate reports — The re-script is accepted for recording only when BOTH reports are on disk <re-script; VERDICT: PASS; whole-video; plate-life; build-f; twenty-five>
 - L136 [2] Standing rulings that bind the re-script (added 2026-09-03) — - E24 - the first sentence answers the thumbnail (G45 proxy + J12); {E24; E25} <RE-ENTERS; topic-governed; proof-governed>
 
+## content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md
+
+- L1 [1] SCRIPT H — REWRITE ORDER (draft 2026-09-08, awaiting operator confirmation) — SCOPE CORRECTED 2026-09-08 (operator). This began as an opening-only {SCOPE CORRECTED 2026-09-08 (operator).; 14 of the 23 failures are outside P1} <opening-only; re-recorded; SCRIPT-H; SHOT-TABLE-H; un-draw; index-concentration; YouTube; motion-plan.json; evidence-dock.json; ev-bravos-original-v1; ev-divergence-v1; silicon-reality-gap-…>
+- L24 [2] The measurement this order answers — From `build-f/timeline.json`, the shipped take's own word timings: {the promise; 1:16; past 0:60 FAIL}
+- L48 [2] The evidence holds (render timeline, 2026-09-08) — Measured from `build-f/steel-and-paper.timeline.json` — runtime 806.5 s, which {`motion-plan.json` and `evidence-dock.json` are a 723 s time; 0:09.5 – 0:50 (40.9 s); ~7× over} <YouTube; ev-bravos-original-v1; ev-divergence-v1; silicon-reality-gap-…; ev-railway-index-v1; forty-one; un-draw>
+- L75 [2] The gate run (2026-09-08, current code) — Script G re-run through `run_script_gates.py` with today's gates: {23 FAIL / 2 WARN / 21 PASS / 8 JUDGE; Three instruments now name the same window.; G13; 0:55 – 1:10; G38} <re-run; [desire]; [opponent]; iron; spike; [loop-close]; [loop]; line-craft>
+- L105 [2] Editorial changes (the reason for the rewrite) — 1. The credit-first opening has been tested; it is retired as the OPENING. {The credit-first opening has been tested; it is retired as t; The credit is kept — it is honest and it is ours to give — b} <suggested-traffic; consequence-framed; fire-sale; Front-end; one-mechanism; N-instances; weekly-disclosure; De-perish; re-verified; September 2026; SCRIPT-C-PRODUCTION>
+- L164 [2] Package (fixed together with the opening, not after it) — E27: the package is title + thumbnail + hook, deeply answered. Fixing the {Lifetime thumbnail CTR is ~8 %} <early-window>
+- L179 [2] The host: an open EXPERIMENT, not a decision (operator, 2026-09-08) — "We don't know yet, we have to test retention over time." {The record, corrected.; robo = mascot = the thumbnail signature; Mike = host = in-episode and banner; The gap.} <per-video; world-broadcast-set-v2; per-second; first-person; risk-score; SHOT-TABLE-H>
+- L224 [2] Publication (operator decision — RECOMMENDED, not confirmed) — Re-cut, unlist the original (never delete — it is the analytics baseline {unlist} <Re-cut; re-upload; YouTube; Re-cutting>
+- L235 [2] Cost — Word-level alignment exists for all 2,457 words and the record chain already {ElevenLabs is the YouTube lane and is paid — no audio runs w} <Word-level; re-record>
+- L243 [2] Standing gates that bind the new draft — - G09 / E24 — the promise by 0:45 (WARN), 0:60 FAIL. The row this order exists for. {G09 / E24; G45 + J12; E21; E25 / M12; E27; G15b} <line-craft; [post-key]>
+- L254 [2] Acceptance — 1. `gate_opening_structure.py` clean on G09, G45; J12 verdicted by hand against the new thumbnail. {The real acceptance is the curve.} <time-anchored; re-verification; re-upload>
+- L262 [2] Open — needs the operator — - Confirm the publication route above (unlist + re-upload vs. move on to video 2). <re-upload>
+
 ## content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-C-PRODUCTION.md
 
 - L1 [1] Steel and Paper — SCRIPT C (PRODUCTION TEXT) — Script B with Revision C applied. Structure, beats and the five hardest {Terms defined inline} <seed-locked; term-explanation; re-verified; VOICE-PACK; target-date; SCRIPT-C-VO.txt; In 1845; [post-key]; YouTube; [pre-key]; dual-line; quarter-billion>
@@ -510,6 +547,14 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L203 [2] Loop pass 5 — the hook, after the operator reframed the episode — Operator: *"this isn't truly a historical parallel episode, it's a real-time {evidence; Was:; Now:} <real-time; boom-bust; third-party; [post-key]; viewer-facing>
 - L243 [2] Loop pass 4 — found by reading the assembled text — My S113 split orphaned the next sentence: "And calls it the market." {A mechanical gate cannot see a dangling subject created two} <target-date>
 - L252 [2] Loop pass 6 — orphan sweep — Checked all 76 dependency-opening sentences (those beginning on a {In today's > money, more than a trillion.} <dependency-opening; quarter-billion>
+
+## content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-GATES-2026-09-03-at-record.md
+
+- L1 [1] SCRIPT GATES - SCRIPT-G-VO.txt — script: SCRIPT-G-VO.txt <SCRIPT-G-SCREENS; SCRIPT-G-VIEWER; loop-close>
+- L18 [2] lint_script_pattern.py — exit 0
+- L26 [2] audit_script_doctrine.py — exit 1
+- L63 [2] gate_opening_structure.py — exit 1
+- L191 [2] enumerate_strength_screens.py — exit 0
 
 ## content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-JUDGE.md
 
@@ -563,6 +608,24 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L208 [2] Round 9 — instant trigger + the horizon arithmetic (operator, 2026-08-30) — G10 trigger · the two-quarter rule BACKTESTS WRONG twice in the {G10 trigger; G11 consolidation; G12 horizon} <two-quarter; below-avg; mix-shift; four-part; RE-RECORD>
 - L231 [2] Round 10 — THE FULL PASS on rounds 8-9 (operator: "the script needs
 - L232 [2] the full pass since we changed it") — Honest admission first: rounds 8-9 walked the ten S-gates per new {TWO X1 ORPHANS FOUND (insertion-severed) + one verification; G13; G14} <S-gates; partial-pass; re-emitted; release-lag; non-literal; s-run; w-run; t-run; And-junction; thesis-weighted; re-read>
+
+## content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-JUDGE.md
+
+- L1 [1] SCRIPT H — JUDGE LEDGER (R2/R3, by hand, 2026-09-08) — The mechanical rows are the tools' (R1). These are the twelve JUDGE rows and the {2 FAIL / 2 WARN / 42 PASS / 12 JUDGE} <anti-tag-laundering; McKee; head-fake; profit-taking; quarter-billion; two-thirds; load-bearing; Attribution-first; [tricolon]; [dip]; [rehook]; lead-in>
+- L10 [2] J12 — sentence 1 answers the thumbnail — **PASS** — The thumbnail was opened, not inferred from its filename. It carries two bars — {"STEEL or PAPER?"; This is the row Script G failed outright}
+- L33 [2] J03 — hook concrete, terminal stress — **PASS** — "The AI bubble is real." Five words, the stress lands terminally on real, {real}
+- L38 [2] J05 — McKee gap: line 2 violates line 1's expected consequence — **PASS** — "The AI bubble is real." → "Just not in the steel."
+- L44 [2] J01 — counterparty as mechanism — **PASS** — *"Not Bravos Research, whose chart this is. Not Nvidia. Capital arriving faster
+- L50 [2] J02 — head-fake played straight — **PASS** — *"Chipmakers doubling while their customers sit flat at the index is textbook <profit-taking>
+- L56 [2] J06 — P1 image tensions concrete — **PASS** — *"This certificate is what the last bubble actually was: paper sold as safety,
+- L63 [2] J07 — P2 image tensions concrete — **PASS** — Railways drawing a quarter-billion pounds then crashing two-thirds; the trains <quarter-billion; two-thirds>
+- L68 [2] J04 — P1 B5 against the P2 catalyst — **PASS** — B5 ends on "capital that fast leaves a paper trail, and paper you can read";
+- L74 [2] J08 — phonetic anchor only on the promise/payoff/tell — **PASS** — The promise: *"One test, three questions, thirty seconds a holding, and it sorts {steel/paper}
+- L80 [2] J09 — the line at 0:20 — **PASS** — *"Somewhere a guy on his lunch break is watching his fourth copy of the same <load-bearing>
+- L85 [2] J10 — the line at 0:50 — **PASS** — "Not Bravos Research, whose chart this is." The credit is given inside a
+- L90 [2] J11 — the line at 1:32 — **PASS** — *"Alex Karp of Palantir says enterprises are paying for tokens that create no <Attribution-first>
+- L95 [2] R2 — anti-tag-laundering — Every declared tag was read against its own text. All delivered. The three worth <[tricolon]; [dip]; [rehook]>
+- L109 [2] Open, and NOT verdicted here — - G02 — first word at 0.00s in the edit clock. Not a script property; it is {G02; G15b; I called this a gate defect earlier and that was premature —} <lead-in; close shares 1 content stem(s); spike; certificate; paper; safety; sold; steel; close-window; SHOT-TABLE-H>
 
 ## content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md
 
@@ -3640,10 +3703,10 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1405 [2] E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 dissolves, <blur-zooms; min-jerk; docks → dip; bare → cut; carried-light; cross-reveal; wipe_right; [DERIVED]>
 - L1430 [2] E48 — A declared transition vocabulary with one hero, the spiral; the primaries are not prescribed yet; the mount is a build; cut minimally, one thread (2026-09-06, amended the same hour) — From the HyperFrames transitions page the operator brought in by hand (`hyperframes.heygen.com/prompting/transitions`, read {A short's transition vocabulary is declared, not improvised.} <HyperFrames; blur-zooms; black-hole; fade-out; two-tween>
 - L1463 [2] E49 — Nothing ever goes truly still: every held thing carries a named subtle idle; Ken Burns and parallax were the blunt answer (2026-09-06) — The operator, closing the HyperFrames intake: *"Those are the big takeaways, along with 'nothing ever goes truly still.' This is {The rule.} <HyperFrames; bit-identical; FROZEN_MAX_S; encoder-size>
-- L1489 [2] E50 — A chart's deployed life: 6-8 s from its LAST data point on average, 12 s at most; then it un-draws or becomes the next thing (2026-09-07) — The operator, on v3's second watch: *"One thing is we're leaving the chart up for too long. We should un-draw it or morph it into <build_to; [OPERATOR 2026-09-07]; data-changing; undraw; Math.max; bars>
-- L1514 [2] E51 — A push-in is only used tied to something that just landed; an untied zoom is filler (2026-09-07) — The operator, on v3's third watch: *"The push-in doesn't make sense - we are using it randomly it seems, it is a motion that {The rule.} <punch; focus_zoom; spring-in; snap; world-stage>
-- L1531 [2] E52 — A page cites, it does not footnote; a chart reads with no caption (2026-09-07) — The operator, opening the design pass on v3: *"cited sources should take up minimal space, not maximal. Charts need to make {The citation.} <src_style: compact; proof; month-on-month>
-- L1548 [2] E53 — Chart form is law, not taste: the perception hierarchy, the honest zero, and the label at the line's end (2026-09-07) — From the macro-chart intake (`docs/content-video-engine/MACRO-CHART-INTAKE-2026-09-07.md`), gated the same day. The three {The perception hierarchy} <macro-chart; McGill; non-aligned; ledger_page; operator-approved; part-to-whole; top-five; never-build; axes.hlines; spread>
+- L1489 [2] E50 — A chart's deployed life: 6-8 s from its LAST data point on average, 12 s at most; then it un-draws or becomes the next thing (2026-09-07) — The operator, on v3's second watch: *"One thing is we're leaving the chart up for too long. We should un-draw it or morph it into <build_to; operator-approved; ceiling-only; enter=built; spiral; snap; undraw; arrival + build + deployed; page.build_s; [OPERATOR 2026-09-07]; data-changing; Math.max>
+- L1530 [2] E51 — A push-in is only used tied to something that just landed; an untied zoom is filler (2026-09-07) — The operator, on v3's third watch: *"The push-in doesn't make sense - we are using it randomly it seems, it is a motion that {The rule.} <punch; focus_zoom; spring-in; snap; world-stage>
+- L1547 [2] E52 — A page cites, it does not footnote; a chart reads with no caption (2026-09-07) — The operator, opening the design pass on v3: *"cited sources should take up minimal space, not maximal. Charts need to make {The citation.} <src_style: compact; proof; month-on-month>
+- L1564 [2] E53 — Chart form is law, not taste: the perception hierarchy, the honest zero, and the label at the line's end (2026-09-07) — From the macro-chart intake (`docs/content-video-engine/MACRO-CHART-INTAKE-2026-09-07.md`), gated the same day. The three {The perception hierarchy} <macro-chart; McGill; non-aligned; ledger_page; operator-approved; part-to-whole; top-five; never-build; axes.hlines; spread>
 
 ## docs/portable/OUTRO-CTA-PLAYBOOK.md
 

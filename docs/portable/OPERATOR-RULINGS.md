@@ -1499,6 +1499,22 @@ the chart to stay still while a video plays in a dock."*
    the end of its final `build_to`, the last bar of a bar page, the bracket's label written - not its first cap and not the
    page's entry. Annotations that add no data (a spotlight, a callout, a retitle, a relight) do not restart the clock; a
    mark that adds data (a build to a later datum, a bracket that writes a figure, a second series) does.
+**Amendment, 2026-09-08 (operator-approved) — the 6 s is a FLOOR, and it binds only on a chart that ARRIVES BUILT.**
+The ceiling above exists because a chart held STATIC killed ep1. The opposite fault is a completed chart whipped away
+before it can be taken in - the Japan tariff short's hook page scored **0.03 s** of deployed life and passed a
+ceiling-only gate. But the two only collide if the BUILD is counted as dead time, and it is not. The operator:
+*"The builds are the art, it's the suspense and the proof that the work is real, and building/drawing the chart is what
+allows the user to follow, instead of seeing a full, busy chart and not knowing where to look."*
+
+So: **if you watched it draw, you do not need long to read it** - the pen led your eye in and the build WAS the reading.
+**If it arrived complete, you have to find your own way around it**, and that is what the 6 s buys. A page that draws is
+EXEMPT from the floor; a page that arrives built (`enter=built`, `spiral`, `snap`) and is then cut short is not. A page
+that ends its own life with an `undraw` is also exempt - that is leaving on purpose, which is what this ruling asks for.
+Gate **M21** carries the floor and reports the split, because a span is `arrival + build + deployed` and only the last is
+this clock: an author who is told "0.0 s deployed" needs to know whether to lengthen the span or let the page arrive drawn.
+The companion capability is `enter=built` (the page mounts with its chart already drawn) and `page.build_s` (a page draws
+over its own seconds instead of the fixed 3.0). Which of the two a page takes is an editorial call, never arithmetic.
+
 2. **The life.** From that moment the chart has **6-8 s on average, 12 s at most** `[OPERATOR 2026-09-07]` before it
    un-draws (the line unwinds from its tip back to a datum or to nothing, the reverse of the build) or BECOMES the next thing
    (the figure the sentence turns to, a different display of the same object - bars, a comparison - or the next chart, by
