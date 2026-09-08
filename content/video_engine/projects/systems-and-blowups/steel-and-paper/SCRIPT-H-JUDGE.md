@@ -54,9 +54,11 @@ Delivered without a wink or an undercut. It is stated as the correct read, which
 is what makes the later turn land.
 
 ## J06 — P1 image tensions concrete — **PASS**
-The spike (steel that got used) against the certificates (paper that went to
-nearly zero) is a physical pairing, in one sentence, carrying the argument. No
-abstraction stands in for it.
+*"This certificate is what the last bubble actually was: paper sold as safety,
+while the steel it paid for is still carrying trains."* One held object against
+one working machine, in a single sentence, carrying the whole argument. The
+object is the thing being warned about, not the thing being reassured about —
+which is why it replaced the iron spike.
 
 ## J07 — P2 image tensions concrete — **PASS**
 Railways drawing a quarter-billion pounds then crashing two-thirds; the trains
