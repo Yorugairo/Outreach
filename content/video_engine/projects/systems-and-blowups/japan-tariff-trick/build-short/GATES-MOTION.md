@@ -14,8 +14,6 @@
           s9.15 r7 / build_caption_pages 4-6 words
   [WARN ] M11 first chart ledger:s02 enters at 1.8s, its build lands at 1.8s, with spotlight at 2.3s; WARN no sound cue within 1.5s of the enter at 1.8s; window 0-10s (E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10)
           E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue
-  [WARN ] M21 2 page(s) deployed under 6s after the last data mark: s04 5.4s deployed of a 13.0s span (arrive+build 7.5s), 0.6s short; s11 2.9s deployed of a 10.4s span (arrive+build 7.6s), 3.1s short - the chart is being RUSHED, not held: give the span the seconds (the arrival is the art, so add to the span or to page.build_s rather than cutting the mount)
-          E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing
   [PASS ] M01 longest still stretch 2.3s at 0:28
           doc 29 s8.19 / s9.25 stillness ceiling
   [PASS ] M02 0 stretches > 8s (working target)
@@ -46,10 +44,12 @@
           E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)
   [INFO ] M19 build_to caps declared; none holds between caps
           P47 T2 (SHOT-TABLE-V3-PROPOSAL part B): a cap is a hold the sentence asked for, not stillness
+  [INFO ] M21 2 page(s) deployed 8-12s after the last data mark (a dock's clip may hold it): s02 11.9s (0:01 -> 0:13); s06 10.8s (0:36 -> 0:47)
+          E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing
   [JUDGE] J01 every savor beat holds its picture (card up, badge lit), never a bare plate with a drift
           doc 29 s9.25 #3
 
-RESULT: 0 FAIL / 3 WARN / 12 PASS / 1 JUDGE / 3 INFO
+RESULT: 0 FAIL / 2 WARN / 12 PASS / 1 JUDGE / 4 INFO
 ```
 
 TIMELINE: japan-short.timeline.json sha256:636d1693746d7eb8f2b8f677996e8e5cf90f606c8b599c1dc43a945fe09df253

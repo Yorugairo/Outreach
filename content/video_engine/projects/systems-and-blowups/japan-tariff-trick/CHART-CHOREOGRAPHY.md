@@ -32,16 +32,27 @@ the same way and leaves the same way, while the engine now carries `build_to`,
 `snap` enters, and ARAP `morph`. None is used here. That is the gap this ledger
 was asked for.
 
-**They are UNDER-deployed, not over.** The average deployed life is ~3.5 s
-against E50's 6-8 s. **#1 is 0.0 s** — its last data mark lands as the scene
-cuts, so that chart is never read at all.
+**Corrected 2026-09-08 — they were not "under-deployed".** An earlier pass here
+read four pages as *rushed* because little time remained after their last data
+mark. That counted the build as dead time, and it is not:
 
-**The fix is the draw, not the hold** (operator, 2026-09-08: *"with that sort of
-duration, I'm tempted to say that the fix is to draw out the charts in a
-slower/more animated fashion"*). The span is not being spent on a static hold;
-the chart finishes early and waits. `page.build_s` now lets a page draw over its
-own seconds instead of LP.BUILD's 3.0 — motion where there was a wait. Opt-in,
-so no existing frame moves.
+> *"The builds are the art, it's the suspense and the proof that the work is
+> real, and building/drawing the chart is what allows the user to follow, instead
+> of seeing a full, busy chart and not knowing where to look."* — operator
+
+So the rule, and M21's floor now encodes it: **if you watched it draw, you do not
+need long to read it** — the pen led your eye in and the build WAS the reading.
+**If it arrived complete, you have to find your own way around it**, and that is
+what the 6 s buys. A page that draws is exempt from the floor.
+
+Under that rule only **one** page ever had a fault, and it was not a duration
+fault: the hook page wrote `−$122.6B` at 13.70 s while the VO says "twenty-two
+billion" at 6.81–7.18 s — six and a half seconds late, and then cut 0.03 s after
+it landed. That bracket is gone (it duplicated a figure the selling page pays off
+properly at 0:50); the page now arrives built with a spotlight on the June low.
+
+**s11 keeps its build and is not a problem.** Its ×3.8 reveal is the page's
+reading experience, and 2.9 s after it is ample when you watched it draw.
 
 ## The story each one tells
 

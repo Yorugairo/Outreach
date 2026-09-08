@@ -82,11 +82,16 @@ STOP_ON1_PX_S = 250        # P47 T1 [DERIVED: CADENCE.ON1_PX_S, the brief :185-1
 STOP_THROW_DX, STOP_THROW_DY, CARD_W_DEFAULT = 240, 160, 864   # the template's throw offsets and the .dock width, mirrored
 SRC_M20 = "P47 T1 (the brief :185-193, the cadence rule): a throw steps on 1s above 250 px/s, on 2s below - reported, not scored, until HG2 tunes it"
 DEPLOY_AVG_S, DEPLOY_MAX_S = 8.0, 12.0   # E50 [OPERATOR 2026-09-07]: a chart's deployed life - 6-8 s from its LAST data mark on average, 12 s at most
-DEPLOY_MIN_S = 6.0   # ... and 6 s is E50's own LOWER bound. The gate only ever enforced the ceiling, so a chart drawn and
-                     # cut in the same breath PASSED - the tariff short's hook page scored 0.0 s and passed (operator,
-                     # 2026-09-08: "it sounds more like our problem for rushing the charts"). The arrival is not the
-                     # thing to cut: a page that is short of deployed life needs a LONGER SPAN, and the gate now says
-                     # how many seconds short it is.
+DEPLOY_MIN_S = 6.0   # ... and 6 s is E50's own LOWER bound, enforced ONLY on a page that ARRIVES BUILT.
+                     # E50's ceiling exists because a chart HELD static killed ep1. The floor exists for the opposite
+                     # fault: a completed chart whipped away before it can be taken in (the tariff short's hook page
+                     # scored 0.03 s). But the two only bite on the same page if the build is treated as dead time,
+                     # and it is not - operator, 2026-09-08: "the builds are the art, it's the suspense and the proof
+                     # that the work is real, and building/drawing the chart is what allows the user to follow,
+                     # instead of seeing a full, busy chart and not knowing where to look."
+                     # So: IF YOU WATCHED IT DRAW, YOU DO NOT NEED LONG TO READ IT - the pen led your eye in and the
+                     # build WAS the reading. IF IT ARRIVED COMPLETE, you have to find your own way around it, and
+                     # that is what the 6 s buys. A page that builds is exempt.
 PUSH_TIE_BEFORE_S, PUSH_TIE_AFTER_S = 1.5, 0.3   # [DERIVED] a push is TIED when a landing on its scene falls inside (at - 1.5 s, at + 0.3 s)
 SRC_M22 = "E51 (operator 2026-09-07): a push-in is only used tied to something - pushing into a newly landed badge or data series; a zoom on a thing that just sits there is filler"
 SRC_M21 = "E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing"
@@ -939,14 +944,16 @@ def _deployed_gate(scenes: list[dict]) -> Gate | None:
                        f"(arrive+build {_arrive_of(scenes, l[0]):.1f}s), {DEPLOY_MIN_S - l[3]:.1f}s short")
     # the floor applies only to a page CUT short. A page that ends its own life with an undraw is LEAVING on purpose -
     # E50's "then it un-draws or becomes the next thing" - and a deliberate exit is not a rushed chart.
-    short = [l for l in lives if l[3] < DEPLOY_MIN_S and l[2] >= _end_of(scenes, l[0]) - 1e-6]
+    short = [l for l in lives if l[3] < DEPLOY_MIN_S and l[2] >= _end_of(scenes, l[0]) - 1e-6
+             and _arrive_of(scenes, l[0]) < 1.0]   # only a page that ARRIVES BUILT: a page that draws was read as it drew
     over = [l for l in lives if l[3] > DEPLOY_MAX_S]
     long = [l for l in lives if DEPLOY_AVG_S < l[3] <= DEPLOY_MAX_S]
     if short and not over:
         return Gate("M21", "WARN", f"{len(short)} page(s) deployed under {DEPLOY_MIN_S:.0f}s after the last data mark: "
                     + "; ".join(split(l) for l in short[:8])
-                    + " - the chart is being RUSHED, not held: give the span the seconds (the arrival is the art, so add"
-                      " to the span or to page.build_s rather than cutting the mount)", SRC_M21)
+                    + " - it ARRIVES BUILT and is cut before it can be read. A page that draws is exempt (the build leads"
+                      " the eye and IS the reading); this one asks the viewer to find their own way around a finished"
+                      " chart, so give the span the seconds", SRC_M21)
     if over:
         return Gate("M21", "WARN", f"{len(over)} page(s) deployed past {DEPLOY_MAX_S:.0f}s after the last data mark: " + "; ".join(row(l) for l in over[:8])
                     + " - un-draw it (undraw) or let it become the next thing (figure, another display, the morph)", SRC_M21)
