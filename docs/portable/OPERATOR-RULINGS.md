@@ -1555,9 +1555,15 @@ ballistic chord, the tumble, the material's squash and settle on contact), the o
 staying beneath until it has landed, the chart standing when it does. The row's boundary is a
 cut; nothing wipes, nothing dips. Under E48 the tariff short's vocabulary is now: **primary**
 the dip (plate to plate), **accent** the throw (a chart arriving built), **hero** the spiral
-(a page returning). Dials `THROW_S 0.45 = STOP.FLIGHT_S`, arc 0.12 and spin 6° damped from the
-pill's 0.22 / 9° because the page is the stage `[DERIVED]`; `throw_from` below | above | left |
-right, `throw_s` per page.
+(a page returning). The first draft damped the arc (0.12) so the page stayed in frame; the operator: *"I actually
+think it would be cool if it DID leave the frame mid arc — what I'm thinking of is when the
+evidence docks are thrown … the card kind of wobbles. We could do the same wobble as we throw
+the chart over, it 'wobbles' out of screen, before flopping back down."* So the throw is the
+Tokyo dock's at page size: arc 0.8 (the page clears the top edge at the apex), the pill's 9°
+tumble, a 0.6 s flight, and the landing is the paper material's own — the receiver's dip on
+the underdamped spring (ζ 0.67, the wobble) and the restitution hop h1 = e²h0, which the tall
+arc makes visible (the flop). Dials, all `[DERIVED]`; `throw_from` below | above | left | right,
+`throw_s` per page.
 
 ## E51 — A push-in is only used tied to something that just landed; an untied zoom is filler (2026-09-07)
 

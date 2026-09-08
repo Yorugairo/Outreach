@@ -2396,10 +2396,14 @@
      conclusion), in the page's quiet zone, painted as a function of t (never a CSS transition) */
   const LP_BADGE0 = 0.4, LP_BADGE_STEP = 0.9, LP_BADGE_IN = 0.36;
   const SNAP_S = 0.45;   /* the third watch: the card snaps up to the full stage - a push tied to a landing [DERIVED: E45's spring-in span] */
-  /* THE THROW (enter=throw, 2026-09-08): a full page is a card too. Flight 0.45 s = STOP.FLIGHT_S [DERIVED: P47 T1]; the arc and the
-     tumble are damped from the pill's (0.22 / 9 deg) because the page is the stage - a page-sized card at the pill's arc would leave
-     the frame at mid-flight. From off the bottom edge by default (the chart lands on the world from the viewer's side). Dials. */
-  const THROW_S = 0.45, THROW_ARC = 0.12, THROW_SPIN = 6, THROW_SETTLE_S = 1.2;
+  /* THE THROW (enter=throw, 2026-09-08): a full page is a card too - the Tokyo dock's throw at page size. The operator on the first
+     damped draft (arc 0.12, "a page-sized card at the pill's arc would leave the frame"): "I actually think it would be cool if it DID
+     leave the frame mid arc ... it 'wobbles' out of screen, before flopping back down." So the arc is tall enough that the page clears
+     the top edge at the apex (lift = ARC x chord at u = 0.5; from below the chord is ~1.12 H, so ARC 0.8 puts the apex ~0.9 H above the
+     rest and the page is off the top of the frame for the middle of the flight), the tumble is the pill's 9 deg, the flight a little
+     longer than the pill's for the height, and the landing is the paper material's own: the receiver's dip on an underdamped spring
+     (zeta 0.67 - that is the wobble) and the restitution hop h1 = e^2 h0, which the tall arc makes visible - the flop. Dials. */
+  const THROW_S = 0.6, THROW_ARC = 0.8, THROW_SPIN = 9, THROW_SETTLE_S = 1.2;
   const THROW_FROM = { below: { x: PORTRAIT ? 90 : 160, y: STAGE_H * 1.12 }, above: { x: PORTRAIT ? -90 : -160, y: -STAGE_H * 1.12 },
                        right: { x: STAGE_W * 1.12, y: PORTRAIT ? 120 : 80 }, left: { x: -STAGE_W * 1.12, y: PORTRAIT ? 120 : 80 } };
   const LP_BADGE_COL = { coral: "crimson", teal: "teal", cobalt: "cobalt", ink: "deemph", sunflower: "amber" };   /* badge accent -> series colour (the key) */
