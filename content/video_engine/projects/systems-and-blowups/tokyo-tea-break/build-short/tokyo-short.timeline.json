@@ -2205,7 +2205,7 @@
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short\\clips\\dock-j-tea-cup.mp4",
-    "sha256": "e044b5064852e7d5c3b75cf3ec999e3fafda8383b7759e90205d51388302c1fb"
+    "sha256": "78f60db99c1fd029658437e75e90d47e17fcedd04a0b6535a87991ff7cf2262c"
    },
    "badges": []
   }
@@ -6104,10 +6104,10 @@
      "badge_at": [],
      "kind": "video",
      "place": {
-      "x": 464,
-      "y": 1443,
-      "w": 151,
-      "h": 109
+      "x": 259,
+      "y": 605,
+      "w": 216,
+      "h": 145
      },
      "read_s": 1.2,
      "park_s": 0.7,

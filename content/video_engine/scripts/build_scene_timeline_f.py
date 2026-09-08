@@ -69,7 +69,7 @@ ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page
 MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets (stopaction.mjs MASS) a throw or a landing settles by
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_OPTS = ("idle", "arrive", "mass", "morph")  # the `;key=value` options a plate id may carry
-DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y")   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x")   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -448,9 +448,9 @@ def dock_opts(raw) -> dict:
             if v not in DOCK_BAND_ORDER:
                 raise ValueError(f"dock: centre_band must be one of {'|'.join(DOCK_BAND_ORDER)}")
             continue
-        if k == "centre_y":
+        if k in ("centre_y", "centre_x"):
             if isinstance(v, bool) or not isinstance(v, (int, float)) or not 0.0 <= v <= 1.0:
-                raise ValueError("dock: centre_y must be the card's centre as a share of the stage height, 0..1")
+                raise ValueError(f"dock: {k} must be the card's centre as a share of the stage, 0..1")
             continue
         _check_opt(k, v, "dock")
     return dict(raw)
@@ -657,7 +657,8 @@ def dock_place(world: dict, aspect: str | None) -> dict | None:
 
 
 def centred_place(place: dict, aspect: str | None, card_aspect: float | None = None, page: dict | None = None,
-                  centre_w: float | None = None, band_name: str | None = None, centre_y: float | None = None) -> dict:
+                  centre_w: float | None = None, band_name: str | None = None, centre_y: float | None = None,
+                  centre_x: float | None = None) -> dict:
     """The same card at the READING width, centred - horizontally on the stage, vertically in the page's own FREE space.
 
     The third watch asked for a centred dock ("center dock then retract the host on that chart page"); the macro-chart intake
@@ -668,9 +669,11 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
     w = round((centre_w or CENTRE_W) * sw); h = round(w * card_aspect) if card_aspect else dock_card_h(w)   # the READING width unless the row names a smaller card
     if h > CENTRE_MAX_H * sh:
         h = round(CENTRE_MAX_H * sh); w = round(h / card_aspect) if card_aspect else w
-    if centre_y is not None:   # the row places the card itself: page_boxes models a page's bands, and on a portrait page with
-        # a tall chart its model and the player's own layout disagree (R26-27) - an author may name the centre outright
-        return {"x": round((sw - w) / 2), "y": round(max(0, centre_y * sh - h / 2)), "w": w, "h": h}
+    if centre_y is not None or centre_x is not None:   # the row places the card itself: page_boxes models a page's bands, and
+        # on a portrait page with a tall chart its model and the player's layout disagree (R26-27) - an author may name it
+        cx = centre_x * sw if centre_x is not None else sw / 2
+        cy = centre_y * sh if centre_y is not None else sh / 2
+        return {"x": round(max(0, cx - w / 2)), "y": round(max(0, cy - h / 2)), "w": w, "h": h}
     bands = [bd for bd in free_bands(LPG.page_boxes(page, aspect or "16:9")) if page and bd["band"] in ("below", "foot", "above")] if page else []
     if band_name:   # the row names the band itself (the sixth watch: the cup belongs between the source line and the caption)
         bands = [bd for bd in bands if bd["band"] == band_name]
@@ -811,7 +814,7 @@ def main() -> int:
                 raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
             d = META.get(aid, {"title": aid, "source": "", "species": "deck",
                                "badges": []})
-            dplace = centred_place(place, ASPECT, dopt.get("card_aspect"), (world or {}).get("page"), dopt.get("centre_w"), dopt.get("centre_band"), dopt.get("centre_y")) if (place and dopt.get("centre")) else place   # the third watch: a card centred on the page
+            dplace = centred_place(place, ASPECT, dopt.get("card_aspect"), (world or {}).get("page"), dopt.get("centre_w"), dopt.get("centre_band"), dopt.get("centre_y"), dopt.get("centre_x")) if (place and dopt.get("centre")) else place   # the third watch: a card centred on the page
             if True:
                 if aid not in evidence:
                     try:

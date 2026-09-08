@@ -216,7 +216,9 @@ DOCK_STILLS = {                     # dock asset id -> (source clip, crop height
 }
 
 
-TEA_CROP = (424, 486, 272, 244)   # the cup, its saucer, the little card and the steam above it, on the clip's own 720x1280
+# MEASURED off the clip's own frame (the ink rows, not by eye): the cup and saucer sit at x 440-570, its steam above at
+# x 492-535, so the CUP's centre is x 505 - the crop is built around that, not around the counter's furniture
+TEA_CROP = (375, 515, 260, 200)
 STILL_DOCKS = "--still-docks" in sys.argv   # the pre-video-dock fallback: dock each clip's first frame instead
 
 
@@ -445,7 +447,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # tea break' that doesn't interfere with graph ... I wonder if we could even just zoom the video on it and play the
             # steaming tea cup"): the opening scene's own cup, zoomed out of that footage so the steam keeps moving, small and
             # centred in the page's free space. The host is gone from this page - it was parking over the title.
-            (dock_zoom("dock-j-tea-cup", "clip-a-counter-tab-v2.mp4", TEA_CROP), 0, t_tea, t_outro - 0.3, {"centre": True, "centre_w": 0.14, "centre_y": 0.78}),   # MEASURED off the rendered page: the caption ends at 1440 and the first note starts at 1554, so the cup takes that gap   # the gap between the source line and the caption: clear of the graph, the notes and the words
+            (dock_zoom("dock-j-tea-cup", "clip-a-counter-tab-v2.mp4", TEA_CROP), 0, t_tea, t_outro - 0.3, {"centre": True, "centre_w": 0.20, "centre_x": 0.34, "centre_y": 0.353}),   # the plot's own empty upper-left, under the % label and above the line's low start   # the gap between the source line and the caption: clear of the graph, the notes and the words
         ], "cut", [   # the SNAP is this row's own transition (no dip into it); the outro row still dips
             # the three notes write in the quiet zone over "Tokyo is still on its tea break", staggered, before the host lands over the page
             # the fourth watch: the bracket on this page drew a naked vertical span at the plot's edge - its label had no room in the

@@ -3056,7 +3056,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L75 [2] The fourth watch's answer: one unit beats two (2026-09-07, the same night) — The operator on the tiered page: *"we still have that spike which is almost certainly an artifact. I also don't understand {The spike was ours, not the data's.} <bracket; Fed funds 3.75%, flat; two-scale; FED_WITH_BARS=1; lower-right>
 - L110 [2] The fifth watch: a policy rate is a rule, and the gap is the argument (2026-09-07) — The operator: "gray line is also just terrible, it should be a light blue or something, grey almost reads like a mistake." {A policy rate is not a series.} <axes.hlines; [{y, label, color}]; deemph; muted-history; lone-series; spread; PS.SPREAD_A; PS.SPREAD_BLEED; callout; pad; 3.97% - the February low; from_index>
 - L141 [3] ... and the low, circled (the same watch) — "We should circle and call out the low more, now that we have room for it." Three moves, in the order of the argument: <callout; pad; 3.97% - the February low; spread; from_index>
-- L153 [3] The host leaves, the tea comes back (the sixth watch) — *"Get rid of the host and just dock a small, centered image of the cup of tea on 'its tea break' that doesn't interfere with <zoom_clip(); dock_zoom(); TEA_CROP; centre: True; centre_band: "foot"; page_boxes; centre_y; centre_w; centre_band>
+- L153 [3] The host leaves, the tea comes back (the sixth watch) — *"Get rid of the host and just dock a small, centered image of the cup of tea on 'its tea break' that doesn't interfere with <zoom_clip(); dock_zoom(); TEA_CROP; centre: True; centre_band: "foot"; page_boxes; centre_y; upper-left; centre_x; centre_w; centre_band>
 
 ## docs/content-video-engine/P13-GATE-A-ARMBAR-REVIEW.md
 

@@ -169,5 +169,11 @@ reconciled a row may name the card's centre outright (`centre_y`), and this one 
 estimated: the caption ends at 1440 and the first note starts at 1554, so the cup takes that gap at 1442-1552. Clear of the
 graph, the caption and the notes.
 
-New dock options: `centre_w` (the card's width as a share of the stage), `centre_band` (which free band), `centre_y` (the
-card's centre, when the band model cannot be trusted). Suites 141 pass; gate PASS, M16 longest event gap 1.1 s.
+**Corrected the same hour.** "Centred" meant the CUP centred in its own frame, not the card centred on the page - and the
+card was welcome to take the plot's empty upper-left. Both done: the crop is now built around the cup's MEASURED centre
+(the ink rows say the cup and saucer sit at x 440-570 with the steam at 492-535, so the cup's centre is x 505 - my first
+crop had centred on the counter's furniture, which put the cup left of frame), and the card sits at the plot's own empty
+corner under the `%` label and above the line's low start. `centre_x` joins `centre_y`.
+
+New dock options: `centre_w` (the card's width as a share of the stage), `centre_band` (which free band), `centre_x` /
+`centre_y` (the card's centre, when the band model cannot be trusted). Suites 134 pass; gate PASS.
