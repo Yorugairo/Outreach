@@ -26,5 +26,19 @@
   "source": "HollowStickMike - Money Physics",
   "species": "deck",
   "badges": []
+ },
+ {
+  "asset": "dock-b-holdings",
+  "title": "Japan is selling America's debt",
+  "source": "US Treasury TIC \u00b7 Sep 2026",
+  "species": "chart",
+  "badges": []
+ },
+ {
+  "asset": "dock-g-receipt",
+  "title": "The tariff bill on a $30,000 car",
+  "source": "DERIVED \u00b7 USTR + USITC HTS 8708 \u00b7 Sep 2026",
+  "species": "chart",
+  "badges": []
  }
 ]

@@ -593,7 +593,12 @@ def chart_docks(tl: dict, docks: list[dict]) -> tuple[list[dict], bool]:
     scenes = tl.get("scenes", [])
     evidence = tl.get("evidence") or {}
     known = bool(evidence)
-    tl_docks = [(d, s) for s in scenes for d in s.get("docks", [])]
+    # a card a later page SNAPS UP FROM (enter=snap=<dock>, the third watch) is that page's own preview, thrown onto the scene
+    # before it - the page carries the annotation, so the card is not a first chart entering unannotated (2026-09-08: the
+    # tariff hook page's card at 0.8 s read as one)
+    snap_cards = {(s.get("world") or {}).get("page", {}).get("snap_from") for s in scenes}
+    snap_cards.discard(None)
+    tl_docks = [(d, s) for s in scenes for d in s.get("docks", []) if (d.get("slide") or d.get("asset") or d.get("asset_id")) not in snap_cards]
     pairs = tl_docks if tl_docks else [(d, None) for d in docks]
     out = []
     for d, s in pairs:
@@ -641,7 +646,7 @@ def _page_land_offset(scene: dict) -> float:
         return mount_s + PAGE_BUILD_END_S - LP_ROLL_S + extra
     if page.get("enter") == "morph":   # P47 T3: the morph replaces the roll, the savor, the soak and the punch; the build starts as it ends
         return float(page.get("morph_s") or MORPH_S) + LP_BUILD_S + extra
-    if page.get("enter") in ("spiral", "snap", "built", "throw"):   # a returning page, a card become the world (P47 T7), or a page that mounts with its chart already drawn: arrives built
+    if page.get("enter") in ("spiral", "snap", "built", "throw", "drop"):   # a returning page, a card become the world (P47 T7), or a page that mounts with its chart already drawn: arrives built
         return 0.0
     return PAGE_BUILD_END_S + extra
 

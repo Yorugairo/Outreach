@@ -1586,7 +1586,31 @@ growth before the card's centre reaches its rest puts its top out of frame (0.5 
 the flight both did), so the card is card-sized for the whole flight and **grows to the stage
 after the contact, in place, over `SNAP_S`** — the snap on the landing, exactly as first
 described. Measured on the frames: whole card rising at 0.1 s, out of the top by 0.4 s, gone
-through the middle, back whole at 1.0 s, landed whole at 1.1 s, the world at 1.5 s. `throw_grow: "snap"` keeps the flat
+through the middle, back whole at 1.0 s, landed whole at 1.1 s, the world at 1.5 s.
+
+**And then the answer that was already ours (the same night).** *"If we're going to throw it,
+we should use the same throw as we did for the docks in Tokyo, then we should snap to the full
+plate size, not grow it … Tokyo never did the snap to the full-size plate, we have to do that
+part; but we got the landing with weight/gravity part right on Tokyo."* That is the third
+watch (P47 T7) end to end: the chart rendered as a portrait CARD (`chart_card.py`), thrown
+onto the previous scene as a dock with `arrive: throw` (the stop-action landing Tokyo got
+right), and the page entering with `enter=snap=<that card>` — it grows from the landed
+card's rectangle to the stage over `SNAP_S` 0.45 s by min-jerk. The snap carries a WHOOSH:
+*"zoom pan frame would work if the zoom is fast with a woosh to full size"* — a motion blur
+on a velocity envelope (4u(1−u): zero at both ends, peaking where the move is fastest — the
+mechanism from remotion-ui's `zoom-through`, ported not copied) and the whoosh cue in the
+sound plan. `enter=throw` and `enter=drop` stay in the kit as opt-ins; the tariff short's two
+chart arrivals use the card-then-snap. M11 no longer reads a card a page snaps from as an
+unannotated first chart — it is that page's own preview.
+
+**The card page (the same hour).** *"Is it possible to keep the edges of the card rounded
+like this where it's more like a phone? The straight-edged version is never as good of a
+look. I think that effect might actually point to one of the research pieces: everything
+should have a shadow instead of a border."* Doc 29 §1.2 (the 2.5D physical card: hard-edge
+paper shadow, no fake 3D blur) and doc 48's floating sticker. A page declared `card` — and a
+snapped page by default — keeps the card's rounded corners at full size (44 px portrait),
+sits at 0.955 of the stage with the world visible around it, and carries the ink shadow
+(18 px 18 px 0) with no border. `;card=yes|no` on the plate id; goldens untouched. `throw_grow: "snap"` keeps the flat
 min-jerk growth for comparison. Dials, all `[DERIVED]`, HG2 tunes by eye; `throw_from` below |
 above | left | right, `throw_s` per page, `throw=<grow>,<from>,<s>` on the plate id.
 

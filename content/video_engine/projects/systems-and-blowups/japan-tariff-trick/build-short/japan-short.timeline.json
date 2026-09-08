@@ -377,7 +377,7 @@
      "k": false
     }
    ],
-   "cap_mode": "stage"
+   "cap_mode": "anchor"
   },
   {
    "s": 3.14,
@@ -2246,13 +2246,35 @@
  ],
  "sound": [
   {
+   "slot": "page enter 2 (snap)",
+   "at": 1.82,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_0_A__",
+    "B": "__snd_0_B__",
+    "C": "__snd_0_C__"
+   }
+  },
+  {
+   "slot": "page enter 6 (snap)",
+   "at": 36.93,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "__snd_1_A__",
+    "B": "__snd_1_B__",
+    "C": "__snd_1_C__"
+   }
+  },
+  {
    "slot": "hook bed",
    "at": 0.0,
    "gain": 0.015,
    "fade_in": 1.5,
    "variants": {
-    "A": "__snd_0_A__",
-    "B": "__snd_0_B__"
+    "A": "__snd_2_A__",
+    "B": "__snd_2_B__"
    }
   },
   {
@@ -2261,12 +2283,22 @@
    "gain": 0.015,
    "fade_in": 3.0,
    "variants": {
-    "A": "__snd_1_A__",
-    "B": "__snd_1_B__"
+    "A": "__snd_3_A__",
+    "B": "__snd_3_B__"
    }
   }
  ],
  "evidence": {
+  "dock-b-holdings": {
+   "title": "Japan is selling America's debt",
+   "source": "US Treasury TIC \u00b7 Sep 2026",
+   "species": "chart",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\build-short\\docks\\dock-b-holdings.png",
+    "sha256": "d96ca5c9ee673dc1cc1b240002d0b170e4a5a936e2d9d8140d152ca9677fc7be"
+   },
+   "badges": []
+  },
   "dock-c-two-lanes": {
    "title": "The left lane and the right lane",
    "source": "HollowStickMike - Money Physics",
@@ -2274,6 +2306,16 @@
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\build-short\\docks\\dock-c-two-lanes.png",
     "sha256": "3efd3e997d877ae655d968c9430d5d5034d93aaf49b3782f9cd8b7dc921177be"
+   },
+   "badges": []
+  },
+  "dock-g-receipt": {
+   "title": "The tariff bill on a $30,000 car",
+   "source": "DERIVED \u00b7 USTR + USITC HTS 8708 \u00b7 Sep 2026",
+   "species": "chart",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\build-short\\docks\\dock-g-receipt.png",
+    "sha256": "263e179611dcd68022890a6fe43c2c510ccfef34fb17e0f21d22127d29f01263"
    },
    "badges": []
   },
@@ -2322,12 +2364,22 @@
     },
     "idle": "drift"
    },
-   "exit": "cut",
+   "exit": "dip",
    "span": [
     0.0,
     1.82
    ],
-   "docks": [],
+   "docks": [
+    {
+     "slide": "dock-b-holdings",
+     "slot": 0,
+     "enter": 0.82,
+     "exit": 1.82,
+     "badge_at": [],
+     "arrive": "throw",
+     "mass": "paper"
+    }
+   ],
    "species": []
   },
   {
@@ -3658,7 +3710,8 @@
      "judge": [],
      "badges": [],
      "emphasize": 0,
-     "enter": "throw",
+     "enter": "snap",
+     "snap_from": "dock-b-holdings",
      "exit": "cut"
     },
     "ken_burns": {
@@ -3676,7 +3729,7 @@
    "species": [
     {
      "kind": "spotlight",
-     "at": 3.32,
+     "at": 2.67,
      "dur": 1.2,
      "target": {
       "kind": "datum",
@@ -4055,7 +4108,17 @@
     31.28,
     36.93
    ],
-   "docks": [],
+   "docks": [
+    {
+     "slide": "dock-g-receipt",
+     "slot": 0,
+     "enter": 35.93,
+     "exit": 36.93,
+     "badge_at": [],
+     "arrive": "throw",
+     "mass": "paper"
+    }
+   ],
    "species": []
   },
   {
@@ -4109,7 +4172,8 @@
       }
      ],
      "emphasize": 1,
-     "enter": "throw",
+     "enter": "snap",
+     "snap_from": "dock-g-receipt",
      "exit": "cut"
     },
     "ken_burns": {

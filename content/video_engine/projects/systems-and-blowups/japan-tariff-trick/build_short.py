@@ -51,7 +51,8 @@ bed_gain = lambda f: round(10 ** ((VO_LUFS + BED_LU[PLATFORM] - BEDS[f]) / 20), 
 # the ledger page's own clock (mirrored from the player's LP block, as Tokyo mirrors it): the chart LANDS 7.4 s after the
 # page's clock starts; a mount replaces the 0.7 s roll and ends where the roll would have (E45)
 PAGE_BUILD_END_S, PAGE_BUILD_START_S, PAGE_BUILD_S, LP_ROLL_S = 7.4, 4.4, 3.0, 0.7
-THROW_LAND_S = 1.1   # the player's THROW_S: a thrown page (enter=throw) is in the air this long before it lands as the world
+SNAP_S = 0.45        # the player's SNAP_S: a landed card grows to the stage in this long (the third watch)
+CARD_LEAD_S = 1.0    # a chart card is thrown onto the previous scene this long before its page snaps up from it (the dock's 0.45 s flight + a beat on the ground)
 
 # THE WORLDS - this story's stills (omni-video/stills/<arm>-<id>.png, 768x1376, Nano Banana Pro on HollowStickMike). The
 # `-v2` retries replaced a first pass that lost or drifted the character in a busy frame (the operator picks; these are the picks).
@@ -78,6 +79,8 @@ DOCK_META = [
     {"asset": "dock-c-two-lanes", "title": "The left lane and the right lane", "source": "HollowStickMike - Money Physics", "species": "deck", "badges": []},
     {"asset": "dock-a-podium", "title": "Washington signed a tariff", "source": "HollowStickMike - Money Physics", "species": "deck", "badges": []},
     {"asset": "dock-e-vault", "title": "Tokyo checked the vault", "source": "HollowStickMike - Money Physics", "species": "deck", "badges": []},
+    {"asset": "dock-b-holdings", "title": "Japan is selling America's debt", "source": "US Treasury TIC · Sep 2026", "species": "chart", "badges": []},   # the hook page as a thrown card
+    {"asset": "dock-g-receipt", "title": "The tariff bill on a $30,000 car", "source": "DERIVED · USTR + USITC HTS 8708 · Sep 2026", "species": "chart", "badges": []},   # the receipt page as a thrown card
 ]
 
 
@@ -146,6 +149,21 @@ def dock_card(aid: str, src: Path, crop: tuple[float, float]) -> Path:
     return out
 
 
+def chart_dock_card(aid: str, series: str, variant: str = "line", aspect: str = "9:16") -> str:
+    """A CHART CARD (Tokyo R26-19 / the third watch): the series object's ledger page rendered once at its landing by
+    scripts/chart_card.py as a PORTRAIT card - the page it will become - and registered as a dock still. The card is THROWN onto
+    the previous scene on the dock's stop-action kinetics (the landing with weight Tokyo got right) and the page then enters with
+    snap=<this card>: it grows from the landed card's rectangle to the stage (the part Tokyo never did; operator, 2026-09-08)."""
+    import build_render_f as R
+    import chart_card as CC
+    src = HERE / "evidence/objects" / f"{series}.series.json"
+    out = BUILD / "docks" / f"{aid}.png"
+    if not out.exists() or out.stat().st_mtime < max(src.stat().st_mtime, Path(CC.__file__).stat().st_mtime):
+        CC.render_card(src, out, variant, aspect=aspect)
+    R.STAMPED[aid] = str(out)
+    return aid
+
+
 def register_assets() -> None:
     """The resolver checks STAMPED first (build_render_f.find_asset): the stills, the dock cards and the dock clips land there by id."""
     import build_render_f as R
@@ -210,6 +228,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
     BRACKET = {"kind": "bracket", "from": PEAK_IDX, "to": LAST_IDX, "label": "−$122.6B", "sub": "Feb to Jun 2026", "color": "neg"}
     # 1-2 the hook and THE PAGE ON THE HOOK (E44): the mount begins on the hook's last word and ends where the roll-out would
     t_mount = at("tariffs")
+    t_card = round(max(0.05, t_mount - CARD_LEAD_S), 2)             # the holdings card is thrown onto the podium a second before it snaps up
     t_page = at("Instead")
     mount_hook = round(t_page + LP_ROLL_S - t_mount, 2)
     t_build = round(t_page + PAGE_BUILD_START_S, 2)                 # the line draws to the February peak
@@ -231,6 +250,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
     # 5-6 the ship on "Toyota crosses once"; the receipt page mounts over it on "But here's where the math breaks Detroit"
     t_ship = cut("Toyota crosses once")
     t_math = cut("But here's where")
+    t_receipt_card = round(t_math - CARD_LEAD_S, 2)                  # the receipt card is thrown onto the ship a second before it snaps up
     t_page3 = at("But here's where")
     t_six = max(at("six thousand dollars"), round(t_page3 + PAGE_BUILD_END_S + 0.05, 2))
     # 7-8 the vault on "the second lever"; the holdings page RETURNS by the spiral on "Instead of reinvesting"
@@ -261,18 +281,22 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
     # nowhere: a `cut` row is a cut since 2026-09-08 (it used to fall through to the wipe, E47 s3).
     return [
         # 1 the hook: the victory lap at the podium - "Trump announced he beat Japan on tariffs"
-        (0.0, t_mount, "plate-podium;idle=drift", ken, [], None, None),
+        (0.0, t_mount, "plate-podium;idle=drift", ken, [
+            # THE CARD, THROWN (the third watch, the Tokyo way): the holdings page as a portrait card flies onto the podium on the dock's
+            # stop-action throw and lands with weight; the next row's page SNAPS up from where it landed and IS the world
+            (chart_dock_card("dock-b-holdings", "ev-japan-holdings-v1", "line"), 0, t_card, t_mount, {"arrive": "throw", "mass": "paper"}),
+        ], None, None),
         # 2 THE PAGE ON THE HOOK: Japan's holdings ARRIVE DRAWN over the podium (enter=built, operator 2026-09-08: "chart 1
         #   doesn't actually need a build... we have plenty of builds in the short"). The build was never what starved this
         #   page - the BRACKET was, scheduled at 11.9-13.70 against a cut at 13.73, which also wrote -$122.6B six and a half
         #   seconds after the voice says it. The bracket is cut outright: operator, "a cheap, relatively bad way we use just
         #   to add some motion", and the figure is not lost - the selling page pays it off properly at 0:50. Deployed life
         #   goes 0.03s -> the whole span. exit=cut: the gates dip in.
-        (t_mount, t_gates, hold + ":throw:cut", ken, [], "cut", [
+        (t_mount, t_gates, hold + ":snap=dock-b-holdings:cut", ken, [], "cut", [
             # M11: a page that ARRIVES full must be pointed at, or it is homework (E25). The spotlight lands on the June
             # low as the page appears - the divergence IS the mechanism, and pointing at it beats the bracket that used
             # to write the figure six and a half seconds after the voice said it.
-            {"kind": "spotlight", "at": round(t_mount + THROW_LAND_S + 0.4, 2), "dur": 1.2, "target": datum(LAST_IDX)},   # after the throw has LANDED (1.1 s flight), never mid-air
+            {"kind": "spotlight", "at": round(t_mount + SNAP_S + 0.4, 2), "dur": 1.2, "target": datum(LAST_IDX)},   # after the SNAP has finished, never mid-snap
         ]),
         # 3 the crossings map: six hops, six stamps. Plant centres as stage fractions on sig-b-crossings-map-v9 (768x1376 -> 9:16):
         #   Detroit (0.215, 0.425), Ontario (0.65, 0.34) across the water, Mexico (0.455, 0.87) below the border. The route is
@@ -291,10 +315,12 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
             {"kind": "retitle", "at": t_right, "dur": 2.4, "text": "The right lane: Detroit's parts bill"},
         ]),
         # 5 the catalyst: the car carrier at one pier, one stamp - "Toyota crosses once. Tokyo pays a flat fifteen percent"
-        (t_ship, t_math, "plate-ship;idle=drift", ken, [], "dip", None),
+        (t_ship, t_math, "plate-ship;idle=drift", ken, [
+            (chart_dock_card("dock-g-receipt", "ev-tariff-receipt-v1", "bars"), 0, t_receipt_card, t_math, {"arrive": "throw", "mass": "paper"}),
+        ], "dip", None),
         # 6 the receipt page mounts over the ship on "the math breaks Detroit"; Detroit's bar is spotlit as the number is spoken;
         #   the +$1,740 is the page's own badge (B3: the numeral is in the sub behind it)
-        (t_math, t_lever, "ledger:ev-tariff-receipt-v1:bars:1:right:throw:cut", ken, [], "cut", [
+        (t_math, t_lever, "ledger:ev-tariff-receipt-v1:bars:1:right:snap=dock-g-receipt:cut", ken, [], "cut", [
             {"kind": "spotlight", "at": t_six, "dur": 1.0, "target": datum(1)},
         ]),
         # 7 the second lever: the vault, shelves emptying (it returns on "Tokyo checked the Treasury vault" - E48, the callback is the thread)
@@ -377,6 +403,9 @@ def main() -> int:
         if r[2].startswith("ledger:") and ":spiral" in r[2]:
             cues.append({"slot": f"page enter {i + 1} (spiral)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0,
                          "variants": {"A": "fs-whoosh-3-spiral-in.mp3", "B": "fs-whoosh-3-648729.mp3", "C": "fs-swirl-in-478722.mp3"}})
+        if r[2].startswith("ledger:") and ":snap=" in r[2]:   # the SNAP's whoosh (operator, 2026-09-08: "fast with a woosh to full size") - the card becomes the world
+            cues.append({"slot": f"page enter {i + 1} (snap)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0,
+                         "variants": {"A": "fs-whoosh-3-648729.mp3", "B": "fs-riserhit-754771.mp3", "C": "fs-whoosh-1-706679.mp3"}})
     t_turn = next(r[0] for r in rows if r[2].startswith("plate-vault"))   # the second lever
     cues.append({"slot": "hook bed", "at": 0.0, "gain": bed_gain("suno-hook-B.mp3"), "fade_in": 1.5,
                  "variants": {"A": "suno-hook-B.mp3", "B": "suno-hook-A.mp3"},

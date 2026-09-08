@@ -49,6 +49,13 @@
   .lp { position: absolute; left: 4.545%; top: 4.545%; width: 90.91%; height: 90.91%; overflow: hidden;
         --lp-cream: #F4E6C7; --lp-char: #25313C; --lp-chalk: #F2F2F2; --lp-acc: #F5B72E; --lp-pos: #2E9E5B; --lp-neg: #B0201F;   /* chart SIGN colours (operator, 2026-09-03): green up, blood red down - the sunflower callout is the only yellow */ --lp-brand: #1769C2; }
   .lp-page { position: absolute; inset: 0; background: var(--lp-cream); will-change: transform; overflow: hidden; }
+  /* THE CARD PAGE (operator, 2026-09-08: "keep the edges of the card rounded like this where it's more like a phone ... everything
+     should have a shadow instead of a border"): a page declared `card` keeps the thrown card's rounded corners at full size and sits
+     on the world with doc 29 s1.2's hard-edge paper shadow (14px 14px 0 ink at 1080p, scaled) and NO border - the world stays visible
+     around it (.cardworld). Opt-in per page; a snapped page is a card by default. */
+  .lp-page.card { border-radius: 36px; box-shadow: 18px 18px 0 #25313C; }
+  html[data-aspect="9:16"] .lp-page.card { border-radius: 44px; }
+  .world.ledger.cardworld { background: transparent !important; }
   /* plain cream (operator, 2026-09-03: "just a plain cream background"); the newsprint grain stays barely there */
   .lp-grain { position: absolute; inset: 0; opacity: .08; mix-blend-mode: multiply; pointer-events: none; }
   /* the unravelling edge: a curl shadow ahead of the front and a lit rim on it */
@@ -2397,7 +2404,7 @@
      value / tag with the series' accent as the key - spring in one at a time AFTER the build (the callout is the
      conclusion), in the page's quiet zone, painted as a function of t (never a CSS transition) */
   const LP_BADGE0 = 0.4, LP_BADGE_STEP = 0.9, LP_BADGE_IN = 0.36;
-  const SNAP_S = 0.45;   /* the third watch: the card snaps up to the full stage - a push tied to a landing [DERIVED: E45's spring-in span] */
+  const SNAP_S = 0.45, SNAP_BLUR = 6, CARD_SCALE = 0.955;   /* CARD_SCALE: a card page's rest size [DERIVED: a phone in a hand] */   /* the third watch: the card snaps up to the full stage - a push tied to a landing [DERIVED: E45's spring-in span]; SNAP_BLUR: the whoosh's peak blur, px [DERIVED: zoom-through's blurPeak 8 at 1080p, scaled] */
   /* THE THROW (enter=throw, 2026-09-08): a full page is a card too - the Tokyo dock's throw at page size. The operator on the first
      damped draft (arc 0.12, "a page-sized card at the pill's arc would leave the frame"): "I actually think it would be cool if it DID
      leave the frame mid arc ... it 'wobbles' out of screen, before flopping back down." So the arc is tall enough that the page clears
@@ -2414,6 +2421,7 @@
      2026-09-08); at 0.8 the card comes back WHOLE at card size and snaps up to the stage over the last fifth of the flight - the
      snap on the landing. The ARC (1.5 x the chord, THROW_ARC above) carries a 0.62 card clear of the top edge with the camera
      following a quarter of its height. */
+  const DROP_S = 0.55, DROP_FROM_H = 1.1;   /* the DROP (enter=drop): from just above the frame, easing in over 0.55 s [DERIVED: a page-height fall under the stop-action drop law] */
   const THROW_GROW_AT = 0.8, THROW_PITCH = 45, THROW_BEND = 35, THROW_FOLLOW = 0.25, THROW_PERSP = 1600, THROW_SQUASH = 0.15;   /* THROW_SQUASH: the page's share of the motion squash - 0.25 x 0.15 ~ 4 % at top speed */
   const THROW_FROM = { below: { x: STAGE_W * 0.06, y: STAGE_H * 1.1 }, above: { x: -STAGE_W * 0.06, y: -STAGE_H * 1.1 },
                        right: { x: STAGE_W * 1.1, y: STAGE_H * 0.06 }, left: { x: -STAGE_W * 1.1, y: STAGE_H * 0.06 } };
@@ -3786,11 +3794,17 @@
     const morphOn = pg.enter === "morph" && kin("arap_morph"), morphS = morphOn ? (pg.morph_s || MORPH.S) : 0;   /* P47 T3: the prop becomes the chart */
     const built = pg.enter === "built";   /* arrives with its chart drawn: the span is all deployed life, the idle keeps it alive */
     const snap = pg.enter === "snap";   /* the third watch: the thrown card BECOMES the world - the page arrives built and grows from the card's rectangle to the stage over SNAP_S */
+    const card = pg.card === true || (pg.card !== false && pg.enter === "snap");   /* a snapped page is a card unless told otherwise */
+    st.page.classList.toggle("card", card);
+    el.classList.toggle("cardworld", card);
+    const dropped = pg.enter === "drop";   /* operator, 2026-09-08: "is falling down into the frame easier?" - yes: the dock's landXf (weight first,
+       the drop easing in, the impact, the settle) with the drop from above the frame; a full-size page falls onto the world and lands as it. No
+       leaving the frame, no growth, nothing to clip. */
     const thrown = pg.enter === "throw";   /* operator, 2026-09-08: "throw the chart onto the plate ... the transition is literally the plate entering the world" -
        the whole page flies in on the pills' own kinetics (throwXf: a ballistic chord, the tumble, the material's squash and settle) and arrives built */
     const mount = pg.enter === "mount" || (pg.enter === "morph" && !morphOn);   /* a morph with its flag off is a mount of the same length */
     const mountS = mount ? (pg.mount_s || pg.morph_s || LP.FIELD) : 0;   /* the mount phase: the world fades, the cream builds; then the page's clock starts at ROLL + SAVOR (no roll, no savor) */
-    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || built || thrown) ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : mount ? LP.ROLL - mountS : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2): its cream builds over mount_s, then the SAVOR holds the empty page before the ink; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
+    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || built || thrown || dropped) ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : mount ? LP.ROLL - mountS : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2): its cream builds over mount_s, then the SAVOR holds the empty page before the ink; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
     /* beat 1: roll-out */
     const rk = (mount || morphOn || snap) ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) with the cream steps */
     const mu = mount ? clamp01((t - scene.span[0]) / mountS) : 1;
@@ -3853,10 +3867,24 @@
         const tx = (S.card.x - S.board.x * sx0) * (1 - u), ty = (S.card.y - S.board.y * sy0) * (1 - u);
         st.page.style.transformOrigin = "0 0";
         snapCss = "translate(" + tx.toFixed(2) + "px," + ty.toFixed(2) + "px) scale(" + sx.toFixed(5) + "," + sy.toFixed(5) + ") ";
-      }
+        /* THE WHOOSH (operator, 2026-09-08: "zoom pan frame would work if the zoom is fast with a woosh to full size"): a motion blur
+           on a VELOCITY envelope - 4u(1-u), exactly 0 at both ends and peaking where the snap moves fastest - the mechanism ported from
+           remotion-ui's zoom-through (a blur taken linearly off displacement is at full strength where the card is arriving, so the
+           landing reads soft; on the speed it lands crisp). SNAP_BLUR px at the peak, a dial. */
+        const speed = 4 * u * (1 - u), blur = SNAP_BLUR * speed;
+        st.page.style.filter = blur > 0.2 ? "blur(" + blur.toFixed(2) + "px)" : "";
+      } else st.page.style.filter = "";
     }
     let throwCss = "";
-    if (thrown) {   /* THROW_FROM is where the flight starts, as an offset from the page's rest (px); the arc lifts against it */
+    if (dropped) {   /* THE DROP: landXf from DROP_FROM_H above the rest, the drop easing in (gravity) over drop_s, the paper landing */
+      const tt = t - scene.span[0], Ds = +pg.drop_s > 0 ? +pg.drop_s : DROP_S;
+      const sx = landXf(scene.world.mass || "paper", tt, { DROP_PX: STAGE_H * DROP_FROM_H, DROP_S: Ds, ANTIC_S: 0 });
+      const sxPage = Object.assign({}, sx, { alpha: (sx.alpha || 0) * THROW_SQUASH });
+      st.page.style.transformOrigin = "50% 100%";   /* the squash on the hit is about the contact edge */
+      throwCss = stopCss(sxPage).trim() + " ";
+      const h = Math.max(0, -(sx.y || 0));
+      st.throw = { h, u: clamp01(tt / Ds), phase: sx.phase, landed: tt >= Ds, ground: sx.ground || 0, shake: sx.shake || { x: 0, y: 0 }, follow: 0 };
+    } else if (thrown) {   /* THROW_FROM is where the flight starts, as an offset from the page's rest (px); the arc lifts against it */
       const from = THROW_FROM[pg.throw_from] || THROW_FROM.below, F = +pg.throw_s > 0 ? +pg.throw_s : THROW_S, tt = t - scene.span[0];
       const sx = throwXf(from, scene.world.mass || "paper", tt, { FLIGHT_S: F, ARC: THROW_ARC, SPIN_DEG: THROW_SPIN });
       const u = clamp01(tt / F), landed = tt >= F;
@@ -3893,7 +3921,8 @@
       st.throw = { h, u, phase: sx.phase, landed, ground: sx.ground || 0, shake: sx.shake || { x: 0, y: 0 },
                    follow: landed ? 0 : THROW_FOLLOW * h };
     } else st.throw = null;
-    st.page.style.transform = snapCss + throwCss + "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")"
+    const cardCss = card ? "scale(" + CARD_SCALE + ") " : "";   /* the card's rest size: a little smaller than the stage, the world around it */
+    st.page.style.transform = snapCss + throwCss + cardCss + "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")"
       + idleCssFor("page", pg.idle, t, st.seed, 1);   /* E49: the page breathes while it holds under a sentence */
     /* beat 6: the build - crisp, landing on the exact strings - on the punched page */
     const c = clamp01((t3 - LP.PUNCH) / (st.buildDur || LP.BUILD));   /* race/decline/combo declare their own envelope */
@@ -4324,8 +4353,8 @@
     /* DISSOLVE (operator, 2026-09-05, on the wipe into the outro card - "what is this madness?"): a row whose exit reads dissolve
        arrives by a plain cross-fade over DISSOLVE_S - no front, no seam, the outgoing world keeps playing underneath */
     const snapIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "snap";   /* the card becomes the world: the page grows over the outgoing scene, which stays until covered */
-    const throwIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "throw";   /* the plate is thrown onto the world: the world stays beneath until it has landed */
-    wB.classList.toggle("snapping", (!!snapIn && t - sc.span[0] < SNAP_S) || (!!throwIn && t - sc.span[0] < THROW_S + THROW_SETTLE_S));
+    const throwIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && (sc.world.page.enter === "throw" || sc.world.page.enter === "drop");   /* the plate is thrown onto the world: the world stays beneath until it has landed */
+    wB.classList.toggle("snapping", (!!snapIn && t - sc.span[0] < SNAP_S) || (!!throwIn && t - sc.span[0] < (sc.world.page.enter === "drop" ? DROP_S : THROW_S) + THROW_SETTLE_S));
     const mountIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && (sc.world.page.enter === "mount" || sc.world.page.enter === "morph");   /* MOUNT (operator, 2026-09-05): the outgoing scene fades while the cream plate mounts over it - no page turn; a MORPH page arrives the same way (P47 T3).
        NEVER a built page (operator, 2026-09-08: "when we're launching the chart already built we NEVER mount. Mounting is reserved for cream coming
        through over the scene, and then drawing") - enter=built takes the row's own transition, like a plate, and arrives with the chart standing */
