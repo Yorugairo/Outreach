@@ -76,3 +76,10 @@ Three rules bind agents generating assets here:
    contact sheet. Free generation does not remove the review step.
 3. `approved` is set by the operator, never by product code, and figures
    are never fabricated — unverified claims go under SOURCES-TO-VERIFY.
+4. **Recall before you build** (2026-09-08): a proposal, a "try", an iteration or a "review
+   the docs" opens with `Recall:` lines from `docs_find` before anything is built - the order
+   (docs_find → rulings → capabilities/registries → the research bundle → a Gemini research
+   WORK-ORDER over the bridge, scoped as a QUESTION, never a design, its answer quarantined)
+   and the commit hook are in `docs/runbooks/RECALL-RECEIPT.md`. Inspect AND measure the
+   output before delivering it. Subjective media edits: 2-3 cheap preview candidates first;
+   image generation is cheap.

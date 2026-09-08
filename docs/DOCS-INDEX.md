@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3534 records across 282 files.
+3541 records across 283 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -4184,6 +4184,16 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L73 [3] Lane write sets (three harnesses, one checkout - interim until P2's order contract) — | lane | owns (may write without a cross-lane brief) | never writes | {` (reports + index run), Flow batch manifests and their quar} <cross-lane; tests>
 - L87 [3] Hand-off policy (measured 2026-09-05, `evals/RETRIEVAL-BENCHMARK-2026-09-05.md`) — What a dispatch costs. A fresh subagent pays ~20-25 k tokens before its first tool call (system {What a dispatch costs.} <re-sent; SigMap; sed -n; path:line; disk-as-bus; sqz compress --mode safe; explorer; open-ended; implementation_luna; junior_developer; reviewer; architect_sol>
 - L172 [2] PRP Format — New plans use YAML frontmatter: <draft; approved; running; review; blocked; complete; ## Summary; ## Intent And Acceptance; ## Scope; ## Not Building; ## Human Gates; ## Mandatory Reads>
+
+## docs/runbooks/RECALL-RECEIPT.md
+
+- L1 [1] The recall receipt — recall before you build — Operator, 2026-09-08, after a day in which the wipe's retirement (E47), the throw-then-snap (the third {proposing} <throw-then-snap; HyperFrames; re-derived; re-checks; path:line; Recall:; docs_find 0 hits for <term>; WORK-ORDER; render_baseline.serve; frame_png; javascript_tool; opt-in>
+- L12 [2] 1. The triggers — Any of these opens a recall before anything else is said or built: {"let's build / add / try / what if we …"; "try"; "iterate"; "review the docs"} <re-checks; path:line>
+- L23 [2] 2. The receipt — The proposal (and the commit that lands it) opens with `Recall:` lines — one per hit — before the <Recall:; docs_find 0 hits for <term>>
+- L44 [2] 3. The order — cheapest first; stop at the first layer that answers — 1. `python content/video_engine/scripts/docs_find.py "<noun>"` — one line per hit, cheapest layer first. <WORK-ORDER; path:line>
+- L60 [2] 4. Inspect AND measure — No visual or audio artifact is delivered, and no "fixed" is said, until both: {the frames; the geometry} <render_baseline.serve; frame_png; javascript_tool>
+- L73 [2] 5. When the record is silent — Say so in the receipt; propose the smallest opt-in that leaves the goldens byte-identical {opt-in} <byte-identical>
+- L80 [2] 6. Cheap candidates first — For a subjective media edit — a plate, a look, a motion — generate two or three cheap preview candidates <re-roll>
 
 ## docs/runbooks/RENDER-REGRESSION.md
 
