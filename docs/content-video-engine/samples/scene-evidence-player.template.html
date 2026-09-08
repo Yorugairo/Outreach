@@ -3852,7 +3852,14 @@
          page cleanly over the old world - by the time it lands the ledger page IS the new world"): the page flies as a CARD
          (THROW_CARD of the stage, the dock's size) and grows to the stage by min-jerk over SNAP_S, finishing exactly at the
          contact - the snap enter's growth, timed to the throw's landing. */
-      const snapK = minJerk(clamp01((tt - (F - SNAP_S)) / SNAP_S)), cardScale = THROW_CARD + (1 - THROW_CARD) * snapK;
+      /* TWO GROWTH LAWS to test by eye (operator: "it might even need to be a time-matched zoom ... we might just have to test it"):
+         `throw_grow: "snap"` (default) - the snap enter's min-jerk over SNAP_S, finishing at the contact (rest-to-rest, 42 s42.2);
+         `throw_grow: "depth"` - PERSPECTIVE: the card is coming TOWARD the camera onto the world plane, so its apparent size is 1/z
+         with depth falling linearly over the whole flight (43: the 2.5D camera; 24: planes scale by depth) - hyperbolic, slow early,
+         fast into the landing, no separate clock to time-match because the flight IS the clock. Same endpoints, same contact. */
+      const grow = pg.throw_grow === "depth" ? THROW_CARD / (THROW_CARD + (1 - THROW_CARD) * (1 - clamp01(tt / F)))
+                                             : THROW_CARD + (1 - THROW_CARD) * minJerk(clamp01((tt - (F - SNAP_S)) / SNAP_S));
+      const cardScale = tt >= F ? 1 : grow;
       st.page.style.transformOrigin = "50% 50%";
       throwCss = stopCss(sx).trim() + " scale(" + cardScale.toFixed(4) + ") ";
     }
