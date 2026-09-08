@@ -237,3 +237,21 @@ rendered.
 - The goldens: `ledger-soak-page` and `ledger-page-mid-build` have no camera species; identity by default keeps them.
 - `worldAnswer` already translates the worlds for a landing's dip - the camera root must compose ABOVE it or the dip
   becomes a camera move.
+
+## Verification
+
+- `python -m pytest content/video_engine/tests/test_golden_frames.py -q` - byte-identical with the camera flag off (every slice).
+- `python -m pytest content/video_engine/tests/test_camera.py content/video_engine/tests/test_camera_probe.py content/video_engine/tests/test_gate_motion_density.py -q`
+- `python content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short.py --arm sig` then
+  `python content/video_engine/scripts/gate_motion_density.py .../japan-tariff-trick/build-short --timeline japan-short.timeline.json` - 0 FAIL.
+- Rendered frames across the hook arrival (the scratchpad `beat_frames.py` pattern: `render_baseline.serve` + `frame_png`
+  on `build-short/player.html`) read as a viewer, and the element rects inspected in the pane at the instants that matter
+  (the 2026-09-08 lesson: measure the page / field / title rects, do not read instants).
+- The operator's watch on :8734 (HG1, HG2).
+
+## Evidence And Handoff
+
+- Evidence lands per slice in this file (`Evidence:` lines): test output, the gate's RESULT line, frame paths, commit SHAs.
+- Handoff: the ruling (E54) in `docs/portable/OPERATOR-RULINGS.md` with the operator's words; `CAPABILITIES.md` row;
+  the choreography ledger's arrives column; the docs layers regenerated (`build_docs_layers.py --write`, 8 in sync).
+- The player is served by `serve_player.py 8734 build-short` (no-store); the render after the word per `REVIEW-CLAUDE.md`.
