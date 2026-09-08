@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-07T18:38:57.998Z",
+  "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink with a single red accent. A massive round bank vault door stands half open, its wheel lock turned, revealing shelves of bundled paper bonds inside, some shelves already empty. The character, in his indigo suit and copper tie, peers inside with one hand on the edge of the door, leaning in. A single still frame, no on-screen text.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\still-e-vault.png",
+      "sha256": "5d5c33d9c088c3b7e80cc80455b8d55d2ce7903aebd51b3f1ce7f8ea00f9f49e"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\still-e-vault-raw.png",
+      "sha256": "5d5c33d9c088c3b7e80cc80455b8d55d2ce7903aebd51b3f1ce7f8ea00f9f49e"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\still-e-vault-raw.png",
+        "sha256": "5d5c33d9c088c3b7e80cc80455b8d55d2ce7903aebd51b3f1ce7f8ea00f9f49e"
+      }
+    ]
+  }
+}

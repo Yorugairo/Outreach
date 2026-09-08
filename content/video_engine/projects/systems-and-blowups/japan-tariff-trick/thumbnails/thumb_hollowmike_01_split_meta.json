@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-07T17:56:46.991Z",
+  "prompt": "9:16 vertical, high-impact YouTube thumbnail. Cream paper ground with vibrant saturated color blocking and bold charcoal ink contours. At the top, a massive bold golden-yellow pill badge with thick black outline displays the text \"THE TARIFF TRAP\" in heavy black sans-serif. In the center, a dramatic high-contrast split screen: On the left, an American red pickup truck is stopped behind a stack of six heavy hazard-striped toll barrier arms with glowing red siren lights, crowned by a bright red badge reading \"+$6,240 TAX\". On the right, a clean blue cargo container ship arrives under an electric blue badge reading \"$4,500 TARIFF\". The character stands in the center foreground, hands open gesturing in dramatic shock at the two sides. Vibrant dynamic colors, loud contrast, thick clean graphic lines.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_hollowmike_01_split.png",
+      "sha256": "f9d29ca20083193554510bf19e1fb21b7e5223e329e9c5125117ca398770ca63"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_hollowmike_01_split-raw.png",
+      "sha256": "f9d29ca20083193554510bf19e1fb21b7e5223e329e9c5125117ca398770ca63"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_hollowmike_01_split-raw.png",
+        "sha256": "f9d29ca20083193554510bf19e1fb21b7e5223e329e9c5125117ca398770ca63"
+      }
+    ]
+  }
+}

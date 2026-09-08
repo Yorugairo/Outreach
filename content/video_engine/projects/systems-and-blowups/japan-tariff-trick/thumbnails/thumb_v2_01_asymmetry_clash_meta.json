@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-07T17:55:51.567Z",
+  "prompt": "A bold, vibrant, high-contrast 2D editorial graphic illustration for a YouTube thumbnail on a clean solid cream ground (#F4E6C7). Fixed perpendicular eye-level perspective, centered on a 9:16 vertical canvas. At the top, a massive, highly saturated golden-yellow pill badge (#FFCC00) with thick black border displays the bold text \"THE TARIFF TRAP\" in heavy black sans-serif. The canvas is divided into a high-energy split screen: On the left, an American red pickup truck (#FF2D55) is stopped in front of six heavy red-and-white hazard striped toll barrier gates with flashing emergency red beacon lights, crowned by an intense red badge reading \"+$6,240 TAX\". On the right, a giant glowing electric golden semiconductor silicon wafer (#FFD700) with radiant gold circuit traces sits atop a clean blue cargo ship (#007AFF), crowned by a bright blue badge reading \"$4,500 TARIFF\". In the lower center stands our character @HollowStickMike with his signature voluminous black dreadlocks swept to the left, chunky deep purple rectangular glasses floating inside a hollow circular ring face, wearing a tailored slate navy suit jacket (#2E4A73), crisp white collared shirt, and crimson red tie (#8C1D24). His hands are open gesturing with shock and analysis at the huge cost gap. Bold saturated color blocking, intense visual impact, thick clean outlines, zero photorealism, zero gradients.",
+  "references": [
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\assets\\characters\\hollow-stick-mike\\portrait_reference.png"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_v2_01_asymmetry_clash.png",
+      "sha256": "4d45f1d854eaa59accd789fca3cb4528f684f7b48a0a39536c10458a94ca786c"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_v2_01_asymmetry_clash-raw.png",
+      "sha256": "4d45f1d854eaa59accd789fca3cb4528f684f7b48a0a39536c10458a94ca786c"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_v2_01_asymmetry_clash-raw.png",
+        "sha256": "4d45f1d854eaa59accd789fca3cb4528f684f7b48a0a39536c10458a94ca786c"
+      }
+    ]
+  }
+}

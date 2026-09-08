@@ -1,0 +1,30 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-07T17:52:56.652Z",
+  "prompt": "Flat 2D monoline vector technical blueprint illustration on a solid untextured cream washi paper ground (#F4E6C7). Fixed perpendicular perspective, centered on a 9:16 vertical canvas. At the top, a bold golden yellow pill badge (#E5A93C) displays the text \"THE 6X BORDER TRAP\" in bold charcoal sans-serif (#25313C). Across the central stage, a stylized supply-chain transit schematic is rendered in crisp charcoal linework: A red American pickup truck (#D9534F) is surrounded by an intricate red looped trajectory path that bounces back and forth six times across three regional border pillars labeled \"USA\", \"CANADA\", and \"MEXICO\". Each crossing point is stamped with a red circular stamp reading \"25% TAX\". Below the schematic, a bold dual-receipt comparison box shows: \"DETROIT: $6,240 TAX\" in a red box versus \"TOYOTA: $4,500 FLAT\" in a blue box. In the bottom right corner, a minimalist stickman in a charcoal vest points up at the sixth border crossing. Clean uniform 2D vector linework (#25313C), flat matte color fills, zero 3D rendering, zero gradients, zero photorealism.",
+  "references": [],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_04_six_border_pinball.png",
+      "sha256": "f51e7f257add7ef28841da1ae1fa5fb15bcf0c85db83632491e37da9f765375f"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_04_six_border_pinball-raw.png",
+      "sha256": "f51e7f257add7ef28841da1ae1fa5fb15bcf0c85db83632491e37da9f765375f"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_04_six_border_pinball-raw.png",
+        "sha256": "f51e7f257add7ef28841da1ae1fa5fb15bcf0c85db83632491e37da9f765375f"
+      }
+    ]
+  }
+}

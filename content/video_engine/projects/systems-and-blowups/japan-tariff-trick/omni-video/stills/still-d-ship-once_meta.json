@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-07T18:38:01.132Z",
+  "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink with a single red accent. A large car-carrier ship is moored at one pier, a line of small cars rolling down its single ramp onto the dock. At a small desk on the pier a customs clerk stamps one sheet of paper once. The character, in his indigo suit and copper tie, stands on the pier in the lower third watching with his hands in his pockets. A single still frame, no on-screen text.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\still-d-ship-once.png",
+      "sha256": "0d0df8a7507dfe3eb0dbc507ad31b2239ad88099a6e61900eb0800080b4084a1"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\still-d-ship-once-raw.png",
+      "sha256": "0d0df8a7507dfe3eb0dbc507ad31b2239ad88099a6e61900eb0800080b4084a1"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\still-d-ship-once-raw.png",
+        "sha256": "0d0df8a7507dfe3eb0dbc507ad31b2239ad88099a6e61900eb0800080b4084a1"
+      }
+    ]
+  }
+}

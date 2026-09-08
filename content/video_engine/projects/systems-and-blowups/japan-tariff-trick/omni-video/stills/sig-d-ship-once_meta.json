@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-07T18:43:21.894Z",
+  "prompt": "9:16 vertical, full bleed. A light application of woodblock print and vox newspaper meets rich anime colors. A large car-carrier ship is moored at one pier, a line of small cars rolling down its single ramp onto the dock. At a small desk on the pier a customs clerk stamps one sheet of paper once. The character, in his indigo suit and copper tie, stands on the pier in the lower third watching with his hands in his pockets. A single still frame, no on-screen text.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-d-ship-once.png",
+      "sha256": "7d3315432093b00904d8ed722793097dbab7480ebf28a5c2a11457abf5612c2e"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-d-ship-once-raw.png",
+      "sha256": "7d3315432093b00904d8ed722793097dbab7480ebf28a5c2a11457abf5612c2e"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\sig-d-ship-once-raw.png",
+        "sha256": "7d3315432093b00904d8ed722793097dbab7480ebf28a5c2a11457abf5612c2e"
+      }
+    ]
+  }
+}

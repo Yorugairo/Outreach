@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-07T17:58:06.906Z",
+  "prompt": "9:16 vertical, high-impact vibrant YouTube thumbnail. Cream paper ground with bold, saturated graphic color blocks and heavy charcoal contours. At the top, an ultra-vivid bold golden-yellow pill badge with a thick black border displays \"THE $122B TRAP\" in heavy black sans-serif. In the upper left, a massive steel bank vault door labeled \"US TREASURY\" is blown open with bond bills flying out in a dynamic swirl under a bright neon red badge reading \"-$122B DEBT\". A bold, sweeping, vibrant red capital outflow arrow arcs across the dark ocean into a colossal, radiant golden semiconductor silicon wafer on the right, glowing intensely with electric gold circuit lines under a bold badge reading \"¥10T CHIPS\". In the foreground, the character stands holding a thin pointer aimed directly at the glowing silicon wafer. Vibrant dynamic colors, loud saturation contrast, high visual punch, clean bold graphic outlines.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_hollowmike_02_vault_silicon.png",
+      "sha256": "d436cd3ba34633244a32a579013d435b5445c6de4d4390de2cb74dfca625e2fd"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_hollowmike_02_vault_silicon-raw.png",
+      "sha256": "d436cd3ba34633244a32a579013d435b5445c6de4d4390de2cb74dfca625e2fd"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_hollowmike_02_vault_silicon-raw.png",
+        "sha256": "d436cd3ba34633244a32a579013d435b5445c6de4d4390de2cb74dfca625e2fd"
+      }
+    ]
+  }
+}

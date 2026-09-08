@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-07T17:59:05.400Z",
+  "prompt": "9:16 vertical, high-impact vibrant YouTube thumbnail. Cream paper ground with bold, saturated graphic color blocks and heavy charcoal contours. At the top, an ultra-vivid bold golden-yellow pill badge with a thick black border displays \"HOW JAPAN WON\" in heavy black sans-serif. In the center, a large mechanical two-pan balance scale is severely tilted in extreme imbalance: The left pan is slammed down to the floor under an American red pickup truck crushed beneath heavy red iron weights labeled \"25% TAX\", crowned by a bold red warning box reading \"+$6,240 TAX\". The right pan floats high in the air, carrying a radiant, glowing electric golden semiconductor wafer under a bold gold badge reading \"¥10T CHIPS\". In the center foreground, the character stands with an open-handed shrug gesture of disbelief at the disparity. Vibrant saturated colors, loud contrast, thick clean graphic outlines.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_hollowmike_03_scale_collapse.png",
+      "sha256": "6948a1bd4caa039ddf33d1d8112cd66b513396fd45fc8e1e0f89b6120e2cced7"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_hollowmike_03_scale_collapse-raw.png",
+      "sha256": "6948a1bd4caa039ddf33d1d8112cd66b513396fd45fc8e1e0f89b6120e2cced7"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_hollowmike_03_scale_collapse-raw.png",
+        "sha256": "6948a1bd4caa039ddf33d1d8112cd66b513396fd45fc8e1e0f89b6120e2cced7"
+      }
+    ]
+  }
+}

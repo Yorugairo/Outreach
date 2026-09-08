@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-07T17:59:47.541Z",
+  "prompt": "9:16 vertical, high-impact vibrant YouTube thumbnail. Cream paper ground with bold, saturated graphic color blocks and heavy charcoal contours. At the top, an ultra-vivid bold golden-yellow pill badge with a thick black border displays \"THE 6X BORDER TRAP\" in heavy black sans-serif. In the center, a vibrant dynamic supply chain pinball maze: Three vertical border gates labeled \"USA\", \"CANADA\", and \"MEXICO\" have a looping red trajectory path where an American red pickup truck bounces back and forth six times across the borders, each crossing stamped with a vivid red circular badge reading \"25% TAX\". Below the maze, a large high-contrast dual receipt displays \"DETROIT: $6,240 TAX\" in a bold red box and \"TOYOTA: $4,500 FLAT\" in a bold blue box. In the lower corner, the character stands in his signature suit pointing a thin pointer up toward the border crossing loops. Vibrant saturated colors, loud contrast, thick clean outlines.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_hollowmike_04_pinball_maze.png",
+      "sha256": "eda33eb94d54a85fdd8025ac8b7f3a687baf961f2cdfe4926e5135d0bc569655"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_hollowmike_04_pinball_maze-raw.png",
+      "sha256": "eda33eb94d54a85fdd8025ac8b7f3a687baf961f2cdfe4926e5135d0bc569655"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\thumbnails\\thumb_hollowmike_04_pinball_maze-raw.png",
+        "sha256": "eda33eb94d54a85fdd8025ac8b7f3a687baf961f2cdfe4926e5135d0bc569655"
+      }
+    ]
+  }
+}

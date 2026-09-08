@@ -64,6 +64,7 @@ CHART_VARIANTS = ("line", "bars", "race", "decline", "progress", "share")
 PROP_PLACEMENTS = ("centre", "left", "right", "datum")
 QUIET_ZONES = ("left", "right")
 AXES_KEYS = ("log", "ylabel", "xticks", "from_zero", "highlight_from", "hlines", "hline", "marks", "eventbars",
+             "name_clear",   # lift the inline series name clear of the data it would otherwise be written across
              "ymin", "ymax", "yfmt", "yunit", "panels")
 UNCHARTABLE = {
     "checklist": "no chartable values: 'checklist' is a table, not a chart (keep it a dock)",
@@ -552,8 +553,12 @@ def _decline_block(series: dict, spec: dict) -> dict:
 
 def _story_block(series: dict) -> dict:
     labels, raw, colors = story_data(series)
+    # a BARS page carries its axes too, so it can declare a comparator rule (`hlines`) - the device that lets the
+    # GAP between a reference and a taller bar be drawn instead of subtracted (E53 s6, operator 2026-09-08)
+    axes = {k: copy.deepcopy(series[k]) for k in AXES_KEYS if k in series}
     return {"labels": list(labels), "values": [to_number(v) for v in raw],
-            "value_strings": [value_string(v) for v in raw], "colors": list(colors)}
+            "value_strings": [value_string(v) for v in raw], "colors": list(colors),
+            **({"axes": axes} if axes else {})}
 
 
 def _dense_block(series: dict) -> dict:

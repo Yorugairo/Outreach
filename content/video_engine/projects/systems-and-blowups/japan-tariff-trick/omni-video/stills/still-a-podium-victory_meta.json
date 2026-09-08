@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-07T18:36:01.477Z",
+  "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink with a single red accent. A press briefing podium with a cluster of microphones stands centre page in front of a drawn curtain and one small flag on a stand. The character, in his indigo suit and copper tie, stands beside the podium with one arm raised in a victory gesture, chin up, the other hand flat on the podium. A single still frame, no on-screen text.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "Generating will use 0 credits",
+    "modelText": "🍌 Nano Banana Pro",
+    "credits": 0
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\still-a-podium-victory.png",
+      "sha256": "5d983fd46dcf6728eecd4f1e7966c751ee4a387587cfeaaa690b49ad5bfe2749"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\still-a-podium-victory-raw.png",
+      "sha256": "5d983fd46dcf6728eecd4f1e7966c751ee4a387587cfeaaa690b49ad5bfe2749"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\omni-video\\stills\\still-a-podium-victory-raw.png",
+        "sha256": "5d983fd46dcf6728eecd4f1e7966c751ee4a387587cfeaaa690b49ad5bfe2749"
+      }
+    ]
+  }
+}

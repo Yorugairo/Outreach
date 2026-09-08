@@ -1,0 +1,45 @@
+{
+ "title": "The second lever: Japan sold, month by month",
+ "sub": "Change in Japan's US Treasury holdings, $bn a month, March to June 2026 - four months, -$122.6B, a tenth of the pile",
+ "src": "US Treasury TIC Table 5 (slt_table5.txt), Major Foreign Holders - fetched 2026-09-07",
+ "unit": "$",
+ "bars": [
+  {
+   "label": "Mar",
+   "value": -47.7,
+   "color": "crimson"
+  },
+  {
+   "label": "Apr",
+   "value": 18.3,
+   "color": "teal"
+  },
+  {
+   "label": "May",
+   "value": -66.8,
+   "color": "crimson"
+  },
+  {
+   "label": "Jun",
+   "value": -26.4,
+   "color": "crimson"
+  }
+ ],
+ "badges": [
+  {
+   "label": "FEB TO JUN 2026",
+   "value": "-$122.6B",
+   "tag": "a tenth of the pile",
+   "accent": "crimson"
+  }
+ ],
+ "status": "REAL",
+ "fetched": "2026-09-07",
+ "facts": {
+  "feb": 1239.3,
+  "jun": 1116.7,
+  "drop_bn": -122.6,
+  "biggest_month": "May",
+  "biggest_bn": -66.8
+ }
+}

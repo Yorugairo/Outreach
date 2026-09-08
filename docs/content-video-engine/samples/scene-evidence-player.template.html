@@ -2671,6 +2671,12 @@
       const h = Math.max(3, Math.abs(yv - base)), y = neg ? base : base - h;
       const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (i === st.emph ? " emph" : ""), st.chart,
         { x: x.toFixed(1), y: y.toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 6 });   /* grows from the zero baseline, up or down */
+      /* E53 s7: a DECLARED colour outranks the sign default. Without this the builder read only the value's sign,
+         so a page of COSTS came out green - three duty bills and a tariff receipt on the tariff short, all reading
+         as good news because the numbers were positive. A rise is not always a gain. The stylesheet beats a
+         presentation attribute, so the declared fill goes through style. */
+      const dcol = LP_PAL[(pg.colors || [])[i]];
+      if (dcol) bar.style.fill = dcol;
       bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
       const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + (P ? 52 : 34), "text-anchor": "middle", opacity: 0 });
       lab.textContent = (pg.labels || [])[i] || "";
@@ -2682,6 +2688,19 @@
       lpMark(st, "b:" + i, "bar", bar, { x, y, w: bw, h, base, cx: x + bw / 2, end: rec.end, neg, v }, rec);
       lpMark(st, "xlab:" + i, "xlabel", lab, { x: x + bw / 2, y: bottom + (P ? 52 : 34) });
       lpMark(st, "val:b:" + i, "value", val, { x: x + bw / 2, y: vy, v });
+    });
+    /* COMPARATOR RULE on a bars page (operator, 2026-09-08: "it needs some type of comparator line"). The line page
+       has had `axes.hlines` since the fifth watch; a bars page needs it more, because a comparison between two bars
+       is exactly where a viewer is asked to subtract. The rule is drawn across the plot at its value and named at
+       its right end, so the gap between it and a taller bar IS the argument (E53 s6). */
+    const HLB = ((pg.axes || {}).hlines || []).filter((h) => h && Number.isFinite(+h.y));
+    st.hlines = HLB.map((h, hi) => {
+      const col = LP_PAL[h.color] || h.color || "#8fb3f0", hy = my(+h.y);
+      const line = lpEl("line", "hrule", st.chart, { x1: x0, x2: x1, y1: hy.toFixed(1), y2: hy.toFixed(1), stroke: col });
+      const lab = h.label ? lpText(st.chart, "sname", x1, hy - (P ? 16 : 10), "end", String(h.label),
+        { opacity: 0, style: LP_HALO + "fill:" + col + (P ? ";font-size:34px" : "") }) : null;
+      lpMark(st, "rule:" + hi, "rule", line, { y: hy, v: +h.y, x1: x0, x2: x1 });
+      return { h, y: hy, line, lab, col };
     });
     const e = st.bars[Math.min(st.emph, st.bars.length - 1)];
     if (e) {
@@ -2785,7 +2804,16 @@
       /* a line ending high takes its name in the empty lower right - but only when it is the ONLY line. With two, both would
          land in the same corner and stack onto the axis (the fourth watch); each is named at its own end instead. */
       /* ... and never when a reference RULE already owns the lower right for its own label (the fifth watch) */
+      /* s9.23b / E53 s8: the name lives at the line's END - but anchored "end" it is written LEFTWARD, across
+         whatever the line already drew. On the tariff short's holdings page that put "-9.9% Japan" straight over the
+         muted history. Lift it clear of every point it would span. */
       const nameBelow = P && drawn.length === 1 && !HL.length && my(last[1]) < T + 0.35 * (B - T);
+      /* OPT-IN (`axes.name_clear`): lifting the name changes where it sits on every page that already draws one,
+         and the goldens are the contract - four moved when this was unconditional. A page asks for it. */
+      const spanX = P ? 330 : 210, xEnd = mx(last[0]);
+      let clearY = my(last[1]);
+      if (ax.name_clear) for (const q of drawn) for (const [qx, qv] of q.pts) { const px2 = mx(qx);
+        if (px2 >= xEnd - spanX && px2 <= xEnd) clearY = Math.min(clearY, my(qv)); }
       const name = lpEl("text", "sname", st.chart, P ? { x: (nameBelow ? W - R : Math.min(mx(last[0]), mx(prev[0])) - 8).toFixed(1), y: (nameBelow ? B - 28 : my(last[1]) - 30).toFixed(1), "text-anchor": "end", fill: col, opacity: 0 }
                                                      : { x: (mx(last[0]) + 12).toFixed(1), y: (my(last[1]) + 8).toFixed(1), fill: col, opacity: 0 });
       st.linePts.push(s.pts.map(([x, v]) => [mx(x), my(v)]));   /* the exact datum positions, for the species' targets */
@@ -2796,6 +2824,7 @@
       if (ib && ib.tag) { const tg = lpEl("tspan", "tagchip", name, { dx: 12, fill: col }); tg.textContent = ib.tag; }
       const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: nameBelow ? B - 28 : my(last[1]) + (P ? -30 : 8),
                      pts: s.pts.map(([x, v]) => [mx(x), my(v)]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum */
+      if (ax.name_clear && !nameBelow) rec.ny = Math.min(rec.ny, clearY - (P ? 34 : 20));
       st.paths.push(rec);
       lpMark(st, "s" + rec.si + (rec.muted ? ":h" : ""), "line", p, { pts: rec.pts, vals: s.pts.map(([, v]) => +v), len, k0: rec.k0, muted: rec.muted, col }, rec);
     });
