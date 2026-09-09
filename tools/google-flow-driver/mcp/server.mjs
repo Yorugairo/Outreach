@@ -1,4 +1,22 @@
+import fs from 'node:fs';
 import path from 'node:path';
+
+// Stdio safety: MCP JSON-RPC protocol requires stdout to only carry JSON.
+// Redirect console.* to stderr and a local logfile so debug output never corrupts JSON-RPC stdout.
+const logFile = path.resolve('C:/Users/Snipe/Downloads/Outreach Program/tools/google-flow-driver/runtime/flow-mcp.log');
+try { fs.mkdirSync(path.dirname(logFile), { recursive: true }); } catch {}
+
+function safeLog(prefix, ...args) {
+  const line = `[${new Date().toISOString()}] [${prefix}] ` + args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ') + '\n';
+  process.stderr.write(line);
+  try { fs.appendFileSync(logFile, line); } catch {}
+}
+
+console.log = (...args) => safeLog('LOG', ...args);
+console.info = (...args) => safeLog('INFO', ...args);
+console.warn = (...args) => safeLog('WARN', ...args);
+console.error = (...args) => safeLog('ERROR', ...args);
+
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import {
@@ -71,6 +89,18 @@ const TOOLS = [
           type: 'string',
           description: 'The video generation prompt description and style instructions.'
         },
+        startFrame: {
+          type: 'string',
+          description: 'Start frame asset name or query in project library for continuous two-point interpolation.'
+        },
+        endFrame: {
+          type: 'string',
+          description: 'End frame asset name or query in project library for continuous two-point interpolation.'
+        },
+        character: {
+          type: 'string',
+          description: 'Character reference chip name (e.g. "HollowStickMike").'
+        },
         references: {
           type: 'array',
           items: { type: 'string' },
@@ -97,14 +127,40 @@ const TOOLS = [
         },
         outputPath: {
           type: 'string',
-          description: 'Absolute output file path where the resulting MP4 video will be saved.'
+          description: 'Optional output file path where the resulting MP4 video will be saved if synchronous render is used.'
         },
         projectUrl: {
           type: 'string',
           description: 'Optional specific Google Flow project URL to navigate to.'
         }
       },
-      required: ['prompt', 'outputPath']
+      required: ['prompt']
+    }
+  },
+  {
+    name: 'get_flow_canvas',
+    description: 'Inspect the real-time state of the Google Flow canvas and generation queue. Returns isGenerating (boolean), progress percentage (e.g. "45%"), composer state (pinned triggers and chips), and visible library assets (<200 tokens).',
+    inputSchema: {
+      type: 'object',
+      properties: {}
+    }
+  },
+  {
+    name: 'download_flow_video',
+    description: 'Download the newest generated scene video from the Google Flow canvas to a target path and automatically extract verification frames via FFmpeg.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        outputPath: {
+          type: 'string',
+          description: 'Absolute output file path where the resulting MP4 video will be saved.'
+        },
+        extractFrames: {
+          type: 'boolean',
+          description: 'Whether to extract 1 fps verification frames to <outputPath>-frames directory (default: true).'
+        }
+      },
+      required: ['outputPath']
     }
   },
   {
@@ -247,7 +303,35 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
 
     if (name === 'create_flow_video') {
+      if (args.startFrame && args.endFrame) {
+        const result = await engine.submitInterpolationVideo({
+          startFrame: args.startFrame,
+          endFrame: args.endFrame,
+          character: args.character || 'HollowStickMike',
+          prompt: args.prompt
+        });
+        return {
+          content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
+        };
+      }
       const result = await engine.generateVideo(args || {});
+      return {
+        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
+      };
+    }
+
+    if (name === 'get_flow_canvas') {
+      const result = await engine.getCanvasState();
+      return {
+        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
+      };
+    }
+
+    if (name === 'download_flow_video') {
+      const result = await engine.downloadVideo({
+        outputPath: args.outputPath,
+        extractFrames: args.extractFrames !== false
+      });
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }]
       };

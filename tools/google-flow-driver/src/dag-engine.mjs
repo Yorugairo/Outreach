@@ -250,4 +250,25 @@ export class FlowDagEngine {
       results,
     };
   }
+
+  async submitInterpolationVideo({ startFrame, endFrame, character, prompt }) {
+    if (!startFrame || !endFrame) {
+      throw new Error('startFrame and endFrame are required for continuous interpolation.');
+    }
+    if (!prompt) {
+      throw new Error('prompt is required.');
+    }
+    return this.driver.submitInterpolation({ startFrame, endFrame, character, prompt });
+  }
+
+  async getCanvasState() {
+    return this.driver.getCanvasSnapshot();
+  }
+
+  async downloadVideo({ outputPath, extractFrames = true }) {
+    if (!outputPath) {
+      throw new Error('outputPath is required.');
+    }
+    return this.driver.downloadLatestVideo(outputPath, extractFrames);
+  }
 }

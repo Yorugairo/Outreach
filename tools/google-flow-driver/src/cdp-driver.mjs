@@ -1,6 +1,8 @@
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { execSync } from 'node:child_process';
 import { chromium } from 'playwright-core';
 
 // Flow moved hosts on 2026-09-04 (labs.google/fx/tools/flow -> flow.google.com). Match either,
@@ -142,6 +144,43 @@ export class FlowCdpDriver {
   async listProjectCharacters() {
     const page = await this.getFlowPage();
     this.resetIdleTimer();
+
+    // 0. The library's Characters view is the authoritative list (2026-09-08): every bound character is a
+    //    <flow-character-tile> carrying a .character-tile-name. The All-media grid renders only the first
+    //    strip of that list (three tiles), and the alt/span scan below returned on that first hit - which is
+    //    how "Mike2" was reported missing while live. Read the view, then put the library back where it was.
+    const readTiles = () => page.evaluate(() =>
+      Array.from(document.querySelectorAll('flow-character-tile .character-tile-name'))
+        .map(e => e.textContent.trim()).filter(Boolean));
+    try {
+      const charsNav = page.getByText('Characters', { exact: true }).first();
+      if (await charsNav.count() > 0) {
+        // The media grid is the generation observer's baseline. Leaving the view empties it and coming back
+        // refills it lazily; a baseline taken before the refill sees the previous roll's output as "new" and
+        // downloads it again (the Mike2 roll landed MikeMasterV3's file, 2026-09-08). Count the grid before
+        // leaving and do not return until it is back to that count.
+        const gridCount = () => page.evaluate(() => document.querySelectorAll('img[src*="flow-content.google/image/"]').length);
+        const before = await gridCount();
+        await charsNav.click();
+        await page.waitForTimeout(900);
+        const tileNames = await readTiles();
+        const back = page.getByText('All media', { exact: true }).first();
+        if (await back.count() > 0) {
+          await back.click();
+          const t0 = Date.now();
+          while (Date.now() - t0 < 8000 && (await gridCount()) < before) await page.waitForTimeout(250);
+          await page.waitForTimeout(400);
+          const after = await gridCount();
+          if (after < before) console.warn(`[FlowCdpDriver] Media grid refilled to ${after}/${before} tiles after the Characters view; the observer baseline may be short.`);
+        }
+        if (tileNames.length > 0) return Array.from(new Set(tileNames));
+      } else {
+        const tileNames = await readTiles();
+        if (tileNames.length > 0) return Array.from(new Set(tileNames));
+      }
+    } catch (err) {
+      console.warn(`[FlowCdpDriver] Characters view read failed, falling back to the grid scan: ${err.message}`);
+    }
 
     // 1. Scan DOM for character image alt tags and cards
     const names = await page.evaluate(() => {
@@ -332,6 +371,17 @@ export class FlowCdpDriver {
       await page.waitForTimeout(400);
       initial = await this.readGenerationState();
     }
+    // Agent mode (2026-09-08) replaces the settings pill with an agent chat bar ('Agent instructions', 'tune');
+    // the pill only exists with the Agent chip toggled OFF. The chip sticks per project, so read it every time.
+    if (!initial.pillText) {
+      const agentChip = page.locator('flow-agent-mode-toggle-chip button[aria-pressed="true"]');
+      if (await agentChip.count() > 0) {
+        console.log('[FlowCdpDriver] Composer is in Agent mode - toggling it off to reach the settings pill.');
+        await agentChip.first().click();
+        await page.waitForTimeout(1200);
+        initial = await this.readGenerationState();
+      }
+    }
 
     const currentText = `${initial.modelText} ${initial.pillText}`.toLowerCase();
     const isImage = mode === 'image';
@@ -348,9 +398,11 @@ export class FlowCdpDriver {
     }
 
     let pill = this.settingsPill();
-    if (await pill.count() === 0) {
+    // The pill is absent for a moment while the page settles after a roll (the v5 crossings-map order died on
+    // it 0 s in, and the pill was back by the time anyone looked, 2026-09-08) - retry before declaring it gone.
+    for (let attempt = 0; attempt < 4 && (await pill.count()) === 0; attempt++) {
       await page.keyboard.press('Escape');
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(500 + attempt * 1000);
       pill = this.settingsPill();
     }
     if (await pill.count() === 0) throw new Error('Flow settings pill not found (composer button ending in x1..x4).');
@@ -720,7 +772,11 @@ export class FlowCdpDriver {
       // an image downloaded earlier in this session is never "new" again (same defect as the video
       // path: the page lists an earlier output after the baseline is taken; its signed URL may also
       // have expired, which is the "Failed to fetch" that killed the stills batch, 2026-09-04)
-      this.seenImageIds = this.seenImageIds || new Set();
+      // ... and never "new" again across PROCESSES either: every stdio dispatch is a fresh server, so the set
+      // above started empty each roll and the previous roll's output was downloaded twice (v7 landed v6's file,
+      // byte-identical, 2026-09-08). The set now persists in runtime/seen-image-ids.json - the one piece of
+      // state two sessions on the same Flow project must share.
+      this.seenImageIds = this.seenImageIds || new Set(this._loadSeenImageIds());
       const idOf = (s) => s.split('?')[0];
       while (Date.now() - startTime < timeoutMs) {
         this.resetIdleTimer();
@@ -748,13 +804,13 @@ export class FlowCdpDriver {
             }, currentSrc);
           } catch (e) {
             console.warn(`[FlowCdpDriver] Could not fetch ${currentSrc.slice(0, 80)} (${e.message}); skipping it.`);
-            this.seenImageIds.add(idOf(currentSrc));
+            this.seenImageIds.add(idOf(currentSrc)); this._saveSeenImageId(idOf(currentSrc));
             prevList.push(currentSrc);
             await page.waitForTimeout(2500);
             continue;
           }
           prevList.push(currentSrc);
-          this.seenImageIds.add(idOf(currentSrc));
+          this.seenImageIds.add(idOf(currentSrc)); this._saveSeenImageId(idOf(currentSrc));
           // Flow's asset-service '/asb/' entries are PREVIEW thumbnails (286x512, ~20 KB); the render is the
           // flow-content.google/image URL. Three Tokyo stills came back as thumbnails (2026-09-04).
           if (bytes.length < 120000 && /\/asb\//.test(currentSrc)) {
@@ -851,6 +907,250 @@ export class FlowCdpDriver {
     fs.writeFileSync(rawOutputPath, Buffer.from(videoBytes));
     console.log(`[FlowCdpDriver] Successfully saved raw video (${videoBytes.length} bytes) to ${rawOutputPath}`);
     return rawOutputPath;
+  }
+
+  async pinFrame(type, query) {
+    const page = await this.getFlowPage();
+    this.resetIdleTimer();
+
+    // Clear overlays
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(300);
+
+    let btn = page.locator(`button.empty-chip:has-text("${type}"), .frame-trigger:has-text("${type}")`).first();
+    if (await btn.count() === 0) {
+      const settingsBtn = page.locator("button.settings-trigger-button").first();
+      if (await settingsBtn.count() > 0) {
+        await settingsBtn.click();
+        await page.waitForTimeout(600);
+        const framesSpan = page.locator(".cdk-overlay-container span.toggle-text:has-text('Frames'), .cdk-overlay-container [role='button']:has-text('Frames')").first();
+        if (await framesSpan.count() > 0) {
+          await framesSpan.click();
+          await page.waitForTimeout(800);
+          await page.keyboard.press('Escape');
+          await page.waitForTimeout(500);
+        }
+      }
+      btn = page.locator(`button.empty-chip:has-text("${type}"), .frame-trigger:has-text("${type}")`).first();
+    }
+    if (await btn.count() === 0) {
+      throw new Error(`Frame trigger button for "${type}" not found on composer.`);
+    }
+
+    await btn.click();
+    await page.waitForTimeout(1000);
+
+    // List available items in picker
+    const items = await page.evaluate(() => {
+      return Array.from(document.querySelectorAll('[role="option"], .asset-item')).map(el => {
+        const text = (el.innerText || '').replace(/\s+/g, ' ').trim();
+        return text;
+      }).filter(Boolean);
+    });
+
+    const cleanQuery = query.toLowerCase().trim();
+    const matched = items.find(item => item.toLowerCase().includes(cleanQuery));
+
+    if (!matched) {
+      await page.keyboard.press('Escape');
+      throw new Error(`Asset matching "${query}" not found in project library. Available assets: [${items.slice(0, 12).join(' | ')}]`);
+    }
+
+    const itemEl = page.locator(`[role="option"]:has-text("${matched}"), .asset-item:has-text("${matched}")`).first();
+    await itemEl.click();
+    await page.waitForTimeout(800);
+
+    const addBtn = page.locator('button.detail-add-to-prompt-btn, button:has-text("Add to prompt")').first();
+    if (await addBtn.count() > 0) {
+      await addBtn.click();
+      await page.waitForTimeout(1000);
+    }
+    return matched;
+  }
+
+  async submitInterpolation({ startFrame, endFrame, character = 'HollowStickMike', prompt }) {
+    const page = await this.getFlowPage();
+    this.resetIdleTimer();
+
+    // Reset to canvas if currently in scene editor
+    if (page.url().includes('/edit/')) {
+      const backBtn = page.locator("button[aria-label*='Back'], button:has-text('arrow_back')").first();
+      if (await backBtn.count() > 0) {
+        await backBtn.click();
+        await page.waitForTimeout(1000);
+      } else {
+        await page.keyboard.press('Escape');
+        await page.waitForTimeout(800);
+      }
+    } else {
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(300);
+    }
+
+    // 1. Pin Start Frame
+    const startMatched = await this.pinFrame('Start', startFrame);
+
+    // 2. Pin End Frame
+    const endMatched = await this.pinFrame('End', endFrame);
+
+    // 3. Clear editor & insert character chip
+    const editor = page.locator("div.ProseMirror, div[contenteditable='true']").first();
+    await editor.click({ force: true });
+    await page.waitForTimeout(200);
+    await page.keyboard.press('Control+A');
+    await page.waitForTimeout(150);
+    await page.keyboard.press('Backspace');
+    await page.waitForTimeout(200);
+
+    if (character) {
+      await page.keyboard.type('@');
+      await page.waitForTimeout(800);
+      const charOpt = page.locator(`[role="option"]:has-text("${character}"), .asset-item:has-text("${character}")`).first();
+      if (await charOpt.count() > 0) {
+        await charOpt.click();
+        await page.waitForTimeout(600);
+        const addBtn = page.locator('button.detail-add-to-prompt-btn, button:has-text("Add to prompt")').first();
+        if (await addBtn.count() > 0) {
+          await addBtn.click();
+          await page.waitForTimeout(800);
+        }
+      }
+    }
+
+    // 4. Insert transition prompt
+    await editor.click({ force: true });
+    await page.keyboard.press('Control+End');
+    await page.waitForTimeout(150);
+    await page.keyboard.insertText(' ' + prompt.trim());
+    await page.waitForTimeout(600);
+
+    // 5. Submit generation
+    const submitBtn = page.locator("button[aria-label*='Start generation'], button:has-text('arrow_forward')").last();
+    await submitBtn.click();
+    await page.waitForTimeout(3000);
+
+    return {
+      status: 'submitted',
+      startFrame: startMatched,
+      endFrame: endMatched,
+      character,
+      prompt: prompt.slice(0, 100) + '...'
+    };
+  }
+
+  async getCanvasSnapshot() {
+    const page = await this.getFlowPage();
+    this.resetIdleTimer();
+
+    const snapshot = await page.evaluate(() => {
+      // Check pending tiles and progress percentage
+      const pendingTile = document.querySelector('flow-pending-tile');
+      const newestTile = document.querySelector('flow-video-tile');
+      const statusText = ((pendingTile?.innerText || '') + ' ' + (newestTile?.innerText || ''));
+      const match = statusText.match(/\b\d+%\b/);
+      const isGenerating = Boolean(pendingTile) || Boolean(match);
+      const progress = match ? match[0] : (isGenerating ? 'processing' : null);
+
+      // Check triggers
+      const triggers = Array.from(document.querySelectorAll('.frame-trigger, .empty-chip, .chip-container')).map(el => ({
+        text: el.innerText.trim(),
+        hasImg: Boolean(el.querySelector('img'))
+      }));
+      const startPinned = triggers.some(t => t.hasImg);
+      const endPinned = triggers.filter(t => t.hasImg).length >= 2;
+
+      // Check chips
+      const chips = Array.from(document.querySelectorAll('.mention-chip')).map(c => c.innerText.trim());
+
+      // Check top completed tiles in grid
+      const assetElements = Array.from(document.querySelectorAll('flow-video-tile, flow-image-tile, flow-character-tile, .asset-item, .card')).slice(0, 15);
+      const assets = assetElements.map(el => {
+        const title = el.querySelector('.asset-title, .title, span, p')?.innerText || el.innerText || '';
+        return title.replace(/\s+/g, ' ').trim().slice(0, 60);
+      }).filter(Boolean);
+
+      return {
+        isGenerating,
+        progress,
+        composer: {
+          startPinned,
+          endPinned,
+          chips,
+          triggersCount: triggers.length
+        },
+        libraryAssets: [...new Set(assets)]
+      };
+    });
+
+    return snapshot;
+  }
+
+  async downloadLatestVideo(outputPath, extractFrames = true) {
+    const page = await this.getFlowPage();
+    this.resetIdleTimer();
+
+    const targetDir = path.dirname(outputPath);
+    fs.mkdirSync(targetDir, { recursive: true });
+
+    let downloadBtn = page.locator("button[aria-label*='Download scene'], button:has-text('download')").filter({ visible: true }).first();
+    if (await downloadBtn.count() === 0) {
+      // Try opening the top-left completed card (handling dynamic demand banner offset)
+      await page.mouse.click(350, 220);
+      await page.waitForTimeout(2000);
+      downloadBtn = page.locator("button[aria-label*='Download scene'], button:has-text('download')").filter({ visible: true }).first();
+      if (await downloadBtn.count() === 0) {
+        await page.mouse.click(355, 140);
+        await page.waitForTimeout(2000);
+        downloadBtn = page.locator("button[aria-label*='Download scene'], button:has-text('download')").filter({ visible: true }).first();
+      }
+    }
+
+    if (await downloadBtn.count() === 0) {
+      throw new Error('Download scene button could not be located after clicking latest video card.');
+    }
+
+    const [ download ] = await Promise.all([
+      page.waitForEvent('download', { timeout: 30000 }).catch(() => null),
+      downloadBtn.click()
+    ]);
+
+    if (!download) {
+      throw new Error('Failed to capture browser download event.');
+    }
+
+    await download.saveAs(outputPath);
+    const sizeBytes = fs.statSync(outputPath).size;
+
+    let framesDir = null;
+    if (extractFrames && sizeBytes > 100000) {
+      const baseName = path.basename(outputPath, path.extname(outputPath));
+      framesDir = path.join(targetDir, `${baseName}-frames`);
+      fs.mkdirSync(framesDir, { recursive: true });
+      const framePattern = path.join(framesDir, 'frame-%02d.png');
+      execSync(`ffmpeg -y -i "${outputPath}" -vf "fps=1" "${framePattern}"`, { stdio: 'pipe' });
+    }
+
+    return {
+      success: true,
+      outputPath,
+      sizeBytes,
+      framesDir
+    };
+  }
+
+  _seenImageIdsPath() {
+    return path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'runtime', 'seen-image-ids.json');
+  }
+  _loadSeenImageIds() {
+    try { return JSON.parse(fs.readFileSync(this._seenImageIdsPath(), 'utf8')); } catch { return []; }
+  }
+  _saveSeenImageId(id) {
+    try {
+      const file = this._seenImageIdsPath();
+      const ids = new Set(this._loadSeenImageIds()); ids.add(id);
+      fs.mkdirSync(path.dirname(file), { recursive: true });
+      fs.writeFileSync(file, JSON.stringify(Array.from(ids).slice(-500)));
+    } catch (err) { console.warn(`[FlowCdpDriver] could not persist seen image id: ${err.message}`); }
   }
 
   async disconnect() {
