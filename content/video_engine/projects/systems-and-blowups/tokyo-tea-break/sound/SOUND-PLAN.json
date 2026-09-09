@@ -69,24 +69,60 @@
   {
    "slot": "hook bed",
    "at": 0.0,
-   "gain": 0.0226,
+   "gain": 0.0569,
    "fade_in": 1.5,
+   "env": [
+    [
+     8.79,
+     0.0
+    ],
+    [
+     9.09,
+     4.0
+    ],
+    [
+     10.29,
+     4.0
+    ],
+    [
+     11.09,
+     0.0
+    ]
+   ],
    "variants": {
     "A": "suno-hook-B.mp3",
     "B": "suno-hook-A.mp3"
    },
-   "note": "youtube -28 LU under the VO (-17.9 LUFS); B at 0.0232"
+   "note": "youtube -20 LU under the VO (-17.9 LUFS); B at 0.0582"
   },
   {
    "slot": "turn bed",
    "at": 40.0,
-   "gain": 0.0226,
+   "gain": 0.0569,
    "fade_in": 3.0,
+   "env": [
+    [
+     75.49,
+     0.0
+    ],
+    [
+     75.79,
+     4.0
+    ],
+    [
+     77.28,
+     4.0
+    ],
+    [
+     78.08,
+     0.0
+    ]
+   ],
    "variants": {
     "A": "suno-pivot-A.mp3",
     "B": "suno-pivot-B.mp3"
    },
-   "note": "youtube -28 LU under the VO; B at 0.0226"
+   "note": "youtube -20 LU under the VO; B at 0.0569"
   }
  ],
  "page_cues_note": "LEDGER PAGE CUES (P35 T9, 2026-09-02). 'at' values here are RELATIVE to the page's own start on the timeline, NOT the episode clock - the page species adds the page start when it schedules them. Kept out of 'cues' on purpose: build_scene_timeline_f.py and render_episode.mix_audio() flatten every entry in 'cues' onto the episode clock. Gains = whoosh accent 0.9 scaled by the measured integrated-loudness difference vs fs-whoosh-1-706679.mp3 (-14.06 LUFS): 0.9 * 10^(-(I_cue - I_whoosh)/20). Whoosh accent exempt from the -28 LU bed rule and so are these (they are accents, not beds). All CC0 - sound/SOURCES.md.",

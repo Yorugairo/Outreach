@@ -64,6 +64,16 @@
         "build-short"
       ],
       "port": 8736
+    },
+    {
+      "name": "tokyo-short-player-b",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/serve_player.py",
+        "8738",
+        "build-short"
+      ],
+      "port": 8738
     }
   ]
 }

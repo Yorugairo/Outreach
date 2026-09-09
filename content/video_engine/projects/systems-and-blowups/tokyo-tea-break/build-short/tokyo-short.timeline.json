@@ -1618,7 +1618,7 @@
      "k": false
     }
    ],
-   "cap_mode": "anchor"
+   "cap_mode": "stage"
   },
   {
    "s": 61.99,
@@ -2076,6 +2076,7 @@
    "at": 9.51,
    "gain": 0.12,
    "fade_in": 0.0,
+   "env": [],
    "variants": {
     "A": "__snd_0_A__",
     "B": "__snd_0_B__"
@@ -2086,6 +2087,7 @@
    "at": 36.86,
    "gain": 0.12,
    "fade_in": 0.0,
+   "env": [],
    "variants": {
     "A": "__snd_1_A__",
     "B": "__snd_1_B__"
@@ -2096,6 +2098,7 @@
    "at": 38.96,
    "gain": 0.12,
    "fade_in": 0.0,
+   "env": [],
    "variants": {
     "A": "__snd_2_A__",
     "B": "__snd_2_B__",
@@ -2108,6 +2111,7 @@
    "at": 44.88,
    "gain": 0.12,
    "fade_in": 0.0,
+   "env": [],
    "variants": {
     "A": "__snd_3_A__",
     "B": "__snd_3_B__",
@@ -2119,6 +2123,7 @@
    "at": 76.21,
    "gain": 0.12,
    "fade_in": 0.0,
+   "env": [],
    "variants": {
     "A": "__snd_4_A__",
     "B": "__snd_4_B__"
@@ -2129,6 +2134,7 @@
    "at": 76.83,
    "gain": 0.12,
    "fade_in": 0.0,
+   "env": [],
    "variants": {
     "A": "__snd_5_A__"
    }
@@ -2136,8 +2142,26 @@
   {
    "slot": "hook bed",
    "at": 0.0,
-   "gain": 0.0226,
+   "gain": 0.0569,
    "fade_in": 1.5,
+   "env": [
+    [
+     8.79,
+     0.0
+    ],
+    [
+     9.09,
+     4.0
+    ],
+    [
+     10.29,
+     4.0
+    ],
+    [
+     11.09,
+     0.0
+    ]
+   ],
    "variants": {
     "A": "__snd_6_A__",
     "B": "__snd_6_B__"
@@ -2146,8 +2170,26 @@
   {
    "slot": "turn bed",
    "at": 40.0,
-   "gain": 0.0226,
+   "gain": 0.0569,
    "fade_in": 3.0,
+   "env": [
+    [
+     75.49,
+     0.0
+    ],
+    [
+     75.79,
+     4.0
+    ],
+    [
+     77.28,
+     4.0
+    ],
+    [
+     78.08,
+     0.0
+    ]
+   ],
    "variants": {
     "A": "__snd_7_A__",
     "B": "__snd_7_B__"
@@ -2177,14 +2219,13 @@
    },
    "badges": []
   },
-  "dock-f-toll-gate-to-fab": {
-   "kind": "video",
-   "title": "The gate to the fab",
-   "source": "@StickMike \u00b7 Money Physics",
+  "dock-i-fab-wafer": {
+   "title": "Ten trillion yen for chips",
+   "source": "HollowStickMike \u00b7 Money Physics",
    "species": "deck",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-f-toll-gate-to-fab-v2.mp4",
-    "sha256": "ceb472b41d8a0687b20f29b448ec669b74d95b9c4cb2707218108b1c94631a7d"
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short\\docks\\dock-i-fab-wafer.png",
+    "sha256": "b3a5333dfefc03db31172055e07b2bb29e65846120f720454354a36491958ad7"
    },
    "badges": []
   },
@@ -5101,21 +5142,21 @@
    ],
    "docks": [
     {
-     "slide": "dock-f-toll-gate-to-fab",
+     "slide": "dock-i-fab-wafer",
      "slot": 0,
      "enter": 55.31,
-     "exit": 61.76,
+     "exit": 59.57,
      "badge_at": [],
-     "kind": "video",
      "place": {
-      "x": 594,
-      "y": 297,
-      "w": 270,
-      "h": 175
+      "x": 78,
+      "y": 552,
+      "w": 804,
+      "h": 475
      },
      "read_s": 1.2,
      "park_s": 0.7,
-     "park": true
+     "park": true,
+     "centre": true
     }
    ],
    "species": [
@@ -5124,6 +5165,38 @@
      "at": 41.88,
      "dur": 2.4,
      "text": "The opponent: a balance sheet"
+    },
+    {
+     "kind": "spotlight",
+     "at": 56.85,
+     "dur": 0.99,
+     "idle": "live",
+     "target": {
+      "kind": "point",
+      "x": 0.5549,
+      "y": 0.4112
+     }
+    },
+    {
+     "kind": "spotlight",
+     "at": 57.84,
+     "dur": 1.73,
+     "until": 59.57,
+     "idle": "live",
+     "glide_at": 0.0,
+     "target": {
+      "kind": "point",
+      "x": 0.5549,
+      "y": 0.4112
+     },
+     "target2": {
+      "kind": "region",
+      "x0": 0.0722,
+      "y0": 0.2875,
+      "x1": 0.8167,
+      "y1": 0.5349
+     },
+     "held": true
     },
     {
      "kind": "bracket",

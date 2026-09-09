@@ -1,0 +1,21 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-09T06:24:00Z",
+  "prompt": "OPERATOR, BY HAND IN FLOW (not captured by the driver): Mike with a clipboard at a wafer chamber in a fab - pencil/woodblock, the E39 atom; the operator's candidate for 'pledging ten trillion yen to build domestic semiconductors'",
+  "references": [
+    "HollowStickMike"
+  ],
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "dimensions": [
+    1536,
+    2752
+  ],
+  "recovered": "downloaded by the operator from Flow as Man_inspecting_silicon_wafer_2K_202609090624.jpeg (2026-09-09), copied into the project's stills; candidate until the word 'approved'; copied into the Tokyo short 2026-09-09 as the pledge dock (E55: the toll-gate clip was useless without the plant)",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\sig-i-fab-wafer.png",
+      "sha256": "741dd6b13cabc5a6d121f5ee5a98b58055e928a27e197229adbcc3b7df92a1d8"
+    }
+  }
+}

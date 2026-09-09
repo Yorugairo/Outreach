@@ -182,7 +182,9 @@ def press_pack(window_s: float, out: Path, clusters: int, seed: int) -> Path:
 # THE BEDS (sub-threshold music, docs/research/audio/SUBTHRESHOLD_BACKGROUND_MUSIC_RESEARCH_BLUEPRINT.md s2, calibrated by ear
 # 2026-09-01; operator, 2026-09-05: "-28 LU is youtube, -26 is facebook"): gain = 10^((VO_I - LU - bed_I) / 20). The ep1 Suno beds
 # reused (SOURCES.md); the hook bed from 0:00, the turn bed fading in under it at 0:40 and running to the end (continuity, s5).
-BED_LU = {"youtube": -28.0, "facebook": -26.0}
+BED_LU = {"youtube": -20.0, "facebook": -20.0}   # a SHORT sits at -20 (E55, 2026-09-09; the -28 was the long-form calibration)
+BED_SWELL_DB = 4.0   # the bed BREATHES +4 dB from a card's throw through its landing/snap (the bed blueprint rule 3; E55)
+SNAP_S_BED = 0.45
 PLATFORM = "youtube"
 VO_LUFS = -17.9   # vo-short/audio/scene_1.mp3, measured 2026-09-05
 BEDS = {"suno-hook-A.mp3": -13.2, "suno-hook-B.mp3": -13.0, "suno-pivot-A.mp3": -13.0, "suno-pivot-B.mp3": -13.0}   # the copies in sound/, matched to -14 then limited at -1 dBFS: MEASURED integrated LUFS (SOURCES.md), so one gain fits both variants
@@ -219,7 +221,10 @@ DOCK_STILLS = {                     # dock asset id -> (source clip, crop height
 # MEASURED off the clip's own frame (the ink rows, not by eye): the cup and saucer sit at x 440-570, its steam above at
 # x 492-535, so the CUP's centre is x 505 - the crop is built around that, not around the counter's furniture
 TEA_CROP = (375, 515, 260, 200)
-STILL_DOCKS = "--still-docks" in sys.argv   # the pre-video-dock fallback: dock each clip's first frame instead
+STILL_DOCKS = "--still-docks" in sys.argv
+STILLS_DIR = HERE / "omni-video/stills"
+FAB_CROP = (0.22, 0.33)   # the band of the fab still: Mike with the clipboard, the wafer chamber (landscape, the toll gate's slot)
+FAB_WAFER = (0.649, 0.501)   # the wafer's centre in the band (the warm disc's centroid)   # the pre-video-dock fallback: dock each clip's first frame instead
 
 
 def zoom_clip(name: str, src_name: str, crop: tuple[int, int, int, int]) -> Path:
@@ -266,6 +271,34 @@ def dock_still(aid: str) -> str:
     return aid
 
 
+def dock_png(aid: str, png: Path, crop: tuple[float, float]) -> str:
+    """A still PNG cropped to a card, (top, height) as fractions of the still - the tariff short's dock_card; the card remembers
+    its source and crop so a swapped still or a new crop re-cuts it."""
+    import subprocess
+    import build_render_f as R
+    out = BUILD / "docks" / f"{aid}.png"; out.parent.mkdir(parents=True, exist_ok=True)
+    stamp = out.with_suffix(".src"); key = f"{png.resolve()}|{crop}"
+    if not out.exists() or out.stat().st_mtime < png.stat().st_mtime or (stamp.read_text(encoding="utf-8") if stamp.exists() else "") != key:
+        t, h = crop
+        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(png), "-vf", f"crop=iw:ih*{h}:0:ih*{t}", str(out)], check=True)
+        stamp.write_text(key, encoding="utf-8")
+    R.STAMPED[aid] = str(out)
+    return aid
+
+
+def centred_card_point(card_aspect: float, centre_y: float, fx: float, fy: float, centre_w: float | None = None, centre_x: float | None = None) -> dict:
+    """A POINT target inside a CENTRED dock card - the compiler's centred_place with an authored centre is deterministic, so a
+    fraction (fx, fy) of the card maps to a stage fraction (the tariff short's helper, 2026-09-09)."""
+    import build_scene_timeline_f as C
+    sw, sh = (1080, 1920)
+    w = round((centre_w or C.CENTRE_W) * sw); h = round(w * card_aspect)
+    if h > C.CENTRE_MAX_H * sh:
+        h = round(C.CENTRE_MAX_H * sh); w = round(h / card_aspect)
+    cx = (centre_x if centre_x is not None else 0.5) * sw
+    x0, y0 = max(0, cx - w / 2), max(0, centre_y * sh - h / 2)
+    return {"kind": "point", "x": round((x0 + fx * w) / sw, 4), "y": round((y0 + fy * h) / sh, 4)}
+
+
 def card_aspect(aid: str) -> float:
     """The rendered card's h / w, for a centred placement sized to the card (dock_card must have run)."""
     from PIL import Image
@@ -295,6 +328,7 @@ DOCK_META = [
     {"asset": "dock-a2-counter-colder", "title": "The host at the counter", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
     {"asset": "dock-g-two-fingers", "title": "Two numbers", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
     {"asset": "dock-f-toll-gate-to-fab", "title": "The gate to the fab", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
+    {"asset": "dock-i-fab-wafer", "title": "Ten trillion yen for chips", "source": "HollowStickMike · Money Physics", "species": "deck", "badges": []},
     # R26-19 / E50: the hook's own proof as a CHART card on the ring - species "chart", so M11/M12 read it as the chart it is
     {"asset": "dock-h-fed-vs-yields", "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.", "source": "US Treasury TIC · FRED · Sep 2026", "species": "chart", "badges": []},
     # the sixth watch: the cup from the opening scene, zoomed and still steaming, on "its tea break"
@@ -411,10 +445,24 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
         #   and STAYS through the pledge, which docks the gate instead of cutting to it. exit=cut: the Meta page MOUNTS over
         #   this one at "went home", so there is no retract to double it, and the gate card does not ride one (E40 #5).
         (t_catalyst, t_second, hold + ":spiral:cut", (0, 0, 0), [
-            (dock_still("dock-f-toll-gate-to-fab"), 0, t_pledge, t_second),
+            # E55 (operator, 2026-09-09): the toll-gate clip "was already weak because it was supposed to be a toll gate, without the
+            # manufacturing plant it's just useless" - the fab (Mike at the wafer chamber, the operator's own Flow plate) takes the
+            # clip's own measured place as a centred card; the LIGHT lands on the wafer at "chips" and holds to the cut (E56: never a ring on a picture)
+            # the card proves its sentence and leaves at the turn ("And here's what nobody says" - E50/E25); its exit is the beat M16 counts
+            (dock_png("dock-i-fab-wafer", STILLS_DIR / "sig-i-fab-wafer.png", FAB_CROP), 0, t_pledge, at("And here's"),
+             {"centre": True, "card_aspect": 0.5911, "centre_w": 0.744, "centre_x": 0.444, "centre_y": 0.411}),
             # the fourth watch: the selling bars are no evidence dock - they are the ring page's own bars, laid against its lines (combo)
         ], "cut", [
             carried(t_catalyst),
+            # the LIGHT on the wafer (E56), breathing; on "works" it GLIDES out to the whole fab ("if that works" - the plant, not the
+            # wafer) and holds until the card leaves; the glide is the second beat the 4.9 s hold needed (M16)
+            # two lights, two beats (the gate credits a species START, not a glide inside one): the wafer on "chips" for the 0.99 s
+            # to "works"; then a second light that starts on the wafer and GLIDES out to the whole fab, held until the card leaves
+            {"kind": "spotlight", "at": at("chips"), "dur": round(at("works") - at("chips"), 2), "idle": "live",
+             "target": centred_card_point(0.5911, 0.411, *FAB_WAFER, centre_w=0.744, centre_x=0.444)},
+            {"kind": "spotlight", "at": at("works"), "dur": "hold", "until": at("And here's"), "idle": "live", "glide_at": 0.0,
+             "target": centred_card_point(0.5911, 0.411, *FAB_WAFER, centre_w=0.744, centre_x=0.444),
+             "target2": {"kind": "region", "x0": round(78 / 1080, 4), "y0": round(552 / 1920, 4), "x1": round(882 / 1080, 4), "y1": round(1027 / 1920, 4)}},
             # E51 (the third watch): the punch on the peak here was tied to nothing - the page returns drawn - and is cut
             # V3: the BRACKET measures the drop from the peak to June by the hand on the number; its label is the number and
             # its sub lands on "a tenth of the pile" - the callout that said the same is gone (one thing per sentence)
@@ -587,9 +635,20 @@ def main() -> int:
                              "variants": {"A": FLIP, "B": "fs-page-stroke-447925.mp3"},
                              "note": f"contact at {contact:.2f}s, the cue one frame early (the report Q5: 0 to -1 frame); a documented hit file for metal is still to find"})
     # the beds, sub-threshold and continuous: the hook bed from 0, the turn bed fading in under it at 0:40 to the end
-    cues.append({"slot": "hook bed", "at": 0.0, "gain": bed_gain("suno-hook-B.mp3"), "fade_in": 1.5, "variants": {"A": "suno-hook-B.mp3", "B": "suno-hook-A.mp3"},
+    # the bed's ENVELOPE (dB against its own gain), keyed to every thrown card: up over the 0.3 s before the throw, held through the
+    # landing (and the snap when the card becomes the page), down over 0.8 s - the player and the render apply it as a pure function of t
+    env = []
+    for r in rows:
+        for d in (r[4] or []):
+            if len(d) > 4 and isinstance(d[4], dict) and d[4].get("arrive") == "throw":
+                t_throw = float(d[2])
+                snap_row = next((q[0] for q in rows if f":snap={d[0]}" in q[2]), None)
+                t_end = (snap_row + SNAP_S_BED) if snap_row is not None else (t_throw + 1.2)
+                env += [[round(t_throw - 0.3, 2), 0.0], [round(t_throw, 2), BED_SWELL_DB], [round(t_end, 2), BED_SWELL_DB], [round(t_end + 0.8, 2), 0.0]]
+    hook_env = [k for k in env if k[0] < 40.0]; turn_env = [[round(k[0] - 40.0, 2), k[1]] for k in env if k[0] >= 40.0]
+    cues.append({"slot": "hook bed", "at": 0.0, "gain": bed_gain("suno-hook-B.mp3"), "fade_in": 1.5, "env": hook_env, "variants": {"A": "suno-hook-B.mp3", "B": "suno-hook-A.mp3"},
                  "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO ({VO_LUFS} LUFS); B at {bed_gain('suno-hook-A.mp3')}"})
-    cues.append({"slot": "turn bed", "at": 40.0, "gain": bed_gain("suno-pivot-A.mp3"), "fade_in": 3.0, "variants": {"A": "suno-pivot-A.mp3", "B": "suno-pivot-B.mp3"},
+    cues.append({"slot": "turn bed", "at": 40.0, "gain": bed_gain("suno-pivot-A.mp3"), "fade_in": 3.0, "env": [[round(k[0] + 40.0, 2), k[1]] for k in turn_env], "variants": {"A": "suno-pivot-A.mp3", "B": "suno-pivot-B.mp3"},
                  "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO; B at {bed_gain('suno-pivot-B.mp3')}"})
     plan["cues"] = cues
     plan_path.write_text(json.dumps(plan, indent=1), encoding="utf-8")
