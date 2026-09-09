@@ -1783,21 +1783,23 @@ the player — a pace is never chosen from the number alone. The Whisper gate's 
 twenty-two billion dollars" → "$122 billion") fails BOTH the original and the re-timed take identically (12.7% vs 14.3%
 WER, the same one "deletion"): a tool defect, backlog, not a take defect.
 
-## E56 — A ring is not an animation: a focus is a LIGHT, never a drawn circle; every new addition passes the life check (2026-09-09)
+## E56 — A ring has ONE use: circling a number or a point on a chart; a picture's focus is a LIGHT; every new addition passes the life check (2026-09-09)
 
 On the fab card's wafer under "semiconductors" the build drew a callout ring. The operator: *"I think drawing the ring on
 the wafer is dumb. If that wafer is going to do anything we should give it a light shimmer or a spotlight. We have to
 stop drawing rings or circles on everything — that's just a cheap call-out mechanism, not a high quality animation."*
 The second time in two days (E49 §3: *"you're circling beneath to avoid circling"*). Standing:
 
-1. **The callout ring is retired as a focus device.** A thing the sentence is about is shown by LIGHT — the spotlight
-   species (the frame dims, the subject stays lit; it holds per E25 and releases on a reason) — or, once built, by a
-   SHIMMER (`docs_find` 0 hits for shimmer / glint / sheen / specular / gleam: a specular sweep across the subject is the
-   one unbuilt mechanism here; opt-in, goldens byte-identical, judged on frames). A drawn circle around a thing is not
-   an option on a new build; where a ring still stands in an approved beat it stays until the operator says.
-2. **A label with a value is not a ring.** The crossings map's six `25%` stamps carry the count itself (the label is
-   the content, E48's stamps); their circular mark is a stamp's shape, not a call-out — OPEN: the operator may want the
-   stamps as label-only marks; nothing changes on the approved map without the word.
+1. **The ring's one use** — the operator, refining the same day: *"it's not that the ring has to retire entirely, it's
+   that it has a specific use: circling a number or a point on a chart."* So: a callout ring targets a **datum** (a
+   point or a value on a chart page or chart card) or IS a number (a stamp whose label is a value — the crossings map's
+   six `25%` stamps, which circle the count itself). A ring around a point or region of a PICTURE — a plate, a dock
+   still, a character, a wafer — is the cheap call-out the ruling refuses; the focus there is LIGHT — the spotlight
+   species (the frame dims, the subject stays lit; holds per E25) — or, once built, a SHIMMER (`docs_find` 0 hits for
+   shimmer / glint / sheen / specular / gleam; opt-in, goldens byte-identical, judged on frames).
+2. **The gate.** The compiler refuses a callout whose target is not a datum and whose label carries no digit
+   (`build_scene_timeline_f.py`, validate_species): the ring on the wafer would have been refused at build time. Tokyo's
+   callouts (datum targets) and the map's stamps (numeric labels) pass unchanged.
 3. **The life check is a gate on every new addition** (operator: *"make sure all of the new additions pass the life
    check with the pixels shifting"*). E49 measured on the ADDITION, not only on the whole frame: over the thing's hold,
    sample every 0.25 s and hash ITS region — no two consecutive samples identical. The pledge card and the light on the

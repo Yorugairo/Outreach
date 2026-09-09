@@ -33,6 +33,7 @@ import base64
 import io
 import hashlib
 import json
+import re
 import mimetypes
 import subprocess
 import sys
@@ -275,6 +276,12 @@ def _validate_entry(entry) -> list[str]:
                 errs.append("trace: hop.draw_s must be > 0")
     if "idle" in entry and entry["idle"] not in IDLE_KINDS:   # a held light's idle (E49 on the spotlight, 2026-09-09)
         errs.append(f"{kind}: idle {entry['idle']!r} is not one of {'|'.join(IDLE_KINDS)}")
+    if kind == "callout" and isinstance(entry.get("target"), dict) and entry["target"].get("kind") != "datum"             and not re.search(r"\d", str(entry.get("label", ""))):
+        # E56 (operator, 2026-09-09): "it's not that the ring has to retire entirely, it's that it has a specific use: circling a
+        # number or a point on a chart" - a datum target IS a point on a chart; a stamp whose label is a number IS the number;
+        # a ring around a picture's point or region is the cheap call-out the ruling refuses - the focus there is a light
+        errs.append(f"callout: a ring circles a NUMBER or a POINT ON A CHART (E56) - this one targets a {entry['target'].get('kind')} "
+                    f"with no numeric label; use a spotlight (the light) on a picture")
     allowed = SPECIES_TARGETS[kind]
     if not allowed:
         return errs

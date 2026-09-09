@@ -148,3 +148,18 @@ def test_trace_hop_draw_s_must_be_positive_and_plain_trace_is_untouched():
     e["hop"] = {"from": [0.1, 0.1], "to": [0.5, 0.5], "draw_s": 0}
     assert any("hop.draw_s must be > 0" in x for x in B.validate_species([e], STILL, PLATE))
     assert B.validate_species([_sp("trace", target=REGION)], STILL, PLATE) == []
+
+
+# ---- E56 (2026-09-09): a ring has ONE use - a number or a point on a CHART; a picture's focus is a light ----
+
+def test_e56_a_callout_ring_on_a_picture_point_is_refused():
+    errs = B.validate_species([_sp("callout", target=POINT)], STILL, PLATE)
+    assert any("E56" in e and "spotlight" in e for e in errs), errs
+
+
+def test_e56_a_datum_ring_and_a_numeric_stamp_pass():
+    assert not [e for e in B.validate_species([_sp("callout", target=DATUM)], STILL, PLATE) if "E56" in e]
+    stamp = dict(_sp("callout", target=POINT), label="25%")
+    assert not [e for e in B.validate_species([stamp], STILL, PLATE) if "E56" in e]
+    light = _sp("spotlight", target=POINT)
+    assert not [e for e in B.validate_species([light], STILL, PLATE) if "E56" in e]
