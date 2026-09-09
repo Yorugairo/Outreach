@@ -108,6 +108,22 @@ def cut_before(ws: list[dict], phrase: str) -> float:
     return round(ws[i - 1]["end_s"] + CUT_AT * gap, 2)
 
 
+def next_sentence_start(ws: list[dict], t: float) -> float | None:
+    """The start of the first word of the NEXT sentence after t - the take's own punctuation is the boundary (24 of 247 words
+    end in . ? !). E25 (2026-09-08): "the light should unzoom when it says 'Auto parts taxes' - that's the real beginning of the
+    scene transition": the chart proves one sentence, so its light releases on the first word of the next one. None = no
+    sentence ends after t."""
+    seen_end = False
+    for w in ws:
+        if w["start_s"] < t:
+            continue
+        if seen_end:
+            return round(w["start_s"], 2)
+        if w["w"].rstrip()[-1:] in ".?!":
+            seen_end = True
+    return None
+
+
 def word_time(ws: list[dict], phrase: str) -> float:
     return phrase_start(ws, phrase)[1]
 
@@ -404,6 +420,15 @@ def main() -> int:
     CP.main()
 
     rows = shot_table(ws, runtime_s, t_outro)
+    # E25: a held light follows its SENTENCE - every `dur: "hold"` species gets `until` = the first word of the next sentence
+    # (from the take's punctuation), unless the row already names one; the compiler takes the earliest of that, the next event
+    # on the row, a card arriving, and the cut
+    for r in rows:
+        for e in (r[6] or []) if len(r) > 6 else []:
+            if isinstance(e, dict) and e.get("dur") == "hold" and "until" not in e:
+                u = next_sentence_start(ws, float(e["at"]))
+                if u is not None:
+                    e["until"] = u
     # the sound map (Tokyo's, verbatim): a spiral entry is the warped whoosh at 0.12; mounts are silent; every page exits by cut
     plan_path = HERE / "sound/SOUND-PLAN.json"
     plan = json.loads(plan_path.read_text(encoding="utf-8"))

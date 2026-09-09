@@ -938,6 +938,14 @@ against semiconductors; `ev-bravos-original-v1.series.json` carries a
 until re-read against the source. The divergence mapping stands on the
 dock's badges.
 
+**Amended 2026-09-08 — the light follows the sentence.** Operator, on the tariff short's hook page: *"I think the light
+should unzoom when it says 'Auto parts taxes' - that's the real beginning of the scene transition, but I don't know how
+to make that a repeatable catch."* The catch is this ruling read literally: the chart proves ONE sentence, so its focus
+light belongs to that sentence and releases on the first word of the NEXT one. The boundary is in the take itself - the
+word-timed words carry their punctuation (`dollars.` at 7.80, `Auto` at 8.88) - so `next_sentence_start()` in the build
+writes the release as `until` on every held species, and the compiler takes the earliest of: the next event on the row,
+a card arriving, the sentence's end, the cut. No number is typed by hand; a re-recorded take moves the light with it.
+
 ## E26 — Three roles check a script, and the third one knows nothing (2026-09-03)
 
 The gates are **mechanical**: counts, positions, durations, decided from the

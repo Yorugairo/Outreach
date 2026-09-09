@@ -880,7 +880,12 @@ def main() -> int:
         for e in row_species:
             if isinstance(e, dict) and e.get("dur") == "hold":
                 nxt = next((x for x in ats if x > float(e["at"]) + 1e-6), None)
-                e["dur"] = round(max(0.05, (nxt if nxt is not None else float(b)) - float(e["at"])), 2)
+                end = nxt if nxt is not None else float(b)
+                # `until` (E25, 2026-09-08: the light follows the SENTENCE the chart proves - it releases on the first word of the
+                # next sentence; the shot table writes it from the take's punctuation, so it is a rule read off the words, not a number)
+                if isinstance(e.get("until"), (int, float)) and not isinstance(e.get("until"), bool):
+                    end = min(end, float(e["until"]))
+                e["dur"] = round(max(0.05, end - float(e["at"])), 2)
                 e["held"] = True   # the record of why the duration is what it is
         species_errors = validate_species(row_species, ken, plate, pivot_span=None)
         if species_errors:

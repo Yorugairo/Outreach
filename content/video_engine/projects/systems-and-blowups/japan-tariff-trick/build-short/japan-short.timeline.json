@@ -3731,11 +3731,12 @@
     {
      "kind": "spotlight",
      "at": 2.67,
-     "dur": 9.11,
+     "dur": 6.21,
      "target": {
       "kind": "datum",
       "index": 315
      },
+     "until": 8.88,
      "held": true
     }
    ]
@@ -4076,6 +4077,7 @@
       "kind": "datum",
       "index": 0
      },
+     "until": 26.5,
      "held": true
     },
     {
@@ -4193,6 +4195,7 @@
       "kind": "datum",
       "index": 1
      },
+     "until": 47.94,
      "held": true
     }
    ]
@@ -4311,6 +4314,7 @@
       "kind": "datum",
       "index": 2
      },
+     "until": 63.68,
      "held": true
     }
    ]
