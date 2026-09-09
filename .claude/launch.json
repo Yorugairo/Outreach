@@ -34,6 +34,16 @@
         "build-short"
       ],
       "port": 8733
+    },
+    {
+      "name": "japan-short-player",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/serve_player.py",
+        "8734",
+        "build-short"
+      ],
+      "port": 8734
     }
   ]
 }
