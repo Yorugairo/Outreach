@@ -1,6 +1,6 @@
 # How Japan Tricked Trump — v3 build (own worlds, five distinct charts) and the pre-review pass (Claude, 2026-09-07)
 
-The short is BUILT and watchable, quarantined until the operator's word (no render yet).
+**APPROVED 2026-09-08** ("approved, huge success.") - the plates (map v9, the two chart cards), the card-then-snap arrival and the Chirp voice (E54); the bed at -20 LU, breathing over the landings. Rendered once at 1440x2560 from this word (`build-short/render/`).
 
 - Player: `python serve_player.py 8734 build-short` → http://127.0.0.1:8734/player.html (also `.claude/launch.json` → `japan-short-player`)
 - Build: `python build_short.py` → `build-short/player.html`, `build-short/japan-short.timeline.json`, `build-short/GATES-MOTION.md`

@@ -91,11 +91,11 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## ruling-ledger
 
-- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing corrections l — Portable, model-agnostic. Load alongside `DOCTRINE — defines: A3; E11; E12; +41 more — terms: long-form; drop-off; YouTube; world-building; six-phase
+- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing corrections l — Portable, model-agnostic. Load alongside `DOCTRINE — defines: A3; E11; E12; +42 more — terms: long-form; drop-off; YouTube; world-building; six-phase
 
 ## capabilities
 
-- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything. — defines: Area-preserving squash; Beds and the press pack; Build-on: the page performs on a word, WIRED; +92 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline; text-tier
+- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything. — defines: Area-preserving squash; Beds and the press pack; Build-on: the page performs on a word, WIRED; +100 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline; text-tier
 
 ## backlog
 
