@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4521 topics, 4672 citation edges. The 200 largest topics follow,
+4520 topics, 4675 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (144)
@@ -88,7 +88,7 @@ at most 12 sections each - the JSONL holds every one.
 ## post-key (77)
 
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:93 — 3. Production Shot Table & Visual Choreography (83.26s Master Timeline) — - Canvas Dimensions: 1080×1920 (9:16 Vertical).
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:55 — DECISIONS (each with a recommendation; the baseline ships as built) — 1. The $6,240. Recommend keeping the spoken line ("over six thousand dollars") only if the operator accepts the CAR-styl
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:62 — DECISIONS (each with a recommendation; the baseline ships as built) — 1. The $6,240. Recommend keeping the spoken line ("over six thousand dollars") only if the operator accepts the CAR-styl
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:1 — How Japan Tricked Trump — Shot Table (9:16 Vertical Short) — Authored per Doc 51 Shorts doctrine, Operator Rulings E44/E45/E46, and Motion Density Standard (M16 pulse every 1.2–2.5s
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:14 — Shot Sequence — | # | Span (est.) | Script / Beat | World & Visual Stage | Evidence / Species & Kinetic Pulse | Audio / Transition Cue |
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:243 — Standing gates that bind the new draft — - G09 / E24 — the promise by 0:45 (WARN), 0:60 FAIL. The row this order exists for.
@@ -119,7 +119,7 @@ at most 12 sections each - the JSONL holds every one.
 
 ## long-form (70)
 
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:69 — The SCREENS declared tags — verdicts (CHECK-RESPONSIBILITIES R2) — - `[rehook]@0:11` true · `[new]@0:18` true · `[archetype]@0:28` true · `[catalyst]@0:32` true · `[rehook]@0:38` true
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:76 — The SCREENS declared tags — verdicts (CHECK-RESPONSIBILITIES R2) — - `[rehook]@0:11` true · `[new]@0:18` true · `[archetype]@0:28` true · `[catalyst]@0:32` true · `[rehook]@0:38` true
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-DOSSIER.md:97 — Addendum 2026-09-04 — the rewrite's hook, sourced (SCRIPT-90S-VO.claude.txt) — Re-ran the builder the same day: TIC still prints 2026-06 (no July release yet), Japan
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:1 — Tokyo Tea Break — review, 2026-09-03 — Reviewed: `SCRIPT-90S-VO.txt` (67 s at the Chirp scratch pace, 194 words) and
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:14 — TOOLS (final verdicts) — A finding about our instrument, not the script: 17 of the 90-second short's 23
@@ -152,7 +152,7 @@ at most 12 sections each - the JSONL holds every one.
 ## elevenlabs (60)
 
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:89 — What should become what — the candidates, ranked — A. #4 RETURNS to #1 — it does not move next to it. An earlier draft of this
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:55 — DECISIONS (each with a recommendation; the baseline ships as built) — 1. The $6,240. Recommend keeping the spoken line ("over six thousand dollars") only if the operator accepts the CAR-styl
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:62 — DECISIONS (each with a recommendation; the baseline ships as built) — 1. The $6,240. Recommend keeping the spoken line ("over six thousand dollars") only if the operator accepts the CAR-styl
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:158 — Production, same evening (stages 5-8) — - Take: ElevenLabs, one request (`record_short_take.py`), 81.2 s at 174 wpm, gaps intact; whisper
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10 — The bars this table is built to — - Worlds are 10 s Omni clips of `@StickMike` on the cream page (`#F4E6C7` ground,
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:1 — Tokyo Tea Break — shot table, 9:16 short — Authored 2026-09-04 against `SCRIPT-90S-VO.txt` (282 words, ~89 s after the tempo
@@ -803,7 +803,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/portable/OPERATOR-RULINGS.md:1419 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
   cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:49, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:107, +14 more
 - docs/portable/OPERATOR-RULINGS.md:1444 — E48 — A declared transition vocabulary with one hero, the spiral; the primaries are not prescribed yet; the mount is a build; cut minimally, one thread (2026-09-06, amended the same hour) — From the HyperFrames transitions page the operator brought in by hand (`hyperframes.heygen.com/prompting/transitions`, r
-  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:15, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:72, docs/content-video-engine/BACKLOG.md:420, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:178, +6 more
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:22, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:72, docs/content-video-engine/BACKLOG.md:420, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:178, +6 more
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:270 — 8. What HyperFrames Would Say About Our Open Transition Queries (`TRANSITIONS-REVIEW-2026-09-06.md`) — This section does not settle our open transition queries. Rather, it contrasts what HyperFrames doctrine would advise ag
 - docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md:150 — 4. By kind — the dip is the one real offset, and it is an offset of the *transition*, not of the cut — Caption timeline, rule (a) ≥ 0.30 s:
 - docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:1 — Wealth Logic Transitions, Measured From The Pixels — Pass-1 · 2026-09-06 · sources: the video on disk, the ledger · for: TR-1
@@ -1425,6 +1425,23 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/STEEL-AND-PAPER-WAVE-5-PLAN.md:107 — 4. Order of operations — 1. Wave-5 claim — delivered, 15 plates.
 - docs/content-video-engine/CAPABILITIES.md:1 — CAPABILITIES — what is already built — Check this file before building anything. Three asset classes were
 - docs/content-video-engine/CAPABILITIES.md:18 — Scene-evidence player — the review renderer: cross-reveal wipe with carried light, coalesced docks, snap-to-boundary, dock-owned sides, interval
+- … 5 more in `docs/DOCS-TOPICS.jsonl`
+
+## side-by-side (17)
+
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:1 — How Japan Tricked Trump — v3 build (own worlds, five distinct charts) and the pre-review pass (Claude, 2026-09-07) — APPROVED 2026-09-08 ("approved, huge success.") - the plates (map v9, the two chart cards), the card-then-snap arrival a
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:62 — DECISIONS (each with a recommendation; the baseline ships as built) — 1. The $6,240. Recommend keeping the spoken line ("over six thousand dollars") only if the operator accepts the CAR-styl
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:161 — Part 4: 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:193 — 4.2 Aspect Ratio Transformation Strategies
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:194 — The Failure of Center-Crop / Dynamic Pan & Scan — Cropping a 16:9 frame ($1920 \times 1080$) to 9:16 ($607.5 \times 1080$) results in an immediate $68.36\%$ horizontal ar
+- docs/content-video-engine/07-PILOT-SEASON.md:44 — 1. The five episodes (operator-defined, production-annotated)
+- docs/content-video-engine/07-PILOT-SEASON.md:57 — E2 — "Why Basic BJJ Beats Complex Guard Systems (The Science of Roger Gracie)" — - Sources: national history + Gracie migration article (technique-philosophy sections).
+- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:81 — Lane C — `presenter_infographic` — Reference: personal-finance channel, presenter-anchored.
+- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:336 — The honest risk — A parametric rig can read as sterile. Part of Casual Finance's charm is that no
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:966 — 9.16 Motion verification and authority (operator decisions, 2026-08-29) — 1. The gold standard is a RENDERED reference, not a table of constants.
+  cited by: docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/CAPABILITIES.md:150
+- docs/content-video-engine/BACKLOG.md:207 — Ready to pull in — read 2026-09-05 after the hands-on day (operator: "see if we're ready to pull anything else in") — Ordered by leverage against what the Tokyo build now exercises. Each names the artifact it lands on.
+- docs/content-video-engine/BACKLOG.md:225 — The plan stack — | # | plan | status | note |
 - … 5 more in `docs/DOCS-TOPICS.jsonl`
 
 ## slot-swapped (17)
@@ -2103,23 +2120,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:20 — Inputs in this directory — | File | What it is |
 - … 3 more in `docs/DOCS-TOPICS.jsonl`
 
-## side-by-side (15)
-
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:55 — DECISIONS (each with a recommendation; the baseline ships as built) — 1. The $6,240. Recommend keeping the spoken line ("over six thousand dollars") only if the operator accepts the CAR-styl
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:161 — Part 4: 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:193 — 4.2 Aspect Ratio Transformation Strategies
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:194 — The Failure of Center-Crop / Dynamic Pan & Scan — Cropping a 16:9 frame ($1920 \times 1080$) to 9:16 ($607.5 \times 1080$) results in an immediate $68.36\%$ horizontal ar
-- docs/content-video-engine/07-PILOT-SEASON.md:44 — 1. The five episodes (operator-defined, production-annotated)
-- docs/content-video-engine/07-PILOT-SEASON.md:57 — E2 — "Why Basic BJJ Beats Complex Guard Systems (The Science of Roger Gracie)" — - Sources: national history + Gracie migration article (technique-philosophy sections).
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:81 — Lane C — `presenter_infographic` — Reference: personal-finance channel, presenter-anchored.
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:336 — The honest risk — A parametric rig can read as sterile. Part of Casual Finance's charm is that no
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:966 — 9.16 Motion verification and authority (operator decisions, 2026-08-29) — 1. The gold standard is a RENDERED reference, not a table of constants.
-  cited by: docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/CAPABILITIES.md:150
-- docs/content-video-engine/BACKLOG.md:207 — Ready to pull in — read 2026-09-05 after the hands-on day (operator: "see if we're ready to pull anything else in") — Ordered by leverage against what the Tokyo build now exercises. Each names the artifact it lands on.
-- docs/content-video-engine/BACKLOG.md:225 — The plan stack — | # | plan | status | note |
-- docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:171 — Test acceptance — 1. Every pipeline stage runs on this brief with no hand-carried files except
-- … 3 more in `docs/DOCS-TOPICS.jsonl`
-
 ## single-mesh (15)
 
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:7 — Executive Summary & Root-Cause Diagnosis — The 2.5D parallax videos generated in our initial Tokyo Tea Break run (`content/video_engine/projects/systems-and-blowup
@@ -2268,8 +2268,8 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/CAPABILITIES.md:218 — The frozen baseline (P39 T1, 2026-09-04) — The last known-good player is tagged `player-baseline-2026-09-04` (annotated; the
 - docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md:26 — The mechanism to port (not the code) — 1. An organic mask from a NAMED point — the radial reveal (29:1764) with the two-harmonic edge noise, seeded by
 - docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md:45 — Status — Not built. Backlog TR-14. The operator's source is below so the harvest survives the session; the port is a species /
-- docs/portable/OPERATOR-RULINGS.md:1786 — E56 — A ring has ONE use: circling a number or a point on a chart; a picture's focus is a LIGHT; every new addition passes the life check (2026-09-09) — On the fab card's wafer under "semiconductors" the build drew a callout ring. The operator: *"I think drawing the ring o
-  cited by: docs/content-video-engine/CAPABILITIES.md:14, docs/portable/OPERATOR-RULINGS.md:1764
+- docs/portable/OPERATOR-RULINGS.md:1787 — E56 — A ring has ONE use: circling a number or a point on a chart; a picture's focus is a LIGHT; every new addition passes the life check (2026-09-09) — On the fab card's wafer under "semiconductors" the build drew a callout ring. The operator: *"I think drawing the ring o
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:1, docs/content-video-engine/CAPABILITIES.md:14, docs/portable/OPERATOR-RULINGS.md:1764
 - docs/research/2026-08-22-agent-design-tooling-assessment.md:1 — Agent-Native Design Tooling: Buy, Borrow, or Build — Status: current
 - docs/research/2026-08-22-agent-design-tooling-assessment.md:8 — Answer — Neither, as posed. The pipeline has two jobs with opposite requirements, and
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
@@ -2675,7 +2675,7 @@ at most 12 sections each - the JSONL holds every one.
 
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:1 — CHART CHOREOGRAPHY — Japan Tariff Trick (short) — Operator, 2026-09-08: *"I think that choreography probably has to start being
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13 — As built (2026-09-08) — | # | chart | on | span | deployed (M21) | arrives | leaves | becomes |
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:43 — Evidence pass (E18) — what I verified myself vs. what the hand-off asserts — | figure | verdict |
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:50 — Evidence pass (E18) — what I verified myself vs. what the hand-off asserts — | figure | verdict |
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-DOSSIER.md:1 — Tokyo Tea Break — evidence dossier — Every figure the script speaks, its source, and the date it was fetched. Nothing here
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-DOSSIER.md:45 — Charts built — | sidecar | proves | form |
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:36 — Shots (kit clock first, Kokoro cut in brackets) — | # | span | beat | world | evidence / species | why this pairing |
@@ -3148,7 +3148,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8 — 1. The judgment — The research asked the right questions and mostly did not answer them. The research brief's Track B (`briefs/RESEARCH-BR
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38 — What to do, in the operator's order (recent stumble → TOP; unbuilt → BACKLOG; unmeasured → EXPLORE) — | id | item | why | cost |
 - docs/portable/OPERATOR-RULINGS.md:1361 — E45 — A dock on a page is small and sits in the page's quiet space; the mount is the transition into a full-page ledger (2026-09-06) — Ruled on the first Tokyo v2 player with video docks (004698d). The operator: *"the dock needs to not cover the middle of
-  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:93, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:123, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:15, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:1, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:14, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:32, +24 more
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:93, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:123, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:22, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:1, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:14, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:32, +24 more
 - docs/portable/OPERATOR-RULINGS.md:1419 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
   cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:49, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:107, +14 more
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:270 — 8. What HyperFrames Would Say About Our Open Transition Queries (`TRANSITIONS-REVIEW-2026-09-06.md`) — This section does not settle our open transition queries. Rather, it contrasts what HyperFrames doctrine would advise ag

@@ -718,6 +718,7 @@ _none._
 
 ## Markers naming no target — recorded, not paired
 
+- `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:8` — marker "superseded" names no target — Rendered once at 1440x2560 from this word: `build-short/render/japan-short-full-1440p.mp4` (the 09-08 render kept beside it as `-2026-09-08-superseded`).
 - `docs/agentic-analysis-contract.md:22` — marker "superseded" names no target — - `superseded` for replaced executions
 - `docs/content-video-engine/07-PILOT-SEASON.md:5` — marker "superseded" names no target — **Superseded cohort:** the technique-heavy cohort below is retained as historical planning context.
 - `docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:16` — marker "deprecated" names no target — (Do NOT build on Imagen 4 — deprecated, shuts down 2026-08-17) |
