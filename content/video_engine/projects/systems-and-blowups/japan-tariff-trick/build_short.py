@@ -399,12 +399,14 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
         #   the pledge dock (the fab) lands on "pledging" and leaves with the page (E40 #5: exit=cut). The holdings line stays at the hook only.
         (t_return, t_finance, f"ledger:ev-japan-selling-v1:bars:2:right:mount={round(t_page4 + LP_ROLL_S - t_return, 2)}:cut" + ";idle=live", ken, [
             # the pledge card sits CENTRED over the proved chart from its first frame (the park spot at the top-right sat on the
-            # chart's title and the April label); the ring lands on the wafer at "semiconductors" - the sentence's object, and
+            # chart's title and the April label); the light lands on the wafer at "semiconductors" - the sentence's object, and
             # the visual event M16 asks for inside the card's 3.3 s
             ("dock-h-pledge", 0, t_pledge, t_finance, {"centre": True, "card_aspect": still_card_aspect("dock-h-pledge"), "centre_y": PLEDGE_CY, "centre_x": PLEDGE_CX, "centre_w": PLEDGE_CW}),
         ], "cut", [
             {"kind": "spotlight", "at": t_sell_land, "dur": "hold", "target": datum(2)},   # May, the biggest month (a callout ring sat on the pill)
-            {"kind": "callout", "at": at("semiconductors"), "dur": round(t_finance - at("semiconductors"), 2), "pad": 22,
+            # the LIGHT on the wafer (E56, operator 2026-09-09: "drawing the ring on the wafer is dumb ... give it a light shimmer or a
+            # spotlight"): the focus light lands on the wafer at "semiconductors", holds to the cut, and breathes (idle live)
+            {"kind": "spotlight", "at": at("semiconductors"), "dur": "hold", "idle": "live",
              "target": centred_card_point(still_card_aspect("dock-h-pledge"), PLEDGE_CY, *PLEDGE_WAFER, centre_w=PLEDGE_CW, centre_x=PLEDGE_CX)},
         ]),
         # 9 the reflection: two fingers to camera - "In finance, we call this the double squeeze"

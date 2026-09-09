@@ -273,6 +273,8 @@ def _validate_entry(entry) -> list[str]:
                     errs.append(f"trace: hop.{f} must be a number")
             if isinstance(hop.get("draw_s"), (int, float)) and hop["draw_s"] <= 0:
                 errs.append("trace: hop.draw_s must be > 0")
+    if "idle" in entry and entry["idle"] not in IDLE_KINDS:   # a held light's idle (E49 on the spotlight, 2026-09-09)
+        errs.append(f"{kind}: idle {entry['idle']!r} is not one of {'|'.join(IDLE_KINDS)}")
     allowed = SPECIES_TARGETS[kind]
     if not allowed:
         return errs

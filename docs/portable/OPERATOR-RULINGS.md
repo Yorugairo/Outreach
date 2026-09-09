@@ -1770,7 +1770,7 @@ is a picture of the sentence's SUBJECT (E25: proof, not decoration); a borrowed 
 plant is cut, not kept. The operator generated the subject by hand in Flow — Mike at the wafer chamber in a fab, the E39
 atom — and offered the package thumbnails as alternates ("we could use this instead"); the fab plate ships as the dock
 (`dock-h-pledge`), CENTRED over the proved plot in a box authored from the page's measured ink (under the subtitle,
-over the source line whole, clear of the badge), with the ring on the wafer at "semiconductors". The package thumbnails
+over the source line whole, clear of the badge), with the LIGHT on the wafer at "semiconductors" (a ring first, retired the same day - E56). The package thumbnails
 are kept on disk (`sig-j-vault-to-chips`, `sig-k-scale-how-japan-won`): their taller panels do not fit that page.
 
 **The pace.** Measured before anything was proposed: the approved Chirp take runs 178.9 WPM over its span (E34's ~180),
@@ -1782,4 +1782,27 @@ gates 0 FAIL / 0 WARN. Three candidates exist (tight 79.2 s / x106 78.6 s / fast
 the player — a pace is never chosen from the number alone. The Whisper gate's numeral normalization ("a hundred and
 twenty-two billion dollars" → "$122 billion") fails BOTH the original and the re-timed take identically (12.7% vs 14.3%
 WER, the same one "deletion"): a tool defect, backlog, not a take defect.
+
+## E56 — A ring is not an animation: a focus is a LIGHT, never a drawn circle; every new addition passes the life check (2026-09-09)
+
+On the fab card's wafer under "semiconductors" the build drew a callout ring. The operator: *"I think drawing the ring on
+the wafer is dumb. If that wafer is going to do anything we should give it a light shimmer or a spotlight. We have to
+stop drawing rings or circles on everything — that's just a cheap call-out mechanism, not a high quality animation."*
+The second time in two days (E49 §3: *"you're circling beneath to avoid circling"*). Standing:
+
+1. **The callout ring is retired as a focus device.** A thing the sentence is about is shown by LIGHT — the spotlight
+   species (the frame dims, the subject stays lit; it holds per E25 and releases on a reason) — or, once built, by a
+   SHIMMER (`docs_find` 0 hits for shimmer / glint / sheen / specular / gleam: a specular sweep across the subject is the
+   one unbuilt mechanism here; opt-in, goldens byte-identical, judged on frames). A drawn circle around a thing is not
+   an option on a new build; where a ring still stands in an approved beat it stays until the operator says.
+2. **A label with a value is not a ring.** The crossings map's six `25%` stamps carry the count itself (the label is
+   the content, E48's stamps); their circular mark is a stamp's shape, not a call-out — OPEN: the operator may want the
+   stamps as label-only marks; nothing changes on the approved map without the word.
+3. **The life check is a gate on every new addition** (operator: *"make sure all of the new additions pass the life
+   check with the pixels shifting"*). E49 measured on the ADDITION, not only on the whole frame: over the thing's hold,
+   sample every 0.25 s and hash ITS region — no two consecutive samples identical. The pledge card and the light on the
+   wafer: 0 identical pairs of 10 (card) and 0 (light); M18 on the build: longest identical run 0.17 s.
+4. **A held light is a held thing** — it breathes. `idle` on a spotlight (one of the IDLE_KINDS) breathes the hole's
+   radius and drifts its centre on the same seeded, pure-function-of-t kinetics as every idle; absent = the old still
+   light, so the goldens are byte-identical. The wafer light runs `idle: live`.
 

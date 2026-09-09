@@ -4115,8 +4115,13 @@
       } else if (sp.kind === "spotlight") { /* dim the frame except a feathered hole gliding between two declared targets */
         const a = resolveTarget(sp.target), z = resolveTarget(sp.target2) || a; if (!a) return;
         const g = spIO((t - sp.at - (sp.glide_at || 0)) / 0.6);
-        const ca = centre(a), cz = centre(z), cx = ca.cx + (cz.cx - ca.cx) * g, cy = ca.cy + (cz.cy - ca.cy) * g;
-        const r0 = (Math.max(a.w, 240) / 2 + 60) / (PORTRAIT ? SPOT_R_PORTRAIT : STAGE_W / 2), id = "spot" + si;   /* the hole as a fraction of the gradient radius: the landscape half-width, kept on purpose in portrait (below) */
+        const ca = centre(a), cz = centre(z);
+        /* E49 on the light itself (operator, 2026-09-09: "make sure all of the new additions pass the life check with the pixels
+           shifting"): `idle` on a spotlight names one of IDLE_KINDS for the HOLE - its radius breathes by the idle's scale and its
+           centre drifts by the idle's offset, the same seeded pure-function-of-t kinetics every held thing carries. Absent = still. */
+        const ix = sp.idle && sp.idle !== "none" ? idleXf(sp.idle, t, lpHash(seed | 0, si | 0, 991)) : { scale: 1, dx: 0, dy: 0 };
+        const cx = ca.cx + (cz.cx - ca.cx) * g + ix.dx, cy = ca.cy + (cz.cy - ca.cy) * g + ix.dy;
+        const r0 = ((Math.max(a.w, 240) / 2 + 60) * ix.scale) / (PORTRAIT ? SPOT_R_PORTRAIT : STAGE_W / 2), id = "spot" + si;   /* the hole as a fraction of the gradient radius: the landscape half-width, kept on purpose in portrait (below) */
         const defs = lpEl("defs", "", spSvg);
         const rg = lpEl("radialGradient", "", defs, PORTRAIT ? { id, gradientUnits: "userSpaceOnUse", cx: cx.toFixed(1), cy: cy.toFixed(1), r: 960 }   /* portrait: a round hole, the offsets below keep their landscape size (960 = half the landscape width) */
                                                             : { id, cx: (cx / STAGE_W).toFixed(4), cy: (cy / STAGE_H).toFixed(4), r: 0.5 });
