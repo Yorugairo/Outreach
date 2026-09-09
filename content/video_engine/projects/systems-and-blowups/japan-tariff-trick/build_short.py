@@ -42,7 +42,7 @@ BRAND_GAP, BRAND_TAIL = 0.7, 1.0
 OUTRO_S, OUTRO_LEAD = 6.2, 0.1
 
 # the beds (Tokyo's, sound/SOURCES.md) at the youtube level; the VO is the Chirp take, measured 2026-09-07 (ebur128)
-BED_LU = {"youtube": -28.0, "facebook": -26.0}
+BED_LU = {"youtube": -26.0, "facebook": -26.0}   # a SHORT sits at -26 on both (operator, 2026-09-08: "this is a short, so it should be -26"); -28 is the long-form calibration (Steel and Paper, the research blueprint)
 PLATFORM = "youtube"
 VO_LUFS = -21.5
 BEDS = {"suno-hook-A.mp3": -13.2, "suno-hook-B.mp3": -13.0, "suno-pivot-A.mp3": -13.0, "suno-pivot-B.mp3": -13.0}

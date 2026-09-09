@@ -2270,7 +2270,7 @@
   {
    "slot": "hook bed",
    "at": 0.0,
-   "gain": 0.015,
+   "gain": 0.0188,
    "fade_in": 1.5,
    "variants": {
     "A": "__snd_2_A__",
@@ -2280,7 +2280,7 @@
   {
    "slot": "turn bed",
    "at": 47.78,
-   "gain": 0.015,
+   "gain": 0.0188,
    "fade_in": 3.0,
    "variants": {
     "A": "__snd_3_A__",
