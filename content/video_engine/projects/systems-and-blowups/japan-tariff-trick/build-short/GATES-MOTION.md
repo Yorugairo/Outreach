@@ -54,5 +54,5 @@
 RESULT: 0 FAIL / 1 WARN / 13 PASS / 1 JUDGE / 5 INFO
 ```
 
-TIMELINE: japan-short.timeline.json sha256:e1a30e35721c2800f5715f7ed7a37272ccc671a10001c00ae7c7f417de2188b8
+TIMELINE: japan-short.timeline.json sha256:7acd55c06492eabf96c0613ba30fd35cc45b34f101b860481a7fa3acd8413715
 VERDICT: PASS (0 FAIL)
