@@ -875,7 +875,8 @@ def main() -> int:
         # dur: "hold" (operator, 2026-09-08, on the spotlight: "right now we flash it on, and really, it should hold until it
         # has a reason not to") - a species held until the NEXT event on its row (the next species' `at`) or the row's end.
         # Resolved here so the player and the gates see plain seconds; an authored number is never touched.
-        ats = sorted(float(e["at"]) for e in row_species if isinstance(e, dict) and isinstance(e.get("at"), (int, float)))
+        ats = sorted([float(e["at"]) for e in row_species if isinstance(e, dict) and isinstance(e.get("at"), (int, float))]
+                     + [float(d[2]) for d in (ds or []) if isinstance(d, (list, tuple)) and len(d) > 2 and isinstance(d[2], (int, float))])   # a card ARRIVING is an event too
         for e in row_species:
             if isinstance(e, dict) and e.get("dur") == "hold":
                 nxt = next((x for x in ats if x > float(e["at"]) + 1e-6), None)

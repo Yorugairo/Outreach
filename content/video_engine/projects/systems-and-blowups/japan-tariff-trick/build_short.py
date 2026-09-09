@@ -319,8 +319,9 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
         (t_engine, t_ship, f"ledger:ev-parts-cascade-v1:bars:0:right:mount={round(t_page2 + LP_ROLL_S - t_engine, 2)}:cut" + ";idle=live", ken, [
             ("dock-c-two-lanes", 0, t_lanes, t_ship),
         ], "cut", [
-            {"kind": "spotlight", "at": t_parts_land, "dur": "hold", "target": datum(0)},
-            {"kind": "callout", "at": round(t_parts_land + 1.1, 2), "dur": 1.6, "target": datum(1)},
+            {"kind": "spotlight", "at": t_parts_land, "dur": "hold", "target": datum(0)},   # holds until the two-lanes card lands (a card arriving is a reason not to)
+            # the harness callout is GONE (operator, 2026-09-08: "we don't even need it here. The evidence layer we're throwing in is the
+            # better story") - the two-lanes card parks over that bar, and a ring beneath a card is not a circle
             {"kind": "retitle", "at": t_right, "dur": 2.4, "text": "The right lane: Detroit's parts bill"},
         ]),
         # 5 the catalyst: the car carrier at one pier, one stamp - "Toyota crosses once. Tokyo pays a flat fifteen percent"

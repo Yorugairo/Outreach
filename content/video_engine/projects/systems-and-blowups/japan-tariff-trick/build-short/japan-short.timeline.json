@@ -4071,21 +4071,12 @@
     {
      "kind": "spotlight",
      "at": 25.89,
-     "dur": 1.1,
+     "dur": 0.61,
      "target": {
       "kind": "datum",
       "index": 0
      },
      "held": true
-    },
-    {
-     "kind": "callout",
-     "at": 26.99,
-     "dur": 1.6,
-     "target": {
-      "kind": "datum",
-      "index": 1
-     }
     },
     {
      "kind": "retitle",
@@ -4315,7 +4306,7 @@
     {
      "kind": "spotlight",
      "at": 57.55,
-     "dur": 6.01,
+     "dur": 2.73,
      "target": {
       "kind": "datum",
       "index": 2
