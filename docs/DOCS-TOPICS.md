@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4520 topics, 4650 citation edges. The 200 largest topics follow,
+4519 topics, 4651 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (144)
@@ -926,7 +926,7 @@ at most 12 sections each - the JSONL holds every one.
 
 ## word-timed (21)
 
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:1 — How Japan Tricked Trump — v3 build (own worlds, five distinct charts) and the pre-review pass (Claude, 2026-09-07) — The short is BUILT and watchable, quarantined until the operator's word (no render yet).
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:1 — How Japan Tricked Trump — v3 build (own worlds, five distinct charts) and the pre-review pass (Claude, 2026-09-07) — APPROVED 2026-09-08 ("approved, huge success.") - the plates (map v9, the two chart cards), the card-then-snap arrival a
 - content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:64 — Evidence — The accepted proof made the world and evidence roles visually distinct while
 - content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:80 — Action — Bind each caption to the active evidence region for its semantic cue. Position
 - content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:1 — World Plate, Evidence, and Caption Grammar v1 — Status: accepted design direction
