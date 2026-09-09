@@ -38,6 +38,24 @@ GATE_REFUSED = 2                 # exit code: the gate refused, nothing was capt
 FORCE_RECORD = "FORCED-RENDER.md"  # render/FORCED-RENDER.md: every --force with its reason
 
 
+def _env_volume(c: dict) -> str:
+    """The cue's `volume=` argument: its gain, times its ENVELOPE (`env` = [[t, dB], ...] against the gain, linear between
+    keys, flat outside them) as a per-frame ffmpeg expression in the CLIP's own time (the cue is delayed by `at` after this
+    filter, so every key shifts by -at). The same function the player runs (`envGain`) - the render must carry what the
+    strip played (the bed breathes over a thrown card's landing; the bed blueprint, rule 3; 2026-09-08)."""
+    env = c.get("env") or []
+    if not env:
+        return str(c["gain"])
+    at = float(c["at"])
+    keys = [(float(t) - at, float(db)) for t, db in env]
+    expr = str(keys[-1][1])
+    for (t0, d0), (t1, d1) in reversed(list(zip(keys, keys[1:]))):
+        seg = f"({d0}+({d1}-{d0})*(t-{t0})/{t1 - t0})" if t1 > t0 else str(d1)
+        expr = f"if(lt(t,{t1}),{seg},{expr})"
+    expr = f"if(lt(t,{keys[0][0]}),{keys[0][1]},{expr})"
+    return f"'{c['gain']}*pow(10,({expr})/20)':eval=frame"
+
+
 def mix_audio(dur: float) -> Path:
     OUT.mkdir(exist_ok=True)
     # the episode is the build's parent, its VO is the file the timeline names (Tokyo, 2026-09-04:
@@ -54,7 +72,7 @@ def mix_audio(dur: float) -> Path:
         inputs += ["-i", str(clip)]
         fade = f",afade=t=in:d={c['fade_in']}" if c.get("fade_in") else ""
         delay = int(round(c["at"] * 1000))
-        chains.append(f"[{i}:a]volume={c['gain']}{fade},adelay={delay}|{delay}[c{i}]")
+        chains.append(f"[{i}:a]volume={_env_volume(c)}{fade},adelay={delay}|{delay}[c{i}]")
         mix.append(f"[c{i}]")
     fc = (";".join(chains) + ";" + "".join(mix)
           + f"amix=inputs={len(mix)}:duration=first:normalize=0,"
