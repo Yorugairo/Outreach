@@ -3724,7 +3724,7 @@
    "exit": "cut",
    "span": [
     1.82,
-    11.78
+    8.88
    ],
    "docks": [],
    "species": [
@@ -3755,15 +3755,15 @@
    },
    "exit": "dip",
    "span": [
-    11.78,
+    8.88,
     18.3
    ],
    "docks": [],
    "species": [
     {
      "kind": "trace",
-     "at": 13.66,
-     "dur": 4.64,
+     "at": 9.78,
+     "dur": 8.52,
      "color": "#B0201F",
      "target": {
       "kind": "region",
@@ -3780,6 +3780,123 @@
       "to": [
        0.65,
        0.34
+      ],
+      "bow": 0.16,
+      "draw_s": 0.55,
+      "width": 9
+     }
+    },
+    {
+     "kind": "callout",
+     "at": 10.33,
+     "dur": 7.97,
+     "label": "25%",
+     "pad": 22,
+     "label_scale": 2.2,
+     "target": {
+      "kind": "point",
+      "x": 0.65,
+      "y": 0.34
+     }
+    },
+    {
+     "kind": "trace",
+     "at": 11.07,
+     "dur": 7.23,
+     "color": "#B0201F",
+     "target": {
+      "kind": "region",
+      "x0": 0.215,
+      "y0": 0.34,
+      "x1": 0.65,
+      "y1": 0.425
+     },
+     "hop": {
+      "from": [
+       0.65,
+       0.34
+      ],
+      "to": [
+       0.215,
+       0.425
+      ],
+      "bow": 0.16,
+      "draw_s": 0.55,
+      "width": 9
+     }
+    },
+    {
+     "kind": "callout",
+     "at": 11.62,
+     "dur": 6.68,
+     "label": "25%",
+     "pad": 22,
+     "label_scale": 2.2,
+     "target": {
+      "kind": "point",
+      "x": 0.215,
+      "y": 0.425
+     }
+    },
+    {
+     "kind": "trace",
+     "at": 12.36,
+     "dur": 5.94,
+     "color": "#B0201F",
+     "target": {
+      "kind": "region",
+      "x0": 0.215,
+      "y0": 0.425,
+      "x1": 0.455,
+      "y1": 0.87
+     },
+     "hop": {
+      "from": [
+       0.215,
+       0.425
+      ],
+      "to": [
+       0.455,
+       0.87
+      ],
+      "bow": 0.16,
+      "draw_s": 0.55,
+      "width": 9
+     }
+    },
+    {
+     "kind": "callout",
+     "at": 12.91,
+     "dur": 5.39,
+     "label": "25%",
+     "pad": 22,
+     "label_scale": 2.2,
+     "target": {
+      "kind": "point",
+      "x": 0.455,
+      "y": 0.87
+     }
+    },
+    {
+     "kind": "trace",
+     "at": 13.66,
+     "dur": 4.64,
+     "color": "#B0201F",
+     "target": {
+      "kind": "region",
+      "x0": 0.215,
+      "y0": 0.425,
+      "x1": 0.455,
+      "y1": 0.87
+     },
+     "hop": {
+      "from": [
+       0.455,
+       0.87
+      ],
+      "to": [
+       0.215,
+       0.425
       ],
       "bow": 0.16,
       "draw_s": 0.55,
@@ -3795,131 +3912,14 @@
      "label_scale": 2.2,
      "target": {
       "kind": "point",
-      "x": 0.65,
-      "y": 0.34
-     }
-    },
-    {
-     "kind": "trace",
-     "at": 14.18,
-     "dur": 4.12,
-     "color": "#B0201F",
-     "target": {
-      "kind": "region",
-      "x0": 0.215,
-      "y0": 0.34,
-      "x1": 0.65,
-      "y1": 0.425
-     },
-     "hop": {
-      "from": [
-       0.65,
-       0.34
-      ],
-      "to": [
-       0.215,
-       0.425
-      ],
-      "bow": 0.16,
-      "draw_s": 0.55,
-      "width": 9
-     }
-    },
-    {
-     "kind": "callout",
-     "at": 14.73,
-     "dur": 3.57,
-     "label": "25%",
-     "pad": 22,
-     "label_scale": 2.2,
-     "target": {
-      "kind": "point",
-      "x": 0.215,
-      "y": 0.425
-     }
-    },
-    {
-     "kind": "trace",
-     "at": 14.69,
-     "dur": 3.61,
-     "color": "#B0201F",
-     "target": {
-      "kind": "region",
-      "x0": 0.215,
-      "y0": 0.425,
-      "x1": 0.455,
-      "y1": 0.87
-     },
-     "hop": {
-      "from": [
-       0.215,
-       0.425
-      ],
-      "to": [
-       0.455,
-       0.87
-      ],
-      "bow": 0.16,
-      "draw_s": 0.55,
-      "width": 9
-     }
-    },
-    {
-     "kind": "callout",
-     "at": 15.24,
-     "dur": 3.06,
-     "label": "25%",
-     "pad": 22,
-     "label_scale": 2.2,
-     "target": {
-      "kind": "point",
-      "x": 0.455,
-      "y": 0.87
-     }
-    },
-    {
-     "kind": "trace",
-     "at": 15.21,
-     "dur": 3.09,
-     "color": "#B0201F",
-     "target": {
-      "kind": "region",
-      "x0": 0.215,
-      "y0": 0.425,
-      "x1": 0.455,
-      "y1": 0.87
-     },
-     "hop": {
-      "from": [
-       0.455,
-       0.87
-      ],
-      "to": [
-       0.215,
-       0.425
-      ],
-      "bow": 0.16,
-      "draw_s": 0.55,
-      "width": 9
-     }
-    },
-    {
-     "kind": "callout",
-     "at": 15.76,
-     "dur": 2.54,
-     "label": "25%",
-     "pad": 22,
-     "label_scale": 2.2,
-     "target": {
-      "kind": "point",
       "x": 0.165,
       "y": 0.38
      }
     },
     {
      "kind": "trace",
-     "at": 15.72,
-     "dur": 2.58,
+     "at": 14.95,
+     "dur": 3.35,
      "color": "#B0201F",
      "target": {
       "kind": "region",
@@ -3944,8 +3944,8 @@
     },
     {
      "kind": "callout",
-     "at": 16.27,
-     "dur": 2.03,
+     "at": 15.5,
+     "dur": 2.8,
      "label": "25%",
      "pad": 22,
      "label_scale": 2.2,

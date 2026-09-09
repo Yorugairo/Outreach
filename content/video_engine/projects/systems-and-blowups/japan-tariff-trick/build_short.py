@@ -213,7 +213,7 @@ def crossings_species(t0: float, t_truck: float, t_six: float, t_end: float) -> 
     ring with the 25% label, both held to the cut so the picture accumulates into the count (M16: an event every ~0.9 s)."""
     n = len(MAP_ROUTE)
     draw_s = 0.55
-    first = round(t_truck - 0.2, 2)
+    first = round(t_truck - 0.2, 2)                          # t_truck is now "compounded" (9.98): six hops from 9.8 to the sixth stamp on "six" (16.79)
     last_land = round(t_six + 0.05, 2)                       # the sixth stamp ON "six"
     step = (last_land - draw_s - first) / (n - 1)
     out = []
@@ -261,7 +261,13 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
     #   parts cross the border six separate times" - six hops drawn plant to plant, a 25% stamp on every landing, the sixth stamp
     #   landing on "six". cut("Auto parts") at 8.88 was the plan (PLATE-ORDER-MAP-BEAT.md) and is not a legal cut: the voice runs
     #   straight from "Toyota." into "Auto parts" with no M13 gap, so the boundary is the next breath, 11.78 (a 6.5 s beat).
-    t_gates = cut("But look")
+    # 2026-09-08, the first watch: "by our own logic the cut should come after 'dollars' - there's a big empty gap where we're
+    # lingering on the chart when we should transition". E25: the chart proves one sentence and leaves. cut_before("Auto parts")
+    # refuses because Whisper stretched "dollars." to 8.88 and swallowed the ~1 s of silence; the boundary is the ONSET of "Auto"
+    # (E47 / TR-2: the reference's dips are centred on the next word's onset), so the light fades out into the dip and the map
+    # arrives on its own sentence, "Auto parts taxes compounded against Detroit"
+    t_gates = at("Auto parts")
+    t_compound = at("compounded")                                     # the hops ARE the compounding: the first one leaves here
     t_truck = at("When you buy")
     t_six_times = at("six separate times")                          # (t_six is the receipt row's "six thousand dollars", below)
     # 4 the parts page mounts over the gates on "An engine block"; its bars land as the harness sentence ends; the two lanes dock on the archetype
@@ -328,7 +334,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
         #   D->O, O->D, D->M, M->D, D->O, O->D - every hop crosses a drawn line, and the sixth stamp lands on "six" (the count is
         #   the stamps, no counter). Hops are held to the cut so the picture accumulates; the arcs alternate sides so the
         #   return never retraces the outbound.
-        (t_gates, t_engine, "plate-gates;idle=drift", ken, [], "dip", crossings_species(t_gates, t_truck, t_six_times, t_engine)),
+        (t_gates, t_engine, "plate-gates;idle=drift", ken, [], "dip", crossings_species(t_gates, t_compound, t_six_times, t_engine)),
         # 4 the parts page mounts over the gates on "An engine block"; the engine bar is spotlit as the bars land, the harness
         #   called out after it (both after the landing - no highlight over the charcoal build); the two lanes DOCK on the
         #   archetype (E45: springs to reading size, then parks in the quiet zone) and leave with the page (E40 #5: exit=cut)
