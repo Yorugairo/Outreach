@@ -12,6 +12,13 @@
       "args": [
         "tools/google-flow-driver/mcp/server.mjs"
       ]
+    },
+    "sigmap": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\Snipe\\AppData\\Roaming\\npm\\node_modules\\sigmap\\gen-context.js",
+        "--mcp"
+      ]
     }
   }
 }
