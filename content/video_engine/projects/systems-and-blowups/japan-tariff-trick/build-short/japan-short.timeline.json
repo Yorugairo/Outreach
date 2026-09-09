@@ -3718,7 +3718,8 @@
      "scale": 0,
      "x": 0,
      "y": 0
-    }
+    },
+    "idle": "live"
    },
    "exit": "cut",
    "span": [
@@ -3730,11 +3731,12 @@
     {
      "kind": "spotlight",
      "at": 2.67,
-     "dur": 1.2,
+     "dur": 9.11,
      "target": {
       "kind": "datum",
       "index": 315
-     }
+     },
+     "held": true
     }
    ]
   },
@@ -4039,7 +4041,8 @@
      "scale": 0,
      "x": 0,
      "y": 0
-    }
+    },
+    "idle": "live"
    },
    "exit": "cut",
    "span": [
@@ -4068,11 +4071,12 @@
     {
      "kind": "spotlight",
      "at": 25.89,
-     "dur": 1.0,
+     "dur": 1.1,
      "target": {
       "kind": "datum",
       "index": 0
-     }
+     },
+     "held": true
     },
     {
      "kind": "callout",
@@ -4180,7 +4184,8 @@
      "scale": 0,
      "x": 0,
      "y": 0
-    }
+    },
+    "idle": "live"
    },
    "exit": "cut",
    "span": [
@@ -4192,11 +4197,12 @@
     {
      "kind": "spotlight",
      "at": 44.53,
-     "dur": 1.0,
+     "dur": 3.25,
      "target": {
       "kind": "datum",
       "index": 1
-     }
+     },
+     "held": true
     }
    ]
   },
@@ -4278,7 +4284,8 @@
      "scale": 0,
      "x": 0,
      "y": 0
-    }
+    },
+    "idle": "live"
    },
    "exit": "cut",
    "span": [
@@ -4308,11 +4315,12 @@
     {
      "kind": "spotlight",
      "at": 57.55,
-     "dur": 1.2,
+     "dur": 6.01,
      "target": {
       "kind": "datum",
       "index": 2
-     }
+     },
+     "held": true
     }
    ]
   },
@@ -4612,7 +4620,8 @@
      "scale": 0,
      "x": 0,
      "y": 0
-    }
+    },
+    "idle": "live"
    },
    "exit": "cut",
    "span": [
@@ -4666,11 +4675,12 @@
     {
      "kind": "spotlight",
      "at": 80.35,
-     "dur": 1.0,
+     "dur": 0.75,
      "target": {
       "kind": "datum",
       "index": 43
-     }
+     },
+     "held": true
     },
     {
      "kind": "figure",

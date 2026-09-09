@@ -102,16 +102,16 @@
   /* MOTION MENU species (doc 29 s9.27; P35 T6/T7): plate life on the world side, the targeted overlay above the docks */
   #plife { position: absolute; inset: 0; pointer-events: none; }
   #plife img { position: absolute; will-change: transform; transform-origin: 50% 100%; }
-  #species { position: absolute; inset: 0; width: var(--stage-w); height: var(--stage-h); pointer-events: none; overflow: visible; }
+  #species, #species-under { position: absolute; inset: 0; width: var(--stage-w); height: var(--stage-h); pointer-events: none; overflow: visible; }
   /* E47 world-change transitions (operator 2026-09-06). Two veils above everything the scene carries, so a
      dip takes the docks, the stage captions and the species down with the world and a blur-zoom softens the
      whole frame. Both are inert until a transition drives them: #dipveil at opacity 0 paints nothing and
      #bzveil at backdrop-filter none filters nothing, so a build with neither exit renders as before. */
   #bzveil { position: absolute; inset: 0; pointer-events: none; }
   #dipveil { position: absolute; inset: 0; pointer-events: none; background: #000; opacity: 0; }
-  #species .co { fill: none; stroke: #F5B72E; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
-  #species .sq { fill: none; stroke: #F5B72E; stroke-width: 5; stroke-linecap: round; }
-  #species .lab { font: 700 30px Inter, Arial, sans-serif; fill: #F5B72E; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 8px; }   /* inline series names may run past the plot (s9.23b) */
+#species .co, #species-under .co { fill: none; stroke: #F5B72E; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+#species .sq, #species-under .sq { fill: none; stroke: #F5B72E; stroke-width: 5; stroke-linecap: round; }
+#species .lab, #species-under .lab { font: 700 30px Inter, Arial, sans-serif; fill: #F5B72E; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 8px; }   /* inline series names may run past the plot (s9.23b) */
   .lp-chart text { font-family: Inter, Arial, sans-serif; fill: var(--lp-chalk); }
   .lp-chart .ax { stroke: #8a94a0; stroke-width: 2; }
   .lp-chart .grid { stroke: rgba(242,242,242,.14); stroke-width: 1.5; }
@@ -444,6 +444,10 @@
   <div id="spot"></div>
   <div id="plife"></div>
 
+  <!-- SPECIES-UNDER (2026-09-08): a species on a DATUM (the page's chart) paints here, beneath the docks - "the drawn circles should be on
+       the layer beneath the card" (operator); a species on a point / region / span annotates what is there and paints in #species, above
+       the docks (the golden chart-callout: a ring on the card itself). The choice is per species, in paintSpecies. -->
+  <svg id="species-under" viewBox="0 0 1920 1080" aria-hidden="true"></svg>
   <div class="dock" id="dock-1">
     <div class="slide-frame"><img id="i1" alt="evidence" /></div>
     <div class="rail" id="r1"></div>
@@ -882,7 +886,7 @@
      sway; none - explicit stillness, declared.
      Every number below is a starting reference, tagged where it came from; the operator's eye moves them (42 s42.5). */
 
-  const IDLE_KINDS = Object.freeze(["none", "breath", "drift", "pulse", "figure"]);
+  const IDLE_KINDS = Object.freeze(["none", "breath", "drift", "pulse", "figure", "live"]);   /* live: breath + drift (2026-09-08) */
 
   const IDLE = Object.freeze({
     BREATH_AMP: 0.012,        /* [DERIVED: HyperFrames /prompting/motion "1-2 %", verified 2026-09-06; measure on ours] - a 1.2 % inhale */
@@ -962,6 +966,10 @@
     if (kind === "drift") { const d = drift(tq, phase, P); return Object.assign(id, { dx: d[0], dy: d[1] }); }
     if (kind === "pulse") return Object.assign(id, { lum: pulse(tq, phase, P) });
     if (kind === "figure") { const s = sway(tq, phase, P); return Object.assign(id, { scale: 1 + P.BREATH_AMP * figureBreath(tq, phase, P), dx: s[0], dy: s[1] }); }
+    if (kind === "live") {   /* breath + drift (2026-09-08): a breath is a scale with a fixed point at the centre, so a chart at the page centre
+                                stayed bit-identical while the page "breathed" (operator: "even our charts need some sort of life, even if it's
+                                just 1 pixel shifts"); the drift moves every pixel by the same 1-2 px walk, so nothing on the page is ever still */
+      const d = drift(tq, phase, P); return Object.assign(id, { scale: breath(tq, phase, P), dx: d[0], dy: d[1] }); }
     return id;
   };
 
@@ -3974,7 +3982,8 @@
                SPOT_DIM: 0.49,   /* operator 2026-09-03: 0.55 was 'way too dark', 0.44 too light - settled at 0.49 */
                STEAM_PERIOD: 2.6, TRACE_PERIOD: 3.2, TRACE_DRAW: 1.1, TICK_STEP: 0.5 };   /* STILL LIFE (2026-09-05): steam, trace, ticker */
   const CAMERA = new Set(["punch", "focus_zoom", "pull_back"]);
-  const spSvg = $("species"), plife = $("plife");
+  const spTop = $("species"), spUnder = $("species-under"), plife = $("plife");
+  let spSvg = spTop;   /* the layer the species painter draws into - chosen per species in paintSpecies */
   const spEase = (k) => 1 - Math.pow(1 - clamp01(k), 3);
   const spIO = (k) => { k = clamp01(k); return k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; };
   /* an element's box in STAGE px (the stage is scaled to fit the pane) */
@@ -4078,11 +4087,17 @@
               target: f.target || { kind: "datum", index: Number.isInteger(pg.emphasize) ? pg.emphasize : 0 }, target2: f.target2 }];
   };
   const paintSpecies = (sc, t) => {
-    spSvg.replaceChildren(); plife.replaceChildren();
+    spTop.replaceChildren(); spUnder.replaceChildren(); plife.replaceChildren();
+    const hasDocks = (sc.docks || []).length > 0;
     plife.style.transformOrigin = (STAGE_W / 2) + "px " + (STAGE_H / 2) + "px"; plife.style.transform = camCss(camXf(sc, t));   /* plate life lives in the world: the camera carries it */
     [...(sc.species || []), ...pageFocus(sc)].forEach((sp, si) => {
       const dur = sp.dur || 1, k = (t - sp.at) / Math.max(0.001, dur);
       if (k < 0 || k > 1) return;
+      /* WHICH LAYER (operator, 2026-09-08: "the drawn circles should be on the layer beneath the card"): a species on a DATUM annotates
+         the page's chart and paints beneath any card parked or thrown over it; a species on a point / region / span annotates whatever
+         is there - the card itself, in the chart-callout golden - and paints above. Time is not the test: on the tariff parts page the
+         ring began after the card arrived and still belonged to the bar beneath it. */
+      spSvg = hasDocks && sp.target && sp.target.kind === "datum" ? spUnder : spTop;
       const seed = 0x51EC1E5 ^ ((sc.scene_id || "").length * 131 + si);
       if (sp.kind === "callout") {
         const b = resolveTarget(sp.target); if (!b) return;

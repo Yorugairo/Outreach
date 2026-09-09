@@ -1614,6 +1614,22 @@ sits at 0.955 of the stage with the world visible around it, and carries the ink
 min-jerk growth for comparison. Dials, all `[DERIVED]`, HG2 tunes by eye; `throw_from` below |
 above | left | right, `throw_s` per page, `throw=<grow>,<from>,<s>` on the plate id.
 
+**E49, amended 2026-09-08 (the tariff short's first watch) - three rulings on life and layers.**
+1. *"Nothing should ever be truly stable - even our charts need to have some sort of life, even if it's just 1 pixel
+   shifts."* The page's `breath` is a scale with a fixed point at the page's centre, so a chart at the centre stayed
+   bit-identical while the page "breathed" - E49 satisfied on paper, not to the eye. The **`live`** idle (breath + the
+   2 px drift, every pixel moving) is the ledger page's idle on the tariff short (`;idle=live`), measured: 1,233 px of
+   the chart region change from one frame to the next, 6,153 over half a second. The frozen-frames gate passes.
+2. *"We have to improve how we use the focus light - right now we flash it on, and really, it should hold until it has
+   a reason not to."* A spotlight's `dur` may be **`hold`**: the compiler resolves it to the next event on the row (the
+   next species' `at`) or the row's end - the hook page's spotlight now runs 9.1 s to the cut; the parts page's 1.1 s
+   until its callout takes over. An authored number is never touched.
+3. *"We're circling for a highlight, then throwing the card, and when that card lands, it is now circled. The drawn
+   circles should be on the layer beneath the card."* Two species layers: a species on a **datum** annotates the
+   page's chart and paints **beneath** the docks (`#species-under`); a species on a point / region / span annotates
+   what is there - the card itself, as in the `chart-callout` golden - and paints above. Time is not the test: on the
+   parts page the ring began after the card arrived and still belonged to the bar beneath it.
+
 ## E51 — A push-in is only used tied to something that just landed; an untied zoom is filler (2026-09-07)
 
 The operator, on v3's third watch: *"The push-in doesn't make sense - we are using it randomly it seems, it is a motion that

@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4514 topics, 4628 citation edges. The 200 largest topics follow,
+4514 topics, 4630 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (144)
@@ -760,6 +760,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/FINDING-gaps-are-the-edit.md:81 — Test 3 — the question I should have asked first — Tests 1 and 2 asked "do gaps predict where we cut." That was backwards. The claim is
 - … 10 more in `docs/DOCS-TOPICS.jsonl`
 
+## re-run (22)
+
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/AGENTS.md:33 — Commands — > `npm run dev` is a long-running server, not a one-shot command. It blocks until stopped.
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/CLAUDE.md:33 — Commands — > `npm run dev` is a long-running server, not a one-shot command. It blocks until stopped.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:90 — Standing gates that bind the new draft — - Doc 37 + paragraph rules: the VO payload is REFLOWED (~8–10 paragraphs
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:75 — The gate run (2026-09-08, current code) — Script G re-run through `run_script_gates.py` with today's gates:
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:78 — Round 4 — the ENUMERATED screens (operator audit, 2026-08-30) — The operator asked whether L1/L3 and the X1 orphan screen ran to the
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:132 — DECISION (operator rules; recommendation on each) — 1. Runtime 2:20 against doc 51's 45–60 s. Every clear cut that clears G01–G45 has
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:152 — SOURCES-TO-VERIFY — None outstanding. TIC July prints soon; re-run `evidence/build_tokyo_evidence.py` before
+- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:633 — 23. Micro-repair - the editor excises what the provider stutters (operator, 2026-08-30) — Amends the old splice ban. When the provider RENDERS a sub-word defect
+- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:201 — 8. Checks before a document ships — - [ ] Form chosen by §6 — and it is not a chart when it should be a tile
+- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:213 — 9. Provenance — Palette and checks produced with the `dataviz` skill's validator
+- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:172 — 6. Order of operations — 1. Apply §1–§3 to the script text.
+- docs/content-video-engine/patterns/SENTENCE-STRENGTH-CHECK.md:1 — SENTENCE STRENGTH CHECK — the line-by-line gate — A per-sentence pass run AFTER a script conforms structurally and BEFORE it
+- … 10 more in `docs/DOCS-TOPICS.jsonl`
+
 ## as-rigid-as-possible (21)
 
 - content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:159 — Pillar 2: As-Rigid-As-Possible (ARAP) Morphing & 2.5D Projective Geometry
@@ -991,22 +1007,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:116 — 1. The Cinematic Dolly (Recommended Default) — - Node: `DepthflowMotionPresetDolly`
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:141 — 5. Motion discipline — Motion is authored in this order:
 - docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:310 — 9. Primary Citations & Evidence Ledger — 1. Google DeepMind:
-- … 8 more in `docs/DOCS-TOPICS.jsonl`
-
-## re-run (20)
-
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/AGENTS.md:33 — Commands — > `npm run dev` is a long-running server, not a one-shot command. It blocks until stopped.
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/CLAUDE.md:33 — Commands — > `npm run dev` is a long-running server, not a one-shot command. It blocks until stopped.
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:90 — Standing gates that bind the new draft — - Doc 37 + paragraph rules: the VO payload is REFLOWED (~8–10 paragraphs
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:75 — The gate run (2026-09-08, current code) — Script G re-run through `run_script_gates.py` with today's gates:
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:78 — Round 4 — the ENUMERATED screens (operator audit, 2026-08-30) — The operator asked whether L1/L3 and the X1 orphan screen ran to the
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:132 — DECISION (operator rules; recommendation on each) — 1. Runtime 2:20 against doc 51's 45–60 s. Every clear cut that clears G01–G45 has
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:152 — SOURCES-TO-VERIFY — None outstanding. TIC July prints soon; re-run `evidence/build_tokyo_evidence.py` before
-- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:633 — 23. Micro-repair - the editor excises what the provider stutters (operator, 2026-08-30) — Amends the old splice ban. When the provider RENDERS a sub-word defect
-- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:201 — 8. Checks before a document ships — - [ ] Form chosen by §6 — and it is not a chart when it should be a tile
-- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:213 — 9. Provenance — Palette and checks produced with the `dataviz` skill's validator
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:172 — 6. Order of operations — 1. Apply §1–§3 to the script text.
-- docs/content-video-engine/patterns/SENTENCE-STRENGTH-CHECK.md:1 — SENTENCE STRENGTH CHECK — the line-by-line gate — A per-sentence pass run AFTER a script conforms structurally and BEFORE it
 - … 8 more in `docs/DOCS-TOPICS.jsonl`
 
 ## b-roll (19)

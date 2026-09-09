@@ -3,12 +3,12 @@
 ```text
 === MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\content\video_engine\projects\systems-and-blowups\japan-tariff-trick\build-short ===
                runtime: 1:29
-         visual_events: 311 (208.8/min)
+         visual_events: 306 (205.5/min)
                  docks: 6
            dock_source: timeline
           ledger_pages: 5
   still_over_12s_share: 0%
-            per_minute: 0:00:223/7 1:00:178/8
+            per_minute: 0:00:219/7 1:00:176/8
 
   [WARN ] M06 62 caption pages = 42/min, 4.0 words/page
           s9.15 r7 / build_caption_pages 4-6 words
@@ -38,9 +38,9 @@
           E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract
   [PASS ] M16 longest gap between visual events 2.3s at 0:28; 0 gap(s) over 2.5s
           doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
-  [INFO ] M07 short: 1 full minute(s) in 89s - opening 223.0 events/min, 7.0 evidence entries/min; tail from 1:00 177.8/min; whole runtime 207.5/min - no minute distribution to rank in (E21 is judged on the whole)
+  [INFO ] M07 short: 1 full minute(s) in 89s - opening 219.0 events/min, 7.0 evidence entries/min; tail from 1:00 175.8/min; whole runtime 204.1/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
-  [INFO ] M18 frozen frames not measured - run measure_frozen_frames.py <build> (writes frame-hashes.json)
+  [INFO ] M18 frame-hashes.json measured another player.html (the build was rebuilt since) - re-run measure_frozen_frames.py <build>
           E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)
   [INFO ] M19 build_to caps declared; none holds between caps
           P47 T2 (SHOT-TABLE-V3-PROPOSAL part B): a cap is a hold the sentence asked for, not stillness
@@ -54,5 +54,5 @@
 RESULT: 0 FAIL / 1 WARN / 13 PASS / 1 JUDGE / 5 INFO
 ```
 
-TIMELINE: japan-short.timeline.json sha256:02bcfc0f1e2a3c90b84ff1274d4db42fbdd699a7bd9a1d0534ea0248a7d0a7a9
+TIMELINE: japan-short.timeline.json sha256:33fdabe550d5b1d8f6f4f511b7d58c9acc93850fb440de1e0e36e0d02f1e6b9e
 VERDICT: PASS (0 FAIL)

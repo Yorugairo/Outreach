@@ -67,7 +67,7 @@ SPECIES_LEDGER = "ledger"          # timeline["species"] entry; the player keys 
 # nowhere ("we made it the default because it worked, but we need a better default, and it can be
 # an effect at that point"). dip and blurzoom may carry their own length: `dip:<s>`, `blurzoom:<s>`.
 SCENE_EXITS = ("cut", "dip", "blurzoom", "dissolve", "wipe", "wipe_right", "suck")
-IDLE_KINDS = ("none", "breath", "drift", "pulse", "figure")   # E49 / P47 T5: the player's named idles; `;idle=<kind>` on any plate id (`none` is explicit stillness)
+IDLE_KINDS = ("none", "breath", "drift", "pulse", "figure", "live")   # live (2026-09-08): breath + drift - the breath has a fixed point at the centre, so a chart at the page centre read as still; the drift moves every pixel   # E49 / P47 T5: the player's named idles; `;idle=<kind>` on any plate id (`none` is explicit stillness)
 IDLE_OPT = ";idle="
 ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page's pills ARRIVE (spring = E45's pop, the default)
 MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets (stopaction.mjs MASS) a throw or a landing settles by
@@ -870,11 +870,20 @@ def main() -> int:
         # The targeting law is a hard build error naming the row; the pivot
         # span is None until the parent wires it from the ledger (s9.28 C4).
         row_species = list(row[6]) if len(row) > 6 and row[6] is not None else []
+        # each window runs to the next so the world layer never drops out
+        b = plan[i + 1][0] if i + 1 < len(plan) else tl["runtime_s"]
+        # dur: "hold" (operator, 2026-09-08, on the spotlight: "right now we flash it on, and really, it should hold until it
+        # has a reason not to") - a species held until the NEXT event on its row (the next species' `at`) or the row's end.
+        # Resolved here so the player and the gates see plain seconds; an authored number is never touched.
+        ats = sorted(float(e["at"]) for e in row_species if isinstance(e, dict) and isinstance(e.get("at"), (int, float)))
+        for e in row_species:
+            if isinstance(e, dict) and e.get("dur") == "hold":
+                nxt = next((x for x in ats if x > float(e["at"]) + 1e-6), None)
+                e["dur"] = round(max(0.05, (nxt if nxt is not None else float(b)) - float(e["at"])), 2)
+                e["held"] = True   # the record of why the duration is what it is
         species_errors = validate_species(row_species, ken, plate, pivot_span=None)
         if species_errors:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(species_errors))
-        # each window runs to the next so the world layer never drops out
-        b = plan[i + 1][0] if i + 1 < len(plan) else tl["runtime_s"]
         # a ledger page is drawn, not embedded (doc 29 s9.26); a bad or
         # missing series is a hard build error naming the row
         try:

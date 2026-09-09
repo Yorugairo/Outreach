@@ -301,11 +301,11 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
         #   seconds after the voice says it. The bracket is cut outright: operator, "a cheap, relatively bad way we use just
         #   to add some motion", and the figure is not lost - the selling page pays it off properly at 0:50. Deployed life
         #   goes 0.03s -> the whole span. exit=cut: the gates dip in.
-        (t_mount, t_gates, hold + ":snap=dock-b-holdings:cut", ken, [], "cut", [
+        (t_mount, t_gates, hold + ":snap=dock-b-holdings:cut" + ";idle=live", ken, [], "cut", [
             # M11: a page that ARRIVES full must be pointed at, or it is homework (E25). The spotlight lands on the June
             # low as the page appears - the divergence IS the mechanism, and pointing at it beats the bracket that used
             # to write the figure six and a half seconds after the voice said it.
-            {"kind": "spotlight", "at": round(t_mount + SNAP_S + 0.4, 2), "dur": 1.2, "target": datum(LAST_IDX)},   # after the SNAP has finished, never mid-snap
+            {"kind": "spotlight", "at": round(t_mount + SNAP_S + 0.4, 2), "dur": "hold", "target": datum(LAST_IDX)},   # after the SNAP has finished, never mid-snap
         ]),
         # 3 the crossings map: six hops, six stamps. Plant centres as stage fractions on sig-b-crossings-map-v9 (768x1376 -> 9:16):
         #   Detroit (0.215, 0.425), Ontario (0.65, 0.34) across the water, Mexico (0.455, 0.87) below the border. The route is
@@ -316,10 +316,10 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
         # 4 the parts page mounts over the gates on "An engine block"; the engine bar is spotlit as the bars land, the harness
         #   called out after it (both after the landing - no highlight over the charcoal build); the two lanes DOCK on the
         #   archetype (E45: springs to reading size, then parks in the quiet zone) and leave with the page (E40 #5: exit=cut)
-        (t_engine, t_ship, f"ledger:ev-parts-cascade-v1:bars:0:right:mount={round(t_page2 + LP_ROLL_S - t_engine, 2)}:cut", ken, [
+        (t_engine, t_ship, f"ledger:ev-parts-cascade-v1:bars:0:right:mount={round(t_page2 + LP_ROLL_S - t_engine, 2)}:cut" + ";idle=live", ken, [
             ("dock-c-two-lanes", 0, t_lanes, t_ship),
         ], "cut", [
-            {"kind": "spotlight", "at": t_parts_land, "dur": 1.0, "target": datum(0)},
+            {"kind": "spotlight", "at": t_parts_land, "dur": "hold", "target": datum(0)},
             {"kind": "callout", "at": round(t_parts_land + 1.1, 2), "dur": 1.6, "target": datum(1)},
             {"kind": "retitle", "at": t_right, "dur": 2.4, "text": "The right lane: Detroit's parts bill"},
         ]),
@@ -329,18 +329,18 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
         ], "dip", None),
         # 6 the receipt page mounts over the ship on "the math breaks Detroit"; Detroit's bar is spotlit as the number is spoken;
         #   the +$1,740 is the page's own badge (B3: the numeral is in the sub behind it)
-        (t_math, t_lever, "ledger:ev-tariff-receipt-v1:bars:1:right:snap=dock-g-receipt:cut", ken, [], "cut", [
-            {"kind": "spotlight", "at": t_six, "dur": 1.0, "target": datum(1)},
+        (t_math, t_lever, "ledger:ev-tariff-receipt-v1:bars:1:right:snap=dock-g-receipt:cut" + ";idle=live", ken, [], "cut", [
+            {"kind": "spotlight", "at": t_six, "dur": "hold", "target": datum(1)},
         ]),
         # 7 the second lever: the vault, shelves emptying (it returns on "Tokyo checked the Treasury vault" - E48, the callback is the thread)
         (t_lever, t_return, "plate-vault;idle=drift", ken, [], "dip", None),
         # 8 THE SECOND LEVER as its own chart: Japan's month-by-month selling (four bars, REAL, TIC table 5) mounts over the vault on
         #   "Instead of reinvesting"; the bars land under "of Washington's debt" and May, the biggest month, is called out; the
         #   gate to the fab docks on "pledging" and leaves with the page (E40 #5: exit=cut). The holdings line stays at the hook only.
-        (t_return, t_finance, f"ledger:ev-japan-selling-v1:bars:2:right:mount={round(t_page4 + LP_ROLL_S - t_return, 2)}:cut", ken, [
+        (t_return, t_finance, f"ledger:ev-japan-selling-v1:bars:2:right:mount={round(t_page4 + LP_ROLL_S - t_return, 2)}:cut" + ";idle=live", ken, [
             ("dock-f-toll-gate-to-fab", 0, t_pledge, t_finance),
         ], "cut", [
-            {"kind": "spotlight", "at": t_sell_land, "dur": 1.2, "target": datum(2)},   # May, the biggest month (a callout ring sat on the pill)
+            {"kind": "spotlight", "at": t_sell_land, "dur": "hold", "target": datum(2)},   # May, the biggest month (a callout ring sat on the pill)
         ]),
         # 9 the reflection: two fingers to camera - "In finance, we call this the double squeeze"
         (t_finance, t_wrote, "clip:" + seekable_clip("clip-g-two-fingers-v2.mp4", WORLD_CLIPS["clip-g-two-fingers-v2.mp4"]).as_posix(), ken, [], "dip", None),
@@ -350,12 +350,12 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
         #   cheque on "And this is where the policy backfired"; the line draws to the latest quarter and lands under "America used
         #   the tariff"; the peak is spotlit on "to tax its own cars" and its figure written on "while Tokyo funded". The two
         #   callbacks ride it as DOCKS: the podium on "Washington signed", the vault on "Then Tokyo checked the Treasury vault".
-        (t_backfire, t_outro, f"ledger:ev-customs-duties-v1:line:{CUSTOMS_LAST_IDX}:right:mount={round(t_page5 + LP_ROLL_S - t_backfire, 2)}:cut", ken, [
+        (t_backfire, t_outro, f"ledger:ev-customs-duties-v1:line:{CUSTOMS_LAST_IDX}:right:mount={round(t_page5 + LP_ROLL_S - t_backfire, 2)}:cut" + ";idle=live", ken, [
             ("dock-a-podium", 0, t_signed, t_checked),
             ("dock-e-vault", 0, t_checked, t_used),
         ], "cut", [
             {"kind": "build_to", "at": t_customs_build, "dur": PAGE_BUILD_S, "target": datum(CUSTOMS_LAST_IDX)},
-            {"kind": "spotlight", "at": max(t_customs_land, at("tax its own cars")), "dur": 1.0, "target": datum(CUSTOMS_PEAK_IDX)},
+            {"kind": "spotlight", "at": max(t_customs_land, at("tax its own cars")), "dur": "hold", "target": datum(CUSTOMS_PEAK_IDX)},
             {"kind": "figure", "at": t_funded, "dur": 1.4, "target": datum(CUSTOMS_PEAK_IDX), "text": "$364bn a year", "sub": "customs duties, late 2025", "color": "neg", "dy": -0.9},
         ]),
         # 12 the outro card, dissolving in over the ring page
