@@ -14,8 +14,8 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 14 | 272 | 95.2% | 91.9% | 3 | 97.5 |
-| Process (everything else) | 269 | 3086 | 97.5% | 91.6% | 10 | 100.0 |
-| All docs | 283 | 3358 | 97.3% | 91.7% | 13 | 100.0 |
+| Process (everything else) | 270 | 3092 | 97.5% | 91.6% | 11 | 100.0 |
+| All docs | 284 | 3364 | 97.4% | 91.6% | 14 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -138,7 +138,7 @@ Non-exempt sections whose first real line is under 40 characters (89).
 
 ## Appendix B - generic headings
 
-Headings that name a filing slot, not a concept (13).
+Headings that name a filing slot, not a concept (14).
 
 - `content/video_engine/projects/history-of-bjj/episode-2-research-questions.md:5` Questions
 - `content/video_engine/projects/history-of-bjj/episode-3-research-questions.md:5` Questions
@@ -148,6 +148,7 @@ Headings that name a filing slot, not a concept (13).
 - `docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:8` Purpose
 - `docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:140` 5. Rules
 - `docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:267` Rules
+- `docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md:45` Status
 - `docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:542` Notes
 - `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:168` 6. Other
 - `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:36` 7. Other

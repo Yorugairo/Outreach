@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-283 documents across 13 kinds.
+284 documents across 13 kinds.
 
 ## doctrine
 
@@ -333,6 +333,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md — SOURCES — steel-and-paper sound — Per-asset licence ledger (SOUND-SOURCING.md rule: — defines: P35 — terms: gain-matched; highest-rated; preview-hq-mp3; -ss; sort=rating_desc
 - docs/agent-memory/explorer/MEMORY.md — explorer - durable memory (reviewed) — Promoted from worker scratch by the parent after r — defines: — — terms: path | heading or symbol | what; per-platform; tokyo-tea-break; il-tea-break
 - docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md — HyperFrames intake — the Gemini research, gat — The operator: "HyperFrames has a GREAT resource li — defines: — — terms: push-in; ## The question; ## Verdict up front; ## Sources; ## NOT FOUND WHERE I LOOKED
+- docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md — Intake — the ink bloom transition (operator, — The operator brought a MotionKit preset by hand: " — defines: — — terms: K-M; km_ink; two-harmonic; byte-identical; Recall
 - docs/content-video-engine/MACRO-CHART-INTAKE-2026-09-07.md — Macro-chart journalism research — the intake, — The Gemini lane's `docs/research/markets/MACRO_CHA — defines: — — terms: McGill; Verified 2026-09-07; Local Evidence; fetch; weight-and-mass
 - docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md — remotion-ui intake — seven components, gated — The same morning as the HyperFrames harvest, seven — defines: — — terms: snap; HyperFrames; badge-stamp; undraw; dip
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md — DOCTRINE CORE — portable content-operation co — Model-agnostic; paste whole into any system-instru — defines: — — terms: scene-setting; pause-framed; seed-locked; paragraph-shaped; quarter-billion
