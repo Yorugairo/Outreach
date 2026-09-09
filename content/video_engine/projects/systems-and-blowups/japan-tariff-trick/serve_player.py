@@ -1,4 +1,4 @@
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler   # THREADED (2026-09-09): one client streaming a Range or holding a socket wedged every other client - four render shards timed out on Page.goto against the single-threaded server
 import os, sys, re
 
 class RangeFileWrapper:
@@ -61,6 +61,6 @@ class RangeHTTPRequestHandler(SimpleHTTPRequestHandler):
 if __name__ == '__main__':
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8731
     os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), sys.argv[2]) if len(sys.argv) > 2 else os.path.dirname(os.path.abspath(__file__)))   # [dir]: the build to serve (build-short)
-    server = HTTPServer(('127.0.0.1', port), RangeHTTPRequestHandler)
+    server = ThreadingHTTPServer(('127.0.0.1', port), RangeHTTPRequestHandler)
     print(f"Serving Japan Tariff Trick review player on http://127.0.0.1:{port}/player.html with full Range/seek support...")
     server.serve_forever()
