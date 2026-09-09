@@ -2,6 +2,13 @@
 
 **APPROVED 2026-09-08** ("approved, huge success.") - the plates (map v9, the two chart cards), the card-then-snap arrival and the Chirp voice (E54); the bed at -20 LU, breathing over the landings. Rendered once at 1440x2560 from this word (`build-short/render/`).
 
+**APPROVED 2026-09-09** ("tight sounds right, approved, render it") - the second cut: the Chirp take with its dead space killed
+(`retime_take.py vo-short/audio/scene_1.mp3 --gaps --out scene_1-tight` -> 79.18 s, 188.2 WPM; the build's default clock), the
+receipt page without the reference line (E53 addendum), the fab plate as the pledge dock with the LIGHT on the wafer (E55/E56),
+runtime 85.28 s, gates 0 FAIL / 0 WARN / 15 PASS. Rendered once at 1440x2560 from this word: `build-short/render/japan-short-full-1440p.mp4`
+(the 09-08 render kept beside it as `-2026-09-08-superseded`). The 6% tempo candidate (`scene_1-fast`, 80.8 s) was heard side-by-side
+on :8735 and not chosen.
+
 - Player: `python serve_player.py 8734 build-short` → http://127.0.0.1:8734/player.html (also `.claude/launch.json` → `japan-short-player`)
 - Build: `python build_short.py` → `build-short/player.html`, `build-short/japan-short.timeline.json`, `build-short/GATES-MOTION.md`
 - Clock: `vo-short/audio/scene_1.mp3` = the Chirp scratch take (83.26 s), word-timed locally by the new

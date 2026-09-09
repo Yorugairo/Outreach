@@ -176,7 +176,15 @@ def parallel_render(n_frames: int, workers: int, video_out: Path) -> None:
              "--part", str(part)]))
     fails = [p.wait() for p in procs]
     if any(fails):
-        raise RuntimeError(f"shard exit codes: {fails}")
+        # a shard can die on a transient (2026-09-08: shard 0's encoder pipe closed at t=10.5 under four workers, the other three
+        # were whole) - re-run the failed shards once, one at a time, before declaring the render failed
+        redo = [w for w, code in enumerate(fails) if code]
+        print(f"  shard exit codes {fails}: re-running shard(s) {redo} once", flush=True)
+        for w in redo:
+            a, b = w * chunk, min((w + 1) * chunk, n_frames)
+            code = subprocess.run([sys.executable, __file__, "--frames", str(a), str(b), "--part", str(parts[w])]).returncode
+            if code:
+                raise RuntimeError(f"shard {w} failed twice (exit {code})")
     lst = OUT / "parts.txt"
     lst.write_text("".join(f"file '{p.as_posix()}'\n" for p in parts),
                    encoding="utf-8")

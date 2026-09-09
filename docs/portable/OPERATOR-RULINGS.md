@@ -1779,7 +1779,8 @@ never run on a short's take: 13 sentence settles of 0.66–0.96 s and two mid-se
 operator's instinct — *"speeding the voice up by ~6% and re-timing"* — is `atempo 1.06` on the compressed take
 (`retime_take.py`; the words scale exactly, no second Whisper pass): 74.70 s, 199.5 WPM, runtime 80.8 s from 89.4,
 gates 0 FAIL / 0 WARN. Three candidates exist (tight 79.2 s / x106 78.6 s / fast 74.7 s); the operator picks BY EAR on
-the player — a pace is never chosen from the number alone. The Whisper gate's numeral normalization ("a hundred and
+the player — a pace is never chosen from the number alone. **Picked 2026-09-09: tight** (*"tight sounds right, approved,
+render it"*) — the dead-space kill alone, at 188 WPM; the 6% on top was heard side-by-side and not taken. The Whisper gate's numeral normalization ("a hundred and
 twenty-two billion dollars" → "$122 billion") fails BOTH the original and the re-timed take identically (12.7% vs 14.3%
 WER, the same one "deletion"): a tool defect, backlog, not a take defect.
 
