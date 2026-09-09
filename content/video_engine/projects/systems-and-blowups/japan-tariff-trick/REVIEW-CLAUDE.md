@@ -57,8 +57,8 @@ Packaging QC: title A's "$122 billion" is the verified figure — good. The thum
 1. **The $6,240.** Recommend keeping the spoken line ("over six thousand dollars") only if the operator accepts the CAR-style
    model on screen as labelled; otherwise the honest line is the parts cascade as spoken (25% at each crossing) without a total,
    and the receipt page becomes $4,500 vs "$1,450 + $820 + $1,680, and three more crossings". Script edits are Gemini's file — I did not touch it.
-2. **The voice.** The take is Chirp 3 HD Charon, the Facebook-lane ship voice; YouTube masters are ElevenLabs (voice-lane ruling).
-   Recommend: watch v1 on Chirp, and on the cut's approval record with `record_short_take.py --go` — every row re-times itself from the new words.
+2. **The voice.** RESOLVED 2026-09-08 (E54): the short ships on Chirp 3 HD Charon on both lanes; no ElevenLabs body take. Real people
+   hear the cuts side-by-side and that, with the curve, is how the voice is learned. Changing it later re-times every row (`record_short_take.py --go`).
 3. **The worlds.** RESOLVED — generated (see the shape above). Open only: which arm (charcoal vs signature), and whether the drifted ship still is acceptable or gets a third pass.
 4. **The thumbnail.** The `$122B TRAP` vault-to-wafer composition (`thumbnails/thumb_hollowmike_02_vault_silicon.png`) answers title A and sentence 1 best (J12). (My first note called the HollowStickMike reference off-model — wrong: HollowStickMike is the bound character; the thumbnails are on-model.)
 5. **J50 / the [new]@0:50 tag.** The [post-key] names a compound mechanism (the tariff funded Japan's chips AND cost $122B). The

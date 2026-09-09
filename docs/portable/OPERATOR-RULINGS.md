@@ -1734,3 +1734,22 @@ rules below are CONFIRMED findings; the intake page records what was rejected an
    the series' terminal point in the series' colour, and a right gutter reserved for it - never a legend box, and never a
    sub that has quietly become one. Where a plot has no gutter the fallback is the sub, and that is a compromise to be fixed,
    not a pattern to copy. (This is doc 29 s9.23b, now with its reason and its source.)
+
+## E54 — Chirp ships on YouTube too, for now; voice is learned from real people side-by-side, not from metrics alone; the bed stays at −20 (2026-09-08)
+
+The tariff short's body take stays **Chirp 3 HD Charon** — the ElevenLabs body (paid) is not recorded. The operator's
+words: *"I think I also have to keep the chirp voice. So far that's the feedback I've gotten from real people and we're
+early in this journey and changing voice is cheap. We'll try out the chirp voice and collect real feedback from people
+based on both videos played for them side-by-side and that's how we learn instead of relying just on the metrics changes
+and keeping the same voice."*
+
+- **Voice on both lanes is Chirp until real people say otherwise.** E34's split (ElevenLabs YouTube / Chirp Facebook)
+  is suspended for the shorts: the test is two cuts played side-by-side to real viewers, and the retention curve is
+  the second witness, not the only one. Changing the voice later is cheap; every row re-times from the new words
+  (`record_short_take.py --go`).
+- **The bed stays at −20 LU and goes no louder** — *"I'm providing more actual content depth for them so I don't want
+  too much musical interference."* The competitors' louder beds are noted, not copied; the rule-3 ducking under
+  number-dense stretches is not built until the rest moves.
+- The single-variable retention test (first watch, this morning) is retired by this: the variable under test is now the
+  engine's work, on the voice real people already answered for.
+
