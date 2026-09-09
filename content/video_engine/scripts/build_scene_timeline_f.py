@@ -125,6 +125,7 @@ SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                  "spread")                     # the fifth watch: the region between two drawn series, bled full of ink on a word (the divergence IS the argument): a chart's deployed life is 6-8 s from its last data mark, 12 s at most - then it
                                                # UN-DRAWS (the line unwinds from where it stands back to a datum, index 0 = to nothing) or BECOMES
                                                # the next thing: a FIGURE the hand writes at a datum's spot (the treasury number the sentence turns to)
+HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
 PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to")
 CHART_TO_KINDS = ("recast",)   # P48: rescale / extend / morph_to are T2, T3 and T5 - each lands with its own law
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
@@ -887,6 +888,14 @@ def main() -> int:
                     end = min(end, float(e["until"]))
                 e["dur"] = round(max(0.05, end - float(e["at"])), 2)
                 e["held"] = True   # the record of why the duration is what it is
+        # a held light with no room is a FLASH, and a flash is a glitch (operator, 2026-09-08: "the spotlight on a black card that
+        # flashes briefly" - 0.61 s between the bars landing and the card arriving). Below HOLD_MIN_S the species is dropped, and
+        # the drop is written into the timeline so the choreography ledger can see it.
+        dropped = [e for e in row_species if isinstance(e, dict) and e.get("held") and e["dur"] < HOLD_MIN_S]
+        for e in dropped:
+            row_species.remove(e)
+        if dropped:
+            print(f"  hold: dropped {len(dropped)} {'/'.join(e['kind'] for e in dropped)} on row {i + 1} - under {HOLD_MIN_S}s of room before the next event")
         species_errors = validate_species(row_species, ken, plate, pivot_span=None)
         if species_errors:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(species_errors))

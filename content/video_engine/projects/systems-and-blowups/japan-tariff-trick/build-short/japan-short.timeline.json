@@ -4070,17 +4070,6 @@
    ],
    "species": [
     {
-     "kind": "spotlight",
-     "at": 25.89,
-     "dur": 0.61,
-     "target": {
-      "kind": "datum",
-      "index": 0
-     },
-     "until": 26.5,
-     "held": true
-    },
-    {
      "kind": "retitle",
      "at": 28.7,
      "dur": 2.4,
@@ -4666,16 +4655,6 @@
       "kind": "datum",
       "index": 45
      }
-    },
-    {
-     "kind": "spotlight",
-     "at": 80.35,
-     "dur": 0.75,
-     "target": {
-      "kind": "datum",
-      "index": 43
-     },
-     "held": true
     },
     {
      "kind": "figure",

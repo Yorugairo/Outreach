@@ -1,0 +1,100 @@
+"""PORTRAIT PARITY (operator, 2026-09-08: "how do we make sure that anything that is hard-coded to landscape is actually
+responsive to mobile?"). Two gates:
+
+1. A LINT on the player template: no landscape literal (1920 / 1080 / 960 / 540) in code outside the stage constants and
+   an explicit allowlist (the two SVG viewBox defaults, which start-up re-fits to the stage; comment lines). The under
+   species layer shipped with the landscape viewBox and put a portrait spotlight at the axis corner; the camera zoomed a
+   portrait short about 960/540. Both were literals this lint would have refused.
+2. A RUNTIME check: a golden surface rendered at 9:16 - every <svg> under #stage carries the stage's viewBox, and every
+   full-stage layer's box equals the stage's box. A layer that is not re-fitted is exactly the bug class of the night.
+"""
+from __future__ import annotations
+
+import re
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[3]
+TEMPLATE = ROOT / "docs/content-video-engine/samples/scene-evidence-player.template.html"
+sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
+
+LITERAL = re.compile(r"(?<![\w.])(1920|1080|960|540)(?![\w.])")
+ALLOW = (
+    'viewBox="0 0 1920 1080"',          # the two species SVG defaults - re-fitted to the stage at start-up (template: $("species").setAttribute("viewBox", ...))
+    "STAGE_W", "STAGE_H",               # the constants themselves and any line that already speaks in them
+    "PORTRAIT ?",                       # an explicit portrait branch
+)
+
+
+def _code_lines():
+    """The template's lines with comments removed - block comments (/* ... */ across lines), line comments, HTML comments."""
+    in_block = False
+    for n, line in enumerate(TEMPLATE.read_text(encoding="utf-8").splitlines(), 1):
+        code, i = "", 0
+        while i < len(line):
+            if in_block:
+                j = line.find("*/", i)
+                if j < 0:
+                    i = len(line); break
+                in_block, i = False, j + 2
+            else:
+                j = line.find("/*", i)
+                k = line.find("//", i)
+                if k >= 0 and (j < 0 or k < j) and "http" not in line[max(0, k - 6):k]:
+                    code += line[i:k]; i = len(line); break
+                if j < 0:
+                    code += line[i:]; i = len(line); break
+                code += line[i:j]; in_block, i = True, j + 2
+        if code.strip().startswith("<!--"):
+            continue
+        yield n, code, line
+
+
+def test_no_landscape_literal_in_player_code():
+    offenders = []
+    for n, code, line in _code_lines():
+        if LITERAL.search(code) and not any(a in line for a in ALLOW):
+            offenders.append(f"{n}: {line.strip()[:110]}")
+    assert not offenders, "landscape literals in player code (use STAGE_W / STAGE_H, or allowlist with a reason):\n" + "\n".join(offenders)
+
+
+def test_every_layer_is_fitted_to_the_portrait_stage():
+    import tempfile
+    import render_baseline as RB
+    from playwright.sync_api import sync_playwright
+
+    tl, uris, _t, _a = RB.load_surface("chart-callout")
+    timeline = dict(tl, aspect="9:16")
+    w, h = RB.STAGE["9:16"]
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / "p.html"
+        html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
+        srv, port = RB.serve(html.parent)
+        try:
+            with sync_playwright() as pw:
+                br = pw.chromium.launch(headless=True)
+                pg = br.new_context(viewport={"width": w, "height": h}).new_page()
+                pg.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
+                RB.prepare_page(pg, w, h)
+                report = pg.evaluate("""() => {
+                  const stage = document.getElementById('stage').getBoundingClientRect();
+                  const same = (r) => Math.abs(r.width - stage.width) < 2 && Math.abs(r.height - stage.height) < 2;
+                  const svgs = [...document.querySelectorAll('#stage > svg')].map(s => ({id: s.id, viewBox: s.getAttribute('viewBox')}));
+                  const over = (r) => Math.abs(r.width - stage.width * 1.10) < 3 && Math.abs(r.height - stage.height * 1.10) < 3
+                    && Math.abs((r.x + r.width / 2) - (stage.x + stage.width / 2)) < 3 && Math.abs((r.y + r.height / 2) - (stage.y + stage.height / 2)) < 3;
+                  const layers = [...document.querySelectorAll('#stage > *')].filter(e => getComputedStyle(e).position === 'absolute' && e.id)
+                    .map(e => ({id: e.id, fitted: same(e.getBoundingClientRect()), overscan: over(e.getBoundingClientRect()), display: getComputedStyle(e).display}));
+                  return {stage: [Math.round(stage.width), Math.round(stage.height)], svgs, layers};
+                }""")
+                br.close()
+        finally:
+            srv.shutdown()
+    bad_svg = [s for s in report["svgs"] if s["viewBox"] != f"0 0 {w} {h}"]
+    assert not bad_svg, f"SVG layers not fitted to the {w}x{h} stage: {bad_svg}"
+    # measured 2026-09-08: the WORLDS are 1.10x the stage, centred (the Ken Burns overscan) - by design, in both aspects;
+    # the caption is a strip; every veil and species layer IS the stage
+    FULL = {"wash", "spot", "plife", "species", "species-under", "bzveil", "dipveil"}
+    unfitted = [l for l in report["layers"] if l["id"] in FULL and l["display"] != "none" and not l["fitted"]]
+    assert not unfitted, f"full-stage layers whose box is not the stage's: {unfitted}"
+    worlds = [l for l in report["layers"] if l["id"] in ("wA", "wB")]
+    assert worlds and all(l["overscan"] for l in worlds), f"the worlds are not the stage x 1.10 centred: {worlds}"

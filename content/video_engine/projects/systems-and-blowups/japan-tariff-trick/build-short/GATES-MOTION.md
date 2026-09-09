@@ -3,12 +3,12 @@
 ```text
 === MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\content\video_engine\projects\systems-and-blowups\japan-tariff-trick\build-short ===
                runtime: 1:29
-         visual_events: 304 (204.1/min)
+         visual_events: 302 (202.8/min)
                  docks: 6
            dock_source: timeline
           ledger_pages: 5
   still_over_12s_share: 0%
-            per_minute: 0:00:217/7 1:00:176/8
+            per_minute: 0:00:216/7 1:00:174/8
 
   [WARN ] M06 62 caption pages = 42/min, 4.0 words/page
           s9.15 r7 / build_caption_pages 4-6 words
@@ -38,7 +38,7 @@
           E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract
   [PASS ] M16 longest gap between visual events 2.3s at 0:28; 0 gap(s) over 2.5s
           doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
-  [INFO ] M07 short: 1 full minute(s) in 89s - opening 217.0 events/min, 7.0 evidence entries/min; tail from 1:00 175.8/min; whole runtime 202.8/min - no minute distribution to rank in (E21 is judged on the whole)
+  [INFO ] M07 short: 1 full minute(s) in 89s - opening 216.0 events/min, 7.0 evidence entries/min; tail from 1:00 173.7/min; whole runtime 201.4/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
   [INFO ] M18 frame-hashes.json measured another player.html (the build was rebuilt since) - re-run measure_frozen_frames.py <build>
           E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)
@@ -54,5 +54,5 @@
 RESULT: 0 FAIL / 1 WARN / 13 PASS / 1 JUDGE / 5 INFO
 ```
 
-TIMELINE: japan-short.timeline.json sha256:cf835cf373275418ec150d9d8b1d37ac5dd70556826119e68dd759f119a1017d
+TIMELINE: japan-short.timeline.json sha256:1a84a971084f8eec5b25d8d150a59765d2889cc72f931cd83028ca95fc80f842
 VERDICT: PASS (0 FAIL)

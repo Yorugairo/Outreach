@@ -1638,6 +1638,19 @@ above | left | right, `throw_s` per page, `throw=<grow>,<from>,<s>` on the plate
    what is there - the card itself, as in the `chart-callout` golden - and paints above. Time is not the test: on the
    parts page the ring began after the card arrived and still belonged to the bar beneath it.
 
+**E49, the same night, two more.** *"What is this glitch?"* — a pale patch at the chart's axis corner and *"the spotlight
+on a black card that flashes briefly."* Measured, not guessed: the new under-species layer carried the landscape
+`viewBox` while the top layer is re-fitted to the stage at start-up, so a portrait spotlight's hole landed at the axis
+corner; and the light had 0.61 s between the bars landing and the card arriving — a flash. Two rules: **`HOLD_MIN_S`
+1.0 s** — a held light with less room than that before the next event is dropped, not flashed (the compiler prints the
+drop); and **portrait parity as a gate** (`test_portrait_parity.py`): no landscape literal (1920 / 1080 / 960 / 540) in
+player code outside the stage constants and an allowlist with a reason, and a 9:16 render in which every SVG layer
+carries the stage's viewBox and every full-stage layer's box is the stage's (the worlds are 1.10x centred by design —
+the Ken Burns overscan). The lint found three more: the camera's centre (`camXf` / `camCss` zoomed a portrait short
+about 960/540), the verdict stack's burst offsets, and the spotlight's hole radius (kept landscape-sized in portrait on
+purpose, now named). Operator: *"how do we make sure that anything that is hard-coded to landscape is actually
+responsive to mobile?"* — the gate, not vigilance.
+
 ## E51 — A push-in is only used tied to something that just landed; an untied zoom is filler (2026-09-07)
 
 The operator, on v3's third watch: *"The push-in doesn't make sense - we are using it randomly it seems, it is a motion that

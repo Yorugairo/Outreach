@@ -525,6 +525,7 @@
   const STAGE_H = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--stage-h")) || 1080;
   const PORTRAIT = STAGE_H > STAGE_W;   /* 9:16 (P41, doc 49 s49.1 amended 2026-09-05): the chart IS the world */
   $("species").setAttribute("viewBox", `0 0 ${STAGE_W} ${STAGE_H}`);
+  $("species-under").setAttribute("viewBox", `0 0 ${STAGE_W} ${STAGE_H}`);   /* the under layer shares the stage frame - left on the landscape default it placed a portrait spotlight at the axis corner (2026-09-08) */
   const fitStage = () => { stage.style.transform = `scale(${fit.clientWidth / STAGE_W})`; };
   addEventListener("resize", fitStage); fitStage();
 
@@ -1668,7 +1669,7 @@
                  tilt: [-3, 2, -2, 3, -2.5, 2.5][i % 6],
                  dir: i % 2 ? 1 : -1,
                  adx: acx - cx, ady: acy - cy, asc: 840 / wpx,
-                 bx: (cx - 960) / 700, by: (cy - 540) / 460 };
+                 bx: (cx - STAGE_W / 2) / (STAGE_W * 700 / 1920), by: (cy - STAGE_H / 2) / (STAGE_H * 460 / 1080) };   /* the burst's normalised offset from the STAGE centre; the 700/460 divisors were landscape px, kept as fractions so landscape is identical (2026-09-08) */
       });
       document.getElementById("stage").appendChild(sb);
       stackState[slot] = { sb, items, clear_at: ev.stack.clear_at };
@@ -3982,6 +3983,7 @@
                SPOT_DIM: 0.49,   /* operator 2026-09-03: 0.55 was 'way too dark', 0.44 too light - settled at 0.49 */
                STEAM_PERIOD: 2.6, TRACE_PERIOD: 3.2, TRACE_DRAW: 1.1, TICK_STEP: 0.5 };   /* STILL LIFE (2026-09-05): steam, trace, ticker */
   const CAMERA = new Set(["punch", "focus_zoom", "pull_back"]);
+  const SPOT_R_PORTRAIT = 960;   /* PORTRAIT ? the spotlight's gradient radius keeps its landscape size (a round hole the width of the short side), userSpaceOnUse - the one landscape number kept on purpose */
   const spTop = $("species"), spUnder = $("species-under"), plife = $("plife");
   let spSvg = spTop;   /* the layer the species painter draws into - chosen per species in paintSpecies */
   const spEase = (k) => 1 - Math.pow(1 - clamp01(k), 3);
@@ -4023,7 +4025,7 @@
   const centre = (b) => ({ cx: b.x + b.w / 2, cy: b.y + b.h / 2 });
   /* the camera: one world transform for this window, about the resolved target */
   const camXf = (sc, t) => {
-    let xf = { s: 1, ox: 960, oy: 540 };
+    let xf = { s: 1, ox: STAGE_W / 2, oy: STAGE_H / 2 };   /* the stage's centre, not the landscape's (2026-09-08: 960/540 zoomed a portrait short about the wrong point) */
     for (const sp of (sc.species || [])) {
       if (!CAMERA.has(sp.kind)) continue;
       const k = (t - sp.at) / Math.max(0.001, sp.dur || 1);
@@ -4043,7 +4045,7 @@
     return xf;
   };
   const camCss = (xf) => xf.s === 1 ? "" :
-    "translate(" + (xf.ox - 960).toFixed(1) + "px, " + (xf.oy - 540).toFixed(1) + "px) scale(" + xf.s.toFixed(4) + ") translate(" + (960 - xf.ox).toFixed(1) + "px, " + (540 - xf.oy).toFixed(1) + "px) ";
+    "translate(" + (xf.ox - STAGE_W / 2).toFixed(1) + "px, " + (xf.oy - STAGE_H / 2).toFixed(1) + "px) scale(" + xf.s.toFixed(4) + ") translate(" + (STAGE_W / 2 - xf.ox).toFixed(1) + "px, " + (STAGE_H / 2 - xf.oy).toFixed(1) + "px) ";
   /* a wobbled ellipse around a box (hw-callout-circle): seeded, drawn by dash-offset */
   const calloutPath = (b, seed, pad) => {
     const pd = Number.isFinite(+pad) ? +pad : 0;   /* a datum resolves to a point: `pad` is how wide the hand rings it (the fifth watch) */
@@ -4113,7 +4115,7 @@
         const a = resolveTarget(sp.target), z = resolveTarget(sp.target2) || a; if (!a) return;
         const g = spIO((t - sp.at - (sp.glide_at || 0)) / 0.6);
         const ca = centre(a), cz = centre(z), cx = ca.cx + (cz.cx - ca.cx) * g, cy = ca.cy + (cz.cy - ca.cy) * g;
-        const r0 = (Math.max(a.w, 240) / 2 + 60) / 960, id = "spot" + si;
+        const r0 = (Math.max(a.w, 240) / 2 + 60) / (PORTRAIT ? SPOT_R_PORTRAIT : STAGE_W / 2), id = "spot" + si;   /* the hole as a fraction of the gradient radius: the landscape half-width, kept on purpose in portrait (below) */
         const defs = lpEl("defs", "", spSvg);
         const rg = lpEl("radialGradient", "", defs, PORTRAIT ? { id, gradientUnits: "userSpaceOnUse", cx: cx.toFixed(1), cy: cy.toFixed(1), r: 960 }   /* portrait: a round hole, the offsets below keep their landscape size (960 = half the landscape width) */
                                                             : { id, cx: (cx / STAGE_W).toFixed(4), cy: (cy / STAGE_H).toFixed(4), r: 0.5 });
