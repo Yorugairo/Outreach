@@ -42,7 +42,8 @@ BRAND_GAP, BRAND_TAIL = 0.7, 1.0
 OUTRO_S, OUTRO_LEAD = 6.2, 0.1
 
 # the beds (Tokyo's, sound/SOURCES.md) at the youtube level; the VO is the Chirp take, measured 2026-09-07 (ebur128)
-BED_LU = {"youtube": -26.0, "facebook": -26.0}   # a SHORT sits at -26 on both (operator, 2026-09-08: "this is a short, so it should be -26"); -28 is the long-form calibration (Steel and Paper, the research blueprint)
+BED_LU = {"youtube": -20.0, "facebook": -20.0}   # a SHORT sits at -20 (operator, 2026-09-08, second pass on the strip: "i like it at +6db" against the -26 plan; "sub-threshold is basically useless, we want to be just above sub-threshold... competitors play music even louder"); -28 is the long-form calibration (Steel and Paper, the research blueprint)
+BED_SWELL_DB = 4.0   # the bed BREATHES with the structure (the blueprint, rule 3: it rises under scene transitions): +4 dB from a card's throw through its snap - the operator heard the landing "sound much better" with the bed up; the rest of the bed stays at BED_LU
 PLATFORM = "youtube"
 VO_LUFS = -21.5
 BEDS = {"suno-hook-A.mp3": -13.2, "suno-hook-B.mp3": -13.0, "suno-pivot-A.mp3": -13.0, "suno-pivot-B.mp3": -13.0}
@@ -448,7 +449,17 @@ def main() -> int:
             cues.append({"slot": f"page enter {i + 1} (snap)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0,
                          "variants": {"A": "fs-whoosh-3-648729.mp3", "B": "fs-riserhit-754771.mp3", "C": "fs-whoosh-1-706679.mp3"}})
     t_turn = next(r[0] for r in rows if r[2].startswith("plate-vault"))   # the second lever
-    cues.append({"slot": "hook bed", "at": 0.0, "gain": bed_gain("suno-hook-B.mp3"), "fade_in": 1.5,
+    # the bed's ENVELOPE, in dB against its own gain, keyed to every thrown card: up over the 0.3 s before the throw, held
+    # through the landing and the snap, down over 0.8 s after the page is the world (a pure function of t in the player)
+    env = []
+    for r in rows:
+        for d in (r[4] or []):
+            if len(d) > 4 and isinstance(d[4], dict) and d[4].get("arrive") == "throw":
+                t_throw = float(d[2])
+                t_snap = next((q[0] for q in rows if f":snap={d[0]}" in q[2]), d[3])
+                env += [[round(t_throw - 0.3, 2), 0.0], [round(t_throw, 2), BED_SWELL_DB],
+                        [round(t_snap + SNAP_S, 2), BED_SWELL_DB], [round(t_snap + SNAP_S + 0.8, 2), 0.0]]
+    cues.append({"slot": "hook bed", "at": 0.0, "gain": bed_gain("suno-hook-B.mp3"), "fade_in": 1.5, "env": env,
                  "variants": {"A": "suno-hook-B.mp3", "B": "suno-hook-A.mp3"},
                  "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO ({VO_LUFS} LUFS)"})
     cues.append({"slot": "turn bed", "at": round(t_turn, 2), "gain": bed_gain("suno-pivot-A.mp3"), "fade_in": 3.0,

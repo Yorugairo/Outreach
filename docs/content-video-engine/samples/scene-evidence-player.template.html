@@ -4767,6 +4767,18 @@
     }
     return { ...c, els, sel: Object.keys(c.variants)[0], vol: c.gain };
   });
+  /* a cue's ENVELOPE: `env` = [[t, dB], ...] against the cue's own gain, linear between keys, flat outside them - the bed
+     breathes with the structure (the research blueprint, rule 3: it rises under scene transitions - a thrown card's landing
+     and snap; operator, 2026-09-08: the landing "sounds much better" with the bed up). A pure function of t: seek-exact. */
+  const envGain = (c, tt) => {
+    const e = c.env; if (!e || !e.length) return 1;
+    if (tt <= e[0][0]) return Math.pow(10, e[0][1] / 20);
+    for (let i = 1; i < e.length; i++) if (tt <= e[i][0]) {
+      const [t0, d0] = e[i - 1], [t1, d1] = e[i]; const k = t1 > t0 ? (tt - t0) / (t1 - t0) : 1;
+      return Math.pow(10, (d0 + (d1 - d0) * k) / 20);
+    }
+    return Math.pow(10, e[e.length - 1][1] / 20);
+  };
   const syncSound = (tt, isPlaying) => {
     for (const c of SND) {
       for (const [vk, el] of Object.entries(c.els)) {
@@ -4775,7 +4787,7 @@
         const off = tt - c.at;
         if (active && off >= 0 && dur && off < dur) {
           const fade = c.fade_in > 0 ? Math.min(1, off / c.fade_in) : 1;
-          el.volume = Math.min(1, c.vol * fade);
+          el.volume = Math.min(1, c.vol * fade * envGain(c, tt));
           if (el.paused) { el.currentTime = off; el.play().catch(() => {}); }
           else if (Math.abs(el.currentTime - off) > 0.3) el.currentTime = off;
         } else if (!el.paused) el.pause();

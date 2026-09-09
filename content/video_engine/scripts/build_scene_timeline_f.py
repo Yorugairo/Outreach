@@ -1024,6 +1024,7 @@ def main() -> int:
                 sound_cues.append({"slot": cue["slot"], "at": cue["at"],
                                    "gain": cue.get("gain", 0.5),
                                    "fade_in": cue.get("fade_in", 0),
+                                   "env": cue.get("env", []),   # [[t, dB], ...] against the cue's gain - the bed breathes (rule 3 of the bed blueprint)
                                    "variants": variants})
         print(f"  sound cues  : {len(sound_cues)} embedded from SOUND-PLAN.json")
 

@@ -113,9 +113,19 @@ dense segments.
    narration gaps, not a defect. Range remains −22 to −30; −30 is the
    floor (below it the bed stops masking and is wasted per the
    subliminal null result). Bed alone meters roughly −42 LUFS momentary.
-   **A SHORT sits at −26 (operator, 2026-09-08, the tariff short's first watch: "this is a short, so it should be
-   −26").** The −28 calibration is long-form; a 90 s vertical runs at the top of the range on both platforms
-   (`BED_LU = {youtube: -26, facebook: -26}` in a short's build).
+   **A SHORT sits at −20 (operator, 2026-09-08).** The first watch set −26 ("this is a short, so it should be
+   −26"); the second pass, on a strip that reads in dB against the plan, moved it: *"i like it at +6db"* — −20 LU —
+   with the reasoning *"what the actual research said about sub-threshold is that it's basically useless, we want
+   to be just above sub-threshold, and I guess that depends on what volume people's phones are at"* and *"it is
+   audible on standard scene, but I've noticed competitors play music even louder."* −20 is 2 dB above the
+   long-form range's top: a 60 s vertical is judged on a phone at whatever volume the feed set, has no savor pauses
+   to breathe in, and its competitors run the bed as music. The −28 calibration is long-form
+   (`BED_LU = {youtube: -20, facebook: -20}` in a short's build).
+   **The bed BREATHES (rule 3, built 2026-09-08):** what the operator actually noticed at +6 was the thrown card —
+   *"it makes the landing of the thrown card sound much better, that's why I noticed"* — the transition-swell case.
+   The short's bed carries an envelope (`env: [[t, dB], …]` on the cue, `BED_SWELL_DB = 4`): +4 dB from 0.3 s
+   before a card's throw, held through its landing and snap, back to the rest over 0.8 s. The player applies it
+   as a pure function of t (`envGain`); the compiler carries it through.
    This is well under every measured-interference regime in the
    literature (studies find effects at 0 to −5 dB SNR; we sit at
    −22 to −30) while staying above the masking floor so it still
