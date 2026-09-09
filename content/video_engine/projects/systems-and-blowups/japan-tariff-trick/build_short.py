@@ -13,6 +13,7 @@ line); `clip:<path>` a clip. Cuts land at 0.8 of the >= 0.30 s gap before the ne
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -33,7 +34,8 @@ CUSTOMS_PEAK_IDX, CUSTOMS_LAST_IDX = 43, 45   # 2025 Q4 $364bn/yr, 2026 Q2 (the 
 CUT_AT, MIN_GAP = 0.8, 0.30          # M13
 PEAK_IDX, LAST_IDX = 311, 315        # Feb 2026 $1,239.3B, Jun 2026 $1,116.7B in ev-japan-holdings-v1 (asserted in build)
 KEYFRAME_EVERY = 12
-ARM = sys.argv[sys.argv.index("--arm") + 1] if "--arm" in sys.argv else "still"   # still (charcoal on cream) | sig (the signature line)
+ARM = sys.argv[sys.argv.index("--arm") + 1] if "--arm" in sys.argv else "still"
+TAKE_STEM = sys.argv[sys.argv.index("--take") + 1] if "--take" in sys.argv else "scene_1"   # a re-timed candidate take (retime_take.py) builds with --take <stem>; the clock follows it   # still (charcoal on cream) | sig (the signature line)
 
 # the outro and the brand line are channel assets (the Tokyo build documents both); reused by path, not copied
 OUTRO = TOKYO / "outro/outro-v2.mov"                       # 6.2 s, the dark card: "It's not magic. It's mechanics."
@@ -52,6 +54,11 @@ bed_gain = lambda f: round(10 ** ((VO_LUFS + BED_LU[PLATFORM] - BEDS[f]) / 20), 
 # the ledger page's own clock (mirrored from the player's LP block, as Tokyo mirrors it): the chart LANDS 7.4 s after the
 # page's clock starts; a mount replaces the 0.7 s roll and ends where the roll would have (E45)
 PAGE_BUILD_END_S, PAGE_BUILD_START_S, PAGE_BUILD_S, LP_ROLL_S = 7.4, 4.4, 3.0, 0.7
+# the pledge card's box on the portrait stage, MEASURED against the Japan-selling page's ink (2026-09-09, stage px): the subtitle
+# ends at y 413, the source line sits at 1077-1108 and the badge at 1159-1301 from x 76 - so the card's box spans x 76-846, y 430-1120:
+# it covers the proved plot and the source line whole (no peeking fragments) and leaves the -$122.6B badge and the caption clear
+PLEDGE_CY, PLEDGE_CX, PLEDGE_CW = 0.4021, 0.4407, 0.7407   # box x 76-876, y 428-1116 (crop 0.48 of the still): covers every label of the plot (the -$26.4 tag ends at x 872), the frame and shadow stop short of the badge at 1159
+PLEDGE_WAFER = (0.645, 0.477)   # the wafer's centre as a fraction of the fab card (measured: the warm disc's centroid in the crop)
 SNAP_S = 0.45        # the player's SNAP_S: a landed card grows to the stage in this long (the third watch)
 CARD_LEAD_S = 1.0    # a chart card is thrown onto the previous scene this long before its page snaps up from it (the dock's 0.45 s flight + a beat on the ground)
 
@@ -68,15 +75,19 @@ DOCK_FILES = {                       # still id per arm, and the card crop (top,
     "dock-c-two-lanes": ({"still": "still-c-two-lanes-v2", "sig": "sig-c-two-lanes"}, (0.26, 0.44)),      # the two lanes, docked on the archetype
     "dock-a-podium": ({"still": "still-a-podium-victory", "sig": "sig-a-podium-victory"}, (0.14, 0.52)),   # the podium, docked on "Washington signed" (E48 callback)
     "dock-e-vault": ({"still": "still-e-vault", "sig": "sig-e-vault"}, (0.18, 0.52)),                     # the vault, docked on "Tokyo checked the Treasury vault"
+    # the PLEDGE dock (operator, 2026-09-09: Tokyo's toll-gate clip "was already weak because it was supposed to be a toll gate, without
+    # the manufacturing plant it's just useless") - the operator's own Flow images: the fab (Mike at the wafer chamber, the E39 atom)
+    # by default; DOCK_H=trap swaps in the $122B-trap panel (the vault emptying into the wafer, the package composition)
+    "dock-h-pledge": ({"still": "sig-i-fab-wafer", "sig": "sig-i-fab-wafer"}, (0.19, 0.48)) if os.environ.get("DOCK_H", "fab") == "fab"
+                     else ({"still": "sig-j-vault-to-chips", "sig": "sig-j-vault-to-chips"}, (0.152, 0.55)),
 }
 CLIPS = {
-    "dock-f-toll-gate-to-fab": TOKYO / "omni-video/stills/clip-f-toll-gate-to-fab-v2.mp4",   # the open gate, the road to the fab (10.0 s)
 }
 WORLD_CLIPS = {
     "clip-g-two-fingers-v2.mp4": TOKYO / "omni-video/stills/clip-g-two-fingers-v2.mp4",     # StickMike to camera, two fingers up (10.0 s)
 }
 DOCK_META = [
-    {"asset": "dock-f-toll-gate-to-fab", "title": "The gate to the fab", "source": "HollowStickMike - Money Physics", "species": "deck", "badges": []},
+    {"asset": "dock-h-pledge", "title": "Ten trillion yen for chips", "source": "HollowStickMike - Money Physics", "species": "deck", "badges": []},
     {"asset": "dock-c-two-lanes", "title": "The left lane and the right lane", "source": "HollowStickMike - Money Physics", "species": "deck", "badges": []},
     {"asset": "dock-a-podium", "title": "Washington signed a tariff", "source": "HollowStickMike - Money Physics", "species": "deck", "badges": []},
     {"asset": "dock-e-vault", "title": "Tokyo checked the vault", "source": "HollowStickMike - Money Physics", "species": "deck", "badges": []},
@@ -86,7 +97,7 @@ DOCK_META = [
 
 
 def words() -> list[dict]:
-    d = json.loads((TAKE / "scene_1.words.json").read_text(encoding="utf-8"))
+    d = json.loads((TAKE / f"{TAKE_STEM}.words.json").read_text(encoding="utf-8"))
     return d["words"] if isinstance(d, dict) else d
 
 
@@ -160,9 +171,12 @@ def dock_card(aid: str, src: Path, crop: tuple[float, float]) -> Path:
     """The still cropped to a card the way Tokyo cropped its clips for the still fallback; written once."""
     out = BUILD / "docks" / f"{aid}.png"
     out.parent.mkdir(parents=True, exist_ok=True)
-    if not out.exists() or out.stat().st_mtime < src.stat().st_mtime:
+    stamp = out.with_suffix(".src")   # the card remembers its source and crop: a swapped still (DOCK_H) or a new crop re-cuts it
+    key = f"{src.resolve()}|{crop}"
+    if not out.exists() or out.stat().st_mtime < src.stat().st_mtime or (stamp.read_text(encoding="utf-8") if stamp.exists() else "") != key:
         top, h = crop
         subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-vf", f"crop=iw:ih*{h}:0:ih*{top}", str(out)], check=True)
+        stamp.write_text(key, encoding="utf-8")
     return out
 
 
@@ -186,6 +200,28 @@ def card_aspect(aid: str) -> float:
     from PIL import Image
     w, h = Image.open(BUILD / "docks" / f"{aid}.png").size
     return round(h / w, 4)
+
+
+def centred_card_point(card_aspect: float, centre_y: float, fx: float, fy: float, centre_w: float | None = None, centre_x: float | None = None) -> dict:
+    """A POINT target inside a CENTRED dock card: the compiler's centred_place with an authored centre_y is deterministic
+    (width CENTRE_W of the stage, height by the card's aspect, capped at CENTRE_MAX_H, centred on x), so a fraction (fx, fy)
+    of the card maps to a stage fraction here - the ring on the wafer aims at the card the compiler will draw."""
+    import build_scene_timeline_f as C
+    sw, sh = (1080, 1920)
+    w = round((centre_w or C.CENTRE_W) * sw); h = round(w * card_aspect)
+    if h > C.CENTRE_MAX_H * sh:
+        h = round(C.CENTRE_MAX_H * sh); w = round(h / card_aspect)
+    cx = (centre_x if centre_x is not None else 0.5) * sw
+    x0, y0 = max(0, cx - w / 2), max(0, centre_y * sh - h / 2)
+    return {"kind": "point", "x": round((x0 + fx * w) / sw, 4), "y": round((y0 + fy * h) / sh, 4)}
+
+
+def still_card_aspect(aid: str) -> float:
+    """h / w of a DOCK_FILES still's card crop, from the still's own size (before dock_card has run)."""
+    from PIL import Image
+    arms, (top, hh) = DOCK_FILES[aid]
+    w, h = Image.open(STILLS / f"{arms[ARM]}.png").size
+    return round(hh * h / w, 4)
 
 
 def register_assets() -> None:
@@ -360,11 +396,16 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
         (t_lever, t_return, "plate-vault;idle=drift", ken, [], "dip", None),
         # 8 THE SECOND LEVER as its own chart: Japan's month-by-month selling (four bars, REAL, TIC table 5) mounts over the vault on
         #   "Instead of reinvesting"; the bars land under "of Washington's debt" and May, the biggest month, is called out; the
-        #   gate to the fab docks on "pledging" and leaves with the page (E40 #5: exit=cut). The holdings line stays at the hook only.
+        #   the pledge dock (the fab) lands on "pledging" and leaves with the page (E40 #5: exit=cut). The holdings line stays at the hook only.
         (t_return, t_finance, f"ledger:ev-japan-selling-v1:bars:2:right:mount={round(t_page4 + LP_ROLL_S - t_return, 2)}:cut" + ";idle=live", ken, [
-            ("dock-f-toll-gate-to-fab", 0, t_pledge, t_finance),
+            # the pledge card sits CENTRED over the proved chart from its first frame (the park spot at the top-right sat on the
+            # chart's title and the April label); the ring lands on the wafer at "semiconductors" - the sentence's object, and
+            # the visual event M16 asks for inside the card's 3.3 s
+            ("dock-h-pledge", 0, t_pledge, t_finance, {"centre": True, "card_aspect": still_card_aspect("dock-h-pledge"), "centre_y": PLEDGE_CY, "centre_x": PLEDGE_CX, "centre_w": PLEDGE_CW}),
         ], "cut", [
             {"kind": "spotlight", "at": t_sell_land, "dur": "hold", "target": datum(2)},   # May, the biggest month (a callout ring sat on the pill)
+            {"kind": "callout", "at": at("semiconductors"), "dur": round(t_finance - at("semiconductors"), 2), "pad": 22,
+             "target": centred_card_point(still_card_aspect("dock-h-pledge"), PLEDGE_CY, *PLEDGE_WAFER, centre_w=PLEDGE_CW, centre_x=PLEDGE_CX)},
         ]),
         # 9 the reflection: two fingers to camera - "In finance, we call this the double squeeze"
         (t_finance, t_wrote, "clip:" + seekable_clip("clip-g-two-fingers-v2.mp4", WORLD_CLIPS["clip-g-two-fingers-v2.mp4"]).as_posix(), ken, [], "dip", None),
@@ -393,7 +434,7 @@ def main() -> int:
     ws = words()
     BUILD.mkdir(exist_ok=True)
     (BUILD / "audio").mkdir(exist_ok=True)
-    shutil.copy2(TAKE / "scene_1.mp3", BUILD / "audio/episode.mp3")
+    shutil.copy2(TAKE / f"{TAKE_STEM}.mp3", BUILD / "audio/episode.mp3")
     probe = lambda p: float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(p)],
                                            capture_output=True, text=True).stdout or 0)
     t_vo_end = round(probe(BUILD / "audio/episode.mp3"), 3)

@@ -1,2239 +1,2191 @@
 {
  "schema_version": "scene_evidence_timeline.v1",
- "runtime_s": 89.356,
+ "runtime_s": 80.797,
  "title": "How Japan Tricked Trump",
  "subtitle": "Money Physics - short",
  "episode_id": "japan-tariff-trick",
  "project_id": "systems-and-blowups",
  "aspect": "9:16",
  "narration": {
-  "canonical_hash": "3c6e6180606efe2047d0922255b28abaf65783e2329f337c168207ecf6352ddf",
+  "canonical_hash": "1186fe9603c09c6e991034f9808fc7a6bc86060f9c1bc8c6830ffef240f09e88",
   "words_path": "build-short/timeline.json"
  },
  "captions": [
   {
    "at": 0.0,
-   "until": 1.18,
+   "until": 1.11,
    "text": "Trump announced he beat"
   },
   {
-   "at": 1.18,
-   "until": 2.22,
-   "text": "Japan on tariffs."
+   "at": 1.11,
+   "until": 2.57,
+   "text": "Japan on tariffs. Instead,"
   },
   {
-   "at": 3.14,
-   "until": 4.22,
-   "text": "Instead, that tariff funded"
+   "at": 2.85,
+   "until": 3.92,
+   "text": "that tariff funded Japan's"
   },
   {
-   "at": 4.22,
-   "until": 5.78,
-   "text": "Japan's chip empire, and"
+   "at": 3.92,
+   "until": 5.13,
+   "text": "chip empire, and cost"
   },
   {
-   "at": 5.78,
-   "until": 6.81,
-   "text": "cost America a hundred and"
+   "at": 5.13,
+   "until": 5.9,
+   "text": "America a hundred and"
   },
   {
-   "at": 6.81,
-   "until": 8.88,
+   "at": 5.9,
+   "until": 7.85,
    "text": "twenty-two billion dollars."
   },
   {
-   "at": 8.88,
-   "until": 10.4,
+   "at": 7.85,
+   "until": 9.28,
    "text": "Auto parts taxes compounded"
   },
   {
-   "at": 10.4,
-   "until": 12.26,
+   "at": 9.28,
+   "until": 11.04,
    "text": "against Detroit. But look at"
   },
   {
-   "at": 12.26,
-   "until": 13.2,
-   "text": "what nobody explained."
+   "at": 11.04,
+   "until": 12.49,
+   "text": "what nobody explained. When"
   },
   {
-   "at": 13.86,
-   "until": 14.94,
-   "text": "When you buy an American"
+   "at": 12.49,
+   "until": 13.74,
+   "text": "you buy an American truck,"
   },
   {
-   "at": 14.94,
-   "until": 16.56,
-   "text": "truck, its parts cross the"
+   "at": 14.06,
+   "until": 15.11,
+   "text": "its parts cross the border"
   },
   {
-   "at": 16.56,
-   "until": 17.74,
-   "text": "border six separate times."
+   "at": 15.11,
+   "until": 16.7,
+   "text": "six separate times. An"
   },
   {
-   "at": 18.44,
-   "until": 19.74,
-   "text": "An engine block from Ontario"
+   "at": 16.7,
+   "until": 17.75,
+   "text": "engine block from Ontario"
   },
   {
-   "at": 19.74,
-   "until": 20.74,
+   "at": 17.75,
+   "until": 18.7,
    "text": "carries a twenty-five"
   },
   {
-   "at": 20.74,
-   "until": 22.12,
+   "at": 18.7,
+   "until": 20.0,
    "text": "percent border tariff on raw"
   },
   {
-   "at": 22.12,
-   "until": 23.92,
+   "at": 20.0,
+   "until": 21.7,
    "text": "parts. A wiring harness from"
   },
   {
-   "at": 23.92,
-   "until": 24.94,
+   "at": 21.7,
+   "until": 22.66,
    "text": "Mexico gets hit with the"
   },
   {
-   "at": 24.94,
-   "until": 26.06,
+   "at": 22.66,
+   "until": 23.72,
    "text": "exact same twenty-five"
   },
   {
-   "at": 26.06,
-   "until": 28.18,
+   "at": 23.72,
+   "until": 25.72,
    "text": "percent. In the left lane, a"
   },
   {
-   "at": 28.18,
-   "until": 29.58,
+   "at": 25.72,
+   "until": 27.04,
    "text": "taxed Toyota. In the right,"
   },
   {
-   "at": 29.86,
+   "at": 27.3,
+   "until": 28.87,
+   "text": "a bankrupt Detroit. Toyota"
+  },
+  {
+   "at": 28.87,
    "until": 30.66,
-   "text": "a bankrupt Detroit."
+   "text": "crosses once. Tokyo pays a"
   },
   {
-   "at": 31.44,
-   "until": 32.5,
-   "text": "Toyota crosses once."
+   "at": 30.66,
+   "until": 31.75,
+   "text": "flat fifteen percent on the"
   },
   {
-   "at": 33.26,
-   "until": 34.49,
-   "text": "Tokyo pays a flat fifteen"
+   "at": 31.75,
+   "until": 32.89,
+   "text": "sticker, not a penny more."
   },
   {
-   "at": 34.49,
-   "until": 35.74,
-   "text": "percent on the sticker, not"
-  },
-  {
-   "at": 35.74,
-   "until": 36.32,
-   "text": "a penny more."
-  },
-  {
-   "at": 37.08,
-   "until": 37.8,
+   "at": 33.36,
+   "until": 34.04,
    "text": "But here's where the math"
   },
   {
-   "at": 37.8,
-   "until": 38.4,
-   "text": "breaks Detroit."
+   "at": 34.04,
+   "until": 35.44,
+   "text": "breaks Detroit. On a thirty"
   },
   {
-   "at": 39.16,
-   "until": 39.98,
-   "text": "On a thirty thousand dollar"
+   "at": 35.44,
+   "until": 36.6,
+   "text": "thousand dollar car, Tokyo"
   },
   {
-   "at": 39.98,
-   "until": 41.36,
-   "text": "car, Tokyo pays forty-five"
+   "at": 36.6,
+   "until": 37.36,
+   "text": "pays forty-five hundred"
   },
   {
-   "at": 41.36,
-   "until": 42.66,
-   "text": "hundred dollars in tariffs."
+   "at": 37.36,
+   "until": 39.04,
+   "text": "dollars in tariffs. Detroit"
   },
   {
-   "at": 43.32,
-   "until": 44.08,
-   "text": "Detroit pays over six"
+   "at": 39.04,
+   "until": 39.82,
+   "text": "pays over six thousand"
   },
   {
-   "at": 44.08,
-   "until": 45.18,
-   "text": "thousand dollars in stacked"
+   "at": 39.82,
+   "until": 40.89,
+   "text": "dollars in stacked border"
   },
   {
-   "at": 45.18,
-   "until": 46.62,
-   "text": "border duties alone, right"
+   "at": 40.89,
+   "until": 42.26,
+   "text": "duties alone, right here at"
   },
   {
-   "at": 46.62,
-   "until": 47.16,
-   "text": "here at home."
+   "at": 42.26,
+   "until": 43.66,
+   "text": "home. And that's where Tokyo"
   },
   {
-   "at": 47.94,
-   "until": 48.7,
-   "text": "And that's where Tokyo"
-  },
-  {
-   "at": 48.7,
-   "until": 49.54,
+   "at": 43.66,
+   "until": 44.45,
    "text": "pulled the second lever."
   },
   {
-   "at": 50.1,
-   "until": 51.1,
+   "at": 44.98,
+   "until": 45.92,
    "text": "Instead of reinvesting in"
   },
   {
-   "at": 51.1,
-   "until": 51.46,
-   "text": "America,"
+   "at": 45.92,
+   "until": 46.87,
+   "text": "America, Japan started"
   },
   {
-   "at": 52.18,
-   "until": 53.16,
-   "text": "Japan started dumping United"
+   "at": 46.87,
+   "until": 47.85,
+   "text": "dumping United States"
   },
   {
-   "at": 53.16,
-   "until": 53.96,
-   "text": "States Treasuries."
+   "at": 47.85,
+   "until": 49.14,
+   "text": "Treasuries. They sold a"
   },
   {
-   "at": 54.92,
-   "until": 55.71,
-   "text": "They sold a hundred and"
+   "at": 49.14,
+   "until": 49.72,
+   "text": "hundred and twenty-two"
   },
   {
-   "at": 55.71,
-   "until": 56.48,
-   "text": "twenty-two billion dollars"
+   "at": 49.72,
+   "until": 50.64,
+   "text": "billion dollars of"
   },
   {
-   "at": 56.48,
-   "until": 57.68,
-   "text": "of Washington's debt."
+   "at": 50.64,
+   "until": 52.23,
+   "text": "Washington's debt. Tokyo"
   },
   {
-   "at": 58.34,
-   "until": 59.54,
-   "text": "Tokyo brought that money"
+   "at": 52.23,
+   "until": 53.24,
+   "text": "brought that money home,"
   },
   {
-   "at": 59.54,
-   "until": 61.08,
-   "text": "home, pledging ten trillion"
+   "at": 53.6,
+   "until": 54.91,
+   "text": "pledging ten trillion yen to"
   },
   {
-   "at": 61.08,
-   "until": 62.26,
-   "text": "yen to build domestic"
+   "at": 54.91,
+   "until": 55.47,
+   "text": "build domestic"
   },
   {
-   "at": 62.26,
-   "until": 64.28,
+   "at": 55.47,
+   "until": 57.38,
    "text": "semiconductors. In finance,"
   },
   {
-   "at": 64.4,
-   "until": 65.22,
+   "at": 57.49,
+   "until": 58.26,
    "text": "we call this the double"
   },
   {
-   "at": 65.22,
-   "until": 66.94,
+   "at": 58.26,
+   "until": 59.89,
    "text": "squeeze: The competitor got"
   },
   {
-   "at": 66.94,
-   "until": 68.14,
+   "at": 59.89,
+   "until": 61.02,
    "text": "cheaper parts and built"
   },
   {
-   "at": 68.14,
-   "until": 69.56,
+   "at": 61.02,
+   "until": 62.36,
    "text": "silicon. And then we wrote"
   },
   {
-   "at": 69.56,
-   "until": 70.52,
+   "at": 62.36,
+   "until": 63.26,
    "text": "them a blank check anyway,"
   },
   {
-   "at": 70.52,
-   "until": 71.82,
+   "at": 63.26,
+   "until": 64.49,
    "text": "to bribe them to keep buying"
   },
   {
-   "at": 71.82,
-   "until": 72.08,
-   "text": "bonds."
+   "at": 64.49,
+   "until": 65.74,
+   "text": "bonds. And this is where the"
   },
   {
-   "at": 72.9,
-   "until": 73.78,
-   "text": "And this is where the policy"
+   "at": 65.74,
+   "until": 67.3,
+   "text": "policy backfired. Washington"
   },
   {
-   "at": 73.78,
-   "until": 75.48,
-   "text": "backfired. Washington signed"
+   "at": 67.3,
+   "until": 69.25,
+   "text": "signed a tariff. Then Tokyo"
   },
   {
-   "at": 75.48,
-   "until": 75.9,
-   "text": "a tariff."
+   "at": 69.25,
+   "until": 70.23,
+   "text": "checked the Treasury vault."
   },
   {
-   "at": 76.52,
-   "until": 77.66,
-   "text": "Then Tokyo checked the"
-  },
-  {
-   "at": 77.66,
-   "until": 78.22,
-   "text": "Treasury vault."
-  },
-  {
-   "at": 79.02,
-   "until": 80.18,
+   "at": 70.7,
+   "until": 71.79,
    "text": "America used the tariff to"
   },
   {
-   "at": 80.18,
-   "until": 81.38,
+   "at": 71.79,
+   "until": 72.92,
    "text": "tax its own cars, while"
   },
   {
-   "at": 81.38,
-   "until": 82.84,
+   "at": 72.92,
+   "until": 74.3,
    "text": "Tokyo funded its own chips."
   }
  ],
  "caption_pages": [
   {
    "s": 0.0,
-   "e": 1.18,
+   "e": 1.11,
    "t": [
     {
      "w": "Trump",
      "s": 0.0,
-     "e": 0.44,
+     "e": 0.41,
      "k": false
     },
     {
      "w": "announced",
-     "s": 0.44,
-     "e": 0.82,
+     "s": 0.41,
+     "e": 0.77,
      "k": false
     },
     {
      "w": "he",
-     "s": 0.82,
-     "e": 1.04,
+     "s": 0.77,
+     "e": 0.98,
      "k": false
     },
     {
      "w": "beat",
-     "s": 1.04,
-     "e": 1.18,
+     "s": 0.98,
+     "e": 1.11,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 1.18,
-   "e": 2.22,
+   "s": 1.11,
+   "e": 2.57,
    "t": [
     {
      "w": "Japan",
-     "s": 1.18,
-     "e": 1.52,
+     "s": 1.11,
+     "e": 1.43,
      "k": true
     },
     {
      "w": "on",
-     "s": 1.52,
-     "e": 1.82,
+     "s": 1.43,
+     "e": 1.72,
      "k": false
     },
     {
      "w": "tariffs.",
-     "s": 1.82,
-     "e": 2.22,
+     "s": 1.72,
+     "e": 2.09,
+     "k": false
+    },
+    {
+     "w": "Instead,",
+     "s": 2.57,
+     "e": 2.57,
      "k": false
     }
    ],
    "cap_mode": "anchor"
   },
   {
-   "s": 3.14,
-   "e": 4.22,
+   "s": 2.85,
+   "e": 3.92,
    "t": [
     {
-     "w": "Instead,",
-     "s": 3.14,
-     "e": 3.14,
-     "k": false
-    },
-    {
      "w": "that",
-     "s": 3.58,
-     "e": 3.66,
+     "s": 2.85,
+     "e": 2.92,
      "k": false
     },
     {
      "w": "tariff",
-     "s": 3.66,
-     "e": 3.94,
+     "s": 2.92,
+     "e": 3.19,
      "k": false
     },
     {
      "w": "funded",
-     "s": 3.94,
-     "e": 4.22,
+     "s": 3.19,
+     "e": 3.45,
      "k": false
+    },
+    {
+     "w": "Japan's",
+     "s": 3.45,
+     "e": 3.92,
+     "k": true
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 4.22,
-   "e": 5.78,
+   "s": 3.92,
+   "e": 5.13,
    "t": [
     {
-     "w": "Japan's",
-     "s": 4.22,
-     "e": 4.72,
-     "k": true
-    },
-    {
      "w": "chip",
-     "s": 4.72,
-     "e": 4.86,
+     "s": 3.92,
+     "e": 4.06,
      "k": false
     },
     {
      "w": "empire,",
-     "s": 4.86,
-     "e": 5.26,
+     "s": 4.06,
+     "e": 4.43,
      "k": false
     },
     {
      "w": "and",
-     "s": 5.26,
-     "e": 5.78,
+     "s": 4.43,
+     "e": 4.92,
+     "k": false
+    },
+    {
+     "w": "cost",
+     "s": 4.92,
+     "e": 5.13,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 5.78,
-   "e": 6.81,
+   "s": 5.13,
+   "e": 5.9,
    "t": [
     {
-     "w": "cost",
-     "s": 5.78,
-     "e": 6.0,
-     "k": false
-    },
-    {
      "w": "America",
-     "s": 6.0,
-     "e": 6.36,
+     "s": 5.13,
+     "e": 5.47,
      "k": true
     },
     {
      "w": "a",
-     "s": 6.36,
-     "e": 6.4,
+     "s": 5.47,
+     "e": 5.51,
      "k": false
     },
     {
      "w": "hundred",
-     "s": 6.4,
-     "e": 6.69,
+     "s": 5.51,
+     "e": 5.78,
      "k": true
     },
     {
      "w": "and",
-     "s": 6.69,
-     "e": 6.81,
+     "s": 5.78,
+     "e": 5.9,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 6.81,
-   "e": 8.88,
+   "s": 5.9,
+   "e": 7.85,
    "t": [
     {
      "w": "twenty-two",
-     "s": 6.81,
-     "e": 7.18,
+     "s": 5.9,
+     "e": 6.25,
      "k": false
     },
     {
      "w": "billion",
-     "s": 7.18,
-     "e": 7.8,
+     "s": 6.25,
+     "e": 6.83,
      "k": true
     },
     {
      "w": "dollars.",
-     "s": 7.8,
-     "e": 8.88,
+     "s": 6.83,
+     "e": 7.85,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 8.88,
-   "e": 10.4,
+   "s": 7.85,
+   "e": 9.28,
    "t": [
     {
      "w": "Auto",
-     "s": 8.88,
-     "e": 9.34,
+     "s": 7.85,
+     "e": 8.28,
      "k": false
     },
     {
      "w": "parts",
-     "s": 9.34,
-     "e": 9.56,
+     "s": 8.28,
+     "e": 8.49,
      "k": false
     },
     {
      "w": "taxes",
-     "s": 9.56,
-     "e": 9.98,
+     "s": 8.49,
+     "e": 8.89,
      "k": false
     },
     {
      "w": "compounded",
-     "s": 9.98,
-     "e": 10.4,
+     "s": 8.89,
+     "e": 9.28,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 10.4,
-   "e": 12.26,
+   "s": 9.28,
+   "e": 11.04,
    "t": [
     {
      "w": "against",
-     "s": 10.4,
-     "e": 10.92,
+     "s": 9.28,
+     "e": 9.77,
      "k": false
     },
     {
      "w": "Detroit.",
-     "s": 10.92,
-     "e": 11.32,
+     "s": 9.77,
+     "e": 10.15,
      "k": true
     },
     {
      "w": "But",
-     "s": 11.9,
-     "e": 11.98,
+     "s": 10.7,
+     "e": 10.77,
      "k": false
     },
     {
      "w": "look",
-     "s": 11.98,
-     "e": 12.14,
+     "s": 10.77,
+     "e": 10.93,
      "k": false
     },
     {
      "w": "at",
-     "s": 12.14,
-     "e": 12.26,
+     "s": 10.93,
+     "e": 11.04,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 12.26,
-   "e": 13.2,
+   "s": 11.04,
+   "e": 12.49,
    "t": [
     {
      "w": "what",
-     "s": 12.26,
-     "e": 12.4,
+     "s": 11.04,
+     "e": 11.17,
      "k": false
     },
     {
      "w": "nobody",
-     "s": 12.4,
-     "e": 12.66,
+     "s": 11.17,
+     "e": 11.41,
      "k": false
     },
     {
      "w": "explained.",
-     "s": 12.66,
-     "e": 13.2,
+     "s": 11.41,
+     "e": 11.93,
+     "k": false
+    },
+    {
+     "w": "When",
+     "s": 12.4,
+     "e": 12.49,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 13.86,
-   "e": 14.94,
+   "s": 12.49,
+   "e": 13.74,
    "t": [
     {
-     "w": "When",
-     "s": 13.86,
-     "e": 13.96,
-     "k": false
-    },
-    {
      "w": "you",
-     "s": 13.96,
-     "e": 14.12,
+     "s": 12.49,
+     "e": 12.64,
      "k": false
     },
     {
      "w": "buy",
-     "s": 14.12,
-     "e": 14.38,
+     "s": 12.64,
+     "e": 12.89,
      "k": false
     },
     {
      "w": "an",
-     "s": 14.38,
-     "e": 14.6,
+     "s": 12.89,
+     "e": 13.09,
      "k": false
     },
     {
      "w": "American",
-     "s": 14.6,
-     "e": 14.94,
+     "s": 13.09,
+     "e": 13.41,
      "k": true
+    },
+    {
+     "w": "truck,",
+     "s": 13.41,
+     "e": 13.74,
+     "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 14.94,
-   "e": 16.56,
+   "s": 14.06,
+   "e": 15.11,
    "t": [
     {
-     "w": "truck,",
-     "s": 14.94,
-     "e": 15.28,
-     "k": false
-    },
-    {
      "w": "its",
-     "s": 15.62,
-     "e": 15.72,
+     "s": 14.06,
+     "e": 14.15,
      "k": false
     },
     {
      "w": "parts",
-     "s": 15.72,
-     "e": 16.02,
+     "s": 14.15,
+     "e": 14.43,
      "k": false
     },
     {
      "w": "cross",
-     "s": 16.02,
-     "e": 16.36,
+     "s": 14.43,
+     "e": 14.76,
      "k": false
     },
     {
      "w": "the",
-     "s": 16.36,
-     "e": 16.56,
+     "s": 14.76,
+     "e": 14.94,
+     "k": false
+    },
+    {
+     "w": "border",
+     "s": 14.94,
+     "e": 15.11,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 16.56,
-   "e": 17.74,
+   "s": 15.11,
+   "e": 16.7,
    "t": [
     {
-     "w": "border",
-     "s": 16.56,
-     "e": 16.74,
-     "k": false
-    },
-    {
      "w": "six",
-     "s": 16.74,
-     "e": 17.06,
+     "s": 15.11,
+     "e": 15.41,
      "k": true
     },
     {
      "w": "separate",
-     "s": 17.06,
-     "e": 17.36,
+     "s": 15.41,
+     "e": 15.7,
      "k": false
     },
     {
      "w": "times.",
-     "s": 17.36,
-     "e": 17.74,
+     "s": 15.7,
+     "e": 16.06,
+     "k": false
+    },
+    {
+     "w": "An",
+     "s": 16.53,
+     "e": 16.7,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 18.44,
-   "e": 19.74,
+   "s": 16.7,
+   "e": 17.75,
    "t": [
     {
-     "w": "An",
-     "s": 18.44,
-     "e": 18.62,
-     "k": false
-    },
-    {
      "w": "engine",
-     "s": 18.62,
-     "e": 18.88,
+     "s": 16.7,
+     "e": 16.94,
      "k": false
     },
     {
      "w": "block",
-     "s": 18.88,
-     "e": 19.08,
+     "s": 16.94,
+     "e": 17.13,
      "k": false
     },
     {
      "w": "from",
-     "s": 19.08,
-     "e": 19.26,
+     "s": 17.13,
+     "e": 17.3,
      "k": false
     },
     {
      "w": "Ontario",
-     "s": 19.26,
-     "e": 19.74,
+     "s": 17.3,
+     "e": 17.75,
      "k": true
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 19.74,
-   "e": 20.74,
+   "s": 17.75,
+   "e": 18.7,
    "t": [
     {
      "w": "carries",
-     "s": 19.74,
-     "e": 20.1,
+     "s": 17.75,
+     "e": 18.09,
      "k": false
     },
     {
      "w": "a",
-     "s": 20.1,
-     "e": 20.28,
+     "s": 18.09,
+     "e": 18.26,
      "k": false
     },
     {
      "w": "twenty-five",
-     "s": 20.28,
-     "e": 20.74,
+     "s": 18.26,
+     "e": 18.7,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 20.74,
-   "e": 22.12,
+   "s": 18.7,
+   "e": 20.0,
    "t": [
     {
      "w": "percent",
-     "s": 20.74,
-     "e": 21.06,
+     "s": 18.7,
+     "e": 19.0,
      "k": true
     },
     {
      "w": "border",
-     "s": 21.06,
-     "e": 21.34,
+     "s": 19.0,
+     "e": 19.26,
      "k": false
     },
     {
      "w": "tariff",
-     "s": 21.34,
-     "e": 21.7,
+     "s": 19.26,
+     "e": 19.6,
      "k": false
     },
     {
      "w": "on",
-     "s": 21.7,
-     "e": 21.94,
+     "s": 19.6,
+     "e": 19.83,
      "k": false
     },
     {
      "w": "raw",
-     "s": 21.94,
-     "e": 22.12,
+     "s": 19.83,
+     "e": 20.0,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 22.12,
-   "e": 23.92,
+   "s": 20.0,
+   "e": 21.7,
    "t": [
     {
      "w": "parts.",
-     "s": 22.12,
-     "e": 22.48,
+     "s": 20.0,
+     "e": 20.34,
      "k": false
     },
     {
      "w": "A",
-     "s": 22.98,
-     "e": 23.14,
+     "s": 20.81,
+     "e": 20.96,
      "k": false
     },
     {
      "w": "wiring",
-     "s": 23.14,
-     "e": 23.44,
+     "s": 20.96,
+     "e": 21.25,
      "k": false
     },
     {
      "w": "harness",
-     "s": 23.44,
-     "e": 23.72,
+     "s": 21.25,
+     "e": 21.51,
      "k": false
     },
     {
      "w": "from",
-     "s": 23.72,
-     "e": 23.92,
+     "s": 21.51,
+     "e": 21.7,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 23.92,
-   "e": 24.94,
+   "s": 21.7,
+   "e": 22.66,
    "t": [
     {
      "w": "Mexico",
-     "s": 23.92,
-     "e": 24.24,
+     "s": 21.7,
+     "e": 22.0,
      "k": true
     },
     {
      "w": "gets",
-     "s": 24.24,
-     "e": 24.5,
+     "s": 22.0,
+     "e": 22.25,
      "k": false
     },
     {
      "w": "hit",
-     "s": 24.5,
-     "e": 24.68,
+     "s": 22.25,
+     "e": 22.41,
      "k": false
     },
     {
      "w": "with",
-     "s": 24.68,
-     "e": 24.82,
+     "s": 22.41,
+     "e": 22.55,
      "k": false
     },
     {
      "w": "the",
-     "s": 24.82,
-     "e": 24.94,
+     "s": 22.55,
+     "e": 22.66,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 24.94,
-   "e": 26.06,
+   "s": 22.66,
+   "e": 23.72,
    "t": [
     {
      "w": "exact",
-     "s": 24.94,
-     "e": 25.18,
+     "s": 22.66,
+     "e": 22.89,
      "k": false
     },
     {
      "w": "same",
-     "s": 25.18,
-     "e": 25.44,
+     "s": 22.89,
+     "e": 23.13,
      "k": false
     },
     {
      "w": "twenty-five",
-     "s": 25.44,
-     "e": 26.06,
+     "s": 23.13,
+     "e": 23.72,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 26.06,
-   "e": 28.18,
+   "s": 23.72,
+   "e": 25.72,
    "t": [
     {
      "w": "percent.",
-     "s": 26.06,
-     "e": 26.5,
+     "s": 23.72,
+     "e": 24.13,
      "k": true
     },
     {
      "w": "In",
-     "s": 26.5,
-     "e": 27.34,
+     "s": 24.13,
+     "e": 24.93,
      "k": false
     },
     {
      "w": "the",
-     "s": 27.34,
-     "e": 27.44,
+     "s": 24.93,
+     "e": 25.02,
      "k": false
     },
     {
      "w": "left",
-     "s": 27.44,
-     "e": 27.6,
+     "s": 25.02,
+     "e": 25.17,
      "k": false
     },
     {
      "w": "lane,",
-     "s": 27.6,
-     "e": 27.92,
+     "s": 25.17,
+     "e": 25.47,
      "k": false
     },
     {
      "w": "a",
-     "s": 28.18,
-     "e": 28.18,
+     "s": 25.72,
+     "e": 25.72,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 28.18,
-   "e": 29.58,
+   "s": 25.72,
+   "e": 27.04,
    "t": [
     {
      "w": "taxed",
-     "s": 28.18,
-     "e": 28.36,
+     "s": 25.72,
+     "e": 25.89,
      "k": false
     },
     {
      "w": "Toyota.",
-     "s": 28.36,
-     "e": 28.7,
+     "s": 25.89,
+     "e": 26.21,
      "k": true
     },
     {
      "w": "In",
-     "s": 28.7,
-     "e": 29.28,
+     "s": 26.21,
+     "e": 26.75,
      "k": false
     },
     {
      "w": "the",
-     "s": 29.28,
-     "e": 29.38,
+     "s": 26.75,
+     "e": 26.85,
      "k": false
     },
     {
      "w": "right,",
-     "s": 29.38,
-     "e": 29.58,
+     "s": 26.85,
+     "e": 27.04,
      "k": false
     }
    ],
    "cap_mode": "anchor"
   },
   {
-   "s": 29.86,
-   "e": 30.66,
+   "s": 27.3,
+   "e": 28.87,
    "t": [
     {
      "w": "a",
-     "s": 29.86,
-     "e": 29.94,
+     "s": 27.3,
+     "e": 27.38,
      "k": false
     },
     {
      "w": "bankrupt",
-     "s": 29.94,
-     "e": 30.26,
+     "s": 27.38,
+     "e": 27.68,
      "k": false
     },
     {
      "w": "Detroit.",
-     "s": 30.26,
-     "e": 30.66,
+     "s": 27.68,
+     "e": 28.06,
      "k": true
+    },
+    {
+     "w": "Toyota",
+     "s": 28.53,
+     "e": 28.87,
+     "k": false
     }
    ],
    "cap_mode": "anchor"
   },
   {
-   "s": 31.44,
-   "e": 32.5,
+   "s": 28.87,
+   "e": 30.66,
    "t": [
     {
-     "w": "Toyota",
-     "s": 31.44,
-     "e": 31.8,
-     "k": false
-    },
-    {
      "w": "crosses",
-     "s": 31.8,
-     "e": 32.12,
+     "s": 28.87,
+     "e": 29.17,
      "k": false
     },
     {
      "w": "once.",
-     "s": 32.12,
-     "e": 32.5,
+     "s": 29.17,
+     "e": 29.53,
+     "k": false
+    },
+    {
+     "w": "Tokyo",
+     "s": 30.0,
+     "e": 30.3,
+     "k": false
+    },
+    {
+     "w": "pays",
+     "s": 30.3,
+     "e": 30.53,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 30.53,
+     "e": 30.66,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 33.26,
-   "e": 34.49,
+   "s": 30.66,
+   "e": 31.75,
    "t": [
     {
-     "w": "Tokyo",
-     "s": 33.26,
-     "e": 33.58,
-     "k": false
-    },
-    {
-     "w": "pays",
-     "s": 33.58,
-     "e": 33.82,
-     "k": false
-    },
-    {
-     "w": "a",
-     "s": 33.82,
-     "e": 33.96,
-     "k": false
-    },
-    {
      "w": "flat",
-     "s": 33.96,
-     "e": 34.16,
+     "s": 30.66,
+     "e": 30.85,
      "k": false
     },
     {
      "w": "fifteen",
-     "s": 34.16,
-     "e": 34.49,
+     "s": 30.85,
+     "e": 31.16,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 34.49,
-   "e": 35.74,
-   "t": [
+    },
     {
      "w": "percent",
-     "s": 34.49,
-     "e": 34.82,
+     "s": 31.16,
+     "e": 31.47,
      "k": true
     },
     {
      "w": "on",
-     "s": 34.82,
-     "e": 35.02,
+     "s": 31.47,
+     "e": 31.66,
      "k": false
     },
     {
      "w": "the",
-     "s": 35.02,
-     "e": 35.12,
+     "s": 31.66,
+     "e": 31.75,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 31.75,
+   "e": 32.89,
+   "t": [
     {
      "w": "sticker,",
-     "s": 35.12,
-     "e": 35.36,
+     "s": 31.75,
+     "e": 31.98,
      "k": false
     },
     {
      "w": "not",
-     "s": 35.58,
-     "e": 35.74,
+     "s": 32.19,
+     "e": 32.34,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 35.74,
-   "e": 36.32,
-   "t": [
+    },
     {
      "w": "a",
-     "s": 35.74,
-     "e": 35.88,
+     "s": 32.34,
+     "e": 32.47,
      "k": false
     },
     {
      "w": "penny",
-     "s": 35.88,
-     "e": 35.98,
+     "s": 32.47,
+     "e": 32.57,
      "k": false
     },
     {
      "w": "more.",
-     "s": 35.98,
-     "e": 36.32,
+     "s": 32.57,
+     "e": 32.89,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 37.08,
-   "e": 37.8,
+   "s": 33.36,
+   "e": 34.04,
    "t": [
     {
      "w": "But",
-     "s": 37.08,
-     "e": 37.16,
+     "s": 33.36,
+     "e": 33.43,
      "k": false
     },
     {
      "w": "here's",
-     "s": 37.16,
-     "e": 37.4,
+     "s": 33.43,
+     "e": 33.66,
      "k": false
     },
     {
      "w": "where",
-     "s": 37.4,
-     "e": 37.5,
+     "s": 33.66,
+     "e": 33.76,
      "k": false
     },
     {
      "w": "the",
-     "s": 37.5,
-     "e": 37.6,
+     "s": 33.76,
+     "e": 33.85,
      "k": false
     },
     {
      "w": "math",
-     "s": 37.6,
-     "e": 37.8,
+     "s": 33.85,
+     "e": 34.04,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 37.8,
-   "e": 38.4,
+   "s": 34.04,
+   "e": 35.44,
    "t": [
     {
      "w": "breaks",
-     "s": 37.8,
-     "e": 38.06,
+     "s": 34.04,
+     "e": 34.28,
      "k": false
     },
     {
      "w": "Detroit.",
-     "s": 38.06,
-     "e": 38.4,
+     "s": 34.28,
+     "e": 34.6,
      "k": true
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 39.16,
-   "e": 39.98,
-   "t": [
+    },
     {
      "w": "On",
-     "s": 39.16,
-     "e": 39.26,
+     "s": 35.08,
+     "e": 35.17,
      "k": false
     },
     {
      "w": "a",
-     "s": 39.26,
-     "e": 39.36,
+     "s": 35.17,
+     "e": 35.26,
      "k": false
     },
     {
      "w": "thirty",
-     "s": 39.36,
-     "e": 39.55,
+     "s": 35.26,
+     "e": 35.44,
      "k": true
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 35.44,
+   "e": 36.6,
+   "t": [
     {
      "w": "thousand",
-     "s": 39.55,
-     "e": 39.79,
+     "s": 35.44,
+     "e": 35.67,
      "k": true
     },
     {
      "w": "dollar",
-     "s": 39.79,
-     "e": 39.98,
+     "s": 35.67,
+     "e": 35.85,
      "k": false
+    },
+    {
+     "w": "car,",
+     "s": 35.85,
+     "e": 36.23,
+     "k": false
+    },
+    {
+     "w": "Tokyo",
+     "s": 36.4,
+     "e": 36.6,
+     "k": true
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 39.98,
-   "e": 41.36,
+   "s": 36.6,
+   "e": 37.36,
    "t": [
     {
-     "w": "car,",
-     "s": 39.98,
-     "e": 40.38,
-     "k": false
-    },
-    {
-     "w": "Tokyo",
-     "s": 40.56,
-     "e": 40.78,
-     "k": true
-    },
-    {
      "w": "pays",
-     "s": 40.78,
-     "e": 41.08,
+     "s": 36.6,
+     "e": 36.89,
      "k": false
     },
     {
      "w": "forty-five",
-     "s": 41.08,
-     "e": 41.36,
+     "s": 36.89,
+     "e": 37.15,
      "k": false
+    },
+    {
+     "w": "hundred",
+     "s": 37.15,
+     "e": 37.36,
+     "k": true
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 41.36,
-   "e": 42.66,
+   "s": 37.36,
+   "e": 39.04,
    "t": [
     {
-     "w": "hundred",
-     "s": 41.36,
-     "e": 41.58,
-     "k": true
-    },
-    {
      "w": "dollars",
-     "s": 41.58,
-     "e": 41.8,
+     "s": 37.36,
+     "e": 37.57,
      "k": false
     },
     {
      "w": "in",
-     "s": 41.8,
-     "e": 42.38,
+     "s": 37.57,
+     "e": 38.11,
      "k": false
     },
     {
      "w": "tariffs.",
-     "s": 42.38,
-     "e": 42.66,
+     "s": 38.11,
+     "e": 38.38,
+     "k": false
+    },
+    {
+     "w": "Detroit",
+     "s": 38.85,
+     "e": 39.04,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 43.32,
-   "e": 44.08,
+   "s": 39.04,
+   "e": 39.82,
    "t": [
     {
-     "w": "Detroit",
-     "s": 43.32,
-     "e": 43.52,
-     "k": false
-    },
-    {
      "w": "pays",
-     "s": 43.52,
-     "e": 43.78,
+     "s": 39.04,
+     "e": 39.28,
      "k": false
     },
     {
      "w": "over",
-     "s": 43.78,
-     "e": 43.98,
+     "s": 39.28,
+     "e": 39.47,
      "k": false
     },
     {
      "w": "six",
-     "s": 43.98,
-     "e": 44.08,
+     "s": 39.47,
+     "e": 39.57,
+     "k": true
+    },
+    {
+     "w": "thousand",
+     "s": 39.57,
+     "e": 39.82,
      "k": true
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 44.08,
-   "e": 45.18,
+   "s": 39.82,
+   "e": 40.89,
    "t": [
     {
-     "w": "thousand",
-     "s": 44.08,
-     "e": 44.35,
-     "k": true
-    },
-    {
      "w": "dollars",
-     "s": 44.35,
-     "e": 44.58,
+     "s": 39.82,
+     "e": 40.04,
      "k": false
     },
     {
      "w": "in",
-     "s": 44.58,
-     "e": 44.94,
+     "s": 40.04,
+     "e": 40.38,
      "k": false
     },
     {
      "w": "stacked",
-     "s": 44.94,
-     "e": 45.18,
+     "s": 40.38,
+     "e": 40.6,
+     "k": false
+    },
+    {
+     "w": "border",
+     "s": 40.6,
+     "e": 40.89,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 45.18,
-   "e": 46.62,
+   "s": 40.89,
+   "e": 42.26,
    "t": [
     {
-     "w": "border",
-     "s": 45.18,
-     "e": 45.48,
-     "k": false
-    },
-    {
      "w": "duties",
-     "s": 45.48,
-     "e": 45.76,
+     "s": 40.89,
+     "e": 41.15,
      "k": false
     },
     {
      "w": "alone,",
-     "s": 45.76,
-     "e": 46.1,
+     "s": 41.15,
+     "e": 41.47,
      "k": false
     },
     {
      "w": "right",
-     "s": 46.42,
-     "e": 46.62,
+     "s": 41.77,
+     "e": 41.96,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 46.62,
-   "e": 47.16,
-   "t": [
+    },
     {
      "w": "here",
-     "s": 46.62,
-     "e": 46.8,
+     "s": 41.96,
+     "e": 42.13,
      "k": false
     },
     {
      "w": "at",
-     "s": 46.8,
-     "e": 46.94,
-     "k": false
-    },
-    {
-     "w": "home.",
-     "s": 46.94,
-     "e": 47.16,
+     "s": 42.13,
+     "e": 42.26,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 47.94,
-   "e": 48.7,
+   "s": 42.26,
+   "e": 43.66,
    "t": [
     {
+     "w": "home.",
+     "s": 42.26,
+     "e": 42.47,
+     "k": false
+    },
+    {
      "w": "And",
-     "s": 47.94,
-     "e": 48.06,
+     "s": 42.94,
+     "e": 43.06,
      "k": false
     },
     {
      "w": "that's",
-     "s": 48.06,
-     "e": 48.24,
+     "s": 43.06,
+     "e": 43.23,
      "k": false
     },
     {
      "w": "where",
-     "s": 48.24,
-     "e": 48.36,
+     "s": 43.23,
+     "e": 43.34,
      "k": false
     },
     {
      "w": "Tokyo",
-     "s": 48.36,
-     "e": 48.7,
+     "s": 43.34,
+     "e": 43.66,
      "k": true
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 48.7,
-   "e": 49.54,
+   "s": 43.66,
+   "e": 44.45,
    "t": [
     {
      "w": "pulled",
-     "s": 48.7,
-     "e": 48.94,
+     "s": 43.66,
+     "e": 43.89,
      "k": false
     },
     {
      "w": "the",
-     "s": 48.94,
-     "e": 49.12,
+     "s": 43.89,
+     "e": 44.06,
      "k": false
     },
     {
      "w": "second",
-     "s": 49.12,
-     "e": 49.36,
+     "s": 44.06,
+     "e": 44.28,
      "k": false
     },
     {
      "w": "lever.",
-     "s": 49.36,
-     "e": 49.54,
+     "s": 44.28,
+     "e": 44.45,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 50.1,
-   "e": 51.1,
+   "s": 44.98,
+   "e": 45.92,
    "t": [
     {
      "w": "Instead",
-     "s": 50.1,
-     "e": 50.3,
+     "s": 44.98,
+     "e": 45.17,
      "k": false
     },
     {
      "w": "of",
-     "s": 50.3,
-     "e": 50.48,
+     "s": 45.17,
+     "e": 45.34,
      "k": false
     },
     {
      "w": "reinvesting",
-     "s": 50.48,
-     "e": 51.02,
+     "s": 45.34,
+     "e": 45.85,
      "k": false
     },
     {
      "w": "in",
-     "s": 51.02,
-     "e": 51.1,
+     "s": 45.85,
+     "e": 45.92,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 51.1,
-   "e": 51.46,
+   "s": 45.92,
+   "e": 46.87,
    "t": [
     {
      "w": "America,",
-     "s": 51.1,
-     "e": 51.46,
+     "s": 45.92,
+     "e": 46.26,
      "k": true
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 52.18,
-   "e": 53.16,
-   "t": [
+    },
     {
      "w": "Japan",
-     "s": 52.18,
-     "e": 52.2,
+     "s": 46.55,
+     "e": 46.57,
      "k": true
     },
     {
      "w": "started",
-     "s": 52.2,
-     "e": 52.52,
+     "s": 46.57,
+     "e": 46.87,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 46.87,
+   "e": 47.85,
+   "t": [
     {
      "w": "dumping",
-     "s": 52.52,
-     "e": 52.84,
+     "s": 46.87,
+     "e": 47.17,
      "k": false
     },
     {
      "w": "United",
-     "s": 52.84,
-     "e": 53.16,
-     "k": true
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 53.16,
-   "e": 53.96,
-   "t": [
-    {
-     "w": "States",
-     "s": 53.16,
-     "e": 53.56,
+     "s": 47.17,
+     "e": 47.47,
      "k": true
     },
     {
-     "w": "Treasuries.",
-     "s": 53.56,
-     "e": 53.96,
+     "w": "States",
+     "s": 47.47,
+     "e": 47.85,
      "k": true
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 54.92,
-   "e": 55.71,
+   "s": 47.85,
+   "e": 49.14,
    "t": [
     {
+     "w": "Treasuries.",
+     "s": 47.85,
+     "e": 48.23,
+     "k": true
+    },
+    {
      "w": "They",
-     "s": 54.92,
-     "e": 55.16,
+     "s": 48.7,
+     "e": 48.92,
      "k": false
     },
     {
      "w": "sold",
-     "s": 55.16,
-     "e": 55.36,
+     "s": 48.92,
+     "e": 49.11,
      "k": false
     },
     {
      "w": "a",
-     "s": 55.36,
-     "e": 55.39,
-     "k": false
-    },
-    {
-     "w": "hundred",
-     "s": 55.39,
-     "e": 55.62,
-     "k": true
-    },
-    {
-     "w": "and",
-     "s": 55.62,
-     "e": 55.71,
+     "s": 49.11,
+     "e": 49.14,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 55.71,
-   "e": 56.48,
+   "s": 49.14,
+   "e": 49.72,
    "t": [
     {
-     "w": "twenty-two",
-     "s": 55.71,
-     "e": 56.0,
+     "w": "hundred",
+     "s": 49.14,
+     "e": 49.35,
+     "k": true
+    },
+    {
+     "w": "and",
+     "s": 49.35,
+     "e": 49.45,
      "k": false
     },
     {
+     "w": "twenty-two",
+     "s": 49.45,
+     "e": 49.72,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 49.72,
+   "e": 50.64,
+   "t": [
+    {
      "w": "billion",
-     "s": 56.0,
-     "e": 56.48,
+     "s": 49.72,
+     "e": 50.17,
      "k": true
     },
     {
      "w": "dollars",
-     "s": 56.48,
-     "e": 56.48,
+     "s": 50.17,
+     "e": 50.17,
+     "k": false
+    },
+    {
+     "w": "of",
+     "s": 50.17,
+     "e": 50.64,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 56.48,
-   "e": 57.68,
+   "s": 50.64,
+   "e": 52.23,
    "t": [
     {
-     "w": "of",
-     "s": 56.48,
-     "e": 56.98,
-     "k": false
-    },
-    {
      "w": "Washington's",
-     "s": 56.98,
-     "e": 57.54,
+     "s": 50.64,
+     "e": 51.17,
      "k": true
     },
     {
      "w": "debt.",
-     "s": 57.54,
-     "e": 57.68,
+     "s": 51.17,
+     "e": 51.3,
+     "k": false
+    },
+    {
+     "w": "Tokyo",
+     "s": 51.77,
+     "e": 52.23,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 58.34,
-   "e": 59.54,
+   "s": 52.23,
+   "e": 53.24,
    "t": [
     {
-     "w": "Tokyo",
-     "s": 58.34,
-     "e": 58.82,
-     "k": false
-    },
-    {
      "w": "brought",
-     "s": 58.82,
-     "e": 59.14,
+     "s": 52.23,
+     "e": 52.53,
      "k": false
     },
     {
      "w": "that",
-     "s": 59.14,
-     "e": 59.34,
+     "s": 52.53,
+     "e": 52.72,
      "k": false
     },
     {
      "w": "money",
-     "s": 59.34,
-     "e": 59.54,
+     "s": 52.72,
+     "e": 52.91,
+     "k": false
+    },
+    {
+     "w": "home,",
+     "s": 52.91,
+     "e": 53.24,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 59.54,
-   "e": 61.08,
+   "s": 53.6,
+   "e": 54.91,
    "t": [
     {
-     "w": "home,",
-     "s": 59.54,
-     "e": 59.9,
-     "k": false
-    },
-    {
      "w": "pledging",
-     "s": 60.28,
-     "e": 60.34,
+     "s": 53.6,
+     "e": 53.66,
      "k": false
     },
     {
      "w": "ten",
-     "s": 60.34,
-     "e": 60.72,
+     "s": 53.66,
+     "e": 54.02,
      "k": true
     },
     {
      "w": "trillion",
-     "s": 60.72,
-     "e": 61.08,
+     "s": 54.02,
+     "e": 54.36,
      "k": true
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 61.08,
-   "e": 62.26,
-   "t": [
+    },
     {
      "w": "yen",
-     "s": 61.08,
-     "e": 61.36,
+     "s": 54.36,
+     "e": 54.62,
      "k": false
     },
     {
      "w": "to",
-     "s": 61.36,
-     "e": 61.66,
+     "s": 54.62,
+     "e": 54.91,
      "k": false
-    },
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 54.91,
+   "e": 55.47,
+   "t": [
     {
      "w": "build",
-     "s": 61.66,
-     "e": 61.86,
+     "s": 54.91,
+     "e": 55.09,
      "k": false
     },
     {
      "w": "domestic",
-     "s": 61.86,
-     "e": 62.26,
+     "s": 55.09,
+     "e": 55.47,
      "k": false
     }
    ],
    "cap_mode": "anchor"
   },
   {
-   "s": 62.26,
-   "e": 64.28,
+   "s": 55.47,
+   "e": 57.38,
    "t": [
     {
      "w": "semiconductors.",
-     "s": 62.26,
-     "e": 63.1,
+     "s": 55.47,
+     "e": 56.26,
      "k": false
     },
     {
      "w": "In",
-     "s": 63.68,
-     "e": 63.9,
+     "s": 56.81,
+     "e": 57.02,
      "k": false
     },
     {
      "w": "finance,",
-     "s": 63.9,
-     "e": 64.28,
+     "s": 57.02,
+     "e": 57.38,
      "k": false
     }
    ],
    "cap_mode": "anchor"
   },
   {
-   "s": 64.4,
-   "e": 65.22,
+   "s": 57.49,
+   "e": 58.26,
    "t": [
     {
      "w": "we",
-     "s": 64.4,
-     "e": 64.48,
+     "s": 57.49,
+     "e": 57.57,
      "k": false
     },
     {
      "w": "call",
-     "s": 64.48,
-     "e": 64.64,
+     "s": 57.57,
+     "e": 57.72,
      "k": false
     },
     {
      "w": "this",
-     "s": 64.64,
-     "e": 64.88,
+     "s": 57.72,
+     "e": 57.94,
      "k": false
     },
     {
      "w": "the",
-     "s": 64.88,
-     "e": 65.02,
+     "s": 57.94,
+     "e": 58.08,
      "k": false
     },
     {
      "w": "double",
-     "s": 65.02,
-     "e": 65.22,
+     "s": 58.08,
+     "e": 58.26,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 65.22,
-   "e": 66.94,
+   "s": 58.26,
+   "e": 59.89,
    "t": [
     {
      "w": "squeeze:",
-     "s": 65.22,
-     "e": 65.54,
+     "s": 58.26,
+     "e": 58.57,
      "k": false
     },
     {
      "w": "The",
-     "s": 66.14,
-     "e": 66.26,
+     "s": 59.13,
+     "e": 59.24,
      "k": true
     },
     {
      "w": "competitor",
-     "s": 66.26,
-     "e": 66.58,
+     "s": 59.24,
+     "e": 59.55,
      "k": false
     },
     {
      "w": "got",
-     "s": 66.58,
-     "e": 66.94,
+     "s": 59.55,
+     "e": 59.89,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 66.94,
-   "e": 68.14,
+   "s": 59.89,
+   "e": 61.02,
    "t": [
     {
      "w": "cheaper",
-     "s": 66.94,
-     "e": 67.16,
+     "s": 59.89,
+     "e": 60.09,
      "k": false
     },
     {
      "w": "parts",
-     "s": 67.16,
-     "e": 67.56,
+     "s": 60.09,
+     "e": 60.47,
      "k": false
     },
     {
      "w": "and",
-     "s": 67.56,
-     "e": 67.94,
+     "s": 60.47,
+     "e": 60.83,
      "k": false
     },
     {
      "w": "built",
-     "s": 67.94,
-     "e": 68.14,
+     "s": 60.83,
+     "e": 61.02,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 68.14,
-   "e": 69.56,
+   "s": 61.02,
+   "e": 62.36,
    "t": [
     {
      "w": "silicon.",
-     "s": 68.14,
-     "e": 68.54,
+     "s": 61.02,
+     "e": 61.4,
      "k": false
     },
     {
      "w": "And",
-     "s": 69.1,
-     "e": 69.2,
+     "s": 61.92,
+     "e": 62.02,
      "k": false
     },
     {
      "w": "then",
-     "s": 69.2,
-     "e": 69.32,
+     "s": 62.02,
+     "e": 62.13,
      "k": false
     },
     {
      "w": "we",
-     "s": 69.32,
-     "e": 69.42,
+     "s": 62.13,
+     "e": 62.23,
      "k": false
     },
     {
      "w": "wrote",
-     "s": 69.42,
-     "e": 69.56,
+     "s": 62.23,
+     "e": 62.36,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 69.56,
-   "e": 70.52,
+   "s": 62.36,
+   "e": 63.26,
    "t": [
     {
      "w": "them",
-     "s": 69.56,
-     "e": 69.74,
+     "s": 62.36,
+     "e": 62.53,
      "k": false
     },
     {
      "w": "a",
-     "s": 69.74,
-     "e": 69.84,
+     "s": 62.53,
+     "e": 62.62,
      "k": false
     },
     {
      "w": "blank",
-     "s": 69.84,
-     "e": 70.02,
+     "s": 62.62,
+     "e": 62.79,
      "k": false
     },
     {
      "w": "check",
-     "s": 70.02,
-     "e": 70.26,
+     "s": 62.79,
+     "e": 63.02,
      "k": false
     },
     {
      "w": "anyway,",
-     "s": 70.26,
-     "e": 70.52,
+     "s": 63.02,
+     "e": 63.26,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 70.52,
-   "e": 71.82,
+   "s": 63.26,
+   "e": 64.49,
    "t": [
     {
      "w": "to",
-     "s": 70.52,
-     "e": 70.92,
+     "s": 63.26,
+     "e": 63.64,
      "k": false
     },
     {
      "w": "bribe",
-     "s": 70.92,
-     "e": 71.14,
+     "s": 63.64,
+     "e": 63.85,
      "k": false
     },
     {
      "w": "them",
-     "s": 71.14,
-     "e": 71.32,
+     "s": 63.85,
+     "e": 64.02,
      "k": false
     },
     {
      "w": "to",
-     "s": 71.32,
-     "e": 71.44,
+     "s": 64.02,
+     "e": 64.13,
      "k": false
     },
     {
      "w": "keep",
-     "s": 71.44,
-     "e": 71.58,
+     "s": 64.13,
+     "e": 64.26,
      "k": false
     },
     {
      "w": "buying",
-     "s": 71.58,
-     "e": 71.82,
+     "s": 64.26,
+     "e": 64.49,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 71.82,
-   "e": 72.08,
+   "s": 64.49,
+   "e": 65.74,
    "t": [
     {
      "w": "bonds.",
-     "s": 71.82,
-     "e": 72.08,
+     "s": 64.49,
+     "e": 64.74,
      "k": false
-    }
-   ],
-   "cap_mode": "stage"
-  },
-  {
-   "s": 72.9,
-   "e": 73.78,
-   "t": [
+    },
     {
      "w": "And",
-     "s": 72.9,
-     "e": 73.0,
+     "s": 65.21,
+     "e": 65.3,
      "k": false
     },
     {
      "w": "this",
-     "s": 73.0,
-     "e": 73.1,
+     "s": 65.3,
+     "e": 65.4,
      "k": false
     },
     {
      "w": "is",
-     "s": 73.1,
-     "e": 73.2,
+     "s": 65.4,
+     "e": 65.49,
      "k": false
     },
     {
      "w": "where",
-     "s": 73.2,
-     "e": 73.34,
+     "s": 65.49,
+     "e": 65.62,
      "k": false
     },
     {
      "w": "the",
-     "s": 73.34,
-     "e": 73.46,
-     "k": false
-    },
-    {
-     "w": "policy",
-     "s": 73.46,
-     "e": 73.78,
+     "s": 65.62,
+     "e": 65.74,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 73.78,
-   "e": 75.48,
+   "s": 65.74,
+   "e": 67.3,
    "t": [
     {
+     "w": "policy",
+     "s": 65.74,
+     "e": 66.04,
+     "k": false
+    },
+    {
      "w": "backfired.",
-     "s": 73.78,
-     "e": 74.28,
+     "s": 66.04,
+     "e": 66.51,
      "k": false
     },
     {
      "w": "Washington",
-     "s": 74.88,
-     "e": 75.12,
-     "k": false
-    },
-    {
-     "w": "signed",
-     "s": 75.12,
-     "e": 75.48,
+     "s": 67.08,
+     "e": 67.3,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 75.48,
-   "e": 75.9,
+   "s": 67.3,
+   "e": 69.25,
    "t": [
     {
+     "w": "signed",
+     "s": 67.3,
+     "e": 67.64,
+     "k": false
+    },
+    {
      "w": "a",
-     "s": 75.48,
-     "e": 75.66,
+     "s": 67.64,
+     "e": 67.81,
      "k": false
     },
     {
      "w": "tariff.",
-     "s": 75.66,
-     "e": 75.9,
+     "s": 67.81,
+     "e": 68.04,
      "k": false
-    }
-   ],
-   "cap_mode": "anchor"
-  },
-  {
-   "s": 76.52,
-   "e": 77.66,
-   "t": [
+    },
     {
      "w": "Then",
-     "s": 76.52,
-     "e": 76.7,
+     "s": 68.62,
+     "e": 68.79,
      "k": false
     },
     {
      "w": "Tokyo",
-     "s": 76.7,
-     "e": 77.18,
+     "s": 68.79,
+     "e": 69.25,
      "k": true
-    },
-    {
-     "w": "checked",
-     "s": 77.18,
-     "e": 77.44,
-     "k": false
-    },
-    {
-     "w": "the",
-     "s": 77.44,
-     "e": 77.66,
-     "k": false
     }
    ],
    "cap_mode": "anchor"
   },
   {
-   "s": 77.66,
-   "e": 78.22,
+   "s": 69.25,
+   "e": 70.23,
    "t": [
     {
+     "w": "checked",
+     "s": 69.25,
+     "e": 69.49,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 69.49,
+     "e": 69.7,
+     "k": false
+    },
+    {
      "w": "Treasury",
-     "s": 77.66,
-     "e": 77.9,
+     "s": 69.7,
+     "e": 69.92,
      "k": true
     },
     {
      "w": "vault.",
-     "s": 77.9,
-     "e": 78.22,
+     "s": 69.92,
+     "e": 70.23,
      "k": false
     }
    ],
    "cap_mode": "anchor"
   },
   {
-   "s": 79.02,
-   "e": 80.18,
+   "s": 70.7,
+   "e": 71.79,
    "t": [
     {
      "w": "America",
-     "s": 79.02,
-     "e": 79.18,
+     "s": 70.7,
+     "e": 70.85,
      "k": false
     },
     {
      "w": "used",
-     "s": 79.18,
-     "e": 79.56,
+     "s": 70.85,
+     "e": 71.21,
      "k": false
     },
     {
      "w": "the",
-     "s": 79.56,
-     "e": 79.74,
+     "s": 71.21,
+     "e": 71.38,
      "k": false
     },
     {
      "w": "tariff",
-     "s": 79.74,
-     "e": 80.02,
+     "s": 71.38,
+     "e": 71.64,
      "k": false
     },
     {
      "w": "to",
-     "s": 80.02,
-     "e": 80.18,
+     "s": 71.64,
+     "e": 71.79,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 80.18,
-   "e": 81.38,
+   "s": 71.79,
+   "e": 72.92,
    "t": [
     {
      "w": "tax",
-     "s": 80.18,
-     "e": 80.42,
+     "s": 71.79,
+     "e": 72.02,
      "k": false
     },
     {
      "w": "its",
-     "s": 80.42,
-     "e": 80.58,
+     "s": 72.02,
+     "e": 72.17,
      "k": false
     },
     {
      "w": "own",
-     "s": 80.58,
-     "e": 80.76,
+     "s": 72.17,
+     "e": 72.34,
      "k": false
     },
     {
      "w": "cars,",
-     "s": 80.76,
-     "e": 81.1,
+     "s": 72.34,
+     "e": 72.66,
      "k": false
     },
     {
      "w": "while",
-     "s": 81.1,
-     "e": 81.38,
+     "s": 72.66,
+     "e": 72.92,
      "k": false
     }
    ],
    "cap_mode": "stage"
   },
   {
-   "s": 81.38,
-   "e": 82.84,
+   "s": 72.92,
+   "e": 74.3,
    "t": [
     {
      "w": "Tokyo",
-     "s": 81.38,
-     "e": 81.84,
+     "s": 72.92,
+     "e": 73.36,
      "k": true
     },
     {
      "w": "funded",
-     "s": 81.84,
-     "e": 82.16,
+     "s": 73.36,
+     "e": 73.66,
      "k": false
     },
     {
      "w": "its",
-     "s": 82.16,
-     "e": 82.38,
+     "s": 73.66,
+     "e": 73.87,
      "k": false
     },
     {
      "w": "own",
-     "s": 82.38,
-     "e": 82.58,
+     "s": 73.87,
+     "e": 74.06,
      "k": false
     },
     {
      "w": "chips.",
-     "s": 82.58,
-     "e": 82.84,
+     "s": 74.06,
+     "e": 74.3,
      "k": false
     }
    ],
@@ -2247,7 +2199,7 @@
  "sound": [
   {
    "slot": "page enter 2 (snap)",
-   "at": 1.82,
+   "at": 1.72,
    "gain": 0.12,
    "fade_in": 0.0,
    "env": [],
@@ -2259,7 +2211,7 @@
   },
   {
    "slot": "page enter 6 (snap)",
-   "at": 36.93,
+   "at": 33.26,
    "gain": 0.12,
    "fade_in": 0.0,
    "env": [],
@@ -2276,35 +2228,35 @@
    "fade_in": 1.5,
    "env": [
     [
-     0.52,
+     0.42,
      0.0
     ],
     [
-     0.82,
+     0.72,
      4.0
     ],
     [
-     2.27,
+     2.17,
      4.0
     ],
     [
-     3.07,
+     2.97,
      0.0
     ],
     [
-     35.63,
+     31.96,
      0.0
     ],
     [
-     35.93,
+     32.26,
      4.0
     ],
     [
-     37.38,
+     33.71,
      4.0
     ],
     [
-     38.18,
+     34.51,
      0.0
     ]
    ],
@@ -2315,7 +2267,7 @@
   },
   {
    "slot": "turn bed",
-   "at": 47.78,
+   "at": 42.85,
    "gain": 0.0376,
    "fade_in": 3.0,
    "env": [],
@@ -2342,7 +2294,7 @@
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\build-short\\docks\\dock-c-two-lanes.png",
-    "sha256": "3efd3e997d877ae655d968c9430d5d5034d93aaf49b3782f9cd8b7dc921177be"
+    "sha256": "36666db895a468473c0da90c906a23fadafb66c51de9470a697394fed1773eb1"
    },
    "badges": []
   },
@@ -2352,18 +2304,17 @@
    "species": "chart",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\build-short\\docks\\dock-g-receipt.png",
-    "sha256": "263e179611dcd68022890a6fe43c2c510ccfef34fb17e0f21d22127d29f01263"
+    "sha256": "8625bd7e9827eb68063cc7a1e644622ffedbef5111d33c3b5988f0c7ecbc0eea"
    },
    "badges": []
   },
-  "dock-f-toll-gate-to-fab": {
-   "kind": "video",
-   "title": "The gate to the fab",
+  "dock-h-pledge": {
+   "title": "Ten trillion yen for chips",
    "source": "HollowStickMike - Money Physics",
    "species": "deck",
    "document": {
-    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-f-toll-gate-to-fab-v2.mp4",
-    "sha256": "ceb472b41d8a0687b20f29b448ec669b74d95b9c4cb2707218108b1c94631a7d"
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\build-short\\docks\\dock-h-pledge.png",
+    "sha256": "17d0d3e0139a004b6d6c705769a5b9111c0ec991069a28319c5f5f59f1d3171f"
    },
    "badges": []
   },
@@ -2373,7 +2324,7 @@
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\build-short\\docks\\dock-a-podium.png",
-    "sha256": "fe4a1f0b6dff91159c6a2f387f08544eca5abd67b7d83352d949033c83da49de"
+    "sha256": "b005fc17690ec85c7da65c745cc875d81c2a87b41e7540804c0e36c4eec7b1f7"
    },
    "badges": []
   },
@@ -2383,7 +2334,7 @@
    "species": "deck",
    "document": {
     "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\japan-tariff-trick\\build-short\\docks\\dock-e-vault.png",
-    "sha256": "86ca4b647f60e4c324e6ffb36fb29dfdc4f037482bd54bbeb38527945888ce12"
+    "sha256": "bf0b43018c7b9979cd55cda220c130b1b772e69d714710cc162eecec1f02bce1"
    },
    "badges": []
   }
@@ -2404,14 +2355,14 @@
    "exit": "dip",
    "span": [
     0.0,
-    1.82
+    1.72
    ],
    "docks": [
     {
      "slide": "dock-b-holdings",
      "slot": 0,
-     "enter": 0.82,
-     "exit": 1.82,
+     "enter": 0.72,
+     "exit": 1.72,
      "badge_at": [],
      "arrive": "throw",
      "mass": "paper"
@@ -3760,20 +3711,20 @@
    },
    "exit": "cut",
    "span": [
-    1.82,
-    8.88
+    1.72,
+    7.85
    ],
    "docks": [],
    "species": [
     {
      "kind": "spotlight",
-     "at": 2.67,
-     "dur": 6.21,
+     "at": 2.57,
+     "dur": 5.28,
      "target": {
       "kind": "datum",
       "index": 315
      },
-     "until": 8.88,
+     "until": 7.85,
      "held": true
     }
    ]
@@ -3792,15 +3743,15 @@
    },
    "exit": "dip",
    "span": [
-    8.88,
-    18.3
+    7.85,
+    16.43
    ],
    "docks": [],
    "species": [
     {
      "kind": "trace",
-     "at": 9.78,
-     "dur": 8.52,
+     "at": 8.69,
+     "dur": 7.74,
      "color": "#B0201F",
      "target": {
       "kind": "region",
@@ -3825,8 +3776,8 @@
     },
     {
      "kind": "callout",
-     "at": 10.33,
-     "dur": 7.97,
+     "at": 9.24,
+     "dur": 7.19,
      "label": "25%",
      "pad": 22,
      "label_scale": 2.2,
@@ -3838,8 +3789,8 @@
     },
     {
      "kind": "trace",
-     "at": 11.07,
-     "dur": 7.23,
+     "at": 9.87,
+     "dur": 6.56,
      "color": "#B0201F",
      "target": {
       "kind": "region",
@@ -3864,8 +3815,8 @@
     },
     {
      "kind": "callout",
-     "at": 11.62,
-     "dur": 6.68,
+     "at": 10.42,
+     "dur": 6.01,
      "label": "25%",
      "pad": 22,
      "label_scale": 2.2,
@@ -3877,8 +3828,8 @@
     },
     {
      "kind": "trace",
-     "at": 12.36,
-     "dur": 5.94,
+     "at": 11.06,
+     "dur": 5.37,
      "color": "#B0201F",
      "target": {
       "kind": "region",
@@ -3903,8 +3854,8 @@
     },
     {
      "kind": "callout",
-     "at": 12.91,
-     "dur": 5.39,
+     "at": 11.61,
+     "dur": 4.82,
      "label": "25%",
      "pad": 22,
      "label_scale": 2.2,
@@ -3916,8 +3867,8 @@
     },
     {
      "kind": "trace",
-     "at": 13.66,
-     "dur": 4.64,
+     "at": 12.24,
+     "dur": 4.19,
      "color": "#B0201F",
      "target": {
       "kind": "region",
@@ -3942,8 +3893,8 @@
     },
     {
      "kind": "callout",
-     "at": 14.21,
-     "dur": 4.09,
+     "at": 12.79,
+     "dur": 3.64,
      "label": "25%",
      "pad": 22,
      "label_scale": 2.2,
@@ -3955,8 +3906,8 @@
     },
     {
      "kind": "trace",
-     "at": 14.95,
-     "dur": 3.35,
+     "at": 13.43,
+     "dur": 3.0,
      "color": "#B0201F",
      "target": {
       "kind": "region",
@@ -3981,8 +3932,8 @@
     },
     {
      "kind": "callout",
-     "at": 15.5,
-     "dur": 2.8,
+     "at": 13.98,
+     "dur": 2.45,
      "label": "25%",
      "pad": 22,
      "label_scale": 2.2,
@@ -3994,8 +3945,8 @@
     },
     {
      "kind": "trace",
-     "at": 16.24,
-     "dur": 2.06,
+     "at": 14.61,
+     "dur": 1.82,
      "color": "#B0201F",
      "target": {
       "kind": "region",
@@ -4020,8 +3971,8 @@
     },
     {
      "kind": "callout",
-     "at": 16.79,
-     "dur": 1.51,
+     "at": 15.16,
+     "dur": 1.27,
      "label": "25%",
      "pad": 22,
      "label_scale": 2.2,
@@ -4072,7 +4023,7 @@
      "badges": [],
      "emphasize": 0,
      "enter": "mount",
-     "mount_s": 0.84,
+     "mount_s": 0.8,
      "exit": "cut"
     },
     "ken_burns": {
@@ -4084,15 +4035,15 @@
    },
    "exit": "cut",
    "span": [
-    18.3,
-    31.28
+    16.43,
+    28.43
    ],
    "docks": [
     {
      "slide": "dock-c-two-lanes",
      "slot": 0,
-     "enter": 26.5,
-     "exit": 31.28,
+     "enter": 24.13,
+     "exit": 28.43,
      "badge_at": [],
      "place": {
       "x": 346,
@@ -4108,7 +4059,7 @@
    "species": [
     {
      "kind": "retitle",
-     "at": 28.7,
+     "at": 26.21,
      "dur": 2.4,
      "text": "The right lane: Detroit's parts bill"
     }
@@ -4128,15 +4079,15 @@
    },
    "exit": "dip",
    "span": [
-    31.28,
-    36.93
+    28.43,
+    33.26
    ],
    "docks": [
     {
      "slide": "dock-g-receipt",
      "slot": 0,
-     "enter": 35.93,
-     "exit": 36.93,
+     "enter": 32.26,
+     "exit": 33.26,
      "badge_at": [],
      "arrive": "throw",
      "mass": "paper"
@@ -4175,13 +4126,7 @@
       "crimson"
      ],
      "axes": {
-      "hlines": [
-       {
-        "y": 4500,
-        "label": "Toyota's bill",
-        "color": "cobalt"
-       }
-      ]
+      "hlines": []
      },
      "unit": "$",
      "judge": [],
@@ -4208,20 +4153,20 @@
    },
    "exit": "cut",
    "span": [
-    36.93,
-    47.78
+    33.26,
+    42.85
    ],
    "docks": [],
    "species": [
     {
      "kind": "spotlight",
-     "at": 44.53,
-     "dur": 3.25,
+     "at": 40.81,
+     "dur": 2.04,
      "target": {
       "kind": "datum",
       "index": 1
      },
-     "until": 47.94,
+     "until": 42.94,
      "held": true
     }
    ]
@@ -4240,8 +4185,8 @@
    },
    "exit": "dip",
    "span": [
-    47.78,
-    49.99
+    42.85,
+    44.88
    ],
    "docks": [],
    "species": []
@@ -4297,7 +4242,7 @@
      ],
      "emphasize": 2,
      "enter": "mount",
-     "mount_s": 0.81,
+     "mount_s": 0.8,
      "exit": "cut"
     },
     "ken_burns": {
@@ -4309,39 +4254,50 @@
    },
    "exit": "cut",
    "span": [
-    49.99,
-    63.56
+    44.88,
+    56.7
    ],
    "docks": [
     {
-     "slide": "dock-f-toll-gate-to-fab",
+     "slide": "dock-h-pledge",
      "slot": 0,
-     "enter": 60.28,
-     "exit": 63.56,
+     "enter": 53.6,
+     "exit": 56.7,
      "badge_at": [],
-     "kind": "video",
      "place": {
-      "x": 501,
-      "y": 296,
-      "w": 363,
-      "h": 228
+      "x": 76,
+      "y": 428,
+      "w": 800,
+      "h": 688
      },
      "read_s": 1.2,
      "park_s": 0.7,
-     "park": true
+     "park": true,
+     "centre": true
     }
    ],
    "species": [
     {
      "kind": "spotlight",
-     "at": 57.55,
-     "dur": 2.73,
+     "at": 52.43,
+     "dur": 1.17,
      "target": {
       "kind": "datum",
       "index": 2
      },
-     "until": 63.68,
+     "until": 56.81,
      "held": true
+    },
+    {
+     "kind": "callout",
+     "at": 55.47,
+     "dur": 1.23,
+     "pad": 22,
+     "target": {
+      "kind": "point",
+      "x": 0.5481,
+      "y": 0.3939
+     }
     }
    ]
   },
@@ -4359,8 +4315,8 @@
    },
    "exit": "dip",
    "span": [
-    63.56,
-    68.99
+    56.7,
+    61.82
    ],
    "docks": [],
    "species": []
@@ -4379,8 +4335,8 @@
    },
    "exit": "dip",
    "span": [
-    68.99,
-    72.74
+    61.82,
+    65.11
    ],
    "docks": [],
    "species": []
@@ -4634,7 +4590,7 @@
      "badges": [],
      "emphasize": 0,
      "enter": "mount",
-     "mount_s": 0.86,
+     "mount_s": 0.8,
      "exit": "cut"
     },
     "ken_burns": {
@@ -4646,15 +4602,15 @@
    },
    "exit": "cut",
    "span": [
-    72.74,
-    83.16
+    65.11,
+    74.6
    ],
    "docks": [
     {
      "slide": "dock-a-podium",
      "slot": 0,
-     "enter": 74.88,
-     "exit": 76.52,
+     "enter": 67.08,
+     "exit": 68.62,
      "badge_at": [],
      "place": {
       "x": 505,
@@ -4669,8 +4625,8 @@
     {
      "slide": "dock-e-vault",
      "slot": 0,
-     "enter": 76.52,
-     "exit": 79.02,
+     "enter": 68.62,
+     "exit": 70.7,
      "badge_at": [],
      "place": {
       "x": 505,
@@ -4686,7 +4642,7 @@
    "species": [
     {
      "kind": "build_to",
-     "at": 77.3,
+     "at": 69.61,
      "dur": 3.0,
      "target": {
       "kind": "datum",
@@ -4694,8 +4650,18 @@
      }
     },
     {
+     "kind": "spotlight",
+     "at": 72.66,
+     "dur": 1.94,
+     "target": {
+      "kind": "datum",
+      "index": 43
+     },
+     "held": true
+    },
+    {
      "kind": "figure",
-     "at": 81.1,
+     "at": 72.66,
      "dur": 1.4,
      "target": {
       "kind": "datum",
@@ -4722,14 +4688,14 @@
    },
    "exit": "dip",
    "span": [
-    83.16,
-    89.36
+    74.6,
+    80.8
    ],
    "docks": [],
    "species": [
     {
      "kind": "life",
-     "at": 83.156,
+     "at": 74.597,
      "dur": 6.2
     }
    ]

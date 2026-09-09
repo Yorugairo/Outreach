@@ -416,17 +416,17 @@ _none._
 
 ### DELTA — nothing like it in the target — THIS IS THE LIFT LIST
 
-- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:1` — Audio Fix Runbook — `current-bubble-mechanism` mispronunciation — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:433` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.12 / b 0.00 — 1 rule
+- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:1` — Audio Fix Runbook — `current-bubble-mechanism` mispronunciation — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:438` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.12 / b 0.00 — 1 rule
     - `:3` STATUS: DEPRECATED. Kept for the reasoning trail; superseded by 37 §8, Recording Standards v2 (master-take rule; splice-repair banned). Do not follow this docum
 - `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:9` — The defect, located exactly — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:268` The MASTER TAKE rule — h 0.00 / j 0.05 / b 0.00 — 0 rules
-- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:31` — Source artifacts — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:433` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.06 / b 0.00 — 0 rules
-- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:43` — Blocker: there is no narration audio on disk — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:433` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.15 / b 0.17 — 5 rules
+- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:31` — Source artifacts — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:438` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.06 / b 0.00 — 0 rules
+- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:43` — Blocker: there is no narration audio on disk — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:438` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.15 / b 0.17 — 5 rules
     - `:45` Searched the whole pilot directory — no `.mp3`, `.wav` or `.m4a` exists. Only
     - `:63` Get the stem. In order of preference:
     - `:65` 1. ElevenLabs history — `GET /v1/history/{history_item_id}/audio` returns the
     - `:67` 2. Re-synthesise take `scene_9002` only (249.3s) — avoids splicing entirely.
     - `:68` 3. Locate the stem wherever it actually lives; it is not in this worktree.
-- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:70` — Structural notes — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:433` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.09 / b 0.00 — 4 rules
+- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:70` — Structural notes — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:438` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.09 / b 0.00 — 4 rules
     - `:72` - The 99 "blocks" in `canonical-audio.v1.json` are a derived 10-second timing
     - `:75` - Block `word_timings` overlap — 99 blocks sum to 4,889 entries against a
     - `:76` 2,445-word master. Always read the master `words_path`; never reassemble from
@@ -448,7 +448,7 @@ _none._
     - `:124` 5. Patch and re-time. T18 is specified but not built — see the plan. Until
     - `:126` 6. Re-time coverage automatically:
     - `:132` 7. Re-mix, then re-render.
-- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:134` — What re-timing already guarantees — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:433` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.10 / b 0.00 — 2 rules
+- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:134` — What re-timing already guarantees — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:438` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.10 / b 0.00 — 2 rules
     - `:138` silently re-timed. A re-record with identical text reconciles cleanly — only the
     - `:142` came back at 980.806s — 67s and 6.8% out. That gap is why render never runs off
 - `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:145` — Related — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 3 rules

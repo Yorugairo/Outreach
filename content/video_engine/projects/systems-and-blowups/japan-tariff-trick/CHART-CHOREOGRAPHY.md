@@ -79,7 +79,7 @@ A `cut` row is a one-frame cut in the player since today. E50 carries the amendm
    set: the highlight split does the argument by itself.
 2. **Parts cascade** — *"25% at every crossing."* Duty per component, three of six
    crossings named. Costs, so the bars are crimson.
-3. **Receipt** — *"Detroit pays more to build it at home."* Toyota's bill muted as
+3. **Receipt** — *"Detroit pays more to build it at home."* Toyota's bill [REMOVED 2026-09-09, E53 addendum: Toyota is the bar] muted as
    the baseline, Detroit's crimson, and a comparator rule at $4,500 so the $1,740
    gap is drawn rather than subtracted (E53 §6).
 4. **Selling** — *"Four months, −$122.6B."* The monthly change, May emphasised.

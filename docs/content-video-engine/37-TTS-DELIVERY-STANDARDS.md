@@ -395,6 +395,11 @@ take, enforced by tooling:
 2. Only then does `insert_edit_pauses.py` add the owed pauses - it now
    REFUSES to run on an uncompressed timeline.
 
+**A short's single take (2026-09-09):** `retime_take.py <take.mp3> --gaps [--tempo 1.06]` applies the same caps to a
+scene take + its words file (the cuts sit inside silences; the words shift exactly; a tempo change scales them by 1/r,
+so the words stay the clock without a second Whisper pass). The tariff short's Chirp take: 15 gaps over the caps,
+4.08 s removed (178.9 → 188.2 WPM); with the operator's 6% on top, 74.70 s and 199.5 WPM (E55).
+
 Deliberate silence is authored; everything else above the caps is dead
 air. Script G's raw take measured ~16s of it.
 

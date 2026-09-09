@@ -14,8 +14,8 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 14 | 272 | 95.2% | 91.9% | 3 | 97.5 |
-| Process (everything else) | 270 | 3093 | 97.5% | 91.6% | 11 | 100.0 |
-| All docs | 284 | 3365 | 97.4% | 91.6% | 14 | 100.0 |
+| Process (everything else) | 270 | 3095 | 97.5% | 91.6% | 11 | 100.0 |
+| All docs | 284 | 3367 | 97.4% | 91.7% | 14 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -76,7 +76,7 @@ Non-exempt sections whose first real line is under 40 characters (89).
 - `docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:49` Audio identity and rights boundary
 - `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:135` 5. Episode 1 commands
 - `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:267` Part 8 — The scene-evidence lane (default production pattern)
-- `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:433` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30)
+- `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:438` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30)
 - `docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:196` 5. Worked instance
 - `docs/content-video-engine/53-THE-STICKMAN-LANE.md:183` 53.4 What this corrects in my own claims
 - `docs/content-video-engine/P13-GATE-A-ARMBAR-REVIEW.md:38` Locked Defaults

@@ -1753,3 +1753,33 @@ and keeping the same voice."*
 - The single-variable retention test (first watch, this morning) is retired by this: the variable under test is now the
   engine's work, on the voice real people already answered for.
 
+### E53 addendum — a value already on the chart is never a reference line (2026-09-09)
+
+The receipt page carried `hlines: [{y: 4500, label: "Toyota's bill"}]` — Toyota's $4,500 is the left BAR. The dashed line
+ran across the Detroit bar and its label sat beside it: the operator, on the render: *"there's a label on the dashed line
+for Toyota's bill, which reads like a mis-label of Detroit. There doesn't need to be a dashed line of Toyota's bill,
+because Toyota is already represented on the bar."* Rule 5 already said what a reference rule is — a number an
+institution SETS. A series value drawn again as a line is the instance that rule forbids; the line is gone.
+
+## E55 — A dock that cannot show its subject is useless; a short's take is killed of dead space, then paced by ear (2026-09-09)
+
+**The dock.** Tokyo's toll-gate clip sat on the Japan-selling page under "pledging ten trillion yen to build domestic
+semiconductors". The operator: *"that evidence dock originally shows walking past the gate to the manufacturing plant. It
+was already weak because it was supposed to be a toll gate, without the manufacturing plant it's just useless."* A dock
+is a picture of the sentence's SUBJECT (E25: proof, not decoration); a borrowed asset that shows the road and not the
+plant is cut, not kept. The operator generated the subject by hand in Flow — Mike at the wafer chamber in a fab, the E39
+atom — and offered the package thumbnails as alternates ("we could use this instead"); the fab plate ships as the dock
+(`dock-h-pledge`), CENTRED over the proved plot in a box authored from the page's measured ink (under the subtitle,
+over the source line whole, clear of the badge), with the ring on the wafer at "semiconductors". The package thumbnails
+are kept on disk (`sig-j-vault-to-chips`, `sig-k-scale-how-japan-won`): their taller panels do not fit that page.
+
+**The pace.** Measured before anything was proposed: the approved Chirp take runs 178.9 WPM over its span (E34's ~180),
+247 words in 82.84 s, with 26 gaps over 0.30 s totalling 16.8 s. Doc 37 §14's standing order (kill the dead space) had
+never run on a short's take: 13 sentence settles of 0.66–0.96 s and two mid-sentence holes → 4.08 s removed. The
+operator's instinct — *"speeding the voice up by ~6% and re-timing"* — is `atempo 1.06` on the compressed take
+(`retime_take.py`; the words scale exactly, no second Whisper pass): 74.70 s, 199.5 WPM, runtime 80.8 s from 89.4,
+gates 0 FAIL / 0 WARN. Three candidates exist (tight 79.2 s / x106 78.6 s / fast 74.7 s); the operator picks BY EAR on
+the player — a pace is never chosen from the number alone. The Whisper gate's numeral normalization ("a hundred and
+twenty-two billion dollars" → "$122 billion") fails BOTH the original and the re-timed take identically (12.7% vs 14.3%
+WER, the same one "deletion"): a tool defect, backlog, not a take defect.
+

@@ -2,1488 +2,1488 @@
  "episode": "japan-tariff-trick",
  "script": "SCRIPT-SHORT-VO.txt",
  "take": "vo-short",
- "runtime_s": 89.356,
+ "runtime_s": 80.797,
  "words": [
   {
    "w": "Trump",
    "start": 0.0,
-   "end": 0.44,
+   "end": 0.415,
    "part": 1
   },
   {
    "w": "announced",
-   "start": 0.44,
-   "end": 0.82,
+   "start": 0.415,
+   "end": 0.774,
    "part": 1
   },
   {
    "w": "he",
-   "start": 0.82,
-   "end": 1.04,
+   "start": 0.774,
+   "end": 0.981,
    "part": 1
   },
   {
    "w": "beat",
-   "start": 1.04,
-   "end": 1.18,
+   "start": 0.981,
+   "end": 1.113,
    "part": 1
   },
   {
    "w": "Japan",
-   "start": 1.18,
-   "end": 1.52,
+   "start": 1.113,
+   "end": 1.434,
    "part": 1
   },
   {
    "w": "on",
-   "start": 1.52,
-   "end": 1.82,
+   "start": 1.434,
+   "end": 1.717,
    "part": 1
   },
   {
    "w": "tariffs.",
-   "start": 1.82,
-   "end": 2.22,
+   "start": 1.717,
+   "end": 2.094,
    "part": 1
   },
   {
    "w": "Instead,",
-   "start": 3.14,
-   "end": 3.14,
+   "start": 2.566,
+   "end": 2.566,
    "part": 1
   },
   {
    "w": "that",
-   "start": 3.58,
-   "end": 3.66,
+   "start": 2.849,
+   "end": 2.925,
    "part": 1
   },
   {
    "w": "tariff",
-   "start": 3.66,
-   "end": 3.94,
+   "start": 2.925,
+   "end": 3.189,
    "part": 1
   },
   {
    "w": "funded",
-   "start": 3.94,
-   "end": 4.22,
+   "start": 3.189,
+   "end": 3.453,
    "part": 1
   },
   {
    "w": "Japan's",
-   "start": 4.22,
-   "end": 4.72,
+   "start": 3.453,
+   "end": 3.925,
    "part": 1
   },
   {
    "w": "chip",
-   "start": 4.72,
-   "end": 4.86,
+   "start": 3.925,
+   "end": 4.057,
    "part": 1
   },
   {
    "w": "empire,",
-   "start": 4.86,
-   "end": 5.26,
+   "start": 4.057,
+   "end": 4.434,
    "part": 1
   },
   {
    "w": "and",
-   "start": 5.26,
-   "end": 5.78,
+   "start": 4.434,
+   "end": 4.925,
    "part": 1
   },
   {
    "w": "cost",
-   "start": 5.78,
-   "end": 6.0,
+   "start": 4.925,
+   "end": 5.132,
    "part": 1
   },
   {
    "w": "America",
-   "start": 6.0,
-   "end": 6.36,
+   "start": 5.132,
+   "end": 5.472,
    "part": 1
   },
   {
    "w": "a",
-   "start": 6.36,
-   "end": 6.401,
+   "start": 5.472,
+   "end": 5.51,
    "part": 1
   },
   {
    "w": "hundred",
-   "start": 6.401,
-   "end": 6.688,
+   "start": 5.51,
+   "end": 5.781,
    "part": 1
   },
   {
    "w": "and",
-   "start": 6.688,
-   "end": 6.811,
+   "start": 5.781,
+   "end": 5.897,
    "part": 1
   },
   {
    "w": "twenty-two",
-   "start": 6.811,
-   "end": 7.18,
+   "start": 5.897,
+   "end": 6.245,
    "part": 1
   },
   {
    "w": "billion",
-   "start": 7.18,
-   "end": 7.8,
+   "start": 6.245,
+   "end": 6.83,
    "part": 1
   },
   {
    "w": "dollars.",
-   "start": 7.8,
-   "end": 8.88,
+   "start": 6.83,
+   "end": 7.849,
    "part": 1
   },
   {
    "w": "Auto",
-   "start": 8.88,
-   "end": 9.34,
+   "start": 7.849,
+   "end": 8.283,
    "part": 1
   },
   {
    "w": "parts",
-   "start": 9.34,
-   "end": 9.56,
+   "start": 8.283,
+   "end": 8.491,
    "part": 1
   },
   {
    "w": "taxes",
-   "start": 9.56,
-   "end": 9.98,
+   "start": 8.491,
+   "end": 8.887,
    "part": 1
   },
   {
    "w": "compounded",
-   "start": 9.98,
-   "end": 10.4,
+   "start": 8.887,
+   "end": 9.283,
    "part": 1
   },
   {
    "w": "against",
-   "start": 10.4,
-   "end": 10.92,
+   "start": 9.283,
+   "end": 9.774,
    "part": 1
   },
   {
    "w": "Detroit.",
-   "start": 10.92,
-   "end": 11.32,
+   "start": 9.774,
+   "end": 10.151,
    "part": 1
   },
   {
    "w": "But",
-   "start": 11.9,
-   "end": 11.98,
+   "start": 10.698,
+   "end": 10.774,
    "part": 1
   },
   {
    "w": "look",
-   "start": 11.98,
-   "end": 12.14,
+   "start": 10.774,
+   "end": 10.925,
    "part": 1
   },
   {
    "w": "at",
-   "start": 12.14,
-   "end": 12.26,
+   "start": 10.925,
+   "end": 11.038,
    "part": 1
   },
   {
    "w": "what",
-   "start": 12.26,
-   "end": 12.4,
+   "start": 11.038,
+   "end": 11.17,
    "part": 1
   },
   {
    "w": "nobody",
-   "start": 12.4,
-   "end": 12.66,
+   "start": 11.17,
+   "end": 11.415,
    "part": 1
   },
   {
    "w": "explained.",
-   "start": 12.66,
-   "end": 13.2,
+   "start": 11.415,
+   "end": 11.925,
    "part": 1
   },
   {
    "w": "When",
-   "start": 13.86,
-   "end": 13.96,
+   "start": 12.396,
+   "end": 12.491,
    "part": 1
   },
   {
    "w": "you",
-   "start": 13.96,
-   "end": 14.12,
+   "start": 12.491,
+   "end": 12.642,
    "part": 1
   },
   {
    "w": "buy",
-   "start": 14.12,
-   "end": 14.38,
+   "start": 12.642,
+   "end": 12.887,
    "part": 1
   },
   {
    "w": "an",
-   "start": 14.38,
-   "end": 14.6,
+   "start": 12.887,
+   "end": 13.094,
    "part": 1
   },
   {
    "w": "American",
-   "start": 14.6,
-   "end": 14.94,
+   "start": 13.094,
+   "end": 13.415,
    "part": 1
   },
   {
    "w": "truck,",
-   "start": 14.94,
-   "end": 15.28,
+   "start": 13.415,
+   "end": 13.736,
    "part": 1
   },
   {
    "w": "its",
-   "start": 15.62,
-   "end": 15.72,
+   "start": 14.057,
+   "end": 14.151,
    "part": 1
   },
   {
    "w": "parts",
-   "start": 15.72,
-   "end": 16.02,
+   "start": 14.151,
+   "end": 14.434,
    "part": 1
   },
   {
    "w": "cross",
-   "start": 16.02,
-   "end": 16.36,
+   "start": 14.434,
+   "end": 14.755,
    "part": 1
   },
   {
    "w": "the",
-   "start": 16.36,
-   "end": 16.56,
+   "start": 14.755,
+   "end": 14.943,
    "part": 1
   },
   {
    "w": "border",
-   "start": 16.56,
-   "end": 16.74,
+   "start": 14.943,
+   "end": 15.113,
    "part": 1
   },
   {
    "w": "six",
-   "start": 16.74,
-   "end": 17.06,
+   "start": 15.113,
+   "end": 15.415,
    "part": 1
   },
   {
    "w": "separate",
-   "start": 17.06,
-   "end": 17.36,
+   "start": 15.415,
+   "end": 15.698,
    "part": 1
   },
   {
    "w": "times.",
-   "start": 17.36,
-   "end": 17.74,
+   "start": 15.698,
+   "end": 16.057,
    "part": 1
   },
   {
    "w": "An",
-   "start": 18.44,
-   "end": 18.62,
+   "start": 16.528,
+   "end": 16.698,
    "part": 1
   },
   {
    "w": "engine",
-   "start": 18.62,
-   "end": 18.88,
+   "start": 16.698,
+   "end": 16.943,
    "part": 1
   },
   {
    "w": "block",
-   "start": 18.88,
-   "end": 19.08,
+   "start": 16.943,
+   "end": 17.132,
    "part": 1
   },
   {
    "w": "from",
-   "start": 19.08,
-   "end": 19.26,
+   "start": 17.132,
+   "end": 17.302,
    "part": 1
   },
   {
    "w": "Ontario",
-   "start": 19.26,
-   "end": 19.74,
+   "start": 17.302,
+   "end": 17.755,
    "part": 1
   },
   {
    "w": "carries",
-   "start": 19.74,
-   "end": 20.1,
+   "start": 17.755,
+   "end": 18.094,
    "part": 1
   },
   {
    "w": "a",
-   "start": 20.1,
-   "end": 20.28,
+   "start": 18.094,
+   "end": 18.264,
    "part": 1
   },
   {
    "w": "twenty-five",
-   "start": 20.28,
-   "end": 20.739,
+   "start": 18.264,
+   "end": 18.697,
    "part": 1
   },
   {
    "w": "percent",
-   "start": 20.739,
-   "end": 21.06,
+   "start": 18.697,
+   "end": 19.0,
    "part": 1
   },
   {
    "w": "border",
-   "start": 21.06,
-   "end": 21.34,
+   "start": 19.0,
+   "end": 19.264,
    "part": 1
   },
   {
    "w": "tariff",
-   "start": 21.34,
-   "end": 21.7,
+   "start": 19.264,
+   "end": 19.604,
    "part": 1
   },
   {
    "w": "on",
-   "start": 21.7,
-   "end": 21.94,
+   "start": 19.604,
+   "end": 19.83,
    "part": 1
   },
   {
    "w": "raw",
-   "start": 21.94,
-   "end": 22.12,
+   "start": 19.83,
+   "end": 20.0,
    "part": 1
   },
   {
    "w": "parts.",
-   "start": 22.12,
-   "end": 22.48,
+   "start": 20.0,
+   "end": 20.34,
    "part": 1
   },
   {
    "w": "A",
-   "start": 22.98,
-   "end": 23.14,
+   "start": 20.811,
+   "end": 20.962,
    "part": 1
   },
   {
    "w": "wiring",
-   "start": 23.14,
-   "end": 23.44,
+   "start": 20.962,
+   "end": 21.245,
    "part": 1
   },
   {
    "w": "harness",
-   "start": 23.44,
-   "end": 23.72,
+   "start": 21.245,
+   "end": 21.509,
    "part": 1
   },
   {
    "w": "from",
-   "start": 23.72,
-   "end": 23.92,
+   "start": 21.509,
+   "end": 21.698,
    "part": 1
   },
   {
    "w": "Mexico",
-   "start": 23.92,
-   "end": 24.24,
+   "start": 21.698,
+   "end": 22.0,
    "part": 1
   },
   {
    "w": "gets",
-   "start": 24.24,
-   "end": 24.5,
+   "start": 22.0,
+   "end": 22.245,
    "part": 1
   },
   {
    "w": "hit",
-   "start": 24.5,
-   "end": 24.68,
+   "start": 22.245,
+   "end": 22.415,
    "part": 1
   },
   {
    "w": "with",
-   "start": 24.68,
-   "end": 24.82,
+   "start": 22.415,
+   "end": 22.547,
    "part": 1
   },
   {
    "w": "the",
-   "start": 24.82,
-   "end": 24.94,
+   "start": 22.547,
+   "end": 22.66,
    "part": 1
   },
   {
    "w": "exact",
-   "start": 24.94,
-   "end": 25.18,
+   "start": 22.66,
+   "end": 22.887,
    "part": 1
   },
   {
    "w": "same",
-   "start": 25.18,
-   "end": 25.44,
+   "start": 22.887,
+   "end": 23.132,
    "part": 1
   },
   {
    "w": "twenty-five",
-   "start": 25.44,
-   "end": 26.064,
+   "start": 23.132,
+   "end": 23.721,
    "part": 1
   },
   {
    "w": "percent.",
-   "start": 26.064,
-   "end": 26.5,
+   "start": 23.721,
+   "end": 24.132,
    "part": 1
   },
   {
    "w": "In",
-   "start": 26.5,
-   "end": 27.34,
+   "start": 24.132,
+   "end": 24.925,
    "part": 1
   },
   {
    "w": "the",
-   "start": 27.34,
-   "end": 27.44,
+   "start": 24.925,
+   "end": 25.019,
    "part": 1
   },
   {
    "w": "left",
-   "start": 27.44,
-   "end": 27.6,
+   "start": 25.019,
+   "end": 25.17,
    "part": 1
   },
   {
    "w": "lane,",
-   "start": 27.6,
-   "end": 27.92,
+   "start": 25.17,
+   "end": 25.472,
    "part": 1
   },
   {
    "w": "a",
-   "start": 28.18,
-   "end": 28.18,
+   "start": 25.717,
+   "end": 25.717,
    "part": 1
   },
   {
    "w": "taxed",
-   "start": 28.18,
-   "end": 28.36,
+   "start": 25.717,
+   "end": 25.887,
    "part": 1
   },
   {
    "w": "Toyota.",
-   "start": 28.36,
-   "end": 28.7,
+   "start": 25.887,
+   "end": 26.208,
    "part": 1
   },
   {
    "w": "In",
-   "start": 28.7,
-   "end": 29.28,
+   "start": 26.208,
+   "end": 26.755,
    "part": 1
   },
   {
    "w": "the",
-   "start": 29.28,
-   "end": 29.38,
+   "start": 26.755,
+   "end": 26.849,
    "part": 1
   },
   {
    "w": "right,",
-   "start": 29.38,
-   "end": 29.58,
+   "start": 26.849,
+   "end": 27.038,
    "part": 1
   },
   {
    "w": "a",
-   "start": 29.86,
-   "end": 29.94,
+   "start": 27.302,
+   "end": 27.377,
    "part": 1
   },
   {
    "w": "bankrupt",
-   "start": 29.94,
-   "end": 30.26,
+   "start": 27.377,
+   "end": 27.679,
    "part": 1
   },
   {
    "w": "Detroit.",
-   "start": 30.26,
-   "end": 30.66,
+   "start": 27.679,
+   "end": 28.057,
    "part": 1
   },
   {
    "w": "Toyota",
-   "start": 31.44,
-   "end": 31.8,
+   "start": 28.528,
+   "end": 28.868,
    "part": 1
   },
   {
    "w": "crosses",
-   "start": 31.8,
-   "end": 32.12,
+   "start": 28.868,
+   "end": 29.17,
    "part": 1
   },
   {
    "w": "once.",
-   "start": 32.12,
-   "end": 32.5,
+   "start": 29.17,
+   "end": 29.528,
    "part": 1
   },
   {
    "w": "Tokyo",
-   "start": 33.26,
-   "end": 33.58,
+   "start": 30.0,
+   "end": 30.302,
    "part": 1
   },
   {
    "w": "pays",
-   "start": 33.58,
-   "end": 33.82,
+   "start": 30.302,
+   "end": 30.528,
    "part": 1
   },
   {
    "w": "a",
-   "start": 33.82,
-   "end": 33.96,
+   "start": 30.528,
+   "end": 30.66,
    "part": 1
   },
   {
    "w": "flat",
-   "start": 33.96,
-   "end": 34.16,
+   "start": 30.66,
+   "end": 30.849,
    "part": 1
   },
   {
    "w": "fifteen",
-   "start": 34.16,
-   "end": 34.49,
+   "start": 30.849,
+   "end": 31.16,
    "part": 1
   },
   {
    "w": "percent",
-   "start": 34.49,
-   "end": 34.82,
+   "start": 31.16,
+   "end": 31.472,
    "part": 1
   },
   {
    "w": "on",
-   "start": 34.82,
-   "end": 35.02,
+   "start": 31.472,
+   "end": 31.66,
    "part": 1
   },
   {
    "w": "the",
-   "start": 35.02,
-   "end": 35.12,
+   "start": 31.66,
+   "end": 31.755,
    "part": 1
   },
   {
    "w": "sticker,",
-   "start": 35.12,
-   "end": 35.36,
+   "start": 31.755,
+   "end": 31.981,
    "part": 1
   },
   {
    "w": "not",
-   "start": 35.58,
-   "end": 35.74,
+   "start": 32.189,
+   "end": 32.34,
    "part": 1
   },
   {
    "w": "a",
-   "start": 35.74,
-   "end": 35.88,
+   "start": 32.34,
+   "end": 32.472,
    "part": 1
   },
   {
    "w": "penny",
-   "start": 35.88,
-   "end": 35.98,
+   "start": 32.472,
+   "end": 32.566,
    "part": 1
   },
   {
    "w": "more.",
-   "start": 35.98,
-   "end": 36.32,
+   "start": 32.566,
+   "end": 32.887,
    "part": 1
   },
   {
    "w": "But",
-   "start": 37.08,
-   "end": 37.16,
+   "start": 33.358,
+   "end": 33.434,
    "part": 1
   },
   {
    "w": "here's",
-   "start": 37.16,
-   "end": 37.4,
+   "start": 33.434,
+   "end": 33.66,
    "part": 1
   },
   {
    "w": "where",
-   "start": 37.4,
-   "end": 37.5,
+   "start": 33.66,
+   "end": 33.755,
    "part": 1
   },
   {
    "w": "the",
-   "start": 37.5,
-   "end": 37.6,
+   "start": 33.755,
+   "end": 33.849,
    "part": 1
   },
   {
    "w": "math",
-   "start": 37.6,
-   "end": 37.8,
+   "start": 33.849,
+   "end": 34.038,
    "part": 1
   },
   {
    "w": "breaks",
-   "start": 37.8,
-   "end": 38.06,
+   "start": 34.038,
+   "end": 34.283,
    "part": 1
   },
   {
    "w": "Detroit.",
-   "start": 38.06,
-   "end": 38.4,
+   "start": 34.283,
+   "end": 34.604,
    "part": 1
   },
   {
    "w": "On",
-   "start": 39.16,
-   "end": 39.26,
+   "start": 35.075,
+   "end": 35.17,
    "part": 1
   },
   {
    "w": "a",
-   "start": 39.26,
-   "end": 39.36,
+   "start": 35.17,
+   "end": 35.264,
    "part": 1
   },
   {
    "w": "thirty",
-   "start": 39.36,
-   "end": 39.546,
+   "start": 35.264,
+   "end": 35.44,
    "part": 1
   },
   {
    "w": "thousand",
-   "start": 39.546,
-   "end": 39.794,
+   "start": 35.44,
+   "end": 35.674,
    "part": 1
   },
   {
    "w": "dollar",
-   "start": 39.794,
-   "end": 39.98,
+   "start": 35.674,
+   "end": 35.849,
    "part": 1
   },
   {
    "w": "car,",
-   "start": 39.98,
-   "end": 40.38,
+   "start": 35.849,
+   "end": 36.226,
    "part": 1
   },
   {
    "w": "Tokyo",
-   "start": 40.56,
-   "end": 40.78,
+   "start": 36.396,
+   "end": 36.604,
    "part": 1
   },
   {
    "w": "pays",
-   "start": 40.78,
-   "end": 41.08,
+   "start": 36.604,
+   "end": 36.887,
    "part": 1
   },
   {
    "w": "forty-five",
-   "start": 41.08,
-   "end": 41.362,
+   "start": 36.887,
+   "end": 37.153,
    "part": 1
   },
   {
    "w": "hundred",
-   "start": 41.362,
-   "end": 41.581,
+   "start": 37.153,
+   "end": 37.359,
    "part": 1
   },
   {
    "w": "dollars",
-   "start": 41.581,
-   "end": 41.8,
+   "start": 37.359,
+   "end": 37.566,
    "part": 1
   },
   {
    "w": "in",
-   "start": 41.8,
-   "end": 42.38,
+   "start": 37.566,
+   "end": 38.113,
    "part": 1
   },
   {
    "w": "tariffs.",
-   "start": 42.38,
-   "end": 42.66,
+   "start": 38.113,
+   "end": 38.377,
    "part": 1
   },
   {
    "w": "Detroit",
-   "start": 43.32,
-   "end": 43.52,
+   "start": 38.849,
+   "end": 39.038,
    "part": 1
   },
   {
    "w": "pays",
-   "start": 43.52,
-   "end": 43.78,
+   "start": 39.038,
+   "end": 39.283,
    "part": 1
   },
   {
    "w": "over",
-   "start": 43.78,
-   "end": 43.98,
+   "start": 39.283,
+   "end": 39.472,
    "part": 1
   },
   {
    "w": "six",
-   "start": 43.98,
-   "end": 44.08,
+   "start": 39.472,
+   "end": 39.566,
    "part": 1
   },
   {
    "w": "thousand",
-   "start": 44.08,
-   "end": 44.347,
+   "start": 39.566,
+   "end": 39.818,
    "part": 1
   },
   {
    "w": "dollars",
-   "start": 44.347,
-   "end": 44.58,
+   "start": 39.818,
+   "end": 40.038,
    "part": 1
   },
   {
    "w": "in",
-   "start": 44.58,
-   "end": 44.94,
+   "start": 40.038,
+   "end": 40.377,
    "part": 1
   },
   {
    "w": "stacked",
-   "start": 44.94,
-   "end": 45.18,
+   "start": 40.377,
+   "end": 40.604,
    "part": 1
   },
   {
    "w": "border",
-   "start": 45.18,
-   "end": 45.48,
+   "start": 40.604,
+   "end": 40.887,
    "part": 1
   },
   {
    "w": "duties",
-   "start": 45.48,
-   "end": 45.76,
+   "start": 40.887,
+   "end": 41.151,
    "part": 1
   },
   {
    "w": "alone,",
-   "start": 45.76,
-   "end": 46.1,
+   "start": 41.151,
+   "end": 41.472,
    "part": 1
   },
   {
    "w": "right",
-   "start": 46.42,
-   "end": 46.62,
+   "start": 41.774,
+   "end": 41.962,
    "part": 1
   },
   {
    "w": "here",
-   "start": 46.62,
-   "end": 46.8,
+   "start": 41.962,
+   "end": 42.132,
    "part": 1
   },
   {
    "w": "at",
-   "start": 46.8,
-   "end": 46.94,
+   "start": 42.132,
+   "end": 42.264,
    "part": 1
   },
   {
    "w": "home.",
-   "start": 46.94,
-   "end": 47.16,
+   "start": 42.264,
+   "end": 42.472,
    "part": 1
   },
   {
    "w": "And",
-   "start": 47.94,
-   "end": 48.06,
+   "start": 42.943,
+   "end": 43.057,
    "part": 1
   },
   {
    "w": "that's",
-   "start": 48.06,
-   "end": 48.24,
+   "start": 43.057,
+   "end": 43.226,
    "part": 1
   },
   {
    "w": "where",
-   "start": 48.24,
-   "end": 48.36,
+   "start": 43.226,
+   "end": 43.34,
    "part": 1
   },
   {
    "w": "Tokyo",
-   "start": 48.36,
-   "end": 48.7,
+   "start": 43.34,
+   "end": 43.66,
    "part": 1
   },
   {
    "w": "pulled",
-   "start": 48.7,
-   "end": 48.94,
+   "start": 43.66,
+   "end": 43.887,
    "part": 1
   },
   {
    "w": "the",
-   "start": 48.94,
-   "end": 49.12,
+   "start": 43.887,
+   "end": 44.057,
    "part": 1
   },
   {
    "w": "second",
-   "start": 49.12,
-   "end": 49.36,
+   "start": 44.057,
+   "end": 44.283,
    "part": 1
   },
   {
    "w": "lever.",
-   "start": 49.36,
-   "end": 49.54,
+   "start": 44.283,
+   "end": 44.453,
    "part": 1
   },
   {
    "w": "Instead",
-   "start": 50.1,
-   "end": 50.3,
+   "start": 44.981,
+   "end": 45.17,
    "part": 1
   },
   {
    "w": "of",
-   "start": 50.3,
-   "end": 50.48,
+   "start": 45.17,
+   "end": 45.34,
    "part": 1
   },
   {
    "w": "reinvesting",
-   "start": 50.48,
-   "end": 51.02,
+   "start": 45.34,
+   "end": 45.849,
    "part": 1
   },
   {
    "w": "in",
-   "start": 51.02,
-   "end": 51.1,
+   "start": 45.849,
+   "end": 45.925,
    "part": 1
   },
   {
    "w": "America,",
-   "start": 51.1,
-   "end": 51.46,
+   "start": 45.925,
+   "end": 46.264,
    "part": 1
   },
   {
    "w": "Japan",
-   "start": 52.18,
-   "end": 52.2,
+   "start": 46.547,
+   "end": 46.566,
    "part": 1
   },
   {
    "w": "started",
-   "start": 52.2,
-   "end": 52.52,
+   "start": 46.566,
+   "end": 46.868,
    "part": 1
   },
   {
    "w": "dumping",
-   "start": 52.52,
-   "end": 52.84,
+   "start": 46.868,
+   "end": 47.17,
    "part": 1
   },
   {
    "w": "United",
-   "start": 52.84,
-   "end": 53.16,
+   "start": 47.17,
+   "end": 47.472,
    "part": 1
   },
   {
    "w": "States",
-   "start": 53.16,
-   "end": 53.56,
+   "start": 47.472,
+   "end": 47.849,
    "part": 1
   },
   {
    "w": "Treasuries.",
-   "start": 53.56,
-   "end": 53.96,
+   "start": 47.849,
+   "end": 48.226,
    "part": 1
   },
   {
    "w": "They",
-   "start": 54.92,
-   "end": 55.16,
+   "start": 48.698,
+   "end": 48.925,
    "part": 1
   },
   {
    "w": "sold",
-   "start": 55.16,
-   "end": 55.36,
+   "start": 48.925,
+   "end": 49.113,
    "part": 1
   },
   {
    "w": "a",
-   "start": 55.36,
-   "end": 55.392,
+   "start": 49.113,
+   "end": 49.143,
    "part": 1
   },
   {
    "w": "hundred",
-   "start": 55.392,
-   "end": 55.616,
+   "start": 49.143,
+   "end": 49.355,
    "part": 1
   },
   {
    "w": "and",
-   "start": 55.616,
-   "end": 55.712,
+   "start": 49.355,
+   "end": 49.445,
    "part": 1
   },
   {
    "w": "twenty-two",
-   "start": 55.712,
-   "end": 56.0,
+   "start": 49.445,
+   "end": 49.717,
    "part": 1
   },
   {
    "w": "billion",
-   "start": 56.0,
-   "end": 56.48,
+   "start": 49.717,
+   "end": 50.17,
    "part": 1
   },
   {
    "w": "dollars",
-   "start": 56.48,
-   "end": 56.48,
+   "start": 50.17,
+   "end": 50.17,
    "part": 1
   },
   {
    "w": "of",
-   "start": 56.48,
-   "end": 56.98,
+   "start": 50.17,
+   "end": 50.642,
    "part": 1
   },
   {
    "w": "Washington's",
-   "start": 56.98,
-   "end": 57.54,
+   "start": 50.642,
+   "end": 51.17,
    "part": 1
   },
   {
    "w": "debt.",
-   "start": 57.54,
-   "end": 57.68,
+   "start": 51.17,
+   "end": 51.302,
    "part": 1
   },
   {
    "w": "Tokyo",
-   "start": 58.34,
-   "end": 58.82,
+   "start": 51.774,
+   "end": 52.226,
    "part": 1
   },
   {
    "w": "brought",
-   "start": 58.82,
-   "end": 59.14,
+   "start": 52.226,
+   "end": 52.528,
    "part": 1
   },
   {
    "w": "that",
-   "start": 59.14,
-   "end": 59.34,
+   "start": 52.528,
+   "end": 52.717,
    "part": 1
   },
   {
    "w": "money",
-   "start": 59.34,
-   "end": 59.54,
+   "start": 52.717,
+   "end": 52.906,
    "part": 1
   },
   {
    "w": "home,",
-   "start": 59.54,
-   "end": 59.9,
+   "start": 52.906,
+   "end": 53.245,
    "part": 1
   },
   {
    "w": "pledging",
-   "start": 60.28,
-   "end": 60.34,
+   "start": 53.604,
+   "end": 53.66,
    "part": 1
   },
   {
    "w": "ten",
-   "start": 60.34,
-   "end": 60.72,
+   "start": 53.66,
+   "end": 54.019,
    "part": 1
   },
   {
    "w": "trillion",
-   "start": 60.72,
-   "end": 61.08,
+   "start": 54.019,
+   "end": 54.358,
    "part": 1
   },
   {
    "w": "yen",
-   "start": 61.08,
-   "end": 61.36,
+   "start": 54.358,
+   "end": 54.623,
    "part": 1
   },
   {
    "w": "to",
-   "start": 61.36,
-   "end": 61.66,
+   "start": 54.623,
+   "end": 54.906,
    "part": 1
   },
   {
    "w": "build",
-   "start": 61.66,
-   "end": 61.86,
+   "start": 54.906,
+   "end": 55.094,
    "part": 1
   },
   {
    "w": "domestic",
-   "start": 61.86,
-   "end": 62.26,
+   "start": 55.094,
+   "end": 55.472,
    "part": 1
   },
   {
    "w": "semiconductors.",
-   "start": 62.26,
-   "end": 63.1,
+   "start": 55.472,
+   "end": 56.264,
    "part": 1
   },
   {
    "w": "In",
-   "start": 63.68,
-   "end": 63.9,
+   "start": 56.811,
+   "end": 57.019,
    "part": 1
   },
   {
    "w": "finance,",
-   "start": 63.9,
-   "end": 64.28,
+   "start": 57.019,
+   "end": 57.377,
    "part": 1
   },
   {
    "w": "we",
-   "start": 64.4,
-   "end": 64.48,
+   "start": 57.491,
+   "end": 57.566,
    "part": 1
   },
   {
    "w": "call",
-   "start": 64.48,
-   "end": 64.64,
+   "start": 57.566,
+   "end": 57.717,
    "part": 1
   },
   {
    "w": "this",
-   "start": 64.64,
-   "end": 64.88,
+   "start": 57.717,
+   "end": 57.943,
    "part": 1
   },
   {
    "w": "the",
-   "start": 64.88,
-   "end": 65.02,
+   "start": 57.943,
+   "end": 58.075,
    "part": 1
   },
   {
    "w": "double",
-   "start": 65.02,
-   "end": 65.22,
+   "start": 58.075,
+   "end": 58.264,
    "part": 1
   },
   {
    "w": "squeeze:",
-   "start": 65.22,
-   "end": 65.54,
+   "start": 58.264,
+   "end": 58.566,
    "part": 1
   },
   {
    "w": "The",
-   "start": 66.14,
-   "end": 66.26,
+   "start": 59.132,
+   "end": 59.245,
    "part": 1
   },
   {
    "w": "competitor",
-   "start": 66.26,
-   "end": 66.58,
+   "start": 59.245,
+   "end": 59.547,
    "part": 1
   },
   {
    "w": "got",
-   "start": 66.58,
-   "end": 66.94,
+   "start": 59.547,
+   "end": 59.887,
    "part": 1
   },
   {
    "w": "cheaper",
-   "start": 66.94,
-   "end": 67.16,
+   "start": 59.887,
+   "end": 60.094,
    "part": 1
   },
   {
    "w": "parts",
-   "start": 67.16,
-   "end": 67.56,
+   "start": 60.094,
+   "end": 60.472,
    "part": 1
   },
   {
    "w": "and",
-   "start": 67.56,
-   "end": 67.94,
+   "start": 60.472,
+   "end": 60.83,
    "part": 1
   },
   {
    "w": "built",
-   "start": 67.94,
-   "end": 68.14,
+   "start": 60.83,
+   "end": 61.019,
    "part": 1
   },
   {
    "w": "silicon.",
-   "start": 68.14,
-   "end": 68.54,
+   "start": 61.019,
+   "end": 61.396,
    "part": 1
   },
   {
    "w": "And",
-   "start": 69.1,
-   "end": 69.2,
+   "start": 61.925,
+   "end": 62.019,
    "part": 1
   },
   {
    "w": "then",
-   "start": 69.2,
-   "end": 69.32,
+   "start": 62.019,
+   "end": 62.132,
    "part": 1
   },
   {
    "w": "we",
-   "start": 69.32,
-   "end": 69.42,
+   "start": 62.132,
+   "end": 62.226,
    "part": 1
   },
   {
    "w": "wrote",
-   "start": 69.42,
-   "end": 69.56,
+   "start": 62.226,
+   "end": 62.358,
    "part": 1
   },
   {
    "w": "them",
-   "start": 69.56,
-   "end": 69.74,
+   "start": 62.358,
+   "end": 62.528,
    "part": 1
   },
   {
    "w": "a",
-   "start": 69.74,
-   "end": 69.84,
+   "start": 62.528,
+   "end": 62.623,
    "part": 1
   },
   {
    "w": "blank",
-   "start": 69.84,
-   "end": 70.02,
+   "start": 62.623,
+   "end": 62.792,
    "part": 1
   },
   {
    "w": "check",
-   "start": 70.02,
-   "end": 70.26,
+   "start": 62.792,
+   "end": 63.019,
    "part": 1
   },
   {
    "w": "anyway,",
-   "start": 70.26,
-   "end": 70.52,
+   "start": 63.019,
+   "end": 63.264,
    "part": 1
   },
   {
    "w": "to",
-   "start": 70.52,
-   "end": 70.92,
+   "start": 63.264,
+   "end": 63.642,
    "part": 1
   },
   {
    "w": "bribe",
-   "start": 70.92,
-   "end": 71.14,
+   "start": 63.642,
+   "end": 63.849,
    "part": 1
   },
   {
    "w": "them",
-   "start": 71.14,
-   "end": 71.32,
+   "start": 63.849,
+   "end": 64.019,
    "part": 1
   },
   {
    "w": "to",
-   "start": 71.32,
-   "end": 71.44,
+   "start": 64.019,
+   "end": 64.132,
    "part": 1
   },
   {
    "w": "keep",
-   "start": 71.44,
-   "end": 71.58,
+   "start": 64.132,
+   "end": 64.264,
    "part": 1
   },
   {
    "w": "buying",
-   "start": 71.58,
-   "end": 71.82,
+   "start": 64.264,
+   "end": 64.491,
    "part": 1
   },
   {
    "w": "bonds.",
-   "start": 71.82,
-   "end": 72.08,
+   "start": 64.491,
+   "end": 64.736,
    "part": 1
   },
   {
    "w": "And",
-   "start": 72.9,
-   "end": 73.0,
+   "start": 65.208,
+   "end": 65.302,
    "part": 1
   },
   {
    "w": "this",
-   "start": 73.0,
-   "end": 73.1,
+   "start": 65.302,
+   "end": 65.396,
    "part": 1
   },
   {
    "w": "is",
-   "start": 73.1,
-   "end": 73.2,
+   "start": 65.396,
+   "end": 65.491,
    "part": 1
   },
   {
    "w": "where",
-   "start": 73.2,
-   "end": 73.34,
+   "start": 65.491,
+   "end": 65.623,
    "part": 1
   },
   {
    "w": "the",
-   "start": 73.34,
-   "end": 73.46,
+   "start": 65.623,
+   "end": 65.736,
    "part": 1
   },
   {
    "w": "policy",
-   "start": 73.46,
-   "end": 73.78,
+   "start": 65.736,
+   "end": 66.038,
    "part": 1
   },
   {
    "w": "backfired.",
-   "start": 73.78,
-   "end": 74.28,
+   "start": 66.038,
+   "end": 66.509,
    "part": 1
   },
   {
    "w": "Washington",
-   "start": 74.88,
-   "end": 75.12,
+   "start": 67.075,
+   "end": 67.302,
    "part": 1
   },
   {
    "w": "signed",
-   "start": 75.12,
-   "end": 75.48,
+   "start": 67.302,
+   "end": 67.642,
    "part": 1
   },
   {
    "w": "a",
-   "start": 75.48,
-   "end": 75.66,
+   "start": 67.642,
+   "end": 67.811,
    "part": 1
   },
   {
    "w": "tariff.",
-   "start": 75.66,
-   "end": 75.9,
+   "start": 67.811,
+   "end": 68.038,
    "part": 1
   },
   {
    "w": "Then",
-   "start": 76.52,
-   "end": 76.7,
+   "start": 68.623,
+   "end": 68.792,
    "part": 1
   },
   {
    "w": "Tokyo",
-   "start": 76.7,
-   "end": 77.18,
+   "start": 68.792,
+   "end": 69.245,
    "part": 1
   },
   {
    "w": "checked",
-   "start": 77.18,
-   "end": 77.44,
+   "start": 69.245,
+   "end": 69.491,
    "part": 1
   },
   {
    "w": "the",
-   "start": 77.44,
-   "end": 77.66,
+   "start": 69.491,
+   "end": 69.698,
    "part": 1
   },
   {
    "w": "Treasury",
-   "start": 77.66,
-   "end": 77.9,
+   "start": 69.698,
+   "end": 69.925,
    "part": 1
   },
   {
    "w": "vault.",
-   "start": 77.9,
-   "end": 78.22,
+   "start": 69.925,
+   "end": 70.226,
    "part": 1
   },
   {
    "w": "America",
-   "start": 79.02,
-   "end": 79.18,
+   "start": 70.698,
+   "end": 70.849,
    "part": 1
   },
   {
    "w": "used",
-   "start": 79.18,
-   "end": 79.56,
+   "start": 70.849,
+   "end": 71.208,
    "part": 1
   },
   {
    "w": "the",
-   "start": 79.56,
-   "end": 79.74,
+   "start": 71.208,
+   "end": 71.377,
    "part": 1
   },
   {
    "w": "tariff",
-   "start": 79.74,
-   "end": 80.02,
+   "start": 71.377,
+   "end": 71.642,
    "part": 1
   },
   {
    "w": "to",
-   "start": 80.02,
-   "end": 80.18,
+   "start": 71.642,
+   "end": 71.792,
    "part": 1
   },
   {
    "w": "tax",
-   "start": 80.18,
-   "end": 80.42,
+   "start": 71.792,
+   "end": 72.019,
    "part": 1
   },
   {
    "w": "its",
-   "start": 80.42,
-   "end": 80.58,
+   "start": 72.019,
+   "end": 72.17,
    "part": 1
   },
   {
    "w": "own",
-   "start": 80.58,
-   "end": 80.76,
+   "start": 72.17,
+   "end": 72.34,
    "part": 1
   },
   {
    "w": "cars,",
-   "start": 80.76,
-   "end": 81.1,
+   "start": 72.34,
+   "end": 72.66,
    "part": 1
   },
   {
    "w": "while",
-   "start": 81.1,
-   "end": 81.38,
+   "start": 72.66,
+   "end": 72.925,
    "part": 1
   },
   {
    "w": "Tokyo",
-   "start": 81.38,
-   "end": 81.84,
+   "start": 72.925,
+   "end": 73.358,
    "part": 1
   },
   {
    "w": "funded",
-   "start": 81.84,
-   "end": 82.16,
+   "start": 73.358,
+   "end": 73.66,
    "part": 1
   },
   {
    "w": "its",
-   "start": 82.16,
-   "end": 82.38,
+   "start": 73.66,
+   "end": 73.868,
    "part": 1
   },
   {
    "w": "own",
-   "start": 82.38,
-   "end": 82.58,
+   "start": 73.868,
+   "end": 74.057,
    "part": 1
   },
   {
    "w": "chips.",
-   "start": 82.58,
-   "end": 82.84,
+   "start": 74.057,
+   "end": 74.302,
    "part": 1
   }
  ],
@@ -1491,151 +1491,151 @@
   {
    "text": "Trump announced he beat Japan on tariffs.",
    "start": 0.0,
-   "end": 2.22,
+   "end": 2.094,
    "part": 1
   },
   {
    "text": "Instead, that tariff funded Japan's chip empire, and cost America a hundred and twenty-two billion dollars.",
-   "start": 3.14,
-   "end": 8.88,
+   "start": 2.566,
+   "end": 7.849,
    "part": 1
   },
   {
    "text": "Auto parts taxes compounded against Detroit.",
-   "start": 8.88,
-   "end": 11.32,
+   "start": 7.849,
+   "end": 10.151,
    "part": 1
   },
   {
    "text": "But look at what nobody explained.",
-   "start": 11.9,
-   "end": 13.2,
+   "start": 10.698,
+   "end": 11.925,
    "part": 1
   },
   {
    "text": "When you buy an American truck, its parts cross the border six separate times.",
-   "start": 13.86,
-   "end": 17.74,
+   "start": 12.396,
+   "end": 16.057,
    "part": 1
   },
   {
    "text": "An engine block from Ontario carries a twenty-five percent border tariff on raw parts.",
-   "start": 18.44,
-   "end": 22.48,
+   "start": 16.528,
+   "end": 20.34,
    "part": 1
   },
   {
    "text": "A wiring harness from Mexico gets hit with the exact same twenty-five percent.",
-   "start": 22.98,
-   "end": 26.5,
+   "start": 20.811,
+   "end": 24.132,
    "part": 1
   },
   {
    "text": "In the left lane, a taxed Toyota.",
-   "start": 26.5,
-   "end": 28.7,
+   "start": 24.132,
+   "end": 26.208,
    "part": 1
   },
   {
    "text": "In the right, a bankrupt Detroit.",
-   "start": 28.7,
-   "end": 30.66,
+   "start": 26.208,
+   "end": 28.057,
    "part": 1
   },
   {
    "text": "Toyota crosses once.",
-   "start": 31.44,
-   "end": 32.5,
+   "start": 28.528,
+   "end": 29.528,
    "part": 1
   },
   {
    "text": "Tokyo pays a flat fifteen percent on the sticker, not a penny more.",
-   "start": 33.26,
-   "end": 36.32,
+   "start": 30.0,
+   "end": 32.887,
    "part": 1
   },
   {
    "text": "But here's where the math breaks Detroit.",
-   "start": 37.08,
-   "end": 38.4,
+   "start": 33.358,
+   "end": 34.604,
    "part": 1
   },
   {
    "text": "On a thirty thousand dollar car, Tokyo pays forty-five hundred dollars in tariffs.",
-   "start": 39.16,
-   "end": 42.66,
+   "start": 35.075,
+   "end": 38.377,
    "part": 1
   },
   {
    "text": "Detroit pays over six thousand dollars in stacked border duties alone, right here at home.",
-   "start": 43.32,
-   "end": 47.16,
+   "start": 38.849,
+   "end": 42.472,
    "part": 1
   },
   {
    "text": "And that's where Tokyo pulled the second lever.",
-   "start": 47.94,
-   "end": 49.54,
+   "start": 42.943,
+   "end": 44.453,
    "part": 1
   },
   {
    "text": "Instead of reinvesting in America, Japan started dumping United States Treasuries.",
-   "start": 50.1,
-   "end": 53.96,
+   "start": 44.981,
+   "end": 48.226,
    "part": 1
   },
   {
    "text": "They sold a hundred and twenty-two billion dollars of Washington's debt.",
-   "start": 54.92,
-   "end": 57.68,
+   "start": 48.698,
+   "end": 51.302,
    "part": 1
   },
   {
    "text": "Tokyo brought that money home, pledging ten trillion yen to build domestic semiconductors.",
-   "start": 58.34,
-   "end": 63.1,
+   "start": 51.774,
+   "end": 56.264,
    "part": 1
   },
   {
    "text": "In finance, we call this the double squeeze:",
-   "start": 63.68,
-   "end": 65.54,
+   "start": 56.811,
+   "end": 58.566,
    "part": 1
   },
   {
    "text": "The competitor got cheaper parts and built silicon.",
-   "start": 66.14,
-   "end": 68.54,
+   "start": 59.132,
+   "end": 61.396,
    "part": 1
   },
   {
    "text": "And then we wrote them a blank check anyway, to bribe them to keep buying bonds.",
-   "start": 69.1,
-   "end": 72.08,
+   "start": 61.925,
+   "end": 64.736,
    "part": 1
   },
   {
    "text": "And this is where the policy backfired.",
-   "start": 72.9,
-   "end": 74.28,
+   "start": 65.208,
+   "end": 66.509,
    "part": 1
   },
   {
    "text": "Washington signed a tariff.",
-   "start": 74.88,
-   "end": 75.9,
+   "start": 67.075,
+   "end": 68.038,
    "part": 1
   },
   {
    "text": "Then Tokyo checked the Treasury vault.",
-   "start": 76.52,
-   "end": 78.22,
+   "start": 68.623,
+   "end": 70.226,
    "part": 1
   },
   {
    "text": "America used the tariff to tax its own cars, while Tokyo funded its own chips.",
-   "start": 79.02,
-   "end": 82.84,
+   "start": 70.698,
+   "end": 74.302,
    "part": 1
   }
  ],
