@@ -176,7 +176,8 @@ flickers; Bravos scales and translates the whole card instead - PLAUSIBLE tier: 
 ## Human Gates
 
 - **HG1 (after T3):** the operator watches `rescale` and `extend` on a real page - do added points and a moving axis read
-  as one continuous thing, or as a jump?
+  as one continuous thing, or as a jump? **Ready 2026-09-10:** `steel-and-paper/build-f/chart-transitions-proof.html` on
+  :8739 (`chart-transitions-proof`) - the Tokyo holdings page, rescale at 8 s, extend at 13 s; the frames were sent.
 - **HG2 (after T4):** the operator watches `recast` - does a line becoming bars read as the same data, or as a new chart?
   This is the gate that decides whether recast ships or stays an experiment. **Stills sent 2026-09-07** (the holdings
   line leaving, the pie drawing on, the wedge peeled): the question for the watch is whether the hand-over reads as one
@@ -331,7 +332,7 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   later series - phase 1 moving with the target's line undrawn, phase 2 the target standing with its line short of
   the end and the nib on it, after fully drawn with the cap released; the seek test), goldens byte-identical, and the
   plan's flag golden as a SURFACE golden: `ledger-extend` (the golden series windowed at 8 s and extended at 12 s,
-  judged at 13.4 s mid-tail; its derived states come from the compiler off a temp episode, so the golden proves the
+  judged at 13.05 s mid-tail - and it caught a cap applied to the first series alone: a window that grows grows for EVERY series (6de864f); its derived states come from the compiler off a temp episode, so the golden proves the
   compiler and the player together). Frames: `scratchpad/frames/extend-sheet2.png` (sent). One defect the frames
   caught and the tests then pinned: the muted history path ran ahead of the pen (the cap was applied to the
   highlighted path only) - now every path of the series caps itself at its own shared datum.
