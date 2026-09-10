@@ -3821,7 +3821,7 @@
           f = ev.kind === "build" ? Math.max(Math.min(f, prev), lvl) : Math.min(f, lvl);
           if (u >= 1) prev = to;
         }
-        if (cs.extendCap && (pp.si | 0) === (cs.extendCap.si | 0)) {   /* P48 T3: every path of the extended series - the muted history AND the highlighted tail - is drawn to the pen: the shared part stands, the new part follows the nib */
+        if (cs.extendCap && (!cs.extendCap.bySeries || (pp.si | 0) === (cs.extendCap.si | 0))) {   /* P48 T3: a window that grows grows for EVERY series (the golden's four lines caught a cap on the first alone); a later series caps itself. The muted history and the highlighted tail alike are drawn to the pen: the shared part stands, the new part follows the nib */
           const c0 = cs.extendCap.bySeries ? 0 : capFrac(pp, cs.extendCap.idx), pen = strokeFrac(pp.p, pp.len, cs.extendCap.u2);
           f = Math.min(f, c0 + (1 - c0) * (pen == null ? expoOut(cs.extendCap.u2) : pen));
         }

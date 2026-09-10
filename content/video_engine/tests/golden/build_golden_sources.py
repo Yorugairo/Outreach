@@ -37,7 +37,7 @@ FRAME_T = {
     "ledger-soak-page": 2.7,        # mid-soak: stains spreading and overlapping (P43 T3 K-M ink is judged here)
     "dock-pair-16x9": 12.0,         # both cards up, badges landed
     "dock-pair-9x16": 12.0,
-    "ledger-extend": 13.4,          # P48 T3: mid-extend - the axis has retargeted, the nib is drawing the new tail (rescale at 8 s, extend at 12 s over 2 s)
+    "ledger-extend": 13.05,         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
 }
 
 
