@@ -1819,3 +1819,12 @@ The second time in two days (E49 §3: *"you're circling beneath to avoid circlin
    radius and drifts its centre on the same seeded, pure-function-of-t kinetics as every idle; absent = the old still
    light, so the goldens are byte-identical. The wafer light runs `idle: live`.
 
+## E57 — Flow generation is routed by size: an episode's plates go to Gemini over the bridge, a couple of plates we drive ourselves (2026-09-10)
+
+The operator: *"Flow generation is probably optional. If it's a large work order for an entire episode run, probably give it
+to Gemini because it will probably cost more to generate ourselves than to dispatch. If it's just a couple plates we can just
+drive the MCP ourselves."* So: a WORK-ORDER for an episode's plate set (a batch, a character pass, a re-roll round) is a
+bridge packet to the Gemini lane (P46); one to a few plates for a beat under review are `create_flow_image` over CDP from
+this session (the stdio dispatcher, `omni-video/dispatch_*.py`), asked for before the session is driven. The bridge is not
+retired - only Flow image orders of the small kind left it.
+

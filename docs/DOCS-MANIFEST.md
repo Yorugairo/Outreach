@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-289 documents across 13 kinds.
+290 documents across 13 kinds.
 
 ## doctrine
 
@@ -91,7 +91,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## ruling-ledger
 
-- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing correcti — Portable, model-agnostic. Load alongside — defines: A3; E11; +45 more — terms: long-form; drop-off; YouTube; world-building
+- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing correcti — Portable, model-agnostic. Load alongside — defines: A3; E11; +46 more — terms: long-form; drop-off; YouTube; world-building
 
 ## capabilities
 
@@ -180,6 +180,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md — Wealth Logic Transitions Research Bluepr — Superseded 2026-09-06 by `WEALTH_LOGIC_T — defines: — — terms: blur-zooms; zoom-throughs; fade-throughs; frame-per-boundary
 - docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md — Weight, Density, and Mass in Drawing, An — Pass Metadata: Workflow: Deep Research E — defines: — — terms: Kersten et al.; t_0; stop-motion; High-Mass
 - docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md — Motion Graphics & Animation from Still I — High-retention, broadcast-grade video co — defines: — — terms: context-aware; LaMa; Shih et al.; LTX-Video
+- docs/research/tech/TREEMAP_READABILITY_RESEARCH_BLUEPRINT.md — Treemap Readability & Layout Mechanics — — How readable are treemaps on video scree — defines: P50 — terms: treemap-readability; McGill; near-square; Kong et al.
 
 ## source-bundle
 
