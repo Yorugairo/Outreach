@@ -269,7 +269,7 @@ RS_PROBE = """() => {
   const head = (s) => d(s).split(' L')[0];
   const drawn = (s) => 1 - parseFloat(path(s).getAttribute('stroke-dashoffset') || '0') / path(s).len;
   const ticks = (s) => (s.marks || []).filter(m => m.role === 'tick').map(m => [m.geom.v, +m.el.getAttribute('y1'), m.el.style.opacity === '' ? 1 : +m.el.style.opacity]);
-  return { n: S.length, charts: S.map(s => +(s.chart.style.opacity || 0)), head0: head(S[0]), d0: d(S[0]).length,
+  return { n: S.length, charts: S.map(s => +(s.chart.style.opacity || 0)), head0: head(S[0]), d0: d(S[0]).length, clipped0: !!path(S[0]).getAttribute('clip-path'),
            built0: S[0].paths[0].d0 === d(S[0]), ticks0: ticks(S[0]), ticks1: S[1] ? ticks(S[1]) : null, active: st.active | 0,
            line1: S[1] ? (1 - parseFloat(S[1].paths[0].p.getAttribute('stroke-dashoffset') || '0') / S[1].paths[0].len) : null,
            subOld: (st.subGlyphs || []).reduce((a, g) => a + parseFloat(g.style.getPropertyValue('--w') || '0'), 0) / Math.max(1, (st.subGlyphs || []).length) };
@@ -319,11 +319,12 @@ def test_a_rescale_moves_the_standing_chart_to_the_new_scale_and_lands_on_the_de
         assert mid["charts"] == [1, 1], "mid-clock both svgs show: the standing chart moving, the target's furniture arriving"
         assert not mid["built0"] and mid["head0"] != before["head0"], "the standing line has been re-projected - its path moved"
         assert mid["line1"] < 0.01, "the target's own line is not drawn during the blend (no double line)"
+        assert mid["clipped0"] and not before["clipped0"], "the plot box pins the moving line: nothing draws outside it during the blend"
         leaving = [tk for tk in mid["ticks0"] if tk[2] < 1]
         assert leaving, "ticks whose value leaves the window's domain fade as they travel"
         after = at(RS_AT + RS_S + 0.3)
         assert after["charts"] == [0, 1] and after["line1"] > 0.99 and after["active"] == 1, "after the clock the derived state stands, fully built"
-        assert after["built0"], "and the standing chart's path is restored to its built geometry (a seek is the play)"
+        assert after["built0"] and not after["clipped0"], "and the standing chart's path is restored to its built geometry, unpinned (a seek is the play)"
         assert after["subOld"] > 0.98, "the words stayed: it is the same chart on a new scale"
         assert not errs, errs
     finally:

@@ -2868,6 +2868,15 @@
     if (Array.isArray(ax.xdomain) && ax.xdomain.length === 2 && Number.isFinite(+ax.xdomain[0]) && Number.isFinite(+ax.xdomain[1])) { x0 = +ax.xdomain[0]; x1 = +ax.xdomain[1]; }
     const mx = (x) => L + (x - x0) / (x1 - x0 || 1) * (W - L - R), my = (v) => T + (1 - (Y(v) - y0) / (y1 - y0)) * (B - T);
     st.scale = { kind: "line", mx, my, yv: Y, x0, x1, y0, y1 };   /* P48 T2: the scale a rescale interpolates - both states keep theirs */
+    /* P48 (operator, 2026-09-10, on the rescale's over-draw: "how do we prevent the over-draw during the transform? some type of
+       pin-and-pivot"): the PLOT BOX is the pin. While a transition re-projects the standing line, the points that leave the target
+       window are drawn on their way out - the history off the left, a falling tail below the axis, across the labels and off the
+       page. A chart never draws outside its plot: this clip, padded by the stroke so a cap at the edge survives, is referenced by
+       the series paths only while a rescale is on (lpPaintRescale) and dropped after (lpRestoreState), so nothing else moves. */
+    { const defs = lpEl("defs", "", st.chart), cid = "plotclip-" + (st.seed | 0) + "-" + (++lpClipN);   /* deterministic: the build order names it, never a random */
+      const cp = lpEl("clipPath", "", defs, { id: cid, clipPathUnits: "userSpaceOnUse" });
+      lpEl("rect", "", cp, { x: (L - 14).toFixed(1), y: (T - 14).toFixed(1), width: (W - L - R + 28).toFixed(1), height: (B - T + 28).toFixed(1) });
+      st.plotClip = cid; }
     st.axisB = B;   /* P47 T3: the morph closes its target along the axis */
     st.plot = { L, R, T, B, W, x0, x1, y0, y1, log: !!ax.log };   /* P48 T1: the scale a transition interpolates */
     lpMark(st, "axis", "axis", lpEl("line", "ax", st.chart, { x1: L, x2: W - R, y1: B, y2: B }), { x1: L, x2: W - R, y: B });
@@ -2987,6 +2996,7 @@
      computed - and it is what a transition matches on (P48 T2-T5): shared keys tween, new keys enter by
      the stroke or spring law, dropped keys exit. Keys are unique per state; a collision would silently
      drop a mark, so one is disambiguated rather than overwritten. */
+  let lpClipN = 0;   /* P48: plot clips, numbered in build order */
   const lpMark = (st, key, role, el, geom, rec) => {
     if (!st.marks) { st.marks = []; st.markBy = {}; }
     let k = key, n = 2; while (st.markBy[k]) k = key + "#" + n++;
@@ -3853,7 +3863,10 @@
      so a seek to any t paints the same frame (the seek test). Bravos 46 s46.7: a build inside a held frame, not a cut. */
   const lpRestoreState = (S) => {
     if (!S || !S.xfDirty) return;
-    for (const pp of S.paths || []) if (pp.d0 && pp.p.getAttribute("d") !== pp.d0) { pp.p.setAttribute("d", pp.d0); pp.p.setAttribute("stroke-dasharray", pp.len0); pp.len = pp.len0; }
+    for (const pp of S.paths || []) {
+      if (pp.d0 && pp.p.getAttribute("d") !== pp.d0) { pp.p.setAttribute("d", pp.d0); pp.p.setAttribute("stroke-dasharray", pp.len0); pp.len = pp.len0; }
+      if (pp.p.hasAttribute("clip-path")) pp.p.removeAttribute("clip-path");
+    }
     for (const m of S.marks || []) {
       const g = m.geom || {}, e = m.el; if (!e) continue;
       if (m.role === "tick" || m.role === "rule") { e.setAttribute("y1", g.y.toFixed(1)); e.setAttribute("y2", g.y.toFixed(1)); e.style.opacity = ""; }
@@ -3876,6 +3889,7 @@
       const mapA = (x, v) => [sa.mx(x), sa.my(v)], mapB = (x, v) => [sb.mx(x), sb.my(v)];
       for (const pp of A.paths || []) {
         if (!pp.data) continue;
+        if (A.plotClip) pp.p.setAttribute("clip-path", "url(#" + A.plotClip + ")");   /* the pin: nothing draws outside the plot while the line moves */
         const f = 1 - parseFloat(pp.p.getAttribute("stroke-dashoffset") || "0") / (pp.len || 1);   /* how much is drawn, before the path moves */
         const { d } = xfPath(pp.data, mapA, mapB, u);
         pp.p.setAttribute("d", d);
