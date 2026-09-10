@@ -28,6 +28,12 @@ RUNTIME = 26.0
 
 def main() -> int:
     tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
+    # the golden's clock is a 2 s silent wav (a golden is scrubbed, never played): a WATCHED proof needs a clock the length of
+    # its runtime, or the player stops at 0:02 with the field mid-soak (the operator, 2026-09-10: "a blurred ink coming in for
+    # 0:02 then it just freezes")
+    sys.path.insert(0, str(REPO / "content/video_engine/tests/golden"))
+    from build_golden_sources import silent_wav, uri  # noqa: E402
+    uris = dict(uris, __audio__=uri("audio/wav", silent_wav(RUNTIME + 0.5)))
     world = B.world_for_plate(PLATE, (0, 0, 0), EP)
     n = len(world["page"]["series"][0]["pts"])
     species = [{"kind": "chart_to", "at": RESCALE_AT, "dur": RESCALE_S, "to": "rescale", "window": WINDOW},
