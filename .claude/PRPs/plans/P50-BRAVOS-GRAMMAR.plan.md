@@ -98,8 +98,9 @@ Acceptance:
 
 ## Human Gates
 
-1. **The treemap ruling (E53 §7).** The donut is the one part-to-whole exception; a treemap is a second. The builder is
-   built only after the operator rules; until then T6 is `blocked`.
+1. **The treemap ruling.** Ruled 2026-09-10 (*"yes, we want the exception"*): E53 §1's second amendment, the CENSUS
+   exception - breadth or a named subset, the subset marked and its share written, labels only where they fit, a size
+   claim takes its bar. T6 is unblocked under those four.
 2. **The species-by-sentence taxonomy.** The ten sentence acts in T1 - the operator, 2026-09-10: *"sounds like it makes
    sense"* - approved as drafted.
 3. **The tv-embed plate (T7)** needs a Flow order (ask before driving the session) - or a still the operator generates
@@ -228,13 +229,13 @@ Acceptance:
 - Evidence: pending
 
 ### T6: The treemap page builder with X marks
-- Status: blocked (human gate 1)
-- Owner: `implementation_luna` after the ruling
-- Depends on: T1; gate 1
+- Status: pending (gate 1 ruled 2026-09-10 - the census exception, E53 §1 second amendment)
+- Owner: `implementation_luna`
+- Depends on: T1
 - Write set: `content/video_engine/scripts/ledger_page.py` (builder `treemap` from a `series.json` of shares; the
-  squarified layout, labels only where the cell fits, the rest unnamed - E53 §7's honesty; `peel`'s cousin `cross:
-  [names]` on a word); template (`paintLedger` treemap variant); tests; golden `treemap-cross`; E53 amendment with the
-  operator's words.
+  squarified layout, labels only where the cell fits, the rest unnamed; `cross: [names]` on a word and the crossed
+  share WRITTEN on the page (the census exception's (b)); the builder REFUSES a series whose claim field names a size
+  comparison); template (`paintLedger` treemap variant); tests; golden `treemap-cross`.
 - Acceptance: shots 89-91's grammar: a treemap of exports by partner; on a word three partners take an X; the map
   shrinks to a chip on the next (a `chart_to: recast` or an exit).
 - Validate: the test suite above + `python content/video_engine/scripts/ledger_page.py --check <series>`
@@ -296,5 +297,5 @@ Acceptance:
 - Per slice: the commit hash, the golden's path, the proof frames, the life-check numbers, the CAPABILITIES row.
 - The species-by-sentence table's first real use: the next short's shot table is authored against it and the lint's
   report is attached to its REVIEW.
-- Open questions carried to the operator: gate 1 (treemap). Gates 2 and 4 answered 2026-09-10; R26-24 joins as T9 and
+- All four gates answered 2026-09-10; R26-24 joins as T9 and
   every matching backlog row rides its slice (operator: *"yes we should add all of the backlog blends that are matches"*).

@@ -1703,6 +1703,16 @@ rules below are CONFIRMED findings; the intake page records what was rejected an
    so no angle has to be estimated (E52: the math is drawn); (d) the slice count is small enough to name - five or fewer.
    Outside those four the refusal stands. First use: the top-five foreign holders of US Treasuries, with Japan's
    -$122.6B peeling out as the sold wedge (P48 T4).
+   **Second amendment, 2026-09-10 (operator: "yes, we want the exception") — the CENSUS exception, for the treemap.**
+   A treemap encodes value as AREA, a tier below angle, and its point is many cells - so it fails the donut's test by
+   construction. It is allowed, and only, when all four hold: (a) the page's claim is about the BREADTH of a whole or a
+   NAMED SUBSET of its parts - how many, which - never the size of one part against another; (b) the subset is marked
+   (an X, a dim, a peel) and its share is WRITTEN on the page as a number (E52); (c) cells are labelled only where the
+   label fits, and no unlabelled cell is ever the argument; (d) a magnitude claim in the same beat takes its bar or line
+   - the treemap never stands alone as proof of a size. The reference: Bravos Research's exports-by-partner treemap with
+   the departing partners crossed out (REPORT.claude.md, shots 89-91) - the X's land on the big cells, which is the one
+   claim a chip board cannot make ("the biggest ones are leaving"); for a pure count the icon board (P50 T2) is the
+   cheaper honest form. Built as P50 T6 (`ledger_page` builder `treemap`, `cross: [names]` on a word).
 2. **Never a stacked bar** (baseline drift). Only the bottom segment of a stack sits on a stable zero; every segment above it
    floats on a moving baseline and cannot be compared. Grouped bars, or tiers sharing an x, or small multiples - never a
    stack. This is a never-build, not a backlog item.
