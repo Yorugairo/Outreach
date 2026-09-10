@@ -1,0 +1,26 @@
+SOURCE ON DISK - fetched 2026-09-10 via tavily_extract (text, advanced) from iShares.com product pages, for the Bravos-style
+BREAKTHROUGH chart (the operator, 2026-09-10: "show the average bond market return over the last 10 yrs with the average
+return of SOXX as the breakthrough"). The pages publish standardized average annual total returns (NAV); the extract
+carries the tables but not the printed "as of" date - the pages list 2025 calendar-year returns and distributions dated
+through Sep 1, 2026 (AGG) / Jun 15, 2026 (SOXX), so the standardized figures are the latest quarter-end before the fetch.
+Treat the as-of as "quarter-end preceding 2026-09-10" and re-fetch the fact sheet PDF for the printed date before any
+render (the PDF URLs returned a 104/290-byte redirect stub to curl on this machine).
+
+URL: https://www.ishares.com/us/products/239705/ishares-phlx-semiconductor-etf
+iShares Semiconductor ETF (SOXX) - Average Annual Total Returns
+|  | 1y | 3y | 5y | 10y | Incept. |
+| Total Return (%) | 169.60 | 56.92 | 34.50 | 36.59 | 15.42 |
+| Market Price (%) | 169.69 | 56.95 | 34.51 | 36.60 | 15.42 |
+| Benchmark (%) | 170.76 | 57.48 | 35.04 | 37.20 |
+Cumulative: 10y 2,160.71 % (NAV). Calendar: 2021 44.00, 2022 -35.03, 2023 66.90, 2024 12.97, 2025 40.71.
+
+URL: https://www.ishares.com/us/products/239458/ishares-core-total-us-bond-market-etf
+iShares Core U.S. Aggregate Bond ETF (AGG) - Average Annual Total Returns
+|  | 1y | 3y | 5y | 10y | Incept. |
+| Total Return (%) | 3.80 | 4.16 | 0.09 | 1.52 | 3.15 |
+| Market Price (%) | 3.79 | 4.17 | 0.08 | 1.50 | 3.14 |
+| Benchmark (%) | 3.79 | 4.15 | 0.08 | 1.54 | 3.25 |
+Cumulative: 10y 16.24 % (NAV). Calendar: 2021 -1.67, 2022 -13.06, 2023 5.58, 2024 1.37, 2025 7.19.
+
+The two figures the chart draws: bonds (AGG, the broad US investment-grade market) 1.52 % a year over ten years; semiconductors
+(SOXX) 36.59 % a year over ten years. Both NAV total return, the same table on each page.

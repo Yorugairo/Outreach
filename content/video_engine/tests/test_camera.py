@@ -279,3 +279,31 @@ def test_the_compiler_admits_enter_camera_and_the_gate_ties_the_arrival_to_its_c
     sc = {"scene_id": "s02", "span": [8.0, 16.0], "world": {"kind": "ledger", "page": {"enter": "camera", "snap_from": "dock-card"}}, "species": [], "docks": []}
     assert G._arrival_moves(sc) == [(8.0, 8.45, "dock-card")]
     assert G._arrival_moves({"scene_id": "x", "span": [0, 1], "world": {"kind": "ledger", "page": {"enter": "snap", "snap_from": "d"}}}) == []
+
+
+def _png_uri(w: int, h: int) -> str:
+    import base64, io
+    from PIL import Image
+    buf = io.BytesIO(); Image.new("RGB", (w, h), (200, 190, 170)).save(buf, "PNG")
+    return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode("ascii")
+
+
+@needs_browser
+def test_the_arrival_box_is_the_card_as_it_stands_once_it_has_a_body():
+    """The ring's Fed card holds its one-second reading size and never reaches its parked `place`: the eye goes to the box the
+    card STANDS in (its layout, image height included). A card with no body (the harness's image-less card above) has no
+    layout to speak of, so its parked place stands for it - both rules on one probe."""
+    tl, uris = _arrival_timeline()
+    uris = dict(uris, **{"dock-card": _png_uri(800, 600)})
+    tl = dict(tl, evidence=dict(tl.get("evidence") or {}, **{"dock-card": {"title": "x", "source": "", "species": "chart", "badges": [], "kind": "image"}}))   # fillDock mounts nothing for a slide with no evidence entry
+    p = _Player(tl, uris)
+    try:
+        p.seek(7.9); p.page.wait_for_timeout(60)   # the card up and its body decoded: a cold seek's first frame reads the empty dock (R26-21's class)
+        p.seek(8.2); c = p.camera(8.2)
+        box = p.page.evaluate("() => { const d = document.querySelectorAll('.dock')[0]; return { y: d.offsetTop, h: d.offsetHeight, w: d.offsetWidth }; }")
+        assert box["h"] > 600 and box["h"] < 800, ("the layout box is the image plus the card's chrome", box)
+        assert c["look"] == [540, box["y"] + box["h"] / 2], (c["look"], box)
+        assert c["look"][1] != 480 + 711, "not the parked place's centre"
+        assert not p.errs, p.errs
+    finally:
+        p.close()

@@ -1,0 +1,49 @@
+{
+ "title": "Ten years, a year at a time",
+ "sub": "Average annual total return over the last ten years, %",
+ "src": "iShares AGG, SOXX (NAV, quarter-end) · fetched Sep 2026",
+ "src_full": "iShares.com product pages, standardized average annual total returns (NAV), fetched 2026-09-10 - evidence/sources/ishares-soxx-agg-returns-2026-09-10.txt",
+ "src_style": "compact",
+ "unit": "%",
+ "bars": [
+  {
+   "label": "Bonds",
+   "value": 1.52,
+   "color": "deemph"
+  },
+  {
+   "label": "Chips",
+   "value": 36.59,
+   "color": "crimson"
+  }
+ ],
+ "emphasize": 1,
+ "status": "REAL",
+ "fetched": "2026-09-10",
+ "facts": {
+  "agg_10y_avg_pct": 1.52,
+  "soxx_10y_avg_pct": 36.59,
+  "agg_10y_cum_pct": 16.24,
+  "soxx_10y_cum_pct": 2160.71,
+  "note": "the scale is stated to 8 % so the bonds bar reads; the chips bar breaks through it - the frame that could not hold the number"
+ },
+ "badges": [
+  {
+   "label": "BONDS",
+   "value": "1.5% a year",
+   "tag": "AGG",
+   "accent": "ink"
+  },
+  {
+   "label": "CHIPS",
+   "value": "36.6% a year",
+   "tag": "SOXX",
+   "accent": "crimson"
+  }
+ ],
+ "domain": [
+  0,
+  8
+ ],
+ "overflow": "break"
+}

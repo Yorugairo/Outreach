@@ -1,0 +1,24 @@
+SOURCE ON DISK - fetched 2026-09-10 via tavily_extract (text), for the Tokyo short's pledge evidence (the operator, 2026-09-10:
+"we don't actually have any evidence for 'Japan has pledged 10 trillion yen to chips.' we should grab an article quote").
+
+URL: https://asia.nikkei.com/business/tech/semiconductors/japan-to-roll-out-65bn-in-support-for-chips-ai
+Title: Japan to roll out $65bn in support for chips, AI - Nikkei Asia
+Byline: MARI ISHIBASHI, Nikkei staff writer
+Dateline: November 12, 2024 01:27 JST
+Subhead: Measures will run through fiscal 2030, with eye on homegrown chipmaker Rapidus
+
+Extracted text (verbatim from the fetch; the article body beyond the lede is paywalled):
+---
+TOKYO -- The Japanese government will provide at least 10 trillion yen ($65 billion) in support through fiscal 2030 to boost the semiconductor and artificial intelligence industries under plans laid out Monday by Prime Minister Shigeru Ishiba.
+---
+
+Second source, same fetch (Reuters wire carried by the South China Morning Post):
+URL: https://www.scmp.com/news/asia/east-asia/article/3286197/japan-pledges-fresh-us65-billion-chips-ai-help-narrow-gap-china
+Title: Japan pledges fresh US$65 billion for chips, AI to help narrow gap with China | South China Morning Post
+---
+Ishiba said he hoped public aid of more than 10 trillion yen (US$65 billion) for the sector by the 2030 financial year would serve as a catalyst to generate public and private investment of more than 50 trillion yen over the next 10 years.
+The new funding framework, separate from previously earmarked funds worth roughly 4 trillion yen, will be sketched out in an coming economic stimulus package with an aim to generate an economic impact of about 160 trillion yen, according to a draft of the package seen by reporters.
+---
+
+The script's line the evidence stands under: "Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds."
+The quote the record types: the Nikkei lede. The phrase the highlighter lands on: "at least 10 trillion yen".

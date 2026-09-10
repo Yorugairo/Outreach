@@ -104,6 +104,16 @@
         "build-short-p49"
       ],
       "port": 8741
+    },
+    {
+      "name": "tokyo-short-player-cam",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/serve_player.py",
+        "8742",
+        "build-short-cam"
+      ],
+      "port": 8742
     }
   ]
 }

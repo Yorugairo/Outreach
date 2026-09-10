@@ -63,7 +63,7 @@ CHART_VARIANTS = ("line", "bars", "race", "decline", "progress", "share")
 # plate change (RULE-the-page-is-the-ground, 2026-09-04).
 PROP_PLACEMENTS = ("centre", "left", "right", "datum")
 QUIET_ZONES = ("left", "right")
-AXES_KEYS = ("log", "ylabel", "xticks", "from_zero", "highlight_from", "hlines", "hline", "marks", "eventbars",
+AXES_KEYS = ("overflow", "log", "ylabel", "xticks", "from_zero", "highlight_from", "hlines", "hline", "marks", "eventbars",
              "name_clear",   # lift the inline series name clear of the data it would otherwise be written across
              "ymin", "ymax", "yfmt", "yunit", "panels",
              "domain", "xdomain")   # P48 T2: a derived rescale state names its exact y domain and x window

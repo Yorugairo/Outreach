@@ -1311,6 +1311,14 @@ and no date axis. The gates, all template-enforced now:
 - The test: mute the narration, screenshot the chart, hand it to a
   stranger. If any ink needs the voiceover to explain it, the chart
   is not done.
+- **The BREAKTHROUGH (2026-09-10, measured on Bravos 50-55):** a bars
+  page may STATE its scale (`domain`) and let ONE value break through
+  the top (`overflow: "break"`) - the bar runs past the top gridline, a
+  break glyph cuts it there, the value stands above it. The scale is
+  printed and the value is printed, so the height is not a lie (E28); the
+  drama is the frame that could not hold the number. The scale is the
+  one the SMALL bar reads on (bonds 1.52 % on 0-8 %; chips 36.59 % breaks
+  it) - a stated scale that no bar needs is a lie of the other kind.
 
 ### 9.24 The VERDICT STACK species (operator, s68, 2026-08-30)
 

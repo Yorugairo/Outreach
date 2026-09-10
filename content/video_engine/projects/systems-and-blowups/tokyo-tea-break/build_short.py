@@ -30,6 +30,8 @@ sys.path.insert(0, str(SCRIPTS))
 SCRIPT = HERE / "SCRIPT-90S-VO.claude.txt"
 TAKE = HERE / "vo-short/audio"
 BUILD = HERE / os.environ.get("TOKYO_BUILD_DIR", "build-short")   # P48 T7: a cut under review builds beside the watched one (TOKYO_BUILD_DIR=build-short-p48 -> :8740), never over it
+CAMERA = os.environ.get("TOKYO_CAMERA", "0") == "1"   # P49 (the operator, 2026-09-10: "let's test out those camera changes"): the arrival on the ring + the pull toward the landings, in a build beside (build-short-cam, :8742)
+CAM_ROW = {"keys": [], "attention": "landings"} if CAMERA else None   # the row's 8th element: the eye pulls toward a card as it lands (E59 #1; the dials are HG1's)
 CLIPS = HERE / "omni-video/stills"   # the v2 set: approved stills to video (APPROVALS.json)
 SERIES = ("ev-japan-holdings-v1", "ev-meta-yield-v1")
 CUT_AT = 0.8          # M13: the cut sits at 0.8 of the gap before the next phrase
@@ -286,6 +288,50 @@ def dock_still(aid: str) -> str:
     return aid
 
 
+PLEDGE_QUOTE = "...at least 10 trillion yen ($65 billion) in support through fiscal 2030 to boost the semiconductor..."   # the Nikkei lede's claim, excerpted (both ellipses say so; five typed lines grew the paper into the caption strip - measured 2026-09-10)
+PLEDGE_HL = ("at", "least", "10", "trillion", "yen")     # the highlighter's phrase
+PLEDGE_SYNC = {"10": "ten", "trillion": "trillion", "yen": "yen"}   # the stroke lands per-word on the NARRATOR's word
+
+
+def record_words(text: str, t0: float, ws: list[dict], anchor_phrase: str, sync: dict, hl: tuple, per: float = 0.1, tail_per: float = 0.07) -> tuple[list, list, float]:
+    """[[word, t], ...] for a record dock: the words before the phrase type from t0 at `per`, the phrase's words land on the
+    narrator's (the take's word starts after `anchor_phrase`), the rest type at `tail_per`; plus the highlight range and the end."""
+    words = text.split()
+    i0, _ = phrase_start(ws, anchor_phrase)
+    narr = {}
+    for w in ws[i0:i0 + 12]:
+        k = w["w"].strip(".,;:!?").lower()
+        if k in sync.values() and k not in narr:
+            narr[k] = round(float(w["start_s"]), 2)
+    out, t = [], t0
+    k0 = next(i for i in range(len(words)) if [x.strip(".,;:!?()").lower() for x in words[i:i + len(hl)]] == [x.lower() for x in hl])
+    k1 = k0 + len(hl) - 1
+    for i, w in enumerate(words):
+        key = w.strip(".,;:!?()").lower()
+        if k0 <= i <= k1 and key in sync and sync[key] in narr:
+            t = max(t, narr[sync[key]])
+        out.append([w, round(t, 2)])
+        t += per if i < k1 else tail_per
+    return out, [k0, k1], round(out[-1][1] + 0.05, 2)
+
+
+def record_dock(aid: str, ws: list[dict], t0: float) -> str:
+    """The pledge record: a 1x1 placeholder asset (a record is live type, never an image) and the META's `record` filled."""
+    import build_render_f as R
+    out = BUILD / "docks" / f"{aid}.png"; out.parent.mkdir(parents=True, exist_ok=True)
+    if not out.exists():
+        from PIL import Image
+        Image.new("RGB", (1, 1), (22, 24, 28)).save(out)   # a real 1x1 PNG (the hand-typed hex was a broken stream)
+    R.STAMPED[aid] = str(out)
+    words, hl, end = record_words(PLEDGE_QUOTE, t0, ws, "ten trillion yen", PLEDGE_SYNC, PLEDGE_HL)
+    for m in DOCK_META:
+        if m["asset"] == aid:
+            m["record"] = {"hdr": ["Nikkei Asia \u00b7 Semiconductors", "12 November 2024"], "kicker": "Japan to roll out $65bn in support for chips, AI",
+                           "words": words, "hl": hl, "end": end, "attr": "Mari Ishibashi, Nikkei staff writer",
+                           "src": "asia.nikkei.com \u00b7 fetched 2026-09-10 \u00b7 evidence/sources/nikkei-2024-11-12-japan-chips-ai-support.txt"}
+    return aid
+
+
 def dock_png(aid: str, png: Path, crop: tuple[float, float]) -> str:
     """A still PNG cropped to a card, (top, height) as fractions of the still - the tariff short's dock_card; the card remembers
     its source and crop so a swapped still or a new crop re-cuts it."""
@@ -346,6 +392,9 @@ DOCK_META = [
     {"asset": "dock-i-fab-wafer", "title": "Ten trillion yen for chips", "source": "HollowStickMike · Money Physics", "species": "deck", "badges": []},
     # R26-19 / E50: the hook's own proof as a CHART card on the ring - species "chart", so M11/M12 read it as the chart it is
     {"asset": "dock-h-fed-vs-yields", "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.", "source": "US Treasury TIC · FRED · Sep 2026", "species": "chart", "badges": []},
+    # the pledge's evidence (2026-09-10): a RECORD dock - the Nikkei lede typed on paper, the highlighter on the phrase the sentence
+    # claims; `record` is filled at build (record_dock) from the take's word times. Source: evidence/sources/nikkei-2024-11-12-japan-chips-ai-support.txt
+    {"asset": "dock-k-pledge-record", "title": "Japan to roll out $65bn in support for chips, AI", "source": "Nikkei Asia · 12 Nov 2024", "species": "record", "badges": []},
     # the sixth watch: the cup from the opening scene, zoomed and still steaming, on "its tea break"
     {"asset": "dock-j-tea-cup", "title": "The tea, still going", "source": "@StickMike · Money Physics", "species": "deck", "badges": []},
 ]
@@ -457,7 +506,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # DIFFERENT chart - the Feb-Jun window, or the monthly change as signed bars - and which one is the operator's
             # call; the capability is P48 (`rescale` T2 / `recast` T4).
             {"kind": "retitle", "at": t_opponent, "dur": 2.4, "text": RETITLE},                                       # the title rewrites by the hand on "The opponent"
-        ]),
+        ], CAM_ROW),
         # 3 the PROMISE plate: the viewer's desk, entered by SUCK - the page collapses into the black of the stick figure
         #   (operator, 2026-09-05). Unchanged from v1 except that what gets sucked away is now the page, not a clip.
         (t_promise, t_catalyst, "plate-p-viewers-desk", (0, 0, 0), [], "suck:0.49,0.55", [
@@ -477,7 +526,11 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # the card proves its sentence and leaves at the turn ("And here's what nobody says" - E50/E25); its exit is the beat M16 counts
             # the operator, 2026-09-10 (docking over a living chart costs space): the monthly bars PARK up-left on "pledged" and the fab
             # card takes the band the park frees - 626x370 at (0.5, 0.55) = y 871-1241, above the source line (1249), over nothing
-            (dock_png("dock-i-fab-wafer", STILLS_DIR / "sig-i-fab-wafer.png", FAB_CROP), 0, t_pledge, at("And here's"),
+            # the pledge's EVIDENCE (2026-09-10): the record types the Nikkei lede in the band under the parked bars on "pledged", the
+            # highlighter landing on "at least 10 trillion yen" as the narrator says it; on "works" the band is the plant's
+            (record_dock("dock-k-pledge-record", ws, t_pledge), 0, t_pledge, at("works"),
+             {"centre": True, "card_aspect": 0.47, "centre_w": FAB_W, "centre_x": FAB_CX, "centre_y": FAB_CY - 0.028}),   # the paper's height is its typed text; ~54 px up (a share of the stage) keeps its foot clear of the caption strip
+            (dock_png("dock-i-fab-wafer", STILLS_DIR / "sig-i-fab-wafer.png", FAB_CROP), 0, at("works"), at("And here's"),
              {"centre": True, "card_aspect": 0.5911, "centre_w": FAB_W, "centre_x": FAB_CX, "centre_y": FAB_CY}),
             # the fourth watch: the selling bars are no evidence dock - they are the ring page's own bars, laid against its lines (combo)
         ], "cut", [
@@ -487,9 +540,10 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # two lights, two beats (the gate credits a species START, not a glide inside one): the wafer on "chips" for the 0.99 s
             # to "works"; then a second light that starts on the wafer and GLIDES out to the whole fab, held until the card leaves
             {"kind": "chart_to", "at": round(t_pledge - 0.4, 2), "dur": 0.9, "to": "park", "scale": 0.55, "anchor": "top"},   # the bars make room for the plant
-            {"kind": "spotlight", "at": at("chips"), "dur": round(at("works") - at("chips"), 2), "idle": "live",
+            # the lights follow the plant: the wafer once the card has landed (works + the landing), the glide out to the whole fab on "beats"
+            {"kind": "spotlight", "at": round(at("works") + 0.55, 2), "dur": round(at("beats") - at("works") - 0.55, 2), "idle": "live",
              "target": centred_card_point(0.5911, FAB_CY, *FAB_WAFER, centre_w=FAB_W, centre_x=FAB_CX)},
-            {"kind": "spotlight", "at": at("works"), "dur": "hold", "until": at("And here's"), "idle": "live", "glide_at": 0.0,
+            {"kind": "spotlight", "at": at("beats"), "dur": "hold", "until": at("And here's"), "idle": "live", "glide_at": 0.0,
              "target": centred_card_point(0.5911, FAB_CY, *FAB_WAFER, centre_w=FAB_W, centre_x=FAB_CX),
              "target2": FAB_BOX},
             # E51 (the third watch): the punch on the peak here was tied to nothing - the page returns drawn - and is cut
@@ -507,7 +561,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # measured on the frame: a FIGURE at the June bar (282 px of type, written leftward) crosses the May bar's body at every dy the
             # 800 px plot allows - so the print is a NOTE in the page's quiet zone (the June bar's own -$26.4 stands in its callout)
             {"kind": "note", "at": t_first, "dur": 1.4, "text": "the June print: " + _bn(FACTS["latest"]) + " - your first number"},
-        ]),
+        ], CAM_ROW),
         # 5 the second number: a Meta share priced at each yield, punch on the 5.5 % bar at "discounts" - as v1
         # ... the Meta page HOLDS to the snap (E50: deployed 69.2 -> 76.8, 7.6 s) and the Fed CARD is thrown onto it on "The Fed still" -
         #   the holdings page does not come back for the ring ("we bring back the old chart for no reason" - the third watch)
@@ -529,7 +583,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
         #   6b: on "moved" the card SNAPS up to the full stage and IS the last world - the Fed page, arrived built (E51: a push tied to
         #   a landing); its side notes write as the ring is spoken (from the object's facts); the host arrives CENTRED on it for
         #   "and that unfunded bar tab is still ours" and retracts before the dip to the card.
-        (t_moved, t_outro, f"ledger:ev-fed-vs-yields-v1:line:{FED_MAY_IDX}:right:snap=dock-h-fed-vs-yields:cut", (0, 0, 0), [
+        (t_moved, t_outro, f"ledger:ev-fed-vs-yields-v1:line:{FED_MAY_IDX}:right:{'camera' if CAMERA else 'snap'}=dock-h-fed-vs-yields:cut", (0, 0, 0), [   # P49 T5: with TOKYO_CAMERA=1 the eye goes to the thrown card on "moved" instead of the card growing
             # the sixth watch (operator: "get rid of the host and just dock a small, centered image of the cup of tea on 'its
             # tea break' that doesn't interfere with graph ... I wonder if we could even just zoom the video on it and play the
             # steaming tea cup"): the opening scene's own cup, zoomed out of that footage so the steam keeps moving, small and
@@ -595,7 +649,6 @@ def main() -> int:
     (BUILD / "timeline.json").write_text(json.dumps(tl_built, indent=1), encoding="utf-8")
     # v2: the short DOES dock - the clips arrive over the page as stills (E44 / operator, 2026-09-06). The cards carry an
     # authored title, source and species; the pages are still the proof.
-    (BUILD / "evidence-dock.json").write_text(json.dumps(DOCK_META, indent=1), encoding="utf-8")
     (HERE / "evidence/objects").mkdir(exist_ok=True)
     for s in SERIES:
         shutil.copy2(HERE / "evidence" / f"{s}.series.json", HERE / "evidence/objects" / f"{s}.series.json")
@@ -606,6 +659,8 @@ def main() -> int:
     CP.main()
 
     rows = shot_table(ws, runtime_s, t_outro)
+    # written AFTER the rows: record_dock fills a META entry's `record` (the typed words) while the rows are built (2026-09-10)
+    (BUILD / "evidence-dock.json").write_text(json.dumps(DOCK_META, indent=1), encoding="utf-8")
     # the page-enter cue (M11: a sound hit within 1.5 s of the first chart): the page roll-out foley at
     # every ledger entry, on the episode clock, beside the page-relative page_cues (P35 T9)
     plan_path = HERE / "sound/SOUND-PLAN.json"

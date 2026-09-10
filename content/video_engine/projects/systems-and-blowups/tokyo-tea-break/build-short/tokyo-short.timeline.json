@@ -2119,14 +2119,26 @@
    }
   },
   {
+   "slot": "page retract 4 (whirl)",
+   "at": 59.56,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "env": [],
+   "variants": {
+    "A": "__snd_4_A__",
+    "B": "__snd_4_B__",
+    "C": "__snd_4_C__"
+   }
+  },
+  {
    "slot": "landing 5 (throw, paper)",
    "at": 76.21,
    "gain": 0.12,
    "fade_in": 0.0,
    "env": [],
    "variants": {
-    "A": "__snd_4_A__",
-    "B": "__snd_4_B__"
+    "A": "__snd_5_A__",
+    "B": "__snd_5_B__"
    }
   },
   {
@@ -2136,7 +2148,7 @@
    "fade_in": 0.0,
    "env": [],
    "variants": {
-    "A": "__snd_5_A__"
+    "A": "__snd_6_A__"
    }
   },
   {
@@ -2163,8 +2175,8 @@
     ]
    ],
    "variants": {
-    "A": "__snd_6_A__",
-    "B": "__snd_6_B__"
+    "A": "__snd_7_A__",
+    "B": "__snd_7_B__"
    }
   },
   {
@@ -2191,8 +2203,8 @@
     ]
    ],
    "variants": {
-    "A": "__snd_7_A__",
-    "B": "__snd_7_B__"
+    "A": "__snd_8_A__",
+    "B": "__snd_8_B__"
    }
   }
  ],
@@ -2218,6 +2230,96 @@
     "sha256": "a6be50e2541d4086a08fe7ad5d1d72925fc91ea78c6874373c3c54c998cc484b"
    },
    "badges": []
+  },
+  "dock-k-pledge-record": {
+   "title": "Japan to roll out $65bn in support for chips, AI",
+   "source": "Nikkei Asia \u00b7 12 Nov 2024",
+   "species": "record",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short\\docks\\dock-k-pledge-record.png",
+    "sha256": "c15688ff8385efe0c3f7f8f96fe93e3f98a43a6a1cd7f5eea746257291608061"
+   },
+   "badges": [],
+   "record": {
+    "hdr": [
+     "Nikkei Asia \u00b7 Semiconductors",
+     "12 November 2024"
+    ],
+    "kicker": "Japan to roll out $65bn in support for chips, AI",
+    "words": [
+     [
+      "...at",
+      55.31
+     ],
+     [
+      "least",
+      55.41
+     ],
+     [
+      "10",
+      55.71
+     ],
+     [
+      "trillion",
+      56.0
+     ],
+     [
+      "yen",
+      56.45
+     ],
+     [
+      "($65",
+      56.52
+     ],
+     [
+      "billion)",
+      56.59
+     ],
+     [
+      "in",
+      56.66
+     ],
+     [
+      "support",
+      56.73
+     ],
+     [
+      "through",
+      56.8
+     ],
+     [
+      "fiscal",
+      56.87
+     ],
+     [
+      "2030",
+      56.94
+     ],
+     [
+      "to",
+      57.01
+     ],
+     [
+      "boost",
+      57.08
+     ],
+     [
+      "the",
+      57.15
+     ],
+     [
+      "semiconductor...",
+      57.22
+     ]
+    ],
+    "hl": [
+     0,
+     4
+    ],
+    "end": 57.27,
+    "attr": "Mari Ishibashi, Nikkei staff writer",
+    "src": "asia.nikkei.com \u00b7 fetched 2026-09-10 \u00b7 evidence/sources/nikkei-2024-11-12-japan-chips-ai-support.txt"
+   }
   },
   "dock-i-fab-wafer": {
    "title": "Ten trillion yen for chips",
@@ -2270,7 +2372,11 @@
     1.99
    ],
    "docks": [],
-   "species": []
+   "species": [],
+   "camera": {
+    "keys": [],
+    "attention": "locked"
+   }
   },
   {
    "scene_id": "s02",
@@ -3607,7 +3713,85 @@
      "scale": 0,
      "x": 0,
      "y": 0
-    }
+    },
+    "page_states": [
+     {
+      "schema_version": "ledger_page.v1",
+      "surface": "page",
+      "builder": "dense-line",
+      "variant": "line",
+      "title": "Our biggest customer is selling",
+      "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06",
+      "source": "US Treasury TIC Table 5 \u00b7 2026-09",
+      "quiet_zone": "right",
+      "src_style": "compact",
+      "labels": [
+       "Japan"
+      ],
+      "values": [],
+      "value_strings": [],
+      "colors": [],
+      "series": [
+       {
+        "label": "-9.9%",
+        "name": "Japan",
+        "color": "crimson",
+        "pts": [
+         [
+          "2026.0833",
+          "1239.3"
+         ],
+         [
+          "2026.1667",
+          "1191.6"
+         ],
+         [
+          "2026.25",
+          "1209.9"
+         ],
+         [
+          "2026.3333",
+          "1143.1"
+         ],
+         [
+          "2026.4167",
+          "1116.7"
+         ]
+        ]
+       }
+      ],
+      "axes": {
+       "ylabel": "$bn",
+       "xticks": [
+        [
+         2026.0833,
+         "Feb '26"
+        ],
+        [
+         2026.25,
+         "Apr '26"
+        ],
+        [
+         2026.4167,
+         "Jun '26"
+        ]
+       ],
+       "highlight_from": "2026.0833",
+       "xdomain": [
+        2026.043,
+        2026.457
+       ]
+      },
+      "unit": "",
+      "judge": [],
+      "badges": [],
+      "emphasize": 0,
+      "derived": "rescale",
+      "window_offsets": [
+       311
+      ]
+     }
+    ]
    },
    "exit": "cut",
    "span": [
@@ -3642,10 +3826,10 @@
      "badge_at": [],
      "kind": "video",
      "place": {
-      "x": 140,
-      "y": 280,
-      "w": 799,
-      "h": 208
+      "x": 594,
+      "y": 399,
+      "w": 454,
+      "h": 416
      },
      "read_s": 1.2,
      "park_s": 0.7,
@@ -3684,13 +3868,23 @@
      }
     },
     {
-     "kind": "undraw",
+     "kind": "chart_to",
      "at": 21.09,
-     "dur": 1.2,
-     "target": {
-      "kind": "datum",
-      "index": 0
-     }
+     "dur": 1.4,
+     "to": "rescale",
+     "window": [
+      2026.043,
+      2026.457
+     ],
+     "state": 1
+    },
+    {
+     "kind": "chart_to",
+     "at": 36.18,
+     "dur": 0.9,
+     "to": "park",
+     "scale": 0.55,
+     "anchor": "top"
     },
     {
      "kind": "figure",
@@ -3701,7 +3895,6 @@
       "index": 311
      },
      "text": "$1,239.3B",
-     "sub": "February 2026",
      "dy": -0.7
     },
     {
@@ -3713,9 +3906,8 @@
       "index": 315
      },
      "text": "$1,116.7B",
-     "sub": "June 2026",
      "color": "neg",
-     "dy": 1.6
+     "dy": -1.0
     },
     {
      "kind": "retitle",
@@ -3723,7 +3915,11 @@
      "dur": 2.4,
      "text": "The opponent: a balance sheet"
     }
-   ]
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked"
+   }
   },
   {
    "scene_id": "s03",
@@ -3797,7 +3993,11 @@
       "y1": 0.548
      }
     }
-   ]
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked"
+   }
   },
   {
    "scene_id": "s04",
@@ -5133,7 +5333,56 @@
      "scale": 0,
      "x": 0,
      "y": 0
-    }
+    },
+    "page_states": [
+     {
+      "schema_version": "ledger_page.v1",
+      "surface": "page",
+      "builder": "story",
+      "variant": "bars",
+      "title": "The monthly print: Japan sold, month by month",
+      "sub": "Change in Japan's US Treasury holdings, $bn a month, March to June 2026",
+      "source": "US Treasury TIC \u00b7 Sep 2026",
+      "quiet_zone": "right",
+      "src_style": "compact",
+      "labels": [
+       "Mar",
+       "Apr",
+       "May",
+       "Jun"
+      ],
+      "values": [
+       -47.7,
+       18.3,
+       -66.8,
+       -26.4
+      ],
+      "value_strings": [
+       "-47.7",
+       "18.3",
+       "-66.8",
+       "-26.4"
+      ],
+      "colors": [
+       "crimson",
+       "teal",
+       "crimson",
+       "crimson"
+      ],
+      "unit": "$",
+      "judge": [],
+      "badges": [
+       {
+        "label": "FEB TO JUN 2026",
+        "value": "-$122.6B",
+        "tag": "a tenth of the pile",
+        "accent": "crimson",
+        "inline": false
+       }
+      ],
+      "emphasize": 3
+     }
+    ]
    },
    "exit": "cut",
    "span": [
@@ -5142,20 +5391,37 @@
    ],
    "docks": [
     {
-     "slide": "dock-i-fab-wafer",
+     "slide": "dock-k-pledge-record",
      "slot": 0,
      "enter": 55.31,
-     "exit": 59.57,
+     "exit": 57.84,
      "badge_at": [],
      "place": {
-      "x": 78,
-      "y": 552,
-      "w": 804,
-      "h": 475
+      "x": 227,
+      "y": 855,
+      "w": 626,
+      "h": 294
      },
      "read_s": 1.2,
      "park_s": 0.7,
      "park": true,
+     "centre": true
+    },
+    {
+     "slide": "dock-i-fab-wafer",
+     "slot": 0,
+     "enter": 57.84,
+     "exit": 59.57,
+     "badge_at": [],
+     "place": {
+      "x": 227,
+      "y": 871,
+      "w": 626,
+      "h": 370
+     },
+     "read_s": 1.2,
+     "park_s": 0.7,
+     "park": false,
      "centre": true
     }
    ],
@@ -5167,34 +5433,42 @@
      "text": "The opponent: a balance sheet"
     },
     {
+     "kind": "chart_to",
+     "at": 54.91,
+     "dur": 0.9,
+     "to": "park",
+     "scale": 0.55,
+     "anchor": "top"
+    },
+    {
      "kind": "spotlight",
-     "at": 56.85,
-     "dur": 0.99,
+     "at": 58.39,
+     "dur": 0.17,
      "idle": "live",
      "target": {
       "kind": "point",
-      "x": 0.5549,
-      "y": 0.4112
+      "x": 0.5864,
+      "y": 0.5502
      }
     },
     {
      "kind": "spotlight",
-     "at": 57.84,
-     "dur": 1.73,
+     "at": 58.56,
+     "dur": 1.01,
      "until": 59.57,
      "idle": "live",
      "glide_at": 0.0,
      "target": {
       "kind": "point",
-      "x": 0.5549,
-      "y": 0.4112
+      "x": 0.5864,
+      "y": 0.5502
      },
      "target2": {
       "kind": "region",
-      "x0": 0.0722,
-      "y0": 0.2875,
-      "x1": 0.8167,
-      "y1": 0.5349
+      "x0": 0.2102,
+      "y0": 0.4536,
+      "x1": 0.7898,
+      "y1": 0.6464
      },
      "held": true
     },
@@ -5209,26 +5483,23 @@
      "color": "neg"
     },
     {
-     "kind": "undraw",
+     "kind": "chart_to",
      "at": 50.3,
-     "dur": 1.2,
-     "target": {
-      "kind": "datum",
-      "index": 0
-     }
+     "dur": 1.4,
+     "to": "recast",
+     "state": 1
     },
     {
-     "kind": "figure",
+     "kind": "note",
      "at": 53.19,
-     "dur": 1.6,
-     "target": {
-      "kind": "datum",
-      "index": 315
-     },
-     "text": "$1,116.7B",
-     "sub": "the June 2026 print"
+     "dur": 1.4,
+     "text": "the June print: $1,116.7B - your first number"
     }
-   ]
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked"
+   }
   },
   {
    "scene_id": "s05",
@@ -5339,7 +5610,11 @@
       "index": 0
      }
     }
-   ]
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked"
+   }
   },
   {
    "scene_id": "s06",
@@ -6217,7 +6492,11 @@
      "dur": 1.2,
      "text": "30-year mortgage 5.98% -> 6.71% over the same months."
     }
-   ]
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked"
+   }
   },
   {
    "scene_id": "s07",
@@ -6243,29 +6522,34 @@
      "at": 82.623,
      "dur": 6.2
     }
-   ]
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked"
+   }
   }
  ],
  "species": [
   "ledger",
   "build_to",
   "spotlight",
-  "undraw",
+  "chart_to",
   "figure",
   "retitle",
   "steam",
   "trace",
   "ticker",
   "bracket",
+  "note",
   "callout",
   "spread",
-  "note",
   "life"
  ],
  "kinetics": {
   "idle": true,
   "stop_action": true,
   "arap_morph": true,
+  "camera": true,
   "analytic_spring": true,
   "min_jerk": true,
   "area_squash": true,

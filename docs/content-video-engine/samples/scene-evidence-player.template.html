@@ -288,6 +288,16 @@
   .paper .prule { height: 2px; background: #cdc5b4; margin: 11px 0 20px; }
   .paper .pkick { font-size: 15px; color: #6b665c; margin-bottom: 12px; }
   .paper blockquote { font-size: 25px; line-height: 1.5; min-height: 5.8em; }
+  /* portrait (2026-09-10, the Tokyo pledge record): the paper's type was sized for a 1920-wide stage - on a phone 25px is
+     unreadable; the 9:16 record reads at the sub's size, its chrome a step under */
+  html[data-aspect="9:16"] .paper { padding: 26px 34px 24px; min-height: 0; }
+  html[data-aspect="9:16"] .paper blockquote { font-size: 32px; line-height: 1.4; min-height: 4.2em; }
+  html[data-aspect="9:16"] .paper .phdr { font-size: 18px; }
+  html[data-aspect="9:16"] .paper .pkick { font-size: 20px; }
+  html[data-aspect="9:16"] .paper .pattr { font-size: 18px; }
+  /* the paper's height is its typed text: on a phone the source line grew the foot under the caption strip (measured 36 px);
+     the header IS the citation (E52) and the source path lives in the META, so the line is off in portrait */
+  html[data-aspect="9:16"] .paper .psrc { display: none; }
   .paper .hw { background-image: linear-gradient(101deg, transparent 1.5%,
                  rgba(245,201,63,.72) 6%, rgba(245,201,63,.72) 94%,
                  transparent 98.5%);
@@ -2540,6 +2550,7 @@
         const swept = Math.max(0, Math.min(1, (t - ts) / 0.2));
         sp.style.backgroundSize = ((1 - Math.pow(1 - swept, 3)) * 100) + "% 100%";
         frag.append(sp);
+        if (k === r.hl[1] && k < i) frag.append(document.createTextNode(" "));   /* the space after the phrase, outside the stroke (Tokyo 2026-09-10: "yen($65 billion)") */
       } else {
         frag.append(document.createTextNode(txt));
         if (k < i) frag.append(document.createTextNode(" "));
@@ -2875,9 +2886,18 @@
        below it for negatives, value labels ride the bar's far end, category labels stay along the bottom. */
     const n = Math.max(1, st.vals.length);
     const lo0 = Math.min(0, ...st.vals), hi0 = Math.max(0, ...st.vals);
-    const pad = Math.max(1e-9, (hi0 - lo0) * 0.14), lo = lo0 - (lo0 < 0 ? pad : 0), hi = hi0 + (hi0 > 0 ? pad : 0);
+    /* THE BREAKTHROUGH (Bravos, 2026-09-10): a bars page may STATE its scale (`axes.domain`) and let a value past it break
+       through the top (`axes.overflow: "break"`) - the bar runs BREAK of the plot past the top gridline, a break glyph cuts it
+       there, its value stands above it. The scale is printed and the value is printed, so the height is not a lie (E28); the
+       drama is the frame that could not hold the number. */
+    const dom = Array.isArray((pg.axes || {}).domain) && (pg.axes.domain.length === 2) ? pg.axes.domain.map(Number) : null;
+    const brk = (pg.axes || {}).overflow === "break";
+    const pad = Math.max(1e-9, (hi0 - lo0) * 0.14);
+    const lo = dom ? Math.min(dom[0], lo0) : lo0 - (lo0 < 0 ? pad : 0), hi = dom ? dom[1] : hi0 + (hi0 > 0 ? pad : 0);
     const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;   /* portrait (P41): stage px, 40px labels below, 59px values and pill above */
-    const bottom = P ? G.H - 70 : 440, top = P ? 150 : 90, x0 = P ? 150 : 60, x1 = P ? G.W - 30 : 980, gap = 0.34, unit = pg.unit || "";
+    const bottom = P ? G.H - 70 : 440, top0 = P ? 150 : 90, x0 = P ? 150 : 60, x1 = P ? G.W - 30 : 980, gap = 0.34, unit = pg.unit || "";
+    /* a breaking page lowers its plot top to make headroom: the bar's run past the top gridline plus the value that stands above it */
+    const top = brk ? top0 + Math.round(0.12 * (bottom - top0)) + (P ? 64 : 40) : top0;
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
     st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
@@ -2887,9 +2907,10 @@
        short's monthly page with only two tick labels ($0 and -$50) and NO reference above zero for its one
        positive bar. Asking for six lands step 20 and five labelled ticks. */
     lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26, 6);
+    const BREAK = 0.12 * (bottom - top);   /* how far a breaking bar runs past the top gridline [DERIVED: Bravos 50-55, the bar that runs out] */
     st.vals.forEach((v, i) => {
-      const x = x0 + (x1 - x0) / n * (i + gap / 2), yv = my(v), neg = v < 0;
-      const h = Math.max(3, Math.abs(yv - base)), y = neg ? base : base - h;
+      const over = brk && v > hi, x = x0 + (x1 - x0) / n * (i + gap / 2), yv = my(over ? hi : v), neg = v < 0;
+      const h = Math.max(3, Math.abs(yv - base)) + (over ? BREAK : 0), y = neg ? base : base - h;
       const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (i === st.emph ? " emph" : ""), st.chart,
         { x: x.toFixed(1), y: y.toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 6 });   /* grows from the zero baseline, up or down */
       /* E53 s7: a DECLARED colour outranks the sign default. Without this the builder read only the value's sign,
@@ -2904,7 +2925,14 @@
       const vy = neg ? base + h + (P ? 62 : 26) : base - h - (P ? 22 : 14);
       const val = lpEl("text", "val", st.chart, { x: (x + bw / 2).toFixed(1), y: vy.toFixed(1), "text-anchor": "middle", opacity: 0 });
       val.textContent = lpWithUnit(st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v), unit);
-      const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + h : base - h };
+      const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + h : base - h, over };
+      if (over) {   /* the break glyph: a zigzag in the page's ground across the bar at the top gridline, chalk-edged - the bar is cut and continues */
+        const zx0 = x - 8, zx1 = x + bw + 8, zy = top, dz = 9;
+        const zig = "M" + zx0.toFixed(1) + " " + (zy + dz).toFixed(1) + " L" + (zx0 + (zx1 - zx0) * 0.25).toFixed(1) + " " + (zy - dz).toFixed(1)
+          + " L" + (zx0 + (zx1 - zx0) * 0.5).toFixed(1) + " " + (zy + dz).toFixed(1) + " L" + (zx0 + (zx1 - zx0) * 0.75).toFixed(1) + " " + (zy - dz).toFixed(1) + " L" + zx1.toFixed(1) + " " + (zy + dz).toFixed(1);
+        rec.brk = lpEl("path", "brk", st.chart, { d: zig, fill: "none", stroke: "var(--lp-ground, #16181c)", "stroke-width": 14, "stroke-linejoin": "round", opacity: 0 });
+        rec.brk2 = lpEl("path", "brk", st.chart, { d: zig, fill: "none", stroke: "var(--lp-chalk)", "stroke-width": 3, "stroke-linejoin": "round", opacity: 0 });
+      }
       st.bars.push(rec);
       lpMark(st, "b:" + i, "bar", bar, { x, y, w: bw, h, base, cx: x + bw / 2, end: rec.end, neg, v }, rec);
       lpMark(st, "xlab:" + i, "xlabel", lab, { x: x + bw / 2, y: bottom + (P ? 52 : 34) });
@@ -2952,8 +2980,13 @@
           o.val.setAttribute("x", nx.toFixed(1));
         }
       }
-      lpEl("rect", "cpill", cg, { x: (e.x - CP.w / 2).toFixed(1), y: py.toFixed(1), width: CP.w, height: CP.h, rx: CP.rx });
+      const pr = lpEl("rect", "cpill", cg, { x: (e.x - CP.w / 2).toFixed(1), y: py.toFixed(1), width: CP.w, height: CP.h, rx: CP.rx });
       const ct = lpEl("text", "callout", cg, { x: e.x.toFixed(1), y: (py + CP.ty).toFixed(1), "text-anchor": "middle" });
+      /* the pill fits its number: a six-glyph value ("36.59%", the breakthrough page) overran the fixed width and lost its
+         first digit at the edge (measured 2026-09-10). Measured on the final string; a page not yet laid out measures 0 and keeps the dial. */
+      ct.textContent = e.val.textContent;
+      const need = (ct.getComputedTextLength ? ct.getComputedTextLength() : 0) + (P ? 34 : 18);
+      if (need > CP.w) { pr.setAttribute("x", (e.x - need / 2).toFixed(1)); pr.setAttribute("width", need.toFixed(1)); }
       e.val.setAttribute("opacity", 0); e.val.style.display = "none";
       st.callout = cg; st.cval = ct; st.cfinal = e.val.textContent; st.cnum = st.vals[e.i]; st.cunit = unit;
       lpMark(st, "callout", "callout", cg, { x: e.x, y: py });
@@ -4012,6 +4045,7 @@
       cs.bars.forEach((bb, i) => {
         const k = expoOut(clamp01((c - i * 0.1) / 0.55));
         bb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
+        if (bb.brk) { const on = k > 0.92 ? 1 : 0; bb.brk.setAttribute("opacity", on); bb.brk2.setAttribute("opacity", on); }   /* the break cuts the bar once it has run past the top */
         bb.lab.setAttribute("opacity", clamp01((c - i * 0.1 - 0.3) / 0.2).toFixed(2));
         bb.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
       });
@@ -4939,7 +4973,10 @@
       const d = (prev.docks || []).find((x) => x.slide === sc.world.page.snap_from), del = d ? docks[d.slot | 0] : null;
       /* the card's box at rest: its parked `place`, else its LAYOUT box (left/top/width from the solo CSS, the height from the
          image - layout is untouched by transforms, so a cold seek reads the same box a played frame does), else the recorded rect */
-      const box = d && d.place ? d.place : (del && del.offsetWidth > 0 && del.offsetHeight > 0 ? { x: del.offsetLeft, y: del.offsetTop, w: del.offsetWidth, h: del.offsetHeight } : SNAP_RECT[sc.world.page.snap_from]);
+      /* the LAYOUT box first: a card thrown onto a page carries a parked `place` it may never reach (a one-second card holds its
+         reading size - the ring's Fed card, whose arrival zoomed past it); the element's layout IS where the card stands */
+      const body = del && del.querySelector("img,video"), hasBody = !!body && (((body.naturalHeight | 0) > 0) || ((body.videoHeight | 0) > 0));   /* a card with no body has no layout to speak of: its parked place stands for it */
+      const box = (hasBody && del.offsetWidth > 0 && del.offsetHeight > 40) ? { x: del.offsetLeft, y: del.offsetTop, w: del.offsetWidth, h: del.offsetHeight } : (d && d.place ? d.place : SNAP_RECT[sc.world.page.snap_from]);
       if (box && box.w > 0 && box.h > 0) {
         const u = minJerk(clamp01((t - sc.span[0]) / SNAP_S)), st = camArrivalState(box, u, STAGE_W, STAGE_H);
         camArr = { scene: prev, slide: sc.world.page.snap_from, u, box, state: { s: st.s, ox: st.look[0], oy: st.look[1], ax: st.at[0], ay: st.at[1] } };

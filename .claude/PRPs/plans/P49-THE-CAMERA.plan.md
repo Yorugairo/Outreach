@@ -370,6 +370,10 @@ is the cream (or the deckle); corners rounded whenever the card is not full-fram
   on `build-short/player.html`) read as a viewer, and the element rects inspected in the pane at the instants that matter
   (the 2026-09-08 lesson: measure the page / field / title rects, do not read instants).
 - The operator's watch on :8734 (HG1, HG2).
+- (2026-09-10) HG1/HG2 material on the Tokyo short too: `TOKYO_CAMERA=1 TOKYO_BUILD_DIR=build-short-cam` → :8742
+  (`tokyo-short-player-cam`): the attention pull on the row-2 landings and the fab card, the arrival on the ring in place
+  of the snap; gate PASS (M24 in frame). The operator asked for it ("let's test out those camera changes"); it is watched
+  against the locked cut on :8738, never over it.
 
 ## Evidence And Handoff
 
