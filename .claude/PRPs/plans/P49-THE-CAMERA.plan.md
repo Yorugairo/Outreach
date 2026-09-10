@@ -1,7 +1,7 @@
 ---
 id: P49-THE-CAMERA
 title: The camera as a first-class component of the physics - the eye in the world
-status: draft
+status: running
 operation: feature
 risk: standard
 owner: parent
@@ -96,7 +96,8 @@ composition, then still), and a slow push on a press collage that stacks. So:
 5. **T7's record** carries this table; E54 in the plan's write set is now E59 (E54-E58 exist).
 
 The revised order: **T1 -> T2 -> T3 + T6 (the probe and the gate, the value P48 exposed) -> T4 (locked by default; the
-map/wide-stage move; the landing tie) -> T5 (opt-in, HG2) -> T7.** Nothing here is approved; the plan stays `draft`.
+map/wide-stage move; the landing tie) -> T5 (opt-in, HG2) -> T7.** Approved to run by the operator's `/prp-implement P49`
+(2026-09-10: *"let's see how it changes the play through"*).
 
 ## Intent And Acceptance
 
@@ -190,17 +191,23 @@ rendered.
 ## Task Slices
 
 ### T1: The camera model on the timeline
-- Status: pending
-- Owner: implementation_luna
+- Status: complete (2026-09-10)
+- Owner: parent (built with T2/T3 - the model's shape is the player's)
 - Depends on: none
 - Write set: `content/video_engine/scripts/build_scene_timeline_f.py`, `content/video_engine/tests/test_camera.py`
 - Acceptance: a timeline with no authored camera carries identity keys; an authored key list validates (monotonic t,
   zoom > 0, ease in the kinetics set); the three camera species compile to keys with the same numbers `camXf` produces.
 - Validate: `python -m pytest content/video_engine/tests/test_camera.py -q`
-- Evidence: pending
+- Evidence: (2026-09-10) a shot row's optional 8th element `{"keys": [{t, zoom, look, at?, ease?}], "attention":
+  "locked"|"landings"}`; `look`/`at` as stage fractions or a declared target (resolved by the player at load);
+  `validate_camera` names every fault (ascending t, zoom > 0, the ease set, the attention set, a target's own errors);
+  `validate_camera_row` refuses keys and a camera species on one row (s9.28 C3); every compiled scene carries `camera`
+  (identity `{keys: [], attention: "locked"}` when nothing is authored); `build_kinetics` turns `camera` on. Deviation:
+  the species do NOT compile to keys - a datum target resolves only in the player (its page geometry), so the species
+  stay species and the PLAYER routes them through the one camera (T2); the numbers are the same by construction.
 
 ### T2: One camera transform at the world root
-- Status: pending
+- Status: complete (2026-09-10) - the root is LOGICAL (one state per frame), not a DOM wrapper: see the deviation
 - Owner: parent
 - Depends on: T1
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html`, `content/video_engine/scripts/kinetics/camera.mjs`, `content/video_engine/scripts/sync_kinetics.py`
@@ -208,17 +215,32 @@ rendered.
   are byte-identical; with it on, the three species render pixel-identical to today on the tariff short's frames
   (measured by `measure_frozen_frames.py`-style hashes on the affected windows).
 - Validate: `python -m pytest content/video_engine/tests/test_golden_frames.py -q` and the window hashes
-- Evidence: pending
+- Evidence: (2026-09-10) `kinetics/camera.mjs` (synced into the template after chartxf): `camSpeciesState` (the three
+  envelopes factored UNCHANGED), `camKeyState` (keys: identity before the first, lerp by the arriving key's ease, hold
+  after the last), `camCssFor` (a zoom in place writes the byte-identical string the player always wrote; a pan takes
+  `translate(t) scale(s)` with t = at - s*look - (1-s)*O), `camFrustum`, `camInFrame`, `camProject`. The player:
+  `camNow(sc, t)` (behind `kinetics.camera`; keys win when authored, else the species window, else identity) feeds the
+  same two call sites `camXf` fed (plife, the world element). **Pixel-identical, measured:** a punch, a focus zoom and a
+  pull-back on the golden page, flag off vs on, 11 instants - the same transform string and the same frame hash at each.
+  13 goldens byte-identical. Deviation, stated: no DOM wrapper - the same string on the same three elements IS one
+  transform, and a wrapper would risk sub-pixel drift for nothing; docks stay in screen space (doc 29: the drawing
+  surface), so "docks compose through it" is NOT done and is HG-level (the plan's acceptance 1 is met for worlds, plate
+  life and species; docks are a ruling to take, not a slice).
 
 ### T3: The probe - what is in frame
-- Status: pending
+- Status: complete (2026-09-10)
 - Owner: junior_developer
 - Depends on: T2
 - Write set: template (`window.__camera`), `content/video_engine/tests/test_camera_probe.py`
 - Acceptance: `__camera(t)` returns `{frustum: {x0,y0,x1,y1}, zoom}` and `inFrame(target)` with the on-screen scale;
   a target off frame at t reports false.
-- Validate: `python -m pytest content/video_engine/tests/test_camera_probe.py -q`
-- Evidence: pending
+- Validate: `python -m pytest content/video_engine/tests/test_camera.py -q` (the probe's tests live with the model's)
+- Evidence: (2026-09-10) `window.__camera(t, target?)` -> `{scene, on, zoom, look, at, frustum{x0,y0,x1,y1}, target:
+  {inside, visible, scale, box, screen}}` - the frustum in world (pre-camera) stage px, a target's visible share, its
+  on-screen scale and where it lands. Measured on the punch's hold: zoom 1.14, the frustum 1080/1.14 x 1920/1.14 inside
+  the stage, the punch's own target inside, the far corner out and projecting off screen; identity before the window.
+  `test_camera.py` 14 (the model 11 rows, the pixel identity, the probe, authored keys pan+zoom+hold+seek);
+  `kinetics/camera.test.mjs` 6.
 
 ### T4: The attention law
 - Status: pending

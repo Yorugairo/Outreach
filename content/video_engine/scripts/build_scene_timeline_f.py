@@ -142,6 +142,63 @@ BRACKET_COLORS = ("crimson", "teal", "cobalt", "amber", "deemph", "neg", "pos")
 # s9.27 precedence / s9.28 C3: punch, focus zoom, pull-back and Ken Burns are
 # mutually exclusive per window - one camera move, never over a Ken Burns drift.
 CAMERA_MOVES = ("punch", "focus_zoom", "pull_back")
+# P49 T1: THE CAMERA on the timeline - one persistent 2D similarity per scene. A shot row may carry, as its optional 8th
+# element, {"keys": [{t, zoom, look, at?, ease?}, ...], "attention": "locked"|"landings"}: `look` is the world point the
+# camera looks at and `at` the screen point it lands on ([x, y] stage fractions, or a declared target the player resolves
+# at load); a key with no `at` zooms in place. Nothing authored -> identity (Bravos, measured 2026-09-10: LOCKED is the
+# default). Keys and a camera species never share a row (s9.28 C3: one camera per window).
+CAMERA_EASES = ("cubic", "inout", "linear", "hold")
+CAMERA_ATTENTION = ("locked", "landings")
+
+
+def camera_identity() -> dict:
+    return {"keys": [], "attention": "locked"}
+
+
+def validate_camera(cam, plate_id: str) -> list[str]:
+    """An authored camera, validated by name: keys in ascending t, zoom > 0, an ease from the set, look/at as stage
+    fractions or a declared target, attention from the set. None or the identity pass."""
+    if cam is None:
+        return []
+    if not isinstance(cam, dict):
+        return [f"{plate_id}: camera must be a dict {{keys: [...], attention: locked|landings}}"]
+    errs: list[str] = []
+    if cam.get("attention", "locked") not in CAMERA_ATTENTION:
+        errs.append(f"{plate_id}: camera attention must be one of {'|'.join(CAMERA_ATTENTION)}")
+    keys = cam.get("keys", [])
+    if not isinstance(keys, list):
+        return errs + [f"{plate_id}: camera keys must be a list of {{t, zoom, look, at?, ease?}}"]
+    num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool)
+    last = None
+    for i, k in enumerate(keys):
+        if not isinstance(k, dict) or not num(k.get("t")):
+            errs.append(f"{plate_id}: camera key {i}: 't' must be a number (timeline seconds)"); continue
+        if last is not None and k["t"] <= last:
+            errs.append(f"{plate_id}: camera key {i}: keys must be in ascending t")
+        last = k["t"]
+        z = k.get("zoom", 1)
+        if not num(z) or z <= 0:
+            errs.append(f"{plate_id}: camera key {i}: zoom must be a number > 0")
+        if k.get("ease", "cubic") not in CAMERA_EASES:
+            errs.append(f"{plate_id}: camera key {i}: ease must be one of {'|'.join(CAMERA_EASES)}")
+        for fld in ("look", "at"):
+            v = k.get(fld)
+            if v is None:
+                continue
+            if isinstance(v, dict):
+                errs += [f"{plate_id}: camera key {i}: {fld}: {e}" for e in _validate_target("camera", v, TARGET_KINDS)]
+            elif not (isinstance(v, (list, tuple)) and len(v) == 2 and all(num(c) and 0 <= c <= 1 for c in v)):
+                errs.append(f"{plate_id}: camera key {i}: {fld} must be [x, y] as stage fractions 0..1 or a declared target")
+    return errs
+
+
+def validate_camera_row(cam, row_species, plate_id: str) -> list[str]:
+    """The row's camera against its species: authored keys and a camera species cannot both drive one window."""
+    errs = validate_camera(cam, plate_id)
+    moves = [e["kind"] for e in (row_species or []) if isinstance(e, dict) and e.get("kind") in CAMERA_MOVES]
+    if isinstance(cam, dict) and cam.get("keys") and moves:
+        errs.append(f"{plate_id}: camera keys and a {moves[0]} species on one row - one camera per window (s9.28 C3)")
+    return errs
 TARGET_KINDS = ("datum", "point", "region", "span")
 # s9.27 targeting law: the target kinds each species may take. () = the species
 # needs no target (plate life's target is the plate itself); everything else
@@ -1019,7 +1076,7 @@ def build_kinetics() -> dict:
     """The flags a compiled timeline carries. P39: every capability defaults OFF in the template. E49 (P47 T5): the
     IDLE is on for every timeline this compiler writes - a build that wants stillness says so (``KINETICS["idle"] =
     False``); the goldens' frozen sources carry no flag and stay byte-identical."""
-    return {"idle": True, "stop_action": True, "arap_morph": True, **KINETICS}   # P47 T1: an authored `arrive` is the switch; the flag only guards the goldens
+    return {"idle": True, "stop_action": True, "arap_morph": True, "camera": True, **KINETICS}   # P47 T1: an authored `arrive` is the switch; the flag only guards the goldens; P49 T2: the camera is one state per frame (the species pixel-identical)
 
 
 def main() -> int:
@@ -1053,6 +1110,7 @@ def main() -> int:
         # The targeting law is a hard build error naming the row; the pivot
         # span is None until the parent wires it from the ledger (s9.28 C4).
         row_species = list(row[6]) if len(row) > 6 and row[6] is not None else []
+        row_camera = row[7] if len(row) > 7 and row[7] is not None else None   # P49 T1: the optional 8th element
         # each window runs to the next so the world layer never drops out
         b = plan[i + 1][0] if i + 1 < len(plan) else tl["runtime_s"]
         # dur: "hold" (operator, 2026-09-08, on the spotlight: "right now we flash it on, and really, it should hold until it
@@ -1078,7 +1136,7 @@ def main() -> int:
             row_species.remove(e)
         if dropped:
             print(f"  hold: dropped {len(dropped)} {'/'.join(e['kind'] for e in dropped)} on row {i + 1} - under {HOLD_MIN_S}s of room before the next event")
-        species_errors = validate_species(row_species, ken, plate, pivot_span=None)
+        species_errors = validate_species(row_species, ken, plate, pivot_span=None) + validate_camera_row(row_camera, row_species, plate)
         if species_errors:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(species_errors))
         # a ledger page is drawn, not embedded (doc 29 s9.26); a bad or
@@ -1179,6 +1237,7 @@ def main() -> int:
             # declared target to pixels at render time (resolveTarget), the
             # motion gate counts their events per the s9.27 gate column
             "species": row_species,
+            "camera": row_camera if row_camera is not None else camera_identity(),   # P49 T1: identity unless the row authored keys
         }
         # E47: a timed exit publishes its length so the motion gate credits the right
         # window without re-parsing the name; a bare `dip` leaves the gate on DIP_S.

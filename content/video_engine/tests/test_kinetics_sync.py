@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import sync_kinetics as SK  # noqa: E402
 
-MODULES = ["ease", "spring", "stroke", "ink", "squash", "idle", "stopaction", "chartxf", "arap"]   # P43 T1 + P47 T5/T1/T3, in dependency order (the template's region order)
+MODULES = ["ease", "spring", "stroke", "ink", "squash", "idle", "stopaction", "chartxf", "camera", "arap"]   # P43 T1 + P47 T5/T1/T3, in dependency order (the template's region order)
 
 
 def test_committed_template_is_in_sync() -> None:
