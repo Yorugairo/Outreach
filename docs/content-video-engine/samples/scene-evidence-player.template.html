@@ -3917,15 +3917,35 @@
     Bs.extendCap = { si, bySeries, idx: (xf.sp.from_index | 0) - ((Bs.windowOffsets || [])[0] | 0), u2 };   /* each path of the series caps itself at its own shared datum (lpPaintChart) */
     for (let i = 0; i < states.length; i++) lpPaintChart(states[i], i === xf.to ? 1 : 0, t3, scene, t);
   };
+  /* P48 T2b - PARK. The active chart shrinks toward one corner of its own box by ONE affine transform on a min-jerk clock and
+     stays there: every mark, tick, ring and X keeps its place inside the chart (the stability rule - a re-laid-out chart flickers,
+     Sondag 2018), the title stays where it is, and the rest of the chart's box is free for what the sentence turns to next
+     (Bravos shot 91). The transform is the SVG's own; datum targets map through it because stageBox reads the transformed
+     rectangle, and the vortex reads the same rectangle. Idle-clean: the transform is written only while a park is on. */
+  const PARK_ORIGIN = Object.freeze({ top: "0 0", bottom: "0 100%", left: "0 0", right: "100% 0" });
+  const lpPaintPark = (S, sp, t) => {
+    const d = Math.max(0.001, sp.dur || 1), u = segEase(clamp01((t - sp.at) / d)), sc = 1 - (1 - (+sp.scale || 0.72)) * u;
+    S.chart.style.transformOrigin = PARK_ORIGIN[sp.anchor || "top"] || PARK_ORIGIN.top;
+    S.chart.style.transform = "scale(" + sc.toFixed(4) + ")";
+    S.parked = { u, scale: sc, anchor: sp.anchor || "top" };
+  };
+  const lpUnpark = (S) => { if (S && S.parked) { S.chart.style.transform = ""; S.chart.style.transformOrigin = ""; S.parked = null; } };
   /* the page's chart states over time. A `chart_to` is not a cut: the standing state runs its law BACKWARDS over the
      transition's own clock, then the named state draws on by its own envelope. Before the first chart_to, and on a page
      that declares none, this is exactly the single-chart behaviour it replaced. */
   const lpPaintStates = (st, scene, cBase, t3, t) => {
     const states = st.states || [st];
-    if (states.length < 2) { lpPaintChart(st, cBase, t3, scene, t); return; }   /* a page with one chart is exactly what it was */
-    let cur = 0, cCur = cBase, leaving = false, xf = null;
+    if (states.length < 2) {   /* a page with one chart is exactly what it was - plus a park, if the row names one (P48 T2b) */
+      lpPaintChart(st, cBase, t3, scene, t);
+      let pk = null; for (const sp of pageSpecies(scene, "chart_to")) { if (t < sp.at) break; pk = sp.to === "park" ? sp : null; }
+      if (pk) lpPaintPark(st, pk, t); else lpUnpark(st);
+      st.active = 0; return;
+    }
+    let cur = 0, cCur = cBase, leaving = false, xf = null, park = null;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
+      if (sp.to === "park") { park = sp; continue; }   /* P48 T2b: a transform on whichever state is active, never a state change */
+      park = null;   /* a later transition to another state un-parks (the new state stands full) */
       const d = Math.max(0.001, sp.dur || 1), k = Math.max(0, Math.min(states.length - 1, sp.state | 0));
       if (sp.to === "rescale") {   /* P48 T2: the axes retarget on one clock; the chart never leaves, and the target stands built */
         if (t < sp.at + d) { xf = { from: cur, to: k, u: segEase(clamp01((t - sp.at) / d)) }; break; }
@@ -3945,12 +3965,14 @@
       for (const S of states) { lpRestoreState(S); S.extendCap = null; }   /* no transition on: every state exactly as built (a seek is the play) */
       for (let i = 0; i < states.length; i++) lpPaintChart(states[i], i === cur ? cCur : 0, t3, scene, t, i === cur && leaving);
     }
+    for (let i = 0; i < states.length; i++) if (!park || i !== (st.active | 0)) lpUnpark(states[i]);
+    if (park && !xf) lpPaintPark(states[st.active | 0], park, t);
     /* the words that describe the chart move with it: the standing sub and source erase over the transition's first
        PS.ERASE_S, the arriving state's write over the rest. State 0's are the page's own, written by the page's build. */
     let ink = 0, ue = 0, uw = 1;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
-      if (sp.to === "rescale" || sp.to === "extend") continue;   /* P48 T2/T3: the words stay - it is the same chart with more of its data */
+      if (sp.to === "rescale" || sp.to === "extend" || sp.to === "park") continue;   /* P48 T2/T3/T2b: the words stay - it is the same chart */
       const d = Math.max(PS.ERASE_S + 0.01, sp.dur || 1);
       ue = clamp01((t - sp.at) / PS.ERASE_S);
       uw = clamp01((t - sp.at - PS.ERASE_S) / (d - PS.ERASE_S));

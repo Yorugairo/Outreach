@@ -129,7 +129,9 @@ SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                                                # the next thing: a FIGURE the hand writes at a datum's spot (the treasury number the sentence turns to)
 HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
 PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to")
-CHART_TO_KINDS = ("recast", "rescale", "extend")   # P48: recast (T4, a hand-over), rescale (T2, the axes retarget), extend (T3, new points draw on); morph_to is T5
+CHART_TO_KINDS = ("recast", "rescale", "extend", "park")   # P48: recast (T4, a hand-over), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform); morph_to is T5
+PARK_ANCHORS = ("top", "bottom", "left", "right")   # the corner of its own box the parked chart shrinks toward (top = Bravos 91: up, the room opens below)
+PARK_SCALE = (0.3, 0.95)                             # a parked chart is still a chart: never below 0.3 of itself, and 0.95 is not a park
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
                                                                 # (a returning page keeps its retitle, its bracket standing); the gate credits no event before the span
@@ -225,6 +227,16 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     elif kind == "chart_to":
         if entry.get("to") not in CHART_TO_KINDS:
             errs.append(f"chart_to: 'to' must be one of {'|'.join(CHART_TO_KINDS)} (the verb the chart changes state by)")
+        if entry.get("to") == "park":
+            # P48 T2b: no state is derived - the ACTIVE chart is transformed as one piece; the row names how small and toward which side
+            sc = entry.get("scale", 0.72)
+            if not isinstance(sc, (int, float)) or isinstance(sc, bool) or not (PARK_SCALE[0] <= sc <= PARK_SCALE[1]):
+                errs.append(f"chart_to park: scale must be a number in [{PARK_SCALE[0]}, {PARK_SCALE[1]}] (default 0.72)")
+            if entry.get("anchor", "top") not in PARK_ANCHORS:
+                errs.append(f"chart_to park: anchor must be one of {'|'.join(PARK_ANCHORS)} (the side the chart keeps)")
+            if "state" in entry:
+                errs.append("chart_to park: 'state' is not named - the active chart parks")
+            return errs
         if entry.get("to") == "extend":
             # P48 T3: the target carries points the standing chart did not - `to_index` (the page's series-0 index the window
             # grows to) or `series` (a `later: true` series in the file that draws on from its first point); the state is derived

@@ -54,7 +54,7 @@ needs_browser = pytest.mark.skipif(not _chromium_available(), reason="playwright
 def test_chart_to_is_a_page_species_with_a_verb_and_a_state():
     assert "chart_to" in B.SPECIES_KINDS and "chart_to" in B.PAGE_SPECIES
     assert B.SPECIES_TARGETS["chart_to"] == ()
-    assert B.CHART_TO_KINDS == ("recast", "rescale", "extend"), "morph_to lands with its own law (P48 T5)"
+    assert B.CHART_TO_KINDS == ("recast", "rescale", "extend", "park"), "morph_to lands with its own law (P48 T5)"
     assert B.STATE_MAX == 3
 
 
@@ -499,5 +499,116 @@ def test_an_extend_seeks_exactly():
         for t in (EX_AT + 0.3, EX_AT + EX_S * 0.7, EX_AT + EX_S + 1.0):
             a = at(t); at(3.0); at(EX_AT + EX_S + 4.0); b = at(t)
             assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True), t
+    finally:
+        close()
+
+
+# ---- P48 T2b: park - the chart makes room by one affine transform (Bravos 91) --------------------------------------
+
+PK_AT, PK_S = 12.0, 1.0
+
+
+@pytest.mark.parametrize("entry, needle", [
+    ({"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "park", "scale": 0.1}, "scale must be a number in"),
+    ({"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "park", "scale": "small"}, "scale must be a number in"),
+    ({"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "park", "anchor": "centre"}, "anchor must be one of"),
+    ({"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "park", "state": 1}, "the active chart parks"),
+])
+def test_a_park_names_how_small_and_which_side(entry, needle):
+    errs = B._validate_page_fields("chart_to", entry)
+    assert any(needle in e for e in errs), (needle, errs)
+    assert not B._validate_page_fields("chart_to", {"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "park"})
+    assert not B._validate_page_fields("chart_to", {"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "park", "scale": 0.6, "anchor": "bottom"})
+
+
+@needs_objects
+def test_a_park_derives_no_state():
+    plate = "ledger:ev-japan-holdings-v1:line"
+    world = B.world_for_plate(plate, (0, 0, 0), EP)
+    sp = [{"kind": "chart_to", "at": PK_AT, "dur": PK_S, "to": "park"}]
+    B.derive_rescale_states(world, sp, plate, EP)
+    assert "page_states" not in world and "state" not in sp[0], "the active chart parks; nothing is built for it"
+
+
+PK_PROBE = """() => {
+  const w = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')); const st = w.__lp; const S = (st.states || [st])[st.active | 0];
+  const sb = document.getElementById('stage').getBoundingClientRect(), k = %d / sb.width;
+  const r = S.chart.getBoundingClientRect();
+  const box = { x: (r.left - sb.left) * k, y: (r.top - sb.top) * k, w: r.width * k, h: r.height * k };
+  const tr = S.chart.style.transform || '';
+  const datum = (() => {   /* the species' own map (resolveTarget's vbMap): the datum's chart point through the svg's live rectangle */
+    const q = (S.linePts || [[]])[0][5]; if (!q) return null; const vb = S.chart.viewBox.baseVal, k2 = Math.min(box.w / vb.width, box.h / vb.height);
+    return [Math.round(box.x + (box.w - vb.width * k2) / 2 + q[0] * k2), Math.round(box.y + (box.h - vb.height * k2) / 2 + q[1] * k2)]; })();
+  return { box: [Math.round(box.x), Math.round(box.y), Math.round(box.w), Math.round(box.h)], transform: tr, parked: !!S.parked, datum,
+           title_y: Math.round((st.marks.find(m => m.key === 'title').el.getBoundingClientRect().top - sb.top) * k) };
+}"""
+
+
+def _park_player(species, runtime=24.0):
+    from playwright.sync_api import sync_playwright
+    tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
+    plate = "ledger:ev-japan-holdings-v1:line"
+    world = B.world_for_plate(plate, (0, 0, 0), EP)
+    B.derive_rescale_states(world, species, plate, EP)
+    scene = dict(tl["scenes"][0], species=species, span=[0.0, runtime], world=dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}))
+    timeline = dict(tl, aspect="9:16", runtime_s=runtime, scenes=[scene], caption_pages=[], captions=[])
+    td = tempfile.TemporaryDirectory()
+    html = Path(td.name) / "park.html"
+    html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
+    w, h = RB.STAGE["9:16"]
+    srv, port = RB.serve(html.parent)
+    pw = sync_playwright().start()
+    br = pw.chromium.launch(headless=True)
+    page = br.new_context(viewport={"width": w, "height": h}).new_page()
+    errs: list[str] = []
+    page.on("pageerror", lambda e: errs.append(str(e)))
+    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
+    RB.prepare_page(page, w, h)
+    probe = PK_PROBE % w
+
+    def at(t: float) -> dict:
+        page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+        return page.evaluate(probe)
+
+    def close():
+        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
+    return at, errs, close
+
+
+@needs_objects
+@needs_browser
+def test_a_park_shrinks_the_active_chart_toward_its_corner_and_holds():
+    species = [{"kind": "chart_to", "at": PK_AT, "dur": PK_S, "to": "park", "scale": 0.7}]
+    at, errs, close = _park_player(species)
+    try:
+        before = at(PK_AT - 0.5)
+        assert not before["parked"] and before["transform"] == ""
+        mid = at(PK_AT + PK_S * 0.5)
+        assert mid["parked"] and 0.7 < mid["box"][2] / before["box"][2] < 1.0, "mid-clock the chart is between full and parked"
+        after = at(PK_AT + PK_S + 0.5)
+        assert after["parked"] and abs(after["box"][2] / before["box"][2] - 0.7) < 0.01 and abs(after["box"][3] / before["box"][3] - 0.7) < 0.01, "parked at 0.7 of itself"
+        assert abs(after["box"][0] - before["box"][0]) <= 1 and abs(after["box"][1] - before["box"][1]) <= 1, "anchored at its top-left: the room opens below and to the right"
+        assert after["title_y"] == before["title_y"], "the title stays"
+        # a datum target maps through the park: its stage position is the corner + 0.7 x its offset from the corner
+        bx, by = before["box"][0], before["box"][1]
+        ex, ey = bx + 0.7 * (before["datum"][0] - bx), by + 0.7 * (before["datum"][1] - by)
+        assert abs(after["datum"][0] - ex) <= 2 and abs(after["datum"][1] - ey) <= 2, (after["datum"], (ex, ey))
+        held = at(PK_AT + PK_S + 6.0)
+        assert held["box"] == after["box"], "the park holds until the next transition"
+        assert not errs, errs
+    finally:
+        close()
+
+
+@needs_objects
+@needs_browser
+def test_a_park_seeks_exactly_and_unparks_before_its_word():
+    species = [{"kind": "chart_to", "at": PK_AT, "dur": PK_S, "to": "park"}]
+    at, _errs, close = _park_player(species)
+    try:
+        a = at(PK_AT + 0.4); at(PK_AT + 5.0); b = at(PK_AT + 0.4)
+        assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True)
+        back = at(PK_AT - 1.0)
+        assert not back["parked"] and back["transform"] == "", "before the word, after a seek back, the chart is exactly itself"
     finally:
         close()

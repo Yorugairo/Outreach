@@ -295,7 +295,7 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   through the probe (`built0`), not by a golden of the transition itself - the flag golden comes with T3.
 
 ### T2b: `park` - the chart makes room by one affine transform (Bravos shot 91)
-- Status: pending
+- Status: complete (2026-09-10)
 - Owner: `junior_developer` (bounded: a transform on the state store T2 builds; the quiet-zone box exists in `page_boxes`)
 - Depends on: T2
 - Write set: the template (`lpPaintStates` park branch), `scripts/build_scene_timeline_f.py` (`chart_to.to == "park"`,
@@ -307,7 +307,19 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   region is reported on `__lpProbe` so a dock, a `flow` or a `figure` can take it; (4) the seek test; (5) goldens
   byte-identical without it
 - Validate: `python -m pytest content/video_engine/tests/test_chart_transitions.py content/video_engine/tests/test_golden_frames.py -q`
-- Evidence: pending
+- Evidence: 2026-09-10 - `chart_to {to: "park", scale?, anchor?}` (scale in [0.3, 0.95], default 0.72; anchor top | bottom |
+  left | right, default top - the corner the chart keeps); NO state is derived: the ACTIVE chart svg takes one CSS scale
+  about that corner on the min-jerk clock and holds it until the next transition (`lpPaintPark` / `lpUnpark`; a
+  single-state page parks too). The stability rule holds by construction - one transform on the whole svg, so every
+  mark, tick, ring and X keeps its place inside the chart; datum targets map through it because `stageBox` reads the
+  transformed rectangle (the test proves a datum lands at corner + 0.7 x its offset); the title stays; the words stay.
+  Deviations, named: the parked chart shrinks toward a corner of its own box rather than travelling to a page band -
+  the room it opens is the rest of its box (Bravos 91 is exactly this: the treemap up and smaller, the diagram below),
+  and the freed region is not yet reported on `__lpProbe` (the box is the chart's minus the parked corner - T6/T7 add
+  the probe line when a species needs it). **39 transition tests** (grammar; no state derived; the browser proof -
+  between full and parked mid-clock, 0.7 of itself anchored at its top-left with the title unmoved, the datum through
+  the transform, held six seconds later; the seek test with an unpark on a seek back). Goldens byte-identical (68).
+  The proof page parks at 17.5 s (`scratchpad/frames/park-sheet.png`).
 
 ### T3: `extend` - additional points draw on at the pen's speed
 - Status: complete (2026-09-10)
