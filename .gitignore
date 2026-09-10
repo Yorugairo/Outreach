@@ -173,3 +173,6 @@ evals/BRIDGE-LOG.jsonl
 docs/research/runs/bridge/
 # worker-scratch agent memory (memory: local) - worktree-local, promoted into docs/agent-memory/ by review
 .claude/agent-memory-local/
+
+# a reference watch keeps its downloaded video and captions locally, never in git (2026-09-10)
+**/claude-watch/download/

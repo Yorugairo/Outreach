@@ -18,10 +18,10 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4520 topics, 4675 citation edges. The 200 largest topics follow,
+4541 topics, 4719 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
-## youtube (144)
+## youtube (146)
 
 - content/video_engine/projects/history-of-bjj/README.md:1 — History of BJJ Series — This directory contains source-controlled editorial inputs for History Documentary
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:1 — How Japan Tricked Trump — Production Hand-off Pack — Project: `japan-tariff-trick` (Systems & Blowups / Money Physics)
@@ -35,7 +35,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:224 — Publication (operator decision — RECOMMENDED, not confirmed) — Re-cut, unlist the original (never delete — it is the analytics baseline
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-C-PRODUCTION.md:1 — Steel and Paper — SCRIPT C (PRODUCTION TEXT) — Script B with Revision C applied. Structure, beats and the five hardest
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:1 — Script E — external review — Two independent readings, deliberately outside our own doc set.
-- … 132 more in `docs/DOCS-TOPICS.jsonl`
+- … 134 more in `docs/DOCS-TOPICS.jsonl`
 
 ## review-only (102)
 
@@ -213,6 +213,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:1 — Alicia Script — Persona Pass (v2) — The approved 3:00 script from
 - … 43 more in `docs/DOCS-TOPICS.jsonl`
 
+## pacing (43)
+
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:153 — 5. Audio Assets & Timestamp Artifacts Available — All audio assets are persisted in `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/scratch/`:
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:19 — P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 11 shots | 449 words | 299.3 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:24 — P2: The Engine (Foundational Model) [01:30 - 02:52] — - Pacing: 9 shots | 359 words | 261.8 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:29 — P3: The Gap (Mounting Contradiction) [02:52 - 07:36] — - Pacing: 28 shots | 992 words | 209.7 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:34 — P4: The Pivot (45–55% Chiastic Turn) [07:36 - 09:17] — - Pacing: 11 shots | 401 words | 237.4 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:39 — P5: The Payoff & The Tell (Grand Climax) [09:17 - 14:21] — - Pacing: 31 shots | 1151 words | 227.1 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:44 — P6: The Close (Resolution & Ring Echo) [14:21 - 16:53] — - Pacing: 15 shots | 600 words | 236.8 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:95 — P1: The Open (00:00 – 01:30) | Hook & Contract — - Pacing: 11 shots | 449 words | 299.3 WPM burst
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:100 — P2: The Engine (01:30 – 02:52) | Foundational Model — - Pacing: 9 shots | 359 words | 261.8 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:105 — P3: The Gap (02:52 – 07:36) | Mounting Contradiction & Initial Mechanisms — - Pacing: 28 shots | 992 words | 209.7 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:110 — P4: The Pivot (07:36 – 09:17) | 45–55% Chiastic Turn — - Pacing: 11 shots | 401 words | 237.4 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:115 — P5: The Payoff & The Tell (09:17 – 14:21) | Climax & Accessible Counterparts — - Pacing: 31 shots | 1,151 words | 227.1 WPM
+- … 31 more in `docs/DOCS-TOPICS.jsonl`
+
 ## on-screen (41)
 
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:84 — The plate — READY TO GENERATE — The beat is now 9.5 s, not 4.57 s. Moving `t_gates` from `cut("When you buy")`
@@ -280,21 +296,21 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:143 — 3. The full skeleton (phases 2–6, same fusion — to be expanded per use) — | Phase | Classical spine (doc 32) | Platform fill (doc 31) |
 - … 25 more in `docs/DOCS-TOPICS.jsonl`
 
-## pacing (37)
+## full-frame (35)
 
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:153 — 5. Audio Assets & Timestamp Artifacts Available — All audio assets are persisted in `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/scratch/`:
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:19 — P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 11 shots | 449 words | 299.3 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:24 — P2: The Engine (Foundational Model) [01:30 - 02:52] — - Pacing: 9 shots | 359 words | 261.8 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:29 — P3: The Gap (Mounting Contradiction) [02:52 - 07:36] — - Pacing: 28 shots | 992 words | 209.7 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:34 — P4: The Pivot (45–55% Chiastic Turn) [07:36 - 09:17] — - Pacing: 11 shots | 401 words | 237.4 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:39 — P5: The Payoff & The Tell (Grand Climax) [09:17 - 14:21] — - Pacing: 31 shots | 1151 words | 227.1 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:44 — P6: The Close (Resolution & Ring Echo) [14:21 - 16:53] — - Pacing: 15 shots | 600 words | 236.8 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:95 — P1: The Open (00:00 – 01:30) | Hook & Contract — - Pacing: 11 shots | 449 words | 299.3 WPM burst
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:100 — P2: The Engine (01:30 – 02:52) | Foundational Model — - Pacing: 9 shots | 359 words | 261.8 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:105 — P3: The Gap (02:52 – 07:36) | Mounting Contradiction & Initial Mechanisms — - Pacing: 28 shots | 992 words | 209.7 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:110 — P4: The Pivot (07:36 – 09:17) | 45–55% Chiastic Turn — - Pacing: 11 shots | 401 words | 237.4 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:115 — P5: The Payoff & The Tell (09:17 – 14:21) | Climax & Accessible Counterparts — - Pacing: 31 shots | 1,151 words | 227.1 WPM
-- … 25 more in `docs/DOCS-TOPICS.jsonl`
+- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:12 — Action — Keep the canonical world plate full-frame as the continuity layer. Let the
+- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:110 — Evidence — The five-minute cut uses 20 evidence beats with at most two simultaneously,
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:1 — World Plate, Evidence, and Caption Grammar v1 — Status: accepted design direction
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:13 — Production rules — 1. Keep the selected world plate full-frame and legible as the hero.
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:45 — Proven proof — - Master: `current-bubble-mechanism/five-minute-semantic-demo-v3/render/current-bubble-five-minute-v3.mp4`
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md:1 — World Plate + Evidence Rail Breakthrough v1 — Status: accepted design direction
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md:7 — Durable composition contract — Use the canonical woodblock world plate as the full-frame story environment.
+- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md:15 — Atomic rules — 1. World owns attention. Keep the selected world plate full-frame for the
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/FRAME.md:10 — Current Bubble — HyperFrames object choreography — This is a dark, warm woodblock-paper theatre for a finance explainer. The world
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:60 — Three decisions for the operator — 1. The dock or the cut for the blue-ties panel (s03). → DOCK (operator, 2026-09-06: "use the chart plate/ledger AND THEN
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- … 23 more in `docs/DOCS-TOPICS.jsonl`
 
 ## attribution-first (34)
 
@@ -312,37 +328,21 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/patterns/FULL-VIDEO-MAP.md:263 — Provenance — Built from: the operator's marked passages — final count 35
 - … 22 more in `docs/DOCS-TOPICS.jsonl`
 
-## full-frame (33)
-
-- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:12 — Action — Keep the canonical world plate full-frame as the continuity layer. Let the
-- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:110 — Evidence — The five-minute cut uses 20 evidence beats with at most two simultaneously,
-- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:1 — World Plate, Evidence, and Caption Grammar v1 — Status: accepted design direction
-- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:13 — Production rules — 1. Keep the selected world plate full-frame and legible as the hero.
-- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:45 — Proven proof — - Master: `current-bubble-mechanism/five-minute-semantic-demo-v3/render/current-bubble-five-minute-v3.mp4`
-- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md:1 — World Plate + Evidence Rail Breakthrough v1 — Status: accepted design direction
-- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md:7 — Durable composition contract — Use the canonical woodblock world plate as the full-frame story environment.
-- content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md:15 — Atomic rules — 1. World owns attention. Keep the selected world plate full-frame for the
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/FRAME.md:10 — Current Bubble — HyperFrames object choreography — This is a dark, warm woodblock-paper theatre for a finance explainer. The world
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:60 — Three decisions for the operator — 1. The dock or the cut for the blue-ties panel (s03). → DOCK (operator, 2026-09-06: "use the chart plate/ledger AND THEN
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- … 21 more in `docs/DOCS-TOPICS.jsonl`
-
-## cut-in (32)
+## cut-in (34)
 
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1 — PRODUCTION REFERENCE REPORT: 6 Ways Rich People Make Money With Debt — - Source: `https://www.youtube.com/watch?v=rCHYttyvaw8`
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:11 — Shot Duration Distribution — - Under 3s (Brisk cut-in / punch): 6
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:14 — Executive Summary & Production Benchmarks — This video represents the current gold standard for institutional-grade, faceless financial explainers on YouTube. Unlik
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:18 — Core Production Metrics — - Total Cuts: 100 shots
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:1 — PRODUCTION REFERENCE REPORT: China Just Triggered A New World Order. — - Source: `https://youtu.be/1ZS5_txbOsc?si=lCnqWLmL-NQ8a_1u`
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:11 — Shot Duration Distribution — - Under 3s (Brisk cut-in / punch): 2
 - content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1 — PRODUCTION REFERENCE REPORT: Claude Code (Free Plan) + YouTube = $77,000/Month — - Source: `https://www.youtube.com/watch?v=WVT2FCjhDDY`
 - content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:11 — Shot Duration Distribution — - Under 3s (Brisk cut-in / punch): 46
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:14 — Executive Summary & Production Benchmarks — This video represents the current gold standard for institutional-grade, faceless financial explainers on YouTube. Unlik
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:18 — Core Production Metrics — - Total Cuts: 100 shots
-- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
-- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:14 — Executive Summary & Production Benchmarks — This video represents the current gold standard for institutional-grade, faceless financial explainers on YouTube. Unlik
-- … 20 more in `docs/DOCS-TOPICS.jsonl`
+- … 22 more in `docs/DOCS-TOPICS.jsonl`
 
 ## multi-plane (32)
 
@@ -433,7 +433,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:46 — 45.3 Our current dials, and what they should be — Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04.
   cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/RESEARCH-INDEX.md:35
 - docs/content-video-engine/46-REFERENCE-RHYTHM.md:1 — 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and
-  cited by: docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:124, docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md:16
+  cited by: content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:8, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:124, docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md:16
 - docs/content-video-engine/46-REFERENCE-RHYTHM.md:60 — 46.3 The gap threshold — settled from the reference, 2026-09-04 — A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
   cited by: docs/content-video-engine/46-REFERENCE-RHYTHM.md:181, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/BACKLOG.md:469, docs/content-video-engine/BACKLOG.md:523, docs/content-video-engine/FINDING-gaps-are-the-edit.md:171, +10 more
 - docs/content-video-engine/46-REFERENCE-RHYTHM.md:172 — 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames
@@ -628,6 +628,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:82 — 3. Domain 2: Drawing Engines, Affine Transforms, & Cutout Rigging
 - … 14 more in `docs/DOCS-TOPICS.jsonl`
 
+## source (26)
+
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1 — PRODUCTION REFERENCE REPORT: 6 Ways Rich People Make Money With Debt — - Source: `https://www.youtube.com/watch?v=rCHYttyvaw8`
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:1 — PRODUCTION REFERENCE REPORT (Claude, 2026-09-10): China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` - Bravos Research, 19:56.5 (1196.5 s), 1280x720 av1, 29.97 fps
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:1 — PRODUCTION REFERENCE REPORT: China Just Triggered A New World Order. — - Source: `https://youtu.be/1ZS5_txbOsc?si=lCnqWLmL-NQ8a_1u`
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1 — PRODUCTION REFERENCE REPORT: Claude Code (Free Plan) + YouTube = $77,000/Month — - Source: `https://www.youtube.com/watch?v=WVT2FCjhDDY`
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:171 — The On-1s / On-2s / On-3s Decision Rule (Proposal) — $$\text{Frame Cadence} = \begin{cases}
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:274 — 1. The Kinematic Two-Thirds Power Law (Tier 1 Math — CLOSED) — Human handwriting and drawing velocity strictly tracks path curvature $\kappa(s)$:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:288 — A6: The Secondary-Motion Budget [RECLASSIFIED: Design Proposal] — - Energy Ratio Proposal:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:379 — B5: Rhythm as a Distribution [Tier 1 Science — CLOSED] — High-retention shot lengths follow a Log-Normal Distribution exhibiting $1/f$ pink noise scaling:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:389 — C1: Shape Interpolation (ARAP) [Tier 1 Math — CLOSED] — - Polar decomposition of deformation gradient:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:430 — C5: Ink on Paper, Specifically [Tier 1 Math & Shaders — CLOSED] — - Three physical components:
+- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/REPORT.md:1 — PRODUCTION REFERENCE REPORT: Why US Bond Yields Are Surging Again — Do This ASAP! — - Source: `https://www.youtube.com/watch?v=04epi6oH7EY`
+- docs/content-video-engine/03-SYSTEM-ARCHITECTURE.md:301 — 7. Guards (the no-slop enforcement layer) — `storyboard_guard.py` runs before Gate A and again after any Gate A edit. Extends the
+- … 14 more in `docs/DOCS-TOPICS.jsonl`
+
 ## t-x (26)
 
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:55 — 2. The Mathematical Limit: The Disocclusion Problem — Why did the stick figure and the Tokyo pillar melt?
@@ -660,6 +676,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:262 — 8. Calibrated Parameter Dials & Node Contracts
 - … 14 more in `docs/DOCS-TOPICS.jsonl`
 
+## key-questions (24)
+
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:19 — P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 11 shots | 449 words | 299.3 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:24 — P2: The Engine (Foundational Model) [01:30 - 02:52] — - Pacing: 9 shots | 359 words | 261.8 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:29 — P3: The Gap (Mounting Contradiction) [02:52 - 07:36] — - Pacing: 28 shots | 992 words | 209.7 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:34 — P4: The Pivot (45–55% Chiastic Turn) [07:36 - 09:17] — - Pacing: 11 shots | 401 words | 237.4 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:39 — P5: The Payoff & The Tell (Grand Climax) [09:17 - 14:21] — - Pacing: 31 shots | 1151 words | 227.1 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:44 — P6: The Close (Resolution & Ring Echo) [14:21 - 16:53] — - Pacing: 15 shots | 600 words | 236.8 WPM
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:19 — P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 14 shots | 374 words | 249.3 WPM
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:24 — P2: The Engine (Foundational Model) [01:30 - 03:23] — - Pacing: 12 shots | 443 words | 234.4 WPM
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:29 — P3: The Gap (Mounting Contradiction) [03:23 - 08:58] — - Pacing: 28 shots | 1198 words | 214.5 WPM
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:34 — P4: The Pivot (45–55% Chiastic Turn) [08:58 - 10:58] — - Pacing: 13 shots | 466 words | 233.7 WPM
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:39 — P5: The Payoff & The Tell (Grand Climax) [10:58 - 16:57] — - Pacing: 38 shots | 1338 words | 223.6 WPM
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:44 — P6: The Close (Resolution & Ring Echo) [16:57 - 19:57] — - Pacing: 20 shots | 711 words | 237.7 WPM
+- … 12 more in `docs/DOCS-TOPICS.jsonl`
+
 ## real-time (24)
 
 - content/video_engine/projects/systems-and-blowups/korea-memory-toll/EVIDENCE-DOSSIER.md:1 — The Trillion Dollar Toll Booth — Evidence Dossier — Every figure the script speaks, its source, and the date it was reported. Nothing here
@@ -676,20 +708,20 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:739 — 6. Master Citation & Authority Registry
 - … 12 more in `docs/DOCS-TOPICS.jsonl`
 
-## source (24)
+## transcript-sample (24)
 
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1 — PRODUCTION REFERENCE REPORT: 6 Ways Rich People Make Money With Debt — - Source: `https://www.youtube.com/watch?v=rCHYttyvaw8`
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1 — PRODUCTION REFERENCE REPORT: Claude Code (Free Plan) + YouTube = $77,000/Month — - Source: `https://www.youtube.com/watch?v=WVT2FCjhDDY`
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:171 — The On-1s / On-2s / On-3s Decision Rule (Proposal) — $$\text{Frame Cadence} = \begin{cases}
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:274 — 1. The Kinematic Two-Thirds Power Law (Tier 1 Math — CLOSED) — Human handwriting and drawing velocity strictly tracks path curvature $\kappa(s)$:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:288 — A6: The Secondary-Motion Budget [RECLASSIFIED: Design Proposal] — - Energy Ratio Proposal:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:379 — B5: Rhythm as a Distribution [Tier 1 Science — CLOSED] — High-retention shot lengths follow a Log-Normal Distribution exhibiting $1/f$ pink noise scaling:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:389 — C1: Shape Interpolation (ARAP) [Tier 1 Math — CLOSED] — - Polar decomposition of deformation gradient:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:430 — C5: Ink on Paper, Specifically [Tier 1 Math & Shaders — CLOSED] — - Three physical components:
-- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/REPORT.md:1 — PRODUCTION REFERENCE REPORT: Why US Bond Yields Are Surging Again — Do This ASAP! — - Source: `https://www.youtube.com/watch?v=04epi6oH7EY`
-- docs/content-video-engine/03-SYSTEM-ARCHITECTURE.md:301 — 7. Guards (the no-slop enforcement layer) — `storyboard_guard.py` runs before Gate A and again after any Gate A edit. Extends the
-- docs/content-video-engine/07-PILOT-SEASON.md:46 — E1 — "The Bizarre History of BJJ: From Samurai Battlefields to Tacoma" — - Sources: registry BJJ history + Gracie-migration articles (national history corpus).
-- docs/content-video-engine/07-PILOT-SEASON.md:57 — E2 — "Why Basic BJJ Beats Complex Guard Systems (The Science of Roger Gracie)" — - Sources: national history + Gracie migration article (technique-philosophy sections).
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:19 — P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 11 shots | 449 words | 299.3 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:24 — P2: The Engine (Foundational Model) [01:30 - 02:52] — - Pacing: 9 shots | 359 words | 261.8 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:29 — P3: The Gap (Mounting Contradiction) [02:52 - 07:36] — - Pacing: 28 shots | 992 words | 209.7 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:34 — P4: The Pivot (45–55% Chiastic Turn) [07:36 - 09:17] — - Pacing: 11 shots | 401 words | 237.4 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:39 — P5: The Payoff & The Tell (Grand Climax) [09:17 - 14:21] — - Pacing: 31 shots | 1151 words | 227.1 WPM
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:44 — P6: The Close (Resolution & Ring Echo) [14:21 - 16:53] — - Pacing: 15 shots | 600 words | 236.8 WPM
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:19 — P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 14 shots | 374 words | 249.3 WPM
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:24 — P2: The Engine (Foundational Model) [01:30 - 03:23] — - Pacing: 12 shots | 443 words | 234.4 WPM
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:29 — P3: The Gap (Mounting Contradiction) [03:23 - 08:58] — - Pacing: 28 shots | 1198 words | 214.5 WPM
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:34 — P4: The Pivot (45–55% Chiastic Turn) [08:58 - 10:58] — - Pacing: 13 shots | 466 words | 233.7 WPM
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:39 — P5: The Payoff & The Tell (Grand Climax) [10:58 - 16:57] — - Pacing: 38 shots | 1338 words | 223.6 WPM
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:44 — P6: The Close (Resolution & Ring Echo) [16:57 - 19:57] — - Pacing: 20 shots | 711 words | 237.7 WPM
 - … 12 more in `docs/DOCS-TOPICS.jsonl`
 
 ## viviani-terzuolo-1982 (24)
@@ -751,7 +783,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:1 — What we actually learn from the zapiwala tutorial — verified, 2026-09-04 — Read against Gemini's dossier in this directory, then re-measured from the primary
 - content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/WHAT-WE-LEARN.md:10 — 1. The finding that matters: they cut on the gap, we cut through the word — Their video's own edit, measured from its caption word timings against its own cut list:
 - docs/content-video-engine/46-REFERENCE-RHYTHM.md:1 — 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and
-  cited by: docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:124, docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md:16
+  cited by: content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:8, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:124, docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md:16
 - docs/content-video-engine/46-REFERENCE-RHYTHM.md:43 — 46.2 What this means for M13 and for M10 — M13 (cut lands in an acoustic gap) is free. Since our cut frequency already matches,
   cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:21, docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:1
 - docs/content-video-engine/46-REFERENCE-RHYTHM.md:60 — 46.3 The gap threshold — settled from the reference, 2026-09-04 — A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
@@ -792,6 +824,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:398 — 13.4 Primary Academic & Empirical Citations — - Viviani & Terzuolo (1982), Trajectory determines movement dynamics, Neuroscience: Two-Thirds Power Law ($v \propto \ka
 - … 9 more in `docs/DOCS-TOPICS.jsonl`
 
+## b-roll (21)
+
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:126 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md:1 — NICHE BEND RESEARCH DOSSIER: WHY US BOND YIELDS ARE SURGING AGAIN — > Strategic repositioning brief. Contrasts crowded competitor tropes with forensic mechanics,
+- content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md:8 — 1. Top Competitor Cluster (The Crowded Mainstream) — | Competitor Title | Channel / Source | Core Hook Trope | Video URL |
+- content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md:18 — Competitor Narrative & Art Style Patterns: — - Thumbnail & Title Trope: High-urgency doom ('Surging AGAIN - Do This ASAP!', 'Catastrophe ahead').
+- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:1 — NICHE BEND RESEARCH DOSSIER: WHY US BOND YIELDS ARE SURGING AGAIN — DO THIS ASAP! — > Strategic repositioning brief. Contrasts crowded competitor tropes with forensic mechanics,
+- … 9 more in `docs/DOCS-TOPICS.jsonl`
+
 ## blur-zoom (21)
 
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:72 — D. The transition vocabulary (E48) - the seams of v3 by name — | seam | kind | role |
@@ -801,7 +849,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md:1 — Intake — the ink bloom transition (operator, 2026-09-08) — The operator brought a MotionKit preset by hand: *"here's an ink bloom transition that is not the swirl; our swirl is
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157 — 6. TR-1 landed — the reference's transition mix, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_kinds.py` over the 720p upload (30 fps), all 99 boundaries in 2.4 s, calibrate
 - docs/portable/OPERATOR-RULINGS.md:1419 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
-  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:49, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:107, +14 more
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:12, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:49, +15 more
 - docs/portable/OPERATOR-RULINGS.md:1444 — E48 — A declared transition vocabulary with one hero, the spiral; the primaries are not prescribed yet; the mount is a build; cut minimally, one thread (2026-09-06, amended the same hour) — From the HyperFrames transitions page the operator brought in by hand (`hyperframes.heygen.com/prompting/transitions`, r
   cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:22, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:72, docs/content-video-engine/BACKLOG.md:420, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:178, +6 more
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:270 — 8. What HyperFrames Would Say About Our Open Transition Queries (`TRANSITIONS-REVIEW-2026-09-06.md`) — This section does not settle our open transition queries. Rather, it contrasts what HyperFrames doctrine would advise ag
@@ -937,7 +985,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:233 — What this does and does not prove — It does not support "we win on presentation." The 242K video has the worst
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:582 — What this changes — - `stick_figure` is removed as a lane name — but not as a capability. Lane D is a
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
-  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:39, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:56, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:25, +45 more
+  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:39, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:56, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:25, +46 more
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
 - … 9 more in `docs/DOCS-TOPICS.jsonl`
 
@@ -1008,22 +1056,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:141 — 5. Motion discipline — Motion is authored in this order:
 - docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:310 — 9. Primary Citations & Evidence Ledger — 1. Google DeepMind:
 - … 8 more in `docs/DOCS-TOPICS.jsonl`
-
-## b-roll (19)
-
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md:1 — NICHE BEND RESEARCH DOSSIER: WHY US BOND YIELDS ARE SURGING AGAIN — > Strategic repositioning brief. Contrasts crowded competitor tropes with forensic mechanics,
-- content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md:8 — 1. Top Competitor Cluster (The Crowded Mainstream) — | Competitor Title | Channel / Source | Core Hook Trope | Video URL |
-- content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md:18 — Competitor Narrative & Art Style Patterns: — - Thumbnail & Title Trope: High-urgency doom ('Surging AGAIN - Do This ASAP!', 'Catastrophe ahead').
-- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:1 — NICHE BEND RESEARCH DOSSIER: WHY US BOND YIELDS ARE SURGING AGAIN — DO THIS ASAP! — > Strategic repositioning brief. Contrasts crowded competitor tropes with forensic mechanics,
-- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:8 — 1. Top Competitor Cluster (The Crowded Mainstream) — | Competitor Title | Channel / Source | Core Hook Trope | Video URL |
-- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md:18 — Competitor Narrative & Art Style Patterns: — - Thumbnail & Title Trope: High-urgency doom ('Surging AGAIN - Do This ASAP!', 'Catastrophe ahead').
-- … 7 more in `docs/DOCS-TOPICS.jsonl`
 
 ## dot-com (19)
 
@@ -1264,38 +1296,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:71 — 2. Comparative Scorecard & Production Benchmarks — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
 - … 6 more in `docs/DOCS-TOPICS.jsonl`
 
-## key-questions (18)
-
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:19 — P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 11 shots | 449 words | 299.3 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:24 — P2: The Engine (Foundational Model) [01:30 - 02:52] — - Pacing: 9 shots | 359 words | 261.8 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:29 — P3: The Gap (Mounting Contradiction) [02:52 - 07:36] — - Pacing: 28 shots | 992 words | 209.7 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:34 — P4: The Pivot (45–55% Chiastic Turn) [07:36 - 09:17] — - Pacing: 11 shots | 401 words | 237.4 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:39 — P5: The Payoff & The Tell (Grand Climax) [09:17 - 14:21] — - Pacing: 31 shots | 1151 words | 227.1 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:44 — P6: The Close (Resolution & Ring Echo) [14:21 - 16:53] — - Pacing: 15 shots | 600 words | 236.8 WPM
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:19 — P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 30 shots | 382 words | 254.7 WPM
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:24 — P2: The Engine (Foundational Model) [01:30 - 02:07] — - Pacing: 5 shots | 192 words | 311.4 WPM
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:29 — P3: The Gap (Mounting Contradiction) [02:07 - 05:36] — - Pacing: 24 shots | 873 words | 250.4 WPM
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:34 — P4: The Pivot (45–55% Chiastic Turn) [05:36 - 06:51] — - Pacing: 1 shots | 219 words | 175.9 WPM
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:39 — P5: The Payoff & The Tell (Grand Climax) [06:51 - 10:35] — - Pacing: 24 shots | 899 words | 240.7 WPM
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:44 — P6: The Close (Resolution & Ring Echo) [10:35 - 12:27] — - Pacing: 21 shots | 532 words | 284.9 WPM
-- … 6 more in `docs/DOCS-TOPICS.jsonl`
-
-## transcript-sample (18)
-
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:19 — P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 11 shots | 449 words | 299.3 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:24 — P2: The Engine (Foundational Model) [01:30 - 02:52] — - Pacing: 9 shots | 359 words | 261.8 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:29 — P3: The Gap (Mounting Contradiction) [02:52 - 07:36] — - Pacing: 28 shots | 992 words | 209.7 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:34 — P4: The Pivot (45–55% Chiastic Turn) [07:36 - 09:17] — - Pacing: 11 shots | 401 words | 237.4 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:39 — P5: The Payoff & The Tell (Grand Climax) [09:17 - 14:21] — - Pacing: 31 shots | 1151 words | 227.1 WPM
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:44 — P6: The Close (Resolution & Ring Echo) [14:21 - 16:53] — - Pacing: 15 shots | 600 words | 236.8 WPM
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:19 — P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 30 shots | 382 words | 254.7 WPM
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:24 — P2: The Engine (Foundational Model) [01:30 - 02:07] — - Pacing: 5 shots | 192 words | 311.4 WPM
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:29 — P3: The Gap (Mounting Contradiction) [02:07 - 05:36] — - Pacing: 24 shots | 873 words | 250.4 WPM
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:34 — P4: The Pivot (45–55% Chiastic Turn) [05:36 - 06:51] — - Pacing: 1 shots | 219 words | 175.9 WPM
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:39 — P5: The Payoff & The Tell (Grand Climax) [06:51 - 10:35] — - Pacing: 24 shots | 899 words | 240.7 WPM
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:44 — P6: The Close (Resolution & Ring Echo) [10:35 - 12:27] — - Pacing: 21 shots | 532 words | 284.9 WPM
-- … 6 more in `docs/DOCS-TOPICS.jsonl`
-
 ## x-0 (18)
 
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:146 — Minimum-Jerk Trajectories (Camera Zooms & Arm Gestures) — Camera push-ins (`focus_zoom`) and `@StickMike` arm gestures follow Flash & Hogan's 5th-order jerk-minimizing polynomial
@@ -1417,7 +1417,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/28-AOY-MCP-EVALUATION.md:328 — Voiceover and title doctrine — probed 2026-08-24 — Follow-up probes after the fact-check, plus one live run of the
 - docs/content-video-engine/28-AOY-MCP-EVALUATION.md:333 — Voiceover — delivery rules exist; ElevenLabs settings do not — What came back, all chunk-stable:
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
-  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:39, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:56, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:25, +45 more
+  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:39, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:56, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:25, +46 more
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:267 — Part 8 — The scene-evidence lane (default production pattern) — Status: accepted 2026-08-24. Proven by
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:335 — 8.5 Lane selection — | | scene-evidence lane | linked choreography |
@@ -1743,6 +1743,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:267 — SCRIPT B — **PRODUCTION TEXT** (sentence-strength pass; won the A/B ear test) — A/B verdict (operator, 2026-08-24, by ear): three matched pairs — open,
 - docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:456 — Strength Log (A → B, gates per SENTENCE-STRENGTH-CHECK) — | # | A (original) | Gates failed | B (final) |
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:191 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
+- … 4 more in `docs/DOCS-TOPICS.jsonl`
+
+## record-document (16)
+
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:1 — PRODUCTION REFERENCE REPORT (Claude, 2026-09-10): China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` - Bravos Research, 19:56.5 (1196.5 s), 1280x720 av1, 29.97 fps
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:50 — The grammar (what the frames say; what it maps to in our engine) — 1. One stage, one accent. Near-black charcoal, one pink, white type; green only for 'up' and the CTA. Titles top-centre
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:126 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
 ## risk-score (16)
@@ -2177,7 +2193,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:38 — 3. Higgsfield: mostly avoid, one thing to monitor seriously — What it is (mid-2026): a social-first AI video suite aggregating 15+ frontier models (Sora 2,
 - docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:88 — 6. Monitor list — Higgsfield Explainer REST/API + per-video cost · Gemini Omni Pro (length/res) · Gemini TTS
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
-  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:39, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:56, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:25, +45 more
+  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:39, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:56, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:25, +46 more
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1103 — 9.11 Rebuild source charts — do not extract frames (operator, 2026-08-25) — Operator ruling, superseding the clip-extraction workflow in 9.10:
   cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:1, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18
@@ -2269,7 +2285,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md:26 — The mechanism to port (not the code) — 1. An organic mask from a NAMED point — the radial reveal (29:1764) with the two-harmonic edge noise, seeded by
 - docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md:45 — Status — Not built. Backlog TR-14. The operator's source is below so the harvest survives the session; the port is a species /
 - docs/portable/OPERATOR-RULINGS.md:1787 — E56 — A ring has ONE use: circling a number or a point on a chart; a picture's focus is a LIGHT; every new addition passes the life check (2026-09-09) — On the fab card's wafer under "semiconductors" the build drew a callout ring. The operator: *"I think drawing the ring o
-  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:1, docs/content-video-engine/CAPABILITIES.md:14, docs/portable/OPERATOR-RULINGS.md:1764
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:1, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:1, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:12, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:21, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:50, docs/content-video-engine/CAPABILITIES.md:14, +1 more
 - docs/research/2026-08-22-agent-design-tooling-assessment.md:1 — Agent-Native Design Tooling: Buy, Borrow, or Build — Status: current
 - docs/research/2026-08-22-agent-design-tooling-assessment.md:8 — Answer — Neither, as posed. The pipeline has two jobs with opposite requirements, and
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
@@ -2347,7 +2363,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/ken-burns-effect-proof-v1/README.md:1 — Ken Burns Effect Proof v1 — Purpose: evaluate the reviewed local `ken-burns-effect` Remotion Bit against
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/ken-burns-effect-proof-v1/README.md:6 — Sequence — 1. Frames 0–143: slow Ken-Burns reframe over the memory-supports world plate.
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1 — 29 — Evidence Motion Standards (Gemini findings + v1 momentum + linked choreography) — Status: accepted working standard, 2026-08-24
-  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:39, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:56, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:25, +45 more
+  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:39, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:56, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:25, +46 more
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:93 — Part 1 — The Gemini evidence-dock grammar (most significant findings) — Source: `docs/content-video-engine/samples/gemini-decoupled-evidence-showcase.html` (archived copy; original landed in t
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:146 — Part 2 — Momentum mechanics (recovered from hyperframes-opening-v1) — Source: `edit/hyperframes-opening-v1/index.html` (f10b worktree). These four
@@ -2753,7 +2769,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:184 — Track D — placement (the "where" question) — | # | question | why it matters here |
 - docs/content-video-engine/PIPELINE.md:109 — Captions — doc 29 Part 5, not your own design — - One fixed lower-third anchor. Evidence roams; the caption does not.
 - docs/portable/OPERATOR-RULINGS.md:557 — E21 — The screen never goes still; captions ARE the motion when nothing else moves (2026-09-02) — Operator, watching Steel and Paper after a week of flat performance: "we
-  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:24, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:48, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:105, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:243, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:254, +28 more
+  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:24, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:48, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:105, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:243, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:254, +30 more
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
 
 ## mass-spring-damper (13)
@@ -2966,6 +2982,21 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:197 — 6. Domain 5: Academic Literature & Mathematical Foundations
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:199 — 6.1 Biomechanical Motor Control — - Two-Thirds Power Law: $v(t) = \gamma \kappa(t)^{-1/3}$, angular speed $\omega(t) = \gamma \kappa(t)^{2/3}$ (Viviani &
 
+## chart (12)
+
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:65 — 3. `semantic_id` — the alias — - The claim segment must equal `claim_refs[0]`. That is what makes this a
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:126 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- docs/content-video-engine/prompts/SLIDE-SEMANTIC-REGISTRATION.md:65 — 3. `semantic_id` — the alias — - The claim segment must equal `claim_refs[0]`. That is what makes this a
+
 ## claim-refs (12)
 
 - content/video_engine/projects/systems-and-blowups/registration/README.md:1 — Slide Semantic Registration — systems-and-blowups — Returned 2026-08-24, validated PASS: 86/86 slides, 340 verbatim figures,
@@ -3089,6 +3120,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:1 — 45 — Parallax and plate motion: what may move, how much, and what is banned — Extracted from `05_comfyui_parallax_technical_standards.md` and
   cited by: docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:135, docs/portable/OPERATOR-RULINGS.md:1477
 
+## in-world (12)
+
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:126 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:163 — PRODUCTION AWARENESS — Narration is synthesized: numbers as spoken words, exact numerals on
+- docs/portable/DOCTRINE-CORE.md:172 — PRODUCTION AWARENESS — Motion and evidence choreography: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md`
+- docs/portable/OPERATOR-RULINGS.md:761 — E25 — The chart is the proof, not the homework (2026-09-03) — The analytics behind E24, read by the operator: the thumbnail converts at
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:109, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:136, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:1, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:48, +41 more
+
 ## insight-run (12)
 
 - docs/run-centric-schema-notes.md:1 — Run-Centric Schema Notes — Prepared: 2026-07-07
@@ -3118,6 +3165,21 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:178 — Mathematical Proof of Zero Area Inversion: — $$\det(J_k(t)) = \det(R_k(t)) \cdot \det(S_k(t)) = 1 \cdot (\lambda_1 \lambda_2)^t > 0 \quad orall t \in [0, 1]$$
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:210 — 6.3 Non-Rigid Shape Morphing (ARAP) & Skinning — - As-Rigid-As-Possible (ARAP) Shape Interpolation: Polar decomposition of deformation gradient $J_k = R_k S_k$ (Alexa, C
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:209 — 6.3 Non-Rigid Shape Morphing (ARAP) & Skinning — - As-Rigid-As-Possible (ARAP) Shape Interpolation: Polar decomposition of deformation gradient $J_k = R_k S_k$ (Alexa, C
+
+## left-to-right (12)
+
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:1 — PRODUCTION REFERENCE REPORT (Claude, 2026-09-10): China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` - Bravos Research, 19:56.5 (1196.5 s), 1280x720 av1, 29.97 fps
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:50 — The grammar (what the frames say; what it maps to in our engine) — 1. One stage, one accent. Near-black charcoal, one pink, white type; green only for 'up' and the CTA. Titles top-centre
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:446 — 6. Track D — Placement (The "Where" Question)
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:455 — D2: Non-Decorative Composition for 9:16 [Candidate Doctrine] — - Tangency Elimination Rule: Minimum clearance $\ge 24\text{px}$ OR deliberate overlap $\ge 48\text{px}$ with cast shado
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:441 — 8.9 Documents draw on, and they leave (operator correction, 2026-08-24) — Two failures in the v4 build, one cause: the dock was a state, not an event.
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:575 — 8.13 Hand pose set v2 — host-consistent, two poses, per-pose nib — The asset pack shipped exactly one hand: `draw-hand-a-v1`, light-skinned, and
+- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:377 — 11. Data documents animate too — the line is drawn by narration beats — Operator question, 2026-08-25: keep charts as they are, or move to manim?
+- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:399 — The beat-keyed draw — The important idea, and the thing that makes this better than a chart
+- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:466 — 6. Track D — Placement (The "Where" Question)
+- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:475 — D2: Non-Decorative Composition for 9:16 [Candidate Doctrine] — - Tangency Elimination Rule: Minimum clearance $\ge 24\text{px}$ OR deliberate overlap $\ge 48\text{px}$ with cast shado
+- docs/content-video-engine/RULE-abstract-to-concrete.md:1 — The plate throws the punch — abstract-to-concrete, 2026-09-04 — Adopted from the doodle-channel master prompt's rule 5, which is the one genuinely
+- docs/content-video-engine/RULE-abstract-to-concrete.md:39 — Frame types that carry a punch — Adapted from the source's rule 8, kept where it fits our register and dropped where it
 
 ## long-term (12)
 
@@ -3150,7 +3212,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/portable/OPERATOR-RULINGS.md:1361 — E45 — A dock on a page is small and sits in the page's quiet space; the mount is the transition into a full-page ledger (2026-09-06) — Ruled on the first Tokyo v2 player with video docks (004698d). The operator: *"the dock needs to not cover the middle of
   cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:93, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:123, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:22, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:1, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:14, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:32, +24 more
 - docs/portable/OPERATOR-RULINGS.md:1419 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
-  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:49, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:107, +14 more
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:12, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:49, +15 more
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:270 — 8. What HyperFrames Would Say About Our Open Transition Queries (`TRANSITIONS-REVIEW-2026-09-06.md`) — This section does not settle our open transition queries. Rather, it contrasts what HyperFrames doctrine would advise ag
 
 ## non-zero (12)
@@ -3242,65 +3304,3 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:319 — B1: The Gap-Cut Finding, Generalised [RE-ASK 4: Audited & Answered]
 - docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:333 — 3. Gate M13 Status: Candidate Doctrine — - Decision Rule: Proposed cut points check the Whisper acoustic timestamp track. If audio level $< -32\text{ dBFS}$ for
 - docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:163 — Track B — the editor (cutting and rhythm) — | # | question | why it matters here |
-
-## re-read (12)
-
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/sound/SOURCES.md:55 — Slots in SOUND-PLAN.json (`page_cues`, page-relative) — The three slots live under a separate top-level `page_cues` list, not in
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:1 — Script G — strength log (the fixpoint audit trail) — Protocol: STRENGTH-LOOP.md. Round 1 walked every sentence (225); the
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:78 — Round 4 — the ENUMERATED screens (operator audit, 2026-08-30) — The operator asked whether L1/L3 and the X1 orphan screen ran to the
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:232 — the full pass since we changed it") — Honest admission first: rounds 8-9 walked the ten S-gates per new
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/SOURCES.md:55 — Slots in SOUND-PLAN.json (`page_cues`, page-relative) — The three slots live under a separate top-level `page_cues` list, not in
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/ANALYTICS-2026-09-06.md:1 — Analytics — the Tokyo short on Facebook, first read (2026-09-06, ~1 h after posting) — Operator screenshots, 2026-09-06 (Sunday, posted during the NFL as a timing test). n = 8 viewers — a sample, not a
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/ANALYTICS-2026-09-06.md:34 — What this does not yet say — Eight viewers cannot separate the hook from the timing test from the audience. The second step at 0:55 (s08, a clip
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md:55 — Slots in SOUND-PLAN.json (`page_cues`, page-relative) — The three slots live under a separate top-level `page_cues` list, not in
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1130 — 9.12 Work orders are immutable after dispatch (operator, 2026-08-25) — The mp-thumbs-wave-2 order was patched in place after the batch
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18
-- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:1 — 32 — Writing for the Ear (craft doctrine, non-YouTube) — The fundamental-craft layer under the YouTube layer. Doc 31 holds the
-  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-AUDIT-2026-09-03.md:25, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:486, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:87, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:306, docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:24, +4 more
-- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:22 — 1. Sentence mechanics for the ear — Audio is temporal, linear, ephemeral — the listener cannot backtrack. Every
-- docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:152 — 5. Evidence attachment (12 documents + 1 instrument) — | Beat | Document |
-
-## record-document (12)
-
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- docs/content-video-engine/CAPABILITIES.md:1 — CAPABILITIES — what is already built — Check this file before building anything. Three asset classes were
-- docs/content-video-engine/CAPABILITIES.md:19 — Record-document species — typewriter + per-word highlighter, stroke synced to the NARRATOR's word timings
-- docs/content-video-engine/RULE-the-page-is-the-ground.md:1 — The page is our ground — how props-compose works in OUR style, 2026-09-04 — Wealth Logic composes props on empty white. We are not going to adopt white: their
-- docs/content-video-engine/RULE-the-page-is-the-ground.md:37 — The three tiers, and what each is for — WORLD (woodblock vox newsprint — 71 approved plates). Establishing beats and the big
-
-## report-backed (12)
-
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
-
-## silicon-silent-triopoly (12)
-
-- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:517 — S01 · The Ultimate Antidote to the S&P 500 Bubble — Opening source plate framing silicon memory as the physical counterpoint to a software-led market bubble.
-- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:523 — S02 · The Great Valuation Paradox — Source plate contrasting an extreme S&P 500 CAPE ratio with memory-triopoly forward valuation and margins.
-- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:529 — S03 · The Strange Genesis of a Cartel — Source history plate describing how Samsung, Micron, and SK hynix emerged from separate survival paths.
-- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:535 — S04 · The Capital Cycle Meat Grinder — Source mechanism plate showing price wars, excess capital expenditure, and the collapse of weaker memory rivals.
-- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:541 — S05 · The Physical Moat of HBM — Source mechanism plate showing the stacked HBM structure and the physical fragility of ultra-thin silicon.
-- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:547 — S06 · The Packaging Battle Matrix — Source comparison of Samsung film-based packaging and SK hynix liquid-epoxy packaging approaches.
-- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:553 — S07 · The RAM-ageddon Penalty — Source plate illustrating the three-to-one wafer-capacity penalty created by HBM production.
-- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:559 — S08 · The Expanding DRAM Battlefield — Source market-share map showing the memory triopoly, CXMT, and the expanding DRAM competitive field.
-- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:565 — S09 · The NAND Counteroffensive — Source plate showing the NAND market lanes, leading manufacturers, and a disruptive challenger.
-- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:571 — S10 · The S&P 500 Liquidity Mirage — Source plate contrasting reported index earnings growth with the underlying composition of market liquidity.
-- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:577 — S11 · The Unbreakable Chokepoint — Source comparison of the outdated commodity view with the memory triopoly's contracted, integrated, and capacity-bound m
-- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:583 — S12 · The Crucible of Compute — Closing source plate framing memory as the physical bottleneck that controls the economics of AI compute.

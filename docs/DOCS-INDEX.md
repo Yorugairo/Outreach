@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3562 records across 284 files.
+3586 records across 289 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -726,6 +726,13 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L52 [2] What this blocks — The tell — variable, threshold, where we sit, the flip — is the spine of the close and {"where we sit" is wrong by ~2.6 points, with the sign invert}
 - L61 [2] Recommendation — Take the retrospective. It costs one paragraph, it keeps the tea-break ring and the {receipt} <tea-break; May 2023>
 
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md
+
+- L1 [1] Tokyo tea break — the remake on the 09-09 engine (Claude, 2026-09-09) — The operator: "how does the tokyo tea remake look?" — after the tariff short's second cut shipped. The short was last built {Recall:} <tokyo-short-player-b; build-morph-demo; dead-space; hardCut; idle; Fed-funds; pre-existing; badge-less; dock-f-toll-gate-to-fab; side-r; FAB_CROP; FAB_WAFER>
+- L12 [2] What the engine changed by itself (a plain rebuild) — - The dip instead of the wipe at every world change (E47's `hardCut` fix), holds resolved by sentence (E25), the portrait <hardCut; idle; Fed-funds; pre-existing; badge-less>
+- L21 [2] Applied today (E55 / E56 / the bed) — 1. The pledge dock. Tokyo's `dock-f-toll-gate-to-fab` clip under "pledged ten trillion yen to chips" is the asset the {The pledge dock.} <dock-f-toll-gate-to-fab; side-r; FAB_CROP; FAB_WAFER; idle: live; BED_LU; blue-ties; env>
+- L36 [2] Open — the operator's call on the watch — - The Fed card vs the caption strip (76.2–76.8 s): the thrown chart card is a 9:16 page (1458 px tall at reading width) {The Fed card vs the caption strip; The empty plot under the docks} <CENTRE_MAX_H; balance-sheet; un-drawn; $665; RENDER_ASPECT=9:16>
+
 ## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md
 
 - L1 [1] Tokyo Tea Break — review, 2026-09-03 — Reviewed: `SCRIPT-90S-VO.txt` (67 s at the Chirp scratch pace, 194 words) and {VERDICT: FAIL — blocks recording.} <SCRIPT-90S-VO.txt; SCRIPT-P1-VO.txt; eight-minute; hedged-yield; CHECK-RESPONSIBILITIES; opening-gate; head-fake; long-form; Follow-up; short-runtime; [post-key]; [archetype]>
@@ -906,6 +913,37 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L324 [2] 5.2 Deterministic Bit-Level Hash: `lpHash`
 - L334 [2] 5.3 O(1) Seek-Safe Analytic Spring Evaluator
 - L386 [2] 6. Authoritative Academic Citations — 1. Viviani, P., & Terzuolo, C. (1982). Trajectory determines movement dynamics. Neuroscience, 7(2), 431-437. {Viviani, P., & Terzuolo, C. (1982).; Flash, T., & Hogan, N. (1985).; Lasseter, J. (1987).; Witkin, A., & Kass, M. (1988).; Schneider, P. J. (1990).} <Computer-generated; pen-and-ink; Cohen-Or; As-rigid-as-possible; Human-Computer; MoXi; real-time; High-Quality>
+
+## content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md
+
+- L1 [1] PRODUCTION REFERENCE REPORT (Claude, 2026-09-10): China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` - Bravos Research, 19:56.5 (1196.5 s), 1280x720 av1, 29.97 fps {Source:; Transcript:; 3542 words, 177.6 WPM; Visual events:; 50 new compositions (2.5/min); Sponsor:} <YouTube; Near-black; top-centre; bottom-left; Data: ... Source: ..., Bravos Research; tv-embed; record document; press-card; left-to-right; line-end-to-bar; 1,405; vector map>
+- L8 [2] The distribution (doc 46's table, recomputed here) — | | events (cuts + builds) | compositions (cuts only) | WL reference (doc 46) | {The finding:}
+- L26 [2] Screen time by lane — | lane | seconds | share |
+- L37 [2] The six phases (the house grid; words from the deduped captions) — | phase | window | events | compositions | words | WPM |
+- L50 [2] The grammar (what the frames say; what it maps to in our engine) — 1. One stage, one accent. Near-black charcoal, one pink, white type; green only for 'up' and the CTA. Titles top-centre in the accent; a small source line botto {One stage, one accent.; Other people's claims are framed; their own analysis is bare} <Near-black; top-centre; bottom-left; Data: ... Source: ..., Bravos Research; tv-embed; record document; press-card; left-to-right; line-end-to-bar; 1,405; vector map; bracket>
+- L65 [2] Artifacts — - `SHOT_LEDGER.claude.md` - every event with its species and line; `claude-watch/shots/` - one frame per event (0.5 s after) and ten contact sheets <per-sample>
+
+## content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md
+
+- L1 [1] PRODUCTION REFERENCE REPORT: China Just Triggered A New World Order. — - Source: `https://youtu.be/1ZS5_txbOsc?si=lCnqWLmL-NQ8a_1u` {Source:; Duration:; Resolution:; Channel / Creator:; Total Cuts:; 6.02 CPM} <cut-in; status-quo; 120 frames>
+- L11 [2] Shot Duration Distribution — - Under 3s (Brisk cut-in / punch): 2 {2; 63; 38; 17} <cut-in>
+- L17 [2] 6-Phase Retention Architecture Deconstruction <status-quo>
+- L19 [3] P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 14 shots | 374 words | 249.3 WPM {Pacing; 249.3 WPM; Key Questions; Transcript Sample}
+- L24 [3] P2: The Engine (Foundational Model) [01:30 - 03:23] — - Pacing: 12 shots | 443 words | 234.4 WPM {Pacing; 234.4 WPM; Key Questions; Transcript Sample} <status-quo>
+- L29 [3] P3: The Gap (Mounting Contradiction) [03:23 - 08:58] — - Pacing: 28 shots | 1198 words | 214.5 WPM {Pacing; 214.5 WPM; Key Questions; Transcript Sample}
+- L34 [3] P4: The Pivot (45–55% Chiastic Turn) [08:58 - 10:58] — - Pacing: 13 shots | 466 words | 233.7 WPM {Pacing; 233.7 WPM; Key Questions; Transcript Sample}
+- L39 [3] P5: The Payoff & The Tell (Grand Climax) [10:58 - 16:57] — - Pacing: 38 shots | 1338 words | 223.6 WPM {Pacing; 223.6 WPM; Key Questions; Transcript Sample}
+- L44 [3] P6: The Close (Resolution & Ring Echo) [16:57 - 19:57] — - Pacing: 20 shots | 711 words | 237.7 WPM {Pacing; 237.7 WPM; Key Questions; Transcript Sample}
+- L50 [2] Artifact Manifest — - Detailed Shot Ledger: [`SHOT_LEDGER.md`](SHOT_LEDGER.md) <120 frames>
+
+## content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.claude.md
+
+- L1 [1] SHOT LEDGER (Claude, 2026-09-10): the measured events, the species read from the frames, the spoken line — Source `https://youtu.be/1ZS5_txbOsc` - China Just Triggered A New World Order, Bravos Research, 19:56.5. Events measured as local maxima of the frame-to-frame <frame-to-frame; COMP; unclassified; claude-watch; headline-card; tv-embed; strategy-session; up-arrow; WaPo; MULTI-LINE; safe-haven>
+
+## content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md
+
+- L1 [1] SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat | <unclassified; one-on-one; chart; record_document; instrument; host_diegetic; in-world; kinetic_type; Full-frame; b_roll; screen_recording>
+- L126 [3] Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve). <chart; record_document; instrument; host_diegetic; in-world; kinetic_type; Full-frame; b_roll; screen_recording>
 
 ## content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md
 
@@ -2455,6 +2493,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L167 [2] 46.8 Sources — Primary: `04` (recomputed), `01`, `MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md` §10.
 - L172 [2] 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames = {hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frame} <blur-zoom; world-persists; [DERIVED]>
 - L181 [2] 46.6 Where the picture change sits in the pause — measured 2026-09-06 (TR-2) — `measure_cut_offsets.py` on TR-1's 99 boundaries, caption and Whisper word times, pause ≥ 0.30 s: the picture changes a {the picture changes a median 100 ms (3 frames at 30 fps) bef; A dip through black is centred: its black midpoint sits +13} <split-edit; dip_start = onset − 0.24 s; [DERIVED]; _whisper.csv>
+- L194 [2] 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — China Just Triggered A New World Order, 19m57s, measured by frame difference (96x54 grey at 4 fps, local maxima {2.5} <YouTube; fade-to-black; title-card; press-card>
 
 ## docs/content-video-engine/47-FINDINGS-TO-CHECKS.md
 

@@ -188,3 +188,28 @@ centred: its black midpoint sits +13 ms from the onset** (`dip_start = onset −
 that follows: land the cut 3 frames before the next word's onset; centre a dip's black on it. Series per boundary in
 `docs/research/motion/wealth_logic_cut_offsets.csv` (+ `_whisper.csv`); the report in
 `docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md`.
+
+---
+
+## 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts
+
+*China Just Triggered A New World Order*, 19m57s, measured by frame difference (96x54 grey at 4 fps, local maxima
+of the mean |delta| >= 6/255, 1 s refractory) and read frame by frame:
+`content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md`.
+
+| | events (cuts + builds) | compositions (cuts) | WL (46.1) |
+|---|---|---|---|
+| per minute | 6.0 | **2.5** | 5.9 |
+| median | 5.9 s | 16.6 s | 9.6 s |
+| Q1 / Q3 | 3.3 / 12.4 s | 8.8 / 34.1 s | 6.3 / 13.2 s |
+| longest | 54 s | 112 s | 26 s |
+
+The operator called it *"the cleanest finance YouTube production I ever saw."* What the numbers say: the picture
+changes at the WL rate, but the COMPOSITION changes at less than half of it. Seventy of the 120 events are builds
+inside a held frame — a press card lands on the stack, a line draws, a country lights, a value stamps, one node of a
+diagram swaps. That is E21 answered by builds, and E50's deployed clock answered by a frame that keeps earning its
+hold. Their spread is wider than WL's on both counts (IQR 9.1 s / 25.3 s against 6.9 s). Two caveats on the
+measurement: a difference detector reads a dissolve as an event and a fade-to-black as two; and the 0.2 s "shot 1"
+is the title-card wipe. The species gaps it exposes (a vector map, a flow diagram of icon chips, a press-card dock, a
+treemap) are listed in the report's grammar section.
+
