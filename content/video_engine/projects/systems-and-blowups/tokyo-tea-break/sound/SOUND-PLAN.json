@@ -47,6 +47,17 @@
    }
   },
   {
+   "slot": "page retract 4 (whirl)",
+   "at": 59.56,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "variants": {
+    "A": "fs-swirl-out-478683.mp3",
+    "B": "fs-whoosh-3-drain.mp3",
+    "C": "fs-whoosh-4-648732.mp3"
+   }
+  },
+  {
    "slot": "landing 5 (throw, paper)",
    "at": 76.21,
    "gain": 0.12,

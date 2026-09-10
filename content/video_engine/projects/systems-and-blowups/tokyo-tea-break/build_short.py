@@ -54,6 +54,11 @@ def _holdings_window() -> list[float]:
 
 
 HOLDINGS_WINDOW = _holdings_window()
+# P48 T7 (2026-09-10): the fab card's box beside the PARKED monthly bars - the band under the parked chart, above the source line
+FAB_W, FAB_CX, FAB_CY = 0.58, 0.5, 0.55
+_fw, _fh = round(FAB_W * 1080), round(round(FAB_W * 1080) * 0.5911)
+FAB_BOX = {"kind": "region", "x0": round((FAB_CX * 1080 - _fw / 2) / 1080, 4), "y0": round((FAB_CY * 1920 - _fh / 2) / 1920, 4),
+           "x1": round((FAB_CX * 1080 + _fw / 2) / 1080, 4), "y1": round((FAB_CY * 1920 + _fh / 2) / 1920, 4)}   # the whole plant, for the glide
 
 
 def _holdings_facts() -> dict:
@@ -419,7 +424,12 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # HG1 (operator, 2026-09-07): "the dock at 0:16 is useless, that's the tea clip but at that point we're not talking about tea" -
             # the tea swap on "sixty-three" is gone; the panel holds parked through the joke and retracts on "watching" (part B row 4)
             (dock_still("dock-c-blue-ties-panel"), 0, t_panel, t_watch, {"arrive": "throw", "mass": "paper"}),
-            (dock_still("dock-g-two-fingers"), 0, t_two, t_promise, {"arrive": "land", "mass": "metal", "centre": True}),   # the design pass: the line is un-drawn by now - the card takes the page's centre
+            # the operator, 2026-09-10 ("two numbers could probably be parked better, now that our charts are actually a living species
+            # docking over them costs more because it's space we could be using"): the chart PARKS up-left on "Two numbers" (Bravos 91)
+            # and the fingers land BESIDE it in the room the park frees - measured on the P48 build: the chart svg is 800x851 at (80,374),
+            # parked at 0.55 it holds x 80-520, y 374-842; the card (720x660) at 0.42 of the stage sits centred at (0.76, 0.316), clear of
+            # the sub above (242-342) and the parked plot, over nothing
+            (dock_still("dock-g-two-fingers"), 0, t_two, t_promise, {"arrive": "land", "mass": "metal", "centre": True, "card_aspect": 0.9167, "centre_w": 0.42, "centre_x": 0.76, "centre_y": 0.316}),
         ], "cut", [
             # V3: the build stops at the FEBRUARY PEAK ("The Fed hasn't moved, but your borrowing costs climbed anyway"); the coral
             # drop is its own stroke on "watching:", so the June datum is drawn the moment the sentence turns to the lender
@@ -434,7 +444,9 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # clock at 0:22 and the title turns to the opponent at 0:30 - its life ends at the turn; on "Two numbers" M21 read 14.1 s)
             # so the figures stand alone under the retitle and the fingers land on the bare page as designed
             {"kind": "chart_to", "at": t_table, "dur": 1.4, "to": "rescale", "window": HOLDINGS_WINDOW},
-            {"kind": "undraw", "at": t_opponent, "dur": 1.2, "target": datum(0)},
+            # ... and on "Two numbers" the windowed chart PARKS up-left (the fingers take the room beside it) instead of un-drawing:
+            # the chart stays legible as the sentence sets the agenda (E58: park = room for the next thing; no clock restarts)
+            {"kind": "chart_to", "at": round(t_two - 0.4, 2), "dur": 0.9, "to": "park", "scale": 0.55, "anchor": "top"},
             {"kind": "figure", "at": t_trillion, "dur": 1.6, "target": datum(PEAK_IDX), "text": _bn(FACTS["peak"]), "dy": -0.7},   # P48 T7: on the windowed line the months ARE the axis (Feb '26 ... Jun '26) - the figures carry no month sub (E52)
             {"kind": "figure", "at": t_since, "dur": 1.6, "target": datum(LAST_IDX), "text": _bn(FACTS["latest"]), "color": "neg", "dy": -1.0},   # P48 T7: June is the windowed plot's floor - the figure writes ABOVE its point, clear of the line's last segment (dy +1.6 put it on the axis labels)
             # THE BEAT IS UNFINISHED AND SAYS SO (2026-09-07). E50: a chart un-draws OR BECOMES THE NEXT THING. This page
@@ -458,13 +470,15 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
         # 4 catalyst + the pledge: the page RETURNS by the spiral (it unwinds from its point, never drawn like new - E40 s4)
         #   and STAYS through the pledge, which docks the gate instead of cutting to it. exit=cut: the Meta page MOUNTS over
         #   this one at "went home", so there is no retract to double it, and the gate card does not ride one (E40 #5).
-        (t_catalyst, t_second, hold + ":spiral:cut", (0, 0, 0), [
+        (t_catalyst, t_second, hold + ":spiral:cut;then=ev-japan-selling-v1:bars:3", (0, 0, 0), [   # the second state: the month-by-month bars, June emphasised
             # E55 (operator, 2026-09-09): the toll-gate clip "was already weak because it was supposed to be a toll gate, without the
             # manufacturing plant it's just useless" - the fab (Mike at the wafer chamber, the operator's own Flow plate) takes the
             # clip's own measured place as a centred card; the LIGHT lands on the wafer at "chips" and holds to the cut (E56: never a ring on a picture)
             # the card proves its sentence and leaves at the turn ("And here's what nobody says" - E50/E25); its exit is the beat M16 counts
+            # the operator, 2026-09-10 (docking over a living chart costs space): the monthly bars PARK up-left on "pledged" and the fab
+            # card takes the band the park frees - 626x370 at (0.5, 0.55) = y 871-1241, above the source line (1249), over nothing
             (dock_png("dock-i-fab-wafer", STILLS_DIR / "sig-i-fab-wafer.png", FAB_CROP), 0, t_pledge, at("And here's"),
-             {"centre": True, "card_aspect": 0.5911, "centre_w": 0.744, "centre_x": 0.444, "centre_y": 0.411}),
+             {"centre": True, "card_aspect": 0.5911, "centre_w": FAB_W, "centre_x": FAB_CX, "centre_y": FAB_CY}),
             # the fourth watch: the selling bars are no evidence dock - they are the ring page's own bars, laid against its lines (combo)
         ], "cut", [
             carried(t_catalyst),
@@ -472,11 +486,12 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # wafer) and holds until the card leaves; the glide is the second beat the 4.9 s hold needed (M16)
             # two lights, two beats (the gate credits a species START, not a glide inside one): the wafer on "chips" for the 0.99 s
             # to "works"; then a second light that starts on the wafer and GLIDES out to the whole fab, held until the card leaves
+            {"kind": "chart_to", "at": round(t_pledge - 0.4, 2), "dur": 0.9, "to": "park", "scale": 0.55, "anchor": "top"},   # the bars make room for the plant
             {"kind": "spotlight", "at": at("chips"), "dur": round(at("works") - at("chips"), 2), "idle": "live",
-             "target": centred_card_point(0.5911, 0.411, *FAB_WAFER, centre_w=0.744, centre_x=0.444)},
+             "target": centred_card_point(0.5911, FAB_CY, *FAB_WAFER, centre_w=FAB_W, centre_x=FAB_CX)},
             {"kind": "spotlight", "at": at("works"), "dur": "hold", "until": at("And here's"), "idle": "live", "glide_at": 0.0,
-             "target": centred_card_point(0.5911, 0.411, *FAB_WAFER, centre_w=0.744, centre_x=0.444),
-             "target2": {"kind": "region", "x0": round(78 / 1080, 4), "y0": round(552 / 1920, 4), "x1": round(882 / 1080, 4), "y1": round(1027 / 1920, 4)}},
+             "target": centred_card_point(0.5911, FAB_CY, *FAB_WAFER, centre_w=FAB_W, centre_x=FAB_CX),
+             "target2": FAB_BOX},
             # E51 (the third watch): the punch on the peak here was tied to nothing - the page returns drawn - and is cut
             # V3: the BRACKET measures the drop from the peak to June by the hand on the number; its label is the number and
             # its sub lands on "a tenth of the pile" - the callout that said the same is gone (one thing per sentence)
@@ -484,8 +499,14 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # E50: the bracket is the page's last data mark (49.1); on "The Treasury prints" the line and the bracket un-draw and the
             # June print writes on "your first number" - THE first number the promise named; it holds under the pledge and the
             # money-went-home line (a figure is the next thing, not the chart) until the Meta page mounts over it
-            {"kind": "undraw", "at": t_prints, "dur": 1.2, "target": datum(0)},
-            {"kind": "figure", "at": t_first, "dur": 1.6, "target": datum(LAST_IDX), "text": _bn(FACTS["latest"]), "sub": "the " + MONTH(FACTS["latest_month"]) + " print"},
+            # the operator, 2026-09-10 ("showing the monthly-change on the treasury prints might make sense"): on "The Treasury prints" the
+            # line RECASTS into the month-by-month bars (E58: the same data in another form - the hand-over, 316 points have no bar
+            # correspondence): the line leaves by length, the sub and source rewrite, the four signed bars draw (a drop goes DOWN, blood
+            # red - E28); "your first number" then writes at the JUNE bar - the print the sentence names. The bracket leaves with the line.
+            {"kind": "chart_to", "at": t_prints, "dur": 1.4, "to": "recast", "state": 1},
+            # measured on the frame: a FIGURE at the June bar (282 px of type, written leftward) crosses the May bar's body at every dy the
+            # 800 px plot allows - so the print is a NOTE in the page's quiet zone (the June bar's own -$26.4 stands in its callout)
+            {"kind": "note", "at": t_first, "dur": 1.4, "text": "the June print: " + _bn(FACTS["latest"]) + " - your first number"},
         ]),
         # 5 the second number: a Meta share priced at each yield, punch on the 5.5 % bar at "discounts" - as v1
         # ... the Meta page HOLDS to the snap (E50: deployed 69.2 -> 76.8, 7.6 s) and the Fed CARD is thrown onto it on "The Fed still" -

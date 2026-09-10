@@ -936,3 +936,39 @@ def test_a_figure_follows_the_active_state_after_a_rescale_and_a_dropped_datum_s
                 br.close()
         finally:
             srv.shutdown()
+
+
+@needs_objects
+@needs_browser
+def test_a_cold_seek_into_a_park_paints_the_figures_parked_on_the_first_frame():
+    """The Tokyo cut at "Two numbers": the perform layer must carry the parked chart's transform on the very first frame a
+    cold seek lands on (the renderer seeks; a one-frame lag put the June figure under the parked chart)."""
+    from playwright.sync_api import sync_playwright
+    plate = "ledger:ev-japan-holdings-v1:line"
+    world = B.world_for_plate(plate, (0, 0, 0), EP)
+    n = len(world["page"]["series"][0]["pts"])
+    species = [{"kind": "chart_to", "at": 8.0, "dur": 1.4, "to": "rescale", "window": [2026.043, 2026.457]},
+               {"kind": "figure", "at": 10.0, "dur": 1.2, "target": {"kind": "datum", "index": n - 1}, "text": "1,116.7"},
+               {"kind": "chart_to", "at": 13.0, "dur": 0.9, "to": "park", "scale": 0.55, "anchor": "top"}]
+    B.derive_rescale_states(world, species, plate, EP)
+    tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
+    scene = dict(tl["scenes"][0], species=species, span=[0.0, 24.0], world=dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}))
+    timeline = dict(tl, aspect="9:16", runtime_s=24.0, scenes=[scene], caption_pages=[], captions=[])
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / "park.html"; html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
+        w, h = RB.STAGE["9:16"]; srv, port = RB.serve(html.parent)
+        try:
+            with sync_playwright() as pw:
+                br = pw.chromium.launch(headless=True); page = br.new_context(viewport={"width": w, "height": h}).new_page()
+                page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000); RB.prepare_page(page, w, h)
+                seek = "t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }"
+                page.evaluate(seek, 13.5)   # COLD, mid-park
+                r = page.evaluate("() => { const st = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')).__lp; const A = st.states[st.active | 0]; return { chart: A.chart.style.transform, layer: st.performSvg ? st.performSvg.style.transform : null, origin: [A.chart.style.transformOrigin, st.performSvg ? st.performSvg.style.transformOrigin : null] }; }")
+                assert r["chart"].startswith("scale(") and r["layer"] == r["chart"] and r["origin"][0] == r["origin"][1], r
+                a = page.evaluate("() => { const st = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')).__lp; const g = st.perform.figures[0].g.getBoundingClientRect(); return [g.left, g.top]; }")
+                page.evaluate(seek, 3.0); page.evaluate(seek, 13.5)
+                b = page.evaluate("() => { const st = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')).__lp; const g = st.perform.figures[0].g.getBoundingClientRect(); return [g.left, g.top]; }")
+                assert abs(a[0] - b[0]) < 0.5 and abs(a[1] - b[1]) < 0.5, (a, b)
+                br.close()
+        finally:
+            srv.shutdown()

@@ -3734,7 +3734,11 @@
   const paintPerform = (st, scene, t, pg) => {
     if (!st.perform) st.perform = buildPerform(st, scene, pg);
     const PF = st.perform;
-    const undrawAll = pageSpecies(scene, "undraw").filter((sp) => (sp.series ?? (sp.target || {}).series) == null);
+    if (st.performSvg && st.states) {   /* P48 T7: the perform layer rides the active chart's park - copied HERE, after the layer exists, so a cold seek into a park paints it parked on its first frame */
+      const A = st.states[st.active | 0]; st.performSvg.style.transformOrigin = A.chart.style.transformOrigin; st.performSvg.style.transform = A.chart.style.transform;
+    }
+    const undrawAll = [...pageSpecies(scene, "undraw").filter((sp) => (sp.series ?? (sp.target || {}).series) == null),
+                       ...pageSpecies(scene, "chart_to").filter((sp) => sp.to === "recast" || sp.to === "morph")];   /* P48 T7: a recast or morph takes the line - the bracket leaves with it, on the same clock */
     for (const b of PF.brackets) paintBracket(b, t, undrawAll.find((sp) => sp.at >= b.sp.at));
     for (const sd of PF.spreads || []) paintSpread(sd, t);   /* the fifth watch: the gap between the lines, bled full */
     for (const fg of PF.figures || []) paintFigure(fg, t, st);   /* E50: the chart's next thing */
@@ -4109,7 +4113,6 @@
     }
     for (let i = 0; i < states.length; i++) if (!park || i !== (st.active | 0)) lpUnpark(states[i]);
     if (park && !xf) lpPaintPark(states[st.active | 0], park, t);
-    if (st.performSvg) { const A = states[st.active | 0]; st.performSvg.style.transformOrigin = A.chart.style.transformOrigin; st.performSvg.style.transform = A.chart.style.transform; }   /* P48 T7: the perform layer rides the active chart's park */
     /* the words that describe the chart move with it: the standing sub and source erase over the transition's first
        PS.ERASE_S, the arriving state's write over the rest. State 0's are the page's own, written by the page's build. */
     let ink = 0, ue = 0, uw = 1;

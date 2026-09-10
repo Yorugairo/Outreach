@@ -7,7 +7,7 @@ risk: standard
 owner: parent
 branch: main
 created: 2026-09-08
-updated: 2026-09-08
+updated: 2026-09-10
 ---
 
 # The camera as a first-class component of the physics
@@ -49,6 +49,54 @@ composes through it, nothing can ask "what is in frame at t". Every arrival buil
 had to move the OBJECT because nothing else could look at it - the operator's read: *"It wouldn't make sense that the
 card lands, and then grows. It would make sense that as the card came into view, our focus shifted, and we went to see
 what that card was."*
+
+## Amended 2026-09-10 - after P48 (a chart changes state) and Bravos's camera, MEASURED
+
+The operator, 2026-09-10: *"how does P49 change with our new capabilities & after watching bravos? they did a lot of
+camera stuff."* Measured before answering (E38: the threshold comes from the reference), on the source video in the
+dossier (`claude-watch/camera.json`; `measure_bravos_camera.py` in the session scratchpad - ORB + RANSAC partial affine
+between frames 2 s apart, 640x360, per held composition of the Claude shot ledger, three samples each, the median):
+
+| held compositions >= 3.2 s | n | camera-still (< 0.15 %/s zoom and < 4 px/s pan) | pushes > 0.3 %/s | pans > 8 px/s |
+| --- | --- | --- | --- | --- |
+| charts | 12 | **11** | 0 | 0 |
+| diagrams | 4 | 4 | 0 | 0 |
+| cards / press | 9 | 8 | 1 (the press collage, +1.25 %/s over ~10 s) | 0 |
+| maps | 10 | 6 | 1 (#68: +0.6 %/s, then a ~6 %/s push between countries) | 3 |
+| other (icon boards, CTA) | 10 | 8 | 0 | 2 (icon boards sliding) |
+| **all** | **45** | **37** | 2 | 5 |
+
+**What "a lot of camera stuff" is, measured: it is not the camera.** 37 of 45 held compositions are camera-still, and
+every chart and every diagram is - the line draws, the tag lands, the bar stamps under a LOCKED camera. The motion the
+eye reads is 6.0 events/min of builds inside a held frame and 2.5 compositions/min of cuts (46 §46.7). The camera moves
+in exactly two places: on the MAP, where the stage is wider than the frame (a push or a pan between countries, once per
+composition, then still), and a slow push on a press collage that stacks. So:
+
+1. **The default is LOCKED, and it is the reference's default, not a fallback.** Doc 16's *"a locked shot has zero
+   camera amount"* is Bravos's practice on every chart. The HyperFrames rule 2 (*"a continuous 4-8 % push"*) is REJECTED
+   as a default: zero of twelve chart holds carry one. T4's attention law is re-scoped: the camera holds while a thing
+   builds (the build leads the eye - E50's amendment), and moves only (a) tied to a landing (E51, already the law for
+   `punch`), (b) between focal points on a stage wider than the frame - the map, a wide diagram - as ONE move per
+   composition that settles, (c) as an authored key. "Attention drives the camera" stays the operator's decision; what
+   attention means is now measured: it moves the eye to a NEW composition, it does not drift on a held one.
+2. **P48 took the object-moves-for-the-eye cases away.** `park` (the chart shrinks to a corner so the next thing has
+   room - Bravos 91), `rescale`/`extend` (the axes retarget instead of a push-in on a window), the keyed recast and
+   `morph_to` are all "the world moves under a locked camera" - which is what the reference does. The plan's Rejected
+   Alternative ("the object grows because nothing could look at it") is narrowed: `snap` and `throw` stay as arrivals;
+   the chart's own changes of state are NOT camera work and P49 must not re-implement them as pushes.
+3. **T3 (the probe) and T6 (the in-frame gate) gain a customer:** after a `park` or a docked card beside a parked chart
+   (the Tokyo cut, "Two numbers") the engine needs to know what is in frame and what is covered - `__camera(t)` +
+   `inFrame(target)` should read the park's transform and the docks' `place`. This is now the first slice worth building,
+   before any camera MOVE: it answers "is the card over the chart" at compile time, which the operator has asked three
+   times by eye.
+4. **T5 (the camera arrival) stays opt-in and behind HG2**, and the reference argues against it: Bravos brings a new
+   composition in by a CUT (2.5/min) or a build, never by the eye travelling to a card. The operator's read (*"as the
+   card came into view, our focus shifted"*) is still the ask; the measurement says build it as a short, settled move
+   (a push-through of 1-2 s, blur riding the velocity), watched against `snap` on the same beat - not as the default.
+5. **T7's record** carries this table; E54 in the plan's write set is now E59 (E54-E58 exist).
+
+The revised order: **T1 -> T2 -> T3 + T6 (the probe and the gate, the value P48 exposed) -> T4 (locked by default; the
+map/wide-stage move; the landing tie) -> T5 (opt-in, HG2) -> T7.** Nothing here is approved; the plan stays `draft`.
 
 ## Intent And Acceptance
 

@@ -2493,7 +2493,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L167 [2] 46.8 Sources — Primary: `04` (recomputed), `01`, `MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md` §10.
 - L172 [2] 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames = {hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frame} <blur-zoom; world-persists; [DERIVED]>
 - L181 [2] 46.6 Where the picture change sits in the pause — measured 2026-09-06 (TR-2) — `measure_cut_offsets.py` on TR-1's 99 boundaries, caption and Whisper word times, pause ≥ 0.30 s: the picture changes a {the picture changes a median 100 ms (3 frames at 30 fps) bef; A dip through black is centred: its black midpoint sits +13} <split-edit; dip_start = onset − 0.24 s; [DERIVED]; _whisper.csv>
-- L194 [2] 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — China Just Triggered A New World Order, 19m57s, measured by frame difference (96x54 grey at 4 fps, local maxima {2.5} <YouTube; fade-to-black; title-card; press-card>
+- L194 [2] 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — China Just Triggered A New World Order, 19m57s, measured by frame difference (96x54 grey at 4 fps, local maxima {2.5} <YouTube; camera-still; fade-to-black; title-card; press-card>
 
 ## docs/content-video-engine/47-FINDINGS-TO-CHECKS.md
 

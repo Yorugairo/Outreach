@@ -206,7 +206,9 @@ of the mean |delta| >= 6/255, 1 s refractory) and read frame by frame:
 
 The operator called it *"the cleanest finance YouTube production I ever saw."* What the numbers say: the picture
 changes at the WL rate, but the COMPOSITION changes at less than half of it. Seventy of the 120 events are builds
-inside a held frame — a press card lands on the stack, a line draws, a country lights, a value stamps, one node of a
+inside a held frame — under a LOCKED camera: measured 2026-09-10, 37 of 45 held compositions are camera-still and
+every chart and diagram is; the camera moves only on the map, between countries, once per composition, and as one slow
+push on a stacking collage (`claude-watch/camera.json`; P49 amended) — a press card lands on the stack, a line draws, a country lights, a value stamps, one node of a
 diagram swaps. That is E21 answered by builds, and E50's deployed clock answered by a frame that keeps earning its
 hold. Their spread is wider than WL's on both counts (IQR 9.1 s / 25.3 s against 6.9 s). Two caveats on the
 measurement: a difference detector reads a dissolve as an event and a fade-to-black as two; and the 0.2 s "shot 1"

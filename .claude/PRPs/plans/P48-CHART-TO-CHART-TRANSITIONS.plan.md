@@ -421,7 +421,7 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   `kinetics.arap_morph` off the transition degrades to a `recast` or a cut of the same length, and the frame is
   byte-identical to that; (5) the seek test
 - Validate: `python -m pytest content/video_engine/tests/test_morph.py content/video_engine/tests/test_chart_transitions.py -q`
-- Evidence (2026-09-10): `chart_to {at, dur, to: "morph", state}` - the AREA UNDER THE STANDING LINE becomes the area
+- Evidence: (2026-09-10) `chart_to {at, dur, to: "morph", state}` - the AREA UNDER THE STANDING LINE becomes the area
   under the target state's line by ARAP (`kinetics/arap.mjs`'s strip mesh, the same mesh as P47 T3's page-enter morph),
   mid-page, on one clock. The compiler admits it between two line pages only (`MORPH_BUILDERS = ("dense-line",)`) and
   refuses by name otherwise ("dense-line -> story: a morph moves the AREA UNDER A LINE into another ... n lines -> n bars
@@ -477,8 +477,8 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   timeline read - it belongs with the life check, not this gate.
 
 ### T7: The doctrine and the Tokyo application
-- Status: **the doctrine complete; the Tokyo application built on :8740 with ONE verb, awaiting HG4** (2026-09-10) - the
-  second verb's beat is the operator's choice (see the deviation)
+- Status: **the doctrine complete; the Tokyo application built on :8740 with FOUR verbs (rescale, park, recast, park),
+  awaiting HG4** (2026-09-10) - the operator picked the beats the same day (see "the operator's two cuts")
 - Owner: parent
 - Depends on: T4, T5, T6
 - Write set: `docs/portable/OPERATOR-RULINGS.md` (E53 candidate: *a chart changes state; it never cuts to another chart of
@@ -491,7 +491,7 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   ring page now does with a second object), **morph_to** for R26-16's planted element; (3) the motion gate PASSes with M23
   clean; (4) stills for the watch
 - Validate: `python build_short.py` in the Tokyo folder; `python content/video_engine/scripts/measure_frozen_frames.py <build>`; the gate report
-- Evidence (2026-09-10): **E58** written (`docs/portable/OPERATOR-RULINGS.md`: a chart changes STATE, never cuts to another
+- Evidence: (2026-09-10) **E58** written (`docs/portable/OPERATOR-RULINGS.md`: a chart changes STATE, never cuts to another
   chart of the same data; the table of five verbs - the sentence that earns each, what moves, what it is NOT for; when a
   cut still wins; the laws every verb obeys) and **doc 29 §9.28 (e)** (the transition grammar under the surface grammar).
   **Tokyo:** `build_short.py` row 2 - on "The Treasury's table" the holdings page RESCALES to the February-June window
@@ -518,6 +518,23 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   bars as a keyed/hand-over recast on "The Treasury prints" (row 4) in place of the June-print figure changes what the
   first number IS; or a `park` on "Two numbers" so the fingers land beside the windowed chart instead of on the bare page
   (needs `centred_place` to read the park - the freed-region line). Both are stated for HG4, not forced.
+- **The operator's two cuts, applied the same day (2026-09-10, HG4 round 2):** (1) *"two numbers could probably be parked
+  better, now that our charts are actually a living species docking over them costs more because it's space we could be
+  using"* - the windowed chart PARKS up-left (0.55, top) on "Two numbers" and the fingers card lands BESIDE it (`centre_w`
+  0.42 at (0.76, 0.316), measured against the page's boxes: the chart svg 80-880 x 374-1225, parked 80-520 x 374-842);
+  the un-draw on "The opponent" is gone - the chart lives beside the agenda until the suck (M21 WARN: 16.5 s deployed
+  from the rescale's end to the promise plate - the operator's call against E50's 12 s ceiling, stated, not hidden).
+  (2) *"showing the monthly-change on the treasury prints might make sense"* - row 4's plate carries
+  `;then=ev-japan-selling-v1:bars:3` (the tariff short's REAL month-by-month object, TIC table 5, copied with provenance)
+  and on "The Treasury prints" the line RECASTS into the four signed bars (the hand-over; the -$122.6B bracket now
+  leaves WITH the line on the recast's clock - `undrawAll` counts a recast/morph); "your first number" is a NOTE
+  ("the June print: $1,116.7B - your first number"), because a figure at the June bar (282 px of type, written leftward)
+  crossed the May bar's body at every dy the 800 px plot allows - measured, not guessed; the June bar's own -$26.4 stands
+  in its callout. The fab card then lands BESIDE the parked bars ("pledged": park 0.55 top; the card 626x370 at (0.5,
+  0.55) in the band above the source line; both lights retargeted through `centred_card_point` and `FAB_BOX`). Gate
+  0 FAIL / 2 WARN / M23 PASS with four transitions (rescale, park, recast, park); no frozen run. Found by the stills: a
+  COLD seek into a park painted the perform layer unparked for one frame (the June figure under the parked chart) - the
+  layer now takes the active chart's transform where it is created (`paintPerform`), gated by a cold-seek test.
 - **Open (a follow-up, not this plan's lane):** brackets and spreads on a page with states are built on the page's own
   geometry and WAIT while a derived state stands (hidden); making them follow the active state the way figures do is a
   bounded slice (`buildPerform` per state, or geometry per frame) - BACKLOG R26-28.
