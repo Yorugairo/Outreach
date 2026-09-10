@@ -65,7 +65,8 @@ PROP_PLACEMENTS = ("centre", "left", "right", "datum")
 QUIET_ZONES = ("left", "right")
 AXES_KEYS = ("log", "ylabel", "xticks", "from_zero", "highlight_from", "hlines", "hline", "marks", "eventbars",
              "name_clear",   # lift the inline series name clear of the data it would otherwise be written across
-             "ymin", "ymax", "yfmt", "yunit", "panels")
+             "ymin", "ymax", "yfmt", "yunit", "panels",
+             "domain", "xdomain")   # P48 T2: a derived rescale state names its exact y domain and x window
 UNCHARTABLE = {
     "checklist": "no chartable values: 'checklist' is a table, not a chart (keep it a dock)",
     "shares": ("'shares' is a donut, and E53 s1 ranks angle and area at the bottom of the perception hierarchy: "
@@ -106,7 +107,7 @@ def decimal_year_label(value: Any) -> str | None:
     if year is None or not (YEAR_RANGE[0] <= year < YEAR_RANGE[1]):
         return None
     whole = int(year)
-    month = min(11, int((year - whole) * 12))
+    month = min(11, int((year - whole) * 12 + 0.01))   # 2026.0833 is February: a four-decimal year puts 0.0833 * 12 at 0.9996, which truncates to January without a hundredth of a month's tolerance (P48 T2)
     return f"{MONTHS[month]} '{whole % 100:02d}"
 
 
@@ -457,11 +458,12 @@ def _validate_variant(series: dict, variant: str) -> list[str]:
 
 
 def build_spec(series: dict, variant: str, emphasize: int | None = None,
-               quiet_zone: str = "right") -> dict:
-    """The page spec; pure and deterministic - the input dict is never mutated."""
+               quiet_zone: str = "right", builder: str | None = None) -> dict:
+    """The page spec; pure and deterministic - the input dict is never mutated. `builder` forces the page's builder
+    (P48 T2: a derived rescale state keeps the PAGE's builder even when its window holds too few points to read as dense)."""
     if quiet_zone not in QUIET_ZONES:
         raise ValueError(f"quiet_zone must be one of {'|'.join(QUIET_ZONES)}")
-    builder = pick_builder(series, variant)
+    builder = builder or pick_builder(series, variant)
     spec: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION, "surface": "page", "builder": builder,
         "variant": variant, "title": series.get("title"), "sub": series.get("sub", ""),

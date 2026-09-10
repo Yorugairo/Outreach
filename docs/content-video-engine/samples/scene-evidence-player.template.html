@@ -888,7 +888,7 @@
      sway; none - explicit stillness, declared.
      Every number below is a starting reference, tagged where it came from; the operator's eye moves them (42 s42.5). */
 
-  const IDLE_KINDS = Object.freeze(["none", "breath", "drift", "pulse", "figure", "live"]);   /* live: breath + drift (2026-09-08) */
+  const IDLE_KINDS = Object.freeze(["none", "breath", "drift", "pulse", "figure"]);
 
   const IDLE = Object.freeze({
     BREATH_AMP: 0.012,        /* [DERIVED: HyperFrames /prompting/motion "1-2 %", verified 2026-09-06; measure on ours] - a 1.2 % inhale */
@@ -968,10 +968,6 @@
     if (kind === "drift") { const d = drift(tq, phase, P); return Object.assign(id, { dx: d[0], dy: d[1] }); }
     if (kind === "pulse") return Object.assign(id, { lum: pulse(tq, phase, P) });
     if (kind === "figure") { const s = sway(tq, phase, P); return Object.assign(id, { scale: 1 + P.BREATH_AMP * figureBreath(tq, phase, P), dx: s[0], dy: s[1] }); }
-    if (kind === "live") {   /* breath + drift (2026-09-08): a breath is a scale with a fixed point at the centre, so a chart at the page centre
-                                stayed bit-identical while the page "breathed" (operator: "even our charts need some sort of life, even if it's
-                                just 1 pixel shifts"); the drift moves every pixel by the same 1-2 px walk, so nothing on the page is ever still */
-      const d = drift(tq, phase, P); return Object.assign(id, { scale: breath(tq, phase, P), dx: d[0], dy: d[1] }); }
     return id;
   };
 
@@ -1408,6 +1404,61 @@
   };
   /* the SVG path of an outline */
   const outlinePath = (pts) => pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ") + " Z";
+  /* KINETICS:END */
+  /* KINETICS:BEGIN chartxf */
+  /* kinetics/chartxf.mjs - CHART TRANSITIONS (P48 T2, 2026-09-10): the interpolators a chart changes STATE by.
+     SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN chartxf and
+     KINETICS:END. Self-contained on purpose: nothing here reads a template symbol; the clock (minJerk, ease.mjs) is
+     applied by the caller.
+     The law (P48): a transition is a pure interpolation between two states that were both BUILT at load. A rescale
+     moves every shared mark from its position under scale A to its position under scale B on one clock; a mark whose
+     value leaves the target domain fades as it goes; a mark the target adds fades in where it will stand. Nothing is
+     rebuilt per frame - the caller writes attributes from the numbers these functions return, so a seek is the play.
+     Bravos (46 s46.7): the picture changes six times a minute, the composition two and a half - a rescale is one of
+     the builds inside a held frame that make that possible. */
+
+  /* xfLerp - the one blend. u is already on the clock (0..1); outside it clamps, so a transition that has not started
+     returns a and one that has ended returns b, exactly (the goldens' contract at both ends). */
+  const xfLerp = (a, b, u) => { u = Math.min(1, Math.max(0, u)); return a + (b - a) * u; };
+
+  /* xfPoint - a datum's screen position between two scales. mapA / mapB take the DATUM (x, v) and return [px, py]; the
+     datum never changes, only where the scale puts it - so a point outside B's window still has a position under B
+     (past the plot's edge), which is where it travels to while it fades. */
+  const xfPoint = (x, v, mapA, mapB, u) => {
+    const a = mapA(x, v), b = mapB(x, v);
+    return [xfLerp(a[0], b[0], u), xfLerp(a[1], b[1], u)];
+  };
+
+  /* xfPath - a series' whole path between two scales, as the point list and the SVG `d` the caller writes. */
+  const xfPath = (pts, mapA, mapB, u) => {
+    const out = pts.map(([x, v]) => xfPoint(x, v, mapA, mapB, u));
+    return { pts: out, d: out.map(([px, py], k) => (k ? "L" : "M") + px.toFixed(1) + " " + py.toFixed(1)).join(" ") };
+  };
+
+  /* xfFade - the opacity of a mark keyed by VALUE as the domain moves. A mark whose value is inside the target domain
+     holds; one leaving fades over the first LEAVE share of the clock; one arriving (present only in B) fades in over the
+     last ARRIVE share. Both edges clamp so the ends are exact: at u=0 an arriving mark is invisible, at u=1 a leaving
+     one is. */
+  const XF = Object.freeze({
+    LEAVE: 0.5,    /* a leaving tick is gone by half the clock - it should not travel the whole way as a ghost [DERIVED: E28, the axis must read at every t] */
+    ARRIVE: 0.5,   /* an arriving tick appears over the second half, at its settled place */
+  });
+  const xfFade = (inside, arriving, u) => {
+    u = Math.min(1, Math.max(0, u));
+    if (arriving) return inside ? Math.min(1, Math.max(0, (u - (1 - XF.ARRIVE)) / XF.ARRIVE)) : 0;
+    return inside ? 1 : Math.max(0, 1 - u / XF.LEAVE);
+  };
+
+  /* xfInside - is a value within a domain [lo, hi] (either order), with a hair of tolerance for the tick that sits on
+     the edge (a nice-step tick at exactly the domain's end is part of the axis, not outside it). */
+  const xfInside = (v, lo, hi) => {
+    const a = Math.min(lo, hi), b = Math.max(lo, hi), eps = (b - a) * 1e-6;
+    return v >= a - eps && v <= b + eps;
+  };
+
+  /* xfRect - a bar between two states: every edge lerps, so a bar that grows keeps its baseline and a bar that moves keeps
+     its width law. geom is {x, y, w, h}. */
+  const xfRect = (ga, gb, u) => ({ x: xfLerp(ga.x, gb.x, u), y: xfLerp(ga.y, gb.y, u), w: xfLerp(ga.w, gb.w, u), h: xfLerp(ga.h, gb.h, u) });
   /* KINETICS:END */
   /* Pills draw TEXT, so they take the text tier - never the graphic tier. */
   const ACCENT = { sunflower: "var(--t-sunflower)", coral: "var(--t-coral)", teal: "var(--t-teal)", cobalt: "var(--t-cobalt)", ink: "#d7dee6" };
@@ -2680,7 +2731,8 @@
                    bars: [], paths: [], labels: [], callout: null, cval: null, inlineBadges: {}, linePts: [],
                    marks: [], markBy: {}, badges: [], inkEls: [],
                    vals: pg2.values || [], vstr: pg2.value_strings || [],
-                   emph: Number.isInteger(pg2.emphasize) ? pg2.emphasize : -1, kind: pg2.builder || "story" };
+                   emph: Number.isInteger(pg2.emphasize) ? pg2.emphasize : -1, kind: pg2.builder || "story",
+                   windowOffsets: pg2.window_offsets || null };   /* P48 T2: a derived (windowed) state maps the page's datum indices */
       (builders[s2.kind] || buildLedgerBars)(s2, pg2);
       /* ... and its own SUB and SOURCE. A caption that goes on describing the chart that left is a lie on the page, so a
          recast rewrites them with the same hand that rewrites the title: the old run erases glyph by glyph, the new one
@@ -2713,6 +2765,7 @@
     const bottom = P ? G.H - 70 : 440, top = P ? 150 : 90, x0 = P ? 150 : 60, x1 = P ? G.W - 30 : 980, gap = 0.34, unit = pg.unit || "";
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
+    st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
     const bw = (x1 - x0) / n * (1 - gap);
     /* both axes, always (operator, 2026-09-03): y ticks with the unit from the shared helper, the zero line as the axis */
     /* six divisions, not the default five: lpNiceStep's 1-2-5 ladder rounds 21.8 up to 50, which left the tariff
@@ -2806,7 +2859,15 @@
     for (const h of HL) { y0 = Math.min(y0, Y(+h.y)); y1 = Math.max(y1, Y(+h.y)); }
     const pad = (y1 - y0) * 0.06 || 1; y0 -= pad; y1 += pad;
     if (ax.from_zero && !ax.log) y0 = 0;   /* E28 (operator, 2026-09-05): a truncated axis made a tenth look like a fall to nothing - the series declares its zero */
+    /* P48 T2: a DERIVED rescale state names its exact domain - the y bounds (`axes.domain`) and the x window (`axes.xdomain`) -
+       so a transition lands on a scale the page itself declared. Opt-in: a page naming neither draws exactly as it always has. */
+    if (Array.isArray(ax.domain)) {
+      if (ax.domain[0] !== null && ax.domain[0] !== undefined && Number.isFinite(+ax.domain[0])) y0 = Y(+ax.domain[0]);
+      if (ax.domain[1] !== null && ax.domain[1] !== undefined && Number.isFinite(+ax.domain[1])) y1 = Y(+ax.domain[1]);
+    }
+    if (Array.isArray(ax.xdomain) && ax.xdomain.length === 2 && Number.isFinite(+ax.xdomain[0]) && Number.isFinite(+ax.xdomain[1])) { x0 = +ax.xdomain[0]; x1 = +ax.xdomain[1]; }
     const mx = (x) => L + (x - x0) / (x1 - x0 || 1) * (W - L - R), my = (v) => T + (1 - (Y(v) - y0) / (y1 - y0)) * (B - T);
+    st.scale = { kind: "line", mx, my, yv: Y, x0, x1, y0, y1 };   /* P48 T2: the scale a rescale interpolates - both states keep theirs */
     st.axisB = B;   /* P47 T3: the morph closes its target along the axis */
     st.plot = { L, R, T, B, W, x0, x1, y0, y1, log: !!ax.log };   /* P48 T1: the scale a transition interpolates */
     lpMark(st, "axis", "axis", lpEl("line", "ax", st.chart, { x1: L, x2: W - R, y1: B, y2: B }), { x1: L, x2: W - R, y: B });
@@ -2876,7 +2937,8 @@
       const ib = (st.inlineBadges || {})[s.color];
       if (ib && ib.tag) { const tg = lpEl("tspan", "tagchip", name, { dx: 12, fill: col }); tg.textContent = ib.tag; }
       const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: nameBelow ? B - 28 : my(last[1]) + (P ? -30 : 8),
-                     pts: s.pts.map(([x, v]) => [mx(x), my(v)]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum */
+                     pts: s.pts.map(([x, v]) => [mx(x), my(v)]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted,
+                     data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum; P48 T2: and its DATA, so a rescale re-projects it */
       if (ax.name_clear && !nameBelow) rec.ny = Math.min(rec.ny, clearY - (P ? 34 : 20));
       st.paths.push(rec);
       lpMark(st, "s" + rec.si + (rec.muted ? ":h" : ""), "line", p, { pts: rec.pts, vals: s.pts.map(([, v]) => +v), len, k0: rec.k0, muted: rec.muted, col }, rec);
@@ -2933,10 +2995,15 @@
   };
   /* a datum's position, from whichever mark owns it: its own mark (a bar) or its series' stroke (a line) */
   const lpMarkDatum = (st, si, i) => {
-    const B = st.markBy || {}, own = B["s" + si + ":" + i] || (si === 0 ? B["b:" + i] : null);
+    /* P48 T2: a datum resolves against the ACTIVE chart state - after a rescale the page's chart is the derived one, whose
+       series is a window of the page's own, so the page's datum index maps by the window's offset; a datum the window
+       dropped resolves to nothing (a species on it does not fire), never to the wrong point */
+    const S = (st.states && st.states[st.active | 0]) || st, off = (S.windowOffsets || [])[si] | 0, j = i - off;
+    if (j < 0) return null;
+    const B = S.markBy || {}, own = B["s" + si + ":" + j] || (si === 0 ? B["b:" + j] : null);
     if (own) return [own.geom.cx != null ? own.geom.cx : own.geom.x, own.geom.end != null ? own.geom.end : own.geom.y];
     const str = B["s" + si]; if (!str || !str.geom.pts) return null;
-    return str.geom.pts[i - (str.geom.k0 | 0)] || null;
+    return str.geom.pts[j - (str.geom.k0 | 0)] || null;
   };
   /* stylesheet rules beat SVG presentation attributes, so colour/size overrides on text go through `style` */
   const lpText = (parent, cls, x, y, anchor, text, at) => {
@@ -3769,25 +3836,92 @@
         lpPeelTo(cs, pu);
       }
   };
+  /* P48 T2 - RESCALE. The standing chart never leaves: on one min-jerk clock every mark that exists under both scales moves
+     from its place under A to its place under B (a line's path is re-projected from its DATA, a bar's rect and every tick,
+     label, rule and name lerp by value), a tick whose value leaves the target domain fades as it travels, a tick the target
+     adds fades in at its settled place, and at the clock's end the target state stands exactly as it was built at load. The
+     blend WRITES attributes onto the standing state's elements; lpRestoreState puts them back the moment no rescale is on,
+     so a seek to any t paints the same frame (the seek test). Bravos 46 s46.7: a build inside a held frame, not a cut. */
+  const lpRestoreState = (S) => {
+    if (!S || !S.xfDirty) return;
+    for (const pp of S.paths || []) if (pp.d0 && pp.p.getAttribute("d") !== pp.d0) { pp.p.setAttribute("d", pp.d0); pp.p.setAttribute("stroke-dasharray", pp.len0); pp.len = pp.len0; }
+    for (const m of S.marks || []) {
+      const g = m.geom || {}, e = m.el; if (!e) continue;
+      if (m.role === "tick" || m.role === "rule") { e.setAttribute("y1", g.y.toFixed(1)); e.setAttribute("y2", g.y.toFixed(1)); e.style.opacity = ""; }
+      else if (m.role === "ylabel" || m.role === "rulelabel" || m.role === "name") { e.setAttribute("x", (+g.x).toFixed(1)); e.setAttribute("y", (+g.y).toFixed(1)); e.style.opacity = ""; }
+      else if (m.role === "xtick" || m.role === "xlabel" || m.role === "value") { e.setAttribute("x", (+g.x).toFixed(1)); e.setAttribute("y", (+g.y).toFixed(1)); e.style.opacity = ""; }
+      else if (m.role === "bar") { e.setAttribute("x", g.x.toFixed(1)); e.setAttribute("y", g.y.toFixed(1)); e.setAttribute("width", g.w.toFixed(1)); e.setAttribute("height", g.h.toFixed(1)); e.style.transformOrigin = "0 " + g.base.toFixed(1) + "px"; }
+    }
+    S.xfDirty = false;
+  };
+  const lpPaintRescale = (states, xf, t3, scene, t) => {
+    const A = states[xf.from], Bs = states[xf.to], u = xf.u;
+    for (let i = 0; i < states.length; i++) if (i !== xf.from && i !== xf.to) lpPaintChart(states[i], 0, t3, scene, t);
+    lpPaintChart(A, 1, t3, scene, t);        /* the standing chart, fully built: the transition moves its marks */
+    lpPaintChart(Bs, 0, t3, scene, t);       /* the target's furniture only - its series stay undrawn until the clock ends */
+    const sa = A.scale, sb = Bs.scale; if (!sa || !sb) return;
+    A.xfDirty = true; Bs.xfDirty = true;
+    const vIn = (v) => xfInside(sa.yv(v), sb.y0, sb.y1), xIn = (x) => sb.x0 === undefined || xfInside(x, sb.x0, sb.x1);
+    const aVals = new Set((A.marks || []).filter((m) => m.role === "tick").map((m) => m.geom.v));
+    if (sa.kind === "line" && sb.kind === "line") {
+      const mapA = (x, v) => [sa.mx(x), sa.my(v)], mapB = (x, v) => [sb.mx(x), sb.my(v)];
+      for (const pp of A.paths || []) {
+        if (!pp.data) continue;
+        const f = 1 - parseFloat(pp.p.getAttribute("stroke-dashoffset") || "0") / (pp.len || 1);   /* how much is drawn, before the path moves */
+        const { d } = xfPath(pp.data, mapA, mapB, u);
+        pp.p.setAttribute("d", d);
+        const len2 = pp.p.getTotalLength ? pp.p.getTotalLength() : pp.len; pp.len = len2;
+        pp.p.setAttribute("stroke-dasharray", len2); pp.p.setAttribute("stroke-dashoffset", (len2 * (1 - f)).toFixed(1));
+      }
+    }
+    const nameB = (k) => (Bs.markBy || {})[k];
+    for (const m of A.marks || []) {
+      const g = m.geom || {}, e = m.el; if (!e) continue;
+      if (m.role === "tick" || m.role === "rule") { const y = xfLerp(g.y, sb.my(g.v), u); e.setAttribute("y1", y.toFixed(1)); e.setAttribute("y2", y.toFixed(1)); e.style.opacity = xfFade(vIn(g.v), false, u).toFixed(3); }
+      else if (m.role === "ylabel" || m.role === "rulelabel") { const y = xfLerp(g.y, sb.my(g.v) + (g.y - sa.my(g.v)), u); e.setAttribute("y", y.toFixed(1)); e.style.opacity = xfFade(vIn(g.v), false, u).toFixed(3); }
+      else if (m.role === "xtick" && sb.mx) { const x = xfLerp(g.x, sb.mx(g.v), u); e.setAttribute("x", x.toFixed(1)); e.style.opacity = xfFade(xIn(g.v), false, u).toFixed(3); }
+      else if (m.role === "name") { const nb = nameB(m.key); if (nb) { e.setAttribute("x", xfLerp(g.x, nb.geom.x, u).toFixed(1)); e.setAttribute("y", xfLerp(g.y, nb.geom.y, u).toFixed(1)); } }
+      else if (m.role === "bar" && sa.kind === "bars") { const nb = nameB(m.key); if (nb) { const r = xfRect(g, nb.geom, u); e.setAttribute("x", r.x.toFixed(1)); e.setAttribute("y", r.y.toFixed(1)); e.setAttribute("width", r.w.toFixed(1)); e.setAttribute("height", r.h.toFixed(1)); e.style.transformOrigin = "0 " + xfLerp(g.base, nb.geom.base, u).toFixed(1) + "px"; } }
+      else if ((m.role === "value" || m.role === "xlabel") && sa.kind === "bars") { const nb = nameB(m.key); if (nb) { e.setAttribute("x", xfLerp(g.x, nb.geom.x, u).toFixed(1)); e.setAttribute("y", xfLerp(g.y, nb.geom.y, u).toFixed(1)); } }
+    }
+    /* the target's furniture: a tick the standing chart already has stays hidden (its twin is travelling); a NEW one arrives */
+    Bs.chart.style.opacity = u > 0 ? 1 : 0;
+    for (const m of Bs.marks || []) {
+      const e = m.el; if (!e) continue;
+      if (m.role === "tick" || m.role === "ylabel") e.style.opacity = xfFade(true, true, aVals.has(m.geom.v) ? 0 : u).toFixed(3);
+      else if (m.role === "xtick" || m.role === "rule" || m.role === "rulelabel" || m.role === "axislabel") e.style.opacity = xfFade(true, true, u).toFixed(3);
+      else if (m.role === "name" || m.role === "line" || m.role === "bar" || m.role === "value" || m.role === "xlabel") e.style.opacity = "0";
+    }
+  };
   /* the page's chart states over time. A `chart_to` is not a cut: the standing state runs its law BACKWARDS over the
      transition's own clock, then the named state draws on by its own envelope. Before the first chart_to, and on a page
      that declares none, this is exactly the single-chart behaviour it replaced. */
   const lpPaintStates = (st, scene, cBase, t3, t) => {
     const states = st.states || [st];
     if (states.length < 2) { lpPaintChart(st, cBase, t3, scene, t); return; }   /* a page with one chart is exactly what it was */
-    let cur = 0, cCur = cBase, leaving = false;
+    let cur = 0, cCur = cBase, leaving = false, xf = null;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
       const d = Math.max(0.001, sp.dur || 1), k = Math.max(0, Math.min(states.length - 1, sp.state | 0));
+      if (sp.to === "rescale") {   /* P48 T2: the axes retarget on one clock; the chart never leaves, and the target stands built */
+        if (t < sp.at + d) { xf = { from: cur, to: k, u: segEase(clamp01((t - sp.at) / d)) }; break; }
+        cur = k; cCur = 1; continue;
+      }
       if (t < sp.at + d) { cCur = 1 - segEase(clamp01((t - sp.at) / d)); leaving = true; break; }   /* the standing chart is leaving */
       cur = k; cCur = clamp01((t - (sp.at + d)) / (states[k].buildDur || LP.BUILD));
     }
-    for (let i = 0; i < states.length; i++) lpPaintChart(states[i], i === cur ? cCur : 0, t3, scene, t, i === cur && leaving);
+    st.active = xf ? xf.from : cur;   /* the state a species target resolves against (P48 T2) */
+    if (xf) { lpPaintRescale(states, xf, t3, scene, t); }
+    else {
+      for (const S of states) lpRestoreState(S);   /* no rescale on: every state exactly as built (a seek is the play) */
+      for (let i = 0; i < states.length; i++) lpPaintChart(states[i], i === cur ? cCur : 0, t3, scene, t, i === cur && leaving);
+    }
     /* the words that describe the chart move with it: the standing sub and source erase over the transition's first
        PS.ERASE_S, the arriving state's write over the rest. State 0's are the page's own, written by the page's build. */
     let ink = 0, ue = 0, uw = 1;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
+      if (sp.to === "rescale") continue;   /* P48 T2: the words stay - it is the same chart on a new scale */
       const d = Math.max(PS.ERASE_S + 0.01, sp.dur || 1);
       ue = clamp01((t - sp.at) / PS.ERASE_S);
       uw = clamp01((t - sp.at - PS.ERASE_S) / (d - PS.ERASE_S));

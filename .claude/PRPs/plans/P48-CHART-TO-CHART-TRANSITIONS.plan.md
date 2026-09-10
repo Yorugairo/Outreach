@@ -262,7 +262,7 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   byte-identical: not one attribute write moved.
 
 ### T2: The state store and `rescale` - two states on one page, the axes retarget
-- Status: pending
+- Status: complete (2026-09-10)
 - Owner: parent
 - Depends on: T1
 - Write set: `scripts/ledger_page.py` (`resolve_state`), `scripts/build_scene_timeline_f.py` (`chart_to` in
@@ -274,7 +274,24 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   exactly; between, every shared mark is at the min-jerk blend of its two positions; (3) tick labels cross-fade, new ticks
   write in ink; (4) the seek test holds; (5) `STATE_MAX` 3 enforced by the compiler with a named error
 - Validate: `node --test content/video_engine/tests/kinetics/chartxf.test.mjs`; `python -m pytest content/video_engine/tests/test_chart_transitions.py content/video_engine/tests/test_golden_frames.py -q`
-- Evidence: pending
+- Evidence: 2026-09-10 - `kinetics/chartxf.mjs` (xfLerp / xfPoint / xfPath / xfFade / xfInside / xfRect, dials XF.LEAVE and
+  XF.ARRIVE) synced as the ninth region, **6 node tests**; the compiler: `chart_to {to: "rescale", ymin?, ymax?,
+  window?}` - the state is DERIVED from the page's own series by `rescale_state` (the window sliced with `window_offsets`
+  recorded, `axes.domain` / `axes.xdomain` set, the page's builder kept, month labels for a months-wide window, three
+  at most) and appended by `derive_rescale_states` under STATE_MAX; the player: the line builder honours `axes.domain` /
+  `axes.xdomain` (opt-in), every line and bars state keeps `st.scale`, `lpPaintRescale` re-projects the standing line
+  from its DATA on the clock, lerps ticks / labels / rules / names / bars by value or key, fades leaving values by
+  XF.LEAVE and arriving ones by XF.ARRIVE, and `lpRestoreState` puts every written attribute back when no rescale is
+  on (the seek test); `lpMarkDatum` resolves against the ACTIVE state through the window offset, so a `figure` after
+  a rescale lands on the right datum and a dropped one does not fire; the words stay (a rescale rewrites no sub or
+  source). **22 transition tests** (grammar, the derived state, STATE_MAX / off-page refusal, the browser proof - before
+  exact, mid moving with leaving ticks fading and no double line, after the derived state exactly with the standing
+  path restored - and the seek test), **goldens byte-identical (68)**, kinetics sync 8/8. The frames: the Tokyo holdings
+  page, the 26-year line becoming its Feb-Jun 2026 window in place (`scratchpad/frames/rescale-final.png`, sent to the
+  operator). Deviations, named: the bars branch is written by the same mark-key law but proven only on the line (no bars
+  page rescales yet); `decimal_year_label` truncated a four-decimal February to January - fixed with a hundredth of a
+  month's tolerance, goldens unmoved; acceptance (2)'s "byte-identical to no transition" holds by the restore, checked
+  through the probe (`built0`), not by a golden of the transition itself - the flag golden comes with T3.
 
 ### T2b: `park` - the chart makes room by one affine transform (Bravos shot 91)
 - Status: pending

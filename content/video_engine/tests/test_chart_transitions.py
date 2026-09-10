@@ -54,7 +54,7 @@ needs_browser = pytest.mark.skipif(not _chromium_available(), reason="playwright
 def test_chart_to_is_a_page_species_with_a_verb_and_a_state():
     assert "chart_to" in B.SPECIES_KINDS and "chart_to" in B.PAGE_SPECIES
     assert B.SPECIES_TARGETS["chart_to"] == ()
-    assert B.CHART_TO_KINDS == ("recast",), "rescale / extend / morph_to land with their own laws (P48 T2/T3/T5)"
+    assert B.CHART_TO_KINDS == ("recast", "rescale"), "extend / morph_to land with their own laws (P48 T3/T5)"
     assert B.STATE_MAX == 3
 
 
@@ -215,5 +215,128 @@ def test_a_page_that_declares_no_transition_is_exactly_what_it_was():
         assert d["charts"][0] == 1 and d["charts"][1] == 0
         assert all(f > 0.99 for f in d["lineDrawn"])
         assert d["subNew"] == 0 and d["subOld"] > 0.9
+    finally:
+        close()
+
+
+# ---- P48 T2: rescale - the axes retarget on one clock, the chart never leaves ----------------------------------------
+
+RS_AT, RS_S = 11.0, 1.4
+WINDOW = [2025.9, 2026.6]   # the holdings page's last months (decimal years) - the row-2 sell-off at full width
+
+
+@pytest.mark.parametrize("entry, needle", [
+    ({"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "rescale"}, "name the target domain"),
+    ({"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "rescale", "ymin": "low"}, "ymin must be a number"),
+    ({"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "rescale", "window": [2026, 2025]}, "from < to"),
+    ({"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "rescale", "window": [2025, 2026], "state": 1}, "derived from the domain"),
+])
+def test_a_rescale_names_its_domain_and_never_a_state(entry, needle):
+    errs = B._validate_page_fields("chart_to", entry)
+    assert any(needle in e for e in errs), (needle, errs)
+    assert not B._validate_page_fields("chart_to", {"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "rescale", "window": [2025, 2026]})
+
+
+@needs_objects
+def test_a_rescale_derives_its_state_from_the_page_s_own_series():
+    world = B.world_for_plate("ledger:ev-japan-holdings-v1:line", (0, 0, 0), EP)
+    sp = [{"kind": "chart_to", "at": RS_AT, "dur": RS_S, "to": "rescale", "window": WINDOW, "ymin": 1050}]
+    B.derive_rescale_states(world, sp, "ledger:ev-japan-holdings-v1:line", EP)
+    assert sp[0]["state"] == 1, "the species now points at the derived state"
+    st = world["page_states"][0]
+    assert st["derived"] == "rescale" and st["builder"] == "dense-line"
+    assert st["axes"]["xdomain"] == WINDOW and st["axes"]["domain"] == [1050, None]
+    pts = st["series"][0]["pts"]
+    assert all(WINDOW[0] <= float(x) <= WINDOW[1] for x, _ in pts) and 2 <= len(pts) < 20, "the window slices the series"
+    assert st["window_offsets"][0] > 300, "the datum index on the page maps to the derived state by the dropped count"
+    assert st["title"] == world["page"]["title"] and st["sub"] == world["page"]["sub"], "the same words describe the same chart"
+
+
+@needs_objects
+def test_a_rescale_past_state_max_or_off_a_page_is_refused():
+    world = B.world_for_plate(PLATE, (0, 0, 0), EP)   # one `then=` already: a rescale would be the third state, allowed; two would not
+    sp = [{"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "rescale", "window": WINDOW},
+          {"kind": "chart_to", "at": 2.0, "dur": 1.0, "to": "rescale", "ymin": 0}]
+    with pytest.raises(ValueError, match="STATE_MAX"):
+        B.derive_rescale_states(world, sp, PLATE, EP)
+    with pytest.raises(ValueError, match="LEDGER PAGE"):
+        B.derive_rescale_states({"kind": "still"}, [sp[0]], "plate-x", EP)
+
+
+RS_PROBE = """() => {
+  const w = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')); const st = w.__lp; const S = st.states || [st];
+  const path = (s) => s.paths[0].p; const d = (s) => path(s).getAttribute('d');
+  const head = (s) => d(s).split(' L')[0];
+  const drawn = (s) => 1 - parseFloat(path(s).getAttribute('stroke-dashoffset') || '0') / path(s).len;
+  const ticks = (s) => (s.marks || []).filter(m => m.role === 'tick').map(m => [m.geom.v, +m.el.getAttribute('y1'), m.el.style.opacity === '' ? 1 : +m.el.style.opacity]);
+  return { n: S.length, charts: S.map(s => +(s.chart.style.opacity || 0)), head0: head(S[0]), d0: d(S[0]).length,
+           built0: S[0].paths[0].d0 === d(S[0]), ticks0: ticks(S[0]), ticks1: S[1] ? ticks(S[1]) : null, active: st.active | 0,
+           line1: S[1] ? (1 - parseFloat(S[1].paths[0].p.getAttribute('stroke-dashoffset') || '0') / S[1].paths[0].len) : null,
+           subOld: (st.subGlyphs || []).reduce((a, g) => a + parseFloat(g.style.getPropertyValue('--w') || '0'), 0) / Math.max(1, (st.subGlyphs || []).length) };
+}"""
+
+
+def _rescale_player():
+    from playwright.sync_api import sync_playwright
+    tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
+    plate = "ledger:ev-japan-holdings-v1:line"
+    world = B.world_for_plate(plate, (0, 0, 0), EP)
+    species = [{"kind": "chart_to", "at": RS_AT, "dur": RS_S, "to": "rescale", "window": WINDOW}]
+    B.derive_rescale_states(world, species, plate, EP)
+    sc = tl["scenes"][0]
+    scene = dict(sc, species=species, span=[0.0, 24.0], world=dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}))
+    timeline = dict(tl, aspect="9:16", runtime_s=24.0, scenes=[scene], caption_pages=[], captions=[])
+    td = tempfile.TemporaryDirectory()
+    html = Path(td.name) / "rescale.html"
+    html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
+    w, h = RB.STAGE["9:16"]
+    srv, port = RB.serve(html.parent)
+    pw = sync_playwright().start()
+    br = pw.chromium.launch(headless=True)
+    page = br.new_context(viewport={"width": w, "height": h}).new_page()
+    errs: list[str] = []
+    page.on("pageerror", lambda e: errs.append(str(e)))
+    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
+    RB.prepare_page(page, w, h)
+
+    def at(t: float) -> dict:
+        page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+        return page.evaluate(RS_PROBE)
+
+    def close():
+        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
+    return at, errs, close
+
+
+@needs_objects
+@needs_browser
+def test_a_rescale_moves_the_standing_chart_to_the_new_scale_and_lands_on_the_derived_state():
+    at, errs, close = _rescale_player()
+    try:
+        before = at(RS_AT - 0.5)
+        assert before["n"] == 2 and before["charts"] == [1, 0] and before["built0"], "before the word: the page exactly as built, the derived state hidden"
+        mid = at(RS_AT + RS_S * 0.5)
+        assert mid["charts"] == [1, 1], "mid-clock both svgs show: the standing chart moving, the target's furniture arriving"
+        assert not mid["built0"] and mid["head0"] != before["head0"], "the standing line has been re-projected - its path moved"
+        assert mid["line1"] < 0.01, "the target's own line is not drawn during the blend (no double line)"
+        leaving = [tk for tk in mid["ticks0"] if tk[2] < 1]
+        assert leaving, "ticks whose value leaves the window's domain fade as they travel"
+        after = at(RS_AT + RS_S + 0.3)
+        assert after["charts"] == [0, 1] and after["line1"] > 0.99 and after["active"] == 1, "after the clock the derived state stands, fully built"
+        assert after["built0"], "and the standing chart's path is restored to its built geometry (a seek is the play)"
+        assert after["subOld"] > 0.98, "the words stayed: it is the same chart on a new scale"
+        assert not errs, errs
+    finally:
+        close()
+
+
+@needs_objects
+@needs_browser
+def test_a_rescale_seeks_exactly():
+    at, _errs, close = _rescale_player()
+    try:
+        for t in (RS_AT + 0.3, RS_AT + RS_S * 0.7, RS_AT + RS_S + 2.0):
+            a = at(t); at(2.0); at(RS_AT + RS_S + 5.0); b = at(t)
+            assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True), t
     finally:
         close()

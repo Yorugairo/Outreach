@@ -32,6 +32,7 @@ from __future__ import annotations
 import base64
 import io
 import hashlib
+import copy
 import json
 import re
 import mimetypes
@@ -128,7 +129,8 @@ SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                                                # the next thing: a FIGURE the hand writes at a datum's spot (the treasury number the sentence turns to)
 HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
 PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to")
-CHART_TO_KINDS = ("recast",)   # P48: rescale / extend / morph_to are T2, T3 and T5 - each lands with its own law
+CHART_TO_KINDS = ("recast", "rescale")   # P48: recast (T4, a hand-over), rescale (T2, the axes retarget on one clock); extend / morph_to are T3 and T5
+RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
                                                                 # (a returning page keeps its retitle, its bracket standing); the gate credits no event before the span
 RELIGHT_REFS = ("bracket", "title")
@@ -223,6 +225,22 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     elif kind == "chart_to":
         if entry.get("to") not in CHART_TO_KINDS:
             errs.append(f"chart_to: 'to' must be one of {'|'.join(CHART_TO_KINDS)} (the verb the chart changes state by)")
+        if entry.get("to") == "rescale":
+            # P48 T2: a rescale keeps the page's own chart and moves its SCALE - the target state is derived by the compiler
+            # from the page's series (window sliced, domain set), never authored as a `then=`; so the row names the domain,
+            # not a state index
+            named = [k for k in RESCALE_KEYS if entry.get(k) is not None]
+            if not named:
+                errs.append("chart_to rescale: name the target domain - ymin and/or ymax (numbers) and/or window [from_x, to_x]")
+            for k in ("ymin", "ymax"):
+                if entry.get(k) is not None and not isinstance(entry[k], (int, float)):
+                    errs.append(f"chart_to rescale: {k} must be a number")
+            w = entry.get("window")
+            if w is not None and not (isinstance(w, (list, tuple)) and len(w) == 2 and all(isinstance(v, (int, float)) for v in w) and w[0] < w[1]):
+                errs.append("chart_to rescale: window must be [from_x, to_x] with from < to (the page's own x units)")
+            if "state" in entry:
+                errs.append("chart_to rescale: 'state' is derived from the domain, not named")
+            return errs
         idx = entry.get("state")
         if not is_idx(idx) or idx == 0:
             errs.append("chart_to: 'state' must be the index of one of the page's OTHER chart states (1..STATE_MAX-1, "
@@ -421,6 +439,69 @@ def _page_state(spec_id: str, ep_dir: Path, where: str) -> dict:
     if errors:
         raise ValueError(f"{where}: then={spec_id!r} is not a page ({variant}): " + "; ".join(errors))
     return LPG.build_spec(series, variant, emph)
+
+
+def rescale_state(plate_id: str, ep_dir: Path, sp: dict) -> dict:
+    """P48 T2: the page's OWN series re-specified for a target domain - the x window sliced to [from, to] (a point on
+    the edge kept; a highlight_from outside the window dropped), the y bounds carried as `axes.domain` and the window
+    as `axes.xdomain`, which the player's line builder honours exactly (opt-in keys: a page that names neither draws as
+    it always has). Every mark keeps its key, so the transition is a pure interpolation of positions."""
+    series_id, variant, emphasize, quiet_zone, _enter, _exit = parse_ledger_id(split_plate_opts(plate_id)[0])
+    path = Path(ep_dir) / "evidence/objects" / f"{series_id}.series.json"
+    series = copy.deepcopy(LPG.load_series(path))
+    builder = LPG.pick_builder(series, variant)   # the PAGE's builder - a windowed series must not re-decide it by its point count
+    if builder not in ("dense-line", "story"):
+        raise ValueError(f"chart_to rescale: only a line or a bars page rescales (this page is {builder}); recast or cut")
+    window = sp.get("window")
+    axes = {}
+    if window is not None:
+        lo, hi = float(window[0]), float(window[1])
+        offsets = []
+        for ser in series.get("series") or []:
+            pts = ser.get("pts", [])
+            kept = [pt for pt in pts if lo - 1e-9 <= float(pt[0]) <= hi + 1e-9]
+            if len(kept) < 2:
+                raise ValueError(f"chart_to rescale: the window [{lo}, {hi}] keeps {len(kept)} point(s) of {ser.get('name') or 'the series'}: nothing to draw")
+            offsets.append(next(i for i, pt in enumerate(pts) if lo - 1e-9 <= float(pt[0])))   # a datum index on the page maps to index - offset on this state
+            ser["pts"] = kept
+        axes["window_offsets"] = offsets
+        hf = series.get("highlight_from")
+        if hf is not None and hf != "" and not (lo <= float(hf) <= hi):
+            series.pop("highlight_from", None)
+        axes["xdomain"] = [lo, hi]
+        # the page's own x ticks (years) fall outside a months-wide window: the derived state labels every kept point instead,
+        # in the series' own token (a decimal year reads as "Feb '26"); a window that still holds the page's ticks keeps them
+        own = [t for t in (series.get("xticks") or []) if isinstance(t, (list, tuple)) and lo <= float(t[0]) <= hi]
+        if not own:
+            first = (series.get("series") or [{}])[0].get("pts", [])
+            labelled = [[float(x), LPG.decimal_year_label(x) or str(x)] for x, _ in first]
+            step = max(1, -(-len(labelled) // 3))   # at most three labels across the window: a month label is ~110 px at the portrait size and four touched (the frames, 2026-09-10)
+            series["xticks"] = labelled[::step]
+    if sp.get("ymin") is not None or sp.get("ymax") is not None:
+        axes["domain"] = [sp.get("ymin"), sp.get("ymax")]
+    for k, v in axes.items():
+        series[k] = v
+    spec = LPG.build_spec(series, variant, emphasize, quiet_zone or "right", builder=builder)
+    spec.setdefault("axes", {}).update(axes)
+    spec["derived"] = "rescale"
+    if axes.get("window_offsets"):
+        spec["window_offsets"] = axes.pop("window_offsets")
+        spec["axes"].pop("window_offsets", None)
+    return spec
+
+
+def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir: Path) -> None:
+    """Append one derived page state per `chart_to rescale` on the row and point the species at it (`state`)."""
+    for sp in row_species or []:
+        if not (isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "rescale"):
+            continue
+        if world.get("kind") != SPECIES_LEDGER:
+            raise ValueError("chart_to rescale: only a LEDGER PAGE rescales")
+        states = world.setdefault("page_states", [])
+        if len(states) + 1 >= STATE_MAX:
+            raise ValueError(f"chart_to rescale: {len(states) + 2} chart states is past STATE_MAX ({STATE_MAX}): a fourth chart is a new page or a card")
+        states.append(rescale_state(plate_id, ep_dir, sp))
+        sp["state"] = len(states)
 
 
 def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | None = None) -> dict:
@@ -912,6 +993,10 @@ def main() -> int:
         # missing series is a hard build error naming the row
         try:
             world = world_for_plate(plate, ken, EP, META)
+        except ValueError as exc:
+            raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
+        try:
+            derive_rescale_states(world, row_species, plate, EP)   # P48 T2: each `chart_to rescale` gets its own derived page state
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         if world.get("kind") == SPECIES_CLIP:

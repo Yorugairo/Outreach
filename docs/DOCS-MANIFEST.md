@@ -95,7 +95,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## capabilities
 
-- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: A centred dock in an AUTHORED box, and a ring inside it; A light that breathes + the life check on an addition; +104 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
+- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `rescale`: the chart's axes retarget on one clock, WIRED; A centred dock in an AUTHORED box, and a ring inside it; +105 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
 
 ## backlog
 
