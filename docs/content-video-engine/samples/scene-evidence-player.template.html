@@ -3571,6 +3571,16 @@
   const segEase = (u) => (kin("min_jerk") ? minJerk(u) : expoOut(clamp01(u)));
   const buildPerform = (st, scene, pg) => {
     const P = !!st.portrait, fs = P ? 40 : 26, fss = P ? 32 : 20, G = st.geom || { W: 1000, H: 560 };
+    /* P48 T7: on a page with chart STATES the perform layer (brackets, figures, spreads) draws on its OWN svg above every
+       state - inside state 0's svg it vanished with it the moment a rescale made the derived state active (the Tokyo cut's
+       two treasury figures). A figure then follows the ACTIVE state's datum (paintFigure); a bracket or spread is built on
+       the page's own geometry and waits while a derived state stands. A page with one chart draws exactly as it did. */
+    if ((st.states || []).length > 1 && !st.performSvg) {
+      st.performSvg = lpEl("svg", "lp-chart lp-perform", st.page, { viewBox: st.chart.getAttribute("viewBox") });
+      st.performSvg.style.cssText = st.chart.style.cssText; st.performSvg.style.pointerEvents = "none";
+      st.performSvg.style.opacity = ""; st.performSvg.style.transform = ""; st.performSvg.style.transformOrigin = "";   /* the box, not the chart's current state (a cold seek past a rescale copied opacity 0) */
+    }
+    const surf = st.performSvg || st.chart;
     const brackets = pageSpecies(scene, "bracket").map((sp, bi) => {
       const pts = (st.linePts || [])[sp.series | 0] || [];
       if (pts.length < 2) return null;
@@ -3586,7 +3596,7 @@
       const base = st.paths.filter((pp) => (pp.si | 0) === (sp.series | 0) && !pp.muted).map((pp) => pp.p.getAttribute("stroke"))[0] || "var(--lp-chalk)";
       const col = sp.color ? (PS_PAL[sp.color] || sp.color) : base;
       const mk = (cls, stroke, op) => {
-        const g = lpEl("g", "lp-bracket " + cls, st.chart, { opacity: op });
+        const g = lpEl("g", "lp-bracket " + cls, surf, { opacity: op });
         const line = lpEl("path", "bk", g, { d: "M" + x.toFixed(1) + " " + y0.toFixed(1) + " L" + x.toFixed(1) + " " + y1.toFixed(1), stroke });
         const len = line.getTotalLength ? line.getTotalLength() : (y1 - y0);
         line.setAttribute("stroke-dasharray", len); line.setAttribute("stroke-dashoffset", len);
@@ -3622,13 +3632,13 @@
       const fits = D[0] + PS.BRACKET_GAP + PS.BRACKET_ROOM <= G.W;
       const x = fits ? D[0] + 14 : D[0] - 14, anchor = fits ? "start" : "end";
       const y = D[1] + fs * 0.35 + (Number(sp.dy) || 0) * fs * 1.2;
-      const g = lpEl("g", "lp-figure", st.chart, { opacity: 0 });   /* no pin dot: the figure stands where the line was (the third watch: lingering dots read as strange) */
+      const g = lpEl("g", "lp-figure", surf, { opacity: 0 });   /* no pin dot: the figure stands where the line was (the third watch: lingering dots read as strange) */
       const label = lpEl("text", "bklab", g, { x: x.toFixed(1), y: y.toFixed(1), "text-anchor": anchor, style: "font-size:" + fs + "px;fill:" + col });
       const lg = [...String(sp.text || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
       let sub = null, sg = [];
       if (sp.sub) { sub = lpEl("text", "bksub", g, { x: x.toFixed(1), y: (y + fss * 1.3).toFixed(1), "text-anchor": anchor, style: "font-size:" + fss + "px;fill:" + col });
         sg = [...String(sp.sub)].map((ch) => { const ts = lpEl("tspan", "", sub, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; }); }
-      return { sp, D, x, y, fits, g, label, lg, sub, sg, fi };
+      return { sp, D, x, y, fits, g, label, lg, sub, sg, fi, fs, fss, W: G.W, si: sp.series | 0, idx: i };
     }).filter(Boolean);
     /* NOTES (the third watch: "the page has plenty of space on the side to write things"): a line of handwriting in the page's
        QUIET ZONE beside the chart - the column the chart leaves free (the dock's band) - stacked in order, each written on its
@@ -3661,8 +3671,8 @@
       const yAt = (pts, x) => { let i = 1; while (i < pts.length - 1 && pts[i][0] < x) i++;
         const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; return x1 === x0 ? y1 : y0 + (y1 - y0) * ((x - x0) / (x1 - x0)); };
       const col = PS_PAL[sp.color] || sp.color || "var(--lp-neg)";
-      const path = lpEl("path", "lp-spread", st.chart, { fill: col, "fill-opacity": 0, stroke: "none" });
-      st.chart.insertBefore(path, st.chart.firstChild);   /* under every line and label: it is ground, not ink on top */
+      const path = lpEl("path", "lp-spread", surf, { fill: col, "fill-opacity": 0, stroke: "none" });
+      surf.insertBefore(path, surf.firstChild);   /* under every line and label: it is ground, not ink on top */
       return { sp, hi, lo, path };
     }).filter(Boolean);
     return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads };
@@ -3682,9 +3692,18 @@
     sd.path.setAttribute("fill-opacity", (PS.SPREAD_A * clamp01(u / 0.35)).toFixed(3));
   };
   /* the figure's write: the figure writes glyph by glyph over the first 0.6 of its word, the sub over the rest */
-  const paintFigure = (fg, t) => {
+  const paintFigure = (fg, t, st) => {
     const sp = fg.sp, dur = Math.max(0.001, sp.dur || 1), u = clamp01((t - sp.at) / dur);
     fg.g.setAttribute("opacity", t >= sp.at ? 1 : 0);
+    if (st && (st.states || []).length > 1) {   /* P48 T7: the figure stands at its datum on the ACTIVE state - a datum the window dropped shows nothing */
+      const D = lpMarkDatum(st, fg.si, fg.idx);
+      if (!D) { fg.g.setAttribute("opacity", 0); return; }
+      const fits = D[0] + PS.BRACKET_GAP + PS.BRACKET_ROOM <= fg.W, x = fits ? D[0] + 14 : D[0] - 14, anchor = fits ? "start" : "end";
+      const y = D[1] + fg.fs * 0.35 + (Number(sp.dy) || 0) * fg.fs * 1.2;
+      fg.label.setAttribute("x", x.toFixed(1)); fg.label.setAttribute("y", y.toFixed(1)); fg.label.setAttribute("text-anchor", anchor);
+      if (fg.sub) { fg.sub.setAttribute("x", x.toFixed(1)); fg.sub.setAttribute("y", (y + fg.fss * 1.3).toFixed(1)); fg.sub.setAttribute("text-anchor", anchor); }
+      fg.D = D; fg.x = x; fg.y = y; fg.fits = fits;
+    }
     const nl = Math.max(1, fg.lg.length), perL = 0.6 / nl, uL = u;
     fg.lg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uL - j * perL) / (perL * 1.6)).toFixed(3)));
     const ns = Math.max(1, fg.sg.length), perS = 0.4 / ns, uS = u - 0.6;
@@ -3718,7 +3737,7 @@
     const undrawAll = pageSpecies(scene, "undraw").filter((sp) => (sp.series ?? (sp.target || {}).series) == null);
     for (const b of PF.brackets) paintBracket(b, t, undrawAll.find((sp) => sp.at >= b.sp.at));
     for (const sd of PF.spreads || []) paintSpread(sd, t);   /* the fifth watch: the gap between the lines, bled full */
-    for (const fg of PF.figures || []) paintFigure(fg, t);   /* E50: the chart's next thing */
+    for (const fg of PF.figures || []) paintFigure(fg, t, st);   /* E50: the chart's next thing */
     for (const nt of PF.notes || []) { nt.div.style.opacity = t >= nt.sp.at ? "" : "0"; writeGlyphs(nt.glyphs, t - nt.sp.at, Math.max(0.05, nt.sp.dur || 1)); }
     /* RELIGHT: the sunflower twin rises and falls on a sine over dur */
     for (const b of PF.brackets) b.glow.g.setAttribute("opacity", "0");
@@ -3728,6 +3747,9 @@
       if (rl.ref === "bracket") { const b = PF.brackets[rl.index | 0]; if (b) b.glow.g.setAttribute("opacity", e.toFixed(3)); }
       else if (rl.ref === "title") { const tg = PF.retitles.length ? PF.retitles[PF.retitles.length - 1].glyphs : (st.titleGlyphs || []); for (const g of tg) g.style.color = e > 0.02 ? PS.RELIGHT_COL : ""; }
     }
+    const derived = (st.states || []).length > 1 && (st.active | 0) !== 0;   /* P48 T7: a bracket or spread measures the page's OWN chart; while a derived state stands it waits */
+    for (const b of PF.brackets) if (derived) { b.main.g.setAttribute("opacity", 0); b.glow.g.setAttribute("opacity", 0); }
+    for (const sd of PF.spreads || []) { if (derived) sd.path.setAttribute("opacity", 0); else sd.path.removeAttribute("opacity"); }
     if (PF.retitles.length) {
       const chain = [{ glyphs: st.titleGlyphs || [], at: -Infinity }, ...PF.retitles.map((r) => ({ glyphs: r.glyphs, at: r.sp.at, dur: Math.max(PS.ERASE_S + 0.01, r.sp.dur || 1) }))];
       chain.forEach((c, k) => {
@@ -4087,6 +4109,7 @@
     }
     for (let i = 0; i < states.length; i++) if (!park || i !== (st.active | 0)) lpUnpark(states[i]);
     if (park && !xf) lpPaintPark(states[st.active | 0], park, t);
+    if (st.performSvg) { const A = states[st.active | 0]; st.performSvg.style.transformOrigin = A.chart.style.transformOrigin; st.performSvg.style.transform = A.chart.style.transform; }   /* P48 T7: the perform layer rides the active chart's park */
     /* the words that describe the chart move with it: the standing sub and source erase over the transition's first
        PS.ERASE_S, the arriving state's write over the rest. State 0's are the page's own, written by the page's build. */
     let ink = 0, ue = 0, uw = 1;

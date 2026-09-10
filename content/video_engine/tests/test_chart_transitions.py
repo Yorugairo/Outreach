@@ -882,3 +882,57 @@ def test_measure_morph_measures_a_morph_to_per_morph_keyed_scene_at(tmp_path):
     key = f"{timeline['scenes'][0]['scene_id']}@{MT_AT:.2f}"
     assert list(res) == [key], res
     assert res[key]["min_det"] > 0 and res[key]["centroid_ok"] and res[key]["area_ok"], res[key]
+
+
+# ---- P48 T7: the perform layer on a page with states - a figure follows the active state's datum ----------------------
+
+FG_PROBE = """() => {
+  const w = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')); const st = w.__lp; const PF = st.perform || { figures: [] };
+  return { active: st.active | 0, onOwnSvg: !!st.performSvg && (PF.figures || []).every(fg => fg.g.ownerSVGElement === st.performSvg),
+           layerShown: !!st.performSvg && getComputedStyle(st.performSvg).opacity === '1' && getComputedStyle(st.performSvg).display !== 'none',
+           figs: (PF.figures || []).map(fg => ({ op: +fg.g.getAttribute('opacity'), x: +fg.label.getAttribute('x'), y: +fg.label.getAttribute('y'), D: fg.D })) };
+}"""
+
+
+@needs_objects
+@needs_browser
+def test_a_figure_follows_the_active_state_after_a_rescale_and_a_dropped_datum_shows_nothing():
+    """The Tokyo cut (T7): the holdings page rescales to Feb-Jun on a word, then two figures write at the peak and at June -
+    they stand at the WINDOWED line's points, on the perform layer above the states; a figure at a datum outside the window
+    shows nothing; before the rescale the figures are where the page's own geometry puts them."""
+    from playwright.sync_api import sync_playwright
+    plate = "ledger:ev-japan-holdings-v1:line"
+    world = B.world_for_plate(plate, (0, 0, 0), EP)
+    n = len(world["page"]["series"][0]["pts"])
+    species = [{"kind": "chart_to", "at": 8.0, "dur": 1.4, "to": "rescale", "window": [2026.043, 2026.457]},
+               {"kind": "figure", "at": 10.0, "dur": 1.2, "target": {"kind": "datum", "index": n - 1}, "text": "1,116.7"},
+               {"kind": "figure", "at": 10.0, "dur": 1.2, "target": {"kind": "datum", "index": 3}, "text": "early"}]
+    B.derive_rescale_states(world, species, plate, EP)
+    tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
+    scene = dict(tl["scenes"][0], species=species, span=[0.0, 24.0], world=dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}))
+    timeline = dict(tl, aspect="9:16", runtime_s=24.0, scenes=[scene], caption_pages=[], captions=[])
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / "fig.html"; html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
+        w, h = RB.STAGE["9:16"]; srv, port = RB.serve(html.parent)
+        try:
+            with sync_playwright() as pw:
+                br = pw.chromium.launch(headless=True); page = br.new_context(viewport={"width": w, "height": h}).new_page()
+                errs = []; page.on("pageerror", lambda e: errs.append(str(e)))
+                page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000); RB.prepare_page(page, w, h)
+                seek = "t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }"
+                page.evaluate(seek, 12.0)
+                r = page.evaluate(FG_PROBE)
+                assert r["active"] == 1 and r["onOwnSvg"] and r["layerShown"], r   # a COLD seek past the rescale: the layer must not inherit the hidden chart's opacity
+                june, early = r["figs"]
+                assert june["op"] == 1 and early["op"] == 0, "June is in the window and writes; index 3 (2000) is outside it and shows nothing"
+                pt = page.evaluate("() => { const st = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')).__lp; const S = st.states[1]; return S.linePts[0][S.linePts[0].length - 1]; }")
+                assert abs(june["D"][0] - pt[0]) < 1e-6 and abs(june["D"][1] - pt[1]) < 1e-6, "the figure's datum is the windowed line's last point"
+                assert abs(abs(june["x"] - pt[0]) - 14) < 0.06, "the figure writes 14 units beside its datum (x written to one decimal)"
+                page.evaluate(seek, 7.0)   # before the word: the page's own geometry
+                r0 = page.evaluate(FG_PROBE)
+                pt0 = page.evaluate("() => { const st = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')).__lp; return st.linePts[0][st.linePts[0].length - 1]; }")
+                assert r0["active"] == 0 and abs(r0["figs"][0]["D"][0] - pt0[0]) < 1e-6, r0
+                assert not errs, errs
+                br.close()
+        finally:
+            srv.shutdown()

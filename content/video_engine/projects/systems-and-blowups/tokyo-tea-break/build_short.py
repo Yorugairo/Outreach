@@ -16,6 +16,7 @@ timed from the take, never typed.
 from __future__ import annotations
 
 import json
+import os
 import math
 import shutil
 import sys
@@ -28,7 +29,7 @@ sys.path.insert(0, str(SCRIPTS))
 
 SCRIPT = HERE / "SCRIPT-90S-VO.claude.txt"
 TAKE = HERE / "vo-short/audio"
-BUILD = HERE / "build-short"
+BUILD = HERE / os.environ.get("TOKYO_BUILD_DIR", "build-short")   # P48 T7: a cut under review builds beside the watched one (TOKYO_BUILD_DIR=build-short-p48 -> :8740), never over it
 CLIPS = HERE / "omni-video/stills"   # the v2 set: approved stills to video (APPROVALS.json)
 SERIES = ("ev-japan-holdings-v1", "ev-meta-yield-v1")
 CUT_AT = 0.8          # M13: the cut sits at 0.8 of the gap before the next phrase
@@ -44,6 +45,15 @@ def _holdings_indices() -> tuple[int, int]:
 
 
 PEAK_IDX, LAST_IDX = _holdings_indices()
+
+
+def _holdings_window() -> list[float]:
+    """P48 T7: the February-June window the row-2 rescale opens - a month's margin either side of the peak and the last print."""
+    pts = json.loads((HERE / "evidence/ev-japan-holdings-v1.series.json").read_text(encoding="utf-8"))["series"][0]["pts"]
+    return [round(float(pts[PEAK_IDX][0]) - 0.04, 3), round(float(pts[LAST_IDX][0]) + 0.04, 3)]
+
+
+HOLDINGS_WINDOW = _holdings_window()
 
 
 def _holdings_facts() -> dict:
@@ -416,13 +426,17 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             {"kind": "build_to", "at": t_build, "dur": PAGE_BUILD_S, "target": datum(PEAK_IDX)},
             {"kind": "build_to", "at": t_watch, "dur": 1.2, "target": datum(LAST_IDX)},
             {"kind": "spotlight", "at": t_lender, "dur": 1.0, "target": datum(LAST_IDX)},                                  # the June datum on "our biggest lender"
-            # E50 (operator, 2026-09-07 second watch: "we're leaving the chart up for too long ... reverse the draw / transform the
-            # graph into the treasury"): the line's last data mark is the June stroke at "watching:"; on "The Treasury's table" the
-            # line UN-DRAWS to nothing and the two treasury figures write where it stood - the peak on "over a trillion", June on
-            # "selling since February" - from the object's facts; they hold under the anecdote, take the retitle and the fingers
-            {"kind": "undraw", "at": t_table, "dur": 1.2, "target": datum(0)},
-            {"kind": "figure", "at": t_trillion, "dur": 1.6, "target": datum(PEAK_IDX), "text": _bn(FACTS["peak"]), "sub": MONTH(FACTS["peak_month"]), "dy": -0.7},
-            {"kind": "figure", "at": t_since, "dur": 1.6, "target": datum(LAST_IDX), "text": _bn(FACTS["latest"]), "sub": MONTH(FACTS["latest_month"]), "color": "neg", "dy": 1.6},
+            # P48 T7 (E58; the fourth watch: "we were supposed to re-draw or morph the chart to another"): on "The Treasury's table"
+            # the chart CHANGES STATE instead of un-drawing - it RESCALES to the February-June window, so the sell-off the sentence is
+            # about stands at full width (five of 316 points were a ~10 px stub on the 26-year axis - the beat the 09-07 note left
+            # unfinished); the two treasury figures then write on the windowed line - the peak on "over a trillion", June on "selling
+            # since February" - from the object's facts, and the chart un-draws on "The opponent" (E50: the rescale restarts its
+            # clock at 0:22 and the title turns to the opponent at 0:30 - its life ends at the turn; on "Two numbers" M21 read 14.1 s)
+            # so the figures stand alone under the retitle and the fingers land on the bare page as designed
+            {"kind": "chart_to", "at": t_table, "dur": 1.4, "to": "rescale", "window": HOLDINGS_WINDOW},
+            {"kind": "undraw", "at": t_opponent, "dur": 1.2, "target": datum(0)},
+            {"kind": "figure", "at": t_trillion, "dur": 1.6, "target": datum(PEAK_IDX), "text": _bn(FACTS["peak"]), "dy": -0.7},   # P48 T7: on the windowed line the months ARE the axis (Feb '26 ... Jun '26) - the figures carry no month sub (E52)
+            {"kind": "figure", "at": t_since, "dur": 1.6, "target": datum(LAST_IDX), "text": _bn(FACTS["latest"]), "color": "neg", "dy": -1.0},   # P48 T7: June is the windowed plot's floor - the figure writes ABOVE its point, clear of the line's last segment (dy +1.6 put it on the axis labels)
             # THE BEAT IS UNFINISHED AND SAYS SO (2026-09-07). E50: a chart un-draws OR BECOMES THE NEXT THING. This page
             # un-draws correctly and then becomes nothing - I redrew a piece of the SAME line (`paths: "tail"`) and labelled it,
             # which is neither. It also could not read: February-June is 5 of 316 points, 1.27 % of a 26-year axis, so the

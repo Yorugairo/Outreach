@@ -1828,3 +1828,45 @@ bridge packet to the Gemini lane (P46); one to a few plates for a beat under rev
 this session (the stdio dispatcher, `omni-video/dispatch_*.py`), asked for before the session is driven. The bridge is not
 retired - only Flow image orders of the small kind left it.
 
+## E58 — A chart changes STATE; it never cuts to another chart of the same data. Five verbs, each with its beat; a cut still wins between different arguments (2026-09-10)
+
+The operator, 2026-09-07 (P48's brief): *"we should be able to re-draw, change chart types/shapes, add additional points, or
+morph on page"*; on the fourth watch of Tokyo: *"the problem is that we were supposed to either morph or undraw that chart,
+which you did undraw it. Then we were supposed to re-draw or morph the chart to another."* And on the P48 proof, 2026-09-10:
+*"great mechanics on the extensions/transformations/rescales. that's huge"*; *"the swirl should take the whole drawn chart
+with it, the swirl leads to a clean plate to start fresh"*; on the over-draw during a transform: *"almost some type of
+pin-and-pivot"* (the plot box is the pin). Bravos (46 §46.7) is the reference: a build inside a held frame, never a cut.
+
+**The ruling.** When the next thing the sentence needs is the SAME data at another scale, with more of it, in another
+form, or a different series in the same frame, the page CHANGES STATE on the word - one clock, the marks that persist
+moving, the furniture handing over, the words rewriting - and never cuts to a second chart of it. `chart_to` is the verb;
+the page's states are declared on the plate (`;then=`) or derived by the compiler; M23 lists every transition and refuses a
+state built for nothing.
+
+**Which verb, on which beat (the sentence decides; one thing per sentence - E25):**
+
+| the sentence turns to | the verb | what moves | what it is NOT for |
+| --- | --- | --- | --- |
+| the same series at another scale - "since February", "at full width", the window the story is about | **`rescale`** `{window, ymin, ymax}` | the line re-projects from its data, ticks and names lerp by value; leaving values fade, arriving ones fade in; the derived state stands as built | a window that drops the point the sentence is about; a scale that fakes a zero (E28) |
+| more of the same series - "and then May", a later series of the same file - "then consumption" | **`extend`** `{to_index}` / `{series}` | the axes retarget first (0.45 of the clock), then the new segment draws on at the pen with the nib | redrawing data already on the page (that is a `build_to`, or nothing) |
+| the same data in another form, one bar per line - "where the four stand today" | **`recast` keyed** `{state, keyed: true}` | the terminal NAME gives way to the terminal VALUE; the line leaves by its history while its end and value fly to the bar top and the bar grows from the baseline | a pair with no honest 1:1 correspondence - the compiler refuses it by name |
+| another chart of the data with no correspondence - a line into a pie of the holders, a line into five monthly bars | **`recast`** `{state}` (the hand-over) | the standing chart runs its own build law backwards (it leaves by length, in reverse), the title/sub/source rewrite by the hand, the named state draws on by its own law | pretending a tween that does not exist |
+| a different series in the same frame - "what the Fed charges against what America pays" after the holdings | **`morph`** `{state}` | the standing line leaves by length as its area fills; the filled strip morphs (ARAP, det J > 0) into the target's area as the axes hand over; the target builds and the fill leaves with it | bars or shares (no strip); a shape invented to hold continuity (R26-16: the source is real or it is a cut) |
+| room for the next thing - a card, a second diagram (Bravos 91) | **`park`** `{scale, anchor}` | one affine transform on the whole chart toward a corner of its box; every mark in place; datum targets and the vortex follow | a state change; it moves no data and restarts no clock |
+
+**When a cut still wins.** A different ARGUMENT is a different page: a chart of the holders' shares after a chart of the
+holdings is a recast only if the sentence says "the same money, by who holds it"; if the sentence has moved on ("the second
+number"), the page leaves by the vortex and the next page arrives by its own entry (E45, 29 §9.31). Three states is the most
+a page carries (`STATE_MAX`); a fourth chart is a new page or a card. A transition never fires inside a page's build beat or
+inside the last half second of its life (M23 WARN) - a transition that ends at the edge is a cut wearing a verb.
+
+**The laws every verb obeys.** One clock, min-jerk (42 §42.2). The words move with the chart: a rescale/extend/park keeps
+them (it is the same chart); a recast/morph erases the sub and source glyph by glyph over `PS.ERASE_S` and writes the
+target's. The plot box is the pin during a rescale (points leaving the window are clipped, never drawn across the labels).
+The vortex drains the ACTIVE state - the swirl takes the whole drawn chart with it and leads to a clean plate. A
+transition's end is a landing (E51's push tie) and a data mark (E50's clock restarts). Every state passes the life check
+(E49/E56). A seek to any t paints one frame.
+
+Mechanisms: `docs/content-video-engine/CAPABILITIES.md` (the rescale / extend / keyed recast / morph_to / park rows, M23);
+the plan `.claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md`; the proof `steel-and-paper/build-f/chart-transitions-proof.html`.
+

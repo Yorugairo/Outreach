@@ -1882,6 +1882,40 @@ the runtime agent per window until the timeline carries the species rows
 (CHECK-RESPONSIBILITIES §3, R2); the motion gate then counts what it can
 (P35 T4).
 
+**(e) TRANSITIONS — a chart changes STATE, never cuts to another chart of
+the same data (E58, P48, 2026-09-10).** When the next thing the sentence
+needs is the same data at another scale, with more points, in another
+form, or a different series in the same frame, the page changes state on
+the word by `chart_to` and the surface stays a PAGE - the decision above
+is not re-run. The verbs and their beats:
+
+- **`rescale`** `{window | ymin | ymax}` - the same series at the scale the
+  sentence is about ("since February" at full width); the compiler derives
+  the state from the page's own series; the line re-projects, the ticks
+  lerp by value, the plot box is the pin.
+- **`extend`** `{to_index | series}` - more of the same series, or a
+  `later: true` series of the same file; the axes retarget first, the new
+  segment draws on at the pen with the nib.
+- **`recast`** `{state}` / `{state, keyed: true}` - the same data in
+  another form: keyed when one bar answers one line (the name becomes the
+  value, the line leaves by its history, the bar grows beneath); the
+  hand-over otherwise (the standing chart un-draws by its own law, the
+  words rewrite, the named state draws on). Illegal keyed pairs are
+  refused by name.
+- **`morph`** `{state}` - a different series in the same frame: the area
+  under the standing line becomes the area under the target's by ARAP
+  (det J > 0), the axes hand over, the target builds over the strip.
+- **`park`** `{scale, anchor}` - room for the next thing: one affine
+  transform toward a corner; no state change, no clock restart.
+
+A state is declared on the plate (`;then=<series>:<variant>`, at most
+`STATE_MAX` 3) or derived (rescale/extend). **M23** lists every transition
+with its scene, verb and clock; WARNs one inside the build beat or the
+last 0.5 s of the page; FAILs a page with two states and no transition. A
+transition's end is a landing (M22) and a data mark (M21). A cut still
+wins between different ARGUMENTS (the vortex, then the next page's own
+entry - s9.31). The rows: CAPABILITIES.md; the ruling: E58.
+
 ### 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03)
 
 Ruling E24. An outside analyst's read of Steel and Paper's drop-off,

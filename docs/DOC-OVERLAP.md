@@ -55,7 +55,7 @@ or jaccard >= 0.40; DELTA = neither.
     - `:54` 7. Recognition hold — a stable map, timeline, relationship graph, or document
     - `:56` 8. CTA — invite viewers to explore the Registry or the next history question;
     - `:59` The conflict loop remains useful only when the conflict exists in the evidence.
-- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:62` — 4. Visual modes — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1982` 9.31 The page VORTEX — how a page leaves, and how it returns (operator, 2026-09-05) — h 0.00 / j 0.03 / b 0.00 — 1 rule
+- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:62` — 4. Visual modes — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2016` 9.31 The page VORTEX — how a page leaves, and how it returns (operator, 2026-09-05) — h 0.00 / j 0.03 / b 0.00 — 1 rule
     - `:66` research-only `longform-illustrated-history-v1` production profile. The earlier
 - `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:71` — Production-profile fork — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:413` 8.8 No production chrome in the frame (operator correction, 2026-08-24) — h 0.00 / j 0.04 / b 0.00 — 25 rules
     - `:74` reference to independent abstract atoms. A profile preserves a coherent set of:
@@ -92,7 +92,7 @@ or jaccard >= 0.40; DELTA = neither.
 - `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:152` — World first, vectors second — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.07 / b 0.00 — 2 rules
     - `:160` For document and map compositions, generated imagery is background-only. A
     - `:164` world may be interpretive; the explanation layer must remain exact.
-- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:166` — V4.1 living-editorial cadence — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.06 / b 0.00 — 14 rules
+- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:166` — V4.1 living-editorial cadence — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2061` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.06 / b 0.00 — 14 rules
     - `:168` `editorial_coverage.v1` resolves visual coverage before treatments:
     - `:170` - every complete sentence receives at least one distinct visual concept;
     - `:171` - long sentences split only at contrast or meaningful clause boundaries;
@@ -187,7 +187,7 @@ _none._
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:126` — 4. Fact surfaces — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:197` Part 4 — The literal evidence layer (teacher-stamped deck slides) — h 0.00 / j 0.07 / b 0.00 — 2 rules
     - `:130` | Date seal | Introduce one date and one event | One date only; source-bound |
     - `:134` | Relationship scroll | Connect named entities with sourced verbs | Unknown or contested edges are labelled, never completed silently |
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:141` — 5. Motion discipline — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2027` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.06 / b 0.00 — 7 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:141` — 5. Motion discipline — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2061` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.06 / b 0.00 — 7 rules
     - `:143` Motion is authored in this order:
     - `:145` 1. Character or prop action.
     - `:146` 2. Localized environmental action.
@@ -207,7 +207,7 @@ _none._
     - `:172` - fallbacks for unavailable motion assets.
     - `:179` Longer scenes are allowed only while character blocking, facts, props, or
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:182` — Google Flow terminology — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.08 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:196` — Catalog and comparison rhythm — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1885` 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — h 0.00 / j 0.02 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:196` — Catalog and comparison rhythm — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1919` 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — h 0.00 / j 0.02 / b 0.00 — 0 rules
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:208` — 7. Scene flow — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:278` 8.1 The shape — h 0.00 / j 0.14 / b 0.00 — 12 rules
     - `:210` Each adjacency declares at least one connector:
     - `:212` - `direction`: travel continues into a route trace;

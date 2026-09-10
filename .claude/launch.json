@@ -84,6 +84,16 @@
         "steel-and-paper/build-f"
       ],
       "port": 8739
+    },
+    {
+      "name": "tokyo-short-player-p48",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/serve_player.py",
+        "8740",
+        "build-short-p48"
+      ],
+      "port": 8740
     }
   ]
 }

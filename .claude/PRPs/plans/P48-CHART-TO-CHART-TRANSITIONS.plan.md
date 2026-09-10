@@ -477,7 +477,8 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   timeline read - it belongs with the life check, not this gate.
 
 ### T7: The doctrine and the Tokyo application
-- Status: pending
+- Status: **the doctrine complete; the Tokyo application built on :8740 with ONE verb, awaiting HG4** (2026-09-10) - the
+  second verb's beat is the operator's choice (see the deviation)
 - Owner: parent
 - Depends on: T4, T5, T6
 - Write set: `docs/portable/OPERATOR-RULINGS.md` (E53 candidate: *a chart changes state; it never cuts to another chart of
@@ -490,7 +491,36 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   ring page now does with a second object), **morph_to** for R26-16's planted element; (3) the motion gate PASSes with M23
   clean; (4) stills for the watch
 - Validate: `python build_short.py` in the Tokyo folder; `python content/video_engine/scripts/measure_frozen_frames.py <build>`; the gate report
-- Evidence: pending
+- Evidence (2026-09-10): **E58** written (`docs/portable/OPERATOR-RULINGS.md`: a chart changes STATE, never cuts to another
+  chart of the same data; the table of five verbs - the sentence that earns each, what moves, what it is NOT for; when a
+  cut still wins; the laws every verb obeys) and **doc 29 §9.28 (e)** (the transition grammar under the surface grammar).
+  **Tokyo:** `build_short.py` row 2 - on "The Treasury's table" the holdings page RESCALES to the February-June window
+  (`HOLDINGS_WINDOW`, a month's margin either side of the peak and the last print) instead of un-drawing, so the sell-off
+  the sentence is about stands at full width (the 09-07 note: five of 316 points were a ~10 px stub); the two treasury
+  figures then write on the windowed line (the peak on "over a trillion", June on "selling since February"; no month subs -
+  the months are the axis now, E52; June writes above its point, it being the plot's floor); the line un-draws on "The
+  opponent" (E50: the rescale restarts the clock at 0:22, the title turns at 0:30 - on "Two numbers" M21 read 14.1 s).
+  Built BESIDE the watched remake (`TOKYO_BUILD_DIR=build-short-p48`, served by `tokyo-short-player-p48` on :8740; the
+  09-09 build on :8738 untouched). Gate: 0 FAIL / 2 WARN (M11 no sound cue on the first chart and M21 s06 0.2 s short -
+  both pre-existing in the watched build) / M23 PASS (`s02 rescale 0:21+1.4s`); frozen frames: no run over 0.5 s.
+  Stills at 20.8 / 21.8 / 22.7 / 24.5 / 27.0 / 34.6 s sent for HG4. **Found by the stills, fixed at the cause:** page
+  species (figure, bracket, spread) were drawn inside state 0's svg and vanished the moment a rescale made the derived
+  state active - the two treasury figures were invisible. On a page with chart states the perform layer now draws on its
+  OWN svg above every state (`st.performSvg`; a page with one chart draws exactly as it did - goldens byte-identical), a
+  figure follows the ACTIVE state's datum through `lpMarkDatum` (a datum the window dropped shows nothing), the layer
+  rides the active chart's park, and a cold seek past the rescale no longer inherits the hidden chart's opacity (the
+  second still caught that). Test: `test_a_figure_follows_the_active_state_after_a_rescale_and_a_dropped_datum_shows_nothing`.
+- **Deviation, stated: one verb on Tokyo, not two.** The candidates named here were written before the verbs existed.
+  `extend` on "selling since February" would redraw a tail the page already drew on "watching" (a build_to) - the
+  sentence does not earn it. `recast` on "here's what nobody says: the money went home" has 2.2 s before the Meta page
+  mounts on "went home" - a recast that stands two seconds is a cut wearing a verb (E58). `morph_to` for R26-16's tie
+  is T5b (the page-enter path). The beat that WOULD earn a second verb is the operator's cut to make: the monthly-change
+  bars as a keyed/hand-over recast on "The Treasury prints" (row 4) in place of the June-print figure changes what the
+  first number IS; or a `park` on "Two numbers" so the fingers land beside the windowed chart instead of on the bare page
+  (needs `centred_place` to read the park - the freed-region line). Both are stated for HG4, not forced.
+- **Open (a follow-up, not this plan's lane):** brackets and spreads on a page with states are built on the page's own
+  geometry and WAIT while a derived state stands (hidden); making them follow the active state the way figures do is a
+  bounded slice (`buildPerform` per state, or geometry per frame) - BACKLOG R26-28.
 
 ## Verification
 
