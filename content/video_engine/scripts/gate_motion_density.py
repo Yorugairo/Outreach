@@ -409,6 +409,18 @@ def _attention_moves(s: dict) -> list[tuple[float, float, str]]:
     return out
 
 
+SNAP_S_MIRROR = 0.45   # the player's SNAP_S (the snap's and the camera arrival's clock), mirrored
+
+
+def _arrival_moves(s: dict) -> list[tuple[float, float, str]]:
+    """P49 T5: (start, start + SNAP_S, the card's slide) for a page that arrives by the eye going to its card."""
+    pg = (s.get("world") or {}).get("page") or {}
+    if pg.get("enter") != "camera" or not pg.get("snap_from") or not s.get("span"):
+        return []
+    a = float(s["span"][0])
+    return [(a, a + SNAP_S_MIRROR, str(pg["snap_from"]))]
+
+
 def _camera_key_segments(s: dict) -> list[tuple[float, float, str]]:
     """(start, end, why) for every segment of a scene's authored camera keys that MOVES the camera - zoom, look or at
     changes between two keys (a `hold` ease is a step at the arriving key, credited as a move of CAMERA_MOVE_S there)."""
@@ -457,7 +469,7 @@ def _build_clashes(scenes: list[dict], docks: list[dict]) -> list[tuple[str, str
             for slide, a, z in builds:
                 if at < z and a < end:
                     out.append((s.get("scene_id", "?"), f"{kind} {at:.1f}-{end:.1f}s over {slide} build {a:.1f}-{z:.1f}s"))
-        for at, end, own in _attention_moves(s):   # P49 T4: the pull toward a landing is TIED to that dock (E51) - it clashes only with another build
+        for at, end, own in _attention_moves(s) + _arrival_moves(s):   # P49 T4/T5: the pull toward a landing, and the eye going to the card, are TIED to that dock (E51) - they clash only with another build
             for slide, a, z in builds:
                 if slide != own and at < z and a < end:
                     out.append((s.get("scene_id", "?"), f"attention pull {at:.1f}-{end:.1f}s (toward {own}) over {slide} build {a:.1f}-{z:.1f}s"))
@@ -838,7 +850,7 @@ def _page_land_offset(scene: dict) -> float:
         return mount_s + PAGE_BUILD_END_S - LP_ROLL_S + extra
     if page.get("enter") == "morph":   # P47 T3: the morph replaces the roll, the savor, the soak and the punch; the build starts as it ends
         return float(page.get("morph_s") or MORPH_S) + LP_BUILD_S + extra
-    if page.get("enter") in ("spiral", "snap", "built", "throw", "drop"):   # a returning page, a card become the world (P47 T7), or a page that mounts with its chart already drawn: arrives built
+    if page.get("enter") in ("spiral", "snap", "built", "throw", "drop", "camera"):   # a returning page, a card become the world (P47 T7; P49 T5 by the eye), or a page that mounts with its chart already drawn: arrives built
         return 0.0
     return PAGE_BUILD_END_S + extra
 

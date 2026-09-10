@@ -99,5 +99,14 @@ export const camAttentionState = (docks, t, contactOf, P = ATTN) => {
   }
   return st;
 };
+/* T5 - THE CAMERA ARRIVAL (P49): the eye goes to a landed card. Over the arrival's clock u (0..1, eased by the caller)
+   the camera looks at the card's centre and carries it to the stage's centre while zooming to the FILL scale - the
+   scale at which the card's box (stage px) fills the stage; at u = 1 the frustum IS the card, so the world can switch
+   to the page the card is a picture of with no seam. */
+export const camArrivalState = (box, u, W, H) => {
+  const fill = Math.min(W / Math.max(1, box.w), H / Math.max(1, box.h));
+  const c = [box.x + box.w / 2, box.y + box.h / 2], O = [W / 2, H / 2];
+  return { s: 1 + (fill - 1) * u, look: c, at: [c[0] + (O[0] - c[0]) * u, c[1] + (O[1] - c[1]) * u], fill };
+};
 /* where a world point lands on screen */
 export const camProject = (st, p) => [st.at[0] + st.s * (p[0] - st.look[0]), st.at[1] + st.s * (p[1] - st.look[1])];

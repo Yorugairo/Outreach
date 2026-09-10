@@ -1563,6 +1563,15 @@
     }
     return st;
   };
+  /* T5 - THE CAMERA ARRIVAL (P49): the eye goes to a landed card. Over the arrival's clock u (0..1, eased by the caller)
+     the camera looks at the card's centre and carries it to the stage's centre while zooming to the FILL scale - the
+     scale at which the card's box (stage px) fills the stage; at u = 1 the frustum IS the card, so the world can switch
+     to the page the card is a picture of with no seam. */
+  const camArrivalState = (box, u, W, H) => {
+    const fill = Math.min(W / Math.max(1, box.w), H / Math.max(1, box.h));
+    const c = [box.x + box.w / 2, box.y + box.h / 2], O = [W / 2, H / 2];
+    return { s: 1 + (fill - 1) * u, look: c, at: [c[0] + (O[0] - c[0]) * u, c[1] + (O[1] - c[1]) * u], fill };
+  };
   /* where a world point lands on screen */
   const camProject = (st, p) => [st.at[0] + st.s * (p[0] - st.look[0]), st.at[1] + st.s * (p[1] - st.look[1])];
   /* KINETICS:END */
@@ -1681,7 +1690,7 @@
   const SNAP_FROM = {}, SNAP_RECT = {};
   window.__lpSnap = () => ({ rect: SNAP_RECT, from: Object.keys(SNAP_FROM) });   /* P47 T7: the snap's recorded card box, for the tests */
   TL.scenes.forEach((sc, si) => (sc.docks || []).forEach((d) => DOCKS.push({ ...d, si, scene: sc })));
-  TL.scenes.forEach((sc) => { const pg = sc.world && sc.world.page; if (pg && pg.enter === "snap" && pg.snap_from) SNAP_FROM[pg.snap_from] = sc; });
+  TL.scenes.forEach((sc) => { const pg = sc.world && sc.world.page; if (pg && (pg.enter === "snap" || pg.enter === "camera") && pg.snap_from) SNAP_FROM[pg.snap_from] = sc; });   /* P49 T5: a camera page's card is registered the same way */
   /* COALESCE. A document that holds through three scenes is authored as one
      dock per scene, so it used to exit and re-enter at every boundary - the
      entrance re-running on a card that never left. Evidence that persists
@@ -4248,7 +4257,8 @@
     const morphOn = pg.enter === "morph" && kin("arap_morph"), morphS = morphOn ? (pg.morph_s || MORPH.S) : 0;   /* P47 T3: the prop becomes the chart */
     const built = pg.enter === "built";   /* arrives with its chart drawn: the span is all deployed life, the idle keeps it alive */
     const snap = pg.enter === "snap";   /* the third watch: the thrown card BECOMES the world - the page arrives built and grows from the card's rectangle to the stage over SNAP_S */
-    const card = pg.card === true || (pg.card !== false && pg.enter === "snap");   /* a snapped page is a card unless told otherwise */
+    const camIn = pg.enter === "camera";   /* P49 T5: the page arrives built and the EYE went to the card - it shows at the match, at identity */
+    const card = pg.card === true || (pg.card !== false && (pg.enter === "snap" || camIn));   /* a snapped (or camera-arrived) page is a card unless told otherwise */
     st.page.classList.toggle("card", card);
     el.classList.toggle("cardworld", card);
     const dropped = pg.enter === "drop";   /* operator, 2026-09-08: "is falling down into the frame easier?" - yes: the dock's landXf (weight first,
@@ -4258,7 +4268,7 @@
        the whole page flies in on the pills' own kinetics (throwXf: a ballistic chord, the tumble, the material's squash and settle) and arrives built */
     const mount = pg.enter === "mount" || (pg.enter === "morph" && !morphOn);   /* a morph with its flag off is a mount of the same length */
     const mountS = mount ? (pg.mount_s || pg.morph_s || LP.FIELD) : 0;   /* the mount phase: the world fades, the cream builds; then the page's clock starts at ROLL + SAVOR (no roll, no savor) */
-    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || built || thrown || dropped) ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : mount ? LP.ROLL - mountS : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2): its cream builds over mount_s, then the SAVOR holds the empty page before the ink; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
+    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || camIn || built || thrown || dropped) ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : mount ? LP.ROLL - mountS : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2): its cream builds over mount_s, then the SAVOR holds the empty page before the ink; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
     /* beat 1: roll-out */
     const rk = (mount || morphOn || snap) ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) with the cream steps */
     const mu = mount ? clamp01((t - scene.span[0]) / mountS) : 1;
@@ -4490,7 +4500,9 @@
     if (Array.isArray(v)) return [v[0] * STAGE_W, v[1] * STAGE_H];
     const b = resolveTarget(v); if (!b) return null; const { cx, cy } = centre(b); return [cx, cy];
   };
+  let camArr = null;   /* P49 T5: this frame's camera arrival, when one is on - set by render, read by camNow for the outgoing scene */
   const camNow = (sc, t) => {
+    if (camArr && camArr.scene === sc) return camArr.state;   /* the eye is going to the card: the outgoing world rides the arrival */
     if (!kin("camera")) return camXf(sc, t);
     const keys = ((sc.camera || {}).keys || []);
     let st = null;
@@ -4848,8 +4860,22 @@
     /* DISSOLVE (operator, 2026-09-05, on the wipe into the outro card - "what is this madness?"): a row whose exit reads dissolve
        arrives by a plain cross-fade over DISSOLVE_S - no front, no seam, the outgoing world keeps playing underneath */
     const snapIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "snap";   /* the card becomes the world: the page grows over the outgoing scene, which stays until covered */
+    /* P49 T5: THE CAMERA ARRIVAL - over SNAP_S the eye goes to the landed card: the outgoing world and the card zoom together
+       until the card's parked box (the dock's `place`, pure) fills the stage; the page waits hidden and shows at the match */
+    const camInSc = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "camera";
+    camArr = null;
+    if (camInSc && t - sc.span[0] < SNAP_S) {
+      const d = (prev.docks || []).find((x) => x.slide === sc.world.page.snap_from), del = d ? docks[d.slot | 0] : null;
+      /* the card's box at rest: its parked `place`, else its LAYOUT box (left/top/width from the solo CSS, the height from the
+         image - layout is untouched by transforms, so a cold seek reads the same box a played frame does), else the recorded rect */
+      const box = d && d.place ? d.place : (del && del.offsetWidth > 0 && del.offsetHeight > 0 ? { x: del.offsetLeft, y: del.offsetTop, w: del.offsetWidth, h: del.offsetHeight } : SNAP_RECT[sc.world.page.snap_from]);
+      if (box && box.w > 0 && box.h > 0) {
+        const u = minJerk(clamp01((t - sc.span[0]) / SNAP_S)), st = camArrivalState(box, u, STAGE_W, STAGE_H);
+        camArr = { scene: prev, slide: sc.world.page.snap_from, u, box, state: { s: st.s, ox: st.look[0], oy: st.look[1], ax: st.at[0], ay: st.at[1] } };
+      }
+    }
     const throwIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && (sc.world.page.enter === "throw" || sc.world.page.enter === "drop");   /* the plate is thrown onto the world: the world stays beneath until it has landed */
-    wB.classList.toggle("snapping", (!!snapIn && t - sc.span[0] < SNAP_S) || (!!throwIn && t - sc.span[0] < (sc.world.page.enter === "drop" ? DROP_S : THROW_S) + THROW_SETTLE_S));
+    wB.classList.toggle("snapping", (!!snapIn && t - sc.span[0] < SNAP_S) || !!camArr || (!!throwIn && t - sc.span[0] < (sc.world.page.enter === "drop" ? DROP_S : THROW_S) + THROW_SETTLE_S));
     const mountIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && (sc.world.page.enter === "mount" || sc.world.page.enter === "morph");   /* MOUNT (operator, 2026-09-05): the outgoing scene fades while the cream plate mounts over it - no page turn; a MORPH page arrives the same way (P47 T3).
        NEVER a built page (operator, 2026-09-08: "when we're launching the chart already built we NEVER mount. Mounting is reserved for cream coming
        through over the scene, and then drawing") - enter=built takes the row's own transition, like a plate, and arrives with the chart standing */
@@ -4878,11 +4904,13 @@
        inset hides wB completely, so the old plate holds and there is no
        destination-plate flash at the boundary. */
     wB.style.maskImage = "none"; wB.style.webkitMaskImage = "none";
-    wB.style.opacity = dissolve ? dk.toFixed(4) : 1;
+    wB.style.opacity = camArr ? 0 : dissolve ? dk.toFixed(4) : 1;   /* P49 T5: the page waits for the eye to arrive */
     wB.style.clipPath = sc.exit === "wipe_right"
       ? `inset(0 0 0 ${(1-wk)*100}%)` : `inset(0 ${(1-wk)*100}% 0 0)`;
     paint(wA, prev || sc);
     paint(wB, sc);
+    { const blur = camArr ? SNAP_BLUR * 4 * camArr.u * (1 - camArr.u) : 0;   /* the whoosh rides the arrival's speed (the snap's own envelope) */
+      wA.style.filter = blur > 0.2 ? "blur(" + blur.toFixed(2) + "px)" : ""; }
     /* THE BLURZOOM (E47 #1). wB always carries the scene the frame is showing, so the outgoing magnification and
        the incoming rise are the same element on two clocks. min-jerk on the zoom (the ruling: the reference's
        zoom neither snaps nor sags); the softness rides the same u, an explicit numeric radius per frame - no
@@ -5066,12 +5094,13 @@
       if (snapSc) {
         const im = el.querySelector("img, video") || el;
         if (im.offsetHeight > 2) SNAP_RECT[d.slide] = { x: el.offsetLeft + (im === el ? 0 : im.offsetLeft), y: el.offsetTop + (im === el ? 0 : im.offsetTop), w: im.offsetWidth, h: im.offsetHeight };   /* an image still loading has no height yet */
-        if (t >= snapSc.span[0]) el.style.visibility = "hidden";
+        const byEye = snapSc.world.page.enter === "camera";   /* P49 T5: the card stays through the arrival and hides at the match - on the SAME predicate the page shows on (camArr), never a second clock (a 10 ms scrub step put one bare frame between the card and the page) */
+        if (t >= snapSc.span[0] && !(byEye && camArr && camArr.slide === d.slide)) el.style.visibility = "hidden";
       }
       el.classList.toggle("arriving", arr !== "spring");
       let contact = el.parentNode ? el.parentNode.querySelector("#dock-contact-" + s) : null;
       if (arr !== "spring") {   /* P47 T1: the card ARRIVES by a throw or a landing, then the park choreography (dockGeom) is untouched */
-        const rk = t > d.exit ? springPop(clamp01((t - d.exit) / DOCK_RETRACT_S)) : 0;
+        const rk = t > d.exit ? springPop(clamp01((t - d.exit) / DOCK_RETRACT_S)) : 0;   /* P49 T5: a camera page's card carries an exit past the match - the compiler extends it (extend_camera_cards) */
         const from = { x: (d.side === "l" ? -1 : 1) * ((el.offsetWidth || 800) + STOP_THROW_DX), y: -STOP_THROW_DY };
         const opts = d.violent ? { violent: true } : {};   /* a stage shake reads as violence, not mass - opt-in per dock (the report Q3) */
         const sx = arr === "throw" ? throwXf(from, d.mass || "paper", t - d.enter, opts) : landXf(d.mass || "paper", t - d.enter, opts);
@@ -5099,10 +5128,23 @@
         el.style.transform = "scale(" + (DOCK_POP_FROM + (1 - DOCK_POP_FROM) * (pk - rk)).toFixed(4) + ")"
           + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3);   /* E49: the parked card breathes */
         if (!swept) el.style.opacity = clamp01(1 - rk) * clamp01((t - d.enter) / DOCK_FADE_S);
+      } else if (camArr && camArr.slide === d.slide) {   /* P49 T5: the landed card rides the arrival - screen = at + s (p - look), written about the card's own top-left */
+        const st = camArr.state, L = el.offsetLeft, Tp = el.offsetTop;
+        el.style.transformOrigin = "0 0";
+        el.style.transform = "translate(" + (st.ax + st.s * (L - st.ox) - L).toFixed(2) + "px, " + (st.ay + st.s * (Tp - st.oy) - Tp).toFixed(2) + "px) scale(" + st.s.toFixed(5) + ")";
+        const blur = SNAP_BLUR * 4 * camArr.u * (1 - camArr.u); el.style.filter = blur > 0.2 ? "blur(" + blur.toFixed(2) + "px)" : "";
       } else el.style.transform = ((xk && !swept)
         ? "translateY(" + (-22 * xe) + "px) scale(" + (1 - 0.05 * xe) + ")"
         : "translateY(" + (32 * (1 - ck)) + "px) scale(" + (0.96 + 0.04 * ck) + ")")
         + idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + s, 3);
+      if (camArr && camArr.slide === d.slide) {   /* P49 T5: the landed card rides the arrival - screen = at + s (p - look), composed BEFORE the card's own transform about the card's own centre (its origin) */
+        /* the prefix composes about the card's OWN transform-origin (a thrown card's is its bottom edge, the squash's contact
+           edge - the first cut scaled about the centre and the card climbed 250 px off the top at the match) */
+        const st = camArr.state, org = (getComputedStyle(el).transformOrigin || "").split(" ").map(parseFloat);
+        const Cx = el.offsetLeft + (Number.isFinite(org[0]) ? org[0] : (el.offsetWidth || 0) / 2), Cy = el.offsetTop + (Number.isFinite(org[1]) ? org[1] : (el.offsetHeight || 0) / 2);
+        el.style.transform = "translate(" + (st.ax + st.s * (Cx - st.ox) - Cx).toFixed(2) + "px, " + (st.ay + st.s * (Cy - st.oy) - Cy).toFixed(2) + "px) scale(" + st.s.toFixed(5) + ") " + el.style.transform;
+        const blur = SNAP_BLUR * 4 * camArr.u * (1 - camArr.u); el.style.filter = blur > 0.2 ? "blur(" + blur.toFixed(2) + "px)" : "";
+      } else if (el.style.filter) el.style.filter = "";
       const shk = arr !== "spring" ? expoOut(clamp01((lag(t) - d.enter) / CARD_IN)) : ck;   /* HF-2: a thrown or landed card's shadow settles one frame after it */
       const sh = 12 * shk * (swept ? (1 - wk) : 1);   // light leaves with the page
       el.style.boxShadow = sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)";
@@ -5329,9 +5371,10 @@
   /* P49 T3: what the eye sees at t - the camera's state, its frustum in world (pre-camera) stage px, and for a declared
      target whether it is in frame, how much of it, at what on-screen scale, and where it lands on screen. Seek to t
      first (a datum resolves against the painted page). */
+  window.__camArr = () => camArr && { u: camArr.u, slide: camArr.slide, box: camArr.box, state: camArr.state };   /* P49 T5: the arrival this frame, for the probes */
   window.__camera = (t, tg) => {
     let si = 0; for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
-    const sc = TL.scenes[si], xf = camNow(sc, t);
+    const sc = TL.scenes[si], xf = camArr ? camArr.state : camNow(sc, t);   /* P49 T5: an arrival in progress is the camera this frame */
     const st = { s: xf.s, look: [xf.ox, xf.oy], at: [xf.ax != null ? xf.ax : xf.ox, xf.ay != null ? xf.ay : xf.oy] };
     const fr = camFrustum(st, STAGE_W, STAGE_H);
     let target = null;

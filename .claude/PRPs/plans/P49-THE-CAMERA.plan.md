@@ -264,7 +264,7 @@ rendered.
   and the Tokyo fingers are the candidates; nothing ships with landings on until the operator's word.
 
 ### T5: The camera arrival (the card becomes the world by the eye going to it)
-- Status: pending
+- Status: built, opt-in beside `snap`, on the tariff short's two chart pages in a SIDE build for HG2 (2026-09-10)
 - Owner: parent
 - Depends on: T4
 - Write set: template, `build_scene_timeline_f.py` (`enter=camera=<dock>`), `japan-tariff-trick/build_short.py`
@@ -272,7 +272,28 @@ rendered.
   seam (the ARAP invariants exact at the switch); the whoosh rides the camera's speed; M11 reads the card as the page's
   own preview (already true for snap).
 - Validate: rendered frames across the arrival; goldens; the gate 0 FAIL
-- Evidence: pending
+- Evidence: (2026-09-10) `enter=camera=<dock>` (`LEDGER_ENTERS`; the page's `snap_from` as for a snap). The card lands on
+  the previous scene as today; then over SNAP_S the EYE goes to it: `camArrivalState` (kinetics/camera.mjs) looks at the
+  card's box and carries it to the stage's centre while zooming to the fill scale (min-jerk, the whoosh on the snap's
+  own velocity envelope on the outgoing world and the card); the outgoing world rides the arrival (`camNow` returns
+  the arrival for that scene), the card rides it as a prefix composed BEFORE its own transform about its own
+  transform-origin (a thrown card's is its bottom edge - the first cut scaled about the centre and the card climbed 250
+  px off the top at the match), the page waits hidden and shows at the match, at identity; the card hides on the SAME
+  predicate the page shows on (a second clock put one bare frame of world between them - the scrub's 10 ms step). The
+  card's box is its parked `place`, else its LAYOUT box (left/top/width from the solo CSS, the height from the image -
+  untouched by transforms), else the recorded rect. The compiler extends that card's exit to the arrival's end
+  (`extend_camera_cards` - it fell out of the dock list 5 ms before the match). M14 exempts the arrival against its own
+  card (E51). **Measured on the tariff hook** (`build-short-p49`, `TARIFF_BUILD_DIR` + `TARIFF_CHART_ARRIVAL=camera`,
+  the approved build untouched; `japan-short-player-p49` on :8741): the card's rect at the match [5, -9, 1071, 1928] -
+  the stage to within the card's 1.3 % aspect mismatch; consecutive frames inside the arrival differ by a mean |delta|
+  of 0.2-10 (motion), the match frame to the page by 18.5 (the card is a 758 px rendering of the page scaled 1.33 -
+  its softness and its cream border against the live page's crisp ink and deckle). That residual is the seam HG2
+  judges; the snap has the same. Cold-seek limitation, stated (R26-21's class): the first frame after a cold seek INTO
+  the arrival window reads the card's layout before the dock loop lays it out and skips the arrival for that frame -
+  sequential rendering is exact; the renderer's shards start at scene boundaries or hold frames.
+  `test_camera.py` 20 (+4: the eye goes to the card and the world switches at the match; the compiler admits
+  enter=camera and the gate ties the arrival; the compiler keeps the card up to the match); goldens byte-identical.
+  HG2 material: `frames/tariff-hg2-sheet.png` (1.62 / 1.94 / 2.07 / 2.20 / 2.26 / 2.27 / 2.30 / 2.82 s).
 
 ### T6: The in-frame gate
 - Status: complete (2026-09-10)

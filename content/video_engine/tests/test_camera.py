@@ -231,3 +231,51 @@ def test_a_landing_pulls_the_eye_only_when_attention_says_so():
         p.seek(6.0); assert p.camera(6.0)["zoom"] == 1 and p.cam() == "", "locked: the reference's default"
     finally:
         p.close()
+
+
+# ---- P49 T5: the camera arrival - the eye goes to the landed card, the world switches at the match -----------------
+
+CARD = {"asset": "dock-card", "slot": 0, "enter": 2.0, "exit": 8.5, "arrive": "throw", "mass": "paper", "centre": True,   # the exit past the match, as the compiler writes it (extend_camera_cards)
+        "place": {"x": 140, "y": 480, "w": 800, "h": 1422}, "title": "x", "source": "", "species": "chart", "badges": [], "kind": "image", "slide": "dock-card"}
+
+
+def _arrival_timeline():
+    tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
+    base = tl["scenes"][0]
+    s1 = dict(base, scene_id="s01", species=[], span=[0.0, 8.0], docks=[dict(CARD)], exit="cut", world=dict(base["world"], ken_burns={"scale": 0, "x": 0, "y": 0}))
+    page2 = dict(base["world"]["page"], enter="camera", snap_from="dock-card")
+    s2 = dict(base, scene_id="s02", species=[], span=[8.0, 16.0], docks=[], world=dict(base["world"], page=page2, ken_burns={"scale": 0, "x": 0, "y": 0}))
+    return dict(tl, aspect="9:16", runtime_s=16.0, scenes=[s1, s2], caption_pages=[], captions=[], kinetics={"camera": True, "min_jerk": True}), uris
+
+
+@needs_browser
+def test_the_eye_goes_to_the_card_and_the_world_switches_at_the_match():
+    p = _Player(*_arrival_timeline())
+    try:
+        probe = "() => { const d = document.querySelectorAll('.dock')[0]; return { wB: getComputedStyle(wB).opacity, dockVis: getComputedStyle(d).visibility, dockTr: d.style.transform, wAtr: wA.style.transform, wAblur: wA.style.filter }; }"
+        p.seek(7.9); before = p.page.evaluate(probe)
+        assert before["dockVis"] == "visible" and before["wB"] != "0", before
+        p.seek(8.2); mid = p.page.evaluate(probe); c = p.camera(8.2)
+        fill = min(1080 / 800, 1920 / 1422)
+        assert 1 < c["zoom"] < fill and c["look"] == [540, 480 + 711] and c["at"] != c["look"], c
+        assert mid["wB"] == "0", "the page waits for the eye"
+        assert mid["dockVis"] == "visible" and "scale(" in mid["dockTr"] and mid["wAtr"].startswith("translate("), mid
+        assert mid["wAblur"].startswith("blur("), "the whoosh rides the arrival's speed"
+        p.seek(8.5); after = p.page.evaluate(probe); c2 = p.camera(8.5)
+        assert c2["zoom"] == 1 and after["wB"] == "1" and after["dockVis"] == "hidden" and after["wAblur"] == "", (after, c2)
+        p.seek(8.0 + 0.45 - 0.001); cm = p.camera(8.0 + 0.45 - 0.001)   # the match: the frustum IS the card's box
+        fr = cm["frustum"]
+        assert abs(fr["x0"] - 140) < 2 and abs(fr["x1"] - 940) < 2 and abs((fr["y1"] - fr["y0"]) - 1920 / fill) < 2, fr
+        a = p.page.evaluate(probe); p.seek(3.0); p.seek(12.0); p.seek(8.2); b = p.page.evaluate(probe)
+        assert a != b and b == mid, "a seek is the play"
+        assert not p.errs, p.errs
+    finally:
+        p.close()
+
+
+def test_the_compiler_admits_enter_camera_and_the_gate_ties_the_arrival_to_its_card():
+    assert "camera" in B.LEDGER_ENTERS
+    import gate_motion_density as G
+    sc = {"scene_id": "s02", "span": [8.0, 16.0], "world": {"kind": "ledger", "page": {"enter": "camera", "snap_from": "dock-card"}}, "species": [], "docks": []}
+    assert G._arrival_moves(sc) == [(8.0, 8.45, "dock-card")]
+    assert G._arrival_moves({"scene_id": "x", "span": [0, 1], "world": {"kind": "ledger", "page": {"enter": "snap", "snap_from": "d"}}}) == []

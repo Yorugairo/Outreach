@@ -51,7 +51,7 @@ import ledger_page as LPG  # noqa: E402  (series.json -> ledger_page.v1 spec, do
 
 LEDGER_PREFIX = "ledger:"          # shot-table plate id prefix for a LEDGER PAGE world (s9.28 surface = page)
 LEDGER_ID_PARTS = (3, 7)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]  enter = spiral | mount=<seconds>; exit = cut
-LEDGER_ENTERS = ("spiral", "mount", "morph", "snap", "built", "throw", "drop")   # enter=drop: the page FALLS into the frame from above and lands as the world (the dock's landXf) - "is falling down into the frame easier?" (operator, 2026-09-08)   # enter=throw (2026-09-08): the whole page is THROWN onto the world and arrives built - the transition IS the plate entering the world   # enter=built: the page ARRIVES with its chart already drawn, by the row's own transition - it NEVER mounts (operator, 2026-09-08: mount is cream coming through over the scene, then drawing).
+LEDGER_ENTERS = ("spiral", "mount", "morph", "snap", "built", "throw", "drop", "camera")   # enter=camera=<dock>: P49 T5 - the page arrives BUILT and the EYE goes to the landed card (the camera zooms the outgoing world and the card until the card fills the stage, then the world is the page) - the snap's opposite number, opt-in until HG2   # enter=drop: the page FALLS into the frame from above and lands as the world (the dock's landXf) - "is falling down into the frame easier?" (operator, 2026-09-08)   # enter=throw (2026-09-08): the whole page is THROWN onto the world and arrives built - the transition IS the plate entering the world   # enter=built: the page ARRIVES with its chart already drawn, by the row's own transition - it NEVER mounts (operator, 2026-09-08: mount is cream coming through over the scene, then drawing).
 # The build is a device, not an obligation - five builds in one short is repetition, and a page that arrives complete spends
 # its whole span being read instead of being drawn (operator, 2026-09-08: "maybe chart 1 doesn't actually need a build, it
 # could enter built, the deconstruction/transformation is its own thing"). E49 keeps it alive; the transformation is the
@@ -148,6 +148,25 @@ CAMERA_MOVES = ("punch", "focus_zoom", "pull_back")
 # at load); a key with no `at` zooms in place. Nothing authored -> identity (Bravos, measured 2026-09-10: LOCKED is the
 # default). Keys and a camera species never share a row (s9.28 C3: one camera per window).
 CAMERA_EASES = ("cubic", "inout", "linear", "hold")
+CAMERA_ARRIVAL_S = 0.45   # the player's SNAP_S: the camera arrival's clock (enter=camera=<dock>), mirrored
+
+
+def extend_camera_cards(scenes: list[dict]) -> list[str]:
+    """P49 T5: a page that arrives by the eye going to its card (enter=camera=<dock>) needs that card ON SCREEN until the
+    match - a card whose authored exit is the page's start left the dock list 5 ms before the match (one frame of bare
+    world). The card's exit is extended to the arrival's end here, in the timeline, so the player reads a plain span.
+    Returns a note per card it moved."""
+    notes: list[str] = []
+    for i, sc in enumerate(scenes):
+        pg = (sc.get("world") or {}).get("page") or {}
+        if pg.get("enter") != "camera" or not pg.get("snap_from") or i == 0:
+            continue
+        end = float(sc["span"][0]) + CAMERA_ARRIVAL_S
+        for d in scenes[i - 1].get("docks", []):
+            if d.get("slide") == pg["snap_from"] and float(d.get("exit", 0.0)) < end:
+                notes.append(f"{d['slide']}: exit {d['exit']} -> {round(end, 2)} (the eye's arrival on {sc.get('scene_id')})")
+                d["exit"] = round(end, 2)
+    return notes
 CAMERA_ATTENTION = ("locked", "landings")
 
 
@@ -674,8 +693,8 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
     page = LPG.build_spec(series, variant, emphasize, quiet_zone)
     if enter:
         page["enter"] = enter.split("=")[0]   # the player: a returning page unwinds from its point (LP_RETRACT.IN); a mount builds its cream first
-        if "=" in enter and enter.startswith("snap"):
-            page["snap_from"] = enter.split("=", 1)[1]   # the dock asset the page grows from (the card thrown on the previous scene)
+        if "=" in enter and (enter.startswith("snap") or enter.startswith("camera")):
+            page["snap_from"] = enter.split("=", 1)[1]   # the dock asset the page grows from - or, for enter=camera, the card the eye goes to (P49 T5)
         elif "=" in enter and enter.startswith("throw"):   # throw=<grow>[,<from>[,<s>]] - the growth law (snap | depth), the side, the flight
             grow, *rest = enter.split("=", 1)[1].split(",")
             if grow not in ("snap", "depth"):
@@ -1297,7 +1316,7 @@ def main() -> int:
         "caption_modes": ["stage", "anchor"],
         "sound": sound_cues,
         "evidence": evidence,
-        "scenes": scenes,
+        "scenes": (extend_camera_cards(scenes) and scenes) or scenes,   # P49 T5: a camera page's card stays up to the match
         # every species present (the ledger world + the targeted kinds), so
         # downstream (gate, render) can see it
         "species": timeline_species(scenes),

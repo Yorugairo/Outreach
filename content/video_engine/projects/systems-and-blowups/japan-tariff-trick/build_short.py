@@ -27,7 +27,8 @@ TOKYO = HERE.parent / "tokyo-tea-break"
 
 SCRIPT = HERE / "SCRIPT-SHORT-VO.txt"
 TAKE = HERE / "vo-short/audio"
-BUILD = HERE / "build-short"
+BUILD = HERE / os.environ.get("TARIFF_BUILD_DIR", "build-short")   # P49 T5: a cut under review builds beside the approved one (TARIFF_BUILD_DIR=build-short-p49 -> :8741), never over it
+CHART_ARRIVAL = os.environ.get("TARIFF_CHART_ARRIVAL", "snap")   # snap (approved, 2026-09-09) | camera (P49 T5, opt-in until HG2: the eye goes to the card)
 STILLS = HERE / "omni-video/stills"
 SERIES = ("ev-japan-holdings-v1", "ev-parts-cascade-v1", "ev-tariff-receipt-v1", "ev-japan-selling-v1", "ev-customs-duties-v1")
 CUSTOMS_PEAK_IDX, CUSTOMS_LAST_IDX = 43, 45   # 2025 Q4 $364bn/yr, 2026 Q2 (the latest) in ev-customs-duties-v1 (asserted in build)
@@ -360,7 +361,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
         #   seconds after the voice says it. The bracket is cut outright: operator, "a cheap, relatively bad way we use just
         #   to add some motion", and the figure is not lost - the selling page pays it off properly at 0:50. Deployed life
         #   goes 0.03s -> the whole span. exit=cut: the gates dip in.
-        (t_mount, t_gates, hold + ":snap=dock-b-holdings:cut" + ";idle=live", ken, [], "cut", [
+        (t_mount, t_gates, hold + f":{CHART_ARRIVAL}=dock-b-holdings:cut" + ";idle=live", ken, [], "cut", [
             # M11: a page that ARRIVES full must be pointed at, or it is homework (E25). The spotlight lands on the June
             # low as the page appears - the divergence IS the mechanism, and pointing at it beats the bracket that used
             # to write the figure six and a half seconds after the voice said it.
@@ -389,7 +390,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
         ], "dip", None),
         # 6 the receipt page mounts over the ship on "the math breaks Detroit"; Detroit's bar is spotlit as the number is spoken;
         #   the +$1,740 is the page's own badge (B3: the numeral is in the sub behind it)
-        (t_math, t_lever, "ledger:ev-tariff-receipt-v1:bars:1:right:snap=dock-g-receipt:cut" + ";idle=live", ken, [], "cut", [
+        (t_math, t_lever, f"ledger:ev-tariff-receipt-v1:bars:1:right:{CHART_ARRIVAL}=dock-g-receipt:cut" + ";idle=live", ken, [], "cut", [
             {"kind": "spotlight", "at": t_six, "dur": "hold", "target": datum(1)},
         ]),
         # 7 the second lever: the vault, shelves emptying (it returns on "Tokyo checked the Treasury vault" - E48, the callback is the thread)
@@ -488,7 +489,7 @@ def main() -> int:
         if r[2].startswith("ledger:") and ":spiral" in r[2]:
             cues.append({"slot": f"page enter {i + 1} (spiral)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0,
                          "variants": {"A": "fs-whoosh-3-spiral-in.mp3", "B": "fs-whoosh-3-648729.mp3", "C": "fs-swirl-in-478722.mp3"}})
-        if r[2].startswith("ledger:") and ":snap=" in r[2]:   # the SNAP's whoosh (operator, 2026-09-08: "fast with a woosh to full size") - the card becomes the world
+        if r[2].startswith("ledger:") and (":snap=" in r[2] or ":camera=" in r[2]):   # the SNAP's (or the camera arrival's) whoosh (operator, 2026-09-08: "fast with a woosh to full size") - the card becomes the world
             cues.append({"slot": f"page enter {i + 1} (snap)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0,
                          "variants": {"A": "fs-whoosh-3-648729.mp3", "B": "fs-riserhit-754771.mp3", "C": "fs-whoosh-1-706679.mp3"}})
     t_turn = next(r[0] for r in rows if r[2].startswith("plate-vault"))   # the second lever
@@ -499,7 +500,7 @@ def main() -> int:
         for d in (r[4] or []):
             if len(d) > 4 and isinstance(d[4], dict) and d[4].get("arrive") == "throw":
                 t_throw = float(d[2])
-                t_snap = next((q[0] for q in rows if f":snap={d[0]}" in q[2]), d[3])
+                t_snap = next((q[0] for q in rows if f":snap={d[0]}" in q[2] or f":camera={d[0]}" in q[2]), d[3])
                 env += [[round(t_throw - 0.3, 2), 0.0], [round(t_throw, 2), BED_SWELL_DB],
                         [round(t_snap + SNAP_S, 2), BED_SWELL_DB], [round(t_snap + SNAP_S + 0.8, 2), 0.0]]
     cues.append({"slot": "hook bed", "at": 0.0, "gain": bed_gain("suno-hook-B.mp3"), "fade_in": 1.5, "env": env,
