@@ -313,7 +313,7 @@ rendered.
   unpack error, first hit by an export nothing called) - fixed at the call.
 
 ### T7: The record
-- Status: pending
+- Status: complete (2026-09-10)
 - Owner: parent
 - Depends on: T5, T6
 - Write set: `docs/portable/OPERATOR-RULINGS.md`, `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md`,
@@ -321,7 +321,15 @@ rendered.
 - Acceptance: E54 carries the operator's words; §9.27's "one camera move per window" is restated for a persistent camera;
   the layers regenerate in sync.
 - Validate: `python content/video_engine/scripts/build_docs_layers.py --write`
-- Evidence: pending
+- Evidence: (2026-09-10) **E59** in `docs/portable/OPERATOR-RULINGS.md` - the operator's words of 2026-09-08 and the
+  three settled decisions, the Bravos measurement, the ruling (one persistent eye, LOCKED by default; the four reasons it
+  moves: a landing, a wider stage, the arrival, the three species; the nevers: a drift on a held chart, weight, a move
+  over a build, two moves, captions, and - until ruled - docks; the laws). Doc 29 §9.28 C3 restated for the persistent
+  camera. CAPABILITIES: the camera rows (the model + probe; the arrival + the attention law). The tariff choreography
+  ledger's arrives note (snap in the approved cut, camera in the side build, HG2 decides). The docs layers regenerated.
+  The plan stays `running` on the two human gates: HG1 (the attention dials by eye), HG2 (does the arrival replace the
+  snap); HG3 is closed by the operator's word (captions do not ride). Docks riding the camera is a ruling to take, not a
+  slice (stated in T2). E54 in the original write set is E59 (E54-E58 were written between).
 
 ## Decisions - SETTLED by the operator (2026-09-08)
 

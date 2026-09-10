@@ -1845,7 +1845,14 @@ default (P35 intent); at least one more per episode.
   uncovered for the dock's whole hold.
 - **C3 — one camera move per window.** Punch, focus zoom, pull-back and
   Ken Burns are mutually exclusive per window (s9.27 precedence). On a
-  page, Ken Burns is a slow push only.
+  page, Ken Burns is a slow push only. **Restated for the persistent camera
+  (E59, P49, 2026-09-10):** the camera is ONE state per frame, LOCKED by
+  default (Bravos measured: 37 of 45 held compositions still); a window
+  carries at most one MOVE - a species, an authored key segment, the pull
+  tied to a landing, or the arrival - never two, never over Ken Burns
+  (M09), never over another evidence build (M14; the tied pull is exempt
+  against its own card), and every pointing species fires at a target the
+  frame can see (M24).
 - **C4 — the pivot's reversal takes no species.** The visual register
   shift IS the motion (P4 QC); a page or a targeted species fires only on
   the THEREFORE after it.

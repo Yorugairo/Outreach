@@ -1870,3 +1870,45 @@ transition's end is a landing (E51's push tie) and a data mark (E50's clock rest
 Mechanisms: `docs/content-video-engine/CAPABILITIES.md` (the rescale / extend / keyed recast / morph_to / park rows, M23);
 the plan `.claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md`; the proof `steel-and-paper/build-f/chart-transitions-proof.html`.
 
+## E59 — The camera is a first-class component of the physics: ONE persistent eye, LOCKED by default, that moves only for a reason the frame can name (2026-09-10)
+
+The operator, 2026-09-08, on the tariff short's chart arrival: *"We've added almost everything to our production process
+except a truly first class viewer/camera perspective. Our engine, and also you therefore, don't know what it's seeing
+until it's rendered back essentially. We need to add the camera as a first class component of our physics. It wouldn't
+make sense that the card lands, and then grows. It would make sense that as the card came into view, our focus shifted,
+and we went to see what that card was. We've talked a lot about 'building the world' - and forgot to make the eyes a
+first class part of it."* Settled the same hour: attention drives the camera by default, authored keys override; the
+camera arrival stays opt-in until watched; captions do not ride the camera. And on 2026-09-10, before building: *"they
+did a lot of camera stuff"* - measured, and it was not the camera (P49's amendment: 37 of 45 of Bravos's held
+compositions are camera-still, every chart and every diagram; the camera moves on the map between countries and on one
+stacking collage; the motion the eye feels is the builds and the cuts).
+
+**The ruling.** The camera is ONE persistent 2D similarity per timeline - a zoom, the world point it looks at, the screen
+point that lands on - a pure function of t (`kinetics/camera.mjs`), through which the worlds, the plate life and the
+species compose; the engine can ask what is in frame before a frame is rendered (`__camera(t, target)`, gate M24).
+**Its default is LOCKED** - the reference's default, doc 16's "a locked shot has zero camera amount". It moves for a
+reason the frame can name, and for no other:
+
+1. **Tied to a landing** (E51): a dock that arrives pulls the eye a little (`attention: "landings"`, 1.06 from the
+   contact frame, held while the card is up, released before it leaves) - opt-in per row, the dials by eye (HG1).
+2. **Between focal points on a stage wider than the frame** - a map, a wide diagram: ONE move per composition, then
+   still (Bravos's map pushes). Authored as keys (`{t, zoom, look, at, ease}`); a key list and a camera species never
+   share a window.
+3. **The arrival** (`enter=camera=<dock>`): the card lands, the eye goes to it, the world switches to the page at the
+   match - the graphic match by the camera, not by the object growing. Opt-in beside `snap` until HG2.
+4. **The three species** (punch, focus zoom, pull-back) as before - through the same camera, pixel-identical.
+
+**Never:** a continuous push on a held chart (the HyperFrames "4-8 % actor" - zero of twelve Bravos chart holds carry
+one; rejected as a default); a camera move to sell weight (the receiver dips - the weight report Q3); a move over an
+evidence build (M14; the pull tied to the landing is exempt against its own card); two moves in one window (M09);
+captions riding the camera (Z5 is the viewer's layer); and - until ruled - docks riding it (the dock is this lane's
+drawing surface, doc 29; the arrival carries the one card it goes to, by the same transform, for the seam).
+
+**The laws.** Min-jerk or the species' own ease; a settle after every move (42 §42.2); a seek to any t paints one frame
+(the state is closed-form; the one stated exception is the first frame after a cold seek INTO an arrival, R26-21's
+class). P48's verbs - park, rescale, extend, the keyed recast, morph - are the WORLD moving under a locked camera and are
+never re-implemented as pushes.
+
+Mechanisms: `docs/content-video-engine/CAPABILITIES.md` (the camera rows); the plan `.claude/PRPs/plans/P49-THE-CAMERA.plan.md`;
+the measurement `sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/claude-watch/camera.json`.
+

@@ -20,6 +20,11 @@ this ledger exists to make deliberate.
 | 4 | `ev-japan-selling-v1` — the monthly change | 50.0 s | 13.6 s | 6.1 s | `mount` | `cut` | — |
 | 5 | `ev-customs-duties-v1` — what America paid | 72.7 s | 10.4 s | 2.9 s | `mount` | `cut` | — |
 
+**Arrives, 2026-09-10 (P49 T5):** the approved cut (2026-09-09) arrives rows 1 and 3 by `snap` (the card thrown on the
+previous scene, the page grown from it). A SIDE build (`build-short-p49`, `TARIFF_CHART_ARRIVAL=camera`, :8741) arrives
+them by `camera` - the card lands and the EYE goes to it, the world switching to the page at the match (E59 #3). Neither
+replaces the other until HG2; the approved build is untouched.
+
 **Span is not deployed life.** A span carries the mount, the roll, the savor,
 the field, the punch and the build; E50's clock starts at the LAST DATA MARK.
 `gate_motion_density` **M21 PASSES on all five** — an earlier draft of this

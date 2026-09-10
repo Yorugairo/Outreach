@@ -91,7 +91,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## ruling-ledger
 
-- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing correcti — Portable, model-agnostic. Load alongside — defines: A3; E11; +47 more — terms: long-form; drop-off; YouTube; world-building
+- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing correcti — Portable, model-agnostic. Load alongside — defines: A3; E11; +48 more — terms: long-form; drop-off; YouTube; world-building
 
 ## capabilities
 
@@ -273,7 +273,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/martial-matters/pilots/marshall-monday-001/script-draft.md — Why Rap Violence is Actually a Sign of P — Target spoken runtime: 14–16 minutes Hos — defines: — — terms: PLAIN-LANGUAGE; scented-candle; hard-won; mm-agonistic-display
 - content/video_engine/projects/systems-and-blowups/ASSET-SPRINT-2026-08-25.md — Asset Sprint — 2026-08-25 (downtime batc — All generation via the claim loop (codex — defines: — — terms: collision-free; channel-asset; APPROVED as plate species; paid-gate
 - content/video_engine/projects/systems-and-blowups/EPISODE-SEEDS.md — EPISODE SEEDS — banked hooks and mechani — Operator, verbatim: "I don't have to be — defines: — — terms: thesis-correct; trade-broken; data-explosion; technology-survives-the
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md — CHART CHOREOGRAPHY — Japan Tariff Trick — Operator, 2026-09-08: "I think that chor — defines: — — terms: cut; build_to; undraw; ev-japan-holdings-v1
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md — CHART CHOREOGRAPHY — Japan Tariff Trick — Operator, 2026-09-08: "I think that chor — defines: — — terms: cut; ev-japan-holdings-v1; ev-parts-cascade-v1; mount
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/EVIDENCE-DOSSIER.md — How Japan Tricked Trump — evidence dossi — Every figure the script speaks, its sour — defines: — — terms: US-Japan; cross-border; twenty-five; RO-RO
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md — How Japan Tricked Trump — Production Han — Project: `japan-tariff-trick` (Systems & — defines: — — terms: @StickMike; top-performing; #F4E6C7; THE TARIFF TRAP
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PACKAGING.md — How Japan Tricked Trump — Packaging & Di — Authored per `docs/portable/PACKAGING-PL — defines: — — terms: top-performing; #F4E6C7; THE TARIFF TRAP; #25313C

@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3623 records across 290 files.
+3624 records across 290 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -71,13 +71,13 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
 ## content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md
 
-- L1 [1] CHART CHOREOGRAPHY — Japan Tariff Trick (short) — Operator, 2026-09-08: *"I think that choreography probably has to start being {the sentence it proves; what it arrives as; how long it is deployed; what it becomes} <re-draws; ev-japan-holdings-v1; throw; cut; ev-parts-cascade-v1; mount; ev-tariff-receipt-v1; ev-japan-selling-v1; ev-customs-duties-v1; gate_motion_density; build_to; undraw>
-- L13 [2] As built (2026-09-08) — | # | chart | on | span | deployed (M21) | arrives | leaves | becomes | {deployed (M21); `throw` — the page thrown onto the world, lands with the cha} <ev-japan-holdings-v1; cut; ev-parts-cascade-v1; mount; ev-tariff-receipt-v1; ev-japan-selling-v1; ev-customs-duties-v1; gate_motion_density; build_to; undraw; figure; spread>
-- L75 [2] The story each one tells — 1. Holdings — "Japan is selling America's debt." A 26-year level, with the {Holdings; Parts cascade; Receipt}
-- L89 [2] What should become what — the candidates, ranked — A. #4 RETURNS to #1 — it does not move next to it. An earlier draft of this {A. #4 RETURNS to #1 — it does not move next to it.; Withdrawn after reading the script; the second lever} <twenty-two; two-lever; spiral; recast; ElevenLabs; build_to; −$122.6B; build_s; nit-picking>
-- L134 [2] The timing model (operator, 2026-09-08) — *"The arrival is the art. It sounds more like our problem for rushing the charts… {A span is three things, and only the last is E50's clock:; ~7.5 s} <near-constant; undraw>
-- L172 [2] The rule this ledger proposes — Every chart declares its exit in the shot table, and `cut` is a choice that has {recast} <cut>
-- L178 [2] Not decided — - Whether #4 becomes a spiral-return recast of #1 (no VO change) — recommended. <spiral-return; build_s>
+- L1 [1] CHART CHOREOGRAPHY — Japan Tariff Trick (short) — Operator, 2026-09-08: *"I think that choreography probably has to start being {the sentence it proves; what it arrives as; how long it is deployed; what it becomes} <re-draws; ev-japan-holdings-v1; throw; cut; ev-parts-cascade-v1; mount; ev-tariff-receipt-v1; ev-japan-selling-v1; ev-customs-duties-v1; snap; build-short-p49; TARIFF_CHART_ARRIVAL=camera>
+- L13 [2] As built (2026-09-08) — | # | chart | on | span | deployed (M21) | arrives | leaves | becomes | {deployed (M21); `throw` — the page thrown onto the world, lands with the cha} <ev-japan-holdings-v1; cut; ev-parts-cascade-v1; mount; ev-tariff-receipt-v1; ev-japan-selling-v1; ev-customs-duties-v1; snap; build-short-p49; TARIFF_CHART_ARRIVAL=camera; camera; gate_motion_density>
+- L80 [2] The story each one tells — 1. Holdings — "Japan is selling America's debt." A 26-year level, with the {Holdings; Parts cascade; Receipt}
+- L94 [2] What should become what — the candidates, ranked — A. #4 RETURNS to #1 — it does not move next to it. An earlier draft of this {A. #4 RETURNS to #1 — it does not move next to it.; Withdrawn after reading the script; the second lever} <twenty-two; two-lever; spiral; recast; ElevenLabs; build_to; −$122.6B; build_s; nit-picking>
+- L139 [2] The timing model (operator, 2026-09-08) — *"The arrival is the art. It sounds more like our problem for rushing the charts… {A span is three things, and only the last is E50's clock:; ~7.5 s} <near-constant; undraw>
+- L177 [2] The rule this ledger proposes — Every chart declares its exit in the shot table, and `cut` is a choice that has {recast} <cut>
+- L183 [2] Not decided — - Whether #4 becomes a spiral-return recast of #1 (no VO change) — recommended. <spiral-return; build_s>
 
 ## content/video_engine/projects/systems-and-blowups/japan-tariff-trick/EVIDENCE-DOSSIER.md
 
@@ -2210,10 +2210,10 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1427 [3] 9.26 The LEDGER PAGE — the plate-chart species, the channel's signature (operator, 2026-09-02) — Ruling E22. Operator: *"if we could roll out a cream paper that gets {What it is.} <channel-defining; hw-callout-circle; whiteboard-ink; outline-draw; chalk-light; hw-underline; conic-gradient; per-glyph; roll-out; ink-bleed-reveal; chart-story; #F4E6C7>
 - L1706 [3] 9.27 The MOTION MENU — opt-in species, each with a slot, a mechanism, and a gate treatment (operator, 2026-09-02) — Ruling E22 addendum. The registry items the operator flagged, read from {Targeting law (operator: "one problem with this type of thin} <t-derived; REMOTION-UI-HARVEST; semantic; chart-story; bar-chart-race; decline-chart; handwriting-text; outline-draw; whiteboard-ink; ink-bleed; roll-out; stop-motion-cadence>
 - L1775 [3] 9.28 The SURFACE GRAMMAR — page, dock, or transition, decided by rule (operator, 2026-09-03) — P35 T0. Operator: *"the first part of the plan is getting components {surface; builder} <pop-out; shot-table; dense-line; story; race; decline; combo; #F4E6C7; chalk-light; series.json; roll-out; near-black>
-- L1919 [3] 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — Ruling E24. An outside analyst's read of Steel and Paper's drop-off, {1. The confirmation gap (0–15s).} <drop-off; --title; --thumb; mini-payoff; PROMISE_WIN = (30, 45); full-screen; dense-line; scene-setting>
-- L1974 [3] 9.30 The chart is the PROOF, not the homework — no chart held across plates (operator, 2026-09-03) — Ruling E25. The operator's own read of the analytics behind §9.29: the <YouTube; drop-off; topic-exit; capital-formation; dock-held; RE-ENTER; topic-governed; PROOF-governed; re-entering; held-dock; stage-caption; re-script>
-- L2016 [3] 9.31 The page VORTEX — how a page leaves, and how it returns (operator, 2026-09-05) — *"All of the colours spiral back into a single point in the charcoal, and all of the charcoal {The retract.} <closed-form; r(1 − u^1.7); enter=spiral; roll-out; exit=cut; sub-pixel; enter=mount=<seconds>; went home; mount=2.43; Shot-table; LP_RETRACT; lpVortex>
-- L2061 [3] 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — P45 T4 under ruling 7 (operator, 2026-09-05: *"we compressed the docs because we didn't have a {compressed into this doc, not superseded} <motion-authoring; four-layer; 15-…:150; sub-clause; SPECIES_EVENTS; punch; push; focus_zoom; re-verdicts; first-minute; :123; gate_motion_density.py:494>
+- L1926 [3] 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — Ruling E24. An outside analyst's read of Steel and Paper's drop-off, {1. The confirmation gap (0–15s).} <drop-off; --title; --thumb; mini-payoff; PROMISE_WIN = (30, 45); full-screen; dense-line; scene-setting>
+- L1981 [3] 9.30 The chart is the PROOF, not the homework — no chart held across plates (operator, 2026-09-03) — Ruling E25. The operator's own read of the analytics behind §9.29: the <YouTube; drop-off; topic-exit; capital-formation; dock-held; RE-ENTER; topic-governed; PROOF-governed; re-entering; held-dock; stage-caption; re-script>
+- L2023 [3] 9.31 The page VORTEX — how a page leaves, and how it returns (operator, 2026-09-05) — *"All of the colours spiral back into a single point in the charcoal, and all of the charcoal {The retract.} <closed-form; r(1 − u^1.7); enter=spiral; roll-out; exit=cut; sub-pixel; enter=mount=<seconds>; went home; mount=2.43; Shot-table; LP_RETRACT; lpVortex>
+- L2068 [3] 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — P45 T4 under ruling 7 (operator, 2026-09-05: *"we compressed the docs because we didn't have a {compressed into this doc, not superseded} <motion-authoring; four-layer; 15-…:150; sub-clause; SPECIES_EVENTS; punch; push; focus_zoom; re-verdicts; first-minute; :123; gate_motion_density.py:494>
 
 ## docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md
 
@@ -3784,6 +3784,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1797 [2] E56 — A ring has ONE use: circling a number or a point on a chart; a picture's focus is a LIGHT; every new addition passes the life check (2026-09-09) — On the fab card's wafer under "semiconductors" the build drew a callout ring. The operator: *"I think drawing the ring on {The ring's one use} <call-out; 25%; docs_find; opt-in; byte-identical; idle; pure-function-of-t; idle: live>
 - L1822 [2] E57 — Flow generation is routed by size: an episode's plates go to Gemini over the bridge, a couple of plates we drive ourselves (2026-09-10) — The operator: *"Flow generation is probably optional. If it's a large work order for an entire episode run, probably give it <WORK-ORDER; re-roll; create_flow_image>
 - L1831 [2] E58 — A chart changes STATE; it never cuts to another chart of the same data. Five verbs, each with its beat; a cut still wins between different arguments (2026-09-10) — The operator, 2026-09-07 (P48's brief): *"we should be able to re-draw, change chart types/shapes, add additional points, or <re-draw; over-draw; pin-and-pivot; chart_to; ;then=; rescale; {window, ymin, ymax}; re-projects; extend; {to_index}; {series}; build_to>
+- L1873 [2] E59 — The camera is a first-class component of the physics: ONE persistent eye, LOCKED by default, that moves only for a reason the frame can name (2026-09-10) — The operator, 2026-09-08, on the tariff short's chart arrival: *"We've added almost everything to our production process <opt-in; camera-still; __camera(t, target); attention: "landings"; {t, zoom, look, at, ease}; enter=camera=<dock>; snap; pull-back; pixel-identical; HyperFrames; Min-jerk; closed-form>
 
 ## docs/portable/OUTRO-CTA-PLAYBOOK.md
 
