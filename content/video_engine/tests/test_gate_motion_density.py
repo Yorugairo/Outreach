@@ -715,7 +715,7 @@ def test_a_wipe_or_a_cut_credits_no_transition_window():
 # ---- P48 T6 (2026-09-10): M23 - a chart changes state, never over a build, never at the edge; a transition is a landing and a data mark ----
 
 def _xf(to, at, dur=1.2, **kw):
-    return {"kind": "chart_to", "to": to, "at": at, "dur": dur, **({"state": 1} if to in ("recast",) else {}), **kw}
+    return {"kind": "chart_to", "to": to, "at": at, "dur": dur, **({"state": 1} if to in ("recast", "morph") else {}), **kw}
 
 
 def _page_with_states(sid, a, z, species, n_states=2):
@@ -751,6 +751,26 @@ def test_m23_fails_a_page_built_with_two_states_and_no_transition_between_them()
     g = _run_page(_page_with_states("s02", 10.0, 40.0, [_xf("park", 20.0)]))
     assert g["M23"].level == "FAIL" and "2 chart states and no transition" in g["M23"].message, g["M23"]
     assert "M23" not in _run_page(_page_scene("s02", 10.0, 40.0)), "a page with one chart and no chart_to has no M23 row"
+
+
+def test_m23_counts_a_morph_to_and_m17_is_measured_per_morph():
+    """P48 T5: a morph_to is a data transition (M23 lists it, its end is a landing and a data mark), and M17 reads the
+    invariants PER MORPH - the page-enter morph keyed by its scene, every morph_to keyed scene@at."""
+    land = 10.0 + G.PAGE_BUILD_END_S
+    g = _run_page(_page_with_states("s02", 10.0, 40.0, [_xf("morph", land + 3.0, dur=2.0)]))
+    assert g["M23"].level == "PASS" and "s02 morph" in g["M23"].message, g["M23"]
+    lives = G._deployed_lives([_page_with_states("s02", 10.0, 40.0, [_xf("morph", land + 3.0, dur=2.0)])])
+    assert lives and lives[0][1] == round(land + 5.0, 2), "E50's clock restarts at the morph's end"
+    sc = _page_with_states("s02", 10.0, 40.0, [_xf("morph", land + 3.0, dur=2.0)])
+    sc["world"]["page"]["enter"] = "morph"
+    keys = [k for k, _l in G._morphs([sc])]
+    assert keys == ["s02", f"s02@{land + 3.0:.2f}"], keys
+    assert G._morph_events(sc)[0]["from"] == 0 and G._morph_events(sc)[0]["to"] == 1
+    good = {"centroid_ok": True, "axis_ok": True, "area_ok": True, "centroid_shift": 0.01, "axis_deg": 2.0, "area_ratio": 0.9, "min_det": 0.4}
+    assert G._morph_gate([sc], None).level == "INFO" and "2 morph(s)" in G._morph_gate([sc], None).message
+    assert G._morph_gate([sc], {"scenes": {"s02": good, f"s02@{land + 3.0:.2f}": good}}).level == "PASS"
+    w = G._morph_gate([sc], {"scenes": {"s02": good}})
+    assert w.level == "WARN" and "morph_to at" in w.message and "not in the measurement" in w.message, w
 
 
 def test_a_transition_s_end_is_a_landing_for_the_push_tie_and_a_data_mark_for_the_deployed_clock():

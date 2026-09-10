@@ -56,8 +56,9 @@ captions do NOT count - they are what a viewer reads as stillness.
        data mark to its exit or its undraw - 6-8s average, 12s at most
   M22  a push is tied to a landing (E51): every punch /     WARN   (an untied push is filler)
        focus_zoom has a landing on its scene inside (at - 1.5s, at + 0.3s)
-  M17  the morph's match-cut invariants (P47 T3): centroid WARN   (only when a page enters by morph; INFO until
-       <= 6 % W, axis <= 15 deg, area >= 60 %, det J > 0        measure_morph.py has run)
+  M17  the morph's match-cut invariants (P47 T3; per     WARN   (per MORPH - a page's enter morph and every morph_to;
+       morph since P48 T5): centroid <= 6 % W, axis             INFO until measure_morph.py has run)
+       <= 15 deg, area >= 60 %, det J > 0
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -99,7 +100,7 @@ PUSH_TIE_BEFORE_S, PUSH_TIE_AFTER_S = 1.5, 0.3   # [DERIVED] a push is TIED when
 SRC_M22 = "E51 (operator 2026-09-07): a push-in is only used tied to something - pushing into a newly landed badge or data series; a zoom on a thing that just sits there is filler"
 SRC_M23 = "P48 (operator 2026-09-07): chart-to-chart transitions are a first-rate feature - a chart changes STATE and never cuts; E45/E50: never over a build, never inside the last 0.5 s of a page's life"
 TRANSITION_EDGE_S = 0.5    # a transition that ends inside the last half second of its page is a cut wearing a verb [DERIVED: E50, P48 Patterns]
-TRANSITION_DATA_KINDS = ("recast", "rescale", "extend")   # the verbs that change the chart's DATA state: their end is a data mark and a landing; a park moves the chart and changes nothing
+TRANSITION_DATA_KINDS = ("recast", "rescale", "extend", "morph")   # the verbs that change the chart's DATA state: their end is a data mark and a landing; a park moves the chart and changes nothing
 SRC_M21 = "E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing"
 SRC_M18 = "E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)"
 STILL_WARN_S = 8.0         # s9.25 working target
@@ -1080,21 +1081,50 @@ def load_morph_invariants(build: Path) -> dict | str | None:
     return doc
 
 
+def _morph_events(sc: dict) -> list[dict]:
+    """P48 T5: the `chart_to morph` species on a page, each with the state it starts from (the active state at its word)."""
+    out, cur = [], 0
+    for sp in sorted((e for e in sc.get("species", []) if isinstance(e, dict) and e.get("kind") == "chart_to"), key=lambda e: float(e.get("at", 0.0))):
+        if sp.get("to") == "park":
+            continue
+        k = int(sp.get("state", 0) or 0)
+        if sp.get("to") == "morph":
+            out.append({"at": float(sp.get("at", 0.0)), "dur": float(sp.get("dur", 1.0)), "from": cur, "to": k, "key": f"{sc.get('scene_id', '?')}@{float(sp.get('at', 0.0)):.2f}"})
+        cur = k
+    return out
+
+
+def _morphs(scenes: list[dict]) -> list[tuple[str, str]]:
+    """Every morph on the timeline as (measurement key, label): a page that ENTERS by morph (keyed by its scene id, as
+    measure_morph.py has always written it) and every morph_to on a page (keyed scene@at) - M17 is measured PER MORPH."""
+    out: list[tuple[str, str]] = []
+    for s in scenes:
+        if not _is_page(s):
+            continue
+        if ((s.get("world") or {}).get("page") or {}).get("enter") == "morph":
+            out.append((str(s.get("scene_id", "?")), str(s.get("scene_id", "?"))))
+        for ev in _morph_events(s):
+            out.append((ev["key"], f"{s.get('scene_id', '?')} morph_to at {_mm(ev['at'])}"))
+    return out
+
+
 def _morph_gate(scenes: list[dict], inv: dict | str | None) -> Gate | None:
-    """M17 (P47 T3): the three match-cut invariants per morph page, measured in the player - INFO until measured (no silent
-    skip), WARN naming the invariant that failed, PASS with the numbers. No morph page, no row."""
-    morphs = [s for s in scenes if _is_page(s) and (s.get("world", {}).get("page") or {}).get("enter") == "morph"]
+    """M17 (P47 T3; P48 T5 per morph): the three match-cut invariants per MORPH - a page's enter morph and every morph_to -
+    measured in the player - INFO until measured (no silent skip), WARN naming the invariant that failed, PASS with the
+    numbers. No morph, no row."""
+    morphs = _morphs(scenes)
     if not morphs:
         return None
     if inv is None:
-        return Gate("M17", "INFO", f"{len(morphs)} morph page(s), invariants not measured - run measure_morph.py <build> (writes {MORPH_INVARIANTS_NAME})", SRC_M17)
+        return Gate("M17", "INFO", f"{len(morphs)} morph(s), invariants not measured - run measure_morph.py <build> (writes {MORPH_INVARIANTS_NAME})", SRC_M17)
     if inv == "stale":
         return Gate("M17", "INFO", f"{MORPH_INVARIANTS_NAME} measured another player.html - re-run measure_morph.py <build>", SRC_M17)
     rows, bad = [], []
-    for sc in morphs:
-        r = (inv.get("scenes") or {}).get(sc.get("scene_id"))
+    for key, label in morphs:
+        r = (inv.get("scenes") or {}).get(key)
+        sc = {"scene_id": label}   # the row names the morph, not only its page
         if not r:
-            bad.append(f"{sc.get('scene_id')}: not in the measurement"); continue
+            bad.append(f"{label}: not in the measurement"); continue
         fails = [n for n, ok in (("centroid", r.get("centroid_ok")), ("axis", r.get("axis_ok")), ("area", r.get("area_ok"))) if not ok]
         if r.get("min_det", 1) <= 0:
             fails.append("det J <= 0")

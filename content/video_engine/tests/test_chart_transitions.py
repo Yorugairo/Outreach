@@ -54,7 +54,7 @@ needs_browser = pytest.mark.skipif(not _chromium_available(), reason="playwright
 def test_chart_to_is_a_page_species_with_a_verb_and_a_state():
     assert "chart_to" in B.SPECIES_KINDS and "chart_to" in B.PAGE_SPECIES
     assert B.SPECIES_TARGETS["chart_to"] == ()
-    assert B.CHART_TO_KINDS == ("recast", "rescale", "extend", "park"), "morph_to lands with its own law (P48 T5)"
+    assert B.CHART_TO_KINDS == ("recast", "rescale", "extend", "park", "morph"), "the five verbs (P48 T2-T5)"
     assert B.STATE_MAX == 3
 
 
@@ -726,3 +726,159 @@ def test_a_keyed_recast_seeks_exactly(tmp_path):
             assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True), t
     finally:
         close()
+
+
+# ---- P48 T5: morph_to - the area under the standing line becomes the target's by ARAP, mid-page ---------------------
+
+MT_AT, MT_S = 12.0, 2.0
+MORPH_FILL_A = 0.28   # MORPH.FILL_A in the template
+
+
+def _line_to_line_ep(tmp: Path) -> tuple[Path, str]:
+    """A temp episode: the four-line divergence page, then a one-line page of its first series (dense-line on both sides)."""
+    src = json.loads(GOLDEN_SERIES.read_text(encoding="utf-8"))
+    one = dict(src, title="The memory makers alone", sub="index, 100 = Aug '25", series=[dict(src["series"][0])])
+    one.pop("badges", None)
+    (tmp / "evidence/objects").mkdir(parents=True, exist_ok=True)
+    (tmp / "evidence/objects/ev-lines-v1.series.json").write_text(json.dumps(src), encoding="utf-8")
+    (tmp / "evidence/objects/ev-one-v1.series.json").write_text(json.dumps(one), encoding="utf-8")
+    return tmp, "ledger:ev-lines-v1:line;then=ev-one-v1:line"
+
+
+def test_a_morph_is_admitted_between_two_line_pages_only(tmp_path):
+    ep, plate = _line_to_line_ep(tmp_path)
+    world = B.world_for_plate(plate, (0, 0, 0), ep)
+    assert (world["page"]["builder"], world["page_states"][0]["builder"]) == ("dense-line", "dense-line")
+    B.derive_rescale_states(world, [{"kind": "chart_to", "at": MT_AT, "dur": MT_S, "to": "morph", "state": 1}], plate, ep)
+    ep2, plate2 = _lines_to_bars_ep(tmp_path / "bars")
+    with pytest.raises(ValueError, match="a morph moves the AREA UNDER A LINE"):
+        B.derive_rescale_states(B.world_for_plate(plate2, (0, 0, 0), ep2), [{"kind": "chart_to", "at": MT_AT, "dur": MT_S, "to": "morph", "state": 1}], plate2, ep2)
+    assert not B._validate_page_fields("chart_to", {"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "morph", "state": 1})
+    assert any("'state' must be" in e for e in B._validate_page_fields("chart_to", {"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "morph"}))
+
+
+MT_PROBE = """() => {
+  const w = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')); const st = w.__lp; const S = st.states || [st];
+  const M = (st.morphTo || {})['0>1'];
+  const frac = (s) => s.paths.filter(p => !p.muted).map(p => parseFloat(p.p.getAttribute('stroke-dashoffset') || '0') / (p.len || 1));
+  return { chartOp: S.map(s => s.chart.style.opacity), undrawn: frac(S[0]), target: frac(S[1]), active: st.active | 0,
+           morph: M ? (M.svg.style.opacity === '1' ? { on: '1', fill: parseFloat(M.path.getAttribute('fill-opacity')), d: M.path.getAttribute('d'), u: M.u } : { on: '0' }) : null };   /* a hidden strip's attributes are not on the frame */
+}"""
+
+
+def _morph_timeline(ep, plate, species, runtime=30.0, kinetics=None):
+    tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
+    world = B.world_for_plate(plate, (0, 0, 0), ep)
+    B.derive_rescale_states(world, species, plate, ep)
+    scene = dict(tl["scenes"][0], species=species, span=[0.0, runtime], world=dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}))
+    timeline = dict(tl, aspect="9:16", runtime_s=runtime, scenes=[scene], caption_pages=[], captions=[])
+    # the golden surface's kinetics leave arap_morph OFF (the flag guards the goldens); a morph_to needs it ON, as a compiled
+    # timeline has it (kinetics_defaults) - the flag-off test passes its own
+    timeline["kinetics"] = kinetics if kinetics is not None else dict(tl.get("kinetics") or {}, arap_morph=True, min_jerk=True)
+    return timeline, uris
+
+
+def _morph_player(ep, plate, species, runtime=30.0, kinetics=None):
+    from playwright.sync_api import sync_playwright
+    timeline, uris = _morph_timeline(ep, plate, species, runtime, kinetics)
+    td = tempfile.TemporaryDirectory()
+    html = Path(td.name) / "morph.html"
+    html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
+    w, h = RB.STAGE["9:16"]
+    srv, port = RB.serve(html.parent)
+    pw = sync_playwright().start()
+    br = pw.chromium.launch(headless=True)
+    page = br.new_context(viewport={"width": w, "height": h}).new_page()
+    errs: list[str] = []
+    page.on("pageerror", lambda e: errs.append(str(e)))
+    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
+    RB.prepare_page(page, w, h)
+
+    def at(t: float) -> dict:
+        page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+        return page.evaluate(MT_PROBE)
+
+    def frame(t: float) -> bytes:
+        return RB.frame_png(page, t, (w, h))
+
+    def close():
+        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
+    return at, frame, page, errs, close
+
+
+@needs_browser
+def test_the_area_under_the_line_becomes_the_target_s_area_and_the_invariants_hold(tmp_path):
+    ep, plate = _line_to_line_ep(tmp_path)
+    species = [{"kind": "chart_to", "at": MT_AT, "dur": MT_S, "to": "morph", "state": 1}]
+    at, _frame, page, errs, close = _morph_player(ep, plate, species)
+    try:
+        before = at(MT_AT - 0.5)
+        assert all(f == 0 for f in before["undrawn"]) and (before["morph"] is None or before["morph"]["on"] == "0"), "before the word: the four lines stand drawn, no strip"
+        leave = at(MT_AT + MT_S * 0.15)   # inside the leave (the first 0.3 of the clock)
+        assert any(0.02 < f < 0.98 for f in leave["undrawn"]), "the standing lines are leaving by length"
+        assert leave["morph"]["on"] == "1" and 0.02 < leave["morph"]["fill"] < MORPH_FILL_A, "the area under the line fills as the line leaves"
+        assert leave["chartOp"][0] == "1", "the standing axes stand through the leave"
+        mid = at(MT_AT + MT_S * 0.55)   # mid-morph: the standing axes are leaving
+        assert all(f >= 0.99 for f in mid["undrawn"]) and abs(mid["morph"]["fill"] - MORPH_FILL_A) < 0.01, "the lines are gone; the filled strip is the shape"
+        assert mid["morph"]["d"] not in (None, "") and mid["active"] == 1, "a datum target now resolves against the target state"
+        assert 0 < float(mid["chartOp"][0]) < 1 and float(mid["chartOp"][1]) == 0, "the standing axes leave over the morph's first half"
+        inv = page.evaluate("() => window.__morphInvariants('0>1')")
+        assert inv and inv["min_det"] > 0 and inv["end_error"] < 1e-3, inv
+        assert inv["centroid_ok"] and inv["axis_ok"] and inv["area_ok"], inv   # M17's three invariants hold on this pair
+        late = at(MT_AT + MT_S * 0.85)
+        assert float(late["chartOp"][0]) == 0 and 0 < float(late["chartOp"][1]) < 1 and late["morph"]["d"] != mid["morph"]["d"], "the target's axes arrive over the second half as the strip keeps moving"
+        hold = at(MT_AT + MT_S + 0.4)   # the target builds; the fill leaves with the build
+        assert hold["morph"]["on"] == "1" and hold["morph"]["fill"] < MORPH_FILL_A and any(0.01 < f < 0.99 for f in hold["target"]), hold
+        built = at(MT_AT + MT_S + 6.0)
+        assert built["morph"]["on"] == "0" and all(f == 0 for f in built["target"]) and built["chartOp"] == ["0", "1"], "the target stands built; the strip is gone"
+        assert not errs, errs
+    finally:
+        close()
+
+
+@needs_browser
+def test_a_morph_to_seeks_exactly(tmp_path):
+    ep, plate = _line_to_line_ep(tmp_path)
+    species = [{"kind": "chart_to", "at": MT_AT, "dur": MT_S, "to": "morph", "state": 1}]
+    at, _frame, _page, _errs, close = _morph_player(ep, plate, species)
+    try:
+        for t in (MT_AT + 0.3, MT_AT + MT_S * 0.7, MT_AT + MT_S + 0.5, MT_AT - 1.0):
+            a = at(t); at(3.0); at(MT_AT + MT_S + 8.0); at(MT_AT + 1.0); b = at(t)
+            assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True), t
+    finally:
+        close()
+
+
+@needs_browser
+def test_with_the_flag_off_a_morph_to_is_the_recast_hand_over_byte_for_byte(tmp_path):
+    """kinetics.arap_morph off: a morph_to degrades to the plain recast of the same length - the frames are identical."""
+    import hashlib
+    ep, plate = _line_to_line_ep(tmp_path)
+    hashes = []
+    for verb in ("morph", "recast"):
+        species = [{"kind": "chart_to", "at": MT_AT, "dur": MT_S, "to": verb, "state": 1}]
+        _at, frame, _page, errs, close = _morph_player(ep, plate, species, kinetics={"arap_morph": False})
+        try:
+            hashes.append([hashlib.sha256(frame(t)).hexdigest() for t in (MT_AT + 0.6, MT_AT + MT_S + 0.5, MT_AT + MT_S + 3.0)])
+            assert not errs, errs
+        finally:
+            close()
+    assert hashes[0] == hashes[1]
+
+
+@needs_browser
+def test_measure_morph_measures_a_morph_to_per_morph_keyed_scene_at(tmp_path):
+    """M17 per morph (P48 T5): measure_morph.py finds the morph_to on the page, seeks mid-morph and writes its invariants
+    under scene@at - beside a page-enter morph's row, which keeps its scene-id key."""
+    import measure_morph as MM
+    ep, plate = _line_to_line_ep(tmp_path)
+    species = [{"kind": "chart_to", "at": MT_AT, "dur": MT_S, "to": "morph", "state": 1}]
+    timeline, uris = _morph_timeline(ep, plate, species)
+    html = tmp_path / "player.html"
+    html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
+    scenes = MM.morph_scenes(timeline)
+    assert [s["scene_id"] for s in scenes] == [timeline["scenes"][0]["scene_id"]]
+    res = MM.measure_html(html, "9:16", scenes)
+    key = f"{timeline['scenes'][0]['scene_id']}@{MT_AT:.2f}"
+    assert list(res) == [key], res
+    assert res[key]["min_det"] > 0 and res[key]["centroid_ok"] and res[key]["area_ok"], res[key]

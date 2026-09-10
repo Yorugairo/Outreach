@@ -409,7 +409,7 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   by LENGTH, and in the reverse order it was drawn, so a highlighted tail does not float off the end as a stray mark).
 
 ### T5: `morph_to` - ARAP between two shapes on the page
-- Status: pending
+- Status: **complete for the chart-state source (2026-09-10)**; the planted-element source (R26-16, the tie) stays open as T5b - see the deviation
 - Owner: `implementation_luna` (bounded: the mesh and the invariants exist from P47 T3)
 - Depends on: T1
 - Write set: the template (`morphOn` generalised from the page ENTER to a species), `scripts/kinetics/arap.mjs` (only if a
@@ -421,7 +421,35 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   `kinetics.arap_morph` off the transition degrades to a `recast` or a cut of the same length, and the frame is
   byte-identical to that; (5) the seek test
 - Validate: `python -m pytest content/video_engine/tests/test_morph.py content/video_engine/tests/test_chart_transitions.py -q`
-- Evidence: pending
+- Evidence (2026-09-10): `chart_to {at, dur, to: "morph", state}` - the AREA UNDER THE STANDING LINE becomes the area
+  under the target state's line by ARAP (`kinetics/arap.mjs`'s strip mesh, the same mesh as P47 T3's page-enter morph),
+  mid-page, on one clock. The compiler admits it between two line pages only (`MORPH_BUILDERS = ("dense-line",)`) and
+  refuses by name otherwise ("dense-line -> story: a morph moves the AREA UNDER A LINE into another ... n lines -> n bars
+  is the keyed recast; anything else the recast or a cut"). The player (`lpStrip`, `lpMorphFor`, `lpPaintMorphTo`,
+  `lpPaintMorphHold`, `XF_MORPH.LEAVE` 0.3): the first 0.3 of the clock the standing line un-draws by length in reverse
+  while its area fills in the series' own colour (MORPH.FILL_A); the rest of the clock the filled strip morphs (min-jerk)
+  into the target's area, det J > 0 at every sampled frame, the standing axes leaving over the morph's first half and the
+  target's arriving over the second; then the target BUILDS on its own law and the fill leaves with the build, as the
+  page-enter morph's does. The strip is built once per (from, to) pair at first need from geometry fixed at load - pure;
+  hidden whenever no morph is on or holding (a seek to any t paints one frame). **M17 per morph:** `_morph_events` /
+  `_morphs` in the gate list a page's enter morph (keyed by its scene id, as before) and every morph_to (keyed
+  `scene@at`); `measure_morph.py` seeks each morph_to to 0.65 of its clock and reads `__morphInvariants("from>to")`;
+  M23 counts a morph as a data transition (its end a landing and a data mark). **Flag off:** with `kinetics.arap_morph`
+  off a morph_to falls through to the recast hand-over of the same length - the test hashes three frames of a `morph`
+  build against a `recast` build and they are identical. Frames read at 49.5 / 50.4 / 50.9 / 51.4 / 52.3 / 54.5 s of
+  the proof (the Tokyo holdings line -> the Fed-vs-yields line, two different series on disk): the holdings area fills
+  as its line leaves, the filled shape becomes the yield line's shape as the $bn axis goes and the % axis comes, the
+  yield line draws over the strip's top edge and the fill leaves - one thing changing shape. Invariants on the test pair
+  (the four-line page -> its first series alone): centroid, axis and area inside M17's bounds, min det > 0, end error
+  < 1e-3. `test_chart_transitions.py` 47 (five new: the legal pair, the morph and its invariants, the seek, the flag-off
+  byte-for-byte, measure_morph per morph), `test_gate_motion_density.py` 62 (+1: M23 counts a morph, M17 keys per
+  morph), `test_morph.py` green, 13 goldens byte-identical. Proof page :8739 gains a third scene (the morph at 50 s).
+- **Deviation, stated: acceptance (3)'s planted-element source (R26-16, the tie) is not built here.** A morph_to's
+  source is a CHART STATE (the standing line's area); the tie is an element of the outgoing WORLD (a Flow still), which
+  needs the page-ENTER morph to take a traced outline in stage px on the outgoing scene's last frame, the morph spanning
+  the boundary, the fill sampled from the source's colour (R26-16's own list). That is a separate half-day on the
+  page-enter path (`world.morph = {poly: [...]}` + a silhouette tracer for a still) - **T5b**, after HG3's watch of
+  what shipped; nothing here forecloses it (the strip mesh takes any x-monotone pair).
 
 ### T6: The gate - M23, the transition as a landing, E50's clock restarted
 - Status: complete (2026-09-10)

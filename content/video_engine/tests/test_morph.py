@@ -101,7 +101,7 @@ def test_the_morph_hangs_off_the_existing_arap_flag_and_falls_back_to_a_mount():
     assert "/* KINETICS:BEGIN arap */" in html and "const paintMorph = " in html
     assert 'const morphOn = pg.enter === "morph" && kin("arap_morph")' in html
     assert '(pg.enter === "morph" && !morphOn)' in html, "with the flag off a morph page is a mount of the same length"
-    assert "window.__morphInvariants = () =>" in html
+    assert "window.__morphInvariants = (key) =>" in html   # P48 T5: no key = the page-enter morph; "from>to" = a morph_to
 
 
 # ---- the browser -----------------------------------------------------------------------------

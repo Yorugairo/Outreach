@@ -129,7 +129,8 @@ SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                                                # the next thing: a FIGURE the hand writes at a datum's spot (the treasury number the sentence turns to)
 HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
 PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to")
-CHART_TO_KINDS = ("recast", "rescale", "extend", "park")   # P48: recast (T4, a hand-over), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform); morph_to is T5
+CHART_TO_KINDS = ("recast", "rescale", "extend", "park", "morph")   # P48: recast (T4, a hand-over; keyed: T4b), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform), morph (T5: the area under the line becomes the target's by ARAP)
+MORPH_BUILDERS = ("dense-line",)                     # P48 T5: the shape a morph moves is the AREA UNDER A LINE - both sides of a morph_to are line pages
 PARK_ANCHORS = ("top", "bottom", "left", "right")   # the corner of its own box the parked chart shrinks toward (top = Bravos 91: up, the room opens below)
 RECAST_PAIRS = (("dense-line", "story"),)             # P48 T4b: the legal KEYED pairs - n lines <-> n bars by series (Bravos 99-105); everything else recasts by the hand-over
 PARK_SCALE = (0.3, 0.95)                             # a parked chart is still a chart: never below 0.3 of itself, and 0.95 is not a park
@@ -528,6 +529,18 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     at its state. An extend grows the CURRENT window (the page's whole series, or the last rescale's window) to
     `to_index`, or reveals a `later: true` series; the species carries `from_index` (the last shared datum) so the
     player caps the draw there."""
+    for sp in (row_species or []):   # P48 T5: a morph moves the area under a line into another - both sides are line pages, or the refusal names the verb to use
+        if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "morph":
+            if world.get("kind") != SPECIES_LEDGER:
+                raise ValueError("chart_to morph: only a LEDGER PAGE has chart states")
+            states = [world.get("page") or {}] + list(world.get("page_states") or [])
+            k = int(sp.get("state", 0))
+            if not (0 < k < len(states)):
+                raise ValueError(f"chart_to morph: state {k} is not one of the page's other chart states")
+            pair = (states[0].get("builder"), states[k].get("builder"))
+            if pair[0] not in MORPH_BUILDERS or pair[1] not in MORPH_BUILDERS:
+                raise ValueError(f"chart_to morph: {pair[0]} -> {pair[1]}: a morph moves the AREA UNDER A LINE into another ({'|'.join(MORPH_BUILDERS)} on both sides); "
+                                 "n lines -> n bars is the keyed recast (keyed: true); anything else is the recast (the hand-over) or a cut")
     for sp in (row_species or []):   # P48 T4b: a keyed recast is admitted only on a legal pair, and the refusal names the reason
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "recast" and sp.get("keyed"):
             if world.get("kind") != SPECIES_LEDGER:

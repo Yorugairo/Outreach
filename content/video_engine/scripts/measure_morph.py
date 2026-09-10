@@ -22,13 +22,16 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
 import render_baseline as RB  # noqa: E402
+from gate_motion_density import _morph_events as morph_events  # noqa: E402  (P48 T5: the morph_to species, keyed scene@at)
 
 MORPH_INVARIANTS_NAME = "morph-invariants.json"
+MORPH_TO_SAMPLE = 0.65   # where in a morph_to's clock the strip is measured: past the leave (XF_MORPH.LEAVE 0.3), mid-morph
 
 
 def morph_scenes(tl: dict) -> list[dict]:
+    """Every ledger page with a morph on it: an ENTER by morph, or a `chart_to morph` species (P48 T5)."""
     return [s for s in tl.get("scenes", []) if (s.get("world") or {}).get("kind") == "ledger"
-            and ((s["world"].get("page") or {}).get("enter") == "morph")]
+            and (((s["world"].get("page") or {}).get("enter") == "morph") or morph_events(s))]
 
 
 def measure_html(html: Path, aspect: str, scenes: list[dict]) -> dict:
@@ -43,11 +46,16 @@ def measure_html(html: Path, aspect: str, scenes: list[dict]) -> dict:
             page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
             RB.prepare_page(page, w, h)
             for sc in scenes:
-                ms = float((sc["world"].get("page") or {}).get("morph_s") or 2.0)
-                t = float(sc["span"][0]) + ms / 2
-                RB.frame_png(page, t, (w, h))   # seek: the page builds its morph on first paint
-                inv = page.evaluate("() => window.__morphInvariants ? window.__morphInvariants() : null")
-                out[sc.get("scene_id", "?")] = inv or {"error": "no morph on the page at its midpoint"}
+                if ((sc["world"].get("page") or {}).get("enter") == "morph"):
+                    ms = float((sc["world"].get("page") or {}).get("morph_s") or 2.0)
+                    t = float(sc["span"][0]) + ms / 2
+                    RB.frame_png(page, t, (w, h))   # seek: the page builds its morph on first paint
+                    inv = page.evaluate("() => window.__morphInvariants ? window.__morphInvariants() : null")
+                    out[sc.get("scene_id", "?")] = inv or {"error": "no morph on the page at its midpoint"}
+                for ev in morph_events(sc):   # P48 T5: each morph_to, measured mid-morph, keyed scene@at
+                    RB.frame_png(page, ev["at"] + ev["dur"] * MORPH_TO_SAMPLE, (w, h))
+                    inv = page.evaluate("k => window.__morphInvariants ? window.__morphInvariants(k) : null", f"{ev['from']}>{ev['to']}")
+                    out[ev["key"]] = inv or {"error": f"no morph_to strip on the page at {ev['at']:.2f}+{ev['dur'] * MORPH_TO_SAMPLE:.2f} s"}
             browser.close()
     finally:
         srv.shutdown()

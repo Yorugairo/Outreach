@@ -3980,6 +3980,56 @@
     for (const m of A.marks || []) if (m.el && FURNITURE.includes(m.role)) m.el.style.opacity = xfFade(false, false, v).toFixed(3);
     for (const m of Bs.marks || []) if (m.el && FURNITURE.includes(m.role)) m.el.style.opacity = xfFade(true, true, v).toFixed(3);
   };
+  /* P48 T5 - morph_to: the AREA UNDER THE STANDING LINE becomes the area under the target's line by ARAP (kinetics/arap.mjs,
+     the strip mesh of P47 T3's page-enter morph), mid-page, on one clock. The first XF_MORPH.LEAVE of it the standing line
+     un-draws by length, in reverse (E50: a line leaves by length) while its area fills in the series' own colour; the rest
+     of the clock the filled strip morphs (min-jerk, det J > 0 at every frame) into the target's area as the standing axes
+     leave and the target's arrive; then the target BUILDS on its own law - the line strokes along the morphed area's top
+     edge - and the fill leaves with the build, as the page-enter morph's does. No key correspondence is pretended: it is a
+     change of SHAPE (the plan's row 37: "morph on page - the geometry, with no key correspondence"). Behind
+     kinetics.arap_morph: with the flag off a morph_to IS the recast hand-over of the same length, byte for byte. */
+  const XF_MORPH = Object.freeze({ LEAVE: 0.3 });   /* the share of the clock the standing line takes to leave before the shape moves */
+  const lpStrip = (S, n) => {   /* a state's area under its first drawn line as a strip: n columns, top on the line, bottom on the axis */
+    const line = (S.linePts || [])[0]; if (!line || line.length < 2 || !(S.axisB > 0)) return null;
+    const xL = line[0][0], xR = line[line.length - 1][0];
+    const yAt = (x) => { for (let i = 0; i + 1 < line.length; i++) { const a = line[i], q = line[i + 1]; if (x >= a[0] - 1e-9 && x <= q[0] + 1e-9) { const u = (x - a[0]) / Math.max(1e-9, q[0] - a[0]); return a[1] + (q[1] - a[1]) * clamp01(u); } } return line[line.length - 1][1]; };
+    const xs = [...Array(n).keys()].map((i) => xL + (i / (n - 1)) * (xR - xL));
+    return { top: xs.map((x) => [x, yAt(x)]), bot: xs.map((x) => [x, S.axisB]) };
+  };
+  const lpMorphFor = (st, from, to) => {   /* built once per pair, at first need; the states' geometry is fixed at load, so it is pure */
+    const key = from + ">" + to; st.morphTo = st.morphTo || {};
+    if (key in st.morphTo) return st.morphTo[key];
+    const A = st.states[from], Bs = st.states[to], n = MORPH.COLS, sa = lpStrip(A, n), sb = lpStrip(Bs, n);
+    if (!sa || !sb) return (st.morphTo[key] = null);
+    const mesh = stripMesh(sa.top, sa.bot), Bv = [...sb.top, ...sb.bot], prep = arapPrepareMesh(mesh, Bv, n + (n >> 1));   /* the pinned vertex: the bottom middle */
+    const svg = lpEl("svg", "lp-chart lp-morph", st.page, { viewBox: A.chart.getAttribute("viewBox") });
+    svg.setAttribute("style", A.chart.getAttribute("style") || ""); svg.style.opacity = "0";
+    const col = ((A.paths || []).filter((pp) => !pp.muted)[0] || {}).p, stroke = col ? col.getAttribute("stroke") : "var(--lp-chalk)";
+    const Ao = stripOutline(mesh.verts, n);
+    const path = lpEl("path", "morph", svg, { d: outlinePath(Ao), fill: stroke, "fill-opacity": 0, stroke: "var(--lp-chalk)", "stroke-width": 3 });
+    return (st.morphTo[key] = { svg, path, prep, A: Ao, B: stripOutline(Bv, n), W: (A.geom || { W: 1000 }).W, stroke, u: 0 });
+  };
+  const lpHideMorphs = (st, keep) => { for (const k in (st.morphTo || {})) { const M = st.morphTo[k]; if (M && M !== keep) M.svg.style.opacity = "0"; } };
+  const lpPaintMorphTo = (st, states, xf, t3, scene, t) => {
+    const A = states[xf.from], Bs = states[xf.to], u = xf.u, M = lpMorphFor(st, xf.from, xf.to);
+    const uL = clamp01(u / XF_MORPH.LEAVE), uM = clamp01((u - XF_MORPH.LEAVE) / (1 - XF_MORPH.LEAVE)), kL = segEase(uL), kM = segEase(uM);
+    for (let i = 0; i < states.length; i++) if (i !== xf.from && i !== xf.to) lpPaintChart(states[i], 0, t3, scene, t);
+    lpPaintChart(A, 1 - kL, t3, scene, t, true);   /* the standing line leaves by length, in reverse */
+    A.chart.style.opacity = uM > 0 ? xfFade(false, false, uM).toFixed(3) : "1";   /* its axes stand through the leave, then go over the morph's first half */
+    lpPaintChart(Bs, 0, t3, scene, t);
+    Bs.chart.style.opacity = xfFade(true, true, uM).toFixed(3);   /* the target's axes arrive over the morph's second half; its line waits for the build */
+    lpHideMorphs(st, M); if (!M) return;
+    const pts = uM <= 0 ? M.A : (uM >= 1 ? M.B : arapAt(M.prep, kM).outline);
+    M.path.setAttribute("d", outlinePath(pts));
+    M.path.setAttribute("fill-opacity", (MORPH.FILL_A * kL).toFixed(3));   /* the area fills as its line leaves */
+    M.svg.style.opacity = "1"; M.u = u;
+  };
+  const lpPaintMorphHold = (st, hold, c) => {   /* after the clock: the fill leaves as the target's line draws over the morphed area's top edge */
+    const M = lpMorphFor(st, hold.from, hold.to); lpHideMorphs(st, M); if (!M) return;
+    M.path.setAttribute("d", outlinePath(M.B));
+    M.path.setAttribute("fill-opacity", (MORPH.FILL_A * (1 - clamp01(c))).toFixed(3));
+    M.svg.style.opacity = c < 1 ? "1" : "0"; M.u = 1;
+  };
   const PARK_ORIGIN = Object.freeze({ top: "0 0", bottom: "0 100%", left: "0 0", right: "100% 0" });
   const lpPaintPark = (S, sp, t) => {
     const d = Math.max(0.001, sp.dur || 1), u = segEase(clamp01((t - sp.at) / d)), sc = 1 - (1 - (+sp.scale || 0.72)) * u;
@@ -3999,11 +4049,11 @@
       if (pk) lpPaintPark(st, pk, t); else lpUnpark(st);
       st.active = 0; return;
     }
-    let cur = 0, cCur = cBase, leaving = false, xf = null, park = null;
+    let cur = 0, cCur = cBase, leaving = false, xf = null, park = null, hold = null;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
       if (sp.to === "park") { park = sp; continue; }   /* P48 T2b: a transform on whichever state is active, never a state change */
-      park = null;   /* a later transition to another state un-parks (the new state stands full) */
+      park = null; hold = null;   /* a later transition to another state un-parks (the new state stands full) and ends a morph's hold */
       const d = Math.max(0.001, sp.dur || 1), k = Math.max(0, Math.min(states.length - 1, sp.state | 0));
       if (sp.to === "rescale") {   /* P48 T2: the axes retarget on one clock; the chart never leaves, and the target stands built */
         if (t < sp.at + d) { xf = { from: cur, to: k, u: segEase(clamp01((t - sp.at) / d)) }; break; }
@@ -4013,6 +4063,10 @@
         if (t < sp.at + d) { xf = { from: cur, to: k, u: clamp01((t - sp.at) / d), extend: true, sp }; break; }
         cur = k; cCur = 1; continue;
       }
+      if (sp.to === "morph" && kin("arap_morph")) {   /* P48 T5: the area under the line morphs into the target's; then the target builds - with the flag off this falls through to the recast hand-over of the same length */
+        if (t < sp.at + d) { xf = { from: cur, to: k, u: clamp01((t - sp.at) / d), morph: true }; break; }
+        hold = { from: cur, to: k }; cur = k; cCur = clamp01((t - (sp.at + d)) / (states[k].buildDur || LP.BUILD)); continue;
+      }
       if (sp.keyed) {   /* P48 T4b: the keyed tween - one clock, both states painted by lpPaintRecastKeyed, the target built at its end */
         if (t < sp.at + d) { xf = { from: cur, to: k, u: clamp01((t - sp.at) / d), keyed: true }; break; }
         cur = k; cCur = 1; continue;
@@ -4020,13 +4074,16 @@
       if (t < sp.at + d) { cCur = 1 - segEase(clamp01((t - sp.at) / d)); leaving = true; break; }   /* the standing chart is leaving */
       cur = k; cCur = clamp01((t - (sp.at + d)) / (states[k].buildDur || LP.BUILD));
     }
-    st.active = xf ? (xf.extend && xf.u >= XF_EXTEND.RESCALE ? xf.to : xf.from) : cur;   /* the state a species target resolves against (P48 T2) */
+    st.active = xf ? ((xf.extend && xf.u >= XF_EXTEND.RESCALE) || (xf.morph && xf.u >= XF_MORPH.LEAVE) ? xf.to : xf.from) : cur;   /* the state a species target resolves against (P48 T2) */
+    if (!(xf && xf.morph) && !(!xf && hold)) lpHideMorphs(st, null);   /* P48 T5: a morph's strip shows only while it morphs or holds under the target's build */
     if (xf && xf.extend) { lpPaintExtend(states, xf, t3, scene, t); }
+    else if (xf && xf.morph) { for (const S of states) { lpRestoreState(S); S.extendCap = null; } lpPaintMorphTo(st, states, xf, t3, scene, t); }
     else if (xf && xf.keyed) { for (const S of states) lpRestoreState(S); lpPaintRecastKeyed(states, xf, t3, scene, t); }
     else if (xf) { lpPaintRescale(states, xf, t3, scene, t); }
     else {
       for (const S of states) { lpRestoreState(S); S.extendCap = null; }   /* no transition on: every state exactly as built (a seek is the play) */
       for (let i = 0; i < states.length; i++) lpPaintChart(states[i], i === cur ? cCur : 0, t3, scene, t, i === cur && leaving);
+      if (hold) lpPaintMorphHold(st, hold, cCur);
     }
     for (let i = 0; i < states.length; i++) if (!park || i !== (st.active | 0)) lpUnpark(states[i]);
     if (park && !xf) lpPaintPark(states[st.active | 0], park, t);
@@ -5109,9 +5166,10 @@
   scrub.addEventListener("input", () => { seek(+scrub.value); });
   sync();
   /* P47 T3: the morph's match-cut invariants on the active page (25 frames of the ARAP outline), for measure_morph.py / M17 */
-  window.__morphInvariants = () => {
-    const world = [wA, wB].find((e) => e.__lp && e.classList.contains("ledger")); if (!world || !world.__lp.morph) return null;
-    const M = world.__lp.morph, frames = [];
+  window.__morphInvariants = (key) => {   /* no key: the page-enter morph; "from>to": a morph_to between two states (P48 T5) */
+    const world = [wA, wB].find((e) => e.__lp && e.classList.contains("ledger")); if (!world) return null;
+    const M = key == null ? world.__lp.morph : (world.__lp.morphTo || {})[key]; if (!M) return null;
+    const frames = [];
     for (let i = 0; i <= 24; i++) frames.push(i === 24 ? M.B : arapAt(M.prep, i / 24).outline);
     const inv = morphInvariants(frames, M.W), last = frames[24];
     const endErr = Math.max(...last.map((p, i) => Math.hypot(p[0] - M.B[i][0], p[1] - M.B[i][1])));
