@@ -7,7 +7,7 @@ risk: standard
 owner: parent
 branch: main
 created: 2026-09-06
-updated: 2026-09-06 (approved by /prp-implement; HG3 defaults set by the parent pending the operator: grace 10 min, SLA 60 min, residue budget 6 runs / 200k tokens per day)
+updated: 2026-09-10
 ---
 
 # The lane bridge as code
@@ -137,7 +137,7 @@ actionable: the inbox hook for live sessions, the daemon + per-lane handlers for
 - Evidence: 2026-09-06 (junior_developer; parent re-ran the tests, read the bridge_env diff - two hunks in the ledger section only - and scanned for secrets). `bridge_reply.py` (300 lines), `test_bridge_reply.py` (306 lines), `bridge_env.LEDGER_EVENTS = (sent, replied, followup, tier0, tier1, timeout, escalated)` with `ledger_append` refusing anything else. `42 passed in 0.33s` across reply + send; two mutations (followup numbering, event guard) fail 2 tests each. Deltas from the brief, kept: `conversationId` is not in `order.json` - `bridge_send` writes it to `conversation.json` (gemini) / `reply.json` `session_id` (claude), so the resolver falls back through both; send-first-then-record, so a refused send leaves no file, no move, no ledger line. `--packet` takes the full 64-hex id.
 
 ### T4: the packet contract (HG1)
-- Status: pending
+- Status: pending (2026-09-10: the only open slice; the Flow bridge lane was RETIRED 2026-09-08 for the stdio dispatcher, and Gemini stepped back to research intake 2026-09-10 - the contract now concerns the Codex/Astra lane only; the operator decides whether it is still wanted)
 - Owner: parent (drafts), Astra via the bridge (reviews), operator ratifies
 - Depends on: T1-T3
 - Write set: `docs/runbooks/BRIDGE-PACKET.md`
