@@ -309,7 +309,7 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
 - Evidence: pending
 
 ### T3: `extend` - additional points draw on at the pen's speed
-- Status: pending
+- Status: complete (2026-09-10)
 - Owner: `implementation_luna` (bounded; the interpolator exists after T2)
 - Depends on: T2
 - Write set: `scripts/kinetics/chartxf.mjs`, the template, `tests/test_chart_transitions.py`, `scripts/ledger_page.py`
@@ -319,7 +319,22 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   extends the same way (it draws from its first point); (3) the value labels of new points write as the nib passes, never
   before; (4) the seek test holds; (5) a flag golden `ledger-page@extend`
 - Validate: `python -m pytest content/video_engine/tests/test_chart_transitions.py content/video_engine/tests/test_golden_frames.py -q`
-- Evidence: pending
+- Evidence: 2026-09-10 - `chart_to {to: "extend", to_index | series}`: the compiler grows the CURRENT window (the page's
+  whole series or the last rescale's) to `to_index` and records `from_index` (the last shared datum, in the page's
+  indexing), or reveals a `later: true` series (`ledger_page._dense_block` keeps such a series off the page's own
+  chart; `rescale_state(..., reveal=k)` puts it on the derived one); `lpPaintExtend`: the first XF_EXTEND.RESCALE (0.45)
+  of the clock is T2's rescale (the target's line hidden), then the target stands and EVERY path of the extended series
+  - the muted history and the highlighted tail alike - is drawn to the pen: `capFrac` at the shared datum plus the
+  remainder by `strokeFrac` (the two-thirds law), the nib visible, through `cs.extendCap` in lpPaintChart; the
+  boundary is invisible because the re-projected geometry IS the target's. **32 transition tests** (grammar; the grown
+  window and the shared datum; a later series off the page until revealed; the browser proofs for to_index and for a
+  later series - phase 1 moving with the target's line undrawn, phase 2 the target standing with its line short of
+  the end and the nib on it, after fully drawn with the cap released; the seek test), goldens byte-identical, and the
+  plan's flag golden as a SURFACE golden: `ledger-extend` (the golden series windowed at 8 s and extended at 12 s,
+  judged at 13.4 s mid-tail; its derived states come from the compiler off a temp episode, so the golden proves the
+  compiler and the player together). Frames: `scratchpad/frames/extend-sheet2.png` (sent). One defect the frames
+  caught and the tests then pinned: the muted history path ran ahead of the pen (the cap was applied to the
+  highlighted path only) - now every path of the series caps itself at its own shared datum.
 
 ### T4: `recast` - the chart type changes by a keyed tween
 - Status: **the beat ships; the keyed tween does not** (2026-09-07) - awaiting HG2

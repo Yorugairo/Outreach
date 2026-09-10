@@ -54,7 +54,7 @@ needs_browser = pytest.mark.skipif(not _chromium_available(), reason="playwright
 def test_chart_to_is_a_page_species_with_a_verb_and_a_state():
     assert "chart_to" in B.SPECIES_KINDS and "chart_to" in B.PAGE_SPECIES
     assert B.SPECIES_TARGETS["chart_to"] == ()
-    assert B.CHART_TO_KINDS == ("recast", "rescale"), "extend / morph_to land with their own laws (P48 T3/T5)"
+    assert B.CHART_TO_KINDS == ("recast", "rescale", "extend"), "morph_to lands with its own law (P48 T5)"
     assert B.STATE_MAX == 3
 
 
@@ -337,6 +337,167 @@ def test_a_rescale_seeks_exactly():
     try:
         for t in (RS_AT + 0.3, RS_AT + RS_S * 0.7, RS_AT + RS_S + 2.0):
             a = at(t); at(2.0); at(RS_AT + RS_S + 5.0); b = at(t)
+            assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True), t
+    finally:
+        close()
+
+
+# ---- P48 T3: extend - the axes retarget, then the new points draw on at the pen ------------------------------------
+
+EX_RS_AT, EX_RS_S = 8.0, 1.2      # first: window the page to its early months
+EX_AT, EX_S = 12.0, 2.0           # then: extend the window to the last datum
+EX_WINDOW = [2025.9, 2026.3]
+
+
+@pytest.mark.parametrize("entry, needle", [
+    ({"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "extend"}, "exactly one of to_index"),
+    ({"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "extend", "to_index": 5, "series": 1}, "exactly one of to_index"),
+    ({"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "extend", "to_index": 0}, "positive datum index"),
+    ({"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "extend", "series": 0}, "index (>= 1)"),
+    ({"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "extend", "to_index": 5, "state": 1}, "derived, not named"),
+])
+def test_an_extend_names_new_points_or_a_later_series(entry, needle):
+    errs = B._validate_page_fields("chart_to", entry)
+    assert any(needle in e for e in errs), (needle, errs)
+    assert not B._validate_page_fields("chart_to", {"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "extend", "to_index": 5})
+
+
+@needs_objects
+def test_an_extend_grows_the_standing_window_and_remembers_the_shared_datum():
+    plate = "ledger:ev-japan-holdings-v1:line"
+    world = B.world_for_plate(plate, (0, 0, 0), EP)
+    n = len(world["page"]["series"][0]["pts"])
+    sp = [{"kind": "chart_to", "at": EX_RS_AT, "dur": EX_RS_S, "to": "rescale", "window": EX_WINDOW},
+          {"kind": "chart_to", "at": EX_AT, "dur": EX_S, "to": "extend", "to_index": n - 1}]
+    B.derive_rescale_states(world, sp, plate, EP)
+    assert [s["state"] for s in sp] == [1, 2]
+    a, b = world["page_states"]
+    assert a["derived"] == "rescale" and b["derived"] == "extend"
+    assert b["axes"]["xdomain"][0] == EX_WINDOW[0] and b["axes"]["xdomain"][1] > EX_WINDOW[1], "the window keeps its start and grows to the datum"
+    assert len(b["series"][0]["pts"]) > len(a["series"][0]["pts"])
+    assert sp[1]["from_index"] == max(i for i, pt in enumerate(world["page"]["series"][0]["pts"]) if float(pt[0]) <= EX_WINDOW[1]), "the last shared datum, in the page's indexing"
+    with pytest.raises(ValueError, match="adds nothing"):
+        B.derive_rescale_states(B.world_for_plate(plate, (0, 0, 0), EP), [{"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "extend", "to_index": n - 1}], plate, EP)
+
+
+def _later_series_ep(tmp: Path) -> tuple[Path, str]:
+    """A temp episode whose page carries a second, `later: true` series (Bravos 29-30: consumption drawn on after production)."""
+    src = json.loads((EP / "evidence/objects/ev-japan-holdings-v1.series.json").read_text(encoding="utf-8"))
+    base = src["series"][0]
+    twin = dict(base, name="Twin", label="", color="teal", later=True, pts=[[x, float(v) * 0.6] for x, v in base["pts"]])
+    src["series"] = [base, twin]
+    (tmp / "evidence/objects").mkdir(parents=True)
+    (tmp / "evidence/objects/ev-later-v1.series.json").write_text(json.dumps(src), encoding="utf-8")
+    return tmp, "ledger:ev-later-v1:line"
+
+
+@needs_objects
+def test_a_later_series_is_off_the_page_until_an_extend_reveals_it(tmp_path):
+    ep, plate = _later_series_ep(tmp_path)
+    world = B.world_for_plate(plate, (0, 0, 0), ep)
+    assert len(world["page"]["series"]) == 1, "a later: true series is not on the page's own chart"
+    sp = [{"kind": "chart_to", "at": EX_AT, "dur": EX_S, "to": "extend", "series": 1}]
+    B.derive_rescale_states(world, sp, plate, ep)
+    st = world["page_states"][0]
+    assert len(st["series"]) == 2 and st["derived"] == "extend" and sp[0]["from_series"] == 1
+    with pytest.raises(ValueError, match="not a later"):
+        B.derive_rescale_states(B.world_for_plate(plate, (0, 0, 0), ep), [{"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "extend", "series": 3}], plate, ep)
+
+
+EX_PROBE = """() => {
+  const w = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')); const st = w.__lp; const S = st.states || [st];
+  const drawn = (s, k) => { const pp = (s.paths || []).filter(p => !p.muted)[k]; return pp ? 1 - parseFloat(pp.p.getAttribute('stroke-dashoffset') || '0') / pp.len : null; };
+  const tip = (s, k) => { const pp = (s.paths || []).filter(p => !p.muted)[k]; return pp ? +pp.tip.getAttribute('opacity') : null; };
+  return { n: S.length, charts: S.map(s => +(s.chart.style.opacity || 0)), active: st.active | 0,
+           drawn: S.map(s => [drawn(s, 0), drawn(s, 1)]), tips: S.map(s => [tip(s, 0), tip(s, 1)]),
+           cap: S[S.length - 1].extendCap ? S[S.length - 1].extendCap.u2 : null };
+}"""
+
+
+def _extend_player(ep, plate, species, runtime=26.0):
+    from playwright.sync_api import sync_playwright
+    tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
+    world = B.world_for_plate(plate, (0, 0, 0), ep)
+    B.derive_rescale_states(world, species, plate, ep)
+    scene = dict(tl["scenes"][0], species=species, span=[0.0, runtime], world=dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}))
+    timeline = dict(tl, aspect="9:16", runtime_s=runtime, scenes=[scene], caption_pages=[], captions=[])
+    td = tempfile.TemporaryDirectory()
+    html = Path(td.name) / "extend.html"
+    html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
+    w, h = RB.STAGE["9:16"]
+    srv, port = RB.serve(html.parent)
+    pw = sync_playwright().start()
+    br = pw.chromium.launch(headless=True)
+    page = br.new_context(viewport={"width": w, "height": h}).new_page()
+    errs: list[str] = []
+    page.on("pageerror", lambda e: errs.append(str(e)))
+    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
+    RB.prepare_page(page, w, h)
+
+    def at(t: float) -> dict:
+        page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+        return page.evaluate(EX_PROBE)
+
+    def close():
+        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
+    return at, errs, close
+
+
+@needs_objects
+@needs_browser
+def test_an_extend_retargets_the_axes_then_draws_the_new_points_at_the_pen():
+    plate = "ledger:ev-japan-holdings-v1:line"
+    n = len(B.world_for_plate(plate, (0, 0, 0), EP)["page"]["series"][0]["pts"])
+    species = [{"kind": "chart_to", "at": EX_RS_AT, "dur": EX_RS_S, "to": "rescale", "window": EX_WINDOW},
+               {"kind": "chart_to", "at": EX_AT, "dur": EX_S, "to": "extend", "to_index": n - 1}]
+    at, errs, close = _extend_player(EP, plate, species)
+    try:
+        before = at(EX_AT - 0.3)
+        assert before["charts"] == [0, 1, 0] and before["drawn"][1][0] > 0.99, "before the word: the windowed state stands, fully drawn"
+        phase1 = at(EX_AT + EX_S * 0.2)
+        assert phase1["charts"][1] == 1 and phase1["charts"][2] == 1 and phase1["drawn"][2][0] < 0.01, "phase 1: the standing chart moves to the new scale; the target's line is not yet drawn"
+        phase2 = at(EX_AT + EX_S * 0.7)
+        assert phase2["charts"] == [0, 0, 1] and phase2["active"] == 2, "phase 2: the target stands"
+        assert 0.3 < phase2["drawn"][2][0] < 0.999, "its line is drawn to the pen: past the shared datum, short of the end"
+        assert phase2["tips"][2][0] == 1 and phase2["cap"] is not None and phase2["cap"] > 0.3, "the nib is visible on the new tail"
+        assert all(d is not None and d < 0.999 for d in [phase2["drawn"][2][0]]), "no path of the extended series runs ahead of the pen"
+        after = at(EX_AT + EX_S + 0.3)
+        assert after["charts"] == [0, 0, 1] and after["drawn"][2][0] > 0.99 and after["cap"] is None, "after the clock: fully drawn, the cap released"
+        assert not errs, errs
+    finally:
+        close()
+
+
+@needs_objects
+@needs_browser
+def test_a_later_series_draws_on_from_its_first_point(tmp_path):
+    ep, plate = _later_series_ep(tmp_path)
+    species = [{"kind": "chart_to", "at": EX_AT, "dur": EX_S, "to": "extend", "series": 1}]
+    at, errs, close = _extend_player(ep, plate, species)
+    try:
+        before = at(EX_AT - 0.3)
+        assert before["charts"] == [1, 0] and before["drawn"][0][1] is None, "one line on the page; the later series is not built into the page's own state"
+        mid = at(EX_AT + EX_S * 0.75)
+        assert mid["charts"] == [0, 1] and mid["drawn"][1][0] > 0.99, "phase 2: the page's own line stands fully drawn on the target"
+        assert 0.05 < mid["drawn"][1][1] < 0.999 and mid["tips"][1][1] == 1, "the later series is drawing from its first point, the nib on it"
+        after = at(EX_AT + EX_S + 0.5)
+        assert after["drawn"][1] == [pytest.approx(1, abs=0.01), pytest.approx(1, abs=0.01)]
+        assert not errs, errs
+    finally:
+        close()
+
+
+@needs_objects
+@needs_browser
+def test_an_extend_seeks_exactly():
+    plate = "ledger:ev-japan-holdings-v1:line"
+    n = len(B.world_for_plate(plate, (0, 0, 0), EP)["page"]["series"][0]["pts"])
+    species = [{"kind": "chart_to", "at": EX_RS_AT, "dur": EX_RS_S, "to": "rescale", "window": EX_WINDOW},
+               {"kind": "chart_to", "at": EX_AT, "dur": EX_S, "to": "extend", "to_index": n - 1}]
+    at, _errs, close = _extend_player(EP, plate, species)
+    try:
+        for t in (EX_AT + 0.3, EX_AT + EX_S * 0.7, EX_AT + EX_S + 1.0):
+            a = at(t); at(3.0); at(EX_AT + EX_S + 4.0); b = at(t)
             assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True), t
     finally:
         close()

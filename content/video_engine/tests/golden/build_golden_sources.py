@@ -37,6 +37,7 @@ FRAME_T = {
     "ledger-soak-page": 2.7,        # mid-soak: stains spreading and overlapping (P43 T3 K-M ink is judged here)
     "dock-pair-16x9": 12.0,         # both cards up, badges landed
     "dock-pair-9x16": 12.0,
+    "ledger-extend": 13.4,          # P48 T3: mid-extend - the axis has retargeted, the nib is drawing the new tail (rescale at 8 s, extend at 12 s over 2 s)
 }
 
 
@@ -125,6 +126,28 @@ def ledger_soak_page() -> tuple[dict, dict]:
     return _timeline("Golden: ledger soak page", scenes, {}, None), _base_uris()
 
 
+def ledger_extend() -> tuple[dict, dict]:
+    """P48 T2/T3: the soak page windowed by a `rescale` (8 s) and grown back to its last datum by an `extend` (12 s). The
+    derived states come from the compiler itself (derive_rescale_states), off a temp episode holding the golden series, so
+    the golden proves the compiler and the player together; judged mid-extend (FRAME_T 13.4)."""
+    import tempfile
+    import build_scene_timeline_f as BST
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", 0, "right")
+    page["field"] = "soak"
+    page["badges"] = [dict(b, inline=False) for b in page.get("badges", [])] or _badges()
+    world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    n = len(page["series"][0]["pts"])
+    species = [{"kind": "chart_to", "at": 8.0, "dur": 1.2, "to": "rescale", "window": [2025.67, 2026.1]},
+               {"kind": "chart_to", "at": 12.0, "dur": 2.0, "to": "extend", "to_index": n - 1}]
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td); (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/golden-series.series.json").write_bytes(SERIES.read_bytes())
+        BST.derive_rescale_states(world, species, "ledger:golden-series:line", ep)
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: ledger extend", scenes, {}, None), _base_uris()
+
+
 def _chart_evidence() -> dict:
     chart = json.loads(SERIES.read_text(encoding="utf-8"))
     return {"ev-golden-chart": {"title": "Golden chart", "source": "golden series sidecar", "species": "chart",
@@ -165,6 +188,7 @@ SURFACES = {
     "ledger-soak-page": ledger_soak_page,
     "dock-pair-16x9": lambda: _dock_pair(None),
     "dock-pair-9x16": lambda: _dock_pair("9:16"),
+    "ledger-extend": ledger_extend,
 }
 
 

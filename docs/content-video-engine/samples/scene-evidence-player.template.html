@@ -3821,6 +3821,10 @@
           f = ev.kind === "build" ? Math.max(Math.min(f, prev), lvl) : Math.min(f, lvl);
           if (u >= 1) prev = to;
         }
+        if (cs.extendCap && (pp.si | 0) === (cs.extendCap.si | 0)) {   /* P48 T3: every path of the extended series - the muted history AND the highlighted tail - is drawn to the pen: the shared part stands, the new part follows the nib */
+          const c0 = cs.extendCap.bySeries ? 0 : capFrac(pp, cs.extendCap.idx), pen = strokeFrac(pp.p, pp.len, cs.extendCap.u2);
+          f = Math.min(f, c0 + (1 - c0) * (pen == null ? expoOut(cs.extendCap.u2) : pen));
+        }
         pp.p.setAttribute("stroke-dashoffset", (pp.len * (1 - f)).toFixed(1));
         pp.p.style.opacity = f > 0.004 ? "" : "0";   /* E50 (the third watch: "dots that linger"): a zero-length round-capped dash paints a dot at the path's start - an un-drawn line shows nothing */
         const drawing = f > 0.01 && f < 0.995;
@@ -3893,6 +3897,21 @@
       else if (m.role === "name" || m.role === "line" || m.role === "bar" || m.role === "value" || m.role === "xlabel") e.style.opacity = "0";
     }
   };
+  /* P48 T3 - EXTEND. Two phases on one clock: the shared marks RESCALE to the target's scale over the first XF_EXTEND.RESCALE
+     share (the standing line moves, the target's furniture arrives), then the target stands with its shared points drawn and
+     the NEW segment draws from the last shared datum at the pen's speed (strokeFrac, the two-thirds law) with the nib visible
+     - or, for a later series, that series draws from its first point. Nothing pops: at the phase boundary the standing line's
+     re-projected geometry IS the target's, so the hand-over is invisible. Bravos 29-30: production first, consumption on its word. */
+  const XF_EXTEND = Object.freeze({ RESCALE: 0.45 });   /* the share of an extend's clock spent retargeting the axes before the pen moves [DERIVED: the axis settles before the eye follows the nib] */
+  const lpPaintExtend = (states, xf, t3, scene, t) => {
+    const A = states[xf.from], Bs = states[xf.to], R = XF_EXTEND.RESCALE;
+    if (xf.u < R) { lpPaintRescale(states, { from: xf.from, to: xf.to, u: segEase(xf.u / R) }, t3, scene, t); Bs.extendCap = null; return; }
+    for (const S of states) lpRestoreState(S);
+    const u2 = clamp01((xf.u - R) / (1 - R));
+    const bySeries = xf.sp.from_series != null, si = bySeries ? xf.sp.from_series | 0 : 0;
+    Bs.extendCap = { si, bySeries, idx: (xf.sp.from_index | 0) - ((Bs.windowOffsets || [])[0] | 0), u2 };   /* each path of the series caps itself at its own shared datum (lpPaintChart) */
+    for (let i = 0; i < states.length; i++) lpPaintChart(states[i], i === xf.to ? 1 : 0, t3, scene, t);
+  };
   /* the page's chart states over time. A `chart_to` is not a cut: the standing state runs its law BACKWARDS over the
      transition's own clock, then the named state draws on by its own envelope. Before the first chart_to, and on a page
      that declares none, this is exactly the single-chart behaviour it replaced. */
@@ -3907,13 +3926,18 @@
         if (t < sp.at + d) { xf = { from: cur, to: k, u: segEase(clamp01((t - sp.at) / d)) }; break; }
         cur = k; cCur = 1; continue;
       }
+      if (sp.to === "extend") {   /* P48 T3: the axes retarget, then the new points draw on at the pen */
+        if (t < sp.at + d) { xf = { from: cur, to: k, u: clamp01((t - sp.at) / d), extend: true, sp }; break; }
+        cur = k; cCur = 1; continue;
+      }
       if (t < sp.at + d) { cCur = 1 - segEase(clamp01((t - sp.at) / d)); leaving = true; break; }   /* the standing chart is leaving */
       cur = k; cCur = clamp01((t - (sp.at + d)) / (states[k].buildDur || LP.BUILD));
     }
-    st.active = xf ? xf.from : cur;   /* the state a species target resolves against (P48 T2) */
-    if (xf) { lpPaintRescale(states, xf, t3, scene, t); }
+    st.active = xf ? (xf.extend && xf.u >= XF_EXTEND.RESCALE ? xf.to : xf.from) : cur;   /* the state a species target resolves against (P48 T2) */
+    if (xf && xf.extend) { lpPaintExtend(states, xf, t3, scene, t); }
+    else if (xf) { lpPaintRescale(states, xf, t3, scene, t); }
     else {
-      for (const S of states) lpRestoreState(S);   /* no rescale on: every state exactly as built (a seek is the play) */
+      for (const S of states) { lpRestoreState(S); S.extendCap = null; }   /* no transition on: every state exactly as built (a seek is the play) */
       for (let i = 0; i < states.length; i++) lpPaintChart(states[i], i === cur ? cCur : 0, t3, scene, t, i === cur && leaving);
     }
     /* the words that describe the chart move with it: the standing sub and source erase over the transition's first
@@ -3921,7 +3945,7 @@
     let ink = 0, ue = 0, uw = 1;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
-      if (sp.to === "rescale") continue;   /* P48 T2: the words stay - it is the same chart on a new scale */
+      if (sp.to === "rescale" || sp.to === "extend") continue;   /* P48 T2/T3: the words stay - it is the same chart with more of its data */
       const d = Math.max(PS.ERASE_S + 0.01, sp.dur || 1);
       ue = clamp01((t - sp.at) / PS.ERASE_S);
       uw = clamp01((t - sp.at - PS.ERASE_S) / (d - PS.ERASE_S));

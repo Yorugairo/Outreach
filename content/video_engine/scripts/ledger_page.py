@@ -565,8 +565,9 @@ def _story_block(series: dict) -> dict:
 
 
 def _dense_block(series: dict) -> dict:
-    return {"labels": [s.get("name") or s.get("label") for s in dense_series(series)],
-            "series": copy.deepcopy(series.get("series") or []),
+    # P48 T3: a series marked `later: true` waits off the page - an `extend` derives the state that draws it on
+    return {"labels": [s.get("name") or s.get("label") for s in dense_series(series) if not s.get("later")],
+            "series": copy.deepcopy([s for s in (series.get("series") or []) if not (isinstance(s, dict) and s.get("later"))]),
             "axes": {k: copy.deepcopy(series[k]) for k in AXES_KEYS if k in series}}
 
 

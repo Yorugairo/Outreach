@@ -129,7 +129,7 @@ SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                                                # the next thing: a FIGURE the hand writes at a datum's spot (the treasury number the sentence turns to)
 HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
 PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to")
-CHART_TO_KINDS = ("recast", "rescale")   # P48: recast (T4, a hand-over), rescale (T2, the axes retarget on one clock); extend / morph_to are T3 and T5
+CHART_TO_KINDS = ("recast", "rescale", "extend")   # P48: recast (T4, a hand-over), rescale (T2, the axes retarget), extend (T3, new points draw on); morph_to is T5
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
                                                                 # (a returning page keeps its retitle, its bracket standing); the gate credits no event before the span
@@ -225,6 +225,19 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     elif kind == "chart_to":
         if entry.get("to") not in CHART_TO_KINDS:
             errs.append(f"chart_to: 'to' must be one of {'|'.join(CHART_TO_KINDS)} (the verb the chart changes state by)")
+        if entry.get("to") == "extend":
+            # P48 T3: the target carries points the standing chart did not - `to_index` (the page's series-0 index the window
+            # grows to) or `series` (a `later: true` series in the file that draws on from its first point); the state is derived
+            named = [k for k in ("to_index", "series") if entry.get(k) is not None]
+            if len(named) != 1:
+                errs.append("chart_to extend: name exactly one of to_index (the datum the window grows to) or series (a later: true series to draw on)")
+            if entry.get("to_index") is not None and not (is_idx(entry["to_index"]) and entry["to_index"] > 0):
+                errs.append("chart_to extend: to_index must be a positive datum index of the page's first series")
+            if entry.get("series") is not None and not (is_idx(entry["series"]) and entry["series"] > 0):
+                errs.append("chart_to extend: series must be the index (>= 1) of a later: true series in the page's file")
+            if "state" in entry:
+                errs.append("chart_to extend: 'state' is derived, not named")
+            return errs
         if entry.get("to") == "rescale":
             # P48 T2: a rescale keeps the page's own chart and moves its SCALE - the target state is derived by the compiler
             # from the page's series (window sliced, domain set), never authored as a `then=`; so the row names the domain,
@@ -441,7 +454,7 @@ def _page_state(spec_id: str, ep_dir: Path, where: str) -> dict:
     return LPG.build_spec(series, variant, emph)
 
 
-def rescale_state(plate_id: str, ep_dir: Path, sp: dict) -> dict:
+def rescale_state(plate_id: str, ep_dir: Path, sp: dict, reveal: int | None = None) -> dict:
     """P48 T2: the page's OWN series re-specified for a target domain - the x window sliced to [from, to] (a point on
     the edge kept; a highlight_from outside the window dropped), the y bounds carried as `axes.domain` and the window
     as `axes.xdomain`, which the player's line builder honours exactly (opt-in keys: a page that names neither draws as
@@ -449,6 +462,11 @@ def rescale_state(plate_id: str, ep_dir: Path, sp: dict) -> dict:
     series_id, variant, emphasize, quiet_zone, _enter, _exit = parse_ledger_id(split_plate_opts(plate_id)[0])
     path = Path(ep_dir) / "evidence/objects" / f"{series_id}.series.json"
     series = copy.deepcopy(LPG.load_series(path))
+    if reveal is not None:   # P48 T3: the named later series joins this state
+        ser_list = series.get("series") or []
+        if not (0 < reveal < len(ser_list)) or not ser_list[reveal].get("later"):
+            raise ValueError(f"chart_to extend: series {reveal} is not a later: true series of {path.name}")
+        ser_list[reveal].pop("later", None)
     builder = LPG.pick_builder(series, variant)   # the PAGE's builder - a windowed series must not re-decide it by its point count
     if builder not in ("dense-line", "story"):
         raise ValueError(f"chart_to rescale: only a line or a bars page rescales (this page is {builder}); recast or cut")
@@ -458,6 +476,8 @@ def rescale_state(plate_id: str, ep_dir: Path, sp: dict) -> dict:
         lo, hi = float(window[0]), float(window[1])
         offsets = []
         for ser in series.get("series") or []:
+            if ser.get("later"):
+                offsets.append(0); continue   # not on this state: no index to map
             pts = ser.get("pts", [])
             kept = [pt for pt in pts if lo - 1e-9 <= float(pt[0]) <= hi + 1e-9]
             if len(kept) < 2:
@@ -491,16 +511,45 @@ def rescale_state(plate_id: str, ep_dir: Path, sp: dict) -> dict:
 
 
 def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir: Path) -> None:
-    """Append one derived page state per `chart_to rescale` on the row and point the species at it (`state`)."""
-    for sp in row_species or []:
-        if not (isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "rescale"):
-            continue
+    """Append one derived page state per `chart_to rescale` / `extend` on the row, in time order, and point each species
+    at its state. An extend grows the CURRENT window (the page's whole series, or the last rescale's window) to
+    `to_index`, or reveals a `later: true` series; the species carries `from_index` (the last shared datum) so the
+    player caps the draw there."""
+    cur_window = None
+    for sp in sorted((e for e in (row_species or []) if isinstance(e, dict) and e.get("kind") == "chart_to" and e.get("to") in ("rescale", "extend")), key=lambda e: e["at"]):
         if world.get("kind") != SPECIES_LEDGER:
-            raise ValueError("chart_to rescale: only a LEDGER PAGE rescales")
+            raise ValueError(f"chart_to {sp['to']}: only a LEDGER PAGE has chart states")
         states = world.setdefault("page_states", [])
         if len(states) + 1 >= STATE_MAX:
-            raise ValueError(f"chart_to rescale: {len(states) + 2} chart states is past STATE_MAX ({STATE_MAX}): a fourth chart is a new page or a card")
-        states.append(rescale_state(plate_id, ep_dir, sp))
+            raise ValueError(f"chart_to {sp['to']}: {len(states) + 2} chart states is past STATE_MAX ({STATE_MAX}): a fourth chart is a new page or a card")
+        if sp["to"] == "rescale":
+            states.append(rescale_state(plate_id, ep_dir, sp))
+            if sp.get("window") is not None:
+                cur_window = [float(sp["window"][0]), float(sp["window"][1])]
+        else:
+            first = (world["page"].get("series") or [{}])[0].get("pts") or []
+            if not first:
+                raise ValueError("chart_to extend: the page has no series to extend")
+            if sp.get("to_index") is not None:
+                idx = int(sp["to_index"])
+                full = (LPG.load_series(Path(ep_dir) / "evidence/objects" / f"{parse_ledger_id(split_plate_opts(plate_id)[0])[0]}.series.json").get("series") or [{}])[0].get("pts") or []
+                if idx >= len(full):
+                    raise ValueError(f"chart_to extend: to_index {idx} is past the series' last datum ({len(full) - 1})")
+                lo = cur_window[0] if cur_window else float(full[0][0])
+                cur_hi = cur_window[1] if cur_window else float(full[-1][0])
+                hi = float(full[idx][0])
+                if hi <= cur_hi + 1e-9:
+                    raise ValueError(f"chart_to extend: to_index {idx} (x={hi}) adds nothing past the standing window's end (x={cur_hi})")
+                shared = max(i for i, pt in enumerate(full) if float(pt[0]) <= cur_hi + 1e-9)
+                spec = rescale_state(plate_id, ep_dir, {"window": [lo, hi]})
+                spec["derived"] = "extend"
+                sp["from_index"] = shared
+                cur_window = [lo, hi]
+            else:
+                spec = rescale_state(plate_id, ep_dir, {"window": cur_window} if cur_window else {}, reveal=int(sp["series"]))
+                spec["derived"] = "extend"
+                sp["from_series"] = int(sp["series"])
+            states.append(spec)
         sp["state"] = len(states)
 
 
