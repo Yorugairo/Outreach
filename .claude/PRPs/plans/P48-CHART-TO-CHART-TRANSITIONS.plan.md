@@ -1,7 +1,7 @@
 ---
 id: P48-CHART-TO-CHART-TRANSITIONS
 title: Chart-to-chart transitions as a first-rate feature - a chart changes STATE (redraw, rescale, extend, recast, morph) and never cuts
-status: approved
+status: running
 operation: feature
 risk: elevated
 owner: parent
