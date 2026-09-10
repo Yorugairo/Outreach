@@ -100,11 +100,11 @@ Acceptance:
 
 1. **The treemap ruling (E53 §7).** The donut is the one part-to-whole exception; a treemap is a second. The builder is
    built only after the operator rules; until then T6 is `blocked`.
-2. **The species-by-sentence taxonomy.** The ten sentence acts in T1 are the parent's draft; the operator approves the
-   list before it is written into the skill (it steers every future shot table).
+2. **The species-by-sentence taxonomy.** The ten sentence acts in T1 - the operator, 2026-09-10: *"sounds like it makes
+   sense"* - approved as drafted.
 3. **The tv-embed plate (T7)** needs a Flow order (ask before driving the session) - or a still the operator generates
    by hand, as with the fab plate.
-4. **One accent?** A ruling question raised by the report; not decided here.
+4. **One accent?** Ruled 2026-09-10: *"I think 2 accents is fine"* - coral + sunflower stand; no change.
 5. Push authorization per commit, as standing.
 
 ## Mandatory Reads
@@ -258,7 +258,7 @@ Acceptance:
 - Write set: `docs/content-video-engine/BACKLOG.md` rows re-pointed: **R26-20** badge-stamp two-spring landing ->
   T2 (the chip lands with it); **R26-25** the `span` species -> T4; **R26-24** N-tier pages (small multiples, shared
   x) -> a T5-adjacent slice on `ledger_page.py` (Bravos' two-panel SPR, shots 35-36 - the strongest blend of all;
-  add as T9 if the operator wants it in this plan); **R26-1** field-coloured halo on direct labels -> the terminal
+  **T9**); **R26-1** field-coloured halo on direct labels -> the terminal
   tag + value bar (shots 104-105), on T1's table as the COMPARES row's finish; **motion menu: push hand-off** ->
   T3; **radial reveal** -> T5's light (a country reveals from its centroid); **beat-freeze chart exit** -> the
   COMPARES row's C1 (unchanged, cited); **R26-22** centred placement by E50's clock -> the press stack's park.
@@ -267,6 +267,19 @@ Acceptance:
   TR-14 the ink bloom (they cut and dip), weight-shift captions (they have no captions).
 - Acceptance: every row above carries the slice id and the Bravos shot numbers; no row is closed without the build.
 - Validate: `python content/video_engine/scripts/build_docs_layers.py --check`
+- Evidence: pending
+
+### T9: N-tier pages - small multiples on a shared x (R26-24; Bravos' two-panel SPR, shots 35-36)
+- Status: pending
+- Owner: `implementation_luna` (a `ledger_page.py` builder + the page's paint); parent reads the frames
+- Depends on: T1
+- Write set: `content/video_engine/scripts/ledger_page.py` (builder `tiers`: N series objects on one page, each its own
+  y-scale and honest zero (E53 §4), one shared x, the tier titles as the series names, one source line); template
+  (`paintLedger` tiers variant: the tiers draw in turn on their words, `build_to` per tier, the drop of one tier as a
+  bar in the accent - shot 36); tests; golden `tiers-two`; CAPABILITIES row; BACKLOG R26-24 -> BUILT.
+- Acceptance: Japan SPR | US SPR on one page, drawn in turn, the drop bar on a word; the page is OURS (A1-A3) when the
+  series are; goldens byte-identical without it; the life check on the page region.
+- Validate: the test suite in Verification + `python content/video_engine/scripts/ledger_page.py --check <series>`
 - Evidence: pending
 
 ## Verification
@@ -283,5 +296,5 @@ Acceptance:
 - Per slice: the commit hash, the golden's path, the proof frames, the life-check numbers, the CAPABILITIES row.
 - The species-by-sentence table's first real use: the next short's shot table is authored against it and the lint's
   report is attached to its REVIEW.
-- Open questions carried to the operator: gate 1 (treemap), gate 2 (the ten acts), gate 4 (one accent), whether R26-24
-  joins as T9.
+- Open questions carried to the operator: gate 1 (treemap). Gates 2 and 4 answered 2026-09-10; R26-24 joins as T9 and
+  every matching backlog row rides its slice (operator: *"yes we should add all of the backlog blends that are matches"*).
