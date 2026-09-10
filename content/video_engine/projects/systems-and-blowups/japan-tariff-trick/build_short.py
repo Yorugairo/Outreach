@@ -34,7 +34,7 @@ CUSTOMS_PEAK_IDX, CUSTOMS_LAST_IDX = 43, 45   # 2025 Q4 $364bn/yr, 2026 Q2 (the 
 CUT_AT, MIN_GAP = 0.8, 0.30          # M13
 PEAK_IDX, LAST_IDX = 311, 315        # Feb 2026 $1,239.3B, Jun 2026 $1,116.7B in ev-japan-holdings-v1 (asserted in build)
 KEYFRAME_EVERY = 12
-ARM = sys.argv[sys.argv.index("--arm") + 1] if "--arm" in sys.argv else "still"
+ARM = sys.argv[sys.argv.index("--arm") + 1] if "--arm" in sys.argv else "sig"   # THE APPROVED ARM is the default (2026-09-10: another lane's plain rebuild produced the charcoal `still` arm and the watched player served it)
 TAKE_STEM = sys.argv[sys.argv.index("--take") + 1] if "--take" in sys.argv else "scene_1-tight"   # THE APPROVED CLOCK (operator, 2026-09-09: "tight sounds right, approved, render it") - the Chirp take with doc 37 s14's dead space killed (retime_take.py scene_1.mp3 --gaps --out scene_1-tight, 79.18 s); --take <stem> builds another candidate   # still (charcoal on cream) | sig (the signature line)
 
 # the outro and the brand line are channel assets (the Tokyo build documents both); reused by path, not copied
