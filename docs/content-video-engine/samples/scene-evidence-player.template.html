@@ -3119,16 +3119,56 @@
     st.marks.push(m); st.markBy[k] = m; return m;
   };
   /* a datum's position, from whichever mark owns it: its own mark (a bar) or its series' stroke (a line) */
+  const lpMarkDatumOn = (S, si, i) => {   /* a datum's position on ONE chart state, by the PAGE's datum index */
+    const off = (S.windowOffsets || [])[si] | 0, j = i - off;
+    if (j < 0) return null;
+    const B = S.markBy || {}, own = B["s" + si + ":" + j] || (si === 0 ? B["b:" + j] : null);
+    if (own) return [own.geom.cx != null ? own.geom.cx : own.geom.x, own.geom.end != null ? own.geom.end : own.geom.y];
+    const str = B["s" + si], hit = str && str.geom.pts ? str.geom.pts[j - (str.geom.k0 | 0)] : null;
+    if (hit) return hit;
+    const pts = (S.linePts || [])[si];   /* R26-28: a datum in the muted HISTORY of a highlighted line - the stroke mark carries the tail (k0 > 0); the state's own points carry every index */
+    return pts && pts[j] ? pts[j] : null;
+  };
+  /* R26-28 (2026-09-10): a datum's position THIS FRAME - the active state's, LERPED from the leaving state to the arriving
+     one while a rescale or extend moves the scale (the same eased clock the marks move on); null while either side lacks
+     it. Brackets and spreads read their anchors here every frame, so they travel with the data instead of jumping at the
+     switch, and hide while the data they measure is off the window. */
+  const lpDatumNow = (st, si, i) => {
+    const xf = st.xfNow;
+    if (xf && !xf.keyed && !xf.morph && st.states) {
+      const a = lpMarkDatumOn(st.states[xf.from], si, i), b = lpMarkDatumOn(st.states[xf.to], si, i);
+      if (!a || !b) return null;
+      const u = xf.extend ? segEase(clamp01(xf.u / XF_EXTEND.RESCALE)) : xf.u;
+      return [xfLerp(a[0], b[0], u), xfLerp(a[1], b[1], u)];
+    }
+    return lpMarkDatum(st, si, i);
+  };
+  /* a series' points this frame, by the page's datum index: [{i, p}] in index order - the active state's, or the lerp of
+     the two states across a rescale / extend for every index both carry */
+  const lpPointsNow = (st, si) => {
+    const idx = (S) => { const B = S.markBy || {}, str = B["s" + si]; if (!str || !str.geom.pts) return [];
+      const off = (S.windowOffsets || [])[si] | 0, k0 = str.geom.k0 | 0; return str.geom.pts.map((p, j) => ({ i: off + k0 + j, p })); };
+    const xf = st.xfNow;
+    if (xf && !xf.keyed && !xf.morph && st.states) {
+      const A = new Map(idx(st.states[xf.from]).map((q) => [q.i, q.p])), out = [];
+      const u = xf.extend ? segEase(clamp01(xf.u / XF_EXTEND.RESCALE)) : xf.u;
+      for (const q of idx(st.states[xf.to])) { const a = A.get(q.i); if (a) out.push({ i: q.i, p: [xfLerp(a[0], q.p[0], u), xfLerp(a[1], q.p[1], u)] }); }
+      return out;
+    }
+    return idx((st.states && st.states[st.active | 0]) || st);
+  };
+  const lpRuleYNow = (st, k) => {   /* a reference rule's y this frame (its value re-projected by the active state; lerped across a rescale) */
+    const S0 = (st.states && st.states[st.active | 0]) || st, xf = st.xfNow;
+    const on = (S) => { const r = (S.hlines || [])[k]; return r ? r.y : null; };
+    if (xf && !xf.keyed && !xf.morph && st.states) { const a = on(st.states[xf.from]), b = on(st.states[xf.to]); if (a == null || b == null) return null;
+      return xfLerp(a, b, xf.extend ? segEase(clamp01(xf.u / XF_EXTEND.RESCALE)) : xf.u); }
+    return on(S0);
+  };
   const lpMarkDatum = (st, si, i) => {
     /* P48 T2: a datum resolves against the ACTIVE chart state - after a rescale the page's chart is the derived one, whose
        series is a window of the page's own, so the page's datum index maps by the window's offset; a datum the window
        dropped resolves to nothing (a species on it does not fire), never to the wrong point */
-    const S = (st.states && st.states[st.active | 0]) || st, off = (S.windowOffsets || [])[si] | 0, j = i - off;
-    if (j < 0) return null;
-    const B = S.markBy || {}, own = B["s" + si + ":" + j] || (si === 0 ? B["b:" + j] : null);
-    if (own) return [own.geom.cx != null ? own.geom.cx : own.geom.x, own.geom.end != null ? own.geom.end : own.geom.y];
-    const str = B["s" + si]; if (!str || !str.geom.pts) return null;
-    return str.geom.pts[j - (str.geom.k0 | 0)] || null;
+    return lpMarkDatumOn((st.states && st.states[st.active | 0]) || st, si, i);
   };
   /* stylesheet rules beat SVG presentation attributes, so colour/size overrides on text go through `style` */
   const lpText = (parent, cls, x, y, anchor, text, at) => {
@@ -3703,30 +3743,45 @@
       /* the span stands to the RIGHT of the two data (the ticks point back at them); when the chart's room there is too
          narrow for the label (a series ending at the right edge - the holdings page), the label writes ABOVE the span,
          anchored to it, where a peak has nothing over it - never over the line's own history to the left */
-      const xr = Math.max(A[0], B[0]) + PS.BRACKET_GAP, fits = xr + PS.BRACKET_ROOM <= G.W, inMargin = xr <= G.W;
-      const x = inMargin ? xr : Math.min(A[0], B[0]) - PS.BRACKET_GAP, dir = inMargin ? -1 : 1;
-      const anchor = fits ? "start" : "end";
-      const y0 = Math.min(A[1], B[1]), y1 = Math.max(A[1], B[1]), ym = (y0 + y1) / 2;
-      const yClear = Math.min(y0, ...pts.map((q) => q[1]));   /* a stacked label clears the WHOLE series - a record before the span can stand higher than the span's top */
+      /* the span stands to the RIGHT of the two data (the ticks point back at them); when the chart's room there is too
+         narrow for the label, the label writes ABOVE the span. The geometry is a FUNCTION of the two anchors and the
+         series' points, so it can be re-read every frame on a page whose chart changes state (R26-28) */
+      const geomOf = (Ap, Bp, ptsNow) => {
+        const xr = Math.max(Ap[0], Bp[0]) + PS.BRACKET_GAP, fits = xr + PS.BRACKET_ROOM <= G.W, inMargin = xr <= G.W;
+        const x = inMargin ? xr : Math.min(Ap[0], Bp[0]) - PS.BRACKET_GAP, dir = inMargin ? -1 : 1;
+        const y0 = Math.min(Ap[1], Bp[1]), y1 = Math.max(Ap[1], Bp[1]), ym = (y0 + y1) / 2;
+        const yClear = Math.min(y0, ...ptsNow.map((q) => q[1]));   /* a stacked label clears the WHOLE series - a record before the span can stand higher than the span's top */
+        const lx = fits ? x + 12 : x - 4, ly = fits ? ym + fs * 0.35 : yClear - (sp.sub ? fss * 1.3 : 0) - 10;   /* beside, or stacked above the whole line */
+        return { x, dir, fits, anchor: fits ? "start" : "end", y0, y1, lx, ly, sy: fits ? ly + fss * 1.3 : yClear - 10 };
+      };
+      const g0 = geomOf(A, B, pts);
       const base = st.paths.filter((pp) => (pp.si | 0) === (sp.series | 0) && !pp.muted).map((pp) => pp.p.getAttribute("stroke"))[0] || "var(--lp-chalk)";
       const col = sp.color ? (PS_PAL[sp.color] || sp.color) : base;
+      const applyGeom = (side, q) => {   /* write a geometry onto a side's elements (the build's and every re-read frame's) */
+        side.line.setAttribute("d", "M" + q.x.toFixed(1) + " " + q.y0.toFixed(1) + " L" + q.x.toFixed(1) + " " + q.y1.toFixed(1));
+        side.len = side.line.getTotalLength ? side.line.getTotalLength() : (q.y1 - q.y0);
+        side.line.setAttribute("stroke-dasharray", side.len);
+        side.t0.setAttribute("d", "M" + q.x.toFixed(1) + " " + q.y0.toFixed(1) + " l" + (q.dir * PS.BRACKET_TICK_W).toFixed(1) + " 0"); side.t0.setAttribute("transform-origin", q.x.toFixed(1) + "px " + q.y0.toFixed(1) + "px");
+        side.t1.setAttribute("d", "M" + q.x.toFixed(1) + " " + q.y1.toFixed(1) + " l" + (q.dir * PS.BRACKET_TICK_W).toFixed(1) + " 0"); side.t1.setAttribute("transform-origin", q.x.toFixed(1) + "px " + q.y1.toFixed(1) + "px");
+        side.label.setAttribute("x", q.lx.toFixed(1)); side.label.setAttribute("y", q.ly.toFixed(1)); side.label.setAttribute("text-anchor", q.anchor);
+        if (side.sub) { side.sub.setAttribute("x", q.lx.toFixed(1)); side.sub.setAttribute("y", q.sy.toFixed(1)); side.sub.setAttribute("text-anchor", q.anchor); }
+      };
       const mk = (cls, stroke, op) => {
         const g = lpEl("g", "lp-bracket " + cls, surf, { opacity: op });
-        const line = lpEl("path", "bk", g, { d: "M" + x.toFixed(1) + " " + y0.toFixed(1) + " L" + x.toFixed(1) + " " + y1.toFixed(1), stroke });
-        const len = line.getTotalLength ? line.getTotalLength() : (y1 - y0);
+        const line = lpEl("path", "bk", g, { d: "M" + g0.x.toFixed(1) + " " + g0.y0.toFixed(1) + " L" + g0.x.toFixed(1) + " " + g0.y1.toFixed(1), stroke });
+        const len = line.getTotalLength ? line.getTotalLength() : (g0.y1 - g0.y0);
         line.setAttribute("stroke-dasharray", len); line.setAttribute("stroke-dashoffset", len);
-        const tick = (y) => lpEl("path", "bk", g, { d: "M" + x.toFixed(1) + " " + y.toFixed(1) + " l" + (dir * PS.BRACKET_TICK_W).toFixed(1) + " 0", stroke, "transform-origin": x.toFixed(1) + "px " + y.toFixed(1) + "px" });
-        const t0 = tick(y0), t1 = tick(y1);
-        const lx = fits ? x + 12 : x - 4, ly = fits ? ym + fs * 0.35 : yClear - (sp.sub ? fss * 1.3 : 0) - 10;   /* beside, or stacked above the whole line */
-        const label = lpEl("text", "bklab", g, { x: lx.toFixed(1), y: ly.toFixed(1), "text-anchor": anchor, style: "font-size:" + fs + "px;fill:" + stroke });   /* inline fill: the chart's class CSS outranks a fill attribute */
+        const tick = (y) => lpEl("path", "bk", g, { d: "M" + g0.x.toFixed(1) + " " + y.toFixed(1) + " l" + (g0.dir * PS.BRACKET_TICK_W).toFixed(1) + " 0", stroke, "transform-origin": g0.x.toFixed(1) + "px " + y.toFixed(1) + "px" });
+        const t0 = tick(g0.y0), t1 = tick(g0.y1);
+        const label = lpEl("text", "bklab", g, { x: g0.lx.toFixed(1), y: g0.ly.toFixed(1), "text-anchor": g0.anchor, style: "font-size:" + fs + "px;fill:" + stroke });   /* inline fill: the chart's class CSS outranks a fill attribute */
         const lg = [...String(sp.label || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
         let sub = null, sg = [];
-        if (sp.sub) { sub = lpEl("text", "bksub", g, { x: lx.toFixed(1), y: (fits ? ly + fss * 1.3 : yClear - 10).toFixed(1), "text-anchor": anchor, style: "font-size:" + fss + "px;fill:" + stroke });
+        if (sp.sub) { sub = lpEl("text", "bksub", g, { x: g0.lx.toFixed(1), y: g0.sy.toFixed(1), "text-anchor": g0.anchor, style: "font-size:" + fss + "px;fill:" + stroke });
           sg = [...String(sp.sub)].map((ch) => { const ts = lpEl("tspan", "", sub, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; }); }
         return { g, line, len, t0, t1, label, lg, sub, sg };
       };
       const main = mk("main", col, 0), glow = mk("glow", PS.RELIGHT_COL, 0);   /* the sunflower twin ABOVE the base: at full it covers span and label alike */
-      return { sp, x, y0, y1, A, B, fits, main, glow, bi };
+      return { sp, x: g0.x, y0: g0.y0, y1: g0.y1, A, B, fits: g0.fits, main, glow, bi, si: sp.series | 0, geomOf, applyGeom, key: "" };
     }).filter(Boolean);
     const retitles = pageSpecies(scene, "retitle").map((sp, ri) => {
       const div = lpEl("div", "lp-ink lp-title lp-retitle", st.page);
@@ -3793,14 +3848,24 @@
     return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads };
   };
   /* the bleed: the region grows left to right over SPREAD_BLEED of the word, the ink deepens over the rest */
-  const paintSpread = (sd, t) => {
+  const paintSpread = (sd, t, st) => {
     const sp = sd.sp, dur = Math.max(0.001, sp.dur || 1), u = clamp01((t - sp.at) / dur);
     if (u <= 0) { sd.path.setAttribute("fill-opacity", 0); return; }
-    const k = minJerk(clamp01(u / PS.SPREAD_BLEED)), n = sd.hi.length, m = Math.max(2, Math.round(k * n));
+    let hi = sd.hi, lo = sd.lo;
+    if (st && (st.states || []).length > 1) {   /* R26-28: the two edges this frame - the active state's points (lerped across a rescale / extend), the rule's y re-projected */
+      const A0 = lpPointsNow(st, sp.from | 0), fromI = Number.isInteger(sp.from_index) ? sp.from_index : -Infinity;
+      const A = A0.filter((e) => e.i >= fromI).map((e) => e.p);
+      const rule = Number.isInteger(sp.to_rule) ? lpRuleYNow(st, sp.to_rule) : null;
+      const B = Number.isInteger(sp.to_rule) ? (rule == null ? null : [[-1e9, rule], [1e9, rule]]) : lpPointsNow(st, sp.to | 0).map((e) => e.p);
+      if (!A || !B || A.length < 2 || B.length < 2) { sd.path.setAttribute("fill-opacity", 0); return; }
+      const dense = A.length >= B.length ? A : B; hi = dense === A ? A : B; lo = dense === A ? B : A;   /* walk the denser edge; read the other at its x */
+      if (Number.isInteger(sp.to_rule)) { hi = A; lo = B; }
+    }
+    const k = minJerk(clamp01(u / PS.SPREAD_BLEED)), n = hi.length, m = Math.max(2, Math.round(k * n));
     const yAt = (pts, x) => { let i = 1; while (i < pts.length - 1 && pts[i][0] < x) i++;
       const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; return x1 === x0 ? y1 : y0 + (y1 - y0) * ((x - x0) / (x1 - x0)); };
     const top = [], bot = [];
-    for (let i = 0; i < m; i++) { const [x, y] = sd.hi[i]; top.push([x, y]); bot.push([x, yAt(sd.lo, x)]); }
+    for (let i = 0; i < m; i++) { const [x, y] = hi[i]; top.push([x, y]); bot.push([x, yAt(lo, x)]); }
     const d = top.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ")
       + bot.reverse().map(([x, y]) => "L" + x.toFixed(1) + " " + y.toFixed(1)).join(" ") + " Z";
     sd.path.setAttribute("d", d);
@@ -3824,8 +3889,15 @@
     const ns = Math.max(1, fg.sg.length), perS = 0.4 / ns, uS = u - 0.6;
     fg.sg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uS - j * perS) / (perS * 1.6)).toFixed(3)));
   };
-  const paintBracket = (b, t, ud) => {
+  const paintBracket = (b, t, ud, st) => {
     const sp = b.sp, dur = Math.max(0.001, sp.dur || 1);
+    if (st && (st.states || []).length > 1) {   /* R26-28: the two anchors and the series' points, this frame, on the active state (lerped across a rescale / extend) */
+      const Ap = lpDatumNow(st, b.si, sp.from | 0), Bp = lpDatumNow(st, b.si, sp.to | 0);
+      if (!Ap || !Bp) { b.main.g.setAttribute("opacity", 0); b.glow.g.setAttribute("opacity", 0); b.hidden = true; return; }   /* a datum the window dropped: nothing to measure */
+      b.hidden = false;
+      const q = b.geomOf(Ap, Bp, lpPointsNow(st, b.si).map((e) => e.p)), key = [q.x, q.y0, q.y1, q.lx, q.ly, q.anchor].map((v) => typeof v === "number" ? v.toFixed(1) : v).join("|");
+      if (key !== b.key) { b.applyGeom(b.main, q); b.applyGeom(b.glow, q); b.key = key; b.x = q.x; b.y0 = q.y0; b.y1 = q.y1; b.fits = q.fits; }
+    }
     let u = clamp01((t - sp.at) / dur);
     /* E50: an UNDRAW (no series named) after the bracket's word takes the bracket with the line - the label un-writes,
        the ticks shrink, the span retracts, on the undraw's own clock */
@@ -3854,8 +3926,8 @@
     }
     const undrawAll = [...pageSpecies(scene, "undraw").filter((sp) => (sp.series ?? (sp.target || {}).series) == null),
                        ...pageSpecies(scene, "chart_to").filter((sp) => sp.to === "recast" || sp.to === "morph")];   /* P48 T7: a recast or morph takes the line - the bracket leaves with it, on the same clock */
-    for (const b of PF.brackets) paintBracket(b, t, undrawAll.find((sp) => sp.at >= b.sp.at));
-    for (const sd of PF.spreads || []) paintSpread(sd, t);   /* the fifth watch: the gap between the lines, bled full */
+    for (const b of PF.brackets) paintBracket(b, t, undrawAll.find((sp) => sp.at >= b.sp.at), st);
+    for (const sd of PF.spreads || []) paintSpread(sd, t, st);   /* the fifth watch: the gap between the lines, bled full; R26-28: on the active state */
     for (const fg of PF.figures || []) paintFigure(fg, t, st);   /* E50: the chart's next thing */
     for (const nt of PF.notes || []) { nt.div.style.opacity = t >= nt.sp.at ? "" : "0"; writeGlyphs(nt.glyphs, t - nt.sp.at, Math.max(0.05, nt.sp.dur || 1)); }
     /* RELIGHT: the sunflower twin rises and falls on a sine over dur */
@@ -3866,9 +3938,7 @@
       if (rl.ref === "bracket") { const b = PF.brackets[rl.index | 0]; if (b) b.glow.g.setAttribute("opacity", e.toFixed(3)); }
       else if (rl.ref === "title") { const tg = PF.retitles.length ? PF.retitles[PF.retitles.length - 1].glyphs : (st.titleGlyphs || []); for (const g of tg) g.style.color = e > 0.02 ? PS.RELIGHT_COL : ""; }
     }
-    const derived = (st.states || []).length > 1 && (st.active | 0) !== 0;   /* P48 T7: a bracket or spread measures the page's OWN chart; while a derived state stands it waits */
-    for (const b of PF.brackets) if (derived) { b.main.g.setAttribute("opacity", 0); b.glow.g.setAttribute("opacity", 0); }
-    for (const sd of PF.spreads || []) { if (derived) sd.path.setAttribute("opacity", 0); else sd.path.removeAttribute("opacity"); }
+    for (const b of PF.brackets) if (b.hidden) { b.main.g.setAttribute("opacity", 0); b.glow.g.setAttribute("opacity", 0); }   /* R26-28: a bracket whose data left the window stays hidden through the relight */
     if (PF.retitles.length) {
       const chain = [{ glyphs: st.titleGlyphs || [], at: -Infinity }, ...PF.retitles.map((r) => ({ glyphs: r.glyphs, at: r.sp.at, dur: Math.max(PS.ERASE_S + 0.01, r.sp.dur || 1) }))];
       chain.forEach((c, k) => {
@@ -4216,6 +4286,7 @@
       cur = k; cCur = clamp01((t - (sp.at + d)) / (states[k].buildDur || LP.BUILD));
     }
     st.active = xf ? ((xf.extend && xf.u >= XF_EXTEND.RESCALE) || (xf.morph && xf.u >= XF_MORPH.LEAVE) ? xf.to : xf.from) : cur;   /* the state a species target resolves against (P48 T2) */
+    st.xfNow = xf ? { from: xf.from, to: xf.to, u: xf.u, extend: !!xf.extend, keyed: !!xf.keyed, morph: !!xf.morph } : null;   /* R26-28: the perform layer lerps its anchors on this clock */
     if (!(xf && xf.morph) && !(!xf && hold)) lpHideMorphs(st, null);   /* P48 T5: a morph's strip shows only while it morphs or holds under the target's build */
     if (xf && xf.extend) { lpPaintExtend(states, xf, t3, scene, t); }
     else if (xf && xf.morph) { for (const S of states) { lpRestoreState(S); S.extendCap = null; } lpPaintMorphTo(st, states, xf, t3, scene, t); }
@@ -5372,6 +5443,7 @@
      target whether it is in frame, how much of it, at what on-screen scale, and where it lands on screen. Seek to t
      first (a datum resolves against the painted page). */
   window.__camArr = () => camArr && { u: camArr.u, slide: camArr.slide, box: camArr.box, state: camArr.state };   /* P49 T5: the arrival this frame, for the probes */
+  window.__lpDatum = (k, si, i) => { const w = [wA, wB].find((e) => e.__lp && e.classList.contains("ledger")); if (!w) return null; const st = w.__lp; return k == null ? lpDatumNow(st, si, i) : lpMarkDatumOn((st.states || [st])[k], si, i); };   /* R26-28: a datum on state k, or this frame's (lerped) position */
   window.__camera = (t, tg) => {
     let si = 0; for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
     const sc = TL.scenes[si], xf = camArr ? camArr.state : camNow(sc, t);   /* P49 T5: an arrival in progress is the camera this frame */

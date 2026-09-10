@@ -535,9 +535,14 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   0 FAIL / 2 WARN / M23 PASS with four transitions (rescale, park, recast, park); no frozen run. Found by the stills: a
   COLD seek into a park painted the perform layer unparked for one frame (the June figure under the parked chart) - the
   layer now takes the active chart's transform where it is created (`paintPerform`), gated by a cold-seek test.
-- **Open (a follow-up, not this plan's lane):** brackets and spreads on a page with states are built on the page's own
-  geometry and WAIT while a derived state stands (hidden); making them follow the active state the way figures do is a
-  bounded slice (`buildPerform` per state, or geometry per frame) - BACKLOG R26-28.
+- **R26-28 built (2026-09-10, the operator: "fold in the proper bracket/spread handling before review"):** brackets
+  and spreads now follow the active state per frame - anchors and edges through `lpDatumNow` / `lpPointsNow` /
+  `lpRuleYNow`, lerped across a rescale or extend on the marks' own clock, hidden while a datum is off the window,
+  leaving with the line on a recast or morph. Measured in the player on the Tokyo pair: the bracket's span equals the
+  two data on the page's chart before the rescale, rides the lerped anchors mid-clock (between the two states), equals
+  the windowed state's data after; a bracket from index 3 (2000) hides the moment the window moves; the spread on the
+  Fed page is rebuilt on the windowed points, inside the windowed plot, and covers only the shared data mid-clock; a
+  seek is the play. Two tests in `test_chart_transitions.py`.
 
 ## Verification
 

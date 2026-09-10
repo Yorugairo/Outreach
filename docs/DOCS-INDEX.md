@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3624 records across 290 files.
+3623 records across 290 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -2739,7 +2739,6 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L432 [7] R26-13 M18 per layer — the whole-frame hash `measure_frozen_frames.py` writes cannot see a frozen page beneath a boiling phrase caption or a moving video dock (Tokyo v2 pre-E49: 1036
 - L433 [7] R26-15 The HyperFrames harvest, twelve components verbatim — (`content/video_engine/hyperframes/HARVEST-2026-09-07.md`) - references, tools and play objects, never a change to what works. The lessons named for a slice whe
 - L434 [7] R26-16 The morph's source is a real element of the outgoing world, never a conjured shape — operator on the HG3 stills, 2026-09-07: "we can't have an overlay of a chart portion on the screen that doesn't exist for 3 frames just to pretend that we're ho
-- L436 [7] R26-28 Brackets and spreads follow the active chart state — on a page with states the perform layer now draws above every state and a FIGURE follows the active state's datum (P48 T7), but a bracket or spread is built onc
 - L437 [7] R26-27 `page_boxes` disagrees with the player's own layout on a portrait page — `centred_place` asked `free_bands` for the gap between the source line and the caption and was handed y 536, which the player draws inside the plot; the x maths
 - L438 [7] R26-24 N-tier pages (small multiples, shared x) — the macro-chart intake's Archetype 3: three bands, one x, one unit each, so correlated macro series compare without a dual axis. We built the two-band case (`ti
 - L439 [7] R26-25 A `span` species: a shaded region with a label — the intake's Archetype 5 (regime / epoch shading behind a line, with stage brackets). We have `bracket` (a measured span between two data) but nothing that shad

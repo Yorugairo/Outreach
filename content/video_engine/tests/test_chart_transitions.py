@@ -972,3 +972,103 @@ def test_a_cold_seek_into_a_park_paints_the_figures_parked_on_the_first_frame():
                 br.close()
         finally:
             srv.shutdown()
+
+
+# ---- R26-28: brackets and spreads follow the active chart state, lerped across a rescale ----------------------------
+
+BR_RESCALE_AT, BR_RESCALE_S = 10.0, 1.4
+
+
+def _perform_player(plate, species, runtime=24.0):
+    """The Tokyo page with page species and a chart_to, through the compiler's own derivation."""
+    from playwright.sync_api import sync_playwright
+    tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
+    world = B.world_for_plate(plate, (0, 0, 0), EP)
+    B.derive_rescale_states(world, species, plate, EP)
+    scene = dict(tl["scenes"][0], species=species, span=[0.0, runtime], world=dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}))
+    timeline = dict(tl, aspect="9:16", runtime_s=runtime, scenes=[scene], caption_pages=[], captions=[], kinetics={"min_jerk": True})
+    td = tempfile.TemporaryDirectory()
+    html = Path(td.name) / "perform.html"
+    html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
+    w, h = RB.STAGE["9:16"]
+    srv, port = RB.serve(html.parent)
+    pw = sync_playwright().start()
+    br = pw.chromium.launch(headless=True)
+    page = br.new_context(viewport={"width": w, "height": h}).new_page()
+    errs: list[str] = []
+    page.on("pageerror", lambda e: errs.append(str(e)))
+    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
+    RB.prepare_page(page, w, h)
+
+    def seek(t):
+        page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+
+    def close():
+        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
+    return page, seek, errs, close
+
+
+BRACKET_PROBE = """() => { const st = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')).__lp; const PF = st.perform;
+  return PF.brackets.map(b => { const d = b.main.line.getAttribute('d').match(/M([\\d.]+) ([\\d.]+) L([\\d.]+) ([\\d.]+)/).slice(1).map(Number);
+    return { x: d[0], y0: d[1], y1: d[3], op: +b.main.g.getAttribute('opacity'), lx: +b.main.label.getAttribute('x'), ly: +b.main.label.getAttribute('y'), anchor: b.main.label.getAttribute('text-anchor'), hidden: !!b.hidden, W: st.geom.W }; }); }"""
+
+
+@needs_objects
+@needs_browser
+def test_a_bracket_follows_the_data_across_a_rescale_and_hides_when_its_datum_leaves_the_window():
+    plate = "ledger:ev-japan-holdings-v1:line"
+    world = B.world_for_plate(plate, (0, 0, 0), EP)
+    n = len(world["page"]["series"][0]["pts"])
+    peak, last = 311, n - 1   # the February peak and the June print (the Tokyo cut's bracket)
+    species = [{"kind": "bracket", "at": 4.0, "dur": 2.4, "from": peak, "to": last, "label": "-$122.6B", "sub": "a tenth", "color": "neg"},
+               {"kind": "bracket", "at": 4.0, "dur": 2.4, "from": 3, "to": last, "label": "since 2000"},   # index 3 leaves the window
+               {"kind": "chart_to", "at": BR_RESCALE_AT, "dur": BR_RESCALE_S, "to": "rescale", "window": [2026.043, 2026.457]}]
+    page, seek, errs, close = _perform_player(plate, species)
+    try:
+        seek(9.5); before = page.evaluate(BRACKET_PROBE)
+        a0, b0 = page.evaluate("() => [window.__lpDatum(0, 0, %d), window.__lpDatum(0, 0, %d)]" % (peak, last))
+        assert abs(min(a0[1], b0[1]) - before[0]["y0"]) < 0.06 and abs(max(a0[1], b0[1]) - before[0]["y1"]) < 0.06, (before[0], a0, b0)
+        assert before[1]["op"] == 1 and not before[1]["hidden"], "both brackets stand on the page's own chart"
+        seek(BR_RESCALE_AT + BR_RESCALE_S * 0.5); mid = page.evaluate(BRACKET_PROBE)
+        a1, b1 = page.evaluate("() => [window.__lpDatum(1, 0, %d), window.__lpDatum(1, 0, %d)]" % (peak, last))
+        lerped = page.evaluate("() => [window.__lpDatum(null, 0, %d), window.__lpDatum(null, 0, %d)]" % (peak, last))
+        assert min(a0[1], a1[1]) - 0.1 <= lerped[0][1] <= max(a0[1], a1[1]) + 0.1 and lerped[0] != a0 and lerped[0] != a1, "the anchor is between the two states mid-clock"
+        assert abs(min(lerped[0][1], lerped[1][1]) - mid[0]["y0"]) < 0.06 and abs(max(lerped[0][1], lerped[1][1]) - mid[0]["y1"]) < 0.06, "the span rides the lerped anchors"
+        assert mid[1]["hidden"] and mid[1]["op"] == 0, "the bracket from index 3 has nothing to measure once the window moves"
+        seek(BR_RESCALE_AT + BR_RESCALE_S + 0.5); after = page.evaluate(BRACKET_PROBE)
+        assert abs(min(a1[1], b1[1]) - after[0]["y0"]) < 0.06 and abs(max(a1[1], b1[1]) - after[0]["y1"]) < 0.06, (after[0], a1, b1)
+        assert 0 < after[0]["lx"] < after[0]["W"] and after[0]["op"] == 1, "the label is on the page"
+        assert after[1]["hidden"], "and stays hidden on the windowed state"
+        seek(9.5); back = page.evaluate(BRACKET_PROBE)
+        assert back == before, "a seek is the play"
+        assert not errs, errs
+    finally:
+        close()
+
+
+@needs_objects
+@needs_browser
+def test_a_spread_follows_the_active_state_across_a_rescale():
+    plate = "ledger:ev-fed-vs-yields-v1:line"
+    world = B.world_for_plate(plate, (0, 0, 0), EP)
+    n = len(world["page"]["series"][0]["pts"])
+    xs = [float(p[0]) for p in world["page"]["series"][0]["pts"]]
+    window = [round(xs[n // 2] - 0.005, 4), round(xs[-1] + 0.005, 4)]
+    species = [{"kind": "spread", "at": 3.0, "dur": 1.8, "from": 0, "to_rule": 0, "from_index": 4, "color": "neg"},
+               {"kind": "chart_to", "at": BR_RESCALE_AT, "dur": BR_RESCALE_S, "to": "rescale", "window": window}]
+    page, seek, errs, close = _perform_player(plate, species)
+    probe = "() => { const st = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')).__lp; const sd = st.perform.spreads[0]; const d = sd.path.getAttribute('d') || ''; const xs = [...d.matchAll(/[ML]([\\d.-]+) /g)].map(m => +m[1]); return { n: xs.length, xmin: Math.min(...xs), xmax: Math.max(...xs), fill: +sd.path.getAttribute('fill-opacity') }; }"
+    try:
+        seek(9.5); before = page.evaluate(probe)
+        assert before["fill"] > 0 and before["n"] >= 4, before
+        seek(BR_RESCALE_AT + BR_RESCALE_S + 0.5); after = page.evaluate(probe)
+        plot = page.evaluate("() => { const st = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')).__lp; const S = st.states[1]; return S.plot; }")
+        assert after["fill"] > 0 and after["n"] < before["n"], "the windowed state carries fewer points: the fill is rebuilt on them"
+        assert after["xmin"] >= plot["L"] - 1 and after["xmax"] <= plot["W"] - plot["R"] + 1, "the fill lies inside the windowed plot"
+        seek(BR_RESCALE_AT + BR_RESCALE_S * 0.5); mid = page.evaluate(probe)
+        assert mid["fill"] > 0 and mid["n"] <= after["n"], "mid-clock the fill covers only the data both states carry"
+        seek(9.5); back = page.evaluate(probe)
+        assert back == before, "a seek is the play"
+        assert not errs, errs
+    finally:
+        close()
