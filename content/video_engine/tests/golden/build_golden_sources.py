@@ -37,7 +37,8 @@ FRAME_T = {
     "ledger-soak-page": 2.7,        # mid-soak: stains spreading and overlapping (P43 T3 K-M ink is judged here)
     "dock-pair-16x9": 12.0,         # both cards up, badges landed
     "dock-pair-9x16": 12.0,
-    "ledger-extend": 13.05,         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
+    "ledger-extend": 13.05,
+    "ledger-keyed": 12.75,          # P48 T4b: mid-phase-2 of the keyed recast (12 s + 2 s; the golden's expoOut clock is half done at u 0.37): the lines have left half their history, their ends and values are in flight to the bar tops, the bars are half grown         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
 }
 
 
@@ -148,6 +149,31 @@ def ledger_extend() -> tuple[dict, dict]:
     return _timeline("Golden: ledger extend", scenes, {}, None), _base_uris()
 
 
+def ledger_keyed() -> tuple[dict, dict]:
+    """P48 T4b: the four-line page becomes its four bars by the KEYED recast (12 s, 2 s) - the legal pair n lines -> n bars
+    by series (Bravos 99-105). The bars are each line's last value, DERIVED from the golden series into a temp episode and
+    built as a `then=` state by the compiler's own _page_state; judged mid-flight (FRAME_T 13.2)."""
+    import json
+    import tempfile
+    import build_scene_timeline_f as BST
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", 0, "right")
+    page["field"] = "soak"
+    page["badges"] = [dict(b, inline=False) for b in page.get("badges", [])] or _badges()
+    raw = json.loads(SERIES.read_text(encoding="utf-8"))
+    bars = {"title": "Where the four lines end", "sub": "index at the last point, 100 = Aug '25", "src": raw.get("src", ""), "unit": "",
+            "bars": [{"label": short, "value": round(float(sr["pts"][-1][1]), 1), "color": sr.get("color", "crimson")}
+                     for sr, short in zip(raw["series"], ("Memory", "Chips", "Mega-cap", "S&P 500"))]}
+    species = [{"kind": "chart_to", "at": 12.0, "dur": 2.0, "to": "recast", "state": 1, "keyed": True}]
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td); (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/golden-bars.series.json").write_text(json.dumps(bars), encoding="utf-8")
+        world = {"kind": "ledger", "page": page, "page_states": [BST._page_state("golden-bars:bars", ep, "golden")], "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+        BST.derive_rescale_states(world, species, "ledger:golden-series:line;then=golden-bars:bars", ep)
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: ledger keyed recast", scenes, {}, None), _base_uris()
+
+
 def _chart_evidence() -> dict:
     chart = json.loads(SERIES.read_text(encoding="utf-8"))
     return {"ev-golden-chart": {"title": "Golden chart", "source": "golden series sidecar", "species": "chart",
@@ -189,6 +215,7 @@ SURFACES = {
     "dock-pair-16x9": lambda: _dock_pair(None),
     "dock-pair-9x16": lambda: _dock_pair("9:16"),
     "ledger-extend": ledger_extend,
+    "ledger-keyed": ledger_keyed,
 }
 
 

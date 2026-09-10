@@ -3866,7 +3866,9 @@
     for (const pp of S.paths || []) {
       if (pp.d0 && pp.p.getAttribute("d") !== pp.d0) { pp.p.setAttribute("d", pp.d0); pp.p.setAttribute("stroke-dasharray", pp.len0); pp.len = pp.len0; }
       if (pp.p.hasAttribute("clip-path")) pp.p.removeAttribute("clip-path");
+      if (pp.p.hasAttribute("transform")) pp.p.removeAttribute("transform");
     }
+    for (const m of S.marks || []) if (m.el && ["axis", "axislabel"].includes(m.role)) m.el.style.opacity = "";
     for (const m of S.marks || []) {
       const g = m.geom || {}, e = m.el; if (!e) continue;
       if (m.role === "tick" || m.role === "rule") { e.setAttribute("y1", g.y.toFixed(1)); e.setAttribute("y2", g.y.toFixed(1)); e.style.opacity = ""; }
@@ -3936,6 +3938,48 @@
      Sondag 2018), the title stays where it is, and the rest of the chart's box is free for what the sentence turns to next
      (Bravos shot 91). The transform is the SVG's own; datum targets map through it because stageBox reads the transformed
      rectangle, and the vortex reads the same rectangle. Idle-clean: the transform is written only while a park is on. */
+  /* P48 T4b - the KEYED recast (n lines -> n bars, by series; Bravos 99-105). Two phases on ONE clock. Phase 1 (the first
+     KEYED.TAG): each line's terminal VALUE appears at its end - the number its bar will be (Bravos 99: "value bars at the
+     ends"). Phase 2: the line leaves by its HISTORY (the dash window slides toward the tail: what stays is the last value),
+     its end and its value travel to the bar's top, and the bar grows from the common baseline beneath them; A's furniture
+     leaves over the first half of the phase and B's arrives over the second; the bar's name comes up under it. The line's
+     NAME gives way to its value in phase 1 - the value is born at the name's settled (pushed-apart) y, so four values never
+     overprint each other or the tag chips (the first cut had 120.8 over 121.5 and 712.5 over "our layer"). At the clock's end
+     the target stands exactly as built. The correspondence is by index - series i <-> bar i -
+     which the compiler admitted (RECAST_PAIRS). */
+  const KEYED = Object.freeze({ TAG: 0.3 });   /* the share of the clock the terminal values take to appear before anything moves */
+  const FURNITURE = ["tick", "ylabel", "rule", "rulelabel", "xtick", "axis", "axislabel"];
+  const lpPaintRecastKeyed = (states, xf, t3, scene, t) => {
+    const A = states[xf.from], Bs = states[xf.to], u = xf.u;
+    const u1 = expoOut(clamp01(u / KEYED.TAG)), v = segEase(clamp01((u - KEYED.TAG) / (1 - KEYED.TAG)));
+    for (let i = 0; i < states.length; i++) if (i !== xf.from && i !== xf.to) lpPaintChart(states[i], 0, t3, scene, t);
+    lpPaintChart(A, 1, t3, scene, t);
+    lpPaintChart(Bs, 0, t3, scene, t);   /* the base: bars at scaleY(0), names and values at 0; the keyed paint writes over it */
+    Bs.chart.style.opacity = 1;
+    A.xfDirty = true; Bs.xfDirty = true;
+    const bars = (Bs.marks || []).filter((m) => m.role === "bar");
+    for (const pp of A.paths || []) {
+      if (pp.muted || !pp.pts || !pp.pts.length) continue;
+      const bar = bars[pp.si | 0]; if (!bar) continue;
+      const end = pp.pts[pp.pts.length - 1], top = [bar.geom.cx, bar.geom.end];
+      const dx = (top[0] - end[0]) * v, dy = (top[1] - end[1]) * v;
+      pp.p.setAttribute("stroke-dashoffset", (-(pp.len * v)).toFixed(1));   /* the dash window slides toward the tail: the history leaves first */
+      pp.p.setAttribute("transform", "translate(" + dx.toFixed(1) + " " + dy.toFixed(1) + ")");
+      pp.tip.setAttribute("opacity", 0);
+      pp.name.setAttribute("opacity", (1 - u1).toFixed(2));   /* the name gives way to the number */
+      const rec = bar.rec || {};
+      if (rec.bar) rec.bar.style.transform = "scaleY(" + v.toFixed(4) + ")";
+      if (rec.val) {   /* the value: born where the name stood (its settled y), travels with the line's end to the bar's top */
+        const vm = Bs.markBy["val:b:" + (pp.si | 0)], nm = A.markBy["name:s" + (pp.si | 0)];
+        const p0 = [end[0], nm ? +nm.geom.y : end[1] - 14], p1 = vm ? [vm.geom.x, vm.geom.y] : [top[0], top[1] - 14];
+        rec.val.setAttribute("x", xfLerp(p0[0], p1[0], v).toFixed(1)); rec.val.setAttribute("y", xfLerp(p0[1], p1[1], v).toFixed(1));
+        rec.val.setAttribute("opacity", u1.toFixed(2));
+      }
+      if (rec.lab) rec.lab.setAttribute("opacity", clamp01((v - 0.6) / 0.4).toFixed(2));   /* the bar's name comes up as the line's goes */
+    }
+    for (const m of A.marks || []) if (m.el && FURNITURE.includes(m.role)) m.el.style.opacity = xfFade(false, false, v).toFixed(3);
+    for (const m of Bs.marks || []) if (m.el && FURNITURE.includes(m.role)) m.el.style.opacity = xfFade(true, true, v).toFixed(3);
+  };
   const PARK_ORIGIN = Object.freeze({ top: "0 0", bottom: "0 100%", left: "0 0", right: "100% 0" });
   const lpPaintPark = (S, sp, t) => {
     const d = Math.max(0.001, sp.dur || 1), u = segEase(clamp01((t - sp.at) / d)), sc = 1 - (1 - (+sp.scale || 0.72)) * u;
@@ -3969,11 +4013,16 @@
         if (t < sp.at + d) { xf = { from: cur, to: k, u: clamp01((t - sp.at) / d), extend: true, sp }; break; }
         cur = k; cCur = 1; continue;
       }
+      if (sp.keyed) {   /* P48 T4b: the keyed tween - one clock, both states painted by lpPaintRecastKeyed, the target built at its end */
+        if (t < sp.at + d) { xf = { from: cur, to: k, u: clamp01((t - sp.at) / d), keyed: true }; break; }
+        cur = k; cCur = 1; continue;
+      }
       if (t < sp.at + d) { cCur = 1 - segEase(clamp01((t - sp.at) / d)); leaving = true; break; }   /* the standing chart is leaving */
       cur = k; cCur = clamp01((t - (sp.at + d)) / (states[k].buildDur || LP.BUILD));
     }
     st.active = xf ? (xf.extend && xf.u >= XF_EXTEND.RESCALE ? xf.to : xf.from) : cur;   /* the state a species target resolves against (P48 T2) */
     if (xf && xf.extend) { lpPaintExtend(states, xf, t3, scene, t); }
+    else if (xf && xf.keyed) { for (const S of states) lpRestoreState(S); lpPaintRecastKeyed(states, xf, t3, scene, t); }
     else if (xf) { lpPaintRescale(states, xf, t3, scene, t); }
     else {
       for (const S of states) { lpRestoreState(S); S.extendCap = null; }   /* no transition on: every state exactly as built (a seek is the play) */

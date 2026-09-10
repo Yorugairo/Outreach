@@ -131,6 +131,7 @@ HOLD_MIN_S = 1.0   # a held species with less room than this before the next eve
 PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to")
 CHART_TO_KINDS = ("recast", "rescale", "extend", "park")   # P48: recast (T4, a hand-over), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform); morph_to is T5
 PARK_ANCHORS = ("top", "bottom", "left", "right")   # the corner of its own box the parked chart shrinks toward (top = Bravos 91: up, the room opens below)
+RECAST_PAIRS = (("dense-line", "story"),)             # P48 T4b: the legal KEYED pairs - n lines <-> n bars by series (Bravos 99-105); everything else recasts by the hand-over
 PARK_SCALE = (0.3, 0.95)                             # a parked chart is still a chart: never below 0.3 of itself, and 0.95 is not a park
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
@@ -527,6 +528,23 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
     at its state. An extend grows the CURRENT window (the page's whole series, or the last rescale's window) to
     `to_index`, or reveals a `later: true` series; the species carries `from_index` (the last shared datum) so the
     player caps the draw there."""
+    for sp in (row_species or []):   # P48 T4b: a keyed recast is admitted only on a legal pair, and the refusal names the reason
+        if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "recast" and sp.get("keyed"):
+            if world.get("kind") != SPECIES_LEDGER:
+                raise ValueError("chart_to recast keyed: only a LEDGER PAGE has chart states")
+            states = [world.get("page") or {}] + list(world.get("page_states") or [])
+            k = int(sp.get("state", 0))
+            if not (0 < k < len(states)):
+                raise ValueError(f"chart_to recast keyed: state {k} is not one of the page's other chart states")
+            A, Bs = states[0], states[k]
+            pair = (A.get("builder"), Bs.get("builder"))
+            if pair not in RECAST_PAIRS:
+                raise ValueError(f"chart_to recast keyed: {pair[0]} -> {pair[1]} has no honest key correspondence (the legal pairs: "
+                                 + ", ".join(f"{a} -> {b}" for a, b in RECAST_PAIRS) + "); use the plain recast (the hand-over), morph_to or a cut")
+            n_lines = len([s for s in (A.get("series") or []) if not s.get("later")])
+            n_bars = len(Bs.get("values") or [])
+            if n_lines != n_bars:
+                raise ValueError(f"chart_to recast keyed: {n_lines} line(s) and {n_bars} bar(s) - a keyed recast needs one bar per series; a {n_lines}-line page has no {n_bars}-bar correspondence")
     cur_window = None
     for sp in sorted((e for e in (row_species or []) if isinstance(e, dict) and e.get("kind") == "chart_to" and e.get("to") in ("rescale", "extend")), key=lambda e: e["at"]):
         if world.get("kind") != SPECIES_LEDGER:

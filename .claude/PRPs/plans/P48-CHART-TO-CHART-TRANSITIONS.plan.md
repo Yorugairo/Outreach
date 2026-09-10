@@ -350,7 +350,8 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   highlighted path only) - now every path of the series caps itself at its own shared datum.
 
 ### T4: `recast` - the chart type changes by a keyed tween
-- Status: **the beat ships; the keyed tween does not** (2026-09-07) - awaiting HG2
+- Status: **the hand-over ships (2026-09-07); the keyed tween for the legal pair ships (T4b, 2026-09-10)** - HG2 answered
+  by the operator on the proof page ("great mechanics on the extensions/transformations/rescales")
 - Owner: parent (the correspondence rules are architecture; HG2 decides whether it ships)
 - Depends on: T2 (and T3's dials)
 - Write set: `scripts/kinetics/chartxf.mjs` (the mark correspondence), `scripts/ledger_page.py` (`RECAST_PAIRS` and the
@@ -380,6 +381,28 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   terminal tag grows a value bar at the line's end, the line un-draws by length while the bar slides to a common
   baseline and the axis retargets; `RECAST_PAIRS` names it; the Fed-vs-yields page (two lines -> two bars of the
   current yields) is the Tokyo instance for T7.
+- **T4b evidence (2026-09-10): `chart_to {to: "recast", state, keyed: true}`.** The compiler admits it on a legal pair
+  only - `RECAST_PAIRS = (("dense-line", "story"),)` - and refuses by name otherwise ("dense-line -> share has no honest
+  key correspondence ... use the plain recast, morph_to or a cut"; "4 line(s) and 2 bar(s) - a keyed recast needs one
+  bar per series"). The player (`lpPaintRecastKeyed`, `KEYED.TAG` 0.3) runs two phases on ONE clock, raw `u`: phase 1,
+  each line's terminal NAME gives way to its terminal VALUE (the number its bar will be, born at the name's settled,
+  pushed-apart y - so four values never overprint each other or the tag chips); phase 2 on the min-jerk clock, the
+  line leaves by its HISTORY (the dash window slides toward the tail: what stays is the last value), its end and its
+  value travel to the bar's top-centre, the bar grows from the common baseline beneath them (`scaleY(v)` about its
+  base), A's furniture leaves over the first half and B's arrives over the second, the bar's name comes up under it;
+  at the clock's end the target stands exactly as built and `lpRestoreState` takes the transform and the furniture
+  opacities off (a seek to any t paints one frame). The words rewrite as every recast's do (the sub and source erase
+  and rewrite). Deviation from the acceptance's wording, stated: the value bar does not grow AT the line's end and
+  then slide - with a non-zero-based domain a bar from the line's end to the floor would not be the value (E28), so
+  the honest phase 1 is the value, not a bar; the bar grows where it will stand. Frames read at 34.5 / 35.4 / 35.9 /
+  36.4 / 36.9 / 37.6 s of the proof: four values stand separated at the ends, the lines retreat from their starts,
+  the tails fly to the bar tops as the bars rise, the built page reads (labels Memory / Chips / Mega-cap / S&P 500);
+  the first cut's two overprints (120.8 over 121.5, 712.5 over "our layer") are what moved the value to the name's
+  place. Life check: 90,784 px change between 38.0 and 38.6 s on the built bar page (the page's idle). Golden
+  `ledger-keyed` (the divergence page becoming its four bars, mid-flight) added; the 12 others byte-identical.
+  `test_chart_transitions.py` 42 (three new: the legal-pair refusals, the lines become their bars on one clock, the
+  seek), `test_golden_frames.py` 13. Proof page :8739 rebuilt with a second scene (the keyed recast at 35 s).
+  Acceptance rows (2) and (4) are now met for the legal pair.
 - Two faults the FRAMES caught, both fixed at the cause: the sub and source went on describing the chart that had left
   (a caption lying about the page - they are rewritten with the chart now), and the line's un-draw ran on the pen's
   two-thirds law backwards, which on a dense series stands still for most of the clock and then vanishes (a line leaves

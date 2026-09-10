@@ -613,3 +613,116 @@ def test_a_park_seeks_exactly_and_unparks_before_its_word():
         assert not back["parked"] and back["transform"] == "", "before the word, after a seek back, the chart is exactly itself"
     finally:
         close()
+
+
+# ---- P48 T4b: the keyed recast - n lines become n bars, by series (Bravos 99-105) --------------------------------------
+
+KR_AT, KR_S = 12.0, 1.8
+GOLDEN_SERIES = ROOT / "content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/objects/ev-divergence-v1.series.json"
+
+
+def _lines_to_bars_ep(tmp: Path, n_bars: int | None = None) -> tuple[Path, str]:
+    """A temp episode: the four-line divergence page, and a bars object of the lines' last values (one bar per series)."""
+    src = json.loads(GOLDEN_SERIES.read_text(encoding="utf-8"))
+    names = [s.get("name") or s.get("label") or f"s{i}" for i, s in enumerate(src["series"])]
+    lasts = [float(s["pts"][-1][1]) for s in src["series"]]
+    if n_bars is not None:
+        names, lasts = names[:n_bars], lasts[:n_bars]
+    bars = {"title": "Where the four stand today", "sub": "index, 100 = Aug '25", "src": "Yahoo Finance", "unit": "",
+            "bars": [{"label": n, "value": round(v, 1), "color": s.get("color", "crimson")} for n, v, s in zip(names, lasts, src["series"])]}
+    (tmp / "evidence/objects").mkdir(parents=True)
+    (tmp / "evidence/objects/ev-lines-v1.series.json").write_text(json.dumps(src), encoding="utf-8")
+    (tmp / "evidence/objects/ev-bars-v1.series.json").write_text(json.dumps(bars), encoding="utf-8")
+    return tmp, "ledger:ev-lines-v1:line;then=ev-bars-v1:bars"
+
+
+def test_a_keyed_recast_is_admitted_on_the_legal_pair_only(tmp_path):
+    ep, plate = _lines_to_bars_ep(tmp_path)
+    world = B.world_for_plate(plate, (0, 0, 0), ep)
+    assert (world["page"]["builder"], world["page_states"][0]["builder"]) == ("dense-line", "story")
+    B.derive_rescale_states(world, [{"kind": "chart_to", "at": KR_AT, "dur": KR_S, "to": "recast", "state": 1, "keyed": True}], plate, ep)
+    ep2, plate2 = _lines_to_bars_ep(tmp_path / "short", n_bars=2)
+    with pytest.raises(ValueError, match="4 line\\(s\\) and 2 bar\\(s\\)"):
+        B.derive_rescale_states(B.world_for_plate(plate2, (0, 0, 0), ep2), [{"kind": "chart_to", "at": KR_AT, "dur": KR_S, "to": "recast", "state": 1, "keyed": True}], plate2, ep2)
+    with pytest.raises(ValueError, match="no honest key correspondence"):
+        B.derive_rescale_states(B.world_for_plate(PLATE, (0, 0, 0), EP), [{"kind": "chart_to", "at": KR_AT, "dur": KR_S, "to": "recast", "state": 1, "keyed": True}], PLATE, EP)
+
+
+KR_PROBE = """() => {
+  const w = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')); const st = w.__lp; const S = st.states || [st];
+  const A = S[0], Bs = S[1];
+  const lines = A.paths.filter(p => !p.muted).map(p => ({ off: parseFloat(p.p.getAttribute('stroke-dashoffset') || '0'), tr: p.p.getAttribute('transform') || '', name: +p.name.getAttribute('opacity') }));
+  const bars = (Bs.bars || []).map(b => b.bar.style.transform || '');
+  const vals = (Bs.bars || []).map(b => b.val ? +b.val.getAttribute('opacity') : null);
+  return { charts: S.map(s => +(s.chart.style.opacity || 0)), lines, bars, vals, active: st.active | 0,
+           axisA: (() => { const m = A.marks.find(m => m.role === 'axis'); return m ? (m.el.style.opacity === '' ? 1 : +m.el.style.opacity) : null; })(),
+           subOld: (st.subGlyphs || []).reduce((a, g) => a + parseFloat(g.style.getPropertyValue('--w') || '0'), 0) / Math.max(1, (st.subGlyphs || []).length) };
+}"""
+
+
+def _keyed_player(ep, plate, species, runtime=24.0):
+    from playwright.sync_api import sync_playwright
+    tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
+    world = B.world_for_plate(plate, (0, 0, 0), ep)
+    B.derive_rescale_states(world, species, plate, ep)
+    scene = dict(tl["scenes"][0], species=species, span=[0.0, runtime], world=dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}))
+    timeline = dict(tl, aspect="9:16", runtime_s=runtime, scenes=[scene], caption_pages=[], captions=[])
+    td = tempfile.TemporaryDirectory()
+    html = Path(td.name) / "keyed.html"
+    html.write_text(RB.instantiate(timeline, uris), encoding="utf-8")
+    w, h = RB.STAGE["9:16"]
+    srv, port = RB.serve(html.parent)
+    pw = sync_playwright().start()
+    br = pw.chromium.launch(headless=True)
+    page = br.new_context(viewport={"width": w, "height": h}).new_page()
+    errs: list[str] = []
+    page.on("pageerror", lambda e: errs.append(str(e)))
+    page.goto("http://127.0.0.1:%d/%s" % (port, html.name), wait_until="networkidle", timeout=120000)
+    RB.prepare_page(page, w, h)
+
+    def at(t: float) -> dict:
+        page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+        return page.evaluate(KR_PROBE)
+
+    def close():
+        br.close(); pw.stop(); srv.shutdown(); td.cleanup()
+    return at, errs, close
+
+
+@needs_browser
+def test_the_lines_become_their_bars_on_one_clock(tmp_path):
+    ep, plate = _lines_to_bars_ep(tmp_path)
+    species = [{"kind": "chart_to", "at": KR_AT, "dur": KR_S, "to": "recast", "state": 1, "keyed": True}]
+    at, errs, close = _keyed_player(ep, plate, species)
+    try:
+        before = at(KR_AT - 0.5)
+        assert before["charts"] == [1, 0] and all(l["off"] == 0 and l["tr"] == "" for l in before["lines"]), "before the word: four lines fully drawn, untouched"
+        tag = at(KR_AT + KR_S * 0.2)   # phase 1: the names give way to the values; nothing has moved yet
+        assert all(l["off"] == 0 and l["name"] < 0.2 for l in tag["lines"]) and all(o is None or o > 0.8 for o in tag["vals"]), tag
+        mid = at(KR_AT + KR_S * 0.5)
+        assert mid["charts"] == [1, 1], "mid-clock both states show"
+        assert all(l["off"] < 0 and l["tr"].startswith("translate(") for l in mid["lines"]), "each line retreats from its start (a negative dash offset) and its end travels toward its bar"
+        assert all("scaleY(" in b and b != "scaleY(0)" for b in mid["bars"]), "the bars are growing from the baseline"
+        assert mid["axisA"] is not None and mid["axisA"] < 1, "the line page's furniture is leaving"
+        after = at(KR_AT + KR_S + 0.4)
+        assert after["charts"] == [0, 1] and after["active"] == 1 and all(b == "scaleY(1.0000)" or b == "scaleY(1)" for b in after["bars"]), "after the clock: the bar page stands built"
+        assert all(l["tr"] == "" for l in after["lines"]), "the keyed transform is off the lines once the clock ends"
+        assert after["subOld"] < 0.05, "the words that described the lines are erased; the bar page's words are the page's"
+        back = at(KR_AT - 0.5)
+        assert back["charts"] == [1, 0] and all(l["off"] == 0 and l["tr"] == "" and l["name"] == 1 for l in back["lines"]), "a seek back paints the four lines exactly as built (a seek is the play)"
+        assert not errs, errs
+    finally:
+        close()
+
+
+@needs_browser
+def test_a_keyed_recast_seeks_exactly(tmp_path):
+    ep, plate = _lines_to_bars_ep(tmp_path)
+    species = [{"kind": "chart_to", "at": KR_AT, "dur": KR_S, "to": "recast", "state": 1, "keyed": True}]
+    at, _errs, close = _keyed_player(ep, plate, species)
+    try:
+        for t in (KR_AT + 0.4, KR_AT + KR_S * 0.8, KR_AT + KR_S + 2.0):
+            a = at(t); at(3.0); at(KR_AT + KR_S + 5.0); b = at(t)
+            assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True), t
+    finally:
+        close()
