@@ -401,7 +401,7 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
 - Evidence: pending
 
 ### T6: The gate - M23, the transition as a landing, E50's clock restarted
-- Status: pending
+- Status: complete (2026-09-10)
 - Owner: `junior_developer` (explicit, small; the rules are written here)
 - Depends on: T2 (the timeline shape)
 - Write set: `scripts/gate_motion_density.py` (`_transitions`, `_transition_gate` M23, `_landings` += the transition,
@@ -412,7 +412,18 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   between them; (2) a transition's landing time counts for E51's push tie (M22) and for M11's annotation window; (3) E50's
   deployed clock restarts at a transition's end (M21 reads the new state's last data mark); (4) the registry documents M23
 - Validate: `python -m pytest content/video_engine/tests/test_gate_motion_density.py -q`
-- Evidence: pending
+- Evidence: 2026-09-10 - `_transitions` / `_states_without_a_transition` / `_transition_gate` in `gate_motion_density.py`:
+  **M23** lists every chart_to with its scene, verb and clock; WARN when one fires before the page's build lands
+  (`_page_land_offset`) or ends inside the last `TRANSITION_EDGE_S` (0.5 s) of its page; FAIL when a page carries two or
+  three chart states and no recast/rescale/extend to move between them (a state built for nothing); no row on a page
+  with one chart and no chart_to. A transition's END is a landing in `_landings` (M22's push tie sees it) and a data
+  mark in `_deployed_lives` (E50's clock restarts at it) - for `TRANSITION_DATA_KINDS` only: a park moves the chart
+  and changes no data, so it is neither. `SRC_M23` + the header row; the registry regenerated (`docs/GATES-REGISTRY.md`
+  carries M23). **61 gate tests** (4 new: the listing/PASS, the build-beat and edge WARNs, the orphan-states FAIL and
+  the no-row case, the landing + the restarted clock with the park excluded). Deviation, named: acceptance (2)'s M11
+  annotation window is untouched - M11 is the FIRST chart's entry and a transition is never that; the stability WARN
+  the Bravos amendment asked for (a shared key moving under a non-rescale verb) is a player-side measurement, not a
+  timeline read - it belongs with the life check, not this gate.
 
 ### T7: The doctrine and the Tokyo application
 - Status: pending

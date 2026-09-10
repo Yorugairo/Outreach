@@ -710,3 +710,56 @@ def test_a_timed_exit_credits_the_length_it_declares_and_the_first_scene_credits
 def test_a_wipe_or_a_cut_credits_no_transition_window():
     for name in ("cut", "wipe_right", "dissolve", "suck:0.5,0.5"):
         assert G._transition_events(_tail_build(name, 6.2)[0]["scenes"]) == [], name
+
+
+# ---- P48 T6 (2026-09-10): M23 - a chart changes state, never over a build, never at the edge; a transition is a landing and a data mark ----
+
+def _xf(to, at, dur=1.2, **kw):
+    return {"kind": "chart_to", "to": to, "at": at, "dur": dur, **({"state": 1} if to in ("recast",) else {}), **kw}
+
+
+def _page_with_states(sid, a, z, species, n_states=2):
+    s = _page_scene(sid, a, z, species=species)
+    s["world"]["page_states"] = [{"schema_version": "ledger_page.v1", "builder": "story"}] * (n_states - 1)
+    return s
+
+
+def _run_page(scene, runtime=60.0):
+    scenes = [{"scene_id": "s01", "world": {"kind": "clip"}, "span": [0.0, scene["span"][0]]}, scene,
+              {"scene_id": "s99", "world": {"kind": "clip"}, "span": [scene["span"][1], runtime]}]
+    pages, tt = [], 0.0
+    while tt < runtime:
+        pages.append({"s": tt, "e": tt + 1.5, "t": [{"w": "x"}] * 5, "cap_mode": "stage"}); tt += 1.5
+    return _by_id(G.run({"runtime_s": runtime, "scenes": scenes, "caption_pages": pages, "rows": []}, [], {"cues": []})[0])
+
+
+def test_m23_lists_every_transition_and_passes_when_each_is_on_a_built_chart_clear_of_the_edge():
+    land = 10.0 + G.PAGE_BUILD_END_S
+    g = _run_page(_page_with_states("s02", 10.0, 40.0, [_xf("rescale", land + 2.0, window=[1, 2]), _xf("extend", land + 8.0, to_index=9)]))
+    assert g["M23"].level == "PASS" and "2 transition(s)" in g["M23"].message and "s02 rescale" in g["M23"].message and "extend" in g["M23"].message, g["M23"]
+
+
+def test_m23_warns_on_a_transition_inside_the_build_beat_or_at_the_page_s_edge():
+    land = 10.0 + G.PAGE_BUILD_END_S
+    early = _run_page(_page_with_states("s02", 10.0, 40.0, [_xf("rescale", land - 2.0, window=[1, 2])]))
+    assert early["M23"].level == "WARN" and "inside the page's build beat" in early["M23"].message, early["M23"]
+    late = _run_page(_page_with_states("s02", 10.0, 40.0, [_xf("rescale", 39.0, dur=0.8, window=[1, 2])]))
+    assert late["M23"].level == "WARN" and "last 0.5 s" in late["M23"].message, late["M23"]
+
+
+def test_m23_fails_a_page_built_with_two_states_and_no_transition_between_them():
+    g = _run_page(_page_with_states("s02", 10.0, 40.0, [_xf("park", 20.0)]))
+    assert g["M23"].level == "FAIL" and "2 chart states and no transition" in g["M23"].message, g["M23"]
+    assert "M23" not in _run_page(_page_scene("s02", 10.0, 40.0)), "a page with one chart and no chart_to has no M23 row"
+
+
+def test_a_transition_s_end_is_a_landing_for_the_push_tie_and_a_data_mark_for_the_deployed_clock():
+    land = 10.0 + G.PAGE_BUILD_END_S
+    xf = _xf("extend", land + 4.0, dur=2.0, to_index=9)
+    tied = _run_page(_page_with_states("s02", 10.0, 40.0, [xf, {"kind": "punch", "at": land + 6.2, "dur": 1.0, "target": {"kind": "datum", "index": 3}}]))
+    assert tied["M22"].level == "PASS", tied["M22"]
+    lives = G._deployed_lives([_page_with_states("s02", 10.0, 40.0, [xf])])
+    assert lives and lives[0][1] == round(land + 6.0, 2), "E50's clock restarts at the transition's end"
+    parked = G._deployed_lives([_page_scene("s02", 10.0, 40.0, species=[_xf("park", land + 4.0, dur=1.0)])])
+    assert parked[0][1] == round(land, 2), "a park moves the chart and changes no data: the clock does not restart"
+    assert not any("park" in n for _t, n in G._landings(_page_scene("s02", 10.0, 40.0, species=[_xf("park", land + 4.0)])))

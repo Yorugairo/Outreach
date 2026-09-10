@@ -49,6 +49,9 @@ captions do NOT count - they are what a viewer reads as stillness.
        between two caps, listed by name
   M20  the cadence rule per arrival (P47 T1): a thrown card  INFO   (only when a dock arrives by throw|land)
        steps on 1s above 250 px/s, on 2s below
+  M23  chart transitions (P48): every chart_to listed with  FAIL   (a page with two states and no transition;
+       its clock; one inside the build beat or within 0.5s of        WARN inside the build / at the edge; ledger pages only)
+       the exit WARNs; two states and no chart_to FAILs
   M21  the chart's deployed life (E50): from a page's LAST   WARN   (over 12s; INFO over 8s; ledger pages only)
        data mark to its exit or its undraw - 6-8s average, 12s at most
   M22  a push is tied to a landing (E51): every punch /     WARN   (an untied push is filler)
@@ -94,6 +97,9 @@ DEPLOY_MIN_S = 6.0   # ... and 6 s is E50's own LOWER bound, enforced ONLY on a 
                      # that is what the 6 s buys. A page that builds is exempt.
 PUSH_TIE_BEFORE_S, PUSH_TIE_AFTER_S = 1.5, 0.3   # [DERIVED] a push is TIED when a landing on its scene falls inside (at - 1.5 s, at + 0.3 s)
 SRC_M22 = "E51 (operator 2026-09-07): a push-in is only used tied to something - pushing into a newly landed badge or data series; a zoom on a thing that just sits there is filler"
+SRC_M23 = "P48 (operator 2026-09-07): chart-to-chart transitions are a first-rate feature - a chart changes STATE and never cuts; E45/E50: never over a build, never inside the last 0.5 s of a page's life"
+TRANSITION_EDGE_S = 0.5    # a transition that ends inside the last half second of its page is a cut wearing a verb [DERIVED: E50, P48 Patterns]
+TRANSITION_DATA_KINDS = ("recast", "rescale", "extend")   # the verbs that change the chart's DATA state: their end is a data mark and a landing; a park moves the chart and changes nothing
 SRC_M21 = "E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing"
 SRC_M18 = "E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)"
 STILL_WARN_S = 8.0         # s9.25 working target
@@ -571,6 +577,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
         g.append(dg)                                                      # M21 (E50: the chart's deployed life per page)
     if (pg_ := _push_tie_gate(tl.get("scenes", []))) is not None:
         g.append(pg_)                                                     # M22 (E51: a push is tied to a landing)
+    if (tg := _transition_gate(tl.get("scenes", []))) is not None:
+        g.append(tg)                                                      # M23 (P48 T6: a chart changes state, never over a build, never at the edge)
     if (mg := _morph_gate(tl.get("scenes", []), morph)) is not None:
         g.append(mg)                                                      # M17 (P47 T3: the match-cut invariants per morph page)
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
@@ -864,6 +872,8 @@ def _deployed_lives(scenes: list[dict]) -> list[tuple[str, float, float, float]]
         page = ((s.get("world") or {}).get("page") or {})
         marks = [a + _page_land_offset(s)]
         marks += [float(x["at"]) + float(x.get("dur", 0.0)) for x in sp if x.get("kind") in ("build_to", "bracket") and a <= float(x.get("at", -1e9)) <= z]
+        # P48 T6: a chart that changes its data state is a new chart's life - E50's clock restarts at the transition's end
+        marks += [float(x["at"]) + float(x.get("dur", 0.0)) for x in sp if x.get("kind") == "chart_to" and x.get("to") in TRANSITION_DATA_KINDS and a <= float(x.get("at", -1e9)) <= z]
         last = max(m for m in marks if m <= z + 1e-6) if any(m <= z + 1e-6 for m in marks) else a
         uds = sorted(float(x["at"]) for x in sp if x.get("kind") == "undraw" and last - 1e-6 <= float(x.get("at", -1e9)) <= z)
         end = uds[0] if uds else z
@@ -884,6 +894,8 @@ def _landings(s: dict) -> list[tuple[float, str]]:
     for sp in s.get("species", []):
         if sp.get("kind") in ("build_to", "bracket", "figure", "note"):
             out.append((float(sp.get("at", 0.0)) + float(sp.get("dur", 0.0)), f"{sp['kind']} landing"))
+        if sp.get("kind") == "chart_to" and sp.get("to") in TRANSITION_DATA_KINDS:   # P48 T6: the chart that arrives by a transition has LANDED (E51)
+            out.append((float(sp.get("at", 0.0)) + float(sp.get("dur", 0.0)), f"chart_to {sp.get('to')} landing"))
     for d in s.get("docks", []):
         arr = d.get("arrive")
         contact = float(d.get("enter", 0.0)) + (0.46 if arr == "throw" else 0.32 if arr == "land" else 0.0)
@@ -914,6 +926,52 @@ def _push_tie_gate(scenes: list[dict]) -> Gate | None:
         return Gate("M22", "WARN", f"{len(bad)} push(es) tied to nothing: " + "; ".join(f"{sid} {k} at {_mm(t)}" for sid, k, t in bad[:8])
                     + " - a push lands ON a thing that just landed (a badge, a datum, a bracket, a card) or it is cut", SRC_M22)
     return Gate("M22", "PASS", "every push is tied to a landing on its scene", SRC_M22)
+
+
+def _transitions(scenes: list[dict]) -> list[dict]:
+    """Every declared chart_to on a ledger page: scene, verb, at, dur, end, and the two faults M23 names."""
+    out: list[dict] = []
+    for s in scenes:
+        if not _is_page(s) or not s.get("span"):
+            continue
+        a, z = float(s["span"][0]), float(s["span"][1])
+        land = a + _page_land_offset(s)
+        for sp in s.get("species", []):
+            if sp.get("kind") != "chart_to":
+                continue
+            at, dur = float(sp.get("at", 0.0)), float(sp.get("dur", 0.0))
+            out.append({"scene": str(s.get("scene_id", "?")), "to": sp.get("to"), "at": round(at, 2), "dur": round(dur, 2), "end": round(at + dur, 2),
+                        "in_build": at < land - 1e-6, "at_edge": at + dur > z - TRANSITION_EDGE_S + 1e-6})
+    return out
+
+
+def _states_without_a_transition(scenes: list[dict]) -> list[str]:
+    """A page built with two (or three) chart states that no chart_to ever moves between: a state built for nothing."""
+    out: list[str] = []
+    for s in scenes:
+        if not _is_page(s):
+            continue
+        n_states = 1 + len(((s.get("world") or {}).get("page_states") or []))
+        moves = [sp for sp in s.get("species", []) if sp.get("kind") == "chart_to" and sp.get("to") in TRANSITION_DATA_KINDS]
+        if n_states > 1 and not moves:
+            out.append(f"{s.get('scene_id', '?')} carries {n_states} chart states and no transition")
+    return out
+
+
+def _transition_gate(scenes: list[dict]) -> Gate | None:
+    """M23 (P48 T6): the transitions, listed; a transition over the build or at the edge WARNs; states with no transition FAIL."""
+    xs = _transitions(scenes)
+    orphans = _states_without_a_transition(scenes)
+    if not xs and not orphans:
+        return None
+    if orphans:
+        return Gate("M23", "FAIL", "; ".join(orphans) + " - a second chart state is built to be moved to (chart_to recast|rescale|extend), or it is a card", SRC_M23)
+    bad = [x for x in xs if x["in_build"] or x["at_edge"]]
+    listing = ", ".join(f"{x['scene']} {x['to']} {_mm(x['at'])}+{x['dur']:.1f}s" for x in xs[:10]) + (" ..." if len(xs) > 10 else "")
+    if bad:
+        why = "; ".join(f"{x['scene']} {x['to']} at {_mm(x['at'])}" + (" fires inside the page's build beat" if x["in_build"] else "") + (" ends inside the last 0.5 s of its page" if x["at_edge"] else "") for x in bad[:6])
+        return Gate("M23", "WARN", f"{len(xs)} transition(s): {listing} - {why} (E45: never over a build; E50: a transition is how a chart leaves, not a cut wearing a verb)", SRC_M23)
+    return Gate("M23", "PASS", f"{len(xs)} transition(s), each on a built chart and clear of its page's edge: {listing}", SRC_M23)
 
 
 def _end_of(scenes: list[dict], scene_id: str) -> float:
