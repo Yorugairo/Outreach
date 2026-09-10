@@ -243,14 +243,25 @@ rendered.
   `kinetics/camera.test.mjs` 6.
 
 ### T4: The attention law
-- Status: pending
+- Status: complete, LOCKED by default; the landings pull is opt-in per row and waits on HG1 (2026-09-10)
 - Owner: parent
 - Depends on: T2, T3
 - Write set: `kinetics/camera.mjs`, template, `docs/portable/OPERATOR-RULINGS.md` (E54)
 - Acceptance: a dock landing pulls focus toward it by the servo law and settles; dials `[DERIVED]`; HG1 by eye on the
   tariff hook.
 - Validate: rendered frames at the landing and the settle; `gate_motion_density.py` M09/M14 PASS
-- Evidence: pending
+- Evidence: (2026-09-10) the default is `attention: "locked"` - Bravos measured (37 of 45 held compositions still, every
+  chart and diagram): the camera does not move on a held thing. `attention: "landings"` on a row: `camAttentionState`
+  (kinetics/camera.mjs, `ATTN = {SCALE 1.06, IN 0.5, OUT 0.6}` [DERIVED: Bravos #68's map push ~6 % between countries])
+  - a dock that ARRIVES (throw | land) with a parked `place` pulls the eye by a zoom in place about its box, in over
+  ATTN.IN from the CONTACT frame (the stop-action clock: a throw's FLIGHT_S 0.45, a landing's ANTIC_S + DROP_S 0.32 - the
+  push is tied to the landing, E51), held while the card is up, released over ATTN.OUT before it leaves; the last landing
+  wins. The compiler refuses attention landings with a camera species on one row; the gate mirrors the dials: M09
+  clashes attention + a species, M14 counts the pull as a move that is EXEMPT against its own dock's build (the tie) and
+  clashes with any other build, M24 evaluates the pull's frustum. Measured in the player: identity until the contact
+  frame, 1.06 about the card's centre at contact + 0.5 s, held at 9.0 s, releasing at exit - 0.3 s, identity after; a
+  locked row with the same dock moves nothing. HG1 (the three dials by eye on a real landing) is open - the tariff hook
+  and the Tokyo fingers are the candidates; nothing ships with landings on until the operator's word.
 
 ### T5: The camera arrival (the card becomes the world by the eye going to it)
 - Status: pending

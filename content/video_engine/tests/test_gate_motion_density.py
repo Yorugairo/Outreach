@@ -835,3 +835,29 @@ def test_m24_reads_the_track_and_names_a_target_out_of_frame():
     assert G.camera_state_at(sc, 30.0, 1920.0, 1080.0, None)["s"] == 2.0
     fr = G.camera_frustum(G.camera_state_at(sc, 30.0, 1920.0, 1080.0, None), 1920.0, 1080.0)
     assert abs((fr["x1"] - fr["x0"]) - 960) < 1e-9 and abs(fr["x0"] - 576) < 1e-9 and abs(fr["x1"] - 1536) < 1e-9, "a zoom in place keeps the look point where it was on screen: the frame is not centred on it"
+
+
+def test_the_attention_pull_is_tied_to_its_own_dock_and_clashes_with_any_other_build():
+    """P49 T4: the attention pull toward a landing overlaps that dock's build by definition (E51: the push IS the landing)
+    - M14 exempts it against its own dock and names it against another's; M09 clashes it with a camera species."""
+    dock = {"asset": "dock-x", "slot": 0, "enter": 5.0, "exit": 12.0, "arrive": "throw", "place": {"x": 140, "y": 600, "w": 800, "h": 450}, "badge_at": []}
+    tl, docks, mp = _bare_plate()
+    tl["scenes"][0]["docks"] = [dict(dock)]
+    tl["scenes"][0]["camera"] = {"keys": [], "attention": "landings"}
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M14"].level == "PASS", g["M14"]
+    assert G._attention_moves(tl["scenes"][0]) == [(5.45, 5.95, "dock-x")]
+    tl["scenes"][0]["docks"].append({"asset": "dock-y", "slot": 1, "enter": 5.2, "exit": 12.0, "badge_at": []})   # a second build under the pull
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M14"].level == "FAIL" and "attention pull 5.5-6.0s (toward dock-x) over dock-y build" in g["M14"].message, g["M14"]
+    tl, docks, mp = _bare_plate(species=[{"kind": "punch", "at": 8.0, "dur": 1.2, "target": {"kind": "point", "x": 0.5, "y": 0.5}}])
+    tl["scenes"][0]["docks"] = [dict(dock)]
+    tl["scenes"][0]["camera"] = {"keys": [], "attention": "landings"}
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M09"].level == "FAIL" and "attention landings + punch" in g["M09"].message, g["M09"]
+    # M24 evaluates the pull: a point at the far corner leaves the 1.06 frame about the card
+    tl, docks, mp = _bare_plate(species=[{"kind": "callout", "at": 8.0, "dur": 1.0, "target": {"kind": "point", "x": 0.01, "y": 0.01}}])
+    tl["scenes"][0]["docks"] = [dict(dock)]
+    tl["scenes"][0]["camera"] = {"keys": [], "attention": "landings"}
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M24"].level == "FAIL" and "zoom 1.06" in g["M24"].message, g["M24"]

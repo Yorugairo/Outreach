@@ -64,6 +64,8 @@ def test_a_good_key_list_passes_and_keys_never_share_a_row_with_a_camera_species
     assert len(errs) == 1 and "camera keys and a punch" in errs[0] and "s9.28 C3" in errs[0], errs
     assert B.validate_camera_row(cam, [{"kind": "callout", "at": 3.0, "dur": 1.0, "target": POINT}], PLATE) == []
     assert B.validate_camera_row(None, [{"kind": "punch", "at": 3.0, "dur": 1.0, "target": POINT}], PLATE) == []
+    errs = B.validate_camera_row({"keys": [], "attention": "landings"}, [{"kind": "punch", "at": 3.0, "dur": 1.0, "target": POINT}], PLATE)
+    assert len(errs) == 1 and "attention landings and a punch" in errs[0] and "E51" in errs[0], errs
 
 
 # ---- T2 / T3: the player ----------------------------------------------------------------------------------------------
@@ -194,5 +196,38 @@ def test_authored_keys_pan_and_zoom_and_the_frustum_follows_the_look():
         assert abs(p.camera(9.0)["zoom"] - 1.5) < 1e-9, "holds after the last key"
         p.seek(1.0); p.seek(4.5); assert p.cam() == tr, "a seek is the play"
         assert not p.errs, p.errs
+    finally:
+        p.close()
+
+
+# ---- P49 T4: the attention law - a landing pulls the eye, locked otherwise --------------------------------------------
+
+DOCK = {"asset": "dock-x", "slot": 0, "enter": 4.0, "exit": 12.0, "arrive": "throw", "mass": "paper", "place": {"x": 140, "y": 600, "w": 800, "h": 450},
+        "title": "x", "source": "", "species": "chart", "badges": [], "kind": "image"}
+
+
+@needs_browser
+def test_a_landing_pulls_the_eye_only_when_attention_says_so():
+    """attention: landings - identity before the contact frame, a 1.06 zoom in place about the card's box once it has
+    landed (E51: the push is tied to the landing), released before the card leaves; attention: locked - nothing moves."""
+    tl, uris = _timeline([[]], [{"keys": [], "attention": "landings"}], True)
+    tl["scenes"][0]["docks"] = [dict(DOCK)]
+    p = _Player(tl, uris)
+    try:
+        tc = 4.0 + 0.45   # a throw's contact: enter + STOP.FLIGHT_S
+        p.seek(tc - 0.1); assert p.camera(tc - 0.1)["zoom"] == 1, "still until the contact frame"
+        p.seek(tc + 0.5); c = p.camera(tc + 0.5)
+        assert abs(c["zoom"] - 1.06) < 1e-9 and c["look"] == [540, 825] and c["at"] == c["look"], c
+        p.seek(9.0); assert abs(p.camera(9.0)["zoom"] - 1.06) < 1e-9, "held while the card is up"
+        p.seek(11.7); z = p.camera(11.7)["zoom"]; assert 1 < z < 1.06, ("released over ATTN.OUT before the exit", z)
+        p.seek(12.5); assert p.camera(12.5)["zoom"] == 1
+        assert not p.errs, p.errs
+    finally:
+        p.close()
+    tl, uris = _timeline([[]], [{"keys": [], "attention": "locked"}], True)
+    tl["scenes"][0]["docks"] = [dict(DOCK)]
+    p = _Player(tl, uris)
+    try:
+        p.seek(6.0); assert p.camera(6.0)["zoom"] == 1 and p.cam() == "", "locked: the reference's default"
     finally:
         p.close()

@@ -214,6 +214,8 @@ BADGE_SETTLE_S = 0.6             # ... and each badge reveal is one too, settlin
 CAMERA_MOVE_S = 1.2              # a camera species with no declared dur is credited this long
 SRC_M24 = "P49 T6 (operator 2026-09-08: 'our engine ... doesn't know what it's seeing until it's rendered back'): a pointing species whose target is out of the camera's frame when it fires points at nothing - checked from the track before render"
 POINTING_KINDS = ("callout", "spotlight", "squiggle", "punch", "focus_zoom", "beat_freeze", "radial", "push", "figure", "spread", "bracket")   # the species that point at a declared target
+ATTN_SCALE, ATTN_IN, ATTN_OUT = 1.06, 0.5, 0.6            # P49 T4: kinetics/camera.mjs ATTN, mirrored [DERIVED: Bravos #68]
+STOP_FLIGHT_S, STOP_ANTIC_S, STOP_DROP_S = 0.45, 0.18, 0.14   # the stop-action clock (kinetics/stopaction.mjs STOP), mirrored: the contact frame of a throw / a landing
 SRC_M14 = "47 s2 G-a / doc 07 Pillar 4 (saccadic suppression): a camera move may not overlap an evidence build - the eye is blind during the move"
 
 
@@ -380,14 +382,30 @@ def _camera_clashes(scenes: list[dict]) -> list[tuple[str, str]]:
         scale = float(s.get("world", {}).get("ken_burns", {}).get("scale", 0) or 0)
         sid = s.get("scene_id", "?")
         keyed = bool(_camera_key_segments(s))   # P49 T6: an authored key segment is a camera move
+        landings = (s.get("camera") or {}).get("attention") == "landings"   # P49 T4: the landing IS the move
         if len(moves) > 1:
             out.append((sid, " + ".join(moves)))
         elif moves and keyed:
             out.append((sid, f"camera keys + {moves[0]}"))
+        elif moves and landings:
+            out.append((sid, f"attention landings + {moves[0]}"))
         elif moves and scale > 0:
             out.append((sid, f"{moves[0]} over Ken Burns scale {scale:g}"))
         elif keyed and scale > 0:
             out.append((sid, f"camera keys over Ken Burns scale {scale:g}"))
+    return out
+
+
+def _attention_moves(s: dict) -> list[tuple[float, float, str]]:
+    """P49 T4: (contact, contact + ATTN_IN, dock slide) for every arriving dock a landings-attention scene pulls toward."""
+    if (s.get("camera") or {}).get("attention") != "landings":
+        return []
+    out: list[tuple[float, float, str]] = []
+    for d in s.get("docks", []):
+        if not d.get("place") or d.get("arrive") not in ("throw", "land"):
+            continue
+        tc = float(d.get("enter", 0.0)) + (STOP_FLIGHT_S if d.get("arrive") == "throw" else STOP_ANTIC_S + STOP_DROP_S)
+        out.append((tc, tc + ATTN_IN, str(d.get("slide", d.get("asset", "?")))))
     return out
 
 
@@ -439,6 +457,10 @@ def _build_clashes(scenes: list[dict], docks: list[dict]) -> list[tuple[str, str
             for slide, a, z in builds:
                 if at < z and a < end:
                     out.append((s.get("scene_id", "?"), f"{kind} {at:.1f}-{end:.1f}s over {slide} build {a:.1f}-{z:.1f}s"))
+        for at, end, own in _attention_moves(s):   # P49 T4: the pull toward a landing is TIED to that dock (E51) - it clashes only with another build
+            for slide, a, z in builds:
+                if slide != own and at < z and a < end:
+                    out.append((s.get("scene_id", "?"), f"attention pull {at:.1f}-{end:.1f}s (toward {own}) over {slide} build {a:.1f}-{z:.1f}s"))
     return out
 
 
@@ -483,7 +505,19 @@ def camera_state_at(s: dict, t: float, sw: float, sh: float, plot: dict | None) 
     ident = {"s": 1.0, "look": (sw / 2, sh / 2), "at": (sw / 2, sh / 2)}
     keys = [k for k in ((s.get("camera") or {}).get("keys") or []) if isinstance(k, dict) and isinstance(k.get("t"), (int, float))]
     if not keys:
-        return ident
+        st = ident
+        if (s.get("camera") or {}).get("attention") == "landings":   # P49 T4: the pull toward a landing, as the player draws it
+            for d in s.get("docks", []):
+                if not d.get("place") or d.get("arrive") not in ("throw", "land"):
+                    continue
+                tc = float(d.get("enter", 0.0)) + (STOP_FLIGHT_S if d.get("arrive") == "throw" else STOP_ANTIC_S + STOP_DROP_S)
+                exit_t = float(d.get("exit", tc)); out_t = exit_t - ATTN_OUT
+                if not (tc <= t <= exit_t):
+                    continue
+                a = _cam_ease("inout", (t - tc) / ATTN_IN) * (1 - _cam_ease("inout", (t - out_t) / ATTN_OUT))
+                c = (float(d["place"]["x"]) + float(d["place"]["w"]) / 2, float(d["place"]["y"]) + float(d["place"]["h"]) / 2)
+                st = {"s": 1 + (ATTN_SCALE - 1) * a, "look": c, "at": c}
+        return st
     K = []
     for k in keys:
         look = _cam_point(k.get("look"), sw, sh, plot) or (sw / 2, sh / 2)
@@ -520,7 +554,8 @@ def _in_frame_faults(scenes: list[dict], aspect: str) -> list[str]:
     sw, sh = (1080.0, 1920.0) if aspect == "9:16" else (1920.0, 1080.0)
     out: list[str] = []
     for s in scenes:
-        if not ((s.get("camera") or {}).get("keys")):
+        cam = s.get("camera") or {}
+        if not cam.get("keys") and cam.get("attention") != "landings":
             continue   # identity everywhere: nothing can leave the frame
         page = (s.get("world") or {}).get("page")
         plot = None
@@ -545,13 +580,14 @@ def _in_frame_faults(scenes: list[dict], aspect: str) -> list[str]:
 
 def _in_frame_gate(scenes: list[dict], aspect: str) -> Gate | None:
     """M24: no row unless a scene authors camera keys (the identity camera frames everything)."""
-    if not any(((s.get("camera") or {}).get("keys")) for s in scenes):
+    if not any(((s.get("camera") or {}).get("keys")) or (s.get("camera") or {}).get("attention") == "landings" for s in scenes):
         return None
     faults = _in_frame_faults(scenes, aspect)
     if faults:
         return Gate("M24", "FAIL", "; ".join(faults[:8]) + (" ..." if len(faults) > 8 else "") + " - a species points at what the eye cannot see: move the key, or the species", SRC_M24)
-    n = sum(1 for s in scenes for sp in s.get("species", []) if sp.get("kind") in POINTING_KINDS and isinstance(sp.get("target"), dict) and ((s.get("camera") or {}).get("keys")))
-    return Gate("M24", "PASS", f"{n} pointing species on keyed-camera scenes, every target in frame when it fires", SRC_M24)
+    n = sum(1 for s in scenes for sp in s.get("species", []) if sp.get("kind") in POINTING_KINDS and isinstance(sp.get("target"), dict)
+            and (((s.get("camera") or {}).get("keys")) or (s.get("camera") or {}).get("attention") == "landings"))
+    return Gate("M24", "PASS", f"{n} pointing species on moving-camera scenes, every target in frame when it fires", SRC_M24)
 
 
 def _build_gate(clashes: list[tuple[str, str]]) -> Gate:

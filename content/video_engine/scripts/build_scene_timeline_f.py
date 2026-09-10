@@ -198,6 +198,8 @@ def validate_camera_row(cam, row_species, plate_id: str) -> list[str]:
     moves = [e["kind"] for e in (row_species or []) if isinstance(e, dict) and e.get("kind") in CAMERA_MOVES]
     if isinstance(cam, dict) and cam.get("keys") and moves:
         errs.append(f"{plate_id}: camera keys and a {moves[0]} species on one row - one camera per window (s9.28 C3)")
+    elif isinstance(cam, dict) and cam.get("attention") == "landings" and moves:
+        errs.append(f"{plate_id}: attention landings and a {moves[0]} species on one row - the landing IS the camera's move (E51, s9.28 C3)")
     return errs
 TARGET_KINDS = ("datum", "point", "region", "span")
 # s9.27 targeting law: the target kinds each species may take. () = the species
