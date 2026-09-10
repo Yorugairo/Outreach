@@ -594,7 +594,7 @@ def code_status(rec: dict, corpus: Corpus) -> tuple[str, list[str]]:
     evidence += module_uses(corpus, usage, rec["module"], rec["line"])
     if evidence:
         return "implemented", evidence
-    return row_status(corpus, (rec["name"], usage))
+    return row_status(corpus, naming_rows(corpus, (rec["name"], usage)))   # the rows that NAME it (it passed the names themselves as rows - a latent unpack error, first hit by an export nothing called: P49's CAM_EASES)
 
 
 def module_uses(corpus: Corpus, name: str, own_module: str, own_line: int) -> list[str]:

@@ -783,3 +783,55 @@ def test_a_transition_s_end_is_a_landing_for_the_push_tie_and_a_data_mark_for_th
     parked = G._deployed_lives([_page_scene("s02", 10.0, 40.0, species=[_xf("park", land + 4.0, dur=1.0)])])
     assert parked[0][1] == round(land, 2), "a park moves the chart and changes no data: the clock does not restart"
     assert not any("park" in n for _t, n in G._landings(_page_scene("s02", 10.0, 40.0, species=[_xf("park", land + 4.0)])))
+
+
+# ---- P49 T6: the gate reads the camera track - M09/M14 count key segments, M24 in-frame ---------------------------
+
+def _keyed(scene, keys):
+    scene["camera"] = {"keys": keys, "attention": "locked"}
+    return scene
+
+
+def test_m09_counts_an_authored_key_segment_as_a_camera_move():
+    tl, docks, mp = _bare_plate(species=[{"kind": "punch", "at": 10.0, "dur": 1.2, "target": {"kind": "point", "x": 0.5, "y": 0.5}}])
+    _keyed(tl["scenes"][0], [{"t": 2.0, "zoom": 1.0}, {"t": 4.0, "zoom": 1.3, "look": [0.6, 0.4]}])
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M09"].level == "FAIL" and "camera keys + punch" in g["M09"].message, g["M09"]
+    tl, docks, mp = _bare_plate(ken_scale=0.04)
+    _keyed(tl["scenes"][0], [{"t": 2.0, "zoom": 1.0}, {"t": 4.0, "zoom": 1.3}])
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M09"].level == "FAIL" and "camera keys over Ken Burns" in g["M09"].message, g["M09"]
+    tl, docks, mp = _bare_plate()
+    _keyed(tl["scenes"][0], [{"t": 2.0, "zoom": 1.3}, {"t": 4.0, "zoom": 1.3}])   # two keys, nothing moves: not a move
+    assert G._camera_key_segments(tl["scenes"][0]) == []
+    assert G._camera_key_segments(_keyed({"scene_id": "x"}, [{"t": 1.0, "zoom": 1}, {"t": 3.0, "zoom": 2, "ease": "hold"}])) == [(3.0, 3.0 + G.CAMERA_MOVE_S, "camera key step at 3.0s")]
+
+
+def test_m14_catches_a_key_segment_over_an_evidence_build():
+    tl, docks, mp = _bare_plate()
+    tl["scenes"][0]["docks"] = [{"asset": "dock-x", "slot": 0, "enter": 5.0, "exit": 12.0, "badge_at": []}]
+    _keyed(tl["scenes"][0], [{"t": 4.0, "zoom": 1.0}, {"t": 7.0, "zoom": 1.4, "look": [0.5, 0.5]}])
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M14"].level == "FAIL" and "camera keys 4.0-7.0s over dock-x build" in g["M14"].message, g["M14"]
+
+
+def test_m24_reads_the_track_and_names_a_target_out_of_frame():
+    point_in = {"kind": "point", "x": 0.6, "y": 0.4}
+    point_out = {"kind": "point", "x": 0.05, "y": 0.05}
+    tl, docks, mp = _bare_plate(species=[{"kind": "callout", "at": 10.0, "dur": 1.0, "target": point_in},
+                                         {"kind": "spotlight", "at": 12.0, "dur": 1.0, "target": point_out}])
+    assert "M24" not in _by_id(G.run(tl, docks, mp)[0]), "no keys, no row: the identity camera frames everything"
+    _keyed(tl["scenes"][0], [{"t": 6.0, "zoom": 1.0, "look": [0.6, 0.4]}, {"t": 8.0, "zoom": 2.0, "look": [0.6, 0.4]}])
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M24"].level == "FAIL" and "s00 spotlight at" in g["M24"].message and "0% in frame (zoom 2.00)" in g["M24"].message, g["M24"]
+    assert "callout" not in g["M24"].message, "the callout's target sits at the look point - in frame"
+    tl["scenes"][0]["species"] = [{"kind": "callout", "at": 10.0, "dur": 1.0, "target": point_in}]
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M24"].level == "PASS" and "1 pointing species" in g["M24"].message, g["M24"]
+    # the state the gate evaluates is the player's: identity before the first key, the lerp, the hold
+    sc = tl["scenes"][0]
+    assert G.camera_state_at(sc, 5.0, 1920.0, 1080.0, None)["s"] == 1.0
+    assert abs(G.camera_state_at(sc, 7.0, 1920.0, 1080.0, None)["s"] - (1 + (1 - (1 - 0.5) ** 3))) < 1e-9
+    assert G.camera_state_at(sc, 30.0, 1920.0, 1080.0, None)["s"] == 2.0
+    fr = G.camera_frustum(G.camera_state_at(sc, 30.0, 1920.0, 1080.0, None), 1920.0, 1080.0)
+    assert abs((fr["x1"] - fr["x0"]) - 960) < 1e-9 and abs(fr["x0"] - 576) < 1e-9 and abs(fr["x1"] - 1536) < 1e-9, "a zoom in place keeps the look point where it was on screen: the frame is not centred on it"

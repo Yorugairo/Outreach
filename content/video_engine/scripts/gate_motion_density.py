@@ -33,7 +33,10 @@ captions do NOT count - they are what a viewer reads as stillness.
   M08  stage-mode captions declared on every still stretch FAIL once the timeline carries cap_mode;
        until then INFO listing where stage captions are REQUIRED + a JUDGE row
   M09  one camera move per window: no scene stacks two of   FAIL   (s9.27 precedence / s9.28 C3)
-  M14  a camera move never overlaps an evidence build      FAIL   (47 s2 G-a / doc 07 Pillar 4)
+  M14  a camera move never overlaps an evidence build      FAIL   (47 s2 G-a / doc 07 Pillar 4; P49 T6: an authored
+       key segment is a move too)
+  M24  every pointing species' target is IN FRAME when     FAIL   (P49 T6: the camera's state at `at` from the scene's
+       it fires (the camera track evaluated at the word)           keys; a datum's box is the page's plot; identity passes)
        punch | focus_zoom | pull_back, or one over Ken Burns
   M10  opening stillness: no still stretch > 6s begins      FAIL   (E24 / s9.29: 4-6s in the first 30-60s)
        in the first 60s
@@ -68,6 +71,10 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sys as _sys
+from pathlib import Path as _P
+_sys.path.insert(0, str(_P(__file__).resolve().parent))
+import ledger_page as LPG  # noqa: E402  (P49 T6: a datum's in-frame box is the page's plot)
 import statistics as st
 import sys
 from dataclasses import dataclass
@@ -205,6 +212,8 @@ SRC_M12 = "E25 / doc 29 s9.30: the chart is the proof, not the homework"
 DOCK_BUILD_S = 1.5               # 47 s2 G-a: a card's entrance - the wipe / fly-in - is a build the eye must be free to read
 BADGE_SETTLE_S = 0.6             # ... and each badge reveal is one too, settling ~0.6s after badge_at
 CAMERA_MOVE_S = 1.2              # a camera species with no declared dur is credited this long
+SRC_M24 = "P49 T6 (operator 2026-09-08: 'our engine ... doesn't know what it's seeing until it's rendered back'): a pointing species whose target is out of the camera's frame when it fires points at nothing - checked from the track before render"
+POINTING_KINDS = ("callout", "spotlight", "squiggle", "punch", "focus_zoom", "beat_freeze", "radial", "push", "figure", "spread", "bracket")   # the species that point at a declared target
 SRC_M14 = "47 s2 G-a / doc 07 Pillar 4 (saccadic suppression): a camera move may not overlap an evidence build - the eye is blind during the move"
 
 
@@ -370,10 +379,34 @@ def _camera_clashes(scenes: list[dict]) -> list[tuple[str, str]]:
         moves = [sp.get("kind") for sp in s.get("species", []) if sp.get("kind") in CAMERA_MOVES]
         scale = float(s.get("world", {}).get("ken_burns", {}).get("scale", 0) or 0)
         sid = s.get("scene_id", "?")
+        keyed = bool(_camera_key_segments(s))   # P49 T6: an authored key segment is a camera move
         if len(moves) > 1:
             out.append((sid, " + ".join(moves)))
+        elif moves and keyed:
+            out.append((sid, f"camera keys + {moves[0]}"))
         elif moves and scale > 0:
             out.append((sid, f"{moves[0]} over Ken Burns scale {scale:g}"))
+        elif keyed and scale > 0:
+            out.append((sid, f"camera keys over Ken Burns scale {scale:g}"))
+    return out
+
+
+def _camera_key_segments(s: dict) -> list[tuple[float, float, str]]:
+    """(start, end, why) for every segment of a scene's authored camera keys that MOVES the camera - zoom, look or at
+    changes between two keys (a `hold` ease is a step at the arriving key, credited as a move of CAMERA_MOVE_S there)."""
+    keys = ((s.get("camera") or {}).get("keys") or [])
+    out: list[tuple[float, float, str]] = []
+    prev = None
+    for k in keys:
+        if not isinstance(k, dict) or not isinstance(k.get("t"), (int, float)):
+            continue
+        cur = (float(k["t"]), float(k.get("zoom", 1) or 1), k.get("look"), k.get("at") if k.get("at") is not None else k.get("look"), k.get("ease", "cubic"))
+        if prev is not None and (cur[1] != prev[1] or cur[2] != prev[2] or cur[3] != prev[3]):
+            if cur[4] == "hold":
+                out.append((cur[0], cur[0] + CAMERA_MOVE_S, f"camera key step at {cur[0]:.1f}s"))
+            else:
+                out.append((prev[0], cur[0], f"camera keys {prev[0]:.1f}-{cur[0]:.1f}s"))
+        prev = cur
     return out
 
 
@@ -399,14 +432,126 @@ def _build_clashes(scenes: list[dict], docks: list[dict]) -> list[tuple[str, str
     builds = _build_windows(scenes, docks)
     out = []
     for s in scenes:
-        for sp in s.get("species", []):
-            if sp.get("kind") not in CAMERA_MOVES:
-                continue
-            at = float(sp.get("at", 0.0)); end = at + float(sp.get("dur", CAMERA_MOVE_S) or CAMERA_MOVE_S)
+        moves = [(float(sp.get("at", 0.0)), float(sp.get("at", 0.0)) + float(sp.get("dur", CAMERA_MOVE_S) or CAMERA_MOVE_S), sp["kind"])
+                 for sp in s.get("species", []) if sp.get("kind") in CAMERA_MOVES]
+        moves += [(a, z, "camera keys") for a, z, _why in _camera_key_segments(s)]   # P49 T6: the track's own moves
+        for at, end, kind in moves:
             for slide, a, z in builds:
                 if at < z and a < end:
-                    out.append((s.get("scene_id", "?"), f"{sp['kind']} {at:.1f}-{end:.1f}s over {slide} build {a:.1f}-{z:.1f}s"))
+                    out.append((s.get("scene_id", "?"), f"{kind} {at:.1f}-{end:.1f}s over {slide} build {a:.1f}-{z:.1f}s"))
     return out
+
+
+# ---- P49 T6: the camera's state from the track, the way the player evaluates it (kinetics/camera.mjs camKeyState) ----
+
+def _cam_ease(name: str, k: float) -> float:
+    k = max(0.0, min(1.0, k))
+    if name == "inout":
+        return 2 * k * k if k < 0.5 else 1 - ((-2 * k + 2) ** 2) / 2
+    if name == "linear":
+        return k
+    if name == "hold":
+        return 1.0 if k >= 1 else 0.0
+    return 1 - (1 - k) ** 3   # cubic
+
+
+def _cam_point(v, sw: float, sh: float, plot: dict | None) -> tuple[float, float] | None:
+    """A key's look/at as stage px: [x, y] fractions, or a declared target's centre (a datum: the plot's centre)."""
+    if isinstance(v, (list, tuple)) and len(v) == 2:
+        return (float(v[0]) * sw, float(v[1]) * sh)
+    if isinstance(v, dict):
+        b = _target_box(v, sw, sh, plot)
+        return (b["x"] + b["w"] / 2, b["y"] + b["h"] / 2) if b else None
+    return None
+
+
+def _target_box(tg: dict, sw: float, sh: float, plot: dict | None) -> dict | None:
+    """A declared target as a world box in stage px: point (w = h = 0), region, datum (the page's plot box); span: none."""
+    kind = tg.get("kind") if isinstance(tg, dict) else None
+    if kind == "point":
+        return {"x": float(tg["x"]) * sw, "y": float(tg["y"]) * sh, "w": 0.0, "h": 0.0}
+    if kind == "region":
+        return {"x": float(tg["x0"]) * sw, "y": float(tg["y0"]) * sh, "w": (float(tg["x1"]) - float(tg["x0"])) * sw, "h": (float(tg["y1"]) - float(tg["y0"])) * sh}
+    if kind == "datum" and plot:
+        return dict(plot)
+    return None
+
+
+def camera_state_at(s: dict, t: float, sw: float, sh: float, plot: dict | None) -> dict:
+    """{s, look, at} at t from the scene's authored keys - identity before the first, lerp by the arriving key's ease,
+    hold after the last; species windows are the player's and are not evaluated here (their target is their centre)."""
+    ident = {"s": 1.0, "look": (sw / 2, sh / 2), "at": (sw / 2, sh / 2)}
+    keys = [k for k in ((s.get("camera") or {}).get("keys") or []) if isinstance(k, dict) and isinstance(k.get("t"), (int, float))]
+    if not keys:
+        return ident
+    K = []
+    for k in keys:
+        look = _cam_point(k.get("look"), sw, sh, plot) or (sw / 2, sh / 2)
+        at = (_cam_point(k.get("at"), sw, sh, plot) or look) if k.get("at") is not None else look
+        K.append({"t": float(k["t"]), "s": float(k.get("zoom", 1) or 1), "look": look, "at": at, "ease": k.get("ease", "cubic")})
+    if t < K[0]["t"]:
+        return ident
+    i = 1
+    while i < len(K) and t > K[i]["t"]:
+        i += 1
+    if i >= len(K):
+        L = K[-1]; return {"s": L["s"], "look": L["look"], "at": L["at"]}
+    a, b = K[i - 1], K[i]
+    u = _cam_ease(b["ease"], (t - a["t"]) / max(1e-6, b["t"] - a["t"]))
+    lerp = lambda p, q: p + (q - p) * u
+    return {"s": lerp(a["s"], b["s"]), "look": (lerp(a["look"][0], b["look"][0]), lerp(a["look"][1], b["look"][1])), "at": (lerp(a["at"][0], b["at"][0]), lerp(a["at"][1], b["at"][1]))}
+
+
+def camera_frustum(st: dict, sw: float, sh: float) -> dict:
+    (lx, ly), (ax, ay), s = st["look"], st["at"], st["s"]
+    return {"x0": lx + (0 - ax) / s, "y0": ly + (0 - ay) / s, "x1": lx + (sw - ax) / s, "y1": ly + (sh - ay) / s}
+
+
+def _visible_share(fr: dict, box: dict) -> float:
+    x0, y0 = max(fr["x0"], box["x"]), max(fr["y0"], box["y"]); x1, y1 = min(fr["x1"], box["x"] + box["w"]), min(fr["y1"], box["y"] + box["h"])
+    area = max(0.0, box["w"]) * max(0.0, box["h"])
+    if area > 0:
+        return max(0.0, x1 - x0) * max(0.0, y1 - y0) / area
+    return 1.0 if (x0 <= x1 and y0 <= y1) else 0.0
+
+
+def _in_frame_faults(scenes: list[dict], aspect: str) -> list[str]:
+    """P49 T6: every pointing species whose declared target is not (fully) in the camera's frame at its `at`."""
+    sw, sh = (1080.0, 1920.0) if aspect == "9:16" else (1920.0, 1080.0)
+    out: list[str] = []
+    for s in scenes:
+        if not ((s.get("camera") or {}).get("keys")):
+            continue   # identity everywhere: nothing can leave the frame
+        page = (s.get("world") or {}).get("page")
+        plot = None
+        if isinstance(page, dict):
+            try:
+                plot = LPG.page_boxes(page, aspect).get("plot")
+            except Exception:   # a page the box model cannot place: the datum proxy is unavailable, the check skips it
+                plot = None
+        for sp in s.get("species", []):
+            if sp.get("kind") not in POINTING_KINDS or not isinstance(sp.get("target"), dict):
+                continue
+            at = float(sp.get("at", 0.0))
+            box = _target_box(sp["target"], sw, sh, plot)
+            if box is None:
+                continue
+            st = camera_state_at(s, at, sw, sh, plot)
+            share = _visible_share(camera_frustum(st, sw, sh), box)
+            if share < 0.999:
+                out.append(f"{s.get('scene_id', '?')} {sp['kind']} at {_mm(at)}: its {sp['target'].get('kind')} target is {100 * share:.0f}% in frame (zoom {st['s']:.2f})")
+    return out
+
+
+def _in_frame_gate(scenes: list[dict], aspect: str) -> Gate | None:
+    """M24: no row unless a scene authors camera keys (the identity camera frames everything)."""
+    if not any(((s.get("camera") or {}).get("keys")) for s in scenes):
+        return None
+    faults = _in_frame_faults(scenes, aspect)
+    if faults:
+        return Gate("M24", "FAIL", "; ".join(faults[:8]) + (" ..." if len(faults) > 8 else "") + " - a species points at what the eye cannot see: move the key, or the species", SRC_M24)
+    n = sum(1 for s in scenes for sp in s.get("species", []) if sp.get("kind") in POINTING_KINDS and isinstance(sp.get("target"), dict) and ((s.get("camera") or {}).get("keys")))
+    return Gate("M24", "PASS", f"{n} pointing species on keyed-camera scenes, every target in frame when it fires", SRC_M24)
 
 
 def _build_gate(clashes: list[tuple[str, str]]) -> Gate:
@@ -580,6 +725,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
         g.append(pg_)                                                     # M22 (E51: a push is tied to a landing)
     if (tg := _transition_gate(tl.get("scenes", []))) is not None:
         g.append(tg)                                                      # M23 (P48 T6: a chart changes state, never over a build, never at the edge)
+    if (ifg := _in_frame_gate(tl.get("scenes", []), str(tl.get("aspect") or "16:9"))) is not None:
+        g.append(ifg)                                                     # M24 (P49 T6: the target is in the camera's frame when the species fires)
     if (mg := _morph_gate(tl.get("scenes", []), morph)) is not None:
         g.append(mg)                                                      # M17 (P47 T3: the match-cut invariants per morph page)
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")

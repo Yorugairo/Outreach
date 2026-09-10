@@ -264,13 +264,21 @@ rendered.
 - Evidence: pending
 
 ### T6: The in-frame gate
-- Status: pending
+- Status: complete (2026-09-10)
 - Owner: junior_developer
 - Depends on: T3
 - Write set: `content/video_engine/scripts/gate_motion_density.py`, `docs/GATES-REGISTRY.md` (generated), tests
 - Acceptance: M24 FAILs a pointing species whose target is out of frame when it fires; M09/M14 read the camera track.
 - Validate: `python -m pytest content/video_engine/tests/test_gate_motion_density.py -q`
-- Evidence: pending
+- Evidence: (2026-09-10) `_camera_key_segments` (a key segment that changes zoom, look or at is a camera move; a `hold`
+  key is a step credited CAMERA_MOVE_S); M09 clashes keys + a camera species and keys over Ken Burns; M14 checks key
+  segments against the build windows ("camera keys 4.0-7.0s over dock-x build"); **M24**: for every pointing species on
+  a scene with keys, the camera's state at `at` is evaluated the way the player evaluates it (`camera_state_at`: identity
+  before the first key, lerp by the arriving key's ease, hold after) and the target's world box (point, region; a datum =
+  the page's plot from `page_boxes`; a span is not a box) must be fully in the frustum - FAIL names the species, its
+  target kind, the visible share and the zoom; no row without keys (the identity camera frames everything). 65 gate
+  tests (+3). Found on the way: `build_animation_registry.code_status` passed names where rows were expected (a latent
+  unpack error, first hit by an export nothing called) - fixed at the call.
 
 ### T7: The record
 - Status: pending

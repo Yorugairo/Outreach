@@ -2,7 +2,7 @@
 // zoom in place, a frustum that inverts the projection, an in-frame test that knows a point from a box.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { CAM, camEase, camIdentity, camSpeciesState, camKeyState, camCssFor, camFrustum, camInFrame, camProject } from "../../scripts/kinetics/camera.mjs";
+import { CAM, CAM_EASES, camEase, camIdentity, camSpeciesState, camKeyState, camCssFor, camFrustum, camInFrame, camProject } from "../../scripts/kinetics/camera.mjs";
 
 const W = 1080, H = 1920;
 const oldCss = (s, ox, oy) => s === 1 ? "" : "translate(" + (ox - W / 2).toFixed(1) + "px, " + (oy - H / 2).toFixed(1) + "px) scale(" + s.toFixed(4) + ") translate(" + (W / 2 - ox).toFixed(1) + "px, " + (H / 2 - oy).toFixed(1) + "px)";
@@ -68,5 +68,5 @@ test("the frustum inverts the projection; a box is in, partly in, or out; a poin
   assert.equal(camInFrame(fr, { x: 540, y: 960, w: 0, h: 0 }).visible, 1, "a point inside");
   assert.equal(camInFrame(fr, { x: 10, y: 10, w: 0, h: 0 }).visible, 0, "a point outside");
   assert.deepEqual(camFrustum(camIdentity(W, H), W, H), { x0: 0, y0: 0, x1: W, y1: H });
-  assert.deepEqual(Object.keys(camEase), ["cubic", "inout", "linear", "hold"]);
+  assert.deepEqual(CAM_EASES, ["cubic", "inout", "linear", "hold"]);   // the set the compiler mirrors (CAMERA_EASES)
 });
