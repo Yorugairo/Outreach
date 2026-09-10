@@ -3467,16 +3467,20 @@
   };
   /* the particles, measured once at build (untransformed): page-px ones (glyphs, pills), chart ones (viewBox units),
      and the drain in each space - the chart's meet mapping and the field's stretch mapping are inverted from the page */
-  const lpParticles = (st, page) => {
+  /* P48 (operator, 2026-09-10: "the swirl should take the whole drawn chart with it; the swirl leads to a clean plate"): the
+     vortex drains the ACTIVE chart state - after a rescale or an extend that is the derived state, not the page's own - while
+     the glyphs and pills it drains are the page's (shared by every state). Particles are cached per state. */
+  const lpParticles = (st, page, S) => {
+    S = S || st;
     const glyphs = [...st.glyphs, ...(st.rtGlyphs || [])].map((g) => ({ el: g, ...lpHome(page, g) }));   /* P47 T2: a retitle's glyphs ride the vortex too */
     const pills = (st.badges || []).map((b) => ({ el: b.el, ...lpHome(page, b.el) }));
-    const skip = new Set([...st.paths.map((p) => p.p), ...st.paths.map((p) => p.tip)]);
-    const svg = [...st.chart.children].filter((e) => !skip.has(e) && e.tagName !== "defs").map((e) => {
+    const skip = new Set([...S.paths.map((p) => p.p), ...S.paths.map((p) => p.tip)]);
+    const svg = [...S.chart.children].filter((e) => !skip.has(e) && e.tagName !== "defs").map((e) => {
       let b; try { b = e.getBBox(); } catch (x) { b = { x: 0, y: 0, width: 0, height: 0 }; }
       return { el: e, x: b.x + b.width / 2, y: b.y + b.height / 2 };
     });
     const c = { x: page.offsetWidth * st.boardCentre.x / 100, y: page.offsetHeight * st.boardCentre.y / 100 };
-    const pr = page.getBoundingClientRect(), cr = st.chart.getBoundingClientRect(), vb = st.chart.viewBox.baseVal;
+    const pr = page.getBoundingClientRect(), cr = S.chart.getBoundingClientRect(), vb = S.chart.viewBox.baseVal;
     const cw = cr.width / pr.width * page.offsetWidth, ch = cr.height / pr.height * page.offsetHeight;
     const cx0 = (cr.left - pr.left) / pr.width * page.offsetWidth, cy0 = (cr.top - pr.top) / pr.height * page.offsetHeight;
     const k = Math.min(cw / (vb.width || 1), ch / (vb.height || 1)) || 1;   /* xMidYMid meet */
@@ -3497,10 +3501,11 @@
       uf = Math.max(uf, 1 - clamp01(ui / 0.55)); uc = Math.max(uc, 1 - clamp01((ui - 0.4) / 0.6));   /* the stains surface over the first 0.9 s, the colours unwind over the last 1 s */
     }
     const on = uc > 0 || uf > 0;
-    if (!on && !st.spiralOn) return;   /* idle: touch no style, read no layout (either re-snaps text a sub-pixel on the punched page) */
-    st.spiralOn = on;
-    if (!st.parts) st.parts = lpParticles(st, st.page);
-    const P = st.parts;
+    const S = (st.states && st.states[st.active | 0]) || st;   /* the chart the drain takes: the active state's */
+    if (!on && !S.spiralOn) return;   /* idle: touch no style, read no layout (either re-snaps text a sub-pixel on the punched page) */
+    S.spiralOn = on;
+    if (!S.parts) S.parts = lpParticles(st, st.page, S);
+    const P = S.parts;
     for (const g of P.glyphs) g.el.style.transform = uc > 0 ? lpVortexCss(lpVortex(g.x, g.y, P.c, P.Rpage, uc), g.x, g.y) + " rotate(var(--tilt))" : "";
     for (const p of P.pills) if (uc > 0) p.el.style.transform = lpVortexCss(lpVortex(p.x, p.y, P.c, P.Rpage, uc), p.x, p.y);
     for (const q of P.svg) {
@@ -3508,8 +3513,8 @@
       else q.el.removeAttribute("transform");
     }
     /* the series line curls in point by point; the tips hide */
-    st.paths.forEach((pp, i) => {
-      const pts = (st.linePts || [])[i];
+    S.paths.forEach((pp, i) => {
+      const pts = (S.linePts || [])[i];
       if (!pts) return;
       if (uc > 0) {
         const d = pts.map(([x, y], k) => { const v = lpVortex(x, y, P.cChart, P.Rchart, uc); return (k ? "L" : "M") + v.x.toFixed(1) + " " + v.y.toFixed(1); }).join(" ");
