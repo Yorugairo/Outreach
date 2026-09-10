@@ -7,7 +7,7 @@ risk: elevated
 owner: parent
 branch: main
 created: 2026-09-07
-updated: 2026-09-07
+updated: 2026-09-10
 ---
 
 # Chart-to-chart transitions
@@ -99,6 +99,31 @@ one - the typewriter backspace is built for a page's title, and the same `eraseF
 So the first verb after T1 is **T4 (recast)**, not T2 (window), and its acceptance is this beat. Until it lands row 2 ships
 as the two treasury figures standing where the line was - honest, and not pretending to be a chart - with the redraw
 commented out in `build_short.py` giving this reason.
+
+## Amended 2026-09-10 - what the Bravos reference adds (`sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md`)
+
+Recall: doc 46 §46.7 (events are not cuts - Bravos changes the composition 2.5x a minute and the picture 6x; every
+verb here is a BUILD on a held page, never a new plate); E53 §1 second amendment (the census exception, 2026-09-10);
+`docs/research/tech/TREEMAP_READABILITY_RESEARCH_BLUEPRINT.md` §7.6 (Sondag et al. 2018: a re-partitioned layout
+flickers; Bravos scales and translates the whole card instead - PLAUSIBLE tier: the paper is not on disk, the frames are).
+
+1. **The legal pair for the keyed tween (T4b) now has a reference and a name.** Bravos shots 99-105: a five-series line
+   chart names each line at its end (terminal tags), the tags GROW value bars at the line ends (104), then the page
+   recasts into a horizontal bar chart of the current values (105). Cardinality n series -> n bars, keyed by series -
+   the 1:1 correspondence the plan's Not Building demands. T4b's acceptance case is this pair: `multi-line (n) <-> bars
+   (n)`, the bar growing from the line's end at the tag, the line un-drawing by length as the bar slides to the common
+   baseline. The Fed-vs-yields page is our instance (two lines -> two bars).
+2. **A new verb, `park` (T2b).** Bravos shot 91: the finished treemap is not re-laid-out or dismissed; the WHOLE chart
+   scales to ~0.75 and translates up as one affine transform, holding every cell and X in place while the next diagram
+   enters below. E50's "becomes the next thing" has a third honest form: the chart makes room. `chart_to {at, dur, to:
+   "park", scale, anchor}` = state B is state A's marks under one affine transform into the page's declared quiet zone
+   (`page_boxes`), the title carried; never a re-layout of existing keys (the stability rule). Rides on T2's state
+   store; no interpolator beyond the transform.
+3. **`extend` by series has its reference.** Bravos shots 29-30: production draws first, consumption draws on after it,
+   on its word - T3 (2), a new series drawing from its first point. Also 102: the fifth line (China) added after the four.
+4. **The stability rule for every verb:** a transition never recomputes the layout of a key that exists in both states
+   unless the verb IS a rescale; a `recast`/`park`/`extend` moves keys by transform or draws new ones. Written into T6's
+   M23 as a WARN when a shared key's geometry changes under a non-rescale verb.
 
 ## Intent And Acceptance
 
@@ -251,6 +276,21 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
 - Validate: `node --test content/video_engine/tests/kinetics/chartxf.test.mjs`; `python -m pytest content/video_engine/tests/test_chart_transitions.py content/video_engine/tests/test_golden_frames.py -q`
 - Evidence: pending
 
+### T2b: `park` - the chart makes room by one affine transform (Bravos shot 91)
+- Status: pending
+- Owner: `junior_developer` (bounded: a transform on the state store T2 builds; the quiet-zone box exists in `page_boxes`)
+- Depends on: T2
+- Write set: the template (`lpPaintStates` park branch), `scripts/build_scene_timeline_f.py` (`chart_to.to == "park"`,
+  fields `scale`, `anchor: quiet|top|bottom`), `scripts/ledger_page.py` (the parked box from `page_boxes`), tests, a flag
+  golden `ledger-page@park`
+- Acceptance: (1) on the word the whole chart (plot, axes, labels, marks, any X or ring on it) scales to `scale` (default
+  0.72) and translates into the anchor box on a min-jerk clock, the title staying; (2) no key's relative geometry changes
+  (the affine is one matrix - measured: every mark's centre maps by the same transform within 0.5 px); (3) the freed
+  region is reported on `__lpProbe` so a dock, a `flow` or a `figure` can take it; (4) the seek test; (5) goldens
+  byte-identical without it
+- Validate: `python -m pytest content/video_engine/tests/test_chart_transitions.py content/video_engine/tests/test_golden_frames.py -q`
+- Evidence: pending
+
 ### T3: `extend` - additional points draw on at the pen's speed
 - Status: pending
 - Owner: `implementation_luna` (bounded; the interpolator exists after T2)
@@ -291,6 +331,10 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   correspondence to be honest. **The keyed tween for LEGAL pairs (line <-> combo's line, story bars <-> combo's bars)
   is not built** and is now T4b, after HG2: `RECAST_PAIRS`, the mark correspondence in `chartxf.mjs`, and the flag
   golden. Acceptance rows (2) and (4) belong to T4b; (1), (3) and (5) are met by what shipped.
+- **T4b's acceptance case (2026-09-10): the Bravos pair.** `multi-line (n series) <-> bars (n)`, keyed by series: the
+  terminal tag grows a value bar at the line's end, the line un-draws by length while the bar slides to a common
+  baseline and the axis retargets; `RECAST_PAIRS` names it; the Fed-vs-yields page (two lines -> two bars of the
+  current yields) is the Tokyo instance for T7.
 - Two faults the FRAMES caught, both fixed at the cause: the sub and source went on describing the chart that had left
   (a caption lying about the page - they are rewritten with the chart now), and the line's un-draw ran on the pen's
   two-thirds law backwards, which on a dense series stands still for most of the clock and then vanishes (a line leaves

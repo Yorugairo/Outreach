@@ -233,9 +233,16 @@ Acceptance:
 - Owner: `implementation_luna`
 - Depends on: T1
 - Write set: `content/video_engine/scripts/ledger_page.py` (builder `treemap` from a `series.json` of shares; the
-  squarified layout, labels only where the cell fits, the rest unnamed; `cross: [names]` on a word and the crossed
-  share WRITTEN on the page (the census exception's (b)); the builder REFUSES a series whose claim field names a size
-  comparison); template (`paintLedger` treemap variant); tests; golden `treemap-cross`.
+  squarified layout (Bruls 2000; the aspect tuned toward 3:2, never 1:1 - Heer & Bostock 2010's square penalty), labels
+  only where the cell fits (the research's floors: value font >= 18 px, no text in a cell under 80 x 36 px; three tiers -
+  two lines, one stacked line, none), the rest unnamed; `cross: [names]` on a word and the crossed share WRITTEN on the
+  page (the census exception's (b)); the shrink afterwards is P48's `park` (one affine transform, never a re-layout -
+  Sondag 2018); the builder REFUSES a series whose claim field names a size comparison); template (`paintLedger`
+  treemap variant); tests; golden `treemap-cross`. Research: `docs/research/tech/TREEMAP_READABILITY_RESEARCH_BLUEPRINT.md`
+  §6-7 and `docs/research/runs/treemap-readability/findings_typography_and_mobile.md` §5 (Gemini, 2026-09-10) - tiers:
+  the Bravos teardown is CONFIRMED against our own frames; the perception papers and the ISO floors are PLAUSIBLE
+  (cited by DOI, not on disk); the blueprint's "container x 60, y 280, w 960, h 1060" is EDITORIAL - the plot box is
+  `page_boxes`'s, not a research doc's.
 - Acceptance: shots 89-91's grammar: a treemap of exports by partner; on a word three partners take an X; the map
   shrinks to a chip on the next (a `chart_to: recast` or an exit).
 - Validate: the test suite above + `python content/video_engine/scripts/ledger_page.py --check <series>`
