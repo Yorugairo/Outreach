@@ -380,7 +380,13 @@ def main() -> int:
 
     mins, secs = divmod(round(total), 60)
     clock = f"{mins}:{secs:02d}"
-    html = TEMPLATE.read_text(encoding="utf-8")
+    # P51 T1: the engine left the template. single_file_shell inlines it and leaves {{TIMELINE}} /
+    # {{URIS}} open, so every anchor this door patches (the caption loop, DUR, the title) is in the text
+    # and ep1's committed player stays ONE file.
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location("render_baseline", REPO / "content/video_engine/scripts/render_baseline.py")
+    _RB = _ilu.module_from_spec(_spec); _spec.loader.exec_module(_RB)
+    html = _RB.single_file_shell(TEMPLATE)
     # finance-niche dock scale +20% (operator, 2026-08-25): charts must read
     # sleeker pills (operator, 2026-08-25): one-baseline badges, document fills the card
     html = html.replace(

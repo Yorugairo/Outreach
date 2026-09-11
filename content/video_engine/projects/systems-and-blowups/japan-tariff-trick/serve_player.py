@@ -18,6 +18,11 @@ class RangeFileWrapper:
         self.f.close()
 
 class RangeHTTPRequestHandler(SimpleHTTPRequestHandler):
+    # P51 T1: .mjs is not in Python's mimetypes table on Windows, and a module served as
+    # application/octet-stream is refused by the browser's strict MIME check - a split build
+    # would show its shell and mount nothing.
+    extensions_map = {**SimpleHTTPRequestHandler.extensions_map, '.mjs': 'text/javascript'}
+
     def end_headers(self):
         self.send_header('Accept-Ranges', 'bytes')
         self.send_header('Cache-Control', 'no-store')   # a rebuilt player.html is always the one served (2026-09-05)

@@ -104,7 +104,7 @@ def test_a_throw_and_a_landing_are_motion_and_m20_names_the_cadence():
 
 
 def test_the_flag_defaults_off_and_the_arrivals_hang_off_it():
-    html = TEMPLATE.read_text(encoding="utf-8")
+    html = RB.player_text()
     m = re.search(r"const KINETICS_DEFAULTS = Object\.freeze\(\{(.*?)\}\);", html, re.S)
     assert m and re.search(r"\bstop_action:\s*false", m.group(1))
     assert "/* KINETICS:BEGIN stopaction */" in html and "export" not in html.split("/* KINETICS:BEGIN stopaction */")[1].split("/* KINETICS:END */")[0]

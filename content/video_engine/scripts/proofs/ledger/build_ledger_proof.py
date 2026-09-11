@@ -127,10 +127,12 @@ def main() -> int:
         "plate-plain": "data:image/png;base64," + base64.b64encode(png_solid(64, 36, (43, 52, 60))).decode(),
         "__audio__": "data:audio/wav;base64," + base64.b64encode(silent_wav(RUNTIME)).decode(),
     }
-    html = TEMPLATE.read_text(encoding="utf-8")
-    html = html.replace("{{TIMELINE}}", json.dumps(timeline, separators=(",", ":")))
-    html = html.replace("{{URIS}}", json.dumps(uris, separators=(",", ":")))
-    OUT.write_text(html, encoding="utf-8")
+    # P51 T1: the engine left the page, so the substitution is render_baseline's (this proof stays
+    # ONE file - it is handed over as a page somebody opens).
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location("render_baseline", REPO / "content/video_engine/scripts/render_baseline.py")
+    _RB = _ilu.module_from_spec(_spec); _spec.loader.exec_module(_RB)
+    OUT.write_text(_RB.instantiate(timeline, uris, TEMPLATE), encoding="utf-8")
     print(f"wrote {OUT} ({OUT.stat().st_size:,} bytes); builders: {bars['builder']}, {line['builder']}")
     return 0
 

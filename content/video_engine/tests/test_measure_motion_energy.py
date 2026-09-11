@@ -130,8 +130,9 @@ def test_a_track_shorter_than_two_samples_has_no_energy():
 
 # --------------------------------------------------------------------------- classification table
 def template_class_tokens(template: Path = TEMPLATE) -> set[str]:
-    """Every class token the reviewed template can put on an element - the grep the table is held to."""
-    text = template.read_text(encoding="utf-8")
+    """Every class token the reviewed player can put on an element - the grep the table is held to."""
+    import render_baseline as RB
+    text = RB.player_text() if template is TEMPLATE else template.read_text(encoding="utf-8")
     tokens: set[str] = set()
     for pattern in (r'class\s*(?:=|:)\s*"([^"]*)"',
                     r"className\s*=\s*[\"']([^\"']*)[\"']",

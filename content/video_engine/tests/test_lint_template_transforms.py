@@ -31,6 +31,7 @@ def test_exactly_the_unanchored_ones_are_reported():
 
 
 def test_the_template_lands_as_info_with_a_list():
-    html = (ROOT / "docs/content-video-engine/samples/scene-evidence-player.template.html").read_text(encoding="utf-8")
+    import render_baseline as RB
+    html = RB.player_text()
     findings = L.check(html)
     assert isinstance(findings, list)   # the count is the deliverable, not a threshold - INFO ladder

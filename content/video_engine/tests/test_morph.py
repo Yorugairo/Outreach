@@ -181,7 +181,7 @@ def test_m17_is_absent_without_a_morph_info_until_measured_stale_on_a_rebuild_an
 
 
 def test_the_morph_hangs_off_the_existing_arap_flag_and_falls_back_to_a_mount():
-    html = TEMPLATE.read_text(encoding="utf-8")
+    html = RB.player_text()
     m = re.search(r"const KINETICS_DEFAULTS = Object\.freeze\(\{(.*?)\}\);", html, re.S)
     assert m and re.search(r"\barap_morph:\s*false", m.group(1))
     assert "/* KINETICS:BEGIN arap */" in html and "const paintMorph = " in html

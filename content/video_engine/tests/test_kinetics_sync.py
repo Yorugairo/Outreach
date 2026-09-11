@@ -1,11 +1,11 @@
-"""P43 T1: the kinetics modules are the source of truth and the template carries an exact
-inlined copy of each. `sync_kinetics.py --check` is the contract; these tests pin that it
+"""P43 T1: the kinetics modules are the source of truth and the ENGINE carries an exact
+inlined copy of each (P51 T1 moved the regions out of the page and into scene-evidence-engine.mjs). `sync_kinetics.py --check` is the contract; these tests pin that it
 passes on the committed tree, that it FAILS on drift, that the module syntax is stripped, and
 that the write is idempotent (so a --write after a clean --check changes nothing).
 
 P50 T2 widens the contract to a SECOND module dir - content/video_engine/scripts/species/, one
 painter per species kind (the operator's module rule, 2026-09-11: no new species is written into
-the template's body). Both dirs are scanned into one name space, with the same region grammar,
+the engine's body). Both dirs are scanned into one name space, with the same region grammar,
 the same missing-region / missing-module report and the same import-order rule; the tests below
 pin each of those three."""
 from __future__ import annotations
@@ -45,12 +45,12 @@ SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span", 
                               # the template's vecmap branch calls paintVecmapWorld, so the map's fit lives with its species.
 
 
-def test_committed_template_is_in_sync() -> None:
+def test_committed_engine_is_in_sync() -> None:
     assert SK.check() == []
 
 
 def test_every_t1_module_exists_and_has_one_region() -> None:
-    html = SK.TEMPLATE.read_text(encoding="utf-8")
+    html = SK.ENGINE.read_text(encoding="utf-8")
     for name in MODULES:
         assert (SK.MODULES / f"{name}.mjs").is_file()
         assert html.count(f"/* KINETICS:BEGIN {name} */") == 1, name
@@ -58,7 +58,7 @@ def test_every_t1_module_exists_and_has_one_region() -> None:
 
 
 def test_the_moved_functions_are_still_defined_in_the_template() -> None:
-    html = SK.TEMPLATE.read_text(encoding="utf-8")
+    html = SK.ENGINE.read_text(encoding="utf-8")
     for fn in ("const minJerk = (u) =>", "const springPop = (u, Mp = 0.04) =>"):
         assert html.count(fn) == 1, fn
     # and nothing that only means something to node survived the inlining. CODE lines only: a block
@@ -81,7 +81,7 @@ def test_inline_text_strips_module_syntax() -> None:
 
 def test_drift_is_detected(tmp_path: Path) -> None:
     tpl = tmp_path / "t.html"
-    shutil.copy(SK.TEMPLATE, tpl)
+    shutil.copy(SK.ENGINE, tpl)
     html = tpl.read_text(encoding="utf-8")
     drifted = html.replace("10 - 15 * u + 6 * u * u", "10 - 15 * u + 7 * u * u", 1)
     assert drifted != html
@@ -97,12 +97,12 @@ def test_missing_region_and_missing_module_are_reported(tmp_path: Path) -> None:
         shutil.copy(SK.MODULES / f"{name}.mjs", mods / f"{name}.mjs")
     (mods / "orphan.mjs").write_text("export const orphan = 1;\n", encoding="utf-8")
     tpl = tmp_path / "t.html"
-    shutil.copy(SK.TEMPLATE, tpl)
-    assert SK.check(tpl, mods, SK.SPECIES_DIR) == ["orphan: kinetics/orphan.mjs has no region in the template"]
+    shutil.copy(SK.ENGINE, tpl)
+    assert SK.check(tpl, mods, SK.SPECIES_DIR) == ["orphan: kinetics/orphan.mjs has no region in the engine"]
     html = tpl.read_text(encoding="utf-8").replace("/* KINETICS:BEGIN spring */", "/* KINETICS:BEGIN ghost */", 1)
     tpl.write_text(html, encoding="utf-8")
     problems = SK.check(tpl, mods, SK.SPECIES_DIR)
-    assert any(p.startswith("ghost: region in the template but no") for p in problems), problems
+    assert any(p.startswith("ghost: region in the engine but no") for p in problems), problems
     assert any(p.startswith("spring: kinetics/spring.mjs has no region") for p in problems), problems
 
 
@@ -115,12 +115,12 @@ def test_import_order_is_the_dependency(tmp_path: Path) -> None:
     tpl.write_text("<script>\n  /* KINETICS:BEGIN a */\n  /* KINETICS:END */\n  /* KINETICS:BEGIN b */\n  /* KINETICS:END */\n</script>\n",
                    encoding="utf-8")
     assert SK.write(tpl, mods, None) == 2
-    assert SK.check(tpl, mods, None) == ["a: imports b but b's region is not earlier in the template"]
+    assert SK.check(tpl, mods, None) == ["a: imports b but b's region is not earlier in the engine"]
 
 
 def test_write_is_idempotent_and_keeps_the_line_endings(tmp_path: Path) -> None:
     tpl = tmp_path / "t.html"
-    shutil.copy(SK.TEMPLATE, tpl)
+    shutil.copy(SK.ENGINE, tpl)
     before = tpl.read_bytes()
     assert SK.write(tpl) == len(MODULES) + len(SPECIES)
     assert tpl.read_bytes() == before
@@ -132,7 +132,7 @@ def test_both_dirs_are_scanned_into_one_name_space() -> None:
     """Every species module is found beside every kinetics module, and each has exactly one region."""
     names = SK.module_files()
     assert set(MODULES) | set(SPECIES) <= set(names)
-    html = SK.TEMPLATE.read_text(encoding="utf-8")
+    html = SK.ENGINE.read_text(encoding="utf-8")
     for name in SPECIES:
         assert (SK.SPECIES_DIR / f"{name}.mjs").is_file(), name
         assert names[name].parent == SK.SPECIES_DIR, name
@@ -144,13 +144,13 @@ def test_a_species_module_with_no_region_fails_check_by_name(tmp_path: Path) -> 
     sp.mkdir()
     (sp / "nowhere.mjs").write_text("export const paintNowhere = () => 1;\n", encoding="utf-8")
     tpl = tmp_path / "t.html"
-    shutil.copy(SK.TEMPLATE, tpl)
+    shutil.copy(SK.ENGINE, tpl)
     problems = SK.check(tpl, SK.MODULES, sp)
-    assert "nowhere: species/nowhere.mjs has no region in the template" in problems, problems
+    assert "nowhere: species/nowhere.mjs has no region in the engine" in problems, problems
     # ... and the reverse, the same way a kinetics region does: a region with no module names both dirs
     html = tpl.read_text(encoding="utf-8").replace("/* KINETICS:BEGIN chip */", "/* KINETICS:BEGIN phantom */", 1)
     tpl.write_text(html, encoding="utf-8")
-    assert any(p == "phantom: region in the template but no kinetics/phantom.mjs or species/phantom.mjs"
+    assert any(p == "phantom: region in the engine but no kinetics/phantom.mjs or species/phantom.mjs"
                for p in SK.check(tpl, SK.MODULES, sp)), SK.check(tpl, SK.MODULES, sp)
 
 
@@ -162,7 +162,7 @@ def test_a_name_in_both_dirs_is_refused(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="one name space"):
         SK.module_files(mods, sp)
     tpl = tmp_path / "t.html"
-    shutil.copy(SK.TEMPLATE, tpl)
+    shutil.copy(SK.ENGINE, tpl)
     problems = SK.check(tpl, mods, sp)
     assert len(problems) == 1 and problems[0].startswith("twin: a module of that name in both"), problems
 
@@ -173,7 +173,7 @@ def test_a_species_module_may_import_a_kinetics_module_whose_region_is_earlier()
     src = (SK.SPECIES_DIR / "chip.mjs").read_text(encoding="utf-8")
     deps = SK.imports_of(src)
     assert "spring" in deps, deps
-    html = SK.TEMPLATE.read_text(encoding="utf-8")
+    html = SK.ENGINE.read_text(encoding="utf-8")
     order = [m.group(2) for m in SK.REGION.finditer(html.replace("\r\n", "\n"))]
     for dep in deps:
         assert order.index(dep) < order.index("chip"), dep
@@ -191,4 +191,4 @@ def test_a_comment_line_beginning_with_import_is_not_stripped() -> None:
     # ... and the species module that found it keeps its registration through the inlining
     chip = (SK.SPECIES_DIR / "chip.mjs").read_text(encoding="utf-8")
     assert "SPECIES_PAINTERS.chip = paintChip;" in SK.inline_text(chip, "  ")
-    assert "SPECIES_PAINTERS.chip = paintChip;" in SK.TEMPLATE.read_text(encoding="utf-8")
+    assert "SPECIES_PAINTERS.chip = paintChip;" in SK.ENGINE.read_text(encoding="utf-8")

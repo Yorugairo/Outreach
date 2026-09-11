@@ -28,7 +28,7 @@ CAPTION_STRIP = (1340, 1440)
 
 
 def _rule(selector: str) -> str:
-    src = RB.TEMPLATE.read_text(encoding="utf-8")
+    src = RB.player_text()
     m = re.search(re.escape(selector) + r"\s*\{([^}]*)\}", src)
     assert m, f"no CSS rule for {selector!r}"
     return m.group(1)

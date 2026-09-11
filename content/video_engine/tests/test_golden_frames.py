@@ -1,4 +1,4 @@
-"""P39 T3: four committed golden frames; any pixel change FAILS, names the surface, and
+"""P39 T3: the committed golden frames; any pixel change FAILS, names the surface, and
 writes golden | actual | diff side by side under tests/golden/diffs/.
 
 The harness is proven by breaking it: the last test renders through a one-value CSS
@@ -11,6 +11,8 @@ Refresh deliberately, never by accident:
 """
 from __future__ import annotations
 
+import hashlib
+import json
 import sys
 import tempfile
 from pathlib import Path
@@ -59,6 +61,55 @@ def test_every_surface_has_a_committed_source_and_golden() -> None:
 def test_golden_frame_is_unchanged(surface: str) -> None:
     failures = RB.check([surface])
     assert not failures, "\n".join(failures)
+
+
+# ---- P51 T1: THE SPLIT FORM RENDERS THE SAME FRAME ----------------------------------------------
+# The engine left the page. The goldens are still captured from the SINGLE-FILE form (inline data,
+# inline engine); a build writes the SPLIT form (a shell that imports the engine module and fetches
+# the timeline and the asset map beside it). These two prove the split is a delivery format and not
+# a render change: the same surface, written the other way, hashes to the same pixels.
+SPLIT_PARITY = ["ledger-page-mid-build",   # the ledger world mid-build: the page, its chart, its ink
+                "chip-board"]              # + a targeted species, whose painter is inlined by sync_kinetics
+
+
+def _split_frame(surface: str) -> bytes:
+    """Write the surface as a BUILD writes it - player.html + <name>.timeline.json + assets.json +
+    a copy of the engine - and capture the golden's instant off the served dir."""
+    tl, uris, t, aspect = RB.load_surface(surface)
+    with tempfile.TemporaryDirectory() as td:
+        page = RB.write_split(Path(td), tl, uris, f"{surface}.timeline.json")
+        return RB.render_frame(page, t, aspect)
+
+
+@pytest.mark.parametrize("surface", SPLIT_PARITY)
+def test_the_split_form_hashes_the_same_as_the_single_file(surface: str) -> None:
+    golden = (RB.FRAMES / f"{surface}.png").read_bytes()
+    actual = _split_frame(surface)
+    if RB.rgb_bytes(golden)[1] != RB.rgb_bytes(actual)[1]:
+        diff = RB.write_diff(f"{surface}.split", golden, actual)
+        raise AssertionError(f"{surface}: the split form renders different pixels - see {diff}")
+
+
+SPLIT_PAGE_CEILING = 200 * 1024   # the plan's number: a build's page is a page, not an asset bundle
+TOKYO_SPLIT = (ROOT / "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t0")
+
+
+def test_the_split_build_is_small() -> None:
+    """A split build holds a page a human can open in an editor, with its data beside it."""
+    tl, uris, _t, _a = RB.load_surface("ledger-page-mid-build")
+    with tempfile.TemporaryDirectory() as td:
+        d = Path(td)
+        page = RB.write_split(d, tl, uris, "s.timeline.json")
+        assert page.stat().st_size < SPLIT_PAGE_CEILING, page.stat().st_size
+        assert (d / RB.ASSETS_NAME).exists() and (d / RB.ENGINE.name).exists()
+        manifest = json.loads((d / RB.MANIFEST_NAME).read_text(encoding="utf-8"))
+        assert manifest["engine_sha256"] == hashlib.sha256(RB.ENGINE.read_bytes()).hexdigest()
+        assert manifest["timeline"] == "s.timeline.json"
+    if (TOKYO_SPLIT / "player.html").exists():   # the test bed, when it has been rebuilt since the split
+        page = TOKYO_SPLIT / "player.html"
+        assert page.stat().st_size < SPLIT_PAGE_CEILING, f"{page}: {page.stat().st_size} bytes"
+        assert (TOKYO_SPLIT / RB.ASSETS_NAME).stat().st_size > page.stat().st_size * 10, (
+            "the asset map should carry the weight the page used to")
 
 
 def test_harness_catches_a_one_value_css_change() -> None:

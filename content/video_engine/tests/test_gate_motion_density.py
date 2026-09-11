@@ -943,8 +943,11 @@ needs_tokyo25 = pytest.mark.skipif(not (TOKYO / "player.html").exists(), reason=
 def tokyo_parts():
     """The compiled timeline and the build's own asset map, lifted out of the built player once."""
     html = (TOKYO / "player.html").read_text(encoding="utf-8")
-    uris = _re.search(r'<script id="asset-data" type="application/json">(.*?)</script>', html, _re.S).group(1)
-    tpl = RB25.TEMPLATE.read_text(encoding="utf-8")
+    # P51 T1: a build's page may be the split form (the slot is empty and assets.json sits beside it)
+    # or the single-file one committed before the split. Both give the same asset map TEXT.
+    slot = _re.search(r'<script id="asset-data"[^>]*>(.*?)</script>', html, _re.S)
+    uris = (slot.group(1).strip() if slot else "") or (TOKYO / "assets.json").read_text(encoding="utf-8")
+    tpl = RB25.single_file_shell()   # the shell with the engine inlined, data slots still open
     return _json.loads((TOKYO / TOKYO_TL).read_text(encoding="utf-8")), uris, tpl
 
 

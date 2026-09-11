@@ -693,7 +693,7 @@
  },
  "measured": "2026-09-11",
  "note": "measured by scripts/measure_page_boxes.py - do not hand-edit",
- "player_sha256": "75e484995f339e9e5337255509a3511598c0f0a2755718c1c67b58b64313fc3e",
+ "player_sha256": "b6613c73317390b5d11f5ccd7c8ce87893b1add1f3405c58f5c34a65d4ab9630",
  "schema": "page_boxes.v1",
  "stage": {
   "16:9": [

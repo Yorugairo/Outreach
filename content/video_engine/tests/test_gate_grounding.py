@@ -9,7 +9,10 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 import gate_grounding as G  # noqa: E402
 
-TEMPLATE = (ROOT / "docs/content-video-engine/samples/scene-evidence-player.template.html").read_text(encoding="utf-8")
+sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
+import render_baseline as RB  # noqa: E402
+
+TEMPLATE = RB.player_text()   # P51 T1: the shell and the engine - G-j greps the player's painters
 
 
 def _scene(**kw) -> dict:

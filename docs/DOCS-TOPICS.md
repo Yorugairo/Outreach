@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4785 topics, 5651 citation edges. The 200 largest topics follow,
+4787 topics, 5661 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (158)
@@ -790,6 +790,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:398 — Improvement 5: Word-Gap Boundary Snapping Engine — Integrate the acoustic transition finding directly into the script-to-storyboard compiler (`src/services/storyboard_gene
 - … 11 more in `docs/DOCS-TOPICS.jsonl`
 
+## dot-com (22)
+
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/edit/EVIDENCE-COVERAGE.md:71 — 4. Transparent Still Head Cutouts Inventory (Extracted & Verified) — All 6 still head portraits have been isolated, background-removed via neural matting, color-graded to 4500K documentary
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/EVIDENCE-DOSSIER.md:1 — EVIDENCE DOSSIER — The Myth of "Historical Normal"
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/EVIDENCE-DOSSIER.md:6 — Verified Data Series & Citations — 1. US 10-Year Treasury Constant Maturity (`DGS10` / FRED)
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:246 — Correction found while building (2026-08-25) — The GDP-share claim needed weakening, not strengthening. Recomputing
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-LEDGER.md:1 — Steel and Paper — Script G ledger — Script G: 13,268 chars · ~13m 34s speech (+15s edit pauses ≈ 13m 49s) · pivot 50.6% · both checkers clean
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-LEDGER.md:70 — The yardstick (P2 — NEW central self-pulled evidence) — Railways ~50% of UK capital formation (one technology, caveat SPOKEN) →
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-PRODUCTION.md:1 — STEEL AND PAPER — Script G (production) — Base: Script F. Changes per REWRITE-ORDER-G. Pause marks per doc 37.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-PRODUCTION.md:274 — Sources — - Bravos Research divergence pairing (MAMAA vs semiconductors) — recreated,
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:1 — Steel and Paper - the 2:46-3:23 sputter, and how the unit should read — Retention read 2026-09-02: AVD 2:49 at n=2 (noise), but it lands three
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:31 — The unit as it should read (target ~62s, turn lands ~3:10) — > At the dot-com peak, that share hit twenty-three cents. Today it's
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:372 — `Titles_Format_Library` live run — template quality check — Ran against "finance and investing (market bubbles, wealth mechanics)",
+- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:110 — 4b. Baseline analysis — the chart-story reference (`Jw8ykhoOVBQ`) — Analysed before the AOY script lands, so the comparison is measured rather
+- … 10 more in `docs/DOCS-TOPICS.jsonl`
+
 ## m-p (22)
 
 - content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/BRAVOS-STYLE-EVIDENCE-PACK.md:11 — 1. The 5 Core Mechanics of the "New Bravos Style" — To reproduce the institutional tier seen in China Just Triggered A New World Order without violating our brand doctrine:
@@ -844,7 +860,7 @@ at most 12 sections each - the JSONL holds every one.
 ## stop-motion (22)
 
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1297 — 9.23 A chart carries its OWN story (operator, 2026-08-30) — "The charts need to fully communicate their own story without
-  cited by: docs/content-video-engine/40-MEDIA-TDD.md:53, docs/content-video-engine/CAPABILITIES.md:118, docs/portable/OPERATOR-RULINGS.md:505
+  cited by: docs/content-video-engine/40-MEDIA-TDD.md:53, docs/content-video-engine/CAPABILITIES.md:119, docs/portable/OPERATOR-RULINGS.md:505
 - docs/content-video-engine/SPECIES-BY-SENTENCE.md:78 — 2. The widened rows (2026-09-10 / 11: E58, E59, E60, the dock read->park, E61) — | # | the sentence ... | the mechanism | its beat | declared on the row | gates | example |
 - docs/portable/OPERATOR-RULINGS.md:1936 — E60 — The BREAKTHROUGH is a rescale: the bar that cannot fit builds to the comparator's level, then shoots while the scale rewrites under it (2026-09-10) — The operator's words. On the first pass (a zigzag cut at the top gridline, the bar a little past it): *"is that squiggle
   cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:46, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:65, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1297, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2156, docs/content-video-engine/BACKLOG.md:420, docs/content-video-engine/CAPABILITIES.md:14, +9 more
@@ -907,22 +923,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:58 — 2.1 Mechanics Under the Hood — `Depthflow` is an image-space continuous heightfield ray marcher (`depthflow.glsl`). It projects camera rays from `camer
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:25 — 1. Master File & Artifact Inventory — All research, evidence frames, technical specifications, and mathematical treatises produced during this research cycle
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:29 — 1.1 Complete Evidence Bundle (`complete_research_evidence_bundle/`) — | File / Artifact | Size / Scope | Primary Role & Description | Recommended Agent / Consumer |
-- … 9 more in `docs/DOCS-TOPICS.jsonl`
-
-## dot-com (21)
-
-- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/EVIDENCE-DOSSIER.md:1 — EVIDENCE DOSSIER — The Myth of "Historical Normal"
-- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/EVIDENCE-DOSSIER.md:6 — Verified Data Series & Citations — 1. US 10-Year Treasury Constant Maturity (`DGS10` / FRED)
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:246 — Correction found while building (2026-08-25) — The GDP-share claim needed weakening, not strengthening. Recomputing
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-LEDGER.md:1 — Steel and Paper — Script G ledger — Script G: 13,268 chars · ~13m 34s speech (+15s edit pauses ≈ 13m 49s) · pivot 50.6% · both checkers clean
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-LEDGER.md:70 — The yardstick (P2 — NEW central self-pulled evidence) — Railways ~50% of UK capital formation (one technology, caveat SPOKEN) →
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-PRODUCTION.md:1 — STEEL AND PAPER — Script G (production) — Base: Script F. Changes per REWRITE-ORDER-G. Pause marks per doc 37.
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-PRODUCTION.md:274 — Sources — - Bravos Research divergence pairing (MAMAA vs semiconductors) — recreated,
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:1 — Steel and Paper - the 2:46-3:23 sputter, and how the unit should read — Retention read 2026-09-02: AVD 2:49 at n=2 (noise), but it lands three
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:31 — The unit as it should read (target ~62s, turn lands ~3:10) — > At the dot-com peak, that share hit twenty-three cents. Today it's
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:372 — `Titles_Format_Library` live run — template quality check — Ran against "finance and investing (market bubbles, wealth mechanics)",
-- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:110 — 4b. Baseline analysis — the chart-story reference (`Jw8ykhoOVBQ`) — Analysed before the AOY script lands, so the comparison is measured rather
-- docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:128 — Beat map — | Beat | Move |
 - … 9 more in `docs/DOCS-TOPICS.jsonl`
 
 ## mask-pinned (21)
@@ -1151,7 +1151,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:436 — 14.2 9:16 vs. 16:9 Cross-Platform Architecture & Short vs. Long Form — 1. The Universal Clean Canvas ($800 \times 1060\text{ px}$):
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1942 — 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — Ruling E24. An outside analyst's read of Steel and Paper's drop-off,
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1997, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2084, docs/content-video-engine/CAPABILITIES.md:142, docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:101, docs/content-video-engine/patterns/phase-guides/P1.md:175, docs/content-video-engine/PIPELINE.md:18
+  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1997, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2084, docs/content-video-engine/CAPABILITIES.md:143, docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:101, docs/content-video-engine/patterns/phase-guides/P1.md:175, docs/content-video-engine/PIPELINE.md:18
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1997 — 9.30 The chart is the PROOF, not the homework — no chart held across plates (operator, 2026-09-03) — Ruling E25. The operator's own read of the analytics behind §9.29: the
   cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2039, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2156, docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:101, docs/portable/OPERATOR-RULINGS.md:1968
 - docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:253 — A4: The Threshold of "Alive" [RE-ASK 1 ★: Audited & Answered]
@@ -1502,11 +1502,11 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:25 — "Why not MapLibre?" — the honest answer, and a revision — Operator, 2026-09-08. Citing the harvest was not a reason, so here is the check.
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/RECORD-CHAIN-G.md:1 — SCRIPT G — RECORD CHAIN (FINAL RUN 2026-08-30 — post-playthrough master, chain complete) — FINAL MASTER: part 1 reused from validated cache (FREE - first legit
 - docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:1 — 49 — Generative video and the vertical stage — Extracted from `10_generative_video_tools_and_cross_platform_composition.md`.
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:210, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:116, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118, docs/content-video-engine/CAPABILITIES.md:94, +1 more
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:210, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:116, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:366, docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118, docs/content-video-engine/CAPABILITIES.md:95, +1 more
 - docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:13 — 49.1 The vertical safe box, and the defect it exposed — Mobile platforms overlay UI on up to 59.1 % of a vertical frame. The intersection that
   cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:158, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:210, docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:1, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:30, +10 more
 - docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52 — The 3-zone vertical stage — Centre-cropping 16:9 → 9:16 destroys 68.36 % of horizontal area
-- docs/content-video-engine/CAPABILITIES.md:248 — The frozen baseline (P39 T1, 2026-09-04) — The last known-good player is tagged `player-baseline-2026-09-04` (annotated; the
+- docs/content-video-engine/CAPABILITIES.md:249 — The frozen baseline (P39 T1, 2026-09-04) — The last known-good player is tagged `player-baseline-2026-09-04` (annotated; the
 - docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:1 — Grill: the animator's loop — decision ledger (2026-09-11) — `/grill-me let's find the most powerful features we could add to make you a better animator, and improve our iteration
 - docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:8 — 1. Settled — | decision | the operator's words | what it binds |
 - docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:41 — 4. Immediate build order (P51, after P50 T1 the map) — 1. The authoring kit - the eleven helpers the two shorts copy, plus the outro/bed/pauses assembly, become one library bo
@@ -1641,7 +1641,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:81 — Lane C — `presenter_infographic` — Reference: personal-finance channel, presenter-anchored.
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:336 — The honest risk — A parametric rig can read as sterile. Part of Casual Finance's charm is that no
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:966 — 9.16 Motion verification and authority (operator decisions, 2026-08-29) — 1. The gold standard is a RENDERED reference, not a table of constants.
-  cited by: docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/CAPABILITIES.md:179
+  cited by: docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/CAPABILITIES.md:180
 - docs/content-video-engine/BACKLOG.md:207 — Ready to pull in — read 2026-09-05 after the hands-on day (operator: "see if we're ready to pull anything else in") — Ordered by leverage against what the Tokyo build now exercises. Each names the artifact it lands on.
 - docs/content-video-engine/BACKLOG.md:225 — The plan stack — | # | plan | status | note |
 - … 5 more in `docs/DOCS-TOPICS.jsonl`
@@ -1885,7 +1885,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/28-AOY-MCP-EVALUATION.md:396 — The decisive test, run: `review_script` + `review_title` on our own work — 2026-08-24 — Phase 2 of the harvest plan. Fed the Alicia-format script (narration only,
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
 - docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:523 — 20. THE TEMPO FIELD - one choreography across script AND video (operator-approved 2026-08-30) — The realization (obvious only in hindsight, and only reachable through
-- docs/content-video-engine/CAPABILITIES.md:118 — Evidence & assets — Martial Matters episode 1 (merged from p16, 2026-08-29): 192 asset files
+- docs/content-video-engine/CAPABILITIES.md:119 — Evidence & assets — Martial Matters episode 1 (merged from p16, 2026-08-29): 192 asset files
 - docs/content-video-engine/patterns/STRENGTH-LOOP.md:108 — 7. The loop protocol — Operator rulings, 2026-08-29.
 - docs/content-video-engine/patterns/STRENGTH-LOOP.md:138 — Rewrite budget — the over-smoothing guard — Any sentence rewritten more than twice stops and goes to the operator
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
@@ -2074,7 +2074,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/BACKLOG.md:11 — The founding-premise correction (52) — > *"The stick figures work because you can build the world you need to convey; I was
 - docs/content-video-engine/BACKLOG.md:296 — Planning gap found 2026-09-04: gates whose fix has no owner — An audit of P37 and P38 against docs 42–49 found three gates that check behaviour
 - docs/content-video-engine/BACKLOG.md:354 — B6 — the multi-plane lane has no owner and the viability matrix needs it — 45 §45.2 bans Depthflow on any plate carrying a foreground character, an isolated prop,
-- docs/content-video-engine/CAPABILITIES.md:187 — The research reference layer (2026-09-04) — Docs 42–46 condense the research evidence bundle into what is applicable here.
+- docs/content-video-engine/CAPABILITIES.md:188 — The research reference layer (2026-09-04) — Docs 42–46 condense the research evidence bundle into what is applicable here.
 - docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:104 — 4. The reference layer's maths not yet built (docs 42–49, all "reference — not yet folded to portable") — | doc | maths | built? |
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
@@ -2681,6 +2681,23 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/FINDING-the-animation-math-and-what-it-changes.md:1 — The animation math, and what each piece changes in our code — 2026-09-04 — From `07_academic_literature_drawing_and_2_5d_animation_engine.md`, read in full after the
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
+## systems-and-blowups (14)
+
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:153 — 5. Audio Assets & Timestamp Artifacts Available — All audio assets are persisted in `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/scratch/`:
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/edit/EVIDENCE-COVERAGE.md:1 — Full-Episode Evidence Layer Coverage & Cadence Baseline — Episode: The Myth of "Historical Normal": How Small Changes Break Big Markets
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/edit/EVIDENCE-COVERAGE.md:42 — 3. Diegetic TV Video Evidence Inventory (Harvested & Verified) — All 5 broadcast video clips have been downloaded, sliced to exact duration, color-graded to match the dark slate world p
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/edit/EVIDENCE-COVERAGE.md:71 — 4. Transparent Still Head Cutouts Inventory (Extracted & Verified) — All 6 still head portraits have been isolated, background-removed via neural matting, color-graded to 4500K documentary
+- content/video_engine/projects/systems-and-blowups/registration/README.md:1 — Slide Semantic Registration — systems-and-blowups — Returned 2026-08-24, validated PASS: 86/86 slides, 340 verbatim figures,
+- docs/content-video-engine/patterns/CRAFT-DEVICES.md:34 — The devices — | device | scale | what it does | defined in | exemplar |
+- docs/portable/OPERATOR-RULINGS.md:515 — E19 — Isolation is by PROJECT, not by worktree (2026-08-31) — "I think you should be able to write across worktrees; what we want to
+- docs/portable/OPERATOR-RULINGS.md:531 — E20 — Concession runs are budgeted; a delivered proof is never hedged next-line (2026-09-02) — Retention read on Steel and Paper (AVD 2:49 at n=2 - noise, but it lands
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:77, docs/content-video-engine/patterns/STRENGTH-LOOP.md:71, docs/portable/OPERATOR-RULINGS.md:557
+- docs/research/2026-08-22-agent-design-tooling-assessment.md:131 — Correction (2026-08-22, same day) — An earlier revision of this document claimed the bottleneck was "roughly 150
+- docs/STATE-OF-WORK.md:1 — STATE OF WORK - every worktree, regenerated — Generated 2026-09-03 06:02 by `survey_worktrees.py`. DO NOT hand-edit - rerun the script.
+- docs/STATE-OF-WORK.md:11 — `C:\Users\Snipe\Downloads\Outreach Program` — - branch `main` - HEAD 9bd23d8 2026-09-03 docs(review): keep the yen scene-3 plate claim's records before its worktree i
+- docs/STATE-OF-WORK.md:17 — `C:\Users\Snipe\.codex\worktrees\f10b\Outreach Program` — - branch `codex/stickly-woodblock-variant` - HEAD 808eb14 2026-08-23 chore(video): commit accumulated engine source and
+- … 2 more in `docs/DOCS-TOPICS.jsonl`
+
 ## take-or-pay (14)
 
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
@@ -2761,7 +2778,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:116 — 2. Animation Mechanics & Deterministic Clocking
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:118 — 2.1 The Deadly Flaw of Wall-Clock Animations in Headless Video — In interactive web browsers, animations rely on `requestAnimationFrame(timestamp)` or `setInterval`. If the CPU stutters
 - docs/content-video-engine/01-PRD.md:121 — 7. Non-functional requirements — - Reproducibility: same storyboard + configs ⇒ same video (schema major-version refusal;
-- docs/content-video-engine/CAPABILITIES.md:229 — The golden-frame harness (P39 T2/T3, 2026-09-04) — Four committed surfaces - ledger page mid-build, chart with a callout, 16:9 dock pair,
+- docs/content-video-engine/CAPABILITIES.md:230 — The golden-frame harness (P39 T2/T3, 2026-09-04) — Four committed surfaces - ledger page mid-build, chart with a callout, 16:9 dock pair,
 - docs/content-video-engine/RESEARCH-INDEX.md:86 — Full disposition table
 - docs/content-video-engine/RESEARCH-INDEX.md:117 — `02_drawing_engine_and_transforms_research.md` — 29 headings — | heading | disposition |
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
@@ -3032,7 +3049,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/25-EDITOR-EMBEDDING-SPIKE.md:43 — Revisit triggers — Reopen this decision only if one of these becomes true: Remotion ships a
 - docs/content-video-engine/26-AGENT-GENERATION-LOOP.md:67 — Work-order authoring — The claim service renders the work order; do not hand-write one. It encodes:
 - docs/content-video-engine/27-DURABILITY-AND-LAYOUT.md:64 — The disaster-recovery contract — A bare catalogue plus credentials is sufficient to rebuild every canonical
-- docs/content-video-engine/CAPABILITIES.md:173 — External evidence sources — | Source | Where | Gives | Rule |
+- docs/content-video-engine/CAPABILITIES.md:174 — External evidence sources — | Source | Where | Gives | Rule |
 - docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md:1 — Exploration inventory (2026-09-10) — the explorer's mapping behind EXPLORATION-REVIEW-2026-09-10.md — Every Bravos term put through `docs_find`, every open backlog row with the maths it needs and whether that maths is on d
 - docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md:5 — P49 exploration inventory — the Bravos math and the open backlog — Read-only pass, 2026-09-10. All paths absolute-resolvable from the MAIN checkout
 - docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md:51 — Astra's review (2026-09-05, later) - accepted, and what changed here — Astra agreed with the four recommendations with qualifications; all four are applied on this side:
@@ -3068,23 +3085,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/VERDICT-research-brief-animation-craft.md:42 — ADOPT AS OURS — sound engineering, but a design choice we own and tune — These are not findings. They are reasonable starting constants. Take them, label them
 - docs/content-video-engine/FINDING-what-the-bundle-already-answered.md:1 — What the research bundle already answered — 2026-09-04 — I reviewed the answers file (08) and spot-checked the academic monograph (07), then
 - docs/content-video-engine/FINDING-what-the-bundle-already-answered.md:13 — 1. B5 is answered from our own data — and it kills my hypothesis — `04_shot_ledger_100_cuts.md` is a frame-accurate 100-shot ledger of the reference
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## systems-and-blowups (13)
-
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:153 — 5. Audio Assets & Timestamp Artifacts Available — All audio assets are persisted in `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/scratch/`:
-- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/edit/EVIDENCE-COVERAGE.md:1 — Full-Episode Evidence Layer Coverage & Cadence Baseline — Episode: The Myth of "Historical Normal": How Small Changes Break Big Markets
-- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/edit/EVIDENCE-COVERAGE.md:42 — 3. Diegetic TV Video Evidence Inventory (Harvested & Verified) — All 5 broadcast video clips have been downloaded, sliced to exact duration, color-graded to match the dark slate world p
-- content/video_engine/projects/systems-and-blowups/registration/README.md:1 — Slide Semantic Registration — systems-and-blowups — Returned 2026-08-24, validated PASS: 86/86 slides, 340 verbatim figures,
-- docs/content-video-engine/patterns/CRAFT-DEVICES.md:34 — The devices — | device | scale | what it does | defined in | exemplar |
-- docs/portable/OPERATOR-RULINGS.md:515 — E19 — Isolation is by PROJECT, not by worktree (2026-08-31) — "I think you should be able to write across worktrees; what we want to
-- docs/portable/OPERATOR-RULINGS.md:531 — E20 — Concession runs are budgeted; a delivered proof is never hedged next-line (2026-09-02) — Retention read on Steel and Paper (AVD 2:49 at n=2 - noise, but it lands
-  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:77, docs/content-video-engine/patterns/STRENGTH-LOOP.md:71, docs/portable/OPERATOR-RULINGS.md:557
-- docs/research/2026-08-22-agent-design-tooling-assessment.md:131 — Correction (2026-08-22, same day) — An earlier revision of this document claimed the bottleneck was "roughly 150
-- docs/STATE-OF-WORK.md:1 — STATE OF WORK - every worktree, regenerated — Generated 2026-09-03 06:02 by `survey_worktrees.py`. DO NOT hand-edit - rerun the script.
-- docs/STATE-OF-WORK.md:11 — `C:\Users\Snipe\Downloads\Outreach Program` — - branch `main` - HEAD 9bd23d8 2026-09-03 docs(review): keep the yen scene-3 plate claim's records before its worktree i
-- docs/STATE-OF-WORK.md:17 — `C:\Users\Snipe\.codex\worktrees\f10b\Outreach Program` — - branch `codex/stickly-woodblock-variant` - HEAD 808eb14 2026-08-23 chore(video): commit accumulated engine source and
-- docs/STATE-OF-WORK.md:23 — `C:\Users\Snipe\.codex\worktrees\p29-remotion-console\Outreach Program` — - branch `codex/p31-semantic-evidence-and-word-timed-captions` - HEAD 461fbea 2026-08-23 feat(video): production console
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
 
 ## target-date (13)
@@ -3325,4 +3325,4 @@ at most 12 sections each - the JSONL holds every one.
 - docs/portable/OPERATOR-RULINGS.md:1090 — E32 — Motion is not animation; the original motion premise was flawed (2026-09-04) — *"When I first started, I had 0 understanding of animation, so I thought all of the movement
   cited by: docs/portable/OPERATOR-RULINGS.md:1246
 - docs/portable/OPERATOR-RULINGS.md:1654 — E51 — A push-in is only used tied to something that just landed; an untied zoom is filler (2026-09-07) — The operator, on v3's third watch: *"The push-in doesn't make sense - we are using it randomly it seems, it is a motion
-  cited by: docs/content-video-engine/BACKLOG.md:420, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/CAPABILITIES.md:212, docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md:99, docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md:37, docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md:56, +4 more
+  cited by: docs/content-video-engine/BACKLOG.md:420, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/CAPABILITIES.md:213, docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md:99, docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md:37, docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md:56, +4 more

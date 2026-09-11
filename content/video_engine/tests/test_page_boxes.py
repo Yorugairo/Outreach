@@ -49,9 +49,8 @@ def estimate(page: dict, aspect: str, tmp: Path) -> dict:
 
 def test_the_fixture_names_every_builder_at_both_aspects_and_the_player_it_was_read_from():
     assert FIXTURE["schema"] == LPG.PAGE_BOXES_SCHEMA
-    assert FIXTURE["player_sha256"] == hashlib.sha256(
-        (ROOT / "docs/content-video-engine/samples/scene-evidence-player.template.html").read_bytes()).hexdigest(), (
-        "the fixture was measured from a different player.html - re-run measure_page_boxes.py --write")
+    assert FIXTURE["player_sha256"] == M.template_sha(), (
+        "the fixture was measured from a different player - re-run measure_page_boxes.py --write")
     assert sorted(FIXTURE["builders"]) == sorted(M.BUILDERS)
     for builder, aspect in CASES:
         entry = FIXTURE["builders"][builder][aspect]

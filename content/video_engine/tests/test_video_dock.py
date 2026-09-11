@@ -120,7 +120,7 @@ def test_the_asset_resolver_reaches_a_docked_clip_so_the_motion_plan_never_calls
 
 
 def test_the_world_clip_and_the_video_dock_share_one_seek():
-    html = TEMPLATE.read_text(encoding="utf-8")
+    html = RB.player_text()
     assert html.count("const seekVideo = (v, want) =>") == 1
     assert html.count("seekVideo(v,") == 2, "paintClip and paintDockClip, and nothing else, seek"
     # the awaited-seek machinery the renderer waits on exists exactly once
@@ -384,7 +384,7 @@ def test_a_dock_too_short_to_read_and_park_says_park_false():
 
 
 def test_the_player_reads_place_and_overrides_the_solo_defaults():
-    html = TEMPLATE.read_text(encoding="utf-8")
+    html = RB.player_text()
     for prop, expr in (("width", "G.w"), ("left", "G.x"), ("top", "G.y")):
         assert f"el.style.{prop} = G ? {expr}.toFixed(2)" in html, (
             f"the card's {prop} must come from the choreography")
@@ -398,7 +398,7 @@ def test_the_park_is_the_engines_own_kinetics_not_a_cut_or_a_dissolve():
     """E45: "you're just cutting the docks in instead of using our strong maths/springs". The
     arrival is the analytic spring's POP preset (42 s42.2, Mp = 4%, settle 6); the shrink and the
     slide are Flash & Hogan's minimum-jerk quintic, width and position on ONE clock."""
-    html = TEMPLATE.read_text(encoding="utf-8")
+    html = RB.player_text()
     assert "const j = minJerk(clamp01((t - d.enter - readS) / parkS));" in html
     assert "R.x + (P.x - R.x) * j" in html and "R.w + (P.w - R.w) * j" in html
     assert "const pk = springPop(clamp01((t - d.enter) / DOCK_POP_S));" in html

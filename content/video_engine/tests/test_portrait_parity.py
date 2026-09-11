@@ -16,6 +16,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 TEMPLATE = ROOT / "docs/content-video-engine/samples/scene-evidence-player.template.html"
+ENGINE = ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs"
+PLAYER = (TEMPLATE, ENGINE)   # P51 T1: the player is a shell and an engine - the lint reads BOTH
 sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 LITERAL = re.compile(r"(?<![\w.])(1920|1080|960|540)(?![\w.])")
@@ -26,10 +28,10 @@ ALLOW = (
 )
 
 
-def _code_lines():
-    """The template's lines with comments removed - block comments (/* ... */ across lines), line comments, HTML comments."""
+def _code_lines(path: Path = TEMPLATE):
+    """One file's lines with comments removed - block comments (/* ... */ across lines), line comments, HTML comments."""
     in_block = False
-    for n, line in enumerate(TEMPLATE.read_text(encoding="utf-8").splitlines(), 1):
+    for n, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
         code, i = "", 0
         while i < len(line):
             if in_block:
@@ -52,9 +54,10 @@ def _code_lines():
 
 def test_no_landscape_literal_in_player_code():
     offenders = []
-    for n, code, line in _code_lines():
-        if LITERAL.search(code) and not any(a in line for a in ALLOW):
-            offenders.append(f"{n}: {line.strip()[:110]}")
+    for path in PLAYER:
+        for n, code, line in _code_lines(path):
+            if LITERAL.search(code) and not any(a in line for a in ALLOW):
+                offenders.append(f"{path.name}:{n}: {line.strip()[:110]}")
     assert not offenders, "landscape literals in player code (use STAGE_W / STAGE_H, or allowlist with a reason):\n" + "\n".join(offenders)
 
 

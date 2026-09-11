@@ -2245,14 +2245,12 @@ def main() -> int:
         "kinetics": build_kinetics(),   # the template's capability flags this build turns on (P39: default all off; E49: the idle on)
         **({"caption_style": CAPTION_STYLE} if CAPTION_STYLE else {}),
     }
-    (BUILD / TIMELINE_NAME).write_text(
-        json.dumps(timeline, indent=1), encoding="utf-8")
-
-    html = TEMPLATE.read_text(encoding="utf-8")
-    html = html.replace("{{TIMELINE}}", json.dumps(timeline, separators=(",", ":")))
-    html = html.replace("{{URIS}}", json.dumps(uris, separators=(",", ":")))
-    out = BUILD / "player.html"
-    out.write_text(html, encoding="utf-8")
+    # P51 T1: the SPLIT form. write_split writes the compiled timeline (byte for byte what this
+    # line always wrote), assets.json, a copy of the engine module and the shell that fetches them,
+    # plus player.json naming the engine's sha - so a build dir holds a ~46 KB page, not a 32 MB one,
+    # and a served build says which engine it is running.
+    import render_baseline as _RB
+    out = _RB.write_split(BUILD, timeline, uris, TIMELINE_NAME, template=TEMPLATE)
 
     dur = float(subprocess.run(
         ["ffprobe", "-v", "quiet", "-show_entries", "format=duration",
@@ -2267,7 +2265,8 @@ def main() -> int:
     print(f"  captions    : {len(timeline['captions'])} lines / "
           f"{sum(len(p['t']) for p in pages)} tokens")
     print(f"  audio       : {dur:.2f}s embedded as __audio__")
-    print(f"  URIs        : {len(uris)} embedded, {out.stat().st_size/1e6:.0f} MB player")
+    print(f"  URIs        : {len(uris)} fetched from {(BUILD / _RB.ASSETS_NAME).stat().st_size/1e6:.0f} MB "
+          f"{_RB.ASSETS_NAME}, {out.stat().st_size/1e3:.0f} KB player + {(BUILD / _RB.ENGINE.name).stat().st_size/1e3:.0f} KB engine")
     print(f"  wrote {out}")
 
     # THE PLATE CADENCE, measured. Two pieces per plate with two badges each,

@@ -35,7 +35,7 @@ CAPABILITIES = ["curvature_stroke", "analytic_spring", "area_squash", "arap_morp
 
 
 def _defaults_block() -> dict[str, str]:
-    src = RB.TEMPLATE.read_text(encoding="utf-8")
+    src = RB.player_text()
     m = re.search(r"const KINETICS_DEFAULTS = Object\.freeze\(\{(.*?)\}\);", src, re.S)
     assert m, "template has no KINETICS_DEFAULTS block"
     return dict(re.findall(r"(\w+)\s*:\s*(true|false)", m.group(1)))
@@ -49,7 +49,7 @@ def test_every_capability_flag_defaults_to_current_behaviour() -> None:
 
 
 def test_template_reads_the_flags_from_the_timeline() -> None:
-    src = RB.TEMPLATE.read_text(encoding="utf-8")
+    src = RB.player_text()
     assert "TL.kinetics" in src
     assert "const kin = (name) => KIN[name] === true" in src
 

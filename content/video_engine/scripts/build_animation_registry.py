@@ -67,7 +67,7 @@ MD_REL = "docs/ANIMATION-REGISTRY.md"
 INDEX_REL = "docs/DOCS-INDEX.jsonl"
 CITATIONS_REL = "docs/DOCS-CITATIONS.jsonl"
 KINETICS_DIR = "content/video_engine/scripts/kinetics"
-TEMPLATE_REL = "docs/content-video-engine/samples/scene-evidence-player.template.html"
+TEMPLATE_REL = "docs/content-video-engine/samples/scene-evidence-engine.mjs"   # P51 T1: the dials left the page with the engine
 TESTS_DIR = "content/video_engine/tests"
 SCRIPTS_DIR = "content/video_engine/scripts"
 

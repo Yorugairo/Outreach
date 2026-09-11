@@ -49,7 +49,7 @@ needs_browser = pytest.mark.skipif(not _chromium_available(), reason="playwright
 
 
 def test_the_flag_exists_defaults_off_and_the_module_is_inlined():
-    html = TEMPLATE.read_text(encoding="utf-8")
+    html = RB.player_text()
     m = re.search(r"const KINETICS_DEFAULTS = Object\.freeze\(\{(.*?)\}\);", html, re.S)
     assert m and re.search(r"\bidle:\s*false", m.group(1)), "kinetics.idle must exist and default OFF (P39)"
     assert "/* KINETICS:BEGIN idle */" in html and "const IDLE_KINDS = Object.freeze" in html

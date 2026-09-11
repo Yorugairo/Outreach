@@ -205,7 +205,8 @@ def entry(builder: str, aspect: str, page: dict | None = None) -> dict:
 
 
 def template_sha() -> str:
-    return hashlib.sha256(RB.TEMPLATE.read_bytes()).hexdigest()
+    """P51 T1: the player is two files now - the fixture is stale when EITHER changes."""
+    return hashlib.sha256(RB.TEMPLATE.read_bytes() + RB.ENGINE.read_bytes()).hexdigest()
 
 
 def build(builders: list[str]) -> dict:

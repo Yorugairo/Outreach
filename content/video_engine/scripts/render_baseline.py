@@ -17,9 +17,11 @@ from __future__ import annotations
 
 import argparse
 import functools
+import hashlib
 import http.server
 import io
 import json
+import shutil
 import sys
 import tempfile
 import threading
@@ -27,6 +29,9 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
 TEMPLATE = REPO / "docs/content-video-engine/samples/scene-evidence-player.template.html"
+ENGINE = REPO / "docs/content-video-engine/samples/scene-evidence-engine.mjs"
+ASSETS_NAME = "assets.json"        # the split form's fetched asset map
+MANIFEST_NAME = "player.json"      # names the engine a served build is running, and its sha
 GOLDEN = REPO / "content/video_engine/tests/golden"
 SOURCES = GOLDEN / "sources"
 FRAMES = GOLDEN / "frames"
@@ -45,16 +50,103 @@ FLAG_FRAMES = {
 }
 
 
-def instantiate(timeline: dict, uris: dict, template: Path = TEMPLATE) -> str:
-    """The build step's exact substitution (build_scene_timeline_f.py) on the reviewed template."""
+# P51 T1 - THE TWO FORMS OF ONE PAGE. The engine is a module on disk (scene-evidence-engine.mjs);
+# the template is a shell (style + DOM + the two data slots + {{ENGINE}}). One engine text serves both:
+#   SINGLE  the engine inlined as a classic script, the data inlined in the slots - the goldens, every
+#           test that instantiates a surface, and every player.html committed before the split;
+#   SPLIT   the engine imported as a module beside the page, the data fetched from the slots' data-src -
+#           what a build writes, so a build dir holds a ~45 KB page instead of a 32 MB one.
+# The boot line is identical in both, and __mounted is what a renderer waits on (prepare_page).
+BOOT = "window.__mounted = false; mount().then(() => { window.__mounted = true; });"
+
+
+def engine_script(engine: Path = ENGINE) -> str:
+    """The engine as ONE inline classic script: its module syntax stripped by the same code that
+    inlines the kinetics modules into it, so there is exactly one stripper in the repo."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import sync_kinetics as SK  # noqa: E402 - a sibling script, not a package
+    return "<script>\n" + SK.inline_text(engine.read_text(encoding="utf-8"), "") + "\n" + BOOT + "\n</script>"
+
+
+def module_script(engine_src: str = None) -> str:
+    """The engine as a module fetched beside the page."""
+    return ('<script type="module">import { mount } from "./' + (engine_src or ENGINE.name) + '";\n'
+            + BOOT + "\n</script>")
+
+
+def player_text(template: Path = TEMPLATE, engine: Path = ENGINE) -> str:
+    """The shell and the engine as ONE text - what a lint or a grep-style check means by "the
+    player's source". It is not a page (nothing is substituted): use instantiate() for that."""
+    return template.read_text(encoding="utf-8") + "\n" + engine.read_text(encoding="utf-8")
+
+
+def single_file_shell(template: Path = TEMPLATE, engine: Path = ENGINE) -> str:
+    """The shell with the engine inlined and the two DATA slots still open ({{TIMELINE}} / {{URIS}}).
+
+    One caller needs this and not instantiate(): ep1's legacy F door patches the player's OWN JS
+    (the caption loop, DUR, the title) before it substitutes its data - those anchors moved into
+    the engine, so the door has to see the composed text."""
     html = template.read_text(encoding="utf-8")
-    if "{{TIMELINE}}" not in html or "{{URIS}}" not in html:
-        raise RuntimeError(f"{template} is not the template - it has no {{{{TIMELINE}}}}/{{{{URIS}}}} slots")
-    return (html.replace("{{TIMELINE}}", json.dumps(timeline, separators=(",", ":")))
-                .replace("{{URIS}}", json.dumps(uris, separators=(",", ":"))))
+    for slot in ("{{TIMELINE}}", "{{URIS}}", "{{ENGINE}}"):
+        if slot not in html:
+            raise RuntimeError(f"{template} is not the shell - it has no {slot} slot")
+    return (html.replace("{{TIMELINE_SRC}}", "").replace("{{ASSETS_SRC}}", "")
+                .replace("{{ENGINE}}", engine_script(engine)))
+
+
+def instantiate(timeline: dict, uris: dict, template: Path = TEMPLATE, split: bool = False,
+                engine: Path = ENGINE, timeline_src: str = "", assets_src: str = ASSETS_NAME) -> str:
+    """The build step's exact substitution on the reviewed shell.
+
+    split=False (the default, and what every golden and test takes): the single-file form.
+    split=True: the shell with the two data slots EMPTY and their data-src filled - the engine
+    fetches them. `timeline_src` is the compiled timeline's file name in the build dir."""
+    html = template.read_text(encoding="utf-8")
+    for slot in ("{{TIMELINE}}", "{{URIS}}", "{{ENGINE}}"):
+        if slot not in html:
+            raise RuntimeError(f"{template} is not the shell - it has no {slot} slot")
+    if split and not timeline_src:
+        raise ValueError("the split form needs the compiled timeline's file name (timeline_src)")
+    return (html.replace("{{TIMELINE}}", "" if split else json.dumps(timeline, separators=(",", ":")))
+                .replace("{{URIS}}", "" if split else json.dumps(uris, separators=(",", ":")))
+                .replace("{{TIMELINE_SRC}}", timeline_src if split else "")
+                .replace("{{ASSETS_SRC}}", assets_src if split else "")
+                .replace("{{ENGINE}}", module_script(engine.name) if split else engine_script(engine)))
+
+
+def write_split(build_dir: Path, timeline: dict, uris: dict, timeline_name: str,
+                template: Path = TEMPLATE, engine: Path = ENGINE) -> Path:
+    """Write a SELF-CONTAINED split build: the page, the compiled timeline, the asset map, and a COPY
+    of the engine beside them (a served build never reaches back into docs/). player.json names the
+    engine and its sha - the compiled timeline stays byte-identical to what the build always wrote."""
+    build_dir = Path(build_dir)
+    build_dir.mkdir(parents=True, exist_ok=True)
+    (build_dir / timeline_name).write_text(json.dumps(timeline, indent=1), encoding="utf-8")
+    (build_dir / ASSETS_NAME).write_text(json.dumps(uris, separators=(",", ":")), encoding="utf-8")
+    shutil.copyfile(engine, build_dir / engine.name)
+    out = build_dir / "player.html"
+    out.write_text(instantiate(timeline, uris, template, split=True, engine=engine,
+                               timeline_src=timeline_name), encoding="utf-8")
+    (build_dir / MANIFEST_NAME).write_text(json.dumps({
+        "form": "split",
+        "engine": engine.name,
+        "engine_sha256": hashlib.sha256(engine.read_bytes()).hexdigest(),
+        "timeline": timeline_name,
+        "assets": ASSETS_NAME,
+    }, indent=1), encoding="utf-8")
+    return out
 
 
 class _Quiet(http.server.SimpleHTTPRequestHandler):
+    # .mjs is NOT in Python's mimetypes table on Windows, and a module served as
+    # application/octet-stream is refused by the browser's strict MIME check - the split page
+    # would load its shell and mount nothing. no-store so a rebuilt engine is never the cached one.
+    extensions_map = {**http.server.SimpleHTTPRequestHandler.extensions_map, ".mjs": "text/javascript"}
+
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-store")
+        super().end_headers()
+
     def log_message(self, *_):  # noqa: D401 - silence per-request logging
         pass
 
@@ -92,6 +184,10 @@ def prepare_page(page, w: int, h: int) -> None:
       - an element screenshot inherits the container's fractional offset (1081x1920)
     """
     page.wait_for_selector("#stage", timeout=60000)
+    # P51 T1: the split page mounts after two fetches, so the DOM can exist before the engine has
+    # run. __mounted is undefined on a single-file page and on every player committed before the
+    # split, where the engine has already run by load - those pass this line without waiting.
+    page.wait_for_function("window.__mounted !== false", timeout=300000)
     page.evaluate("document.fonts.ready")
     page.evaluate("document.getElementById('vo').muted = true")
     page.evaluate("for (const id of ['sndbar']) { const e=document.getElementById(id); if (e) e.style.display='none'; }")
