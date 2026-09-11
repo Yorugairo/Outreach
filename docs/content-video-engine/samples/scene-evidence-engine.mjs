@@ -4851,7 +4851,14 @@ async function mount(doc) {
     b.main.g.setAttribute("opacity", t >= sp.at ? 1 : 0);
   };
   /* the title glyphs' write-on: --w per glyph on a clock, the build's own stagger (per = share of the write per glyph) */
-  const writeGlyphs = (glyphs, tw, span) => { const n = Math.max(1, glyphs.length), per = span / n; glyphs.forEach((g, j) => g.style.setProperty("--w", clamp01((tw - j * per) / (per * 1.6)).toFixed(3))); };
+  /* R26-46: a glyph's WRITTEN width is kept on the element beside the painted one. The erase below
+     scales the width this frame wrote; before this it read `--w` back out of the DOM and multiplied
+     THAT, which is an integrator - paint the same instant twice and the letter is erased twice, and
+     the answer at t depended on how the page got there (the determinism check's class: a render
+     seeks sequentially, a golden renders cold). The base title (chain index 0) is the exposed one,
+     because nobody re-writes it from t on the way in: it is the page build's own ink. */
+  const setW = (g, v) => { g.__w = v; g.style.setProperty("--w", v.toFixed(3)); };
+  const writeGlyphs = (glyphs, tw, span) => { const n = Math.max(1, glyphs.length), per = span / n; glyphs.forEach((g, j) => setW(g, clamp01((tw - j * per) / (per * 1.6)))); };
   /* an erase runs the wipe backwards, glyph after glyph, over ERASE_S: the factor each glyph's --w is multiplied by */
   const eraseFactor = (n, j, ue) => 1 - clamp01((ue * (n + 3) - j) / 3);
   const paintPerform = (st, scene, t, pg) => {
@@ -4884,7 +4891,8 @@ async function mount(doc) {
         if (k > 0) writeGlyphs(c.glyphs, t - c.at - PS.ERASE_S, c.dur - PS.ERASE_S);   /* a retitle writes after its erase of the one before */
         if (next && t >= next.at) {   /* and is erased, glyph by glyph, when the next one fires */
           const ue = clamp01((t - next.at) / PS.ERASE_S), n = c.glyphs.length;
-          c.glyphs.forEach((g, j) => g.style.setProperty("--w", (parseFloat(g.style.getPropertyValue("--w") || "0") * eraseFactor(n, j, ue)).toFixed(3)));
+          /* the WRITTEN width times the erase factor - a function of t alone (R26-46) */
+          c.glyphs.forEach((g, j) => g.style.setProperty("--w", ((g.__w != null ? g.__w : parseFloat(g.style.getPropertyValue("--w")) || 0) * eraseFactor(n, j, ue)).toFixed(3)));
         }
       });
     }
@@ -5534,7 +5542,7 @@ async function mount(doc) {
     /* beat 4: ink writes title/source once the field has soaked - no outline (E22 addendum 7: the deckle is the edge) */
     const t3 = tr - LP.ROLL - LP.SAVOR - LP.FIELD;
     const n = Math.max(1, st.glyphs.length), per = LP.INK / n;
-    st.glyphs.forEach((g, j) => g.style.setProperty("--w", clamp01((t3 - j * per) / (per * 1.6)).toFixed(3)));
+    st.glyphs.forEach((g, j) => setW(g, clamp01((t3 - j * per) / (per * 1.6))));   /* R26-46: the page's own ink records what it wrote, so the title's erase scales that and not its own last answer */
     /* beat 5: PUNCH IN on the board - the line and the deckle margin are the room we spend (E22 addendum 6) */
     const pk = (pg.punch === false || PORTRAIT) ? 0 : expoOut(clamp01(t3 / LP.PUNCH));   /* a host plate skips the punch: his gesture is the direction; portrait has no margin to spend (P41) */
     const bdc = st.boardCentre || { x: 50, y: 50 };

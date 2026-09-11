@@ -32,6 +32,7 @@ T_CAP2, CAP2_S = 12.0, 1.5
 T_BRACKET, BRACKET_S = 15.0, 2.0
 T_RETITLE, RETITLE_S = 19.0, 2.0
 T_RELIGHT, RELIGHT_S = 22.0, 1.0
+PS_ERASE_PROBE = 0.2                   # into the retitle's erase (PS.ERASE_S is 0.45 in the engine): the old title half gone
 T_UNDRAW, UNDRAW_S = 23.2, 1.2         # E50: the line unwinds to nothing on a word
 T_FIGURE, FIGURE_S = 24.5, 1.2         # ... and the figure the sentence turns to writes at the peak's spot
 T_REDRAW, REDRAW_S = 25.8, 1.0         # P47 T9: then the TAIL redraws - the months the sentence is about - while the history stays un-drawn (all before the golden's own retract at 27.5)
@@ -336,6 +337,87 @@ def test_undraw_unwinds_the_line_to_nothing_and_the_figure_writes_at_the_datum()
         assert all(0.05 < p["frac"] < 0.95 for p in mid), "redrawing at the middle of the word"
     finally:
         P.close()
+
+
+# ---- R26-46: the title's state is a function of t, not of the seek path ------------------------
+# The determinism check (P51 T4) caught a page sought THROUGH its retitle carrying no title where a
+# page sought straight to the same instant carried one. The erase in `paintPerform` multiplies the
+# glyph's CURRENT `--w` by its erase factor, so the answer at t depended on how many times the frame
+# had been painted; the base title (chain index 0) is the one nobody re-writes from t on the way in.
+# Both halves are pinned here: the same instant painted many times, and the two arrivals at a
+# retitle CARRIED into a later scene (`at` before the scene's start - the class the check exists for,
+# a render seeking sequentially against a golden rendering cold).
+# every ledger world's own ink, per layer: two ledger scenes put a page in each of wA and wB, and
+# __lpProbe answers for the first one it finds - which at this instant is the page that LEFT.
+INK_BY_WORLD = """() => [...document.querySelectorAll('.world')].map((w) => ({
+  id: w.id, shown: getComputedStyle(w).display !== 'none' && getComputedStyle(w).opacity !== '0',
+  title: [...w.querySelectorAll('.lp-title:not(.lp-retitle) .g')].map((g) => +(g.style.getPropertyValue('--w') || 0)),
+  retitles: [...w.querySelectorAll('.lp-retitle')].map((r) => [...r.querySelectorAll('.g')].map((g) => +(g.style.getPropertyValue('--w') || 0))),
+}))"""
+T_SCENE2 = 30.0          # the second page mounts here ...
+T_CARRIED = 28.0         # ... and the retitle it carries fired before it, in the page that left
+
+
+def _two_scene_carried(tl: dict, pts: list) -> dict:
+    """Two ledger scenes: a page that leaves at T_SCENE2, and the page the retitle is carried into."""
+    sc = tl["scenes"][0]
+    pg0 = sc["world"]["page"]
+    page = dict(pg0, series=pg0["series"][:1])
+    still = {"scale": 0, "x": 0, "y": 0}
+    first = dict(sc, scene_id="s01", span=[0.0, T_SCENE2], species=[],
+                 world=dict(sc["world"], page=dict(page, title="The page that leaves"), ken_burns=still))
+    second = dict(sc, scene_id="s02", span=[T_SCENE2, T_SCENE2 + 12.0],
+                  species=[{"kind": "retitle", "at": T_CARRIED, "dur": 2.4, "text": "carried"}],
+                  world=dict(sc["world"], page=page, ken_burns=still))
+    return dict(tl, scenes=[first, second], caption_pages=[], captions=[], runtime_s=T_SCENE2 + 12.0,
+                kinetics={"min_jerk": True, "analytic_spring": True})
+
+
+@needs_browser
+def test_the_titles_erase_does_not_compound_when_the_same_instant_is_painted_twice():
+    """R26-46, half one: an erase that reads its own last answer is an integrator, not a function of t."""
+    name, tl, uris, aspect, pts = _line_golden()
+    tl2, _p, _l = _authored(tl, pts)
+    P = _Player(tl2, uris, aspect)
+    try:
+        inside = T_RETITLE + PS_ERASE_PROBE          # inside the erase, where the old title is half gone
+        once = P.probe(inside)["title"]
+        assert any(w > 0 for w in once), "the erase is under way at this instant - the test would be vacuous otherwise"
+        for _ in range(4):
+            again = P.probe(inside)["title"]
+            assert again == once, f"the same instant, painted again, erased further: {once} -> {again}"
+    finally:
+        P.close()
+
+
+@needs_browser
+def test_a_carried_retitle_paints_the_same_whether_the_page_mounted_before_or_after_its_word():
+    """R26-46, half two: the two arrivals at a page whose retitle fired before it mounted."""
+    name, tl, uris, aspect, pts = _line_golden()
+    tl2 = _two_scene_carried(tl, pts)
+    t = T_SCENE2 + 6.0                                # the second page, built and standing
+    P = _Player(tl2, uris, aspect)
+    try:
+        for step in (0.0, 10.0, 20.0, T_CARRIED, T_CARRIED + 0.2, T_SCENE2, T_SCENE2 + 3.0, t):
+            P.probe(step)                             # walked in, as play arrives
+        warm = P.page.evaluate(INK_BY_WORLD)
+    finally:
+        P.close()
+    C = _Player(tl2, uris, aspect)                    # a page that has never been anywhere else
+    try:
+        C.probe(t)
+        cold = C.page.evaluate(INK_BY_WORLD)
+    finally:
+        C.close()
+    live = [w for w in cold if w["shown"] and w["retitles"]]
+    assert live and all(g >= 0.999 for g in live[-1]["retitles"][0]), \
+        f"the carried title is written on a page that mounted after its word: {cold}"
+    assert warm == cold, f"the page's ink differs by path:\n  warm {warm}\n  cold {cold}"
+    # The FRAME hash is deliberately NOT asserted here. On this fixture two COLD renders of the same
+    # instant already differ from each other - a label's client rect moves by ~0.6 px and its ink box
+    # by 1.5 px between fresh pages - which is a capture-side class of its own (the BACKLOG's sub-pixel
+    # text row), not the state R26-46 names. What R26-46 names - every glyph's `--w` a function of t
+    # and not of the seek path - is asserted above, on both world layers.
 
 
 @needs_browser

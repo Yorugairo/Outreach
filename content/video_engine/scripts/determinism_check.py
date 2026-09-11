@@ -7,7 +7,9 @@ touches is rendered twice from the same build:
 
     WARM   the page a scrub session leaves behind - one browser page, the instants walked in
            order, each approached by seeks from just before it, as play would arrive;
-    COLD   a fresh page per instant, seeking straight to it - what render_episode does.
+    COLD   a fresh page per instant, seeking straight to it - what render_episode does - and
+           painted twice before the hash, so the answer is the page's state and not the
+           rasteriser's first cheap pass at a scaled bitmap (R26-47; `Frames.cold`).
 
 The two frames' RGB bytes are hashed and compared. A mismatch means the frame is a function of
 history, not of t; it is printed with both PNGs written beside the build and the check exits 1.
@@ -196,10 +198,23 @@ class Frames:
         return RB.frame_png(self.warm_page, t, (self.w, self.h))
 
     def cold(self, t: float) -> bytes:
-        """As the renderer arrives: a page that has never been anywhere else."""
+        """As the renderer arrives: a page that has never been anywhere else.
+
+        SETTLED (R26-47, 2026-09-11): the frame is taken on the SECOND paint of the instant, which is
+        the rule `probe.Probe.seek` already follows for its own reads ("the first seek settles the
+        page - a cold seek reads a card before its body has decoded"). Measured on the Tokyo cut at
+        0:59.57: warm 98703e3a5ae1; cold captured once a4782129ab55; the SAME DOM captured again with
+        no seek adff2810172e; the same instant sought again 98703e3a5ae1 - three different rasters of
+        one unchanged DOM, settling on the warm one. That is Chromium re-rasterising a scaled bitmap
+        at a better filter after its first cheap pass (the drift was 0.16 % of the frame, max channel
+        delta 24, all of it inside `dock-i-fab-wafer`'s box), not the player being a function of its
+        history. Painting twice costs one screenshot per instant and removes the whole class; any
+        state that really depends on the path survives it, because the painter re-runs at the same t.
+        """
         page = self._open()
         try:
-            return RB.frame_png(page, t, (self.w, self.h))
+            RB.frame_png(page, t, (self.w, self.h))          # paint 1: the page lands on the instant
+            return RB.frame_png(page, t, (self.w, self.h))   # paint 2: the raster has settled
         finally:
             page.context.close()
 
