@@ -238,6 +238,16 @@ PARK_ANCHORS = ("top", "bottom", "left", "right")   # the corner of its own box 
 RECAST_PAIRS = (("dense-line", "story"),)             # P48 T4b: the legal KEYED pairs - n lines <-> n bars by series (Bravos 99-105); everything else recasts by the hand-over
 RECAST_TAG_PAIRS = (("dense-line", "story"),)        # P50 T11: the legal pairs for `keyed: "tags"` - each series' TERMINAL TAG is the mark that becomes its bar (Bravos 104-105), so the source must be a page that names its lines at their ends
 RECAST_KEYS = (True, "tags")                         # P50 T11: `keyed: true` keys the DATUM (the line's end -> the bar's top), `keyed: "tags"` keys the TAG (the name at the end -> the bar's own number); false / absent is the hand-over
+# E64 / R26-49 (the operator on Tokyo at 0:50: "it basically just cuts a new chart"): the THIRD key - the DATA. The two
+# keys above key a MARK the source page draws (a line's end, the tag at it) and the correspondence IS the series index;
+# this one keys a RELATION between two data - bar k is the line's own change from one datum to the next - so it is the
+# only key that writes a `key_map`, and the only one that cannot be looked up in a list of builder pairs: Tokyo's pair
+# is (dense-line, story), the same builders the series key uses, and only the DATA tell them apart. Hence a RULE
+# (`recast_data_key`), not a RECAST_DATA_PAIRS list.
+RECAST_DATA_KEY = "data"
+RECAST_KEYS_ALL = RECAST_KEYS + (RECAST_DATA_KEY,)   # every legal value of `keyed`: the two MARK keys, and the DATA key
+RECAST_DATA_TOL = 0.005                              # 0.5 % of the larger magnitude: a bar and the line's own difference are the SAME
+                                                     # number or the pair is not keyed on data - a near-miss is a refusal, never a tween
 PARK_SCALE = (0.3, 0.95)                             # a parked chart is still a chart: never below 0.3 of itself, and 0.95 is not a park; exactly 1.0 is an UN-PARK (2026-09-10)
 # SPECIES BY SENTENCE (P50 T1, 2026-09-11; the operator: "do we already have an understanding mapped in docs to how/where to
 # know when to use these capabilities?"). One line per kind: WHICH SENTENCE calls for it. The map is
@@ -593,10 +603,12 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     elif kind == "chart_to":
         if entry.get("to") not in CHART_TO_KINDS:
             errs.append(f"chart_to: 'to' must be one of {'|'.join(CHART_TO_KINDS)} (the verb the chart changes state by)")
-        if entry.get("keyed") not in (None, False) and entry.get("keyed") not in RECAST_KEYS:
-            errs.append("chart_to recast: keyed must be true (the DATUM hands over: the line's end becomes the bar's top) "
-                        "or \"tags\" (the TERMINAL TAG hands over: the name at the line's end becomes the bar's number, "
-                        "P50 T11) - absent is the plain recast, the hand-over")
+        if entry.get("keyed") not in (None, False) and entry.get("keyed") not in RECAST_KEYS_ALL:
+            errs.append("chart_to recast: keyed must be true (the DATUM hands over: the line's end becomes the bar's top), "
+                        "\"tags\" (the TERMINAL TAG hands over: the name at the line's end becomes the bar's number, "
+                        "P50 T11) or \"data\" (the line's own CHANGE between two consecutive data becomes the bar, E64) - "
+                        "absent, the compiler derives the key it can see and the row keeps the plain recast only when the "
+                        "two states share nothing (E64)")
         elif entry.get("keyed") not in (None, False) and entry.get("to") != "recast":
             errs.append(f"chart_to {entry.get('to')}: 'keyed' belongs to the RECAST - the verb that shows the same data in another form")
         if entry.get("method") is not None:   # P50 T12: doc 43 s43.5's two methods, named only where there are two
@@ -1153,7 +1165,78 @@ def rescale_state(plate_id: str, ep_dir: Path, sp: dict, reveal: int | None = No
     return spec
 
 
-def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir: Path) -> None:
+MONTH_ABBR = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+
+def month_of_x(x: float) -> str | None:
+    """The month a fractional-year x names (2026.1667 -> 'Mar'), or None when x is not a month of a year - the page's
+    own x units are years, so a monthly series' datum names a month and a bar's category can be checked against it."""
+    x = float(x)
+    frac = (x - (x // 1.0)) * 12.0
+    k = int(round(frac))
+    return MONTH_ABBR[k] if 0 <= k <= 11 and abs(frac - k) < 0.02 else None
+
+
+def recast_data_key(A: dict, Bs: dict, tol: float = RECAST_DATA_TOL) -> tuple[list | None, str]:
+    """E64 / R26-49 - THE DATA KEY, checked as a rule rather than looked up as a pair: a page that draws ONE line,
+    whose named state is a bars page of n bars, is keyed on data when the bars ARE the line's own consecutive
+    changes - bar k is the change from the line's datum (m - n + k) to (m - n + k + 1), m its last index - over the
+    line's last n + 1 data, which must be consecutive periods, and the bars' categories (when they are months) must
+    be those data's own months.
+
+    Returns ``([{datum, bar, from}, ...], "")`` when the pair keys - the datum that travels, the bar it becomes, the
+    datum it is measured from, so the engine never re-derives the correspondence - and ``(None, <the reason>)`` when
+    it does not. The reason is the refusal's sentence and names the numbers that disagree: figures are never
+    fabricated, so a bar that is merely CLOSE to the line's change is not that change."""
+    lines = [s for s in (A.get("series") or []) if not s.get("later")]
+    vals = list(Bs.get("values") or [])
+    n = len(vals)
+    if len(lines) != 1:
+        return None, f"the data key reads ONE line's own data and this page draws {len(lines)} series"
+    if not n:
+        return None, "the named state has no bars - the data key hands each of n bars the line's own change"
+    pts = list(lines[0].get("pts") or [])
+    if len(pts) < n + 1:
+        return None, f"{n} bar(s) need the line's last {n + 1} data and it carries {len(pts)}"
+    tail = pts[len(pts) - n - 1:]
+    steps = [float(tail[i + 1][0]) - float(tail[i][0]) for i in range(n)]
+    if min(steps) <= 0 or (max(steps) - min(steps)) > 0.1 * max(steps):
+        return None, "the line's last data are not consecutive periods - a change bar measures one step of the line"
+    labels = [str(v or "").strip()[:3].title() for v in (Bs.get("labels") or [])]
+    key_map, off = [], []
+    for k, v in enumerate(vals):
+        i = len(pts) - n + k
+        d = float(pts[i][1]) - float(pts[i - 1][1])
+        v = float(v)
+        if abs(d - v) > tol * max(abs(d), abs(v), 1e-9):
+            named = f" ({labels[k]})" if k < len(labels) and labels[k] else ""
+            off.append(f"bar {k}{named} is {v:g} and the line's own change into datum {i} is {d:g}")
+        month = month_of_x(pts[i][0])
+        if month and k < len(labels) and labels[k] in MONTH_ABBR and labels[k] != month:
+            off.append(f"bar {k} is labelled {labels[k]!r} and datum {i} is {month}")
+        key_map.append({"datum": i, "bar": k, "from": i - 1})
+    return (None, "; ".join(off)) if off else (key_map, "")
+
+
+def derive_recast_key(A: dict, Bs: dict) -> tuple[object, list | None, str]:
+    """E64: the key the COMPILER can see for itself, so a recast whose two states share their data is never the
+    un-draw-then-draw the operator read as a cut. In order: by SERIES (the datum, `true`), by the terminal TAGS
+    (`"tags"`, when every line is named at its end), by the DATA (`"data"`, with its key map). Returns
+    ``(keyed, key_map, why)``; `keyed` is None when the two states share nothing the compiler can key, and `why` is
+    the data key's reason - the last thing tried."""
+    pair = (A.get("builder"), Bs.get("builder"))
+    lines = [s for s in (A.get("series") or []) if not s.get("later")]
+    n_bars = len(Bs.get("values") or [])
+    if n_bars and len(lines) == n_bars:
+        if pair in RECAST_PAIRS:
+            return True, None, ""
+        if pair in RECAST_TAG_PAIRS and all(str(s.get("name") or s.get("label") or "").strip() for s in lines):
+            return "tags", None, ""
+    key_map, why = recast_data_key(A, Bs)
+    return (RECAST_DATA_KEY, key_map, "") if key_map else (None, None, why)
+
+
+def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir: Path, sid: str | None = None) -> None:
     """Append one derived page state per `chart_to rescale` / `extend` on the row, in time order, and point each species
     at its state. An extend grows the CURRENT window (the page's whole series, or the last rescale's window) to
     `to_index`, or reveals a `later: true` series; the species carries `from_index` (the last shared datum) so the
@@ -1209,16 +1292,32 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
                                      f"{aspect} (the research's floors: nothing under 80 x 36 px, no type under 18 px), and E53 s1's "
                                      "census exception (c) says no unlabelled cell is ever the argument. Give the part a shorter "
                                      "name on the page, or cross one the page can name")
-    for sp in (row_species or []):   # P48 T4b: a keyed recast is admitted only on a legal pair, and the refusal names the reason
-        if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "recast" and sp.get("keyed"):
-            if world.get("kind") != SPECIES_LEDGER:
-                raise ValueError("chart_to recast keyed: only a LEDGER PAGE has chart states")
-            states = [world.get("page") or {}] + list(world.get("page_states") or [])
-            k = int(sp.get("state", 0))
-            if not (0 < k < len(states)):
-                raise ValueError(f"chart_to recast keyed: state {k} is not one of the page's other chart states")
-            A, Bs = states[0], states[k]
-            tags = sp.get("keyed") == "tags"   # P50 T11: the TAG form - each series' end tag is the mark that becomes its bar
+    for sp in (row_species or []):   # P48 T4b: a keyed recast is admitted only on a legal pair, and the refusal names the
+        # reason. E64/R26-49: and a recast the author left plain is KEYED BY THE COMPILER when the two states share their
+        # data - the un-draw-then-draw the operator read as a cut at 0:50 was never a choice anyone made, it was a key
+        # nobody had asked for. What the compiler cannot key it names, and the hand-over stays the author's to own.
+        if not (isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "recast"):
+            continue
+        keyed = sp.get("keyed") or None
+        if keyed and world.get("kind") != SPECIES_LEDGER:
+            raise ValueError("chart_to recast keyed: only a LEDGER PAGE has chart states")
+        states = [world.get("page") or {}] + list(world.get("page_states") or [])
+        k = sp.get("state", 0)
+        k = int(k) if isinstance(k, (int, float)) and not isinstance(k, bool) else 0
+        if not (0 < k < len(states)):
+            if not keyed:
+                continue   # a plain recast's state index is the grammar's to refuse (validate_species), not the key's
+            raise ValueError(f"chart_to recast keyed: state {k} is not one of the page's other chart states")
+        A, Bs = states[0], states[k]
+        if keyed == RECAST_DATA_KEY:   # E64: the DATA key, checked against the two specs' own numbers
+            key_map, why = recast_data_key(A, Bs)
+            if not key_map:
+                raise ValueError(f'chart_to recast keyed "data": the bars are not the line\'s own changes - {why}. The data '
+                                 "key hands each bar the difference between two consecutive data of the line (E64); use "
+                                 "keyed: true / \"tags\" (the series key), the plain recast, or a cut")
+            sp["key_map"] = key_map
+        elif keyed:
+            tags = keyed == "tags"   # P50 T11: the TAG form - each series' end tag is the mark that becomes its bar
             legal = RECAST_TAG_PAIRS if tags else RECAST_PAIRS
             pair = (A.get("builder"), Bs.get("builder"))
             if pair not in legal:
@@ -1236,6 +1335,17 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
                     raise ValueError(f"chart_to recast keyed: \"tags\" hands each line's TERMINAL TAG to its bar, and series "
                                      + ", ".join(str(i) for i in bare) + f" of {n_lines} carries no name or label to hand over - "
                                      "name every line at its end (E53 s8), or use keyed: true (the datum hands over instead)")
+        elif world.get("kind") == SPECIES_LEDGER:   # E64: no key asked for - derive the one the data already say
+            derived, key_map, _why = derive_recast_key(A, Bs)
+            sp["keyed"] = derived
+            where = f"{sid or 'row'} chart_to recast at {sp.get('at')}"
+            if derived:
+                sp["keyed_derived"] = True
+                if key_map:
+                    sp["key_map"] = key_map
+                print(f"  {where}: keyed {json.dumps(derived)} (derived - E64)")
+            else:
+                print(f"  {where}: no key - the plain recast (E64: a hand-over to name)")
     cur_window = None
     for sp in sorted((e for e in (row_species or []) if isinstance(e, dict) and e.get("kind") == "chart_to" and e.get("to") in ("rescale", "extend")), key=lambda e: e["at"]):
         if world.get("kind") != SPECIES_LEDGER:
@@ -2658,7 +2768,7 @@ def main() -> int:
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         try:
-            derive_rescale_states(world, row_species, plate, EP)   # P48 T2: each `chart_to rescale` gets its own derived page state
+            derive_rescale_states(world, row_species, plate, EP, sid=sid)   # P48 T2: each `chart_to rescale` gets its own derived page state; E64: and each recast its derived KEY
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         _thread = ((world.get("page") or {}).get("thread") or {}) if world.get("kind") == SPECIES_LEDGER else {}
