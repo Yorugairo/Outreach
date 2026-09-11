@@ -2152,3 +2152,59 @@ not evidence), §9.9 above (the diegetic composite carries the host's gesture an
 surface while the edit composites the real, sharp evidence into it), and gate **G-b**
 (`docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:70`) for the parallax case. Doc 15's line is the
 general form of all three: the information layer is composited afterward, never generated.
+
+### 9.33 The chart is the WORLD — a long form is authored on the page; a plate is one of three things, and says which (operator, 2026-09-11)
+
+Ruling E61 (`docs/portable/OPERATOR-RULINGS.md`), in the operator's words: *"the ledger/chart plate is the world
+that we build on, it's the main character. Plates become narration plates that link ideas together or give us
+ground to decompress from charts, and provide visual grounding and our channel differentiation. It basically
+becomes B-roll. The plates exist because we didn't know how to hold animation or time with charts or tell the
+narrative over a long format. Now we have much more capability in that, so it should go more towards
+chart/ledger worlds."* This section is what that changes in how a long form is authored. It reverses nothing
+above it: §9.28 still decides page against dock by rule (A1-A3, B1-B4), §9.30 still forbids a chart held across
+plates as homework, §9.31 still says how a page leaves. What is new is the DEFAULT: the page is where the story
+lives, and a plate must earn its row.
+
+**1. The page is the main character across the phases.** Doc 38's six phases (P1-P6, `patterns/FULL-VIDEO-MAP.md`)
+are authored on ledger pages by default. The chart-to-chart family (E58) carries a scene from one sentence to the
+next without a cut: the same series at another scale (`rescale`) when the sentence turns to a window, more of it
+(`extend`) when the story moves on in time, another form (`recast`, keyed or the hand-over) when the sentence says
+"the same money, by who holds it", a different line in the same frame (`morph`) when two series meet. Three states
+is the most a page carries (`STATE_MAX`); the fourth is a new page or a card. The species-by-sentence map
+(`SPECIES-BY-SENTENCE.md`) names which; the lint reads the table against it.
+
+**2. The park and the un-park are the page's breath.** When the sentence needs room beside the chart - a card that
+must be read, a second diagram - the chart PARKS (one affine transform, every mark in place, Bravos 91) and the
+card takes the band the park frees; a park STANDS until the next park, and `scale: 1.0` is the UN-PARK that
+grows the chart back when the cards leave (E58 amended: *"if they're going to leave the chart should either
+re-take center stage, or they might as well stay til the transition"*). A card that is read centred and then kept
+beside the chart is the dock read->park. The chart never leaves the stage for a card; it makes room.
+
+**3. The burst is the payoff.** The number a long form builds to - the one that cannot fit the honest scale - lands
+as E60's breakthrough on the page that has been the world for the phase: the comparator's level, the hold, the
+shoot while the scale rewrites. It is the P5 delivery (60-70 %) in the page's own grammar, not a cut to a bigger
+chart. The camera stays locked through it (E59): the motion is the scale moving under a still eye.
+
+**4. A plate appears for ONE of three uses, and its row says which** (`;use=` on the plate id; the lint WARNs a
+long-form plate row with no use; the compiler learns the token with P51 T0). The operator's three, verbatim in
+E61, each with its surface-grammar letter and its seam:
+
+| use | the operator's words | what it is | the letter | the seam in and out |
+|---|---|---|---|---|
+| **landing** | *"we throw a plate onto the art world and then dock evidence on it"* | a LANDING SURFACE: a narrative plate that carries docked evidence - the art embed (P50 T7: a declared embed surface, a poster, a paper, a frame) - or, without the plate, evidence docked straight onto the chart | §9.28 B1-B4 (the dock keeps its register; the plate is the world under it); B3 when the card lands on the page itself | the plate arrives by the dip or the mount (E47); the dock by its own choreography (E45); the plate leaves when its evidence has left |
+| **bridge** | *"plates become narration plates that link ideas together or give us ground to decompress from charts ... it basically becomes B-roll"*; *"plates get used as needed between ideas if it's a one-dimensional video"* | a NARRATION PLATE between two ideas: B-roll that lets the viewer breathe after a chart, grounds the story in a picture, carries the channel's look; it proves nothing and docks nothing | §9.28 NONE (a savor, a breath): under 12 s or carrying stage captions (M08); it lives (E21, E49: the idle) | a dip or the wipe with a plate as the departing world; the next page mounts under it or rolls out |
+| **reset** | *"we go to a plate as essentially a transition to cover the world, we reset the evidence, and come back clean or on a completely different topic"* | a RESET: the plate covers the world so the evidence clears; the next page mounts clean, or a new topic opens on it | §9.28 C1 (the wipe with a plate as the departing world) / C5 (the boundary); the page before it leaves by the vortex (§9.31) | in: the vortex drains the page into it, or the dip; out: the mount (E45 §2: the cream builds under the plate and the chart draws at the transition) |
+
+A plate that is none of the three is a leftover from the era the operator named - the plate we reached for
+because we could not hold time on a chart. It is cut, or it becomes a page.
+
+**5. What this steers.** The next long's shot table is authored on pages by default: the equation spine of the
+script (doc 38) becomes a spine of chart states, one page per argument, the verbs carrying the sentences inside
+an argument and the vortex + mount between arguments; plates are exceptions with their use named; the
+species-by-sentence lint lists them. The package (the thumbnail and the first frame) is NOT ruled by this
+section: whether it leads with the ledger look is an open A/B test (E61, 2026-09-11: *"we're A/B testing
+thumbnails now ... we didn't test our own plates yet"*); nothing in the engine assumes one.
+
+Mechanisms: E58 (the verbs), E59 (the camera), E60 (the burst), E61 (this ruling); `SPECIES-BY-SENTENCE.md`
+(P50 T1); the plans `.claude/PRPs/plans/P50-BRAVOS-GRAMMAR.plan.md` (T7 the art embed) and
+`P51-THE-ANIMATORS-LOOP.plan.md` (T8).

@@ -258,7 +258,7 @@ Acceptance:
 - Evidence: pending
 
 ### T8: The chart-as-world doctrine and the package rule
-- Status: pending - E61 RULED 2026-09-11 (the package rule struck: thumbnails under A/B test); doc 29 §9.30 still to write
+- Status: complete (2026-09-11) - E61 ruled in the operator's words; the doctrine written as doc 29 **§9.33** (§9.30 was already "the chart is the PROOF" - the plan's number was stale)
 - Owner: parent
 - Depends on: none (docs)
 - Write set: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` §9.30 (the ledger page as the main character of a
@@ -273,7 +273,7 @@ Acceptance:
 - Acceptance: E61 reads as the operator's; the next long's shot table is authored on pages by default and the lint (P50
   T1) reports plates as exceptions with their reason.
 - Validate: `python content/video_engine/scripts/build_docs_layers.py --check`
-- Evidence: pending
+- Evidence: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` §9.33 (the page across the phases, the park/un-park as the breath, the burst as the payoff, the three plate uses verbatim with their §9.28 letters and seams, the package explicitly not ruled); `patterns/FULL-VIDEO-MAP.md` §2 one paragraph; the episode-build skill's plate-cadence rule (home, not the repo); docs layers regenerated. The lint's WARN on an unnamed long-form plate shipped with P50 T1 (ea4dac2).
 
 ## Verification
 

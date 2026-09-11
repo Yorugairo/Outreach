@@ -55,9 +55,9 @@ or jaccard >= 0.40; DELTA = neither.
     - `:54` 7. Recognition hold — a stable map, timeline, relationship graph, or document
     - `:56` 8. CTA — invite viewers to explore the Registry or the next history question;
     - `:59` The conflict loop remains useful only when the conflict exists in the evidence.
-- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:62` — 4. Visual modes — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2039` 9.31 The page VORTEX — how a page leaves, and how it returns (operator, 2026-09-05) — h 0.00 / j 0.03 / b 0.00 — 1 rule
+- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:62` — 4. Visual modes — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2156` 9.33 The chart is the WORLD — a long form is authored on the page; a plate is one of three things, and says which (operator, 2026-09-11) — h 0.00 / j 0.05 / b 0.00 — 1 rule
     - `:66` research-only `longform-illustrated-history-v1` production profile. The earlier
-- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:71` — Production-profile fork — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:413` 8.8 No production chrome in the frame (operator correction, 2026-08-24) — h 0.00 / j 0.04 / b 0.00 — 25 rules
+- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:71` — Production-profile fork — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2156` 9.33 The chart is the WORLD — a long form is authored on the page; a plate is one of three things, and says which (operator, 2026-09-11) — h 0.00 / j 0.05 / b 0.00 — 25 rules
     - `:74` reference to independent abstract atoms. A profile preserves a coherent set of:
     - `:76` - composition and shot-scale grammar;
     - `:77` - limited-animation economics;
@@ -343,7 +343,7 @@ _none._
 ### DELTA — nothing like it in the target — THIS IS THE LIFT LIST
 
 - `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:1` — Timestamped Plate Production — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:441` 8.9 Documents draw on, and they leave (operator correction, 2026-08-24) — h 0.00 / j 0.04 / b 0.00 — 0 rules
-- `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:8` — 1. Decision — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:345` 8.6 Evidence selection rules (operator correction, 2026-08-24) — h 0.00 / j 0.03 / b 0.00 — 2 rules
+- `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:8` — 1. Decision — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2156` 9.33 The chart is the WORLD — a long form is authored on the page; a plate is one of three things, and says which (operator, 2026-09-11) — h 0.00 / j 0.04 / b 0.00 — 2 rules
     - `:46` remains the rule owner; the skill applies its schedule, world, quarantine, and
     - `:47` promotion rules without duplicating factual history.
 - `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:49` — 2. Congruence before generation — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:197` Part 4 — The literal evidence layer (teacher-stamped deck slides) — h 0.00 / j 0.06 / b 0.00 — 10 rules

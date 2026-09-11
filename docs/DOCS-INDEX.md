@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3685 records across 295 files.
+3686 records across 295 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -2227,6 +2227,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1997 [3] 9.30 The chart is the PROOF, not the homework — no chart held across plates (operator, 2026-09-03) — Ruling E25. The operator's own read of the analytics behind §9.29: the <YouTube; drop-off; topic-exit; capital-formation; dock-held; RE-ENTER; topic-governed; PROOF-governed; re-entering; held-dock; stage-caption; re-script>
 - L2039 [3] 9.31 The page VORTEX — how a page leaves, and how it returns (operator, 2026-09-05) — *"All of the colours spiral back into a single point in the charcoal, and all of the charcoal {The retract.} <closed-form; r(1 − u^1.7); enter=spiral; roll-out; exit=cut; sub-pixel; enter=mount=<seconds>; went home; mount=2.43; Shot-table; LP_RETRACT; lpVortex>
 - L2084 [3] 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — P45 T4 under ruling 7 (operator, 2026-09-05: *"we compressed the docs because we didn't have a {compressed into this doc, not superseded} <motion-authoring; four-layer; 15-…:150; sub-clause; SPECIES_EVENTS; punch; push; focus_zoom; re-verdicts; first-minute; :123; gate_motion_density.py:494>
+- L2156 [3] 9.33 The chart is the WORLD — a long form is authored on the page; a plate is one of three things, and says which (operator, 2026-09-11) — Ruling E61 (`docs/portable/OPERATOR-RULINGS.md`), in the operator's words: *"the ledger/chart plate is the world <B-roll; chart-to-chart; rescale; extend; recast; hand-over; morph; STATE_MAX; species-by-sentence; un-park; scale: 1.0; re-take>
 
 ## docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md
 
@@ -3294,15 +3295,15 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L22 [2] 0. The extended unit hierarchy — McKee: beat → scene → sequence → act → story. Extended: {Line; Beat; Loop; Unit; Phase} <McKee>
 - L36 [2] 1. Geometry and the scaling law — - Pinned absolute: P1 THE OPEN is 60–90 seconds at every runtime — {Pinned absolute:; 45–55% of runtime; Elastic:; Beyond 30 minutes} <mini-pivots>
 - L69 [2] 2. Cross-phase constants (the constants of integration) — Rehook anchors (positional, AOY): A1 ≈ 0:30 · A2 ≈ 1:00 · A3 ≈ 3:00 · {Rehook anchors (positional, AOY):; Foreshadow schedule (Grand-Payoff-Betrayal fix):} <fast-forward; re-promises; re-sighted; micro-CTA; head-fakes; S-V-O; attribution-first; [pre-key]; [post-key]; pile-on; operator-priority; thesis-grade>
-- L125 [2] 3. P1 — THE OPEN (0:00–1:30, absolute) — Classical: Truby Weakness & Need · Glass anecdote opens · irony counterpoint. <pre-opener; [post-key]; archetypes-in-settings; biography-as-twist; Mini-payoff; [pre-key]; macro-loop; Map-not-territory; context-dump>
-- L141 [2] 4. P2 — THE ENGINE (1:30–5:00) — Classical: Snyder Catalyst & Debate · McKee inciting incident · contextual {Head-fake #1 planted; A3; F2} <McKee; new-info; strong-but-not-best; micro-CTA; AND-THEN; post-payoff>
-- L162 [2] 5. P3 — THE GAP (5:00–13:30, elastic: the pattern unit) — Classical: Expectation-Reality Gap engine · Opponent & Plan · subtext {THE PATTERN UNIT (2:00–2:30, repeated 3–4× at reference):} <Expectation-Reality; new-info; McKee; [post-key]; re-justifying; Across-unit; dead-air; mini-pivots; best-evidence; all-anecdote>
-- L190 [2] 6. P4 — THE MIDPOINT PIVOT (13:30–16:30, pinned 45–55%) — Classical: Snyder false peak OR false collapse · Truby Battle · the mode {A4} <[pre-key]; sentence-length; mid-video; re-justification; head-fake; mid-roll; pre-key>
-- L210 [2] 7. P5 — REFLECTION & CONVERGENCE (16:30–26:00) — Classical: Glass Reflection dominant · chiastic center · Self-Revelation {Chiastic center; Grand payoff delivered} <Self-Revelation; [pre-key]; [post-key]; new-info>
-- L227 [2] 8. P6 — THE CLOSE (26:00–30:00: true close 60–90s + end screen 20s) — Classical: Self-Revelation → New Equilibrium · chiastic echo · ring {Ring echo; Final anaphoric triad; Action Window} <Self-Revelation; first-planted; Peak-End; take-home; ring-native; best-performing; token-verifiable>
-- L246 [2] 9. The one-page duty roster (what must exist, counted, @30:00) — | System | Count | Where | <LIFO-closed; Head-fakes; post-macro; pre-key; post-key; token-verifiable>
-- L263 [2] Provenance — Built from: the operator's marked passages — final count 35 {35} <HIGHLIGHT-SESSION; operator-named; double-marked; attribution-first; McKee-hierarchy; McKee; FACELESS-CHANNEL-DOCTRINE; WRITING-FOR-THE-EAR; SCRIPT-ARCHITECTURE; LLM-CONTEXT-CLASSICAL>
-- L277 [2] CHANGELOG — - 2026-08-24 — v1, T1 of the P10 plan. Geometry decision recorded: open and {Alicia v2} <mini-pivot; retro-fit; pre-map; mid-video; head-fake; rule-one; rehook-family; front-loaded; pre-pivot; scene-and-evidence-driven; re-distribution; follow-up>
+- L136 [2] 3. P1 — THE OPEN (0:00–1:30, absolute) — Classical: Truby Weakness & Need · Glass anecdote opens · irony counterpoint. <pre-opener; [post-key]; archetypes-in-settings; biography-as-twist; Mini-payoff; [pre-key]; macro-loop; Map-not-territory; context-dump>
+- L152 [2] 4. P2 — THE ENGINE (1:30–5:00) — Classical: Snyder Catalyst & Debate · McKee inciting incident · contextual {Head-fake #1 planted; A3; F2} <McKee; new-info; strong-but-not-best; micro-CTA; AND-THEN; post-payoff>
+- L173 [2] 5. P3 — THE GAP (5:00–13:30, elastic: the pattern unit) — Classical: Expectation-Reality Gap engine · Opponent & Plan · subtext {THE PATTERN UNIT (2:00–2:30, repeated 3–4× at reference):} <Expectation-Reality; new-info; McKee; [post-key]; re-justifying; Across-unit; dead-air; mini-pivots; best-evidence; all-anecdote>
+- L201 [2] 6. P4 — THE MIDPOINT PIVOT (13:30–16:30, pinned 45–55%) — Classical: Snyder false peak OR false collapse · Truby Battle · the mode {A4} <[pre-key]; sentence-length; mid-video; re-justification; head-fake; mid-roll; pre-key>
+- L221 [2] 7. P5 — REFLECTION & CONVERGENCE (16:30–26:00) — Classical: Glass Reflection dominant · chiastic center · Self-Revelation {Chiastic center; Grand payoff delivered} <Self-Revelation; [pre-key]; [post-key]; new-info>
+- L238 [2] 8. P6 — THE CLOSE (26:00–30:00: true close 60–90s + end screen 20s) — Classical: Self-Revelation → New Equilibrium · chiastic echo · ring {Ring echo; Final anaphoric triad; Action Window} <Self-Revelation; first-planted; Peak-End; take-home; ring-native; best-performing; token-verifiable>
+- L257 [2] 9. The one-page duty roster (what must exist, counted, @30:00) — | System | Count | Where | <LIFO-closed; Head-fakes; post-macro; pre-key; post-key; token-verifiable>
+- L274 [2] Provenance — Built from: the operator's marked passages — final count 35 {35} <HIGHLIGHT-SESSION; operator-named; double-marked; attribution-first; McKee-hierarchy; McKee; FACELESS-CHANNEL-DOCTRINE; WRITING-FOR-THE-EAR; SCRIPT-ARCHITECTURE; LLM-CONTEXT-CLASSICAL>
+- L288 [2] CHANGELOG — - 2026-08-24 — v1, T1 of the P10 plan. Geometry decision recorded: open and {Alicia v2} <mini-pivot; retro-fit; pre-map; mid-video; head-fake; rule-one; rehook-family; front-loaded; pre-pivot; scene-and-evidence-driven; re-distribution; follow-up>
 
 ## docs/content-video-engine/patterns/HIGHLIGHT-SESSION-2026-08-24.md
 

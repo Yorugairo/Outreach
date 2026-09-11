@@ -120,6 +120,17 @@ phase; the alternation never stops.
 layering (P3) → visual register shift (P4) → abstract synthesis (P5) →
 ring symmetry (P6). A line that captions its own visual fails everywhere.
 
+**The world across the phases (E61, doc 29 §9.33):** the ledger page is the
+main character - P1's promise chart is the page the phases return to; P2-P3
+extend it (`extend`), re-window it (`rescale`) and recast it (`recast`) one
+sentence at a time instead of cutting to the next chart; the P4 pivot is a
+new argument, so a new page (the vortex out, the mount in); P5's delivery is
+the burst (E60) on the page that has been the world; P6 rings on the page
+unwound. A plate appears for one of three named uses - a landing surface for
+docked evidence, a bridge between ideas, a reset that clears the evidence -
+and says which on its row; the species-by-sentence lint lists every other
+plate as an exception.
+
 ---
 
 ## 3. P1 — THE OPEN (0:00–1:30, absolute)
