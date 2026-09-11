@@ -22,7 +22,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import render_baseline as RB  # noqa: E402
 
-SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pair-9x16", "ledger-soak-page"]
+SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pair-9x16", "ledger-soak-page",
+            "chip-board"]   # P50 T2: the icon chip, three of them, the middle one crossed
 
 
 def _chromium_available() -> bool:

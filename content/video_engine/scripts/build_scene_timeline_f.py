@@ -38,6 +38,7 @@ import re
 import mimetypes
 import subprocess
 import sys
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
@@ -103,6 +104,46 @@ VIDEO_SUFFIXES = (".mp4", ".webm")
 DOCK_KIND_VIDEO = "video"          # written onto the dock entry and the evidence map for a clip asset
 DOCK_KIND_IMAGE = "image"          # the default - never written, so an all-image build compiles byte-identically
 
+# THE ICON SET (P50 T2, rule A2a: sourced, with provenance, never generated). A `chip` names a glyph by file
+# stem under content/video_engine/assets/icons/; the provenance of every file - the set, its version, the upstream
+# URL and the license - is assets/icons/SOURCES.md. The compiler reads the file, KEEPS ONLY GEOMETRY (the tags and
+# attributes below, everything else in the file dropped) and embeds that as the asset map's `icon:<name>`, exactly
+# the route a plate or a dock still takes through `data_uri` - so the player stays one self-contained file and the
+# painter never receives markup it has to trust.
+ICONS_DIR = REPO / "content/video_engine/assets/icons"
+ICON_PREFIX = "icon:"
+ICON_NAME = re.compile(r"^[a-z0-9][a-z0-9-]*$")
+ICON_TAGS = ("path", "circle", "rect", "line", "polyline", "polygon", "ellipse")
+ICON_ATTRS = ("d", "cx", "cy", "r", "rx", "ry", "x", "y", "width", "height", "x1", "y1", "x2", "y2", "points")
+CHIP_STATES = ("on", "crossed")   # a chip lands lit, or lands already crossed (a board read back after the fact)
+
+
+def icon_file(name: str) -> Path:
+    """The sourced SVG behind one icon name (existence is the caller's check)."""
+    return ICONS_DIR / f"{name}.svg"
+
+
+def icon_geometry(name: str) -> str:
+    """One icon as the asset map carries it: ``{"vb": [x, y, w, h], "el": [{"t", "a"}]}`` as JSON.
+
+    ValueError names the icon when the name is not a file stem we accept, when no file is there
+    (source it - never generate one), or when nothing of the file survives the geometry filter."""
+    if not (isinstance(name, str) and ICON_NAME.match(name)):
+        raise ValueError(f"icon {name!r}: an icon name is lowercase letters, digits and hyphens")
+    p = icon_file(name)
+    if not p.is_file():
+        raise ValueError(f"icon {name!r}: no file at {p} - source one per assets/icons/SOURCES.md, never generate it")
+    root = ET.fromstring(p.read_text(encoding="utf-8"))
+    box = (root.get("viewBox") or "0 0 24 24").replace(",", " ").split()
+    vb = [int(float(v)) if float(v) == int(float(v)) else float(v) for v in box[:4]]
+    els = [{"t": tag, "a": attrs} for node in root.iter()
+           for tag in [node.tag.split("}")[-1]] if tag in ICON_TAGS
+           for attrs in [{k: v for k, v in node.attrib.items() if k in ICON_ATTRS}] if attrs]
+    if not els:
+        raise ValueError(f"icon {name!r}: {p.name} carries no geometry the player accepts ({'|'.join(ICON_TAGS)})")
+    return json.dumps({"vb": vb, "el": els}, separators=(",", ":"))
+
+
 # Ken Burns: doc 29 §1.4 — the world plate drifts while evidence holds locked,
 # so the eye separates narrative world from evidence data with no labelling.
 KEN = {"scale": 0.04, "x": 14, "y": -10}
@@ -128,6 +169,11 @@ SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                  "spread")                     # the fifth watch: the region between two drawn series, bled full of ink on a word (the divergence IS the argument): a chart's deployed life is 6-8 s from its last data mark, 12 s at most - then it
                                                # UN-DRAWS (the line unwinds from where it stands back to a datum, index 0 = to nothing) or BECOMES
                                                # the next thing: a FIGURE the hand writes at a datum's spot (the treasury number the sentence turns to)
+SPECIES_CHIP = "chip"
+SPECIES_KINDS += (SPECIES_CHIP,)   # P50 T2: THE ICON CHIP (the Bravos icon board, shots 26-28) - a card with one SOURCED glyph and a
+                                   # label, landing on its word and crossed out on a later one. The first species built under the
+                                   # operator's module rule (2026-09-11): the painter is scripts/species/chip.mjs, not a branch in the
+                                   # template's body; this file still owns its grammar, its targets and its glyph's provenance.
 HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
 PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to")
 CHART_TO_KINDS = ("recast", "rescale", "extend", "park", "morph")   # P48: recast (T4, a hand-over; keyed: T4b), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform), morph (T5: the area under the line becomes the target's by ARAP)
@@ -163,6 +209,7 @@ SPECIES_WHEN = {
     "note": "the sentence adds a side fact the chart cannot show - a line of handwriting in the page's quiet zone",
     "spread": "the sentence's argument IS the gap between two series (or a series and a rule) - the region bleeds full of ink",
     "peel": "the sentence names a slice of a whole that LEAVES - the share page's slice peels off and goes blood red",
+    SPECIES_CHIP: "the sentence names a THING as one of a set (a prediction, an actor, a plant) - a chip lands on its word; RETRACTS crosses it out on a later word (Bravos's icon board)",
     "chart_to": "the sentence needs the SAME data at another scale / with more of it / in another form / beside a card - the page changes state (E58; CHART_TO_WHEN names the verb); never a cut to a second chart of it",
 }
 CHART_TO_WHEN = {
@@ -271,6 +318,8 @@ SPECIES_TARGETS = {
     "beat_freeze": ("point", "region"), "radial": ("point", "region"), "push": ("point", "region"),
     "steam": ("region",), "trace": ("region",), "ticker": ("region",),
     "life": (),
+    SPECIES_CHIP: ("point", "region"),   # P50 T2: a chip lands where the author declared it - a point, or centred in a region;
+                                         # E56 does not reach it (a chip is a card with a glyph, never a ring around a picture)
     "build_to": ("datum",), "bracket": (), "retitle": (), "relight": (),   # P47 T2: the datum is the cap; the others carry their own fields
     "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (), "chart_to": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
@@ -412,6 +461,29 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     return errs
 
 
+def _validate_chip(entry: dict) -> list[str]:
+    """P50 T2: a chip carries a SOURCED glyph and a label, and its cross falls on a LATER word."""
+    errs: list[str] = []
+    icon = entry.get("icon")
+    if not isinstance(icon, str) or not ICON_NAME.match(icon):
+        errs.append("chip: 'icon' names a sourced glyph under content/video_engine/assets/icons "
+                    "(lowercase letters, digits, hyphens) - a chip with no glyph is a blank card")
+    elif not icon_file(icon).is_file():
+        errs.append(f"chip: icon {icon!r} is not in content/video_engine/assets/icons - "
+                    "source it and record it in SOURCES.md (A2a), never generate one")
+    if not isinstance(entry.get("label"), str) or not entry["label"].strip():
+        errs.append("chip: 'label' must be a non-empty string - a chip names the thing it stands for")
+    if "state" in entry and entry["state"] not in CHIP_STATES:
+        errs.append(f"chip: state must be one of {'|'.join(CHIP_STATES)}")
+    ca = entry.get("cross_at")
+    if ca is not None:
+        if isinstance(ca, bool) or not isinstance(ca, (int, float)):
+            errs.append("chip: 'cross_at' must be a number (episode seconds, the word the claim is retracted on)")
+        elif isinstance(entry.get("at"), (int, float)) and not isinstance(entry.get("at"), bool) and ca <= entry["at"]:
+            errs.append(f"chip: cross_at {ca} is not after at {entry['at']} - a chip is crossed out on a LATER word")
+    return errs
+
+
 def _validate_entry(entry) -> list[str]:
     """Errors for one species entry: known kind, numeric at/dur, a target where the law requires one."""
     if not isinstance(entry, dict) or entry.get("kind") not in SPECIES_KINDS:
@@ -422,6 +494,8 @@ def _validate_entry(entry) -> list[str]:
     if not errs and entry["dur"] <= 0:
         errs.append(f"{kind}: dur must be > 0 (a species that lasts 0s does not fire)")
     errs += _validate_page_fields(kind, entry)
+    if kind == SPECIES_CHIP:
+        errs += _validate_chip(entry)
     if kind == "trace" and "hop" in entry:   # opt-in (2026-09-08): ONE bowed hop point-to-point, drawn once and held - a crossing
         hop = entry["hop"]
         if not isinstance(hop, dict):
@@ -1215,6 +1289,14 @@ def main() -> int:
         species_errors = validate_species(row_species, ken, plate, pivot_span=None) + validate_camera_row(row_camera, row_species, plate)
         if species_errors:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(species_errors))
+        # P50 T2: a chip's SOURCED glyph rides the asset map exactly as a plate or a dock still does,
+        # keyed `icon:<name>` - the geometry travels in the player, never a path to a file on disk.
+        for e in row_species:
+            if isinstance(e, dict) and e.get("kind") == SPECIES_CHIP:
+                try:
+                    uris[ICON_PREFIX + e["icon"]] = icon_geometry(e["icon"])
+                except ValueError as exc:
+                    raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         # a ledger page is drawn, not embedded (doc 29 s9.26); a bad or
         # missing series is a hard build error naming the row
         try:

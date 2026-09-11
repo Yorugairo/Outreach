@@ -202,7 +202,7 @@ Acceptance:
 - Evidence: `docs/content-video-engine/SPECIES-BY-SENTENCE.md` (the ten acts + the widened rows; s4 generated from the compiler); `SPECIES_WHEN` / `CHART_TO_WHEN` in `build_scene_timeline_f.py` (every kind, asserted at import); `lint_species_choice.py` + `tests/test_lint_species_choice.py` (12 tests: the three places agree, the classifier on the shipped sentences, INFO-only on both shorts, E61's WARN on a long-form plate); PIPELINE stage 7; the episode-build skill's authoring step; a `Use when` clause on 44 CAPABILITIES rows. Deviation: `;use=` is READ by the lint but not yet accepted by the compiler's `PLATE_OPTS` (no engine code in T1 by the operator's goal) - P51 T0 adds the token where the row grammar is consolidated; the registry export named in the write set is the docs layers (the map is indexed and `docs_find "ranking sentence"` hits it), not `build_animation_registry.py`, which covers the kinetics modules only.
 
 ### T2: The icon chip
-- Status: pending
+- Status: complete (2026-09-11) - the first species MODULE; the mechanism shipped with it
 - Owner: `implementation_luna` (bounded: one species, one CSS block, one test); parent reviews the frames
 - Depends on: T1 (the `when`)
 - Write set: template species block (`kind: "chip"`: a rounded dark square with one glyph from
@@ -213,7 +213,7 @@ Acceptance:
   later word (the Bravos icon board: predictions crossed out one by one - shots 26-28); the life check 0 identical
   pairs; goldens byte-identical without it.
 - Validate: `python -m pytest content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_targeted_species.py content/video_engine/tests/test_portrait_parity.py -q`
-- Evidence: pending
+- Evidence: (A) the mechanism - `sync_kinetics.py` scans `scripts/species/` with `kinetics/` (11 modules: 10 + 1), the template's `SPECIES_PAINTERS` registry + the one hook in `paintSpecies`, `tests/test_kinetics_sync.py` (13; the inline_text block-comment fix with its regression test); (B) the chip - `scripts/species/chip.mjs` (110), `tests/kinetics/chip.test.mjs` (node, 84 across the kinetics tests), `build_scene_timeline_f.py` (+82: the kind, the `when`, the validation, `icon_geometry`), `gate_motion_density.py` (+11: field-named edges), `tests/test_targeted_species.py` (+4), the golden `chip-board`, `assets/icons/` (Lucide v1.45.0 ISC, five files, SOURCES.md + LICENSE). Validated by the parent: `sync_kinetics --check` in sync; goldens + targeted species + portrait parity + lint + kinetics sync + the gate: 139 passed; node 84/84; the filmstrip (t=5.22 the first landing mid-spring, 6.42 the second beside it, 10.37 the cross mid-draw, 11.00 the settled board) read by the parent: the board lands, strikes and dims as designed; the life check alive (18,875 bytes between two 30 fps frames on the held board). CAPABILITIES rows (the mechanism, the chip); the map's rows 6 and 10 mark the chip built. Note for the first cut that uses it: the cross is sunflower; a blood-red strike for a RETRACTED claim is a dial to rule.
 
 ### T3: The press-card dock and the stack hand-off
 - Status: pending

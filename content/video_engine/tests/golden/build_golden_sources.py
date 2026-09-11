@@ -38,6 +38,7 @@ FRAME_T = {
     "dock-pair-16x9": 12.0,         # both cards up, badges landed
     "dock-pair-9x16": 12.0,
     "ledger-extend": 13.05,
+    "chip-board": 11.0,             # P50 T2: all three chips landed (5.0 / 6.2 / 7.4 + LAND_S) and the middle one's X fully drawn (10.0 + CROSS_S) - the board as it is read
     "ledger-keyed": 12.75,          # P48 T4b: mid-phase-2 of the keyed recast (12 s + 2 s; the golden's expoOut clock is half done at u 0.37): the lines have left half their history, their ends and values are in flight to the bar tops, the bars are half grown         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
 }
 
@@ -174,6 +175,26 @@ def ledger_keyed() -> tuple[dict, dict]:
     return _timeline("Golden: ledger keyed recast", scenes, {}, None), _base_uris()
 
 
+def chip_board() -> tuple[dict, dict]:
+    """P50 T2: the icon board (Bravos shots 26-28) - three chips land on three words across a bare plate and the
+    middle one is crossed out on a later one. The glyphs are the SOURCED icons under content/video_engine/assets/icons
+    (Lucide, ISC - assets/icons/SOURCES.md), embedded by the compiler's OWN icon_geometry, so this golden proves the
+    asset route and the painter module together. Every chip carries the breath idle (E49): the board holds, it never
+    goes still. Judged after all three have landed and the cross has finished drawing (FRAME_T 11.0)."""
+    import build_scene_timeline_f as BST
+    board = [("factory", "PLANTS", 0.24), ("ship", "FREIGHT", 0.5), ("cpu", "CHIPS", 0.76)]
+    species = [{"kind": "chip", "at": 5.0 + 1.2 * i, "dur": 14.0 - 1.2 * i, "icon": icon, "label": label,
+                "idle": "breath", "target": {"kind": "point", "x": x, "y": 0.62}}   # below the caption band: the board is read, not stepped on
+               for i, (icon, label, x) in enumerate(board)]
+    species[1]["cross_at"] = 10.0   # the retraction: the middle prediction did not happen
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = _base_uris()
+    for icon, _label, _x in board:
+        uris[BST.ICON_PREFIX + icon] = BST.icon_geometry(icon)
+    return _timeline("Golden: the icon board", scenes, {}, None), uris
+
+
 def _chart_evidence() -> dict:
     chart = json.loads(SERIES.read_text(encoding="utf-8"))
     return {"ev-golden-chart": {"title": "Golden chart", "source": "golden series sidecar", "species": "chart",
@@ -216,6 +237,7 @@ SURFACES = {
     "dock-pair-9x16": lambda: _dock_pair("9:16"),
     "ledger-extend": ledger_extend,
     "ledger-keyed": ledger_keyed,
+    "chip-board": chip_board,
 }
 
 

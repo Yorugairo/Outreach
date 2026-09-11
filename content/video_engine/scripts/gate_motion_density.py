@@ -200,6 +200,9 @@ SPECIES_EVENTS = {"punch": ("at",), "callout": ("at",), "focus_zoom": ("at", "en
                   "undraw": ("at", "end"), "figure": ("at", "end"), "note": ("at", "end"), "spread": ("at", "end"),
                   "peel": ("at", "end"),
                   "chart_to": ("at", "end")}   # P48: the chart leaving and the next one arriving are both motion, and the arrival is a landing (E51)   # P48 T4: the piece leaving is motion at both ends, and its landing is a push's tie (E51)   # E50 (P47 T6): the line unwinds; the figure writes; a note is handwriting
+SPECIES_EVENTS["chip"] = ("at", "cross_at")   # P50 T2: a chip LANDS on its word (an event) and is CROSSED on a later one (another).
+                                              # "cross_at" is neither an edge of the window nor its end: it names the row's own field,
+                                              # and _species_events credits any such name at the instant that field holds.
 LIFE_CONTINUOUS_S = 1.0    # a continuous life (steam) is one event per second of its window - it never lets the frame go still
 # VIDEO DOCK (ruling E44 / backlog R26-7, 2026-09-06): a dock whose asset is a clip is moving pictures on
 # the card, so the frame is never still while it is up - credited continuously, exactly like a "life"
@@ -243,7 +246,7 @@ DOCK_BUILD_S = 1.5               # 47 s2 G-a: a card's entrance - the wipe / fly
 BADGE_SETTLE_S = 0.6             # ... and each badge reveal is one too, settling ~0.6s after badge_at
 CAMERA_MOVE_S = 1.2              # a camera species with no declared dur is credited this long
 SRC_M24 = "P49 T6 (operator 2026-09-08: 'our engine ... doesn't know what it's seeing until it's rendered back'): a pointing species whose target is out of the camera's frame when it fires points at nothing - checked from the track before render"
-POINTING_KINDS = ("callout", "spotlight", "squiggle", "punch", "focus_zoom", "beat_freeze", "radial", "push", "figure", "spread", "bracket")   # the species that point at a declared target
+POINTING_KINDS = ("callout", "spotlight", "squiggle", "punch", "focus_zoom", "beat_freeze", "radial", "push", "figure", "spread", "bracket", "chip")   # the species that point at a declared target
 ATTN_SCALE, ATTN_IN, ATTN_OUT = 1.06, 0.5, 0.6            # P49 T4: kinetics/camera.mjs ATTN, mirrored [DERIVED: Bravos #68]
 STOP_FLIGHT_S, STOP_ANTIC_S, STOP_DROP_S = 0.45, 0.18, 0.14   # the stop-action clock (kinetics/stopaction.mjs STOP), mirrored: the contact frame of a throw / a landing
 BT_HOLD_S, BT_RUN_S, BT_SETTLE_S, BT_STEP_S = 0.5, 0.6, 0.3, 0.06   # E60 the breakthrough's clock (the template's LPX.BT_*), mirrored: the run past the build
@@ -392,6 +395,12 @@ def _species_events(scenes: list[dict]) -> list[float]:
                 out.append(round(at, 2))
             if "end" in edges and keep(at + dur):
                 out.append(round(at + dur, 2))
+            for edge in edges:   # P50 T2: an edge that names a FIELD (the chip's cross_at) fires at that field's own instant
+                if edge in ("at", "end"):
+                    continue
+                v = sp.get(edge)
+                if isinstance(v, (int, float)) and not isinstance(v, bool) and keep(float(v)):
+                    out.append(round(float(v), 2))
     return out
 
 

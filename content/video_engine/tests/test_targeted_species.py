@@ -5,8 +5,11 @@ and any species firing inside the pivot's reversal; a well-formed list is
 accepted and emitted verbatim. Pure function - no episode build needed."""
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
+
+import pytest
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
@@ -163,3 +166,69 @@ def test_e56_a_datum_ring_and_a_numeric_stamp_pass():
     assert not [e for e in B.validate_species([stamp], STILL, PLATE) if "E56" in e]
     light = _sp("spotlight", target=POINT)
     assert not [e for e in B.validate_species([light], STILL, PLATE) if "E56" in e]
+
+
+# ---- P50 T2: THE ICON CHIP (the Bravos icon board, shots 26-28) -------------------------------
+# A chip lands on its word with a SOURCED glyph and a label, at a declared point or region, and is
+# crossed out on a LATER word. Each refusal names the kind, the way every other species' does.
+
+def _chip(**kw):
+    e = {"kind": "chip", "at": 10.0, "dur": 6.0, "icon": "factory", "label": "STEEL",
+         "target": {"kind": "point", "x": 0.3, "y": 0.5}}
+    e.update(kw)
+    return {k: v for k, v in e.items() if v is not None}
+
+
+def test_a_chip_without_a_target_is_refused_by_name():
+    errs = B.validate_species([_chip(target=None)], STILL, PLATE)
+    assert any(e.startswith("chip: no declared target") for e in errs), errs
+    # ... and a datum is not one of its two: a chip is a card on the frame, not an annotation of a bar
+    errs = B.validate_species([_chip(target=DATUM)], STILL, PLATE)
+    assert errs == ["chip: target kind 'datum' not allowed (takes point|region)"], errs
+    assert B.validate_species([_chip(target=REGION)], STILL, PLATE) == []
+
+
+def test_a_chip_without_a_sourced_icon_is_refused_by_name():
+    for bad, needle in ((None, "'icon' names a sourced glyph"), ("", "'icon' names a sourced glyph"),
+                        ("../secrets", "'icon' names a sourced glyph"), (7, "'icon' names a sourced glyph"),
+                        ("no-such-glyph", "is not in content/video_engine/assets/icons")):
+        entry = _chip()
+        if bad is None:
+            entry.pop("icon")
+        else:
+            entry["icon"] = bad
+        errs = B.validate_species([entry], STILL, PLATE)
+        assert any(e.startswith("chip: ") and needle in e for e in errs), (bad, errs)
+    # a chip with no label is refused the same way - a chip names the thing it stands for
+    errs = B.validate_species([_chip(label=None)], STILL, PLATE)
+    assert any(e.startswith("chip: 'label' must be a non-empty string") for e in errs), errs
+    assert any(e.startswith("chip: 'label'") for e in B.validate_species([_chip(label="  ")], STILL, PLATE))
+
+
+def test_a_chip_crossed_before_it_lands_is_refused_by_name():
+    for bad in (10.0, 9.5, -1):
+        errs = B.validate_species([_chip(cross_at=bad)], STILL, PLATE)
+        assert any(e.startswith("chip: cross_at") and "LATER word" in e for e in errs), (bad, errs)
+    assert any(e.startswith("chip: 'cross_at' must be a number")
+               for e in B.validate_species([_chip(cross_at="later")], STILL, PLATE))
+    assert any(e.startswith("chip: state must be one of")
+               for e in B.validate_species([_chip(state="struck")], STILL, PLATE))
+    assert B.validate_species([_chip(cross_at=13.5)], STILL, PLATE) == []
+    assert B.validate_species([_chip(state="crossed")], STILL, PLATE) == []
+
+
+def test_a_good_chip_passes_and_its_icon_lands_in_the_asset_map():
+    assert B.validate_species([_chip(cross_at=14.0, state="on", idle="breath")], STILL, PLATE) == []
+    assert B.SPECIES_WHEN["chip"] and B.SPECIES_TARGETS["chip"] == ("point", "region")
+    # the asset route: the compiler embeds the SOURCED file's geometry under `icon:<name>`, keeping only
+    # shapes and their geometry attributes - the player never receives markup it has to trust
+    key = B.ICON_PREFIX + "factory"
+    assert key == "icon:factory"
+    geo = json.loads(B.icon_geometry("factory"))
+    assert geo["vb"] == [0, 0, 24, 24]
+    assert geo["el"] and all(n["t"] in B.ICON_TAGS for n in geo["el"]), geo["el"]
+    assert all(set(n["a"]) <= set(B.ICON_ATTRS) and n["a"] for n in geo["el"]), geo["el"]
+    assert not any("stroke" in n["a"] or "style" in n["a"] or "onload" in n["a"] for n in geo["el"])
+    for name in ("no-such-glyph", "../../etc/passwd", "Factory"):
+        with pytest.raises(ValueError, match="icon"):
+            B.icon_geometry(name)
