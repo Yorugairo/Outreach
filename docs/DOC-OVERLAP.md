@@ -670,31 +670,32 @@ _none._
 
 ### DELTA — nothing like it in the target — THIS IS THE LIFT LIST
 
-- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:1` — Exploration review — what techniques and maths are still unexplored (2026-09-10) — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:194` 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — h 0.00 / j 0.32 / b 0.18 — 0 rules
-- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:11` — 1. The Bravos maths — what Gemini's dossier carries, and what we took — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:194` 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — h 0.00 / j 0.24 / b 0.17 — 0 rules
-- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:37` — 2. Bravos's species we have not built (from `REPORT.claude.md` §"The grammar") — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:194` 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — h 0.00 / j 0.09 / b 0.00 — 2 rules
-    - `:44` | 8 | the flow diagram - dashed boxes of icon chips joined by arrows, the SAME diagram reused with one node swapped | a `flow-diagram` species: chips + arrows +
-    - `:52` | 12 | 178 WPM, no pauses; the sponsor block the only tonal break | doc 46; the take standard (E38/M13) | RECORDED |
-- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:54` — 3. The open backlog — the technique or maths each row needs — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 9 rules
-    - `:60` | R26-16 the morph's source is a planted element (the tie) | planting a real element of the outgoing world per scene, a seam's length, never on a mount; the ARA
-    - `:63` | R26-22 centred placement by E50's clock | a solo card centred by the chart's deployed clock instead of the reading rect over the title | `_page_land_offset` +
-    - `:69` | TR-7 the ARAP match cut as GATES | the three invariants (centroid <= 0.06 W, axis <= 15 deg, area ratio >= 0.60) checked before a morph is allowed | `arap.mjs
-    - `:70` | TR-8 M13 into the registry; the log-normal shot-length check; the carried-light luminance check | three settled rules with no gate | doc 46 §46.1's distributi
-    - `:73` | TR-11 isolate transition KINDS in retention | an experiment design on later shorts (n = 254 measured worlds, not kinds) | analytics only |
-    - `:75` | TR-15 the Whisper gate normalises numerals | "a hundred and twenty-two billion dollars" == `$122 billion` before the diff | a numeral normaliser (text); no ma
-    - `:78` | MC-10 yield-curve term structure | Archetype 6 - INDEX only | no beat needs it yet |
-    - `:83` | HF-8 / HF-9 the One Breather; `[focal]` / `[roles]` per row | one calm beat per film; the focal entity per shot row | shot-table fields + an INFO row in the g
-    - `:85` | HF-18 a shader seam (`sdf-iris`) | only if a world change wants it | deferred by the intake |
-- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:95` — 4. The reference layer's maths not yet built (docs 42–49, all "reference — not yet folded to portable") — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:1` 46 — Reference rhythm: what the shot ledger actually measures — h 0.00 / j 0.03 / b 0.00 — 0 rules
-- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:107` — 5. Audio — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:60` 46.3 The gap threshold — settled from the reference, 2026-09-04 — h 0.00 / j 0.03 / b 0.00 — 0 rules
-- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:114` — 6. What I would explore next, in order — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:43` 46.2 What this means for M13 and for M10 — h 0.00 / j 0.04 / b 0.00 — 7 rules
-    - `:116` 1. The press-card dock (§2 #3) - Bravos's proof species and the cheapest gap: a still, an underline callout, the quiet stack with the newest lit. Every short we
-    - `:117` 2. The burst's furniture (§2 #6): the "?" placeholder state and the axis-mounted value capsule with the dotted leader - E60's burst is built; these finish Bravo
-    - `:118` 3. R26-30 the stop-motion burst - the operator's blend; the two mechanisms exist, the composition is a day.
-    - `:119` 4. R26-25 the span species and R26-24 N-tier pages - the two macro-chart archetypes we still refuse a beat for.
-    - `:120` 5. The vector map (§2 #7) - the largest gap and the one Bravos leans on most; an SVG world with the light-on-name law, arcs and stamps; the camera's map push is
-    - `:121` 6. TR-7's ARAP invariants as compiler refusals - the morph is built; the gate that stops a bad match is not.
-    - `:122` 7. The treemap ruling (§2 #10) before any code.
+- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:1` — Exploration review — what techniques and maths are still unexplored (2026-09-10) — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:194` 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — h 0.00 / j 0.24 / b 0.18 — 0 rules
+- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:11` — 1. The Bravos maths — what Gemini's dossier carries, and what we took — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:194` 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — h 0.00 / j 0.23 / b 0.14 — 1 rule
+    - `:31` Then the operator produced the summary Gemini never filed (`C:/Users/Snipe/Downloads/Gemini Bravos Convo.md`, now
+- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:46` — 2. Bravos's species we have not built (from `REPORT.claude.md` §"The grammar") — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:194` 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — h 0.00 / j 0.09 / b 0.00 — 2 rules
+    - `:53` | 8 | the flow diagram - dashed boxes of icon chips joined by arrows, the SAME diagram reused with one node swapped | a `flow-diagram` species: chips + arrows +
+    - `:61` | 12 | 178 WPM, no pauses; the sponsor block the only tonal break | doc 46; the take standard (E38/M13) | RECORDED |
+- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:63` — 3. The open backlog — the technique or maths each row needs — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 9 rules
+    - `:69` | R26-16 the morph's source is a planted element (the tie) | planting a real element of the outgoing world per scene, a seam's length, never on a mount; the ARA
+    - `:72` | R26-22 centred placement by E50's clock | a solo card centred by the chart's deployed clock instead of the reading rect over the title | `_page_land_offset` +
+    - `:78` | TR-7 the ARAP match cut as GATES | the three invariants (centroid <= 0.06 W, axis <= 15 deg, area ratio >= 0.60) checked before a morph is allowed | `arap.mjs
+    - `:79` | TR-8 M13 into the registry; the log-normal shot-length check; the carried-light luminance check | three settled rules with no gate | doc 46 §46.1's distributi
+    - `:82` | TR-11 isolate transition KINDS in retention | an experiment design on later shorts (n = 254 measured worlds, not kinds) | analytics only |
+    - `:84` | TR-15 the Whisper gate normalises numerals | "a hundred and twenty-two billion dollars" == `$122 billion` before the diff | a numeral normaliser (text); no ma
+    - `:87` | MC-10 yield-curve term structure | Archetype 6 - INDEX only | no beat needs it yet |
+    - `:92` | HF-8 / HF-9 the One Breather; `[focal]` / `[roles]` per row | one calm beat per film; the focal entity per shot row | shot-table fields + an INFO row in the g
+    - `:94` | HF-18 a shader seam (`sdf-iris`) | only if a world change wants it | deferred by the intake |
+- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:104` — 4. The reference layer's maths not yet built (docs 42–49, all "reference — not yet folded to portable") — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:1` 46 — Reference rhythm: what the shot ledger actually measures — h 0.00 / j 0.03 / b 0.00 — 0 rules
+- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:116` — 5. Audio — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:60` 46.3 The gap threshold — settled from the reference, 2026-09-04 — h 0.00 / j 0.03 / b 0.00 — 0 rules
+- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:123` — 6. What I would explore next, in order — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:43` 46.2 What this means for M13 and for M10 — h 0.00 / j 0.04 / b 0.00 — 7 rules
+    - `:125` 1. The press-card dock (§2 #3) - Bravos's proof species and the cheapest gap: a still, an underline callout, the quiet stack with the newest lit. Every short we
+    - `:126` 2. The burst's furniture (§2 #6): the "?" placeholder state and the axis-mounted value capsule with the dotted leader - E60's burst is built; these finish Bravo
+    - `:127` 3. R26-30 the stop-motion burst - the operator's blend; the two mechanisms exist, the composition is a day.
+    - `:128` 4. R26-25 the span species and R26-24 N-tier pages - the two macro-chart archetypes we still refuse a beat for.
+    - `:129` 5. The vector map (§2 #7) - the largest gap and the one Bravos leans on most; an SVG world with the light-on-name law, arcs and stamps; the camera's map push is
+    - `:130` 6. TR-7's ARAP invariants as compiler refusals - the morph is built; the gate that stops a bad match is not.
+    - `:131` 7. The treemap ruling (§2 #10) before any code.
 
 ### PARTIAL — the target carries some of it — check what it dropped
 

@@ -28,6 +28,15 @@ samples, the seven-term species legend it used zero times, and the 120-frame key
 `claude-watch/shots/`). The companion inventory, every term put through `docs_find` with the hit count:
 [EXPLORATION-INVENTORY-2026-09-10.md](EXPLORATION-INVENTORY-2026-09-10.md).
 
+**Then the operator produced the summary Gemini never filed** (`C:/Users/Snipe/Downloads/Gemini Bravos Convo.md`, now
+`sources/reference_analyses/bravos-.../GEMINI-CONVO-2026-09-10.md`): five techniques with their maths - the studio display
+stage (a planar homography, four depth layers, a sine micro-pan), the isometric silo array with satellites, the dual-lane
+stage with a sonar ping, the scale-break (the domain expanding under a spring), the bloom + tip-riding pills. Mapped claim
+by claim in `REPORT.claude.md` §"Gemini's un-filed summary, mapped": the scale-break is E60's burst (built), the fractional
+tip and the pop spring are ours already, the display stage / the ping / the tip pill are R26-32 / R26-33 / R26-34, the
+bloom is against E22 unless ruled, and two of its camera claims (a DoF push-in at 17:15, a track-left at 8:22) are not in
+the frames or the measurement - composition 99 (16:45-18:00) and composition 53 (8:19-8:26) are still.
+
 So: yes - the maths Gemini referenced in the Bravos doc is pacing arithmetic, and all of it is either carried,
 re-measured better, or rejected with the reason written. The motion maths of the reference layer (springs, stroke
 reparameterisation, Kubelka-Munk, ARAP, disocclusion, the figure rig) came from the research BUNDLE, not from the

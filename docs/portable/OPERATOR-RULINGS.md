@@ -1928,6 +1928,11 @@ DEFAULT build (`TOKYO_CAMERA` defaults to 1; `TOKYO_CAMERA=0` rebuilds the locke
 tariff short's approved and rendered cut keeps its snap until it is re-cut on its own word (its side build :8741 stands).
 The locked default for every OTHER timeline is unchanged: the pull and the arrival are opt-in per row, as above.
 
+*Checked the same day against Gemini's un-filed Bravos summary (the operator's paste): its "DoF push-in at 17:15 on the
+bond yields" and "camera tracks left at 8:22" are not in the frames - composition 99 (16:45-18:00) and composition 53
+(8:19-8:26) are still (zoom 0, pan 0); 17:26 is a dissolve into a new chart. The count stands: zero of the chart holds
+carry a push. `REPORT.claude.md` §"Gemini's un-filed summary, mapped".*
+
 ## E60 — The BREAKTHROUGH is a rescale: the bar that cannot fit builds to the comparator's level, then shoots while the scale rewrites under it (2026-09-10)
 
 **The operator's words.** On the first pass (a zigzag cut at the top gridline, the bar a little past it): *"is that squiggle

@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-292 documents across 13 kinds.
+293 documents across 13 kinds.
 
 ## doctrine
 
@@ -99,7 +99,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## backlog
 
-- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +93 more — terms: Z-stack; short-form; drawOn; G-g
+- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +96 more — terms: Z-stack; short-form; drawOn; G-g
 
 ## pattern
 
@@ -189,7 +189,8 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md — SHOT LEDGER: Frame-Accurate Pacing & Vis — `chart`: Quantitative coordinate graph ( — defines: — — terms: chart; record_document; instrument; host_diegetic
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md — Production Research Report: Wealth Logic — Author / Channel: Wealth Logic Episode T — defines: P1; P2; +4 more — terms: EARNS; RENT; words.json; storyboard.json
 - content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md — Academic Literature Monograph: Mathemati — When financial and historical explainers — defines: M13 — terms: s_k; int_0; J_k; R_k
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md — PRODUCTION REFERENCE REPORT (Claude, 202 — The finding: the picture changes six tim — defines: — — terms: Near-black; top-centre; bottom-left; Data: ... Source: ..., Bravos Research
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/GEMINI-CONVO-2026-09-10.md — Gemini's un-filed summary of the Bravos — The operator: "Did all of this make it i — defines: — — terms: dark-mode; frame_0182.jpg; frame_0192.jpg; springPop
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md — PRODUCTION REFERENCE REPORT (Claude, 202 — The finding: the picture changes six tim — defines: — — terms: tv-embed; Near-black; top-centre; bottom-left
 - content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md — PRODUCTION REFERENCE REPORT: China Just — Under 3s (Brisk cut-in / punch): 2 3s to — defines: P1; P2; +4 more — terms: Pacing; Key Questions; Transcript Sample; status-quo
 - content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.claude.md — SHOT LEDGER (Claude, 2026-09-10): the me — Source `https://youtu.be/1ZS5_txbOsc` - — defines: — — terms: frame-to-frame; COMP; unclassified; claude-watch
 - content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md — SHOT LEDGER: Frame-Accurate Pacing & Vis — `chart`: Quantitative coordinate graph ( — defines: — — terms: chart; record_document; instrument; host_diegetic
@@ -339,7 +340,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md — SOURCES — steel-and-paper sound — Per-asset licence ledger (SOUND-SOURCING — defines: P35 — terms: gain-matched; highest-rated; preview-hq-mp3; -ss
 - docs/agent-memory/explorer/MEMORY.md — explorer - durable memory (reviewed) — Promoted from worker scratch by the pare — defines: — — terms: path | heading or symbol | what; per-platform; tokyo-tea-break; il-tea-break
 - docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md — Exploration inventory (2026-09-10) — the — Every Bravos term put through `docs_find — defines: P49 — terms: REFERENCE-RHYTHM; re-measures; 29.97 fps; cut-in
-- docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md — Exploration review — what techniques and — The operator: "review the backlog and ex — defines: — — terms: Kubelka-Munk; RESEARCH-INDEX; re-measured; per-phase
+- docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md — Exploration review — what techniques and — The operator: "review the backlog and ex — defines: — — terms: RESEARCH-INDEX; re-measured; per-phase; over-count
 - docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md — HyperFrames intake — the Gemini research — The operator: "HyperFrames has a GREAT r — defines: — — terms: push-in; ## The question; ## Verdict up front; ## Sources
 - docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md — Intake — the ink bloom transition (opera — The operator brought a MotionKit preset — defines: — — terms: K-M; km_ink; two-harmonic; byte-identical
 - docs/content-video-engine/MACRO-CHART-INTAKE-2026-09-07.md — Macro-chart journalism research — the in — The Gemini lane's `docs/research/markets — defines: — — terms: McGill; Verified 2026-09-07; Local Evidence; fetch
