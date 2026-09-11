@@ -2015,6 +2015,9 @@ reads this rule; M25 already refuses a caption in a card's box.
 commit that ships this - consistency, not taste (the grill ledger: a golden pins that nothing moved that we did not
 mean to move). The shipped shorts are re-cut only when their next cut asks; Tokyo is the test bed.
 
-Mechanisms: the compiler (`caption_band` on a dock entry from `page_boxes`'s bands), the engine (`#caption.stage`
-positioned by the entry; `.quiet` 48 px / 800), `self_watch.py` O8; `docs/content-video-engine/CAPABILITIES.md`
-(the captions rows). The finding that produced it: `tokyo-tea-break/build-short/SELF-WATCH.md` (gate 1).
+Mechanisms (WIRED 2026-09-11, the same day): the compiler's `caption_band` / `stamp_caption_bands` on every dock entry whose
+window carries a caption (below, above, the home strip - the first clear of the data and of every live card by one line;
+none -> null), the engine's `capBand` (the topmost live band, `.stage` kept; `.quiet` only on a null), the template's 9:16
+`#caption.quiet` at 48 px / 800 in the safe box, `self_watch.py` O8, the golden `dock-pair-9x16` regenerated on purpose;
+`docs/content-video-engine/CAPABILITIES.md` (the captions rows). The finding that produced it:
+`tokyo-tea-break/build-short/SELF-WATCH.md` (gate 1).

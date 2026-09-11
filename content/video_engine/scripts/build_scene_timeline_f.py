@@ -1823,6 +1823,159 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
     return {"x": round((sw - w) / 2), "y": round(max(0, (band - h) / 2)), "w": w, "h": h}
 
 
+# ---- THE CAPTION'S BAND UNDER A CARD (ruling E62, 2026-09-11) ---------------------------------
+# "Under a card the caption keeps its size and MOVES; it shrinks only when no band fits." The
+# demotion s9.25 #2 ruled on 2026-09-02 was a demotion in SIZE (64 px / 800 -> 33 px / 600), and the
+# gate-1 read of the Tokyo cut caught what that costs: at 0:38, under the two-fingers card, "money
+# went: a Treasury page," read 33 stage px = 12.1 CSS px on a phone. E62: the demotion is in
+# POSITION. The compiler states, per dock, the band the PAGE leaves free of the card and of the data
+# for a two-line strip at the stage size; the player puts the strip there and keeps `.stage`. Only
+# when no band holds the strip does the caption fall back to the quiet anchor (48 px / 800 on a short).
+#
+# THE RULE. The strip is two lines at the stage size (a short's caption pages are cut to 25-28 chars
+# a line at 64 px - build_caption_pages.py). The candidates are tried in this order:
+#   1. `below` - the free band under the plot (the page's own room above its source line);
+#   2. `above` - the free band over the plot (across the title, exactly as E45 parks a card there);
+#   3. `quiet` - the strip's HOME, where the stage caption already sits when no card is up.
+# A candidate wins when the strip fits inside it CLEAR of the plot's data box and clear of every card
+# live in that dock's window by a margin of one line. None fits -> `caption_band: null`, and the
+# player takes the quiet anchor. The bands come from `free_bands` / `page_boxes` - the measured
+# fixture when the page is on file, `ledger_page`'s estimate when it is not (P50 T16) - so the
+# caption is placed against the same one truth every card is placed against.
+CAPTION_STAGE_PX = 64          # the stage caption's type, both aspects (the template's `#caption.stage`)
+CAPTION_LINE_H = 1.12          # its line box (the template's `#caption.stage` line-height)
+CAPTION_LINES = 2              # a caption page is cut to two lines on a short (build_caption_pages.py)
+CAPTION_BAND_ORDER = ("below", "above", "quiet")
+CAPTION_HOME_BOTTOM = 480      # 9:16: the strip sits on `bottom: 480px` (G-l, y 1297-1440)
+CAPTION_HOME_TOP = 0.40        # 16:9: the stage caption's own 40% band
+CAPTION_SIDE_PAD = 120         # the stage caption's near margin beside a declared quiet zone
+CAPTION_QZ_SPLIT = 0.58        # ... and the far one, as a share of the stage width
+
+
+def caption_strip_h() -> int:
+    """The stage caption's own height: two lines at the stage size, in stage pixels."""
+    return round(CAPTION_STAGE_PX * CAPTION_LINE_H * CAPTION_LINES)
+
+
+def stage_px_w(aspect: str) -> int:
+    return LPG.STAGE_PX[aspect][0]
+
+
+def caption_strip_x(aspect: str, quiet_zone: str | None) -> tuple[int, int]:
+    """(x, w) of the stage caption's box - the template's own left/right for this aspect and zone."""
+    sw = stage_px_w(aspect)
+    if aspect == "9:16":                       # `#caption.stage.onpage`: left 80, right 200 (the safe box)
+        return 80, sw - 200 - 80
+    if quiet_zone == "right":                  # the caption keeps the LEFT of the stage
+        x = round(CAPTION_QZ_SPLIT * sw)
+        return x, sw - CAPTION_SIDE_PAD - x
+    if quiet_zone == "left":
+        return CAPTION_SIDE_PAD, round(CAPTION_QZ_SPLIT * sw) - CAPTION_SIDE_PAD
+    return 200, sw - 400                       # `#caption.stage`: left 200, right 200
+
+
+def caption_home_y(aspect: str) -> int:
+    """Where the stage caption sits with no card up - the third candidate, and the one to beat."""
+    sh = LPG.STAGE_PX[aspect][1]
+    if aspect == "9:16":
+        return sh - CAPTION_HOME_BOTTOM - caption_strip_h()
+    return round(CAPTION_HOME_TOP * sh)
+
+
+def _rects_meet(a: dict, b: dict, pad: float = 0.0) -> bool:
+    """Do these two rectangles meet, with `b` grown by `pad` on every side?"""
+    return (a["x"] < b["x"] + b["w"] + pad and a["x"] + a["w"] > b["x"] - pad
+            and a["y"] < b["y"] + b["h"] + pad and a["y"] + a["h"] > b["y"] - pad)
+
+
+def caption_band(page: dict, aspect: str, cards: list[dict] | None) -> dict | None:
+    """The band this page leaves free for the caption under `cards` (E62), or None.
+
+    ``{"y", "h", "band"}`` in stage pixels - the strip's own rectangle and the candidate it came
+    from. `cards` is every card box live in the dock's window (its parked `place`, and the reading
+    box when the row named one); None means a card whose box the compiler does not know, and the
+    answer is None - the caption takes the quiet anchor rather than guess. Pure: nothing is mutated."""
+    if cards is None:
+        return None
+    boxes = LPG.page_boxes(page, aspect)
+    h = caption_strip_h()
+    x, w = caption_strip_x(aspect, boxes.get("quiet_zone"))
+    margin = round(CAPTION_STAGE_PX * CAPTION_LINE_H)         # one line of clear air beside a card
+    stage = boxes["stage"]
+    # the strip clears the page's DATA and the page's own INK. `free_bands` hands E45's card the
+    # title and the sub ("over the title", the card being opaque and the heading read); a caption is
+    # white type with a shadow, so a strip on the title is two texts in one place - it is not free.
+    ink = [boxes[k] for k in ("plot", "title", "sub", "source", "rail") if boxes.get(k) and boxes[k]["h"] > 0]
+    bands = {bd["band"]: bd for bd in free_bands(boxes)}
+    for name in CAPTION_BAND_ORDER:
+        if name == "quiet":
+            ys = [caption_home_y(aspect)]
+        else:
+            bd = bands.get(name)
+            if bd is None or bd["h"] < h:
+                continue
+            top, bottom = bd["y"], bd["y"] + bd["h"] - h      # flush to the band's two edges ...
+            ys = [bottom, top] if name == "above" else [top, bottom]   # ... the edge by the plot first (E45's park)
+            for c in cards:                                   # ... then flush above and below each card
+                ys += [c["y"] - margin - h, c["y"] + c["h"] + margin]
+            ys = [y for y in ys if bd["y"] <= y <= bd["y"] + bd["h"] - h]
+        for y in ys:
+            strip = {"x": x, "y": round(y), "w": w, "h": h}
+            if strip["y"] < 0 or strip["y"] + h > stage["h"]:
+                continue
+            if any(_rects_meet(strip, b) for b in ink):       # never over the data or the page's ink
+                continue
+            if any(_rects_meet(strip, c, margin) for c in cards):
+                continue
+            return {"y": strip["y"], "h": h, "band": name}
+    return None
+
+
+def dock_card_boxes(docks: list[dict], enter: float, exitt: float) -> list[dict] | None:
+    """Every card box on stage during [enter, exit), or None when one of them is not on the timeline.
+
+    A dock's box is its parked `place` plus the reading box when the row named one (`read_place`);
+    a dock with neither - a card on its solo CSS geometry - is a box the compiler cannot state, and
+    the caller then writes no band at all. The window is read against EVERY dock on the scene, so a
+    band that clears this card also clears the ones beside it and the strip does not dance when the
+    second card enters."""
+    boxes: list[dict] = []
+    for d in docks:
+        if d["exit"] <= enter or d["enter"] >= exitt:
+            continue
+        if not d.get("place"):
+            return None
+        boxes.append(dict(d["place"]))
+        if d.get("read_place"):
+            boxes.append(dict(d["read_place"]))
+    return boxes
+
+
+def _caption_in_window(pages: list[dict], enter: float, exitt: float) -> bool:
+    """Is a caption page on screen at any point of this dock's window? (E62 writes a band only then.)"""
+    return any(pg["s"] < exitt and pg.get("e", pg["s"]) >= enter for pg in pages)
+
+
+def stamp_caption_bands(scenes: list[dict], pages: list[dict], aspect: str | None) -> int:
+    """E62: write `caption_band` onto every dock entry whose window carries a caption. In place.
+
+    Returns how many entries took a band (the rest are stamped `null` and keep the quiet anchor).
+    A dock on a plain plate has no page to read bands off, so it is stamped `null` too - which is
+    exactly the behaviour every build had before this rule."""
+    asp = aspect or "16:9"
+    placed = 0
+    for sc in scenes:
+        world = sc.get("world")
+        page = world.get("page") if isinstance(world, dict) and world.get("kind") == SPECIES_LEDGER else None
+        for d in sc.get("docks", []):
+            if not _caption_in_window(pages, d["enter"], d["exit"]):
+                continue
+            band = caption_band(page, asp, dock_card_boxes(sc.get("docks", []), d["enter"], d["exit"])) if page else None
+            d["caption_band"] = band
+            placed += bool(band)
+    return placed
+
+
 def page_is_measured(world: dict | None, aspect: str | None) -> bool:
     """True when the fixture holds the PLAYER's own boxes for this scene's page (P50 T16).
 
@@ -2493,6 +2646,18 @@ def main() -> int:
 
     # caption STAGE mode: stamp each page with the mode it takes at its first word (after the scenes exist)
     pages = [{**pg, "cap_mode": "anchor" if _dock_live_at(scenes, pg["s"]) else "stage"} for pg in pages]
+    # E62: and the BAND each card leaves the caption free - the demotion under a card is in position,
+    # not in size. A dock whose window carries a caption takes `caption_band`; null means no band
+    # holds a two-line strip clear of the card and of the data, and the player takes the quiet anchor.
+    banded = stamp_caption_bands(scenes, pages, ASPECT)
+    stamped = [d for sc in scenes for d in sc.get("docks", []) if "caption_band" in d]
+    if stamped:
+        chosen: dict[str, int] = {}
+        for d in stamped:
+            key = d["caption_band"]["band"] if d.get("caption_band") else "quiet-anchor"
+            chosen[key] = chosen.get(key, 0) + 1
+        print(f"  caption band: {banded}/{len(stamped)} dock window(s) keep the stage caption "
+              f"({', '.join(f'{k} x{v}' for k, v in sorted(chosen.items()))})")
     uris["__audio__"] = data_uri(audio)
 
     # SOUND REVIEW LAYER (operator, 2026-08-31: "i can't judge the audio

@@ -7383,7 +7383,18 @@ async function mount(doc) {
 
     /* LAYER 5 — canonical caption track: resolved by time at its own
        timings, never resampled onto beat boundaries (doc 29 Part 5). */
-    const quiet = active.length > 0;
+    /* E62 (2026-09-11): under a card the caption KEEPS the stage - its 64 px and its weight 800 -
+       and MOVES to the band the page leaves free of the card, which the compiler wrote onto the
+       dock entry (`caption_band`, from the page's own boxes: clear of the data, of the page's ink
+       and of every card live in that window). The demotion is in POSITION, not in size: the punch
+       is the size, and a card is a reason to move, not to shrink. It falls back to the quiet anchor
+       only when a live card carries NO band - which is every timeline compiled before this rule, so
+       those builds paint exactly as they did. The TOPMOST band wins when two cards are up; each was
+       already cut clear of the cards beside it, so the strip does not dance when the second enters. */
+    const carded = active.length > 0;
+    const capBand = carded && active.every((d) => d.caption_band && typeof d.caption_band.y === "number")
+      ? active.map((d) => d.caption_band).reduce((a, b) => (b.y < a.y ? b : a)) : null;
+    const quiet = carded && !capBand;
     /* STAGE (s9.25 #2): the timeline declares it; the anchor is the shared-stage position only */
     /* a ledger page may pin its captions to the anchor (page.caption === "anchor"): a host plate's quiet zone is the host's (C5 addendum) */
     const capPinned = sc.world.kind === "ledger" && sc.world.page && sc.world.page.caption === "anchor";
@@ -7468,6 +7479,12 @@ async function mount(doc) {
     const onPage = PORTRAIT && stage;   /* portrait: the caption strip on every world - the 40% band is where a plate's subject lives (the promise plate's laptop, 2026-09-05) */
     cap.classList.toggle("onpage", onPage);
     if (onPage) { cap.style.left = ""; cap.style.right = ""; }
+    /* E62: the strip takes the band the card left it - a LAYOUT move on the dock's own enter clock
+       (the caption is the viewer's layer and never rides the camera, E59), painted with no
+       transition, exactly as the stage/anchor switch has always been: a wall-clock transition never
+       lands in a captured frame, so a scrubbed render and a play-through must agree at the instant. */
+    if (capBand) { cap.style.top = capBand.y + "px"; cap.style.bottom = "auto"; }
+    else if (cap.style.top || cap.style.bottom) { cap.style.top = ""; cap.style.bottom = ""; }
 
     [...chips.children].forEach((c, i) => c.classList.toggle("on", i === si));
   };

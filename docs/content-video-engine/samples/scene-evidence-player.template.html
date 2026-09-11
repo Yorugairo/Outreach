@@ -269,8 +269,18 @@
   html[data-aspect="9:16"] #dock-1.solo.side-r,
   html[data-aspect="9:16"] #dock-1.solo.side-l { left: 80px; }
   /* the anchored caption takes the strip under the box, y[1340,1440], not the bottom dead
-     zone it inherited from the 16:9 rule (it rendered at y=1759, under the scrub bar) */
-  html[data-aspect="9:16"] #caption.quiet { bottom: 480px; }
+     zone it inherited from the 16:9 rule (it rendered at y=1759, under the scrub bar).
+     E62 (2026-09-11): on a SHORT the quiet anchor's floor is 48px at weight 800 - the operator
+     read 33px/600 as the caption "losing its size/punch" (12.1 CSS px on a phone at gate 1; 48px
+     is 17 CSS px). It is the fallback now, not the demotion: under a card the caption keeps the
+     stage and MOVES (the engine's `caption_band`), and only a card that leaves no band puts it
+     here. Two lines at 48px/1.24 are 119px, inside the 150px strip. Left/right take the safe box
+     (doc 49 s49.1: the right 200px is platform chrome) - at 33px the inherited 145px margins were
+     already in the rail, and bigger type reaches further. The LANDSCAPE quiet size is untouched at
+     33px/600: the 16:9 anchor strip is 82px tall (ledger_page.CAPTION_ANCHOR), which is exactly two
+     lines at 33px/1.24, and the proportional floor by stage height (48 * 1080/1920 = 27px) is
+     already below it - E62 names a floor for the short, and 16:9 is above its own. */
+  html[data-aspect="9:16"] #caption.quiet { bottom: 480px; left: 80px; right: 200px; font-size: 48px; font-weight: 800; }
 
   /* The skill puts mix-blend-mode: multiply on the artblock wrapper — correct
      for hand-drawn INK on a paper canvas. It does not transfer to a literal
