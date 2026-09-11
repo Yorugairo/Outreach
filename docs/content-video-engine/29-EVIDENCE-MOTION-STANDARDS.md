@@ -1311,14 +1311,21 @@ and no date axis. The gates, all template-enforced now:
 - The test: mute the narration, screenshot the chart, hand it to a
   stranger. If any ink needs the voiceover to explain it, the chart
   is not done.
-- **The BREAKTHROUGH (2026-09-10, measured on Bravos 50-55):** a bars
-  page may STATE its scale (`domain`) and let ONE value break through
-  the top (`overflow: "break"`) - the bar runs past the top gridline, a
-  break glyph cuts it there, the value stands above it. The scale is
-  printed and the value is printed, so the height is not a lie (E28); the
-  drama is the frame that could not hold the number. The scale is the
-  one the SMALL bar reads on (bonds 1.52 % on 0-8 %; chips 36.59 % breaks
-  it) - a stated scale that no bar needs is a lie of the other kind.
+- **The BREAKTHROUGH (2026-09-10; Bravos measured at 8:02 of its SPR
+  chart):** a bars page may STATE its scale (`domain`) that ONE value
+  cannot fit. That bar builds to the COMPARATOR's level (the tallest
+  honest bar) with the others, holds a beat as a bar like them, then
+  runs: `overflow: "burst"` (Bravos) shoots to its true height WHILE the
+  scale rewrites to the nice ceiling above it - the honest bar shrinks to
+  a sliver, the ticks cross over, an overshoot settles, the bar glows;
+  `overflow: "stack"` holds the scale and grows the bar one comparator
+  per step until its number - out of the plot, off the page. The scale
+  and the value are printed at every instant, so nothing is a lie (E28);
+  the drama is the comparator collapsing (burst) or the frame that could
+  not hold the number (stack). Never a break glyph: a broken-axis mark
+  says "abbreviated", the opposite of a breakthrough. The stated scale
+  is the one the SMALL bar reads on (bonds 1.52 % on 0-8 %) - a stated
+  scale that no bar needs is a lie of the other kind.
 
 ### 9.24 The VERDICT STACK species (operator, s68, 2026-08-30)
 

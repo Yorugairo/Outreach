@@ -55,7 +55,7 @@ or jaccard >= 0.40; DELTA = neither.
     - `:54` 7. Recognition hold — a stable map, timeline, relationship graph, or document
     - `:56` 8. CTA — invite viewers to explore the Registry or the next history question;
     - `:59` The conflict loop remains useful only when the conflict exists in the evidence.
-- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:62` — 4. Visual modes — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2031` 9.31 The page VORTEX — how a page leaves, and how it returns (operator, 2026-09-05) — h 0.00 / j 0.03 / b 0.00 — 1 rule
+- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:62` — 4. Visual modes — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2038` 9.31 The page VORTEX — how a page leaves, and how it returns (operator, 2026-09-05) — h 0.00 / j 0.03 / b 0.00 — 1 rule
     - `:66` research-only `longform-illustrated-history-v1` production profile. The earlier
 - `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:71` — Production-profile fork — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:413` 8.8 No production chrome in the frame (operator correction, 2026-08-24) — h 0.00 / j 0.04 / b 0.00 — 25 rules
     - `:74` reference to independent abstract atoms. A profile preserves a coherent set of:
@@ -92,7 +92,7 @@ or jaccard >= 0.40; DELTA = neither.
 - `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:152` — World first, vectors second — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.07 / b 0.00 — 2 rules
     - `:160` For document and map compositions, generated imagery is background-only. A
     - `:164` world may be interpretive; the explanation layer must remain exact.
-- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:166` — V4.1 living-editorial cadence — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2076` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.06 / b 0.00 — 14 rules
+- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:166` — V4.1 living-editorial cadence — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2083` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.06 / b 0.00 — 14 rules
     - `:168` `editorial_coverage.v1` resolves visual coverage before treatments:
     - `:170` - every complete sentence receives at least one distinct visual concept;
     - `:171` - long sentences split only at contrast or meaningful clause boundaries;
@@ -129,7 +129,7 @@ or jaccard >= 0.40; DELTA = neither.
 - `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:264` — Gate B — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1047` 9.8 Generated text, conditionally re-licensed (operator, 2026-08-25) — h 0.00 / j 0.05 / b 0.00 — 1 rule
     - `:266` Gate B reviews the landscape master, both native vertical clips, captions,
 - `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:270` — 8. Native verticals — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:277` — 9. Chapter subvideos — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1367` 9.25 The screen never goes still; captions take the stage (operator, 2026-09-02) — h 0.00 / j 0.05 / b 0.00 — 1 rule
+- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:277` — 9. Chapter subvideos — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1374` 9.25 The screen never goes still; captions take the stage (operator, 2026-09-02) — h 0.00 / j 0.05 / b 0.00 — 1 rule
     - `:279` Each chapter may become a landscape or vertical subvideo only when it has a
 - `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:288` — World-first generated plates for documentary explanation — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1034` 9.7 Host-in-world plates approved (operator, 2026-08-25) — h 0.00 / j 0.04 / b 0.00 — 5 rules
     - `:297` Remotion then adds the meaning-bearing layer from the approved episode:
@@ -142,7 +142,7 @@ or jaccard >= 0.40; DELTA = neither.
     - `:321` literal noun-per-cut rule.
     - `:331` The generated-block style board and animatic are review-only revisions. They
     - `:333` the active board, Gate A snapshot, research packet, and rights-cleared asset
-- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:336` — Plate-to-video motion handoff — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1435` 9.26 The LEDGER PAGE — the plate-chart species, the channel's signature (operator, 2026-09-02) — h 0.00 / j 0.04 / b 0.00 — 1 rule
+- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:336` — Plate-to-video motion handoff — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1442` 9.26 The LEDGER PAGE — the plate-chart species, the channel's signature (operator, 2026-09-02) — h 0.00 / j 0.04 / b 0.00 — 1 rule
     - `:346` Provider clips remain quarantined. A completed Magnific/Kling manifest must be
 
 ### PARTIAL — the target carries some of it — check what it dropped
@@ -176,7 +176,7 @@ _none._
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:90` — Evidence — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.33 / b 0.07 — 1 rule
     - `:96` Generated paper, scrolls, desks, and frames may surround evidence. They never
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:99` — Explanation — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:106` — Transition — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1783` 9.28 The SURFACE GRAMMAR — page, dock, or transition, decided by rule (operator, 2026-09-03) — h 0.00 / j 0.03 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:106` — Transition — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1790` 9.28 The SURFACE GRAMMAR — page, dock, or transition, decided by rule (operator, 2026-09-03) — h 0.00 / j 0.03 / b 0.00 — 0 rules
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:112` — 3. Documentary beat grammar — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1165` 9.14 World plates MAY show screens, boards, and trend imagery (operator, 2026-08-25) — h 0.00 / j 0.04 / b 0.00 — 6 rules
     - `:114` Every factual passage uses this recurring sequence when applicable:
     - `:116` 1. Picture it — establish the human situation through world or character.
@@ -187,7 +187,7 @@ _none._
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:126` — 4. Fact surfaces — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:197` Part 4 — The literal evidence layer (teacher-stamped deck slides) — h 0.00 / j 0.07 / b 0.00 — 2 rules
     - `:130` | Date seal | Introduce one date and one event | One date only; source-bound |
     - `:134` | Relationship scroll | Connect named entities with sourced verbs | Unknown or contested edges are labelled, never completed silently |
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:141` — 5. Motion discipline — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2076` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.06 / b 0.00 — 7 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:141` — 5. Motion discipline — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2083` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.06 / b 0.00 — 7 rules
     - `:143` Motion is authored in this order:
     - `:145` 1. Character or prop action.
     - `:146` 2. Localized environmental action.
@@ -207,7 +207,7 @@ _none._
     - `:172` - fallbacks for unavailable motion assets.
     - `:179` Longer scenes are allowed only while character blocking, facts, props, or
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:182` — Google Flow terminology — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.08 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:196` — Catalog and comparison rhythm — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1934` 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — h 0.00 / j 0.02 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:196` — Catalog and comparison rhythm — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1941` 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — h 0.00 / j 0.02 / b 0.00 — 0 rules
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:208` — 7. Scene flow — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:278` 8.1 The shape — h 0.00 / j 0.14 / b 0.00 — 12 rules
     - `:210` Each adjacency declares at least one connector:
     - `:212` - `direction`: travel continues into a route trace;
@@ -383,7 +383,7 @@ _none._
     - `:181` The older manifests V1 and V2 are frozen candidate inventories only. They
     - `:189` canonical narration. A future Episode Production Gate must bind the active
     - `:191` does not start animation, narration, assembly, Gate A, or publication.
-- `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:193` — 7. Canonical-audio editorial binding — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1714` 9.27 The MOTION MENU — opt-in species, each with a slot, a mechanism, and a gate treatment (operator, 2026-09-02) — h 0.00 / j 0.04 / b 0.00 — 7 rules
+- `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:193` — 7. Canonical-audio editorial binding — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1721` 9.27 The MOTION MENU — opt-in species, each with a slot, a mechanism, and a gate treatment (operator, 2026-09-02) — h 0.00 / j 0.04 / b 0.00 — 7 rules
     - `:204` seconds. It must never absorb unrepresented narration into the preceding
     - `:213` then candidates for explicit semantic selection, never defaults. This preserves
     - `:219` new plate and a locked camera; only sparse, 1% focal-point pushes are allowed.

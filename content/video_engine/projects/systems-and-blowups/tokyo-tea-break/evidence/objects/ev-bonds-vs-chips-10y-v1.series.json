@@ -25,7 +25,7 @@
   "soxx_10y_avg_pct": 36.59,
   "agg_10y_cum_pct": 16.24,
   "soxx_10y_cum_pct": 2160.71,
-  "note": "the scale is stated to 8 % so the bonds bar reads; the chips bar breaks through it - the frame that could not hold the number"
+  "note": "the scale is stated to 8 % so the bonds bar reads; the chips bar builds to the bonds' level, holds, then BURSTS to its number while the scale rewrites to 40 % (Bravos) - or, with overflow: \"stack\", grows one bond-year per step off the page at the stated scale"
  },
  "badges": [
   {
@@ -45,5 +45,5 @@
   0,
   8
  ],
- "overflow": "break"
+ "overflow": "burst"
 }

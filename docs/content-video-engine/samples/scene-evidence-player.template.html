@@ -2886,18 +2886,20 @@
        below it for negatives, value labels ride the bar's far end, category labels stay along the bottom. */
     const n = Math.max(1, st.vals.length);
     const lo0 = Math.min(0, ...st.vals), hi0 = Math.max(0, ...st.vals);
-    /* THE BREAKTHROUGH (Bravos, 2026-09-10): a bars page may STATE its scale (`axes.domain`) and let a value past it break
-       through the top (`axes.overflow: "break"`) - the bar runs BREAK of the plot past the top gridline, a break glyph cuts it
-       there, its value stands above it. The scale is printed and the value is printed, so the height is not a lie (E28); the
-       drama is the frame that could not hold the number. */
+    /* THE BREAKTHROUGH (2026-09-10): a bars page may STATE its scale (`axes.domain`) that one value cannot fit. That bar builds
+       to the COMPARATOR's level (the tallest honest bar) with the others, holds, then runs by one of two mechanics (LPX.BT_*):
+         burst (Bravos 8:02): it shoots to its true height WHILE the scale rewrites to the nice ceiling above it - the honest
+               bar shrinks to a sliver, the old ticks slide and fade, the new ones fade in, an overshoot settles, the bar glows;
+         stack (the operator): the scale HOLDS and the bar grows in comparator-sized steps until its true number - out of the
+               plot, through the title, off the page (the page clips it), the top gridline snapping as it passes.
+       The scale is printed and the value is printed at every instant, so nothing is a lie (E28/E53). */
     const dom = Array.isArray((pg.axes || {}).domain) && (pg.axes.domain.length === 2) ? pg.axes.domain.map(Number) : null;
-    const brk = (pg.axes || {}).overflow === "break";
+    const ovf = (pg.axes || {}).overflow, btMode = (ovf === "burst" || ovf === "break") ? "burst" : ovf === "stack" ? "stack" : null;
+    const brk = !!btMode && !!dom;
     const pad = Math.max(1e-9, (hi0 - lo0) * 0.14);
     const lo = dom ? Math.min(dom[0], lo0) : lo0 - (lo0 < 0 ? pad : 0), hi = dom ? dom[1] : hi0 + (hi0 > 0 ? pad : 0);
     const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;   /* portrait (P41): stage px, 40px labels below, 59px values and pill above */
-    const bottom = P ? G.H - 70 : 440, top0 = P ? 150 : 90, x0 = P ? 150 : 60, x1 = P ? G.W - 30 : 980, gap = 0.34, unit = pg.unit || "";
-    /* a breaking page lowers its plot top to make headroom: the bar's run past the top gridline plus the value that stands above it */
-    const top = brk ? top0 + Math.round(0.12 * (bottom - top0)) + (P ? 64 : 40) : top0;
+    const bottom = P ? G.H - 70 : 440, top = P ? 150 : 90, x0 = P ? 150 : 60, x1 = P ? G.W - 30 : 980, gap = 0.34, unit = pg.unit || "";
     const my = (v) => bottom - (v - lo) / (hi - lo || 1) * (bottom - top);
     const base = my(0);
     st.scale = { kind: "bars", my, yv: (v) => v, y0: lo, y1: hi, x0, x1 };   /* P48 T2 */
@@ -2906,11 +2908,12 @@
     /* six divisions, not the default five: lpNiceStep's 1-2-5 ladder rounds 21.8 up to 50, which left the tariff
        short's monthly page with only two tick labels ($0 and -$50) and NO reference above zero for its one
        positive bar. Asking for six lands step 20 and five labelled ticks. */
-    lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26, 6);
-    const BREAK = 0.12 * (bottom - top);   /* how far a breaking bar runs past the top gridline [DERIVED: Bravos 50-55, the bar that runs out] */
+    const ticks0 = lpYTicks(st, lo, hi, my, x0 - 20, x1 + 20, unit, x0 - 26, 6);
+    /* the comparator: the tallest bar the stated scale holds - the breaking bar first stands at ITS level, a bar like the others */
+    const honest = st.vals.filter((v) => !(brk && v > hi)), comp = honest.length ? Math.max(...honest) : hi;
     st.vals.forEach((v, i) => {
-      const over = brk && v > hi, x = x0 + (x1 - x0) / n * (i + gap / 2), yv = my(over ? hi : v), neg = v < 0;
-      const h = Math.max(3, Math.abs(yv - base)) + (over ? BREAK : 0), y = neg ? base : base - h;
+      const over = brk && v > hi, x = x0 + (x1 - x0) / n * (i + gap / 2), yv = my(over ? comp : v), neg = v < 0;
+      const h = Math.max(3, Math.abs(yv - base)), y = neg ? base : base - h;
       const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (i === st.emph ? " emph" : ""), st.chart,
         { x: x.toFixed(1), y: y.toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 6 });   /* grows from the zero baseline, up or down */
       /* E53 s7: a DECLARED colour outranks the sign default. Without this the builder read only the value's sign,
@@ -2925,19 +2928,37 @@
       const vy = neg ? base + h + (P ? 62 : 26) : base - h - (P ? 22 : 14);
       const val = lpEl("text", "val", st.chart, { x: (x + bw / 2).toFixed(1), y: vy.toFixed(1), "text-anchor": "middle", opacity: 0 });
       val.textContent = lpWithUnit(st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v), unit);
-      const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + h : base - h, over };
-      if (over) {   /* the break glyph: a zigzag in the page's ground across the bar at the top gridline, chalk-edged - the bar is cut and continues */
-        const zx0 = x - 8, zx1 = x + bw + 8, zy = top, dz = 9;
-        const zig = "M" + zx0.toFixed(1) + " " + (zy + dz).toFixed(1) + " L" + (zx0 + (zx1 - zx0) * 0.25).toFixed(1) + " " + (zy - dz).toFixed(1)
-          + " L" + (zx0 + (zx1 - zx0) * 0.5).toFixed(1) + " " + (zy + dz).toFixed(1) + " L" + (zx0 + (zx1 - zx0) * 0.75).toFixed(1) + " " + (zy - dz).toFixed(1) + " L" + zx1.toFixed(1) + " " + (zy + dz).toFixed(1);
-        rec.brk = lpEl("path", "brk", st.chart, { d: zig, fill: "none", stroke: "var(--lp-ground, #16181c)", "stroke-width": 14, "stroke-linejoin": "round", opacity: 0 });
-        rec.brk2 = lpEl("path", "brk", st.chart, { d: zig, fill: "none", stroke: "var(--lp-chalk)", "stroke-width": 3, "stroke-linejoin": "round", opacity: 0 });
+      const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + h : base - h, over, v, bx: x, bw };
+      if (over && btMode === "stack") {   /* the top gridline SNAPS as the bar passes: its two broken ends kick up beside the bar */
+        const mk = (ax, bx2) => lpEl("line", "grid snap", st.chart, { x1: ax.toFixed(1), y1: top.toFixed(1), x2: bx2.toFixed(1), y2: (top - 16).toFixed(1), stroke: "var(--lp-chalk)", "stroke-width": 3, "stroke-linecap": "round", opacity: 0 });
+        rec.snap = [mk(x - 4, x - 24), mk(x + bw + 4, x + bw + 24)];
       }
       st.bars.push(rec);
       lpMark(st, "b:" + i, "bar", bar, { x, y, w: bw, h, base, cx: x + bw / 2, end: rec.end, neg, v }, rec);
       lpMark(st, "xlab:" + i, "xlabel", lab, { x: x + bw / 2, y: bottom + (P ? 52 : 34) });
       lpMark(st, "val:b:" + i, "value", val, { x: x + bw / 2, y: vy, v });
     });
+    if (brk && st.bars.some((b) => b.over)) {
+      const vmax = Math.max(...st.vals), niceCeil = (v) => { const s = lpNiceStep(v / 4); return Math.ceil(v / s - 1e-9) * s; };
+      const hi1 = btMode === "burst" ? niceCeil(vmax) : hi, my1 = (v) => bottom - (v - lo) / (hi1 - lo || 1) * (bottom - top);
+      const step0 = lpNiceStep(Math.max(1e-9, (hi - lo) / 6)), vals0 = [];
+      for (let tv = Math.ceil(lo / step0 - 1e-9) * step0; tv <= hi + 1e-9; tv += step0) vals0.push(Math.abs(tv) < step0 * 1e-6 ? 0 : tv);
+      const ticks1 = [];
+      if (btMode === "burst") {   /* the scale the number needs, built now and hidden: it fades in as the old one slides away */
+        const step1 = lpNiceStep(Math.max(1e-9, (hi1 - lo) / 5));
+        for (let tv = Math.ceil(lo / step1 - 1e-9) * step1; tv <= hi1 + 1e-9; tv += step1) {
+          const v = Math.abs(tv) < step1 * 1e-6 ? 0 : tv, y = my1(v);
+          if (v === 0) continue;   /* the zero line is the axis, shared */
+          ticks1.push(lpEl("line", "grid", st.chart, { x1: x0 - 20, x2: x1 + 20, y1: y.toFixed(1), y2: y.toFixed(1), opacity: 0 }));
+          ticks1.push(lpText(st.chart, "lab", x0 - 26, y + (P ? 14 : 8), "end", lpWithUnit(lpTick(v), unit), { opacity: 0 }));
+        }
+      }
+      st.bt = { mode: btMode, hi0: hi, hi1, lo, top, bottom, base, plot: bottom - top, comp, ticks0, vals0, ticks1 };
+      st.buildDur = LP.BUILD + LPX.BT_HOLD + (btMode === "burst" ? LPX.BT_RUN + LPX.BT_SETTLE : LPX.BT_STEP_S * (Math.ceil(vmax / comp - 1e-9) + 1));
+      st.chart.style.overflow = "visible";   /* the stack leaves the plot; the page's edge is what clips it */
+      if (btMode === "stack") [st.titleEl, st.page.querySelector(".lp-sub"), st.page.querySelector(".lp-src")].forEach((el) => {   /* the bar runs BEHIND the words: the claim stays legible */
+        if (el) { el.style.position = "relative"; el.style.zIndex = 3; } });
+    }
     /* COMPARATOR RULE on a bars page (operator, 2026-09-08: "it needs some type of comparator line"). The line page
        has had `axes.hlines` since the fifth watch; a bars page needs it more, because a comparison between two bars
        is exactly where a viewer is asked to subtract. The rule is drawn across the plot at its value and named at
@@ -2980,6 +3001,7 @@
           o.val.setAttribute("x", nx.toFixed(1));
         }
       }
+      if (e.over && st.bt) { py = e.end - CP.up; }   /* a breaking bar's pill rides its tip (the paint moves it) */
       const pr = lpEl("rect", "cpill", cg, { x: (e.x - CP.w / 2).toFixed(1), y: py.toFixed(1), width: CP.w, height: CP.h, rx: CP.rx });
       const ct = lpEl("text", "callout", cg, { x: e.x.toFixed(1), y: (py + CP.ty).toFixed(1), "text-anchor": "middle" });
       /* the pill fits its number: a six-glyph value ("36.59%", the breakthrough page) overran the fixed width and lost its
@@ -2989,6 +3011,7 @@
       if (need > CP.w) { pr.setAttribute("x", (e.x - need / 2).toFixed(1)); pr.setAttribute("width", need.toFixed(1)); }
       e.val.setAttribute("opacity", 0); e.val.style.display = "none";
       st.callout = cg; st.cval = ct; st.cfinal = e.val.textContent; st.cnum = st.vals[e.i]; st.cunit = unit;
+      if (e.over && st.bt) { st.cfinalTrue = e.val.textContent; st.cnum = st.bt.comp; st.cfinal = lpWithUnit(lpFmt(st.bt.comp), unit); st.cpill = pr; st.cp = CP; }
       lpMark(st, "callout", "callout", cg, { x: e.x, y: py });
     }
   };
@@ -3116,6 +3139,14 @@
      and st.buildDur (its own envelope; LP.BUILD stays the story/dense-line default). Everything is
      a pure function of t; the race bakes its ranks once from the data, never from the clock. */
   const LPX = {
+    /* THE BREAKTHROUGH (2026-09-10) - a bars page that states a scale one value cannot fit. Both mechanics start at the
+       COMPARATOR's level (the tallest honest bar) once the page has built, hold, then run - on the page's own build clock. */
+    BT_HOLD: 0.5,        /* seconds the breaking bar stands at the comparator's level, a bar like the others, before it runs */
+    BT_RUN: 0.6,         /* burst: the shoot + the rescale [DERIVED: Bravos 8:02.0-8:02.6, the SPR bar fills the frame in ~0.6 s] */
+    BT_SETTLE: 0.3,      /* burst: the overshoot settles back [DERIVED: Bravos 8:02.4 -> 8:02.6] */
+    BT_OVER: 0.05,       /* burst: the overshoot past the true height, as a share of it */
+    BT_GLOW: 18,         /* burst: the bar's glow at the peak, px; it holds at half after [DERIVED: Bravos, the pink bloom] */
+    BT_STEP_S: 0.06,     /* stack: seconds per comparator-sized step ("stacks each frame that same amount") */
     RACE_IN: 0.6,        /* bars grow into period 0 first: the page builds from empty, the component opens full */
     RACE_PERIOD: 1.2,    /* seconds per period (bar-chart-race defaults 2): a beat on the page, not a film */
     RACE_SWAP: 0.7,      /* fraction of a period one row swap takes when the crossing is mid-period, centred on it (operator: "smoother") */
@@ -4036,24 +4067,72 @@
     M.svg.style.opacity = (u < 1 || c < 1) ? "1" : "0";
     M.u = u;
   };
+  /* ---- THE BREAKTHROUGH's run (2026-09-10): seconds since the ordinary build ended, a pure function of them ------------
+     burst: the bar shoots from the comparator's level to its true height while the scale rewrites (hi0 -> hi1) under every
+            bar; the old ticks slide with the stretching scale and fade, the new ones fade in; the bar overshoots and settles;
+            the pill rides the tip and counts to the exact string; the bar glows.
+     stack: the scale holds; the bar grows one comparator per BT_STEP_S until the true number, past the plot, off the page. */
+  const lpPaintBreakthrough = (cs, secs) => {
+    const B = cs.bt, e = cs.bars.find((b) => b.over); if (!B || !e) return;
+    const run = secs - LPX.BT_HOLD, P = !!cs.portrait, plot = B.plot;
+    let V = B.comp, hiU = B.hi0, u1 = 0, u2 = 0, overshoot = 0;
+    if (B.mode === "burst") {
+      u1 = clamp01(run / LPX.BT_RUN); u2 = clamp01((run - LPX.BT_RUN) / LPX.BT_SETTLE);
+      const u = minJerk(u1);
+      hiU = B.hi0 + (B.hi1 - B.hi0) * u;
+      V = B.comp + (e.v - B.comp) * u;
+      overshoot = LPX.BT_OVER * (u1 < 1 ? Math.sin(Math.PI / 2 * u1) : 1 - minJerk(u2));
+    } else {
+      const steps = run < 0 ? 0 : Math.floor(run / LPX.BT_STEP_S) + 1;
+      V = Math.min(e.v, B.comp * (1 + steps));
+    }
+    const myU = (v) => B.bottom - (v - B.lo) / (hiU - B.lo || 1) * plot;
+    cs.scale.my = myU; cs.scale.y1 = hiU;   /* figures and brackets on the page follow the live scale (R26-28) */
+    cs.bars.forEach((bb) => {
+      const shown = bb === e ? V : bb.v, h = Math.max(3, (B.base - myU(shown)) * (bb === e ? 1 + overshoot : 1));
+      bb.bar.setAttribute("y", (B.base - h).toFixed(1)); bb.bar.setAttribute("height", h.toFixed(1)); bb.h = h; bb.end = B.base - h;
+      if (bb !== e) bb.val.setAttribute("y", (bb.end - (P ? 22 : 14)).toFixed(1));
+      else if (!cs.callout) { bb.val.setAttribute("y", (bb.end - (P ? 22 : 14)).toFixed(1)); bb.val.textContent = V >= e.v - 1e-9 ? lpWithUnit(cs.vstr[e.i] != null ? String(cs.vstr[e.i]) : lpFmt(e.v), cs.cunit || "") : lpWithUnit(lpFmt(V), cs.cunit || ""); }
+      if (bb.snap) bb.snap.forEach((s) => s.setAttribute("opacity", V > B.hi0 ? 1 : 0));
+    });
+    if (B.mode === "burst") {
+      const fade = minJerk(u1);
+      B.ticks0.forEach((el, j) => {   /* [grid, label] pairs, in vals0's order: they slide with the stretching scale and leave */
+        const v = B.vals0[j >> 1], y = myU(v), isLab = (j & 1) === 1;
+        if (isLab) el.setAttribute("y", (y + (P ? 14 : 8)).toFixed(1)); else { el.setAttribute("y1", y.toFixed(1)); el.setAttribute("y2", y.toFixed(1)); }
+        if (v !== 0) el.setAttribute("opacity", (1 - fade).toFixed(3));
+      });
+      B.ticks1.forEach((el) => el.setAttribute("opacity", fade.toFixed(3)));
+      const glow = run < 0 ? 0 : u1 < 1 ? u1 : 1 - 0.5 * minJerk(u2);
+      e.bar.style.filter = glow > 0 ? "drop-shadow(0 0 " + (LPX.BT_GLOW * glow).toFixed(1) + "px " + (e.bar.style.fill || "var(--lp-pos)") + ")" : "";
+    }
+    if (cs.callout && cs.cpill) {   /* the pill rides the tip; once the tip has left the page it sits inside its own bar */
+      const CP = cs.cp, py = Math.max(24, e.end - CP.up);
+      cs.cpill.setAttribute("y", py.toFixed(1)); cs.cval.setAttribute("y", (py + CP.ty).toFixed(1));
+      cs.cval.textContent = V >= e.v - 1e-9 ? cs.cfinalTrue : lpWithUnit(lpFmt(V), cs.cunit || "");
+    }
+  };
   /* ---- ONE chart's build beat (P48 T4, lifted verbatim out of paintLedger) -------------------------
      `cs` is a CHART STATE: the page's own (st) or one of the others it can become. Everything here was
      already a pure function of the state's fraction c and the scene's species - lifting it changed no
      law - and that purity is what makes a recast free: c running back to zero un-draws any builder. */
   const lpPaintChart = (cs, c, t3, scene, t, leaving) => {
       cs.chart.style.opacity = c > 0 ? 1 : 0;   /* axes and grid belong to the build, not the bleed */
+      /* a breakthrough page's build is longer than LP.BUILD: the ordinary bars law runs on the first LP.BUILD seconds of it (cb),
+         the run on the seconds after (bts); a page without one is exactly what it was (cb === c) */
+      const cb = cs.bt ? clamp01(c * cs.buildDur / LP.BUILD) : c, bts = cs.bt ? c * cs.buildDur - LP.BUILD : -1;
       cs.bars.forEach((bb, i) => {
-        const k = expoOut(clamp01((c - i * 0.1) / 0.55));
+        const k = expoOut(clamp01((cb - i * 0.1) / 0.55));
         bb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
-        if (bb.brk) { const on = k > 0.92 ? 1 : 0; bb.brk.setAttribute("opacity", on); bb.brk2.setAttribute("opacity", on); }   /* the break cuts the bar once it has run past the top */
-        bb.lab.setAttribute("opacity", clamp01((c - i * 0.1 - 0.3) / 0.2).toFixed(2));
+        bb.lab.setAttribute("opacity", clamp01((cb - i * 0.1 - 0.3) / 0.2).toFixed(2));
         bb.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
       });
       if (cs.callout) {
-        const ck = c >= 1 ? 1 : clamp01((c - 0.55) / 0.45);   /* (1 - 0.55) / 0.45 is 0.999... in floating point: the count must LAND on the exact string (s9.23b), never one unit short forever */
+        const ck = cb >= 1 ? 1 : clamp01((cb - 0.55) / 0.45);   /* (1 - 0.55) / 0.45 is 0.999... in floating point: the count must LAND on the exact string (s9.23b), never one unit short forever */
         cs.callout.setAttribute("opacity", clamp01(ck / 0.3).toFixed(2));
         cs.cval.textContent = ck >= 1 ? cs.cfinal : lpWithUnit(lpFmt(cs.cnum * expoOut(ck)), cs.cunit || "");
       }
+      if (cs.bt && bts >= 0) lpPaintBreakthrough(cs, bts);
       const caps = pageSpecies(scene, "build_to");   /* P47 T2: the line draws to a datum on a word, the rest on the next word */
       cs.paths.forEach((pp) => {
         const fr = clamp01((c - pp.stagger * 0.3) / 0.7);
