@@ -5143,6 +5143,8 @@ async function mount(doc) {
       if (pp.p.hasAttribute("transform")) pp.p.removeAttribute("transform");
     }
     for (const m of S.marks || []) if (m.el && ["axis", "axislabel"].includes(m.role)) m.el.style.opacity = "";
+    lpUnwriteRestore(S);   /* E64: a tick label the hand-over un-wrote is whole again the moment no recast is on (a seek is the play) */
+    if (S.dataKey) for (const d of S.dataKey.dots) d.setAttribute("opacity", 0);   /* E64: the travelling data belong to the hand-over and to nothing else */
     for (const m of S.marks || []) {
       const g = m.geom || {}, e = m.el; if (!e) continue;
       if (m.role === "tick" || m.role === "rule") { e.setAttribute("y1", g.y.toFixed(1)); e.setAttribute("y2", g.y.toFixed(1)); e.style.opacity = ""; }
@@ -5224,6 +5226,73 @@ async function mount(doc) {
      which the compiler admitted (RECAST_PAIRS). */
   const KEYED = Object.freeze({ TAG: 0.3 });   /* the share of the clock the terminal values take to appear before anything moves */
   const FURNITURE = ["tick", "ylabel", "rule", "rulelabel", "xtick", "axis", "axislabel"];
+  /* E64 (the operator on Tokyo at 0:50, 2026-09-11: "i think the chart needs to either re-write/re-draw itself or morph.
+     right now it basically just cuts a new chart") - A LABEL THAT WRITES. The page's title, sub and source are HTML glyph
+     spans and write by --w; a tick label is one SVG <text>, so its hand is its own CHARACTER COUNT: w = 1 is the whole
+     string, w = 0 is a bare axis, and everything between is the string being written (or un-written) one glyph at a time,
+     as a pure function of the transition's clock. The full string is remembered on the element at first use and put back
+     by lpRestoreState, so a seek out of a hand-over paints the label exactly as it was built. */
+  const TEXT_HAND = ["ylabel", "rulelabel", "xtick", "axislabel", "xlabel"];
+  const lpWriteText = (e, w) => {
+    if (!e || e.firstElementChild) return;   /* a string with a tspan in it (an inline tag chip) is not ours to re-cut */
+    if (e.__full == null) e.__full = e.textContent || "";
+    const n = e.__full.length, s = e.__full.slice(0, Math.max(0, Math.min(n, Math.ceil(clamp01(w) * n))));
+    if (e.textContent !== s) e.textContent = s;
+  };
+  const lpUnwriteRestore = (S) => { for (const m of S.marks || []) if (m.el && m.el.__full != null && TEXT_HAND.includes(m.role) && m.el.textContent !== m.el.__full) m.el.textContent = m.el.__full; };
+  /* E64 - THE AXIS HAND-OVER, on every recast (keyed or plain). The axes never swap in one frame: the standing chart's
+     tick labels un-write while its gridlines SLIDE to where the target's stand (by rank - the i-th line of n goes to the
+     i-th of m, interpolated - so the two scales meet instead of cross-fading), and the target's labels write themselves
+     on over the back half of the same clock. The lines cross-fade where they already coincide, so the swap has nothing
+     left to show. Every number the hand writes is the page's own: nothing here invents a tick. */
+  const AXIS_HAND = Object.freeze({ OUT: 0.55, IN: 0.35, CROSS: 0.6 });   /* the shares of the clock the standing labels take to be un-written, the arriving ones to start, and the gridlines to change hands once they coincide [DERIVED: the erase reads before the write begins, as a retitle's does (PS.ERASE_S); a line that faded before it arrived would hide the slide this exists to show] */
+  const AXIS_LINES = ["tick", "rule", "axis"];     /* what SLIDES: the gridlines, the zero, a reference rule */
+  const AXIS_LABELS = ["ylabel", "rulelabel", "xtick", "axislabel"];   /* what is WRITTEN: every string on the axes */
+  const lpTickRanks = (S) => (S.marks || []).filter((m) => m.role === "tick" && m.el).sort((a, b) => (a.geom.y || 0) - (b.geom.y || 0));
+  const axisLabelN = (S, role) => { S.axisN = S.axisN || {}; if (S.axisN[role] == null) S.axisN[role] = (S.marks || []).filter((m) => m.el && m.role === role).length; return S.axisN[role]; };
+  const lpAxisHandOver = (A, Bs, u) => {
+    const ta = lpTickRanks(A), tb = lpTickRanks(Bs), k = segEase(clamp01(u));
+    const out = clamp01(u / AXIS_HAND.OUT), inn = clamp01((u - AXIS_HAND.IN) / (1 - AXIS_HAND.IN));
+    const cross = clamp01((u - AXIS_HAND.CROSS) / (1 - AXIS_HAND.CROSS));
+    const toY = (i) => {   /* the i-th standing gridline's place under the target's scale, by rank */
+      if (!tb.length) return ta[i].geom.y;
+      if (ta.length < 2 || tb.length < 2) return tb[Math.min(i, tb.length - 1)].geom.y;
+      const f = i * (tb.length - 1) / (ta.length - 1), j = Math.min(tb.length - 2, Math.floor(f));
+      return xfLerp(tb[j].geom.y, tb[j + 1].geom.y, f - j);
+    };
+    const dy = {};   /* how far each tick travels, so its own label rides with it */
+    ta.forEach((m, i) => { const y = xfLerp(m.geom.y, toY(i), k); dy[m.key] = y - m.geom.y;
+      m.el.setAttribute("y1", y.toFixed(1)); m.el.setAttribute("y2", y.toFixed(1)); });
+    /* ONE HAND, not six: the labels of a role leave (and arrive) in their own order, each with its own slot of the
+       share, exactly as writeGlyphs staggers a title's glyphs. Un-written all at once, six year labels became six
+       identical stubs - "20 20 20 20 20 20" - which reads as breakage, not as writing (the Tokyo probe at 50.9). */
+    const sweep = (S, w, ahead) => { const seen = {};
+      for (const m of S.marks || []) { if (!m.el || !AXIS_LABELS.includes(m.role)) continue;
+        const i = (seen[m.role] = (seen[m.role] == null ? 0 : seen[m.role] + 1)), n = axisLabelN(S, m.role);
+        lpWriteText(m.el, ahead ? clamp01((w * (n + 1) - i) / 1.6) : 1 - clamp01((w * (n + 1) - i) / 1.6));
+        m.el.style.opacity = "";
+      } };
+    for (const m of A.marks || []) {
+      const e = m.el; if (!e) continue;
+      if (AXIS_LABELS.includes(m.role)) {   /* the hand takes the label away one glyph at a time - a fade would hide the writing this rule is about */
+        if (m.role === "ylabel") { const d = dy["tick:" + String(m.key).split(":")[1]] || 0; e.setAttribute("y", ((+m.geom.y) + d).toFixed(1)); }
+      } else if (AXIS_LINES.includes(m.role)) e.style.opacity = (1 - cross).toFixed(3);   /* lit all the way to the target's place, then handed over where the two coincide */
+      else if (FURNITURE.includes(m.role)) e.style.opacity = xfFade(false, false, u).toFixed(3);
+    }
+    sweep(A, out, false);
+    /* the target's furniture is what the eye reads through the hand-over; its data wait for their own law. A target
+       that HAS no axes (a pie, a treemap) has nothing to hand over and its layer is not raised for it: the recast into
+       one is the hand-over it always was. */
+    if ((Bs.marks || []).some((m) => m.el && (AXIS_LINES.includes(m.role) || AXIS_LABELS.includes(m.role)))) Bs.chart.style.opacity = 1;
+    for (const m of Bs.marks || []) {
+      const e = m.el; if (!e) continue;
+      if (AXIS_LABELS.includes(m.role)) continue;
+      else if (AXIS_LINES.includes(m.role)) e.style.opacity = cross.toFixed(3);
+      else if (FURNITURE.includes(m.role)) e.style.opacity = xfFade(true, true, u).toFixed(3);
+    }
+    sweep(Bs, inn, true);
+    A.xfDirty = true; Bs.xfDirty = true;
+  };
   /* P50 T11 - the TAG form (`keyed: "tags"`, Bravos 104-105). The same hand-over keyed on the other mark: each
      series' TERMINAL TAG is what becomes its bar. The tag does not give way to a number - it IS the number: it slides
      and GROWS into the bar's own value type while the line un-draws by length beneath it, and in the last breath of
@@ -5279,8 +5348,75 @@ async function mount(doc) {
       }
       if (rec.lab) rec.lab.setAttribute("opacity", clamp01((v - 0.6) / 0.4).toFixed(2));   /* the bar's name comes up as the line's goes */
     }
-    for (const m of A.marks || []) if (m.el && FURNITURE.includes(m.role)) m.el.style.opacity = xfFade(false, false, v).toFixed(3);
-    for (const m of Bs.marks || []) if (m.el && FURNITURE.includes(m.role)) m.el.style.opacity = xfFade(true, true, v).toFixed(3);
+    lpAxisHandOver(A, Bs, v);   /* E64: the ticks re-write and the gridlines slide - the furniture fade this replaced was the last one-frame swap left in a keyed recast */
+  };
+  /* E64 / R26-49 - THE DATA-KEYED RECAST (`keyed: "data"`, the compiler's key_map). One line becomes n change bars because
+     its own consecutive data ARE those bars: Tokyo's holdings line, Feb -> Jun 2026, is the four monthly prints. Three
+     phases on ONE clock, the keyed recast's shape with the datum in the tag's place. Phase 1 (KEYED_DATA.HIST): the line
+     un-draws BY ITS HISTORY - the dash window slides from the start up to the first datum the bars need - and the n + 1
+     data it keeps stand as ink on the tail while the line's name gives way. Phase 2 (T0 -> T1, overlapping the first so
+     nothing waits): each keyed datum carries its place to the top of its bar on the engine's own min-jerk while the bar
+     grows from the baseline beneath it to the CHANGE the compiler verified (datum - from), the anchor datum the first
+     change is measured from fades as its difference becomes ink, the rest of the line un-draws behind them, and the
+     categories write under the bars. Phase 3 (after T1): the bar's own number takes the landed datum's place, in the bar
+     page's own type - the travelling mark is the datum, the standing one is the change, so no number is ever drawn twice.
+     The correspondence is never re-derived here: key_map[k] = {datum, bar, from} is the compiler's, checked against both
+     series.json files before a frame existed. */
+  const KEYED_DATA = Object.freeze({ HIST: 0.35, T0: 0.25, T1: 0.9, MIN_S: 1.6 });   /* MIN_S: the floor the choreography needs to read at 24 fps - four data leave a line, cross the plot and land on their bars; under it the travel is fewer frames than the eye needs to follow one (2026-09-11, read off the probe sheet) */
+  const lpPathFrac = (pp, j) => {   /* the share of a stroke's LENGTH at its j-th datum, by the polyline it was drawn through */
+    const pts = pp.pts || [];
+    if (j <= 0 || pts.length < 2) return j <= 0 ? 0 : 1;
+    if (j >= pts.length - 1) return 1;
+    let tot = 0, at = 0;
+    for (let i = 1; i < pts.length; i++) { const s = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); tot += s; if (i <= j) at += s; }
+    return tot > 0 ? at / tot : 1;
+  };
+  const lpDataDots = (A, map) => {   /* the travelling data: one dot per bar and one for the anchor the first change is measured from, built once per page and hidden by lpRestoreState */
+    if (A.dataKey && A.dataKey.n === map.length) return A.dataKey;
+    const lead = (A.paths || []).filter((pp) => !pp.muted)[0] || (A.paths || [])[0] || {};
+    const stroke = lead.p ? lead.p.getAttribute("stroke") : "var(--lp-chalk)";
+    const dots = map.concat([null]).map(() => lpEl("circle", "", A.chart, { r: 9, fill: stroke, opacity: 0 }));   /* a datum's own ink: the nib is 6 and this has to read as it crosses a portrait plot */
+    return (A.dataKey = { dots, n: map.length, stroke });
+  };
+  const lpPaintRecastData = (states, xf, t3, scene, t) => {
+    const A = states[xf.from], Bs = states[xf.to], u = xf.u, map = (xf.key_map || []).map((m) => ({ datum: m.datum | 0, bar: m.bar | 0, from: m.from | 0 }));
+    const uh = minJerk(clamp01(u / KEYED_DATA.HIST));   /* the datum travel and the un-draw are Flash & Hogan's quintic on purpose (E64: "min-jerk, the engine's own"), not the page's eased default - the hand-over reads the same whatever the kinetics flags say */
+    const v = minJerk(clamp01((u - KEYED_DATA.T0) / (KEYED_DATA.T1 - KEYED_DATA.T0)));
+    const hand = clamp01((u - KEYED_DATA.T1) / (1 - KEYED_DATA.T1));
+    for (let i = 0; i < states.length; i++) if (i !== xf.from && i !== xf.to) lpPaintChart(states[i], 0, t3, scene, t);
+    lpPaintChart(A, 1, t3, scene, t);
+    lpPaintChart(Bs, 0, t3, scene, t);   /* the base: bars at scaleY(0), categories and numbers at 0; the keyed paint writes over it */
+    Bs.chart.style.opacity = 1;
+    A.xfDirty = true; Bs.xfDirty = true;
+    const off0 = (A.windowOffsets || [])[0] | 0, keep = map.length ? map[0].from : 0;
+    for (const pp of A.paths || []) {   /* the history leaves first; what the bars need stands until the data fly */
+      if (!pp.pts || !pp.pts.length) continue;
+      const fk = lpPathFrac(pp, keep - off0 - (pp.k0 | 0));
+      pp.p.setAttribute("stroke-dashoffset", (-(pp.len * (fk * uh + (1 - fk) * v))).toFixed(1));
+      pp.tip.setAttribute("opacity", 0);
+      if (pp.pill) pp.pill.g.setAttribute("opacity", 0);
+      pp.name.setAttribute("opacity", (1 - uh).toFixed(2));
+    }
+    const D = lpDataDots(A, map), born = minJerk(clamp01(u / (KEYED_DATA.HIST * 0.6)));
+    map.forEach((m, k) => {
+      const bar = (Bs.markBy || {})["b:" + m.bar], p0 = lpMarkDatumOn(A, 0, m.datum), dot = D.dots[k];
+      if (!dot) return;
+      if (!bar || !p0) { dot.setAttribute("opacity", 0); return; }
+      const p1 = [bar.geom.cx, bar.geom.end];
+      dot.setAttribute("cx", xfLerp(p0[0], p1[0], v).toFixed(1));
+      dot.setAttribute("cy", xfLerp(p0[1], p1[1], v).toFixed(1));
+      dot.setAttribute("opacity", (born * (1 - hand)).toFixed(3));
+      const rec = bar.rec || {};
+      if (rec.bar) rec.bar.style.transform = "scaleY(" + v.toFixed(4) + ")";   /* the bar grows beneath the datum to the change the compiler verified */
+      if (rec.val) rec.val.setAttribute("opacity", hand.toFixed(3));           /* the bar's own number takes the landed datum's place */
+      if (rec.lab) { rec.lab.setAttribute("opacity", clamp01((v - 0.25) / 0.35).toFixed(3)); lpWriteText(rec.lab, clamp01((v - 0.3) / 0.5)); }
+    });
+    const anchor = D.dots[map.length], pA = map.length ? lpMarkDatumOn(A, 0, map[0].from) : null;
+    if (anchor) {   /* the datum the first change is measured FROM: it stands while the tail does, and fades as its difference becomes a bar */
+      if (pA) { anchor.setAttribute("cx", (+pA[0]).toFixed(1)); anchor.setAttribute("cy", (+pA[1]).toFixed(1)); }
+      anchor.setAttribute("opacity", (pA ? born * (1 - segEase(clamp01(v * 1.6))) : 0).toFixed(3));
+    }
+    lpAxisHandOver(A, Bs, u);   /* the axes hand over on the WHOLE clock: the travel is only its middle, and a scale that waited for it would swap under the landing */
   };
   /* P48 T5 - morph_to: the AREA UNDER THE STANDING LINE becomes the area under the target's line by ARAP (kinetics/arap.mjs,
      the strip mesh of P47 T3's page-enter morph), mid-page, on one clock. The first XF_MORPH.LEAVE of it the standing line
@@ -5378,7 +5514,7 @@ async function mount(doc) {
       if (pk) lpPaintPark(st, pk, t, pkFrom); else lpUnpark(st);
       st.active = 0; return;
     }
-    let cur = 0, cCur = cBase, leaving = false, xf = null, park = null, parkFrom = 1, hold = null;
+    let cur = 0, cCur = cBase, leaving = false, xf = null, park = null, parkFrom = 1, hold = null, plain = null;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
       if (sp.to === "park") { parkFrom = park ? (+park.scale || 0.72) : 1; park = sp; continue; }   /* P48 T2b: a transform on whichever state is active, never a state change; a later park moves from the standing one */
@@ -5398,10 +5534,14 @@ async function mount(doc) {
         hold = { from: cur, to: k, method: sp.method }; cur = k; cCur = clamp01((t - (sp.at + d)) / (states[k].buildDur || LP.BUILD)); continue;
       }
       if (sp.keyed) {   /* P48 T4b: the keyed tween - one clock, both states painted by lpPaintRecastKeyed, the target built at its end */
-        if (t < sp.at + d) { xf = { from: cur, to: k, u: clamp01((t - sp.at) / d), keyed: sp.keyed }; break; }   /* P50 T11: true = the datum hands over, "tags" = the terminal tag does */
+        /* E64: the DATA key's choreography has a floor - four data leave the line, cross the plot and land on their bars,
+           and a row that gives it less time gets the longer clock, not a faster cut (the row's own dur is still the row's
+           when it is the longer of the two). */
+        const dk = sp.keyed === "data" ? Math.max(d, KEYED_DATA.MIN_S) : d;
+        if (t < sp.at + dk) { xf = { from: cur, to: k, u: clamp01((t - sp.at) / dk), keyed: sp.keyed, key_map: sp.key_map }; break; }   /* P50 T11: true = the datum hands over, "tags" = the terminal tag does; E64: "data" = the datum whose CHANGE is the bar */
         cur = k; cCur = 1; continue;
       }
-      if (t < sp.at + d) { cCur = 1 - segEase(clamp01((t - sp.at) / d)); leaving = true; break; }   /* the standing chart is leaving */
+      if (t < sp.at + d) { cCur = 1 - segEase(clamp01((t - sp.at) / d)); leaving = true; plain = { from: cur, to: k, u: clamp01((t - sp.at) / d) }; break; }   /* the standing chart is leaving - E64: with its axes handing over to the one arriving */
       cur = k; cCur = clamp01((t - (sp.at + d)) / (states[k].buildDur || LP.BUILD));
     }
     st.active = xf ? ((xf.extend && xf.u >= XF_EXTEND.RESCALE) || (xf.morph && xf.u >= XF_MORPH.LEAVE) ? xf.to : xf.from) : cur;   /* the state a species target resolves against (P48 T2) */
@@ -5409,11 +5549,15 @@ async function mount(doc) {
     if (!(xf && xf.morph) && !(!xf && hold)) lpHideMorphs(st, null);   /* P48 T5: a morph's strip shows only while it morphs or holds under the target's build */
     if (xf && xf.extend) { lpPaintExtend(states, xf, t3, scene, t); }
     else if (xf && xf.morph) { for (const S of states) { lpRestoreState(S); S.extendCap = null; } lpPaintMorphTo(st, states, xf, t3, scene, t); }
-    else if (xf && xf.keyed) { for (const S of states) lpRestoreState(S); lpPaintRecastKeyed(states, xf, t3, scene, t); }
+    else if (xf && xf.keyed) { for (const S of states) lpRestoreState(S); (xf.keyed === "data" ? lpPaintRecastData : lpPaintRecastKeyed)(states, xf, t3, scene, t); }
     else if (xf) { lpPaintRescale(states, xf, t3, scene, t); }
     else {
       for (const S of states) { lpRestoreState(S); S.extendCap = null; }   /* no transition on: every state exactly as built (a seek is the play) */
       for (let i = 0; i < states.length; i++) lpPaintChart(states[i], i === cur ? cCur : 0, t3, scene, t, i === cur && leaving);
+      /* E64: the PLAIN recast (the compiler found no key) still un-draws and re-draws - but its axes hand over rather
+         than swapping in one frame, so the page reads as re-writing itself. The state it is leaving to is otherwise
+         untouched: nothing of the target's data is drawn before its own build. */
+      if (plain && states[plain.to] && states[plain.from]) lpAxisHandOver(states[plain.from], states[plain.to], plain.u);
       if (hold) lpPaintMorphHold(st, hold, cCur);
     }
     for (let i = 0; i < states.length; i++) if (!park || i !== (st.active | 0)) lpUnpark(states[i]);

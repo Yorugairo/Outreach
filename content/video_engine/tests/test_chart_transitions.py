@@ -1272,3 +1272,165 @@ def test_the_golden_carries_the_wire_and_e50s_clock_does_not_restart():
     import gate_motion_density as MG
     land = float(s2["span"][0]) + MG._page_land_offset(s2)
     assert land > float(s2["span"][0]), "the second page still has its own build to run - the wire did not replace it"
+
+
+# ---- E64 / R26-49: the DATA-keyed recast, and the axis hand-over every recast gets -----------------------------------
+
+DK_AT, DK_S = 12.0, 2.0   # the clock the fixture's row names; the painter's own floor (KEYED_DATA.MIN_S) is shorter
+DK_MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+
+def _data_ep(tmp: Path, bars_over: list[float] | None = None) -> tuple[Path, str, list[float]]:
+    """A temp episode: a MONTHLY line page (a level that wanders), and a bars page that is that line's own last four
+    consecutive CHANGES - the pair E64 keys on data. `bars_over` replaces the bar values (a pair that shares nothing).
+    Returns the episode, the plate id and the four changes the page must end up standing at."""
+    steps = [0.0, 9.4, -4.2, 12.1, -6.6, 5.3, 14.2, -9.9, 3.7, 11.4, -12.8, 6.9]
+    pts, v = [], 1200.0
+    for i in range(36):
+        v = round(v + steps[i % len(steps)] + (1.5 if i % 5 else -2.0), 1)
+        pts.append([round(2023.25 + i / 12, 4), v])
+    last = pts[-5:]
+    changes = [round(b[1] - a[1], 1) for a, b in zip(last, last[1:])]
+    bars = [{"label": DK_MONTHS[int(round((p[0] - int(p[0])) * 12)) % 12], "value": (bars_over or changes)[k],
+             "color": "crimson" if changes[k] < 0 else "teal"} for k, p in enumerate(last[1:])]
+    line = {"title": "The pile, month by month", "sub": "holdings, $bn, monthly", "src": "Fixture", "unit": "$",
+            "ylabel": "$bn", "series": [{"name": "Holdings", "label": "36 months", "color": "crimson", "pts": pts}]}
+    page2 = {"title": "The monthly print", "sub": "change in holdings, $bn a month", "src": "Fixture", "unit": "$", "bars": bars}
+    (tmp / "evidence/objects").mkdir(parents=True, exist_ok=True)
+    (tmp / "evidence/objects/fx-pile.series.json").write_text(json.dumps(line), encoding="utf-8")
+    (tmp / "evidence/objects/fx-prints.series.json").write_text(json.dumps(page2), encoding="utf-8")
+    return tmp, "ledger:fx-pile:line;then=fx-prints:bars", changes
+
+
+DK_PROBE = """() => {
+  const w = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')); const st = w.__lp; const S = st.states || [st];
+  const A = S[0], Bs = S[1];
+  const txt = (s, role) => (s.marks || []).filter(m => m.role === role && m.el).map(m => (m.el.textContent || ''));
+  const full = (s, role) => (s.marks || []).filter(m => m.role === role && m.el).map(m => (m.el.__full != null ? m.el.__full : (m.el.textContent || '')));
+  const dots = ((A.dataKey || {}).dots || []).map(d => [+d.getAttribute('cx'), +d.getAttribute('cy'), +d.getAttribute('opacity')]);
+  const bars = (Bs.marks || []).filter(m => m.role === 'bar');
+  return {
+    dots,
+    barScale: bars.map(m => (m.rec && m.rec.bar ? (m.rec.bar.style.transform || '') : '')),
+    barTop: bars.map(m => m.geom.end), barBase: bars.map(m => m.geom.base), barV: bars.map(m => m.geom.v),
+    barLab: bars.map(m => (m.rec && m.rec.lab ? (m.rec.lab.textContent || '') : '')),
+    barVal: bars.map(m => (m.rec && m.rec.val ? +m.rec.val.getAttribute('opacity') : null)),
+    yA: txt(A, 'ylabel'), yAfull: full(A, 'ylabel'), yB: txt(Bs, 'ylabel'), yBfull: full(Bs, 'ylabel'),
+    tickA: (A.marks || []).filter(m => m.role === 'tick').map(m => [+m.el.getAttribute('y1'), m.geom.y, +(m.el.style.opacity || 1)]),
+    tickB: (Bs.marks || []).filter(m => m.role === 'tick').map(m => +(m.el.style.opacity || 1)),
+    lineOff: (A.paths || []).map(p => parseFloat(p.p.getAttribute('stroke-dashoffset') || '0') / (p.len || 1)),
+    linePts: (A.linePts || [])[0] || [], charts: S.map(s => +(s.chart.style.opacity || 0)), active: st.active | 0,
+  };
+}"""
+
+
+def _data_species(ep: Path, plate: str, keyed=None) -> list[dict]:
+    sp = [{"kind": "chart_to", "at": DK_AT, "dur": DK_S, "to": "recast", "state": 1}]
+    if keyed is not None:
+        sp[0]["keyed"] = keyed
+    B.derive_rescale_states(B.world_for_plate(plate, (0, 0, 0), ep), sp, plate, ep, sid="s01")
+    return sp
+
+
+def test_the_compiler_hands_the_engine_a_key_map_for_this_fixture(tmp_path):
+    """The engine half never re-derives the correspondence: the row carries `keyed: "data"` and the key_map the
+    compiler checked against both series files (E64 half 1), and the fixture's bars ARE the line's own changes."""
+    ep, plate, changes = _data_ep(tmp_path)
+    sp = _data_species(ep, plate)
+    assert sp[0]["keyed"] == "data" and sp[0]["keyed_derived"] is True
+    assert [m["bar"] for m in sp[0]["key_map"]] == [0, 1, 2, 3]
+    assert [m["datum"] - m["from"] for m in sp[0]["key_map"]] == [1, 1, 1, 1], "each bar is ONE step of the line"
+    world = B.world_for_plate(plate, (0, 0, 0), ep)
+    assert [round(float(v), 1) for v in world["page_states"][0]["values"]] == changes
+
+
+@needs_browser
+def test_the_data_fly_to_their_bars_while_the_axes_re_write(tmp_path):
+    """E64, the Tokyo 0:50 case on a fixture: at half the clock the four data are IN FLIGHT between the line and
+    their bar tops, the bars are part-grown beneath them, the line has left its history, and the axis is mid
+    hand-over - the standing labels un-written, the arriving ones begun."""
+    ep, plate, changes = _data_ep(tmp_path)
+    species = _data_species(ep, plate)
+    at, errs, close = _keyed_player(ep, plate, species, probe=DK_PROBE)
+    try:
+        before = at(DK_AT - 0.5)
+        assert before["charts"][0] == 1 and all(d[2] == 0 for d in before["dots"]), "before the word: no datum has left the line"
+        assert all(a == b for a, b in zip(before["yA"], before["yAfull"])), "and every tick label is whole"
+        mid = at(DK_AT + DK_S * 0.5)
+        pts = mid["linePts"]
+        for k, m in enumerate(species[0]["key_map"]):
+            x0, y0 = pts[m["datum"]]
+            top, base = mid["barTop"][k], mid["barBase"][k]
+            dx, dy, op = mid["dots"][k]
+            assert op > 0.5, f"datum {m['datum']} is in the air"
+            assert min(y0, top) - 1 <= dy <= max(y0, top) + 1, (k, y0, dy, top)
+            assert abs(dy - y0) > 1 and abs(dy - top) > 1, f"bar {k}: the datum has left the line and not yet landed"
+            assert min(x0, mid["barTop"][k] * 0 + x0, mid["dots"][k][0]) is not None
+        grown = [float(s.split("scaleY(")[1].rstrip(")")) for s in mid["barScale"]]
+        assert all(0.05 < g < 0.95 for g in grown), f"the bars are growing beneath the data, not standing: {grown}"
+        assert all(len(a) < len(b) for a, b in zip(mid["yA"], mid["yAfull"])), "the standing labels are being un-written"
+        assert any(0 < len(a) < len(b) for a, b in zip(mid["yB"], mid["yBfull"])), "the arriving ones are being written"
+        assert all(t[2] > 0.3 for t in mid["tickA"]), "the gridlines are still lit while they slide"
+        assert any(abs(t[0] - t[1]) > 1 for t in mid["tickA"]), "and they have moved off their built y"
+        assert mid["lineOff"][0] < 0, "the line is un-drawing by its history (the dash window slides to the tail)"
+        after = at(DK_AT + DK_S + 0.4)
+        assert after["charts"] == [0, 1] and after["active"] == 1, "the bars page stands alone"
+        assert all(s in ("scaleY(1.0000)", "scaleY(1)", "") for s in after["barScale"]), after["barScale"]
+        assert [round(float(v), 1) for v in after["barV"]] == changes, "the bars stand at the changes the compiler verified"
+        assert all(a == b for a, b in zip(after["yB"], after["yBfull"])), "the arriving axis is written out"
+        assert all(d[2] == 0 for d in after["dots"]), "the travelling data are gone - the bars' own numbers have it"
+        back = at(DK_AT - 0.5)
+        assert all(a == b for a, b in zip(back["yA"], back["yAfull"])), "a seek back writes every label whole again"
+        assert all(d[2] == 0 for d in back["dots"]) and back["charts"][0] == 1
+        assert not errs, errs
+    finally:
+        close()
+
+
+@needs_browser
+def test_a_data_keyed_recast_seeks_exactly(tmp_path):
+    """A cold seek into any instant of the hand-over paints what a play-through paints (P39's law): the same
+    frame model, to the digit, after a scrub away and back."""
+    ep, plate, _changes = _data_ep(tmp_path)
+    species = _data_species(ep, plate)
+    at, _errs, close = _keyed_player(ep, plate, species, probe=DK_PROBE)
+    try:
+        for t in (DK_AT + 0.3, DK_AT + DK_S * 0.5, DK_AT + DK_S * 0.8, DK_AT + DK_S + 1.0):
+            a = at(t); at(2.0); at(DK_AT + DK_S + 4.0); b = at(t)
+            assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True), t
+    finally:
+        close()
+
+
+@needs_browser
+def test_the_plain_recasts_axes_hand_over_too(tmp_path):
+    """E64: a recast the compiler could NOT key keeps its un-draw-then-draw, but its axes re-write rather than
+    swapping in one frame - the standing labels un-written, the arriving ones written, the gridlines lit and moved."""
+    ep, plate, _changes = _data_ep(tmp_path, bars_over=[3.0, 4.0, 5.0, 6.0])   # bars that are not the line's changes
+    species = _data_species(ep, plate)
+    assert species[0]["keyed"] is None and "key_map" not in species[0], "the compiler found no key - this is the plain recast"
+    at, errs, close = _keyed_player(ep, plate, species, probe=DK_PROBE)
+    try:
+        mid = at(DK_AT + DK_S * 0.5)
+        assert all(len(a) < len(b) for a, b in zip(mid["yA"], mid["yAfull"])), "the standing labels are being un-written"
+        assert any(0 < len(a) < len(b) for a, b in zip(mid["yB"], mid["yBfull"])), "the arriving ones are being written"
+        assert any(abs(t[0] - t[1]) > 1 for t in mid["tickA"]), "the gridlines have slid toward the new scale"
+        assert all(t[2] > 0.3 for t in mid["tickA"]), "and none of them blinked out to do it"
+        assert all(d[2] == 0 for d in mid["dots"]) if mid["dots"] else True, "no datum travels on a plain recast"
+        assert all("scaleY(0" in s or s == "" for s in mid["barScale"]), "and no bar grows before the target's own build"
+        a = at(DK_AT + DK_S * 0.5); at(2.0); b = at(DK_AT + DK_S * 0.5)
+        assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True), "the plain recast seeks exactly too"
+        assert not errs, errs
+    finally:
+        close()
+
+
+def test_the_data_key_has_its_own_golden_surface():
+    """`data-to-bars`: the committed source carries the DERIVED key and its map, so the golden proves the compiler
+    and the painter together (the frame is judged at dur * 0.5)."""
+    src = RB.SOURCES / "data-to-bars.timeline.json"
+    assert src.exists(), "run build_golden_sources.py"
+    sp = json.loads(src.read_text(encoding="utf-8"))["scenes"][0]["species"][0]
+    assert sp["to"] == "recast" and sp["keyed"] == "data" and sp["keyed_derived"] is True
+    assert [m["bar"] for m in sp["key_map"]] == [0, 1, 2, 3]
+    assert (RB.FRAMES / "data-to-bars.png").exists(), "run render_baseline.py --surface data-to-bars"

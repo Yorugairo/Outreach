@@ -49,6 +49,7 @@ FRAME_T = {
     "tiers-two": 14.2,              # P50 T9: both bands drawn (the page builds to 8.9, the second band's own word runs 9.5-11.5) and the drop bar in the accent all but finished (12.0 + 0.88 of 2.5) with its label being written
     "treemap-cross": 10.9,          # P50 T6: the census has landed (the build ends at 8.0), the three X's are struck (9.0 + CROSS_S) and the crossed share is written (9.0 + WRITE_AT + 3.0 * WRITE = 10.7)
     "tags-to-bars": 12.2,           # P50 T11: mid-hand-over of the KEYED-TAGS recast (12 s + 2 s): the two terminal tags are halfway to their bars and growing into the bars' own type, the lines have left half their history beneath them, the bars are half grown, and no value has been drawn twice
+    "data-to-bars": 13.0,           # E64 / R26-49: dur * 0.5 of the DATA-keyed recast (12 s + 2 s) - the four data in flight between the line and their bars, the bars part-grown beneath them, the old tick labels most of the way un-written and the new ones started
     "ledger-keyed": 12.75,          # P48 T4b: mid-phase-2 of the keyed recast (12 s + 2 s; the golden's expoOut clock is half done at u 0.37): the lines have left half their history, their ends and values are in flight to the bar tops, the bars are half grown         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
 }
 
@@ -282,6 +283,51 @@ def tags_to_bars() -> tuple[dict, dict]:
 # P50 T9: the two bands of the tiers golden - synthetic reserves, the SHAPE is what is under test
 # (a level that holds and then falls against one that falls all along), on ONE x of twenty half-years.
 TIERS_X = [2015 + 0.5 * i for i in range(21)]
+
+
+def data_to_bars() -> tuple[dict, dict]:
+    """E64 / R26-49: the DATA-KEYED recast - one line becomes the n bars that ARE its own consecutive changes.
+
+    The fixture is a synthetic MONTHLY balance sheet (36 months; the shape is what is under test, as the tiers
+    golden's reserves are), and the bars page is computed FROM it: bar k is the change from month to month over
+    the last four, to the tenth the page prints. Nothing here names a key: the row is a PLAIN
+    `chart_to recast`, and the compiler derives `keyed: "data"` and its key_map (E64) - so the golden proves the
+    derivation, the key map and the painter together.
+
+    Judged at dur * 0.5 (FRAME_T 13.0): the four data are in flight between the line and their bar tops, the bars
+    are part-grown beneath them, the line has left its history, the standing tick labels are most of the way
+    un-written and the arriving ones have begun."""
+    import json
+    import tempfile
+    import build_scene_timeline_f as BST
+    n_months, base = 36, 1200.0
+    steps = [0.0, 9.4, -4.2, 12.1, -6.6, 5.3, 14.2, -9.9, 3.7, 11.4, -12.8, 6.9]   # a level that wanders, month by month
+    pts, v = [], base
+    for i in range(n_months):
+        v = round(v + steps[i % len(steps)] + (1.5 if i % 5 else -2.0), 1)
+        x = round(2023.25 + i / 12, 4)
+        pts.append([x, v])
+    last = pts[-5:]
+    months = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+    bars = [{"label": months[int(round((p[0] - int(p[0])) * 12)) % 12], "value": round(p[1] - q[1], 1),
+             "color": "crimson" if p[1] < q[1] else "teal"} for q, p in zip(last, last[1:])]
+    line = {"title": "The pile, month by month", "sub": "holdings, $bn, monthly", "src": "Golden fixture",
+            "unit": "$", "ylabel": "$bn", "series": [{"name": "Holdings", "label": "36 months", "color": "crimson", "pts": pts}]}
+    page2 = {"title": "The monthly print", "sub": "change in holdings, $bn a month", "src": "Golden fixture",
+             "unit": "$", "bars": bars}
+    species = [{"kind": "chart_to", "at": 12.0, "dur": 2.0, "to": "recast", "state": 1}]   # NO key: the compiler derives it
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td); (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/golden-pile.series.json").write_text(json.dumps(line), encoding="utf-8")
+        (ep / "evidence/objects/golden-prints.series.json").write_text(json.dumps(page2), encoding="utf-8")
+        plate = "ledger:golden-pile:line;then=golden-prints:bars"
+        world = BST.world_for_plate(plate, (0, 0, 0), ep)
+        world["ken_burns"] = {"scale": 0, "x": 0, "y": 0}
+        world["page"]["field"] = "soak"
+        BST.derive_rescale_states(world, species, plate, ep, sid="s01")
+    assert species[0].get("keyed") == "data" and len(species[0].get("key_map") or []) == 4, species[0]
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: data to bars", scenes, {}, None), _base_uris()
 
 
 def tiers_two() -> tuple[dict, dict]:
@@ -604,6 +650,7 @@ SURFACES = {
     "occluder-dock": occluder_dock,
     "thread-baseline": thread_baseline,
     "tags-to-bars": tags_to_bars,
+    "data-to-bars": data_to_bars,
     "chip-board": chip_board,
     "press-stack": press_stack,
     "flow-swap": flow_swap,

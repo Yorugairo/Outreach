@@ -2074,6 +2074,10 @@ author must own with a new row.
 the world). A cut says "another chart"; a re-write says "the same money, counted another way" - which is the
 sentence the cut at 0:50 is under ("The Treasury prints the new total monthly").
 
-Mechanisms: the compiler (`RECAST_PAIRS` widened to the datum-keyed line -> change-bars pair; the plain recast
-refused with the keyed forms named), the engine's recast (the axis hand-over and the datum travel for the new
-pair), M23 reading it; `docs/content-video-engine/CAPABILITIES.md`. The finding: the operator's read of 0:50.
+Mechanisms (WIRED 2026-09-11, the same day, in two halves): the compiler keys by DATA when the bars are the line's own
+consecutive changes and derives the key when the author named none (`key_map` on the entry; a pair that shares nothing is
+named `keyed: null`); the engine's recast carries each keyed datum to its bar while the bar grows beneath, un-draws the line
+by its history, and hands the AXES over for every recast (labels un-written and written glyph by glyph, the gridlines
+sliding by rank) - never a one-frame swap; M23 reads it; the goldens `data-to-bars` (new), `tags-to-bars` and `ledger-keyed`
+(the axis swap they had frozen in, regenerated on purpose). `docs/content-video-engine/CAPABILITIES.md`. The finding: the
+operator's read of 0:50.
