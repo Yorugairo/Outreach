@@ -962,15 +962,16 @@ def _opening_still_gate(still: list[tuple[float, float]]) -> Gate:
 
 def _page_land_offset(scene: dict) -> float:
     """Seconds from a ledger page's enter to its chart landing: PAGE_BUILD_END_S on a roll-out; on a mount
-    (E45 s2: the mount IS the roll-out, the savor stays) mount_s + PAGE_BUILD_END_S - ROLL, the roll being the
-    only beat a mount skips (the player defaults mount_s to the FIELD beat when the spec carries none)."""
+    (R26-50, 2026-09-11: the mount is the SOAK on the page's own clock - the cream at once, the soak over mount_s, then ink
+    -> punch -> build; a mount skips the roll, the savor and the field beat) mount_s + PAGE_BUILD_END_S - ROLL - SAVOR - FIELD
+    (the player defaults mount_s to the FIELD beat when the spec carries none)."""
     page = ((scene or {}).get("world") or {}).get("page") or {}
     # a page may draw over its own seconds (page.build_s); the gate's landing must move with the player's, or the two
     # disagree about when the chart is finished and the deployed life is measured against the wrong mark
     extra = max(0.0, float(page.get("build_s") or LP_BUILD_S) - LP_BUILD_S)
     if page.get("enter") == "mount":
         mount_s = float(page.get("mount_s") or LP_FIELD_S)
-        return mount_s + PAGE_BUILD_END_S - LP_ROLL_S + extra
+        return mount_s + PAGE_BUILD_END_S - LP_ROLL_S - LP_SAVOR_S - LP_FIELD_S + extra   # R26-50: the soak on the page's clock, then ink
     if page.get("enter") == "morph":   # P47 T3: the morph replaces the roll, the savor, the soak and the punch; the build starts as it ends
         return float(page.get("morph_s") or MORPH_S) + LP_BUILD_S + extra
     if page.get("enter") in ("spiral", "snap", "built", "throw", "drop", "camera"):   # a returning page, a card become the world (P47 T7; P49 T5 by the eye), or a page that mounts with its chart already drawn: arrives built

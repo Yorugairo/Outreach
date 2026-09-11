@@ -58,7 +58,9 @@ def test_each_drawing_beat_is_its_own_window(s02):
     """The page's own build clock and each `build_to` - separate windows, never one span. Between the
     Tokyo caps (10.69 -> 18.95) the line RESTS on its datum (M19's hold): a card reading in that gap
     is beside a finished chart, not over a build."""
-    assert s02["windows"] == [(1.99, pytest.approx(10.69)), (7.69, pytest.approx(10.69)), (18.95, pytest.approx(20.15))]
+    # R26-50 (2026-09-11): a mounting page lands its own build mount_s + 3.5 s after enter (7.49 on s02, was 10.69 on the roll-out clock);
+    # the build_to at 7.69 still draws to 10.69, so the panel card at 9.1 is still inside a drawing window
+    assert s02["windows"] == [(1.99, pytest.approx(7.49)), (7.69, pytest.approx(10.69)), (18.95, pytest.approx(20.15))]
     assert B.page_build_windows({"kind": B.SPECIES_LEDGER, "page": {"enter": "spiral"}}, [], 4.0) == [], "a page that arrives BUILT never draws"
     assert B.page_build_windows({"kind": "plate", "asset_id": "plate-x"}, [], 0.0) == [], "a plain plate has no chart to draw"
 

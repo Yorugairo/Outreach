@@ -571,3 +571,177 @@ def test_enter_throw_arrives_built_and_is_a_known_enter():
     thrown["world"]["page"] = dict(thrown["world"]["page"], enter="throw")
     assert G._arrive_of([thrown], "s01") == 0.0, "enter=throw arrives drawn"
     assert G._deployed_gate([thrown]).level == "PASS"
+
+
+# ---- R26-50: a `cut` cuts, and the caption is the viewer's layer -------------------------------
+# The operator, 2026-09-11, watching the Tokyo cut: *"the random back dip to black at 1:01"*. Tokyo
+# s05 (`ledger:ev-meta-yield-v1:bars:3:right:mount=2.43:cut`) mounted by CROSS-FADING its cream over
+# the finished page that had just left - the outgoing world rode above the new page for mount_s
+# (2.43 s) and the new page's soak only began after it, so four and a half seconds ran under two
+# sentences with nothing new to read, and the caption - painted UNDER that fade - dimmed with the
+# page it was not part of. The rule: the mount's clock is the PAGE's (the cream is the ground on the
+# scene's first frame, the soak opens there, over mount_s), the boundary belongs to the row's exit
+# (a cut cuts; a declared exit keeps E47's own short clock), and #caption never dims and is never
+# painted over (E21, E59: Z5 is the viewer's layer).
+T_MOUNT = 20.0            # page A has been standing for 12 s; page B mounts here
+MOUNT_S = 2.43            # Tokyo s05's own dial
+CAPTION_TEXT = "home, and the tab stayed"
+
+# every layer the frame paints, ranked the way the browser stacks it, plus what is actually hit at
+# the caption's centre and at the stage's - a layer that covers the caption answers here by name.
+FRAME_STATE = r"""() => {
+  const stage = document.getElementById('stage'), cap = document.getElementById('caption');
+  const cs = (el) => getComputedStyle(el);
+  const zr = (el) => { const z = cs(el).zIndex; return z === 'auto' ? 0 : +z; };
+  const kids = [...stage.children];
+  const rank = (el) => [zr(el), kids.indexOf(el)];
+  const scale = (p) => { const m = /scale\(([-\d.]+)\)/.exec(p.getAttribute('transform') || ''); return m ? +m[1] : 0; };
+  const worlds = [...document.querySelectorAll('.world')].map((w) => {
+    const page = w.querySelector('.lp-page');
+    const blobs = [...w.querySelectorAll('.lp-field svg path')].map(scale);
+    return { id: w.id, ledger: w.classList.contains('ledger'), opacity: +cs(w).opacity,
+             rank: rank(w), clip: cs(w).clipPath, display: cs(w).display,
+             title: (w.querySelector('.lp-title') || { textContent: '' }).textContent,
+             glyphs: [...w.querySelectorAll('.lp-title:not(.lp-retitle) .g')].map((g) => +(g.style.getPropertyValue('--w') || 0)),
+             pageOpacity: page ? +cs(page).opacity : null,
+             soak: blobs.length ? Math.max(...blobs) : 0 };
+  });
+  const at = (x, y) => { const e = document.elementFromPoint(x, y); if (!e) return null;
+    const w = e.closest ? e.closest('.world') : null;
+    return { id: e.id || '', cls: (typeof e.className === 'string' ? e.className : ''), world: w ? w.id : null,
+             inCaption: cap.contains(e) || e === cap }; };
+  const r = cap.getBoundingClientRect(), sb = stage.getBoundingClientRect();
+  return { worlds,
+           caption: { opacity: +cs(cap).opacity, rank: rank(cap), text: cap.textContent,
+                      hit: at(r.left + r.width / 2, r.top + r.height / 2) },
+           wash: { rank: rank(document.getElementById('wash')), opacity: +cs(document.getElementById('wash')).opacity },
+           dipveil: { rank: rank(document.getElementById('dipveil')), opacity: +cs(document.getElementById('dipveil')).opacity },
+           centre: at(sb.left + sb.width / 2, sb.top + sb.height / 2) };
+}"""
+
+
+def _dip_s() -> float:
+    """E47's own dip, read from the engine so the test cannot drift from the dial."""
+    import re
+    m = re.search(r"DIP_S = ([\d.]+)", RB.ENGINE.read_text(encoding="utf-8"))
+    assert m, "DIP_S is not in the engine"
+    return float(m.group(1))
+
+
+def _two_scene_mount(tl: dict, exit_name: str) -> dict:
+    """Page A stands and leaves at T_MOUNT on `exit_name`; page B MOUNTS there, mount_s 2.43,
+    with an anchored caption running across the boundary."""
+    sc = tl["scenes"][0]
+    pg0 = sc["world"]["page"]
+    page = dict(pg0, series=pg0["series"][:1])
+    still = {"scale": 0, "x": 0, "y": 0}
+    first = dict(sc, scene_id="s01", span=[0.0, T_MOUNT], species=[], exit="cut",
+                 world=dict(sc["world"], page=dict(page, title="The page that leaves"), ken_burns=still))
+    second = dict(sc, scene_id="s02", span=[T_MOUNT, T_MOUNT + 14.0], species=[], exit=exit_name,
+                  world=dict(sc["world"], page=dict(page, title="The page that mounts", enter="mount", mount_s=MOUNT_S),
+                             ken_burns=still))
+    return dict(tl, scenes=[first, second], caption_pages=None, caption_modes=[],
+                captions=[{"at": T_MOUNT - 3.0, "until": T_MOUNT + 6.0, "text": CAPTION_TEXT}],
+                runtime_s=T_MOUNT + 14.0, kinetics={"min_jerk": True, "analytic_spring": True})
+
+
+def _frame(P: "_Player", t: float) -> dict:
+    P.page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+    return P.page.evaluate(FRAME_STATE)
+
+
+def _pages(fr: dict) -> tuple[dict, dict]:
+    """(the world carrying the page that left, the world carrying the page that mounted). Past the
+    boundary the player paints the previous scene into wA and the live one into wB; each carries the
+    title that names it, which is asserted here so the pair can never be read the wrong way round."""
+    by = {w["id"]: w for w in fr["worlds"]}
+    gone, up = by["wA"], by["wB"]
+    assert "leaves" in (gone["title"] or "") and "mounts" in (up["title"] or ""),         [w["title"] for w in fr["worlds"]]
+    return gone, up
+
+
+@needs_browser
+def test_a_cut_cuts_the_page_that_left_is_gone_on_the_mounting_scenes_first_frame():
+    """R26-50 rule 1: no cross-fade of the previous chart over the new page's cream."""
+    name, tl, uris, aspect, pts = _line_golden()
+    P = _Player(_two_scene_mount(tl, "cut"), uris, aspect)
+    try:
+        before = _frame(P, T_MOUNT - 0.1)
+        standing = {w["id"]: w for w in before["worlds"]}["wB"]        # before the boundary the live world is the page that leaves
+        assert "leaves" in standing["title"] and before["centre"]["world"] == "wB", before["centre"]
+
+        fr = _frame(P, T_MOUNT + 0.1)
+        gone, up = _pages(fr)
+        assert gone["opacity"] == 0 or fr["centre"]["world"] == up["id"], \
+            f"the page that left still paints at the boundary: centre hit {fr['centre']}, opacity {gone['opacity']}"
+        assert gone["rank"] < up["rank"], f"the outgoing world rides ABOVE the new page: {gone['rank']} vs {up['rank']}"
+        assert up["opacity"] == 1, f"the mounting page's world is cross-fading in: opacity {up['opacity']}"
+        assert up["pageOpacity"] == 1, f"the cream does not land at once: page opacity {up['pageOpacity']}"
+        assert "0%" in up["clip"] or up["clip"] == "none", f"a wipe front is clipping the mounting page: {up['clip']}"
+    finally:
+        P.close()
+
+
+@needs_browser
+def test_the_mounting_pages_soak_opens_on_the_scenes_first_frame_and_its_ink_follows_mount_s():
+    """R26-50 rule 1 + rule 3: mount_s is the SOAK's seconds, counted from the scene's first frame;
+    the ink, the punch and the build follow at their own LP offsets, as they always have."""
+    name, tl, uris, aspect, pts = _line_golden()
+    P = _Player(_two_scene_mount(tl, "cut"), uris, aspect)
+    try:
+        half = _pages(_frame(P, T_MOUNT + MOUNT_S / 2))[1]
+        assert half["soak"] > 0, "half way through the mount the charcoal has not started - the soak is not on the page's clock"
+        late = _pages(_frame(P, T_MOUNT + MOUNT_S * 0.9))[1]
+        assert late["soak"] > half["soak"], f"the soak does not spread: {half['soak']:.1f} -> {late['soak']:.1f}"
+        assert all(g == 0 for g in late["glyphs"]), "the ink writes before the soak has filled the board"
+        inked = _pages(_frame(P, T_MOUNT + MOUNT_S + 0.3))[1]
+        assert inked["glyphs"] and inked["glyphs"][0] > 0, \
+            f"the ink has not begun a third of a second after the soak's own seconds: {inked['glyphs'][:4]}"
+    finally:
+        P.close()
+
+
+@needs_browser
+def test_the_caption_never_dims_and_nothing_the_mount_paints_covers_it():
+    """R26-50 rule 2 (E21, E59): the caption is Z5, the viewer's layer. Its computed opacity is 1
+    across the mount window and it is what the frame hits at its own centre - above the world, above
+    the wash, above the cream of the page that is mounting."""
+    name, tl, uris, aspect, pts = _line_golden()
+    P = _Player(_two_scene_mount(tl, "cut"), uris, aspect)
+    try:
+        for dt in (0.1, 1.0, 2.0, MOUNT_S + 0.5):
+            fr = _frame(P, T_MOUNT + dt)
+            cap = fr["caption"]
+            assert cap["text"] == CAPTION_TEXT, f"+{dt}s: the caption is not up: {cap['text']!r}"
+            assert cap["opacity"] == 1, f"+{dt}s: the caption dims with the page: opacity {cap['opacity']}"
+            assert cap["hit"] and cap["hit"]["inCaption"], \
+                f"+{dt}s: something paints over the caption: {cap['hit']}"
+            for w in fr["worlds"]:
+                assert w["rank"] < cap["rank"], f"+{dt}s: world {w['id']} is above the caption: {w['rank']} vs {cap['rank']}"
+            assert fr["wash"]["rank"] < cap["rank"], "the wash is above the caption"
+            assert fr["dipveil"]["rank"] > cap["rank"], "E47's veil must stay ABOVE the caption - a dip takes the whole frame"
+    finally:
+        P.close()
+
+
+@needs_browser
+def test_a_declared_dip_keeps_e47s_own_clock_never_the_mounts():
+    """R26-50 rule 1, second half: an exit that is declared leaves on its own short clock - the dip is
+    over in DIP_S, and what stands after it is the new page, not a fading old one."""
+    name, tl, uris, aspect, pts = _line_golden()
+    dip = _dip_s()
+    assert dip < 1.0, f"the dip is meant to be short: {dip}"
+    P = _Player(_two_scene_mount(tl, "dip"), uris, aspect)
+    try:
+        early = _frame(P, T_MOUNT + 0.1)
+        assert early["dipveil"]["opacity"] > 0, "the dip is not running - this case would be vacuous"
+        after = _frame(P, T_MOUNT + dip)
+        gone, up = _pages(after)
+        assert after["dipveil"]["opacity"] == 0, f"the dip outlasts its own seconds: {after['dipveil']['opacity']}"
+        assert gone["opacity"] == 0 or after["centre"]["world"] == up["id"], \
+            f"the page that left is still there after the dip: {after['centre']}"
+        assert up["pageOpacity"] == 1 and up["opacity"] == 1, "the new page is still arriving after the exit's own clock"
+        assert up["soak"] > 0, "the soak waited for the transition instead of opening on the page's first frame"
+        assert after["caption"]["opacity"] == 1, "the caption's own opacity rides the dip (E47 dips the FRAME, by the veil)"
+    finally:
+        P.close()

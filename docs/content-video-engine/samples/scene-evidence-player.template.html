@@ -108,8 +108,8 @@
      dip takes the docks, the stage captions and the species down with the world and a blur-zoom softens the
      whole frame. Both are inert until a transition drives them: #dipveil at opacity 0 paints nothing and
      #bzveil at backdrop-filter none filters nothing, so a build with neither exit renders as before. */
-  #bzveil { position: absolute; inset: 0; pointer-events: none; }
-  #dipveil { position: absolute; inset: 0; pointer-events: none; background: #000; opacity: 0; }
+  #bzveil { position: absolute; inset: 0; pointer-events: none; z-index: 60; }
+  #dipveil { position: absolute; inset: 0; pointer-events: none; background: #000; opacity: 0; z-index: 60; }   /* R26-50: above #caption's z-index 50, because E47's dip takes the viewer's layer down with the world */
 #species .co, #species-under .co { fill: none; stroke: #F5B72E; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
 #species .sq, #species-under .sq { fill: none; stroke: #F5B72E; stroke-width: 5; stroke-linecap: round; }
 #species .lab, #species-under .lab { font: 700 30px Inter, Arial, sans-serif; fill: #F5B72E; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 8px; }   /* inline series names may run past the plot (s9.23b) */
@@ -448,6 +448,14 @@
        margin; nothing else lives in the bottom band. Doc 29 s9.15 ruling 7. */
     position: absolute; left: 145px; right: 145px; bottom: 120px; text-align: center;
     line-height: 1.24; color: var(--cream); font-size: 40px; font-weight: 700;
+    /* Z5 - THE VIEWER'S LAYER (E21, E59; R26-50). The caption never dims and nothing the world
+       does paints over it: not a mounting page's cream, not a transition plate raised above the
+       incoming world, not the plate's foreground cutout (#fgover, whose own comment has said so
+       since HF-17) and not the wipe's seam. Only E47's two veils sit higher (z-index 60), because
+       a dip through black takes the whole frame, captions included. Before this the caption was
+       z-index auto and the outgoing world, raised to 3 while a page mounted, painted over it -
+       the caption 'dimmed with the page' the operator read at 1:01 of the Tokyo cut. */
+    z-index: 50;
     text-shadow: 0 2px 14px rgba(0,0,0,.94), 0 0 5px rgba(0,0,0,.85);
     /* no transition: the stage -> anchor demote is instant so a seek-and-screenshot render and a
        live play agree on every frame (a wall-clock transition never lands in a captured frame) */

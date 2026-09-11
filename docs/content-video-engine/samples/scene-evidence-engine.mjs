@@ -2059,7 +2059,7 @@ async function mount(doc) {
   const wA = $("wA"), wB = $("wB"), wash = $("wash"), seam = $("seam"), cap = $("caption");
   const docks = [$("dock-1"), $("dock-2")];
   const bzveil = $("bzveil"), dipveil = $("dipveil");   /* E47: the blur-zoom's softness and the dip's black */
-  const WIPE = 0.62, DISSOLVE_S = 0.8, MOUNT_STEPS = 5;   /* DISSOLVE_S: the cross-fade a row declares with exit dissolve (the outro card); MOUNT_STEPS: the DANCE - a mounting page fades in this many steps over its soak, the charcoal growing between them */
+  const WIPE = 0.62, DISSOLVE_S = 0.8, MOUNT_STEPS = 5;   /* DISSOLVE_S: the cross-fade a row declares with exit dissolve (the outro card); MOUNT_STEPS: the staircase a mounting page RISES on over its soak (R26-50 retired the cross-fade the outgoing world used to ride) */
   const SUCK_S = 0.3, SUCK_TURN = 240;   /* the suck transition: 0.3 s, two thirds of a turn into the point */
   /* THE TWO WORLD-CHANGE TRANSITIONS (ruling E47, operator 2026-09-06), taken off the measured reference
      (doc 46 s46.5; docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md). Both straddle the boundary:
@@ -5494,25 +5494,24 @@ async function mount(doc) {
     const thrown = pg.enter === "throw";   /* operator, 2026-09-08: "throw the chart onto the plate ... the transition is literally the plate entering the world" -
        the whole page flies in on the pills' own kinetics (throwXf: a ballistic chord, the tumble, the material's squash and settle) and arrives built */
     const mount = pg.enter === "mount" || (pg.enter === "morph" && !morphOn);   /* a morph with its flag off is a mount of the same length */
-    const mountS = mount ? (pg.mount_s || pg.morph_s || LP.FIELD) : 0;   /* the mount phase: the world fades, the cream builds; then the page's clock starts at ROLL + SAVOR (no roll, no savor) */
-    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || camIn || built || thrown || dropped) ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : mount ? LP.ROLL - mountS : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2): its cream builds over mount_s, then the SAVOR holds the empty page before the ink; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
+    const mountS = mount ? (pg.mount_s || pg.morph_s || LP.FIELD) : 0;   /* R26-50: mount_s is the SOAK's own seconds - the page's clock, never the page that left */
+    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || camIn || built || thrown || dropped) ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : mount ? LP.ROLL + LP.SAVOR + (LP.FIELD - mountS) : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2) on the PAGE's own clock (R26-50): the cream is the ground on its first frame and the SOAK starts there, over mount_s - the roll and the savor are already behind it, and the ink, the punch and the build follow at their own LP offsets; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
     /* beat 1: roll-out */
-    const rk = (mount || morphOn || snap) ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) with the cream steps */
+    const rk = (mount || morphOn || snap) ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) on MOUNT_STEPS over its soak */
     /* HF-16: the wire recedes from the instant the CHART layer comes up - the build drives that layer's opacity, so a
        recede timed from the scene's first frame would be over before any of it had been seen. `tr` is the page's own
        clock with every entry already folded into it, so this stays a pure function of t. */
     if (st.thread && st.thread.el) st.thread.el.setAttribute("opacity", threadPose(tr - (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH)).alpha.toFixed(3));
-    const mu = mount ? clamp01((t - scene.span[0]) / mountS) : 1;
-    const lpDance = (u) => { if (u >= 1) return 1; const k = Math.floor(u * MOUNT_STEPS), f = u * MOUNT_STEPS - k; return (k + clamp01((f - 0.5) / 0.5)) / MOUNT_STEPS; };
+    const mu = mount ? clamp01((t - scene.span[0]) / mountS) : 1;   /* R26-50: the mount window IS the soak, and it opens on the scene's first frame */
     const mk = mount ? Math.floor(mu * MOUNT_STEPS) / MOUNT_STEPS : 1;
-    if (mount) { st.page.style.opacity = lpDance(mu).toFixed(4); }   /* the CREAM builds beneath the fading world, in the other half of each step */
+    if (mount) { st.page.style.opacity = "1"; }   /* THE CREAM IS THE GROUND (E22; R26-50): it lands at once and never cross-fades over the page that left */
     /* (the roll-out translate is composed with the punch below) */
     st.edge.style.opacity = (mount ? 0 : 1 - clamp01((tr - LP.ROLL) / 0.25)).toFixed(2);   /* no roll edge on a mount */
     /* beat 2: the half savor - the textured page holds, empty (E22 addendum 2) */
     /* beat 3: the field. SOAK: seeps spread and saturate, never contract - paper taking ink;
        SCRIBBLE: strokes accumulate one at a time with the nib at the front. Either ends on the
        crisp rect. */
-    const b = morphOn ? 1 : clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD);   /* a mount's soak begins a savor after its cream is full (tr reaches ROLL at mount_s; E45 s2: the savor stays); a morph page's board is soaked from its first frame */
+    const b = morphOn ? 1 : mount ? mu : clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD);   /* R26-50: a mounting page's soak runs over mount_s from the scene's first frame (its cream is already the ground); a morph page's board is soaked from its first frame */
     for (const bl of st.blobs) {
       /* STEP MOTION under km_ink (operator: "too smooth"): a stain's progress is a seeded staircase on the stepped clock, its own phase */
       const u = kin("km_ink") ? soakStepped(clamp01((b - bl.lag) / (1 - bl.lag)), (k) => lpHash(st.seed, bl.i + 1, 200 + k)) : clamp01((b - bl.lag) / (1 - bl.lag));
@@ -7083,22 +7082,23 @@ async function mount(doc) {
     }
     const throwIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && (sc.world.page.enter === "throw" || sc.world.page.enter === "drop");   /* the plate is thrown onto the world: the world stays beneath until it has landed */
     wB.classList.toggle("snapping", (!!snapIn && t - sc.span[0] < SNAP_S) || !!camArr || (!!throwIn && t - sc.span[0] < (sc.world.page.enter === "drop" ? DROP_S : THROW_S) + THROW_SETTLE_S));
-    const mountIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && (sc.world.page.enter === "mount" || sc.world.page.enter === "morph");   /* MOUNT (operator, 2026-09-05): the outgoing scene fades while the cream plate mounts over it - no page turn; a MORPH page arrives the same way (P47 T3).
+    const mountIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && (sc.world.page.enter === "mount" || sc.world.page.enter === "morph");   /* MOUNT: the page's own roll-out (E45 s2), so it takes no wipe front - and, since R26-50, no cross-fade either.
        NEVER a built page (operator, 2026-09-08: "when we're launching the chart already built we NEVER mount. Mounting is reserved for cream coming
        through over the scene, and then drawing") - enter=built takes the row's own transition, like a plate, and arrives with the chart standing */
-    const dissolve = prev && (sc.exit === "dissolve" || mountIn);
-    /* THE DANCE (operator, 2026-09-05, corrected: "the fades should be the WORLD fading, beneath it the CREAM should be building,
-       and by the time we reach the actual transition time the full cream should be built and the chart should start drawing"):
-       over the page's mount_s the OUTGOING world rides above and fades in MOUNT_STEPS steps while the page's cream plate builds
-       beneath it in the other half of each step (paintLedger); at mount_s the world is gone, the cream is full, the page's own
-       clock begins. The hand-off itself is no wipe (wk = 1) and no cross-fade of the page (dk = 1). */
-    const mountS = mountIn ? (sc.world.page.mount_s || sc.world.page.morph_s || LP.FIELD) : 0, mu = mountIn ? clamp01((t - sc.span[0]) / mountS) : 1;
-    const dk = dissolve && !mountIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / DISSOLVE_S)) : 1;
+    /* R26-50 (the operator, 2026-09-11, watching Tokyo: "the random back dip to black at 1:01"). THE DANCE IS RETIRED. Until today a
+       mounting page forced a cross-fade here: the OUTGOING world rode above the new page at z-index 3 and faded in MOUNT_STEPS steps
+       over the page's mount_s (2.43 s on Tokyo s05), so the finished chart dimmed to grey and then to cream for two and a half seconds,
+       the caption dimmed under it (it sits below z-index 3 - E21/E59: the caption is the viewer's layer and never dims), and the new
+       page's soak only began after the fade. A cut CUTS: the page that left is gone on the new scene's first frame and the cream is the
+       new page's ground at once. A declared exit keeps E47's own short clock - the dip's DIP_S, DISSOLVE_S, the blur-zoom's - never the
+       mount's. The mount's clock is the page's own (paintLedger: the soak opens on the scene's first frame). */
+    const dissolve = prev && sc.exit === "dissolve";
+    const dk = dissolve ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / DISSOLVE_S)) : 1;
     /* E47 s3 (2026-09-06): the wipe is RETIRED as the world-change default and is reached by name only (wipe / wipe_right);
        a row that says `cut` is a cut - one frame, both plates steady, the reference's own most common boundary. Until
        2026-09-08 a `cut` row fell through to the wipe here, which is why two built pages arrived by a wipe nobody declared. */
     const hardCut = prev && exitName(sc.exit) === "cut";
-    const wk = prev && !hardCut && !spiralIn && !snapIn && !throwIn && !suck && !dissolve && !dipIn && !bzIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
+    const wk = prev && !hardCut && !spiralIn && !snapIn && !throwIn && !suck && !dissolve && !mountIn && !dipIn && !bzIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const seaming = prev && wk > 0 && wk < 1;
     /* THE HARD-EDGE CLIP WIPE (restored 2026-09-01). The remotion-ui
        directional-wipe port (dd9e476, 2026-08-30) replaced this with a
@@ -7159,8 +7159,6 @@ async function mount(doc) {
       const sk = kin("min_jerk") ? 1 - minJerk(su) : Math.pow(1 - su, 1.6);   /* the collapse: minimum-jerk when the build declares it */
       wA.style.transform = "rotate(" + (SUCK_TURN * (kin("min_jerk") ? minJerk(su) : su)).toFixed(1) + "deg) scale(" + sk.toFixed(4) + ") " + wA.style.transform;
       wA.style.zIndex = 3;   /* the outgoing world rides above the incoming plate while it collapses */
-    } else if (mountIn && mu < 1) {   /* the dance: the outgoing world above the mounting page, fading in steps */
-      wA.style.opacity = (1 - Math.floor(mu * MOUNT_STEPS) / MOUNT_STEPS).toFixed(4); wA.style.zIndex = 3;
     } else { if (wA.style.zIndex) wA.style.zIndex = ""; if (wA.style.opacity !== "") wA.style.opacity = ""; }
     seam.style.opacity = seaming ? 1 : 0;
     seam.style.transform = `translateX(${(sc.exit === "wipe_right" ? (1-wk) : wk) * STAGE_W}px)`;
