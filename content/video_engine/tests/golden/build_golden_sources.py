@@ -40,6 +40,8 @@ FRAME_T = {
     "ledger-extend": 13.05,
     "press-stack": 11.4,            # P50 T3: all three cards landed (5.0 / 7.4 / 9.8 + LAND_S), the pile settled, and the underline on the third fully drawn (10.6 + SQUIG_DRAW)
     "chip-board": 11.0,             # P50 T2: all three chips landed (5.0 / 6.2 / 7.4 + LAND_S) and the middle one's X fully drawn (10.0 + CROSS_S) - the board as it is read
+    "flow-swap": 12.6,              # P50 T4: the swap is over (11.0 + SWAP_OUT_S + SWAP_IN_S = 11.75), the new node stands where the old one did, both arrows and the year stamp are in
+    "span-decade": 12.6,            # P50 T4: the page has built (3.9 + 0.5 + 3.0), the span's shade is fully in (8.0 + IN_S) and its name fully written (8.45 + dur * WRITE = 12.45)
     "ledger-keyed": 12.75,          # P48 T4b: mid-phase-2 of the keyed recast (12 s + 2 s; the golden's expoOut clock is half done at u 0.37): the lines have left half their history, their ends and values are in flight to the bar tops, the bars are half grown         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
 }
 
@@ -222,6 +224,49 @@ def chip_board() -> tuple[dict, dict]:
     return _timeline("Golden: the icon board", scenes, {}, None), uris
 
 
+def flow_swap() -> tuple[dict, dict]:
+    """P50 T4: THE FLOW DIAGRAM (Bravos shots 82-86). Three nodes inside a dashed box draw on one word - the
+    frame by the nib, the chips on the badge spring, the CLOTHOID arrows between them by length - and on a
+    LATER word ONE node swaps (the standing chip's landing run backward, the new one's run forward, in the
+    same spot) while the arrows stand. The rhyme.
+
+    The glyphs are the SOURCED icons under content/video_engine/assets/icons (Lucide, ISC - assets/icons/
+    SOURCES.md), embedded by the compiler's OWN icon_geometry, so this golden proves the asset route, the
+    clothoid fitter and the painter module together. The diagram carries the breath idle (E49): it holds, it
+    never goes still. Judged after the swap has finished (FRAME_T 12.6)."""
+    import build_scene_timeline_f as BST
+    species = [{"kind": "flow", "at": 4.0, "dur": 18.0, "idle": "breath",
+                "target": {"kind": "region", "x0": 0.10, "y0": 0.50, "x1": 0.90, "y1": 0.90},   # below the caption band: the diagram is read, not stepped on
+                "nodes": [{"id": "plant", "icon": "factory", "label": "PLANTS"},
+                          {"id": "freight", "icon": "ship", "label": "FREIGHT"},
+                          {"id": "price", "icon": "coins", "label": "PRICE"}],
+                "edges": [["plant", "freight"], ["freight", "price"]],
+                "swap": {"at": 11.0, "node": "freight", "icon": "cpu", "label": "CHIPS"},
+                "tag": "1973"}]
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = _base_uris()
+    for name in sorted({n["icon"] for n in species[0]["nodes"]} | {species[0]["swap"]["icon"]}):
+        uris[BST.ICON_PREFIX + name] = BST.icon_geometry(name)
+    return _timeline("Golden: the flow diagram and its swap", scenes, {}, None), uris
+
+
+def span_decade() -> tuple[dict, dict]:
+    """P50 T4 / R26-25 (the intake's Archetype 5; Bravos 107-110's "Decades"): a ledger LINE page - built
+    exactly as `ledger-page-mid-build` builds its page, with no emphasis so every series is drawn and the
+    band stands behind all four - carrying a SPAN: the stretch between two data shaded on its word and NAMED
+    above it by the hand. The band is re-read from the live points every frame, so it would follow a rescale;
+    here it stands on the page's own scale. Judged once the name is written (FRAME_T 12.6)."""
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", None, "right")
+    page["field"] = "scribble"
+    species = [{"kind": "span", "at": 8.0, "dur": 8.0, "from": 40, "to": 150,
+                "label": "THE RUN-UP", "color": "cobalt"}]
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the span on a ledger page", scenes, {}, None), _base_uris()
+
+
 # P50 T3: the press stack. Three claims, three words, one pile - Bravos shots 5-10's grammar.
 PRESS_CARDS = [
     ("ev-press-a", 5.0, "THE HERALD, 4 MAR 2026", {"x0": 0.08, "y0": 0.17, "x1": 0.62, "y1": 0.46},
@@ -300,6 +345,8 @@ SURFACES = {
     "ledger-keyed": ledger_keyed,
     "chip-board": chip_board,
     "press-stack": press_stack,
+    "flow-swap": flow_swap,
+    "span-decade": span_decade,
 }
 
 

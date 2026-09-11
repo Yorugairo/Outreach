@@ -472,13 +472,13 @@ _none._
 
 ### DELTA — nothing like it in the target — THIS IS THE LIFT LIST
 
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:1` — Answers to Research Brief — Animation Craft & The Drawing Engine (Pass 2 Audited) — `docs/content-video-engine/42-DRAWING-KINETICS.md:1` 42 — Drawing kinetics: how a stroke, a settle, and a squash are computed — h 0.00 / j 0.03 / b 0.00 — 1 rule
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:1` — Answers to Research Brief — Animation Craft & The Drawing Engine (Pass 2 Audited) — `docs/content-video-engine/42-DRAWING-KINETICS.md:102` 42.4 Curve quality — Euler spirals for generated geometry — h 0.00 / j 0.03 / b 0.00 — 1 rule
     - `:23` "We could not find a measured value" is a passing answer. A fabricated value is a failing one. An honest gap is infinitely more useful than an invented number,
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:27` — 0. Pass 1 Audit & Retrospective: The Honest Correction — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.06 / b 0.00 — 0 rules
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:31` — 0.1 Specific Errors Conceded & Corrected — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:61` — 1. Pipeline & Doctrine Triage: What Goes Where — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:88` — 2. Executive Synthesis: Synergies & The Free High-Leverage Wins — `docs/content-video-engine/42-DRAWING-KINETICS.md:118` 42.6 Sources — h 0.00 / j 0.07 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:90` — 2.1 The 5 Overlapping Synergies to Capitalize On — `docs/content-video-engine/42-DRAWING-KINETICS.md:118` 42.6 Sources — h 0.00 / j 0.07 / b 0.00 — 10 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:88` — 2. Executive Synthesis: Synergies & The Free High-Leverage Wins — `docs/content-video-engine/42-DRAWING-KINETICS.md:123` 42.6 Sources — h 0.00 / j 0.07 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:90` — 2.1 The 5 Overlapping Synergies to Capitalize On — `docs/content-video-engine/42-DRAWING-KINETICS.md:123` 42.6 Sources — h 0.00 / j 0.07 / b 0.00 — 10 rules
     - `:111` 1. Acoustic Silence Gaps $\times$ Scene Cuts $\times$ Saccadic Suppression $\times$ Tversky Savor Holds:
     - `:112` - Mechanism: Speech pauses (silence intervals $\Delta t \ge 0.30\text{s}$) naturally trigger subconscious ocular blink and saccadic eye-reset behaviors (saccadi
     - `:113` 2. Two-Thirds Power Law ($v \propto \kappa^{-1/3}$) $\times$ Progressive Stroke Rendering $\times$ Dynamic Nib Pooling:
@@ -513,9 +513,9 @@ _none._
     - `:193` - Failure Signature: Translating a chart board or camera at $v > 300\text{ px/s}$ on-2s creates severe stroboscopic double-imaging and retinal judder (Watson et
     - `:194` - Source: Richard Williams, The Animator's Survival Kit (2001), pp. 35–42; John Lasseter, Principles of Traditional Animation Applied to 3D Computer Animation,
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:198` — A2: Ease Equivalence [RECLASSIFIED: Design Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:223` — A3: Spring vs. Curve [RECLASSIFIED: Design Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:102` 42.4 Curve quality — Euler spirals for generated geometry — h 0.00 / j 0.04 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:223` — A3: Spring vs. Curve [RECLASSIFIED: Design Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:102` 42.4 Curve quality — Euler spirals for generated geometry — h 0.00 / j 0.03 / b 0.00 — 0 rules
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:225` — Analytic Mass-Spring-Damper Formulation (Tier 1 Math) — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:230` — Material Parameter Presets [Tier 2 Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:112` 42.5 What is ours to tune, not a finding — h 0.00 / j 0.04 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:230` — Material Parameter Presets [Tier 2 Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:117` 42.5 What is ours to tune, not a finding — h 0.00 / j 0.04 / b 0.00 — 0 rules
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:253` — A4: The Threshold of "Alive" [RE-ASK 1 ★: Audited & Answered] — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.02 / b 0.00 — 0 rules
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:255` — 1. The Direct Answer — `docs/content-video-engine/42-DRAWING-KINETICS.md:63` 42.2 The settle — closed-form second-order dynamics — h 0.00 / j 0.03 / b 0.00 — 0 rules
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:260` — 2. Nearest Adjacent Scientific Evidence — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
@@ -526,14 +526,14 @@ _none._
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:292` — A5: Drawing-On [CLOSED & RECLASSIFIED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:12` 42.1 The stroke — curvature-reparameterised drawing — h 0.00 / j 0.13 / b 0.00 — 0 rules
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:294` — 1. The Kinematic Two-Thirds Power Law (Tier 1 Math — CLOSED) — `docs/content-video-engine/42-DRAWING-KINETICS.md:12` 42.1 The stroke — curvature-reparameterised drawing — h 0.00 / j 0.03 / b 0.00 — 1 rule
     - `:299` - Source: Paolo Viviani & C. Terzuolo, Trajectory determines movement dynamics, Neuroscience 7(2): 431–437, 1982. (Closed, accepted).
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:301` — 2. Dynamic Nib Pooling [RECLASSIFIED: Engineering Heuristic Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:118` 42.6 Sources — h 0.00 / j 0.11 / b 0.00 — 1 rule
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:301` — 2. Dynamic Nib Pooling [RECLASSIFIED: Engineering Heuristic Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:123` 42.6 Sources — h 0.00 / j 0.11 / b 0.00 — 1 rule
     - `:304` - Corner Discontinuity Rule: When interior angle $\theta_{\text{corner}} < 75^\circ$, decelerate stroke to $v=0$ over 3 frames, hold for 2 frames ($83\text{ms}$
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:308` — A6: The Secondary-Motion Budget [RECLASSIFIED: Design Proposal] — `docs/content-video-engine/42-DRAWING-KINETICS.md:91` 42.3 Squash and stretch, area-preserving and motion-driven — h 0.00 / j 0.04 / b 0.00 — 3 rules
     - `:310` - Energy Ratio Proposal [DERIVED: from Lasseter 1987 + Williams 2001 craft doctrine (sources: not on file), extrapolated to an energy ratio]:
     - `:312` - Lag & Settle Proposal: Phase lag $= 2\text{--}4$ frames ($83\text{--}166\text{ms}$). Secondary settle must complete within $1.5\times$ primary duration. [DERI
     - `:313` - Source: John Lasseter (1987); Richard Williams (2001). (Classified as animator craft doctrine).
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:317` — 4. Track B — The Editor (Cutting and Rhythm) — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:319` — B1: The Gap-Cut Finding, Generalised [RE-ASK 4: Audited & Answered] — `docs/content-video-engine/42-DRAWING-KINETICS.md:112` 42.5 What is ours to tune, not a finding — h 0.00 / j 0.03 / b 0.00 — 0 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:319` — B1: The Gap-Cut Finding, Generalised [RE-ASK 4: Audited & Answered] — `docs/content-video-engine/42-DRAWING-KINETICS.md:117` 42.5 What is ours to tune, not a finding — h 0.00 / j 0.03 / b 0.00 — 0 rules
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:321` — 1. Practitioner Doctrine vs. Empirical Science — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 4 rules
     - `:322` - Walter Murch (In the Blink of an Eye, 1995): Murch posits that cuts should align with natural eye blinks and conversational breath pauses, proposing the famou
     - `:323` - Empirical Film Cognition (Tim J. Smith & John M. Henderson 2008):
@@ -574,7 +574,7 @@ _none._
     - `:444` - SVG DOM path limit: $\le 450$ paths.
     - `:445` - SVG Filter limit: $\le 2$ filter primitives (`feTurbulence`, `feGaussianBlur`).
     - `:446` - Production Standard: Bake heavy paper textures into static WebP background cards; use Canvas 2D / Skia for high-frequency dynamic line drawing.
-- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:450` — C5: Ink on Paper, Specifically [Tier 1 Math & Shaders — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:112` 42.5 What is ours to tune, not a finding — h 0.00 / j 0.03 / b 0.00 — 5 rules
+- `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:450` — C5: Ink on Paper, Specifically [Tier 1 Math & Shaders — CLOSED] — `docs/content-video-engine/42-DRAWING-KINETICS.md:117` 42.5 What is ours to tune, not a finding — h 0.00 / j 0.03 / b 0.00 — 5 rules
     - `:451` - Three physical components:
     - `:452` 1. Two-Thirds Power Law velocity re-parameterization.
     - `:453` 2. 1D Perlin noise deckle stroke edge ($\sigma = 0.6\text{px}$, frequency $= 0.18$).

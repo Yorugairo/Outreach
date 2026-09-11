@@ -296,3 +296,121 @@ def test_the_ring_on_a_picture_is_refused_exactly_as_it_was_before_the_exception
     errs = B.validate_species([_sp("callout", target=POINT)], STILL, PLATE)
     assert len(errs) == 1 and "(E56)" in errs[0] and "use a spotlight (the light) on a picture" in errs[0], errs
     assert B.validate_species([{**_sp("callout", target=POINT), "label": "+613%"}], STILL, PLATE) == []
+
+
+# ---- P50 T4: THE FLOW DIAGRAM and THE SPAN ----------------------------------------------------------------
+# A flow names 2-6 things by SOURCED glyph, the arrows between them BY NAME, and - at most once - the node that
+# swaps on a LATER word while the rest stands (Bravos shots 82-86). A span names a STRETCH OF TIME on a ledger
+# page's chart. Everything is checked by name, so a typo is a build error and never a diagram missing an arrow.
+LEDGER = B.LEDGER_PREFIX + "ev-golden:line"
+BOX = {"kind": "region", "x0": 0.1, "y0": 0.5, "x1": 0.9, "y1": 0.9}
+
+
+def _flow(**kw):
+    e = {"kind": "flow", "at": 10.0, "dur": 8.0, "target": dict(BOX),
+         "nodes": [{"id": "plant", "icon": "factory", "label": "PLANTS"},
+                   {"id": "freight", "icon": "ship", "label": "FREIGHT"},
+                   {"id": "price", "icon": "coins", "label": "PRICE"}],
+         "edges": [["plant", "freight"], ["freight", "price"]]}
+    e.update(kw)
+    return {k: v for k, v in e.items() if v is not None}
+
+
+def _span(**kw):
+    e = {"kind": "span", "at": 10.0, "dur": 6.0, "from": 10, "to": 60, "label": "THE DECADE"}
+    e.update(kw)
+    return {k: v for k, v in e.items() if v is not None}
+
+
+def test_a_flow_without_a_region_target_is_refused_by_name():
+    errs = B.validate_species([_flow(target=None)], STILL, PLATE)
+    assert any(e.startswith("flow: no declared target") for e in errs), errs
+    # a diagram needs its ROOM: a point leaves its size to the painter, a datum is a chart's annotation
+    for bad in (POINT, DATUM, SPAN):
+        errs = B.validate_species([_flow(target=bad)], STILL, PLATE)
+        assert errs == [f"flow: target kind {bad['kind']!r} not allowed (takes region)"], (bad, errs)
+    assert B.SPECIES_TARGETS["flow"] == ("region",)
+
+
+def test_a_flow_with_too_few_or_too_many_nodes_is_refused_by_name():
+    one = [{"id": "plant", "icon": "factory", "label": "PLANTS"}]
+    errs = B.validate_species([_flow(nodes=one, edges=[["plant", "plant"]])], STILL, PLATE)
+    assert len(errs) == 1 and errs[0].startswith("flow: 'nodes' must be a list of 2-6") and "is a chip" in errs[0], errs
+    seven = [{"id": f"n{i}", "icon": "factory", "label": f"N{i}"} for i in range(7)]
+    assert any("must be a list of 2-6" in e for e in B.validate_species([_flow(nodes=seven)], STILL, PLATE))
+    # ... and a node without an id, a label or a SOURCED glyph, each named
+    twins = [{"id": "a", "icon": "factory", "label": "A"}, {"id": "a", "icon": "ship", "label": "B"}]
+    errs = B.validate_species([_flow(nodes=twins, edges=[["a", "a"]])], STILL, PLATE)
+    assert any("id 'a' is already a node" in e for e in errs), errs
+    for bad, needle in ((None, "'icon' names a sourced glyph"), ("Factory", "'icon' names a sourced glyph"),
+                        ("not-a-real-icon", "is not in content/video_engine/assets/icons")):
+        nodes = [{"id": "a", "icon": bad, "label": "A"}, {"id": "b", "icon": "ship", "label": "B"}]
+        errs = B.validate_species([_flow(nodes=nodes, edges=[["a", "b"]])], STILL, PLATE)
+        assert any(e.startswith("flow: node 0") and needle in e for e in errs), (bad, errs)
+    nodes = [{"id": "a", "icon": "factory", "label": "  "}, {"id": "b", "icon": "ship", "label": "B"}]
+    errs = B.validate_species([_flow(nodes=nodes, edges=[["a", "b"]])], STILL, PLATE)
+    assert any(e.startswith("flow: node 0: 'label'") for e in errs), errs
+
+
+def test_a_flow_edge_naming_something_that_is_not_a_node_is_refused_by_name():
+    errs = B.validate_species([_flow(edges=[["plant", "ghost"]])], STILL, PLATE)
+    assert len(errs) == 1 and "edge 0 names 'ghost'" in errs[0] and "plant, freight, price" in errs[0], errs
+    errs = B.validate_species([_flow(edges=[["plant", "plant"]])], STILL, PLATE)
+    assert any("edge 0 runs from 'plant' to itself" in e for e in errs), errs
+    errs = B.validate_species([_flow(edges=[])], STILL, PLATE)
+    assert any("a diagram with no arrows is a chip board" in e for e in errs), errs
+    assert any("edge 0 must be [from, to]" in e for e in B.validate_species([_flow(edges=[["plant"]])], STILL, PLATE))
+
+
+def test_a_flow_swap_on_the_same_word_or_naming_no_node_is_refused_by_name():
+    for bad in (10.0, 9.5, 0.0):
+        errs = B.validate_species([_flow(swap={"at": bad, "node": "freight", "icon": "cpu", "label": "CHIPS"})], STILL, PLATE)
+        assert any(e.startswith(f"flow: swap at {bad}") and "LATER word" in e for e in errs), (bad, errs)
+    errs = B.validate_species([_flow(swap={"at": 19.0, "node": "freight", "icon": "cpu", "label": "CHIPS"})], STILL, PLATE)
+    assert any("falls outside the diagram's window" in e and "would never fire" in e for e in errs), errs
+    errs = B.validate_species([_flow(swap={"at": "later", "node": "freight", "icon": "cpu", "label": "CHIPS"})], STILL, PLATE)
+    assert any(e.startswith("flow: swap 'at' must be a number") for e in errs), errs
+    errs = B.validate_species([_flow(swap={"at": 13.0, "node": "ghost", "icon": "cpu", "label": "CHIPS"})], STILL, PLATE)
+    assert any("swap names node 'ghost'" in e for e in errs), errs
+    errs = B.validate_species([_flow(swap={"at": 13.0, "node": "freight", "icon": "no-such-glyph", "label": "CHIPS"})], STILL, PLATE)
+    assert any(e.startswith("flow: swap: icon") for e in errs), errs
+    errs = B.validate_species([_flow(swap={"at": 13.0, "node": "freight", "icon": "cpu", "label": ""})], STILL, PLATE)
+    assert any(e.startswith("flow: swap 'label'") for e in errs), errs
+    assert any(e.startswith("flow: 'swap' must be a dict") for e in B.validate_species([_flow(swap=13.0)], STILL, PLATE))
+
+
+def test_a_span_out_of_order_or_off_a_ledger_page_is_refused_by_name():
+    for lo, hi in ((60, 10), (10, 10), (0.6, 0.2)):
+        errs = B.validate_species([_span(**{"from": lo, "to": hi})], STILL, LEDGER)
+        assert any(e.startswith(f"span: from {lo} is not before to {hi}") for e in errs), (lo, hi, errs)
+    errs = B.validate_species([_span(**{"from": 10, "to": 0.8})], STILL, LEDGER)
+    assert any("name BOTH edges the same way" in e for e in errs), errs
+    for bad, needle in ((-1, "is not a non-negative datum index"), (1.4, "is not a 0..1 fraction"),
+                        ("Jan", "must be a datum index (an integer) or an x-fraction")):
+        errs = B.validate_species([_span(**{"from": bad})], STILL, LEDGER)
+        assert any(e.startswith("span: 'from'") or f"span: from={bad}" in e for e in errs), (bad, errs)
+        assert any(needle in e for e in errs), (bad, errs)
+    assert any(e.startswith("span: needs a non-empty string label") and "a bracket MEASURES" in e
+               for e in B.validate_species([_span(label="  ")], STILL, LEDGER))
+    assert any(e.startswith("span: color must be one of") for e in B.validate_species([_span(color="puce")], STILL, LEDGER))
+    # ... and a span is a PAGE species: it performs on a ledger page, not on a plate
+    errs = B.validate_species([_span()], STILL, PLATE)
+    assert errs == [f"{PLATE}: span is a page species - it performs on a ledger page, not on {PLATE!r}"], errs
+    assert "span" in B.PAGE_SPECIES and B.SPECIES_TARGETS["span"] == ()
+
+
+def test_a_good_flow_and_a_good_span_pass_and_every_glyph_lands_in_the_asset_map():
+    good = _flow(swap={"at": 13.0, "node": "freight", "icon": "cpu", "label": "CHIPS"}, tag="1973", idle="breath")
+    assert B.validate_species([good], STILL, PLATE) == []
+    assert B.validate_species([_span()], STILL, LEDGER) == []
+    assert B.validate_species([_span(**{"from": 0.2, "to": 0.8}, color="cobalt", series=1)], STILL, LEDGER) == []
+    # the asset-map route: every SOURCED glyph the row carries, in declaration order, embedded as geometry
+    assert B.species_icons(good) == ["factory", "ship", "coins", "cpu"]
+    assert B.species_icons(_span()) == [] and B.species_icons(None) == []
+    assert B.species_icons({"kind": "chip", "icon": "landmark"}) == ["landmark"]
+    for name in B.species_icons(good):
+        geo = json.loads(B.icon_geometry(name))
+        assert geo["el"] and len(geo["vb"]) == 4, name
+    # and both kinds carry a `when` and an event edge (P50 T1's rule, the gate's table)
+    assert B.SPECIES_WHEN["flow"].startswith("the sentence EXPLAINS a mechanism")
+    assert B.SPECIES_WHEN["span"].startswith("the sentence SPANS a period on a chart")

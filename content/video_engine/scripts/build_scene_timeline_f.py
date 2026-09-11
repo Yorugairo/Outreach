@@ -172,15 +172,23 @@ SPECIES_KINDS = ("punch", "callout", "focus_zoom", "spotlight", "squiggle",
                  "spread")                     # the fifth watch: the region between two drawn series, bled full of ink on a word (the divergence IS the argument): a chart's deployed life is 6-8 s from its last data mark, 12 s at most - then it
                                                # UN-DRAWS (the line unwinds from where it stands back to a datum, index 0 = to nothing) or BECOMES
                                                # the next thing: a FIGURE the hand writes at a datum's spot (the treasury number the sentence turns to)
+SPECIES_FLOW = "flow"     # P50 T4: THE FLOW DIAGRAM (the Bravos flow diagram, shots 82-86) - 2-6 named things inside a dashed
+SPECIES_SPAN = "span"     # box, the CLOTHOID arrows between them, and ONE node that swaps on a later word while the rest stands
+                          # (the rhyme). SPECIES_SPAN: a shaded stretch of TIME behind a ledger page's chart with its NAME above
+                          # it (R26-25, the intake's Archetype 5; Bravos 107-110's "Decades") - a PAGE species, painted by the
+                          # page's own perform layer. Both painters are modules: species/flow.mjs and species/span.mjs.
 SPECIES_CHIP = "chip"
 SPECIES_KINDS += (SPECIES_CHIP,)   # P50 T2: THE ICON CHIP (the Bravos icon board, shots 26-28) - a card with one SOURCED glyph and a
                                    # label, landing on its word and crossed out on a later one. The first species built under the
                                    # operator's module rule (2026-09-11): the painter is scripts/species/chip.mjs, not a branch in the
                                    # template's body; this file still owns its grammar, its targets and its glyph's provenance.
+SPECIES_KINDS += (SPECIES_FLOW, SPECIES_SPAN)   # P50 T4 (2026-09-11), both under the module rule
+FLOW_NODES = (2, 6)   # a mechanism with ONE part is a chip; with seven it is a diagram nobody reads at phone size
 UNDERLINE_FORM = "underline"   # P50 T3: a callout's FORM - the hand-drawn underline under a press card's quoted phrase (E56's one
                                # exception, the squiggle law s9.27). Not a species kind: the grammar gains a form and a target, not a kind.
 HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
-PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to")
+PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to",
+                 SPECIES_SPAN)   # P50 T4: a span is a page species - it is shaded behind the page's own chart, on the page's own clock and live scale (R26-28)
 CHART_TO_KINDS = ("recast", "rescale", "extend", "park", "morph")   # P48: recast (T4, a hand-over; keyed: T4b), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform), morph (T5: the area under the line becomes the target's by ARAP)
 MORPH_BUILDERS = ("dense-line",)                     # P48 T5: the shape a morph moves is the AREA UNDER A LINE - both sides of a morph_to are line pages
 PARK_ANCHORS = ("top", "bottom", "left", "right")   # the corner of its own box the parked chart shrinks toward (top = Bravos 91: up, the room opens below)
@@ -215,6 +223,8 @@ SPECIES_WHEN = {
     "spread": "the sentence's argument IS the gap between two series (or a series and a rule) - the region bleeds full of ink",
     "peel": "the sentence names a slice of a whole that LEAVES - the share page's slice peels off and goes blood red",
     SPECIES_CHIP: "the sentence names a THING as one of a set (a prediction, an actor, a plant) - a chip lands on its word; RETRACTS crosses it out on a later word (Bravos's icon board)",
+    SPECIES_FLOW: "the sentence EXPLAINS a mechanism - A causes B via C - as named things and the arrows between them; a later word SWAPS one node and the rest stands (Bravos's rhyme)",
+    SPECIES_SPAN: "the sentence SPANS a period on a chart - a regime, an epoch, 'the decade' - shaded behind the line with its name; a bracket measures two data, a span names a stretch of time",
     "chart_to": "the sentence needs the SAME data at another scale / with more of it / in another form / beside a card - the page changes state (E58; CHART_TO_WHEN names the verb); never a cut to a second chart of it",
 }
 CHART_TO_WHEN = {
@@ -325,6 +335,8 @@ SPECIES_TARGETS = {
     "life": (),
     SPECIES_CHIP: ("point", "region"),   # P50 T2: a chip lands where the author declared it - a point, or centred in a region;
                                          # E56 does not reach it (a chip is a card with a glyph, never a ring around a picture)
+    SPECIES_FLOW: ("region",),   # P50 T4: a diagram needs its ROOM declared - the box it draws itself inside; a point would leave its size to the painter
+    SPECIES_SPAN: (),            # ... and a span names its two edges as data, not as a coordinate: the chart owns where they are
     "build_to": ("datum",), "bracket": (), "retitle": (), "relight": (),   # P47 T2: the datum is the cap; the others carry their own fields
     "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (), "chart_to": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
@@ -397,6 +409,29 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             errs.append(f"figure: color must be one of {'|'.join(BRACKET_COLORS)}")
         if "dy" in entry and (isinstance(entry["dy"], bool) or not isinstance(entry["dy"], (int, float))):
             errs.append("figure: dy must be a number (lines of the figure's own size, negative = up)")
+    elif kind == SPECIES_SPAN:   # P50 T4 / R26-25: a stretch of TIME, named. Both edges the same way: two datum
+        edges = {}               # indices (integers, the page's own) or two x-fractions of the drawn series (0..1)
+        for f in ("from", "to"):
+            v = entry.get(f)
+            if isinstance(v, bool) or not isinstance(v, (int, float)):
+                errs.append(f"span: {f!r} must be a datum index (an integer) or an x-fraction of the series (0..1)")
+            elif isinstance(v, int) and v < 0:
+                errs.append(f"span: {f}={v} is not a non-negative datum index")
+            elif isinstance(v, float) and not 0.0 <= v <= 1.0:
+                errs.append(f"span: {f}={v} is not a 0..1 fraction of the drawn series' x extent")
+            else:
+                edges[f] = v
+        if len(edges) == 2:
+            if isinstance(edges["from"], int) != isinstance(edges["to"], int):
+                errs.append("span: name BOTH edges the same way - two datum indices, or two 0..1 fractions")
+            elif not edges["from"] < edges["to"]:
+                errs.append(f"span: from {edges['from']} is not before to {edges['to']} - a span names a stretch, not a point")
+        if not isinstance(entry.get("label"), str) or not entry["label"].strip():
+            errs.append("span: needs a non-empty string label - a span NAMES a stretch of time (a bracket MEASURES two data)")
+        if "color" in entry and entry["color"] not in BRACKET_COLORS:
+            errs.append(f"span: color must be one of {'|'.join(BRACKET_COLORS)}")
+        if "series" in entry and not is_idx(entry["series"]):
+            errs.append("span: series must be a non-negative integer series index")
     elif kind == "undraw":
         if "series" in entry and not is_idx(entry["series"]):
             errs.append("undraw: series must be a non-negative integer series index")
@@ -494,6 +529,93 @@ def _validate_chip(entry: dict) -> list[str]:
     return errs
 
 
+def _validate_icon(where: str, name) -> list[str]:
+    """One SOURCED glyph, by name and on disk (A2a). Shared by the chip and by every node of a flow."""
+    if not isinstance(name, str) or not ICON_NAME.match(name):
+        return [f"{where}: 'icon' names a sourced glyph under content/video_engine/assets/icons "
+                "(lowercase letters, digits, hyphens) - a card with no glyph is a blank card"]
+    if not icon_file(name).is_file():
+        return [f"{where}: icon {name!r} is not in content/video_engine/assets/icons - "
+                "source it and record it in SOURCES.md (A2a), never generate one"]
+    return []
+
+
+def _validate_flow(entry: dict) -> list[str]:
+    """P50 T4: a flow diagram names 2-6 things by SOURCED glyph, the arrows between them BY NAME, and - at most
+    once - the node that SWAPS on a later word while the rest stands (Bravos's rhyme, shots 82-86). Everything
+    is checked by name, so a typo in an edge is a build error and never a diagram missing an arrow."""
+    errs: list[str] = []
+    num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool)
+    nodes, lo, hi = entry.get("nodes"), *FLOW_NODES
+    if not isinstance(nodes, list) or not lo <= len(nodes) <= hi:
+        return [f"flow: 'nodes' must be a list of {lo}-{hi} {{id, icon, label}} - one thing is a chip, seven is a diagram nobody reads"]
+    ids: list[str] = []
+    for i, n in enumerate(nodes):
+        if not isinstance(n, dict):
+            errs.append(f"flow: node {i} must be a dict {{id, icon, label}}")
+            continue
+        nid = n.get("id")
+        if not isinstance(nid, str) or not nid.strip():
+            errs.append(f"flow: node {i}: 'id' must be a non-empty string - the edges name it")
+        elif nid in ids:
+            errs.append(f"flow: node {i}: id {nid!r} is already a node of this diagram - every id is its own")
+        else:
+            ids.append(nid)
+        errs += _validate_icon(f"flow: node {i}", n.get("icon"))
+        if not isinstance(n.get("label"), str) or not n["label"].strip():
+            errs.append(f"flow: node {i}: 'label' must be a non-empty string - a node names the thing it stands for")
+    edges = entry.get("edges")
+    if not isinstance(edges, list) or not edges:
+        errs.append("flow: 'edges' must be a non-empty list of [from, to] node ids - a diagram with no arrows is a chip board")
+    else:
+        for j, e in enumerate(edges):
+            if not (isinstance(e, (list, tuple)) and len(e) == 2):
+                errs.append(f"flow: edge {j} must be [from, to] node ids")
+                continue
+            for end in e:
+                if end not in ids:
+                    errs.append(f"flow: edge {j} names {end!r}, which is not one of this diagram's nodes ({', '.join(ids) or 'none'})")
+            if e[0] == e[1]:
+                errs.append(f"flow: edge {j} runs from {e[0]!r} to itself")
+    if "tag" in entry and (not isinstance(entry["tag"], str) or not entry["tag"].strip()):
+        errs.append("flow: 'tag' must be a non-empty string - the year the diagram is stamped with")
+    sw = entry.get("swap")
+    if sw is None:
+        return errs
+    if not isinstance(sw, dict):
+        return errs + ["flow: 'swap' must be a dict {at, node, icon, label}"]
+    at, sat, dur = entry.get("at"), sw.get("at"), entry.get("dur")
+    if not num(sat):
+        errs.append("flow: swap 'at' must be a number (episode seconds - the word one part of the mechanism changes on)")
+    elif num(at) and sat <= at:
+        errs.append(f"flow: swap at {sat} is not after at {at} - a node swaps on a LATER word (Bravos's rhyme)")
+    elif num(at) and num(dur) and sat >= at + dur:
+        errs.append(f"flow: swap at {sat} falls outside the diagram's window ({at}-{round(at + dur, 3)}s) - it would never fire")
+    if sw.get("node") not in ids:
+        errs.append(f"flow: swap names node {sw.get('node')!r}, which is not one of this diagram's nodes ({', '.join(ids) or 'none'})")
+    errs += _validate_icon("flow: swap", sw.get("icon"))
+    if not isinstance(sw.get("label"), str) or not sw["label"].strip():
+        errs.append("flow: swap 'label' must be a non-empty string - the new part names itself")
+    return errs
+
+
+def species_icons(entry) -> list[str]:
+    """Every SOURCED glyph one species entry carries, in declaration order: the chip's one (P50 T2), a flow's
+    nodes and its swap (T4). The asset map is keyed ``icon:<name>`` - the geometry travels in the player,
+    never a path to a file on disk."""
+    if not isinstance(entry, dict):
+        return []
+    if entry.get("kind") == SPECIES_CHIP:
+        return [entry["icon"]] if isinstance(entry.get("icon"), str) else []
+    if entry.get("kind") == SPECIES_FLOW:
+        out = [n["icon"] for n in (entry.get("nodes") or []) if isinstance(n, dict) and isinstance(n.get("icon"), str)]
+        sw = entry.get("swap")
+        if isinstance(sw, dict) and isinstance(sw.get("icon"), str):
+            out.append(sw["icon"])
+        return out
+    return []
+
+
 CALLOUT_FORMS = (UNDERLINE_FORM,)   # P50 T3: the one form a callout takes besides the ring
 
 
@@ -546,6 +668,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
     errs += _validate_page_fields(kind, entry)
     if kind == SPECIES_CHIP:
         errs += _validate_chip(entry)
+    if kind == SPECIES_FLOW:
+        errs += _validate_flow(entry)
     if kind == "trace" and "hop" in entry:   # opt-in (2026-09-08): ONE bowed hop point-to-point, drawn once and held - a crossing
         hop = entry["hop"]
         if not isinstance(hop, dict):
@@ -1423,9 +1547,9 @@ def main() -> int:
         # P50 T2: a chip's SOURCED glyph rides the asset map exactly as a plate or a dock still does,
         # keyed `icon:<name>` - the geometry travels in the player, never a path to a file on disk.
         for e in row_species:
-            if isinstance(e, dict) and e.get("kind") == SPECIES_CHIP:
+            for _icon in species_icons(e):   # P50 T4: a flow's nodes and its swap ride the same route as the chip's one
                 try:
-                    uris[ICON_PREFIX + e["icon"]] = icon_geometry(e["icon"])
+                    uris[ICON_PREFIX + _icon] = icon_geometry(_icon)
                 except ValueError as exc:
                     raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         # a ledger page is drawn, not embedded (doc 29 s9.26); a bad or

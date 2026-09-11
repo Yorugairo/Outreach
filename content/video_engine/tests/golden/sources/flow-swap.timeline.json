@@ -1,0 +1,406 @@
+{
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [
+  {
+   "e": 3.8,
+   "s": 1.0,
+   "t": [
+    {
+     "e": 1.4,
+     "k": false,
+     "s": 1.0,
+     "w": "the"
+    },
+    {
+     "e": 1.7999999999999998,
+     "k": true,
+     "s": 1.4,
+     "w": "frame"
+    },
+    {
+     "e": 2.2,
+     "k": false,
+     "s": 1.8,
+     "w": "under"
+    },
+    {
+     "e": 2.6,
+     "k": false,
+     "s": 2.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 6.8,
+   "s": 4.0,
+   "t": [
+    {
+     "e": 4.4,
+     "k": false,
+     "s": 4.0,
+     "w": "the"
+    },
+    {
+     "e": 4.800000000000001,
+     "k": true,
+     "s": 4.4,
+     "w": "frame"
+    },
+    {
+     "e": 5.2,
+     "k": false,
+     "s": 4.8,
+     "w": "under"
+    },
+    {
+     "e": 5.6000000000000005,
+     "k": false,
+     "s": 5.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 9.8,
+   "s": 7.0,
+   "t": [
+    {
+     "e": 7.4,
+     "k": false,
+     "s": 7.0,
+     "w": "the"
+    },
+    {
+     "e": 7.800000000000001,
+     "k": true,
+     "s": 7.4,
+     "w": "frame"
+    },
+    {
+     "e": 8.200000000000001,
+     "k": false,
+     "s": 7.8,
+     "w": "under"
+    },
+    {
+     "e": 8.600000000000001,
+     "k": false,
+     "s": 8.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 12.8,
+   "s": 10.0,
+   "t": [
+    {
+     "e": 10.4,
+     "k": false,
+     "s": 10.0,
+     "w": "the"
+    },
+    {
+     "e": 10.8,
+     "k": true,
+     "s": 10.4,
+     "w": "frame"
+    },
+    {
+     "e": 11.200000000000001,
+     "k": false,
+     "s": 10.8,
+     "w": "under"
+    },
+    {
+     "e": 11.600000000000001,
+     "k": false,
+     "s": 11.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 15.8,
+   "s": 13.0,
+   "t": [
+    {
+     "e": 13.4,
+     "k": false,
+     "s": 13.0,
+     "w": "the"
+    },
+    {
+     "e": 13.8,
+     "k": true,
+     "s": 13.4,
+     "w": "frame"
+    },
+    {
+     "e": 14.200000000000001,
+     "k": false,
+     "s": 13.8,
+     "w": "under"
+    },
+    {
+     "e": 14.600000000000001,
+     "k": false,
+     "s": 14.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 18.8,
+   "s": 16.0,
+   "t": [
+    {
+     "e": 16.4,
+     "k": false,
+     "s": 16.0,
+     "w": "the"
+    },
+    {
+     "e": 16.799999999999997,
+     "k": true,
+     "s": 16.4,
+     "w": "frame"
+    },
+    {
+     "e": 17.2,
+     "k": false,
+     "s": 16.8,
+     "w": "under"
+    },
+    {
+     "e": 17.599999999999998,
+     "k": false,
+     "s": 17.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 21.8,
+   "s": 19.0,
+   "t": [
+    {
+     "e": 19.4,
+     "k": false,
+     "s": 19.0,
+     "w": "the"
+    },
+    {
+     "e": 19.799999999999997,
+     "k": true,
+     "s": 19.4,
+     "w": "frame"
+    },
+    {
+     "e": 20.2,
+     "k": false,
+     "s": 19.8,
+     "w": "under"
+    },
+    {
+     "e": 20.599999999999998,
+     "k": false,
+     "s": 20.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 24.8,
+   "s": 22.0,
+   "t": [
+    {
+     "e": 22.4,
+     "k": false,
+     "s": 22.0,
+     "w": "the"
+    },
+    {
+     "e": 22.799999999999997,
+     "k": true,
+     "s": 22.4,
+     "w": "frame"
+    },
+    {
+     "e": 23.2,
+     "k": false,
+     "s": 22.8,
+     "w": "under"
+    },
+    {
+     "e": 23.599999999999998,
+     "k": false,
+     "s": 23.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 27.8,
+   "s": 25.0,
+   "t": [
+    {
+     "e": 25.4,
+     "k": false,
+     "s": 25.0,
+     "w": "the"
+    },
+    {
+     "e": 25.799999999999997,
+     "k": true,
+     "s": 25.4,
+     "w": "frame"
+    },
+    {
+     "e": 26.2,
+     "k": false,
+     "s": 25.8,
+     "w": "under"
+    },
+    {
+     "e": 26.599999999999998,
+     "k": false,
+     "s": 26.2,
+     "w": "test"
+    }
+   ]
+  }
+ ],
+ "captions": [
+  {
+   "at": 1.0,
+   "text": "the frame under test",
+   "until": 3.8
+  },
+  {
+   "at": 4.0,
+   "text": "the frame under test",
+   "until": 6.8
+  },
+  {
+   "at": 7.0,
+   "text": "the frame under test",
+   "until": 9.8
+  },
+  {
+   "at": 10.0,
+   "text": "the frame under test",
+   "until": 12.8
+  },
+  {
+   "at": 13.0,
+   "text": "the frame under test",
+   "until": 15.8
+  },
+  {
+   "at": 16.0,
+   "text": "the frame under test",
+   "until": 18.8
+  },
+  {
+   "at": 19.0,
+   "text": "the frame under test",
+   "until": 21.8
+  },
+  {
+   "at": 22.0,
+   "text": "the frame under test",
+   "until": 24.8
+  },
+  {
+   "at": 25.0,
+   "text": "the frame under test",
+   "until": 27.8
+  }
+ ],
+ "episode_id": "golden",
+ "evidence": {},
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 30.0,
+ "scenes": [
+  {
+   "docks": [],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    30.0
+   ],
+   "species": [
+    {
+     "at": 4.0,
+     "dur": 18.0,
+     "edges": [
+      [
+       "plant",
+       "freight"
+      ],
+      [
+       "freight",
+       "price"
+      ]
+     ],
+     "idle": "breath",
+     "kind": "flow",
+     "nodes": [
+      {
+       "icon": "factory",
+       "id": "plant",
+       "label": "PLANTS"
+      },
+      {
+       "icon": "ship",
+       "id": "freight",
+       "label": "FREIGHT"
+      },
+      {
+       "icon": "coins",
+       "id": "price",
+       "label": "PRICE"
+      }
+     ],
+     "swap": {
+      "at": 11.0,
+      "icon": "cpu",
+      "label": "CHIPS",
+      "node": "freight"
+     },
+     "tag": "1973",
+     "target": {
+      "kind": "region",
+      "x0": 0.1,
+      "x1": 0.9,
+      "y0": 0.5,
+      "y1": 0.9
+     }
+    }
+   ],
+   "world": {
+    "asset_id": "plate-plain",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: the flow diagram and its swap"
+}

@@ -22,10 +22,14 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import sync_kinetics as SK  # noqa: E402
 
-MODULES = ["ease", "spring", "stroke", "ink", "squash", "idle", "stopaction", "chartxf", "camera", "arap"]   # P43 T1 + P47 T5/T1/T3, in dependency order (the template's region order)
-SPECIES = ["chip", "press"]   # P50 T2 on: one module per species kind, inlined into the species block; `press` is the
+MODULES = ["ease", "spring", "stroke", "clothoid", "ink", "squash", "idle", "stopaction", "chartxf", "camera", "arap"]   # P43 T1 + P47 T5/T1/T3
+                                              # + P50 T14 the clothoid fitter, beside the stroke it is drawn by; in dependency order (the template's region order)
+SPECIES = ["chip", "press", "flow", "span"]   # P50 T2 on: one module per species kind, inlined into the species block; `press` is the
                               # one that is not a KIND (P50 T3: the press card is a DOCK kind) - it carries the stack's math
-                              # and the underline's clock for the dock loop and the callout, and registers no painter
+                              # and the underline's clock for the dock loop and the callout, and registers no painter.
+                              # `span` (P50 T4) is a KIND but registers no painter either: it is a PAGE species, built and
+                              # painted by the page's perform layer, and its region sits with the kinetics laws so that layer
+                              # can close over it. `flow` registers paintFlow the way the chip does.
 
 
 def test_committed_template_is_in_sync() -> None:

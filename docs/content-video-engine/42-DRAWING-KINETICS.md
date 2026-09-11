@@ -109,6 +109,11 @@ Séquin 1992).
 Applies to geometry the engine **generates** — arrows, balance arms, connectors, axes.
 Hand-authored art is unaffected.
 
+**Built 2026-09-11 (P50 T14):** `content/video_engine/scripts/kinetics/clothoid.mjs` - the segment between two
+points with end tangents (Fresnel integrals by series), the two-segment G2 fit for an S-curve, the curvature
+measured on the samples; `tests/kinetics/clothoid.test.mjs` shows the Bezier of the same ends inflecting where the
+clothoid does not. First customers: the flow diagram's arrows (P50 T4), the map's arcs (T5).
+
 ## 42.5 What is ours to tune, not a finding
 
 `γ`, `λ_w`, `α_w`, `λ_ρ`, `α_ρ`, `κ_v`, `κ_a`, per-material `ζ`/`ω₀`, and any corner

@@ -64,17 +64,17 @@ ACT_SPECIES = {
     "COMPARES": ("line page", "build_to", "chart_to:rescale", "chart_to:extend", "figure"),
     "DIVIDES": ("share page", "peel"),
     "NAMES": ("trace",),
-    "EXPLAINS": ("note", "plate use=bridge"),
+    "EXPLAINS": ("note", "plate use=bridge", "chip", "flow"),
     "TURNS": ("figure", "spotlight", "callout", "note"),
     "BREAKS": ("burst", "stack"),
-    "SPANS": ("bracket", "spread", "relight"),
+    "SPANS": ("bracket", "spread", "relight", "span"),
     "SETS": ("chart_to:park", "figure", "retitle"),
     "RETRACTS": ("retitle", "squiggle"),
 }
 # ... and what it names as pending, by task (s5), so the line says where the better species is.
 ACT_PENDING = {
-    "QUOTES": "press card T3", "NAMES": "vector map T5", "EXPLAINS": "chips + flow diagram T2", "DIVIDES": "treemap T6",
-    "RETRACTS": "crossed-out board T2", "BREAKS": "furniture T10",
+    "NAMES": "vector map T5", "DIVIDES": "treemap T6",   # QUOTES / EXPLAINS closed: the press card (T3), the chip (T2) and the flow diagram (T4) ship
+    "BREAKS": "furniture T10",   # RETRACTS closed: the chip crosses out (T2)
 }
 
 

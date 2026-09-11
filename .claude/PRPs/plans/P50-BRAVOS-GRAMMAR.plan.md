@@ -231,7 +231,7 @@ Acceptance:
 - Evidence: `scripts/press_card.py` (135; `tests/test_press_card.py` 130), `scripts/species/press.mjs` (115; `tests/kinetics/press.test.mjs` 162), `build_scene_timeline_f.py` (+173: `DOCK_KIND_PRESS`, `press_meta`, `assign_press_stack`, the `phrase` target and the `underline` form admitted for a callout alone, `press_plate_error`), the template (+237: `paintPress` outside the two slots, the underline riding the card's live geometry), `tests/test_press_dock.py` (113), `test_targeted_species.py` (+5), `test_gate_motion_density.py` (+1: a stack step is already a dock event, the underline counts at its word), the golden `press-stack`. Validated by the parent: sync_kinetics 12 modules (10 + 2); 235 tests across goldens (15, existing byte-identical), species, press, video dock, read->park, the gate, sync, portrait parity, lint, breakthrough, camera; node 96/96; the filmstrip (5.30 the first card mid-spring, 7.55 the second arriving as the first is shoved back, 9.95 the third, 10.75 the underline mid-draw, 11.40 the settled fan) read by the parent. Deviations: no new species KIND (a press card is a dock kind; `SPECIES_WHEN['push']` re-worded to say the hand-off shipped as the stack); an E45 guard the brief did not ask for (a press dock on a ledger plate is refused - reverse when a cut wants quotations beside a parked chart); the build-loop seam is unit-tested, not episode-built - the first cut with a press row closes it.
 
 ### T4: The flow diagram (chips + arrows + the swap) and the span bracket
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: `implementation_luna` for the SVG layout (a dashed box, N chips, arrows between named chips); parent for
   the swap (it reuses `chart_to`'s law: the standing node un-draws, the new node draws on the same spot)
 - Depends on: T2
@@ -242,7 +242,7 @@ Acceptance:
 - Acceptance: the Bravos rhyme (shots 82-86): a three-node diagram draws on a word; on a later word one node swaps
   and the rest stands; the swap is one event; the life check passes; nothing spins.
 - Validate: the test suite above
-- Evidence: pending
+- Evidence: `scripts/species/flow.mjs` (248) + `tests/kinetics/flow.test.mjs` (250); `scripts/species/span.mjs` (103) + `tests/kinetics/span.test.mjs` (123); the compiler (`flow`, `span` in SPECIES_KINDS / SPECIES_WHEN / validate_species; `span` a PAGE species), the gate, the lint's availability table (EXPLAINS: chip + flow; SPANS: span), the template (the flow painter through the registry; the span on the perform layer); goldens `flow-swap` and `span-decade` (read by the parent: PLANTS -> CHIPS -> PRICE with smooth clothoid arrows and the 1973 tag; THE RUN-UP shaded behind the memory-makers lines). The parent's run: node 140/140 across the kinetics tests; sync_kinetics 15 modules (11 kinetics, 4 species); goldens byte-identical. The agent hit its turn limit at the span node test and was resumed for the compiler tests, the filmstrip and the report.
 
 ### T5: The vector map - a world that lights, an arc that crosses, a stamp that lands
 - Status: pending
@@ -393,7 +393,7 @@ Acceptance:
 - Evidence: pending
 
 ### T14: The last drawing-kinetics law - the clothoid fitter for generated geometry (doc 42 §42.4)
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: `implementation_luna`
 - Depends on: none (its first customers are T4's arrows and T5's arcs; the leaders of T10/T11 its third)
 - Write set: `content/video_engine/scripts/kinetics/clothoid.mjs` (new: an Euler-spiral segment between two points with
@@ -405,7 +405,7 @@ Acceptance:
 - Acceptance: an arrow drawn by the fitter has monotone curvature (measured on the samples) where the Bezier's ripples;
   hand-authored art untouched; goldens byte-identical (no golden carries a generated curve today).
 - Validate: `node --test content/video_engine/tests/kinetics/clothoid.test.mjs`; `python -m pytest content/video_engine/tests/test_kinetics_sync.py content/video_engine/tests/test_kinetics_flags.py -q`
-- Evidence: pending
+- Evidence: `kinetics/clothoid.mjs` (290) + `tests/kinetics/clothoid.test.mjs` (210): the segment with end tangents by the Fresnel series, the S-fit G2 at the join, the curvature monotone along the segment where the Bezier of the same ends inflects; its region in the template after `stroke`; the flow diagram's arrows are its first customer (the flow-swap golden). Doc 42 s42.4 carries the status line.
 
 ### T15: The continuity three - arriving from the edge, the three threads, the occlusion cue (HF-15, HF-16, HF-17)
 - Status: pending

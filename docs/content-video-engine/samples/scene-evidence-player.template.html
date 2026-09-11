@@ -121,6 +121,13 @@
 #species .chipcard, #species-under .chipcard { fill: #05131e; stroke: #25313C; stroke-width: 3; }
 #species .chipglyph, #species-under .chipglyph { fill: none; stroke: #F2F2F2; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 #species .chiplab, #species-under .chiplab { font: 700 28px Inter, Arial, sans-serif; fill: #F5B72E; text-anchor: middle; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 6px; }
+  /* THE FLOW DIAGRAM (P50 T4) - the second place the module rule lets a species touch the template. The frame is
+     drawn in the muted ink (#8a94a0, the axis grey) so it reads as a diagram's boundary and never as evidence; the
+     arrows are the species sunflower, the same hand as .co and .sq; the year stamp is the frame's own grey, because
+     a date is furniture. The cards inside are CHIPS and reuse .chipcard / .chipglyph / .chiplab above. */
+#species .flowbox, #species-under .flowbox { fill: none; stroke: #8a94a0; stroke-width: 3; stroke-linecap: round; }
+#species .flowarrow, #species-under .flowarrow { fill: none; stroke: #F5B72E; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+#species .flowtag, #species-under .flowtag { font: 700 34px Inter, Arial, sans-serif; fill: #8a94a0; text-anchor: end; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 6px; }
   .lp-chart text { font-family: Inter, Arial, sans-serif; fill: var(--lp-chalk); }
   .lp-chart .ax { stroke: #8a94a0; stroke-width: 2; }
   .lp-chart .grid { stroke: rgba(242,242,242,.14); stroke-width: 1.5; }
@@ -146,6 +153,8 @@
   .lp-chart .glow .bk { stroke-width: 7; }
   .lp-chart .bklab, .lp-chart .bksub { font-family: Kalam, Inter, Arial, sans-serif; font-weight: 700; }
   .lp-chart .bksub { font-weight: 400; opacity: .85; }
+  .lp-chart .lp-span { stroke: none; }                                                            /* P50 T4: the span's shade - ground under every line, its depth set per frame */
+  .lp-chart .spanlab { font-family: Kalam, Inter, Arial, sans-serif; font-weight: 700; }           /* ... and the NAME it gives the stretch, in the same hand the bracket's label is written in */
   .lp-chart .tagchip { font-size: 18px; font-weight: 600; letter-spacing: .04em; opacity: .85; text-transform: lowercase; }
   /* PORTRAIT (P41, doc 49 s49.1 amended 2026-09-05): in 9:16 the chart IS the world. The page fills the frame to
      its deckle, the charcoal fills the page to that edge, the series is re-laid for the tall frame in stage px
@@ -703,6 +712,403 @@
     if (x >= s[n - 1]) return arr[n - 1];
     const [lo, hi] = bracket(s, x, n), ds = s[hi] - s[lo];
     return ds > 0 ? arr[lo] + (x - s[lo]) * (arr[hi] - arr[lo]) / ds : arr[lo];
+  };
+  /* KINETICS:END */
+  /* KINETICS:BEGIN clothoid */
+  /* kinetics/clothoid.mjs - THE CLOTHOID FITTER for GENERATED geometry (P50 T14; doc 42 s42.4). SOURCE OF TRUTH,
+     inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN clothoid and KINETICS:END,
+     AFTER stroke and before the species regions - it imports nothing, so its region may sit anywhere after the
+     laws it is drawn by; it sits beside the stroke because the stroke is its one consumer.
+
+     THE LAW (42 s42.4, as written): "Cubic Bezier curvature is a degree-3-over-degree-6 rational function: it
+     ripples, throws parasitic inflections and flat spots. Euler spirals (clothoids) hold dk/ds = const, giving
+     G2 continuity and minimising E_MVS = integral (dk/ds)^2 ds (Levien 2009; Moreton & Sequin 1992). Applies to
+     geometry the engine GENERATES - arrows, balance arms, connectors, axes. Hand-authored art is unaffected."
+     So: a segment here is theta(s) = theta0 + k0 s + dk s^2 / 2, and its curvature is a straight line in s. It
+     is fitted to a G1 Hermite problem - two points and the tangent angle at each - which is the shape every
+     generated connector is actually given (a chip's edge to the next chip's edge, a centroid to a centroid).
+
+     THE FIT (Bertolazzi & Frego 2015, "G1 fitting with clothoids", the same reduction; the arithmetic here is
+     ours and tested against brute-force quadrature). Put tau = s / L. With phi the chord's angle, phi0 =
+     wrap(theta0 - phi) and phi1 = wrap(theta1 - phi), delta = phi1 - phi0:
+       theta(tau) - phi = phi0 + B tau + A tau^2,  B = delta - A
+     The end point is ON the chord exactly when the component across the chord vanishes:
+       g(A) = integral_0^1 sin(A tau^2 + (delta - A) tau + phi0) dtau = 0      <- one equation, one unknown
+     and then L = r / integral_0^1 cos(...) dtau with r the chord's length. A = 0 is the circular arc (a
+     symmetric problem, phi1 = -phi0, solves at A = 0 - the fitter's own sanity check, pinned in the tests).
+     g is found by an expanding bracket around A = 3 (phi0 + phi1) and bisected to the last bit: deterministic,
+     and it cannot walk off a Newton cliff on a near-straight pair where g is almost flat.
+
+     THE FRESNEL INTEGRALS. Those two integrals are the generalised Fresnel momenta X(a, b, c), Y(a, b, c) =
+     integral_0^1 cos|sin(a tau^2 + b tau + c) dtau, which complete the square onto C(x) = integral_0^x
+     cos(pi t^2 / 2) dt and S(x) its sine. C and S are the POWER SERIES inside |x| <= SERIES_R and THE
+     ASYMPTOTIC FORM outside it - the two the doc's law is worth having, and the seam between them sits where
+     their two error curves cross (measured: ~1e-9 at x = 3.4; the series is 1e-15 at x = 2 and the asymptotic
+     form 1e-12 by x = 4). A fixed-step Simpson was tried in that band and is the reason the seam is where it
+     is: to hold 1e-12 at x = 4 it wants some 25 000 samples per call, and this arithmetic sits INSIDE the
+     fit's own bisection, a hundred and thirty calls deep, on every frame that draws an arrow.
+     The one place completing the square cannot be used is |a| -> 0, where its two Fresnel arguments run off
+     as 1 / sqrt(a) and their difference is multiplied back by sqrt(1 / a): there the momenta are integrated
+     directly by a composite 8-point Gauss-Legendre, a couple of dozen cosines at machine precision.
+
+     Nothing is stored: every export is a pure function of its arguments, so the same declaration draws the same
+     polyline on a scrub as on a play. The dials below are ours to tune (42 s42.5), not findings. */
+
+  const CLOTHOID = Object.freeze({
+    SERIES_R: 3.4,        /* |x| the Fresnel POWER SERIES is trusted to. The series is exact arithmetic on paper and pure cancellation in a double: its largest term grows like (pi x^2 / 2)^n / n!, so at x = 3.4 it peaks near 1e7 against a result of ~0.5 (seven digits gone, ~1e-9 left) - and that is exactly where the asymptotic form below has come down to the same 1e-9. The seam is the crossing of the two error curves, measured, not guessed. */
+    SERIES_MAX: 64,       /* ... and the term count that ends the sum if the epsilon never does */
+    SERIES_EPS: 1e-17,    /* the term below which the sum has converged against a result of order 0.5 */
+    ASYMP_MAX: 64,        /* the asymptotic form's term cap; it stops on its own at its smallest term, which is what an asymptotic series' accuracy IS */
+    SMALL_A: 0.5,         /* |a| under which the momenta are integrated DIRECTLY instead of by completing the square: below it the square's two Fresnel arguments run off as 1 / sqrt(a) and their difference is multiplied back by sqrt(1 / a) - the one place this arithmetic loses everything */
+    GL_PHASE: 2.0,        /* ... on panels of about this many radians of phase each, 8-point Gauss-Legendre per panel: machine precision for a couple of dozen cosines, which matters because this branch sits INSIDE the fit's bisection */
+    GL_PANELS_MAX: 64,    /* ... and a panel cap, so a wild phase cannot hang the frame */
+    GUESS_K: 3,           /* the bracket's centre, A0 = GUESS_K (phi0 + phi1): exactly right for the symmetric arc (A = 0) and within a step of the root for everything we draw */
+    BRACKET_STEP: 0.5,    /* the first step out from the guess, in units of A (A is the turn in radians per unit tau^2) */
+    BRACKET_GROW: 1.6,    /* ... growing geometrically, so a hard pair is bracketed in a few dozen probes rather than a few thousand */
+    BRACKET_MAX: 64,      /* ... for at most this many probes each way */
+    A_MAX: 4000,          /* the widest |A| a fit may claim: past it the "curve" is a coil, not a connector */
+    BISECT: 80,           /* bisections after the bracket: 80 halvings take any bracket to the last bit of a double */
+    SAMPLES: 48,          /* the default polyline length: the stroke engine resamples by arclength anyway, so this only has to be dense enough that its chords hide (42 s42.1's SAMPLE_PX at our sizes) */
+    BEZ_HANDLE: 0.5,      /* the reference cubic's handle as a share of the chord - half of it, what a hand-rolled connector is usually given. It is a DIAL because the cubic's defect depends on it: at a half the parasitic inflection 42 s42.4 names is there to be measured, at a third the cubic is tamer and its curvature still ripples. The clothoid has no such dial. */
+    JOIN_SWEEP: 2.4,      /* radians either side of the chord the S-fit sweeps its join tangent through, looking for the curvature match */
+    JOIN_STEPS: 48,       /* ... in this many probes: fine enough that a sign change inside the sweep is not stepped over */
+    JOIN_AT: 0.5,         /* ... with the join itself at the chord's midpoint: one free parameter, one equation (the curvature at the join, read from both sides) */
+  });
+
+  const clTAU = Math.PI * 2;
+  const clPI2 = Math.PI / 2;
+
+  /* an angle folded into (-pi, pi] - every phase in the fit is a difference of two headings */
+  const wrapPi = (a) => {
+    let v = (a + Math.PI) % clTAU;
+    if (v <= 0) v += clTAU;
+    return v - Math.PI;
+  };
+
+  /* a tangent given as a heading in radians, as [x, y] or as {x, y} -> the heading in radians */
+  const angleOf = (t) => {
+    if (typeof t === "number") return t;
+    if (Array.isArray(t)) return Math.atan2(t[1], t[0]);
+    if (t && typeof t === "object") return Math.atan2(t.y, t.x);
+    return 0;
+  };
+
+  const clPt = (p) => (Array.isArray(p) ? { x: +p[0], y: +p[1] } : { x: +p.x, y: +p.y });
+
+  /* C(x), S(x) by the power series: C = sum (-1)^n (pi/2)^2n x^(4n+1) / ((2n)! (4n+1)), S its sine twin. */
+  const clFresnelSeries = (x) => {
+    const x2 = x * x, q = clPI2 * clPI2 * x2 * x2;   /* the factor that carries each term to the next */
+    let tc = x, ts = clPI2 * x2 * x, C = tc, S = ts / 3;
+    for (let n = 1; n < CLOTHOID.SERIES_MAX; n++) {
+      tc *= -q / ((2 * n) * (2 * n - 1));
+      ts *= -q / ((2 * n + 1) * (2 * n));
+      C += tc / (4 * n + 1);
+      S += ts / (4 * n + 3);
+      if (Math.abs(tc) + Math.abs(ts) < CLOTHOID.SERIES_EPS) break;
+    }
+    return { C, S };
+  };
+
+  /* ... and past SERIES_R by THE ASYMPTOTIC FORM (the option 42 s42.4's fitter is given). Repeated integration
+     by parts of I(x) = integral_x^inf exp(i pi t^2 / 2) dt gives I ~ exp(i z) sum c_n, z = pi x^2 / 2, with
+     c_0 = i / (pi x) and c_(n+1) = c_n (-i (2n+1) / (pi x^2)); C = 1/2 - Re I, S = 1/2 - Im I. The series
+     diverges eventually - it is asymptotic - so it is summed to its SMALLEST term, which is its accuracy:
+     about exp(-z) / (pi x), i.e. 1e-9 at x = 3.4 and 1e-12 by x = 4. */
+  const clFresnelAsym = (x) => {
+    const z = clPI2 * x * x, cz = Math.cos(z), sz = Math.sin(z), px2 = Math.PI * x * x;
+    let cr = 0, ci = 1 / (Math.PI * x), sr = 0, si = 0, prev = Infinity;
+    for (let n = 0; n < CLOTHOID.ASYMP_MAX; n++) {
+      const mag = Math.hypot(cr, ci);
+      if (mag > prev) break;            /* past the smallest term the asymptotic series only gets worse */
+      prev = mag;
+      sr += cr; si += ci;
+      const k = (2 * n + 1) / px2, nr = k * ci, ni = -k * cr;   /* c *= -i k */
+      cr = nr; ci = ni;
+    }
+    return { C: 0.5 - (cz * sr - sz * si), S: 0.5 - (cz * si + sz * sr) };
+  };
+
+  /* THE FRESNEL INTEGRALS, odd in x: the series inside SERIES_R, the asymptotic form outside it. */
+  const fresnel = (x) => {
+    const a = Math.abs(x), sg = x < 0 ? -1 : 1;
+    const f = a <= CLOTHOID.SERIES_R ? clFresnelSeries(a) : clFresnelAsym(a);
+    return { C: sg * f.C, S: sg * f.S };
+  };
+
+  /* 8-point Gauss-Legendre on [-1, 1] (Abramowitz & Stegun 25.4.30): eight cosines buy ~1e-15 on a panel
+     holding a couple of radians of phase, where a fixed-step Simpson would want thousands. */
+  const CL_GL_X = Object.freeze([-0.9602898564975363, -0.7966664774136267, -0.5255324099163290, -0.1834346424956498,
+                                 0.1834346424956498, 0.5255324099163290, 0.7966664774136267, 0.9602898564975363]);
+  const CL_GL_W = Object.freeze([0.1012285362903763, 0.2223810344533745, 0.3137066458778873, 0.3626837833783620,
+                                 0.3626837833783620, 0.3137066458778873, 0.2223810344533745, 0.1012285362903763]);
+
+  /* the momenta integrated directly - the |a| ~ 0 branch, where completing the square divides by a */
+  const clMomentsDirect = (a, b, c) => {
+    const span = Math.abs(a) + Math.abs(b);
+    const m = Math.min(CLOTHOID.GL_PANELS_MAX, Math.max(1, Math.ceil(span / CLOTHOID.GL_PHASE)));
+    const h = 1 / m;
+    let X = 0, Y = 0;
+    for (let p = 0; p < m; p++) {
+      const mid = (p + 0.5) * h, half = h / 2;
+      for (let i = 0; i < 8; i++) {
+        const t = mid + half * CL_GL_X[i], ph = a * t * t + b * t + c, w = CL_GL_W[i] * half;
+        X += w * Math.cos(ph);
+        Y += w * Math.sin(ph);
+      }
+    }
+    return { X, Y };
+  };
+
+  /* THE GENERALISED FRESNEL MOMENTA: X, Y = integral_0^1 cos|sin(a tau^2 + b tau + c) dtau, by completing the
+     square onto C and S. a < 0 is the mirror (cos is even in the whole phase, sin odd). */
+  const fresnelMoments = (a, b, c) => {
+    if (Math.abs(a) < CLOTHOID.SMALL_A) return clMomentsDirect(a, b, c);
+    if (a < 0) { const m = fresnelMoments(-a, -b, -c); return { X: m.X, Y: -m.Y }; }
+    const k = Math.sqrt(2 * a / Math.PI), scale = Math.sqrt(Math.PI / (2 * a));
+    const u0 = k * (b / (2 * a)), u1 = k * (1 + b / (2 * a)), psi = c - b * b / (4 * a);
+    const f1 = fresnel(u1), f0 = fresnel(u0), dC = f1.C - f0.C, dS = f1.S - f0.S;
+    const cp = Math.cos(psi), sp = Math.sin(psi);
+    return { X: scale * (cp * dC - sp * dS), Y: scale * (cp * dS + sp * dC) };
+  };
+
+  /* THE FIT of one segment to a G1 Hermite problem. Returns the segment as the player draws it:
+     { x0, y0, theta0, k0, dk, L } with theta(s) = theta0 + k0 s + dk s^2 / 2, plus the fit's own A / B
+     (the turn in tau) and `ok` - false when the pair is degenerate (coincident points, or a phase that
+     brackets no root inside A_MAX), in which case the caller draws the straight chord and nothing lies. */
+  const clothoidFit = (p0, t0, p1, t1) => {
+    const a = clPt(p0), b = clPt(p1), th0 = angleOf(t0), th1 = angleOf(t1);
+    const dx = b.x - a.x, dy = b.y - a.y, r = Math.hypot(dx, dy), phi = Math.atan2(dy, dx);
+    const bad = { x0: a.x, y0: a.y, theta0: th0, k0: 0, dk: 0, L: r, A: 0, B: 0, phi, ok: false };
+    if (!(r > 0)) return bad;
+    const phi0 = wrapPi(th0 - phi), phi1 = wrapPi(th1 - phi), delta = phi1 - phi0;
+    const g = (A) => fresnelMoments(A, delta - A, phi0).Y;
+    const A0 = CLOTHOID.GUESS_K * (phi0 + phi1), f0 = g(A0);
+    let lo = A0, hi = A0, flo = f0;
+    if (f0 !== 0) {
+      let step = CLOTHOID.BRACKET_STEP, found = false;
+      for (let i = 0; i < CLOTHOID.BRACKET_MAX && !found; i++) {
+        const dn = A0 - step, up = A0 + step, fdn = g(dn), fup = g(up);
+        if (fdn * f0 <= 0) { lo = dn; flo = fdn; hi = A0; found = true; }
+        else if (fup * f0 <= 0) { lo = A0; flo = f0; hi = up; found = true; }
+        else { step *= CLOTHOID.BRACKET_GROW; if (step > CLOTHOID.A_MAX) break; }
+      }
+      if (!found) return bad;
+    }
+    for (let i = 0; i < CLOTHOID.BISECT; i++) {
+      const mid = 0.5 * (lo + hi), fm = g(mid);
+      if (fm === 0) { lo = mid; hi = mid; break; }
+      if (fm * flo <= 0) { hi = mid; } else { lo = mid; flo = fm; }
+    }
+    const A = 0.5 * (lo + hi), B = delta - A, X = fresnelMoments(A, B, phi0).X;
+    if (!(X > 0)) return bad;
+    const L = r / X;
+    return { x0: a.x, y0: a.y, theta0: th0, k0: B / L, dk: 2 * A / (L * L), L, A, B, phi, ok: true };
+  };
+
+  /* THE SEGMENT AT tau in [0, 1]: the point, the arclength, the heading and the SIGNED curvature there. The
+     point is the momenta of the PARTIAL interval (exact), never a running sum - a sample is the same value
+     whether it is asked for first or last. */
+  const clothoidAt = (fit, tau) => {
+    const u = Math.min(1, Math.max(0, tau)), A = fit.A, B = fit.B, th0 = fit.theta0;
+    const m = fresnelMoments(A * u * u, B * u, th0);
+    return { x: fit.x0 + fit.L * u * m.X, y: fit.y0 + fit.L * u * m.Y,
+             s: fit.L * u, k: fit.k0 + fit.dk * fit.L * u, theta: th0 + B * u + A * u * u };
+  };
+
+  /* THE POLYLINE the stroke engine draws BY LENGTH: n samples of the fitted segment, each carrying its own
+     arclength and curvature so 42 s42.1's profile can be read straight off it. */
+  const clothoid = (p0, t0, p1, t1, n = CLOTHOID.SAMPLES) => {
+    const fit = clothoidFit(p0, t0, p1, t1), N = Math.max(2, n | 0), out = new Array(N);
+    for (let i = 0; i < N; i++) out[i] = clothoidAt(fit, i / (N - 1));
+    return out;
+  };
+
+  /* THE TWO-SEGMENT G2 FIT (the S-curve). Two clothoids meet at the chord's midpoint; the ONE free parameter
+     is the heading there, and it is chosen so the curvature the first segment ARRIVES with is the curvature
+     the second LEAVES with - G2 at the join by construction, not by luck. The sweep is bracketed either side
+     of the chord's own direction and bisected, exactly as the single fit's A is. `ok` false = no match inside
+     JOIN_SWEEP; the caller then has two G1 segments and knows it. */
+  const clothoidS = (p0, t0, p1, t1, n = CLOTHOID.SAMPLES) => {
+    const a = clPt(p0), b = clPt(p1);
+    const m = { x: a.x + (b.x - a.x) * CLOTHOID.JOIN_AT, y: a.y + (b.y - a.y) * CLOTHOID.JOIN_AT };
+    const chord = Math.atan2(b.y - a.y, b.x - a.x);
+    /* the curvature gap at the join, as a function of the join's heading */
+    const gap = (th) => {
+      const f1 = clothoidFit(a, t0, m, th), f2 = clothoidFit(m, th, b, t1);
+      if (!f1.ok || !f2.ok) return null;
+      return { d: f2.k0 - (f1.k0 + f1.dk * f1.L), f1, f2 };
+    };
+    const g0 = gap(chord);
+    let lo = chord, hi = chord, glo = g0, found = !!g0 && g0.d === 0;
+    if (g0 && !found) {
+      const h = CLOTHOID.JOIN_SWEEP / CLOTHOID.JOIN_STEPS;
+      for (let i = 1; i <= CLOTHOID.JOIN_STEPS && !found; i++) {
+        const dn = gap(chord - i * h), up = gap(chord + i * h);
+        if (dn && dn.d * g0.d <= 0) { lo = chord - i * h; glo = dn; hi = chord - (i - 1) * h; found = true; }
+        else if (up && up.d * g0.d <= 0) { lo = chord + (i - 1) * h; glo = gap(lo) || g0; hi = chord + i * h; found = true; }
+      }
+    }
+    let thm = chord, best = g0;
+    if (found && glo) {
+      for (let i = 0; i < CLOTHOID.BISECT; i++) {
+        const mid = 0.5 * (lo + hi), gm = gap(mid);
+        if (!gm) break;
+        if (gm.d === 0) { lo = mid; hi = mid; glo = gm; break; }
+        if (gm.d * glo.d <= 0) { hi = mid; } else { lo = mid; glo = gm; }
+      }
+      thm = 0.5 * (lo + hi);
+      best = gap(thm) || g0;
+    }
+    if (!best) return { ok: false, theta_m: thm, gap: null, join: null, fits: [], pts: [] };
+    const N = Math.max(4, n | 0), n1 = Math.max(2, N >> 1), n2 = Math.max(2, N - n1 + 1);
+    const pts = [];
+    for (let i = 0; i < n1; i++) pts.push(clothoidAt(best.f1, i / (n1 - 1)));
+    const s1 = best.f1.L;
+    for (let i = 1; i < n2; i++) { const q = clothoidAt(best.f2, i / (n2 - 1)); q.s += s1; pts.push(q); }
+    const end = clothoidAt(best.f1, 1);
+    return { ok: found, theta_m: thm, gap: best.d,
+             join: { x: end.x, y: end.y, theta: thm, k_in: end.k, k_out: best.f2.k0 },
+             fits: [best.f1, best.f2], pts };
+  };
+
+  /* THE REFERENCE the doc names: the textbook G1 Hermite CUBIC over the same ends. It is here so a test can
+     show the parasitic inflection - a curvature that changes SIGN where the clothoid's does not - and so no
+     one has to take 42 s42.4 on faith. Nothing draws it. */
+  const bezierOf = (p0, t0, p1, t1, n = CLOTHOID.SAMPLES, handle = CLOTHOID.BEZ_HANDLE) => {
+    const a = clPt(p0), b = clPt(p1), th0 = angleOf(t0), th1 = angleOf(t1);
+    const r = Math.hypot(b.x - a.x, b.y - a.y) * handle;
+    const c1 = { x: a.x + r * Math.cos(th0), y: a.y + r * Math.sin(th0) };
+    const c2 = { x: b.x - r * Math.cos(th1), y: b.y - r * Math.sin(th1) };
+    const N = Math.max(2, n | 0), out = new Array(N);
+    for (let i = 0; i < N; i++) {
+      const u = i / (N - 1), v = 1 - u, w0 = v * v * v, w1 = 3 * v * v * u, w2 = 3 * v * u * u, w3 = u * u * u;
+      out[i] = { x: w0 * a.x + w1 * c1.x + w2 * c2.x + w3 * b.x, y: w0 * a.y + w1 * c1.y + w2 * c2.y + w3 * b.y };
+    }
+    return out;
+  };
+
+  /* THE MEASURED curvature of a polyline: Menger's 1 / circumradius, SIGNED by the turn (left positive), so a
+     ripple in a generated curve shows up as what it is. The ends copy their neighbours (three points are the
+     smallest thing a curvature can be read from). */
+  const curvatureOf = (pts) => {
+    const n = pts.length, k = new Array(n).fill(0);
+    for (let i = 1; i < n - 1; i++) {
+      const a = pts[i - 1], b = pts[i], c = pts[i + 1];
+      const abx = b.x - a.x, aby = b.y - a.y, bcx = c.x - b.x, bcy = c.y - b.y;
+      const cross = abx * bcy - aby * bcx;
+      const den = Math.hypot(abx, aby) * Math.hypot(bcx, bcy) * Math.hypot(c.x - a.x, c.y - a.y);
+      k[i] = den > 0 ? 2 * cross / den : 0;
+    }
+    if (n > 2) { k[0] = k[1]; k[n - 1] = k[n - 2]; }
+    return k;
+  };
+
+  /* the polyline as an SVG path the nib can be handed: the caller draws it BY LENGTH (42 s42.1). */
+  const clothoidPath = (pts) => pts.map((p, i) => (i ? "L" : "M") + p.x.toFixed(2) + " " + p.y.toFixed(2)).join(" ");
+  /* KINETICS:END */
+  /* KINETICS:BEGIN span */
+  /* species/span.mjs - THE SPAN (P50 T4; BACKLOG R26-25, the intake's Archetype 5; Bravos shots 107-110's
+     "Decades" bracket). SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between
+     KINETICS:BEGIN span and KINETICS:END. It imports nothing, and its region sits with the kinetics laws
+     rather than in the species block at the foot of the file - on purpose: a PAGE species' math is called by
+     the page's PERFORM layer, which is written hundreds of lines above the species block, and a const has to
+     exist before the function that closes over it is built.
+
+     WHEN: the sentence SPANS a period on a chart - a regime, an epoch, "the decade" - shaded behind the line
+     with its name. A BRACKET measures two data; a SPAN names a stretch of time. That is the whole difference,
+     and it is why this is a second species and not a bracket option: a bracket's label is a NUMBER it measured,
+     a span's label is a NAME it gives.
+
+     THE LAW, a pure function of t:
+       shade  - the band between the two declared edges fades in over IN_S to ALPHA, behind every line (it is
+                ground, not ink on top - the same rule the spread follows).
+       label  - written above the band BY THE HAND, glyph after glyph, over WRITE of the word, starting when
+                the shade is in. Above the band where there is room for it, inside its top edge where there
+                is not (a chart that fills its box has nothing over it).
+     THE EDGES. `from` and `to` are each either a DATUM INDEX (an integer: the page's own index, the one a
+     bracket and a figure use) or an X-FRACTION (a number in 0..1 along the drawn series' own x extent, for a
+     period that falls between two data). Both are resolved on the ACTIVE chart state every frame, from the
+     same live points a bracket reads (R26-28): a rescale moves the band with the data, and a window that has
+     dropped one of the two edges hides it rather than drawing it in the wrong place.
+
+     THE PAINTER IS NOT HERE, and that is a finding, not an omission (P50 T4, 2026-09-11): a PAGE species is
+     built and painted by the page's own perform layer - inside the chart's viewBox, on the page state `st`,
+     under the active state's park transform - while SPECIES_PAINTERS hands a painter the stage-px overlay and
+     the scene's clock. Registering a page species in that registry would paint it in the wrong space and leave
+     the perform layer none the wiser. So the MATH is here, pure and tested, and the perform layer calls it in
+     a dozen lines. Closing that gap - one registry both layers can route through - is P51 T1's business.
+     The dials below are ours to tune (42 s42.5), not findings. */
+
+  const SPAN = Object.freeze({
+    IN_S: 0.45,       /* the shade's fade-in: a period ARRIVES, it does not cut in - slower than a bracket's tick, because nothing is being measured */
+    ALPHA: 0.16,      /* ... and what it settles at: enough to read as a region behind the line, never enough to fight it (the spread bleeds to 0.30 because the gap IS its argument; a span is only the room the argument happens in) */
+    WRITE: 0.5,       /* the share of the word the label's hand takes, after the shade is in */
+    PAD_T: 44,        /* the band's reach above the highest point of the drawn data, in the chart's viewBox units ... */
+    PAD_B: 44,        /* ... and below the lowest: it is a band behind the chart, not a box around the line */
+    LABEL_DY: 16,     /* the label's baseline above the band's top edge, where the band has room above it ... */
+    LABEL_IN: 2.1,    /* ... and, where it does not, inside the top edge by this many of the label's own sizes: two lines down, clear of the plot's own top furniture (the unit caption sits on the first line inside the plot - read in the frame, 2026-09-11) */
+    LABEL_ROOM: 1.3,  /* "room above" means this many label sizes clear of the chart's top - otherwise the name is written inside the band */
+    MIN_W: 6,         /* a band narrower than this is not a period - it is two adjacent data, which is a bracket's job */
+  });
+
+  const span01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* is this edge a DATUM INDEX (an integer) or an X-FRACTION? */
+  const spanIsIndex = (v) => Number.isInteger(v);
+
+  /* ONE EDGE -> x in the chart's viewBox. `entries` is the series' live points in lpPointsNow's shape,
+     [{i, p: [x, y]}]: an index resolves to the point that CARRIES it (a window that dropped it -> null), a
+     fraction to that position along the drawn series' own x extent. */
+  const spanEdgeX = (entries, v) => {
+    if (!Array.isArray(entries) || entries.length < 2) return null;
+    if (spanIsIndex(v)) { const e = entries.find((q) => q.i === v); return e ? e.p[0] : null; }
+    const f = +v;
+    if (!Number.isFinite(f)) return null;
+    const a = entries[0].p[0], b = entries[entries.length - 1].p[0];
+    return a + span01(f) * (b - a);
+  };
+
+  /* the band's vertical reach: every drawn series' points, padded - so the shade stands behind the whole
+     chart and moves with it, and never has to be told where the plot box is */
+  const spanExtent = (lists) => {
+    let y0 = Infinity, y1 = -Infinity;
+    for (const l of lists || []) for (const q of (l || [])) { y0 = Math.min(y0, q.p[1]); y1 = Math.max(y1, q.p[1]); }
+    return Number.isFinite(y0) && Number.isFinite(y1) ? { y0: y0 - SPAN.PAD_T, y1: y1 + SPAN.PAD_B } : null;
+  };
+
+  /* THE BAND this frame, or null when either edge has left the window (the bracket's rule: nothing to name,
+     nothing drawn). `entries` is the named series' live points, `lists` every series', `H` the chart's viewBox
+     height when the caller knows it - the band is clipped to the page rather than drawn off it. */
+  const spanBand = (entries, lists, from, to, H) => {
+    const a = spanEdgeX(entries, from), b = spanEdgeX(entries, to), ext = spanExtent(lists);
+    if (a === null || b === null || !ext) return null;
+    const x0 = Math.min(a, b), x1 = Math.max(a, b);
+    if (!(x1 - x0 >= SPAN.MIN_W)) return null;
+    const top = Number.isFinite(H) ? Math.max(0, ext.y0) : ext.y0;
+    const bot = Number.isFinite(H) ? Math.min(H, ext.y1) : ext.y1;
+    if (!(bot > top)) return null;
+    return { x: x0, w: x1 - x0, y: top, h: bot - top, cx: (x0 + x1) / 2 };
+  };
+
+  /* where the name is written: above the band when the chart leaves room over it, inside its top edge when
+     the chart fills its box (the bracket's own rule for a label with nowhere to stand) */
+  const spanLabelY = (band, fs) => (band.y >= fs * SPAN.LABEL_ROOM ? band.y - SPAN.LABEL_DY : band.y + fs * SPAN.LABEL_IN);
+
+  /* THE POSE at t: is it up, how deep is the shade, how far has the hand written. */
+  const spanPose = (sp, t) => {
+    const at = +sp.at, dur = Math.max(0.001, +sp.dur || 1), d = t - at;
+    const shade = span01(d / SPAN.IN_S);
+    return { on: d >= 0, shade, alpha: SPAN.ALPHA * shade, write: span01((d - SPAN.IN_S) / (dur * SPAN.WRITE)) };
+  };
+
+  /* one glyph's opacity as the hand writes the label: each glyph over its share of the write, with the 1.6
+     overlap the bracket and the figure use, so the line reads as a hand and not as a ticker. The share is
+     1 / (n + 0.6), not 1 / n, so the LAST glyph is fully in exactly when the write ends - at 1 / n the tail
+     of the name would still be at 0.625 when the word was over (the bracket buys the same slack by writing
+     its label over only part of its own window). */
+  const spanGlyph = (write, j, n) => {
+    const per = 1 / (Math.max(1, n | 0) + 1.6 - 1);
+    return span01((write - j * per) / (per * 1.6));
   };
   /* KINETICS:END */
   /* KINETICS:BEGIN ink */
@@ -4037,7 +4443,20 @@
       surf.insertBefore(path, surf.firstChild);   /* under every line and label: it is ground, not ink on top */
       return { sp, hi, lo, path };
     }).filter(Boolean);
-    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads };
+    /* THE SPAN (P50 T4; R26-25, the intake's Archetype 5; Bravos 107-110's "Decades"). A shaded stretch of TIME
+       behind the chart with its NAME above it. The geometry is not built here: species/span.mjs rebuilds the band
+       from the LIVE points every frame (spanBand), so the span follows a rescale and hides when a window drops one
+       of its edges - the same clock and the same live scale a bracket follows (R26-28). The shade is ground, under
+       every line; the name is ink, on top, written glyph by glyph by the hand. */
+    const spans = pageSpecies(scene, "span").map((sp) => {
+      const col = sp.color ? (PS_PAL[sp.color] || sp.color) : "var(--lp-chalk)";
+      const rect = lpEl("rect", "lp-span", surf, { x: 0, y: 0, width: 0, height: 0, fill: col, "fill-opacity": 0 });
+      surf.insertBefore(rect, surf.firstChild);
+      const label = lpEl("text", "spanlab", surf, { x: 0, y: 0, "text-anchor": "middle", opacity: 0, style: "font-size:" + fs + "px;fill:" + col });
+      const lg = [...String(sp.label || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
+      return { sp, si: sp.series | 0, rect, label, lg, fs };
+    });
+    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans };
   };
   /* the bleed: the region grows left to right over SPREAD_BLEED of the word, the ink deepens over the rest */
   const paintSpread = (sd, t, st) => {
@@ -4062,6 +4481,24 @@
       + bot.reverse().map(([x, y]) => "L" + x.toFixed(1) + " " + y.toFixed(1)).join(" ") + " Z";
     sd.path.setAttribute("d", d);
     sd.path.setAttribute("fill-opacity", (PS.SPREAD_A * clamp01(u / 0.35)).toFixed(3));
+  };
+  /* the span: the band re-read on the LIVE scale every frame, the shade fading in under the lines, the name written
+     above it by the hand (species/span.mjs owns every number; this is the call) */
+  const paintSpan = (sd, t, st) => {
+    const pose = spanPose(sd.sp, t);
+    const hide = () => { sd.rect.setAttribute("fill-opacity", 0); sd.label.setAttribute("opacity", 0); };
+    if (!pose.on) { hide(); return; }
+    const lists = [];
+    for (let i = 0; i < Math.max(1, (st.linePts || []).length); i++) lists.push(lpPointsNow(st, i));
+    const band = spanBand(lists[sd.si] || [], lists, sd.sp.from, sd.sp.to, (st.geom || {}).H);
+    if (!band) { hide(); return; }   /* R26-28: an edge the window dropped names nothing - nothing is drawn */
+    sd.rect.setAttribute("x", band.x.toFixed(1)); sd.rect.setAttribute("y", band.y.toFixed(1));
+    sd.rect.setAttribute("width", band.w.toFixed(1)); sd.rect.setAttribute("height", band.h.toFixed(1));
+    sd.rect.setAttribute("fill-opacity", pose.alpha.toFixed(3));
+    sd.label.setAttribute("opacity", 1);
+    sd.label.setAttribute("x", band.cx.toFixed(1));
+    sd.label.setAttribute("y", spanLabelY(band, sd.fs).toFixed(1));
+    sd.lg.forEach((ts, j) => ts.setAttribute("opacity", spanGlyph(pose.write, j, sd.lg.length).toFixed(3)));
   };
   /* the figure's write: the figure writes glyph by glyph over the first 0.6 of its word, the sub over the rest */
   const paintFigure = (fg, t, st) => {
@@ -4120,6 +4557,7 @@
                        ...pageSpecies(scene, "chart_to").filter((sp) => sp.to === "recast" || sp.to === "morph")];   /* P48 T7: a recast or morph takes the line - the bracket leaves with it, on the same clock */
     for (const b of PF.brackets) paintBracket(b, t, undrawAll.find((sp) => sp.at >= b.sp.at), st);
     for (const sd of PF.spreads || []) paintSpread(sd, t, st);   /* the fifth watch: the gap between the lines, bled full; R26-28: on the active state */
+    for (const sd of PF.spans || []) paintSpan(sd, t, st);       /* P50 T4: the named stretch of time, shaded behind the chart on the live scale */
     for (const fg of PF.figures || []) paintFigure(fg, t, st);   /* E50: the chart's next thing */
     for (const nt of PF.notes || []) { nt.div.style.opacity = t >= nt.sp.at ? "" : "0"; writeGlyphs(nt.glyphs, t - nt.sp.at, Math.max(0.05, nt.sp.dur || 1)); }
     /* RELIGHT: the sunflower twin rises and falls on a sine over dur */
@@ -5123,6 +5561,252 @@
     if (f.some((v) => !Number.isFinite(v))) return null;
     return { x: img.x + f[0] * img.w, y: img.y + f[1] * img.h, w: (f[2] - f[0]) * img.w, h: (f[3] - f[1]) * img.h };
   };
+  /* KINETICS:END */
+  /* KINETICS:BEGIN flow */
+  /* species/flow.mjs - THE FLOW DIAGRAM (P50 T4; the Bravos flow diagram, shots 82-86: a three-node diagram
+     draws on a word, and on a LATER word one node swaps while the rest stands - the rhyme). SOURCE OF TRUTH,
+     inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN flow and KINETICS:END,
+     AFTER spring, idle, clothoid and chip - it imports all four, and the import order IS the region order.
+
+     WHEN: the sentence EXPLAINS a mechanism - A causes B via C - as named things and the arrows between them;
+     a later word SWAPS one node and the rest stands (Bravos's rhyme).
+
+     THE LAW, all of it a pure function of t:
+       box    - the dashed frame draws ON, dash by dash, by the curvature stroke (42 s42.1): the nib runs round
+                the rectangle and leaves DASH-long marks with GAP between them, so the diagram arrives as a
+                drawn thing and not as a rectangle that appeared. A dash already passed is simply there.
+       nodes  - each node is a CHIP (species/chip.mjs): the same card, the same sourced glyph, the same badge
+                spring, landing NODE_STEP after the one before, once the box is BOX_LEAD of the way round.
+                The chip's own painter is not called - a chip resolves its own target and owns its own cross -
+                but its dials (CHIP) and its landing law (chipLand) are, so a node and a lone chip land alike.
+       arrows - between named nodes, one per EDGE_S after the last node lands, drawn BY LENGTH with the nib:
+                a CLOTHOID (kinetics/clothoid.mjs, 42 s42.4), leaving one chip's edge on a tangent turned BOW
+                off the chord and entering the next's turned BOW * ENTER_K back into it. The two turns are
+                UNEQUAL on purpose: equal ones give a circular arc, and the point of the fitter is the RAMP -
+                dk/ds constant, the pen accelerating out of one card and settling into the next.
+       swap   - on swap.at the standing node UN-DRAWS - its own landing run backward, exactly as chart_to's
+                recast runs a build law backward - and the new glyph and label draw on IN THE SAME SPOT. The
+                arrows stand: the mechanism did not change, one of its parts did. ONE event at swap.at.
+       tag    - a year stamp in the box's corner, written last (the diagram is dated, not captioned).
+     Nothing is stored: every visual reads from t, sp.at and sp.swap.at, so a scrubbed frame is the played
+     frame. The glyphs are SOURCED icons (assets/icons, A2a provenance) carried in the asset map as
+     `icon:<name>`; this module never invents geometry. The dials below are ours to tune (42 s42.5). */
+
+  const FLOW = Object.freeze({
+    BOX_S: 0.9,        /* the dashed frame's own draw: long enough that the nib is seen going round, short enough that the first chip is not kept waiting */
+    BOX_LEAD: 0.55,    /* ... and the share of it that is done when the first chip lands - the frame is still drawing under the diagram, the way a hand works */
+    DASH: 26,          /* the dash's length in STAGE px ... */
+    DASH_GAP: 15,      /* ... and the air between two dashes: a 2:1 rhythm reads as "a frame", never as a solid box */
+    NODE_STEP: 0.2,    /* one node after the last: a beat under the eye's own saccade, so three read as a sequence and not a flash */
+    EDGE_LAG: 0.1,     /* the breath between the last chip landing and the first arrow leaving it */
+    EDGE_S: 0.34,      /* one arrow, drawn by length; arrows go one at a time - the mechanism is read in its order */
+    BOW: 0.42,         /* the exit tangent's turn off the chord, in radians: enough curve to read as a hand's arrow, not a hoop */
+    ENTER_K: 0.45,     /* ... and the entry tangent's turn as a share of it. UNEQUAL: equal angles are a circular arc and waste the fitter */
+    EDGE_GAP: 16,      /* the air between a card's edge and the arrow that leaves it */
+    HEAD: 28,          /* the arrowhead's stroke length in stage px ... */
+    HEAD_A: 0.42,      /* ... and its half-angle in radians */
+    HEAD_F: 0.72,      /* ... landing over the last of the arrow's own clock, after the shaft has arrived */
+    SAMPLES: 40,       /* the clothoid's polyline per arrow: dense enough that its chords hide at our sizes */
+    SWAP_OUT_S: 0.3,   /* the standing node's landing, run BACKWARD */
+    SWAP_IN_S: 0.45,   /* ... and the new one's, run forward: in is slower than out, so the eye lands on what arrived */
+    TAG_LAG: 0.12,     /* the breath before the year stamps ... */
+    TAG_S: 0.5,        /* ... and its own write */
+    TAG_PAD: 26,       /* the stamp's inset from the box's top-right corner */
+    TAG_SIZE: 34,      /* ... at this size: a date, not a title */
+    PITCH_K: 1.5,      /* a node's room ALONG the row as a multiple of the card: the card plus the arrow between it and the next */
+    CROSS_K: 1.15,     /* ... and ACROSS it, over card + label: a breath above and below */
+    MIN_K: 0.4,        /* the smallest the diagram may be scaled to before it stops being read - under it the author gave it too small a box */
+    LABEL_H: 34,       /* the label's own line, for the block's height (the chip writes it at CHIP.LABEL_DY below the card) */
+  });
+
+  const flow01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* THE LAYOUT: where each node stands inside the declared box, and how big the whole diagram is drawn.
+     A row inside the box; a COLUMN when the box is taller than it is wide (a portrait build's box is), which
+     is the same rule read from the geometry rather than from the aspect. */
+  const flowLayout = (box, n) => {
+    const N = Math.max(1, n | 0), column = box.h > box.w;
+    const pitch = (column ? box.h : box.w) / N, across = column ? box.w : box.h;
+    const block = CHIP.SIZE + CHIP.LABEL_DY + FLOW.LABEL_H;
+    const k = Math.max(FLOW.MIN_K, Math.min(1, pitch / (CHIP.SIZE * FLOW.PITCH_K), across / (block * FLOW.CROSS_K)));
+    const lift = (CHIP.LABEL_DY + FLOW.LABEL_H) * k / 2;   /* the card sits above centre so card + label are centred together */
+    const cells = [];
+    for (let i = 0; i < N; i++) {
+      cells.push(column ? { x: box.x + box.w / 2, y: box.y + pitch * (i + 0.5) - lift }
+                        : { x: box.x + pitch * (i + 0.5), y: box.y + box.h / 2 - lift });
+    }
+    return { k, column, cells, half: CHIP.SIZE * k / 2 };
+  };
+
+  /* THE CLOCK: every instant the declaration implies, in episode seconds. One place, so the painter, the tests
+     and the gate all read the same schedule. */
+  const flowClock = (sp) => {
+    const at = +sp.at, nodes = sp.nodes || [], edges = sp.edges || [];
+    const first = at + FLOW.BOX_S * FLOW.BOX_LEAD;
+    const nodeAt = nodes.map((_, i) => first + i * FLOW.NODE_STEP);
+    const landed = (nodeAt.length ? nodeAt[nodeAt.length - 1] : first) + CHIP.LAND_S;
+    const edgeAt = edges.map((_, j) => landed + FLOW.EDGE_LAG + j * FLOW.EDGE_S);
+    const tagAt = (edgeAt.length ? edgeAt[edgeAt.length - 1] + FLOW.EDGE_S : landed) + FLOW.TAG_LAG;
+    return { box: [at, at + FLOW.BOX_S], nodeAt, landed, edgeAt, tagAt, tagEnd: tagAt + FLOW.TAG_S };
+  };
+
+  /* the box's draw at t, 0..1 - and, from it, the dash that is under the nib */
+  const flowBoxF = (sp, t) => flow01((t - +sp.at) / FLOW.BOX_S);
+
+  /* the rectangle's perimeter cut into dashes, each with the fraction of the whole draw it owns. The nib starts
+     at the top-left and runs clockwise - the way the box would be drawn by a hand. */
+  const flowDashes = (box) => {
+    const per = 2 * (box.w + box.h), n = Math.max(4, Math.round(per / (FLOW.DASH + FLOW.DASH_GAP)));
+    const step = per / n, out = [];
+    const at = (d) => {   /* a distance round the perimeter -> a point on it, clockwise from the top-left */
+      let s = ((d % per) + per) % per;
+      if (s < box.w) return { x: box.x + s, y: box.y };
+      s -= box.w;
+      if (s < box.h) return { x: box.x + box.w, y: box.y + s };
+      s -= box.h;
+      if (s < box.w) return { x: box.x + box.w - s, y: box.y + box.h };
+      return { x: box.x, y: box.y + box.h - (s - box.w) };
+    };
+    const corners = [box.w, box.w + box.h, 2 * box.w + box.h, per];
+    for (let i = 0; i < n; i++) {
+      const d0 = i * step;
+      let len = Math.min(FLOW.DASH, step * 0.72);
+      /* a dash that ran past a CORNER used to be drawn as its chord, which cut the corner off the box (read in
+         the frame, 2026-09-11). A dash stops at the corner it reaches; the next one starts the new side. */
+      for (const c of corners) if (c > d0 && c < d0 + len) len = c - d0;
+      out.push({ a: at(d0), b: at(d0 + len), t0: i / n, t1: (i + 1) / n });
+    }
+    return out;
+  };
+
+  /* THE SWAP at t: which node is changing, and how far through which half of its change. `phase` is "none"
+     before the word, "out" while the standing node un-draws, "in" while the new one draws, "done" after. */
+  const flowSwapPhase = (sp, t) => {
+    const sw = sp.swap;
+    if (!sw || !Number.isFinite(+sw.at)) return { phase: "none", u: 1 };
+    const d = t - +sw.at;
+    if (d < 0) return { phase: "none", u: 1 };
+    if (d < FLOW.SWAP_OUT_S) return { phase: "out", u: 1 - d / FLOW.SWAP_OUT_S };   /* the landing, run backward */
+    const uIn = flow01((d - FLOW.SWAP_OUT_S) / FLOW.SWAP_IN_S);
+    return { phase: uIn >= 1 ? "done" : "in", u: uIn };
+  };
+
+  /* ONE NODE at t: what it shows (a swap changes the glyph and the label, never the place) and how far its
+     landing has run. u is the landing's normalised clock, which is all chipLand needs. */
+  const flowNodeAt = (sp, i, t) => {
+    const node = (sp.nodes || [])[i] || {}, sw = sp.swap;
+    const C = flowClock(sp), u0 = flow01((t - C.nodeAt[i]) / CHIP.LAND_S);
+    if (!sw || sw.node !== node.id) return { icon: node.icon, label: node.label, u: u0, alpha: 1, swapping: false };
+    const ph = flowSwapPhase(sp, t);
+    if (ph.phase === "none") return { icon: node.icon, label: node.label, u: u0, alpha: 1, swapping: false };
+    /* OUT: the landing run backward - and the card's own opacity on the OUT clock. The chip's fade is 0.14 s
+       of a 0.55 s landing; reversed into SWAP_OUT_S it would be a blink at the very end rather than an
+       un-draw (read in the frame, 2026-09-11), so the ink leaves on the clock the un-draw was given, the way
+       an `undraw` retracts a stroke on its own clock and not on the build's. */
+    if (ph.phase === "out") return { icon: node.icon, label: node.label, u: Math.min(u0, ph.u), alpha: ph.u, swapping: true };
+    return { icon: sw.icon, label: sw.label, u: ph.u, alpha: 1, swapping: ph.phase === "in" };
+  };
+
+  /* the pose of a node at a landing clock u: the chip's own law, on the flow's clock */
+  const flowPose = (u) => chipLand(flow01(u) * CHIP.LAND_S, 0);
+
+  /* ONE ARROW's draw at t, 0..1 */
+  const flowEdgeF = (sp, j, t) => {
+    const C = flowClock(sp);
+    return C.edgeAt[j] === undefined ? 0 : flow01((t - C.edgeAt[j]) / FLOW.EDGE_S);
+  };
+
+  /* THE ANCHORS of one arrow: the point on each card's square edge that faces the other, pushed out by
+     EDGE_GAP, and the two tangents the clothoid is fitted to. */
+  const flowAnchors = (a, b, half) => {
+    const dx = b.x - a.x, dy = b.y - a.y, chord = Math.atan2(dy, dx);
+    const edge = (c, th) => {   /* the square's boundary in direction th, plus the air */
+      const cs = Math.cos(th), sn = Math.sin(th), m = Math.max(Math.abs(cs), Math.abs(sn)) || 1;
+      const r = half / m + FLOW.EDGE_GAP;
+      return { x: c.x + r * cs, y: c.y + r * sn };
+    };
+    const t0 = chord - FLOW.BOW, t1 = chord + FLOW.BOW * FLOW.ENTER_K;
+    return { p0: edge(a, t0), t0, p1: edge(b, t1 + Math.PI), t1, chord };
+  };
+
+  /* the arrowhead's two strokes at the polyline's far end, along the tangent it arrives on */
+  const flowHead = (pts) => {
+    const n = pts.length;
+    if (n < 2) return "";
+    const tip = pts[n - 1], prev = pts[n - 2], th = Math.atan2(tip.y - prev.y, tip.x - prev.x);
+    const arm = (s) => ({ x: tip.x - FLOW.HEAD * Math.cos(th + s * FLOW.HEAD_A), y: tip.y - FLOW.HEAD * Math.sin(th + s * FLOW.HEAD_A) });
+    const l = arm(1), r = arm(-1);
+    return "M" + l.x.toFixed(2) + " " + l.y.toFixed(2) + " L" + tip.x.toFixed(2) + " " + tip.y.toFixed(2)
+         + " L" + r.x.toFixed(2) + " " + r.y.toFixed(2);
+  };
+
+  /* the edges as index pairs into the node list (a name that is not a node is dropped, not drawn wrong) */
+  const flowEdgeIndex = (sp) => {
+    const ids = (sp.nodes || []).map((n) => n && n.id);
+    return (sp.edges || []).map((e) => [ids.indexOf(e && e[0]), ids.indexOf(e && e[1])]);
+  };
+
+  /* THE PAINTER. ctx is the template's species context (see SPECIES_PAINTERS in the player). Everything is
+     drawn in STAGE px into one group, in reading order: the frame, the arrows (under the cards, so their ends
+     tuck beneath), the cards, the stamp. */
+  function paintFlow(ctx) {
+    const { sp, t, svg, el, A, resolveTarget, drawOn, hash, idle, seed, si } = ctx;
+    const box = resolveTarget(sp.target);
+    if (!box || !(box.w > 0 && box.h > 0)) return;   /* the targeting law: a flow needs its room declared */
+    const nodes = sp.nodes || [], lay = flowLayout(box, nodes.length), C = flowClock(sp);
+    const g = el("g", "flow", svg, {});
+    /* the frame, dash by dash, under the nib */
+    const bf = flowBoxF(sp, t);
+    if (bf > 0) {
+      for (const d of flowDashes(box)) {
+        const f = flow01((bf - d.t0) / Math.max(1e-6, d.t1 - d.t0));
+        if (f <= 0) continue;
+        const p = el("path", "flowbox", g, { d: "M" + d.a.x.toFixed(1) + " " + d.a.y.toFixed(1) + " L" + d.b.x.toFixed(1) + " " + d.b.y.toFixed(1) });
+        if (f < 1) drawOn(p, f);
+      }
+    }
+    /* the arrows, drawn by length with the nib */
+    flowEdgeIndex(sp).forEach(([ia, ib], j) => {
+      if (ia < 0 || ib < 0 || ia === ib) return;
+      const f = flowEdgeF(sp, j, t);
+      if (f <= 0) return;
+      const an = flowAnchors(lay.cells[ia], lay.cells[ib], lay.half);
+      const pts = clothoid(an.p0, an.t0, an.p1, an.t1, FLOW.SAMPLES);
+      drawOn(el("path", "flowarrow", g, { d: clothoidPath(pts) }), Math.min(1, f / FLOW.HEAD_F));
+      if (f > FLOW.HEAD_F) drawOn(el("path", "flowarrow", g, { d: flowHead(pts) }), (f - FLOW.HEAD_F) / (1 - FLOW.HEAD_F));
+    });
+    /* the cards */
+    nodes.forEach((node, i) => {
+      const st = flowNodeAt(sp, i, t);
+      if (st.u <= 0 || st.alpha <= 0) return;
+      const pose = flowPose(st.u), c = lay.cells[i];
+      const ix = sp.idle && sp.idle !== "none" ? idle(sp.idle, t, hash(seed | 0, si | 0, 907 + i)) : { scale: 1, dx: 0, dy: 0 };
+      const s = pose.scale * ix.scale * lay.k;
+      const ng = el("g", "", g, { opacity: (pose.fade * st.alpha).toFixed(3),
+                                  transform: "translate(" + (c.x + ix.dx).toFixed(1) + " " + (c.y + (pose.dy + ix.dy) * lay.k).toFixed(1) + ") scale(" + s.toFixed(4) + ")" });
+      const h = CHIP.SIZE / 2;
+      el("rect", "chipcard", ng, { x: (-h).toFixed(1), y: (-h).toFixed(1), width: CHIP.SIZE, height: CHIP.SIZE, rx: CHIP.RX });
+      const geo = chipGeometry(A ? A["icon:" + st.icon] : null);
+      if (geo) {
+        const vb = geo.vb || [0, 0, 24, 24], gk = CHIP.GLYPH / Math.max(vb[2] || 1, vb[3] || 1);
+        const gg = el("g", "chipglyph", ng, { transform: "translate(" + (-CHIP.GLYPH / 2).toFixed(1) + " " + (-CHIP.GLYPH / 2).toFixed(1) + ") scale(" + gk.toFixed(4) + ") translate(" + (-vb[0]) + " " + (-vb[1]) + ")" });
+        geo.el.forEach((q) => el(q.t, "", gg, q.a));   /* the sourced geometry verbatim */
+      }
+      if (st.label) { const lab = el("text", "chiplab", ng, { x: 0, y: (h + CHIP.LABEL_DY).toFixed(1) }); lab.textContent = st.label; }
+    });
+    /* the year stamp in the box's corner */
+    if (sp.tag && t >= C.tagAt) {
+      const u = flow01((t - C.tagAt) / FLOW.TAG_S), e = springPop(u);
+      const tx = el("text", "flowtag", g, { x: (box.x + box.w - FLOW.TAG_PAD).toFixed(1),
+                                            y: (box.y + FLOW.TAG_PAD + FLOW.TAG_SIZE * (1.4 - 0.4 * e)).toFixed(1),
+                                            opacity: flow01(u / 0.4).toFixed(3), style: "font-size:" + FLOW.TAG_SIZE + "px" });
+      tx.textContent = sp.tag;
+    }
+  }
+
+  /* the module rule's registration: a plain assignment (inline_text keeps it), guarded so `node --test` can
+     import this file for the math above without the template's registry */
+  if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.flow = paintFlow;
   /* KINETICS:END */
   /* a ledger page's declared focus (page.focus = {kind, target?, label?}) is an implicit species at LP_FOCUS_AT;
      the target defaults to the emphasized datum (E22 addendum 6) */
