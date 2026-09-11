@@ -506,15 +506,16 @@ def test_the_two_thirds_power_law_is_implemented_and_stroke_mjs_is_the_evidence(
                for r in hits for e in r["status_evidence"]), [r["status_evidence"] for r in hits]
 
 
-def test_zero_slip_and_the_cadence_rule_are_tracked_and_unbuilt(real) -> None:
+def test_zero_slip_is_tracked_and_the_cadence_rule_is_implemented(real) -> None:
     # zero-slip: G-j tracks it, a gate checks a proxy, and nothing binds the ground - the gate's
     # citation of 48 §48.7 is not an implementation, so the row's verdict stands
     assert {r["status"] for r in _named(real, "formula", "zero-slip")} == {"tracked"}
-    # On-1s / On-2s was the orphan of 2026-09-05 and the triage opened P45 O1 for it that day
+    # On-1s / On-2s was the orphan of 2026-09-05; P47 T1 (2026-09-06) built it as kinetics/stopaction.mjs - the cadence
+    # rule stepped on the integer frame index - so the registry now reads the module that names it: implemented
     cadence = _named(real, "formula", "On-1s / On-2s")
-    assert {r["status"] for r in cadence} == {"tracked"}
-    assert all(e.startswith("docs/content-video-engine/BACKLOG.md")
-               for r in cadence for e in r["status_evidence"]), "no code may name the cadence rule"
+    assert {r["status"] for r in cadence} == {"implemented"}
+    assert any(e.startswith("content/video_engine/scripts/kinetics/stopaction.mjs")
+               for r in cadence for e in r["status_evidence"]), "the cadence rule is stopaction.mjs (P47 T1)"
 
 
 def test_the_secondary_motion_ratio_is_retired_by_the_doc_47_row(real) -> None:
