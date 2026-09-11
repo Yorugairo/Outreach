@@ -129,3 +129,86 @@ def test_a_failing_script_gate_makes_it_not_clean(tmp_path):
     report = (build / SW.REPORT_NAME).read_text(encoding="utf-8")
     assert rc == 1
     assert report.splitlines()[-1].startswith("NOT CLEAN - the script gates: VERDICT: FAIL")
+
+
+# ---- the operator's copy (SELF-WATCH.html) ---------------------------------------------------------------------
+def test_instants_in_reads_the_forms_and_skips_sizes_shares_and_durations():
+    ev = ("t=10.0: the pop over the plot; t=24-32 five tiles; t=57.5 and 57.65 identical; the landing (9.1) and (48-50); "
+          "the retitle at 33.2; 11.6 CSS px; 36.6% and 36.59%; reads 0.00 %; 0.4 s before; 303 px; 0:39-0:45; R26-39")
+    ts = SW.instants_in(ev, 89.0, cap=40)
+    assert ts == [9.0, 10.0, 24.0, 28.0, 32.0, 33.0, 39.0, 45.0, 48.0, 50.0, 57.5]   # a 6 s span has no midpoint; 8 s (24-32) does
+    assert SW.instants_in("t=120", 89.0) == []                                   # past the runtime
+    assert len(SW.instants_in(" ".join(f"t={t}" for t in range(0, 80, 2)), 89.0)) == SW.TILES_PER_ROW   # capped, spread
+
+
+def test_parse_report_reads_the_md_the_agent_filled():
+    md = "\n".join([
+        "# SELF-WATCH - proj - build - 2026-09-11 - short (1 min opening)",
+        "player.html sha256 abc - timeline x.timeline.json - runtime 1:29 - aspect 9:16 - script S",
+        "", "## 1. The gates (mechanical - a FAIL here ends the report)", "",
+        "| row | verdict | detail |", "|---|---|---|",
+        "| motion gate (M01-M24) | WARN | [WARN] M11 a \\| b |",
+        "| M25 layout | PASS | clean |",
+        "", "## 2. The opening, read", "",
+        "sheets: self-watch/ opening.1.png, opening.2.png (30 tiles at 2 s steps from 0:00 to 0:58, 360 px, 12 per sheet)",
+        "", "| # | check | verdict | evidence (t, what the tile shows) |", "|---|---|---|---|",
+        "| O1 | the package | PASS | t=0.0-2.0: the counter |",
+        "| O9 | the cards | FAIL | the burst at (59.5) |",
+        "", "## 3. Verdict", "", "NOT CLEAN - O9 FAIL", "read 2026-09-11 by the agent", ""])
+    rep = SW.parse_report(md)
+    assert rep["title"].startswith("SELF-WATCH - proj") and rep["meta"].startswith("player.html sha256 abc")
+    assert rep["gates"] == [("motion gate (M01-M24)", "WARN", "[WARN] M11 a | b"), ("M25 layout", "PASS", "clean")]
+    assert rep["sheets"] == ["opening.1.png", "opening.2.png"]
+    assert rep["o_rows"] == [("O1", "the package", "PASS", "t=0.0-2.0: the counter"), ("O9", "the cards", "FAIL", "the burst at (59.5)")]
+    assert rep["verdict"] == "NOT CLEAN - O9 FAIL" and rep["notes"] == ["read 2026-09-11 by the agent"]
+
+
+def test_write_html_without_a_probe_names_the_instants_and_inlines_the_sheets(tmp_path):
+    build = tmp_path / "build"
+    (build / SW.SHEET_DIR).mkdir(parents=True)
+    from PIL import Image
+    Image.new("RGB", (40, 70), (10, 10, 10)).save(build / SW.SHEET_DIR / "opening.1.png")
+    (build / "timeline.json").write_text('{"runtime_s": 89.0}', encoding="utf-8")
+    (build / "x.timeline.json").write_text('{"aspect": "9:16", "scenes": []}', encoding="utf-8")
+    (build / SW.REPORT_NAME).write_text("\n".join([
+        "# SELF-WATCH - proj - build - 2026-09-11 - short (1 min opening)", "meta line", "",
+        "## 1. The gates", "", "| row | verdict | detail |", "|---|---|---|", "| M25 layout | PASS | clean |", "",
+        "## 2. The opening, read", "",
+        "sheets: self-watch/ opening.1.png (1 tiles at 2 s steps from 0:00 to 0:00, 360 px, 12 per sheet)", "",
+        "| # | check | verdict | evidence (t, what the tile shows) |", "|---|---|---|---|",
+        "| O8 | the captions | PASS | t=48 under the plot; t=54 above the note |",
+        "| O9 | the cards | TODO | opening.1.png |",
+        "", "## 3. Verdict", "", "TODO - the agent reads the sheets", ""]), encoding="utf-8")
+    out = SW.write_html(build, None, "http://127.0.0.1:8738/player.html")
+    html = out.read_text(encoding="utf-8")
+    assert out.name == SW.HTML_NAME
+    assert SW.PLAIN["O8"][0] in html and "PASS looks like:" in html and "E62" in html      # the plain question and the looks
+    assert "instants named: 0:48.0, 0:54.0" in html                                          # no probe: named, not grabbed
+    assert "class='verdict TODO'" in html and "data:image/png;base64," in html                # the sheet inlined
+    assert "http://127.0.0.1:8738/player.html?t=" not in html                                 # no tiles without a probe
+    assert "<span class='lv PASS'>PASS</span>" in html and "<span class='lv TODO'>TODO</span>" in html
+
+
+@needs_build
+def test_html_from_the_probe_writes_a_tile_per_instant_linked_to_the_player(tmp_path):
+    build = tmp_path / "build-short"
+    build.mkdir(parents=True)
+    for name in ("player.html", "timeline.json", "tokyo-short.timeline.json"):
+        shutil.copy2(BUILD / name, build / name)
+    (build / SW.SHEET_DIR).mkdir()
+    (build / SW.REPORT_NAME).write_text("\n".join([
+        "# SELF-WATCH - tokyo-tea-break - build-short - 2026-09-11 - short (1 min opening)", "meta", "",
+        "## 1. The gates", "", "| row | verdict | detail |", "|---|---|---|", "| M25 layout | PASS | clean |", "",
+        "## 2. The opening, read", "", "sheets: self-watch/  (0 tiles)", "",
+        "| # | check | verdict | evidence (t, what the tile shows) |", "|---|---|---|---|",
+        "| O8 | the captions | WARN | t=38.0 the anchor caption under the fingers card at 12 CSS px |",
+        "", "## 3. Verdict", "", "NOT CLEAN - O8", ""]), encoding="utf-8")
+    rc = SW.main([str(build), "--html", "--player-url", "http://127.0.0.1:8738/player.html"])
+    assert rc == 0
+    html = (build / SW.HTML_NAME).read_text(encoding="utf-8")
+    tiles = sorted((build / SW.SHEET_DIR).glob("O8-*.png"))
+    assert [p.name for p in tiles] == ["O8-0038.0.png"]
+    assert "href='http://127.0.0.1:8738/player.html?t=38' data-t='38'" in html and "0:38.0 · watch" in html and "SEEK_JS" not in html and "name='mp-player'" not in html and "window.open(a.href, 'mp-player')" in html
+    from PIL import Image
+    im = Image.open(tiles[0])
+    assert im.width == SW.TILE_W["9:16"] and abs(im.height / im.width - 1920 / 1080) < 0.02
