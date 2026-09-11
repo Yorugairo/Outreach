@@ -114,6 +114,19 @@
         "build-short-cam"
       ],
       "port": 8742
+    },
+    {
+      "name": "tokyo-editor",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "content/video_engine/scripts/serve_player.py",
+        "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t7",
+        "--port",
+        "8744",
+        "--watch"
+      ],
+      "port": 8744,
+      "url": "http://127.0.0.1:8744/editor.html"
     }
   ]
 }

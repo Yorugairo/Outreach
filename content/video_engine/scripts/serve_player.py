@@ -35,6 +35,25 @@ the build's own compiled timeline. When one moves:
     answers the moment the generation moves. The page's client (render_baseline.WATCH_CLIENT,
     in the split shell) only runs when `?watch=1` is on the URL - a served build without the flag
     is exactly the page it was before this file.
+
+P51 T7 adds the WRITE side of the same loop - the editor's one door:
+
+    POST /overrides            body {"<row id>.<field>": <value>, ...}
+      The patch is merged into `<build>/overrides.json` and VALIDATED FIRST: the compiler's own
+      `apply_overrides` is run over the build's CURRENT rows, so a refusal is the compiler's
+      refusal, naming the row and the field, and nothing at all is written.
+        200 {"ok": true, "gen": 7, "keys": [...], "overrides": {...}}   the watcher does the rest
+        400 {"ok": false, "error": "s04.dock.x: field 'centre_y': ..."}  the sidecar unchanged
+      A `null` value DELETES its key (the edit taken back). `?literal=1` writes the value as given
+      instead - which is how the two fields whose OFF state IS a null are turned off: a row's
+      camera (`{"s04.camera": null}`) and its exit (the mechanical default).
+      A dict value is merged field by field onto the key's existing dict, so one line accumulates
+      the fields a hand tunes; `null` inside it unsets that field the way the compiler reads it.
+
+    GET /editor.html           the editor page (P51 T7), read from `<scripts>/../editor/editor.html`
+      and served on the BUILD's own origin so it can drive the served player.html in an iframe and
+      fetch the build's timeline, words and sidecar. Nothing is copied into the build: a build stays
+      data only, and the editor a build is opened with is always the current file on disk.
 """
 from __future__ import annotations
 
@@ -56,6 +75,7 @@ POLL_S = 0.25          # the watcher's tick: no third-party watcher, just os.sta
 HOLD_S = 25.0          # how long /reload holds a request before answering on the timeout
 MANIFEST_NAME = "player.json"
 OVERRIDES_NAME = "overrides.json"
+EDITOR_HTML = SCRIPTS.parent / "editor" / "editor.html"   # P51 T7: served from here, never copied into a build
 CHECK_MAX = 6          # instants the server's own determinism check renders (the CLI checks all)
 
 
@@ -98,9 +118,55 @@ class ReviewHandler(SimpleHTTPRequestHandler):
             super().log_message(*a)
 
     def do_GET(self):
-        if urlparse(self.path).path.rstrip("/") == "/reload":
+        path = urlparse(self.path).path.rstrip("/")
+        if path == "/reload":
             return self._reload()
+        if path == "/editor.html":
+            return self._editor()
         return super().do_GET()
+
+    def do_POST(self):
+        if urlparse(self.path).path.rstrip("/") == "/overrides":
+            return self._overrides()
+        return self.send_error(404, "the only POST this server takes is /overrides (P51 T7)")
+
+    def _json(self, code: int, payload: dict) -> None:
+        body = json.dumps(payload).encode("utf-8")
+        self.send_response(code)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _editor(self):
+        """The editor page, off the scripts tree, on the BUILD's origin (P51 T7)."""
+        try:
+            body = EDITOR_HTML.read_bytes()
+        except OSError as exc:
+            return self.send_error(404, f"no editor page at {EDITOR_HTML}: {exc}")
+        self.send_response(200)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _overrides(self):
+        """The editor's write: one sidecar line, the compiler's refusal, never a silent drop."""
+        q = parse_qs(urlparse(self.path).query)
+        literal = q.get("literal", ["0"])[0] not in ("0", "", "false", "no")
+        try:
+            n = int(self.headers.get("Content-Length") or 0)
+            patch = json.loads(self.rfile.read(n).decode("utf-8") or "{}")
+        except (ValueError, UnicodeDecodeError) as exc:
+            return self._json(400, {"ok": False, "error": f"the body is one JSON object keyed by row id and "
+                                                          f"field ({{\"s04.dock.x\": {{...}}}}) - {exc}"})
+        try:
+            merged = write_overrides(Path(self.directory), patch, literal=literal)
+        except ValueError as exc:
+            return self._json(400, {"ok": False, "error": str(exc)})
+        return self._json(200, {"ok": True, "gen": self.watch.gen if self.watch else 0,
+                                "keys": sorted(patch) if isinstance(patch, dict) else [],
+                                "overrides": merged})
 
     def _reload(self):
         q = parse_qs(urlparse(self.path).query)
@@ -148,6 +214,85 @@ class ReviewHandler(SimpleHTTPRequestHandler):
         f = open(path, "rb")
         f.seek(start)
         return RangeFileWrapper(f, length)
+
+
+# ---- the write door (P51 T7) --------------------------------------------------------------------------------------
+
+def _build_rows(build: Path):
+    """The build's CURRENT rows and the two facts a sidecar is validated against, read through the
+    same `compile` block the watcher re-compiles with - never a guess about the episode."""
+    sys.path.insert(0, str(SCRIPTS))
+    manifest = build / MANIFEST_NAME
+    try:
+        c = (json.loads(manifest.read_text(encoding="utf-8")) or {}).get("compile")
+    except (OSError, ValueError) as exc:
+        raise ValueError(f"{MANIFEST_NAME} is not readable in {build.name}: {exc}") from None
+    if not c:
+        raise ValueError(f"{build.name} has no compile block in {MANIFEST_NAME} - a sidecar is validated against "
+                         "the episode's rows and this build does not name them")
+    import authoring.table as T
+    table = (build / c["episode_dir"] / c["shot_table_file"]).resolve()
+    if not table.is_file():
+        raise ValueError(f"the shot table {table} is not on disk - a sidecar layers over the table it was built from")
+    words_path = build / "timeline.json"
+    words = None
+    if words_path.is_file():
+        try:
+            words = (json.loads(words_path.read_text(encoding="utf-8")) or {}).get("words")
+        except ValueError:
+            words = None
+    try:
+        rows = T.load_rows(table)
+    except Exception as exc:   # a half-written table must answer 400, not 500
+        raise ValueError(f"{table.name} did not load: {type(exc).__name__}: {exc}") from None
+    return rows, words, c.get("aspect")
+
+
+def _merge_overrides(current: dict, patch: dict, literal: bool) -> dict:
+    """The sidecar after this patch. A null DELETES its key (the edit taken back) unless `literal`,
+    which writes the value as given - the camera off and the exit default ARE nulls (P51 T5)."""
+    if not isinstance(patch, dict):
+        raise ValueError(f"the body is one JSON object keyed by row id and field, not a {type(patch).__name__}")
+    out = dict(current)
+    for key, value in patch.items():
+        if value is None and not literal:
+            out.pop(str(key), None)
+        elif isinstance(value, dict) and isinstance(out.get(str(key)), dict) and not literal:
+            out[str(key)] = {**out[str(key)], **value}   # one line accumulates the fields a hand tunes
+        else:
+            out[str(key)] = value
+    return out
+
+
+def write_overrides(build: Path, patch: dict, literal: bool = False) -> dict:
+    """Merge `patch` into `<build>/overrides.json` - AFTER the compiler has accepted the result.
+
+    The validation is the compiler's own `apply_overrides` over the build's current rows: the same
+    call the compile makes, so what the server accepts is what the build will accept, and a refusal
+    is the refusal that names the row and the field. A ValueError means nothing was written."""
+    build = Path(build)
+    path = build / OVERRIDES_NAME
+    try:
+        current = json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
+    except ValueError as exc:
+        raise ValueError(f"{OVERRIDES_NAME} on disk is not JSON: {exc}") from None
+    if not isinstance(current, dict):
+        raise ValueError(f"{OVERRIDES_NAME} on disk is not an object keyed by row id and field")
+    merged = _merge_overrides(current, patch, literal)
+    sys.path.insert(0, str(SCRIPTS))
+    import build_scene_timeline_f as C
+    rows, words, aspect = _build_rows(build)
+    try:
+        C.apply_overrides(rows, merged, words=words, aspect=aspect)
+    except ValueError as exc:
+        raise ValueError(str(exc)) from None
+    if not merged:
+        path.unlink(missing_ok=True)      # an empty sidecar is NO sidecar: the watcher sees the stamp move
+        return {}
+    tmp = path.with_suffix(".json.tmp")   # atomically, so the watcher never reads a half-written file
+    tmp.write_text(json.dumps(merged, indent=1, sort_keys=True), encoding="utf-8")
+    os.replace(tmp, path)
+    return merged
 
 
 # ---- the loop ----------------------------------------------------------------------------------------------------

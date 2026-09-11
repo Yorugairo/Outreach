@@ -244,7 +244,7 @@ Acceptance:
 - Evidence: pending
 
 ### T7: The editor, thin (R26-17 step 3)
-- Status: pending (human gate 3)
+- Status: built 2026-09-11 - HUMAN GATE 3 OPEN (the operator's three edits by hand)
 - Owner: parent (the controls); `implementation_luna` (the page)
 - Depends on: T4, T5
 - Write set: `content/video_engine/editor/editor.html` (a client of the served player: the scrub, the scene list, the
@@ -255,7 +255,7 @@ Acceptance:
 - Acceptance: gate 3 - the three edits of 2026-09-10 (the record 0.015 up, the plant 0.04 down, the camera on) made by
   hand in the editor, each landing as a sidecar line and a frame, no rebuild by the agent.
 - Validate: by eye on the Tokyo cut; `python -m pytest content/video_engine/tests/test_overrides.py content/video_engine/tests/test_reload.py -q`
-- Evidence: pending
+- Evidence: `editor/editor.html` (571), `serve_player.py` (+146: `POST /overrides` validated by the compiler's `apply_overrides` over the build's current rows before the atomic write, `?literal=1` for the two nulls, `GET /editor.html` off the scripts tree on the build's origin), `tests/test_editor.py` (6: the page is the file and nothing lands in the build; the scenes and s04's docks listed over the served build; a POST writes the sidecar and the next /reload names 55.31 with the dock in `why`; a bad value 400 naming the row and `centre_y`, an unknown row 400 naming s01..s07, the sidecar unwritten; the null / literal pair; a real pointer drag moves the ghost 90 px while the frame's `.dock` box is unchanged and the release writes the stage-share centre). Gate 3's proof by the agent on `build-short-t7` (a private copy; its compile block re-pointed): the three edits as three sidecar lines, the frame in 0.98 s; the strip at 57.0 and the editor screenshot in the dispatch record. Two findings: the camera edit is invisible at 57.0 (off vs on differ only at 56.90, the fab card's landing - by design); the determinism check reports a mismatch at 61.76 (the s04 span end, the R26-46/47 family). Deviations: two routes not one (the GET is what makes same-origin possible); the ghost is the compiled `place` (the park box for a card that pops then parks - labelled so); the dials are a disabled panel until the sidecar has a `dials` key. The operator's gate 3 stays OPEN: the three edits by their hand in the page (`tokyo-editor`, :8744).
 
 ### T8: The chart-as-world doctrine and the package rule
 - Status: complete (2026-09-11) - E61 ruled in the operator's words; the doctrine written as doc 29 **§9.33** (§9.30 was already "the chart is the PROOF" - the plan's number was stale)
