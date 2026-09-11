@@ -172,7 +172,7 @@ Acceptance:
 ## Task Slices
 
 ### T1: The species-by-sentence map, the `when` on every kind, the lint, the skill step
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: parent (the taxonomy and the doc); `junior_developer` for the lint once the table exists
 - Depends on: none (human gate 2 before the skill edit)
 - Write set: `docs/content-video-engine/SPECIES-BY-SENTENCE.md` (new); `content/video_engine/scripts/build_scene_timeline_f.py`
@@ -199,7 +199,7 @@ Acceptance:
 - Validate: `python content/video_engine/scripts/lint_species_choice.py content/video_engine/projects/systems-and-blowups/japan-tariff-trick`
   and the same for `tokyo-tea-break`; `python -m pytest content/video_engine/tests/test_lint_species_choice.py -q`;
   `python content/video_engine/scripts/build_docs_layers.py --check`; `python content/video_engine/scripts/docs_find.py "ranking sentence"`.
-- Evidence: pending
+- Evidence: `docs/content-video-engine/SPECIES-BY-SENTENCE.md` (the ten acts + the widened rows; s4 generated from the compiler); `SPECIES_WHEN` / `CHART_TO_WHEN` in `build_scene_timeline_f.py` (every kind, asserted at import); `lint_species_choice.py` + `tests/test_lint_species_choice.py` (12 tests: the three places agree, the classifier on the shipped sentences, INFO-only on both shorts, E61's WARN on a long-form plate); PIPELINE stage 7; the episode-build skill's authoring step; a `Use when` clause on 44 CAPABILITIES rows. Deviation: `;use=` is READ by the lint but not yet accepted by the compiler's `PLATE_OPTS` (no engine code in T1 by the operator's goal) - P51 T0 adds the token where the row grammar is consolidated; the registry export named in the write set is the docs layers (the map is indexed and `docs_find "ranking sentence"` hits it), not `build_animation_registry.py`, which covers the kinetics modules only.
 
 ### T2: The icon chip
 - Status: pending

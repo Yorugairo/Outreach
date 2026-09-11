@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4650 topics, 5196 citation edges. The 200 largest topics follow,
+4672 topics, 5382 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (150)
@@ -708,6 +708,24 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:386 — 6. Authoritative Academic Citations — 1. Viviani, P., & Terzuolo, C. (1982). Trajectory determines movement dynamics. Neuroscience, 7(2), 431-437.
 - … 13 more in `docs/DOCS-TOPICS.jsonl`
 
+## stop-motion (24)
+
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1297 — 9.23 A chart carries its OWN story (operator, 2026-08-30) — "The charts need to fully communicate their own story without
+  cited by: docs/content-video-engine/40-MEDIA-TDD.md:53, docs/content-video-engine/CAPABILITIES.md:101, docs/portable/OPERATOR-RULINGS.md:505
+- docs/content-video-engine/BACKLOG.md:440 — R26-30 The breakthrough BLEND - a stop-motion burst — (the operator, 2026-09-10, E60: "A blend would also work, basically a stop-motion version of what bravos does. essential
+- docs/content-video-engine/SPECIES-BY-SENTENCE.md:78 — 2. The widened rows (2026-09-10 / 11: E58, E59, E60, the dock read->park, E61) — | # | the sentence ... | the mechanism | its beat | declared on the row | gates | example |
+- docs/content-video-engine/SPECIES-BY-SENTENCE.md:152 — 5. Not built yet, by task (the map already names them so the lint can say "available" the day they land) — | species | act | task |
+- docs/portable/OPERATOR-RULINGS.md:1936 — E60 — The BREAKTHROUGH is a rescale: the bar that cannot fit builds to the comparator's level, then shoots while the scale rewrites under it (2026-09-10) — The operator's words. On the first pass (a zigzag cut at the top gridline, the bar a little past it): *"is that squiggle
+  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:46, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:65, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1297, docs/content-video-engine/BACKLOG.md:420, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md:99, +7 more
+- docs/research/motion/BRIEF-WEIGHT-DENSITY-MASS-2026-09-07.md:1 — Research brief — weight, density and mass in drawing, animation and stop-motion — Asked by: the operator, 2026-09-07, on Tokyo v3's first throw and landing (P47 T1, HG2): *"The throw comes on, but it
+- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:1 — HyperFrames Motion, Transitions, and Kinetic Transformations — Research Blueprint — Pass-3 deep extraction · 2026-09-06 · sources: HeyGen HyperFrames official documentation (overview, motion, transitions,
+- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:5 — The question — How does HeyGen HyperFrames structure motion design, scene transitions, stop-motion physics, and transformations, and ho
+- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:9 — Verdict up front — Motion is an epistemic claim, not a decorative layer. When a video feels cheap or disconnected, the instinct is to add t
+- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:85 — Rule 8 — Handmade Imperfection Stays Reproducible — Handmade, woodblock, paper-cutout, or stop-motion aesthetics require discrete stepped holds (on-twos). To prevent non-de
+- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:179 — 5. Stop-Motion Physics and Deterministic Frame Quantization — For paper-cutout, woodblock, and hand-animated aesthetics (e.g. Money Physics / Tokyo Tea Break), continuous floating-po
+- docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:1 — Weight, Density, and Mass in Drawing, Animation, and Stop-Motion: Research Blueprint — Pass Metadata:
+- … 12 more in `docs/DOCS-TOPICS.jsonl`
+
 ## viviani-terzuolo-1982 (24)
 
 - content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:49 — Pillar 1: Biomechanical Motor Control & Procedural Stroke Mechanics
@@ -792,24 +810,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/patterns/SENTENCE-STRENGTH-CHECK.md:1 — SENTENCE STRENGTH CHECK — the line-by-line gate — A per-sentence pass run AFTER a script conforms structurally and BEFORE it
 - … 10 more in `docs/DOCS-TOPICS.jsonl`
 
-## stop-motion (22)
-
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1297 — 9.23 A chart carries its OWN story (operator, 2026-08-30) — "The charts need to fully communicate their own story without
-  cited by: docs/content-video-engine/40-MEDIA-TDD.md:53, docs/content-video-engine/CAPABILITIES.md:101, docs/portable/OPERATOR-RULINGS.md:505
-- docs/content-video-engine/BACKLOG.md:440 — R26-30 The breakthrough BLEND - a stop-motion burst — (the operator, 2026-09-10, E60: "A blend would also work, basically a stop-motion version of what bravos does. essential
-- docs/portable/OPERATOR-RULINGS.md:1936 — E60 — The BREAKTHROUGH is a rescale: the bar that cannot fit builds to the comparator's level, then shoots while the scale rewrites under it (2026-09-10) — The operator's words. On the first pass (a zigzag cut at the top gridline, the bar a little past it): *"is that squiggle
-  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:46, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:65, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1297, docs/content-video-engine/BACKLOG.md:420, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md:99, +4 more
-- docs/research/motion/BRIEF-WEIGHT-DENSITY-MASS-2026-09-07.md:1 — Research brief — weight, density and mass in drawing, animation and stop-motion — Asked by: the operator, 2026-09-07, on Tokyo v3's first throw and landing (P47 T1, HG2): *"The throw comes on, but it
-- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:1 — HyperFrames Motion, Transitions, and Kinetic Transformations — Research Blueprint — Pass-3 deep extraction · 2026-09-06 · sources: HeyGen HyperFrames official documentation (overview, motion, transitions,
-- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:5 — The question — How does HeyGen HyperFrames structure motion design, scene transitions, stop-motion physics, and transformations, and ho
-- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:9 — Verdict up front — Motion is an epistemic claim, not a decorative layer. When a video feels cheap or disconnected, the instinct is to add t
-- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:85 — Rule 8 — Handmade Imperfection Stays Reproducible — Handmade, woodblock, paper-cutout, or stop-motion aesthetics require discrete stepped holds (on-twos). To prevent non-de
-- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:179 — 5. Stop-Motion Physics and Deterministic Frame Quantization — For paper-cutout, woodblock, and hand-animated aesthetics (e.g. Money Physics / Tokyo Tea Break), continuous floating-po
-- docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:1 — Weight, Density, and Mass in Drawing, Animation, and Stop-Motion: Research Blueprint — Pass Metadata:
-- docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:13 — The Question — Following review of Tokyo v3's first thrown and landed cards (P47 T1), the operator noted:
-- docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:28 — Verdict Up Front — 1. A HIT squash does NOT hold: Across traditional hand-drawn animation (Richard Williams, Whitaker & Halas) and 3D compu
-- … 10 more in `docs/DOCS-TOPICS.jsonl`
-
 ## as-rigid-as-possible (21)
 
 - content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:159 — Pillar 2: As-Rigid-As-Possible (ARAP) Morphing & 2.5D Projective Geometry
@@ -835,7 +835,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md:1 — Intake — the ink bloom transition (operator, 2026-09-08) — The operator brought a MotionKit preset by hand: *"here's an ink bloom transition that is not the swirl; our swirl is
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157 — 6. TR-1 landed — the reference's transition mix, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_kinds.py` over the 720p upload (30 fps), all 99 boundaries in 2.4 s, calibrate
 - docs/portable/OPERATOR-RULINGS.md:1419 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
-  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:12, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:8, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34, +17 more
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:12, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:8, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34, +18 more
 - docs/portable/OPERATOR-RULINGS.md:1444 — E48 — A declared transition vocabulary with one hero, the spiral; the primaries are not prescribed yet; the mount is a build; cut minimally, one thread (2026-09-06, amended the same hour) — From the HyperFrames transitions page the operator brought in by hand (`hyperframes.heygen.com/prompting/transitions`, r
   cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:22, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:72, docs/content-video-engine/BACKLOG.md:420, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:178, +6 more
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:270 — 8. What HyperFrames Would Say About Our Open Transition Queries (`TRANSITIONS-REVIEW-2026-09-06.md`) — This section does not settle our open transition queries. Rather, it contrasts what HyperFrames doctrine would advise ag
@@ -1372,7 +1372,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/MACRO-CHART-INTAKE-2026-09-07.md:7 — The gate — What the provenance actually is. The five source lines carry a URL, a `Verified 2026-09-07` date and a `Local Evidence`
 - docs/content-video-engine/MACRO-CHART-INTAKE-2026-09-07.md:68 — Open — - MC-7 (N tiers), MC-9 (the shaded span species) — backlog.
 - docs/portable/OPERATOR-RULINGS.md:1688 — E53 — Chart form is law, not taste: the perception hierarchy, the honest zero, and the label at the line's end (2026-09-07) — From the macro-chart intake (`docs/content-video-engine/MACRO-CHART-INTAKE-2026-09-07.md`), gated the same day. The thre
-  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:82, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:1, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:1, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:50, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:65, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:75, +16 more
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:82, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:1, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:1, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:50, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:65, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:75, +19 more
 - docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md:1 — Finance Combo & Comparison Charts — Design & Architecture Blueprint — Pass-2 · 2026-09-07 · sources: ObservableHQ, The Economist Visual Style Guide, Bloomberg Terminal, Bravos Research · for
 - docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md:8 — Verdict up front — Standard single-series and simple dual-line plots succeed because both series share identical continuous coordinate syst
 - docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md:17 — 1. ObservableHQ Foundations: Why LLMs Fail on Combo Charts — Recent foundational research from ObservableHQ (Robert Kosara, Allison Horst, Mike Bostock) and Cleveland & McGill (1984
@@ -2867,7 +2867,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:184 — Track D — placement (the "where" question) — | # | question | why it matters here |
 - docs/content-video-engine/PIPELINE.md:109 — Captions — doc 29 Part 5, not your own design — - One fixed lower-third anchor. Evidence roams; the caption does not.
 - docs/portable/OPERATOR-RULINGS.md:557 — E21 — The screen never goes still; captions ARE the motion when nothing else moves (2026-09-02) — Operator, watching Steel and Paper after a week of flat performance: "we
-  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:24, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:48, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:105, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:243, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:254, +34 more
+  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:24, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:48, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:105, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:243, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:254, +37 more
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
 
 ## mass-spring-damper (13)
@@ -2900,11 +2900,11 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8 — 1. The judgment — The research asked the right questions and mostly did not answer them. The research brief's Track B (`briefs/RESEARCH-BR
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:38 — What to do, in the operator's order (recent stumble → TOP; unbuilt → BACKLOG; unmeasured → EXPLORE) — | id | item | why | cost |
 - docs/portable/OPERATOR-RULINGS.md:1361 — E45 — A dock on a page is small and sits in the page's quiet space; the mount is the transition into a full-page ledger (2026-09-06) — Ruled on the first Tokyo v2 player with video docks (004698d). The operator: *"the dock needs to not cover the middle of
-  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:93, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:123, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:22, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:1, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:14, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:32, +28 more
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:93, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:123, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:22, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:1, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:14, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:32, +29 more
 - docs/portable/OPERATOR-RULINGS.md:1419 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
-  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:12, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:8, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34, +17 more
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:12, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:8, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34, +18 more
 - docs/portable/OPERATOR-RULINGS.md:1880 — E59 — The camera is a first-class component of the physics: ONE persistent eye, LOCKED by default, that moves only for a reason the frame can name (2026-09-10) — The operator, 2026-09-08, on the tariff short's chart arrival: *"We've added almost everything to our production process
-  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:65, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1791, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:46, docs/portable/OPERATOR-RULINGS.md:1968
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:65, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1791, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:46, docs/content-video-engine/PIPELINE.md:18, +3 more
 - … 1 more in `docs/DOCS-TOPICS.jsonl`
 
 ## multi-year (13)
@@ -3209,6 +3209,25 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/prompts/LIBRARY-BUILD-EP1-V3-REGENERATION.md:189 — Generation settings — | Asset class | Size | Background | Quality |
 - docs/content-video-engine/prompts/LIBRARY-BUILD-EP1-V3-REGENERATION.md:198 — Acceptance — reject and regenerate if — 1. Any text, numeral, label or currency symbol appears anywhere. No exceptions.
 
+## focus-zoom (12)
+
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:121 — 4. Animation Engine & Motion Recommendations
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:146 — Minimum-Jerk Trajectories (Camera Zooms & Arm Gestures) — Camera push-ins (`focus_zoom`) and `@StickMike` arm gestures follow Flash & Hogan's 5th-order jerk-minimizing polynomial
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:57 — Four places in one frame — one map, two framings — The operator wants Mexico, Detroit, Tokyo and Canada. All four in one frame is a
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:1 — Tokyo short v3 — the cut ledger and the page's performance (proposal, 2026-09-06) — The operator on v2 (docks springing, dips, the page mounted on the hook): *"That is a cool effect. Now it's tougher beca
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:47 — B. The page performs — the holdings page, sentence by sentence — The page is on screen 1.99–38.96, 44.88–61.76 and 75.73–81.55: 56 of 89 seconds. Today it does five things in that time.
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2084 — 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — P45 T4 under ruling 7 (operator, 2026-09-05: *"we compressed the docs because we didn't have a
+  cited by: docs/AGENTS-VIDEO-ENGINE.md:5, docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:1, docs/content-video-engine/16-EDITORIAL-MOTION-SYSTEM.md:1
+- docs/content-video-engine/51-THE-SHORTS-FORMAT.md:135 — 51.8 Motion is not animation — and the gate always knew it — Operator, 2026-09-04:
+  cited by: docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:120, docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:167, docs/content-video-engine/BACKLOG.md:97, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:49, docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:107
+- docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md:56 — Index — recorded, not ported — | component | our nearest | gap | why |
+- docs/content-video-engine/SPECIES-BY-SENTENCE.md:113 — 4. The compiler's `when` on every kind (generated: `--when --md`; the test compares) — Rendered from `SPECIES_WHEN` / `CHART_TO_WHEN` in `build_scene_timeline_f.py`; the block between the markers is generate
+- docs/content-video-engine/TRIAGE-2026-09-05.md:147 — 1g. Compressed-doc rules verified by hand (T4 owns the generated full list) — | item | what it is (≤120 chars) | where (path \| heading) | status + evidence (registry line) | recent-stumble evidence
+- docs/portable/OPERATOR-RULINGS.md:1090 — E32 — Motion is not animation; the original motion premise was flawed (2026-09-04) — *"When I first started, I had 0 understanding of animation, so I thought all of the movement
+  cited by: docs/portable/OPERATOR-RULINGS.md:1246
+- docs/portable/OPERATOR-RULINGS.md:1654 — E51 — A push-in is only used tied to something that just landed; an untied zoom is filler (2026-09-07) — The operator, on v3's third watch: *"The push-in doesn't make sense - we are using it randomly it seems, it is a motion
+  cited by: docs/content-video-engine/BACKLOG.md:420, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/CAPABILITIES.md:195, docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md:99, docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md:37, docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md:56, +4 more
+
 ## image-space (12)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:1 — Unified System Specification: The 3 ComfyUI Engines & The Ledger Page Drawing/Animation Architecture — Generated: 2026-09-04 | Status: Authoritative Architecture Specification | Scope: Video Engine Compositing, ComfyUI Loca
@@ -3239,7 +3258,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:163 — PRODUCTION AWARENESS — Narration is synthesized: numbers as spoken words, exact numerals on
 - docs/portable/DOCTRINE-CORE.md:172 — PRODUCTION AWARENESS — Motion and evidence choreography: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md`
 - docs/portable/OPERATOR-RULINGS.md:761 — E25 — The chart is the proof, not the homework (2026-09-03) — The analytics behind E24, read by the operator: the thumbnail converts at
-  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:109, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:136, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:1, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:48, +42 more
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:1, content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:109, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:136, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:1, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:48, +46 more
 
 ## insight-run (12)
 
@@ -3300,20 +3319,3 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/36-WRITER-PERSONA.md:292 — The $500 19-year-old — personal accretive burn — The youth register, resolved: they don't need to buy current earnings or
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md:72 — **Rhetorical Acoustics and Oral Cadence: Lessons from Speechwriting** — Speechwriting rhetoric is the art of engineering acoustic memory23. Because spoken words dissolve instantly upon utteran
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md:76 — **The Dynamics of Strategic Silence** — In his study of presidential rhetoric, James Humes identifies the Power Pause as the single most critical vocal techniqu
-
-## near-black (12)
-
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:1 — PRODUCTION REFERENCE REPORT (Claude, 2026-09-10): China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` - Bravos Research, 19:56.5 (1196.5 s), 1280x720 av1, 29.97 fps
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:50 — The grammar (what the frames say; what it maps to in our engine) — 1. One stage, one accent. Near-black charcoal, one pink, white type; green only for 'up' and the CTA. Titles top-centre
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:305 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:304 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:81 — Lane C — `presenter_infographic` — Reference: personal-finance channel, presenter-anchored.
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:518 — 8.11 Do not blend a literal document (bug, 2026-08-24) — The first reveal-engine build drew nothing visible. The mask was correct —
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1791 — 9.28 The SURFACE GRAMMAR — page, dock, or transition, decided by rule (operator, 2026-09-03) — P35 T0. Operator: *"the first part of the plan is getting components
-  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:109, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1997, docs/content-video-engine/41-LEDGER-PAGE-SPECIES.md:1, docs/content-video-engine/41-LEDGER-PAGE-SPECIES.md:85, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:101, +4 more
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-IMAGE-PACK.md:1 — Image Prompt Pack — "Steel and Paper" (GPT image generation) — Companion to [ANSWER-BRAVOS-HYPE-CYCLE.md](ANSWER-BRAVOS-HYPE-CYCLE.md).
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-IMAGE-PACK.md:30 — The plates
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-IMAGE-PACK.md:32 — P-01 · s01 OPEN — the spike (RING TOKEN, master plate) — *Duty: microhook visual stun; irony counterpoint — the future shown as
-- docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md:56 — A.2 The named mechanics — read from the frames on the Claude side, measured 2026-09-10 — | item | what it is (the technique/maths) | status | where (file:line) | note |
-- docs/portable/OPERATOR-RULINGS.md:614 — E22 — The ledger page: charts that ARE the plate, on cream paper in charcoal ink (2026-09-02) — Operator, on plate charts: "All of these charts actually become viable
-  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/DESIGN-PASS-2026-09-07.md:1, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-AUDIT-2026-09-03.md:100, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10, content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:1, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:65, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:7, +44 more

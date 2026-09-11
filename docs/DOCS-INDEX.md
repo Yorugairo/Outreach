@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3666 records across 294 files.
+3685 records across 295 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -3013,12 +3013,12 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 ## docs/content-video-engine/CAPABILITIES.md
 
 - L1 [1] CAPABILITIES — what is already built — Check this file before building anything. Three asset classes were {Check this file before building anything.; capabilities} <curtain-era; Scene-evidence; cross-reveal; snap-to-boundary; dock-owned; one-baseline; text-tier; Record-document; per-word; drawRecord; Live-chart; two-panel>
-- L14 [2] Rendering & playback — | Capability | Where | State | Proof | {Scene-evidence player; Record-document species} <cross-reveal; snap-to-boundary; dock-owned; one-baseline; text-tier; per-word; drawRecord; Live-chart; two-panel; per-color; stat-tile; .series.json>
+- L14 [2] Rendering & playback — | Capability | Where | State | Proof | {Scene-evidence player; Record-document species; Use when:} <cross-reveal; snap-to-boundary; dock-owned; one-baseline; text-tier; per-word; drawRecord; Live-chart; two-panel; per-color; stat-tile; .series.json>
 - L18 [7] Scene-evidence player — the review renderer: cross-reveal wipe with carried light, coalesced docks, snap-to-boundary, dock-owned sides, interval wash, finance geometry (864/1056), one-
-- L19 [7] Record-document species — typewriter + per-word highlighter, stroke synced to the NARRATOR's word timings
+- L19 [7] Record-document species — typewriter + per-word highlighter, stroke synced to the NARRATOR's word timings Use when: the sentence QUOTES someone's claim and the words themselves are the p
 - L20 [7] Live-chart species — the ANIMATED EVIDENCE LAYER: line draw (+area fill revealed with the line), BAR charts (staggered grow, notes land with bars), two-panel small multiples, annota
 - L21 [7] Narration-keyed chart draw — DRAW_KEYS bound to word timings ("the crash lands on the words")
-- L22 [7] Kinetic + quiet captions — word-punch groups at canonical timings; quiet mode under any docked evidence
+- L22 [7] Kinetic + quiet captions — word-punch groups at canonical timings; quiet mode under any docked evidence Use when: always - stage mode when no dock is up (the caption is the motion), quiet
 - L23 [7] Caption STAGE mode — when no dock is up the caption IS the motion: centred at 40% in the plate's quiet zone (a ledger page's declared zone), 64px/800, each word pops at its own spok
 - L24 [7] LEDGER PAGE species — the channel signature (E22): a world plate that IS a chart. `world.kind == "ledger"` + `world.page` (a `ledger_page.v1` spec): plain cream page rolls out (a GEN
 - L25 [7] The page VORTEX — how a ledger page leaves and how it returns. RETRACT: on the scene's last 1.0 + 1.0 s every colour on the page is a particle (each ink glyph, each bar / value /
@@ -3675,6 +3675,28 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L360 [2] 5. Hard bans (voice-specific; the never-list in CORE also applies) — Book-intro register (expository, past tense, paragraph-shaped) · <Book-intro; paragraph-shaped; colon-stacking>
 - L373 [2] 6. Calibration protocol — test a model before trusting it — Before a new model (or a new session) writes production copy, have it {Atmosphere creeping into sentence one; Credentials promoted to their own sentence; Abstractions left uncashed}
 - L390 [2] 7. Maintenance — This pack is downstream of evidence, never a substitute for it. When the <re-derive>
+
+## docs/content-video-engine/SPECIES-BY-SENTENCE.md
+
+- L1 [1] SPECIES BY SENTENCE — which species, on which sentence (P50 T1, 2026-09-11) — The operator, 2026-09-10: *"Do we already have an understanding mapped in docs to how/where to know when to use these <SPECIES_WHEN; CHART_TO_WHEN; SPECIES_KINDS; episode-build; timeline.json; sentences; build_to; rescale; extend; figure; peel; trace>
+- L22 [2] 0. The acts at a glance (one line each; the rows are §1-§2) <build_to; rescale; extend; figure; peel; trace; note; spotlight; callout; domain; overflow: "burst"; stack>
+- L24 [3] The quoting sentence (QUOTES) — Their claim, their words, their pledge -> the record dock (the typewriter, the highlighter on the phrase); the press card (T3) when built; the dock read->park w
+- L27 [3] The ranking sentence (RANKS) — Who is biggest, which comes first -> the bars page (the emphasised bar), the race builder over time, the callout on the ranked value; the burst when one bar can
+- L30 [3] The comparing sentence (COMPARES over time) — Rose, fell, since, monthly -> the line page with terminal tags; `build_to` the datum, `rescale` the window, `extend` the next points, `figure` at the datum. Row <build_to; rescale; extend; figure>
+- L33 [3] The dividing sentence (DIVIDES a whole) — A share, a tenth, half of it -> the share page, the `peel` for the slice that leaves; the treemap (T6) for breadth. Row 4. <peel>
+- L36 [3] The naming sentence (NAMES places and flows) — Crosses the border, from Ontario, the money went home -> the `trace` with hops on a still today; the vector map (T5) when built. Row 5. <trace>
+- L39 [3] The explaining sentence (EXPLAINS a mechanism) — A causes B via C, "when you ..., then ..." -> the flow diagram (T2) when built; today a narration plate that names its use, or the page's `note`. Row 6. <note>
+- L42 [3] The turning sentence (TURNS on a number) — The sentence's weight is one figure -> the `figure` at its datum, the light on it (`spotlight`, held), the ring on it (`callout`), a `note` when there is no roo <figure; spotlight; callout; note>
+- L45 [3] The breaking sentence (BREAKS the honest scale) — A number one bar cannot fit -> the burst (E60: `domain` + `overflow: "burst"` on the object; the comparator's level, the hold, the shoot while the scale rewrite <domain; overflow: "burst"; stack>
+- L48 [3] The spanning sentence (SPANS a period or a distance) — From the peak to June, the gap between two series -> the `bracket` (its label the number, its sub the second thing), the `spread` bled full, the `relight` on re <bracket; spread; relight>
+- L51 [3] The agenda sentence (SETS an agenda) — "Two numbers", "three things" -> the page parks (`chart_to park`) and the numbered figures or the card take the room; `scale: 1.0` un-parks when they leave. Row <chart_to park; scale: 1.0; un-parks>
+- L54 [3] The retracting sentence (RETRACTS a claim) — "The opponent isn't the Fed", "none of this happened" -> the `retitle` that replaces the false frame; the crossed-out board (T2) when built; a `squiggle` strike <retitle; crossed-out; squiggle>
+- L57 [3] The same data again (E58's verbs), the read-then-kept card, the camera, the plate — Rows 12-15: the five `chart_to` verbs and the park laws; the dock `read` / `read_s` / `park_s`; E59's four reasons a camera moves; E61's three plate uses (`;use <chart_to; read_s; park_s; ;use=landing|bridge|reset>
+- L60 [2] 1. The ten sentence acts — | # | the sentence ... | sounds like | surface (§9.28) | species / verb | target it declares | gates that read it | built | example (take · t) | {QUOTES; record; press-card; read->park} <drawRecord; record_words; centre; dock-k-pledge-record; variant: bars; :<emphasize>; spotlight; dense-line; build_to; chart_to rescale; extend; figure>
+- L78 [2] 2. The widened rows (2026-09-10 / 11: E58, E59, E60, the dock read->park, E61) — | # | the sentence ... | the mechanism | its beat | declared on the row | gates | example | {BREAKS the honest scale; burst} <domain: [lo, hi]; overflow: "burst"; BT_HOLD; BT_RUN; overflow: "stack"; BT_STEP_S; axis-mounted; stop-motion; build_s; _breakthrough_run_s; domain; overflow>
+- L89 [2] 3. The lint - `lint_species_choice.py` — It reads the project's written shot table (`SHOT-TABLE-SHORT.py`, the `W` literal the build writes) and the build's <timeline.json; sentences; kind; chart_to; ledger; plate; clip; burst; stack; ;then=; overflow; · no row>
+- L113 [2] 4. The compiler's `when` on every kind (generated: `--when --md`; the test compares) — Rendered from `SPECIES_WHEN` / `CHART_TO_WHEN` in `build_scene_timeline_f.py`; the block between the markers is generated - <SPECIES_WHEN; CHART_TO_WHEN; lint_species_choice.py --write-doc; --check-doc; punch; callout; focus_zoom; spotlight; squiggle; pull_back; pull-back; plate_life>
+- L152 [2] 5. Not built yet, by task (the map already names them so the lint can say "available" the day they land) — | species | act | task | <crossed-out; press-card; hand-off; art-embed; line-end; stop-motion; beat-freeze; SPECIES_KINDS; PAGE_SPECIES; CHART_TO_KINDS; DOCK_OPTS>
 
 ## docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md
 

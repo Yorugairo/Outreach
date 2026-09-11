@@ -134,6 +134,44 @@ MORPH_BUILDERS = ("dense-line",)                     # P48 T5: the shape a morph
 PARK_ANCHORS = ("top", "bottom", "left", "right")   # the corner of its own box the parked chart shrinks toward (top = Bravos 91: up, the room opens below)
 RECAST_PAIRS = (("dense-line", "story"),)             # P48 T4b: the legal KEYED pairs - n lines <-> n bars by series (Bravos 99-105); everything else recasts by the hand-over
 PARK_SCALE = (0.3, 0.95)                             # a parked chart is still a chart: never below 0.3 of itself, and 0.95 is not a park; exactly 1.0 is an UN-PARK (2026-09-10)
+# SPECIES BY SENTENCE (P50 T1, 2026-09-11; the operator: "do we already have an understanding mapped in docs to how/where to
+# know when to use these capabilities?"). One line per kind: WHICH SENTENCE calls for it. The map is
+# docs/content-video-engine/SPECIES-BY-SENTENCE.md (its s4 is generated from these two dicts by lint_species_choice.py
+# --when --write-doc; the test keeps them equal); the lint reads a shot table against it. Data, not behaviour.
+SPECIES_WHEN = {
+    "punch": "the sentence lands on ONE named object already on stage (the ring token, a datum, a plate object) and the eye must hit it - punctuation tied to a landing (E51), never filler",
+    "callout": "the sentence names a NUMBER or a POINT on a chart to ring (E56: a ring's one use); the label is the sentence's figure",
+    "focus_zoom": "after a chart or document has entered, the sentence turns to ONE region of it and holds there dead still",
+    "spotlight": "the sentence's focus is a PICTURE or a datum and the rest may dim - the light lands on it and holds until the sentence has a reason to leave (dur 'hold', E25 amended)",
+    "squiggle": "a caption WORD span the sentence stresses or strikes, stage mode only - drawn under the word as it is said",
+    "pull_back": "a hook that opens on ONE large number, then recontextualizes it - the detail holds, one pull-back reveals the headline around it",
+    "plate_life": "a bare world plate with no evidence must live (E21) - our cutouts stepped at 10 fps for the window",
+    "beat_freeze": "leaving a chart as a HIT - the final state freezes, then a directional cut (declared in 29 s9.27, NOT built)",
+    "radial": "revealing the ring token or a callback object FROM the point the narration names (declared in 29 s9.27, NOT built)",
+    "push": "dock A hands off to dock B on the sentence - an evidence hand-off, never a scene transition (NOT built; P50 T3's press-card stack)",
+    "steam": "STILL LIFE: a named region of an approved still breathes (steam, smoke) so the plate never goes still (E49)",
+    "trace": "the sentence NAMES places and flows on a still - a route draws with hops between named points, stamps stack at them",
+    "ticker": "STILL LIFE: a tape of figures ticks across a named region of an approved still",
+    "life": "a DECLARED claim that this world animates on its own (a rendered clip, the outro) - the gate credits it; the agent verifies by eye",
+    "build_to": "the sentence turns to a DATUM before the series' end - the line draws to it and stops (the peak now, the drop on the next sentence)",
+    "bracket": "the sentence SPANS two data ('from the peak to June', 'a tenth of the pile') - the hand draws the span, the number is its label, the second thing its sub",
+    "retitle": "the sentence renames what the page is about ('The opponent isn't the Fed') - the title rewrites by the hand; a returning page arrives retitled",
+    "relight": "the sentence RETURNS to a number already on the page (the ring's echo) - the bracket or the title re-fires",
+    "undraw": "the sentence has LEFT the chart's argument (E50) and the next thing is not a chart - the line unwinds to a datum or to nothing",
+    "figure": "the sentence TURNS on a number - the hand writes it at its datum's spot (a note when the datum has no room)",
+    "note": "the sentence adds a side fact the chart cannot show - a line of handwriting in the page's quiet zone",
+    "spread": "the sentence's argument IS the gap between two series (or a series and a rule) - the region bleeds full of ink",
+    "peel": "the sentence names a slice of a whole that LEAVES - the share page's slice peels off and goes blood red",
+    "chart_to": "the sentence needs the SAME data at another scale / with more of it / in another form / beside a card - the page changes state (E58; CHART_TO_WHEN names the verb); never a cut to a second chart of it",
+}
+CHART_TO_WHEN = {
+    "recast": "the same data in another form: keyed (n lines -> n bars by series, 'where the four stand today'; RECAST_PAIRS) or the hand-over (a line into the monthly bars, into a pie of the holders)",
+    "rescale": "the same series at another scale - 'since February', 'at full width': the window the story is about; never a window that drops the sentence's point",
+    "extend": "more of the same series ('and then May') or a later series of the same file ('then consumption') - drawn on at the pen",
+    "park": "room for the next thing beside the chart (a card, a second diagram); scale 1.0 is the UN-PARK when the cards leave; it moves no data and restarts no clock",
+    "morph": "a different LINE series in the same frame ('what the Fed charges against what America pays') - the area under the line becomes the target's by ARAP",
+}
+assert set(SPECIES_WHEN) == set(SPECIES_KINDS) and set(CHART_TO_WHEN) == set(CHART_TO_KINDS), "every kind carries a when (P50 T1)"
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
                                                                 # (a returning page keeps its retitle, its bracket standing); the gate credits no event before the span
