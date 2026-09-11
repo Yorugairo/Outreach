@@ -30,14 +30,17 @@ if str(SCRIPTS) not in sys.path:
 import ledger_page as LPG  # noqa: E402
 
 RUNTIME = 30.0
+THREAD_CUT = 15.0   # P50 T15 / HF-16: where the `thread-baseline` golden cuts from its line page to its bars page
 # the frame each surface is judged at - chosen so the thing under test is on screen and mid-motion
 FRAME_T = {
     "ledger-page-mid-build": 6.0,   # field filled, outline drawn, ink and bars building
     "chart-callout": 12.0,          # the line has drawn, all four badges have landed
+    "occluder-dock": 12.0,          # P50 T15 / HF-17: the card landed (4.0) and still, its lower half behind the plate's desk edge
     "ledger-soak-page": 2.7,        # mid-soak: stains spreading and overlapping (P43 T3 K-M ink is judged here)
     "dock-pair-16x9": 12.0,         # both cards up, badges landed
     "dock-pair-9x16": 12.0,
     "ledger-extend": 13.05,
+    "thread-baseline": 19.9,        # P50 T15 / HF-16: MID-CARRY - the wire from the line page standing while the bars page grows under it. The carried mark lives inside the page's chart <svg>, whose opacity the BUILD drives, so it becomes visible when the chart layer does (scene 2 at 15.0 + ROLL+SAVOR+FIELD+PUNCH = 19.4) and recedes from there over THREAD.FADE_S; 19.9 is half way through that, with two bars grown
     "press-stack": 11.4,            # P50 T3: all three cards landed (5.0 / 7.4 / 9.8 + LAND_S), the pile settled, and the underline on the third fully drawn (10.6 + SQUIG_DRAW)
     "chip-board": 11.0,             # P50 T2: all three chips landed (5.0 / 6.2 / 7.4 + LAND_S) and the middle one's X fully drawn (10.0 + CROSS_S) - the board as it is read
     "flow-swap": 12.6,              # P50 T4: the swap is over (11.0 + SWAP_OUT_S + SWAP_IN_S = 11.75), the new node stands where the old one did, both arrows and the year stamp are in
@@ -206,6 +209,41 @@ def ledger_keyed() -> tuple[dict, dict]:
         BST.derive_rescale_states(world, species, "ledger:golden-series:line;then=golden-bars:bars", ep)
     scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
     return _timeline("Golden: ledger keyed recast", scenes, {}, None), _base_uris()
+
+
+def thread_baseline() -> tuple[dict, dict]:
+    """P50 T15 / HF-16 - THE WIRE: TWO PAGES, and one element of the first still standing under the second.
+
+    The intake's HF-16 ("the three threads - the wire, the ruler, the protagonist chip - one continuous line as the
+    film's spine") against our own persistence rule: ours persists the PAGE, and this persists one MARK across a page
+    change. Scene 1 is the line page every other golden uses; scene 2 is a bars page of where those lines end, and its
+    plate id names `thread=s0` - the first line survives the cut and lies under the bars as ground, on the same stage
+    pixels it was drawn on.
+
+    Both halves are the shipped ones: the page specs are `ledger_page.build_spec`'s, the thread is put through the
+    compiler's own `thread_mark_error` against the page before it (the check the shot table would get), and the carry
+    is `species/thread.mjs` in the player. Judged MID-CARRY (FRAME_T 15.8): scene 2's roll-out is over, its cream is
+    building, it has drawn nothing of its own yet - and the wire is there, receding from the subject it was to the
+    ground line it becomes."""
+    import json
+    import build_scene_timeline_f as BST
+    series = LPG.load_series(SERIES)
+    page1 = LPG.build_spec(series, "line", None, "right")
+    page1["field"] = "scribble"
+    raw = json.loads(SERIES.read_text(encoding="utf-8"))
+    bars = {"title": "Where the four lines end", "sub": "index at the last point, 100 = Aug '25", "src": raw.get("src", ""), "unit": "",
+            "bars": [{"label": short, "value": round(float(sr["pts"][-1][1]), 1), "color": sr.get("color", "crimson")}
+                     for sr, short in zip(raw["series"], ("Memory", "Chips", "Mega-cap", "S&P 500"))]}
+    page2 = LPG.build_spec(bars, "bars", None, "right")
+    page2["field"] = "scribble"
+    world1 = {"kind": "ledger", "page": page1, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    err = BST.thread_mark_error(world1, "s0", "golden thread-baseline")
+    assert err is None, err
+    page2["thread"] = {"key": "s0", "from": "s01"}   # exactly what `;thread=s0` compiles to on the second row
+    scenes = [{"scene_id": "s01", "world": world1, "exit": "cut", "span": [0.0, THREAD_CUT], "docks": [], "species": []},
+              {"scene_id": "s02", "world": {"kind": "ledger", "page": page2, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [THREAD_CUT, RUNTIME], "docks": [], "species": []}]
+    return _timeline("Golden: the wire across a page boundary", scenes, {}, None), _base_uris()
 
 
 def tags_to_bars() -> tuple[dict, dict]:
@@ -444,6 +482,60 @@ def vecmap_arc() -> tuple[dict, dict]:
     return _timeline("Golden: the vector map, its arc and its stamps", scenes, {}, "9:16"), uris
 
 
+def png_cutout(w: int, h: int, rgb: tuple[int, int, int], shapes: list[tuple[float, float, float, float]]) -> bytes:
+    """A FOREGROUND LAYER: the named boxes opaque in `rgb`, every other pixel fully transparent (RGBA, colour
+    type 6). The alpha is the whole point of the layer, which is why the compiler embeds it raw - `data_uri`'s
+    capped path re-encodes through RGB and would flatten it."""
+    raw = bytearray()
+    for y in range(h):
+        line = bytearray(b"\x00")
+        for x in range(w):
+            hit = any(x0 * w <= x < x1 * w and y0 * h <= y < y1 * h for (x0, y0, x1, y1) in shapes)
+            line += bytes((*rgb, 255)) if hit else b"\x00\x00\x00\x00"
+        raw += line
+
+    def chunk(tag: bytes, data: bytes) -> bytes:
+        return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
+
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(bytes(raw), 9)) + chunk(b"IEND", b""))
+
+
+# P50 T15 / HF-17: the synthetic front of the golden's plate - a desk edge across the foot of the frame and the
+# post of a lamp beside it. A SHAPE, deliberately: what is under test is that the plate's front paints over the
+# card, not whether this particular cutout is beautiful (the operator judges the cue on a real beat).
+OCCLUDER_SHAPES = [(0.0, 0.62, 1.0, 1.0), (0.70, 0.30, 0.78, 0.66)]
+OCCLUDER_PLACE = {"x": 620, "y": 300, "w": 900, "h": 560}   # straddles BOTH shapes: the desk edge cuts its foot, the lamp post its right-hand side - one card, two occluders, no blur anywhere
+
+
+def occluder_dock() -> tuple[dict, dict]:
+    """P50 T15 / HF-17 - OCCLUSION IS THE DEPTH CUE: one card docked on a plate, and the plate's own FOREGROUND
+    layer painting over it.
+
+    The intake read Bravos's depth as occlusion where doc 29 had proposed a focus rack, and the operator has
+    preferred the wash to a rack since 2026-09-06; this is the third reading, built so it can be judged in a
+    frame instead of argued. The card lands at OCCLUDER_PLACE, which straddles the desk edge at 0.62 and the
+    lamp post beside it: the top of the card is in the room, the bottom is behind the desk. Nothing is blurred,
+    nothing is dimmed - the card is simply behind something.
+
+    The dock entry is the compiler's own (`dock_entry(behind=..., fg=...)`), the layer rides the asset map under
+    the key the compiler writes (`fg:<plate>:<layer>`), and the player mounts it above the docks and below the
+    species and caption layers. Judged with the card landed and still (FRAME_T 12.0)."""
+    import build_scene_timeline_f as BST
+    aid, layer = "plate-plain", "desk"
+    fg_key = f"{BST.FG_PREFIX}{aid}:{layer}"
+    dock = BST.dock_entry("ev-occluded-card", 0, 4.0, RUNTIME, 2, BST.DOCK_KIND_IMAGE, OCCLUDER_PLACE,
+                          None, None, False, behind=layer, fg=fg_key)
+    ev = {"ev-occluded-card": {"title": "The card behind the desk", "source": "P50 T15 HF-17", "species": "deck",
+                               "document": {"path": "golden", "sha256": "0" * 64}, "badges": _badges()[:2]}}
+    scenes = [{"scene_id": "s01", "world": {"asset_id": aid, "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [dock], "species": []}]
+    uris = _base_uris()
+    uris["ev-occluded-card"] = uri("image/png", png_solid(640, 400, (23, 105, 194)))
+    uris[fg_key] = uri("image/png", png_cutout(480, 270, (26, 31, 38), OCCLUDER_SHAPES))
+    return _timeline("Golden: the dock behind the plate's front", scenes, ev, None), uris
+
+
 def press_stack() -> tuple[dict, dict]:
     """P50 T3: THREE PRESS CARDS on a bare plate, stacking on three words (Bravos shots 5-10), the third carrying
     the underline on its quoted phrase (E56's one exception, the squiggle law §9.27).
@@ -509,6 +601,8 @@ SURFACES = {
     "dock-pair-9x16": lambda: _dock_pair("9:16"),
     "ledger-extend": ledger_extend,
     "ledger-keyed": ledger_keyed,
+    "occluder-dock": occluder_dock,
+    "thread-baseline": thread_baseline,
     "tags-to-bars": tags_to_bars,
     "chip-board": chip_board,
     "press-stack": press_stack,

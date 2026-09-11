@@ -44,3 +44,39 @@ def test_a_dock_entry_carries_its_reading_box_and_its_own_clock():
     assert "read_place" not in plain and plain["read_s"] == B.DOCK_READ_S and plain["park_s"] == B.DOCK_PARK_S, "without a read box: exactly as it was"
     short = B.dock_entry("dock-x", 0, 10.0, 11.0, 0, B.DOCK_KIND_IMAGE, PLACE, None, None, True, read_place=READ, read_s=1.54, park_s=0.7)
     assert short["park"] is False, "too short to hold both phases: the card stays at reading size"
+
+
+# ---- P50 T16 / R26-22: the card E50's clock centres reads and parks like any other ---------------
+import ledger_page as LPG  # noqa: E402
+import measure_page_boxes as MPB  # noqa: E402
+
+
+def _measured_world(builder: str = "story") -> dict:
+    return {"kind": B.SPECIES_LEDGER, "page": MPB.representative(builder)}
+
+
+def test_a_card_centred_by_e50s_clock_still_reads_then_parks():
+    """R26-22 changes WHERE a solo card goes, never the choreography it goes there with (E45): it
+    springs in at reading size, holds `read_s`, then shrinks and slides to its centred box."""
+    w = _measured_world()
+    assert B.solo_centre_by_clock(w, "9:16", 1, 0, 30.0, 20.0, {}) is True
+    place = B.page_place(w["page"], "9:16")
+    centred = B.centred_place(place, "9:16", 1.0, w["page"])
+    d = B.dock_entry("dock-x", 0, 30.0, 36.0, 0, B.DOCK_KIND_IMAGE, centred, None, None, True)
+    assert d["place"] == centred and d["centre"] is True
+    assert d["read_s"] == B.DOCK_READ_S and d["park_s"] == B.DOCK_PARK_S and d["park"] is True
+    assert centred != place, "the clock moved the card off the rectangle it would have parked at"
+
+
+def test_an_estimated_page_keeps_exactly_the_rectangle_the_estimate_cut(tmp_path):
+    """The conservative half. A page the fixture never measured is placed by `ledger_page`'s model,
+    unchanged - that is why the Tokyo and tariff cuts compile to the same bytes they did before T16."""
+    page = dict(MPB.representative("story"), title="A page nobody has measured")
+    saved = LPG.PAGE_BOXES_FIXTURE
+    LPG.PAGE_BOXES_FIXTURE = tmp_path / "no-such-fixture.json"
+    try:
+        by_estimate = B.page_place(page, "9:16")
+    finally:
+        LPG.PAGE_BOXES_FIXTURE = saved
+    assert B.page_place(page, "9:16") == by_estimate
+    assert B.solo_centre_by_clock({"kind": B.SPECIES_LEDGER, "page": page}, "9:16", 1, 0, 99.0, 0.0, {}) is False

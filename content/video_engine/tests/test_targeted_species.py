@@ -611,3 +611,73 @@ def test_a_cross_without_its_written_share_is_refused_by_the_other_half_of_the_b
     assert len(errs) == 1 and "carries no number" in errs[0], errs
     errs = B.validate_species([_cross(cells=[])], STILL, "ledger:exports:treemap")
     assert len(errs) == 1 and "'cells' must be a non-empty list" in errs[0], errs
+
+
+# ---- HF-17 (P50 T15): one foreground occluder on a world plate ------------------------------------------------------
+# "Occlusion beats blur as the depth cue" (the intake, against doc 29's open focus-rack proposal). A dock declares
+# `behind: "<layer>"`; the plate declares its fronts beside itself in `<plate>.layers.json`. The compiler's whole job
+# is that the layer EXISTS - the two ways this fails silently are a name the plate does not carry and a file that is
+# not on disk, and both end as a card that simply never got occluded and a frame nobody can explain.
+import json as _json  # noqa: E402
+
+
+def _plate_with_layers(tmp_path, layers: dict, write_files=True):
+    plate = tmp_path / "plate-desk.png"
+    plate.write_bytes(b"\x89PNG\r\n\x1a\n")
+    (tmp_path / "plate-desk.layers.json").write_text(_json.dumps({"foreground": layers}), encoding="utf-8")
+    if write_files:
+        for name in layers.values():
+            (tmp_path / name).write_bytes(b"\x89PNG\r\n\x1a\n")
+    return plate
+
+
+def test_behind_is_a_dock_option_and_the_plate_declares_its_fronts(tmp_path):
+    assert "behind" in B.DOCK_OPTS
+    assert B.dock_opts({"behind": "desk"}) == {"behind": "desk"}
+    for bad in ("", "  ", 3, True, None):
+        with pytest.raises(ValueError) as e:
+            B.dock_opts({"behind": bad})
+        assert "foreground layer" in str(e.value)
+    plate = _plate_with_layers(tmp_path, {"desk": "plate-desk.front.png", "lamp": "plate-desk.lamp.png"})
+    got = B.plate_layers(plate)
+    assert sorted(got) == ["desk", "lamp"] and got["desk"].name == "plate-desk.front.png"
+    assert B.plate_layers(tmp_path / "nothing.png") == {}, "a plate is not required to have a front"
+    (tmp_path / "plate-desk.layers.json").write_text("not json", encoding="utf-8")
+    assert B.plate_layers(plate) == {}, "a malformed sidecar is no layers, never a crash"
+
+
+def test_the_compiler_refuses_a_layer_the_plate_does_not_have(tmp_path):
+    plate = _plate_with_layers(tmp_path, {"desk": "plate-desk.front.png"})
+    layers = B.plate_layers(plate)
+    world = {"asset_id": "plate-desk", "sha256": "0" * 64}
+    assert B.behind_error(world, layers, "desk", "row 3 dock ev-x") is None
+    miss = B.behind_error(world, layers, "lamp", "row 3 dock ev-x")
+    assert miss and "is not a foreground layer of 'plate-desk'" in miss and "it declares desk" in miss
+    gone = _plate_with_layers(tmp_path, {"ghost": "plate-desk.ghost.png"}, write_files=False)
+    off = B.behind_error(world, B.plate_layers(gone), "ghost", "row 3 dock ev-x")
+    assert off and "which is not on disk" in off
+    for kind in ({"kind": B.SPECIES_LEDGER, "page": {}}, {"kind": B.VECMAP_KIND}, {"kind": B.SPECIES_CLIP, "asset_id": "clip"}):
+        drawn = B.behind_error(kind, layers, "desk", "row 3 dock ev-x")
+        assert drawn and "no front to hide a card behind" in drawn, kind
+
+
+def test_a_dock_entry_carries_behind_and_its_layer_key_only_when_the_row_asks():
+    d = B.dock_entry("ev-x", 0, 4.0, 20.0, 0, B.DOCK_KIND_IMAGE, {"x": 1, "y": 2, "w": 3, "h": 4},
+                     behind="desk", fg=f"{B.FG_PREFIX}plate-desk:desk")
+    assert d["behind"] == "desk" and d["fg"] == "fg:plate-desk:desk"
+    plain = B.dock_entry("ev-x", 0, 4.0, 20.0, 0)
+    assert "behind" not in plain and "fg" not in plain, "a build that never asks is byte-for-byte what it was"
+
+
+def test_the_golden_docks_one_card_behind_the_plates_own_front():
+    """The `occluder-dock` source, as committed: the layer rides the asset map under the key the compiler writes, the
+    dock names it, and the PNG carries an alpha channel - colour type 6 - because the whole layer is its alpha."""
+    import base64
+    sources = ROOT / "content/video_engine/tests/golden/sources"
+    tl = _json.loads((sources / "occluder-dock.timeline.json").read_text(encoding="utf-8"))
+    uris = _json.loads((sources / "occluder-dock.uris.json").read_text(encoding="utf-8"))
+    dock = tl["scenes"][0]["docks"][0]
+    assert dock["behind"] == "desk" and dock["fg"] == f"{B.FG_PREFIX}plate-plain:desk"
+    assert dock["fg"] in uris and uris[dock["fg"]].startswith("data:image/png;base64,")
+    png = base64.b64decode(uris[dock["fg"]].split(",", 1)[1])
+    assert png[:8] == b"\x89PNG\r\n\x1a\n" and png[25] == 6, "the foreground layer must be RGBA - its alpha IS the cutout"

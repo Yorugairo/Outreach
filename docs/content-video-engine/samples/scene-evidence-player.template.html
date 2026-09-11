@@ -414,6 +414,15 @@
     filter: drop-shadow(-12px 16px 20px rgba(0,0,0,.42));
   }
 
+  /* HF-17 (P50 T15) - THE FOREGROUND LAYER. A world plate may declare a cutout that belongs IN FRONT of
+     everything that lands on it; a dock that names it (`behind: "<layer>"`) is occluded by it. Occlusion is
+     the depth cue, not blur (the intake's HF-17 against doc 29's open focus-rack proposal; the operator has
+     preferred the wash to a rack since 2026-09-06). It carries the WORLD's own transform, because it is part
+     of the plate - the Ken Burns, the idle and the camera move it with the ground it stands on - and it sits
+     above the docks and below #species and #caption: the card goes behind the object, the annotation and the
+     viewer's own layer never do (E59: Z5 is the viewer's layer). */
+  #fgover { position: absolute; inset: -5%; background-size: cover; background-position: center;
+            opacity: 0; pointer-events: none; z-index: 7; will-change: transform, opacity; }
   #seam { position: absolute; top: 0; bottom: 0; width: 6px; background: var(--charcoal); box-shadow: 0 0 22px rgba(5,19,30,.9); opacity: 0; z-index: 45; }
   /* The curtain experiment (2026-08-29) is RETIRED: an opaque panel
      sweeping the stage reads as a blackout blink at every boundary. The
@@ -531,6 +540,7 @@
     <div class="rail" id="r2"></div>
   </div>
 
+  <div id="fgover" aria-hidden="true"></div>
   <div id="seam"></div>
   <svg id="species" viewBox="0 0 1920 1080" aria-hidden="true"></svg>
   <div id="caption"></div>
@@ -1128,6 +1138,78 @@
     const per = 1 / (Math.max(1, n | 0) + 1.6 - 1);
     return span01((write - j * per) / (per * 1.6));
   };
+  /* KINETICS:END */
+  /* KINETICS:BEGIN thread */
+  /* species/thread.mjs - THE WIRE (P50 T15, HF-16: "the three threads - the wire, the ruler, the protagonist chip -
+     one continuous line as the film's spine"). SOURCE OF TRUTH, inlined into the scene-evidence player by
+     sync_kinetics.py between KINETICS:BEGIN thread and KINETICS:END. It imports nothing, and its region sits with the
+     kinetics laws rather than in the species block at the foot of the file, for span.mjs's reason: a PAGE species'
+     math is called by the page's build, which is written hundreds of lines above the species block.
+
+     WHEN: two pages in a row are the same argument, and ONE element of the first belongs under the second - the
+     holdings baseline still lying under the Meta bars. Our pages already persist a topic (s9.15); what HF-16 names
+     is a single element that persists across a CUT, so the second world reads as the first one continued rather
+     than as a new subject.
+
+     THE GRAMMAR, and why it is the plate id's. A `chart_to extend` cannot do this: a species lives on ONE scene and
+     addresses that scene's own `world.page_states`, which are built from the SAME series file - it has no way to name
+     a mark on the world before it. Crossing the boundary inside `extend` would mean teaching species to reach into
+     another scene, which is a far bigger mechanism than the thing it buys. So the thread is declared where the page
+     itself is declared, on the ARRIVING page's plate id: `;thread=<mark key>` - "this page starts with that mark
+     already on it". It needs no new species, it survives every entry the page can make (cut, mount, spiral), and it
+     reads in the shot table as what it is: a property of the page, not an event in it.
+
+     THE CARRY, and why it is a similarity. The mark survives the cut by staying WHERE IT WAS ON THE STAGE. Both
+     pages draw inside an <svg> whose viewBox is fitted into the page's chart box, so each page is one similarity
+     from its own drawing units to stage pixels (`threadFit` - the browser's own preserveAspectRatio="xMidYMid meet":
+     uniform scale, centred). The carry is therefore source-fit -> stage -> target-fit-inverse, one composition of two
+     similarities (`threadCarry`), and the points it returns are the SAME PIXELS the outgoing page drew, expressed in
+     the incoming page's units so that everything the page does afterwards - the park, a rescale's transform, the
+     camera - carries the wire with it.
+
+     THE POSE is a pure function of t and has one job: the wire is ALREADY DRAWN when the page arrives (that is the
+     whole point - it did not come from anywhere), and it recedes to a ground line over FADE_S so the new page's own
+     ink reads on top of it. Nothing draws on and nothing is re-timed: `threadPose` runs on the page's own clock, not
+     a second one. The dials below are ours to tune (42 s42.5), not findings. */
+
+  const THREAD = Object.freeze({
+    ALPHA: 0.34,      /* what the carried mark settles at: present enough to be the same line, faint enough that the new page's ink is the subject */
+    FROM: 0.85,       /* ... and what it starts at on the page's first frame - it was the SUBJECT one frame ago, so it does not appear already dimmed */
+    FADE_S: 0.9,      /* the recede, over the new page's cream: the wire is handed over, not cut away */
+    WIDTH: 0.62,      /* its stroke, as a share of the width the source drew it at: a ground line is thinner than an argument */
+    MIN_PTS: 2,       /* fewer than two points is not a line, and nothing is carried */
+  });
+
+  const th01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* THE FIT of one chart: its viewBox (vw x vh) contained in its stage box, uniform scale, centred. */
+  const threadFit = (box, vw, vh) => {
+    const s = Math.min(box.w / Math.max(1e-6, vw), box.h / Math.max(1e-6, vh));
+    return { s, tx: box.x + (box.w - vw * s) / 2, ty: box.y + (box.h - vh * s) / 2 };
+  };
+
+  /* a point in a chart's own units -> stage px, and back: each other's inverse to the bit */
+  const threadToStage = (fit, p) => [fit.s * p[0] + fit.tx, fit.s * p[1] + fit.ty];
+  const threadToLocal = (fit, q) => [(q[0] - fit.tx) / fit.s, (q[1] - fit.ty) / fit.s];
+
+  /* THE CARRY: the outgoing page's polyline, in the incoming page's units, standing on the same pixels. */
+  const threadCarry = (pts, srcFit, dstFit) => {
+    if (!Array.isArray(pts) || pts.length < THREAD.MIN_PTS) return null;
+    return pts.map((p) => threadToLocal(dstFit, threadToStage(srcFit, p)));
+  };
+
+  /* the stroke width that carries with it: the source's width through both fits, thinned to a ground line */
+  const threadWidth = (w, srcFit, dstFit) => Math.max(1, (+w || 4) * (srcFit.s / Math.max(1e-6, dstFit.s)) * THREAD.WIDTH);
+
+  /* THE POSE at the page's own clock: already drawn at the first frame, receding to a ground line. */
+  const threadPose = (tr) => {
+    const k = th01((+tr || 0) / THREAD.FADE_S);
+    return { drawn: 1, alpha: THREAD.FROM + (THREAD.ALPHA - THREAD.FROM) * k };
+  };
+
+  /* the path data for a carried polyline - a plain polyline, because it IS the line that was drawn, not a new curve */
+  const threadPath = (pts) => (!pts || pts.length < THREAD.MIN_PTS) ? ""
+    : pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(2) + " " + p[1].toFixed(2)).join(" ");
   /* KINETICS:END */
   /* KINETICS:BEGIN tiers */
   /* species/tiers.mjs - N-TIER PAGES (P50 T9; BACKLOG R26-24; Bravos shots 35-36's two-panel SPR).
@@ -5878,10 +5960,47 @@
       r.glyphs.forEach((g, j) => g.style.setProperty("--w", eraseFactor(n, j, ue).toFixed(3)));
     }
   };
+  /* HF-16 (P50 T15) - THE WIRE, in the player. The arriving page's plate id named a mark on the page BEFORE it
+     (`;thread=<mark key>`); this builds that mark into the new page's own chart, standing on the pixels it already
+     stood on, as GROUND under everything the page is about to draw. It runs ONCE per page state - the carry is a
+     similarity, not a per-frame decision - and after that the wire is an ordinary keyed mark on this page, riding
+     its park, its rescale and the camera with the rest of it. A source the player cannot find (a thread named
+     across a non-page, a mark that page never drew) leaves the page exactly as it would have been: the compiler
+     refuses those at build time, and the player never guesses. */
+  /* an <svg> has no offsetLeft: the chart's box is its CSS box, which both layouts set explicitly (portrait in px,
+     landscape in %) and which getComputedStyle resolves to used pixels against the stage-sized .lp. It carries NO
+     transform, so the carry is the same number whatever the page happens to be doing when it is computed. */
+  const lpChartBox = (ch) => { const cs = getComputedStyle(ch);
+    return { x: parseFloat(cs.left) || 0, y: parseFloat(cs.top) || 0, w: parseFloat(cs.width) || 0, h: parseFloat(cs.height) || 0 }; };
+  const lpThreadSource = (from) => {
+    for (const id of ["wA", "wB"]) { const s = ledgerState.get(id + "|" + from); if (s && s.chart && s.chart.isConnected) return s; }
+    return null;
+  };
+  const lpThread = (st, scene) => {
+    st.thread = { el: null };   /* set FIRST: a page whose source is not there tries once, not every frame */
+    const th = (scene.world.page || {}).thread;
+    if (!th || !th.key) return;
+    const src = lpThreadSource(th.from);
+    const mk = src && src.markBy ? src.markBy[th.key] : null;
+    if (!mk || !mk.geom || !Array.isArray(mk.geom.pts) || !src.geom || !st.geom) return;
+    const sb = lpChartBox(src.chart), db = lpChartBox(st.chart);
+    if (!(sb.w > 0 && sb.h > 0 && db.w > 0 && db.h > 0)) { st.thread = null; return; }   /* not laid out yet: try again next frame */
+    const sf = threadFit(sb, src.geom.W, src.geom.H);
+    const df = threadFit(db, st.geom.W, st.geom.H);
+    const pts = threadCarry(mk.geom.pts, sf, df);
+    if (!pts) return;
+    const sw = parseFloat(getComputedStyle(mk.el).strokeWidth) || 4;
+    const p = lpEl("path", "ser thread", st.chart, { d: threadPath(pts), fill: "none", stroke: mk.geom.col || "#aeb6be",
+      "stroke-width": threadWidth(sw, sf, df).toFixed(2), "stroke-linecap": "round", "stroke-linejoin": "round", opacity: 0 });
+    st.chart.insertBefore(p, st.chart.firstChild);   /* the wire is GROUND: the new page's ink reads on top of it */
+    lpMark(st, "thread:" + th.key, "line", p, { pts, vals: mk.geom.vals || [], len: 0, k0: 0, muted: true, col: mk.geom.col, thread: true });
+    st.thread.el = p;
+  };
   const paintLedger = (el, scene, t) => {
     const st = ledgerState.get(el.id + "|" + scene.scene_id) || buildLedger(el, scene);
     const pg = scene.world.page || {};
     if (!st.root.isConnected) { el.querySelectorAll(".lp").forEach((x) => x.remove()); el.appendChild(st.root); }
+    if (!st.thread) lpThread(st, scene);   /* HF-16: after the page is in the DOM, so both charts have a layout box */
     const morphOn = pg.enter === "morph" && kin("arap_morph"), morphS = morphOn ? (pg.morph_s || MORPH.S) : 0;   /* P47 T3: the prop becomes the chart */
     const built = pg.enter === "built";   /* arrives with its chart drawn: the span is all deployed life, the idle keeps it alive */
     const snap = pg.enter === "snap";   /* the third watch: the thrown card BECOMES the world - the page arrives built and grows from the card's rectangle to the stage over SNAP_S */
@@ -5899,6 +6018,10 @@
     const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || camIn || built || thrown || dropped) ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : mount ? LP.ROLL - mountS : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2): its cream builds over mount_s, then the SAVOR holds the empty page before the ink; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
     /* beat 1: roll-out */
     const rk = (mount || morphOn || snap) ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) with the cream steps */
+    /* HF-16: the wire recedes from the instant the CHART layer comes up - the build drives that layer's opacity, so a
+       recede timed from the scene's first frame would be over before any of it had been seen. `tr` is the page's own
+       clock with every entry already folded into it, so this stays a pure function of t. */
+    if (st.thread && st.thread.el) st.thread.el.setAttribute("opacity", threadPose(tr - (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH)).alpha.toFixed(3));
     const mu = mount ? clamp01((t - scene.span[0]) / mountS) : 1;
     const lpDance = (u) => { if (u >= 1) return 1; const k = Math.floor(u * MOUNT_STEPS), f = u * MOUNT_STEPS - k; return (k + clamp01((f - 0.5) / 0.5)) / MOUNT_STEPS; };
     const mk = mount ? Math.floor(mu * MOUNT_STEPS) / MOUNT_STEPS : 1;
@@ -7513,6 +7636,13 @@
       ? `inset(0 0 0 ${(1-wk)*100}%)` : `inset(0 ${(1-wk)*100}% 0 0)`;
     paint(wA, prev || sc);
     paint(wB, sc);
+    /* HF-17: the plate's foreground, over the cards. One layer per scene - a plate has one front - and it is up
+       exactly while the dock that declared it is up, so a scene with no occluded dock costs nothing. */
+    { const fgEl = document.getElementById("fgover");
+      const fgD = (sc.docks || []).find((d) => d && d.fg && A[d.fg] && t >= +d.enter && t <= +d.exit);
+      if (fgD) { if (fgEl.dataset.src !== fgD.fg) { fgEl.style.backgroundImage = 'url("' + A[fgD.fg] + '")'; fgEl.dataset.src = fgD.fg; }
+                 fgEl.style.transform = wB.style.transform; fgEl.style.opacity = "1"; }
+      else fgEl.style.opacity = "0"; }
     { const blur = camArr ? SNAP_BLUR * 4 * camArr.u * (1 - camArr.u) : 0;   /* the whoosh rides the arrival's speed (the snap's own envelope) */
       wA.style.filter = blur > 0.2 ? "blur(" + blur.toFixed(2) + "px)" : ""; }
     /* THE BLURZOOM (E47 #1). wB always carries the scene the frame is showing, so the outgoing magnification and

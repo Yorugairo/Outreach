@@ -1198,3 +1198,77 @@ def test_a_park_to_full_size_grows_the_chart_back_from_the_standing_park():
         assert not errs, errs
     finally:
         close()
+
+
+# ---- HF-16 (P50 T15): THE WIRE - one mark carried across a page BOUNDARY -------------------------------------------
+# The grammar question the slice had to answer: `chart_to extend` across a page boundary, or `;thread=<mark key>` on the
+# arriving page's plate id? It is the plate id's, and these tests say why in code: `extend` addresses `page_states`,
+# every one of which is derived from the SAME series by `derive_rescale_states`, so there is no reachable name for a
+# mark on the world BEFORE this one. The thread is a property of the arriving page, and the compiler checks it against
+# the page that hands it over.
+
+THREAD_LINE_PAGE = {"kind": B.SPECIES_LEDGER, "page": {"builder": "dense-line", "title": "Japan's holdings",
+                                                       "series": [{"name": "Japan", "pts": [[0, 1], [1, 2]]},
+                                                                  {"name": "China", "pts": [[0, 3], [1, 4]]}],
+                                                       "axes": {"hlines": [0]}}}
+THREAD_BARS_PAGE = {"kind": B.SPECIES_LEDGER, "page": {"builder": "story", "title": "Where they end", "values": [1, 2, 3]}}
+
+
+def test_a_thread_is_a_plate_option_on_the_ARRIVING_page_not_a_species():
+    """`;thread=s0` puts the mark on the page's own spec; `from` is filled by the build loop with the scene before it.
+    Nothing about it is a species, so it needs no window, no target and no species slot on the row."""
+    bare, opts = B.split_plate_opts("ledger:ev-meta-yield-v1:bars;thread=s0")
+    assert bare == "ledger:ev-meta-yield-v1:bars" and opts == {"thread": "s0"}
+    assert "thread" in B.PLATE_OPTS
+    assert B.THREAD_KEY_RE.match("s0") and B.THREAD_KEY_RE.match("b:12") and B.THREAD_KEY_RE.match("rule:1")
+    for bad in ("s", "b:", "series0", "title", "thread"):
+        assert not B.THREAD_KEY_RE.match(bad), bad
+    with pytest.raises(ValueError) as e:
+        B._check_opt("thread", "title", "'ledger:x:bars;thread=title'")
+    assert "is not a mark key" in str(e.value)
+
+
+@pytest.mark.parametrize("prev, key, needle", [
+    (None, "s0", "not a ledger page"),
+    ({"asset_id": "plate-plain"}, "s0", "not a ledger page"),
+    (THREAD_LINE_PAGE, "s7", "never drew that mark"),
+    (THREAD_LINE_PAGE, "rule:3", "never drew that mark"),
+    (THREAD_BARS_PAGE, "b:9", "never drew that mark"),
+    (THREAD_LINE_PAGE, "wibble", "not a mark key this build can check"),
+])
+def test_the_compiler_refuses_a_wire_the_page_before_it_never_drew(prev, key, needle):
+    err = B.thread_mark_error(prev, key, "shot row 4 (12.0-20.0s) 'ledger:x:bars;thread=%s'" % key)
+    assert err and needle in err, err
+
+
+@pytest.mark.parametrize("prev, key", [(THREAD_LINE_PAGE, "s0"), (THREAD_LINE_PAGE, "s1"),
+                                       (THREAD_LINE_PAGE, "rule:0"), (THREAD_BARS_PAGE, "b:2")])
+def test_a_wire_the_page_before_it_did_draw_is_accepted(prev, key):
+    assert B.thread_mark_error(prev, key, "row 4") is None
+
+
+def test_only_a_page_may_carry_a_wire_and_it_rides_the_page_spec():
+    """A wire is one mark OF A PAGE handed to the next page: a drawn world that is not a page has no marks to give
+    and none to receive. The vector map is the nearest thing to a counter-example - it is drawn, it has species -
+    and it is refused by name."""
+    with pytest.raises(ValueError) as e:
+        B.world_for_plate("vecmap:IRN,USA,CHN;thread=s0", (0, 0, 0), None)
+    assert "LEDGER PAGE option" in str(e.value)
+    page = B.world_for_plate("ledger:ev-japan-holdings-v1:line;thread=s0", (0, 0, 0), EP)
+    assert page["page"]["thread"] == {"key": "s0"}, "the build loop fills `from` with the scene before it"
+
+
+def test_the_golden_carries_the_wire_and_e50s_clock_does_not_restart():
+    """The `thread-baseline` source, as committed: two scenes, and the second page starts with the first page's s0
+    already on it. E50 dates a page by its LAST data mark and M21 measures the deployed life from there; the wire
+    arrives on the second page's FIRST frame, so it is one more data mark on that page and can never be its latest -
+    the deployed clock the gate reads is the new page's own build, unchanged."""
+    tl = json.loads((RB.SOURCES / "thread-baseline.timeline.json").read_text(encoding="utf-8"))
+    s1, s2 = tl["scenes"]
+    assert s1["world"]["page"]["builder"] == "dense-line" and s2["world"]["page"]["builder"] == "story"
+    assert s2["world"]["page"]["thread"] == {"key": "s0", "from": s1["scene_id"]}
+    assert B.thread_mark_error(s1["world"], "s0", "golden") is None
+    assert "thread" not in s1["world"]["page"], "the wire belongs to the page that RECEIVES it"
+    import gate_motion_density as MG
+    land = float(s2["span"][0]) + MG._page_land_offset(s2)
+    assert land > float(s2["span"][0]), "the second page still has its own build to run - the wire did not replace it"

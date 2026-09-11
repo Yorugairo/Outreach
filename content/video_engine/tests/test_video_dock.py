@@ -596,3 +596,52 @@ def test_the_parking_card_is_the_same_frame_in_two_browsers(tmp_path: Path):
     assert a[0] == b[0] == RB.STAGE["9:16"]
     assert hashlib.sha256(a[1]).hexdigest() == hashlib.sha256(b[1]).hexdigest(), (
         "the parking card differs between two renders of the same t - the move is not pure in t")
+
+
+# ---- P50 T16: one placement truth - every placer cuts its bands from the same boxes --------------
+import itertools  # noqa: E402
+
+import ledger_page as LPG  # noqa: E402
+import measure_page_boxes as MPB  # noqa: E402
+
+PLACE_CASES = list(itertools.product(MPB.BUILDERS, MPB.ASPECTS))
+
+
+def _overlap(a: dict, b: dict) -> float:
+    w = min(a["x"] + a["w"], b["x"] + b["w"]) - max(a["x"], b["x"])
+    h = min(a["y"] + a["h"], b["y"] + b["h"]) - max(a["y"], b["y"])
+    return max(0, w) * max(0, h)
+
+
+@pytest.mark.parametrize("builder, aspect", PLACE_CASES)
+def test_a_dock_on_a_measured_page_never_covers_the_chart_the_player_drew(builder, aspect):
+    """E45 §1 against the PLAYER's own boxes, not against an estimate of them (R26-27): on every
+    measured page, at both aspects, the parked card clears the plot, the source line, the badge rail
+    and the caption's anchor - and sits inside one of the bands `free_bands` cut."""
+    page = MPB.representative(builder)
+    boxes = LPG.page_boxes(page, aspect)
+    assert boxes["measured"] is True, f"{builder} {aspect}: the fixture should hold this page"
+    place = B.page_place(page, aspect)
+    if place is None:
+        pytest.skip(f"{builder} {aspect}: no band wide enough for a card - the dock keeps its solo geometry")
+    for forbidden in ("plot", "source", "rail", "caption_anchor"):
+        assert _overlap(place, boxes[forbidden]) == 0, (
+            f"{builder} {aspect}: the card {place} covers the {forbidden} {boxes[forbidden]}")
+    bands = B.free_bands(boxes)
+    assert any(_overlap(place, bd) == place["w"] * place["h"] for bd in bands), (
+        f"{builder} {aspect}: the card {place} is not wholly inside any free band {bands}")
+
+
+@pytest.mark.parametrize("builder, aspect", PLACE_CASES)
+def test_the_parked_card_and_the_centred_card_read_the_same_bands(builder, aspect):
+    """The two placers cannot disagree: `page_place` and `centred_place` both cut `free_bands` out of
+    the same `page_boxes`, so a centred card lands in a band the parked card could also have used."""
+    page = MPB.representative(builder)
+    place = B.page_place(page, aspect)
+    if place is None:
+        pytest.skip(f"{builder} {aspect}: no band wide enough for a card")
+    bands = B.free_bands(LPG.page_boxes(page, aspect))
+    centred = B.centred_place(place, aspect, 1.0, page)
+    assert any(bd["y"] - 1 <= centred["y"] and centred["y"] + centred["h"] <= bd["y"] + bd["h"] + 1
+               for bd in bands if bd["band"] in ("above", "below", "foot")), (
+        f"{builder} {aspect}: the centred card {centred} is in none of {bands}")

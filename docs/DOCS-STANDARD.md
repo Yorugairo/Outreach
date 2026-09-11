@@ -13,9 +13,9 @@ item, a quote, a table row or a fence.
 
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
-| Research (`docs/research/**`) | 15 | 297 | 95.6% | 92.6% | 3 | 98.0 |
-| Process (everything else) | 281 | 3178 | 97.6% | 91.7% | 11 | 100.0 |
-| All docs | 296 | 3475 | 97.4% | 91.8% | 14 | 100.0 |
+| Research (`docs/research/**`) | 17 | 328 | 95.1% | 93.0% | 3 | 97.0 |
+| Process (everything else) | 287 | 3207 | 97.6% | 91.8% | 11 | 100.0 |
+| All docs | 304 | 3535 | 97.4% | 91.9% | 14 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -44,7 +44,7 @@ item, a quote, a table row or a fence.
 
 ## Appendix A - sections missing a lead line
 
-Non-exempt sections whose first real line is under 40 characters (89).
+Non-exempt sections whose first real line is under 40 characters (92).
 
 - `content/video_engine/projects/martial-matters/pilots/marshall-monday-001/script-draft.md:1` Why Rap Violence is Actually a Sign of Peace | Marshall Matters Ep. 1
 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:13` Titles & Click Contracts
@@ -100,11 +100,14 @@ Non-exempt sections whose first real line is under 40 characters (89).
 - `docs/research/2026-07-26-product-strength-competitive-research.md:374` Layer 3: methodology and export
 - `docs/research/2026-07-28-accretive-revenue-assessment.md:287` 6. 30 / 60 / 90
 - `docs/research/2026-08-22-agent-design-tooling-assessment.md:1` Agent-Native Design Tooling: Buy, Borrow, or Build
+- `docs/research/markets/TREASURY_YIELD_SPIKE_SEPTEMBER_2026_RESEARCH_BLUEPRINT.md:62` 3. Transmission into Equities, Housing, and Corporate Credit
 - `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:16` 1. Hard cut
 - `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:23` 3. Wipe
 - `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:26` 4. Push
 - `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:33` 6. World-persists
 - `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:36` 7. Other
+- `docs/research/tech/VIDEO_ENGINE_TOOLING_AND_MCP_BLUEPRINT.md:87` A. Flubber (Topological Vector Shape Morphing)
+- `docs/research/tech/VIDEO_ENGINE_TOOLING_AND_MCP_BLUEPRINT.md:93` B. SVGO (SVG Path Optimization & Decimal Precision)
 - `docs/run-centric-schema-notes.md:1` Run-Centric Schema Notes
 - `docs/run-centric-schema-notes.md:51` What remains entity-centric
 - `docs/runbooks/PRP_EXECUTION.md:2` PRP Execution

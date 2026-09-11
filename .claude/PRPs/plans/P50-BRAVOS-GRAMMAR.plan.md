@@ -408,7 +408,7 @@ Acceptance:
 - Evidence: `kinetics/clothoid.mjs` (290) + `tests/kinetics/clothoid.test.mjs` (210): the segment with end tangents by the Fresnel series, the S-fit G2 at the join, the curvature monotone along the segment where the Bezier of the same ends inflects; its region in the template after `stroke`; the flow diagram's arrows are its first customer (the flow-swap golden). Doc 42 s42.4 carries the status line.
 
 ### T15: The continuity three - arriving from the edge, the three threads, the occlusion cue (HF-15, HF-16, HF-17)
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: parent (authoring + the frames); `junior_developer` for the compiler checks
 - Depends on: T1
 - Write set: HF-15 - a camera key law (E59 reason 2): the next region is visible at the frame edge BEFORE the move (a
@@ -419,10 +419,10 @@ Acceptance:
   cutout paints over it: the depth cue by occlusion, not blur - judged by eye); tests; one Tokyo or tariff beat each.
 - Acceptance: each of the three on one real beat, read in frames by the operator; the gate rows that read them.
 - Validate: the camera, transitions and gate suites
-- Evidence: pending
+- Evidence: HF-15: `camera_edge_errors` in `validate_camera` evaluates the previous key's frustum (the gate's M24 mirror of camera.mjs) and refuses a key whose target is wholly off-frame, naming the key's t and the distance; the vecmap IRN -> USA move passes at 1.35x (two thirds of the USA in frame) and is refused at 2.6x (`test_camera.py` +95). HF-16: `;thread=<mark key>` on the ARRIVING page's plate id (a species addresses one scene's states; the wire is a property of the page - "this page starts with that mark already on it" - and survives a cut, a mount or a spiral); the compiler checks the key against the page that hands it over; `species/thread.mjs` (70; 8 node tests to 1e-9) composes the two fits so the mark stands on the SAME stage pixels after the cut; E50's clock does not restart (the wire is the page's first mark, never its latest); golden `thread-baseline`. HF-17: `behind: "<layer>"` on the dock with the plate's fronts in a sidecar `<plate>.layers.json` (`{"foreground": {"desk": "...png"}}`) - the compiler refuses an undeclared layer or a missing file and embeds the PNG raw (the capped data_uri path drops the alpha); painted above the docks and below the species and caption layers; golden `occluder-dock`. The parent's run: sync 22 modules (12 + 10); node 215/215; 392 across page boxes, read->park, video dock, camera, transitions, goldens (byte-identical), sync, gate, portrait parity, species, lint, kit. The 6-up read by the parent. Open: the wire becomes visible when the chart layer does, not on the page's first cream frame (a doctrine call, R26-44); HF-17 is judged by eye on a real beat.
 
 ### T16: One placement truth (R26-22, R26-27)
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: `junior_developer`
 - Depends on: none
 - Write set: `build_scene_timeline_f.py` (`page_boxes` measured from the player's own layout once per aspect and
@@ -432,7 +432,7 @@ Acceptance:
 - Acceptance: a row that names no `centre_y` lands where the player draws the band; the Tokyo and tariff cuts are
   byte-identical (they name their centres).
 - Validate: `python -m pytest content/video_engine/tests/test_dock_read_park.py content/video_engine/tests/test_video_dock.py -q` + the two builds' gates
-- Evidence: pending
+- Evidence: `measure_page_boxes.py` (266) -> `assets/page-boxes.v1.json` (five builders x two aspects, keyed by the page's INK - `ledger_page.page_ink_key`: builder, title, sub / source first clause, rail count, ylabel, quiet zone - because a page's boxes are a pure function of its ink and a fixture keyed by builder alone would hand page B the boxes measured from page A); `page_boxes` reads a measured page and keeps the estimate for one not on file, the build saying so; the solo card auto-centres only on a MEASURED page (centring against an estimate is what put the tea cup on the chart); `tests/test_page_boxes.py` (204), `test_dock_read_park.py` (+36), `test_video_dock.py` (+49). The portrait dense-line page: the plot {215, 568, 607, 618} where the estimate said {230, 564, 580, 624}; the free band below the plot {80, 1186, 800, 44}; the story page's below-band y 1136 h 94 vs the estimate's y 1188 h 42; every 16:9 box 50-120 px off. The byte-identical proof on both shorts against the T0 baselines (the agent twice, the parent once on Tokyo): IDENTICAL on every artifact (GATES-MOTION differs by the new M25 / M26 rows only). Frames: the same row by the estimate (no band fits, the card covers the chart) and by the fixture (centred in the measured band, the chart readable). Open: the approved shorts' pages are not on file - measuring them moves four dock rectangles and flips two docks to E50-centred, a re-cut of approved work; the treemap squarifies into the plot it feeds (`--passes 2` converges it).
 
 ## Verification
 

@@ -307,3 +307,98 @@ def test_the_arrival_box_is_the_card_as_it_stands_once_it_has_a_body():
         assert not p.errs, p.errs
     finally:
         p.close()
+
+
+# ---- HF-15 (P50 T15): the next region is visible at the frame's edge BEFORE the move (E59 reason 2) ----------------
+
+VECMAP_PLATE = "vecmap:IRN,USA,CHN"
+# species/vecmap.mjs `mapFit` / `focusBox`, mirrored here so the test's keys are the REAL places on the
+# real stage and not invented fractions: the focus set's bbox padded by VECMAP.PAD, fit inside the stage
+# less VECMAP.MARGIN of its short side, one similarity (sx === sy).
+VECMAP_PAD, VECMAP_MARGIN, VECMAP_ZOOM_MAX = 18.0, 0.055, 4.2
+
+
+def _map_fit(ids, sw, sh):
+    m = world = B.world_map()
+    bs = [world["countries"][a]["bbox"] for a in ids]
+    x0 = min(b[0] for b in bs) - VECMAP_PAD; y0 = min(b[1] for b in bs) - VECMAP_PAD
+    w = max(b[2] for b in bs) - x0 + VECMAP_PAD; h = max(b[3] for b in bs) - y0 + VECMAP_PAD
+    mg = VECMAP_MARGIN * min(sw, sh)
+    k = min(VECMAP_ZOOM_MAX, (sw - 2 * mg) / w, (sh - 2 * mg) / h)
+    return k, sw / 2 - k * (x0 + w / 2), sh / 2 - k * (y0 + h / 2), m
+
+
+def _country_region(a3, ids=("IRN", "USA", "CHN"), aspect="9:16"):
+    """A country's box on the stage, as the `region` target a camera key names (stage fractions 0..1)."""
+    sw, sh = (1080.0, 1920.0) if aspect == "9:16" else (1920.0, 1080.0)
+    k, tx, ty, world = _map_fit(ids, sw, sh)
+    bb = world["countries"][a3]["bbox"]
+    return {"kind": "region", "x0": (k * bb[0] + tx) / sw, "y0": (k * bb[1] + ty) / sh,
+            "x1": (k * bb[2] + tx) / sw, "y1": (k * bb[3] + ty) / sh}
+
+
+def _two_key_map(zoom, aspect="9:16"):
+    """The map composition E59 reason 2 exists for: one move between two focal points on a stage wider
+    than the frame - Iran, then the United States - at a named zoom."""
+    return {"keys": [{"t": 0.0, "zoom": zoom, "look": _country_region("IRN", aspect=aspect)},
+                     {"t": 4.0, "zoom": zoom, "look": _country_region("USA", aspect=aspect), "at": [0.5, 0.5]}],
+            "attention": "locked"}   # the second key names `at`: a key with no `at` is a zoom IN PLACE, not a move
+
+
+def test_a_map_move_passes_when_the_next_country_is_partly_in_frame():
+    """At 1.35x the frame Iran holds runs x[196..996] and the United States sits at x[79..394]: two
+    thirds of it is already on screen when the move starts. The region ARRIVES - HF-15's whole point."""
+    cam = _two_key_map(1.35)
+    fr = B.MG.camera_frustum(B.MG.camera_state_at({"camera": cam}, 0.0, 1080.0, 1920.0, None), 1080.0, 1920.0)
+    usa = B._cam_key_box(cam["keys"][1]["look"], 1080.0, 1920.0)
+    assert 0.4 < B.MG._visible_share(fr, usa) < 1.0, (fr, usa)
+    assert B.validate_camera(cam, VECMAP_PLATE, "9:16") == []
+    assert B.camera_edge_errors(cam, VECMAP_PLATE, "9:16") == []
+    assert B.validate_camera_row(cam, [], VECMAP_PLATE, "9:16") == []
+
+
+def test_a_map_move_is_refused_when_the_next_country_is_wholly_off_frame():
+    """At 2.6x the frame runs x[466..881] and the United States ends at 394: nothing of it is on screen
+    when the move begins, so for four seconds the viewer watches empty ocean and the country arrives from
+    nowhere. The message names the key's t, the frame, the target and the gap."""
+    cam = _two_key_map(2.6)
+    fr = B.MG.camera_frustum(B.MG.camera_state_at({"camera": cam}, 0.0, 1080.0, 1920.0, None), 1080.0, 1920.0)
+    assert B.MG._visible_share(fr, B._cam_key_box(cam["keys"][1]["look"], 1080.0, 1920.0)) == 0.0
+    errs = B.validate_camera(cam, VECMAP_PLATE, "9:16")
+    assert len(errs) == 1, errs
+    msg = errs[0]
+    assert "camera key 1 (t=4.00s)" in msg and "wholly off-frame at key 0 (t=0.00s)" in msg
+    assert "px past the left edge" in msg and "E59 reason 2 / HF-15" in msg
+    assert B.validate_camera_row(cam, [], VECMAP_PLATE, "9:16") == errs
+
+
+def test_the_refusal_is_the_camera_modules_own_frustum_not_a_second_opinion():
+    """`camera_edge_errors` reads `kinetics/camera.mjs`'s frustum through the motion gate's mirror of it
+    (M24's `camera_frustum`), so the compiler's refusal and the gate's in-frame row cannot disagree about
+    what the eye can see. A zoom IN PLACE keeps its target where it already sits on screen - the frame is
+    not centred on `look` - and the check is written against that, not against a centred guess."""
+    cam = _two_key_map(2.6)
+    st = B.MG.camera_state_at({"camera": cam}, 0.0, 1080.0, 1920.0, None)
+    fr = B.MG.camera_frustum(st, 1080.0, 1920.0)
+    assert fr["x1"] - fr["x0"] == pytest.approx(1080.0 / 2.6)
+    assert fr["x0"] < st["look"][0] < fr["x1"] and abs((fr["x0"] + fr["x1"]) / 2 - st["look"][0]) > 1.0
+
+
+def test_the_first_key_is_never_refused_and_a_locked_camera_says_nothing():
+    """Before the first key the camera is the identity, which frames the whole stage - so a first key may
+    look anywhere. A camera with no keys, or one key, has no move to check."""
+    far = {"kind": "region", "x0": 0.01, "y0": 0.01, "x1": 0.05, "y1": 0.05}
+    assert B.camera_edge_errors({"keys": [{"t": 0.0, "zoom": 3.0, "look": far}]}, PLATE) == []
+    assert B.camera_edge_errors(B.camera_identity(), PLATE) == []
+    assert B.camera_edge_errors(None, PLATE) == []
+
+
+def test_a_target_the_law_cannot_place_is_never_refused():
+    """A `datum` names a spot on a page this check has not been handed; M24 reads those against the page's
+    own plot at gate time. Silence, not a guess."""
+    cam = {"keys": [{"t": 0.0, "zoom": 3.0, "look": [0.9, 0.9]},
+                    {"t": 2.0, "zoom": 3.0, "look": {"kind": "datum", "index": 4}}]}
+    assert B.camera_edge_errors(cam, PLATE) == []
+    back = {"keys": [{"t": 0.0, "zoom": 3.0, "look": {"kind": "datum", "index": 4}},
+                     {"t": 2.0, "zoom": 3.0, "look": [0.02, 0.02]}]}
+    assert B.camera_edge_errors(back, PLATE) == [], "the frame BEFORE the move is unknown: nothing is claimed"

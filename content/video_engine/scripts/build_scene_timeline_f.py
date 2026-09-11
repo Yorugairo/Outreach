@@ -77,13 +77,13 @@ ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page
 MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets (stopaction.mjs MASS) a throw or a landing settles by
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
-PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill")   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread")   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
 STATE_MAX = 3
 DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s",
-             "press", "stack")   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+             "press", "stack", "behind")   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -324,9 +324,76 @@ def camera_identity() -> dict:
     return {"keys": [], "attention": "locked"}
 
 
-def validate_camera(cam, plate_id: str) -> list[str]:
+def _cam_key_box(look, sw: float, sh: float) -> dict | None:
+    """A key's `look` as a WORLD box in stage px: a declared point/region target, a bare [x, y] as a
+    point, and None for anything this function cannot place on its own (a `datum` names a spot on a
+    page it has not been handed - M24 checks those against the page's real plot at gate time)."""
+    if isinstance(look, (list, tuple)) and len(look) == 2:
+        return {"x": float(look[0]) * sw, "y": float(look[1]) * sh, "w": 0.0, "h": 0.0}
+    if isinstance(look, dict):
+        return MG._target_box(look, sw, sh, None)
+    return None
+
+
+def _off_frame_by(fr: dict, box: dict) -> tuple[float, str]:
+    """How far outside the frame the box is, and which edge it is past: the shortest push that would
+    bring any part of it back on screen."""
+    gaps = ((fr["x0"] - (box["x"] + box["w"]), "left"), (box["x"] - fr["x1"], "right"),
+            (fr["y0"] - (box["y"] + box["h"]), "top"), (box["y"] - fr["y1"], "bottom"))
+    worst = max(gaps, key=lambda g: g[0])
+    return max(0.0, worst[0]), worst[1]
+
+
+def camera_edge_errors(cam, plate_id: str, aspect: str | None = None) -> list[str]:
+    """HF-15 / E59 reason 2: the next region is VISIBLE AT THE FRAME'S EDGE before the camera moves.
+
+    E59 gives the camera exactly one reason to pan: "between focal points on a stage wider than the
+    frame - a map, a wide diagram: ONE move per composition, then still". The intake's HF-15 names
+    what makes such a move read as a move at all: regions ARRIVE. The eye goes to something it can
+    already see a piece of, and the thing it leaves goes out by parallax. A key whose target is
+    WHOLLY outside the frame the previous key holds is a cut wearing a pan's clothes - for the whole
+    length of the move the viewer watches empty stage, and the subject appears from nowhere.
+
+    The frustum is the camera's own: `kinetics/camera.mjs` `camFrustum`, mirrored for Python in the
+    motion gate as `camera_frustum`, evaluated at the PREVIOUS key's t - the last frame before the
+    move begins. The first key is never refused: before it the camera is the identity, which frames
+    the whole stage, so anything a key can name is already on screen.
+
+    Refused only when NOTHING of the target is in frame (`visible == 0`). How much of it has to show
+    is a judgement the operator has not made; that nothing at all does is not a judgement."""
+    if not isinstance(cam, dict):
+        return []
+    sw, sh = (1080.0, 1920.0) if (aspect or "16:9") == "9:16" else (1920.0, 1080.0)
+    keys = [k for k in (cam.get("keys") or []) if isinstance(k, dict) and isinstance(k.get("t"), (int, float))]
+    if len(keys) < 2 or any(k["t"] <= keys[i]["t"] for i, k in enumerate(keys[1:])):
+        return []           # unsorted or single-key lists are `validate_camera`'s to refuse first
+    errs: list[str] = []
+    for i in range(1, len(keys)):
+        box = _cam_key_box(keys[i].get("look"), sw, sh)
+        if box is None or any(_cam_key_box(k.get("look"), sw, sh) is None and k.get("look") is not None for k in keys[:i]):
+            continue        # a look this function cannot place: the frame before it is unknown, so nothing is claimed
+        prev = keys[i - 1]
+        st = MG.camera_state_at({"camera": {"keys": keys}}, float(prev["t"]), sw, sh, None)
+        fr = MG.camera_frustum(st, sw, sh)
+        if MG._visible_share(fr, box) > 0:
+            continue
+        gap, edge = _off_frame_by(fr, box)
+        errs.append(
+            f"{plate_id}: camera key {i} (t={float(keys[i]['t']):.2f}s) moves to a target that is wholly off-frame at "
+            f"key {i - 1} (t={float(prev['t']):.2f}s): that frame shows x[{fr['x0']:.0f}..{fr['x1']:.0f}] "
+            f"y[{fr['y0']:.0f}..{fr['y1']:.0f}] at zoom {st['s']:.2f}, and the target sits at "
+            f"x[{box['x']:.0f}..{box['x'] + box['w']:.0f}] y[{box['y']:.0f}..{box['y'] + box['h']:.0f}] - "
+            f"{gap:.0f}px past the {edge} edge. E59 reason 2 / HF-15: the next region ARRIVES from the frame's "
+            "edge; a target the frame cannot show is a cut wearing a pan's clothes")
+    return errs
+
+
+def validate_camera(cam, plate_id: str, aspect: str | None = None) -> list[str]:
     """An authored camera, validated by name: keys in ascending t, zoom > 0, an ease from the set, look/at as stage
-    fractions or a declared target, attention from the set. None or the identity pass."""
+    fractions or a declared target, attention from the set. None or the identity pass.
+
+    And, once the names check out, E59 reason 2's own law: every key after the first moves to something
+    the frame before it already SHOWS (`camera_edge_errors`, HF-15)."""
     if cam is None:
         return []
     if not isinstance(cam, dict):
@@ -358,12 +425,16 @@ def validate_camera(cam, plate_id: str) -> list[str]:
                 errs += [f"{plate_id}: camera key {i}: {fld}: {e}" for e in _validate_target("camera", v, TARGET_KINDS)]
             elif not (isinstance(v, (list, tuple)) and len(v) == 2 and all(num(c) and 0 <= c <= 1 for c in v)):
                 errs.append(f"{plate_id}: camera key {i}: {fld} must be [x, y] as stage fractions 0..1 or a declared target")
-    return errs
+    # the names are right: now the MOVE itself (E59 reason 2). Only on a clean key list - an unsorted or
+    # malformed one has nothing to say about framing until it says what its keys are.
+    return errs + (camera_edge_errors(cam, plate_id, aspect) if not errs else [])
 
 
-def validate_camera_row(cam, row_species, plate_id: str) -> list[str]:
-    """The row's camera against its species: authored keys and a camera species cannot both drive one window."""
-    errs = validate_camera(cam, plate_id)
+def validate_camera_row(cam, row_species, plate_id: str, aspect: str | None = None) -> list[str]:
+    """The row's camera against its species: authored keys and a camera species cannot both drive one window,
+    and (HF-15) no key moves to a region the frame before it cannot show - which is an ASPECT's question, so
+    the build hands its own down."""
+    errs = validate_camera(cam, plate_id, aspect)
     moves = [e["kind"] for e in (row_species or []) if isinstance(e, dict) and e.get("kind") in CAMERA_MOVES]
     if isinstance(cam, dict) and cam.get("keys") and moves:
         errs.append(f"{plate_id}: camera keys and a {moves[0]} species on one row - one camera per window (s9.28 C3)")
@@ -1251,7 +1322,60 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
             "ken_burns": {"scale": ken[0], "x": ken[1], "y": ken[2]}}
 
 
+# HF-16 (P50 T15) - THE WIRE: `;thread=<mark key>` on the ARRIVING page's plate id names one mark of the page
+# BEFORE it that survives the cut - the holdings baseline still lying under the Meta bars. The intake's HF-16
+# ("the three threads ... one continuous line as the film's spine") against our own persistence rule (s9.15):
+# ours persists the PAGE, and a thread persists one element across a page CHANGE.
+#
+# WHY THE PLATE ID AND NOT `chart_to extend`. A species lives on ONE scene and addresses that scene's own
+# `world.page_states`, every one of which is built from the SAME series file by `derive_rescale_states`; an
+# `extend` names `to_index` INTO the page's own points. Nothing in that grammar can name a mark on the world
+# before it, and teaching species to reach across a scene boundary is a far larger mechanism than the thing it
+# buys. Declared on the plate id, the thread is what it actually is - a property of the arriving PAGE ("this
+# page starts with that mark already on it") - it needs no new species, and it survives every entry a page can
+# make (a cut, a mount, a spiral). The carry math is `scripts/species/thread.mjs`; the player draws it as
+# GROUND under the new page's own ink and it is an ordinary keyed mark from that frame on.
+#
+# E50's CLOCK DOES NOT RESTART. The wire arrives already drawn, on the page's first frame, so it can never be
+# the page's LAST data mark - which is what E50 dates a page by and what M21 measures the deployed life from.
+# It is one more data mark on the second page (M21 counts it), never the latest one, so the deployed clock the
+# gate reads is the new page's own build, unchanged.
+THREAD_KEYS = ("s<n>", "b:<n>", "rule:<n>")   # the mark keys the compiler can check against the page before it: a series, a bar, an hline
+THREAD_KEY_RE = re.compile(r"^(?:s(\d+)|b:(\d+)|rule:(\d+))$")
+
+
+def thread_mark_error(prev_world: dict | None, key: str, where: str) -> str | None:
+    """Can the scene BEFORE this one hand over a mark called `key`? The message, or None.
+
+    The player's mark keys are the template's own (`lpMark`); these three are the ones a page spec can be read
+    for without running a builder, which is the whole of what a compiler may honestly claim."""
+    m = THREAD_KEY_RE.match(str(key or ""))
+    if not m:
+        return (f"{where}: thread={key!r} is not a mark key this build can check - one of {'|'.join(THREAD_KEYS)} "
+                "(a series, a bar, an hline of the page before this one)")
+    page = (prev_world or {}).get("page") if isinstance(prev_world, dict) else None
+    if not page or (prev_world or {}).get("kind") != SPECIES_LEDGER:
+        return (f"{where}: thread={key!r} carries one mark across a page boundary, and the scene before this one is "
+                "not a ledger page - there is no page to hand it over (HF-16)")
+    axes = page.get("axes") or {}
+    have = {"s": len(page.get("series") or []),
+            "b": len(page.get("values") or []),
+            "rule": len(axes.get("hlines") or ([axes["hline"]] if axes.get("hline") is not None else []))}
+    kind = "s" if key.startswith("s") else "b" if key.startswith("b:") else "rule"
+    index = int(next(g for g in m.groups() if g is not None))
+    one, many = {"s": ("series", "series"), "b": ("bar", "bars"), "rule": ("rule", "hlines")}[kind]
+    if index >= have[kind]:
+        return (f"{where}: thread={key!r} names {one} {index} of {str(page.get('title'))[:40]!r}, which draws "
+                f"{have[kind]} {many} - the page before this one never drew that mark")
+    return None
+
+
 def _check_opt(key: str, value, where: str) -> None:
+    if key == "thread":   # HF-16: the shape here, the page before it in `thread_mark_error` (which needs that page)
+        if THREAD_KEY_RE.match(str(value)):
+            return
+        raise ValueError(f"{where}: thread {value!r} is not a mark key - one of "
+                         f"{'|'.join(THREAD_KEYS)} (a series, a bar or an hline of the page before this one)")
     if key == "pill":   # P50 T11 / R26-34: yes | no | the datum index the pill POPS at (springPop, Mp 0.05)
         if value in ("yes", "no") or (value.isdigit() and int(value) >= 0):
             return
@@ -1322,6 +1446,52 @@ def press_meta(raw) -> dict:
             "phrase": {k: round(float(ph[k]), 5) for k in PHRASE_KEYS}}
 
 
+# HF-17 (P50 T15) - THE FOREGROUND OCCLUDER. "Occlusion beats blur as the depth cue" (the intake, against doc
+# 29's open focus-rack proposal; the operator has preferred the wash to a rack since 2026-09-06). A world plate
+# may declare cutouts that belong IN FRONT of whatever lands on it - the desk edge the card slides behind, the
+# lamp it passes under - and a dock names one: `behind: "<layer>"` on the row's dock options.
+#
+# WHERE THE LAYER IS DECLARED. Beside the plate, in `<plate>.layers.json`:
+#     {"foreground": {"<layer name>": "<png beside the plate, with alpha>"}}
+# A sidecar, not a new asset id: the layer is not a plate of its own (it can never be a world), it is part of
+# THIS plate, and it travels with it. The compiler refuses a `behind` the plate does not declare and a declared
+# file that is not on disk - the two ways this goes wrong silently, which would be a card that simply never got
+# occluded and a frame nobody could explain. The PNG is embedded RAW (`data_uri` with no cap): the cap path
+# re-encodes through RGB and would throw the alpha away, which is the whole layer.
+FG_PREFIX = "fg:"          # the asset-map key a foreground layer rides: `fg:<plate asset id>:<layer>`
+FG_LAYERS_SUFFIX = ".layers.json"
+
+
+def plate_layers(path: Path | None) -> dict:
+    """The FOREGROUND layers a plate declares, `{name: Path}`. No sidecar, or a malformed one, is no layers -
+    a plate is not required to have a front, and only a row that NAMES one gets an error."""
+    if path is None:
+        return {}
+    side = Path(path).with_suffix(FG_LAYERS_SUFFIX)
+    try:
+        data = json.loads(side.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    fg = (data or {}).get("foreground") if isinstance(data, dict) else None
+    if not isinstance(fg, dict):
+        return {}
+    return {str(k): Path(path).parent / str(v) for k, v in fg.items() if isinstance(v, str) and v}
+
+
+def behind_error(world: dict, layers: dict, layer: str, where: str) -> str | None:
+    """Can this scene's world paint `layer` over a card? The message, or None."""
+    if not isinstance(world, dict) or not world.get("asset_id") or world.get("kind") in (SPECIES_LEDGER, VECMAP_KIND, SPECIES_CLIP):
+        return (f"{where}: behind={layer!r} needs a world PLATE with a foreground layer - this scene's world is "
+                f"{(world or {}).get('kind') or 'a drawn page'}, which has no front to hide a card behind (HF-17)")
+    if layer not in layers:
+        named = ", ".join(sorted(layers)) if layers else "none"
+        return (f"{where}: behind={layer!r} is not a foreground layer of {world['asset_id']!r} - it declares {named}. "
+                f"Name it in <plate>{FG_LAYERS_SUFFIX} as {{\"foreground\": {{\"{layer}\": \"<png with alpha>\"}}}}")
+    if not layers[layer].is_file():
+        return (f"{where}: behind={layer!r} of {world['asset_id']!r} points at {layers[layer].name}, which is not on disk")
+    return None
+
+
 def dock_opts(raw) -> dict:
     """The optional 5th element of a dock tuple: ``{"arrive": spring|throw|land, "mass": paper|metal|liquid|ink}`` (P47 T1).
     ValueError names the key; the caller names the row."""
@@ -1332,6 +1502,10 @@ def dock_opts(raw) -> dict:
     for k, v in raw.items():
         if k not in DOCK_OPTS:
             raise ValueError(f"dock option {k!r} is not one of {'|'.join(DOCK_OPTS)}")
+        if k == "behind":   # HF-17: the plate's foreground layer this card goes behind; the plate is checked at the row
+            if not isinstance(v, str) or not v.strip():
+                raise ValueError("dock: behind must name a foreground layer of the scene's plate (<plate>.layers.json)")
+            continue
         if k == "centre":
             if v is not True:
                 raise ValueError("dock: centre must be True (the card parks centred on the page)")
@@ -1391,6 +1565,11 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
         if world.get("kind") != SPECIES_LEDGER:
             raise ValueError(f"{plate_id!r}: card= is a LEDGER PAGE option")
         world["page"]["card"] = card == "yes"
+    thread = opts.pop("thread", None)
+    if thread is not None:   # HF-16: the arriving PAGE starts with one mark of the page before it already on it
+        if world.get("kind") != SPECIES_LEDGER:
+            raise ValueError(f"{plate_id!r}: thread= is a LEDGER PAGE option - a wire is one mark of a page, carried onto the next page")
+        world["page"]["thread"] = {"key": thread}   # `from` is the scene before this one: the build loop fills it, and checks it
     pill = opts.pop("pill", None)
     if pill is not None and pill != "no":
         # P50 T11 (R26-34): the tip-riding pill is a LINE PAGE's option and it is the ROW's word, not the object's -
@@ -1548,6 +1727,12 @@ def _card_w_for(height: float) -> int:
 def free_bands(boxes: dict) -> list[dict]:
     """The rectangles inside the safe box that the page's own ink leaves free (E45).
 
+    ONE PLACEMENT TRUTH (P50 T16): the bands are cut out of whatever `page_boxes` handed us - the
+    PLAYER's own boxes when the fixture has measured this page's ink, `ledger_page`'s estimate of
+    them when it has not (`boxes["measured"]` says which). Every placer - `page_place`,
+    `centred_place`, the solo card's E50 centring - cuts its bands here, so no two of them can
+    disagree about where a page's free space is.
+
     The title and the sub are NOT ink for this purpose - E45 parks the card "over the title" once
     the heading has been read - so the head of the `above` band is the safe box's own head."""
     safe, plot = boxes["safe"], boxes["plot"]
@@ -1638,10 +1823,48 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
     return {"x": round((sw - w) / 2), "y": round(max(0, (band - h) / 2)), "w": w, "h": h}
 
 
+def page_is_measured(world: dict | None, aspect: str | None) -> bool:
+    """True when the fixture holds the PLAYER's own boxes for this scene's page (P50 T16).
+
+    `assets/page-boxes.v1.json` carries what `measure_page_boxes.py` read off the rendered page; a
+    page whose ink is on file is placed against the player's numbers, a page that is not keeps
+    `ledger_page`'s estimate of them. Everything that PLACES - `free_bands`, `page_place`,
+    `centred_place` - reads the same `page_boxes`, so a scene is measured or estimated as a whole."""
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not world.get("page"):
+        return False
+    return bool(LPG.page_boxes(world["page"], aspect or "16:9").get("measured"))
+
+
+def solo_centre_by_clock(world: dict | None, aspect: str | None, n_docks: int, slot: int,
+                         enter: float, scene_start: float, dopt: dict) -> bool:
+    """R26-22: a SOLO card that arrives after the page's own clock has finished is CENTRED in the
+    band the fixture says is free - not parked at the reading rect over the title.
+
+    E50 dates a page by its last data mark: once the chart has landed the page is being read, not
+    built, and the card is the thing to look at. `_page_land_offset` is the motion gate's own reading
+    of that clock (the roll-out, the mount, a page that arrives built), so the compiler and the gate
+    date the page the same way. Three conditions, and all three are the ruling's:
+
+      * the card is ALONE on the scene - a pair keeps the layout its two slots declare (E45);
+      * the page's chart has LANDED by the card's enter - before that the card would cover a build;
+      * the page's bands are MEASURED - centring against an ESTIMATE of the bands is what put the tea
+        cup on the chart in the sixth watch (R26-27), so a page the fixture has never seen keeps
+        today's parked rectangle and the build says so.
+
+    An authored `centre` (with or without `centre_y`) outranks all of it: it is handled by the caller
+    and this returns False for it, so an authored row compiles to exactly the bytes it did before."""
+    if n_docks != 1 or slot != 0 or dopt.get("centre") or dopt.get("press") or dopt.get("stack"):
+        return False
+    if not page_is_measured(world, aspect):
+        return False
+    land = float(scene_start) + MG._page_land_offset({"world": world})
+    return float(enter) >= land - 1e-6
+
+
 def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                kind: str = DOCK_KIND_IMAGE, place: dict | None = None, arrive: str | None = None, mass: str | None = None,
                centre: bool = False, read_place: dict | None = None, read_s: float | None = None, park_s: float | None = None,
-               press: dict | None = None, stack: bool = False) -> dict:
+               press: dict | None = None, stack: bool = False, behind: str | None = None, fg: str | None = None) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -1656,6 +1879,9 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
     rs, ps = (float(read_s) if read_s else DOCK_READ_S), (float(park_s) if park_s else DOCK_PARK_S)   # the dock's own clock, else the defaults
     return {
         "slide": aid, "slot": slot,
+        # HF-17: the plate's foreground layer this card is behind, and the asset-map key it rides. Written ONLY when
+        # the row asks, so every build that does not is byte-for-byte what it was.
+        **({"behind": behind, "fg": fg} if behind and fg else {}),
         "enter": round(enter, 2), "exit": round(exitt, 2),
         "badge_at": [round(enter + 0.75 + 1.3 * (n + 1), 2) for n in range(n_badges)],
         **({"kind": DOCK_KIND_VIDEO} if kind == DOCK_KIND_VIDEO else {}),
@@ -1756,7 +1982,7 @@ def main() -> int:
         return 1
     print(f"  audio: {audio.name}")
 
-    evidence, uris, scenes = {}, {}, []
+    evidence, uris, scenes, estimated_pages = {}, {}, [], []   # P50 T16: the pages this build placed by ESTIMATE, for the report below
     for i, row in enumerate(plan):
         # exit style is HYBRID (operator, 2026-08-29): mechanical default
         # (E47, 2026-09-06: docks -> DIP, bare -> cut; it was docks -> wipe),
@@ -1806,7 +2032,7 @@ def main() -> int:
                 continue
             if _o.get("press"):
                 row_press[_d[0]] = _o["press"]
-        species_errors = validate_species(row_species, ken, plate, pivot_span=None, press_docks=row_press) + validate_camera_row(row_camera, row_species, plate)
+        species_errors = validate_species(row_species, ken, plate, pivot_span=None, press_docks=row_press) + validate_camera_row(row_camera, row_species, plate, ASPECT)
         if species_errors:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(species_errors))
         # P50 T2: a chip's SOURCED glyph rides the asset map exactly as a plate or a dock still does,
@@ -1827,6 +2053,13 @@ def main() -> int:
             derive_rescale_states(world, row_species, plate, EP)   # P48 T2: each `chart_to rescale` gets its own derived page state
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
+        _thread = ((world.get("page") or {}).get("thread") or {}) if world.get("kind") == SPECIES_LEDGER else {}
+        if _thread:   # HF-16: the wire names the scene BEFORE this one, and that scene has to own the mark
+            _prev = scenes[-1] if scenes else None
+            _terr = thread_mark_error((_prev or {}).get("world"), _thread["key"], f"shot row {i + 1} ({a}-{b}s) {plate!r}")
+            if _terr:
+                raise SystemExit(f"FAIL: {_terr}")
+            _thread["from"] = _prev["scene_id"]
         if world.get("kind") == VECMAP_KIND:
             uris[MAP_PREFIX + world["map"]] = world_map_json(world["map"])   # ONCE: the same key for every vecmap scene in the build
         elif world.get("kind") == SPECIES_CLIP:
@@ -1834,6 +2067,8 @@ def main() -> int:
         elif "asset_id" in world:
             uris[world["asset_id"]] = data_uri(R.find_asset(world["asset_id"]), STAGE_W)   # the bare id (E49's `;idle=` is not part of it)
         docks = []
+        if world.get("kind") == SPECIES_LEDGER and world.get("page") and not page_is_measured(world, ASPECT):
+            estimated_pages.append(f"row {i + 1} {str(world['page'].get('title') or plate)[:44]!r}")
         # E45 §1: on a ledger page every dock parks in the same rectangle, computed from the
         # page's own geometry. Only the SOLO card (slot 0) is placed - a paired/stacked dock keeps
         # the layout its slot declares, and a plain plate keeps the solo card entirely.
@@ -1845,11 +2080,21 @@ def main() -> int:
                 raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
             d = META.get(aid, {"title": aid, "source": "", "species": "deck",
                                "badges": []})
-            dplace = centred_place(place, ASPECT, dopt.get("card_aspect"), (world or {}).get("page"), dopt.get("centre_w"), dopt.get("centre_band"), dopt.get("centre_y"), dopt.get("centre_x")) if (place and dopt.get("centre")) else place   # the third watch: a card centred on the page
+            auto_centre = solo_centre_by_clock(world, ASPECT, len(ds), slot, enter, a, dopt)   # R26-22: E50's clock centres a solo card on a MEASURED page
+            centred = bool(dopt.get("centre")) or auto_centre
+            dplace = centred_place(place, ASPECT, dopt.get("card_aspect"), (world or {}).get("page"), dopt.get("centre_w"), dopt.get("centre_band"), dopt.get("centre_y"), dopt.get("centre_x")) if (place and centred) else place   # the third watch: a card centred on the page
             if dopt.get("press"):   # P50 T3: E45 - the pile has one box, and it is the stage's centre
                 _perr = press_plate_error(plate, aid)
                 if _perr:
                     raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) {_perr}")
+            fg_key = None
+            if dopt.get("behind"):   # HF-17: the card goes behind the plate's own front
+                _layers = plate_layers(R.find_asset(world["asset_id"]) if world.get("asset_id") else None)
+                _berr = behind_error(world, _layers, dopt["behind"], f"shot row {i + 1} ({a}-{b}s) dock {aid}")
+                if _berr:
+                    raise SystemExit(f"FAIL: {_berr}")
+                fg_key = f"{FG_PREFIX}{world['asset_id']}:{dopt['behind']}"
+                uris[fg_key] = data_uri(_layers[dopt["behind"]])   # RAW: the capped path re-encodes through RGB and would drop the alpha
             rd = dopt.get("read") or {}   # the box a centred card POPS at before it parks to dplace (2026-09-10)
             rplace = centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x")) if (place and rd) else None
             if True:
@@ -1907,9 +2152,10 @@ def main() -> int:
                     uris[aid] = dock_uri(ap)
                 docks.append(dock_entry(aid, slot, enter, exitt, len(d["badges"]),
                                         evidence[aid].get("kind", DOCK_KIND_IMAGE),
-                                        dplace if (slot == 0 or dopt.get("centre")) else None, dopt.get("arrive"), dopt.get("mass"), bool(dopt.get("centre")),   # a centred card is placed on either slot (2026-09-10: two cards up at once)
+                                        dplace if (slot == 0 or centred) else None, dopt.get("arrive"), dopt.get("mass"), centred,   # a centred card is placed on either slot (2026-09-10: two cards up at once)
                                         read_place=rplace, read_s=dopt.get("read_s"), park_s=dopt.get("park_s"),
-                                        press=dopt.get("press"), stack=bool(dopt.get("stack"))))
+                                        press=dopt.get("press"), stack=bool(dopt.get("stack")),
+                                        behind=dopt.get("behind"), fg=fg_key))
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         try:
             exit_id, exit_s = scene_exit(authored_exit, bool(docks))
@@ -1933,6 +2179,14 @@ def main() -> int:
         if exit_s is not None:
             scene["exit_s"] = exit_s
         scenes.append(scene)
+
+    # P50 T16: the build says whose numbers it placed by. A page the fixture has not measured is placed
+    # by `ledger_page`'s ESTIMATE of the player's layout - good enough to park a card against the plot's
+    # edge (E45 parks from the title side), never good enough to centre one in a band (R26-27).
+    if estimated_pages:
+        print(f"  page boxes  : {len(estimated_pages)} page(s) ESTIMATED, not measured - "
+              f"{'; '.join(estimated_pages)}. Measure them into assets/page-boxes.v1.json "
+              "(measure_page_boxes.py) to place them by the player's own boxes.")
 
     # caption STAGE mode: stamp each page with the mode it takes at its first word (after the scenes exist)
     pages = [{**pg, "cap_mode": "anchor" if _dock_live_at(scenes, pg["s"]) else "stage"} for pg in pages]

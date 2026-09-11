@@ -41,6 +41,8 @@ from __future__ import annotations
 
 import argparse
 import copy
+import functools
+import hashlib
 import json
 import re
 import sys
@@ -1170,6 +1172,84 @@ def treemap_plot(chart: dict, aspect: str) -> dict:
                 (1 - L["L"] - L["R"]) * vw * s, (L["B"] - L["T"]) * vh * s)
 
 
+# ---- ONE PLACEMENT TRUTH (P50 T16, R26-27) -------------------------------------------------
+# Everything above this line is an ESTIMATE of where the player will put the page's ink. The layout
+# LAW in `_portrait_boxes` is the template's own, line for line (measured 2026-09-11: given the ink
+# heights, the chart's top, the plot's L/R/T/B and the source line all land on the player's pixel).
+# What Python cannot see is the INK: `_ink_lines` wraps at an average advance, and a title the
+# player writes in ONE line is estimated at two - which moves every box under it by 76 px on a 9:16
+# page. That is R26-27 exactly ("the x maths is exact, only y is off").
+#
+# THE FIXTURE. `measure_page_boxes.py` renders a representative page per builder per aspect in the
+# headless player and writes what it MEASURES to `assets/page-boxes.v1.json`. A page's boxes are a
+# pure function of its INK - the builder, the title, the sub's and the source's first clause, the
+# rail's badge count, the basis label and the quiet zone are the ONLY inputs `_portrait_boxes` and
+# `_landscape_boxes` read - so `page_ink_key` hashes exactly that, and a measured entry is valid for
+# any page carrying the same ink, and for no other page at all. A page whose ink is not on file
+# keeps today's estimate and SAYS so: `boxes["measured"]` is False and the compiler writes one line
+# per estimated page into the build's report. The truth is never guessed - either the player's own
+# numbers are on file for this ink, or the caller knows it is holding an estimate.
+_REPO = Path(__file__).resolve().parents[3]
+PAGE_BOXES_FIXTURE = _REPO / "content/video_engine/assets/page-boxes.v1.json"
+PAGE_BOXES_SCHEMA = "page_boxes.v1"
+BOX_KEYS = ("title", "sub", "chart", "plot", "source", "rail")
+INK_KEYS = ("builder", "title", "sub", "source", "quiet_zone")
+
+
+def page_ink_key(spec: dict) -> str:
+    """The fingerprint of everything about `spec` that moves a box: its ink, its rail and its zone.
+
+    Two pages with the same key lay out identically at a given aspect - the DATA never moves a box,
+    it is drawn inside the plot - so one measurement serves both. Stable across runs and machines."""
+    rail = [b for b in spec.get("badges") or [] if not b.get("inline")]
+    ink = {
+        **{k: spec.get(k) for k in INK_KEYS},
+        "sub_clause": first_clause(spec.get("sub"), True),
+        "src_clause": first_clause(spec.get("source"), False),
+        "rail_n": len(rail),
+        "ylabel": (spec.get("axes") or {}).get("ylabel"),
+        "tiers_n": len(spec.get("tiers")) if isinstance(spec.get("tiers"), list) else 0,
+    }
+    blob = json.dumps(ink, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()[:16]
+
+
+@functools.lru_cache(maxsize=4)
+def _fixture(path: str, mtime: float) -> dict:
+    """The measured fixture, builder -> aspect -> entry. A missing or malformed file reads as empty:
+    the fixture is a measurement the compiler may not have, never a dependency it fails on. `mtime`
+    is in the cache key so a re-measurement inside one process is seen."""
+    try:
+        data = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    if not isinstance(data, dict) or data.get("schema") != PAGE_BOXES_SCHEMA:
+        return {}
+    builders = data.get("builders")
+    return builders if isinstance(builders, dict) else {}
+
+
+def fixture(path: Path | None = None) -> dict:
+    """builder -> aspect -> entry, from `assets/page-boxes.v1.json` (or `path`)."""
+    p = Path(path or PAGE_BOXES_FIXTURE)
+    try:
+        mtime = p.stat().st_mtime
+    except OSError:
+        return {}
+    return _fixture(str(p), mtime)
+
+
+def measured_boxes(spec: dict, aspect: str) -> dict | None:
+    """The player's own boxes for THIS page's ink, or None when nothing on file measured it."""
+    entry = (fixture().get(str(spec.get("builder"))) or {}).get(aspect)
+    if not isinstance(entry, dict) or entry.get("ink") != page_ink_key(spec):
+        return None
+    boxes = entry.get("boxes")
+    if not isinstance(boxes, dict) or not all(k in boxes for k in BOX_KEYS):
+        return None
+    return {k: dict(boxes[k]) for k in BOX_KEYS}
+
+
 def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
     """Where this page puts its ink, in STAGE pixels (E45 §1).
 
@@ -1178,6 +1258,11 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
     passes the spec's declared side through. ``plot`` is the DATA box plus the ink that lives
     inside it - the basis label above it (``axes.ylabel``) and the x tick labels below the axis -
     because a card over either of them covers the chart just as surely.
+
+    ``measured`` says whose numbers these are (P50 T16): True when the fixture holds the player's
+    own boxes for this page's INK (`measured_boxes`), False when this is `_portrait_boxes`' estimate.
+    A caller that PLACES something by these boxes - `free_bands`, `page_place`, `centred_place` - is
+    reading one truth or the other, and the compiler reports which for every page it compiles.
 
     Pure and deterministic; the spec is never mutated. An `object` page (no chart) reports the
     prop's field as its chart and an empty plot."""
@@ -1191,10 +1276,16 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
         boxes["bands"] = tier_bands(boxes["plot"], len(spec.get("tiers") or []))
     if spec.get("builder") == "treemap":
         boxes["plot"] = treemap_plot(boxes["chart"], aspect)
+    measured = measured_boxes(spec, aspect)
+    if measured:                      # the player's own numbers for this ink win over every estimate above
+        boxes.update(measured)
+        if spec.get("builder") == "tiers":   # the tier bands are a law over the PLOT: re-cut them on the measured one
+            boxes["bands"] = tier_bands(boxes["plot"], len(spec.get("tiers") or []))
     sx, sy, sw, sh = SAFE_BOX[aspect]
     cx, cy, cw, ch = CAPTION_ANCHOR[aspect]
     return {"aspect": aspect, "stage": _box(0, 0, w_s, h_s), "safe": _box(sx, sy, sw, sh),
-            "caption_anchor": _box(cx, cy, cw, ch), "quiet_zone": spec.get("quiet_zone"), **boxes}
+            "caption_anchor": _box(cx, cy, cw, ch), "quiet_zone": spec.get("quiet_zone"),
+            "measured": bool(measured), **boxes}
 
 
 def load_series(path: Path) -> dict:

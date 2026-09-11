@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-296 documents across 13 kinds.
+304 documents across 13 kinds.
 
 ## doctrine
 
@@ -95,7 +95,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## capabilities
 
-- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +135 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
+- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +137 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
 
 ## backlog
 
@@ -173,6 +173,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md — Acoustic Narrative Architecture: Integra — Writing for spoken delivery requires a f — defines: — — terms: McKee; long-form; Expectation-Reality; single-idea
 - docs/research/audio/SUBTHRESHOLD_BACKGROUND_MUSIC_RESEARCH_BLUEPRINT.md — Sub-threshold Background Music — Researc — Pass-1 discovery brief · 2026-09-01 · so — defines: — — terms: room-tone; just-audible; subliminal-audio; Egermann et al.
 - docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md — Finance Combo & Comparison Charts — Desi — Why do automated systems and LLMs consis — defines: — — terms: x-axis; ObservableHQ; x = 0, 1, ..., N-1; McGill
+- docs/research/markets/TREASURY_YIELD_SPIKE_SEPTEMBER_2026_RESEARCH_BLUEPRINT.md — US Treasury Yield Spike & Bond Market St — What are the empirical drivers, exact da — defines: — — terms: YouTube; January 1983; MoM; highest-yielding
 - docs/research/motion/BRIEF-WEIGHT-DENSITY-MASS-2026-09-07.md — Research brief — weight, density and mas — Asked by: the operator, 2026-09-07, on T — defines: — — terms: area-preserving; mass-spring-damper; HyperFrames; stop-motion-cadence
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md — HyperFrames Motion, Transitions, and Kin — How does HeyGen HyperFrames structure mo — defines: — — terms: HyperFrames; HeyGen; on-twos; rules-and-anti-patterns
 - docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md — Wealth Logic — where the picture change — TR-2 (`docs/content-video-engine/TRANSIT — defines: — — terms: YouTube; split-edit; L-cut-like; J-cut-like
@@ -181,6 +182,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md — Weight, Density, and Mass in Drawing, An — Pass Metadata: Workflow: Deep Research E — defines: — — terms: Kersten et al.; t_0; stop-motion; High-Mass
 - docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md — Motion Graphics & Animation from Still I — High-retention, broadcast-grade video co — defines: — — terms: context-aware; LaMa; Shih et al.; LTX-Video
 - docs/research/tech/TREEMAP_READABILITY_RESEARCH_BLUEPRINT.md — Treemap Readability & Layout Mechanics — — How readable are treemaps on video scree — defines: P50 — terms: treemap-readability; McGill; near-square; Kong et al.
+- docs/research/tech/VIDEO_ENGINE_TOOLING_AND_MCP_BLUEPRINT.md — High-Leverage Tooling, Open-Source MCPs, — What specific open-source Model Context — defines: — — terms: GitHub; PyPI; fred-mcp-server; sec-edgar-mcp
 
 ## source-bundle
 
@@ -289,6 +291,12 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md — continuous-learning-import.v1.md — id: keep-world-plate-full-frame trigger: — defines: — — terms: evidence-composition; full-frame; operator-accepted-proof; word-timed
 - content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md — World Plate, Evidence, and Caption Gramm — World plates provide the story environme — defines: — — terms: word-timed; full-frame; full-scene; non-destructive
 - content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md — World Plate + Evidence Rail Breakthrough — Use the canonical woodblock world plate — defines: — — terms: full-frame; hand-led; source-bound; HyperFrames
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/BRAVOS-STYLE-EVIDENCE-PACK.md — BRAVOS-STYLE PRODUCTION EVIDENCE PACK — Standard: Bravos Research Reference Anal — defines: — — terms: high-resolution; TV-Embed; rotateY; rotateX
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/edit/EVIDENCE-COVERAGE.md — Full-Episode Evidence Layer Coverage & C — Episode: The Myth of "Historical Normal" — defines: — — terms: systems-and-blowups; myth-of-historical-normal; closed-form; #F4E6C7
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/EVIDENCE-DOSSIER.md — EVIDENCE DOSSIER — The Myth of "Historic — A nominal interest rate is not an anchor — defines: — — terms: debt-to-GDP; near-zero; All-time; Dot-Com
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/REVIEW_BRIEF_FOR_CLAUDE.md — Review Brief: "The Myth of Historical No — Repository Root: `C:/Users/Snipe/Downloa — defines: — — terms: September 2026; long-form; Scene-by-scene; Bravos-Style
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/SCRIPT-PRODUCTION.md — THE MYTH OF "HISTORICAL NORMAL" — Script — Locked Title: The Myth of "Historical No — defines: — — terms: hyper-leveraged; low-debt; twenty-two; [ring]
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/VISUAL-CHOREOGRAPHY.md — VISUAL & EVIDENCE CHOREOGRAPHY SPECIFICA — Standard: Doc 29 (`29-EVIDENCE-MOTION-ST — defines: P1; P6 — terms: DGS10; #F4E6C7; #25313C; #B23A22
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/single-world-index-mechanism-proof-v1/REVIEW.md — Single-World Index Mechanism Proof — Rev — Window: canonical narration words 1072–1 — defines: — — terms: long-tail; 10 largest holdings of 500 total; ≈40%; watch-review-boundaries
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/evidence-coverage-v1/coverage-summary.md — P32 Full-Episode Evidence Coverage Basel — Artifact: `ab547e586cefbb53e699bc69b8863 — defines: P32 — terms: Source-pack; composition-approved; production-ready; new-world-art
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/CLAUDE.md — HyperFrames Composition Project — Always invoke the relevant skill before — defines: — — terms: window.__timelines; framework-specific; data-*; shader-compatible
