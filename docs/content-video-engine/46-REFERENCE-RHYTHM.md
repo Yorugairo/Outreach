@@ -215,3 +215,10 @@ measurement: a difference detector reads a dissolve as an event and a fade-to-bl
 is the title-card wipe. The species gaps it exposes (a vector map, a flow diagram of icon chips, a press-card dock, a
 treemap) are listed in the report's grammar section.
 
+**Gemini's dossier on the same video (`REPORT.md`, read 2026-09-10 for the exploration review):** a pacing report - 120
+cuts / 6.02 CPM, mean shot 9.97 s on a 5.7 s sampler, 3543 words / 177.7 WPM, and the six phase windows: P1 0:00-1:30,
+P2 1:30-3:23, P3 3:23-8:58, **P4 8:58-10:58 (45-55 % of the runtime)**, P5 10:58-16:57, P6 16:57-19:57. The phase
+windows are carried: Bravos's pivot sits at the FULL-VIDEO-MAP's 45-55 % chiastic turn, a second reference confirming
+it. Its per-phase WPMs (214-249, every phase above the whole's 178) are REJECTED for the same reason as Wealth Logic's
+(RESEARCH-INDEX conflict 4, the caption over-count); its species column is empty (`unclassified` x 120).
+
