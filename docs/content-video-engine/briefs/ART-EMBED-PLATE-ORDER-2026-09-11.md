@@ -20,11 +20,18 @@ the information layer is composited afterward). The rest of the plate is the hou
 > printed on the poster. A desk lamp on the left throws a warm cone across the wall; the corners fall to shadow. No
 > people, no text anywhere in the image, no logos.
 
-Two more surfaces worth a second still if the first works: **a paper on the desk** (the card lands flat, the camera
-above - a "document" embed for records) and **a framed picture on a shelf** (small, for a single stamp).
+**The second still (the operator, 2026-09-11: "another still if it works includes a laptop or a TV hanging on a wall. Then we
+have multiple surfaces we can work with, and punch/project into"):** the same study, a TV hanging on the wall where the poster
+was (a dark screen in a thin bezel, angled the same way) and an open laptop on the desk, its screen toward the viewer and blank -
+TWO surfaces in one plate, plus the paper. Same style atom, same negative space, no text, no logos. A third if cheap: **a paper on
+the desk** alone (the card lands flat, the camera above - a "document" embed for records).
+
+So T7's grammar is a NAMED set of surfaces per plate, not one quad: `embed: {tv: {quad}, laptop: {quad}, poster: {quad}, paper:
+{quad}}` on the manifest, and a dock names which one it lands on (`embed: "tv"`); a press card can punch into the TV while a
+record lies on the laptop; the camera's punch / focus zoom takes a surface as its target like any declared region (E59 reason 4).
 
 **What the engine does with it (T7's code, built against a synthetic quad until the plate exists).** The plate's
-manifest declares `embed: {quad: [[x, y] x 4] (stage fractions, the surface's corners in order TL TR BR BL), darken:
+manifest declares its surfaces by name, each `{quad: [[x, y] x 4] (stage fractions, the corners in order TL TR BR BL), darken:
 "<word>"}`. A press dock with `embed: True` on that plate is projected onto the quad by a planar homography (the CSS
 `matrix3d` from the four corners; Gemini's H with h22 = 1); the room's vignette darkens on the word so the surface
 lights; the card's own idle stays; its badges and underline live in the projected space. The argument's own charts

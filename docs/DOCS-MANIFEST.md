@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-304 documents across 13 kinds.
+306 documents across 13 kinds.
 
 ## doctrine
 
@@ -213,6 +213,8 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md — Master Research & Evidence Dossier: High — Executive Summary & The 4 Core Pillars C — defines: — — terms: Closed-Form; s_x; s_y; a_x
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md — Deep Research Report: Drawing Engines, A — State-of-the-art programmatic video gene — defines: — — terms: closed-form; s_x; s_y; HyperFrames
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md — Master Research & Evidence Dossier: High — Executive Summary & The 4 Core Pillars C — defines: — — terms: Closed-Form; s_x; s_y; a_x
+- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md — PRODUCTION REFERENCE REPORT: The New Rul — Compositions Measured: 55 Camera-Locked — defines: P1; P2; +4 more — terms: zero-drift; High-Velocity; cut-alignment; Near-black
+- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/SHOT_LEDGER.md — SHOT LEDGER: Dual-Track Visual Events & — Kind: `COMP` = new base stage / scene cu — defines: — — terms: LOCKED; SLOW_PUSH; metaphor_prop; build
 - content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md — Unified System Specification: The 3 Comf — We are not merely patching a parallax sh — defines: — — terms: image-space; DiT; strength; intensity
 - content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md — NICHE BEND RESEARCH DOSSIER: WHY US BOND — Strategic repositioning brief. Contrasts — defines: — — terms: High-urgency; b-roll; low-resolution; cross-border
 - content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md — Production Research Report: Wealth Logic — Author / Channel: Wealth Logic Episode T — defines: P1; P2; +4 more — terms: EARNS; RENT; words.json; storyboard.json

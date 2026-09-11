@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3766 records across 304 files.
+3790 records across 306 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -1559,6 +1559,36 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L278 [3] 8.3 LTX-Video 2B DiT Ambient Ground (Engine 3) — - Frame Count Rule: $N = 8n + 1$ (Standard: 121 frames @ 24fps = 5.04s, or 97 frames = 4.04s). {Frame Count Rule:; 121 frames; 97 frames; Sampling Steps:; Guidance Scale (CFG):; STG Scale:} <25 steps; FlowMatch; 2.5; 3.2; 3.5; 1.0>
 - L287 [2] 9. Production Code Blueprints & Data Schemas — The research reports contain complete, production-ready TypeScript, Python, GLSL, and JSON modules: {`KinematicStrokeEngine.ts`; `SchneiderBezierFitter.ts`} <production-ready; TypeScript; Two-Thirds; arc-length; Newton-Raphson; least-squares; DynamicNibRibbon.ts; velocity-dependent; evaluateAnalyticSpring.ts; Closed-form; seek-safe; second-order>
 - L304 [2] 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine: {`RULE-the-page-is-the-ground.md` (2026-09-04):; Operator Ruling E22 (2026-09-02):; Operator Ruling E25 (2026-09-03):} <cross-referenced; #F4E6C7; near-black; punch-ins; Never-Fabricate; series.json; Anti-Hallucination; mask-pinned; LTX-Video>
+
+## content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md
+
+- L1 [1] PRODUCTION REFERENCE REPORT: The New Rules For Faceless Channels in 2026 — - Source: `https://www.youtube.com/watch?v=ye2T2FwubI4` {Source:; Channel / Creator:; Duration:; Resolution:} <vidIQ; Camera-Locked; zero-drift; High-Velocity; cut-alignment; Near-black; [e.g. #14171A]; [e.g. #242930]; [e.g. #FF2D55]; High-salience; [e.g. #00E5FF]; unclassified>
+- L10 [2] 1. Measured Physical Metrics (Automated Telemetry) <Camera-Locked; zero-drift; High-Velocity; cut-alignment>
+- L12 [3] Visual Pacing & Event Hierarchy — | Metric | Measured Value | Production Benchmark / Meaning | {Visual Events (Cuts + Builds); 100; Base Compositions (Stage Changes); 79; Mean Composition Hold; 6.7s}
+- L22 [3] Quantitative Camera Telemetry — - Compositions Measured: 55 {Compositions Measured:; Camera-Locked Ratio:; 43.6%; Dynamic / Panning Ratio:; 56.4%} <zero-drift>
+- L27 [3] Speech Cadence & Acoustic Dynamics — - Deduped Word Count: 1625 words (vs 1625 raw caption tokens) {Deduped Word Count:; 1625 words; Honest Speech Cadence:; 184.3 WPM; Acoustic Pauses ($>0.30$s):; 0 pauses} <High-Velocity; cut-alignment>
+- L34 [2] 2. Visual System & Stage Grammar <Near-black; [e.g. #14171A]; [e.g. #242930]; [e.g. #FF2D55]; High-salience; [e.g. #00E5FF]; unclassified; metaphor_prop>
+- L36 [3] The Ground & Environment — (Document the physical or graphic ground: dark charcoal void, cream washi paper, 3D textured studio, terminal UI, or live footage) {Ground Type:; Depth Strategy:} <Near-black>
+- L41 [3] Palette & Token Hierarchy — | Role | Observed Hex / Tone | Usage / Semantic Meaning | {Ground (60%); Surface (30%); Primary Accent (10%); Secondary Accent} <[e.g. #14171A]; [e.g. #242930]; [e.g. #FF2D55]; High-salience; [e.g. #00E5FF]>
+- L49 [3] Visual Species Distribution — | Species | Count | Share | Primary Function in Video | <unclassified; metaphor_prop>
+- L57 [2] 3. Information Architecture & Retention Pacing
+- L59 [3] 6-Phase Retention Architecture Mapping
+- L60 [4] P1: The Open (Hook & Contract) [00:00 - 01:30] — - Pacing: 20 events | 404 words | 269.3 WPM {Pacing:; 269.3 WPM; Inquiry Check:; Deduped Audio Snippet:}
+- L65 [4] P2: The Engine (Foundational Model) [01:30 - 01:30] — - Pacing: 1 events | 24 words | 0.0 WPM {Pacing:; 0.0 WPM; Inquiry Check:; Deduped Audio Snippet:}
+- L70 [4] P3: The Gap (Mounting Contradiction) [01:30 - 03:58] — - Pacing: 41 events | 750 words | 303.9 WPM {Pacing:; 303.9 WPM; Inquiry Check:; Deduped Audio Snippet:}
+- L75 [4] P4: The Pivot (Chiastic Reversal) [03:58 - 04:51] — - Pacing: 10 events | 272 words | 308.6 WPM {Pacing:; 308.6 WPM; Inquiry Check:; Deduped Audio Snippet:}
+- L80 [4] P5: The Payoff (Grand Climax) [04:51 - 07:30] — - Pacing: 21 events | 583 words | 220.5 WPM {Pacing:; 220.5 WPM; Inquiry Check:; Deduped Audio Snippet:}
+- L85 [4] P6: The Close (Resolution & Ring Echo) [07:30 - 08:49] — - Pacing: 12 events | 393 words | 297.2 WPM {Pacing:; 297.2 WPM; Inquiry Check:; Deduped Audio Snippet:}
+- L92 [2] 4. Differentiating Visual & Motion Techniques (Open-Ended Discovery) — (Document the unique technical, mathematical, or directorial innovations discovered in this specific video) <[e.g. Shot #14, 02:15]; [e.g. Shot #45, 08:22]>
+- L95 [3] Technique 1: [Name Technique, e.g. Diegetic Studio Stage / Dynamic Spring Scale / Tip Tracking] — - Observed Timestamp & Shot ID: `[e.g. Shot #14, 02:15]` {Observed Timestamp & Shot ID:; Visual Effect:; Cognitive Function:; Mathematical / Mechanical Formulation:} <[e.g. Shot #14, 02:15]>
+- L105 [3] Technique 2: [Name Second Discovered Technique] — - Observed Timestamp & Shot ID: `[e.g. Shot #45, 08:22]` {Observed Timestamp & Shot ID:; Visual Effect:; Cognitive Function:; Mathematical / Mechanical Formulation:} <[e.g. Shot #45, 08:22]>
+- L116 [2] 5. Doctrine Fit & Gap Analysis (Outreach Video Engine) — | Technique / Device | Repo Doctrine Status | Engine Capability Gap | Recommended Action | {[Technique A]; [Technique B]; [Technique C]} <[e.g. Novel part-to-whole]; [e.g. Missing component]; [e.g. Violates Ruling E22 (Anti-bloom)]; anti-pattern>
+- L126 [2] 6. Artifact Manifest & Verification — - Dual-Track Shot Ledger: [`SHOT_LEDGER.md`](SHOT_LEDGER.md) (100 events classified) {Dual-Track Shot Ledger:; Quantitative Camera Telemetry:; 3-Tile High-Fidelity Contact Sheets:} <camera.json; contact_sheet_01.jpg; contact_sheet_02.jpg; contact_sheet_03.jpg; contact_sheet_04.jpg; contact_sheet_05.jpg; contact_sheet_06.jpg; contact_sheet_07.jpg; contact_sheet_08.jpg; contact_sheet_09.jpg; contact_sheet_10.jpg; contact_sheet_11.jpg>
+
+## content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/SHOT_LEDGER.md
+
+- L1 [1] SHOT LEDGER: Dual-Track Visual Events & Composition Hierarchy — | Shot # | Start | End | Dur (s) | Kind | Camera | Keyframe | Species | Spoken Line / Audio Beat | <LOCKED; unclassified; SLOW_PUSH; metaphor_prop; build; PowerPoint; PAN; YouTube; zoom-in; DYNAMIC; chart; record_document>
+- L106 [3] Taxonomy Legend — - Kind: `COMP` = new base stage / scene cut; `build` = animated element or callout inside held composition. {Kind:; Camera:; Species:} <COMP; build; LOCKED; SLOW_PUSH; zoom-in; PAN; DYNAMIC; chart; record_document; metaphor_prop; diagram_flow; map>
 
 ## content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md
 
