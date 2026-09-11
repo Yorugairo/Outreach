@@ -1602,7 +1602,9 @@ def _morph_gate(scenes: list[dict], inv: dict | str | None) -> Gate | None:
         fails = [n for n, ok in (("centroid", r.get("centroid_ok")), ("axis", r.get("axis_ok")), ("area", r.get("area_ok"))) if not ok]
         if r.get("min_det", 1) <= 0:
             fails.append("det J <= 0")
-        txt = f"{sc.get('scene_id')}: centroid {100 * float(r.get('centroid_shift', 0)):.1f} % W, axis {float(r.get('axis_deg', 0)):.1f} deg, area {float(r.get('area_ratio', 0)):.2f}, min det {float(r.get('min_det', 0)):.3f}"
+        # P50 T12: WHICH METHOD ran is part of the reading - Method A's det is a measurement, Method B's is a guarantee
+        txt = (f"{sc.get('scene_id')}: method {str(r.get('method') or 'arap')}, centroid {100 * float(r.get('centroid_shift', 0)):.1f} % W, "
+               f"axis {float(r.get('axis_deg', 0)):.1f} deg, area {float(r.get('area_ratio', 0)):.2f}, min det {float(r.get('min_det', 0)):.3f}")
         (bad if fails else rows).append(txt + (" - FAILS " + ", ".join(fails) if fails else ""))
     if bad:
         return Gate("M17", "WARN", "; ".join(bad + rows) + " - the morph does not read as one thing changing (move the prop onto the chart's box, keep its axis, keep its area)", SRC_M17)

@@ -77,7 +77,7 @@ ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page
 MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets (stopaction.mjs MASS) a throw or a landing settles by
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
-PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use")   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill")   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
@@ -226,8 +226,18 @@ PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure",
                  SPECIES_SPAN, SPECIES_CROSS)   # P50 T4: a span is a page species - it is shaded behind the page's own chart, on the page's own clock and live scale (R26-28)
 CHART_TO_KINDS = ("recast", "rescale", "extend", "park", "morph")   # P48: recast (T4, a hand-over; keyed: T4b), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform), morph (T5: the area under the line becomes the target's by ARAP)
 MORPH_BUILDERS = ("dense-line",)                     # P48 T5: the shape a morph moves is the AREA UNDER A LINE - both sides of a morph_to are line pages
+MORPH_METHODS = ("a", "arap")                        # doc 43 s43.5: A = vertex-based (ring-normalise, resample, rotational alignment, lerp, cubic), B = triangle-based ARAP
+# The decision rule (doc 43 s43.5): "outline-to-outline with modest rotation -> Method A ... anything where the prop
+# deforms into a chart with real rotation -> Method B", and "start on A; escalate when a shape actually collapses".
+# The doc's own number for "real" is 90 deg (where the vertex lerp collapses to zero area); the number the ENGINE can
+# act on is TR-7's, 15 deg, because a pair past it is refused outright (below) - so every pair the compiler admits is
+# "modest" and defaults to A, and B is reached by naming `method: "arap"` on the row. That is doc 43's escalation,
+# written down: the refusal is what makes the default safe.
+METHOD_A_MAX_DEG = 15.0   # [DERIVED: arap.mjs ARAP.AXIS_MAX_DEG / the brief B4 - the same limit the refusal enforces]
 PARK_ANCHORS = ("top", "bottom", "left", "right")   # the corner of its own box the parked chart shrinks toward (top = Bravos 91: up, the room opens below)
 RECAST_PAIRS = (("dense-line", "story"),)             # P48 T4b: the legal KEYED pairs - n lines <-> n bars by series (Bravos 99-105); everything else recasts by the hand-over
+RECAST_TAG_PAIRS = (("dense-line", "story"),)        # P50 T11: the legal pairs for `keyed: "tags"` - each series' TERMINAL TAG is the mark that becomes its bar (Bravos 104-105), so the source must be a page that names its lines at their ends
+RECAST_KEYS = (True, "tags")                         # P50 T11: `keyed: true` keys the DATUM (the line's end -> the bar's top), `keyed: "tags"` keys the TAG (the name at the end -> the bar's own number); false / absent is the hand-over
 PARK_SCALE = (0.3, 0.95)                             # a parked chart is still a chart: never below 0.3 of itself, and 0.95 is not a park; exactly 1.0 is an UN-PARK (2026-09-10)
 # SPECIES BY SENTENCE (P50 T1, 2026-09-11; the operator: "do we already have an understanding mapped in docs to how/where to
 # know when to use these capabilities?"). One line per kind: WHICH SENTENCE calls for it. The map is
@@ -512,6 +522,19 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     elif kind == "chart_to":
         if entry.get("to") not in CHART_TO_KINDS:
             errs.append(f"chart_to: 'to' must be one of {'|'.join(CHART_TO_KINDS)} (the verb the chart changes state by)")
+        if entry.get("keyed") not in (None, False) and entry.get("keyed") not in RECAST_KEYS:
+            errs.append("chart_to recast: keyed must be true (the DATUM hands over: the line's end becomes the bar's top) "
+                        "or \"tags\" (the TERMINAL TAG hands over: the name at the line's end becomes the bar's number, "
+                        "P50 T11) - absent is the plain recast, the hand-over")
+        elif entry.get("keyed") not in (None, False) and entry.get("to") != "recast":
+            errs.append(f"chart_to {entry.get('to')}: 'keyed' belongs to the RECAST - the verb that shows the same data in another form")
+        if entry.get("method") is not None:   # P50 T12: doc 43 s43.5's two methods, named only where there are two
+            if entry.get("to") != "morph":
+                errs.append(f"chart_to {entry.get('to')}: 'method' belongs to the MORPH (doc 43 s43.5) - no other verb has two")
+            elif entry["method"] not in MORPH_METHODS:
+                errs.append(f"chart_to morph: method must be one of {'|'.join(MORPH_METHODS)} "
+                            "(a = the vertex lerp of doc 43 s43.5 Method A, arap = Method B's triangle solve); "
+                            "absent, the compiler chooses by the pair's measured rotation")
         if entry.get("to") == "park":
             # P48 T2b: no state is derived - the ACTIVE chart is transformed as one piece; the row names how small and toward which side
             sc = entry.get("scale", 0.72)
@@ -1076,6 +1099,23 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
             if pair[0] not in MORPH_BUILDERS or pair[1] not in MORPH_BUILDERS:
                 raise ValueError(f"chart_to morph: {pair[0]} -> {pair[1]}: a morph moves the AREA UNDER A LINE into another ({'|'.join(MORPH_BUILDERS)} on both sides); "
                                  "n lines -> n bars is the keyed recast (keyed: true); anything else is the recast (the hand-over) or a cut")
+            # P50 T12 (TR-7): the three match-cut invariants are measured on the PAIR ITSELF, here, before a player
+            # exists - a bad match is a build error naming the number it missed by, never a silent bad morph that
+            # M17 reports after the render. The same measurement the player makes (measure_morph.py's port of
+            # arap.mjs), on the two strips the two pages would hand each other.
+            import measure_morph as MM   # local: the gate's module chain, paid only by a page that morphs
+            inv = MM.pair_invariants(states[0], states[k])
+            if inv is None:
+                raise ValueError(f"chart_to morph: state {k} - neither state carries a series to read a shape from; "
+                                 "a morph moves the area under a LINE")
+            if not (inv["centroid_ok"] and inv["axis_ok"] and inv["area_ok"]):
+                raise ValueError(f"chart_to morph: state {k} - the pair fails the match-cut invariants (TR-7 / the brief B4, "
+                                 f"measured on the two shapes by measure_morph.py): {MM.invariant_line(inv)}. A morph reads "
+                                 "as ONE thing changing or it is a cut (E58: a morph's source is real or it is a cut) - use "
+                                 "the recast (the hand-over), or cut")
+            # doc 43 s43.5's decision rule, on the measured rotation; the row may name the method and override it
+            sp["method"] = sp.get("method") or ("a" if inv["axis_deg"] <= METHOD_A_MAX_DEG else "arap")
+            sp["invariants"] = {k2: round(inv[k2], 4) for k2 in ("centroid_shift", "axis_deg", "area_ratio")}
     for sp in (row_species or []):   # P50 T6: a cross names CELLS - of a treemap page, and only labels that page carries
         if isinstance(sp, dict) and sp.get("kind") == SPECIES_CROSS:
             page = (world or {}).get("page") or {}
@@ -1107,14 +1147,24 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
             if not (0 < k < len(states)):
                 raise ValueError(f"chart_to recast keyed: state {k} is not one of the page's other chart states")
             A, Bs = states[0], states[k]
+            tags = sp.get("keyed") == "tags"   # P50 T11: the TAG form - each series' end tag is the mark that becomes its bar
+            legal = RECAST_TAG_PAIRS if tags else RECAST_PAIRS
             pair = (A.get("builder"), Bs.get("builder"))
-            if pair not in RECAST_PAIRS:
-                raise ValueError(f"chart_to recast keyed: {pair[0]} -> {pair[1]} has no honest key correspondence (the legal pairs: "
-                                 + ", ".join(f"{a} -> {b}" for a, b in RECAST_PAIRS) + "); use the plain recast (the hand-over), morph_to or a cut")
-            n_lines = len([s for s in (A.get("series") or []) if not s.get("later")])
-            n_bars = len(Bs.get("values") or [])
+            if pair not in legal:
+                raise ValueError(f"chart_to recast keyed{' tags' if tags else ''}: {pair[0]} -> {pair[1]} has no honest key correspondence (the legal pairs: "
+                                 + ", ".join(f"{a} -> {b}" for a, b in legal) + "); use the plain recast (the hand-over), morph_to or a cut")
+            lines = [s for s in (A.get("series") or []) if not s.get("later")]
+            n_lines, n_bars = len(lines), len(Bs.get("values") or [])
             if n_lines != n_bars:
                 raise ValueError(f"chart_to recast keyed: {n_lines} line(s) and {n_bars} bar(s) - a keyed recast needs one bar per series; a {n_lines}-line page has no {n_bars}-bar correspondence")
+            if tags:
+                # the tag IS the hand-over: a line the page never named has nothing to hand its bar, and a silent
+                # cross-fade is the cut this verb exists to avoid (E53 s8: the name lives at the line's END)
+                bare = [i for i, s in enumerate(lines) if not str(s.get("name") or s.get("label") or "").strip()]
+                if bare:
+                    raise ValueError(f"chart_to recast keyed: \"tags\" hands each line's TERMINAL TAG to its bar, and series "
+                                     + ", ".join(str(i) for i in bare) + f" of {n_lines} carries no name or label to hand over - "
+                                     "name every line at its end (E53 s8), or use keyed: true (the datum hands over instead)")
     cur_window = None
     for sp in sorted((e for e in (row_species or []) if isinstance(e, dict) and e.get("kind") == "chart_to" and e.get("to") in ("rescale", "extend")), key=lambda e: e["at"]):
         if world.get("kind") != SPECIES_LEDGER:
@@ -1202,6 +1252,11 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
 
 
 def _check_opt(key: str, value, where: str) -> None:
+    if key == "pill":   # P50 T11 / R26-34: yes | no | the datum index the pill POPS at (springPop, Mp 0.05)
+        if value in ("yes", "no") or (value.isdigit() and int(value) >= 0):
+            return
+        raise ValueError(f"{where}: pill {value!r} is not yes|no|<datum index> (the milestone the pill pops at - "
+                         "a non-negative index of the page's first series)")
     allowed = {"idle": IDLE_KINDS, "arrive": ARRIVALS, "mass": MASSES, "morph": MORPH_SHAPES,
                "card": ("yes", "no"), "use": PLATE_USES}[key]
     if value not in allowed:
@@ -1336,6 +1391,15 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
         if world.get("kind") != SPECIES_LEDGER:
             raise ValueError(f"{plate_id!r}: card= is a LEDGER PAGE option")
         world["page"]["card"] = card == "yes"
+    pill = opts.pop("pill", None)
+    if pill is not None and pill != "no":
+        # P50 T11 (R26-34): the tip-riding pill is a LINE PAGE's option and it is the ROW's word, not the object's -
+        # the evidence object carries the data (AXES_KEYS); how this shot draws it is the plate id's, as `card=` is.
+        # It rides the DRAW, and the beats that drive the draw (build_to) are declared on the same row.
+        if world.get("kind") != SPECIES_LEDGER or (world.get("page") or {}).get("builder") not in MORPH_BUILDERS:
+            raise ValueError(f"{plate_id!r}: pill= is a DENSE-LINE page option - the pill rides a line's drawing tip "
+                             f"(this page is {((world.get('page') or {}).get('builder') or world.get('kind') or 'a plate')!r})")
+        world["page"]["tip_pill"] = True if pill == "yes" else {"milestone": int(pill)}
     world.update(opts)   # idle (E49), arrive / mass (P47 T1), use (E61) - written only when the row names them
     if thens:   # P48 T4: the other charts this page can become, each a full spec built at load
         if world.get("kind") != SPECIES_LEDGER:

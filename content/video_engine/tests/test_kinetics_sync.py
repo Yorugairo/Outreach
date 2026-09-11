@@ -22,9 +22,11 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import sync_kinetics as SK  # noqa: E402
 
-MODULES = ["ease", "spring", "stroke", "clothoid", "ink", "squash", "idle", "stopaction", "chartxf", "camera", "arap"]   # P43 T1 + P47 T5/T1/T3
+MODULES = ["ease", "spring", "stroke", "clothoid", "ink", "squash", "idle", "stopaction", "chartxf", "camera", "arap",
+           "morph_a"]   # P43 T1 + P47 T5/T1/T3 + P50 T12 (morph_a: doc 43 s43.5 Method A, after arap - it imports it)
                                               # + P50 T14 the clothoid fitter, beside the stroke it is drawn by; in dependency order (the template's region order)
-SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span", "vecmap"]   # P50 T2 on: one module per species kind, inlined into the species block; `press` is the
+SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span", "vecmap",
+           "tippill"]   # P50 T11: R26-34's pill - a line PAGE's option rather than a targeted kind, so it registers no painter   # P50 T2 on: one module per species kind, inlined into the species block; `press` is the
                               # `breakthrough` (P50 T10/T13) is a third that registers no painter: the burst is a PAGE
                               # mechanic painted by lpPaintBreakthrough off the page's build clock, and it PREDATES the
                               # module rule - only its new math (the placeholder, the axis capsule, the stepped cadence)

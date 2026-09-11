@@ -45,6 +45,7 @@ FRAME_T = {
     "span-decade": 12.6,            # P50 T4: the page has built (3.9 + 0.5 + 3.0), the span's shade is fully in (8.0 + IN_S) and its name fully written (8.45 + dur * WRITE = 12.45)
     "tiers-two": 14.2,              # P50 T9: both bands drawn (the page builds to 8.9, the second band's own word runs 9.5-11.5) and the drop bar in the accent all but finished (12.0 + 0.88 of 2.5) with its label being written
     "treemap-cross": 10.9,          # P50 T6: the census has landed (the build ends at 8.0), the three X's are struck (9.0 + CROSS_S) and the crossed share is written (9.0 + WRITE_AT + 3.0 * WRITE = 10.7)
+    "tags-to-bars": 12.2,           # P50 T11: mid-hand-over of the KEYED-TAGS recast (12 s + 2 s): the two terminal tags are halfway to their bars and growing into the bars' own type, the lines have left half their history beneath them, the bars are half grown, and no value has been drawn twice
     "ledger-keyed": 12.75,          # P48 T4b: mid-phase-2 of the keyed recast (12 s + 2 s; the golden's expoOut clock is half done at u 0.37): the lines have left half their history, their ends and values are in flight to the bar tops, the bars are half grown         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
 }
 
@@ -205,6 +206,39 @@ def ledger_keyed() -> tuple[dict, dict]:
         BST.derive_rescale_states(world, species, "ledger:golden-series:line;then=golden-bars:bars", ep)
     scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
     return _timeline("Golden: ledger keyed recast", scenes, {}, None), _base_uris()
+
+
+def tags_to_bars() -> tuple[dict, dict]:
+    """P50 T11: the KEYED-TAGS recast (Bravos 104-105) - a TWO-line page hands each line's TERMINAL TAG to its bar.
+    The tag is the mark that becomes the bar's number: it slides and grows into the bar's own value type while the
+    line un-draws by length beneath it, and no value is ever written twice. Two lines, not four, so the two tags are
+    legible in the frame; both are the golden series' own, and the bars are their last values, DERIVED into a temp
+    episode and built as a `then=` state by the compiler itself (judged mid-slide, FRAME_T 13.0)."""
+    import json
+    import tempfile
+    import build_scene_timeline_f as BST
+    raw = json.loads(SERIES.read_text(encoding="utf-8"))
+    lasts = [round(float(s["pts"][-1][1]), 1) for s in raw["series"][:2]]
+    # the tag IS the bar's number: each line is named "<its last value> <short name>" at its end (E53 s8), so when the
+    # tag lands on the bar the NUMBER does not change - only the name drops, to re-appear as the bar's own label
+    two = dict(raw, title="Two layers, one year", sub="index, 100 = Aug '25",
+               series=[dict(s, label=f"{v}", name=n) for s, v, n in zip(raw["series"][:2], lasts, ("Memory", "Chips"))])
+    two.pop("badges", None)
+    bars = {"title": "Where the two end", "sub": "index at the last point, 100 = Aug '25", "src": raw.get("src", ""), "unit": "",
+            "bars": [{"label": short, "value": v, "color": sr.get("color", "crimson")}
+                     for sr, short, v in zip(raw["series"][:2], ("Memory", "Chips"), lasts)]}
+    species = [{"kind": "chart_to", "at": 12.0, "dur": 2.0, "to": "recast", "state": 1, "keyed": "tags"}]
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td); (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/golden-two.series.json").write_text(json.dumps(two), encoding="utf-8")
+        (ep / "evidence/objects/golden-two-bars.series.json").write_text(json.dumps(bars), encoding="utf-8")
+        plate = "ledger:golden-two:line;then=golden-two-bars:bars"
+        world = BST.world_for_plate(plate, (0, 0, 0), ep)
+        world["ken_burns"] = {"scale": 0, "x": 0, "y": 0}
+        world["page"]["field"] = "soak"
+        BST.derive_rescale_states(world, species, plate, ep)
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: tags to bars", scenes, {}, None), _base_uris()
 
 
 # P50 T9: the two bands of the tiers golden - synthetic reserves, the SHAPE is what is under test
@@ -475,6 +509,7 @@ SURFACES = {
     "dock-pair-9x16": lambda: _dock_pair("9:16"),
     "ledger-extend": ledger_extend,
     "ledger-keyed": ledger_keyed,
+    "tags-to-bars": tags_to_bars,
     "chip-board": chip_board,
     "press-stack": press_stack,
     "flow-swap": flow_swap,

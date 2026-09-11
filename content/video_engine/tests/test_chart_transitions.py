@@ -660,7 +660,7 @@ KR_PROBE = """() => {
 }"""
 
 
-def _keyed_player(ep, plate, species, runtime=24.0):
+def _keyed_player(ep, plate, species, runtime=24.0, probe=None):
     from playwright.sync_api import sync_playwright
     tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
     world = B.world_for_plate(plate, (0, 0, 0), ep)
@@ -682,7 +682,7 @@ def _keyed_player(ep, plate, species, runtime=24.0):
 
     def at(t: float) -> dict:
         page.evaluate("t => { const s = document.getElementById('scrub'); s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
-        return page.evaluate(KR_PROBE)
+        return page.evaluate(probe or KR_PROBE)
 
     def close():
         br.close(); pw.stop(); srv.shutdown(); td.cleanup()
@@ -724,6 +724,106 @@ def test_a_keyed_recast_seeks_exactly(tmp_path):
         for t in (KR_AT + 0.4, KR_AT + KR_S * 0.8, KR_AT + KR_S + 2.0):
             a = at(t); at(3.0); at(KR_AT + KR_S + 5.0); b = at(t)
             assert json.dumps(a, sort_keys=True) == json.dumps(b, sort_keys=True), t
+    finally:
+        close()
+
+
+# ---- P50 T11: the keyed recast keyed on the TERMINAL TAGS (Bravos 104-105) -------------------------------------------
+
+
+def _tagged_ep(tmp: Path, named: bool = True) -> tuple[Path, str]:
+    """A temp episode: a TWO-line page whose lines are named at their ends (the tags), and its two bars. With
+    `named` off the lines carry no name or label - the page has no tags to hand over."""
+    src = json.loads(GOLDEN_SERIES.read_text(encoding="utf-8"))
+    lasts = [round(float(s["pts"][-1][1]), 1) for s in src["series"][:2]]
+    series = [dict(s) for s in src["series"][:2]]
+    for s, v, n in zip(series, lasts, ("Memory", "Chips")):
+        s["label"], s["name"] = (f"{v}", n) if named else ("", "")
+    lines = dict(src, title="Two layers, one year", series=series)
+    lines.pop("badges", None)
+    bars = {"title": "Where the two end", "sub": "index at the last point", "src": "Yahoo Finance", "unit": "",
+            "bars": [{"label": n, "value": v, "color": s.get("color", "crimson")}
+                     for s, n, v in zip(series, ("Memory", "Chips"), lasts)]}
+    (tmp / "evidence/objects").mkdir(parents=True, exist_ok=True)
+    (tmp / "evidence/objects/ev-tagged-v1.series.json").write_text(json.dumps(lines), encoding="utf-8")
+    (tmp / "evidence/objects/ev-twobars-v1.series.json").write_text(json.dumps(bars), encoding="utf-8")
+    return tmp, "ledger:ev-tagged-v1:line;then=ev-twobars-v1:bars"
+
+
+def test_the_keyed_tags_pair_is_admitted_and_the_tag_role_reaches_the_timeline(tmp_path):
+    """`keyed: "tags"` is the second key the recast can hand over on: the TAG rather than the datum. The pair is the
+    same one RECAST_PAIRS admits, but the page must carry the tags the verb hands over."""
+    assert B.RECAST_KEYS == (True, "tags") and B.RECAST_TAG_PAIRS == (("dense-line", "story"),)
+    ep, plate = _tagged_ep(tmp_path)
+    world = B.world_for_plate(plate, (0, 0, 0), ep)
+    assert (world["page"]["builder"], world["page_states"][0]["builder"]) == ("dense-line", "story")
+    species = [{"kind": "chart_to", "at": KR_AT, "dur": KR_S, "to": "recast", "state": 1, "keyed": "tags"}]
+    B.derive_rescale_states(world, species, plate, ep)
+    scene = {"scene_id": "s01", "span": [0.0, 24.0], "world": world, "species": species}
+    assert json.loads(json.dumps(scene))["species"][0]["keyed"] == "tags", "the role the tween keys on travels in the timeline"
+    assert [s["name"] for s in world["page"]["series"]] == ["Memory", "Chips"]
+    assert not B._validate_page_fields("chart_to", species[0])
+    assert any("keyed must be true" in e for e in B._validate_page_fields(
+        "chart_to", {"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "recast", "state": 1, "keyed": "names"}))
+
+
+def test_a_page_with_no_tags_is_refused_for_the_tag_form(tmp_path):
+    """A line the page never named has nothing to hand its bar; the silent cross-fade that would follow is the cut
+    this verb exists to avoid."""
+    ep, plate = _tagged_ep(tmp_path, named=False)
+    with pytest.raises(ValueError, match="series are named inline"):
+        B.world_for_plate(plate, (0, 0, 0), ep)   # s9.23b: an unnamed line page is not a page at all
+    # ... and the tag form's own check, for a world assembled another way (a derived state, a golden's builder)
+    ep2, plate2 = _tagged_ep(tmp_path / "named")
+    world = B.world_for_plate(plate2, (0, 0, 0), ep2)
+    for s in world["page"]["series"]:
+        s["label"], s["name"] = "", ""
+    species = [{"kind": "chart_to", "at": KR_AT, "dur": KR_S, "to": "recast", "state": 1, "keyed": "tags"}]
+    with pytest.raises(ValueError, match="carries no name or label to hand over"):
+        B.derive_rescale_states(world, species, plate2, ep2)
+    ep, plate = ep2, plate2
+    B.derive_rescale_states(B.world_for_plate(plate, (0, 0, 0), ep),
+                            [{"kind": "chart_to", "at": KR_AT, "dur": KR_S, "to": "recast", "state": 1, "keyed": True}],
+                            plate, ep)   # the DATUM form needs no tag: it is admitted on the same page
+
+
+TAGS_PROBE = """() => {
+  const w = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')); const st = w.__lp; const S = st.states || [st];
+  const A = S[0], Bs = S[1];
+  const tags = A.paths.filter(p => !p.muted).map(p => ({ x: +p.name.getAttribute('x'), y: +p.name.getAttribute('y'),
+    op: +p.name.getAttribute('opacity'), tr: p.name.getAttribute('transform') || '', txt: p.name.textContent,
+    off: parseFloat(p.p.getAttribute('stroke-dashoffset') || '0') }));
+  const bars = (Bs.bars || []).map(b => ({ sy: b.bar.style.transform || '', val: b.val ? +b.val.getAttribute('opacity') : null,
+    vx: b.val ? +b.val.getAttribute('x') : null, vy: b.val ? +b.val.getAttribute('y') : null, txt: b.val ? b.val.textContent : '' }));
+  return { tags, bars, active: st.active | 0 };
+}"""
+
+
+@needs_browser
+def test_each_tag_slides_into_its_bar_s_number_and_no_value_is_written_twice(tmp_path):
+    ep, plate = _tagged_ep(tmp_path)
+    species = [{"kind": "chart_to", "at": KR_AT, "dur": KR_S, "to": "recast", "state": 1, "keyed": "tags"}]
+    at, errs, close = _keyed_player(ep, plate, species, probe=TAGS_PROBE)
+    try:
+        before = at(KR_AT - 0.5)
+        assert all(t["op"] == 1 and t["tr"] == "" and t["off"] == 0 for t in before["tags"]), "the two tags stand at their lines' ends"
+        assert all(b["val"] == 0 for b in before["bars"]), "and the bars' numbers are not on the page yet"
+        mid = at(KR_AT + KR_S * 0.4)
+        for i, t in enumerate(mid["tags"]):
+            assert t["op"] == 1, "the tag IS the mark that travels - it never gives way mid-flight"
+            assert t["tr"].startswith("translate("), "it grows into the bar's own type as it goes"
+            assert abs(t["x"] - before["tags"][i]["x"]) > 1, "and it has moved"
+            assert t["off"] < 0, "the line un-draws by length beneath it (the dash window slides to the tail)"
+        assert all(b["val"] == 0 for b in mid["bars"]), "no value is drawn while its tag is still in flight"
+        assert all("scaleY(" in b["sy"] and b["sy"] != "scaleY(0)" for b in mid["bars"]), "the bars are growing"
+        after = at(KR_AT + KR_S + 0.5)
+        assert all(b["val"] == 1 for b in after["bars"]) and after["active"] == 1
+        assert all(t["op"] == 0 for t in after["tags"]), "one number, in one place: the tag is gone once the bar's own is up"
+        for i, b in enumerate(after["bars"]):
+            assert b["txt"] in before["tags"][i]["txt"], f"the bar's number is the one the tag carried ({b['txt']!r} vs {before['tags'][i]['txt']!r})"
+        back = at(KR_AT - 0.5)
+        assert json.dumps(back, sort_keys=True) == json.dumps(before, sort_keys=True), "a seek back is the play (the grown tag shrinks home)"
+        assert not errs, errs
     finally:
         close()
 

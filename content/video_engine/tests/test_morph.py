@@ -59,6 +59,92 @@ def test_the_plate_option_names_the_prop_outline():
     assert B.build_kinetics()["arap_morph"] is True
 
 
+# ---- P50 T12: METHOD A, and TR-7's invariants as compiler refusals ----------------------------
+
+MORPH_AT, MORPH_DUR = 6.0, 2.0
+
+
+def _synth(name: str, value, **axes) -> dict:
+    """A 40-point dense-line page (the builder picks dense-line past STORY_MAX_VALUES), synthetic on purpose:
+    the SHAPE is what the invariants read, so the fixture states it and nothing else."""
+    xs = [round(2020 + i * 0.1, 3) for i in range(40)]
+    return {"title": name, "sub": "synthetic", "src": "test", "unit": "",
+            "series": [{"name": name, "color": "crimson", "pts": [[x, round(value(i), 3)] for i, x in enumerate(xs)]}], **axes}
+
+
+HIGH = _synth("high", lambda i: 190 + 3 * (i % 2), domain=[0, 200], from_zero=True)   # the area under it fills the plot
+LOW = _synth("low", lambda i: 20 + 3 * (i % 2), domain=[0, 200], from_zero=True)      # ... and under this one it is a sliver
+MID = _synth("mid", lambda i: 105 + 3 * (i % 2), domain=[0, 200], from_zero=True)
+NEAR = _synth("near", lambda i: 188 + 3 * (i % 2), domain=[0, 200], from_zero=True)   # the same shape, two units down
+RISE = _synth("rise", lambda i: 100 + 30 * i / 39, domain=[100, 130])
+FALL = _synth("fall", lambda i: 130 - 30 * i / 39, domain=[100, 130])
+
+
+def _morph_pair(tmp: Path, a_doc: dict, b_doc: dict, species: list | None = None):
+    """Compile a two-state line page out of two synthetic objects and run the morph's checks over it."""
+    (tmp / "evidence/objects").mkdir(parents=True, exist_ok=True)
+    (tmp / "evidence/objects/ev-a-v1.series.json").write_text(json.dumps(a_doc), encoding="utf-8")
+    (tmp / "evidence/objects/ev-b-v1.series.json").write_text(json.dumps(b_doc), encoding="utf-8")
+    plate = "ledger:ev-a-v1:line;then=ev-b-v1:line"
+    world = B.world_for_plate(plate, (0, 0, 0), tmp)
+    sp = species if species is not None else [{"kind": "chart_to", "at": MORPH_AT, "dur": MORPH_DUR, "to": "morph", "state": 1}]
+    B.derive_rescale_states(world, sp, plate, tmp)
+    return world, sp
+
+
+def test_a_morph_whose_shape_travels_is_refused_with_the_measured_centroid(tmp_path: Path):
+    """TR-7's first invariant: the centroid may move 6 % of W. The area under a line at the top of the plot and the
+    area under one at its foot are not the same thing moving - they are two things, and that is a cut."""
+    with pytest.raises(ValueError, match=r"centroid 18\.3 % W \(FAIL, limit 6 %\)"):
+        _morph_pair(tmp_path, HIGH, LOW)
+    with pytest.raises(ValueError, match="fails the match-cut invariants"):
+        _morph_pair(tmp_path / "b", HIGH, LOW)
+
+
+def test_a_morph_whose_axis_turns_is_refused_with_the_measured_angle(tmp_path: Path):
+    """The second: 15 degrees. A rise becoming a fall turns the shape's principal axis through 43.7 of them."""
+    with pytest.raises(ValueError, match=r"axis 43\.7 deg \(FAIL, limit 15 deg\)"):
+        _morph_pair(tmp_path, RISE, FALL)
+
+
+def test_a_morph_that_loses_its_area_is_refused_with_the_measured_ratio(tmp_path: Path):
+    """The third: the bounding area keeps 60 % of itself. A shape that halves is a new shape."""
+    with pytest.raises(ValueError, match=r"area ratio 0\.56 \(FAIL, floor 0\.60\)"):
+        _morph_pair(tmp_path, HIGH, MID)
+    with pytest.raises(ValueError, match="use the recast"):
+        _morph_pair(tmp_path / "b", HIGH, MID)
+
+
+def test_a_good_pair_passes_and_the_method_is_the_decision_rule_s(tmp_path: Path):
+    """doc 43 s43.5: outline-to-outline with modest rotation -> Method A; the row may still name the other."""
+    _world, sp = _morph_pair(tmp_path, HIGH, NEAR)
+    assert sp[0]["method"] == "a", sp
+    assert sp[0]["invariants"]["axis_deg"] <= B.METHOD_A_MAX_DEG == 15.0
+    assert sp[0]["invariants"]["centroid_shift"] <= 0.06 and sp[0]["invariants"]["area_ratio"] >= 0.60
+    named = [{"kind": "chart_to", "at": MORPH_AT, "dur": MORPH_DUR, "to": "morph", "state": 1, "method": "arap"}]
+    _w2, sp2 = _morph_pair(tmp_path / "b", HIGH, NEAR, named)
+    assert sp2[0]["method"] == "arap", "a named method is the author's word, not the rule's"
+    assert B.MORPH_METHODS == ("a", "arap")
+    assert any("method must be one of a|arap" in e for e in
+               B._validate_page_fields("chart_to", {"kind": "chart_to", "at": 1.0, "dur": 1.0, "to": "morph", "state": 1, "method": "b"}))
+
+
+def test_the_pair_measurement_is_arap_mjs_s_own_dials_in_python(tmp_path: Path):
+    """measure_morph.py ports arap.mjs's invariants so the compiler can refuse before a player exists. The dials must
+    be ONE set: the module's freeze is the source of truth and this pins the port to it."""
+    src = (ROOT / "content/video_engine/scripts/kinetics/arap.mjs").read_text(encoding="utf-8")
+    m = re.search(r"ARAP = Object\.freeze\(\{([^}]*)\}\)", src)
+    assert m, "arap.mjs no longer freezes its dials where the port can read them"
+    for key in ("CENTROID_MAX", "AXIS_MAX_DEG", "AREA_MIN_RATIO", "N"):
+        got = re.search(key + r":\s*([\d.]+)", m.group(1))
+        assert got and float(got.group(1)) == float(MM.MORPH_DIALS[key]), (key, got and got.group(1), MM.MORPH_DIALS[key])
+    ring = [[0, 0], [100, 0], [100, 50], [0, 50]]
+    same = MM.ring_invariants(ring, [[x + 1, y] for x, y in ring], 1000)
+    assert same["centroid_ok"] and same["axis_ok"] and same["area_ok"] and same["axis_deg"] < 1e-9
+    turned = MM.ring_invariants(ring, [[y, x] for x, y in ring], 1000)
+    assert not turned["axis_ok"] and abs(turned["axis_deg"] - 90.0) < 1e-6 or turned["axis_deg"] > 15
+
+
 # ---- the gate --------------------------------------------------------------------------------
 
 

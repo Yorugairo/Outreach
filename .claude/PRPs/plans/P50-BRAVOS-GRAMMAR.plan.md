@@ -350,7 +350,7 @@ Acceptance:
 - Evidence: `scripts/species/breakthrough.mjs` (160; `tests/kinetics/breakthrough.test.mjs` 19 node tests), the template (+254: the "?" track and stamp until the hold, the axis capsule with `breakCapsuleFit` and the dotted leader routed beside the bar), `ledger_page.py` (`overflow_placeholder` - `placeholder` already means SOURCES-TO-VERIFY, the collision caught by an existing test - and `overflow_capsule`), `proof_breakthrough.py` (four proof pages: burst, stack, furniture, stop), `test_breakthrough.py` (+3). The parent's run: sync 19 modules (11 + 8); node 192/192; 202 across breakthrough, goldens (byte-identical - the options are off), gate, probe, portrait parity, sync, lint, ledger; the filmstrip read by the parent (5.00 the "?" mid-build, 5.85 the count at the hold with the capsule and leader, 6.37 mid-shoot). A dial to rule on the first cut: the y-axis capsule for vertical bars.
 
 ### T11: Line-end tags become the next chart's bars (Bravos shots 104-105; continuity)
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: `implementation_luna`; parent integrates
 - Depends on: T1
 - Write set: `build_scene_timeline_f.py` (`RECAST_PAIRS` gains `("dense-line", "story")` KEYED ON THE TERMINAL TAGS:
@@ -361,10 +361,10 @@ Acceptance:
 - Acceptance: a four-line yield page hands its four tags to a four-bar page with no cut and no re-draw of the values;
   the tag rides the tip during the draw and names the line at its end (E53 unchanged); goldens byte-identical.
 - Validate: `python -m pytest content/video_engine/tests/test_chart_transitions.py content/video_engine/tests/test_golden_frames.py -q`
-- Evidence: pending
+- Evidence: `RECAST_TAG_PAIRS` / `RECAST_KEYS` (`keyed: "tags"`), the template's `lpPaintRecastKeyed` tag role (the hand-over on the clock, `KEYED_TAG_HAND` 0.92), `scripts/species/tippill.mjs` (103; `tests/kinetics/tippill.test.mjs` 7) with `;pill=yes|no|<n>` on the plate id, `test_chart_transitions.py` (+104), the golden `tags-to-bars` (read by the parent: the lines un-drawing, the tags standing, the bars rising to take them; the filmstrip 11.50 / 12.20 / 14.60 and the pill mid-draw at 4.75). Three defects found on the frames and fixed in place: the pill copied the tag flat (it clones the tag now), it measured its width before the webfont loaded, the hand-over ran on the eased slide. R26-34 closed; R26-42 (the pill's leader behind its capsule) and R26-43 (a tag wider than the chart: no pill, silently) logged.
 
 ### T12: Morph Method A (vertex-based) and TR-7's ARAP invariants as compiler refusals
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: parent (the invariants); `implementation_luna` (Method A)
 - Depends on: none
 - Write set: `content/video_engine/scripts/kinetics/morph_a.mjs` (new: ring-normalise, resample to N, the rotational
@@ -377,7 +377,7 @@ Acceptance:
 - Acceptance: the same morph renders by A and by ARAP and the frames are read side by side (a human gate on the demo,
   as HG3 was); a pair outside the invariants is refused with the measured number; goldens byte-identical.
 - Validate: `python -m pytest content/video_engine/tests/test_morph.py content/video_engine/tests/test_kinetics_sync.py -q`
-- Evidence: pending
+- Evidence: `kinetics/morph_a.mjs` (106; `tests/kinetics/morph_a.test.mjs` 8: every intermediate ring simple, the area monotone, the alignment minimal, the endpoints exact), `measure_morph.py` (+211: the three invariants for a pair, `--pair A B`; M17 opens with the method and the numbers - for A the min det measured on the strip's triangles), the compiler (`MORPH_METHODS`, `METHOD_A_MAX_DEG` 15, the three refusals naming the measured number and the limit - verbatim in the commit), the template's `lpPaintMorphTo` routing (ARAP when `method` is absent: old timelines byte-identical), `test_morph.py` (+86), `proof_morph_a.py` + `steel-and-paper/build-f/morph-a-proof.html` and `morph-a-arap-proof.html` (the same pair by both methods, for the operator's read - the human gate on the demo). The parent's run: sync 21 modules (12 + 9); node 207/207; 248 across morph, transitions, goldens (byte-identical), sync, gate, portrait parity, species, breakthrough; the filmstrip read (7.10 by A and by ARAP). Default ratified: every admitted pair defaults to A. Open: R26-16's planted element (`morph_from` across a scene boundary) is a different write set - the rule stands, the row re-worded.
 
 ### T13: The stop-motion burst (R26-30, the operator's blend)
 - Status: complete (2026-09-11)
