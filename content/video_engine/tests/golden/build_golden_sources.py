@@ -41,6 +41,7 @@ FRAME_T = {
     "press-stack": 11.4,            # P50 T3: all three cards landed (5.0 / 7.4 / 9.8 + LAND_S), the pile settled, and the underline on the third fully drawn (10.6 + SQUIG_DRAW)
     "chip-board": 11.0,             # P50 T2: all three chips landed (5.0 / 6.2 / 7.4 + LAND_S) and the middle one's X fully drawn (10.0 + CROSS_S) - the board as it is read
     "flow-swap": 12.6,              # P50 T4: the swap is over (11.0 + SWAP_OUT_S + SWAP_IN_S = 11.75), the new node stands where the old one did, both arrows and the year stamp are in
+    "vecmap-arc": 12.4,             # P50 T5: all four have landed - IRN lit (5.0), the arc drawn (6.6 + DRAW_S), "1996" stamped (8.4), CHN lit (9.6) with its figure (10.4) - and the X that cuts the flow is fully struck (11.5 + CROSS_S = 11.95)
     "span-decade": 12.6,            # P50 T4: the page has built (3.9 + 0.5 + 3.0), the span's shade is fully in (8.0 + IN_S) and its name fully written (8.45 + dur * WRITE = 12.45)
     "ledger-keyed": 12.75,          # P48 T4b: mid-phase-2 of the keyed recast (12 s + 2 s; the golden's expoOut clock is half done at u 0.37): the lines have left half their history, their ends and values are in flight to the bar tops, the bars are half grown         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
 }
@@ -278,6 +279,40 @@ PRESS_CARDS = [
 ]
 
 
+# P50 T5: the vector map. Two declared MAP POINTS (map box units, x = (lon + 180) / 360 * 1000,
+# y = (90 - lat) / 180 * 500): the Gulf the oil leaves, and the mid-Atlantic where the year stamps.
+VECMAP_GULF = {"kind": "mappoint", "x": 644, "y": 178}      # ~52E 26N
+VECMAP_ATLANTIC = {"kind": "mappoint", "x": 430, "y": 100}  # ~25W 54N, clear of the arc it dates (read in the frame: at 40N the year sat under the X)
+
+
+def vecmap_arc() -> tuple[dict, dict]:
+    """P50 T5: THE VECTOR MAP (Bravos shots 57-80) on one clock, in PORTRAIT - the aspect the map has to
+    survive, because a 9:16 stage is where a world map is hardest to read.
+
+    Iran LIGHTS on its word (the country's own outline filled to the accent - the spotlight's cousin, never
+    a ring: E56); an ARC leaves the Gulf and crosses to the United States, drawn by length with the nib as a
+    clothoid that lifts toward the pole, and is CUT by an X at its midpoint on a later word; "1996" STAMPS
+    over the Atlantic at the year's size; China lights and takes "1.4 Billion Barrels" at its centroid.
+
+    The world is built by the compiler's OWN world_for_plate off the plate id `vecmap:IRN,USA,CHN`, and the
+    map rides the asset map as `map:world-110m` through its OWN world_map_json - so this golden proves the
+    data (Natural Earth 110m, public domain), the compiler's route and the painter module together. The map
+    carries the breath idle (E49): a held world is never a still image. Judged once the X is struck (12.4)."""
+    import build_scene_timeline_f as BST
+    world = BST.world_for_plate("vecmap:IRN,USA,CHN", (0, 0, 0), None)
+    species = [
+        {"kind": "light", "at": 5.0, "dur": 14.0, "idle": "breath", "target": {"kind": "country", "id": "IRN"}},
+        {"kind": "arc", "at": 6.6, "dur": 12.0, "crossed": 11.5, "from": VECMAP_GULF, "to": {"kind": "country", "id": "USA"}},
+        {"kind": "stamp", "at": 8.4, "dur": 10.0, "size": "year", "text": "1996", "target": VECMAP_ATLANTIC},
+        {"kind": "light", "at": 9.6, "dur": 9.0, "idle": "breath", "target": {"kind": "country", "id": "CHN"}},
+        {"kind": "stamp", "at": 10.4, "dur": 8.0, "text": "1.4 Billion Barrels", "target": {"kind": "country", "id": "CHN"}},
+    ]
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = _base_uris()
+    uris[BST.MAP_PREFIX + world["map"]] = BST.world_map_json(world["map"])
+    return _timeline("Golden: the vector map, its arc and its stamps", scenes, {}, "9:16"), uris
+
+
 def press_stack() -> tuple[dict, dict]:
     """P50 T3: THREE PRESS CARDS on a bare plate, stacking on three words (Bravos shots 5-10), the third carrying
     the underline on its quoted phrase (E56's one exception, the squiggle law §9.27).
@@ -347,6 +382,7 @@ SURFACES = {
     "press-stack": press_stack,
     "flow-swap": flow_swap,
     "span-decade": span_decade,
+    "vecmap-arc": vecmap_arc,
 }
 
 

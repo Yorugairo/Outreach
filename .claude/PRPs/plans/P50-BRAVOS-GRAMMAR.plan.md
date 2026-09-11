@@ -245,7 +245,7 @@ Acceptance:
 - Evidence: `scripts/species/flow.mjs` (248) + `tests/kinetics/flow.test.mjs` (250); `scripts/species/span.mjs` (103) + `tests/kinetics/span.test.mjs` (123); the compiler (`flow`, `span` in SPECIES_KINDS / SPECIES_WHEN / validate_species; `span` a PAGE species), the gate, the lint's availability table (EXPLAINS: chip + flow; SPANS: span), the template (the flow painter through the registry; the span on the perform layer); goldens `flow-swap` and `span-decade` (read by the parent: PLANTS -> CHIPS -> PRICE with smooth clothoid arrows and the 1973 tag; THE RUN-UP shaded behind the memory-makers lines). The parent's run: node 140/140 across the kinetics tests; sync_kinetics 15 modules (11 kinetics, 4 species); goldens byte-identical. The agent hit its turn limit at the span node test and was resumed for the compiler tests, the filmstrip and the report.
 
 ### T5: The vector map - a world that lights, an arc that crosses, a stamp that lands
-- Status: pending
+- Status: complete (2026-09-11) - the data (06dae01) and the world + species
 - Owner: `implementation_luna` for the data (Natural Earth 110m -> `assets/maps/world-110m.paths.json`, ids by ISO
   A3, simplified to <= 450 path nodes per country per the C4 seek envelope); parent for the species
 - Depends on: T2 (the chips on the map)
@@ -258,7 +258,7 @@ Acceptance:
   China lights and takes "1.4 Billion Barrels"; every event keyed to a word; M16 counts each light and arc; the light
   on a country is the spotlight species' cousin, never a ring (E56).
 - Validate: the test suite above; `python content/video_engine/scripts/measure_frozen_frames.py <proof build>`
-- Evidence: pending
+- Evidence: the data (commit 06dae01): `build_world_map.py`, `assets/maps/world-110m.paths.json` (186,741 bytes, 177 countries, nodes min 6 / median 36 / max 442, the source pinned by blob hash), `tests/test_world_map.py` (24). The world and the species: `scripts/species/vecmap.mjs` (357) + `tests/kinetics/vecmap.test.mjs` (272); the compiler (`vecmap[:<A3 list>]`, the focus fit for both aspects, the map shipped once in the asset map, `light` / `arc` / `stamp` with `size: figure|year`, the `country` and `mappoint` targets admitted only on a vecmap world), the gate, the lint (NAMES: light, arc, stamp; the pending line closed), the template's thin world branch; the golden `vecmap-arc` (read by the parent: the world in muted ink, IRN and CHN lit, the USA the focus outline, the Gulf -> US arc crossed with its X, 1996 and 1.4 Billion Barrels stamped). The parent's run: sync_kinetics 16 modules (11 + 5); node 159/159; 187 across goldens (existing byte-identical), targeted species, portrait parity, lint, sync, gate, world map. The agent hit its turn limit at the compiler tests and was resumed for the filmstrip and the report.
 
 ### T6: The treemap page builder with X marks
 - Status: pending (gate 1 ruled 2026-09-10 - the census exception, E53 §1 second amendment)

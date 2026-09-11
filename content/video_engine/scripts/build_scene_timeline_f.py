@@ -33,6 +33,7 @@ import base64
 import io
 import hashlib
 import copy
+import functools
 import json
 import re
 import mimetypes
@@ -97,6 +98,22 @@ SHOT_TABLE_FILE = "SHOT-TABLE-F.py"
 TITLE, SUBTITLE, EPISODE_ID = "Steel and Paper", "Money Physics · answer to Bravos Research", "steel-and-paper"
 ASPECT = None                      # "9:16" for a short: the template reads timeline.aspect (html[data-aspect])
 CLIP_PREFIX = "clip:"              # shot-table plate id for a CLIP world: clip:<path to a silent mp4>
+# THE VECTOR MAP (P50 T5; the Bravos world map, shots 57-80). A shot-table plate id `vecmap[:<A3 list>]` is a
+# world that is DRAWN, not embedded - the same relation a ledger page has to a plate: 177 country outlines from
+# content/video_engine/assets/maps/world-110m.paths.json (Natural Earth 110m, public domain, ids by ISO A3,
+# already projected onto a 1000 x 500 equirectangular box by build_world_map.py) painted by
+# scripts/species/vecmap.mjs. The id's optional list is the FOCUS SET: the countries this composition frames.
+# The FIT is not compiled: the player carries one file for both aspects (render_baseline instantiates the same
+# timeline at 16:9 and at 9:16, and test_portrait_parity flips a golden's aspect), so the framing is computed at
+# load from the focus set's own bboxes and the live stage - mapFit, one similarity per composition, tested in
+# tests/kinetics/vecmap.test.mjs for both aspects. What the compiler owns is what the player must not guess:
+# which countries are framed, that every name is real, and that the map data reaches the player ONCE.
+VECMAP_KIND = "vecmap"
+VECMAP_PREFIX = re.compile(r"^vecmap(?::|;|$)")   # `vecmap`, `vecmap:IRN,USA,CHN`, `vecmap;idle=drift` - never a plate called `vecmap-desk`
+WORLD_MAP = "world-110m"                          # the one map on disk; the id names it so a second one is a new name, never a new branch
+MAP_PREFIX = "map:"                               # ... and its key in the asset map: `map:world-110m`, written once however many scenes use it
+MAPS_DIR = REPO / "content/video_engine/assets/maps"
+VECMAP_FOCUS_MAX = 6                              # a focus set of seven countries is the whole world: drop the list (E59: a composition frames its places)
 SPECIES_CLIP = "clip"              # world.kind for a clip; the player seeks a <video> to the scene clock
 # VIDEO DOCK (ruling E44 / backlog R26-7, operator 2026-09-06: "use the chart plate/ledger AND THEN DOCK
 # the animation videos"): a dock asset may be a clip. It embeds raw like a clip world and the player seeks
@@ -184,6 +201,13 @@ SPECIES_KINDS += (SPECIES_CHIP,)   # P50 T2: THE ICON CHIP (the Bravos icon boar
                                    # template's body; this file still owns its grammar, its targets and its glyph's provenance.
 SPECIES_KINDS += (SPECIES_FLOW, SPECIES_SPAN)   # P50 T4 (2026-09-11), both under the module rule
 FLOW_NODES = (2, 6)   # a mechanism with ONE part is a chip; with seven it is a diagram nobody reads at phone size
+SPECIES_LIGHT, SPECIES_ARC, SPECIES_STAMP = "light", "arc", "stamp"
+SPECIES_KINDS += (SPECIES_LIGHT, SPECIES_ARC, SPECIES_STAMP)   # P50 T5: the three species of the VECTOR MAP world, and of no other world.
+VECMAP_SPECIES = (SPECIES_LIGHT, SPECIES_ARC, SPECIES_STAMP)   # light: the country's fill rises to the accent and holds (the spotlight's cousin -
+                          # a FILL, never a ring: E56). arc: a clothoid from one centroid to another, drawn by length with the nib, an X struck at
+                          # its midpoint when the flow is CUT. stamp: a figure written at a place, or a YEAR at the smaller size - `year` is not a
+                          # fourth kind, it is `size: "year"` on a stamp (one act - a number put on a place - is one kind, one `when`, one event edge).
+STAMP_SIZES = ("figure", "year")
 UNDERLINE_FORM = "underline"   # P50 T3: a callout's FORM - the hand-drawn underline under a press card's quoted phrase (E56's one
                                # exception, the squiggle law s9.27). Not a species kind: the grammar gains a form and a target, not a kind.
 HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
@@ -224,6 +248,9 @@ SPECIES_WHEN = {
     "peel": "the sentence names a slice of a whole that LEAVES - the share page's slice peels off and goes blood red",
     SPECIES_CHIP: "the sentence names a THING as one of a set (a prediction, an actor, a plant) - a chip lands on its word; RETRACTS crosses it out on a later word (Bravos's icon board)",
     SPECIES_FLOW: "the sentence EXPLAINS a mechanism - A causes B via C - as named things and the arrows between them; a later word SWAPS one node and the rest stands (Bravos's rhyme)",
+    SPECIES_LIGHT: "the sentence NAMES a place - the country lights on the word, the spotlight's cousin (a fill, never a ring)",
+    SPECIES_ARC: "the sentence NAMES a flow between two places - the arc draws from one to the other on the word; crossed when the flow is cut",
+    SPECIES_STAMP: "the sentence puts a NUMBER or a name on a place - the figure writes at the country's centroid",
     SPECIES_SPAN: "the sentence SPANS a period on a chart - a regime, an epoch, 'the decade' - shaded behind the line with its name; a bracket measures two data, a span names a stretch of time",
     "chart_to": "the sentence needs the SAME data at another scale / with more of it / in another form / beside a card - the page changes state (E58; CHART_TO_WHEN names the verb); never a cut to a second chart of it",
 }
@@ -322,6 +349,11 @@ def validate_camera_row(cam, row_species, plate_id: str) -> list[str]:
         errs.append(f"{plate_id}: attention landings and a {moves[0]} species on one row - the landing IS the camera's move (E51, s9.28 C3)")
     return errs
 TARGET_KINDS = ("datum", "point", "region", "span")
+COUNTRY_TARGET, MAPPOINT_TARGET = "country", "mappoint"   # P50 T5: a place on the VECTOR MAP - {"kind": "country", "id": "IRN"} (the
+MAP_TARGETS = (COUNTRY_TARGET, MAPPOINT_TARGET)           # outline's own centroid) or {"kind": "mappoint", "x": 640, "y": 165} in MAP BOX
+                                                          # units, never stage fractions: the map is the coordinate system, so a declared
+                                                          # point stays on the Gulf at either aspect and under any framing. Admitted for the
+                                                          # three vecmap species alone - every other species names a stage coordinate.
 # s9.27 targeting law: the target kinds each species may take. () = the species
 # needs no target (plate life's target is the plate itself); everything else
 # fires only on a declared coordinate - datum index / series point on a page or
@@ -336,17 +368,21 @@ SPECIES_TARGETS = {
     SPECIES_CHIP: ("point", "region"),   # P50 T2: a chip lands where the author declared it - a point, or centred in a region;
                                          # E56 does not reach it (a chip is a card with a glyph, never a ring around a picture)
     SPECIES_FLOW: ("region",),   # P50 T4: a diagram needs its ROOM declared - the box it draws itself inside; a point would leave its size to the painter
+    SPECIES_LIGHT: (COUNTRY_TARGET,),                  # P50 T5: a COUNTRY lights - a point cannot (the light is the outline's own fill)
+    SPECIES_STAMP: MAP_TARGETS,                        # ... a stamp writes at a country's centroid or at a declared point (a year over the Gulf)
+    SPECIES_ARC: (),                                   # ... and an arc names its two ENDS (`from` / `to`), not one target
     SPECIES_SPAN: (),            # ... and a span names its two edges as data, not as a coordinate: the chart owns where they are
     "build_to": ("datum",), "bracket": (), "retitle": (), "relight": (),   # P47 T2: the datum is the cap; the others carry their own fields
     "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (), "chart_to": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
 PHRASE_TARGET = "phrase"                      # P50 T3: a region INSIDE a press card - {"kind": "phrase", "dock": "<the press dock's asset id>"}.
-TARGET_KINDS_ALL = TARGET_KINDS + (PHRASE_TARGET,)   # ... admitted for a CALLOUT alone, and only as the underline (E56's one exception); the
+TARGET_KINDS_ALL = TARGET_KINDS + (PHRASE_TARGET,) + MAP_TARGETS   # ... admitted for a CALLOUT alone, and only as the underline (E56's one exception); the
                                                      # compiler resolves it to the dock's declared phrase box, the player to stage px through
                                                      # the card's LIVE geometry (a parked or stacked card moves, and the underline moves with it)
 TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
                  "region": ("x0", "y0", "x1", "y1"), "span": ("from_word", "to_word"),
-                 PHRASE_TARGET: ()}   # its one field is `dock`, a name - checked in _validate_callout, where the row's press docks are known
+                 PHRASE_TARGET: (),   # its one field is `dock`, a name - checked in _validate_callout, where the row's press docks are known
+                 COUNTRY_TARGET: (), MAPPOINT_TARGET: ()}   # ... and a map target's fields are MAP units, not 0..1 fractions: _validate_map_target checks them against the map's own box
 FRACTION_FIELDS = ("x", "y", "x0", "y0", "x1", "y1")   # plate coordinates as fractions of the frame, 0..1
 
 
@@ -506,6 +542,64 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     return errs
 
 
+def _validate_map_target(kind: str, field: str, tg, countries: dict, box: list) -> list[str]:
+    """P50 T5: a place on the map, by NAME. A country id that is not in the data and a point outside the
+    map's own box are the two ways an author can aim at nothing, and both are named here rather than
+    resolving to a silent no-paint in the player."""
+    if not isinstance(tg, dict) or tg.get("kind") not in MAP_TARGETS:
+        return [f"{kind}: {field} must be a place on the map - {{'kind': 'country', 'id': '<ISO A3>'}} or "
+                f"{{'kind': 'mappoint', 'x': <0..{int(box[0])}>, 'y': <0..{int(box[1])}>}}"]
+    if tg["kind"] == COUNTRY_TARGET:
+        a3 = tg.get("id")
+        if not isinstance(a3, str) or a3 not in countries:
+            return [f"{kind}: {field} country {a3!r} is not in {WORLD_MAP} (ids are ISO A3, uppercase - assets/maps/SOURCES.md)"]
+        return []
+    errs = []
+    for f, hi in (("x", box[0]), ("y", box[1])):
+        v = tg.get(f)
+        if isinstance(v, bool) or not isinstance(v, (int, float)):
+            errs.append(f"{kind}: {field} mappoint needs numeric {f!r} (map units, not a stage fraction)")
+        elif not 0 <= v <= hi:
+            errs.append(f"{kind}: {field} mappoint {f}={v} is outside the map's {int(box[0])} x {int(box[1])} box")
+    return errs
+
+
+def _validate_vecmap_species(entry: dict) -> list[str]:
+    """P50 T5: the three species of the map. The kinds themselves are refused off a vecmap world in
+    validate_species, where the row's plate id is known; here each one's own fields are checked by name."""
+    kind = entry["kind"]
+    try:
+        data = world_map()
+    except ValueError as exc:   # no map on disk: say so once, against the species that needs it
+        return [f"{kind}: {exc}"]
+    countries, box = data["countries"], data["box"]
+    errs: list[str] = []
+    if kind == SPECIES_ARC:
+        for f in ("from", "to"):
+            if f not in entry:
+                errs.append(f"arc: no {f!r} - an arc names the two places it runs between (a flow has an origin and a destination)")
+            else:
+                errs += _validate_map_target("arc", f, entry[f], countries, box)
+        crossed = entry.get("crossed")
+        if crossed is not None:
+            at, dur = entry.get("at"), entry.get("dur")
+            num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool)
+            if not num(crossed):
+                errs.append("arc: 'crossed' must be a number (episode seconds, the word the flow is cut on)")
+            elif num(at) and crossed <= at:
+                errs.append(f"arc: crossed {crossed} is not after at {at} - the flow draws first and is cut on a LATER word")
+            elif num(at) and num(dur) and crossed >= at + dur:
+                errs.append(f"arc: crossed {crossed} falls outside the arc's window ({at}-{round(at + dur, 3)}s) - it would never fire")
+    if kind == SPECIES_STAMP:
+        if not isinstance(entry.get("text"), str) or not entry["text"].strip():
+            errs.append("stamp: 'text' must be a non-empty string - a stamp puts a FIGURE (or a year) on a place")
+        if "size" in entry and entry["size"] not in STAMP_SIZES:
+            errs.append(f"stamp: size must be one of {'|'.join(STAMP_SIZES)} (a year is a stamp at the smaller size, not a fourth species)")
+    if kind in (SPECIES_LIGHT, SPECIES_STAMP) and isinstance(entry.get("target"), dict) and entry["target"].get("kind") in MAP_TARGETS:
+        errs += _validate_map_target(kind, "target", entry["target"], countries, box)
+    return errs
+
+
 def _validate_chip(entry: dict) -> list[str]:
     """P50 T2: a chip carries a SOURCED glyph and a label, and its cross falls on a LATER word."""
     errs: list[str] = []
@@ -599,6 +693,43 @@ def _validate_flow(entry: dict) -> list[str]:
     return errs
 
 
+@functools.lru_cache(maxsize=2)
+def world_map(name: str = WORLD_MAP) -> dict:
+    """The committed map as data: ``{"box": [w, h], "countries": {A3: {name, centroid, bbox, paths}}}``.
+
+    Read once per build (the file is 187 KB and the same for every scene). ValueError names the map when
+    the file is not there - it is built by scripts/build_world_map.py, which is the only thing allowed to
+    fetch, and the contract it writes is pinned by tests/test_world_map.py."""
+    p = MAPS_DIR / f"{name}.paths.json"
+    if not p.is_file():
+        raise ValueError(f"map {name!r}: no file at {p} - run scripts/build_world_map.py")
+    return json.loads(p.read_text(encoding="utf-8"))
+
+
+def world_map_json(name: str = WORLD_MAP) -> str:
+    """The map as the asset map carries it: the file's own bytes as text, under ``map:<name>``. The player
+    parses it once (species/vecmap.mjs memoises by the string), so the whole world costs one asset."""
+    return json.dumps(world_map(name), separators=(",", ":"))
+
+
+def parse_vecmap_id(plate_id: str) -> list[str]:
+    """``vecmap[:<A3>[,<A3>...]]`` -> the FOCUS SET, in the order the author wrote it (may be empty: the
+    whole world). ValueError names the id; the caller names the row."""
+    body = plate_id.split(":", 1)[1] if ":" in plate_id else ""
+    ids = [p.strip() for p in body.split(",") if p.strip()] if body.strip() else []
+    if len(ids) > VECMAP_FOCUS_MAX:
+        raise ValueError(f"{plate_id!r}: {len(ids)} countries in focus is past VECMAP_FOCUS_MAX ({VECMAP_FOCUS_MAX}) - "
+                         "a composition frames its places; for the whole world write `vecmap`")
+    known = world_map()["countries"]
+    for i, a3 in enumerate(ids):
+        if a3 not in known:
+            raise ValueError(f"{plate_id!r}: focus {a3!r} is not a country in {WORLD_MAP} "
+                             "(ids are ISO A3, uppercase - see assets/maps/SOURCES.md)")
+        if a3 in ids[:i]:
+            raise ValueError(f"{plate_id!r}: focus {a3!r} is named twice")
+    return ids
+
+
 def species_icons(entry) -> list[str]:
     """Every SOURCED glyph one species entry carries, in declaration order: the chip's one (P50 T2), a flow's
     nodes and its swap (T4). The asset map is keyed ``icon:<name>`` - the geometry travels in the player,
@@ -670,6 +801,8 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_chip(entry)
     if kind == SPECIES_FLOW:
         errs += _validate_flow(entry)
+    if kind in VECMAP_SPECIES:
+        errs += _validate_vecmap_species(entry)
     if kind == "trace" and "hop" in entry:   # opt-in (2026-09-08): ONE bowed hop point-to-point, drawn once and held - a crossing
         hop = entry["hop"]
         if not isinstance(hop, dict):
@@ -717,6 +850,10 @@ def validate_species(row_species, ken, plate_id: str, pivot_span: tuple | None =
     if not str(plate_id).startswith(LEDGER_PREFIX):   # P47 T2: the page species perform on a ledger page only
         errs += [f"{plate_id}: {e['kind']} is a page species - it performs on a ledger page, not on {plate_id!r}"
                  for e in row_species if isinstance(e, dict) and e.get("kind") in PAGE_SPECIES]
+    if not VECMAP_PREFIX.match(str(plate_id)):   # P50 T5: the three map species perform ON a map, the way a page species performs on a page
+        errs += [f"{plate_id}: {e['kind']} is a vecmap species - it performs on a vector map world "
+                 f"(`vecmap[:<ISO A3 list>]`), not on {plate_id!r}"
+                 for e in row_species if isinstance(e, dict) and e.get("kind") in VECMAP_SPECIES]
     moves = [e["kind"] for e in row_species if isinstance(e, dict) and e.get("kind") in CAMERA_MOVES]
     if len(moves) > 1:
         errs.append(f"{plate_id}: {' + '.join(moves)} on one row - one camera move per window (s9.28 C3)")
@@ -1158,6 +1295,12 @@ def _world_for_bare_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | 
     reading the series / plate file; ValueError on a bad or missing id."""
     if plate_id.startswith(LEDGER_PREFIX):
         return ledger_world(plate_id, ken, ep_dir, ((meta or {}).get(parse_ledger_id(plate_id)[0]) or {}).get("badges"))
+    if VECMAP_PREFIX.match(plate_id):   # P50 T5: the VECTOR MAP world - drawn from data, like a page, never an embedded plate
+        if ken and ken[0]:
+            raise ValueError(f"{plate_id!r}: a vector map takes no Ken Burns - the camera moves between focal points on the "
+                             "map and then holds (E59 reason 2), and a drifting map would move under the lights on it")
+        return {"kind": VECMAP_KIND, "map": WORLD_MAP, "focus": parse_vecmap_id(plate_id), "box": world_map()["box"],
+                "ken_burns": {"scale": 0, "x": 0, "y": 0}}
     if plate_id.startswith(CLIP_PREFIX):
         cp = Path(plate_id[len(CLIP_PREFIX):])
         cp = cp if cp.is_absolute() else Path(ep_dir) / cp
@@ -1562,7 +1705,9 @@ def main() -> int:
             derive_rescale_states(world, row_species, plate, EP)   # P48 T2: each `chart_to rescale` gets its own derived page state
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
-        if world.get("kind") == SPECIES_CLIP:
+        if world.get("kind") == VECMAP_KIND:
+            uris[MAP_PREFIX + world["map"]] = world_map_json(world["map"])   # ONCE: the same key for every vecmap scene in the build
+        elif world.get("kind") == SPECIES_CLIP:
             uris[world["asset_id"]] = data_uri(Path(world.pop("clip_path")))   # raw mp4, keyed by the clip's stem
         elif "asset_id" in world:
             uris[world["asset_id"]] = data_uri(R.find_asset(world["asset_id"]), STAGE_W)   # the bare id (E49's `;idle=` is not part of it)

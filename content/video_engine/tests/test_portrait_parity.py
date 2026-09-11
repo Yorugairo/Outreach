@@ -98,3 +98,51 @@ def test_every_layer_is_fitted_to_the_portrait_stage():
     assert not unfitted, f"full-stage layers whose box is not the stage's: {unfitted}"
     worlds = [l for l in report["layers"] if l["id"] in ("wA", "wB")]
     assert worlds and all(l["overscan"] for l in worlds), f"the worlds are not the stage x 1.10 centred: {worlds}"
+
+
+def test_the_vector_map_fits_the_portrait_stage():
+    """P50 T5: the map's own fit, measured in the browser at 9:16 - the land the composition FRAMES is inside
+    the stage with its margin, and the species over it sit on the land, not beside it (the world is a div
+    carrying the camera's CSS and the species layer is an svg that is not: vmGroupXf is what keeps them
+    together). The `vecmap-arc` golden is authored portrait, so this is its own aspect."""
+    import tempfile
+    import render_baseline as RB
+    from playwright.sync_api import sync_playwright
+
+    tl, uris, t, aspect = RB.load_surface("vecmap-arc")
+    assert aspect == "9:16", "the vector map's golden is the portrait one"
+    w, h = RB.STAGE[aspect]
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / "p.html"
+        html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
+        srv, port = RB.serve(html.parent)
+        try:
+            with sync_playwright() as pw:
+                br = pw.chromium.launch(headless=True)
+                pg = br.new_context(viewport={"width": w, "height": h}).new_page()
+                pg.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
+                RB.prepare_page(pg, w, h)
+                pg.evaluate("t => { const s = document.getElementById('scrub');"
+                            " s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+                report = pg.evaluate("""() => {
+                  const stage = document.getElementById('stage').getBoundingClientRect();
+                  const box = (sel) => { const e = document.querySelector(sel); if (!e) return null;
+                    const r = e.getBoundingClientRect();
+                    return {x: r.x - stage.x, y: r.y - stage.y, w: r.width, h: r.height}; };
+                  return {stage: [stage.width, stage.height], focus: box('.world svg.vm .vmfocus'),
+                          lit: [...document.querySelectorAll('#species .vmlit')].length,
+                          arc: box('#species .vmarc'), litBox: box('#species .vmlit')};
+                }""")
+                br.close()
+        finally:
+            srv.shutdown()
+    W, H = report["stage"]
+    assert report["focus"], "no framed country on the map"
+    f = report["focus"]
+    assert f["x"] >= 0 and f["y"] >= 0 and f["x"] + f["w"] <= W + 1 and f["y"] + f["h"] <= H + 1, \
+        f"a framed country is outside the {W}x{H} stage: {f}"
+    assert report["lit"], "no country is lit at the golden's t"
+    lit = report["litBox"]
+    assert lit["x"] >= 0 and lit["x"] + lit["w"] <= W + 1, f"a light is off the portrait stage: {lit}"
+    a = report["arc"]
+    assert a and a["w"] > W * 0.3, f"the arc does not cross the portrait frame: {a}"

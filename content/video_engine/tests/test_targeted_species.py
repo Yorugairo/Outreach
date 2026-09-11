@@ -414,3 +414,113 @@ def test_a_good_flow_and_a_good_span_pass_and_every_glyph_lands_in_the_asset_map
     # and both kinds carry a `when` and an event edge (P50 T1's rule, the gate's table)
     assert B.SPECIES_WHEN["flow"].startswith("the sentence EXPLAINS a mechanism")
     assert B.SPECIES_WHEN["span"].startswith("the sentence SPANS a period on a chart")
+
+
+# ---- P50 T5: THE VECTOR MAP - the world, the three species and their places -------
+VECMAP = "vecmap:IRN,USA,CHN"
+IRN = {"kind": "country", "id": "IRN"}
+GULF = {"kind": "mappoint", "x": 644, "y": 178}
+
+
+def _light(**kw):
+    e = {"kind": "light", "at": 5.0, "dur": 6.0, "target": dict(IRN)}
+    e.update(kw)
+    return {k: v for k, v in e.items() if v is not None}
+
+
+def _arc(**kw):
+    e = {"kind": "arc", "at": 6.6, "dur": 8.0, "from": dict(GULF), "to": {"kind": "country", "id": "USA"}}
+    e.update(kw)
+    return {k: v for k, v in e.items() if v is not None}
+
+
+def _stamp(**kw):
+    e = {"kind": "stamp", "at": 8.0, "dur": 6.0, "text": "1.4 Billion Barrels", "target": {"kind": "country", "id": "CHN"}}
+    e.update(kw)
+    return {k: v for k, v in e.items() if v is not None}
+
+
+def test_the_map_species_are_refused_off_a_vecmap_world_by_name():
+    for entry in (_light(), _arc(), _stamp()):
+        for plate in (PLATE, LEDGER, "clip:evidence/objects/x.mp4"):
+            errs = B.validate_species([entry], STILL, plate)
+            assert any(e.startswith(f"{plate}: {entry['kind']} is a vecmap species") and "vector map world" in e
+                       for e in errs), (entry["kind"], plate, errs)
+    # ... and a plate whose id merely BEGINS with the word is not a map
+    assert any("is a vecmap species" in e for e in B.validate_species([_light()], STILL, "vecmap-desk-v1"))
+    # every other species keeps its stage coordinates: a country target is not one of them
+    errs = B.validate_species([_sp("callout", target=dict(IRN))], STILL, VECMAP)
+    assert "callout: target kind 'country' not allowed (takes datum|point|region|span|phrase)" in errs, errs
+    assert any("a ring circles a NUMBER or a POINT ON A CHART (E56)" in e for e in errs),         "E56 refuses it twice over: a ring around a country is exactly the light the map ships"
+
+
+def test_a_light_on_a_country_that_is_not_in_the_map_is_refused_by_name():
+    errs = B.validate_species([_light(target={"kind": "country", "id": "ATLANTIS"})], STILL, VECMAP)
+    assert len(errs) == 1 and "country 'ATLANTIS' is not in world-110m" in errs[0] and "ISO A3" in errs[0], errs
+    for bad in ({"kind": "country", "id": "irn"}, {"kind": "country"}, {"kind": "country", "id": 7}):
+        assert any("is not in world-110m" in e for e in B.validate_species([_light(target=bad)], STILL, VECMAP)), bad
+    # a light lights a COUNTRY: a map point has no outline to fill
+    errs = B.validate_species([_light(target=dict(GULF))], STILL, VECMAP)
+    assert errs == ["light: target kind 'mappoint' not allowed (takes country)"], errs
+    # ... and the world id itself refuses a name that is not a place
+    with pytest.raises(ValueError, match="is not a country in world-110m"):
+        B.parse_vecmap_id("vecmap:IRN,ATLANTIS")
+    with pytest.raises(ValueError, match="named twice"):
+        B.parse_vecmap_id("vecmap:IRN,IRN")
+    with pytest.raises(ValueError, match="VECMAP_FOCUS_MAX"):
+        B.parse_vecmap_id("vecmap:IRN,USA,CHN,JPN,DEU,GBR,MEX")
+    assert B.parse_vecmap_id("vecmap") == [] and B.parse_vecmap_id(VECMAP) == ["IRN", "USA", "CHN"]
+
+
+def test_a_mappoint_outside_the_maps_own_box_is_refused_by_name():
+    box = B.world_map()["box"]
+    for bad in ({"kind": "mappoint", "x": box[0] + 1, "y": 100}, {"kind": "mappoint", "x": 100, "y": -2},
+                {"kind": "mappoint", "x": "640", "y": 100}, {"kind": "mappoint", "y": 100}):
+        errs = B.validate_species([_arc(**{"from": bad})], STILL, VECMAP)
+        assert any("mappoint" in e and ("outside the map" in e or "needs numeric" in e) for e in errs), (bad, errs)
+    assert any("outside the map's 1000 x 500 box" in e
+               for e in B.validate_species([_stamp(target={"kind": "mappoint", "x": 1200, "y": 10})], STILL, VECMAP))
+    # the two ENDS are required, and each is a place
+    assert any(e.startswith("arc: no 'to'") for e in B.validate_species([_arc(to=None)], STILL, VECMAP))
+    assert any("must be a place on the map" in e for e in B.validate_species([_arc(**{"from": POINT})], STILL, VECMAP))
+
+
+def test_an_arc_cut_on_the_same_word_or_outside_its_window_is_refused_by_name():
+    for bad in (6.6, 4.0):
+        errs = B.validate_species([_arc(crossed=bad)], STILL, VECMAP)
+        assert any(e.startswith(f"arc: crossed {bad}") and "LATER word" in e for e in errs), (bad, errs)
+    errs = B.validate_species([_arc(crossed=20.0)], STILL, VECMAP)
+    assert any("falls outside the arc's window" in e and "would never fire" in e for e in errs), errs
+    assert any(e.startswith("arc: 'crossed' must be a number") for e in B.validate_species([_arc(crossed="later")], STILL, VECMAP))
+    # a stamp says what it stamps, at one of two sizes
+    assert any(e.startswith("stamp: 'text'") for e in B.validate_species([_stamp(text="  ")], STILL, VECMAP))
+    assert any(e.startswith("stamp: size must be one of") for e in B.validate_species([_stamp(size="huge")], STILL, VECMAP))
+
+
+def test_a_vecmap_world_is_built_from_the_plate_id_and_takes_no_ken_burns():
+    world = B.world_for_plate(VECMAP + ";idle=drift", STILL, None)
+    assert world["kind"] == "vecmap" and world["map"] == B.WORLD_MAP
+    assert world["focus"] == ["IRN", "USA", "CHN"] and world["box"] == [1000, 500]
+    assert world["ken_burns"] == {"scale": 0, "x": 0, "y": 0} and world["idle"] == "drift"
+    assert B.world_for_plate("vecmap", STILL, None)["focus"] == []
+    with pytest.raises(ValueError, match="takes no Ken Burns"):
+        B.world_for_plate(VECMAP, (0.04, 10, -6), None)
+
+
+def test_a_good_map_row_passes_and_the_map_lands_in_the_asset_map_once():
+    good = [_light(idle="breath"), _arc(crossed=11.5), _stamp(size="year", text="1996", target=dict(GULF)), _stamp()]
+    assert B.validate_species(good, STILL, VECMAP) == []
+    # the asset route: ONE key for the whole world, whatever the build asks for it
+    uris = {}
+    for plate in (VECMAP, "vecmap", "vecmap:JPN"):
+        world = B.world_for_plate(plate, STILL, None)
+        uris[B.MAP_PREFIX + world["map"]] = B.world_map_json(world["map"])
+    assert list(uris) == ["map:world-110m"]
+    data = json.loads(uris["map:world-110m"])
+    assert len(data["countries"]) == 177 and data["box"] == [1000, 500]
+    assert all(data["countries"][a3]["centroid"] for a3 in ("IRN", "USA", "CHN"))
+    assert B.species_icons(good[0]) == [], "a map species carries no sourced glyph - its geometry IS the map"
+    # ... and each of the three carries a `when` (P50 T1's rule) naming the act the map answers
+    assert B.SPECIES_WHEN["light"].startswith("the sentence NAMES a place")
+    assert B.SPECIES_WHEN["arc"].startswith("the sentence NAMES a flow between two places")
+    assert B.SPECIES_WHEN["stamp"].startswith("the sentence puts a NUMBER or a name on a place")

@@ -204,6 +204,12 @@ SPECIES_EVENTS["flow"] = ("at", "swap.at")   # P50 T4: the diagram DRAWS on its 
                                             # build) and ONE node SWAPS on a later one. "swap.at" is a DOTTED path: the edge
                                             # names a field inside a field, which _species_events walks.
 SPECIES_EVENTS["span"] = ("at",)            # ... and a span shades in on its word; it holds after that, so it has no end event
+# P50 T5: the VECTOR MAP's three. A light LANDS on its word (the country's fill rises: an event) and then holds -
+# like a span, it has no end event, because a light that leaves is the next composition's business. An arc draws on
+# its word AND is CUT on a later one ("crossed", a field edge like the chip's cross_at). A stamp lands once.
+SPECIES_EVENTS["light"] = ("at",)
+SPECIES_EVENTS["arc"] = ("at", "crossed")
+SPECIES_EVENTS["stamp"] = ("at",)
 SPECIES_EVENTS["chip"] = ("at", "cross_at")   # P50 T2: a chip LANDS on its word (an event) and is CROSSED on a later one (another).
                                               # "cross_at" is neither an edge of the window nor its end: it names the row's own field,
                                               # and _species_events credits any such name at the instant that field holds.
@@ -251,7 +257,8 @@ BADGE_SETTLE_S = 0.6             # ... and each badge reveal is one too, settlin
 CAMERA_MOVE_S = 1.2              # a camera species with no declared dur is credited this long
 SRC_M24 = "P49 T6 (operator 2026-09-08: 'our engine ... doesn't know what it's seeing until it's rendered back'): a pointing species whose target is out of the camera's frame when it fires points at nothing - checked from the track before render"
 POINTING_KINDS = ("callout", "spotlight", "squiggle", "punch", "focus_zoom", "beat_freeze", "radial", "push", "figure", "spread", "bracket", "chip",
-                  "flow", "span")   # P50 T4: a flow points at the region it draws itself inside; a span names data and carries no target dict, so M24 skips it   # the species that point at a declared target
+                  "flow", "span",
+                  "light", "arc", "stamp")   # P50 T5: the map's three point at a PLACE - a country or a map point, which is not a stage box, so _target_box skips them and M24 credits them without a frustum test   # P50 T4: a flow points at the region it draws itself inside; a span names data and carries no target dict, so M24 skips it   # the species that point at a declared target
 ATTN_SCALE, ATTN_IN, ATTN_OUT = 1.06, 0.5, 0.6            # P49 T4: kinetics/camera.mjs ATTN, mirrored [DERIVED: Bravos #68]
 STOP_FLIGHT_S, STOP_ANTIC_S, STOP_DROP_S = 0.45, 0.18, 0.14   # the stop-action clock (kinetics/stopaction.mjs STOP), mirrored: the contact frame of a throw / a landing
 BT_HOLD_S, BT_RUN_S, BT_SETTLE_S, BT_STEP_S = 0.5, 0.6, 0.3, 0.06   # E60 the breakthrough's clock (the template's LPX.BT_*), mirrored: the run past the build

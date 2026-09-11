@@ -95,11 +95,11 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## capabilities
 
-- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +128 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
+- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +129 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
 
 ## backlog
 
-- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +102 more — terms: Z-stack; short-form; drawOn; G-g
+- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +101 more — terms: Z-stack; short-form; drawOn; G-g
 
 ## pattern
 
@@ -348,6 +348,6 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/content-video-engine/MACRO-CHART-INTAKE-2026-09-07.md — Macro-chart journalism research — the in — The Gemini lane's `docs/research/markets — defines: — — terms: McGill; Verified 2026-09-07; Local Evidence; fetch
 - docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md — remotion-ui intake — seven components, g — The same morning as the HyperFrames harv — defines: — — terms: snap; HyperFrames; badge-stamp; undraw
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md — DOCTRINE CORE — portable content-operati — Model-agnostic; paste whole into any sys — defines: — — terms: scene-setting; pause-framed; seed-locked; paragraph-shaped
-- docs/content-video-engine/SPECIES-BY-SENTENCE.md — SPECIES BY SENTENCE — which species, on — The operator, 2026-09-10: "Do we already — defines: P50 — terms: figure; build_to; extend; spotlight
+- docs/content-video-engine/SPECIES-BY-SENTENCE.md — SPECIES BY SENTENCE — which species, on — The operator, 2026-09-10: "Do we already — defines: P50 — terms: figure; build_to; extend; rescale
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md — Transitions — the review (2026-09-06) — The operator: "I think we should review — defines: — — terms: [DERIVED]; L-cuts; unclassified; quart-in-out
 - docs/content-video-engine/TRIAGE-2026-09-05.md — TRIAGE 2026-09-05 — the corpus against w — Counts as of the registry at 86c46f5. Th — defines: M13 — terms: recent-stumble; zero-slip; BACKLOG.md:218 (row 6); arc-length
