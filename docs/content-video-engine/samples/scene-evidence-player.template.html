@@ -2954,7 +2954,8 @@
         }
       }
       st.bt = { mode: btMode, hi0: hi, hi1, lo, top, bottom, base, plot: bottom - top, comp, ticks0, vals0, ticks1 };
-      st.buildDur = LP.BUILD + LPX.BT_HOLD + (btMode === "burst" ? LPX.BT_RUN + LPX.BT_SETTLE : LPX.BT_STEP_S * (Math.ceil(vmax / comp - 1e-9) + 1));
+      st.btBase = (Number.isFinite(+pg.build_s) && +pg.build_s > 0) ? +pg.build_s : LP.BUILD;   /* the ordinary build's own length (a page may declare build_s) */
+      st.buildDur = st.btBase + LPX.BT_HOLD + (btMode === "burst" ? LPX.BT_RUN + LPX.BT_SETTLE : LPX.BT_STEP_S * (Math.ceil(vmax / comp - 1e-9) + 1));
       st.chart.style.overflow = "visible";   /* the stack leaves the plot; the page's edge is what clips it */
       if (btMode === "stack") [st.titleEl, st.page.querySelector(".lp-sub"), st.page.querySelector(".lp-src")].forEach((el) => {   /* the bar runs BEHIND the words: the claim stays legible */
         if (el) { el.style.position = "relative"; el.style.zIndex = 3; } });
@@ -4120,7 +4121,7 @@
       cs.chart.style.opacity = c > 0 ? 1 : 0;   /* axes and grid belong to the build, not the bleed */
       /* a breakthrough page's build is longer than LP.BUILD: the ordinary bars law runs on the first LP.BUILD seconds of it (cb),
          the run on the seconds after (bts); a page without one is exactly what it was (cb === c) */
-      const cb = cs.bt ? clamp01(c * cs.buildDur / LP.BUILD) : c, bts = cs.bt ? c * cs.buildDur - LP.BUILD : -1;
+      const cb = cs.bt ? clamp01(c * cs.buildDur / cs.btBase) : c, bts = cs.bt ? c * cs.buildDur - cs.btBase : -1;
       cs.bars.forEach((bb, i) => {
         const k = expoOut(clamp01((cb - i * 0.1) / 0.55));
         bb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
@@ -4359,9 +4360,20 @@
     const d = Math.max(0.001, sp.dur || 1), u = segEase(clamp01((t - sp.at) / d)), sc = 1 - (1 - (+sp.scale || 0.72)) * u;
     S.chart.style.transformOrigin = PARK_ORIGIN[sp.anchor || "top"] || PARK_ORIGIN.top;
     S.chart.style.transform = "scale(" + sc.toFixed(4) + ")";
+    /* the citation rides the park with the chart (E52: the page cites - it was left full-size under the cards the park made room
+       for, measured on the Tokyo cut 2026-09-10): the source line moves to where the parked chart's foot now is, at the park's scale */
+    if (S.page && (sp.anchor || "top") === "top") {
+      const pH = S.page.clientHeight || 0, toPx = (v) => { const q = String(v || "").trim(), n = parseFloat(q); return Number.isFinite(n) ? (q.endsWith("%") ? n / 100 * pH : n) : NaN; };   /* a page lays out in px (portrait) or % (landscape) */
+      const cT = toPx(S.chart.style.top) || 0;
+      S.page.querySelectorAll(".lp-src").forEach((el) => {
+        const sT = toPx(el.style.top); const dy = (Number.isFinite(sT) ? (sT - cT) : 0) * (sc - 1);
+        el.style.transformOrigin = "0 0"; el.style.transform = "translate(0px," + dy.toFixed(1) + "px) scale(" + sc.toFixed(4) + ")";
+      });
+    }
     S.parked = { u, scale: sc, anchor: sp.anchor || "top" };
   };
-  const lpUnpark = (S) => { if (S && S.parked) { S.chart.style.transform = ""; S.chart.style.transformOrigin = ""; S.parked = null; } };
+  const lpUnpark = (S) => { if (S && S.parked) { S.chart.style.transform = ""; S.chart.style.transformOrigin = ""; S.parked = null;
+    if (S.page) S.page.querySelectorAll(".lp-src").forEach((el) => { el.style.transform = ""; el.style.transformOrigin = ""; }); } };
   /* the page's chart states over time. A `chart_to` is not a cut: the standing state runs its law BACKWARDS over the
      transition's own clock, then the named state draws on by its own envelope. Before the first chart_to, and on a page
      that declares none, this is exactly the single-chart behaviour it replaced. */
@@ -4369,7 +4381,7 @@
     const states = st.states || [st];
     if (states.length < 2) {   /* a page with one chart is exactly what it was - plus a park, if the row names one (P48 T2b) */
       lpPaintChart(st, cBase, t3, scene, t);
-      let pk = null; for (const sp of pageSpecies(scene, "chart_to")) { if (t < sp.at) break; pk = sp.to === "park" ? sp : null; }
+      let pk = null; for (const sp of pageSpecies(scene, "chart_to")) { if (t < sp.at) break; if (sp.to === "park") pk = sp; }   /* a park stands until the next park (E60 Tokyo: the burst plays in the parked slot; a park to scale 1 un-parks) */
       if (pk) lpPaintPark(st, pk, t); else lpUnpark(st);
       st.active = 0; return;
     }
@@ -4377,7 +4389,8 @@
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
       if (sp.to === "park") { park = sp; continue; }   /* P48 T2b: a transform on whichever state is active, never a state change */
-      park = null; hold = null;   /* a later transition to another state un-parks (the new state stands full) and ends a morph's hold */
+      hold = null;   /* a later transition to another state ends a morph's hold; the standing PARK stays - the new state stands where the old one did
+                        (E60 Tokyo, 2026-09-10: the ten-year bars recast into the parked monthly bars' slot and burst there, the plant beneath them; a park to scale 1 un-parks) */
       const d = Math.max(0.001, sp.dur || 1), k = Math.max(0, Math.min(states.length - 1, sp.state | 0));
       if (sp.to === "rescale") {   /* P48 T2: the axes retarget on one clock; the chart never leaves, and the target stands built */
         if (t < sp.at + d) { xf = { from: cur, to: k, u: segEase(clamp01((t - sp.at) / d)) }; break; }

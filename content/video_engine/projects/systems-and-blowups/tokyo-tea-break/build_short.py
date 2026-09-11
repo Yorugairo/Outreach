@@ -519,7 +519,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
         # 4 catalyst + the pledge: the page RETURNS by the spiral (it unwinds from its point, never drawn like new - E40 s4)
         #   and STAYS through the pledge, which docks the gate instead of cutting to it. exit=cut: the Meta page MOUNTS over
         #   this one at "went home", so there is no retract to double it, and the gate card does not ride one (E40 #5).
-        (t_catalyst, t_second, hold + ":spiral:cut;then=ev-japan-selling-v1:bars:3", (0, 0, 0), [   # the second state: the month-by-month bars, June emphasised
+        (t_catalyst, t_second, hold + ":spiral:cut;then=ev-japan-selling-v1:bars:3;then=ev-bonds-vs-chips-10y-v1:bars:1", (0, 0, 0), [   # the second state: the month-by-month bars, June emphasised
             # E55 (operator, 2026-09-09): the toll-gate clip "was already weak because it was supposed to be a toll gate, without the
             # manufacturing plant it's just useless" - the fab (Mike at the wafer chamber, the operator's own Flow plate) takes the
             # clip's own measured place as a centred card; the LIGHT lands on the wafer at "chips" and holds to the cut (E56: never a ring on a picture)
@@ -529,9 +529,9 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # the pledge's EVIDENCE (2026-09-10): the record types the Nikkei lede in the band under the parked bars on "pledged", the
             # highlighter landing on "at least 10 trillion yen" as the narrator says it; on "works" the band is the plant's
             (record_dock("dock-k-pledge-record", ws, t_pledge), 0, t_pledge, at("works"),
-             {"centre": True, "card_aspect": 0.47, "centre_w": FAB_W, "centre_x": FAB_CX, "centre_y": FAB_CY - 0.028}),   # the paper's height is its typed text; ~54 px up (a share of the stage) keeps its foot clear of the caption strip
+             {"centre": True, "card_aspect": 0.47, "centre_w": FAB_W, "centre_x": FAB_CX, "centre_y": FAB_CY - 0.015}),   # the paper's height is its typed text; 0.015 up keeps its foot clear of the caption strip and its head clear of the parked bars' source line
             (dock_png("dock-i-fab-wafer", STILLS_DIR / "sig-i-fab-wafer.png", FAB_CROP), 0, at("works"), at("And here's"),
-             {"centre": True, "card_aspect": 0.5911, "centre_w": FAB_W, "centre_x": FAB_CX, "centre_y": FAB_CY}),
+             {"centre": True, "card_aspect": 0.5911, "centre_w": FAB_W, "centre_x": FAB_CX, "centre_y": FAB_CY + 0.04}),   # under the parked ten-year bars (E60): the card's top clears their labels and source
             # the fourth watch: the selling bars are no evidence dock - they are the ring page's own bars, laid against its lines (combo)
         ], "cut", [
             carried(t_catalyst),
@@ -539,13 +539,11 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # wafer) and holds until the card leaves; the glide is the second beat the 4.9 s hold needed (M16)
             # two lights, two beats (the gate credits a species START, not a glide inside one): the wafer on "chips" for the 0.99 s
             # to "works"; then a second light that starts on the wafer and GLIDES out to the whole fab, held until the card leaves
-            {"kind": "chart_to", "at": round(t_pledge - 0.4, 2), "dur": 0.9, "to": "park", "scale": 0.55, "anchor": "top"},   # the bars make room for the plant
+            {"kind": "chart_to", "at": round(t_pledge - 0.4, 2), "dur": 0.9, "to": "park", "scale": 0.52, "anchor": "top"},   # the bars make room for the plant; 0.52 (measured 2026-09-10): the ten-year bars' feet and labels clear the card's top
             # the lights follow the plant: the wafer once the card has landed (works + the landing), the glide out to the whole fab on "beats"
-            {"kind": "spotlight", "at": round(at("works") + 0.55, 2), "dur": round(at("beats") - at("works") - 0.55, 2), "idle": "live",
-             "target": centred_card_point(0.5911, FAB_CY, *FAB_WAFER, centre_w=FAB_W, centre_x=FAB_CX)},
-            {"kind": "spotlight", "at": at("beats"), "dur": "hold", "until": at("And here's"), "idle": "live", "glide_at": 0.0,
-             "target": centred_card_point(0.5911, FAB_CY, *FAB_WAFER, centre_w=FAB_W, centre_x=FAB_CX),
-             "target2": FAB_BOX},
+            # NO light on the plant (measured 2026-09-10): the spotlight darkens the whole page, and the page above the band is where
+            # the burst lands on "bonds" (E60) - the bars vanished under the vignette for the whole beat. The card lands with weight
+            # and holds on its idle; "beats our bonds" belongs to the breakthrough.
             # E51 (the third watch): the punch on the peak here was tied to nothing - the page returns drawn - and is cut
             # V3: the BRACKET measures the drop from the peak to June by the hand on the number; its label is the number and
             # its sub lands on "a tenth of the pile" - the callout that said the same is gone (one thing per sentence)
@@ -558,6 +556,13 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # correspondence): the line leaves by length, the sub and source rewrite, the four signed bars draw (a drop goes DOWN, blood
             # red - E28); "your first number" then writes at the JUNE bar - the print the sentence names. The bracket leaves with the line.
             {"kind": "chart_to", "at": t_prints, "dur": 1.4, "to": "recast", "state": 1},
+            # E60 (the operator, 2026-09-10: "It should go into Tokyo 'beats our bonds'"): on "and if that works" the parked monthly bars
+            # RECAST into the ten-year bars - bonds 1.52 % a year on a stated 0-8 % scale, chips building to the bonds' level with it -
+            # and the BURST lands on "bonds": the chips bar shoots to 36.59 % while the scale rewrites to 40 % under it (Bravos's move).
+            # Timed from the take (measured 2026-09-10: the hold starts at the END of the state's build, not at the bars' landing): recast on
+            # "to chips," 56.85-57.35, the bars at the bonds' level 58.13, the hold from 58.55 ("beats"), the shoot 59.05-59.65 ("bonds." 58.97-59.57)
+            {"kind": "chart_to", "at": at("to chips"), "dur": 0.5, "to": "recast", "state": 2},
+            {"kind": "retitle", "at": at("to chips"), "dur": 1.2, "text": "Ten years, a year at a time"},   # the recast rewrites the sub and source; the title is the hand's (as row 2)
             # measured on the frame: a FIGURE at the June bar (282 px of type, written leftward) crosses the May bar's body at every dy the
             # 800 px plot allows - so the print is a NOTE in the page's quiet zone (the June bar's own -$26.4 stands in its callout)
             {"kind": "note", "at": t_first, "dur": 1.4, "text": "the June print: " + _bn(FACTS["latest"]) + " - your first number"},

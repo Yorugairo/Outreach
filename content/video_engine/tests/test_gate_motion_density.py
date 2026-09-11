@@ -861,3 +861,24 @@ def test_the_attention_pull_is_tied_to_its_own_dock_and_clashes_with_any_other_b
     tl["scenes"][0]["camera"] = {"keys": [], "attention": "landings"}
     g = _by_id(G.run(tl, docks, mp)[0])
     assert g["M24"].level == "FAIL" and "zoom 1.06" in g["M24"].message, g["M24"]
+
+
+def test_a_breakthrough_state_s_run_is_its_last_data_mark_and_its_landing():
+    """E60: a recast into a chart state whose axes carry `overflow` lands when the bar's run ends - the state's own build
+    (build_s), the hold at the comparator's level, the burst and its settle - not at the transition's end. M21's clock and
+    E51's landings both read that instant; a state with no overflow lands at the transition's end as before."""
+    bt = {"axes": {"overflow": "burst", "domain": [0, 8]}, "values": [1.52, 36.59], "build_s": 1.2}
+    plain = {"values": [1, 2]}
+    s = _page_scene("s04", 40.0, 60.0, species=[{"kind": "chart_to", "at": 50.0, "dur": 0.5, "to": "recast", "state": 2}])
+    s["world"]["page_states"] = [plain, bt]
+    assert G._breakthrough_run_s(bt) == pytest.approx(G.BT_HOLD_S + G.BT_RUN_S + G.BT_SETTLE_S)
+    assert G._breakthrough_run_s(plain) == 0.0
+    land = 50.5 + 1.2 + G.BT_HOLD_S + G.BT_RUN_S + G.BT_SETTLE_S
+    assert G._transition_land(s, s["species"][0]) == pytest.approx(land)
+    assert any(abs(t - land) < 1e-6 and "recast" in n for t, n in G._landings(s)), "the landing is the run's end"
+    lives = {sid: (last, end) for sid, last, end, _d in G._deployed_lives([s])}
+    assert lives["s04"][0] == pytest.approx(land, abs=0.01), "M21 counts the deployed life from the run's end"
+    s["species"][0]["state"] = 1   # the plain state: the transition's end, as before
+    assert G._transition_land(s, s["species"][0]) == 50.5
+    stack = {"axes": {"overflow": "stack", "domain": [0, 8]}, "values": [1.52, 36.59]}
+    assert G._breakthrough_run_s(stack) == pytest.approx(G.BT_HOLD_S + G.BT_STEP_S * 26), "25 bricks of 1.52 reach 36.59: the comparator's plus 25 steps"

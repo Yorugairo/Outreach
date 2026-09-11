@@ -29,10 +29,11 @@ import render_baseline as RB  # noqa: E402
 EP = ROOT / "content/video_engine/projects/systems-and-blowups/tokyo-tea-break"
 OBJ = EP / "evidence/objects/ev-bonds-vs-chips-10y-v1.series.json"
 PLATE = "ledger:ev-bonds-vs-chips-10y-v1:bars:1:right"
-BUILD_AT = 0.7 + 0.8 + 2.4 + 0.5   # LP.ROLL + SAVOR + FIELD + PUNCH: the bars build from here, for LP.BUILD 3.0 s
+BUILD_AT = 0.7 + 0.8 + 2.4 + 0.5   # LP.ROLL + SAVOR + FIELD + PUNCH: the bars build from here, for the page's build_s (LP.BUILD 3.0 by default)
 HOLD, RUN, SETTLE, STEP = 0.5, 0.6, 0.3, 0.06   # LPX.BT_* mirrored
-T_HOLD = BUILD_AT + 3.0 + HOLD / 2      # 7.65: built, standing at the comparator's level
-T_RUN0 = BUILD_AT + 3.0 + HOLD          # 7.9: the run begins
+BUILD_S = float(json.loads(OBJ.read_text(encoding="utf-8")).get("build_s", 3.0)) if OBJ.exists() else 3.0   # the object's own build (Tokyo: 1.2 s)
+T_HOLD = BUILD_AT + BUILD_S + HOLD / 2      # built, standing at the comparator's level
+T_RUN0 = BUILD_AT + BUILD_S + HOLD          # the run begins
 
 needs_object = pytest.mark.skipif(not OBJ.exists(), reason="the bonds-vs-chips object is not on disk")
 

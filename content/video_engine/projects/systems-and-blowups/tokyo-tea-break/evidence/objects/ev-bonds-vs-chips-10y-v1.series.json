@@ -45,5 +45,6 @@
   0,
   8
  ],
- "overflow": "burst"
+ "overflow": "burst",
+ "build_s": 1.2
 }

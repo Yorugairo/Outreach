@@ -5381,6 +5381,60 @@
        }
       ],
       "emphasize": 3
+     },
+     {
+      "schema_version": "ledger_page.v1",
+      "surface": "page",
+      "builder": "story",
+      "variant": "bars",
+      "title": "Ten years, a year at a time",
+      "sub": "Average annual total return over the last ten years, %",
+      "source": "iShares AGG, SOXX (NAV, quarter-end) \u00b7 fetched Sep 2026",
+      "quiet_zone": "right",
+      "src_style": "compact",
+      "build_s": 1.2,
+      "labels": [
+       "Bonds",
+       "Chips"
+      ],
+      "values": [
+       1.52,
+       36.59
+      ],
+      "value_strings": [
+       "1.52",
+       "36.59"
+      ],
+      "colors": [
+       "deemph",
+       "crimson"
+      ],
+      "axes": {
+       "overflow": "burst",
+       "domain": [
+        0,
+        8
+       ]
+      },
+      "unit": "%",
+      "judge": [],
+      "badges": [
+       {
+        "label": "BONDS",
+        "value": "1.5% a year",
+        "tag": "AGG",
+        "accent": "ink",
+        "inline": false
+       },
+       {
+        "label": "CHIPS",
+        "value": "36.6% a year",
+        "tag": "SOXX",
+        "accent": "crimson",
+        "inline": false
+       }
+      ],
+      "emphasize": 1
      }
     ]
    },
@@ -5398,7 +5452,7 @@
      "badge_at": [],
      "place": {
       "x": 227,
-      "y": 855,
+      "y": 880,
       "w": 626,
       "h": 294
      },
@@ -5415,7 +5469,7 @@
      "badge_at": [],
      "place": {
       "x": 227,
-      "y": 871,
+      "y": 948,
       "w": 626,
       "h": 370
      },
@@ -5437,40 +5491,8 @@
      "at": 54.91,
      "dur": 0.9,
      "to": "park",
-     "scale": 0.55,
+     "scale": 0.52,
      "anchor": "top"
-    },
-    {
-     "kind": "spotlight",
-     "at": 58.39,
-     "dur": 0.17,
-     "idle": "live",
-     "target": {
-      "kind": "point",
-      "x": 0.5864,
-      "y": 0.5502
-     }
-    },
-    {
-     "kind": "spotlight",
-     "at": 58.56,
-     "dur": 1.01,
-     "until": 59.57,
-     "idle": "live",
-     "glide_at": 0.0,
-     "target": {
-      "kind": "point",
-      "x": 0.5864,
-      "y": 0.5502
-     },
-     "target2": {
-      "kind": "region",
-      "x0": 0.2102,
-      "y0": 0.4536,
-      "x1": 0.7898,
-      "y1": 0.6464
-     },
-     "held": true
     },
     {
      "kind": "bracket",
@@ -5488,6 +5510,19 @@
      "dur": 1.4,
      "to": "recast",
      "state": 1
+    },
+    {
+     "kind": "chart_to",
+     "at": 56.72,
+     "dur": 0.5,
+     "to": "recast",
+     "state": 2
+    },
+    {
+     "kind": "retitle",
+     "at": 56.72,
+     "dur": 1.2,
+     "text": "Ten years, a year at a time"
     },
     {
      "kind": "note",

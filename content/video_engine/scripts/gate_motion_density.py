@@ -216,6 +216,44 @@ SRC_M24 = "P49 T6 (operator 2026-09-08: 'our engine ... doesn't know what it's s
 POINTING_KINDS = ("callout", "spotlight", "squiggle", "punch", "focus_zoom", "beat_freeze", "radial", "push", "figure", "spread", "bracket")   # the species that point at a declared target
 ATTN_SCALE, ATTN_IN, ATTN_OUT = 1.06, 0.5, 0.6            # P49 T4: kinetics/camera.mjs ATTN, mirrored [DERIVED: Bravos #68]
 STOP_FLIGHT_S, STOP_ANTIC_S, STOP_DROP_S = 0.45, 0.18, 0.14   # the stop-action clock (kinetics/stopaction.mjs STOP), mirrored: the contact frame of a throw / a landing
+BT_HOLD_S, BT_RUN_S, BT_SETTLE_S, BT_STEP_S = 0.5, 0.6, 0.3, 0.06   # E60 the breakthrough's clock (the template's LPX.BT_*), mirrored: the run past the build
+
+
+def _breakthrough_run_s(page: dict) -> float:
+    """E60: seconds a breakthrough page's chart runs PAST its ordinary build (build_s or LP_BUILD_S): the hold at the
+    comparator's level, then the burst + settle, or the stack's steps. 0 for a page with no overflow."""
+    axes = (page or {}).get("axes") or {}
+    mode = axes.get("overflow")
+    if mode not in ("burst", "stack", "break"):
+        return 0.0
+    if mode == "stack":
+        vals = [float(v) for v in (page.get("values") or []) if isinstance(v, (int, float))]
+        dom = axes.get("domain") or [0, 0]
+        try:
+            hi = float(dom[1])
+        except (TypeError, ValueError, IndexError):
+            hi = 0.0
+        honest = [v for v in vals if v <= hi]
+        comp = max(honest) if honest else hi
+        vmax = max(vals) if vals else 0.0
+        import math
+        steps = (math.ceil(vmax / comp - 1e-9) + 1) if comp > 0 else 1
+        return BT_HOLD_S + BT_STEP_S * steps
+    return BT_HOLD_S + BT_RUN_S + BT_SETTLE_S
+
+
+def _transition_land(scene: dict, x: dict) -> float:
+    """The instant a chart_to's target chart has LANDED: the transition's end, plus - when the target state is a breakthrough
+    page (E60) - its own build and run (the state builds AFTER the standing chart has left)."""
+    end = float(x.get("at", 0.0)) + float(x.get("dur", 0.0))
+    idx = x.get("state")
+    states = ((scene.get("world") or {}).get("page_states") or [])
+    if isinstance(idx, int) and 1 <= idx <= len(states):
+        target = states[idx - 1] or {}
+        run = _breakthrough_run_s(target)
+        if run > 0:
+            return end + float(target.get("build_s") or LP_BUILD_S) + run
+    return end
 SRC_M14 = "47 s2 G-a / doc 07 Pillar 4 (saccadic suppression): a camera move may not overlap an evidence build - the eye is blind during the move"
 
 
@@ -1069,7 +1107,7 @@ def _deployed_lives(scenes: list[dict]) -> list[tuple[str, float, float, float]]
         marks = [a + _page_land_offset(s)]
         marks += [float(x["at"]) + float(x.get("dur", 0.0)) for x in sp if x.get("kind") in ("build_to", "bracket") and a <= float(x.get("at", -1e9)) <= z]
         # P48 T6: a chart that changes its data state is a new chart's life - E50's clock restarts at the transition's end
-        marks += [float(x["at"]) + float(x.get("dur", 0.0)) for x in sp if x.get("kind") == "chart_to" and x.get("to") in TRANSITION_DATA_KINDS and a <= float(x.get("at", -1e9)) <= z]
+        marks += [_transition_land(s, x) for x in sp if x.get("kind") == "chart_to" and x.get("to") in TRANSITION_DATA_KINDS and a <= float(x.get("at", -1e9)) <= z]   # E60: a breakthrough state's run is its last mark
         last = max(m for m in marks if m <= z + 1e-6) if any(m <= z + 1e-6 for m in marks) else a
         uds = sorted(float(x["at"]) for x in sp if x.get("kind") == "undraw" and last - 1e-6 <= float(x.get("at", -1e9)) <= z)
         end = uds[0] if uds else z
@@ -1091,7 +1129,7 @@ def _landings(s: dict) -> list[tuple[float, str]]:
         if sp.get("kind") in ("build_to", "bracket", "figure", "note"):
             out.append((float(sp.get("at", 0.0)) + float(sp.get("dur", 0.0)), f"{sp['kind']} landing"))
         if sp.get("kind") == "chart_to" and sp.get("to") in TRANSITION_DATA_KINDS:   # P48 T6: the chart that arrives by a transition has LANDED (E51)
-            out.append((float(sp.get("at", 0.0)) + float(sp.get("dur", 0.0)), f"chart_to {sp.get('to')} landing"))
+            out.append((_transition_land(s, sp), f"chart_to {sp.get('to')} landing"))   # E60: a breakthrough state lands when its run ends
     for d in s.get("docks", []):
         arr = d.get("arrive")
         contact = float(d.get("enter", 0.0)) + (0.46 if arr == "throw" else 0.32 if arr == "land" else 0.0)

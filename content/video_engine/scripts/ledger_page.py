@@ -234,7 +234,8 @@ def _validate_overflow(series: dict, variant: str) -> list[str]:
     if variant != "bars":
         errors.append(f"overflow is a BARS page's device (E60); this page is {variant!r}")
     dom = series.get("domain")
-    if not (isinstance(dom, list) and len(dom) == 2 and all(isinstance(x, (int, float)) and not isinstance(x, bool) for x in dom) and dom[1] > dom[0]):
+    dom = [to_number(x) for x in dom] if isinstance(dom, list) else None   # floats arrive as their own tokens (load_series parse_float=str)
+    if not (isinstance(dom, list) and len(dom) == 2 and all(x is not None for x in dom) and dom[1] > dom[0]):
         errors.append("overflow needs a stated scale: 'domain': [lo, hi] with hi > lo - the scale the honest bar reads on (E60)")
         return errors
     vals = [to_number(b.get("value")) for b in _bars(series)]
@@ -501,7 +502,7 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         **({"line_unit": series["line_unit"]} if isinstance(series.get("line_unit"), str) else {}),   # P47 T9: a combo's lines take their own right axis in this unit
         **({"legend_in_sub": True} if series.get("legend_in_sub") else {}),   # the sub names the lines by colour: no inline name (it would repeat and collide)
         **({"tiers": True} if series.get("tiers") else {}),   # the macro-chart intake: bars and lines in two bands sharing one x, each on its own scale
-        **({"build_s": float(series["build_s"])} if isinstance(series.get("build_s"), (int, float)) and not isinstance(series.get("build_s"), bool) and series["build_s"] > 0 else {}),   # the page draws over its own seconds
+        **({"build_s": float(to_number(series["build_s"]))} if to_number(series.get("build_s")) is not None and to_number(series["build_s"]) > 0 else {}),   # load_series decodes floats as their own tokens (parse_float=str): 1.2 arrives as "1.2", so the number is read, not the type   # the page draws over its own seconds
         "labels": [], "values": [], "value_strings": [], "colors": [],
     }
     if builder == "object":

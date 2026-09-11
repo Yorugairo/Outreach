@@ -732,7 +732,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L12 [2] What the engine changed by itself (a plain rebuild) — - The dip instead of the wipe at every world change (E47's `hardCut` fix), holds resolved by sentence (E25), the portrait <hardCut; idle; Fed-funds; pre-existing; badge-less>
 - L21 [2] Applied today (E55 / E56 / the bed) — 1. The pledge dock. Tokyo's `dock-f-toll-gate-to-fab` clip under "pledged ten trillion yen to chips" is the asset the {The pledge dock.} <dock-f-toll-gate-to-fab; side-r; FAB_CROP; FAB_WAFER; idle: live; BED_LU; blue-ties; env>
 - L36 [2] Open — the operator's call on the watch — - The Fed card vs the caption strip (76.2–76.8 s): the thrown chart card is a 9:16 page (1458 px tall at reading width) {The Fed card vs the caption strip; The empty plot under the docks} <CENTRE_MAX_H; balance-sheet; un-drawn; $665; RENDER_ASPECT=9:16>
-- L46 [2] 2026-09-10 — :8738 and :8740 closed out; the pledge's evidence; the camera beside — The operator read :8740 over :8738 ("8740>8738, thats good work") and asked for the two to be closed out: the DEFAULT build <build-short; Nov 2024; per-word; build-short-cam; TOKYO_CAMERA=1; bond-year>
+- L46 [2] 2026-09-10 — :8738 and :8740 closed out; the pledge's evidence; the camera beside — The operator read :8740 over :8738 ("8740>8738, thats good work") and asked for the two to be closed out: the DEFAULT build <build-short; Nov 2024; per-word; build-short-cam; TOKYO_CAMERA=1; re-scale; ten-year>
 
 ## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md
 
