@@ -1109,10 +1109,12 @@ def test_m27_refuses_a_card_docking_over_a_chart_that_is_still_drawing():
                 "clearances": {"safe_pct": {}}, "camera": {"scene": "s02", "zoom": 1.0, "look": [540, 960]},
                 "marks": {"n": 2, "drawn": drawn, "up": 1.0, "parked": False}}
 
-    bad = G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "reading", 72)]}, [])
+    # the compiler's own clock decides mid-build (E63: `build_windows` on the scene); marks.drawn is reported, never scored
+    M27_SCENES = [{"scene_id": "s02", "span": [1.99, 38.96], "build_windows": [[1.99, 10.69]], "docks": []}]
+    bad = G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "reading", 72)]}, M27_SCENES)
     assert bad.level == "FAIL", bad.message
-    assert "dock-c-blue-ties-panel" in bad.message and "72 %" in bad.message and "50% drawn" in bad.message, bad.message
-    assert G._over_build_gate({"aspect": "9:16", "instants": [inst(1.0, "reading", 72)]}, []).level == "PASS"
-    assert G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "parked", 72)]}, []).level == "PASS"
-    assert G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "reading", 4, area=2147)]}, []).level == "WARN"
+    assert "dock-c-blue-ties-panel" in bad.message and "72 %" in bad.message and "marks 50% drawn" in bad.message, bad.message
+    assert G._over_build_gate({"aspect": "9:16", "instants": [inst(1.0, "reading", 72)]}, []).level == "PASS", "no windows: nothing draws"
+    assert G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "parked", 72)]}, M27_SCENES).level == "PASS"
+    assert G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "reading", 4, area=2147)]}, M27_SCENES).level == "WARN"
     assert G._over_build_gate(None, []).level == "INFO", "no probe file: said so, never silently green"

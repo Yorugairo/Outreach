@@ -2916,6 +2916,13 @@ def main() -> int:
         # window without re-parsing the name; a bare `dip` leaves the gate on DIP_S.
         if exit_s is not None:
             scene["exit_s"] = exit_s
+        # E63: the windows the chart DRAWS in (the page's own build, each build_to) - the same list the READ was
+        # decided against - published so the gate's M27 measures the frame against the compiler's clock and not
+        # against a DOM proxy (the probe's marks.drawn averages every drawn path and reads 0.52 on a finished line
+        # whose second path is a stub by design). Absent on a row with nothing to draw.
+        bw = page_build_windows(world, row_species, a)
+        if bw:
+            scene["build_windows"] = [[round(x, 2), round(y, 2)] for x, y in bw]
         scenes.append(scene)
 
     # P50 T16: the build says whose numbers it placed by. A page the fixture has not measured is placed

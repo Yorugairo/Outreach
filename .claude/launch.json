@@ -127,6 +127,17 @@
       ],
       "port": 8744,
       "url": "http://127.0.0.1:8744/editor.html"
+    },
+    {
+      "name": "tokyo-side-t0",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "content/video_engine/scripts/serve_player.py",
+        "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t0",
+        "--port",
+        "8746"
+      ],
+      "port": 8746
     }
   ]
 }

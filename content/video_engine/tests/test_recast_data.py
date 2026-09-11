@@ -225,6 +225,13 @@ def test_the_shipped_tokyo_timeline_is_unchanged_but_for_the_new_fields(rows):
     species list the shipped `tokyo-short.timeline.json` already carries - and that file carries none of them."""
     shipped = {s["scene_id"]: s.get("species") or [] for s in json.loads(SHIPPED.read_text(encoding="utf-8"))["scenes"]}
     assert not any(k in e for s in shipped.values() for e in s for k in NEW_FIELDS), "the shipped file predates E64"
+    # The shipped cut predates R26-50 (2026-09-11 evening): the first page's build beat was re-fitted to the mount clock
+    # (the build_to at 7.69 on a landing of 10.69 -> 4.49 on 7.49, build_short.py taking the landing from the gate's own
+    # _page_land_offset). The one authored second that moved is normalised here so the test keeps proving E64's claim -
+    # nothing but the new fields - rather than the clock's.
+    for e in shipped.get("s02", []):
+        if e.get("kind") == "build_to" and e.get("at") == 7.69:
+            e["at"] = 4.49
     seen = 0
     for sid, i in B.row_ids(rows).items():
         if sid not in shipped or not shipped[sid]:

@@ -1333,11 +1333,23 @@ def _values_gate(doc: dict | str | None) -> Gate:
                 f"(band {band}); worst {worst[0]:.1%} of the top tick" + (f" - {worst[1]}" if worst[1] else ""), SRC_M26)
 
 
+def _in_build_window(t: float, scenes: list[dict]) -> bool:
+    """Is the chart drawing at t - inside one of the scene's compiled `build_windows` (E63)?"""
+    for s in scenes or []:
+        a, b = (s.get("span") or [0.0, 0.0])[:2]
+        if not (float(a) <= t < float(b)):
+            continue
+        return any(float(x) <= t <= float(y) for x, y in (s.get("build_windows") or []))
+    return False
+
+
 def _over_build_faults(doc: dict, scenes: list[dict]) -> tuple[list[str], list[str], int]:
     """(FAIL lines, WARN lines, how many card-on-plot readings were taken mid-build) over every instant.
 
-    An instant counts when the page's marks say the chart is DRAWING - `marks.drawn` strictly between
-    0 and 1, the probe's own read of the stroke - and the card has not parked yet. A card the compiler
+    An instant counts when it lies inside one of its scene's `build_windows` - the compiler's own clock
+    for the chart DRAWING (the page's own build, each build_to), the list the READ was decided against -
+    and the card has not parked yet. `marks.drawn` is reported, never decisive: it averages every drawn
+    path and reads 0.52 on Tokyo's finished line, whose second path is a stub by design. A card the compiler
     already answered for (E63's `read_moved` / `read_deferred`) is still measured, and still fails if
     it is on the plot: the entry is a record of the decision, never an exemption from the frame."""
     handled = {str(d.get("slide")): ("moved" if d.get("read_moved") else "deferred")
@@ -1348,8 +1360,8 @@ def _over_build_faults(doc: dict, scenes: list[dict]) -> tuple[list[str], list[s
     for inst in doc.get("instants") or []:
         t = float(inst.get("t", 0.0))
         drawn = (inst.get("marks") or {}).get("drawn")
-        if drawn is None or not (0.0 < float(drawn) < 1.0):
-            continue                                  # nothing drawn yet, or the chart is complete: not this row's business
+        if not _in_build_window(t, scenes):
+            continue                                  # the chart is not drawing here (the compiler's clock): not this row's business
         state = {d["id"]: d.get("state") for d in inst.get("docks") or []}
         for o in inst.get("overlaps") or []:
             if o.get("b") != "page.plot" or state.get(o.get("a")) in (None, "parked"):
@@ -1357,7 +1369,7 @@ def _over_build_faults(doc: dict, scenes: list[dict]) -> tuple[list[str], list[s
             measured += 1
             note = f" - the compiler {handled[o['a']]} this read (E63) and it still lands here" if o["a"] in handled else ""
             where = (f"at {_mm(t)}, {o['area_px']:,} px, {o['share_of_smaller']} % of the smaller box, "
-                     f"the chart {float(drawn):.0%} drawn")
+                     f"the chart drawing (marks {float(drawn):.0%} drawn)" if drawn is not None else "the chart drawing")
             if o["share_of_smaller"] / 100.0 > BUILD_OVER_SHARE:
                 fails.append(f"{o['a']} sits on the plot while the chart draws {where}{note}")
             else:

@@ -32,6 +32,7 @@ sys.path.insert(0, str(SCRIPTS))
 
 from authoring import Project                                             # noqa: E402
 from authoring import audio as A, docks as D, table as T, words as W      # noqa: E402
+import gate_motion_density as MG                                          # noqa: E402  R26-50: the page's landing, one truth
 
 SCRIPT = HERE / "SCRIPT-90S-VO.claude.txt"
 TAKE = HERE / "vo-short/audio"
@@ -257,7 +258,10 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     t_bar_tab = word_in("bar tab is still ours", "bar")  # (the ring's last line)
     t_that = word_in("that unfunded bar tab is", "that")  # the host arrives CENTRED on the Fed page for its whole last line
     # V3 words (P47 T2): the page performs on these
-    t_build = round(t_page + PAGE_BUILD_START_S, 2)      # the page's own build beat (tr = t - t_page on a mount, E45 s2) - the line draws to the peak
+    # R26-50 (2026-09-11): the mount is the SOAK on the page's own clock - the build beat starts mount_s + PUNCH after the
+    # scene's start, not 4.4 s after t_page; the landing is the gate's one truth (_page_land_offset), so the build_to that
+    # shapes the line's arrival on the peak rides the clock the gate measures (before: 7.69 on a landing of 10.69; now 4.49 / 7.49)
+    t_build = round(t_mount + MG._page_land_offset({"world": {"kind": "ledger", "page": {"enter": "mount", "mount_s": mount_hook}}}) - PAGE_BUILD_S, 2)
     t_opponent = at("The opponent")                      # the title rewrites here
     t_hundred = at("a hundred and twenty-two billion")   # the bracket draws here, its sub landing on "a tenth of the pile"
     t_prints = at("The Treasury prints")                 # E50: the line and the bracket un-draw here (the last data mark is the bracket)

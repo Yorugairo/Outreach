@@ -47,6 +47,12 @@ def s02() -> dict:
             "windows": B.page_build_windows(world, row[6], row[0])}
 
 
+def RULED_ENTER(s02: dict) -> float:
+    """An enter inside the page's own build window: the card's read starts while the line draws."""
+    a, b = s02["windows"][0]
+    return round(a + (b - a) * 0.55, 2)
+
+
 def _read(s02: dict, enter: float) -> dict | None:
     """E63's decision for the panel card entering at `enter`, everything else the row's own."""
     return B.read_over_build(s02["place"], B.dock_read_box(ASPECT), s02["page"], ASPECT,
@@ -58,9 +64,10 @@ def test_each_drawing_beat_is_its_own_window(s02):
     """The page's own build clock and each `build_to` - separate windows, never one span. Between the
     Tokyo caps (10.69 -> 18.95) the line RESTS on its datum (M19's hold): a card reading in that gap
     is beside a finished chart, not over a build."""
-    # R26-50 (2026-09-11): a mounting page lands its own build mount_s + 3.5 s after enter (7.49 on s02, was 10.69 on the roll-out clock);
-    # the build_to at 7.69 still draws to 10.69, so the panel card at 9.1 is still inside a drawing window
-    assert s02["windows"] == [(1.99, pytest.approx(7.49)), (7.69, pytest.approx(10.69)), (18.95, pytest.approx(20.15))]
+    # R26-50 (2026-09-11): a mounting page lands its own build mount_s + 3.5 s after enter (7.49 on s02, was 10.69 on the
+    # roll-out clock), and the cut's build_to was re-fitted to the same clock the same evening (4.49 -> 7.49, was 7.69 -> 10.69),
+    # so the page's own beat and the authored cap draw as one window again
+    assert s02["windows"] == [(1.99, pytest.approx(7.49)), (pytest.approx(4.49), pytest.approx(7.49)), (18.95, pytest.approx(20.15))]
     assert B.page_build_windows({"kind": B.SPECIES_LEDGER, "page": {"enter": "spiral"}}, [], 4.0) == [], "a page that arrives BUILT never draws"
     assert B.page_build_windows({"kind": "plate", "asset_id": "plate-x"}, [], 0.0) == [], "a plain plate has no chart to draw"
 
@@ -77,8 +84,12 @@ def test_the_cards_solo_reading_box_is_the_players_own(s02):
 # ------------------------------------------------------------------ the decision
 def test_the_tokyo_panel_card_does_not_read_over_the_build(s02):
     """The ruling on the row it was ruled on. The page leaves a 208 px band above the plot - not room
-    for a card at E45's own width - so the read is DEFERRED: the card enters at its parked box."""
-    d = _read(s02, s02["enter"])
+    for a card at E45's own width - so the read is DEFERRED: the card enters at its parked box.
+    The case is proved at RULED_ENTER - 9.1 s on the roll-out clock the ruling was made on; the live cut's
+    build beat was re-fitted to the mount clock the same evening (R26-50), so the live panel card now
+    enters after the landing and reads beside a finished chart (the operator: "somewhat okay here because
+    of timing"). An enter three seconds into the live build window is the same defect on the same page."""
+    d = _read(s02, RULED_ENTER(s02))
     assert d, "the compiler saw nothing to decide on the row the operator ruled on"
     if d.get("read_moved"):
         to = dict(zip(("x", "y", "w", "h"), d["read_moved"]["to"]))
@@ -90,8 +101,10 @@ def test_the_tokyo_panel_card_does_not_read_over_the_build(s02):
 
 
 def test_a_dock_that_enters_after_the_landing_is_untouched(s02):
-    """The line lands at 10.69; a card entering at 12.0 reads beside a chart that is done - and the
-    entry compiles to exactly the bytes it did before the rule existed."""
+    """The line lands at 7.49 (10.69 on the clock the rule was written on); a card entering at 12.0 -
+    and the live panel card at 9.1 - reads beside a chart that is done, and the entry compiles to
+    exactly the bytes it did before the rule existed."""
+    assert _read(s02, s02["enter"]) is None, "the live cut: the card enters after the landing now"
     assert _read(s02, 12.0) is None
     assert _read(s02, 21.0) is None, "past the second cap's landing too"
     assert _read(s02, 19.0) is not None, "but a card INSIDE the second cap's window is the same defect"
@@ -185,21 +198,28 @@ def _instant(t: float, drawn: float | None, state: str, share: int, area: int = 
             "marks": {"n": 2, "drawn": drawn, "up": 1.0, "parked": False}}
 
 
+# the scene the instants belong to, with the compiler's own build windows (E63: `build_windows` on the scene) - M27
+# decides mid-build by these, never by `marks.drawn` (the probe averages every drawn path and reads 0.52 on a finished
+# line whose second path is a stub by design; it is reported in the row's text, not scored)
+S02_SCENE = {"scene_id": "s02", "span": [1.99, 38.96], "build_windows": [[1.99, 10.69], [18.95, 20.15]], "docks": []}
+
+
 def _m27(instants: list[dict], scenes: list[dict] | None = None):
-    return G._over_build_gate({"aspect": ASPECT, "instants": instants}, scenes or [])
+    return G._over_build_gate({"aspect": ASPECT, "instants": instants}, scenes if scenes is not None else [S02_SCENE])
 
 
 def test_m27_fails_a_card_reading_on_a_chart_that_is_still_drawing():
     g = _m27([_instant(10.29, 0.5, "reading", 40)])
     assert g.level == "FAIL", g.message
-    assert PANEL in g.message and "0:10" in g.message and "277,066 px" in g.message and "50% drawn" in g.message, g.message
+    assert PANEL in g.message and "0:10" in g.message and "277,066 px" in g.message and "marks 50% drawn" in g.message, g.message
 
 
 def test_m27_is_not_the_row_for_a_finished_chart_or_a_parked_card():
-    assert _m27([_instant(10.29, 1.0, "reading", 40)]).level == "PASS", "the chart is complete - M25's business, not this row's"
-    assert _m27([_instant(10.29, 0.0, "reading", 40)]).level == "PASS", "nothing drawn yet"
-    assert _m27([_instant(10.29, None, "reading", 40)]).level == "PASS", "a page with no marks to read"
-    assert _m27([_instant(11.04, 0.5, "parked", 40)]).level == "PASS", "a PARKED card is E45's contract and M25's row"
+    assert _m27([_instant(12.0, 0.52, "reading", 40)]).level == "PASS", "the chart is complete (outside every window) - M25's business, even with marks.drawn at 0.52"
+    assert _m27([_instant(1.5, 0.0, "reading", 40)]).level == "PASS", "before the page draws"
+    assert _m27([_instant(10.29, None, "reading", 40)]).level == "FAIL", "inside the window the marks are not consulted - the compiler's clock decides"
+    assert _m27([_instant(10.29, 0.5, "reading", 40)], [{"scene_id": "s02", "span": [1.99, 38.96], "docks": []}]).level == "PASS", "a scene with nothing to draw (no windows) - never this row's"
+    assert _m27([_instant(10.04, 0.5, "parked", 40)]).level == "PASS", "a PARKED card is E45's contract and M25's row"
 
 
 def test_m27_warns_a_card_merely_inside_the_plots_box():
@@ -210,7 +230,7 @@ def test_m27_warns_a_card_merely_inside_the_plots_box():
 def test_m27_still_scores_a_read_the_compiler_answered():
     """The exemption that is not one: the entry records the decision, the frame decides. A card the
     compiler moved that STILL lands on the plot fails, and says the fix did not take."""
-    scenes = [{"docks": [{"slide": PANEL, "read_moved": {"from": [], "to": [], "why": "x"}}]}]
+    scenes = [dict(S02_SCENE, docks=[{"slide": PANEL, "read_moved": {"from": [], "to": [], "why": "x"}}])]
     g = _m27([_instant(10.29, 0.5, "reading", 40)], scenes)
     assert g.level == "FAIL" and "the compiler moved this read" in g.message, g.message
 
