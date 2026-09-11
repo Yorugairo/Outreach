@@ -30,7 +30,7 @@ sys.path.insert(0, str(SCRIPTS))
 SCRIPT = HERE / "SCRIPT-90S-VO.claude.txt"
 TAKE = HERE / "vo-short/audio"
 BUILD = HERE / os.environ.get("TOKYO_BUILD_DIR", "build-short")   # P48 T7: a cut under review builds beside the watched one (TOKYO_BUILD_DIR=build-short-p48 -> :8740), never over it
-CAMERA = os.environ.get("TOKYO_CAMERA", "0") == "1"   # P49 (the operator, 2026-09-10: "let's test out those camera changes"): the arrival on the ring + the pull toward the landings, in a build beside (build-short-cam, :8742)
+CAMERA = os.environ.get("TOKYO_CAMERA", "1") == "1"   # the operator's watch, 2026-09-10 ("8742>8738"): the camera cut IS the cut; TOKYO_CAMERA=0 rebuilds the locked variant beside it   # P49 (the operator, 2026-09-10: "let's test out those camera changes"): the arrival on the ring + the pull toward the landings, in a build beside (build-short-cam, :8742)
 CAM_ROW = {"keys": [], "attention": "landings"} if CAMERA else None   # the row's 8th element: the eye pulls toward a card as it lands (E59 #1; the dials are HG1's)
 CLIPS = HERE / "omni-video/stills"   # the v2 set: approved stills to video (APPROVALS.json)
 SERIES = ("ev-japan-holdings-v1", "ev-meta-yield-v1")
@@ -572,6 +572,10 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # "to chips," 56.85-57.35, the bars at the bonds' level 58.13, the hold from 58.55 ("beats"), the shoot 59.05-59.65 ("bonds." 58.97-59.57)
             {"kind": "chart_to", "at": at("to chips"), "dur": 0.5, "to": "recast", "state": 2},
             {"kind": "retitle", "at": at("to chips"), "dur": 1.2, "text": "Ten years, a year at a time"},   # the recast rewrites the sub and source; the title is the hand's (as row 2)
+            # the operator (2026-09-10: "if they're going to leave the chart should either re-take center stage, or they might as well stay
+            # til the transition"): as the two cards leave on "And here's", the chart UN-PARKS - grows back to full size from the parked
+            # slot - and the burst's result holds large under "what nobody says" until the Meta page mounts over it
+            {"kind": "chart_to", "at": round(at("And here's") + 0.3, 2), "dur": 0.9, "to": "park", "scale": 1.0, "anchor": "top"},
             # measured on the frame: a FIGURE at the June bar (282 px of type, written leftward) crosses the May bar's body at every dy the
             # 800 px plot allows - so the print is a NOTE in the page's quiet zone (the June bar's own -$26.4 stands in its callout)
             {"kind": "note", "at": t_first, "dur": 1.4, "text": "the June print: " + _bn(FACTS["latest"]) + " - your first number"},

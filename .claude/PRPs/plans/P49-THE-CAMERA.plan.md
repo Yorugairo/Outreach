@@ -1,7 +1,7 @@
 ---
 id: P49-THE-CAMERA
 title: The camera as a first-class component of the physics - the eye in the world
-status: running
+status: complete
 operation: feature
 risk: standard
 owner: parent
@@ -243,7 +243,7 @@ rendered.
   `kinetics/camera.test.mjs` 6.
 
 ### T4: The attention law
-- Status: complete, LOCKED by default; the landings pull is opt-in per row and waits on HG1 (2026-09-10)
+- Status: complete, LOCKED by default; the landings pull is opt-in per row - HG1 CLOSED by the operator's watch (2026-09-10: "8742>8738", the dials stand as derived)
 - Owner: parent
 - Depends on: T2, T3
 - Write set: `kinetics/camera.mjs`, template, `docs/portable/OPERATOR-RULINGS.md` (E54)
@@ -264,7 +264,7 @@ rendered.
   and the Tokyo fingers are the candidates; nothing ships with landings on until the operator's word.
 
 ### T5: The camera arrival (the card becomes the world by the eye going to it)
-- Status: built, opt-in beside `snap`, on the tariff short's two chart pages in a SIDE build for HG2 (2026-09-10)
+- Status: complete, opt-in beside `snap` - HG2 CLOSED by the operator's watch on the Tokyo short (2026-09-10: "8742>8738" - the arrival is the ring's entrance in the Tokyo cut; the tariff's approved cut keeps its snap until re-cut)
 - Owner: parent
 - Depends on: T4
 - Write set: template, `build_scene_timeline_f.py` (`enter=camera=<dock>`), `japan-tariff-trick/build_short.py`
@@ -369,7 +369,8 @@ is the cream (or the deckle); corners rounded whenever the card is not full-fram
 - Rendered frames across the hook arrival (the scratchpad `beat_frames.py` pattern: `render_baseline.serve` + `frame_png`
   on `build-short/player.html`) read as a viewer, and the element rects inspected in the pane at the instants that matter
   (the 2026-09-08 lesson: measure the page / field / title rects, do not read instants).
-- The operator's watch on :8734 (HG1, HG2).
+- The operator's watch on :8734 (HG1, HG2). DONE 2026-09-10 on the Tokyo short: "8742>8738" (E59 amended) - both gates closed; the
+  camera cut is Tokyo's default build; the plan is complete.
 - (2026-09-10) HG1/HG2 material on the Tokyo short too: `TOKYO_CAMERA=1 TOKYO_BUILD_DIR=build-short-cam` → :8742
   (`tokyo-short-player-cam`): the attention pull on the row-2 landings and the fab card, the arrival on the ring in place
   of the snap; gate PASS (M24 in frame). The operator asked for it ("let's test out those camera changes"); it is watched

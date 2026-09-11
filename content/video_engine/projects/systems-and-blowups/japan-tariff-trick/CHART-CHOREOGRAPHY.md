@@ -23,7 +23,9 @@ this ledger exists to make deliberate.
 **Arrives, 2026-09-10 (P49 T5):** the approved cut (2026-09-09) arrives rows 1 and 3 by `snap` (the card thrown on the
 previous scene, the page grown from it). A SIDE build (`build-short-p49`, `TARIFF_CHART_ARRIVAL=camera`, :8741) arrives
 them by `camera` - the card lands and the EYE goes to it, the world switching to the page at the match (E59 #3). Neither
-replaces the other until HG2; the approved build is untouched.
+replaces the other until HG2; the approved build is untouched. HG2 closed 2026-09-10 on the TOKYO short (the camera cut won,
+"8742>8738", E59 amended): this short's approved and rendered cut keeps its snap until it is re-cut on its own word; :8741 stands
+as the comparison.
 
 **Span is not deployed life.** A span carries the mount, the roll, the savor,
 the field, the punch and the build; E50's clock starts at the LAST DATA MARK.

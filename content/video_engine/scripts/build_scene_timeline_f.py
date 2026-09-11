@@ -133,7 +133,7 @@ CHART_TO_KINDS = ("recast", "rescale", "extend", "park", "morph")   # P48: recas
 MORPH_BUILDERS = ("dense-line",)                     # P48 T5: the shape a morph moves is the AREA UNDER A LINE - both sides of a morph_to are line pages
 PARK_ANCHORS = ("top", "bottom", "left", "right")   # the corner of its own box the parked chart shrinks toward (top = Bravos 91: up, the room opens below)
 RECAST_PAIRS = (("dense-line", "story"),)             # P48 T4b: the legal KEYED pairs - n lines <-> n bars by series (Bravos 99-105); everything else recasts by the hand-over
-PARK_SCALE = (0.3, 0.95)                             # a parked chart is still a chart: never below 0.3 of itself, and 0.95 is not a park
+PARK_SCALE = (0.3, 0.95)                             # a parked chart is still a chart: never below 0.3 of itself, and 0.95 is not a park; exactly 1.0 is an UN-PARK (2026-09-10)
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
                                                                 # (a returning page keeps its retitle, its bracket standing); the gate credits no event before the span
@@ -310,8 +310,8 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
         if entry.get("to") == "park":
             # P48 T2b: no state is derived - the ACTIVE chart is transformed as one piece; the row names how small and toward which side
             sc = entry.get("scale", 0.72)
-            if not isinstance(sc, (int, float)) or isinstance(sc, bool) or not (PARK_SCALE[0] <= sc <= PARK_SCALE[1]):
-                errs.append(f"chart_to park: scale must be a number in [{PARK_SCALE[0]}, {PARK_SCALE[1]}] (default 0.72)")
+            if not isinstance(sc, (int, float)) or isinstance(sc, bool) or not (PARK_SCALE[0] <= sc <= PARK_SCALE[1] or sc == 1.0):
+                errs.append(f"chart_to park: scale must be a number in [{PARK_SCALE[0]}, {PARK_SCALE[1]}] (default 0.72) - or exactly 1.0, the UN-PARK that grows the chart back from the standing park")
             if entry.get("anchor", "top") not in PARK_ANCHORS:
                 errs.append(f"chart_to park: anchor must be one of {'|'.join(PARK_ANCHORS)} (the side the chart keeps)")
             if "state" in entry:

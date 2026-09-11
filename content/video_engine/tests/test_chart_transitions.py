@@ -1072,3 +1072,29 @@ def test_a_spread_follows_the_active_state_across_a_rescale():
         assert not errs, errs
     finally:
         close()
+
+
+def test_a_park_to_one_is_an_un_park_and_a_near_one_is_not():
+    """2026-09-10 (the operator: the chart re-takes centre stage when the cards leave): scale 1.0 is the un-park; 0.96-0.99 is
+    still "not a park" and refused."""
+    assert B._validate_page_fields("chart_to", {"kind": "chart_to", "at": 1.0, "dur": 0.9, "to": "park", "scale": 1.0}) == []
+    assert any("UN-PARK" in e for e in B._validate_page_fields("chart_to", {"kind": "chart_to", "at": 1.0, "dur": 0.9, "to": "park", "scale": 0.97}))
+
+
+@needs_objects
+@needs_browser
+def test_a_park_to_full_size_grows_the_chart_back_from_the_standing_park():
+    species = [{"kind": "chart_to", "at": PK_AT, "dur": PK_S, "to": "park", "scale": 0.55},
+               {"kind": "chart_to", "at": PK_AT + 4.0, "dur": 1.0, "to": "park", "scale": 1.0}]
+    at, errs, close = _park_player(species)
+    try:
+        full = at(PK_AT - 0.5); parked = at(PK_AT + PK_S + 0.5)
+        assert abs(parked["box"][2] / full["box"][2] - 0.55) < 0.01, "parked at 0.55"
+        mid = at(PK_AT + 4.5)
+        assert 0.55 < mid["box"][2] / full["box"][2] < 1.0, "mid-clock the chart is between the park and full: it grows from where it stood, no jump"
+        back = at(PK_AT + 5.5)
+        assert abs(back["box"][2] / full["box"][2] - 1.0) < 0.01 and abs(back["box"][3] / full["box"][3] - 1.0) < 0.01, "full size again"
+        assert abs(back["box"][0] - full["box"][0]) <= 1 and abs(back["box"][1] - full["box"][1]) <= 1
+        assert not errs, errs
+    finally:
+        close()

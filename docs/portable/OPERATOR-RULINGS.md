@@ -1912,6 +1912,15 @@ never re-implemented as pushes.
 Mechanisms: `docs/content-video-engine/CAPABILITIES.md` (the camera rows); the plan `.claude/PRPs/plans/P49-THE-CAMERA.plan.md`;
 the measurement `sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/claude-watch/camera.json`.
 
+**Amended 2026-09-10, the watch: "8742>8738".** The operator watched the Tokyo short's camera cut (:8742 - the pull toward
+the row-2 landings and the plant, the arrival on the ring) against the locked cut (:8738) and read the camera cut as the
+better one. That closes the two human gates the plan held open: **HG1** - the landing pull's dials stand as derived (1.06
+from the contact frame, in 0.5 s, released over 0.6 s before the card leaves); **HG2** - the arrival replaces the snap on
+the ring: the card lands, the eye goes to it, the page is the world at the match. The camera cut is the Tokyo short's
+DEFAULT build (`TOKYO_CAMERA` defaults to 1; `TOKYO_CAMERA=0` rebuilds the locked variant beside it for comparison). The
+tariff short's approved and rendered cut keeps its snap until it is re-cut on its own word (its side build :8741 stands).
+The locked default for every OTHER timeline is unchanged: the pull and the arrival are opt-in per row, as above.
+
 ## E60 — The BREAKTHROUGH is a rescale: the bar that cannot fit builds to the comparator's level, then shoots while the scale rewrites under it (2026-09-10)
 
 **The operator's words.** On the first pass (a zigzag cut at the top gridline, the bar a little past it): *"is that squiggle

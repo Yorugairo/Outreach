@@ -4367,8 +4367,11 @@
     M.svg.style.opacity = c < 1 ? "1" : "0"; M.u = 1;
   };
   const PARK_ORIGIN = Object.freeze({ top: "0 0", bottom: "0 100%", left: "0 0", right: "100% 0" });
-  const lpPaintPark = (S, sp, t) => {
-    const d = Math.max(0.001, sp.dur || 1), u = segEase(clamp01((t - sp.at) / d)), sc = 1 - (1 - (+sp.scale || 0.72)) * u;
+  const lpPaintPark = (S, sp, t, fromScale) => {
+    /* a park moves the chart from where it STANDS: from full size, or from the previous park's scale - so a park to scale 1 is an
+       UN-PARK that grows the chart back (the operator, 2026-09-10: "the chart should re-take center stage" when the cards leave) */
+    const from = Number.isFinite(+fromScale) ? +fromScale : 1;
+    const d = Math.max(0.001, sp.dur || 1), u = segEase(clamp01((t - sp.at) / d)), sc = from + ((+sp.scale || 0.72) - from) * u;
     S.chart.style.transformOrigin = PARK_ORIGIN[sp.anchor || "top"] || PARK_ORIGIN.top;
     S.chart.style.transform = "scale(" + sc.toFixed(4) + ")";
     /* the citation rides the park with the chart (E52: the page cites - it was left full-size under the cards the park made room
@@ -4392,14 +4395,14 @@
     const states = st.states || [st];
     if (states.length < 2) {   /* a page with one chart is exactly what it was - plus a park, if the row names one (P48 T2b) */
       lpPaintChart(st, cBase, t3, scene, t);
-      let pk = null; for (const sp of pageSpecies(scene, "chart_to")) { if (t < sp.at) break; if (sp.to === "park") pk = sp; }   /* a park stands until the next park (E60 Tokyo: the burst plays in the parked slot; a park to scale 1 un-parks) */
-      if (pk) lpPaintPark(st, pk, t); else lpUnpark(st);
+      let pk = null, pkFrom = 1; for (const sp of pageSpecies(scene, "chart_to")) { if (t < sp.at) break; if (sp.to === "park") { pkFrom = pk ? (+pk.scale || 0.72) : 1; pk = sp; } }   /* a park stands until the next park (E60 Tokyo: the burst plays in the parked slot; a park to scale 1 un-parks) */
+      if (pk) lpPaintPark(st, pk, t, pkFrom); else lpUnpark(st);
       st.active = 0; return;
     }
-    let cur = 0, cCur = cBase, leaving = false, xf = null, park = null, hold = null;
+    let cur = 0, cCur = cBase, leaving = false, xf = null, park = null, parkFrom = 1, hold = null;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
-      if (sp.to === "park") { park = sp; continue; }   /* P48 T2b: a transform on whichever state is active, never a state change */
+      if (sp.to === "park") { parkFrom = park ? (+park.scale || 0.72) : 1; park = sp; continue; }   /* P48 T2b: a transform on whichever state is active, never a state change; a later park moves from the standing one */
       hold = null;   /* a later transition to another state ends a morph's hold; the standing PARK stays - the new state stands where the old one did
                         (E60 Tokyo, 2026-09-10: the ten-year bars recast into the parked monthly bars' slot and burst there, the plant beneath them; a park to scale 1 un-parks) */
       const d = Math.max(0.001, sp.dur || 1), k = Math.max(0, Math.min(states.length - 1, sp.state | 0));
@@ -4435,7 +4438,7 @@
       if (hold) lpPaintMorphHold(st, hold, cCur);
     }
     for (let i = 0; i < states.length; i++) if (!park || i !== (st.active | 0)) lpUnpark(states[i]);
-    if (park && !xf) lpPaintPark(states[st.active | 0], park, t);
+    if (park && !xf) lpPaintPark(states[st.active | 0], park, t, parkFrom);
     /* the words that describe the chart move with it: the standing sub and source erase over the transition's first
        PS.ERASE_S, the arriving state's write over the rest. State 0's are the page's own, written by the page's build. */
     let ink = 0, ue = 0, uw = 1;

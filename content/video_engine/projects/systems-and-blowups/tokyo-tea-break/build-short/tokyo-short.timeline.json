@@ -2194,11 +2194,11 @@
      4.0
     ],
     [
-     77.28,
+     76.99,
      4.0
     ],
     [
-     78.08,
+     77.79,
      0.0
     ]
    ],
@@ -3902,7 +3902,7 @@
    ],
    "camera": {
     "keys": [],
-    "attention": "locked"
+    "attention": "landings"
    }
   },
   {
@@ -5515,6 +5515,14 @@
      "text": "Ten years, a year at a time"
     },
     {
+     "kind": "chart_to",
+     "at": 59.87,
+     "dur": 0.9,
+     "to": "park",
+     "scale": 1.0,
+     "anchor": "top"
+    },
+    {
      "kind": "note",
      "at": 53.19,
      "dur": 1.4,
@@ -5523,7 +5531,7 @@
    ],
    "camera": {
     "keys": [],
-    "attention": "locked"
+    "attention": "landings"
    }
   },
   {
@@ -5610,7 +5618,7 @@
      "slide": "dock-h-fed-vs-yields",
      "slot": 0,
      "enter": 75.79,
-     "exit": 76.83,
+     "exit": 77.28,
      "badge_at": [],
      "place": {
       "x": 501,
@@ -6443,7 +6451,7 @@
      "judge": [],
      "badges": [],
      "emphasize": 0,
-     "enter": "snap",
+     "enter": "camera",
      "snap_from": "dock-h-fed-vs-yields",
      "exit": "cut"
     },
