@@ -11,6 +11,19 @@
    inline_text drops an `export {...}` list, and `"use strict"` stays the body's first
    statement (a default parameter would make that directive a SyntaxError), so the inlined
    copy is strict exactly where the old IIFE was. */
+
+/* P51 T4 - THE HOT-RELOAD STATE, module level so mount() can be run a second time on the same
+   page. `reload(timeline)` at the foot puts the shell's own DOM back and calls mount() again -
+   the same code path mount runs after the data arrives, no page load, the scrub position kept.
+     __shellHTML  the body exactly as the shell delivered it, taken on the FIRST mount and only
+                  when the page is watched (?watch=1): a single-file page carries its whole asset
+                  bundle in that string, so a golden render never pays for the snapshot;
+     __assets     the asset map, parsed once - a reload changes the timeline, never the assets;
+     __mountGen   the live mount's token: the play loop of a mount that has been replaced sees a
+                  moved token and stops instead of painting a dead DOM;
+     __onResize   the live fitStage, so the window carries one resize listener, not one per mount. */
+let __shellHTML = null, __assets = null, __mountGen = 0, __onResize = null;
+
 async function mount(doc) {
   "use strict";
   /* $ is declared FIRST. It used to sit below the title/scrub lines that
@@ -18,10 +31,14 @@ async function mount(doc) {
      rendered black - passing every structural check while showing nothing. */
   const $ = (id) => document.getElementById(id);
   const D = doc || document;   /* the only doc-scoped reads in the body - everything below keeps `document` */
+  const MY = ++__mountGen;     /* P51 T4: this mount's token - a reload moves it and the old play loop stops */
+  const WATCH = typeof location !== "undefined" && /[?&]watch=1/.test(location.search);
+  if (WATCH && __shellHTML === null) __shellHTML = D.body.innerHTML;   /* taken before one node of this mount exists */
   const slot = (id) => { const el = D.getElementById(id); return { el, text: el.textContent.trim() }; };
   const tlSlot = slot("timeline-data"), aSlot = slot("asset-data");
   const TL = tlSlot.text ? JSON.parse(tlSlot.text) : await (await fetch(tlSlot.el.dataset.src, { cache: "no-store" })).json();
-  const A  = aSlot.text  ? JSON.parse(aSlot.text)  : await (await fetch(aSlot.el.dataset.src,  { cache: "no-store" })).json();
+  const A  = __assets || (aSlot.text ? JSON.parse(aSlot.text) : await (await fetch(aSlot.el.dataset.src,  { cache: "no-store" })).json());
+  if (WATCH) __assets = A;     /* a reload re-mounts on the SAME assets - never a second fetch of a 31 MB map */
   /* P39 T4 - THE KILL SWITCH. Every capability that changes rendered output reads a flag
      from timeline.kinetics and DEFAULTS TO FALSE, which means the behaviour tagged at
      player-baseline-2026-09-04. A bad result is one timeline field away from the old
@@ -65,6 +82,8 @@ async function mount(doc) {
   $("species").setAttribute("viewBox", `0 0 ${STAGE_W} ${STAGE_H}`);
   $("species-under").setAttribute("viewBox", `0 0 ${STAGE_W} ${STAGE_H}`);   /* the under layer shares the stage frame - left on the landscape default it placed a portrait spotlight at the axis corner (2026-09-08) */
   const fitStage = () => { stage.style.transform = `scale(${fit.clientWidth / STAGE_W})`; };
+  if (__onResize) removeEventListener("resize", __onResize);   /* P51 T4: one live listener, not one per mount */
+  __onResize = fitStage;
   addEventListener("resize", fitStage); fitStage();
 
   const clamp01 = (v) => Math.min(1, Math.max(0, v));
@@ -7538,7 +7557,7 @@ async function mount(doc) {
   const sync = () => { scrub.value = t; clock.textContent = `${fmt(t)} / ${fmt(DUR)}`; render(t); syncSound(t, playing); };
   const seek = (v) => { t = Math.min(DUR, Math.max(0, v)); vo.currentTime = t; sync(); };
   const tick = () => {
-    if (!playing) return;
+    if (!playing || MY !== __mountGen) return;   /* P51 T4: a replaced mount's play loop stops here */
     t = Math.min(DUR, vo.currentTime);
     if (t >= DUR) { playing = false; clipLive = false; vo.pause(); playBtn.innerHTML = "&#9654; Replay"; }
     sync();
@@ -7555,6 +7574,12 @@ async function mount(doc) {
   $("mute").addEventListener("click", () => { vo.muted = !vo.muted; $("mute").textContent = vo.muted ? "Unmute" : "Mute"; });
   scrub.addEventListener("input", () => { seek(+scrub.value); });
   sync();
+  /* P51 T4: ?t=<seconds> opens the page AT that instant - the same scrub input every probe and
+     every test seeks with, so a report can link the frame it is talking about. */
+  if (typeof location !== "undefined") {
+    const T0 = new URLSearchParams(location.search).get("t");
+    if (T0 !== null && T0 !== "" && isFinite(+T0)) { scrub.value = +T0; scrub.dispatchEvent(new Event("input", { bubbles: true })); }
+  }
   /* P47 T3: the morph's match-cut invariants on the active page (25 frames of the ARAP outline), for measure_morph.py / M17 */
   /* P49 T3: what the eye sees at t - the camera's state, its frustum in world (pre-camera) stage px, and for a declared
      target whether it is in frame, how much of it, at what on-screen scale, and where it lands on screen. Seek to t
@@ -7685,4 +7710,26 @@ async function mount(doc) {
     return name + ": " + n + " played frames";
   };
 
-export { mount };
+/* P51 T4 - RELOAD: a new timeline on a page that is already open. The shell's own DOM comes back
+   (which is what kills every node and every listener the last mount made), the new timeline goes
+   into the slot the loader reads, and mount() runs the same path it runs after a fetch. The assets
+   are not read again, the scrub position is kept, and the page is left seeking at it - so what is
+   on screen after a reload is what a cold load at that t paints. The snapshot only exists on a
+   watched page (?watch=1), which is what makes this cost a served build nothing. */
+async function reload(timeline) {
+  if (__shellHTML === null)
+    throw new Error("reload: this page was not opened with ?watch=1, so no shell snapshot was taken");
+  const before = document.getElementById("scrub");
+  const at = before ? +before.value : 0;
+  window.__mounted = false;
+  document.body.innerHTML = __shellHTML;
+  document.getElementById("timeline-data").textContent = JSON.stringify(timeline);
+  await mount();
+  const scrub = document.getElementById("scrub");
+  if (scrub) { scrub.value = at; scrub.dispatchEvent(new Event("input", { bubbles: true })); }
+  window.__mounted = true;
+  window.__reloads = (window.__reloads || 0) + 1;
+  return at;
+}
+
+export { mount, reload };

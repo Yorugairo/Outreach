@@ -1402,7 +1402,13 @@ built timeline (exit 1):**
    in the accent colour, the spoken word at full white. When a dock
    enters, the caption demotes to the lower-third anchor inside the
    dock's enter duration (0.75s) and comes back to the stage when the last
-   dock clears. The timeline carries the mode per row (`cap_mode:
+   dock clears. **Amended 2026-09-11 (E62):** the demotion is in POSITION,
+   not in size - under a card the caption keeps its stage size and weight
+   and moves to the band the page leaves free of the card (the measured
+   fixture's bands, read against the dock's place); it shrinks to the
+   quiet anchor only when no band fits, and that anchor's floor is 48 px on
+   a short at weight 800. The punch is the size; a card is a reason to
+   move, not to shrink. The timeline carries the mode per row (`cap_mode:
    "stage" | "anchor"`); the player template implements both. Until the
    template ships stage mode, the gate lists every still stretch where
    stage captions are REQUIRED so the shot table can be authored against

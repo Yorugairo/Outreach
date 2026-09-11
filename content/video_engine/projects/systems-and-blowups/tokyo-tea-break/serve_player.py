@@ -1,71 +1,25 @@
-from http.server import HTTPServer, SimpleHTTPRequestHandler
-import os, sys, re
+"""Tokyo Tea Break's review player - a thin wrapper on the SHARED server (P51 T4).
 
-class RangeFileWrapper:
-    def __init__(self, f, length):
-        self.f = f
-        self.remaining = length
+The server itself is `content/video_engine/scripts/serve_player.py` (no-store, Range/seek, .mjs as
+text/javascript, and `--watch` for the hot-reload loop). This file keeps the CLI and the port the
+project's runbooks and `.claude/launch.json` have always used:
 
-    def read(self, size=-1):
-        if self.remaining <= 0:
-            return b""
-        to_read = self.remaining if (size == -1 or size > self.remaining) else size
-        data = self.f.read(to_read)
-        self.remaining -= len(data)
-        return data
+    python serve_player.py [port] [build dir] [--watch] [--no-check]     # default 8731, this dir
 
-    def close(self):
-        self.f.close()
+The shared file is loaded BY PATH under another name: a plain `import serve_player` from a script
+of the same name imports this wrapper a second time, not the server.
+"""
+import importlib.util
+import sys
+from pathlib import Path
 
-class RangeHTTPRequestHandler(SimpleHTTPRequestHandler):
-    # P51 T1: .mjs is not in Python's mimetypes table on Windows, and a module served as
-    # application/octet-stream is refused by the browser's strict MIME check - a split build
-    # would show its shell and mount nothing.
-    extensions_map = {**SimpleHTTPRequestHandler.extensions_map, '.mjs': 'text/javascript'}
+HERE = Path(__file__).resolve().parent
+SHARED = HERE.parents[2] / "scripts" / "serve_player.py"   # content/video_engine/scripts
+sys.path.insert(0, str(SHARED.parent))
+_spec = importlib.util.spec_from_file_location("review_server", SHARED)
+S = importlib.util.module_from_spec(_spec)
+sys.modules["review_server"] = S
+_spec.loader.exec_module(S)
 
-    def end_headers(self):
-        self.send_header('Accept-Ranges', 'bytes')
-        self.send_header('Cache-Control', 'no-store')   # a rebuilt player.html is always the one served (2026-09-05)
-        super().end_headers()
-
-    def send_head(self):
-        path = self.translate_path(self.path)
-        if not os.path.isfile(path):
-            return super().send_head()
-
-        range_header = self.headers.get('Range')
-        if not range_header:
-            return super().send_head()
-
-        total_size = os.path.getsize(path)
-        m = re.match(r'bytes=(\d+)-(\d*)', range_header)
-        if not m:
-            return super().send_head()
-
-        start = int(m.group(1))
-        end = int(m.group(2)) if m.group(2) else total_size - 1
-
-        if start >= total_size:
-            self.send_error(416, "Requested Range Not Satisfiable")
-            return None
-
-        end = min(end, total_size - 1)
-        length = end - start + 1
-
-        ctype = self.guess_type(path)
-        self.send_response(206)
-        self.send_header('Content-Type', ctype)
-        self.send_header('Content-Range', f'bytes {start}-{end}/{total_size}')
-        self.send_header('Content-Length', str(length))
-        self.end_headers()
-
-        f = open(path, 'rb')
-        f.seek(start)
-        return RangeFileWrapper(f, length)
-
-if __name__ == '__main__':
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8731
-    os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), sys.argv[2]) if len(sys.argv) > 2 else os.path.dirname(os.path.abspath(__file__)))   # [dir]: the build to serve (build-short)
-    server = HTTPServer(('127.0.0.1', port), RangeHTTPRequestHandler)
-    print(f"Serving Tokyo Tea Break review player on http://127.0.0.1:{port}/player.html with full Range/seek support...")
-    server.serve_forever()
+if __name__ == "__main__":
+    raise SystemExit(S.legacy_main(HERE, 8731, "Tokyo Tea Break"))

@@ -10,10 +10,12 @@ hands the build to `build_scene_timeline_f`. It never authors a row.
 """
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 ROW_SPECIES = 6      # the row's 7th element: the species list
 SHOT_TABLE_VAR = "W"
+OVERRIDES_NAME = "overrides.json"   # P51 T5: the edit sidecar, beside the build it belongs to
 
 
 def at(ws: list[dict], phrase: str) -> float:
@@ -27,6 +29,45 @@ def write_shot_table(path: Path, rows: list[tuple], header: str) -> Path:
     episode wants above it (its docstring, and anything else that identifies the build)."""
     path.write_text(header + f"{SHOT_TABLE_VAR} = " + repr(rows).replace("), (", "),\n     (") + "\n", encoding="utf-8")
     return path
+
+
+def load_rows(path: Path) -> list[tuple]:
+    """The rows back out of a written shot table - the compiler loads the file the same way."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("shot_rows", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return list(getattr(mod, SHOT_TABLE_VAR))
+
+
+def apply_sidecar(ep: Path, build: Path, shot_table_file: str) -> list[str]:
+    """P51 T5: `<build>/overrides.json` layered over the AUTHORED table before the compiler reads it.
+
+    A human's or a flash agent's edit lands in the sidecar, keyed by row id and field
+    (`build_scene_timeline_f.apply_overrides` is the grammar and the refusals); the table stays the
+    agent's. The literal is REWRITTEN here with the effective rows - so `SHOT-TABLE-SHORT.py` shows
+    what was compiled and the compiled timeline matches it - which makes the compiler's own pass
+    over the same sidecar a no-op (the layering is idempotent). Returns the ids layered on; `[]`
+    when there is no sidecar, and then nothing at all is read, written or changed."""
+    path = Path(build) / OVERRIDES_NAME
+    if not path.is_file():
+        return []
+    import build_scene_timeline_f as C
+    overrides = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(overrides, dict):
+        raise SystemExit(f"FAIL: {path}: the sidecar is a JSON object keyed by row id and field")
+    table = Path(ep) / shot_table_file
+    header, sep, _ = table.read_text(encoding="utf-8").partition(f"{SHOT_TABLE_VAR} = ")
+    if not sep:
+        raise SystemExit(f"FAIL: {table}: no `{SHOT_TABLE_VAR} = ` - a sidecar layers over a table this kit wrote")
+    words_path = Path(build) / "timeline.json"
+    words = json.loads(words_path.read_text(encoding="utf-8")).get("words") if words_path.is_file() else None
+    try:
+        rows = C.apply_overrides(load_rows(table), overrides, words=words, aspect=C.ASPECT)
+    except ValueError as exc:
+        raise SystemExit(f"FAIL: {path.name}: {exc}") from None
+    write_shot_table(table, rows, header)
+    return sorted(overrides)
 
 
 def row_line(row, show_docks: bool = False) -> str:
@@ -85,4 +126,36 @@ def compile_timeline(ep: Path, build: Path, *, timeline_name: str, shot_table_fi
     C.ASPECT = aspect
     C.CAPTION_STYLE = caption_style
     C.KINETICS = dict(kinetics)
-    return C.main()
+    apply_sidecar(ep, build, shot_table_file)   # P51 T5: the edit sidecar, over the literal, before the compiler reads it
+    rc = C.main()
+    if rc == 0:
+        write_compile_manifest(ep, build, timeline_name=timeline_name, shot_table_file=shot_table_file,
+                               title=title, subtitle=subtitle, episode_id=episode_id, aspect=aspect,
+                               caption_style=caption_style, kinetics=dict(kinetics), render=render)
+    return rc
+
+
+MANIFEST_NAME = "player.json"   # written by render_baseline.write_split; this adds the compile block
+
+
+def write_compile_manifest(ep: Path, build: Path, **fields) -> Path:
+    """P51 T4: the re-compile, recorded by the only door that compiles.
+
+    `serve_player --watch` re-runs the compiler in-process when the shot table or the sidecar
+    moves; it reads THIS block instead of guessing an episode's facts. Written after a green
+    compile, beside the engine's sha in the same manifest, with the episode dir relative to the
+    build (a build folder stays movable).
+
+    `stamped` is the other half of what a re-compile needs and the half that is easy to miss: the
+    episode's own dock assets are registered with the render resolver IN MEMORY while the rows are
+    authored (`docks.register` -> `build_render_f.STAMPED`), so a compiler run in a process that
+    never ran the build script cannot find one. Recorded here, the server restores it."""
+    import json
+    import os
+    import build_render_f as R
+    p = Path(build) / MANIFEST_NAME
+    m = json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
+    m["compile"] = {"episode_dir": os.path.relpath(Path(ep), Path(build)).replace("\\", "/"),
+                    "stamped": {k: str(v) for k, v in sorted(R.STAMPED.items())}, **fields}
+    p.write_text(json.dumps(m, indent=1), encoding="utf-8")
+    return p

@@ -190,7 +190,7 @@ Acceptance:
 - Evidence: `content/video_engine/scripts/probe.py` (625 lines), `gate_motion_density.py` M25 (+132), `tests/test_probe.py` (8), `tests/test_gate_motion_density.py` (+4: the three 2026-09-10 defects rebuilt as fixtures from the Tokyo compiled timeline each FAIL with the right pair named, the untouched build PASSes). Measured: Tokyo 58.6 JSON 1,092 bytes in 2.2 s; `--gate` 61 instants in 7.8 s; the gate `[PASS ] M25 ... smallest type read 11.6 CSS px on a phone (floor 11) | INFO ... source parked 4.9, chart.lab parked 7.5 ...`; 145 tests green across probe / gate / camera / lint / kit (the parent's run). Four scope decisions, measured and named in code: settled cards only (the Fed card crosses the page mid-throw in the approved cut); the chart's DATA, not its plot box (the approved tea cup parks in the plot's empty corner); ink line by line (a two-line sub is mostly air); the type floor skips parked runs and the citation (the 2026-09-07 design pass set .lp-src.compact at 9.4 CSS px on purpose) and lists them. Two template findings logged, not fixed here (out of the write set): R26-37 (the template's probes take the first ledger world), R26-38 (stale `__lp` after a backward seek). CAPABILITIES row; PIPELINE 7c; GATES-REGISTRY regenerated.
 
 ### T3: The one-shot bar - the self-watch as a build artifact
-- Status: built 2026-09-11 - HUMAN GATE 1 OPEN: the operator reads `tokyo-tea-break/build-short/SELF-WATCH.md` and names what the bar should have refused that it passed, and what it flagged that it should not; those become rows
+- Status: built 2026-09-11 - HUMAN GATE 1 in progress: the operator's first read (2026-09-11 afternoon) named two things - (1) the bar PASSED what it should have refused: the anchor caption under a card at 12 CSS px with no punch (ruled E62: the caption keeps its size and moves; a 48 px floor) - a row for O8 and a compiler rule; (2) the report cannot be judged by reading: it needs the frames inline, one plain question per row, and a link to the served player at the instant (`?t=`) - the report becomes SELF-WATCH.html with crops and links (after T4's seek lands). The rows are written when both ship
 - Owner: parent (the checklist); `junior_developer` (the runner)
 - Depends on: T2, P50 T1 (the species-by-sentence lint)
 - Write set: `content/video_engine/scripts/self_watch.py` (runs the gate, M25, the lint, the viewer's last verdict for the
@@ -205,7 +205,7 @@ Acceptance:
 - Evidence: `content/video_engine/scripts/self_watch.py` (the runner; the checklist rows O1-O10 in it verbatim), `tests/test_self_watch.py` (8: the gate parser, NOT CLEAN on a FAIL, TODO never CLEAN from the runner, the long-form plate row, the verdict reader, the opening window, the Tokyo report in a temp copy with 3 sheets and layout-probe.json, a failing script gate -> exit 1); both `build_short.py` run it last (`SELF_WATCH=0` skips). Measured: the wired Tokyo side build 19.7 s end to end; `tokyo-tea-break/build-short/SELF-WATCH.md` written for human gate 1 - section 1: motion gate WARN (M11, M21 standing), M25 PASS (61 instants, smallest type 11.6 CSS px), the lint INFO (25 sentences, 6 with an available species and no row), the viewer `present, no verdict line`, the script gates `VERDICT: FAIL (1 viewer)` -> NOT CLEAN. The bar's first bite is the record's: the viewer never re-ran on the final Tokyo script. The runner was written by the parent after the junior_developer dispatch stalled on the worktree write guard (40 min, nothing on disk).
 
 ### T4: Hot reload with the determinism check (R26-17 step 2)
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: `implementation_luna`
 - Depends on: T1
 - Write set: `serve_player.py` (a file watcher on the shot table / sidecar / dials; a `/reload` endpoint the page long-polls;
@@ -215,10 +215,10 @@ Acceptance:
 - Acceptance: a `centre_y` edit lands on the served page in under a second; a deliberate stateful bug (a test fixture
   that caches a box) is caught as a warm/cold mismatch at the instant.
 - Validate: `python -m pytest content/video_engine/tests/test_reload.py -q`
-- Evidence: pending
+- Evidence: `scripts/serve_player.py` (396; the projects' two as 25-line wrappers loading it by path), `determinism_check.py` (309), `tests/test_reload.py` (10), the engine (+51: module-level reload state, the watch client's snapshot and asset cache, the mount token in `tick`, `?t=` on load, `reload()` exported), `render_baseline.WATCH_CLIENT`, `authoring/table.py write_compile_manifest` (the `compile` block with `stamped` - the in-memory dock registrations a fresh process cannot compile without). Measured on Tokyo: the sidecar edit -> the page in 658 ms (the re-compile 335 ms), a compiled-timeline edit in 273 / 239 / 244 ms, the scrub kept, no page load; the stateful-bug fixture caught (`mismatch at 5.50`, both PNGs, exit 1); the unchanged build ok at its instants; R26-21's class named when it fires (unit-tested; it did not fire on s04, a spiral page). The check's first catch: two real mismatches on the approved cut, R26-46 (the retitle's state depends on the seek path) and R26-47 (the fab card's exit drift) - found, logged, not fixed in this slice. The parent's run with T5: 103+ across reload, overrides, goldens (byte-identical with the engine changed), probe, camera, kit, self-watch, read->park, species. Deviations: the sidecar unit test is split (a golden surface has no episode to layer over; the full path measured on Tokyo); `authoring/table.py` shared with T5 (the sidecar above the manifest); the watcher re-stamps its targets after a compile (the sidecar rewrites the shot table) and a bad sidecar's SystemExit is caught (threading's excepthook dropped it silently).
 
 ### T5: The override sidecar
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: `implementation_luna`; parent (the schema)
 - Depends on: T0
 - Write set: `build_scene_timeline_f.py` (`apply_overrides(rows, overrides)`: a sidecar `<build>/overrides.json` keyed by
@@ -228,7 +228,7 @@ Acceptance:
 - Acceptance: an override of `centre_y`, of a species' `at` (by word), and of `TOKYO_CAMERA` produces the same build as
   editing the source would; an unknown key or a bad value is refused with the row named.
 - Validate: `python -m pytest content/video_engine/tests/test_overrides.py -q`
-- Evidence: pending
+- Evidence: `build_scene_timeline_f.py` (+314: `apply_overrides`, the derived ids on every dock / species / camera, `compile_order`'s same-second refusal, `overrides_applied`), `authoring/table.py` (`load_rows`, `apply_sidecar` before the literal is written), `tests/test_overrides.py` (36: centre_y layered == the source edit as rows AND as the compiled dock entry; the word form == the build's `at`; a null camera == `TOKYO_CAMERA=0`'s rows; 17 refusals by row and field; idempotence in any key order; identity with no sidecar). Proof: no sidecar -> timeline.json, evidence-dock.json, caption-pages.json, SHOT-TABLE-SHORT.py, SOUND-PLAN.json byte-identical to the T0 baseline and the compiled timeline equal once its new `id` fields are stripped (39 ids, unique); the live sidecar (five keys) layered on Tokyo's side build with the gate PASS. The parent's run with T4: see T4. The tariff short was not rebuilt (its clip ids embed the build dir; the mechanism is tested and `apply_sidecar` returns [] without a sidecar). Deviation: the compiled timeline cannot be byte-identical by construction (the ids) - the stripped-equal proof stands in.
 
 ### T6: The change report - what a human or a flash agent changed, as the agent sees it
 - Status: pending (human gate 2)

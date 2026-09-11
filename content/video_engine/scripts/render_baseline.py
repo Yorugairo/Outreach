@@ -68,10 +68,47 @@ def engine_script(engine: Path = ENGINE) -> str:
     return "<script>\n" + SK.inline_text(engine.read_text(encoding="utf-8"), "") + "\n" + BOOT + "\n</script>"
 
 
+# P51 T4 - THE WATCH CLIENT. It rides in the SPLIT form only (a golden's single-file page is the
+# text it always was) and does nothing at all unless ?watch=1 is on the URL - so a served build
+# without the flag is exactly today's page. With the flag it long-polls the review server's
+# /reload, which holds the request until the build's generation moves, and hands the new timeline
+# to the engine's reload(): no page load, the scrub position kept. The server's answer carries
+# `reload` false for a generation that only reports a determinism result, so the check can land
+# after the frame without re-mounting the page.
+WATCH_CLIENT = """
+if (/[?&]watch=1/.test(location.search)) {
+  const W = window.__watch = { gen: 0, applied: 0, reloads: 0, last: null, error: null };
+  (async () => {
+    while (window.__mounted === false) await new Promise(r => setTimeout(r, 25));
+    for (;;) {
+      try {
+        const m = await (await fetch("reload?since=" + W.gen, { cache: "no-store" })).json();
+        W.last = m; W.error = null;
+        if (m.gen > W.gen) {
+          W.gen = m.gen;
+          if (m.reload) {
+            const tl = await (await fetch(m.timeline + "?gen=" + m.gen, { cache: "no-store" })).json();
+            await reload(tl);
+            W.reloads++;
+          }
+          W.applied = m.gen;
+        }
+      } catch (e) { W.error = String(e); await new Promise(r => setTimeout(r, 500)); }
+    }
+  })();
+}
+"""
+
+
 def module_script(engine_src: str = None) -> str:
-    """The engine as a module fetched beside the page."""
-    return ('<script type="module">import { mount } from "./' + (engine_src or ENGINE.name) + '";\n'
-            + BOOT + "\n</script>")
+    """The engine as a module fetched beside the page, with the watch client behind ?watch=1.
+
+    The namespace import is deliberate: a build dir written before P51 T4 carries an engine copy
+    with no `reload` export, and a NAMED import of a missing binding is a link error that kills
+    the whole page - `import * as` degrades to an undefined function instead."""
+    return ('<script type="module">import * as ENGINE from "./' + (engine_src or ENGINE.name) + '";\n'
+            'const mount = ENGINE.mount, reload = ENGINE.reload;\n'
+            + BOOT + "\n" + WATCH_CLIENT + "</script>")
 
 
 def player_text(template: Path = TEMPLATE, engine: Path = ENGINE) -> str:

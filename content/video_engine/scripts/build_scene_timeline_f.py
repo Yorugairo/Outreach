@@ -1864,7 +1864,8 @@ def solo_centre_by_clock(world: dict | None, aspect: str | None, n_docks: int, s
 def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                kind: str = DOCK_KIND_IMAGE, place: dict | None = None, arrive: str | None = None, mass: str | None = None,
                centre: bool = False, read_place: dict | None = None, read_s: float | None = None, park_s: float | None = None,
-               press: dict | None = None, stack: bool = False, behind: str | None = None, fg: str | None = None) -> dict:
+               press: dict | None = None, stack: bool = False, behind: str | None = None, fg: str | None = None,
+               rid: str | None = None) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -1878,6 +1879,10 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
     span = round(exitt - enter, 2)
     rs, ps = (float(read_s) if read_s else DOCK_READ_S), (float(park_s) if park_s else DOCK_PARK_S)   # the dock's own clock, else the defaults
     return {
+        # P51 T5: the DERIVED row id - `<scene>.dock.<slide>` - the key a human or a flash agent edits this
+        # card by in `<build>/overrides.json`. Written only when the compiler hands one down, so every other
+        # caller's entry is byte-for-byte what it was.
+        **({"id": rid} if rid else {}),
         "slide": aid, "slot": slot,
         # HF-17: the plate's foreground layer this card is behind, and the asset-map key it rides. Written ONLY when
         # the row asks, so every build that does not is byte-for-byte what it was.
@@ -1964,6 +1969,284 @@ def build_kinetics() -> dict:
     return {"idle": True, "stop_action": True, "arap_morph": True, "camera": True, **KINETICS}   # P47 T1: an authored `arrive` is the switch; the flag only guards the goldens; P49 T2: the camera is one state per frame (the species pixel-identical)
 
 
+# ------------------------------------------------------------------ P51 T5: THE OVERRIDE SIDECAR
+# The grill, 2026-09-11: "a human's or a flash agent's edit is a sidecar of overrides keyed by row
+# id and field, layered over the shot table the agent authors". The agent AUTHORS; an editor
+# TUNES. So an edit never rewrites the table - it lands in `<build>/overrides.json`:
+#
+#     {"s04.dock.dock-k-pledge-record": {"centre_y": 0.32},
+#      "s04.species.3": {"at": {"word": "pledged"}},
+#      "s02.camera": null,
+#      "s04.plate": {"idle": "drift"},
+#      "s04.exit": "dip"}
+#
+# The key is a ROW ID and a FIELD. The ids are DERIVED from the compiled order - `s01`.. exactly as
+# `main` writes them, a dock by its slide, a species by its INDEX in the row's authored list,
+# `.camera` / `.plate` / `.exit` for the row's own - never random and never stored in the table, so
+# two sidecars written a week apart diff line by line and a rebuild renumbers nothing. Every value
+# goes through the SAME validator the shot table's own does (`dock_opts`, `validate_species` /
+# `_validate_page_fields`, `split_plate_opts`, `validate_camera_row`, `parse_exit`); an unknown id,
+# an unknown field or a bad value is REFUSED naming both, never quietly dropped. `null` puts a
+# field back to the row's default (the camera off, an option unset). The layering is PURE - the
+# authored rows are never mutated - and idempotent: the same rows plus the same sidecar give the
+# same rows, whatever order the keys arrive in.
+OVERRIDES_NAME = "overrides.json"
+OVERRIDE_KEY_FORM = ("<scene>.plate | <scene>.exit | <scene>.camera | <scene>.dock.<slide> | "
+                     "<scene>.species.<index>")
+IDX_PLATE, IDX_KEN, IDX_DOCKS, IDX_EXIT, IDX_SPECIES, IDX_CAMERA = 2, 3, 4, 5, 6, 7
+SPECIES_OPEN_FIELDS = ("at", "dur", "until", "idle")   # every species may take these, authored on the row or not
+SPECIES_CLOSED_FIELDS = ("kind", "id")                 # ... and these are AUTHORING: a sidecar never changes what a species IS
+
+
+def scene_row_id(n: int) -> str:
+    """The nth row IN COMPILE ORDER, as the compiled scene names itself (`s01`..)."""
+    return f"s{n + 1:02d}"
+
+
+def dock_row_id(scene_id: str, slide: str) -> str:
+    """A dock's stable key: its SLIDE, which is the one thing about a card the row already names."""
+    return f"{scene_id}.dock.{slide}"
+
+
+def species_row_id(scene_id: str, n: int) -> str:
+    """A species' stable key: its INDEX in the row's authored list (a held light dropped for want of
+    room keeps its number, so the key survives the compiler's own edits)."""
+    return f"{scene_id}.species.{n}"
+
+
+def camera_row_id(scene_id: str) -> str:
+    return f"{scene_id}.camera"
+
+
+def compile_order(rows) -> list[int]:
+    """The row indices in the order `main` compiles them - it sorts the table on the start time - so
+    a sidecar's `s04` names the row the compiled timeline's `s04` is."""
+    starts = [float(r[0]) for r in rows]
+    if len(set(starts)) != len(starts):
+        dup = next(s for s in starts if starts.count(s) > 1)
+        raise ValueError(f"two shot rows open at {dup}s - the compiler sorts the table and a sidecar keys rows "
+                         "by that order, so every row has to open at its own second")
+    return sorted(range(len(rows)), key=lambda i: starts[i])
+
+
+def row_ids(rows) -> dict[str, int]:
+    """Every scene id of a shot table -> that row's index in the AUTHORED list."""
+    return {scene_row_id(n): i for n, i in enumerate(compile_order(rows))}
+
+
+def _override_words(words) -> list[dict] | None:
+    """The build's words in the shape `authoring.words` reads: `timeline.json` writes start/end, a
+    take writes start_s/end_s, and a sidecar resolves against either."""
+    if not words:
+        return None
+    if isinstance(words, dict):
+        words = words.get("words") or []
+    return [{"w": w["w"], "start_s": w.get("start_s", w.get("start")), "end_s": w.get("end_s", w.get("end"))}
+            for w in words]
+
+
+def _word_at(form: dict, ws, key: str) -> float:
+    """`{"word": "<phrase>"}` - the second the take says it, read through `authoring.words.at`, so a
+    hand edit anchors on the SCRIPT the way the shot table does instead of on a stopwatch."""
+    if set(form) != {"word"} or not isinstance(form.get("word"), str) or not form["word"].strip():
+        raise ValueError(f"{key}: field 'at': the word form is {{\"word\": \"<phrase>\"}}, not {form!r}")
+    if not ws:
+        raise ValueError(f"{key}: field 'at': {form['word']!r} needs the build's words - pass words= "
+                         "(the build's timeline.json words) to apply_overrides")
+    from authoring import words as KW
+    try:
+        return KW.at(ws, form["word"])
+    except SystemExit as exc:
+        raise ValueError(f"{key}: field 'at': {exc}") from None
+
+
+def _patched(base: dict, patch: dict, key: str, allowed, check) -> dict:
+    """One field at a time onto `base`, each checked by the shot table's own validator the moment it
+    lands - so the field that breaks is the field the refusal names. `None` unsets a field."""
+    out = dict(base)
+    for field in sorted(patch):
+        if allowed is not None and field not in allowed:
+            raise ValueError(f"{key}: field {field!r} is not one of {'|'.join(allowed)}")
+        trial = dict(out)
+        if patch[field] is None:
+            trial.pop(field, None)
+        else:
+            trial[field] = patch[field]
+        try:
+            check(trial)
+        except ValueError as exc:
+            raise ValueError(f"{key}: field {field!r}: {exc}") from None
+        out = trial
+    return out
+
+
+def _grow(row: list, i: int) -> None:
+    while len(row) <= i:
+        row.append(None)
+
+
+def _row_press(row) -> dict:
+    """The row's PRESS docks, read the way `main` reads them before the species are validated - a
+    callout's `phrase` target names one, and the law cannot check a name it has not read."""
+    out = {}
+    for d in (row[IDX_DOCKS] or []) if len(row) > IDX_DOCKS else []:
+        try:
+            o = dock_opts(d[4] if len(d) > 4 else None)
+        except (ValueError, IndexError, TypeError):
+            continue
+        if o.get("press"):
+            out[d[0]] = o["press"]
+    return out
+
+
+def _override_dock(row: list, key: str, slide: str, patch) -> None:
+    """A dock's OPTION fields (the tuple's optional 5th element), validated by `dock_opts`."""
+    ds = list(row[IDX_DOCKS] or []) if len(row) > IDX_DOCKS else []
+    hit = next((j for j, d in enumerate(ds) if str(d[0]) == slide), None)
+    if hit is None:
+        raise ValueError(f"{key}: no dock {slide!r} on this row - its docks are "
+                         f"{', '.join(str(d[0]) for d in ds) or 'none'}")
+    if not isinstance(patch, dict):
+        raise ValueError(f"{key}: a dock override is a dict of {'|'.join(DOCK_OPTS)}, not {patch!r}")
+    d = list(ds[hit])
+    base = dict(d[4]) if len(d) > 4 and isinstance(d[4], dict) else {}
+    opts = _patched(base, patch, key, DOCK_OPTS, dock_opts)   # `dock_opts` CHECKS; the row keeps the raw options
+    if opts or len(d) > 4:
+        _grow(d, 4)
+        d[4] = opts or None
+    ds[hit] = tuple(d) if isinstance(ds[hit], tuple) else d
+    row[IDX_DOCKS] = tuple(ds) if isinstance(row[IDX_DOCKS], tuple) else ds
+
+
+def _override_species(row: list, key: str, sel: str, patch, ws) -> None:
+    """A species' own fields, validated by the targeting law (`validate_species` ->
+    `_validate_page_fields`) with the patched entry back in its row. `at` may arrive as a number or
+    as `{"word": "<phrase>"}`."""
+    sp = list(row[IDX_SPECIES] or []) if len(row) > IDX_SPECIES else []
+    if not sel.isdigit():
+        raise ValueError(f"{key}: a species is keyed by its INDEX in the row's authored list "
+                         f"(`<scene>.species.<index>`), not {sel!r}")
+    n = int(sel)
+    if n >= len(sp) or not isinstance(sp[n], dict):
+        raise ValueError(f"{key}: no species {n} on this row - it carries {len(sp)} "
+                         f"({f'0..{len(sp) - 1}' if sp else 'none'})")
+    if not isinstance(patch, dict):
+        raise ValueError(f"{key}: a species override is a dict of the species' own fields, not {patch!r}")
+    entry = sp[n]
+    patch = dict(patch)
+    if isinstance(patch.get("at"), dict):
+        patch["at"] = _word_at(patch["at"], ws, key)
+    for f in patch:
+        if f in SPECIES_CLOSED_FIELDS:
+            raise ValueError(f"{key}: field {f!r} is AUTHORING, not an edit - a sidecar tunes a species, "
+                             "it does not change what it is")
+    allowed = tuple(dict.fromkeys(tuple(f for f in entry if f not in SPECIES_CLOSED_FIELDS) + SPECIES_OPEN_FIELDS))
+    plate, ken, press = str(row[IDX_PLATE]), row[IDX_KEN], _row_press(row)
+
+    def check(entry_trial: dict) -> None:
+        errs = validate_species(sp[:n] + [entry_trial] + sp[n + 1:], ken, plate, press_docks=press)
+        if errs:
+            raise ValueError("; ".join(errs))
+
+    sp[n] = _patched(entry, patch, key, allowed, check)
+    row[IDX_SPECIES] = tuple(sp) if isinstance(row[IDX_SPECIES], tuple) else sp
+
+
+def _override_plate(row: list, key: str, patch) -> None:
+    """The row's PLATE options - the `;key=value` suffixes `split_plate_opts` admits. The bare id is
+    never touched: a different world is a different row, not an edit."""
+    if not isinstance(patch, dict):
+        raise ValueError(f"{key}: a plate override is a dict of {'|'.join(PLATE_OPTS)} "
+                         f"(the `;key=value` options a plate id carries), not {patch!r}")
+    pid = str(row[IDX_PLATE])
+    for field in sorted(patch):
+        if field not in PLATE_OPTS:
+            raise ValueError(f"{key}: field {field!r} is not one of {'|'.join(PLATE_OPTS)}")
+        bare, *parts = pid.split(";")
+        kept = [p for p in parts if p.split("=", 1)[0] != field]
+        trial = ";".join([bare] + kept + ([] if patch[field] is None else [f"{field}={patch[field]}"]))
+        try:
+            split_plate_opts(trial)
+        except ValueError as exc:
+            raise ValueError(f"{key}: field {field!r}: {exc}") from None
+        pid = trial
+    row[IDX_PLATE] = pid
+
+
+def _override_exit(row: list, key: str, value) -> None:
+    """The row's EXIT (the transition INTO it, E47), validated by `parse_exit`; null = the
+    mechanical default."""
+    if value is not None and not isinstance(value, str):
+        raise ValueError(f"{key}: field 'exit': an exit is one of {'|'.join(SCENE_EXITS)} (dip and blurzoom may "
+                         f"carry their length, `dip:0.4`) or null for the mechanical default, not {value!r}")
+    if value is not None:
+        try:
+            parse_exit(value)
+        except ValueError as exc:
+            raise ValueError(f"{key}: field 'exit': {exc}") from None
+    _grow(row, IDX_EXIT)
+    row[IDX_EXIT] = value
+
+
+def _override_camera(row: list, key: str, value, aspect) -> None:
+    """The row's CAMERA (the 8th element): null turns it off, a dict is the keys/attention form
+    `validate_camera_row` admits - against this row's own species, as the compiler checks it."""
+    if value is not None and not isinstance(value, dict):
+        raise ValueError(f"{key}: field 'camera': a camera is null (the camera off) or a dict "
+                         f"{{keys: [...], attention: {'|'.join(CAMERA_ATTENTION)}}}, not {value!r}")
+    sp = list(row[IDX_SPECIES] or []) if len(row) > IDX_SPECIES else []
+    errs = validate_camera_row(value, sp, str(row[IDX_PLATE]), aspect)
+    if errs:
+        raise ValueError(f"{key}: field 'camera': " + "; ".join(errs))
+    _grow(row, IDX_CAMERA)
+    row[IDX_CAMERA] = value
+
+
+def apply_overrides(rows, overrides, words=None, aspect=None) -> list[tuple]:
+    """The sidecar layered over the AUTHORED rows, BEFORE anything is compiled - the one place a
+    hand edit enters the build.
+
+    `rows` are shot-table rows, `overrides` the parsed `<build>/overrides.json` keyed
+    ``<row id>.<field>`` (see OVERRIDE_KEY_FORM), `words` the build's `timeline.json` words (or a
+    take's) so a species' `at` may be named by its phrase. Returns NEW rows in the same authored
+    order; the input is never mutated, and with an empty sidecar the rows come back as they went in.
+    A ValueError names the row id and the field - the caller names the file."""
+    out = [tuple(r) for r in rows]
+    if not overrides:
+        return out
+    if not isinstance(overrides, dict):
+        raise ValueError(f"the sidecar is a JSON object keyed by row id and field ({OVERRIDE_KEY_FORM}), "
+                         f"not a {type(overrides).__name__}")
+    ids = row_ids(rows)
+    ws = _override_words(words)
+    edited: dict[int, list] = {}
+    for key in sorted(overrides):
+        scene, _, rest = str(key).partition(".")
+        if scene not in ids:
+            raise ValueError(f"{key!r} names no row - this shot table is "
+                             f"{scene_row_id(0)}..{scene_row_id(len(out) - 1)}")
+        if not rest:
+            raise ValueError(f"{key!r} names a scene but no field - a sidecar key is {OVERRIDE_KEY_FORM}")
+        row = edited.setdefault(ids[scene], list(out[ids[scene]]))
+        field, _, sel = rest.partition(".")
+        value = overrides[key]
+        if field == "dock" and sel:
+            _override_dock(row, key, sel, value)
+        elif field == "species" and sel:
+            _override_species(row, key, sel, value, ws)
+        elif field == "plate" and not sel:
+            _override_plate(row, key, value)
+        elif field == "exit" and not sel:
+            _override_exit(row, key, value)
+        elif field == "camera" and not sel:
+            _override_camera(row, key, value, aspect)
+        else:
+            raise ValueError(f"{key!r}: {rest!r} is not a field of a row - a sidecar key is {OVERRIDE_KEY_FORM}")
+    for i, row in edited.items():
+        out[i] = tuple(row)
+    return out
+
+
 def main() -> int:
     tl = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))
     # THE AUTHORED SHOT TABLE is the source. Not an allocator.
@@ -1971,6 +2254,19 @@ def main() -> int:
     sp = importlib.util.spec_from_file_location("shot", EP / SHOT_TABLE_FILE)
     shot = importlib.util.module_from_spec(sp); sp.loader.exec_module(shot)
     plan = sorted(shot.W)
+    # P51 T5: a human's or a flash agent's edit is a SIDECAR over the authored table, never a rewrite of it.
+    # The kit lays it over the literal before the compiler is pointed here (`authoring.table.apply_sidecar`),
+    # so this pass is a no-op on a kit build; it is the whole mechanism when the compiler is run on its own.
+    applied: list[str] = []
+    ov_path = BUILD / OVERRIDES_NAME
+    if ov_path.is_file():
+        overrides = json.loads(ov_path.read_text(encoding="utf-8"))
+        try:
+            plan = apply_overrides(plan, overrides, words=tl.get("words"), aspect=ASPECT)
+        except ValueError as exc:
+            raise SystemExit(f"FAIL: {ov_path.name}: {exc}") from None
+        applied = sorted(overrides)
+        print(f"  overrides   : {len(applied)} from {ov_path.name} - {', '.join(applied)}")
     dock = json.loads((BUILD / "evidence-dock.json").read_text(encoding="utf-8"))
     META = {d["asset"]: d for d in dock}
     pages = json.loads((BUILD / "caption-pages.json").read_text(encoding="utf-8"))
@@ -1990,11 +2286,16 @@ def main() -> int:
         # the MEANING differs - doc 29 Part 6: cut = contrast/correction, wipe =
         # process continuation. The rule itself is `scene_exit` above.
         a, b, plate, ken, ds = row[:5]
+        sid = scene_row_id(i)   # P51 T5: the scene's own id, derived here and written onto every part an editor keys by
         authored_exit = row[5] if len(row) > 5 else None
         # TARGETED SPECIES (doc 29 s9.27, P35 T7): the optional 7th element.
         # The targeting law is a hard build error naming the row; the pivot
         # span is None until the parent wires it from the ledger (s9.28 C4).
         row_species = list(row[6]) if len(row) > 6 and row[6] is not None else []
+        # P51 T5: every species carries `<scene>.species.<n>`, n its index in the row's AUTHORED list - so the key
+        # survives the hold/drop pass below, and a chart_to is keyed exactly as a spotlight is.
+        row_species = [{**e, "id": species_row_id(sid, n)} if isinstance(e, dict) else e
+                       for n, e in enumerate(row_species)]
         row_camera = row[7] if len(row) > 7 and row[7] is not None else None   # P49 T1: the optional 8th element
         # each window runs to the next so the world layer never drops out
         b = plan[i + 1][0] if i + 1 < len(plan) else tl["runtime_s"]
@@ -2155,14 +2456,16 @@ def main() -> int:
                                         dplace if (slot == 0 or centred) else None, dopt.get("arrive"), dopt.get("mass"), centred,   # a centred card is placed on either slot (2026-09-10: two cards up at once)
                                         read_place=rplace, read_s=dopt.get("read_s"), park_s=dopt.get("park_s"),
                                         press=dopt.get("press"), stack=bool(dopt.get("stack")),
-                                        behind=dopt.get("behind"), fg=fg_key))
+                                        behind=dopt.get("behind"), fg=fg_key, rid=dock_row_id(sid, aid)))
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         try:
             exit_id, exit_s = scene_exit(authored_exit, bool(docks))
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
+        camera = dict(row_camera) if row_camera is not None else camera_identity()   # a COPY: one CAM_ROW dict is shared by many rows
+        camera["id"] = camera_row_id(sid)   # P51 T5: `<scene>.camera` - the key a null in the sidecar turns this camera off by
         scene = {
-            "scene_id": f"s{i+1:02d}",
+            "scene_id": sid,
             # Ken Burns is AUTHORED per shot in the table, not one constant.
             "world": world,
             "exit": exit_id,
@@ -2172,7 +2475,7 @@ def main() -> int:
             # declared target to pixels at render time (resolveTarget), the
             # motion gate counts their events per the s9.27 gate column
             "species": row_species,
-            "camera": row_camera if row_camera is not None else camera_identity(),   # P49 T1: identity unless the row authored keys
+            "camera": camera,   # P49 T1: identity unless the row authored keys
         }
         # E47: a timed exit publishes its length so the motion gate credits the right
         # window without re-parsing the name; a bare `dip` leaves the gate on DIP_S.
@@ -2243,6 +2546,9 @@ def main() -> int:
         # downstream (gate, render) can see it
         "species": timeline_species(scenes),
         "kinetics": build_kinetics(),   # the template's capability flags this build turns on (P39: default all off; E49: the idle on)
+        # P51 T5: the sidecar's own receipt - which row ids a human or a flash agent edited into this build.
+        # Absent when nothing was layered, so a build with no sidecar is byte-for-byte what it was.
+        **({"overrides_applied": applied} if applied else {}),
         **({"caption_style": CAPTION_STYLE} if CAPTION_STYLE else {}),
     }
     # P51 T1: the SPLIT form. write_split writes the compiled timeline (byte for byte what this

@@ -1991,3 +1991,30 @@ finance. We didn't test our own plates yet."*). No rule until the test reads; no
 
 Mechanisms: `docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md` (the ledger); the plan
 `.claude/PRPs/plans/P51-THE-ANIMATORS-LOOP.plan.md` T8 (doc 29 §9.30 to write); P50 T1 (the lint).
+
+## E62 — Under a card the caption keeps its size and MOVES; it shrinks only when no band fits (2026-09-11)
+
+**The operator's words.** On the first gate-1 read of the one-shot bar (P51 T3, the Tokyo cut), on the anchor caption
+under the two-fingers card at 0:38 ("money went: a Treasury page," - 33 px, 12 CSS px on a phone): *"I don't quite
+understand why our captions sometimes lose their size/punch."* The record's answer (29 §9.25 #2: when a dock enters
+the caption demotes to the lower-third anchor, `#caption.quiet` 33 px / 600) was the design, and the bar had passed it
+- the probe read 12.1 CSS px against an 11 px floor. Offered three: (A) the caption keeps its stage size and weight
+and steps aside in POSITION, to the band the card leaves free, shrinking to the anchor only when no band fits, with a
+floor of 48 px on a short; (B) keep the place, raise the quiet size in place; (C) both. **"A. sounds like the right
+solution."**
+
+**The ruling.** §9.25's two modes stay; the demotion is in position, not in size. When a card is up, the caption keeps
+the stage's 64 px / 800 and MOVES to the band the page leaves free of the card - above, below or beside the plot, the
+bands the measured fixture knows (P50 T16), read against the dock's place; the compiler writes the caption's band onto
+the dock's entry and the player positions the strip by it. It drops to the quiet anchor only when no band can hold
+two lines clear of the card and of the data, and the quiet anchor's floor is 48 px on a short (17 CSS px on a phone)
+at weight 800. The punch is the size; a card is a reason to move, not to shrink. The self-watch's caption row (O8)
+reads this rule; M25 already refuses a caption in a card's box.
+
+**What it changes on record.** Every golden that carries a caption under a card is regenerated on purpose in the
+commit that ships this - consistency, not taste (the grill ledger: a golden pins that nothing moved that we did not
+mean to move). The shipped shorts are re-cut only when their next cut asks; Tokyo is the test bed.
+
+Mechanisms: the compiler (`caption_band` on a dock entry from `page_boxes`'s bands), the engine (`#caption.stage`
+positioned by the entry; `.quiet` 48 px / 800), `self_watch.py` O8; `docs/content-video-engine/CAPABILITIES.md`
+(the captions rows). The finding that produced it: `tokyo-tea-break/build-short/SELF-WATCH.md` (gate 1).

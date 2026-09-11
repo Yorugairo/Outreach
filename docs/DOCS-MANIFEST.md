@@ -91,15 +91,15 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## ruling-ledger
 
-- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing correcti — Portable, model-agnostic. Load alongside — defines: A3; E11; +50 more — terms: long-form; drop-off; YouTube; world-building
+- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing correcti — Portable, model-agnostic. Load alongside — defines: A3; E11; +51 more — terms: long-form; drop-off; YouTube; world-building
 
 ## capabilities
 
-- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +138 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
+- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +140 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
 
 ## backlog
 
-- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +97 more — terms: Z-stack; short-form; drawOn; G-g
+- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +99 more — terms: Z-stack; short-form; drawOn; G-g
 
 ## pattern
 
