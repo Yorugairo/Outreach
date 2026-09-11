@@ -1912,3 +1912,34 @@ never re-implemented as pushes.
 Mechanisms: `docs/content-video-engine/CAPABILITIES.md` (the camera rows); the plan `.claude/PRPs/plans/P49-THE-CAMERA.plan.md`;
 the measurement `sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/claude-watch/camera.json`.
 
+## E60 — The BREAKTHROUGH is a rescale: the bar that cannot fit builds to the comparator's level, then shoots while the scale rewrites under it (2026-09-10)
+
+**The operator's words.** On the first pass (a zigzag cut at the top gridline, the bar a little past it): *"is that squiggle
+line the break through bar? how do we show the breakthrough happen? the scale of the breakthrough doesn't look right because
+it shows the 8% scale, then our bar goes to 36.59%, so it doesnt really read as a breakthrough the way that it should"*. The
+two shapes they named: *"either the breakthrough shows at the bond level (the comparator) then stacks each frame that same
+amount til it builds to its real number, OR it builds to 1.52% right next to the bonds, then immediately counts/shoots up to
+breakthrough up to 36.59%"*. Then: *"What does Bravos actually do?"* - and on the two proofs: **"the re-scale is the way. A
+blend would also work, basically a stop-motion version of what bravos does. essentially blending our stop motion + break
+through + counter mechanics. But this works."**
+
+**What Bravos does (measured, 8:01.8-8:03.2 of "China just triggered a new world order", the SPR-by-country chart).** The
+row holds a grey "?" track with a pink stamp; the bar shoots to the frame's edge WHILE the axis rescales under it (0-450
+becomes 0-1500; every other bar collapses to a stub); it overshoots the edge, settles back; a pink value capsule counts up
+on the axis under its end with a dotted leader. The frame is never broken - its scale changes to hold the number, and the
+drama is the comparators shrinking to nothing.
+
+**The ruling.** A bars page may STATE a scale that ONE value cannot fit (`domain` + `overflow` on the object). The stated
+scale is the one the HONEST bar reads on (bonds 1.52 % on 0-8 %) - a stated scale no bar needs is a lie of the other kind.
+The breaking bar builds to the COMPARATOR's level with the others (a bar like them), holds a beat, then **shoots to its
+true height while the scale rewrites to the nice ceiling above it** (`overflow: "burst"` - the honest bar shrinks to a
+sliver, the old ticks slide with the stretching scale and fade, the new ones fade in, an overshoot settles, the pill rides
+the tip and counts to the exact string, the bar glows). The scale and the value are printed at every instant (E28, E53).
+**Never a break glyph**: a broken-axis mark says "abbreviated", the opposite of a breakthrough. The stack (`overflow:
+"stack"`: the scale holds, the bar grows one comparator per step off the page) stays an option a row may name; the BLEND
+the operator described - the burst in stop-motion steps, the counter stepping with it, the scale rewriting stepwise
+(stopaction.mjs's cadence + the breakthrough + the counter) - is R26-30, built when a cut asks for it.
+
+Mechanisms: `docs/content-video-engine/CAPABILITIES.md` (the breakthrough row); the template's `buildLedgerBars` /
+`lpPaintBreakthrough` / `LPX.BT_*`; the proofs `steel-and-paper/build-f/breakthrough-proof.html` (burst) and
+`breakthrough-stack-proof.html`; the measurement `scratchpad/bravos-bar` frames, recorded in the CAPABILITIES row.

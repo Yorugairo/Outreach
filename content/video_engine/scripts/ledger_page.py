@@ -212,9 +212,38 @@ def validate(series: dict, variant: str) -> list[str]:
         return errors + [next((v for k, v in UNCHARTABLE.items() if k in series), UNCHARTABLE_DEFAULT)]
     if variant in CHART_VARIANTS:
         errors += _validate_shape_for_variant(series, variant)
+    errors += _validate_overflow(series, variant)
     errors += _validate_sign_in_geometry(series)
     errors += badge_key_conflicts(series)
     return errors + _validate_values(series, variant) + _validate_variant(series, variant)
+
+
+OVERFLOW_MODES = ("burst", "stack", "break")   # E60: burst is THE breakthrough (the rescale), stack an option; "break" is burst's alias
+
+
+def _validate_overflow(series: dict, variant: str) -> list[str]:
+    """E60 (the operator, 2026-09-10: "the re-scale is the way"): a bars page may STATE a scale (`domain`) that ONE value cannot
+    fit and name how that bar breaks it (`overflow`). Checked, not trusted: the mechanic is one we have; the scale is stated;
+    one bar breaks it; one bar reads on it - a stated scale no bar needs is a lie of the other kind."""
+    ovf = series.get("overflow")
+    if ovf is None:
+        return []
+    errors: list[str] = []
+    if ovf not in OVERFLOW_MODES:
+        errors.append(f"overflow {ovf!r} is not one of {'|'.join(OVERFLOW_MODES)} (E60: burst is the breakthrough, stack an option)")
+    if variant != "bars":
+        errors.append(f"overflow is a BARS page's device (E60); this page is {variant!r}")
+    dom = series.get("domain")
+    if not (isinstance(dom, list) and len(dom) == 2 and all(isinstance(x, (int, float)) and not isinstance(x, bool) for x in dom) and dom[1] > dom[0]):
+        errors.append("overflow needs a stated scale: 'domain': [lo, hi] with hi > lo - the scale the honest bar reads on (E60)")
+        return errors
+    vals = [to_number(b.get("value")) for b in _bars(series)]
+    vals = [v for v in vals if v is not None]
+    if vals and not any(v > dom[1] for v in vals):
+        errors.append(f"overflow declares a breakthrough no bar makes: no value is above the stated scale's top {dom[1]}")
+    if vals and not any(v <= dom[1] for v in vals):
+        errors.append(f"every bar is above the stated scale's top {dom[1]}: a stated scale no bar reads on is a lie of the other kind (E60)")
+    return errors
 
 
 SIGNED_NOTE_RE = re.compile(r"^\s*[+\u2212-]\s*\d")

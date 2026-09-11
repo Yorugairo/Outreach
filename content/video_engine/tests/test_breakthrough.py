@@ -64,6 +64,29 @@ def test_a_bars_page_without_a_domain_carries_no_axes():
     assert "axes" not in LP._story_block({"bars": [{"label": "a", "value": 1.5}]}), "a page that declares nothing is unchanged"
 
 
+GOOD = {"title": "t", "src": "s", "bars": [{"label": "Bonds", "value": 1.52}, {"label": "Chips", "value": 36.59}], "domain": [0, 8], "overflow": "burst"}
+
+
+@pytest.mark.parametrize("over, needle", [
+    ({"overflow": "wobble"}, "not one of burst|stack|break"),
+    ({"domain": None}, "needs a stated scale"),
+    ({"domain": [8, 0]}, "needs a stated scale"),
+    ({"bars": [{"label": "Bonds", "value": 1.52}, {"label": "Chips", "value": 6.0}]}, "no bar makes"),
+    ({"bars": [{"label": "Bonds", "value": 12.0}, {"label": "Chips", "value": 36.59}]}, "lie of the other kind"),
+])
+def test_an_overflow_is_checked_not_trusted(over, needle):
+    """E60: the mechanic is one we have, the scale is stated, one bar breaks it, one bar reads on it."""
+    errs = LP.validate({**GOOD, **over}, "bars")
+    assert any(needle in e for e in errs), (needle, errs)
+
+
+def test_a_sound_overflow_page_validates_and_a_line_page_may_not_carry_one():
+    assert LP.validate(GOOD, "bars") == []
+    assert LP.validate({**GOOD, "overflow": "stack"}, "bars") == [] and LP.validate({**GOOD, "overflow": "break"}, "bars") == []
+    line = {"title": "t", "src": "s", "series": [{"name": "a", "pts": [[0, 1], [1, 2]]}], "domain": [0, 8], "overflow": "burst"}
+    assert any("BARS page's device" in e for e in LP.validate(line, "line"))
+
+
 @needs_object
 def test_the_object_states_its_scale_and_its_figures_are_the_sourced_ones():
     obj = json.loads(OBJ.read_text(encoding="utf-8"))

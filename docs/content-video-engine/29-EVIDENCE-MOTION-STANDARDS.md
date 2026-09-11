@@ -1315,16 +1315,17 @@ and no date axis. The gates, all template-enforced now:
   chart):** a bars page may STATE its scale (`domain`) that ONE value
   cannot fit. That bar builds to the COMPARATOR's level (the tallest
   honest bar) with the others, holds a beat as a bar like them, then
-  runs: `overflow: "burst"` (Bravos) shoots to its true height WHILE the
-  scale rewrites to the nice ceiling above it - the honest bar shrinks to
-  a sliver, the ticks cross over, an overshoot settles, the bar glows;
-  `overflow: "stack"` holds the scale and grows the bar one comparator
-  per step until its number - out of the plot, off the page. The scale
-  and the value are printed at every instant, so nothing is a lie (E28);
-  the drama is the comparator collapsing (burst) or the frame that could
-  not hold the number (stack). Never a break glyph: a broken-axis mark
-  says "abbreviated", the opposite of a breakthrough. The stated scale
-  is the one the SMALL bar reads on (bonds 1.52 % on 0-8 %) - a stated
+  runs: `overflow: "burst"` (Bravos; **E60: "the re-scale is the way"**)
+  shoots to its true height WHILE the scale rewrites to the nice
+  ceiling above it - the honest bar shrinks to a sliver, the ticks cross
+  over, an overshoot settles, the bar glows. `overflow: "stack"` (the
+  scale holds; the bar grows one comparator per step until its number,
+  out of the plot, off the page) is an option a row may name; the
+  stop-motion burst (the blend) is R26-30. The scale and the value are
+  printed at every instant, so nothing is a lie (E28); the drama is the
+  comparator collapsing. Never a break glyph: a broken-axis mark says
+  "abbreviated", the opposite of a breakthrough. The stated scale is
+  the one the SMALL bar reads on (bonds 1.52 % on 0-8 %) - a stated
   scale that no bar needs is a lie of the other kind.
 
 ### 9.24 The VERDICT STACK species (operator, s68, 2026-08-30)
