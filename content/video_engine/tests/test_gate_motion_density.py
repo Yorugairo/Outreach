@@ -1095,26 +1095,31 @@ def test_m25_refuses_paper_in_the_caption_strip(tokyo_parts):
 
 
 # ---- M27 (E63, 2026-09-11): the READ over a build -----------------------------------------------
-def test_m27_refuses_a_card_docking_over_a_chart_that_is_still_drawing():
+def test_m27_refuses_a_card_docking_over_a_plot_drawing_or_finished():
     """The Tokyo defect at 0:09.5-0:10.5, as the probe measured it: the panel card at its solo reading
     box over the plot (277,066 px, 72 % of the smaller box) while `marks.drawn` says 0.50 - the line is
-    still being drawn under it. The same instant with the chart FINISHED, or with the card PARKED, is
-    not this row's business (M25 scores the parked composition). The fuller set is in
-    tests/test_dock_over_build.py; this is the row's own smoke."""
-    def inst(drawn, state, share, area=277066):
-        return {"t": 10.29, "why": "s02 dock dock-c-blue-ties-panel reading size",
+    still being drawn under it. E63 widened the same evening: the same card on the same plot with the
+    chart FINISHED is the same defect, and the row says which. A PARKED card is not this row's business
+    (M25 scores the parked composition). The fuller set is in tests/test_dock_over_build.py; this is the
+    row's own smoke."""
+    def inst(drawn, state, share, area=277066, t=10.29):
+        return {"t": t, "why": "s02 dock dock-c-blue-ties-panel reading size",
                 "docks": [{"id": "dock-c-blue-ties-panel", "state": state, "box": [79, 552, 801, 474], "rest": 1}],
                 "page": {"plot": [230, 464, 580, 681]}, "texts": [],
                 "overlaps": [{"a": "dock-c-blue-ties-panel", "b": "page.plot", "area_px": area, "share_of_smaller": share}],
                 "clearances": {"safe_pct": {}}, "camera": {"scene": "s02", "zoom": 1.0, "look": [540, 960]},
                 "marks": {"n": 2, "drawn": drawn, "up": 1.0, "parked": False}}
 
-    # the compiler's own clock decides mid-build (E63: `build_windows` on the scene); marks.drawn is reported, never scored
+    # the compiler's own clock (E63: `build_windows` on the scene) now chooses the row's WORDS, never the verdict;
+    # marks.drawn is reported, never scored
     M27_SCENES = [{"scene_id": "s02", "span": [1.99, 38.96], "build_windows": [[1.99, 10.69]], "docks": []}]
     bad = G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "reading", 72)]}, M27_SCENES)
     assert bad.level == "FAIL", bad.message
     assert "dock-c-blue-ties-panel" in bad.message and "72 %" in bad.message and "marks 50% drawn" in bad.message, bad.message
-    assert G._over_build_gate({"aspect": "9:16", "instants": [inst(1.0, "reading", 72)]}, []).level == "PASS", "no windows: nothing draws"
+    assert "while the chart draws" in bad.message, bad.message
+    done = G._over_build_gate({"aspect": "9:16", "instants": [inst(1.0, "reading", 72, t=12.0)]}, M27_SCENES)
+    assert done.level == "FAIL" and "on the finished chart" in done.message, done.message
+    assert G._over_build_gate({"aspect": "9:16", "instants": [inst(1.0, "reading", 72)]}, []).level == "FAIL", "no windows is not an exemption"
     assert G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "parked", 72)]}, M27_SCENES).level == "PASS"
     assert G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "reading", 4, area=2147)]}, M27_SCENES).level == "WARN"
     assert G._over_build_gate(None, []).level == "INFO", "no probe file: said so, never silently green"

@@ -1933,7 +1933,7 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
     return {"x": round((sw - w) / 2), "y": round(max(0, (band - h) / 2)), "w": w, "h": h}
 
 
-# ---- THE READ NEVER SITS ON A CHART THAT IS STILL DRAWING (ruling E63, 2026-09-11) -------------
+# ---- A CARD NEVER READS OVER A LEDGER PAGE'S PLOT (ruling E63, widened 2026-09-11) ------------
 # The operator, on the Tokyo cut at 0:09.5-0:10.5: *"docking over the plate while it's drawing is not
 # a good standard practice, it's somewhat okay here because of timing, but as a rule we should
 # probably use better handling now that we can manipulate scale/depth/placement easier."* The panel
@@ -1941,6 +1941,16 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
 # 801x474) over the middle of the plot, and the line the page is still drawing - `build_to` at 7.69
 # for 3.0 s, landing on datum 311 at 10.69 - runs on UNDERNEATH it. E45 s1 already forbids a card
 # PARKED on the plot and M25 scores it; this is the other half of the choreography, the READ.
+#
+# THE QUALIFIER IS DROPPED (the operator, the third self-watch, the same evening). E63 as first wired
+# moved the read only WHILE THE CHART WAS DRAWING. The cut's build beat was then re-fitted to the mount
+# clock - the line lands at 7.49 and the panel card enters at 9.1 - so the rule stopped firing and the
+# pop came back centred over the FINISHED chart at 9.5-11.0: *"im confused, because you just left the
+# dock over the chart now too. something went backwards."* So: a card never READS over a ledger page's
+# plot, drawing or finished. The drawing windows are still compiled and still stamped on the scene
+# (`build_windows`) - they are what lets the entry and the gate SAY whether the chart was drawing at
+# the time - but they no longer decide anything. E45's PARK is untouched: a parked card on the page is
+# E45's contract and M25's row; only the READ moves.
 #
 # THE RULE. The word is never moved - the card still enters when the sentence says so - the READ is:
 #   (a) the reading box is re-placed in a free band the page leaves (`free_bands`): `above`, across
@@ -1951,8 +1961,8 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
 #       never pops (`read_deferred`, which the player already renders - a card with `centre` and no
 #       reading box takes its box from its first frame).
 # The entry records the decision so the build report and the gate can say what happened. A dock whose
-# read begins after the build has LANDED is untouched, and so is a dock on a plain plate - every row
-# without the case compiles to exactly the bytes it did before.
+# read is already clear of the plot is untouched, and so is a dock on a plain plate - every row without
+# the case compiles to exactly the bytes it did before.
 DOCK_READ_CSS = {   # the template's `.dock.solo` geometry, mirrored (the box `dockReadRect` measures when nothing is forced):
     "9:16": {"x": 80, "y": 553, "w": 800},     # html[data-aspect="9:16"] #dock-1.solo { width: 800px; left: 80px; top: 553px }
     "16:9": {"x": 764, "y": 172, "w": 1056},   # #dock-1.solo { width: 1056px; top: 172px } + .side-r (side-l is its mirror at 100)
@@ -2053,18 +2063,19 @@ def read_over_build(place: dict | None, read_box: dict | None, page: dict | None
     Returns ``{"read_place": {...}, "read_moved": {"from": [...], "to": [...], "why": "..."}}`` when a
     band holds the card, ``{"read_deferred": True}`` when none does, and None when the dock is not on a
     ledger page, has no reading pop at all (a centred card takes its parked box from its first frame),
-    reads clear of the plot, or reads only after the chart has landed. Pure: nothing is mutated."""
-    if not place or not read_box or not page or not windows:
+    or reads clear of the plot. The chart's state does NOT enter the decision (the widening): a read on
+    the plot moves whether the line is drawing or finished. `windows` stays for the RECORD only - it is
+    what lets `why` say the read fell while the chart was drawing. Pure: nothing is mutated."""
+    if not place or not read_box or not page:
         return None
-    hit = [(a, b) for a, b in windows if read_from < b - 1e-6 and read_to > a + 1e-6]
-    if not hit:
-        return None                                   # the read is over before the first stroke, or begins after the landing
-    build_to = max(b for _a, b in hit)
     boxes = LPG.page_boxes(page, aspect or "16:9")
     plot = boxes.get("plot")
     if not plot or _overlap_share(read_box, plot) <= READ_OVER_PLOT_SHARE:
         return None                                   # the card already reads clear of the plot
-    why = f"the chart builds until {build_to:.2f}s"
+    hit = [(a, b) for a, b in (windows or []) if read_from < b - 1e-6 and read_to > a + 1e-6]
+    why = "a card never reads over the plot (E63)"
+    if hit:                                           # the record, never the reason: which it was, for the report and the gate
+        why += f" - while the chart draws, until {max(b for _a, b in hit):.2f}s"
     bands = {bd["band"]: bd for bd in free_bands(boxes)}
     for name in READ_BAND_ORDER:
         band = bands.get(name)
@@ -2815,9 +2826,10 @@ def main() -> int:
                 uris[fg_key] = data_uri(_layers[dopt["behind"]])   # RAW: the capped path re-encodes through RGB and would drop the alpha
             rd = dopt.get("read") or {}   # the box a centred card POPS at before it parks to dplace (2026-09-10)
             rplace = centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x")) if (place and rd) else None
-            # E63: a card never READS over a chart that is still drawing. The read box is the row's own when it named
-            # one, the card's solo CSS box otherwise; a centred card with no `read` has no pop at all (it takes its
-            # parked box from its first frame), so there is nothing to move and the entry is untouched.
+            # E63 (widened): a card never READS over the page's plot, drawing or finished. The read box is the row's
+            # own when it named one, the card's solo CSS box otherwise; a centred card with no `read` has no pop at all
+            # (it takes its parked box from its first frame), so there is nothing to move and the entry is untouched.
+            # The build windows are still handed over - for the RECORD in `why`, never for the decision.
             eplace = dplace if (slot == 0 or centred) else None
             _rs = float(dopt["read_s"]) if dopt.get("read_s") else DOCK_READ_S
             _ps = float(dopt["park_s"]) if dopt.get("park_s") else DOCK_PARK_S
@@ -2916,9 +2928,10 @@ def main() -> int:
         # window without re-parsing the name; a bare `dip` leaves the gate on DIP_S.
         if exit_s is not None:
             scene["exit_s"] = exit_s
-        # E63: the windows the chart DRAWS in (the page's own build, each build_to) - the same list the READ was
-        # decided against - published so the gate's M27 measures the frame against the compiler's clock and not
-        # against a DOM proxy (the probe's marks.drawn averages every drawn path and reads 0.52 on a finished line
+        # E63: the windows the chart DRAWS in (the page's own build, each build_to). Since the widening they decide
+        # nothing - a card never reads over the plot, drawing or finished - but they are still published, because
+        # they are how M27 and the compiled entry SAY which frame it was, against the compiler's own clock rather
+        # than a DOM proxy (the probe's marks.drawn averages every drawn path and reads 0.52 on a finished line
         # whose second path is a stub by design). Absent on a row with nothing to draw.
         bw = page_build_windows(world, row_species, a)
         if bw:

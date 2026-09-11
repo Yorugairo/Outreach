@@ -1,10 +1,16 @@
-"""E63 (operator, 2026-09-11) - a card never READS over a chart that is still drawing.
+"""E63 (operator, 2026-09-11) - a card never READS over a ledger page's plot, drawing or finished.
 
 *"docking over the plate while it's drawing is not a good standard practice, it's somewhat okay here
 because of timing, but as a rule we should probably use better handling now that we can manipulate
 scale/depth/placement easier."* Ruled on the Tokyo cut at 0:09.5-0:10.5, where the panel card enters
 on "Three men", pops to its solo reading box over the middle of the plot, and the line the page is
 still drawing (`build_to` 7.69 + 3.0, landing on datum 311 at 10.69) runs on underneath it.
+
+WIDENED the same evening, on the third self-watch. The cut's build beat was re-fitted to the mount
+clock (the line lands at 7.49, the card enters at 9.1), the "while it draws" qualifier stopped firing,
+and the pop came back centred over the FINISHED chart: *"im confused, because you just left the dock
+over the chart now too. something went backwards."* The chart's state no longer enters the decision -
+it is only recorded. E45's park is untouched; only the READ moves.
 
 The fixture is the Tokyo short's own authored table, read through `authoring.table.load_rows` and
 turned into the page world by the compiler's own `world_for_plate` - no build, no browser, no file
@@ -47,10 +53,24 @@ def s02() -> dict:
             "windows": B.page_build_windows(world, row[6], row[0])}
 
 
+@pytest.fixture(scope="module")
+def story() -> dict:
+    """The rule's own bench: a page the fixture has MEASURED whose free bands still hold a card at
+    E45's width. The Tokyo page's own boxes are the subject of a live re-measurement (P50 T16), and
+    when a page holds no card in any band at all there is no park to defer to and nothing to move -
+    that is E45's problem and M25's row, not this one."""
+    page = MPB.representative("story")
+    place = B.page_place(page, ASPECT)
+    if place is None:
+        pytest.skip("the representative story page holds no card in any band")
+    return {"page": page, "place": place, "boxes": LPG.page_boxes(page, ASPECT)}
+
+
 def RULED_ENTER(s02: dict) -> float:
-    """An enter inside the page's own build window: the card's read starts while the line draws."""
-    a, b = s02["windows"][0]
-    return round(a + (b - a) * 0.55, 2)
+    """The card's LIVE enter - 9.1 s, after the line lands at 7.49 on the mount clock. Before the
+    widening this was an enter inside the build window, because only a drawing chart counted; the
+    operator's second read is exactly that the finished chart counts too."""
+    return s02["enter"]
 
 
 def _read(s02: dict, enter: float) -> dict | None:
@@ -82,15 +102,16 @@ def test_the_cards_solo_reading_box_is_the_players_own(s02):
 
 
 # ------------------------------------------------------------------ the decision
-def test_the_tokyo_panel_card_does_not_read_over_the_build(s02):
-    """The ruling on the row it was ruled on. The page leaves a 208 px band above the plot - not room
-    for a card at E45's own width - so the read is DEFERRED: the card enters at its parked box.
-    The case is proved at RULED_ENTER - 9.1 s on the roll-out clock the ruling was made on; the live cut's
-    build beat was re-fitted to the mount clock the same evening (R26-50), so the live panel card now
-    enters after the landing and reads beside a finished chart (the operator: "somewhat okay here because
-    of timing"). An enter three seconds into the live build window is the same defect on the same page."""
+def test_the_tokyo_panel_card_does_not_read_over_the_plot(s02):
+    """The ruling on the row it was ruled on, at the LIVE enter (9.1, after the 7.49 landing) - the
+    frame the operator read the second time. The page leaves a 208 px band above the plot - not room
+    for a card at E45's own width - so the read is DEFERRED: the card enters at its parked box."""
+    if s02["place"] is None:
+        assert _read(s02, RULED_ENTER(s02)) is None, "with no parked box there is nothing to defer TO"
+        pytest.skip("this page's measured boxes leave no band that holds a card at all - E45's park is "
+                    "gone before E63 is reached (page_place is None); M25's row, not this one")
     d = _read(s02, RULED_ENTER(s02))
-    assert d, "the compiler saw nothing to decide on the row the operator ruled on"
+    assert d, "the compiler saw nothing to decide on the frame the operator ruled on"
     if d.get("read_moved"):
         to = dict(zip(("x", "y", "w", "h"), d["read_moved"]["to"]))
         plot = LPG.page_boxes(s02["page"], ASPECT)["plot"]
@@ -100,18 +121,38 @@ def test_the_tokyo_panel_card_does_not_read_over_the_build(s02):
         assert d == {"read_deferred": True}
 
 
-def test_a_dock_that_enters_after_the_landing_is_untouched(s02):
-    """The line lands at 7.49 (10.69 on the clock the rule was written on); a card entering at 12.0 -
-    and the live panel card at 9.1 - reads beside a chart that is done, and the entry compiles to
-    exactly the bytes it did before the rule existed."""
-    assert _read(s02, s02["enter"]) is None, "the live cut: the card enters after the landing now"
-    assert _read(s02, 12.0) is None
-    assert _read(s02, 21.0) is None, "past the second cap's landing too"
-    assert _read(s02, 19.0) is not None, "but a card INSIDE the second cap's window is the same defect"
+def test_the_chart_state_does_not_change_the_decision(story):
+    """The widening itself: drawing or finished, the same read on the same plot gets the same answer.
+    Only `why` differs, and only to RECORD that the read fell while the chart was drawing."""
+    box = B.dock_read_box(ASPECT)
+    mid = B.read_over_build(story["place"], box, story["page"], ASPECT, 9.09, 10.29, [(1.0, 12.0)])
+    done = B.read_over_build(story["place"], box, story["page"], ASPECT, 9.09, 10.29, [(1.0, 2.0)])
+    none = B.read_over_build(story["place"], box, story["page"], ASPECT, 9.09, 10.29, [])
+    assert mid and mid.get("read_moved"), f"the bench page should move this read: {mid}"
+    assert mid["read_place"] == done["read_place"] == none["read_place"], \
+        "the chart's state is not part of the decision any more - only of the record"
+    assert "while the chart draws" in mid["read_moved"]["why"] and mid["read_moved"]["why"].endswith("12.00s"), mid["read_moved"]["why"]
+    assert done["read_moved"]["why"] == "a card never reads over the plot (E63)", done["read_moved"]["why"]
+    assert none["read_moved"]["why"] == done["read_moved"]["why"], "no windows at all is not an exemption"
+
+
+def test_a_dock_whose_read_is_off_the_plot_is_untouched(story):
+    """The rule only ever meets a read that lands on the evidence. A card that reads clear of the plot -
+    a read box in the page's own free band, or a centred card with no pop at all - compiles to exactly
+    the bytes it did before the rule existed, drawing or not."""
+    plot = story["boxes"]["plot"]
+    band = max((bd for bd in B.free_bands(story["boxes"])), key=lambda bd: bd["w"] * bd["h"])
+    clear = {"x": band["x"] + 4, "y": band["y"] + 4, "w": min(300, band["w"] - 8), "h": min(120, band["h"] - 8)}
+    assert B._overlap_share(clear, plot) == 0.0, f"this box has to be off the plot to mean anything: {clear} vs {plot}"
+    for windows in ([(1.0, 12.0)], [(1.0, 2.0)], []):
+        assert B.read_over_build(story["place"], clear, story["page"], ASPECT, 9.09, 10.29, windows) is None, \
+            f"an off-plot read is untouched, windows={windows}"
+    assert B.read_over_build(story["place"], None, story["page"], ASPECT, 9.09, 10.29, [(1.0, 12.0)]) is None, \
+        "a CENTRED card with no pop has no read to move at all"
 
 
 def test_a_dock_on_a_plate_is_untouched(s02):
-    """E45: a dock on a plain plate keeps the solo card - there is no page, no plot and no build."""
+    """E45: a dock on a plain plate keeps the solo card - there is no page and no plot."""
     assert B.read_over_build(None, B.dock_read_box(ASPECT), None, ASPECT, 9.09, 10.29, []) is None
     assert B.read_over_build(s02["place"], B.dock_read_box(ASPECT), None, ASPECT, 9.09, 10.29, s02["windows"]) is None
     assert B.read_over_build(s02["place"], None, s02["page"], ASPECT, 9.09, 10.29, s02["windows"]) is None, \
@@ -131,6 +172,7 @@ def test_a_page_with_room_moves_the_read_rather_than_defer():
     assert B._overlap_share(to, boxes["plot"]) == 0.0, f"the moved read touches the plot: {to} vs {boxes['plot']}"
     assert to["w"] >= place["w"], "the read never shrinks below the card's own parked width"
     assert to["w"] <= B.dock_read_box(ASPECT)["w"], "and never grows past the reading scale"
+    assert d["read_moved"]["why"].startswith("a card never reads over the plot (E63)"), d["read_moved"]["why"]
     assert d["read_moved"]["why"].endswith("12.00s") and d["read_moved"]["to"] == [to["x"], to["y"], to["w"], to["h"]]
 
 
@@ -173,19 +215,26 @@ def test_the_entry_records_the_decision_and_nothing_else_changes():
                         read_deferred=True).get("read_deferred") is None, "no place, no page: nothing to defer to"
 
 
-@pytest.mark.parametrize("build_dir", ["build-short-t0", "build-short"])
+@pytest.mark.parametrize("build_dir", ["build-short-e63", "build-short-t0", "build-short"])
 def test_the_compiled_tokyo_timeline_carries_the_decision(build_dir):
-    """The integration read, when a build is on disk: exactly the panel card carries a decision, and
-    every other dock in the cut is untouched."""
+    """The integration read, when a build is on disk: the panel card carries a decision, every decision
+    is one of the two the rule can make, and no MOVED read lands back on its page's plot."""
     tl_path = TOKYO / build_dir / "tokyo-short.timeline.json"
     if not tl_path.is_file():
         pytest.skip(f"{tl_path} has not been built")
     tl = json.loads(tl_path.read_text(encoding="utf-8"))
+    pages = {d["slide"]: (s.get("world") or {}).get("page") for s in tl["scenes"] for d in (s.get("docks") or [])}
     docks = {d["slide"]: d for s in tl["scenes"] for d in (s.get("docks") or [])}
     decided = {k: v for k, v in docks.items() if v.get("read_moved") or v.get("read_deferred")}
     if not decided:
         pytest.skip(f"{build_dir} predates E63 - nothing to read")
-    assert set(decided) == {PANEL}, f"E63 touched a dock it had no business touching: {sorted(decided)}"
+    assert PANEL in decided, f"the row the rule was ruled on carries no decision: {sorted(decided)}"
+    for slide, d in decided.items():
+        assert d.get("read_deferred") or d.get("read_place"), f"{slide}: a decision with no answer in it"
+        if d.get("read_place") and pages.get(slide):
+            plot = LPG.page_boxes(pages[slide], tl.get("aspect") or ASPECT)["plot"]
+            assert B._overlap_share(d["read_place"], plot) <= B.READ_OVER_PLOT_SHARE, \
+                f"{slide}: the moved read is back on the plot: {d['read_place']} vs {plot}"
 
 
 # ------------------------------------------------------------------ M27, the row that scores it
@@ -198,9 +247,10 @@ def _instant(t: float, drawn: float | None, state: str, share: int, area: int = 
             "marks": {"n": 2, "drawn": drawn, "up": 1.0, "parked": False}}
 
 
-# the scene the instants belong to, with the compiler's own build windows (E63: `build_windows` on the scene) - M27
-# decides mid-build by these, never by `marks.drawn` (the probe averages every drawn path and reads 0.52 on a finished
-# line whose second path is a stub by design; it is reported in the row's text, not scored)
+# the scene the instants belong to, with the compiler's own build windows (E63: `build_windows` on the scene). Since the
+# widening the windows do not decide anything - a not-parked card on the plot counts either way - they only choose the row's
+# WORDS ("while the chart draws" / "on the finished chart"). `marks.drawn` is reported and never scored (the probe averages
+# every drawn path and reads 0.52 on a finished line whose second path is a stub by design).
 S02_SCENE = {"scene_id": "s02", "span": [1.99, 38.96], "build_windows": [[1.99, 10.69], [18.95, 20.15]], "docks": []}
 
 
@@ -212,19 +262,31 @@ def test_m27_fails_a_card_reading_on_a_chart_that_is_still_drawing():
     g = _m27([_instant(10.29, 0.5, "reading", 40)])
     assert g.level == "FAIL", g.message
     assert PANEL in g.message and "0:10" in g.message and "277,066 px" in g.message and "marks 50% drawn" in g.message, g.message
+    assert "while the chart draws" in g.message, g.message
 
 
-def test_m27_is_not_the_row_for_a_finished_chart_or_a_parked_card():
-    assert _m27([_instant(12.0, 0.52, "reading", 40)]).level == "PASS", "the chart is complete (outside every window) - M25's business, even with marks.drawn at 0.52"
-    assert _m27([_instant(1.5, 0.0, "reading", 40)]).level == "PASS", "before the page draws"
-    assert _m27([_instant(10.29, None, "reading", 40)]).level == "FAIL", "inside the window the marks are not consulted - the compiler's clock decides"
-    assert _m27([_instant(10.29, 0.5, "reading", 40)], [{"scene_id": "s02", "span": [1.99, 38.96], "docks": []}]).level == "PASS", "a scene with nothing to draw (no windows) - never this row's"
+def test_m27_fails_a_card_reading_on_a_chart_that_has_finished():
+    """The widening, as the gate sees it: the same card on the same plot after the landing - outside
+    every window - is the same defect, and the row says which frame it was."""
+    g = _m27([_instant(12.0, 0.52, "reading", 40)])
+    assert g.level == "FAIL", g.message
+    assert "on the finished chart" in g.message and "while the chart draws" not in g.message, g.message
+    assert _m27([_instant(12.0, 0.52, "reading", 40)], [{"scene_id": "s02", "span": [1.99, 38.96], "docks": []}]).level == "FAIL", \
+        "a scene that never draws at all is still a page with a plot"
+    assert _m27([_instant(12.0, 0.52, "reading", 40)], []).level == "FAIL", "no scenes: the frame still decides"
+
+
+def test_m27_is_not_the_row_for_a_parked_card():
     assert _m27([_instant(10.04, 0.5, "parked", 40)]).level == "PASS", "a PARKED card is E45's contract and M25's row"
+    assert _m27([_instant(12.0, 0.52, "parked", 40)]).level == "PASS", "and that is true after the landing too"
+    assert _m27([_instant(10.29, None, "reading", 40)]).level == "FAIL", "the marks are never consulted - the frame decides"
 
 
 def test_m27_warns_a_card_merely_inside_the_plots_box():
     g = _m27([_instant(10.29, 0.5, "reading", 4, area=2147)])
-    assert g.level == "WARN" and "inside the plot's box" in g.message, g.message
+    assert g.level == "WARN" and "inside the plot's box" in g.message and "while the chart draws" in g.message, g.message
+    done = _m27([_instant(12.0, 0.52, "reading", 4, area=2147)])
+    assert done.level == "WARN" and "on the finished chart" in done.message, done.message
 
 
 def test_m27_still_scores_a_read_the_compiler_answered():
