@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3697 records across 295 files.
+3696 records across 295 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -2760,7 +2760,6 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L440 [7] R26-36 A page row with `;then=` / `;idle=` after `:cut` is not read as a cut by the sound map — `page_transitions()["cut"]` is the literal `:cut` SUFFIX test both shorts were built on; Tokyo row 4 (`...:spiral:cut;then=...`) therefore gets a "page retract
 - L441 [7] R26-37 The template's own probes answer for the FIRST ledger world — `lpProbe` / `camera` / `lpDatum` take `[wA, wB].find(ledger)`; when both worlds hold a page (a mount: Tokyo 0:58 and 0:81) they answer for the page UNDERNEATH.
 - L442 [7] R26-38 A world's `lp` can point at the previous page after a backward seek — at 0:58 after a seek to 0:30, `world.lp` holds the previous page's state whose chart elements are detached; the rendered frames are byte-identical (the player i
-- L443 [7] R26-39 A recast into an overflow state paints the breaking bar TALL during its build phase — measured on the Tokyo build-short (the self-watch's first read, 2026-09-11): at 57.5 and 57.65 s (sought and played, identical) the chips bar stands 303 px on t
 - L444 [7] R26-40 M26 - the printed value and the drawn height agree at every instant — E28 / E53 say the scale and the value are printed at every instant; nobody checks that the bar's HEIGHT matches the value the pill prints on the scale the ticks
 - L446 [7] R26-30 The breakthrough BLEND - a stop-motion burst — (the operator, 2026-09-10, E60: "A blend would also work, basically a stop-motion version of what bravos does. essentially blending our stop motion + break thro
 - L447 [7] R26-29 The breakthrough object's printed as-of date — `ev-bonds-vs-chips-10y-v1` carries iShares' standardized ten-year average annual total returns (AGG 1.52 %, SOXX 36.59 %, NAV) from the product pages, which pub

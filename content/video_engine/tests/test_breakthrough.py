@@ -207,3 +207,37 @@ def test_the_stack_grows_one_comparator_per_step_off_the_page_at_the_stated_scal
         assert chips["filter"] == "", "no glow on the stack"
     finally:
         close()
+
+
+T_MID = BUILD_AT + BUILD_S * 0.5   # mid-build: the bars law is running, the breakthrough's clock (bts) is still negative
+
+ONSCREEN = """() => {
+  const R = (el) => el.getBoundingClientRect().height;
+  const emph = document.querySelector('.lp-chart rect.bar.emph'), plain = document.querySelector('.lp-chart rect.bar:not(.emph)');
+  return { emph: emph ? R(emph) : null, plain: plain ? R(plain) : null };
+}"""
+
+
+@needs_object
+@needs_browser
+def test_mid_build_the_breaking_bar_rises_to_the_comparator_s_level():
+    """R26-39 (the self-watch's first read, Tokyo 57.5 s): the breaking bar is laid out at its VALUE on the stated scale
+    (36.59 on 0-8, taller than the plot) and the breakthrough paint rewrote it to the comparator's level only from the
+    hold, so the build phase scaled the oversized rect - a tall bar that then snapped down. E60: it builds to the
+    comparator's level WITH the others, holds, then shoots."""
+    for mode in ("burst", "stack"):
+        page, errs, close = _player(mode)
+        try:
+            p = _at(page, T_MID)
+            assert not errs, errs
+            bonds, chips = p["bars"]
+            comp_h = p["plot"] * 1.52 / 8
+            assert abs(chips["h"] - comp_h) < 0.6, ("the breaking bar's rest is the comparator's level during the build", mode, chips["h"], comp_h)
+            on = page.evaluate(ONSCREEN)
+            assert on["emph"] <= comp_h + 1.0, ("on screen it never rises past the comparator's level while building", mode, on)
+            assert all(o == 1 for o in p["old"]) and all(o == 0 for o in p["neu"]), ("the stated scale is the visible one", mode, p["old"], p["neu"])
+            assert p["text"] is not None and p["text"] != "36.59%", ("the pill counts toward the comparator, it does not print the number", mode, p["text"])
+            q = _at(page, T_HOLD)
+            assert abs(q["bars"][1]["h"] - q["bars"][0]["h"]) < 0.6, "and at the hold it stands level with the bonds, as before"
+        finally:
+            close()

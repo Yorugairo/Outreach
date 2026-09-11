@@ -4112,7 +4112,7 @@
       const shown = bb === e ? V : bb.v, h = Math.max(3, (B.base - myU(shown)) * (bb === e ? 1 + overshoot : 1));
       bb.bar.setAttribute("y", (B.base - h).toFixed(1)); bb.bar.setAttribute("height", h.toFixed(1)); bb.h = h; bb.end = B.base - h;
       if (bb !== e) bb.val.setAttribute("y", (bb.end - (P ? 22 : 14)).toFixed(1));
-      else if (!cs.callout) { bb.val.setAttribute("y", (bb.end - (P ? 22 : 14)).toFixed(1)); bb.val.textContent = V >= e.v - 1e-9 ? lpWithUnit(cs.vstr[e.i] != null ? String(cs.vstr[e.i]) : lpFmt(e.v), cs.cunit || "") : lpWithUnit(lpFmt(V), cs.cunit || ""); }
+      else if (!cs.callout) { bb.val.setAttribute("y", (bb.end - (P ? 22 : 14)).toFixed(1)); if (secs >= 0) bb.val.textContent = V >= e.v - 1e-9 ? lpWithUnit(cs.vstr[e.i] != null ? String(cs.vstr[e.i]) : lpFmt(e.v), cs.cunit || "") : lpWithUnit(lpFmt(V), cs.cunit || ""); }
       if (bb.snap) bb.snap.forEach((s) => s.setAttribute("opacity", V > B.hi0 ? 1 : 0));
     });
     if (B.mode === "burst") {
@@ -4129,7 +4129,7 @@
     if (cs.callout && cs.cpill) {   /* the pill rides the tip; once the tip has left the page it sits inside its own bar */
       const CP = cs.cp, py = Math.max(24, e.end - CP.up);
       cs.cpill.setAttribute("y", py.toFixed(1)); cs.cval.setAttribute("y", (py + CP.ty).toFixed(1));
-      cs.cval.textContent = V >= e.v - 1e-9 ? cs.cfinalTrue : lpWithUnit(lpFmt(V), cs.cunit || "");
+      if (secs >= 0) cs.cval.textContent = V >= e.v - 1e-9 ? cs.cfinalTrue : lpWithUnit(lpFmt(V), cs.cunit || "");   /* R26-39: the build's count to comp is lpPaintChart's */
     }
   };
   /* ---- ONE chart's build beat (P48 T4, lifted verbatim out of paintLedger) -------------------------
@@ -4152,7 +4152,8 @@
         cs.callout.setAttribute("opacity", clamp01(ck / 0.3).toFixed(2));
         cs.cval.textContent = ck >= 1 ? cs.cfinal : lpWithUnit(lpFmt(cs.cnum * expoOut(ck)), cs.cunit || "");
       }
-      if (cs.bt && bts >= 0) lpPaintBreakthrough(cs, bts);
+      if (cs.bt) lpPaintBreakthrough(cs, bts);   /* R26-39: negative secs = the BUILD phase - the bar's rest is the comparator's level, so the
+                                                bars law above scales a bar like the others (E60); the laid-out rect is the value on the stated scale */
       const caps = pageSpecies(scene, "build_to");   /* P47 T2: the line draws to a datum on a word, the rest on the next word */
       cs.paths.forEach((pp) => {
         const fr = clamp01((c - pp.stagger * 0.3) / 0.7);
