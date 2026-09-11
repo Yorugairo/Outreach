@@ -43,6 +43,8 @@ FRAME_T = {
     "flow-swap": 12.6,              # P50 T4: the swap is over (11.0 + SWAP_OUT_S + SWAP_IN_S = 11.75), the new node stands where the old one did, both arrows and the year stamp are in
     "vecmap-arc": 12.4,             # P50 T5: all four have landed - IRN lit (5.0), the arc drawn (6.6 + DRAW_S), "1996" stamped (8.4), CHN lit (9.6) with its figure (10.4) - and the X that cuts the flow is fully struck (11.5 + CROSS_S = 11.95)
     "span-decade": 12.6,            # P50 T4: the page has built (3.9 + 0.5 + 3.0), the span's shade is fully in (8.0 + IN_S) and its name fully written (8.45 + dur * WRITE = 12.45)
+    "tiers-two": 14.2,              # P50 T9: both bands drawn (the page builds to 8.9, the second band's own word runs 9.5-11.5) and the drop bar in the accent all but finished (12.0 + 0.88 of 2.5) with its label being written
+    "treemap-cross": 10.9,          # P50 T6: the census has landed (the build ends at 8.0), the three X's are struck (9.0 + CROSS_S) and the crossed share is written (9.0 + WRITE_AT + 3.0 * WRITE = 10.7)
     "ledger-keyed": 12.75,          # P48 T4b: mid-phase-2 of the keyed recast (12 s + 2 s; the golden's expoOut clock is half done at u 0.37): the lines have left half their history, their ends and values are in flight to the bar tops, the bars are half grown         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
 }
 
@@ -203,6 +205,101 @@ def ledger_keyed() -> tuple[dict, dict]:
         BST.derive_rescale_states(world, species, "ledger:golden-series:line;then=golden-bars:bars", ep)
     scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
     return _timeline("Golden: ledger keyed recast", scenes, {}, None), _base_uris()
+
+
+# P50 T9: the two bands of the tiers golden - synthetic reserves, the SHAPE is what is under test
+# (a level that holds and then falls against one that falls all along), on ONE x of twenty half-years.
+TIERS_X = [2015 + 0.5 * i for i in range(21)]
+
+
+def tiers_two() -> tuple[dict, dict]:
+    """P50 T9 (R26-24; Bravos shots 35-36's two-panel SPR): N SMALL MULTIPLES on one page - two
+    reserves, one unit, one shared x, each band on its own scale with its own honest zero (E53 s4)
+    and its own gridlines, the tier titles the series' own names.
+
+    The bands draw IN TURN, which is the page's whole grammar: the first draws on the page's own
+    build beat, and the second is held at nothing by a `build_to` at its datum 0 and then drawn on
+    its OWN WORD by a second one (`tier: 1` - a tier IS a series index, and this is the word the
+    author writes). Then the drop of the second band is MEASURED on a later word by a bracket in its
+    `form: "bar"` - the same two data, drawn as a bar in the accent (shot 36).
+
+    The page is `ledger_page.build_spec`'s own, and the row is put through the compiler's
+    `validate_species` and `derive_rescale_states` before it is written, so this golden proves the
+    builder, the compiler's grammar and the painter together. Judged with the drop bar landing (14.2)."""
+    import build_scene_timeline_f as BST
+    series = {
+        "title": "Two reserves, one decade",
+        "sub": "strategic petroleum reserves, each band on its own scale",
+        "src": "Synthetic series for the golden surface; not a figure about the world",
+        "xticks": [[2015, "2015"], [2020, "2020"], [2025, "2025"]],
+        "tiers": [
+            {"name": "JAPAN", "unit": "Mb", "color": "cobalt",
+             "pts": [[x, round(324 - 0.4 * i - (2.6 * max(0, i - 12)), 1)] for i, x in enumerate(TIERS_X)]},
+            {"name": "UNITED STATES", "unit": "Mb", "color": "crimson",
+             "pts": [[x, round(695 - 2.0 * i - (14.0 * max(0, i - 10)), 1)] for i, x in enumerate(TIERS_X)]},
+        ],
+    }
+    page = LPG.build_spec(series, "tiers", None, "right")
+    page["field"] = "scribble"
+    species = [
+        {"kind": "build_to", "at": 4.0, "dur": 0.5, "tier": 1, "target": {"kind": "datum", "index": 0}},   # the second band waits: the build beat is spent on this cap
+        {"kind": "build_to", "at": 9.5, "dur": 2.0, "tier": 1, "target": {"kind": "datum", "index": len(TIERS_X) - 1}},
+        # the drop, MEASURED (Bravos shot 36): 675 Mb at i=10 to 579 at i=16. The bracket stands to the
+        # right of the two data it measures, so a span that ends at the LAST datum has no room for its own
+        # label - this one ends where the page still has a margin, and the label writes beside the bar.
+        {"kind": "bracket", "at": 12.0, "dur": 2.5, "series": 1, "from": 10, "to": 16,
+         "label": "-96 Mb", "sub": "the drawdown", "color": "crimson", "form": "bar"},
+    ]
+    plate = "ledger:golden-tiers:tiers"
+    errs = BST.validate_species(species, (0, 0, 0), plate)
+    assert not errs, errs
+    world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    BST.derive_rescale_states(world, species, plate, REPO)
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: two tiers on one x", scenes, {}, None), _base_uris()
+
+
+# P50 T6: the census. The shares are Bravos's own exports-by-partner profile (shots 89-91) rounded to
+# the tenth; the page claims BREADTH, and the cross claims the three partners' share as a NUMBER.
+TREEMAP_SHARES = [
+    ("United States", 16.8), ("Hong Kong", 8.5), ("Japan", 4.7), ("Korea", 4.5), ("Vietnam", 4.1),
+    ("India", 3.4), ("Germany", 3.1), ("Netherlands", 3.0), ("Malaysia", 2.5), ("Russia", 2.4),
+    ("Brazil", 2.0), ("Australia", 1.9), ("Spain", 1.3), ("Saudi Arabia", 1.2), ("Rest of world", 40.6),
+]
+
+
+def treemap_cross() -> tuple[dict, dict]:
+    """P50 T6 (E53 s1's second amendment - the CENSUS exception, ruled 2026-09-10; Bravos shots 89-91):
+    a treemap of exports by partner, squarified toward 3:2 by `ledger_page.py` at BUILD time inside
+    page_boxes' own plot, labelled only where the research's floors say a label fits (value font
+    >= 18 px; nothing under 80 x 36 px) and counting the rest in one legend line.
+
+    On a word three partners take an X and the crossed SHARE is WRITTEN on the page - the two halves
+    of the exception, which is why they are one species. The shrink afterwards is P48's park and
+    needs nothing new: `lpPaintPark` scales the chart's own svg, and every cell rides it (E58 -
+    one affine transform, never a re-layout; Sondag 2018).
+
+    Judged once the X's are struck and the share is written (10.9)."""
+    import build_scene_timeline_f as BST
+    series = {
+        "title": "China's exports, by partner",
+        "sub": "share of goods exports, one year",
+        "src": "Synthetic census for the golden surface; not a figure about the world",
+        "unit": "%",
+        "shares": [{"label": label, "value": value} for label, value in TREEMAP_SHARES],
+        "total": 100,
+    }
+    page = LPG.build_spec(series, "treemap", None, "right")
+    page["field"] = "scribble"
+    species = [{"kind": "cross", "at": 9.0, "dur": 3.0, "cells": ["United States", "Japan", "Korea"],
+                "text": "3 partners, 26 % of exports"}]
+    plate = "ledger:golden-treemap:treemap"
+    errs = BST.validate_species(species, (0, 0, 0), plate)
+    assert not errs, errs
+    world = {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    BST.derive_rescale_states(world, species, plate, REPO)   # the cross's cells are checked against the page's own labels
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the census and its X marks", scenes, {}, None), _base_uris()
 
 
 def chip_board() -> tuple[dict, dict]:
@@ -383,6 +480,8 @@ SURFACES = {
     "flow-swap": flow_swap,
     "span-decade": span_decade,
     "vecmap-arc": vecmap_arc,
+    "tiers-two": tiers_two,
+    "treemap-cross": treemap_cross,
 }
 
 

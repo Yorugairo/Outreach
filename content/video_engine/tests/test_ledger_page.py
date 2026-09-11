@@ -397,3 +397,171 @@ def test_decline_display_from_a_labels_list_beats_the_decimal_year():
     no_list = {**series, "labels": None}
     spec2 = L.build_spec(no_list, "decline")
     assert spec2["display_labels"] == {"start": "Jan '24", "end": "Jan '26", "series": "m"}
+
+
+# --- P50 T9: N-TIER PAGES (R26-24) -------------------------------------------
+# N small multiples on one page: N bands, each its own y-scale and honest zero, ONE shared x.
+
+def _tier(name: str, unit: str = "Mb", n: int = 8, base: float = 300.0, step: float = -2.0, x0: float = 2015.0) -> dict:
+    return {"name": name, "unit": unit, "pts": [[x0 + 0.5 * i, base + step * i] for i in range(n)]}
+
+
+def _tiers(*tiers: dict, **extra) -> dict:
+    return {"title": "Two reserves, one decade", "src": "our reading", "tiers": list(tiers), **extra}
+
+
+def test_two_tiers_build_two_bands_on_one_shared_x():
+    series = _tiers(_tier("JAPAN"), _tier("UNITED STATES", base=695.0, step=-9.0))
+    assert L.validate(series, "tiers") == []
+    spec = L.build_spec(series, "tiers", None, "right")
+    assert spec["builder"] == "tiers" and spec["variant"] == "tiers"
+    assert spec["labels"] == ["JAPAN", "UNITED STATES"], "the tier titles ARE the series' names; the page's title stays the argument"
+    assert [t["unit"] for t in spec["tiers"]] == ["Mb", "Mb"]
+    assert [t["kind"] for t in spec["tiers"]] == ["line", "line"]
+    assert spec["tiers"][0]["x"] == spec["tiers"][1]["x"] == [2015.0, 2018.5], "one x, and it is the page's"
+    assert spec["tiers"][0]["series"][0]["pts"][0] == [2015.0, 300.0], "the points ride verbatim"
+
+
+def test_the_two_band_combo_key_is_untouched_by_the_n_tier_builder():
+    """`tiers: true` (a bool) is the macro-chart intake's OVERLAY key and builds exactly as it did:
+    E53 s4 keeps the two apart, and so does this test - a list is the new builder, a bool is not."""
+    series = {"title": "t", "src": "s", "unit": "%", "tiers": True,
+              "bars": [{"label": "Jan", "value": -3.0, "x": 2025.0}, {"label": "Feb", "value": 2.0, "x": 2025.1}],
+              "series": [{"name": "10-year", "color": "cobalt", "pts": [[2025.0, 4.1], [2025.1, 4.4]]}]}
+    spec = L.build_spec(series, "line", None, "right")
+    assert spec["builder"] == "combo" and spec["tiers"] is True
+    assert "labels" in spec and spec["labels"] == ["Jan", "Feb"]
+
+
+def test_three_tiers_build_three_bands_and_page_boxes_reports_them():
+    series = _tiers(_tier("A"), _tier("B", base=40.0), _tier("C", base=9.0, step=-0.2))
+    assert L.validate(series, "tiers") == []
+    spec = L.build_spec(series, "tiers", None, "right")
+    assert len(spec["tiers"]) == 3
+    for aspect in ("16:9", "9:16"):
+        boxes = L.page_boxes(spec, aspect)
+        bands = boxes["bands"]
+        assert len(bands) == 3, aspect
+        assert bands[0]["y"] == boxes["plot"]["y"], "the first band starts at the plot's top"
+        assert bands[2]["y"] + bands[2]["h"] <= boxes["plot"]["y"] + boxes["plot"]["h"] + 1
+        assert bands[0]["h"] == bands[1]["h"] == bands[2]["h"], "equal bands: shape is read against shape"
+        gutter = bands[1]["y"] - (bands[0]["y"] + bands[0]["h"])
+        assert abs(gutter - L.TIER_GAP * bands[0]["h"]) <= 1, (aspect, gutter)
+
+
+def test_tiers_on_different_x_ranges_are_refused_naming_both():
+    series = _tiers(_tier("A"), _tier("B", x0=1990.0))
+    errs = L.validate(series, "tiers")
+    assert len(errs) == 1 and "share ONE x" in errs[0], errs
+    assert "1990..1993.5" in errs[0] and "2015..2018.5" in errs[0], errs
+
+
+def test_a_tier_without_a_unit_is_refused_by_name():
+    series = _tiers(_tier("JAPAN"), _tier("UNITED STATES", unit=""))
+    errs = L.validate(series, "tiers")
+    assert len(errs) == 1 and "'UNITED STATES'" in errs[0] and "no 'unit'" in errs[0], errs
+
+
+def test_five_tiers_are_refused_and_the_message_names_the_ceiling_and_why():
+    series = _tiers(*[_tier(f"T{i}") for i in range(5)])
+    errs = L.validate(series, "tiers")
+    assert errs and errs[0].startswith("5 tiers: the ceiling is 4"), errs
+    assert "9:16" in errs[0] and "quarter" in errs[0], "the refusal says WHY four is the ceiling"
+    assert L.validate(_tiers(_tier("A")), "tiers")[0].startswith("a tiers page needs 'tiers'")
+
+
+def test_a_tiers_page_carries_the_pages_own_axes_for_the_one_shared_x():
+    series = _tiers(_tier("A"), _tier("B"), xticks=[[2015, "2015"], [2018, "2018"]])
+    spec = L.build_spec(series, "tiers", None, "right")
+    assert spec["axes"]["xticks"] == [[2015, "2015"], [2018, "2018"]], "the x is shared, so its ticks are the page's"
+
+
+# --- P50 T6: THE CENSUS PAGE (E53 s1's second amendment) ---------------------
+
+CENSUS = [("United States", 16.8), ("Hong Kong", 8.5), ("Japan", 4.7), ("Korea", 4.5), ("Vietnam", 4.1),
+          ("India", 3.4), ("Germany", 3.1), ("Netherlands", 3.0), ("Malaysia", 2.5), ("Russia", 2.4),
+          ("Brazil", 2.0), ("Australia", 1.9), ("Spain", 1.3), ("Saudi Arabia", 1.2), ("Rest of world", 40.6)]
+
+
+def _census(**extra) -> dict:
+    return {"title": "China's exports, by partner", "sub": "share of goods exports, one year",
+            "src": "our reading", "unit": "%", "total": 100,
+            "shares": [{"label": a, "value": b} for a, b in CENSUS], **extra}
+
+
+def test_squarify_areas_are_proportional_and_the_cells_sit_near_three_by_two():
+    areas = [v / sum(v for _, v in CENSUS) * (900.0 * 600.0) for _, v in sorted(CENSUS, key=lambda kv: -kv[1])]
+    cells = L.squarify(areas, 0.0, 0.0, 900.0, 600.0)
+    assert len(cells) == len(areas)
+    for area, cell in zip(areas, cells):
+        assert abs(cell["w"] * cell["h"] - area) <= 1e-6 * area, (area, cell)
+    assert abs(sum(c["w"] * c["h"] for c in cells) - 900.0 * 600.0) <= 1e-6 * 900 * 600
+    for c in cells:
+        assert c["x"] >= -1e-9 and c["y"] >= -1e-9
+        assert c["x"] + c["w"] <= 900.0 + 1e-6 and c["y"] + c["h"] <= 600.0 + 1e-6
+    ratios = sorted(c["w"] / c["h"] for c in cells)
+    median = ratios[len(ratios) // 2]
+    assert 1.0 <= median <= 2.4, f"the layout is tuned toward {L.TREEMAP_ASPECT}:1, never 1:1 - median {median}"
+    # ... and tuning toward 3:2 really does move it off the square (the paper's own target)
+    square = sorted(c["w"] / c["h"] for c in L.squarify(areas, 0.0, 0.0, 900.0, 600.0, target=1.0))
+    assert square[len(square) // 2] < median
+
+
+def test_the_label_tiers_are_the_research_floors_two_lines_one_line_none():
+    assert L.label_tier(240, 160, "United States", "16.8")["tier"] == 2
+    assert L.label_tier(240, 160, "United States", "16.8")["value_font"] >= L.TREEMAP_VALUE_FONT
+    one = L.label_tier(120, 44, "Japan", "4.7")   # over 80 x 36, under 110 x 64: one stacked line
+    assert one["tier"] == 1 and one["value_font"] == 0.0 and one["font"] >= L.TREEMAP_LABEL_FONT[0]
+    assert L.label_tier(70, 40, "Japan", "4.7")["tier"] == 0, "nothing under 80 x 36 px carries text"
+    assert L.label_tier(240, 30, "Japan", "4.7")["tier"] == 0, "... in either dimension"
+    long_name = L.label_tier(100, 44, "Saudi Arabia", "1.2")
+    assert long_name["tier"] == 0, "a name too long for its cell at 18 px is not shrunk below the floor - it is not written"
+
+
+def test_a_treemap_page_lays_out_both_aspects_and_counts_what_it_could_not_name():
+    series = _census()
+    assert L.validate(series, "treemap") == []
+    spec = L.build_spec(series, "treemap", None, "right")
+    assert spec["builder"] == "treemap" and spec["total"] == 100
+    assert set(spec["layout"]) == {"16:9", "9:16"}
+    for aspect, lay in spec["layout"].items():
+        cells = lay["cells"]
+        assert len(cells) == len(CENSUS), aspect
+        assert [c["label"] for c in cells][:2] == ["Rest of world", "United States"], "layout order: the biggest cell first"
+        assert abs(sum(c["fw"] * c["fh"] for c in cells) - 1.0) <= 1e-3, aspect
+        assert cells[0]["share"] == 0.406 and cells[1]["tier"] >= 1
+        unnamed = sum(1 for c in cells if c["tier"] == 0)
+        assert lay["unnamed"] == unnamed
+        assert lay["legend"] == (f"and {unnamed} others" if unnamed else "")
+        assert all(c["value_font"] >= L.TREEMAP_VALUE_FONT for c in cells if c["tier"] == 2), aspect
+
+
+def test_a_size_claim_on_a_census_page_is_refused_and_points_at_the_bars_page():
+    for text, field in (("America is bigger than the next four", "sub"), ("Who is largest?", "title"),
+                        ("three times Japan's", "claim")):
+        errs = L.validate(_census(**{field: text}), "treemap")
+        assert errs and "SIZE CLAIM takes its BAR" in errs[0], (field, errs)
+        assert "--variant bars" in errs[0], "the refusal names the page that CAN carry it (E53 s1)"
+        assert field in errs[0]
+    assert L.validate(_census(sub="the census of a whole year"), "treemap") == []
+
+
+def test_a_census_needs_three_parts_and_positive_ones():
+    errs = L.validate({"title": "t", "src": "s", "shares": [{"label": "a", "value": 1}, {"label": "b", "value": 2}]}, "treemap")
+    assert errs and "at least 3 parts" in errs[0] and "--variant share" in errs[0], errs
+    bad = _census()
+    bad["shares"][2] = {"label": "Japan", "value": -4.7}
+    assert any("not a positive number" in e for e in L.validate(bad, "treemap")), L.validate(bad, "treemap")
+
+
+def test_check_infers_the_variant_from_the_files_own_shape_and_writes_nothing(tmp_path, capsys):
+    path = _write(tmp_path, "ev-census.series.json", _census())
+    assert L.main([str(path), "--check"]) == 0
+    out = capsys.readouterr().out
+    assert out.startswith("OK ev-census.series.json: treemap treemap 15 cells"), out
+    assert not list(tmp_path.glob("*.page.json")), "a check writes nothing"
+    tiers = _write(tmp_path, "ev-two.series.json", _tiers(_tier("A"), _tier("B")))
+    assert L.main([str(tiers), "--check"]) == 0
+    assert "tiers tiers 2 tiers sharing x" in capsys.readouterr().out
+    assert L.infer_variant({"bars": [{"label": "a", "value": 1}]}) is None, "a bars file's variant is the sentence's call, never a guess"
+    assert L.main([str(_write(tmp_path, "ev-bars.series.json", _bars([1, 2]))), "--check"]) == L.EXIT_INVALID

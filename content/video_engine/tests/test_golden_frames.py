@@ -27,6 +27,8 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "press-stack",  # P50 T3: three press cards stacked, the newest lit, the underline drawn on its phrase
             "flow-swap",    # P50 T4: the three-node diagram after its swap - the new node in place, both clothoid arrows standing, the year stamped
             "span-decade",  # P50 T4: a ledger line page with a named stretch of time shaded behind it
+            "tiers-two",    # P50 T9: two bands on one shared x, each with its own scale and honest zero, the second drawn on its own word and its drop measured as a bar
+            "treemap-cross",  # P50 T6: the census page - a squarified treemap, three partners crossed on a word and their share written
             "vecmap-arc"]   # P50 T5: the vector map in PORTRAIT - Iran lit, the arc from the Gulf to the US cut by its X, "1996" and "1.4 Billion Barrels" stamped, China lit
 
 

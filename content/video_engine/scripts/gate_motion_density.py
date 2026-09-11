@@ -210,6 +210,9 @@ SPECIES_EVENTS["span"] = ("at",)            # ... and a span shades in on its wo
 SPECIES_EVENTS["light"] = ("at",)
 SPECIES_EVENTS["arc"] = ("at", "crossed")
 SPECIES_EVENTS["stamp"] = ("at",)
+SPECIES_EVENTS["cross"] = ("at",)   # P50 T6: the census's X marks strike on their word - the named cells are struck, dimmed
+                                    # and their share written, all on one clock; like a span or a light it holds after that,
+                                    # so it has no end event (what happens next is the park, which is its own row).
 SPECIES_EVENTS["chip"] = ("at", "cross_at")   # P50 T2: a chip LANDS on its word (an event) and is CROSSED on a later one (another).
                                               # "cross_at" is neither an edge of the window nor its end: it names the row's own field,
                                               # and _species_events credits any such name at the instant that field holds.

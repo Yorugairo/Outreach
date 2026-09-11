@@ -1129,6 +1129,191 @@
     return span01((write - j * per) / (per * 1.6));
   };
   /* KINETICS:END */
+  /* KINETICS:BEGIN tiers */
+  /* species/tiers.mjs - N-TIER PAGES (P50 T9; BACKLOG R26-24; Bravos shots 35-36's two-panel SPR).
+     SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between
+     KINETICS:BEGIN tiers and KINETICS:END, AFTER ease (it uses minJerk). Its region sits with the
+     kinetics laws rather than in the species block at the foot of the file, for the reason span.mjs
+     gives: a PAGE's math is called by builders and by the perform layer, both written hundreds of
+     lines above the species block, and a const has to exist before the function that closes over it.
+
+     WHEN: the sentence compares the SAME quantity across two, three or four subjects over the same
+     period - Japan's reserve and America's, one unit, one decade. That is a small multiple: N bands
+     stacked, each with its own y-scale and its own honest zero (E53 s4), sharing ONE x. It is NOT the
+     overlay: when two series must be read AGAINST each other, E53 s4 says they belong on one plot with
+     the bars keeping the zero and the line riding over them (`tiers: true` on a combo page, the
+     macro-chart intake's Archetype 1). Separating those would throw away the comparison. Separate
+     bands are for the comparison that is made by SHAPE, band against band, on a shared time axis.
+
+     THE LAW, all of it a pure function of the page's geometry and the build fraction c:
+       bands   - the plot is cut into N equal bands with a gutter of GAP of a band's height between
+                 them. The MIRROR of ledger_page.tier_bands (python, the compiler's dock placement):
+                 one law in two languages, the same two dials, pinned on both sides.
+       domain  - each band's own y-scale, from an HONEST ZERO by default: a band whose zero is dropped
+                 exaggerates its own shape, and a page of small multiples is read shape against shape.
+                 A band may opt out (`from_zero: false` in its axes) and the page's judge row says so.
+       ticks   - TICKS gridlines a band, and the unit written once per band beside its own top tick:
+                 a band is a chart, and a chart with no unit is a number with no meaning.
+       draw    - the bands draw IN TURN: band i starts at its own share of the build clock, and a
+                 `build_to` per tier (a tier IS a series index on this page) puts each band on its own
+                 WORD instead. The drop of one band is measured by the bracket in its `form: "bar"`.
+     The dials are ours to tune (42 s42.5), not findings. */
+
+  const TIERS = Object.freeze({
+    GAP: 0.20,        /* the gutter between two bands, as a share of a band's own height - ledger_page.TIER_GAP is the same number in python [DERIVED, read off the first frame: at 0.10 a band's name sat on the floor tick label of the band above] */
+    PAD: 0.08,        /* headroom over a band's tallest value, as a share of its own span: a line that touches its band's ceiling reads as clipped */
+    TICKS: 2,         /* gridlines a band (the combo's tiered case uses 2-3 for the same reason: a short band wants fewer ticks) */
+    NAME_DY: 6,       /* the band's NAME sits this far above the band's top edge, in the chart's viewBox units - inside the gutter, clear of the band above's floor label */
+    STAGGER: 0.34,    /* the share of the build clock between one band's start and the next one's */
+    MIN_H: 46,        /* a band shorter than this in viewBox units cannot carry a scale and a name; the compiler's ceiling of 4 is what keeps it from happening */
+  });
+
+  const tier01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* THE BANDS: N boxes between `top` and `bot`, top to bottom, each {y0, y1, h}. */
+  const tierBands = (top, bot, n, gap = TIERS.GAP) => {
+    const k = Math.max(0, n | 0);
+    if (!k) return [];
+    const h = (bot - top) / (k + (k - 1) * gap);
+    return Array.from({ length: k }, (_, i) => {
+      const y0 = top + i * h * (1 + gap);
+      return { y0, y1: y0 + h, h };
+    });
+  };
+
+  /* THE DOMAIN of one band: its own values, with the zero kept honest unless the band drops it. The
+     pad is one-sided on a from-zero band (the floor IS the claim) and two-sided when it is not. */
+  const tierDomain = (vals, fromZero = true) => {
+    /* a null or empty datum is NOT a zero (Number(null) is 0, which would put a floor under a band that has none) */
+    const nums = (vals || []).filter((v) => v !== null && v !== undefined && v !== "" && Number.isFinite(+v)).map(Number);
+    if (!nums.length) return [0, 1];
+    let lo = Math.min(...nums), hi = Math.max(...nums);
+    if (fromZero) { lo = Math.min(0, lo); hi = Math.max(0, hi); }
+    const span = hi - lo || Math.abs(hi) || 1;
+    hi += span * TIERS.PAD;
+    if (!fromZero) lo -= span * TIERS.PAD;
+    return [lo, hi];
+  };
+
+  /* a value's y inside its band */
+  const tierY = (band, lo, hi, v) => band.y1 - (Number(v) - lo) / ((hi - lo) || 1) * band.h;
+
+  /* the nice gridline values of a band: TICKS of them inside the domain, the zero always among them
+     when the domain holds it (an honest zero that is not drawn is not read) */
+  const tierTicks = (lo, hi, n = TIERS.TICKS) => {
+    const raw = (hi - lo) / Math.max(1, n);
+    const e = Math.pow(10, Math.floor(Math.log10(Math.max(1e-12, raw)))), f = raw / e;
+    const step = e * (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10);
+    const out = [];
+    for (let v = Math.ceil(lo / step - 1e-9) * step; v <= hi + 1e-9; v += step) out.push(Math.abs(v) < step * 1e-6 ? 0 : v);
+    return out;
+  };
+
+  /* THE BUILD: band i starts at i * STAGGER of the clock and draws over what is left of it, so the
+     bands arrive in turn even before a word is put on them. A `build_to` per tier overrides this by
+     capping the band's own stroke - the caps machinery is the page's, not ours. */
+  const tierStagger = (i, n) => (n <= 1 ? 0 : Math.min(0.9, (i | 0) * TIERS.STAGGER));
+  const tierBuildK = (c, i, n) => minJerk(tier01((c - tierStagger(i, n)) / Math.max(0.05, 1 - tierStagger(n - 1, n))));
+  /* KINETICS:END */
+  /* KINETICS:BEGIN treemap */
+  /* species/treemap.mjs - THE CENSUS PAGE and its X MARKS (P50 T6; E53 s1's second amendment, the
+     census exception, ruled 2026-09-10; Bravos shots 89-91). SOURCE OF TRUTH, inlined into the
+     scene-evidence player by sync_kinetics.py between KINETICS:BEGIN treemap and KINETICS:END, AFTER
+     ease. Its region sits with the kinetics laws for span.mjs's reason: the page's builder and the
+     page's PERFORM layer both call it, and both are written far above the species block.
+
+     WHERE THE LAYOUT IS. Not here. The squarified rectangles (Bruls, Huizing & van Wijk 2000, tuned
+     toward 3:2 rather than the paper's square - Heer & Bostock 2010) are computed by ledger_page.py at
+     BUILD time, inside page_boxes' own plot, and ride the spec as fractions of that plot. This module
+     maps a cell's fractions into the rect it is drawn in and owns the CLOCK. That split is the point:
+     a layout computed at paint time is a re-layout waiting to happen, and E58 (with Sondag 2018) says
+     the shrink afterwards is ONE affine transform - cells never hop. `treemapRect` is linear in the
+     plot rect, which is what makes the park free: scaling the rect scales every cell exactly.
+
+     WHEN: the sentence takes a CENSUS - "China sells to everyone", "three partners, 41 % of exports".
+     Never a size comparison between two cells: that is a bar's job, and `ledger_page.py` refuses the
+     file whose own words make one.
+
+     THE LAW, a pure function of the build fraction c and of t:
+       cells  - they land in LAYOUT order (largest first), each over CELL_IN of the clock, staggered
+                across STAGGER of it - the bars' law, on a mosaic; the label writes once its own cell
+                is nearly in, and only on the cells the compiler said had room (the research's floors).
+       cross  - the named cells take a two-stroke X over CROSS_S (the chip's cross, the same dial: one
+                cross law on the page) and dim to DIM while it is struck. The X is the mark; the DIM is
+                what keeps a crossed cell part of the census instead of deleting it.
+       share  - and the crossed share is WRITTEN by the hand over WRITE of the word - E53 s1's second
+                amendment (b), which is why the species carries both halves and the compiler refuses
+                one without the other.
+     The dials are ours to tune (42 s42.5), not findings. */
+
+  const TREEMAP = Object.freeze({
+    CELL_IN: 0.30,      /* one cell's own landing, as a share of the build clock */
+    STAGGER: 0.70,      /* ... and the share of the clock spent handing from the first cell to the last */
+    LABEL_AT: 0.55,     /* a cell's label writes from this much of its own landing: the tile first, its name after */
+    RISE: 0.35,         /* the cell grows from this share of its own size as it lands (the bar's scale, in two dimensions) */
+    CROSS_S: 0.5,       /* the X's two strokes together - the chip's own dial (species/chip.mjs CROSS_S), deliberately */
+    CROSS_INSET: 0.12,  /* the X's inset from the cell's corners, as a share of the cell's SHORTER side */
+    DIM: 0.55,          /* what a crossed cell dims to: struck, still legible, still counted (the census does not delete) */
+    WRITE: 0.45,        /* the share of the word the hand takes to write the crossed share, once the X's are struck */
+    WRITE_AT: 0.35,     /* ... starting here, so the number arrives while the last X is still being drawn */
+  });
+
+  const tm01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* A CELL'S RECT inside the plot it is drawn in. Linear in the plot: scale or translate the plot and
+     every cell follows exactly, which is the park (E58: one affine transform, never a re-layout). */
+  const treemapRect = (cell, plot) => ({
+    x: plot.x + (+cell.fx || 0) * plot.w,
+    y: plot.y + (+cell.fy || 0) * plot.h,
+    w: (+cell.fw || 0) * plot.w,
+    h: (+cell.fh || 0) * plot.h,
+  });
+
+  /* the landing of cell i of n at build fraction c: layout order, the bars' stagger */
+  const treemapCellK = (c, i, n) => {
+    const span = n > 1 ? TREEMAP.STAGGER / (n - 1) : 0;
+    return tm01((c - (i | 0) * span) / TREEMAP.CELL_IN);
+  };
+
+  /* the cell's own scale as it lands, about its centre, and its label's opacity */
+  const treemapCellScale = (k) => TREEMAP.RISE + (1 - TREEMAP.RISE) * k;
+  const treemapLabelK = (k) => tm01((k - TREEMAP.LABEL_AT) / (1 - TREEMAP.LABEL_AT));
+
+  /* WHICH CELLS a cross names, by label, in the page's own order. A name the page does not carry
+     resolves to nothing here and is refused at build time by the compiler - the player never guesses. */
+  const treemapNamed = (cells, names) => {
+    const want = new Set((names || []).map(String));
+    return (cells || []).map((c, i) => (want.has(String(c.label)) ? i : -1)).filter((i) => i >= 0);
+  };
+
+  /* THE CROSS at t: 0 until the species' word, 1 CROSS_S later. */
+  const treemapCrossF = (sp, t) => tm01((t - +sp.at) / TREEMAP.CROSS_S);
+
+  /* the two strokes of the X from the cross's fraction: the first over its first half, the second over
+     the second - the chip's law, so one X on the page is drawn like every other */
+  const treemapStrokes = (cross) => [tm01(cross * 2), tm01(cross * 2 - 1)];
+
+  /* the two diagonals of a cell's X, inset from its corners by a share of its shorter side */
+  const treemapCrossLines = (r, inset = TREEMAP.CROSS_INSET) => {
+    const d = Math.min(r.w, r.h) * inset;
+    const x0 = r.x + d, x1 = r.x + r.w - d, y0 = r.y + d, y1 = r.y + r.h - d;
+    return [{ x1: x0, y1: y0, x2: x1, y2: y1 }, { x1: x1, y1: y0, x2: x0, y2: y1 }];
+  };
+
+  /* a crossed cell dims while it is struck, and holds there: it is still one of the parts */
+  const treemapDim = (cross) => 1 - (1 - TREEMAP.DIM) * tm01(cross);
+
+  /* the hand writing the crossed share, and one glyph of it (the span's and the figure's own law: the
+     share is 1 / (n + 0.6) so the last glyph lands exactly as the write ends) */
+  const treemapWrite = (sp, t) => {
+    const dur = Math.max(0.001, +sp.dur || 1);
+    return tm01((t - +sp.at - TREEMAP.WRITE_AT) / (dur * TREEMAP.WRITE));
+  };
+  const treemapGlyph = (write, j, n) => {
+    const per = 1 / (Math.max(1, n | 0) + 0.6);
+    return tm01((write - j * per) / (per * 1.6));
+  };
+  /* KINETICS:END */
   /* KINETICS:BEGIN ink */
   /* kinetics/ink.mjs - Kubelka-Munk ink (44 s44.1; FINDING-the-animation-math s6; 47 s5b). SOURCE OF TRUTH, inlined into
      the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN ink and KINETICS:END (P43 T3). Behind
@@ -3388,7 +3573,8 @@
     st.subGlyphs = [...subEl.querySelectorAll(".g")]; st.srcGlyphs = [...src.querySelectorAll(".g")];   /* P48 T4: a recast erases the words that described the chart that left */
     lpMark(st, "title", "title", title, {}); lpMark(st, "sub", "sub", subEl, {}); lpMark(st, "src", "src", src, {});   /* P48 T1: the page's own ink is a mark too - a retitle and a recast both move it */
     /* one builder per treatment (s9.28; P35 Builder Architecture) - each harvested from its own component, never merged */
-    const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo, share: buildLedgerShare };
+    const builders = { "dense-line": buildLedgerLine, race: buildLedgerRace, decline: buildLedgerDecline, combo: buildLedgerCombo, share: buildLedgerShare,
+                       tiers: buildLedgerTiers, treemap: buildLedgerTreemap };   /* P50 T9 / T6 */
     (builders[st.kind] || buildLedgerBars)(st, pg);
     /* A page may declare its own BUILD length (operator, 2026-09-08: "the fix is to draw out the charts in a
        slower/more animated fashion"). Measured on the tariff short, M21 puts the deployed lives at 0.0-6.1 s
@@ -3710,6 +3896,8 @@
     COMBO_LABEL_SHARE: 0.55,   /* [DERIVED, the fourth watch]: a combo prints a bar's value only for the emphasised bar or one at this share of the biggest move */
     SHARE_BUILD: 3.2, SHARE_SWEEP: 0.78, SHARE_LABEL: 0.12,   /* [DERIVED, P48 T4] the pie's own envelope: the sweep takes most of it, each name writing as its slice completes */
     SHARE_PEEL_OUT: 0.17,   /* [DERIVED] how far the piece slides from the pie, as a share of the radius: clear of its neighbours, still obviously OF the circle */
+    TIERS_BUILD: 4.5,       /* [DERIVED, P50 T9] N bands in turn: the combo's envelope, because it is the same amount of ink - a page that wants a band per WORD puts a build_to on each tier instead */
+    TREEMAP_BUILD: 3.6,     /* [DERIVED, P50 T6] the mosaic lands in layout order over this; longer reads as a loading screen, shorter and the eye cannot follow the biggest cells arriving first */
   };
   const LP_PAL = { crimson: "#ED6A4A", teal: "#178C83", cobalt: "#8fb3f0", amber: "#F5B72E", deemph: "#b8c4d0" };   /* the field's own tokens (cobalt lifted for the charcoal, as dense-line) */
   const pow2out = (x) => 1 - (1 - x) * (1 - x);
@@ -4203,6 +4391,173 @@
       if (w.val) w.val.setAttribute("opacity", o);
     }
   };
+  /* ---- TIERS (P50 T9; BACKLOG R26-24; Bravos shots 35-36's two-panel SPR) ------------------------
+     N SMALL MULTIPLES on one page: N bands stacked, each with its own y-scale and its own honest zero
+     (E53 s4), sharing ONE x, the tier titles the series' own names. species/tiers.mjs owns every
+     number (the bands, the domains, the in-turn clock); this is the DOM.
+     The bands draw in turn: a line band is a path in st.paths like any other, so a `build_to` per
+     tier (a tier IS a series index on this page) puts each band on its own WORD - which is how the
+     page is meant to be authored, and how the golden does it. The drop of one band is measured by
+     the bracket in its `form: "bar"`: the same two data, drawn as a bar in the accent (shot 36). */
+  const buildLedgerTiers = (st, pg) => {
+    const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait, ax = pg.axes || {};
+    const L = P ? 150 : 96, R = P ? 70 : 150, T = P ? 130 : 66, B = P ? G.H - 90 : 468, W = G.W;
+    const trs = (pg.tiers || []).filter(Boolean), n = trs.length;
+    const bands = tierBands(T, B, n);
+    const fs = P ? 34 : 22, ns = P ? 38 : 25;
+    /* the ONE x every band shares: the page's own extent, read from every band's data */
+    let x0 = Infinity, x1 = -Infinity;
+    for (const tr of trs) {
+      for (const s of tr.series || []) for (const q of s.pts || []) { x0 = Math.min(x0, +q[0]); x1 = Math.max(x1, +q[0]); }
+      if (Array.isArray(tr.x)) { x0 = Math.min(x0, +tr.x[0]); x1 = Math.max(x1, +tr.x[1]); }
+    }
+    const cats = (trs[0] || {}).x_labels || null;   /* category bands (bars) share one label list instead of one number line */
+    const nCat = cats ? cats.length : 0;
+    const mx = cats ? (i) => L + (W - L - R) * ((i + 0.5) / Math.max(1, nCat))
+                    : (x) => L + (+x - x0) / ((x1 - x0) || 1) * (W - L - R);
+    st.tiers = { bands: [], n };
+    trs.forEach((tr, ti) => {
+      const band = bands[ti]; if (!band) return;
+      const tax = tr.axes || {}, lines = (tr.series || []).filter((s) => s.pts && s.pts.length);
+      const vals = tr.kind === "bars" ? (tr.values || []) : lines.flatMap((s) => (s.pts || []).map((q) => +q[1]));
+      const dom = tierDomain(vals, tax.from_zero !== false);
+      const my = (v) => tierY(band, dom[0], dom[1], v);
+      /* the band's own gridlines and its own unit: a band is a chart, and every chart says what it measures */
+      for (const v of tierTicks(dom[0], dom[1])) {
+        const y = my(v);
+        lpEl("line", "grid", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1) });
+        lpText(st.chart, "lab", L - 10, y + (P ? 12 : 7), "end", lpWithUnit(lpTick(v), tr.unit || ""), { style: "fill:#aeb6be" + (P ? ";font-size:30px" : "") });
+      }
+      /* the tier's TITLE, over its own band's top-left corner (the page's title stays the argument) */
+      const nameEl = lpText(st.chart, "sname", L, band.y0 - TIERS.NAME_DY, "start", String(tr.name || ""),
+        { opacity: 0, style: LP_HALO + "fill:var(--lp-chalk);font-size:" + ns + "px" });
+      const rec = { name: nameEl, bars: [], ti };
+      st.tiers.bands.push(rec);
+      if (tr.kind === "bars") {
+        const bw = (W - L - R) / Math.max(1, nCat) * 0.62, base = my(Math.max(dom[0], 0));
+        (tr.values || []).forEach((v, i) => {
+          const h = Math.max(2, Math.abs(+v) / ((dom[1] - dom[0]) || 1) * band.h), neg = +v < 0;
+          const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos"), st.chart,
+            { x: (mx(i) - bw / 2).toFixed(1), y: (neg ? base : base - h).toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 4 });
+          bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
+          const val = lpText(st.chart, "val", mx(i), (neg ? base + h + (P ? 34 : 20) : base - h - 10).toFixed(1), "middle",
+            String((tr.value_strings || [])[i] ?? lpFmt(+v)), { opacity: 0, style: LP_HALO + (P ? "font-size:30px" : "") });
+          rec.bars.push({ bar, val });
+          lpMark(st, "b:" + ti + ":" + i, "bar", bar, { x: mx(i) - bw / 2, y: neg ? base : base - h, w: bw, h, base, cx: mx(i), end: neg ? base + h : base - h, neg, v: +v });
+        });
+        st.linePts.push((tr.values || []).map((v, i) => [mx(i), my(+v)]));   /* a bar's top is a datum too: a bracket can measure it */
+      } else {
+        lines.forEach((s, k) => {
+          const pts = s.pts.map(([x, v], i) => [cats ? mx(i) : mx(x), my(v)]);
+          const col = LP_PAL[s.color] || LP_PAL[tr.color] || (n > 1 ? LP_PAL.cobalt : LP_PAL.crimson);
+          const d = pts.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
+          const p = lpEl("path", "ser", st.chart, { d, stroke: col });
+          const len = p.getTotalLength ? p.getTotalLength() : 2000;
+          p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
+          const tip = lpEl("circle", "", st.chart, { r: 6, fill: col, opacity: 0 });
+          /* the band's name IS this line's name (the line page's law): it writes as the band finishes drawing */
+          const prec = { p, len, tip, name: k ? lpText(st.chart, "sname", L, band.y0 - TIERS.NAME_DY, "start", "", { opacity: 0 }) : nameEl,
+                         stagger: ti / Math.max(1, n), ny: band.y0 - TIERS.NAME_DY, pts, si: ti, k0: 0, muted: false,
+                         data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };
+          st.paths.push(prec);
+          lpMark(st, "s" + ti + (k ? ":" + k : ""), "line", p, { pts, vals: s.pts.map((q) => +q[1]), len, k0: 0, muted: false, col }, prec);
+          if (!k) st.linePts.push(pts);   /* the tier's own datum positions: series index === tier index */
+        });
+      }
+    });
+    /* ONE shared x under the last band - the axis line and its ticks, drawn once for the whole page */
+    lpMark(st, "axis", "axis", lpEl("line", "ax", st.chart, { x1: L, x2: W - R, y1: B, y2: B }), { x1: L, x2: W - R, y: B });
+    if (cats) cats.forEach((lab, i) => {
+      const tx = lpText(st.chart, "lab", mx(i), B + (P ? 52 : 32), "middle", String(lab));
+      lpMark(st, "xtick:" + i, "xtick", tx, { v: i, x: mx(i), y: B + (P ? 52 : 32) });
+    });
+    else (ax.xticks || []).forEach(([x, lab], i) => {
+      const tx = lpText(st.chart, "lab", mx(x), B + (P ? 52 : 32), "middle", String(lab));
+      lpMark(st, "xtick:" + i, "xtick", tx, { v: +x, x: mx(x), y: B + (P ? 52 : 32) });
+    });
+    st.buildDur = LPX.TIERS_BUILD; st.paint = paintLedgerTiers;
+    st.plot = { L, R, T, B, W: G.W, x0, x1, y0: 0, y1: 1, log: false };
+  };
+  /* the bands' own build step: the tier titles of the bars bands and their bars, in turn. A LINE
+     band needs nothing here - its path is in st.paths, so the page's own build beat and every
+     `build_to` on it are the line page's, unchanged. */
+  const paintLedgerTiers = (st, c) => {
+    const TT = st.tiers; if (!TT) return;
+    for (const bd of TT.bands) {
+      if (!bd.bars.length) continue;   /* a line band's name rides its line (lpPaintChart) */
+      const k = tierBuildK(c, bd.ti, TT.n);
+      bd.name.setAttribute("opacity", clamp01((k - 0.1) / 0.25).toFixed(2));
+      bd.bars.forEach((bb, i) => {
+        const kk = expoOut(clamp01((k - i * 0.08) / 0.55));
+        bb.bar.style.transform = "scaleY(" + kk.toFixed(4) + ")";
+        bb.val.setAttribute("opacity", clamp01((kk - 0.9) / 0.1).toFixed(2));
+      });
+    }
+  };
+  /* ---- TREEMAP (P50 T6; E53 s1's second amendment - the CENSUS exception; Bravos shots 89-91) ----
+     The squarified layout is the COMPILER's (ledger_page.squarify, inside page_boxes' own plot, both
+     aspects, at build time) and rides the spec as fractions; species/treemap.mjs maps a cell into
+     the rect it is drawn in and owns the clock. Nothing is laid out per frame - which is what makes
+     the shrink afterwards a park (E58: one affine transform, never a re-layout).
+     The labels are the compiler's decision too: it wrote each cell's tier and font from the research
+     floors on the cell's real size in stage pixels, so a cell either carries a label that FITS or
+     carries none and is counted in the legend line ("and 12 others"). */
+  const LP_TREE_RAMP = ["rgba(23,140,131,.86)", "rgba(23,140,131,.68)", "rgba(143,179,240,.55)", "rgba(184,196,208,.42)", "rgba(184,196,208,.30)"];
+  const buildLedgerTreemap = (st, pg) => {
+    const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;
+    /* the page's OWN plot margins - the line builder's, which is what ledger_page.treemap_plot mirrors */
+    const L = P ? 150 : 70, R = P ? 70 : 220, T = P ? 90 : 40, B = P ? G.H - 80 : 470;
+    const lay = (pg.layout || {})[P ? "9:16" : "16:9"] || (pg.layout || {})["16:9"] || { cells: [] };
+    const avail = { x: L, y: T, w: G.W - L - R, h: B - T };
+    /* the cells were squarified for page_boxes' plot: keep that plot's ASPECT exactly, centred in the
+       room the page gives, so no cell is stretched out of the 3:2 the layout was tuned to (and so the
+       label sizes the compiler chose off the research's floors scale by ONE ratio, isotropically) */
+    const want = ((lay.plot || {}).w || avail.w) / Math.max(1, (lay.plot || {}).h || avail.h);
+    let pw = avail.w, ph = pw / want;
+    if (ph > avail.h) { ph = avail.h; pw = ph * want; }
+    const plot = { x: avail.x + (avail.w - pw) / 2, y: avail.y + (avail.h - ph) / 2, w: pw, h: ph };
+    /* the compiler decided each label's size in STAGE pixels against its own plot; this viewBox is not
+       that plot, so the sizes ride in on the same ratio the cells do - one scale, no second decision */
+    const sc = plot.w / Math.max(1, ((lay.plot || {}).w || plot.w));
+    const cells = (lay.cells || []).map((c, i) => {
+      const r = treemapRect(c, plot), pad = 6 * sc;
+      const g = lpEl("g", "lp-cell", st.chart, { opacity: 0 });
+      const fill = LP_PAL[(pg.colors || [])[c.index]] || LP_TREE_RAMP[Math.min(i, LP_TREE_RAMP.length - 1)];
+      const box = lpEl("rect", "", g, { x: r.x.toFixed(1), y: r.y.toFixed(1), width: Math.max(0, r.w - 2).toFixed(1), height: Math.max(0, r.h - 2).toFixed(1), fill, rx: 3 });
+      let lab = null, val = null;
+      if (c.tier >= 1) {
+        const f = c.font * sc;
+        lab = lpText(g, "lab", r.x + pad, r.y + pad + f, "start", String(c.label),
+          { opacity: 0, style: "fill:#F5EFE2;font-size:" + f.toFixed(1) + "px;font-weight:700" });
+        if (c.tier >= 2) {
+          const vf = c.value_font * sc;
+          val = lpText(g, "lab", r.x + pad, r.y + pad + f + vf * 1.15, "start", String(c.value_string || ""),
+            { opacity: 0, style: "fill:#F5EFE2;font-size:" + vf.toFixed(1) + "px" });
+        }
+      }
+      return { i, index: c.index, label: String(c.label), rect: r, g, box, lab, val, cx: r.x + r.w / 2, cy: r.y + r.h / 2 };
+    });
+    /* the parts the page could not name are COUNTED, never dropped: a census says how many there were */
+    const legend = lay.legend ? lpText(st.chart, "lab", plot.x, plot.y + plot.h + (P ? 46 : 28), "start", String(lay.legend),
+      { opacity: 0, style: "fill:#aeb6be" + (P ? ";font-size:30px" : "") }) : null;
+    st.treemap = { cells, plot, sc, legend };
+    st.buildDur = LPX.TREEMAP_BUILD; st.paint = paintLedgerTreemap;
+    st.plot = { L: plot.x, R: G.W - (plot.x + plot.w), T: plot.y, B: plot.y + plot.h, W: G.W, x0: 0, x1: 1, y0: 0, y1: 1, log: false };
+  };
+  const paintLedgerTreemap = (st, c) => {
+    const TM = st.treemap; if (!TM) return;
+    const n = TM.cells.length;
+    TM.cells.forEach((cc, i) => {
+      const k = treemapCellK(c, i, n), s = treemapCellScale(k);
+      cc.g.setAttribute("opacity", clamp01(k / 0.3).toFixed(3));
+      cc.g.style.transformOrigin = cc.cx.toFixed(1) + "px " + cc.cy.toFixed(1) + "px";
+      cc.g.style.transform = "scale(" + s.toFixed(4) + ")";
+      const lk = treemapLabelK(k).toFixed(3);
+      if (cc.lab) cc.lab.setAttribute("opacity", lk);
+      if (cc.val) cc.val.setAttribute("opacity", lk);
+    });
+    if (TM.legend) TM.legend.setAttribute("opacity", clamp01((c - 0.85) / 0.15).toFixed(3));
+  };
   /* the piece leaves on its word (the `peel` species): it slides out along its own bisector, goes blood red, and its
      figure writes beside it. u is a pure function of t, so a seek lands the identical frame. */
   const lpPeelTo = (st, u) => {
@@ -4328,6 +4683,7 @@
      BRACKET_GAP the room between the data and the span, viewBox units. */
   const PS = { SPREAD_A: 0.30, SPREAD_BLEED: 0.55,   /* the fifth watch: the gap between two lines, bled full of ink - the alpha it lands at, and the share of the word the bleed takes to cross */
                ERASE_S: 0.4, BRACKET_DRAW: 0.5, BRACKET_TICK: 0.15, BRACKET_LABEL: 0.55, BRACKET_GAP: 34, BRACKET_TICK_W: 14,
+               BRACKET_BAR_W: 26,   /* P50 T9: `form: "bar"` - the SAME span, drawn as a bar in the accent instead of a hairline (Bravos shot 36: the drop of one tier). The law is the bracket's: the bar grows from the first datum's level to the second as the span draws, so a fall goes DOWN (E28) */
                BRACKET_ROOM: 200, RELIGHT_COL: "#F5B72E" };
   const PS_PAL = { crimson: "#ED6A4A", teal: "#178C83", cobalt: "#8fb3f0", amber: "#F5B72E", deemph: "#b8c4d0", neg: "var(--lp-neg)", pos: "var(--lp-pos)" };
   const pageSpecies = (scene, kind) => (scene.species || []).filter((sp) => sp && sp.kind === kind).sort((a, b) => a.at - b.at);
@@ -4367,7 +4723,8 @@
         const x = inMargin ? xr : Math.min(Ap[0], Bp[0]) - PS.BRACKET_GAP, dir = inMargin ? -1 : 1;
         const y0 = Math.min(Ap[1], Bp[1]), y1 = Math.max(Ap[1], Bp[1]), ym = (y0 + y1) / 2;
         const yClear = Math.min(y0, ...ptsNow.map((q) => q[1]));   /* a stacked label clears the WHOLE series - a record before the span can stand higher than the span's top */
-        const lx = fits ? x + 12 : x - 4, ly = fits ? ym + fs * 0.35 : yClear - (sp.sub ? fss * 1.3 : 0) - 10;   /* beside, or stacked above the whole line */
+        const half = sp.form === "bar" ? PS.BRACKET_BAR_W / 2 : 0;   /* P50 T9: a bar has width, and its label is written clear of it, not on it */
+        const lx = fits ? x + 12 + half : x - 4 - half, ly = fits ? ym + fs * 0.35 : yClear - (sp.sub ? fss * 1.3 : 0) - 10;   /* beside, or stacked above the whole line */
         return { x, dir, fits, anchor: fits ? "start" : "end", y0, y1, lx, ly, sy: fits ? ly + fss * 1.3 : yClear - 10 };
       };
       const g0 = geomOf(A, B, pts);
@@ -4385,6 +4742,7 @@
       const mk = (cls, stroke, op) => {
         const g = lpEl("g", "lp-bracket " + cls, surf, { opacity: op });
         const line = lpEl("path", "bk", g, { d: "M" + g0.x.toFixed(1) + " " + g0.y0.toFixed(1) + " L" + g0.x.toFixed(1) + " " + g0.y1.toFixed(1), stroke });
+        if (sp.form === "bar") { line.style.strokeWidth = (P ? PS.BRACKET_BAR_W * 1.7 : PS.BRACKET_BAR_W) + "px"; line.style.strokeLinecap = "butt"; line.style.opacity = "0.92"; }
         const len = line.getTotalLength ? line.getTotalLength() : (g0.y1 - g0.y0);
         line.setAttribute("stroke-dasharray", len); line.setAttribute("stroke-dashoffset", len);
         const tick = (y) => lpEl("path", "bk", g, { d: "M" + g0.x.toFixed(1) + " " + y.toFixed(1) + " l" + (g0.dir * PS.BRACKET_TICK_W).toFixed(1) + " 0", stroke, "transform-origin": g0.x.toFixed(1) + "px " + y.toFixed(1) + "px" });
@@ -4474,7 +4832,46 @@
       const lg = [...String(sp.label || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
       return { sp, si: sp.series | 0, rect, label, lg, fs };
     });
-    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans };
+    /* THE CENSUS'S X MARKS (P50 T6; E53 s1's second amendment, 2026-09-10; Bravos shots 89-91). The
+       named cells take an X and dim; the crossed SHARE is written by the hand above the map. Both halves
+       are ONE species because the exception is one act: (a) the subset is marked AND (b) its share is
+       written as a number. species/treemap.mjs owns the geometry and the clock. */
+    const crosses = pageSpecies(scene, "cross").map((sp) => {
+      const TM = st.treemap; if (!TM) return null;   /* the compiler refuses a cross off a treemap page; a page that lost its map draws nothing */
+      const col = sp.color ? (PS_PAL[sp.color] || sp.color) : PS.RELIGHT_COL;   /* sunflower, the chip's own cross */
+      const marks = treemapNamed(TM.cells, sp.cells).map((ci) => {
+        const cell = TM.cells[ci];
+        const strokes = treemapCrossLines(cell.rect).map((ln) => {
+          const p = lpEl("path", "bk", surf, { d: "M" + ln.x1.toFixed(1) + " " + ln.y1.toFixed(1) + " L" + ln.x2.toFixed(1) + " " + ln.y2.toFixed(1),
+                                               stroke: col, opacity: 0 });
+          p.style.strokeWidth = (st.portrait ? 11 : 7) + "px"; p.style.strokeLinecap = "round";
+          const len = p.getTotalLength ? p.getTotalLength() : Math.hypot(ln.x2 - ln.x1, ln.y2 - ln.y1);
+          p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
+          return { p, len };
+        });
+        return { cell, strokes };
+      });
+      const label = lpText(surf, "bklab", TM.plot.x, TM.plot.y - (P ? 26 : 16), "start", "",
+        { opacity: 0, style: "font-size:" + fs + "px;fill:" + col });
+      const lg = [...String(sp.text || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
+      return { sp, marks, label, lg };
+    }).filter(Boolean);
+    return { brackets, retitles, relights: pageSpecies(scene, "relight"), figures, notes, spreads, spans, crosses };
+  };
+  /* the X's two strokes over the named cells, the cells dimming under them, and the share written by
+     the hand: every number is species/treemap.mjs's, this is the call */
+  const paintCross = (cr, t) => {
+    const f = treemapCrossF(cr.sp, t), sk = treemapStrokes(f), dim = treemapDim(f);
+    for (const m of cr.marks) {
+      m.strokes.forEach((s, j) => {
+        s.p.setAttribute("opacity", sk[j] > 0 ? 1 : 0);
+        s.p.setAttribute("stroke-dashoffset", (s.len * (1 - sk[j])).toFixed(1));
+      });
+      m.cell.box.style.opacity = f > 0 ? dim.toFixed(3) : "";   /* the FILL dims, never the name: E53 s1's census (c) says the crossed cell is read, and a struck cell is still counted */
+    }
+    cr.label.setAttribute("opacity", t >= cr.sp.at ? 1 : 0);
+    const w = treemapWrite(cr.sp, t);
+    cr.lg.forEach((ts, j) => ts.setAttribute("opacity", treemapGlyph(w, j, cr.lg.length).toFixed(3)));
   };
   /* the bleed: the region grows left to right over SPREAD_BLEED of the word, the ink deepens over the rest */
   const paintSpread = (sd, t, st) => {
@@ -4577,6 +4974,7 @@
     for (const sd of PF.spreads || []) paintSpread(sd, t, st);   /* the fifth watch: the gap between the lines, bled full; R26-28: on the active state */
     for (const sd of PF.spans || []) paintSpan(sd, t, st);       /* P50 T4: the named stretch of time, shaded behind the chart on the live scale */
     for (const fg of PF.figures || []) paintFigure(fg, t, st);   /* E50: the chart's next thing */
+    for (const cr of PF.crosses || []) paintCross(cr, t);        /* P50 T6: the census's X marks and the share they cross */
     for (const nt of PF.notes || []) { nt.div.style.opacity = t >= nt.sp.at ? "" : "0"; writeGlyphs(nt.glyphs, t - nt.sp.at, Math.max(0.05, nt.sp.dur || 1)); }
     /* RELIGHT: the sunflower twin rises and falls on a sine over dur */
     for (const b of PF.brackets) b.glow.g.setAttribute("opacity", "0");
@@ -4734,7 +5132,9 @@
            (never below what stands), an undraw unwinds (index 0 = to nothing), and a build_to AFTER an undraw RE-DRAWS. `paths`
            picks which strokes an event touches: all (default) | tail (the highlighted strokes, k0 > 0) | history (k0 = 0) - so a
            page can un-draw everything and then draw back only the months the sentence is about. */
-        const forMe = (sp) => { const ss = sp.series ?? (sp.target || {}).series, pk = sp.paths || "all";
+        /* P50 T9: on a tiers page a TIER is a series index - one resolution, not two; `tier` is the word the
+           author writes and the compiler refuses it beside a disagreeing `series` */
+        const forMe = (sp) => { const ss = sp.series ?? sp.tier ?? (sp.target || {}).series, pk = sp.paths || "all";
           return pp.pts && (ss == null || (ss | 0) === (pp.si | 0)) && (pk === "all" || (pk === "tail" ? (pp.k0 | 0) > 0 : (pp.k0 | 0) === 0)); };
         const evs = [...caps.filter((sp) => forMe(sp) && !!sp.target).map((sp) => ({ sp, kind: "build" })), ...pageSpecies(scene, "undraw").filter(forMe).map((sp) => ({ sp, kind: "undraw" }))].sort((a, b) => a.sp.at - b.sp.at);
         let prev = 1;

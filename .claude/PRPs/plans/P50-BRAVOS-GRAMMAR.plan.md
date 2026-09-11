@@ -261,7 +261,7 @@ Acceptance:
 - Evidence: the data (commit 06dae01): `build_world_map.py`, `assets/maps/world-110m.paths.json` (186,741 bytes, 177 countries, nodes min 6 / median 36 / max 442, the source pinned by blob hash), `tests/test_world_map.py` (24). The world and the species: `scripts/species/vecmap.mjs` (357) + `tests/kinetics/vecmap.test.mjs` (272); the compiler (`vecmap[:<A3 list>]`, the focus fit for both aspects, the map shipped once in the asset map, `light` / `arc` / `stamp` with `size: figure|year`, the `country` and `mappoint` targets admitted only on a vecmap world), the gate, the lint (NAMES: light, arc, stamp; the pending line closed), the template's thin world branch; the golden `vecmap-arc` (read by the parent: the world in muted ink, IRN and CHN lit, the USA the focus outline, the Gulf -> US arc crossed with its X, 1996 and 1.4 Billion Barrels stamped). The parent's run: sync_kinetics 16 modules (11 + 5); node 159/159; 187 across goldens (existing byte-identical), targeted species, portrait parity, lint, sync, gate, world map. The agent hit its turn limit at the compiler tests and was resumed for the filmstrip and the report.
 
 ### T6: The treemap page builder with X marks
-- Status: pending (gate 1 ruled 2026-09-10 - the census exception, E53 §1 second amendment)
+- Status: complete (2026-09-11) - gate 1 ruled 2026-09-10 (the census exception, E53 §1 second amendment)
 - Owner: `implementation_luna`
 - Depends on: T1
 - Write set: `content/video_engine/scripts/ledger_page.py` (builder `treemap` from a `series.json` of shares; the
@@ -278,7 +278,7 @@ Acceptance:
 - Acceptance: shots 89-91's grammar: a treemap of exports by partner; on a word three partners take an X; the map
   shrinks to a chip on the next (a `chart_to: recast` or an exit).
 - Validate: the test suite above + `python content/video_engine/scripts/ledger_page.py --check <series>`
-- Evidence: pending
+- Evidence: `ledger_page.py` builder `treemap` (the squarify toward 3:2, the label tiers by the research floors, the size-claim refusal), `scripts/species/treemap.mjs` + `tests/kinetics/treemap.test.mjs`, the `cross` species in the compiler (the named cells' X's and the written share), the lint (DIVIDES: treemap page, cross; COMPARES: tiers page; the pending line closed), the golden `treemap-cross` (read by the parent: China's exports by partner, US / Japan / Korea crossed, "3 partners, 26 % of exports" written, "and 7 others"). The agent hit its turn limit and was resumed for the filmstrip and the report.
 
 ### T7: The ART-embed world for the external lane (was: the tv-embed)
 - Status: pending (human gate 3)
@@ -322,7 +322,7 @@ Acceptance:
 - Evidence: pending
 
 ### T9: N-tier pages - small multiples on a shared x (R26-24; Bravos' two-panel SPR, shots 35-36)
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: `implementation_luna` (a `ledger_page.py` builder + the page's paint); parent reads the frames
 - Depends on: T1
 - Write set: `content/video_engine/scripts/ledger_page.py` (builder `tiers`: N series objects on one page, each its own
@@ -332,7 +332,7 @@ Acceptance:
 - Acceptance: Japan SPR | US SPR on one page, drawn in turn, the drop bar on a word; the page is OURS (A1-A3) when the
   series are; goldens byte-identical without it; the life check on the page region.
 - Validate: the test suite in Verification + `python content/video_engine/scripts/ledger_page.py --check <series>`
-- Evidence: pending
+- Evidence: `ledger_page.py` builder `tiers` (N in [2, 4], one shared x, each band its own honest scale; the two-band form byte-identical), `scripts/species/tiers.mjs` + `tests/kinetics/tiers.test.mjs`, `tests/test_ledger_page.py`, the golden `tiers-two` (read by the parent: JAPAN | UNITED STATES on 2015-2025, the -96 Mb drop bar in the accent). The parent's run with T6: node 173/173; 231 across goldens (existing byte-identical), species, portrait parity, lint, sync, gate, ledger, breakthrough; sync_kinetics 18 modules (11 + 7). R26-24 closed.
 
 ### T10: The burst's furniture (Bravos 8:01.8-8:03.2; E60 built the burst)
 - Status: pending

@@ -208,11 +208,22 @@ VECMAP_SPECIES = (SPECIES_LIGHT, SPECIES_ARC, SPECIES_STAMP)   # light: the coun
                           # its midpoint when the flow is CUT. stamp: a figure written at a place, or a YEAR at the smaller size - `year` is not a
                           # fourth kind, it is `size: "year"` on a stamp (one act - a number put on a place - is one kind, one `when`, one event edge).
 STAMP_SIZES = ("figure", "year")
+SPECIES_CROSS = "cross"       # P50 T6: the CENSUS's X marks on a TREEMAP page (E53 s1's second amendment, 2026-09-10;
+SPECIES_KINDS += (SPECIES_CROSS,)   # Bravos shots 89-91). ONE species carries both halves of the exception - the named
+                              # cells take an X (a), and the share they add up to is WRITTEN on the page as a number (b) -
+                              # because they are one act, and a subset marked without its share is the area comparison the
+                              # ruling refuses. The painter's math is scripts/species/treemap.mjs; the page's perform layer
+                              # draws it, as it draws every page species.
+TIER_SPECIES = ("build_to", "undraw", "figure", "bracket")   # P50 T9: the page species that may name a TIER - which on a
+                              # tiers page IS a series index. One resolution, not two: `tier` is the word the author writes
+                              # (a band, not a line), `series` is what the player reads, and the two may not disagree.
+BRACKET_FORMS = ("span", "bar")   # P50 T9 / Bravos shot 36: the same measured span drawn as a hairline with ticks, or as a
+                              # BAR in the accent - the drop of one tier. A form, not a kind (P50 T3's precedent, the underline).
 UNDERLINE_FORM = "underline"   # P50 T3: a callout's FORM - the hand-drawn underline under a press card's quoted phrase (E56's one
                                # exception, the squiggle law s9.27). Not a species kind: the grammar gains a form and a target, not a kind.
 HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
 PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to",
-                 SPECIES_SPAN)   # P50 T4: a span is a page species - it is shaded behind the page's own chart, on the page's own clock and live scale (R26-28)
+                 SPECIES_SPAN, SPECIES_CROSS)   # P50 T4: a span is a page species - it is shaded behind the page's own chart, on the page's own clock and live scale (R26-28)
 CHART_TO_KINDS = ("recast", "rescale", "extend", "park", "morph")   # P48: recast (T4, a hand-over; keyed: T4b), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform), morph (T5: the area under the line becomes the target's by ARAP)
 MORPH_BUILDERS = ("dense-line",)                     # P48 T5: the shape a morph moves is the AREA UNDER A LINE - both sides of a morph_to are line pages
 PARK_ANCHORS = ("top", "bottom", "left", "right")   # the corner of its own box the parked chart shrinks toward (top = Bravos 91: up, the room opens below)
@@ -251,6 +262,7 @@ SPECIES_WHEN = {
     SPECIES_LIGHT: "the sentence NAMES a place - the country lights on the word, the spotlight's cousin (a fill, never a ring)",
     SPECIES_ARC: "the sentence NAMES a flow between two places - the arc draws from one to the other on the word; crossed when the flow is cut",
     SPECIES_STAMP: "the sentence puts a NUMBER or a name on a place - the figure writes at the country's centroid",
+    SPECIES_CROSS: "the sentence names a SUBSET of a census and what it adds up to - the named cells of a treemap page take an X on the word and the crossed share is written on the page (E53 s1's census exception)",
     SPECIES_SPAN: "the sentence SPANS a period on a chart - a regime, an epoch, 'the decade' - shaded behind the line with its name; a bracket measures two data, a span names a stretch of time",
     "chart_to": "the sentence needs the SAME data at another scale / with more of it / in another form / beside a card - the page changes state (E58; CHART_TO_WHEN names the verb); never a cut to a second chart of it",
 }
@@ -372,6 +384,7 @@ SPECIES_TARGETS = {
     SPECIES_STAMP: MAP_TARGETS,                        # ... a stamp writes at a country's centroid or at a declared point (a year over the Gulf)
     SPECIES_ARC: (),                                   # ... and an arc names its two ENDS (`from` / `to`), not one target
     SPECIES_SPAN: (),            # ... and a span names its two edges as data, not as a coordinate: the chart owns where they are
+    SPECIES_CROSS: (),           # ... and a cross names CELLS, by their labels: the page laid them out, so the page knows where they are
     "build_to": ("datum",), "bracket": (), "retitle": (), "relight": (),   # P47 T2: the datum is the cap; the others carry their own fields
     "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (), "chart_to": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
@@ -426,6 +439,8 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             errs.append("bracket: series must be a non-negative integer series index")
         if "color" in entry and entry["color"] not in BRACKET_COLORS:
             errs.append(f"bracket: color must be one of {'|'.join(BRACKET_COLORS)}")
+        if "form" in entry and entry["form"] not in BRACKET_FORMS:
+            errs.append(f"bracket: form must be one of {'|'.join(BRACKET_FORMS)} (P50 T9: `bar` draws the same measured span as a bar in the accent - the drop of one tier)")
     elif kind == "retitle":
         if not isinstance(entry.get("text"), str) or not entry["text"].strip():
             errs.append("retitle: needs a non-empty string text")
@@ -468,9 +483,30 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
             errs.append(f"span: color must be one of {'|'.join(BRACKET_COLORS)}")
         if "series" in entry and not is_idx(entry["series"]):
             errs.append("span: series must be a non-negative integer series index")
+    elif kind == SPECIES_CROSS:   # P50 T6: the census exception's two halves, checked rather than trusted
+        cells = entry.get("cells")
+        if not isinstance(cells, list) or not cells or not all(isinstance(c, str) and c.strip() for c in cells):
+            errs.append("cross: 'cells' must be a non-empty list of cell LABELS - the named subset the sentence crosses out")
+        elif len(set(cells)) != len(cells):
+            errs.append(f"cross: a cell is named twice in {cells}")
+        if not isinstance(entry.get("text"), str) or not entry["text"].strip():
+            errs.append("cross: needs 'text' - the crossed SHARE written on the page as a number (E53 s1's census exception (b): "
+                        "'3 partners, 41 % of exports'). The X's alone would ask the viewer to compare areas, which is the one "
+                        "thing a treemap may not do")
+        elif not re.search(r"\d", entry["text"]):
+            errs.append(f"cross: text {entry['text']!r} carries no number - the share the crossing adds up to is WRITTEN, so no area has to be estimated (E52)")
+        if "color" in entry and entry["color"] not in BRACKET_COLORS:
+            errs.append(f"cross: color must be one of {'|'.join(BRACKET_COLORS)}")
     elif kind == "undraw":
         if "series" in entry and not is_idx(entry["series"]):
             errs.append("undraw: series must be a non-negative integer series index")
+    if "tier" in entry:   # P50 T9: a TIER is a series index on a tiers page - the author's word for a band
+        if not is_idx(entry.get("tier")):
+            errs.append(f"{kind}: tier must be a non-negative integer band index (a tier IS a series index on a tiers page)")
+        elif kind not in TIER_SPECIES:
+            errs.append(f"{kind}: 'tier' belongs to the page species that name a series ({'|'.join(TIER_SPECIES)})")
+        elif "series" in entry and is_idx(entry.get("series")) and entry["series"] != entry["tier"]:
+            errs.append(f"{kind}: tier {entry['tier']} and series {entry['series']} disagree - a tier IS the series index on a tiers page; name one of them")
     if kind in ("build_to", "undraw") and "paths" in entry and entry["paths"] not in PATH_SELECTORS:
         errs.append(f"{kind}: paths must be one of {'|'.join(PATH_SELECTORS)} (the highlighted tail, the history, or all)")
     elif kind == "chart_to":
@@ -1040,6 +1076,28 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
             if pair[0] not in MORPH_BUILDERS or pair[1] not in MORPH_BUILDERS:
                 raise ValueError(f"chart_to morph: {pair[0]} -> {pair[1]}: a morph moves the AREA UNDER A LINE into another ({'|'.join(MORPH_BUILDERS)} on both sides); "
                                  "n lines -> n bars is the keyed recast (keyed: true); anything else is the recast (the hand-over) or a cut")
+    for sp in (row_species or []):   # P50 T6: a cross names CELLS - of a treemap page, and only labels that page carries
+        if isinstance(sp, dict) and sp.get("kind") == SPECIES_CROSS:
+            page = (world or {}).get("page") or {}
+            if world.get("kind") != SPECIES_LEDGER or page.get("builder") != "treemap":
+                raise ValueError("cross: the census's X marks land on a TREEMAP page (`ledger:<series>:treemap`); "
+                                 f"this world is {page.get('builder') or world.get('kind') or 'a plate'!r}")
+            labels = [str(x) for x in (page.get("labels") or [])]
+            unknown = [str(c) for c in (sp.get("cells") or []) if str(c) not in labels]
+            if unknown:
+                raise ValueError(f"cross: the page has no cell named {', '.join(repr(u) for u in unknown)} - its parts are: "
+                                 + ", ".join(labels[:8]) + (", ..." if len(labels) > 8 else ""))
+            # E53 s1's census exception (c): no UNLABELLED cell is ever the argument. A cell whose name the
+            # research floors culled (too small, or too long a name for its width) may not be crossed - on
+            # either stage, because the page is read on both.
+            for aspect, lay in sorted((page.get("layout") or {}).items()):
+                tiers = {str(c.get("label")): int(c.get("tier") or 0) for c in (lay.get("cells") or [])}
+                bare = [c for c in (sp.get("cells") or []) if tiers.get(str(c), 0) < 1]
+                if bare:
+                    raise ValueError(f"cross: {', '.join(repr(b) for b in bare)} - the page could not fit a label in that cell at "
+                                     f"{aspect} (the research's floors: nothing under 80 x 36 px, no type under 18 px), and E53 s1's "
+                                     "census exception (c) says no unlabelled cell is ever the argument. Give the part a shorter "
+                                     "name on the page, or cross one the page can name")
     for sp in (row_species or []):   # P48 T4b: a keyed recast is admitted only on a legal pair, and the refusal names the reason
         if isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "recast" and sp.get("keyed"):
             if world.get("kind") != SPECIES_LEDGER:

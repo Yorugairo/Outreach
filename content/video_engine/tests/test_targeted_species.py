@@ -524,3 +524,90 @@ def test_a_good_map_row_passes_and_the_map_lands_in_the_asset_map_once():
     assert B.SPECIES_WHEN["light"].startswith("the sentence NAMES a place")
     assert B.SPECIES_WHEN["arc"].startswith("the sentence NAMES a flow between two places")
     assert B.SPECIES_WHEN["stamp"].startswith("the sentence puts a NUMBER or a name on a place")
+
+
+# ---- P50 T9: a TIER is a series index on a tiers page ------------------------
+
+def test_a_build_to_names_its_tier_and_the_word_is_the_authors(tmp_path):
+    """The bands draw in turn on their words: a `build_to` per tier. A tier IS a series index - one
+    resolution, not two - so `tier` is admitted beside the datum and refused where it means nothing."""
+    good = {"kind": "build_to", "at": 9.5, "dur": 2.0, "tier": 1, "target": DATUM}
+    assert B.validate_species([good], STILL, "ledger:two-reserves:tiers") == []
+    assert B.validate_species([{**good, "series": 1}], STILL, "ledger:two-reserves:tiers") == [], "the same index twice is not a disagreement"
+    errs = B.validate_species([{**good, "series": 0}], STILL, "ledger:two-reserves:tiers")
+    assert len(errs) == 1 and "tier 1 and series 0 disagree" in errs[0], errs
+    errs = B.validate_species([{**good, "tier": -1}], STILL, "ledger:two-reserves:tiers")
+    assert len(errs) == 1 and "tier must be a non-negative integer band index" in errs[0], errs
+    errs = B.validate_species([{"kind": "note", "at": 9.5, "dur": 2.0, "text": "a side fact", "tier": 1}], STILL, "ledger:two-reserves:tiers")
+    assert len(errs) == 1 and "'tier' belongs to the page species that name a series" in errs[0], errs
+
+
+def test_the_brackets_bar_form_is_admitted_and_anything_else_named():
+    bar = {"kind": "bracket", "at": 12.0, "dur": 2.5, "tier": 1, "from": 10, "to": 16,
+           "label": "-96 Mb", "color": "crimson", "form": "bar"}
+    assert B.validate_species([bar], STILL, "ledger:two-reserves:tiers") == []
+    errs = B.validate_species([{**bar, "form": "blob"}], STILL, "ledger:two-reserves:tiers")
+    assert len(errs) == 1 and "form must be one of span|bar" in errs[0], errs
+
+
+# ---- P50 T6: the census's X marks -------------------------------------------
+import ledger_page as LPG  # noqa: E402
+
+CENSUS_PARTS = [("United States", 16.8), ("Hong Kong", 8.5), ("Japan", 4.7), ("Korea", 4.5),
+                ("Vietnam", 4.1), ("India", 3.4), ("Saudi Arabia", 1.2), ("Rest of world", 58.8)]
+
+
+def _census_world() -> dict:
+    series = {"title": "China's exports, by partner", "src": "our reading", "unit": "%", "total": 100,
+              "shares": [{"label": a, "value": b} for a, b in CENSUS_PARTS]}
+    return {"kind": "ledger", "page": LPG.build_spec(series, "treemap", None, "right"),
+            "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+
+
+def _cross(**extra) -> dict:
+    return {"kind": "cross", "at": 9.0, "dur": 3.0, "cells": ["United States", "Japan"],
+            "text": "2 partners, 22 % of exports", **extra}
+
+
+def test_a_good_cross_passes_and_the_page_knows_its_cells(tmp_path):
+    world, sp = _census_world(), _cross()
+    assert B.validate_species([sp], STILL, "ledger:exports:treemap") == []
+    B.derive_rescale_states(world, [sp], "ledger:exports:treemap", tmp_path)   # no exception: the cells are the page's own
+    # ... and the shrink afterwards is P48's park: one affine transform on the standing chart, nothing new
+    park = {"kind": "chart_to", "at": 13.0, "dur": 1.2, "to": "park", "scale": 0.72, "anchor": "top"}
+    assert B.validate_species([sp, park], STILL, "ledger:exports:treemap") == []
+    B.derive_rescale_states(world, [sp, park], "ledger:exports:treemap", tmp_path)
+    assert not world.get("page_states"), "a park derives no state - it moves the chart that stands (E58)"
+
+
+def test_a_cross_naming_a_cell_the_page_does_not_carry_is_refused_by_name(tmp_path):
+    world = _census_world()
+    with pytest.raises(ValueError) as exc:
+        B.derive_rescale_states(world, [_cross(cells=["United States", "Atlantis"])], "ledger:exports:treemap", tmp_path)
+    assert "no cell named 'Atlantis'" in str(exc.value) and "its parts are" in str(exc.value), exc.value
+
+
+def test_a_cross_on_a_cell_the_page_could_not_LABEL_is_refused_by_the_census_bound(tmp_path):
+    """E53 s1's census exception (c): no unlabelled cell is ever the argument. 'Saudi Arabia' is 1.2 %
+    of the whole and its name is long - the floors cull its label, so it may not be crossed."""
+    world = _census_world()
+    with pytest.raises(ValueError) as exc:
+        B.derive_rescale_states(world, [_cross(cells=["Saudi Arabia"])], "ledger:exports:treemap", tmp_path)
+    assert "could not fit a label" in str(exc.value) and "census exception (c)" in str(exc.value), exc.value
+
+
+def test_a_cross_off_a_treemap_page_is_refused(tmp_path):
+    errs = B.validate_species([_cross()], STILL, PLATE)
+    assert any("page species" in e for e in errs), errs   # a plate carries no page species at all
+    with pytest.raises(ValueError) as exc:
+        B.derive_rescale_states({"kind": "ledger", "page": {"builder": "story", "labels": []}}, [_cross()], "ledger:x:bars", tmp_path)
+    assert "land on a TREEMAP page" in str(exc.value), exc.value
+
+
+def test_a_cross_without_its_written_share_is_refused_by_the_other_half_of_the_bound():
+    errs = B.validate_species([{"kind": "cross", "at": 9.0, "dur": 3.0, "cells": ["Japan"]}], STILL, "ledger:exports:treemap")
+    assert len(errs) == 1 and "census exception (b)" in errs[0], errs
+    errs = B.validate_species([_cross(text="the partners that left")], STILL, "ledger:exports:treemap")
+    assert len(errs) == 1 and "carries no number" in errs[0], errs
+    errs = B.validate_species([_cross(cells=[])], STILL, "ledger:exports:treemap")
+    assert len(errs) == 1 and "'cells' must be a non-empty list" in errs[0], errs

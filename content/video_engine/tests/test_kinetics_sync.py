@@ -24,7 +24,11 @@ import sync_kinetics as SK  # noqa: E402
 
 MODULES = ["ease", "spring", "stroke", "clothoid", "ink", "squash", "idle", "stopaction", "chartxf", "camera", "arap"]   # P43 T1 + P47 T5/T1/T3
                                               # + P50 T14 the clothoid fitter, beside the stroke it is drawn by; in dependency order (the template's region order)
-SPECIES = ["chip", "press", "flow", "span", "vecmap"]   # P50 T2 on: one module per species kind, inlined into the species block; `press` is the
+SPECIES = ["tiers", "treemap", "chip", "press", "flow", "span", "vecmap"]   # P50 T2 on: one module per species kind, inlined into the species block; `press` is the
+                              # `tiers` (P50 T9) and `treemap` (P50 T6) are neither kinds nor painters: they are the math of
+                              # two PAGE BUILDERS - the bands of a small-multiple page, and the clock and X marks of a census
+                              # page whose layout is python's. Their regions sit with the kinetics laws, and first, because
+                              # the page's builders and its perform layer both close over them.
                               # one that is not a KIND (P50 T3: the press card is a DOCK kind) - it carries the stack's math
                               # and the underline's clock for the dock loop and the callout, and registers no painter.
                               # `span` (P50 T4) is a KIND but registers no painter either: it is a PAGE species, built and

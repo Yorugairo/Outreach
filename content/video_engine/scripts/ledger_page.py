@@ -55,8 +55,15 @@ EXIT_INVALID = 2
 SCHEMA_VERSION = "ledger_page.v1"
 MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 YEAR_RANGE = (1900, 2100)   # a decimal x outside this is a number, not a date
-VARIANTS = ("line", "bars", "race", "decline", "progress", "share", "object")
+VARIANTS = ("line", "bars", "race", "decline", "progress", "share", "object", "tiers", "treemap")
 CHART_VARIANTS = ("line", "bars", "race", "decline", "progress", "share")
+# `tiers` (P50 T9, R26-24; Bravos shots 35-36): N SMALL MULTIPLES on one page - N series, each in its
+# own band with its own y-scale and its own honest zero (E53 s4), sharing ONE x. Two metrics whose
+# units or magnitudes differ cannot share a y without one of them lying; what they CAN honestly share
+# is the time axis, which is the comparison the sentence is making. `tiers: true` (a bool) stays what
+# it was - the two-band combo's key - and builds byte-identically; `tiers: [...]` is this builder.
+TIERS_MIN, TIERS_MAX = 2, 4
+# `treemap` (P50 T6): the CENSUS page, under E53 s1's second amendment (ruled 2026-09-10).
 # `object` is the page as a WORKING surface rather than an evidence surface: it draws
 # a registered prop in ink on the cream instead of a chart. Same page clock, same
 # deckle, same focus - so an object page can transform into a chart page without a
@@ -72,7 +79,8 @@ UNCHARTABLE = {
     "shares": ("'shares' is a donut, and E53 s1 ranks angle and area at the bottom of the perception hierarchy: "
                "it is refused for every variant except --variant share, which the ruling's amendment (2026-09-07) "
                "allows only inside its four bounds - a part-to-whole claim about ONE named slice, that slice "
-               "highlighted and the rest muted, the figure WRITTEN on the page, and five slices or fewer"),
+               "highlighted and the rest muted, the figure WRITTEN on the page, and five slices or fewer. "
+               "A whole with MANY parts is a census: --variant treemap (E53 s1's second amendment, 2026-09-10)"),
 }
 # E53 s1 as amended (2026-09-07). The hierarchy's objection is to COMPARING many encoded angles; a claim about one
 # highlighted slice is not that. These are the amendment's bounds, enforced here so the exception cannot widen by use.
@@ -179,6 +187,8 @@ def pick_builder(series: dict, variant: str) -> str:
         return "object"
     if variant == "share":
         return "share"
+    if variant in ("tiers", "treemap"):   # P50 T9 / T6: the file's shape is the variant's own - there is nothing to infer
+        return variant
     """Builder from the data shape and the variant (P35 Builder Architecture)."""
     if variant in ("race", "decline"):
         return variant
@@ -205,6 +215,10 @@ def validate(series: dict, variant: str) -> list[str]:
         return errors + _validate_object(series)
     if variant == "share":
         return errors + _validate_share(series)
+    if variant == "tiers":
+        return errors + _validate_tiers(series)
+    if variant == "treemap":
+        return errors + _validate_treemap(series)
     has_race = any(r["values"] for r in race_rows(series))
     if variant != "share" and "shares" in series and not (_bars(series) or dense_series(series)):
         return errors + [UNCHARTABLE["shares"]]
@@ -291,6 +305,348 @@ def _validate_share(series: dict) -> list[str]:
             if abs(pv) > whole:
                 errors.append(f"peel {pv} is larger than the slice it comes out of ({whole}): a piece cannot exceed its part")
     return errors
+
+
+# ---- TIERS (P50 T9, R26-24; Bravos shots 35-36) -------------------------------------------------
+# N small multiples on ONE page: N bands stacked, each with its own y-scale and its own honest zero
+# (E53 s4), sharing ONE x. The tier titles are the series' own names; the page's title stays the
+# argument. Two metrics that differ in unit or in magnitude cannot share a y without one of them
+# lying; what they can honestly share is the TIME AXIS, which is the comparison being made.
+def _tier_entries(series: dict) -> list:
+    """The declared tiers, verbatim (an entry that is not an object is kept so the error can name it)."""
+    return list(series["tiers"]) if isinstance(series.get("tiers"), list) else []
+
+
+def _tier_lines(tier: dict) -> list[dict]:
+    """A tier's line series: its own ``series`` list, or the ``pts`` shorthand read as one series."""
+    if not isinstance(tier, dict):
+        return []
+    own = [s for s in (tier.get("series") or []) if isinstance(s, dict) and "pts" in s]
+    if not own and isinstance(tier.get("pts"), list):
+        own = [{k: v for k, v in tier.items() if k not in ("series", "bars", "unit")}]
+    return own
+
+
+def _tier_x(tier: dict) -> tuple | None:
+    """This tier's x signature: ``("num", lo, hi)`` for points (or bars carrying their own x),
+    ``("cat", labels)`` for category bars. None when the tier has no data to span."""
+    xs = [to_number(p[0]) for s in _tier_lines(tier) for p in _points(s)]
+    xs += [to_number(b.get("x")) for b in _bars(tier) if b.get("x") is not None]
+    xs = [x for x in xs if x is not None]
+    if xs:
+        return ("num", min(xs), max(xs))
+    labels = [str(b.get("label")) for b in _bars(tier)]
+    return ("cat", tuple(labels)) if labels else None
+
+
+def _x_same(a: tuple, b: tuple) -> bool:
+    if a[0] != b[0]:
+        return False
+    if a[0] == "cat":
+        return a[1] == b[1]
+    span = max(1.0, abs(a[2] - a[1]), abs(b[2] - b[1]))
+    return abs(a[1] - b[1]) <= 1e-9 * span and abs(a[2] - b[2]) <= 1e-9 * span
+
+
+def _x_text(sig: tuple | None) -> str:
+    if sig is None:
+        return "nothing"
+    return f"{sig[1]:g}..{sig[2]:g}" if sig[0] == "num" else "|".join(sig[1])
+
+
+def _validate_tiers(series: dict) -> list[str]:
+    """A tiers page's contract: N in [TIERS_MIN, TIERS_MAX], every band named, united and fed, one
+    shared x. Every failure names the band it came from - a page of small multiples is only honest
+    while the x is the same x, so that check is the whole point of the builder."""
+    tiers = _tier_entries(series)
+    if not isinstance(series.get("tiers"), list) or len(tiers) < TIERS_MIN:
+        return [f"a tiers page needs 'tiers': a list of at least {TIERS_MIN} bands, each {{name, unit, "
+                "series|pts|bars}} - one band is a line page, and `tiers: true` is the two-band COMBO's key, not this"]
+    errors: list[str] = []
+    if len(tiers) > TIERS_MAX:
+        errors.append(f"{len(tiers)} tiers: the ceiling is {TIERS_MAX}. On a 9:16 stage the plot is ~1060 px tall, so "
+                      f"{TIERS_MAX} bands leave each about a quarter of it (~250 px) - a band under that cannot carry "
+                      "its own scale, its name and a readable line at once. Split the page.")
+    sigs: list[tuple] = []
+    for i, tier in enumerate(tiers):
+        where = f"tiers[{i}]"
+        if not isinstance(tier, dict):
+            errors.append(f"{where} is not an object"); continue
+        name = tier.get("name") or tier.get("title")
+        if not _text(name):
+            errors.append(f"{where} has no 'name': the tier titles ARE the series' names on a tiers page (the page's title stays the argument)")
+        else:
+            where = f"tiers[{i}] {name!r}"
+        if not _text(tier.get("unit")):
+            errors.append(f"{where} has no 'unit': each band carries its own scale, and a scale with no unit is a number with no meaning (E53 s4)")
+        lines, bars = _tier_lines(tier), _bars(tier)
+        if not lines and not bars:
+            errors.append(f"{where} has no data: a band takes 'series'/'pts' ([x, y] pairs) or 'bars'")
+        for j, entry in enumerate(lines):
+            raw = entry.get("pts") or []
+            bad = [p for p in raw if not (isinstance(p, (list, tuple)) and len(p) == 2
+                                          and to_number(p[0]) is not None and to_number(p[1]) is not None)]
+            if bad or len(raw) < 2:
+                errors.append(f"{where} series[{j}] pts must be at least two [x, y] numeric pairs ({len(bad)} bad of {len(raw)})")
+        for j, bar in enumerate(bars):
+            if to_number(bar.get("value")) is None:
+                errors.append(f"{where} bars[{j}] value {bar.get('value')!r} is not numeric")
+            if not _text(bar.get("label")):
+                errors.append(f"{where} bars[{j}] has no label (one label per datum)")
+        sig = _tier_x(tier)
+        sigs.append(sig)
+        if sig and sigs[0] and not _x_same(sigs[0], sig):
+            errors.append(f"{where} spans x {_x_text(sig)} while tiers[0] spans {_x_text(sigs[0])} - N tiers share ONE x "
+                          "(that is what makes them small multiples, and the only thing the page claims across bands); "
+                          "window the file to one x, or draw two pages")
+    return errors
+
+
+def _tiers_block(series: dict) -> dict:
+    """The bands, normalised: one object per tier with its own data, its own unit and its own x span.
+    The page's ``labels`` are the tier NAMES, so every count, emphasis and mark keyed off labels reads
+    the bands - a tier is the tiers page's datum."""
+    out = []
+    for tier in _tier_entries(series):
+        lines, bars = _tier_lines(tier), _bars(tier)
+        sig = _tier_x(tier)
+        band: dict[str, Any] = {
+            "name": str(tier.get("name") or tier.get("title") or ""),
+            "unit": str(tier.get("unit") or ""),
+            "kind": "line" if lines else "bars",
+            "axes": {k: copy.deepcopy(tier[k]) for k in AXES_KEYS if k in tier},
+        }
+        if lines:
+            band["series"] = copy.deepcopy(lines)
+        else:
+            band.update({"labels": [b.get("label") for b in bars],
+                         "values": [to_number(b.get("value")) for b in bars],
+                         "value_strings": [value_string(b.get("value")) for b in bars],
+                         "colors": [b.get("color") for b in bars]})
+        if tier.get("color") is not None:
+            band["color"] = tier["color"]
+        if sig and sig[0] == "num":
+            band["x"] = [sig[1], sig[2]]
+        elif sig:
+            band["x_labels"] = list(sig[1])
+        out.append(band)
+    axes = {k: copy.deepcopy(series[k]) for k in AXES_KEYS if k in series}
+    return {"tiers": out, "labels": [b["name"] for b in out],
+            # the page's OWN axes ride at the top level: the x is shared, so its ticks belong to the page
+            # and not to any one band (a band that named the x would be claiming the page's only shared scale)
+            **({"axes": axes} if axes else {}),
+            "values": [], "value_strings": [], "colors": []}
+
+
+# ---- TREEMAP (P50 T6; E53 s1's second amendment, the CENSUS exception, ruled 2026-09-10) ---------
+# A whole broken into its parts by AREA. Area is the bottom of Cleveland & McGill's hierarchy, which
+# is exactly why the exception is narrow: the page shows BREADTH (how many parts there are, and that
+# a few of them are most of it) or marks a NAMED SUBSET and WRITES its share - it never asks anyone to
+# compare two areas. A size claim takes its bar, and the builder refuses the file that carries one.
+TREEMAP_ASPECT = 1.5        # the aspect the squarify tunes toward: 3:2, never 1:1 (Heer & Bostock 2010's square penalty - a square cell reads as a block, a 3:2 cell as a labelled thing)
+TREEMAP_MIN_CELL = (80, 36)     # research s1 (ISO 9241-303 at a 30-40 cm handheld distance): under this, NO text - illegible ink blobs overlap and the mosaic reads as noise
+TREEMAP_TWO_LINE = (110, 64)    # ... and the floor for two lines (label + value)
+TREEMAP_VALUE_FONT = 18         # the absolute legible floor on a 1080x1920 stage; a value that would be written smaller is not written
+TREEMAP_LABEL_FONT = (18, 32)   # the label's clamp
+TREEMAP_PAD = 6                 # the cell's inner padding at 1080x1920 (research s2: glyph stems never touch a cell edge)
+TREEMAP_CHAR_W = 0.72           # the advance the font clamp assumes. The research's own figure is 0.65 em; our cell labels are BOLD, and at 0.65 "Japan" touched its cell's right edge in the rendered frame (2026-09-11)
+TREEMAP_LINE_H = {1: 1.5, 2: 2.2}   # the cell height one line of type needs, and two. The research's clamp divides by 2.2 whatever the line count, which contradicts the same document's 36 px single-line floor: at 2.2 a 44 px cell could never carry 18 px type. 2.2 is the TWO-line allowance; one line takes a line and a half
+TREEMAP_MIN_SHARES = 3          # two parts of a whole is a share page (one named slice, the rest muted); a census starts at three
+# E53 s1: a SIZE CLAIM takes its bar. The page that says "bigger than" is asking for exactly the
+# comparison area cannot carry - the refusal names the bars page rather than silently drawing it.
+SIZE_CLAIM_RE = re.compile(
+    r"\b(bigger|larger|smaller|biggest|largest|smallest|dwarfs?|outweighs?|twice|thrice|triple|tripled|doubles?|doubled"
+    r"|more than|less than|(?:\d+(?:\.\d+)?|two|three|four|five|six|seven|eight|nine|ten)\s*(?:x\b|times))\b", re.I)
+SIZE_CLAIM_FIELDS = ("title", "sub", "claim")
+
+
+def _size_claim(series: dict) -> tuple[str, str] | None:
+    """(field, phrase) of the first size comparison the page's own words make, or None."""
+    for field in SIZE_CLAIM_FIELDS:
+        text = series.get(field)
+        if not _text(text):
+            continue
+        hit = SIZE_CLAIM_RE.search(text)
+        if hit:
+            return field, hit.group(0)
+    return None
+
+
+def _treemap_shares(series: dict) -> list[dict]:
+    return [s for s in (series.get("shares") or []) if isinstance(s, dict)]
+
+
+def _validate_treemap(series: dict) -> list[str]:
+    """A treemap page's contract. The census exception's own bounds, checked rather than trusted."""
+    shares = series.get("shares")
+    if not isinstance(shares, list) or len(shares) < TREEMAP_MIN_SHARES:
+        return [f"a treemap page needs 'shares': at least {TREEMAP_MIN_SHARES} parts of one whole "
+                "({label, value}) - two parts of a whole is a share page (--variant share), not a census"]
+    errors: list[str] = []
+    claim = _size_claim(series)
+    if claim:
+        errors.append(f"the page's {claim[0]} says {claim[1]!r}: a SIZE CLAIM takes its BAR (E53 s1) - area is the bottom of the "
+                      "perception hierarchy and two cells of a treemap cannot be compared by eye. Draw the named values as "
+                      "--variant bars, and keep the treemap for what it is good at: the census (how many parts, and which "
+                      "named ones are struck out with their share written)")
+    seen: set[str] = set()
+    for i, sh in enumerate(_treemap_shares(series)):
+        if not _text(sh.get("label")):
+            errors.append(f"shares[{i}] has no label: a cell is named on itself, and an unnamed cell is counted in the legend")
+        elif sh["label"] in seen:
+            errors.append(f"shares[{i}] {sh['label']!r} is listed twice; one part, one cell")
+        else:
+            seen.add(sh["label"])
+        v = to_number(sh.get("value"))
+        if v is None or v <= 0:
+            errors.append(f"shares[{i}] value {sh.get('value')!r} is not a positive number: a part of a whole has an area, and an area is positive")
+    if len(_treemap_shares(series)) != len(shares):
+        errors.append("every entry of 'shares' must be an object {label, value}")
+    total = to_number(series.get("total"))
+    if series.get("total") is not None and (total is None or total <= 0):
+        errors.append(f"total {series.get('total')!r} is not a positive number (the whole the parts are parts of)")
+    if total is not None and total > 0:
+        summed = sum(to_number(s.get("value")) or 0.0 for s in _treemap_shares(series))
+        if summed - total > 1e-6 * max(1.0, total):
+            errors.append(f"the parts add up to {summed:g}, more than the declared total {total:g}: a part cannot exceed its whole")
+    return errors
+
+
+def _cost(w: float, h: float, target: float) -> float:
+    """A cell's aspect COST against the target (Bruls 2000 s2 with the target left free): 1 at the
+    target, growing either side of it. The paper minimises toward a SQUARE; Heer & Bostock 2010 found
+    the square penalised in reading tasks and 3:2 the sweet spot, so the target is ours to set."""
+    if w <= 0 or h <= 0:
+        return float("inf")
+    r = (w / h) / target
+    return max(r, 1 / r)
+
+
+def _layout_row(row: list[float], x: float, y: float, dx: float, dy: float) -> list[dict]:
+    """One row of cells laid along the rectangle's shorter side, in order (Bruls 2000's `layoutrow`)."""
+    covered = sum(row)
+    out = []
+    if covered <= 0 or dx <= 0 or dy <= 0:
+        return out
+    if dx >= dy:                      # a wide rectangle: the row stands as a COLUMN down its left edge
+        w = covered / dy
+        yy = y
+        for v in row:
+            h = v / w
+            out.append({"x": x, "y": yy, "w": w, "h": h}); yy += h
+    else:                             # a tall rectangle: the row lies along its top edge
+        h = covered / dx
+        xx = x
+        for v in row:
+            w = v / h
+            out.append({"x": xx, "y": y, "w": w, "h": h}); xx += w
+    return out
+
+
+def _row_cost(row: list[float], x: float, y: float, dx: float, dy: float, target: float) -> float:
+    cells = _layout_row(row, x, y, dx, dy)
+    return max((_cost(c["w"], c["h"], target) for c in cells), default=float("inf"))
+
+
+def squarify(areas: list[float], x: float, y: float, dx: float, dy: float,
+             target: float = TREEMAP_ASPECT) -> list[dict]:
+    """The squarified treemap (Bruls, Huizing & van Wijk 2000) of `areas` - already scaled to fill
+    dx*dy and sorted descending - inside the rectangle. Pure, deterministic, order-preserving: cell i
+    is areas[i]. The only departure from the paper is the aspect the rows are tuned toward (3:2)."""
+    cells: list[dict] = []
+    rest = list(areas)
+    row: list[float] = []
+    while rest:
+        v = rest[0]
+        if not row or _row_cost(row + [v], x, y, dx, dy, target) <= _row_cost(row, x, y, dx, dy, target):
+            row.append(v); rest.pop(0)
+            continue
+        cells.extend(_layout_row(row, x, y, dx, dy))
+        covered = sum(row)
+        if dx >= dy:
+            w = covered / dy if dy else 0.0
+            x += w; dx -= w
+        else:
+            h = covered / dx if dx else 0.0
+            y += h; dy -= h
+        row = []
+    cells.extend(_layout_row(row, x, y, dx, dy))
+    return cells
+
+
+def _clamp_font(w: float, h: float, chars: int, lines: int) -> float:
+    """The research's dynamic font clamp (findings s2.3), for `lines` lines of `chars` characters."""
+    inner_w, inner_h = w - 2 * TREEMAP_PAD, h - 2 * TREEMAP_PAD
+    lo, hi = TREEMAP_LABEL_FONT
+    return max(0.0, min(hi, inner_w / max(1, chars) / TREEMAP_CHAR_W,
+                        inner_h / TREEMAP_LINE_H.get(lines, 2.2 * lines / 2))) if inner_w > 0 and inner_h > 0 else 0.0
+
+
+def label_tier(w: float, h: float, label: str, value_text: str) -> dict:
+    """The three-tier label degradation (research s1 and s5's teardown of Bravos 89-91):
+      2 - two lines, the label and its value, both at or above the legible floor;
+      1 - ONE stacked line: the label alone;
+      0 - none. The cell is a tile and the part is counted in the legend instead.
+    The floors are the cell's own size in STAGE pixels; the font clamp is what refuses a long name in
+    a cell that is wide enough for a short one."""
+    lo = TREEMAP_LABEL_FONT[0]
+    if w >= TREEMAP_TWO_LINE[0] and h >= TREEMAP_TWO_LINE[1]:
+        chars = max(len(label), len(value_text))
+        font = _clamp_font(w, h, chars, 2)
+        value_font = max(TREEMAP_VALUE_FONT, round(font * 0.72))
+        if font >= lo and value_font >= TREEMAP_VALUE_FONT and (font + value_font) * 1.15 <= h - 2 * TREEMAP_PAD:
+            return {"tier": 2, "font": round(font, 1), "value_font": round(float(value_font), 1)}
+    if w >= TREEMAP_MIN_CELL[0] and h >= TREEMAP_MIN_CELL[1]:
+        font = _clamp_font(w, h, len(label), 1)
+        if font >= lo:
+            return {"tier": 1, "font": round(font, 1), "value_font": 0.0}
+    return {"tier": 0, "font": 0.0, "value_font": 0.0}
+
+
+def treemap_cells(spec: dict, aspect: str) -> dict:
+    """The page's cells inside `page_boxes`'s PLOT for this aspect - never a research doc's container.
+
+    Each cell carries its place as a FRACTION of the plot (so the player maps it into its own viewBox
+    without re-deriving the layout - E58: a park is an affine transform, never a re-layout) and the
+    stage pixels the label tier was decided on. Pure."""
+    plot = page_boxes(spec, aspect)["plot"]
+    values = [float(v or 0.0) for v in spec.get("values") or []]
+    total = float(spec.get("total") or sum(values) or 1.0)
+    area = max(1.0, plot["w"]) * max(1.0, plot["h"])
+    order = sorted(range(len(values)), key=lambda i: (-values[i], i))   # squarify takes them largest first; `order` keeps the file's own index
+    rects = squarify([values[i] / max(1e-12, sum(values)) * area for i in order],
+                     0.0, 0.0, float(plot["w"]), float(plot["h"]))
+    cells = []
+    for k, i in enumerate(order):
+        r = rects[k] if k < len(rects) else {"x": 0.0, "y": 0.0, "w": 0.0, "h": 0.0}
+        label = str((spec.get("labels") or [None] * len(values))[i] or "")
+        vs = str((spec.get("value_strings") or [None] * len(values))[i] or "")
+        share = values[i] / total if total else 0.0
+        tier = label_tier(r["w"], r["h"], label, vs)
+        cells.append({"index": i, "label": label, "value": values[i], "value_string": vs,
+                      "share": round(share, 6),
+                      "fx": round(r["x"] / max(1e-9, plot["w"]), 6), "fy": round(r["y"] / max(1e-9, plot["h"]), 6),
+                      "fw": round(r["w"] / max(1e-9, plot["w"]), 6), "fh": round(r["h"] / max(1e-9, plot["h"]), 6),
+                      "w_px": round(r["w"], 1), "h_px": round(r["h"], 1), **tier})
+    unnamed = sum(1 for c in cells if c["tier"] == 0)
+    return {"plot": plot, "cells": cells, "unnamed": unnamed,
+            # the parts the page could not name are COUNTED, never dropped: the census says how many there were
+            "legend": f"and {unnamed} others" if unnamed else ""}
+
+
+def _treemap_block(series: dict) -> dict:
+    """The parts verbatim, in the file's own order; the layout is added per aspect by `build_spec`."""
+    shares = _treemap_shares(series)
+    total = to_number(series.get("total"))
+    summed = sum(to_number(s.get("value")) or 0.0 for s in shares)
+    return {"labels": [str(s.get("label")) for s in shares],
+            "values": [to_number(s.get("value")) for s in shares],
+            "value_strings": [value_string(s.get("value_string", s.get("value"))) for s in shares],
+            # a part that names no colour takes NONE: the page's own ramp tiles the mosaic in layout
+            # order, which is what gives a census its cell boundaries (a whole map in one token is a blob)
+            "colors": [str(s["color"]) if s.get("color") else "" for s in shares],
+            "total": total if total is not None else summed,
+            **({"total_string": value_string(series["total"])} if series.get("total") is not None else {})}
 
 
 def _validate_object(series: dict) -> list[str]:
@@ -501,7 +857,7 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         **({"src_style": series["src_style"]} if series.get("src_style") in ("compact",) else {}),   # the design pass (2026-09-07): a citation takes minimal space
         **({"line_unit": series["line_unit"]} if isinstance(series.get("line_unit"), str) else {}),   # P47 T9: a combo's lines take their own right axis in this unit
         **({"legend_in_sub": True} if series.get("legend_in_sub") else {}),   # the sub names the lines by colour: no inline name (it would repeat and collide)
-        **({"tiers": True} if series.get("tiers") else {}),   # the macro-chart intake: bars and lines in two bands sharing one x, each on its own scale
+        **({"tiers": True} if series.get("tiers") is True else {}),   # the macro-chart intake: bars and lines in two bands sharing one x, each on its own scale (a `tiers` LIST is the N-tier builder below, not this key)
         **({"build_s": float(to_number(series["build_s"]))} if to_number(series.get("build_s")) is not None and to_number(series["build_s"]) > 0 else {}),   # load_series decodes floats as their own tokens (parse_float=str): 1.2 arrives as "1.2", so the number is read, not the type   # the page draws over its own seconds
         "labels": [], "values": [], "value_strings": [], "colors": [],
     }
@@ -518,6 +874,19 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         spec["judge"] = review_notes(series)
         spec["badges"] = badges_for(series)
         spec["emphasize"] = int(series.get("emphasize") if emphasize is None else emphasize)
+        return spec
+    if builder in ("tiers", "treemap"):
+        spec.update(_tiers_block(series) if builder == "tiers" else _treemap_block(series))
+        spec["unit"] = str(series["unit"]) if _text(series.get("unit")) else ""
+        spec["judge"] = review_notes(series)
+        spec["badges"] = badges_for(series)
+        count = len(spec["labels"])
+        spec["emphasize"] = None if emphasize is None or not count else max(0, min(int(emphasize), count - 1))
+        if builder == "treemap":
+            # the layout is computed HERE, at build time, in page_boxes' own plot - both aspects, because the
+            # page does not know which stage it will be read on and a treemap laid out at paint time is a
+            # re-layout waiting to happen (E58 / Sondag 2018: a park is one affine transform)
+            spec["layout"] = {aspect: treemap_cells(spec, aspect) for aspect in STAGE_PX}
         return spec
     if builder == "race":
         spec.update(_race_block(series))
@@ -675,6 +1044,21 @@ def _box(x: float, y: float, w: float, h: float) -> dict:
     return {"x": round(x), "y": round(y), "w": round(w), "h": round(h)}
 
 
+TIER_GAP = 0.20   # the gutter between two bands, as a share of a band's own height [DERIVED, read off the first frame: at 0.10 a band's NAME sat on the floor tick label of the band above it; 0.20 is one line of type between them and still leaves four bands ~230 px each on a 9:16 plot]
+
+
+def tier_bands(plot: dict, n: int) -> list[dict]:
+    """The N band boxes inside a tiers page's plot, top to bottom, in stage pixels.
+
+    The MIRROR of `tierBands` in scripts/species/tiers.mjs - one law in two languages, the same two
+    dials, pinned on both sides (test_ledger_page and tests/kinetics/tiers.test.mjs). The compiler
+    needs it to park a dock clear of a band; the player needs it to draw one."""
+    if n < 1:
+        return []
+    h = plot["h"] / (n + (n - 1) * TIER_GAP)
+    return [_box(plot["x"], plot["y"] + i * h * (1 + TIER_GAP), plot["w"], h) for i in range(n)]
+
+
 def _portrait_boxes(spec: dict, w_s: int, h_s: int) -> dict:
     P, PL = PORTRAIT_LAYOUT, PORTRAIT_PLOT
     title_h = _ink_height(spec.get("title"), "title")
@@ -721,6 +1105,30 @@ def _landscape_boxes(spec: dict, w_s: int, h_s: int) -> dict:
     }
 
 
+LAND_VIEWBOX = (1000, 560)   # the landscape chart's viewBox; a portrait chart's viewBox IS its pixel box (the template: "builders draw in stage px")
+
+
+def treemap_plot(chart: dict, aspect: str) -> dict:
+    """The rect a TREEMAP's cells are laid out in: the page's own plot margins inside the chart box,
+    with the landscape viewBox's LETTERBOX applied.
+
+    Every other builder can live with this module's estimate of where the ink lands, because being a
+    line out is a line out. A treemap cannot: its layout is tuned to the plot's ASPECT, and a plot
+    estimated at 1.19 when the player will draw at 1.65 turns every squarified cell into a strip and
+    scales its label with it (read off the first rendered frame, 2026-09-11). The landscape chart's
+    viewBox is 1000x560 with the default preserveAspectRatio, so it is scaled to FIT the chart box and
+    centred in it; the page's plot margins are then the line builder's own."""
+    if aspect == "9:16":
+        P = PORTRAIT_PLOT
+        return _box(chart["x"] + P["L"], chart["y"] + P["T"], chart["w"] - P["L"] - P["R"], chart["h"] - P["T"] - P["B"])
+    vw, vh = LAND_VIEWBOX
+    s = min(chart["w"] / vw, chart["h"] / vh)
+    ox, oy = chart["x"] + (chart["w"] - vw * s) / 2, chart["y"] + (chart["h"] - vh * s) / 2
+    L = LAND_PLOT
+    return _box(ox + L["L"] * vw * s, oy + L["T"] * vh * s,
+                (1 - L["L"] - L["R"]) * vw * s, (L["B"] - L["T"]) * vh * s)
+
+
 def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
     """Where this page puts its ink, in STAGE pixels (E45 §1).
 
@@ -738,6 +1146,10 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
     boxes = (_portrait_boxes if aspect == "9:16" else _landscape_boxes)(spec, w_s, h_s)
     if spec.get("builder") == "object":
         boxes["plot"] = _box(boxes["chart"]["x"], boxes["chart"]["y"], 0, 0)
+    if spec.get("builder") == "tiers":
+        boxes["bands"] = tier_bands(boxes["plot"], len(spec.get("tiers") or []))
+    if spec.get("builder") == "treemap":
+        boxes["plot"] = treemap_plot(boxes["chart"], aspect)
     sx, sy, sw, sh = SAFE_BOX[aspect]
     cx, cy, cw, ch = CAPTION_ANCHOR[aspect]
     return {"aspect": aspect, "stage": _box(0, 0, w_s, h_s), "safe": _box(sx, sy, sw, sh),
@@ -752,10 +1164,28 @@ def load_series(path: Path) -> dict:
     return data
 
 
+def infer_variant(series: dict) -> str | None:
+    """The variant this file's SHAPE names, or None when it is the author's call (`--check` alone).
+
+    Only the unambiguous shapes: a `tiers` LIST is a tiers page, `props` an object page, `shares` the
+    census (treemap) unless the file declares the donut's `peel`. A bars/pts file is a line page, a
+    bars page, a decline or a progress page depending on what the SENTENCE does with it - which is
+    not in the file, so it is never guessed."""
+    if isinstance(series.get("tiers"), list):
+        return "tiers"
+    if isinstance(series.get("props"), list) and series["props"]:
+        return "object"
+    if isinstance(series.get("shares"), list):
+        return "share" if series.get("peel") is not None else "treemap"
+    return None
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="series.json -> ledger page spec (doc 29 s9.26)")
     parser.add_argument("series", help="the ev-*.series.json beside the asset")
-    parser.add_argument("--variant", required=True, choices=VARIANTS)   # `share` is the donut exception; see SHARE_BOUNDS
+    parser.add_argument("--variant", default=None, choices=VARIANTS)   # `share` is the donut exception; see SHARE_BOUNDS
+    parser.add_argument("--check", action="store_true",
+                        help="validate only - nothing is written, and the variant may be left to the file's own shape")
     parser.add_argument("--emphasize", type=int, default=None, help="index of the emphasized datum")
     parser.add_argument("--quiet-zone", default="right", choices=QUIET_ZONES, help="where docks land (s9.28 B3)")
     parser.add_argument("--out", default=None, help="spec path; default <name>.page.json beside the input")
@@ -766,15 +1196,26 @@ def main(argv: list[str] | None = None) -> int:
     except (OSError, ValueError) as exc:
         print(f"ledger_page: cannot read {path}: {exc}", file=sys.stderr)
         return EXIT_INVALID
-    errors = validate(series, args.variant)
+    variant = args.variant or infer_variant(series)
+    if variant is None:
+        print(f"ledger_page: {path}: name the variant (--variant {'|'.join(VARIANTS)}) - "
+              "this file's shape does not name one on its own", file=sys.stderr)
+        return EXIT_INVALID
+    errors = validate(series, variant)
     if errors:
-        print(f"ledger_page: {path} is not a page ({args.variant}):", file=sys.stderr)
+        print(f"ledger_page: {path} is not a page ({variant}):", file=sys.stderr)
         for error in errors:
             print(f"  - {error}", file=sys.stderr)
         return EXIT_INVALID
-    spec = build_spec(series, args.variant, args.emphasize, args.quiet_zone)
+    spec = build_spec(series, variant, args.emphasize, args.quiet_zone)
     for note in spec.get("judge", []):
         print(f"  [JUDGE] {note}")
+    if args.check:   # a check writes nothing: it says what the file IS a page of, and what the page will carry
+        extra = (f" {len(spec['tiers'])} tiers sharing x" if spec["builder"] == "tiers" else
+                 f" {len(spec['labels'])} cells, {spec['layout']['16:9']['unnamed']} unnamed (16:9)" if spec["builder"] == "treemap" else
+                 f" {len(spec['labels'])} values")
+        print(f"OK {path.name}: {spec['builder']} {variant}{extra} source={spec['source']!r}")
+        return 0
     stem = path.name[: -len(".series.json")] if path.name.endswith(".series.json") else path.stem
     out = Path(args.out) if args.out else path.with_name(f"{stem}.page.json")
     out.write_text(json.dumps(spec, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

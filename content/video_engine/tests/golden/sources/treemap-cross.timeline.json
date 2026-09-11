@@ -1,0 +1,960 @@
+{
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [
+  {
+   "e": 3.8,
+   "s": 1.0,
+   "t": [
+    {
+     "e": 1.4,
+     "k": false,
+     "s": 1.0,
+     "w": "the"
+    },
+    {
+     "e": 1.7999999999999998,
+     "k": true,
+     "s": 1.4,
+     "w": "frame"
+    },
+    {
+     "e": 2.2,
+     "k": false,
+     "s": 1.8,
+     "w": "under"
+    },
+    {
+     "e": 2.6,
+     "k": false,
+     "s": 2.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 6.8,
+   "s": 4.0,
+   "t": [
+    {
+     "e": 4.4,
+     "k": false,
+     "s": 4.0,
+     "w": "the"
+    },
+    {
+     "e": 4.800000000000001,
+     "k": true,
+     "s": 4.4,
+     "w": "frame"
+    },
+    {
+     "e": 5.2,
+     "k": false,
+     "s": 4.8,
+     "w": "under"
+    },
+    {
+     "e": 5.6000000000000005,
+     "k": false,
+     "s": 5.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 9.8,
+   "s": 7.0,
+   "t": [
+    {
+     "e": 7.4,
+     "k": false,
+     "s": 7.0,
+     "w": "the"
+    },
+    {
+     "e": 7.800000000000001,
+     "k": true,
+     "s": 7.4,
+     "w": "frame"
+    },
+    {
+     "e": 8.200000000000001,
+     "k": false,
+     "s": 7.8,
+     "w": "under"
+    },
+    {
+     "e": 8.600000000000001,
+     "k": false,
+     "s": 8.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 12.8,
+   "s": 10.0,
+   "t": [
+    {
+     "e": 10.4,
+     "k": false,
+     "s": 10.0,
+     "w": "the"
+    },
+    {
+     "e": 10.8,
+     "k": true,
+     "s": 10.4,
+     "w": "frame"
+    },
+    {
+     "e": 11.200000000000001,
+     "k": false,
+     "s": 10.8,
+     "w": "under"
+    },
+    {
+     "e": 11.600000000000001,
+     "k": false,
+     "s": 11.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 15.8,
+   "s": 13.0,
+   "t": [
+    {
+     "e": 13.4,
+     "k": false,
+     "s": 13.0,
+     "w": "the"
+    },
+    {
+     "e": 13.8,
+     "k": true,
+     "s": 13.4,
+     "w": "frame"
+    },
+    {
+     "e": 14.200000000000001,
+     "k": false,
+     "s": 13.8,
+     "w": "under"
+    },
+    {
+     "e": 14.600000000000001,
+     "k": false,
+     "s": 14.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 18.8,
+   "s": 16.0,
+   "t": [
+    {
+     "e": 16.4,
+     "k": false,
+     "s": 16.0,
+     "w": "the"
+    },
+    {
+     "e": 16.799999999999997,
+     "k": true,
+     "s": 16.4,
+     "w": "frame"
+    },
+    {
+     "e": 17.2,
+     "k": false,
+     "s": 16.8,
+     "w": "under"
+    },
+    {
+     "e": 17.599999999999998,
+     "k": false,
+     "s": 17.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 21.8,
+   "s": 19.0,
+   "t": [
+    {
+     "e": 19.4,
+     "k": false,
+     "s": 19.0,
+     "w": "the"
+    },
+    {
+     "e": 19.799999999999997,
+     "k": true,
+     "s": 19.4,
+     "w": "frame"
+    },
+    {
+     "e": 20.2,
+     "k": false,
+     "s": 19.8,
+     "w": "under"
+    },
+    {
+     "e": 20.599999999999998,
+     "k": false,
+     "s": 20.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 24.8,
+   "s": 22.0,
+   "t": [
+    {
+     "e": 22.4,
+     "k": false,
+     "s": 22.0,
+     "w": "the"
+    },
+    {
+     "e": 22.799999999999997,
+     "k": true,
+     "s": 22.4,
+     "w": "frame"
+    },
+    {
+     "e": 23.2,
+     "k": false,
+     "s": 22.8,
+     "w": "under"
+    },
+    {
+     "e": 23.599999999999998,
+     "k": false,
+     "s": 23.2,
+     "w": "test"
+    }
+   ]
+  },
+  {
+   "e": 27.8,
+   "s": 25.0,
+   "t": [
+    {
+     "e": 25.4,
+     "k": false,
+     "s": 25.0,
+     "w": "the"
+    },
+    {
+     "e": 25.799999999999997,
+     "k": true,
+     "s": 25.4,
+     "w": "frame"
+    },
+    {
+     "e": 26.2,
+     "k": false,
+     "s": 25.8,
+     "w": "under"
+    },
+    {
+     "e": 26.599999999999998,
+     "k": false,
+     "s": 26.2,
+     "w": "test"
+    }
+   ]
+  }
+ ],
+ "captions": [
+  {
+   "at": 1.0,
+   "text": "the frame under test",
+   "until": 3.8
+  },
+  {
+   "at": 4.0,
+   "text": "the frame under test",
+   "until": 6.8
+  },
+  {
+   "at": 7.0,
+   "text": "the frame under test",
+   "until": 9.8
+  },
+  {
+   "at": 10.0,
+   "text": "the frame under test",
+   "until": 12.8
+  },
+  {
+   "at": 13.0,
+   "text": "the frame under test",
+   "until": 15.8
+  },
+  {
+   "at": 16.0,
+   "text": "the frame under test",
+   "until": 18.8
+  },
+  {
+   "at": 19.0,
+   "text": "the frame under test",
+   "until": 21.8
+  },
+  {
+   "at": 22.0,
+   "text": "the frame under test",
+   "until": 24.8
+  },
+  {
+   "at": 25.0,
+   "text": "the frame under test",
+   "until": 27.8
+  }
+ ],
+ "episode_id": "golden",
+ "evidence": {},
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 30.0,
+ "scenes": [
+  {
+   "docks": [],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    30.0
+   ],
+   "species": [
+    {
+     "at": 9.0,
+     "cells": [
+      "United States",
+      "Japan",
+      "Korea"
+     ],
+     "dur": 3.0,
+     "kind": "cross",
+     "text": "3 partners, 26 % of exports"
+    }
+   ],
+   "world": {
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "kind": "ledger",
+    "page": {
+     "badges": [],
+     "builder": "treemap",
+     "colors": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+     ],
+     "emphasize": null,
+     "field": "scribble",
+     "judge": [],
+     "labels": [
+      "United States",
+      "Hong Kong",
+      "Japan",
+      "Korea",
+      "Vietnam",
+      "India",
+      "Germany",
+      "Netherlands",
+      "Malaysia",
+      "Russia",
+      "Brazil",
+      "Australia",
+      "Spain",
+      "Saudi Arabia",
+      "Rest of world"
+     ],
+     "layout": {
+      "16:9": {
+       "cells": [
+        {
+         "fh": 0.707317,
+         "font": 32,
+         "fw": 0.574,
+         "fx": 0.0,
+         "fy": 0.0,
+         "h_px": 284.3,
+         "index": 14,
+         "label": "Rest of world",
+         "share": 0.406,
+         "tier": 2,
+         "value": 40.6,
+         "value_font": 23.0,
+         "value_string": "40.6",
+         "w_px": 380.6
+        },
+        {
+         "fh": 0.292683,
+         "font": 32,
+         "fw": 0.574,
+         "fx": 0.0,
+         "fy": 0.707317,
+         "h_px": 117.7,
+         "index": 0,
+         "label": "United States",
+         "share": 0.168,
+         "tier": 2,
+         "value": 16.8,
+         "value_font": 23.0,
+         "value_string": "16.8",
+         "w_px": 380.6
+        },
+        {
+         "fh": 0.309859,
+         "font": 26.2,
+         "fw": 0.274318,
+         "fx": 0.574,
+         "fy": 0.0,
+         "h_px": 124.6,
+         "index": 1,
+         "label": "Hong Kong",
+         "share": 0.085,
+         "tier": 2,
+         "value": 8.5,
+         "value_font": 19.0,
+         "value_string": "8.5",
+         "w_px": 181.9
+        },
+        {
+         "fh": 0.309859,
+         "font": 24.6,
+         "fw": 0.151682,
+         "fx": 0.848318,
+         "fy": 0.0,
+         "h_px": 124.6,
+         "index": 2,
+         "label": "Japan",
+         "share": 0.047,
+         "tier": 1,
+         "value": 4.7,
+         "value_font": 0.0,
+         "value_string": "4.7",
+         "w_px": 100.6
+        },
+        {
+         "fh": 0.258803,
+         "font": 28.7,
+         "fw": 0.173878,
+         "fx": 0.574,
+         "fy": 0.309859,
+         "h_px": 104.0,
+         "index": 3,
+         "label": "Korea",
+         "share": 0.045,
+         "tier": 2,
+         "value": 4.5,
+         "value_font": 21.0,
+         "value_string": "4.5",
+         "w_px": 115.3
+        },
+        {
+         "fh": 0.235798,
+         "font": 20.5,
+         "fw": 0.173878,
+         "fx": 0.574,
+         "fy": 0.568662,
+         "h_px": 94.8,
+         "index": 4,
+         "label": "Vietnam",
+         "share": 0.041,
+         "tier": 2,
+         "value": 4.1,
+         "value_font": 18.0,
+         "value_string": "4.1",
+         "w_px": 115.3
+        },
+        {
+         "fh": 0.19554,
+         "font": 28.7,
+         "fw": 0.173878,
+         "fx": 0.574,
+         "fy": 0.80446,
+         "h_px": 78.6,
+         "index": 5,
+         "label": "India",
+         "share": 0.034,
+         "tier": 2,
+         "value": 3.4,
+         "value_font": 21.0,
+         "value_string": "3.4",
+         "w_px": 115.3
+        },
+        {
+         "fh": 0.241946,
+         "font": 0.0,
+         "fw": 0.128128,
+         "fx": 0.747878,
+         "fy": 0.309859,
+         "h_px": 97.3,
+         "index": 6,
+         "label": "Germany",
+         "share": 0.031,
+         "tier": 0,
+         "value": 3.1,
+         "value_font": 0.0,
+         "value_string": "3.1",
+         "w_px": 84.9
+        },
+        {
+         "fh": 0.241946,
+         "font": 0.0,
+         "fw": 0.123995,
+         "fx": 0.876005,
+         "fy": 0.309859,
+         "h_px": 97.3,
+         "index": 7,
+         "label": "Netherlands",
+         "share": 0.03,
+         "tier": 0,
+         "value": 3.0,
+         "value_font": 0.0,
+         "value_string": "3.0",
+         "w_px": 82.2
+        },
+        {
+         "fh": 0.19435,
+         "font": 0.0,
+         "fw": 0.128634,
+         "fx": 0.747878,
+         "fy": 0.551805,
+         "h_px": 78.1,
+         "index": 8,
+         "label": "Malaysia",
+         "share": 0.025,
+         "tier": 0,
+         "value": 2.5,
+         "value_font": 0.0,
+         "value_string": "2.5",
+         "w_px": 85.3
+        },
+        {
+         "fh": 0.19435,
+         "font": 0.0,
+         "fw": 0.123489,
+         "fx": 0.876511,
+         "fy": 0.551805,
+         "h_px": 78.1,
+         "index": 9,
+         "label": "Russia",
+         "share": 0.024,
+         "tier": 0,
+         "value": 2.4,
+         "value_font": 0.0,
+         "value_string": "2.4",
+         "w_px": 81.9
+        },
+        {
+         "fh": 0.130177,
+         "font": 20.8,
+         "fw": 0.153637,
+         "fx": 0.747878,
+         "fy": 0.746155,
+         "h_px": 52.3,
+         "index": 10,
+         "label": "Brazil",
+         "share": 0.02,
+         "tier": 1,
+         "value": 2.0,
+         "value_font": 0.0,
+         "value_string": "2.0",
+         "w_px": 101.9
+        },
+        {
+         "fh": 0.123668,
+         "font": 0.0,
+         "fw": 0.153637,
+         "fx": 0.747878,
+         "fy": 0.876332,
+         "h_px": 49.7,
+         "index": 11,
+         "label": "Australia",
+         "share": 0.019,
+         "tier": 0,
+         "value": 1.9,
+         "value_font": 0.0,
+         "value_string": "1.9",
+         "w_px": 101.9
+        },
+        {
+         "fh": 0.131999,
+         "font": 0.0,
+         "fw": 0.098485,
+         "fx": 0.901515,
+         "fy": 0.746155,
+         "h_px": 53.1,
+         "index": 12,
+         "label": "Spain",
+         "share": 0.013,
+         "tier": 0,
+         "value": 1.3,
+         "value_font": 0.0,
+         "value_string": "1.3",
+         "w_px": 65.3
+        },
+        {
+         "fh": 0.121846,
+         "font": 0.0,
+         "fw": 0.098485,
+         "fx": 0.901515,
+         "fy": 0.878154,
+         "h_px": 49.0,
+         "index": 13,
+         "label": "Saudi Arabia",
+         "share": 0.012,
+         "tier": 0,
+         "value": 1.2,
+         "value_font": 0.0,
+         "value_string": "1.2",
+         "w_px": 65.3
+        }
+       ],
+       "legend": "and 7 others",
+       "plot": {
+        "h": 402,
+        "w": 663,
+        "x": 325,
+        "y": 333
+       },
+       "unnamed": 7
+      },
+      "9:16": {
+       "cells": [
+        {
+         "fh": 0.406,
+         "font": 32,
+         "fw": 1.0,
+         "fx": 0.0,
+         "fy": 0.0,
+         "h_px": 258.2,
+         "index": 14,
+         "label": "Rest of world",
+         "share": 0.406,
+         "tier": 2,
+         "value": 40.6,
+         "value_font": 23.0,
+         "value_string": "40.6",
+         "w_px": 580.0
+        },
+        {
+         "fh": 0.394435,
+         "font": 25.1,
+         "fw": 0.425926,
+         "fx": 0.0,
+         "fy": 0.406,
+         "h_px": 250.9,
+         "index": 0,
+         "label": "United States",
+         "share": 0.168,
+         "tier": 2,
+         "value": 16.8,
+         "value_font": 18.0,
+         "value_string": "16.8",
+         "w_px": 247.0
+        },
+        {
+         "fh": 0.199565,
+         "font": 32,
+         "fw": 0.425926,
+         "fx": 0.0,
+         "fy": 0.800435,
+         "h_px": 126.9,
+         "index": 1,
+         "label": "Hong Kong",
+         "share": 0.085,
+         "tier": 2,
+         "value": 8.5,
+         "value_font": 23.0,
+         "value_string": "8.5",
+         "w_px": 247.0
+        },
+        {
+         "fh": 0.160258,
+         "font": 32,
+         "fw": 0.293277,
+         "fx": 0.425926,
+         "fy": 0.406,
+         "h_px": 101.9,
+         "index": 2,
+         "label": "Japan",
+         "share": 0.047,
+         "tier": 2,
+         "value": 4.7,
+         "value_font": 23.0,
+         "value_string": "4.7",
+         "w_px": 170.1
+        },
+        {
+         "fh": 0.160258,
+         "font": 32,
+         "fw": 0.280797,
+         "fx": 0.719203,
+         "fy": 0.406,
+         "h_px": 101.9,
+         "index": 3,
+         "label": "Korea",
+         "share": 0.045,
+         "tier": 2,
+         "value": 4.5,
+         "value_font": 23.0,
+         "value_string": "4.5",
+         "w_px": 162.9
+        },
+        {
+         "fh": 0.167768,
+         "font": 25.7,
+         "fw": 0.244385,
+         "fx": 0.425926,
+         "fy": 0.566258,
+         "h_px": 106.7,
+         "index": 4,
+         "label": "Vietnam",
+         "share": 0.041,
+         "tier": 2,
+         "value": 4.1,
+         "value_font": 19.0,
+         "value_string": "4.1",
+         "w_px": 141.7
+        },
+        {
+         "fh": 0.139125,
+         "font": 32,
+         "fw": 0.244385,
+         "fx": 0.425926,
+         "fy": 0.734026,
+         "h_px": 88.5,
+         "index": 5,
+         "label": "India",
+         "share": 0.034,
+         "tier": 2,
+         "value": 3.4,
+         "value_font": 23.0,
+         "value_string": "3.4",
+         "w_px": 141.7
+        },
+        {
+         "fh": 0.126849,
+         "font": 25.7,
+         "fw": 0.244385,
+         "fx": 0.425926,
+         "fy": 0.873151,
+         "h_px": 80.7,
+         "index": 6,
+         "label": "Germany",
+         "share": 0.031,
+         "tier": 2,
+         "value": 3.1,
+         "value_font": 19.0,
+         "value_string": "3.1",
+         "w_px": 141.7
+        },
+        {
+         "fh": 0.166824,
+         "font": 0.0,
+         "fw": 0.17983,
+         "fx": 0.670311,
+         "fy": 0.566258,
+         "h_px": 106.1,
+         "index": 7,
+         "label": "Netherlands",
+         "share": 0.03,
+         "tier": 0,
+         "value": 3.0,
+         "value_font": 0.0,
+         "value_string": "3.0",
+         "w_px": 104.3
+        },
+        {
+         "fh": 0.166824,
+         "font": 0.0,
+         "fw": 0.149859,
+         "fx": 0.850141,
+         "fy": 0.566258,
+         "h_px": 106.1,
+         "index": 8,
+         "label": "Malaysia",
+         "share": 0.025,
+         "tier": 0,
+         "value": 2.5,
+         "value_font": 0.0,
+         "value_string": "2.5",
+         "w_px": 86.9
+        },
+        {
+         "fh": 0.145592,
+         "font": 19.4,
+         "fw": 0.164845,
+         "fx": 0.670311,
+         "fy": 0.733082,
+         "h_px": 92.6,
+         "index": 9,
+         "label": "Russia",
+         "share": 0.024,
+         "tier": 1,
+         "value": 2.4,
+         "value_font": 0.0,
+         "value_string": "2.4",
+         "w_px": 95.6
+        },
+        {
+         "fh": 0.121326,
+         "font": 19.4,
+         "fw": 0.164845,
+         "fx": 0.670311,
+         "fy": 0.878674,
+         "h_px": 77.2,
+         "index": 10,
+         "label": "Brazil",
+         "share": 0.02,
+         "tier": 1,
+         "value": 2.0,
+         "value_font": 0.0,
+         "value_string": "2.0",
+         "w_px": 95.6
+        },
+        {
+         "fh": 0.11526,
+         "font": 0.0,
+         "fw": 0.164845,
+         "fx": 0.835155,
+         "fy": 0.733082,
+         "h_px": 73.3,
+         "index": 11,
+         "label": "Australia",
+         "share": 0.019,
+         "tier": 0,
+         "value": 1.9,
+         "value_font": 0.0,
+         "value_string": "1.9",
+         "w_px": 95.6
+        },
+        {
+         "fh": 0.078862,
+         "font": 23.2,
+         "fw": 0.164845,
+         "fx": 0.835155,
+         "fy": 0.848342,
+         "h_px": 50.2,
+         "index": 12,
+         "label": "Spain",
+         "share": 0.013,
+         "tier": 1,
+         "value": 1.3,
+         "value_font": 0.0,
+         "value_string": "1.3",
+         "w_px": 95.6
+        },
+        {
+         "fh": 0.072796,
+         "font": 0.0,
+         "fw": 0.164845,
+         "fx": 0.835155,
+         "fy": 0.927204,
+         "h_px": 46.3,
+         "index": 13,
+         "label": "Saudi Arabia",
+         "share": 0.012,
+         "tier": 0,
+         "value": 1.2,
+         "value_font": 0.0,
+         "value_string": "1.2",
+         "w_px": 95.6
+        }
+       ],
+       "legend": "and 4 others",
+       "plot": {
+        "h": 636,
+        "w": 580,
+        "x": 230,
+        "y": 490
+       },
+       "unnamed": 4
+      }
+     },
+     "quiet_zone": "right",
+     "schema_version": "ledger_page.v1",
+     "source": "Synthetic census for the golden surface; not a figure about the world",
+     "sub": "share of goods exports, one year",
+     "surface": "page",
+     "title": "China's exports, by partner",
+     "total": 100.0,
+     "total_string": "100",
+     "unit": "%",
+     "value_strings": [
+      "16.8",
+      "8.5",
+      "4.7",
+      "4.5",
+      "4.1",
+      "3.4",
+      "3.1",
+      "3.0",
+      "2.5",
+      "2.4",
+      "2.0",
+      "1.9",
+      "1.3",
+      "1.2",
+      "40.6"
+     ],
+     "values": [
+      16.8,
+      8.5,
+      4.7,
+      4.5,
+      4.1,
+      3.4,
+      3.1,
+      3.0,
+      2.5,
+      2.4,
+      2.0,
+      1.9,
+      1.3,
+      1.2,
+      40.6
+     ],
+     "variant": "treemap"
+    }
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: the census and its X marks"
+}
