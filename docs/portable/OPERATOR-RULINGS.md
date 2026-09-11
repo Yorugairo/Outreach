@@ -2084,3 +2084,32 @@ by its history, and hands the AXES over for every recast (labels un-written and 
 sliding by rank) - never a one-frame swap; M23 reads it; the goldens `data-to-bars` (new), `tags-to-bars` and `ledger-keyed`
 (the axis swap they had frozen in, regenerated on purpose). `docs/content-video-engine/CAPABILITIES.md`. The finding: the
 operator's read of 0:50.
+
+## E65 — The placer always finds a place: the plot's empty room, the axis band, scale - a card is never left over the data and never left unplaced (2026-09-11)
+
+**The operator's words.** On the third form's frames, after the measured page boxes showed that Tokyo's real pages leave no
+band outside the plot for a card (the title is one line, the chart 89 px taller than the estimate) and the placer answered
+"no place" - which the engine painted as the big centred card over the chart: *"inside of the empty data would be good, but
+it can also land underneath partially over-lapping the axis, it's going to be adjusted up to the corner right anyways.
+Remember that we have complete control over the scale and placement on the page, there's no reason we shouldn't have the
+physics engine to be handling better than this as a base level."*
+
+**The ruling.** A card on a ledger page is placed by the page's own room, in this order, and the placer never returns
+nothing: (1) a band outside the plot at the card's size; (2) the plot's EMPTY room - the largest rectangle the data's ink
+does not touch (a data mask measured from the player, never estimated), on the declared quiet side when it is empty,
+else the emptiest corner; (3) underneath, over the x-axis band - a card may partially overlap the axis labels, never
+the data; the card's SCALE gives ground before its place does (down to a legibility floor; past it the build warns). The
+READ (the landing) takes the same room enlarged toward the axis at the reading scale; the PARK is the corner - the page's
+quiet side, or the emptiest - the card adjusts up into it after the read (E45's choreography kept). "No place" is not an
+outcome: the last resort is the emptiest corner at the floor size with a build warning naming the page, never a card
+over the data and never a hand-authored park as the way out. M25 (a settled card on the data's INK) and M27 (a read on the
+plot) keep their rows; a card in the plot's empty room passes both because the ink is what they read.
+
+**Why.** The engine has the page's true boxes (P50 T16) and full control of scale and placement (E45, E62, E63); a page
+that "has no room" is a placer that has not looked at the room it has. The base level is the physics engine placing the
+card; the author's hand is for taste, not for rescue.
+
+Mechanisms: the measured fixture gains the plot's data mask and the axis bands per page (`measure_page_boxes.py`,
+`page-boxes.v1.json`, `ledger_page.py`); the compiler's `page_place` / the read box fall through the order above and
+record the room they took (`place_room: outside | empty | axis | corner`); `gate_motion_density.py` M25 / M27 read the ink;
+`docs/content-video-engine/CAPABILITIES.md`. The finding: the third form's 0:57 frame on the measured side build.
