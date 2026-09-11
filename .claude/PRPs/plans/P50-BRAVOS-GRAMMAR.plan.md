@@ -140,6 +140,11 @@ Acceptance:
 
 1. T1 first - the map is what makes the rest usable, and it is cheap. It ships with a `when` for every EXISTING species
    before any new one is built (the operator's second ask outranks the first).
+   **The module rule (2026-09-11, so nothing built here is ported later):** from T2 on, no new species is written into the
+   template's body. Each is a file under `content/video_engine/scripts/species/<kind>.mjs`, inlined by `sync_kinetics.py`
+   exactly as the ten kinetics modules are, with its own `tests/kinetics/<kind>.test.mjs`; P51 T1 (the runtime apart
+   from the document) then changes only how the modules are LOADED. The order across the two plans by slice: P50 T1 ->
+   P51 T0 (the kit), T2 (eyes), T3 (the bar) -> P50 T2-T16 as modules -> P51 T1 (the split), T4-T7.
 2. T2 the icon chip (the foundation the diagram, the press card's badges and the map's chips all use).
 3. T3 press-card dock, T4 flow diagram, T5 vector map - independent write sets inside the template's species block
    (each behind its own kind name), dispatched one at a time; the parent integrates and reads every frame.

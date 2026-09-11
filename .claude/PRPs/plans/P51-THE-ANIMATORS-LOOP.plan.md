@@ -119,6 +119,9 @@ Acceptance:
 
 1. T0 the authoring kit, then T2 the eyes, then T3 the bar - the three that make a one-shot possible on the engine as it
    stands, none of them needing the split. T8 the doctrine in parallel (docs only; it steers the next long).
+   **Against P50:** P50 T1 (the map) precedes T0; P50's species (T2-T16) follow T3 and are written as MODULES under
+   `scripts/species/` inlined by `sync_kinetics.py` (P50's module rule), so T1 here changes how modules load and ports
+   nothing; T4-T7 follow the species or interleave with them - they do not depend on them.
 2. T1 the split, proven by the goldens; then T4 hot reload with the determinism check; then T5 the sidecar and T6 the
    change report (the human-and-flash-agent loop).
 3. T7 the editor last, thin, as a client.
