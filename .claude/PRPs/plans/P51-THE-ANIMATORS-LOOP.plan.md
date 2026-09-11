@@ -99,7 +99,7 @@ Acceptance:
 2. **The change report's shape** (T6): the operator makes three edits in the sidecar by hand (a box, a beat's word, a
    variant) and reads the report the agent gets; does it say what they changed?
 3. **The editor's first three controls** (T7) by eye, on the Tokyo cut.
-4. **E61** (T8): the chart-as-world doctrine and the package rule are the operator's ruling, drafted here in their words.
+4. **E61** (T8): RULED 2026-09-11 in the operator's words; the package rule struck (an open A/B test). Gate closed.
 5. Push authorization per commit, as standing.
 
 ## Mandatory Reads
@@ -256,7 +256,7 @@ Acceptance:
 - Evidence: pending
 
 ### T8: The chart-as-world doctrine and the package rule
-- Status: pending (human gate 4: E61)
+- Status: pending - E61 RULED 2026-09-11 (the package rule struck: thumbnails under A/B test); doc 29 §9.30 still to write
 - Owner: parent
 - Depends on: none (docs)
 - Write set: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` §9.30 (the ledger page as the main character of a
@@ -264,8 +264,8 @@ Acceptance:
   breath, the burst as the payoff, a plate where the story needs a picture - a narration plate, B-roll; the operator's
   three uses of a plate, verbatim in the ledger: a LANDING SURFACE for docked evidence (the art embed) or evidence docked
   straight on the chart, a BRIDGE between ideas, a RESET that covers the world so the evidence clears and the next page
-  mounts clean or on a new topic - each with its surface-grammar letter and its seam); the package
-  rule (the thumbnail and the first frame lead with the ledger look; a generated scene never carries the package alone);
+  mounts clean or on a new topic - each with its surface-grammar letter and its seam); NO package rule (struck
+  2026-09-11: thumbnails are under A/B test, our own plates untested - E61 records it as not ruled);
   `docs/portable/OPERATOR-RULINGS.md` E61 drafted in the operator's words of 2026-09-11; `patterns/FULL-VIDEO-MAP.md`
   one paragraph; `episode-build` skill B-rules; the docs layers.
 - Acceptance: E61 reads as the operator's; the next long's shot table is authored on pages by default and the lint (P50

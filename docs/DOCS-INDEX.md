@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3665 records across 294 files.
+3666 records across 294 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -3838,6 +3838,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1831 [2] E58 — A chart changes STATE; it never cuts to another chart of the same data. Five verbs, each with its beat; a cut still wins between different arguments (2026-09-10) — The operator, 2026-09-07 (P48's brief): *"we should be able to re-draw, change chart types/shapes, add additional points, or <re-draw; over-draw; pin-and-pivot; chart_to; ;then=; rescale; {window, ymin, ymax}; re-projects; extend; {to_index}; {series}; build_to>
 - L1880 [2] E59 — The camera is a first-class component of the physics: ONE persistent eye, LOCKED by default, that moves only for a reason the frame can name (2026-09-10) — The operator, 2026-09-08, on the tariff short's chart arrival: *"We've added almost everything to our production process <opt-in; camera-still; __camera(t, target); attention: "landings"; {t, zoom, look, at, ease}; enter=camera=<dock>; snap; pull-back; pixel-identical; HyperFrames; Min-jerk; closed-form>
 - L1936 [2] E60 — The BREAKTHROUGH is a rescale: the bar that cannot fit builds to the comparator's level, then shoots while the scale rewrites under it (2026-09-10) — The operator's words. On the first pass (a zigzag cut at the top gridline, the bar a little past it): *"is that squiggle {The operator's words.} <re-scale; stop-motion; SPR-by-country; domain; overflow; overflow: "burst"; broken-axis; buildLedgerBars; lpPaintBreakthrough; LPX.BT_*>
+- L1968 [2] E61 — The chart is the world; a plate is one of three things, and says which (2026-09-11) — The operator's words. *"The ledger/chart plate is the world that we build on, it's the main character. Plates become {The operator's words.} <B-roll; one-dimensional; chart-to-chart; un-park; species-by-sentence; long-form>
 
 ## docs/portable/OUTRO-CTA-PLAYBOOK.md
 

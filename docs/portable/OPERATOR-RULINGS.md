@@ -1964,3 +1964,30 @@ the operator described - the burst in stop-motion steps, the counter stepping wi
 Mechanisms: `docs/content-video-engine/CAPABILITIES.md` (the breakthrough row); the template's `buildLedgerBars` /
 `lpPaintBreakthrough` / `LPX.BT_*`; the proofs `steel-and-paper/build-f/breakthrough-proof.html` (burst) and
 `breakthrough-stack-proof.html`; the measurement `scratchpad/bravos-bar` frames, recorded in the CAPABILITIES row.
+
+## E61 — The chart is the world; a plate is one of three things, and says which (2026-09-11)
+
+**The operator's words.** *"The ledger/chart plate is the world that we build on, it's the main character. Plates become
+narration plates that link ideas together or give us ground to decompress from charts, and provide visual grounding and our
+channel differentiation. It basically becomes B-roll. The plates exist because we didn't know how to hold animation or time
+with charts or tell the narrative over a long format. Now we have much more capability in that, so it should go more
+towards chart/ledger worlds."* And the three uses: *"Sometimes we throw a plate onto the art world and then dock evidence
+on it. Sometimes we just dock evidence by itself. Plates get used as needed between ideas if it's a one-dimensional video.
+Other times we go to a plate as a transition to cover the world, we reset the evidence, and come back clean or on a
+completely different topic."*
+
+**The ruling.** A long form is authored on the ledger page by default: the chart-to-chart family (E58) carries the scenes
+across the phases, the park and the un-park are its breath, the burst (E60) its payoff, the camera (E59) locked unless a
+reason names itself. A plate appears for ONE of three uses and names which on its row: (1) a **landing surface** - a plate
+thrown onto the art world with evidence docked on it (the art embed, P50 T7) - or evidence docked straight onto the chart
+(§9.28 B3); (2) a **bridge** - a narration plate between ideas, B-roll; (3) a **reset** - a plate that covers the world so the
+evidence clears and the next page mounts clean or on a new topic (§9.28 C1's wipe with a plate as the departing world;
+E47's dip or the mount as the seam). Every plate still lives (E21, the idle). **The species-by-sentence lint (P50 T1) lists
+every plate in a long-form table with its use named; a plate with no named use is a WARN** (the operator: *"agreed"*).
+
+**Not ruled: the package.** Whether the thumbnail and the first frame should lead with the ledger look is an open A/B test
+(the operator, 2026-09-11: *"we're A/B testing thumbnails now. we're not using what we used for test 1 which was simple
+finance. We didn't test our own plates yet."*). No rule until the test reads; nothing in the engine assumes one.
+
+Mechanisms: `docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md` (the ledger); the plan
+`.claude/PRPs/plans/P51-THE-ANIMATORS-LOOP.plan.md` T8 (doc 29 §9.30 to write); P50 T1 (the lint).
