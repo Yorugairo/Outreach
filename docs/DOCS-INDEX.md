@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3638 records across 291 files.
+3647 records across 292 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -3126,15 +3126,27 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L245 [2] What is NOT built yet — [`BACKLOG.md`](BACKLOG.md) — the hand-maintained open work, and the scope shift <hand-maintained; auto-generated>
 - L252 [2] The recall rule — 1. `ls` and read the index before searching (PIPELINE.md, this file, PLATE-LIBRARY, CHOREOGRAPHY). {in the same commit; closes its BACKLOG.md row in the same commit} <PLATE-LIBRARY>
 
+## docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md
+
+- L1 [1] Exploration inventory (2026-09-10) — the explorer's mapping behind EXPLORATION-REVIEW-2026-09-10.md — Every Bravos term put through `docs_find`, every open backlog row with the maths it needs and whether that maths is on disk. Read-only recall; the review is the <docs_find; Read-only>
+- L5 [1] P49 exploration inventory — the Bravos math and the open backlog — Read-only pass, 2026-09-10. All paths absolute-resolvable from the MAIN checkout <Read-only; absolute-resolvable; sweet-villani; re-measures; 29.97 fps; REFERENCE-RHYTHM; cut-in; [00:00 - 01:30]; [01:30 - 03:23]; [03:23 - 08:58]; [08:58 - 10:58]; [10:58 - 16:57]>
+- L14 [2] Table A — THE BRAVOS MATH <re-measures; 29.97 fps; REFERENCE-RHYTHM; cut-in; [00:00 - 01:30]; [01:30 - 03:23]; [03:23 - 08:58]; [08:58 - 10:58]; [10:58 - 16:57]; [16:57 - 19:57]; RESEARCH-INDEX; per-phase>
+- L16 [3] A.1 Everything the GEMINI files reference (REPORT.md, SHOT_LEDGER.md) — Root: `content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/` {19m 56s (1196.6s); 1280x720 (av1); 120 cuts, 6.02 CPM} <re-measures; 29.97 fps; REFERENCE-RHYTHM; cut-in; [00:00 - 01:30]; [01:30 - 03:23]; [03:23 - 08:58]; [08:58 - 10:58]; [10:58 - 16:57]; [16:57 - 19:57]; RESEARCH-INDEX; per-phase>
+- L56 [3] A.2 The named mechanics — read from the frames on the Claude side, measured 2026-09-10 — | item | what it is (the technique/maths) | status | where (file:line) | note | {6.0 events/min vs 2.5 compositions/min} <REFERENCE-RHYTHM; abs-delta; build-on; near-black; top-centre; two-tier; Data: … Source: …, Bravos Research; bottom-left; OPERATOR-RULINGS; re-verified; tv-embed; docs_find "tv-embed">
+- L89 [2] Table B — THE OPEN BACKLOG — `docs/content-video-engine/BACKLOG.md`. Every row below is open (no BUILT/CLOSED marker). <minJerk; springParams; springEval; springPop; squashMatrix; springSquash; strokeProfile; Kubelka-Munk; kmChannel; kmStack; soakStepped; idleXf>
+- L99 [3] B.1 The R26 / TR queue (the live one) — | item | what it is (the technique/maths) | status | where (file:line) | note — does the maths exist? | {M18 per layer; The HyperFrames harvest, twelve components verbatim} <?layers=; per-element; getBoundingClientRect; path; slide; two-layer; fade_up; blur-in; pull_back; drift-that-ends-at-zero; HYPERFRAMES-INTAKE; region>
+- L129 [3] B.2 Open rows outside the R26 series — | item | what it is (the technique/maths) | status | where (file:line) | note — does the maths exist? | {The soak as a PLATE REVEAL; Analytic spring evaluator} <Ready-to-pull; ink-on-cream; soakStepped; soakJitter; SOAK_STEP; springPop; M_p; springParams; springEval; over-damped; det(J(t)) > 0; jacobianAt>
+- L176 [3] Coverage limits of this pass — Searched: the Bravos dossier folder (all four md files, `claude-watch/camera.json`, `cuts.json`, <cuts.json; scene-scores.txt; one-line; docs_find>
+
 ## docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md
 
-- L1 [1] Exploration review — what techniques and maths are still unexplored (2026-09-10) — The operator: *"review the backlog and exploration docs - what techniques / maths do we still have to explore? Did you <RESEARCH-INDEX; re-measured; per-phase; over-count; FULL-VIDEO-MAP; unclassified; Kubelka-Munk; press-card; stack-with-newest-lit; stack; burst-clear; TV-embed>
-- L11 [2] 1. The Bravos maths — what Gemini's dossier carries, and what we took — Gemini's `REPORT.md` is a pacing report, not a motion report. Everything numeric in it: {pacing report} <re-measured; per-phase; RESEARCH-INDEX; over-count; FULL-VIDEO-MAP; unclassified; Kubelka-Munk>
-- L31 [2] 2. Bravos's species we have not built (from `REPORT.claude.md` §"The grammar") — | # | Bravos mechanic | what it needs | status | {the press card; the TV-embed world} <press-card; stack-with-newest-lit; stack; burst-clear; vector-map; per-country; light-on-name; one-move-per-composition; map-flight; flow-diagram; swap-one-node; bracket>
-- L48 [2] 3. The open backlog — the technique or maths each row needs — | row | needs | maths already on disk? | <per-layer; HyperFrames; badge-stamp; two-spring; single-spring; springPop; springEval; closed-form; place; read_place; _page_land_offset; N-tier>
-- L82 [2] 4. The reference layer's maths not yet built (docs 42–49, all "reference — not yet folded to portable") — | doc | maths | built? | {Euler spirals} <arc-length; closed-form; Z-stack; vertex-based; interpolate-path; argmin_k Σ‖v_A,i − v_B,(i+k)‖²; correspond; Kubelka-Munk; coffee-ring; K-M; multi-plane; ComfyUI>
-- L94 [2] 5. Audio — The sub-threshold bed research (`docs/research/audio/`) triangulated a −22 to −30 LU window (MEDIUM: craft consensus, not <sub-threshold; env>
-- L101 [2] 6. What I would explore next, in order — 1. The press-card dock (§2 #3) - Bravos's proof species and the cheapest gap: a still, an underline callout, the quiet stack with the newest lit. Every short we {The press-card dock; The burst's furniture; R26-30 the stop-motion burst; R26-25 the span species and R26-24 N-tier pages} <axis-mounted; macro-chart; light-on-name>
+- L1 [1] Exploration review — what techniques and maths are still unexplored (2026-09-10) — The operator: *"review the backlog and exploration docs - what techniques / maths do we still have to explore? Did you <RESEARCH-INDEX; re-measured; per-phase; over-count; FULL-VIDEO-MAP; unclassified; Key-Questions; seven-term; docs_find; EXPLORATION-INVENTORY; Kubelka-Munk; press-card>
+- L11 [2] 1. The Bravos maths — what Gemini's dossier carries, and what we took — Gemini's `REPORT.md` is a pacing report, not a motion report. Everything numeric in it: {pacing report} <re-measured; per-phase; RESEARCH-INDEX; over-count; FULL-VIDEO-MAP; unclassified; Key-Questions; seven-term; docs_find; EXPLORATION-INVENTORY; Kubelka-Munk>
+- L37 [2] 2. Bravos's species we have not built (from `REPORT.claude.md` §"The grammar") — | # | Bravos mechanic | what it needs | status | {the press card; the TV-embed world} <press-card; stack-with-newest-lit; stack; burst-clear; vector-map; per-country; light-on-name; one-move-per-composition; map-flight; flow-diagram; swap-one-node; bracket>
+- L54 [2] 3. The open backlog — the technique or maths each row needs — | row | needs | maths already on disk? | <per-layer; HyperFrames; badge-stamp; two-spring; single-spring; springPop; springEval; closed-form; place; read_place; _page_land_offset; N-tier>
+- L95 [2] 4. The reference layer's maths not yet built (docs 42–49, all "reference — not yet folded to portable") — | doc | maths | built? | {Euler spirals} <arc-length; closed-form; Z-stack; vertex-based; interpolate-path; argmin_k Σ‖v_A,i − v_B,(i+k)‖²; correspond; Kubelka-Munk; coffee-ring; K-M; multi-plane; ComfyUI>
+- L107 [2] 5. Audio — The sub-threshold bed research (`docs/research/audio/`) triangulated a −22 to −30 LU window (MEDIUM: craft consensus, not <sub-threshold; env>
+- L114 [2] 6. What I would explore next, in order — 1. The press-card dock (§2 #3) - Bravos's proof species and the cheapest gap: a still, an underline callout, the quiet stack with the newest lit. Every short we {The press-card dock; The burst's furniture; R26-30 the stop-motion burst; R26-25 the span species and R26-24 N-tier pages} <axis-mounted; macro-chart; light-on-name>
 
 ## docs/content-video-engine/FINDING-gaps-are-the-edit.md
 

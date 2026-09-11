@@ -22,6 +22,12 @@ Gemini's `REPORT.md` is a **pacing report**, not a motion report. Everything num
 | the six phase windows | P1 0:00-1:30 · P2 1:30-3:23 · P3 3:23-8:58 · **P4 8:58-10:58 (45-55 %)** · P5 10:58-16:57 · P6 16:57-19:57 | **NOT carried until today** - now in doc 46 §46.7: Bravos's pivot sits at 45-55 % of the runtime, the FULL-VIDEO-MAP's chiastic turn, confirmed on a second reference |
 | species per shot | `unclassified` × 120 | empty in Gemini's ledger; ours classifies every event (`SHOT_LEDGER.claude.md`) |
 
+Deliberately not carried (recorded in Gemini's file, nothing to build from): the "Doc 29 target ~12 s per plate"
+benchmark, the "Fast / Dense (high cognitive load)" WPM label, the per-phase Key-Questions rubric, the transcript
+samples, the seven-term species legend it used zero times, and the 120-frame keyframe set (ours are at
+`claude-watch/shots/`). The companion inventory, every term put through `docs_find` with the hit count:
+[EXPLORATION-INVENTORY-2026-09-10.md](EXPLORATION-INVENTORY-2026-09-10.md).
+
 So: yes - the maths Gemini referenced in the Bravos doc is pacing arithmetic, and all of it is either carried,
 re-measured better, or rejected with the reason written. The motion maths of the reference layer (springs, stroke
 reparameterisation, Kubelka-Munk, ARAP, disocclusion, the figure rig) came from the research BUNDLE, not from the
@@ -37,12 +43,12 @@ built is a set of SPECIES (§2, from `REPORT.claude.md`'s grammar), not maths.
 | 7 | **the live vector map** - countries light as named, dashed arcs with X's for blocked flows, year stamps as pink tags, a B/W figure cutout, a figure stamp on a country | a `vector-map` species (SVG world, per-country paths, the light-on-name law, arc + X, the stamp); the camera's one-move-per-composition push between countries is BUILT (P49 keys) | ABSENT (our crossings map is a painted plate with hop traces); RU-3's map-flight rejected for the runtime, so this is an SVG job |
 | 8 | **the flow diagram** - dashed boxes of icon chips joined by arrows, the SAME diagram reused with one node swapped | a `flow-diagram` species: chips + arrows + the swap-one-node transition (the rhyme as a visual) | ABSENT; `bracket` covers the span brackets only |
 | 6 | **the burst's furniture** - the "?" placeholder track, the value capsule counting up ON THE AXIS under the bar's end, the dotted leader from the bar's end to the axis | on top of E60's burst (BUILT today): a placeholder state before the reveal, the capsule as an axis-mounted callout, a dotted leader (we have the offset-annotation leader on lines) | PARTIAL - the burst and the rescale are built; the three ornaments are not |
-| 10 | **the treemap with X marks** - exports by partner, partners crossed out | a part-to-whole form; E53 §1 holds ONE exception (the share/donut under four bounds) - a treemap needs its own ruling before code | ABSENT, needs a ruling |
+| 10 | **the treemap with X marks** - exports by partner, partners crossed out | a part-to-whole form; E53 §1 holds ONE exception (the share/donut under four bounds) - a treemap needs its own ruling before code | RECORDED (`docs/research/tech/TREEMAP_READABILITY_RESEARCH_BLUEPRINT.md`; zero hits in `content/video_engine/scripts/`) - needs the ruling |
 | 4 | **line-end tags become the next chart's bars** (the terminal tags -> value bars -> the next chart) | a keyed recast pair (dense-line -> story) with the TAGS as the keyed marks; today's keyed pairs: `RECAST_PAIRS = (("dense-line","story"),)` keyed on the datum | PARTIAL - the keyed recast exists; keying on the terminal tag is a small extension |
 | 5 | **the dashed ellipse on the datum** (the ring's form) with a flag chip beside | a `ring` form dial (dashed ellipse vs circle) + a chip | PARTIAL - the ring exists (E56's one use); the dashed-ellipse form and the chip do not |
 | 9 | **the numbered agenda** ("China's Gameplan" 1 \| 2, revealed in turn) | a stage caption device: numbered figures revealed on their words | ABSENT; `figure` + `note` could compose it |
 | (7:43) | **the isometric icon array** (the silos: a field of identical icons stacking up on a tilted plate) | a `count-array` species: N icons placed on an isometric grid, arriving in reading order, the count as the claim | ABSENT |
-| 11 | **restraint, measured** - 37/45 held compositions camera-still; the map push once per composition; one slow push on a stacking collage | BUILT: E59 (LOCKED default, the four reasons a camera moves), M24; the Tokyo cut carries the pull + the arrival ("8742>8738") | BUILT |
+| 11 | **restraint, measured** - 37/45 held compositions camera-still (by species: chart 11/12, diagram 4/4, card 8/9, map 6/10; the movers: shot 57 pan 69.7 px/s, shot 68 zoom +0.59 %/s, shot 78 pan 31.8 px/s - recomputed from `claude-watch/camera.json` for this review); the map push once per composition; one slow push on a stacking collage | BUILT: E59 (LOCKED default, the four reasons a camera moves), M24; the Tokyo cut carries the pull + the arrival ("8742>8738") | BUILT |
 | 12 | 178 WPM, no pauses; the sponsor block the only tonal break | doc 46; the take standard (E38/M13) | RECORDED |
 
 ## 3. The open backlog — the technique or maths each row needs
@@ -79,11 +85,18 @@ built is a set of SPECIES (§2, from `REPORT.claude.md`'s grammar), not maths.
 | HF-18 a shader seam (`sdf-iris`) | only if a world change wants it | deferred by the intake |
 | RU-2's `e` restitution | the hop after contact - `stopaction.mjs` carries `e` tagged from the weight brief; the operator has not heard it by ear at the four masses | the number is in the module; the listening is the gap |
 
+The older open rows the R26 series sits on (the inventory lists them with their maths): R26-0..R26-11 and R26-17 (the
+engine apart from the editor, renumbered P49's predecessor), the P38 rows T0 / T2 / T7 (dual-quaternion skinning) / T8
+(prop attach), G-i / G-j / G-k (the IK/FK boundary), V-a (the muted-caption judge), A2a / A2a', P41, X0 / X1 / X2 /
+X14 / X17 / X18 / X19 and ~20 P45 triage rows. The maths that does NOT exist anywhere on disk for them: the
+harmonisation of R26-2 / P45 O10, P38 T7's DQS, P38 T8's attach, G-k's IK/FK (48 §48 gives the theory, no code), and
+the Euler spiral (R26-3 / P45 T2: `stroke.mjs` has Menger curvature, no clothoid fitter).
+
 ## 4. The reference layer's maths not yet built (docs 42–49, all "reference — not yet folded to portable")
 
 | doc | maths | built? |
 |---|---|---|
-| 42 Drawing kinetics | stroke reparameterisation (arc-length), closed-form springs + the overshoot inverse, squash | BUILT (`stroke.mjs`, `spring.mjs`, `squash.mjs`); **Euler spirals** (the pen's path curvature law) are in the doc and nowhere in the kinetics - unbuilt |
+| 42 Drawing kinetics | stroke reparameterisation (arc-length), closed-form springs + the overshoot inverse, squash | BUILT (`stroke.mjs`, `spring.mjs`, `squash.mjs`); **Euler spirals** (§42.4, `dκ/ds = const` for generated geometry) are in the doc and nowhere in the kinetics - `stroke.mjs` has Menger curvature, no clothoid fitter (R26-3 / P45 T2) |
 | 43 Scene graph and transform | the anchor sandwich, Z-stack, dirty flags, both morph methods (§43.5: Method A vertex-based - Flubber / d3-interpolate-path with the rotational alignment `argmin_k Σ‖v_A,i − v_B,(i+k)‖²`; Method B ARAP), the cutout rig (§43.6) | Method B BUILT (`arap.mjs`, with the same alignment step in `correspond`); Method A (closed outline shapes, cheap) is unbuilt; the cutout rig is unbuilt by design (the host is a bound Flow character) |
 | 44 Ink and surface | Kubelka-Munk, the coffee-ring edge, anisotropic wicking | K-M BUILT (the ink layer), then BOUNDED by E22: the soak is a plate - six filter rounds lost to the alpha film; the wicking/coffee-ring maths stay reference |
 | 45 Parallax and plate motion | the disocclusion limit, the viability matrix, multi-plane inpainting, masked ambient motion | the ComfyUI 2.5D engine BUILT; the dial audit (our dials matched no target) was the finding - the viability matrix as a per-plate check is unbuilt |

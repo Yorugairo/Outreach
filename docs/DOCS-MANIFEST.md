@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-291 documents across 13 kinds.
+292 documents across 13 kinds.
 
 ## doctrine
 
@@ -338,6 +338,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md — Tokyo short v3 — the cut ledger and the — The operator on v2 (docks springing, dip — defines: P47 — terms: re-lit; sixty-three; sell-off; blue-ties
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md — SOURCES — steel-and-paper sound — Per-asset licence ledger (SOUND-SOURCING — defines: P35 — terms: gain-matched; highest-rated; preview-hq-mp3; -ss
 - docs/agent-memory/explorer/MEMORY.md — explorer - durable memory (reviewed) — Promoted from worker scratch by the pare — defines: — — terms: path | heading or symbol | what; per-platform; tokyo-tea-break; il-tea-break
+- docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md — Exploration inventory (2026-09-10) — the — Every Bravos term put through `docs_find — defines: P49 — terms: REFERENCE-RHYTHM; re-measures; 29.97 fps; cut-in
 - docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md — Exploration review — what techniques and — The operator: "review the backlog and ex — defines: — — terms: Kubelka-Munk; RESEARCH-INDEX; re-measured; per-phase
 - docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md — HyperFrames intake — the Gemini research — The operator: "HyperFrames has a GREAT r — defines: — — terms: push-in; ## The question; ## Verdict up front; ## Sources
 - docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md — Intake — the ink bloom transition (opera — The operator brought a MotionKit preset — defines: — — terms: K-M; km_ink; two-harmonic; byte-identical
