@@ -258,7 +258,10 @@ Acceptance:
 - Depends on: none (docs)
 - Write set: `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` §9.30 (the ledger page as the main character of a
   long form: the equation spine across phases, scene extension by the chart-to-chart family, the park/un-park as the
-  breath, the burst as the payoff, a plate where the story needs a picture - a narration plate, B-roll); the package
+  breath, the burst as the payoff, a plate where the story needs a picture - a narration plate, B-roll; the operator's
+  three uses of a plate, verbatim in the ledger: a LANDING SURFACE for docked evidence (the art embed) or evidence docked
+  straight on the chart, a BRIDGE between ideas, a RESET that covers the world so the evidence clears and the next page
+  mounts clean or on a new topic - each with its surface-grammar letter and its seam); the package
   rule (the thumbnail and the first frame lead with the ledger look; a generated scene never carries the package alone);
   `docs/portable/OPERATOR-RULINGS.md` E61 drafted in the operator's words of 2026-09-11; `patterns/FULL-VIDEO-MAP.md`
   one paragraph; `episode-build` skill B-rules; the docs layers.
