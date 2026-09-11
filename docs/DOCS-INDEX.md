@@ -2959,7 +2959,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
 ## docs/content-video-engine/briefs/ART-EMBED-PLATE-ORDER-2026-09-11.md
 
-- L1 [1] The ART-embed plate - the order for human gate 3 (P50 T7, 2026-09-11) — What the gate asks. P50 T7 gives the external lane its world: Bravos has the chart world and the TV world (their {What the gate asks.; What the plate must carry.} <hand-made; chalk-light; . A press dock with; matrix3d>
+- L1 [1] The ART-embed plate - the order for human gate 3 (P50 T7, 2026-09-11; the style line corrected to the house atom the same day) — What the gate asks. P50 T7 gives the external lane its world: Bravos has the chart world and the TV world (their {What the gate asks.; What the plate must carry.} <hand-made; . A press dock with; matrix3d>
 
 ## docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md
 
