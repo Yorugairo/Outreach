@@ -14,8 +14,8 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 17 | 328 | 95.1% | 93.0% | 3 | 97.0 |
-| Process (everything else) | 289 | 3233 | 97.6% | 91.8% | 11 | 100.0 |
-| All docs | 306 | 3561 | 97.4% | 91.9% | 14 | 100.0 |
+| Process (everything else) | 289 | 3235 | 97.6% | 91.8% | 11 | 100.0 |
+| All docs | 306 | 3563 | 97.4% | 91.9% | 14 | 100.0 |
 
 ## The 20 lowest-scoring docs
 

@@ -2021,3 +2021,57 @@ none -> null), the engine's `capBand` (the topmost live band, `.stage` kept; `.q
 `#caption.quiet` at 48 px / 800 in the safe box, `self_watch.py` O8, the golden `dock-pair-9x16` regenerated on purpose;
 `docs/content-video-engine/CAPABILITIES.md` (the captions rows). The finding that produced it:
 `tokyo-tea-break/build-short/SELF-WATCH.md` (gate 1).
+
+## E63 — No card reads over a chart while the chart is drawing; a card takes scale, depth or placement instead (2026-09-11)
+
+**The operator's words.** Gate 1's second read, watching the Tokyo cut with the HTML self-watch beside it (the
+panel card at 0:09.5 flies in and reads centred over the plot while the line is still building underneath, for
+about 1.5 s, then parks top-right): *"docking over the plate while it's drawing is not a good standard practice,
+it's somewhat okay here because of timing, but as a rule we should probably use better handling now that we can
+manipulate scale/depth/placement easier."*
+
+**The ruling.** A chart's build is never hidden behind a card. While a chart is drawing (from its build's start
+to its landing), no card's reading pop may sit on the plot; the card keeps its WORD (the enter is the sentence's)
+and changes how it reads: it reads in the band the page leaves free (above the plot across the title, as E45 parks
+a card, or below it), at the reading scale if that fits and at a smaller one if not; and when no band holds a read
+at all, the read is deferred - the card enters on its word straight at its parked place, and the compiled entry
+says so. A card that enters after the landing is untouched; a card on a plate is untouched. The gate reads it (M27:
+a card over a plot while `marks.drawn` is between 0 and 1 is a FAIL). E45's choreography stands for every card that
+reads over a finished chart or a plate.
+
+**Why.** The chart proves one sentence (E25); the build IS the proof arriving. A card over it while it draws hides
+the arrival and makes two things happen where the eye can follow one (E21's opposite: motion the viewer cannot
+see). The engine can now place, scale and layer a card against the page's measured boxes (P50 T16, E62), so the
+old excuse - the card had nowhere else to read - is gone.
+
+Mechanisms: the compiler (`read_moved` / `read_deferred` on the dock entry), `gate_motion_density.py` M27,
+`self_watch.py` O6; `docs/content-video-engine/CAPABILITIES.md`. The finding: the Tokyo self-watch's O6 row
+(2026-09-11) and the operator's read of the same instant.
+
+## E64 — A chart becomes another chart by re-writing itself or by morphing; it never cuts (2026-09-11)
+
+**The operator's words.** The same read, on the Tokyo cut at 0:50 (the balance-sheet line becomes the four
+monthly-change bars: the sub un-writes, the line un-draws by its history in 0.6 s, the axes swap to the new scale
+in one frame, then the bars grow): *"I don't like how the transformation is handled at 0:50, i think the chart
+needs to either re-write/re-draw itself or morph. right now it basically just cuts a new chart, thats the most
+obvious issue to me."*
+
+**The ruling.** When a page's chart becomes another chart (a `chart_to` recast, a state change, a windowed line
+becoming its bars), the change is VISIBLE AS WRITING or as a morph on the page's own clock: the axis labels
+un-write and re-write, the gridlines slide to the new scale, the standing ink un-draws only to what the next chart
+keeps, and what the two charts share travels - the datum that becomes a bar carries its value to the bar's top
+and the bar grows beneath it (the keyed recast's law, P48 T4b / P50 T11, now the rule for every pair: by series
+when the lines are the series, by datum when the data are the bars). A recast that clears the page and draws the
+next chart fresh is a cut with a delay; a cut is a scene change and takes a new row and a new page (E25). So the
+plain recast stops being un-draw-then-draw: the compiler derives the key itself when the two states share their
+data (a line whose next state is bars over the same series or the same data is keyed without the author asking),
+the axes always hand over by re-writing, and a pair that shares nothing is named in the compile as a cut the
+author must own with a new row.
+
+**Why.** Continuity is the claim (Bravos 99-105: the tags become the bars with no cut; doc 29 §9.33 the chart is
+the world). A cut says "another chart"; a re-write says "the same money, counted another way" - which is the
+sentence the cut at 0:50 is under ("The Treasury prints the new total monthly").
+
+Mechanisms: the compiler (`RECAST_PAIRS` widened to the datum-keyed line -> change-bars pair; the plain recast
+refused with the keyed forms named), the engine's recast (the axis hand-over and the datum travel for the new
+pair), M23 reading it; `docs/content-video-engine/CAPABILITIES.md`. The finding: the operator's read of 0:50.
