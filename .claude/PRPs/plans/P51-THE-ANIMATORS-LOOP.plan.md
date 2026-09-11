@@ -174,7 +174,7 @@ Acceptance:
 - Evidence: pending
 
 ### T2: Eyes - the probe CLI and the layout gate M25
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: `implementation_luna` (the probe); parent (the gate's thresholds, measured on the three defects)
 - Depends on: none
 - Write set: `content/video_engine/scripts/probe.py` (`probe <build> <t...> --json [--sheet out.png --tile 360]`: every
@@ -187,7 +187,7 @@ Acceptance:
   FAIL M25 with the right pair named); CAPABILITIES row; `docs/GATES-REGISTRY` regenerated.
 - Acceptance: as the acceptance above; the probe's JSON for one instant is under 2 KB.
 - Validate: `python content/video_engine/scripts/probe.py content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short 58.6 --json`; the gate tests
-- Evidence: pending
+- Evidence: `content/video_engine/scripts/probe.py` (625 lines), `gate_motion_density.py` M25 (+132), `tests/test_probe.py` (8), `tests/test_gate_motion_density.py` (+4: the three 2026-09-10 defects rebuilt as fixtures from the Tokyo compiled timeline each FAIL with the right pair named, the untouched build PASSes). Measured: Tokyo 58.6 JSON 1,092 bytes in 2.2 s; `--gate` 61 instants in 7.8 s; the gate `[PASS ] M25 ... smallest type read 11.6 CSS px on a phone (floor 11) | INFO ... source parked 4.9, chart.lab parked 7.5 ...`; 145 tests green across probe / gate / camera / lint / kit (the parent's run). Four scope decisions, measured and named in code: settled cards only (the Fed card crosses the page mid-throw in the approved cut); the chart's DATA, not its plot box (the approved tea cup parks in the plot's empty corner); ink line by line (a two-line sub is mostly air); the type floor skips parked runs and the citation (the 2026-09-07 design pass set .lp-src.compact at 9.4 CSS px on purpose) and lists them. Two template findings logged, not fixed here (out of the write set): R26-37 (the template's probes take the first ledger world), R26-38 (stale `__lp` after a backward seek). CAPABILITIES row; PIPELINE 7c; GATES-REGISTRY regenerated.
 
 ### T3: The one-shot bar - the self-watch as a build artifact
 - Status: pending (human gate 1 on its first real report)

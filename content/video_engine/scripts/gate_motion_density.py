@@ -62,6 +62,10 @@ captions do NOT count - they are what a viewer reads as stillness.
   M17  the morph's match-cut invariants (P47 T3; per     WARN   (per MORPH - a page's enter morph and every morph_to;
        morph since P48 T5): centroid <= 6 % W, axis             INFO until measure_morph.py has run)
        <= 15 deg, area >= 60 %, det J > 0
+  M25  layout (P51 T2): at every landing, a SETTLED card       FAIL   (E45 s1 / E52 / E60; a dock inside the safe
+       over the chart's data, over a line of the page's ink            zone WARNs; INFO until probe.py <build> --gate
+       or in the caption strip; type under 11 CSS px on a             has written layout-probe.json)
+       phone. Read from layout-probe.json, never a browser
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -110,6 +114,32 @@ TRANSITION_EDGE_S = 0.5    # a transition that ends inside the last half second 
 TRANSITION_DATA_KINDS = ("recast", "rescale", "extend", "morph")   # the verbs that change the chart's DATA state: their end is a data mark and a landing; a park moves the chart and changes nothing
 SRC_M21 = "E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing"
 SRC_M18 = "E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)"
+LAYOUT_PROBE_NAME = "layout-probe.json"   # written by probe.py --gate beside the timeline; M25 reads it and never opens a browser
+SRC_M25 = ("E45 s1 (the compiler's `place`: a card parks in the page's quiet space, never over the plot, the title, the source line "
+           "or the caption's anchor) / E52 (the page CITES: the citation rides the park) / E60 - the three defects of 2026-09-10, "
+           "refused from the page's own DOM (probe.py --gate)")
+# A SETTLED card only. What a card RESTS on is composition and the compiler's contract; what it flies over on its way in is
+# choreography (the Tokyo Fed card crosses the whole page mid-throw, approved 2026-09-09). probe.py marks `rest` and `state`.
+LAYOUT_SETTLED = ("parked", "reading")
+DATA_OVER_SHARE = 0.02     # a settled card may cover this much of itself with the chart's DATA - the bars, the drawn series,
+                           # the numbers - and no more (defect i: the fab card over the bars). A card in a chart's EMPTY
+                           # corner is clean (the Tokyo cup, approved): the data is measured where it is drawn, not as a plot box.
+INK_OVER_SHARE = 0.08      # ... and this much of a LINE of the page's ink - the citation, a note, the title, an axis label, a
+                           # pill (defect ii: the source line left full-size under the cards). Below it is the glyph box's own
+                           # padding brushing a card's edge, measured at 1-3 % where nothing touches on screen.
+CAPTION_TOUCH_SHARE = 0.01  # any real intersection with the caption strip while a caption is showing (defect iii: the record's
+                           # paper grew into the strip); a hundredth of the strip is the box's rounding, not the paper.
+TYPE_FLOOR_CSS = 11.0      # doc 49 s49.1 reads the floor at 12 CSS px on a 390 px phone (34 px on the 1080 stage); 11 is the
+                           # refusal line under it. Exempt: the citation (the operator's design pass 2026-09-07 - "cited sources
+                           # should take up minimal space, not maximal" - put .lp-src.compact at 26 px = 9.4 CSS px on purpose)
+                           # and any run a park has demoted (probe.py marks it `pk`): a parked chart is a thumbnail beside the
+                           # card that holds the stage, not reading matter.
+TYPE_FLOOR_EXEMPT = ("source",)
+LAYOUT_INK = ("page.source", "page.note", "page.title", "page.sub", "pill")   # a LINE of ink; `page.plot` / `page.chart` are
+                           # rectangles the probe reports for context - a card beside a parked chart sits inside the plot box
+                           # by design, and only the DATA in it is protected
+SAFE_WARN_SHARE = 0.10     # a settled card with more than a tenth of itself inside a Shorts chrome band (top 12 %, bottom 20 %,
+                           # outer 5 %) is at risk of the overlay; a sliver at the edge is not.
 STILL_WARN_S = 8.0         # s9.25 working target
 SHORT_PULSE_MAX_S = 2.5    # doc 49 s49.6: a short needs a visual event every 1.2-2.5 s. THE GATE IS THE PULSE (operator, 2026-09-05):
                            # a floor on motion, never a ceiling - 'we could have much more animation and it would be fine'
@@ -726,7 +756,8 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
                             or any(isinstance(pg, dict) and "cap_mode" in pg for pg in pages)}
 
 
-def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None = None, morph: dict | str | None = None) -> tuple[list[Gate], dict]:
+def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None = None, morph: dict | str | None = None,
+        layout: dict | str | None = None) -> tuple[list[Gate], dict]:
     A = analyse(tl, docks, mp)
     R = A["runtime"]
     mm = lambda s: f"{int(s // 60)}:{int(s % 60):02d}"
@@ -801,6 +832,7 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     # E24 / E25: the opening minute and the chart-as-proof rule
     g += [_opening_still_gate(A["still"]), _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
     g.append(_frozen_gate(frames))                                        # M18 (E49: nothing ever goes truly still)
+    g.append(_layout_gate(layout))                                        # M25 (P51 T2: the layout gate, from probe.py's boxes)
     if (bt := _build_to_gate(tl.get("scenes", []))) is not None:
         g.append(bt)                                                      # M19 (P47 T2: the build_to holds, INFO)
     if (cg := _cadence_gate(tl.get("scenes", []))) is not None:
@@ -1039,6 +1071,19 @@ def load_frames(build: Path) -> list[dict] | str | None:
     return list(doc.get("frames") or []) if isinstance(doc, dict) else list(doc)
 
 
+def load_layout(build: Path) -> dict | str | None:
+    """The layout probe.py --gate wrote beside the timeline, or None when it has not run (M18's pattern)."""
+    p = Path(build) / LAYOUT_PROBE_NAME
+    if not p.exists():
+        return None
+    doc = json.loads(p.read_text(encoding="utf-8"))
+    if isinstance(doc, dict) and doc.get("player_sha256"):
+        html = Path(build) / "player.html"   # the boxes are keyed to the player they were read from
+        if html.exists() and hashlib.sha256(html.read_bytes()).hexdigest() != doc["player_sha256"]:
+            return "stale"
+    return doc if isinstance(doc, dict) else None
+
+
 def frozen_runs(frames: list[dict], max_s: float = FROZEN_MAX_S) -> list[tuple[float, float]]:
     """(start t, frozen seconds) of every run of identical consecutive hashes longer than max_s - the seconds between
     the run's first and last identical frame. Mirrors measure_frozen_frames.frozen_runs."""
@@ -1078,6 +1123,90 @@ def _frozen_gate(frames: list[dict] | str | None) -> Gate:
     # the longest run that stayed under the ceiling, for the record
     longest = max(frozen_runs(frames, -1.0), key=lambda r: r[1], default=(0.0, 0.0))
     return Gate("M18", "PASS", f"no run of bit-identical frames over {FROZEN_MAX_S:.2f}s ({span}); longest {longest[1]:.2f}s at {_mm(longest[0])}", SRC_M18)
+
+
+def _parked_type(doc: dict) -> list[str]:
+    """The runs under the floor that the row LISTS and never scores: the citation by the operator's design pass,
+    and anything a park has demoted (E58: the park makes room - a parked chart is a shape, not a read)."""
+    smallest: dict[str, float] = {}
+    for inst in doc.get("instants") or []:
+        for x in inst.get("texts") or []:
+            if x["css"] >= TYPE_FLOOR_CSS or not (x.get("pk") or x["k"] in TYPE_FLOOR_EXEMPT):
+                continue
+            k = x["k"] + (" parked" if x.get("pk") else " (the citation)")
+            smallest[k] = min(smallest.get(k, 99.0), x["css"])
+    return [f"{k} {v:.1f}" for k, v in sorted(smallest.items(), key=lambda kv: kv[1])]
+
+
+def _layout_faults(doc: dict) -> tuple[list[str], list[str]]:
+    """(FAIL lines, WARN lines) over every probed instant. Each names the two boxes, the instant and the area."""
+    fails: list[str] = []
+    warns: list[str] = []
+    portrait = str(doc.get("aspect") or "16:9") == "9:16"
+    for inst in doc.get("instants") or []:
+        t = float(inst.get("t", 0.0))
+        settled = {d["id"] for d in inst.get("docks") or [] if d.get("rest") and d.get("state") in LAYOUT_SETTLED}
+        for o in inst.get("overlaps") or []:
+            if o["a"] not in settled:
+                continue
+            share, px = o["share_of_smaller"] / 100.0, o["area_px"]
+            where = f"at {_mm(t)}, {px:,} px, {o['share_of_smaller']} %"
+            if o["b"] == "page.data" and share > DATA_OVER_SHARE:
+                fails.append(f"{o['a']} over the chart's data {where} of the card")
+            elif o["b"] == "caption" and share > CAPTION_TOUCH_SHARE:
+                fails.append(f"{o['a']} in the caption strip {where} of the smaller")
+            elif (o["b"] in LAYOUT_INK or o["b"].startswith("chart.")) and share > INK_OVER_SHARE:
+                fails.append(f"{_ink_name(o['b'])} under {o['a']} {where} of the ink")
+        if portrait:
+            for x in inst.get("texts") or []:
+                if x.get("pk") or x["k"] in TYPE_FLOOR_EXEMPT or x["css"] >= TYPE_FLOOR_CSS:
+                    continue
+                fails.append(f"{x['k']} type at {x['css']:.1f} CSS px on a phone at {_mm(t)} (floor {TYPE_FLOOR_CSS:.0f}, {x['px']} stage px)")
+        for band, pct in (inst.get("clearances") or {}).get("safe_pct", {}).items():
+            if pct / 100.0 > SAFE_WARN_SHARE and settled:
+                warns.append(f"a card is {pct} % inside the {band} safe-zone band at {_mm(t)}")
+    return _dedupe(fails), _dedupe(warns)
+
+
+def _ink_name(key: str) -> str:
+    return {"page.source": "the page's source line", "page.note": "a note", "page.title": "the title", "page.sub": "the sub",
+            "pill": "a pill", "chart.lab": "an axis label", "chart.val": "a value", "chart.callout": "a callout",
+            "chart.sname": "a series name"}.get(key, key)
+
+
+def _dedupe(lines: list[str]) -> list[str]:
+    seen, out = set(), []
+    for line in lines:
+        key = line.split(" at ")[0]
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(line)
+    return out
+
+
+def _layout_gate(doc: dict | str | None) -> Gate:
+    """M25 (P51 T2): the layout gate. Browser-free, exactly as M18 is - it reads the boxes probe.py measured in the
+    page's own DOM at the instants that matter, and refuses the three defects of 2026-09-10 by name."""
+    if doc is None:
+        return Gate("M25", "INFO", f"layout not measured - run probe.py <build> --gate (writes {LAYOUT_PROBE_NAME})", SRC_M25)
+    if doc == "stale":
+        return Gate("M25", "INFO", f"{LAYOUT_PROBE_NAME} measured another player.html (the build was rebuilt since) - re-run probe.py <build> --gate", SRC_M25)
+    instants = (doc or {}).get("instants") or []
+    if not instants:
+        return Gate("M25", "INFO", f"{LAYOUT_PROBE_NAME} carries no instants - re-run probe.py <build> --gate", SRC_M25)
+    fails, warns = _layout_faults(doc)
+    span = f"{len(instants)} instants probed"
+    parked = _parked_type(doc)
+    listed = (" | INFO, listed not scored (CSS px on a phone): " + ", ".join(parked[:4])) if parked else ""
+    if fails:
+        return Gate("M25", "FAIL", f"{len(fails)} layout fault(s) over {span}: " + "; ".join(fails[:6]) + (" ..." if len(fails) > 6 else "") + listed, SRC_M25)
+    if warns:
+        return Gate("M25", "WARN", f"{len(warns)} safe-zone intrusion(s) over {span}: " + "; ".join(warns[:4]) + (" ..." if len(warns) > 4 else "") + listed, SRC_M25)
+    small = min((x["css"] for i in instants for x in (i.get("texts") or [])
+                 if not x.get("pk") and x["k"] not in TYPE_FLOOR_EXEMPT), default=0.0)
+    return Gate("M25", "PASS", f"no settled card on the chart's data, on a line of the page's ink or in the caption strip over {span}; "
+                f"smallest type read {small:.1f} CSS px on a phone (floor {TYPE_FLOOR_CSS:.0f})" + listed, SRC_M25)
 
 
 def _build_to_holds(scenes: list[dict]) -> list[tuple[float, float]]:
@@ -1408,7 +1537,7 @@ def write_report(build_dir: Path, timeline_name: str | None = None) -> tuple[Pat
     build_dir = Path(build_dir)
     tl, docks, mp = _load(build_dir, timeline_name)
     tl_path = _timeline_path(build_dir, timeline_name)
-    gates, stats = run(tl, docks, mp, load_frames(build_dir), load_morph_invariants(build_dir))
+    gates, stats = run(tl, docks, mp, load_frames(build_dir), load_morph_invariants(build_dir), load_layout(build_dir))
     n_fail = fail_count(gates)
     verdict = "FAIL" if n_fail else "PASS"
     # the timeline hash keys the report to the build it measured; render_episode refuses a
@@ -1430,7 +1559,7 @@ def main() -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     tl, docks, mp = _load(args.build, args.timeline)
-    gates, stats = run(tl, docks, mp, load_frames(args.build), load_morph_invariants(args.build))
+    gates, stats = run(tl, docks, mp, load_frames(args.build), load_morph_invariants(args.build), load_layout(args.build))
     print(report_text(gates, stats, args.build))
     return 1 if fail_count(gates) else 0
 

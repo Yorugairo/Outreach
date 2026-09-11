@@ -882,3 +882,115 @@ def test_a_breakthrough_state_s_run_is_its_last_data_mark_and_its_landing():
     assert G._transition_land(s, s["species"][0]) == 50.5
     stack = {"axes": {"overflow": "stack", "domain": [0, 8]}, "values": [1.52, 36.59]}
     assert G._breakthrough_run_s(stack) == pytest.approx(G.BT_HOLD_S + G.BT_STEP_S * 26), "25 bricks of 1.52 reach 36.59: the comparator's plus 25 steps"
+
+
+# ---- P51 T2: M25, the layout gate - the three defects of 2026-09-10, rebuilt as fixtures ---------------------------
+# Each fixture takes the COMPILED Tokyo short timeline, edits one row, instantiates it through
+# render_baseline onto the reviewed template with the build's own assets, probes the instants that
+# matter with probe.py and runs M25 on what the page's DOM says. The untouched timeline is the control.
+
+import json as _json  # noqa: E402
+import re as _re  # noqa: E402
+import tempfile as _tempfile  # noqa: E402
+
+import probe as PROBE  # noqa: E402
+import render_baseline as RB25  # noqa: E402
+
+TOKYO = ROOT / "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short"
+TOKYO_TL = "tokyo-short.timeline.json"
+# the record reads, the fab card reads, the burst, the fab card parked beside the record (E60)
+M25_INSTANTS = [(56.3, "the record at reading size"), (57.92, "the fab card at reading size"),
+                (58.6, "the burst"), (58.72, "the fab card parked")]
+
+
+def _browser_ok25() -> bool:
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as pw:
+            pw.chromium.launch(headless=True).close()
+        return True
+    except Exception:
+        return False
+
+
+needs_browser25 = pytest.mark.skipif(not _browser_ok25(), reason="playwright chromium not installed")
+needs_tokyo25 = pytest.mark.skipif(not (TOKYO / "player.html").exists(), reason="the Tokyo short build is not on disk")
+
+
+@pytest.fixture(scope="module")
+def tokyo_parts():
+    """The compiled timeline and the build's own asset map, lifted out of the built player once."""
+    html = (TOKYO / "player.html").read_text(encoding="utf-8")
+    uris = _re.search(r'<script id="asset-data" type="application/json">(.*?)</script>', html, _re.S).group(1)
+    tpl = RB25.TEMPLATE.read_text(encoding="utf-8")
+    return _json.loads((TOKYO / TOKYO_TL).read_text(encoding="utf-8")), uris, tpl
+
+
+def _m25(tl: dict, parts, instants=M25_INSTANTS) -> "G.Gate":
+    """Build a player from this timeline, probe those instants, return the M25 row."""
+    _base, uris, tpl = parts
+    with _tempfile.TemporaryDirectory() as td:
+        d = Path(td)
+        (d / TOKYO_TL).write_text(_json.dumps(tl), encoding="utf-8")
+        # RB.instantiate's own substitution, with the asset map left as the text it already is
+        (d / "player.html").write_text(tpl.replace("{{TIMELINE}}", _json.dumps(tl, separators=(",", ":"))).replace("{{URIS}}", uris), encoding="utf-8")
+        with PROBE.Probe(d, TOKYO_TL) as p:
+            doc = PROBE.probe_doc(d, probe=p, instants=instants)
+    return G._layout_gate(doc)
+
+
+def _s04(tl: dict) -> dict:
+    return next(s for s in tl["scenes"] if s["scene_id"] == "s04")
+
+
+def test_m25_is_info_until_the_probe_has_run():
+    """M18's pattern exactly: measured or named, never a silent skip."""
+    assert G._layout_gate(None).level == "INFO" and "probe.py" in G._layout_gate(None).message
+    assert G._layout_gate("stale").level == "INFO" and "another player.html" in G._layout_gate("stale").message
+    assert G._layout_gate({"instants": []}).level == "INFO"
+    assert G.load_layout(Path("no/such/build")) is None
+
+
+@needs_browser25
+@needs_tokyo25
+def test_m25_passes_the_tokyo_short_as_built(tokyo_parts):
+    """The cut the operator watched and approved (2026-09-09): two cards parked beside a chart parked to
+    0.52, the citation riding it down. M25 must not have an opinion about it."""
+    g = _m25(_json.loads(_json.dumps(tokyo_parts[0])), tokyo_parts)
+    assert g.level == "PASS", g.message
+    assert "no settled card on the chart's data" in g.message
+
+
+@needs_browser25
+@needs_tokyo25
+def test_m25_refuses_the_card_on_the_chart_s_data_and_the_citation_left_under_it(tokyo_parts):
+    """Defects (i) and (ii), 2026-09-10, from one edit: delete row 4's park and the fab card lands on the
+    bars the park made room beside, with the page's source line left full-size underneath it (E52)."""
+    tl = _json.loads(_json.dumps(tokyo_parts[0]))
+    sc = _s04(tl)
+    n = len(sc["species"])
+    sc["species"] = [x for x in sc["species"]
+                     if not (x.get("kind") == "chart_to" and x.get("to") == "park" and float(x["at"]) < 55.0)]
+    assert len(sc["species"]) == n - 1, "row 4's park is the row this fixture deletes"
+    g = _m25(tl, tokyo_parts)
+    assert g.level == "FAIL", g.message
+    assert "dock-i-fab-wafer over the chart's data" in g.message, g.message          # (i)
+    assert "the page's source line under dock-i-fab-wafer" in g.message, g.message   # (ii)
+    assert "%" in g.message and "px" in g.message, "the boxes are named with their area"
+
+
+@needs_browser25
+@needs_tokyo25
+def test_m25_refuses_paper_in_the_caption_strip(tokyo_parts):
+    """Defect (iii): the record's READING box grown to the row's `read: {centre_w: 0.95, centre_y: 0.80}`
+    - which the compiler writes as this read_place (build_scene_timeline_f.centred_place) - so the paper
+    rests over the caption while a caption is showing."""
+    tl = _json.loads(_json.dumps(tokyo_parts[0]))
+    rec = next(d for d in _s04(tl)["docks"] if d["slide"] == "dock-k-pledge-record")
+    card_aspect = rec["read_place"]["h"] / rec["read_place"]["w"]
+    w = round(0.95 * 1080)
+    h = round(w * card_aspect)
+    rec["read_place"] = {"x": round((1080 - w) / 2), "y": round(0.80 * 1920 - h / 2), "w": w, "h": h}
+    g = _m25(tl, tokyo_parts, [(56.0, "the record reads"), (56.3, "the record reads"), (56.6, "the record reads")])
+    assert g.level == "FAIL", g.message
+    assert "dock-k-pledge-record in the caption strip" in g.message, g.message
