@@ -29,6 +29,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))   # bare-module import works from any cwd / test runner
 import build_scene_timeline_f as B  # noqa: E402
+from build_scene_timeline_f import PLATE_USES  # noqa: E402,F401  E61: the compiler owns the tuple; `L.PLATE_USES` still reads
 
 ROOT = Path(__file__).resolve().parents[3]
 MAP_DOC = ROOT / "docs/content-video-engine/SPECIES-BY-SENTENCE.md"
@@ -36,7 +37,6 @@ DOC_BEGIN, DOC_END = "<!-- SPECIES_WHEN:BEGIN -->", "<!-- SPECIES_WHEN:END -->"
 LONG_FORM_S = 180.0          # the script gates' route: a measured clock under 3:00 is a short (E35 / G2)
 TABLE_NAME = "SHOT-TABLE-SHORT.py"
 DEFAULT_BUILD = "build-short"
-PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is
 TEXT_W = 74
 
 # The keyword table. Crude on purpose (V05's lesson: a classifier the author can read beats one they cannot argue with).

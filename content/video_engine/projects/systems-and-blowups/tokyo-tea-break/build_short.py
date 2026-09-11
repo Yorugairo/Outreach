@@ -11,13 +11,16 @@ from `evidence/objects/<series>.series.json`. Cuts land at 0.8 of the >= 0.30 s 
 first word of the next beat (M13, from the reference) - the rows are anchored on PHRASES and
 timed from the take, never typed.
 
+P51 T0: the mechanism (the take's clock, the dock registrations, the audio stitch and bed
+envelope, the hand-off) lives in `scripts/authoring/`; this file keeps THIS EPISODE'S FACTS -
+its rows, its anchors, its crops, its cue files, its levels.
+
     python build_short.py            # builds build-short/ and runs the motion gate
 """
 from __future__ import annotations
 
 import json
 import os
-import math
 import shutil
 import sys
 from pathlib import Path
@@ -27,15 +30,19 @@ REPO = HERE.parents[4]
 SCRIPTS = REPO / "content/video_engine/scripts"
 sys.path.insert(0, str(SCRIPTS))
 
+from authoring import Project                                             # noqa: E402
+from authoring import audio as A, docks as D, table as T, words as W      # noqa: E402
+
 SCRIPT = HERE / "SCRIPT-90S-VO.claude.txt"
 TAKE = HERE / "vo-short/audio"
 BUILD = HERE / os.environ.get("TOKYO_BUILD_DIR", "build-short")   # P48 T7: a cut under review builds beside the watched one (TOKYO_BUILD_DIR=build-short-p48 -> :8740), never over it
+EP = Project(here=HERE, build=BUILD, take=TAKE, take_stem="scene_1", script_name=SCRIPT.name, episode_id="tokyo-tea-break")
+EDIT_PAUSES = HERE / "SCRIPT-90S-VO.claude-EDIT-PAUSES.json"
 CAMERA = os.environ.get("TOKYO_CAMERA", "1") == "1"   # the operator's watch, 2026-09-10 ("8742>8738"): the camera cut IS the cut; TOKYO_CAMERA=0 rebuilds the locked variant beside it   # P49 (the operator, 2026-09-10: "let's test out those camera changes"): the arrival on the ring + the pull toward the landings, in a build beside (build-short-cam, :8742)
 CAM_ROW = {"keys": [], "attention": "landings"} if CAMERA else None   # the row's 8th element: the eye pulls toward a card as it lands (E59 #1; the dials are HG1's)
 CLIPS = HERE / "omni-video/stills"   # the v2 set: approved stills to video (APPROVALS.json)
 SERIES = ("ev-japan-holdings-v1", "ev-meta-yield-v1")
-CUT_AT = 0.8          # M13: the cut sits at 0.8 of the gap before the next phrase
-MIN_GAP = 0.30        # M13: a gap shorter than this is not a cut point
+
 
 # the holdings series since 2000 (316 monthly points): the February-2026 high the script calls the peak, and the latest
 def _holdings_indices() -> tuple[int, int]:
@@ -58,9 +65,6 @@ def _holdings_window() -> list[float]:
 HOLDINGS_WINDOW = _holdings_window()
 # P48 T7 (2026-09-10): the fab card's box beside the PARKED monthly bars - the band under the parked chart, above the source line
 FAB_W, FAB_CX, FAB_CY = 0.58, 0.5, 0.55
-_fw, _fh = round(FAB_W * 1080), round(round(FAB_W * 1080) * 0.5911)
-FAB_BOX = {"kind": "region", "x0": round((FAB_CX * 1080 - _fw / 2) / 1080, 4), "y0": round((FAB_CY * 1920 - _fh / 2) / 1920, 4),
-           "x1": round((FAB_CX * 1080 + _fw / 2) / 1080, 4), "y1": round((FAB_CY * 1920 + _fh / 2) / 1920, 4)}   # the whole plant, for the glide
 
 
 def _holdings_facts() -> dict:
@@ -76,73 +80,6 @@ FACTS = _holdings_facts()
 FED = json.loads((HERE / "evidence/objects/ev-fed-vs-yields-v1.series.json").read_text(encoding="utf-8"))   # the Fed page's object: its notes, its bracket indices
 FED_NOTES = FED["notes"]
 FED_MAY_IDX = max(range(len(FED["bars"])), key=lambda i: -FED["bars"][i]["value"]) if FED.get("bars") else 0   # the emphasised bar is the biggest SELLING month, never the first (a page with no bars emphasises nothing)
-
-
-def clip_dock(aid: str) -> str:
-    """A CLIP as a dock (the video dock, E44): the host's counter clip docked over a page instead of taking the frame."""
-    import build_render_f as R
-    name = DOCK_STILLS[aid][0]
-    R.STAMPED[aid] = str(CLIPS / name)
-    return aid
-MONTH = lambda ym: __import__("datetime").date(int(ym[:4]), int(ym[5:7]), 1).strftime("%B %Y")
-
-
-def words() -> list[dict]:
-    """The take's words (start_s / end_s)."""
-    d = json.loads((TAKE / "scene_1.words.json").read_text(encoding="utf-8"))
-    return d["words"] if isinstance(d, dict) else d
-
-
-def shifted_words() -> list[dict]:
-    """The words AFTER the edit pauses (build-short/timeline.json, start / end) in the take's shape."""
-    tl = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))
-    return [{"w": w["w"], "start_s": w["start"], "end_s": w["end"]} for w in tl["words"]]
-
-
-def phrase_start(ws: list[dict], phrase: str) -> tuple[int, float]:
-    """Index and start time of the word that opens `phrase` (punctuation-insensitive)."""
-    norm = lambda s: s.strip(".,:;!?\"'").lower()
-    toks = [norm(x) for x in phrase.split()]
-    for i in range(len(ws) - len(toks) + 1):
-        if [norm(x["w"]) for x in ws[i:i + len(toks)]] == toks:
-            return i, ws[i]["start_s"]
-    raise SystemExit(f"phrase not in the take: {phrase!r}")
-
-
-def cut_before(ws: list[dict], phrase: str) -> float:
-    """The cut time before `phrase`: 0.8 of the gap after the previous word (M13)."""
-    i, start = phrase_start(ws, phrase)
-    if i == 0:
-        return 0.0
-    prev_end = ws[i - 1]["end_s"]
-    gap = start - prev_end
-    if gap < MIN_GAP:
-        raise SystemExit(f"no cut point before {phrase!r}: gap {gap:.2f}s < {MIN_GAP}s (M13)")
-    return round(prev_end + CUT_AT * gap, 2)
-
-
-def word_time(ws: list[dict], phrase: str) -> float:
-    return phrase_start(ws, phrase)[1]
-
-
-def write_timeline(ws: list[dict], runtime_s: float) -> dict:
-    """`timeline.json` in the shape the caption-page builder and the compiler read (one part)."""
-    out_words = [{"w": w["w"], "start": round(w["start_s"], 3), "end": round(w["end_s"], 3), "part": 1} for w in ws]
-    sents, cur = [], []
-    for w in out_words:
-        cur.append(w)
-        if w["w"].rstrip('"”').endswith((".", "!", "?", ":")):
-            sents.append({"text": " ".join(x["w"] for x in cur), "start": cur[0]["start"], "end": cur[-1]["end"], "part": 1})
-            cur = []
-    if cur:
-        sents.append({"text": " ".join(x["w"] for x in cur), "start": cur[0]["start"], "end": cur[-1]["end"], "part": 1})
-    tl = {"episode": "tokyo-tea-break", "script": SCRIPT.name, "take": "vo-short", "runtime_s": runtime_s,
-          "words": out_words, "sentences": sents, "edit_pauses_applied": False}
-    (BUILD / "timeline.json").write_text(json.dumps(tl, indent=1), encoding="utf-8")
-    return tl
-
-
-KEYFRAME_EVERY = 12   # frames (0.5 s at 24 fps): a seek decodes at most half a second, not the whole clip
 
 
 # THE OUTRO (operator, 2026-09-05: "we have the outro built already, same as we used for the first reel - the remotion kit outro"):
@@ -161,18 +98,6 @@ OUTRO_S, OUTRO_LEAD = 6.2, 0.1   # the card's fade begins a tenth before the las
 # four CC0 shutters (sound/SOURCES.md) composed into a seeded pack the length of the panel clip - clusters of two or three
 # clicks, a cluster every ~1-1.6 s, the sample and its level varied per click; A dense, B sparse. One cue at the panel.
 SHUTTERS = ["fs-shutter-pentax-337229.mp3", "fs-shutter-manual-521854.mp3", "fs-shutter-sony-249750.mp3", "fs-shutter-dslr-539136.mp3"]
-
-
-def stop_dials() -> dict:
-    """The stop-action module's timing dials (FLIGHT_S, ANTIC_S, DROP_S), read from the source so the landing cue and the
-    landing itself share one clock. The module is the truth; this is a regex over its STOP block."""
-    import re
-    src = (SCRIPTS / "kinetics/stopaction.mjs").read_text(encoding="utf-8")
-    block = src.split("export const STOP", 1)[1].split("});", 1)[0]
-    out = {k: float(v) for k, v in re.findall(r"^\s*([A-Z_]+):\s*([0-9.]+)", block, flags=re.M)}
-    for k in ("FLIGHT_S", "ANTIC_S", "DROP_S"):
-        assert k in out, f"stopaction.mjs no longer names {k}"
-    return out
 
 
 def press_pack(window_s: float, out: Path, clusters: int, seed: int) -> Path:
@@ -202,23 +127,11 @@ def press_pack(window_s: float, out: Path, clusters: int, seed: int) -> Path:
 BED_LU = {"youtube": -20.0, "facebook": -20.0}   # a SHORT sits at -20 (E55, 2026-09-09; the -28 was the long-form calibration)
 BED_SWELL_DB = 4.0   # the bed BREATHES +4 dB from a card's throw through its landing/snap (the bed blueprint rule 3; E55)
 SNAP_S_BED = 0.45
+TURN_BED_AT = 40.0   # the turn bed fades in under the hook bed here and runs to the end
 PLATFORM = "youtube"
 VO_LUFS = -17.9   # vo-short/audio/scene_1.mp3, measured 2026-09-05
 BEDS = {"suno-hook-A.mp3": -13.2, "suno-hook-B.mp3": -13.0, "suno-pivot-A.mp3": -13.0, "suno-pivot-B.mp3": -13.0}   # the copies in sound/, matched to -14 then limited at -1 dBFS: MEASURED integrated LUFS (SOURCES.md), so one gain fits both variants
-bed_gain = lambda f: round(10 ** ((VO_LUFS + BED_LU[PLATFORM] - BEDS[f]) / 20), 4)
-
-
-def seekable_clip(name: str, src: Path | None = None) -> Path:
-    """The Flow clip re-encoded with a keyframe every KEYFRAME_EVERY frames (the originals carry ONE keyframe in 240,
-    so every seek decoded from frame 0 and live playback fell behind and held - operator, 2026-09-05). Same
-    frames, same length; written once into build-short/clips/ and reused while the source is unchanged."""
-    import subprocess
-    src, out = (src or CLIPS / name), BUILD / "clips" / name
-    out.parent.mkdir(parents=True, exist_ok=True)
-    if not out.exists() or out.stat().st_mtime < src.stat().st_mtime:
-        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-an", "-c:v", "libx264", "-profile:v", "high", "-crf", "17", "-preset", "slow",
-                        "-g", str(KEYFRAME_EVERY), "-keyint_min", str(KEYFRAME_EVERY), "-sc_threshold", "0", "-bf", "0", "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(out)], check=True)
-    return out
+bed_gain = lambda f: A.bed_gain(VO_LUFS, BED_LU[PLATFORM], BEDS[f])
 
 
 # THE DOCKS (E44 / operator, 2026-09-06: "use the chart plate/ledger AND THEN DOCK the animation videos"): under v2 the page
@@ -233,6 +146,7 @@ DOCK_STILLS = {                     # dock asset id -> (source clip, crop height
     "dock-g-two-fingers":       ("clip-g-two-fingers-v2.mp4", 660, 200),       # both hands, the two fingers up
     "dock-f-toll-gate-to-fab":  ("clip-f-toll-gate-to-fab-v2.mp4", 620, 190),  # the open gate, the road, the fab
 }
+DOCK_CROP_W = 720                   # the clips' own frame width: a still-fallback card is the full width, cropped in height
 
 
 # MEASURED off the clip's own frame (the ink rows, not by eye): the cup and saucer sit at x 440-570, its steam above at
@@ -244,140 +158,33 @@ FAB_CROP = (0.22, 0.33)   # the band of the fab still: Mike with the clipboard, 
 FAB_WAFER = (0.649, 0.501)   # the wafer's centre in the band (the warm disc's centroid)   # the pre-video-dock fallback: dock each clip's first frame instead
 
 
-def zoom_clip(name: str, src_name: str, crop: tuple[int, int, int, int]) -> Path:
-    """A clip ZOOMED on a region of another clip's frame (the sixth watch: "I wonder if we could even just zoom the video on
-    it and play the steaming tea cup"). ffmpeg crops the region and scales it back up, keyframed like every other dock clip,
-    so the card is live footage - the steam keeps moving (E49) - not a still lifted out of it."""
-    import subprocess
-    x, y, w, h = crop
-    src, out = CLIPS / src_name, BUILD / "clips" / name
-    out.parent.mkdir(parents=True, exist_ok=True)
-    if not out.exists() or out.stat().st_mtime < src.stat().st_mtime:
-        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-an",
-                        "-vf", f"crop={w}:{h}:{x}:{y},scale={w * 2}:{h * 2}:flags=lanczos",
-                        "-c:v", "libx264", "-profile:v", "high", "-crf", "17", "-preset", "slow",
-                        "-g", str(KEYFRAME_EVERY), "-keyint_min", str(KEYFRAME_EVERY), "-sc_threshold", "0", "-bf", "0",
-                        "-pix_fmt", "yuv420p", "-movflags", "+faststart", str(out)], check=True)
-    return out
-
-
-def dock_zoom(aid: str, src_name: str, crop: tuple[int, int, int, int]) -> str:
-    """Register a zoomed clip as a VIDEO dock asset (an .mp4 asset becomes a video dock in the compiler)."""
-    import build_render_f as R
-    R.STAMPED[aid] = str(zoom_clip(f"{aid}.mp4", src_name, crop))
-    return aid
-
-
 def dock_still(aid: str) -> str:
-    """Register the dock asset with the resolver (`build_render_f.find_asset` checks STAMPED first, build_render_f.py:49).
-    Default: the CLIP itself, so the compiler makes a VIDEO dock (E44 / R26-7, video dock c0c6a17). With `--still-docks`:
-    the clip's first frame cropped to the card, written to build-short/docks/ - v2's first build, kept as the fallback."""
-    import subprocess
-    import build_render_f as R
+    """The dock asset: the CLIP itself, so the compiler makes a VIDEO dock (E44 / R26-7, video dock c0c6a17). With
+    `--still-docks`: the clip's first frame cropped to the card - v2's first build, kept as the fallback."""
     name, h, y = DOCK_STILLS[aid]
-    src = CLIPS / name
-    if not STILL_DOCKS:
-        R.STAMPED[aid] = str(src)
-        return aid
-    out = BUILD / "docks" / f"{aid}.png"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    if not out.exists() or out.stat().st_mtime < src.stat().st_mtime:
-        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-frames:v", "1",
-                        "-vf", f"crop=720:{h}:0:{y}", str(out)], check=True)
-    R.STAMPED[aid] = str(out)
-    return aid
+    return D.dock_still(aid, CLIPS / name, BUILD, still=STILL_DOCKS, frame_crop=(DOCK_CROP_W, h, 0, y))
+
+
+def dock_chart(aid: str, series: str, variant: str = "line", aspect: str | None = None) -> str:
+    """This episode's chart card: the object beside the build, rendered at its landing (R26-19 / E50)."""
+    return D.chart_card(aid, HERE / "evidence/objects" / f"{series}.series.json", BUILD, variant, aspect)
 
 
 PLEDGE_QUOTE = "...at least 10 trillion yen ($65 billion) in support through fiscal 2030..."   # the Nikkei lede's claim, excerpted (both ellipses say so; the operator, 2026-09-10: "the read out can end at 'through fiscal 2030...'")
 PLEDGE_HL = ("at", "least", "10", "trillion", "yen")     # the highlighter's phrase
 PLEDGE_SYNC = {"10": "ten", "trillion": "trillion", "yen": "yen"}   # the stroke lands per-word on the NARRATOR's word
-
-
-def record_words(text: str, t0: float, ws: list[dict], anchor_phrase: str, sync: dict, hl: tuple, per: float = 0.1, tail_per: float = 0.07) -> tuple[list, list, float]:
-    """[[word, t], ...] for a record dock: the words before the phrase type from t0 at `per`, the phrase's words land on the
-    narrator's (the take's word starts after `anchor_phrase`), the rest type at `tail_per`; plus the highlight range and the end."""
-    words = text.split()
-    i0, _ = phrase_start(ws, anchor_phrase)
-    narr = {}
-    for w in ws[i0:i0 + 12]:
-        k = w["w"].strip(".,;:!?").lower()
-        if k in sync.values() and k not in narr:
-            narr[k] = round(float(w["start_s"]), 2)
-    out, t = [], t0
-    k0 = next(i for i in range(len(words)) if [x.strip(".,;:!?()").lower() for x in words[i:i + len(hl)]] == [x.lower() for x in hl])
-    k1 = k0 + len(hl) - 1
-    for i, w in enumerate(words):
-        key = w.strip(".,;:!?()").lower()
-        if k0 <= i <= k1 and key in sync and sync[key] in narr:
-            t = max(t, narr[sync[key]])
-        out.append([w, round(t, 2)])
-        t += per if i < k1 else tail_per
-    return out, [k0, k1], round(out[-1][1] + 0.05, 2)
+PLEDGE_ANCHOR = "ten trillion yen"
 
 
 def record_dock(aid: str, ws: list[dict], t0: float) -> str:
-    """The pledge record: a 1x1 placeholder asset (a record is live type, never an image) and the META's `record` filled."""
-    import build_render_f as R
-    out = BUILD / "docks" / f"{aid}.png"; out.parent.mkdir(parents=True, exist_ok=True)
-    if not out.exists():
-        from PIL import Image
-        Image.new("RGB", (1, 1), (22, 24, 28)).save(out)   # a real 1x1 PNG (the hand-typed hex was a broken stream)
-    R.STAMPED[aid] = str(out)
-    words, hl, end = record_words(PLEDGE_QUOTE, t0, ws, "ten trillion yen", PLEDGE_SYNC, PLEDGE_HL)
-    for m in DOCK_META:
-        if m["asset"] == aid:
-            m["record"] = {"hdr": ["Nikkei Asia", "12 November 2024"], "kicker": "Japan to roll out $65bn in support for chips, AI",
-                           "words": words, "hl": hl, "end": end, "attr": "Mari Ishibashi, Nikkei staff writer",
-                           "src": "asia.nikkei.com \u00b7 fetched 2026-09-10 \u00b7 evidence/sources/nikkei-2024-11-12-japan-chips-ai-support.txt"}
-    return aid
-
-
-def dock_png(aid: str, png: Path, crop: tuple[float, float]) -> str:
-    """A still PNG cropped to a card, (top, height) as fractions of the still - the tariff short's dock_card; the card remembers
-    its source and crop so a swapped still or a new crop re-cuts it."""
-    import subprocess
-    import build_render_f as R
-    out = BUILD / "docks" / f"{aid}.png"; out.parent.mkdir(parents=True, exist_ok=True)
-    stamp = out.with_suffix(".src"); key = f"{png.resolve()}|{crop}"
-    if not out.exists() or out.stat().st_mtime < png.stat().st_mtime or (stamp.read_text(encoding="utf-8") if stamp.exists() else "") != key:
-        t, h = crop
-        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(png), "-vf", f"crop=iw:ih*{h}:0:ih*{t}", str(out)], check=True)
-        stamp.write_text(key, encoding="utf-8")
-    R.STAMPED[aid] = str(out)
-    return aid
-
-
-def centred_card_point(card_aspect: float, centre_y: float, fx: float, fy: float, centre_w: float | None = None, centre_x: float | None = None) -> dict:
-    """A POINT target inside a CENTRED dock card - the compiler's centred_place with an authored centre is deterministic, so a
-    fraction (fx, fy) of the card maps to a stage fraction (the tariff short's helper, 2026-09-09)."""
-    import build_scene_timeline_f as C
-    sw, sh = (1080, 1920)
-    w = round((centre_w or C.CENTRE_W) * sw); h = round(w * card_aspect)
-    if h > C.CENTRE_MAX_H * sh:
-        h = round(C.CENTRE_MAX_H * sh); w = round(h / card_aspect)
-    cx = (centre_x if centre_x is not None else 0.5) * sw
-    x0, y0 = max(0, cx - w / 2), max(0, centre_y * sh - h / 2)
-    return {"kind": "point", "x": round((x0 + fx * w) / sw, 4), "y": round((y0 + fy * h) / sh, 4)}
-
-
-def card_aspect(aid: str) -> float:
-    """The rendered card's h / w, for a centred placement sized to the card (dock_card must have run)."""
-    from PIL import Image
-    w, h = Image.open(BUILD / "docks" / f"{aid}.png").size
-    return round(h / w, 4)
-
-
-def dock_card(aid: str, series: str, variant: str = "line", aspect: str | None = None) -> str:
-    """A CHART CARD (R26-19 / E50): the series object's ledger page rendered once at its landing by scripts/chart_card.py and
-    registered as a dock still, so a 2-3 s beat can carry a chart a fresh page could never land in time. Rebuilt when the
-    object or the renderer is newer than the card."""
-    import build_render_f as R
-    import chart_card as CC
-    src = HERE / "evidence/objects" / f"{series}.series.json"
-    out = BUILD / "docks" / f"{aid}.png"
-    if not out.exists() or out.stat().st_mtime < max(src.stat().st_mtime, Path(CC.__file__).stat().st_mtime):
-        CC.render_card(src, out, variant, aspect=aspect)
-    R.STAMPED[aid] = str(out)
+    """The pledge record: a placeholder asset (a record is live type, never an image) and the META's `record` filled
+    from the take's own word times."""
+    D.record_asset(aid, BUILD)
+    typed, hl, end = D.record_words(PLEDGE_QUOTE, t0, ws, PLEDGE_ANCHOR, PLEDGE_SYNC, PLEDGE_HL)
+    D.meta_set(DOCK_META, aid, "record",
+               {"hdr": ["Nikkei Asia", "12 November 2024"], "kicker": "Japan to roll out $65bn in support for chips, AI",
+                "words": typed, "hl": hl, "end": end, "attr": "Mari Ishibashi, Nikkei staff writer",
+                "src": "asia.nikkei.com · fetched 2026-09-10 · evidence/sources/nikkei-2024-11-12-japan-chips-ai-support.txt"})
     return aid
 
 
@@ -415,10 +222,10 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     only and the coral drop draws on "watching"; the title rewrites on "The opponent"; the bracket "-$122.6B / a tenth
     of the pile" draws from the peak to June on "a hundred and twenty-two billion" and stands on the ring, re-lit on the
     second "unfunded bar tab". One thing per sentence; the callouts the bracket now says are gone."""
-    clip = lambda name, src=None: f"clip:{seekable_clip(name, src).as_posix()}"
+    clip = lambda name, src=None: f"clip:{D.seekable_clip(name, src or CLIPS / name, BUILD).as_posix()}"
     t_outro = t_outro if t_outro is not None else runtime_s
     hold = f"ledger:ev-japan-holdings-v1:line:{LAST_IDX}:right"
-    at = lambda phrase: round(word_time(ws, phrase), 2)
+    at = lambda phrase: W.at(ws, phrase)
     datum = lambda i: {"kind": "datum", "index": i}
     # V2 anchors. A dock MOUNTS on a word (s9.15: a mount is a dissolve on a word), so these are word times, not cut
     # points; only the world changes that are still cuts (the promise plate, the catalyst, the ring) take cut_before.
@@ -434,16 +241,16 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     t_trillion = at("over a trillion")                   # ... and the peak figure writes where the line was
     t_since = at("selling since February")               # ... the June figure beside it
     t_two = at("Two numbers")
-    t_promise = cut_before(ws, "a Treasury page")        # the cut drops on "went:" (operator, 2026-09-05): the promise plate
-    t_catalyst = cut_before(ws, "Since February, Japan")
+    t_promise = W.cut_before(ws, "a Treasury page")      # the cut drops on "went:" (operator, 2026-09-05): the promise plate
+    t_catalyst = W.cut_before(ws, "Since February, Japan")
     t_pledge = at("pledged")                             # the gate docks on "pledged"
-    t_cut = cut_before(ws, "So, the second number")      # the cream is full here and the Meta chart starts drawing
+    t_cut = W.cut_before(ws, "So, the second number")    # the cream is full here and the Meta chart starts drawing
     t_second = at("went home")                           # the Meta page's mount begins under the holdings page
-    t_ring = cut_before(ws, "The Fed still hasn't moved")
+    t_ring = W.cut_before(ws, "The Fed still hasn't moved")
     t_relit = at("that unfunded")                        # the second "unfunded bar tab" - the callout is re-lit on it
     t_ours = at("still ours")                            # the host mounts here as the last image before the card
     t_fed_still = at("The Fed still")                    # R26-19: the Fed-vs-yields CARD is thrown here ...
-    word_in = lambda phrase, word: next(round(w["start_s"], 2) for w in ws[phrase_start(ws, phrase)[0]:][:10] if w["w"].strip(".,;:!?").lower() == word)
+    word_in = lambda phrase, word: W.word_in(ws, phrase, word)
     t_moved = word_in("still hasn't moved", "moved")     # ... and SNAPS up to become the last world on the ring's "moved" (the third watch; the hook says it first)
     t_tokyo_still = at("Tokyo is still")                 # the first side note writes here ...
     t_tea = word_in("still on its tea break", "tea")     # ... the second here, and the cup docks on it
@@ -539,7 +346,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
              {"centre": True, "card_aspect": 1.0, "centre_w": 0.40, "centre_x": 0.77, "centre_y": 0.335,
               "read": {"centre_w": FAB_W, "centre_x": FAB_CX, "centre_y": FAB_CY - 0.015, "card_aspect": 0.47},
               "read_s": round(at("to chips") - t_pledge, 2), "park_s": 0.7}),
-            (dock_png("dock-i-fab-wafer", STILLS_DIR / "sig-i-fab-wafer.png", FAB_CROP), 0, at("to chips"), at("And here's"),
+            (D.dock_png("dock-i-fab-wafer", STILLS_DIR / "sig-i-fab-wafer.png", FAB_CROP, BUILD), 0, at("to chips"), at("And here's"),
              {"centre": True, "card_aspect": 0.5911, "centre_w": FAB_W, "centre_x": FAB_CX, "centre_y": FAB_CY + 0.04}),   # under the parked bars (E60): the card's top clears their labels and source
             # the fourth watch: the selling bars are no evidence dock - they are the ring page's own bars, laid against its lines (combo)
         ], "cut", [
@@ -556,7 +363,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # E51 (the third watch): the punch on the peak here was tied to nothing - the page returns drawn - and is cut
             # V3: the BRACKET measures the drop from the peak to June by the hand on the number; its label is the number and
             # its sub lands on "a tenth of the pile" - the callout that said the same is gone (one thing per sentence)
-            {"kind": "bracket", "at": t_hundred, "dur": 2.4, "from": PEAK_IDX, "to": LAST_IDX, "label": "\u2212$122.6B", "sub": "a tenth of the pile", "color": "neg"},
+            {"kind": "bracket", "at": t_hundred, "dur": 2.4, "from": PEAK_IDX, "to": LAST_IDX, "label": "−$122.6B", "sub": "a tenth of the pile", "color": "neg"},
             # E50: the bracket is the page's last data mark (49.1); on "The Treasury prints" the line and the bracket un-draw and the
             # June print writes on "your first number" - THE first number the promise named; it holds under the pledge and the
             # money-went-home line (a figure is the next thing, not the chart) until the Meta page mounts over it
@@ -584,7 +391,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
         # ... the Meta page HOLDS to the snap (E50: deployed 69.2 -> 76.8, 7.6 s) and the Fed CARD is thrown onto it on "The Fed still" -
         #   the holdings page does not come back for the ring ("we bring back the old chart for no reason" - the third watch)
         (t_second, t_moved, meta, (0, 0, 0), [
-            (dock_card("dock-h-fed-vs-yields", "ev-fed-vs-yields-v1", aspect="9:16"), 0, t_fed_still, t_moved, {"arrive": "throw", "mass": "paper"}),
+            (dock_chart("dock-h-fed-vs-yields", "ev-fed-vs-yields-v1", aspect="9:16"), 0, t_fed_still, t_moved, {"arrive": "throw", "mass": "paper"}),
         ], None, [
             {"kind": "callout", "at": at("price-to-earnings multiple"), "dur": 2.0, "target": datum(0)},
             # E51 (the third watch, "the weak push-in at 1:14"): the punch on the 5.5 % bar at "discounts" zoomed on a bar that had landed
@@ -606,7 +413,7 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # tea break' that doesn't interfere with graph ... I wonder if we could even just zoom the video on it and play the
             # steaming tea cup"): the opening scene's own cup, zoomed out of that footage so the steam keeps moving, small and
             # centred in the page's free space. The host is gone from this page - it was parking over the title.
-            (dock_zoom("dock-j-tea-cup", "clip-a-counter-tab-v2.mp4", TEA_CROP), 0, t_tea, t_outro - 0.3, {"centre": True, "centre_w": 0.20, "centre_x": 0.34, "centre_y": 0.353}),   # the plot's own empty upper-left, under the % label and above the line's low start   # the gap between the source line and the caption: clear of the graph, the notes and the words
+            (D.dock_zoom("dock-j-tea-cup", CLIPS / "clip-a-counter-tab-v2.mp4", TEA_CROP, BUILD), 0, t_tea, t_outro - 0.3, {"centre": True, "centre_w": 0.20, "centre_x": 0.34, "centre_y": 0.353}),   # the plot's own empty upper-left, under the % label and above the line's low start   # the gap between the source line and the caption: clear of the graph, the notes and the words
         ], "cut", [   # the SNAP is this row's own transition (no dip into it); the outro row still dips
             # the three notes write in the quiet zone over "Tokyo is still on its tea break", staggered, before the host lands over the page
             # the fourth watch: the bracket on this page drew a naked vertical span at the plot's edge - its label had no room in the
@@ -631,50 +438,109 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     ]
 
 
+# THE SOUND MAP (operator, 2026-09-05, second pass: "page retract 4 and page enter 9 are the only sound effects i hear"):
+# fs-whoosh-2 is -26.9 LUFS, 13 dB under every other file - every cue on it was inaudible. The VO is -17.9 LUFS; each accent
+# sits 1-4 LU under it. The map: a roll-in page enters on the page-roll at a fifth (the "tear", 80% quieter - earlier ruling);
+# a MOUNT entry has no page turn at all; a page that leaves by the drain: a LIGHT FLIP (whoosh-1, the short swish) if it will
+# come back, a WHIRL (whoosh-4, the long sweep, timed to end on the cut) if it arrived by spiral; a spiral IN is a WHOOSH
+# (whoosh-3); the SUCK is the tear (the page-roll - "if there's not a good one, the tear actually makes some sense")
+# THIRD PASS (operator, 2026-09-05: "that whoosh sound is too mechanical, it sounds like a jet almost, ours should sound like a
+# whirl / whirlpool / spinning / spiralling ... the sounds should still be background sounds, ~8-10 dB below"): WATER - the spiral
+# in and the drain are basin swirls, the suck is a whirlpool, the flip a quiet page turn (CC0, sound/SOURCES.md); every accent
+# file is -14 LUFS, so ACCENT = 0.22 puts it ~9 dB under the -17.9 LUFS voice. The review strip carries the alternates (B/C/D).
+ROLL, FLIP, SWIRL_IN, SWIRL_OUT, WHIRLPOOL = "fs-page-roll-464302.mp3", "fs-pageturn-484968.mp3", "fs-swirl-in-478722.mp3", "fs-swirl-out-478683.mp3", "fs-whirlpool-537920.mp3"
+SLURP, SLURP2, AIR1, AIR3, AIR4 = "fs-slurp-735164.mp3", "fs-slurp2-583716.mp3", "fs-whoosh-1-706679.mp3", "fs-whoosh-3-648729.mp3", "fs-whoosh-4-648732.mp3"
+# FOURTH PASS (operator, 2026-09-05: "page enter 7 spiral (B) is the way, and it can probably be used for suck 6 also ... stretch/warp
+# the sound to match the transition - the distortion would work in our favour"): whoosh-3 WARPED to each transition's clock by
+# sound/warp_sound.py (a time-varying resample on the min-jerk curve: pitch and speed glide together, tape-style) - accelerating
+# into the suck (0.55 s), decelerating out of the spiral (1.6 s), accelerating into the drain (2.2 s, ending on the cut)
+W_SUCK, W_SPIRAL, W_DRAIN = "fs-whoosh-3-suck.mp3", "fs-whoosh-3-spiral-in.mp3", "fs-whoosh-3-drain.mp3"
+# FIFTH PASS (E44, operator 2026-09-06 on SHOT-TABLE-V2-PROPOSAL.md): under v2 the pages are the CONSTANT and the sound
+# should not announce them - every page accent comes down from 0.22 to 0.12 (~14.5 dB under the -17.9 LUFS voice, the
+# level the operator set for the press pack on 2026-09-05), and the roll-out enter comes down from 0.18 to the same 0.12.
+ACCENT, RETRACT_S, WHIRL_S = 0.12, 2.0, 2.2   # the drain starts RETRACT_S before the row ends; the out-swirl and the drain warp run 2.2 s, timed to end on the cut
+ENTER_GAIN = 0.12                             # a roll-out page enter (was 0.18)
+PRESS_GAIN = 0.16
+PANEL_CLIP = "clip-c-blue-ties-panel"         # the press: phones out for the whole panel clip
+
+
+def sound_cues(rows: list[tuple]) -> list[dict]:
+    """This episode's cue map over the kit's transition and arrival readings: which file plays where, and how loud."""
+    STOP = A.stop_dials()                     # FLIGHT_S / ANTIC_S / DROP_S from the kinetics module: the landing cue's clock
+    cues: list[dict] = []
+    for i, r in enumerate(rows):
+        page = A.page_transitions(r[2])
+        if page["ledger"]:
+            if page["spiral"]:
+                cues.append({"slot": f"page enter {i + 1} (spiral)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": W_SPIRAL, "B": AIR3, "C": SWIRL_IN}})
+            elif not page["mount"]:
+                cues.append({"slot": f"page enter {i + 1}", "at": round(r[0], 2), "gain": ENTER_GAIN, "fade_in": 0.0, "variants": {"A": ROLL}})
+            if not page["cut"]:
+                if page["spiral"]:
+                    cues.append({"slot": f"page retract {i + 1} (whirl)", "at": round(r[1] - WHIRL_S, 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": SWIRL_OUT, "B": W_DRAIN, "C": AIR4}})
+                else:
+                    cues.append({"slot": f"page retract {i + 1} (flip)", "at": round(r[1] - RETRACT_S, 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": FLIP, "B": AIR1}})
+        elif isinstance(r[5], str) and r[5].startswith("suck"):
+            cues.append({"slot": f"suck {i + 1}", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": W_SUCK, "B": AIR3, "C": WHIRLPOOL, "D": ROLL}})
+        if PANEL_CLIP in r[2]:
+            win = round(r[1] - r[0], 3)
+            press_pack(win, HERE / "sound/press-pack-A.mp3", clusters=12, seed=0xC1A55)
+            press_pack(win, HERE / "sound/press-pack-B.mp3", clusters=6, seed=0xC1A56)
+            cues.append({"slot": f"press {i + 1}", "at": round(r[0], 2), "gain": PRESS_GAIN, "fade_in": 0.0, "variants": {"A": "press-pack-A.mp3", "B": "press-pack-B.mp3"},
+                         "note": "the pack meters -16.6 LUFS; 0.16 puts the clicks ~14.5 dB under the voice (operator, 2026-09-05: 14-15 dB under)"})
+        # THE LANDING CUE (P47 T1 follow-up, the weight report Q5 - source on file: Williams pp. 263, 309-311): the sound lands ON the
+        # contact frame or one frame early, never two ahead. The contact is the dock's enter + the module's own flight (a throw)
+        # or anticipation + drop (a land), read from stopaction.mjs so the cue cannot drift from the motion. The file: the quiet
+        # page turn (documented, -19.1 LUFS) for both until the ear says; fs-riserhit-754771.mp3 sits in the folder with NO line in
+        # sound/SOURCES.md and is not used. The report's "+6 to +12 dB" for a hit is a doctrine line, not our measurement - the gain
+        # stays at ACCENT for the second watch.
+        for d, opts in A.row_arrivals(r):
+            arr = opts["arrive"]
+            contact = A.landing_contact(d[2], arr, STOP)
+            cues.append({"slot": f"landing {i + 1} ({arr}, {opts.get('mass', 'paper')})", "at": round(contact - 1 / 24, 2), "gain": ACCENT, "fade_in": 0.0,
+                         "variants": {"A": FLIP, "B": "fs-page-stroke-447925.mp3"},
+                         "note": f"contact at {contact:.2f}s, the cue one frame early (the report Q5: 0 to -1 frame); a documented hit file for metal is still to find"})
+    # the beds, sub-threshold and continuous: the hook bed from 0, the turn bed fading in under it at 0:40 to the end
+    # the bed's ENVELOPE (dB against its own gain), keyed to every thrown card: up over the 0.3 s before the throw, held through the
+    # landing (and the snap when the card becomes the page), down over 0.8 s - the player and the render apply it as a pure function of t
+    # NOTE the snap key is `:snap=` ALONE: this cut's ring arrives by `:camera=` under TOKYO_CAMERA=1, and its swell has always
+    # fallen back to the throw + 1.2 s. Widening the key would move the bed under an approved cut, so it stays as shipped.
+    env = A.bed_envelope(rows, BED_SWELL_DB, SNAP_S_BED, fallback_end=lambda d: float(d[2]) + 1.2, snap_keys=(":snap=",))
+    hook_env = [k for k in env if k[0] < TURN_BED_AT]
+    turn_env = [[round(k[0] - TURN_BED_AT, 2), k[1]] for k in env if k[0] >= TURN_BED_AT]
+    cues.append({"slot": "hook bed", "at": 0.0, "gain": bed_gain("suno-hook-B.mp3"), "fade_in": 1.5, "env": hook_env, "variants": {"A": "suno-hook-B.mp3", "B": "suno-hook-A.mp3"},
+                 "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO ({VO_LUFS} LUFS); B at {bed_gain('suno-hook-A.mp3')}"})
+    cues.append({"slot": "turn bed", "at": TURN_BED_AT, "gain": bed_gain("suno-pivot-A.mp3"), "fade_in": 3.0, "env": [[round(k[0] + TURN_BED_AT, 2), k[1]] for k in turn_env], "variants": {"A": "suno-pivot-A.mp3", "B": "suno-pivot-B.mp3"},
+                 "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO; B at {bed_gain('suno-pivot-B.mp3')}"})
+    return cues
+
+
 def main() -> int:
-    ws = words()
-    BUILD.mkdir(exist_ok=True)
-    (BUILD / "audio").mkdir(exist_ok=True)
-    shutil.copy2(TAKE / "scene_1.mp3", BUILD / "audio/episode.mp3")
-    import subprocess
-    runtime_s = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
-                                      str(BUILD / "audio/episode.mp3")], capture_output=True, text=True).stdout or 0)
-    write_timeline(ws, runtime_s)
+    ws = W.take_words(EP)
+    EP.mkdirs()
+    shutil.copy2(TAKE / "scene_1.mp3", EP.audio_master)
+    W.write_timeline(EP, ws, A.probe_duration(EP.audio_master))
     # the OWED room at the four cut points (doc 37: silence over the settle lives in the editor's timeline)
-    import insert_edit_pauses as IP
-    IP.EP, IP.BUILD, IP.PLAN_FILE = HERE, BUILD, HERE / "SCRIPT-90S-VO.claude-EDIT-PAUSES.json"
-    sys.argv = [sys.argv[0], "--skip-tighten-check"]      # the take is raw on purpose: the gaps are the cut points
-    if IP.main() != 0:
-        raise SystemExit("edit pauses failed")
-    ws = shifted_words()
-    tl_built = json.loads((BUILD / "timeline.json").read_text(encoding="utf-8"))
-    runtime_s = tl_built["runtime_s"]
+    tl_built = W.apply_edit_pauses(EP, EDIT_PAUSES)
+    ws = W.shifted_words(EP)
     # the outro extends the runtime past the VO: pad the (paused) audio with silence so the player plays to the end
-    t_vo_end = runtime_s
-    t_outro = round(t_vo_end - OUTRO_LEAD, 3)
-    line_s = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(BRAND_LINE)], capture_output=True, text=True).stdout or 0)
-    t_line = round(t_vo_end + BRAND_GAP, 3)
-    runtime_s = round(max(t_outro + OUTRO_S, t_line + line_s + BRAND_TAIL), 3)
+    t_vo_end = tl_built["runtime_s"]
+    line_s = A.probe_duration(BRAND_LINE)
+    t_outro, t_line, runtime_s = A.outro_clock(t_vo_end, line_s, outro_lead=OUTRO_LEAD, outro_s=OUTRO_S, brand_gap=BRAND_GAP, brand_tail=BRAND_TAIL)
     audio = BUILD / tl_built.get("paused_audio", "audio/episode.mp3")
-    stitched = audio.with_name(audio.stem + "-stitched.mp3")
-    # the take, BRAND_GAP of silence, the brand line, then silence to the runtime - one stream, the take's own sample rate
-    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(audio), "-f", "lavfi", "-t", str(BRAND_GAP), "-i", "anullsrc=r=44100:cl=mono", "-i", str(BRAND_LINE),
-                    "-filter_complex", f"[0:a]aresample=44100,aformat=channel_layouts=mono[a];[1:a]aresample=44100,aformat=channel_layouts=mono[g];[2:a]aresample=44100,aformat=channel_layouts=mono[l];[a][g][l]concat=n=3:v=0:a=1,apad=whole_dur={runtime_s}[out]",
-                    "-map", "[out]", "-c:a", "libmp3lame", "-q:a", "2", str(stitched)], check=True)
-    stitched.replace(audio)
+    A.stitch_brand_line(audio, BRAND_LINE, BRAND_GAP, runtime_s)
     print(f"  brand line  : {line_s:.2f}s at {t_line:.2f}s (gap {BRAND_GAP}s after the last word); card at {t_outro:.2f}s; runtime {runtime_s:.2f}s")
     tl_built["runtime_s"] = runtime_s
-    (BUILD / "timeline.json").write_text(json.dumps(tl_built, indent=1), encoding="utf-8")
+    W.save_timeline(EP, tl_built)
     # v2: the short DOES dock - the clips arrive over the page as stills (E44 / operator, 2026-09-06). The cards carry an
     # authored title, source and species; the pages are still the proof.
     (HERE / "evidence/objects").mkdir(exist_ok=True)
     for s in SERIES:
         shutil.copy2(HERE / "evidence" / f"{s}.series.json", HERE / "evidence/objects" / f"{s}.series.json")
 
-    import build_caption_pages as CP
-    CP.BUILD = BUILD
-    CP.CHAR_BUDGET, CP.MAX_WORDS = 28, 6   # a page holds a phrase of 3-6 words on TWO lines at most: the portrait strip is 800 px at 64 px type = 25-28 chars a line; measured 2026-09-05 - 46 chars / 7 words wrapped half the pages to 3-5 lines
-    CP.main()
+    # a page holds a phrase of 3-6 words on TWO lines at most: the portrait strip is 800 px at 64 px type = 25-28 chars a
+    # line; measured 2026-09-05 - 46 chars / 7 words wrapped half the pages to 3-5 lines
+    T.caption_pages(BUILD, char_budget=28, max_words=6)
 
     rows = shot_table(ws, runtime_s, t_outro)
     # written AFTER the rows: record_dock fills a META entry's `record` (the typed words) while the rows are built (2026-09-10)
@@ -683,102 +549,24 @@ def main() -> int:
     # every ledger entry, on the episode clock, beside the page-relative page_cues (P35 T9)
     plan_path = HERE / "sound/SOUND-PLAN.json"
     plan = json.loads(plan_path.read_text(encoding="utf-8"))
-    # THE SOUND MAP (operator, 2026-09-05, second pass: "page retract 4 and page enter 9 are the only sound effects i hear"):
-    # fs-whoosh-2 is -26.9 LUFS, 13 dB under every other file - every cue on it was inaudible. The VO is -17.9 LUFS; each accent
-    # sits 1-4 LU under it. The map: a roll-in page enters on the page-roll at a fifth (the "tear", 80% quieter - earlier ruling);
-    # a MOUNT entry has no page turn at all; a page that leaves by the drain: a LIGHT FLIP (whoosh-1, the short swish) if it will
-    # come back, a WHIRL (whoosh-4, the long sweep, timed to end on the cut) if it arrived by spiral; a spiral IN is a WHOOSH
-    # (whoosh-3); the SUCK is the tear (the page-roll - "if there's not a good one, the tear actually makes some sense")
-    # THIRD PASS (operator, 2026-09-05: "that whoosh sound is too mechanical, it sounds like a jet almost, ours should sound like a
-    # whirl / whirlpool / spinning / spiralling ... the sounds should still be background sounds, ~8-10 dB below"): WATER - the spiral
-    # in and the drain are basin swirls, the suck is a whirlpool, the flip a quiet page turn (CC0, sound/SOURCES.md); every accent
-    # file is -14 LUFS, so ACCENT = 0.22 puts it ~9 dB under the -17.9 LUFS voice. The review strip carries the alternates (B/C/D).
-    ROLL, FLIP, SWIRL_IN, SWIRL_OUT, WHIRLPOOL = "fs-page-roll-464302.mp3", "fs-pageturn-484968.mp3", "fs-swirl-in-478722.mp3", "fs-swirl-out-478683.mp3", "fs-whirlpool-537920.mp3"
-    SLURP, SLURP2, AIR1, AIR3, AIR4 = "fs-slurp-735164.mp3", "fs-slurp2-583716.mp3", "fs-whoosh-1-706679.mp3", "fs-whoosh-3-648729.mp3", "fs-whoosh-4-648732.mp3"
-    # FOURTH PASS (operator, 2026-09-05: "page enter 7 spiral (B) is the way, and it can probably be used for suck 6 also ... stretch/warp
-    # the sound to match the transition - the distortion would work in our favour"): whoosh-3 WARPED to each transition's clock by
-    # sound/warp_sound.py (a time-varying resample on the min-jerk curve: pitch and speed glide together, tape-style) - accelerating
-    # into the suck (0.55 s), decelerating out of the spiral (1.6 s), accelerating into the drain (2.2 s, ending on the cut)
-    W_SUCK, W_SPIRAL, W_DRAIN = "fs-whoosh-3-suck.mp3", "fs-whoosh-3-spiral-in.mp3", "fs-whoosh-3-drain.mp3"
-    # FIFTH PASS (E44, operator 2026-09-06 on SHOT-TABLE-V2-PROPOSAL.md): under v2 the pages are the CONSTANT and the sound
-    # should not announce them - every page accent comes down from 0.22 to 0.12 (~14.5 dB under the -17.9 LUFS voice, the
-    # level the operator set for the press pack on 2026-09-05), and the roll-out enter comes down from 0.18 to the same 0.12.
-    ACCENT, RETRACT_S, WHIRL_S = 0.12, 2.0, 2.2   # the drain starts RETRACT_S before the row ends; the out-swirl and the drain warp run 2.2 s, timed to end on the cut
-    ENTER_GAIN = 0.12                             # a roll-out page enter (was 0.18)
-    STOP = stop_dials()                           # FLIGHT_S / ANTIC_S / DROP_S from the kinetics module: the landing cue's clock
-    cues = []
-    for i, r in enumerate(rows):
-        if r[2].startswith("ledger:"):
-            spiral_in, mount_in, cut = ":spiral" in r[2], ":mount" in r[2], r[2].endswith(":cut")
-            if spiral_in:
-                cues.append({"slot": f"page enter {i + 1} (spiral)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": W_SPIRAL, "B": AIR3, "C": SWIRL_IN}})
-            elif not mount_in:
-                cues.append({"slot": f"page enter {i + 1}", "at": round(r[0], 2), "gain": ENTER_GAIN, "fade_in": 0.0, "variants": {"A": ROLL}})
-            if not cut:
-                if spiral_in:
-                    cues.append({"slot": f"page retract {i + 1} (whirl)", "at": round(r[1] - WHIRL_S, 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": SWIRL_OUT, "B": W_DRAIN, "C": AIR4}})
-                else:
-                    cues.append({"slot": f"page retract {i + 1} (flip)", "at": round(r[1] - RETRACT_S, 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": FLIP, "B": AIR1}})
-        elif isinstance(r[5], str) and r[5].startswith("suck"):
-            cues.append({"slot": f"suck {i + 1}", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0, "variants": {"A": W_SUCK, "B": AIR3, "C": WHIRLPOOL, "D": ROLL}})
-        if "clip-c-blue-ties-panel" in r[2]:   # the press: phones out for the whole panel clip
-            win = round(r[1] - r[0], 3)
-            press_pack(win, HERE / "sound/press-pack-A.mp3", clusters=12, seed=0xC1A55)
-            press_pack(win, HERE / "sound/press-pack-B.mp3", clusters=6, seed=0xC1A56)
-            cues.append({"slot": f"press {i + 1}", "at": round(r[0], 2), "gain": 0.16, "fade_in": 0.0, "variants": {"A": "press-pack-A.mp3", "B": "press-pack-B.mp3"},
-                         "note": "the pack meters -16.6 LUFS; 0.16 puts the clicks ~14.5 dB under the voice (operator, 2026-09-05: 14-15 dB under)"})
-        # THE LANDING CUE (P47 T1 follow-up, the weight report Q5 - source on file: Williams pp. 263, 309-311): the sound lands ON the
-        # contact frame or one frame early, never two ahead. The contact is the dock's enter + the module's own flight (a throw)
-        # or anticipation + drop (a land), read from stopaction.mjs so the cue cannot drift from the motion. The file: the quiet
-        # page turn (documented, -19.1 LUFS) for both until the ear says; fs-riserhit-754771.mp3 sits in the folder with NO line in
-        # sound/SOURCES.md and is not used. The report's "+6 to +12 dB" for a hit is a doctrine line, not our measurement - the gain
-        # stays at ACCENT for the second watch.
-        for d in (r[4] or []):
-            opts = d[4] if len(d) > 4 and isinstance(d[4], dict) else {}
-            arr = opts.get("arrive")
-            if arr in ("throw", "land"):
-                # a throw flies on the STEPPED clock (round(t * 24)), so its contact is the first frame at or past FLIGHT_S; a land is continuous
-                contact = d[2] + (math.ceil(STOP["FLIGHT_S"] * 24 - 1e-9) / 24 if arr == "throw" else STOP["ANTIC_S"] + STOP["DROP_S"])
-                cues.append({"slot": f"landing {i + 1} ({arr}, {opts.get('mass', 'paper')})", "at": round(contact - 1 / 24, 2), "gain": ACCENT, "fade_in": 0.0,
-                             "variants": {"A": FLIP, "B": "fs-page-stroke-447925.mp3"},
-                             "note": f"contact at {contact:.2f}s, the cue one frame early (the report Q5: 0 to -1 frame); a documented hit file for metal is still to find"})
-    # the beds, sub-threshold and continuous: the hook bed from 0, the turn bed fading in under it at 0:40 to the end
-    # the bed's ENVELOPE (dB against its own gain), keyed to every thrown card: up over the 0.3 s before the throw, held through the
-    # landing (and the snap when the card becomes the page), down over 0.8 s - the player and the render apply it as a pure function of t
-    env = []
-    for r in rows:
-        for d in (r[4] or []):
-            if len(d) > 4 and isinstance(d[4], dict) and d[4].get("arrive") == "throw":
-                t_throw = float(d[2])
-                snap_row = next((q[0] for q in rows if f":snap={d[0]}" in q[2]), None)
-                t_end = (snap_row + SNAP_S_BED) if snap_row is not None else (t_throw + 1.2)
-                env += [[round(t_throw - 0.3, 2), 0.0], [round(t_throw, 2), BED_SWELL_DB], [round(t_end, 2), BED_SWELL_DB], [round(t_end + 0.8, 2), 0.0]]
-    hook_env = [k for k in env if k[0] < 40.0]; turn_env = [[round(k[0] - 40.0, 2), k[1]] for k in env if k[0] >= 40.0]
-    cues.append({"slot": "hook bed", "at": 0.0, "gain": bed_gain("suno-hook-B.mp3"), "fade_in": 1.5, "env": hook_env, "variants": {"A": "suno-hook-B.mp3", "B": "suno-hook-A.mp3"},
-                 "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO ({VO_LUFS} LUFS); B at {bed_gain('suno-hook-A.mp3')}"})
-    cues.append({"slot": "turn bed", "at": 40.0, "gain": bed_gain("suno-pivot-A.mp3"), "fade_in": 3.0, "env": [[round(k[0] + 40.0, 2), k[1]] for k in turn_env], "variants": {"A": "suno-pivot-A.mp3", "B": "suno-pivot-B.mp3"},
-                 "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO; B at {bed_gain('suno-pivot-B.mp3')}"})
-    plan["cues"] = cues
+    plan["cues"] = sound_cues(rows)
     plan_path.write_text(json.dumps(plan, indent=1), encoding="utf-8")
-    (HERE / "SHOT-TABLE-SHORT.py").write_text(
-        '"""Tokyo short - AUTHORED shot table, timed from the take by build_short.py. Do not hand-edit; edit build_short.shot_table."""\n'
-        "W = " + repr(rows).replace("), (", "),\n     (") + "\n", encoding="utf-8")
-    for r in rows:
-        print(f"  {r[0]:6.2f}-{r[1]:6.2f}  {r[2].split('/')[-1] if r[2].startswith('clip:') else r[2]}"
-              + (f"  species {[s['kind'] for s in r[6]]}" if r[6] else ""))
+    T.write_shot_table(HERE / "SHOT-TABLE-SHORT.py", rows,
+                       '"""Tokyo short - AUTHORED shot table, timed from the take by build_short.py. Do not hand-edit; edit build_short.shot_table."""\n')
+    T.print_rows(rows)
 
-    import build_scene_timeline_f as C
-    C.EP, C.BUILD = HERE, BUILD
-    C.TIMELINE_NAME = "tokyo-short.timeline.json"
-    C.SHOT_TABLE_FILE = "SHOT-TABLE-SHORT.py"
-    C.TITLE, C.SUBTITLE, C.EPISODE_ID = "Tokyo Tea Break", "Money Physics · short", "tokyo-tea-break"
-    C.ASPECT = "9:16"
-    C.CAPTION_STYLE = "phrase"   # shorts read their captions (operator, 2026-09-05): the page lands as one phrase, only k-words punctuated
-    C.KINETICS = {"analytic_spring": True, "min_jerk": True,   # the timing module (FINDING-the-animation-math s2/s3): closed-form springs on the pops, minimum-jerk on the wipe and the suck
-                  "area_squash": True,                        # P43 T4: the badge pops stretch along their travel from the spring's own velocity (42 s42.3)
-                  "km_ink": False}                            # P43 T3: OFF (operator, 2026-09-05, after six rounds in motion: "our original applications were better, with the ink pooling/blotchiness ... turn ink off"); K-M stays for ink over ink, the soak goes to a plate reveal (BACKLOG)
-    C.KINETICS["curvature_stroke"] = True                     # P43 T2: the HAND on every drawn path - the operator ruled from the side-by-side clip (2026-09-05: "curvature stroke should be on")
-    return C.main()
+    return T.compile_timeline(
+        HERE, BUILD,
+        timeline_name="tokyo-short.timeline.json",
+        shot_table_file="SHOT-TABLE-SHORT.py",
+        title="Tokyo Tea Break", subtitle="Money Physics · short", episode_id="tokyo-tea-break",
+        aspect="9:16",
+        caption_style="phrase",   # shorts read their captions (operator, 2026-09-05): the page lands as one phrase, only k-words punctuated
+        # the timing module (FINDING-the-animation-math s2/s3): closed-form springs on the pops, minimum-jerk on the wipe and
+        # the suck; area_squash (P43 T4) stretches a badge pop along its travel from the spring's own velocity (42 s42.3);
+        # km_ink OFF (P43 T3, operator 2026-09-05 after six rounds: "our original applications were better ... turn ink off");
+        # curvature_stroke ON - the HAND on every drawn path (P43 T2, ruled from the side-by-side clip)
+        kinetics={"analytic_spring": True, "min_jerk": True, "area_squash": True, "km_ink": False, "curvature_stroke": True})
 
 
 if __name__ == "__main__":

@@ -74,7 +74,8 @@ IDLE_OPT = ";idle="
 ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page's pills ARRIVE (spring = E45's pop, the default)
 MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets (stopaction.mjs MASS) a throw or a landing settles by
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
-PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card")   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
+PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use")   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
@@ -761,7 +762,8 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
 
 
 def _check_opt(key: str, value, where: str) -> None:
-    allowed = {"idle": IDLE_KINDS, "arrive": ARRIVALS, "mass": MASSES, "morph": MORPH_SHAPES, "card": ("yes", "no")}[key]
+    allowed = {"idle": IDLE_KINDS, "arrive": ARRIVALS, "mass": MASSES, "morph": MORPH_SHAPES,
+               "card": ("yes", "no"), "use": PLATE_USES}[key]
     if value not in allowed:
         raise ValueError(f"{where}: {key} {value!r} is not one of {'|'.join(allowed)}")
 
@@ -849,7 +851,7 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
         if world.get("kind") != SPECIES_LEDGER:
             raise ValueError(f"{plate_id!r}: card= is a LEDGER PAGE option")
         world["page"]["card"] = card == "yes"
-    world.update(opts)   # idle (E49), arrive / mass (P47 T1) - written only when the row names them
+    world.update(opts)   # idle (E49), arrive / mass (P47 T1), use (E61) - written only when the row names them
     if thens:   # P48 T4: the other charts this page can become, each a full spec built at load
         if world.get("kind") != SPECIES_LEDGER:
             raise ValueError(f"{plate_id!r}: then= is a LEDGER PAGE option: only a page has chart states")

@@ -1,7 +1,7 @@
 ---
 id: P50-BRAVOS-GRAMMAR
 title: The Bravos grammar and the burn-down - the species we lack, the art-embed world, the hand-offs that carry continuity, the last drawing-kinetics law, and a species-by-sentence map so an agent knows when to use what we have
-status: approved
+status: running
 operation: feature
 risk: standard
 owner: parent

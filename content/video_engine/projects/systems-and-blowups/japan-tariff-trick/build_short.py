@@ -1,4 +1,5 @@
-"""Japan tariff trick - the short, built from the take like the Tokyo short (tokyo-tea-break/build_short.py, the template).
+"""Japan tariff trick - the short, built from the take like the other short (both now write through
+`scripts/authoring/`, the kit P51 T0 pulled out of the two copies).
 
 One take, one part (`vo-short/audio/scene_1.words.json` is the clock - today the Chirp scratch take, word-timed locally by
 align_take_whisper.py; an ElevenLabs master drops in at the same path and every row re-times itself). The shot table is
@@ -15,7 +16,6 @@ from __future__ import annotations
 import json
 import os
 import shutil
-import subprocess
 import sys
 from pathlib import Path
 
@@ -23,7 +23,10 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[4]
 SCRIPTS = REPO / "content/video_engine/scripts"
 sys.path.insert(0, str(SCRIPTS))
-TOKYO = HERE.parent / "tokyo-tea-break"
+SIBLING = HERE.parent / "tokyo-tea-break"   # the channel assets the other short documents: the outro card, the host's clips
+
+from authoring import Project                                             # noqa: E402
+from authoring import audio as A, docks as D, table as T, words as W      # noqa: E402
 
 SCRIPT = HERE / "SCRIPT-SHORT-VO.txt"
 TAKE = HERE / "vo-short/audio"
@@ -32,28 +35,27 @@ CHART_ARRIVAL = os.environ.get("TARIFF_CHART_ARRIVAL", "snap")   # snap (approve
 STILLS = HERE / "omni-video/stills"
 SERIES = ("ev-japan-holdings-v1", "ev-parts-cascade-v1", "ev-tariff-receipt-v1", "ev-japan-selling-v1", "ev-customs-duties-v1")
 CUSTOMS_PEAK_IDX, CUSTOMS_LAST_IDX = 43, 45   # 2025 Q4 $364bn/yr, 2026 Q2 (the latest) in ev-customs-duties-v1 (asserted in build)
-CUT_AT, MIN_GAP = 0.8, 0.30          # M13
 PEAK_IDX, LAST_IDX = 311, 315        # Feb 2026 $1,239.3B, Jun 2026 $1,116.7B in ev-japan-holdings-v1 (asserted in build)
-KEYFRAME_EVERY = 12
 ARM = sys.argv[sys.argv.index("--arm") + 1] if "--arm" in sys.argv else "sig"   # THE APPROVED ARM is the default (2026-09-10: another lane's plain rebuild produced the charcoal `still` arm and the watched player served it)
 TAKE_STEM = sys.argv[sys.argv.index("--take") + 1] if "--take" in sys.argv else "scene_1-tight"   # THE APPROVED CLOCK (operator, 2026-09-09: "tight sounds right, approved, render it") - the Chirp take with doc 37 s14's dead space killed (retime_take.py scene_1.mp3 --gaps --out scene_1-tight, 79.18 s); --take <stem> builds another candidate   # still (charcoal on cream) | sig (the signature line)
+EP = Project(here=HERE, build=BUILD, take=TAKE, take_stem=TAKE_STEM, script_name=SCRIPT.name, episode_id="japan-tariff-trick")
 
-# the outro and the brand line are channel assets (the Tokyo build documents both); reused by path, not copied
-OUTRO = TOKYO / "outro/outro-v2.mov"                       # 6.2 s, the dark card: "It's not magic. It's mechanics."
+# the outro and the brand line are channel assets (the other short's build documents both); reused by path, not copied
+OUTRO = SIBLING / "outro/outro-v2.mov"                     # 6.2 s, the dark card: "It's not magic. It's mechanics."
 BRAND_LINE = HERE.parents[2] / "channel-assets/money-physics/outro/vo/audio/brand-line-paced.mp3"
 BRAND_GAP, BRAND_TAIL = 0.7, 1.0
 OUTRO_S, OUTRO_LEAD = 6.2, 0.1
 
-# the beds (Tokyo's, sound/SOURCES.md) at the youtube level; the VO is the Chirp take, measured 2026-09-07 (ebur128)
+# the beds (the channel's, sound/SOURCES.md) at the youtube level; the VO is the Chirp take, measured 2026-09-07 (ebur128)
 BED_LU = {"youtube": -20.0, "facebook": -20.0}   # a SHORT sits at -20 (operator, 2026-09-08, second pass on the strip: "i like it at +6db" against the -26 plan; "sub-threshold is basically useless, we want to be just above sub-threshold... competitors play music even louder"); -28 is the long-form calibration (Steel and Paper, the research blueprint)
 BED_SWELL_DB = 4.0   # the bed BREATHES with the structure (the blueprint, rule 3: it rises under scene transitions): +4 dB from a card's throw through its snap - the operator heard the landing "sound much better" with the bed up; the rest of the bed stays at BED_LU
 PLATFORM = "youtube"
 VO_LUFS = -21.5
 BEDS = {"suno-hook-A.mp3": -13.2, "suno-hook-B.mp3": -13.0, "suno-pivot-A.mp3": -13.0, "suno-pivot-B.mp3": -13.0}
-bed_gain = lambda f: round(10 ** ((VO_LUFS + BED_LU[PLATFORM] - BEDS[f]) / 20), 4)
+bed_gain = lambda f: A.bed_gain(VO_LUFS, BED_LU[PLATFORM], BEDS[f])
 
-# the ledger page's own clock (mirrored from the player's LP block, as Tokyo mirrors it): the chart LANDS 7.4 s after the
-# page's clock starts; a mount replaces the 0.7 s roll and ends where the roll would have (E45)
+# the ledger page's own clock (mirrored from the player's LP block, as the other short mirrors it): the chart LANDS 7.4 s after
+# the page's clock starts; a mount replaces the 0.7 s roll and ends where the roll would have (E45)
 PAGE_BUILD_END_S, PAGE_BUILD_START_S, PAGE_BUILD_S, LP_ROLL_S = 7.4, 4.4, 3.0, 0.7
 # the pledge card's box on the portrait stage, MEASURED against the Japan-selling page's ink (2026-09-09, stage px): the subtitle
 # ends at y 413, the source line sits at 1077-1108 and the badge at 1159-1301 from x 76 - so the card's box spans x 76-846, y 430-1120:
@@ -72,20 +74,20 @@ PLATE_FILES = {
     "plate-vault": {"still": "still-e-vault", "sig": "sig-e-vault"},                       # the Treasury vault, shelves emptying
     "plate-check": {"still": "still-h-blank-check", "sig": "sig-h-blank-check"},           # the blank cheque pushed across the desk
 }
-DOCK_FILES = {                       # still id per arm, and the card crop (top, height) as fractions of the still - a card the way Tokyo cropped its clips
+DOCK_FILES = {                       # still id per arm, and the card crop (top, height) as fractions of the still - a card the way the other short cropped its clips
     "dock-c-two-lanes": ({"still": "still-c-two-lanes-v2", "sig": "sig-c-two-lanes"}, (0.26, 0.44)),      # the two lanes, docked on the archetype
     "dock-a-podium": ({"still": "still-a-podium-victory", "sig": "sig-a-podium-victory"}, (0.14, 0.52)),   # the podium, docked on "Washington signed" (E48 callback)
     "dock-e-vault": ({"still": "still-e-vault", "sig": "sig-e-vault"}, (0.18, 0.52)),                     # the vault, docked on "Tokyo checked the Treasury vault"
-    # the PLEDGE dock (operator, 2026-09-09: Tokyo's toll-gate clip "was already weak because it was supposed to be a toll gate, without
-    # the manufacturing plant it's just useless") - the operator's own Flow images: the fab (Mike at the wafer chamber, the E39 atom)
-    # by default; DOCK_H=trap swaps in the $122B-trap panel (the vault emptying into the wafer, the package composition)
+    # the PLEDGE dock (operator, 2026-09-09: the other short's toll-gate clip "was already weak because it was supposed to be a toll
+    # gate, without the manufacturing plant it's just useless") - the operator's own Flow images: the fab (Mike at the wafer chamber,
+    # the E39 atom) by default; DOCK_H=trap swaps in the $122B-trap panel (the vault emptying into the wafer, the package composition)
     "dock-h-pledge": ({"still": "sig-i-fab-wafer", "sig": "sig-i-fab-wafer"}, (0.19, 0.48)) if os.environ.get("DOCK_H", "fab") == "fab"
                      else ({"still": "sig-j-vault-to-chips", "sig": "sig-j-vault-to-chips"}, (0.152, 0.55)),
 }
 CLIPS = {
 }
 WORLD_CLIPS = {
-    "clip-g-two-fingers-v2.mp4": TOKYO / "omni-video/stills/clip-g-two-fingers-v2.mp4",     # StickMike to camera, two fingers up (10.0 s)
+    "clip-g-two-fingers-v2.mp4": SIBLING / "omni-video/stills/clip-g-two-fingers-v2.mp4",     # StickMike to camera, two fingers up (10.0 s)
 }
 DOCK_META = [
     {"asset": "dock-h-pledge", "title": "Ten trillion yen for chips", "source": "HollowStickMike - Money Physics", "species": "deck", "badges": []},
@@ -97,148 +99,37 @@ DOCK_META = [
 ]
 
 
-def words() -> list[dict]:
-    d = json.loads((TAKE / f"{TAKE_STEM}.words.json").read_text(encoding="utf-8"))
-    return d["words"] if isinstance(d, dict) else d
-
-
-def phrase_start(ws: list[dict], phrase: str) -> tuple[int, float]:
-    norm = lambda s: s.strip(".,:;!?\"'").lower()
-    toks = [norm(x) for x in phrase.split()]
-    for i in range(len(ws) - len(toks) + 1):
-        if [norm(x["w"]) for x in ws[i:i + len(toks)]] == toks:
-            return i, ws[i]["start_s"]
-    raise SystemExit(f"phrase not in the take: {phrase!r}")
-
-
-def cut_before(ws: list[dict], phrase: str) -> float:
-    i, start = phrase_start(ws, phrase)
-    if i == 0:
-        return 0.0
-    gap = start - ws[i - 1]["end_s"]
-    if gap < MIN_GAP:
-        raise SystemExit(f"no cut point before {phrase!r}: gap {gap:.2f}s < {MIN_GAP}s (M13)")
-    return round(ws[i - 1]["end_s"] + CUT_AT * gap, 2)
-
-
-def next_sentence_start(ws: list[dict], t: float) -> float | None:
-    """The start of the first word of the NEXT sentence after t - the take's own punctuation is the boundary (24 of 247 words
-    end in . ? !). E25 (2026-09-08): "the light should unzoom when it says 'Auto parts taxes' - that's the real beginning of the
-    scene transition": the chart proves one sentence, so its light releases on the first word of the next one. None = no
-    sentence ends after t."""
-    seen_end = False
-    for w in ws:
-        if w["start_s"] < t:
-            continue
-        if seen_end:
-            return round(w["start_s"], 2)
-        if w["w"].rstrip()[-1:] in ".?!":
-            seen_end = True
-    return None
-
-
-def word_time(ws: list[dict], phrase: str) -> float:
-    return phrase_start(ws, phrase)[1]
-
-
-def write_timeline(ws: list[dict], runtime_s: float) -> dict:
-    out_words = [{"w": w["w"], "start": round(w["start_s"], 3), "end": round(w["end_s"], 3), "part": 1} for w in ws]
-    sents, cur = [], []
-    for w in out_words:
-        cur.append(w)
-        if w["w"].rstrip("\"”").endswith((".", "!", "?", ":")):
-            sents.append({"text": " ".join(x["w"] for x in cur), "start": cur[0]["start"], "end": cur[-1]["end"], "part": 1})
-            cur = []
-    if cur:
-        sents.append({"text": " ".join(x["w"] for x in cur), "start": cur[0]["start"], "end": cur[-1]["end"], "part": 1})
-    tl = {"episode": "japan-tariff-trick", "script": SCRIPT.name, "take": "vo-short", "runtime_s": runtime_s,
-          "words": out_words, "sentences": sents, "edit_pauses_applied": False}
-    (BUILD / "timeline.json").write_text(json.dumps(tl, indent=1), encoding="utf-8")
-    return tl
-
-
-def seekable_clip(name: str, src: Path) -> Path:
-    """A keyframe every KEYFRAME_EVERY frames so a seek never decodes from frame 0 (Tokyo, 2026-09-05)."""
-    out = BUILD / "clips" / name
-    out.parent.mkdir(parents=True, exist_ok=True)
-    if not out.exists() or out.stat().st_mtime < src.stat().st_mtime:
-        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-an", "-c:v", "libx264", "-profile:v", "high", "-crf", "17", "-preset", "slow",
-                        "-g", str(KEYFRAME_EVERY), "-keyint_min", str(KEYFRAME_EVERY), "-sc_threshold", "0", "-bf", "0", "-pix_fmt", "yuv420p",
-                        "-movflags", "+faststart", str(out)], check=True)
-    return out
-
-
-def dock_card(aid: str, src: Path, crop: tuple[float, float]) -> Path:
-    """The still cropped to a card the way Tokyo cropped its clips for the still fallback; written once."""
-    out = BUILD / "docks" / f"{aid}.png"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    stamp = out.with_suffix(".src")   # the card remembers its source and crop: a swapped still (DOCK_H) or a new crop re-cuts it
-    key = f"{src.resolve()}|{crop}"
-    if not out.exists() or out.stat().st_mtime < src.stat().st_mtime or (stamp.read_text(encoding="utf-8") if stamp.exists() else "") != key:
-        top, h = crop
-        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(src), "-vf", f"crop=iw:ih*{h}:0:ih*{top}", str(out)], check=True)
-        stamp.write_text(key, encoding="utf-8")
-    return out
-
-
 def chart_dock_card(aid: str, series: str, variant: str = "line", aspect: str = "9:16") -> str:
-    """A CHART CARD (Tokyo R26-19 / the third watch): the series object's ledger page rendered once at its landing by
-    scripts/chart_card.py as a PORTRAIT card - the page it will become - and registered as a dock still. The card is THROWN onto
-    the previous scene on the dock's stop-action kinetics (the landing with weight Tokyo got right) and the page then enters with
-    snap=<this card>: it grows from the landed card's rectangle to the stage (the part Tokyo never did; operator, 2026-09-08)."""
-    import build_render_f as R
-    import chart_card as CC
-    src = HERE / "evidence/objects" / f"{series}.series.json"
-    out = BUILD / "docks" / f"{aid}.png"
-    if not out.exists() or out.stat().st_mtime < max(src.stat().st_mtime, Path(CC.__file__).stat().st_mtime):
-        CC.render_card(src, out, variant, aspect=aspect)
-    R.STAMPED[aid] = str(out)
-    return aid
+    """A CHART CARD (R26-19 / the third watch): the series object's ledger page rendered once at its landing as a PORTRAIT
+    card - the page it will become. The card is THROWN onto the previous scene on the dock's stop-action kinetics and the
+    page then enters with snap=<this card>: it grows from the landed card's rectangle to the stage (operator, 2026-09-08)."""
+    return D.chart_card(aid, HERE / "evidence/objects" / f"{series}.series.json", BUILD, variant, aspect)
 
 
 def card_aspect(aid: str) -> float:
-    """The rendered card's h / w, for a centred placement sized to the card (chart_dock_card must have run) - Tokyo's."""
-    from PIL import Image
-    w, h = Image.open(BUILD / "docks" / f"{aid}.png").size
-    return round(h / w, 4)
-
-
-def centred_card_point(card_aspect: float, centre_y: float, fx: float, fy: float, centre_w: float | None = None, centre_x: float | None = None) -> dict:
-    """A POINT target inside a CENTRED dock card: the compiler's centred_place with an authored centre_y is deterministic
-    (width CENTRE_W of the stage, height by the card's aspect, capped at CENTRE_MAX_H, centred on x), so a fraction (fx, fy)
-    of the card maps to a stage fraction here - the ring on the wafer aims at the card the compiler will draw."""
-    import build_scene_timeline_f as C
-    sw, sh = (1080, 1920)
-    w = round((centre_w or C.CENTRE_W) * sw); h = round(w * card_aspect)
-    if h > C.CENTRE_MAX_H * sh:
-        h = round(C.CENTRE_MAX_H * sh); w = round(h / card_aspect)
-    cx = (centre_x if centre_x is not None else 0.5) * sw
-    x0, y0 = max(0, cx - w / 2), max(0, centre_y * sh - h / 2)
-    return {"kind": "point", "x": round((x0 + fx * w) / sw, 4), "y": round((y0 + fy * h) / sh, 4)}
+    """The rendered card's h / w, for a centred placement sized to the card (chart_dock_card must have run)."""
+    return D.card_aspect(aid, BUILD)
 
 
 def still_card_aspect(aid: str) -> float:
-    """h / w of a DOCK_FILES still's card crop, from the still's own size (before dock_card has run)."""
-    from PIL import Image
-    arms, (top, hh) = DOCK_FILES[aid]
-    w, h = Image.open(STILLS / f"{arms[ARM]}.png").size
-    return round(hh * h / w, 4)
+    """h / w of a DOCK_FILES still's card crop, from the still's own size (before the card has been cut)."""
+    arms, crop = DOCK_FILES[aid]
+    return D.still_card_aspect(STILLS / f"{arms[ARM]}.png", crop)
 
 
 def register_assets() -> None:
     """The resolver checks STAMPED first (build_render_f.find_asset): the stills, the dock cards and the dock clips land there by id."""
-    import build_render_f as R
     for aid, arms in PLATE_FILES.items():
         p = STILLS / f"{arms[ARM]}.png"
         assert p.exists(), f"missing still {aid}: {p}"
-        R.STAMPED[aid] = str(p)
+        D.register(aid, p)
     for aid, (arms, crop) in DOCK_FILES.items():
         p = STILLS / f"{arms[ARM]}.png"
         assert p.exists(), f"missing still {aid}: {p}"
-        R.STAMPED[aid] = str(dock_card(aid, p, crop))
+        D.register(aid, D.still_card(aid, p, crop, BUILD))
     for aid, p in CLIPS.items():
         assert p.exists(), f"missing clip {aid}: {p}"
-        R.STAMPED[aid] = str(p)
+        D.register(aid, p)
 
 
 MAP_PLANTS = {"D": (0.215, 0.425), "O": (0.65, 0.34), "M": (0.455, 0.87)}   # plant chip centres on the crossings map, stage fractions
@@ -276,14 +167,14 @@ def crossings_species(t0: float, t_truck: float, t_six: float, t_end: float) -> 
 
 
 def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
-    """The authored rows. E44/E45/E50, the Tokyo v3 grammar: the REAL chart (Japan's Treasury holdings) mounts over the podium
+    """The authored rows. E44/E45/E50, the v3 grammar: the REAL chart (Japan's Treasury holdings) mounts over the podium
     on the hook line and carries the -$122.6B bracket on "what nobody explained"; the six gates take the frame on "six separate
     times"; the parts page mounts over them on "An engine block" with the two lanes docked on the archetype; the ship carries
     "Toyota crosses once"; the receipt page mounts over it on "the math breaks Detroit"; the vault on "the second lever"; the
     holdings page RETURNS by the spiral with the gate-to-the-fab docked on "pledging"; two fingers for the double squeeze, the
     blank cheque on "we wrote them a blank check"; the ring is the podium, the vault and the page with the bracket standing."""
-    at = lambda phrase: round(word_time(ws, phrase), 2)
-    cut = lambda phrase: cut_before(ws, phrase)
+    at = lambda phrase: W.at(ws, phrase)
+    cut = lambda phrase: W.cut_before(ws, phrase)
     datum = lambda i: {"kind": "datum", "index": i}
     hold = f"ledger:ev-japan-holdings-v1:line:{LAST_IDX}:right"
     BRACKET = {"kind": "bracket", "from": PEAK_IDX, "to": LAST_IDX, "label": "−$122.6B", "sub": "Feb to Jun 2026", "color": "neg"}
@@ -349,10 +240,10 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
     return [
         # 1 the hook: the victory lap at the podium - "Trump announced he beat Japan on tariffs"
         (0.0, t_mount, "plate-podium;idle=drift", ken, [
-            # THE CARD, THROWN (the third watch, the Tokyo way): the holdings page as a portrait card flies onto the podium on the dock's
-            # stop-action throw and lands with weight; the next row's page SNAPS up from where it landed and IS the world
-            # it lands CENTRED over the imagery (operator: Tokyo adapted the spot because its dock stayed; here the card lands and
-            # zooms fast, so the middle is fine) on the dock's own stop-action throw
+            # THE CARD, THROWN (the third watch, the other short's way): the holdings page as a portrait card flies onto the podium on
+            # the dock's stop-action throw and lands with weight; the next row's page SNAPS up from where it landed and IS the world
+            # it lands CENTRED over the imagery (operator: the other cut adapted the spot because its dock stayed; here the card lands
+            # and zooms fast, so the middle is fine) on the dock's own stop-action throw
             (chart_dock_card("dock-b-holdings", "ev-japan-holdings-v1", "line"), 0, t_card, t_mount, {"arrive": "throw", "mass": "paper", "centre": True, "card_aspect": card_aspect("dock-b-holdings")}),
         ], None, None),
         # 2 THE PAGE ON THE HOOK: Japan's holdings ARRIVE DRAWN over the podium (enter=built, operator 2026-09-08: "chart 1
@@ -408,10 +299,10 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
             # the LIGHT on the wafer (E56, operator 2026-09-09: "drawing the ring on the wafer is dumb ... give it a light shimmer or a
             # spotlight"): the focus light lands on the wafer at "semiconductors", holds to the cut, and breathes (idle live)
             {"kind": "spotlight", "at": at("semiconductors"), "dur": "hold", "idle": "live",
-             "target": centred_card_point(still_card_aspect("dock-h-pledge"), PLEDGE_CY, *PLEDGE_WAFER, centre_w=PLEDGE_CW, centre_x=PLEDGE_CX)},
+             "target": D.centred_card_point(still_card_aspect("dock-h-pledge"), PLEDGE_CY, *PLEDGE_WAFER, centre_w=PLEDGE_CW, centre_x=PLEDGE_CX)},
         ]),
         # 9 the reflection: two fingers to camera - "In finance, we call this the double squeeze"
-        (t_finance, t_wrote, "clip:" + seekable_clip("clip-g-two-fingers-v2.mp4", WORLD_CLIPS["clip-g-two-fingers-v2.mp4"]).as_posix(), ken, [], "dip", None),
+        (t_finance, t_wrote, "clip:" + D.seekable_clip("clip-g-two-fingers-v2.mp4", WORLD_CLIPS["clip-g-two-fingers-v2.mp4"], BUILD).as_posix(), ken, [], "dip", None),
         # 10 the blank cheque pushed across the desk - "And then we wrote them a blank check anyway"
         (t_wrote, t_backfire, "plate-check;idle=drift", ken, [], "dip", None),
         # 11 THE RING on the mechanism, a NEW chart: customs duties - the tariff America paid at its own border - mounts over the
@@ -427,32 +318,52 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
             {"kind": "figure", "at": t_funded, "dur": 1.4, "target": datum(CUSTOMS_PEAK_IDX), "text": "$364bn a year", "sub": "customs duties, late 2025", "color": "neg", "dy": -0.9},
         ]),
         # 12 the outro card, dissolving in over the ring page
-        (t_outro, runtime_s, "clip:" + seekable_clip("outro-v2.mp4", OUTRO).as_posix(), ken, [], "dip", [
+        (t_outro, runtime_s, "clip:" + D.seekable_clip("outro-v2.mp4", OUTRO, BUILD).as_posix(), ken, [], "dip", [
             {"kind": "life", "at": t_outro, "dur": round(runtime_s - t_outro, 2)},
         ]),
     ]
 
 
+# the sound map (the other short's, verbatim): a spiral entry is the warped whoosh at 0.12; mounts are silent; every page exits by cut
+ACCENT = 0.12
+SPIRAL_IN = {"A": "fs-whoosh-3-spiral-in.mp3", "B": "fs-whoosh-3-648729.mp3", "C": "fs-swirl-in-478722.mp3"}
+SNAP_IN = {"A": "fs-whoosh-3-648729.mp3", "B": "fs-riserhit-754771.mp3", "C": "fs-whoosh-1-706679.mp3"}   # the SNAP's (or the camera arrival's) whoosh (operator, 2026-09-08: "fast with a woosh to full size") - the card becomes the world
+TURN_PLATE = "plate-vault"   # the second lever: the turn bed fades in under it
+
+
+def sound_cues(rows: list[tuple]) -> list[dict]:
+    """This episode's cue map over the kit's transition and arrival readings."""
+    cues: list[dict] = []
+    for i, r in enumerate(rows):
+        page = A.page_transitions(r[2])
+        if page["ledger"] and page["spiral"]:
+            cues.append({"slot": f"page enter {i + 1} (spiral)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0,
+                         "variants": dict(SPIRAL_IN)})
+        if page["ledger"] and (page["snap"] or page["camera"]):
+            cues.append({"slot": f"page enter {i + 1} (snap)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0,
+                         "variants": dict(SNAP_IN)})
+    t_turn = next(r[0] for r in rows if r[2].startswith(TURN_PLATE))
+    # the bed's ENVELOPE, in dB against its own gain, keyed to every thrown card: up over the 0.3 s before the throw, held
+    # through the landing and the snap, down over 0.8 s after the page is the world (a pure function of t in the player)
+    env = A.bed_envelope(rows, BED_SWELL_DB, SNAP_S, fallback_end=lambda d: float(d[3]) + SNAP_S)
+    cues.append({"slot": "hook bed", "at": 0.0, "gain": bed_gain("suno-hook-B.mp3"), "fade_in": 1.5, "env": env,
+                 "variants": {"A": "suno-hook-B.mp3", "B": "suno-hook-A.mp3"},
+                 "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO ({VO_LUFS} LUFS)"})
+    cues.append({"slot": "turn bed", "at": round(t_turn, 2), "gain": bed_gain("suno-pivot-A.mp3"), "fade_in": 3.0,
+                 "variants": {"A": "suno-pivot-A.mp3", "B": "suno-pivot-B.mp3"},
+                 "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO; fades in under the second lever"})
+    return cues
+
+
 def main() -> int:
-    ws = words()
-    BUILD.mkdir(exist_ok=True)
-    (BUILD / "audio").mkdir(exist_ok=True)
-    shutil.copy2(TAKE / f"{TAKE_STEM}.mp3", BUILD / "audio/episode.mp3")
-    probe = lambda p: float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", str(p)],
-                                           capture_output=True, text=True).stdout or 0)
-    t_vo_end = round(probe(BUILD / "audio/episode.mp3"), 3)
-    t_outro = round(t_vo_end - OUTRO_LEAD, 3)
-    line_s = probe(BRAND_LINE)
-    t_line = round(t_vo_end + BRAND_GAP, 3)
-    runtime_s = round(max(t_outro + OUTRO_S, t_line + line_s + BRAND_TAIL), 3)
-    audio = BUILD / "audio/episode.mp3"
-    stitched = audio.with_name("episode-stitched.mp3")
-    fc = ("[0:a]aresample=44100,aformat=channel_layouts=mono[a];[1:a]aresample=44100,aformat=channel_layouts=mono[g];"
-          "[2:a]aresample=44100,aformat=channel_layouts=mono[l];[a][g][l]concat=n=3:v=0:a=1,apad=whole_dur=" + str(runtime_s) + "[out]")
-    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(audio), "-f", "lavfi", "-t", str(BRAND_GAP), "-i", "anullsrc=r=44100:cl=mono", "-i", str(BRAND_LINE),
-                    "-filter_complex", fc, "-map", "[out]", "-c:a", "libmp3lame", "-q:a", "2", str(stitched)], check=True)
-    stitched.replace(audio)
-    write_timeline(ws, runtime_s)
+    ws = W.take_words(EP)
+    EP.mkdirs()
+    shutil.copy2(TAKE / f"{TAKE_STEM}.mp3", EP.audio_master)
+    t_vo_end = round(A.probe_duration(EP.audio_master), 3)
+    line_s = A.probe_duration(BRAND_LINE)
+    t_outro, t_line, runtime_s = A.outro_clock(t_vo_end, line_s, outro_lead=OUTRO_LEAD, outro_s=OUTRO_S, brand_gap=BRAND_GAP, brand_tail=BRAND_TAIL)
+    A.stitch_brand_line(EP.audio_master, BRAND_LINE, BRAND_GAP, runtime_s)
+    W.write_timeline(EP, ws, runtime_s)
     print(f"  arm {ARM}; take {t_vo_end:.2f}s; brand line {line_s:.2f}s at {t_line:.2f}s; card at {t_outro:.2f}s; runtime {runtime_s:.2f}s")
 
     (BUILD / "evidence-dock.json").write_text(json.dumps(DOCK_META, indent=1), encoding="utf-8")
@@ -465,72 +376,28 @@ def main() -> int:
     assert c[CUSTOMS_PEAK_IDX][1] == 364.324 and len(c) == CUSTOMS_LAST_IDX + 1, "the customs object moved under the shot table"
     register_assets()
 
-    import build_caption_pages as CP
-    CP.BUILD = BUILD
-    CP.CHAR_BUDGET, CP.MAX_WORDS = 28, 6
-    CP.main()
+    T.caption_pages(BUILD, char_budget=28, max_words=6)
 
     rows = shot_table(ws, runtime_s, t_outro)
-    # E25: a held light follows its SENTENCE - every `dur: "hold"` species gets `until` = the first word of the next sentence
-    # (from the take's punctuation), unless the row already names one; the compiler takes the earliest of that, the next event
-    # on the row, a card arriving, and the cut
-    for r in rows:
-        for e in (r[6] or []) if len(r) > 6 else []:
-            if isinstance(e, dict) and e.get("dur") == "hold" and "until" not in e:
-                u = next_sentence_start(ws, float(e["at"]))
-                if u is not None:
-                    e["until"] = u
-    # the sound map (Tokyo's, verbatim): a spiral entry is the warped whoosh at 0.12; mounts are silent; every page exits by cut
+    T.hold_until(rows, ws)   # E25: a held light follows its sentence
     plan_path = HERE / "sound/SOUND-PLAN.json"
     plan = json.loads(plan_path.read_text(encoding="utf-8"))
-    ACCENT = 0.12
-    cues = []
-    for i, r in enumerate(rows):
-        if r[2].startswith("ledger:") and ":spiral" in r[2]:
-            cues.append({"slot": f"page enter {i + 1} (spiral)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0,
-                         "variants": {"A": "fs-whoosh-3-spiral-in.mp3", "B": "fs-whoosh-3-648729.mp3", "C": "fs-swirl-in-478722.mp3"}})
-        if r[2].startswith("ledger:") and (":snap=" in r[2] or ":camera=" in r[2]):   # the SNAP's (or the camera arrival's) whoosh (operator, 2026-09-08: "fast with a woosh to full size") - the card becomes the world
-            cues.append({"slot": f"page enter {i + 1} (snap)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0,
-                         "variants": {"A": "fs-whoosh-3-648729.mp3", "B": "fs-riserhit-754771.mp3", "C": "fs-whoosh-1-706679.mp3"}})
-    t_turn = next(r[0] for r in rows if r[2].startswith("plate-vault"))   # the second lever
-    # the bed's ENVELOPE, in dB against its own gain, keyed to every thrown card: up over the 0.3 s before the throw, held
-    # through the landing and the snap, down over 0.8 s after the page is the world (a pure function of t in the player)
-    env = []
-    for r in rows:
-        for d in (r[4] or []):
-            if len(d) > 4 and isinstance(d[4], dict) and d[4].get("arrive") == "throw":
-                t_throw = float(d[2])
-                t_snap = next((q[0] for q in rows if f":snap={d[0]}" in q[2] or f":camera={d[0]}" in q[2]), d[3])
-                env += [[round(t_throw - 0.3, 2), 0.0], [round(t_throw, 2), BED_SWELL_DB],
-                        [round(t_snap + SNAP_S, 2), BED_SWELL_DB], [round(t_snap + SNAP_S + 0.8, 2), 0.0]]
-    cues.append({"slot": "hook bed", "at": 0.0, "gain": bed_gain("suno-hook-B.mp3"), "fade_in": 1.5, "env": env,
-                 "variants": {"A": "suno-hook-B.mp3", "B": "suno-hook-A.mp3"},
-                 "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO ({VO_LUFS} LUFS)"})
-    cues.append({"slot": "turn bed", "at": round(t_turn, 2), "gain": bed_gain("suno-pivot-A.mp3"), "fade_in": 3.0,
-                 "variants": {"A": "suno-pivot-A.mp3", "B": "suno-pivot-B.mp3"},
-                 "note": f"{PLATFORM} {BED_LU[PLATFORM]:+.0f} LU under the VO; fades in under the second lever"})
-    plan["cues"] = cues
+    plan["cues"] = sound_cues(rows)
     plan_path.write_text(json.dumps(plan, indent=1), encoding="utf-8")
-    (HERE / "SHOT-TABLE-SHORT.py").write_text(
-        '"""Japan tariff trick short - AUTHORED shot table, timed from the take by build_short.py. Do not hand-edit; edit build_short.shot_table."""\n'
-        f"# arm: {ARM}\n"
-        "W = " + repr(rows).replace("), (", "),\n     (") + "\n", encoding="utf-8")
-    for r in rows:
-        name = r[2].split("/")[-1] if r[2].startswith("clip:") else r[2]
-        extra = (f"  docks {[d[0] for d in r[4]]}" if r[4] else "") + (f"  species {[s['kind'] for s in r[6]]}" if r[6] else "")
-        print(f"  {r[0]:6.2f}-{r[1]:6.2f}  {name}{extra}")
+    T.write_shot_table(HERE / "SHOT-TABLE-SHORT.py", rows,
+                       '"""Japan tariff trick short - AUTHORED shot table, timed from the take by build_short.py. Do not hand-edit; edit build_short.shot_table."""\n'
+                       f"# arm: {ARM}\n")
+    T.print_rows(rows, show_docks=True)
 
-    import build_render_f as R
-    import build_scene_timeline_f as C
-    R.EP, R.BUILD = HERE, BUILD
-    C.EP, C.BUILD = HERE, BUILD
-    C.TIMELINE_NAME = "japan-short.timeline.json"
-    C.SHOT_TABLE_FILE = "SHOT-TABLE-SHORT.py"
-    C.TITLE, C.SUBTITLE, C.EPISODE_ID = "How Japan Tricked Trump", "Money Physics - short", "japan-tariff-trick"
-    C.ASPECT = "9:16"
-    C.CAPTION_STYLE = "phrase"
-    C.KINETICS = {"analytic_spring": True, "min_jerk": True, "area_squash": True, "km_ink": False, "curvature_stroke": True}
-    return C.main()
+    return T.compile_timeline(
+        HERE, BUILD,
+        timeline_name="japan-short.timeline.json",
+        shot_table_file="SHOT-TABLE-SHORT.py",
+        title="How Japan Tricked Trump", subtitle="Money Physics - short", episode_id="japan-tariff-trick",
+        aspect="9:16",
+        caption_style="phrase",
+        kinetics={"analytic_spring": True, "min_jerk": True, "area_squash": True, "km_ink": False, "curvature_stroke": True},
+        render=True)
 
 
 if __name__ == "__main__":

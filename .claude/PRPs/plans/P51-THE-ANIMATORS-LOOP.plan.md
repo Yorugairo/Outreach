@@ -1,7 +1,7 @@
 ---
 id: P51-THE-ANIMATORS-LOOP
 title: The animator's loop - the engine apart from the editor, eyes that cost nothing, a one-shot bar, and a diffable edit layer a human or a flash agent can write
-status: approved
+status: running
 operation: feature
 risk: standard
 owner: parent
@@ -145,7 +145,7 @@ Acceptance:
 ## Task Slices
 
 ### T0: The authoring kit - one door for both formats
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: `implementation_luna`; parent reviews the diff-empty proof
 - Depends on: none
 - Write set: `content/video_engine/scripts/authoring/__init__.py`, `words.py` (`words`, `shifted_words`, `phrase_start`,
@@ -157,7 +157,7 @@ Acceptance:
 - Acceptance: both shorts rebuild byte-identical (timeline JSON, evidence-dock JSON, GATES-MOTION.md diff empty); the F
   door builds unchanged; the kit has no per-project constant in it (every episode fact stays in the episode).
 - Validate: rebuild both shorts and `git diff --stat` on their build folders; `python -m pytest content/video_engine/tests/test_authoring_kit.py -q`
-- Evidence: pending
+- Evidence: `content/video_engine/scripts/authoring/{__init__,words,docks,audio,table}.py` (588 lines); `tests/test_authoring_kit.py` (31 tests, with the hygiene grep); Tokyo `build_short.py` 785 -> 573, the tariff 537 -> 404; the proof: both shorts rebuilt into `build-short-t0/` before and after, `cmp -s` IDENTICAL on timeline.json / evidence-dock.json / caption-pages.json / GATES-MOTION.md / the compiled timeline / SHOT-TABLE-SHORT.py / SOUND-PLAN.json (the parent repeated the Tokyo rebuild against the agent's baseline: identical); `PLATE_USES` + `;use=` in the compiler (the lint imports it). Deviations: the F door shares nothing importable without changing its output (ep1's legacy door: own WINDOWS, inline SVG evidence, a hardcoded worktree REPO path) - left untouched; the kit preserves two quirks of the approved cuts on purpose, logged as BACKLOG R26-35 (the Tokyo bed swell keys on `:snap=` only) and R26-36 (the `:cut` suffix test misses `;then=` rows). CAPABILITIES row added.
 
 ### T1: The runtime apart from the document (R26-17 step 1)
 - Status: pending
