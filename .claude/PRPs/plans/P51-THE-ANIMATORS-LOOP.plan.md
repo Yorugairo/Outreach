@@ -1,7 +1,7 @@
 ---
 id: P51-THE-ANIMATORS-LOOP
 title: The animator's loop - the engine apart from the editor, eyes that cost nothing, a one-shot bar, and a diffable edit layer a human or a flash agent can write
-status: draft
+status: approved
 operation: feature
 risk: standard
 owner: parent
@@ -39,6 +39,8 @@ long, the first 0:60 of a short, at higher scrutiny); the ledger page as the mai
 - The spike's precedents: Motion Canvas writes a dragged timing to a named event in a `.meta` sidecar; Theatre.js
   keeps a state JSON with random keyframe ids (a semantic diff is needed); Remotion writes into source and its docs
   name the preview-versus-render desync; HyperFrames gates capture on one runtime and warns of per-machine pixel drift.
+
+**APPROVED 2026-09-11** (the operator: *"approve both plans"*). The order by slice across the two plans stands as written in the Execution Path: P50 T1 -> P51 T0, T2, T3 -> P50's species as modules -> P51 T1, T4-T7; P51 T8 in parallel.
 
 ## Intent And Acceptance
 

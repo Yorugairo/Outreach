@@ -1,7 +1,7 @@
 ---
 id: P50-BRAVOS-GRAMMAR
 title: The Bravos grammar and the burn-down - the species we lack, the art-embed world, the hand-offs that carry continuity, the last drawing-kinetics law, and a species-by-sentence map so an agent knows when to use what we have
-status: draft
+status: approved
 operation: feature
 risk: standard
 owner: parent
@@ -67,6 +67,8 @@ ARAP invariants as compiler refusals ... with that, we should probably finish ou
 that orders the plan: *"Do we already have an understanding mapped in docs to how/where to know when to use these
 capabilities if we build them?"* - the surfaces yes (§9.28 A/B/C/D), the species and the verbs no: that is T1, and it
 now covers E58's five verbs, E59's four reasons a camera moves, E60's burst, the dock read->park and the un-park.
+
+**APPROVED 2026-09-11** (the operator: *"approve both plans"*). The order by slice across the two plans stands as written in the Execution Path: P50 T1 -> P51 T0, T2, T3 -> P50's species as modules -> P51 T1, T4-T7; P51 T8 in parallel.
 
 ## Intent And Acceptance
 
