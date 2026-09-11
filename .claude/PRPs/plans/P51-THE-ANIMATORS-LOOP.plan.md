@@ -190,7 +190,7 @@ Acceptance:
 - Evidence: `content/video_engine/scripts/probe.py` (625 lines), `gate_motion_density.py` M25 (+132), `tests/test_probe.py` (8), `tests/test_gate_motion_density.py` (+4: the three 2026-09-10 defects rebuilt as fixtures from the Tokyo compiled timeline each FAIL with the right pair named, the untouched build PASSes). Measured: Tokyo 58.6 JSON 1,092 bytes in 2.2 s; `--gate` 61 instants in 7.8 s; the gate `[PASS ] M25 ... smallest type read 11.6 CSS px on a phone (floor 11) | INFO ... source parked 4.9, chart.lab parked 7.5 ...`; 145 tests green across probe / gate / camera / lint / kit (the parent's run). Four scope decisions, measured and named in code: settled cards only (the Fed card crosses the page mid-throw in the approved cut); the chart's DATA, not its plot box (the approved tea cup parks in the plot's empty corner); ink line by line (a two-line sub is mostly air); the type floor skips parked runs and the citation (the 2026-09-07 design pass set .lp-src.compact at 9.4 CSS px on purpose) and lists them. Two template findings logged, not fixed here (out of the write set): R26-37 (the template's probes take the first ledger world), R26-38 (stale `__lp` after a backward seek). CAPABILITIES row; PIPELINE 7c; GATES-REGISTRY regenerated.
 
 ### T3: The one-shot bar - the self-watch as a build artifact
-- Status: pending (human gate 1 on its first real report)
+- Status: built 2026-09-11 - HUMAN GATE 1 OPEN: the operator reads `tokyo-tea-break/build-short/SELF-WATCH.md` and names what the bar should have refused that it passed, and what it flagged that it should not; those become rows
 - Owner: parent (the checklist); `junior_developer` (the runner)
 - Depends on: T2, P50 T1 (the species-by-sentence lint)
 - Write set: `content/video_engine/scripts/self_watch.py` (runs the gate, M25, the lint, the viewer's last verdict for the
@@ -202,7 +202,7 @@ Acceptance:
 - Acceptance: a build the agent hands over carries a clean `SELF-WATCH.md`; the operator's first read (gate 1) names what
   the bar should have refused, and those become rows.
 - Validate: `python content/video_engine/scripts/self_watch.py <build>` on the Tokyo cut; the file exists and every row has a verdict
-- Evidence: pending
+- Evidence: `content/video_engine/scripts/self_watch.py` (the runner; the checklist rows O1-O10 in it verbatim), `tests/test_self_watch.py` (8: the gate parser, NOT CLEAN on a FAIL, TODO never CLEAN from the runner, the long-form plate row, the verdict reader, the opening window, the Tokyo report in a temp copy with 3 sheets and layout-probe.json, a failing script gate -> exit 1); both `build_short.py` run it last (`SELF_WATCH=0` skips). Measured: the wired Tokyo side build 19.7 s end to end; `tokyo-tea-break/build-short/SELF-WATCH.md` written for human gate 1 - section 1: motion gate WARN (M11, M21 standing), M25 PASS (61 instants, smallest type 11.6 CSS px), the lint INFO (25 sentences, 6 with an available species and no row), the viewer `present, no verdict line`, the script gates `VERDICT: FAIL (1 viewer)` -> NOT CLEAN. The bar's first bite is the record's: the viewer never re-ran on the final Tokyo script. The runner was written by the parent after the junior_developer dispatch stalled on the worktree write guard (40 min, nothing on disk).
 
 ### T4: Hot reload with the determinism check (R26-17 step 2)
 - Status: pending

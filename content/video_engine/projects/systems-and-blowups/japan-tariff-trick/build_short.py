@@ -389,7 +389,7 @@ def main() -> int:
                        f"# arm: {ARM}\n")
     T.print_rows(rows, show_docks=True)
 
-    return T.compile_timeline(
+    rc = T.compile_timeline(
         HERE, BUILD,
         timeline_name="japan-short.timeline.json",
         shot_table_file="SHOT-TABLE-SHORT.py",
@@ -398,6 +398,10 @@ def main() -> int:
         caption_style="phrase",
         kinetics={"analytic_spring": True, "min_jerk": True, "area_squash": True, "km_ink": False, "curvature_stroke": True},
         render=True)
+    if os.environ.get("SELF_WATCH", "1") == "1":   # P51 T3: the one-shot bar runs LAST - the probe (M25's input), the gate, the lint, the verdicts, the opening's sheets -> SELF-WATCH.md; SELF_WATCH=0 skips it
+        import self_watch as SW
+        rc = rc or SW.main([str(BUILD), "--project", str(HERE), "--script", "SCRIPT-SHORT"])
+    return rc
 
 
 if __name__ == "__main__":

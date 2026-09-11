@@ -555,7 +555,7 @@ def main() -> int:
                        '"""Tokyo short - AUTHORED shot table, timed from the take by build_short.py. Do not hand-edit; edit build_short.shot_table."""\n')
     T.print_rows(rows)
 
-    return T.compile_timeline(
+    rc = T.compile_timeline(
         HERE, BUILD,
         timeline_name="tokyo-short.timeline.json",
         shot_table_file="SHOT-TABLE-SHORT.py",
@@ -567,6 +567,10 @@ def main() -> int:
         # km_ink OFF (P43 T3, operator 2026-09-05 after six rounds: "our original applications were better ... turn ink off");
         # curvature_stroke ON - the HAND on every drawn path (P43 T2, ruled from the side-by-side clip)
         kinetics={"analytic_spring": True, "min_jerk": True, "area_squash": True, "km_ink": False, "curvature_stroke": True})
+    if os.environ.get("SELF_WATCH", "1") == "1":   # P51 T3: the one-shot bar runs LAST - the probe (M25's input), the gate, the lint, the verdicts, the opening's sheets -> SELF-WATCH.md; SELF_WATCH=0 skips it
+        import self_watch as SW
+        rc = rc or SW.main([str(BUILD), "--project", str(HERE), "--script", "SCRIPT-90S.claude"])
+    return rc
 
 
 if __name__ == "__main__":
