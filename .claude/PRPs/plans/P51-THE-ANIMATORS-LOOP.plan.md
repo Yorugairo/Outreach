@@ -231,7 +231,7 @@ Acceptance:
 - Evidence: `build_scene_timeline_f.py` (+314: `apply_overrides`, the derived ids on every dock / species / camera, `compile_order`'s same-second refusal, `overrides_applied`), `authoring/table.py` (`load_rows`, `apply_sidecar` before the literal is written), `tests/test_overrides.py` (36: centre_y layered == the source edit as rows AND as the compiled dock entry; the word form == the build's `at`; a null camera == `TOKYO_CAMERA=0`'s rows; 17 refusals by row and field; idempotence in any key order; identity with no sidecar). Proof: no sidecar -> timeline.json, evidence-dock.json, caption-pages.json, SHOT-TABLE-SHORT.py, SOUND-PLAN.json byte-identical to the T0 baseline and the compiled timeline equal once its new `id` fields are stripped (39 ids, unique); the live sidecar (five keys) layered on Tokyo's side build with the gate PASS. The parent's run with T4: see T4. The tariff short was not rebuilt (its clip ids embed the build dir; the mechanism is tested and `apply_sidecar` returns [] without a sidecar). Deviation: the compiled timeline cannot be byte-identical by construction (the ids) - the stripped-equal proof stands in.
 
 ### T6: The change report - what a human or a flash agent changed, as the agent sees it
-- Status: pending (human gate 2)
+- Status: built 2026-09-11 - HUMAN GATE 2 OPEN (the operator's three hand edits, the report, the reply)
 - Owner: `implementation_luna`; parent reads the first report
 - Depends on: T2, T5
 - Write set: `content/video_engine/scripts/change_report.py` (`change_report <build> [--since <sha>|--against <overrides.json>]`:
@@ -241,7 +241,7 @@ Acceptance:
 - Acceptance: gate 2 - the operator's three hand edits are each described correctly by the report the agent gets, with
   the frame pair, and the agent's reply cites it.
 - Validate: `python content/video_engine/scripts/change_report.py <build> --against <a hand-edited overrides.json>`
-- Evidence: pending
+- Evidence: `change_report.py` (673), `tests/test_change_report.py` (15: 7 pure - the diff-line formatter, the sidecar diff in row order with added/removed/changed, `effective` off synthetic rows, instant attribution, the round-robin crop plan, the bookkeeping filter; 8 on a private copy of Tokyo's side build - the three diff lines in row order with the authored left-hand values, the word form with its resolved second, instants + crop pairs per key, the gate delta, the determinism verdict, the verdict counts, byte-identical text on a second run, never writes the table it reads). The first report, read by the parent: the record's exit pair shows the card one step higher on the right - the 0.335 -> 0.30 move, legible without the player; the camera-off edit shows as M24's 3 -> 0 pointing species, not as a crop (a camera key has no box). The before build: a temp copy re-compiled in process through the compile block (`apply_sidecar` held off - it rewrites the episode's table; the compiler's own pass layers instead). Deviations: `--since` implemented, untested; the fixture moved to `build-short-t6` (t0 was being rebuilt under the run - the purity test caught it). Gate 2 stays OPEN: the operator's three hand edits, the report the agent gets, the reply that cites it.
 
 ### T7: The editor, thin (R26-17 step 3)
 - Status: built 2026-09-11 - HUMAN GATE 3 OPEN (the operator's three edits by hand)
