@@ -66,14 +66,14 @@ ACT_SPECIES = {
     "NAMES": ("trace", "light", "arc", "stamp"),   # P50 T5: the vector map ships - a country lights, an arc crosses, a figure stamps
     "EXPLAINS": ("note", "plate use=bridge", "chip", "flow"),
     "TURNS": ("figure", "spotlight", "callout", "note"),
-    "BREAKS": ("burst", "stack"),
+    "BREAKS": ("burst", "stack", "burst:stop", "placeholder", "axis capsule"),
     "SPANS": ("bracket", "spread", "relight", "span"),
     "SETS": ("chart_to:park", "figure", "retitle"),
     "RETRACTS": ("retitle", "squiggle"),
 }
 # ... and what it names as pending, by task (s5), so the line says where the better species is.
 ACT_PENDING = {
-    "BREAKS": "furniture T10",   # QUOTES / EXPLAINS closed: the press card (T3), the chip (T2) and the flow diagram (T4) ship; NAMES closed: the vector map (T5);
+    # every act has its species now (2026-09-11): QUOTES the press card (T3), EXPLAINS the chip (T2) + the flow diagram (T4), NAMES the vector map (T5),
 }                                # DIVIDES closed: the treemap page and its X marks (T6), COMPARES widened by the tiers page (T9); RETRACTS closed: the chip crosses out (T2)
 
 

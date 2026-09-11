@@ -66,6 +66,9 @@ captions do NOT count - they are what a viewer reads as stillness.
        over the chart's data, over a line of the page's ink            zone WARNs; INFO until probe.py <build> --gate
        or in the caption strip; type under 11 CSS px on a             has written layout-probe.json)
        phone. Read from layout-probe.json, never a browser
+  M26  values (R26-40): every bar whose number is PRINTED       FAIL   (E28 / E53; INFO until probe.py <build>
+       is drawn at that number on the scale the page prints            --gate has run, or when no value is printed)
+       beside it. M25's sibling, from the same file
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -135,6 +138,18 @@ TYPE_FLOOR_CSS = 11.0      # doc 49 s49.1 reads the floor at 12 CSS px on a 390 
                            # and any run a park has demoted (probe.py marks it `pk`): a parked chart is a thumbnail beside the
                            # card that holds the stage, not reading matter.
 TYPE_FLOOR_EXEMPT = ("source",)
+SRC_M26 = ("E28 (a chart reads right at a glance: a bar's height IS its value) / E53 (the scale and the value are printed at "
+           "every instant) / R26-40 - the printed number and the DRAWN height, read against the scale the page itself prints, "
+           "from the page's own DOM (probe.py --gate). R26-39 was exactly this mismatch: 303 px of bar at \"0.00 %\"")
+# THE BAND. A printed number and a drawn height never agree to the pixel, and two things account for the gap:
+VALUE_TOL = 0.04           # (a) ROUNDING. A pill prints lpFmt's two decimals and a tick label lpTick's, and the height is
+                           # measured off a rendered box - so a few hundredths of the TOP TICK is arithmetic, not a lie.
+                           # Measured on the Tokyo short as built: the worst disagreement over its probed instants is far
+                           # inside this (reported by the row itself, which prints the worst it saw).
+VALUE_OVERSHOOT = 0.05     # (b) THE BURST'S OVERSHOOT (LPX.BT_OVER, mirrored here as the gate mirrors _breakthrough_run_s's
+                           # dials): during the shoot a breaking bar is drawn this much PAST its own number on purpose (E60)
+                           # and settles back. It is a share of the bar's own height, so the band is the sum: 4 % of the top
+                           # tick plus 5 % of the number printed. Anything outside that is the page lying about its data.
 LAYOUT_INK = ("page.source", "page.note", "page.title", "page.sub", "pill")   # a LINE of ink; `page.plot` / `page.chart` are
                            # rectangles the probe reports for context - a card beside a parked chart sits inside the plot box
                            # by design, and only the DATA in it is protected
@@ -859,6 +874,7 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     g += [_opening_still_gate(A["still"]), _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
     g.append(_frozen_gate(frames))                                        # M18 (E49: nothing ever goes truly still)
     g.append(_layout_gate(layout))                                        # M25 (P51 T2: the layout gate, from probe.py's boxes)
+    g.append(_values_gate(layout))                                        # M26 (R26-40: the printed value against the drawn height)
     if (bt := _build_to_gate(tl.get("scenes", []))) is not None:
         g.append(bt)                                                      # M19 (P47 T2: the build_to holds, INFO)
     if (cg := _cadence_gate(tl.get("scenes", []))) is not None:
@@ -1233,6 +1249,76 @@ def _layout_gate(doc: dict | str | None) -> Gate:
                  if not x.get("pk") and x["k"] not in TYPE_FLOOR_EXEMPT), default=0.0)
     return Gate("M25", "PASS", f"no settled card on the chart's data, on a line of the page's ink or in the caption strip over {span}; "
                 f"smallest type read {small:.1f} CSS px on a phone (floor {TYPE_FLOOR_CSS:.0f})" + listed, SRC_M25)
+
+
+def _printed_number(text: str) -> float | None:
+    """The number a page printed, out of the string it printed it in ("36.59%", "-$66.8", "1,405").
+    The unit and the separators are dropped; the sign is not (E28: a drop is a negative number)."""
+    try:
+        return float("".join(c for c in str(text) if c.isdigit() or c in ".-"))
+    except (TypeError, ValueError):
+        return None
+
+
+def _value_faults(doc: dict) -> tuple[list[str], int, tuple[float, str]]:
+    """(FAIL lines, how many printed values were read, the worst disagreement as a share of the top tick).
+
+    The arithmetic is the chart's own: a bar's value is its height as a share of the distance from the zero
+    line to a tick, times that tick's value. Both come from the page as DRAWN, so a parked chart, a rescale
+    mid-flight and a burst rewriting its own scale are all read on whatever the viewer is looking at."""
+    fails: list[str] = []
+    read = 0
+    worst = (0.0, "")
+    for inst in doc.get("instants") or []:
+        t = float(inst.get("t", 0.0))
+        bars = (inst.get("page") or {}).get("bars") or {}
+        tick = bars.get("tick") or []
+        if not bars.get("b") or len(tick) != 2:
+            continue
+        base, (tv, ty) = float(bars["base"]), (float(tick[0]), float(tick[1]))
+        span = base - ty
+        if not (span > 1) or not tv:
+            continue
+        for b in bars["b"]:
+            printed = _printed_number(b.get("v")) if b.get("v") else None
+            if printed is None:
+                continue
+            read += 1
+            # a bar hangs BELOW the zero line for a negative value (E28): the sign is geometry, so read it there
+            sign = 1 if b["y"] + b["h"] <= base + 1 else -1
+            drawn = sign * b["h"] / span * tv
+            gap = abs(drawn - printed)
+            share = gap / abs(tv)
+            if share > worst[0]:
+                worst = (share, f"{b['l'] or 'a bar'} at {_mm(t)}")
+            if gap > VALUE_TOL * abs(tv) + VALUE_OVERSHOOT * abs(printed):
+                fails.append(f"{b['l'] or 'a bar'} prints {b['v']} and draws {drawn:.2f} at {_mm(t)} "
+                             f"({b['h']} px against {span:.0f} px to the {tv:g} tick)")
+    return _dedupe(fails), read, worst
+
+
+def _values_gate(doc: dict | str | None) -> Gate:
+    """M26 (R26-40): the value gate, M25's sibling. Browser-free, from the same layout-probe.json - the page
+    prints its scale and its numbers at every instant (E28/E53), and this is the row that reads them against
+    the geometry they are printed on."""
+    if doc is None:
+        return Gate("M26", "INFO", f"values not measured - run probe.py <build> --gate (writes {LAYOUT_PROBE_NAME})", SRC_M26)
+    if doc == "stale":
+        return Gate("M26", "INFO", f"{LAYOUT_PROBE_NAME} measured another player.html (the build was rebuilt since) - re-run probe.py <build> --gate", SRC_M26)
+    instants = (doc or {}).get("instants") or []
+    if not instants:
+        return Gate("M26", "INFO", f"{LAYOUT_PROBE_NAME} carries no instants - re-run probe.py <build> --gate", SRC_M26)
+    fails, read, worst = _value_faults(doc)
+    span = f"{len(instants)} instants probed"
+    if not read:
+        return Gate("M26", "INFO", f"no bars page printed a value at any of the {span} - nothing to check "
+                    "(a line page's numbers are its tags, not a height)", SRC_M26)
+    band = f"{VALUE_TOL:.0%} of the top tick + the burst's {VALUE_OVERSHOOT:.0%} overshoot"
+    if fails:
+        return Gate("M26", "FAIL", f"{len(fails)} bar(s) drawn at a height their own printed value does not carry, over {span} "
+                    f"(band {band}): " + "; ".join(fails[:6]) + (" ..." if len(fails) > 6 else ""), SRC_M26)
+    return Gate("M26", "PASS", f"{read} printed value(s) over {span} agree with the height drawn on the scale the page prints "
+                f"(band {band}); worst {worst[0]:.1%} of the top tick" + (f" - {worst[1]}" if worst[1] else ""), SRC_M26)
 
 
 def _build_to_holds(scenes: list[dict]) -> list[tuple[float, float]]:

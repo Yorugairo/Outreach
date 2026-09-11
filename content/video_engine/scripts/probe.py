@@ -15,7 +15,9 @@ every visible dock, the ledger page's boxes (title / sub / plot / source / rail)
 strip, type sizes at the PHONE scale, the overlaps as named pairs with their area, the
 clearances to the caption strip and to the safe zone, the camera state and the marks summary.
 `--gate` writes `<build>/layout-probe.json` for the M25 row of gate_motion_density.py, which
-stays browser-free and reads that file exactly as M18 reads frame-hashes.json.
+stays browser-free and reads that file exactly as M18 reads frame-hashes.json. The same file
+carries `page.bars` for M26 (R26-40): per bar the drawn height, the number printed for it and
+the scale it is printed on, so the gate can refuse a height that disagrees with its own value.
 
     python probe.py <build> 58.6 --json
     python probe.py <build> 9.2 36.7 54.5 57.0 58.6 --sheet sheet.png --tile 360
@@ -157,7 +159,7 @@ READ_DOM = r"""
     return out;
   };
 
-  const out = { stage: [stg.width, stg.height], docks: [], items: [], plots: [], data: [], nmarks: 0, drawn: [], chart: null, caption: null, marks: null };
+  const out = { stage: [stg.width, stg.height], docks: [], items: [], plots: [], data: [], nmarks: 0, drawn: [], chart: null, caption: null, marks: null, bars: null };
   for (const d of document.querySelectorAll('.dock')) {
     const o = eff(d); if (o <= 0.05) continue;
     out.docks.push({ el: d.id, name: d.dataset.slide || d.id, box: R(d), op: o,
@@ -202,7 +204,7 @@ READ_DOM = r"""
        0:58 after a backward seek). The state object is used for one thing only - the plot box it
        declares - and a chart with no state falls back to where its axes and data are drawn. */
     const states = S && S.states && S.states.length ? S.states : (S ? [S] : []);
-    let up = 0, chartBox = null, parked = false;
+    let up = 0, chartBox = null, parked = false, barsOp = -1;
     for (const chart of world.querySelectorAll('.lp-chart')) {
       const o = eff(chart); if (o <= 0.05) continue;
       const st = states.find((x) => x && x.chart === chart) || null;
@@ -240,6 +242,44 @@ READ_DOM = r"""
         const r = el.getBoundingClientRect(); if (r.width < 2 || r.height < 2) continue;
         const cls = (el.getAttribute('class') || 'text').split(' ')[0];
         out.items.push({ k: 'chart.' + cls, box: R(el), px: fs(el), s: sc(el), txt: txt(el) });
+      }
+      /* M26 (R26-40): THE PRINTED VALUE AGAINST THE DRAWN HEIGHT. E28 and E53 say the scale and the value are
+         printed at every instant; nothing checked that the bar's HEIGHT agreed with either. R26-39 was exactly
+         that mismatch - 303 px of bar at "0.00 %" - and everything the check needs is already in the page's own
+         DOM: each bar's drawn height, the zero line, the topmost VISIBLE tick label (the scale the height is
+         read on - the burst's second tick set fades in as the first fades out, and whichever is up is the one
+         the viewer is reading it against) and the number printed for that bar if it is FULLY shown. A tick's
+         VALUE is on its label and its Y is on its rule, so the two are paired by proximity; a label with no
+         rule under it is not a tick. Bars pages only: `st.scale.kind` says which. */
+      if (st && st.scale && st.scale.kind === 'bars' && (st.bars || []).length && o > barsOp) {
+        const axEl = chart.querySelector('line.ax');
+        const gridY = [];
+        for (const g of chart.querySelectorAll('line.grid, line.ax')) {
+          if (eff(g) <= 0.05) continue;
+          const b = R(g); if (b[2] < 4) continue;   /* a horizontal rule is wide and has no height */
+          gridY.push(b[1] + b[3] / 2);
+        }
+        const bnum = (s) => { const v = parseFloat(String(s).replace(/[^0-9.\-]/g, '')); return Number.isFinite(v) ? v : null; };
+        let tick = null;
+        for (const el of chart.querySelectorAll('text.lab')) {
+          if (el.getAttribute('text-anchor') !== 'end' || eff(el) <= 0.5) continue;   /* a y tick's label; a category label is centred */
+          const v = bnum(el.textContent); if (v === null || v === 0) continue;
+          const b = R(el), cy = b[1] + b[3] / 2;
+          let y = null, d = 1e9;
+          for (const gy of gridY) { const q = Math.abs(gy - cy); if (q < d) { d = q; y = gy; } }
+          if (y === null || d > b[3]) continue;
+          if (!tick || y < tick[1]) tick = [v, y];
+        }
+        const rows = [];
+        for (const bb of st.bars) {
+          if (!bb.bar || eff(bb.bar) <= 0.05) continue;
+          const r = bb.bar.getBoundingClientRect();
+          /* the emphasised bar's number is in the CALLOUT (its own label is hidden); everyone else's is its value label */
+          const vEl = (st.callout && st.cval && st.bars[st.emph] === bb) ? st.cval : bb.val;
+          rows.push({ l: (bb.lab ? txt(bb.lab) : '').slice(0, 14), h: r.height, y: r.y - stg.y,
+                      v: (vEl && eff(vEl) >= 0.99) ? txt(vEl) : null });
+        }
+        if (axEl && tick && rows.length) { out.bars = { base: R(axEl)[1], tv: tick[0], ty: tick[1], b: rows }; barsOp = o; }
       }
     }
     out.chart = { up, box: chartBox, parked };
@@ -371,6 +411,13 @@ def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: di
         page["data"] = [int(round(v)) for v in data]
     if (dom.get("chart") or {}).get("box"):
         page["chart"] = [int(round(v)) for v in dom["chart"]["box"]]
+    # R26-40: the bars as DRAWN, with the number printed for each and the scale it is read on (M26).
+    # Abbreviated keys and ints - one instant's JSON is the contract and it stays under 2 KB.
+    bars = dom.get("bars")
+    if bars and bars.get("b"):
+        page["bars"] = {"base": int(round(bars["base"])), "tick": [bars["tv"], int(round(bars["ty"]))],
+                        "b": [{"l": r["l"], "h": int(round(r["h"])), "y": int(round(r["y"])),
+                               **({"v": r["v"]} if r.get("v") else {})} for r in bars["b"]]}
 
     # TYPE, grouped by kind: the smallest drawn size in the group is what the floor is read against
     groups: dict[str, list[dict]] = {}

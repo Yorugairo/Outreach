@@ -24,7 +24,11 @@ import sync_kinetics as SK  # noqa: E402
 
 MODULES = ["ease", "spring", "stroke", "clothoid", "ink", "squash", "idle", "stopaction", "chartxf", "camera", "arap"]   # P43 T1 + P47 T5/T1/T3
                                               # + P50 T14 the clothoid fitter, beside the stroke it is drawn by; in dependency order (the template's region order)
-SPECIES = ["tiers", "treemap", "chip", "press", "flow", "span", "vecmap"]   # P50 T2 on: one module per species kind, inlined into the species block; `press` is the
+SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span", "vecmap"]   # P50 T2 on: one module per species kind, inlined into the species block; `press` is the
+                              # `breakthrough` (P50 T10/T13) is a third that registers no painter: the burst is a PAGE
+                              # mechanic painted by lpPaintBreakthrough off the page's build clock, and it PREDATES the
+                              # module rule - only its new math (the placeholder, the axis capsule, the stepped cadence)
+                              # moved here. Its region sits with the kinetics laws, after stopaction, whose cadence it reads.
                               # `tiers` (P50 T9) and `treemap` (P50 T6) are neither kinds nor painters: they are the math of
                               # two PAGE BUILDERS - the bands of a small-multiple page, and the clock and X marks of a census
                               # page whose layout is python's. Their regions sit with the kinetics laws, and first, because

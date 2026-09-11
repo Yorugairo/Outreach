@@ -948,8 +948,9 @@ def tokyo_parts():
     return _json.loads((TOKYO / TOKYO_TL).read_text(encoding="utf-8")), uris, tpl
 
 
-def _m25(tl: dict, parts, instants=M25_INSTANTS) -> "G.Gate":
-    """Build a player from this timeline, probe those instants, return the M25 row."""
+def _probe_doc(tl: dict, parts, instants=M25_INSTANTS) -> dict:
+    """Build a player from this timeline and probe those instants. ONE run feeds every gate that reads
+    layout-probe.json - M25 the boxes, M26 the values."""
     _base, uris, tpl = parts
     with _tempfile.TemporaryDirectory() as td:
         d = Path(td)
@@ -957,8 +958,17 @@ def _m25(tl: dict, parts, instants=M25_INSTANTS) -> "G.Gate":
         # RB.instantiate's own substitution, with the asset map left as the text it already is
         (d / "player.html").write_text(tpl.replace("{{TIMELINE}}", _json.dumps(tl, separators=(",", ":"))).replace("{{URIS}}", uris), encoding="utf-8")
         with PROBE.Probe(d, TOKYO_TL) as p:
-            doc = PROBE.probe_doc(d, probe=p, instants=instants)
-    return G._layout_gate(doc)
+            return PROBE.probe_doc(d, probe=p, instants=instants)
+
+
+def _m25(tl: dict, parts, instants=M25_INSTANTS) -> "G.Gate":
+    """Build a player from this timeline, probe those instants, return the M25 row."""
+    return G._layout_gate(_probe_doc(tl, parts, instants))
+
+
+def _m26(tl: dict, parts, instants=M25_INSTANTS) -> "G.Gate":
+    """... and the M26 row, off the same file."""
+    return G._values_gate(_probe_doc(tl, parts, instants))
 
 
 def _s04(tl: dict) -> dict:
@@ -999,6 +1009,69 @@ def test_m25_refuses_the_card_on_the_chart_s_data_and_the_citation_left_under_it
     assert "dock-i-fab-wafer over the chart's data" in g.message, g.message          # (i)
     assert "the page's source line under dock-i-fab-wafer" in g.message, g.message   # (ii)
     assert "%" in g.message and "px" in g.message, "the boxes are named with their area"
+
+
+# ---- R26-40: M26, the VALUE gate - the printed number and the drawn height agree -----------------------------------
+# R26-39's own numbers are the fixture: on the Tokyo side build at 57.5 s the chips bar stood 303 px on the
+# rewritten 0-40 % scale while its pill read "0.00 %". The bug is fixed (commit cde3304); the GATE that would
+# have named it is this one, so the fixture keeps the defect alive as arithmetic.
+R26_39_BASE, R26_39_TICK = 822, [40, 525]          # the zero line and the topmost visible tick, in stage px
+R26_39_DEFECT = 303                                 # the height the bar was drawn at while printing 0.00 %
+
+
+def _bars_instant(t: float, rows: list[dict], base: int = R26_39_BASE, tick: list | None = None) -> dict:
+    return {"t": t, "why": "fixture", "page": {"bars": {"base": base, "tick": list(tick or R26_39_TICK), "b": rows}}}
+
+
+def test_m26_is_info_until_the_probe_has_run():
+    """M18's and M25's pattern: measured or named, never a silent skip."""
+    assert G._values_gate(None).level == "INFO" and "probe.py" in G._values_gate(None).message
+    assert G._values_gate("stale").level == "INFO" and "another player.html" in G._values_gate("stale").message
+    assert G._values_gate({"instants": []}).level == "INFO"
+    # ... and INFO, not PASS, when the page printed nothing to check
+    quiet = G._values_gate({"instants": [_bars_instant(1.0, [{"l": "Mar", "h": 100, "y": 722}])]})
+    assert quiet.level == "INFO" and "printed a value" in quiet.message
+
+
+def test_m26_names_the_bar_whose_height_and_printed_value_disagree():
+    """R26-39 as the gate would have caught it: 303 px of bar at "0.00 %" is 40.8 on the scale the page was
+    printing beside it. The honest bar in the same fixture must not be named."""
+    doc = {"instants": [_bars_instant(57.5, [{"l": "Bonds", "h": 11, "y": 811, "v": "1.52%"},
+                                             {"l": "Chips", "h": R26_39_DEFECT, "y": 519, "v": "0.00%"}])]}
+    g = G._values_gate(doc)
+    assert g.level == "FAIL", g.message
+    assert "Chips prints 0.00% and draws 40.8" in g.message, g.message
+    assert "0:57" in g.message and "303 px" in g.message, "the bar, the instant, the printed value and the drawn one"
+    assert "Bonds" not in g.message, "the bar that agrees is not named"
+    # the same page drawn honestly - the bar at its number on the rewritten scale - passes
+    ok = {"instants": [_bars_instant(59.6, [{"l": "Bonds", "h": 11, "y": 811, "v": "1.52%"},
+                                            {"l": "Chips", "h": 272, "y": 550, "v": "36.59%"}])]}
+    assert G._values_gate(ok).level == "PASS", G._values_gate(ok).message
+
+
+def test_m26_reads_a_negative_bar_by_its_geometry_and_allows_the_burst_its_overshoot():
+    """E28: sign IS geometry - a bar hanging below the zero line prints a negative number, and the gate reads
+    it there rather than from the string. E60: during the shoot a breaking bar is drawn up to BT_OVER past its
+    own number on purpose, so the band carries that share of the printed value."""
+    neg = {"instants": [_bars_instant(56.0, [{"l": "May", "h": 390, "y": 697, "v": "-$66.8"}], base=697, tick=[20, 580])]}
+    assert G._values_gate(neg).level == "PASS", G._values_gate(neg).message
+    flipped = {"instants": [_bars_instant(56.0, [{"l": "May", "h": 390, "y": 307, "v": "-$66.8"}], base=697, tick=[20, 580])]}
+    assert G._values_gate(flipped).level == "FAIL", "a bar drawn ABOVE the line cannot print a fall"
+    shot = lambda h: _bars_instant(59.3, [{"l": "Chips", "h": round(h), "y": R26_39_BASE - round(h), "v": "36.59%"}])
+    over = 272 * (1 + G.VALUE_OVERSHOOT * 0.95)      # mid-overshoot, just inside the band
+    assert G._values_gate({"instants": [shot(over)]}).level == "PASS", G._values_gate({"instants": [shot(over)]}).message
+    far = 272 * (1 + G.VALUE_OVERSHOOT + 3 * G.VALUE_TOL)
+    assert G._values_gate({"instants": [shot(far)]}).level == "FAIL", "past the overshoot the page is lying about its data"
+
+
+@needs_browser25
+@needs_tokyo25
+def test_m26_passes_the_tokyo_short_as_built(tokyo_parts):
+    """The cut the operator watched and approved, including the burst at 58.6: every number the page prints is
+    drawn at that number on the scale printed beside it."""
+    g = _m26(_json.loads(_json.dumps(tokyo_parts[0])), tokyo_parts)
+    assert g.level == "PASS", g.message
+    assert "agree with the height drawn" in g.message
 
 
 @needs_browser25

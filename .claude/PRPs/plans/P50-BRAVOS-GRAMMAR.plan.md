@@ -335,7 +335,7 @@ Acceptance:
 - Evidence: `ledger_page.py` builder `tiers` (N in [2, 4], one shared x, each band its own honest scale; the two-band form byte-identical), `scripts/species/tiers.mjs` + `tests/kinetics/tiers.test.mjs`, `tests/test_ledger_page.py`, the golden `tiers-two` (read by the parent: JAPAN | UNITED STATES on 2015-2025, the -96 Mb drop bar in the accent). The parent's run with T6: node 173/173; 231 across goldens (existing byte-identical), species, portrait parity, lint, sync, gate, ledger, breakthrough; sync_kinetics 18 modules (11 + 7). R26-24 closed.
 
 ### T10: The burst's furniture (Bravos 8:01.8-8:03.2; E60 built the burst)
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: `implementation_luna`; parent reads the frames
 - Depends on: T1
 - Write set: template `buildLedgerBars` / `lpPaintBreakthrough` (a `placeholder: "?"` state: the breaking bar's track
@@ -347,7 +347,7 @@ Acceptance:
   byte-identical); with `placeholder` on, the chips track reads "?" through "if that works" and the capsule lands on
   the axis at 36.59 % with its leader; the life check on the page region.
 - Validate: `python -m pytest content/video_engine/tests/test_breakthrough.py content/video_engine/tests/test_golden_frames.py -q`
-- Evidence: pending
+- Evidence: `scripts/species/breakthrough.mjs` (160; `tests/kinetics/breakthrough.test.mjs` 19 node tests), the template (+254: the "?" track and stamp until the hold, the axis capsule with `breakCapsuleFit` and the dotted leader routed beside the bar), `ledger_page.py` (`overflow_placeholder` - `placeholder` already means SOURCES-TO-VERIFY, the collision caught by an existing test - and `overflow_capsule`), `proof_breakthrough.py` (four proof pages: burst, stack, furniture, stop), `test_breakthrough.py` (+3). The parent's run: sync 19 modules (11 + 8); node 192/192; 202 across breakthrough, goldens (byte-identical - the options are off), gate, probe, portrait parity, sync, lint, ledger; the filmstrip read by the parent (5.00 the "?" mid-build, 5.85 the count at the hold with the capsule and leader, 6.37 mid-shoot). A dial to rule on the first cut: the y-axis capsule for vertical bars.
 
 ### T11: Line-end tags become the next chart's bars (Bravos shots 104-105; continuity)
 - Status: pending
@@ -380,7 +380,7 @@ Acceptance:
 - Evidence: pending
 
 ### T13: The stop-motion burst (R26-30, the operator's blend)
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: `implementation_luna`; parent reads the frames
 - Depends on: T10 (the furniture rides it)
 - Write set: template `lpPaintBreakthrough` (`cadence: "stop"`: the shoot and the counter step on `stopaction.mjs`'s
@@ -390,7 +390,7 @@ Acceptance:
 - Acceptance: the continuous burst is byte-identical with the option off; the stepped one lands on the same final
   frame; the operator reads both.
 - Validate: as T10
-- Evidence: pending
+- Evidence: `break_cadence: "stop"` on the object; the cadence on 1s at 24 fps (the tip travels 359 px/s, past stopaction's 250 rule; the frame index taken explicitly since the renderer runs 30 fps), the scale jumping per step, the ticks crossing per step, the glow full on the landing step; `test_breakthrough.py` (+2: the stepped V piecewise constant and monotone; the settled frame equal to the continuous mode's - the rendered PNGs hash equal, 39072a119f9140c3). The filmstrip: 6.43 / 6.48 two consecutive steps (22.7 -> 26.9 %), 6.73 the landing frame with the glow. R26-30 closed. Also in this commit: M26 (R26-40) - `probe.py` records `page.bars` (<= 197 bytes an instant), `gate_motion_density.py` M26 with VALUE_TOL 4 % + the burst's 5 % overshoot; Tokyo `[PASS ] M26 41 printed value(s) over 61 instants ... worst 2.9 % - May at 0:56`; R26-39's numbers as a fixture FAIL by name (303 px at "0.00 %").
 
 ### T14: The last drawing-kinetics law - the clothoid fitter for generated geometry (doc 42 §42.4)
 - Status: complete (2026-09-11)

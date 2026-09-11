@@ -102,11 +102,20 @@ def test_the_object_states_its_scale_and_its_figures_are_the_sourced_ones():
 
 PROBE = """() => {
   const st = window.wA?.__lp || window.wB?.__lp || document.querySelector('.world')?.__lp;
-  const bars = st.bars.map(b => ({ i: b.i, over: !!b.over, h: b.h, end: b.end, y: Number(b.bar.getAttribute('y')),
+  const bars = st.bars.map(b => ({ i: b.i, over: !!b.over, h: b.h, end: b.end, y: Number(b.bar.getAttribute('y')), bx: b.bx, bw: b.bw,
                                    snap: b.snap ? Number(b.snap[0].getAttribute('opacity')) : null, filter: b.bar.style.filter || "" }));
   const B = st.bt || null;
   const pill = st.cpill || (st.callout ? st.callout.querySelector('.cpill') : null);
+  const track = st.chart.querySelector('rect.btrack'), stamp = st.chart.querySelector('text.bstamp'), lead = st.chart.querySelector('line.blead');
+  const num = (el, a) => el ? Number(el.getAttribute(a)) : null;
+  const e = st.bars.find(b => b.over);
   return { bars, base: st.bt ? st.bt.base : null, top: st.bt ? st.bt.top : null, plot: st.bt ? st.bt.plot : null,
+           track: track ? { op: num(track, 'opacity'), y: num(track, 'y'), h: num(track, 'height') } : null,
+           stamp: stamp ? { op: num(stamp, 'opacity'), y: num(stamp, 'y'), txt: stamp.textContent } : null,
+           lead: lead ? { y1: num(lead, 'y1'), y2: num(lead, 'y2'), x: num(lead, 'x1'), op: num(lead, 'opacity'), dash: lead.getAttribute('stroke-dasharray') } : null,
+           calloutOp: st.callout ? Number(st.callout.getAttribute('opacity')) : null,
+           cad: st.bt && st.bt.cad ? { hold: st.bt.cad.hold, fps: st.bt.cad.fps, why: st.bt.cad.why } : null,
+           labY: e ? Number(e.lab.getAttribute('y')) : null, end: e ? e.end : null,
            y1: st.scale.y1, y0: st.scale.y0, mode: B && B.mode, comp: B && B.comp, hi1: B && B.hi1,
            old: B ? B.ticks0.filter((e, j) => (j & 1) === 1 && B.vals0[j >> 1] !== 0).map(e => Number(e.getAttribute('opacity') ?? 1)) : [],
            neu: B ? B.ticks1.map(e => Number(e.getAttribute('opacity'))) : [],
@@ -115,11 +124,14 @@ PROBE = """() => {
 }"""
 
 
-def _player(mode: str):
+def _player(mode: str, opts: dict | None = None):
+    """The breakthrough page, with whatever OPTIONS the slice is about laid on its axes (P50 T10/T13).
+    `opts` None is the page exactly as E60 shipped it."""
     from playwright.sync_api import sync_playwright
     tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
     world = B.world_for_plate(PLATE, (0, 0, 0), EP)
     world = json.loads(json.dumps(world)); world["page"]["axes"]["overflow"] = mode
+    world["page"]["axes"].update(opts or {})
     scene = dict(tl["scenes"][0], species=[], span=[0.0, 16.0], world=dict(world, ken_burns={"scale": 0, "x": 0, "y": 0}))
     timeline = dict(tl, aspect="9:16", runtime_s=16.0, scenes=[scene], caption_pages=[], captions=[])
     timeline["kinetics"] = dict(timeline.get("kinetics") or {}, min_jerk=True)
@@ -210,6 +222,163 @@ def test_the_stack_grows_one_comparator_per_step_off_the_page_at_the_stated_scal
 
 
 T_MID = BUILD_AT + BUILD_S * 0.5   # mid-build: the bars law is running, the breakthrough's clock (bts) is still negative
+
+
+# ---- P50 T10: the burst's furniture ---------------------------------------------------------------------
+
+
+FURNITURE = {"overflow_placeholder": "?", "overflow_capsule": "axis"}
+PH_OUT_S = 0.18   # BREAK.PH_OUT_S mirrored: the mark leaves over this much of the hold
+
+
+def test_the_furniture_keys_ride_the_axes_and_are_checked_beside_the_overflow():
+    """E60's furniture is grammar on the OBJECT, validated with the mechanic it belongs to - a dial nothing
+    reads is worse than an error, so it is one."""
+    for k in ("overflow_placeholder", "overflow_capsule", "break_cadence"):
+        assert k in LP.AXES_KEYS
+    assert LP.validate({**GOOD, **FURNITURE, "break_cadence": "stop"}, "bars") == []
+    axes = LP._story_block({"bars": GOOD["bars"], "domain": [0, 8], "overflow": "burst", **FURNITURE}).get("axes")
+    assert axes["overflow_placeholder"] == "?" and axes["overflow_capsule"] == "axis"
+    assert any("declares no 'overflow'" in e for e in LP.validate({**{k: v for k, v in GOOD.items() if k != "overflow"}, "overflow_placeholder": "?"}, "bars"))
+    # `placeholder` is NOT this key: since the intake it has marked figures still under SOURCES-TO-VERIFY,
+    # and a page never renders those (AGENTS.md). Taking it would have weakened that refusal.
+    assert any("SOURCES-TO-VERIFY" in e for e in LP.validate({**GOOD, "status": "SOURCES-TO-VERIFY", "placeholder": True}, "bars"))
+    assert any("not one of axis" in e for e in LP.validate({**GOOD, "overflow_capsule": "tip"}, "bars"))
+    assert any("not a caption" in e for e in LP.validate({**GOOD, "overflow_placeholder": "unknown"}, "bars"))
+    assert any("already steps" in e for e in LP.validate({**GOOD, "overflow": "stack", "break_cadence": "stop"}, "bars"))
+
+
+@needs_object
+@needs_browser
+def test_the_placeholder_holds_the_number_s_place_until_it_is_spoken():
+    """T10: Bravos 8:01.8 - the row is a grey "?" track until the number is said. Ours: the mark stands where
+    the number will be, the track stands behind the bar at the comparator's height, and the COUNT that would
+    otherwise sit there is held back. "Spoken" is the start of the hold."""
+    page, errs, close = _player("burst", FURNITURE)
+    try:
+        for t in (BUILD_AT + BUILD_S * 0.25, T_MID, BUILD_AT + BUILD_S - 0.01):
+            p = _at(page, t)
+            assert p["stamp"]["txt"] == "?" and p["stamp"]["op"] == 1, ("the mark stands through the build", t, p["stamp"])
+            assert p["track"]["op"] > 0, "and the track stands behind the bar"
+            assert p["calloutOp"] == 0, "... while the count is held back: one mark on the page, never two"
+        p = _at(page, T_MID)
+        comp_h = p["plot"] * 1.52 / 8
+        assert abs(p["track"]["h"] - comp_h) < 0.6, ("the track is the COMPARATOR's height - furniture, not data (E28)", p["track"])
+        assert abs(p["track"]["y"] - (p["base"] - comp_h)) < 0.6
+        assert p["stamp"]["y"] < p["track"]["y"], "the mark is written above the track's top edge, where the number will be"
+        q = _at(page, T_HOLD)   # 0.25 s into the hold, past PH_OUT_S
+        assert not errs, errs
+        assert q["stamp"]["op"] == 0 and q["track"]["op"] == 0, "the mark leaves as the number is spoken"
+        assert q["calloutOp"] == 1 and q["text"] == "1.52%", "and the count stands in its place, at the comparator"
+        assert _at(page, 10.0)["text"] == "36.59%", "the burst lands on its number as it always did"
+    finally:
+        close()
+
+
+@needs_object
+@needs_browser
+def test_the_capsule_mounts_on_the_axis_with_a_dotted_leader_to_the_bar_s_end():
+    """T10: Bravos 8:02.6 - a value capsule counts up ON THE AXIS under the bar's end with a dotted leader.
+    Ours mounts at the zero line, fits the band the chart's box leaves (the page's citation is below it, E52),
+    takes the x-label's row - the name goes above the zero line - and routes the leader CLEAR of the bar, which
+    a vertical bar's geometry demands (a line from its top to the axis would cross it)."""
+    page, errs, close = _player("burst", FURNITURE)
+    try:
+        mid = _at(page, T_RUN0 + RUN * 0.45)
+        assert not errs, errs
+        assert mid["pillY"] > mid["base"], ("the capsule is ON THE AXIS, under it", mid["pillY"], mid["base"])
+        assert mid["pillY"] - mid["base"] < 20, "and close to it - the pad, not a drift"
+        assert 1.52 < float(mid["text"].rstrip("%")) < 36.59, "counting up during the shoot"
+        lead = mid["lead"]
+        assert lead["dash"] and " " in lead["dash"], "DOTTED: a solid rule across a chart is a comparator (E53 s6)"
+        assert lead["op"] == 1
+        assert lead["y1"] > mid["end"] and lead["y2"] < mid["pillY"], ("from the bar's end down to the capsule", lead, mid["end"])
+        chips = mid["bars"][1]
+        assert lead["x"] < chips["bx"] or lead["x"] > chips["bx"] + chips["bw"],             ("routed clear of the bar, not through it", lead["x"], chips["bx"], chips["bw"])
+        assert mid["labY"] < mid["base"], "the capsule took the label's row: the bar's name is written above the zero line"
+        end = _at(page, 10.0)
+        assert end["text"] == "36.59%" and end["pillY"] == mid["pillY"], "the capsule does not move: the bar does"
+        assert end["lead"]["y1"] > end["end"] and end["lead"]["y2"] == mid["lead"]["y2"]
+    finally:
+        close()
+
+
+@needs_object
+@needs_browser
+def test_with_the_options_off_the_burst_is_exactly_what_e60_shipped():
+    """The acceptance both slices stand on: a page that names no option renders the frame it always did.
+    The same assertions the two E60 tests make, re-run on a player built through the new code path."""
+    page, errs, close = _player("burst")
+    try:
+        p = _at(page, T_HOLD)
+        assert p["track"] is None and p["stamp"] is None and p["lead"] is None and p["cad"] is None, "no furniture is built"
+        assert p["mode"] == "burst" and p["comp"] == 1.52 and p["y1"] == 8
+        bonds, chips = p["bars"]
+        assert abs(chips["h"] - bonds["h"]) < 0.6 and p["text"] == "1.52%"
+        assert p["pillY"] < p["base"], "the pill rides the tip, above the bar - the default is untouched"
+        end = _at(page, 10.0)
+        assert not errs, errs
+        assert end["y1"] == 40 and end["hi1"] == 40 and end["text"] == "36.59%"
+        assert abs(end["bars"][1]["h"] - end["plot"] * 36.59 / 40) < 0.6
+        assert "drop-shadow" in end["bars"][1]["filter"]
+    finally:
+        close()
+
+
+# ---- P50 T13: the stop-motion burst (R26-30, E60's blend) -----------------------------------------------
+
+
+@needs_object
+@needs_browser
+def test_the_stepped_shoot_is_piecewise_constant_between_frames_and_monotone_across_them():
+    """T13: the shoot, the counter, the rescale and the ticks' crossing read off ONE stepped clock, so they
+    step together. The cadence is the one the burst's own speed asks for through stopaction's rule."""
+    page, errs, close = _player("burst", {"break_cadence": "stop"})
+    try:
+        p0 = _at(page, T_RUN0)
+        assert p0["cad"] == {"hold": 1, "fps": 24, "why": "359 px/s > 250: on 1s"}, p0["cad"]
+        fps = 24
+        poses, prev = [], None
+        for f in range(0, 15):
+            a = _at(page, T_RUN0 + f / fps)
+            b = _at(page, T_RUN0 + (f + 0.25) / fps)
+            assert (a["bars"][1]["h"], a["y1"], a["text"]) == (b["bars"][1]["h"], b["y1"], b["text"]), \
+                f"frame {f} must HOLD: the bar, the scale and the counter step together"
+            poses.append((a["bars"][1]["h"], a["y1"], a["text"]))
+            if prev:
+                assert a["bars"][1]["h"] >= prev[0] - 1e-9 and a["y1"] >= prev[1] - 1e-9, f"frame {f} went backwards"
+            prev = poses[-1]
+        assert not errs, errs
+        assert len(set(poses)) >= 8, ("a shoot, not a cut", len(set(poses)))
+        assert len(set(poses)) <= 15, "and a stepped one, not a continuum"
+        land = _at(page, T_RUN0 + 15 / fps)
+        assert "drop-shadow" in land["bars"][1]["filter"] and land["text"] == "36.59%", "the glow HITS on the landing step"
+        assert "drop-shadow" not in _at(page, T_RUN0 + 14 / fps)["bars"][1]["filter"], "and on no step before it"
+    finally:
+        close()
+
+
+@needs_object
+@needs_browser
+def test_the_stepped_burst_rests_on_the_continuous_one_s_frame():
+    """T13's acceptance: the blend lands where the ruled default lands. Asserted on the DOM and on the
+    RENDERED PNG - the two pages' frames at and after the settle hash the same."""
+    import hashlib
+    T_SETTLED = T_RUN0 + RUN + SETTLE
+    states = {}
+    for mode, opts in (("cont", None), ("stop", {"break_cadence": "stop"})):
+        page, errs, close = _player("burst", opts)
+        try:
+            states[mode] = [_at(page, T_SETTLED + d) for d in (0.0, 0.2, 1.0)]
+            states[mode + "_png"] = [hashlib.sha256(RB.frame_png(page, T_SETTLED + d, RB.STAGE["9:16"])).hexdigest()
+                                     for d in (0.0, 0.2)]
+            assert not errs, errs
+        finally:
+            close()
+    for a, b in zip(states["cont"], states["stop"]):
+        for k in ("bars", "y1", "hi1", "text", "pillY", "old", "neu"):
+            assert a[k] == b[k], (k, a[k], b[k])
+    assert states["cont_png"] == states["stop_png"], "the rendered frame at rest is the same frame, byte for byte"
 
 ONSCREEN = """() => {
   const R = (el) => el.getBoundingClientRect().height;

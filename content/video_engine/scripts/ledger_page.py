@@ -73,7 +73,8 @@ QUIET_ZONES = ("left", "right")
 AXES_KEYS = ("overflow", "log", "ylabel", "xticks", "from_zero", "highlight_from", "hlines", "hline", "marks", "eventbars",
              "name_clear",   # lift the inline series name clear of the data it would otherwise be written across
              "ymin", "ymax", "yfmt", "yunit", "panels",
-             "domain", "xdomain")   # P48 T2: a derived rescale state names its exact y domain and x window
+             "domain", "xdomain",   # P48 T2: a derived rescale state names its exact y domain and x window
+             "overflow_placeholder", "overflow_capsule", "break_cadence")   # P50 T10 / T13: the breakthrough's furniture (E60)
 UNCHARTABLE = {
     "checklist": "no chartable values: 'checklist' is a table, not a chart (keep it a dock)",
     "shares": ("'shares' is a donut, and E53 s1 ranks angle and area at the bottom of the perception hierarchy: "
@@ -233,6 +234,15 @@ def validate(series: dict, variant: str) -> list[str]:
 
 
 OVERFLOW_MODES = ("burst", "stack", "break")   # E60: burst is THE breakthrough (the rescale), stack an option; "break" is burst's alias
+BURST_MODES = ("burst", "break")               # the rescale itself; the stack already steps, so the blend has nothing to add to it
+CAPSULE_MODES = ("axis",)                      # P50 T10: the value capsule mounted ON THE AXIS under the bar's end (Bravos 8:02.6);
+                                               # absent = the pill above the tip, which stays the default
+BREAK_CADENCES = ("stop",)                     # P50 T13 / R26-30 (E60, the operator's blend): the shoot stepped on stopaction's
+                                               # cadence rule; absent = the continuous burst, which is the ruled default
+PLACEHOLDER_MAX = 3                            # a placeholder is a MARK, not a caption: "?" is the one Bravos uses.
+                                               # NOT `placeholder`, which since the intake has meant "these figures are
+                                               # still SOURCES-TO-VERIFY and this page never renders" (AGENTS.md: figures
+                                               # are never fabricated) - hence the sibling naming, after the mechanic each furnishes
 
 
 def _validate_overflow(series: dict, variant: str) -> list[str]:
@@ -240,9 +250,13 @@ def _validate_overflow(series: dict, variant: str) -> list[str]:
     fit and name how that bar breaks it (`overflow`). Checked, not trusted: the mechanic is one we have; the scale is stated;
     one bar breaks it; one bar reads on it - a stated scale no bar needs is a lie of the other kind."""
     ovf = series.get("overflow")
-    if ovf is None:
-        return []
     errors: list[str] = []
+    # P50 T10 / T13: every piece of furniture belongs to a breakthrough. Declared without one it is a dial nothing
+    # reads, which is worse than an error - so it IS one, and it names the key.
+    furniture = [k for k in ("overflow_placeholder", "overflow_capsule", "break_cadence") if series.get(k) is not None]
+    if ovf is None:
+        return errors + [f"{k} is the breakthrough's furniture and this page declares no 'overflow' (E60, P50 T10/T13)"
+                         for k in furniture]
     if ovf not in OVERFLOW_MODES:
         errors.append(f"overflow {ovf!r} is not one of {'|'.join(OVERFLOW_MODES)} (E60: burst is the breakthrough, stack an option)")
     if variant != "bars":
@@ -258,6 +272,33 @@ def _validate_overflow(series: dict, variant: str) -> list[str]:
         errors.append(f"overflow declares a breakthrough no bar makes: no value is above the stated scale's top {dom[1]}")
     if vals and not any(v <= dom[1] for v in vals):
         errors.append(f"every bar is above the stated scale's top {dom[1]}: a stated scale no bar reads on is a lie of the other kind (E60)")
+    return errors + _validate_burst_furniture(series, ovf)
+
+
+def _validate_burst_furniture(series: dict, ovf: str) -> list[str]:
+    """P50 T10 / T13 - the burst's three options, each off unless the object names it and each checked when it does.
+    `overflow_placeholder` is the mark the breaking bar prints until its number is spoken (Bravos 8:01.8: a "?" track);
+    `overflow_capsule` mounts the value capsule on the axis with a dotted leader; `break_cadence` steps the shoot on
+    stopaction's cadence (E60's blend, R26-30)."""
+    errors: list[str] = []
+    ph = series.get("overflow_placeholder")
+    if ph is not None and ph is not True:
+        if not isinstance(ph, str) or not ph.strip():
+            errors.append("overflow_placeholder is the MARK the breaking bar prints until its number is spoken: a short string, or true for '?'")
+        elif len(ph.strip()) > PLACEHOLDER_MAX:
+            errors.append(f"overflow_placeholder {ph!r} is {len(ph.strip())} characters: a placeholder is a mark, not a caption "
+                          f"(<= {PLACEHOLDER_MAX}; Bravos stamps '?')")
+    cap = series.get("overflow_capsule")
+    if cap is not None and cap not in CAPSULE_MODES:
+        errors.append(f"overflow_capsule {cap!r} is not one of {'|'.join(CAPSULE_MODES)} (P50 T10: the capsule mounts on the "
+                      "AXIS under the bar's end; leave it out for the pill that rides the tip)")
+    cad = series.get("break_cadence")
+    if cad is not None:
+        if cad not in BREAK_CADENCES:
+            errors.append(f"break_cadence {cad!r} is not one of {'|'.join(BREAK_CADENCES)} (P50 T13: 'stop' is the blend; "
+                          "leave it out for the continuous burst, which E60 ruled the default)")
+        elif ovf not in BURST_MODES:
+            errors.append(f"break_cadence is the BURST's cadence (E60's blend); this page's overflow is {ovf!r}, which already steps")
     return errors
 
 
