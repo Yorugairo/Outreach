@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3657 records across 293 files.
+3665 records across 294 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -936,16 +936,18 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
 ## content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md
 
-- L1 [1] PRODUCTION REFERENCE REPORT: China Just Triggered A New World Order. — - Source: `https://youtu.be/1ZS5_txbOsc?si=lCnqWLmL-NQ8a_1u` {Source:; Duration:; Resolution:; Channel / Creator:; Total Cuts:; 6.02 CPM} <cut-in; status-quo; 120 frames>
-- L11 [2] Shot Duration Distribution — - Under 3s (Brisk cut-in / punch): 2 {2; 63; 38; 17} <cut-in>
-- L17 [2] 6-Phase Retention Architecture Deconstruction <status-quo>
-- L19 [3] P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 14 shots | 374 words | 249.3 WPM {Pacing; 249.3 WPM; Key Questions; Transcript Sample}
-- L24 [3] P2: The Engine (Foundational Model) [01:30 - 03:23] — - Pacing: 12 shots | 443 words | 234.4 WPM {Pacing; 234.4 WPM; Key Questions; Transcript Sample} <status-quo>
-- L29 [3] P3: The Gap (Mounting Contradiction) [03:23 - 08:58] — - Pacing: 28 shots | 1198 words | 214.5 WPM {Pacing; 214.5 WPM; Key Questions; Transcript Sample}
-- L34 [3] P4: The Pivot (45–55% Chiastic Turn) [08:58 - 10:58] — - Pacing: 13 shots | 466 words | 233.7 WPM {Pacing; 233.7 WPM; Key Questions; Transcript Sample}
-- L39 [3] P5: The Payoff & The Tell (Grand Climax) [10:58 - 16:57] — - Pacing: 38 shots | 1338 words | 223.6 WPM {Pacing; 223.6 WPM; Key Questions; Transcript Sample}
-- L44 [3] P6: The Close (Resolution & Ring Echo) [16:57 - 19:57] — - Pacing: 20 shots | 711 words | 237.7 WPM {Pacing; 237.7 WPM; Key Questions; Transcript Sample}
-- L50 [2] Artifact Manifest — - Detailed Shot Ledger: [`SHOT_LEDGER.md`](SHOT_LEDGER.md) <120 frames>
+- L1 [1] PRODUCTION REFERENCE REPORT: China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` {Source:; Channel / Creator:; Duration:; Resolution:; Deduped Speech Cadence:; 177.6 WPM} <YouTube; fast-paced; b-roll; shot_010; shot_016; shot_019; box-shadow: 0 20px 40px rgba(0,0,0,0.6); dark-glass; white-and-crimson; cross-section; above-ground; Dual-Lane>
+- L15 [2] Executive Summary: What Made This A "Huge Step Up" — This upload marks a major visual and technical elevation for Bravos Research. Rather than relying on traditional fast-paced b-roll or flat 2D slide decks, Bravo {internal builds within held compositions} <fast-paced; b-roll>
+- L23 [2] 1. The Five Core Architectural Techniques <shot_010; shot_016; shot_019; box-shadow: 0 20px 40px rgba(0,0,0,0.6); dark-glass; white-and-crimson; cross-section; above-ground; Dual-Lane; Dark-mode; t_0; Scale-Break>
+- L25 [3] 1. The Diegetic Studio Display Stage (`shots/shot_002` → `shot_010`, `shot_016` → `shot_019`) — - Visual Staging: To present external press evidence (India Today, Goldman Sachs, Financial Post), Bravos projects articles onto a virtual physical monitor moun {Visual Staging:; Why It Works:; Mathematical Specification (Planar Homography & Depth Layers} <box-shadow: 0 20px 40px rgba(0,0,0,0.6)>
+- L37 [3] 2. Isometric Metaphor Staging & Satellites (Shot 53, 08:19.0–08:25.8) — - Visual Staging: To explain China's Strategic Petroleum Reserve (SPR), Bravos deploys an isometric dark-glass dock holding a $5 \times 5$ array of 25 stylized {Visual Staging:; Dynamic Choreography:; Subterranean Cutaway Card:} <dark-glass; white-and-crimson; cross-section; above-ground>
+- L42 [3] 3. Dual-Lane Synchronized Stage (Shot 28, 04:30.0–04:45.0) — - Visual Staging: Instead of cutting back and forth between charts and maps, Bravos splits the canvas into two synchronized functional viewports: {Visual Staging:; Left Viewport ($[0, 0.52 \cdot W]$):; Right Viewport ($[0.52 \cdot W, W]$):; Clock Synchronization & Sonar Wave:} <Dark-mode; t_0>
+- L50 [3] 4. The "Scale-Break" Asymmetry Payoff (Shots 50–55, 08:01.8–08:03.2) — - Visual Staging: A horizontal bar chart lists global SPR reserves: US (413M), Japan (263M), Europe (179M). China sits at the top with a blank white teaser plac {Visual Staging:; The Breakthrough Climax:; Mathematical Specification (Dynamic Domain Spring):} <drop-down; X-axis; springPop; M_p; re-mapping>
+- L60 [3] 5. Line-Tip Callout Badges & Volumetric Bloom (Shots 99–104, 17:08–17:22) — - Visual Staging: In the sovereign bond-yield climax, multiple yield curves draw simultaneously, each capped with a glowing capsule label and country flag that {Visual Staging:; Mathematical Specification (Interpolated Tip & Single-Pass B} <bond-yield; P_k; zero-state; springPop; M_p>
+- L75 [2] 2. The Treemap Case Study: The Census Exception (Shots 89–91, 14:52–15:31) — Bravos's handling of China's export destinations is a benchmark implementation of Ruling E53 (The Census Exception): {Ruling E53 (The Census Exception)} <Cleveland-McGill; McGill; 16.83%; 8.52%; 4.66%; 4.45%; Kong et al.; micro-tile; Micro-cells; Strike-Through; X-marks; Western-aligned>
+- L107 [2] 3. Empirical Camera Measurement: The "Locked Camera" Reality — A major discovery from quantitative motion tracking (`claude-watch/camera.json`, ORB feature matching + RANSAC homography between frames 2.0s apart): {37 of 45 held compositions ($\ge 3.2\text{s}$) are 100% came; Every data chart (11 of 12) and every diagram (4 of 4) is co; The Finding:} <camera-still>
+- L117 [2] 4. Six-Phase Pacing & Cadence Breakdown (Deduped Audio) — | Phase | Time Window | Duration | Events | Compositions | Words | Cadence (WPM) | Pacing Role & Visual Strategy | {P1: The Open; P2: The Engine; P3: The Gap} <Dual-lane; scale-break; X-marks; flow-diagram; Multi-yield>
+- L130 [2] 5. Artifact Manifest & Verification — - Detailed Event Ledger: [`SHOT_LEDGER.claude.md`](SHOT_LEDGER.claude.md) (120 events with timecodes and species classification). {Detailed Event Ledger:; Original Pacing Ledger:; Extracted Reference Frames:; Quantitative Camera Telemetry:; Deduped Whisper Captions:} <claude-watch>
 
 ## content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.claude.md
 
@@ -3198,6 +3200,15 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L86 [2] 4. Backlog R4 is answered by `02_drawing_engine_and_transforms_research.md` — R4 asked whether Flow Characters lock identity under motion; our own test showed hair {Do not generate the character per shot. Build a vector cutou} <Z-stack; ledger_page.v2.json; object-page>
 - L106 [2] 5. Two discrepancies to settle — Speech rate. The reference runs 183.6 WPM; we measured ep1 at 182.8. Our {Speech rate.; 183.6 WPM; retracted, see 46 §46.6; that number was mine and has no ori; The acoustic gap threshold.; ≥ 0.45 s} <best-performing; breath-gap; intensity; steady_value; edge_fix; ssaa; depth_anything_v2_vitl_fp32; vits_fp16>
 - L124 [2] 6. The process note — The bundle's own index (`00_README_INDEX.md`) routes each file to a consumer — 04 to the {I read the file addressed to me and treated the rest as cont; a research bundle is read by its index, not by its summary.} <half-used>
+
+## docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md
+
+- L1 [1] Grill: the animator's loop — decision ledger (2026-09-11) — `/grill-me let's find the most powerful features we could add to make you a better animator, and improve our iteration <grill-me; time-to-production; Two rounds, one research spike (; watch-then-cut; self-watch; named-event; write-into-source; random-id; re-render; hash-compare; byte-identical; one-shot>
+- L8 [2] 1. Settled — | decision | the operator's words | what it binds | {The time goes into the watch-then-cut rounds, because the fi; The agent's loop first, the operator's editor second.} <self-watch; named-event; write-into-source; random-id; re-render; hash-compare; byte-identical; one-shot; species-by-sentence; two-second; B-roll; long-format>
+- L23 [2] 2. Rejected — - An editor that holds live state (option B): the documented killer is a change that passes preview and dies in render (Remotion's own docs: tweens on plain obj {An editor that holds live state; The editor first.; Vision as the agent's eyes.} <re-reads; Remotion-style; GUI-first; hand-count>
+- L32 [2] 3. Verified gotchas (from the spike) — 1. Preview-versus-render desync is structural, not a bug class you fix once: HyperFrames gates capture on the same runtime both sides and still warns that fonts <Preview-versus-render; HyperFrames; per-machine; cross-machine; re-renders; agent-plus-human>
+- L40 [2] 4. Immediate build order (P51, after P50 T1 the map) — 1. The authoring kit - the eleven helpers the two shorts copy, plus the outro/bed/pauses assembly, become one library both doors (short and long) call; the shot {The authoring kit; Eyes: the probe CLI and the layout gate; The self-watch} <probe <build> <t...>; under-size; safe-zone; one-shot; byte-identical; re-rendered; overrides.json; remotion-ui; chart-as-world; un-park>
+- L51 [2] 5. The horizon: AnimatorOS — The operator: *"we need like an 'AnimatorOS' where we start a component library + editor similar to how i built with codex for <built-in; in-session; timeline-editor; self-watch; B-roll>
 
 ## docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md
 
