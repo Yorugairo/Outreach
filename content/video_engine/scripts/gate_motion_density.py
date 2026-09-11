@@ -69,6 +69,9 @@ captions do NOT count - they are what a viewer reads as stillness.
   M26  values (R26-40): every bar whose number is PRINTED       FAIL   (E28 / E53; INFO until probe.py <build>
        is drawn at that number on the scale the page prints            --gate has run, or when no value is printed)
        beside it. M25's sibling, from the same file
+  M27  the read over a build (E63): a card that has not        FAIL   (E63; WARN when it is inside the plot's box
+       parked sits on a plot whose chart is still drawing               under 5 %; INFO until probe.py <build> --gate
+       (marks.drawn between 0 and 1). M25's sibling                     has run)
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -141,6 +144,13 @@ TYPE_FLOOR_EXEMPT = ("source",)
 SRC_M26 = ("E28 (a chart reads right at a glance: a bar's height IS its value) / E53 (the scale and the value are printed at "
            "every instant) / R26-40 - the printed number and the DRAWN height, read against the scale the page itself prints, "
            "from the page's own DOM (probe.py --gate). R26-39 was exactly this mismatch: 303 px of bar at \"0.00 %\"")
+SRC_M27 = ("E63 (operator 2026-09-11, on the Tokyo cut at 0:09.5-0:10.5: \"docking over the plate while it's drawing is not a good "
+           "standard practice ... as a rule we should probably use better handling now that we can manipulate scale/depth/placement "
+           "easier\"): a card that has not parked yet may not sit on the plot of a chart that is still drawing - the READ moves "
+           "(the compiler's `read_moved` / `read_deferred`), never the word. Read from the page's own DOM (probe.py --gate)")
+BUILD_OVER_SHARE = 0.05    # of the smaller box: over this the card is ON the build (the Tokyo panel card read 66-77 % of itself);
+                           # under it the card is merely inside the plot's box - the compiler's own line (READ_OVER_PLOT_SHARE),
+                           # so the placer and the gate draw it in the same place.
 # THE BAND. A printed number and a drawn height never agree to the pixel, and two things account for the gap:
 VALUE_TOL = 0.04           # (a) ROUNDING. A pill prints lpFmt's two decimals and a tick label lpTick's, and the height is
                            # measured off a rendered box - so a few hundredths of the TOP TICK is arithmetic, not a lie.
@@ -875,6 +885,7 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     g.append(_frozen_gate(frames))                                        # M18 (E49: nothing ever goes truly still)
     g.append(_layout_gate(layout))                                        # M25 (P51 T2: the layout gate, from probe.py's boxes)
     g.append(_values_gate(layout))                                        # M26 (R26-40: the printed value against the drawn height)
+    g.append(_over_build_gate(layout, tl.get("scenes", [])))              # M27 (E63: no card reads over a chart that is still drawing)
     if (bt := _build_to_gate(tl.get("scenes", []))) is not None:
         g.append(bt)                                                      # M19 (P47 T2: the build_to holds, INFO)
     if (cg := _cadence_gate(tl.get("scenes", []))) is not None:
@@ -1319,6 +1330,62 @@ def _values_gate(doc: dict | str | None) -> Gate:
                     f"(band {band}): " + "; ".join(fails[:6]) + (" ..." if len(fails) > 6 else ""), SRC_M26)
     return Gate("M26", "PASS", f"{read} printed value(s) over {span} agree with the height drawn on the scale the page prints "
                 f"(band {band}); worst {worst[0]:.1%} of the top tick" + (f" - {worst[1]}" if worst[1] else ""), SRC_M26)
+
+
+def _over_build_faults(doc: dict, scenes: list[dict]) -> tuple[list[str], list[str], int]:
+    """(FAIL lines, WARN lines, how many card-on-plot readings were taken mid-build) over every instant.
+
+    An instant counts when the page's marks say the chart is DRAWING - `marks.drawn` strictly between
+    0 and 1, the probe's own read of the stroke - and the card has not parked yet. A card the compiler
+    already answered for (E63's `read_moved` / `read_deferred`) is still measured, and still fails if
+    it is on the plot: the entry is a record of the decision, never an exemption from the frame."""
+    handled = {str(d.get("slide")): ("moved" if d.get("read_moved") else "deferred")
+               for s in (scenes or []) for d in (s.get("docks") or []) if d.get("read_moved") or d.get("read_deferred")}
+    fails: list[str] = []
+    warns: list[str] = []
+    measured = 0
+    for inst in doc.get("instants") or []:
+        t = float(inst.get("t", 0.0))
+        drawn = (inst.get("marks") or {}).get("drawn")
+        if drawn is None or not (0.0 < float(drawn) < 1.0):
+            continue                                  # nothing drawn yet, or the chart is complete: not this row's business
+        state = {d["id"]: d.get("state") for d in inst.get("docks") or []}
+        for o in inst.get("overlaps") or []:
+            if o.get("b") != "page.plot" or state.get(o.get("a")) in (None, "parked"):
+                continue                              # a PARKED card is E45's contract and M25's row; this one is the READ
+            measured += 1
+            note = f" - the compiler {handled[o['a']]} this read (E63) and it still lands here" if o["a"] in handled else ""
+            where = (f"at {_mm(t)}, {o['area_px']:,} px, {o['share_of_smaller']} % of the smaller box, "
+                     f"the chart {float(drawn):.0%} drawn")
+            if o["share_of_smaller"] / 100.0 > BUILD_OVER_SHARE:
+                fails.append(f"{o['a']} sits on the plot while the chart draws {where}{note}")
+            else:
+                warns.append(f"{o['a']} is inside the plot's box while the chart draws {where}{note}")
+    return _dedupe(fails), _dedupe(warns), measured
+
+
+def _over_build_gate(doc: dict | str | None, scenes: list[dict]) -> Gate:
+    """M27 (E63): no card DOCKS over a chart that is still drawing. M25's sibling, from the same
+    layout-probe.json - M25 scores a SETTLED card's composition, this row scores the card's READ
+    against the page's clock, which is the half the operator caught on the Tokyo cut."""
+    if doc is None:
+        return Gate("M27", "INFO", f"the read over a build not measured - run probe.py <build> --gate (writes {LAYOUT_PROBE_NAME})", SRC_M27)
+    if doc == "stale":
+        return Gate("M27", "INFO", f"{LAYOUT_PROBE_NAME} measured another player.html (the build was rebuilt since) - re-run probe.py <build> --gate", SRC_M27)
+    instants = (doc or {}).get("instants") or []
+    if not instants:
+        return Gate("M27", "INFO", f"{LAYOUT_PROBE_NAME} carries no instants - re-run probe.py <build> --gate", SRC_M27)
+    fails, warns, measured = _over_build_faults(doc, scenes)
+    span = f"{len(instants)} instants probed"
+    if fails:
+        return Gate("M27", "FAIL", f"{len(fails)} card(s) reading on a building chart over {span}: " + "; ".join(fails[:6])
+                    + (" ..." if len(fails) > 6 else "") + f" - move the READ, never the word (E63): a free band at the "
+                    f"reading scale, else the scale that fits, else enter at the parked box", SRC_M27)
+    if warns:
+        return Gate("M27", "WARN", f"{len(warns)} card(s) inside the plot's box (under {BUILD_OVER_SHARE:.0%}) while the chart draws over {span}: "
+                    + "; ".join(warns[:4]) + (" ..." if len(warns) > 4 else ""), SRC_M27)
+    return Gate("M27", "PASS", f"no card reads on a chart that is still drawing over {span} "
+                f"({measured} card/plot reading(s) taken mid-build)", SRC_M27)
 
 
 def _build_to_holds(scenes: list[dict]) -> list[tuple[float, float]]:

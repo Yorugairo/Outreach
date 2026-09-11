@@ -1092,3 +1092,27 @@ def test_m25_refuses_paper_in_the_caption_strip(tokyo_parts):
     g = _m25(tl, tokyo_parts, [(56.0, "the record reads"), (56.3, "the record reads"), (56.6, "the record reads")])
     assert g.level == "FAIL", g.message
     assert "dock-k-pledge-record in the caption strip" in g.message, g.message
+
+
+# ---- M27 (E63, 2026-09-11): the READ over a build -----------------------------------------------
+def test_m27_refuses_a_card_docking_over_a_chart_that_is_still_drawing():
+    """The Tokyo defect at 0:09.5-0:10.5, as the probe measured it: the panel card at its solo reading
+    box over the plot (277,066 px, 72 % of the smaller box) while `marks.drawn` says 0.50 - the line is
+    still being drawn under it. The same instant with the chart FINISHED, or with the card PARKED, is
+    not this row's business (M25 scores the parked composition). The fuller set is in
+    tests/test_dock_over_build.py; this is the row's own smoke."""
+    def inst(drawn, state, share, area=277066):
+        return {"t": 10.29, "why": "s02 dock dock-c-blue-ties-panel reading size",
+                "docks": [{"id": "dock-c-blue-ties-panel", "state": state, "box": [79, 552, 801, 474], "rest": 1}],
+                "page": {"plot": [230, 464, 580, 681]}, "texts": [],
+                "overlaps": [{"a": "dock-c-blue-ties-panel", "b": "page.plot", "area_px": area, "share_of_smaller": share}],
+                "clearances": {"safe_pct": {}}, "camera": {"scene": "s02", "zoom": 1.0, "look": [540, 960]},
+                "marks": {"n": 2, "drawn": drawn, "up": 1.0, "parked": False}}
+
+    bad = G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "reading", 72)]}, [])
+    assert bad.level == "FAIL", bad.message
+    assert "dock-c-blue-ties-panel" in bad.message and "72 %" in bad.message and "50% drawn" in bad.message, bad.message
+    assert G._over_build_gate({"aspect": "9:16", "instants": [inst(1.0, "reading", 72)]}, []).level == "PASS"
+    assert G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "parked", 72)]}, []).level == "PASS"
+    assert G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "reading", 4, area=2147)]}, []).level == "WARN"
+    assert G._over_build_gate(None, []).level == "INFO", "no probe file: said so, never silently green"

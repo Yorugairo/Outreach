@@ -2044,9 +2044,11 @@ the arrival and makes two things happen where the eye can follow one (E21's oppo
 see). The engine can now place, scale and layer a card against the page's measured boxes (P50 T16, E62), so the
 old excuse - the card had nowhere else to read - is gone.
 
-Mechanisms: the compiler (`read_moved` / `read_deferred` on the dock entry), `gate_motion_density.py` M27,
-`self_watch.py` O6; `docs/content-video-engine/CAPABILITIES.md`. The finding: the Tokyo self-watch's O6 row
-(2026-09-11) and the operator's read of the same instant.
+Mechanisms (WIRED 2026-09-11, the same day): the compiler's `read_over_build` (`read_moved` / `read_deferred` on the dock
+entry; the band above, below, the foot; the air from the plot measured, not assumed), `gate_motion_density.py` M27 (a card on
+the plot while `marks.drawn` is between 0 and 1 is a FAIL), `self_watch.py` O6 reads M27; on Tokyo the panel card's read is
+deferred - the page leaves no band - and the line draws unobstructed. `docs/content-video-engine/CAPABILITIES.md`. The
+finding: the Tokyo self-watch's O6 row (2026-09-11) and the operator's read of the same instant.
 
 ## E64 — A chart becomes another chart by re-writing itself or by morphing; it never cuts (2026-09-11)
 

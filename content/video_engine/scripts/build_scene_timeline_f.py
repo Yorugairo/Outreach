@@ -1823,6 +1823,153 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
     return {"x": round((sw - w) / 2), "y": round(max(0, (band - h) / 2)), "w": w, "h": h}
 
 
+# ---- THE READ NEVER SITS ON A CHART THAT IS STILL DRAWING (ruling E63, 2026-09-11) -------------
+# The operator, on the Tokyo cut at 0:09.5-0:10.5: *"docking over the plate while it's drawing is not
+# a good standard practice, it's somewhat okay here because of timing, but as a rule we should
+# probably use better handling now that we can manipulate scale/depth/placement easier."* The panel
+# card enters on its word at 9.09, pops to reading size (its solo CSS box, which the probe reads at
+# 801x474) over the middle of the plot, and the line the page is still drawing - `build_to` at 7.69
+# for 3.0 s, landing on datum 311 at 10.69 - runs on UNDERNEATH it. E45 s1 already forbids a card
+# PARKED on the plot and M25 scores it; this is the other half of the choreography, the READ.
+#
+# THE RULE. The word is never moved - the card still enters when the sentence says so - the READ is:
+#   (a) the reading box is re-placed in a free band the page leaves (`free_bands`): `above`, across
+#       the title exactly as E45 parks a card there, then `below`, then the `foot`; at the reading
+#       scale when the band holds it, else at the widest scale that does, and never narrower than the
+#       card's own parked width (E45's floor - below it the card is not evidence any more);
+#   (b) when no band holds even that, the read is DEFERRED: the card enters at its PARKED place and
+#       never pops (`read_deferred`, which the player already renders - a card with `centre` and no
+#       reading box takes its box from its first frame).
+# The entry records the decision so the build report and the gate can say what happened. A dock whose
+# read begins after the build has LANDED is untouched, and so is a dock on a plain plate - every row
+# without the case compiles to exactly the bytes it did before.
+DOCK_READ_CSS = {   # the template's `.dock.solo` geometry, mirrored (the box `dockReadRect` measures when nothing is forced):
+    "9:16": {"x": 80, "y": 553, "w": 800},     # html[data-aspect="9:16"] #dock-1.solo { width: 800px; left: 80px; top: 553px }
+    "16:9": {"x": 764, "y": 172, "w": 1056},   # #dock-1.solo { width: 1056px; top: 172px } + .side-r (side-l is its mirror at 100)
+}
+READ_BAND_ORDER = ("above", "below", "foot")   # the read moves the way E45's card parks: over the title first
+READ_OVER_PLOT_SHARE = 0.05   # the read MEETS the plot at this share of the smaller box - M27's own line, so the gate and the compiler agree
+READ_PLOT_PAD = 48            # ... and the air the MOVED read keeps from the plot on a page placed by ESTIMATE: `ledger_page`'s
+                              # model of the Tokyo page puts the plot 24 px below where the player draws it (P50 T16), and the
+                              # camera's push moves the page under a card that does not move with it (+3 px at zoom 1.06). Both,
+                              # doubled. A band that cannot give the card this much air has not got room for a read, and the read
+                              # is DEFERRED instead - which is what the Tokyo page's 208 px band does.
+READ_PLOT_PAD_MEASURED = DOCK_PLACE_PAD   # ... and on a page the fixture HAS measured the estimate's error is gone: the player's
+                              # own boxes, with the card's usual clear air for the camera's push (E45's own pad).
+
+
+def dock_read_box(aspect: str | None, read_place: dict | None = None, card_aspect: float | None = None) -> dict:
+    """The rectangle a placed card READS at, in stage pixels.
+
+    The row's own `read_place` when it named one (`dock_opts`'s `read`), else the card's solo CSS
+    geometry with its height from `dock_card_h` - which the probe confirms to the pixel: the Tokyo
+    panel card reads at [79, 552, 801, 474] against this box's [80, 553, 800, 474]."""
+    if read_place:
+        return {k: read_place[k] for k in ("x", "y", "w", "h")}
+    css = DOCK_READ_CSS.get(aspect or "16:9", DOCK_READ_CSS["16:9"])
+    h = round(css["w"] * card_aspect) if card_aspect else dock_card_h(css["w"])
+    return {"x": css["x"], "y": css["y"], "w": css["w"], "h": h}
+
+
+def _overlap_share(a: dict, b: dict) -> float:
+    """The area two rectangles share, as a share of the SMALLER of them (the probe's own measure)."""
+    w = min(a["x"] + a["w"], b["x"] + b["w"]) - max(a["x"], b["x"])
+    h = min(a["y"] + a["h"], b["y"] + b["h"]) - max(a["y"], b["y"])
+    if w <= 0 or h <= 0:
+        return 0.0
+    return (w * h) / max(1.0, min(a["w"] * a["h"], b["w"] * b["h"]))
+
+
+def page_build_windows(world: dict | None, species: list[dict] | None, scene_start: float) -> list[tuple[float, float]]:
+    """Every stretch in which this scene's chart is DRAWING - (from, to) in build seconds, empty when
+    the scene is not a ledger page or its chart never draws.
+
+    Two sources, and they are separate windows rather than one span: the page's own clock, dated by the
+    motion gate's `MG._page_land_offset` (the roll-out, the mount, the morph, a page that arrives
+    built), and each `build_to`, which draws the line to a datum on its own word. Tokyo s02 declares
+    two caps - 7.69 + 3.0 and 18.95 + 1.2 - and between them the line RESTS on its cap (M19's hold):
+    a card that reads in the gap is reading beside a finished chart, not over a build."""
+    if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not world.get("page"):
+        return []
+    out: list[tuple[float, float]] = []
+    land = float(scene_start) + MG._page_land_offset({"world": world})
+    if land > float(scene_start) + 1e-6:
+        out.append((float(scene_start), land))
+    out += [(float(sp["at"]), float(sp["at"]) + float(sp.get("dur") or 0.0))
+            for sp in (species or []) if sp.get("kind") == "build_to" and float(sp.get("dur") or 0.0) > 0]
+    return sorted(out)
+
+
+def _read_card_h(w: float, card_aspect: float | None) -> int:
+    """A card of width `w` is this tall: the row's own aspect when it named one, else the card's own
+    build - a 16:9 slide frame plus the chrome (`dock_card_h`), which does NOT scale with the width."""
+    return round(w * card_aspect) if card_aspect else dock_card_h(round(w))
+
+
+def _read_fit(band: dict, box: dict, floor_w: float, aspect: str | None, card_aspect: float | None,
+              plot: dict | None, pad_plot: float = READ_PLOT_PAD) -> dict | None:
+    """`box` re-placed inside `band` at the same width if it fits, else the widest that does.
+
+    None when the band cannot hold the card at its parked width - E45's floor, under which the card
+    stops being evidence - or when what fits would still crowd the plot. Centred on the stage
+    horizontally (clamped into the band) and in the band vertically, so the card reads where the eye
+    already is and the park is a short slide away."""
+    pad = DOCK_PLACE_PAD
+    room_w, room_h = band["w"] - 2 * pad, band["h"] - 2 * pad
+    w = min(float(box["w"]), room_w,
+            (room_h / card_aspect) if card_aspect else float(_card_w_for(room_h)))
+    if w < max(floor_w, DOCK_ON_PAGE_MIN_W) - 0.5:
+        return None
+    w = round(w)
+    h = _read_card_h(w, card_aspect)
+    if h > room_h:
+        return None
+    sw = 1080 if (aspect or "16:9") == "9:16" else 1920
+    x = min(max(round((sw - w) / 2), band["x"] + pad), band["x"] + band["w"] - pad - w)
+    fit = {"x": round(x), "y": round(band["y"] + (band["h"] - h) / 2), "w": w, "h": h}
+    return fit if not plot or _overlap_share(fit, _grown(plot, pad_plot)) <= 0 else None
+
+
+def _grown(box: dict, pad: float) -> dict:
+    """`box` with `pad` of clear air on every side."""
+    return {"x": box["x"] - pad, "y": box["y"] - pad, "w": box["w"] + 2 * pad, "h": box["h"] + 2 * pad}
+
+
+def read_over_build(place: dict | None, read_box: dict | None, page: dict | None, aspect: str | None,
+                    read_from: float, read_to: float, windows: list[tuple[float, float]] | None,
+                    card_aspect: float | None = None) -> dict | None:
+    """E63's decision for one placed dock: where its READ goes, or None when there is nothing to move.
+
+    Returns ``{"read_place": {...}, "read_moved": {"from": [...], "to": [...], "why": "..."}}`` when a
+    band holds the card, ``{"read_deferred": True}`` when none does, and None when the dock is not on a
+    ledger page, has no reading pop at all (a centred card takes its parked box from its first frame),
+    reads clear of the plot, or reads only after the chart has landed. Pure: nothing is mutated."""
+    if not place or not read_box or not page or not windows:
+        return None
+    hit = [(a, b) for a, b in windows if read_from < b - 1e-6 and read_to > a + 1e-6]
+    if not hit:
+        return None                                   # the read is over before the first stroke, or begins after the landing
+    build_to = max(b for _a, b in hit)
+    boxes = LPG.page_boxes(page, aspect or "16:9")
+    plot = boxes.get("plot")
+    if not plot or _overlap_share(read_box, plot) <= READ_OVER_PLOT_SHARE:
+        return None                                   # the card already reads clear of the plot
+    why = f"the chart builds until {build_to:.2f}s"
+    bands = {bd["band"]: bd for bd in free_bands(boxes)}
+    for name in READ_BAND_ORDER:
+        band = bands.get(name)
+        if band is None:
+            continue
+        moved = _read_fit(band, read_box, float(place["w"]), aspect, card_aspect, plot,
+                          READ_PLOT_PAD_MEASURED if boxes.get("measured") else READ_PLOT_PAD)
+        if moved is None:
+            continue
+        return {"read_place": moved,
+                "read_moved": {"from": [read_box["x"], read_box["y"], read_box["w"], read_box["h"]],
+                               "to": [moved["x"], moved["y"], moved["w"], moved["h"]], "why": why}}
+    return {"read_deferred": True}
+
+
 # ---- THE CAPTION'S BAND UNDER A CARD (ruling E62, 2026-09-11) ---------------------------------
 # "Under a card the caption keeps its size and MOVES; it shrinks only when no band fits." The
 # demotion s9.25 #2 ruled on 2026-09-02 was a demotion in SIZE (64 px / 800 -> 33 px / 600), and the
@@ -2018,7 +2165,7 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                kind: str = DOCK_KIND_IMAGE, place: dict | None = None, arrive: str | None = None, mass: str | None = None,
                centre: bool = False, read_place: dict | None = None, read_s: float | None = None, park_s: float | None = None,
                press: dict | None = None, stack: bool = False, behind: str | None = None, fg: str | None = None,
-               rid: str | None = None) -> dict:
+               rid: str | None = None, read_moved: dict | None = None, read_deferred: bool = False) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -2050,8 +2197,13 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         **({"place": place, "read_s": rs, "park_s": ps,
             "park": span >= rs + ps} if place else {}),
         **({"read_place": read_place} if (place and read_place) else {}),   # a centred card that pops here, then parks to its place (2026-09-10)
+        # E63 (2026-09-11): the read the compiler MOVED off a chart that was still drawing, and where it moved it
+        # from; or the read it DEFERRED entirely (the card enters at its parked place). Written only when the rule
+        # fired, so every other entry is byte-for-byte what it was.
+        **({"read_moved": read_moved} if (place and read_moved) else {}),
+        **({"read_deferred": True} if (place and read_deferred) else {}),
         **({"arrive": arrive} if arrive else {}), **({"mass": mass} if mass else {}),   # P47 T1: only when the row names them
-        **({"centre": True} if centre and place else {}),   # the design pass: a centred card sits at its box from its first frame - no reading size, no park
+        **({"centre": True} if (centre or (read_deferred and place)) and place else {}),   # the design pass: a centred card sits at its box from its first frame - no reading size, no park
     }
 
 
@@ -2432,6 +2584,8 @@ def main() -> int:
     print(f"  audio: {audio.name}")
 
     evidence, uris, scenes, estimated_pages = {}, {}, [], []   # P50 T16: the pages this build placed by ESTIMATE, for the report below
+    read_moves: list[str] = []      # E63: the docks whose READ the rule moved off a building chart ...
+    read_defers: list[str] = []     # ... and the ones with no band to move it to, deferred to the parked box
     for i, row in enumerate(plan):
         # exit style is HYBRID (operator, 2026-08-29): mechanical default
         # (E47, 2026-09-06: docks -> DIP, bare -> cut; it was docks -> wipe),
@@ -2551,6 +2705,23 @@ def main() -> int:
                 uris[fg_key] = data_uri(_layers[dopt["behind"]])   # RAW: the capped path re-encodes through RGB and would drop the alpha
             rd = dopt.get("read") or {}   # the box a centred card POPS at before it parks to dplace (2026-09-10)
             rplace = centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x")) if (place and rd) else None
+            # E63: a card never READS over a chart that is still drawing. The read box is the row's own when it named
+            # one, the card's solo CSS box otherwise; a centred card with no `read` has no pop at all (it takes its
+            # parked box from its first frame), so there is nothing to move and the entry is untouched.
+            eplace = dplace if (slot == 0 or centred) else None
+            _rs = float(dopt["read_s"]) if dopt.get("read_s") else DOCK_READ_S
+            _ps = float(dopt["park_s"]) if dopt.get("park_s") else DOCK_PARK_S
+            _aspect_of_card = rd.get("card_aspect", dopt.get("card_aspect")) if rd else dopt.get("card_aspect")
+            _read_box = (dock_read_box(ASPECT, rplace, _aspect_of_card)
+                         if (rplace or not centred) else None)
+            e63 = read_over_build(eplace, _read_box, (world or {}).get("page"), ASPECT, float(enter),
+                                  float(enter) + (_rs if exitt - enter >= _rs + _ps else exitt - enter),
+                                  page_build_windows(world, row_species, a), _aspect_of_card) or {}
+            if e63.get("read_place"):
+                rplace = e63["read_place"]
+                read_moves.append(f"{sid}.{aid} -> {e63['read_moved']['to']}")
+            elif e63.get("read_deferred"):
+                read_defers.append(f"{sid}.{aid}")
             if True:
                 if aid not in evidence:
                     try:
@@ -2606,10 +2777,11 @@ def main() -> int:
                     uris[aid] = dock_uri(ap)
                 docks.append(dock_entry(aid, slot, enter, exitt, len(d["badges"]),
                                         evidence[aid].get("kind", DOCK_KIND_IMAGE),
-                                        dplace if (slot == 0 or centred) else None, dopt.get("arrive"), dopt.get("mass"), centred,   # a centred card is placed on either slot (2026-09-10: two cards up at once)
+                                        eplace, dopt.get("arrive"), dopt.get("mass"), centred,   # a centred card is placed on either slot (2026-09-10: two cards up at once)
                                         read_place=rplace, read_s=dopt.get("read_s"), park_s=dopt.get("park_s"),
                                         press=dopt.get("press"), stack=bool(dopt.get("stack")),
-                                        behind=dopt.get("behind"), fg=fg_key, rid=dock_row_id(sid, aid)))
+                                        behind=dopt.get("behind"), fg=fg_key, rid=dock_row_id(sid, aid),
+                                        read_moved=e63.get("read_moved"), read_deferred=bool(e63.get("read_deferred"))))
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         try:
             exit_id, exit_s = scene_exit(authored_exit, bool(docks))
@@ -2639,6 +2811,12 @@ def main() -> int:
     # P50 T16: the build says whose numbers it placed by. A page the fixture has not measured is placed
     # by `ledger_page`'s ESTIMATE of the player's layout - good enough to park a card against the plot's
     # edge (E45 parks from the title side), never good enough to centre one in a band (R26-27).
+    if read_moves or read_defers:
+        # E63: the reads the rule re-placed, and the ones it deferred to the parked box. Named, never silent.
+        print(f"  dock read   : {len(read_moves)} read(s) moved off a building chart"
+              + (f" ({'; '.join(read_moves[:4])})" if read_moves else "")
+              + (f", {len(read_defers)} deferred to the parked box ({'; '.join(read_defers[:4])})" if read_defers else "")
+              + " (E63)")
     if estimated_pages:
         print(f"  page boxes  : {len(estimated_pages)} page(s) ESTIMATED, not measured - "
               f"{'; '.join(estimated_pages)}. Measure them into assets/page-boxes.v1.json "
