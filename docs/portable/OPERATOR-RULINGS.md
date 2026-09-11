@@ -1867,6 +1867,13 @@ The vortex drains the ACTIVE state - the swirl takes the whole drawn chart with 
 transition's end is a landing (E51's push tie) and a data mark (E50's clock restarts). Every state passes the life check
 (E49/E56). A seek to any t paints one frame.
 
+**Amended 2026-09-10 (the Tokyo cut).** Three park laws, measured on the frames: a park STANDS until the next park (a
+later recast no longer un-parks - the new state stands where the old one did, so the ten-year bars burst in the monthly
+bars' parked slot with the plant beneath); a park moves from where the chart stands, so a park to scale **1.0** is the
+UN-PARK that grows the chart back (the operator: "if they're going to leave the chart should either re-take center stage,
+or they might as well stay til the transition"; 0.96-0.99 stay "not a park"); and the page's source line rides the park
+with its chart (E52 - it had been left full-size under the cards the park made room for).
+
 Mechanisms: `docs/content-video-engine/CAPABILITIES.md` (the rescale / extend / keyed recast / morph_to / park rows, M23);
 the plan `.claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md`; the proof `steel-and-paper/build-f/chart-transitions-proof.html`.
 
