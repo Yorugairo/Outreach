@@ -1,13 +1,13 @@
 ---
 id: P50-BRAVOS-GRAMMAR
-title: The Bravos grammar - four species we lack, and a species-by-sentence map so an agent knows when to use what we have
+title: The Bravos grammar and the burn-down - the species we lack, the art-embed world, the hand-offs that carry continuity, the last drawing-kinetics law, and a species-by-sentence map so an agent knows when to use what we have
 status: draft
 operation: feature
 risk: standard
 owner: parent
 branch: main
 created: 2026-09-10
-updated: 2026-09-10
+updated: 2026-09-10 (amended the same night with the operator's burn-down)
 ---
 
 # The Bravos grammar
@@ -57,6 +57,17 @@ light, the morph from a line's end to a bar (P48 `chart_to`).
 cuts. Every species below is therefore a build ON a held surface, keyed to a word, with a declared target - the motion
 menu's law - never a new plate.
 
+**Amended the same night (the operator's burn-down, after Gemini's un-filed Bravos summary was mapped -
+`REPORT.claude.md` §"mapped", `EXPLORATION-REVIEW-2026-09-10.md`):** *"we should probably add the additional morph
+method. Parallax isn't all that important right now ... It also doesn't have to be a TV. If Bravos has the chart world and
+the TV world, we could have the chart and the 'art' world -- our narrative plates/paintings ... the press card + tv embed
+or art embed world. Probably the vector map, burst furniture, line-end tags as next chart's bars is a great add to help us
+increase our continuity ... HF17, HF-15, HF-16, MC-8, r26-30 blend, r26-27, r26-25, R26-24, R26-22, r26-20, r26-16, TR-7's
+ARAP invariants as compiler refusals ... with that, we should probably finish our drawing kinetics too."* And the question
+that orders the plan: *"Do we already have an understanding mapped in docs to how/where to know when to use these
+capabilities if we build them?"* - the surfaces yes (§9.28 A/B/C/D), the species and the verbs no: that is T1, and it
+now covers E58's five verbs, E59's four reasons a camera moves, E60's burst, the dock read->park and the un-park.
+
 ## Intent And Acceptance
 
 Intent: (a) four species ported as mechanisms into the scene-evidence player, each opt-in, each a pure function of t,
@@ -93,6 +104,10 @@ Acceptance:
 - A runtime import of anything (motion menu law: mechanisms port, code does not).
 - A host removal or a caption removal because Bravos has none.
 - The camera (P49 has it), the ink bloom (TR-14), the chart-to-chart family (P48) - referenced, not re-planned.
+- Parallax as a mechanism (the operator, 2026-09-10: *"Parallax isn't all that important right now"*): R26-32's sine
+  micro-pan is dropped; only the planar homography survives, as the art-embed's surface projection (T7).
+- A TV. Our second world is the ART world - the narrative plates and paintings we already make; the external lane lands
+  on them (T7), never on a monitor.
 - A GIS: the vector map is one simplified world outline (Natural Earth 110m, ~80 KB as paths) with country ids; no
   projection changes, no zoom levels beyond the camera the player already has.
 
@@ -103,8 +118,9 @@ Acceptance:
    claim takes its bar. T6 is unblocked under those four.
 2. **The species-by-sentence taxonomy.** The ten sentence acts in T1 - the operator, 2026-09-10: *"sounds like it makes
    sense"* - approved as drafted.
-3. **The tv-embed plate (T7)** needs a Flow order (ask before driving the session) - or a still the operator generates
-   by hand, as with the fab plate.
+3. **The art-embed slot (T7)**: the first narrative plate that carries a declared embed surface (a poster on the wall,
+   a paper on the desk, a framed picture) needs a Flow order (ask before driving the session) - or a still the operator
+   generates by hand, as with the fab plate.
 4. **One accent?** Ruled 2026-09-10: *"I think 2 accents is fine"* - coral + sunflower stand; no change.
 5. Push authorization per commit, as standing.
 
@@ -127,7 +143,10 @@ Acceptance:
 2. T2 the icon chip (the foundation the diagram, the press card's badges and the map's chips all use).
 3. T3 press-card dock, T4 flow diagram, T5 vector map - independent write sets inside the template's species block
    (each behind its own kind name), dispatched one at a time; the parent integrates and reads every frame.
-4. T6 treemap after gate 1. T7 tv-embed after gate 3. T8 the backlog blends ride on the slice they belong to.
+4. T7 the art embed after gate 3, right after T3 (the press card needs a world to land on). Then T4 + T14 together (the
+   flow diagram's arrows are the clothoid fitter's first customer), T5 (the map's arcs its second), T11 (the tags-to-bars
+   hand-off), T10 (the burst's furniture), T13 (the stop-motion burst), T12 (morph Method A + TR-7's refusals), T9, T15,
+   T16. T6 the treemap when a beat asks for it (gate 1 is ruled). T8 the backlog blends ride on the slice they belong to.
 5. Every slice: goldens byte-identical, the new golden, the life check on the addition, the proof page grows one row,
    the CAPABILITIES row lands in the same commit (the recall rule 3), a `Recall:` line in the commit.
 
@@ -160,8 +179,14 @@ Acceptance:
   -> share page (donut) / treemap after gate 1; NAMES places and flows -> vector map (light, arc, stamp); EXPLAINS a
   mechanism (A causes B via C) -> flow diagram (chips + arrows), the swap for a rhyme; TURNS on a number -> figure
   stamp / the light on the datum; SPANS a period -> bracket / span; SETS an agenda ("two things") -> numbered figures;
-  RETRACTS a claim ("none of this happened") -> the icon board crossed out. Each row: the surface, the species, the
-  target kind, the gate letters, an example sentence from the tariff or Tokyo take. `docs_find "<act>"` hits it. The
+  RETRACTS a claim ("none of this happened") -> the icon board crossed out. **Widened the same night:** TURNS on a
+  number that BREAKS the honest scale -> the burst (E60; the comparator's level, the hold, the shoot) with its
+  furniture (T10); the SAME data in another form or window -> E58's five verbs (rescale / extend / keyed recast / park /
+  morph_to), each with its beat, and the park's two laws (a park stands until the next park; 1.0 is the un-park when
+  the cards leave and the chart re-takes the stage); a card that must be READ then KEPT beside the chart -> the dock
+  read->park (`read` / `read_s` / `park_s`); the four reasons a camera moves (E59: a landing, a wider stage, the arrival,
+  the three species) and the nevers. Each row: the surface, the species or verb, the target kind, the gate letters, an
+  example sentence from the tariff or Tokyo take. `docs_find "<act>"` hits it. The
   lint reads a shot table's rows + the take's words, classifies each sentence by a keyword table (crude on purpose, like
   V05), and prints `sentence · act · species available · row has: <species or none>`; INFO, never FAIL.
 - Validate: `python content/video_engine/scripts/lint_species_choice.py content/video_engine/projects/systems-and-blowups/japan-tariff-trick`
@@ -248,14 +273,19 @@ Acceptance:
 - Validate: the test suite above + `python content/video_engine/scripts/ledger_page.py --check <series>`
 - Evidence: pending
 
-### T7: The tv-embed world for the external lane
+### T7: The ART-embed world for the external lane (was: the tv-embed)
 - Status: pending (human gate 3)
 - Owner: parent
 - Depends on: T3
-- Write set: one generated plate (a TV in a dark room, the screen as a declared dock slot) per channel under
-  `channel-assets/money-physics/plates/`; `build_scene_timeline_f.py` (a plate may declare `slots: [{region}]` that a
-  press dock lands INTO, with the room's vignette darkening on a word - shots 20-22).
-- Acceptance: the tariff short's first press quote (if any) plays on the TV; the argument's own charts never do (B1).
+- Write set: `build_scene_timeline_f.py` (a narrative plate may declare `embed: {quad: [[x,y]x4], darken: <word>}` -
+  a surface INSIDE the painting - a poster on the wall, a paper on the desk, a framed picture - that a press dock lands
+  ONTO); the template (the dock projected onto the quad by a planar homography - the CSS `matrix3d` from the four
+  corners, Gemini's H with `h22 = 1`; the room's vignette darkening on the word; the card's own idle stays); one
+  plate per channel that carries such a surface under `channel-assets/money-physics/plates/` (gate 3); the press
+  card's badges and underline in the projected space.
+- Acceptance: Bravos has the chart world and the TV world; we have the chart world (the ledger page) and the ART world
+  (our narrative plates). The tariff short's first press quote (if any) lands on a painted surface in perspective and
+  reads; the argument's own charts never do (B1); the goldens hold; the life check on the embed's region.
 - Validate: frames at the seam; the test suite
 - Evidence: pending
 
@@ -266,10 +296,17 @@ Acceptance:
 - Write set: `docs/content-video-engine/BACKLOG.md` rows re-pointed: **R26-20** badge-stamp two-spring landing ->
   T2 (the chip lands with it); **R26-25** the `span` species -> T4; **R26-24** N-tier pages (small multiples, shared
   x) -> a T5-adjacent slice on `ledger_page.py` (Bravos' two-panel SPR, shots 35-36 - the strongest blend of all;
-  **T9**); **R26-1** field-coloured halo on direct labels -> the terminal
+  **T9**); **R26-32** the studio display stage -> T7 (the homography only; the sine pan dropped with parallax);
+  **R26-33** the sonar ping -> T5 (a `ping` at a lit country: `r(t) = r_max ((t - t0) mod T) / T`, `alpha = 1 - r /
+  r_max`); **R26-34** the tip-riding pill -> T11 (the pill rides the tip during the draw, then IS the terminal tag);
+  **MC-8** spread / divergence -> CLOSED (built as the `spread` species, R26-26 - the intake's EXPLORE row is stale);
+  **R26-1** field-coloured halo on direct labels -> the terminal
   tag + value bar (shots 104-105), on T1's table as the COMPARES row's finish; **motion menu: push hand-off** ->
   T3; **radial reveal** -> T5's light (a country reveals from its centroid); **beat-freeze chart exit** -> the
-  COMPARES row's C1 (unchanged, cited); **R26-22** centred placement by E50's clock -> the press stack's park.
+  COMPARES row's C1 (unchanged, cited); **R26-22** centred placement by E50's clock and **R26-27** page_boxes vs the
+  player's layout -> T16 (one placement truth); **R26-16** the planted-element morph -> T12 (Method A's first use);
+  **R26-20** the two-spring landing -> T2 (as before); **R26-30** the stop-motion burst -> T13; **HF-15 / HF-16 /
+  HF-17** -> T15.
   Rows that do NOT blend (noted so nobody reaches): R26-4 the chart on the hook (Bravos opens on press cards, not a
   chart - a different answer to the same beat, not a contradiction), R26-6 a returning character (they have none),
   TR-14 the ink bloom (they cut and dip), weight-shift captions (they have no captions).
@@ -288,6 +325,106 @@ Acceptance:
 - Acceptance: Japan SPR | US SPR on one page, drawn in turn, the drop bar on a word; the page is OURS (A1-A3) when the
   series are; goldens byte-identical without it; the life check on the page region.
 - Validate: the test suite in Verification + `python content/video_engine/scripts/ledger_page.py --check <series>`
+- Evidence: pending
+
+### T10: The burst's furniture (Bravos 8:01.8-8:03.2; E60 built the burst)
+- Status: pending
+- Owner: `implementation_luna`; parent reads the frames
+- Depends on: T1
+- Write set: template `buildLedgerBars` / `lpPaintBreakthrough` (a `placeholder: "?"` state: the breaking bar's track
+  stands grey with a "?" stamp until its number is spoken, then the comparator level and the burst as today; the
+  value capsule mounted ON THE AXIS under the bar's end, counting up, with a dotted leader from the bar's end to the
+  axis - the pill above the tip stays the default, the capsule an option `capsule: "axis"`); `ledger_page.py`
+  (`overflow_capsule`, `placeholder` keys); `test_breakthrough.py` (+3); the proof page grows a row.
+- Acceptance: the Tokyo "beats our bonds" beat renders identically with the options off (goldens; the cut's frames
+  byte-identical); with `placeholder` on, the chips track reads "?" through "if that works" and the capsule lands on
+  the axis at 36.59 % with its leader; the life check on the page region.
+- Validate: `python -m pytest content/video_engine/tests/test_breakthrough.py content/video_engine/tests/test_golden_frames.py -q`
+- Evidence: pending
+
+### T11: Line-end tags become the next chart's bars (Bravos shots 104-105; continuity)
+- Status: pending
+- Owner: `implementation_luna`; parent integrates
+- Depends on: T1
+- Write set: `build_scene_timeline_f.py` (`RECAST_PAIRS` gains `("dense-line", "story")` KEYED ON THE TERMINAL TAGS:
+  each series' end tag is the mark that becomes its bar - the tag slides and grows into the bar, the line un-draws by
+  length beneath it); template `lpPaintRecastKeyed` (a `tag` role in the keyed tween beside `datum`); the tip-riding
+  pill (R26-34) as the tag's life during the draw: `X_pill(u) = P_tip(u) + D_offset`, a leader from the tip, popping
+  on `springPop(Mp = 0.05)` at its milestone, and at the end it IS the terminal tag; `test_chart_transitions.py` (+2).
+- Acceptance: a four-line yield page hands its four tags to a four-bar page with no cut and no re-draw of the values;
+  the tag rides the tip during the draw and names the line at its end (E53 unchanged); goldens byte-identical.
+- Validate: `python -m pytest content/video_engine/tests/test_chart_transitions.py content/video_engine/tests/test_golden_frames.py -q`
+- Evidence: pending
+
+### T12: Morph Method A (vertex-based) and TR-7's ARAP invariants as compiler refusals
+- Status: pending
+- Owner: parent (the invariants); `implementation_luna` (Method A)
+- Depends on: none
+- Write set: `content/video_engine/scripts/kinetics/morph_a.mjs` (new: ring-normalise, resample to N, the rotational
+  alignment `argmin_k sum ||v_A,i - v_B,(i+k)||^2` - `arap.mjs` `correspond` already has it - then a direct vertex lerp
+  and a cubic reconstruction per frame; doc 43 §43.5 Method A); the compiler (`morph_to` gains `method: "a" | "arap"`,
+  default by doc 43's decision rule: outline-to-outline with modest rotation -> A, real rotation -> ARAP) and the
+  REFUSALS (TR-7): a morph whose pair fails centroid <= 0.06 W, axis <= 15 deg, or area ratio >= 0.60 is a build error
+  naming the number, never a silent bad match; `measure_morph.py` prints the three invariants; R26-16's planted
+  element (the tie) as Method A's first use; `test_morph.py` (+4); M17 reads the method.
+- Acceptance: the same morph renders by A and by ARAP and the frames are read side by side (a human gate on the demo,
+  as HG3 was); a pair outside the invariants is refused with the measured number; goldens byte-identical.
+- Validate: `python -m pytest content/video_engine/tests/test_morph.py content/video_engine/tests/test_kinetics_sync.py -q`
+- Evidence: pending
+
+### T13: The stop-motion burst (R26-30, the operator's blend)
+- Status: pending
+- Owner: `implementation_luna`; parent reads the frames
+- Depends on: T10 (the furniture rides it)
+- Write set: template `lpPaintBreakthrough` (`cadence: "stop"`: the shoot and the counter step on `stopaction.mjs`'s
+  frame-index cadence, the scale rewriting stepwise, the ticks crossing per step, the glow on the landing frame;
+  `overflow: "burst"` + `break_cadence` on the object); `ledger_page.py`; `test_breakthrough.py` (+2); the proof page's
+  third row.
+- Acceptance: the continuous burst is byte-identical with the option off; the stepped one lands on the same final
+  frame; the operator reads both.
+- Validate: as T10
+- Evidence: pending
+
+### T14: The last drawing-kinetics law - the clothoid fitter for generated geometry (doc 42 §42.4)
+- Status: pending
+- Owner: `implementation_luna`
+- Depends on: none (its first customers are T4's arrows and T5's arcs; the leaders of T10/T11 its third)
+- Write set: `content/video_engine/scripts/kinetics/clothoid.mjs` (new: an Euler-spiral segment between two points with
+  end tangents - `dk/ds = const`, Fresnel integrals by series, sampled to a polyline the stroke engine draws by length;
+  a two-segment fit for an S-curve; G2 at the joins); the template's generated curves (the flow diagram's arrows, the
+  map's arcs, the offset-annotation leaders) take it in place of cubic Beziers; `sync_kinetics.py` MODULES + the flags
+  test; `tests/kinetics/clothoid.test.mjs` (curvature monotone along the segment; the tangents met; a Bezier of the
+  same ends shows the parasitic inflection the doc names); CAPABILITIES row; doc 42's status line updated.
+- Acceptance: an arrow drawn by the fitter has monotone curvature (measured on the samples) where the Bezier's ripples;
+  hand-authored art untouched; goldens byte-identical (no golden carries a generated curve today).
+- Validate: `node --test content/video_engine/tests/kinetics/clothoid.test.mjs`; `python -m pytest content/video_engine/tests/test_kinetics_sync.py content/video_engine/tests/test_kinetics_flags.py -q`
+- Evidence: pending
+
+### T15: The continuity three - arriving from the edge, the three threads, the occlusion cue (HF-15, HF-16, HF-17)
+- Status: pending
+- Owner: parent (authoring + the frames); `junior_developer` for the compiler checks
+- Depends on: T1
+- Write set: HF-15 - a camera key law (E59 reason 2): the next region is visible at the frame edge BEFORE the move (a
+  key's `look` must leave the target's box partly in frame at the key before it; `validate_camera` refuses a key whose
+  target is wholly off-frame); HF-16 - the wire: one element carried across worlds (`extend` across a page boundary -
+  the holdings baseline drawn on under the Meta bars; a `thread:` option naming the mark that survives the cut); HF-17
+  - one foreground occluder on a world plate (a dock may declare `behind: <plate layer>` so the plate's foreground
+  cutout paints over it: the depth cue by occlusion, not blur - judged by eye); tests; one Tokyo or tariff beat each.
+- Acceptance: each of the three on one real beat, read in frames by the operator; the gate rows that read them.
+- Validate: the camera, transitions and gate suites
+- Evidence: pending
+
+### T16: One placement truth (R26-22, R26-27)
+- Status: pending
+- Owner: `junior_developer`
+- Depends on: none
+- Write set: `build_scene_timeline_f.py` (`page_boxes` measured from the player's own layout once per aspect and
+  written to a fixture the compiler reads, so `centred_place` and the player agree on a portrait page's bands - R26-27:
+  y 536 vs 1250); a solo card centred by E50's clock instead of the reading rect over the title (R26-22: the read box
+  from `_page_land_offset`); tests on both.
+- Acceptance: a row that names no `centre_y` lands where the player draws the band; the Tokyo and tariff cuts are
+  byte-identical (they name their centres).
+- Validate: `python -m pytest content/video_engine/tests/test_dock_read_park.py content/video_engine/tests/test_video_dock.py -q` + the two builds' gates
 - Evidence: pending
 
 ## Verification
