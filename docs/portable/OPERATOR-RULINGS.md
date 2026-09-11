@@ -2030,13 +2030,16 @@ about 1.5 s, then parks top-right): *"docking over the plate while it's drawing 
 it's somewhat okay here because of timing, but as a rule we should probably use better handling now that we can
 manipulate scale/depth/placement easier."*
 
-**The ruling.** A chart's build is never hidden behind a card. While a chart is drawing (from its build's start
-to its landing), no card's reading pop may sit on the plot; the card keeps its WORD (the enter is the sentence's)
+**The ruling.** A chart's build is never hidden behind a card - and, widened the same evening on the operator's read of the
+third form ("im confused, because you just left the dock over the chart now too. something went backwards" - the cut's clock
+had moved the chart's landing before the card's word, so the rule as first written stopped firing and E45's reading pop came back
+centred over the finished chart): **a card never READS over a ledger page's plot, drawing or finished.** No card's reading pop
+may sit on the plot; the card keeps its WORD (the enter is the sentence's)
 and changes how it reads: it reads in the band the page leaves free (above the plot across the title, as E45 parks
 a card, or below it), at the reading scale if that fits and at a smaller one if not; and when no band holds a read
 at all, the read is deferred - the card enters on its word straight at its parked place, and the compiled entry
-says so. A card that enters after the landing is untouched; a card on a plate is untouched. The gate reads it (M27:
-a card over a plot while `marks.drawn` is between 0 and 1 is a FAIL). E45's choreography stands for every card that
+says so. A card on a plate is untouched; a PARKED card on the page is E45's contract (M25). The gate reads it (M27: a
+card reading on a plot, drawing or finished, is a FAIL; its text says which). E45's choreography stands for every card that
 reads over a finished chart or a plate.
 
 **Why.** The chart proves one sentence (E25); the build IS the proof arriving. A card over it while it draws hides
