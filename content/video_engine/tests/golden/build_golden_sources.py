@@ -38,6 +38,7 @@ FRAME_T = {
     "dock-pair-16x9": 12.0,         # both cards up, badges landed
     "dock-pair-9x16": 12.0,
     "ledger-extend": 13.05,
+    "press-stack": 11.4,            # P50 T3: all three cards landed (5.0 / 7.4 / 9.8 + LAND_S), the pile settled, and the underline on the third fully drawn (10.6 + SQUIG_DRAW)
     "chip-board": 11.0,             # P50 T2: all three chips landed (5.0 / 6.2 / 7.4 + LAND_S) and the middle one's X fully drawn (10.0 + CROSS_S) - the board as it is read
     "ledger-keyed": 12.75,          # P48 T4b: mid-phase-2 of the keyed recast (12 s + 2 s; the golden's expoOut clock is half done at u 0.37): the lines have left half their history, their ends and values are in flight to the bar tops, the bars are half grown         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
 }
@@ -51,6 +52,32 @@ def png_solid(w: int, h: int, rgb: tuple[int, int, int]) -> bytes:
 
     return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0))
             + chunk(b"IDAT", zlib.compress(raw, 9)) + chunk(b"IEND", b""))
+
+
+def png_bars(w: int, h: int, rgb: tuple[int, int, int], bars: list[tuple[float, float, float, float]],
+             ink: tuple[int, int, int] = (28, 34, 42)) -> bytes:
+    """A synthetic HEADLINE: a paper ground with dark bars where the words are, each bar a box in fractions of
+    the image. Deterministic and stdlib-only (the same PNG writer png_solid uses), so the golden's card is a
+    committed input like every other - press_card.py's own crop has its own test, on its own synthetic page."""
+    row = [list(rgb) for _ in range(w)]
+    px = [list(row[i]) for i in range(w)]
+    raw = bytearray()
+    for y in range(h):
+        line = bytearray(b"\x00")
+        for x in range(w):
+            c = rgb
+            for (x0, y0, x1, y1) in bars:
+                if x0 * w <= x < x1 * w and y0 * h <= y < y1 * h:
+                    c = ink
+                    break
+            line += bytes(c)
+        raw += line
+
+    def chunk(tag: bytes, data: bytes) -> bytes:
+        return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
+
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(bytes(raw), 9)) + chunk(b"IEND", b""))
 
 
 def silent_wav(seconds: float) -> bytes:
@@ -195,6 +222,40 @@ def chip_board() -> tuple[dict, dict]:
     return _timeline("Golden: the icon board", scenes, {}, None), uris
 
 
+# P50 T3: the press stack. Three claims, three words, one pile - Bravos shots 5-10's grammar.
+PRESS_CARDS = [
+    ("ev-press-a", 5.0, "THE HERALD, 4 MAR 2026", {"x0": 0.08, "y0": 0.17, "x1": 0.62, "y1": 0.46},
+     [(0.06, 0.14, 0.64, 0.44), (0.06, 0.58, 0.88, 0.72), (0.06, 0.80, 0.52, 0.90)]),
+    ("ev-press-b", 7.4, "THE LEDGER, 6 MAR 2026", {"x0": 0.30, "y0": 0.15, "x1": 0.92, "y1": 0.45},
+     [(0.28, 0.12, 0.94, 0.43), (0.06, 0.58, 0.70, 0.72), (0.06, 0.80, 0.84, 0.90)]),
+    ("ev-press-c", 9.8, "THE DISPATCH, 9 MAR 2026", {"x0": 0.12, "y0": 0.16, "x1": 0.55, "y1": 0.47},
+     [(0.10, 0.13, 0.57, 0.45), (0.06, 0.58, 0.92, 0.72), (0.06, 0.80, 0.38, 0.90)]),
+]
+
+
+def press_stack() -> tuple[dict, dict]:
+    """P50 T3: THREE PRESS CARDS on a bare plate, stacking on three words (Bravos shots 5-10), the third carrying
+    the underline on its quoted phrase (E56's one exception, the squiggle law §9.27).
+
+    Each card is a dock of kind `press` with its source line and its phrase box as fractions of the card - exactly
+    what the compiler writes from press_card.py's meta - and its place in the pile (`stack_index` / `stack_n`) in
+    enter order. The player mounts each one outside the two dock slots and poses the whole pile from
+    species/press.mjs. Judged after the third has settled and its underline has finished drawing (FRAME_T 11.4)."""
+    evidence, uris, docks = {}, _base_uris(), []
+    for i, (aid, enter, src, _phrase, bars) in enumerate(PRESS_CARDS):
+        evidence[aid] = {"title": f"Press card {i + 1}", "source": src, "species": "press",
+                         "document": {"path": "golden", "sha256": "0" * 64}, "badges": []}
+        uris[aid] = uri("image/png", png_bars(528, 160, (250, 247, 240), bars))
+        docks.append({"slide": aid, "slot": 0, "enter": enter, "exit": RUNTIME, "badge_at": [],
+                      "kind": "press", "source": src, "phrase": PRESS_CARDS[i][3],
+                      "stack_index": i, "stack_n": len(PRESS_CARDS)})
+    species = [{"kind": "callout", "form": "underline", "at": 10.6, "dur": 2.0,
+                "target": {"kind": "phrase", "dock": PRESS_CARDS[-1][0]}}]
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": docks, "species": species}]
+    return _timeline("Golden: the press stack", scenes, evidence, None), uris
+
+
 def _chart_evidence() -> dict:
     chart = json.loads(SERIES.read_text(encoding="utf-8"))
     return {"ev-golden-chart": {"title": "Golden chart", "source": "golden series sidecar", "species": "chart",
@@ -238,6 +299,7 @@ SURFACES = {
     "ledger-extend": ledger_extend,
     "ledger-keyed": ledger_keyed,
     "chip-board": chip_board,
+    "press-stack": press_stack,
 }
 
 

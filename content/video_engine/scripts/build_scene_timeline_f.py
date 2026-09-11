@@ -81,7 +81,8 @@ PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use")   # card
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
 STATE_MAX = 3
-DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s")   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s",
+             "press", "stack")   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -103,6 +104,8 @@ SPECIES_CLIP = "clip"              # world.kind for a clip; the player seeks a <
 VIDEO_SUFFIXES = (".mp4", ".webm")
 DOCK_KIND_VIDEO = "video"          # written onto the dock entry and the evidence map for a clip asset
 DOCK_KIND_IMAGE = "image"          # the default - never written, so an all-image build compiles byte-identically
+DOCK_KIND_PRESS = "press"          # P50 T3: the card is a HEADLINE cut from a screenshot - it carries its source line and its quoted phrase,
+                                   # and the player paints it in the press pass (a fanned stack), never in the two-slot dock loop
 
 # THE ICON SET (P50 T2, rule A2a: sourced, with provenance, never generated). A `chip` names a glyph by file
 # stem under content/video_engine/assets/icons/; the provenance of every file - the set, its version, the upstream
@@ -174,6 +177,8 @@ SPECIES_KINDS += (SPECIES_CHIP,)   # P50 T2: THE ICON CHIP (the Bravos icon boar
                                    # label, landing on its word and crossed out on a later one. The first species built under the
                                    # operator's module rule (2026-09-11): the painter is scripts/species/chip.mjs, not a branch in the
                                    # template's body; this file still owns its grammar, its targets and its glyph's provenance.
+UNDERLINE_FORM = "underline"   # P50 T3: a callout's FORM - the hand-drawn underline under a press card's quoted phrase (E56's one
+                               # exception, the squiggle law s9.27). Not a species kind: the grammar gains a form and a target, not a kind.
 HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
 PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to")
 CHART_TO_KINDS = ("recast", "rescale", "extend", "park", "morph")   # P48: recast (T4, a hand-over; keyed: T4b), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform), morph (T5: the area under the line becomes the target's by ARAP)
@@ -195,7 +200,7 @@ SPECIES_WHEN = {
     "plate_life": "a bare world plate with no evidence must live (E21) - our cutouts stepped at 10 fps for the window",
     "beat_freeze": "leaving a chart as a HIT - the final state freezes, then a directional cut (declared in 29 s9.27, NOT built)",
     "radial": "revealing the ring token or a callback object FROM the point the narration names (declared in 29 s9.27, NOT built)",
-    "push": "dock A hands off to dock B on the sentence - an evidence hand-off, never a scene transition (NOT built; P50 T3's press-card stack)",
+    "push": "dock A hands off to dock B on the sentence - the evidence hand-off SHIPPED as the press STACK (a dock kind: `press` + `stack`, P50 T3, 2026-09-11): declare a press stack; the `push` species itself stays unbuilt",
     "steam": "STILL LIFE: a named region of an approved still breathes (steam, smoke) so the plate never goes still (E49)",
     "trace": "the sentence NAMES places and flows on a still - a route draws with hops between named points, stamps stack at them",
     "ticker": "STILL LIFE: a tape of figures ticks across a named region of an approved still",
@@ -312,7 +317,7 @@ TARGET_KINDS = ("datum", "point", "region", "span")
 # fires only on a declared coordinate - datum index / series point on a page or
 # dock, a plate point or region the author names, a caption word span.
 SPECIES_TARGETS = {
-    "punch": TARGET_KINDS, "callout": TARGET_KINDS, "focus_zoom": TARGET_KINDS,
+    "punch": TARGET_KINDS, "callout": TARGET_KINDS + ("phrase",), "focus_zoom": TARGET_KINDS,   # P50 T3: the callout alone may point INSIDE a press card
     "spotlight": TARGET_KINDS, "squiggle": TARGET_KINDS, "pull_back": TARGET_KINDS,
     "plate_life": (),
     "beat_freeze": ("point", "region"), "radial": ("point", "region"), "push": ("point", "region"),
@@ -323,15 +328,20 @@ SPECIES_TARGETS = {
     "build_to": ("datum",), "bracket": (), "retitle": (), "relight": (),   # P47 T2: the datum is the cap; the others carry their own fields
     "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (), "chart_to": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
+PHRASE_TARGET = "phrase"                      # P50 T3: a region INSIDE a press card - {"kind": "phrase", "dock": "<the press dock's asset id>"}.
+TARGET_KINDS_ALL = TARGET_KINDS + (PHRASE_TARGET,)   # ... admitted for a CALLOUT alone, and only as the underline (E56's one exception); the
+                                                     # compiler resolves it to the dock's declared phrase box, the player to stage px through
+                                                     # the card's LIVE geometry (a parked or stacked card moves, and the underline moves with it)
 TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
-                 "region": ("x0", "y0", "x1", "y1"), "span": ("from_word", "to_word")}
+                 "region": ("x0", "y0", "x1", "y1"), "span": ("from_word", "to_word"),
+                 PHRASE_TARGET: ()}   # its one field is `dock`, a name - checked in _validate_callout, where the row's press docks are known
 FRACTION_FIELDS = ("x", "y", "x0", "y0", "x1", "y1")   # plate coordinates as fractions of the frame, 0..1
 
 
 def _validate_target(kind: str, target, allowed: tuple) -> list[str]:
     """Errors for one species' target against the kinds it may take (s9.27 targeting law)."""
-    if not isinstance(target, dict) or target.get("kind") not in TARGET_KINDS:
-        return [f"{kind}: target must be a dict of kind {'|'.join(TARGET_KINDS)}"]
+    if not isinstance(target, dict) or target.get("kind") not in TARGET_KINDS_ALL:
+        return [f"{kind}: target must be a dict of kind {'|'.join(TARGET_KINDS)}"]   # `phrase` is a callout's alone (P50 T3) and is named by its own error below
     tk = target["kind"]
     if tk not in allowed:
         return [f"{kind}: target kind {tk!r} not allowed (takes {'|'.join(allowed)})"]
@@ -484,7 +494,47 @@ def _validate_chip(entry: dict) -> list[str]:
     return errs
 
 
-def _validate_entry(entry) -> list[str]:
+CALLOUT_FORMS = (UNDERLINE_FORM,)   # P50 T3: the one form a callout takes besides the ring
+
+
+def _validate_callout(entry: dict, press_docks: dict | None) -> list[str]:
+    """E56 as code, with P50 T3's single exception.
+
+    E56 (the operator, 2026-09-09): a ring circles a NUMBER or a POINT ON A CHART; a picture's focus is
+    a light. The exception the plan opens is an UNDERLINE on a QUOTED PHRASE - the squiggle law (doc 29
+    s9.27 "Squiggle marks") - declared as ``{"kind": "phrase", "dock": "<press dock id>"}`` with
+    ``form: "underline"``. A callout on a press card with no form is a ring around a picture, and E56
+    still refuses it by name. ``press_docks`` is the row's press docks by asset id; without it a phrase
+    target names nothing and is refused, which is the safe direction."""
+    tgt, form = entry.get("target"), entry.get("form")
+    if form is not None and form not in CALLOUT_FORMS:
+        return [f"callout: form {form!r} is not one of {'|'.join(CALLOUT_FORMS)}"]
+    if not isinstance(tgt, dict):
+        return []
+    if tgt.get("kind") == PHRASE_TARGET:
+        errs = []
+        dock = tgt.get("dock")
+        if not isinstance(dock, str) or not dock.strip():
+            errs.append("callout: target phrase must name its card - {'kind': 'phrase', 'dock': '<the press dock's asset id>'}")
+        elif not (press_docks or {}).get(dock):
+            errs.append(f"callout: target phrase names dock {dock!r}, which is not a PRESS dock on this row - "
+                        "a phrase is a region of a press card (P50 T3)")
+        if form != UNDERLINE_FORM:
+            errs.append("callout: a ring circles a NUMBER or a POINT ON A CHART (E56) - on a press card the one exception is "
+                        f'form: "{UNDERLINE_FORM}" on the quoted phrase (the squiggle law, s9.27); a ring on a card is refused')
+        return errs
+    if form is not None:
+        return [f"callout: form {form!r} is the press card's underline (P50 T3) - it takes a phrase target, "
+                f"not a {tgt.get('kind')}"]
+    if tgt.get("kind") != "datum" and not re.search(r"\d", str(entry.get("label", ""))):
+        # a datum target IS a point on a chart; a stamp whose label is a number IS the number; a ring
+        # around a picture's point or region is the cheap call-out the ruling refuses - the focus there is a light
+        return [f"callout: a ring circles a NUMBER or a POINT ON A CHART (E56) - this one targets a {tgt.get('kind')} "
+                f"with no numeric label; use a spotlight (the light) on a picture"]
+    return []
+
+
+def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
     """Errors for one species entry: known kind, numeric at/dur, a target where the law requires one."""
     if not isinstance(entry, dict) or entry.get("kind") not in SPECIES_KINDS:
         return [f"species entry {entry!r}: kind must be one of {'|'.join(SPECIES_KINDS)}"]
@@ -512,12 +562,8 @@ def _validate_entry(entry) -> list[str]:
                 errs.append("trace: hop.draw_s must be > 0")
     if "idle" in entry and entry["idle"] not in IDLE_KINDS:   # a held light's idle (E49 on the spotlight, 2026-09-09)
         errs.append(f"{kind}: idle {entry['idle']!r} is not one of {'|'.join(IDLE_KINDS)}")
-    if kind == "callout" and isinstance(entry.get("target"), dict) and entry["target"].get("kind") != "datum"             and not re.search(r"\d", str(entry.get("label", ""))):
-        # E56 (operator, 2026-09-09): "it's not that the ring has to retire entirely, it's that it has a specific use: circling a
-        # number or a point on a chart" - a datum target IS a point on a chart; a stamp whose label is a number IS the number;
-        # a ring around a picture's point or region is the cheap call-out the ruling refuses - the focus there is a light
-        errs.append(f"callout: a ring circles a NUMBER or a POINT ON A CHART (E56) - this one targets a {entry['target'].get('kind')} "
-                    f"with no numeric label; use a spotlight (the light) on a picture")
+    if kind == "callout":   # E56 and P50 T3's one exception - see _validate_callout
+        errs += _validate_callout(entry, press_docks)
     allowed = SPECIES_TARGETS[kind]
     if not allowed:
         return errs
@@ -528,7 +574,8 @@ def _validate_entry(entry) -> list[str]:
     return errs
 
 
-def validate_species(row_species, ken, plate_id: str, pivot_span: tuple | None = None) -> list[str]:
+def validate_species(row_species, ken, plate_id: str, pivot_span: tuple | None = None,
+                     press_docks: dict | None = None) -> list[str]:
     """The targeting law as a pure check on one shot-table row's species list
     (doc 29 s9.27, s9.28 C3/C4). Returns the errors; the caller names the row.
 
@@ -542,7 +589,7 @@ def validate_species(row_species, ken, plate_id: str, pivot_span: tuple | None =
         return []
     if not isinstance(row_species, (list, tuple)):
         return [f"{plate_id}: species must be a list of species dicts"]
-    errs = [e for entry in row_species for e in _validate_entry(entry)]
+    errs = [e for entry in row_species for e in _validate_entry(entry, press_docks)]
     if not str(plate_id).startswith(LEDGER_PREFIX):   # P47 T2: the page species perform on a ledger page only
         errs += [f"{plate_id}: {e['kind']} is a page species - it performs on a ledger page, not on {plate_id!r}"
                  for e in row_species if isinstance(e, dict) and e.get("kind") in PAGE_SPECIES]
@@ -867,6 +914,40 @@ def split_idle(plate_id: str) -> tuple[str, str | None]:
     return bare, opts.get("idle")
 
 
+PHRASE_KEYS = ("x0", "y0", "x1", "y1")
+
+
+def press_meta(raw) -> dict:
+    """A PRESS dock's card meta: the dict ``press_card.py`` wrote, or the path to that JSON.
+
+    Returns only what the player needs - the kind, the source line and the phrase box - so the
+    provenance keys the tool also writes (the crop rectangle, the screenshot's sha256) stay on disk
+    and out of the timeline. ValueError names the option; the caller names the row and the dock."""
+    meta = raw
+    if isinstance(raw, (str, Path)):
+        p = Path(raw)
+        if not p.is_file():
+            raise ValueError(f"dock: press {str(raw)!r} is not a file - press_card.py writes the card's meta JSON beside its PNG")
+        try:
+            meta = json.loads(p.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"dock: press {p.name} is not JSON ({exc})") from exc
+    if not isinstance(meta, dict):
+        raise ValueError("dock: press must be the card meta dict press_card.py writes, or the path to it")
+    src = meta.get("source")
+    if not isinstance(src, str) or not src.strip():
+        # B1 / A2a: their claim is a card, and the card says whose claim it is
+        raise ValueError("dock: press needs a non-empty 'source' (the masthead and the date) - a press card without its source is not evidence")
+    ph = meta.get("phrase")
+    if not isinstance(ph, dict) or any(isinstance(ph.get(k), bool) or not isinstance(ph.get(k), (int, float))
+                                       or not 0.0 <= float(ph[k]) <= 1.0 for k in PHRASE_KEYS):
+        raise ValueError(f"dock: press 'phrase' must be {{{', '.join(PHRASE_KEYS)}}} as fractions of the CARD in 0..1")
+    if not (float(ph["x0"]) < float(ph["x1"]) and float(ph["y0"]) < float(ph["y1"])):
+        raise ValueError("dock: press 'phrase' is empty or inverted - x0 < x1 and y0 < y1 (the region of the headline the sentence turns on)")
+    return {"kind": DOCK_KIND_PRESS, "source": src.strip(),
+            "phrase": {k: round(float(ph[k]), 5) for k in PHRASE_KEYS}}
+
+
 def dock_opts(raw) -> dict:
     """The optional 5th element of a dock tuple: ``{"arrive": spring|throw|land, "mass": paper|metal|liquid|ink}`` (P47 T1).
     ValueError names the key; the caller names the row."""
@@ -910,8 +991,19 @@ def dock_opts(raw) -> dict:
             if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
                 raise ValueError(f"dock: {k} must be seconds > 0")
             continue
+        if k == "press":   # P50 T3: the card is a headline cut from a screenshot - press_meta validates it
+            continue
+        if k == "stack":
+            if v is not True:
+                raise ValueError("dock: stack must be True (the card joins the scene's press pile)")
+            continue
         _check_opt(k, v, "dock")
-    return dict(raw)
+    out = dict(raw)
+    if "press" in out:
+        out["press"] = press_meta(out["press"])   # a path resolves here, so every caller downstream sees the dict
+    elif out.get("stack"):
+        raise ValueError("dock: stack is the PRESS stack - it belongs to a dock that carries `press` (the push hand-off, doc 29 s9.27)")
+    return out
 
 
 def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None = None) -> dict:
@@ -1159,7 +1251,8 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
 
 def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                kind: str = DOCK_KIND_IMAGE, place: dict | None = None, arrive: str | None = None, mass: str | None = None,
-               centre: bool = False, read_place: dict | None = None, read_s: float | None = None, park_s: float | None = None) -> dict:
+               centre: bool = False, read_place: dict | None = None, read_s: float | None = None, park_s: float | None = None,
+               press: dict | None = None, stack: bool = False) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -1177,12 +1270,39 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         "enter": round(enter, 2), "exit": round(exitt, 2),
         "badge_at": [round(enter + 0.75 + 1.3 * (n + 1), 2) for n in range(n_badges)],
         **({"kind": DOCK_KIND_VIDEO} if kind == DOCK_KIND_VIDEO else {}),
+        # P50 T3: a PRESS card carries its source line and its quoted phrase onto the stage; `_stack` is the
+        # scene's own bookkeeping and is replaced by stack_index / stack_n once every dock on the scene is known
+        **({"kind": DOCK_KIND_PRESS, "source": press["source"], "phrase": press["phrase"],
+            **({"_stack": True} if stack else {})} if press else {}),
         **({"place": place, "read_s": rs, "park_s": ps,
             "park": span >= rs + ps} if place else {}),
         **({"read_place": read_place} if (place and read_place) else {}),   # a centred card that pops here, then parks to its place (2026-09-10)
         **({"arrive": arrive} if arrive else {}), **({"mass": mass} if mass else {}),   # P47 T1: only when the row names them
         **({"centre": True} if centre and place else {}),   # the design pass: a centred card sits at its box from its first frame - no reading size, no park
     }
+
+
+def press_plate_error(plate_id: str, aid: str) -> str | None:
+    """E45 §1 as code for the press card: the pile takes the STAGE's own centre box (the player's `.dock.press`
+    placement), which on a LEDGER PAGE would sit over the plot. A quotation beside a chart is the dock's
+    read->park, not the stack. Returns the error naming the dock, or None."""
+    if str(plate_id).startswith(LEDGER_PREFIX):
+        return (f"dock {aid}: a PRESS card stacks in the stage's centre box, which on a ledger page covers the "
+                "plot (E45 §1) - put the quotation on its own plate, or dock the card as a still and let it park")
+    return None
+
+
+def assign_press_stack(docks: list[dict]) -> list[dict]:
+    """THE PRESS STACK (P50 T3; doc 29 s9.27's push hand-off) on one scene's docks, in place.
+
+    Every dock the row marked ``stack: True`` takes its index in ENTER order and the size of the pile, so the
+    player poses the whole stack from the timeline alone (species/press.mjs ``pressStack``) - the newest lit,
+    each older one a step back and a step dimmer. The marker itself never reaches the timeline. Returns the
+    stacked docks, oldest first."""
+    stacked = sorted([d for d in docks if d.pop("_stack", False)], key=lambda d: (d["enter"], d["slot"]))
+    for i, d in enumerate(stacked):
+        d["stack_index"], d["stack_n"] = i, len(stacked)
+    return stacked
 
 
 def title_for(asset: str) -> tuple[str, str]:
@@ -1286,7 +1406,18 @@ def main() -> int:
             row_species.remove(e)
         if dropped:
             print(f"  hold: dropped {len(dropped)} {'/'.join(e['kind'] for e in dropped)} on row {i + 1} - under {HOLD_MIN_S}s of room before the next event")
-        species_errors = validate_species(row_species, ken, plate, pivot_span=None) + validate_camera_row(row_camera, row_species, plate)
+        # P50 T3: the row's PRESS docks, read BEFORE the species are validated - a callout's `phrase` target
+        # names one of them, and the targeting law cannot check a name it has not read yet. A malformed option
+        # is ignored here and raised by the dock pass below, which names the dock in its error.
+        row_press = {}
+        for _d in (ds or []):
+            try:
+                _o = dock_opts(_d[4] if len(_d) > 4 else None)
+            except (ValueError, IndexError, TypeError):
+                continue
+            if _o.get("press"):
+                row_press[_d[0]] = _o["press"]
+        species_errors = validate_species(row_species, ken, plate, pivot_span=None, press_docks=row_press) + validate_camera_row(row_camera, row_species, plate)
         if species_errors:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(species_errors))
         # P50 T2: a chip's SOURCED glyph rides the asset map exactly as a plate or a dock still does,
@@ -1324,6 +1455,10 @@ def main() -> int:
             d = META.get(aid, {"title": aid, "source": "", "species": "deck",
                                "badges": []})
             dplace = centred_place(place, ASPECT, dopt.get("card_aspect"), (world or {}).get("page"), dopt.get("centre_w"), dopt.get("centre_band"), dopt.get("centre_y"), dopt.get("centre_x")) if (place and dopt.get("centre")) else place   # the third watch: a card centred on the page
+            if dopt.get("press"):   # P50 T3: E45 - the pile has one box, and it is the stage's centre
+                _perr = press_plate_error(plate, aid)
+                if _perr:
+                    raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) {_perr}")
             rd = dopt.get("read") or {}   # the box a centred card POPS at before it parks to dplace (2026-09-10)
             rplace = centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x")) if (place and rd) else None
             if True:
@@ -1382,7 +1517,9 @@ def main() -> int:
                 docks.append(dock_entry(aid, slot, enter, exitt, len(d["badges"]),
                                         evidence[aid].get("kind", DOCK_KIND_IMAGE),
                                         dplace if (slot == 0 or dopt.get("centre")) else None, dopt.get("arrive"), dopt.get("mass"), bool(dopt.get("centre")),   # a centred card is placed on either slot (2026-09-10: two cards up at once)
-                                        read_place=rplace, read_s=dopt.get("read_s"), park_s=dopt.get("park_s")))
+                                        read_place=rplace, read_s=dopt.get("read_s"), park_s=dopt.get("park_s"),
+                                        press=dopt.get("press"), stack=bool(dopt.get("stack"))))
+        assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         try:
             exit_id, exit_s = scene_exit(authored_exit, bool(docks))
         except ValueError as exc:

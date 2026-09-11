@@ -95,11 +95,11 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## capabilities
 
-- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +124 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
+- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +125 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
 
 ## backlog
 
-- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +102 more — terms: Z-stack; short-form; drawOn; G-g
+- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +101 more — terms: Z-stack; short-form; drawOn; G-g
 
 ## pattern
 

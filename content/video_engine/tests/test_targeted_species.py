@@ -232,3 +232,67 @@ def test_a_good_chip_passes_and_its_icon_lands_in_the_asset_map():
     for name in ("no-such-glyph", "../../etc/passwd", "Factory"):
         with pytest.raises(ValueError, match="icon"):
             B.icon_geometry(name)
+
+
+# ---- P50 T3: the press card's UNDERLINE - E56's one exception, and its refusals ----
+# The species grammar gains no KIND here (a press card is a DOCK kind): it gains a target, `phrase`,
+# which points INSIDE a press card, and a form, `underline`, which is the only thing allowed to point
+# there. A ring on a card is still a ring, and E56 still refuses it by name.
+
+PRESS_DOCKS = {"ev-press-herald": {"kind": "press", "source": "The Herald, 4 Mar 2026",
+                                   "phrase": {"x0": 0.12, "y0": 0.2, "x1": 0.66, "y1": 0.44}}}
+PHRASE = {"kind": "phrase", "dock": "ev-press-herald"}
+
+
+def _underline(**kw):
+    e = {"kind": "callout", "form": "underline", "at": 12.0, "dur": 2.0, "target": dict(PHRASE)}
+    e.update(kw)
+    return {k: v for k, v in e.items() if v is not None}
+
+
+def test_an_underline_on_a_press_cards_phrase_is_admitted():
+    assert B.validate_species([_underline()], STILL, PLATE, press_docks=PRESS_DOCKS) == []
+    assert B.SPECIES_TARGETS["callout"][-1] == B.PHRASE_TARGET
+    assert B.PHRASE_TARGET not in B.SPECIES_TARGETS["spotlight"], "the callout alone may point inside a card"
+
+
+def test_a_ring_on_a_press_card_is_still_refused_by_e56():
+    errs = B.validate_species([_underline(form=None)], STILL, PLATE, press_docks=PRESS_DOCKS)
+    assert len(errs) == 1 and "(E56)" in errs[0] and errs[0].startswith("callout: a ring circles"), errs
+    assert 'form: "underline"' in errs[0], "the message names the one exception"
+    # ... and a label full of numbers does not buy a ring onto a card either
+    assert B.validate_species([_underline(form=None, label="4.6%")], STILL, PLATE, press_docks=PRESS_DOCKS) == errs
+
+
+def test_a_phrase_target_that_names_no_press_dock_is_refused_by_name():
+    errs = B.validate_species([_underline(target={"kind": "phrase", "dock": "ev-golden-chart"})], STILL, PLATE,
+                              press_docks=PRESS_DOCKS)
+    assert len(errs) == 1 and "is not a PRESS dock on this row" in errs[0], errs
+    # the same row with no press dock at all - the safe direction is refusal
+    assert "is not a PRESS dock on this row" in B.validate_species([_underline()], STILL, PLATE)[0]
+    for bad in (None, "", 7):
+        errs = B.validate_species([_underline(target={"kind": "phrase", "dock": bad})], STILL, PLATE,
+                                  press_docks=PRESS_DOCKS)
+        assert any("target phrase must name its card" in e for e in errs), (bad, errs)
+
+
+def test_only_a_callout_may_point_inside_a_press_card():
+    for kind in ("punch", "spotlight", "focus_zoom", "squiggle", "chip"):
+        errs = B.validate_species([{"kind": kind, "at": 12.0, "dur": 2.0, "target": dict(PHRASE),
+                                    "icon": "factory", "label": "STEEL"}], STILL, PLATE, press_docks=PRESS_DOCKS)
+        assert any("target kind 'phrase' not allowed" in e for e in errs), (kind, errs)
+
+
+def test_the_form_is_the_underline_and_it_belongs_to_a_phrase():
+    errs = B.validate_species([_underline(form="highlight")], STILL, PLATE, press_docks=PRESS_DOCKS)
+    assert errs == ["callout: form 'highlight' is not one of underline"], errs
+    # a form on a point / datum target is the press card's underline in the wrong place
+    errs = B.validate_species([_underline(target=POINT, label="4%")], STILL, PLATE, press_docks=PRESS_DOCKS)
+    assert len(errs) == 1 and "it takes a phrase target" in errs[0], errs
+    assert B.validate_species([_underline(form=None, target=DATUM)], STILL, PLATE, press_docks=PRESS_DOCKS) == []
+
+
+def test_the_ring_on_a_picture_is_refused_exactly_as_it_was_before_the_exception():
+    errs = B.validate_species([_sp("callout", target=POINT)], STILL, PLATE)
+    assert len(errs) == 1 and "(E56)" in errs[0] and "use a spotlight (the light) on a picture" in errs[0], errs
+    assert B.validate_species([{**_sp("callout", target=POINT), "label": "+613%"}], STILL, PLATE) == []

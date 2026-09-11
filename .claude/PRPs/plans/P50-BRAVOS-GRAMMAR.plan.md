@@ -216,7 +216,7 @@ Acceptance:
 - Evidence: (A) the mechanism - `sync_kinetics.py` scans `scripts/species/` with `kinetics/` (11 modules: 10 + 1), the template's `SPECIES_PAINTERS` registry + the one hook in `paintSpecies`, `tests/test_kinetics_sync.py` (13; the inline_text block-comment fix with its regression test); (B) the chip - `scripts/species/chip.mjs` (110), `tests/kinetics/chip.test.mjs` (node, 84 across the kinetics tests), `build_scene_timeline_f.py` (+82: the kind, the `when`, the validation, `icon_geometry`), `gate_motion_density.py` (+11: field-named edges), `tests/test_targeted_species.py` (+4), the golden `chip-board`, `assets/icons/` (Lucide v1.45.0 ISC, five files, SOURCES.md + LICENSE). Validated by the parent: `sync_kinetics --check` in sync; goldens + targeted species + portrait parity + lint + kinetics sync + the gate: 139 passed; node 84/84; the filmstrip (t=5.22 the first landing mid-spring, 6.42 the second beside it, 10.37 the cross mid-draw, 11.00 the settled board) read by the parent: the board lands, strikes and dims as designed; the life check alive (18,875 bytes between two 30 fps frames on the held board). CAPABILITIES rows (the mechanism, the chip); the map's rows 6 and 10 mark the chip built. Note for the first cut that uses it: the cross is sunflower; a blood-red strike for a RETRACTED claim is a dial to rule.
 
 ### T3: The press-card dock and the stack hand-off
-- Status: pending
+- Status: complete (2026-09-11)
 - Owner: parent (the dock kinetics touch the throw/land code); `junior_developer` for the crop tool
 - Depends on: T2
 - Write set: `content/video_engine/scripts/press_card.py` (new: a screenshot -> a card cropped to its headline, source
@@ -228,7 +228,7 @@ Acceptance:
   underline draws on the phrase (E56: a label of a value or a datum is allowed; an underline on a quoted phrase is the
   squiggle law, §9.27); B1 holds: their claim never pages.
 - Validate: the test suite above + `python content/video_engine/scripts/gate_motion_density.py <proof build>`
-- Evidence: pending
+- Evidence: `scripts/press_card.py` (135; `tests/test_press_card.py` 130), `scripts/species/press.mjs` (115; `tests/kinetics/press.test.mjs` 162), `build_scene_timeline_f.py` (+173: `DOCK_KIND_PRESS`, `press_meta`, `assign_press_stack`, the `phrase` target and the `underline` form admitted for a callout alone, `press_plate_error`), the template (+237: `paintPress` outside the two slots, the underline riding the card's live geometry), `tests/test_press_dock.py` (113), `test_targeted_species.py` (+5), `test_gate_motion_density.py` (+1: a stack step is already a dock event, the underline counts at its word), the golden `press-stack`. Validated by the parent: sync_kinetics 12 modules (10 + 2); 235 tests across goldens (15, existing byte-identical), species, press, video dock, read->park, the gate, sync, portrait parity, lint, breakthrough, camera; node 96/96; the filmstrip (5.30 the first card mid-spring, 7.55 the second arriving as the first is shoved back, 9.95 the third, 10.75 the underline mid-draw, 11.40 the settled fan) read by the parent. Deviations: no new species KIND (a press card is a dock kind; `SPECIES_WHEN['push']` re-worded to say the hand-off shipped as the stack); an E45 guard the brief did not ask for (a press dock on a ledger plate is refused - reverse when a cut wants quotations beside a parked chart); the build-loop seam is unit-tested, not episode-built - the first cut with a press row closes it.
 
 ### T4: The flow diagram (chips + arrows + the swap) and the span bracket
 - Status: pending

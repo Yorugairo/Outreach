@@ -23,7 +23,9 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 import sync_kinetics as SK  # noqa: E402
 
 MODULES = ["ease", "spring", "stroke", "ink", "squash", "idle", "stopaction", "chartxf", "camera", "arap"]   # P43 T1 + P47 T5/T1/T3, in dependency order (the template's region order)
-SPECIES = ["chip"]   # P50 T2 on: one painter module per species kind, inlined into the species block
+SPECIES = ["chip", "press"]   # P50 T2 on: one module per species kind, inlined into the species block; `press` is the
+                              # one that is not a KIND (P50 T3: the press card is a DOCK kind) - it carries the stack's math
+                              # and the underline's clock for the dock loop and the callout, and registers no painter
 
 
 def test_committed_template_is_in_sync() -> None:

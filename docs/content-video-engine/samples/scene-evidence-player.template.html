@@ -271,6 +271,24 @@
      NARRATOR'S word timings. Ported from the motion prototype
      (evidence/prototypes/record-document-motion.html). */
   .dock.record .slide-frame, .dock.record .rail { display: none; }
+  /* THE PRESS CARD (P50 T3; doc 29 s9.27 "Push hand-off"; Bravos shots 5-10). A headline cut from a screenshot
+     (press_card.py), docked as paper: the still card's frame, no badge rail, and a MASTHEAD STRIP along the card's
+     TOP edge carrying the source line in the record document's header type - the same family, tracking and ink as
+     .paper .phdr above, so the attribution reads as print and never as UI. The strip is at the top because the pile
+     fans UPWARD: every older card shows its masthead over the newer one in front of it.
+     Nothing here animates. The stack's whole pose is one transform the dock loop writes per frame from
+     species/press.mjs (pressStack), about the card's bottom centre - the hinge the pile grows off. */
+  /* the pile's own box: the solo card's width, centred on the stage, in the evidence zone. It is ID-free on purpose
+     (a press card mounts as #press-<slide>, so the #dock-1 / #dock-2 left rules never reach it) and it is the ONLY
+     placement a press dock has - the stack is a shape, not a layout, and everything else about it is the transform. */
+  .dock.press { width: 1056px; left: 432px; top: 330px; transform-origin: 50% 100%; }
+  html[data-aspect="9:16"] .dock.press { width: 800px; left: 80px; top: 660px; }   /* the mobile safe box x[80,880] (doc 49 s49.1) */
+  .dock.press .rail { display: none; }
+  .dock.press .pmast { display: flex; justify-content: space-between; gap: 14px; padding: 0 2px 9px;
+    font-family: "Lucida Sans Typewriter", "Courier New", monospace; font-size: 13px; letter-spacing: .16em;
+    text-transform: uppercase; color: #6b665c; }
+  /* portrait: the same strip at the record paper's portrait size - 13px on a phone is not a source line, it is a smudge */
+  html[data-aspect="9:16"] .dock.press .pmast { font-size: 22px; letter-spacing: .12em; padding-bottom: 12px; }
   /* LIVE CHART (data-document motion pattern): the line is drawn, not
      pasted. Dark chart ground inside the washi frame, like the PNG. */
   .dock.chart .slide-frame img { display: none; }
@@ -1709,6 +1727,91 @@
     return { x: R.x + (P.x - R.x) * j, y: R.y + (P.y - R.y) * j, w: R.w + (P.w - R.w) * j };
   };
 
+  /* ================= THE PRESS CARD STACK (P50 T3; doc 29 s9.27 "Push hand-off") =================
+     A press dock is a DOCK KIND, not a species: it has a card, a lifecycle, a source line and a quoted phrase.
+     It is painted HERE rather than in the two-slot loop below for one reason - a stack is three cards on stage at
+     once and the player has two slots. Each press dock mounts its OWN .dock.press element keyed by its slide, and
+     the pile's pose comes whole from species/press.mjs: pressStack(i, n, uNew), a pure function of the card's
+     place in the pile and the newest card's landing clock. Membership is read from DOCKS at the instant asked, so
+     a scrubbed frame is the played frame and a card that has LEFT the stack is simply not in it.
+     Nothing above or below changes for a build with no press dock: the two-slot loop skips this kind, and every
+     existing golden renders byte-identically. */
+  const PRESS_EL = Object.create(null);     /* the mounted card, per slide id */
+  const PRESS_POSE = Object.create(null);   /* its live stage geometry and the phrase box in stage px - what resolveTarget reads for a `phrase` target */
+  const PRESS_KIND = "press", PHRASE_KIND = "phrase";
+  const isPressDock = (d) => !!d && d.kind === PRESS_KIND;
+
+  const pressMount = (d) => {
+    if (PRESS_EL[d.slide]) return PRESS_EL[d.slide];
+    const el = document.createElement("div");
+    el.className = "dock press";
+    el.id = "press-" + d.slide;
+    el.innerHTML = '<div class="pmast"><span></span></div><div class="slide-frame"><img alt="evidence" /></div>';
+    el.querySelector(".pmast span").textContent = d.source || "";   /* B1: the card says whose claim it is */
+    el.querySelector("img").src = (A && A[d.slide]) || "";
+    const seam = $("seam");
+    seam.parentNode.insertBefore(el, seam);   /* the dock layer, under #species: the underline is drawn ABOVE the card */
+    return (PRESS_EL[d.slide] = el);
+  };
+
+  /* the stacked press docks live at t, oldest first. A press dock with no stack bookkeeping is its own pile of one:
+     a lone quotation lands and holds, and two unrelated cards never push each other. */
+  const pressPile = (d, t) => (d.stack_n > 1
+    ? DOCKS.filter((x) => isPressDock(x) && x.stack_n > 1 && t >= x.enter && t < x.exit)
+           .sort((a, b) => a.enter - b.enter || (a.stack_index | 0) - (b.stack_index | 0))
+    : [d]);
+
+  /* the card's pose at t: its place in the pile, the newest card's landing clock, and the fades its own span owns.
+     A card past its exit holds the pose it LEFT in (the pile read one instant before it went) and retracts on the
+     dock's own spring - never a dissolve. */
+  const pressPose = (d, t) => {
+    const tp = t < d.exit ? t : d.exit - 1e-3;
+    const pile = pressPile(d, tp), i = pile.indexOf(d);
+    if (i < 0) return null;
+    const newest = pile[pile.length - 1];
+    const el = PRESS_EL[d.slide];   /* the fan's step is the CARD'S own height, so a pile of any card reads the same */
+    const step = el && el.offsetHeight > 2 ? { STEP_PX: Math.max(PRESS.STEP_PX, el.offsetHeight * PRESS.STEP_H) } : {};
+    const pose = pressStack(i, pile.length, clamp01((tp - newest.enter) / PRESS.LAND_S), step);
+    const rk = t > d.exit ? springPop(clamp01((t - d.exit) / DOCK_RETRACT_S)) : 0;
+    pose.i = i; pose.n = pile.length;
+    pose.alpha = pose.opacity * clamp01((t - d.enter) / PRESS.FADE_S) * clamp01(1 - rk);
+    return pose;
+  };
+
+  const paintPressCard = (d, t) => {
+    const el = pressMount(d), pose = t >= d.enter && t < d.exit + EXIT ? pressPose(d, t) : null;
+    if (!pose) { el.style.opacity = 0; delete PRESS_POSE[d.slide]; return; }
+    /* NO z-index: the pile's order is DOM order - each card mounts on its enter, so the newest is the last press
+       element before #seam and paints in front of the others AND under #species, where the underline is drawn.
+       A positive z-index here would lift the card above the species layer and swallow its own underline. */
+    el.style.opacity = pose.alpha.toFixed(3);
+    /* the SAME composition, in the same order, about the same origin as pressXf below: translate, then scale
+       (x carrying the squeeze), then the lean. Written to the element, so the card's own layout box is untouched. */
+    el.style.transform = "translate(" + pose.dx.toFixed(2) + "px," + pose.dy.toFixed(2) + "px) scale("
+      + (pose.scale * pose.sx).toFixed(5) + "," + pose.scale.toFixed(5) + ") skewX(" + pose.skew.toFixed(3) + "deg)";
+    const sh = 12 * expoOut(clamp01((t - d.enter) / CARD_IN));
+    el.style.boxShadow = sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)";
+    /* THE LIVE GEOMETRY the underline rides: the card's LAYOUT box (offsets - transform-free) carried through the
+       pose by pressXf, and the phrase box inside the card image carried through the same transform. The image's
+       offsets are read from the dock's padding edge, so the card may be re-laid out at any aspect without a number
+       here changing. */
+    const im = el.querySelector("img");
+    const box = { x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight };
+    const bl = el.clientLeft || 0, bt = el.clientTop || 0;
+    const img = im && im.offsetWidth > 2 && im.offsetHeight > 2   /* an image still decoding has a width but no height: no box, no underline */
+      ? { x: box.x + bl + im.offsetLeft, y: box.y + bt + im.offsetTop, w: im.offsetWidth, h: im.offsetHeight } : null;
+    const xf = pressXf(box, pose), q = pressPhraseBox(img, d.phrase);
+    PRESS_POSE[d.slide] = { card: xf(box), phrase: q ? xf(q) : null, depth: pose.depth, i: pose.i, n: pose.n };
+  };
+
+  /* every press card live at t, and nothing else on stage: a card off its span takes its geometry with it, so a
+     species pointing into it resolves to nothing and paints nothing (the targeting law). */
+  const paintPress = (live, t) => {
+    const on = Object.create(null);
+    for (const d of live) if (isPressDock(d)) { on[d.slide] = 1; paintPressCard(d, t); }
+    for (const k in PRESS_EL) if (!on[k]) { PRESS_EL[k].style.opacity = 0; delete PRESS_POSE[k]; }
+  };
+
   /* every dock carries its own lifetime: enter -> hand-led reveal -> hold
      (7s cap) -> exit. Nothing lives to the end of a scene. */
   const DOCKS = [];
@@ -1786,6 +1889,11 @@
   for (const d of DOCKS)
     for (const b of BOUNDS)
       if (d.enter < b && b - d.exit > 0.05 && b - d.exit <= 1.4) { d.exit = b; break; }
+
+  /* P50 T3: every press card mounts HERE, at load, not on the frame it first paints. A card's image must be
+     decoded before the first frame asks how tall it is - the fan's step and the phrase box are both read off the
+     card's live layout, and a zero-height image would put the underline at the card's top edge on a cold seek. */
+  for (const d of DOCKS) if (isPressDock(d)) pressMount(d);
 
   const chips = $("scenes");
   TL.scenes.forEach((sc, i) => {
@@ -4680,6 +4788,11 @@
       }
       return null;
     }
+    if (tg.kind === PHRASE_KIND) {   /* P50 T3: a region INSIDE a press card, resolved through that card's LIVE
+         geometry - a parked or stacked card moves, and what points at it moves with it. Off stage: nothing. */
+      const p = PRESS_POSE[tg.dock];
+      return p && p.phrase ? p.phrase : null;
+    }
     if (tg.kind === "span") {
       const ws = [...cap.querySelectorAll(".cw")].slice(tg.from_word | 0, (tg.to_word | 0) + 1);
       if (!ws.length) return null;
@@ -4896,6 +5009,121 @@
      import this file for the math above without the template's registry */
   if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.chip = paintChip;
   /* KINETICS:END */
+  /* KINETICS:BEGIN press */
+  /* species/press.mjs - THE PRESS CARD STACK (P50 T3; doc 29 §9.27 rows "Push hand-off" and "Squiggle marks";
+     Bravos shots 5-10: their claims arrive as cards, and each new one pushes the last back into a lit pile).
+     SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN press
+     and KINETICS:END, AFTER ease and spring - it imports both, and the import order IS the region order.
+
+     THE MODULE RULE (the operator, 2026-09-11) applies, with one difference from chip.mjs: a press card is a
+     DOCK kind, not a species kind, so this module registers NO painter. The dock loop owns the card (a card is
+     a card: the frame, the masthead, the lifecycle) and reads its whole pose from the pure functions here; the
+     only thing new to the SPECIES grammar is the `phrase` target and the `underline` form of a callout, whose
+     clock is underlineFrac below.
+
+     WHEN: the sentence QUOTES someone (SPECIES-BY-SENTENCE row 1). One card is a quotation; a STACK is a
+     sequence of them - three claims on three words, the newest lit and the older ones fanned behind it.
+
+     THE LAW, all of it a pure function of t through uNew (the NEWEST card's landing fraction):
+       land   - the newest card lands on the badge spring (kinetics/spring.mjs springPop, the POP preset,
+                Mp = 4 %) over LAND_S, from POP_FROM and DROP_PX above its place - the dock's own arrival.
+       push   - every OLDER card moves from the pose it held one step forward to the pose of its new depth,
+                on Flash & Hogan's minimum-jerk quintic over PUSH_S (shorter than LAND_S: the pile has taken
+                the push before the newest has finished overshooting - cause, then effect, never in step).
+                The hand-off itself is §9.27's push: x (PUSH_DX), scaleX (SQUEEZE) and skewX (SKEW_DEG) on a
+                sin(pi p) pulse, zero at both ends - the shove reads on the card being pushed, and leaves
+                nothing behind. Never a fade between two cards: a fade is a dissolve, and a dissolve is the
+                thing E45 refuses.
+       settle - the pile is a FAN: each step behind sits STEP_PX higher (so every masthead stays readable),
+                STEP_SCALE smaller and DIM dimmer, floored at BACK_SCALE and DIM_MIN - deep in the pile a card
+                is still a card, never a grey rectangle.
+       gone   - a card off its span is not in the stack at all; the painter passes the LIVE count as n, so a
+                card that has left closes the gap instead of leaving a hole.
+     Nothing is stored: every visual reads from t, the dock's enter and the live count, so a scrubbed frame is
+     the played frame. The dials below are ours to tune (42 §42.5), not findings. */
+
+  const PRESS = Object.freeze({
+    LAND_S: 0.5,      /* the newest card's landing clock - the dock's own DOCK_POP_S 0.45 plus a beat, this card being pushed in rather than popped up */
+    POP_FROM: 0.88,   /* the scale it springs from: nearer its size than the dock's 0.85, because the ARRIVAL here is the push, not the pop */
+    DROP_PX: 22,      /* ... and how far above its place it falls from, on the same spring */
+    FADE_S: 0.12,     /* the opacity ramp - the dock's DOCK_FADE_S, so a press card enters like every other card */
+    PUSH_S: 0.38,     /* the older cards' slide back: shorter than LAND_S so the pile has settled while the newest is still overshooting */
+    STEP_PX: 30,      /* the floor on how much higher each step behind sits (a small card still fans) */
+    STEP_H: 0.22,     /* ... and the step as a share of the CARD'S OWN height, which is what actually keeps every masthead
+                         strip readable: the painter passes max(STEP_PX, H * STEP_H), so the fan reads the same on a
+                         headline crop of any depth instead of being a number tuned to one card */
+    STEP_SCALE: 0.05, /* ... and this much smaller: a step of depth the eye reads without a perspective (it eats into the
+                         reveal above - the card shrinks about its bottom edge, so its top comes DOWN as it goes back) */
+    BACK_SCALE: 0.78, /* the floor on that shrink: deep in the pile a card is still legible as a card */
+    DIM: 0.22,        /* what each step behind dims by - the newest is the lit one (Bravos 5-10) */
+    DIM_MIN: 0.34,    /* the floor on that dim: a card the sentence may come back to never goes to nothing */
+    PUSH_DX: 26,      /* §9.27's push: how far the shoved card is carried sideways at the peak of the shove */
+    SQUEEZE: 0.035,   /* ... how much it compresses on x there (scaleX: the shove hits its edge) */
+    SKEW_DEG: 2.4,    /* ... and how far it leans (skewX) - small: a lean, never a tumble */
+    UNDERLINE_EASE: 3,/* the underline's draw curve: the hand decelerates into the end of the phrase (1 - (1 - u)^3) */
+  });
+
+  const p01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* THE RESTING POSE of the card d steps behind the newest: the fan, with its two floors. */
+  const pressRest = (d, o = {}) => {
+    const P = Object.assign({}, PRESS, o), k = Math.max(0, d | 0);
+    return { dy: k ? -P.STEP_PX * k : 0, scale: Math.max(P.BACK_SCALE, 1 - P.STEP_SCALE * k),
+             opacity: Math.max(P.DIM_MIN, 1 - P.DIM * k) };
+  };
+
+  /* THE STACK at t: the pose of the i-th card of n LIVE cards while the newest (i = n - 1) arrives with
+     uNew in [0, 1] over LAND_S. The newest springs; everything behind it is pushed one step back. */
+  const pressStack = (i, n, uNew, o = {}) => {
+    const P = Object.assign({}, PRESS, o);
+    const total = Math.max(1, n | 0), idx = Math.min(Math.max(0, i | 0), total - 1);
+    const d = total - 1 - idx, u = p01(uNew);
+    if (d === 0) {                                    /* the newest: the badge spring, and no push of its own */
+      const s = springPop(u);
+      return { depth: 0, push: 0, dx: 0, dy: (s - 1) * P.DROP_PX, scale: P.POP_FROM + (1 - P.POP_FROM) * s,
+               sx: 1, skew: 0, opacity: 1, fade: p01(u * P.LAND_S / P.FADE_S) };
+    }
+    const p = minJerk(p01(u * P.LAND_S / P.PUSH_S));  /* the push's own, shorter clock, read off the newest's */
+    const a = pressRest(d - 1, P), b = pressRest(d, P);
+    const pulse = Math.sin(Math.PI * p);              /* zero at both ends: the shove leaves nothing behind */
+    return { depth: d, push: p,
+             dx: -P.PUSH_DX * pulse, dy: a.dy + (b.dy - a.dy) * p,
+             scale: a.scale + (b.scale - a.scale) * p, sx: 1 - P.SQUEEZE * pulse,
+             skew: P.SKEW_DEG * pulse, opacity: a.opacity + (b.opacity - a.opacity) * p, fade: 1 };
+  };
+
+  /* THE UNDERLINE's draw fraction at u (its elapsed clock over the stroke's window): the hand runs out fast
+     and decelerates into the last letter, exactly as the squiggle's stroke does under a stressed word. */
+  const underlineFrac = (u, o = {}) => {
+    const P = Object.assign({}, PRESS, o);
+    return 1 - Math.pow(1 - p01(u), P.UNDERLINE_EASE);
+  };
+
+  /* THE CARD'S LIVE GEOMETRY: the element box {x, y, w, h} in stage px with the pose applied, and any box
+     INSIDE it (the phrase) carried through the same transform - so the underline rides the card wherever the
+     stack has put it. The transform is written about the card's bottom centre, the pile's own hinge:
+       x' = ox + scale * sx * ((x - ox) + tan(skew) * (y - oy)) + dx
+       y' = oy + scale * (y - oy) + dy
+     The CSS the painter writes must be the same composition, in the same order, about the same origin. */
+  const pressXf = (box, pose) => {
+    const ox = box.x + box.w / 2, oy = box.y + box.h, tan = Math.tan((pose.skew || 0) * Math.PI / 180);
+    const s = pose.scale, sx = s * (pose.sx == null ? 1 : pose.sx);
+    const at = (x, y) => [ox + sx * ((x - ox) + tan * (y - oy)) + (pose.dx || 0), oy + s * (y - oy) + (pose.dy || 0)];
+    return (q) => {
+      const pts = [at(q.x, q.y), at(q.x + q.w, q.y), at(q.x, q.y + q.h), at(q.x + q.w, q.y + q.h)];
+      const xs = pts.map((p) => p[0]), ys = pts.map((p) => p[1]);
+      return { x: Math.min(...xs), y: Math.min(...ys), w: Math.max(...xs) - Math.min(...xs), h: Math.max(...ys) - Math.min(...ys) };
+    };
+  };
+
+  /* the phrase box the compiler wrote as FRACTIONS of the card (press_card.py), in the card image's own px */
+  const pressPhraseBox = (img, phrase) => {
+    if (!img || !phrase) return null;
+    const f = ["x0", "y0", "x1", "y1"].map((k) => +phrase[k]);
+    if (f.some((v) => !Number.isFinite(v))) return null;
+    return { x: img.x + f[0] * img.w, y: img.y + f[1] * img.h, w: (f[2] - f[0]) * img.w, h: (f[3] - f[1]) * img.h };
+  };
+  /* KINETICS:END */
   /* a ledger page's declared focus (page.focus = {kind, target?, label?}) is an implicit species at LP_FOCUS_AT;
      the target defaults to the emphasized datum (E22 addendum 6) */
   const pageFocus = (sc) => {
@@ -4929,6 +5157,12 @@
       }
       if (sp.kind === "callout") {
         const b = resolveTarget(sp.target); if (!b) return;
+        if (sp.form === "underline") {   /* P50 T3 / E56's ONE exception: a ring circles a number or a point on a chart,
+             but an underline under a QUOTED PHRASE is the squiggle law (s9.27) - the same hand, the same .sq stroke,
+             drawn from `at` over SQUIG_DRAW on the underline's own clock, riding the card's live geometry. */
+          drawOn(lpEl("path", "sq", spSvg, { d: squigglePath(b, seed) }), underlineFrac(k * dur / SP.SQUIG_DRAW));
+          return;
+        }
         const pd = Number.isFinite(+sp.pad) ? +sp.pad : 0;
         drawOn(lpEl("path", "co", spSvg, { d: calloutPath(b, seed, pd) }), k * dur / SP.CALLOUT_DRAW);
         if (sp.label && k * dur > SP.CALLOUT_DRAW * 0.8) {
@@ -5357,7 +5591,7 @@
       worldAnswer.y += thr.ground + thr.follow; worldAnswer.x += thr.shake.x; worldAnswer.y += thr.shake.y;
     } else if (pageContact) pageContact.style.opacity = "0";
     for (let s = 0; s < 2; s++) {
-      const d = live.find((x) => x.slot === s);
+      const d = live.find((x) => x.slot === s && !isPressDock(x));   /* P50 T3: a press card is mounted by paintPress, not by a slot */
       const el = docks[s];
       if (!d) { el.style.opacity = 0; el.style.clipPath = "inset(0 100% 0 0)"; parkDockClips(el);
         const c0 = el.parentNode && el.parentNode.querySelector("#dock-contact-" + s); if (c0) c0.style.opacity = 0;   /* P47 T9: a card off its span takes its contact shadow with it (it lingered after the ring's snap) */
@@ -5513,6 +5747,7 @@
           at != null && t >= Math.max(at, chartDone) && t < d.exit);
       });
     }
+    paintPress(live, t);   /* P50 T3: the press stack, outside the two slots - a pile can be three cards deep */
     if (worldAnswer.x || worldAnswer.y) {   /* the ground takes the weight: the dip (and a violent hit's shake) on the world, on top of its own transform */
       for (const wl of [wA, wB]) if (wl.style.display !== "none") {
         /* the OUTGOING world (wA) is a plate that must keep the frame covered while it rides down: a downward answer of y px also

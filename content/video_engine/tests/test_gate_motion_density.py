@@ -154,6 +154,28 @@ def test_a_short_page_credits_only_the_beats_it_had_time_to_play():
     assert g["M01"].level == "FAIL", g["M01"]   # the 17.5s bare plate is still again
 
 
+def test_a_press_stack_step_is_already_an_event_and_the_underline_counts_at_its_word():
+    """P50 T3: a stack step needs NOTHING added to the gate. Each press card in a pile is its own dock, and a
+    dock's enter and exit have been events since P35 (_dock_clock -> _collect_events); the underline is a
+    `callout`, which SPECIES_EVENTS already counts at `at`. This test is the confirmation, in the gate's own
+    terms - if either ever stops being true, a stack of three claims would read as one event and M16 would
+    credit a still frame."""
+    docks = [{"slide": f"ev-press-{i}", "slot": 0, "enter": e, "exit": 26.0, "badge_at": [],
+              "kind": "press", "source": "The Herald", "phrase": {"x0": 0.1, "y0": 0.2, "x1": 0.6, "y1": 0.4},
+              "stack_index": i, "stack_n": 3} for i, e in enumerate((5.0, 7.4, 9.8))]
+    species = [{"kind": "callout", "form": "underline", "at": 10.6, "dur": 2.0,
+                "target": {"kind": "phrase", "dock": "ev-press-2"}}]
+    tl, d0, mp = _bare_plate(runtime=30.0, species=species)
+    tl["scenes"][0]["docks"] = docks
+    ev = G.analyse(tl, d0, mp)["events"]
+    for step in (5.0, 7.4, 9.8):
+        assert step in ev, f"the stack step at {step}s is not an event: {sorted(ev)}"
+    assert 10.6 in ev, "the underline counts at its word"
+    assert 26.0 in ev, "the pile leaving is an event too"
+    # and a press card is NOT a video dock: it is a still card, and it credits no continuous motion
+    assert G._video_dock_events(tl["scenes"], d0) == []
+
+
 def test_species_events_stop_at_the_scene_end():
     tl, docks, mp = _bare_plate(runtime=30.0, species=[{"kind": "plate_life", "at": 28.0, "dur": 5.0, "target": {"kind": "point", "x": 0.5, "y": 0.5}}])
     ev = G.analyse(tl, docks, mp)["events"]

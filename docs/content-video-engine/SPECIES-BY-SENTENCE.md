@@ -22,7 +22,7 @@ it prints every sentence with an available species and no row - INFO, for the au
 ## 0. The acts at a glance (one line each; the rows are §1-§2)
 
 ### The quoting sentence (QUOTES)
-Their claim, their words, their pledge -> the record dock (the typewriter, the highlighter on the phrase); the press card (T3) when built; the dock read->park when the card then stays beside the chart. Row 1.
+Their claim, their words, their pledge -> the record dock (the typewriter, the highlighter on the phrase); the press card (built 2026-09-11: a headline cut from a screenshot, its masthead stamped, stacking on the plate - the older cards dim and slide back, the newest lit - with the underline drawn under the quoted phrase); the dock read->park when the card then stays beside the chart. Row 1.
 
 ### The ranking sentence (RANKS)
 Who is biggest, which comes first -> the bars page (the emphasised bar), the race builder over time, the callout on the ranked value; the burst when one bar cannot fit. Row 2.
@@ -61,7 +61,7 @@ Rows 12-15: the five `chart_to` verbs and the park laws; the dock `read` / `read
 
 | # | the sentence ... | sounds like | surface (§9.28) | species / verb | target it declares | gates that read it | built | example (take · t) |
 |---|---|---|---|---|---|---|---|---|
-| 1 | **QUOTES** someone - their claim, their words, their pledge | "X said / announced / pledged ..." | DOCK (B1: it is THEIR claim) | the **record** dock (`drawRecord`: the typewriter, the highlighter on the phrase as it is said; portrait type in cqw on a short); the **press-card** dock for a headline with a masthead (P50 T3); the dock **read->park** when the card must then stay beside the chart (§2 #13) | none on a page - the highlight span is the take's own words (`record_words`); the card's box (`centre`, `read`) | M03 (evidence <= 45 s apart), M12 (a chart dock leaves), M16 (the exit is a beat), E56 (never a ring on a picture) | record YES; press card T3 | Tokyo 53.4 *"Tokyo has pledged ten trillion yen to chips"* -> `dock-k-pledge-record` reads centred, parks beside the parked bars |
+| 1 | **QUOTES** someone - their claim, their words, their pledge | "X said / announced / pledged ..." | DOCK (B1: it is THEIR claim) | the **record** dock (`drawRecord`: the typewriter, the highlighter on the phrase as it is said; portrait type in cqw on a short); the **press-card** dock for a headline with a masthead (P50 T3); the dock **read->park** when the card must then stay beside the chart (§2 #13) | none on a page - the highlight span is the take's own words (`record_words`); the card's box (`centre`, `read`) | M03 (evidence <= 45 s apart), M12 (a chart dock leaves), M16 (the exit is a beat), E56 (never a ring on a picture) | record YES; press card + the stack YES (2026-09-11) | Tokyo 53.4 *"Tokyo has pledged ten trillion yen to chips"* -> `dock-k-pledge-record` reads centred, parks beside the parked bars |
 | 2 | **RANKS** - who is biggest, which comes first, the order of a set | "our biggest lender", "the top three", "first ... second ..." | PAGE (A1-A3) when the ranking is ours from a series we own; else a chart card (B2) | the **bars** page (`variant: bars`, the emphasised bar `:<emphasize>`); the **race** builder for a ranking that changes over time; the **breakthrough** when one bar cannot fit (§2 #11); a **callout** on the ranked value | the emphasised bar's index; a datum for the callout | E28 (a drop goes DOWN, blood red), E53 (values printed), E50 (deployed 6-8 s from the last mark), M21 | YES | Tokyo 17.0 *"our biggest lender"* -> the cut keeps the line page and LIGHTS the June datum (`spotlight`); the rank is a fact about the series, so the light, not a new bars page - one thing per sentence |
 | 3 | **COMPARES over time** - rose, fell, since, monthly, a decade | "it's been selling since February", "over the last ten years" | PAGE: the **line** page (`dense-line`), its terminal tags naming each series at its end (E53); a dense-line **chart card** for a 2-3 s beat | `build_to` to the datum the sentence reaches; `chart_to rescale` to the window the sentence is about; `extend` for "and then May"; `figure` at the datum | a datum index (`build_to`, `figure`); a window `[x0, x1]` (`rescale`); `to_index` (`extend`) | E50 (the deployed clock), M21 (the chart's life), M23 (every chart_to listed; none inside the build beat), E25 | YES | Tokyo 20.8 *"and it's been selling since February"* -> `rescale` to the Feb-Jun window on "The Treasury's table"; 44.0 *"Since February, Japan has sold ..."* -> the bracket from the peak to June |
 | 4 | **DIVIDES a whole** - a share, a tenth, half of it, the slices | "a tenth of the pile", "the share of the price that's profit" | PAGE: the **share** page (the proportion bars / the donut); the **peel** for the slice that leaves; the **treemap** for breadth or a named subset (E53 §1 census exception; P50 T6) | the slice by name (`peel`); the emphasised share | E53 §1 (a size claim takes its bar; the subset marked, its share written), E28 | share + peel YES; treemap T6 | Tokyo 44.0 *"a tenth of the pile"* -> the bracket's SUB carries the share (the cut chose the span over a share page: the sentence turns on the drop, the tenth is its sub) |
@@ -127,7 +127,7 @@ edit the compiler, then `lint_species_choice.py --write-doc` (`--check-doc` and 
 | `plate_life` | a bare world plate with no evidence must live (E21) - our cutouts stepped at 10 fps for the window |
 | `beat_freeze` | leaving a chart as a HIT - the final state freezes, then a directional cut (declared in 29 s9.27, NOT built) |
 | `radial` | revealing the ring token or a callback object FROM the point the narration names (declared in 29 s9.27, NOT built) |
-| `push` | dock A hands off to dock B on the sentence - an evidence hand-off, never a scene transition (NOT built; P50 T3's press-card stack) |
+| `push` | dock A hands off to dock B on the sentence - the evidence hand-off SHIPPED as the press STACK (a dock kind: `press` + `stack`, P50 T3, 2026-09-11): declare a press stack; the `push` species itself stays unbuilt |
 | `steam` | STILL LIFE: a named region of an approved still breathes (steam, smoke) so the plate never goes still (E49) |
 | `trace` | the sentence NAMES places and flows on a still - a route draws with hops between named points, stamps stack at them |
 | `ticker` | STILL LIFE: a tape of figures ticks across a named region of an approved still |
@@ -154,7 +154,6 @@ edit the compiler, then `lint_species_choice.py --write-doc` (`--check-doc` and 
 
 | species | act | task |
 |---|---|---|
-| the press-card dock (a headline with a masthead, the stack with the push hand-off) | QUOTES | P50 T3 |
 | the vector map world (a light, an arc, a stamp) | NAMES | P50 T5 |
 | the treemap (E53 §1 census exception) | DIVIDES | P50 T6 |
 | the art-embed plate (a declared embed surface on a narrative plate: E61 #1) | a landing surface | P50 T7 (gate 3: ask before a Flow order) |
@@ -162,7 +161,7 @@ edit the compiler, then `lint_species_choice.py --write-doc` (`--check-doc` and 
 | line-end tags become the next chart's bars | COMPARES -> RANKS | P50 T11 |
 | the stop-motion burst (R26-30) | BREAKS | P50 T13 |
 | the continuity three (arriving from the edge, the three threads, the occlusion cue) | any | P50 T15 |
-| beat-freeze exit, radial reveal, push hand-off (29 §9.27, declared but not built) | leaving a chart; a callback; a hand-off | with T3 (push) / open |
+| beat-freeze exit, radial reveal (29 §9.27, declared but not built); the `push` species (its hand-off shipped as the press STACK, a dock kind, 2026-09-11) | leaving a chart; a callback | open |
 
 Sources: 29 §9.27 (the motion menu), §9.28 (the surface grammar); E25, E28, E50-E53, E56, E58-E61
 (`docs/portable/OPERATOR-RULINGS.md`); `SPECIES_KINDS`, `PAGE_SPECIES`, `CHART_TO_KINDS`, `DOCK_OPTS` in
