@@ -298,6 +298,16 @@
   /* the paper's height is its typed text: on a phone the source line grew the foot under the caption strip (measured 36 px);
      the header IS the citation (E52) and the source path lives in the META, so the line is off in portrait */
   html[data-aspect="9:16"] .paper .psrc { display: none; }
+  /* the record is a SCALABLE object (the operator, 2026-09-10: "pop the card centered exactly as it is, and move it and resize it to
+     that slot"): its type is set in container-query units of the dock's width, so the park - a layout width - resizes the paper
+     without a rewrap: the lines the viewer read stay the lines. At the 626 px band card these equal the px sizes above. */
+  html[data-aspect="9:16"] .dock.record { container-type: inline-size; }
+  html[data-aspect="9:16"] .dock.record .paper { padding: 4.2cqw 5.4cqw 3.8cqw; }
+  html[data-aspect="9:16"] .dock.record .paper blockquote { font-size: 5.1cqw; }
+  html[data-aspect="9:16"] .dock.record .paper .phdr { font-size: 2.9cqw; }
+  html[data-aspect="9:16"] .dock.record .paper .pkick { font-size: 3.2cqw; }
+  html[data-aspect="9:16"] .dock.record .paper .pattr { font-size: 2.9cqw; }
+  html[data-aspect="9:16"] .dock.record .paper .prule { margin: 1.8cqw 0 3.2cqw; }
   .paper .hw { background-image: linear-gradient(101deg, transparent 1.5%,
                  rgba(245,201,63,.72) 6%, rgba(245,201,63,.72) 94%,
                  transparent 98.5%);
@@ -1669,6 +1679,7 @@
   /* the READING rectangle: the card's own CSS geometry, measured with no placement forced on it.
      Content-independent (width, left and top are all CSS), so it is measured once per dock. */
   const dockReadRect = (el, d) => {
+    if (d.read_place) return { x: d.read_place.x, y: d.read_place.y, w: d.read_place.w };   /* the row named the box the card pops at (2026-09-10) */
     if (d._read) return d._read;
     const w = el.style.width, l = el.style.left, tp = el.style.top;
     el.style.width = ""; el.style.left = ""; el.style.top = "";
@@ -1682,7 +1693,7 @@
   const dockGeom = (el, d, t) => {
     if (!d.place) return null;
     const R = dockReadRect(el, d), P = d.place;
-    if (d.centre) return { x: P.x, y: P.y, w: P.w };   /* a CENTRED card (the design pass): its box from the first frame, whatever its life */
+    if (d.centre && !d.read_place) return { x: P.x, y: P.y, w: P.w };   /* a CENTRED card (the design pass): its box from the first frame, whatever its life - unless the row named a reading box it pops at first */
     const readS = d.read_s != null ? d.read_s : DOCK_READ_S;
     const parkS = d.park_s != null ? d.park_s : DOCK_PARK_S;
     if (d.exit - d.enter < readS + parkS) return { x: R.x, y: R.y, w: R.w };   /* too short to park */

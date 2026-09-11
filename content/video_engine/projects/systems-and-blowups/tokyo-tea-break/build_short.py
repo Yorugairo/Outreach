@@ -288,7 +288,7 @@ def dock_still(aid: str) -> str:
     return aid
 
 
-PLEDGE_QUOTE = "...at least 10 trillion yen ($65 billion) in support through fiscal 2030 to boost the semiconductor..."   # the Nikkei lede's claim, excerpted (both ellipses say so; five typed lines grew the paper into the caption strip - measured 2026-09-10)
+PLEDGE_QUOTE = "...at least 10 trillion yen ($65 billion) in support through fiscal 2030..."   # the Nikkei lede's claim, excerpted (both ellipses say so; the operator, 2026-09-10: "the read out can end at 'through fiscal 2030...'")
 PLEDGE_HL = ("at", "least", "10", "trillion", "yen")     # the highlighter's phrase
 PLEDGE_SYNC = {"10": "ten", "trillion": "trillion", "yen": "yen"}   # the stroke lands per-word on the NARRATOR's word
 
@@ -326,7 +326,7 @@ def record_dock(aid: str, ws: list[dict], t0: float) -> str:
     words, hl, end = record_words(PLEDGE_QUOTE, t0, ws, "ten trillion yen", PLEDGE_SYNC, PLEDGE_HL)
     for m in DOCK_META:
         if m["asset"] == aid:
-            m["record"] = {"hdr": ["Nikkei Asia \u00b7 Semiconductors", "12 November 2024"], "kicker": "Japan to roll out $65bn in support for chips, AI",
+            m["record"] = {"hdr": ["Nikkei Asia", "12 November 2024"], "kicker": "Japan to roll out $65bn in support for chips, AI",
                            "words": words, "hl": hl, "end": end, "attr": "Mari Ishibashi, Nikkei staff writer",
                            "src": "asia.nikkei.com \u00b7 fetched 2026-09-10 \u00b7 evidence/sources/nikkei-2024-11-12-japan-chips-ai-support.txt"}
     return aid
@@ -528,10 +528,19 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
             # card takes the band the park frees - 626x370 at (0.5, 0.55) = y 871-1241, above the source line (1249), over nothing
             # the pledge's EVIDENCE (2026-09-10): the record types the Nikkei lede in the band under the parked bars on "pledged", the
             # highlighter landing on "at least 10 trillion yen" as the narrator says it; on "works" the band is the plant's
-            (record_dock("dock-k-pledge-record", ws, t_pledge), 0, t_pledge, at("works"),
-             {"centre": True, "card_aspect": 0.47, "centre_w": FAB_W, "centre_x": FAB_CX, "centre_y": FAB_CY - 0.015}),   # the paper's height is its typed text; 0.015 up keeps its foot clear of the caption strip and its head clear of the parked bars' source line
-            (dock_png("dock-i-fab-wafer", STILLS_DIR / "sig-i-fab-wafer.png", FAB_CROP), 0, at("works"), at("And here's"),
-             {"centre": True, "card_aspect": 0.5911, "centre_w": FAB_W, "centre_x": FAB_CX, "centre_y": FAB_CY + 0.04}),   # under the parked ten-year bars (E60): the card's top clears their labels and source
+            # the operator (2026-09-10): "'Tokyo has pledged ten trillion yen to chips' should summon both the fab card and the quote, they both
+            # fit on screen ... put the text evidence next to the chart with the fab card docked below. We pop the card first next to the
+            # chart, then on 'chips' the fab card below." The record (slot 1) stands BESIDE the parked chart, top-right, from "pledged";
+            # the plant (slot 0) lands in the band below on "to chips,"; both leave at the turn ("And here's"). The burst plays top-left.
+            # ... then the operator again: "pop the card centered exactly as it is, and move it and resize it to that slot on the right when we
+            # pop the next card" - the record POPS at the band box it had (`read`), holds until "to chips," (`read_s`), and PARKS over 0.7 s
+            # to the slot beside the parked chart as the plant lands beneath; its type scales with its width (no rewrap)
+            (record_dock("dock-k-pledge-record", ws, t_pledge), 1, t_pledge, at("And here's"),
+             {"centre": True, "card_aspect": 1.0, "centre_w": 0.40, "centre_x": 0.77, "centre_y": 0.335,
+              "read": {"centre_w": FAB_W, "centre_x": FAB_CX, "centre_y": FAB_CY - 0.015, "card_aspect": 0.47},
+              "read_s": round(at("to chips") - t_pledge, 2), "park_s": 0.7}),
+            (dock_png("dock-i-fab-wafer", STILLS_DIR / "sig-i-fab-wafer.png", FAB_CROP), 0, at("to chips"), at("And here's"),
+             {"centre": True, "card_aspect": 0.5911, "centre_w": FAB_W, "centre_x": FAB_CX, "centre_y": FAB_CY + 0.04}),   # under the parked bars (E60): the card's top clears their labels and source
             # the fourth watch: the selling bars are no evidence dock - they are the ring page's own bars, laid against its lines (combo)
         ], "cut", [
             carried(t_catalyst),

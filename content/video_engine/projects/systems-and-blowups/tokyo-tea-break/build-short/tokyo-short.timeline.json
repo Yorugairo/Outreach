@@ -2242,7 +2242,7 @@
    "badges": [],
    "record": {
     "hdr": [
-     "Nikkei Asia \u00b7 Semiconductors",
+     "Nikkei Asia",
      "12 November 2024"
     ],
     "kicker": "Japan to roll out $65bn in support for chips, AI",
@@ -2292,31 +2292,15 @@
       56.87
      ],
      [
-      "2030",
+      "2030...",
       56.94
-     ],
-     [
-      "to",
-      57.01
-     ],
-     [
-      "boost",
-      57.08
-     ],
-     [
-      "the",
-      57.15
-     ],
-     [
-      "semiconductor...",
-      57.22
      ]
     ],
     "hl": [
      0,
      4
     ],
-    "end": 57.27,
+    "end": 56.99,
     "attr": "Mari Ishibashi, Nikkei staff writer",
     "src": "asia.nikkei.com \u00b7 fetched 2026-09-10 \u00b7 evidence/sources/nikkei-2024-11-12-japan-chips-ai-support.txt"
    }
@@ -5446,25 +5430,31 @@
    "docks": [
     {
      "slide": "dock-k-pledge-record",
-     "slot": 0,
+     "slot": 1,
      "enter": 55.31,
-     "exit": 57.84,
+     "exit": 59.57,
      "badge_at": [],
      "place": {
+      "x": 616,
+      "y": 427,
+      "w": 432,
+      "h": 432
+     },
+     "read_s": 1.41,
+     "park_s": 0.7,
+     "park": true,
+     "read_place": {
       "x": 227,
       "y": 880,
       "w": 626,
       "h": 294
      },
-     "read_s": 1.2,
-     "park_s": 0.7,
-     "park": true,
      "centre": true
     },
     {
      "slide": "dock-i-fab-wafer",
      "slot": 0,
-     "enter": 57.84,
+     "enter": 56.72,
      "exit": 59.57,
      "badge_at": [],
      "place": {
@@ -5475,7 +5465,7 @@
      },
      "read_s": 1.2,
      "park_s": 0.7,
-     "park": false,
+     "park": true,
      "centre": true
     }
    ],

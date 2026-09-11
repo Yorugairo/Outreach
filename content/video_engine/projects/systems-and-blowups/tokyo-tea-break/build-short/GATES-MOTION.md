@@ -3,12 +3,12 @@
 ```text
 === MOTION DENSITY GATE: C:\Users\Snipe\Downloads\Outreach Program\content\video_engine\projects\systems-and-blowups\tokyo-tea-break\build-short ===
                runtime: 1:28
-         visual_events: 312 (210.8/min)
+         visual_events: 311 (210.1/min)
                  docks: 6
            dock_source: timeline
           ledger_pages: 4
   still_over_12s_share: 0%
-            per_minute: 0:00:220/6 1:00:189/8
+            per_minute: 0:00:219/6 1:00:189/8
 
   [WARN ] M11 first chart ledger:s02 enters at 2.0s, its build lands at 10.7s, with build_to landing on datum 311 at 10.7s (the cap is the annotation: the line ends on the datum); WARN no sound cue within 1.5s of the enter at 2.0s; window 0-10s (E44 short: the page rolls out on the hook - the chart is the mechanism by 0:10)
           E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue
@@ -42,7 +42,7 @@
           doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling
   [PASS ] M23 5 transition(s), each on a built chart and clear of its page's edge: s02 rescale 0:21+1.4s, s02 park 0:36+0.9s, s04 park 0:54+0.9s, s04 recast 0:50+1.4s, s04 recast 0:56+0.5s
           P48 (operator 2026-09-07): chart-to-chart transitions are a first-rate feature - a chart changes STATE and never cuts; E45/E50: never over a build, never inside the last 0.5 s of a page's life
-  [INFO ] M07 short: 1 full minute(s) in 89s - opening 220.0 events/min, 6.0 evidence entries/min; tail from 1:00 189.4/min; whole runtime 209.4/min - no minute distribution to rank in (E21 is judged on the whole)
+  [INFO ] M07 short: 1 full minute(s) in 89s - opening 219.0 events/min, 6.0 evidence entries/min; tail from 1:00 189.4/min; whole runtime 208.7/min - no minute distribution to rank in (E21 is judged on the whole)
           E21: the opening is the densest minute, never the thinnest
   [INFO ] M18 frame-hashes.json measured another player.html (the build was rebuilt since) - re-run measure_frozen_frames.py <build>
           E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)
@@ -56,5 +56,5 @@
 RESULT: 0 FAIL / 2 WARN / 14 PASS / 1 JUDGE / 4 INFO
 ```
 
-TIMELINE: tokyo-short.timeline.json sha256:4d43b04a154b258858218567ad7513869352a1b0f853da3fda87e5a96cd47c73
+TIMELINE: tokyo-short.timeline.json sha256:fd5d00c17ed981483576a88145b9cc35febb38ecaa5595a62ae93190f3ae1754
 VERDICT: PASS (0 FAIL)

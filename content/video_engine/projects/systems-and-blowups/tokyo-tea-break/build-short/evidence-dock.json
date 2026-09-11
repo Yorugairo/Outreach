@@ -49,7 +49,7 @@
   "badges": [],
   "record": {
    "hdr": [
-    "Nikkei Asia \u00b7 Semiconductors",
+    "Nikkei Asia",
     "12 November 2024"
    ],
    "kicker": "Japan to roll out $65bn in support for chips, AI",
@@ -99,31 +99,15 @@
      56.87
     ],
     [
-     "2030",
+     "2030...",
      56.94
-    ],
-    [
-     "to",
-     57.01
-    ],
-    [
-     "boost",
-     57.08
-    ],
-    [
-     "the",
-     57.15
-    ],
-    [
-     "semiconductor...",
-     57.22
     ]
    ],
    "hl": [
     0,
     4
    ],
-   "end": 57.27,
+   "end": 56.99,
    "attr": "Mari Ishibashi, Nikkei staff writer",
    "src": "asia.nikkei.com \u00b7 fetched 2026-09-10 \u00b7 evidence/sources/nikkei-2024-11-12-japan-chips-ai-support.txt"
   }

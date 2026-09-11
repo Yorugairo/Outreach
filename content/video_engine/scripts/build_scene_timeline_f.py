@@ -79,7 +79,7 @@ PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card")   # card=yes|no
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
 STATE_MAX = 3
-DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x")   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s")   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -783,6 +783,19 @@ def dock_opts(raw) -> dict:
             if isinstance(v, bool) or not isinstance(v, (int, float)) or not 0.0 <= v <= 1.0:
                 raise ValueError(f"dock: {k} must be the card's centre as a share of the stage, 0..1")
             continue
+        if k == "read":   # the READING box of a centred card that then parks (2026-09-10): the same centre keys, its own
+            if not isinstance(v, dict) or not v or any(rk not in ("centre_w", "centre_x", "centre_y", "card_aspect") for rk in v):
+                raise ValueError("dock: read must be a dict of centre_w|centre_x|centre_y|card_aspect - the box the card pops at before it parks to its place")
+            if not raw.get("centre"):
+                raise ValueError("dock: read is a CENTRED card's option (the park target is its centred place)")
+            for rk, rv in v.items():
+                if isinstance(rv, bool) or not isinstance(rv, (int, float)) or rv <= 0 or (rk != "card_aspect" and rv > 1.0):
+                    raise ValueError(f"dock: read.{rk} must be a positive share of the stage (card_aspect: height over width)")
+            continue
+        if k in ("read_s", "park_s"):   # the dock's own clock: the hold at the reading box, the park's length (the compiler's defaults otherwise)
+            if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
+                raise ValueError(f"dock: {k} must be seconds > 0")
+            continue
         _check_opt(k, v, "dock")
     return dict(raw)
 
@@ -1032,7 +1045,7 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
 
 def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                kind: str = DOCK_KIND_IMAGE, place: dict | None = None, arrive: str | None = None, mass: str | None = None,
-               centre: bool = False) -> dict:
+               centre: bool = False, read_place: dict | None = None, read_s: float | None = None, park_s: float | None = None) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -1044,13 +1057,15 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
     the shrink-and-slide - and ``park``, which is False when the dock's own span is too short to
     hold both (the card then simply stays at reading size for its whole life)."""
     span = round(exitt - enter, 2)
+    rs, ps = (float(read_s) if read_s else DOCK_READ_S), (float(park_s) if park_s else DOCK_PARK_S)   # the dock's own clock, else the defaults
     return {
         "slide": aid, "slot": slot,
         "enter": round(enter, 2), "exit": round(exitt, 2),
         "badge_at": [round(enter + 0.75 + 1.3 * (n + 1), 2) for n in range(n_badges)],
         **({"kind": DOCK_KIND_VIDEO} if kind == DOCK_KIND_VIDEO else {}),
-        **({"place": place, "read_s": DOCK_READ_S, "park_s": DOCK_PARK_S,
-            "park": span >= DOCK_READ_S + DOCK_PARK_S} if place else {}),
+        **({"place": place, "read_s": rs, "park_s": ps,
+            "park": span >= rs + ps} if place else {}),
+        **({"read_place": read_place} if (place and read_place) else {}),   # a centred card that pops here, then parks to its place (2026-09-10)
         **({"arrive": arrive} if arrive else {}), **({"mass": mass} if mass else {}),   # P47 T1: only when the row names them
         **({"centre": True} if centre and place else {}),   # the design pass: a centred card sits at its box from its first frame - no reading size, no park
     }
@@ -1187,6 +1202,8 @@ def main() -> int:
             d = META.get(aid, {"title": aid, "source": "", "species": "deck",
                                "badges": []})
             dplace = centred_place(place, ASPECT, dopt.get("card_aspect"), (world or {}).get("page"), dopt.get("centre_w"), dopt.get("centre_band"), dopt.get("centre_y"), dopt.get("centre_x")) if (place and dopt.get("centre")) else place   # the third watch: a card centred on the page
+            rd = dopt.get("read") or {}   # the box a centred card POPS at before it parks to dplace (2026-09-10)
+            rplace = centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x")) if (place and rd) else None
             if True:
                 if aid not in evidence:
                     try:
@@ -1242,7 +1259,8 @@ def main() -> int:
                     uris[aid] = dock_uri(ap)
                 docks.append(dock_entry(aid, slot, enter, exitt, len(d["badges"]),
                                         evidence[aid].get("kind", DOCK_KIND_IMAGE),
-                                        dplace if slot == 0 else None, dopt.get("arrive"), dopt.get("mass"), bool(dopt.get("centre"))))
+                                        dplace if (slot == 0 or dopt.get("centre")) else None, dopt.get("arrive"), dopt.get("mass"), bool(dopt.get("centre")),   # a centred card is placed on either slot (2026-09-10: two cards up at once)
+                                        read_place=rplace, read_s=dopt.get("read_s"), park_s=dopt.get("park_s")))
         try:
             exit_id, exit_s = scene_exit(authored_exit, bool(docks))
         except ValueError as exc:
