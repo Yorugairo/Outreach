@@ -1,5 +1,7 @@
 # The ART-embed plate - the order for human gate 3 (P50 T7, 2026-09-11; the style line corrected to the house atom the same day)
 
+**APPROVED 2026-09-11 (night) - the operator: "Plate order is approved."** The order goes to the Flow session as written below.
+
 **What the gate asks.** P50 T7 gives the external lane its world: Bravos has the chart world and the TV world (their
 claims on a monitor in a lit studio); we have the chart world (the ledger page) and the ART world (our narrative
 plates). The first narrative plate that carries a declared embed SURFACE - a poster on the wall, a paper on the desk, a

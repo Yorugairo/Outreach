@@ -281,7 +281,7 @@ Acceptance:
 - Evidence: `ledger_page.py` builder `treemap` (the squarify toward 3:2, the label tiers by the research floors, the size-claim refusal), `scripts/species/treemap.mjs` + `tests/kinetics/treemap.test.mjs`, the `cross` species in the compiler (the named cells' X's and the written share), the lint (DIVIDES: treemap page, cross; COMPARES: tiers page; the pending line closed), the golden `treemap-cross` (read by the parent: China's exports by partner, US / Japan / Korea crossed, "3 partners, 26 % of exports" written, "and 7 others"). The agent hit its turn limit and was resumed for the filmstrip and the report.
 
 ### T7: The ART-embed world for the external lane (was: the tv-embed)
-- Status: pending (human gate 3)
+- Status: gate 3 GRANTED 2026-09-11 (night): "Plate order is approved." - the order in `docs/content-video-engine/briefs/ART-EMBED-PLATE-ORDER-2026-09-11.md` (the house style atom; the first still with the poster; the second with the TV on the wall and the laptop on the desk) goes to the Flow session next; the mechanism (the named quads on the manifest, the homography, the press card landing on a surface) follows the stills
 - Owner: parent
 - Depends on: T3
 - Write set: `build_scene_timeline_f.py` (a narrative plate may declare `embed: {quad: [[x,y]x4], darken: <word>}` -
