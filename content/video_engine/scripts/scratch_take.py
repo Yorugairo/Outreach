@@ -45,8 +45,13 @@ OUT = DEFAULT_OUT
 
 
 def load_script() -> str:
+    """The spoken text: every beat mark off, backticked or bare.
+
+    The bare form is the one every short writes (`SCRIPT-90S-VO.txt`), and stripping only the backticked form read
+    twelve marks aloud - "[ring", "[post-key" - and spent 17.0 s of an 81 s kokoro scratch on them
+    (normal-for-which-bridge, 2026-09-12). Both engines read through this door so they cannot disagree again."""
     t = SCRIPT_PATH.read_text(encoding="utf-8")
-    return re.sub(r"`\[[a-z-]+\]`", "", t)
+    return re.sub(r"`?\[[a-z0-9_-]+\]`?", "", t)
 
 
 def paragraphs(text: str) -> list[str]:
@@ -62,9 +67,7 @@ def env_key(name: str) -> str:
 
 def run_chirp(rate: float = 1.0) -> None:
     key = env_key("GEMINI_TTS_API_KEY")
-    text = SCRIPT_PATH.read_text(encoding="utf-8")
-    clean = re.sub(r"`?\[[a-z0-9_-]+\]`?", "", text)
-    paras = [p.strip() for p in clean.split("\n\n") if p.strip()]
+    paras = [p.strip() for p in load_script().split("\n\n") if p.strip()]
     batches, cur = [], ""
     for p in paras:
         if cur and len(cur) + len(p) + 2 > 4500:
@@ -108,6 +111,22 @@ def run_chirp(rate: float = 1.0) -> None:
           f"({len(batches)} calls, free tier)")
 
 
+def merge_punct(words: list[dict]) -> list[dict]:
+    """A stop is part of the word it closes, not a word of its own.
+
+    Kokoro tokenises "once ." as two tokens; a take's words.json carries "once." on one. Every consumer of this
+    file (the caption pages, `split_sentences`, a shot table's phrase anchors) reads the take's shape, so the
+    scratch has to be the take's shape - the docstring already promises it.  (normal-for-which-bridge, 2026-09-12)"""
+    out: list[dict] = []
+    for w in words:
+        if out and w["w"] and all(c in ".,;:!?\u2014-\"')" for c in w["w"]):
+            out[-1]["w"] += w["w"]
+            out[-1]["end_s"] = w["end_s"]
+            continue
+        out.append(dict(w))
+    return out
+
+
 def run_kokoro() -> None:
     import numpy as np
     import soundfile as sf
@@ -139,6 +158,7 @@ def run_kokoro() -> None:
         # version made the pause after "holding you." a beat too long)
         wavs.append(np.zeros(int(SR * 0.25), dtype=np.float32))
         offset += 0.25
+    words = merge_punct(words)
     wav = np.concatenate(wavs)
     sf.write(OUT / "scratch-kokoro.wav", wav, SR)
     subprocess.run(["ffmpeg", "-y", "-v", "quiet", "-i",

@@ -1,0 +1,46 @@
+{
+ "schema": "publish_package.v1",
+ "episode": "normal-for-which-bridge",
+ "project": "normal-for-which-bridge",
+ "build": "build-short",
+ "title": "Normal For Which Bridge",
+ "subtitle": "Money Physics · short",
+ "channel": "Money Physics",
+ "channel_slug": "money-physics",
+ "channel_line": "The market isn't magic. It's mechanics.",
+ "channel_path": "channel-assets/money-physics/CHANNEL-DESCRIPTION.md",
+ "aspect": "9:16",
+ "runtime_s": 69.775,
+ "script": "SCRIPT-SHORT-VO.txt",
+ "take": "vo-short",
+ "master": null,
+ "master_bytes": null,
+ "first_frame": "frame-0000.0.png",
+ "thumbnail": null,
+ "fetched": null,
+ "keywords": "normal for which bridge, how money actually works, how money works, money mechanics, how markets actually work, market mechanics, finance explained, financial history, market crashes, bubbles, AI bubble, semiconductors, risk, investing explained, money physics",
+ "tags": [
+  "#MoneyPhysics",
+  "#NormalForWhichBridge",
+  "#Shorts"
+ ],
+ "inputs": {
+  "build:timeline.json": "ac6d5809d84a8a86",
+  "build:bridge-short.timeline.json": "39752f570bee351c",
+  "repo:channel-assets/money-physics/CHANNEL-DESCRIPTION.md": "faec24550fcaccb1"
+ },
+ "missing": [
+  "the evidence dossier (EVIDENCE-DOSSIER.md)",
+  "the fetched sources' links (evidence/sources/*)",
+  "the 1440p master (render/)",
+  "the thumbnail (*thumb*.png)"
+ ],
+ "counts": {
+  "hook": 2,
+  "figures": 5,
+  "close": 1,
+  "dossier_sources": 0,
+  "links": 0,
+  "onscreen_sources": 3
+ }
+}

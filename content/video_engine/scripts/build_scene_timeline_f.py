@@ -3594,7 +3594,10 @@ def main() -> int:
             raise SystemExit(f"FAIL: {ov_path.name}: {exc}") from None
         applied = sorted(overrides)
         print(f"  overrides   : {len(applied)} from {ov_path.name} - {', '.join(applied)}")
-    dock = json.loads((BUILD / "evidence-dock.json").read_text(encoding="utf-8"))
+    # a PAGES-ONLY short writes no dock metadata: absent is "this table docks nothing", not a broken build
+    # (the first such build, normal-for-which-bridge 2026-09-12, died here with FileNotFoundError)
+    dock_meta = BUILD / "evidence-dock.json"
+    dock = json.loads(dock_meta.read_text(encoding="utf-8")) if dock_meta.is_file() else []
     META = {d["asset"]: d for d in dock}
     pages = json.loads((BUILD / "caption-pages.json").read_text(encoding="utf-8"))
     # the timeline names its own audio: after insert_edit_pauses.py it is

@@ -99,7 +99,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## backlog
 
-- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +116 more — terms: Z-stack; short-form; drawOn; G-g
+- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +120 more — terms: Z-stack; short-form; drawOn; G-g
 
 ## pattern
 
@@ -215,10 +215,10 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md — Deep Research Report: Drawing Engines, A — State-of-the-art programmatic video gene — defines: — — terms: closed-form; s_x; s_y; HyperFrames
 - content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md — PRODUCTION REFERENCE REPORT: Give Me 10 — Compositions Measured: 42 Camera-Locked — defines: P1; P2; +4 more — terms: #14171A; micro-payoffs; zero-drift; Hyper-Dense
 - content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/SHOT_LEDGER.md — SHOT LEDGER: Dual-Track Visual Events & — Kind: `COMP` = new base stage / scene cu — defines: — — terms: SLOW_PUSH; build; metaphor_prop; LOCKED
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md — PRODUCTION REFERENCE REPORT: I Found the — Compositions Measured: 43 Camera-Locked — defines: P1; P2; +4 more — terms: YouTube; zero-drift; High-Velocity; cut-alignment
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md — PRODUCTION REFERENCE REPORT: I Found the — Compositions Measured: 43 Camera-Locked — defines: P1; P2; +4 more — terms: YouTube; #101216; #00D2FF; #1C2026
 - content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/SHOT_LEDGER.md — SHOT LEDGER: Dual-Track Visual Events & — Kind: `COMP` = new base stage / scene cu — defines: — — terms: SLOW_PUSH; build; LOCKED; metaphor_prop
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md — Master Research & Evidence Dossier: High — Executive Summary & The 4 Core Pillars C — defines: — — terms: Closed-Form; s_x; s_y; a_x
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md — PRODUCTION REFERENCE REPORT: The New Rul — Compositions Measured: 55 Camera-Locked — defines: P1; P2; +4 more — terms: zero-drift; High-Velocity; cut-alignment; Near-black
+- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md — PRODUCTION REFERENCE REPORT: The New Rul — Compositions Measured: 55 Camera-Locked — defines: P1; P2; +4 more — terms: #2AA2D6; high-contrast; third-party; YouTube
 - content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/SHOT_LEDGER.md — SHOT LEDGER: Dual-Track Visual Events & — Kind: `COMP` = new base stage / scene cu — defines: — — terms: LOCKED; SLOW_PUSH; metaphor_prop; build
 - content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md — Unified System Specification: The 3 Comf — We are not merely patching a parallax sh — defines: — — terms: image-space; DiT; strength; intensity
 - content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md — NICHE BEND RESEARCH DOSSIER: WHY US BOND — Strategic repositioning brief. Contrasts — defines: — — terms: High-urgency; b-roll; low-resolution; cross-border
