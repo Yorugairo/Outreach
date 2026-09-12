@@ -7,7 +7,9 @@ import assert from "node:assert/strict";
 import { minJerk } from "../../scripts/kinetics/ease.mjs";
 import { springPop } from "../../scripts/kinetics/spring.mjs";
 import { PRESS, pressRest, pressStack, underlineFrac, pressXf, pressPhraseBox,
-         pressTypeScale, pressPictureFit, phoneCssPx } from "../../scripts/species/press.mjs";
+         pressTypeScale, pressPictureFit, phoneCssPx,
+         PRESS_FACES, pressFace, pressWords, pressWrap, pressPhraseFit, pressColumn,
+         pressPhraseTarget, pressPhoneRead } from "../../scripts/species/press.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 
@@ -189,4 +191,127 @@ test("the picture keeps its own aspect: fitted on the width, or on the height, n
   assert.equal(pressPictureFit(700, 400, 0), null, "no aspect on record: the caller leaves the picture's CSS alone");
   assert.equal(pressPictureFit(0, 400, a), null);
   assert.equal(pressPictureFit(700, -1, a), null);
+});
+
+// ---- R26-55: THE PULLED PHRASE AS LIVE TYPE -------------------------------------------------------
+// A raster cannot re-line, so the words travel as data and the card SETS them. The laws under test: the wrap is
+// greedy and never overruns the paper, the size is the largest that fits both axes (quantised, so one box gives
+// one size), the column hands the picture its share and the words the rest, and the face is a dial with three
+// candidates the operator picks from - never a new webfont.
+
+// a monospace measurer: every character 0.6 em wide, which makes every expectation below arithmetic a reader can
+// check by hand (the engine measures the real face; the LAW is what is under test here).
+const CH = 0.6;
+const w1of = (words) => words.map((w) => w.length * CH);
+const PHRASE = "the historic normal has never once been normal";
+const WORDS = pressWords(PHRASE);
+
+test("the words are the operator's own, whitespace collapsed and nothing else touched", () => {
+  assert.deepEqual(pressWords("  the historic \n normal  "), ["the", "historic", "normal"]);
+  assert.deepEqual(pressWords(""), []);
+  assert.deepEqual(pressWords(null), []);
+  assert.deepEqual(pressWords(undefined), []);
+  assert.equal(pressWords(PHRASE).join(" "), PHRASE, "the phrase survives the round trip word for word");
+});
+
+test("the wrap is greedy and no line is wider than the paper it was given", () => {
+  const w1 = w1of(WORDS), size = 20, availW = 200;
+  const lines = pressWrap(w1, CH, size, availW);
+  assert.ok(lines.length > 1, "a phrase this long takes more than one line at 20 px");
+  let seen = [];
+  for (const l of lines) {
+    assert.ok(l.w <= availW || l.words.length === 1, "only a word wider than the paper may overrun a line");
+    seen = seen.concat(l.words);
+  }
+  assert.deepEqual(seen, WORDS.map((_w, i) => i), "every word is placed exactly once, in order");
+  assert.equal(pressWrap(w1, CH, size, 100000).length, 1, "paper enough, one line");
+  assert.equal(pressWrap([], CH, size, 200).length, 0, "no words, no lines");
+});
+
+test("the fit is the LARGEST size that fits both axes, quantised, one box giving one size", () => {
+  const w1 = w1of(WORDS);
+  const fit = pressPhraseFit(w1, CH, 500, 400);
+  assert.ok(fit && fit.fits, "a phrase of eight words fits 500 x 400");
+  assert.ok(fit.size > PRESS.TYPE_MIN && fit.size <= PRESS.TYPE_MAX);
+  assert.ok(Math.abs(fit.size / PRESS.TYPE_Q - Math.round(fit.size / PRESS.TYPE_Q)) < 1e-9, "quantised to TYPE_Q");
+  assert.ok(near(fit.h, fit.lines.length * fit.size * PRESS.LINE_H, 1e-9) && fit.h <= 400);
+  assert.deepEqual(pressPhraseFit(w1, CH, 500, 400), fit, "the same box gives the same size and lines, always");
+  const up = pressPhraseFit(w1, CH, 500, 400 + fit.size * PRESS.LINE_H * 2);
+  assert.ok(up.size > fit.size, "more paper, bigger type - which is the whole point of live type on a tall poster");
+  assert.ok(pressPhraseFit(w1, CH, 200, 60).size < fit.size, "less paper, smaller type");
+  assert.equal(pressPhraseFit(w1, CH, 100000, 100000).size, PRESS.TYPE_MAX, "the ceiling holds: a headline, not a title card");
+});
+
+test("a box that cannot hold the phrase at the floor says so, and never drops a word", () => {
+  const w1 = w1of(WORDS);
+  const tiny = pressPhraseFit(w1, CH, 40, 20);
+  assert.equal(tiny.fits, false, "the build is told, rather than the card hiding it");
+  assert.equal(tiny.size, PRESS.TYPE_MIN);
+  assert.equal(tiny.lines.reduce((n, l) => n + l.words.length, 0), WORDS.length, "every word is still on the card");
+  assert.equal(pressPhraseFit([], CH, 500, 400), null, "no words, no fit");
+  assert.equal(pressPhraseFit(w1, CH, 0, 400), null);
+  assert.equal(pressPhraseFit(w1, CH, 500, 0), null);
+});
+
+test("every line the fit returns fits the paper in the DOM too - the air is what keeps it there", () => {
+  const w1 = w1of(WORDS);
+  for (const [availW, availH] of [[500, 400], [900, 300], [300, 900], [551, 850]]) {
+    const fit = pressPhraseFit(w1, CH, availW, availH);
+    for (const l of fit.lines) assert.ok(l.w <= availW * (1 - PRESS.WORD_AIR) + 1e-9,
+      availW + "x" + availH + ": a measured line is inside the paper, with the air still clear");
+  }
+});
+
+test("the column hands the picture its share of the paper and the words the rest", () => {
+  const a = 160 / 528, paper = 800, w = 500;
+  const col = pressColumn(paper, w, a);
+  assert.ok(col.prov && near(col.prov.h / col.prov.w, a, 1e-9), "the strip keeps the crop's own aspect");
+  assert.ok(col.provH <= paper * PRESS.PROV_SHARE + 1e-9, "the strip never takes more than its share");
+  assert.ok(near(col.phraseH, paper - col.provH - col.gap, 1e-9), "the words take everything left");
+  assert.ok(col.phraseH > col.provH, "the phrase is the hero; the raster is the citation");
+  const tall = pressColumn(paper, w, 4);            // a tall crop: the share binds and the strip narrows
+  assert.ok(near(tall.provH, paper * PRESS.PROV_SHARE, 1e-9) && tall.prov.w < w);
+  assert.equal(pressColumn(0, w, a), null);
+  assert.equal(pressColumn(paper, 0, a), null);
+  const noAspect = pressColumn(paper, w, 0);
+  assert.equal(noAspect.prov, null, "no aspect on record: the caller leaves the picture's CSS alone");
+  assert.ok(near(noAspect.provH, paper * PRESS.PROV_SHARE, 1e-9));
+});
+
+test("the underline rides the LIVE type when there is any, and the crop's own box when there is not", () => {
+  const img = { x: 100, y: 50, w: 1000, h: 400 }, frac = { x0: 0.2, y0: 0.25, x1: 0.7, y1: 0.5 };
+  const live = { x: 120, y: 80, w: 700, h: 220 };
+  assert.deepEqual(pressPhraseTarget(live, img, frac), live, "the words moved, so the mark moves with them");
+  assert.deepEqual(pressPhraseTarget(null, img, frac), pressPhraseBox(img, frac), "no live type: the crop's region");
+  assert.deepEqual(pressPhraseTarget({ x: 0, y: 0, w: 0, h: 0 }, img, frac), pressPhraseBox(img, frac),
+                   "a phrase element with no box yet is no target - an underline is never drawn on nothing");
+  assert.equal(pressPhraseTarget(null, null, frac), null);
+});
+
+test("the phone reading is reported against E62's floor and never clamped to it", () => {
+  const under = pressPhoneRead(38, 1080);       // about what the raster reads at on the measured poster
+  assert.equal(under.floor, PRESS.PHONE_FLOOR);
+  assert.equal(under.clears, false, "13-14 CSS px on a phone is the defect R26-55 exists for");
+  const over = pressPhoneRead(100, 1080);
+  assert.ok(over.clears && over.css > PRESS.PHONE_FLOOR, "live type on a tall surface clears the floor by a mile");
+  assert.ok(near(pressPhoneRead(48, 1080).css, 17, 1e-9), "E62's own arithmetic, to the digit");
+  assert.equal(pressPhoneRead(48, 0).css, 0);
+});
+
+test("the three faces are the operator's to choose, and not one of them downloads a thing", () => {
+  assert.deepEqual(Object.keys(PRESS_FACES), ["house", "serif", "condensed"]);
+  assert.equal(PRESS.FACE, "house", "the default is the house face until the operator rules (gate 7)");
+  assert.equal(pressFace(undefined).id, "house");
+  assert.equal(pressFace("SERIF").id, "serif", "the dial is read case-insensitively");
+  assert.equal(pressFace("no-such-face").id, "house", "a typo can never blank a card");
+  const fams = new Set();
+  for (const [id, f] of Object.entries(PRESS_FACES)) {
+    assert.equal(f.id, id);
+    assert.ok(f.weight >= 400 && f.weight <= 900 && typeof f.track === "string");
+    assert.ok(f.label.length > 20, id + " says what it is, so a choice off a frame is a choice with a name");
+    assert.ok(/(sans-serif|serif)$/.test(f.family), id + " ends in a generic family - a face is never assumed present");
+    assert.ok(!/Kalam/.test(f.family), "the ledger's hand is not a masthead");
+    fams.add(f.family);
+  }
+  assert.equal(fams.size, 3, "three candidates, three different stacks");
 });

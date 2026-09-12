@@ -21,6 +21,7 @@ PIL = pytest.importorskip("PIL.Image", reason="PIL is the tool's one dependency"
 PAGE = (1600, 900)
 HEADLINE = (200, 300, 1400, 520)     # the headline block on the synthetic page
 PHRASE = (500, 340, 1000, 500)       # the quoted phrase inside it
+WORDS = "the historic normal was never normal"   # R26-55: the same phrase as words, for the player's live type
 PAPER, INK, CHROME = (250, 247, 240), (28, 34, 42), (180, 40, 40)
 
 
@@ -42,6 +43,7 @@ def _run(shot: Path, tmp_path: Path, **kw) -> tuple[int, dict | None, Path]:
     argv = [str(shot), "--headline-box", kw.get("headline", "200,300,1400,520"),
             "--phrase-box", kw.get("phrase", "500,340,1000,500"),
             "--source", kw.get("source", "The Herald, 4 Mar 2026"),
+            "--phrase-text", kw.get("text", WORDS),
             "--out", str(out), "--meta", str(meta)]
     if "aspect" in kw:
         argv += ["--aspect", kw["aspect"]]
@@ -128,3 +130,41 @@ def test_the_geometry_is_a_pure_function_the_tests_can_call_without_pixels():
     assert PC.phrase_fractions((50, 100, 150, 200), (0, 0, 200, 400)) == {"x0": 0.25, "y0": 0.25, "x1": 0.75, "y1": 0.5}
     with pytest.raises(ValueError):
         PC.phrase_fractions((50, 100, 250, 200), (0, 0, 200, 400))
+
+
+# ---- R26-55: THE PHRASE'S WORDS BESIDE THE RASTER ------------------------------------------------
+# A crop cannot re-line, so the card carries the phrase as TEXT as well as pixels: the player sets the words
+# at the size the surface allows and keeps the crop as the provenance strip under them. The tool's half of that
+# is one field and two refusals.
+
+
+def test_the_card_carries_the_phrases_words_beside_the_raster(shot: Path, tmp_path: Path):
+    code, meta, out = _run(shot, tmp_path)
+    assert code == 0 and meta["phrase_text"] == WORDS, "the words travel as data, in the operator's own order"
+    assert out.exists(), "and the crop is still written - the raster is the provenance strip, not a discard"
+    assert meta["screenshot"]["sha256"] and meta["crop"], "which is still the file and rectangle it was cut at"
+    assert meta["card"] == [PC.CARD_W["16:9"], meta["card"][1]], "the card's own size is on record for the strip's aspect"
+
+
+def test_the_words_are_collapsed_and_never_otherwise_touched(shot: Path, tmp_path: Path):
+    _code, meta, _out = _run(shot, tmp_path, text="  the historic\n  normal   was  never normal ")
+    assert meta["phrase_text"] == WORDS, "whitespace collapsed; the words themselves are the operator's"
+    assert PC.phrase_words("A B") == "A B" and PC.phrase_words("  two words  ") == "two words"
+
+
+@pytest.mark.parametrize("text", ["", "   ", "normal", "\n"])
+def test_a_phrase_with_no_words_is_refused_by_name(shot: Path, tmp_path: Path, capsys, text):
+    code, meta, _out = _run(shot, tmp_path, text=text)
+    err = capsys.readouterr().err
+    assert code == 2 and meta is None, text
+    assert "--phrase-text must be the quoted phrase's own words" in err and "live type" in err
+
+
+def test_the_words_are_required_so_a_new_card_is_never_raster_only(shot: Path, tmp_path: Path):
+    out, meta = tmp_path / "card.png", tmp_path / "card.json"
+    argv = [str(shot), "--headline-box", "200,300,1400,520", "--phrase-box", "500,340,1000,500",
+            "--source", "The Herald, 4 Mar 2026", "--out", str(out), "--meta", str(meta)]
+    with pytest.raises(SystemExit) as exc:
+        PC.main(argv)
+    assert exc.value.code == 2, "argparse refuses the card outright: R26-55 is the card's shape now, not an option"
+    assert not meta.exists()

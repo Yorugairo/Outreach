@@ -20,9 +20,11 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 import build_scene_timeline_f as B  # noqa: E402
 
 PHRASE = {"x0": 0.12, "y0": 0.2, "x1": 0.66, "y1": 0.44}
-META = {"kind": "press", "source": "The Herald, 4 Mar 2026", "phrase": PHRASE,
+WORDS = "the historic normal was never normal"        # R26-55: the phrase's own words, for the player's live type
+META = {"kind": "press", "source": "The Herald, 4 Mar 2026", "phrase": PHRASE, "phrase_text": WORDS,
         "crop": [100, 200, 1180, 520], "card": [1056, 313],
         "screenshot": {"name": "shot.png", "sha256": "0" * 64}}
+CARD_ASPECT = round(313 / 1056, 5)                    # ... and the crop's own aspect, so the strip needs no decode
 
 
 def _press(**kw) -> dict:
@@ -36,9 +38,49 @@ def _press(**kw) -> dict:
 def test_a_press_dock_carries_its_source_and_phrase_and_drops_the_provenance():
     opts = B.dock_opts({"press": _press()})
     assert opts["press"] == {"kind": "press", "source": "The Herald, 4 Mar 2026",
-                             "phrase": {"x0": 0.12, "y0": 0.2, "x1": 0.66, "y1": 0.44}}
+                             "phrase": {"x0": 0.12, "y0": 0.2, "x1": 0.66, "y1": 0.44},
+                             "phrase_text": WORDS, "img": CARD_ASPECT}
     assert "crop" not in opts["press"] and "screenshot" not in opts["press"], "provenance stays on disk"
     assert "press" in B.DOCK_OPTS and "stack" in B.DOCK_OPTS
+
+
+# ---- R26-55: the phrase's WORDS and the card's aspect reach the timeline --------------------------
+
+def test_the_phrases_words_reach_the_timeline_beside_the_raster():
+    """The player cannot re-line a crop, so the words travel too - and the card's own aspect with them, so the
+    provenance strip is laid out without waiting for the picture to decode."""
+    d = B.dock_entry("ev-press-herald", 0, 4.0, 18.0, 0, press=B.press_meta(META))
+    assert d["phrase_text"] == WORDS and d["img"] == CARD_ASPECT
+    assert d["phrase"] == {"x0": 0.12, "y0": 0.2, "x1": 0.66, "y1": 0.44}, "the crop's own region is still on record"
+
+
+def test_a_card_cut_before_the_words_existed_compiles_exactly_as_it_did():
+    """Every press card on disk was cut by the tool as it was. Neither key is invented for it: the card keeps its
+    raster phrase and the entry is byte-for-byte the entry it was."""
+    old = {k: v for k, v in META.items() if k not in ("phrase_text", "card")}
+    meta = B.press_meta(old)
+    assert meta == {"kind": "press", "source": META["source"], "phrase": PHRASE}
+    d = B.dock_entry("ev-press-herald", 0, 4.0, 18.0, 0, press=meta)
+    assert "phrase_text" not in d and "img" not in d
+
+
+@pytest.mark.parametrize("words, needle", [
+    ("normal", "two or more"),
+    ("   ", "two or more"),
+    (7, "two or more"),
+    (["two", "words"], "two or more"),
+])
+def test_a_phrase_text_that_is_not_the_phrases_words_is_refused_by_name(words, needle):
+    with pytest.raises(ValueError) as exc:
+        B.dock_opts({"press": _press(phrase_text=words)})
+    assert needle in str(exc.value) and "live type" in str(exc.value), str(exc.value)
+
+
+def test_the_words_are_collapsed_and_a_malformed_card_size_is_simply_not_an_aspect():
+    assert B.press_meta(dict(META, phrase_text="  the historic\n normal  was never normal "))["phrase_text"] == WORDS
+    for bad in ([0, 100], [1056], "1056x313", None, [1056, -3], ["1056", "313"]):
+        meta = B.press_meta(dict(META, card=bad))
+        assert "img" not in meta, f"{bad}: a size that is not a size is no aspect, and never a guess"
 
 
 def test_a_press_dock_without_a_source_is_refused_by_name():

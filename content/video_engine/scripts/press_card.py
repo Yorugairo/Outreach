@@ -8,10 +8,17 @@ crop to the dock's own width, and declares two things the card cannot carry in i
   * the PHRASE box - the region of the quoted headline the sentence turns on, re-expressed as
     FRACTIONS of the card so it survives every scale the card is drawn at. It is what a
     `callout` with `form: "underline"` underlines (E56's one exception: an underline on a quoted
-    phrase is the squiggle law, never a ring).
+    phrase is the squiggle law, never a ring);
+  * the PHRASE'S WORDS (R26-55) - the same phrase as TEXT, so the player can set it as LIVE TYPE
+    re-lined to whatever surface the card lands on. A raster cannot re-line: on a tall poster the
+    crop keeps the source page's own line breaks and the phrase reads at 13.4 CSS px on a phone
+    against E62's 17 (E66's own recorded limit). With the words on the card the player fits them
+    to the box and the CROP STAYS as the provenance strip beneath them - still visible, still the
+    file whose sha256 is recorded here, still cited by the source line.
 
     python press_card.py shot.png --headline-box 120,340,1680,520 --source "Reuters, 12 Mar 2026" \\
         --phrase-box 610,360,1180,505 --out evidence/objects/ev-press-reuters.png \\
+        --phrase-text "the historic normal was never normal" \\
         --meta evidence/objects/ev-press-reuters.press.json
 
 Boxes are SOURCE-PIXEL coordinates (x0, y0, x1, y1) read off the screenshot. The crop is the
@@ -22,10 +29,12 @@ screenshot is never modified.
 The meta JSON is what a shot row hands the compiler as a dock's ``press`` option:
 
     {"kind": "press", "source": "...", "phrase": {"x0": .., "y0": .., "x1": .., "y1": ..},
-     "crop": [x0, y0, x1, y1], "card": [w, h], "screenshot": {"name": "...", "sha256": "..."}}
+     "phrase_text": "...", "crop": [x0, y0, x1, y1], "card": [w, h],
+     "screenshot": {"name": "...", "sha256": "..."}}
 
 The provenance keys (`crop`, `screenshot`) are the A2a habit - the card names the file it was cut
-from and the rectangle it was cut at; the compiler reads `kind`, `source` and `phrase` only.
+from and the rectangle it was cut at; the compiler reads `kind`, `source`, `phrase`, `phrase_text`
+and the card's own aspect (from `card`) only.
 """
 from __future__ import annotations
 
@@ -42,6 +51,7 @@ from pathlib import Path
 CARD_W = {"16:9": 1056, "9:16": 800}
 MARGIN_DEFAULT = 16       # source px of paper kept around the headline: enough to read as a cutting, not a crop
 PHRASE_ROUND = 5          # fractions to five places - a card is at most ~1100 px wide, so this is sub-pixel
+PHRASE_WORDS_MIN = 2      # R26-55: a pulled phrase is words, not a label - one word is a ring's job (E56), not a headline's
 
 
 def parse_box(raw: str, name: str) -> tuple[int, int, int, int]:
@@ -78,8 +88,19 @@ def phrase_fractions(phrase: tuple[int, int, int, int], crop: tuple[int, int, in
             "x1": round((px1 - cx0) / w, PHRASE_ROUND), "y1": round((py1 - cy0) / h, PHRASE_ROUND)}
 
 
+def phrase_words(text) -> str:
+    """The phrase's WORDS as the card carries them (R26-55): whitespace collapsed, nothing else touched - the
+    words are the operator's, and the player re-lines them at whatever size the surface allows. Refuses a phrase
+    of fewer than PHRASE_WORDS_MIN words, which is the mistake this flag invites (a label, not a headline)."""
+    words = str("" if text is None else text).split()
+    if len(words) < PHRASE_WORDS_MIN:
+        raise ValueError(f"--phrase-text must be the quoted phrase's own words ({PHRASE_WORDS_MIN} or more), "
+                         f"not {str(text)!r} - it is what the player sets as live type over the provenance strip")
+    return " ".join(words)
+
+
 def build_card(shot: Path, headline: tuple[int, int, int, int], phrase: tuple[int, int, int, int],
-               source: str, aspect: str = "16:9", margin: int = MARGIN_DEFAULT):
+               source: str, aspect: str = "16:9", margin: int = MARGIN_DEFAULT, text: str | None = None):
     """(the card image, the meta dict). Pure: nothing is written here."""
     from PIL import Image   # imported here so `--help` and the box parsers run without PIL
 
@@ -96,6 +117,7 @@ def build_card(shot: Path, headline: tuple[int, int, int, int], phrase: tuple[in
     if card.width != target_w:                      # LANCZOS both ways: a headline is type, and type is what ringing shows on
         card = card.resize((target_w, max(1, round(card.height * target_w / card.width))), Image.LANCZOS)
     meta = {"kind": "press", "source": str(source).strip(), "phrase": frac,
+            "phrase_text": phrase_words(text),   # R26-55: the words beside the raster, for the player's live type
             "crop": list(box), "card": [card.width, card.height],
             "screenshot": {"name": shot.name, "sha256": hashlib.sha256(shot.read_bytes()).hexdigest()}}
     return card, meta
@@ -106,6 +128,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("screenshot", type=Path)
     ap.add_argument("--headline-box", required=True, help="x0,y0,x1,y1 of the headline in SOURCE pixels")
     ap.add_argument("--phrase-box", required=True, help="x0,y0,x1,y1 of the quoted phrase, inside the headline box")
+    ap.add_argument("--phrase-text", required=True,
+                    help="the quoted phrase's own WORDS - set as live type on the card, re-lined to its surface (R26-55)")
     ap.add_argument("--source", required=True, help='the masthead and the date, e.g. "Reuters, 12 Mar 2026"')
     ap.add_argument("--out", required=True, type=Path, help="the card PNG")
     ap.add_argument("--meta", required=True, type=Path, help="the card's meta JSON (the dock's `press` option)")
@@ -118,7 +142,8 @@ def main(argv: list[str] | None = None) -> int:
         if a.margin < 0:
             raise ValueError("--margin must be >= 0")
         card, meta = build_card(a.screenshot, parse_box(a.headline_box, "--headline-box"),
-                                parse_box(a.phrase_box, "--phrase-box"), a.source, a.aspect, a.margin)
+                                parse_box(a.phrase_box, "--phrase-box"), a.source, a.aspect, a.margin,
+                                a.phrase_text)
     except ValueError as exc:
         print(f"FAIL: {exc}", file=sys.stderr)
         return 2
@@ -128,6 +153,7 @@ def main(argv: list[str] | None = None) -> int:
     a.meta.write_text(json.dumps(meta, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     print(f"card  {a.out}  {meta['card'][0]}x{meta['card'][1]}")
     print(f"meta  {a.meta}  phrase {meta['phrase']}")
+    print(f"words {meta['phrase_text']}")
     return 0
 
 

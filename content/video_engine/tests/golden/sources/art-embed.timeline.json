@@ -396,6 +396,7 @@
      },
      "enter": 5.0,
      "exit": 30.0,
+     "img": 0.30303,
      "kind": "press",
      "mass": "paper",
      "phrase": {
@@ -404,6 +405,7 @@
       "y0": 0.17,
       "y1": 0.46
      },
+     "phrase_text": "the historic normal was never normal",
      "slide": "ev-embed-quote",
      "slot": 0,
      "source": "THE HERALD, 4 MAR 2026"

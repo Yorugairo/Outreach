@@ -51,7 +51,40 @@ export const PRESS = Object.freeze({
   SQUEEZE: 0.035,   /* ... how much it compresses on x there (scaleX: the shove hits its edge) */
   SKEW_DEG: 2.4,    /* ... and how far it leans (skewX) - small: a lean, never a tumble */
   UNDERLINE_EASE: 3,/* the underline's draw curve: the hand decelerates into the end of the phrase (1 - (1 - u)^3) */
+  /* R26-55 - THE PULLED PHRASE AS LIVE TYPE: the dials of the fit below. The FACE is the one the OPERATOR rules on. */
+  FACE: "house",    /* the stand-in display face until the operator reads the three off their proof frames (gate 7) */
+  TYPE_MIN: 12,     /* the fit's floor in stage px: under this the phrase is a smudge whatever the surface */
+  TYPE_MAX: 220,    /* ... and its ceiling: a pulled phrase is a headline, never a title card */
+  TYPE_Q: 0.25,     /* the quantum the size is quantised to, so ONE box always gives exactly one size */
+  LINE_H: 1.08,     /* the leading of a display line: tight, the way a masthead sets a headline */
+  WORD_AIR: 0.012,  /* the share of the width kept clear, so a line measured here never takes a second one in the DOM */
+  PROV_SHARE: 0.3,  /* the provenance strip's share of the paper left under the type rows (the raster, still cited) */
+  PROV_GAP: 0.04,   /* ... and the air between the phrase and that strip, on the same paper */
+  PHONE_FLOOR: 17,  /* E62's quiet-caption floor in CSS px on a phone - what a proof frame is READ against, never clamped to */
 });
+
+/* ================= THE FACES OFFERED (human gate 7 - the operator's choice, never ours) =================
+   Three candidates for the stand-in display face a pulled phrase is set in, and all three are already on the
+   page: the template downloads exactly ONE webfont (Kalam, the ledger's hand) and nothing here adds a second -
+   every family below resolves against the faces the renderer already has. The operator reads them off the proof
+   frames (`press-stack@face-serif`, `press-stack@face-condensed`, against the default in `press-stack`) and
+   rules; until then the DEFAULT stands and no cut changes.
+   A face is a DIAL on the timeline (`kinetics.press_face`), not a capability flag: it turns nothing on or off,
+   it names which of the three is in the frame. */
+export const PRESS_FACES = Object.freeze({
+  house: Object.freeze({ id: "house", weight: 800, track: "-0.012em",
+    family: 'Inter, "Segoe UI", system-ui, sans-serif',
+    label: "the house display face - the template's own stack at the caption's display weight" }),
+  serif: Object.freeze({ id: "serif", weight: 700, track: "0em",
+    family: 'Georgia, "Times New Roman", serif',
+    label: "a masthead serif - the quoted headline set the way the paper set it" }),
+  condensed: Object.freeze({ id: "condensed", weight: 700, track: "0.004em",
+    family: '"Arial Narrow", "Bahnschrift Condensed", "Roboto Condensed", "Segoe UI", sans-serif',
+    label: "a condensed grotesque - more words to a line, the tabloid's own pull" }),
+});
+
+/* the face a name asks for; an unknown name (or none at all) is the house face, so a typo can never blank a card */
+export const pressFace = (name) => PRESS_FACES[String(name == null ? "" : name).toLowerCase()] || PRESS_FACES[PRESS.FACE];
 
 const p01 = (v) => Math.min(1, Math.max(0, v));
 
@@ -148,3 +181,100 @@ export const pressPictureFit = (availW, availH, aspect) => {
    The reflow does not clamp to the floor - this is what a proof frame is measured against. */
 export const PHONE_CSS_W = 382.5;
 export const phoneCssPx = (stagePx, stageW) => (+stageW > 0 ? (+stagePx || 0) * PHONE_CSS_W / +stageW : 0);
+
+/* ================= THE PULLED PHRASE IS LIVE TYPE (R26-55; the limit E66 found) =================
+   E66 gave a card the whole surface, and the reflow above scaled the card's ONE picture into it. That picture
+   carries the pulled phrase - `press_card.py` cuts it out of the source screenshot - and a raster cannot RE-LINE:
+   on a tall poster the phrase takes the surface's width, keeps the crop's own line breaks, and reads at 13.4 CSS
+   px in the hand against E62's 17. Type can re-line. So:
+
+   THE LAW. The phrase's WORDS travel beside the raster as data (`phrase_text` on the card's meta, through the
+   press dock onto the timeline), and the card sets them as LIVE TYPE, re-lined to the box it was given:
+     size    - the LARGEST size at which the words wrap into lines that all fit the paper's width and whose
+               total height fits the paper's height. One size for the whole phrase (a headline is one size), found
+               by bisection between TYPE_MIN and TYPE_MAX and quantised to TYPE_Q, so one box gives exactly one
+               size and a seek paints the frame the play-through paints.
+     lines   - the greedy wrap at that size, WRITTEN OUT: the card paints one element per line, so the DOM never
+               re-wraps what was measured here and a line can never take a second one behind our back.
+     face    - PRESS_FACES above, by the `press_face` dial; the house face until the operator rules (gate 7).
+     floor   - NOTHING is clamped. `phoneCssPx(size, stageW)` states what the fit reads as in the hand and
+               PHONE_FLOOR is what a proof frame is judged against - type forced above the surface it is read on
+               would overrun the surface, which is the mistake in the other direction.
+   THE RASTER STAYS. It is the PROVENANCE strip under the words: the crop the phrase was pulled from, still on the
+   card, still the file `press_card.py` recorded the sha256 of, with the masthead and the date citing it. It takes
+   PROV_SHARE of the paper (fitted on one axis by pressPictureFit, so it is never stretched) and the phrase takes
+   the rest - which is why a card's total height does not move when the words arrive.
+   Everything here is a pure function of the box and the measured words: a card with no `phrase_text` gets no live
+   type at all, and every build that has none renders exactly as it did. */
+
+/* the phrase's words, in order: whitespace collapsed, nothing else touched (the operator's own text) */
+export const pressWords = (text) => String(text == null ? "" : text).replace(/\s+/g, " ").trim().split(" ").filter(Boolean);
+
+/* THE GREEDY WRAP at `size`: `w1[i]` is word i's width per px of font size and `space1` the space's, both measured
+   in the face ONCE at a reference size (widths are linear in the size; WORD_AIR is the slack that keeps them so).
+   Returns one entry per line - the words' indices and the line's width in px. A word wider than the paper takes a
+   line of its own and overruns it, which is what makes the fit below reject that size rather than hide it. */
+export const pressWrap = (w1, space1, size, availW) => {
+  const s = +size > 0 ? +size : 0, sp = (+space1 || 0) * s, lines = [];
+  let words = [], w = 0;
+  for (let i = 0; i < (w1 || []).length; i++) {
+    const ww = (+w1[i] || 0) * s;
+    if (words.length && w + sp + ww > availW) { lines.push({ words, w }); words = [i]; w = ww; }
+    else { w += (words.length ? sp : 0) + ww; words.push(i); }
+  }
+  if (words.length) lines.push({ words, w });
+  return lines;
+};
+
+/* THE FIT: the largest quantised size whose wrap fits the paper on both axes, with the lines it gives.
+   `fits` false means even TYPE_MIN overruns the paper - the caller then sets TYPE_MIN and the build says so,
+   rather than a card silently dropping words. */
+export const pressPhraseFit = (w1, space1, availW, availH, o = {}) => {
+  const P = Object.assign({}, PRESS, o);
+  const paper = (+availW > 0 ? +availW : 0) * (1 - P.WORD_AIR), h = +availH > 0 ? +availH : 0;
+  const at = (s) => {
+    const lines = pressWrap(w1, space1, s, paper);
+    const widest = lines.reduce((m, l) => Math.max(m, l.w), 0);
+    return { lines, ok: widest <= paper && lines.length * s * P.LINE_H <= h };
+  };
+  if (!(w1 || []).length || !(paper > 0) || !(h > 0)) return null;
+  const top = at(P.TYPE_MAX);
+  if (top.ok) return { size: P.TYPE_MAX, lines: top.lines, lineH: P.TYPE_MAX * P.LINE_H,
+                       h: top.lines.length * P.TYPE_MAX * P.LINE_H, fits: true };
+  let lo = P.TYPE_MIN, hi = P.TYPE_MAX;
+  const floor = at(lo);
+  if (!floor.ok) return { size: P.TYPE_MIN, lines: floor.lines, lineH: P.TYPE_MIN * P.LINE_H,
+                          h: floor.lines.length * P.TYPE_MIN * P.LINE_H, fits: false };
+  while (hi - lo > P.TYPE_Q) {
+    const mid = (lo + hi) / 2;
+    if (at(mid).ok) lo = mid; else hi = mid;
+  }
+  const size = Math.max(P.TYPE_MIN, Math.floor(lo / P.TYPE_Q) * P.TYPE_Q), got = at(size);
+  return { size, lines: got.lines, lineH: size * P.LINE_H, h: got.lines.length * size * P.LINE_H, fits: got.ok };
+};
+
+/* THE CARD'S COLUMN: how the paper left under the type rows (the masthead, the by-line) is split between the
+   phrase and the provenance strip. The strip is the raster fitted on ONE axis inside PROV_SHARE of that paper, so
+   its height is the picture's own - a wide crop takes less than its share and hands the difference to the words.
+   `null` when there is no paper to split; `prov` null when the picture's aspect is not on record, and the caller
+   then leaves the picture's CSS alone (the reflow's own rule). */
+export const pressColumn = (paperH, availW, aspect, o = {}) => {
+  const P = Object.assign({}, PRESS, o);
+  const paper = +paperH > 0 ? +paperH : 0, w = +availW > 0 ? +availW : 0;
+  if (!(paper > 0) || !(w > 0)) return null;
+  const prov = pressPictureFit(w, paper * P.PROV_SHARE, aspect);
+  const provH = prov ? prov.h : paper * P.PROV_SHARE, gap = paper * P.PROV_GAP;
+  return { prov, provH, gap, phraseH: Math.max(0, paper - provH - gap) };
+};
+
+/* WHAT THE UNDERLINE RIDES (E56's one exception). With live type the phrase is the TYPE's box, not a rectangle of
+   the raster: the words moved, so the mark under them moves with them. A card with no live type falls back to the
+   phrase box the compiler wrote as fractions of the crop, which is what every card did before R26-55. */
+export const pressPhraseTarget = (live, img, phrase) =>
+  (live && +live.w > 2 && +live.h > 2 ? { x: +live.x, y: +live.y, w: +live.w, h: +live.h } : pressPhraseBox(img, phrase));
+
+/* WHAT A FIT READS AS IN THE HAND, and whether it clears E62's floor. Reported, never enforced (see THE LAW). */
+export const pressPhoneRead = (stagePx, stageW, o = {}) => {
+  const P = Object.assign({}, PRESS, o), css = phoneCssPx(stagePx, stageW);
+  return { css: Math.round(css * 100) / 100, floor: P.PHONE_FLOOR, clears: css >= P.PHONE_FLOOR };
+};

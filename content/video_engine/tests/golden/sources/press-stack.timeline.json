@@ -368,6 +368,7 @@
      "badge_at": [],
      "enter": 5.0,
      "exit": 30.0,
+     "img": 0.30303,
      "kind": "press",
      "phrase": {
       "x0": 0.08,
@@ -375,6 +376,7 @@
       "y0": 0.17,
       "y1": 0.46
      },
+     "phrase_text": "the historic normal was never normal",
      "slide": "ev-press-a",
      "slot": 0,
      "source": "THE HERALD, 4 MAR 2026",
@@ -385,6 +387,7 @@
      "badge_at": [],
      "enter": 7.4,
      "exit": 30.0,
+     "img": 0.30303,
      "kind": "press",
      "phrase": {
       "x0": 0.3,
@@ -392,6 +395,7 @@
       "y0": 0.15,
       "y1": 0.45
      },
+     "phrase_text": "the deficit outlived every plan to close it",
      "slide": "ev-press-b",
      "slot": 0,
      "source": "THE LEDGER, 6 MAR 2026",
@@ -402,6 +406,7 @@
      "badge_at": [],
      "enter": 9.8,
      "exit": 30.0,
+     "img": 0.30303,
      "kind": "press",
      "phrase": {
       "x0": 0.12,
@@ -409,6 +414,7 @@
       "y0": 0.16,
       "y1": 0.47
      },
+     "phrase_text": "the rule changed while the market slept",
      "slide": "ev-press-c",
      "slot": 0,
      "source": "THE DISPATCH, 9 MAR 2026",
