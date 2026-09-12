@@ -799,7 +799,7 @@
      },
      "left": {
       "h": 814,
-      "w": 160,
+      "w": 161,
       "x": 64,
       "y": 64
      },
@@ -819,8 +819,8 @@
      },
      "plot": {
       "h": 466,
-      "w": 767,
-      "x": 224,
+      "w": 766,
+      "x": 225,
       "y": 301
      },
      "rail": {
@@ -1503,7 +1503,7 @@
    }
   }
  },
- "player_sha256": "4533c1d201df3bf74ab90c9fbc80b97e9355eb62b4c5c885b8f5168f5c48276b",
+ "player_sha256": "e464efe2663fda81d8628e65d634e63b390ecd7ae054ffca6946fc1bf884f273",
  "projects": [
   "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t0/tokyo-short.timeline.json"
  ],

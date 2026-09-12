@@ -1154,6 +1154,8 @@ def _page_land_offset(scene: dict) -> float:
         return mount_s + PAGE_BUILD_END_S - LP_ROLL_S - LP_SAVOR_S - LP_FIELD_S + extra   # R26-50: the soak on the page's clock, then ink
     if page.get("enter") == "morph":   # P47 T3: the morph replaces the roll, the savor, the soak and the punch; the build starts as it ends
         return float(page.get("morph_s") or MORPH_S) + LP_BUILD_S + extra
+    if page.get("enter") == "spiral":   # review of normal-for-which-bridge (2026-09-12): the page UNWINDS from its point over LP_SPIRAL_IN_S - the probe measured it mid-vortex at 4.8 CSS px when this read 0.0
+        return LP_SPIRAL_IN_S
     if page.get("enter") in ARRIVES_BUILT:   # a returning page, a card become the world (P47 T7; P49 T5 by the eye), or a page that mounts with its chart already drawn: arrives built
         return 0.0
     if page.get("enter") == "axes":   # P53 T1: the page is there on frame 0 and the DATA is what builds - the chart lands one build later

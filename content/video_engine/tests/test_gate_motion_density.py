@@ -1484,3 +1484,13 @@ def test_layer_windows_come_from_the_timeline_the_gate_already_parsed():
     assert len(segs) == 2 and all(len(s) == 4 for s in segs)
     assert max(d for _, d in [r for s in segs for r in G.frozen_runs(s, -1.0)]) < 0.3
     assert G._frames_in(frames, None) == [frames]
+
+
+def test_a_spiral_page_lands_when_its_unwind_ends_never_on_its_first_frame():
+    """normal-for-which-bridge review (2026-09-12): `spiral` sat in ARRIVES_BUILT, so its landing read 0.0 and the layout
+    probe measured the page mid-vortex - type at 4.8 CSS px and ticks on ticks, a scaled page by design (M25 + M28 FAIL on
+    a cut whose frames were clean). The player unwinds the page over LP_SPIRAL_IN_S; the landing is that end."""
+    sp = {"span": [10.0, 20.0], "world": {"kind": "ledger", "page": {"enter": "spiral"}}}
+    assert G._page_land_offset(sp) == G.LP_SPIRAL_IN_S
+    for enter in ("snap", "built"):
+        assert G._page_land_offset({"world": {"kind": "ledger", "page": {"enter": enter}}}) == 0.0, enter

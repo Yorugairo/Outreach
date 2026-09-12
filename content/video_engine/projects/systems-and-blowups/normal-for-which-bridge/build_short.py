@@ -5,10 +5,9 @@ THE ONE-SHOT (the operator, 2026-09-12: "try to one-shot a short to test our cur
 P52 - no clips, no docks, no beds: three LEDGER PAGES and the species the sentences ask for, so what is under test
 is the page, the chart, the species vocabulary and the caption strip rather than an asset library.
 
-THE CLOCK IS A SCRATCH, and that is a declared deviation: `scratch_take.py --engine kokoro` (local, free) wrote
-`vo-short/audio/scene_1.words.json`, and doctrine says scratch timings never touch a build (the paid take is the
-clock). Nothing here ships: no master render, no publish. Kokoro reads ~154 wpm against the real voice's ~180, so
-every window in this build is ~15% long.
+THE CLOCK is the Chirp take (E70: Chirp ships on Facebook; the Kokoro take is kept beside it for the YouTube cut),
+loudnormed to -17.2 LUFS, its words forced-aligned to the script (align_take.py --script, 155/155). One narrative
+plate (Flow, E72) holds the sentence the chart cannot draw; two Suno beds at -20 LU and the CC0 page cues are the sound.
 
     python build_short.py            # builds build-short/ and runs the motion gate + the self-watch
     BRIDGE_BUILD_DIR=build-short-x   # a side build, never over a served one
@@ -87,21 +86,19 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
             # the light goes on the latest datum inside the 1.5 s after THAT - on the word that says a yield is a
             # weight, which is the sentence the light is illustrating (it used to sit on "heavier." at 7.9 s, which
             # was inside the old roll-out's window and four seconds late for this one)
-            {"kind": "callout", "at": at("But a yield"), "dur": 2.6, "pad": 24,
-             "target": {"kind": "datum", "index": LOAD_LAST}, "label": "123% of GDP today"},
-            {"kind": "note", "at": at("Every price"), "dur": 2.4,
-             "text": "every price you own is divided by that number"},
+            # review 2: a spotlight, not a callout - the callout's ring sat on the series' own tag at the line's tip; and no
+            # note - it typed the caption word for word and was still typing when the page left
+            {"kind": "spotlight", "at": at("weight,"), "dur": 2.6, "target": {"kind": "datum", "index": LOAD_LAST}},
         ]),
         # ---- the number: what the long end pays, two weeks apart
-        (t_num, t_load, f"ledger:{LONG}:line:{IDX_AUG}:right::cut", (0, 0, 0), [], "cut", [
+        (t_num, t_load, f"ledger:{LONG}:line:{IDX_AUG}:right:axes:cut", (0, 0, 0), [], "cut", [
             {"kind": "build_to", "at": at("Two weeks ago"), "dur": 1.6,
              "target": {"kind": "datum", "index": IDX_AUG}},
-            {"kind": "figure", "at": at("four point six"), "dur": 1.6, "text": "4.66%",
-             "target": {"kind": "datum", "index": IDX_AUG}, "dy": -0.8},
+            # review 2: no "4.66%" figure - it sat on the 10-year line under the tag and the 4.83% ring landed on both
             {"kind": "build_to", "at": at("By Tuesday"), "dur": 1.6,
              "target": {"kind": "datum", "index": LONG_LAST}},
             {"kind": "callout", "at": at("highest since"), "dur": 2.2, "pad": 24,
-             "target": {"kind": "datum", "index": LONG_LAST}, "label": "4.83% - highest since Oct 2023"},
+             "target": {"kind": "datum", "index": LONG_LAST}, "label": "4.83%"},   # review 1: the sub carries both dates; the long label was clipped at the edge
         ]),
         # ---- the bridge returns by the vortex, already drawn, and takes its two loads one at a time
         # E40: a returning page UNWINDS from its point, it never redraws - the first cut walked this page's line back to
@@ -110,12 +107,10 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
         # ---- THE TURN, on the one picture the chart cannot draw: the bridge, bending under the load (E61 use=bridge)
         (t_load, t_81, f"{plate};use=bridge", (0.04, 0, -10), [], None, []),
         (t_81, t_bill, f"ledger:{LOAD}:line:{LOAD_LAST}:right:spiral:cut", (0, 0, 0), [], "melt", [
-            {"kind": "callout", "at": at("the federal load"), "dur": 2.2, "pad": 20,
-             "target": {"kind": "datum", "index": IDX81}, "label": "1981"},
+            # review 1: no callout on 1981 - it fired inside the spiral (M25) and its ring sat on the figure below
             {"kind": "figure", "at": at("thirty-one percent"), "dur": 1.6, "text": "31% of GDP",
              "target": {"kind": "datum", "index": IDX81}, "dy": -0.8},
-            {"kind": "span", "at": at("that same load"), "dur": 2.6, "from": IDX81, "to": LOAD_LAST,
-             "label": "1981 to today"},
+            # review 2: no span - its shade read as a grey block over the whole line; the two figures name the two loads
             {"kind": "figure", "at": at("one hundred twenty-three"), "dur": 1.8, "text": "123%",
              "target": {"kind": "datum", "index": LOAD_LAST}, "color": "neg", "dy": -1.0},
         ]),
@@ -123,8 +118,7 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
         (t_bill, t_ring, f"ledger:{BILL}:line:{BILL_LAST}:right::cut", (0, 0, 0), [], "cut", [
             {"kind": "build_to", "at": at("Federal interest runs"), "dur": 2.6,
              "target": {"kind": "datum", "index": BILL_LAST}},
-            {"kind": "figure", "at": at("one point two"), "dur": 1.8, "text": "$1.25T a year",
-             "target": {"kind": "datum", "index": BILL_LAST}, "color": "neg", "dy": -1.0},
+            # review 1: no figure here - "$1.25T a year" stood over the series' own "$1.25T Interest paid" tag
             {"kind": "note", "at": at("The thirty-year carries"), "dur": 2.2,
              "text": "the 30-year: 5.28% - every new bond prices off it"},
             # no span on the reflect sentence: M28 caught its label under the figure's own pill at 0:53, and
