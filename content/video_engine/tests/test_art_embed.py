@@ -219,3 +219,82 @@ def test_the_golden_lands_a_press_card_on_the_poster_and_a_still_card_on_the_pap
     assert punch["target"]["quad"] == quote["embed"]["quad"], "the eye and the card read the same surface"
     for surface in (quote["embed"], record["embed"]):
         assert B.embed_quad_error(surface["name"], surface, "the golden") is None
+
+
+# ---- the APPROVED plates, measured (P50 T7, operator 2026-09-12: "The frames are fine") --------------------
+# Three Flow stills the operator approved as ART-embed study plates, each with its surfaces MEASURED on the
+# rendered stage by channel-assets/money-physics/plates/measure_embed_quads.py and written to the plate's own
+# `<plate>.layers.json`. The quads below are those files, copied here so a re-measurement that MOVES a surface
+# has to move a test too - a plate's geometry is a committed number, not a number the tool happens to print.
+#
+# STAGE fractions, not still fractions: the player paints the world plate on `.world`, which is `inset: -5%`
+# with `background-size: cover`, so a 768 x 1376 still lands on the 1080 x 1920 stage at
+# `stage_px = still_px * 1.546875 + (-54, -104.25)`. A quad read off the raw still would sit 5 % inside the
+# surface it was measured on. The engine reads these as `p[0] * STAGE_W, p[1] * STAGE_H` (embedQuadPx).
+PLATES = ROOT / "content/video_engine/channel-assets/money-physics/plates"
+sys.path.insert(0, str(PLATES))
+import measure_embed_quads as MQ  # noqa: E402
+
+MEASURED = {
+    "art-embed-study-poster": {
+        "poster": [[0.35462, 0.16036], [0.86549, 0.11772], [0.86436, 0.6389], [0.35462, 0.62276]],
+    },
+    "art-embed-study-tv-laptop": {
+        "laptop": [[0.61254, 0.6422], [0.95951, 0.64818], [0.94647, 0.78303], [0.59626, 0.76932]],
+        "tv": [[0.23287, 0.20871], [0.9683, 0.20913], [0.96744, 0.50337], [0.2329, 0.49721]],
+    },
+    "art-embed-washi-tv": {
+        "paper": [[0.0, 0.46697], [1.0, 0.46697], [1.0, 1.0], [0.0, 1.0]],
+        "tv": [[0.11402, 0.1411], [0.88743, 0.141], [0.88743, 0.39427], [0.11399, 0.38744]],
+    },
+}
+
+
+def test_each_approved_plate_declares_its_measured_surfaces_through_the_compilers_own_reader():
+    """The file the measurement wrote is the file the COMPILER reads: `<plate>.layers.json` beside the plate,
+    the `embed` key, a named set of quads - `plate_embeds`' rule and nothing else. And the stage fractions in
+    it are the ones the player will use, so the placement the tool measured against is asserted here too."""
+    place = MQ.cover_placement(768, 1376, "9:16")
+    assert (round(place["scale"], 6), round(place["ox"], 2), round(place["oy"], 2)) == (1.546875, -54.0, -104.25), \
+        "the world plate is painted over 110 % of the stage by cover - measure anywhere else and the card misses"
+    for stem, want in sorted(MEASURED.items()):
+        side = PLATES / f"{stem}{B.FG_LAYERS_SUFFIX}"
+        assert side.exists(), f"{side.name} is the measurement - without it the plate declares no surface"
+        got = B.plate_embeds(PLATES / f"{stem}.png")
+        assert sorted(got) == sorted(want), f"{stem} declares {sorted(got)}, measured {sorted(want)}"
+        assert sorted(got) == sorted(MQ.SURFACES[stem]), \
+            f"{stem}: the tool and the file name different surfaces - a re-roll would be measured differently"
+        for name, quad in sorted(want.items()):
+            assert got[name]["quad"] == quad, f"{stem} {name} has moved"
+            assert got[name]["darken"] is None, \
+                f"{stem} {name}: the plate declares the surface, the BUILD dates the dimming on its own word"
+            assert all(0.0 <= v <= 1.0 for p in got[name]["quad"] for v in p), "a stage fraction, corner to corner"
+
+
+def test_every_measured_quad_is_a_lawful_surface_a_card_can_be_read_on():
+    """`embed_quad_error`'s whole law on every surface the three plates declare: four corners on the stage,
+    convex and in TL TR BR BL order, and at least EMBED_MIN_W of the stage wide. The narrowest of the five is
+    the laptop's screen at 35 % - none is under the floor, so none needs recording as a surface that cannot
+    carry a card; the floor itself is proved to still bite by shrinking that same screen under it."""
+    widths = {}
+    for stem, want in sorted(MEASURED.items()):
+        embeds = B.plate_embeds(PLATES / f"{stem}.png")
+        for name, spec in sorted(embeds.items()):
+            where = f"{stem} embed {name}"
+            assert B.embed_quad_error(name, spec, where) is None, B.embed_quad_error(name, spec, where)
+            q = spec["quad"]
+            widths[f"{stem}/{name}"] = ((q[1][0] - q[0][0]) + (q[2][0] - q[3][0])) / 2
+            world = {"asset_id": stem, "sha256": "0" * 64}
+            assert B.embed_error(world, embeds, name, where, species="press") is None, "a press card may land"
+            assert B.embed_error(world, embeds, name, where, species="chart") is not None, "B1 still holds"
+    assert min(widths.values()) >= B.EMBED_MIN_W, widths
+    narrowest = min(widths, key=widths.get)
+    assert narrowest == "art-embed-study-tv-laptop/laptop" and round(widths[narrowest], 3) == 0.349, widths
+    assert round(widths["art-embed-washi-tv/paper"], 3) == 1.0, "the washi ground is the stage, edge to edge"
+    # the floor is not decoration: the same screen, shrunk about its own centre until it is under a quarter of
+    # the stage, is refused by name - so a surface that could not carry a readable card never reaches a dock.
+    lap = MEASURED["art-embed-study-tv-laptop"]["laptop"]
+    cx = sum(p[0] for p in lap) / 4
+    shrunk = [[round(cx + (x - cx) * 0.6, 5), y] for x, y in lap]
+    err = B.embed_quad_error("laptop", {"quad": shrunk}, "the floor")
+    assert err and "of the stage wide" in err and "25% floor" in err, err
