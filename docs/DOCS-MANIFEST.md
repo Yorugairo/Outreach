@@ -73,7 +73,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md — 48 — The figure and the ground: actor mo — Extracted from `09_2d_and_2_5d_body_anim — defines: — — terms: minimum-jerk; O(1); Gazendam & Sinke 2005; α(τ) = 10τ³ − 15τ⁴ + 6τ⁵
 - docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md — 49 — Generative video and the vertical s — Extracted from `10_generative_video_tool — defines: — — terms: width: 800px; left: 80px; Centre-cropping; balance-scale; re-stage
 - docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md — 50 — The phone is the screen: ep1's real — Operator-supplied YouTube analytics for — defines: — — terms: YouTube; Operator-supplied; DERIVED; doc 49 §49.1
-- docs/content-video-engine/51-THE-SHORTS-FORMAT.md — 51 — The shorts format: one page, ship i — Everything needed to build a short, cons — defines: — — terms: long-form; roll-out; x[80,880] y[280,1340]; [post-key]
+- docs/content-video-engine/51-THE-SHORTS-FORMAT.md — 51 — The shorts format: one page, ship i — Everything needed to build a short, cons — defines: — — terms: long-form; stick-figure; roll-out; drop-off
 - docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md — 52 — Construct, don't inherit — Operator, 2026-09-04: — defines: — — terms: RULE-the-page-is-the-ground; real-estate; thirteen-minute; pre-composed
 - docs/content-video-engine/53-THE-STICKMAN-LANE.md — 53 — The stickman lane: the workflow, re — Seven scenes x 4 s = a 30-second short. — defines: — — terms: @Mike; CapCut; ANTI-GLITCH LOCK; stage-gated
 - docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md — 54 — Google Flow Production Research: Ge — Title: Production Optimization, Prompt E — defines: — — terms: Create Body; gemini-omni-1.1-flash; Two-phase; pre-cropped
@@ -95,11 +95,11 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## capabilities
 
-- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +154 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
+- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +163 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
 
 ## backlog
 
-- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +108 more — terms: Z-stack; short-form; drawOn; G-g
+- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +110 more — terms: Z-stack; short-form; drawOn; G-g
 
 ## pattern
 

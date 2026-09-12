@@ -670,10 +670,10 @@ _none._
 
 ### DELTA — nothing like it in the target — THIS IS THE LIFT LIST
 
-- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:1` — Exploration review — what techniques and maths are still unexplored (2026-09-10) — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:194` 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — h 0.00 / j 0.24 / b 0.18 — 0 rules
-- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:11` — 1. The Bravos maths — what Gemini's dossier carries, and what we took — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:194` 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — h 0.00 / j 0.23 / b 0.14 — 1 rule
+- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:1` — Exploration review — what techniques and maths are still unexplored (2026-09-10) — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:205` 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — h 0.00 / j 0.24 / b 0.18 — 0 rules
+- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:11` — 1. The Bravos maths — what Gemini's dossier carries, and what we took — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:205` 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — h 0.00 / j 0.23 / b 0.14 — 1 rule
     - `:31` Then the operator produced the summary Gemini never filed (`C:/Users/Snipe/Downloads/Gemini Bravos Convo.md`, now
-- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:46` — 2. Bravos's species we have not built (from `REPORT.claude.md` §"The grammar") — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:194` 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — h 0.00 / j 0.09 / b 0.00 — 2 rules
+- `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:46` — 2. Bravos's species we have not built (from `REPORT.claude.md` §"The grammar") — `docs/content-video-engine/46-REFERENCE-RHYTHM.md:205` 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts — h 0.00 / j 0.09 / b 0.00 — 2 rules
     - `:53` | 8 | the flow diagram - dashed boxes of icon chips joined by arrows, the SAME diagram reused with one node swapped | a `flow-diagram` species: chips + arrows +
     - `:61` | 12 | 178 WPM, no pauses; the sponsor block the only tonal break | doc 46; the take standard (E38/M13) | RECORDED |
 - `docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:63` — 3. The open backlog — the technique or maths each row needs — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 9 rules
