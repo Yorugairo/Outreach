@@ -347,3 +347,56 @@ def test_tokyo_short_is_judged_by_the_shape():
     assert g["S01"].level == "PASS" and g["S02"].level == "PASS" and g["S03"].level == "PASS" and g["S05"].level == "PASS"
     assert g["S06"].level == "PASS" and g["S07"].level == "PASS"
     assert not {"G02", "G21", "G22", "G37", "G39"} & set(g)
+
+
+def _late_mechanism_short() -> str:
+    """The conforming short with its [post-key] sentence pushed well past 0:10 (the estimated clock carries a tolerance) by a three-sentence archetype in front of it."""
+    s = _conforming_short()
+    key = next(l for l in s.split("\n") if "[post-key]" in l)
+    return s.replace(key, "I ran risk at a bank for six years and watched this exact thing happen twice.\n\n"
+                          "Nobody on the desk called it by its name, and nobody on the desk saw it coming either.\n\n"
+                          "Here is the part they never say out loud on television.\n\n" + key, 1)
+
+
+def test_s02_takes_the_first_ledger_page_as_the_mechanism_e44(tmp_path):
+    """E44 / R26-4 (P52 T12): the chart IS the mechanism. A short whose [post-key] sentence ends after 0:10 FAILs S02 on its
+    own - and PASSes when the build's scene timeline shows the first ledger page rolling out under the hook; an undeclared
+    mechanism sentence still FAILs whatever the page does; a page that lands late does not rescue a late sentence."""
+    s = _late_mechanism_short()
+    g = _by_id(G.run(s, None, ring="tea break", short=True)[0])
+    assert g["S02"].level == "FAIL", g["S02"].message                                  # the sentence alone is late
+    assert "no scene timeline" in g["S02"].message
+    g = _by_id(G.run(s, None, ring="tea break", short=True, pages=[1.99, 44.88])[0])
+    assert g["S02"].level == "PASS" and "ON THE PAGE" in g["S02"].src, g["S02"].message
+    assert "first ledger page lands at 1.99s" in g["S02"].message
+    g = _by_id(G.run(s, None, ring="tea break", short=True, pages=[17.0])[0])
+    assert g["S02"].level == "FAIL" and "first ledger page at 17.00s" in g["S02"].message   # Tokyo v1: the page at 0:17 (E44)
+    g = _by_id(G.run(s.replace(" [post-key]", ""), None, ring="tea break", short=True, pages=[1.99])[0])
+    assert g["S02"].level == "FAIL" and "not declared" in g["S02"].message             # the page never stands in for the declaration
+    # the conforming short is unchanged by a page: the sentence carries it, the message is the old one
+    g = _by_id(G.run(_conforming_short(), None, ring="tea break", short=True, pages=[1.99])[0])
+    assert g["S02"].level == "PASS" and "ON THE PAGE" not in g["S02"].src
+    # load_pages reads the compiler's scenes: a ledger world's span start; clips and plates are not pages
+    import json
+    scenes = {"scenes": [{"scene_id": "s01", "world": {"kind": "clip"}, "span": [0.0, 1.99]},
+                         {"scene_id": "s02", "world": {"kind": "ledger", "page": {}}, "span": [1.99, 38.96]},
+                         {"scene_id": "s03", "world": {"asset_id": "plate"}, "span": [38.96, 44.88]},
+                         {"scene_id": "s04", "world": {"kind": "ledger"}, "span": [44.88, 61.76]}]}
+    (tmp_path / "x-short.timeline.json").write_text(json.dumps(scenes), encoding="utf-8")
+    (tmp_path / "timeline.json").write_text(json.dumps({"words": []}), encoding="utf-8")
+    assert G.load_pages(tmp_path / "x-short.timeline.json") == [1.99, 44.88]
+    assert G.find_scene_timeline(tmp_path / "timeline.json") == tmp_path / "x-short.timeline.json"
+
+
+@needs_tokyo
+def test_tokyo_s02_reads_its_first_page_under_two_seconds():
+    """The two shipped shorts were built under E44: Tokyo's first ledger page lands at 1.99 s (the Japan short's at 1.82 s).
+    Their S02 verdicts do not move - the sentence still carries them - and the stats name the page."""
+    text = (TOKYO / "SCRIPT-90S-VO.claude.txt").read_text(encoding="utf-8")
+    scenes = G.find_scene_timeline(TOKYO / "build-short/timeline.json")
+    assert scenes is not None and scenes.name == "tokyo-short.timeline.json"
+    pages = G.load_pages(scenes)
+    assert pages and pages[0] < 2.5, pages
+    gates, stats = G.run(text, G.load_timeline(TOKYO / "build-short/timeline.json"), ring="tea break", pages=pages)
+    g = _by_id(gates)
+    assert g["S02"].level == "PASS" and stats["first_page"] == f"{pages[0]:.2f}s"

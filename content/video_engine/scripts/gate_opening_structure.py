@@ -364,8 +364,11 @@ def _content_stems(sentence: str) -> set[str]:
 
 
 def run_short(text: str, timeline: list[dict] | None, sents, marks, ring: str | None, title: str | None,
-              thumb: str | None, thumb_file: str | None) -> tuple[list[Gate], dict]:
-    """G2: the shorts shape (doc 51 s51.2) as gates. S01-S08 plus the shared platform gates."""
+              thumb: str | None, thumb_file: str | None, pages: list[float] | None = None) -> tuple[list[Gate], dict]:
+    """G2: the shorts shape (doc 51 s51.2) as gates. S01-S08 plus the shared platform gates.
+    pages: the seconds at which ledger pages LAND (load_pages on the build's scene timeline) - E44 / R26-4: the first page
+    on the hook IS the mechanism surface, so S02 reads a page by 0:10 as the mechanism stated, the [post-key] sentence
+    still declared (a short with no mechanism sentence fails whatever the page does)."""
     runtime = sents[-1][1] if sents else 0.0
     tol = 1.0 if timeline else EST_TOL
     g: list[Gate] = []
@@ -396,7 +399,15 @@ def run_short(text: str, timeline: list[dict] | None, sents, marks, ring: str | 
         add("S02", "51.2 THE MECHANISM by 0:10: the one thing this short is about, stated plainly - declared with [post-key]", "FAIL", "no [post-key] - the mechanism sentence is not declared")
     else:
         e = sents[mech_k][1]
-        add("S02", "51.2 THE MECHANISM by 0:10: the one thing this short is about, stated plainly - declared with [post-key]", "PASS" if e <= SHORT_MECH_BY_S * tol else "FAIL", f"[post-key] sentence ends at {e:.2f}s: '{sents[mech_k][2][:70]}'")
+        first_page = min(pages) if pages else None
+        if e <= SHORT_MECH_BY_S * tol:
+            add("S02", "51.2 THE MECHANISM by 0:10: the one thing this short is about, stated plainly - declared with [post-key]", "PASS", f"[post-key] sentence ends at {e:.2f}s: '{sents[mech_k][2][:70]}'")
+        elif first_page is not None and first_page <= SHORT_MECH_BY_S * tol:
+            # E44 / R26-4 (P52 T12): the chart IS the mechanism - the first ledger page rolling out under the hook satisfies
+            # "mechanism by 0:10"; the figure on it is the stakes. The [post-key] sentence is still declared, and named here.
+            add("S02", "51.2 THE MECHANISM by 0:10 - ON THE PAGE (E44): the first ledger page rolls out under the hook; the [post-key] sentence follows it", "PASS", f"first ledger page lands at {first_page:.2f}s; [post-key] sentence ends at {e:.2f}s: '{sents[mech_k][2][:70]}'")
+        else:
+            add("S02", "51.2 THE MECHANISM by 0:10: the one thing this short is about, stated plainly - declared with [post-key] or carried by the first ledger page (E44)", "FAIL", f"[post-key] sentence ends at {e:.2f}s" + (f"; first ledger page at {first_page:.2f}s" if first_page is not None else "; no scene timeline read (--scenes) so no page can carry it") + f": '{sents[mech_k][2][:70]}'")
     add("J50", "51.1 exactly ONE mechanism (49 s49.6 cognitive atomicity) - [post-key] is a delivery mark and may settle more than one key line: read the key lines as one mechanism or not", "JUDGE",
         "; ".join(f"{sents[k][0]:.0f}s '{sents[k][2][:60]}'" for k in pk) or "no key line declared")
     # S03 N instances of the mechanism between it and the ring
@@ -436,6 +447,7 @@ def run_short(text: str, timeline: list[dict] | None, sents, marks, ring: str | 
     add("S08", f"doc 37 speech: sentences 10-15 words; over {SHORT_SENT_WARN_WORDS} is several caption pages of one breath", "WARN" if longest[0] > SHORT_SENT_WARN_WORDS else "PASS", f"longest sentence {longest[0]} words: '{longest[1][:70]}'")
     stats = {"mode": "short (G2: doc 51 s51.2)", "runtime": mmss(runtime), "timing": "measured" if timeline else "estimated",
              "mechanism": sents[mech_k][2][:60] if mech_k is not None else "-", "instances": len(inst), "ring_close_from": mmss(close_start),
+             "first_page": f"{min(pages):.2f}s" if pages else "-",   # E44: the page that carries the mechanism, when a scene timeline was read
              "beats_declared": {k: [mmss(sents[i][0]) for i in v] for k, v in beats.items()}}   # the screens enumerator reads these (R2 / s3a)
     return g, stats
 
@@ -443,15 +455,16 @@ def run_short(text: str, timeline: list[dict] | None, sents, marks, ring: str | 
 def run(text: str, timeline: list[dict] | None = None, counterparty: str | None = None,
         ring: str | None = None, opening_s: float = 300.0,
         cycle_s: float | None = None, title: str | None = None, thumb: str | None = None,
-        thumb_file: str | None = None, short: bool | None = None) -> tuple[list[Gate], dict]:
+        thumb_file: str | None = None, short: bool | None = None, pages: list[float] | None = None) -> tuple[list[Gate], dict]:
     """cycle_s: how far G36's cycle check runs; None = the whole runtime (E23).
+    pages: ledger page landing seconds from the build's scene timeline (load_pages) - the short's S02 reads them (E44).
     title / thumb: the packaging's words for G45; thumb_file: the thumbnail path J12 prints (E24).
     short: True forces the shorts shape (G2), False the long form; None = a MEASURED clock under SHORT_MAX_S is a short."""
     sents = _sentences_timed(text, timeline)
     if short is None:
         short = timeline is not None and bool(sents) and sents[-1][1] < SHORT_MAX_S
     if short:
-        return run_short(text, timeline, sents, beat_tags.find_marks(text), ring, title, thumb, thumb_file)
+        return run_short(text, timeline, sents, beat_tags.find_marks(text), ring, title, thumb, thumb_file, pages)
     marks = beat_tags.find_marks(text)
     beats: dict[str, list[tuple[float, int]]] = {}
     for tag, off in marks:
@@ -793,10 +806,40 @@ def load_timeline(path: Path) -> list[dict]:
     return d["words"] if isinstance(d, dict) and "words" in d else d
 
 
+def load_pages(path: Path) -> list[float]:
+    """E44 / R26-4 (P52 T12): the seconds at which LEDGER PAGES land, read off the build's scene timeline
+    (`<build>/<slug>.timeline.json`, the compiler's `scenes[]`: a scene whose `world.kind == "ledger"` is a page; its
+    `span[0]` is the landing - the roll-out begins there; the mount's own seconds are the page's arrival, not a delay)."""
+    d = json.loads(path.read_text(encoding="utf-8"))
+    out = []
+    for sc in (d.get("scenes") or []) if isinstance(d, dict) else []:
+        w = sc.get("world") or {}
+        if isinstance(w, dict) and w.get("kind") == "ledger" and sc.get("span"):
+            out.append(float(sc["span"][0]))
+    return out
+
+
+def find_scene_timeline(word_timeline: Path) -> Path | None:
+    """The scene timeline beside a build's word timeline: the one `*.timeline.json` in the same directory that carries
+    `scenes` (Tokyo: `tokyo-short.timeline.json` beside `timeline.json`). None when the build has none."""
+    for p in sorted(word_timeline.parent.glob("*.timeline.json")):
+        if p.resolve() == word_timeline.resolve():
+            continue
+        try:
+            d = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:      # noqa: BLE001 - a sidecar that is not JSON is not a scene timeline
+            continue
+        if isinstance(d, dict) and "scenes" in d:
+            return p
+    return None
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("script", type=Path)
     ap.add_argument("--timeline", type=Path, help="build-f/timeline.json (measured word times)")
+    ap.add_argument("--scenes", type=Path, default=None,
+                    help="the build's scene timeline (<build>/<slug>.timeline.json) - S02 reads the first ledger page off it (E44); default: found beside --timeline")
     ap.add_argument("--counterparty", help="named counterparty, e.g. Bravos")
     ap.add_argument("--ring", help="the ring token object, e.g. spike")
     ap.add_argument("--opening-s", type=float, default=300.0)
@@ -813,8 +856,10 @@ def main() -> int:
     text = args.script.read_text(encoding="utf-8")
     unknown = beat_tags.unknown_marks(text)
     tl = load_timeline(args.timeline) if args.timeline else A.load_timings(args.script)
+    scenes = args.scenes or (find_scene_timeline(args.timeline) if args.timeline else None)
+    pages = load_pages(scenes) if scenes else None
     gates, stats = run(text, tl, args.counterparty, args.ring, args.opening_s, args.cycle_s,
-                       args.title, args.thumb, args.thumb_file, short=args.short)
+                       args.title, args.thumb, args.thumb_file, short=args.short, pages=pages)
     if unknown:
         gates.insert(0, Gate("G00", "doc 37 marks", "FAIL", f"unknown marks would be spoken: {sorted(unknown)}"))
     print(f"=== OPENING STRUCTURE GATE: {args.script.name} ===")

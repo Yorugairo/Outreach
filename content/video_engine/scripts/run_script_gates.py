@@ -205,7 +205,7 @@ def run_audit(script: Path, pivot: str | None, short: bool = False) -> ToolResul
 def run_opening_gate(script: Path, args: argparse.Namespace) -> ToolResult:
     argv = [str(script)]
     # E24: --title / --thumb / --thumb-file pass straight through to G45 / J12
-    for flag in ("timeline", "counterparty", "ring", "title", "thumb", "thumb_file"):
+    for flag in ("timeline", "scenes", "counterparty", "ring", "title", "thumb", "thumb_file"):   # E44: --scenes reaches S02
         if getattr(args, flag):
             argv += [f"--{flag.replace('_', '-')}", str(getattr(args, flag))]
     if args.opening_s is not None:
@@ -339,6 +339,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--ring", help="the ring token object, e.g. spike")
     ap.add_argument("--counterparty", help="named counterparty, e.g. Bravos")
     ap.add_argument("--timeline", type=Path, help="build-f/timeline.json (measured word times)")
+    ap.add_argument("--scenes", type=Path, default=None,
+                    help="the build's scene timeline (<build>/<slug>.timeline.json) for the opening gate's S02 (E44: the first ledger page carries the mechanism); default: found beside --timeline")
     ap.add_argument("--opening-s", type=float, default=None)
     ap.add_argument("--title", help="the locked title - opening gate G45 packaging echo (E24)")
     ap.add_argument("--thumb", help="the thumbnail's words, when recorded in text (E24 G45)")

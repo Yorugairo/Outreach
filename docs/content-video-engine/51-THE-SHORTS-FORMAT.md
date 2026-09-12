@@ -25,10 +25,24 @@ production is what the engine is for.
 
 ```
 0:00–0:03   HOOK          the claim, spoken and on screen. No throat-clearing.
-0:03–0:10   THE MECHANISM the one thing this short is about, stated plainly
+0:03        THE PAGE      the first ledger page rolls out under sentence two (E44)
+0:03–0:10   THE MECHANISM the one thing this short is about, ON the page by 0:10
+            THE HOST      the archetype / the host after the page, or over it as a species
 0:10–0:45   N INSTANCES   the same mechanism, N times, different variables
 0:45–0:55   THE RING      return to the mechanism, not to a phrase
 ```
+
+**The chart on the hook (E44, 2026-09-06; the gate condition 2026-09-12, R26-4 / P52 T12).** Ruled on the Tokyo short's
+first Facebook read (`tokyo-tea-break/ANALYTICS-2026-09-06.md`: the drop-off at 0:11 inside a clip scene, the first ledger
+page at 0:17). The operator: *"our strongest mechanism is our chart plates now, but we don't flex it until 20 seconds in
+... That's the only thing the stick-figure companies can't just drown me against."* So the hook is followed by the chart
+rolling out under the second sentence, before the archetype, the tricolon and the reflect: **the chart is the mechanism,
+the figure on it is the stakes**, and the host comes after the page or over it. `gate_opening_structure.py` S02 reads
+the build's scene timeline (`--scenes <build>/<slug>.timeline.json`, found beside `--timeline` by default): a `[post-key]`
+sentence that ends by 0:10 PASSes as before; one that ends later PASSes when the first ledger page lands by 0:10 (the
+verdict says "ON THE PAGE" and prints both clocks); an undeclared mechanism sentence FAILs whatever the page does, and a
+page at 0:17 rescues nothing. Both shipped shorts land their first page under two seconds (Tokyo 1.99 s, the Japan
+short 1.82 s).
 
 **Gated (G2, 2026-09-05) — `gate_opening_structure.py` reads a measured clock under 3:00 as a short and asks this shape, not the long-form geometry: S01 the hook by 0:03 · S02 the `[post-key]` sentence by 0:10 · S03 ≥ 2 `[new]`/`[catalyst]` instances inside 0:10–80% · S05 the ring (token and stems) in the last 20% · S06 a rehook every 30 s · S07 no brand line (the outro carries it) · S08 no sentence over 18 words (the two-line caption gate) · J50 one mechanism · J51 the instances share a spine. The audit's late-stage flip (doc 35 rule 2) and the 60–90 s open do not bind on a short. Run: `run_script_gates.py <script> --timeline <build>/timeline.json --ring <token> --title "<title>"`.**
 
