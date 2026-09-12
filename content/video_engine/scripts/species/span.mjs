@@ -13,10 +13,24 @@
 
    THE LAW, a pure function of t:
      shade  - the band between the two declared edges fades in over IN_S to ALPHA, behind every line (it is
-              ground, not ink on top - the same rule the spread follows).
+              ground, not ink on top - the same rule the spread follows), and it is SUNK into the ground
+              layer to prove it: the bottom of the active chart state's own svg, never the annotation layer
+              (R26-68; spanGroundLayer below).
      label  - written above the band BY THE HAND, glyph after glyph, over WRITE of the word, starting when
               the shade is in. Above the band where there is room for it, inside its top edge where there
               is not (a chart that fills its box has nothing over it).
+   R26-68 (the one-shot's frames, 2026-09-12: "the grey block covers the line it is measuring, and the page's
+   own series label sits inside the shade"). Two halves, both here:
+     the LAYER - a page with chart STATES gets a perform svg stacked ABOVE every state, and a shade built into
+                 it washes the very line it stands behind. A shade is ground: the painter sinks the rect to the
+                 bottom of the ACTIVE state's own svg every frame (idempotent, so a seek is the play, and a
+                 rebuilt state gets its shade back). A one-state page already drew it there - nothing moves.
+     the LABEL - the band's PAD is room, not an edge, so the pad YIELDS: where one of the page's own direct
+                 labels (a series' terminal tag, a printed value - read off the engine's MARK MODEL) stands
+                 inside the band's x range and above the ink's highest point, the shade's top stops LABEL_CLEAR
+                 short of its baseline and the label is left on the ground. The EDGES never move (they are the
+                 stretch of time the span names), and the span's own name keeps the raw top (`band.yTop`), so it
+                 stands exactly where it stood and the text-on-text gate M28 reads the same geometry.
    THE EDGES. `from` and `to` are each either a DATUM INDEX (an integer: the page's own index, the one a
    bracket and a figure use) or an X-FRACTION (a number in 0..1 along the drawn series' own x extent, for a
    period that falls between two data). Both are resolved on the ACTIVE chart state every frame, from the
@@ -42,6 +56,7 @@ export const SPAN = Object.freeze({
   LABEL_IN: 2.1,    /* ... and, where it does not, inside the top edge by this many of the label's own sizes: two lines down, clear of the plot's own top furniture (the unit caption sits on the first line inside the plot - read in the frame, 2026-09-11) */
   LABEL_ROOM: 1.3,  /* "room above" means this many label sizes clear of the chart's top - otherwise the name is written inside the band */
   MIN_W: 6,         /* a band narrower than this is not a period - it is two adjacent data, which is a bracket's job */
+  LABEL_CLEAR: 0.55,/* R26-68: how far short of a page label's baseline the shade's top stops, in the span's own label sizes - a page's series tag is the DATA's name and reads on the ground, never inside a wash */
 });
 
 const span01 = (v) => Math.min(1, Math.max(0, v));
@@ -69,10 +84,62 @@ export const spanExtent = (lists) => {
   return Number.isFinite(y0) && Number.isFinite(y1) ? { y0: y0 - SPAN.PAD_T, y1: y1 + SPAN.PAD_B } : null;
 };
 
+/* THE PAGE'S LAYERS, as the page publishes them - on its own STATE, which is what a page painter is handed
+   (there is no layer field in the page species context: it carries the engine's helpers, not its DOM). Every
+   chart state owns a `chart` svg and draws its whole world into it - ground, grid, lines, marks, the page's own
+   labels, in that order - and `st.performSvg`, on a page with states, is the ANNOTATION layer stacked above all
+   of them. The active state is the one a datum resolves against, so it is the one a shade belongs under. */
+export const spanActiveState = (st) => ((st && st.states && st.states.length ? st.states[st.active | 0] : null) || st || null);
+export const spanGroundLayer = (st) => { const S = spanActiveState(st); return (S && S.chart) || (st && st.chart) || null; };
+
+/* the shade to the BOTTOM of that layer - under the first thing the chart draws, which is where the spread puts
+   its own fill for the same reason. Idempotent: it moves nothing once the rect is there, so a cold seek lands it
+   exactly where a play does, and a state whose svg was rebuilt gets its shade back on the next frame. */
+export const spanSink = (rect, layer) => {
+  if (!rect || !layer || typeof layer.insertBefore !== "function") return false;
+  if (layer.firstChild === rect) return false;
+  layer.insertBefore(rect, layer.firstChild || null);
+  return true;
+};
+
+/* THE PAGE'S OWN DIRECT LABELS, off the engine's MARK MODEL (every builder registers what it drew under a role
+   and the geom that placed it): the series' terminal tag and a printed value - the two labels that belong to the
+   DATA, and so the two that can end up standing inside a stretch of it. The plot's furniture is deliberately not
+   read: the ticks, the axis captions and the source line live at the plot's edges, and the basis caption read
+   over a 0.16 wash is the very thing LABEL_IN was tuned against (the golden `span-decade`). */
+export const SPAN_LABEL_ROLES = Object.freeze(["name", "value"]);
+export const spanPageLabels = (st) => {
+  const S = spanActiveState(st), out = [];
+  for (const m of (S && S.marks) || []) {
+    if (!m || SPAN_LABEL_ROLES.indexOf(m.role) < 0) continue;
+    const g = m.geom || {}, x = +g.x, y = +g.y;
+    if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+    if (m.el && typeof m.el.textContent === "string" && !m.el.textContent.trim()) continue;   /* a muted history's empty tag names nothing */
+    out.push({ x, y });
+  }
+  return out;
+};
+
+/* THE SHADE'S TOP (R26-68): the pad yields to a label, the ink never does. A label inside the band's x range
+   whose baseline sits in the HEADROOM - between the padded top and the highest drawn point - pushes the shade's
+   top to `clear` below itself; the top never falls past the data it stands behind, so the shade still reaches
+   the ink it is the room for. `top0` is the band's raw (clipped) top, `dataTop` the highest drawn point. */
+export const spanTop = (top0, dataTop, x0, x1, labels, clear) => {
+  let y = top0;
+  for (const L of labels || []) {
+    if (!L || !(L.x >= x0 && L.x <= x1)) continue;
+    if (!(L.y >= top0 && L.y <= dataTop)) continue;
+    y = Math.max(y, L.y + (clear || 0));
+  }
+  return Math.min(Math.max(y, top0), Math.max(top0, dataTop));
+};
+
 /* THE BAND this frame, or null when either edge has left the window (the bracket's rule: nothing to name,
    nothing drawn). `entries` is the named series' live points, `lists` every series', `H` the chart's viewBox
-   height when the caller knows it - the band is clipped to the page rather than drawn off it. */
-export const spanBand = (entries, lists, from, to, H) => {
+   height when the caller knows it - the band is clipped to the page rather than drawn off it. `labels` are the
+   page's own direct labels (spanPageLabels) and `clear` the room to leave under one: given neither, the band is
+   exactly the pad's, which is how a caller with no page to read - a test, a probe - gets the raw law. */
+export const spanBand = (entries, lists, from, to, H, labels, clear) => {
   const a = spanEdgeX(entries, from), b = spanEdgeX(entries, to), ext = spanExtent(lists);
   if (a === null || b === null || !ext) return null;
   const x0 = Math.min(a, b), x1 = Math.max(a, b);
@@ -80,12 +147,18 @@ export const spanBand = (entries, lists, from, to, H) => {
   const top = Number.isFinite(H) ? Math.max(0, ext.y0) : ext.y0;
   const bot = Number.isFinite(H) ? Math.min(H, ext.y1) : ext.y1;
   if (!(bot > top)) return null;
-  return { x: x0, w: x1 - x0, y: top, h: bot - top, cx: (x0 + x1) / 2 };
+  const cut = spanTop(top, ext.y0 + SPAN.PAD_T, x0, x1, labels, clear);   /* R26-68: the shade stops short of a label in its headroom ... */
+  const y = cut < bot ? cut : top;                                        /* ... unless that would leave no band at all */
+  return { x: x0, w: x1 - x0, y, h: bot - y, yTop: top, cx: (x0 + x1) / 2 };
 };
 
 /* where the name is written: above the band when the chart leaves room over it, inside its top edge when
-   the chart fills its box (the bracket's own rule for a label with nowhere to stand) */
-export const spanLabelY = (band, fs) => (band.y >= fs * SPAN.LABEL_ROOM ? band.y - SPAN.LABEL_DY : band.y + fs * SPAN.LABEL_IN);
+   the chart fills its box (the bracket's own rule for a label with nowhere to stand). R26-68: off the band's
+   RAW top (`yTop`), never the top the shade gave up to a label - the name stands where it always stood, so
+   M28's text-on-text geometry is the one it already passed, and the name can never drop onto the very label
+   the shade just cleared. */
+export const spanLabelY = (band, fs) => { const y = band.yTop != null ? band.yTop : band.y;
+  return y >= fs * SPAN.LABEL_ROOM ? y - SPAN.LABEL_DY : y + fs * SPAN.LABEL_IN; };
 
 /* THE POSE at t: is it up, how deep is the shade, how far has the hand written. */
 export const spanPose = (sp, t) => {
@@ -116,8 +189,10 @@ export const paintSpan = (sd, t, st, ctx) => {
   if (!pose.on) { hide(); return; }
   const lists = [];
   for (let i = 0; i < Math.max(1, (st.linePts || []).length); i++) lists.push(ctx.pointsNow(st, i));
-  const band = spanBand(lists[sd.si] || [], lists, sd.sp.from, sd.sp.to, (st.geom || {}).H);
+  const band = spanBand(lists[sd.si] || [], lists, sd.sp.from, sd.sp.to, (st.geom || {}).H,
+                        spanPageLabels(st), SPAN.LABEL_CLEAR * sd.fs);
   if (!band) { hide(); return; }   /* R26-28: an edge the window dropped names nothing - nothing is drawn */
+  spanSink(sd.rect, spanGroundLayer(st));   /* R26-68: a shade is GROUND - under the state's own ink every frame, or it is not a shade */
   sd.rect.setAttribute("x", band.x.toFixed(1)); sd.rect.setAttribute("y", band.y.toFixed(1));
   sd.rect.setAttribute("width", band.w.toFixed(1)); sd.rect.setAttribute("height", band.h.toFixed(1));
   sd.rect.setAttribute("fill-opacity", pose.alpha.toFixed(3));

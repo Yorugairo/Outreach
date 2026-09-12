@@ -3,6 +3,7 @@ the classifier reads the two shipped takes the way the map does, the lint runs I
 plate-use check WARNs a long-form plate with no named use."""
 from __future__ import annotations
 
+import ast
 import json
 import sys
 from pathlib import Path
@@ -139,3 +140,112 @@ def test_no_row_marks_the_sentence(tmp_path):
 def test_usage_errors_exit_2(tmp_path):
     assert L.main([]) == 2
     assert L.main([str(tmp_path)]) == 2
+
+
+# ---------------------------------------------------------------- --propose (P53 T8): a PROPOSER, never an allocator
+BRIDGE = PROJECTS / "normal-for-which-bridge"
+BRIDGE_BUILD = "build-short-axes"
+
+
+def test_every_map_label_is_a_kind_a_chart_to_verb_or_declared_not_a_species():
+    """The map may not grow a label the proposer silently drops: it is a species kind, a `chart_to` verb, or it is
+    named in NOT_A_SPECIES as the world / dock / page choice it actually is."""
+    for act, labels in L.ACT_SPECIES.items():
+        for label in labels:
+            assert L.proposable(label) or label in L.NOT_A_SPECIES, (act, label)
+
+
+def test_proposable_reads_the_kinds_and_the_chart_to_verbs():
+    assert L.proposable("figure") == ("figure", {})
+    assert L.proposable("chart_to:rescale") == ("chart_to", {"to": "rescale"})
+    assert L.proposable("bars page") is None          # a PAGE, not a row's species
+    assert L.proposable("burst:stop") is None         # the object's `overflow`, not a row's species
+
+
+def test_anchor_phrase_takes_the_sentences_first_words():
+    words = [{"w": w} for w in "Now put that number against the country's whole output.".split()]
+    assert L.anchor_phrase("Now put that number against the country's whole output.", words) == ("Now put that number", True)
+    assert L.anchor_phrase("Two words", words)[0] == "Two words"
+    assert L.anchor_phrase("Not in the take at all", words) == ("Not in the take", False)
+
+
+def _write_series(project: Path, obj: str, facts: dict) -> None:
+    d = project / "evidence/objects"
+    d.mkdir(parents=True, exist_ok=True)
+    (d / f"{obj}.series.json").write_text(json.dumps({"series": [{"pts": [[0, 1]]}], "facts": facts}), encoding="utf-8")
+
+
+def _propose_project(tmp_path: Path) -> Path:
+    project = _write_project(tmp_path, "[(0.0, 6.0, 'ledger:ev-x-v1:line:9:right', (0, 0, 0), [], None, [])]", 6.0)
+    _write_series(project, "ev-x-v1", {"latest": 4.83, "last_idx": 9, "idx_aug26": 7})
+    return project
+
+
+def test_proposal_rows_parse_as_dict_literals_anchored_on_a_phrase(tmp_path):
+    lines, counts = L.propose(_propose_project(tmp_path))
+    assert lines[0] == L.PROPOSE_HEADER
+    rows = [l.strip().rstrip(",") for l in lines if l.strip().startswith("{")]
+    assert rows, lines
+    for row in rows:
+        node = ast.parse(row.split("  #")[0].strip().rstrip(","), mode="eval").body
+        assert isinstance(node, ast.Dict)
+        got = {k.value: v for k, v in zip(node.keys, node.values)}
+        assert got["kind"].value in B.SPECIES_KINDS
+        assert isinstance(got["at"], ast.Call) and got["at"].func.id == "at"     # a PHRASE call, never a number
+        assert isinstance(got["at"].args[0], ast.Constant)
+    assert counts["proposed_for"] == 1 and counts["rows"] == len(rows)
+
+
+def test_every_proposal_names_its_act_and_the_when_that_proposed_it(tmp_path):
+    lines, _ = L.propose(_propose_project(tmp_path))
+    assert any(l.startswith("PROPOSAL") and "pledged" in l for l in lines)
+    for row in [l for l in lines if l.strip().startswith("{")]:
+        act, _, when = row.partition("  # ")[2].partition(" · when: ")
+        assert act.split(" ")[0] in L.ACTS, row
+        assert when.strip() and when.strip() in list(B.SPECIES_WHEN.values()) + list(B.CHART_TO_WHEN.values()), row
+
+
+def test_target_is_read_off_the_facts_block_by_name(tmp_path):
+    lines, _ = L.propose(_propose_project(tmp_path))
+    joined = "\n".join(lines)
+    assert 'facts("ev-x-v1")["last_idx"]' in joined      # the NAME, never the number
+    assert '"index": 9' not in joined
+    assert "idx_aug26" in joined                         # the other index keys are offered, not chosen
+
+
+def test_nothing_is_proposed_where_a_row_fires_or_no_act_exists(tmp_path):
+    project = _write_project(tmp_path, "[(0.0, 6.0, 'ledger:ev-x-v1:line:9:right', (0, 0, 0), [], None, "
+                                       "[{'kind': 'figure', 'at': 1.0, 'dur': 1.5, 'text': '10T'}])]", 6.0)
+    _write_series(project, "ev-x-v1", {"last_idx": 9})
+    lines, counts = L.propose(project)
+    assert counts["proposed_for"] == 0 and counts["rows"] == 0
+    assert not any(l.startswith("PROPOSAL") for l in lines)
+    assert any("nothing to propose" in l for l in lines)
+    assert "bridge sentence" not in "\n".join(lines)      # no act: never proposed for
+
+
+def test_propose_leaves_the_report_untouched(tmp_path):
+    project = _propose_project(tmp_path)
+    before, _ = L.report(project)
+    assert L.main([str(project), "--propose"]) == 0
+    after, _ = L.report(project)
+    assert before == after
+
+
+def test_a_page_species_is_not_proposed_over_a_plate(tmp_path):
+    project = _write_project(tmp_path, "[(0.0, 6.0, 'plate-a;idle=drift', (0, 0, 0), [], None, None)]", 6.0)
+    lines, counts = L.propose(project)
+    rows = [l for l in lines if l.strip().startswith("{")]
+    assert not any('"kind": "figure"' in r for r in rows)          # a page species needs a ledger page
+    assert any("not proposable on this world" in l for l in lines)
+
+
+@pytest.mark.skipif(not (BRIDGE / L.TABLE_NAME).is_file() or not (BRIDGE / BRIDGE_BUILD / "timeline.json").is_file(),
+                    reason="the bridge short's axes build is not on disk")
+def test_the_bridge_short_is_proposed_for_from_its_own_facts():
+    lines, counts = L.propose(BRIDGE, build=BRIDGE_BUILD)
+    joined = "\n".join(lines)
+    assert lines[0] == L.PROPOSE_HEADER and "count" in lines[0]
+    assert counts["rows"] > 0 and counts["proposed_for"] > 0
+    assert 'facts("ev-' in joined and '["last_idx"]' in joined
+    assert L.main([str(BRIDGE), "--build", BRIDGE_BUILD, "--propose"]) == 0

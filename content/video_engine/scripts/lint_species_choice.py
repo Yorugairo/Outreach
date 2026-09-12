@@ -13,10 +13,23 @@ long-form table (runtime >= LONG_FORM_S or --long) it lists every plate row with
 a plate is a landing surface, a bridge or a reset, and says which; the compiler's PLATE_OPTS learns the token with P51 T0).
 
     python content/video_engine/scripts/lint_species_choice.py <project dir> [--build <dir>] [--table <py>] [--words <timeline.json>] [--long]
+    python content/video_engine/scripts/lint_species_choice.py <project dir> [--build <dir>] --propose
     python content/video_engine/scripts/lint_species_choice.py --when [--md] [--write-doc | --check-doc]
+
+`--propose` (P53 T8) adds a PROPOSAL block after the report: for every sentence with an act, an available species and NO row
+firing, one DRAFT ROW per available species - anchored on a PHRASE, targeted off the series' own `facts` - for the author to
+keep or delete. A PROPOSER, never an allocator: it writes no shot table, and nothing in it was chosen by count.
 
 `--when` prints the compiler's `when` on every kind (SPECIES_WHEN / CHART_TO_WHEN); `--write-doc` regenerates the map's
 s4 block between the SPECIES_WHEN markers, `--check-doc` exits 1 when the block is stale. Exit 0 otherwise; 2 on usage.
+
+THE PROPOSER'S LIMIT (P53 T8, found by the agent that built it, 2026-09-12): `--propose` reads the WORLD UNDER a
+sentence, never the sentence's REFERENT. On the bridge short it offered the federal-load page's last datum (123%
+of GDP) for "Five percent was normal once." - a sentence about a YIELD, whose series was not on stage - and all four
+candidates put the wrong number on the wrong page. It also cannot see a species firing just outside the sentence's
+own window, so "no row fires here" is weaker than "this beat is unmarked". So the sheet offers several candidates
+per sentence and the author's work is DELETION. That ratio is the honest signal: tune it toward "the best one" and
+this is an allocator again (PIPELINE.md).
 """
 from __future__ import annotations
 
@@ -202,10 +215,280 @@ def row_events(rows: list[tuple], s0: float, s1: float, project: Path) -> list[s
     return out
 
 
+# ---------------------------------------------------------------- the proposer (P53 T8, --propose)
+# NOT AN ALLOCATOR, and it cannot become one. PIPELINE.md "Stage 7 is AUTHORED. There is no allocator": a loop that
+# fills slots by count answers "how many fit" instead of "which one belongs", and no quality of tuning fixes that.
+# So this mode counts nothing, chooses nothing and writes no shot table. For a sentence that DOES something (an act),
+# whose act has a built species, and whose window fires nothing, it prints EVERY available species as a draft row -
+# the sentence above them - for the author to keep or delete. A sentence with no act, or with a row already firing,
+# is not proposed for at all.
+PROPOSE_WORDS = 4     # the anchor is the sentence's own first words, as a PHRASE call: the take stays the clock (authoring/words.py `at`)
+FILL = "FILL: "       # a field only the author can write; pasted as-is it FAILS the compiler's validator, which is the point
+PROPOSE_HEADER = ("PROPOSE · draft rows only - every one is a CANDIDATE for the author to keep or delete, nothing was chosen by "
+                  "count and no shot table was written (Stage 7 is AUTHORED: PIPELINE.md, \"There is no allocator\")")
+
+# What the map lists for an act that is NOT a row's species dict - the world, a dock or a page choice. Named here so a
+# new label in ACT_SPECIES cannot be dropped in silence (the test holds every label against this or a real kind).
+NOT_A_SPECIES = {
+    "record dock": "a DOCK (the record card), registered on the row - not a species",
+    "read->park": "the record dock's `read` option (it pops centred, then parks)",
+    "bars page": "the PAGE's own builder (`ledger:<obj>:story`)",
+    "line page": "the PAGE's own builder (`ledger:<obj>:line`)",
+    "tiers page": "the PAGE's own builder (the small multiples, P50 T9)",
+    "share page": "the PAGE's own builder (the share/pie)",
+    "treemap page": "the PAGE's own builder (the census, P50 T6)",
+    "plate use=bridge": "the plate row's `;use=bridge` token (E61)",
+    "burst": "the object's `overflow` in its own series file (E60)",
+    "stack": "the object's `overflow` in its own series file (E60)",
+    "burst:stop": "the object's `overflow` - the stopped burst (E60)",
+    "placeholder": "a page option (the empty slot the number lands in)",
+    "axis capsule": "a page option (the axis capsule the figure breaks)",
+}
+
+# The ONLY kind whose own `when` names a duration: SPECIES_WHEN["spotlight"] (E25 amended - the light holds until the
+# sentence has a reason to leave; the compiler resolves "hold" against the next event). Every other kind is printed
+# WITHOUT `dur`, and the row's comment says so - `_validate_entry` requires a number, so the author writes it.
+DUR_DEFAULT = {"spotlight": "hold"}
+
+# The fields a kind cannot be READ without: the compiler's own validators (`_validate_page_fields`, `_validate_chip`,
+# `_validate_flow`, `_validate_vecmap_species`), plus the label E56 requires of a ring. Prompts, never values.
+_EDGE = "a datum index (the page's own) or an x-fraction 0..1 - both edges the same way"
+PROPOSE_FILL = {
+    "callout": (("label", "the sentence's figure, as it is said (E56: a ring carries the number)"),),
+    "figure": (("text", "the figure with its unit - never a bare number"),),
+    "note": (("text", "the side fact the chart cannot show, in one line"),),
+    "retitle": (("text", "what the page is about now"),),
+    "relight": (("ref", "bracket | title - which mark re-fires"),),
+    "bracket": (("from", _EDGE), ("to", _EDGE), ("label", "what the two data measure")),
+    "spread": (("from", "the series index the gap starts at"), ("to", "the second series' index (or `to_rule`)")),
+    B.SPECIES_SPAN: (("from", _EDGE), ("to", _EDGE), ("label", "the stretch of time's own name")),
+    B.SPECIES_CHIP: (("icon", "a SOURCED glyph under assets/icons"), ("label", "the thing the chip stands for")),
+    B.SPECIES_FLOW: (("nodes", "2-6 {id, icon, label}"), ("edges", "the arrows, by node id")),
+    B.SPECIES_CROSS: (("cells", "the treemap cells' own labels"), ("text", "the crossed share, written as a number")),
+    B.SPECIES_STAMP: (("text", "the number or the name written at the place"),),
+    B.SPECIES_ARC: (("from", "the origin (a country id or a map point)"), ("to", "the destination")),
+}
+
+
+def proposable(label: str) -> tuple[str, dict] | None:
+    """(kind, the fields the label itself fixes) for a map label that CAN be a row's species dict; None otherwise."""
+    if label in B.SPECIES_KINDS:
+        return label, {}
+    kind, _, verb = label.partition(":")
+    if kind == "chart_to" and verb in B.CHART_TO_KINDS:
+        return kind, {"to": verb}
+    return None
+
+
+def when_of(kind: str, fixed: dict) -> str:
+    """The compiler's own `when` for the thing being proposed - the verb's `when` for a chart_to."""
+    return B.CHART_TO_WHEN[fixed["to"]] if kind == "chart_to" and "to" in fixed else B.SPECIES_WHEN[kind]
+
+
+def candidates(acts: list[str]) -> list[tuple[str, str]]:
+    """(label, the act that proposed it) for every species the acts make available, in the map's order, once each."""
+    out, seen = [], set()
+    for act in acts:
+        for label in ACT_SPECIES.get(act, ()):
+            if label not in seen:
+                seen.add(label)
+                out.append((label, act))
+    return out
+
+
+# ---------------------------------------------------------------- the anchor: a PHRASE, never a number
+def _norm_w(s: str) -> str:
+    return s.strip(".,:;!?\"'").lower()       # authoring/words.py `_norm`, mirrored so the lint imports none of the kit
+
+
+def _phrase_hits(words: list[dict], phrase: str) -> int:
+    toks = [_norm_w(t) for t in phrase.split()]
+    ws = [_norm_w(w.get("w", "")) for w in words]
+    return sum(1 for i in range(len(ws) - len(toks) + 1) if ws[i:i + len(toks)] == toks) if toks else 0
+
+
+def anchor_phrase(text: str, words: list[dict] | None, n: int = PROPOSE_WORDS) -> tuple[str, bool]:
+    """The sentence's first `n` words as the row's anchor, and whether the take carries them exactly once. Falls back
+    to n-1 words when n are not in the take; the caller says so when neither is."""
+    toks = text.split()
+    for k in (n, n - 1):
+        phrase = " ".join(toks[:k])
+        if k <= 0 or not phrase:
+            continue
+        if words is None or _phrase_hits(words, phrase) == 1:
+            return phrase, True
+    return " ".join(toks[:n]) or text, False
+
+
+def take_words_of(words_file: Path) -> list[dict] | None:
+    """The build's own words (`timeline.json` "words"), for checking an anchor resolves; None when it carries none."""
+    try:
+        data = json.loads(words_file.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    ws = data.get("words")
+    return ws if isinstance(ws, list) and ws else None
+
+
+# ---------------------------------------------------------------- the target: the series' own facts, by NAME
+def facts_of(project: Path, obj: str) -> dict:
+    """The `facts` block of `evidence/objects/<obj>.series.json`, or {}."""
+    p = project / "evidence/objects" / f"{obj}.series.json"
+    if not p.is_file():
+        return {}
+    try:
+        facts = json.loads(p.read_text(encoding="utf-8")).get("facts")
+    except (OSError, ValueError):
+        return {}
+    return facts if isinstance(facts, dict) else {}
+
+
+def index_keys(facts: dict) -> list[str]:
+    """The facts that NAME a datum index (`last_idx`, `peak_idx`, `idx_1981q4` ...), `last_idx` first."""
+    keys = [k for k, v in facts.items() if isinstance(v, int) and not isinstance(v, bool)
+            and (k.endswith("_idx") or k.startswith("idx_"))]
+    return sorted(keys, key=lambda k: (k != "last_idx", keys.index(k)))
+
+
+def world_at(rows: list[tuple], t: float) -> dict | None:
+    """The world the table has on stage at `t` - the sentence's own page, so a page species is proposed onto a page."""
+    for row in rows:
+        if float(row[0]) <= t < float(row[1]):
+            return world_of(row[2])
+    return None
+
+
+def world_refuses(kind: str, world: dict | None) -> str | None:
+    """Why this world cannot carry this kind - the compiler's own two refusals (`validate_species`), so a proposal is
+    never one the build would throw out: a page species performs on a ledger page, a map species on a vector map."""
+    where = f"{world['kind']}:{world['object']}" if world else "no world on stage"
+    if kind in B.PAGE_SPECIES and (not world or world["kind"] != "ledger"):
+        return f"a page species performs on a ledger page, not on {where}"
+    if kind in B.VECMAP_SPECIES and (not world or not B.VECMAP_PREFIX.match(world["object"])):
+        return f"a vecmap species performs on a vector map world, not on {where}"
+    return None
+
+
+def propose_target(kind: str, world: dict | None, project: Path) -> tuple[str | None, list[str]]:
+    """The rendered `target` value and the notes it carries: a datum read off the series' own facts BY NAME where the
+    sentence's page has them, else a FILL prompt naming that target kind's fields. Nothing is invented."""
+    allowed = B.SPECIES_TARGETS.get(kind, ())
+    if not allowed:
+        return None, []
+    facts = facts_of(project, world["object"]) if world and world["kind"] == "ledger" else {}
+    keys = index_keys(facts)
+    if "datum" in allowed and keys:
+        code = f'{{"kind": "datum", "index": facts({json.dumps(world["object"])})[{json.dumps(keys[0])}]}}'
+        rest = ", ".join(keys[1:])
+        note = f"target: the series' own facts, by name (this one is {keys[0]}; the other data the sentence may mean: {rest})"
+        return code, [note] if rest else []
+    tk = next((k for k in ("datum", "region", "point") if k in allowed), allowed[0])
+    fields = ", ".join(B.TARGET_FIELDS.get(tk, ())) or "the target kind's own fields"
+    return json.dumps(f"{FILL}a {tk} target ({fields})"), []
+
+
+# ---------------------------------------------------------------- the draft row
+def draft_row(kind: str, fixed: dict, act: str, phrase: str, anchored: bool,
+              world: dict | None, project: Path) -> str:
+    """One draft row: a python dict literal whose `at` is a PHRASE call, with one trailing comment naming the ACT,
+    what the author still owes, and the `when` sentence that proposed it (last, verbatim)."""
+    fields = [f'"kind": {json.dumps(kind)}', f'"at": at({json.dumps(phrase)})']
+    notes: list[str] = []
+    if kind in DUR_DEFAULT:
+        fields.append(f'"dur": {json.dumps(DUR_DEFAULT[kind])}')
+    else:
+        notes.append("no default dur - the compiler requires a number (give it the words' own length)")
+    fields += [f'"{k}": {json.dumps(v)}' for k, v in fixed.items()]
+    target, tnotes = propose_target(kind, world, project)
+    if target:
+        fields.append(f'"target": {target}')
+    notes += tnotes
+    fields += [f'"{k}": {json.dumps(FILL + prompt)}' for k, prompt in PROPOSE_FILL.get(kind, ())]
+    if kind == "chart_to":
+        notes.append("the verb's own fields are the compiler's (`_validate_chart_to`)")
+    if not anchored:
+        notes.append("the take does not carry these words exactly once - lengthen the phrase by hand")
+    return ("    {" + ", ".join(fields) + "},   # " + act
+            + (" · " + " · ".join(notes) if notes else "") + " · when: " + when_of(kind, fixed))
+
+
+def sentence_proposal(sent: dict, acts: list[str], rows: list[tuple], project: Path,
+                      take: list[dict] | None) -> list[str]:
+    """The PROPOSAL block for one sentence: the sentence itself, a draft row per available species, and what its acts
+    offer that is not a species row at all (a page, a dock, an overflow - said, never proposed)."""
+    world = world_at(rows, sent["start"])
+    phrase, anchored = anchor_phrase(sent["text"], take)
+    drafts, refused, not_species = [], [], []
+    for label, act in candidates(acts):
+        pair = proposable(label)
+        if pair is None:
+            not_species.append(f"{label} ({NOT_A_SPECIES.get(label, 'not a species row')})")
+            continue
+        kind, fixed = pair
+        why = world_refuses(kind, world)
+        if why:
+            refused.append(f"{label} ({why})")
+        else:
+            drafts.append(draft_row(kind, fixed, act, phrase, anchored, world, project))
+    if not drafts and not refused and not not_species:
+        return []
+    head = (f"PROPOSAL {sent['start']:6.2f}-{sent['end']:6.2f} · \"{sent['text']}\" · {'+'.join(acts)}"
+            f" · on {world['kind'] + ':' + world['object'] if world else 'no world'}")
+    tail = [f"    # not proposable on this world: {'; '.join(refused)}"] if refused else []
+    tail += [f"    # not a species row (the world, a dock or a page): {'; '.join(not_species)}"] if not_species else []
+    return [head] + drafts + tail
+
+
+def propose(project: Path, build: str | None = None, table: Path | None = None,
+            words: Path | None = None) -> tuple[list[str], dict]:
+    """The proposal sheet. It writes nothing, counts nothing and chooses nothing: it offers what each sentence's own
+    act makes available, and the author keeps or deletes."""
+    table_p, words_p = resolve_inputs(project, build, table, words)
+    rows, sents = load_table(table_p), load_sentences(words_p)
+    take = take_words_of(words_p)
+    lines = [PROPOSE_HEADER,
+             f"PROPOSE · {project.name} · {table_p.name} + {_rel(words_p, project)} · anchors are PHRASE"
+             f" calls (authoring/words.py `at` reads the time out of the take) · every {FILL.strip()} field is the author's"
+             + ("" if take else " · no words in the build's timeline - anchors are unchecked")]
+    counts = {"proposed_for": 0, "rows": 0, "has_row": 0, "no_act": 0}
+    for sent in sents:
+        acts = classify(sent["text"])
+        if not acts or not available(acts):
+            counts["no_act"] += 1
+            continue
+        if [e for e in row_events(rows, sent["start"], sent["end"], project) if not e.startswith("world ")]:
+            counts["has_row"] += 1
+            continue
+        block = sentence_proposal(sent, acts, rows, project, take)
+        if not block:
+            continue
+        counts["proposed_for"] += 1
+        counts["rows"] += sum(1 for line in block if line.strip().startswith("{"))
+        lines += block
+    lines.append(f"PROPOSE · {counts['proposed_for']} sentences proposed for · {counts['rows']} draft rows · "
+                 f"{counts['has_row']} already have a row firing · {counts['no_act']} carry no act or no built species (never proposed for)"
+                 + ("" if counts["proposed_for"] else " · nothing to propose"))
+    return lines, counts
+
 # ---------------------------------------------------------------- the report
+def _rel(path: Path, project: Path) -> str:
+    """The words file as the header names it: under the project when it is, else as given."""
+    try:
+        return path.relative_to(project).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
+def build_dir(project: Path, build: str | None) -> Path:
+    """`--build` names a build dir UNDER the project; a path that already points at one (tab-completed from the repo
+    root) is taken as it stands, so the same argument works from either place."""
+    named = Path(build or DEFAULT_BUILD)
+    return named if named.is_dir() and (named / "timeline.json").is_file() else project / named
+
+
 def resolve_inputs(project: Path, build: str | None, table: Path | None, words: Path | None) -> tuple[Path, Path]:
     table = table or project / TABLE_NAME
-    words = words or project / (build or DEFAULT_BUILD) / "timeline.json"
+    words = words or build_dir(project, build) / "timeline.json"
     if not table.is_file():
         raise FileNotFoundError(f"no shot table at {table} (the build writes {TABLE_NAME}; --table names another)")
     if not words.is_file():
@@ -218,7 +501,7 @@ def report(project: Path, build: str | None = None, table: Path | None = None, w
     table, words = resolve_inputs(project, build, table, words)
     rows, sents = load_table(table), load_sentences(words)
     runtime = max(float(r[1]) for r in rows) if rows else 0.0
-    lines = [f"species by sentence · {project.name} · {table.name} + {words.relative_to(project).as_posix()} · {len(sents)} sentences · {len(rows)} rows · {runtime:.1f} s"]
+    lines = [f"species by sentence · {project.name} · {table.name} + {_rel(words, project)} · {len(sents)} sentences · {len(rows)} rows · {runtime:.1f} s"]
     counts = {"sentences": len(sents), "with_act": 0, "with_row": 0, "no_row": 0, "plates": 0, "plates_unnamed": 0}
     for s in sents:
         acts = classify(s["text"])
@@ -287,6 +570,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--table", type=Path, default=None)
     ap.add_argument("--words", type=Path, default=None, help="a timeline.json with `sentences`")
     ap.add_argument("--long", action="store_true", help="apply E61's plate-use check regardless of runtime")
+    ap.add_argument("--propose", action="store_true",
+                    help="after the report, a DRAFT ROW per available species for every sentence with an act and no "
+                         "row - candidates for the author to keep or delete; it writes no table and chooses nothing")
     ap.add_argument("--when", action="store_true", help="print the compiler's `when` on every kind")
     ap.add_argument("--md", action="store_true", help="with --when: as a Markdown table")
     ap.add_argument("--write-doc", action="store_true", help="regenerate SPECIES-BY-SENTENCE.md s4 from the compiler")
@@ -310,6 +596,8 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     try:
         lines, _ = report(args.project, args.build, args.table, args.words, args.long)
+        if args.propose:      # P53 T8: APPENDED - the report above stays byte for byte what it was
+            lines += propose(args.project, args.build, args.table, args.words)[0]
     except (FileNotFoundError, ValueError) as exc:
         print(f"lint_species_choice: {exc}", file=sys.stderr)
         return 2

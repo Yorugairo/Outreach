@@ -620,10 +620,24 @@ async function mount(doc) {
 
      THE LAW, a pure function of t:
        shade  - the band between the two declared edges fades in over IN_S to ALPHA, behind every line (it is
-                ground, not ink on top - the same rule the spread follows).
+                ground, not ink on top - the same rule the spread follows), and it is SUNK into the ground
+                layer to prove it: the bottom of the active chart state's own svg, never the annotation layer
+                (R26-68; spanGroundLayer below).
        label  - written above the band BY THE HAND, glyph after glyph, over WRITE of the word, starting when
                 the shade is in. Above the band where there is room for it, inside its top edge where there
                 is not (a chart that fills its box has nothing over it).
+     R26-68 (the one-shot's frames, 2026-09-12: "the grey block covers the line it is measuring, and the page's
+     own series label sits inside the shade"). Two halves, both here:
+       the LAYER - a page with chart STATES gets a perform svg stacked ABOVE every state, and a shade built into
+                   it washes the very line it stands behind. A shade is ground: the painter sinks the rect to the
+                   bottom of the ACTIVE state's own svg every frame (idempotent, so a seek is the play, and a
+                   rebuilt state gets its shade back). A one-state page already drew it there - nothing moves.
+       the LABEL - the band's PAD is room, not an edge, so the pad YIELDS: where one of the page's own direct
+                   labels (a series' terminal tag, a printed value - read off the engine's MARK MODEL) stands
+                   inside the band's x range and above the ink's highest point, the shade's top stops LABEL_CLEAR
+                   short of its baseline and the label is left on the ground. The EDGES never move (they are the
+                   stretch of time the span names), and the span's own name keeps the raw top (`band.yTop`), so it
+                   stands exactly where it stood and the text-on-text gate M28 reads the same geometry.
      THE EDGES. `from` and `to` are each either a DATUM INDEX (an integer: the page's own index, the one a
      bracket and a figure use) or an X-FRACTION (a number in 0..1 along the drawn series' own x extent, for a
      period that falls between two data). Both are resolved on the ACTIVE chart state every frame, from the
@@ -649,6 +663,7 @@ async function mount(doc) {
     LABEL_IN: 2.1,    /* ... and, where it does not, inside the top edge by this many of the label's own sizes: two lines down, clear of the plot's own top furniture (the unit caption sits on the first line inside the plot - read in the frame, 2026-09-11) */
     LABEL_ROOM: 1.3,  /* "room above" means this many label sizes clear of the chart's top - otherwise the name is written inside the band */
     MIN_W: 6,         /* a band narrower than this is not a period - it is two adjacent data, which is a bracket's job */
+    LABEL_CLEAR: 0.55,/* R26-68: how far short of a page label's baseline the shade's top stops, in the span's own label sizes - a page's series tag is the DATA's name and reads on the ground, never inside a wash */
   });
 
   const span01 = (v) => Math.min(1, Math.max(0, v));
@@ -676,10 +691,62 @@ async function mount(doc) {
     return Number.isFinite(y0) && Number.isFinite(y1) ? { y0: y0 - SPAN.PAD_T, y1: y1 + SPAN.PAD_B } : null;
   };
 
+  /* THE PAGE'S LAYERS, as the page publishes them - on its own STATE, which is what a page painter is handed
+     (there is no layer field in the page species context: it carries the engine's helpers, not its DOM). Every
+     chart state owns a `chart` svg and draws its whole world into it - ground, grid, lines, marks, the page's own
+     labels, in that order - and `st.performSvg`, on a page with states, is the ANNOTATION layer stacked above all
+     of them. The active state is the one a datum resolves against, so it is the one a shade belongs under. */
+  const spanActiveState = (st) => ((st && st.states && st.states.length ? st.states[st.active | 0] : null) || st || null);
+  const spanGroundLayer = (st) => { const S = spanActiveState(st); return (S && S.chart) || (st && st.chart) || null; };
+
+  /* the shade to the BOTTOM of that layer - under the first thing the chart draws, which is where the spread puts
+     its own fill for the same reason. Idempotent: it moves nothing once the rect is there, so a cold seek lands it
+     exactly where a play does, and a state whose svg was rebuilt gets its shade back on the next frame. */
+  const spanSink = (rect, layer) => {
+    if (!rect || !layer || typeof layer.insertBefore !== "function") return false;
+    if (layer.firstChild === rect) return false;
+    layer.insertBefore(rect, layer.firstChild || null);
+    return true;
+  };
+
+  /* THE PAGE'S OWN DIRECT LABELS, off the engine's MARK MODEL (every builder registers what it drew under a role
+     and the geom that placed it): the series' terminal tag and a printed value - the two labels that belong to the
+     DATA, and so the two that can end up standing inside a stretch of it. The plot's furniture is deliberately not
+     read: the ticks, the axis captions and the source line live at the plot's edges, and the basis caption read
+     over a 0.16 wash is the very thing LABEL_IN was tuned against (the golden `span-decade`). */
+  const SPAN_LABEL_ROLES = Object.freeze(["name", "value"]);
+  const spanPageLabels = (st) => {
+    const S = spanActiveState(st), out = [];
+    for (const m of (S && S.marks) || []) {
+      if (!m || SPAN_LABEL_ROLES.indexOf(m.role) < 0) continue;
+      const g = m.geom || {}, x = +g.x, y = +g.y;
+      if (!Number.isFinite(x) || !Number.isFinite(y)) continue;
+      if (m.el && typeof m.el.textContent === "string" && !m.el.textContent.trim()) continue;   /* a muted history's empty tag names nothing */
+      out.push({ x, y });
+    }
+    return out;
+  };
+
+  /* THE SHADE'S TOP (R26-68): the pad yields to a label, the ink never does. A label inside the band's x range
+     whose baseline sits in the HEADROOM - between the padded top and the highest drawn point - pushes the shade's
+     top to `clear` below itself; the top never falls past the data it stands behind, so the shade still reaches
+     the ink it is the room for. `top0` is the band's raw (clipped) top, `dataTop` the highest drawn point. */
+  const spanTop = (top0, dataTop, x0, x1, labels, clear) => {
+    let y = top0;
+    for (const L of labels || []) {
+      if (!L || !(L.x >= x0 && L.x <= x1)) continue;
+      if (!(L.y >= top0 && L.y <= dataTop)) continue;
+      y = Math.max(y, L.y + (clear || 0));
+    }
+    return Math.min(Math.max(y, top0), Math.max(top0, dataTop));
+  };
+
   /* THE BAND this frame, or null when either edge has left the window (the bracket's rule: nothing to name,
      nothing drawn). `entries` is the named series' live points, `lists` every series', `H` the chart's viewBox
-     height when the caller knows it - the band is clipped to the page rather than drawn off it. */
-  const spanBand = (entries, lists, from, to, H) => {
+     height when the caller knows it - the band is clipped to the page rather than drawn off it. `labels` are the
+     page's own direct labels (spanPageLabels) and `clear` the room to leave under one: given neither, the band is
+     exactly the pad's, which is how a caller with no page to read - a test, a probe - gets the raw law. */
+  const spanBand = (entries, lists, from, to, H, labels, clear) => {
     const a = spanEdgeX(entries, from), b = spanEdgeX(entries, to), ext = spanExtent(lists);
     if (a === null || b === null || !ext) return null;
     const x0 = Math.min(a, b), x1 = Math.max(a, b);
@@ -687,12 +754,18 @@ async function mount(doc) {
     const top = Number.isFinite(H) ? Math.max(0, ext.y0) : ext.y0;
     const bot = Number.isFinite(H) ? Math.min(H, ext.y1) : ext.y1;
     if (!(bot > top)) return null;
-    return { x: x0, w: x1 - x0, y: top, h: bot - top, cx: (x0 + x1) / 2 };
+    const cut = spanTop(top, ext.y0 + SPAN.PAD_T, x0, x1, labels, clear);   /* R26-68: the shade stops short of a label in its headroom ... */
+    const y = cut < bot ? cut : top;                                        /* ... unless that would leave no band at all */
+    return { x: x0, w: x1 - x0, y, h: bot - y, yTop: top, cx: (x0 + x1) / 2 };
   };
 
   /* where the name is written: above the band when the chart leaves room over it, inside its top edge when
-     the chart fills its box (the bracket's own rule for a label with nowhere to stand) */
-  const spanLabelY = (band, fs) => (band.y >= fs * SPAN.LABEL_ROOM ? band.y - SPAN.LABEL_DY : band.y + fs * SPAN.LABEL_IN);
+     the chart fills its box (the bracket's own rule for a label with nowhere to stand). R26-68: off the band's
+     RAW top (`yTop`), never the top the shade gave up to a label - the name stands where it always stood, so
+     M28's text-on-text geometry is the one it already passed, and the name can never drop onto the very label
+     the shade just cleared. */
+  const spanLabelY = (band, fs) => { const y = band.yTop != null ? band.yTop : band.y;
+    return y >= fs * SPAN.LABEL_ROOM ? y - SPAN.LABEL_DY : y + fs * SPAN.LABEL_IN; };
 
   /* THE POSE at t: is it up, how deep is the shade, how far has the hand written. */
   const spanPose = (sp, t) => {
@@ -723,8 +796,10 @@ async function mount(doc) {
     if (!pose.on) { hide(); return; }
     const lists = [];
     for (let i = 0; i < Math.max(1, (st.linePts || []).length); i++) lists.push(ctx.pointsNow(st, i));
-    const band = spanBand(lists[sd.si] || [], lists, sd.sp.from, sd.sp.to, (st.geom || {}).H);
+    const band = spanBand(lists[sd.si] || [], lists, sd.sp.from, sd.sp.to, (st.geom || {}).H,
+                          spanPageLabels(st), SPAN.LABEL_CLEAR * sd.fs);
     if (!band) { hide(); return; }   /* R26-28: an edge the window dropped names nothing - nothing is drawn */
+    spanSink(sd.rect, spanGroundLayer(st));   /* R26-68: a shade is GROUND - under the state's own ink every frame, or it is not a shade */
     sd.rect.setAttribute("x", band.x.toFixed(1)); sd.rect.setAttribute("y", band.y.toFixed(1));
     sd.rect.setAttribute("width", band.w.toFixed(1)); sd.rect.setAttribute("height", band.h.toFixed(1));
     sd.rect.setAttribute("fill-opacity", pose.alpha.toFixed(3));
@@ -1363,7 +1438,11 @@ async function mount(doc) {
     DROP_S: 0.14,      /* the drop itself, easing in */
     DROP_PX: 48,       /* how far a landing thing falls onto its spot */
     SETTLE_S: 1.2,     /* the material's spring is evaluated this long after the impact, then the thing is at rest */
-    IMPACT_S: 0.08,    /* the impact squash's speed-driven part decays over two frames; the material's own motion takes over from there */
+    /* IMPACT_S (0.08 s) DELETED 2026-09-12 (R26-64, P53 T5): the time constant was the vestige of the formulation the
+       5-step ENVELOPE below replaced - `impactSquash` decays the squash off the MATERIAL, counting frames on the stepped
+       clock (`IMPACT_SQUASH * (1 - (f - 1) / squash_frames)`; paper 1 frame, liquid 2, metal 0), not off a time decay.
+       Nothing read it - not this module, not the player, not a test. A time decay returns only if a hit needs a length
+       the material's own frame count cannot state. */
     /* THE HIT (HG2): the impact squash is a 5-step ENVELOPE on the stepped clock [DERIVED: HyperFrames stop-motion-cadence SQUASH_ENV, verified
        2026-09-07], about the ground contact, scaled by the material's `impact`; the CONTACT SHADOW is pinned to the landing spot and grows and
        darkens as the thing nears the floor [DERIVED: the same reference: scale 1.05 -> 0.55, alpha 0.25 -> 0.85; 48 s48 "the floating sticker":
@@ -3555,6 +3634,7 @@ async function mount(doc) {
        clip the previous slide left in this card's frame. */
     const isVideo = dockIsVideo(aid);
     dockEl.classList.toggle("video", isVideo);
+    dockEl.classList.toggle("cutout", dockIsCutout(aid));   /* P53 T7: no card, no paper, no border */
     if (!isVideo) parkDockClips(dockEl);
     $("i" + n).src = (ev.record || ev.chart || isVideo) ? "" : (A[aid] || "");
     const rail = $("r" + n); rail.innerHTML = "";
@@ -8488,12 +8568,23 @@ async function mount(doc) {
                      (the callout's own pads, so the dashed form and the circle ring the same place), cut into
                      DASH-long marks with GAP between them and drawn DASH BY DASH clockwise from the top, each
                      dash owning its own slice of DRAW_S - the flow diagram's dashed frame, bent round a datum
-                     (species/flow.mjs flowDashes is the precedent; this is its ellipse).
+                     (species/flow.mjs flowDashes is the precedent; this is its ellipse). It ENCLOSES THE
+                     DATUM'S OWN MARK: ink inside the ellipse's own x reach that stands clear ABOVE the
+                     ellipse is part of the mark, and the ring is rebuilt round the box of the two - the same
+                     pads, the same minima, the same hand (ringMark + ringHold; R26-67, read on the bridge
+                     short's 69.0 s frame, where the line's last stretch spiked clear above the ring and the
+                     ring then read as circling the air beside the apex). Ink that falls AWAY below the ring
+                     is not the mark: a ring on a peak keeps the tight ellipse the peak was given.
        the flag    - optional, and a CHIP: the chip module's own card, sourced glyph and two-spring landing
                      (species/chip.mjs CHIP + chipLand + chipGeometry) placed beside the ellipse at FLAG_GAP off
-                     its right edge, FLAG_LAG after the ellipse closes. Its own dials are the chip's; this file
-                     only says WHERE - and a chip on the LEFT when the ellipse's right edge would leave the
-                     stage (`flag: "left"`, or measured against STAGE_W when the author says nothing).
+                     its edge, FLAG_LAG after the ellipse closes. Its own dials are the chip's; this file only
+                     says WHERE, and WHERE is the side with the ROOM: `flag_side` always wins; else a datum
+                     inside the last FLAG_EDGE of the DRAWN SERIES' x extent flags LEFT and one inside the
+                     first FLAG_EDGE flags right; and a card that would still cross either end of that extent
+                     goes UNDER the ring, centred below the ellipse, rather than off the page (R26-67: on the
+                     bridge short's 69.0 s frame the automatic choice took the side with no room and the card
+                     was painted into the page's cream margin). With no extent to measure, the bound is the
+                     stage's own edge - exactly the rule this file shipped with.
        hold        - the ellipse and the flag carry a NAMED idle (E49, one of IDLE_KINDS; `breath` unless the
                      row names another), each at its own phase off the seed. NOTHING SPINS: no rotation is ever
                      written - a dash that turns is a wheel, and a wheel is the cheap call-out E56 refused.
@@ -8514,6 +8605,8 @@ async function mount(doc) {
     FLAG_GAP: 34,      /* the air between the ellipse's edge and the flag chip's card */
     FLAG_LAG: 0.14,    /* the breath after the ellipse closes before the flag lands */
     FLAG_K: 0.62,      /* the flag chip's scale against a board chip: a label on a datum, not a card in a set */
+    FLAG_EDGE: 0.15,   /* the share at each END of the drawn series' x extent that has no room for a flag beside a datum in it (R26-67) */
+    HUG_N: 24,         /* how many data either side of the datum the mark is LOOKED for in - a bound on the PROBES, never on the mark (the mark's bound is the ellipse's own rx): the bridge short's spike stands 23 data back from the datum R26-67 was read on */
     LABEL_LIFT: 18,    /* how far above the ellipse the label is written when the flag has taken the room beside it */
   });
 
@@ -8581,10 +8674,99 @@ async function mount(doc) {
   /* ... and one dash's own fraction inside it: 0 before the nib reaches it, 1 once it has passed. */
   const ringDashF = (f, dash) => rg01((f - dash.t0) / Math.max(1e-6, dash.t1 - dash.t0));
 
-  /* WHERE the flag chip stands: beside the ellipse, on the side that has the room. `side` is the author's
-     ("left" | "right"), else the right unless the card would leave the stage. */
-  const ringFlagPlace = (e, side, stageW) => {   /* stageW from the caller (the engine's STAGE_W): no landscape literal in player code (portrait parity) */
+  /* PAST THE END OF ANY DRAWN SERIES. The engine CLAMPS a datum index to the series it actually drew - the
+     exact-datum branch by Math.min(index, pts.length - 1), the bar branch by Math.min(index, bars.length - 1),
+     the length-fraction fallback by clamp01 (resolveTarget, scene-evidence-engine.mjs) - so this is how the far
+     end of the drawn data is ASKED for, rather than derived from a count this file does not have. */
+  const RING_PAST_END = 1 << 24;
+
+  /* THE DRAWN SERIES' X EXTENT in stage px, or null. It arrives the way every geometry in this file arrives:
+     through the engine's own resolveTarget, on the SAME declared target with another index - the first datum,
+     and one past the last. A target with no index (a point, a region, a caption word span) has no extent and
+     takes null, which is the stage-edge rule this file shipped with. */
+  const ringXExtent = (resolve, target) => {
+    if (typeof resolve !== "function" || !target || !Number.isFinite(+target.index)) return null;
+    const a = resolve(Object.assign({}, target, { index: 0 }));
+    const b = resolve(Object.assign({}, target, { index: RING_PAST_END }));
+    if (!a || !b) return null;
+    const x0 = Math.min(a.x, b.x), x1 = Math.max(a.x + a.w, b.x + b.w);
+    return x1 - x0 > 1 ? { x0, x1 } : null;
+  };
+
+  /* THE DATUM'S OWN MARK, a box in stage px (R26-67). A datum on a line resolves to a POINT, and the ink that
+     runs through that point can stand OUTSIDE an ellipse drawn round the point alone: on the bridge short's
+     69.0 s frame the line's last stretch spiked clear above the ring, and the ring read as a ring round the
+     air beside the apex. So the mark is the datum AND any ink inside the ellipse's own x reach that stands
+     clear ABOVE the ellipse - a ring encloses the ink it spans. Ink that falls AWAY under the ring (a peak's
+     own shoulders, the drop after a top) is not this datum's mark and moves nothing, which is why a ring on a
+     peak is untouched and only the rings that had ink towering over them change. THE ONE DIRECTION IS THE
+     OPERATOR'S TO WIDEN: the mirror case - a datum in a trough with the ink plunging clear BELOW the ring -
+     is left alone on purpose rather than guessed at (R26-67 was read on ink standing above).
+     The ink is probed through the engine's resolveTarget, on the SAME declared target with a neighbour's
+     index, so nothing here knows what a datum is: a target with no index never walks at all, and a target
+     that resolves to a BOX (a bar) is its own mark already - a bar's neighbour is a DIFFERENT bar, and the
+     pads are the hand's. HUG_N bounds the probes, e.rx bounds the mark, and a clamped repeat ends the walk
+     where the drawn data does. */
+  const ringMark = (b, e, resolve, target) => {
+    let x0 = b.x, y0 = b.y, x1 = b.x + b.w, y1 = b.y + b.h;
+    const box = () => ({ x: x0, y: y0, w: x1 - x0, h: y1 - y0 });
+    if (b.w > 0 || b.h > 0 || typeof resolve !== "function" || !target || !Number.isFinite(+target.index)) return box();
+    const i0 = +target.index | 0;
+    for (const dir of [-1, 1]) {
+      let prev = { x: b.x, y: b.y };
+      for (let k = 1; k <= RING.HUG_N; k++) {
+        const i = i0 + dir * k;
+        if (i < 0) break;                                     /* an index before the first datum is not an index: never handed on */
+        const q = resolve(Object.assign({}, target, { index: i }));
+        if (!q || (q.x === prev.x && q.y === prev.y)) break;   /* nothing there, or the index clamped: the drawn data ends here */
+        prev = q;
+        if (Math.abs(q.x - e.cx) > e.rx) break;               /* past what the ellipse spans: that is the LINE, not this datum's mark */
+        if (q.y >= e.cy - e.ry) continue;                     /* not standing clear above the ring: enclosed already, or falling away under it */
+        x0 = Math.min(x0, q.x); x1 = Math.max(x1, q.x);
+        y0 = Math.min(y0, q.y);
+      }
+    }
+    return box();
+  };
+
+  /* THE ELLIPSE THAT HOLDS THE MARK: the SAME construction round the mark's box that the ring is built with
+     round a datum's - the callout's own pads, the same minima - and then, if the box's corner is still outside
+     it, grown by one factor so the aspect the pads gave it is kept and the dashes stay the dashes. A mark that
+     IS the resolved target box (a bar, a region, a datum whose ink never left the ring) returns the ellipse it
+     was handed, to the bit: the hand's own ring, untouched. */
+  const ringHold = (e, mark, b, pad = 0) => {
+    if (mark.x === b.x && mark.y === b.y && mark.w === b.w && mark.h === b.h) return e;
+    const h = ringEllipse(mark, pad);
+    const s = Math.hypot((mark.w / 2) / h.rx, (mark.h / 2) / h.ry);
+    return s > 1 ? { cx: h.cx, cy: h.cy, rx: h.rx * s, ry: h.ry * s } : h;
+  };
+
+  /* WHERE the flag chip stands: beside the ellipse on the side that has the room - and UNDER it when neither
+     side has any. `side` is the author's ("left" | "right") and always wins. Absent, the room is read off the
+     DRAWN SERIES' x extent (`ext`, from ringXExtent): a datum inside the last FLAG_EDGE of it is asked for the
+     LEFT first, one anywhere else for the right first, and a card whose own box would cross either end of that
+     extent is refused that side. Refused both, the card goes UNDER the ellipse, centred, at the same FLAG_GAP:
+     a lower card reads, a clipped one does not (R26-67). With no extent, the stage's edge decides - the rule
+     this file shipped with, unchanged. */
+  const ringFlagPlace = (e, side, stageW, ext = null) => {   /* stageW from the caller (the engine's STAGE_W): no landscape literal in player code (portrait parity) */
     const half = (CHIP.SIZE * RING.FLAG_K) / 2, gap = RING.FLAG_GAP + half;
+    const at = (dir) => e.cx + dir * (e.rx + gap);
+    if (side === "right" || side === "left") return { x: at(side === "right" ? 1 : -1), y: e.cy, side };
+    if (ext) {
+      const f = (e.cx - ext.x0) / Math.max(1e-6, ext.x1 - ext.x0);
+      const fits = (dir) => at(dir) - half >= ext.x0 && at(dir) + half <= ext.x1;
+      /* AT THE END OF THE SERIES THE LEFT IS TAKEN. The engine writes the series' own terminal tag just left of the
+         last drawn point (s9.23b: the dense line's inline series name at its tip), and a stage painter cannot read
+         the page's labels to dodge it - so the ring does not try: past the last FLAG_EDGE of the extent the flag
+         goes UNDER the ellipse, into the plot's own empty room below the tip. Read on the frame this fix produced
+         (build-short-axes 68.5 s, 2026-09-12): the chip had moved off the page's margin and onto the middle of
+         "x3.9 Federal debt". The first FLAG_EDGE keeps the right, and everything between is the fit test. */
+      if (f >= 1 - RING.FLAG_EDGE) return { x: e.cx, y: e.cy + e.ry + gap, side: "under" };
+      for (const dir of [1, -1]) {
+        if (fits(dir)) return { x: at(dir), y: e.cy, side: dir > 0 ? "right" : "left" };
+      }
+      return { x: e.cx, y: e.cy + e.ry + gap, side: "under" };
+    }
     const right = side !== "left" && (side === "right" || e.cx + e.rx + gap * 2 <= stageW);
     return { x: e.cx + (right ? 1 : -1) * (e.rx + gap), y: e.cy, side: right ? "right" : "left" };
   };
@@ -8605,7 +8787,9 @@ async function mount(doc) {
     const b = resolveTarget(sp.target);
     if (!b) return;   /* the targeting law: no resolved target, nothing painted */
     const pad = Number.isFinite(+sp.pad) ? +sp.pad : 0;
-    const e = ringEllipse(b, pad), pose = ringPose(sp, t);
+    const e0 = ringEllipse(b, pad);   /* the ring the pads draw ... */
+    const e = ringHold(e0, ringMark(b, e0, resolveTarget, sp.target), b, pad);   /* ... round the datum's own MARK (R26-67) */
+    const pose = ringPose(sp, t);
     if (pose.f <= 0) return;
     const kind = sp.idle === "none" ? "none" : (sp.idle || "breath");
     const ix = kind === "none" ? { scale: 1, dx: 0, dy: 0 } : idle(kind, t, hash(seed | 0, si | 0, 991));
@@ -8614,7 +8798,7 @@ async function mount(doc) {
       const f = ringDashF(pose.f, dash);
       if (f > 0) drawOn(el("path", "rngdash", g, { d: dash.d }), f);
     });
-    const place = sp.flag ? ringFlagPlace(e, sp.flag_side, STAGE_W) : null;
+    const place = sp.flag ? ringFlagPlace(e, sp.flag_side, STAGE_W, ringXExtent(resolveTarget, sp.target)) : null;
     if (sp.label) {   /* the ring's own label, where the engine's callout writes it: outside the ellipse, up and right -
          UNLESS the flag stands on that side, in which case it goes ABOVE the ellipse and starts at its left edge. A
          card that covers the number defeats the ring (read off the first frame of the `ring-dashed-chip` golden). */
@@ -8831,6 +9015,9 @@ async function mount(doc) {
   /* a VIDEO DOCK's clip is pooled at load for the same reason a world clip is: a <video> created at
      the mount has no decoded frame and paints black under the card's 0.75s rise */
   const dockIsVideo = (aid) => ((TL.evidence || {})[aid] || {}).kind === "video";
+  /* P53 T7 / R26-59: a CUTOUT dock is a person, not a document - the card's chrome stands down (`.dock.cutout`).
+     Read exactly where the video kind is read, so a build with no cutout is untouched. */
+  const dockIsCutout = (aid) => ((TL.evidence || {})[aid] || {}).kind === "cutout";
   (TL.scenes || []).forEach((sc) => (sc.docks || []).forEach((d) => {
     if (dockIsVideo(d.slide) && A[d.slide]) clipFor(d.slide).loop = true;
   }));

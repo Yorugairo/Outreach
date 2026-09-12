@@ -48,7 +48,11 @@ export const STOP = Object.freeze({
   DROP_S: 0.14,      /* the drop itself, easing in */
   DROP_PX: 48,       /* how far a landing thing falls onto its spot */
   SETTLE_S: 1.2,     /* the material's spring is evaluated this long after the impact, then the thing is at rest */
-  IMPACT_S: 0.08,    /* the impact squash's speed-driven part decays over two frames; the material's own motion takes over from there */
+  /* IMPACT_S (0.08 s) DELETED 2026-09-12 (R26-64, P53 T5): the time constant was the vestige of the formulation the
+     5-step ENVELOPE below replaced - `impactSquash` decays the squash off the MATERIAL, counting frames on the stepped
+     clock (`IMPACT_SQUASH * (1 - (f - 1) / squash_frames)`; paper 1 frame, liquid 2, metal 0), not off a time decay.
+     Nothing read it - not this module, not the player, not a test. A time decay returns only if a hit needs a length
+     the material's own frame count cannot state. */
   /* THE HIT (HG2): the impact squash is a 5-step ENVELOPE on the stepped clock [DERIVED: HyperFrames stop-motion-cadence SQUASH_ENV, verified
      2026-09-07], about the ground contact, scaled by the material's `impact`; the CONTACT SHADOW is pinned to the landing spot and grows and
      darkens as the thing nears the floor [DERIVED: the same reference: scale 1.05 -> 0.55, alpha 0.25 -> 0.85; 48 s48 "the floating sticker":

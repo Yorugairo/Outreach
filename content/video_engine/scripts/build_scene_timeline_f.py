@@ -87,7 +87,7 @@ PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill", 
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
 STATE_MAX = 3
 DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s",
-             "press", "stack", "behind", "embed")   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+             "press", "stack", "behind", "embed", "cutout")   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -133,6 +133,7 @@ SPECIES_CLIP = "clip"              # world.kind for a clip; the player seeks a <
 VIDEO_SUFFIXES = (".mp4", ".webm")
 DOCK_KIND_VIDEO = "video"          # written onto the dock entry and the evidence map for a clip asset
 DOCK_KIND_IMAGE = "image"          # the default - never written, so an all-image build compiles byte-identically
+DOCK_KIND_CUTOUT = "cutout"        # P53 T7 / R26-59: the dock is a CUTOUT - no card, no paper, no border (a head above the crawl is a person, not a document; the chrome is the template's `.dock.cutout`)
 DOCK_KIND_PRESS = "press"          # P50 T3: the card is a HEADLINE cut from a screenshot - it carries its source line and its quoted phrase,
                                    # and the player paints it in the press pass (a fanned stack), never in the two-slot dock loop
 
@@ -3207,7 +3208,7 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                centre: bool = False, read_place: dict | None = None, read_s: float | None = None, park_s: float | None = None,
                press: dict | None = None, stack: bool = False, behind: str | None = None, fg: str | None = None,
                rid: str | None = None, read_moved: dict | None = None, read_deferred: bool = False,
-               embed: dict | None = None) -> dict:
+               embed: dict | None = None, cutout: bool = False) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -3237,6 +3238,9 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         "enter": round(enter, 2), "exit": round(exitt, 2),
         "badge_at": [round(enter + 0.75 + 1.3 * (n + 1), 2) for n in range(n_badges)],
         **({"kind": DOCK_KIND_VIDEO} if kind == DOCK_KIND_VIDEO else {}),
+        # P53 T7 / R26-59: a CUTOUT dock - the card's chrome stands down. Written only when the row asks, so every
+        # build that docks a document is byte-for-byte what it was.
+        **({"kind": DOCK_KIND_CUTOUT} if cutout else {}),
         # P50 T3: a PRESS card carries its source line and its quoted phrase onto the stage; `_stack` is the
         # scene's own bookkeeping and is replaced by stack_index / stack_n once every dock on the scene is known.
         # R26-55: and the phrase's WORDS and the card's own aspect when the card was cut with them - the player
@@ -3823,7 +3827,8 @@ def main() -> int:
                         # a VIDEO dock (E44 / R26-7): the card carries moving pictures, seeked to
                         # the scene clock by the player's one seek. Declared here so the player
                         # mounts a <video> instead of an <img> and the gate can see it.
-                        **({"kind": DOCK_KIND_VIDEO} if is_video_asset(ap) else {}),
+                        **({"kind": DOCK_KIND_CUTOUT} if dopt.get("cutout")
+                           else {"kind": DOCK_KIND_VIDEO} if is_video_asset(ap) else {}),   # P53 T7: the row's intent, not the asset's nature
                         # Authored in the dock - a machine-mangled asset id is
                         # not a title, and empty badges leave the card's whole
                         # information layer blank (ruling B3: a badge numeral
@@ -3872,7 +3877,8 @@ def main() -> int:
                                         read_place=rplace, read_s=dopt.get("read_s"), park_s=dopt.get("park_s"),
                                         press=dopt.get("press"), stack=bool(dopt.get("stack")),
                                         behind=dopt.get("behind"), fg=fg_key, embed=embed, rid=dock_row_id(sid, aid),
-                                        read_moved=e63.get("read_moved"), read_deferred=bool(e63.get("read_deferred"))))
+                                        read_moved=e63.get("read_moved"), read_deferred=bool(e63.get("read_deferred")),
+                                        cutout=bool(dopt.get("cutout"))))
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         try:
             _pg = (world or {}).get("page") if isinstance((world or {}).get("page"), dict) else None

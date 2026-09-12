@@ -269,6 +269,14 @@
     opacity: 0;
     will-change: opacity, transform, clip-path;
   }
+  /* P53 T7 / R26-59: THE CUTOUT. A head above the crawl is a person, not a document, so the card's chrome
+     stands down - no paper, no border, no radius, no padding, and no backdrop blur (the blur is the paper's
+     own depth cue and reads as a pane of glass in front of a person). The dock's BOX, its placement and its
+     whole arrival choreography are untouched: this is the absence of four declarations, not a second dock. */
+  .dock.cutout {
+    background: none; border: 0; border-radius: 0; padding: 0;
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
   /* ID-scoped: #dock-1's own left rule would otherwise outrank a class chain */
   #dock-1.solo { width: 1056px; top: 172px; }
   #dock-1.solo.side-r { left: 764px; }

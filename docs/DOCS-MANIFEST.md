@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-312 documents across 13 kinds.
+313 documents across 13 kinds.
 
 ## doctrine
 
@@ -99,7 +99,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## backlog
 
-- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +119 more — terms: Z-stack; short-form; drawOn; G-g
+- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +120 more — terms: Z-stack; short-form; drawOn; G-g
 
 ## pattern
 
@@ -118,6 +118,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/content-video-engine/patterns/phase-guides/P6.md — P6 — THE CLOSE — Self-contained generation guide. Consume — defines: P6 — terms: {FORMAT}; audio-first; take-home; ring-native
 - docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md — SCRIPT PATTERN KIT — A portable, deterministic script-generat — defines: — — terms: head-fake; long-form; micro-rules; channel-specific
 - docs/content-video-engine/patterns/SENTENCE-STRENGTH-CHECK.md — SENTENCE STRENGTH CHECK — the line-by-li — A per-sentence pass run AFTER a script c — defines: — — terms: Re-check; Re-run; page-ism; Attribution-first
+- docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md — SHORT-FORM SHAPE — the five positions an — What the one-shot proved (2026-09-12, `p — defines: — — terms: one-shot; LEDGER_ENTERS; axes; spiral
 - docs/content-video-engine/patterns/STRENGTH-LOOP.md — THE STRENGTH LOOP — gates at every scale — `SENTENCE-STRENGTH-CHECK.md` gates L0. T — defines: — — terms: trade-off; re-verifies; Cross-scale; Sub-sentence
 
 ## runbook

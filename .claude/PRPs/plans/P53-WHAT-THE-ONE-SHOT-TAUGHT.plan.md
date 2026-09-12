@@ -7,7 +7,7 @@ risk: standard
 owner: parent
 branch: main
 created: 2026-09-12
-updated: 2026-09-12 (running: T1 the axes register, T2 the measured hand-off, T6 the two stamps and T9 the local aligner are done and proved on frames; T3/T4 dispatched; T5/T7/T8/T10 open)
+updated: 2026-09-12 (running: T1-T9 landed and proved on frames, T7's two halves open; T10 not started; a hard reboot mid-write zero-filled five generated doc layers, regenerated before this commit)
 ---
 
 # What the one-shot taught
@@ -178,31 +178,45 @@ by the parent in every case - a subagent's PASS is not evidence (E71).
   spoken over), and `_load` records which build it is reading.
 
 ### T3: the ring's flag chip stays on the page (R26-67)
-- Status: pending
+- Status: done
 - Owner: junior_developer
 - Depends on: none
 - Write set: `content/video_engine/scripts/species/ring.mjs`, `content/video_engine/tests/golden/frames/` (the frames this moves on purpose), `content/video_engine/tests/test_species_ring.py` if it exists else the species test beside it
 - Acceptance: with the ring on a datum inside the last 15% of the x extent the flag goes left; a chip that would still cross the page box is placed under the ring; the ellipse encloses the datum's own mark including a spike
 - Validate: `python content/video_engine/scripts/sync_kinetics.py --check`; `python -m pytest content/video_engine/tests -k ring -q`; re-shoot the closing frame of `normal-for-which-bridge/build-short` at 69.0 s
-- Evidence: pending
+- Evidence: `ring.mjs` derives the drawn series' x extent through the engine's own `resolveTarget` (index 0 and
+  one past the end, which the engine clamps); `flag_side` always wins. THE FRAMES CORRECTED THE FIRST FIX: sending
+  the chip LEFT put it in the middle of the series' terminal tag ("x3.9 Fed [chip] ebt", build-short-axes 68.5 s),
+  because a stage painter cannot read the page's labels. The parent's follow-up: past the last 15% of the extent
+  the flag goes UNDER the ellipse. Read at 67.8-69.3 s: the chip stands under the ring, clear of the tag, inside the
+  page. `ringMark` grows only a ring with ink standing clear above it; widening the reach was measured and refused
+  (it swells every dense-line ring and moves two goldens - a form change for the operator). Node tests 17 pass.
 
 ### T4: the span's shade goes behind the ink (R26-68)
-- Status: pending
+- Status: done
 - Owner: junior_developer
 - Depends on: none
 - Write set: `content/video_engine/scripts/species/span.mjs`, the goldens it moves
 - Acceptance: the shade paints under the line and under every label; a series label inside the span's x range is moved out of the shade or the shade stops short of it; the span's own label never collides with the page's y-axis label (M28 stays clean)
 - Validate: `python content/video_engine/scripts/sync_kinetics.py --check`; `python -m pytest content/video_engine/tests -k span -q`; re-shoot 38-40 s of `normal-for-which-bridge/build-short`
-- Evidence: pending
+- Evidence: `span.mjs` sinks its rect to the bottom of the ACTIVE chart state's own svg every frame (idempotent,
+  seek-safe) and lets the pad yield to a page label in the headroom; the span's own name keeps the raw top so M28
+  reads the same geometry. Read at 37-40 s of build-short-axes: the line and both figures read OVER the wash. The
+  agent hit its turn limit before validating; the parent synced and read the frames. Node tests 12 pass.
 
 ### T5: R26-64's two dials
-- Status: pending
+- Status: done for (A) and (B); the strobe row is placed, its threshold is a human gate
 - Owner: implementation_luna
 - Depends on: none
 - Write set: `content/video_engine/scripts/kinetics/stopaction.mjs`, `content/video_engine/scripts/gate_motion_density.py`, `content/video_engine/tests/test_kinetics_stopaction.py` (or the test beside the module), `docs/content-video-engine/47-FINDINGS-TO-CHECKS.md`
 - Acceptance: `STOP.IMPACT_S` is deleted (or carries, in place, the reason a time decay returns); a declared cadence (`break_cadence`, an authored hold, a boil) faster than `CADENCE.STROBE_PX_S` fails a gate row naming the speed; `ON1_PX_S` is measured on our own motion against the brief's E2 §7 100 px/s and the measurement is written into the row
 - Validate: `python content/video_engine/scripts/sync_kinetics.py --check`; `python -m pytest content/video_engine/tests -k stopaction -q`; `python content/video_engine/scripts/build_animation_registry.py --check`
-- Evidence: pending
+- Evidence: `STOP.IMPACT_S` deleted with the grep proving nothing read it. ON1_PX_S measured on our motion:
+  every shipped throw runs 1188-2479 px/s, 5-25x both candidates, so the 250-vs-100 disagreement never changed a
+  hold; the burst's 359 is viewBox units, 291 stage px on a drawn page - the SPACE decides whether P50 T13's proof
+  passes, so the human gate rules the space before the threshold. The row belongs beside M20 in
+  `gate_motion_density.py`, and two of R26-64's three clauses have no authoring surface (only `break_cadence` exists).
+  Node tests 11 pass; registry in sync. CAPABILITIES' stale IMPACT_S sentence corrected.
 
 ### T6: the compiler stamps `:cut` under a suck or a melt (R26-60)
 - Status: done (in T2's own post-pass - the two stamps are one function)
@@ -220,22 +234,29 @@ by the parent in every case - a subagent's PASS is not evidence (E71).
   alone, a cut/dip/wipe stamping nothing, a non-page world left alone).
 
 ### T7: the cutout dock kind (R26-59)
-- Status: pending
+- Status: the cutout kind done; the two smaller halves open
 - Owner: parent
 - Depends on: none
 - Write set: `content/video_engine/scripts/build_scene_timeline_f.py`, `docs/content-video-engine/samples/scene-evidence-engine.mjs`, `content/video_engine/samples/scene-evidence-player.template.html`, the tests and goldens beside them
 - Acceptance: a dock declared `cutout` renders with no card frame and no paper; `centred_place` takes the band's `reserve`; `cap_band: "above"` is legal on a crawl with nothing docked; gate 1's 16:9 frame is re-rendered with a real head
 - Validate: `python -m pytest content/video_engine/tests -k "dock or newsreel" -q`; re-render `tests/golden/frames/newsreel-band.png` on purpose and read it
-- Evidence: pending
+- Evidence: `DOCK_KIND_CUTOUT` travels on the evidence entry exactly as the video kind does, the player toggles
+  `.dock.cutout`, and the template stands the card's chrome down (no paper, border, radius, padding or backdrop
+  blur); a document dock compiles byte-for-byte as before. STILL OPEN: `centred_place` taking the band's
+  `reserve`, `cap_band: "above"` on a crawl with nothing docked, and gate 1's re-render with a real head.
 
 ### T8: the row proposer and the short-form shape
-- Status: pending
+- Status: done, with its limit recorded in the tool
 - Owner: implementation_luna
 - Depends on: T1 (the shape's opening row declares an enter)
 - Write set: `content/video_engine/scripts/lint_species_choice.py`, `docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md` (new), `content/video_engine/tests/test_lint_species_choice.py`
 - Acceptance: `--propose` prints a draft row per sentence that has an act, an available species and no row, each carrying the ACT and the `when` that proposed it and a target read off the series' own facts; it never proposes by count, never writes a shot table, and says so in its own header; the shape doc names the short's five positions (the apex read, the instances, the turn, the cost, the ring) with the enter each takes
 - Validate: `python content/video_engine/scripts/lint_species_choice.py <project> --propose`; `python -m pytest content/video_engine/tests/test_lint_species_choice.py -q`
-- Evidence: pending
+- Evidence: `lint_species_choice.py --propose` prints draft rows (phrase anchors, targets read off the series'
+  facts by name, the ACT and the `when` that proposed each) and never writes a shot table; `SHORT-FORM-SHAPE.md`
+  names the five positions. 27 tests pass. The agent named its own wrong proposals: the proposer reads the world
+  UNDER a sentence, never the referent (a yield sentence offered the debt page's datum), so the author's work is
+  deletion - now written into the tool's docstring.
 
 ### T9: both takes, and a clock off either (E70)
 - Status: done, with a limit recorded
