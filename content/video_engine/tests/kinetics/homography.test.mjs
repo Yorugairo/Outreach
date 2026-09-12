@@ -137,3 +137,18 @@ test("a region INSIDE the card (the quoted phrase) comes back as four projected 
   assert.ok(r.h > phrase.h, "the bounding box of a slanted band is taller than the band");
   assert.equal(embedRegion(null, box, phrase), null);
 });
+
+test("THE SURFACE IS THE CARD: the quad's whole bounding rectangle lands corner on corner", () => {
+  // what embedPlace passes since the second watch (the operator, 2026-09-12: "isn't the whole point of the TV
+  // to use it as the entire surface?"): the card is laid out at the WHOLE bounding rectangle of the quad, so
+  // the projection carries its four corners onto the surface's four corners and the card fills it. The card's
+  // own aspect never enters - the box carries the SURFACE'S aspect and the card reflows into it.
+  const b = quadBounds(POSTER), m = embedMatrix(POSTER, b);
+  [[0, 0], [b.w, 0], [b.w, b.h], [0, b.h]].forEach(([lx, ly], i) => {
+    const p = hApply(m, lx, ly);
+    assert.ok(near(p[0] + b.x, POSTER[i][0], 1e-8) && near(p[1] + b.y, POSTER[i][1], 1e-8), `corner ${i}`);
+  });
+  const mid = hApply(m, b.w / 2, b.h / 2);
+  assert.ok(mid[0] + b.x > b.x && mid[0] + b.x < b.x + b.w, "the card's middle stays on the surface");
+  assert.ok(mid[1] + b.y > b.y && mid[1] + b.y < b.y + b.h);
+});

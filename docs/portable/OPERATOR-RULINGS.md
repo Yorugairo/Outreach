@@ -2160,6 +2160,9 @@ that; a card on paper is ink on paper.
 the plate's own blank showing around the information, and the surface reads as a screen with a sticker on it rather
 than as the thing the scene is showing.
 
-Mechanisms: the engine's `embedPlace` and the embedded card's reflow (`species/press.mjs` if its type must scale), the
-golden `art-embed` regenerated on purpose; `docs/content-video-engine/CAPABILITIES.md` (the ART-embed row). The finding:
-the TV proof frame of 2026-09-12.
+Mechanisms (WIRED 2026-09-12, the same hour): the engine's `embedPlace` takes the quad's whole rectangle; `species/press.mjs`
+`pressTypeScale` (one number on both axes) and `pressPictureFit` (one axis); a screen surface's sheen (the plate's pixels in
+screen blend above the card, dimming with the room), the inner edge falloff, the lift; `kind: screen | paper` and `sheen` on
+the layers file, through `embed_entry`; the golden `art-embed` regenerated on purpose (a press card displayed by a screen);
+`docs/content-video-engine/CAPABILITIES.md` (the ART-embed row). The limit it found: the pulled phrase is a raster and cannot
+re-line larger on a tall poster (R26-55). The finding: the TV proof frame of 2026-09-12.

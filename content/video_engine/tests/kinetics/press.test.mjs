@@ -6,7 +6,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { minJerk } from "../../scripts/kinetics/ease.mjs";
 import { springPop } from "../../scripts/kinetics/spring.mjs";
-import { PRESS, pressRest, pressStack, underlineFrac, pressXf, pressPhraseBox } from "../../scripts/species/press.mjs";
+import { PRESS, pressRest, pressStack, underlineFrac, pressXf, pressPhraseBox,
+         pressTypeScale, pressPictureFit, phoneCssPx } from "../../scripts/species/press.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 
@@ -159,4 +160,33 @@ test("the phrase box is the card image's fractions, and a malformed one paints n
   assert.equal(pressPhraseBox(img, null), null);
   assert.equal(pressPhraseBox(null, { x0: 0, y0: 0, x1: 1, y1: 1 }), null);
   assert.equal(pressPhraseBox(img, { x0: 0, y0: 0, x1: "wide", y1: 1 }), null);
+});
+
+// ---- P50 T7 second watch: THE EMBEDDED CARD'S REFLOW ------------------------------------------------
+// The card fills its surface, so the surface's box - not the card's - decides the layout. Two pure laws carry
+// it: the type scales by ONE number, and the picture is fitted on ONE axis (fitting both is what a stretch is).
+
+test("the type scale is the surface's width over the card's own, one number on both axes", () => {
+  assert.ok(near(pressTypeScale(800, 800), 1), "a surface the card's own width changes nothing");
+  assert.ok(near(pressTypeScale(794, 800), 0.9925), "the measured TV");
+  assert.ok(near(pressTypeScale(1080, 800), 1.35), "a surface wider than the card scales its print UP");
+  assert.ok(near(pressTypeScale(392, 800), 0.49), "... and the narrowest lawful surface scales it down");
+  for (const bad of [0, -10, NaN]) assert.equal(pressTypeScale(bad, 800), 1, "a box with no width leaves the card alone");
+  assert.equal(pressTypeScale(800, 0), 1, "a card with no authored width has nothing to scale from");
+  // E62's own arithmetic, which is what a proof frame is read against: 48 px of a 1080-wide short is 17 CSS px
+  assert.ok(near(phoneCssPx(48, 1080), 17, 1e-9));
+  assert.ok(near(phoneCssPx(48 * 1920 / 1080, 1920), 17, 1e-9), "the same share of a landscape stage reads the same");
+  assert.equal(phoneCssPx(100, 0), 0, "a stage with no width reads as nothing, rather than guessing one");
+});
+
+test("the picture keeps its own aspect: fitted on the width, or on the height, never on both", () => {
+  const a = 160 / 528;
+  const wide = pressPictureFit(752, 468, a);       // the TV: the width binds and the paper takes the rest
+  assert.ok(near(wide.w, 752) && near(wide.h, a * 752, 1e-9));
+  const tall = pressPictureFit(1000, 120, a);      // a short band: the height binds, so the picture narrows
+  assert.ok(near(tall.h, 120) && near(tall.w, 120 / a, 1e-9));
+  assert.ok(near(wide.h / wide.w, a, 1e-9) && near(tall.h / tall.w, a, 1e-9), "the aspect survives both branches");
+  assert.equal(pressPictureFit(700, 400, 0), null, "no aspect on record: the caller leaves the picture's CSS alone");
+  assert.equal(pressPictureFit(0, 400, a), null);
+  assert.equal(pressPictureFit(700, -1, a), null);
 });

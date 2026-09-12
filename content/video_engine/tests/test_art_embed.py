@@ -15,6 +15,7 @@ Pure functions and committed files only - no episode build.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -200,25 +201,56 @@ def test_the_camera_takes_a_declared_surface_as_a_target_and_the_compiler_resolv
 
 # ---- the golden surface, as committed ---------------------------------------------------------------------
 
-def test_the_golden_lands_a_press_card_on_the_poster_and_a_still_card_on_the_paper():
-    """`art-embed`, the committed source: two NAMED surfaces on one plate, a press card on the wall and a
-    record on the desk, the room dimming on the poster's word, and the punch aimed at the poster by name."""
+# Until the compiler carries a surface's `kind`, the ENGINE decides the treatment by the surface's NAME:
+# scene-evidence-engine.mjs' EMBED_SCREEN. A screen DISPLAYS its card (the plate's own light composited back
+# over it, the bezel's inner falloff, the paper lifted toward the light); a paper simply carries it.
+ENGINE = ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs"
+SCREENS = ("tv", "laptop")
+
+
+def engine_screen_names() -> set:
+    m = re.search(r"const EMBED_SCREEN = /\^\(([a-z|]+)\)", ENGINE.read_text(encoding="utf-8"))
+    assert m, "the engine no longer names its screen surfaces where this test reads them"
+    return set(m.group(1).split("|"))
+
+
+def test_the_golden_displays_a_press_card_on_the_tv_and_lays_a_record_on_the_desk_paper():
+    """`art-embed`, the committed source: two NAMED surfaces on one plate, a press card on the SCREEN and a
+    record on the desk paper, the room dimming on the screen's word, and the punch aimed at it by name. The two
+    surfaces are the two TREATMENTS, in one frame (P50 T7 second watch, 2026-09-12) - and the card fills each
+    of them corner to corner, which is what the golden frame itself is judged on."""
     tl = json.loads((GOLDEN / "art-embed.timeline.json").read_text(encoding="utf-8"))
     assert tl["aspect"] == "9:16", "a card on a wall has to read on a phone"
     quote, record = tl["scenes"][0]["docks"]
-    assert quote["kind"] == B.DOCK_KIND_PRESS and quote["embed"]["name"] == "poster"
-    assert quote["embed"]["quad"] == [[round(v, 5) for v in p] for p in POSTER]
+    assert quote["kind"] == B.DOCK_KIND_PRESS and quote["embed"]["name"] == "tv"
+    assert quote["embed"]["quad"] == MEASURED["art-embed-study-tv-laptop"]["tv"], \
+        "the golden's screen is the quad MEASURED on the approved plate, not a shape drawn for the test"
     assert quote["embed"]["darken"] == 7.0 and quote["embed"]["img"] == round(160 / 528, 5)
     assert quote["arrive"] == "throw", "a throw lands ONTO the surface with its impact"
     assert "place" not in quote and "stack_index" not in quote, "the surface is the park: no place, no pile"
     assert record["embed"]["name"] == "paper" and "darken" not in record["embed"]
     assert record["badge_at"] and record["embed"]["img"] == 0.625, "the badges ride the projection"
+    names = engine_screen_names()
+    assert quote["embed"]["name"] in names and record["embed"]["name"] not in names, \
+        "the golden carries one surface of each treatment: a screen and a paper"
     under, punch = tl["scenes"][0]["species"]
     assert under["form"] == "underline" and under["target"] == {"kind": "phrase", "dock": quote["slide"]}
-    assert punch["target"]["kind"] == "embed" and punch["target"]["name"] == "poster"
+    assert punch["target"]["kind"] == "embed" and punch["target"]["name"] == "tv"
     assert punch["target"]["quad"] == quote["embed"]["quad"], "the eye and the card read the same surface"
     for surface in (quote["embed"], record["embed"]):
         assert B.embed_quad_error(surface["name"], surface, "the golden") is None
+
+
+def test_every_surface_the_approved_plates_declare_falls_on_the_right_side_of_the_engines_name_line():
+    """The naming default is only safe while it is TRUE of the plates in hand: the two TVs and the laptop are
+    screens, the poster and the washi paper are not. A plate that declared a screen under another name would
+    be carried as a paper - which is why `embed_entry` should pass `kind` and `sheen` through (two lines), and
+    why this test fails the day a new surface name arrives without them."""
+    names = engine_screen_names()
+    assert {"tv", "laptop"} <= names and not names & {"poster", "paper", "washi", "desk"}
+    for stem, want in sorted(MEASURED.items()):
+        for name in sorted(want):
+            assert (name in names) == (name in SCREENS), f"{stem} {name}: the engine would treat it as the other kind"
 
 
 # ---- the APPROVED plates, measured (P50 T7, operator 2026-09-12: "The frames are fine") --------------------
@@ -298,3 +330,21 @@ def test_every_measured_quad_is_a_lawful_surface_a_card_can_be_read_on():
     shrunk = [[round(cx + (x - cx) * 0.6, 5), y] for x, y in lap]
     err = B.embed_quad_error("laptop", {"quad": shrunk}, "the floor")
     assert err and "of the stage wide" in err and "25% floor" in err, err
+
+
+def test_a_surfaces_kind_reaches_the_entry_and_a_screen_is_declared_as_one():
+    """E66: the plate declares the surface's treatment - `kind` (screen | paper) and `sheen` pass through embed_entry;
+    the TVs and the laptop are screens, the poster and the washi paper are paper."""
+    import json
+    q = [[0.2, 0.2], [0.9, 0.2], [0.9, 0.5], [0.2, 0.5]]
+    e = B.embed_entry("tv", {"quad": q, "kind": "screen", "sheen": 0.3})
+    assert e["kind"] == "screen" and e["sheen"] == 0.3
+    assert "kind" not in B.embed_entry("p", {"quad": q})
+    plates = ROOT / "content/video_engine/channel-assets/money-physics/plates"
+    kinds = {}
+    for fn in ("art-embed-study-poster", "art-embed-study-tv-laptop", "art-embed-washi-tv"):
+        for name, spec in json.loads((plates / f"{fn}.layers.json").read_text(encoding="utf-8"))["embed"].items():
+            kinds[(fn, name)] = spec.get("kind")
+    assert kinds[("art-embed-study-tv-laptop", "tv")] == "screen" and kinds[("art-embed-study-tv-laptop", "laptop")] == "screen"
+    assert kinds[("art-embed-washi-tv", "tv")] == "screen" and kinds[("art-embed-washi-tv", "paper")] == "paper"
+    assert kinds[("art-embed-study-poster", "poster")] == "paper"

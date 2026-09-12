@@ -1766,6 +1766,9 @@ def embed_entry(name: str, spec: dict, words=None, card_aspect: float | None = N
     resolved here against the build's own words, so the player never has to find a word at render time."""
     quad = [[round(float(x), 5), round(float(y), 5)] for x, y in spec["quad"]]
     out = {"name": name, "quad": quad}
+    for key in ("kind", "sheen"):      # E66: the surface's own treatment as the plate declares it (screen | paper; the sheen's strength)
+        if spec.get(key) is not None:
+            out[key] = spec[key]
     if card_aspect is not None and float(card_aspect) > 0:
         out["img"] = round(float(card_aspect), 5)
     dk = spec.get("darken")

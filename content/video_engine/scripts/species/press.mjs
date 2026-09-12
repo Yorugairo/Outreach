@@ -113,3 +113,38 @@ export const pressPhraseBox = (img, phrase) => {
   if (f.some((v) => !Number.isFinite(v))) return null;
   return { x: img.x + f[0] * img.w, y: img.y + f[1] * img.h, w: (f[2] - f[0]) * img.w, h: (f[3] - f[1]) * img.h };
 };
+
+/* ================= THE EMBEDDED CARD'S REFLOW (P50 T7 second watch; the operator, 2026-09-12: "isn't the whole
+   point of the TV to use it as the entire surface?") =================
+   A card that lands on a declared surface FILLS it: its unprojected box is the quad's WHOLE rectangle, so the box
+   carries the SURFACE'S aspect, never the card's. The card therefore reflows into that box - its masthead at the
+   top, its pulled phrase in the middle, its by-line at the foot - and two pure laws decide the reflow:
+
+     TYPE    - every px the card is authored at (its frame, its padding, its masthead, its by-line) multiplies by
+               ONE number: the box's width over the width the card's CSS is written at. One number on both axes, so
+               no glyph is ever squeezed - a letter has the same aspect on a wide TV as on a tall poster, and the
+               surface gives ground in SIZE only (E62 / E65: the box gives ground in scale, never in legibility).
+               No floor is imposed here: type floored above its own card would overrun the surface it is read on.
+               The compiler's floor (a quarter of the stage wide) is what keeps a surface big enough to read, and
+               `phoneCssPx` states what the result reads as in the hand, against E62's 17 CSS px.
+     PICTURE - the pulled phrase keeps its OWN aspect. It takes the box's full inner width unless the height left
+               between the masthead and the by-line binds, and then it takes that height and centres in the width.
+               Never both: a picture fitted on two axes is a stretch, and a stretched headline is a lie.
+   Both are closed form in the box, so a card on a surface is a pure function of t like everything else. */
+export const pressTypeScale = (boxW, designW) => (boxW > 0 && designW > 0 ? boxW / designW : 1);
+
+/* the picture's box inside the paper left for it: {w, h} at the picture's own aspect (h / w), or null when the
+   aspect is unknown - the caller then leaves the picture's CSS alone rather than guessing a height. */
+export const pressPictureFit = (availW, availH, aspect) => {
+  const a = +aspect > 0 ? +aspect : 0;
+  if (!a || !(availW > 0) || !(availH > 0)) return null;
+  const h = a * availW;
+  return h <= availH ? { w: availW, h } : { w: availH / a, h: availH };
+};
+
+/* WHAT A STAGE PX READS AS IN THE HAND. E62's own arithmetic: 48 px of a 1080-wide short is 17 CSS px on a phone,
+   which is the quiet caption's floor - so a phone is 1080 * 17 / 48 CSS px wide. The STAGE'S width is passed in
+   (the player speaks in STAGE_W, and neither stage size is written here); a stage with no width reads as nothing.
+   The reflow does not clamp to the floor - this is what a proof frame is measured against. */
+export const PHONE_CSS_W = 382.5;
+export const phoneCssPx = (stagePx, stageW) => (+stageW > 0 ? (+stagePx || 0) * PHONE_CSS_W / +stageW : 0);

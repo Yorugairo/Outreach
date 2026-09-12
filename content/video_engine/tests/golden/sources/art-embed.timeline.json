@@ -333,7 +333,7 @@
    },
    "source": "THE HERALD, 4 MAR 2026",
    "species": "press",
-   "title": "The claim on the wall"
+   "title": "The claim on the screen"
   },
   "ev-embed-record": {
    "badges": [
@@ -374,23 +374,23 @@
      "embed": {
       "darken": 7.0,
       "img": 0.30303,
-      "name": "poster",
+      "name": "tv",
       "quad": [
        [
-        0.3685,
-        0.1941
+        0.23287,
+        0.20871
        ],
        [
-        0.8307,
-        0.156
+        0.9683,
+        0.20913
        ],
        [
-        0.8307,
-        0.6247
+        0.96744,
+        0.50337
        ],
        [
-        0.3685,
-        0.6106
+        0.2329,
+        0.49721
        ]
       ]
      },
@@ -464,23 +464,23 @@
      "kind": "punch",
      "target": {
       "kind": "embed",
-      "name": "poster",
+      "name": "tv",
       "quad": [
        [
-        0.3685,
-        0.1941
+        0.23287,
+        0.20871
        ],
        [
-        0.8307,
-        0.156
+        0.9683,
+        0.20913
        ],
        [
-        0.8307,
-        0.6247
+        0.96744,
+        0.50337
        ],
        [
-        0.3685,
-        0.6106
+        0.2329,
+        0.49721
        ]
       ]
      }
@@ -500,5 +500,5 @@
  "schema_version": "scene_evidence_timeline.v1",
  "sound": [],
  "subtitle": "P39 golden surface",
- "title": "Golden: a card on a painted surface"
+ "title": "Golden: a card displayed by a painted surface"
 }

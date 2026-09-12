@@ -2423,47 +2423,142 @@ async function mount(doc) {
     DARK_HOLE: 0.58,   /* the clear share of the gradient's radius: the surface and its frame are never dimmed */
     DARK_REACH: 1.25,  /* the gradient's radius as a multiple of the surface's own half size */
     SHADOW: 6,         /* the card's shadow ON the surface: it lies on the wall, it does not float in the room */
+    /* A SCREEN, not a wall (the operator, 2026-09-12: "and yes, it should read as inside of the TV"): */
+    SHEEN: 0.4,        /* how much of the PLATE'S OWN pixels inside the quad come back over the card as light */
+    VIGNETTE: 0.045,   /* the bezel's inner falloff, as a share of the surface's width: the card sits INSIDE the frame */
+    VIG_INK: "rgba(5,19,30,.55)",   /* ... in the room's own ink, the veil's colour */
+    LIFT: 1.04,        /* the card's paper lifted toward the screen's light. The cap is the house cream itself:
+                          #f4e6c7's red channel is 244 and 244 x 1.045 clips at 255; 1.04 (253.8) does not. The faint
+                          COOL CAST the order allowed is skipped on purpose - it fights the cream (E22's ground). */
   });
   const embedOf = (d) => (d && d.embed && Array.isArray(d.embed.quad) && d.embed.quad.length === 4 ? d.embed : null);
   const EMBED_GEO = Object.create(null);   /* per slide: the live surface, box and matrix - what the underline reads */
   const embedQuadPx = (em) => em.quad.map((p) => [p[0] * STAGE_W, p[1] * STAGE_H]);   /* the manifest's stage fractions */
 
-  /* the card's BOX on the surface and the matrix that puts it there, both written onto the element. The card is laid
-     out at the surface's own size (real px, real type) and only then projected: `transform-origin: 0 0` so the matrix
-     is exactly the homography from the card's own coordinates, and left / top / width stay its real layout box. */
+  /* WHICH SURFACE THIS IS. A surface is a PAPER by default - a poster, a washi sheet, a record lying on a desk -
+     and a card LIES on it, with its own small shadow. A SCREEN (a TV, a laptop, a monitor) DISPLAYS the card
+     instead (the operator, 2026-09-12: "and yes, it should read as inside of the TV"): the plate's own light comes
+     back over the glass, the bezel's inner edge falls off around it, and the card's paper is lifted a little toward
+     the light. The plate may declare `kind` and `sheen` beside its quad as soon as the compiler carries them (two
+     lines in `embed_entry`: `for k in ("kind", "sheen"): if k in spec: out[k] = spec[k]`); until then a surface
+     NAMED like a screen is one, which is what all three measured plates call theirs (`tv`, `laptop`). */
+  const EMBED_SCREEN = /^(tv|laptop|monitor|screen|display|phone|panel)\d*$/i;
+  const embedKindOf = (em) => (typeof em.kind === "string" && em.kind ? em.kind
+    : EMBED_SCREEN.test(String(em.name || "")) ? "screen" : "paper");
+  const embedSheenOf = (em) => (Number.isFinite(+em.sheen) ? Math.max(0, Math.min(1, +em.sheen))
+    : embedKindOf(em) === "screen" ? EMBED.SHEEN : 0);
+
+  /* THE SURFACE IS THE CARD (the operator on the first proof frame, 2026-09-12: "isn't the whole point of the TV to
+     use it as the entire surface?"). The card's unprojected box is the quad's WHOLE bounding rectangle, so the
+     homography carries the card's four corners onto the surface's four corners and the card FILLS it. What this
+     replaced inscribed the card's own aspect in the quad and letterboxed it, which left the plate's glare showing
+     in a band above and below a strip of print - a card pasted on the glass instead of a screen carrying it.
+     NOTHING IS STRETCHED to get there. The box carries the SURFACE'S aspect, and the card REFLOWS into it
+     (embedReflow below): the masthead at the top, the picture at the box's full inner width and its OWN aspect, the
+     by-line or the badge rail at the foot, the picture centred in whatever paper is left. What scales with the
+     surface is the card's type and chrome, by the one number species/press.mjs states - pressTypeScale, the box's
+     width over the width the card's CSS is authored at - so a wide TV and a tall poster carry the same print at
+     different sizes and no glyph is ever squeezed on one axis.
+     Nothing here measures anything that DECODES: `transform-origin: 0 0` so the matrix is exactly the homography
+     from the card's own coordinates; the type and the chrome are CSS, the same decoded or not; and the picture's
+     box is closed form in the aspect the compiler read off the file (`em.img`) - so a card painted mid-decode
+     already has the layout it will settle at, and a seek to any instant paints the frame the play-through paints. */
   const embedPlace = (el, d) => {
     const em = embedOf(d), quad = embedQuadPx(em), bb = quadBounds(quad);
     if (!bb || !(bb.w > 2) || !(bb.h > 2)) return null;
     el.style.transform = "none"; el.style.transformOrigin = "0 0";
-    el.style.left = "0px"; el.style.top = "0px";
-    /* THE INSCRIBED CARD: the largest box the card can be LAID OUT in that still falls inside the surface's
-       bounds, its own aspect kept (embedBox's rule). The card's height is NOT measured: an <img> has no height
-       until it decodes, this player paints once per seek, and a card measured mid-decode was laid out on a box
-       three hundred pixels out (the first art-embed frame: the still card's rail ran off the plate). What IS
-       measured is CSS and the same decoded or not - the frame's padding and the chrome above and below the
-       picture - and the picture's own aspect comes from the compiler, which has the file:
-           h(w) = chrome + img_aspect * (w - pad)
-       so the box is closed form in w and the frame is a pure function of t either way. */
-    const pic = el.querySelector("img");
-    const ia = +em.img > 0 ? +em.img : 0;
-    /* lay the card out at `ww` and report what that costs: the frame's padding, the chrome above and below the
-       picture, and the height the card will have once the picture is in. Both measurements are CSS - the same
-       whether the picture has decoded or not - and the height is closed form, which is the point. */
-    const at = (ww) => {
-      el.style.width = ww.toFixed(2) + "px";
-      const ow = el.offsetWidth || 0, pad = Math.max(0, ow - (pic ? pic.offsetWidth : ow));
-      const chrome = Math.max(0, (el.offsetHeight || 0) - (pic ? pic.offsetHeight : 0));
-      return { pad, chrome, h: chrome + ia * Math.max(0, ww - pad) };
-    };
-    const narrow = (s) => Math.min(bb.w, Math.max(s.pad + 8, s.pad + (bb.h - s.chrome) / ia));
-    let w = bb.w, s = at(w);                    /* ALWAYS from the surface's full width: no dependence on the frame before */
-    if (s.h > bb.h && ia > 0) { w = narrow(s); s = at(w); }        /* the height binds: letterbox it */
-    if (s.h > bb.h + 1 && ia > 0) { w = narrow(s); s = at(w); }    /* ... again, because a badge rail WRAPS as the card narrows */
-    const h1 = Math.max(8, s.h);
-    const box = { x: bb.x + (bb.w - w) / 2, y: bb.y + (bb.h - h1) / 2, w, h: h1 };
-    el.style.left = box.x.toFixed(2) + "px"; el.style.top = box.y.toFixed(2) + "px";
+    const css = embedCss(el, el.id || d.slide);
+    const k = pressTypeScale(bb.w, css.w);
+    el.style.left = bb.x.toFixed(2) + "px"; el.style.top = bb.y.toFixed(2) + "px";
+    el.style.width = bb.w.toFixed(2) + "px"; el.style.height = bb.h.toFixed(2) + "px";
+    embedReflow(el, d, css, k, +em.img > 0 ? +em.img : 0);
+    const box = { x: bb.x, y: bb.y, w: bb.w, h: bb.h };
     const m = embedMatrix(quad, box);
-    return m ? { quad, box, m } : null;
+    return m ? { quad, box, m, k, em, kind: embedKindOf(em) } : null;
+  };
+
+  /* THE CARD'S AUTHORED PX, read from the CSS ONCE per card and never again: the width its layout is written at
+     (which is what k is measured against) and every px on the list below. Read once because a scaled card must
+     never be re-read - the second frame would scale the first frame's numbers - and read from the CSS because the
+     card's look belongs in the stylesheet, not here. All of it is layout, so it is the same whether the card's
+     picture has decoded or not, and the same at every t. */
+  const EMBED_SCALED = [
+    ["", ["borderWidth", "borderRadius", "paddingTop", "paddingRight", "paddingBottom", "paddingLeft"]],
+    [".pmast", ["fontSize", "paddingBottom"]],          /* the masthead strip - and the by-line, which wears its class */
+    [".slide-frame", ["borderWidth", "borderRadius"]],
+    [".rail", ["gap", "marginTop"]],                     /* the badge rail at the card's foot */
+    [".pill", ["paddingTop", "paddingRight", "paddingBottom", "paddingLeft", "borderRadius"]],
+    [".pill-row", ["gap"]],
+    [".pill-label", ["fontSize"]],
+    [".pill-num", ["fontSize"]],
+    [".pill-tag", ["fontSize", "paddingTop", "paddingRight", "paddingBottom", "paddingLeft", "borderRadius"]],
+  ];
+  const EMBED_CSS = Object.create(null);
+  const embedCss = (el, key) => {
+    if (EMBED_CSS[key]) return EMBED_CSS[key];
+    const px = (v) => parseFloat(v) || 0, design = Object.create(null);
+    for (const [sel, props] of EMBED_SCALED) {
+      const n = sel ? el.querySelector(sel) : el;
+      if (!n) continue;
+      const cs = getComputedStyle(n), row = Object.create(null);
+      for (const p of props) row[p] = px(cs[p]);
+      design[sel] = row;
+    }
+    return (EMBED_CSS[key] = { w: el.offsetWidth || 0, design });
+  };
+
+  /* THE REFLOW: the card laid out at its surface's box. Every authored px multiplies by k, the card becomes a
+     COLUMN (masthead, picture, foot) and the picture keeps its own aspect in the paper left for it
+     (species/press.mjs pressPictureFit: the full inner width, unless the height between the masthead and the foot
+     binds, and then that height, centred - never fitted on both axes, which is what a stretch is).
+     A press card's source line SPLITS at its last comma, so the paper's name reads as the masthead at the top and
+     the date as the BY-LINE at the card's foot, the way a page is laid out; a source with nothing to split keeps
+     its one strip. The pile's cards are untouched - a card only reflows when it lands on a surface. */
+  const embedReflow = (el, d, css, k, ia) => {
+    const px = (v) => v.toFixed(2) + "px", D = css.design;
+    const mast = el.querySelector(".pmast:not(.pby)");
+    if (mast && d.source) {   /* the by-line, before anything is measured: it is a row of the column */
+      const cut = String(d.source).lastIndexOf(",");
+      let by = el.querySelector(".pby");
+      if (cut > 0) {
+        if (!by) {
+          by = document.createElement("div"); by.className = "pmast pby";
+          by.appendChild(document.createElement("span")); el.appendChild(by);
+        }
+        mast.firstChild.textContent = String(d.source).slice(0, cut).trim();
+        by.firstChild.textContent = String(d.source).slice(cut + 1).trim();
+      }
+    }
+    el.style.display = "flex"; el.style.flexDirection = "column";
+    for (const [sel, props] of EMBED_SCALED) {
+      const row = D[sel];
+      if (!row) continue;
+      for (const n of sel ? el.querySelectorAll(sel) : [el]) for (const p of props) n.style[p] = px(row[p] * k);
+    }
+    const by = el.querySelector(".pby");
+    if (by && D[".pmast"]) { by.style.paddingTop = px(D[".pmast"].paddingBottom * k); by.style.paddingBottom = "0px"; }
+    for (const n of el.querySelectorAll(".pmast, .rail")) n.style.flex = "0 0 auto";
+    /* the picture, centred in what the rows above and below leave: the one measurement that decides the reflow, and
+       every term in it is CSS (an offsetHeight of TYPE, a padding, a border), so it is decode-independent. */
+    const pic = el.querySelector("img"), frame = pic && pic.parentNode;
+    if (!frame) return;
+    frame.style.flex = "0 0 auto";
+    const pad = D[""] || { paddingTop: 0, paddingRight: 0, paddingBottom: 0, paddingLeft: 0 };
+    const fbw = (D[".slide-frame"] || { borderWidth: 0 }).borderWidth * k;
+    const rail = el.querySelector(".rail"), railH = rail && rail.offsetParent
+      ? rail.offsetHeight + (D[".rail"] || { marginTop: 0 }).marginTop * k : 0;
+    let rows = railH;
+    for (const n of el.querySelectorAll(".pmast")) rows += n.offsetHeight;
+    const aw = el.clientWidth - (pad.paddingLeft + pad.paddingRight) * k - 2 * fbw;
+    const ah = el.clientHeight - (pad.paddingTop + pad.paddingBottom) * k - rows - 2 * fbw;
+    const fit = pressPictureFit(aw, ah, ia);
+    if (fit) {
+      pic.style.width = px(fit.w); pic.style.height = px(fit.h);
+      frame.style.width = px(fit.w + 2 * fbw); frame.style.margin = "auto";
+    } else {   /* no aspect on record (a clip dock): the picture takes the width it is given and its CSS keeps the rest */
+      pic.style.width = "100%"; pic.style.height = "";
+      frame.style.width = px(Math.max(0, aw + 2 * fbw)); frame.style.margin = "auto 0";
+    }
   };
 
   /* the whole transform at t: the projection, the arrival composed around it, the idle inside it */
@@ -2487,7 +2582,18 @@ async function mount(doc) {
     const idle = idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + (d.slot | 0), 3);   /* E49, in the card's own plane */
     el.style.transform = cssMatrix3d(m)
       + (idle ? " translate(" + cx + "px," + cy + "px)" + idle + " translate(-" + cx + "px,-" + cy + "px)" : "");
-    el.style.boxShadow = EMBED.SHADOW + "px " + EMBED.SHADOW + "px 0 rgba(37,49,60,.55)";
+    /* THE CARD'S EDGE. On a PAPER the card lies on the surface and carries its own small shadow there. On a SCREEN
+       there is nothing for a shadow to fall on - the card IS the picture the screen is showing - so the shadow comes
+       off and the bezel's INNER falloff goes on instead (an inset vignette a few % of the surface's width, in the
+       room's own ink), which is what makes the card read as inside the frame rather than stuck to the glass; and the
+       card's paper is lifted toward that light by EMBED.LIFT. */
+    if (g.kind === "screen") {
+      el.style.boxShadow = "inset 0 0 " + (EMBED.VIGNETTE * g.box.w).toFixed(1) + "px " + EMBED.VIG_INK;
+      el.style.filter = "brightness(" + EMBED.LIFT.toFixed(2) + ")";
+    } else {
+      el.style.boxShadow = EMBED.SHADOW + "px " + EMBED.SHADOW + "px 0 rgba(37,49,60,.55)";
+      el.style.filter = "";
+    }
     g.live = m;
     EMBED_GEO[d.slide] = g;
     return g;
@@ -2521,12 +2627,66 @@ async function mount(doc) {
      and under every card: a radial gradient centred on the surface, clear across it and falling to DARK_ALPHA at the
      corners, in over DARK_S from the word the manifest named. Mounted only when a build actually embeds - a timeline
      with no surface never gains the node, and every existing golden renders byte-identically. */
-  let embedVeilEl = null;
-  const embedVeil = (sc, t) => {
+  /* THE ROOM'S OWN DIM at t: the dock whose surface declared a darkening word, and how far down the room has gone -
+     in on its word over DARK_S, out with the card. Read by the veil, which paints it, and by the sheen, which goes
+     down with the room because the light the sheen carries IS the room's. */
+  const embedDark = (sc, t) => {
     const d = (sc.docks || []).find((x) => {
       const e = embedOf(x);
       return e && e.darken != null && t >= +e.darken && t < +x.exit + EXIT;
     });
+    if (!d) return null;
+    const em = embedOf(d);
+    return { d, em, k: clamp01(minJerk(clamp01((t - +em.darken) / EMBED.DARK_S)) * clamp01((+d.exit + EXIT - t) / EMBED.DARK_S)) };
+  };
+
+  /* A SCREEN DISPLAYS THE CARD, IT DOES NOT CARRY IT (the operator, 2026-09-12: "and yes, it should read as inside
+     of the TV"). The card fills the glass now, so the glass's own light has to come back OVER it: one layer carrying
+     the PLATE'S OWN PIXELS inside the quad - the lamp's wedge, the bezel's inner falloff, whatever the painting put
+     on that screen - registered to the world exactly as the plate's foreground layer is (the same box, the same
+     background, the same transform the world is painted with this frame) and blended as LIGHT (`screen`) over the
+     card at `sheen` strength. It is the plate, so it is static; the only clocks on it are the CARD'S own alpha (the
+     glare belongs over the card - before the card lands, the plate already carries its own) and the room's dim,
+     which takes the sheen down with it but never below 1 - DARK_ALPHA of itself, so the print keeps its contrast on
+     the instant the surface lights. Mounted only when a screen actually carries a card, so a build without one -
+     and every existing golden - is byte-identical. */
+  let embedSheenEl = null;
+  const embedSheen = (sc, t) => {
+    const lit = (sc.docks || []).filter((x) => {
+      const e = embedOf(x);
+      return e && embedSheenOf(e) > 0 && EMBED_GEO[x.slide] && t >= +x.enter && t < +x.exit + EXIT;
+    });
+    const d = lit[lit.length - 1];   /* one layer of light per frame: the last screen to take a card owns it */
+    if (!d && !embedSheenEl) return;
+    if (!embedSheenEl) {
+      embedSheenEl = document.createElement("div");
+      embedSheenEl.id = "embedsheen"; embedSheenEl.setAttribute("aria-hidden", "true");
+      /* the world's own box, spelled out rather than borrowed as a class: inset -5% under `cover`, so the plate
+         lands on this layer exactly where it lands on .world and the light stays where the painting put it */
+      embedSheenEl.style.cssText = "position:absolute; inset:-5%; background-size:cover; background-position:center; "
+        + "opacity:0; pointer-events:none; mix-blend-mode:screen; will-change:opacity;";
+    }
+    /* above every card and under #species: a press card mounts before #seam whenever it first paints, so the layer
+       is moved back to the last place before the seam rather than inserted once and overtaken by a later card. */
+    if (embedSheenEl.nextSibling !== seam) seam.parentNode.insertBefore(embedSheenEl, seam);
+    const plate = sc.world && A[sc.world.asset_id];
+    if (!d || !plate) { embedSheenEl.style.opacity = "0"; return; }
+    if (embedSheenEl.dataset.src !== sc.world.asset_id) {
+      embedSheenEl.style.backgroundImage = 'url("' + plate + '")';
+      embedSheenEl.dataset.src = sc.world.asset_id;
+    }
+    embedSheenEl.style.transform = wB.style.transform;   /* the plate's pose this frame: the light never slides on the glass */
+    const g = EMBED_GEO[d.slide], ox = STAGE_W * 0.05, oy = STAGE_H * 0.05;   /* the layer overhangs the stage by 5% */
+    embedSheenEl.style.clipPath = "polygon(" + g.quad.map((p) => (p[0] + ox).toFixed(2) + "px "
+      + (p[1] + oy).toFixed(2) + "px").join(", ") + ")";
+    const dk = embedDark(sc, t);
+    const down = dk && dk.d === d ? 1 - EMBED.DARK_ALPHA * dk.k : 1;
+    embedSheenEl.style.opacity = (embedSheenOf(embedOf(d)) * down * embedAlpha(d, t)).toFixed(3);
+  };
+
+  let embedVeilEl = null;
+  const embedVeil = (sc, t) => {
+    const dk = embedDark(sc, t), d = dk && dk.d;
     if (!d && !embedVeilEl) return;
     if (!embedVeilEl) {
       embedVeilEl = document.createElement("div");
@@ -2535,14 +2695,13 @@ async function mount(doc) {
       docks[0].parentNode.insertBefore(embedVeilEl, docks[0]);   /* over the world and its life, under every card */
     }
     if (!d) { embedVeilEl.style.opacity = "0"; return; }
-    const em = embedOf(d), bb = quadBounds(embedQuadPx(em));
+    const em = dk.em, bb = quadBounds(embedQuadPx(em));
     if (!bb) { embedVeilEl.style.opacity = "0"; return; }
-    const k = minJerk(clamp01((t - +em.darken) / EMBED.DARK_S)) * clamp01((+d.exit + EXIT - t) / EMBED.DARK_S);
     const cx = (bb.x + bb.w / 2).toFixed(1), cy = (bb.y + bb.h / 2).toFixed(1);
     const rx = (bb.w * EMBED.DARK_REACH).toFixed(1), ry = (bb.h * EMBED.DARK_REACH).toFixed(1);
     embedVeilEl.style.background = "radial-gradient(" + rx + "px " + ry + "px at " + cx + "px " + cy + "px, "
       + "rgba(5,19,30,0) 0%, rgba(5,19,30,0) " + Math.round(EMBED.DARK_HOLE * 100) + "%, rgba(5,19,30,1) 100%)";
-    embedVeilEl.style.opacity = (EMBED.DARK_ALPHA * clamp01(k)).toFixed(3);
+    embedVeilEl.style.opacity = (EMBED.DARK_ALPHA * dk.k).toFixed(3);
   };
 
   /* every dock carries its own lifetime: enter -> hand-led reveal -> hold
@@ -6613,6 +6772,41 @@ async function mount(doc) {
     if (f.some((v) => !Number.isFinite(v))) return null;
     return { x: img.x + f[0] * img.w, y: img.y + f[1] * img.h, w: (f[2] - f[0]) * img.w, h: (f[3] - f[1]) * img.h };
   };
+
+  /* ================= THE EMBEDDED CARD'S REFLOW (P50 T7 second watch; the operator, 2026-09-12: "isn't the whole
+     point of the TV to use it as the entire surface?") =================
+     A card that lands on a declared surface FILLS it: its unprojected box is the quad's WHOLE rectangle, so the box
+     carries the SURFACE'S aspect, never the card's. The card therefore reflows into that box - its masthead at the
+     top, its pulled phrase in the middle, its by-line at the foot - and two pure laws decide the reflow:
+
+       TYPE    - every px the card is authored at (its frame, its padding, its masthead, its by-line) multiplies by
+                 ONE number: the box's width over the width the card's CSS is written at. One number on both axes, so
+                 no glyph is ever squeezed - a letter has the same aspect on a wide TV as on a tall poster, and the
+                 surface gives ground in SIZE only (E62 / E65: the box gives ground in scale, never in legibility).
+                 No floor is imposed here: type floored above its own card would overrun the surface it is read on.
+                 The compiler's floor (a quarter of the stage wide) is what keeps a surface big enough to read, and
+                 `phoneCssPx` states what the result reads as in the hand, against E62's 17 CSS px.
+       PICTURE - the pulled phrase keeps its OWN aspect. It takes the box's full inner width unless the height left
+                 between the masthead and the by-line binds, and then it takes that height and centres in the width.
+                 Never both: a picture fitted on two axes is a stretch, and a stretched headline is a lie.
+     Both are closed form in the box, so a card on a surface is a pure function of t like everything else. */
+  const pressTypeScale = (boxW, designW) => (boxW > 0 && designW > 0 ? boxW / designW : 1);
+
+  /* the picture's box inside the paper left for it: {w, h} at the picture's own aspect (h / w), or null when the
+     aspect is unknown - the caller then leaves the picture's CSS alone rather than guessing a height. */
+  const pressPictureFit = (availW, availH, aspect) => {
+    const a = +aspect > 0 ? +aspect : 0;
+    if (!a || !(availW > 0) || !(availH > 0)) return null;
+    const h = a * availW;
+    return h <= availH ? { w: availW, h } : { w: availH / a, h: availH };
+  };
+
+  /* WHAT A STAGE PX READS AS IN THE HAND. E62's own arithmetic: 48 px of a 1080-wide short is 17 CSS px on a phone,
+     which is the quiet caption's floor - so a phone is 1080 * 17 / 48 CSS px wide. The STAGE'S width is passed in
+     (the player speaks in STAGE_W, and neither stage size is written here); a stage with no width reads as nothing.
+     The reflow does not clamp to the floor - this is what a proof frame is measured against. */
+  const PHONE_CSS_W = 382.5;
+  const phoneCssPx = (stagePx, stageW) => (+stageW > 0 ? (+stagePx || 0) * PHONE_CSS_W / +stageW : 0);
   /* KINETICS:END */
   /* KINETICS:BEGIN flow */
   /* species/flow.mjs - THE FLOW DIAGRAM (P50 T4; the Bravos flow diagram, shots 82-86: a three-node diagram
@@ -7971,6 +8165,7 @@ async function mount(doc) {
       });
     }
     paintPress(live, t);   /* P50 T3: the press stack, outside the two slots - a pile can be three cards deep */
+    embedSheen(sc, t);   /* P50 T7 second watch: a SCREEN's own light back over the card it is displaying */
     if (worldAnswer.x || worldAnswer.y) {   /* the ground takes the weight: the dip (and a violent hit's shake) on the world, on top of its own transform */
       for (const wl of [wA, wB]) if (wl.style.display !== "none") {
         /* the OUTGOING world (wA) is a plate that must keep the frame covered while it rides down: a downward answer of y px also
