@@ -58,10 +58,16 @@ async function mount(doc) {
     camera:           false,   // P49 T2 the persistent camera: the three species through kinetics/camera.mjs (pixel-identical), authored keys per scene, the __camera probe
     stop_action:      false,   // P47 T1 the arrivals: a dock or a pill declared arrive: throw | land with a mass
   });
+  /* THE DIALS (R26-55, 2026-09-12). The same map carries a second, smaller thing: a name whose VALUE is read, not
+     a switch that is on or off - `press_face`, which of the three candidate display faces a pulled phrase is set
+     in while the operator decides (species/press.mjs PRESS_FACES; the default is the house face, so a timeline
+     that names none renders what it always did). A dial is named here so the typo warning below stays true: an
+     unknown name IS ignored, and a dial is not unknown. */
+  const KINETICS_DIALS = Object.freeze({ press_face: "the press card's display face: house | serif | condensed" });
   const KIN = Object.assign({}, KINETICS_DEFAULTS,
     (TL.kinetics && typeof TL.kinetics === "object") ? TL.kinetics : {});
   for (const k of Object.keys(TL.kinetics || {}))
-    if (!(k in KINETICS_DEFAULTS)) console.warn("kinetics: unknown flag ignored: " + k);
+    if (!(k in KINETICS_DEFAULTS) && !(k in KINETICS_DIALS)) console.warn("kinetics: unknown flag ignored: " + k);
   const kin = (name) => KIN[name] === true;
   /* Runtime comes from the TIMELINE, never hardcoded. A template that
      carries the sample's duration clamps every episode to it. */
@@ -147,6 +153,86 @@ async function mount(doc) {
     if (u >= 1) return 1; if (u <= 0) return 0;
     return springEval(u, Mp === SPRING.MP ? POP : springParams(Mp)).x;
   };
+  /* KINETICS:END */
+  /* KINETICS:BEGIN stagger */
+  /* kinetics/stagger.mjs - THE CAPTION'S ARRIVAL AS ONE ENVELOPE (P52 T10). SOURCE OF TRUTH, inlined into the
+     scene-evidence player by sync_kinetics.py between KINETICS:BEGIN stagger and KINETICS:END, AFTER ease (it uses
+     minJerk) and BEFORE the caption block that calls it. Registers no painter: this is a law, not a species.
+
+     [DERIVED: HyperFrames staggered-fade-up] (content/video_engine/hyperframes/HARVEST-2026-09-07.md:27 - "each word is
+     a span; ONE timeline drives --hf-word-y 22 px -> 0, scale 0.92 -> 1 and a 5 px blur -> 0 together, stagger 0.055 s").
+     The operator on it: "incorporating this might be a solution for how we can have more caption motion without
+     overcrowding". That is the whole design brief. Today a stage caption POPS per word (springPop over STAGE_POP_S from
+     1.10 with a 6 px rise and a tilt): motion by punctuation, and eight punctuations a page is the crowding. The fade-up
+     is the other register - one envelope, per-word offsets, three channels moving together, nothing overshooting.
+
+     TWO laws, and they are separable on purpose:
+
+       staggerStarts(onsets, origin, stagger)   WHEN each word arrives.
+           A word arrives on its own spoken onset (E21: captions ARE the motion; the word clock is doctrine and a
+           measured take's onsets are the truth) - unless that onset sits closer than `stagger` to the word before it,
+           in which case it takes the stagger. So a measured page keeps its voice, and a crowded or estimated page is
+           spread into overlapping action: no two words share a start frame (the HyperFrames research blueprint's Rule
+           3, docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:53). A missing onset falls to the
+           previous word plus the stagger; nothing arrives before the page does.
+
+       fadeUpAt(t, start, P)                    WHAT arriving looks like: y RISE_PX -> 0, scale FROM_SCALE -> 1,
+           blur BLUR_PX -> 0 px and opacity 0 -> 1, all read off ONE progress e = minJerk((t - start) / DUR_S). Because
+           it is one progress, the page cannot desynchronise; because minJerk has zero velocity AND zero acceleration at
+           both ends, the word neither snaps in nor sags to a stop. A pure function of t: frame N evaluated cold is the
+           frame the scrub gives (the seek test), which is what makes two renders of one second identical.
+
+     The blur is a FILTER ON THE WORD SPAN - never on the strip. A filter on the strip would blur the whole caption
+     (and force one composited layer for all of it); per word it is the word's own arrival and it is gone by e = 1.
+
+     The dials: RISE_PX / FROM_SCALE / BLUR_PX / STAGGER_S are the harvest's numbers, unchanged. DUR_S is OURS - the
+     envelope has to be longer than the pop (0.2 s) for this to read as an arrival instead of a flash, and longer than
+     the stagger so neighbours overlap into one wave rather than a queue of separate events. */
+
+
+  const FADE_UP = Object.freeze({
+    RISE_PX: 22,       /* [DERIVED: HyperFrames staggered-fade-up] --hf-word-y 22 px -> 0 */
+    FROM_SCALE: 0.92,  /* [DERIVED: HyperFrames staggered-fade-up] scale 0.92 -> 1 */
+    BLUR_PX: 5,        /* [DERIVED: HyperFrames staggered-fade-up] a 5 px blur -> 0, on the word's own span */
+    STAGGER_S: 0.055,  /* [DERIVED: HyperFrames staggered-fade-up] stagger 0.055 s = 3.3 frames at 60 fps */
+    DUR_S: 0.34,       /* ours: one word's envelope - longer than the pop (0.2 s) and than the stagger, so the page arrives as a wave */
+  });
+
+  /* one preset, overridden as a whole - a caller never passes a half-filled dials object */
+  const fadeUpDials = (o) => Object.freeze(Object.assign({}, FADE_UP, o || {}));
+
+  /* WHEN: the per-word arrival times. `onsets` is the page's word clock (null / undefined / NaN = unmeasured),
+     `origin` the page's own start. Monotone by construction, gaps >= stagger, pure. */
+  const staggerStarts = (onsets, origin, stagger = FADE_UP.STAGGER_S) => {
+    const out = [];
+    for (let j = 0; j < (onsets || []).length; j++) {
+      const o = Number(onsets[j]), prev = j ? out[j - 1] : null;
+      let s = Number.isFinite(o) && onsets[j] !== null ? o : (prev === null ? origin : prev + stagger);
+      if (prev === null) { if (Number.isFinite(origin) && s < origin) s = origin; }
+      else if (s < prev + stagger) s = prev + stagger;
+      out.push(s);
+    }
+    return out;
+  };
+
+  /* WHAT: the envelope at t for a word that started at `start` - the four channels off one progress */
+  const fadeUpAt = (t, start, P = FADE_UP) => {
+    /* e is CLAMPED on top of minJerk: the quintic's binary evaluation overshoots 1 by 4e-16 just under u = 1
+       (10 - 15u + 6u^2 at u = 0.9999999999999999), and an envelope whose end is not exactly rest leaves a word
+       at y = -9e-15 px and opacity 1.0000000000000004 forever - so the arrival's end is pinned to rest */
+    const e = Math.min(1, minJerk((t - start) / P.DUR_S));
+    /* the scale is written so BOTH ends are exact - FROM_SCALE at rest and exactly 1 when it has landed
+       (0.92 + 0.08 * 1 is 1.0000000000000002 in binary; springPop's "lands on exactly 1" is the house rule) */
+    const s = e >= 1 ? 1 : P.FROM_SCALE + (1 - P.FROM_SCALE) * e;
+    return { e, o: e, y: P.RISE_PX * (1 - e), s, b: P.BLUR_PX * (1 - e) };
+  };
+
+  /* the whole page at t, in word order */
+  const fadeUpPage = (t, starts, P = FADE_UP) => (starts || []).map((s) => fadeUpAt(t, s, P));
+
+  /* how long the page spends arriving: the last word's offset plus one envelope (0 when there are no words) */
+  const staggerSpan = (starts, P = FADE_UP) =>
+    (starts && starts.length ? starts[starts.length - 1] - starts[0] + P.DUR_S : 0);
   /* KINETICS:END */
   /* KINETICS:BEGIN stroke */
   /* kinetics/stroke.mjs - the curvature-reparameterised stroke (42 s42.1; FINDING-the-animation-math s1; 47 s1 rows
@@ -2370,6 +2456,117 @@ async function mount(doc) {
   const PRESS_KIND = "press", PHRASE_KIND = "phrase", EMBED_KIND = "embed";   /* P50 T7: a declared surface, by name */
   const isPressDock = (d) => !!d && d.kind === PRESS_KIND;
 
+  /* ================= THE PULLED PHRASE IS LIVE TYPE (R26-55; the law is species/press.mjs) =================
+     The phrase reaches the card BOTH ways: the CROP (the provenance strip - its pixels, its file, its sha256 on
+     record) and the WORDS (`phrase_text`, carried by the press dock). A raster cannot re-line - on a tall poster it
+     takes the surface's width and keeps the source page's line breaks, which is how the phrase came to read at 13.4
+     CSS px on a phone (E66's recorded limit) - so the WORDS are what the card sets: one element per measured line,
+     in the face the `press_face` dial names, at the one size pressPhraseFit found for the paper it was given. The
+     crop keeps PROV_SHARE of that paper underneath, still cited by the masthead and the date.
+     MEASURED ONCE per card and face, in the face itself, at a reference size: a text's width is linear in the font
+     size, so one measurement serves every candidate size the fit tries (PRESS.WORD_AIR is the slack that keeps that
+     true in the DOM), and nothing is re-measured on a later frame - the second frame would be measuring the first
+     frame's type. The ruler lives outside #stage, so it measures in STAGE px whatever the page is fitted to.
+     DECODE-INDEPENDENT: the words are type and the strip's height comes from the aspect the compiler read off the
+     file (`d.img` / the surface's `em.img`), so a card painted mid-decode already has the layout it settles at.
+     A card with no `phrase_text` gets none of this and renders exactly as it did before R26-55. */
+  const PRESS_TYPE = Object.create(null);    /* per card: the face, the size, the lines, what it reads as on a phone */
+  const PRESS_W1 = Object.create(null);      /* the measured per-px word widths, per card and face */
+  const PRESS_REF = 100;                     /* the reference size the words are measured at */
+  const pressFaceNow = () => pressFace(KIN && KIN.press_face);   /* the DIAL, not a flag: it names one of three faces */
+  let PRESS_RULER = null;
+  const pressRuler = () => {
+    if (PRESS_RULER) return PRESS_RULER;
+    const n = document.createElement("div");
+    n.style.cssText = "position:absolute;left:-99999px;top:0;visibility:hidden;white-space:pre;pointer-events:none;";
+    document.body.appendChild(n);
+    return (PRESS_RULER = n);
+  };
+  const pressWidths = (d, face) => {
+    const key = d.slide + "|" + face.id;
+    if (PRESS_W1[key]) return PRESS_W1[key];
+    const words = pressWords(d.phrase_text), n = pressRuler();
+    n.style.font = face.weight + " " + PRESS_REF + "px " + face.family;
+    n.style.letterSpacing = face.track;
+    const wid = (s) => { n.textContent = s; return n.getBoundingClientRect().width / PRESS_REF; };
+    return (PRESS_W1[key] = { words, w1: words.map(wid), space1: Math.max(0, wid(" ")) });
+  };
+
+  /* the phrase's own row of the card's column: created on demand, between the masthead and the strip */
+  const pressPhraseNode = (el) => {
+    let ph = el.querySelector(".pphrase");
+    if (ph) return ph;
+    ph = document.createElement("div");
+    ph.className = "pphrase";
+    el.insertBefore(ph, el.querySelector(".slide-frame"));
+    return ph;
+  };
+
+  /* THE PHRASE SET into the paper it was given: the fit, its lines written out one element each (so the DOM never
+     re-wraps what was measured), the band's height held to the paper's so the card's own box does not move. Returns
+     the fit, or null when the card carries no words or there is no paper to set them in. */
+  const pressSetPhrase = (el, d, availW, availH) => {
+    if (!d.phrase_text) return null;
+    const face = pressFaceNow(), m = pressWidths(d, face);
+    const fit = pressPhraseFit(m.w1, m.space1, availW, availH);
+    const ph = pressPhraseNode(el);
+    if (!fit) { ph.style.display = "none"; delete PRESS_TYPE[d.slide]; return null; }
+    ph.style.cssText = "display:flex;flex-direction:column;justify-content:center;align-items:flex-start;"
+      + "flex:0 0 auto;overflow:hidden;color:#17150f;white-space:nowrap;"
+      + "font-family:" + face.family + ";font-weight:" + face.weight + ";letter-spacing:" + face.track
+      + ";font-size:" + fit.size.toFixed(2) + "px;line-height:" + PRESS.LINE_H
+      + ";height:" + availH.toFixed(2) + "px;";
+    const key = face.id + "|" + fit.size.toFixed(2) + "|" + fit.lines.length;
+    if (ph.dataset.set !== key) {
+      ph.textContent = "";
+      for (const l of fit.lines) {
+        const row = document.createElement("div");
+        row.textContent = l.words.map((i) => m.words[i]).join(" ");
+        ph.appendChild(row);
+      }
+      ph.dataset.set = key;
+    }
+    PRESS_TYPE[d.slide] = { face: face.id, size: fit.size, lines: fit.lines.length, fits: fit.fits,
+                            paper: { w: Math.round(availW * 100) / 100, h: Math.round(availH * 100) / 100 },
+                            phone: pressPhoneRead(fit.size, STAGE_W) };
+    return fit;
+  };
+
+  /* THE PILE CARD'S COLUMN. The paper is the crop's own height at the card's width - the height the card always
+     had - split between the words and the provenance strip, so a card's box (and with it the pile's fan, which
+     steps by the card's height) does not move when the phrase becomes type. Laid out ONCE per card and face: every
+     term is CSS or the compiler's aspect, so it is the same on every frame and after any seek. */
+  /* what each card's phrase was SET at - the face, the size, the lines, the paper and what it reads as on a phone.
+     Read by the proof frames and the measurement this slice is judged on (E62's 17 CSS px), the way __lpSnap and
+     __lpProbe are read: the engine states its own numbers rather than a tool inferring them from pixels. */
+  window.__pressType = () => JSON.parse(JSON.stringify(PRESS_TYPE));
+  const PRESS_LAID = Object.create(null);
+  const pressColumnLayout = (el, d) => {
+    const face = pressFaceNow();
+    if (!d.phrase_text || PRESS_LAID[d.slide] === face.id) return;
+    const frame = el.querySelector(".slide-frame"), im = el.querySelector("img");
+    if (!frame || !im) return;
+    const cs = getComputedStyle(el), fs = getComputedStyle(frame), px = (v) => v.toFixed(2) + "px";
+    const availW = Math.max(0, el.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0));
+    const fbw = parseFloat(fs.borderTopWidth) || 0, a = +d.img > 0 ? +d.img : 0;
+    const imgW = Math.max(0, availW - 2 * fbw);
+    const col = pressColumn(a > 0 ? imgW * a : im.offsetHeight, imgW, a);
+    if (!col || !(availW > 2)) return;
+    const fit = pressSetPhrase(el, d, availW, col.phraseH);
+    if (!fit) return;
+    el.querySelector(".pphrase").style.marginBottom = px(col.gap);
+    /* THE PAPER IS OPAQUE. The dock's ground is 90 % cream over whatever is behind it - a UI panel's affordance,
+       not a cutting's - and at display size the card BEHIND a card in the pile ghosts straight through its
+       neighbour's face. A quotation is read off paper, so a card carrying its words carries the same cream at full
+       strength and the pile reads as a pile again (the newest lit, the older ones behind it, E45/§9.27). */
+    el.style.background = "#F4E6C7";
+    if (col.prov) {   /* the strip: the crop fitted on ONE axis inside its share, centred - never stretched */
+      im.style.width = px(col.prov.w); im.style.height = px(col.prov.h);
+      frame.style.width = px(col.prov.w + 2 * fbw); frame.style.marginLeft = "auto"; frame.style.marginRight = "auto";
+    }
+    PRESS_LAID[d.slide] = face.id;
+  };
+
   const pressMount = (d) => {
     if (PRESS_EL[d.slide]) return PRESS_EL[d.slide];
     const el = document.createElement("div");
@@ -2410,6 +2607,7 @@ async function mount(doc) {
   const paintPressCard = (d, t) => {
     const el = pressMount(d);
     if (embedOf(d)) return paintEmbeddedPress(el, d, t);   /* P50 T7: a card that lands ON a surface has no pile and no park */
+    pressColumnLayout(el, d);   /* R26-55: the card's column, once per card and face - BEFORE the pile reads its height */
     const pose = t >= d.enter && t < d.exit + EXIT ? pressPose(d, t) : null;
     if (!pose) { el.style.opacity = 0; delete PRESS_POSE[d.slide]; return; }
     /* NO z-index: the pile's order is DOM order - each card mounts on its enter, so the newest is the last press
@@ -2431,7 +2629,12 @@ async function mount(doc) {
     const bl = el.clientLeft || 0, bt = el.clientTop || 0;
     const img = im && im.offsetWidth > 2 && im.offsetHeight > 2   /* an image still decoding has a width but no height: no box, no underline */
       ? { x: box.x + bl + im.offsetLeft, y: box.y + bt + im.offsetTop, w: im.offsetWidth, h: im.offsetHeight } : null;
-    const xf = pressXf(box, pose), q = pressPhraseBox(img, d.phrase);
+    /* R26-55: with live type the mark goes under the WORDS - the phrase's last line, which is where a hand ends
+       the stroke - and a card with no words keeps the crop's own phrase rectangle, exactly as before. */
+    const ln = el.querySelector(".pphrase") && el.querySelector(".pphrase").lastElementChild;
+    const live = ln && ln.offsetWidth > 2 && ln.offsetHeight > 2
+      ? { x: box.x + bl + ln.offsetLeft, y: box.y + bt + ln.offsetTop, w: ln.offsetWidth, h: ln.offsetHeight } : null;
+    const xf = pressXf(box, pose), q = pressPhraseTarget(live, img, d.phrase);
     PRESS_POSE[d.slide] = { card: xf(box), phrase: q ? xf(q) : null, depth: pose.depth, i: pose.i, n: pose.n };
   };
 
@@ -2591,7 +2794,17 @@ async function mount(doc) {
     let rows = railH;
     for (const n of el.querySelectorAll(".pmast")) rows += n.offsetHeight;
     const aw = el.clientWidth - (pad.paddingLeft + pad.paddingRight) * k - 2 * fbw;
-    const ah = el.clientHeight - (pad.paddingTop + pad.paddingBottom) * k - rows - 2 * fbw;
+    let ah = el.clientHeight - (pad.paddingTop + pad.paddingBottom) * k - rows - 2 * fbw;
+    /* R26-55: on a surface the words are the hero. The paper left under the type rows is split by pressColumn -
+       the crop takes PROV_SHARE of it as the PROVENANCE strip, fitted on one axis, and the phrase is set live in
+       the rest, re-lined to THIS surface's width at the size it allows. A card with no words takes neither branch
+       and the picture is fitted in the whole paper, which is what every embedded card did before. */
+    const col = d.phrase_text ? pressColumn(ah, aw, ia) : null;
+    if (col) {
+      const pfit = pressSetPhrase(el, d, aw, col.phraseH);
+      const phr = el.querySelector(".pphrase");
+      if (pfit && phr) { phr.style.marginBottom = px(col.gap); ah = Math.max(0, ah - col.phraseH - col.gap); }
+    }
     const fit = pressPictureFit(aw, ah, ia);
     if (fit) {
       pic.style.width = px(fit.w); pic.style.height = px(fit.h);
@@ -2659,7 +2872,13 @@ async function mount(doc) {
     const bl = el.clientLeft || 0, bt = el.clientTop || 0;
     const img = im && im.offsetWidth > 2 && im.offsetHeight > 2   /* an image still decoding has no box, so no underline */
       ? { x: g.box.x + bl + im.offsetLeft, y: g.box.y + bt + im.offsetTop, w: im.offsetWidth, h: im.offsetHeight } : null;
-    const q = pressPhraseBox(img, d.phrase);
+    /* R26-55: on a surface the phrase is LIVE TYPE, so the underline rides the words - the last line of the set
+       phrase, carried into the projected space with everything else on the card. A card with no words keeps the
+       crop's own phrase rectangle, which is what every embedded card had before. */
+    const ln = el.querySelector(".pphrase") && el.querySelector(".pphrase").lastElementChild;
+    const live = ln && ln.offsetWidth > 2 && ln.offsetHeight > 2
+      ? { x: g.box.x + bl + ln.offsetLeft, y: g.box.y + bt + ln.offsetTop, w: ln.offsetWidth, h: ln.offsetHeight } : null;
+    const q = pressPhraseTarget(live, img, d.phrase);
     PRESS_POSE[d.slide] = { card: embedRegion(g.live, g.box, g.box), phrase: q ? embedRegion(g.live, g.box, q) : null,
                             depth: 0, i: 0, n: 1 };
   };
@@ -6783,7 +7002,40 @@ async function mount(doc) {
     SQUEEZE: 0.035,   /* ... how much it compresses on x there (scaleX: the shove hits its edge) */
     SKEW_DEG: 2.4,    /* ... and how far it leans (skewX) - small: a lean, never a tumble */
     UNDERLINE_EASE: 3,/* the underline's draw curve: the hand decelerates into the end of the phrase (1 - (1 - u)^3) */
+    /* R26-55 - THE PULLED PHRASE AS LIVE TYPE: the dials of the fit below. The FACE is the one the OPERATOR rules on. */
+    FACE: "house",    /* the stand-in display face until the operator reads the three off their proof frames (gate 7) */
+    TYPE_MIN: 12,     /* the fit's floor in stage px: under this the phrase is a smudge whatever the surface */
+    TYPE_MAX: 220,    /* ... and its ceiling: a pulled phrase is a headline, never a title card */
+    TYPE_Q: 0.25,     /* the quantum the size is quantised to, so ONE box always gives exactly one size */
+    LINE_H: 1.08,     /* the leading of a display line: tight, the way a masthead sets a headline */
+    WORD_AIR: 0.012,  /* the share of the width kept clear, so a line measured here never takes a second one in the DOM */
+    PROV_SHARE: 0.3,  /* the provenance strip's share of the paper left under the type rows (the raster, still cited) */
+    PROV_GAP: 0.04,   /* ... and the air between the phrase and that strip, on the same paper */
+    PHONE_FLOOR: 17,  /* E62's quiet-caption floor in CSS px on a phone - what a proof frame is READ against, never clamped to */
   });
+
+  /* ================= THE FACES OFFERED (human gate 7 - the operator's choice, never ours) =================
+     Three candidates for the stand-in display face a pulled phrase is set in, and all three are already on the
+     page: the template downloads exactly ONE webfont (Kalam, the ledger's hand) and nothing here adds a second -
+     every family below resolves against the faces the renderer already has. The operator reads them off the proof
+     frames (`press-stack@face-serif`, `press-stack@face-condensed`, against the default in `press-stack`) and
+     rules; until then the DEFAULT stands and no cut changes.
+     A face is a DIAL on the timeline (`kinetics.press_face`), not a capability flag: it turns nothing on or off,
+     it names which of the three is in the frame. */
+  const PRESS_FACES = Object.freeze({
+    house: Object.freeze({ id: "house", weight: 800, track: "-0.012em",
+      family: 'Inter, "Segoe UI", system-ui, sans-serif',
+      label: "the house display face - the template's own stack at the caption's display weight" }),
+    serif: Object.freeze({ id: "serif", weight: 700, track: "0em",
+      family: 'Georgia, "Times New Roman", serif',
+      label: "a masthead serif - the quoted headline set the way the paper set it" }),
+    condensed: Object.freeze({ id: "condensed", weight: 700, track: "0.004em",
+      family: '"Arial Narrow", "Bahnschrift Condensed", "Roboto Condensed", "Segoe UI", sans-serif',
+      label: "a condensed grotesque - more words to a line, the tabloid's own pull" }),
+  });
+
+  /* the face a name asks for; an unknown name (or none at all) is the house face, so a typo can never blank a card */
+  const pressFace = (name) => PRESS_FACES[String(name == null ? "" : name).toLowerCase()] || PRESS_FACES[PRESS.FACE];
 
   const p01 = (v) => Math.min(1, Math.max(0, v));
 
@@ -6880,6 +7132,103 @@ async function mount(doc) {
      The reflow does not clamp to the floor - this is what a proof frame is measured against. */
   const PHONE_CSS_W = 382.5;
   const phoneCssPx = (stagePx, stageW) => (+stageW > 0 ? (+stagePx || 0) * PHONE_CSS_W / +stageW : 0);
+
+  /* ================= THE PULLED PHRASE IS LIVE TYPE (R26-55; the limit E66 found) =================
+     E66 gave a card the whole surface, and the reflow above scaled the card's ONE picture into it. That picture
+     carries the pulled phrase - `press_card.py` cuts it out of the source screenshot - and a raster cannot RE-LINE:
+     on a tall poster the phrase takes the surface's width, keeps the crop's own line breaks, and reads at 13.4 CSS
+     px in the hand against E62's 17. Type can re-line. So:
+
+     THE LAW. The phrase's WORDS travel beside the raster as data (`phrase_text` on the card's meta, through the
+     press dock onto the timeline), and the card sets them as LIVE TYPE, re-lined to the box it was given:
+       size    - the LARGEST size at which the words wrap into lines that all fit the paper's width and whose
+                 total height fits the paper's height. One size for the whole phrase (a headline is one size), found
+                 by bisection between TYPE_MIN and TYPE_MAX and quantised to TYPE_Q, so one box gives exactly one
+                 size and a seek paints the frame the play-through paints.
+       lines   - the greedy wrap at that size, WRITTEN OUT: the card paints one element per line, so the DOM never
+                 re-wraps what was measured here and a line can never take a second one behind our back.
+       face    - PRESS_FACES above, by the `press_face` dial; the house face until the operator rules (gate 7).
+       floor   - NOTHING is clamped. `phoneCssPx(size, stageW)` states what the fit reads as in the hand and
+                 PHONE_FLOOR is what a proof frame is judged against - type forced above the surface it is read on
+                 would overrun the surface, which is the mistake in the other direction.
+     THE RASTER STAYS. It is the PROVENANCE strip under the words: the crop the phrase was pulled from, still on the
+     card, still the file `press_card.py` recorded the sha256 of, with the masthead and the date citing it. It takes
+     PROV_SHARE of the paper (fitted on one axis by pressPictureFit, so it is never stretched) and the phrase takes
+     the rest - which is why a card's total height does not move when the words arrive.
+     Everything here is a pure function of the box and the measured words: a card with no `phrase_text` gets no live
+     type at all, and every build that has none renders exactly as it did. */
+
+  /* the phrase's words, in order: whitespace collapsed, nothing else touched (the operator's own text) */
+  const pressWords = (text) => String(text == null ? "" : text).replace(/\s+/g, " ").trim().split(" ").filter(Boolean);
+
+  /* THE GREEDY WRAP at `size`: `w1[i]` is word i's width per px of font size and `space1` the space's, both measured
+     in the face ONCE at a reference size (widths are linear in the size; WORD_AIR is the slack that keeps them so).
+     Returns one entry per line - the words' indices and the line's width in px. A word wider than the paper takes a
+     line of its own and overruns it, which is what makes the fit below reject that size rather than hide it. */
+  const pressWrap = (w1, space1, size, availW) => {
+    const s = +size > 0 ? +size : 0, sp = (+space1 || 0) * s, lines = [];
+    let words = [], w = 0;
+    for (let i = 0; i < (w1 || []).length; i++) {
+      const ww = (+w1[i] || 0) * s;
+      if (words.length && w + sp + ww > availW) { lines.push({ words, w }); words = [i]; w = ww; }
+      else { w += (words.length ? sp : 0) + ww; words.push(i); }
+    }
+    if (words.length) lines.push({ words, w });
+    return lines;
+  };
+
+  /* THE FIT: the largest quantised size whose wrap fits the paper on both axes, with the lines it gives.
+     `fits` false means even TYPE_MIN overruns the paper - the caller then sets TYPE_MIN and the build says so,
+     rather than a card silently dropping words. */
+  const pressPhraseFit = (w1, space1, availW, availH, o = {}) => {
+    const P = Object.assign({}, PRESS, o);
+    const paper = (+availW > 0 ? +availW : 0) * (1 - P.WORD_AIR), h = +availH > 0 ? +availH : 0;
+    const at = (s) => {
+      const lines = pressWrap(w1, space1, s, paper);
+      const widest = lines.reduce((m, l) => Math.max(m, l.w), 0);
+      return { lines, ok: widest <= paper && lines.length * s * P.LINE_H <= h };
+    };
+    if (!(w1 || []).length || !(paper > 0) || !(h > 0)) return null;
+    const top = at(P.TYPE_MAX);
+    if (top.ok) return { size: P.TYPE_MAX, lines: top.lines, lineH: P.TYPE_MAX * P.LINE_H,
+                         h: top.lines.length * P.TYPE_MAX * P.LINE_H, fits: true };
+    let lo = P.TYPE_MIN, hi = P.TYPE_MAX;
+    const floor = at(lo);
+    if (!floor.ok) return { size: P.TYPE_MIN, lines: floor.lines, lineH: P.TYPE_MIN * P.LINE_H,
+                            h: floor.lines.length * P.TYPE_MIN * P.LINE_H, fits: false };
+    while (hi - lo > P.TYPE_Q) {
+      const mid = (lo + hi) / 2;
+      if (at(mid).ok) lo = mid; else hi = mid;
+    }
+    const size = Math.max(P.TYPE_MIN, Math.floor(lo / P.TYPE_Q) * P.TYPE_Q), got = at(size);
+    return { size, lines: got.lines, lineH: size * P.LINE_H, h: got.lines.length * size * P.LINE_H, fits: got.ok };
+  };
+
+  /* THE CARD'S COLUMN: how the paper left under the type rows (the masthead, the by-line) is split between the
+     phrase and the provenance strip. The strip is the raster fitted on ONE axis inside PROV_SHARE of that paper, so
+     its height is the picture's own - a wide crop takes less than its share and hands the difference to the words.
+     `null` when there is no paper to split; `prov` null when the picture's aspect is not on record, and the caller
+     then leaves the picture's CSS alone (the reflow's own rule). */
+  const pressColumn = (paperH, availW, aspect, o = {}) => {
+    const P = Object.assign({}, PRESS, o);
+    const paper = +paperH > 0 ? +paperH : 0, w = +availW > 0 ? +availW : 0;
+    if (!(paper > 0) || !(w > 0)) return null;
+    const prov = pressPictureFit(w, paper * P.PROV_SHARE, aspect);
+    const provH = prov ? prov.h : paper * P.PROV_SHARE, gap = paper * P.PROV_GAP;
+    return { prov, provH, gap, phraseH: Math.max(0, paper - provH - gap) };
+  };
+
+  /* WHAT THE UNDERLINE RIDES (E56's one exception). With live type the phrase is the TYPE's box, not a rectangle of
+     the raster: the words moved, so the mark under them moves with them. A card with no live type falls back to the
+     phrase box the compiler wrote as fractions of the crop, which is what every card did before R26-55. */
+  const pressPhraseTarget = (live, img, phrase) =>
+    (live && +live.w > 2 && +live.h > 2 ? { x: +live.x, y: +live.y, w: +live.w, h: +live.h } : pressPhraseBox(img, phrase));
+
+  /* WHAT A FIT READS AS IN THE HAND, and whether it clears E62's floor. Reported, never enforced (see THE LAW). */
+  const pressPhoneRead = (stagePx, stageW, o = {}) => {
+    const P = Object.assign({}, PRESS, o), css = phoneCssPx(stagePx, stageW);
+    return { css: Math.round(css * 100) / 100, floor: P.PHONE_FLOOR, clears: css >= P.PHONE_FLOOR };
+  };
   /* KINETICS:END */
   /* KINETICS:BEGIN flow */
   /* species/flow.mjs - THE FLOW DIAGRAM (P50 T4; the Bravos flow diagram, shots 82-86: a three-node diagram
@@ -7609,6 +7958,688 @@ async function mount(doc) {
     return { w: bw, h: bh, x: -bw / 2, y: -bh / 2, r: Math.min(bh / 2, 12) };
   };
   /* KINETICS:END */
+  /* KINETICS:BEGIN newsreel */
+  /* SPACE: stage */
+  /* species/newsreel.mjs - THE NEWSREEL BAND (P52 T6; the operator, 2026-09-12: "run the newsreel and then above it
+     we can have either a talking news head, actual news footage, or a narrative plate, we don't always have to fill
+     the whole thing with text"). SOURCE OF TRUTH, inlined into the scene-evidence engine by sync_kinetics.py between
+     KINETICS:BEGIN newsreel and KINETICS:END, AFTER spring (it uses springPop) and after the SPECIES_PAINTERS
+     registry it registers into - the import order IS the region order.
+
+     WHEN: the sentence reports WHAT WAS SAID OR PRINTED - the wire, the headlines, the tape. The band crawls the
+     episode's OWN sourced headlines under a surface that shows who said it (a head cutout, a clip, the plate
+     itself). It is never the whole frame as text: the band is a strip, and the surface above it is the picture.
+
+     THE THREE MECHANISMS TAKEN from RU-4 (remotion-ui/HARVEST-2026-09-07.md:289; licence [UNVERIFIED], so the
+     MECHANISMS are taken and no line of that code is quoted - and none of its look: no broadcast-dark chrome, no
+     flag block, no Inter-as-brand; our tokens - cream, charcoal, coral - and our type):
+       1. the SEAM-FREE WRAP - two copies of one run chasing each other against a STABLE upper-bound width, modulo
+          (`crawlX`): the run is measured ONCE per paint and the second copy sits exactly `width` to its right, so
+          the instant the first copy's tail leaves the band the second is already under the eye. No seam, ever.
+       2. the GRADIENT DISSOLVE at the crawl's RIGHT edge (`edgeStops`, a mask): a headline does not get cut off by
+          a hard line, it goes out of the light. The LEFT edge is hard - it is the column the head / clip stands in.
+       3. `hold` as a LIFE on a standing element: the band stands for the window the author gives it and then
+          RETREATS over BEATS.EXIT_FOR (`reelPose`), instead of being up for the species' whole `dur`.
+
+     THE LAW, all of it a pure function of t (a scrubbed frame IS the played frame - nothing is stored, nothing
+     reads a clock, nothing reads the DOM for time):
+       open   - the band opens from a hairline at its own BOTTOM edge over BEATS.BAR_FOR on the house spring
+                (kinetics/spring.mjs springPop) - a strip that grows out of the frame's edge, never a fade-in.
+       crawl  - from BEATS.CRAWL on, the run moves left at `speed_px_s` (NEWSREEL.SPEED by default) and wraps by
+                the modulo above. The crawl IS the band's life: nothing here ever goes still (E49).
+       strap  - the strapline WRITES left to right over BEATS.STRAP_FOR from BEATS.STRAP (a reveal, our hand's
+                direction), under the crawl, one size down.
+       date   - the dateline the AUTHOR wrote, pinned right in the de-emphasised ink. No clock is ever invented.
+       exit   - when `hold` ends the band retreats over BEATS.EXIT_FOR the way it opened, and is gone.
+     The headlines are the episode's own SOURCED titles (the dossier's Sources, or the clips' on-screen headlines in
+     candidates.json) - this module never invents a headline, and the compiler refuses an empty one. The dials below
+     are ours to tune (doc 42 s42.5), not findings. */
+
+  const NEWSREEL = Object.freeze({
+    SPEED: 140,        /* px per second of the STAGE [DERIVED: RU-4's default, re-read on our 1920 stage: a 60-char headline crosses in ~8 s, which is a read, not a tease] */
+    BAND_H: 0.14,      /* the band's height as a share of the STAGE height - the recommended region; the author's declared region is the truth */
+    GAP: 88,           /* the air between the run's last item and its own repeat, in stage px */
+    BULLET: "•",  /* the house bullet between headlines (the middot is the docs' mark; the bullet is the tape's) */
+    EDGE: 0.12,        /* the gradient dissolve at the RIGHT edge, as a share of the band's width */
+    PAD_X: 34,         /* the crawl's inset from the band's left edge (the hard edge under the head's column) */
+    TAB_W: 12,         /* the coral tab on that hard left edge - our token, in place of RU-4's flag block */
+    CRAWL_ROW: 0.56,   /* the crawl's baseline, as a share of the band's height */
+    STRAP_ROW: 0.88,   /* ... and the strapline's, under it */
+    TYPE: 0.7,         /* the crawl's type as a share of the caption's stage size (64 px -> 45): the tape is read at a glance, the caption is the voice */
+    STRAP_TYPE: 0.56,  /* ... and the strap one size down */
+    DEEMPH: 0.62,      /* what the dateline and the strap dim to - present, never competing with the headline */
+    HAIRLINE: 0.04,    /* the share of its height the band opens FROM (a line of ink on the frame's edge, not nothing) */
+    EST_PX_PER_CHAR: 0.52,   /* the measure-free estimate: a share of the type size per character, for node and for a caller with no text metrics [DERIVED: Inter's average advance] */
+    BEATS: Object.freeze({   /* RU-4's beat plan as a named table in seconds, ours to re-time */
+      BAR: 0,            /* the band starts opening on the species' own `at` */
+      BAR_FOR: 0.42,     /* ... and is open this long after */
+      CRAWL: 0.4,        /* the run starts moving here - inside the open, so the band is never a still strip */
+      STRAP: 0.46,       /* the strapline starts writing here - after the band is open */
+      STRAP_FOR: 0.5,    /* ... and takes this long to write */
+      EXIT_FOR: 0.38,    /* the retreat, when `hold` ends */
+    }),
+    COL: Object.freeze({     /* the tokens the template already defines, each with its own value as the fallback so the
+                                band paints the same inside a page's scope as on a plate (the module names no new token) */
+      BAND: "var(--cream, #F4E6C7)",
+      INK: "var(--charcoal, #25313C)",
+      TAB: "var(--coral, #ED6A4A)",
+    }),
+  });
+
+  const nr01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* THE RUN: the author's headlines with the house bullet between them. A non-string or an empty headline never
+     reaches here - the compiler refuses the row (validate_species) - and this filters anyway. */
+  const reelItems = (sp) => (Array.isArray(sp && sp.headlines) ? sp.headlines : [])
+    .filter((h) => typeof h === "string" && h.trim()).map((h) => h.trim());
+  const reelRun = (items, o = {}) => {
+    const P = Object.assign({}, NEWSREEL, o);
+    return items.join("   " + P.BULLET + "   ");
+  };
+
+  /* THE STABLE UPPER BOUND the wrap runs against: the run's own measured width plus one GAP, so the repeat starts a
+     gap after the run ends. `measure` is the caller's text metric (the painter hands it getComputedTextLength);
+     without one the estimate is used, which is what node and a metric-less caller get - and it is an upper bound on
+     the run, never a fraction of it, so two copies can only ever be further apart than they need to be. */
+  const reelWidth = (items, measure, o = {}) => {
+    const P = Object.assign({}, NEWSREEL, o), run = reelRun(items, P);
+    if (!run) return 0;
+    const w = typeof measure === "function" ? measure(run) : null;
+    const est = run.length * P.EST_PX_PER_CHAR * (P.SIZE || Math.round(64 * P.TYPE));
+    return (Number.isFinite(w) && w > 0 ? w : est) + P.GAP;
+  };
+
+  /* THE MODULO WRAP: where the run's first copy sits at the crawl's own clock `tc`. The second copy is drawn at this
+     + width, so the tape is seamless - `crawlX(tc + width / speed) === crawlX(tc)` (to the float, sub-pixel). */
+  const crawlX = (tc, width, speed) => {
+    if (!(width > 0)) return 0;
+    const v = Number.isFinite(speed) && speed > 0 ? speed : NEWSREEL.SPEED;
+    return -((((tc * v) % width) + width) % width);
+  };
+
+  /* THE SPEED the row runs at: the author's `speed_px_s`, else the dial. Never zero (a still tape is not a tape). */
+  const reelSpeed = (sp, o = {}) => {
+    const P = Object.assign({}, NEWSREEL, o), v = +(sp && sp.speed_px_s);
+    return Number.isFinite(v) && v > 0 ? v : P.SPEED;
+  };
+
+  /* THE WINDOW the band stands for: its `hold` when the author gave it one (the LIFE), else the species' `dur`. */
+  const reelStand = (sp) => {
+    const hold = +(sp && sp.hold);
+    return Number.isFinite(hold) && hold > 0 ? hold : Math.max(0, +(sp && sp.dur) || 0);
+  };
+
+  /* ONE ENTRY: everything the painter draws at t, from the declaration alone.
+     `open` is the band's vertical scale about its own bottom edge, `crawl` the crawl's clock in seconds, `strap` the
+     write's fraction, `exit` the retreat's fraction, `on` whether the band is up at all. */
+  const reelPose = (sp, t, o = {}) => {
+    const P = Object.assign({}, NEWSREEL, o), B = P.BEATS;
+    const rel = t - +sp.at, stand = reelStand(sp);
+    const exit = nr01((rel - stand) / B.EXIT_FOR);
+    const grow = springPop(nr01((rel - B.BAR) / B.BAR_FOR));
+    const open = P.HAIRLINE + (1 - P.HAIRLINE) * grow * (1 - exit);
+    return {
+      rel,
+      on: rel >= 0 && exit < 1,
+      open: rel < 0 ? 0 : open,
+      crawl: Math.max(0, rel - B.CRAWL),
+      strap: nr01((rel - B.STRAP) / B.STRAP_FOR) * (1 - exit),
+      exit,
+      alpha: rel < 0 ? 0 : 1 - exit,
+    };
+  };
+
+  /* the right edge's dissolve, as mask stops: opaque until 1 - EDGE, gone at the band's right edge. A stable id per
+     species index, so two bands in one window never share a mask (and a seek re-creates the same one). */
+  const edgeId = (si) => "nredge" + (si | 0);
+  const edgeStops = (o = {}) => {
+    const P = Object.assign({}, NEWSREEL, o);
+    return [{ offset: 0, stop: 1 }, { offset: 1 - P.EDGE, stop: 1 }, { offset: 1, stop: 0 }];
+  };
+
+  /* THE PAINTER. ctx is the engine's species context (see SPECIES_PAINTERS in the player): the declaration, the
+     clock, the layer and the shared helpers by name. One group at the declared region: a cream strip on the world's
+     charcoal, charcoal type, the dissolve a mask on the crawl alone, the whole band scaled about its own foot. */
+  function paintNewsreel(ctx) {
+    const { sp, t, svg, el, resolveTarget, si } = ctx;
+    const b = resolveTarget(sp.target);
+    if (!b || b.w <= 0 || b.h <= 0) return;   /* the targeting law: no resolved region, nothing painted */
+    const pose = reelPose(sp, t);
+    if (!pose.on) return;
+    const items = reelItems(sp);
+    if (!items.length) return;                /* the compiler refuses this row; the painter draws no empty band */
+    const size = Math.round(64 * NEWSREEL.TYPE), strapSize = Math.round(64 * NEWSREEL.STRAP_TYPE);
+    const run = reelRun(items);
+    const id = edgeId(si), clip = id + "clip";
+    const foot = b.y + b.h;
+    const g = el("g", "nreel", svg, {
+      opacity: pose.alpha.toFixed(3),
+      transform: "translate(0 " + foot.toFixed(1) + ") scale(1 " + pose.open.toFixed(4) + ") translate(0 " + (-foot).toFixed(1) + ")",
+    });
+    const defs = el("defs", "", g);
+    const mask = el("mask", "", defs, { id, maskUnits: "userSpaceOnUse", x: b.x.toFixed(1), y: b.y.toFixed(1), width: b.w.toFixed(1), height: b.h.toFixed(1) });
+    const lg = el("linearGradient", "", mask, { id: id + "g", x1: b.x.toFixed(1), y1: 0, x2: (b.x + b.w).toFixed(1), y2: 0, gradientUnits: "userSpaceOnUse" });
+    edgeStops().forEach((s) => el("stop", "", lg, { offset: s.offset.toFixed(3), "stop-color": "#fff", "stop-opacity": s.stop }));
+    el("rect", "", mask, { x: b.x.toFixed(1), y: b.y.toFixed(1), width: b.w.toFixed(1), height: b.h.toFixed(1), fill: "url(#" + id + "g)" });
+    const cp = el("clipPath", "", defs, { id: clip, clipPathUnits: "userSpaceOnUse" });
+    el("rect", "", cp, { x: (b.x + NEWSREEL.PAD_X).toFixed(1), y: b.y.toFixed(1), width: Math.max(1, b.w - NEWSREEL.PAD_X).toFixed(1), height: b.h.toFixed(1) });
+    /* the band itself: cream paper on the world, a charcoal hairline at its head, the coral tab on its hard left edge */
+    el("rect", "nrband", g, { x: b.x.toFixed(1), y: b.y.toFixed(1), width: b.w.toFixed(1), height: b.h.toFixed(1), style: "fill: " + NEWSREEL.COL.BAND });
+    el("rect", "nrrule", g, { x: b.x.toFixed(1), y: b.y.toFixed(1), width: b.w.toFixed(1), height: 3, style: "fill: " + NEWSREEL.COL.INK + "; opacity: .34" });
+    el("rect", "nrtab", g, { x: b.x.toFixed(1), y: b.y.toFixed(1), width: NEWSREEL.TAB_W, height: b.h.toFixed(1), style: "fill: " + NEWSREEL.COL.TAB });
+    /* the crawl: one measured run, two copies a width apart, the whole thing masked at the right edge */
+    const crawl = el("g", "nrcrawl", g, { mask: "url(#" + id + ")", "clip-path": "url(#" + clip + ")" });
+    const y = (b.y + b.h * NEWSREEL.CRAWL_ROW).toFixed(1);
+    const face = "font: 700 " + size + "px Inter, Arial, sans-serif; fill: " + NEWSREEL.COL.INK;
+    const first = el("text", "nrrun", crawl, { x: 0, y, style: face, "xml:space": "preserve" });
+    first.textContent = run;
+    const measured = typeof first.getComputedTextLength === "function" ? first.getComputedTextLength() : null;
+    const width = reelWidth(items, () => measured, { SIZE: size });
+    const x0 = crawlX(pose.crawl, width, reelSpeed(sp));
+    const left = b.x + NEWSREEL.PAD_X;
+    first.setAttribute("x", (left + x0).toFixed(2));
+    const second = el("text", "nrrun", crawl, { x: (left + x0 + width).toFixed(2), y, style: face, "xml:space": "preserve" });
+    second.textContent = run;
+    if (crawl.setAttribute) crawl.setAttribute("data-reelw", width.toFixed(2));   /* the probe's handle: the wrap's period is width / speed */
+    /* the strapline WRITES from the left under the crawl; the dateline is pinned right in the de-emphasised ink */
+    if (sp.strap && pose.strap > 0) {
+      const wid = Math.max(1, (b.w - NEWSREEL.PAD_X * 2) * pose.strap);
+      const scp = el("clipPath", "", defs, { id: id + "strap", clipPathUnits: "userSpaceOnUse" });
+      el("rect", "", scp, { x: left.toFixed(1), y: b.y.toFixed(1), width: wid.toFixed(1), height: b.h.toFixed(1) });
+      const st = el("text", "nrstrap", el("g", "", g, { "clip-path": "url(#" + id + "strap)" }), {
+        x: left.toFixed(1), y: (b.y + b.h * NEWSREEL.STRAP_ROW).toFixed(1),
+        style: "font: 700 " + strapSize + "px Inter, Arial, sans-serif; fill: " + NEWSREEL.COL.INK + "; opacity: " + NEWSREEL.DEEMPH,
+      });
+      st.textContent = sp.strap;
+    }
+    if (sp.dateline) {
+      const dl = el("text", "nrdate", g, {
+        x: (b.x + b.w - NEWSREEL.PAD_X).toFixed(1), y: (b.y + b.h * NEWSREEL.STRAP_ROW).toFixed(1), "text-anchor": "end",
+        style: "font: 700 " + strapSize + "px Inter, Arial, sans-serif; fill: " + NEWSREEL.COL.INK + "; opacity: " + NEWSREEL.DEEMPH,
+      });
+      dl.textContent = sp.dateline;
+    }
+  }
+
+  /* the module rule's registration: a plain assignment (inline_text keeps it), guarded so `node --test` can import
+     this file for the math above without the engine's registry */
+  if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.newsreel = paintNewsreel;
+  /* KINETICS:END */
+  /* KINETICS:BEGIN countarray */
+  /* SPACE: stage */
+  /* species/countarray.mjs - THE ISOMETRIC COUNT ARRAY (P52 T7; EXPLORATION-REVIEW-2026-09-10.md:59, the Bravos
+     reference at 7:43 - "the silos: a field of identical icons stacking up on a tilted plate"). SOURCE OF TRUTH,
+     inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN countarray and KINETICS:END,
+     AFTER spring, idle and chip - it imports all three, and the import order IS the region order.
+     THE MODULE RULE (the operator, 2026-09-11): a species is a module here, never a branch in the engine's body.
+     The last statement registers the painter in SPECIES_PAINTERS; node, where no such registry exists, still
+     imports the file for the pure math below.
+
+     WHEN: the sentence COUNTS a set - "six plants", "twelve refineries", "three of them" - and the count itself
+     is the claim. N identical icons stand on one tilted field and the number is written under them.
+
+     THE LAW, all of it a pure function of t:
+       the field  - a 2:1 RHOMBUS LATTICE and nothing else. Cell (c, r) stands at x = (c - r) * PITCH,
+                    y = (c + r) * PITCH * RISE with RISE = 0.5 - the dimetric 2:1 step, so the lattice's two axes
+                    read as one field and a row reads as a row. NO PERSPECTIVE CHEAT: no vanishing point, no
+                    foreshortening with depth, no per-row scale - every icon is drawn at exactly one size, and the
+                    only thing that says "back" is being higher up the field. NOTHING SPINS: no icon, tile or glyph
+                    carries a rotation at any t (the test reads the painter's own attributes for one).
+       arrive     - in READING ORDER (row 0 left to right, then row 1 ...), one icon per STEP - the take's own word
+                    pitch - each landing on the CHIP's two-spring law (species/chip.mjs chipLand: the badge spring's
+                    scale overshoot and the drop riding the same clock), so an icon in a field and a lone chip land
+                    alike.
+       the claim  - the COUNT, written under the field CLAIM_LAG after the last icon has landed, over CLAIM_S. The
+                    compiler refuses a count that is not in the claim's own words
+                    (build_scene_timeline_f._validate_count_array): the count IS the claim, never a caption of it.
+       hold       - every cell carries the field's idle (E49, one of IDLE_KINDS; breath unless the row names
+                    another), each at its OWN phase off the seed, so the field is never bit-identical frame to frame
+                    and no two icons breathe in step. idle "none" is declared stillness.
+     Nothing is stored: every visual reads from t, sp.at and sp.count, so a scrubbed frame is the played frame. The
+     glyph is a SOURCED icon (assets/icons, A2a provenance - Lucide 1.45.0, ISC; assets/icons/SOURCES.md and
+     LICENSE.lucide.txt beside it) carried in the asset map as icon:<name>; this module never invents geometry.
+     The dials below are ours to tune (42 s42.5), not findings. */
+
+  const COUNT = Object.freeze({
+    MIN: 2,            /* a count of one is a chip; the compiler holds that bound, and the layout holds to it too */
+    MAX: 12,           /* ... and past a dozen nobody counts a field at phone size - they read the number instead */
+    PITCH: 190,        /* the lattice's half-width step in STAGE px: cell (c, r) is (c - r) * PITCH across ... */
+    RISE: 0.5,         /* ... and (c + r) * PITCH * RISE down. 0.5 IS the 2:1 rhombus - the dimetric step, no perspective */
+    ICON: 120,         /* the glyph's box: smaller than the chip's card, because a field is counted, not read one by one */
+    TILE_K: 0.86,      /* the rhombus tile under an icon, as a share of the lattice's own cell - the tilted plate, seen */
+    STEP: 0.34,        /* one icon per WORD [DERIVED: doc 46's take standard, 178 WPM = 0.337 s a word] */
+    LAND_S: 0.45,      /* one icon's landing (the chip's 0.55 tightened: a field lands faster than a lone card) */
+    POP_FROM: 0.86,    /* the scale it springs from ... */
+    DROP_PX: 26,       /* ... and how far above its place it falls from, on the same spring */
+    FADE_S: 0.12,      /* the opacity ramp - never a pop out of nothing */
+    CLAIM_LAG: 0.18,   /* the breath between the last icon landing and the number being written ... */
+    CLAIM_S: 0.4,      /* ... and the write's own clock */
+    CLAIM_DY: 78,      /* the claim's baseline below the field's bottom edge */
+    CLAIM_SIZE: 58,    /* ... at this size: the count is the claim, so it is the biggest type on the field */
+    MIN_K: 0.4,        /* the smallest the field may be scaled to before it stops being counted - under it the box was too small */
+  });
+
+  const ca01 = (v) => Math.min(1, Math.max(0, v));
+  const CA_LAND = Object.freeze({ LAND_S: COUNT.LAND_S, POP_FROM: COUNT.POP_FROM, DROP_PX: COUNT.DROP_PX, FADE_S: COUNT.FADE_S });
+
+  /* THE LATTICE: N cells in READING ORDER - the columns of a row first, then the next row. The column count is the
+     squarest field that holds N (ceil(sqrt(N))), so six stand 3 x 2 and nine 3 x 3. */
+  const countCells = (n) => {
+    const N = Math.max(1, Math.min(COUNT.MAX, n | 0)), cols = Math.max(1, Math.ceil(Math.sqrt(N))), out = [];
+    for (let i = 0; i < N; i++) out.push({ i, c: i % cols, r: (i / cols) | 0 });
+    return out;
+  };
+
+  /* THE FIELD in a declared box: each cell's centre in stage px, and the ONE scale the whole field is drawn at.
+     The lattice is laid out at PITCH, measured, then scaled by that k and centred - so the 2:1 ratio survives any
+     box, because a scale is not a perspective: both axes take the same k. */
+  const countLayout = (box, n) => {
+    const cells = countCells(n);
+    const raw = cells.map((cell) => ({ i: cell.i, c: cell.c, r: cell.r,
+                                       x: (cell.c - cell.r) * COUNT.PITCH, y: (cell.c + cell.r) * COUNT.PITCH * COUNT.RISE }));
+    const xs = raw.map((p) => p.x), ys = raw.map((p) => p.y);
+    const x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs);
+    const y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+    const pad = COUNT.ICON * 0.5 + COUNT.PITCH * 0.1;
+    const w = x1 - x0 + 2 * pad, h = y1 - y0 + 2 * pad + COUNT.CLAIM_DY;
+    const k = Math.max(COUNT.MIN_K, Math.min(1, (box.w || w) / w, (box.h || h) / h));
+    const cx = box.x + (box.w || 0) / 2, cy = box.y + (box.h || 0) / 2;
+    const mx = (x1 + x0) / 2, my = (y1 + y0) / 2 + COUNT.CLAIM_DY / 2;
+    return { k, w, h, claimY: cy + (y1 - my) * k + COUNT.CLAIM_DY * k,
+             cells: raw.map((p) => ({ i: p.i, c: p.c, r: p.r, x: p.x, y: p.y,
+                                      sx: cx + (p.x - mx) * k, sy: cy + (p.y - my) * k })) };
+  };
+
+  /* WHEN cell i arrives: its own word, STEP after the one before it. */
+  const countArriveAt = (sp, i) => +sp.at + (i | 0) * (Number.isFinite(+sp.step) && +sp.step > 0 ? +sp.step : COUNT.STEP);
+
+  /* ONE CELL's landing at t - the CHIP's law under the field's dials, so a field and a board land alike. */
+  const countCellPose = (sp, t, i) => chipLand(t, countArriveAt(sp, i), CA_LAND);
+
+  /* THE CLAIM's write at t in [0, 1]: 0 until CLAIM_LAG after the LAST icon has settled, 1 CLAIM_S later. */
+  const countClaimF = (sp, t) => {
+    const n = Math.max(1, Math.min(COUNT.MAX, (sp.count | 0)));
+    const done = countArriveAt(sp, n - 1) + COUNT.LAND_S + COUNT.CLAIM_LAG;
+    return ca01((t - done) / COUNT.CLAIM_S);
+  };
+
+  /* ONE ENTRY: everything the painter draws at t, from the declaration alone. */
+  const countPose = (sp, t) => {
+    const n = Math.max(1, Math.min(COUNT.MAX, (sp.count | 0)));
+    const cells = [];
+    for (let i = 0; i < n; i++) cells.push(countCellPose(sp, t, i));
+    return { n, cells, landed: cells.filter((c) => c.u >= 1).length, claim: countClaimF(sp, t) };
+  };
+
+  /* the rhombus tile under one cell - the tilted plate, seen, in the cell's own centred coordinates. 2:1, like the
+     lattice itself: the tile IS the lattice's cell, so the field reads as one plate and not as N floating icons. */
+  const countTilePath = (k = 1) => {
+    const a = COUNT.PITCH * COUNT.TILE_K * k, b = a * COUNT.RISE;
+    return "M0 " + (-b).toFixed(1) + " L" + a.toFixed(1) + " 0 L0 " + b.toFixed(1) + " L" + (-a).toFixed(1) + " 0 Z";
+  };
+
+  /* the spring is the chip's, through chipLand; written out here so the test can assert the identity against
+     springPop itself, and so a reader of one file sees which law lands an icon */
+  const countSpring = (u) => COUNT.POP_FROM + (1 - COUNT.POP_FROM) * springPop(ca01(u));
+
+  /* THE PAINTER. ctx is the engine's species context (SPECIES_PAINTERS in the player): the declaration, the clock,
+     the layer and the shared helpers by name. One group per cell, its transform carrying the landing and the cell's
+     own idle - so nothing rotates, and every child is written in the cell's centred coordinates. */
+  function paintCountArray(ctx) {
+    const { sp, t, svg, el, A, resolveTarget, ease, hash, idle, seed, si } = ctx;
+    const b = resolveTarget(sp.target);
+    if (!b) return;   /* the targeting law: no resolved target, nothing painted */
+    const pose = countPose(sp, t), lay = countLayout(b, pose.n);
+    const g = el("g", "", svg, {});
+    const geo = chipGeometry(A ? A["icon:" + sp.icon] : null);
+    const vb = geo ? (geo.vb || [0, 0, 24, 24]) : [0, 0, 24, 24];
+    const ik = (COUNT.ICON * lay.k) / Math.max(vb[2] || 1, vb[3] || 1);
+    const kind = sp.idle === "none" ? "none" : (sp.idle || "breath");
+    lay.cells.forEach((cell, i) => {
+      const p = pose.cells[i];
+      if (p.fade <= 0) return;   /* an icon before its word is not on the field at all */
+      const ix = kind === "none" ? { scale: 1, dx: 0, dy: 0 } : idle(kind, t, hash(seed | 0, (si | 0) * 31 + i, 991));
+      const s = p.scale * ix.scale;
+      const cg = el("g", "", g, { opacity: p.fade.toFixed(3),
+                                  transform: "translate(" + (cell.sx + ix.dx).toFixed(1) + " " + (cell.sy + p.dy * lay.k + ix.dy).toFixed(1) + ") scale(" + s.toFixed(4) + ")" });
+      el("path", "catile", cg, { d: countTilePath(lay.k) });
+      if (geo) {
+        const gg = el("g", "caglyph", cg, { transform: "translate(" + (-COUNT.ICON * lay.k / 2).toFixed(1) + " " + (-COUNT.ICON * lay.k * 0.85).toFixed(1) + ") scale(" + ik.toFixed(4) + ") translate(" + (-vb[0]) + " " + (-vb[1]) + ")" });
+        geo.el.forEach((nd) => el(nd.t, "", gg, nd.a));   /* the sourced geometry verbatim - the compiler kept only shapes */
+      }
+    });
+    if (pose.claim > 0 && sp.claim) {   /* the count, written as the claim: a pop on its own clock, never a fade out of nothing */
+      const pop = 0.72 + 0.28 * ease(pose.claim), cx = b.x + (b.w || 0) / 2;
+      const tx = el("text", "caclaim", g, { x: cx.toFixed(1), y: lay.claimY.toFixed(1), opacity: pose.claim.toFixed(3),
+                                            "font-size": (COUNT.CLAIM_SIZE * lay.k * pop).toFixed(1) });
+      tx.textContent = sp.claim;
+    }
+  }
+
+  /* the module rule's registration: a plain assignment (inline_text keeps it), guarded so `node --test` can import
+     this file for the math above without the engine's registry */
+  if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.count_array = paintCountArray;
+  /* KINETICS:END */
+  /* KINETICS:BEGIN agenda */
+  /* SPACE: stage */
+  /* species/agenda.mjs - THE NUMBERED AGENDA (P52 T8; EXPLORATION-REVIEW-2026-09-10.md:58, the Bravos
+     "China's Gameplan  1 | 2" board: numbered rows revealed in turn). SOURCE OF TRUTH, inlined into the
+     scene-evidence player by sync_kinetics.py between KINETICS:BEGIN agenda and KINETICS:END, AFTER idle -
+     it imports it, and the import order IS the region order.
+     THE MODULE RULE (the operator, 2026-09-11): a species is a module here, never a branch in the engine's
+     body. The last statement registers the painter in SPECIES_PAINTERS; node, where no such registry exists,
+     still imports the file for the pure math below.
+
+     WHEN: the sentence SETS AN AGENDA - "two numbers", "three things", "here's what nobody says". The review
+     says `figure` plus `note` COULD compose it; the module is what makes it ONE declaration, so the rows
+     cannot drift out of step with the count the sentence gave.
+
+     THE LAW, all of it a pure function of t:
+       the block  - 2 to 4 rows stacked in the declared box, each ROW_H tall at the block's own scale k (one
+                    scale for the whole block: a row is never a different size from its neighbour). The rows
+                    are laid out for the FULL agenda from the first frame, so a row that arrives never pushes
+                    the one above it - the list was always that long, the viewer just had not been shown it.
+       a row      - revealed on its OWN WORD (`rows[i].at`, or STEP after the row before it when the author
+                    gives the block one `at`): the NUMBER is written first, a hairline RULE draws under the row
+                    left to right by the nib (kinetics/stroke.mjs's curvature law through the engine's drawOn),
+                    and the text rises ROW_DY to its place and fades in over ROW_S. A list being written, not a
+                    list appearing.
+       hold       - every row carries a NAMED idle (E49, one of IDLE_KINDS; `breath` unless the row names
+                    another), each at its OWN phase off the seed, so the agenda is never bit-identical frame to
+                    frame and no two rows breathe in step. `idle: "none"` is declared stillness.
+     Nothing is stored: every visual reads from t and the rows' own `at`, so a scrubbed frame is the played
+     frame. The dials below are ours to tune (42 s42.5), not findings. */
+
+  const AGENDA = Object.freeze({
+    MIN_ROWS: 2,       /* one row is a note, not an agenda; the compiler holds this bound and so does the layout */
+    MAX_ROWS: 4,       /* ... and five is a checklist nobody holds in their head at phone size (doc 29 s9.33's recap) */
+    ROW_H: 132,        /* one row's own height in STAGE px: the number, its text and the air under the rule */
+    NUM_W: 92,         /* the number's column - a fixed gutter, so every text starts on the same x */
+    NUM_SIZE: 64,      /* the numeral's type: the biggest thing in the row (it is what the sentence counted) */
+    TEXT_SIZE: 54,     /* ... the row's own words ... */
+    SUB_SIZE: 34,      /* ... and its sub, when the sentence gave the row two halves */
+    ROW_S: 0.42,       /* the text's rise and fade - a row arrives inside a word, never across two */
+    ROW_DY: 26,        /* ... from this far below its place */
+    RULE_S: 0.5,       /* the hairline under the row, drawn by the nib on its own clock */
+    RULE_DY: 22,       /* ... that far under the row's baseline */
+    NUM_LEAD: 0.12,    /* the number is written this long before the text starts rising: the row is numbered, then said */
+    STEP: 0.34,        /* the default word pitch when the block names one `at` [DERIVED: doc 46, 178 WPM] */
+    MIN_K: 0.45,       /* the smallest the block may be scaled to before it stops being read - under it the box was too small */
+  });
+
+  const ag01 = (v) => Math.min(1, Math.max(0, v));
+  const agEase = (u) => 1 - Math.pow(1 - ag01(u), 3);   /* the species ease, written here so the math needs no context */
+
+  /* THE ROWS as the painter reads them: the author's list, numbered from 1 unless a row names its own number,
+     each with the instant it is revealed (its own `at`, else STEP after the row before). */
+  const agendaRows = (sp) => {
+    const rows = Array.isArray(sp.rows) ? sp.rows.slice(0, AGENDA.MAX_ROWS) : [];
+    const step = Number.isFinite(+sp.step) && +sp.step > 0 ? +sp.step : AGENDA.STEP;
+    return rows.map((r, i) => ({
+      i,
+      n: Number.isFinite(+((r || {}).n)) ? String(+r.n) : String(i + 1),
+      text: (r || {}).text == null ? "" : String(r.text),
+      sub: (r || {}).sub == null ? "" : String(r.sub),
+      at: Number.isFinite(+((r || {}).at)) ? +r.at : +sp.at + i * step,
+    }));
+  };
+
+  /* THE BLOCK in a declared box: one scale for every row, and each row's own baseline in stage px. The block is
+     laid out for the FULL list from the first frame - the rows do not close up as they arrive. */
+  const agendaLayout = (box, n) => {
+    const N = Math.max(1, Math.min(AGENDA.MAX_ROWS, n | 0));
+    const h = N * AGENDA.ROW_H, w = AGENDA.NUM_W + 12 * AGENDA.TEXT_SIZE;   /* the widest row we lay out for: a dozen ems of text */
+    const k = Math.max(AGENDA.MIN_K, Math.min(1, (box.h || h) / h, (box.w || w) / w));
+    const x = box.x + (box.w ? Math.max(0, (box.w - w * k) / 2) : 0);
+    const y = box.y + (box.h ? Math.max(0, (box.h - h * k) / 2) : 0);
+    const rows = [];
+    for (let i = 0; i < N; i++) rows.push({ i, x, y: y + (i + 0.62) * AGENDA.ROW_H * k,
+                                            numX: x, textX: x + AGENDA.NUM_W * k,
+                                            ruleY: y + (i + 0.62) * AGENDA.ROW_H * k + AGENDA.RULE_DY * k,
+                                            ruleW: (AGENDA.NUM_W + 9 * AGENDA.TEXT_SIZE) * k });
+    return { k, w, h, rows };
+  };
+
+  /* ONE ROW's arrival at t: the number's write, the rule's draw and the text's rise, all off the row's own word. */
+  const agendaRowF = (sp, t, i) => {
+    const row = agendaRows(sp)[i | 0];
+    if (!row) return { num: 0, rule: 0, text: 0, dy: AGENDA.ROW_DY, fade: 0 };
+    const d = t - row.at;
+    const num = ag01(d / (AGENDA.ROW_S * 0.6));
+    const text = ag01((d - AGENDA.NUM_LEAD) / AGENDA.ROW_S);
+    return { num, rule: ag01(d / AGENDA.RULE_S), text,
+             dy: AGENDA.ROW_DY * (1 - agEase(text)), fade: text };
+  };
+
+  /* ONE ENTRY: every row's arrival at t, and how many rows are fully in - from the declaration alone. */
+  const agendaPose = (sp, t) => {
+    const rows = agendaRows(sp).map((r, i) => Object.assign({ row: r }, agendaRowF(sp, t, i)));
+    return { rows, shown: rows.filter((r) => r.fade > 0).length, done: rows.filter((r) => r.fade >= 1).length };
+  };
+
+  /* THE PAINTER. ctx is the engine's species context (SPECIES_PAINTERS in the player): the declaration, the
+     clock, the layer and the shared helpers by name. One group per row, its transform carrying the rise and the
+     row's own idle - nothing rotates, and the rule is drawn by the same hand every other mark on the stage uses. */
+  function paintAgenda(ctx) {
+    const { sp, t, svg, el, resolveTarget, drawOn, hash, idle, seed, si } = ctx;
+    const b = resolveTarget(sp.target);
+    if (!b) return;   /* the targeting law: no resolved target, nothing painted */
+    const pose = agendaPose(sp, t), lay = agendaLayout(b, pose.rows.length);
+    const kind = sp.idle === "none" ? "none" : (sp.idle || "breath");
+    const g = el("g", "", svg, {});
+    pose.rows.forEach((r, i) => {
+      if (r.num <= 0) return;   /* a row before its word is not on the board at all */
+      const place = lay.rows[i];
+      const ix = kind === "none" ? { scale: 1, dx: 0, dy: 0 } : idle(kind, t, hash(seed | 0, (si | 0) * 17 + i, 991));
+      const rg = el("g", "", g, { transform: "translate(" + ix.dx.toFixed(2) + " " + (r.dy * lay.k + ix.dy).toFixed(2) + ")" });
+      const num = el("text", "agnum", rg, { x: place.numX.toFixed(1), y: place.y.toFixed(1),
+                                            opacity: r.num.toFixed(3), "font-size": (AGENDA.NUM_SIZE * lay.k * ix.scale).toFixed(1) });
+      num.textContent = r.row.n;
+      if (r.rule > 0) {   /* the hairline the hand draws under the row, left to right */
+        const d = "M" + place.numX.toFixed(1) + " " + place.ruleY.toFixed(1) + " L" + (place.numX + place.ruleW).toFixed(1) + " " + place.ruleY.toFixed(1);
+        drawOn(el("path", "agrule", rg, { d }), r.rule);
+      }
+      if (r.fade > 0 && r.row.text) {
+        const tx = el("text", "agrow", rg, { x: place.textX.toFixed(1), y: place.y.toFixed(1),
+                                             opacity: r.fade.toFixed(3), "font-size": (AGENDA.TEXT_SIZE * lay.k * ix.scale).toFixed(1) });
+        tx.textContent = r.row.text;
+      }
+      if (r.fade > 0 && r.row.sub) {
+        const sb = el("text", "agsub", rg, { x: place.textX.toFixed(1), y: (place.ruleY + AGENDA.SUB_SIZE * lay.k).toFixed(1),
+                                             opacity: (r.fade * 0.9).toFixed(3), "font-size": (AGENDA.SUB_SIZE * lay.k).toFixed(1) });
+        sb.textContent = r.row.sub;
+      }
+    });
+  }
+
+  /* the module rule's registration: a plain assignment (inline_text keeps it), guarded so `node --test` can
+     import this file for the math above without the engine's registry */
+  if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.agenda = paintAgenda;
+  /* KINETICS:END */
+  /* KINETICS:BEGIN ring */
+  /* SPACE: stage */
+  /* species/ring.mjs - THE RING'S DASHED-ELLIPSE FORM, AND ITS FLAG CHIP (P52 T8;
+     EXPLORATION-REVIEW-2026-09-10.md:57 #5 - "the dashed ellipse on the datum with a flag chip beside").
+     SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN ring
+     and KINETICS:END, AFTER spring, idle and chip - it imports all three, and the import order IS the region
+     order.
+     THE MODULE RULE (the operator, 2026-09-11): a species is a module here, never a branch in the engine's
+     body. The last statement registers the painter in SPECIES_PAINTERS; node, where no such registry exists,
+     still imports the file for the pure math below.
+
+     E56 IS NOT WIDENED BY THIS FILE. The operator, 2026-09-09: a ring circles a NUMBER or a POINT ON A CHART;
+     a picture's focus is a LIGHT. What this module adds is a FORM - the dashed ellipse instead of the hand's
+     closed circle - and an optional FLAG beside it. The USE is unchanged and is enforced where it always was,
+     in the compiler (`build_scene_timeline_f._validate_ring`, which re-states `_validate_callout`'s own E56
+     rule word for word): a datum target, or a label with a digit in it, or the row is refused at build time.
+     The circle's law is untouched: the `callout` kind is still painted by the engine's own branch through
+     `calloutPath`, with the same RX_PAD / RY_PAD this form rings the datum at, so the two forms ring the same
+     place and only the hand differs.
+
+     WHEN: the sentence TURNS on a number and the ring is wanted as a MARKER rather than as a hand's circle -
+     a dashed ellipse round the datum, with a flag chip naming what the datum is.
+
+     THE LAW, all of it a pure function of t:
+       the ellipse - an axis-aligned ellipse round the resolved datum, rx = w/2 + RX_PAD, ry = h/2 + RY_PAD
+                     (the callout's own pads, so the dashed form and the circle ring the same place), cut into
+                     DASH-long marks with GAP between them and drawn DASH BY DASH clockwise from the top, each
+                     dash owning its own slice of DRAW_S - the flow diagram's dashed frame, bent round a datum
+                     (species/flow.mjs flowDashes is the precedent; this is its ellipse).
+       the flag    - optional, and a CHIP: the chip module's own card, sourced glyph and two-spring landing
+                     (species/chip.mjs CHIP + chipLand + chipGeometry) placed beside the ellipse at FLAG_GAP off
+                     its right edge, FLAG_LAG after the ellipse closes. Its own dials are the chip's; this file
+                     only says WHERE - and a chip on the LEFT when the ellipse's right edge would leave the
+                     stage (`flag: "left"`, or measured against STAGE_W when the author says nothing).
+       hold        - the ellipse and the flag carry a NAMED idle (E49, one of IDLE_KINDS; `breath` unless the
+                     row names another), each at its own phase off the seed. NOTHING SPINS: no rotation is ever
+                     written - a dash that turns is a wheel, and a wheel is the cheap call-out E56 refused.
+     Nothing is stored: every visual reads from t and sp.at, so a scrubbed frame is the played frame. The dials
+     below are ours to tune (42 s42.5), not findings. */
+
+  const RING = Object.freeze({
+    FORM: "dashed",    /* the one form this module paints; the closed circle stays the `callout` kind's, untouched */
+    RX_PAD: 22,        /* the ellipse's half-width over the datum's own box ... [the engine's calloutPath, verbatim] */
+    RY_PAD: 18,        /* ... and its half-height: the dashed form rings exactly where the circle would */
+    MIN_RX: 54,        /* a datum resolves to a POINT (w = h = 0): the smallest ellipse that still reads as a ring ... */
+    MIN_RY: 40,        /* ... at the 4:3 the hand's circle draws round a bare datum */
+    DASH: 26,          /* the dash's length in STAGE px ... [the flow diagram's frame, so one hand draws both] */
+    DASH_GAP: 15,      /* ... and the air between two dashes: the 2:1 rhythm that reads as "dashed" */
+    DRAW_S: 0.55,      /* the whole ellipse, dash by dash - the callout's CALLOUT_DRAW is 0.6; a dashed ring is quicker */
+    SAMPLES: 10,       /* the polyline per dash: a dash is a short arc, and ten chords hide inside 26 px */
+    ARC_SAMPLES: 720,  /* the arc-length table round the whole ellipse: half a degree a step, so a dash is cut by LENGTH */
+    FLAG_GAP: 34,      /* the air between the ellipse's edge and the flag chip's card */
+    FLAG_LAG: 0.14,    /* the breath after the ellipse closes before the flag lands */
+    FLAG_K: 0.62,      /* the flag chip's scale against a board chip: a label on a datum, not a card in a set */
+    LABEL_LIFT: 18,    /* how far above the ellipse the label is written when the flag has taken the room beside it */
+  });
+
+  const rg01 = (v) => Math.min(1, Math.max(0, v));
+  const LABEL_LIFT = RING.LABEL_LIFT;
+
+  /* THE ELLIPSE round a resolved target box, in stage px. A point resolves to w = h = 0 and takes the minimum. */
+  const ringEllipse = (b, pad = 0) => ({
+    cx: b.x + b.w / 2, cy: b.y + b.h / 2,
+    rx: Math.max(RING.MIN_RX, b.w / 2 + RING.RX_PAD + pad),
+    ry: Math.max(RING.MIN_RY, b.h / 2 + RING.RY_PAD + pad * 0.4),
+  });
+
+  /* the ellipse's perimeter, by Ramanujan's approximation - exact enough to cut dashes with (the error is
+     under 1e-5 of the perimeter for every aspect a datum's box can take). */
+  const ringPerimeter = (e) => {
+    const a = Math.max(e.rx, e.ry), b = Math.min(e.rx, e.ry), h = Math.pow((a - b) / (a + b), 2);
+    return Math.PI * (a + b) * (1 + 3 * h / (10 + Math.sqrt(4 - 3 * h)));
+  };
+
+  /* THE ARC-LENGTH TABLE: the ellipse sampled once, with the running length along it. An ellipse's equal ANGLES are
+     NOT equal lengths (a bar's box rings as a tall ellipse, where a slice at the top covers a third of the arc a slice
+     at the side does), so the dashes below are cut by LENGTH - the same thing the flow diagram's frame does on a
+     rectangle. Pure: the table is a function of the ellipse alone. */
+  const ringSamples = (e, m = RING.ARC_SAMPLES) => {
+    const pts = [], cum = [0];
+    for (let i = 0; i <= m; i++) {
+      const a = -Math.PI / 2 + (i / m) * Math.PI * 2;
+      pts.push([e.cx + Math.cos(a) * e.rx, e.cy + Math.sin(a) * e.ry]);
+    }
+    for (let i = 1; i <= m; i++) cum.push(cum[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
+    return { pts, cum, per: cum[m] };
+  };
+
+  /* a distance along the ellipse -> the point there, by walking the table and interpolating inside one sample. */
+  const ringPointAt = (tab, d) => {
+    const per = tab.per, s = ((d % per) + per) % per;
+    let lo = 0, hi = tab.cum.length - 1;
+    while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (tab.cum[mid] <= s) lo = mid; else hi = mid; }
+    const seg = Math.max(1e-9, tab.cum[hi] - tab.cum[lo]), u = (s - tab.cum[lo]) / seg;
+    return [tab.pts[lo][0] + (tab.pts[hi][0] - tab.pts[lo][0]) * u,
+            tab.pts[lo][1] + (tab.pts[hi][1] - tab.pts[lo][1]) * u];
+  };
+
+  /* THE DASHES: the ellipse cut BY LENGTH into marks of DASH with DASH_GAP between them, each with the slice of the
+     whole draw it owns - the nib starts at the TOP and runs clockwise, the way a hand rings a number. Each dash is a
+     short polyline, which is why the arc is sampled rather than swept: no rotation is ever written, and a dash never
+     turns into the next one. The COUNT comes from the closed-form perimeter, the PLACES from the measured table. */
+  const ringDashes = (e) => {
+    const tab = ringSamples(e), n = Math.max(6, Math.round(ringPerimeter(e) / (RING.DASH + RING.DASH_GAP)));
+    const step = tab.per / n, mark = step * (RING.DASH / (RING.DASH + RING.DASH_GAP));
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const d0 = i * step, pts = [];
+      for (let s = 0; s <= RING.SAMPLES; s++) pts.push(ringPointAt(tab, d0 + mark * (s / RING.SAMPLES)));
+      out.push({ i, t0: i / n, t1: (i + 1) / n,
+                 d: pts.map(([x, y], j) => (j ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ") });
+    }
+    return out;
+  };
+
+  /* the whole ellipse's draw at t, 0..1 */
+  const ringDrawF = (sp, t) => rg01((t - +sp.at) / RING.DRAW_S);
+
+  /* ... and one dash's own fraction inside it: 0 before the nib reaches it, 1 once it has passed. */
+  const ringDashF = (f, dash) => rg01((f - dash.t0) / Math.max(1e-6, dash.t1 - dash.t0));
+
+  /* WHERE the flag chip stands: beside the ellipse, on the side that has the room. `side` is the author's
+     ("left" | "right"), else the right unless the card would leave the stage. */
+  const ringFlagPlace = (e, side, stageW = 1920) => {
+    const half = (CHIP.SIZE * RING.FLAG_K) / 2, gap = RING.FLAG_GAP + half;
+    const right = side !== "left" && (side === "right" || e.cx + e.rx + gap * 2 <= stageW);
+    return { x: e.cx + (right ? 1 : -1) * (e.rx + gap), y: e.cy, side: right ? "right" : "left" };
+  };
+
+  /* the flag's landing at t - the CHIP's own two-spring law, off the instant the ellipse closes. */
+  const ringFlagPose = (sp, t) => chipLand(t, +sp.at + RING.DRAW_S + RING.FLAG_LAG, {});
+
+  /* ONE ENTRY: everything the painter draws at t, from the declaration alone. */
+  const ringPose = (sp, t) => {
+    const f = ringDrawF(sp, t);
+    return { f, closed: f >= 1, flag: sp.flag ? ringFlagPose(sp, t) : null };
+  };
+
+  /* THE PAINTER. ctx is the engine's species context (SPECIES_PAINTERS in the player): the declaration, the
+     clock, the layer and the shared helpers by name. */
+  function paintRing(ctx) {
+    const { sp, t, svg, el, A, resolveTarget, drawOn, hash, idle, seed, si, STAGE_W } = ctx;
+    const b = resolveTarget(sp.target);
+    if (!b) return;   /* the targeting law: no resolved target, nothing painted */
+    const pad = Number.isFinite(+sp.pad) ? +sp.pad : 0;
+    const e = ringEllipse(b, pad), pose = ringPose(sp, t);
+    if (pose.f <= 0) return;
+    const kind = sp.idle === "none" ? "none" : (sp.idle || "breath");
+    const ix = kind === "none" ? { scale: 1, dx: 0, dy: 0 } : idle(kind, t, hash(seed | 0, si | 0, 991));
+    const g = el("g", "", svg, { transform: "translate(" + (ix.dx + e.cx * (1 - ix.scale)).toFixed(2) + " " + (ix.dy + e.cy * (1 - ix.scale)).toFixed(2) + ") scale(" + ix.scale.toFixed(4) + ")" });
+    ringDashes(e).forEach((dash) => {
+      const f = ringDashF(pose.f, dash);
+      if (f > 0) drawOn(el("path", "rngdash", g, { d: dash.d }), f);
+    });
+    const place = sp.flag ? ringFlagPlace(e, sp.flag_side, STAGE_W || 1920) : null;
+    if (sp.label) {   /* the ring's own label, where the engine's callout writes it: outside the ellipse, up and right -
+         UNLESS the flag stands on that side, in which case it goes ABOVE the ellipse and starts at its left edge. A
+         card that covers the number defeats the ring (read off the first frame of the `ring-dashed-chip` golden). */
+      const right = !place || place.side === "left";
+      const lx = right ? e.cx + e.rx + 12 : e.cx - e.rx, ly = e.cy - e.ry - (right ? 8 : LABEL_LIFT);
+      const tx = el("text", "lab", g, { x: lx.toFixed(1), y: ly.toFixed(1), opacity: rg01(pose.f * 1.4).toFixed(3) });
+      tx.textContent = sp.label;
+    }
+    if (!place || !pose.flag || pose.flag.fade <= 0) return;
+    const fk = RING.FLAG_K * pose.flag.scale, h = CHIP.SIZE / 2;
+    const fg = el("g", "", g, { opacity: pose.flag.fade.toFixed(3),
+                                transform: "translate(" + place.x.toFixed(1) + " " + (place.y + pose.flag.dy).toFixed(1) + ") scale(" + fk.toFixed(4) + ")" });
+    el("rect", "chipcard", fg, { x: (-h).toFixed(1), y: (-h).toFixed(1), width: CHIP.SIZE, height: CHIP.SIZE, rx: CHIP.RX });
+    const geo = chipGeometry(A ? A["icon:" + sp.flag_icon] : null);
+    if (geo) {
+      const vb = geo.vb || [0, 0, 24, 24], k = CHIP.GLYPH / Math.max(vb[2] || 1, vb[3] || 1);
+      const gg = el("g", "chipglyph", fg, { transform: "translate(" + (-CHIP.GLYPH / 2).toFixed(1) + " " + (-CHIP.GLYPH / 2).toFixed(1) + ") scale(" + k.toFixed(4) + ") translate(" + (-vb[0]) + " " + (-vb[1]) + ")" });
+      geo.el.forEach((nd) => el(nd.t, "", gg, nd.a));   /* the sourced geometry verbatim - the compiler kept only shapes */
+    }
+    if (typeof sp.flag === "string" && sp.flag !== "on") {
+      const lab = el("text", "chiplab", fg, { x: 0, y: (h + CHIP.LABEL_DY).toFixed(1) });
+      lab.textContent = sp.flag;
+    }
+  }
+
+  /* the module rule's registration: a plain assignment (inline_text keeps it), guarded so `node --test` can
+     import this file for the math above without the engine's registry */
+  if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.ring = paintRing;
+  /* KINETICS:END */
   /* a ledger page's declared focus (page.focus = {kind, target?, label?}) is an implicit species at LP_FOCUS_AT;
      the target defaults to the emphasized datum (E22 addendum 6) */
   const pageFocus = (sc) => {
@@ -7857,6 +8888,394 @@ async function mount(doc) {
   /* the renderer awaits this after scrubbing to t (render_baseline.frame_png) */
   window.__clipsSeeked = () => Promise.all([...clipSeeks]);
 
+  /* KINETICS:BEGIN melt */
+  /* SPACE: stage */
+  /* species/melt.mjs - THE MELT EXIT (P52 T9; BACKLOG R26-15, the HyperFrames harvest's morph-text row; the operator,
+     2026-09-07: "it would be cool to be able to melt the chart, turn it into a stop motion ink ball, then splash it
+     everywhere or toss it off the page"). SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py
+     between KINETICS:BEGIN melt and KINETICS:END, AFTER ink, stopaction, arap and morph_a - it imports all four, and
+     the import order IS the region order.
+
+     It registers NO painter: a melt is not a species kind (nothing targets it), it is an EXIT law the engine's scene
+     loop calls by name where it handles the suck. `exit` names the transition INTO the scene it sits on (the player's
+     law), so `s05.exit = "melt"` melts s04's world as s05 begins; the incoming world is untouched beneath throughout.
+
+     FOUR PHASES over the exit's window u = clamp01((t - t_boundary) / secs), the shares fixed dials that sum to 1:
+       melt   u 0    - 0.30   the world's area polygon SAGS: its bottom edge grows N seeded drips, and the silhouette
+                              runs through the GOOEY THRESHOLD (a Gaussian blur re-steepened by a linear alpha ramp -
+                              HyperFrames' morph-text trick, which is our own K-M chain's `feFuncA slope` (ink.mjs
+                              kmFilterMarkup) pointed at a silhouette instead of at summed stain coverage), so two
+                              drips that touch FUSE into one liquid body instead of crossing as two edges.
+       ball   u 0.30 - 0.55   that dripped outline MORPHS to a circle of BALL_R about its own centroid (morph_a, the
+                              vertex method) on the STEPPED clock (stopaction `stepped`, hold 2 - on 2s), the blur
+                              falling to 0 so the blob lands as a solid ink ball. The world's pixels ride inside it.
+       throw  u 0.55 - 1      the ball is THROWN off the stage: stopaction's `throwXf` on the ink material, its
+         or splash            ballistic chord run BACKWARDS (a landing played in reverse IS a launch: the chord is
+                              constant-speed, the arc symmetric, and the tumble that unwinds into a landing winds up
+                              out of a rest) - or, with `melt:splash`, the ball FLATTENS on the same stepped clock and
+                              soakStepped (ink.mjs's seeded staircase of bursts) drives a ring of droplets outward,
+                              each an ink drop by kmHex, fading to nothing at u = 1.
+       gone   u >= 1          the outgoing world is hidden, exactly as the suck ends.
+
+     Everything above the painter is a pure function of (t0, t, the rect, the dials, rnd): the same t twice is the same
+     object, so a scrubbed frame is the played frame and a cold render is the warm one. `rnd(k)` is the caller's seeded
+     hash in [0, 1) - the engine passes lpHash bound to the scene, never Math.random.
+
+     The AUTHORED FORM: `melt` | `melt:<s>` | `melt:splash` | `melt:<x>,<y>` (the exit point in STAGE fractions, the
+     mirror of the suck's declared point) in any order after the name: `melt:1.2:splash`. build_scene_timeline_f.py's
+     parse_exit reads the same grammar and refuses anything else, naming the row.
+     Every number here is a starting dial (doc 42 s42.5); HG2 tunes them by eye on the four proof frames. */
+
+  const MELT = Object.freeze({
+    S: 1.6,            /* the exit's default length [DERIVED: the suck's 0.3 s is one phase of collapse; a melt is three
+                          (the sag, the ball, the flight) plus a throw's FLIGHT_S 0.45 - 3 x 0.38 + 0.45 ~ 1.6] */
+    MELT_END: 0.30,    /* the phase shares as CUTS of u: melt [0, 0.30), ball [0.30, 0.55), throw|splash [0.55, 1] */
+    BALL_END: 0.55,    /* [DERIVED: the sag has to be read as a sag before it balls, and the flight is the longest
+                          phase because it is the one that carries the eye off the page] */
+    /* THE SAG */
+    DRIPS: 7,          /* how many drips the bottom edge grows [DERIVED: at 1745 px of page width, one drip per ~250 px
+                          reads as a run of drips rather than as a scallop] */
+    SAG: 0.40,         /* the deepest drip's reach, as a share of the rect's height */
+    TOP_SAG: 0.42,     /* how far the TOP edge sinks by the end of the sag, as a share of the height. A melting body
+                          loses height - its mass goes downward - and on a page that fills the stage this is the half
+                          of the melt the viewer can actually SEE: the drips below its foot hang off the frame. It
+                          sinks FURTHEST above a drip, because that is where the mass went. */
+    BASE_SAG: 0.10,    /* the whole bottom edge slumps this much besides (a share of the height): a melting thing loses
+                          its edge everywhere, not only under the drips */
+    DRIP_W: 0.11,      /* a drip's half-width as a share of the rect's width */
+    DRIP_JIT: 0.55,    /* how far a drip's centre wanders from its even place, as a share of the even spacing */
+    DRIP_DELAY: 0.40,  /* the last drip starts this far into the melt phase: the drips open in a seeded order */
+    N: 33,             /* samples across the bottom edge (odd, so a drip can sit on the centre) */
+    TOP_N: 13,         /* samples across the TOP edge, and SIDE_N down each side. The ring is drawn as a closed
+                          centripetal Catmull-Rom (morphAPath), which INTERPOLATES its knots but bulges between two that
+                          sit far apart next to two that do not: sampled at two corners only, the top edge of a 1745 px
+                          page arched 220 px ABOVE the page. Even-ish spacing all the way round is the cure, and the
+                          bottom stays the densest because it is the edge that has to read as liquid. */
+    SIDE_N: 7,
+    /* THE GOOEY THRESHOLD */
+    BLUR: 26,          /* the silhouette's blur at the melt's peak, px at 1920 [DERIVED: the fuse gap - two drips
+                          within ~2 sigma of each other join; tuned on the proof frames] */
+    EDGE_SLOPE: 24,    /* the alpha ramp that re-steepens the blur into a liquid EDGE. INK.ALPHA_SLOPE (8) is the
+                          stain's ramp - a stain wants a gradient at its front; a melting body wants a wet edge, so
+                          this is three of them [DERIVED: measured on the proof frames] */
+    /* THE BALL */
+    BALL_R: 0.15,      /* the ball's radius as a share of the rect's height */
+    CIRCLE_N: 96,      /* vertices on the circle. It is RING_N so the morph's arc-length resample lands ON them and
+                          the ball's radius is exactly BALL_R at the end - a coarser circle resamples onto its CHORDS
+                          and the ball ends a fraction of a percent small */
+    RING_N: 96,        /* the morph's resample count (MORPH_A.N) */
+    HOLD: 2,           /* the stepped clock's hold: on 2s (stop-action, doc 42) */
+    FPS: CADENCE.FPS,  /* the frame rate the hold is counted in */
+    /* THE THROW */
+    TO: [1.16, 1.22],  /* the default exit point in STAGE fractions: off the lower right corner */
+    MASS: "ink",       /* the material the flight and its tumble are read in (stopaction MASS) */
+    /* THE SPLASH */
+    DROPS: 14,         /* droplets in the ring */
+    SPLASH_R: 0.85,    /* the ring's reach as a share of the rect's height */
+    SPLASH_SPREAD: 0.30,   /* the angular jitter (radians) on each droplet's ray */
+    SPLASH_FALL: 0.22,     /* how far gravity pulls a droplet below its ray by the end (a share of the height) */
+    DROP_R: 0.045,     /* a droplet's radius as a share of the rect's height */
+    DROP_SX: 0.20,     /* a droplet's optical thickness through the K-M model - INK.S1 (0.03) is ONE stain, so a drop
+                          is ~7 of them: measured, kmHex(cream, charcoal, 0.20) = #253240, the ink itself rather than
+                          the grey wash one stain gives (#7a9a99) - which is what a DROP is, thick enough to hide paper */
+    FADE_FROM: 0.55,   /* the splash holds its ink for this much of its own clock and only then fades out. Ink does not
+                          thin as it flies; it has to be GONE by the end (the next scene owns the frame), so the fade is
+                          the last of the phase, not all of it - faded from the first frame it read as grey, not ink. */
+    FLAT: 0.55,        /* how far the ball flattens as it bursts (1 - FLAT of its height) */
+    PAPER: "#F4E6C7",  /* the cream ground and the charcoal the droplets are mixed over (E22; the page's own two) */
+    INK_HEX: "#25313C",
+  });
+
+  const mc01 = (v) => (v <= 0 ? 0 : v >= 1 ? 1 : v);   /* the engine inlines every module into ONE scope, so a
+     private helper carries the module's own prefix - `c01` is ink.mjs's */
+  /* the melt's own two easings: a SLUMP accelerates (it is gravity), everything else is smooth at both ends */
+  const mSlump = (u) => { const k = mc01(u); return k * k; };
+  const mEase = (u) => { const k = mc01(u); return k * k * (3 - 2 * k); };
+
+  /* ---- the authored form ------------------------------------------------------------------------------------------ */
+  /* `melt` | `melt:<s>` | `melt:splash` | `melt:<x>,<y>`, in any order after the name. Throws on anything else, so a
+     typo in a shot table is a refusal and not a silent default. The engine's own exitSecs cannot read this: it takes
+     the first suffix as a number, and `melt:0.92,1.18` would be 0.92 SECONDS of melt to a point nobody declared. */
+  const meltOpts = (exit, o = {}) => {
+    const P = Object.assign({}, MELT, o), bits = String(exit == null ? "" : exit).split(":");
+    const out = { name: bits[0] || "", secs: P.S, splash: false, to: [P.TO[0], P.TO[1]] };
+    for (let i = 1; i < bits.length; i++) {
+      const b = bits[i].trim();
+      if (b === "") continue;
+      if (b === "splash") { out.splash = true; continue; }
+      if (b.indexOf(",") >= 0) {
+        const xy = b.split(",").map(Number);
+        if (xy.length !== 2 || !xy.every((v) => Number.isFinite(v))) throw new Error("melt: " + b + " is not an x,y point in stage fractions");
+        out.to = xy; continue;
+      }
+      const v = Number(b);
+      if (!(Number.isFinite(v) && v > 0)) throw new Error("melt: " + b + " is neither a length in seconds, nor splash, nor an x,y point");
+      out.secs = v;
+    }
+    return out;
+  };
+
+  /* ---- the phases ------------------------------------------------------------------------------------------------- */
+  /* the three shares, as shares of the window - they sum to 1 by construction */
+  const meltShares = (o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return [P.MELT_END, P.BALL_END - P.MELT_END, 1 - P.BALL_END];
+  };
+  /* which phase u is in, and how far through THAT phase it is */
+  const meltPhase = (u, o = {}) => {
+    const P = Object.assign({}, MELT, o), k = mc01(u);
+    /* GONE takes the boundary itself: (t - t0) / secs cannot be trusted to reach exactly 1 in floating point (4.0 +
+       1.6 - 4.0 is 1.5999999999999996), and a frame that lands on the end of a melt must be gone, not mid-flight. */
+    if (u >= 1 - 1e-9) return { name: "gone", k: 1, from: 1, span: 0 };
+    if (k < P.MELT_END) return { name: "melt", k: k / P.MELT_END, from: 0, span: P.MELT_END };
+    if (k < P.BALL_END) return { name: "ball", k: (k - P.MELT_END) / (P.BALL_END - P.MELT_END), from: P.MELT_END, span: P.BALL_END - P.MELT_END };
+    return { name: "fly", k: (k - P.BALL_END) / (1 - P.BALL_END), from: P.BALL_END, span: 1 - P.BALL_END };
+  };
+  /* the silhouette's blur in px: up over the melt, back to 0 by the end of the ball (a ball is solid, not a cloud) */
+  const meltBlur = (u, o = {}) => {
+    const P = Object.assign({}, MELT, o), ph = meltPhase(u, P);
+    if (ph.name === "melt") return P.BLUR * mEase(ph.k);
+    if (ph.name === "ball") return P.BLUR * (1 - mEase(ph.k));
+    return 0;
+  };
+
+  /* ---- the sag ---------------------------------------------------------------------------------------------------- */
+  /* a drip's window: 1 at its centre, 0 at DRIP_W, cos^2 between - so drips that overlap ADD nothing (the deepest wins)
+     and the gooey threshold, not the arithmetic, is what fuses them */
+  const dripBump = (dx, w) => { const k = mc01(Math.abs(dx) / Math.max(1e-6, w)); const c = Math.cos(k * Math.PI / 2); return c * c; };
+  /* the drips of a rect, as {c, amp, delay, w} - seeded once, read at every u */
+  const meltDrips = (rect, rnd, o = {}) => {
+    const P = Object.assign({}, MELT, o), n = Math.max(1, P.DRIPS | 0), step = rect.w / n, out = [];
+    for (let i = 0; i < n; i++) {
+      out.push({ c: rect.x + step * (i + 0.5) + P.DRIP_JIT * step * (rnd(i) - 0.5),
+                 amp: 0.45 + 0.55 * rnd(40 + i), delay: P.DRIP_DELAY * rnd(70 + i), w: P.DRIP_W * rect.w });
+    }
+    return out;
+  };
+  /* how deep the edge hangs below the rect's foot at x, at melt-phase progress k. Monotone in k by construction: every
+     drip's own clock is monotone, and the edge takes the DEEPEST of them plus the whole edge's slump. */
+  const meltDepth = (x, k, rect, drips, o = {}) => {
+    const P = Object.assign({}, MELT, o), u = mc01(k);
+    let deepest = 0;
+    for (const d of drips) {
+      const own = mSlump(mc01((u - d.delay) / Math.max(1e-6, 1 - d.delay)));
+      deepest = Math.max(deepest, dripBump(x - d.c, d.w) * d.amp * own);
+    }
+    return rect.h * (P.SAG * deepest + P.BASE_SAG * mSlump(u));
+  };
+  /* where the TOP edge has sunk to at x, at melt-phase progress k: down by TOP_SAG of the height, deepest over a drip.
+     Monotone in k for the same reason the foot is - every term is. */
+  const meltTop = (x, k, rect, drips, o = {}) => {
+    const P = Object.assign({}, MELT, o), u = mc01(k);
+    let over = 0;
+    for (const d of drips) over = Math.max(over, dripBump(x - d.c, d.w * 1.15) * d.amp);   /* a touch wider than the drip itself: the hollow above it is broader than its neck */
+    return rect.y + rect.h * P.TOP_SAG * mSlump(u) * (0.55 + 0.45 * over);
+  };
+  /* THE MELTING OUTLINE: a closed ring walked clockwise from the top-left - the top edge, the right side, the foot
+     sampled right to left with the drips hung from it, the left side back up. Passed to morphAPath for the path string
+     the mask carries, and to morphAPrepare as the shape the ball comes from. */
+  const meltOutline = (rect, k, rnd, o = {}) => {
+    const P = Object.assign({}, MELT, o), n = Math.max(3, P.N | 0), drips = meltDrips(rect, rnd, P);
+    const top = Math.max(2, P.TOP_N | 0), side = Math.max(1, P.SIDE_N | 0), foot = rect.y + rect.h, pts = [];
+    for (let j = 0; j < top; j++) { const x = rect.x + rect.w * (j / (top - 1)); pts.push([x, meltTop(x, k, rect, drips, P)]); }
+    const tR = meltTop(rect.x + rect.w, k, rect, drips, P), tL = meltTop(rect.x, k, rect, drips, P);
+    for (let j = 1; j <= side; j++) pts.push([rect.x + rect.w, tR + (foot - tR) * (j / (side + 1))]);   /* down the right */
+    for (let j = n - 1; j >= 0; j--) {                                                             /* the foot, right to left, dripping */
+      const x = rect.x + rect.w * (j / (n - 1));
+      pts.push([x, foot + meltDepth(x, k, rect, drips, P)]);
+    }
+    for (let j = side; j >= 1; j--) pts.push([rect.x, tL + (foot - tL) * (j / (side + 1))]);        /* up the left */
+    return pts;
+  };
+
+  /* ---- the ball --------------------------------------------------------------------------------------------------- */
+  const ballCircle = (c, r, n) => {
+    const out = [];
+    for (let i = 0; i < n; i++) { const a = 2 * Math.PI * (i / n); out.push([c[0] + r * Math.cos(a), c[1] + r * Math.sin(a)]); }
+    return out;
+  };
+  /* the dripped outline BECOMES a circle of BALL_R about its own centroid: morph_a's vertex method, exact at both ends.
+     k is the ball phase's progress, already quantised to the stepped clock by meltState. */
+  const ballAt = (rect, k, rnd, o = {}) => {
+    const P = Object.assign({}, MELT, o), src = meltOutline(rect, 1, rnd, P);
+    const c = centroid(src), r = P.BALL_R * rect.h;
+    const prep = morphAPrepare(src, ballCircle(c, r, P.CIRCLE_N), { n: P.RING_N });
+    return { outline: morphAAt(prep, mEase(k)).outline, centre: c, r, k: mc01(k) };
+  };
+  /* the ball FLATTENS as it bursts: what it loses in height it gains across, about its own centre */
+  const ballFlat = (outline, c, k, o = {}) => {
+    const P = Object.assign({}, MELT, o), f = 1 - P.FLAT * mEase(k), g = 1 + (1 / Math.max(0.05, f) - 1) * 0.5;
+    return outline.map((p) => [c[0] + (p[0] - c[0]) * g, c[1] + (p[1] - c[1]) * f]);
+  };
+
+  /* ---- the splash ------------------------------------------------------------------------------------------------- */
+  /* a ring of DROPS droplets thrown outward on the soak's own STEPPED clock (ink.mjs soakStepped: a seeded staircase of
+     bursts, never contracting), each falling a little as it goes and fading to nothing at k = 1. `d` is the distance
+     travelled along the droplet's own ray - monotone in k, which is what the test pins. */
+  /* the ink's own fade: 1 until FADE_FROM of the burst's clock, then out to exactly 0 at the end */
+  const splashFade = (p, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return 1 - mEase(mc01((mc01(p) - P.FADE_FROM) / Math.max(1e-6, 1 - P.FADE_FROM)));
+  };
+  const splashDrops = (c, h, k, rnd, o = {}) => {
+    const P = Object.assign({}, MELT, o), p = soakStepped(mc01(k), rnd), out = [];
+    for (let i = 0; i < Math.max(0, P.DROPS | 0); i++) {
+      const a = 2 * Math.PI * (i / P.DROPS) + P.SPLASH_SPREAD * (2 * rnd(300 + i) - 1);
+      const reach = P.SPLASH_R * h * (0.55 + 0.9 * rnd(400 + i)), d = reach * p;
+      out.push({ x: c[0] + Math.cos(a) * d, y: c[1] + Math.sin(a) * d + P.SPLASH_FALL * h * p * p,
+                 r: P.DROP_R * h * (0.6 + 0.8 * rnd(500 + i)) * (1 - 0.35 * p), d, a, alpha: splashFade(p, P) });
+    }
+    return out;
+  };
+
+  /* ---- the throw -------------------------------------------------------------------------------------------------- */
+  /* THE FLIGHT, BACKWARDS. stopaction's throwXf brings a thing FROM an offset TO its rest; a launch is that landing run
+     in reverse - the chord is covered at constant speed, the arc's lift is symmetric about the middle, and the tumble
+     that unwinds into a landing winds up out of a rest. So t' = F(1 - k): at k = 0 the ball sits at rest (0, 0) and at
+     k = 1 it is at `from`, which is the declared exit point. The flight fills the phase exactly (FLIGHT_S = F), so the
+     stepped cadence throwXf picks is the phase's own. */
+  const meltThrowAt = (k, from, secs, o = {}) => {
+    const P = Object.assign({}, MELT, o), F = Math.max(0.05, secs), kk = mc01(k);
+    /* k = 0 is REST, said here rather than left to the reversal: t' = F is the instant throwXf has already landed, and
+       a landing is a settle (a 4 px ground dip), not the pose of a ball that has not moved yet. */
+    if (kk <= 0) return { x: 0, y: 0, rot: 0, alpha: 0, theta: Math.PI / 2, phase: "flight", u: 1, hold: 1, h: 0, ground: 0, shake: { x: 0, y: 0 } };
+    return throwXf(from, P.MASS, F * (1 - kk), { FLIGHT_S: F });
+  };
+
+  /* ---- the frame -------------------------------------------------------------------------------------------------- */
+  /* EVERYTHING THE PAINTER NEEDS, in one object, from (t0, t, o, rnd) alone.
+     o carries the geometry as well as any dial: `rect` (the melting box, in the outgoing world's own px), `stagebox`
+     (the stage's box in those same px - what a declared x,y fraction is measured in), `secs`, `splash`, `to`. */
+  const meltState = (t0, t, o = {}, rnd) => {
+    const P = Object.assign({}, MELT, o), rect = P.rect, sb = P.stagebox || rect, to = P.to || P.TO;
+    const secs = Math.max(0.05, +P.secs || P.S), u = mc01((t - t0) / secs), ph = meltPhase(u, P);
+    const st = { u, secs, phase: ph.name, k: ph.k, blur: meltBlur(u, P), splash: !!P.splash,
+                 opacity: 1, outline: null, path: "", centre: null, r: 0, drops: [], xf: null, flat: 1, gone: false };
+    if (ph.name === "gone") { st.gone = true; st.opacity = 0; return st; }
+    if (ph.name === "melt") {
+      st.outline = meltOutline(rect, ph.k, rnd, P);
+      st.path = morphAPath(st.outline);
+      return st;
+    }
+    /* the ball and the flight run on the STEPPED clock, each on its own phase-local seconds (a pure quantisation of t) */
+    const tl = t - t0 - ph.from * secs, span = ph.span * secs;
+    const kq = mc01(stepped(Math.max(0, tl), P.HOLD, P.FPS) / Math.max(1e-6, span));
+    if (ph.name === "ball") {
+      const b = ballAt(rect, kq, rnd, P);
+      st.outline = b.outline; st.centre = b.centre; st.r = b.r; st.k = kq;
+      st.path = morphAPath(st.outline);
+      return st;
+    }
+    const b = ballAt(rect, 1, rnd, P);
+    st.centre = b.centre; st.r = b.r; st.k = kq;
+    if (st.splash) {
+      st.flat = 1 - P.FLAT * mEase(kq);
+      st.outline = ballFlat(b.outline, b.centre, kq, P);
+      st.drops = splashDrops(b.centre, rect.h, kq, rnd, P);
+      st.opacity = splashFade(kq, P);
+    } else {
+      st.outline = b.outline;
+      st.xf = meltThrowAt(kq, { x: sb.x + to[0] * sb.w - b.centre[0], y: sb.y + to[1] * sb.h - b.centre[1] }, span, P);
+    }
+    st.path = morphAPath(st.outline);
+    return st;
+  };
+
+  /* ---- the markup the painter mounts once ------------------------------------------------------------------------- */
+  /* THE GOOEY THRESHOLD as SVG primitives: blur the silhouette, then re-steepen its alpha. Two drips whose blurs
+     overlap cross the ramp together and come out as ONE body with a concave neck - HyperFrames' morph-text trick,
+     which is ink.mjs's kmFilterMarkup `feFuncA slope` applied to a shape instead of to summed coverage. The COLOUR
+     stages of the K-M chain are deliberately not here: they take alpha into the colour channels, which would flatten
+     the melting world to an ink silhouette and throw away the chart the viewer is watching melt. The droplets, which
+     ARE ink and carry no picture, take the K-M model instead - through kmHex, per drop. */
+  const meltFilterMarkup = (id, u, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return '<filter id="' + id + '" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB">'
+      + '<feGaussianBlur stdDeviation="' + meltBlur(u, P).toFixed(2) + '"/>'
+      + '<feComponentTransfer><feFuncA type="linear" slope="' + P.EDGE_SLOPE + '" intercept="0"/></feComponentTransfer>'
+      + '</filter>';
+  };
+  /* the mask the outgoing world wears: one path, filtered. The mask's region is opened well past the element's own box
+     so neither the blur nor a drip is clipped by it. */
+  const meltMaskMarkup = (id, filterId) =>
+    '<mask id="' + id + '" maskUnits="objectBoundingBox" x="-0.4" y="-0.4" width="1.8" height="1.8">'
+    + '<g filter="url(#' + filterId + ')"><path fill="#fff" d=""/></g></mask>';
+
+  /* ---- the painter ------------------------------------------------------------------------------------------------ */
+  /* THE MELTING BOX in the outgoing world's own pixels: a ledger world melts its PAGE (the card box `.lp-page`, whose
+     LAYOUT box is where the page stands whatever transform it carries - the same reading the camera arrival takes);
+     any other world melts the stage. `.world` overhangs the stage by 5% on every side, so the stage sits at 1/22 of
+     the world's box and takes 10/11 of it. */
+  const meltStageBox = (wA) => ({ x: wA.offsetWidth / 22, y: wA.offsetHeight / 22,
+                                         w: wA.offsetWidth * 10 / 11, h: wA.offsetHeight * 10 / 11 });
+  const meltRect = (wA) => {
+    const page = wA.querySelector(".lp-page");
+    if (page && page.offsetWidth > 0 && page.offsetHeight > 0) {
+      const host = page.offsetParent && page.offsetParent !== wA ? page.offsetParent : null;
+      return { x: page.offsetLeft + (host ? host.offsetLeft : 0), y: page.offsetTop + (host ? host.offsetTop : 0),
+               w: page.offsetWidth, h: page.offsetHeight };
+    }
+    return meltStageBox(wA);
+  };
+
+  /* the overlay, mounted ONCE and kept on wA.__melt: an svg SIBLING of the outgoing world (never a child - a child
+     would wear the mask its own defs define, and the droplets would be cut to the ball), holding the filter, the mask
+     and the droplet group. Nothing here reads time. */
+  const meltMount = (wA, el, id) => {
+    const svg = el("svg", "meltov", wA.parentNode, { "pointer-events": "none" });
+    const defs = el("defs", "", svg, {});
+    defs.innerHTML = meltFilterMarkup(id + "f", 0) + meltMaskMarkup(id + "m", id + "f");
+    const m = { id, svg, defs, blur: defs.querySelector("feGaussianBlur"), path: defs.querySelector("mask path"),
+                drops: el("g", "meltdrops", svg, {}), dots: [] };
+    svg.style.position = "absolute"; svg.style.overflow = "visible"; svg.style.pointerEvents = "none"; svg.style.zIndex = "4";
+    wA.__melt = m;
+    return m;
+  };
+
+  /* PAINT ONE FRAME. ctx: { wA, t, t0, opts, rnd, el, id }. The state is meltState's; this only writes it down - the
+     mask's path and blur, the world's mask / transform / opacity, and the droplets. */
+  const paintMelt = (ctx) => {
+    const { wA, el, rnd } = ctx, id = ctx.id || "melt";
+    const m = (wA.__melt && wA.__melt.svg && wA.__melt.svg.isConnected) ? wA.__melt : meltMount(wA, el, id);
+    const st = meltState(ctx.t0, ctx.t, ctx.opts, rnd);
+    m.svg.style.left = wA.offsetLeft + "px"; m.svg.style.top = wA.offsetTop + "px";
+    m.svg.style.width = wA.offsetWidth + "px"; m.svg.style.height = wA.offsetHeight + "px";
+    m.svg.setAttribute("viewBox", "0 0 " + wA.offsetWidth + " " + wA.offsetHeight);
+    m.blur.setAttribute("stdDeviation", st.blur.toFixed(2));
+    m.path.setAttribute("d", st.path);
+    wA.style.mask = "url(#" + id + "m)"; wA.style.webkitMaskImage = "url(#" + id + "m)";
+    wA.style.zIndex = 3;                          /* the outgoing world rides above the incoming plate, as the suck's does */
+    wA.style.opacity = st.gone ? "0" : st.opacity.toFixed(4);
+    m.svg.style.opacity = st.gone ? "0" : "1";
+    if (st.xf) {   /* the flight: the whole world travels, mask and all, about the ball's own centre */
+      wA.style.transformOrigin = st.centre[0].toFixed(1) + "px " + st.centre[1].toFixed(1) + "px";
+      wA.style.transform = "translate(" + st.xf.x.toFixed(2) + "px," + st.xf.y.toFixed(2) + "px) rotate("
+        + st.xf.rot.toFixed(2) + "deg) " + wA.style.transform;
+    }
+    /* the droplets: one circle per drop, created once and moved after that (ink by the K-M model, over the cream) */
+    while (m.dots.length < st.drops.length) m.dots.push(el("circle", "", m.drops, { fill: kmHex(MELT.PAPER, MELT.INK_HEX, MELT.DROP_SX) }));
+    m.dots.forEach((dot, i) => {
+      const d = st.drops[i];
+      if (!d || d.r <= 0.2 || d.alpha <= 0.002) { dot.setAttribute("r", "0"); dot.setAttribute("opacity", "0"); return; }
+      dot.setAttribute("cx", d.x.toFixed(1)); dot.setAttribute("cy", d.y.toFixed(1));
+      dot.setAttribute("r", d.r.toFixed(1)); dot.setAttribute("opacity", d.alpha.toFixed(3));
+    });
+    return st;
+  };
+
+  /* the reset, called on every frame that is NOT a melt - the same shape as the suck's, and it touches only what the
+     painter set (a world that never melted is never written to). */
+  const clearMelt = (wA) => {
+    if (!wA.__melt) return;
+    const m = wA.__melt;
+    if (m.svg && m.svg.parentNode) m.svg.parentNode.removeChild(m.svg);
+    wA.__melt = null;
+    wA.style.mask = ""; wA.style.webkitMaskImage = "";
+    if (wA.style.zIndex) wA.style.zIndex = "";
+    if (wA.style.opacity !== "") wA.style.opacity = "";
+    if (wA.style.transformOrigin) wA.style.transformOrigin = "";
+  };
+  /* KINETICS:END */
   const render = (t) => {
     let si = 0;
     for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
@@ -7929,6 +9348,12 @@ async function mount(doc) {
        into that point of the new plate over SUCK_S, spinning - no wipe front, no seam */
     const suck = prev && typeof sc.exit === "string" && sc.exit.startsWith("suck") ? sc.exit : null;
     const su = suck ? clamp01((t - sc.span[0]) / SUCK_S) : 1;
+    /* MELT (P52 T9; R26-15; the operator, 2026-09-07: "melt the chart, turn it into a stop motion ink ball, then
+       splash it everywhere or toss it off the page"): a row whose exit reads melt sags the OUTGOING world into
+       drips under the gooey threshold, balls it up on 2s and throws it off the stage - or, with melt:splash,
+       bursts it into droplets. Like the suck it arrives on the CUT and takes no wipe front, and it is one world
+       change, so the gate credits it once. species/melt.mjs owns every number and every pixel; this is the call. */
+    const meltOn = prev && exitName(sc.exit) === "melt" ? meltOpts(sc.exit) : null;
     /* E47 (operator 2026-09-06): DIP and BLURZOOM straddle the boundary, so a scene reads its OWN exit for the
        half after its start and the NEXT scene's exit for the half before its end. `exit` names the transition INTO
        the scene it sits on - the same law the wipe, the suck and the dissolve above already follow. The switch
@@ -7977,7 +9402,7 @@ async function mount(doc) {
        a row that says `cut` is a cut - one frame, both plates steady, the reference's own most common boundary. Until
        2026-09-08 a `cut` row fell through to the wipe here, which is why two built pages arrived by a wipe nobody declared. */
     const hardCut = prev && exitName(sc.exit) === "cut";
-    const wk = prev && !hardCut && !spiralIn && !snapIn && !throwIn && !suck && !dissolve && !mountIn && !dipIn && !bzIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
+    const wk = prev && !hardCut && !spiralIn && !snapIn && !throwIn && !suck && !meltOn && !dissolve && !mountIn && !dipIn && !bzIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const seaming = prev && wk > 0 && wk < 1;
     /* THE HARD-EDGE CLIP WIPE (restored 2026-09-01). The remotion-ui
        directional-wipe port (dd9e476, 2026-08-30) replaced this with a
@@ -8040,6 +9465,9 @@ async function mount(doc) {
       wA.style.transform = "rotate(" + (SUCK_TURN * (kin("min_jerk") ? minJerk(su) : su)).toFixed(1) + "deg) scale(" + sk.toFixed(4) + ") " + wA.style.transform;
       wA.style.zIndex = 3;   /* the outgoing world rides above the incoming plate while it collapses */
     } else { if (wA.style.zIndex) wA.style.zIndex = ""; if (wA.style.opacity !== "") wA.style.opacity = ""; }
+    if (meltOn) paintMelt({ wA, t, t0: sc.span[0], el: lpEl, opts: Object.assign({ rect: meltRect(wA), stagebox: meltStageBox(wA) }, meltOn),
+                            rnd: (k) => lpHash(0x3E17 ^ ((sc.scene_id || "").length * 131), k, 977) });
+    else if (wA.__melt) clearMelt(wA);   /* the same reset the suck does above, and only for a world that melted */
     seam.style.opacity = seaming ? 1 : 0;
     seam.style.transform = `translateX(${(sc.exit === "wipe_right" ? (1-wk) : wk) * STAGE_W}px)`;
 
@@ -8323,11 +9751,35 @@ async function mount(doc) {
         }
       }
       if (pg) { const ws = cap.querySelectorAll(".cw");
+        /* T10: the page's ARRIVAL kind - the pop unless the build says otherwise (`cap_arrive` on the page, or
+           `caption_arrive` on the timeline). ABSENT = "pop" = every frame shipped before this slice, to the bit.
+           `fade_up` [DERIVED: HyperFrames staggered-fade-up] is the quiet register: ONE envelope (kinetics/stagger.mjs),
+           per-word offsets, the words rising 22 px through a 5 px blur from 0.92 instead of punching down from 1.10 -
+           the operator's "more caption motion without overcrowding". The starts are computed once per page. */
+        const fuArrive = stage && ((pg.cap_arrive || TL.caption_arrive) === "fade_up");
+        const fuStarts = fuArrive ? staggerStarts(pg.t.map((x) => (x.s == null ? null : +x.s)), pg.s) : null;
         pg.t.forEach((x, j) => { if (ws[j]) { const on = x.s <= t && t < x.e; ws[j].classList.toggle("on", on);
           /* stage: each word pops in at its own spoken time (words.json), never at the page boundary.
              The pop is a pure function of t painted inline (see stagePop) so a scrubbed render
              captures mid-pop frames and two renders of one second are identical. */
-          if (stage && PHRASE) {   /* KINETIC (operator, 2026-09-05: 'we need more kinetic activity ... back to dynamic captions, 4-7 words per
+          if (fuStarts) {   /* T10 [DERIVED: HyperFrames staggered-fade-up]: this word's own offset into the page's ONE envelope -
+             y 22 -> 0, scale 0.92 -> 1, blur 5 px -> 0 and opacity 0 -> 1 off a single minimum-jerk progress, so the page arrives as a
+             wave and no word snaps. What the arrival does NOT touch: the keyword's box sweep, the spoken word's lift and the boil after
+             landing are the pop path's, unchanged (the lift is MARK.LIFT in both registers; the boil only where the phrase mode boils). What it drops: the +-2.5deg tilt and the keyword's extra pop - both are punctuation,
+             which is the crowding this register exists to remove. The BLUR IS A FILTER ON THE WORD SPAN, never on the strip. */
+            const f = fadeUpAt(t, fuStarts[j], FADE_UP), e = f.e;
+            const hk = x.k ? pow2out(clamp01((t - x.s) / MARK.SWEEP_S)) : 0;                 /* the keyword's box sweeps in when spoken, stays */
+            const tick = Math.floor(t * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;   /* the boil, unchanged: seeded per word, on the landed word only */
+            const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * MARK.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * MARK.BOIL_PX : 0;
+            const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * MARK.BOIL_DEG : 0;
+            const sc = f.s * (on && e >= 1 ? MARK.LIFT : 1);
+            ws[j].style.opacity = f.o.toFixed(3);
+            ws[j].style.transform = "translate(" + bx.toFixed(2) + "px," + (f.y + by).toFixed(2) + "px) scale(" + sc.toFixed(4) + ") rotate(" + bdeg.toFixed(2) + "deg)";
+            ws[j].style.filter = f.b > 0.01 ? "blur(" + f.b.toFixed(2) + "px)" : "";
+            ws[j].style.backgroundImage = hk > 0 ? markBox(MARK.RED, 1) : "";
+            ws[j].style.backgroundSize = hk > 0 ? (hk * 100).toFixed(1) + "% 100%" : "";
+            ws[j].classList.toggle("lit", hk > 0.5); }
+          else if (stage && PHRASE) {   /* KINETIC (operator, 2026-09-05: 'we need more kinetic activity ... back to dynamic captions, 4-7 words per
              sentence'): the golden set's word pops - each word lands on its own spoken time with the explosive spring and a rise -
              on a page that holds a sentence; a keyword takes the red box as it lands and stays gold on it */
             const pop = kin("analytic_spring") ? springPop : stagePop;

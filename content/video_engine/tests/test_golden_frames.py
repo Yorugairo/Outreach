@@ -36,6 +36,14 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "vecmap-arc",   # P50 T5: the vector map in PORTRAIT - Iran lit, the arc from the Gulf to the US cut by its X, "1996" and "1.4 Billion Barrels" stamped, China lit
             "thread-baseline",   # P50 T15 / HF-16: THE WIRE - the line page's first series still standing under the bars page after the cut, mid-recede
             "art-embed",    # P50 T7: a press card projected onto the plate's declared poster and a still card on its paper - the ART world, the room darkened around them
+            "count-array",  # P52 T7: six identical sourced icons on a 2:1 rhombus lattice, the count written as the claim
+            "agenda-two",   # P52 T8: two numbered rows revealed one per word, each holding at its own breath
+            "ring-dashed-chip",   # P52 T8: the ring's DASHED form round a datum with its flag chip - E56's use, a new form
+            "species-proof",      # P52 T7 + T8: the proof page for human gate 3 - the three species on one clock (its other two instants are FLAG_FRAMES)
+            "newsreel-band",        # P52 T6: the newsreel band 16:9 - the wire crawling under a docked surface, mid-run
+            "melt-page", "melt-splash",   # P52 T9: the melt exit at its ball instant, and the splash variant (the four @proof-* instants ride PROOF_FRAMES)
+            "newsreel-strip-9x16",  # P52 T6: 9:16 THE DEFAULT strip law - the caption keeps its E62 band, the crawl runs below it
+            "newsreel-strip-above", # P52 T6: 9:16 the ALTERNATIVE (`cap_band: "above"`) - the crawl takes the strip, the caption moves above it
             "occluder-dock"]     # P50 T15 / HF-17: a dock BEHIND the plate's foreground layer - the depth cue by occlusion, not blur
 
 
@@ -59,7 +67,7 @@ def test_every_surface_has_a_committed_source_and_golden() -> None:
         assert (RB.FRAMES / f"{name}.png").exists(), f"{name}: no golden frame - run render_baseline.py --update"
 
 
-@pytest.mark.parametrize("surface", SURFACES + sorted(RB.FLAG_FRAMES))
+@pytest.mark.parametrize("surface", SURFACES + sorted(RB.FLAG_FRAMES) + sorted(RB.PROOF_FRAMES))   # P52 T7/T8: the proof frames are goldens like any other
 def test_golden_frame_is_unchanged(surface: str) -> None:
     failures = RB.check([surface])
     assert not failures, "\n".join(failures)

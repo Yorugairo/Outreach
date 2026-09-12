@@ -48,6 +48,39 @@ FLAG_FRAMES = {
     "ledger-soak-page@area_squash": ("ledger-soak-page", {"analytic_spring": True, "area_squash": True}, 7.86),
     "ledger-soak-page@idle": ("ledger-soak-page", {"idle": True}, 11.0),   # the page holding after its build: the breath is the only difference (E49)
 }
+# P52 T7 + T8, HUMAN GATE 3: THE PROOF FRAMES. A second dict with FLAG_FRAMES' own shape (surface, flags, t) and a
+# different claim: not "this capability changes the frame" but "this INSTANT of this surface is the one to judge".
+# The two are kept apart on purpose - `test_kinetics_flags` is right to insist that every FLAG golden differs from
+# the flag-off render at its t (a flag frame that changed nothing would prove nothing), and a second instant of one
+# surface owes nobody that. Both are checked as goldens, and both are reachable by name from render_surface.
+#
+# `species-proof` carries the last three Bravos species on ONE clock, one per scene, so the operator reads each at
+# its own instant and then plays the single file end to end. The flags they carry are `idle` ON - E49's own switch:
+# what it turns on is the WORLD's breath under the species (the ledger page in scene 1), while each species' own
+# named idle runs either way. On the two bare-plate scenes the flag changes no pixel (a flat plate breathing is a
+# flat plate), which is exactly why these are PROOF frames and not FLAG frames.
+PROOF_FRAMES = {
+    "species-proof@proof-ring": ("species-proof", {"idle": True}, 12.6),     # the dashed ellipse closed round the series' own peak, its flag chip landed, the page breathing under it
+    "species-proof@proof-count": ("species-proof", {"idle": True}, 22.5),    # the isometric field: all six icons in reading order, the count written as the claim
+    "species-proof@proof-agenda": ("species-proof", {"idle": True}, 28.5),   # the numbered agenda: three rows revealed one per word, holding
+    # P52 T9 / R26-15, HUMAN GATE 2: THE MELT, one frame per phase of its 1.6 s window from the cut at 15.0. They carry
+    # no flag (a melt is an authored EXIT, not a capability behind a switch), which is what makes them proofs and not
+    # flag frames. The fifth frame of the gate is `frames/melt-splash.png` - the other register, its own surface.
+    "melt-page@proof-015": ("melt-page", {}, 15.0 + 0.15 * 1.6),   # THE SAG: the top edge sinking over its drips, the gooey threshold fusing the edge
+    "melt-page@proof-045": ("melt-page", {}, 15.0 + 0.45 * 1.6),   # THE BALL, forming: the outline mid-morph toward the circle on the stepped clock
+    "melt-page@proof-075": ("melt-page", {}, 15.0 + 0.75 * 1.6),   # THE THROW: the ink ball in flight, carrying the page's own pixels off the lower right
+    "melt-page@proof-100": ("melt-page", {}, 15.0 + 1.00 * 1.6),   # GONE: the incoming world alone, untouched, nothing left of the one that melted
+}
+# P52 T18 / R26-55, HUMAN GATE 7: THE FACE OF A PULLED PHRASE. The phrase is live type now, so it has a face, and
+# the face is the OPERATOR's to choose - never ours. The `press_face` DIAL names one of the three candidates
+# species/press.mjs offers (all of them already on the page; the template downloads exactly one webfont and this
+# adds none). Same card, same instant, same everything else, so the three frames differ in the FACE and nothing
+# else. The HOUSE face - the default until the operator rules - is the base `press-stack` golden itself: a
+# `press-stack@face-house` entry here would be a frame identical to it, and test_kinetics_flags rightly fails an
+# entry in this map that changes nothing (measured 2026-09-12). Gate 7's three frames are therefore
+# `frames/press-stack.png` (house), and these two.
+FLAG_FRAMES["press-stack@face-serif"] = ("press-stack", {"press_face": "serif"}, 11.4)
+FLAG_FRAMES["press-stack@face-condensed"] = ("press-stack", {"press_face": "condensed"}, 11.4)
 
 
 # P51 T1 - THE TWO FORMS OF ONE PAGE. The engine is a module on disk (scene-evidence-engine.mjs);
@@ -278,9 +311,9 @@ def load_surface(name: str) -> tuple[dict, dict, float, str]:
 
 
 def render_surface(name: str, t: float | None = None, template: Path = TEMPLATE, kinetics: dict | None = None) -> bytes:
-    """A frame of a golden surface; `name` may be a FLAG_FRAMES key (surface@flag), which fixes the flags and the t."""
-    if name in FLAG_FRAMES:
-        surface, flags, t_flag = FLAG_FRAMES[name]
+    """A frame of a golden surface; `name` may be a FLAG_FRAMES or PROOF_FRAMES key (surface@name), which fixes the flags and the t."""
+    if name in FLAG_FRAMES or name in PROOF_FRAMES:   # P52 T7/T8: a proof frame is named and reached the same way
+        surface, flags, t_flag = FLAG_FRAMES[name] if name in FLAG_FRAMES else PROOF_FRAMES[name]
         return render_surface(surface, t if t is not None else t_flag, template, dict(flags, **(kinetics or {})))
     tl, uris, t_default, aspect = load_surface(name)
     if kinetics is not None:
@@ -335,7 +368,7 @@ def main() -> int:
     ap.add_argument("--update", action="store_true")
     ap.add_argument("--check", action="store_true")
     args = ap.parse_args()
-    names = sorted(p.name[: -len(".timeline.json")] for p in SOURCES.glob("*.timeline.json")) + sorted(FLAG_FRAMES)
+    names = sorted(p.name[: -len(".timeline.json")] for p in SOURCES.glob("*.timeline.json")) + sorted(FLAG_FRAMES) + sorted(PROOF_FRAMES)
     if args.list:
         print("\n".join(names)); return 0
     if args.surface:

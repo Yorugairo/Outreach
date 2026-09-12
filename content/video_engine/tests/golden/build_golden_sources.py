@@ -31,6 +31,7 @@ import ledger_page as LPG  # noqa: E402
 
 RUNTIME = 30.0
 THREAD_CUT = 15.0   # P50 T15 / HF-16: where the `thread-baseline` golden cuts from its line page to its bars page
+MELT_CUT = 15.0     # P52 T9: where the `melt-page` golden hands its finished page to a plate - and the page MELTS across it
 # the frame each surface is judged at - chosen so the thing under test is on screen and mid-motion
 FRAME_T = {
     "ledger-page-mid-build": 6.0,   # field filled, outline drawn, ink and bars building
@@ -51,8 +52,31 @@ FRAME_T = {
     "treemap-cross": 10.9,          # P50 T6: the census has landed (the build ends at 8.0), the three X's are struck (9.0 + CROSS_S) and the crossed share is written (9.0 + WRITE_AT + 3.0 * WRITE = 10.7)
     "tags-to-bars": 12.2,           # P50 T11: mid-hand-over of the KEYED-TAGS recast (12 s + 2 s): the two terminal tags are halfway to their bars and growing into the bars' own type, the lines have left half their history beneath them, the bars are half grown, and no value has been drawn twice
     "data-to-bars": 13.0,           # E64 / R26-49: dur * 0.5 of the DATA-keyed recast (12 s + 2 s) - the four data in flight between the line and their bars, the bars part-grown beneath them, the old tick labels most of the way un-written and the new ones started
+    "melt-page": 15.88,             # P52 T9: MELT_CUT + 0.55 of MELT.S (1.6 s) - THE BALL, formed and still at rest on
+                                   # the frame the flight starts: the morph is exactly the circle of BALL_R, and the
+                                   # gooey blur is exactly 0. Mid-morph (0.45) is the livelier picture and is what the
+                                   # PROOF frames show, but its mask carries a 9 px blurred edge, and one render in
+                                   # eight came back with 15 pixels of that edge off by 2 (a Chromium filter-raster
+                                   # flake, measured 2026-09-12) - a golden is a byte-exact pin and takes the instant
+                                   # with no fractional band to flake
+    "melt-splash": 16.2,            # P52 T9: the OTHER register, at 0.75 of the same window - the ball flattened on
+                                   # the stepped clock and the ring of K-M ink droplets thrown outward over the paper
+                                   # (the throw's own 0.75 is `melt-page@proof-075`). The blur is 0 through the whole
+                                   # phase, so this instant is a byte-exact pin like the other.
+    "count-array": 8.0,             # P52 T7: all six icons landed (5.0 + 5 * 0.34 + LAND_S = 7.15) and the count written as the claim (+ CLAIM_LAG + CLAIM_S = 7.73) - the field as it is read
+    "agenda-two": 7.2,              # P52 T8: both rows revealed (5.0 and 6.2 + NUM_LEAD + ROW_S = 6.74) and both rules fully drawn - the agenda as it stands
+    "ring-dashed-chip": 10.6,       # P52 T8: the page has built (3.9 + 0.5 + 3.0), the dashed ellipse has closed round the datum (9.0 + DRAW_S) and the flag chip has landed beside it (+ FLAG_LAG + CHIP.LAND_S = 10.24)
+    "species-proof": 12.6,          # P52 T7/T8, HUMAN GATE 3: the proof page's FIRST instant (the ring closed with its flag on the fully built page). Its other two are FLAG_FRAMES entries on the same clock (species-proof@proof-count / @proof-agenda), so the operator reads all three as frames and then plays the one file
     "ledger-keyed": 12.75,          # P48 T4b: mid-phase-2 of the keyed recast (12 s + 2 s; the golden's expoOut clock is half done at u 0.37): the lines have left half their history, their ends and values are in flight to the bar tops, the bars are half grown         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
 }
+
+
+# P52 T6: the newsreel band, judged mid-run - the band open (5.0 + BAR_FOR), the crawl 5.6 s into its run
+# (784 px left of its place at the default 140 px/s), the strapline fully written, the surface above landed and
+# a caption page live (10.0-12.8) so the STRIP the two share is what the frame shows.
+FRAME_T["newsreel-band"] = 11.0          # 16:9: the band in the lower 40 %, the caption at its own 40 % home
+FRAME_T["newsreel-strip-9x16"] = 11.0    # 9:16 THE DEFAULT: the caption keeps its E62 band, the crawl goes BELOW it
+FRAME_T["newsreel-strip-above"] = 11.0   # 9:16 THE ALTERNATIVE (`cap_band: "above"`): the crawl takes the strip, the caption moves above it
 
 
 def png_solid(w: int, h: int, rgb: tuple[int, int, int]) -> bytes:
@@ -485,14 +509,20 @@ def span_decade() -> tuple[dict, dict]:
 
 
 # P50 T3: the press stack. Three claims, three words, one pile - Bravos shots 5-10's grammar.
+# R26-55: each card carries its pulled phrase as WORDS as well as pixels (the last field), because a crop cannot
+# re-line; the card sets the words as live type and keeps the crop as the provenance strip under them.
 PRESS_CARDS = [
     ("ev-press-a", 5.0, "THE HERALD, 4 MAR 2026", {"x0": 0.08, "y0": 0.17, "x1": 0.62, "y1": 0.46},
-     [(0.06, 0.14, 0.64, 0.44), (0.06, 0.58, 0.88, 0.72), (0.06, 0.80, 0.52, 0.90)]),
+     [(0.06, 0.14, 0.64, 0.44), (0.06, 0.58, 0.88, 0.72), (0.06, 0.80, 0.52, 0.90)],
+     "the historic normal was never normal"),
     ("ev-press-b", 7.4, "THE LEDGER, 6 MAR 2026", {"x0": 0.30, "y0": 0.15, "x1": 0.92, "y1": 0.45},
-     [(0.28, 0.12, 0.94, 0.43), (0.06, 0.58, 0.70, 0.72), (0.06, 0.80, 0.84, 0.90)]),
+     [(0.28, 0.12, 0.94, 0.43), (0.06, 0.58, 0.70, 0.72), (0.06, 0.80, 0.84, 0.90)],
+     "the deficit outlived every plan to close it"),
     ("ev-press-c", 9.8, "THE DISPATCH, 9 MAR 2026", {"x0": 0.12, "y0": 0.16, "x1": 0.55, "y1": 0.47},
-     [(0.10, 0.13, 0.57, 0.45), (0.06, 0.58, 0.92, 0.72), (0.06, 0.80, 0.38, 0.90)]),
+     [(0.10, 0.13, 0.57, 0.45), (0.06, 0.58, 0.92, 0.72), (0.06, 0.80, 0.38, 0.90)],
+     "the rule changed while the market slept"),
 ]
+PRESS_CROP = (528, 160)   # the headline crop every golden card is cut at - its aspect is what the strip is laid out from
 
 
 # P50 T5: the vector map. Two declared MAP POINTS (map box units, x = (lon + 180) / 360 * 1000,
@@ -592,12 +622,14 @@ def press_stack() -> tuple[dict, dict]:
     enter order. The player mounts each one outside the two dock slots and poses the whole pile from
     species/press.mjs. Judged after the third has settled and its underline has finished drawing (FRAME_T 11.4)."""
     evidence, uris, docks = {}, _base_uris(), []
-    for i, (aid, enter, src, _phrase, bars) in enumerate(PRESS_CARDS):
+    for i, (aid, enter, src, _phrase, bars, words) in enumerate(PRESS_CARDS):
         evidence[aid] = {"title": f"Press card {i + 1}", "source": src, "species": "press",
                          "document": {"path": "golden", "sha256": "0" * 64}, "badges": []}
-        uris[aid] = uri("image/png", png_bars(528, 160, (250, 247, 240), bars))
+        uris[aid] = uri("image/png", png_bars(PRESS_CROP[0], PRESS_CROP[1], (250, 247, 240), bars))
         docks.append({"slide": aid, "slot": 0, "enter": enter, "exit": RUNTIME, "badge_at": [],
                       "kind": "press", "source": src, "phrase": PRESS_CARDS[i][3],
+                      # R26-55: the phrase's words and the crop's own aspect, exactly as press_meta writes them
+                      "phrase_text": words, "img": round(PRESS_CROP[1] / PRESS_CROP[0], 5),
                       "stack_index": i, "stack_n": len(PRESS_CARDS)})
     species = [{"kind": "callout", "form": "underline", "at": 10.6, "dur": 2.0,
                 "target": {"kind": "phrase", "dock": PRESS_CARDS[-1][0]}}]
@@ -733,7 +765,10 @@ def art_embed() -> tuple[dict, dict]:
     quote, still = "ev-embed-quote", "ev-embed-record"
     source = "THE HERALD, 4 MAR 2026"
     phrase = {"x0": 0.08, "y0": 0.17, "x1": 0.62, "y1": 0.46}
-    press = BST.press_meta({"source": source, "phrase": phrase})
+    # R26-55: the card carries the phrase's WORDS too, so the surface's card sets them as live type re-lined to the
+    # screen's own shape and keeps the crop beneath as the provenance strip (the limit E66 recorded, closed)
+    press = BST.press_meta({"source": source, "phrase": phrase, "phrase_text": PRESS_CARDS[0][5],
+                            "card": list(PRESS_CROP)})
     # the picture's own aspect, as the compiler writes it off the file (image_aspect): the press card's
     # headline crop is 528 x 160, the record on the desk 640 x 400
     tv = BST.embed_entry("tv", {"quad": ART_TV, "darken": ART_DARKEN}, card_aspect=160 / 528)
@@ -763,7 +798,7 @@ def art_embed() -> tuple[dict, dict]:
     uris["plate-study"] = uri("image/png", png_surfaces(432, 768, (31, 38, 48), (22, 26, 32),
                                                         [(_on_plate(ART_TV), (24, 29, 36), ART_GLARE),
                                                          (_on_plate(ART_PAPER), (222, 214, 198), None)]))
-    uris[quote] = uri("image/png", png_bars(528, 160, (250, 247, 240), PRESS_CARDS[0][4]))
+    uris[quote] = uri("image/png", png_bars(PRESS_CROP[0], PRESS_CROP[1], (250, 247, 240), PRESS_CARDS[0][4]))
     uris[still] = uri("image/png", png_solid(640, 400, (23, 105, 194)))
     return _timeline("Golden: a card displayed by a painted surface", scenes, evidence, "9:16"), uris
 
@@ -801,6 +836,246 @@ def _dock_pair(aspect: str | None) -> tuple[dict, dict]:
     return _timeline(f"Golden: dock pair {aspect or '16:9'}", scenes, ev, aspect), uris
 
 
+def melt_page(splash: bool = False) -> tuple[dict, dict]:
+    """P52 T9 / R26-15 - THE MELT: a finished ledger page hands the stage to a plate, and MELTS across the boundary.
+
+    Scene 1 is the line page every other golden is built from, given the whole 15 s to draw itself, so what melts is a
+    page that has been read. Scene 2 is a plain plate whose `exit` is `melt` - `exit` names the transition INTO the
+    scene it sits on (the player's law, E47), so the melt takes scene 1's world as scene 2 begins: the page's card box
+    sags into drips under the gooey threshold, balls up on 2s about its own centroid, and the ball is thrown off the
+    lower right of the stage, leaving the plate alone. The default register is the THROW; the splash is asked for by
+    name (`melt:splash`) and is rendered as its own proof frame.
+
+    Judged at the BALL instant (FRAME_T 15.72 = the cut + 0.45 of the 1.6 s window), where the two halves that could
+    fail are both on screen: the morph has to be a solid ink ball of BALL_R, and the blur that fused the drips has to
+    be gone."""
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", None, "right")
+    page["field"] = "scribble"
+    page["exit"] = "cut"   # LEDGER_EXITS / E40 #5: NO RETRACT. A page whose world is about to melt must not spiral its
+    # ink back into the cream first - the melt IS how this page leaves, and the vortex would have emptied it two seconds
+    # before the boundary (measured: without this the melt sagged a blank cream sheet, and so does the shipped suck).
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, MELT_CUT], "docks": [], "species": []},
+              {"scene_id": "s02", "world": {"asset_id": "plate-melt", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "melt", "span": [MELT_CUT, RUNTIME], "docks": [], "species": []}]
+    # the incoming world is PAPER, not the shared slate plate: the thing that melts is ink (the page's charcoal field,
+    # and the K-M droplets of the splash are ink over cream by the model), and ink on slate is one dark on another -
+    # the four proof frames a human reads have to show the silhouette, the ball and the droplets, not guess them.
+    uris = _base_uris()
+    uris["plate-melt"] = uri("image/png", png_solid(64, 36, (232, 220, 195)))
+    if splash:
+        scenes[1]["exit"] = "melt:splash"
+    return _timeline("Golden: the page melts, balls up and is " + ("splashed" if splash else "thrown"), scenes, {}, None), uris
+
+
+# ---- P52 T6: THE NEWSREEL BAND, AND THE SURFACE ABOVE IT ---------------------------------------
+# The three headlines are the FIRST CUSTOMER's own sourced titles, read off
+#   content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/assets/evidence_clips/candidates.json
+# (Bloomberg Television x2, Fox Business Clips x1 - E68: a clip's on-screen headline IS its label, and a headline is
+# never invented). That file is an episode asset and is not committed, so the strings are LITERALS here - and
+# checked against the file whenever a checkout happens to have it (below). The surface above the band is a
+# synthetic head-and-shoulders STAND-IN, not the episode's head cutout: a golden's inputs are committed inputs
+# (assets/heads/head_bessent.png is 631 KB of untracked episode asset), and what is under test is the band, the
+# strip the caption shares with it, and that a card lands ABOVE the crawl - not whose face is on the card.
+NEWSREEL_HEADLINES = ["Treasury Secretary Bessent Boosts Buybacks of Long-Dated Debt",
+                      "US Treasury to Buy Up to $6 Billion in Long-Dated Debt",
+                      "Kevin Warsh: A new regime is needed at the Fed"]
+NEWSREEL_SOURCE = ("content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/"
+                   "assets/evidence_clips/candidates.json")
+NEWSREEL_STRIP_H = 143   # [DERIVED: build_scene_timeline_f.caption_strip_h - two lines at 64 px / 1.12]
+
+
+def _newsreel_headlines() -> list[str]:
+    """The three sourced titles, verified against the episode's `candidates.json` when this checkout has it."""
+    f = REPO / NEWSREEL_SOURCE
+    if f.exists():
+        titles = {c["title"] for cands in json.loads(f.read_text(encoding="utf-8")).values() for c in cands}
+        missing = [h for h in NEWSREEL_HEADLINES if h not in titles]
+        if missing:
+            raise SystemExit(f"newsreel golden: {missing} are not titles in {NEWSREEL_SOURCE} - a headline is never invented")
+    return list(NEWSREEL_HEADLINES)
+
+
+def png_head_standin(w: int, h: int) -> bytes:
+    """A synthetic HEAD: a charcoal head-and-shoulders silhouette on cream, drawn as horizontal boxes by the same
+    stdlib PNG writer every other golden input uses. A shape, deliberately - the operator judges the real cutouts
+    on the episode's own frames; this proves the band runs UNDER a docked surface."""
+    rows = []
+    for i in range(11):                                   # the head: an ellipse cut into eleven boxes
+        v = (i + 0.5) / 11
+        r = (1 - (2 * v - 1) ** 2) ** 0.5 * 0.19
+        rows.append((0.5 - r, 0.08 + v * 0.44, 0.5 + r, 0.08 + (v + 1 / 11) * 0.44))
+    for i in range(6):                                    # ... and the shoulders, widening to the card's edge
+        v = i / 6
+        r = 0.21 + v * 0.24
+        rows.append((0.5 - r, 0.56 + v * 0.44, 0.5 + r, 0.56 + (v + 1 / 6) * 0.44))
+    return png_bars(w, h, (244, 230, 199), rows, ink=(37, 49, 60))
+
+
+def _newsreel_surface(aspect: str | None, band: tuple[float, float], cap_band: dict, above: bool) -> tuple[dict, dict]:
+    """One newsreel surface: a plate world, a card docked above, and the band crawling in its declared strip.
+
+    `band` is the region's (y0, y1) in stage fractions; `cap_band` is exactly what the compiler's
+    `newsreel_caption_band` stamps on the dock entry for this composition (the player reads the caption's strip
+    off the dock, E62) - so the frame shows the strip law as the compiler decides it, not as the golden wishes."""
+    head = "ev-newsreel-head"
+    reel = {"kind": "newsreel", "at": 5.0, "dur": 20.0, "headlines": _newsreel_headlines(),
+            "strap": "the wire, under the surface", "dateline": "SEPT 2026",
+            "target": {"kind": "region", "x0": 0.0, "y0": band[0], "x1": 1.0, "y1": band[1]}}
+    if above:
+        reel["cap_band"] = "above"
+    ev = {head: {"title": "The surface above (stand-in)", "source": "golden", "species": "deck",
+                 "document": {"path": "golden", "sha256": "0" * 64}, "badges": []}}
+    # the card is PLACED above the band, on the left third - the composition the operator described ("a
+    # talking news head ... above it"). The placer reserves the band's strip (`newsreel_boxes` -> `free_bands`)
+    # on a ledger page; on a plain plate like this one the row places its own card, and the proof is the frame.
+    place = {"x": 70, "y": 300, "w": 520, "h": 650} if aspect == "9:16" else {"x": 150, "y": 110, "w": 380, "h": 475}
+    dock = dict(_dock(head, 0, 2.0, RUNTIME, 0), place=place, caption_band=dict(cap_band))
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [dock], "species": [reel]}]
+    uris = _base_uris()
+    uris[head] = uri("image/png", png_head_standin(432, 540))
+    tl = _timeline(f"Golden: the newsreel band {aspect or '16:9'}" + (" (caption above the crawl)" if above else ""),
+                   scenes, ev, aspect)
+    tl["note"] = (f"P52 T6. The headlines are sourced titles read off {NEWSREEL_SOURCE} (Bloomberg Television, "
+                  "Fox Business Clips - E68: a clip's on-screen headline is its label). The docked card is a "
+                  "synthetic head stand-in: a golden's inputs are committed inputs. Judge: the band is a STRIP "
+                  "under the surface, the crawl has no seam, and the caption and the crawl never share a strip.")
+    return tl, uris
+
+
+def newsreel_band() -> tuple[dict, dict]:
+    """P52 T6, 16:9: the band in the lower 40 %, a card docked above it, the caption at its own 40 % home.
+    Gate 1's first frame - the composition the operator described: a surface above, the wire below."""
+    return _newsreel_surface(None, (0.78, 0.92), {"y": 432, "h": NEWSREEL_STRIP_H, "band": "quiet"}, False)
+
+
+def newsreel_strip_9x16() -> tuple[dict, dict]:
+    """P52 T6, 9:16 - THE DEFAULT this slice ships: the caption keeps its E62 band (its home, 1297-1440) and the
+    band goes BELOW it (1498-1767). Gate 1's second frame."""
+    return _newsreel_surface("9:16", (0.78, 0.92), {"y": 1297, "h": NEWSREEL_STRIP_H, "band": "quiet"}, False)
+
+
+def newsreel_strip_above() -> tuple[dict, dict]:
+    """P52 T6, 9:16 - THE ALTERNATIVE: `cap_band: "above"`. The crawl takes the caption's own strip (1296-1565)
+    and the caption is stamped one strip higher, above it (1145-1288). Gate 1's third frame: the operator rules
+    the strip law by eye, on this frame against the one above."""
+    return _newsreel_surface("9:16", (0.675, 0.815), {"y": 1145, "h": NEWSREEL_STRIP_H, "band": "newsreel-above"}, True)
+
+
+# P52 T7: THE ISOMETRIC COUNT ARRAY. Six identical SOURCED icons on a 2:1 rhombus lattice, arriving in reading
+# order one per word, the count written under them as the claim.
+COUNT_FIELD = {"kind": "count_array", "at": 5.0, "dur": 14.0, "count": 6, "icon": "factory", "idle": "breath",
+               "claim": "SIX PLANTS", "target": {"kind": "region", "x0": 0.08, "y0": 0.47, "x1": 0.92, "y1": 0.97}}   # clear of the stage caption band (chip-board's own rule: the board is read, not stepped on)
+# P52 T8: THE NUMBERED AGENDA. Tokyo 36.1's own sentence ("Two numbers show where the money went: a Treasury page,
+# and your phone"), as one declaration instead of two figures and a note.
+AGENDA_BLOCK = {"kind": "agenda", "at": 5.0, "dur": 14.0, "idle": "breath",
+                "rows": [{"text": "A Treasury page", "sub": "the sellers"},
+                         {"text": "Your phone", "at": 6.2, "sub": "the bill"}],
+                "target": {"kind": "region", "x0": 0.30, "y0": 0.50, "x1": 0.95, "y1": 0.95}}   # ... and so is the agenda's block
+# P52 T8: THE RING'S DASHED FORM on a datum of a ledger line page, with its flag chip beside it. E56's use, not a
+# new one: the target is a DATUM (a point on a chart) and the label is the figure it circles.
+RING_DASHED = {"kind": "ring", "at": 9.0, "dur": 9.0, "form": "dashed", "idle": "breath",
+               "label": "1,074", "flag": "THE PEAK", "flag_icon": "landmark", "flag_side": "left",   # the room is on the LEFT here: the series' own terminal tag stands to the right of its peak, and a flag over a tag is two labels in one place
+               "target": {"kind": "datum", "index": 191}}   # the memory-makers series' OWN peak: pts[191] = 1074.29 (index, 100 = Aug 2025). The label is the value, never a number we made up (E53)
+
+
+def _line_page():
+    """The ledger LINE page `ring-dashed-chip` and the proof page ring a datum on - built exactly as
+    `span-decade` builds its own, with no emphasis so every series is drawn."""
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", None, "right")
+    page["field"] = "scribble"
+    return page
+
+
+def count_array() -> tuple[dict, dict]:
+    """P52 T7 (EXPLORATION-REVIEW-2026-09-10.md:59, the reference at 7:43 - "the silos"): N identical icons on an
+    ISOMETRIC field over a bare plate. The lattice is a 2:1 rhombus and nothing else - no vanishing point, no
+    per-row scale, nothing rotated at any t - the icons arrive in reading order one per word on the CHIP's own
+    two-spring landing, and the COUNT is written under the field as the claim (the compiler refuses a claim that
+    does not say the number). The glyph is the SOURCED icon under content/video_engine/assets/icons (Lucide
+    1.45.0, ISC - assets/icons/SOURCES.md + LICENSE.lucide.txt), embedded by the compiler's OWN icon_geometry, so
+    this golden proves the asset route and the painter module together. Every cell carries the breath idle (E49),
+    each at its own phase: the field holds, it never goes still. Judged once the claim is written (FRAME_T 8.0)."""
+    import build_scene_timeline_f as BST
+    species = [dict(COUNT_FIELD)]
+    assert not BST.validate_species(species, (0, 0, 0), "plate-plain"), BST.validate_species(species, (0, 0, 0), "plate-plain")
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = _base_uris()
+    uris[BST.ICON_PREFIX + COUNT_FIELD["icon"]] = BST.icon_geometry(COUNT_FIELD["icon"])
+    return _timeline("Golden: the isometric count array", scenes, {}, None), uris
+
+
+def agenda_two() -> tuple[dict, dict]:
+    """P52 T8 (EXPLORATION-REVIEW-2026-09-10.md:58, Bravos's "China's Gameplan 1 | 2"): a numbered agenda of two
+    rows, each revealed on its OWN word - the number written, the hairline drawn under the row by the nib, the
+    text rising into place - and the block laid out for the full list from the first frame, so the second row
+    never pushes the first. Both rows hold at the breath idle (E49), each at its own phase. Judged once both are
+    in (FRAME_T 7.2)."""
+    import build_scene_timeline_f as BST
+    species = [dict(AGENDA_BLOCK)]
+    assert not BST.validate_species(species, (0, 0, 0), "plate-plain"), BST.validate_species(species, (0, 0, 0), "plate-plain")
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the numbered agenda", scenes, {}, None), _base_uris()
+
+
+def ring_dashed_chip() -> tuple[dict, dict]:
+    """P52 T8 (EXPLORATION-REVIEW-2026-09-10.md:57 #5): the ring's DASHED-ELLIPSE form round a datum of a ledger
+    line page, with a flag chip beside it. The form widens, the USE does not - E56 still holds, and this row is
+    exactly what it allows: a datum target (a point on a chart) with the figure as its label. The ellipse is cut
+    into dashes BY LENGTH and drawn dash by dash by the same hand the callout's circle uses, at the callout's own
+    pads, so the two forms ring the same place; the flag is a CHIP (the chip module's card, its sourced glyph and
+    its two-spring landing) placed on the side with the room. Judged once the flag has settled (FRAME_T 10.6)."""
+    import build_scene_timeline_f as BST
+    species = [dict(RING_DASHED)]
+    plate = "ledger:golden-line:line"
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": _line_page(), "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = _base_uris()
+    uris[BST.ICON_PREFIX + RING_DASHED["flag_icon"]] = BST.icon_geometry(RING_DASHED["flag_icon"])
+    return _timeline("Golden: the ring's dashed form and its flag chip", scenes, {}, None), uris
+
+
+def species_proof() -> tuple[dict, dict]:
+    """P52 T7 + T8, THE PROOF PAGE FOR HUMAN GATE 3: all three of the last Bravos species on ONE clock, one per
+    scene, so the operator reads each at its own instant and then plays the single file end to end.
+
+      0 - 18 s   a ledger LINE page, built to its last series (the memory makers draw at their own 9.5 s delay);
+                 the dashed ellipse closes round the series' OWN peak at 11.0 and its flag chip lands beside it
+                 (`species-proof` / `@proof-ring`, t = 12.6, before the page's own retract takes it)
+     18 - 24 s   a bare plate; six identical sourced icons arrive in reading order on the isometric field and
+                 the count is written under them (`@proof-count`, t = 22.5)
+     24 - 30 s   a bare plate; three numbered rows are revealed one per word and hold (`@proof-agenda`, t = 28.5)
+
+    The three instants are FLAG_FRAMES entries with `idle` ON - the one flag that is honest here, because what it
+    turns on is the WORLD's own breath under the species (E49: every held thing carries a named subtle idle), and
+    the species' own idles run either way. So the proof frames are the frames the operator should judge: the page
+    breathing under a closed ring, a field holding, an agenda standing."""
+    import build_scene_timeline_f as BST
+    ring = dict(RING_DASHED, at=11.0, dur=4.0)
+    field = dict(COUNT_FIELD, at=18.6, dur=5.4)
+    block = dict(AGENDA_BLOCK, at=24.4, dur=5.6,
+                 rows=[{"text": "A Treasury page"}, {"text": "Your phone", "at": 25.6}, {"text": "The bill", "at": 26.8, "sub": "$4,500"}])
+    for sp, plate in ((ring, "ledger:golden-line:line"), (field, "plate-plain"), (block, "plate-plain")):
+        errs = BST.validate_species([sp], (0, 0, 0), plate)
+        assert not errs, errs
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": _line_page(), "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, 18.0], "docks": [], "species": [ring]},
+              {"scene_id": "s02", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [18.0, 24.0], "docks": [], "species": [field]},
+              {"scene_id": "s03", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [24.0, RUNTIME], "docks": [], "species": [block]}]
+    uris = _base_uris()
+    for name in sorted({field["icon"], ring["flag_icon"]}):
+        uris[BST.ICON_PREFIX + name] = BST.icon_geometry(name)
+    return _timeline("Golden: the last three Bravos species, one clock (P52 human gate 3)", scenes, {}, None), uris
+
+
 SURFACES = {
     "ledger-page-mid-build": ledger_page_mid_build,
     "chart-callout": chart_callout,
@@ -821,7 +1096,20 @@ SURFACES = {
     "vecmap-arc": vecmap_arc,
     "tiers-two": tiers_two,
     "treemap-cross": treemap_cross,
+    "count-array": count_array,          # P52 T7
+    "agenda-two": agenda_two,            # P52 T8
+    "ring-dashed-chip": ring_dashed_chip,   # P52 T8
+    "species-proof": species_proof,      # P52 T7 + T8: the proof page for human gate 3
+    "melt-page": melt_page,
+    "melt-splash": lambda: melt_page(splash=True),
 }
+
+
+SURFACES.update({   # P52 T6: the newsreel band and the two readings of the bottom strip (gate 1's three frames)
+    "newsreel-band": newsreel_band,
+    "newsreel-strip-9x16": newsreel_strip_9x16,
+    "newsreel-strip-above": newsreel_strip_above,
+})
 
 
 def write_sources() -> list[Path]:

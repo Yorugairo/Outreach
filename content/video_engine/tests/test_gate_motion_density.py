@@ -734,6 +734,18 @@ def test_a_wipe_or_a_cut_credits_no_transition_window():
         assert G._transition_events(_tail_build(name, 6.2)[0]["scenes"]) == [], name
 
 
+def test_a_melt_is_one_world_change_and_is_credited_exactly_once():
+    """P52 T9 (R26-15): the melt sags, balls up and is thrown - four phases, ONE world change. Like the suck it
+    runs forward from the cut instead of straddling it, so it credits no window of its own; its event is the
+    boundary, which is counted once, where every scene start is."""
+    for name in ("melt", "melt:1.2", "melt:splash", "melt:1.2:0.9,1.1"):
+        assert G._transition_events(_tail_build(name, 6.2)[0]["scenes"]) == [], name
+    tl = _tail_build("melt", 6.2)[0]
+    ev = G._collect_events(tl, {}, [], [], [], [])
+    assert sorted(ev)[:3] == [0.0, 6.2, 11.2], sorted(ev)[:4]
+    assert len([x for x in ev if x == 6.2]) == 1, "a melt boundary is ONE event"
+
+
 # ---- P48 T6 (2026-09-10): M23 - a chart changes state, never over a build, never at the edge; a transition is a landing and a data mark ----
 
 def _xf(to, at, dur=1.2, **kw):
@@ -1283,3 +1295,176 @@ def test_m30_reads_a_character_declared_by_its_evidence_species_and_is_absent_wi
     assert g["M30"].level == "FAIL" and "clip-host-counter" in g["M30"].message, g["M30"]
     tl, docks, mp = _cast_build(back_exit="cut", declare=False)   # no world, species or evidence declares a cast
     assert "M30" not in _by_id(G.run(tl, docks, mp)[0])
+
+
+# ---- R26-13 (M18 per layer): a caption boiling over a frozen page ----
+# The whole-frame hash cannot see it (Tokyo v2: 1036 distinct frames of 1066, M18 PASS, the pages still), so
+# measure_frozen_frames.py --layers writes frame-hashes.<layer>.json and M18 reads page / docks / captions each
+# on its own. The fixture is those four files as the gate receives them.
+
+FROZEN_FPS = 12.0        # measure_frozen_frames.py's default
+BOIL_FRAMES = 48         # 4 s of hold at 12 fps
+
+
+def _hashes(hs: list[str], fps: float = FROZEN_FPS) -> list[dict]:
+    return [{"t": round(i / fps, 4), "sha256": h} for i, h in enumerate(hs)]
+
+
+def _boiling_caption_over_a_frozen_page(n: int = BOIL_FRAMES):
+    """The defect the row was written for: the caption paints a new word every frame, so the WHOLE frame differs
+    every frame, while the page layer is bit-identical for the whole 4 s. Returns (whole_frames, layers)."""
+    whole = _hashes([f"whole-{i:04d}" for i in range(n)])
+    layers = {"page": _hashes(["page-held-still"] * n),
+              "docks": _hashes([f"dock-{i:04d}" for i in range(n)]),
+              "captions": _hashes([f"cap-{i:04d}" for i in range(n)])}
+    return whole, layers
+
+
+def test_m18_warns_on_the_page_layer_while_the_whole_frame_hash_passes():
+    whole, layers = _boiling_caption_over_a_frozen_page()
+    assert G._frozen_gate(whole).level == "PASS", "the whole frame differs every frame - the hash the defect hides from"
+    g = G._frozen_gate(whole, layers)
+    assert g.level == "WARN", g
+    assert "whole frame PASS" in g.message and "no run of bit-identical frames" in g.message, g.message
+    assert "page WARN 1 run(s)" in g.message and "3.92s" in g.message, g.message
+    assert "docks PASS" in g.message and "captions PASS" in g.message, g.message
+    assert "THE PAGE IS FROZEN" in g.message and "kinetics.idle" in g.message, g.message
+
+
+def test_m18_reads_each_layer_on_its_own_and_never_invents_one_nobody_measured():
+    whole, layers = _boiling_caption_over_a_frozen_page()
+    # the docks frozen instead: the same read, the other layer named
+    frozen_docks = dict(layers, page=layers["captions"], docks=_hashes(["dock-held"] * BOIL_FRAMES))
+    g = G._frozen_gate(whole, frozen_docks)
+    assert g.level == "WARN" and "docks WARN" in g.message and "page PASS" in g.message, g.message
+    assert "THE PAGE IS FROZEN" not in g.message, "the page moved - only the docks froze"
+    # one layer measured: the others are absent, never a silent PASS
+    g1 = G._frozen_gate(whole, {"page": layers["page"]})
+    assert g1.level == "WARN" and "page WARN" in g1.message and "docks" not in g1.message, g1.message
+    # no layer file at all: the row is byte-identical to the whole-frame read it always was
+    assert G._frozen_gate(whole, {}).message == G._frozen_gate(whole).message
+    assert G._frozen_gate(whole, None).level == "PASS"
+
+
+def test_m18_keeps_the_whole_frame_verdict_when_a_layer_is_worse_and_when_it_is_not():
+    whole_frozen = _hashes(["all-still"] * BOIL_FRAMES)
+    _, layers = _boiling_caption_over_a_frozen_page()
+    g = G._frozen_gate(whole_frozen, layers)
+    assert g.level == "WARN" and "whole frame WARN" in g.message, g.message   # the whole frame is still reported
+    # every layer alive: PASS, and the row still lists what it read
+    alive = {k: _hashes([f"{k}-{i:04d}" for i in range(BOIL_FRAMES)]) for k in G.FRAME_LAYERS}
+    ok = G._frozen_gate(_hashes([f"w-{i:04d}" for i in range(BOIL_FRAMES)]), alive)
+    assert ok.level == "PASS" and "page PASS" in ok.message and "captions PASS" in ok.message, ok.message
+
+
+def test_m18_per_layer_rides_through_run_and_the_layer_files_are_read_from_the_build(tmp_path):
+    import json
+
+    whole, layers = _boiling_caption_over_a_frozen_page()
+    tl, docks, mp = _cast_build()
+    g = _by_id(G.run(tl, docks, mp, frames=whole, frame_layers=layers)[0])
+    assert g["M18"].level == "WARN" and "page WARN" in g["M18"].message, g["M18"]
+    assert _by_id(G.run(tl, docks, mp, frames=whole)[0])["M18"].level == "PASS"   # the whole frame alone, as before
+
+    # ... and load_frame_layers finds exactly the files measure_frozen_frames.py writes
+    (tmp_path / "player.html").write_text("<html>the player</html>", encoding="utf-8")
+    good = __import__("hashlib").sha256((tmp_path / "player.html").read_bytes()).hexdigest()
+    for layer in ("page", "captions"):
+        (tmp_path / G.frame_layer_name(layer)).write_text(
+            json.dumps({"fps": FROZEN_FPS, "layer": layer, "html_sha256": good, "frames": layers[layer]}), encoding="utf-8")
+    (tmp_path / G.frame_layer_name("docks")).write_text(
+        json.dumps({"fps": FROZEN_FPS, "layer": "docks", "html_sha256": "0" * 64, "frames": layers["docks"]}), encoding="utf-8")
+    got = G.load_frame_layers(tmp_path)
+    assert set(got) == {"page", "docks", "captions"} and got["docks"] == "stale"
+    assert G.frame_layer_name("page") == "frame-hashes.page.json"
+    g2 = G._frozen_gate(whole, got)
+    assert g2.level == "WARN" and "page WARN" in g2.message and "docks INFO" in g2.message, g2.message
+    assert G.load_frame_layers(tmp_path / "nothing-here") == {}
+
+
+# ---- P52 T6: A CRAWL IS A STANDING ELEMENT WITH A LIFE ----------------------------------------
+def test_the_newsreel_band_is_credited_like_a_life_and_never_as_an_event_per_frame():
+    """One event at its arrival, then continuous motion for as long as it STANDS (`hold` + the retreat).
+
+    The band is the one species whose motion is neither a landing nor a step: it crawls. Credited as
+    `stepping` (10 fps) one band would carry a whole scene's density and hide a still frame behind it;
+    credited as a single event it would read as a hold. So: `life`'s crediting, on the hold's clock."""
+    assert G.SPECIES_EVENTS["newsreel"] == G.NEWSREEL_CRAWL
+    scenes = [{"scene_id": "s1", "span": [0.0, 30.0],
+               "species": [{"kind": "newsreel", "at": 5.0, "dur": 12.0, "headlines": ["a sourced headline"], "hold": 6.0}]}]
+    ev = G._species_events(scenes)
+    assert ev == [5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0], ev          # the arrival + one per second it stands
+    assert ev[0] == 5.0, "the arrival is an event on its own word"
+    assert max(ev) <= 5.0 + 6.0 + G.NEWSREEL_EXIT_S, "nothing is credited after the band has retreated"
+    scenes[0]["species"][0].pop("hold")                              # no hold: it stands for the window
+    assert G._species_events(scenes) == [5.0 + k for k in range(13)]
+    life = [{"scene_id": "s1", "span": [0.0, 30.0], "species": [{"kind": "life", "at": 5.0, "dur": 12.0}]}]
+    assert G._species_events(life) == G._species_events(scenes), "a crawl is credited exactly like a declared life"
+    step = [{"scene_id": "s1", "span": [0.0, 30.0], "species": [{"kind": "ticker", "at": 5.0, "dur": 12.0}]}]
+    assert len(G._species_events(step)) > 10 * len(ev), "and NOT like a stepping still life - a crawl is not an event per frame"
+
+
+# ---- P52 T7 / T8: THE WORDS THE LAST THREE SPECIES LAND ON ------------------------------------
+def test_the_count_array_credits_every_icon_s_own_word():
+    """Six icons arriving one per word are six events, not one - they are what the frame is doing.
+
+    The edge is named "arrivals" and computed from the row's own `count` and `step`, the way the chip's
+    `cross_at` is read off its own field: the gate never guesses, it reads what the author declared."""
+    assert G.SPECIES_EVENTS["count_array"] == ("at", "arrivals")
+    scenes = [{"scene_id": "s1", "span": [0.0, 30.0],
+               "species": [{"kind": "count_array", "at": 5.0, "dur": 12.0, "count": 6, "icon": "factory", "claim": "SIX PLANTS"}]}]
+    assert G._species_events(scenes) == [5.0, 5.34, 5.68, 6.02, 6.36, 6.7], G._species_events(scenes)
+    scenes[0]["species"][0]["step"] = 0.5
+    assert G._species_events(scenes) == [5.0, 5.5, 6.0, 6.5, 7.0, 7.5]
+    scenes[0]["span"] = [0.0, 6.2]   # a field that runs past its scene stops with the scene
+    assert max(G._species_events(scenes)) <= 6.2
+
+
+def test_the_agenda_credits_each_row_s_own_word_and_the_ring_lands_once():
+    assert G.SPECIES_EVENTS["agenda"] == ("at", "rows")
+    assert G.SPECIES_EVENTS["ring"] == ("at",), "a dashed ring draws on its word and then HOLDS - like a span or a light"
+    scenes = [{"scene_id": "s1", "span": [0.0, 30.0],
+               "species": [{"kind": "agenda", "at": 19.0, "dur": 8.0,
+                            "rows": [{"text": "a"}, {"text": "b", "at": 20.5}, {"text": "c", "at": 22.0}]},
+                           {"kind": "ring", "at": 15.0, "dur": 4.0, "form": "dashed"}]}]
+    assert sorted(G._species_events(scenes)) == [15.0, 19.0, 20.5, 22.0], G._species_events(scenes)
+    scenes[0]["species"] = [{"kind": "agenda", "at": 19.0, "dur": 8.0, "rows": [{"text": "a"}, {"text": "b"}]}]
+    assert G._species_events(scenes) == [19.0, 19.34], "rows with no `at` of their own fall on the default word pitch"
+
+
+def test_all_three_point_at_a_declared_target_so_m24_reads_them():
+    for kind in ("count_array", "agenda", "ring"):
+        assert kind in G.POINTING_KINDS, kind
+
+
+def test_m18_reads_a_dock_and_a_caption_layer_only_where_the_timeline_paints_one():
+    """R26-13's other half, measured on the Tokyo short: the docks layer is bit-identical for the first 1.92 s because
+    no dock exists yet. An empty layer is not a held thing going still, so the read is windowed."""
+    whole, layers = _boiling_caption_over_a_frozen_page()
+    empty_then_alive = _hashes(["bare-stage"] * 24 + [f"dock-{i:04d}" for i in range(24)])
+    layers = dict(layers, docks=empty_then_alive)
+    unwindowed = G._frozen_gate(whole, layers)
+    assert "docks WARN" in unwindowed.message, "the bare stage IS bit-identical - the artefact the window removes"
+    # the dock's own window is the second half: the empty stage before it is not read
+    windows = {"docks": [(24 / FROZEN_FPS, 47 / FROZEN_FPS)], "captions": [(0.0, 47 / FROZEN_FPS)]}
+    g = G._frozen_gate(whole, layers, windows)
+    assert "docks PASS" in g.message and "1 window(s)" in g.message, g.message
+    assert "page WARN" in g.message and g.level == "WARN", g.message   # the page read is not windowed: a world always paints
+    # a timeline with no dock at all says so instead of passing or warning on nothing
+    g0 = G._frozen_gate(whole, layers, {"docks": [], "captions": []})
+    assert "docks INFO (the timeline paints nothing on it" in g0.message, g0.message
+
+
+def test_layer_windows_come_from_the_timeline_the_gate_already_parsed():
+    tl, docks, mp = _cast_build()
+    A = G.analyse(tl, docks, mp)
+    win = G.layer_windows(A)
+    assert set(win) == {"docks", "captions"} and "page" not in win, win
+    assert win["captions"] and all(b > a for a, b in win["captions"])
+    assert len(win["captions"]) == len(A["pages"])
+    # two windows' identical frames are never one run - the layer went away in between
+    frames = _hashes(["same"] * 4 + [f"x-{i}" for i in range(20)] + ["same"] * 4)
+    segs = G._frames_in(frames, [(0.0, 3 / FROZEN_FPS), (24 / FROZEN_FPS, 27 / FROZEN_FPS)])
+    assert len(segs) == 2 and all(len(s) == 4 for s in segs)
+    assert max(d for _, d in [r for s in segs for r in G.frozen_runs(s, -1.0)]) < 0.3
+    assert G._frames_in(frames, None) == [frames]

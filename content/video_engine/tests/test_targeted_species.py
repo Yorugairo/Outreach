@@ -681,3 +681,219 @@ def test_the_golden_docks_one_card_behind_the_plates_own_front():
     assert dock["fg"] in uris and uris[dock["fg"]].startswith("data:image/png;base64,")
     png = base64.b64decode(uris[dock["fg"]].split(",", 1)[1])
     assert png[:8] == b"\x89PNG\r\n\x1a\n" and png[25] == 6, "the foreground layer must be RGBA - its alpha IS the cutout"
+
+
+# ---- P52 T6: THE NEWSREEL BAND -----------------------------------------------------------------
+NEWSREEL_HEADS = ["Treasury Secretary Bessent Boosts Buybacks of Long-Dated Debt",
+                  "US Treasury to Buy Up to $6 Billion in Long-Dated Debt",
+                  "Kevin Warsh: A new regime is needed at the Fed"]
+NEWSREEL_BAND = {"kind": "region", "x0": 0.0, "y0": 0.78, "x1": 1.0, "y1": 0.92}
+
+
+def _reel(**kw):
+    e = {"kind": "newsreel", "at": 42.0, "dur": 9.0, "headlines": list(NEWSREEL_HEADS),
+         "strap": "the wire, this week", "dateline": "SEPT 2026", "target": dict(NEWSREEL_BAND)}
+    e.update(kw)
+    return e
+
+
+def test_the_newsreel_kind_validates_with_its_sourced_headlines_and_a_low_region():
+    """The kind is declared, it takes a REGION and nothing else, and it carries a `when` like every other."""
+    assert B.SPECIES_NEWSREEL in B.SPECIES_KINDS and B.SPECIES_TARGETS[B.SPECIES_NEWSREEL] == ("region",)
+    assert B.SPECIES_WHEN[B.SPECIES_NEWSREEL].startswith("the sentence reports")
+    assert B.SPECIES_NEWSREEL not in B.PAGE_SPECIES, "the band is a STAGE species - it does not perform on the page"
+    assert B.validate_species([_reel()], STILL, PLATE) == []
+    assert B.validate_species([_reel(hold=6.0, speed_px_s=120)], STILL, PLATE) == []
+    assert B.validate_species([_reel(strap=None, dateline=None)], STILL, PLATE) == [], "the strap and the dateline are optional"
+    for bad_target in (POINT, DATUM, SPAN):
+        errs = B.validate_species([_reel(target=bad_target)], STILL, PLATE)
+        assert errs and "not allowed" in errs[0], (bad_target, errs)
+    assert B.validate_species([{"kind": "newsreel", "at": 1.0, "dur": 2.0, "headlines": NEWSREEL_HEADS[:1]}], STILL, PLATE), \
+        "a band with no declared region does not fire (s9.27)"
+
+
+def test_a_headline_the_author_did_not_source_or_cannot_read_is_refused():
+    """`headlines` is the crawl and it is the episode's own SOURCED titles: non-empty, and short enough to read."""
+    errs = B.validate_species([_reel(headlines=[])], STILL, PLATE)
+    assert len(errs) == 1 and "non-empty list" in errs[0] and "never invented" in errs[0], errs
+    errs = B.validate_species([_reel(headlines=["a real headline", "  "])], STILL, PLATE)
+    assert len(errs) == 1 and "headline 1" in errs[0] and "non-empty string" in errs[0], errs
+    errs = B.validate_species([_reel(headlines=["x" * (B.NEWSREEL_HEADLINE_MAX + 1)])], STILL, PLATE)
+    assert len(errs) == 1 and str(B.NEWSREEL_HEADLINE_MAX) in errs[0], errs
+    assert B.validate_species([_reel(headlines=["x" * B.NEWSREEL_HEADLINE_MAX])], STILL, PLATE) == []
+    errs = B.validate_species([_reel(dateline=42)], STILL, PLATE)
+    assert len(errs) == 1 and "no clock is invented" in errs[0], errs
+    errs = B.validate_species([_reel(hold=8.9)], STILL, PLATE)   # 8.9 + the 0.38 retreat > dur 9.0
+    assert len(errs) == 1 and "mid-retreat" in errs[0], errs
+    for bad in (0, -4, True, "fast"):
+        assert B.validate_species([_reel(speed_px_s=bad)], STILL, PLATE), bad
+
+
+def test_the_bands_region_must_sit_low_and_its_box_is_the_strip_the_placer_reserves():
+    """A band is a STRIP in the lower 40 % - above that it is the composition, which is the surface's job."""
+    errs = B.validate_species([_reel(target={"kind": "region", "x0": 0.0, "y0": 0.3, "x1": 1.0, "y1": 0.44})], STILL, PLATE)
+    assert len(errs) == 1 and "lower 40 %" in errs[0] and str(B.NEWSREEL_LOW) in errs[0], errs
+    assert B.validate_species([_reel(target={"kind": "region", "x0": 0.0, "y0": B.NEWSREEL_LOW, "x1": 1.0, "y1": 0.74})],
+                              STILL, PLATE) == [], "exactly at the line is low enough"
+    assert B.newsreel_region_box(_reel(), "9:16") == {"x": 0, "y": 1498, "w": 1080, "h": 269}
+    assert B.newsreel_boxes([_reel(), _sp("punch", target=POINT)], "16:9") == [{"x": 0, "y": 842, "w": 1920, "h": 151}]
+    assert B.newsreel_boxes([], "16:9") == [] and B.newsreel_boxes(None, "16:9") == []
+    # the placer reserves it exactly the way the anchored caption's strip is reserved: it clips the foot
+    boxes = {"safe": {"x": 80, "y": 80, "w": 1760, "h": 920}, "plot": {"x": 200, "y": 200, "w": 1400, "h": 400},
+             "source": {"x": 200, "y": 620, "w": 400, "h": 30}, "rail": {"x": 0, "y": 0, "w": 0, "h": 0},
+             "caption_anchor": {"x": 145, "y": 878, "w": 1630, "h": 82}}
+    band = B.newsreel_boxes([_reel()], "16:9")
+    plain = {b["band"]: b for b in B.free_bands(boxes)}
+    kept = {b["band"]: b for b in B.free_bands(boxes, band)}
+    assert plain["foot"]["h"] > kept["foot"]["h"], "the reserved strip cuts the foot the card would have parked in"
+    assert kept["foot"]["y"] + kept["foot"]["h"] <= band[0]["y"], "no free band reaches into the crawl"
+    assert plain["below"] == kept["below"], "a band above the strip is untouched - the page compiles as it did"
+
+
+# ---- P52 T7 / T8: THE LAST THREE BRAVOS SPECIES ---------------------------------------------------------------------
+# The count array (EXPLORATION-REVIEW-2026-09-10.md:59, the reference at 7:43), the numbered agenda (:58 #9) and the
+# ring's DASHED-ELLIPSE form with its flag chip (:57 #5). The grammar here is the compiler's half: the painters are
+# modules (species/countarray.mjs, species/agenda.mjs, species/ring.mjs) with their own node tests.
+
+def _count(**o):
+    e = {"kind": "count_array", "at": 5.0, "dur": 12.0, "count": 6, "icon": "factory", "claim": "SIX PLANTS",
+         "target": {"kind": "region", "x0": 0.08, "y0": 0.47, "x1": 0.92, "y1": 0.97}}
+    e.update(o)
+    return e
+
+
+def _agenda(**o):
+    e = {"kind": "agenda", "at": 6.0, "dur": 10.0,
+         "rows": [{"text": "A Treasury page"}, {"text": "Your phone"}],
+         "target": {"kind": "region", "x0": 0.30, "y0": 0.50, "x1": 0.95, "y1": 0.95}}
+    e.update(o)
+    return e
+
+
+def _ring(**o):
+    e = {"kind": "ring", "at": 8.0, "dur": 6.0, "form": "dashed", "target": {"kind": "datum", "index": 191}}
+    e.update(o)
+    return e
+
+
+def test_the_three_kinds_are_declared_with_a_when_and_the_targets_the_law_gives_them():
+    for kind in (B.SPECIES_COUNT_ARRAY, B.SPECIES_AGENDA, B.SPECIES_RING):
+        assert kind in B.SPECIES_KINDS and B.SPECIES_WHEN[kind], kind
+    assert B.SPECIES_TARGETS[B.SPECIES_COUNT_ARRAY] == ("point", "region")
+    assert B.SPECIES_TARGETS[B.SPECIES_AGENDA] == ("point", "region")
+    assert B.SPECIES_TARGETS[B.SPECIES_RING] == ("datum", "point", "region")
+    assert B.PHRASE_TARGET not in B.SPECIES_TARGETS[B.SPECIES_RING], "a phrase inside a press card is the callout's underline (P50 T3)"
+    assert "span" not in B.SPECIES_TARGETS[B.SPECIES_RING], "a ring circles a number or a chart point - never a caption word span"
+    for kind in (B.SPECIES_COUNT_ARRAY, B.SPECIES_AGENDA, B.SPECIES_RING):
+        assert kind not in B.PAGE_SPECIES, f"{kind} is a STAGE species - it does not need a ledger page under it"
+
+
+def test_a_well_formed_row_of_each_is_accepted_verbatim():
+    for entry in (_count(), _agenda(), _ring(), _ring(flag="THE PEAK", flag_icon="landmark", flag_side="left", label="1,074")):
+        assert B.validate_species([entry], STILL, PLATE) == [], entry["kind"]
+
+
+# ---- T7: a count with no number in the sentence is refused ---------------------------------------------------------
+
+def test_a_count_array_whose_claim_does_not_say_the_number_is_refused():
+    errs = B.validate_species([_count(claim="THE PLANTS")], STILL, PLATE)
+    assert len(errs) == 1 and "does not say 6" in errs[0] and "no number in the sentence is refused" in errs[0], errs
+    assert B.validate_species([_count(claim="SIX PLANTS")], STILL, PLATE) == [], "the word IS the number"
+    assert B.validate_species([_count(claim="6 PLANTS")], STILL, PLATE) == [], "... and so is the numeral"
+    assert B.validate_species([_count(count=12, claim="TWELVE REFINERIES", dur=12.0)], STILL, PLATE) == []
+    off = B.validate_species([_count(count=3, claim="30 PLANTS")], STILL, PLATE)
+    assert len(off) == 1 and "does not say 3" in off[0], "30 is not three - the digits have to BE the count"
+
+
+def test_a_count_outside_the_bound_or_with_no_sourced_glyph_is_refused():
+    for n in (1, 13):
+        errs = B.validate_species([_count(count=n, claim=f"{n} PLANTS")], STILL, PLATE)
+        assert any("is outside 2-12" in e for e in errs), (n, errs)
+    assert any("not an integer" in e or "must be an integer" in e for e in B.validate_species([_count(count="six")], STILL, PLATE))
+    errs = B.validate_species([_count(icon="a-glyph-we-never-sourced")], STILL, PLATE)
+    assert len(errs) == 1 and "assets/icons" in errs[0] and "never generate one" in errs[0], errs
+    assert B.species_icons(_count()) == ["factory"], "the field's ONE glyph rides the asset map like the chip's"
+
+
+def test_a_field_whose_last_icon_lands_after_its_window_is_refused():
+    errs = B.validate_species([_count(dur=1.0)], STILL, PLATE)
+    assert len(errs) == 1 and "the last icon would land after the field has gone" in errs[0], errs
+    assert B.validate_species([_count(step=0.5, dur=3.0)], STILL, PLATE) == [], "5 * 0.5 + 0.45 fits in 3.0"
+    assert any("'step' must be a positive number" in e for e in B.validate_species([_count(step=0)], STILL, PLATE))
+
+
+# ---- T8: the agenda -------------------------------------------------------------------------------------------------
+
+def test_an_agenda_is_two_to_four_rows_each_with_words_of_its_own():
+    for rows in ([{"text": "only one"}], [{"text": str(i)} for i in range(5)]):
+        errs = B.validate_species([_agenda(rows=rows)], STILL, PLATE)
+        assert len(errs) == 1 and "must be a list of 2 to 4 rows" in errs[0], (len(rows), errs)
+    errs = B.validate_species([_agenda(rows=[{"text": "a"}, {"text": "  "}])], STILL, PLATE)
+    assert len(errs) == 1 and errs[0].startswith("agenda: row 2: 'text'"), errs
+    assert B.validate_species([_agenda(rows=[{"text": "a", "n": 4, "sub": "the sellers"}, {"text": "b"}])], STILL, PLATE) == []
+    assert any("'n' must be a positive integer" in e for e in B.validate_species([_agenda(rows=[{"text": "a", "n": 0}, {"text": "b"}])], STILL, PLATE))
+
+
+def test_the_agenda_reveals_one_row_per_word_in_order_and_inside_its_window():
+    assert B.validate_species([_agenda(rows=[{"text": "a", "at": 6.0}, {"text": "b", "at": 7.4}])], STILL, PLATE) == []
+    back = B.validate_species([_agenda(rows=[{"text": "a", "at": 9.0}, {"text": "b", "at": 8.0}])], STILL, PLATE)
+    assert len(back) == 1 and "one row per word, in order" in back[0], back
+    early = B.validate_species([_agenda(rows=[{"text": "a", "at": 3.0}, {"text": "b", "at": 7.0}])], STILL, PLATE)
+    assert any("before the agenda's own at" in e for e in early), early
+    late = B.validate_species([_agenda(dur=2.0, rows=[{"text": "a"}, {"text": "b", "at": 7.9}])], STILL, PLATE)
+    assert any("a row that cannot finish arriving is not revealed, it flashes" in e for e in late), late
+
+
+# ---- T8: the ring's FORM widens; E56's USE does not -----------------------------------------------------------------
+
+def test_the_ring_takes_the_dashed_form_and_only_that_form():
+    assert B.RING_FORMS == ("dashed",)
+    for bad in (None, "solid", "circle", "underline"):
+        errs = B.validate_species([_ring(form=bad)], STILL, PLATE)
+        assert any("'form' must be one of dashed" in e for e in errs), (bad, errs)
+    assert "the hand's closed circle is a `callout`" in B.validate_species([_ring(form=None)], STILL, PLATE)[0]
+
+
+def test_e56_is_re_stated_for_the_ring_word_for_word_and_never_widened():
+    """The dashed form is a FORM. The USE is E56's, and the refusal is the callout's own, message included."""
+    errs = B.validate_species([_ring(target=dict(POINT))], STILL, PLATE)
+    assert len(errs) == 1 and "(E56)" in errs[0] and "use a spotlight (the light) on a picture" in errs[0], errs
+    assert B.validate_species([_ring(target=dict(POINT), label="25%")], STILL, PLATE) == [], "a stamp whose label IS the number"
+    assert B.validate_species([_ring(target=dict(REGION), label="+613%")], STILL, PLATE) == []
+    region = B.validate_species([_ring(target=dict(REGION))], STILL, PLATE)
+    assert len(region) == 1 and "(E56)" in region[0], region
+    assert B.validate_species([_ring()], STILL, PLATE) == [], "a datum IS a point on a chart"
+    # ... and the CALLOUT's own gate is untouched by all of it: the same row, refused with the same words
+    callout = B.validate_species([_sp("callout", target=POINT)], STILL, PLATE)
+    assert len(callout) == 1 and callout[0].startswith("callout: a ring circles") and "(E56)" in callout[0], callout
+    assert B.validate_species([_sp("callout", target=DATUM)], STILL, PLATE) == []
+
+
+def test_the_flag_chip_needs_a_sourced_glyph_and_a_side_it_understands():
+    assert B.validate_species([_ring(flag="THE PEAK", flag_icon="landmark")], STILL, PLATE) == []
+    errs = B.validate_species([_ring(flag="THE PEAK")], STILL, PLATE)
+    assert len(errs) == 1 and "assets/icons" in errs[0], errs
+    assert any("a glyph with no card" in e for e in B.validate_species([_ring(flag_icon="landmark")], STILL, PLATE))
+    assert any("'flag_side' must be left or right" in e
+               for e in B.validate_species([_ring(flag="THE PEAK", flag_icon="landmark", flag_side="above")], STILL, PLATE))
+    assert B.species_icons(_ring(flag="THE PEAK", flag_icon="landmark")) == ["landmark"]
+    assert B.species_icons(_ring()) == [], "no flag, no glyph in the asset map"
+
+
+def test_the_three_goldens_carry_what_the_species_declare():
+    """The committed sources are the proof the grammar and the painter agree - read back, not re-derived."""
+    sources = ROOT / "content/video_engine/tests/golden/sources"
+    field = json.loads((sources / "count-array.timeline.json").read_text(encoding="utf-8"))["scenes"][0]["species"][0]
+    assert field["kind"] == "count_array" and field["count"] == 6 and "SIX" in field["claim"].upper()
+    uris = json.loads((sources / "count-array.uris.json").read_text(encoding="utf-8"))
+    assert (B.ICON_PREFIX + field["icon"]) in uris, "the sourced glyph travels in the asset map (A2a)"
+    block = json.loads((sources / "agenda-two.timeline.json").read_text(encoding="utf-8"))["scenes"][0]["species"][0]
+    assert block["kind"] == "agenda" and len(block["rows"]) == 2
+    ring = json.loads((sources / "ring-dashed-chip.timeline.json").read_text(encoding="utf-8"))["scenes"][0]["species"][0]
+    assert ring["kind"] == "ring" and ring["form"] == "dashed" and ring["target"]["kind"] == "datum"
+    assert ring["flag"] and ring["label"], "the proof carries both halves of #5: the dashed ellipse and the flag chip"
+    proof = json.loads((sources / "species-proof.timeline.json").read_text(encoding="utf-8"))
+    assert [s["species"][0]["kind"] for s in proof["scenes"]] == ["ring", "count_array", "agenda"], "the three on one clock"
+    for scene in proof["scenes"]:
+        assert not B.validate_species(scene["species"], STILL,
+                                      "ledger:golden-line:line" if scene["world"].get("kind") == "ledger" else PLATE)

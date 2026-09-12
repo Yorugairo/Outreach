@@ -48,6 +48,10 @@ captions do NOT count - they are what a viewer reads as stillness.
        <= 6s inside the opening minute (re-enter it instead)
   M18  frozen frames (E49): no run of bit-identical rendered  WARN   (E49 / P47 T5; INFO until
        frames longer than 0.5s, read from frame-hashes.json          measure_frozen_frames.py has run)
+       AND from frame-hashes.<layer>.json per LAYER when the           (R26-13: a caption boiling over a frozen
+       tool ran with --layers: the page, the docks and the                     page passes the whole-frame hash;
+       captions each on their own, a dock and a caption read                   the page layer is the read that sees it;
+       only inside their own windows; the whole frame is reported              an empty layer is not a held thing)
   M19  build_to holds (P47 T2): the line resting at a datum   INFO   (only when a build_to is declared)
        between two caps, listed by name
   M20  the cadence rule per arrival (P47 T1): a thrown card  INFO   (only when a dock arrives by throw|land)
@@ -104,6 +108,7 @@ from pathlib import Path
 STILL_FAIL_S = 12.0        # doc 29 s8.19 MAX_BARE, s9.25 ceiling
 FROZEN_MAX_S = 0.5         # E49: the longest run of bit-identical rendered frames [DERIVED: HyperFrames' "the final 1-2 seconds"; halved]
 FRAME_HASHES_NAME = "frame-hashes.json"   # written by measure_frozen_frames.py beside the timeline
+FRAME_LAYERS = ("page", "docks", "captions")   # R26-13: the shell's ?layers= switch - mirrored in measure_frozen_frames.LAYERS
 MORPH_S = 2.0              # P47 T3 [DERIVED: the template MORPH.S] - a morph page's prop becomes the chart over this, then the build
 MORPH_STEP_S = 0.5         # a morph is continuous motion: one event every half second of its window
 MORPH_INVARIANTS_NAME = "morph-invariants.json"   # written by measure_morph.py beside the timeline
@@ -130,7 +135,11 @@ SRC_M23 = "P48 (operator 2026-09-07): chart-to-chart transitions are a first-rat
 TRANSITION_EDGE_S = 0.5    # a transition that ends inside the last half second of its page is a cut wearing a verb [DERIVED: E50, P48 Patterns]
 TRANSITION_DATA_KINDS = ("recast", "rescale", "extend", "morph")   # the verbs that change the chart's DATA state: their end is a data mark and a landing; a park moves the chart and changes nothing
 SRC_M21 = "E50 (operator 2026-09-07): a chart's deployed life is 6-8 s from its last data mark on average, 12 s at most - then it un-draws or becomes the next thing"
-SRC_M18 = "E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze (measure_frozen_frames.py)"
+SRC_M18 = ("E49 / P47 T5: nothing ever goes truly still - a run of identical rendered frames over 0.5 s is a freeze "
+           "(measure_frozen_frames.py); R26-13: read PER LAYER too - the page, the docks and the captions each on "
+           "their own (frame-hashes.<layer>.json, the shell's ?layers= switch), because a caption boiling over a "
+           "frozen page passes the whole-frame hash (Tokyo v2: 1036 distinct frames of 1066, M18 PASS, the pages "
+           "still). The whole-frame verdict is still reported.")
 LAYOUT_PROBE_NAME = "layout-probe.json"   # written by probe.py --gate beside the timeline; M25 reads it and never opens a browser
 SRC_M25 = ("E45 s1 (the compiler's `place`: a card parks in the page's quiet space, never over the plot, the title, the source line "
            "or the caption's anchor) / E52 (the page CITES: the citation rides the park) / E60 - the three defects of 2026-09-10, "
@@ -229,6 +238,28 @@ LP_SPIRAL_IN_S = 1.6                       # a page declared enter=spiral unwind
 LP_RETRACT_S = (1.0, 1.0)                  # every page LEAVES by the retract unless exit=cut: the colours go down the drain, then the charcoal (template LP_RETRACT.COLOURS / CHARCOAL)
 SRC_M15 = "E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract"
 LP_BADGE0_S, LP_BADGE_STEP_S = 0.4, 0.9   # page badges spring in after the build: build end + 0.4 + 0.9k (template LP.BADGE0 / BADGE_STEP)
+CAP_ARRIVE_FADE = "fade_up"    # P52 T10: the page's arrival kind (page.cap_arrive / timeline.caption_arrive); absent = the pop
+CAP_STAGGER_S = 0.055          # kinetics/stagger.mjs FADE_UP.STAGGER_S - keep in step with the module, as the LP constants above are kept in step with the template
+
+
+def _stagger_starts(onsets: list[float | None], origin: float, stagger: float = CAP_STAGGER_S) -> list[float]:
+    """When each word of a `fade_up` page actually ARRIVES - the mirror of kinetics/stagger.mjs staggerStarts.
+
+    M08 counts a stage page's words as visual events on their spoken onsets. Under the fade-up envelope a word
+    whose onset crowds the word before it does not arrive then: it arrives one stagger later, because the
+    envelope will not let two words share a start. So the gate reads the ENVELOPE, not the raw onset - otherwise
+    it credits motion at an instant where nothing has moved yet. The law: the onset when it beats the stagger
+    (E21's word clock survives), else the previous start plus the stagger; never before the page."""
+    out: list[float] = []
+    for i, o in enumerate(onsets):
+        prev = out[i - 1] if i else None
+        t = float(o) if o is not None else (origin if prev is None else prev + stagger)
+        if prev is None:
+            t = max(t, origin)
+        else:
+            t = max(t, prev + stagger)
+        out.append(t)
+    return out
 DOCK_SOURCE_TIMELINE = "timeline"            # scenes[].docks enter/exit/badge_at - the player's own clock
 DOCK_SOURCE_FILE = "evidence-dock.json"      # fallback only: a timeline that carries no docks at all
 
@@ -271,6 +302,25 @@ SPECIES_EVENTS["cross"] = ("at",)   # P50 T6: the census's X marks strike on the
 SPECIES_EVENTS["chip"] = ("at", "cross_at")   # P50 T2: a chip LANDS on its word (an event) and is CROSSED on a later one (another).
                                               # "cross_at" is neither an edge of the window nor its end: it names the row's own field,
                                               # and _species_events credits any such name at the instant that field holds.
+# P52 T6: THE NEWSREEL BAND is a STANDING element with a LIFE. It arrives once (one event, on its word) and then
+# CRAWLS - continuous motion for exactly as long as it stands, which is its `hold` plus the retreat when the author
+# gave it one, else its whole window. It is credited like a `life` (one event per LIFE_CONTINUOUS_S), and never like
+# `stepping`: a crawl is not an event per frame - reading it that way would let one band carry a whole scene's
+# density and hide a still frame behind it.
+NEWSREEL_CRAWL = "crawl"
+NEWSREEL_EXIT_S = 0.38   # [DERIVED: species/newsreel.mjs NEWSREEL.BEATS.EXIT_FOR] the retreat is still motion
+SPECIES_EVENTS["newsreel"] = NEWSREEL_CRAWL
+# P52 T7 / T8, the last three Bravos species. Each one's events are the WORDS it lands on, and nothing else:
+# the count array's icons arrive one per word ("arrivals" - the edge is computed from the row's own `count` and
+# `step`, the way the chip's `cross_at` is read off its own field), the agenda's rows are revealed one per word
+# ("rows" - each row's own `at`), and the dashed ring draws once on its word and then HOLDS at its idle, like a
+# span or a light, so it has no end event. No idle is ever an event (E49); M18 is the idle's own check.
+SPECIES_EVENTS["count_array"] = ("at", "arrivals")
+SPECIES_EVENTS["agenda"] = ("at", "rows")
+SPECIES_EVENTS["ring"] = ("at",)
+COUNT_ARRAY_STEP = AGENDA_STEP = 0.34   # the default word pitch both kinds arrive on when the row names no `step`
+                                        # - the same number the compiler holds (build_scene_timeline_f.COUNT_ARRAY_STEP /
+                                        # AGENDA_STEP) and the modules' own dial (COUNT.STEP / AGENDA.STEP): 178 WPM.
 LIFE_CONTINUOUS_S = 1.0    # a continuous life (steam) is one event per second of its window - it never lets the frame go still
 # VIDEO DOCK (ruling E44 / backlog R26-7, 2026-09-06): a dock whose asset is a clip is moving pictures on
 # the card, so the frame is never still while it is up - credited continuously, exactly like a "life"
@@ -341,6 +391,8 @@ CAMERA_MOVE_S = 1.2              # a camera species with no declared dur is cred
 SRC_M24 = "P49 T6 (operator 2026-09-08: 'our engine ... doesn't know what it's seeing until it's rendered back'): a pointing species whose target is out of the camera's frame when it fires points at nothing - checked from the track before render"
 POINTING_KINDS = ("callout", "spotlight", "squiggle", "punch", "focus_zoom", "beat_freeze", "radial", "push", "figure", "spread", "bracket", "chip",
                   "flow", "span",
+                  "count_array", "agenda", "ring",   # P52 T7 / T8: all three point at a DECLARED target (a region or a point for the field and the block, a datum for the ring), so M24 reads them like any other pointing species
+
                   "light", "arc", "stamp")   # P50 T5: the map's three point at a PLACE - a country or a map point, which is not a stage box, so _target_box skips them and M24 credits them without a frustum test   # P50 T4: a flow points at the region it draws itself inside; a span names data and carries no target dict, so M24 skips it   # the species that point at a declared target
 ATTN_SCALE, ATTN_IN, ATTN_OUT = 1.06, 0.5, 0.6            # P49 T4: kinetics/camera.mjs ATTN, mirrored [DERIVED: Bravos #68]
 STOP_FLIGHT_S, STOP_ANTIC_S, STOP_DROP_S = 0.45, 0.18, 0.14   # the stop-action clock (kinetics/stopaction.mjs STOP), mirrored: the contact frame of a throw / a landing
@@ -478,6 +530,12 @@ def _species_events(scenes: list[dict]) -> list[float]:
             # a species authored BEFORE its scene starts is a state the page arrives in (a retitle carried onto a returning page,
             # P47 T2), not an event in another scene's window: nothing before the span is credited
             keep = (lambda t: t <= z) if inside else ((lambda t: t >= a) if a is not None and at < a else (lambda t: True))
+            if edges == NEWSREEL_CRAWL:   # P52 T6: the crawl stands for its `hold` (the LIFE) plus its retreat, else for the window
+                hold = sp.get("hold")
+                win = min(dur, float(hold) + NEWSREEL_EXIT_S) if isinstance(hold, (int, float)) and not isinstance(hold, bool) and hold > 0 else dur
+                n_ev = int(win // LIFE_CONTINUOUS_S)
+                out += [round(at + k * LIFE_CONTINUOUS_S, 2) for k in range(n_ev + 1) if keep(at + k * LIFE_CONTINUOUS_S)]
+                continue
             if edges == "continuous":
                 n_ev = int(dur // LIFE_CONTINUOUS_S)
                 out += [round(at + k * LIFE_CONTINUOUS_S, 2) for k in range(n_ev + 1) if keep(at + k * LIFE_CONTINUOUS_S)]
@@ -492,6 +550,18 @@ def _species_events(scenes: list[dict]) -> list[float]:
                 out.append(round(at + dur, 2))
             for edge in edges:   # P50 T2: an edge that names a FIELD (the chip's cross_at) fires at that field's own instant
                 if edge in ("at", "end"):
+                    continue
+                if edge == "arrivals":   # P52 T7: the count array's icons land one per word - each arrival its own event
+                    n, gap = int(sp.get("count") or 0), float(sp.get("step") or COUNT_ARRAY_STEP)
+                    if gap > 0:
+                        out += [round(at + i * gap, 2) for i in range(1, n) if keep(at + i * gap)]
+                    continue
+                if edge == "rows":       # P52 T8: ... and the agenda's rows are revealed one per word, each on its own `at`
+                    for i, row in enumerate(sp.get("rows") or []):
+                        w = row.get("at") if isinstance(row, dict) else None
+                        w = float(w) if isinstance(w, (int, float)) and not isinstance(w, bool) else at + i * AGENDA_STEP
+                        if i and keep(w):
+                            out.append(round(w, 2))
                     continue
                 v = sp   # P50 T4: ... and a DOTTED edge names a field inside a field (the flow's swap.at), walked here
                 for _part in edge.split("."):
@@ -530,7 +600,13 @@ def _transition_events(scenes: list[dict]) -> list[float]:
     straddles that scene's start: half in the outgoing scene's tail, the switch on the boundary,
     half in the incoming scene. All three instants are events - the dip's black is the boundary
     EVENT, never stillness, and the blur-zoom's magnification is motion. The first scene has no
-    boundary before it, so its exit credits nothing."""
+    boundary before it, so its exit credits nothing.
+
+    Only TRANSITION_S's two straddle a boundary, and only they credit a window. The transitions that
+    run FORWARD from the cut - the suck, and the melt (P52 T9) - credit nothing here on purpose: each
+    is ONE world change (the melt's four phases are one event, not four), and the boundary it happens
+    on is already an event, counted where every scene start is (`_collect_events`). Adding a name to
+    TRANSITION_S credits it THREE, which is a claim about a transition that straddles nothing."""
     out: list[float] = []
     for i, s in enumerate(scenes):
         if i == 0 or not s.get("span"):
@@ -828,9 +904,19 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     stage_rows = [r for r in tl_rows if isinstance(r, dict) and r.get("cap_mode") == "stage"]
     stage_rows += [{"t": pg["s"]} for pg in pages if isinstance(pg, dict) and pg.get("cap_mode") == "stage"]
     # a stage page's WORDS each pop in on their own spoken time (the golden set; E21: captions ARE the motion) - every word with a
-    # clock is a visual event, not only the page's start (a sentence-sized page would otherwise read as a hold, 2026-09-05)
-    stage_rows += [{"t": float(tok["s"])} for pg in pages if isinstance(pg, dict) and pg.get("cap_mode") == "stage"
-                   for tok in (pg.get("t") or []) if isinstance(tok, dict) and tok.get("s") is not None]
+    # clock is a visual event, not only the page's start (a sentence-sized page would otherwise read as a hold, 2026-09-05).
+    # P52 T10: on a page that declares `fade_up` the arrival is ONE staggered envelope, so the event is the word's
+    # envelope start (>= its onset), read by the module's own law - the gate credits motion when it happens, not when it was said.
+    tl_arrive = tl.get("caption_arrive")
+    for pg in pages:
+        if not isinstance(pg, dict) or pg.get("cap_mode") != "stage":
+            continue
+        toks = [tok for tok in (pg.get("t") or []) if isinstance(tok, dict)]
+        if (pg.get("cap_arrive") or tl_arrive) == CAP_ARRIVE_FADE:
+            onsets = [float(tok["s"]) if tok.get("s") is not None else None for tok in toks]
+            stage_rows += [{"t": t} for t in _stagger_starts(onsets, float(pg["s"]))]
+        else:
+            stage_rows += [{"t": float(tok["s"])} for tok in toks if tok.get("s") is not None]
     # P35 T7: targeted species fire as tabled in SPECIES_EVENTS (s9.27 gate column)
     events = _collect_events(tl, mp, spans, badges, page_beats, stage_rows, _species_events(scenes) + _arrival_events(scenes),   # P47 T1: a throw / a landing is motion
                              _video_dock_events(scenes, docks))   # E44: a live video dock is continuous motion
@@ -858,12 +944,13 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
             "over_hold": over_hold, "wc": wc, "pages": pages, "dens": _per_minute(runtime, ev, entries),
             "spans": spans, "dock_source": dock_source, "n_pages": len(page_starts),
             "camera_clashes": _camera_clashes(scenes),
+            "cap_arrive": next((pg["cap_arrive"] for pg in pages if isinstance(pg, dict) and pg.get("cap_arrive")), tl_arrive),
             "has_cap_mode": bool(stage_rows) or any(isinstance(r, dict) and "cap_mode" in r for r in tl_rows)
                             or any(isinstance(pg, dict) and "cap_mode" in pg for pg in pages)}
 
 
 def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None = None, morph: dict | str | None = None,
-        layout: dict | str | None = None) -> tuple[list[Gate], dict]:
+        layout: dict | str | None = None, frame_layers: dict[str, list[dict] | str] | None = None) -> tuple[list[Gate], dict]:
     A = analyse(tl, docks, mp)
     R = A["runtime"]
     mm = lambda s: f"{int(s // 60)}:{int(s % 60):02d}"
@@ -924,7 +1011,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
         add("M08", "FAIL" if bare else "PASS",
             (f"{len(bare)} still stretches > {STILL_FAIL_S:.0f}s carry no stage-mode caption: "
              + ", ".join(f"{mm(a)}+{d:.0f}s" for a, d in sorted(bare)[:12]) + (" ..." if len(bare) > 12 else "")) if bare
-            else "timeline declares cap_mode; every stretch over the ceiling carries stage captions (counted as events above)",
+            else "timeline declares cap_mode; every stretch over the ceiling carries stage captions (counted as events above)"
+                 + (f"; the words arrive on the {A['cap_arrive']} envelope, each on its own offset (P52 T10)" if A["cap_arrive"] else ""),
             "doc 29 s9.25 caption STAGE mode (E21: captions ARE the motion when nothing else moves)")
     else:
         add("M08", "INFO", f"timeline carries no cap_mode yet - stage captions REQUIRED on {len(req)} stretches: "
@@ -937,7 +1025,7 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     g.append(_pulse_gate(tl, A))                                           # M16 (49 s49.6, shorts)
     # E24 / E25: the opening minute and the chart-as-proof rule
     g += [_opening_still_gate(A["still"]), _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
-    g.append(_frozen_gate(frames))                                        # M18 (E49: nothing ever goes truly still)
+    g.append(_frozen_gate(frames, frame_layers, layer_windows(A)))        # M18 (E49: nothing ever goes truly still; R26-13: per layer)
     if (sg := _drop_window_sound_gate(tl, mp)) is not None:
         g.append(sg)                                                      # M29 (E44 s2a / R26-5: a transient inside 0:05-0:12 needs a page landing)
     if (mo := _mount_gate(tl.get("scenes", []), tl.get("evidence") or {})) is not None:
@@ -1332,9 +1420,9 @@ def _camera_gate(clashes: list[tuple[str, str]]) -> Gate:
     return Gate("M09", "FAIL" if clashes else "PASS", msg, "doc 29 s9.27 precedence / s9.28 C3: one camera move per window")
 
 
-def load_frames(build: Path) -> list[dict] | str | None:
-    """The per-frame hashes measure_frozen_frames.py wrote beside the timeline, or None when it has not run."""
-    p = Path(build) / FRAME_HASHES_NAME
+def _load_hash_file(build: Path, name: str) -> list[dict] | str | None:
+    """One frame-hashes file's frames, "stale" when it measured another player.html, None when it is not there."""
+    p = Path(build) / name
     if not p.exists():
         return None
     doc = json.loads(p.read_text(encoding="utf-8"))
@@ -1343,6 +1431,28 @@ def load_frames(build: Path) -> list[dict] | str | None:
         if html.exists() and hashlib.sha256(html.read_bytes()).hexdigest() != doc["html_sha256"]:
             return "stale"
     return list(doc.get("frames") or []) if isinstance(doc, dict) else list(doc)
+
+
+def load_frames(build: Path) -> list[dict] | str | None:
+    """The per-frame hashes measure_frozen_frames.py wrote beside the timeline, or None when it has not run."""
+    return _load_hash_file(build, FRAME_HASHES_NAME)
+
+
+def frame_layer_name(layer: str) -> str:
+    """`frame-hashes.page.json` - mirrors measure_frozen_frames.layer_hashes_name."""
+    return f"frame-hashes.{layer}.json"
+
+
+def load_frame_layers(build: Path) -> dict[str, list[dict] | str]:
+    """The PER-LAYER hashes (R26-13): `{layer: frames}` for every `frame-hashes.<layer>.json` beside the whole-frame
+    file, "stale" for one measured on another player. `{}` when the tool has not run with --layers - M18 then reads
+    the whole frame exactly as it did before, and says which layers it has."""
+    out: dict[str, list[dict] | str] = {}
+    for layer in FRAME_LAYERS:
+        got = _load_hash_file(build, frame_layer_name(layer))
+        if got is not None:
+            out[layer] = got
+    return out
 
 
 def load_layout(build: Path) -> dict | str | None:
@@ -1375,9 +1485,95 @@ def frozen_runs(frames: list[dict], max_s: float = FROZEN_MAX_S) -> list[tuple[f
     return out
 
 
-def _frozen_gate(frames: list[dict] | str | None) -> Gate:
+LEVEL_RANK = {"PASS": 1, "INFO": 2, "WARN": 3, "FAIL": 4}   # the worst of several reads is the row's level
+
+
+def layer_windows(A: dict) -> dict[str, list[tuple[float, float]]]:
+    """When each layer has something PAINTED on it, from the timeline the gate already parsed (R26-13).
+
+    An unpainted layer is bit-identical to the stage's bare ground, and that is not a held thing going still - the
+    first 1.92 s of the Tokyo short carries no dock at all. So the docks are read inside their own dock spans and the
+    captions inside their caption pages; the PAGE layer has no window because a world is painted the whole runtime
+    (a clip scene's world is the video)."""
+    return {"docks": [(float(a), float(b)) for a, b in (A.get("spans") or []) if float(b) > float(a)],
+            "captions": [(float(p["s"]), float(p["e"])) for p in (A.get("pages") or [])
+                         if isinstance(p, dict) and p.get("e") is not None and float(p["e"]) > float(p.get("s", 0.0))]}
+
+
+def _frames_in(frames: list[dict], windows: list[tuple[float, float]] | None) -> list[list[dict]]:
+    """One list of frames per window, never concatenated: two windows' identical frames are not one run - the layer
+    went away in between. `None` (the page) reads the whole measurement as one segment."""
+    if windows is None:
+        return [frames] if len(frames) >= 2 else []
+    segs = []
+    for a, b in sorted(windows):
+        seg = [f for f in frames if a - 1e-9 <= float(f["t"]) <= b + 1e-9]
+        if len(seg) >= 2:
+            segs.append(seg)
+    return segs
+
+
+def frozen_layer_verdicts(layers: dict[str, list[dict] | str] | None,
+                          windows: dict[str, list[tuple[float, float]]] | None = None) -> list[tuple[str, str, str]]:
+    """(layer, level, fragment) for every MEASURED layer, in the shell's order (R26-13).
+
+    The PAGE layer is the read the row exists for: a page held still under a boiling caption is bit-identical here
+    while the whole frame is not. A layer nobody measured is absent - it is never a silent PASS. `windows` (from
+    layer_windows) restricts a layer to the instants something is painted on it."""
+    out: list[tuple[str, str, str]] = []
+    for layer in FRAME_LAYERS:
+        got = (layers or {}).get(layer)
+        if got is None:
+            continue
+        if got == "stale":
+            out.append((layer, "INFO", f"{layer} INFO ({frame_layer_name(layer)} measured another player.html - re-run --layers)"))
+            continue
+        if len(got) < 2:
+            out.append((layer, "INFO", f"{layer} INFO ({len(got)} frame(s) - nothing to compare)"))
+            continue
+        win = (windows or {}).get(layer)
+        segs = _frames_in(got, win)
+        read = f", {len(segs)} window(s)" if win is not None else ""
+        if not segs:
+            out.append((layer, "INFO", f"{layer} INFO (the timeline paints nothing on it{read})"))
+            continue
+        runs = sorted(r for seg in segs for r in frozen_runs(seg))
+        if runs:
+            worst = max(runs, key=lambda r: r[1])
+            out.append((layer, "WARN", f"{layer} WARN {len(runs)} run(s) over {FROZEN_MAX_S:.2f}s, worst {worst[1]:.2f}s at {_mm(worst[0])}{read}"
+                                       + (f" (first {_mm(runs[0][0])}+{runs[0][1]:.2f}s)" if runs[0] != worst else "")))
+        else:
+            longest = max((r for seg in segs for r in frozen_runs(seg, -1.0)), key=lambda r: r[1], default=(0.0, 0.0))
+            out.append((layer, "PASS", f"{layer} PASS (longest {longest[1]:.2f}s at {_mm(longest[0])}{read})"))
+    return out
+
+
+def _frozen_gate(frames: list[dict] | str | None, layers: dict[str, list[dict] | str] | None = None,
+                 windows: dict[str, list[tuple[float, float]]] | None = None) -> Gate:
     """M18 (E49): the idle is not an event - it is the absence of a frozen frame. Measured, never inferred: without
-    frame-hashes.json the row is INFO and says what to run (no silent skip)."""
+    frame-hashes.json the row is INFO and says what to run (no silent skip).
+
+    R26-13: when measure_frozen_frames.py ran with --layers, the page, the docks and the captions are ALSO read each
+    on their own (frame-hashes.<layer>.json), because the whole-frame hash cannot see a frozen page beneath a boiling
+    caption or a moving dock - Tokyo v2 measured 1036 distinct frames of 1066, M18 PASS, and its pages were still.
+    The row's level is the WORST of the whole frame and the layers; the whole-frame verdict is always reported first.
+    `windows` (layer_windows) keeps a layer's read to the instants the timeline paints something on it: an empty layer
+    is bit-identical to the stage's bare ground, and that is not a held thing going still (the Tokyo short's first
+    1.92 s carries no dock)."""
+    whole = _frozen_whole(frames)
+    per = frozen_layer_verdicts(layers, windows)
+    if not per:
+        return whole
+    level = max([whole.level] + [lvl for _, lvl, _ in per], key=lambda x: LEVEL_RANK.get(x, 0))
+    msg = f"whole frame {whole.level}: {whole.message} | per layer (R26-13): " + "; ".join(f for _, _, f in per)
+    page = next((lvl for lay, lvl, _ in per if lay == "page"), None)
+    if page == "WARN" and whole.level == "PASS":
+        msg += " - THE PAGE IS FROZEN under a layer that moves: the whole frame cannot see it (E49: give the held page its idle, kinetics.idle)"
+    return Gate("M18", level, msg, SRC_M18)
+
+
+def _frozen_whole(frames: list[dict] | str | None) -> Gate:
+    """M18's whole-frame read, unchanged (P47 T5) - the layers ride on top of it."""
     if frames is None:
         return Gate("M18", "INFO", f"frozen frames not measured - run measure_frozen_frames.py <build> (writes {FRAME_HASHES_NAME})", SRC_M18)
     if frames == "stale":
@@ -2068,7 +2264,8 @@ def write_report(build_dir: Path, timeline_name: str | None = None) -> tuple[Pat
     build_dir = Path(build_dir)
     tl, docks, mp = _load(build_dir, timeline_name)
     tl_path = _timeline_path(build_dir, timeline_name)
-    gates, stats = run(tl, docks, mp, load_frames(build_dir), load_morph_invariants(build_dir), load_layout(build_dir))
+    gates, stats = run(tl, docks, mp, load_frames(build_dir), load_morph_invariants(build_dir), load_layout(build_dir),
+                       load_frame_layers(build_dir))
     n_fail = fail_count(gates)
     verdict = "FAIL" if n_fail else "PASS"
     # the timeline hash keys the report to the build it measured; render_episode refuses a
@@ -2090,7 +2287,8 @@ def main() -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     tl, docks, mp = _load(args.build, args.timeline)
-    gates, stats = run(tl, docks, mp, load_frames(args.build), load_morph_invariants(args.build), load_layout(args.build))
+    gates, stats = run(tl, docks, mp, load_frames(args.build), load_morph_invariants(args.build), load_layout(args.build),
+                       load_frame_layers(args.build))
     print(report_text(gates, stats, args.build))
     return 1 if fail_count(gates) else 0
 

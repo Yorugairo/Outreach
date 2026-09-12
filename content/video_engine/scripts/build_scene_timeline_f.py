@@ -61,6 +61,10 @@ LEDGER_ENTERS = ("spiral", "mount", "morph", "snap", "built", "throw", "drop", "
                                       # enter=mount: no roll-out - the outgoing scene fades while the cream plate MOUNTS over it, then the page draws (operator, 2026-09-05)
 KINETICS: dict = {}                # timeline.kinetics - the template's capability flags a build turns on (P39 kill switch; default all off)
 CAPTION_STYLE: str | None = None   # timeline.caption_style - "phrase" on a short: the page lands as one readable phrase, only k-words punctuated (2026-09-05)
+CAPTION_ARRIVE: str | None = None   # timeline.caption_arrive + page.cap_arrive - HOW a stage page's words arrive (P52 T10). None = the pop
+                                    # every build shipped before the slice, and NO field is written, so every golden and both shorts compile byte-identical.
+CAPTION_ARRIVALS = ("pop", "fade_up")   # "fade_up" [DERIVED: HyperFrames staggered-fade-up]: ONE envelope, per-word offsets - y 22 px -> 0, scale 0.92 -> 1,
+                                        # blur 5 px -> 0, stagger 0.055 s (kinetics/stagger.mjs) - the quiet register, "more caption motion without overcrowding"
 LEDGER_EXITS = ("cut",)            # exit=cut: no retract - the page leaves on the cut (for a beat that must land on the last line, E40 #5)
 SPECIES_LEDGER = "ledger"          # timeline["species"] entry; the player keys on world.kind == "ledger"
 
@@ -70,7 +74,7 @@ SPECIES_LEDGER = "ledger"          # timeline["species"] entry; the player keys 
 # default; the carried-light cross-reveal stays reachable BY NAME as an effect and is the default
 # nowhere ("we made it the default because it worked, but we need a better default, and it can be
 # an effect at that point"). dip and blurzoom may carry their own length: `dip:<s>`, `blurzoom:<s>`.
-SCENE_EXITS = ("cut", "dip", "blurzoom", "dissolve", "wipe", "wipe_right", "suck")
+SCENE_EXITS = ("cut", "dip", "blurzoom", "dissolve", "wipe", "wipe_right", "suck", "melt")   # melt (P52 T9, R26-15): the outgoing world sags into drips, balls up on 2s and is thrown off the stage or splashed - `melt`, `melt:<s>`, `melt:splash`, `melt:<x>,<y>` (the exit point in stage fractions), the suffixes in any order
 IDLE_KINDS = ("none", "breath", "drift", "pulse", "figure", "live")   # live (2026-09-08): breath + drift - the breath has a fixed point at the centre, so a chart at the page centre read as still; the drift moves every pixel   # E49 / P47 T5: the player's named idles; `;idle=<kind>` on any plate id (`none` is explicit stillness)
 IDLE_OPT = ";idle="
 ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page's pills ARRIVE (spring = E45's pop, the default)
@@ -87,7 +91,8 @@ DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
-TIMED_EXITS = ("dip", "blurzoom")   # ... and only these two read the suffix as SECONDS (suck's is a point)
+TIMED_EXITS = ("dip", "blurzoom", "melt")   # ... and only these read a suffix as SECONDS (suck's is a point); the melt's may be its length, `splash`, or its exit point, so parse_exit reads it apart
+MELT_S = 1.6            # P52 T9: a melt's default length, species/melt.mjs MELT.S - the two are one dial written twice (as DIP_S is, in the engine and in gate_motion_density), and test_transitions_e47 pins them together
 DEFAULT_EXIT_CHANGE = "dip"         # E47 #3 corrected 2026-09-12 (the operator: "the dip is supposed to be used as an actual transition when the
                                     # scene ACTUALLY changes ... what you said is that the dip was associated with any DOCK, not the dip being
                                     # associated to the scene change"): the natural default when the WORLD changes at the boundary - never for a
@@ -228,6 +233,28 @@ BRACKET_FORMS = ("span", "bar")   # P50 T9 / Bravos shot 36: the same measured s
                               # BAR in the accent - the drop of one tier. A form, not a kind (P50 T3's precedent, the underline).
 UNDERLINE_FORM = "underline"   # P50 T3: a callout's FORM - the hand-drawn underline under a press card's quoted phrase (E56's one
                                # exception, the squiggle law s9.27). Not a species kind: the grammar gains a form and a target, not a kind.
+SPECIES_COUNT_ARRAY, SPECIES_AGENDA, SPECIES_RING = "count_array", "agenda", "ring"
+SPECIES_KINDS += (SPECIES_COUNT_ARRAY, SPECIES_AGENDA, SPECIES_RING)   # P52 T7 / T8, the last three Bravos species
+# (EXPLORATION-REVIEW-2026-09-10.md:57 #5, :58 #9, :59 at 7:43), all three under the operator's module rule -
+# species/countarray.mjs, species/agenda.mjs, species/ring.mjs, never a branch in the engine's body.
+#   count_array  N identical SOURCED icons on a 2:1 rhombus lattice (no perspective cheat, nothing spins), arriving
+#                in reading order one per word on the chip's two-spring landing, the COUNT written as the claim.
+#   agenda       2-4 numbered rows, each revealed on its own word and holding at a named idle - the review's
+#                "`figure` + `note` could compose it", made ONE declaration so the rows cannot drift from the count.
+#   ring         the RING'S DASHED-ELLIPSE FORM with an optional flag chip beside it. A FORM, not a new use: E56 is
+#                re-stated verbatim below in _validate_ring (a datum, or a label with a digit - else refused), and
+#                the hand's closed circle is still the `callout` kind, painted by the engine's own calloutPath.
+COUNT_ARRAY_N = (2, 12)   # a count of one is a chip; past a dozen the number is read, not the field (species/countarray.mjs COUNT.MIN/MAX)
+COUNT_ARRAY_WORDS = {2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine",
+                     10: "ten", 11: "eleven", 12: "twelve"}   # ... and the count may be written in words: "six plants" IS the number
+AGENDA_ROWS = (2, 4)      # one row is a note; five is a checklist nobody holds at phone size (species/agenda.mjs)
+RING_FORMS = ("dashed",)  # the one form the module paints - the closed circle stays the callout's (E56 unchanged)
+# the three clocks the grammar has to know to refuse a row that cannot FIT its window. Mirrored from the modules'
+# own dials (species/countarray.mjs COUNT.STEP / LAND_S, species/agenda.mjs AGENDA.STEP / NUM_LEAD + ROW_S), which
+# stay the source of truth for the motion; these are the compiler's copy of the numbers, and the only thing they
+# are used for is arithmetic on the author's `dur`.
+COUNT_ARRAY_STEP, COUNT_ARRAY_LAND_S = 0.34, 0.45
+AGENDA_STEP, AGENDA_ROW_S = 0.34, 0.54
 HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
 PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to",
                  SPECIES_SPAN, SPECIES_CROSS)   # P50 T4: a span is a page species - it is shaded behind the page's own chart, on the page's own clock and live scale (R26-28)
@@ -291,6 +318,9 @@ SPECIES_WHEN = {
     SPECIES_STAMP: "the sentence puts a NUMBER or a name on a place - the figure writes at the country's centroid",
     SPECIES_CROSS: "the sentence names a SUBSET of a census and what it adds up to - the named cells of a treemap page take an X on the word and the crossed share is written on the page (E53 s1's census exception)",
     SPECIES_SPAN: "the sentence SPANS a period on a chart - a regime, an epoch, 'the decade' - shaded behind the line with its name; a bracket measures two data, a span names a stretch of time",
+    SPECIES_COUNT_ARRAY: "the sentence COUNTS a set and the count IS the claim ('six plants', 'twelve refineries') - N identical icons arrive in reading order on an isometric field and the number is written under them",
+    SPECIES_AGENDA: "the sentence SETS an agenda ('two numbers', 'three things') - 2 to 4 numbered rows, each revealed on its own word, holding at a named idle until the sentence that takes them one by one",
+    SPECIES_RING: "the sentence TURNS on a number and wants the ring as a MARKER - the dashed ellipse round the datum, with an optional flag chip naming it (E56's use unchanged: a number or a point on a chart)",
     "chart_to": "the sentence needs the SAME data at another scale / with more of it / in another form / beside a card - the page changes state (E58; CHART_TO_WHEN names the verb); never a cut to a second chart of it",
 }
 CHART_TO_WHEN = {
@@ -300,6 +330,24 @@ CHART_TO_WHEN = {
     "park": "room for the next thing beside the chart (a card, a second diagram); scale 1.0 is the UN-PARK when the cards leave; it moves no data and restarts no clock",
     "morph": "a different LINE series in the same frame ('what the Fed charges against what America pays') - the area under the line becomes the target's by ARAP",
 }
+# P52 T6: THE NEWSREEL BAND (the operator, 2026-09-12: "run the newsreel and then above it we can have either a
+# talking news head, actual news footage, or a narrative plate, we don't always have to fill the whole thing with
+# text"). A STAGE species on a declared REGION in the lower 40 % of the frame: the band crawls the episode's OWN
+# sourced headlines (E68: a clip's label is its on-screen headline; else the dossier's Sources) UNDER whatever
+# surface the row docks above it - a head cutout, a clip on E45's springs, or the plate itself. The painter is
+# scripts/species/newsreel.mjs (the module rule); this file owns its grammar, its region's law, and the bottom
+# STRIP it shares with the caption's E62 band.
+SPECIES_NEWSREEL = "newsreel"
+SPECIES_KINDS += (SPECIES_NEWSREEL,)
+SPECIES_WHEN[SPECIES_NEWSREEL] = ("the sentence reports WHAT WAS SAID OR PRINTED - the wire, the headlines, the tape - the "
+                                  "band crawls the sourced headlines under a surface that shows who said it (a head, a clip, "
+                                  "the plate); never the whole frame as text")
+NEWSREEL_HEADLINE_MAX = 90     # characters: a headline longer than this is a paragraph, and the tape is read at a glance
+NEWSREEL_LOW = 0.60            # the band's region sits in the LOWER 40 % of the stage - higher than that it IS the composition
+NEWSREEL_BAND_H = 0.14         # [DERIVED: species/newsreel.mjs NEWSREEL.BAND_H] the band's recommended height, as a share of the stage
+NEWSREEL_EXIT_S = 0.38         # [DERIVED: species/newsreel.mjs NEWSREEL.BEATS.EXIT_FOR] the retreat, so `hold` + the retreat must fit the window
+NEWSREEL_CAP_ABOVE = "above"   # `cap_band: "above"` on the row - the operator's alternative: the crawl takes the caption's own
+                               # strip and the caption moves ABOVE the crawl. Absent = this slice's default (the band goes below).
 assert set(SPECIES_WHEN) == set(SPECIES_KINDS) and set(CHART_TO_WHEN) == set(CHART_TO_KINDS), "every kind carries a when (P50 T1)"
 RESCALE_KEYS = ("ymin", "ymax", "window")   # a rescale names the target DOMAIN: y bounds and/or an x window [from, to]; the state is DERIVED from the page's own series
 PATH_SELECTORS = ("all", "tail", "history")   # P47 T9: which strokes a build_to / undraw touches - the highlighted tail (k0 > 0), the history, or all   # a page species whose `at` is BEFORE its scene starts is a STATE: the page arrives in that state
@@ -486,9 +534,17 @@ SPECIES_TARGETS = {
     SPECIES_ARC: (),                                   # ... and an arc names its two ENDS (`from` / `to`), not one target
     SPECIES_SPAN: (),            # ... and a span names its two edges as data, not as a coordinate: the chart owns where they are
     SPECIES_CROSS: (),           # ... and a cross names CELLS, by their labels: the page laid them out, so the page knows where they are
+    SPECIES_COUNT_ARRAY: ("point", "region"),   # P52 T7: a field needs its ROOM declared (a region it is centred and scaled inside), or the point it is centred on
+    SPECIES_AGENDA: ("point", "region"),        # ... the same for the agenda's block: the rows are laid out inside the box the author gave them
+    SPECIES_RING: ("datum", "point", "region"),   # P52 T8: E56's own targets and no others - a datum IS a point on a chart; a point or a region
+                                                  # only when the label carries a digit (a stamp whose label is the number); never a caption word
+                                                  # span, and never a phrase inside a press card (that is the callout's underline, P50 T3)
     "build_to": ("datum",), "bracket": (), "retitle": (), "relight": (),   # P47 T2: the datum is the cap; the others carry their own fields
     "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (), "chart_to": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
+SPECIES_TARGETS[SPECIES_NEWSREEL] = ("region",)   # P52 T6: a band needs its STRIP declared - the box it crawls inside; a
+                                                  # point would leave the strip's height to the painter, and the strip is the
+                                                  # thing the caption has to be reconciled with (the strip law below)
 PHRASE_TARGET = "phrase"                      # P50 T3: a region INSIDE a press card - {"kind": "phrase", "dock": "<the press dock's asset id>"}.
 TARGET_KINDS_ALL = TARGET_KINDS + (PHRASE_TARGET, EMBED_TARGET) + MAP_TARGETS   # ... admitted for a CALLOUT alone, and only as the underline (E56's one exception); the
                                                      # compiler resolves it to the dock's declared phrase box, the player to stage px through
@@ -893,6 +949,10 @@ def species_icons(entry) -> list[str]:
         return []
     if entry.get("kind") == SPECIES_CHIP:
         return [entry["icon"]] if isinstance(entry.get("icon"), str) else []
+    if entry.get("kind") == SPECIES_COUNT_ARRAY:   # P52 T7: the field's ONE glyph, drawn N times
+        return [entry["icon"]] if isinstance(entry.get("icon"), str) else []
+    if entry.get("kind") == SPECIES_RING:          # P52 T8: the flag chip's glyph, when the ring carries a flag
+        return [entry["flag_icon"]] if entry.get("flag") and isinstance(entry.get("flag_icon"), str) else []
     if entry.get("kind") == SPECIES_FLOW:
         out = [n["icon"] for n in (entry.get("nodes") or []) if isinstance(n, dict) and isinstance(n.get("icon"), str)]
         sw = entry.get("swap")
@@ -942,6 +1002,170 @@ def _validate_callout(entry: dict, press_docks: dict | None) -> list[str]:
     return []
 
 
+def _validate_newsreel(entry: dict) -> list[str]:
+    """P52 T6: the newsreel row's own grammar.
+
+    `headlines` is the crawl and it is SOURCED - a non-empty list of non-empty strings, each short enough to be
+    read as one line of tape (the author reads them off the dossier's Sources or the clips' `candidates.json`;
+    nothing here invents one). `strap` and `dateline` are strings the author wrote - a dateline is never a clock
+    this build reads, because a rendered frame would then say a different day every time it is rendered. `hold`
+    is the LIFE (the band stands, then retreats) and must leave its retreat inside the window. `cap_band` names
+    the one way out of the strip clash (`NEWSREEL_CAP_ABOVE`), and the region must sit low."""
+    errs: list[str] = []
+    heads = entry.get("headlines")
+    if not isinstance(heads, (list, tuple)) or not heads:
+        errs.append("newsreel: `headlines` must be a non-empty list of the episode's own SOURCED headlines "
+                    "(the dossier's Sources, or a clip's on-screen headline - never invented)")
+    else:
+        for n, h in enumerate(heads):
+            if not isinstance(h, str) or not h.strip():
+                errs.append(f"newsreel: headline {n} is {h!r} - every headline is a non-empty string")
+            elif len(h.strip()) > NEWSREEL_HEADLINE_MAX:
+                errs.append(f"newsreel: headline {n} is {len(h.strip())} characters - the tape is read at a glance, "
+                            f"{NEWSREEL_HEADLINE_MAX} at most (cut it to its claim, or give the band a second row)")
+    for f in ("strap", "dateline"):
+        v = entry.get(f)
+        if v is not None and (not isinstance(v, str) or not v.strip()):
+            errs.append(f"newsreel: `{f}` is {v!r} - a string the AUTHOR wrote, or absent (no clock is invented)")
+    if "speed_px_s" in entry:
+        v = entry["speed_px_s"]
+        if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
+            errs.append(f"newsreel: speed_px_s {entry['speed_px_s']!r} must be a positive number of stage px per second")
+    if entry.get("hold") is not None:
+        v = entry["hold"]
+        if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
+            errs.append(f"newsreel: hold {v!r} must be a positive number of seconds (the band's LIFE), or absent")
+        elif isinstance(entry.get("dur"), (int, float)) and not isinstance(entry.get("dur"), bool) \
+                and v + NEWSREEL_EXIT_S > float(entry["dur"]) + 1e-9:
+            errs.append(f"newsreel: hold {v}s + the retreat {NEWSREEL_EXIT_S}s does not fit the window dur {entry['dur']}s - "
+                        "the band would be cut off mid-retreat; shorten the hold or lengthen the row")
+    if entry.get("cap_band") is not None and entry["cap_band"] != NEWSREEL_CAP_ABOVE:
+        errs.append(f"newsreel: cap_band {entry['cap_band']!r} is not {NEWSREEL_CAP_ABOVE!r} - the one way out of the strip "
+                    "clash is to give the caption its band ABOVE the crawl")
+    tgt = entry.get("target")
+    if isinstance(tgt, dict) and tgt.get("kind") == "region" and isinstance(tgt.get("y0"), (int, float)) \
+            and not isinstance(tgt.get("y0"), bool) and tgt["y0"] < NEWSREEL_LOW:
+        errs.append(f"newsreel: the band's region starts at y0={tgt['y0']} - a band is a STRIP in the lower "
+                    f"{round((1 - NEWSREEL_LOW) * 100)} % of the frame (y0 >= {NEWSREEL_LOW}); the surface above it is the composition")
+    return errs
+
+
+def _count_in_claim(count: int, claim: str) -> bool:
+    """Is the COUNT actually in the claim's own words - as a numeral, or as the word for it? P52 T7's whole
+    refusal: a field of six icons under the words "the plants" is a picture of a number nobody said."""
+    if re.search(r"(?<!\d)" + str(count) + r"(?!\d)", claim):
+        return True
+    word = COUNT_ARRAY_WORDS.get(count)
+    return bool(word and re.search(r"\b" + word + r"\b", claim, re.I))
+
+
+def _validate_count_array(entry: dict) -> list[str]:
+    """P52 T7: the isometric count array. A SOURCED glyph, a count inside the bound, a claim that CARRIES the
+    count, and a field whose last icon lands before the window ends.
+
+    The refusal the plan names - "a count with no number in the sentence is refused" - is enforced against the
+    row's own claim, because that is the only sentence text the compiler has at this point: `validate_species`
+    is a pure check on ONE shot-table row (the take's `sentences` live in the build's timeline.json, and the
+    lint - lint_species_choice.py - is what reads a row against the sentence it falls in). The claim is written
+    on the field by the painter, so a claim that carries the count is a number the viewer both hears and reads."""
+    errs: list[str] = []
+    n = entry.get("count")
+    lo, hi = COUNT_ARRAY_N
+    if isinstance(n, bool) or not isinstance(n, int):
+        errs.append(f"count_array: 'count' must be an integer ({lo}-{hi}) - the count IS the claim")
+        n = None
+    elif not lo <= n <= hi:
+        errs.append(f"count_array: count {n} is outside {lo}-{hi} - one icon is a chip, and past {hi} nobody counts a field")
+    errs += _validate_icon("count_array", entry.get("icon"))
+    claim = entry.get("claim")
+    if not isinstance(claim, str) or not claim.strip():
+        errs.append("count_array: 'claim' must be a non-empty string - the count is written under the field as the claim")
+    elif isinstance(n, int) and not _count_in_claim(n, claim):
+        errs.append(f"count_array: the claim {claim!r} does not say {n} - a count with no number in the sentence is "
+                    f"refused (P52 T7): write the count as a numeral or as the word for it")
+    step = entry.get("step")
+    if step is not None and (isinstance(step, bool) or not isinstance(step, (int, float)) or step <= 0):
+        errs.append("count_array: 'step' must be a positive number (the seconds between two icons' words)")
+    elif isinstance(n, int) and isinstance(entry.get("dur"), (int, float)) and not isinstance(entry.get("dur"), bool):
+        gap = step if isinstance(step, (int, float)) and not isinstance(step, bool) else COUNT_ARRAY_STEP
+        need = (n - 1) * gap + COUNT_ARRAY_LAND_S
+        if need > entry["dur"]:
+            errs.append(f"count_array: {n} icons {gap}s apart need {need:.2f}s but the window is {entry['dur']}s - "
+                        "the last icon would land after the field has gone")
+    return errs
+
+
+def _validate_agenda(entry: dict) -> list[str]:
+    """P52 T8: the numbered agenda. 2-4 rows, each with words of its own, revealed in order and inside the window."""
+    errs: list[str] = []
+    rows = entry.get("rows")
+    lo, hi = AGENDA_ROWS
+    if not isinstance(rows, (list, tuple)) or not lo <= len(rows) <= hi:
+        return [f"agenda: 'rows' must be a list of {lo} to {hi} rows - one row is a note, {hi + 1} is a checklist"]
+    step = entry.get("step")
+    if step is not None and (isinstance(step, bool) or not isinstance(step, (int, float)) or step <= 0):
+        errs.append("agenda: 'step' must be a positive number (the seconds between two rows' words)")
+    at = entry.get("at") if isinstance(entry.get("at"), (int, float)) and not isinstance(entry.get("at"), bool) else None
+    gap = step if isinstance(step, (int, float)) and not isinstance(step, bool) else AGENDA_STEP
+    prev = None
+    for i, row in enumerate(rows):
+        where = f"agenda: row {i + 1}"
+        if not isinstance(row, dict):
+            errs.append(f"{where} must be a dict {{text, n?, sub?, at?}}")
+            continue
+        if not isinstance(row.get("text"), str) or not row["text"].strip():
+            errs.append(f"{where}: 'text' must be a non-empty string - a numbered row says something")
+        if "sub" in row and not isinstance(row["sub"], str):
+            errs.append(f"{where}: 'sub' must be a string")
+        if "n" in row and (isinstance(row["n"], bool) or not isinstance(row["n"], int) or row["n"] < 1):
+            errs.append(f"{where}: 'n' must be a positive integer (the number the sentence gave the row)")
+        r_at = row.get("at")
+        if r_at is not None and (isinstance(r_at, bool) or not isinstance(r_at, (int, float))):
+            errs.append(f"{where}: 'at' must be a number (episode seconds, the word the row is revealed on)")
+            continue
+        when = r_at if isinstance(r_at, (int, float)) else (at + i * gap if at is not None else None)
+        if when is None:
+            continue
+        if at is not None and when < at:
+            errs.append(f"{where}: revealed at {when} - before the agenda's own at {at}")
+        if prev is not None and when <= prev:
+            errs.append(f"{where}: revealed at {when}, not after row {i} at {prev} - one row per word, in order")
+        prev = when
+    if at is not None and prev is not None and isinstance(entry.get("dur"), (int, float)) and not isinstance(entry.get("dur"), bool):
+        if prev + AGENDA_ROW_S > at + entry["dur"]:
+            errs.append(f"agenda: the last row is revealed at {prev} and the window ends at {at + entry['dur']} - "
+                        "a row that cannot finish arriving is not revealed, it flashes")
+    return errs
+
+
+def _validate_ring(entry: dict) -> list[str]:
+    """P52 T8: the ring's DASHED-ELLIPSE form, and its optional flag chip.
+
+    E56 IS NOT WIDENED HERE. The rule is `_validate_callout`'s own, re-stated for this kind word for word (the
+    operator, 2026-09-09: *"it has a specific use: circling a number or a point on a chart"*): a datum target IS
+    a point on a chart, a label with a digit in it IS the number, and a ring round a picture's point or region is
+    the cheap call-out the ruling refuses - the focus there is a LIGHT (the spotlight species). What this kind
+    adds is the FORM (`form: "dashed"`) and the FLAG beside it; the hand's closed circle is still `callout`."""
+    errs: list[str] = []
+    if entry.get("form") not in RING_FORMS:
+        errs.append(f"ring: 'form' must be one of {'|'.join(RING_FORMS)} - the ring's dashed form is what this kind is "
+                    "(the hand's closed circle is a `callout`, E56's ring, unchanged)")
+    tgt = entry.get("target")
+    if isinstance(tgt, dict) and tgt.get("kind") != "datum" and not re.search(r"\d", str(entry.get("label", ""))):
+        errs.append(f"ring: a ring circles a NUMBER or a POINT ON A CHART (E56) - this one targets a {tgt.get('kind')} "
+                    f"with no numeric label; use a spotlight (the light) on a picture")
+    flag = entry.get("flag")
+    if flag is not None:
+        if not isinstance(flag, str) or not flag.strip():
+            errs.append('ring: \'flag\' is the flag chip\'s label, or "on" for a flag with no words')
+        errs += _validate_icon("ring: flag", entry.get("flag_icon"))
+        if "flag_side" in entry and entry["flag_side"] not in ("left", "right"):
+            errs.append("ring: 'flag_side' must be left or right (absent = the side with the room)")
+    elif entry.get("flag_icon") is not None:
+        errs.append("ring: 'flag_icon' with no 'flag' - a glyph with no card is nothing on the stage")
+    return errs
+
+
 def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
     """Errors for one species entry: known kind, numeric at/dur, a target where the law requires one."""
     if not isinstance(entry, dict) or entry.get("kind") not in SPECIES_KINDS:
@@ -956,6 +1180,14 @@ def _validate_entry(entry, press_docks: dict | None = None) -> list[str]:
         errs += _validate_chip(entry)
     if kind == SPECIES_FLOW:
         errs += _validate_flow(entry)
+    if kind == SPECIES_COUNT_ARRAY:   # P52 T7
+        errs += _validate_count_array(entry)
+    if kind == SPECIES_AGENDA:        # P52 T8
+        errs += _validate_agenda(entry)
+    if kind == SPECIES_RING:          # P52 T8: E56 re-stated, never widened
+        errs += _validate_ring(entry)
+    if kind == SPECIES_NEWSREEL:
+        errs += _validate_newsreel(entry)
     if kind in VECMAP_SPECIES:
         errs += _validate_vecmap_species(entry)
     if kind == "trace" and "hop" in entry:   # opt-in (2026-09-08): ONE bowed hop point-to-point, drawn once and held - a crossing
@@ -1074,14 +1306,48 @@ def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str, str | Non
     return series_id, variant, emphasize, quiet_zone, enter, exit_
 
 
-def parse_exit(exit_id: str) -> tuple[str, float | None]:
-    """``cut`` | ``dip[:<s>]`` | ``blurzoom[:<s>]`` | ``wipe_right`` | ``suck:<x>,<y>`` -> (name, seconds or None).
+def _melt_exit(exit_id: str) -> float | None:
+    """A melt's suffixes, in any order: a bare number is its LENGTH, ``splash`` is the register (the
+    default is the throw), and an ``x,y`` pair is the point it is thrown to, in stage fractions.
 
-    Only dip and blurzoom read the suffix as a length; the suck's is the point it collapses into,
-    and every other exit is a bare name. ValueError names the exit; the caller names the row."""
+    species/melt.mjs ``meltOpts`` reads exactly this grammar on the player's side; the two have to
+    agree, and test_transitions_e47 pins the pair. Returns the declared length, or None for MELT_S."""
+    secs: float | None = None
+    for raw in str(exit_id).split(":")[1:]:
+        bit = raw.strip()
+        if bit in ("", "splash"):
+            continue
+        if "," in bit:
+            xy = bit.split(",")
+            try:
+                if len(xy) != 2:
+                    raise ValueError
+                [float(v) for v in xy]
+            except ValueError:
+                raise ValueError(f"exit {exit_id!r}: {bit!r} is not an x,y point in stage fractions") from None
+            continue
+        try:
+            secs = float(bit)
+        except ValueError:
+            raise ValueError(f"exit {exit_id!r}: {bit!r} is neither a length in seconds, nor splash, "
+                             "nor an x,y point") from None
+        if secs <= 0:
+            raise ValueError(f"exit {exit_id!r}: a length must be positive")
+    return secs
+
+
+def parse_exit(exit_id: str) -> tuple[str, float | None]:
+    """``cut`` | ``dip[:<s>]`` | ``blurzoom[:<s>]`` | ``wipe_right`` | ``suck:<x>,<y>`` |
+    ``melt[:<s>][:splash][:<x>,<y>]`` -> (name, seconds or None).
+
+    Only dip, blurzoom and melt read a suffix as a length; the suck's is the point it collapses into,
+    the melt's may be a length AND a register AND a point (``_melt_exit``), and every other exit is a
+    bare name. ValueError names the exit; the caller names the row."""
     name = str(exit_id).split(":")[0]
     if name not in SCENE_EXITS:
         raise ValueError(f"exit {exit_id!r} is not one of {'|'.join(SCENE_EXITS)}")
+    if name == "melt":
+        return exit_id, _melt_exit(exit_id)
     arg = str(exit_id).split(":")[1] if ":" in str(exit_id) else ""
     if name not in TIMED_EXITS or arg == "":
         return exit_id, None
@@ -1563,9 +1829,13 @@ PHRASE_KEYS = ("x0", "y0", "x1", "y1")
 def press_meta(raw) -> dict:
     """A PRESS dock's card meta: the dict ``press_card.py`` wrote, or the path to that JSON.
 
-    Returns only what the player needs - the kind, the source line and the phrase box - so the
+    Returns only what the player needs - the kind, the source line, the phrase box, the phrase's
+    WORDS (R26-55: the player sets them as live type, re-lined to the surface the card lands on) and
+    the card's own aspect (from the crop's size, so the provenance strip needs no decode) - so the
     provenance keys the tool also writes (the crop rectangle, the screenshot's sha256) stay on disk
-    and out of the timeline. ValueError names the option; the caller names the row and the dock."""
+    and out of the timeline. The words and the aspect are OPTIONAL: a card cut before R26-55 carries
+    neither, keeps its raster phrase, and compiles byte-for-byte as it did.
+    ValueError names the option; the caller names the row and the dock."""
     meta = raw
     if isinstance(raw, (str, Path)):
         p = Path(raw)
@@ -1587,8 +1857,21 @@ def press_meta(raw) -> dict:
         raise ValueError(f"dock: press 'phrase' must be {{{', '.join(PHRASE_KEYS)}}} as fractions of the CARD in 0..1")
     if not (float(ph["x0"]) < float(ph["x1"]) and float(ph["y0"]) < float(ph["y1"])):
         raise ValueError("dock: press 'phrase' is empty or inverted - x0 < x1 and y0 < y1 (the region of the headline the sentence turns on)")
+    words = meta.get("phrase_text")
+    if words is not None and (not isinstance(words, str) or len(words.split()) < 2):
+        raise ValueError("dock: press 'phrase_text' must be the quoted phrase's own words (two or more) - "
+                         "it is what the player sets as live type over the provenance strip (R26-55)")
+    card = meta.get("card")
+    aspect = None
+    if isinstance(card, (list, tuple)) and len(card) == 2:
+        cw, chh = card
+        if isinstance(cw, (int, float)) and isinstance(chh, (int, float)) and cw > 0 and chh > 0:
+            aspect = round(float(chh) / float(cw), 5)
     return {"kind": DOCK_KIND_PRESS, "source": src.strip(),
-            "phrase": {k: round(float(ph[k]), 5) for k in PHRASE_KEYS}}
+            "phrase": {k: round(float(ph[k]), 5) for k in PHRASE_KEYS},
+            # R26-55, written ONLY when the card carries them, so a card cut before it compiles unchanged
+            **({"phrase_text": " ".join(words.split())} if words else {}),
+            **({"img": aspect} if aspect else {})}
 
 
 # HF-17 (P50 T15) - THE FOREGROUND OCCLUDER. "Occlusion beats blur as the depth cue" (the intake, against doc
@@ -2045,7 +2328,7 @@ def _card_w_for(height: float) -> int:
     return int((height - DOCK_CARD_CHROME_H) * 16 / 9) + DOCK_CARD_CHROME_W
 
 
-def free_bands(boxes: dict) -> list[dict]:
+def free_bands(boxes: dict, reserve: list[dict] | None = None) -> list[dict]:
     """The rectangles inside the safe box that the page's own ink leaves free (E45).
 
     ONE PLACEMENT TRUTH (P50 T16): the bands are cut out of whatever `page_boxes` handed us - the
@@ -2060,7 +2343,11 @@ def free_bands(boxes: dict) -> list[dict]:
     src, rail, cap = boxes["source"], boxes["rail"], boxes["caption_anchor"]
     left, right = safe["x"], safe["x"] + safe["w"]
     head = safe["y"]
-    foot = min(safe["y"] + safe["h"], cap["y"])
+    # P52 T6: a NEWSREEL band is one more strip a card may never sit in - exactly the role the anchored
+    # caption's strip already plays here (`CAPTION_ANCHOR`, ledger_page.py: "a dock may never sit there") - so
+    # it clips the same foot, by name. `reserve` absent (every caller before this slice) changes nothing.
+    floor_y = min([cap["y"]] + [r["y"] for r in (reserve or []) if isinstance(r, dict)])
+    foot = min(safe["y"] + safe["h"], floor_y)
     ink_foot = max(src["y"] + src["h"], rail["y"] + rail["h"])
     bands = {
         "above": (left, head, right - left, plot["y"] - head),
@@ -2232,7 +2519,7 @@ def emptiest_corner(boxes: dict) -> dict:
     return best
 
 
-def page_place(page: dict, aspect: str) -> dict:
+def page_place(page: dict, aspect: str, reserve: list[dict] | None = None) -> dict:
     """The parked rectangle for a dock on this ledger page, in stage pixels (E45 §1, E65).
 
     ``{"x", "y", "w", "h", "room"}`` - ALWAYS: `room` is which of E65's four rooms it came from
@@ -2244,7 +2531,7 @@ def page_place(page: dict, aspect: str) -> dict:
     floor_h = _floor_h(aspect)
     # (1) OUTSIDE: a band the page's ink leaves free - E45 §1, unchanged
     best = None
-    for band in free_bands(boxes):
+    for band in free_bands(boxes, reserve):   # P52 T6: `reserve` keeps the card out of a newsreel band's strip
         room_w, room_h = band["w"] - 2 * DOCK_PLACE_PAD, band["h"] - 2 * DOCK_PLACE_PAD
         width = max(DOCK_ON_PAGE_MIN_W, min(want, room_w, _card_w_for(room_h)))
         if width > band["w"] - 2 or dock_card_h(width) > band["h"] - 2:
@@ -2298,13 +2585,13 @@ def page_place(page: dict, aspect: str) -> dict:
     return {**_corner_box(corner, w, h, quiet, centre), "room": "corner"}
 
 
-def dock_place(world: dict, aspect: str | None) -> dict | None:
+def dock_place(world: dict, aspect: str | None, reserve: list[dict] | None = None) -> dict | None:
     """The placement every dock on this scene takes, or None on a plain plate (E45: "a dock on a
     plain plate keeps the solo card"). One rectangle per scene, from the page's geometry alone -
     and on a ledger page there is ALWAYS one (E65); the rectangle carries the `room` it came from."""
     if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not world.get("page"):
         return None
-    return page_place(world["page"], aspect or "16:9")
+    return page_place(world["page"], aspect or "16:9", reserve)
 
 
 def centred_place(place: dict, aspect: str | None, card_aspect: float | None = None, page: dict | None = None,
@@ -2589,6 +2876,21 @@ def caption_strip_h() -> int:
     return round(CAPTION_STAGE_PX * CAPTION_LINE_H * CAPTION_LINES)
 
 
+def _caption_arrive() -> str | None:
+    """P52 T10: the arrival a stage page's words take, or None for the pop.
+
+    None and "pop" both mean the shipped behaviour and both write NOTHING: a build that does not ask
+    compiles exactly the bytes it compiled before the slice. Anything else must be a named kind - a typo
+    silently falling back to the pop is the failure mode this refuses (the same rule the kinetics kill
+    switch has: an unknown flag turns nothing on, but here the build ASKED for a register and must get it)."""
+    a = (CAPTION_ARRIVE or "").strip() or None
+    if a is None or a == "pop":
+        return None
+    if a not in CAPTION_ARRIVALS:
+        raise SystemExit(f"caption arrival {a!r} is not one of {CAPTION_ARRIVALS} (build_scene_timeline_f.CAPTION_ARRIVE)")
+    return a
+
+
 def stage_px_w(aspect: str) -> int:
     return LPG.STAGE_PX[aspect][0]
 
@@ -2663,6 +2965,125 @@ def caption_band(page: dict, aspect: str, cards: list[dict] | None) -> dict | No
     return None
 
 
+# ---- THE STRIP LAW: the caption's E62 band and the NEWSREEL band (P52 T6, gate 1) -------------
+# On a short the caption's strip and a newsreel band want the same bottom strip. The compiler REFUSES a row
+# where the two boxes meet and names both, with the two ways out; it does not silently move either, because
+# which one gives way is the operator's call on the frame, not the compiler's:
+#   (1) the DEFAULT this slice ships - the caption keeps its E62 band (its home on a short) and the band goes
+#       BELOW it (`y >= caption home + strip h`); or the band goes entirely ABOVE the caption's home;
+#   (2) `cap_band: "above"` on the newsreel row - the crawl takes the caption's own strip and the caption is
+#       stamped one strip HIGHER, above the crawl (`newsreel_caption_band`).
+# On 16:9 there is no clash to rule: the caption sits at 40 % (432-575) and a band's region is in the lower
+# 40 % (>= 648), so every landscape row takes (1) without saying anything.
+NEWSREEL_STRIP_PAD = 8   # the air between the two strips: a pixel of contact is not "the same strip", 8 px is
+
+
+def newsreel_region_box(entry: dict, aspect: str | None) -> dict | None:
+    """The band's own rectangle in STAGE pixels, from the region the author declared (0..1 fractions)."""
+    tgt = (entry or {}).get("target") or {}
+    if tgt.get("kind") != "region":
+        return None
+    sw, sh = LPG.STAGE_PX[aspect or "16:9"]
+    try:
+        x0, y0, x1, y1 = (float(tgt[k]) for k in ("x0", "y0", "x1", "y1"))
+    except (KeyError, TypeError, ValueError):
+        return None
+    return {"x": round(x0 * sw), "y": round(y0 * sh), "w": round((x1 - x0) * sw), "h": round((y1 - y0) * sh)}
+
+
+def newsreel_rows(row_species) -> list[dict]:
+    """Every newsreel row in this shot row's species list (usually one; two is a second band, not a second line)."""
+    return [e for e in (row_species or []) if isinstance(e, dict) and e.get("kind") == SPECIES_NEWSREEL]
+
+
+def newsreel_boxes(row_species, aspect: str | None) -> list[dict]:
+    """The bands' rectangles - what a card may not cover (handed to the placer as one more reserved strip)."""
+    return [b for b in (newsreel_region_box(e, aspect) for e in newsreel_rows(row_species)) if b]
+
+
+def caption_home_box(aspect: str | None) -> dict:
+    """The caption strip's HOME rectangle in stage pixels - the box the band has to be reconciled with."""
+    asp = aspect or "16:9"
+    x, w = caption_strip_x(asp, None)
+    return {"x": x, "y": caption_home_y(asp), "w": w, "h": caption_strip_h()}
+
+
+def newsreel_strip_clash(entry: dict, aspect: str | None) -> tuple[dict, dict] | None:
+    """(the band's box, the caption's home box) when the two want the same strip, else None."""
+    band = newsreel_region_box(entry, aspect)
+    if band is None:
+        return None
+    home = caption_home_box(aspect)
+    if band["y"] >= home["y"] + home["h"] - NEWSREEL_STRIP_PAD:      # the band is BELOW the caption's strip (the default)
+        return None
+    if band["y"] + band["h"] <= home["y"] + NEWSREEL_STRIP_PAD:      # ... or entirely above it
+        return None
+    return band, home
+
+
+def validate_newsreel_strip(row_species, aspect: str | None, row_docks: bool | None = None) -> list[str]:
+    """The strip law as a pure check on one row (gate 1). Returns the errors; the caller names the row.
+
+    `row_docks` is whether this row docks anything at all: today the player moves the caption's strip only
+    under a CARD (E62's band is written on the dock entry, and the engine reads it there), so a row that asks
+    for `cap_band: "above"` with nothing docked above the band is refused rather than shipped with the caption
+    sitting on the crawl. That is also the composition the operator described - the band runs UNDER a surface."""
+    errs: list[str] = []
+    for e in newsreel_rows(row_species):
+        above = e.get("cap_band") == NEWSREEL_CAP_ABOVE
+        clash = newsreel_strip_clash(e, aspect)
+        if clash and not above:
+            band, home = clash
+            errs.append(
+                f"newsreel: the band's region [{band['y']}-{band['y'] + band['h']}] and the caption's E62 strip "
+                f"[{home['y']}-{home['y'] + home['h']}] want the same strip on {aspect or '16:9'}. Two ways out: move the "
+                f"band's region BELOW the caption's home (y0 >= {round((home['y'] + home['h']) / LPG.STAGE_PX[aspect or '16:9'][1], 4)}) "
+                f"or above it, or give the caption its band above the crawl with cap_band: \"{NEWSREEL_CAP_ABOVE}\"")
+        if above and not clash:
+            errs.append(f'newsreel: cap_band "{NEWSREEL_CAP_ABOVE}" moves the caption above a crawl that is already clear of '
+                        "its strip - drop it, the default places the band below the caption's own band")
+        if above and row_docks is False:
+            errs.append(f'newsreel: cap_band "{NEWSREEL_CAP_ABOVE}" needs a surface docked above the band - the caption\'s strip '
+                        "moves under a CARD (E62 writes the band on the dock entry). Dock the head or the clip, or let the band "
+                        "sit below the caption's home")
+    return errs
+
+
+def newsreel_caption_band(band: dict | None, row_species, aspect: str | None,
+                          enter: float, exitt: float) -> dict | None:
+    """Where the caption's strip goes when a crawl is live in this dock's window (P52 T6).
+
+    `cap_band: "above"` is the operator's alternative: the crawl owns the caption's own strip, so the caption
+    is stamped one strip higher - ABOVE the crawl, clear of it by `NEWSREEL_STRIP_PAD`. Every other row keeps
+    whatever E62 gave it (`band`), which is what every timeline compiled before this slice carries."""
+    h = caption_strip_h()
+    for e in newsreel_rows(row_species):
+        if e.get("cap_band") != NEWSREEL_CAP_ABOVE:
+            continue
+        at, dur = float(e.get("at", 0.0)), float(e.get("dur", 0.0))
+        if at >= exitt or at + dur <= enter:          # the band is not up in this card's window
+            continue
+        box = newsreel_region_box(e, aspect)
+        if box is None:
+            continue
+        y = box["y"] - NEWSREEL_STRIP_PAD - h
+        if y < 0:
+            continue                                   # no room above the crawl: the row keeps E62's answer
+        return {"y": int(y), "h": h, "band": "newsreel-above"}
+    # ... and when a crawl is up and E62 found no band at all, the caption may NOT fall back to the quiet
+    # ANCHOR: that strip is the bottom of the frame, which is where the crawl is. It takes its own HOME
+    # (the stage band) whenever the home is clear of every live band; only if even that is covered does the
+    # row keep None, and then the strip law's refusal above has already named the two boxes.
+    if band is None:
+        live = [b for b in (newsreel_region_box(e, aspect) for e in newsreel_rows(row_species)
+                            if float(e.get("at", 0.0)) < exitt and float(e.get("at", 0.0)) + float(e.get("dur", 0.0)) > enter) if b]
+        if live:
+            home = caption_home_box(aspect)
+            if all(home["y"] + h + NEWSREEL_STRIP_PAD <= b["y"] or home["y"] >= b["y"] + b["h"] + NEWSREEL_STRIP_PAD for b in live):
+                return {"y": home["y"], "h": h, "band": "quiet"}
+    return band
+
+
 def dock_card_boxes(docks: list[dict], enter: float, exitt: float) -> list[dict] | None:
     """Every card box on stage during [enter, exit), or None when one of them is not on the timeline.
 
@@ -2703,6 +3124,7 @@ def stamp_caption_bands(scenes: list[dict], pages: list[dict], aspect: str | Non
             if not _caption_in_window(pages, d["enter"], d["exit"]):
                 continue
             band = caption_band(page, asp, dock_card_boxes(sc.get("docks", []), d["enter"], d["exit"])) if page else None
+            band = newsreel_caption_band(band, sc.get("species"), asp, d["enter"], d["exit"])   # P52 T6: a crawl in this window may own the strip
             d["caption_band"] = band
             placed += bool(band)
     return placed
@@ -2782,8 +3204,13 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         "badge_at": [round(enter + 0.75 + 1.3 * (n + 1), 2) for n in range(n_badges)],
         **({"kind": DOCK_KIND_VIDEO} if kind == DOCK_KIND_VIDEO else {}),
         # P50 T3: a PRESS card carries its source line and its quoted phrase onto the stage; `_stack` is the
-        # scene's own bookkeeping and is replaced by stack_index / stack_n once every dock on the scene is known
+        # scene's own bookkeeping and is replaced by stack_index / stack_n once every dock on the scene is known.
+        # R26-55: and the phrase's WORDS and the card's own aspect when the card was cut with them - the player
+        # sets the words as live type re-lined to the card's box and keeps the crop as the provenance strip; a card
+        # cut before R26-55 carries neither key and its entry is byte-for-byte what it was.
         **({"kind": DOCK_KIND_PRESS, "source": press["source"], "phrase": press["phrase"],
+            **({"phrase_text": press["phrase_text"]} if press.get("phrase_text") else {}),
+            **({"img": press["img"]} if press.get("img") else {}),
             **({"_stack": True} if stack else {})} if press else {}),
         **({"place": place, "read_s": rs, "park_s": ps,
             "park": span >= rs + ps} if place else {}),
@@ -3238,7 +3665,9 @@ def main() -> int:
                 continue
             if _o.get("press"):
                 row_press[_d[0]] = _o["press"]
-        species_errors = validate_species(row_species, ken, plate, pivot_span=None, press_docks=row_press) + validate_camera_row(row_camera, row_species, plate, ASPECT)
+        species_errors = (validate_species(row_species, ken, plate, pivot_span=None, press_docks=row_press)
+                          + validate_camera_row(row_camera, row_species, plate, ASPECT)
+                          + validate_newsreel_strip(row_species, ASPECT, bool(ds)))   # P52 T6: the strip law (gate 1)
         if species_errors:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): " + "; ".join(species_errors))
         # P50 T2: a chip's SOURCED glyph rides the asset map exactly as a plate or a dock still does,
@@ -3288,7 +3717,7 @@ def main() -> int:
         # E45 §1: on a ledger page every dock parks in the same rectangle, computed from the
         # page's own geometry. Only the SOLO card (slot 0) is placed - a paired/stacked dock keeps
         # the layout its slot declares, and a plain plate keeps the solo card entirely.
-        place = dock_place(world, ASPECT)
+        place = dock_place(world, ASPECT, newsreel_boxes(row_species, ASPECT))   # P52 T6: the band's strip is reserved - a card parks ABOVE the crawl
         for aid, slot, enter, exitt, *dextra in ds:   # P47 T1: an optional 5th element names how the card arrives
             try:
                 dopt = dock_opts(dextra[0] if dextra else None)
@@ -3471,6 +3900,11 @@ def main() -> int:
 
     # caption STAGE mode: stamp each page with the mode it takes at its first word (after the scenes exist)
     pages = [{**pg, "cap_mode": "anchor" if _dock_live_at(scenes, pg["s"]) else "stage"} for pg in pages]
+    # P52 T10: and the ARRIVAL each page's words take, beside the mode - absent when the build says nothing,
+    # which is the pop (the field cannot appear in a timeline compiled before this slice, nor in one after it
+    # that never asks; that absence is the byte-identity of every golden and both shorts)
+    if _caption_arrive():
+        pages = [{**pg, "cap_arrive": _caption_arrive()} for pg in pages]
     # E62: and the BAND each card leaves the caption free - the demotion under a card is in position,
     # not in size. A dock whose window carries a caption takes `caption_band`; null means no band
     # holds a two-line strip clear of the card and of the data, and the player takes the quiet anchor.
@@ -3529,6 +3963,9 @@ def main() -> int:
         # take at its first word so the motion gate can count stage pages as events
         # and FAIL a still stretch that carries none.
         "caption_modes": ["stage", "anchor"],
+        # P52 T10: the ARRIVAL the stage words take, for a player reading the timeline rather than a page
+        # (a page's own `cap_arrive` wins). Omitted entirely when the build does not ask - see CAPTION_ARRIVE.
+        **({"caption_arrive": _caption_arrive()} if _caption_arrive() else {}),
         "sound": sound_cues,
         "evidence": evidence,
         "scenes": (extend_camera_cards(scenes) and scenes) or scenes,   # P49 T5: a camera page's card stays up to the match
