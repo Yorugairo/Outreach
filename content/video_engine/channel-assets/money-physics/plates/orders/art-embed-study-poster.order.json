@@ -1,0 +1,15 @@
+{
+  "_contract": "Frozen WORK-ORDER (2026-09-11, P50 T7 gate 3: the operator said \"Plate order is approved.\"). Do not edit the prompt; a change is a new order file. The brief: docs/content-video-engine/briefs/ART-EMBED-PLATE-ORDER-2026-09-11.md. Dispatch: python content/video_engine/channel-assets/money-physics/plates/orders/dispatch_plate_order.py <order file>. The still is quarantined until the operator approves the frame; the surface is BLANK in the painting (E33 / doc 15 s4) - the information layer is composited by the engine (T7's homography onto the named quad).",
+  "_beat": "the first still: ONE surface - the poster on the wall - at least 40 % of the stage's width, its long side near horizontal, no more than ~12 deg of perspective on either axis",
+  "prompt": "9:16 vertical, full bleed. A quiet study at night. A light application of 2.5D woodblock print and vox newspaper meets rich anime colors. A wooden desk in the lower third with a mug and a folded newspaper; on the wall above it, centred, a large blank poster in a thin dark frame, its face slightly angled toward the viewer, catching the lamp's light. Nothing printed on the poster. A desk lamp on the left throws a warm cone across the wall; the corners fall to shadow. No people, no text anywhere in the image, no logos. A single still frame.",
+  "references": [],
+  "ratio": "9:16",
+  "projectUrl": "https://labs.google/fx/tools/flow/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+  "outputPath": "content/video_engine/channel-assets/money-physics/plates/stills/art-embed-study-poster.png",
+  "budget": {
+    "kind": "zero_credit",
+    "model": "Nano Banana Pro",
+    "note": "the sig-* plates of 2026-09-08 recorded creditsText '' on the same settings; a paid roll is refused - the operator's word covers the order, not a spend"
+  },
+  "review_state": "quarantined until the operator approves the frame"
+}
