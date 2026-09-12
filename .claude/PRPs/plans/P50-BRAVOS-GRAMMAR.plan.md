@@ -297,7 +297,7 @@ Acceptance:
 - Evidence: `kinetics/homography.mjs` (154; 9 node tests - the unit square to an axis-aligned rect is affine, a keystone's corners return within 1e-9, the identity quad gives the identity matrix3d), the compiler's `embed` grammar (+213: the named surfaces on `<plate>.layers.json`, the quad validated, an unknown name refused naming the plate's surfaces, a ledger page / a chart card refused - B1, `darken` resolved to a second, `embed {name, quad, darken, img}` on the entry), the engine (+334: the inscribed card under the homography, the arrive onto the surface, the idle kept, no park, the room's darkening on the word, the camera target `embed`), `tests/test_art_embed.py` (19), golden `art-embed` (two cold renders identical; every other golden byte-identical). The two stills (`channel-assets/money-physics/plates/stills/art-embed-study-{poster,tv-laptop}.png`, 768x1376, zero credit) are QUARANTINED until the operator approves the frames; the poster's quad measured from the still `[[0.3685,0.1941],[0.8307,0.1560],[0.8307,0.6247],[0.3685,0.6106]]` (0.462 wide; the order asked for 0.40); the still is 0.5581 aspect against 9:16's 0.5625, so re-measure on the rendered stage when writing the plate's layers file. Deviations: the golden's second surface (the desk paper) is synthetic; the poster came back portrait where the order asked for a near-horizontal long side (the card fits its width, not re-rolled).
 
 ### T8: The backlog blends - pulled onto the slices they belong to
-- Status: pending
+- Status: complete (2026-09-12)
 - Owner: parent (re-pointing rows); the owner of each host slice
 - Depends on: the host slices
 - Write set: `docs/content-video-engine/BACKLOG.md` rows re-pointed: **R26-20** badge-stamp two-spring landing ->
@@ -319,7 +319,7 @@ Acceptance:
   TR-14 the ink bloom (they cut and dip), weight-shift captions (they have no captions).
 - Acceptance: every row above carries the slice id and the Bravos shot numbers; no row is closed without the build.
 - Validate: `python content/video_engine/scripts/build_docs_layers.py --check`
-- Evidence: pending
+- Evidence: every named row carries its slice id: R26-25 -> T4 (closed with `span`), R26-24 -> T9 (closed), R26-34 -> T11 (closed, the tip pill), R26-22 + R26-27 -> T16 (closed for measured pages; the fixture by ink, E65), R26-16 -> T12 (Method A shipped; the rule stands), R26-30 -> T13 (closed), HF-15/16/17 -> T15 (closed), R26-32 -> T7 (closed 2026-09-12 with the ART-embed surface, E66), R26-20 -> T2 (the chip's two-spring landing; the badge-stamp re-port stays half), R26-33 -> T5 (the map shipped; the sonar ping open, its formula on the row), R26-1 -> T11's finish (the terminal tag + value bar; the halo as such not built); MC-8 is closed in the intake (the `spread` species, R26-26) - no BACKLOG row exists for it, none added. The four rows that do not blend are named in the write set and left alone. Validate: `build_docs_layers.py --check` in sync after the rebuild.
 
 ### T9: N-tier pages - small multiples on a shared x (R26-24; Bravos' two-panel SPR, shots 35-36)
 - Status: complete (2026-09-11)
