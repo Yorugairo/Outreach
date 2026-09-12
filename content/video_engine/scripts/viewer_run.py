@@ -3,11 +3,13 @@
 The viewer is the third role beside the gates and the judge - an agent that
 knows NOTHING. This module is the thing that keeps it that way. It reads the
 windows `viewer_windows.py` cut, and for each one it makes a single headless
-call that can see only three things: the wording in
-`content/video_engine/configs/viewer_prompt.v1.md`, the memory text of the
-previous two windows, and the words of this window. No doctrine, no tags, no
-ledger, no dossier, no other window. If the viewer can see any of those the
-test is void (P36 "Not Building").
+call that can see only four things: the wording in
+`content/video_engine/configs/viewer_prompt.v2.md`, the memory text of the
+previous two windows, the words of this window, and the `[screen]` lines the
+windower folded in for what is on screen while they are spoken (R26-0, ruling
+E43 - the prompt says a `[screen]` line is what you can see). No doctrine, no
+tags, no ledger, no dossier, no other window. If the viewer can see any of
+those the test is void (P36 "Not Building").
 
 WINDOW 0 IS THE PACKAGE (ruling E27: the package answered is the first thing
 that matters). Before a single word of the script, the viewer is shown the
@@ -54,7 +56,9 @@ from pathlib import Path
 # --- constants, cited ---------------------------------------------------------
 SCHEMA_VERSION = "viewer_reports.v1"
 WINDOWS_SCHEMA_VERSION = "viewer_windows.v1"
-PROMPT_VERSION = "v1"
+# v2 = v1 + the `[screen]` lines (P52 T14 / R26-0, ruling E43). The wording of a
+# version is frozen; a change is a new file, and a run records which it sent.
+PROMPT_VERSION = "v2"
 DEFAULT_PROMPT = Path(__file__).resolve().parents[1] / "configs" / f"viewer_prompt.{PROMPT_VERSION}.md"
 DEFAULT_LANE = "codex"
 # P36 click 2026-09-03: the plates ran low effort because orchestration is

@@ -198,3 +198,113 @@ def test_a_ring_sentence_maps_to_the_window_that_speaks_it_not_the_opener_it_ech
                {"i": 2, "text": "The Fed still sat still. Tokyo is still on its tea break, and America still holds the tab."}]
     assert V.window_of_sentence(windows, "Tokyo is still on its tea break, and America still holds the tab.") == 2
     assert V.window_of_sentence(windows, "Tokyo took a tea break and left America the tab.") == 0
+
+
+# --- V01 and the screens (R26-0, ruling E43) ---------------------------------
+# The shorts case the ruling was written on: two beats sit on one sentence whose
+# numbers the CHART carries, so the words of the beat are never echoed back. The
+# window now ends in the `[screen]` line viewer_windows.py folds in.
+CHART_SCRIPT = (
+    "The opponent isn't the Fed; it's a Japanese balance sheet. "
+    "`[promise]` [rehook] Two numbers show where the money went: a Treasury page, and your phone."
+)
+CHART_SCREEN = {"kind": "a chart", "title": "Our biggest customer is selling",
+                "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000",
+                "figures": ["Japan", "-9.9%", "$1,116.7B"]}
+
+
+def _chart_windows(with_screens: bool = True) -> dict:
+    spoken = ("The opponent isn't the Fed; it's a Japanese balance sheet. "
+              "Two numbers show where the money went: a Treasury page, and your phone.")
+    screens = [CHART_SCREEN] if with_screens else []
+    text = spoken if not screens else (
+        spoken + '\n[screen] a chart: "Our biggest customer is selling" - '
+        "Japan's holdings of US Treasuries, $bn, monthly since 2000 - "
+        "showing Japan; -9.9%; $1,116.7B")
+    return {"schema_version": "viewer_windows.v1", "window_s": 15.0, "memory_windows": 2,
+            "timing_source": "measured", "screens_source": "ep.timeline.json", "runtime_s": 15.0,
+            "windows": [{"i": 0, "start_s": 0.0, "end_s": 15.0, "span": "0:30-0:45",
+                         "text": text, "memory": "", "screens": screens}]}
+
+
+def _chart_reports(names_the_figure: bool) -> dict:
+    saw = ("Japan's holdings are down to $1,116.7B" if names_the_figure
+           else "Something is going on with the Fed")
+    return {"schema_version": "viewer_reports.v1", "prompt_version": "v2", "model": "test",
+            "reports": [{"i": 0, "span": "0:30-0:45", "new_things": [saw],
+                         "held_question": "", "asked_of_me": "", "could_not_follow": []}]}
+
+
+def test_a_chart_carried_beat_counts_when_the_reader_names_the_screens_figure():
+    res = V.score(_chart_windows(), _chart_reports(True), CHART_SCRIPT)
+    by_tag = {r["tag"]: r for r in res["recall"]}
+    assert by_tag["promise"]["perceived"] and by_tag["rehook"]["perceived"]
+    assert by_tag["promise"]["via"] == "screen"
+    assert by_tag["promise"]["screen_figure"] == "$1,116.7B"
+    assert "$1,116.7B" in by_tag["promise"]["matched"]
+    v01 = next(r for r in res["rows"] if r["id"] == "V01")
+    assert v01["level"] == "PASS" and "off a screen's figure (E43)" in v01["message"]
+    assert "yes (screen)" in V.render(res, "X-VO.txt")
+
+
+def test_the_same_beat_with_no_figure_named_is_still_a_miss():
+    res = V.score(_chart_windows(), _chart_reports(False), CHART_SCRIPT)
+    by_tag = {r["tag"]: r for r in res["recall"]}
+    assert not by_tag["promise"]["perceived"] and not by_tag["rehook"]["perceived"]
+    assert by_tag["promise"]["via"] == "" and by_tag["promise"]["screen_figure"] == ""
+    v01 = next(r for r in res["rows"] if r["id"] == "V01")
+    assert v01["level"] == "FAIL" and "screen" not in v01["message"]
+
+
+def test_with_no_screen_in_the_window_the_verdict_is_exactly_the_old_one():
+    named = V.score(_chart_windows(with_screens=False), _chart_reports(True), CHART_SCRIPT)
+    blind = V.score(_chart_windows(with_screens=False), _chart_reports(False), CHART_SCRIPT)
+    for res in (named, blind):
+        assert all(not r["perceived"] for r in res["recall"])
+        assert next(r for r in res["rows"] if r["id"] == "V01")["level"] == "FAIL"
+
+
+def test_a_reader_saying_the_figure_in_plain_digits_still_matches():
+    reports = _chart_reports(True)
+    reports["reports"][0]["new_things"] = ["Japan is down to about 1116.7 billion dollars"]
+    res = V.score(_chart_windows(), reports, CHART_SCRIPT)
+    assert next(r for r in res["recall"] if r["tag"] == "promise")["via"] == "screen"
+
+
+def test_the_words_rule_still_wins_when_the_reader_echoed_the_sentence():
+    reports = _chart_reports(True)
+    reports["reports"][0]["new_things"] = ["two numbers show where the money went: a page and my phone",
+                                           "Japan's holdings are $1,116.7B"]
+    res = V.score(_chart_windows(), reports, CHART_SCRIPT)
+    promise = next(r for r in res["recall"] if r["tag"] == "promise")
+    assert promise["perceived"] and promise["via"] == "words"
+
+
+def test_figure_numbers_read_the_same_number_through_its_punctuation():
+    assert V.figure_numbers("$1,116.7B") == {"1116.7"}
+    assert V.figure_numbers("-$122.6B a tenth of the pile") == {"122.6"}
+    assert V.figure_numbers("3.97% - the February low") == {"3.97"}
+    assert V.figure_numbers("no number here") == set()
+
+
+def test_a_screen_line_is_not_the_spoken_text():
+    w = {"i": 0, "text": 'said this.\n[screen] a chart: "a title" - showing 42', "memory": ""}
+    assert V.spoken_text(w) == "said this."
+    # placement and the concreteness rule read the words, so the screen cannot move a beat
+    assert V.window_of_sentence([w], "said this.") == 0
+    assert not V.is_concrete("a title", V.spoken_text(w), "")   # score() passes the words
+
+
+def test_a_multi_word_label_counts_and_a_one_word_country_never_does():
+    """A named figure is a NUMBER or a label named by at least two of its own words."""
+    screens = [{"kind": "a chart", "title": "Our biggest customer is selling", "sub": "",
+                "figures": ["Japan", "The opponent: a balance sheet"]}]
+    named = "The speaker says a Japanese balance sheet is driving this, rather than the Fed."
+    assert V.screen_figure_hit(screens, named) == "The opponent: a balance sheet"
+    # "Japan" is the episode's own vocabulary, not something read off the screen
+    assert V.screen_figure_hit(screens, "Japan is America's biggest lender") != "Japan"
+    assert V.screen_figure_hit([{"kind": "a chart", "title": "", "sub": "",
+                                 "figures": ["Japan"]}], "Japan is selling") == ""
+    assert V.label_hit("The opponent: a balance sheet", "a balance sheet, apparently")
+    assert not V.label_hit("Japan", "Japan is selling")
+    assert V.screen_figure_hit(screens, "nothing like it") == ""

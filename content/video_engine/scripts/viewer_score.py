@@ -11,7 +11,12 @@ Two measures, per the P36 plan:
   writer DECLARED (`beat_tags.find_beats`) must show up in what the blind reader
   felt - in its new information or the question it was holding - within +-1
   window of where the beat actually sits. A beat the writer declared and the
-  reader never felt was laundered: tagged, not delivered.
+  reader never felt was laundered: tagged, not delivered. A beat the SCREEN
+  carries counts when the reader names one of that screen's figures (R26-0,
+  ruling E43: on a short the chart carries the number, and the line names the
+  action on it, not the figure) - the `[screen]` lines `viewer_windows.py` folds
+  into each window are what the reader saw, so naming a figure off them is
+  perception, not a guess.
 
   INFORMATION GAIN - the retention clock (doc 31: something genuinely new every
   15-30s) measured as the count of CONCRETE new things per window. The
@@ -66,6 +71,12 @@ STOP = {
 
 WORD_RE = re.compile(r"[A-Za-z][A-Za-z'’-]*|\d[\d.,%$]*")
 SENT_END_RE = re.compile(r"[.!?](?=\s|$)")
+# R26-0: `viewer_windows.py` ends a window with one `[screen]` line per screen.
+# They are what the reader SAW; the words are what it heard, and beat placement
+# and the concreteness rule are about the words.
+SCREEN_LINE_RE = re.compile(r"^\[screen\].*$", re.M)
+# `$1,116.7B`, `1116.7`, `122.6` and `-$122.6B` are the same figure to a reader.
+NUMBER_RE = re.compile(r"\d[\d,]*(?:\.\d+)?")
 
 
 # ---- pure helpers ----------------------------------------------------------
@@ -92,6 +103,59 @@ def overlap_hit(beat_sentence: str, viewer_line: str) -> bool:
         return False
     need = max(OVERLAP_MIN_TOKENS, round(OVERLAP_MIN_RATIO * len(beat)))
     return len(beat & seen) >= min(need, len(beat))
+
+
+def spoken_text(window: dict) -> str:
+    """A window's WORDS - the `[screen]` lines taken back out (R26-0)."""
+    return SCREEN_LINE_RE.sub("", window.get("text", "") or "").strip()
+
+
+def figure_numbers(text: str) -> set[str]:
+    """The numerals in a figure, normalised so `$1,116.7B` matches `1116.7`."""
+    return {m.group(0).replace(",", "").rstrip(".") for m in NUMBER_RE.finditer(text or "")}
+
+
+def reader_lines(report: dict) -> list[str]:
+    """Everything one blind report says it took in: the new things, the question
+    it is holding, and what it thinks it was asked to do."""
+    lines = list(report.get("new_things") or []) + [report.get("held_question") or "",
+                                                    report.get("asked_of_me") or ""]
+    return [x for x in lines if isinstance(x, str) and x.strip()]
+
+
+def label_hit(label: str, viewer_line: str) -> bool:
+    """True when the reader named a wordless figure - a label or a title - whole.
+
+    Stricter than `overlap_hit`: OVERLAP_MIN_TOKENS content tokens, with no
+    relaxation for a short label. A one-word axis label ("Japan") is the
+    episode's own vocabulary and is not evidence that anything was read off the
+    screen; "The opponent: a balance sheet" is.
+    """
+    lab, seen = content_tokens(label), content_tokens(viewer_line)
+    return len(lab) >= OVERLAP_MIN_TOKENS and len(lab & seen) >= OVERLAP_MIN_TOKENS
+
+
+def screen_figure_hit(screens: list[dict], viewer_line: str) -> str:
+    """The figure (or title) the reader named off one of these screens, or "".
+
+    E43: the datum lives on the chart. A NUMBER matches on its digits alone, so
+    the reader may say it with a currency sign, a comma or neither; a wordless
+    label has to be named by at least two of its own words (`label_hit`).
+    """
+    if not (viewer_line or "").strip():
+        return ""
+    seen = figure_numbers(viewer_line)
+    for sc in screens or []:
+        for fig in list(sc.get("figures") or []) + [sc.get("title") or ""]:
+            text = str(fig).strip()
+            if not text:
+                continue
+            nums = figure_numbers(text)
+            if nums and nums & seen:
+                return text
+            if not nums and label_hit(text, viewer_line):
+                return text
+    return ""
 
 
 def sentence_at(text: str, offset: int) -> str:
@@ -126,11 +190,11 @@ def window_of_sentence(windows: list[dict], sentence: str) -> int | None:
     # by design, and best-overlap used to send it to window 0 (Tokyo, 2026-09-04)
     needle = " ".join(tokens(sentence))
     for w in windows:
-        if needle and needle in " ".join(tokens(w.get("text", ""))):
+        if needle and needle in " ".join(tokens(spoken_text(w))):
             return int(w["i"])
     best, best_score = None, 0.0
     for w in windows:
-        shared = beat & content_tokens(w.get("text", ""))
+        shared = beat & content_tokens(spoken_text(w))
         score = len(shared) / len(beat)
         if score > best_score:
             best, best_score = int(w["i"]), score
@@ -173,7 +237,7 @@ def score(windows_doc: dict, reports_doc: dict, script_text: str) -> dict:
         i = int(w["i"])
         rep = reports.get(i) or {}
         things = [t for t in (rep.get("new_things") or []) if isinstance(t, str)]
-        concrete = [t for t in things if is_concrete(t, w.get("text", ""), w.get("memory", ""))]
+        concrete = [t for t in things if is_concrete(t, spoken_text(w), w.get("memory", ""))]
         per_window.append({
             "i": i, "span": w.get("span", ""),
             "reported": bool(rep) and "error" not in rep,
@@ -207,28 +271,45 @@ def score(windows_doc: dict, reports_doc: dict, script_text: str) -> dict:
 
     # --- beat recall
     beats = declared_beats(script_text)
+    by_index = {int(w["i"]): w for w in windows if "i" in w}
     recall = []
     for b in beats:
         wi = window_of_sentence(windows, b["sentence"])
-        matched, where = "", None
+        matched, where, via, figure = "", None, "", ""
         if wi is not None:
-            for j in range(wi - RECALL_SLACK_WINDOWS, wi + RECALL_SLACK_WINDOWS + 1):
+            near = range(wi - RECALL_SLACK_WINDOWS, wi + RECALL_SLACK_WINDOWS + 1)
+            # the promise / assignment class is what the reader files under "asked of me"
+            # ("read that number for myself by the end") - a promise beat could never be
+            # perceived without it (Tokyo rewrite, 2026-09-04)
+            for j in near:
                 rep = reports.get(j)
                 if not rep or "error" in rep:
                     continue
-                # the promise / assignment class is what the reader files under "asked of me"
-                # ("read that number for myself by the end") - a promise beat could never be
-                # perceived without it (Tokyo rewrite, 2026-09-04)
-                lines = (list(rep.get("new_things") or []) + [rep.get("held_question") or "",
-                                                              rep.get("asked_of_me") or ""])
-                for line in lines:
-                    if isinstance(line, str) and overlap_hit(b["sentence"], line):
-                        matched, where = line.strip(), j
+                for line in reader_lines(rep):
+                    if overlap_hit(b["sentence"], line):
+                        matched, where, via = line.strip(), j, "words"
                         break
                 if matched:
                     break
+            # E43 / R26-0: the beat the SCREEN carried. The screens are the ones up in
+            # the beat's OWN window; the reader may name a figure off them a window either
+            # side, exactly as the spoken rule allows.
+            screens = (by_index.get(wi) or {}).get("screens") or []
+            if not matched and screens:
+                for j in near:
+                    rep = reports.get(j)
+                    if not rep or "error" in rep:
+                        continue
+                    for line in reader_lines(rep):
+                        figure = screen_figure_hit(screens, line)
+                        if figure:
+                            matched, where, via = line.strip(), j, "screen"
+                            break
+                    if matched:
+                        break
         recall.append({"tag": b["tag"], "sentence": b["sentence"], "window": wi,
-                       "perceived": bool(matched), "matched": matched, "matched_window": where})
+                       "perceived": bool(matched), "matched": matched, "matched_window": where,
+                       "via": via, "screen_figure": figure if via == "screen" else ""})
 
     scored = [r for r in recall if r["window"] is not None]
     perceived = [r for r in scored if r["perceived"]]
@@ -240,8 +321,10 @@ def score(windows_doc: dict, reports_doc: dict, script_text: str) -> dict:
                         "P36 beat recall (rule R2 laundering, measured from the outside)"))
     else:
         missed = [r for r in scored if not r["perceived"]]
+        by_screen = [r for r in perceived if r.get("via") == "screen"]
         rows.append(Row("V01", "PASS" if not missed else "FAIL",
                         f"{len(perceived)}/{len(scored)} declared beats perceived ({pct:.0f}%)"
+                        + (f"; {len(by_screen)} off a screen's figure (E43)" if by_screen else "")
                         + ("" if not missed else "; unperceived: "
                            + ", ".join(f"[{r['tag']}] w{r['window']}" for r in missed[:8])
                            + ("" if len(missed) <= 8 else f" +{len(missed) - 8} more")),
@@ -297,7 +380,10 @@ def render(res: dict, script_name: str) -> str:
         out += ["| beat | window | perceived | the reader's line |", "|---|---|---|---|"]
         for r in scored:
             line = (r["matched"][:70] + "…") if len(r["matched"]) > 70 else r["matched"]
-            out.append(f"| `[{r['tag']}]` | w{r['window']} | {'yes' if r['perceived'] else '**NO**'} "
+            felt = "**NO**"
+            if r["perceived"]:
+                felt = "yes (screen)" if r.get("via") == "screen" else "yes"
+            out.append(f"| `[{r['tag']}]` | w{r['window']} | {felt} "
                        f"| {line or '—'} |")
     out += ["", "## Per window", "", "| w | span | gain | holding a question | could not follow |", "|---|---|---|---|---|"]
     for p in res["per_window"]:

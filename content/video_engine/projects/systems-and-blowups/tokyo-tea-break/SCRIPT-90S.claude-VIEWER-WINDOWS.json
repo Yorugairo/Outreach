@@ -4,6 +4,7 @@
   "window_s": 15.0,
   "memory_windows": 2,
   "timing_source": "measured",
+  "screens_source": "tokyo-short.timeline.json",
   "runtime_s": 82.723,
   "windows": [
     {
@@ -11,48 +12,198 @@
       "start_s": 0.0,
       "end_s": 15.047,
       "span": "0:00-0:15",
-      "text": "Tokyo took a tea break. And left America with an unfunded bar tab. The Fed hasn't moved, but your borrowing costs climbed anyway. Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole. On YouTube,",
-      "memory": ""
+      "text": "Tokyo took a tea break. And left America with an unfunded bar tab. The Fed hasn't moved, but your borrowing costs climbed anyway. Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole. On YouTube,\n[screen] a chart: \"Our biggest customer is selling\" - Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06 - showing Japan; -9.9%\n[screen] a picture: \"Three men in blue ties\"",
+      "memory": "",
+      "screens": [
+        {
+          "kind": "a chart",
+          "title": "Our biggest customer is selling",
+          "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06",
+          "figures": [
+            "Japan",
+            "-9.9%"
+          ]
+        },
+        {
+          "kind": "a picture",
+          "title": "Three men in blue ties",
+          "sub": "",
+          "figures": []
+        }
+      ]
     },
     {
       "i": 1,
       "start_s": 15.0,
       "end_s": 30.122,
       "span": "0:15-0:30",
-      "text": "it's sixty-three stick figures. Here's what nobody on that panel is watching: our biggest lender. The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February. I ran risk at JPMorgan; when your biggest",
-      "memory": "Tokyo took a tea break. And left America with an unfunded bar tab. The Fed hasn't moved, but your borrowing costs climbed anyway. Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole. On YouTube,"
+      "text": "it's sixty-three stick figures. Here's what nobody on that panel is watching: our biggest lender. The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February. I ran risk at JPMorgan; when your biggest\n[screen] a chart: \"Our biggest customer is selling\" - Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06 - showing Japan; -9.9%; $1,239.3B; $1,116.7B\n[screen] a picture: \"Three men in blue ties\"",
+      "memory": "Tokyo took a tea break. And left America with an unfunded bar tab. The Fed hasn't moved, but your borrowing costs climbed anyway. Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole. On YouTube,",
+      "screens": [
+        {
+          "kind": "a chart",
+          "title": "Our biggest customer is selling",
+          "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06",
+          "figures": [
+            "Japan",
+            "-9.9%",
+            "$1,239.3B",
+            "$1,116.7B"
+          ]
+        },
+        {
+          "kind": "a picture",
+          "title": "Three men in blue ties",
+          "sub": "",
+          "figures": []
+        }
+      ]
     },
     {
       "i": 2,
       "start_s": 30.0,
       "end_s": 44.398,
       "span": "0:30-0:45",
-      "text": "customer walks, the auction sets your price. The opponent isn't the Fed; it's a Japanese balance sheet. Two numbers show where the money went: a Treasury page, and your phone. By the end you'll read both numbers yourself.",
-      "memory": "Tokyo took a tea break. And left America with an unfunded bar tab. The Fed hasn't moved, but your borrowing costs climbed anyway. Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole. On YouTube, it's sixty-three stick figures. Here's what nobody on that panel is watching: our biggest lender. The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February. I ran risk at JPMorgan; when your biggest"
+      "text": "customer walks, the auction sets your price. The opponent isn't the Fed; it's a Japanese balance sheet. Two numbers show where the money went: a Treasury page, and your phone. By the end you'll read both numbers yourself.\n[screen] a chart: \"Our biggest customer is selling\" - Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06 - showing Japan; -9.9%; The opponent: a balance sheet\n[screen] a picture: \"Two numbers\"",
+      "memory": "Tokyo took a tea break. And left America with an unfunded bar tab. The Fed hasn't moved, but your borrowing costs climbed anyway. Three men in blue ties blame the deficit, the Fed, or the vibes at Jackson Hole. On YouTube, it's sixty-three stick figures. Here's what nobody on that panel is watching: our biggest lender. The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February. I ran risk at JPMorgan; when your biggest",
+      "screens": [
+        {
+          "kind": "a chart",
+          "title": "Our biggest customer is selling",
+          "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06",
+          "figures": [
+            "Japan",
+            "-9.9%",
+            "The opponent: a balance sheet"
+          ]
+        },
+        {
+          "kind": "a picture",
+          "title": "Two numbers",
+          "sub": "",
+          "figures": []
+        }
+      ]
     },
     {
       "i": 3,
       "start_s": 45.0,
       "end_s": 60.124,
       "span": "0:45-1:00",
-      "text": "Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile. The Treasury prints the new total monthly, and that print is your first number. Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. And here's what",
-      "memory": "it's sixty-three stick figures. Here's what nobody on that panel is watching: our biggest lender. The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February. I ran risk at JPMorgan; when your biggest customer walks, the auction sets your price. The opponent isn't the Fed; it's a Japanese balance sheet. Two numbers show where the money went: a Treasury page, and your phone. By the end you'll read both numbers yourself."
+      "text": "Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile. The Treasury prints the new total monthly, and that print is your first number. Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. And here's what\n[screen] a chart: \"Our biggest customer is selling\" - Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06 - showing Japan; -9.9%; −$122.6B a tenth of the pile; Ten years, a year at a time; the June print: $1,116.7B - your first number\n[screen] a news clipping: \"Japan to roll out $65bn in support for chips, AI\" - showing ...at least 10 trillion yen ($65 billion) in support through fiscal 2030...\n[screen] a picture: \"Ten trillion yen for chips\"",
+      "memory": "it's sixty-three stick figures. Here's what nobody on that panel is watching: our biggest lender. The Treasury's table shows Japan holds over a trillion dollars of our debt, and it's been selling since February. I ran risk at JPMorgan; when your biggest customer walks, the auction sets your price. The opponent isn't the Fed; it's a Japanese balance sheet. Two numbers show where the money went: a Treasury page, and your phone. By the end you'll read both numbers yourself.",
+      "screens": [
+        {
+          "kind": "a chart",
+          "title": "Our biggest customer is selling",
+          "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06",
+          "figures": [
+            "Japan",
+            "-9.9%",
+            "−$122.6B a tenth of the pile",
+            "Ten years, a year at a time",
+            "the June print: $1,116.7B - your first number"
+          ]
+        },
+        {
+          "kind": "a news clipping",
+          "title": "Japan to roll out $65bn in support for chips, AI",
+          "sub": "",
+          "figures": [
+            "...at least 10 trillion yen ($65 billion) in support through fiscal 2030..."
+          ]
+        },
+        {
+          "kind": "a picture",
+          "title": "Ten trillion yen for chips",
+          "sub": "",
+          "figures": []
+        }
+      ]
     },
     {
       "i": 4,
       "start_s": 60.0,
       "end_s": 75.24,
       "span": "1:00-1:15",
-      "text": "nobody says: the money went home, and the tab stayed here. So, the second number: it's on your phone. Pull up Meta and find its price-to-earnings multiple: that's the share of the price that's profit not yet earned, and a higher yield discounts",
-      "memory": "customer walks, the auction sets your price. The opponent isn't the Fed; it's a Japanese balance sheet. Two numbers show where the money went: a Treasury page, and your phone. By the end you'll read both numbers yourself. Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile. The Treasury prints the new total monthly, and that print is your first number. Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. And here's what"
+      "text": "nobody says: the money went home, and the tab stayed here. So, the second number: it's on your phone. Pull up Meta and find its price-to-earnings multiple: that's the share of the price that's profit not yet earned, and a higher yield discounts\n[screen] a chart: \"Our biggest customer is selling\" - Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06 - showing Japan; -9.9%\n[screen] a chart: \"What a Meta share is worth as the 10-year moves\" - The same trailing profit per share ($26.83), priced at each 10-year yield; today's 4.77% gives the 23.0x multiple and the $617 price. Arithmetic on the discount identity - no growth assumed, no forecast - showing 4%; 4.5%; 5%; 5.5%; 665; 633; 604; 577",
+      "memory": "customer walks, the auction sets your price. The opponent isn't the Fed; it's a Japanese balance sheet. Two numbers show where the money went: a Treasury page, and your phone. By the end you'll read both numbers yourself. Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile. The Treasury prints the new total monthly, and that print is your first number. Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. And here's what",
+      "screens": [
+        {
+          "kind": "a chart",
+          "title": "Our biggest customer is selling",
+          "sub": "Japan's holdings of US Treasuries, $bn, monthly since 2000; 2026-02 $1,239.3B -> 2026-06 $1,116.7B. TIC history to 2025-05, the current release from 2025-06",
+          "figures": [
+            "Japan",
+            "-9.9%"
+          ]
+        },
+        {
+          "kind": "a chart",
+          "title": "What a Meta share is worth as the 10-year moves",
+          "sub": "The same trailing profit per share ($26.83), priced at each 10-year yield; today's 4.77% gives the 23.0x multiple and the $617 price. Arithmetic on the discount identity - no growth assumed, no forecast",
+          "figures": [
+            "4%",
+            "4.5%",
+            "5%",
+            "5.5%",
+            "665",
+            "633",
+            "604",
+            "577"
+          ]
+        }
+      ]
     },
     {
       "i": 5,
       "start_s": 75.0,
       "end_s": 82.723,
       "span": "1:15-1:30",
-      "text": "it. The Fed still hasn't moved. Tokyo is still on its tea break. And that unfunded bar tab is still ours.",
-      "memory": "Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile. The Treasury prints the new total monthly, and that print is your first number. Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. And here's what nobody says: the money went home, and the tab stayed here. So, the second number: it's on your phone. Pull up Meta and find its price-to-earnings multiple: that's the share of the price that's profit not yet earned, and a higher yield discounts"
+      "text": "it. The Fed still hasn't moved. Tokyo is still on its tea break. And that unfunded bar tab is still ours.\n[screen] a chart: \"What a Meta share is worth as the 10-year moves\" - The same trailing profit per share ($26.83), priced at each 10-year yield; today's 4.77% gives the 23.0x multiple and the $617 price. Arithmetic on the discount identity - no growth assumed, no forecast - showing 4%; 4.5%; 5%; 5.5%; 665; 633; 604; 577\n[screen] a chart: \"The Fed hasn't moved. Your borrowing costs climbed anyway.\"\n[screen] a chart: \"The Fed hasn't moved. Your borrowing costs climbed anyway.\" - What the Fed charges against what America actually pays, %, since Dec 2025 - showing 4.77%; 10-year; 3.97% - the February low; Japan started selling in February.; Rates went up immediately: the 10-year +80 bp since February.; 30-year mortgage 5.98% -> 6.71% over the same months.\n[screen] a picture: \"The tea, still going\"",
+      "memory": "Since February, Japan has sold a hundred and twenty-two billion dollars of it, a tenth of the pile. The Treasury prints the new total monthly, and that print is your first number. Tokyo has pledged ten trillion yen to chips, and if that works, it beats our bonds. And here's what nobody says: the money went home, and the tab stayed here. So, the second number: it's on your phone. Pull up Meta and find its price-to-earnings multiple: that's the share of the price that's profit not yet earned, and a higher yield discounts",
+      "screens": [
+        {
+          "kind": "a chart",
+          "title": "What a Meta share is worth as the 10-year moves",
+          "sub": "The same trailing profit per share ($26.83), priced at each 10-year yield; today's 4.77% gives the 23.0x multiple and the $617 price. Arithmetic on the discount identity - no growth assumed, no forecast",
+          "figures": [
+            "4%",
+            "4.5%",
+            "5%",
+            "5.5%",
+            "665",
+            "633",
+            "604",
+            "577"
+          ]
+        },
+        {
+          "kind": "a chart",
+          "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
+          "sub": "",
+          "figures": []
+        },
+        {
+          "kind": "a chart",
+          "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
+          "sub": "What the Fed charges against what America actually pays, %, since Dec 2025",
+          "figures": [
+            "4.77%",
+            "10-year",
+            "3.97% - the February low",
+            "Japan started selling in February.",
+            "Rates went up immediately: the 10-year +80 bp since February.",
+            "30-year mortgage 5.98% -> 6.71% over the same months."
+          ]
+        },
+        {
+          "kind": "a picture",
+          "title": "The tea, still going",
+          "sub": "",
+          "figures": []
+        }
+      ]
     }
   ]
 }
