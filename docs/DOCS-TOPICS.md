@@ -18,10 +18,10 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4867 topics, 6113 citation edges. The 200 largest topics follow,
+4868 topics, 6125 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
-## youtube (164)
+## youtube (165)
 
 - content/video_engine/projects/history-of-bjj/README.md:1 — History of BJJ Series — This directory contains source-controlled editorial inputs for History Documentary
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:1 — How Japan Tricked Trump — Production Hand-off Pack — Project: `japan-tariff-trick` (Systems & Blowups / Money Physics)
@@ -35,7 +35,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:48 — The evidence holds (render timeline, 2026-09-08) — Measured from `build-f/steel-and-paper.timeline.json` — runtime 806.5 s, which
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:224 — Publication (operator decision — RECOMMENDED, not confirmed) — Re-cut, unlist the original (never delete — it is the analytics baseline
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-C-PRODUCTION.md:1 — Steel and Paper — SCRIPT C (PRODUCTION TEXT) — Script B with Revision C applied. Structure, beats and the five hardest
-- … 152 more in `docs/DOCS-TOPICS.jsonl`
+- … 153 more in `docs/DOCS-TOPICS.jsonl`
 
 ## hyperframes (102)
 
@@ -213,7 +213,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:34 — 2. The audit beat — the narration device — A five-step unit, 20–35 seconds. It is an anecdote with a reversal,
 - … 44 more in `docs/DOCS-TOPICS.jsonl`
 
-## pacing (49)
+## pacing (55)
 
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:153 — 5. Audio Assets & Timestamp Artifacts Available — All audio assets are persisted in `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/scratch/`:
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:19 — P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 11 shots | 449 words | 299.3 WPM
@@ -227,7 +227,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:105 — P3: The Gap (02:52 – 07:36) | Mounting Contradiction & Initial Mechanisms — - Pacing: 28 shots | 992 words | 209.7 WPM
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:110 — P4: The Pivot (07:36 – 09:17) | 45–55% Chiastic Turn — - Pacing: 11 shots | 401 words | 237.4 WPM
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:115 — P5: The Payoff & The Tell (09:17 – 14:21) | Climax & Accessible Counterparts — - Pacing: 31 shots | 1,151 words | 227.1 WPM
-- … 37 more in `docs/DOCS-TOPICS.jsonl`
+- … 43 more in `docs/DOCS-TOPICS.jsonl`
 
 ## on-screen (43)
 
@@ -514,6 +514,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:78 — Script (original, ~560 words, ~3:00 at spoken pace) — [s01 — black screen, captions punching in word groups; till sounds under]
 - … 18 more in `docs/DOCS-TOPICS.jsonl`
 
+## source (29)
+
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1 — PRODUCTION REFERENCE REPORT: 6 Ways Rich People Make Money With Debt — - Source: `https://www.youtube.com/watch?v=rCHYttyvaw8`
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:1 — PRODUCTION REFERENCE REPORT (Claude, 2026-09-10): China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` - Bravos Research, 19:56.5 (1196.5 s), 1280x720 av1, 29.97 fps
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:1 — PRODUCTION REFERENCE REPORT: China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc`
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1 — PRODUCTION REFERENCE REPORT: Claude Code (Free Plan) + YouTube = $77,000/Month — - Source: `https://www.youtube.com/watch?v=WVT2FCjhDDY`
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:171 — The On-1s / On-2s / On-3s Decision Rule (Proposal) — $$\text{Frame Cadence} = \begin{cases}
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:274 — 1. The Kinematic Two-Thirds Power Law (Tier 1 Math — CLOSED) — Human handwriting and drawing velocity strictly tracks path curvature $\kappa(s)$:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:288 — A6: The Secondary-Motion Budget [RECLASSIFIED: Design Proposal] — - Energy Ratio Proposal:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:379 — B5: Rhythm as a Distribution [Tier 1 Science — CLOSED] — High-retention shot lengths follow a Log-Normal Distribution exhibiting $1/f$ pink noise scaling:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:389 — C1: Shape Interpolation (ARAP) [Tier 1 Math — CLOSED] — - Polar decomposition of deformation gradient:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:430 — C5: Ink on Paper, Specifically [Tier 1 Math & Shaders — CLOSED] — - Three physical components:
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:1 — PRODUCTION REFERENCE REPORT: Give Me 10 Minutes and I'll Make your Videos Addicting to Watch — - Source: `https://www.youtube.com/watch?v=DiZnbihU4NM`
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:1 — PRODUCTION REFERENCE REPORT: I Found the Pattern Behind Every Viral Video — - Source: `https://youtu.be/EyHJupH4Dr0?si=3WwWRqnCU-tyw6Du`
+- … 17 more in `docs/DOCS-TOPICS.jsonl`
+
 ## stick-figure (29)
 
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/ANALYTICS-2026-09-06.md:1 — Analytics — the Tokyo short on Facebook, first read (2026-09-06, ~1 h after posting) — Operator screenshots, 2026-09-06 (Sunday, posted during the NFL as a timing test). n = 8 viewers — a sample, not a
@@ -578,22 +594,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:122 — 5. Drawing Engine Mechanics & Coordinate Transform Pipeline
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:124 — 2D Affine Transformation Matrix (Homogeneous $3 \times 3$) — $$\mathbf{M} = \begin{bmatrix} a & c & e \\ b & d & f \\ 0 & 0 & 1 \end{bmatrix} = \begin{bmatrix} s_x \cos\theta - k_y
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:127 — Anchor Normalization — $$\mathbf{M}_{local} = \mathbf{T}(a_x, a_y) \times \mathbf{R}(\theta) \times \mathbf{S}(s_x, s_y) \times \mathbf{T}(-a_x
-- … 16 more in `docs/DOCS-TOPICS.jsonl`
-
-## source (28)
-
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md:1 — PRODUCTION REFERENCE REPORT: 6 Ways Rich People Make Money With Debt — - Source: `https://www.youtube.com/watch?v=rCHYttyvaw8`
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:1 — PRODUCTION REFERENCE REPORT (Claude, 2026-09-10): China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` - Bravos Research, 19:56.5 (1196.5 s), 1280x720 av1, 29.97 fps
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:1 — PRODUCTION REFERENCE REPORT: China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc`
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:1 — PRODUCTION REFERENCE REPORT: Claude Code (Free Plan) + YouTube = $77,000/Month — - Source: `https://www.youtube.com/watch?v=WVT2FCjhDDY`
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:171 — The On-1s / On-2s / On-3s Decision Rule (Proposal) — $$\text{Frame Cadence} = \begin{cases}
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:274 — 1. The Kinematic Two-Thirds Power Law (Tier 1 Math — CLOSED) — Human handwriting and drawing velocity strictly tracks path curvature $\kappa(s)$:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:288 — A6: The Secondary-Motion Budget [RECLASSIFIED: Design Proposal] — - Energy Ratio Proposal:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:379 — B5: Rhythm as a Distribution [Tier 1 Science — CLOSED] — High-retention shot lengths follow a Log-Normal Distribution exhibiting $1/f$ pink noise scaling:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:389 — C1: Shape Interpolation (ARAP) [Tier 1 Math — CLOSED] — - Polar decomposition of deformation gradient:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:430 — C5: Ink on Paper, Specifically [Tier 1 Math & Shaders — CLOSED] — - Three physical components:
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:1 — PRODUCTION REFERENCE REPORT: I Found the Pattern Behind Every Viral Video — - Source: `https://youtu.be/EyHJupH4Dr0?si=3WwWRqnCU-tyw6Du`
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:1 — PRODUCTION REFERENCE REPORT: The New Rules For Faceless Channels in 2026 — - Source: `https://www.youtube.com/watch?v=ye2T2FwubI4`
 - … 16 more in `docs/DOCS-TOPICS.jsonl`
 
 ## 1.0 (27)
@@ -690,6 +690,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:140 — 3.3 ComfyUI-Depthflow-Nodes Mastery & Bug Resolution — ComfyUI-Depthflow-Nodes (`depthflow.glsl`) executes an image-space continuous heightfield ray-march:
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:122 — 5. Drawing Engine Mechanics & Coordinate Transform Pipeline
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:124 — 2D Affine Transformation Matrix (Homogeneous $3 \times 3$) — $$\mathbf{M} = \begin{bmatrix} a & c & e \\ b & d & f \\ 0 & 0 & 1 \end{bmatrix} = \begin{bmatrix} s_x \cos\theta - k_y
+- … 14 more in `docs/DOCS-TOPICS.jsonl`
+
+## unclassified (26)
+
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.claude.md:1 — SHOT LEDGER (Claude, 2026-09-10): the measured events, the species read from the frames, the spoken line — Source `https://youtu.be/1ZS5_txbOsc` - China Just Triggered A New World Order, Bravos Research, 19:56.5. Events measure
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:1 — PRODUCTION REFERENCE REPORT: Give Me 10 Minutes and I'll Make your Videos Addicting to Watch — - Source: `https://www.youtube.com/watch?v=DiZnbihU4NM`
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:34 — 2. Visual System & Stage Grammar
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:49 — Visual Species Distribution — | Species | Count | Share | Primary Function in Video |
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/SHOT_LEDGER.md:1 — SHOT LEDGER: Dual-Track Visual Events & Composition Hierarchy — | Shot # | Start | End | Dur (s) | Kind | Camera | Keyframe | Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:1 — PRODUCTION REFERENCE REPORT: I Found the Pattern Behind Every Viral Video — - Source: `https://youtu.be/EyHJupH4Dr0?si=3WwWRqnCU-tyw6Du`
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:34 — 2. Visual System & Stage Grammar
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:49 — Visual Species Distribution — | Species | Count | Share | Primary Function in Video |
 - … 14 more in `docs/DOCS-TOPICS.jsonl`
 
 ## vit (26)
@@ -841,6 +857,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/FINDING-gaps-are-the-edit.md:81 — Test 3 — the question I should have asked first — Tests 1 and 2 asked "do gaps predict where we cut." That was backwards. The claim is
 - … 10 more in `docs/DOCS-TOPICS.jsonl`
 
+## near-black (22)
+
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/VISUAL-CHOREOGRAPHY.md:12 — 1. Production Architecture & Visual Rules — 1. Non-Captioning Law (Doc 29 §9.15, VOICE-PACK §4):
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:1 — PRODUCTION REFERENCE REPORT (Claude, 2026-09-10): China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` - Bravos Research, 19:56.5 (1196.5 s), 1280x720 av1, 29.97 fps
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:50 — The grammar (what the frames say; what it maps to in our engine) — 1. One stage, one accent. Near-black charcoal, one pink, white type; green only for 'up' and the CTA. Titles top-centre
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:305 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:1 — PRODUCTION REFERENCE REPORT: Give Me 10 Minutes and I'll Make your Videos Addicting to Watch — - Source: `https://www.youtube.com/watch?v=DiZnbihU4NM`
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:34 — 2. Visual System & Stage Grammar
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:36 — The Ground & Environment — (Document the physical or graphic ground: dark charcoal void, cream washi paper, 3D textured studio, terminal UI, or liv
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:1 — PRODUCTION REFERENCE REPORT: I Found the Pattern Behind Every Viral Video — - Source: `https://youtu.be/EyHJupH4Dr0?si=3WwWRqnCU-tyw6Du`
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:34 — 2. Visual System & Stage Grammar
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:36 — The Ground & Environment — (Document the physical or graphic ground: dark charcoal void, cream washi paper, 3D textured studio, terminal UI, or liv
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:304 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
+- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:1 — PRODUCTION REFERENCE REPORT: The New Rules For Faceless Channels in 2026 — - Source: `https://www.youtube.com/watch?v=ye2T2FwubI4`
+- … 10 more in `docs/DOCS-TOPICS.jsonl`
+
 ## re-run (22)
 
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/AGENTS.md:33 — Commands — > `npm run dev` is a long-running server, not a one-shot command. It blocks until stopped.
@@ -890,22 +922,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:1 — Weight, Density, and Mass in Drawing, Animation, and Stop-Motion: Research Blueprint — Pass Metadata:
 - docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:13 — The Question — Following review of Tokyo v3's first thrown and landed cards (P47 T1), the operator noted:
 - docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:28 — Verdict Up Front — 1. A HIT squash does NOT hold: Across traditional hand-drawn animation (Richard Williams, Whitaker & Halas) and 3D compu
-- … 10 more in `docs/DOCS-TOPICS.jsonl`
-
-## unclassified (22)
-
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.claude.md:1 — SHOT LEDGER (Claude, 2026-09-10): the measured events, the species read from the frames, the spoken line — Source `https://youtu.be/1ZS5_txbOsc` - China Just Triggered A New World Order, Bravos Research, 19:56.5. Events measure
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:1 — PRODUCTION REFERENCE REPORT: I Found the Pattern Behind Every Viral Video — - Source: `https://youtu.be/EyHJupH4Dr0?si=3WwWRqnCU-tyw6Du`
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:34 — 2. Visual System & Stage Grammar
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:49 — Visual Species Distribution — | Species | Count | Share | Primary Function in Video |
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/SHOT_LEDGER.md:1 — SHOT LEDGER: Dual-Track Visual Events & Composition Hierarchy — | Shot # | Start | End | Dur (s) | Kind | Camera | Keyframe | Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:1 — PRODUCTION REFERENCE REPORT: The New Rules For Faceless Channels in 2026 — - Source: `https://www.youtube.com/watch?v=ye2T2FwubI4`
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:34 — 2. Visual System & Stage Grammar
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:49 — Visual Species Distribution — | Species | Count | Share | Primary Function in Video |
 - … 10 more in `docs/DOCS-TOPICS.jsonl`
 
 ## as-rigid-as-possible (21)
@@ -1025,6 +1041,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:556 — 8. Procedural Code Audit: `parallax-runner.mjs` — Per Claude's RE-ASK 5, we cite the exact, verified file coordinates and code from `tools/google-flow-driver/src/parallax
 - … 9 more in `docs/DOCS-TOPICS.jsonl`
 
+## record-document (21)
+
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:1 — PRODUCTION REFERENCE REPORT (Claude, 2026-09-10): China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` - Bravos Research, 19:56.5 (1196.5 s), 1280x720 av1, 29.97 fps
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:50 — The grammar (what the frames say; what it maps to in our engine) — 1. One stage, one accent. Near-black charcoal, one pink, white type; green only for 'up' and the CTA. Titles top-centre
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:126 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/SHOT_LEDGER.md:106 — Taxonomy Legend — - Kind: `COMP` = new base stage / scene cut; `build` = animated element or callout inside held composition.
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/SHOT_LEDGER.md:1 — SHOT LEDGER: Dual-Track Visual Events & Composition Hierarchy — | Shot # | Start | End | Dur (s) | Kind | Camera | Keyframe | Species | Spoken Line / Audio Beat |
+- … 9 more in `docs/DOCS-TOPICS.jsonl`
+
 ## self-contained (21)
 
 - content/video_engine/projects/history-of-bjj/README.md:1 — History of BJJ Series — This directory contains source-controlled editorial inputs for History Documentary
@@ -1142,22 +1174,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:197 — Part 4 — The literal evidence layer (teacher-stamped deck slides) — Source of truth: `sources/decks/teacher-stamped-production-visuals/` — full
 - … 8 more in `docs/DOCS-TOPICS.jsonl`
 
-## record-document (20)
-
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:1 — PRODUCTION REFERENCE REPORT (Claude, 2026-09-10): China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` - Bravos Research, 19:56.5 (1196.5 s), 1280x720 av1, 29.97 fps
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:50 — The grammar (what the frames say; what it maps to in our engine) — 1. One stage, one accent. Near-black charcoal, one pink, white type; green only for 'up' and the CTA. Titles top-centre
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:126 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/SHOT_LEDGER.md:1 — SHOT LEDGER: Dual-Track Visual Events & Composition Hierarchy — | Shot # | Start | End | Dur (s) | Kind | Camera | Keyframe | Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/SHOT_LEDGER.md:106 — Taxonomy Legend — - Kind: `COMP` = new base stage / scene cut; `build` = animated element or callout inside held composition.
-- … 8 more in `docs/DOCS-TOPICS.jsonl`
-
 ## tiktok (20)
 
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:34 — Video Description (YouTube Shorts / Reels / TikTok)
@@ -1241,22 +1257,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/53-THE-STICKMAN-LANE.md:353 — The character-sheet spec is concrete and reusable — Three labelled rows on a plain cream ground: front, side, three-quarter and back views
 - docs/content-video-engine/53-THE-STICKMAN-LANE.md:435 — A0 landed — 2026-09-04, with two operator corrections — The pack now meets the table above: both views rows, five named expressions, five named
 - docs/content-video-engine/53-THE-STICKMAN-LANE.md:463 — A0 closed — 2026-09-04 — Both sheets approved and promoted; `StickMike` is bound in Flow beside `Mike`. What the
-- … 7 more in `docs/DOCS-TOPICS.jsonl`
-
-## near-black (19)
-
-- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/VISUAL-CHOREOGRAPHY.md:12 — 1. Production Architecture & Visual Rules — 1. Non-Captioning Law (Doc 29 §9.15, VOICE-PACK §4):
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:1 — PRODUCTION REFERENCE REPORT (Claude, 2026-09-10): China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` - Bravos Research, 19:56.5 (1196.5 s), 1280x720 av1, 29.97 fps
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:50 — The grammar (what the frames say; what it maps to in our engine) — 1. One stage, one accent. Near-black charcoal, one pink, white type; green only for 'up' and the CTA. Titles top-centre
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:305 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:1 — PRODUCTION REFERENCE REPORT: I Found the Pattern Behind Every Viral Video — - Source: `https://youtu.be/EyHJupH4Dr0?si=3WwWRqnCU-tyw6Du`
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:34 — 2. Visual System & Stage Grammar
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:36 — The Ground & Environment — (Document the physical or graphic ground: dark charcoal void, cream washi paper, 3D textured studio, terminal UI, or liv
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:304 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:1 — PRODUCTION REFERENCE REPORT: The New Rules For Faceless Channels in 2026 — - Source: `https://www.youtube.com/watch?v=ye2T2FwubI4`
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:34 — 2. Visual System & Stage Grammar
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:36 — The Ground & Environment — (Document the physical or graphic ground: dark charcoal void, cream washi paper, 3D textured studio, terminal UI, or liv
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:81 — Lane C — `presenter_infographic` — Reference: personal-finance channel, presenter-anchored.
 - … 7 more in `docs/DOCS-TOPICS.jsonl`
 
 ## secondary-motion (19)
@@ -1397,6 +1397,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:46 — Pillar 1: The Coordinate Transform Pipeline & Anchor Normalization — - Elements live in local coordinate space and transform to screen space via affine matrix multiplication: $\mathbf{p}{sc
 - … 6 more in `docs/DOCS-TOPICS.jsonl`
 
+## deduped-audio-snippet (18)
+
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:60 — P1: The Open (Hook & Contract) [00:00 - 01:30] — - Pacing: 16 events | 479 words | 319.3 WPM
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:65 — P2: The Engine (Foundational Model) [01:30 - 01:45] — - Pacing: 3 events | 119 words | 474.9 WPM
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:70 — P3: The Gap (Mounting Contradiction) [01:45 - 04:38] — - Pacing: 31 events | 962 words | 333.6 WPM
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:75 — P4: The Pivot (Chiastic Reversal) [04:38 - 05:40] — - Pacing: 19 events | 416 words | 404.0 WPM
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:80 — P5: The Payoff (Grand Climax) [05:40 - 08:45] — - Pacing: 25 events | 926 words | 299.7 WPM
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:85 — P6: The Close (Resolution & Ring Echo) [08:45 - 10:18] — - Pacing: 11 events | 521 words | 337.3 WPM
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:60 — P1: The Open (Hook & Contract) [00:00 - 01:30] — - Pacing: 11 events | 419 words | 279.3 WPM
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:65 — P2: The Engine (Foundational Model) [01:30 - 01:58] — - Pacing: 3 events | 167 words | 356.6 WPM
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:70 — P3: The Gap (Mounting Contradiction) [01:58 - 05:13] — - Pacing: 34 events | 838 words | 258.5 WPM
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:75 — P4: The Pivot (Chiastic Reversal) [05:13 - 06:22] — - Pacing: 5 events | 309 words | 266.9 WPM
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:80 — P5: The Payoff (Grand Climax) [06:22 - 09:50] — - Pacing: 32 events | 930 words | 267.7 WPM
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:85 — P6: The Close (Resolution & Ring Echo) [09:50 - 11:35] — - Pacing: 20 events | 483 words | 278.1 WPM
+- … 6 more in `docs/DOCS-TOPICS.jsonl`
+
 ## heygen (18)
 
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:1 — HyperFrames Motion, Transitions, and Kinetic Transformations — Research Blueprint — Pass-3 deep extraction · 2026-09-06 · sources: HeyGen HyperFrames official documentation (overview, motion, transitions,
@@ -1443,6 +1459,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:7 — Executive Summary — State-of-the-art programmatic video generation systems (such as Remotion, Motion Canvas, Figma Motion, and Rive) achieve
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:30 — 1. Executive Summary & The 4 Core Pillars — State-of-the-art programmatic video generation systems (Remotion, Motion Canvas, Figma Motion, Rive) achieve institution
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:71 — 2. Comparative Scorecard & Production Benchmarks — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
+- … 6 more in `docs/DOCS-TOPICS.jsonl`
+
+## inquiry-check (18)
+
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:60 — P1: The Open (Hook & Contract) [00:00 - 01:30] — - Pacing: 16 events | 479 words | 319.3 WPM
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:65 — P2: The Engine (Foundational Model) [01:30 - 01:45] — - Pacing: 3 events | 119 words | 474.9 WPM
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:70 — P3: The Gap (Mounting Contradiction) [01:45 - 04:38] — - Pacing: 31 events | 962 words | 333.6 WPM
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:75 — P4: The Pivot (Chiastic Reversal) [04:38 - 05:40] — - Pacing: 19 events | 416 words | 404.0 WPM
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:80 — P5: The Payoff (Grand Climax) [05:40 - 08:45] — - Pacing: 25 events | 926 words | 299.7 WPM
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:85 — P6: The Close (Resolution & Ring Echo) [08:45 - 10:18] — - Pacing: 11 events | 521 words | 337.3 WPM
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:60 — P1: The Open (Hook & Contract) [00:00 - 01:30] — - Pacing: 11 events | 419 words | 279.3 WPM
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:65 — P2: The Engine (Foundational Model) [01:30 - 01:58] — - Pacing: 3 events | 167 words | 356.6 WPM
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:70 — P3: The Gap (Mounting Contradiction) [01:58 - 05:13] — - Pacing: 34 events | 838 words | 258.5 WPM
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:75 — P4: The Pivot (Chiastic Reversal) [05:13 - 06:22] — - Pacing: 5 events | 309 words | 266.9 WPM
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:80 — P5: The Payoff (Grand Climax) [06:22 - 09:50] — - Pacing: 32 events | 930 words | 267.7 WPM
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:85 — P6: The Close (Resolution & Ring Echo) [09:50 - 11:35] — - Pacing: 20 events | 483 words | 278.1 WPM
 - … 6 more in `docs/DOCS-TOPICS.jsonl`
 
 ## kubelka-munk (18)
@@ -1593,6 +1625,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:312 — 10. 100-Shot Pacing Ledger & 6-Phase Script Map — - P1: The Open (00:00 – 01:30): 11 shots | 449 words | The Hook + Introduction of The Spread.
 - content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:47 — The 5 Foundational Takeaways for Our Channels (*Money Physics* / *Building Money*)
 - content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:56 — 2. The Unifying Equation Spine (Curing "Listicle Fatigue") — - The Finding: The video covers 6 debt mechanisms, but it never feels like a disconnected listicle.
+- … 5 more in `docs/DOCS-TOPICS.jsonl`
+
+## chart (17)
+
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:65 — 3. `semantic_id` — the alias — - The claim segment must equal `claim_refs[0]`. That is what makes this a
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:126 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/SHOT_LEDGER.md:106 — Taxonomy Legend — - Kind: `COMP` = new base stage / scene cut; `build` = animated element or callout inside held composition.
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/SHOT_LEDGER.md:1 — SHOT LEDGER: Dual-Track Visual Events & Composition Hierarchy — | Shot # | Start | End | Dur (s) | Kind | Camera | Keyframe | Species | Spoken Line / Audio Beat |
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/SHOT_LEDGER.md:106 — Taxonomy Legend — - Kind: `COMP` = new base stage / scene cut; `build` = animated element or callout inside held composition.
 - … 5 more in `docs/DOCS-TOPICS.jsonl`
 
 ## earns (17)
@@ -1790,22 +1838,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md:111 — **Audio-Visual Counterpoint and Subtext** — In faceless visual media, a common pitfall is tautology—writing script narration that merely describes what is simultane
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md:130 — **Integrated Synthesis Framework for Long-Form Audio-Visual Scripts** — To synthesize these diverse methodologies into an operational workflow, the following master blueprint maps broadcast me
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md:143 — **Strategic Synthesis and Practical Execution** — Elevating faceless audio-visual scripts requires synthesizing acoustic precision with deep narrative engineering. At the
-- … 4 more in `docs/DOCS-TOPICS.jsonl`
-
-## chart (16)
-
-- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:65 — 3. `semantic_id` — the alias — - The claim segment must equal `claim_refs[0]`. That is what makes this a
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md:126 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:1 — SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/04_shot_ledger_100_cuts.md:106 — Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve).
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/SHOT_LEDGER.md:1 — SHOT LEDGER: Dual-Track Visual Events & Composition Hierarchy — | Shot # | Start | End | Dur (s) | Kind | Camera | Keyframe | Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/SHOT_LEDGER.md:106 — Taxonomy Legend — - Kind: `COMP` = new base stage / scene cut; `build` = animated element or callout inside held composition.
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/SHOT_LEDGER.md:1 — SHOT LEDGER: Dual-Track Visual Events & Composition Hierarchy — | Shot # | Start | End | Dur (s) | Kind | Camera | Keyframe | Species | Spoken Line / Audio Beat |
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
 ## evidence-backed (16)
@@ -2194,6 +2226,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:263 — 8.1 Depthflow & Depth Anything v2 (Engine 1) — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large FP32; FP16 strictly banned).
 - … 3 more in `docs/DOCS-TOPICS.jsonl`
 
+## anti-pattern (15)
+
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:116 — 5. Doctrine Fit & Gap Analysis (Outreach Video Engine) — | Technique / Device | Repo Doctrine Status | Engine Capability Gap | Recommended Action |
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:116 — 5. Doctrine Fit & Gap Analysis (Outreach Video Engine) — | Technique / Device | Repo Doctrine Status | Engine Capability Gap | Recommended Action |
+- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:116 — 5. Doctrine Fit & Gap Analysis (Outreach Video Engine) — | Technique / Device | Repo Doctrine Status | Engine Capability Gap | Recommended Action |
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536 — `review_script` on Steel and Paper — measured (2026-08-29) — Submitted Script D (1,954 words, 11m 40s) to `review_script`. Confirms the
+- docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md:123 — 7. Anti-patterns — observed rejections — Each of these was produced, shown, and rejected in session:
+- docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md:153 — 9. Faceless personality mechanisms — external doctrine (AOY), adapted — Everything above is operator-derived. This section is the one piece of
+- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:152 — 6. Form selection — the 15-second test — Given the dwell budget, form is chosen by what a reader can finish.
+- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:201 — 8. Checks before a document ships — - [ ] Form chosen by §6 — and it is not a chart when it should be a tile
+- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:156 — 7. Anti-patterns — - The methodology lecture. Explaining process in the abstract instead
+- docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:106 — Comparison — what the persona pass changed, and under which rule — | Slot | v1 | v2 | Rule |
+- docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34 — 1.3 Where the report argues with measurements — - `R:110/172` fade-through-black is "the cardinal anti-pattern" - E47 enters the dip through black into our kit because
+- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:174 — The Cardinal Transition Anti-Pattern: — Never fade the outgoing scene to black or cream and subsequently fade the incoming scene in. That creates a 2-frame perc
+- … 3 more in `docs/DOCS-TOPICS.jsonl`
+
 ## arc-length (15)
 
 - content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:95 — 1.2 Kinematic Arc-Length Reparameterization for SVG & Canvas — Standard web animations interpolate SVG `stroke-dashoffset` linearly with clock time ($s(t) = rac{L}{T} t$), producing r
@@ -2485,22 +2533,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:1 — DOCTRINE CORE — portable content-operation context — Model-agnostic; paste whole into any system-instruction or rules box
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
-## anti-pattern (14)
-
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:116 — 5. Doctrine Fit & Gap Analysis (Outreach Video Engine) — | Technique / Device | Repo Doctrine Status | Engine Capability Gap | Recommended Action |
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:116 — 5. Doctrine Fit & Gap Analysis (Outreach Video Engine) — | Technique / Device | Repo Doctrine Status | Engine Capability Gap | Recommended Action |
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:536 — `review_script` on Steel and Paper — measured (2026-08-29) — Submitted Script D (1,954 words, 11m 40s) to `review_script`. Confirms the
-- docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md:123 — 7. Anti-patterns — observed rejections — Each of these was produced, shown, and rejected in session:
-- docs/content-video-engine/30-VOICE-SOURCE-MATERIAL.md:153 — 9. Faceless personality mechanisms — external doctrine (AOY), adapted — Everything above is operator-derived. This section is the one piece of
-- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:152 — 6. Form selection — the 15-second test — Given the dwell budget, form is chosen by what a reader can finish.
-- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:201 — 8. Checks before a document ships — - [ ] Form chosen by §6 — and it is not a chart when it should be a tile
-- docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:156 — 7. Anti-patterns — - The methodology lecture. Explaining process in the abstract instead
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:106 — Comparison — what the persona pass changed, and under which rule — | Slot | v1 | v2 | Rule |
-- docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:34 — 1.3 Where the report argues with measurements — - `R:110/172` fade-through-black is "the cardinal anti-pattern" - E47 enters the dip through black into our kit because
-- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:174 — The Cardinal Transition Anti-Pattern: — Never fade the outgoing scene to black or cream and subsequently fade the incoming scene in. That creates a 2-frame perc
-- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:270 — 8. What HyperFrames Would Say About Our Open Transition Queries (`TRANSITIONS-REVIEW-2026-09-06.md`) — This section does not settle our open transition queries. Rather, it contrasts what HyperFrames doctrine would advise ag
-- … 2 more in `docs/DOCS-TOPICS.jsonl`
-
 ## expectation-reality (14)
 
 - docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:87 — 3. The format — eight beats — From the operator's own worked example:
@@ -2615,7 +2647,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:184 — Track D — placement (the "where" question) — | # | question | why it matters here |
 - docs/content-video-engine/PIPELINE.md:109 — Captions — doc 29 Part 5, not your own design — - One fixed lower-third anchor. Evidence roams; the caption does not.
 - docs/portable/OPERATOR-RULINGS.md:557 — E21 — The screen never goes still; captions ARE the motion when nothing else moves (2026-09-02) — Operator, watching Steel and Paper after a week of flat performance: "we
-  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/VISUAL-CHOREOGRAPHY.md:2, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:24, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:48, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:105, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:243, +43 more
+  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/VISUAL-CHOREOGRAPHY.md:2, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:24, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:48, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:105, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:243, +44 more
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
 ## model-agnostic (14)
@@ -3295,33 +3327,3 @@ at most 12 sections each - the JSONL holds every one.
 - docs/portable/VOICE-PACK.md:1 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
 - docs/portable/VOICE-PACK.md:52 — 2. Approved production lines, by function — From Script B ("Steel and Paper"), which won a seed-locked A/B by ear
 - docs/portable/VOICE-PACK.md:101 — 3. What the exemplars are doing (the patterns worth naming) — - The opponent is a mechanism, never a person. Not "Bravos is wrong"
-
-## deduped-audio-snippet (12)
-
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:60 — P1: The Open (Hook & Contract) [00:00 - 01:30] — - Pacing: 11 events | 419 words | 279.3 WPM
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:65 — P2: The Engine (Foundational Model) [01:30 - 01:58] — - Pacing: 3 events | 167 words | 356.6 WPM
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:70 — P3: The Gap (Mounting Contradiction) [01:58 - 05:13] — - Pacing: 34 events | 838 words | 258.5 WPM
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:75 — P4: The Pivot (Chiastic Reversal) [05:13 - 06:22] — - Pacing: 5 events | 309 words | 266.9 WPM
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:80 — P5: The Payoff (Grand Climax) [06:22 - 09:50] — - Pacing: 32 events | 930 words | 267.7 WPM
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:85 — P6: The Close (Resolution & Ring Echo) [09:50 - 11:35] — - Pacing: 20 events | 483 words | 278.1 WPM
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:60 — P1: The Open (Hook & Contract) [00:00 - 01:30] — - Pacing: 20 events | 404 words | 269.3 WPM
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:65 — P2: The Engine (Foundational Model) [01:30 - 01:30] — - Pacing: 1 events | 24 words | 0.0 WPM
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:70 — P3: The Gap (Mounting Contradiction) [01:30 - 03:58] — - Pacing: 41 events | 750 words | 303.9 WPM
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:75 — P4: The Pivot (Chiastic Reversal) [03:58 - 04:51] — - Pacing: 10 events | 272 words | 308.6 WPM
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:80 — P5: The Payoff (Grand Climax) [04:51 - 07:30] — - Pacing: 21 events | 583 words | 220.5 WPM
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:85 — P6: The Close (Resolution & Ring Echo) [07:30 - 08:49] — - Pacing: 12 events | 393 words | 297.2 WPM
-
-## demand-free (12)
-
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa

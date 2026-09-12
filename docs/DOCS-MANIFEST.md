@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-308 documents across 13 kinds.
+310 documents across 13 kinds.
 
 ## doctrine
 
@@ -212,6 +212,8 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md — Deep Technical Monograph 10: Generative — This monograph standardizes the technica — defines: — — terms: arXiv; DiT; Spatio-Temporal; mask-pinned
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md — Master Research & Evidence Dossier: High — Executive Summary & The 4 Core Pillars C — defines: — — terms: Closed-Form; s_x; s_y; a_x
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md — Deep Research Report: Drawing Engines, A — State-of-the-art programmatic video gene — defines: — — terms: closed-form; s_x; s_y; HyperFrames
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md — PRODUCTION REFERENCE REPORT: Give Me 10 — Compositions Measured: 42 Camera-Locked — defines: P1; P2; +4 more — terms: zero-drift; Hyper-Dense; cut-alignment; Near-black
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/SHOT_LEDGER.md — SHOT LEDGER: Dual-Track Visual Events & — Kind: `COMP` = new base stage / scene cu — defines: — — terms: SLOW_PUSH; build; metaphor_prop; LOCKED
 - content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md — PRODUCTION REFERENCE REPORT: I Found the — Compositions Measured: 43 Camera-Locked — defines: P1; P2; +4 more — terms: YouTube; zero-drift; High-Velocity; cut-alignment
 - content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/SHOT_LEDGER.md — SHOT LEDGER: Dual-Track Visual Events & — Kind: `COMP` = new base stage / scene cu — defines: — — terms: SLOW_PUSH; build; LOCKED; metaphor_prop
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md — Master Research & Evidence Dossier: High — Executive Summary & The 4 Core Pillars C — defines: — — terms: Closed-Form; s_x; s_y; a_x
