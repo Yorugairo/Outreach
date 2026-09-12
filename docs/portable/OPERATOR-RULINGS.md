@@ -1773,7 +1773,8 @@ and keeping the same voice."*
 - **Voice on both lanes is Chirp until real people say otherwise.** E34's split (ElevenLabs YouTube / Chirp Facebook)
   is suspended for the shorts: the test is two cuts played side-by-side to real viewers, and the retention curve is
   the second witness, not the only one. Changing the voice later is cheap; every row re-times from the new words
-  (`record_short_take.py --go`).
+  (`record_short_take.py --go`). **SUPERSEDED for YouTube 2026-09-12 by E70** - the real people answered and so did
+  the platform: the Chirp cut got basically no plays on YouTube and does fine on Facebook. The Facebook half stands.
 - **The bed stays at −20 LU and goes no louder** — *"I'm providing more actual content depth for them so I don't want
   too much musical interference."* The competitors' louder beds are noted, not copied; the rule-3 ducking under
   number-dense stretches is not built until the rest moves.
@@ -2221,3 +2222,112 @@ likenesses are never on screen for long. I think the heads are valid and usable.
 Mechanisms: the heads manifest (`assets/heads/manifest.json`: `review_state: approved`, `render_eligible: true`, a `note`
 on Volcker's year); the clip manifest's `on_screen` field and the check that refuses a clip without one (P52's newsreel
 slice, which is these clips' first customer); `docs/content-video-engine/CAPABILITIES.md`.
+
+---
+
+## E69 — The 20-second hold ceiling is a relic of the still-plate era: a held frame is legal while it LIVES (2026-09-12)
+
+**Ruling (the operator, on the first pages-only short, whose three-page shape was cut into five worlds to clear the
+ceiling):** *"the twenty second hold ceiling is a relic from when we coudln't live in the frame"*.
+
+**The reason, which is the load-bearing part.** The ceiling is the operator's own correction of 2026-08-25: *"20
+seconds on 1 plate would be the max, and that would be expecting 2 pieces of strong evidence to cover"* (29 §9.13).
+It was true of the world it was written in. A world was a generated STILL then; the only thing that could happen on
+it was a card landing, so "two docks over the stretch" was the only available way to say "something is happening
+here". Everything since has been about living inside a held frame: the ledger page builds itself (§9.26), targeted
+species fire on it (§9.27), a chart recasts, parks and rescales rather than cutting (E58, E64), the captions ARE the
+motion (E21), nothing is ever truly still (E49), and the reference we measured builds inside a held frame on purpose
+(Bravos: 6.0 events a minute against 2.5 compositions a minute). A page that holds is not a plate that sits.
+
+*Apply:*
+1. **Hold length is not a defect. A dead frame is.** Past 20s the gate reads the longest gap between visual events
+   INSIDE the hold - against the pulse a short already carries (a visual event every 1.2-2.5s, M16) or the long
+   form's working target (8s, M02). Live in the frame and hold as long as the argument needs.
+2. **Two docks are one way to live in a frame, not the way.** A species, a page beat, a chart state change, a card,
+   or stage captions all count, because each is something happening in the frame.
+3. **The case the 2026-08-25 correction named still fails**: a still world held past 20s with nothing on it.
+4. **Do not manufacture worlds to pass a hold rule.** The 2026-09-12 one-shot was cut from three pages into five
+   worlds for no reason but this ceiling, which cost it three page arrivals (5-7s each, R26-65) - the rule was
+   buying dead time with dead time. When a hold is long and the frame lives, hold it.
+
+Mechanisms: `gate_motion_density.py` M05 (the liveness read and its message), doc 29 §9.13 (amended in place) and
+§9.28 C5, `test_gate_motion_density.py::test_a_live_hold_past_the_ceiling_is_legal` +
+`::test_plate_hold_ceiling_fails_a_DEAD_hold`.
+
+---
+
+## E70 — Chirp does not ship on YouTube; the lane splits by platform again, and a one-shot renders BOTH takes for the data (2026-09-12)
+
+**Ruling (the operator, asked which clock a one-shot should run on):** *"I think Chirp can't ship on youtube, it got
+basically no plays and I think part of it is that google recognizes it as mass-produced voice, it does fine on
+facebook, probably use both chirp and kokoro, gives us more data."*
+
+**The reason.** E54 suspended the platform split and put Chirp on both lanes, on the strength of real people's
+side-by-side feedback. The platform is now the second witness it asked for, and it answered: the Chirp cut got
+basically no plays on YouTube while the same voice does fine on Facebook. The suspected mechanism is platform-side
+recognition of mass-produced voice, which is not something a better prompt or a louder bed fixes.
+
+*Apply:*
+1. **Facebook keeps Chirp. YouTube's voice is OPEN** - and it is not ElevenLabs by default either (E54 left the paid
+   body unrecorded on purpose). Until it is settled, a YouTube cut is not shipped on a synthetic body voice.
+2. **A one-shot renders BOTH takes** - `scratch_take.py --engine both` (Chirp cloud, Kokoro local) - because two
+   takes of the same script is more data on the same question and both are free or near-free.
+3. **The clock is whichever take would ship.** Kokoro carries its own word timestamps; Chirp carries none, so a
+   Chirp clock is aligned with LOCAL Whisper (never cloud STT). A test build may run on the Kokoro clock as a
+   declared deviation, and its windows are then ~15% long (Kokoro read 154 wpm against the real voice's ~180 on the
+   2026-09-12 one-shot).
+4. **Nothing about the picture waits on this.** The engine's work is timed from words; which body speaks them is a
+   separate decision with its own evidence.
+
+Mechanisms: `scratch_take.py` (`--engine both`), the local Whisper alignment for a Chirp clock, `docs/portable/VOICE-PACK.md`.
+
+---
+
+## E71 — The first cut that ships is the first one clean of the gates AND of every defect the agent can see (2026-09-12)
+
+**Ruling (the operator, on how a one-shot should iterate):** *"you have loop/editor/re-prompt permissions. The first
+cut that gets shipped should be the first one that passes all of our gates AND any defects/weaknesses that you can
+see."*
+
+**The reason.** A gate is a floor, never a ceiling: the 2026-09-12 one-shot passed the script gates, the motion gate
+and the layout probe while its frames still showed a returning page redrawing itself, a flag chip painted off the
+page, a span shading over the ink it measured and three transitions running under live narration. Every one of those
+was visible in a contact sheet and invisible to every gate. "Judge the frame, not the diff" is the habit; this is the
+bar that habit serves.
+
+*Apply:*
+1. **Gate-clean is necessary and not sufficient.** After the gates pass, the agent reads the frames and fixes what it
+   can see. Only then is a cut offered.
+2. **Every defect the read finds is either fixed or written as a row before the offer**, with the frame that shows it
+   named. A defect seen and left unwritten is the worst of the three outcomes.
+3. **The loop is the agent's** - build, read, edit, re-prompt, rebuild - and needs no permission per turn. What needs
+   the operator is the VIDEO (E72).
+
+Mechanisms: `self_watch.py`'s O1-O10 read (the frames at the instants the gates cannot see), `change_report.py`,
+the BACKLOG rows.
+
+---
+
+## E72 — Generating and using assets is the agent's; only the finished video needs the operator (2026-09-12)
+
+**Ruling (the operator, on how rich a one-shot's world should be):** *"Full world, but we should start by building out
+and extending the charts to their maximum use, filling in the narrative plate designs and video around that. you don't
+need my permission to generate and use images/evidence or use the bridge to get research, news articles, heads, and
+clips from Gemini. I only have to approve the video once it's ready, same as if we didnt generate the plates."*
+
+*Apply:*
+1. **The chart comes first and is used to its limit.** A short's world is built out from the pages: the chart's own
+   state grammar (build_to, bracket, figure, span, rescale, recast, park, morph, the ring) carries the argument as far
+   as it goes, and the plates and video are designed around what the chart cannot say. A generated plate is never a
+   substitute for a chart that could have made the point.
+2. **Generation needs no per-order permission**: images, evidence, plates, and bridge research (news, articles, heads,
+   clips from Gemini) are the agent's to fetch and to use. The Flow session is logged in and driving it for a
+   zero-credit roll needs no ask (a PAID roll is still refused).
+3. **The video is the approval gate, exactly as before.** A cut is offered for the watch and the render word the same
+   way whether its plates were generated or drawn from the library. Quarantine still applies to CLAIMS - a figure or a
+   source is approved on its own evidence, never by having been generated.
+4. **Provenance is not relaxed by any of this.** Every generated asset keeps its manifest row, its SHA and its prompt;
+   every fetched clip keeps its `on_screen` label (E68).
+
+Mechanisms: the Flow driver (`create_flow_image`), the bridge (`bridge_send.py` / the daemon), the asset manifests,
+`docs/content-video-engine/CAPABILITIES.md`.

@@ -27,7 +27,7 @@ captions do NOT count - they are what a viewer reads as stillness.
   M02  stretches > 8s (working target)                    WARN
   M03  evidence enters at least every 45s, every phase    FAIL   ("evidence every 15-45s")
   M04  distinct plates >= runtime / 12s                   WARN   (s9.13)
-  M05  no plate held > 20s unless two docks sit over it   FAIL   (s9.13 hard ceiling)
+  M05  no plate held > 20s with the frame DEAD             FAIL   (s9.13 + E69: live in the frame)
   M06  caption cadence: 4-6 words a page, >= 20 pages/min WARN   (s9.15 r7 / build_caption_pages)
   M07  the opening minute is not the thinnest minute      FAIL   (E21: P1 densest, never thinnest)
   M08  stage-mode captions declared on every still stretch FAIL once the timeline carries cap_mode;
@@ -210,7 +210,7 @@ SHORT_PULSE_MAX_S = 2.5    # doc 49 s49.6: a short needs a visual event every 1.
 SRC_M16 = "doc 49 s49.6 / operator 2026-09-05: the short-form gate is the pulse - no gap between visual events over 2.5 s; no ceiling"
 EVIDENCE_GAP_MAX_S = 45.0  # doc 29: evidence every 15-45s
 PLATE_SECONDS = 12.0       # s9.13: runtime / 12s distinct plates
-PLATE_HOLD_MAX_S = 20.0    # s9.13 hard ceiling, unless two docks over it
+PLATE_HOLD_MAX_S = 20.0    # s9.13: past this a hold is READ for liveness (E69, 2026-09-12) - it was "unless two docks over it"
 CAP_WORDS = (4, 6)         # build_caption_pages: MAX_WORDS 6, 4-6 target
 CAP_PAGES_PER_MIN_MIN = 20.0
 OPENING_S = 60.0           # E21: the opening minute
@@ -933,12 +933,17 @@ def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     # plates: a page is its own plate and holds like one (C5)
     plate_ids = [_plate_id(s) for s in scenes]
     holds = [(float(s["span"][0]), float(s["span"][1]) - float(s["span"][0]), _plate_id(s)) for s in scenes]
+    # E69 (the operator, 2026-09-12: "the twenty second hold ceiling is a relic from when we coudln't live in the
+    # frame"): every hold past the ceiling is reported WITH the longest gap between visual events inside it, and
+    # M05 decides on that gap. The dock count rides along because two docks are one way to live in a frame, not
+    # the way.
     over_hold = []
     for a, d, pid in holds:
         if d > PLATE_HOLD_MAX_S:
             n = sum(1 for x, z in spans if x < a + d and z > a)
-            if n < 2:
-                over_hold.append((a, d, pid, n))
+            edges = [a] + [t for t in ev if a < t < a + d] + [a + d]
+            gap, at = max(((b - x, x) for x, b in zip(edges, edges[1:])), default=(d, a))
+            over_hold.append((a, d, pid, n, round(gap, 2), round(at, 2)))
     wc = [len(p.get("t", [])) for p in pages]
     return {"runtime": runtime, "events": ev, "still": still, "ev_gaps": ev_gaps, "plates": plate_ids,
             "over_hold": over_hold, "wc": wc, "pages": pages, "dens": _per_minute(runtime, ev, entries),
@@ -973,9 +978,18 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     want = int(R / PLATE_SECONDS)
     add("M04", "WARN" if n_plates < want else "PASS", f"{n_plates} distinct plates; target runtime/12s = {want}", "doc 29 s9.13 plate density")
     oh = A["over_hold"]
-    add("M05", "FAIL" if oh else "PASS",
-        f"{len(oh)} plates held > {PLATE_HOLD_MAX_S:.0f}s without two docks over them; worst {oh[0][2]} {oh[0][1]:.0f}s at {mm(oh[0][0])}" if oh else "no plate over the 20s hold ceiling",
-        "doc 29 s9.13 hard ceiling")
+    live_max = SHORT_PULSE_MAX_S if _is_short(tl, R) else STILL_WARN_S
+    dead = sorted((h for h in oh if h[4] > live_max), key=lambda h: -h[4])
+    add("M05", "FAIL" if dead else "PASS",
+        (f"{len(dead)} plate(s) held > {PLATE_HOLD_MAX_S:.0f}s with the frame DEAD: worst {dead[0][2]} "
+         f"{dead[0][1]:.0f}s at {mm(dead[0][0])} - {dead[0][4]:.1f}s with no visual event at {mm(dead[0][5])}, "
+         f"over the {live_max:.1f}s liveness ceiling. Live in the frame (a species, a page beat, a card, "
+         f"captions in stage mode) or cut it") if dead
+        else (f"{len(oh)} plate(s) over the {PLATE_HOLD_MAX_S:.0f}s hold, every one LIVE across it "
+              f"(worst gap {max(h[4] for h in oh):.1f}s of {live_max:.1f}s allowed)" if oh
+              else f"no plate over the {PLATE_HOLD_MAX_S:.0f}s hold"),
+        "doc 29 s9.13 as amended by E69 (2026-09-12): the hold is legal while the FRAME LIVES - the ceiling's "
+        "two-dock condition was written when a world was a still and only a card could move on it")
     if A["wc"]:
         ppm = len(A["pages"]) / (R / 60)
         mean_w = st.mean(A["wc"])

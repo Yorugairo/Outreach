@@ -84,10 +84,26 @@ def test_stage_captions_count_as_events():
     assert g["M08"].level == "PASS"
 
 
-def test_plate_hold_ceiling_needs_two_docks():
+def test_plate_hold_ceiling_fails_a_DEAD_hold():
+    """E69 (2026-09-12): the ceiling no longer asks for two docks - it asks whether the frame LIVES. A 25s still
+    plate with one card and no stage captions is the case the 2026-08-25 correction actually named, and it still
+    fails, naming the dead gap."""
     tl, docks, mp = _dense_build(scene_len=25.0, dock_every=20.0)
     g = _by_id(G.run(tl, docks, mp)[0])
-    assert g["M05"].level == "FAIL"
+    assert g["M05"].level == "FAIL", g["M05"]
+    assert "DEAD" in g["M05"].message and "no visual event" in g["M05"].message, g["M05"]
+
+
+def test_a_live_hold_past_the_ceiling_is_legal():
+    """The other half of E69 (the operator: "the twenty second hold ceiling is a relic from when we coudln't live
+    in the frame"). The same 29s hold, with the captions in stage mode carrying the motion (E21), is legal - the
+    hold length is not the defect, a dead frame is."""
+    tl, docks, mp = _dense_build(runtime=120.0, scene_len=29.0, dock_every=60.0)
+    for pg in tl["caption_pages"]:
+        pg["cap_mode"] = "stage"
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M05"].level == "PASS", g["M05"]
+    assert "LIVE" in g["M05"].message, g["M05"]
 
 
 # ---- P35 T4: the timeline is the dock clock; ledger pages count ------------

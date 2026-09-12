@@ -1154,6 +1154,20 @@ expecting 2 pieces of strong evidence to cover."*
 - **Hard ceiling: 20s on a single plate**, and only when TWO strong
   evidence documents dock over that stretch. A bare plate held past 12s
   with nothing docking is a defect.
+  **AMENDED 2026-09-12 (E69).** The two-dock condition is a relic of the
+  still-plate era and is withdrawn. Operator: *"the twenty second hold
+  ceiling is a relic from when we coudln't live in the frame"*. When this
+  ceiling was set (2026-08-25) a world was a generated still and the only
+  thing that could happen on it was a card landing, so "two docks" was the
+  only way to say "something is happening". A world now builds (the ledger
+  page's own beats, §9.26), species fire on it (§9.27), the chart recasts,
+  parks and rescales (E58), the captions ARE the motion (E21) and nothing
+  is ever truly still (E49). **The hold is legal while the FRAME LIVES**:
+  past 20s the gate reads the longest gap between visual events INSIDE the
+  hold against the pulse a short already carries (2.5s, M16) or the long
+  form's working target (8s, M02). Two docks are one way to live in a
+  frame, not the way. A dead hold past 20s still fails, which is the case
+  this correction actually named.
 - The 12s bare-stretch ceiling (9.2/Part 8) governs BOTH layers. A long
   bare stretch is not automatically an evidence shortfall — diagnose
   which layer is thin before ordering work. On Steel and Paper the

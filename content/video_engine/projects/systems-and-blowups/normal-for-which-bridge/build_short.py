@@ -70,7 +70,7 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
 
     rows: list[tuple] = [
         # ---- the bridge, opened at its apex: the hook, the mechanism, and the light on today's load
-        (0.0, t_num, f"ledger:{LOAD}:line:{LOAD_LAST}:right::cut", (0, 0, 0), [], "suck:0.5,0.52", [
+        (0.0, t_num, f"ledger:{LOAD}:line:{LOAD_LAST}:right:built:cut", (0, 0, 0), [], "suck:0.5,0.52", [
             # M11 + the Apex Chart Read (2026-09-12 research): the page's own build lands at ~7.4 s and the light
             # goes on the latest datum inside the 1.5 s after it, on the word that says the bridge is heavier
             {"kind": "callout", "at": at("heavier."), "dur": 2.2, "pad": 24,
