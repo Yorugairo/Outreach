@@ -1,6 +1,8 @@
 # The ART-embed plate - the order for human gate 3 (P50 T7, 2026-09-11; the style line corrected to the house atom the same day)
 
-**APPROVED 2026-09-11 (night) - the operator: "Plate order is approved."** The order goes to the Flow session as written below.
+**APPROVED 2026-09-11 (night) - the operator: "Plate order is approved."** The order went to the Flow session as written below; both stills landed at zero credit. **FRAMES APPROVED 2026-09-12 - the operator: "The frames are fine"** - the stills are out of quarantine (`channel-assets/money-physics/plates/stills/art-embed-study-{poster,tv-laptop}.png`); the layers files with the measured quads follow.
+
+**A third still, proposed by the operator (2026-09-12): "cream washi foreground on the bottom 60% and the TV/monitor on the top 40%"** - the two worlds in one frame: the house paper below (a chart page's ground, or a record lying flat) and a screen above for a press card or a clip. Draft order, for the word: "9:16 vertical, full bleed. A light application of 2.5D woodblock print and vox newspaper meets rich anime colors. The upper two fifths of the frame: a dark wall at night with a large flat television hanging in a thin dark bezel, its screen dark and blank, its face square to the viewer, a desk lamp's warm cone across the wall from the left. The lower three fifths of the frame: a sheet of cream washi paper filling the width edge to edge, its top edge a soft deckle, plain and unmarked, lit evenly. Nothing on the screen, nothing on the paper. No people, no text anywhere in the image, no logos. A single still frame." NOT ordered until the operator says so (the standing rule: ask before driving the Flow session).
 
 **What the gate asks.** P50 T7 gives the external lane its world: Bravos has the chart world and the TV world (their
 claims on a monitor in a lit studio); we have the chart world (the ledger page) and the ART world (our narrative
