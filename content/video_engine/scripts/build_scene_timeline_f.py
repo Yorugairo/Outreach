@@ -83,7 +83,7 @@ PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill", 
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
 STATE_MAX = 3
 DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s",
-             "press", "stack", "behind")   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+             "press", "stack", "behind", "embed")   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -457,13 +457,16 @@ MAP_TARGETS = (COUNTRY_TARGET, MAPPOINT_TARGET)           # outline's own centro
                                                           # units, never stage fractions: the map is the coordinate system, so a declared
                                                           # point stays on the Gulf at either aspect and under any framing. Admitted for the
                                                           # three vecmap species alone - every other species names a stage coordinate.
+EMBED_TARGET = "embed"                        # P50 T7 / E59 reason 4: a declared SURFACE of the scene's plate -
+                                              # {"kind": "embed", "name": "poster"}; the compiler writes the plate's own
+                                              # quad onto it, so the camera punches into the poster BY NAME
 # s9.27 targeting law: the target kinds each species may take. () = the species
 # needs no target (plate life's target is the plate itself); everything else
 # fires only on a declared coordinate - datum index / series point on a page or
 # dock, a plate point or region the author names, a caption word span.
 SPECIES_TARGETS = {
-    "punch": TARGET_KINDS, "callout": TARGET_KINDS + ("phrase",), "focus_zoom": TARGET_KINDS,   # P50 T3: the callout alone may point INSIDE a press card
-    "spotlight": TARGET_KINDS, "squiggle": TARGET_KINDS, "pull_back": TARGET_KINDS,
+    "punch": TARGET_KINDS + (EMBED_TARGET,), "callout": TARGET_KINDS + ("phrase",), "focus_zoom": TARGET_KINDS + (EMBED_TARGET,),   # P50 T3: the callout alone may point INSIDE a press card; P50 T7: the CAMERA alone may take a declared surface (E59 reason 4)
+    "spotlight": TARGET_KINDS, "squiggle": TARGET_KINDS, "pull_back": TARGET_KINDS + (EMBED_TARGET,),
     "plate_life": (),
     "beat_freeze": ("point", "region"), "radial": ("point", "region"), "push": ("point", "region"),
     "steam": ("region",), "trace": ("region",), "ticker": ("region",),
@@ -480,12 +483,13 @@ SPECIES_TARGETS = {
     "undraw": ("datum",), "figure": ("datum",), "note": (), "spread": (), "peel": (), "chart_to": (),   # E50; peel names no datum: the slice it pulls is the one the PAGE declared (page.peel.index), so the chart and the claim cannot disagree; spread names its two series, not a datum: the datum the line unwinds back to (0 = nothing); the datum the figure is pinned to
 }
 PHRASE_TARGET = "phrase"                      # P50 T3: a region INSIDE a press card - {"kind": "phrase", "dock": "<the press dock's asset id>"}.
-TARGET_KINDS_ALL = TARGET_KINDS + (PHRASE_TARGET,) + MAP_TARGETS   # ... admitted for a CALLOUT alone, and only as the underline (E56's one exception); the
+TARGET_KINDS_ALL = TARGET_KINDS + (PHRASE_TARGET, EMBED_TARGET) + MAP_TARGETS   # ... admitted for a CALLOUT alone, and only as the underline (E56's one exception); the
                                                      # compiler resolves it to the dock's declared phrase box, the player to stage px through
                                                      # the card's LIVE geometry (a parked or stacked card moves, and the underline moves with it)
 TARGET_FIELDS = {"datum": ("index",), "point": ("x", "y"),
                  "region": ("x0", "y0", "x1", "y1"), "span": ("from_word", "to_word"),
                  PHRASE_TARGET: (),   # its one field is `dock`, a name - checked in _validate_callout, where the row's press docks are known
+                 EMBED_TARGET: (),    # ... and its one field is `name`, checked below and resolved to the plate's quad at the row
                  COUNTRY_TARGET: (), MAPPOINT_TARGET: ()}   # ... and a map target's fields are MAP units, not 0..1 fractions: _validate_map_target checks them against the map's own box
 FRACTION_FIELDS = ("x", "y", "x0", "y0", "x1", "y1")   # plate coordinates as fractions of the frame, 0..1
 
@@ -506,6 +510,8 @@ def _validate_target(kind: str, target, allowed: tuple) -> list[str]:
             errs.append(f"{kind}: target {tk} {f}={v} is not a 0..1 fraction of the frame")
         elif f not in FRACTION_FIELDS and (not isinstance(v, int) or v < 0):
             errs.append(f"{kind}: target {tk} {f}={v!r} is not a non-negative integer index")
+    if tk == EMBED_TARGET and not (isinstance(target.get("name"), str) and target["name"].strip()):
+        errs.append(f"{kind}: target embed must NAME one of the plate's surfaces ({{'kind': 'embed', 'name': 'poster'}})")
     if tk == "datum" and "series" in target and not isinstance(target["series"], int):
         errs.append(f"{kind}: target datum 'series' must be an integer series index")
     if tk == "span" and not errs and target["from_word"] > target["to_word"]:
@@ -1602,6 +1608,172 @@ def behind_error(world: dict, layers: dict, layer: str, where: str) -> str | Non
     return None
 
 
+
+
+# P50 T7 - THE ART-EMBED SURFACE. Bravos has the chart world and the TV world (their claims on a monitor in a lit
+# studio); we have the chart world (the ledger page) and the ART world - our own narrative plates. E33's objection to
+# docking anything to a generated plate is that it has no addressable coordinate space: a diffusion model decided
+# where the wall is. The answer is to MEASURE one flat surface in the painting and declare it by name, beside the
+# plate, in the SAME sidecar the foreground layers use:
+#
+#     {"foreground": {...}, "embed": {"poster": {"quad": [[x, y] x 4], "darken": "<word>"}, "tv": {...}}}
+#
+# A NAMED SET, not one quad (the approved order, 2026-09-11: "we have multiple surfaces we can work with, and
+# punch/project into") - `poster`, `tv`, `laptop`, `paper` are names an author picks, not a fixed vocabulary. The
+# corners are STAGE FRACTIONS in TL TR BR BL order, read off the still itself. A dock names the one it lands on
+# (`embed: "poster"`), and the camera can take the same surface as a target (E59 reason 4).
+#
+# The compiler's whole job is that the surface EXISTS and can be read: the four ways this goes wrong silently are a
+# name the plate does not declare, a quad that is not a quad (folded, wound the wrong way, off the stage), a surface
+# too small for a card to read on a phone, and a CHART landing on a wall - which B1 forbids outright (their claim on
+# their surface, ours on the page). All four are refused by name here rather than resolving to a frame nobody can
+# explain. The surface itself stays BLANK in the painting (E33 / doc 15 s4): the information layer is composited.
+EMBED_KEY = "embed"
+EMBED_MIN_W = 0.25         # the surface's width as a share of the stage: under this a projected card cannot be read on a phone
+                           # (the plate ORDER asks for 40 %; the compiler's floor is the hard one - a quarter of the frame)
+EMBED_REFUSED_SPECIES = ("chart",)   # B1: the argument's own charts never embed
+
+
+def plate_embeds(path: Path | None) -> dict:
+    """The SURFACES a plate declares, `{name: {"quad": [...], "darken": ...}}`. No sidecar, or a malformed one, is no
+    surfaces - a plate is not required to carry one, and only a row that NAMES one gets an error (plate_layers' rule)."""
+    if path is None:
+        return {}
+    side = Path(path).with_suffix(FG_LAYERS_SUFFIX)
+    try:
+        data = json.loads(side.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    emb = (data or {}).get(EMBED_KEY) if isinstance(data, dict) else None
+    if not isinstance(emb, dict):
+        return {}
+    return {str(k): v for k, v in emb.items() if isinstance(v, dict)}
+
+
+def _quad_points(quad) -> list[tuple[float, float]] | None:
+    if not isinstance(quad, (list, tuple)) or len(quad) != 4:
+        return None
+    out = []
+    for p in quad:
+        if not isinstance(p, (list, tuple)) or len(p) != 2:
+            return None
+        if any(isinstance(v, bool) or not isinstance(v, (int, float)) for v in p):
+            return None
+        out.append((float(p[0]), float(p[1])))
+    return out
+
+
+def embed_quad_error(name: str, spec, where: str) -> str | None:
+    """Is this a surface a card can be projected onto? The message, or None.
+
+    The law: four points, each ON the stage (0..1 fractions); CONVEX and in TL TR BR BL order (every turn the same
+    way round - a folded or mis-ordered quad maps the card onto itself and reads as a tear); and at least
+    EMBED_MIN_W of the stage wide, measured as the mean of its two horizontal edges."""
+    if not isinstance(spec, dict):
+        return f"{where}: embed {name!r} must be an object with a 'quad' of four [x, y] corners"
+    pts = _quad_points(spec.get("quad"))
+    if pts is None:
+        return (f"{where}: embed {name!r} 'quad' must be four [x, y] corners in TL TR BR BL order "
+                "(stage fractions, the corners read off the plate's own still)")
+    if any(not 0.0 <= v <= 1.0 for p in pts for v in p):
+        return f"{where}: embed {name!r} has a corner off the stage - every [x, y] is a 0..1 fraction of the frame"
+    signs = []
+    for i in range(4):
+        ax, ay = pts[i]
+        bx, by = pts[(i + 1) % 4]
+        cx, cy = pts[(i + 2) % 4]
+        signs.append((bx - ax) * (cy - by) - (by - ay) * (cx - bx))
+    if any(s <= 0 for s in signs):
+        return (f"{where}: embed {name!r} is not a convex quad in TL TR BR BL order (the corners turn "
+                f"{'both ways' if any(s > 0 for s in signs) else 'the wrong way'}) - read them clockwise from the "
+                "top left of the surface")
+    width = ((pts[1][0] - pts[0][0]) + (pts[2][0] - pts[3][0])) / 2
+    if width < EMBED_MIN_W:
+        return (f"{where}: embed {name!r} is {width:.0%} of the stage wide, under the {EMBED_MIN_W:.0%} floor - "
+                "a card projected onto it cannot be read on a phone (the plate order asks for 40 %)")
+    dk = spec.get("darken")
+    if dk is not None and not ((isinstance(dk, str) and dk.strip())
+                               or (isinstance(dk, (int, float)) and not isinstance(dk, bool) and dk >= 0)):
+        return (f"{where}: embed {name!r} 'darken' must be the WORD the room dims on (a phrase from the take) "
+                "or a second on the timeline")
+    return None
+
+
+def embed_error(world: dict, embeds: dict, name: str, where: str, species: str | None = None) -> str | None:
+    """Can this dock land on that surface? The message, or None."""
+    if species in EMBED_REFUSED_SPECIES:
+        return (f"{where}: embed={name!r} on a {species} card - the argument's own charts never embed (B1: their "
+                "claim on their surface, ours on the page). A press card or a still card lands on a painted surface")
+    if not isinstance(world, dict) or not world.get("asset_id") or world.get("kind") in (SPECIES_LEDGER, VECMAP_KIND, SPECIES_CLIP):
+        kind = (world or {}).get("kind") or "a drawn page"
+        return (f"{where}: embed={name!r} needs a world PLATE that declares the surface - this scene's world is "
+                f"{kind}, which has no painted surface to land on (B1: a chart page never embeds)")
+    if name not in embeds:
+        named = ", ".join(sorted(embeds)) if embeds else "none"
+        return (f"{where}: embed={name!r} is not a surface of {world['asset_id']!r} - it declares {named}. "
+                f"Name it in <plate>{FG_LAYERS_SUFFIX} as {{\"embed\": {{\"{name}\": {{\"quad\": [[x, y] x 4]}}}}}}")
+    return embed_quad_error(name, embeds[name], where)
+
+
+def image_aspect(p: Path) -> float | None:
+    """A picture's height over its width, or None for anything that is not a still. The PLAYER cannot ask this
+    question in time - an <img> has no height until it decodes, the player paints once per seek, and a card
+    measured mid-decode is a card laid out on the wrong box - so the compiler, which has the file, answers it."""
+    try:
+        if is_video_asset(p):
+            return None
+        from PIL import Image
+        with Image.open(p) as im:
+            return round(im.height / im.width, 5) if im.width else None
+    except (OSError, ValueError):
+        return None
+
+
+def embed_entry(name: str, spec: dict, words=None, card_aspect: float | None = None) -> dict:
+    """What the dock carries onto the timeline: the surface's name, its quad, the SECOND the room dims on, and
+    the card PICTURE's aspect (so the player can letterbox the card on the surface without measuring it).
+
+    `darken` is authored as the word (the plate's manifest speaks the script's language, as every shot row does) and
+    resolved here against the build's own words, so the player never has to find a word at render time."""
+    quad = [[round(float(x), 5), round(float(y), 5)] for x, y in spec["quad"]]
+    out = {"name": name, "quad": quad}
+    if card_aspect is not None and float(card_aspect) > 0:
+        out["img"] = round(float(card_aspect), 5)
+    dk = spec.get("darken")
+    if dk is None:
+        return out
+    if isinstance(dk, (int, float)) and not isinstance(dk, bool):
+        out["darken"] = round(float(dk), 2)
+        return out
+    ws = _override_words(words)
+    if not ws:
+        raise ValueError(f"embed {name!r}: darken={dk!r} is a WORD and this build has no words to date it by")
+    from authoring import words as KW
+    try:
+        out["darken"] = KW.at(ws, dk)
+    except SystemExit as exc:
+        raise ValueError(f"embed {name!r}: darken={dk!r} - {exc}") from None
+    return out
+
+
+def resolve_embed_targets(row_species, embeds: dict, where: str) -> None:
+    """E59 reason 4: a camera move may take a declared SURFACE as its target. The quad is written onto the target
+    here - the player resolves a region, never a plate's manifest. Raises ValueError naming the surface."""
+    for sp in row_species or []:
+        tg = sp.get("target") if isinstance(sp, dict) else None
+        if not isinstance(tg, dict) or tg.get("kind") != EMBED_TARGET:
+            continue
+        name = tg.get("name")
+        if name not in embeds:
+            named = ", ".join(sorted(embeds)) if embeds else "none"
+            raise ValueError(f"{where}: {sp.get('kind')} target embed {name!r} is not a surface of this plate "
+                             f"- it declares {named}")
+        err = embed_quad_error(name, embeds[name], where)
+        if err:
+            raise ValueError(err)
+        tg["quad"] = [[round(float(x), 5), round(float(y), 5)] for x, y in embeds[name]["quad"]]
+
+
 def dock_opts(raw) -> dict:
     """The optional 5th element of a dock tuple: ``{"arrive": spring|throw|land, "mass": paper|metal|liquid|ink}`` (P47 T1).
     ValueError names the key; the caller names the row."""
@@ -1615,6 +1787,10 @@ def dock_opts(raw) -> dict:
         if k == "behind":   # HF-17: the plate's foreground layer this card goes behind; the plate is checked at the row
             if not isinstance(v, str) or not v.strip():
                 raise ValueError("dock: behind must name a foreground layer of the scene's plate (<plate>.layers.json)")
+            continue
+        if k == EMBED_KEY:   # P50 T7: the plate's surface this card lands ON; the plate and the quad are checked at the row
+            if not isinstance(v, str) or not v.strip():
+                raise ValueError("dock: embed must NAME a surface the scene's plate declares (<plate>.layers.json)")
             continue
         if k == "centre":
             if v is not True:
@@ -1661,6 +1837,9 @@ def dock_opts(raw) -> dict:
         out["press"] = press_meta(out["press"])   # a path resolves here, so every caller downstream sees the dict
     elif out.get("stack"):
         raise ValueError("dock: stack is the PRESS stack - it belongs to a dock that carries `press` (the push hand-off, doc 29 s9.27)")
+    if out.get(EMBED_KEY) and out.get("stack"):   # P50 T7: a card on a surface has no pile - the surface is the park
+        raise ValueError("dock: embed and stack are two different arrivals - a card that lands ON a surface is not "
+                         "pushed into a pile (E45's park is the surface itself)")
     return out
 
 
@@ -2539,7 +2718,8 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                kind: str = DOCK_KIND_IMAGE, place: dict | None = None, arrive: str | None = None, mass: str | None = None,
                centre: bool = False, read_place: dict | None = None, read_s: float | None = None, park_s: float | None = None,
                press: dict | None = None, stack: bool = False, behind: str | None = None, fg: str | None = None,
-               rid: str | None = None, read_moved: dict | None = None, read_deferred: bool = False) -> dict:
+               rid: str | None = None, read_moved: dict | None = None, read_deferred: bool = False,
+               embed: dict | None = None) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -2563,6 +2743,9 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         # HF-17: the plate's foreground layer this card is behind, and the asset-map key it rides. Written ONLY when
         # the row asks, so every build that does not is byte-for-byte what it was.
         **({"behind": behind, "fg": fg} if behind and fg else {}),
+        # P50 T7: the SURFACE this card lands on - its name, its four corners and the second the room dims. Written
+        # ONLY when the row asks, so every build that does not is byte-for-byte what it was.
+        **({EMBED_KEY: embed} if embed else {}),
         "enter": round(enter, 2), "exit": round(exitt, 2),
         "badge_at": [round(enter + 0.75 + 1.3 * (n + 1), 2) for n in range(n_badges)],
         **({"kind": DOCK_KIND_VIDEO} if kind == DOCK_KIND_VIDEO else {}),
@@ -3056,6 +3239,14 @@ def main() -> int:
             uris[world["asset_id"]] = data_uri(Path(world.pop("clip_path")))   # raw mp4, keyed by the clip's stem
         elif "asset_id" in world:
             uris[world["asset_id"]] = data_uri(R.find_asset(world["asset_id"]), STAGE_W)   # the bare id (E49's `;idle=` is not part of it)
+        # P50 T7: the SURFACES this plate declares, read once - the docks below land on them and the camera aims at
+        # them by name. A world that is not a plate has none, and only a row that names one gets an error.
+        _embeds = (plate_embeds(R.find_asset(world["asset_id"]))
+                   if world.get("asset_id") and world.get("kind") not in (SPECIES_CLIP, VECMAP_KIND) else {})
+        try:
+            resolve_embed_targets(row_species, _embeds, f"shot row {i + 1} ({a}-{b}s)")
+        except ValueError as exc:
+            raise SystemExit(f"FAIL: {exc}") from exc
         docks = []
         if world.get("kind") == SPECIES_LEDGER and world.get("page"):
             ledger_rows.append(i + 1)
@@ -3089,6 +3280,16 @@ def main() -> int:
                     raise SystemExit(f"FAIL: {_berr}")
                 fg_key = f"{FG_PREFIX}{world['asset_id']}:{dopt['behind']}"
                 uris[fg_key] = data_uri(_layers[dopt["behind"]])   # RAW: the capped path re-encodes through RGB and would drop the alpha
+            embed = None
+            if dopt.get(EMBED_KEY):   # P50 T7: the card lands ON one of the plate's declared surfaces
+                _eerr = embed_error(world, _embeds, dopt[EMBED_KEY], f"shot row {i + 1} ({a}-{b}s) dock {aid}", d.get("species"))
+                if _eerr:
+                    raise SystemExit(f"FAIL: {_eerr}")
+                try:
+                    embed = embed_entry(dopt[EMBED_KEY], _embeds[dopt[EMBED_KEY]], tl.get("words"),
+                                        dopt.get("card_aspect") or image_aspect(dock_asset_path(aid, EP)))
+                except ValueError as exc:
+                    raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
             rd = dopt.get("read") or {}   # the box a centred card POPS at before it parks to dplace (2026-09-10)
             rplace = centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x")) if (place and rd) else None
             # E63 (widened): a card never READS over the page's plot, drawing or finished. The read box is the row's
@@ -3171,7 +3372,7 @@ def main() -> int:
                                         eplace, dopt.get("arrive"), dopt.get("mass"), centred,   # a centred card is placed on either slot (2026-09-10: two cards up at once)
                                         read_place=rplace, read_s=dopt.get("read_s"), park_s=dopt.get("park_s"),
                                         press=dopt.get("press"), stack=bool(dopt.get("stack")),
-                                        behind=dopt.get("behind"), fg=fg_key, rid=dock_row_id(sid, aid),
+                                        behind=dopt.get("behind"), fg=fg_key, embed=embed, rid=dock_row_id(sid, aid),
                                         read_moved=e63.get("read_moved"), read_deferred=bool(e63.get("read_deferred"))))
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         try:

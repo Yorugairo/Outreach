@@ -41,6 +41,7 @@ FRAME_T = {
     "dock-pair-9x16": 12.0,
     "ledger-extend": 13.05,
     "thread-baseline": 19.9,        # P50 T15 / HF-16: MID-CARRY - the wire from the line page standing while the bars page grows under it. The carried mark lives inside the page's chart <svg>, whose opacity the BUILD drives, so it becomes visible when the chart layer does (scene 2 at 15.0 + ROLL+SAVOR+FIELD+PUNCH = 19.4) and recedes from there over THREAD.FADE_S; 19.9 is half way through that, with two bars grown
+    "art-embed": 9.0,               # P50 T7: the press card has landed on the poster (5.0) and settled, the room has finished darkening (7.0 + DARK_S), the underline on its quoted phrase is fully drawn (8.0 + SQUIG_DRAW) and the still card on the desk paper carries both its badges (5.6 + 0.75 + 1.3n)
     "press-stack": 11.4,            # P50 T3: all three cards landed (5.0 / 7.4 / 9.8 + LAND_S), the pile settled, and the underline on the third fully drawn (10.6 + SQUIG_DRAW)
     "chip-board": 11.0,             # P50 T2: all three chips landed (5.0 / 6.2 / 7.4 + LAND_S) and the middle one's X fully drawn (10.0 + CROSS_S) - the board as it is read
     "flow-swap": 12.6,              # P50 T4: the swap is over (11.0 + SWAP_OUT_S + SWAP_IN_S = 11.75), the new node stands where the old one did, both arrows and the year stamp are in
@@ -605,6 +606,117 @@ def press_stack() -> tuple[dict, dict]:
     return _timeline("Golden: the press stack", scenes, evidence, None), uris
 
 
+# ---- P50 T7: THE ART-EMBED SURFACES -------------------------------------------------------------------
+# The poster's quad is MEASURED off the plate still the operator approved (channel-assets/money-physics/
+# plates/stills/art-embed-study-poster.png, 768 x 1376): the bright face inside the frame is one connected
+# component, its four edges fit to sub-pixel residuals, and the corners are those lines' intersections -
+# x = 283 / 638 px (the sides are vertical), the top edge y = -0.1477 x + 308.9, the bottom y = 0.0549 x +
+# 824.6. As stage fractions, TL TR BR BL. The plate itself stays QUARANTINED (the operator approves the
+# frames); the golden paints its own wall with the same quad, so the geometry under test is the real one
+# and nothing outside tests/golden is read at test time.
+ART_POSTER = [[0.3685, 0.1941], [0.8307, 0.1560], [0.8307, 0.6247], [0.3685, 0.6106]]
+# the second surface is SYNTHETIC and stated: the paper on the desk, seen from above - a strong keystone,
+# the widest of the two, and the proof that a plate carries a NAMED SET of surfaces rather than one quad.
+ART_PAPER = [[0.1800, 0.7200], [0.8600, 0.7400], [0.9400, 0.9300], [0.0600, 0.9100]]
+ART_DARKEN = 7.0   # the second the room dims on (the manifest says the WORD; a golden has no take, so it says the second)
+
+
+def _inside(quad: list[list[float]], x: float, y: float) -> bool:
+    """Is (x, y) inside the clockwise quad? Every turn the same way round - the compiler's own convexity law."""
+    for i in range(4):
+        ax, ay = quad[i]
+        bx, by = quad[(i + 1) % 4]
+        if (bx - ax) * (y - ay) - (by - ay) * (x - ax) < 0:
+            return False
+    return True
+
+
+def _grown(quad: list[list[float]], k: float) -> list[list[float]]:
+    cx = sum(p[0] for p in quad) / 4
+    cy = sum(p[1] for p in quad) / 4
+    return [[cx + (p[0] - cx) * k, cy + (p[1] - cy) * k] for p in quad]
+
+
+def png_surfaces(w: int, h: int, wall: tuple[int, int, int], face: tuple[int, int, int],
+                 border: tuple[int, int, int], quads: list[list[list[float]]], grow: float = 1.05) -> bytes:
+    """The synthetic STUDY: a dark wall carrying the declared surfaces, each blank in a thin dark frame.
+    A shape, deliberately - what is under test is that a card lands ON the quad in perspective, not whether
+    this particular wall is beautiful (the operator judges the plate itself, on the approved still)."""
+    rows = [[wall] * w for _ in range(h)]
+    off = (1 / 6, 0.5, 5 / 6)   # 3 x 3 supersampling: a hard edge on a 432 x 768 plate is a staircase at stage size
+    for q in quads:
+        outer = _grown(q, grow)
+        x0 = max(0, int(min(p[0] for p in outer) * w) - 1); x1 = min(w, int(max(p[0] for p in outer) * w) + 2)
+        y0 = max(0, int(min(p[1] for p in outer) * h) - 1); y1 = min(h, int(max(p[1] for p in outer) * h) + 2)
+        for y in range(y0, y1):
+            row = rows[y]
+            for x in range(x0, x1):
+                hit = [0, 0, 0]   # face, border, wall
+                for dy in off:
+                    fy = (y + dy) / h
+                    for dx in off:
+                        fx = (x + dx) / w
+                        hit[0 if _inside(q, fx, fy) else 1 if _inside(outer, fx, fy) else 2] += 1
+                if hit[2] == 9:
+                    continue
+                base = row[x]
+                row[x] = tuple(round((face[c] * hit[0] + border[c] * hit[1] + base[c] * hit[2]) / 9) for c in range(3))
+
+    def chunk(tag: bytes, data: bytes) -> bytes:
+        return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
+
+    raw = b"".join(b"\x00" + b"".join(bytes(c) for c in row) for row in rows)
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(raw, 9)) + chunk(b"IEND", b""))
+
+
+def art_embed() -> tuple[dict, dict]:
+    """P50 T7 - A CARD LANDS ON A PAINTED SURFACE. The plate declares two surfaces by name (`poster` on the
+    wall, `paper` on the desk); a PRESS card lands on the poster and a STILL card with its badge rail lies on
+    the paper. Both are projected by the planar homography from the surface's four corners - so the masthead,
+    the headline, the badges and E56's one underline all live in the projected space - and the room DARKENS
+    outside the poster on its word, so the surface lights (E33: the painting carries no facts; the
+    information layer is composited here). The dock entries are the COMPILER's own (`dock_entry` with
+    `embed=embed_entry(...)`), so the golden proves the grammar and the projection together.
+    Judged with everything landed and still (FRAME_T 9.0)."""
+    import build_scene_timeline_f as BST
+    quote, still = "ev-embed-quote", "ev-embed-record"
+    source = "THE HERALD, 4 MAR 2026"
+    phrase = {"x0": 0.08, "y0": 0.17, "x1": 0.62, "y1": 0.46}
+    press = BST.press_meta({"source": source, "phrase": phrase})
+    # the picture's own aspect, as the compiler writes it off the file (image_aspect): the press card's
+    # headline crop is 528 x 160, the record on the desk 640 x 400
+    poster = BST.embed_entry("poster", {"quad": ART_POSTER, "darken": ART_DARKEN}, card_aspect=160 / 528)
+    paper = BST.embed_entry("paper", {"quad": ART_PAPER}, card_aspect=400 / 640)
+    docks = [
+        BST.dock_entry(quote, 0, 5.0, RUNTIME, 0, BST.DOCK_KIND_IMAGE, None, "throw", "paper", False,
+                       press=press, embed=poster),
+        BST.dock_entry(still, 0, 5.6, RUNTIME, 2, BST.DOCK_KIND_IMAGE, None, None, None, False, embed=paper),
+    ]
+    species = [
+        {"kind": "callout", "form": "underline", "at": 8.0, "dur": 2.0, "target": {"kind": "phrase", "dock": quote}},
+        # E59 reason 4: the eye may punch into a declared SURFACE by name. After the judged instant on purpose -
+        # what this proves in the golden is that the compiler resolved the plate's quad onto the target.
+        {"kind": "punch", "at": 12.0, "dur": 1.6, "target": {"kind": "embed", "name": "poster"}},
+    ]
+    BST.resolve_embed_targets(species, {"poster": {"quad": ART_POSTER}, "paper": {"quad": ART_PAPER}}, "golden art-embed")
+    evidence = {
+        quote: {"title": "The claim on the wall", "source": source, "species": "press",
+                "document": {"path": "golden", "sha256": "0" * 64}, "badges": []},
+        still: {"title": "The record on the desk", "source": "P50 T7", "species": "deck",
+                "document": {"path": "golden", "sha256": "0" * 64}, "badges": _badges()[:2]},
+    }
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-study", "sha256": "0" * 64,
+                                            "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": docks, "species": species}]
+    uris = _base_uris()
+    uris["plate-study"] = uri("image/png", png_surfaces(432, 768, (31, 38, 48), (222, 214, 198), (22, 26, 32),
+                                                        [ART_POSTER, ART_PAPER]))
+    uris[quote] = uri("image/png", png_bars(528, 160, (250, 247, 240), PRESS_CARDS[0][4]))
+    uris[still] = uri("image/png", png_solid(640, 400, (23, 105, 194)))
+    return _timeline("Golden: a card on a painted surface", scenes, evidence, "9:16"), uris
+
+
 def _chart_evidence() -> dict:
     chart = json.loads(SERIES.read_text(encoding="utf-8"))
     return {"ev-golden-chart": {"title": "Golden chart", "source": "golden series sidecar", "species": "chart",
@@ -653,6 +765,7 @@ SURFACES = {
     "data-to-bars": data_to_bars,
     "chip-board": chip_board,
     "press-stack": press_stack,
+    "art-embed": art_embed,
     "flow-swap": flow_swap,
     "span-decade": span_decade,
     "vecmap-arc": vecmap_arc,

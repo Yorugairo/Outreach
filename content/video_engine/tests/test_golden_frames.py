@@ -35,6 +35,7 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "data-to-bars",  # E64 / R26-49: the DATA-keyed recast mid-flight (the derived key, the four data in the air, the axes handing over)
             "vecmap-arc",   # P50 T5: the vector map in PORTRAIT - Iran lit, the arc from the Gulf to the US cut by its X, "1996" and "1.4 Billion Barrels" stamped, China lit
             "thread-baseline",   # P50 T15 / HF-16: THE WIRE - the line page's first series still standing under the bars page after the cut, mid-recede
+            "art-embed",    # P50 T7: a press card projected onto the plate's declared poster and a still card on its paper - the ART world, the room darkened around them
             "occluder-dock"]     # P50 T15 / HF-17: a dock BEHIND the plate's foreground layer - the depth cue by occlusion, not blur
 
 

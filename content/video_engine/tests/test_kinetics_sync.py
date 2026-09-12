@@ -22,7 +22,8 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import sync_kinetics as SK  # noqa: E402
 
-MODULES = ["ease", "spring", "stroke", "clothoid", "ink", "squash", "idle", "stopaction", "chartxf", "camera", "arap",
+MODULES = ["ease", "spring", "stroke", "clothoid", "ink", "squash", "idle", "stopaction", "homography", "chartxf",
+           "camera", "arap",   # P50 T7 (homography): the planar projection that lands a card on a plate's declared surface - it imports nothing, and its region sits after the stop action whose impact it composes with
            "morph_a"]   # P43 T1 + P47 T5/T1/T3 + P50 T12 (morph_a: doc 43 s43.5 Method A, after arap - it imports it)
                                               # + P50 T14 the clothoid fitter, beside the stroke it is drawn by; in dependency order (the template's region order)
 SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span", "vecmap",
