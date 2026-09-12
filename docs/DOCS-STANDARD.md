@@ -14,8 +14,8 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 17 | 328 | 95.1% | 93.0% | 3 | 97.0 |
-| Process (everything else) | 289 | 3235 | 97.6% | 91.8% | 11 | 100.0 |
-| All docs | 306 | 3563 | 97.4% | 91.9% | 14 | 100.0 |
+| Process (everything else) | 291 | 3260 | 97.6% | 91.9% | 11 | 100.0 |
+| All docs | 308 | 3588 | 97.4% | 92.0% | 14 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -44,7 +44,7 @@ item, a quote, a table row or a fence.
 
 ## Appendix A - sections missing a lead line
 
-Non-exempt sections whose first real line is under 40 characters (93).
+Non-exempt sections whose first real line is under 40 characters (94).
 
 - `content/video_engine/projects/martial-matters/pilots/marshall-monday-001/script-draft.md:1` Why Rap Violence is Actually a Sign of Peace | Marshall Matters Ep. 1
 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:13` Titles & Click Contracts
@@ -64,6 +64,7 @@ Non-exempt sections whose first real line is under 40 characters (93).
 - `content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:171` The On-1s / On-2s / On-3s Decision Rule (Proposal)
 - `content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:288` A6: The Secondary-Motion Budget [RECLASSIFIED: Design Proposal]
 - `content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:415` C3: Nested Coordinate Spaces [Tier 1 Architecture — CLOSED]
+- `content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:22` Quantitative Camera Telemetry
 - `content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:22` Quantitative Camera Telemetry
 - `content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md:27` 🔍 [Why US Treasury yields may stay high despite efforts to lower borrowing costs - The HinduBusinessLine](https://www.thehindubusinessline.com/news/world/us-treasury-yields-why-structural-supply-and-demand-pressures-could-keep-rates-high/article71418165.ece)
 - `content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md:30` 🔍 [The Fed - Repo Markets and the Fed’s Balance Sheet: Implications for Monetary Policy Implementation](https://www.federalreserve.gov/econres/notes/feds-notes/repo-markets-and-the-feds-balance-sheet-implications-for-monetary-policy-implementation-20260826.html)

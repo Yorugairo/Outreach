@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-306 documents across 13 kinds.
+308 documents across 13 kinds.
 
 ## doctrine
 
@@ -91,15 +91,15 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## ruling-ledger
 
-- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing correcti — Portable, model-agnostic. Load alongside — defines: A3; E11; +53 more — terms: long-form; The operator's words.; drop-off; YouTube
+- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing correcti — Portable, model-agnostic. Load alongside — defines: A3; E11; +54 more — terms: The operator's words.; long-form; drop-off; YouTube
 
 ## capabilities
 
-- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +146 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
+- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +148 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
 
 ## backlog
 
-- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +103 more — terms: Z-stack; short-form; drawOn; G-g
+- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +105 more — terms: Z-stack; short-form; drawOn; G-g
 
 ## pattern
 
@@ -212,6 +212,8 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md — Deep Technical Monograph 10: Generative — This monograph standardizes the technica — defines: — — terms: arXiv; DiT; Spatio-Temporal; mask-pinned
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md — Master Research & Evidence Dossier: High — Executive Summary & The 4 Core Pillars C — defines: — — terms: Closed-Form; s_x; s_y; a_x
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md — Deep Research Report: Drawing Engines, A — State-of-the-art programmatic video gene — defines: — — terms: closed-form; s_x; s_y; HyperFrames
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md — PRODUCTION REFERENCE REPORT: I Found the — Compositions Measured: 43 Camera-Locked — defines: P1; P2; +4 more — terms: YouTube; zero-drift; High-Velocity; cut-alignment
+- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/SHOT_LEDGER.md — SHOT LEDGER: Dual-Track Visual Events & — Kind: `COMP` = new base stage / scene cu — defines: — — terms: SLOW_PUSH; build; LOCKED; metaphor_prop
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md — Master Research & Evidence Dossier: High — Executive Summary & The 4 Core Pillars C — defines: — — terms: Closed-Form; s_x; s_y; a_x
 - content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md — PRODUCTION REFERENCE REPORT: The New Rul — Compositions Measured: 55 Camera-Locked — defines: P1; P2; +4 more — terms: zero-drift; High-Velocity; cut-alignment; Near-black
 - content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/SHOT_LEDGER.md — SHOT LEDGER: Dual-Track Visual Events & — Kind: `COMP` = new base stage / scene cu — defines: — — terms: LOCKED; SLOW_PUSH; metaphor_prop; build
