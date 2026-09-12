@@ -1,0 +1,15 @@
+{
+  "_contract": "Frozen WORK-ORDER (2026-09-12, P50 T7, the third still). The operator proposed it (\"cream washi foreground on the bottom 60% and the TV/monitor on the top 40%\") and said \"order it\". Do not edit the prompt; a change is a new order file. The brief: docs/content-video-engine/briefs/ART-EMBED-PLATE-ORDER-2026-09-11.md. Dispatch: python content/video_engine/channel-assets/money-physics/plates/orders/dispatch_plate_order.py art-embed-washi-tv.order.json. The still is quarantined until the operator approves the frame; both surfaces are BLANK in the painting (E33 / doc 15 s4).",
+  "_beat": "the two worlds in one frame: the house paper below (a chart page's ground, or a record lying flat) and a screen above for a press card or a clip",
+  "prompt": "9:16 vertical, full bleed. A light application of 2.5D woodblock print and vox newspaper meets rich anime colors. The upper two fifths of the frame: a dark wall at night with a large flat television hanging in a thin dark bezel, its screen dark and blank, its face square to the viewer, a desk lamp's warm cone across the wall from the left. The lower three fifths of the frame: a sheet of cream washi paper filling the width edge to edge, its top edge a soft deckle, plain and unmarked, lit evenly. Nothing on the screen, nothing on the paper. No people, no text anywhere in the image, no logos. A single still frame.",
+  "references": [],
+  "ratio": "9:16",
+  "projectUrl": "https://labs.google/fx/tools/flow/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+  "outputPath": "content/video_engine/channel-assets/money-physics/plates/stills/art-embed-washi-tv.png",
+  "budget": {
+    "kind": "zero_credit",
+    "model": "Nano Banana Pro",
+    "note": "the first two art-embed stills recorded creditsText '' on the same settings; a paid roll is refused"
+  },
+  "review_state": "quarantined until the operator approves the frame"
+}
