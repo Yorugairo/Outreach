@@ -2136,3 +2136,24 @@ takes the room that holds the park joined to the axis band; `gate_motion_density
 from the plot's box to the ink; `docs/content-video-engine/CAPABILITIES.md`. On Tokyo the panel card reads and parks in the
 holdings line's empty lower right (the row's `:right`), the whole line readable; the four authored-centre cards got their
 boxes back. The finding: the third form's 0:57 frame on the measured side build.
+
+## E66 — A surface is used whole: an embedded card fills the surface it lands on, its content reflowed to the surface's shape (2026-09-12)
+
+**The operator's words.** On the first proof frame of the ART-embed mechanism (P50 T7: a press card landed on the TV of
+the approved study, letterboxed into the screen's middle band with the lamp's glare above and below it): *"isn't the
+whole point of the TV to use it as the entire surface?"*
+
+**The ruling.** A painted surface the plate declares - the TV, the poster, the laptop, the paper - is taken WHOLE. An
+embedded card's box is the surface's full rectangle, and the card's content reflows to that shape: the masthead, the
+pulled phrase, the by-line and the badges are laid out at the surface's aspect (long lines on a wide screen, a tall
+column on a poster), the type fitted to the surface's width, never stretched. The inscribed card of the first cut - the
+card's own aspect letterboxed inside the surface - is retired. The legibility floor holds (the compiler's 25 % of the
+stage for a surface; the phrase never under the caption's quiet floor on a phone).
+
+**Why.** The surface was ordered so the card would have a place in the ART world; a card that takes a band of it leaves
+the plate's own blank showing around the information, and the surface reads as a screen with a sticker on it rather
+than as the thing the scene is showing.
+
+Mechanisms: the engine's `embedPlace` and the embedded card's reflow (`species/press.mjs` if its type must scale), the
+golden `art-embed` regenerated on purpose; `docs/content-video-engine/CAPABILITIES.md` (the ART-embed row). The finding:
+the TV proof frame of 2026-09-12.
