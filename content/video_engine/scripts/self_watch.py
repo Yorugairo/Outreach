@@ -12,6 +12,10 @@ script gates' last verdicts - then grabs the OPENING as contact sheets (0:60 on 
   section 3  ONE verdict line: `NOT CLEAN - <the first failing row>`, or `TODO - the agent reads the sheets and fills
              O1-O10`. CLEAN is the agent's word, written after the read; a build handed to the operator carries CLEAN.
 
+The bar also writes the POSTING side of the build, since a cut nobody can post is not one-shot: `publish_package.py`
+puts `<build>/publish/` on disk (the two descriptions, the pinned comment, the tags, the first frame, the checklist -
+R26-8) and the folder rides section 1 as its own row. It never ends the watch: a package that cannot be written WARNs.
+
 and `<build>/SELF-WATCH.html`, the operator's copy (gate 1's first read: "I'd have to see the video and have a better
 writeup of what I'm looking for"): the same rows as one plain question each, what PASS and FAIL look like, the
 agent's read, and the frame at every instant the read names - each frame a link to the served player at that
@@ -39,11 +43,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import lint_species_choice as L  # noqa: E402
 import gate_motion_density as G  # noqa: E402
 import probe as P  # noqa: E402
+import publish_package as PP  # noqa: E402
 
 HERE = Path(__file__).resolve().parent
 GATE = HERE / "gate_motion_density.py"
 REPORT_NAME = "SELF-WATCH.md"
 SHEET_DIR = "self-watch"
+FIRST_FRAME = "frame-0000.0.png"          # the 0:00 frame the publish package copies (R26-8); `*-0000.0.png` is its glob
 LONG_FORM_S = 180.0                       # the script gates' route: a measured clock under 3:00 is a short
 OPENING_S = {"short": 60.0, "long": 180.0}   # the operator: "the first 3 minutes on long format, first 60 seconds on shorts"
 STEP_S, TILE_PX, PER_SHEET = 2.0, 360, 12
@@ -151,6 +157,21 @@ def section1(gate: dict, lint_lines: list[str], lint_counts: dict, viewer: str, 
     rows.append(("the viewer (P36)", level_of(viewer), trim(viewer)))
     rows.append(("the script gates", level_of(sgates), trim(sgates)))
     return rows
+
+
+def publish_row(build: Path, project: Path) -> tuple[str, str, str]:
+    """The posting side of the one-shot bar (R26-8): write `<build>/publish/` from the build's own artifacts and report
+    the folder as a section-1 row. A package that cannot be written WARNs and names the reason - the watch is the cut,
+    so a missing description never says NOT CLEAN."""
+    try:
+        out = PP.write_package(build, project)
+        names = ", ".join(sorted(p.name for p in out.iterdir()))
+        missing = json.loads((out / "MANIFEST.json").read_text(encoding="utf-8"))["missing"]
+        level = "WARN" if missing else "PASS"
+        detail = f"{out.name}/: {names}" + (" · not on disk: " + "; ".join(missing) if missing else "")
+        return ("the publish package (R26-8)", level, trim(detail, 900))
+    except Exception as e:                                  # a build with no timeline, a dossier mid-edit: say so, do not die
+        return ("the publish package (R26-8)", "WARN", f"not written: {type(e).__name__}: {trim(str(e), 240)}")
 
 
 def verdict(rows: list[tuple[str, str, str]]) -> str:
@@ -470,12 +491,16 @@ def main(argv: list[str] | None = None) -> int:
     with P.Probe(build, args.timeline) as p:
         P.write_gate(build, args.timeline, probe=p)                       # M25's input, keyed to this player
         sheets = opening_sheets(p, build / SHEET_DIR, ts, args.tile)
+        # the frame at 0:00 at full stage size: the publish package's `first-frame.png` (R26-8 - what a platform picks
+        # on its own when nobody uploads a thumbnail), and the tile O1 is read against
+        (build / SHEET_DIR / FIRST_FRAME).write_bytes(p.png(0.0))
         sha, tl_name, aspect = hashlib.sha256(p.html.read_bytes()).hexdigest()[:12], p.tl_path.name, p.aspect
     gate = run_gate(build)
     lint_lines, lint_counts = L.report(project, build=build.name, long=(fmt == "long"))
     viewer = verdict_line(project / f"{args.script}-VIEWER.md")
     sgates = verdict_line(project / f"{args.script}-GATES.md")
     rows = section1(gate, lint_lines, lint_counts, viewer, sgates, fmt)
+    rows.append(publish_row(build, project))       # the posting side rides last: it reads the build, it never gates it
     text = render(build, project, args.script, fmt, sha, tl_name, runtime_s, aspect, rows, sheets, ts,
                   _dt.date.today().isoformat())
     (build / REPORT_NAME).write_text(text, encoding="utf-8")

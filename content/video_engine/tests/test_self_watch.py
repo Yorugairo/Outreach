@@ -2,6 +2,7 @@
 are the agent's read (TODO from the runner), a FAIL in section 1 is NOT CLEAN and exit 1, the opening's sheets exist."""
 from __future__ import annotations
 
+import json
 import shutil
 import sys
 from pathlib import Path
@@ -72,6 +73,51 @@ def test_long_form_lists_the_plates():
     assert rows[3][0] == "E61 plates (long)" and rows[3][1] == "WARN" and "plate-a" in rows[3][2]
 
 
+def _small_build(tmp_path) -> Path:
+    """The smallest build the bar's publish step can read: a take and a compiled timeline (P52 T16)."""
+    build = tmp_path / "proj" / "build-x"
+    build.mkdir(parents=True)
+    (build / "timeline.json").write_text(json.dumps(
+        {"episode": "demo", "script": "S.txt", "take": "vo", "runtime_s": 12.0,
+         "sentences": [{"text": "One line that opens it.", "start": 0.0, "end": 2.0},
+                       {"text": "Japan sold a hundred billion.", "start": 3.0, "end": 6.0}]}), encoding="utf-8")
+    (build / "demo.timeline.json").write_text(json.dumps(
+        {"title": "Demo Short", "subtitle": "Demo Channel · short", "episode_id": "demo", "aspect": "9:16",
+         "evidence": {}, "scenes": [{"world": {"page": {"source": "US Treasury TIC · 2026-09"}}}]}),
+        encoding="utf-8")
+    return build
+
+
+# ---- the publish package joins the bar (R26-8, P52 T16) -------------------------------------------------------------
+def test_the_publish_package_is_a_section_1_row_and_lands_in_the_build(tmp_path):
+    build = _small_build(tmp_path)
+    row = SW.publish_row(build, build.parent)
+    assert row[0] == "the publish package (R26-8)" and row[1] == "WARN"      # this build carries no dossier, no master
+    assert "publish/: CHECKLIST.md" in row[2] and "not on disk:" in row[2]
+    assert (build / "publish" / "CHECKLIST.md").is_file() and (build / "publish" / "DESCRIPTION-YOUTUBE.md").is_file()
+    assert "Demo Short" in (build / "publish" / "DESCRIPTION-YOUTUBE.md").read_text(encoding="utf-8")
+
+
+def test_the_report_lists_the_publish_row_under_the_gates(tmp_path):
+    build = _small_build(tmp_path)
+    rows = [("motion gate (M01-M24)", "PASS", "clean"), SW.publish_row(build, build.parent)]
+    md = SW.render(build, build.parent, "S", "short", "abc", "demo.timeline.json", 12.0, "9:16", rows, [], [0.0],
+                   "2026-09-12")
+    sec1 = md.split("## 2.")[0]
+    assert "| the publish package (R26-8) | WARN |" in sec1 and "CHECKLIST.md" in sec1
+
+
+def test_a_package_that_cannot_be_written_warns_and_never_ends_the_watch(tmp_path):
+    empty = tmp_path / "no-build"
+    empty.mkdir()
+    row = SW.publish_row(empty, empty)
+    assert row[1] == "WARN" and row[2].startswith("not written: ")
+    g = SW.parse_gate(GATE_TEXT.replace("[FAIL ] M12", "[PASS ] M12"))
+    rows = SW.section1(g, [], {"sentences": 1, "with_act": 1, "with_row": 1, "no_row": 0}, "VERDICT: PASS",
+                       "VERDICT: PASS", "short") + [row]
+    assert SW.verdict(rows).startswith("TODO -")                             # a missing description is not a FAIL
+
+
 def test_verdict_line_reads_the_last_verdict_or_absent(tmp_path):
     assert SW.verdict_line(tmp_path / "nope.md") == "absent"
     p = tmp_path / "x-GATES.md"
@@ -99,13 +145,18 @@ def test_the_tokyo_report_is_written_with_the_sheets(tmp_path):
     shutil.copy2(TOKYO / "SHOT-TABLE-SHORT.py", project / "SHOT-TABLE-SHORT.py")   # the lint's table; no script reports -> absent
     rc = SW.main([str(build), "--project", str(project), "--script", "SCRIPT-90S.claude", "--step", "2", "--tile", "240"])
     report = (build / SW.REPORT_NAME).read_text(encoding="utf-8")
-    assert rc == 0, report
+    assert rc in (0, 1), report            # 1 = NOT CLEAN on the frozen build's standing motion-gate FAILs (below)
     assert report.startswith("# SELF-WATCH - tokyo-tea-break - build-short - ")
     lines = report.splitlines()
     sec1 = [l for l in lines if l.startswith("| ") and " | " in l and not l.startswith("| row") and not l.startswith("| #")]
     mech = sec1[:6]
     levels = [l.split(" | ")[1] for l in mech]
-    assert levels[0] in ("PASS", "WARN") and levels[1:] == ["PASS", "INFO", "n/a", "absent", "absent"], mech   # the Tokyo gate carries standing WARNs (M11, M21), never a FAIL
+    # the frozen build-short carries the gate's STANDING verdicts - WARNs (M21) and, since M27/M28 (2026-09-11) and M29
+    # (P52 T13), FAILs (M11, M27, M28, M29) - a frozen copy is never rebuilt (E-rule), so the row reads its level and the
+    # report is still written; re-baselined 2026-09-12 (P52 T16)
+    assert levels[0] in ("PASS", "WARN", "FAIL") and levels[1:] == ["PASS", "INFO", "n/a", "absent", "absent"], mech
+    assert "the publish package (R26-8) | " in report and sec1[6].startswith("| the publish package")   # P52 T16
+    assert (build / "publish" / "CHECKLIST.md").is_file()
     assert "M25 layout | PASS" in report and "no settled card" in report
     assert "species by sentence | INFO" in report and "sentences" in report
     for k, _ in SW.O_ROWS:
@@ -128,7 +179,9 @@ def test_a_failing_script_gate_makes_it_not_clean(tmp_path):
     rc = SW.main([str(build), "--project", str(project), "--script", "SCRIPT-90S.claude", "--step", "10", "--tile", "200"])
     report = (build / SW.REPORT_NAME).read_text(encoding="utf-8")
     assert rc == 1
-    assert report.splitlines()[-1].startswith("NOT CLEAN - the script gates: VERDICT: FAIL")
+    last = report.splitlines()[-1]
+    assert last.startswith("NOT CLEAN - ") and "the script gates: VERDICT: FAIL" in report, last   # the motion gate's standing
+    #   FAILs on the frozen build (M11, M27, M28, M29) may be named first; the script gates' FAIL is still in the verdict line
 
 
 # ---- the operator's copy (SELF-WATCH.html) ---------------------------------------------------------------------
