@@ -9822,8 +9822,13 @@ async function mount(doc) {
            hit's squash; it lives beneath the card in the dock layer and dies with the card */
         if (!contact) { contact = document.createElement("div"); contact.className = "dock-contact"; contact.id = "dock-contact-" + s; el.parentNode.insertBefore(contact, el); }
         const cs = contactShadow(sx.h || 0, sx.phase === "land" ? sx.alpha * 0.5 : 0);   /* the hit spreads the shadow by half the squash: a footprint, not a floor */
-        const Wd = G ? G.w : (el.offsetWidth || 800), Hd = el.offsetHeight || 450;   /* the PLACED width (the reading rect, then the park), never the .dock CSS default */
-        const L = parseFloat(el.style.left) || el.offsetLeft, T0 = parseFloat(el.style.top) || el.offsetTop;
+        /* P53 T10 / R26-58: the shadow's box is the PLACED box - a timeline constant - never the live layout. On a cold seek at a
+           throw's first frame the card's image has not decoded, so offsetTop/offsetHeight read a box that has not settled and the
+           shadow landed 1390 px from the walked frame's (Tokyo t4, 75.79). The height is the place's own aspect at the placed width. */
+        const PL = d.place && d.place.w > 0 ? d.place : null;
+        const Wd = G ? G.w : (el.offsetWidth || 800);   /* the PLACED width (the reading rect, then the park), never the .dock CSS default */
+        const Hd = G && PL && PL.h > 0 ? G.w * PL.h / PL.w : (el.offsetHeight || 450);
+        const L = G ? G.x : (parseFloat(el.style.left) || el.offsetLeft), T0 = G ? G.y : (parseFloat(el.style.top) || el.offsetTop);
         contact.style.left = (L + Wd * 0.06).toFixed(1) + "px"; contact.style.width = (Wd * 0.88).toFixed(1) + "px"; contact.style.top = (T0 + Hd - 6).toFixed(1) + "px";
         contact.style.transform = "scale(" + cs.scale.toFixed(3) + ", " + (cs.scale * 0.9).toFixed(3) + ")";
         contact.style.filter = "blur(" + cs.blur.toFixed(2) + "px)";   /* the depth cue: wide high up, a slit at contact */

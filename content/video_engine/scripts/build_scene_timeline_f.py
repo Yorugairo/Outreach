@@ -2631,7 +2631,7 @@ def dock_place(world: dict, aspect: str | None, reserve: list[dict] | None = Non
 
 def centred_place(place: dict, aspect: str | None, card_aspect: float | None = None, page: dict | None = None,
                   centre_w: float | None = None, band_name: str | None = None, centre_y: float | None = None,
-                  centre_x: float | None = None) -> dict:
+                  centre_x: float | None = None, reserve: list[dict] | None = None) -> dict:
     """The same card at the READING width, centred - horizontally on the stage, vertically in the page's own FREE space.
 
     The third watch asked for a centred dock ("center dock then retract the host on that chart page"); the macro-chart intake
@@ -2647,7 +2647,9 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
         cx = centre_x * sw if centre_x is not None else sw / 2
         cy = centre_y * sh if centre_y is not None else sh / 2
         return {"x": round(max(0, cx - w / 2)), "y": round(max(0, cy - h / 2)), "w": w, "h": h}
-    bands = [bd for bd in free_bands(LPG.page_boxes(page, aspect or "16:9")) if page and bd["band"] in ("below", "foot", "above")] if page else []
+    # P53 T7 / R26-59: the newsreel band's strip is RESERVED here too - a centred card (the head above the crawl is one)
+    # may not be centred in a band that runs through the crawl; `dock_place` already honoured it, this door did not
+    bands = [bd for bd in free_bands(LPG.page_boxes(page, aspect or "16:9"), reserve) if page and bd["band"] in ("below", "foot", "above")] if page else []
     if band_name:   # the row names the band itself (the sixth watch: the cup belongs between the source line and the caption)
         bands = [bd for bd in bands if bd["band"] == band_name]
     room = max(bands, key=lambda bd: bd["h"], default=None)
@@ -2660,7 +2662,7 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
     # (the plot's empty rectangle, the axis band, the corner) rather than the stage's middle, which
     # is the chart. The card keeps the centred WIDTH it can, and the room decides where it sits.
     if page:
-        got = page_place(page, aspect or "16:9")
+        got = page_place(page, aspect or "16:9", reserve)
         if got.get("room") != "corner" or not room:
             gw = min(w, got["w"]) if card_aspect else got["w"]
             gh = round(gw * card_aspect) if card_aspect else dock_card_h(gw)
@@ -3768,7 +3770,7 @@ def main() -> int:
                                "badges": []})
             auto_centre = solo_centre_by_clock(world, ASPECT, len(ds), slot, enter, a, dopt)   # R26-22: E50's clock centres a solo card on a MEASURED page
             centred = bool(dopt.get("centre")) or auto_centre
-            dplace = centred_place(place, ASPECT, dopt.get("card_aspect"), (world or {}).get("page"), dopt.get("centre_w"), dopt.get("centre_band"), dopt.get("centre_y"), dopt.get("centre_x")) if (place and centred) else place   # the third watch: a card centred on the page
+            dplace = centred_place(place, ASPECT, dopt.get("card_aspect"), (world or {}).get("page"), dopt.get("centre_w"), dopt.get("centre_band"), dopt.get("centre_y"), dopt.get("centre_x"), newsreel_boxes(row_species, ASPECT)) if (place and centred) else place   # the third watch: a card centred on the page
             if centred and isinstance(dplace, dict) and isinstance(place, dict) and "room" not in dplace:
                 dplace = dict(dplace, room=place.get("room"))   # E65: the room the PAGE offered travels with the centred box
             if dopt.get("press"):   # P50 T3: E45 - the pile has one box, and it is the stage's centre
@@ -3794,7 +3796,7 @@ def main() -> int:
                 except ValueError as exc:
                     raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
             rd = dopt.get("read") or {}   # the box a centred card POPS at before it parks to dplace (2026-09-10)
-            rplace = centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x")) if (place and rd) else None
+            rplace = centred_place(place, ASPECT, rd.get("card_aspect", dopt.get("card_aspect")), (world or {}).get("page"), rd.get("centre_w"), None, rd.get("centre_y"), rd.get("centre_x"), newsreel_boxes(row_species, ASPECT)) if (place and rd) else None
             # E63 (widened): a card never READS over the page's plot, drawing or finished. The read box is the row's
             # own when it named one, the card's solo CSS box otherwise; a centred card with no `read` has no pop at all
             # (it takes its parked box from its first frame), so there is nothing to move and the entry is untouched.

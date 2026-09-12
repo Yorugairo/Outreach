@@ -7,7 +7,7 @@ risk: standard
 owner: parent
 branch: main
 created: 2026-09-12
-updated: 2026-09-12 (running: T1-T9 landed and proved on frames, T7's two halves open; T10 not started; a hard reboot mid-write zero-filled five generated doc layers, regenerated before this commit)
+updated: 2026-09-12 (running: T1-T10 landed and proved on frames; open = gate 1's re-render with a cutout head, and the four human gates)
 ---
 
 # What the one-shot taught
@@ -242,8 +242,10 @@ by the parent in every case - a subagent's PASS is not evidence (E71).
 - Validate: `python -m pytest content/video_engine/tests -k "dock or newsreel" -q`; re-render `tests/golden/frames/newsreel-band.png` on purpose and read it
 - Evidence: `DOCK_KIND_CUTOUT` travels on the evidence entry exactly as the video kind does, the player toggles
   `.dock.cutout`, and the template stands the card's chrome down (no paper, border, radius, padding or backdrop
-  blur); a document dock compiles byte-for-byte as before. STILL OPEN: `centred_place` taking the band's
-  `reserve`, `cap_band: "above"` on a crawl with nothing docked, and gate 1's re-render with a real head.
+  blur); a document dock compiles byte-for-byte as before. `centred_place` now takes the band's `reserve` (both dock-loop call
+  sites pass the row's newsreel boxes; the E65 fallback keeps it too). `cap_band: "above"` on a bare crawl stays
+  REFUSED by design: the player moves the caption's strip under a card, and the head now docks as a cutout, so the
+  composition is satisfiable. STILL OPEN: gate 1's 16:9 frame re-rendered with a real head.
 
 ### T8: the row proposer and the short-form shape
 - Status: done, with its limit recorded in the tool
@@ -275,13 +277,13 @@ by the parent in every case - a subagent's PASS is not evidence (E71).
   the SCRIPT rather than free-form recognition. That is the next step, not a defect in the tool.
 
 ### T10: R26-58, a thrown dock's flight warm versus cold
-- Status: pending
+- Status: done
 - Owner: implementation_luna
 - Depends on: none
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the dock loop's contact placement), `content/video_engine/tests/` the determinism test beside it
 - Acceptance: at Tokyo 75.79 the contact shadow is identical warm and cold; the cure is in the contact placement, not in the throw law
 - Validate: `python content/video_engine/scripts/determinism_check.py <build> --instants 75.79`; `px_diff.py` on the pair
-- Evidence: pending
+- Evidence: T10 evidence (2026-09-12). Reproduced on build-short-t4 (MISMATCH at 75.79 only). The contact shadow read the live layout; it now reads the placed box (`dockGeom` x/y/w, height from the place's aspect) in the engine's dock loop. Fresh private build `build-short-p53t10`: 75.79 / 76.00 / 76.25 all warm == cold; landing frames read at 75.79-76.40. Its one motion-gate FAIL (M29 at 9.51 s) is identical on t4. 212 tests pass across page_performs, gate_motion_density, transition_stamps, kinetics_sync and the golden frames.
 
 ## Verification
 
