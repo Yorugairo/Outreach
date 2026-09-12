@@ -3439,6 +3439,99 @@ async function mount(doc) {
     el.__lp = st;   /* resolveTarget reads the active page's points from its world element */
     return st;
   };
+  /* ---- THE VALUE ROW (R26-53; the operator, 2026-09-11: "why are we now crashing text?") -------------
+     A bars page prints its numbers above its bars at the size the stylesheet gives the page (.val: 26 px
+     landscape, 59 px portrait). Nothing checked that the number FITS the column it is printed over. On the
+     Tokyo Meta page - four four-figure values over 155-unit slots - "$665" measures 131 units, so 24 units
+     of air separated it from "$633": 8.6 CSS px on a 390-px phone against 21 px type, and the three numbers
+     read as one run of digits. The callout's pill made it worse: 165 units of pill on a 155-unit slot left
+     6 units - 2 CSS px - between its edge and "$604", and the two read as one object.
+
+     Two laws, both settled at BUILD, both pure functions of the strings and the sizes (never of t):
+       1. a value label fits its slot, or EVERY value on the page drops to the largest size at which the
+          widest one does - one size for the whole row, never mixed sizes on one page;
+       2. a pill wider than its own slot rises to a band of its own above the whole values row.
+
+     The gutter is the dial. GUT_MIN is its floor in the chart's own units; GUT_FIG is the rule that
+     actually bites - half a FIGURE of air each side, measured in the page's OWN face, so two numbers are
+     never closer than one digit is wide and can never be read as one number. (A flat 12 is a no-op on the
+     Arial fallback this machine renders in: 155 - 24 = 131 against a 131.26 label. Measured, not guessed.) */
+  const LPVAL = Object.freeze({
+    GUT_MIN: 12,       /* the air each side of a value label, chart units - the floor */
+    GUT_FIG: 0.5,      /* ... and the rule: half a figure each side, off the page's own type */
+    STEP: 0.5,         /* the size ladder: the row lands on a half unit, so a rebuild lands on the same size */
+    FLOOR_P: 40,       /* the portrait tick label's size - the floor a value may not go under (doc 49) ... */
+    FLOOR_L: 24,       /* ... and the landscape one. Below it the values split into two rows instead */
+    ROW_DY: 1.15,      /* the second row's lift, in ems of the fitted size: odd bars' values ride one line out */
+    ASC: 0.92,         /* the type's ascent above its baseline as a share of the size (Arial .905, Inter .97 rounded
+                          in): what the BOX reaches, which is what an overlap gate measures - cap height is only the ink */
+    PILL_TOP: 6,       /* the risen pill keeps this much of the chart box clear above it */
+    FIT_STEPS: 4,      /* how many half-unit corrections the fit may make after re-measuring (it needs 0 or 1) */
+  });
+  /* ONE string's width in the chart's own units. The page's own measure first - a <text> in the live document is a
+     pure function of the string, the size and the face, so a cold seek and a warm play answer the same number - and a
+     metric estimate when the page is not laid out yet and getComputedTextLength answers 0 (the engine already had to
+     say this once, for the pill: "a page not yet laid out measures 0 and keeps the dial"). */
+  const LP_ADV = Object.freeze({ ".": 0.28, ",": 0.28, "-": 0.33, "\u2212": 0.58, "%": 0.89, " ": 0.28, "\u00a0": 0.28 });
+  const lpInkW = (el) => {
+    const m = el && el.getComputedTextLength ? el.getComputedTextLength() : 0;
+    if (m > 0) return m;
+    const s = (el && el.textContent) || "";
+    const fs = el ? (parseFloat(el.style.fontSize) || parseFloat(getComputedStyle(el).fontSize) || 0) : 0;
+    let w = 0;
+    for (const ch of s) w += (LP_ADV[ch] != null ? LP_ADV[ch] : 0.56) * fs;
+    return w;
+  };
+  /* LAW 1. Fit the page's whole value row into its slots and return what it took:
+     { size, rows, gut, room }. `slot` is the bar PITCH - a value is centred on its bar and the air
+     it may use is its own column, whoever its neighbour is. Measured, applied, re-measured: the
+     prediction is linear in the size and the browser's is not, quite, so the fit corrects itself. */
+  const lpFitValues = (st, slot, P) => {
+    const vals = st.bars.filter((b) => b.val && (b.val.textContent || "").length);
+    if (!vals.length || !(slot > 0)) return null;
+    const size0 = parseFloat(getComputedStyle(vals[0].val).fontSize) || (P ? 59 : 26);
+    const probe = lpEl("text", "val", st.chart, { opacity: 0, x: 0, y: 0 });
+    probe.textContent = "0";
+    const fig = lpInkW(probe) || size0 * 0.56;   /* the page's own figure width, in the page's own face */
+    probe.remove();
+    const gut = Math.max(LPVAL.GUT_MIN, LPVAL.GUT_FIG * fig), room = slot - 2 * gut;
+    const widest = () => Math.max(...vals.map((b) => lpInkW(b.val)));
+    const w0 = widest();
+    /* IT FITS: the page keeps the stylesheet's size to the bit - no style is written, so a page that
+       never had this defect builds byte-identically to the frame it built before (the goldens). */
+    if (!(room > 0) || w0 <= room) return { size: size0, rows: 1, gut, room, slot, fitted: false };
+    const floor = P ? LPVAL.FLOOR_P : LPVAL.FLOOR_L;
+    let size = Math.max(floor, Math.floor(size0 * room / w0 / LPVAL.STEP) * LPVAL.STEP);
+    for (let i = 0; i < LPVAL.FIT_STEPS; i++) {
+      for (const b of vals) b.val.style.fontSize = size.toFixed(1) + "px";
+      if (widest() <= room || size <= floor) break;
+      size = Math.max(floor, size - LPVAL.STEP);
+    }
+    /* THE FLOOR IS THE FLOOR: a value smaller than the page's own tick label is not reading matter. The row
+       splits instead - odd bars' values ride one line further out, so every label keeps two slots of air. */
+    const rows = widest() > room ? 2 : 1;
+    if (rows === 2) for (const b of vals) if ((b.i & 1) === 1) {
+      b.vdy = (b.neg ? 1 : -1) * size * LPVAL.ROW_DY;   /* out of the axis, never into the bar */
+      b.val.setAttribute("y", (+b.val.getAttribute("y") + b.vdy).toFixed(1));
+      const m = (st.markBy || {})["val:b:" + b.i];
+      if (m) m.geom.y = +b.val.getAttribute("y");       /* the mark is where the ink is (a species targets it) */
+    }
+    return { size, rows, gut, room, slot, fitted: true };
+  };
+  /* LAW 2. The band a pill TOO WIDE FOR ITS OWN SLOT rises to, or null when it may stay where it is:
+     above every value on the page, its bottom `gut` clear of the tallest value's box. A page whose
+     values were never fitted (no row of its own) and a breaking bar (its pill rides its tip) keep
+     their own laws. Pure: the strings, the sizes and the geometry, never t. */
+  const lpPillBand = (st, e, CP, py, slot, pw) => {
+    const VF = st.valFit;
+    if (!VF || (e.over && st.bt) || !(slot > 0) || pw <= slot) return null;
+    const others = st.bars.filter((b) => b !== e && b.val && (b.val.textContent || "").length);
+    if (!others.length) return null;
+    const capTop = (b) => +b.val.getAttribute("y") - (parseFloat(b.val.style.fontSize) || VF.size) * LPVAL.ASC;
+    const band = Math.max(LPVAL.PILL_TOP, Math.min(...others.map(capTop)) - VF.gut - CP.h);
+    return band < py ? band : null;   /* never a DROP: a pill already above the row stays where it is */
+  };
+
   const buildLedgerBars = (st, pg) => {
     /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
        zero baseline. Values are SIGNED; the baseline sits at zero wherever the range puts it, bars hang
@@ -3516,6 +3609,9 @@ async function mount(doc) {
       lpMark(st, "xlab:" + i, "xlabel", lab, { x: x + bw / 2, y: bottom + (P ? 52 : 34) });
       lpMark(st, "val:b:" + i, "value", val, { x: x + bw / 2, y: vy, v });
     });
+    /* R26-53 law 1: the whole row fits its slots, at ONE size, before anything reads a value's box */
+    const slot = (x1 - x0) / n;
+    st.valFit = lpFitValues(st, slot, P);
     if (brk && st.bars.some((b) => b.over)) {
       const vmax = Math.max(...st.vals), niceCeil = (v) => { const s = lpNiceStep(v / 4); return Math.ceil(v / s - 1e-9) * s; };
       const hi1 = btMode === "burst" ? niceCeil(vmax) : hi, my1 = (v) => bottom - (v - lo) / (hi1 - lo || 1) * (bottom - top);
@@ -3566,8 +3662,28 @@ async function mount(doc) {
          y 424-508, "May" at 429-473, fully buried). If there is no room below, the pill flips ABOVE the zero
          line at the same x, where a negative bar leaves the plot empty. s9.23b: a label never overprints. */
       const labTop = bottom + (P ? 52 : 34) - (P ? 40 : 26);   /* the top of the month-label row */
+      /* THE PILL'S BOX IS BUILT AND MEASURED FIRST (R26-53), because how wide it is decides where it may
+         stand: a pill that fits its own slot has the pick of the laws below, and one that does not has
+         exactly one place to go. The rect is created before the text so the text sits on it. */
+      const pr = lpEl("rect", "cpill", cg, { x: (e.x - CP.w / 2).toFixed(1), y: 0, width: CP.w, height: CP.h, rx: CP.rx });
+      const ct = lpEl("text", "callout", cg, { x: e.x.toFixed(1), y: 0, "text-anchor": "middle" });
+      ct.textContent = e.val.textContent;
       let py = e.neg ? e.end + CP.dn : e.end - CP.up;
-      if (e.neg && py + CP.h > labTop) {
+      /* R26-53 law 2: THE PILL SITS ON ITS OWN BAR'S SLOT. Wider than the slot it stands on the neighbour's
+         number - measured on the Tokyo Meta page: 165 units of pill on a 155-unit slot, 6 units from "$604",
+         2 CSS px on a phone, and the operator read the pill and the number as one object. So it RISES to a
+         band of its own above the WHOLE values row: its bottom a gutter clear of the tallest value's box, a
+         dotted leader keeping it tied to the bar it speaks for. Settled here, at build, from the strings and
+         the sizes alone - so the pill's place is a constant in t, and a cold seek and a warm play agree.
+         (It does not TRAVEL into the band on the callout's clock: every path from the slot to the band runs
+         the pill straight through the labels this law exists to keep it off. It arrives where it belongs,
+         on the count-and-fade the callout already owns.)
+         The band OUTRANKS the fallback below - a risen pill is clear of every label, so no neighbour has to
+         yield anything. A breaking bar's pill is exempt from both: it rides its own tip, or is mounted on
+         the axis, by its own law. */
+      const band = lpPillBand(st, e, CP, py, slot, lpInkW(ct) + (P ? 34 : 18));
+      if (band != null) { py = band; st.cband = py; }
+      else if (e.neg && py + CP.h > labTop) {
         /* The bar reaches the plot floor, so there is no room past its end. Above the zero line is not free either:
            the y-rescale puts a small positive bar's own value up there. So the pill goes INSIDE its own bar - the
            emphasised bar is the tallest mark on the page and sunflower on crimson is unmistakable - and any
@@ -3595,17 +3711,23 @@ async function mount(doc) {
         if (capAxis) { CAP = breakCapsuleFit(base, (st.geom || {}).H || bottom, CP); CP = { ...CP, h: CAP.h, ty: CAP.ty, rx: CAP.rx }; py = CAP.y; }
         else py = e.end - CP.up;
       }
-      const pr = lpEl("rect", "cpill", cg, { x: (e.x - CP.w / 2).toFixed(1), y: py.toFixed(1), width: CP.w, height: CP.h, rx: CP.rx });
-      const ct = lpEl("text", "callout", cg, { x: e.x.toFixed(1), y: (py + CP.ty).toFixed(1), "text-anchor": "middle" });
-      /* the pill fits its number: a six-glyph value ("36.59%", the breakthrough page) overran the fixed width and lost its
-         first digit at the edge (measured 2026-09-10). Measured on the final string; a page not yet laid out measures 0 and keeps the dial. */
-      ct.textContent = e.val.textContent;
       if (CAP && CAP.k < 1) {   /* the type shrinks with the box, and BEFORE the fit below measures the number */
         const fs0 = parseFloat(getComputedStyle(ct).fontSize) || (P ? 59 : 30);
         ct.style.fontSize = (fs0 * CAP.k).toFixed(1) + "px";
       }
-      const need = (ct.getComputedTextLength ? ct.getComputedTextLength() : 0) + (P ? 34 : 18);
-      if (need > CP.w) { pr.setAttribute("x", (e.x - need / 2).toFixed(1)); pr.setAttribute("width", need.toFixed(1)); }
+      /* the pill fits its number: a six-glyph value ("36.59%", the breakthrough page) overran the fixed width and lost its
+         first digit at the edge (measured 2026-09-10). Measured on the final string; a page not yet laid out falls back to
+         the face's own metric rather than to 0. The box is placed here, once, whichever law chose the band. */
+      const need = lpInkW(ct) + (P ? 34 : 18), pw = Math.max(CP.w, need);
+      pr.setAttribute("x", (e.x - pw / 2).toFixed(1)); pr.setAttribute("width", pw.toFixed(1));
+      pr.setAttribute("y", py.toFixed(1)); pr.setAttribute("height", CP.h); pr.setAttribute("rx", CP.rx);
+      ct.setAttribute("y", (py + CP.ty).toFixed(1));
+      if (st.cband != null) {   /* the risen pill keeps its leader to the bar it speaks for (dotted: a solid rule is a comparator, E53 s6) */
+        const ly1 = py + CP.h + BREAK.CAP_LEAD_GAP, ly2 = e.end - BREAK.CAP_LEAD_GAP;
+        if (ly2 - ly1 > BREAK.CAP_LEAD_GAP) lpEl("line", "blead", cg, { x1: e.x.toFixed(1), x2: e.x.toFixed(1),
+          y1: ly1.toFixed(1), y2: ly2.toFixed(1), stroke: "var(--lp-acc)", "stroke-width": BREAK.CAP_LEAD_W,
+          "stroke-linecap": "round", "stroke-dasharray": BREAK.CAP_LEAD_DASH });
+      }
       if (e.over && st.bt && capAxis) {   /* the leader lives INSIDE the callout group, so it arrives and leaves with the capsule */
         const C = CAP, lx = breakLeaderX(e.bx, e.bw, x0), L = breakLeader(lx, e.end, C.y);
         const lead = lpEl("line", "blead", cg, { x1: lx.toFixed(1), x2: lx.toFixed(1),
@@ -4977,8 +5099,8 @@ async function mount(doc) {
     cs.bars.forEach((bb) => {
       const shown = bb === e ? V : bb.v, h = Math.max(3, (B.base - myU(shown)) * (bb === e ? 1 + overshoot : 1));
       bb.bar.setAttribute("y", (B.base - h).toFixed(1)); bb.bar.setAttribute("height", h.toFixed(1)); bb.h = h; bb.end = B.base - h;
-      if (bb !== e) bb.val.setAttribute("y", (bb.end - (P ? 22 : 14)).toFixed(1));
-      else if (!cs.callout) { bb.val.setAttribute("y", (bb.end - (P ? 22 : 14)).toFixed(1)); if (secs >= 0) bb.val.textContent = V >= e.v - 1e-9 ? lpWithUnit(cs.vstr[e.i] != null ? String(cs.vstr[e.i]) : lpFmt(e.v), cs.cunit || "") : lpWithUnit(lpFmt(V), cs.cunit || ""); }
+      if (bb !== e) bb.val.setAttribute("y", (bb.end - (P ? 22 : 14) + (bb.vdy || 0)).toFixed(1));
+      else if (!cs.callout) { bb.val.setAttribute("y", (bb.end - (P ? 22 : 14) + (bb.vdy || 0)).toFixed(1)); if (secs >= 0) bb.val.textContent = V >= e.v - 1e-9 ? lpWithUnit(cs.vstr[e.i] != null ? String(cs.vstr[e.i]) : lpFmt(e.v), cs.cunit || "") : lpWithUnit(lpFmt(V), cs.cunit || ""); }
       if (bb.snap) bb.snap.forEach((s) => s.setAttribute("opacity", V > B.hi0 ? 1 : 0));
     });
     if (B.mode === "burst") {

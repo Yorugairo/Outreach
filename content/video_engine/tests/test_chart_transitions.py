@@ -1434,3 +1434,171 @@ def test_the_data_key_has_its_own_golden_surface():
     assert sp["to"] == "recast" and sp["keyed"] == "data" and sp["keyed_derived"] is True
     assert [m["bar"] for m in sp["key_map"]] == [0, 1, 2, 3]
     assert (RB.FRAMES / "data-to-bars.png").exists(), "run render_baseline.py --surface data-to-bars"
+
+
+# ---- R26-53: the value row fits its slots, and the pill never stands on a neighbour -------------------
+#
+# The defect (the operator, 2026-09-11 evening: "why are we now crashing text?"): the Tokyo Meta page's four
+# values - "$665 $633 $604 $577" at the portrait value size over a 155-unit slot - left 24 units of air
+# between neighbours (8.6 CSS px on a 390-px phone against 21 px type) and read as one run of digits, and the
+# callout's pill, wider than its own slot, stood 6 units from "$604". Both were always in the page; neither
+# was ever measured. The fixture below is that page's widths, synthetic.
+
+VF_VALUES = [665, 633, 604, 577]                # the Tokyo Meta page: four four-figure dollar values
+VF_LABELS = ["4%", "4.5%", "5%", "5.5%"]
+VF_BUILD_END = 7.5                              # LP: ROLL .7 + SAVOR .8 + FIELD 2.4 + PUNCH .5 + BUILD 3.0, with room
+VF_EMPH = 3                                     # the callout's pill rides the fourth bar, as Tokyo's does
+
+
+def _vals_ep(tmp: Path, values=None, labels=None, unit="$", name="fx-vals") -> tuple[Path, str]:
+    """A temp episode carrying ONE bars page, so the fit is read on nothing but its own numbers."""
+    vals = VF_VALUES if values is None else values
+    labs = VF_LABELS if labels is None else labels
+    bars = [{"label": labs[k], "value": v, "color": "cobalt" if k < 2 else "crimson"} for k, v in enumerate(vals)]
+    page = {"title": "What a Meta share is worth as the 10-year moves", "sub": "fixture",
+            "src": "Fixture", "unit": unit, "bars": bars}
+    (tmp / "evidence/objects").mkdir(parents=True, exist_ok=True)
+    (tmp / f"evidence/objects/{name}.series.json").write_text(json.dumps(page), encoding="utf-8")
+    return tmp, f"ledger:{name}:bars"
+
+
+VF_PROBE = """() => {
+  const w = [wA, wB].find(e => e.__lp && e.classList.contains('ledger')); const st = w.__lp;
+  const stg = document.getElementById('stage').getBoundingClientRect();
+  const R = (el) => { const r = el.getBoundingClientRect();
+    return [+(r.x - stg.x).toFixed(2), +(r.y - stg.y).toFixed(2), +r.width.toFixed(2), +r.height.toFixed(2)]; };
+  const vals = st.bars.map(b => ({
+    t: b.val.textContent, fs: +parseFloat(getComputedStyle(b.val).fontSize).toFixed(2),
+    inline: b.val.style.fontSize || '', hidden: getComputedStyle(b.val).display === 'none',
+    x: +b.val.getAttribute('x'), y: +b.val.getAttribute('y'), box: R(b.val),
+  }));
+  const pr = st.chart.querySelector('rect.cpill'), ld = st.chart.querySelector('line.blead');
+  return {
+    fit: st.valFit, band: st.cband == null ? null : st.cband, slot: st.valFit ? st.valFit.slot : null,
+    vals, callout: st.cval ? st.cval.textContent : null,
+    pill: pr ? { box: R(pr), w: +pr.getAttribute('width'), y: +pr.getAttribute('y'),
+                 on: +(st.callout.getAttribute('opacity') || 0) } : null,
+    leader: ld ? [+ld.getAttribute('x1'), +ld.getAttribute('y1'), +ld.getAttribute('y2')] : null,
+  };
+}"""
+
+
+def _disjoint(a: list[float], b: list[float]) -> bool:
+    return (min(a[0] + a[2], b[0] + b[2]) - max(a[0], b[0]) <= 0
+            or min(a[1] + a[3], b[1] + b[3]) - max(a[1], b[1]) <= 0)
+
+
+def _x_gap(a: list[float], b: list[float]) -> float:
+    lo, hi = (a, b) if a[0] <= b[0] else (b, a)
+    return hi[0] - (lo[0] + lo[2])
+
+
+@needs_browser
+def test_four_four_figure_values_take_one_smaller_size_and_stand_apart(tmp_path):
+    """LAW 1. The Tokyo widths at 9:16: the row does not fit at the stylesheet's size, so EVERY value on the
+    page drops to the largest size at which the widest one does - one size, never mixed - and the four boxes
+    come out disjoint with at least the page's own gutter between them."""
+    ep, plate = _vals_ep(tmp_path)
+    at, errs, close = _vals_player(ep, plate)
+    try:
+        d = at(VF_BUILD_END)
+        fit = d["fit"]
+        assert fit and fit["fitted"] is True, "the page measured its row and found it did not fit"
+        assert fit["rows"] == 1, "four four-figure values still fit on ONE row at this size"
+        sizes = {v["fs"] for v in d["vals"]}
+        assert len(sizes) == 1, f"one size for the whole row, never mixed: {sizes}"
+        size = sizes.pop()
+        assert size < 59.0, "the stylesheet's 59 px did not fit the slot"
+        assert size >= 40.0, "and it never goes under the page's own tick-label size"
+        assert abs(size - fit["size"]) < 0.01, "the drawn size is the size the fit chose"
+        boxes = sorted((v["box"] for v in d["vals"]), key=lambda b: b[0])
+        for a, b in zip(boxes, boxes[1:]):
+            assert _disjoint(a, b), f"value boxes overlap: {a} {b}"
+            assert _x_gap(a, b) >= fit["gut"], f"less than the gutter between two values: {_x_gap(a, b):.1f} < {fit['gut']:.1f}"
+        assert not errs, errs
+    finally:
+        close()
+
+
+@needs_browser
+def test_a_row_that_fits_keeps_the_stylesheets_own_size_untouched(tmp_path):
+    """... and the other half of law 1, which is what keeps every golden byte-identical: a page whose widest
+    value fits its slot is not restyled at all - no inline size is written, so the frame is the frame it was."""
+    ep, plate = _vals_ep(tmp_path, values=[6, 4], labels=["A", "B"], unit="", name="fx-fits")
+    at, errs, close = _vals_player(ep, plate)
+    try:
+        d = at(VF_BUILD_END)
+        assert d["fit"]["fitted"] is False, "two one-figure values over half the plate each: nothing to fit"
+        assert all(v["inline"] == "" for v in d["vals"]), "no inline font-size is written on a row that fits"
+        assert {v["fs"] for v in d["vals"]} == {59.0}, "the page keeps the stylesheet's portrait value size"
+        assert not errs, errs
+    finally:
+        close()
+
+
+@needs_browser
+def test_a_row_that_cannot_fit_even_at_the_floor_splits_in_two(tmp_path):
+    """The floor is the floor: the same four slots asked to carry SIX-glyph values ("$665.0") cannot, at any
+    size a viewer could read. So the row takes the page's own tick-label size and splits - odd bars' values
+    one line further out - and every box is still disjoint from its neighbour's."""
+    ep, plate = _vals_ep(tmp_path, values=[665.0, 633.0, 604.0, 577.0], name="fx-wide")
+    at, errs, close = _vals_player(ep, plate)
+    try:
+        d = at(VF_BUILD_END)
+        fit = d["fit"]
+        assert fit["fitted"] is True and fit["rows"] == 2, "six glyphs over a 155-unit slot: the row had to split"
+        assert {v["fs"] for v in d["vals"]} == {40.0}, "at the floor, and still ONE size for the whole row"
+        ys = [v["y"] for v in sorted(d["vals"], key=lambda v: v["x"])]
+        assert ys[1] < ys[0] and ys[3] < ys[2], "the odd bars' values ride one line higher than their neighbours'"
+        boxes = sorted((v["box"] for v in d["vals"]), key=lambda b: b[0])
+        for a, b in zip(boxes, boxes[1:]):
+            assert _disjoint(a, b), f"two rows and the boxes still cross: {a} {b}"
+        assert not errs, errs
+    finally:
+        close()
+
+@needs_browser
+def test_the_callout_pill_stands_clear_of_every_other_value(tmp_path):
+    """LAW 2. The pill on the fourth bar is wider than the fourth bar's slot, so it rises to a band of its own
+    above the whole values row - a dotted leader keeping it tied to its bar - and its box is disjoint from
+    every other value's, "$604" first among them."""
+    ep, plate = _vals_ep(tmp_path)
+    at, errs, close = _vals_player(ep, plate, emphasize=VF_EMPH)
+    try:
+        d = at(VF_BUILD_END)
+        pill = d["pill"]
+        assert pill and pill["on"] > 0.99, "the pill has arrived by the end of the build"
+        assert pill["w"] > d["fit"]["slot"], "this is the case the law is for: a pill wider than its own slot"
+        assert d["band"] is not None, "it rose to a band of its own rather than staying on the row"
+        others = [v for v in d["vals"] if not v["hidden"]]
+        assert len(others) == 3, "the emphasised bar's own value is replaced by the pill, not printed twice"
+        for v in others:
+            assert _disjoint(pill["box"], v["box"]), f"the pill covers {v['t']}: {pill['box']} {v['box']}"
+        low = min(v["box"][1] for v in others)
+        assert pill["box"][1] + pill["box"][3] <= low, "the pill's band is ABOVE the values row, not beside it"
+        assert d["leader"] is not None, "a risen pill keeps its leader down to the bar it speaks for"
+        assert not errs, errs
+    finally:
+        close()
+
+
+@needs_browser
+def test_the_pill_and_the_row_are_the_same_cold_as_warm(tmp_path):
+    """LAW 3. Every position is a pure function of t: a cold seek into the pill's own clock paints exactly
+    what a play-through paints - the fitted size, the boxes and the pill's band, to the digit."""
+    ep, plate = _vals_ep(tmp_path)
+    at, errs, close = _vals_player(ep, plate, emphasize=VF_EMPH)
+    try:
+        for t in (5.6, 6.4, VF_BUILD_END, VF_BUILD_END + 4.0):
+            warm = at(t)
+            at(0.4); at(VF_BUILD_END + 8.0)      # away, and back cold
+            cold = at(t)
+            assert json.dumps(warm, sort_keys=True) == json.dumps(cold, sort_keys=True), t
+        assert not errs, errs
+    finally:
+        close()
+
+
+def _vals_player(ep, plate, emphasize=None, runtime=16.0):
+    plate_id = plate if emphasize is None else f"{plate}:{emphasize}"
+    return _keyed_player(ep, plate_id, [], runtime=runtime, probe=VF_PROBE)
