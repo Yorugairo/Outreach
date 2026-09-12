@@ -210,7 +210,7 @@ Acceptance:
 ## Task Slices
 
 ### T1: The treemap golden, regenerated on purpose (R26-56)
-- Status: pending
+- Status: complete (2026-09-12, 5c076e0)
 - Owner: `junior_developer`
 - Depends on: none
 - Write set: `content/video_engine/tests/golden/sources/treemap-cross.timeline.json`,
@@ -222,10 +222,10 @@ Acceptance:
   today (329.6 vs the committed 284.3 is the delta to explain); no other golden source appears in the diff.
 - Validate: `python content/video_engine/tests/golden/build_golden_sources.py` then `python -m pytest
   content/video_engine/tests/test_golden_frames.py -q`
-- Evidence: pending
+- Evidence: the cause proven against six fixture versions (3eba5de the measured page-boxes fixture, not E65: `T1-REPORT.md` in the session scratchpad carries the table); one source and one frame moved; test_golden_frames 28 passed; the frame re-rendered against the committed engine matches (sha 06944a98463ee702). Follow-up named on the row: the player-sha check of test_page_boxes fails against the working tree.
 
 ### T2: The tip pill's leader ends on the pill's near edge (R26-42)
-- Status: pending
+- Status: complete (2026-09-12, 4f698cd; the parent built it after the speedster returned no change)
 - Owner: `speedster`
 - Depends on: none
 - Write set: `content/video_engine/scripts/species/tippill.mjs` (`pillAt` at `:66` takes the pill's BOX, not its
@@ -235,10 +235,10 @@ Acceptance:
   byte-identical; `BACKLOG.md:446` closed.
 - Validate: `node --test content/video_engine/tests/kinetics/tippill.test.mjs`; `python -m pytest
   content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_kinetics_sync.py -q`
-- Evidence: pending
+- Evidence: `leaderEnd` + `pillAt(box)` in the module, `P.boxRel` at the engine's call site, the region synced; node 11 passed; sync in sync (23); goldens: 19 plain surfaces byte-identical with the HEAD template + this engine (`p52/attrib/t2-attrib-rest.txt`; the flag variants are settled frames of the same pages), the live template's moves being T4's rule.
 
 ### T3: The probes answer for the ACTIVE world, and reset on a backward seek (R26-37, R26-38)
-- Status: pending
+- Status: complete (2026-09-12, 8186f1a)
 - Owner: `implementation_luna`
 - Depends on: none
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (`window.__lpProbe` at `:8437` and its
@@ -251,10 +251,10 @@ Acceptance:
   closed.
 - Validate: `python -m pytest content/video_engine/tests/test_probe.py content/video_engine/tests/test_golden_frames.py
   content/video_engine/tests/test_self_watch.py -q`
-- Evidence: pending
+- Evidence: `[wB, wA]` at the three probes, `__lp` re-pointed every painted frame, `scene` / `world` on the probe; probe.py's work-around gone; test_probe 11 (the new test cannot pass on HEAD's engine); eight Tokyo frames and two goldens byte-identical against the HEAD engine; `T3-REPORT.md` in the session scratchpad carries the before/after probe reads.
 
 ### T4: The sub-pixel text class - warm and cold agree (R26-48)
-- Status: pending
+- Status: complete (2026-09-12, 81ccef9)
 - Owner: `implementation_luna` (the fix); parent (the verdict on which cure)
 - Depends on: none
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html` (the text-rendering rule on the
@@ -269,10 +269,10 @@ Acceptance:
 - Validate: `python content/video_engine/scripts/determinism_check.py
   content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t4 --all`; `python -m pytest
   content/video_engine/tests/test_render_determinism.py content/video_engine/tests/test_golden_frames.py -q`
-- Evidence: pending
+- Evidence: cure 1 alone (the row's order honoured; cure 2 measurably unavailable, cure 3 not built); the per-element diff and the pixel attribution in `build-short-t4/determinism/` (ink_diff.py, px_diff.py, the frame pairs); 38 -> 7 mismatch with the seven named; 11 goldens regenerated on purpose (the table in the commit); test_render_determinism 5 (RED/GREEN proved); two rows opened: R26-57 (stage-space text), R26-58 (the thrown dock at 75.79).
 
 ### T5: One painter registry, keyed by space (R26-41)
-- Status: pending
+- Status: complete (2026-09-12, c115f81)
 - Owner: parent (architecture); `implementation_luna` for the mechanical moves under the parent's contract
 - Depends on: T3
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (`SPECIES_PAINTERS` at `:6550` becomes two
@@ -288,7 +288,7 @@ Acceptance:
 - Validate: `python content/video_engine/scripts/sync_kinetics.py --check`; `python -m pytest
   content/video_engine/tests/test_kinetics_sync.py content/video_engine/tests/test_golden_frames.py
   content/video_engine/tests/test_page_performs.py content/video_engine/tests/test_portrait_parity.py -q`
-- Evidence: pending
+- Evidence: the registry, the ctx, the hook, span's painter moved, the SPACE rule (RED/GREEN by flipping span's line); 63 pytest + 233 node; 25/25 goldens byte-identical with the HEAD template and this engine (`p52/t5-golden-table.txt`); bracket / figure / spread named at the hook, not moved.
 
 ### T6: The newsreel band, and the surface above it
 - Status: pending
@@ -402,7 +402,7 @@ Acceptance:
 - Evidence: pending
 
 ### T11: TR-13 - the cut is placed by the take's word clock
-- Status: pending
+- Status: complete (2026-09-12, 35d0cec)
 - Owner: parent (the compiler's clock)
 - Depends on: T3
 - Write set: `content/video_engine/scripts/authoring/words.py` (the placement beside `CUT_AT` and `MIN_GAP`: a cut lands
@@ -420,10 +420,10 @@ Acceptance:
 - Validate: `python -m pytest content/video_engine/tests/test_authoring_kit.py
   content/video_engine/tests/test_transitions_e47.py content/video_engine/tests/test_measure_cut_offsets.py -q`; both
   shorts rebuilt into private dirs and diffed against their pre-slice artifacts
-- Evidence: pending
+- Evidence: `CUT_LEAD_S` / `CUT_RULES` / `cut_before(rule, exit)` in words.py; the pins in both build files; `--scenes` + `tr13_rows` in measure_cut_offsets.py; doc 46 s46.6's engine-form paragraph; 48 kit + offsets tests. Deviation: no compiler change - the engine already centres the dip's black on the boundary, so the boundary on the onset IS the rule. Proof: both shorts rebuilt into build-short-t11, every span / species / dock clock identical to the frozen copies (Tokyo vs build-short-t0 - only s05's exit differs, E47's corrected default; Japan vs build-short). Verdict on the approved builds recorded in the commit (Tokyo 2/5 within a frame; Japan's dips 100-110 ms early).
 
 ### T12: The chart on the hook (R26-4)
-- Status: pending
+- Status: complete (2026-09-12, 2e6740d)
 - Owner: parent (doctrine plus the gate condition)
 - Depends on: none
 - Write set: `docs/content-video-engine/51-THE-SHORTS-FORMAT.md` §51.2 (at `:24`: hook 0:00-0:03 -> the first ledger
@@ -438,10 +438,10 @@ Acceptance:
 - Validate: `python -m pytest content/video_engine/tests/test_gate_opening_structure.py -q`; `python
   content/video_engine/scripts/gate_opening_structure.py` on both shorts' scripts; `python
   content/video_engine/scripts/build_docs_layers.py --check`
-- Evidence: pending
+- Evidence: `load_pages` / `find_scene_timeline` / `--scenes` on the gate and the runner; S02's four cases pinned in test_gate_opening_structure (22 passed); doc 51 s51.2 + SHORTS-SHAPE.md; both shorts: S02 PASS unmoved, first_page 1.99 s / 1.82 s; their stored gate reports untouched.
 
 ### T13: The cut's sound, and a returning character mounts (R26-5, R26-6)
-- Status: pending
+- Status: complete (2026-09-12, d16155e)
 - Owner: `junior_developer`
 - Depends on: none
 - Write set: `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOUND-PLAN.json` (the transient
@@ -457,10 +457,10 @@ Acceptance:
 - Validate: `python -m pytest content/video_engine/tests/test_gate_motion_density.py
   content/video_engine/tests/test_sound_design.py content/video_engine/tests/test_motion_gate_wiring.py -q`; `python
   content/video_engine/scripts/build_gates_registry.py --check`
-- Evidence: pending
+- Evidence: M29 + M30 (`_drop_window_sound_gate`, `_mount_gate`, `_page_landings`), 7 new tests (102 passed), registry in sync (144 records; carries T12's S02 too); `transient_gain` 0.08 on the plan + `PRESS_GAIN` 0.08; Tokyo read-only: M29 FAIL at 9.51 s (the card throw), M30 no row (no cast declared). Open: a dock landing as licence (the operator); the next short declares its cast.
 
 ### T14: The short's viewer sees the screens (R26-0)
-- Status: pending
+- Status: complete (2026-09-12, 45f17c2)
 - Owner: `junior_developer`
 - Depends on: none
 - Write set: `content/video_engine/scripts/viewer_windows.py` (a `[screen]` line per named screen folded into each
@@ -476,7 +476,7 @@ Acceptance:
 - Validate: `python -m pytest content/video_engine/tests/test_viewer_windows.py
   content/video_engine/tests/test_viewer_score.py -q`; `python content/video_engine/scripts/viewer_windows.py
   content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SCRIPT-90S-VO.txt --timeline <private build>`
-- Evidence: pending
+- Evidence: Deviation: screens read off the scene timeline, not `-SCREENS.md` (doctrine, no chart). 54 viewer tests; Tokyo's .claude windows regenerated (words byte-identical, 6/6 with screens); stored reports re-scored 21/24 -> 23/24, the re-scored report committed beside the stored one as `SCRIPT-90S.claude-VIEWER.after-screens.md`; no model called.
 
 ### T15: M18 per layer (R26-13)
 - Status: pending
@@ -498,7 +498,7 @@ Acceptance:
 - Evidence: pending
 
 ### T16: The publish package (R26-8)
-- Status: pending
+- Status: complete (2026-09-12, b00cba7)
 - Owner: `implementation_luna`; parent for the first use (gate 6)
 - Depends on: none
 - Write set: `content/video_engine/scripts/publish_package.py` (new: a `publish/` folder written by the build - the
@@ -514,7 +514,7 @@ Acceptance:
 - Validate: `python -m pytest content/video_engine/tests/test_publish_package.py
   content/video_engine/tests/test_self_watch.py -q`; `python content/video_engine/scripts/publish_package.py <private
   build>` and the folder read by the parent
-- Evidence: pending
+- Evidence: `publish_package.py` (528 lines) + 16 tests; `publish_row` on the bar + the 0:00 frame; PIPELINE stage 8; the folder for gate 6: `tokyo-tea-break/build-short-t16/publish/` (8 files; `CHECKLIST.md` names the master render and the two things not on disk). Two self-watch browser rows re-baselined on the frozen build's standing FAILs.
 
 ### T17: The race A/B on the clothoid fitter (R26-3's open half)
 - Status: pending
