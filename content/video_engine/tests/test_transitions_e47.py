@@ -178,22 +178,37 @@ def test_a_transition_frame_renders_identically_in_two_browsers(exit_id: str, ba
 
 
 # ---------------------------------------------------------------- the compiler's default (E47 #3)
-def test_the_mechanical_default_is_cut_for_every_row():
-    """E47 #3 retired 2026-09-12 (the operator: "we should not be dipping any time we add a dock, we should be in
-    control of our camera/lighting"): docks or bare, the default is cut; a dip is authored by name."""
-    assert B.scene_exit(None, True) == ("cut", None)
-    assert B.scene_exit(None, False) == ("cut", None)
-    assert B.DEFAULT_EXIT_DOCKS == "cut" == B.DEFAULT_EXIT_BARE
+def test_the_mechanical_default_is_dip_when_the_world_changes_and_a_dock_decides_nothing():
+    """E47 #3 corrected 2026-09-12 (the operator: "the dip is supposed to be used as an actual transition when the
+    scene ACTUALLY changes ... the dip was associated with any DOCK, not the dip being associated to the scene
+    change. That's 2 very different things"): a world change dips, the same world cuts, docks are not a factor."""
+    assert B.scene_exit(None, True, None, True) == ("dip", None)
+    assert B.scene_exit(None, False, None, True) == ("dip", None), "a bare row whose plate changes dips too"
+    assert B.scene_exit(None, True, None, False) == ("cut", None), "a dock on the same world never dips"
+    assert B.scene_exit(None, False, None, False) == ("cut", None)
+    assert B.scene_exit(None, True) == ("cut", None), "with no boundary known, cut"
+    assert B.DEFAULT_EXIT_CHANGE == "dip" and B.DEFAULT_EXIT_BARE == "cut"
 
 
-def test_no_enter_and_no_dock_changes_the_default_and_an_authored_dip_still_wins():
-    """The black flash of 2026-09-12 (Tokyo s04 -> s05: the docks -> dip default in front of a mount) is gone for
-    every enter, not only the signatures; an authored dip is still the author's."""
-    for enter in B.SIGNATURE_ENTERS + ("camera", "built", None):
-        assert B.scene_exit(None, True, enter) == ("cut", None), enter
-        assert B.scene_exit(None, False, enter) == ("cut", None), enter
-    assert B.scene_exit("dip", True, "mount") == ("dip", None), "authored wins"
-    assert B.scene_exit("dip:0.3", False, "spiral") == ("dip:0.3", 0.3)
+def test_a_signature_enter_never_dips_by_default_and_an_authored_dip_still_wins():
+    """The black flash of 2026-09-12 (Tokyo s04 -> s05): a mount carries the world change on its own clock, so a
+    dip in front of it paints black seconds before the plate actually changes - the signatures cut even when the
+    world changes; a page arriving built or by the camera onto a different world dips; an authored dip is the author's."""
+    for enter in B.SIGNATURE_ENTERS:
+        assert B.scene_exit(None, True, enter, True) == ("cut", None), enter
+    for enter in ("camera", "built", None):
+        assert B.scene_exit(None, False, enter, True) == ("dip", None), enter
+    assert B.scene_exit("dip", True, "mount", False) == ("dip", None), "authored wins"
+    assert B.scene_exit("dip:0.3", False, "spiral", True) == ("dip:0.3", 0.3)
+
+
+def test_world_key_tells_a_different_chart_from_the_same_page_returning():
+    plate = {"kind": "plate", "asset_id": "plate-x"}
+    assert B.world_key(plate) == B.world_key(dict(plate)) and B.world_key(plate) != B.world_key({"asset_id": "plate-y"})
+    page = {"kind": B.SPECIES_LEDGER, "page": {"builder": "dense-line", "title": "Our biggest customer is selling", "enter": "mount"}}
+    back = {"kind": B.SPECIES_LEDGER, "page": {"builder": "dense-line", "title": "Our biggest customer is selling", "enter": "spiral"}}
+    other = {"kind": B.SPECIES_LEDGER, "page": {"builder": "story", "title": "Ten years, a year at a time", "enter": "camera"}}
+    assert B.world_key(page) == B.world_key(back) != B.world_key(other)
 
 
 def test_an_authored_exit_still_wins_and_the_wipe_is_still_reachable_by_name():

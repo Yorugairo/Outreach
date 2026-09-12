@@ -88,9 +88,11 @@ CENTRE_MAX_H = 0.58                                 # a centred card takes at mo
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
 TIMED_EXITS = ("dip", "blurzoom")   # ... and only these two read the suffix as SECONDS (suck's is a point)
-DEFAULT_EXIT_DOCKS = "cut"          # E47 #3 RETIRED 2026-09-12 (the operator: "we should not be dipping any time we add a dock, we should be in
-                                    # control of our camera/lighting, that sounds like it must have been an old rule"): the mechanical default is
-                                    # cut for every row; a dip or a blur-zoom is AUTHORED by name. Was "dip" 2026-09-06 -> 09-12, "wipe_right" before.
+DEFAULT_EXIT_CHANGE = "dip"         # E47 #3 corrected 2026-09-12 (the operator: "the dip is supposed to be used as an actual transition when the
+                                    # scene ACTUALLY changes ... what you said is that the dip was associated with any DOCK, not the dip being
+                                    # associated to the scene change"): the natural default when the WORLD changes at the boundary - never for a
+                                    # dock, never in front of a signature enter. Was docks -> dip 2026-09-06 -> 09-12, wipe_right before that.
+DEFAULT_EXIT_DOCKS = DEFAULT_EXIT_CHANGE   # kept for the record of the old name; docks decide nothing now
 DEFAULT_EXIT_BARE = "cut"
 SIGNATURE_ENTERS = ("mount", "spiral", "morph")   # E47 #2 (amended 2026-09-12): a page arriving by a signature IS the world change - no dip
                                                   # in front of it by default (the operator: "the dark frame happens at 1:01 on the scene
@@ -1092,19 +1094,37 @@ def parse_exit(exit_id: str) -> tuple[str, float | None]:
     return exit_id, secs
 
 
-def scene_exit(authored_exit: str | None, has_docks: bool, page_enter: str | None = None) -> tuple[str, float | None]:
-    """The HYBRID exit rule (operator 2026-08-29): an authored exit wins; the mechanical default is CUT for every
-    row (E47 #3 retired 2026-09-12 - "we should not be dipping any time we add a dock, we should be in control of
-    our camera/lighting"). A dip or a blur-zoom is authored by name (doc 29 s9.16 #3); the signatures - the mount,
-    the spiral, the morph - are the world changes (E47 #2). `has_docks` and `page_enter` are accepted for the
-    record of the two defaults that came before (docks -> dip; a signature enter -> cut) and change nothing now.
+def world_key(world: dict | None) -> tuple:
+    """What makes a row's world THIS world: a plate or a clip by its asset, a ledger page by its builder and title
+    (a page returning by the spiral is the same world; a different chart is a different one)."""
+    if not isinstance(world, dict):
+        return ("none",)
+    page = world.get("page") if isinstance(world.get("page"), dict) else None
+    if page is not None:
+        return ("page", str(page.get("builder") or ""), str(page.get("title") or ""), str(page.get("ink") or page.get("series_id") or ""))
+    return (str(world.get("kind") or "plate"), str(world.get("asset_id") or ""))
+
+
+def scene_exit(authored_exit: str | None, has_docks: bool, page_enter: str | None = None,
+               world_changed: bool | None = None) -> tuple[str, float | None]:
+    """The HYBRID exit rule (operator 2026-08-29), E47's default corrected 2026-09-12: an authored exit wins;
+    otherwise the dip is the natural transition WHEN THE WORLD ACTUALLY CHANGES at the boundary (`world_changed`:
+    the incoming row's world is not the outgoing row's - a different plate, clip or page), EXCEPT in front of a
+    signature enter (the mount, the spiral, the morph carry the change on their own clock - a dip there paints
+    black seconds before the plate actually changes, the black flash of Tokyo s04 -> s05); the same world, or a
+    signature, cuts. A DOCK decides nothing ("the dip was associated with any DOCK, not the dip being associated
+    to the scene change. That's 2 very different things"); `has_docks` stays in the signature for the record.
 
     An authored 6th shot-table element wins - doc 29 s9.16 #3's override stands, and a row that
     wants the carried-light cross-reveal still asks for it by name. Otherwise the MECHANICAL
     default is ``dip`` when the scene carries docks and ``cut`` when it is bare (it was
     ``wipe_right``/``cut``: the wipe is retired as the default world change, E47 #3).
     Returns the exit as the timeline carries it and the seconds it declares, if any."""
-    return parse_exit(authored_exit or DEFAULT_EXIT_BARE)
+    if authored_exit is not None:
+        return parse_exit(authored_exit)
+    if page_enter in SIGNATURE_ENTERS or not world_changed:
+        return parse_exit(DEFAULT_EXIT_BARE)
+    return parse_exit(DEFAULT_EXIT_CHANGE)
 
 
 def _page_state(spec_id: str, ep_dir: Path, where: str) -> dict:
@@ -3160,6 +3180,7 @@ def main() -> int:
     read_defers: list[str] = []     # ... and the ones with no band to move it to, deferred to the parked box
     card_rooms: list[tuple] = []    # E65: (dock row id, room, box, page title) for every card the placer placed
     ledger_rows: list[int] = []     # the rows carrying a ledger page, so the report can say how many were MEASURED
+    prev_world = None   # E47 corrected: the outgoing row's world, for `world_changed`
     for i, row in enumerate(plan):
         # exit style is HYBRID (operator, 2026-08-29): mechanical default
         # (E47, 2026-09-06: docks -> DIP, bare -> cut; it was docks -> wipe),
@@ -3386,7 +3407,9 @@ def main() -> int:
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         try:
             _pg = (world or {}).get("page") if isinstance((world or {}).get("page"), dict) else None
-            exit_id, exit_s = scene_exit(authored_exit, bool(docks), (_pg or {}).get("enter"))
+            _changed = world_key(world) != world_key(prev_world) if i > 0 else False   # the first row has no boundary
+            exit_id, exit_s = scene_exit(authored_exit, bool(docks), (_pg or {}).get("enter"), _changed)
+            prev_world = world
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         camera = dict(row_camera) if row_camera is not None else camera_identity()   # a COPY: one CAM_ROW dict is shared by many rows
