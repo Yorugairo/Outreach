@@ -6502,6 +6502,10 @@ async function mount(doc) {
     if (!st.thread) lpThread(st, scene);   /* HF-16: after the page is in the DOM, so both charts have a layout box */
     const morphOn = pg.enter === "morph" && kin("arap_morph"), morphS = morphOn ? (pg.morph_s || MORPH.S) : 0;   /* P47 T3: the prop becomes the chart */
     const built = pg.enter === "built";   /* arrives with its chart drawn: the span is all deployed life, the idle keeps it alive */
+    const axesIn = pg.enter === "axes";   /* P53 T1 (operator, 2026-09-12: "showing the charcoal built with only the axes drawn, then immediately
+       drawing the chart and starting the analysis, that gives us the first initial frame of motion"): the page's clock starts at the PUNCH's end,
+       so the paper, the ruled line, the ink (title, labels, axes) and the punch are all behind it on frame 0 and the BUILD runs from there. The
+       hook's register - `built` is the same arrival with the data already on it, and it is still. */
     const snap = pg.enter === "snap";   /* the third watch: the thrown card BECOMES the world - the page arrives built and grows from the card's rectangle to the stage over SNAP_S */
     const camIn = pg.enter === "camera";   /* P49 T5: the page arrives built and the EYE went to the card - it shows at the match, at identity */
     const card = pg.card === true || (pg.card !== false && (pg.enter === "snap" || camIn));   /* a snapped (or camera-arrived) page is a card unless told otherwise */
@@ -6514,7 +6518,7 @@ async function mount(doc) {
        the whole page flies in on the pills' own kinetics (throwXf: a ballistic chord, the tumble, the material's squash and settle) and arrives built */
     const mount = pg.enter === "mount" || (pg.enter === "morph" && !morphOn);   /* a morph with its flag off is a mount of the same length */
     const mountS = mount ? (pg.mount_s || pg.morph_s || LP.FIELD) : 0;   /* R26-50: mount_s is the SOAK's own seconds - the page's clock, never the page that left */
-    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || camIn || built || thrown || dropped) ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : mount ? LP.ROLL + LP.SAVOR + (LP.FIELD - mountS) : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2) on the PAGE's own clock (R26-50): the cream is the ground on its first frame and the SOAK starts there, over mount_s - the roll and the savor are already behind it, and the ink, the punch and the build follow at their own LP offsets; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
+    const tr = t - scene.span[0] + ((pg.enter === "spiral" || snap || camIn || built || thrown || dropped) ? LP_FOCUS_AT + LP_BADGE0 + LP_BADGE_STEP * ((st.badges || []).length + 1) : axesIn ? LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH : mount ? LP.ROLL + LP.SAVOR + (LP.FIELD - mountS) : morphOn ? (LP.ROLL + LP.SAVOR + LP.FIELD + LP.PUNCH) - morphS : 0);   /* a spiral entry ARRIVES built: its beats are all past; a MOUNT is the roll-out (E45 s2) on the PAGE's own clock (R26-50): the cream is the ground on its first frame and the SOAK starts there, over mount_s - the roll and the savor are already behind it, and the ink, the punch and the build follow at their own LP offsets; a MORPH skips the roll, the savor and the soak - the board is there, the prop morphs, the build starts as it ends */
     /* beat 1: roll-out */
     const rk = (mount || morphOn || snap) ? 1 : expoOut(clamp01(tr / LP.ROLL));   /* a mounting page is in place from its first frame; it RISES (below) on MOUNT_STEPS over its soak */
     /* HF-16: the wire recedes from the instant the CHART layer comes up - the build drives that layer's opacity, so a

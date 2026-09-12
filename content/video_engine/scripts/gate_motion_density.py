@@ -234,8 +234,13 @@ PAGE_BUILD_END_S = PAGE_BEAT_OFFSETS[-1]   # a LEDGER PAGE's chart LANDS here (7
                                            # operator's ruling (2026-09-04) is no highlight over the charcoal build, so the species fires after the build, never with the roll-out
 SHORT_FULL_MINUTES = 3                     # M07 ranks whole minutes; with fewer full minutes than this (a short) there is no distribution to rank in -
                                            # the row reports both rates as INFO (P41, 2026-09-05) instead of failing the opening against a 22s tail
+ARRIVES_BUILT = ("spiral", "snap", "built", "throw", "drop", "camera")   # the enters whose page is DRAWN on its first frame: one beat, no roll-out (P53 T1 named the set the landing and the beats had each spelled out)
 LP_SPIRAL_IN_S = 1.6                       # a page declared enter=spiral unwinds from its point over this (template LP_RETRACT.IN): one beat, then the species
 LP_RETRACT_S = (1.0, 1.0)                  # every page LEAVES by the retract unless exit=cut: the colours go down the drain, then the charcoal (template LP_RETRACT.COLOURS / CHARCOAL)
+SRC_M31 = ("R26-66 / P53 T2, measured with measure_stage_gaps.py: a transition that TAKES the world (a suck, a melt) "
+           "left the stage with no world on it for 3.1 s while the narration was already on the next sentence - 8.9% of "
+           "a 69 s short. The DIP is the one transition licensed to empty the stage (a dip is a world change); everything "
+           "else hands off, and the page that follows an inked arrival (enter=axes / built) measures 0.")
 SRC_M15 = "E40 #5 (operator, 2026-09-05): no spotlight on a spiral out - no species window overlaps a page's retract"
 LP_BADGE0_S, LP_BADGE_STEP_S = 0.4, 0.9   # page badges spring in after the build: build end + 0.4 + 0.9k (template LP.BADGE0 / BADGE_STEP)
 CAP_ARRIVE_FADE = "fade_up"    # P52 T10: the page's arrival kind (page.cap_arrive / timeline.caption_arrive); absent = the pop
@@ -453,6 +458,7 @@ def _timeline_path(build: Path, timeline_name: str | None) -> Path:
 
 
 def _load(build: Path, timeline_name: str | None) -> tuple[dict, list[dict], dict]:
+    BUILD_DIR[:] = [Path(build)]   # the rows that read a measurement file beside the timeline (M25, M31)
     tl_path = _timeline_path(build, timeline_name)
     tl = json.loads(tl_path.read_text(encoding="utf-8"))
     docks_p = build / "evidence-dock.json"
@@ -506,7 +512,13 @@ def _page_events(scenes: list[dict]) -> tuple[list[float], list[float]]:
             offs = [k * MORPH_STEP_S for k in range(int(ms // MORPH_STEP_S) + 1)] + [ms, ms + LP_BUILD_S]
             beats += [round(a + off, 2) for off in offs if a + off < z]
             continue
-        beats += [round(a + off, 2) for off in ((0.0, LP_SPIRAL_IN_S) if spiral else PAGE_BEAT_OFFSETS) if a + off < z]
+        # WHAT THE PAGE ACTUALLY PLAYS. A page that arrives BUILT plays no roll-out, no field and no build: its
+        # arrival is its one beat (crediting the six roll-out beats to it made a still page read as motion, which
+        # E69's M05 now decides on). `axes` plays the build alone: the page is there, the data draws. (P53 T1)
+        enter = page.get("enter")
+        offs = ((0.0, LP_SPIRAL_IN_S) if spiral else (0.0,) if enter in ARRIVES_BUILT
+                else (0.0, LP_BUILD_S) if enter == "axes" else PAGE_BEAT_OFFSETS)
+        beats += [round(a + off, 2) for off in offs if a + off < z]
         # the retract: the colours start winding in, then the charcoal - two beats at the page's end (none on exit=cut)
         if (s.get("world", {}).get("page") or {}).get("exit") != "cut":
             beats += [round(z - sum(LP_RETRACT_S), 2), round(z - LP_RETRACT_S[1], 2)]
@@ -891,6 +903,9 @@ def _per_minute(runtime: float, ev: list[float], entries: list[float]) -> list[t
     return dens
 
 
+BUILD_DIR: list[Path] = []   # set by _load / main: the build being read, for the rows that consult a measurement file (M25, M31)
+
+
 def analyse(tl: dict, docks: list[dict], mp: dict) -> dict:
     runtime = float(tl.get("runtime_s") or max(s["span"][1] for s in tl["scenes"]))
     scenes = tl.get("scenes", [])
@@ -1062,6 +1077,9 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
         g.append(ifg)                                                     # M24 (P49 T6: the target is in the camera's frame when the species fires)
     if (mg := _morph_gate(tl.get("scenes", []), morph)) is not None:
         g.append(mg)                                                      # M17 (P47 T3: the match-cut invariants per morph page)
+    sg = _stage_gap_gate(BUILD_DIR[0] if BUILD_DIR else None)             # M31 (R26-66 / P53 T2: the empty stage, measured)
+    if sg is not None:
+        g.append(sg)
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
     return g, _stats(A, tot)
 
@@ -1136,8 +1154,10 @@ def _page_land_offset(scene: dict) -> float:
         return mount_s + PAGE_BUILD_END_S - LP_ROLL_S - LP_SAVOR_S - LP_FIELD_S + extra   # R26-50: the soak on the page's clock, then ink
     if page.get("enter") == "morph":   # P47 T3: the morph replaces the roll, the savor, the soak and the punch; the build starts as it ends
         return float(page.get("morph_s") or MORPH_S) + LP_BUILD_S + extra
-    if page.get("enter") in ("spiral", "snap", "built", "throw", "drop", "camera"):   # a returning page, a card become the world (P47 T7; P49 T5 by the eye), or a page that mounts with its chart already drawn: arrives built
+    if page.get("enter") in ARRIVES_BUILT:   # a returning page, a card become the world (P47 T7; P49 T5 by the eye), or a page that mounts with its chart already drawn: arrives built
         return 0.0
+    if page.get("enter") == "axes":   # P53 T1: the page is there on frame 0 and the DATA is what builds - the chart lands one build later
+        return LP_BUILD_S + extra
     return PAGE_BUILD_END_S + extra
 
 def _first_chart_window(tl: dict) -> tuple[float, float, str]:
@@ -1216,6 +1236,35 @@ def _pulse_gate(tl: dict, A: dict) -> Gate:
     if slow:
         return Gate("M16", "FAIL", msg + ": " + ", ".join(f"{_mm(a)}+{d:.1f}s" for a, d in slow[:6]) + " - add motion there (a species, a caption pop, plate life); never cut motion to pass", SRC_M16)
     return Gate("M16", "PASS", msg, SRC_M16)
+
+
+def _stage_gap_gate(build: Path | None) -> Gate | None:
+    """M31: the empty stage, read off `<build>/stage-gaps.json` (measure_stage_gaps.py) exactly as M25 reads the
+    layout probe - INFO until it is measured, because a gate may not invent a measurement it did not take."""
+    if build is None:
+        return None
+    p = Path(build) / "stage-gaps.json"
+    if not p.is_file():
+        return Gate("M31", "INFO", "not measured - run measure_stage_gaps.py <build> to read the empty stage", SRC_M31)
+    try:
+        doc = json.loads(p.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return Gate("M31", "INFO", f"stage-gaps.json unreadable ({exc})", SRC_M31)
+    rows = [r for r in doc.get("boundaries", []) if not r.get("licensed") and float(r.get("gap_s") or 0) > 0]
+    spoken = [r for r in rows if r.get("spoken")]
+    share = f"{100 * float(doc.get('empty_share') or 0):.1f}% of the runtime empty"
+    if spoken:
+        worst = max(spoken, key=lambda r: float(r["gap_s"]))
+        return Gate("M31", "FAIL",
+                    f"{len(spoken)} transition(s) leave the stage empty UNDER A LIVE SENTENCE ({share}); worst "
+                    f"{worst['scene']} exit={worst['exit']} {worst['gap_s']:.1f}s at {_mm(float(worst['at']))} over "
+                    f"\"{' '.join(worst['spoken'][:6])}...\" - the page that follows takes an inked arrival "
+                    f"(enter=axes or built) or the cut lands later", SRC_M31)
+    if rows:
+        worst = max(rows, key=lambda r: float(r["gap_s"]))
+        return Gate("M31", "WARN", f"{len(rows)} silent empty stage(s) ({share}); worst {worst['scene']} "
+                                   f"{worst['gap_s']:.1f}s at {_mm(float(worst['at']))}", SRC_M31)
+    return Gate("M31", "PASS", f"no world-taking transition leaves the stage empty ({share})", SRC_M31)
 
 
 def _retract_gate(scenes: list[dict]) -> Gate:

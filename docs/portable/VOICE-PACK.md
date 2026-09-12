@@ -233,3 +233,14 @@ Downstream of evidence, never a substitute for it. A rejected line goes
 into `30-VOICE-SOURCE-MATERIAL.md` §7 first, then a contrast pair comes
 here. Widen the exemplar set after three or four more approved scripts and
 re-derive. Full profile: `33-VOICE-PROFILE.md`.
+
+## 8. Aligning a Chirp take's clock (E70)
+
+Chirp does not ship on YouTube and does fine on Facebook, so a one-shot
+renders BOTH takes for the data. Kokoro carries its own word timestamps
+out of the pipeline; Chirp carries none, so its clock has to be ALIGNED
+after the fact - `content/video_engine/scripts/align_take.py <audio>
+--out <words.json> [--script <txt>]`. It runs Whisper LOCALLY
+(faster-whisper) and writes the take's own words.json schema; it never
+calls a cloud STT service or a paid API - that is a hard rule, not a
+preference.

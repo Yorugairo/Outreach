@@ -53,7 +53,7 @@ import ledger_page as LPG  # noqa: E402  (series.json -> ledger_page.v1 spec, do
 
 LEDGER_PREFIX = "ledger:"          # shot-table plate id prefix for a LEDGER PAGE world (s9.28 surface = page)
 LEDGER_ID_PARTS = (3, 7)           # ledger:<series>:<variant>[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]  enter = spiral | mount=<seconds>; exit = cut
-LEDGER_ENTERS = ("spiral", "mount", "morph", "snap", "built", "throw", "drop", "camera")   # enter=camera=<dock>: P49 T5 - the page arrives BUILT and the EYE goes to the landed card (the camera zooms the outgoing world and the card until the card fills the stage, then the world is the page) - the snap's opposite number, opt-in until HG2   # enter=drop: the page FALLS into the frame from above and lands as the world (the dock's landXf) - "is falling down into the frame easier?" (operator, 2026-09-08)   # enter=throw (2026-09-08): the whole page is THROWN onto the world and arrives built - the transition IS the plate entering the world   # enter=built: the page ARRIVES with its chart already drawn, by the row's own transition - it NEVER mounts (operator, 2026-09-08: mount is cream coming through over the scene, then drawing).
+LEDGER_ENTERS = ("spiral", "mount", "morph", "snap", "built", "throw", "drop", "camera", "axes")   # enter=axes (P53 T1, the operator 2026-09-12): the charcoal page lands with its ground, its ruled line, its title, its labels and its AXES already drawn, and the CHART draws from the first frame - "that gives us the first initial frame of motion". `built` is its still sibling: the whole page, data included, at frame 0.   # enter=camera=<dock>: P49 T5 - the page arrives BUILT and the EYE goes to the landed card (the camera zooms the outgoing world and the card until the card fills the stage, then the world is the page) - the snap's opposite number, opt-in until HG2   # enter=drop: the page FALLS into the frame from above and lands as the world (the dock's landXf) - "is falling down into the frame easier?" (operator, 2026-09-08)   # enter=throw (2026-09-08): the whole page is THROWN onto the world and arrives built - the transition IS the plate entering the world   # enter=built: the page ARRIVES with its chart already drawn, by the row's own transition - it NEVER mounts (operator, 2026-09-08: mount is cream coming through over the scene, then drawing).
 # The build is a device, not an obligation - five builds in one short is repetition, and a page that arrives complete spends
 # its whole span being read instead of being drawn (operator, 2026-09-08: "maybe chart 1 doesn't actually need a build, it
 # could enter built, the deconstruction/transformation is its own thing"). E49 keeps it alive; the transformation is the
@@ -1391,6 +1391,40 @@ def scene_exit(authored_exit: str | None, has_docks: bool, page_enter: str | Non
     if page_enter in SIGNATURE_ENTERS or not world_changed:
         return parse_exit(DEFAULT_EXIT_BARE)
     return parse_exit(DEFAULT_EXIT_CHANGE)
+
+
+WORLD_TAKING_EXITS = ("suck", "melt")   # P53 T2 / R26-60: a transition that TAKES the world - the page goes into a point or drips away
+
+
+def stamp_transition_pages(scenes: list[dict]) -> list[str]:
+    """The two defaults a world-taking transition implies, stamped where both sides of the boundary are visible.
+
+    UNDER a suck or a melt (R26-60): a ledger page that does not declare `:cut` runs its own RETRACT first and has
+    emptied the sheet before the boundary, so the suck spins a blank cream page into its point and the melt would
+    drip one (`scratchpad/p52/dbg-wA-suck:0.5,0.5-15.15.png`, 2026-09-12).
+
+    AFTER one (P53 T2): a ledger page with no declared enter takes the roll-out, and the stage carries no ink for
+    seconds while the narration is already on the next sentence - measured at 3.1 s per transition, 8.9% of a 69 s
+    short (`measure_stage_gaps.py`). `axes` lands the page on its ground, title and axes and draws the data from
+    the first frame, which took the measured share to 0.
+
+    A row that declares its own enter or exit is never touched: an author who has chosen is not corrected. Returns
+    one line per stamp, for the build to print - a default that is silent is a default nobody can argue with."""
+    notes: list[str] = []
+    for i, sc in enumerate(scenes):
+        kind = str(sc.get("exit") or "").split(":")[0]
+        if kind not in WORLD_TAKING_EXITS:
+            continue
+        pg = ((sc.get("world") or {}).get("page")) if isinstance((sc.get("world") or {}).get("page"), dict) else None
+        if pg is not None and not pg.get("exit"):
+            pg["exit"] = "cut"
+            notes.append(f"{sc.get('scene_id', '?')}: exit=cut stamped - the page under a {kind} must not retract first (R26-60)")
+        nxt = scenes[i + 1] if i + 1 < len(scenes) else None
+        npg = ((nxt.get("world") or {}).get("page")) if nxt and isinstance((nxt.get("world") or {}).get("page"), dict) else None
+        if npg is not None and not npg.get("enter"):
+            npg["enter"] = "axes"
+            notes.append(f"{nxt.get('scene_id', '?')}: enter=axes stamped - the page after a {kind} arrives with ink, not after a roll-out (P53 T2)")
+    return notes
 
 
 def _page_state(spec_id: str, ep_dir: Path, where: str) -> dict:
@@ -3875,6 +3909,11 @@ def main() -> int:
         if bw:
             scene["build_windows"] = [[round(x, 2), round(y, 2)] for x, y in bw]
         scenes.append(scene)
+
+    # P53 T2 / R26-60: the two defaults a world-taking transition implies, stamped now that both sides of every
+    # boundary are visible - and printed, because a default nobody can see is a default nobody can argue with
+    for _note in stamp_transition_pages(scenes):
+        print(f"  transition  : {_note}")
 
     # P50 T16: the build says whose numbers it placed by. A page the fixture has not measured is placed
     # by `ledger_page`'s ESTIMATE of the player's layout - good enough to park a card against the plot's

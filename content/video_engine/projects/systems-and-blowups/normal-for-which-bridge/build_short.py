@@ -34,7 +34,9 @@ BUILD = HERE / os.environ.get("BRIDGE_BUILD_DIR", "build-short")
 EP = Project(here=HERE, build=BUILD, take=TAKE, take_stem="scene_1",
              script_name=SCRIPT.name, episode_id="normal-for-which-bridge")
 LOAD, LONG, BILL = "ev-federal-load-v1", "ev-long-end-2026-v1", "ev-interest-bill-v1"
-CAP_ARRIVE = os.environ.get("BRIDGE_CAP_ARRIVE") or None   # P52 T10 / gate 4: "fade_up" is the staggered arrival, a side build only
+CAP_ARRIVE = os.environ.get("BRIDGE_CAP_ARRIVE") or None
+OPEN_ENTER = os.environ.get("BRIDGE_OPEN_ENTER", "axes")   # P53 T1 / gate 1: the hook's register - "axes" lands the charcoal page on its axes and draws the chart from the first frame; "built" lands the whole page, still; "" takes the default roll-out
+   # P52 T10 / gate 4: "fade_up" is the staggered arrival, a side build only
 
 
 def facts(series: str) -> dict:
@@ -70,10 +72,12 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
 
     rows: list[tuple] = [
         # ---- the bridge, opened at its apex: the hook, the mechanism, and the light on today's load
-        (0.0, t_num, f"ledger:{LOAD}:line:{LOAD_LAST}:right:built:cut", (0, 0, 0), [], "suck:0.5,0.52", [
-            # M11 + the Apex Chart Read (2026-09-12 research): the page's own build lands at ~7.4 s and the light
-            # goes on the latest datum inside the 1.5 s after it, on the word that says the bridge is heavier
-            {"kind": "callout", "at": at("heavier."), "dur": 2.2, "pad": 24,
+        (0.0, t_num, f"ledger:{LOAD}:line:{LOAD_LAST}:right:{OPEN_ENTER}:cut", (0, 0, 0), [], "suck:0.5,0.52", [
+            # M11 + the Apex Chart Read (2026-09-12 research): on the AXES register the line finishes at 3.0 s, so
+            # the light goes on the latest datum inside the 1.5 s after THAT - on the word that says a yield is a
+            # weight, which is the sentence the light is illustrating (it used to sit on "heavier." at 7.9 s, which
+            # was inside the old roll-out's window and four seconds late for this one)
+            {"kind": "callout", "at": at("But a yield"), "dur": 2.6, "pad": 24,
              "target": {"kind": "datum", "index": LOAD_LAST}, "label": "123% of GDP today"},
             {"kind": "note", "at": at("Every price"), "dur": 2.4,
              "text": "every price you own is divided by that number"},

@@ -562,6 +562,33 @@ def test_m21s_floor_applies_only_to_a_page_that_ARRIVES_BUILT():
     assert G.DEPLOY_MIN_S == 6.0, "the floor is E50's own lower bound, not a new threshold"
 
 
+def test_enter_axes_lands_the_page_and_builds_the_data():
+    """P53 T1 (the operator, 2026-09-12: "showing the charcoal built with only the axes drawn, then immediately
+    drawing the chart and starting the analysis, that gives us the first initial frame of motion"). The page is
+    THERE on frame 0 - so its arrival is not the 7.4 s roll-out - and the chart lands one BUILD later, which is
+    the mark M11 measures its annotation against and M21 measures its deployed life from."""
+    import build_scene_timeline_f as B
+    assert "axes" in B.LEDGER_ENTERS, "the compiler accepts the enter"
+    ax = _scene([]); ax["span"] = [0.0, 12.0]
+    ax["world"]["page"] = dict(ax["world"]["page"], enter="axes", exit="cut")   # exit=cut so the retract's own two beats stay out of this read
+    assert G._arrive_of([ax], "s01") == G.LP_BUILD_S, "the data builds, nothing else does"
+    assert G._arrive_of([ax], "s01") < G.PAGE_BUILD_END_S, "an axes page is not a roll-out"
+    # the beats it plays: the page + the line starting at 0, the line finished at BUILD
+    beats, starts = G._page_events([ax])
+    assert beats == [0.0, G.LP_BUILD_S], beats
+    assert starts == [0.0], starts
+
+
+def test_a_page_that_arrives_built_plays_one_beat():
+    """The other half of T1, and E69's own reason for caring: M05 now decides on the event list, so a page credited
+    six roll-out beats it never plays would read as a live frame while standing perfectly still."""
+    for enter in G.ARRIVES_BUILT:
+        sc = _scene([]); sc["span"] = [0.0, 30.0]
+        sc["world"]["page"] = dict(sc["world"]["page"], enter=enter, exit="cut")
+        beats, _ = G._page_events([sc])
+        assert beats == [0.0] or (enter == "spiral" and beats == [0.0, G.LP_SPIRAL_IN_S]), (enter, beats)
+
+
 def test_enter_throw_arrives_built_and_is_a_known_enter():
     """enter=throw (2026-09-08): the whole page is thrown onto the world and lands with its chart standing -
     the gate reads it as arriving built (the deployed floor binds), and the compiler accepts the enter name."""

@@ -1,0 +1,53 @@
+{
+ "build": "build-short-axes",
+ "runtime_s": 69.775,
+ "step": 0.1,
+ "empty_total_s": 0.0,
+ "empty_share": 0.0,
+ "boundaries": [
+  {
+   "at": 13.79,
+   "scene": "s01",
+   "exit": "suck",
+   "next_enter": "axes",
+   "gap_s": 0.0,
+   "from": null,
+   "to": null,
+   "spoken": [],
+   "licensed": false
+  },
+  {
+   "at": 25.5,
+   "scene": "s02",
+   "exit": "cut",
+   "next_enter": "spiral",
+   "gap_s": 0.0,
+   "from": null,
+   "to": null,
+   "spoken": [],
+   "licensed": false
+  },
+  {
+   "at": 40.51,
+   "scene": "s03",
+   "exit": "melt",
+   "next_enter": "axes",
+   "gap_s": 0.0,
+   "from": null,
+   "to": null,
+   "spoken": [],
+   "licensed": false
+  },
+  {
+   "at": 58.28,
+   "scene": "s04",
+   "exit": "cut",
+   "next_enter": "spiral",
+   "gap_s": 0.0,
+   "from": null,
+   "to": null,
+   "spoken": [],
+   "licensed": false
+  }
+ ]
+}

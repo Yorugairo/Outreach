@@ -1,13 +1,13 @@
 ---
 id: P53-WHAT-THE-ONE-SHOT-TAUGHT
 title: What the one-shot taught - the page's opening register, the hand-off that empties the stage, the two species defects its frames found, and the rows that stand between us and a better second one
-status: draft
+status: running
 operation: feature
 risk: standard
 owner: parent
 branch: main
 created: 2026-09-12
-updated: 2026-09-12
+updated: 2026-09-12 (running: T1 the axes register, T2 the measured hand-off, T6 the two stamps and T9 the local aligner are done and proved on frames; T3/T4 dispatched; T5/T7/T8/T10 open)
 ---
 
 # What the one-shot taught
@@ -141,22 +141,41 @@ by the parent in every case - a subagent's PASS is not evidence (E71).
 ## Task Slices
 
 ### T1: `enter=axes`, and M11 reads an arrival
-- Status: pending
+- Status: done
 - Owner: parent
 - Depends on: none
 - Write set: `content/video_engine/scripts/build_scene_timeline_f.py`, `docs/content-video-engine/samples/scene-evidence-engine.mjs`, `content/video_engine/scripts/gate_motion_density.py`, `content/video_engine/tests/test_page_performs.py`, `content/video_engine/tests/test_gate_motion_density.py`
 - Acceptance: a row declaring `ledger:<series>:line:<i>:right:axes:cut` lands the page with ground, frame, title and axes at frame 0 and draws the line from the first frame; `enter=built` and `enter=axes` both read as annotated on arrival by M11 when the light lands within 1.5 s of the line's finish; a hook row (first row, t=0) with no declared enter is named INFO by the species lint
 - Validate: `python -m pytest content/video_engine/tests/test_page_performs.py content/video_engine/tests/test_gate_motion_density.py -q`; rebuild `normal-for-which-bridge` into `build-short-axes` and read frames 0.0, 0.3, 0.8, 1.5
-- Evidence: pending
+- Evidence: `enter=axes` in `build_scene_timeline_f.py:56`, the player's page clock in the engine (`axesIn`, the
+  page's own beats start at the PUNCH's end), and the gate's two reads - `_page_land_offset` returns one BUILD for
+  an axes page, and `_page_events` now credits a page that arrives BUILT one beat instead of the six a roll-out
+  plays (a latent defect that mattered the moment E69's M05 began deciding on the event list). Pinned by
+  `test_page_performs.py::test_enter_axes_lands_the_page_and_builds_the_data` and
+  `::test_a_page_that_arrives_built_plays_one_beat`; 142 passed across the page and gate suites. Read on frames
+  (`build-short-axes/self-watch/axes/opening.png`): 0.00 s carries the charcoal page with its title, its % of GDP
+  scale, its 0/50/100 ticks and its decade axis and NO data; the line starts at 0.30 s and is complete by 2.0 s.
+  M11 then moved the annotation window from 7.4 s to 3.0 s, the light moved to the word it illustrates, and the
+  motion gate is PASS. `BRIDGE_OPEN_ENTER` is the dial for gate 1's read (axes / built / the roll-out).
 
 ### T2: the hand-off - measure the empty stage, then close it
-- Status: pending
+- Status: done (the cure is smaller than the plan expected - see the deviation)
 - Owner: parent
 - Depends on: none
 - Write set: `content/video_engine/scripts/measure_stage_gaps.py` (new), `content/video_engine/scripts/gate_motion_density.py`, `docs/content-video-engine/samples/scene-evidence-engine.mjs`, `content/video_engine/tests/test_gate_motion_density.py`
 - Acceptance: the measure writes the share of runtime with no world on stage and the per-transition gap (suck, melt, spiral, dip, cut) for a build; the gate FAILs a non-dip transition whose gap carries spoken words; the engine lays the incoming page's ground under the outgoing world for the suck, the melt and the spiral so the measured share is 0 outside a dip
 - Validate: `python content/video_engine/scripts/measure_stage_gaps.py <build>` on `normal-for-which-bridge/build-short` before and after; `python -m pytest content/video_engine/tests/test_gate_motion_density.py -q`
-- Evidence: pending
+- Evidence: `measure_stage_gaps.py <build>` seeks the player across every scene boundary and asks the same DOM the
+  layout gate reads what is ON STAGE, then names the words spoken inside each empty run -> `<build>/stage-gaps.json`.
+  FIRST READ (build-short-axes, 69.8 s): 6.2 s empty, 8.9% of the runtime, the suck at 13.79 s and the melt at
+  40.51 s each 3.1 s and each SPOKEN OVER; the two `cut -> spiral` boundaries measured 0.0 s, so the vortex return
+  was never the problem. THE CURE, measured: the page that FOLLOWS a world-taking transition arrives with ink
+  (`enter=axes`, T1) - the same build then measures 0.0 s empty, 0.0% of the runtime, with the motion gate still
+  PASS. DEVIATION from the plan's acceptance: no engine restaging was needed, so the incoming page's ground is not
+  slid under the outgoing world; the fix is a compiler DEFAULT instead (T6's post-pass), which is smaller, and the
+  transition's own animation is correspondingly shorter on stage - the register the operator rules at human gate 2.
+  M31 reads the measurement the way M25 reads the layout probe (INFO until measured, FAIL when an empty stage is
+  spoken over), and `_load` records which build it is reading.
 
 ### T3: the ring's flag chip stays on the page (R26-67)
 - Status: pending
@@ -186,13 +205,19 @@ by the parent in every case - a subagent's PASS is not evidence (E71).
 - Evidence: pending
 
 ### T6: the compiler stamps `:cut` under a suck or a melt (R26-60)
-- Status: pending
-- Owner: implementation_luna
+- Status: done (in T2's own post-pass - the two stamps are one function)
+- Owner: parent
 - Depends on: T2 (the same transition code path)
 - Write set: `content/video_engine/scripts/build_scene_timeline_f.py`, `content/video_engine/tests/test_build_scene_timeline_f.py`
 - Acceptance: when a scene's exit is `suck` or `melt`, a ledger page row with no declared exit compiles as `:cut` and the build prints that it stamped it; a page that declares its own exit is untouched
 - Validate: `python -m pytest content/video_engine/tests/test_build_scene_timeline_f.py -q`; rebuild `normal-for-which-bridge` and confirm the printed stamp
-- Evidence: pending
+- Evidence: `stamp_transition_pages` (`build_scene_timeline_f.py:1399`), called once the scenes are built and
+  PRINTED per stamp ("a default nobody can see is a default nobody can argue with"): the page UNDER a suck or a
+  melt is stamped `exit=cut` (R26-60), the page AFTER one is stamped `enter=axes` (T2). A row that declares its own
+  enter or exit is never touched. Proved on the one-shot: rows 2 and 4 declare nothing and the build prints
+  `s02: enter=axes stamped ... after a suck` and `s04: ... after a melt`, and the stage-gap measure reads 0.0%.
+  Pinned by `test_transition_stamps.py` (5 cases: the cut stamp, the ink arrival, an author's own choice left
+  alone, a cut/dip/wipe stamping nothing, a non-page world left alone).
 
 ### T7: the cutout dock kind (R26-59)
 - Status: pending
@@ -213,13 +238,20 @@ by the parent in every case - a subagent's PASS is not evidence (E71).
 - Evidence: pending
 
 ### T9: both takes, and a clock off either (E70)
-- Status: pending
-- Owner: speedster
+- Status: done, with a limit recorded
+- Owner: speedster (reviewed by the parent)
 - Depends on: none
-- Write set: `content/video_engine/scripts/scratch_take.py`, `content/video_engine/scripts/align_take.py` (new, local Whisper), `docs/portable/VOICE-PACK.md`
+- Write set: `content/video_engine/scripts/align_take.py` (new, local Whisper), `docs/portable/VOICE-PACK.md`
 - Acceptance: one command renders both takes for a script; `align_take.py` turns a Chirp mp3 into a words.json in the take's schema using LOCAL Whisper only; a build can point at either take's words and says which it used
 - Validate: `python content/video_engine/scripts/scratch_take.py --engine both --script <script>`; `python content/video_engine/scripts/align_take.py <mp3> --out <words.json>`; a rebuild of `normal-for-which-bridge` on the Chirp clock
-- Evidence: pending
+- Evidence: `align_take.py <audio> --out <words.json> [--script <txt>]` runs faster-whisper 1.2.1 LOCALLY
+  (`word_timestamps=True`, int8 on the CPU) and writes the take's own words.json schema, reusing
+  `scratch_take.merge_punct` so a stop belongs to its word. No cloud STT, no paid call, and the missing-dependency
+  path names what to install. THE LIMIT, measured the same day and written into the tool's own docstring: on the
+  same audio faster-whisper `small.en` returned 141 words where kokoro's tokenizer had 155, and the last word's end
+  lagged 0.84 s. A shot table anchors its rows on PHRASES, so a clock missing one word in eleven cannot carry them:
+  this clock is for listening and for beat timing, and authoring against a Chirp take wants forced alignment to
+  the SCRIPT rather than free-form recognition. That is the next step, not a defect in the tool.
 
 ### T10: R26-58, a thrown dock's flight warm versus cold
 - Status: pending
