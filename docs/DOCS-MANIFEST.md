@@ -99,7 +99,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## backlog
 
-- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +107 more — terms: Z-stack; short-form; drawOn; G-g
+- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +108 more — terms: Z-stack; short-form; drawOn; G-g
 
 ## pattern
 
