@@ -235,3 +235,90 @@ def test_m18_refuses_frame_hashes_measured_on_another_player(tmp_path: Path):
     good = hashlib.sha256((tmp_path / "player.html").read_bytes()).hexdigest()
     (tmp_path / G.FRAME_HASHES_NAME).write_text(json.dumps({"fps": 12, "html_sha256": good, "frames": _frames([f"{i:08x}" for i in range(30)])}), encoding="utf-8")
     assert isinstance(G.load_frames(tmp_path), list)
+
+
+# ---- R26-13: the layer switch on the shell, and M18's per-layer read --------------------------
+# E49's whole-frame hash cannot see a frozen page beneath a boiling caption (Tokyo v2: 1036 distinct frames of 1066,
+# M18 PASS, the pages still). `?layers=page,docks,captions` paints only the layers named, so one loop per layer
+# measures the page on its own.
+
+
+def test_the_layer_switch_is_a_query_read_at_load_off_by_default_and_names_the_three_layers():
+    html = RB.player_text()
+    assert 'new URLSearchParams(location.search).get("layers")' in html, "the switch is read from the URL"
+    assert "if (want === null) return;" in html, "off by default: no query, no attribute, no rule"
+    for sel in ('[data-layers~="page"]) .world', '[data-layers~="page"]) #species',
+                '[data-layers~="docks"]) .dock', '[data-layers~="docks"]) .stackbox',
+                '[data-layers~="captions"]) #caption'):
+        assert sel in html, sel
+    assert "visibility: hidden !important" in html, "the engine writes inline styles every frame; geometry must stay"
+    assert MF.LAYERS == G.FRAME_LAYERS == ("page", "docks", "captions")
+    assert MF.layer_hashes_name("page") == G.frame_layer_name("page") == "frame-hashes.page.json"
+
+
+def test_the_switch_is_never_a_build_time_write():
+    """A build copies the shell: the instantiated player carries the switch's CODE and no chosen layer set, so its
+    frames are the whole frame exactly as before (the goldens are byte-identical)."""
+    tl, uris, _t, _a = RB.load_surface("ledger-soak-page")
+    page = RB.instantiate(tl, uris)
+    assert 'data-layers="' not in page and "data-layers'" not in page
+    assert "?layers=" in page, "the shell's own comment names the switch; the URL turns it on, the build never does"
+
+
+def test_parse_layers_takes_a_subset_in_the_shells_order_and_refuses_a_typo():
+    assert MF.parse_layers(None) == []
+    assert MF.parse_layers("captions,page") == ["page", "captions"]
+    assert MF.parse_layers("all") == list(MF.LAYERS) == MF.parse_layers("page, docks , captions")
+    with pytest.raises(SystemExit):
+        MF.parse_layers("pages")
+
+
+@needs_browser
+def test_the_layer_switch_hides_what_it_does_not_name_and_the_page_layer_sees_the_freeze():
+    """Browser-measured, on the soak golden with its Ken Burns zeroed (E49: the camera move is not the stillness cure)
+    and its captions kept - a caption page runs 10.0-12.8 s over the page that holds from ~9.5 s. The whole frame
+    differs half a second later because the caption moved; the PAGE layer is bit-identical. That is the defect R26-13
+    was written for, and the read that catches it."""
+    from playwright.sync_api import sync_playwright
+    bare, uris, aspect = _bare_hold()
+    src, _u, _t, _a = RB.load_surface("ledger-soak-page")
+    tl = dict(bare, caption_pages=src.get("caption_pages") or [], captions=src.get("captions") or [])
+    w, h = RB.STAGE[aspect]
+    vis = ("() => { const g = s => { const el = document.querySelector(s); return el ? getComputedStyle(el).visibility : 'absent'; };"
+           " return [g('.world'), g('.dock'), g('#caption')]; }")
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / "layers.html"
+        html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
+        srv, port = RB.serve(html.parent)
+        try:
+            with sync_playwright() as pw:
+                browser = pw.chromium.launch(headless=True)
+                ctx = browser.new_context(viewport={"width": w, "height": h}, device_scale_factor=1.0)
+
+                def load(query: str):
+                    p = ctx.new_page()
+                    p.goto(f"http://127.0.0.1:{port}/{html.name}{query}", wait_until="networkidle", timeout=120000)
+                    RB.prepare_page(p, w, h)
+                    return p
+
+                whole_p = load("")
+                assert whole_p.evaluate(vis) == ["visible", "visible", "visible"], "off by default"
+                page_p = load("?layers=page")
+                assert page_p.evaluate(vis) == ["visible", "hidden", "hidden"]
+                caps_p = load("?layers=captions")
+                assert caps_p.evaluate(vis) == ["hidden", "hidden", "visible"]
+                both_p = load("?layers=docks,captions")
+                assert both_p.evaluate(vis) == ["hidden", "visible", "visible"]
+                none_p = load("?layers=none")
+                assert none_p.evaluate(vis) == ["hidden", "hidden", "hidden"], "a question with no known layer hides all three"
+
+                whole = [_hash(RB.frame_png(whole_p, t, (w, h))) for t in (HOLD_T, HOLD_T + HALF_S)]
+                pages = [_hash(RB.frame_png(page_p, t, (w, h))) for t in (HOLD_T, HOLD_T + HALF_S)]
+                assert whole[0] != whole[1], "the caption moves, so the whole frame passes E49 - the hash the defect hides from"
+                assert pages[0] == pages[1], "the page beneath it is frozen; the page layer is the read that sees it"
+                # and that is exactly what M18 says when the two files are on disk
+                mk = lambda hs: [{"t": HOLD_T, "sha256": hs[0]}, {"t": HOLD_T + HALF_S, "sha256": hs[1]}]
+                assert not G.frozen_runs(mk(whole), max_s=0.4) and G.frozen_runs(mk(pages), max_s=0.4)
+                browser.close()
+        finally:
+            srv.shutdown()

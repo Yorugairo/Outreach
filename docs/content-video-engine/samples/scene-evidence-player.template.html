@@ -146,6 +146,25 @@
 #species .vmarc, #species-under .vmarc { fill: none; stroke: #F5B72E; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
 #species .vmx, #species-under .vmx { fill: none; stroke: #F5B72E; stroke-width: 5; stroke-linecap: round; }
 #species .vmstamp, #species-under .vmstamp { font: 700 46px Inter, Arial, sans-serif; fill: #F5B72E; text-anchor: middle; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 7px; }
+  /* THE COUNT ARRAY, THE AGENDA AND THE RING'S DASHED FORM (P52 T7/T8) - the module rule's one allowance again:
+     a species module may touch the template's CSS and nothing else. The count array's TILE is the tilted plate -
+     the near-black ink token with the muted-ink outline the flow diagram's frame uses (#8a94a0), so a field of
+     silos reads as a plate and not as N floating icons - its glyph is chalk at the icon set's own stroke-width 2
+     (the painter's group scale carries it up), and its CLAIM is the species sunflower, because the count IS the
+     claim (E56's own rule about a number: the ring circles one, this one writes it). The agenda's numeral takes
+     that same sunflower, its row is chalk type, its sub the frame's grey (a sub is furniture) and its rule the
+     grey hairline the nib draws. The dashed ring is the species sunflower at the callout's own width, so the
+     dashed form and the hand's circle are visibly the same mark drawn two ways. EVERY SIZE HERE IS SET BY THE
+     PAINTER as a font-size attribute (the block scales with its box), so these rules must NOT use the `font`
+     shorthand - a CSS shorthand would beat the presentation attribute and pin the type at one size. */
+#species .catile, #species-under .catile { fill: #05131e; stroke: #8a94a0; stroke-width: 2.5; stroke-linejoin: round; }
+#species .caglyph, #species-under .caglyph { fill: none; stroke: #F2F2F2; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+#species .caclaim, #species-under .caclaim { font-family: Inter, Arial, sans-serif; font-weight: 700; fill: #F5B72E; text-anchor: middle; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 8px; }
+#species .agnum, #species-under .agnum { font-family: Inter, Arial, sans-serif; font-weight: 700; fill: #F5B72E; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 8px; }
+#species .agrow, #species-under .agrow { font-family: Inter, Arial, sans-serif; font-weight: 700; fill: #F2F2F2; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 7px; }
+#species .agsub, #species-under .agsub { font-family: Inter, Arial, sans-serif; font-weight: 500; fill: #8a94a0; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 6px; }
+#species .agrule, #species-under .agrule { fill: none; stroke: #8a94a0; stroke-width: 2.5; stroke-linecap: round; }
+#species .rngdash, #species-under .rngdash { fill: none; stroke: #F5B72E; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
   /* R26-48 (P52 T4): GEOMETRIC PRECISION on every glyph the page writes. The same <text>, the same x/y and the
      same computed type, measured 0.80 px taller in its ink box and ~0.015 px wider on a page that had painted
      many frames than on a fresh one - the hinted advances and ascent Chromium's default `auto` lets Skia pick
@@ -541,7 +560,56 @@
   .chip { font: 600 10px/1 ui-monospace, Consolas, monospace; color: #7d95a6; background: #0a1620;
           border: 1px solid #14293a; border-radius: 3px; padding: 5px 7px; cursor: pointer; }
   .chip.on { color: var(--ink); background: var(--sunflower); border-color: var(--sunflower); }
+
+  /* THE LAYER SWITCH (R26-13 / P52 T15) - `?layers=page,docks,captions` (any subset) paints ONLY the
+     layers named, so measure_frozen_frames.py can hash one layer at a time and M18 can read the PAGE
+     on its own. E49's whole-frame hash cannot see a frozen page beneath a boiling caption (Tokyo v2:
+     1036 distinct frames of 1066, M18 PASS, the pages still).
+
+     Three layers, from the DOM below: PAGE is the world and everything painted with it (the two
+     `.world` plates, the wash, the spotlight, the plate-life images, the foreground cutout, the seam,
+     BOTH species overlays - a species annotates the page, E49 s3 - and the two veils, which take the
+     whole world down); DOCKS are the evidence cards (`.dock`, and the stack board `.stackbox` the
+     engine appends to the stage); CAPTIONS is `#caption`, the viewer's layer (Z5, E21/E59).
+
+     `visibility`, not `display` or `opacity`, and `!important`: the engine writes inline opacity,
+     transforms and `style.visibility` on these elements every frame (an author `!important` still
+     wins over an inline declaration), and a hidden layer must keep its GEOMETRY so the layers that
+     stay are painted exactly where the whole frame paints them.
+
+     OFF by default: with no `?layers=` in the URL no attribute is set and no rule below matches, so a
+     build's player.html renders byte-identically (the goldens prove it). The switch is a query read
+     at load - never a build-time write. */
+  html[data-layers]:not([data-layers~="page"]) .world,
+  html[data-layers]:not([data-layers~="page"]) #wash,
+  html[data-layers]:not([data-layers~="page"]) #spot,
+  html[data-layers]:not([data-layers~="page"]) #plife,
+  html[data-layers]:not([data-layers~="page"]) #fgover,
+  html[data-layers]:not([data-layers~="page"]) #seam,
+  html[data-layers]:not([data-layers~="page"]) #species,
+  html[data-layers]:not([data-layers~="page"]) #species-under,
+  html[data-layers]:not([data-layers~="page"]) #bzveil,
+  html[data-layers]:not([data-layers~="page"]) #dipveil,
+  html[data-layers]:not([data-layers~="docks"]) .dock,
+  html[data-layers]:not([data-layers~="docks"]) .stackbox,
+  html[data-layers]:not([data-layers~="captions"]) #caption { visibility: hidden !important; }
 </style>
+
+<script>
+  /* THE LAYER SWITCH, read from the URL BEFORE the first paint (R26-13 / P52 T15). The shell owns it
+     because the runtime is a module since P51 T1: the attribute is set on <html> here, the CSS above
+     does the hiding, and the engine is untouched - nothing is removed from the DOM, so every layer
+     still lives, animates and measures as it does in the whole frame. An unknown name is dropped;
+     `?layers=` with nothing known left (`?layers=none`) hides all three, which is a legal question. */
+  (function () {
+    var want = new URLSearchParams(location.search).get("layers");
+    if (want === null) return;                                  /* off by default - no attribute, no rule */
+    var KNOWN = ["page", "docks", "captions"];
+    var on = want.split(/[,\s]+/).map(function (s) { return s.trim().toLowerCase(); })
+                 .filter(function (s) { return KNOWN.indexOf(s) >= 0; });
+    document.documentElement.setAttribute("data-layers", on.join(" "));
+  })();
+</script>
 
 <h1><b id="eptitle">Episode</b> &middot; scene-evidence lane &middot; <span id="epsub"></span></h1>
 
