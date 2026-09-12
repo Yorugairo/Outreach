@@ -1862,15 +1862,176 @@ def free_bands(boxes: dict) -> list[dict]:
             for name, (x, y, w, h) in bands.items() if w > 0 and h > 0]
 
 
-def page_place(page: dict, aspect: str) -> dict | None:
-    """The parked rectangle for a dock on this ledger page, in stage pixels (E45 §1).
+# ---- E65: THE PLACER ALWAYS FINDS A PLACE (ruling E65, 2026-09-11) ---------------------------
+# The measured boxes (P50 T16) said what the estimate had hidden: Tokyo's real pages leave NO band
+# outside the plot wide enough for a card - the title is one line where the model says two, so the
+# chart starts 76 px higher and runs 89 px taller - and `page_place` answered None, which the engine
+# painted as the big centred solo card over the chart. The operator: *"inside of the empty data would
+# be good, but it can also land underneath partially over-lapping the axis, it's going to be adjusted
+# up to the corner right anyways. Remember that we have complete control over the scale and placement
+# on the page."*
+#
+# THE ORDER, and the placer never returns nothing:
+#   (1) `outside` - a band outside the plot at the card's size (E45 §1, unchanged: every page that
+#       had a band before E65 compiles to exactly the bytes it did);
+#   (2) `empty`   - the largest rectangle the DATA's ink does not touch, read off the measured
+#       `data_mask`, on the declared quiet side when that side is empty, else the emptiest corner;
+#   (3) `axis`    - underneath: the band between the data's foot and the source line, where the card
+#       may partially overlap the x tick labels (furniture), never the data;
+#   (4) `corner`  - the last resort: the emptiest corner at the legibility floor, and the build
+#       WARNS, naming the page. "No place" is not an outcome.
+# The card's SCALE gives ground before its place does, down to PLACE_FLOOR_H; the room taken is
+# recorded on the entry as `place_room` so the report, the gate and a reader can all see it.
+PLACE_FLOOR_H = {"9:16": 120, "16:9": 80}   # the legibility floor: a card shorter than this has stopped being evidence
+PLACE_ROOMS = ("outside", "empty", "axis", "corner")
 
-    ``{"x", "y", "w", "h"}``, or None when the page reports no band wide enough for a card -
-    the caller then leaves the dock on its solo geometry. Pure: the page spec is never mutated."""
+
+def _floor_h(aspect: str | None) -> int:
+    return PLACE_FLOOR_H.get(aspect or "16:9", PLACE_FLOOR_H["16:9"])
+
+
+def _fit_in(room: dict, want_w: float, floor_h: int, card_aspect: float | None = None) -> tuple[int, int] | None:
+    """The card's (w, h) inside `room` - at `want_w` if it fits, else the widest that does - or None
+    when even the floor card does not. The room is taken with `DOCK_PLACE_PAD` of air on every side."""
+    room_w, room_h = room["w"] - 2 * DOCK_PLACE_PAD, room["h"] - 2 * DOCK_PLACE_PAD
+    if room_w <= 0 or room_h <= 0:
+        return None
+    w = min(float(want_w), room_w, (room_h / card_aspect) if card_aspect else float(_card_w_for(room_h)))
+    w = int(w)
+    h = round(w * card_aspect) if card_aspect else dock_card_h(w)
+    if w < 1 or h > room_h or h < floor_h:
+        return None
+    return w, h
+
+
+def _corner_box(room: dict, w: int, h: int, quiet: str | None, centre: tuple[float, float]) -> dict:
+    """`w` x `h` pushed into the corner of `room` that is furthest from `centre` - the quiet side
+    horizontally when the page declares one, the far end vertically. E65: "it's going to be adjusted
+    up to the corner right anyways"."""
+    pad = DOCK_PLACE_PAD
+    left, right = room["x"] + pad, room["x"] + room["w"] - pad - w
+    top, bottom = room["y"] + pad, room["y"] + room["h"] - pad - h
+    room_cx, room_cy = room["x"] + room["w"] / 2, room["y"] + room["h"] / 2
+    x = right if (quiet == "right" or (quiet is None and room_cx >= centre[0])) else left
+    y = top if room_cy <= centre[1] else bottom
+    return {"x": round(min(max(x, room["x"]), room["x"] + room["w"] - w)),
+            "y": round(min(max(y, room["y"]), room["y"] + room["h"] - h)), "w": w, "h": h}
+
+
+def _clear_of_axis(box: dict, room: dict, boxes: dict) -> dict:
+    """`box` slid up off the x tick labels when its own room has the height to spare (E65 allows a
+    card to overlap the axis band; it does not ask it to). Unchanged when the room is that tight."""
+    ax = (boxes.get("axis") or {}).get("x")
+    if not ax or box["y"] + box["h"] <= ax["y"]:
+        return box
+    y = ax["y"] - box["h"] - DOCK_PLACE_PAD
+    return dict(box, y=round(y)) if y >= room["y"] + DOCK_PLACE_PAD else box
+
+
+def mask_rooms(boxes: dict) -> list[dict]:
+    """Every rectangle of the plot the DATA's ink does not touch, in stage pixels, from the measured
+    `data_mask` (E65). Empty when the page carries no mask - an unmeasured page has no room to read.
+
+    Maximal in width for each span of rows, which is every rectangle a card can be put in; the caller
+    scores them. The mask's cell is ~40 px on a 9:16 page, so the rectangle is the data's own shape at
+    the scale a card is placed at, and a card inside one touches no ink."""
+    mask = boxes.get("data_mask")
+    plot = boxes.get("plot")
+    if not mask or not plot:
+        return []
+    n = len(mask)
+    cw, ch = plot["w"] / n, plot["h"] / n
+    out = []
+    for r0 in range(n):
+        for r1 in range(r0, n):
+            run = 0
+            for c in range(n + 1):
+                clear = c < n and all(mask[r][c] == "0" for r in range(r0, r1 + 1))
+                if clear:
+                    run += 1
+                    continue
+                if run:
+                    c0 = c - run
+                    out.append({"x": plot["x"] + c0 * cw, "y": plot["y"] + r0 * ch,
+                                "w": run * cw, "h": (r1 - r0 + 1) * ch,
+                                "cells": [r0, c0, r1, c - 1]})
+                run = 0
+    return out
+
+
+def mask_is_clear(boxes: dict, box: dict) -> bool:
+    """True when `box` touches no cell the DATA's ink is in (E65's own test for "never on the data").
+    A page with no mask answers False: nothing is known, so nothing is claimed."""
+    mask, plot = boxes.get("data_mask"), boxes.get("plot")
+    if not mask or not plot:
+        return False
+    n = len(mask)
+    cw, ch = plot["w"] / n, plot["h"] / n
+    for r in range(n):
+        y0, y1 = plot["y"] + r * ch, plot["y"] + (r + 1) * ch
+        if box["y"] >= y1 or box["y"] + box["h"] <= y0:
+            continue
+        for c in range(n):
+            if mask[r][c] != "1":
+                continue
+            x0, x1 = plot["x"] + c * cw, plot["x"] + (c + 1) * cw
+            if box["x"] < x1 and box["x"] + box["w"] > x0:
+                return False
+    return True
+
+
+def axis_room(boxes: dict) -> dict | None:
+    """E65 (3): the band UNDER the data - from the foot of the lowest ink in the plot to the source
+    line - which a card may take even though the x tick labels live in it. None when the page is not
+    measured or the data runs to the plot's foot with nothing under it."""
+    mask, plot = boxes.get("data_mask"), boxes.get("plot")
+    if not mask or not plot:
+        return None
+    n = len(mask)
+    rows = [r for r in range(n) if "1" in mask[r]]
+    top = plot["y"] + ((max(rows) + 1) * plot["h"] / n if rows else 0)
+    limit = min(boxes["source"]["y"], boxes["caption_anchor"]["y"])
+    axis = (boxes.get("axis") or {}).get("x")
+    if axis:                                    # the labels are furniture: the room runs past them
+        top = min(top, axis["y"]) if axis["y"] + axis["h"] <= limit else top
+    return {"x": plot["x"], "y": top, "w": plot["w"], "h": limit - top} if limit - top > 0 else None
+
+
+def emptiest_corner(boxes: dict) -> dict:
+    """E65 (4): the quadrant of the plot the data touches least, as a rectangle. The quiet side breaks
+    a tie; a page with no mask answers with the quiet side's own half, which is all it knows."""
+    plot = boxes["plot"]
+    quiet = boxes.get("quiet_zone")
+    half_w, half_h = plot["w"] / 2, plot["h"] / 2
+    mask = boxes.get("data_mask")
+    best, best_key = None, None
+    for qy in (0, 1):
+        for qx in (0, 1):
+            if mask:
+                n = len(mask)
+                r0, r1 = (0, n // 2) if qy == 0 else (n // 2, n)
+                c0, c1 = (0, n // 2) if qx == 0 else (n // 2, n)
+                ink = sum(mask[r][c] == "1" for r in range(r0, r1) for c in range(c0, c1))
+            else:
+                ink = 0
+            key = (-ink, 1 if (quiet == "right" and qx == 1) or (quiet == "left" and qx == 0) else 0)
+            if best_key is None or key > best_key:
+                best_key = key
+                best = {"x": plot["x"] + qx * half_w, "y": plot["y"] + qy * half_h, "w": half_w, "h": half_h}
+    return best
+
+
+def page_place(page: dict, aspect: str) -> dict:
+    """The parked rectangle for a dock on this ledger page, in stage pixels (E45 §1, E65).
+
+    ``{"x", "y", "w", "h", "room"}`` - ALWAYS: `room` is which of E65's four rooms it came from
+    (`outside` | `empty` | `axis` | `corner`). Pure: the page spec is never mutated."""
     boxes = LPG.page_boxes(page, aspect)
     stage_w = boxes["stage"]["w"]
     want = round(DOCK_ON_PAGE_W * stage_w)
     quiet = boxes.get("quiet_zone")
+    floor_h = _floor_h(aspect)
+    # (1) OUTSIDE: a band the page's ink leaves free - E45 §1, unchanged
     best = None
     for band in free_bands(boxes):
         room_w, room_h = band["w"] - 2 * DOCK_PLACE_PAD, band["h"] - 2 * DOCK_PLACE_PAD
@@ -1880,24 +2041,56 @@ def page_place(page: dict, aspect: str) -> dict | None:
         key = (width, band["band"] == quiet, -DOCK_BAND_ORDER.index(band["band"]))
         if best is None or key > best[0]:
             best = (key, band, width)
-    if best is None:
-        return None
-    _, band, width = best
-    height = dock_card_h(width)
-    if band["band"] in ("left", "right"):   # a side column: hug the page's margin, centre vertically
-        x = band["x"] + DOCK_PLACE_PAD if band["band"] == "left" else band["x"] + band["w"] - DOCK_PLACE_PAD - width
-        y = band["y"] + (band["h"] - height) / 2
-    else:                                   # a horizontal band: park against the plot, quiet-zone end
-        x = band["x"] + DOCK_PLACE_PAD if quiet == "left" else band["x"] + band["w"] - DOCK_PLACE_PAD - width
-        y = band["y"] + band["h"] - DOCK_PLACE_PAD - height if band["band"] == "above" else band["y"] + DOCK_PLACE_PAD
-    x = min(max(x, band["x"]), band["x"] + band["w"] - width)
-    y = min(max(y, band["y"]), band["y"] + band["h"] - height)
-    return {"x": round(x), "y": round(y), "w": width, "h": height}
+    if best is not None:
+        _, band, width = best
+        height = dock_card_h(width)
+        if band["band"] in ("left", "right"):   # a side column: hug the page's margin, centre vertically
+            x = band["x"] + DOCK_PLACE_PAD if band["band"] == "left" else band["x"] + band["w"] - DOCK_PLACE_PAD - width
+            y = band["y"] + (band["h"] - height) / 2
+        else:                                   # a horizontal band: park against the plot, quiet-zone end
+            x = band["x"] + DOCK_PLACE_PAD if quiet == "left" else band["x"] + band["w"] - DOCK_PLACE_PAD - width
+            y = band["y"] + band["h"] - DOCK_PLACE_PAD - height if band["band"] == "above" else band["y"] + DOCK_PLACE_PAD
+        x = min(max(x, band["x"]), band["x"] + band["w"] - width)
+        y = min(max(y, band["y"]), band["y"] + band["h"] - height)
+        return {"x": round(x), "y": round(y), "w": width, "h": height, "room": "outside"}
+    plot = boxes["plot"]
+    centre = (plot["x"] + plot["w"] / 2, plot["y"] + plot["h"] / 2)
+    # (2) EMPTY: the largest rectangle the data does not touch, the quiet side first
+    cands = []
+    for room in mask_rooms(boxes):
+        fit = _fit_in(room, want, floor_h)
+        if fit is None:
+            continue
+        w, h = fit
+        box = _clear_of_axis(_corner_box(room, w, h, quiet, centre), room, boxes)
+        room_cx = room["x"] + room["w"] / 2
+        on_quiet = 1 if (quiet == "right" and room_cx >= centre[0]) or (quiet == "left" and room_cx <= centre[0]) else 0
+        corner = abs(room_cx - centre[0]) + abs(room["y"] + room["h"] / 2 - centre[1])
+        ax = (boxes.get("axis") or {}).get("x")
+        over_axis = bool(ax and box["y"] + box["h"] > ax["y"])   # allowed (E65), still second best: a card that
+        cands.append(((on_quiet, w * (0.9 if over_axis else 1.0), corner), box))   # keeps the labels legible wins a near tie
+    if cands:
+        return {**max(cands, key=lambda c: c[0])[1], "room": "empty"}
+    # (3) AXIS: underneath, over the x tick labels - never on the data
+    under = axis_room(boxes)
+    if under:
+        fit = _fit_in(under, want, floor_h)
+        if fit:
+            w, h = fit
+            box = _corner_box(under, w, h, quiet, centre)
+            if mask_is_clear(boxes, box):
+                return {**box, "room": "axis"}
+    # (4) THE CORNER, at the floor - and the build warns (the caller reads `room`)
+    corner = emptiest_corner(boxes)
+    w = _card_w_for(floor_h)
+    h = dock_card_h(w)
+    return {**_corner_box(corner, w, h, quiet, centre), "room": "corner"}
 
 
 def dock_place(world: dict, aspect: str | None) -> dict | None:
     """The placement every dock on this scene takes, or None on a plain plate (E45: "a dock on a
-    plain plate keeps the solo card"). One rectangle per scene, from the page's geometry alone."""
+    plain plate keeps the solo card"). One rectangle per scene, from the page's geometry alone -
+    and on a ledger page there is ALWAYS one (E65); the rectangle carries the `room` it came from."""
     if not isinstance(world, dict) or world.get("kind") != SPECIES_LEDGER or not world.get("page"):
         return None
     return page_place(world["page"], aspect or "16:9")
@@ -1925,10 +2118,20 @@ def centred_place(place: dict, aspect: str | None, card_aspect: float | None = N
     if band_name:   # the row names the band itself (the sixth watch: the cup belongs between the source line and the caption)
         bands = [bd for bd in bands if bd["band"] == band_name]
     room = max(bands, key=lambda bd: bd["h"], default=None)
-    if room and room["h"] >= 40:
+    floor_h = _floor_h(aspect)
+    if room and room["h"] >= max(40, floor_h):
         if h > room["h"]:                                     # a tall card shrinks to the band rather than covering the page
             h = round(room["h"]); w = round(h / card_aspect) if card_aspect else w
         return {"x": round((sw - w) / 2), "y": round(room["y"] + (room["h"] - h) / 2), "w": w, "h": h}
+    # E65: no band outside the plot is tall enough to read a card in - take the page's own room
+    # (the plot's empty rectangle, the axis band, the corner) rather than the stage's middle, which
+    # is the chart. The card keeps the centred WIDTH it can, and the room decides where it sits.
+    if page:
+        got = page_place(page, aspect or "16:9")
+        if got.get("room") != "corner" or not room:
+            gw = min(w, got["w"]) if card_aspect else got["w"]
+            gh = round(gw * card_aspect) if card_aspect else dock_card_h(gw)
+            return {"x": got["x"], "y": got["y"], "w": gw, "h": gh}
     band = CENTRE_BAND * sh if (aspect or "16:9") == "9:16" else sh   # portrait: the caption strip is below the band
     return {"x": round((sw - w) / 2), "y": round(max(0, (band - h) / 2)), "w": w, "h": h}
 
@@ -2088,7 +2291,57 @@ def read_over_build(place: dict | None, read_box: dict | None, page: dict | None
         return {"read_place": moved,
                 "read_moved": {"from": [read_box["x"], read_box["y"], read_box["w"], read_box["h"]],
                                "to": [moved["x"], moved["y"], moved["w"], moved["h"]], "why": why}}
+    # E65: no band outside the plot holds the read - take the room the PARK took, enlarged toward the
+    # axis (the card may overlap the tick labels, never the data), at the reading scale or scaled down
+    # to the legibility floor. The park is the corner the card adjusts up into afterwards.
+    moved = read_in_room(boxes, place, read_box, aspect, card_aspect)
+    if moved:
+        return {"read_place": moved,
+                "read_moved": {"from": [read_box["x"], read_box["y"], read_box["w"], read_box["h"]],
+                               "to": [moved["x"], moved["y"], moved["w"], moved["h"]],
+                               "why": why + " - E65: the plot's own empty room"}}
     return {"read_deferred": True}
+
+
+def read_in_room(boxes: dict, place: dict, read_box: dict, aspect: str | None,
+                 card_aspect: float | None = None) -> dict | None:
+    """E65's READ: the parked card's own room, grown toward the axis, at the reading scale.
+
+    The room is the largest rectangle the data does not touch that CONTAINS the park (so the read and
+    the park are one move apart), grown down to the source line where the x tick labels are - they are
+    furniture. The card takes the reading width if it fits, else the widest that does, never under the
+    legibility floor, and never over a cell the data's ink is in. None when the page has no mask."""
+    if not boxes.get("data_mask") or not place:
+        return None
+    floor_h = _floor_h(aspect)
+    under = axis_room(boxes)
+    rooms = mask_rooms(boxes)
+    if under:
+        rooms = rooms + [under]
+    holds = [r for r in rooms
+             if r["x"] - 1 <= place["x"] and r["y"] - 1 <= place["y"]
+             and r["x"] + r["w"] + 1 >= place["x"] + place["w"] and r["y"] + r["h"] + 1 >= place["y"] + place["h"]]
+    grown = []
+    for r in (holds or rooms):
+        room = dict(r)
+        if under and abs(room["y"] + room["h"] - under["y"]) < 2:   # the room ends where the axis band starts: join them
+            room["h"] = under["y"] + under["h"] - room["y"]
+        grown.append(room)
+    best = None
+    for room in sorted(grown, key=lambda r: -(r["w"] * r["h"])):
+        fit = _fit_in(room, float(read_box["w"]), floor_h, card_aspect)
+        if fit is None:
+            continue
+        w, h = fit
+        sw = 1080 if (aspect or "16:9") == "9:16" else 1920
+        x = min(max(round((sw - w) / 2), room["x"] + DOCK_PLACE_PAD), room["x"] + room["w"] - DOCK_PLACE_PAD - w)
+        box = {"x": round(x), "y": round(room["y"] + (room["h"] - h) / 2), "w": w, "h": h}
+        box = _clear_of_axis(box, room, boxes)
+        if not mask_is_clear(boxes, box):
+            continue
+        if best is None or w > best["w"]:
+            best = box
+    return best
 
 
 # ---- THE CAPTION'S BAND UNDER A CARD (ruling E62, 2026-09-11) ---------------------------------
@@ -2299,6 +2552,8 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
     hold both (the card then simply stays at reading size for its whole life)."""
     span = round(exitt - enter, 2)
     rs, ps = (float(read_s) if read_s else DOCK_READ_S), (float(park_s) if park_s else DOCK_PARK_S)   # the dock's own clock, else the defaults
+    room = place.get("room") if isinstance(place, dict) else None   # E65: which room the placer took
+    place = {k: place[k] for k in ("x", "y", "w", "h")} if isinstance(place, dict) else place
     return {
         # P51 T5: the DERIVED row id - `<scene>.dock.<slide>` - the key a human or a flash agent edits this
         # card by in `<build>/overrides.json`. Written only when the compiler hands one down, so every other
@@ -2317,6 +2572,10 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
             **({"_stack": True} if stack else {})} if press else {}),
         **({"place": place, "read_s": rs, "park_s": ps,
             "park": span >= rs + ps} if place else {}),
+        # E65: the room the card was placed in - outside the plot, the plot's empty room, the axis
+        # band or the corner. Written only when the placer decided one, so every other entry is
+        # byte-for-byte what it was.
+        **({"place_room": room} if (place and room) else {}),
         **({"read_place": read_place} if (place and read_place) else {}),   # a centred card that pops here, then parks to its place (2026-09-10)
         # E63 (2026-09-11): the read the compiler MOVED off a chart that was still drawing, and where it moved it
         # from; or the read it DEFERRED entirely (the card enters at its parked place). Written only when the rule
@@ -2707,6 +2966,8 @@ def main() -> int:
     evidence, uris, scenes, estimated_pages = {}, {}, [], []   # P50 T16: the pages this build placed by ESTIMATE, for the report below
     read_moves: list[str] = []      # E63: the docks whose READ the rule moved off a building chart ...
     read_defers: list[str] = []     # ... and the ones with no band to move it to, deferred to the parked box
+    card_rooms: list[tuple] = []    # E65: (dock row id, room, box, page title) for every card the placer placed
+    ledger_rows: list[int] = []     # the rows carrying a ledger page, so the report can say how many were MEASURED
     for i, row in enumerate(plan):
         # exit style is HYBRID (operator, 2026-08-29): mechanical default
         # (E47, 2026-09-06: docks -> DIP, bare -> cut; it was docks -> wipe),
@@ -2796,8 +3057,10 @@ def main() -> int:
         elif "asset_id" in world:
             uris[world["asset_id"]] = data_uri(R.find_asset(world["asset_id"]), STAGE_W)   # the bare id (E49's `;idle=` is not part of it)
         docks = []
-        if world.get("kind") == SPECIES_LEDGER and world.get("page") and not page_is_measured(world, ASPECT):
-            estimated_pages.append(f"row {i + 1} {str(world['page'].get('title') or plate)[:44]!r}")
+        if world.get("kind") == SPECIES_LEDGER and world.get("page"):
+            ledger_rows.append(i + 1)
+            if not page_is_measured(world, ASPECT):
+                estimated_pages.append(f"row {i + 1} {str(world['page'].get('title') or plate)[:44]!r}")
         # E45 §1: on a ledger page every dock parks in the same rectangle, computed from the
         # page's own geometry. Only the SOLO card (slot 0) is placed - a paired/stacked dock keeps
         # the layout its slot declares, and a plain plate keeps the solo card entirely.
@@ -2812,6 +3075,8 @@ def main() -> int:
             auto_centre = solo_centre_by_clock(world, ASPECT, len(ds), slot, enter, a, dopt)   # R26-22: E50's clock centres a solo card on a MEASURED page
             centred = bool(dopt.get("centre")) or auto_centre
             dplace = centred_place(place, ASPECT, dopt.get("card_aspect"), (world or {}).get("page"), dopt.get("centre_w"), dopt.get("centre_band"), dopt.get("centre_y"), dopt.get("centre_x")) if (place and centred) else place   # the third watch: a card centred on the page
+            if centred and isinstance(dplace, dict) and isinstance(place, dict) and "room" not in dplace:
+                dplace = dict(dplace, room=place.get("room"))   # E65: the room the PAGE offered travels with the centred box
             if dopt.get("press"):   # P50 T3: E45 - the pile has one box, and it is the stage's centre
                 _perr = press_plate_error(plate, aid)
                 if _perr:
@@ -2844,6 +3109,10 @@ def main() -> int:
                 read_moves.append(f"{sid}.{aid} -> {e63['read_moved']['to']}")
             elif e63.get("read_deferred"):
                 read_defers.append(f"{sid}.{aid}")
+            if isinstance(eplace, dict) and eplace.get("room"):   # E65: the room every placed card took
+                card_rooms.append((f"{sid}.{aid}", eplace["room"],
+                                   [eplace["x"], eplace["y"], eplace["w"], eplace["h"]],
+                                   str((world or {}).get("page", {}).get("title") or "")[:44]))
             if True:
                 if aid not in evidence:
                     try:
@@ -2951,6 +3220,17 @@ def main() -> int:
         print(f"  page boxes  : {len(estimated_pages)} page(s) ESTIMATED, not measured - "
               f"{'; '.join(estimated_pages)}. Measure them into assets/page-boxes.v1.json "
               "(measure_page_boxes.py) to place them by the player's own boxes.")
+    elif ledger_rows:
+        print(f"  page boxes  : {len(ledger_rows)} page(s) MEASURED - every card placed by the player's own boxes")
+    if card_rooms:
+        # E65: the room every card took - outside the plot, the plot's own empty room, the axis band
+        # underneath, or the corner at the legibility floor (which warns).
+        print("  card place  : " + "; ".join(f"{rid} {room} {box}" for rid, room, box, _t in card_rooms))
+        floored = [(rid, title) for rid, room, _b, title in card_rooms if room == "corner"]
+        if floored:
+            print(f"  [WARN] E65: {len(floored)} card(s) found no room on the page and took the emptiest corner at "
+                  "the legibility floor - " + "; ".join(f"{rid} on {title!r}" for rid, title in floored)
+                  + ". Give the page room (a shorter title, a parked chart) or place the card by hand.")
 
     # caption STAGE mode: stamp each page with the mode it takes at its first word (after the scenes exist)
     pages = [{**pg, "cap_mode": "anchor" if _dock_live_at(scenes, pg["s"]) else "stage"} for pg in pages]

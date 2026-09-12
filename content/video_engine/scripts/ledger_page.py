@@ -1215,39 +1215,81 @@ def page_ink_key(spec: dict) -> str:
 
 
 @functools.lru_cache(maxsize=4)
-def _fixture(path: str, mtime: float) -> dict:
-    """The measured fixture, builder -> aspect -> entry. A missing or malformed file reads as empty:
-    the fixture is a measurement the compiler may not have, never a dependency it fails on. `mtime`
-    is in the cache key so a re-measurement inside one process is seen."""
+def _doc(path: str, mtime: float) -> dict:
+    """The whole fixture document. A missing or malformed file reads as empty: the fixture is a
+    measurement the compiler may not have, never a dependency it fails on. `mtime` is in the cache
+    key so a re-measurement inside one process is seen."""
     try:
         data = json.loads(Path(path).read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return {}
     if not isinstance(data, dict) or data.get("schema") != PAGE_BOXES_SCHEMA:
         return {}
-    builders = data.get("builders")
-    return builders if isinstance(builders, dict) else {}
+    return data
 
 
-def fixture(path: Path | None = None) -> dict:
-    """builder -> aspect -> entry, from `assets/page-boxes.v1.json` (or `path`)."""
+def _section(name: str, path: Path | None = None) -> dict:
     p = Path(path or PAGE_BOXES_FIXTURE)
     try:
         mtime = p.stat().st_mtime
     except OSError:
         return {}
-    return _fixture(str(p), mtime)
+    section = _doc(str(p), mtime).get(name)
+    return section if isinstance(section, dict) else {}
+
+
+def fixture(path: Path | None = None) -> dict:
+    """builder -> aspect -> entry, from `assets/page-boxes.v1.json` (or `path`): ONE representative
+    page per builder, the fallback for any page carrying that representative's ink."""
+    return _section("builders", path)
+
+
+def measured_pages(path: Path | None = None) -> dict:
+    """ink key -> aspect -> entry: the pages a PROJECT's compiled timeline named, measured one by
+    one (`measure_page_boxes.py --project`). A builder has one representative but an episode has as
+    many pages as it writes titles, so the pages an episode actually compiles are keyed by ink."""
+    return _section("pages", path)
+
+
+def measured_entry(spec: dict, aspect: str) -> dict | None:
+    """The fixture entry that measured THIS page's ink at this aspect, or None.
+
+    The ink-keyed `pages` section first (this very page, measured by name), then the per-builder
+    representative - either way the entry is used only when its `ink` is this page's own."""
+    key = page_ink_key(spec)
+    entry = (measured_pages().get(key) or {}).get(aspect)
+    if not isinstance(entry, dict):
+        entry = (fixture().get(str(spec.get("builder"))) or {}).get(aspect)
+    if not isinstance(entry, dict) or entry.get("ink") != key:
+        return None
+    return entry
 
 
 def measured_boxes(spec: dict, aspect: str) -> dict | None:
     """The player's own boxes for THIS page's ink, or None when nothing on file measured it."""
-    entry = (fixture().get(str(spec.get("builder"))) or {}).get(aspect)
-    if not isinstance(entry, dict) or entry.get("ink") != page_ink_key(spec):
-        return None
-    boxes = entry.get("boxes")
+    entry = measured_entry(spec, aspect)
+    boxes = (entry or {}).get("boxes")
     if not isinstance(boxes, dict) or not all(k in boxes for k in BOX_KEYS):
         return None
     return {k: dict(boxes[k]) for k in BOX_KEYS}
+
+
+def measured_room(spec: dict, aspect: str) -> dict:
+    """E65's room, for a page the fixture has measured: ``data_mask`` (16 rows of 16 characters over
+    the PLOT, `1` where the data's ink touches the cell) and ``axis`` (the x tick labels' band under
+    the plot, the y tick column beside it - furniture a card MAY partially overlap, unlike the data).
+
+    ``{}`` when this page is not measured or was measured before E65: the placer then has boxes but
+    no room, and falls back to the bands outside the plot exactly as it did before."""
+    entry = measured_entry(spec, aspect) or {}
+    mask = entry.get("data_mask")
+    axis = entry.get("axis")
+    out: dict = {}
+    if isinstance(mask, list) and mask and all(isinstance(r, str) and len(r) == len(mask) for r in mask):
+        out["data_mask"] = list(mask)
+    if isinstance(axis, dict):
+        out["axis"] = {k: (dict(v) if isinstance(v, dict) else None) for k, v in axis.items() if k in ("x", "y")}
+    return out
 
 
 def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
@@ -1261,6 +1303,7 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
 
     ``measured`` says whose numbers these are (P50 T16): True when the fixture holds the player's
     own boxes for this page's INK (`measured_boxes`), False when this is `_portrait_boxes`' estimate.
+    A measured page also carries ``data_mask`` and ``axis`` - E65's room INSIDE the plot.
     A caller that PLACES something by these boxes - `free_bands`, `page_place`, `centred_place` - is
     reading one truth or the other, and the compiler reports which for every page it compiles.
 
@@ -1279,6 +1322,7 @@ def page_boxes(spec: dict, aspect: str = "16:9") -> dict:
     measured = measured_boxes(spec, aspect)
     if measured:                      # the player's own numbers for this ink win over every estimate above
         boxes.update(measured)
+        boxes.update(measured_room(spec, aspect))   # E65: the plot's empty room and the axis bands travel with them
         if spec.get("builder") == "tiers":   # the tier bands are a law over the PLOT: re-cut them on the measured one
             boxes["bands"] = tier_bands(boxes["plot"], len(spec.get("tiers") or []))
     sx, sy, sw, sh = SAFE_BOX[aspect]

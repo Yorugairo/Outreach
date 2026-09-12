@@ -7,8 +7,9 @@ rule on the windows that produced the ruling (the Tokyo short's two-fingers card
 record + fab pair at 0:57), on the order the candidates are tried in, and on the fallback: a card
 that covers every band leaves `null` and the player takes the quiet anchor.
 
-The Tokyo pages are ESTIMATED, not measured (`assets/page-boxes.v1.json` holds no `dense-line` 9:16
-entry for this ink) - `page_boxes` says so, and these expectations are read off that estimate.
+The Tokyo pages are MEASURED (R26-51: `assets/page-boxes.v1.json` carries every page this cut
+compiles, keyed by ink) and every card on them is placed by E65's ladder - so these expectations are
+read off the player's own boxes and the plot's own room, not off an estimate of either.
 """
 from __future__ import annotations
 
@@ -24,7 +25,7 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 import build_scene_timeline_f as BST  # noqa: E402
 import ledger_page as LPG  # noqa: E402
 
-TOKYO = ROOT / "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t0/tokyo-short.timeline.json"
+TOKYO = ROOT / "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-r51/tokyo-short.timeline.json"
 STRIP_H = 143          # two lines at 64 px / 1.12
 HOME_Y = 1297          # the strip's home on a short: bottom 480 (G-l)
 
@@ -55,10 +56,13 @@ def test_the_strip_is_two_lines_at_the_stage_size() -> None:
 
 # ---- the Tokyo windows that produced E62 -------------------------------------------------------
 
-def test_the_tokyo_pages_are_estimated_not_measured(tokyo: dict) -> None:
-    """Said out loud: these bands are cut out of `ledger_page`'s estimate of the player's layout."""
+def test_the_tokyo_pages_are_measured_and_carry_the_plots_room(tokyo: dict) -> None:
+    """Said out loud: these bands are cut out of the PLAYER's own boxes (R26-51), and the page hands
+    the placer the plot's data mask and its axis bands with them (E65)."""
     page = _scene(tokyo, "s02")["world"]["page"]
-    assert LPG.page_boxes(page, "9:16")["measured"] is False
+    boxes = LPG.page_boxes(page, "9:16")
+    assert boxes["measured"] is True
+    assert len(boxes["data_mask"]) == 16 and boxes["axis"]["x"], "E65's room travels with the boxes"
 
 
 def test_the_fingers_card_leaves_the_caption_its_home_at_stage_size(tokyo: dict) -> None:
@@ -75,7 +79,8 @@ def test_the_fingers_card_leaves_the_caption_its_home_at_stage_size(tokyo: dict)
 
 def test_the_record_and_plant_window_has_no_band_and_falls_back(tokyo: dict) -> None:
     """0:57, both cards up: the fab card runs to y 1318, into the strip; the page's head is title
-    and sub; the band under the plot is 42 px. Nothing holds two lines -> the quiet anchor."""
+    and sub; the measured band under the plot is 136 px, and the record's own reading box is in it.
+    Nothing holds two lines clear of all three -> the quiet anchor, as it was on the estimate."""
     sc = _scene(tokyo, "s04")
     for slide in ("dock-k-pledge-record", "dock-i-fab-wafer"):
         d = _dock(tokyo, "s04", slide)

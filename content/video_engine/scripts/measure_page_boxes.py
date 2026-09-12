@@ -17,6 +17,27 @@ are a pure function of its ink - see `ledger_page.page_ink_key`), so `free_bands
     python measure_page_boxes.py --write                     # re-measure everything, rewrite the fixture
     python measure_page_boxes.py --check                     # re-measure, diff against the file, exit 1 on drift
     python measure_page_boxes.py --builder tiers --aspect 9:16   # one page, printed, nothing written
+    python measure_page_boxes.py --write --project content/video_engine/projects/.../tokyo-tea-break/build-short-t0
+
+AN EPISODE'S OWN PAGES (R26-51). A builder has ONE representative here; an episode has as many
+pages as it writes titles, and every one of them is an estimate until it is measured - Tokyo's
+first page is a one-line title the model calls two, which moves every box under it by 76 px. So
+`--project <dir>` reads a build's COMPILED timeline - `world.page` and every `world.page_states`
+entry, exactly as the compiler wrote them, never re-derived here - and measures each distinct page
+at the aspect that timeline declares, into the fixture's ink-keyed `pages` section (`ledger_page.
+measured_pages`). The timelines measured are RECORDED in the fixture, so a later plain `--write`
+re-measures them too and reproduces the whole file; a build directory is a gitignored artifact, so
+`--write` on a fresh clone quietly keeps whatever timelines it can still find.
+
+THE ROOM INSIDE THE PLOT (E65, 2026-09-11). A page's real boxes showed that Tokyo's pages leave no
+band outside the plot wide enough for a card, and the placer answered "no place" - which the engine
+painted as a big centred card over the chart. The operator: *"inside of the empty data would be good,
+but it can also land underneath partially over-lapping the axis ... we have complete control over the
+scale and placement on the page."* So every entry also carries `data_mask` - a 16 x 16 grid over the
+plot, `1` where the DATA's ink touches the cell (the line sampled along its drawn length, the bars'
+boxes, the value labels: probe.py's own M25 read) - and `axis`, the x tick labels' band under the plot
+and the y tick column beside it, which a card MAY partially overlap. `build_scene_timeline_f.page_place`
+falls through outside band -> empty room -> axis -> corner on these.
 
 THE PAGES. Four are the committed golden sources' own (the cheapest pages in the repo to
 instantiate - they are already JSON on disk); `share` has no golden and carries its own synthetic
@@ -113,6 +134,42 @@ READ_BOXES = r"""
     }
   }
   out.plot = plot;
+  /* THE AXIS BANDS (E65). The x tick labels under the plot and the y tick column beside it: a card
+     may partially overlap these - they are furniture, not the data - and may never overlap the data. */
+  const roleBox = (roles) => { let u = null;
+    for (const mk of (st.marks || [])) { if (!mk.el || roles.indexOf(mk.role) < 0) continue;
+      const r = R(mk.el); if (r.w >= 1 || r.h >= 1) u = U(u, r); } return u; };
+  /* `tick` is the GRIDLINE (it spans the plot) - furniture the data is drawn over, never a band. */
+  out.axis = {x: roleBox(['xtick', 'xlabel']), y: roleBox(['ylabel'])};
+  /* THE DATA'S OWN INK (E65), read exactly as probe.py's M25 reads it: a bar or a number is its box;
+     a SERIES is a thin wiggle whose bounding box is mostly empty air, so a path is returned as the
+     chain of its DRAWN segments. The mask over these is what says where the plot is empty. */
+  /* `.lp-cell` is the TREEMAP's own cell (a <g> holding the tile and its labels): probe.py's M25
+     selector does not name it, and a mask that misses it would call a full census page empty. */
+  const DATA = 'rect.bar, path.ser, path.wedge, text.val, text.callout, rect.cpill, .lp-cell';
+  const SEG = 48;
+  const dataBoxes = (el) => {
+    const r = R(el);
+    const full = [[r.x, r.y, r.w, r.h]];
+    if (el.tagName !== 'path' || !el.getPointAtLength || !el.getTotalLength) return full;
+    const len = el.getTotalLength(); if (!(len > 0)) return full;
+    const off = parseFloat(el.getAttribute('stroke-dashoffset') || '0');
+    const da = parseFloat((el.getAttribute('stroke-dasharray') || '0').split(/[ ,]/)[0]) || 0;
+    const drawn = da > 0 ? Math.max(0, Math.min(len, len - off)) : len;
+    if (drawn <= 0) return [];
+    const m = el.getScreenCTM(); if (!m) return full;
+    const sw = Math.max(2, (parseFloat(getComputedStyle(el).strokeWidth) || 4) * Math.hypot(m.a, m.b) / 2);
+    const pts = [];
+    for (let i = 0; i <= SEG; i++) { const q = el.getPointAtLength(drawn * i / SEG);
+      pts.push([m.a * q.x + m.c * q.y + m.e - stg.x, m.b * q.x + m.d * q.y + m.f - stg.y]); }
+    const out2 = [];
+    for (let i = 1; i < pts.length; i++) { const a = pts[i - 1], b = pts[i];
+      out2.push([Math.min(a[0], b[0]) - sw, Math.min(a[1], b[1]) - sw,
+                 Math.abs(b[0] - a[0]) + 2 * sw, Math.abs(b[1] - a[1]) + 2 * sw]); }
+    return out2;
+  };
+  out.data = [];
+  if (chart) for (const el of chart.querySelectorAll(DATA)) for (const bx of dataBoxes(el)) out.data.push(bx);
   out.stage = [stg.width, stg.height];
   return out;
 }
@@ -121,6 +178,40 @@ READ_BOXES = r"""
 
 def _strip(page: dict) -> dict:
     return {k: v for k, v in page.items() if k not in TRANSIENT}
+
+
+def project_timeline(path: Path) -> Path:
+    """The compiled timeline under `path`: the file itself, or the newest `*.timeline.json` in the
+    directory, or the newest one in any build directory under it. A project whose build was never
+    run has none - and that is a refusal, not a guess."""
+    p = Path(path)
+    if p.is_file():
+        return p
+    found = sorted(p.glob("*.timeline.json")) + sorted(p.glob("*/*.timeline.json"))
+    found = [f for f in found if f.is_file()]
+    if not found:
+        raise SystemExit(f"{p}: no compiled *.timeline.json - build the project first, then measure it")
+    return max(found, key=lambda f: f.stat().st_mtime)
+
+
+def timeline_pages(path: Path) -> tuple[str, dict]:
+    """`(aspect, {ink: page})` for every ledger page a compiled timeline names - the world's page
+    and each of its `page_states`, in the order they are drawn, deduplicated by ink key."""
+    tl = json.loads(Path(path).read_text(encoding="utf-8"))
+    if not isinstance(tl.get("scenes"), list):
+        raise SystemExit(f"{path}: not a compiled timeline (no scenes)")
+    aspect = tl.get("aspect") or "16:9"
+    if aspect not in ASPECTS:
+        raise SystemExit(f"{path}: aspect {aspect!r} is not one of {'|'.join(ASPECTS)}")
+    pages: dict[str, dict] = {}
+    for scene in tl["scenes"]:
+        world = scene.get("world") or {}
+        found = ([world["page"]] if isinstance(world.get("page"), dict) else []) + \
+                [p for p in (world.get("page_states") or []) if isinstance(p, dict)]
+        for page in found:
+            spec = _strip(page)
+            pages.setdefault(LPG.page_ink_key(spec), spec)
+    return aspect, pages
 
 
 def representative(builder: str) -> dict:
@@ -159,6 +250,26 @@ def _box(raw: dict) -> dict:
     return {"x": round(raw["x"]), "y": round(raw["y"]), "w": round(raw["w"]), "h": round(raw["h"])}
 
 
+MASK_N = 16   # E65: the plot is read on a 16 x 16 grid - ~40 px a cell on a 9:16 page, the scale a card is placed at
+
+
+def data_mask(plot: dict, data: list, n: int = MASK_N) -> list[str]:
+    """`n` rows of `n` characters over the PLOT: `1` where the data's ink touches the cell, `0` where
+    the plot is empty. The cell is the unit the placer reasons in, so two segments over one pixel
+    count once - probe.py's COVER_CELL idea, on the plot's own grid."""
+    cw, ch = plot["w"] / n, plot["h"] / n
+    rows = []
+    for r in range(n):
+        y0, y1 = plot["y"] + r * ch, plot["y"] + (r + 1) * ch
+        row = []
+        for c in range(n):
+            x0, x1 = plot["x"] + c * cw, plot["x"] + (c + 1) * cw
+            row.append("1" if any(b[0] < x1 and b[0] + b[2] > x0 and b[1] < y1 and b[1] + b[3] > y0
+                                  for b in data) else "0")
+        rows.append("".join(row))
+    return rows
+
+
 def measure(builder: str, aspect: str, page: dict | None = None) -> dict:
     """The player's own boxes for this builder's representative page, in stage pixels."""
     page = page if page is not None else representative(builder)
@@ -185,7 +296,9 @@ def measure(builder: str, aspect: str, page: dict | None = None) -> dict:
     if [round(v) for v in dom["stage"]] != [w, h]:
         raise SystemExit(f"{builder} {aspect}: stage measured {dom['stage']}, expected {[w, h]}")
     boxes = {k: _box(dom[k]) for k in LPG.BOX_KEYS}
-    return {"page": page, "boxes": boxes}
+    axis = {k: (_box(dom["axis"][k]) if (dom.get("axis") or {}).get(k) else None) for k in ("x", "y")}
+    return {"page": page, "boxes": boxes, "axis": axis,
+            "data_mask": data_mask(boxes["plot"], dom.get("data") or [])}
 
 
 def _silence() -> str:
@@ -201,7 +314,7 @@ def entry(builder: str, aspect: str, page: dict | None = None) -> dict:
     full = dict(LPG.page_boxes(got["page"], aspect), **boxes)   # safe / caption_anchor / stage, over the MEASURED ink
     bands = {b["band"]: {k: round(b[k]) for k in ("x", "y", "w", "h")} for b in BST.free_bands(full)}
     return {"ink": LPG.page_ink_key(got["page"]), "title": got["page"].get("title"),
-            "boxes": boxes, "bands": bands}
+            "boxes": boxes, "bands": bands, "axis": got["axis"], "data_mask": got["data_mask"]}
 
 
 def template_sha() -> str:
@@ -209,7 +322,45 @@ def template_sha() -> str:
     return hashlib.sha256(RB.TEMPLATE.read_bytes() + RB.ENGINE.read_bytes()).hexdigest()
 
 
-def build(builders: list[str]) -> dict:
+def recorded_projects() -> list[str]:
+    """The timelines the fixture on file was measured from - repo-relative, as recorded."""
+    try:
+        doc = json.loads(FIXTURE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+    got = doc.get("projects") if isinstance(doc, dict) else None
+    return [str(p) for p in got] if isinstance(got, list) else []
+
+
+def _rel(path: Path) -> str:
+    try:
+        return Path(path).resolve().relative_to(REPO).as_posix()
+    except ValueError:
+        return Path(path).resolve().as_posix()
+
+
+def build_pages(timelines: list[str]) -> tuple[dict, list[str]]:
+    """The ink-keyed `pages` section for every compiled timeline named, and the ones actually read.
+    A recorded timeline that is gone (a build directory is an artifact) is skipped with a line."""
+    pages: dict[str, dict] = {}
+    read: list[str] = []
+    for name in sorted(set(timelines)):
+        path = REPO / name if not Path(name).is_absolute() else Path(name)
+        if not Path(path).exists():
+            print(f"  (skipped) {name}: not on disk - build it to measure its pages")
+            continue
+        tl = project_timeline(Path(path))
+        aspect, found = timeline_pages(tl)
+        read.append(_rel(tl))
+        for ink, page in found.items():
+            got = entry(str(page.get("builder")), aspect, page)
+            pages.setdefault(ink, {})[aspect] = dict(got, builder=page.get("builder"), timeline=_rel(tl))
+            print(f"  {str(page.get('builder')):11} {aspect}  {ink}  plot={got['boxes']['plot']}"
+                  f"  {str(page.get('title'))[:40]!r}")
+    return pages, read
+
+
+def build(builders: list[str], timelines: list[str] | None = None) -> dict:
     out: dict[str, dict] = {}
     for builder in builders:
         page = representative(builder)
@@ -217,10 +368,11 @@ def build(builders: list[str]) -> dict:
         for aspect in ASPECTS:
             print(f"  {builder:11} {aspect}  plot={out[builder][aspect]['boxes']['plot']}"
                   f"  bands={ {k: v['y'] for k, v in out[builder][aspect]['bands'].items()} }")
+    pages, read = build_pages(list(timelines or []))
     return {"schema": LPG.PAGE_BOXES_SCHEMA, "measured": str(date.today()),
             "player_sha256": template_sha(), "stage": {a: list(RB.STAGE[a]) for a in ASPECTS},
             "note": "measured by scripts/measure_page_boxes.py - do not hand-edit",
-            "builders": out}
+            "projects": sorted(read), "pages": pages, "builders": out}
 
 
 def dumps(doc: dict) -> str:
@@ -235,6 +387,9 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--builder", choices=BUILDERS)
     ap.add_argument("--aspect", choices=ASPECTS)
     ap.add_argument("--passes", type=int, default=1, help="re-measure N times (the treemap's layout reads the fixture)")
+    ap.add_argument("--project", action="append", default=[], metavar="DIR",
+                    help="a project or build directory whose COMPILED timeline names the pages to measure "
+                         "(repeatable; the ones already recorded in the fixture are always re-measured)")
     args = ap.parse_args(argv)
     if args.list:
         for b in BUILDERS:
@@ -245,10 +400,11 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps({args.builder: {aspect: entry(args.builder, aspect)}}, indent=1, sort_keys=True))
         return 0
     builders = [args.builder] if args.builder else list(BUILDERS)
-    doc = build(builders)
+    timelines = [_rel(Path(p)) for p in args.project] + recorded_projects()
+    doc = build(builders, timelines)
     for _ in range(max(0, args.passes - 1)):
         FIXTURE.write_text(dumps(doc), encoding="utf-8")
-        doc = build(builders)
+        doc = build(builders, timelines)
     if args.check:
         was = FIXTURE.read_text(encoding="utf-8") if FIXTURE.exists() else ""
         now = dumps(doc)
@@ -259,7 +415,9 @@ def main(argv: list[str] | None = None) -> int:
         return 0
     FIXTURE.parent.mkdir(parents=True, exist_ok=True)
     FIXTURE.write_text(dumps(doc), encoding="utf-8")
-    print(f"{FIXTURE.relative_to(REPO)}  {len(builders)} builders x {len(ASPECTS)} aspects  player {doc['player_sha256'][:12]}")
+    print(f"{FIXTURE.relative_to(REPO)}  {len(builders)} builders x {len(ASPECTS)} aspects"
+          f"  + {len(doc['pages'])} project page(s) from {len(doc['projects'])} timeline(s)"
+          f"  player {doc['player_sha256'][:12]}")
     return 0
 
 

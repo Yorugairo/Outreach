@@ -102,23 +102,34 @@ def test_the_cards_solo_reading_box_is_the_players_own(s02):
 
 
 # ------------------------------------------------------------------ the decision
-def test_the_tokyo_panel_card_does_not_read_over_the_plot(s02):
+def test_the_tokyo_panel_card_is_placed_in_the_plots_empty_room(s02):
+    """E65 on the page that produced it. The measured page leaves NO band outside the plot that holds
+    a card - the title is one line, the chart 89 px taller than the estimate - so the placer takes the
+    plot's own empty room: the lower right, the quiet side the row declares, which the holdings line
+    (rising to the top right) leaves clear. A place, never None; and never on the data."""
+    place = s02["place"]
+    assert place is not None, "E65: the placer always finds a place"
+    assert place["room"] in ("empty", "axis"), f"the room this page had to offer: {place}"
+    boxes = LPG.page_boxes(s02["page"], ASPECT)
+    assert B.mask_is_clear(boxes, place), f"the parked card sits on the data: {place}"
+    assert not any(bd for bd in B.free_bands(boxes) if B._fit_in(bd, B.DOCK_ON_PAGE_MIN_W, B._floor_h(ASPECT))), \
+        "this page is the ruling's own case: no band outside the plot holds a card at all"
+
+
+def test_the_tokyo_panel_cards_read_is_off_the_data(s02):
     """The ruling on the row it was ruled on, at the LIVE enter (9.1, after the 7.49 landing) - the
-    frame the operator read the second time. The page leaves a 208 px band above the plot - not room
-    for a card at E45's own width - so the read is DEFERRED: the card enters at its parked box."""
-    if s02["place"] is None:
-        assert _read(s02, RULED_ENTER(s02)) is None, "with no parked box there is nothing to defer TO"
-        pytest.skip("this page's measured boxes leave no band that holds a card at all - E45's park is "
-                    "gone before E63 is reached (page_place is None); M25's row, not this one")
+    frame the operator read the second time. The read is MOVED, and where it lands is the plot's own
+    empty room: over the page's plot BOX, and over no ink the chart drew (E65; M25's row reads the
+    ink, M27's still reads the box - see the gate)."""
     d = _read(s02, RULED_ENTER(s02))
     assert d, "the compiler saw nothing to decide on the frame the operator ruled on"
-    if d.get("read_moved"):
-        to = dict(zip(("x", "y", "w", "h"), d["read_moved"]["to"]))
-        plot = LPG.page_boxes(s02["page"], ASPECT)["plot"]
-        assert B._overlap_share(to, plot) <= B.READ_OVER_PLOT_SHARE, f"the moved read still lands on the plot: {to}"
-        assert d["read_place"] == to and d["read_moved"]["from"] == [80, 553, 800, 474]
-    else:
-        assert d == {"read_deferred": True}
+    assert d.get("read_moved"), f"E65 leaves nothing to defer to: {d}"
+    to = dict(zip(("x", "y", "w", "h"), d["read_moved"]["to"]))
+    boxes = LPG.page_boxes(s02["page"], ASPECT)
+    assert B.mask_is_clear(boxes, to), f"the moved read lands on the data: {to}"
+    assert d["read_place"] == to and d["read_moved"]["from"] == [80, 553, 800, 474]
+    assert "E65" in d["read_moved"]["why"], d["read_moved"]["why"]
+    assert to["h"] >= B._floor_h(ASPECT), "and never under the legibility floor"
 
 
 def test_the_chart_state_does_not_change_the_decision(story):
@@ -176,18 +187,42 @@ def test_a_page_with_room_moves_the_read_rather_than_defer():
     assert d["read_moved"]["why"].endswith("12.00s") and d["read_moved"]["to"] == [to["x"], to["y"], to["w"], to["h"]]
 
 
-def test_a_page_with_no_band_defers_the_read(monkeypatch):
-    """Preference (b). Let the chart fill the page and the rule has nowhere to put the read: the card
-    enters at its parked box and never pops, which is the only honest answer left."""
+def test_a_page_with_no_band_reads_in_the_plots_own_room(monkeypatch):
+    """Preference (b), as E65 rewrote it. Let the chart fill the page and there is no band to move the
+    read to - so it goes into the plot's empty room instead of being deferred, and it lands on no ink."""
     page = MPB.representative("story")
     place = B.page_place(page, ASPECT)
     squeezed = dict(LPG.page_boxes(page, ASPECT))
     squeezed["plot"] = {"x": 80, "y": 300, "w": 800, "h": 980}
     monkeypatch.setattr(B.LPG, "page_boxes", lambda *_a, **_k: squeezed)
-    assert B.read_over_build(place, B.dock_read_box(ASPECT), page, ASPECT, 9.09, 10.29,
-                             [(1.0, 12.0)]) == {"read_deferred": True}
+    got = B.read_over_build(place, B.dock_read_box(ASPECT), page, ASPECT, 9.09, 10.29, [(1.0, 12.0)])
+    assert got and got.get("read_place"), f"E65: the room is the answer, not a deferral: {got}"
+    assert B.mask_is_clear(squeezed, got["read_place"]), got["read_place"]
+    assert "E65" in got["read_moved"]["why"]
     assert B._read_fit({"band": "above", "x": 80, "y": 280, "w": 800, "h": 40}, B.dock_read_box(ASPECT),
                        float(place["w"]), ASPECT, None, squeezed["plot"]) is None, "a 40 px band holds no card at all"
+
+
+def test_a_page_with_no_room_and_no_mask_still_defers_the_read(monkeypatch):
+    """The honest answer is still there for a page nobody has measured: no mask, no room to reason
+    about, so the card enters at its parked box and never pops."""
+    page = MPB.representative("story")
+    place = B.page_place(page, ASPECT)
+    squeezed = {k: v for k, v in LPG.page_boxes(page, ASPECT).items() if k != "data_mask"}
+    squeezed["plot"] = {"x": 80, "y": 300, "w": 800, "h": 980}
+    monkeypatch.setattr(B.LPG, "page_boxes", lambda *_a, **_k: squeezed)
+    assert B.read_over_build(place, B.dock_read_box(ASPECT), page, ASPECT, 9.09, 10.29,
+                             [(1.0, 12.0)]) == {"read_deferred": True}
+
+
+def test_a_page_with_a_band_outside_the_plot_still_takes_it():
+    """E65 changes nothing for a page that has room outside its plot: the bench page still parks in
+    its own band, and the room is named `outside`."""
+    page = MPB.representative("story")
+    place = B.page_place(page, ASPECT)
+    assert place["room"] == "outside", place
+    boxes = LPG.page_boxes(page, ASPECT)
+    assert B._overlap_share(place, boxes["plot"]) == 0.0, f"an outside place is outside the plot: {place}"
 
 
 # ------------------------------------------------------------------ the entry the decision writes

@@ -2109,7 +2109,13 @@ plot) keep their rows; a card in the plot's empty room passes both because the i
 that "has no room" is a placer that has not looked at the room it has. The base level is the physics engine placing the
 card; the author's hand is for taste, not for rescue.
 
-Mechanisms: the measured fixture gains the plot's data mask and the axis bands per page (`measure_page_boxes.py`,
-`page-boxes.v1.json`, `ledger_page.py`); the compiler's `page_place` / the read box fall through the order above and
-record the room they took (`place_room: outside | empty | axis | corner`); `gate_motion_density.py` M25 / M27 read the ink;
-`docs/content-video-engine/CAPABILITIES.md`. The finding: the third form's 0:57 frame on the measured side build.
+Mechanisms (WIRED 2026-09-11, the same evening): the measured fixture carries, per page and aspect, a 16x16 DATA MASK of the
+plot (the cells the data's ink touches, read from the player the way M25 reads ink) and the axis bands (`measure_page_boxes.py`
+--project, `page-boxes.v1.json` pages keyed by ink, `ledger_page.py`); the compiler's `page_place` never returns None - outside
+band, then the largest empty rectangle in the mask (the declared quiet side first, else the emptiest corner, the card pushed
+into the rectangle's outer corner and lifted off the tick labels), then underneath over the x-axis band, then the emptiest
+corner at the legibility floor (120 px tall on 9:16, 80 on 16:9) with a build warning - and records `place_room`; the READ
+takes the room that holds the park joined to the axis band; `gate_motion_density.py` M25 reads the ink and M27 is being moved
+from the plot's box to the ink; `docs/content-video-engine/CAPABILITIES.md`. On Tokyo the panel card reads and parks in the
+holdings line's empty lower right (the row's `:right`), the whole line readable; the four authored-centre cards got their
+boxes back. The finding: the third form's 0:57 frame on the measured side build.
