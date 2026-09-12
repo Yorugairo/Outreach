@@ -77,6 +77,12 @@ captions do NOT count - they are what a viewer reads as stillness.
        - values, ticks, pills, series names, brackets and               closer than half a figure, the air
        figures - sit on each other at a probed instant.                 lpFitValues fits it with; INFO until
        M25's sibling, from the same file                                probe.py <build> --gate has run)
+  M29  the cut's sound (E44 s2a / R26-5): no TRANSIENT cue   FAIL   (E44 s2a; only when a cue lands inside
+       lands inside 0:05-0:12 unless a page lands with it              the window - the beds are exempt)
+       (its arrival or its chart's landing, within 1.5s)
+  M30  a returning character MOUNTS (E44 s2b / R26-6): a    FAIL   (E44 s2b; only when a scene DECLARES a
+       `cut` into a scene whose first species is a character           character - world.character | a `character`
+       an earlier scene already showed                                 species | an evidence species of `character`)
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -304,6 +310,31 @@ OPENING_CHART_HOLD_MAX_S = 6.0   # E25 / doc 29 s9.30: ... and inside the openin
 SRC_M10 = "E24 / doc 29 s9.29: stillness inside the opening minute - 4-6s in the first 30-60s"
 SRC_M11 = "E24 / doc 29 s9.29 (long form) + E44 (short): the first chart enters 0:08-0:20, or 0:00-0:10 on a short, annotated on its divergence, with a sound cue"
 SRC_M12 = "E25 / doc 29 s9.30: the chart is the proof, not the homework"
+# THE CUT'S SOUND, and the DROP WINDOW (ruling E44 s2a / backlog R26-5, 2026-09-06, on the Tokyo read
+# ANALYTICS-2026-09-06.md n = 8: the step at 0:11): "the press / flash cue at a cut is not a hook device; at 0:09 it
+# is the last thing a viewer hears before leaving ... no transient cue lands inside 0:05-0:12 unless a page lands
+# with it." A TRANSIENT is a hit with an attack - a press pack, a page accent, a landing; a BED is continuous
+# sub-threshold music and is exempt, because a bed marks no instant. The row is reported only when a cue actually
+# lands inside the window (the M19-M24 shape), so a build with nothing there carries no row.
+DROP_WINDOW_S = (5.0, 12.0)      # E44 s2a: the window a transient may not mark on its own
+BED_FADE_S = 1.0                 # a cue that fades in over a second or more is a bed, not a transient (the hook bed fades 1.5s)
+BED_SLOT_TOKENS = ("bed",)       # ... and a cue whose slot says so is a bed whatever its fade
+SRC_M29 = ("E44 s2a / R26-5 (operator 2026-09-06: \"the camera flash sound maybe shouldn't be as aggressive\"): the "
+           "press / flash cue at a cut is not a hook device - at 0:09 it is the last thing a viewer hears before "
+           "leaving, so no TRANSIENT cue lands inside 0:05-0:12 unless a PAGE lands with it (the page's own arrival "
+           "or its chart's landing, within 1.5 s). The beds are exempt: a bed marks no instant")
+# A RETURNING CHARACTER MOUNTS (ruling E44 s2b / backlog R26-6, 2026-09-06): "the character cuts on to the scene
+# instead of smoothly entering like he did in scene 1" - a character already introduced re-enters the way he first
+# entered (a dissolve on a word, doc 29 s9.15), never on a cut. A character is DECLARED, never guessed from an
+# asset's name: the timeline carries no cast, and Tokyo's host rides `clip-a-counter-tab-v2`, a name no pattern
+# could read. The three declarations M30 accepts: CHARACTER_KEYS on a scene's world, a species row of kind
+# `character`, and an evidence entry whose species is `character`.
+CHARACTER_SPECIES = ("character",)          # the species kind (a row) / the evidence species (an asset) of a cast member
+CHARACTER_KEYS = ("character", "cast")      # the field a world or a species row names its cast member in
+SRC_M30 = ("E44 s2b / R26-6 (operator 2026-09-06: \"the character cuts on to the scene instead of smoothly entering "
+           "like he did in scene 1\"): a returning character MOUNTS the way he first mounted - a dissolve on a word "
+           "(doc 29 s9.15) - so a scene whose entry transition is a `cut` and whose FIRST species is a character an "
+           "earlier scene already showed is a defect, gated by the mount rule and not by hand")
 DOCK_BUILD_S = 1.5               # 47 s2 G-a: a card's entrance - the wipe / fly-in - is a build the eye must be free to read
 BADGE_SETTLE_S = 0.6             # ... and each badge reveal is one too, settling ~0.6s after badge_at
 CAMERA_MOVE_S = 1.2              # a camera species with no declared dur is credited this long
@@ -907,6 +938,10 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     # E24 / E25: the opening minute and the chart-as-proof rule
     g += [_opening_still_gate(A["still"]), _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
     g.append(_frozen_gate(frames))                                        # M18 (E49: nothing ever goes truly still)
+    if (sg := _drop_window_sound_gate(tl, mp)) is not None:
+        g.append(sg)                                                      # M29 (E44 s2a / R26-5: a transient inside 0:05-0:12 needs a page landing)
+    if (mo := _mount_gate(tl.get("scenes", []), tl.get("evidence") or {})) is not None:
+        g.append(mo)                                                      # M30 (E44 s2b / R26-6: a returning character mounts, it never cuts on)
     g.append(_layout_gate(layout))                                        # M25 (P51 T2: the layout gate, from probe.py's boxes)
     g.append(_values_gate(layout))                                        # M26 (R26-40: the printed value against the drawn height)
     g.append(_over_build_gate(layout, tl.get("scenes", [])))              # M27 (E63/E65: no card reads over a ledger page's ink)
@@ -1124,6 +1159,166 @@ def _chart_hold_gate(tl: dict, docks: list[dict]) -> Gate:
                     + (" ..." if len(bad) > 12 else "") + " - re-enter the chart spotlit on the new datum rather than hold", SRC_M12)
     return Gate("M12", "PASS", f"no chart dock spans a scene boundary or holds past {CHART_HOLD_MAX_S:.0f}s "
                 f"({OPENING_CHART_HOLD_MAX_S:.0f}s in the opening minute)", SRC_M12)
+
+
+# ---- E44 s2a (R26-5): the cut's sound inside the drop window --------------------------------
+
+def _is_bed(cue: dict) -> bool:
+    """A BED is continuous sub-threshold music: its slot says so, it fades in over BED_FADE_S, or it carries the
+    envelope it is ducked by. Everything else is a TRANSIENT - a hit with an attack, and an attack marks an instant."""
+    if any(tok in str(cue.get("slot") or "").lower() for tok in BED_SLOT_TOKENS):
+        return True
+    try:
+        if float(cue.get("fade_in") or 0.0) >= BED_FADE_S:
+            return True
+    except (TypeError, ValueError):
+        pass
+    return bool(cue.get("env"))
+
+
+def _cues(tl: dict, mp: dict) -> list[dict]:
+    """Every sound cue on the EPISODE clock as {at, slot, gain, bed}: the motion plan's non-plate cues and the
+    timeline's own `sound` entries - the two structures _cue_near reads for M11, so the rows never disagree about
+    what sound a build carries. A project's `page_cues` are RELATIVE to their page (P35 T9) and never here."""
+    out: list[dict] = []
+    for c in (mp or {}).get("cues", []) or []:
+        if not isinstance(c, dict) or c.get("kind") == "plate" or not isinstance(c.get("in"), (int, float)):
+            continue
+        out.append({"at": float(c["in"]), "slot": str(c.get("slot") or c.get("kind") or "cue"),
+                    "gain": c.get("gain"), "bed": _is_bed(c)})
+    for x in tl.get("sound", []) or []:
+        if not isinstance(x, dict) or not isinstance(x.get("at"), (int, float)):
+            continue
+        out.append({"at": float(x["at"]), "slot": str(x.get("slot") or "cue"),
+                    "gain": x.get("gain"), "bed": _is_bed(x)})
+    return sorted(out, key=lambda c: c["at"])
+
+
+def _page_landings(scenes: list[dict]) -> list[tuple[float, str]]:
+    """(instant, what) for every way a LEDGER PAGE lands: its own arrival (the scene's start - where it mounts,
+    rolls out or spirals in) and its chart's landing (_page_land_offset, the build end the player draws to).
+    E44 s2a's "unless a page lands with it" is either of the two."""
+    out: list[tuple[float, str]] = []
+    for s in scenes:
+        if not _is_page(s) or not s.get("span"):
+            continue
+        a = float(s["span"][0])
+        sid = s.get("scene_id", "?")
+        out += [(a, f"{sid} page arrives"), (round(a + _page_land_offset(s), 2), f"{sid} chart lands")]
+    return out
+
+
+def _drop_window_transients(tl: dict, mp: dict) -> tuple[list[str], list[str]]:
+    """(unpaired, paired): every TRANSIENT cue inside DROP_WINDOW_S, split by whether a page lands with it -
+    within CUE_TOL_S, the tolerance M11 already gives the first chart's own cue."""
+    lo, hi = DROP_WINDOW_S
+    lands = _page_landings(tl.get("scenes", []))
+    unpaired, paired = [], []
+    for c in _cues(tl, mp):
+        if c["bed"] or not (lo <= c["at"] <= hi):
+            continue
+        near = sorted((abs(t - c["at"]), t, what) for t, what in lands)
+        gain = f" gain {c['gain']}" if isinstance(c["gain"], (int, float)) else ""
+        head = f"{c['slot']} at {c['at']:.2f}s{gain}"
+        if near and near[0][0] <= CUE_TOL_S:
+            paired.append(f"{head} with {near[0][2]} at {near[0][1]:.2f}s")
+        else:
+            unpaired.append(head + (f"; nearest page landing {near[0][2]} at {near[0][1]:.2f}s" if near
+                                    else "; no page lands anywhere in the build"))
+    return unpaired, paired
+
+
+def _drop_window_sound_gate(tl: dict, mp: dict) -> Gate | None:
+    """M29 (E44 s2a / R26-5): no TRANSIENT sound cue lands inside 0:05-0:12 unless a page lands with it. Reported
+    only when a cue lands in the window at all - the M19-M24 shape: a row for what the build actually carries."""
+    unpaired, paired = _drop_window_transients(tl, mp)
+    if not unpaired and not paired:
+        return None
+    lo, hi = DROP_WINDOW_S
+    win = f" (window {_mm(lo)}-{_mm(hi)}, E44 s2a: the press cue at a cut is not a hook device)"
+    if unpaired:
+        return Gate("M29", "FAIL", f"{len(unpaired)} transient cue(s) marking nothing inside the drop window: "
+                    + "; ".join(unpaired[:6]) + (" ..." if len(unpaired) > 6 else "")
+                    + " - drop the cue, or move it onto the page that lands" + win, SRC_M29)
+    return Gate("M29", "PASS", f"{len(paired)} transient cue(s) inside the drop window, each with a page landing on "
+                "it: " + "; ".join(paired[:6]) + (" ..." if len(paired) > 6 else "") + win, SRC_M29)
+
+
+# ---- E44 s2b (R26-6): a returning character mounts, it never cuts on ------------------------
+
+def _declared_character(obj: dict | None, evidence: dict) -> str | None:
+    """The cast id a world or a species row DECLARES: `character` / `cast` on it, an asset whose evidence species
+    is `character`, or a species row of kind `character`. None when nothing declares one - the gate never guesses
+    a character from an asset's name (Tokyo's host rides `clip-a-counter-tab-v2`)."""
+    if not isinstance(obj, dict):
+        return None
+    for k in CHARACTER_KEYS:
+        if isinstance(obj.get(k), str) and obj[k].strip():
+            return obj[k].strip()
+    aid = obj.get("asset_id") or obj.get("asset")
+    if isinstance(aid, str) and (evidence.get(aid) or {}).get("species") in CHARACTER_SPECIES:
+        return aid
+    if obj.get("kind") in CHARACTER_SPECIES:
+        return str(aid or "character")
+    return None
+
+
+def _scene_entries(s: dict, evidence: dict) -> list[tuple[float, str | None]]:
+    """(at, character or None) for everything the scene shows, earliest first: the WORLD at the scene's start - it
+    is on screen in the first frame, and the compiler lists it first in timeline["species"] - then every species
+    row at its own `at`. The head of this list is the scene's FIRST species."""
+    a = float(s["span"][0]) if s.get("span") else 0.0
+    out = [(a, _declared_character(s.get("world"), evidence))]
+    for sp in s.get("species", []) or []:
+        if not isinstance(sp, dict):
+            continue
+        try:
+            at = max(float(sp.get("at", a)), a)
+        except (TypeError, ValueError):
+            at = a
+        out.append((at, _declared_character(sp, evidence)))
+    return sorted(out, key=lambda x: x[0])
+
+
+def _first_character(s: dict, evidence: dict) -> str | None:
+    """The character the scene shows FIRST, or None when its first species is not one."""
+    entries = _scene_entries(s, evidence)
+    return entries[0][1] if entries else None
+
+
+def _cut_on_returning(scenes: list[dict], evidence: dict) -> tuple[list[str], list[str]]:
+    """(offences, entries). A scene's own `exit` names the transition INTO it (the player's law - see
+    _transition_events), so R26-6's defect is a scene whose exit is a `cut` (declared, or absent: the default
+    boundary is a hard cut) and whose FIRST species is a character an earlier scene already showed."""
+    seen: dict[str, float] = {}
+    bad, entries = [], []
+    for i, s in enumerate(scenes):
+        who = _first_character(s, evidence)
+        was = seen.get(who) if who else None
+        cut = str(s.get("exit") or "cut").split(":")[0] == "cut"
+        if i and who and was is not None and cut:
+            at = float(s["span"][0]) if s.get("span") else 0.0
+            bad.append(f"{s.get('scene_id', '?')} cuts onto {who} at {_mm(at)} - he entered first at {_mm(was)}")
+        for at, cid in _scene_entries(s, evidence):
+            if cid and cid not in seen:
+                seen[cid] = at
+                entries.append(f"{cid} enters at {_mm(at)} ({s.get('scene_id', '?')})")
+    return bad, entries
+
+
+def _mount_gate(scenes: list[dict], evidence: dict) -> Gate | None:
+    """M30 (E44 s2b / R26-6): a returning character MOUNTS, never cuts on. Reported only when a scene declares a
+    character (the M19-M24 shape): the timeline carries no cast of its own, so a build that declares none has
+    nothing to measure and says so by carrying no row."""
+    bad, entries = _cut_on_returning(scenes, evidence)
+    if not entries:
+        return None
+    if bad:
+        return Gate("M30", "FAIL", f"{len(bad)} returning character(s) cut on: " + "; ".join(bad[:6])
+                    + (" ..." if len(bad) > 6 else "") + " - a re-entry MOUNTS the way he first mounted (a dissolve "
+                    "on a word, doc 29 s9.15): declare the scene's entry transition, never a cut", SRC_M30)
+    return Gate("M30", "PASS", f"{len(entries)} character entry/entries, no cut onto a character already seen: "
+                + "; ".join(entries[:6]) + (" ..." if len(entries) > 6 else ""), SRC_M30)
 
 
 def _camera_gate(clashes: list[tuple[str, str]]) -> Gate:

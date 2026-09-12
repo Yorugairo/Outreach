@@ -1200,3 +1200,86 @@ def test_m28_passes_the_row_the_fit_has_fitted():
     # a tick under a negative bar's value keeps its own layer's gutter - the air law binds the VALUE row
     tight = META_FITTED + [("tick", "5.5%", [727, 998, 91, 44]), ("tick", "5%", [589, 998, 58, 44])]
     assert G._labels_gate({"instants": [_labels_instant(70.0, tight, vpx=55)]}).level == "PASS"
+
+
+# ---- E44 s2a / R26-5 (M29): the cut's sound inside the drop window 0:05-0:12 ----
+
+def _drop_window_build(cue_at=9.0, slot="press 3", gain=0.16, fade_in=0.0, page_at=3.3, runtime=88.0):
+    """_short_e44_build (a page on the hook, chart landing at page_at + 7.4s) plus ONE sound cue in the
+    timeline's own `sound` list - the structure build_short.py flattens the SOUND-PLAN onto."""
+    tl, docks, mp = _short_e44_build(page_at=page_at, runtime=runtime)
+    tl["sound"] = [{"slot": slot, "at": cue_at, "gain": gain, "fade_in": fade_in, "env": []}]
+    return tl, docks, mp
+
+
+def test_m29_fails_a_transient_in_the_drop_window_with_no_page_landing_on_it():
+    tl, docks, mp = _drop_window_build(cue_at=9.0)        # the chart lands at 10.7s: 1.7s away, over CUE_TOL_S
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M29"].level == "FAIL", g["M29"]
+    assert "press 3 at 9.00s gain 0.16" in g["M29"].message, g["M29"]
+    assert "nearest page landing s02 chart lands at 10.70s" in g["M29"].message, g["M29"]
+    assert "window 0:05-0:12" in g["M29"].message, g["M29"]
+
+
+def test_m29_passes_the_same_transient_when_a_page_lands_with_it():
+    tl, docks, mp = _drop_window_build(cue_at=10.0, gain=0.08)   # 0.7s from the chart landing at 10.7s
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M29"].level == "PASS", g["M29"]
+    assert "with s02 chart lands at 10.70s" in g["M29"].message, g["M29"]
+
+
+def test_m29_exempts_a_bed_and_carries_no_row_when_the_window_is_quiet():
+    tl, docks, mp = _drop_window_build(cue_at=9.0, slot="hook bed", gain=0.0569, fade_in=1.5)
+    assert "M29" not in _by_id(G.run(tl, docks, mp)[0])          # a bed marks no instant
+    tl, docks, mp = _drop_window_build(cue_at=20.0)               # a transient outside the window
+    assert "M29" not in _by_id(G.run(tl, docks, mp)[0])
+
+
+# ---- E44 s2b / R26-6 (M30): a returning character mounts, it never cuts on ----
+
+def _cast_build(back_exit="dissolve", asset_back="clip-host-desk", page_at=6.0, runtime=44.0, declare=True):
+    """The host enters s01, the page holds s02, and s03 brings him BACK. `back_exit` is the transition INTO
+    s03 - a scene's own `exit` names its entry (the player's law, _transition_events)."""
+    land = page_at + G.PAGE_BUILD_END_S
+    host = {"kind": "clip", "asset_id": "clip-host-counter"}
+    back = {"kind": "clip", "asset_id": asset_back}
+    if declare:
+        host["character"] = back["character"] = "mike"
+    scenes = [{"scene_id": "s01", "exit": "cut", "span": [0.0, page_at], "world": host},
+              _page_scene("s02", page_at, page_at + 20.0,
+                          species=[{"kind": "spotlight", "at": land + 1.0, "dur": 2.0,
+                                    "target": {"kind": "datum", "index": 3}}]),
+              {"scene_id": "s03", "exit": back_exit, "span": [page_at + 20.0, runtime], "world": back}]
+    scenes[1]["exit"] = "mount"
+    pages, tt = [], 0.0
+    while tt < runtime:
+        pages.append({"s": tt, "e": tt + 1.5, "t": [{"w": "x"}] * 5, "cap_mode": "stage"}); tt += 1.5
+    tl = {"runtime_s": runtime, "aspect": "9:16", "scenes": scenes, "caption_pages": pages, "rows": []}
+    return tl, [], {"cues": [{"kind": "evidence", "in": page_at + 0.5, "out": page_at + 1.0}]}
+
+
+def test_m30_fails_a_cut_onto_a_character_already_seen():
+    tl, docks, mp = _cast_build(back_exit="cut")
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M30"].level == "FAIL", g["M30"]
+    assert "s03 cuts onto mike at 0:26 - he entered first at 0:00" in g["M30"].message, g["M30"]
+    assert "a re-entry MOUNTS" in g["M30"].message, g["M30"]
+
+
+def test_m30_passes_when_the_returning_character_arrives_on_a_transition():
+    tl, docks, mp = _cast_build(back_exit="dissolve")
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M30"].level == "PASS", g["M30"]
+    assert "mike enters at 0:00 (s01)" in g["M30"].message, g["M30"]
+    # the FIRST entry may be a cut - it is the cold open, and nothing has been seen yet
+    tl, docks, mp = _cast_build(back_exit="dissolve", asset_back="clip-second-host", declare=True)
+    assert _by_id(G.run(tl, docks, mp)[0])["M30"].level == "PASS"
+
+
+def test_m30_reads_a_character_declared_by_its_evidence_species_and_is_absent_without_a_cast():
+    tl, docks, mp = _cast_build(back_exit="cut", asset_back="clip-host-counter", declare=False)
+    tl["evidence"] = {"clip-host-counter": {"species": "character"}}
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M30"].level == "FAIL" and "clip-host-counter" in g["M30"].message, g["M30"]
+    tl, docks, mp = _cast_build(back_exit="cut", declare=False)   # no world, species or evidence declares a cast
+    assert "M30" not in _by_id(G.run(tl, docks, mp)[0])

@@ -468,7 +468,8 @@ W_SUCK, W_SPIRAL, W_DRAIN = "fs-whoosh-3-suck.mp3", "fs-whoosh-3-spiral-in.mp3",
 # level the operator set for the press pack on 2026-09-05), and the roll-out enter comes down from 0.18 to the same 0.12.
 ACCENT, RETRACT_S, WHIRL_S = 0.12, 2.0, 2.2   # the drain starts RETRACT_S before the row ends; the out-swirl and the drain warp run 2.2 s, timed to end on the cut
 ENTER_GAIN = 0.12                             # a roll-out page enter (was 0.18)
-PRESS_GAIN = 0.16
+PRESS_GAIN = 0.08   # R26-5 / E44 s2a (P52 T13): the transient accent at a cut, halved from 0.16 [DERIVED: from the 2026-09-05 metering, halved] -
+                    # the same dial as sound/SOUND-PLAN.json `transient_gain`; the V2 cut carries no press cue, so no build output changes
 PANEL_CLIP = "clip-c-blue-ties-panel"         # the press: phones out for the whole panel clip
 
 
