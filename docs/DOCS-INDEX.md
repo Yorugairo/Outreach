@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3942 records across 313 files.
+3969 records across 315 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -1006,6 +1006,38 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
 - L1 [1] SHOT LEDGER: Frame-Accurate Pacing & Visual Species Breakdown — | Shot # | Start | End | Dur (s) | Keyframe | Classified Species | Spoken Line / Audio Beat | <unclassified; one-on-one; chart; record_document; instrument; host_diegetic; in-world; kinetic_type; Full-frame; b_roll; screen_recording>
 - L126 [3] Visual Species Taxonomy Legend — - `chart`: Quantitative coordinate graph (line, bar, scatter, yield curve). <chart; record_document; instrument; host_diegetic; in-world; kinetic_type; Full-frame; b_roll; screen_recording>
+
+## content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md
+
+- L1 [1] PRODUCTION REFERENCE REPORT: The Bubble's Final Phase Has Begun. — - Source: `https://youtu.be/RUH3BPQ5fTo` {Source:; Channel / Creator:; Duration:; Resolution:} <Camera-Locked; zero-drift; High-Velocity; Wall-Clock; cut-alignment; #111417; #2A0E16; #3D1420; high-contrast; #1D2228; multi-plane; high-prestige>
+- L10 [2] 1. Measured Physical Metrics (Automated Telemetry) <Camera-Locked; zero-drift; High-Velocity; Wall-Clock; cut-alignment>
+- L12 [3] Visual Pacing & Event Hierarchy — | Metric | Measured Value | Production Benchmark / Meaning | {Visual Events (Cuts + Builds); 89; Base Compositions (Stage Changes); 47; Mean Composition Hold; 25.5s}
+- L22 [3] Quantitative Camera Telemetry — - Compositions Measured: 47 {Compositions Measured:; Camera-Locked Ratio:; 66.0%; Dynamic / Panning Ratio:; 34.0%} <zero-drift>
+- L27 [3] Speech Cadence & Acoustic Dynamics — - Deduped Word Count: 3531 words (vs 3534 raw caption tokens) {Deduped Word Count:; 3531 words; Delivery Cadence (Active Speech):; 177.9 WPM; Gross Information Density (Wall-Clock):; 177.0 WPM} <High-Velocity; cut-alignment>
+- L36 [2] 2. Visual System & Stage Grammar <#111417; #2A0E16; #3D1420; high-contrast; #1D2228; multi-plane; high-prestige; push-ins; #D82650; #FF2A5F; #4A90E2; #64B5F6>
+- L38 [3] The Ground & Environment — - Ground Type: Deep Charcoal Institutional Void (`#111417`) with subtle, dark burgundy ambient vignetting (`#2A0E16` to `#3D1420`) and high-contrast vector card {Ground Type:; Depth Strategy:} <#111417; #2A0E16; #3D1420; high-contrast; #1D2228; multi-plane; high-prestige; push-ins>
+- L42 [3] Palette & Token Hierarchy — | Role | Observed Hex / Tone | Usage / Semantic Meaning | {Ground (60%); Surface (30%); Primary Accent (10%); Secondary Accent; Warning / Alert} <#111417; #1D2228; #D82650; #FF2A5F; #4A90E2; #64B5F6; long-term; #FFCC00; #FFFFFF; High-contrast; sans-serif; #8E98A0>
+- L53 [3] Visual Species Distribution — | Species | Count | Share | Primary Function in Video | <chart; diagram_flow; out-of-phase; metaphor_prop; High-concept; record_document>
+- L63 [2] 3. Information Architecture & Retention Pacing <off-balance-sheet; Dot-com; all-time; In 2001; In 2007; out-of-phase; OpenAI; end-market; self-referential; cash-burning; buy-and-hold; forward-looking>
+- L65 [3] 6-Phase Retention Architecture Mapping <off-balance-sheet; Dot-com; all-time; In 2001; In 2007; out-of-phase; OpenAI; end-market; self-referential; cash-burning; buy-and-hold; forward-looking>
+- L66 [4] P1: The Open (Hook & Contract) [00:00 - 01:30] — - Pacing: 8 events | 233 words | 155.3 WPM (active cadence: 165.3 WPM across 84.6s speech) {Pacing:; 155.3 WPM; 165.3 WPM; Inquiry Check:; Deduped Audio Snippet:; Directorial Lesson:} <off-balance-sheet; Dot-com>
+- L72 [4] P2: The Engine (Foundational Model: Equity vs Credit Divergence) [01:30 - 03:23] — - Pacing: 11 events | 358 words | 189.3 WPM (active cadence: 188.7 WPM across 113.8s speech) {Pacing:; 189.3 WPM; 188.7 WPM; Inquiry Check:; Deduped Audio Snippet:; Directorial Lesson:} <all-time>
+- L78 [4] P3: The Gap (Historical Proof: Credit Cycles Lead Equity) [03:23 - 08:59] — - Pacing: 27 events | 1026 words | 183.7 WPM (active cadence: 183.3 WPM across 335.8s speech) {Pacing:; 183.7 WPM; 183.3 WPM; Inquiry Check:; Deduped Audio Snippet:} <In 2001; In 2007; out-of-phase>
+- L84 [4] P4: The Pivot (The Revenue Bottleneck & Circularity Trap) [08:59 - 10:58] — - Pacing: 10 events | 344 words | 172.4 WPM (active cadence: 174.2 WPM across 118.5s speech) {Pacing:; 172.4 WPM; 174.2 WPM; Inquiry Check:; Deduped Audio Snippet:; Directorial Lesson:} <OpenAI; end-market; self-referential>
+- L90 [4] P5: The Payoff (The Elephant on the Beach Ball) [10:58 - 16:57] — - Pacing: 25 events | 1016 words | 169.8 WPM (active cadence: 169.6 WPM across 359.4s speech) {Pacing:; 169.8 WPM; 169.6 WPM; Inquiry Check:; Deduped Audio Snippet:; Directorial Lesson:} <cash-burning; OpenAI>
+- L96 [4] P6: The Close (Resolution & Strategic Action) [16:57 - 19:57] — - Pacing: 13 events | 554 words | 185.1 WPM (active cadence: 185.7 WPM across 179.0s speech) {Pacing:; 185.1 WPM; 185.7 WPM; Inquiry Check:; Deduped Audio Snippet:; Directorial Lesson:} <OpenAI; buy-and-hold; forward-looking>
+- L104 [2] 4. Differentiating Visual & Motion Techniques (Open-Ended Discovery) <Multi-Tier; 00:00.0 - 00:47.9; above-water; T_y; balance-sheet; off-balance-sheet; clip-plane; Out-of-Phase; 04:35.3 - 04:47.3; ninety-degree; lead-lag; high-yield>
+- L106 [3] Technique 1: The Iceberg Multi-Tier Depth Reveal (Shot #01–#04, 00:00 - 00:47) — - Observed Timestamp & Shot ID: Shot #01–#04 (`00:00.0 - 00:47.9`). {Observed Timestamp & Shot ID:; Visual Effect:; $1.52 Trillion in purchase commitments; Cognitive Function:} <00:00.0 - 00:47.9; above-water; T_y; balance-sheet; off-balance-sheet; clip-plane>
+- L120 [3] Technique 2: Out-of-Phase Sine Wave Credit/Equity Kinematics (Shot #24, 04:35 - 04:47) — - Observed Timestamp & Shot ID: Shot #24 (`04:35.3 - 04:47.3`). {Observed Timestamp & Shot ID:; Visual Effect:; Cognitive Function:} <04:35.3 - 04:47.3; ninety-degree; lead-lag; high-yield>
+- L136 [3] Technique 3: The Circus Elephant Metaphor Prop (Shot #59–#60 & Shot #82–#83) — - Observed Timestamp & Shot ID: Shot #59–#60 (`11:58.2 - 12:22.1`) and Shot #82–#83 (`18:09.3 - 18:45.2`). {Observed Timestamp & Shot ID:; Visual Effect:; Cognitive Function:} <11:58.2 - 12:22.1; 18:09.3 - 18:45.2; red-and-white; OpenAI>
+- L153 [3] Technique 4: The Closed-Circularity Capital Flow Orbit (Shot #58, 11:46 - 11:58) — - Observed Timestamp & Shot ID: Shot #58 (`11:46.2 - 11:58.2`). {Observed Timestamp & Shot ID:; Visual Effect:; Cognitive Function:; Application to Outreach Video Engine:} <11:46.2 - 11:58.2; three-node; $100 Billion; $2 Trillion; round-tripping; end-user>
+- L162 [2] 5. Doctrine Fit & Gap Analysis (Outreach Video Engine) — | Technique / Device | Repo Doctrine Status | Engine Capability Gap | Recommended Action | {The Iceberg Hidden Debt Reveal; Credit Markets as the Whistleblower} <clip-plane; balance-sheet; Out-of-Phase; multi-line; phase-shift; over-apply>
+- L174 [2] 6. Artifact Manifest & Verification — - Dual-Track Shot Ledger: [`SHOT_LEDGER.md`](SHOT_LEDGER.md) (89 events classified) {Dual-Track Shot Ledger:; Quantitative Camera Telemetry:; 3-Tile High-Fidelity Contact Sheets:} <camera.json; contact_sheet_01.jpg; contact_sheet_02.jpg; contact_sheet_03.jpg; contact_sheet_04.jpg; contact_sheet_05.jpg; contact_sheet_06.jpg; contact_sheet_07.jpg; contact_sheet_08.jpg; contact_sheet_09.jpg; contact_sheet_10.jpg; contact_sheet_11.jpg>
+
+## content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/SHOT_LEDGER.md
+
+- L1 [1] SHOT LEDGER: Dual-Track Visual Events & Composition Hierarchy — | Shot # | Start | End | Dur (s) | Kind | Camera | Keyframe | Species | Spoken Line / Audio Beat | <SLOW_PUSH; unclassified; LOCKED; build; metaphor_prop; PAN; OpenAI; long-term; zoom-in; DYNAMIC; chart; record_document>
+- L95 [3] Taxonomy Legend — - Kind: `COMP` = new base stage / scene cut; `build` = animated element or callout inside held composition. {Kind:; Camera:; Species:} <COMP; build; LOCKED; SLOW_PUSH; zoom-in; PAN; DYNAMIC; chart; record_document; metaphor_prop; diagram_flow; map>
 
 ## content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md
 
@@ -4121,6 +4153,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L2259 [2] E70 — Chirp does not ship on YouTube; the lane splits by platform again, and a one-shot renders BOTH takes for the data (2026-09-12) — Ruling (the operator, asked which clock a one-shot should run on): *"I think Chirp can't ship on youtube, it got {Ruling (the operator, asked which clock a one-shot should ru; The reason.} <mass-produced; side-by-side; platform-side; ElevenLabs; scratch_take.py --engine both; near-free; --engine both>
 - L2286 [2] E71 — The first cut that ships is the first one clean of the gates AND of every defect the agent can see (2026-09-12) — Ruling (the operator, on how a one-shot should iterate): *"you have loop/editor/re-prompt permissions. The first {Ruling (the operator, on how a one-shot should iterate):; The reason.} <re-prompt; Gate-clean>
 - L2311 [2] E72 — Generating and using assets is the agent's; only the finished video needs the operator (2026-09-12) — Ruling (the operator, on how rich a one-shot's world should be): *"Full world, but we should start by building out {Ruling (the operator, on how rich a one-shot's world should; The chart comes first and is used to its limit.} <per-order; zero-credit; on_screen; create_flow_image>
+- L2337 [2] E73 — The hook opens on its axes and is answered on the ledger; the inked arrival is the exception, the mount stays alive (2026-09-12) — Ruling (the operator, reading P53's human gates): *"hook should open on the axes register, then we immediately {Ruling (the operator, reading P53's human gates):; The reason.} <roll-out; enter=axes; first-scene; exit=cut; built; stamp_transition_pages; after-stamp>
 
 ## docs/portable/OUTRO-CTA-PLAYBOOK.md
 

@@ -9863,7 +9863,9 @@ async function mount(doc) {
       } else if (el.style.filter) el.style.filter = "";
       const shk = arr !== "spring" ? expoOut(clamp01((lag(t) - d.enter) / CARD_IN)) : ck;   /* HF-2: a thrown or landed card's shadow settles one frame after it */
       const sh = 12 * shk * (swept ? (1 - wk) : 1);   // light leaves with the page
-      el.style.boxShadow = sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)";
+      /* P53 T7: a CUTOUT casts no card's lift - the hard offset shadow drew a ghost card edge down the right and along the
+         foot of a person (gate 1's second read, 2026-09-12); a cutout sits on its world (or on the band) with no box at all */
+      el.style.boxShadow = dockIsCutout(d.slide) ? "none" : sh.toFixed(1) + "px " + sh.toFixed(1) + "px 0 rgba(37,49,60,.82)";
       if (embedOf(d)) {   /* P50 T7: a STILL card on a declared surface. The reading pop and the park above are
            REPLACED by the projection (the surface is the park), and the landing spot's contact shadow belongs to a
            card that lands on the floor - this one is on a wall, carrying its own shadow on the plane. */

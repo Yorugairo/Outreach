@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-313 documents across 13 kinds.
+315 documents across 13 kinds.
 
 ## doctrine
 
@@ -91,7 +91,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## ruling-ledger
 
-- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing correcti — Portable, model-agnostic. Load alongside — defines: A3; E11; +61 more — terms: The operator's words.; long-form; ElevenLabs; drop-off
+- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing correcti — Portable, model-agnostic. Load alongside — defines: A3; E11; +62 more — terms: The operator's words.; long-form; ElevenLabs; drop-off
 
 ## capabilities
 
@@ -198,6 +198,8 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md — PRODUCTION REFERENCE REPORT: China Just — This upload marks a major visual and tec — defines: — — terms: box-shadow: 0 20px 40px rgba(0,0,0,0.6); dark-glass; white-and-crimson; cross-section
 - content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.claude.md — SHOT LEDGER (Claude, 2026-09-10): the me — Source `https://youtu.be/1ZS5_txbOsc` - — defines: — — terms: frame-to-frame; COMP; unclassified; claude-watch
 - content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/SHOT_LEDGER.md — SHOT LEDGER: Frame-Accurate Pacing & Vis — `chart`: Quantitative coordinate graph ( — defines: — — terms: chart; record_document; instrument; host_diegetic
+- content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md — PRODUCTION REFERENCE REPORT: The Bubble' — Compositions Measured: 47 Camera-Locked — defines: P1; P2; +4 more — terms: out-of-phase; OpenAI; off-balance-sheet; #111417
+- content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/SHOT_LEDGER.md — SHOT LEDGER: Dual-Track Visual Events & — Kind: `COMP` = new base stage / scene cu — defines: — — terms: SLOW_PUSH; LOCKED; build; metaphor_prop
 - content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md — Dossier: Claude Code (Free Plan) + YouTu — Source Video: https://www.youtube.com/wa — defines: — — terms: rapid-fire; mid-word; mid-phrase; word-level
 - content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md — PRODUCTION REFERENCE REPORT: Claude Code — Under 3s (Brisk cut-in / punch): 46 3s t — defines: P1; P2; +4 more — terms: Pacing; Key Questions; Transcript Sample; status-quo
 - content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md — SHOT LEDGER: Frame-Accurate Pacing & Vis — `chart`: Quantitative coordinate graph ( — defines: — — terms: chart; record_document; instrument; host_diegetic

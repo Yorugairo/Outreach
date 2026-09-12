@@ -874,16 +874,18 @@ def melt_page(splash: bool = False) -> tuple[dict, dict]:
 #   content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/assets/evidence_clips/candidates.json
 # (Bloomberg Television x2, Fox Business Clips x1 - E68: a clip's on-screen headline IS its label, and a headline is
 # never invented). That file is an episode asset and is not committed, so the strings are LITERALS here - and
-# checked against the file whenever a checkout happens to have it (below). The surface above the band is a
-# synthetic head-and-shoulders STAND-IN, not the episode's head cutout: a golden's inputs are committed inputs
-# (assets/heads/head_bessent.png is 631 KB of untracked episode asset), and what is under test is the band, the
-# strip the caption shares with it, and that a card lands ABOVE the crawl - not whose face is on the card.
+# checked against the file whenever a checkout happens to have it (below). The surface above the band is the
+# APPROVED Bessent head (E68) docked as a CUTOUT (P53 T7, the operator 2026-09-12: "replace the head"): a trimmed,
+# 480 px, 256-colour copy committed at tests/golden/inputs/head_bessent_cutout.png, because a golden's inputs are
+# committed inputs and the episode's own 1024 px cutout is untracked.
 NEWSREEL_HEADLINES = ["Treasury Secretary Bessent Boosts Buybacks of Long-Dated Debt",
                       "US Treasury to Buy Up to $6 Billion in Long-Dated Debt",
                       "Kevin Warsh: A new regime is needed at the Fed"]
 NEWSREEL_SOURCE = ("content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/"
                    "assets/evidence_clips/candidates.json")
 NEWSREEL_STRIP_H = 143   # [DERIVED: build_scene_timeline_f.caption_strip_h - two lines at 64 px / 1.12]
+NEWSREEL_HEAD = Path(__file__).resolve().parent / "inputs" / "head_bessent_cutout.png"   # P53 T7: the approved cutout, trimmed to its alpha box (source head_bessent.png sha e454a6d92ad84622)
+NEWSREEL_HEAD_ASPECT = 637 / 480   # the committed copy's own h / w
 
 
 def _newsreel_headlines() -> list[str]:
@@ -925,22 +927,26 @@ def _newsreel_surface(aspect: str | None, band: tuple[float, float], cap_band: d
             "target": {"kind": "region", "x0": 0.0, "y0": band[0], "x1": 1.0, "y1": band[1]}}
     if above:
         reel["cap_band"] = "above"
-    ev = {head: {"title": "The surface above (stand-in)", "source": "golden", "species": "deck",
-                 "document": {"path": "golden", "sha256": "0" * 64}, "badges": []}}
+    ev = {head: {"title": "Scott Bessent (cutout)", "source": "golden", "species": "deck", "kind": "cutout",
+                 "document": {"path": "tests/golden/inputs/head_bessent_cutout.png", "sha256": "0" * 64}, "badges": []}}
     # the card is PLACED above the band, on the left third - the composition the operator described ("a
     # talking news head ... above it"). The placer reserves the band's strip (`newsreel_boxes` -> `free_bands`)
     # on a ledger page; on a plain plate like this one the row places its own card, and the proof is the frame.
-    place = {"x": 70, "y": 300, "w": 520, "h": 650} if aspect == "9:16" else {"x": 150, "y": 110, "w": 380, "h": 475}
-    dock = dict(_dock(head, 0, 2.0, RUNTIME, 0), place=place, caption_band=dict(cap_band))
+    # the box is the HEAD's own aspect now (a cutout has no card to letterbox into)
+    place = ({"x": 70, "y": 300, "w": 520, "h": round(520 * NEWSREEL_HEAD_ASPECT)} if aspect == "9:16"
+             # 16:9: the bust SITS ON the band (its foot at the band's top edge, 0.78 of 1080 = 842) - a cutout that ends
+             # in a hard chest line floating over empty world reads as a sticker; seated, the band crops it like a desk
+             else {"x": 150, "y": 842 - round(380 * NEWSREEL_HEAD_ASPECT), "w": 380, "h": round(380 * NEWSREEL_HEAD_ASPECT)})
+    dock = dict(_dock(head, 0, 2.0, RUNTIME, 0), place=place, caption_band=dict(cap_band), kind="cutout")
     scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
                "exit": "cut", "span": [0.0, RUNTIME], "docks": [dock], "species": [reel]}]
     uris = _base_uris()
-    uris[head] = uri("image/png", png_head_standin(432, 540))
+    uris[head] = uri("image/png", NEWSREEL_HEAD.read_bytes())   # P53 T7: the approved cutout, committed
     tl = _timeline(f"Golden: the newsreel band {aspect or '16:9'}" + (" (caption above the crawl)" if above else ""),
                    scenes, ev, aspect)
     tl["note"] = (f"P52 T6. The headlines are sourced titles read off {NEWSREEL_SOURCE} (Bloomberg Television, "
-                  "Fox Business Clips - E68: a clip's on-screen headline is its label). The docked card is a "
-                  "synthetic head stand-in: a golden's inputs are committed inputs. Judge: the band is a STRIP "
+                  "Fox Business Clips - E68: a clip's on-screen headline is its label). The head is the approved "
+                  "Bessent cutout docked as a CUTOUT - no card, no paper (P53 T7). Judge: the band is a STRIP "
                   "under the surface, the crawl has no seam, and the caption and the crawl never share a strip.")
     return tl, uris
 

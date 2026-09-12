@@ -328,6 +328,14 @@
     background: #fff; isolation: isolate;
   }
   .slide-frame img { display: block; width: 100%; height: auto; }
+  /* P53 T7: a CUTOUT's frame stands down too - the white ground and the charcoal edge are the DOCUMENT's (a slide's
+     own paper); on a cutout they drew a white box round a person (gate 1's first read, 2026-09-12) */
+  .dock.cutout .slide-frame { border: 0; border-radius: 0; background: transparent; }
+  .dock.cutout .rail { display: none; }   /* a person carries no badges - the rail is a document's */
+  /* the FOOT of a cutout dissolves into its world: where a band seats the bust (16:9) the band covers it; where the
+     caption strip sits between the bust and the band (9:16) a hard chest line over empty world read as a sticker */
+  .dock.cutout .slide-frame img { -webkit-mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+                                 mask-image: linear-gradient(to bottom, #000 80%, transparent 100%); }
   /* VIDEO DOCK (ruling E44 / R26-7, 2026-09-06): the dock's asset is a clip, so the card carries
      moving pictures instead of a still. The frame takes the card's own 16:9 rectangle (a still
      sizes the frame from its intrinsic height; a video has none until metadata lands, and a card

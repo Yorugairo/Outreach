@@ -26,7 +26,7 @@ SCRIPTS = REPO / "content/video_engine/scripts"
 sys.path.insert(0, str(SCRIPTS))
 
 from authoring import Project                                          # noqa: E402
-from authoring import audio as A, table as T, words as W               # noqa: E402
+from authoring import audio as A, docks as D, table as T, words as W   # noqa: E402
 
 SCRIPT = HERE / "SCRIPT-SHORT-VO.txt"
 TAKE = HERE / "vo-short/audio"
@@ -34,6 +34,14 @@ BUILD = HERE / os.environ.get("BRIDGE_BUILD_DIR", "build-short")
 EP = Project(here=HERE, build=BUILD, take=TAKE, take_stem="scene_1",
              script_name=SCRIPT.name, episode_id="normal-for-which-bridge")
 LOAD, LONG, BILL = "ev-federal-load-v1", "ev-long-end-2026-v1", "ev-interest-bill-v1"
+PLATE_BRIDGE = "plate-bridge-load"   # omni-video/stills/plate-bridge-load.png - Flow, Nano Banana Pro, zero credit (E72)
+
+# THE SOUND (E54: the bed at -20 LU under the voice, no louder). Measured 2026-09-12: the Chirp take at -17.2 LUFS after
+# loudnorm; both beds at -13.0 LUFS (the Tokyo copies of the Money Physics Suno Pro beds). gain = 10^((VO - LU - bed) / 20).
+VO_LUFS, BED_LU, BED_LUFS = -17.2, 20.0, -13.03
+ROLL, STROKE, SWIRL_IN = "fs-page-roll-464302.mp3", "fs-page-stroke-447925.mp3", "fs-swirl-in-478722.mp3"
+ACCENT, ENTER_GAIN = 0.12, 0.10
+TURN_BED_AT = 21.0   # the turn bed fades in under the hook bed at the TURN sentence, as Tokyo's did at its turn
 CAP_ARRIVE = os.environ.get("BRIDGE_CAP_ARRIVE") or None
 OPEN_ENTER = os.environ.get("BRIDGE_OPEN_ENTER", "axes")   # P53 T1 / gate 1: the hook's register - "axes" lands the charcoal page on its axes and draws the chart from the first frame; "built" lands the whole page, still; "" takes the default roll-out
    # P52 T10 / gate 4: "fade_up" is the staggered arrival, a side build only
@@ -67,7 +75,9 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
 
     t_num = cut("Start with the number")
     t_load = cut("Now put that number")
+    t_81 = cut("In nineteen")
     t_bill = cut("And the load sends")
+    plate = D.register(PLATE_BRIDGE, HERE / "omni-video/stills/plate-bridge-load.png")
     t_ring = cut("So when someone calls")
 
     rows: list[tuple] = [
@@ -94,13 +104,16 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
              "target": {"kind": "datum", "index": LONG_LAST}, "label": "4.83% - highest since Oct 2023"},
         ]),
         # ---- the bridge returns by the vortex, already drawn, and takes its two loads one at a time
-        (t_load, t_bill, f"ledger:{LOAD}:line:{LOAD_LAST}:right:spiral:cut", (0, 0, 0), [], "melt", [
-            {"kind": "build_to", "at": at("In nineteen"), "dur": 2.0,
-             "target": {"kind": "datum", "index": IDX81}},
+        # E40: a returning page UNWINDS from its point, it never redraws - the first cut walked this page's line back to
+        # 1981 with build_to and the second visit showed LESS than the first (read at 28-38 s, 2026-09-12). The page
+        # arrives drawn by the vortex; the sentences mark the two loads on the line that is already there.
+        # ---- THE TURN, on the one picture the chart cannot draw: the bridge, bending under the load (E61 use=bridge)
+        (t_load, t_81, f"{plate};use=bridge", (0.04, 0, -10), [], None, []),
+        (t_81, t_bill, f"ledger:{LOAD}:line:{LOAD_LAST}:right:spiral:cut", (0, 0, 0), [], "melt", [
+            {"kind": "callout", "at": at("the federal load"), "dur": 2.2, "pad": 20,
+             "target": {"kind": "datum", "index": IDX81}, "label": "1981"},
             {"kind": "figure", "at": at("thirty-one percent"), "dur": 1.6, "text": "31% of GDP",
              "target": {"kind": "datum", "index": IDX81}, "dy": -0.8},
-            {"kind": "build_to", "at": at("Today that same"), "dur": 2.4,
-             "target": {"kind": "datum", "index": LOAD_LAST}},
             {"kind": "span", "at": at("that same load"), "dur": 2.6, "from": IDX81, "to": LOAD_LAST,
              "label": "1981 to today"},
             {"kind": "figure", "at": at("one hundred twenty-three"), "dur": 1.8, "text": "123%",
@@ -130,6 +143,36 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
     return T.hold_until(rows, ws)
 
 
+def sound_cues(rows: list[tuple]) -> list[dict]:
+    """The cue map over the kit's transition readings: a page roll on a ledger page's ordinary arrival, a swirl on a
+    spiral return, nothing on a mount (the mount's own cream is silent) or an axes arrival (the stroke of the first
+    line is the cue), and the two beds."""
+    import json
+    gain = round(10 ** ((VO_LUFS - BED_LU - BED_LUFS) / 20), 4)
+    cues: list[dict] = []
+    for i, r in enumerate(rows):
+        page = A.page_transitions(r[2])
+        if not page["ledger"]:
+            continue
+        if page["spiral"]:
+            cues.append({"slot": f"page enter {i + 1} (spiral)", "at": round(r[0], 2), "gain": ACCENT, "fade_in": 0.0,
+                         "variants": {"A": SWIRL_IN}})
+        elif ":axes" in r[2] or i == 0:
+            cues.append({"slot": f"page enter {i + 1} (axes - the first line)", "at": round(r[0] + 0.05, 2), "gain": ACCENT,
+                         "fade_in": 0.0, "variants": {"A": STROKE}})
+        elif not page["mount"]:
+            cues.append({"slot": f"page enter {i + 1}", "at": round(r[0], 2), "gain": ENTER_GAIN, "fade_in": 0.0,
+                         "variants": {"A": ROLL}})
+    cues.append({"slot": "hook bed", "at": 0.0, "gain": gain, "fade_in": 1.5, "variants": {"A": "suno-hook-B.mp3"},
+                 "note": f"-{BED_LU:.0f} LU under the VO ({VO_LUFS} LUFS): {gain}"})
+    cues.append({"slot": "turn bed", "at": TURN_BED_AT, "gain": gain, "fade_in": 3.0, "variants": {"A": "suno-pivot-A.mp3"},
+                 "note": f"-{BED_LU:.0f} LU under the VO; fades in at the turn"})
+    plan = {"note": "normal-for-which-bridge - written by build_short.sound_cues; do not hand-edit",
+            "transient_gain": ACCENT, "cues": cues, "page_cues": [], "page_cues_note": "none yet"}
+    (HERE / "sound/SOUND-PLAN.json").write_text(json.dumps(plan, indent=1), encoding="utf-8")
+    return cues
+
+
 def main() -> int:
     ws = W.take_words(EP)
     EP.mkdirs()
@@ -142,6 +185,7 @@ def main() -> int:
     T.caption_pages(BUILD, char_budget=28, max_words=6)
 
     rows = shot_table(ws, runtime_s)
+    print(f"  sound       : {len(sound_cues(rows))} cues written to sound/SOUND-PLAN.json")
     T.write_shot_table(HERE / "SHOT-TABLE-SHORT.py", rows,
                        '"""Normal For Which Bridge - AUTHORED shot table, timed from the take by build_short.py.\n'
                        'Do not hand-edit; edit build_short.shot_table."""\n')

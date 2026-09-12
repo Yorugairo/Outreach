@@ -14,8 +14,8 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 18 | 338 | 95.3% | 93.2% | 3 | 97.5 |
-| Process (everything else) | 295 | 3322 | 97.6% | 92.1% | 11 | 100.0 |
-| All docs | 313 | 3660 | 97.4% | 92.2% | 14 | 100.0 |
+| Process (everything else) | 297 | 3349 | 97.6% | 92.1% | 11 | 100.0 |
+| All docs | 315 | 3687 | 97.4% | 92.2% | 14 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -44,7 +44,7 @@ item, a quote, a table row or a fence.
 
 ## Appendix A - sections missing a lead line
 
-Non-exempt sections whose first real line is under 40 characters (95).
+Non-exempt sections whose first real line is under 40 characters (96).
 
 - `content/video_engine/projects/martial-matters/pilots/marshall-monday-001/script-draft.md:1` Why Rap Violence is Actually a Sign of Peace | Marshall Matters Ep. 1
 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:13` Titles & Click Contracts
@@ -59,6 +59,7 @@ Non-exempt sections whose first real line is under 40 characters (95).
 - `content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:18` Core Production Metrics
 - `content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1` Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt
 - `content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:18` Core Production Metrics
+- `content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md:22` Quantitative Camera Telemetry
 - `content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:1` Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt
 - `content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:18` Core Production Metrics
 - `content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:171` The On-1s / On-2s / On-3s Decision Rule (Proposal)

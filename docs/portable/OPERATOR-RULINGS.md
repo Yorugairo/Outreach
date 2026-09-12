@@ -2331,3 +2331,32 @@ clips from Gemini. I only have to approve the video once it's ready, same as if 
 
 Mechanisms: the Flow driver (`create_flow_image`), the bridge (`bridge_send.py` / the daemon), the asset manifests,
 `docs/content-video-engine/CAPABILITIES.md`.
+
+---
+
+## E73 — The hook opens on its axes and is answered on the ledger; the inked arrival is the exception, the mount stays alive (2026-09-12)
+
+**Ruling (the operator, reading P53's human gates):** *"hook should open on the axes register, then we immediately
+answer it on the ledger."* And, on the stamp that had put an inked arrival on every page after a suck or a melt:
+*"I dont think suck and melt get less screen time, and I dont think next page arrives already inked most of the time,
+i think that's only for the first frame or when we need speed. It's just the ledger without the mount is all, the
+mount isn't all of the sudden a dead component."*
+
+**The reason.** The axes register (P53 T1) is a page landing on its ground, title and axes with the line drawing from
+the first frame - the page without its mount. That is exactly right for frame 0, where the autoplay feed judges the
+first still and there is no earlier world to hand off from, and for a beat that needs speed. It is wrong as a blanket
+default: a page that follows a suck or a melt has a world to arrive from, and the roll-out or the mount is how it
+arrives. The measurement that justified the blanket stamp counted a stage with no page INK as empty, but a vortex and
+a cream roll-out ARE the world on stage - the probe reads DOM boxes and cannot see either.
+
+*Apply:*
+1. **The hook's page opens on `enter=axes`**, and the hook is answered on that ledger at once: the light lands on the
+   line's own finish (M11 reads the arrival there), not after a roll-out. The compiler stamps it on a first-scene
+   ledger page with no declared enter, and prints it.
+2. **After a suck or a melt the page arrives by its own roll-out or its mount.** Nothing is stamped on it. The
+   `exit=cut` stamp on the page UNDER a suck or a melt (R26-60) is a separate fact and stays.
+3. **`axes` or `built` elsewhere is an authored exception** - a row that needs speed declares it.
+4. **M31 is a reading, not a gate.** It reports stretches with no page ink; it never fails a build on them.
+
+Mechanisms: `build_scene_timeline_f.py` `stamp_transition_pages` (the hook stamp; the after-stamp removed),
+`gate_motion_density.py` M31 (INFO), `test_transition_stamps.py`.

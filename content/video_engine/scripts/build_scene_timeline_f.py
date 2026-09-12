@@ -1404,10 +1404,10 @@ def stamp_transition_pages(scenes: list[dict]) -> list[str]:
     emptied the sheet before the boundary, so the suck spins a blank cream page into its point and the melt would
     drip one (`scratchpad/p52/dbg-wA-suck:0.5,0.5-15.15.png`, 2026-09-12).
 
-    AFTER one (P53 T2): a ledger page with no declared enter takes the roll-out, and the stage carries no ink for
-    seconds while the narration is already on the next sentence - measured at 3.1 s per transition, 8.9% of a 69 s
-    short (`measure_stage_gaps.py`). `axes` lands the page on its ground, title and axes and draws the data from
-    the first frame, which took the measured share to 0.
+    THE HOOK (the operator, 2026-09-12): the first scene's ledger page with no declared enter opens on `axes` - the
+    charcoal page on its axes, the chart drawing from frame 0, answered on the ledger at once. (An earlier stamp put
+    `axes` on every page AFTER a suck or a melt; the operator withdrew it the same day: the inked arrival is for the
+    first frame or a row that needs speed, and the roll-out and the mount stay the normal arrivals.)
 
     A row that declares its own enter or exit is never touched: an author who has chosen is not corrected. Returns
     one line per stamp, for the build to print - a default that is silent is a default nobody can argue with."""
@@ -1420,11 +1420,18 @@ def stamp_transition_pages(scenes: list[dict]) -> list[str]:
         if pg is not None and not pg.get("exit"):
             pg["exit"] = "cut"
             notes.append(f"{sc.get('scene_id', '?')}: exit=cut stamped - the page under a {kind} must not retract first (R26-60)")
-        nxt = scenes[i + 1] if i + 1 < len(scenes) else None
-        npg = ((nxt.get("world") or {}).get("page")) if nxt and isinstance((nxt.get("world") or {}).get("page"), dict) else None
-        if npg is not None and not npg.get("enter"):
-            npg["enter"] = "axes"
-            notes.append(f"{nxt.get('scene_id', '?')}: enter=axes stamped - the page after a {kind} arrives with ink, not after a roll-out (P53 T2)")
+    # THE PAGE AFTER one is NOT stamped (withdrawn 2026-09-12, the operator: "I dont think next page arrives already
+    # inked most of the time, i think that's only for the first frame or when we need speed ... the mount isn't all of
+    # the sudden a dead component"). The inked arrival is the hook's register and a declared exception; after a suck
+    # or a melt the page arrives by its own roll-out or its mount.
+    # THE HOOK (the operator, 2026-09-12: "hook should open on the axes register, then we immediately answer it on the
+    # ledger"): the first scene, a ledger page at t=0 with no declared enter, opens on its axes and draws from frame 0.
+    if scenes:
+        first = scenes[0]
+        fpg = ((first.get("world") or {}).get("page")) if isinstance((first.get("world") or {}).get("page"), dict) else None
+        if fpg is not None and not fpg.get("enter") and float((first.get("span") or [1.0])[0]) <= 0.05:
+            fpg["enter"] = "axes"
+            notes.append(f"{first.get('scene_id', '?')}: enter=axes stamped - the hook opens on the axes register and is answered on the ledger")
     return notes
 
 

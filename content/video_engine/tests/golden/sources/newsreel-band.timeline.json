@@ -327,19 +327,20 @@
   "ev-newsreel-head": {
    "badges": [],
    "document": {
-    "path": "golden",
+    "path": "tests/golden/inputs/head_bessent_cutout.png",
     "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
    },
+   "kind": "cutout",
    "source": "golden",
    "species": "deck",
-   "title": "The surface above (stand-in)"
+   "title": "Scott Bessent (cutout)"
   }
  },
  "narration": {
   "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
   "words_path": ""
  },
- "note": "P52 T6. The headlines are sourced titles read off content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/assets/evidence_clips/candidates.json (Bloomberg Television, Fox Business Clips - E68: a clip's on-screen headline is its label). The docked card is a synthetic head stand-in: a golden's inputs are committed inputs. Judge: the band is a STRIP under the surface, the crawl has no seam, and the caption and the crawl never share a strip.",
+ "note": "P52 T6. The headlines are sourced titles read off content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/assets/evidence_clips/candidates.json (Bloomberg Television, Fox Business Clips - E68: a clip's on-screen headline is its label). The head is the approved Bessent cutout docked as a CUTOUT - no card, no paper (P53 T7). Judge: the band is a STRIP under the surface, the crawl has no seam, and the caption and the crawl never share a strip.",
  "project_id": "golden",
  "runtime_s": 30.0,
  "scenes": [
@@ -354,11 +355,12 @@
      },
      "enter": 2.0,
      "exit": 30.0,
+     "kind": "cutout",
      "place": {
-      "h": 475,
+      "h": 504,
       "w": 380,
       "x": 150,
-      "y": 110
+      "y": 338
      },
      "slide": "ev-newsreel-head",
      "slot": 0

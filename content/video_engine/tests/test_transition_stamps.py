@@ -20,21 +20,37 @@ def _page_scene(sid: str, a: float, b: float, exit_id: str | None = None, **page
 
 
 def test_the_page_under_a_suck_is_stamped_cut():
-    scenes = [_page_scene("s01", 0.0, 10.0, "suck:0.5,0.5"), _page_scene("s02", 10.0, 20.0, "cut")]
+    scenes = [_page_scene("s01", 1.0, 10.0, "suck:0.5,0.5"), _page_scene("s02", 10.0, 20.0, "cut")]
     notes = B.stamp_transition_pages(scenes)
     assert scenes[0]["world"]["page"]["exit"] == "cut", "R26-60: it must not retract itself into the suck"
     assert any("exit=cut" in n and "s01" in n for n in notes), notes
 
 
-def test_the_page_after_a_melt_arrives_with_ink():
-    scenes = [_page_scene("s01", 0.0, 10.0, "melt", exit="cut"), _page_scene("s02", 10.0, 20.0, "cut")]
+def test_the_page_after_a_melt_keeps_its_own_arrival():
+    """Withdrawn 2026-09-12 (the operator): the inked arrival is for the first frame or a row that needs speed; after
+    a suck or a melt the page arrives by its roll-out or its mount, so nothing is stamped on it."""
+    scenes = [_page_scene("s01", 1.0, 10.0, "melt", exit="cut"), _page_scene("s02", 10.0, 20.0, "cut")]
+    assert B.stamp_transition_pages(scenes) == []
+    assert "enter" not in scenes[1]["world"]["page"]
+
+
+def test_the_hook_opens_on_the_axes_register():
+    """The operator, 2026-09-12: "hook should open on the axes register, then we immediately answer it on the ledger"."""
+    scenes = [_page_scene("s01", 0.0, 10.0, "cut"), _page_scene("s02", 10.0, 20.0, "cut")]
     notes = B.stamp_transition_pages(scenes)
-    assert scenes[1]["world"]["page"]["enter"] == "axes", "P53 T2: no roll-out under a live sentence"
-    assert any("enter=axes" in n and "s02" in n for n in notes), notes
+    assert scenes[0]["world"]["page"]["enter"] == "axes"
+    assert "enter" not in scenes[1]["world"]["page"], "only the hook"
+    assert any("s01" in n and "hook" in n for n in notes), notes
+
+
+def test_a_hook_that_declares_its_enter_is_left_alone():
+    scenes = [_page_scene("s01", 0.0, 10.0, "cut", enter="built")]
+    assert B.stamp_transition_pages(scenes) == []
+    assert scenes[0]["world"]["page"]["enter"] == "built"
 
 
 def test_an_author_who_chose_is_not_corrected():
-    scenes = [_page_scene("s01", 0.0, 10.0, "suck", exit="cut"),
+    scenes = [_page_scene("s01", 1.0, 10.0, "suck", exit="cut"),
               _page_scene("s02", 10.0, 20.0, "cut", enter="spiral")]
     assert B.stamp_transition_pages(scenes) == []
     assert scenes[1]["world"]["page"]["enter"] == "spiral"
@@ -42,7 +58,7 @@ def test_an_author_who_chose_is_not_corrected():
 
 def test_a_cut_and_a_dip_stamp_nothing():
     for kind in ("cut", "dip", "wipe_right", None):
-        scenes = [_page_scene("s01", 0.0, 10.0, kind), _page_scene("s02", 10.0, 20.0, "cut")]
+        scenes = [_page_scene("s01", 1.0, 10.0, kind), _page_scene("s02", 10.0, 20.0, "cut")]
         assert B.stamp_transition_pages(scenes) == [], kind
         assert "enter" not in scenes[1]["world"]["page"], kind
 

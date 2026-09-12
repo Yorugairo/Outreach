@@ -1253,16 +1253,19 @@ def _stage_gap_gate(build: Path | None) -> Gate | None:
     rows = [r for r in doc.get("boundaries", []) if not r.get("licensed") and float(r.get("gap_s") or 0) > 0]
     spoken = [r for r in rows if r.get("spoken")]
     share = f"{100 * float(doc.get('empty_share') or 0):.1f}% of the runtime empty"
+    # INFO ONLY (2026-09-12): the probe reads the page's DOM boxes and cannot see a transition's own animation or a
+    # page's cream roll-out, so "no page ink" is not "no world" - the operator: "I dont think suck and melt get less
+    # screen time". A reading, never a verdict.
     if spoken:
         worst = max(spoken, key=lambda r: float(r["gap_s"]))
-        return Gate("M31", "FAIL",
+        return Gate("M31", "INFO",
                     f"{len(spoken)} transition(s) leave the stage empty UNDER A LIVE SENTENCE ({share}); worst "
                     f"{worst['scene']} exit={worst['exit']} {worst['gap_s']:.1f}s at {_mm(float(worst['at']))} over "
                     f"\"{' '.join(worst['spoken'][:6])}...\" - the page that follows takes an inked arrival "
                     f"(enter=axes or built) or the cut lands later", SRC_M31)
     if rows:
         worst = max(rows, key=lambda r: float(r["gap_s"]))
-        return Gate("M31", "WARN", f"{len(rows)} silent empty stage(s) ({share}); worst {worst['scene']} "
+        return Gate("M31", "INFO", f"{len(rows)} silent stretch(es) with no page ink ({share}); worst {worst['scene']} "
                                    f"{worst['gap_s']:.1f}s at {_mm(float(worst['at']))}", SRC_M31)
     return Gate("M31", "PASS", f"no world-taking transition leaves the stage empty ({share})", SRC_M31)
 
