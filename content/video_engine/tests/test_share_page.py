@@ -23,6 +23,17 @@ import build_scene_timeline_f as B  # noqa: E402
 import ledger_page as L  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
+ENGINE = ROOT / "docs/content-video-engine/samples/scene-evidence-engine.mjs"
+
+
+def _ink(token: str) -> str:
+    """The engine's own field ink for a token. E67 (2026-09-12) moved every one of these values;
+    what this file tests is that a DECLARED colour SURVIVES onto the wedge, never which hex it is."""
+    import re
+    m = re.search(r"const LP_INK = \{([^}]*)\};", ENGINE.read_text(encoding="utf-8"))
+    assert m, "LP_INK is not declared in the engine"
+    return dict(re.findall(r"(\w+)\s*:\s*\"(#[0-9A-Fa-f]{6})\"", m.group(1)))[token]
+
 OBJECT = ROOT / "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/evidence/objects/ev-top-holders-v1.series.json"
 PEEL_AT, PEEL_S = 12.0, 1.6
 
@@ -153,7 +164,7 @@ def test_the_pie_draws_five_named_wedges_and_only_the_claim_is_coloured():
         assert [w["name"] for w in d["wedges"]] == ["Japan", "UK", "China", "Belgium", "Canada"]
         assert all(w["op"] >= 0.99 for w in d["wedges"]), \
             "a wedge nobody named: %s" % [(w["name"], w["op"]) for w in d["wedges"]]
-        assert d["wedges"][0]["fill"] == "#178C83", "the claim's slice keeps its declared colour"
+        assert d["wedges"][0]["fill"] == _ink("teal"), "the claim's slice keeps its declared colour"
         assert all(w["fill"].startswith("rgba(184,196,208") for w in d["wedges"][1:]), \
             "E53 s1(b): every other slice is muted context"
         assert {"w:0", "w:4", "peel", "peelfig", "wlab:0"} <= set(d["keys"])
@@ -170,7 +181,7 @@ def test_the_piece_leaves_on_its_word_goes_blood_red_and_writes_its_own_figure()
     page, close = _player()
     try:
         before = _at(page, PEEL_AT - 0.2)
-        assert before["peel"]["fill"] == "#178C83", "at rest the piece is part of its slice, in its slice's colour"
+        assert before["peel"]["fill"] == _ink("teal"), "at rest the piece is part of its slice, in its slice's colour"
         assert before["peel"]["figOp"] == 0, "nothing has left, so nothing is claimed yet"
         after = _at(page, PEEL_AT + PEEL_S + 0.3)
         assert after["peel"]["fill"] == "var(--lp-neg)", "E28: the loss is geometry AND colour"

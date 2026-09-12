@@ -4107,7 +4107,7 @@ async function mount(doc) {
        its right end, so the gap between it and a taller bar IS the argument (E53 s6). */
     const HLB = ((pg.axes || {}).hlines || []).filter((h) => h && Number.isFinite(+h.y));
     st.hlines = HLB.map((h, hi) => {
-      const col = LP_PAL[h.color] || h.color || "#8fb3f0", hy = my(+h.y);
+      const col = LP_PAL[h.color] || h.color || LP_INK.cobalt, hy = my(+h.y);
       const line = lpEl("line", "hrule", st.chart, { x1: x0, x2: x1, y1: hy.toFixed(1), y2: hy.toFixed(1), stroke: col });
       const lab = h.label ? lpText(st.chart, "sname", x1, hy - (P ? 16 : 10), "end", String(h.label),
         { opacity: 0, style: LP_HALO + "fill:" + col + (P ? ";font-size:34px" : "") }) : null;
@@ -4205,9 +4205,35 @@ async function mount(doc) {
       lpMark(st, "callout", "callout", cg, { x: e.x, y: py });
     }
   };
+  /* THE FIELD'S INK (E67, operator 2026-09-12): "we need to use bolder primary, high-contrast line colors for our default
+     the chart instead of gray. that way our charts can become our thumbnails, i think this is part of why bravos uses
+     electric colors." At thumbnail scale a 4 px line in the old inks read grey on the charcoal field (#25313C): crimson
+     4.3:1, teal 3.2:1. This is the electric set, and the operator's correction the same day ("the teal is good, the
+     cobalt would be a fine 3rd color. the first 2 colors need to be more electric & high contrast. like the Teal and a
+     Claude orange would work") fixes their ORDER: teal first, the Claude orange second, cobalt third, amber fourth.
+     The `crimson` slot IS that orange - the token NAMES never change, so every object file on disk stays valid.
+     [DERIVED: WCAG contrast vs #25313C] teal 9.5:1 | crimson(orange) 5.7:1 | cobalt 6.7:1 | amber 7.4:1 | deemph 7.5:1.
+     The orange is an electric lift of Anthropic's own #D97757 (4.3:1 - too dull for a line), 6 degrees off its hue. */
+  const LP_INK = { crimson: "#FF8A4C", teal: "#34F5C5", cobalt: "#4FC3FF", amber: "#F5B72E", deemph: "#b8c4d0" };
+  const LP_CYCLE = ["teal", "crimson", "cobalt", "amber"];   /* E67: an UNDECLARED series takes the next electric ink BY INDEX - never deemph, which is explicit de-emphasis only */
+  const LP_MUTED = "rgba(184,196,208,.45)";   /* a series drawn in its SIGN colour keeps a NEUTRAL history (the 09-05 rule: "nor the history red") */
+  const LINE_BLOOM = 0.35;   /* [DERIVED: Bravos, "neon bloom on the yield lines" (REPORT.claude.md:78)] the halo's alpha under a LIVE series stroke; 0 = off. Muted history never blooms */
+  /* a field ink at an alpha - the muted history of a series that DECLARED its colour is that same hue, not grey (E67) */
+  const lpInkA = (hex, a) => { const h = String(hex).replace("#", ""); return h.length === 6 ? "rgba(" + [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)).join(",") + "," + a + ")" : hex; };
+  /* a sign colour is authored as `var(--lp-neg)`; the bloom needs its CHANNELS to take an alpha. This reads the one
+     value the template declares - no second copy of it in here to drift (E67). */
+  const lpVarHex = (c) => { const m = /^var\((--[\w-]+)\)$/.exec(String(c).trim());
+    if (!m) return c;
+    try { return (getComputedStyle(document.documentElement).getPropertyValue(m[1]) || "").trim() || c; } catch (e) { return c; } };
+  const LP_BLOOM_PX = 6;   /* [DERIVED: Bravos' yield lines, measured at 1080p] the halo's radius in the chart's own units; portrait doubles it, as the stroke does */
+  /* THE NEON BLOOM (E67): a blurred copy of the stroke UNDER the crisp one, in the line's own colour. It is a filter on
+     the path itself, so it rides the drawn length (the dasharray) exactly - a line drawing on blooms only where drawn -
+     and every existing re-projection (build_to, rescale, morph) carries it for free. LINE_BLOOM = 0 leaves no halo at all. */
+  const lpBloom = (st, p, col) => { if (!(LINE_BLOOM > 0)) return;
+    p.style.filter = "drop-shadow(0 0 " + (st && st.portrait ? LP_BLOOM_PX * 2 : LP_BLOOM_PX) + "px " + lpInkA(lpVarHex(col), LINE_BLOOM) + ")"; };
   const buildLedgerLine = (st, pg) => {
     const ax = pg.axes || {}, series = pg.series || [];
-    const PAL = { crimson: "#ED6A4A", teal: "#178C83", cobalt: "#8fb3f0", amber: "#F5B72E", deemph: "#b8c4d0" };
+    const PAL = LP_INK;   /* E67: ONE table, read by every builder that paints on the field */
     const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;   /* portrait (P41): stage px; no right margin for an inline name - it sits above the line's end */
     const L = P ? 150 : 70, R = P ? 70 : 220, T = P ? 90 : 40, B = P ? G.H - 80 : 470, W = G.W;
     const Y = (v) => ax.log ? Math.log10(v) : v;
@@ -4242,7 +4268,7 @@ async function mount(doc) {
     st.plot = { L, R, T, B, W, x0, x1, y0, y1, log: !!ax.log };   /* P48 T1: the scale a transition interpolates */
     lpMark(st, "axis", "axis", lpEl("line", "ax", st.chart, { x1: L, x2: W - R, y1: B, y2: B }), { x1: L, x2: W - R, y: B });
     st.hlines = HL.map((h, hix) => {
-      const col = PAL[h.color] || h.color || "#8fb3f0", y = my(+h.y);
+      const col = PAL[h.color] || h.color || PAL.cobalt, y = my(+h.y);
       const line = lpEl("line", "hrule", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1), stroke: col });
       const lab = h.label ? lpText(st.chart, "sname", W - R, y - (P ? 18 : 12), "end", String(h.label), { opacity: 0, style: LP_HALO + "fill:" + col + (P ? ";font-size:34px" : "") }) : null;
       lpMark(st, "rule:" + hix, "rule", line, { y, v: +h.y, x1: L, x2: W - R });
@@ -4278,8 +4304,16 @@ async function mount(doc) {
       const endsDown = s.pts.length > 1 && +s.pts[s.pts.length - 1][1] < +s.pts[0][1];   /* numbers, never a string compare ('1116.7' < '325.8' is true) */
       /* the sign colour (a rise is green, a fall blood red) is the DEFAULT for a lone series, not a law over it: a series that
          declares its own colour keeps it. A COST that rises is not good news, and the page said so - the fifth watch. */
-      const col = s.muted ? "rgba(184,196,208,.55)" : (PAL[s.color] || (series.length === 1 ? (endsDown ? "var(--lp-neg)" : "var(--lp-pos)") : PAL.deemph));
+      /* E67 (operator 2026-09-12): an undeclared series on a MULTI-series page took PAL.deemph - grey, every one of them.
+         It takes the next electric ink by its own index instead; a LONE undeclared series still reads its sign. */
+      const declared = PAL[s.color];
+      const live = declared || (series.length === 1 ? (endsDown ? "var(--lp-neg)" : "var(--lp-pos)")
+                                                   : PAL[LP_CYCLE[(s.si | 0) % LP_CYCLE.length]]);
+      /* E67: the HISTORY of a declared series is that same hue at .45, not grey - on the holdings page 26 years of line
+         read as nothing. A series drawn in its SIGN colour keeps a neutral history (the 09-05 rule: "nor the history red"). */
+      const col = s.muted ? (declared ? lpInkA(declared, 0.45) : LP_MUTED) : live;
       const p = lpEl("path", "ser" + (s.muted ? " muted" : ""), st.chart, { d, stroke: col });
+      if (!s.muted) lpBloom(st, p, col);   /* the live line blooms; the history never does */
       const len = p.getTotalLength ? p.getTotalLength() : 2000;
       p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
       const tip = lpEl("circle", "", st.chart, { r: 6, fill: col, opacity: 0 });
@@ -4374,7 +4408,7 @@ async function mount(doc) {
     TIERS_BUILD: 4.5,       /* [DERIVED, P50 T9] N bands in turn: the combo's envelope, because it is the same amount of ink - a page that wants a band per WORD puts a build_to on each tier instead */
     TREEMAP_BUILD: 3.6,     /* [DERIVED, P50 T6] the mosaic lands in layout order over this; longer reads as a loading screen, shorter and the eye cannot follow the biggest cells arriving first */
   };
-  const LP_PAL = { crimson: "#ED6A4A", teal: "#178C83", cobalt: "#8fb3f0", amber: "#F5B72E", deemph: "#b8c4d0" };   /* the field's own tokens (cobalt lifted for the charcoal, as dense-line) */
+  const LP_PAL = LP_INK;   /* the field's own tokens - E67's electric set, declared once above buildLedgerLine */
   const pow2out = (x) => 1 - (1 - x) * (1 - x);
   const smoothstep = (x) => x * x * (3 - 2 * x);
   const lpInvSmooth = (s) => 0.5 - Math.sin(Math.asin(1 - 2 * clamp01(s)) / 3);   /* smoothstep's inverse, closed form: the period fraction at which an eased value reaches s */
@@ -4602,17 +4636,18 @@ async function mount(doc) {
          lpText(st.chart, "lab", mx(xs[n - 1]), B + 32, "end", String(dl.end ?? e.label ?? ""), { opacity: 0 })];
     const ylab = lpYLabel(st, pg, L, 64, { opacity: 0 }); if (ylab) labels.push(ylab);   /* top-left, on the callout's row, clear of the ghost */
     const d = vals.map((v, i) => (i ? "L" : "M") + mx(xs[i]).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
-    const p = lpEl("path", "ser", st.chart, { d, style: "stroke:#ED6A4A" });   /* a fall is the negative token */
+    const p = lpEl("path", "ser", st.chart, { d, style: "stroke:" + LP_INK.crimson });   /* a fall is the negative token */
+    lpBloom(st, p, LP_INK.crimson);   /* E67 */
     const len = p.getTotalLength ? p.getTotalLength() : 2000;
     p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
-    const tip = lpEl("circle", "", st.chart, { r: 6, fill: "#ED6A4A", opacity: 0 });
+    const tip = lpEl("circle", "", st.chart, { r: 6, fill: LP_INK.crimson, opacity: 0 });
     const end = lpEl("circle", "", st.chart, { cx: mx(xs[n - 1]).toFixed(1), cy: my(vals[n - 1]).toFixed(1), r: 6, fill: "#F5B72E", opacity: 0 });
     const ghost = lpText(st.chart, "val", mx(xs[0]) + 14, my(vals[0]) - 16, "start", String(s.value_string ?? lpFmt(vals[0])), { opacity: 0 });
-    const name = dl.series ? lpText(st.chart, "sname", mx(xs[0]) + 14, my(vals[0]) + 34, "start", String(dl.series), { opacity: 0, style: LP_HALO + "fill:#ED6A4A" }) : null;   /* named at the line's start, revealed with it */
+    const name = dl.series ? lpText(st.chart, "sname", mx(xs[0]) + 14, my(vals[0]) + 34, "start", String(dl.series), { opacity: 0, style: LP_HALO + "fill:" + LP_INK.crimson }) : null;   /* named at the line's start, revealed with it */
     const big = lpText(st.chart, "callout", W - R, 70, "end", "", { style: "fill:#F2F2F2;font-size:64px", opacity: 0 });
     st.dec = { p, len, tip, end, ground, ghost, name, big, labels, start: vals[0], last: vals[n - 1], endStr: String(e.value_string ?? lpFmt(vals[n - 1])) };
     st.plot = { L, R, T, B, W, x0: xa, x1: xb, y0, y1, log: false };
-    lpMark(st, "s0", "line", p, { pts: vals.map((v, i) => [mx(xs[i]), my(v)]), vals: vals.map((v) => +v), len, k0: 0, muted: false, col: "#ED6A4A" }, st.dec);
+    lpMark(st, "s0", "line", p, { pts: vals.map((v, i) => [mx(xs[i]), my(v)]), vals: vals.map((v) => +v), len, k0: 0, muted: false, col: LP_INK.crimson }, st.dec);
     if (name) lpMark(st, "name:s0", "name", name, { x: mx(xs[0]) + 14, y: my(vals[0]) + 34 });
     labels.forEach((l, i) => lpMark(st, "xlab:" + i, "xlabel", l, { x: +l.getAttribute("x"), y: +l.getAttribute("y") }));
     st.buildDur = LPX.DECLINE_BUILD; st.paint = paintLedgerDecline;
@@ -4697,8 +4732,9 @@ async function mount(doc) {
       if (tiers) lpText(st.chart, "lab", x0 - 30, ly(Math.floor(hi / step) * step) + (P ? 14 : 8), "end", lpWithUnit(lpTick(Math.floor(hi / step) * step), lunit), { style: "fill:#aeb6be" }); }
     const lines = series.map((s, si) => {
       const aligned = s.pts.length === n, lx = (x, k) => aligned ? cx(k) : x0 + (+x - xa) / (xb - xa || 1) * (x1 - x0);   /* one point per bar sits on the bar */
-      const pts = s.pts.map(([x, v], k) => [lx(x, k), ly(v), v]), col = LP_PAL[s.color] || LP_PAL.cobalt;
+      const pts = s.pts.map(([x, v], k) => [lx(x, k), ly(v), v]), col = LP_PAL[s.color] || LP_PAL[LP_CYCLE[si % LP_CYCLE.length]];   /* E67: undeclared takes the cycle by index - teal, then the orange */
       const p = lpEl("path", "ser", st.chart, { d: pts.map(([x, y], k) => (k ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" "), style: "stroke:" + col });
+      lpBloom(st, p, col);   /* E67 */
       const len = p.getTotalLength ? p.getTotalLength() : 2000;
       p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
       const dot = lpEl("circle", "", st.chart, { r: 7, fill: col, opacity: 0 });
@@ -4927,6 +4963,7 @@ async function mount(doc) {
           const col = LP_PAL[s.color] || LP_PAL[tr.color] || (n > 1 ? LP_PAL.cobalt : LP_PAL.crimson);
           const d = pts.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
           const p = lpEl("path", "ser", st.chart, { d, stroke: col });
+          lpBloom(st, p, col);   /* E67 */
           const len = p.getTotalLength ? p.getTotalLength() : 2000;
           p.setAttribute("stroke-dasharray", len); p.setAttribute("stroke-dashoffset", len);
           const tip = lpEl("circle", "", st.chart, { r: 6, fill: col, opacity: 0 });
@@ -4977,7 +5014,7 @@ async function mount(doc) {
      The labels are the compiler's decision too: it wrote each cell's tier and font from the research
      floors on the cell's real size in stage pixels, so a cell either carries a label that FITS or
      carries none and is counted in the legend line ("and 12 others"). */
-  const LP_TREE_RAMP = ["rgba(23,140,131,.86)", "rgba(23,140,131,.68)", "rgba(143,179,240,.55)", "rgba(184,196,208,.42)", "rgba(184,196,208,.30)"];
+  const LP_TREE_RAMP = [lpInkA(LP_INK.teal, .86), lpInkA(LP_INK.teal, .68), lpInkA(LP_INK.cobalt, .55), "rgba(184,196,208,.42)", "rgba(184,196,208,.30)"];   /* E67: the lit cells are the field's own inks, the tail stays neutral */
   const buildLedgerTreemap = (st, pg) => {
     const G = st.geom || { W: 1000, H: 560 }, P = !!st.portrait;
     /* the page's OWN plot margins - the line builder's, which is what ledger_page.treemap_plot mirrors */
@@ -5160,7 +5197,7 @@ async function mount(doc) {
                ERASE_S: 0.4, BRACKET_DRAW: 0.5, BRACKET_TICK: 0.15, BRACKET_LABEL: 0.55, BRACKET_GAP: 34, BRACKET_TICK_W: 14,
                BRACKET_BAR_W: 26,   /* P50 T9: `form: "bar"` - the SAME span, drawn as a bar in the accent instead of a hairline (Bravos shot 36: the drop of one tier). The law is the bracket's: the bar grows from the first datum's level to the second as the span draws, so a fall goes DOWN (E28) */
                BRACKET_ROOM: 200, RELIGHT_COL: "#F5B72E" };
-  const PS_PAL = { crimson: "#ED6A4A", teal: "#178C83", cobalt: "#8fb3f0", amber: "#F5B72E", deemph: "#b8c4d0", neg: "var(--lp-neg)", pos: "var(--lp-pos)" };
+  const PS_PAL = { ...LP_INK, neg: "var(--lp-neg)", pos: "var(--lp-pos)" };   /* E67: a species keyed to a series is the SAME ink as the series */
   const pageSpecies = (scene, kind) => (scene.species || []).filter((sp) => sp && sp.kind === kind).sort((a, b) => a.at - b.at);
   const polyLenTo = (pts, i) => { let L = 0; for (let k = 1; k <= i && k < pts.length; k++) L += Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]); return L; };
   /* the length fraction of a drawn path up to a series datum index (a highlighted tail is offset by its k0; an index before

@@ -2166,3 +2166,58 @@ screen blend above the card, dimming with the room), the inner edge falloff, the
 the layers file, through `embed_entry`; the golden `art-embed` regenerated on purpose (a press card displayed by a screen);
 `docs/content-video-engine/CAPABILITIES.md` (the ART-embed row). The limit it found: the pulled phrase is a raster and cannot
 re-line larger on a tall poster (R26-55). The finding: the TV proof frame of 2026-09-12.
+
+## E67 — The chart's inks are electric and high-contrast by default; the chart is the thumbnail (2026-09-12)
+
+**Ruling (the operator, on the Tokyo holdings page's grey line):** *"i think we need to use bolder primary, high-contrast
+line colors for our default the chart instead of gray. that way our charts can become our thumbnails, i think this is
+part of why bravos uses electric colors."* Then on the first proof: *"I think the teal is good, the cobalt would be a fine
+3rd color. the first 2 colors need to be more electric & high contrast. like the Teal and a Claude orange would work."*
+
+*Apply:*
+1. **The field's inks are measured against the charcoal, not chosen on cream.** The chart draws on the charcoal field
+   (E22); a 4 px line needs a contrast the old tokens never had there (the teal read 3.2:1, the E28 blood red 1.9:1 -
+   invisible as a line, fine as a filled bar). The field palette is now the electric TEAL `#34F5C5` (9.5:1) and the
+   CLAUDE ORANGE `#FF8A4C` in the crimson slot (the token name stays `crimson` so every object file stays valid), the
+   electric COBALT `#4FC3FF` third (6.7:1), the amber fourth; the sign colours on the field lift to `#3DDC84` up and
+   `#FF4D4D` down (E28's sign rule stands - it is the hue's contrast that moved). `[DERIVED: WCAG contrast vs #25313C]`.
+   A saturated red or orange cannot reach 6:1 on charcoal by physics; that is why Bravos blooms its lines.
+2. **The live line blooms.** The drawn series carries a neon halo of its own hue (`LINE_BLOOM` 0.35; 0 is off), riding the
+   drawn length exactly as the stroke does - the Bravos mechanism (REPORT.claude.md: "neon bloom on the yield lines").
+   The muted history (the `highlight_from` rule of 2026-09-05) keeps its role - thinner, no bloom - but in the SERIES'
+   OWN hue at 0.45, never grey, so the whole line reads at thumbnail scale; a lone undeclared series whose story window
+   takes the sign colour keeps a neutral history ("nor the history red").
+3. **Grey is never a default.** An undeclared series on a multi-series page cycles teal, orange, cobalt, amber by index;
+   `deemph` is an explicit de-emphasis an author writes, not what the engine falls back to.
+4. **The chart is the thumbnail.** A page's landing frame must read at 320 px wide with its line, its title and its one
+   figure; the proof sheet at two scales (`INK-PROOF.png`) is the check until the thumbnail tool exists (R26-8's
+   package carries the first frame).
+
+Mechanisms: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the field palette as one table; the bloom;
+the muted history in the series hue; the cycling default), the template's `--lp-pos`/`--lp-neg`; every chart golden
+regenerated on purpose in the commit that says why; `docs/content-video-engine/CAPABILITIES.md` (the inks row).
+
+## E68 — External broadcast material and likenesses are commentary on a surface; the head cutouts are usable (2026-09-12)
+
+**Ruling (the operator, on Gemini's evidence bundle for "The Myth of Historical Normal" - five broadcast clips and six
+head cutouts held at `render_eligible: false`):** *"we don't need strong broadcast rights for re-use, that's exactly why
+bravos has the image manipulation on the screen, plus we're providing direct news/commentary and their individual
+likenesses are never on screen for long. I think the heads are valid and usable."*
+
+*Apply:*
+1. **The external lane is commentary, and it shows on a surface.** A broadcast clip or a pundit's claim appears inside
+   the ART-embed world (E66: the TV, the laptop, the poster) - framed, transformed, short - and our analysis answers it
+   on the bare page. The TV-embed is the rights posture as much as the look; a clip never plays full-frame as our own.
+2. **Head cutouts are usable as docks.** A public figure's cutout (a Fed chair, a Treasury secretary, a bank strategist)
+   docks beside the datum it speaks to for the seconds it takes; the manifest records the source and the SHA and the
+   review state moves to `approved` on the operator's word. A cutout's YEAR must be true to the frame it docks against
+   (the shipped Volcker is the 2000s portrait labelled 1981; a period-correct low-res cutout sits in the raw folder) -
+   a wrong year is an evidence fault, not a rights one.
+3. **A clip's label is what the screen says.** The clip manifest carries the on-screen headline from the contact sheet as
+   the claim the clip proves; a clip assigned to a scene by search intent, not by its frames, is refused (four of the five
+   in this bundle carried a different story than their label - the buyback in the "yield" clip, the 10Y 4.969 on
+   screen in the "ERP" clip, the SPR chart from NBC labelled CNBC). Their `render_eligible` stays false until relabelled.
+
+Mechanisms: the heads manifest (`assets/heads/manifest.json`: `review_state: approved`, `render_eligible: true`, a `note`
+on Volcker's year); the clip manifest's `on_screen` field and the check that refuses a clip without one (P52's newsreel
+slice, which is these clips' first customer); `docs/content-video-engine/CAPABILITIES.md`.

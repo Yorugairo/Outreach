@@ -47,7 +47,7 @@
      frame at t is a pure function of t and the renderer can await the seek (window.__clipsSeeked). */
   .world video.clipv { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
   .lp { position: absolute; left: 4.545%; top: 4.545%; width: 90.91%; height: 90.91%; overflow: hidden;
-        --lp-cream: #F4E6C7; --lp-char: #25313C; --lp-chalk: #F2F2F2; --lp-acc: #F5B72E; --lp-pos: #2E9E5B; --lp-neg: #B0201F;   /* chart SIGN colours (operator, 2026-09-03): green up, blood red down - the sunflower callout is the only yellow */ --lp-brand: #1769C2; }
+        --lp-cream: #F4E6C7; --lp-char: #25313C; --lp-chalk: #F2F2F2; --lp-acc: #F5B72E; --lp-pos: #3DDC84; --lp-neg: #FF4D4D;   /* chart SIGN colours (operator, 2026-09-03): green up, red down - the sunflower callout is the only yellow. E67 (2026-09-12) made them electric so a line reads at thumbnail scale [DERIVED: WCAG vs #25313C] pos 7.4:1 (was 3.9), neg 4.1:1 (was 1.9 - invisible) */ --lp-brand: #1769C2; }
   .lp-page { position: absolute; inset: 0; background: var(--lp-cream); will-change: transform; overflow: hidden; }
   /* THE CARD PAGE (operator, 2026-09-08: "keep the edges of the card rounded like this where it's more like a phone ... everything
      should have a shadow instead of a border"): a page declared `card` keeps the thrown card's rounded corners at full size and sits
@@ -196,8 +196,8 @@
   html[data-aspect="9:16"] .lp-chart .glow .bk { stroke-width: 12; }
   html[data-aspect="9:16"] .lp-chart .tagchip { font-size: 40px; }
   html[data-aspect="9:16"] .lp-chart .ser { stroke-width: 8; }
-  .lp-chart .ser.muted { stroke-width: 2.5; }
-  html[data-aspect="9:16"] .lp-chart .ser.muted { stroke-width: 4; }
+  .lp-chart .ser.muted { stroke-width: 3; }   /* E67: the history is the series' OWN hue at .45 now, not grey - and thick enough to read as its line */
+  html[data-aspect="9:16"] .lp-chart .ser.muted { stroke-width: 6; }
   html[data-aspect="9:16"] .lp-chart .ax { stroke-width: 3; }
   html[data-aspect="9:16"] .lp-chart .grid { stroke-width: 2; }
   html[data-aspect="9:16"] .lp-rail { gap: 12px; }

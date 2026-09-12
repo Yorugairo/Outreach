@@ -91,11 +91,11 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## ruling-ledger
 
-- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing correcti — Portable, model-agnostic. Load alongside — defines: A3; E11; +55 more — terms: The operator's words.; long-form; drop-off; YouTube
+- docs/portable/OPERATOR-RULINGS.md — OPERATOR RULINGS — the standing correcti — Portable, model-agnostic. Load alongside — defines: A3; E11; +57 more — terms: The operator's words.; long-form; drop-off; YouTube
 
 ## capabilities
 
-- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +152 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
+- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +154 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
 
 ## backlog
 
