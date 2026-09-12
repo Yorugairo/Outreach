@@ -6,7 +6,9 @@ work itself. Rewritten 2026-09-04 after the full research-bundle read.
 **Route:** capability that exists → [`CAPABILITIES.md`](CAPABILITIES.md) · what the
 research settled → docs [42](42-DRAWING-KINETICS.md)–[46](46-REFERENCE-RHYTHM.md), indexed
 in [`RESEARCH-INDEX.md`](RESEARCH-INDEX.md) · which findings can be enforced →
-[47](47-FINDINGS-TO-CHECKS.md).
+[47](47-FINDINGS-TO-CHECKS.md) · what is waiting on a DECISION (the open human gates and
+every open question, 2026-09-12) →
+[`OPEN-GATES-AND-QUESTIONS-2026-09-12.md`](OPEN-GATES-AND-QUESTIONS-2026-09-12.md).
 
 ## The founding-premise correction (52)
 

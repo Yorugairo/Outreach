@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-310 documents across 13 kinds.
+312 documents across 13 kinds.
 
 ## doctrine
 
@@ -180,6 +180,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md — Wealth Logic Transitions, Measured From — What KIND of transition does the Wealth — defines: — — terms: blur-zoom; DIP_BRIGHT_FRAC 1.60; [t - 0.6 s, t + 0.8 s]; L_before
 - docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md — Wealth Logic Transitions Research Bluepr — Superseded 2026-09-06 by `WEALTH_LOGIC_T — defines: — — terms: blur-zooms; zoom-throughs; fade-throughs; frame-per-boundary
 - docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md — Weight, Density, and Mass in Drawing, An — Pass Metadata: Workflow: Deep Research E — defines: — — terms: Kersten et al.; t_0; stop-motion; High-Mass
+- docs/research/retention/CHART_APEX_RETENTION_ARCHITECTURE_RESEARCH_BLUEPRINT.md — Chart Apex Retention Architecture — Rese — How to eliminate the severe 0:00–3:00 fr — defines: — — terms: YouTube; vidIQ; DiZnbihU4NM; wrap-up
 - docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md — Motion Graphics & Animation from Still I — High-retention, broadcast-grade video co — defines: — — terms: context-aware; LaMa; Shih et al.; LTX-Video
 - docs/research/tech/TREEMAP_READABILITY_RESEARCH_BLUEPRINT.md — Treemap Readability & Layout Mechanics — — How readable are treemaps on video scree — defines: P50 — terms: treemap-readability; McGill; near-square; Kong et al.
 - docs/research/tech/VIDEO_ENGINE_TOOLING_AND_MCP_BLUEPRINT.md — High-Leverage Tooling, Open-Source MCPs, — What specific open-source Model Context — defines: — — terms: GitHub; PyPI; fred-mcp-server; sec-edgar-mcp
@@ -212,7 +213,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md — Deep Technical Monograph 10: Generative — This monograph standardizes the technica — defines: — — terms: arXiv; DiT; Spatio-Temporal; mask-pinned
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md — Master Research & Evidence Dossier: High — Executive Summary & The 4 Core Pillars C — defines: — — terms: Closed-Form; s_x; s_y; a_x
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md — Deep Research Report: Drawing Engines, A — State-of-the-art programmatic video gene — defines: — — terms: closed-form; s_x; s_y; HyperFrames
-- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md — PRODUCTION REFERENCE REPORT: Give Me 10 — Compositions Measured: 42 Camera-Locked — defines: P1; P2; +4 more — terms: zero-drift; Hyper-Dense; cut-alignment; Near-black
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md — PRODUCTION REFERENCE REPORT: Give Me 10 — Compositions Measured: 42 Camera-Locked — defines: P1; P2; +4 more — terms: #14171A; micro-payoffs; zero-drift; Hyper-Dense
 - content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/SHOT_LEDGER.md — SHOT LEDGER: Dual-Track Visual Events & — Kind: `COMP` = new base stage / scene cu — defines: — — terms: SLOW_PUSH; build; metaphor_prop; LOCKED
 - content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md — PRODUCTION REFERENCE REPORT: I Found the — Compositions Measured: 43 Camera-Locked — defines: P1; P2; +4 more — terms: YouTube; zero-drift; High-Velocity; cut-alignment
 - content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/SHOT_LEDGER.md — SHOT LEDGER: Dual-Track Visual Events & — Kind: `COMP` = new base stage / scene cu — defines: — — terms: SLOW_PUSH; build; LOCKED; metaphor_prop
@@ -360,6 +361,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md — HyperFrames intake — the Gemini research — The operator: "HyperFrames has a GREAT r — defines: — — terms: push-in; ## The question; ## Verdict up front; ## Sources
 - docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md — Intake — the ink bloom transition (opera — The operator brought a MotionKit preset — defines: — — terms: K-M; km_ink; two-harmonic; byte-identical
 - docs/content-video-engine/MACRO-CHART-INTAKE-2026-09-07.md — Macro-chart journalism research — the in — The Gemini lane's `docs/research/markets — defines: — — terms: McGill; Verified 2026-09-07; Local Evidence; fetch
+- docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md — Open gates and open questions - 2026-09- — Everything waiting on a decision after P — defines: — — terms: cap_band: "above"; newsreel-band.png; newsreel-strip-9x16.png; newsreel-strip-above.png
 - docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md — remotion-ui intake — seven components, g — The same morning as the HyperFrames harv — defines: — — terms: snap; HyperFrames; badge-stamp; undraw
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md — DOCTRINE CORE — portable content-operati — Model-agnostic; paste whole into any sys — defines: — — terms: scene-setting; pause-framed; seed-locked; paragraph-shaped
 - docs/content-video-engine/SPECIES-BY-SENTENCE.md — SPECIES BY SENTENCE — which species, on — The operator, 2026-09-10: "Do we already — defines: P50 — terms: figure; build_to; extend; rescale
