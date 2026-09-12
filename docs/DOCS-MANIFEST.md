@@ -95,7 +95,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## capabilities
 
-- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +148 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
+- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +152 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
 
 ## backlog
 
@@ -234,7 +234,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md — Answer Script — "Steel and Paper" (respo — First full production run of the script- — defines: P6 — terms: YouTube; sold-out; In 1845; [post-key]
 - docs/content-video-engine/briefs/ANSWER-BRAVOS-IMAGE-PACK.md — Image Prompt Pack — "Steel and Paper" (G — Companion to ANSWER-BRAVOS-HYPE-CYCLE.md — defines: — — terms: square-shanked; hammer-marked; oiled-wood; in-house
 - docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md — Answers to Research Brief — Animation Cr — Superseded as a reference, 2026-09-04. T — defines: M13 — terms: Two-Thirds; re-orientation; double-imaging; Source
-- docs/content-video-engine/briefs/ART-EMBED-PLATE-ORDER-2026-09-11.md — The ART-embed plate - the order for huma — What the gate asks. P50 T7 gives the ext — defines: P50 — terms: What the gate asks.; What the plate must carry.; hand-made; . A press dock with
+- docs/content-video-engine/briefs/ART-EMBED-PLATE-ORDER-2026-09-11.md — The ART-embed plate - the order for huma — APPROVED 2026-09-11 (night) - the operat — defines: P50 — terms: APPROVED 2026-09-11 (night) - the operator: "Plate order is; What the gate asks.; hand-made; . A press dock with
 - docs/content-video-engine/briefs/FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md — FLOW-OMNI-EXPLAINER-PROMPT-PLAN.md — Title: Institutional 2.5D & Stickman Exp — defines: — — terms: ElevenLabs; @Mike; Re-pasting; extra limbs
 - docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md — Research brief — what the drawing engine — For the Gemini deep-research pass, 2026- — defines: — — terms: follow-through; VOICE-PACK; arc-length; WebGL
 - docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md — Response to research pass 1 — what close — To: the research layer (Gemini deep-rese — defines: — — terms: shot-length; two-thirds; What was wrong.; not
