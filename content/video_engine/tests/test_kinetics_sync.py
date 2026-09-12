@@ -7,7 +7,15 @@ P50 T2 widens the contract to a SECOND module dir - content/video_engine/scripts
 painter per species kind (the operator's module rule, 2026-09-11: no new species is written into
 the engine's body). Both dirs are scanned into one name space, with the same region grammar,
 the same missing-region / missing-module report and the same import-order rule; the tests below
-pin each of those three."""
+pin each of those three.
+
+P52 T5 (R26-41) adds THE SPACE: a species module may declare `/* SPACE: page */` or
+`/* SPACE: stage */` on its first line, and `--check` holds it to the registry that space paints
+through - PAGE_PAINTERS for the page's perform layer, SPECIES_PAINTERS for the stage overlay -
+and to a region placed where that registration can be reached and the painter closed over. The
+tests below pin the declaration on span (the first page species), both wrong-registry directions
+with the space named in the message, the region-order rule and the default (no declaration is
+stage, which is why no module written before P52 T5 had to change)."""
 from __future__ import annotations
 
 import re
@@ -39,9 +47,10 @@ SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span", 
                               # the page's builders and its perform layer both close over them.
                               # one that is not a KIND (P50 T3: the press card is a DOCK kind) - it carries the stack's math
                               # and the underline's clock for the dock loop and the callout, and registers no painter.
-                              # `span` (P50 T4) is a KIND but registers no painter either: it is a PAGE species, built and
-                              # painted by the page's perform layer, and its region sits with the kinetics laws so that layer
-                              # can close over it. `flow` registers paintFlow the way the chip does. `vecmap` (P50 T5)
+                              # `span` (P50 T4) is a KIND and, since P52 T5 (R26-41), registers paintSpan into the PAGE
+                              # registry - PAGE_PAINTERS, not SPECIES_PAINTERS: a page species is painted by the page's
+                              # perform layer, in the chart's viewBox, so its region sits with the kinetics laws where that
+                              # layer can close over it. `flow` registers paintFlow the way the chip does. `vecmap` (P50 T5)
                               # registers THREE painters (light, arc, stamp) and also carries the WORLD the three paint on -
                               # the template's vecmap branch calls paintVecmapWorld, so the map's fit lives with its species.
 
@@ -193,3 +202,120 @@ def test_a_comment_line_beginning_with_import_is_not_stripped() -> None:
     chip = (SK.SPECIES_DIR / "chip.mjs").read_text(encoding="utf-8")
     assert "SPECIES_PAINTERS.chip = paintChip;" in SK.inline_text(chip, "  ")
     assert "SPECIES_PAINTERS.chip = paintChip;" in SK.ENGINE.read_text(encoding="utf-8")
+
+
+# ---- P52 T5: THE SPACE a species is painted in (R26-41) ----------------------------------------
+
+PAGE_MODULE = """/* SPACE: page */
+/* a page species, painted by the perform layer in the chart's viewBox */
+export const paintMine = (sd, t, st, ctx) => ctx.pointsNow(st, sd.si);
+if (typeof REGISTRY !== "undefined") REGISTRY.mine = paintMine;
+"""
+
+STAGE_MODULE = """/* a stage species, painted on the stage-px overlay - it declares nothing, which IS the declaration */
+export const paintYours = (ctx) => ctx.svg;
+if (typeof REGISTRY !== "undefined") REGISTRY.yours = paintYours;
+"""
+
+SYNTH_ENGINE = """<script>
+  const PAGE_PAINTERS = Object.create(null);
+  /* KINETICS:BEGIN mine */
+  /* KINETICS:END */
+  const paintPerform = (st, scene, t, pg) => {};
+  const SPECIES_PAINTERS = Object.create(null);
+  /* KINETICS:BEGIN yours */
+  /* KINETICS:END */
+</script>
+"""
+
+
+def _synth(tmp_path: Path, mine: str, yours: str, engine: str = SYNTH_ENGINE) -> tuple[Path, Path, Path]:
+    """A two-region engine with both registries and a perform layer, and the two modules that fill it."""
+    mods, sp = tmp_path / "kinetics", tmp_path / "species"
+    mods.mkdir(parents=True); sp.mkdir(parents=True)
+    (sp / "mine.mjs").write_text(mine, encoding="utf-8")
+    (sp / "yours.mjs").write_text(yours, encoding="utf-8")
+    tpl = tmp_path / "engine.mjs"
+    tpl.write_text(engine, encoding="utf-8")
+    assert SK.write(tpl, mods, sp) == 2
+    return tpl, mods, sp
+
+
+def test_span_declares_the_page_space_and_registers_into_the_page_registry() -> None:
+    """The first page species through the registry (R26-41): the declaration, the registration and
+    the region's place - before paintPerform, which closes over the painter it calls."""
+    src = (SK.SPECIES_DIR / "span.mjs").read_text(encoding="utf-8")
+    assert SK.space_of(src) == "page"
+    assert SK.registrations_of(src) == [("PAGE_PAINTERS", "span")]
+    assert "PAGE_PAINTERS.span = paintSpan;" in SK.inline_text(src, "  ")
+    html = SK.ENGINE.read_text(encoding="utf-8").replace("\r\n", "\n")
+    assert "PAGE_PAINTERS.span = paintSpan;" in html
+    decl, region = html.index("const PAGE_PAINTERS = Object.create(null);"), html.index("/* KINETICS:BEGIN span */")
+    assert decl < region < SK.PERFORM_DEF.search(html).start()
+    # ... and the perform layer paints no span of its own: the engine's body signature is gone and
+    # the only page-registry lookup in the engine is the hook
+    assert "const paintSpan = (sd, t, st) =>" not in html
+    assert html.count("PAGE_PAINTERS[") == 1, "one hook, no second route into the page registry"
+
+
+def test_a_page_module_that_registers_into_the_stage_registry_fails_by_space(tmp_path: Path) -> None:
+    tpl, mods, sp = _synth(tmp_path, PAGE_MODULE.replace("REGISTRY", "SPECIES_PAINTERS"),
+                           STAGE_MODULE.replace("REGISTRY", "SPECIES_PAINTERS"))
+    problems = SK.check(tpl, mods, sp)
+    assert problems == ["species/mine.mjs declares SPACE: page but registers into SPECIES_PAINTERS "
+                        "(the stage registry) - a page species registers into PAGE_PAINTERS"], problems
+
+
+def test_a_stage_module_that_registers_into_the_page_registry_fails_the_same_way(tmp_path: Path) -> None:
+    tpl, mods, sp = _synth(tmp_path, PAGE_MODULE.replace("REGISTRY", "PAGE_PAINTERS"),
+                           STAGE_MODULE.replace("REGISTRY", "PAGE_PAINTERS"))
+    problems = SK.check(tpl, mods, sp)
+    assert problems == ["species/yours.mjs declares SPACE: stage but registers into PAGE_PAINTERS "
+                        "(the page registry) - a stage species registers into SPECIES_PAINTERS"], problems
+
+
+def test_a_module_with_no_declaration_is_stage() -> None:
+    """Why no existing species had to be touched: stage is the default, and every species written
+    before P52 T5 paints there. A module that registers no painter is held to nothing at all."""
+    assert SK.space_of(STAGE_MODULE) == "stage"
+    assert SK.space_of((SK.SPECIES_DIR / "chip.mjs").read_text(encoding="utf-8")) == "stage"
+    assert SK.space_of((SK.MODULES / "ease.mjs").read_text(encoding="utf-8")) == "stage"
+    for name in ("press", "tippill", "thread", "tiers", "treemap", "breakthrough"):
+        src = (SK.SPECIES_DIR / f"{name}.mjs").read_text(encoding="utf-8")
+        assert SK.registrations_of(src) == [], name
+        assert SK.space_problems(SK.SPECIES_DIR / f"{name}.mjs", src, "", 0) == [], name
+
+
+def test_a_space_nobody_paints_in_is_refused(tmp_path: Path) -> None:
+    tpl, mods, sp = _synth(tmp_path, PAGE_MODULE.replace("SPACE: page", "SPACE: overlay").replace("REGISTRY", "PAGE_PAINTERS"),
+                           STAGE_MODULE.replace("REGISTRY", "SPECIES_PAINTERS"))
+    problems = SK.check(tpl, mods, sp)
+    assert problems == ["species/mine.mjs declares SPACE: overlay - the only spaces are page and stage "
+                        "(a module that paints nothing declares neither)"], problems
+
+
+def test_a_page_region_after_the_perform_layer_fails_on_the_order(tmp_path: Path) -> None:
+    """The order IS the dependency (the inlined copy has no imports): a page painter that lands
+    after paintPerform is not there to be closed over, and a registration before its registry's
+    declaration cannot reach it."""
+    late = """<script>
+  const PAGE_PAINTERS = Object.create(null);
+  const paintPerform = (st, scene, t, pg) => {};
+  /* KINETICS:BEGIN mine */
+  /* KINETICS:END */
+  const SPECIES_PAINTERS = Object.create(null);
+  /* KINETICS:BEGIN yours */
+  /* KINETICS:END */
+</script>
+"""
+    tpl, mods, sp = _synth(tmp_path, PAGE_MODULE.replace("REGISTRY", "PAGE_PAINTERS"),
+                           STAGE_MODULE.replace("REGISTRY", "SPECIES_PAINTERS"), late)
+    problems = SK.check(tpl, mods, sp)
+    assert problems == ["species/mine.mjs declares SPACE: page but its region sits AFTER the engine's "
+                        "paintPerform, which has to close over the painter it calls"], problems
+    early = late.replace("  const PAGE_PAINTERS = Object.create(null);\n", "") \
+                .replace("</script>", "  const PAGE_PAINTERS = Object.create(null);\n</script>")
+    tpl2, mods2, sp2 = _synth(tmp_path / "b", PAGE_MODULE.replace("REGISTRY", "PAGE_PAINTERS"),
+                              STAGE_MODULE.replace("REGISTRY", "SPECIES_PAINTERS"), early)
+    problems = SK.check(tpl2, mods2, sp2)
+    assert any("sits BEFORE the engine's PAGE_PAINTERS declaration" in p for p in problems), problems

@@ -1,3 +1,4 @@
+/* SPACE: page */
 /* species/span.mjs - THE SPAN (P50 T4; BACKLOG R26-25, the intake's Archetype 5; Bravos shots 107-110's
    "Decades" bracket). SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between
    KINETICS:BEGIN span and KINETICS:END. It imports nothing, and its region sits with the kinetics laws
@@ -22,12 +23,13 @@
    same live points a bracket reads (R26-28): a rescale moves the band with the data, and a window that has
    dropped one of the two edges hides it rather than drawing it in the wrong place.
 
-   THE PAINTER IS NOT HERE, and that is a finding, not an omission (P50 T4, 2026-09-11): a PAGE species is
-   built and painted by the page's own perform layer - inside the chart's viewBox, on the page state `st`,
-   under the active state's park transform - while SPECIES_PAINTERS hands a painter the stage-px overlay and
-   the scene's clock. Registering a page species in that registry would paint it in the wrong space and leave
-   the perform layer none the wiser. So the MATH is here, pure and tested, and the perform layer calls it in
-   a dozen lines. Closing that gap - one registry both layers can route through - is P51 T1's business.
+   THE PAINTER IS HERE NOW (P52 T5, R26-41; it was engine code until then, and that WAS the finding): a PAGE
+   species is painted in a different space from a stage species - inside the chart's viewBox, on the page state
+   `st`, under the active state's park transform, off the page's perform clock - so it registers into the page
+   registry, PAGE_PAINTERS, and not into SPECIES_PAINTERS, which hands its painters the stage-px overlay and the
+   scene's clock. The `SPACE: page` line above - the module's first line, in a comment of its own - is that
+   declaration, and sync_kinetics --check is what holds the module to it: a page module that registers into the
+   stage registry fails by name, and so does a stage module that registers into the page one.
    The dials below are ours to tune (42 s42.5), not findings. */
 
 export const SPAN = Object.freeze({
@@ -101,3 +103,30 @@ export const spanGlyph = (write, j, n) => {
   const per = 1 / (Math.max(1, n | 0) + 1.6 - 1);
   return span01((write - j * per) / (per * 1.6));
 };
+
+/* THE PAINTER (P52 T5; R26-41). The band re-read on the LIVE scale every frame, the shade fading in under the
+   lines, the name written above it by the hand - every number of it is the law above; this is the DOM.
+   `sd` is the perform layer's built span (rect, label, the label's glyphs `lg`, its size `fs`, the series `si`
+   and the declaration `sp`), `st` the page state, and `ctx` the PAGE species context the engine hands every page
+   painter (see PAGE_PAINTERS in the engine): the engine's helpers arrive BY NAME - `pointsNow` is the perform
+   layer's lpPointsNow - never as a free identifier, so `node --test` can call this with recorders and no DOM. */
+export const paintSpan = (sd, t, st, ctx) => {
+  const pose = spanPose(sd.sp, t);
+  const hide = () => { sd.rect.setAttribute("fill-opacity", 0); sd.label.setAttribute("opacity", 0); };
+  if (!pose.on) { hide(); return; }
+  const lists = [];
+  for (let i = 0; i < Math.max(1, (st.linePts || []).length); i++) lists.push(ctx.pointsNow(st, i));
+  const band = spanBand(lists[sd.si] || [], lists, sd.sp.from, sd.sp.to, (st.geom || {}).H);
+  if (!band) { hide(); return; }   /* R26-28: an edge the window dropped names nothing - nothing is drawn */
+  sd.rect.setAttribute("x", band.x.toFixed(1)); sd.rect.setAttribute("y", band.y.toFixed(1));
+  sd.rect.setAttribute("width", band.w.toFixed(1)); sd.rect.setAttribute("height", band.h.toFixed(1));
+  sd.rect.setAttribute("fill-opacity", pose.alpha.toFixed(3));
+  sd.label.setAttribute("opacity", 1);
+  sd.label.setAttribute("x", band.cx.toFixed(1));
+  sd.label.setAttribute("y", spanLabelY(band, sd.fs).toFixed(1));
+  sd.lg.forEach((ts, j) => ts.setAttribute("opacity", spanGlyph(pose.write, j, sd.lg.length).toFixed(3)));
+};
+
+/* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment,
+   so inlining keeps it and node - where no registry exists - still imports the file for the math. */
+if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.span = paintSpan;

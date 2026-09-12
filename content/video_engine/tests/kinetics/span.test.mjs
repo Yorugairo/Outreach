@@ -1,10 +1,11 @@
 // P50 T4 - THE SPAN (R26-25; Bravos 107-110's "Decades"). A stretch of TIME shaded behind a ledger page's chart
-// with its NAME above it. The module is math only - the page's perform layer owns the DOM - so these tests pin
-// the two edges (a datum index or an x-fraction), the band on the live points, the clock, and the fact that an
-// edge the window has dropped names nothing and draws nothing (R26-28).
+// with its NAME above it. These tests pin the two edges (a datum index or an x-fraction), the band on the live
+// points, the clock, and the fact that an edge the window has dropped names nothing and draws nothing (R26-28).
+// P52 T5 (R26-41): THE PAINTER lives here too, registered into the PAGE registry, so the last test calls it on
+// recorders with no DOM - it reaches the engine's perform layer only through its ctx.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { SPAN, spanIsIndex, spanEdgeX, spanExtent, spanBand, spanLabelY, spanPose, spanGlyph } from "../../scripts/species/span.mjs";
+import { SPAN, spanIsIndex, spanEdgeX, spanExtent, spanBand, spanLabelY, spanPose, spanGlyph, paintSpan } from "../../scripts/species/span.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 /* lpPointsNow's own shape: the PAGE's datum index and the point in the chart's viewBox */
@@ -120,4 +121,58 @@ test("a seek IS the play: the same t gives the same bits, in any order, with not
 test("nothing in the module reaches for a clock or a random", () => {
   const src = [spanPose, spanBand, spanEdgeX, spanExtent, spanGlyph, spanLabelY].map((f) => f.toString()).join("\n");
   assert.ok(!/Math\.random|Date\.now|new Date|performance\./.test(src), src);
+});
+
+// ---------------------------------------------------------------- the painter, on recorders
+test("THE PAINTER paints the band and the name through its ctx, and nothing at all before its word", () => {
+  const rec = () => ({ at: {}, setAttribute(k, v) { this.at[k] = v; } });
+  const pts = line(101);
+  const stub = (o = {}) => {
+    const lg = Array.from({ length: 10 }, rec);
+    const sd = { sp: sp(o.sp), si: 0, rect: rec(), label: rec(), lg, fs: 26 };
+    const st = { linePts: [pts], geom: { H: 560 } };
+    const ctx = { pointsNow: (state, i) => { assert.equal(state, st); return o.points === undefined ? pts : o.points; } };
+    return { sd, st, ctx };
+  };
+
+  // before the span's own `at`: hidden, and not one number written
+  let { sd, st, ctx } = stub();
+  paintSpan(sd, sd.sp.at - 0.01, st, ctx);
+  assert.deepEqual(sd.rect.at, { "fill-opacity": 0 });
+  assert.deepEqual(sd.label.at, { opacity: 0 });
+
+  // the shade in, the hand not yet writing: the band is the law's, to the law's own precision
+  ({ sd, st, ctx } = stub());
+  const t0 = sd.sp.at + SPAN.IN_S;
+  paintSpan(sd, t0, st, ctx);
+  const band = spanBand(pts, [pts], sd.sp.from, sd.sp.to, 560);
+  assert.deepEqual(sd.rect.at, { x: band.x.toFixed(1), y: band.y.toFixed(1), width: band.w.toFixed(1),
+                                 height: band.h.toFixed(1), "fill-opacity": SPAN.ALPHA.toFixed(3) });
+  assert.equal(sd.rect.at.x, "180.0");
+  assert.equal(sd.rect.at["fill-opacity"], "0.160", "the shade is in, and it is the dial's own alpha");
+  assert.deepEqual(sd.label.at, { opacity: 1, x: band.cx.toFixed(1), y: spanLabelY(band, sd.fs).toFixed(1) });
+  assert.equal(sd.label.at.y, "140.0", "the name stands over the band");
+  assert.deepEqual(sd.lg.map((g) => g.at.opacity), sd.lg.map(() => "0.000"), "not a glyph until the shade is in");
+
+  // the word over: every glyph in, in order
+  ({ sd, st, ctx } = stub());
+  paintSpan(sd, sd.sp.at + SPAN.IN_S + sd.sp.dur * SPAN.WRITE, st, ctx);
+  assert.deepEqual(sd.lg.map((g) => g.at.opacity), sd.lg.map(() => "1.000"));
+
+  // an edge the window has dropped: hidden, never drawn in the wrong place (R26-28)
+  ({ sd, st, ctx } = stub({ points: line(41, 60) }));
+  paintSpan(sd, sd.sp.at + 4, st, ctx);
+  assert.equal(sd.rect.at["fill-opacity"], 0);
+  assert.equal(sd.label.at.opacity, 0);
+  assert.equal(sd.rect.at.x, undefined, "nothing to name, nothing moved");
+});
+
+test("the painter reaches the engine ONLY through ctx - no free identifier, no DOM, no clock of its own", () => {
+  const src = paintSpan.toString();
+  assert.ok(/ctx\.pointsNow\(/.test(src), "the live points arrive by name");
+  assert.ok(!/\blp[A-Z]/.test(src), "nothing the engine owns is reached as a free identifier: " + src);
+  assert.ok(!/document\.|window\.|globalThis|Math\.random|Date\.now|performance\./.test(src),
+    "no DOM and no clock of its own - the perform layer hands it both elements and t: " + src);
+  assert.equal(typeof paintSpan, "function");
+  assert.equal(paintSpan.length, 4, "paint(sd, t, st, ctx) - the page registry's own signature");
 });

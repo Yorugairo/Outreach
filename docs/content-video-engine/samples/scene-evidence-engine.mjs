@@ -506,7 +506,20 @@ async function mount(doc) {
   /* the polyline as an SVG path the nib can be handed: the caller draws it BY LENGTH (42 s42.1). */
   const clothoidPath = (pts) => pts.map((p, i) => (i ? "L" : "M") + p.x.toFixed(2) + " " + p.y.toFixed(2)).join(" ");
   /* KINETICS:END */
+  /* THE PAGE PAINTER REGISTRY (P52 T5; R26-41, the operator's module rule of 2026-09-11 carried to the other space).
+     SPECIES_PAINTERS, declared at the species block far below, hands a STAGE painter the stage-px overlay, resolveTarget
+     and the scene's clock. A PAGE species is painted somewhere else entirely: by the page's own PERFORM layer, inside
+     the chart's viewBox, on the page state `st`, under the ACTIVE state's park transform, on the perform clock. So one
+     law is two registries KEYED BY SPACE, and this is the page one: a page painter is `paint(sd, t, st, ctx)` and
+     reaches everything the engine owns BY NAME through its context object (PAGE_CTX, built beside paintPerform below) -
+     `pointsNow` (lpPointsNow), `datumNow` (lpDatumNow), `markDatum` (lpMarkDatum), `clamp` (clamp01), `el` (lpEl) and
+     the `PS` dials - never as a free identifier, because `node --test` imports the module with none of them in scope.
+     The page regions sit HERE, with the kinetics laws, rather than in the species block: the perform layer is written
+     hundreds of lines above that block and a const must exist before the function that closes over it is built.
+     Object.create(null): a kind name can never reach a prototype member and be called as a painter. */
+  const PAGE_PAINTERS = Object.create(null);
   /* KINETICS:BEGIN span */
+  /* SPACE: page */
   /* species/span.mjs - THE SPAN (P50 T4; BACKLOG R26-25, the intake's Archetype 5; Bravos shots 107-110's
      "Decades" bracket). SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between
      KINETICS:BEGIN span and KINETICS:END. It imports nothing, and its region sits with the kinetics laws
@@ -531,12 +544,13 @@ async function mount(doc) {
      same live points a bracket reads (R26-28): a rescale moves the band with the data, and a window that has
      dropped one of the two edges hides it rather than drawing it in the wrong place.
 
-     THE PAINTER IS NOT HERE, and that is a finding, not an omission (P50 T4, 2026-09-11): a PAGE species is
-     built and painted by the page's own perform layer - inside the chart's viewBox, on the page state `st`,
-     under the active state's park transform - while SPECIES_PAINTERS hands a painter the stage-px overlay and
-     the scene's clock. Registering a page species in that registry would paint it in the wrong space and leave
-     the perform layer none the wiser. So the MATH is here, pure and tested, and the perform layer calls it in
-     a dozen lines. Closing that gap - one registry both layers can route through - is P51 T1's business.
+     THE PAINTER IS HERE NOW (P52 T5, R26-41; it was engine code until then, and that WAS the finding): a PAGE
+     species is painted in a different space from a stage species - inside the chart's viewBox, on the page state
+     `st`, under the active state's park transform, off the page's perform clock - so it registers into the page
+     registry, PAGE_PAINTERS, and not into SPECIES_PAINTERS, which hands its painters the stage-px overlay and the
+     scene's clock. The `SPACE: page` line above - the module's first line, in a comment of its own - is that
+     declaration, and sync_kinetics --check is what holds the module to it: a page module that registers into the
+     stage registry fails by name, and so does a stage module that registers into the page one.
      The dials below are ours to tune (42 s42.5), not findings. */
 
   const SPAN = Object.freeze({
@@ -610,6 +624,33 @@ async function mount(doc) {
     const per = 1 / (Math.max(1, n | 0) + 1.6 - 1);
     return span01((write - j * per) / (per * 1.6));
   };
+
+  /* THE PAINTER (P52 T5; R26-41). The band re-read on the LIVE scale every frame, the shade fading in under the
+     lines, the name written above it by the hand - every number of it is the law above; this is the DOM.
+     `sd` is the perform layer's built span (rect, label, the label's glyphs `lg`, its size `fs`, the series `si`
+     and the declaration `sp`), `st` the page state, and `ctx` the PAGE species context the engine hands every page
+     painter (see PAGE_PAINTERS in the engine): the engine's helpers arrive BY NAME - `pointsNow` is the perform
+     layer's lpPointsNow - never as a free identifier, so `node --test` can call this with recorders and no DOM. */
+  const paintSpan = (sd, t, st, ctx) => {
+    const pose = spanPose(sd.sp, t);
+    const hide = () => { sd.rect.setAttribute("fill-opacity", 0); sd.label.setAttribute("opacity", 0); };
+    if (!pose.on) { hide(); return; }
+    const lists = [];
+    for (let i = 0; i < Math.max(1, (st.linePts || []).length); i++) lists.push(ctx.pointsNow(st, i));
+    const band = spanBand(lists[sd.si] || [], lists, sd.sp.from, sd.sp.to, (st.geom || {}).H);
+    if (!band) { hide(); return; }   /* R26-28: an edge the window dropped names nothing - nothing is drawn */
+    sd.rect.setAttribute("x", band.x.toFixed(1)); sd.rect.setAttribute("y", band.y.toFixed(1));
+    sd.rect.setAttribute("width", band.w.toFixed(1)); sd.rect.setAttribute("height", band.h.toFixed(1));
+    sd.rect.setAttribute("fill-opacity", pose.alpha.toFixed(3));
+    sd.label.setAttribute("opacity", 1);
+    sd.label.setAttribute("x", band.cx.toFixed(1));
+    sd.label.setAttribute("y", spanLabelY(band, sd.fs).toFixed(1));
+    sd.lg.forEach((ts, j) => ts.setAttribute("opacity", spanGlyph(pose.write, j, sd.lg.length).toFixed(3)));
+  };
+
+  /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment,
+     so inlining keeps it and node - where no registry exists - still imports the file for the math. */
+  if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.span = paintSpan;
   /* KINETICS:END */
   /* KINETICS:BEGIN thread */
   /* species/thread.mjs - THE WIRE (P50 T15, HF-16: "the three threads - the wire, the ruler, the protagonist chip -
@@ -5410,24 +5451,6 @@ async function mount(doc) {
     sd.path.setAttribute("d", d);
     sd.path.setAttribute("fill-opacity", (PS.SPREAD_A * clamp01(u / 0.35)).toFixed(3));
   };
-  /* the span: the band re-read on the LIVE scale every frame, the shade fading in under the lines, the name written
-     above it by the hand (species/span.mjs owns every number; this is the call) */
-  const paintSpan = (sd, t, st) => {
-    const pose = spanPose(sd.sp, t);
-    const hide = () => { sd.rect.setAttribute("fill-opacity", 0); sd.label.setAttribute("opacity", 0); };
-    if (!pose.on) { hide(); return; }
-    const lists = [];
-    for (let i = 0; i < Math.max(1, (st.linePts || []).length); i++) lists.push(lpPointsNow(st, i));
-    const band = spanBand(lists[sd.si] || [], lists, sd.sp.from, sd.sp.to, (st.geom || {}).H);
-    if (!band) { hide(); return; }   /* R26-28: an edge the window dropped names nothing - nothing is drawn */
-    sd.rect.setAttribute("x", band.x.toFixed(1)); sd.rect.setAttribute("y", band.y.toFixed(1));
-    sd.rect.setAttribute("width", band.w.toFixed(1)); sd.rect.setAttribute("height", band.h.toFixed(1));
-    sd.rect.setAttribute("fill-opacity", pose.alpha.toFixed(3));
-    sd.label.setAttribute("opacity", 1);
-    sd.label.setAttribute("x", band.cx.toFixed(1));
-    sd.label.setAttribute("y", spanLabelY(band, sd.fs).toFixed(1));
-    sd.lg.forEach((ts, j) => ts.setAttribute("opacity", spanGlyph(pose.write, j, sd.lg.length).toFixed(3)));
-  };
   /* the figure's write: the figure writes glyph by glyph over the first 0.6 of its word, the sub over the rest */
   const paintFigure = (fg, t, st) => {
     const sp = fg.sp, dur = Math.max(0.001, sp.dur || 1), u = clamp01((t - sp.at) / dur);
@@ -5482,6 +5505,10 @@ async function mount(doc) {
   const writeGlyphs = (glyphs, tw, span) => { const n = Math.max(1, glyphs.length), per = span / n; glyphs.forEach((g, j) => setW(g, clamp01((tw - j * per) / (per * 1.6)))); };
   /* an erase runs the wipe backwards, glyph after glyph, over ERASE_S: the factor each glyph's --w is multiplied by */
   const eraseFactor = (n, j, ue) => 1 - clamp01((ue * (n + 3) - j) / 3);
+  /* THE PAGE SPECIES CONTEXT (R26-41): the one object a page painter reaches the engine through - built once here,
+     where every helper it names already exists, and handed to every page painter by paintPerform. A pure bag: a
+     painter that wants something new is given it here by name, and never as an identifier only the engine has. */
+  const PAGE_CTX = { pointsNow: lpPointsNow, datumNow: lpDatumNow, markDatum: lpMarkDatum, clamp: clamp01, el: lpEl, PS };
   const paintPerform = (st, scene, t, pg) => {
     if (!st.perform) st.perform = buildPerform(st, scene, pg);
     const PF = st.perform;
@@ -5492,7 +5519,11 @@ async function mount(doc) {
                        ...pageSpecies(scene, "chart_to").filter((sp) => sp.to === "recast" || sp.to === "morph")];   /* P48 T7: a recast or morph takes the line - the bracket leaves with it, on the same clock */
     for (const b of PF.brackets) paintBracket(b, t, undrawAll.find((sp) => sp.at >= b.sp.at), st);
     for (const sd of PF.spreads || []) paintSpread(sd, t, st);   /* the fifth watch: the gap between the lines, bled full; R26-28: on the active state */
-    for (const sd of PF.spans || []) paintSpan(sd, t, st);       /* P50 T4: the named stretch of time, shaded behind the chart on the live scale */
+    /* THE PAGE REGISTRY HOOK (P52 T5; R26-41) - the only page painting written in this layer. The kind comes off the
+       DECLARATION, so the registry routes it; `span` (P50 T4: the named stretch of time, shaded behind the chart on the
+       live scale) is the first page species through it. NEXT, in this order: `bracket`, `figure`, `spread` - paintBracket,
+       paintFigure and paintSpread still sit above as engine code, and each moves with its builder, not before it. */
+    for (const sd of PF.spans || []) { const p = PAGE_PAINTERS[sd.sp.kind || "span"]; if (p) p(sd, t, st, PAGE_CTX); }
     for (const fg of PF.figures || []) paintFigure(fg, t, st);   /* E50: the chart's next thing */
     for (const cr of PF.crosses || []) paintCross(cr, t);        /* P50 T6: the census's X marks and the share they cross */
     for (const nt of PF.notes || []) { nt.div.style.opacity = t >= nt.sp.at ? "" : "0"; writeGlyphs(nt.glyphs, t - nt.sp.at, Math.max(0.05, nt.sp.dur || 1)); }

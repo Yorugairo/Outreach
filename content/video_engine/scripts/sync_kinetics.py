@@ -26,6 +26,22 @@ engine's body. A species is a module here that registers its painter as its last
 `if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.<kind> = paint<Kind>;` - a plain
 assignment, so inlining keeps it and `node --test` (where SPECIES_PAINTERS does not exist) still
 imports the module for its pure math.
+
+THE SPACE (P52 T5, R26-41): there are two registries under that one rule, because there are two
+spaces to paint in, and a module may DECLARE which is its own on its first line, in a comment of
+its own - `/* SPACE: page */` or `/* SPACE: stage */`:
+
+    page    the page's PERFORM layer paints it - inside the chart's viewBox, on the page state,
+            under the active state's park transform, on the perform clock - so it registers into
+            PAGE_PAINTERS, and its region sits BEFORE paintPerform, which closes over the painter
+            it calls (and after PAGE_PAINTERS' own declaration, which the assignment reaches).
+    stage   the stage-px overlay and the scene's clock: SPECIES_PAINTERS, with the region AFTER
+            that registry's declaration. This is the space a module that declares nothing is held
+            to, so every species written before P52 T5 keeps its own without a word.
+
+`--check` refuses a module that registers into the registry of a space it did not declare, and
+names both. A module that registers no painter - a kinetics law, or a species whose math a page
+BUILDER calls - declares nothing and is held to nothing here: the space is about the painter.
 """
 from __future__ import annotations
 
@@ -44,6 +60,13 @@ SPECIES_DIR = REPO / "content/video_engine/scripts/species"
 REGION = re.compile(r"^([ \t]*)/\* KINETICS:BEGIN (\w+) \*/\n(.*?)^[ \t]*/\* KINETICS:END \*/", re.M | re.S)
 IMPORT = re.compile(r"^\s*import\b.*?\bfrom\s+[\"']\.{1,2}/(?:\w+/)?(\w+)\.mjs[\"'];?\s*$", re.M)
 EXPORT_DECL = re.compile(r"^(\s*)export\s+((?:async\s+)?(?:const|let|function|class))\b")
+SPACE_LINE = re.compile(r"^\s*/\*\s*SPACE:\s*([A-Za-z]+)\s*\*/\s*$")
+REGISTRATION = re.compile(r"\b(SPECIES_PAINTERS|PAGE_PAINTERS)\s*\.\s*(\w+)\s*=")
+REGISTRY_OF = {"page": "PAGE_PAINTERS", "stage": "SPECIES_PAINTERS"}
+CALLED = {"PAGE_PAINTERS": "the page registry", "SPECIES_PAINTERS": "the stage registry"}
+DECLARED = {"PAGE_PAINTERS": re.compile(r"^\s*const PAGE_PAINTERS\s*=", re.M),
+            "SPECIES_PAINTERS": re.compile(r"^\s*const SPECIES_PAINTERS\s*=", re.M)}
+PERFORM_DEF = re.compile(r"^\s*const paintPerform\s*=", re.M)
 
 
 def rel(path: Path) -> str:
@@ -92,6 +115,59 @@ def inline_text(src: str, indent: str = "  ") -> str:
         out.append(indent + line if line.strip() else "")
         in_block = _block_state(line, in_block)
     return "\n".join(out)
+
+
+def space_of(src: str) -> str:
+    """THE SPACE this module's painter paints in, declared on its FIRST non-blank line as
+    `/* SPACE: page */` or `/* SPACE: stage */`. Absent means stage - the space every species
+    written before P52 T5 paints in, so not one existing module had to be touched to say so."""
+    first = next((line for line in src.replace("\r\n", "\n").split("\n") if line.strip()), "")
+    m = SPACE_LINE.match(first)
+    return m.group(1) if m else "stage"
+
+
+def registrations_of(src: str) -> list[tuple[str, str]]:
+    """Every painter the module registers, as (registry, kind). The `typeof` guard around the
+    assignment is not one - only `<REGISTRY>.<kind> =` counts - and a module may register more
+    than one kind (vecmap registers three)."""
+    return REGISTRATION.findall(src)
+
+
+def space_problems(path: Path, src: str, html: str, at: int) -> list[str]:
+    """THE SPACE RULE (P52 T5, R26-41): the space a module declares and the registry it registers
+    into are one statement made twice, so they have to agree. A page painter in the stage registry
+    would be called with the stage-px overlay and the scene's clock, paint in the wrong space, and
+    leave the perform layer none the wiser - that is exactly what P50 T4 found and wrote down.
+
+    The region's PLACE follows from the same declaration, because the inlined copy has no imports
+    and order is the dependency: a page painter is closed over by paintPerform and must exist
+    before it; either painter's assignment must come after its registry's own declaration.
+
+    `at` is where the module's region begins in the engine. A module that registers no painter is
+    held to none of this: the space is about the painter."""
+    space, regs = space_of(src), registrations_of(src)
+    if space not in REGISTRY_OF:
+        return [f"{rel(path)} declares SPACE: {space} - the only spaces are "
+                + " and ".join(sorted(REGISTRY_OF)) + " (a module that paints nothing declares neither)"]
+    if not regs:
+        return []
+    want = REGISTRY_OF[space]
+    for reg, _kind in regs:
+        if reg != want:
+            return [f"{rel(path)} declares SPACE: {space} but registers into {reg} ({CALLED[reg]}) - "
+                    f"a {space} species registers into {want}"]
+    decl = DECLARED[want].search(html)
+    if decl is None:
+        return [f"{rel(path)} declares SPACE: {space} but the engine has no {want} declaration to register into"]
+    out: list[str] = []
+    if at < decl.start():
+        out.append(f"{rel(path)} declares SPACE: {space} but its region sits BEFORE the engine's "
+                   f"{want} declaration, which the registration reaches")
+    perform = PERFORM_DEF.search(html)
+    if space == "page" and perform is not None and at > perform.start():
+        out.append(f"{rel(path)} declares SPACE: page but its region sits AFTER the engine's paintPerform, "
+                   "which has to close over the painter it calls")
+    return out
 
 
 def module_files(modules: Path = MODULES, species: Path | None = SPECIES_DIR) -> dict[str, Path]:
@@ -149,6 +225,7 @@ def check(template: Path = ENGINE, modules: Path = MODULES, species: Path | None
         for dep in imports_of(src):
             if dep not in seen[:-1]:
                 problems.append(f"{name}: imports {dep} but {dep}'s region is not earlier in the engine")
+        problems += space_problems(mods[name], src, html, m.start())
         want = region_text(name, indent, src)
         if m.group(0) != want:
             diff = difflib.unified_diff(m.group(0).split("\n"), want.split("\n"), "template", rel(mods[name]), lineterm="", n=1)
