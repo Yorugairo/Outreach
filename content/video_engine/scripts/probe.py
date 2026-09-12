@@ -190,8 +190,8 @@ READ_DOM = r"""
      keeps its ink and its opacity: it is simply covered. Measured on the Tokyo build at 0:81 and again
      at 0:58 after a backward seek - both times the stale page still stood behind the live one, and
      opacity could not tell them apart. The scene's own world is wB, the last in DOM order, which is
-     also the one that paints on top. (The template's own __lpProbe / __camera / __lpDatum take the
-     FIRST ledger world and read the stale page when both are pages - reported, not fixed here.) */
+     also the one that paints on top - the same rule the template's own __lpProbe / __camera /
+     __lpDatum now take (R26-37), so the probe and the player name the same page. */
   const worlds = [...document.querySelectorAll('.world')];
   const wB = document.getElementById('wB') || worlds[worlds.length - 1];
   const world = wB && wB.__lp && wB.classList.contains('ledger') && eff(wB) > 0.05 ? wB : null;
@@ -224,15 +224,17 @@ READ_DOM = r"""
       }
     const rail = world.querySelector('.lp-rail');
     if (rail && eff(rail) > 0.05 && rail.getBoundingClientRect().height > 0) out.items.push({ k: 'rail', box: R(rail), px: 0, s: 1, txt: '' });
-    /* the charts as the DOM holds them, not as `__lp` remembers them: a page rebuilt into the world
-       can leave __lp pointing at the page BEFORE it, whose chart elements are detached (measured at
-       0:58 after a backward seek). The state object is used for one thing only - the plot box it
-       declares - and a chart with no state falls back to where its axes and data are drawn. */
-    const states = S && S.states && S.states.length ? S.states : (S ? [S] : []);
+    /* the charts as the DOM holds them: what is UP is a screen fact, and a page holds one chart per
+       state (a recast builds its own). The state object is used for one thing only - the plot box it
+       declares - and a builder that declares none (bars) falls back to where its data and axes are
+       drawn. Since R26-38 `__lp` is the page this world painted this frame, so the state and the DOM
+       are the same page on any seek path; before that, a cached page left __lp on the page BEFORE it,
+       whose chart elements are detached (measured at 0:58 after a backward seek). */
+    const states = S.states && S.states.length ? S.states : [S];
     let up = 0, chartBox = null, parked = false, barsOp = -1;
     for (const chart of world.querySelectorAll('.lp-chart')) {
       const o = eff(chart); if (o <= 0.05) continue;
-      const st = states.find((x) => x && x.chart === chart) || null;
+      const st = states.find((x) => x.chart === chart);
       up = Math.max(up, o);
       parked = parked || /scale\(0?\.[0-8]/.test(chart.style.transform || '');   /* lpPaintPark writes scale(<1) */
       const cb = R(chart); chartBox = chartBox ? [Math.min(chartBox[0], cb[0]), Math.min(chartBox[1], cb[1]),
@@ -342,8 +344,8 @@ READ_DOM = r"""
       }
     }
     out.chart = { up, box: chartBox, parked };
-    /* the marks summary from the drawn DOM, not through __lpProbe - that probe takes the first ledger
-       world and would answer for the page underneath */
+    /* the marks summary from the drawn DOM, not through __lpProbe: the gate's question is what is UP on
+       screen (an opacity-0 mark is not ink), which the state object does not answer */
     out.marks = { n: out.nmarks, drawn: out.drawn.length ? out.drawn.reduce((a, b) => a + b, 0) / out.drawn.length : null };
   }
   const cap = document.getElementById('caption');

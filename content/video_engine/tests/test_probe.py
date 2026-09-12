@@ -40,16 +40,15 @@ needs_vals = pytest.mark.skipif(not (VALS / "player.html").exists(), reason="the
 META_FIXED, META_APPROVED = 70.0, 71.0     # the Meta page held on each build
 
 
-def _in_its_own_thread(build: Path, t: float) -> dict:
-    """One instant of a SECOND build. Playwright's sync API allows one running loop per thread and the
-    module-scoped `tokyo` Probe owns this one, so the second player is read on a thread of its own."""
+def _on_a_thread(fn):
+    """Run a player on a thread of its own. Playwright's sync API allows one running loop per thread and
+    the module-scoped `tokyo` Probe owns this one, so any SECOND player is opened beside it."""
     import threading
     out: dict = {}
 
     def run() -> None:
         try:
-            with P.Probe(build) as p:
-                out["inst"] = p.at(t, "the second build")
+            out["v"] = fn()
         except BaseException as e:        # noqa: BLE001 - re-raised on the calling thread below
             out["err"] = e
 
@@ -58,7 +57,16 @@ def _in_its_own_thread(build: Path, t: float) -> dict:
     th.join()
     if "err" in out:
         raise out["err"]
-    return out["inst"]
+    return out["v"]
+
+
+def _in_its_own_thread(build: Path, t: float) -> dict:
+    """One instant of a SECOND build."""
+    def run() -> dict:
+        with P.Probe(build) as p:
+            return p.at(t, "the second build")
+
+    return _on_a_thread(run)
 
 
 @pytest.fixture(scope="module")
@@ -158,7 +166,8 @@ def test_a_parked_chart_is_measured_as_it_is_DRAWN(tokyo):
 @needs_tokyo
 def test_a_seek_is_the_play_for_the_probe_too(tokyo):
     """The boxes at t must not depend on where the probe looked before. Both worlds can hold a page at
-    once and the player's own `__lp` can point at the one underneath - so the probe reads the DOM."""
+    once, so the probe reads the DOM: what is UP on screen is a screen fact, and (since R26-38) the
+    player's own `__lp` names the page this world painted this frame on any seek path."""
     cold = tokyo.at(PARKED)
     tokyo.at(UNPARKED)
     again = tokyo.at(PARKED)
@@ -200,6 +209,53 @@ def test_the_page_s_own_labels_are_boxes_and_the_value_row_s_air_is_measured(tok
     half, lab = air(approved)
     assert 0 < P.gap_px(lab["val:$604"], lab["pill:$577"]) < half, "the pill stands inside the value's own air"
     assert P.gap_px(lab["val:$665"], lab["val:$633"]) < 2 * half, "and the row itself is fitted too tight"
+
+
+# the worlds as the DOM holds them: which one is a page, and whose title it carries
+WORLDS = """() => [...document.querySelectorAll('.world')].map((w) => { const h = w.querySelector('.lp-title:not(.lp-retitle)');
+  return { id: w.id, ledger: w.classList.contains('ledger'), title: h ? (h.textContent || '').slice(0, 30) : null }; })"""
+
+
+@needs_browser
+def test_the_template_s_probe_answers_for_the_page_on_TOP():
+    """R26-37 / R26-38. Two ledger scenes put a page in EACH world - the player paints the previous scene
+    into wA and this scene into wB, the one that paints on top - and `__lpProbe` took the FIRST ledger
+    world it found, so it answered for the page underneath. It must name the page on top, and name the
+    same one however the probe arrived at t (a backward seek repaints from a cached state)."""
+    import tempfile
+
+    import render_baseline as RB
+
+    tl, uris, t, _aspect = RB.load_surface("thread-baseline")
+    live, left = tl["scenes"][1]["scene_id"], tl["scenes"][0]["scene_id"]
+    back = tl["scenes"][0]["span"][0] + 1.0          # an instant inside the page that LEFT
+
+    def run() -> tuple:
+        with tempfile.TemporaryDirectory() as td:
+            RB.write_split(Path(td), tl, uris, "thread.timeline.json")
+            with P.Probe(Path(td), "thread.timeline.json") as p:
+                p.seek(t)
+                worlds = p.page.evaluate(WORLDS)
+                cold = p.page.evaluate("() => window.__lpProbe()")
+                first = p.at(t, "the page on top")
+                p.at(back, "the page that left")               # away, into the page underneath ...
+                second = p.at(t, "back at the page on top")    # ... and back: a cached state repaints
+                return (worlds, cold, p.page.evaluate("() => window.__lpProbe()"),
+                        first["page"], second["page"], p.errs)
+
+    worlds, cold, again, page, page2, errs = _on_a_thread(run)
+    assert not errs, errs
+    # the premise: both worlds hold a page at this instant, and they are different pages
+    assert [w["ledger"] for w in worlds] == [True, True], worlds
+    assert len({w["title"] for w in worlds}) == 2, worlds
+    assert cold["scene"] == live and cold["world"] == "wB", (cold["scene"], cold["world"], worlds)
+    assert cold["scene"] != left
+    # ... and the same answer after a backward seek: the state, not just the DOM, is this frame's page
+    for k in ("scene", "world", "title", "linePts"):
+        assert again[k] == cold[k], (k, again[k], cold[k])
+    assert [m["key"] for m in again["marks"]] == [m["key"] for m in cold["marks"]]
+    # ... and so is the probe's own read of the page: every box, by name, on either path
+    assert page2 == page, (page, page2)
 
 
 @needs_browser

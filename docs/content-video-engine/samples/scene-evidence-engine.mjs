@@ -3850,6 +3850,7 @@ async function mount(doc) {
     }
     const inlineBadges = {}; (pg.badges || []).forEach((bd) => { if (bd.inline) inlineBadges[LP_BADGE_COL[bd.accent]] = bd; });
     const st = { root, page, edge, blobs, strokes, nib, rect, goo, soakFx, soakFk: fk, seed, glyphs, chart, fieldPlate, boardCentre, badges, inlineBadges, field, rail, inkEls: [title, subEl, src], kind: pg.builder || "story",
+                 scene: scene.scene_id || null,   /* R26-37: the page's own name, so a probe says WHICH page it answered for */
                  bars: [], paths: [], labels: [], callout: null, cval: null, vals: pg.values || [],
                  vstr: pg.value_strings || [], emph: Number.isInteger(pg.emphasize) ? pg.emphasize : -1,
                  marks: [], markBy: {}, geom, portrait: PORTRAIT, linePts: [], titleEl: title, titleGlyphs: [...title.querySelectorAll(".g")], rtGlyphs: [], perform: null };   /* geom: the chart's drawing box (viewBox units); linePts: each series' points in it, for exact datum targets */   /* no emphasis declared = no datum styled (spec emits null) */
@@ -6242,6 +6243,9 @@ async function mount(doc) {
   };
   const paintLedger = (el, scene, t) => {
     const st = ledgerState.get(el.id + "|" + scene.scene_id) || buildLedger(el, scene);
+    el.__lp = st;   /* R26-38: the page this world paints THIS frame. buildLedger sets it too, but a CACHED state (every
+       backward seek, and any scene revisited) skipped it, so __lp went on naming the page built into this world last -
+       whose chart elements are detached. The paint was never wrong; only the bookkeeping the probes read was. */
     const pg = scene.world.page || {};
     if (!st.root.isConnected) { el.querySelectorAll(".lp").forEach((x) => x.remove()); el.appendChild(st.root); }
     if (!st.thread) lpThread(st, scene);   /* HF-16: after the page is in the DOM, so both charts have a layout box */
@@ -7821,6 +7825,7 @@ async function mount(doc) {
          A world that is not a map drops a stale one, the way the other branches drop a stale page. */
       const isVecmap = scene.world.kind === "vecmap";
       el.classList.toggle("ledger", isLedger);
+      if (!isLedger) el.__lp = null;   /* R26-38: the page's ink is removed below - the state that described it goes with it */
       el.classList.toggle("vecmap", isVecmap);
       if (!isVecmap) el.querySelectorAll("svg.vm").forEach((x) => x.remove());
       if (isLedger) { el.style.backgroundImage = "none"; paintLedger(el, scene, t); }
@@ -8432,11 +8437,16 @@ async function mount(doc) {
     if (T0 !== null && T0 !== "" && isFinite(+T0)) { scrub.value = +T0; scrub.dispatchEvent(new Event("input", { bubbles: true })); }
   }
   /* P47 T3: the morph's match-cut invariants on the active page (25 frames of the ARAP outline), for measure_morph.py / M17 */
+  /* R26-37: THE ACTIVE WORLD. The player paints the PREVIOUS scene into wA and THIS scene into wB
+     (`paint(wA, prev || sc); paint(wB, sc)`), and wB - last in DOM order - is the page that paints ON TOP. Under a
+     mount (Tokyo 0:58 and 0:81) both worlds hold a page and the outgoing one keeps its ink: a probe that took the
+     FIRST ledger world answered for the page UNDERNEATH. So every probe below takes [wB, wA]: this scene's page when
+     it has one, the page still standing when this scene is not a page at all. The same rule resolveTarget follows. */
   /* P49 T3: what the eye sees at t - the camera's state, its frustum in world (pre-camera) stage px, and for a declared
      target whether it is in frame, how much of it, at what on-screen scale, and where it lands on screen. Seek to t
      first (a datum resolves against the painted page). */
   window.__camArr = () => camArr && { u: camArr.u, slide: camArr.slide, box: camArr.box, state: camArr.state };   /* P49 T5: the arrival this frame, for the probes */
-  window.__lpDatum = (k, si, i) => { const w = [wA, wB].find((e) => e.__lp && e.classList.contains("ledger")); if (!w) return null; const st = w.__lp; return k == null ? lpDatumNow(st, si, i) : lpMarkDatumOn((st.states || [st])[k], si, i); };   /* R26-28: a datum on state k, or this frame's (lerped) position */
+  window.__lpDatum = (k, si, i) => { const w = [wB, wA].find((e) => e.__lp && e.classList.contains("ledger")); if (!w) return null; const st = w.__lp; return k == null ? lpDatumNow(st, si, i) : lpMarkDatumOn((st.states || [st])[k], si, i); };   /* R26-28: a datum on state k, or this frame's (lerped) position */
   window.__camera = (t, tg) => {
     let si = 0; for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
     const sc = TL.scenes[si], xf = camArr ? camArr.state : camNow(sc, t);   /* P49 T5: an arrival in progress is the camera this frame */
@@ -8447,7 +8457,7 @@ async function mount(doc) {
     return { scene: sc.scene_id, on: kin("camera"), zoom: st.s, look: st.look, at: st.at, frustum: fr, target };
   };
   window.__morphInvariants = (key) => {   /* no key: the page-enter morph; "from>to": a morph_to between two states (P48 T5) */
-    const world = [wA, wB].find((e) => e.__lp && e.classList.contains("ledger")); if (!world) return null;
+    const world = [wB, wA].find((e) => e.__lp && e.classList.contains("ledger")); if (!world) return null;
     const M = key == null ? world.__lp.morph : (world.__lp.morphTo || {})[key]; if (!M) return null;
     const frames = [];
     for (let i = 0; i <= 24; i++) frames.push(i === 24 ? M.B : lpMorphRing(M, i / 24));
@@ -8472,7 +8482,7 @@ async function mount(doc) {
      assembles one labeled strip PNG POSTed to :8732. */
   /* P47 T2 test probe (read-only): the active ledger page's drawn state, in the chart's own units */
   window.__lpProbe = () => {
-    const world = [wA, wB].find((e) => e.__lp && e.classList.contains("ledger")); if (!world) return null;
+    const world = [wB, wA].find((e) => e.__lp && e.classList.contains("ledger")); if (!world) return null;
     const st = world.__lp, PF = st.perform || { brackets: [], retitles: [], figures: [], spreads: [] };
     const paths = st.paths.map((pp) => { const off = parseFloat(pp.p.getAttribute("stroke-dashoffset") || "0"), drawn = pp.len - off;
       const q = pp.p.getPointAtLength ? pp.p.getPointAtLength(Math.max(0, Math.min(pp.len, drawn))) : { x: 0, y: 0 };
@@ -8487,7 +8497,7 @@ async function mount(doc) {
     const figures = (PF.figures || []).map((fg) => ({ D: fg.D, x: fg.x, fits: fg.fits, opacity: parseFloat(fg.g.getAttribute("opacity") || "0"),
       label: fg.lg.map((ts) => parseFloat(ts.getAttribute("opacity") || "0")) }));
     const marks = (st.marks || []).map((m) => ({ key: m.key, role: m.role, geom: m.geom }));   /* P48 T1: the keyed model, for the transition tests */
-    return { marks, linePts: st.linePts, paths, brackets, figures, spreads, title: w(st.titleGlyphs || []), retitles: PF.retitles.map((r) => w(r.glyphs)),
+    return { scene: st.scene || null, world: world.id, marks, linePts: st.linePts, paths, brackets, figures, spreads, title: w(st.titleGlyphs || []), retitles: PF.retitles.map((r) => w(r.glyphs)),
              morph: M ? { u: M.u, bbox: [mb.x, mb.y, mb.width, mb.height], fill: parseFloat(M.path.getAttribute("fill-opacity")), on: M.svg.style.opacity } : null };
   };
   window.__filmstrip = async (t0, dur, n, name) => {
