@@ -146,6 +146,13 @@
 #species .vmarc, #species-under .vmarc { fill: none; stroke: #F5B72E; stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
 #species .vmx, #species-under .vmx { fill: none; stroke: #F5B72E; stroke-width: 5; stroke-linecap: round; }
 #species .vmstamp, #species-under .vmstamp { font: 700 46px Inter, Arial, sans-serif; fill: #F5B72E; text-anchor: middle; paint-order: stroke; stroke: rgba(27,30,35,.85); stroke-width: 7px; }
+  /* R26-48 (P52 T4): GEOMETRIC PRECISION on every glyph the page writes. The same <text>, the same x/y and the
+     same computed type, measured 0.80 px taller in its ink box and ~0.015 px wider on a page that had painted
+     many frames than on a fresh one - the hinted advances and ascent Chromium's default `auto` lets Skia pick
+     per raster pass. A render arrives cold and a scrub session arrives warm, so the two disagreed on every
+     label. `geometricPrecision` takes the outline's own metrics unhinted, which are a function of the font and
+     the size alone: the preview's frame and the render's frame become the same frame. */
+  .lp text, .lp-chart text { text-rendering: geometricPrecision; }
   .lp-chart text { font-family: Inter, Arial, sans-serif; fill: var(--lp-chalk); }
   .lp-chart .ax { stroke: #8a94a0; stroke-width: 2; }
   .lp-chart .grid { stroke: rgba(242,242,242,.14); stroke-width: 1.5; }
