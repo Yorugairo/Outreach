@@ -542,7 +542,10 @@ def test_the_three_citation_orphans_the_triage_found_are_implemented_through_the
     frames = _at(real, "UNIFIED_LEDGER", "4.1 Mechanics Under the Hood")
 
     assert {r["status"] for r in arc} == {"implemented"}
-    assert all("stroke.mjs" in e for r in arc for e in r["status_evidence"])
+    # the evidence is the implementing MODULE, never the engine's inlined copy of it (the recipe's rule).
+    # Which module wins is an artifact of the three-entry cap and its sort: stroke.mjs keeps the stroke's own
+    # arclength table and clothoid.mjs the fitter's Fresnel series, and both implement this law (2026-09-12).
+    assert all("/kinetics/" in e for r in arc for e in r["status_evidence"])
     assert {r["status"] for r in damping} == {"implemented"}
     assert any("spring.mjs" in e for r in damping for e in r["status_evidence"])
     assert {r["status"] for r in frames} == {"implemented"}
@@ -572,8 +575,16 @@ def test_every_formula_record_carries_one_of_the_three_provenances(real) -> None
 def test_the_chain_cut_the_research_side_orphans(real) -> None:
     orphans = [r for r in real if r["kind"] == "formula" and r["status"] == "orphaned"]
 
-    # 107 formula records were orphaned before the chain read the research layer (2026-09-05)
-    assert 0 < len(orphans) < 107, len(orphans)
+    # 107 formula records were orphaned before the chain read the research layer (2026-09-05), and the
+    # guard used to be that the chain had not claimed them ALL. P52 gave the last 45 a row instead
+    # (BACKLOG R26-61 the rig's bibliography, R26-62 the ground and the transform chain, R26-63 the
+    # research the triage dropped, R26-64 two dials nothing reads), so the bucket is empty on purpose.
+    # What still catches an over-reaching chain: every record carries a status WITH its evidence, and an
+    # orphan carries none - so nothing can sit in the bucket unaccounted, and nothing can leave it silently.
+    assert len(orphans) < 107, len(orphans)
+    assert all(r["status_evidence"] for r in real if r["kind"] in ("formula", "code")), \
+        [r["name"] for r in real if r["kind"] in ("formula", "code") and not r["status_evidence"]][:5]
+    assert not [r for r in orphans if r["status_evidence"]]
     assert all(BAR.CHAIN_ARROW not in e for r in real if r["kind"] == "formula"
                and r["status"] != "implemented" for e in r["status_evidence"])
 

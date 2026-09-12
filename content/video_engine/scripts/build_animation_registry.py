@@ -85,8 +85,11 @@ CONTEXT_COMMENTS = 8     # comment lines read around a declaration for its citat
 EXPORT = re.compile(r"^export\s+(?:const|function)\s+([A-Za-z_$][\w$]*)")
 CONST_ANY = re.compile(r"^\s*(?:export\s+)?(?:const|let|var|function)\s")
 FLAG_MENTION = re.compile(r"kinetics\.([a-z][a-z0-9_]*)")
-KIN_BEGIN = re.compile(r"KINETICS:BEGIN\s+(\w+)")
-KIN_END = re.compile(r"KINETICS:END")
+# the MARKER, not the word: a module header explains itself with "between KINETICS:BEGIN camera and
+# KINETICS:END", and reading that prose as the marker closed every region three lines in - the engine's
+# inlined copies then read as player code (120 lines of region against sync_kinetics' 4406, 2026-09-12)
+KIN_BEGIN = re.compile(r"^\s*/\*\s*KINETICS:BEGIN\s+(\w+)\s*\*/\s*$")
+KIN_END = re.compile(r"^\s*/\*\s*KINETICS:END\s*\*/\s*$")
 DEFAULTS_BLOCK = re.compile(r"KINETICS_DEFAULTS\s*=\s*Object\.freeze\(\{(.*?)\}\)", re.S)
 DEFAULT_KEY = re.compile(r"^\s*([a-z][a-z0-9_]*)\s*:", re.M)
 OBJECT_KEY = re.compile(r"([A-Za-z_$][\w$]*)\s*:")
@@ -147,6 +150,11 @@ def name_tokens(name: str) -> tuple[str, ...]:
     if name in LAW_ALIASES:
         return LAW_ALIASES[name]
     compounds = tuple(dict.fromkeys(COMPOUND.findall(name)))
+    # ... and the closed form of each: prose hyphenates ("Arc-Length reparameterisation") where the code that
+    # implements it does not (`stroke.mjs`: "equal arclength"), and the two are the same word. Without this the
+    # module was invisible to its own law and a comment in an unrelated module became the evidence (2026-09-12).
+    closed = tuple(c.replace("-", "").replace("/", "") for c in compounds)
+    compounds = tuple(dict.fromkeys(compounds + tuple(c for c in closed if len(c) > 4)))
     return compounds or (name,)
 
 
@@ -453,15 +461,24 @@ def code_record(corpus: Corpus, name: str, rel: str, line: int, signature: str,
             "cites": cites, "_sites": sites, "_usage": usage or name}
 
 
+def decl_re(name: str) -> re.Pattern:
+    """`const <name> = ...` / `function <name>(...)`: the symbol's OWN declaration.
+
+    The test used to be CONST_ANY - any declaration line at all - which also threw away every call that
+    assigns its result (`const st = camArrivalState(box, u, W, H)`, P49's camera arrival). That was
+    camArrivalState's only call site, so a live symbol read as orphaned (2026-09-12)."""
+    return re.compile(r"^\s*(?:export\s+)?(?:const|let|var|function)\s+" + re.escape(name) + r"\b")
+
+
 def template_sites(corpus: Corpus, name: str, flag: str | None) -> list[int]:
-    """Template lines (1-based) reading `kin("<flag>")` or using the name outside its declaration,
+    """Template lines (1-based) reading `kin("<flag>")` or using the name outside its OWN declaration,
     the inlined KINETICS regions excluded."""
-    word, kin = word_re(name), (f'kin("{flag}")' if flag else None)
+    word, kin, decl = word_re(name), (f'kin("{flag}")' if flag else None), decl_re(name)
     out = []
     for i, line in enumerate(corpus.template_lines):
         if in_spans(i, corpus.inlined):
             continue
-        if (kin and kin in line) or (word.search(line) and not CONST_ANY.match(line)):
+        if (kin and kin in line) or (word.search(line) and not decl.match(line)):
             out.append(i + 1)
     return out
 
@@ -592,9 +609,60 @@ def code_status(rec: dict, corpus: Corpus) -> tuple[str, list[str]]:
     evidence = [f"{corpus.template_rel}:{n}" for n in sites[:3]]
     evidence += [f"{rel}:{first_line(corpus.tests[rel], usage)}" for rel in rec["tests"]]
     evidence += module_uses(corpus, usage, rec["module"], rec["line"])
+    if "." in rec["name"]:      # an exported object's key: read as a property, never as a bare word
+        evidence += key_uses(corpus, rec["name"], usage, rec["module"], rec["line"])
     if evidence:
         return "implemented", evidence
     return row_status(corpus, naming_rows(corpus, (rec["name"], usage)))   # the rows that NAME it (it passed the names themselves as rows - a latent unpack error, first hit by an export nothing called: P49's CAM_EASES)
+
+
+def code_lines_only(text: str) -> list[bool]:
+    """Per line: is this CODE rather than prose? A `/* ... */` block's continuation lines carry no comment mark of
+    their own, so COMMENT_LINE cannot see them, and a doc line naming a dial ("a zoom in place of ATTN.SCALE")
+    would read as a use. The same block scan sync_kinetics runs (`_block_state`), kept local to this builder."""
+    out, in_block = [], False
+    for line in split_lines(text):
+        opened = in_block
+        i, seen_code = 0, False
+        while i < len(line):
+            if in_block:
+                if line.startswith("*/", i):
+                    in_block, i = False, i + 2
+                    continue
+            elif line.startswith("/*", i):
+                in_block, i = True, i + 2
+                continue
+            elif line.startswith("//", i):
+                break
+            elif not line[i].isspace():
+                seen_code = True
+            i += 1
+        out.append(seen_code and not (opened and not seen_code))
+    return out
+
+
+def key_uses(corpus: Corpus, name: str, key: str, own_module: str, own_line: int) -> list[str]:
+    """Where a constant object's KEY is read: as `OWNER.KEY` anywhere, or as a bare `.KEY` inside the owning
+    module, which is the `const P = Object.assign({}, OWNER, o); ... P.KEY` idiom every module uses.
+
+    `word_re` refuses a dotted name on purpose - so `foo.springPop` is not our `springPop` - which leaves a key
+    findable nowhere but its own declaration. That went unnoticed while `inlined_spans` was reading the engine's
+    copies of the modules as player code: the copy's declaration line stood in for a use. With the regions
+    excluded correctly, 39 live dials (STOP.*, CLOTHOID.*, CADENCE.*, FADE_UP.*) read as orphaned (2026-09-12).
+    The template's inlined regions stay excluded here too: a copy of a module is not the player calling it."""
+    dotted = word_re(name)
+    prop = re.compile(r"\.\s*" + re.escape(key) + r"(?![\w$])")
+    out: list[str] = []
+    for rel, text in list(corpus.modules.items()) + [(corpus.template_rel, corpus.template)]:
+        own, head, is_code = rel == own_module, header_lines(text), code_lines_only(text)
+        for i, line in enumerate(split_lines(text)):
+            if i < head or (own and i + 1 == own_line) or COMMENT_LINE.match(line) or not is_code[i]:
+                continue
+            if rel == corpus.template_rel and in_spans(i, corpus.inlined):
+                continue
+            if dotted.search(line) or (own and prop.search(line)):
+                out.append(f"{rel}:{i + 1}")
+    return out[:3]
 
 
 def module_uses(corpus: Corpus, name: str, own_module: str, own_line: int) -> list[str]:
