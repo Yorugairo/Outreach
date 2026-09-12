@@ -1444,6 +1444,15 @@ together, so we did a page wipe, because that's one of the only ways it makes se
    is the world change; the `docks -> dip` default stands for a world that arrives without one (a plate, a clip, a page
    that enters built or by the camera). Before R26-50 the mount's wash had hidden that dip's black under the cream; once
    the mount ran on its own clock the 0.47 s of black showed as it was. An authored `dip` still wins.
+   **Amended again 2026-09-12, minutes later** (the operator: *"we should not be dipping any time we add a dock, we
+   should be in control of our camera/lighting, that sounds like it must have been an old rule"*): #3's `docks -> dip`
+   is RETIRED. The mechanical default exit is `cut` for every row, docks or bare, whatever the next world's enter; a
+   dip or a blur-zoom is authored by name (9.16 #3), the signatures are the world changes (#2), and the camera and the
+   lighting - E59, E45's light, the darken - are the tools that carry a card's arrival. And the reason it is retired
+   outright rather than narrowed (the operator, the same minute: *"i think we should just not do it at that default at
+   all though, that's how we have hidden bad frames that have to be manually detected"*): a default dip paints black
+   over the boundary, so a bad frame under it is never seen by the eyes or the gates - a transition is authored, never
+   a blanket. Applies to every build from this date; the approved shorts are not rebuilt for it (R26-45).
 4. **Gates.** A dip is a transition, not a still: M01/M10/M16 count its 14 frames as the boundary event, not as stillness; a
    blur-zoom's magnification is motion. The gate constants carry the `[DERIVED]` tag.
 

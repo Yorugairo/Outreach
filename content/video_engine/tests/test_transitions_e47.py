@@ -178,19 +178,20 @@ def test_a_transition_frame_renders_identically_in_two_browsers(exit_id: str, ba
 
 
 # ---------------------------------------------------------------- the compiler's default (E47 #3)
-def test_the_mechanical_default_is_dip_with_docks_and_cut_when_bare():
-    assert B.scene_exit(None, True) == ("dip", None)
+def test_the_mechanical_default_is_cut_for_every_row():
+    """E47 #3 retired 2026-09-12 (the operator: "we should not be dipping any time we add a dock, we should be in
+    control of our camera/lighting"): docks or bare, the default is cut; a dip is authored by name."""
+    assert B.scene_exit(None, True) == ("cut", None)
     assert B.scene_exit(None, False) == ("cut", None)
+    assert B.DEFAULT_EXIT_DOCKS == "cut" == B.DEFAULT_EXIT_BARE
 
 
-def test_a_page_arriving_by_a_signature_takes_cut_by_default_and_an_authored_dip_still_wins():
-    """E47 amended 2026-09-12: the signature IS the world change - a dip in front of a mount painted 0.47 s of
-    black before the cream (Tokyo s04 -> s05, "the black flash is back on the scene change")."""
-    for enter in B.SIGNATURE_ENTERS:
+def test_no_enter_and_no_dock_changes_the_default_and_an_authored_dip_still_wins():
+    """The black flash of 2026-09-12 (Tokyo s04 -> s05: the docks -> dip default in front of a mount) is gone for
+    every enter, not only the signatures; an authored dip is still the author's."""
+    for enter in B.SIGNATURE_ENTERS + ("camera", "built", None):
         assert B.scene_exit(None, True, enter) == ("cut", None), enter
         assert B.scene_exit(None, False, enter) == ("cut", None), enter
-    assert B.scene_exit(None, True, "camera") == ("dip", None), "a page that arrives without a signature keeps E47 #3's default"
-    assert B.scene_exit(None, True, None) == ("dip", None), "a plate keeps it too"
     assert B.scene_exit("dip", True, "mount") == ("dip", None), "authored wins"
     assert B.scene_exit("dip:0.3", False, "spiral") == ("dip:0.3", 0.3)
 

@@ -88,7 +88,9 @@ CENTRE_MAX_H = 0.58                                 # a centred card takes at mo
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
 TIMED_EXITS = ("dip", "blurzoom")   # ... and only these two read the suffix as SECONDS (suck's is a point)
-DEFAULT_EXIT_DOCKS = "dip"          # E47 #3: was "wipe_right" until 2026-09-06
+DEFAULT_EXIT_DOCKS = "cut"          # E47 #3 RETIRED 2026-09-12 (the operator: "we should not be dipping any time we add a dock, we should be in
+                                    # control of our camera/lighting, that sounds like it must have been an old rule"): the mechanical default is
+                                    # cut for every row; a dip or a blur-zoom is AUTHORED by name. Was "dip" 2026-09-06 -> 09-12, "wipe_right" before.
 DEFAULT_EXIT_BARE = "cut"
 SIGNATURE_ENTERS = ("mount", "spiral", "morph")   # E47 #2 (amended 2026-09-12): a page arriving by a signature IS the world change - no dip
                                                   # in front of it by default (the operator: "the dark frame happens at 1:01 on the scene
@@ -1091,21 +1093,18 @@ def parse_exit(exit_id: str) -> tuple[str, float | None]:
 
 
 def scene_exit(authored_exit: str | None, has_docks: bool, page_enter: str | None = None) -> tuple[str, float | None]:
-    """The HYBRID exit rule (operator 2026-08-29), with E47's default (2026-09-06) and its amendment (2026-09-12).
-
-    `page_enter` is the INCOMING page's enter (the engine reads a row's exit as the transition INTO it): a page
-    arriving by a signature - mount, spiral, morph - takes `cut` by default, because the signature is the world
-    change (E47 #2) and a dip in front of it painted 0.47 s of black before the cream (the operator, 2026-09-12:
-    "the black flash is back on the scene change ... between s04 and s05"). An authored exit still wins.
+    """The HYBRID exit rule (operator 2026-08-29): an authored exit wins; the mechanical default is CUT for every
+    row (E47 #3 retired 2026-09-12 - "we should not be dipping any time we add a dock, we should be in control of
+    our camera/lighting"). A dip or a blur-zoom is authored by name (doc 29 s9.16 #3); the signatures - the mount,
+    the spiral, the morph - are the world changes (E47 #2). `has_docks` and `page_enter` are accepted for the
+    record of the two defaults that came before (docks -> dip; a signature enter -> cut) and change nothing now.
 
     An authored 6th shot-table element wins - doc 29 s9.16 #3's override stands, and a row that
     wants the carried-light cross-reveal still asks for it by name. Otherwise the MECHANICAL
     default is ``dip`` when the scene carries docks and ``cut`` when it is bare (it was
     ``wipe_right``/``cut``: the wipe is retired as the default world change, E47 #3).
     Returns the exit as the timeline carries it and the seconds it declares, if any."""
-    if authored_exit is None and page_enter in SIGNATURE_ENTERS:
-        return parse_exit(DEFAULT_EXIT_BARE)
-    return parse_exit(authored_exit or (DEFAULT_EXIT_DOCKS if has_docks else DEFAULT_EXIT_BARE))
+    return parse_exit(authored_exit or DEFAULT_EXIT_BARE)
 
 
 def _page_state(spec_id: str, ep_dir: Path, where: str) -> dict:
