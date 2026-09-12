@@ -90,6 +90,9 @@ CENTRE_BAND = 0.64                                  # ... and is centred in the 
 TIMED_EXITS = ("dip", "blurzoom")   # ... and only these two read the suffix as SECONDS (suck's is a point)
 DEFAULT_EXIT_DOCKS = "dip"          # E47 #3: was "wipe_right" until 2026-09-06
 DEFAULT_EXIT_BARE = "cut"
+SIGNATURE_ENTERS = ("mount", "spiral", "morph")   # E47 #2 (amended 2026-09-12): a page arriving by a signature IS the world change - no dip
+                                                  # in front of it by default (the operator: "the dark frame happens at 1:01 on the scene
+                                                  # change, the mount starts at 1:02" - the 0.47 s of black before the cream)
 
 TIMELINE_NAME = "steel-and-paper.timeline.json"  # the compiled scene_evidence_timeline.v1 the gate reads
 # Per-episode overrides (Tokyo, 2026-09-04): another episode's build script imports this module,
@@ -1087,14 +1090,21 @@ def parse_exit(exit_id: str) -> tuple[str, float | None]:
     return exit_id, secs
 
 
-def scene_exit(authored_exit: str | None, has_docks: bool) -> tuple[str, float | None]:
-    """The HYBRID exit rule (operator 2026-08-29), with E47's default (2026-09-06).
+def scene_exit(authored_exit: str | None, has_docks: bool, page_enter: str | None = None) -> tuple[str, float | None]:
+    """The HYBRID exit rule (operator 2026-08-29), with E47's default (2026-09-06) and its amendment (2026-09-12).
+
+    `page_enter` is the INCOMING page's enter (the engine reads a row's exit as the transition INTO it): a page
+    arriving by a signature - mount, spiral, morph - takes `cut` by default, because the signature is the world
+    change (E47 #2) and a dip in front of it painted 0.47 s of black before the cream (the operator, 2026-09-12:
+    "the black flash is back on the scene change ... between s04 and s05"). An authored exit still wins.
 
     An authored 6th shot-table element wins - doc 29 s9.16 #3's override stands, and a row that
     wants the carried-light cross-reveal still asks for it by name. Otherwise the MECHANICAL
     default is ``dip`` when the scene carries docks and ``cut`` when it is bare (it was
     ``wipe_right``/``cut``: the wipe is retired as the default world change, E47 #3).
     Returns the exit as the timeline carries it and the seconds it declares, if any."""
+    if authored_exit is None and page_enter in SIGNATURE_ENTERS:
+        return parse_exit(DEFAULT_EXIT_BARE)
     return parse_exit(authored_exit or (DEFAULT_EXIT_DOCKS if has_docks else DEFAULT_EXIT_BARE))
 
 
@@ -3376,7 +3386,8 @@ def main() -> int:
                                         read_moved=e63.get("read_moved"), read_deferred=bool(e63.get("read_deferred"))))
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order
         try:
-            exit_id, exit_s = scene_exit(authored_exit, bool(docks))
+            _pg = (world or {}).get("page") if isinstance((world or {}).get("page"), dict) else None
+            exit_id, exit_s = scene_exit(authored_exit, bool(docks), (_pg or {}).get("enter"))
         except ValueError as exc:
             raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         camera = dict(row_camera) if row_camera is not None else camera_identity()   # a COPY: one CAM_ROW dict is shared by many rows

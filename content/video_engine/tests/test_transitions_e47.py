@@ -183,6 +183,18 @@ def test_the_mechanical_default_is_dip_with_docks_and_cut_when_bare():
     assert B.scene_exit(None, False) == ("cut", None)
 
 
+def test_a_page_arriving_by_a_signature_takes_cut_by_default_and_an_authored_dip_still_wins():
+    """E47 amended 2026-09-12: the signature IS the world change - a dip in front of a mount painted 0.47 s of
+    black before the cream (Tokyo s04 -> s05, "the black flash is back on the scene change")."""
+    for enter in B.SIGNATURE_ENTERS:
+        assert B.scene_exit(None, True, enter) == ("cut", None), enter
+        assert B.scene_exit(None, False, enter) == ("cut", None), enter
+    assert B.scene_exit(None, True, "camera") == ("dip", None), "a page that arrives without a signature keeps E47 #3's default"
+    assert B.scene_exit(None, True, None) == ("dip", None), "a plate keeps it too"
+    assert B.scene_exit("dip", True, "mount") == ("dip", None), "authored wins"
+    assert B.scene_exit("dip:0.3", False, "spiral") == ("dip:0.3", 0.3)
+
+
 def test_an_authored_exit_still_wins_and_the_wipe_is_still_reachable_by_name():
     for name in ("wipe_right", "wipe", "cut", "dissolve", "suck:0.5,0.5"):
         assert B.scene_exit(name, True) == (name, None), name

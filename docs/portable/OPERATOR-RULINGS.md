@@ -1438,6 +1438,12 @@ together, so we did a page wipe, because that's one of the only ways it makes se
    mechanical default becomes `docks → dip`, `bare → cut` (9.16 §3's authored override stands). *"We made it the default because
    it worked, but we need a better default, and it can be an effect at that point"* - the carried-light cross-reveal stays in
    the kit as an EFFECT, reached by name (`wipe` / `wipe_right`) when a shot wants it, and is the default nowhere.
+   **Amended 2026-09-12** (the operator, on the fourth form: *"The black flash is back on the scene change ... between
+   s04 and s05 ... the dark frame happens at 1:01 on the scene change, the mount starts at 1:02"*): a page that ARRIVES
+   by a signature - the mount, the spiral, the morph (#2) - takes `cut` as its mechanical default, because the signature
+   is the world change; the `docks -> dip` default stands for a world that arrives without one (a plate, a clip, a page
+   that enters built or by the camera). Before R26-50 the mount's wash had hidden that dip's black under the cream; once
+   the mount ran on its own clock the 0.47 s of black showed as it was. An authored `dip` still wins.
 4. **Gates.** A dip is a transition, not a still: M01/M10/M16 count its 14 frames as the boundary event, not as stillness; a
    blur-zoom's magnification is motion. The gate constants carry the `[DERIVED]` tag.
 
