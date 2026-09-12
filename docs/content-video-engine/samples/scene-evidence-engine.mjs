@@ -8579,7 +8579,7 @@ async function mount(doc) {
 
   /* WHERE the flag chip stands: beside the ellipse, on the side that has the room. `side` is the author's
      ("left" | "right"), else the right unless the card would leave the stage. */
-  const ringFlagPlace = (e, side, stageW = 1920) => {
+  const ringFlagPlace = (e, side, stageW) => {   /* stageW from the caller (the engine's STAGE_W): no landscape literal in player code (portrait parity) */
     const half = (CHIP.SIZE * RING.FLAG_K) / 2, gap = RING.FLAG_GAP + half;
     const right = side !== "left" && (side === "right" || e.cx + e.rx + gap * 2 <= stageW);
     return { x: e.cx + (right ? 1 : -1) * (e.rx + gap), y: e.cy, side: right ? "right" : "left" };
@@ -8610,7 +8610,7 @@ async function mount(doc) {
       const f = ringDashF(pose.f, dash);
       if (f > 0) drawOn(el("path", "rngdash", g, { d: dash.d }), f);
     });
-    const place = sp.flag ? ringFlagPlace(e, sp.flag_side, STAGE_W || 1920) : null;
+    const place = sp.flag ? ringFlagPlace(e, sp.flag_side, STAGE_W) : null;
     if (sp.label) {   /* the ring's own label, where the engine's callout writes it: outside the ellipse, up and right -
          UNLESS the flag stands on that side, in which case it goes ABOVE the ellipse and starts at its left edge. A
          card that covers the number defeats the ring (read off the first frame of the `ring-dashed-chip` golden). */

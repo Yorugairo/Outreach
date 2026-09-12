@@ -30,13 +30,15 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import sync_kinetics as SK  # noqa: E402
 
-MODULES = ["ease", "spring", "stroke", "clothoid", "ink", "squash", "idle", "stopaction", "homography", "chartxf",
+MODULES = ["ease", "spring", "stagger",   # P52 T10: the caption's stagger envelope - after spring, before the caption block uses it
+           "stroke", "clothoid", "ink", "squash", "idle", "stopaction", "homography", "chartxf",
            "camera", "arap",   # P50 T7 (homography): the planar projection that lands a card on a plate's declared surface - it imports nothing, and its region sits after the stop action whose impact it composes with
            "morph_a"]   # P43 T1 + P47 T5/T1/T3 + P50 T12 (morph_a: doc 43 s43.5 Method A, after arap - it imports it)
                                               # + P50 T14 the clothoid fitter, beside the stroke it is drawn by; in dependency order (the template's region order)
 SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span", "vecmap",
            "thread",    # P50 T15 / HF-16: the WIRE - a page species' carry math, so it registers no painter either (span's case)
-           "tippill"]   # P50 T11: R26-34's pill - a line PAGE's option rather than a targeted kind, so it registers no painter   # P50 T2 on: one module per species kind, inlined into the species block; `press` is the
+           "tippill",   # P50 T11: R26-34's pill - a line PAGE's option rather than a targeted kind, so it registers no painter   # P50 T2 on: one module per species kind, inlined into the species block; `press` is the
+           "newsreel", "countarray", "agenda", "ring", "melt"]   # P52 T6 / T7 / T8 / T9: the wave-3 species, in the engine's region order (melt registers no painter - an exit)
                               # `breakthrough` (P50 T10/T13) is a third that registers no painter: the burst is a PAGE
                               # mechanic painted by lpPaintBreakthrough off the page's build clock, and it PREDATES the
                               # module rule - only its new math (the placeholder, the axis capsule, the stepped cadence)
