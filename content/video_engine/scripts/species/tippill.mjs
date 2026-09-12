@@ -60,6 +60,27 @@ export const pillClamp = (x, span, x0, x1) => {
   return x;
 };
 
+/* the leader's far end (R26-42, P52 T2): ON the capsule's boundary, at the edge nearest the tip - never inside it.
+   `box` is the pill's ink about its anchor, {x, y, w, h} (pillBox's shape, placed by the caller: a tag written from
+   its end puts the anchor on the box's edge, one written from its middle at the centre; a badge chip widens it).
+   The first cut ran the leader to the ANCHOR, which for an end-anchored tag sits inside the box - the line vanished
+   behind its own capsule. Without a box, `span` ([left, right] about the anchor) gives the horizontal extent and
+   the vertical is unbounded; without either the terminus is the anchor itself. The ray from the anchor toward the
+   tip is cut where it leaves the rect (the capsule's rounded corners sit inside the rect, so a point on the rect
+   is on or outside the capsule); an anchor outside its own box ends the leader at the anchor. */
+export const leaderEnd = (tip, pill, box, span) => {
+  const dx = tip[0] - pill[0], dy = tip[1] - pill[1], d = Math.hypot(dx, dy) || 1, ux = dx / d, uy = dy / d;
+  const r = box ? [pill[0] + box.x, pill[1] + box.y, pill[0] + box.x + box.w, pill[1] + box.y + box.h]
+          : span ? [pill[0] + span[0], -Infinity, pill[0] + span[1], Infinity] : null;   /* a span bounds x alone */
+  if (!r) return { p: [pill[0], pill[1]], t: 0 };
+  const e = 1e-9, inside = pill[0] >= r[0] - e && pill[0] <= r[2] + e && pill[1] >= r[1] - e && pill[1] <= r[3] + e;
+  if (!inside) return { p: [pill[0], pill[1]], t: 0 };
+  const tx = ux > 0 ? (r[2] - pill[0]) / ux : ux < 0 ? (r[0] - pill[0]) / ux : Infinity;
+  const ty = uy > 0 ? (r[3] - pill[1]) / uy : uy < 0 ? (r[1] - pill[1]) / uy : Infinity;
+  const t = Math.max(0, Math.min(tx, ty, d));          /* never past the tip: a box that swallows the tip has no leader */
+  return { p: [pill[0] + ux * t, pill[1] + uy * t], t };
+};
+
 /* ---- the pill ---------------------------------------------------------------------------------------------------- */
 /* the whole state at a drawn fraction u. `o.milestone` is the fraction the pill pops at (0 = with the first ink),
    `o.tag` the terminal tag's settled [x, y] - the place the pill hands over at. Nothing here reads the DOM. */
@@ -79,8 +100,10 @@ export const pillAt = (pts, u, o = {}) => {
   const land = o.tag ? [o.tag[0], o.tag[1]] : ride;
   /* at k = 1 the pill IS the tag's place - exactly, not within a float - because the tag is drawn there next frame */
   const pill = k >= 1 ? [land[0], land[1]] : [ride[0] + (land[0] - ride[0]) * k, ride[1] + (land[1] - ride[1]) * k];
-  /* the leader, short of both ends; it fades with the settle (the pill is no longer the tip's) */
-  const dx = pill[0] - tip.p[0], dy = pill[1] - tip.p[1], d = Math.hypot(dx, dy) || 1;
+  /* the leader, short of both ends; it fades with the settle (the pill is no longer the tip's). Its far end is the
+     capsule's NEAR EDGE (leaderEnd, R26-42), not the anchor - `o.box` from the caller's pillBox, `o.span` as a fallback */
+  const end = leaderEnd(tip.p, pill, o.box, o.span).p;
+  const dx = end[0] - tip.p[0], dy = end[1] - tip.p[1], d = Math.hypot(dx, dy) || 1;
   const gap = Math.min(P.LEAD_GAP, d / 3), ux = dx / d, uy = dy / d;
   return {
     on: u > m && u < 1,
@@ -90,7 +113,7 @@ export const pillAt = (pts, u, o = {}) => {
     pop,
     settle: k,
     handover: k,
-    leader: [[tip.p[0] + ux * gap, tip.p[1] + uy * gap], [pill[0] - ux * gap, pill[1] - uy * gap]],
+    leader: [[tip.p[0] + ux * gap, tip.p[1] + uy * gap], [end[0] - ux * gap, end[1] - uy * gap]],
     leaderOpacity: 1 - k,
   };
 };

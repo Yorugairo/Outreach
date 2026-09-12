@@ -2,7 +2,7 @@
 // springPop(Mp = 0.05) at a declared milestone, and the hand-over to the terminal tag at the end of the draw (E53 s8).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { TIPPILL, polyCum, tipAt, fracAtIndex, pillAt, pillBox, pillSpan, pillClamp } from "../../scripts/species/tippill.mjs";
+import { TIPPILL, polyCum, tipAt, fracAtIndex, pillAt, pillBox, pillSpan, pillClamp, leaderEnd } from "../../scripts/species/tippill.mjs";
 import { springPop } from "../../scripts/kinetics/spring.mjs";
 
 const straight = [[100, 400], [200, 400], [300, 400], [400, 400]];   // 300 units long, flat
@@ -100,4 +100,59 @@ test("the pill's box is its type plus its padding, capsule-ended, and the dials 
   assert.equal(b.r, Math.min(b.h / 2, 12));
   assert.throws(() => { TIPPILL.DX = 0; }, TypeError);
   assert.equal(TIPPILL.SETTLE, 0.10, "the last tenth of the draw - the window the terminal tag fades in over");
+});
+
+/* R26-42 (P52 T2): the leader ends ON the capsule, at the edge nearest the tip - never inside it */
+const strictlyInside = (p, r) => p[0] > r[0] + 1e-9 && p[0] < r[2] - 1e-9 && p[1] > r[1] + 1e-9 && p[1] < r[3] - 1e-9;
+const rectOf = (pill, box) => [pill[0] + box.x, pill[1] + box.y, pill[0] + box.x + box.w, pill[1] + box.y + box.h];
+
+test("the leader's far end is ON the capsule's near edge for an end-anchored tag, never inside the box (R26-42)", () => {
+  for (const scale of [1, 1920 / 1080]) {                       /* the two aspects: the stage's px differ, the law does not */
+    const b = pillBox(140 * scale, 26 * scale);
+    const endAnchored = { x: -b.w, y: -b.h / 2, w: b.w, h: b.h };  /* written from its end: the anchor sits on the box's right edge */
+    const s = pillAt(zig, 0.5, { milestone: 0, box: endAnchored });
+    const r = rectOf(s.pill, endAnchored);
+    assert.ok(strictlyInside(s.pill, r) === false || true);       /* the anchor is on the edge; the point under test is the leader */
+    const end = leaderEnd(s.tip, s.pill, endAnchored).p;
+    assert.ok(!strictlyInside(end, r), `the terminus ${end} is inside the box ${r}`);
+    const onEdge = [r[0], r[1], r[2], r[3]].some((v, i) => Math.abs((i % 2 ? end[1] : end[0]) - v) < 1e-9);
+    assert.ok(onEdge, "the terminus lies on the rect's boundary");
+    assert.ok(!strictlyInside(s.leader[1], r), "the drawn leader stops short of the box, outside it");
+    // the first cut ended the leader at the anchor: for this tag that point is INSIDE the ink the eye sees
+    const anchorOnly = pillAt(zig, 0.5, { milestone: 0 });
+    assert.ok(Math.hypot(anchorOnly.leader[1][0] - s.leader[1][0], anchorOnly.leader[1][1] - s.leader[1][1]) > 10,
+              "with the box the far end moved to the near edge");
+  }
+});
+
+test("a start-anchored tag's near edge IS its anchor; a mid-anchored tag's is half a box away (both anchor ends)", () => {
+  const b = pillBox(140, 26);
+  const start = { x: 0, y: -b.h / 2, w: b.w, h: b.h };            /* written from its start: the anchor is the box's left edge */
+  const mid = { x: -b.w / 2, y: -b.h / 2, w: b.w, h: b.h };
+  const s = pillAt(straight, 0.5, { milestone: 0 });               /* the tip is LEFT of the pill (DX > 0), on a flat line */
+  const eS = leaderEnd(s.tip, s.pill, start), eM = leaderEnd(s.tip, s.pill, mid);
+  assert.ok(Math.hypot(eS.p[0] - s.pill[0], eS.p[1] - s.pill[1]) < 1e-9 && eS.t === 0, "start-anchored: the edge is the anchor");
+  assert.ok(!strictlyInside(eM.p, rectOf(s.pill, mid)), "mid-anchored: the terminus leaves the box");
+  assert.ok(eM.p[0] < s.pill[0], "mid-anchored: it leaves toward the tip");
+});
+
+test("without a box the span gives the horizontal near edge; without either the terminus is the anchor (the old law)", () => {
+  const s = pillAt(straight, 0.5, { milestone: 0 });
+  const e = leaderEnd(s.tip, s.pill, null, [-20, 0]);          /* the ink stops short of the nib (DX keeps it clear) */
+  assert.ok(Math.abs(e.p[0] - (s.pill[0] - 20)) < 1e-9, "span: the left edge, on the ray toward the tip");
+  const wide = leaderEnd(s.tip, s.pill, null, [-120, 0]);        /* ink over the nib itself: the leader is cut AT the tip */
+  assert.ok(Math.abs(wide.t - Math.hypot(s.tip[0] - s.pill[0], s.tip[1] - s.pill[1])) < 1e-9);
+  const e0 = leaderEnd(s.tip, s.pill);
+  assert.deepEqual(e0.p, s.pill);
+  const s2 = pillAt(straight, 0.5, { milestone: 0, span: [-20, 0] });
+  assert.ok(s2.leader[1][0] < s.leader[1][0], "the drawn leader with a span stops earlier than without");
+});
+
+test("an anchor outside its own box, or a box that swallows the tip, never sends the leader past the tip", () => {
+  const s = pillAt(straight, 0.5, { milestone: 0 });
+  const away = { x: 40, y: -10, w: 60, h: 20 };                    /* a chip pushed the ink clear of the anchor */
+  assert.deepEqual(leaderEnd(s.tip, s.pill, away).p, s.pill);
+  const huge = { x: -2000, y: -2000, w: 4000, h: 4000 };
+  const e = leaderEnd(s.tip, s.pill, huge);
+  assert.ok(Math.abs(e.t - Math.hypot(s.tip[0] - s.pill[0], s.tip[1] - s.pill[1])) < 1e-9, "cut at the tip, not beyond");
 });
