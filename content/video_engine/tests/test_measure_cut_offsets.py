@@ -199,3 +199,27 @@ def test_percentiles_interpolate_and_stay_ordered():
     assert MO.pct(xs, 0.10) == pytest.approx(4.0)
     assert MO.pct(xs, 0.90) == pytest.approx(36.0)
     assert MO.pct([], 0.5) is None
+
+
+def test_tr13_verdict_reads_our_scene_timeline_and_names_the_cut_and_the_centred_dip(tmp_path: Path):
+    """TR-13 (P52 T11): `--scenes` turns the compiler's scene timeline into boundaries (every scene end but the last, kind =
+    the exit name) and `tr13_rows` gives the verdict against the next word's onset: a cut 100 ms (3 frames) before it is
+    `cut-3f`, a dip ON it is `dip-centred`, a boundary a full gap early is `off`."""
+    import json
+    scenes = {"scenes": [{"scene_id": "s01", "exit": "cut", "span": [0.0, 1.10]},          # "four" starts at 1.20: the cut 100 ms before it
+                         {"scene_id": "s02", "exit": "dip:0.4", "span": [1.10, 2.00]},     # "seven" starts at 2.00: the dip's black on it
+                         {"scene_id": "s03", "exit": "cut", "span": [2.00, 2.20]},         # a boundary that is nowhere near a lead
+                         {"scene_id": "s04", "exit": "cut", "span": [2.20, 3.0]}]}
+    p = tmp_path / "x-short.timeline.json"
+    p.write_text(json.dumps(scenes), encoding="utf-8")
+    bounds = MO.scene_boundaries(p)
+    assert [(b["boundary"], b["t_s"], b["kind"]) for b in bounds] == [("s01>s02", 1.10, "cut"), ("s02>s03", 2.00, "dip"), ("s03>s04", 2.20, "cut")]
+    onsets = [0.0, 0.2, 0.4, 1.2, 1.4, 1.6, 2.0, 2.2, 2.4]
+    rows = MO.tr13_rows(MO.build_rows(bounds, [(str(i), t) for i, t in enumerate(onsets)]), onsets, FPS)
+    assert [r["tr13"] for r in rows] == ["cut-3f", "dip-centred", "off"]
+    assert round(rows[0]["lead_ms"]) == 100 and round(rows[1]["lead_ms"]) == 0 and rows[2]["onset_s"] == 2.2
+    # a build's own timeline.json is a words file: start/end keys read like s/e
+    w = tmp_path / "timeline.json"
+    w.write_text(json.dumps({"words": [{"w": "a", "start": 0.0, "end": 0.1}, {"w": "b", "start": 1.2, "end": 1.3}]}), encoding="utf-8")
+    words, ends = MO.load_words(w)
+    assert words == [("a", 0.0), ("b", 1.2)] and ends == [0.1, 1.3]

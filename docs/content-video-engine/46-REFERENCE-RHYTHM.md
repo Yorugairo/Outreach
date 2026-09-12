@@ -189,6 +189,17 @@ that follows: land the cut 3 frames before the next word's onset; centre a dip's
 `docs/research/motion/wealth_logic_cut_offsets.csv` (+ `_whisper.csv`); the report in
 `docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md`.
 
+**The engine form, built 2026-09-12 (TR-13, P52 T11).** `content/video_engine/scripts/authoring/words.py` places every
+boundary: `cut_before(ws, phrase, rule=None, exit="cut")` - under the `onset` rule (the default for a measured take) a
+cut lands at the next word's onset minus `CUT_LEAD_S` = 0.10 s `[DERIVED: the 3-frame median above]`, and a `dip`
+boundary lands ON the onset, because the engine paints the dip's black centred on the boundary (both linear halves reach
+1 there - `scene-evidence-engine.mjs`, "THE DIP (E47 #1)") - so no compiler phase shift is needed; the M13 refusal of a gap
+under 0.30 s holds under either rule. The `gap` rule (M13 as first shipped: 0.8 of the gap) survives as the PIN the two
+approved shorts carry by name in their `build_short.py` (`rule="gap"`), so they rebuild byte-identical; a take with
+estimated times keeps `gap` and says so. WHICH transition a boundary takes is untouched (`scene_exit`, E47 as corrected
+2026-09-12). The verdict on our own build: `measure_cut_offsets.py --scenes <build>/<slug>.timeline.json --words
+<build>/timeline.json` prints one line per boundary - `cut-3f`, `dip-centred`, or `off` with the lead in ms.
+
 ---
 
 ## 46.7 A second reference: Bravos Research (2026-09-10) — events are not cuts

@@ -242,12 +242,16 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float | None = None) -
     t_trillion = at("over a trillion")                   # ... and the peak figure writes where the line was
     t_since = at("selling since February")               # ... the June figure beside it
     t_two = at("Two numbers")
-    t_promise = W.cut_before(ws, "a Treasury page")      # the cut drops on "went:" (operator, 2026-09-05): the promise plate
-    t_catalyst = W.cut_before(ws, "Since February, Japan")
+    # P52 T11 PIN: the approved cut keeps M13's 0.8-of-the-gap placement (rule="gap"); TR-13's onset rule (the cut 3 frames
+    # before the next word, a dip centred on it - doc 46 s46.6) is words.py's default for every build after this one. The
+    # pin is what keeps this build byte-identical; lifting it is a re-cut and needs the operator's word.
+    cut = lambda phrase: W.cut_before(ws, phrase, rule="gap")
+    t_promise = cut("a Treasury page")                   # the cut drops on "went:" (operator, 2026-09-05): the promise plate
+    t_catalyst = cut("Since February, Japan")
     t_pledge = at("pledged")                             # the gate docks on "pledged"
-    t_cut = W.cut_before(ws, "So, the second number")    # the cream is full here and the Meta chart starts drawing
+    t_cut = cut("So, the second number")                 # the cream is full here and the Meta chart starts drawing
     t_second = at("went home")                           # the Meta page's mount begins under the holdings page
-    t_ring = W.cut_before(ws, "The Fed still hasn't moved")
+    t_ring = cut("The Fed still hasn't moved")
     t_relit = at("that unfunded")                        # the second "unfunded bar tab" - the callout is re-lit on it
     t_ours = at("still ours")                            # the host mounts here as the last image before the card
     t_fed_still = at("The Fed still")                    # R26-19: the Fed-vs-yields CARD is thrown here ...

@@ -174,7 +174,8 @@ def shot_table(ws: list[dict], runtime_s: float, t_outro: float) -> list[tuple]:
     holdings page RETURNS by the spiral with the gate-to-the-fab docked on "pledging"; two fingers for the double squeeze, the
     blank cheque on "we wrote them a blank check"; the ring is the podium, the vault and the page with the bracket standing."""
     at = lambda phrase: W.at(ws, phrase)
-    cut = lambda phrase: W.cut_before(ws, phrase)
+    cut = lambda phrase: W.cut_before(ws, phrase, rule="gap")   # P52 T11 PIN: the approved cut keeps M13's 0.8-of-the-gap placement;
+                                                                #   TR-13's onset rule is words.py's default for every later build
     datum = lambda i: {"kind": "datum", "index": i}
     hold = f"ledger:ev-japan-holdings-v1:line:{LAST_IDX}:right"
     BRACKET = {"kind": "bracket", "from": PEAK_IDX, "to": LAST_IDX, "label": "−$122.6B", "sub": "Feb to Jun 2026", "color": "neg"}

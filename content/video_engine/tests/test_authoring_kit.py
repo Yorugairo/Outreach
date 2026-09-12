@@ -51,7 +51,8 @@ def test_word_in_finds_the_word_inside_the_phrase():
 
 def test_cut_before_sits_at_eight_tenths_of_the_gap():
     # the gap after "moved." (1.00) before "Your" (2.00) is a second: the cut lands at 1.80
-    assert W.cut_before(TAKE, "Your costs") == 1.80
+    # ... under M13's gap rule, the pin the two approved shorts carry; the default since TR-13 (P52 T11) is the onset rule
+    assert W.cut_before(TAKE, "Your costs", rule="gap") == 1.80
     assert W.cut_before(TAKE, "The Fed") == 0.0, "nothing to cut before the first word"
 
 
@@ -273,3 +274,33 @@ def test_the_kit_holds_no_episode_fact():
 
 def test_the_kit_is_the_five_modules_the_plan_names():
     assert sorted(p.name for p in KIT.glob("*.py")) == ["__init__.py", "audio.py", "docks.py", "table.py", "words.py"]
+
+
+def test_tr13_the_onset_rule_is_the_default_and_places_a_cut_three_frames_before_the_word():
+    """TR-13 (P52 T11, doc 46 s46.6): on a measured take the default rule lands a CUT at the next word's onset minus
+    CUT_LEAD_S (3 frames at 30 fps) and a DIP boundary ON the onset - the engine centres the dip's black on the boundary."""
+    assert W.cut_rule(TAKE) == "onset" and W.DEFAULT_CUT_RULE == "onset" and W.CUT_LEAD_S == 0.10
+    assert W.cut_before(TAKE, "Your costs") == 1.90                     # "Your" starts at 2.00
+    assert W.cut_before(TAKE, "Your costs", exit="dip") == 2.00         # the dip's black midpoint is the onset
+    assert W.cut_before(TAKE, "The Fed") == 0.0                         # nothing before the first word
+
+
+def test_tr13_the_gap_pin_keeps_m13s_placement_and_the_refusal_holds_under_both_rules():
+    """The two approved shorts are pinned to rule="gap" (M13's 0.8 of the gap) so they rebuild byte-identical; a gap
+    under MIN_GAP is refused under either rule; an unknown rule is refused by name."""
+    assert W.cut_before(TAKE, "Your costs", rule="gap") == 1.80
+    for rule in (None, "gap", "onset"):
+        with pytest.raises(SystemExit) as e:
+            W.cut_before(TAKE, "Two numbers", rule=rule)                 # the gap is 0.10 s
+        assert "M13" in str(e.value)
+    with pytest.raises(ValueError):
+        W.cut_before(TAKE, "Your costs", rule="middle")
+
+
+def test_tr13_an_estimated_take_keeps_the_gap_rule_and_says_so():
+    """Three frames mean nothing against a guessed clock: a take with an `estimated` word keeps the gap rule by default,
+    and a caller's pin still wins."""
+    est = [dict(w, estimated=True) for w in TAKE]
+    assert W.is_estimated(est) and not W.is_estimated(TAKE)
+    assert W.cut_rule(est) == "gap" and W.cut_before(est, "Your costs") == 1.80
+    assert W.cut_before(est, "Your costs", rule="onset") == 1.90

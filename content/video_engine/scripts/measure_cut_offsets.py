@@ -165,6 +165,44 @@ def load_boundaries(path: Path) -> list[dict]:
     return [{"boundary": r["boundary"], "t_s": float(r["t_s"]), "kind": r.get("kind", "")} for r in rows]
 
 
+def scene_boundaries(path: Path) -> list[dict]:
+    """TR-13 (P52 T11): OUR build's boundaries, read off the compiler's scene timeline (`<build>/<slug>.timeline.json`,
+    `scenes[]`): every scene end but the last is a boundary at `span[1]`, its kind the scene's exit name (a `dip:0.4`
+    is a dip; a `suck:x,y` a suck)."""
+    d = json.loads(Path(path).read_text(encoding="utf-8"))
+    scenes = d.get("scenes") or []
+    out = []
+    for a, b in zip(scenes, scenes[1:]):
+        kind = str(a.get("exit") or "cut").split(":", 1)[0]
+        out.append({"boundary": f"{a.get('scene_id', '?')}>{b.get('scene_id', '?')}", "t_s": float(a["span"][1]), "kind": kind})
+    return out
+
+
+CUT_LEAD_S = 0.10      # TR-13: a cut lands 3 frames (at 30 fps) before the next onset [DERIVED: doc 46 s46.6]; a dip's black sits ON it
+
+
+def tr13_rows(rows: list[dict], onsets: list[float], fps: float = FPS) -> list[dict]:
+    """The engine-form verdict per boundary (doc 46 s46.6, the rule words.py places by): `onset_s` the next word's onset
+    after the boundary, `lead_ms` how far the picture changes BEFORE it (positive = picture first), `tr13` the verdict -
+    a cut within one frame of CUT_LEAD_S before the onset is `cut-3f`; a dip whose boundary (= its black midpoint, the
+    engine centres it there) is within one frame of the onset is `dip-centred`; anything else `off` with the number."""
+    frame_ms = 1000.0 / fps
+    out = []
+    for r in rows:
+        t = r["t_s"]
+        nxt = next((o for o in onsets if o >= t - 1e-6), None)
+        lead = None if nxt is None else (nxt - t) * 1000.0
+        want = 0.0 if r.get("kind") == "dip" else CUT_LEAD_S * 1000.0
+        if lead is None:
+            verdict = "no-onset"
+        elif abs(lead - want) <= frame_ms + 1e-6:
+            verdict = "dip-centred" if r.get("kind") == "dip" else "cut-3f"
+        else:
+            verdict = "off"
+        out.append(dict(r, onset_s=nxt, lead_ms=lead, tr13=verdict))
+    return out
+
+
 def build_rows(boundaries: list[dict], words: list[tuple[str, float]],
                ends: list[float] | None = None) -> list[dict]:
     onsets = [t for _, t in words]
@@ -294,16 +332,25 @@ def markdown(rows: list[dict], rule: str, fps: float, label: str) -> str:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--boundaries", required=True)
-    ap.add_argument("--words", required=True)
+    ap.add_argument("--boundaries", help="a boundaries CSV (boundary, t_s, kind) - the reference's list")
+    ap.add_argument("--scenes", help="TR-13: OUR build's scene timeline (<build>/<slug>.timeline.json) instead of --boundaries")
+    ap.add_argument("--words", required=True, help="a .vtt or a words JSON ({words: [{w, start|s, end|e}]}) - a build's timeline.json works")
     ap.add_argument("--csv")
     ap.add_argument("--fps", type=float, default=FPS)
     ap.add_argument("--label", default="")
     ap.add_argument("--md", action="store_true")
     args = ap.parse_args()
 
+    if not args.boundaries and not args.scenes:
+        ap.error("one of --boundaries or --scenes is required")
     words, ends = load_words(Path(args.words))
-    rows = build_rows(load_boundaries(Path(args.boundaries)), words, ends)
+    bounds = scene_boundaries(Path(args.scenes)) if args.scenes else load_boundaries(Path(args.boundaries))
+    rows = build_rows(bounds, words, ends)
+    if args.scenes:   # TR-13: the verdict on our own build, one line per boundary
+        print(f"== TR-13 on {args.scenes}: cut = onset - {CUT_LEAD_S * 1000:.0f} ms, dip centred on the onset (one frame = {1000 / args.fps:.1f} ms)")
+        for r in tr13_rows(rows, [t for _, t in words], args.fps):
+            lead = "-" if r["lead_ms"] is None else f"{r['lead_ms']:+.0f} ms"
+            print(f"   {r['boundary']:<10} {r['kind']:<9} t={r['t_s']:.2f}  onset={r['onset_s'] if r['onset_s'] is None else round(r['onset_s'], 2)}  lead={lead:>8}  {r['tr13']}")
     print(f"== {args.label or args.words}: {len(words)} words, {len(rows)} boundaries")
     if args.csv:
         print(f"   csv -> {write_csv(rows, Path(args.csv))}")

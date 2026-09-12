@@ -10,8 +10,14 @@ import json
 import sys
 from pathlib import Path
 
-CUT_AT = 0.8          # M13: the cut sits at 0.8 of the gap before the next phrase
+CUT_AT = 0.8          # M13: the cut sits at 0.8 of the gap before the next phrase (the "gap" rule - the two approved shorts are pinned to it)
 MIN_GAP = 0.30        # M13: a gap shorter than this is not a cut point
+CUT_LEAD_S = 0.10     # TR-13 (P52 T11): a CUT lands this far before the next word's onset - 3 frames at 30 fps [DERIVED: doc 46 s46.6, the
+                      # reference's median 100 ms picture-before-onset on 99 boundaries, TR-2 2026-09-06]
+CUT_RULES = ("onset", "gap")   # "onset": TR-13 - the cut at onset - CUT_LEAD_S, a dip's boundary ON the onset (the engine centres its black
+                               #          there: scene-evidence-engine.mjs "THE DIP (E47 #1)" - both halves reach 1 at the boundary);
+                               # "gap":   M13 as first shipped - CUT_AT of the gap; what the two approved shorts are pinned to, by name in their build files
+DEFAULT_CUT_RULE = "onset"     # for a MEASURED take; an estimated take (a word flagged "estimated") keeps "gap" and says so
 SENTENCE_ENDS = (".", "!", "?", ":")   # what closes a caption sentence in `timeline.json`
 HARD_STOPS = ".?!"                     # ... and what closes a SPOKEN sentence (a colon runs on)
 QUOTE_TAIL = "\"”"                # a closing quote may sit after the stop
@@ -59,9 +65,30 @@ def word_in(ws: list[dict], phrase: str, word: str, window: int = 10) -> float:
     return next(round(w["start_s"], 2) for w in ws[i0:][:window] if w["w"].strip(".,;:!?").lower() == word)
 
 
-def cut_before(ws: list[dict], phrase: str, cut_at: float = CUT_AT, min_gap: float = MIN_GAP) -> float:
-    """The cut time before `phrase`: `cut_at` of the gap after the previous word (M13). A gap under
-    `min_gap` is refused by name - the beat has to move, never the words (the gate-fit ruling)."""
+def is_estimated(ws: list[dict]) -> bool:
+    """A take whose times are estimates, not measured: any word flagged `estimated`. The onset rule is a measured
+    rule (3 frames mean nothing against a guessed clock), so such a take keeps the gap rule."""
+    return any(w.get("estimated") for w in ws)
+
+
+def cut_rule(ws: list[dict], rule: str | None = None) -> str:
+    """The placement rule a take gets: the caller's pin, else the default - "onset" for a measured take, "gap" for an
+    estimated one."""
+    if rule is not None:
+        if rule not in CUT_RULES:
+            raise ValueError(f"cut rule {rule!r} is not one of {CUT_RULES}")
+        return rule
+    return "gap" if is_estimated(ws) else DEFAULT_CUT_RULE
+
+
+def cut_before(ws: list[dict], phrase: str, cut_at: float = CUT_AT, min_gap: float = MIN_GAP,
+               rule: str | None = None, exit: str = "cut") -> float:
+    """The boundary time before `phrase`. A gap under `min_gap` is refused by name whatever the rule - the beat has
+    to move, never the words (the gate-fit ruling). Under the "gap" rule (M13 as first shipped) the boundary sits at
+    `cut_at` of the gap after the previous word. Under the "onset" rule (TR-13, P52 T11 - doc 46 s46.6: the picture
+    changes a median 3 frames before the next word's onset; a dip through black is centred ON the onset) a `cut`
+    lands at onset - CUT_LEAD_S and a `dip` boundary lands on the onset itself, because the engine paints the dip's
+    black centred on the boundary. `rule` None = cut_rule(ws): "onset" for a measured take, "gap" for an estimated one."""
     i, start = phrase_start(ws, phrase)
     if i == 0:
         return 0.0
@@ -69,7 +96,10 @@ def cut_before(ws: list[dict], phrase: str, cut_at: float = CUT_AT, min_gap: flo
     gap = start - prev_end
     if gap < min_gap:
         raise SystemExit(f"no cut point before {phrase!r}: gap {gap:.2f}s < {min_gap}s (M13)")
-    return round(prev_end + cut_at * gap, 2)
+    if cut_rule(ws, rule) == "gap":
+        return round(prev_end + cut_at * gap, 2)
+    lead = 0.0 if exit == "dip" else CUT_LEAD_S
+    return round(max(prev_end, start - lead), 2)
 
 
 def next_sentence_start(ws: list[dict], t: float) -> float | None:
