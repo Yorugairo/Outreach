@@ -39,6 +39,7 @@ TAKE = HERE / "vo-short/audio"
 BUILD = HERE / os.environ.get("TOKYO_BUILD_DIR", "build-short")   # P48 T7: a cut under review builds beside the watched one (TOKYO_BUILD_DIR=build-short-p48 -> :8740), never over it
 EP = Project(here=HERE, build=BUILD, take=TAKE, take_stem="scene_1", script_name=SCRIPT.name, episode_id="tokyo-tea-break")
 EDIT_PAUSES = HERE / "SCRIPT-90S-VO.claude-EDIT-PAUSES.json"
+CAP_ARRIVE = os.environ.get("TOKYO_CAP_ARRIVE") or None   # P52 T10: "fade_up" turns the staggered fade-up caption arrival on for THIS build dir only; unset = the shipped pop
 CAMERA = os.environ.get("TOKYO_CAMERA", "1") == "1"   # the operator's watch, 2026-09-10 ("8742>8738"): the camera cut IS the cut; TOKYO_CAMERA=0 rebuilds the locked variant beside it   # P49 (the operator, 2026-09-10: "let's test out those camera changes"): the arrival on the ring + the pull toward the landings, in a build beside (build-short-cam, :8742)
 CAM_ROW = {"keys": [], "attention": "landings"} if CAMERA else None   # the row's 8th element: the eye pulls toward a card as it lands (E59 #1; the dials are HG1's)
 CLIPS = HERE / "omni-video/stills"   # the v2 set: approved stills to video (APPROVALS.json)
@@ -564,6 +565,13 @@ def main() -> int:
                        '"""Tokyo short - AUTHORED shot table, timed from the take by build_short.py. Do not hand-edit; edit build_short.shot_table."""\n')
     T.print_rows(rows)
 
+    # P52 T10, the PRIVATE build only: TOKYO_CAP_ARRIVE=fade_up compiles the staggered fade-up arrival onto
+    # every caption page (one envelope, per-word offsets - kinetics/stagger.mjs) for the operator's side-by-side
+    # against the pop. UNSET is the default and touches nothing, so the approved cut rebuilds byte-identical.
+    if CAP_ARRIVE:
+        import build_scene_timeline_f as _C
+        _C.CAPTION_ARRIVE = CAP_ARRIVE
+        print(f"  caption     : arrival {CAP_ARRIVE} (TOKYO_CAP_ARRIVE) - a private register, not the approved cut")
     rc = T.compile_timeline(
         HERE, BUILD,
         timeline_name="tokyo-short.timeline.json",
