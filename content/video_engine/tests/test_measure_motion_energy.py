@@ -6,7 +6,9 @@ Three things are provable off-line and are proved here:
   2. the classification table - every class it names is a real class in the reviewed template
      (grep-grounded), and every class actually observed under `#stage` resolves to PRIMARY or
      SECONDARY rather than UNCLASSIFIED,
-  3. the aggregation by scene window and the shape of the emitted report.
+  3. the aggregation by scene window and the shape of the emitted report,
+  4. P52 T17 / R26-3 - the RACE read, on two synthetic pairs that differ on ONE axis each: a sharp
+     join against a smooth arc (geometry) and a stepped clock against a continuous one (timing).
 
 The headless run is a smoke test: it is the only part that needs Chromium, and it skips when
 Playwright or its browser is unavailable rather than failing the suite.
@@ -366,6 +368,223 @@ def test_markdown_names_the_scenes_that_exceed_the_reference():
     assert report["scenes"][0]["over_reference"] is True
     assert "OVER" in mme.markdown(report)
     assert "s01 (0.640)" in mme.markdown(report)
+
+
+# ---- P52 T17 / R26-3: THE RACE READ -------------------------------------------------------------
+# The read exists to tell two defects apart, so the tests are two synthetic pairs, one per axis:
+#   GEOMETRY - a polyline with a SHARP join against a smooth arc of the same ends,
+#   TIMING   - a STEPPED clock against a continuous one along the same straight line.
+# Each pair differs on ONE axis and the tests assert the read moves on that axis and stays put on
+# the other. A measurement that cannot separate them cannot answer R26-3's question.
+SHARP_LEG = 100.0
+
+
+def _sharp_join_track(step: float = 1.0) -> list[tuple[float, float]]:
+    """Two straight legs meeting at a right angle - all of the turning at one point."""
+    n = int(SHARP_LEG / step)
+    out = [(i * step, 0.0) for i in range(n + 1)]
+    out += [(SHARP_LEG, i * step) for i in range(1, n + 1)]
+    return out
+
+
+def _smooth_arc_track(step: float = 1.0) -> list[tuple[float, float]]:
+    """A quarter circle over the same two ends - the same turn, spread evenly (curvature 1/100)."""
+    n = int(SHARP_LEG * math.pi / 2 / step)
+    return [(SHARP_LEG * math.sin(a), SHARP_LEG - SHARP_LEG * math.cos(a))
+            for a in (math.pi / 2 * i / n for i in range(n + 1))]
+
+
+def _straight_track(positions) -> list[tuple[float, float]]:
+    return [(x, 0.0) for x in positions]
+
+
+def _continuous_clock(frames: int, distance: float) -> list[float]:
+    return [distance * i / frames for i in range(frames + 1)]
+
+
+def _stepped_clock(frames: int, distance: float, periods: int) -> list[float]:
+    """The race's own law: each period eased in and out, so the mark stops dead at every join."""
+    per = frames // periods
+    out = []
+    for i in range(frames + 1):
+        k, f = divmod(i, per)
+        u = f / per
+        out.append(distance * (min(k, periods) + (u * u * (3 - 2 * u) if k < periods else 0)) / periods)
+    return out
+
+
+def test_a_sharp_join_carries_far_more_curvature_energy_than_a_smooth_one():
+    sharp = mme.curvature_energy(_sharp_join_track())
+    smooth = mme.curvature_energy(_smooth_arc_track())
+    assert sharp["bending"] > 10 * smooth["bending"], (sharp, smooth)
+    # E_MVS is the functional Euler spirals minimise (42 s42.4): a corner is where it blows up
+    assert sharp["fairness"] > 100 * smooth["fairness"], (sharp, smooth)
+    assert sharp["kappa_max"] > 20 * smooth["kappa_max"]
+
+
+def test_the_smooth_arc_reads_its_own_analytic_curvature():
+    """A quarter circle of radius 100 has curvature 1/100 everywhere - the read must say so, or the
+    scale the two arms are compared on means nothing."""
+    pts = mme.resample_by_arclength(_smooth_arc_track(), 2.0)
+    k = mme.curvature_of(pts)[3:-3]
+    assert max(abs(abs(ki) - 0.01) for ki in k) < 5e-4, (min(k), max(k))
+
+
+def test_the_join_curvature_peak_is_a_spike_at_a_corner_and_flat_on_an_arc():
+    """A corner is a curvature SPIKE, not a step: both legs of a right angle are dead straight, so
+    |k after - k before| is zero across it and only the PEAK sees the defect. That is why the read
+    carries both numbers - a race join can fail either way."""
+    sharp = _sharp_join_track()
+    times = [i / 10 for i in range(len(sharp))]
+    corner = mme.join_curvature(sharp, times, [times[len(times) // 2]])
+    arc = _smooth_arc_track()
+    arc_times = [i / 10 for i in range(len(arc))]
+    smooth = mme.join_curvature(arc, arc_times, [arc_times[len(arc_times) // 2]])
+    assert corner["peak_max"] > 0.2, corner
+    assert corner["step_max"] < 1e-6, corner          # straight into straight: no step, all spike
+    assert smooth["peak_max"] == pytest.approx(0.01, abs=1e-3), smooth
+    assert smooth["step_max"] < 1e-3, smooth
+
+
+def test_a_curvature_STEP_at_a_join_is_seen_where_the_peak_alone_would_miss_it():
+    """Two arcs of different radius meeting tangentially - G1 but not G2. Nothing spikes; the
+    curvature simply jumps. This is the defect a clothoid chain exists to remove."""
+    # arc 1: radius 30 about (0, 30), a quarter turn ending at (30, 30) heading +y
+    tight = [(30.0 * math.sin(a), 30.0 - 30.0 * math.cos(a))
+             for a in (math.pi / 2 * i / 200 for i in range(201))]
+    # arc 2: radius 300 about (-270, 30) - the SAME centre side, so the path turns the same way and
+    # the tangent is continuous. Only the radius changes, which is the whole point.
+    slack = [(-270.0 + 300.0 * math.cos(a), 30.0 + 300.0 * math.sin(a))
+             for a in (math.pi / 2 * i / 200 for i in range(1, 201))]
+    track = tight + slack
+    times = [i / 100 for i in range(len(track))]
+    read = mme.join_curvature(track, times, [times[len(tight) - 1]])
+    assert read["step_max"] == pytest.approx(1 / 30 - 1 / 300, rel=0.1), read
+
+
+def test_a_stepped_clock_carries_more_timing_energy_than_a_continuous_one():
+    fps, frames, dist = 30.0, 120, 600.0
+    even = mme.speed_track(_straight_track(_continuous_clock(frames, dist)), fps)
+    stepped = mme.speed_track(_straight_track(_stepped_clock(frames, dist, 6)), fps)
+    assert mme.timing_energy(stepped, fps) > 100 * (mme.timing_energy(even, fps) + 1.0)
+
+
+def test_timing_energy_is_zero_at_a_constant_speed_however_curved_the_path():
+    """The timing axis is blind to shape: a mark going round a circle at one speed is not choppy."""
+    fps = 30.0
+    speeds = mme.speed_track(_smooth_arc_track(), fps)
+    assert mme.timing_energy(speeds, fps) < 1e-6 * max(speeds) ** 2 * fps ** 4
+
+
+def test_curvature_is_read_after_the_clock_is_resampled_out():
+    """The SAME path travelled on two different clocks must read the same curvature - otherwise the
+    geometry axis is a disguised timing signal and the A/B proves nothing."""
+    even = _smooth_arc_track(step=1.0)
+    # the same arc, sampled hard at the start and sparsely at the end - a clock, not a shape
+    lumpy = [(SHARP_LEG * math.sin(a), SHARP_LEG - SHARP_LEG * math.cos(a))
+             for a in (math.pi / 2 * (i / 160) ** 2 for i in range(161))]
+    a, b = mme.curvature_energy(even), mme.curvature_energy(lumpy)
+    assert abs(a["bending"] - b["bending"]) < 0.02 * a["bending"], (a, b)
+
+
+def test_stalls_and_the_join_dip_see_a_clock_that_stops_at_every_period():
+    fps, frames, dist, periods = 30.0, 240, 600.0, 6
+    times = [i / fps for i in range(frames + 1)]
+    joins = [times[i * (frames // periods)] for i in range(periods + 1)]
+    stepped = mme.speed_track(_straight_track(_stepped_clock(frames, dist, periods)), fps)
+    even = mme.speed_track(_straight_track(_continuous_clock(frames, dist)), fps)
+    assert mme.stall_fraction(stepped) > 0.02          # measured 0.05 at 40 frames per period
+    assert mme.stall_fraction(even) == 0.0
+    assert mme.join_speed_dip(stepped, times, joins, 0.5 / fps)["dip"] < 0.15
+    assert mme.join_speed_dip(even, times, joins, 0.5 / fps)["dip"] == pytest.approx(1.0, abs=1e-6)
+
+
+def test_arclength_resampling_is_uniform_and_keeps_the_ends():
+    pts = mme.resample_by_arclength(_smooth_arc_track(), 2.0)
+    steps = [math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(pts, pts[1:])]
+    # the spacing is exact ALONG the polyline; the straight line between two resampled points is a
+    # chord of it, so on a curve it is a hair shorter. That gap is the sampling, not an error.
+    assert max(abs(s - 2.0) for s in steps) < 1e-3
+    assert pts[0] == pytest.approx((0.0, 0.0), abs=1e-9)
+
+
+def test_race_tracks_are_keyed_by_the_row_name_not_by_dom_order():
+    """The engine repaints the rows in VALUE order every frame, so DOM order is not identity."""
+    frames = [(0.0, [{"mark": "A", "x": 10, "y": 0}, {"mark": "B", "x": 5, "y": 30}]),
+              (0.1, [{"mark": "B", "x": 20, "y": 0}, {"mark": "A", "x": 12, "y": 30}])]
+    tracks = mme.race_tracks(frames)
+    assert tracks["A"] == [(10, 0), (12, 30)]
+    assert tracks["B"] == [(5, 30), (20, 0)]
+
+
+def test_a_mark_missing_from_one_frame_is_dropped_from_every_track():
+    frames = [(0.0, [{"mark": "A", "x": 0, "y": 0}, {"mark": "B", "x": 0, "y": 0}]),
+              (0.1, [{"mark": "A", "x": 1, "y": 0}])]
+    assert sorted(mme.race_tracks(frames)) == ["A"]
+
+
+def _race_frames(clock_positions, marks=("ALPHA", "BETA"), fps=30.0):
+    return [(i / fps, [{"mark": m, "x": x, "y": 40.0 * n} for n, m in enumerate(marks)])
+            for i, x in enumerate(clock_positions)]
+
+
+def test_the_race_read_carries_both_axes_per_mark_and_in_total():
+    fps, frames, dist, periods = 30.0, 120, 600.0, 6
+    joins = [i * (frames // periods) / fps for i in range(periods + 1)]
+    read = mme.race_read(_race_frames(_stepped_clock(frames, dist, periods), fps=fps), fps, joins)
+    assert read["totals"]["marks"] == 2 and len(read["marks"]) == 2
+    for row in read["marks"]:
+        for key in ("timing_energy", "speed_cv", "stall_fraction", "join_speed_dip",
+                    "bending", "fairness", "join_peak_max", "join_step_max"):
+            assert key in row, key
+    assert read["totals"]["timing_energy"] > 0
+    assert read["joins"] == joins
+
+
+def test_the_race_markdown_names_both_axes_and_every_mark(tmp_path):
+    fps = 30.0
+    read = mme.race_read(_race_frames(_continuous_clock(60, 300.0), fps=fps), fps, [0.5, 1.0])
+    md = mme.race_markdown(read, tmp_path)
+    assert "TIMING" in md and "GEOMETRY" in md
+    assert "ALPHA" in md and "BETA" in md
+    assert "E_MVS" in md
+
+
+ENGINE_CLOCK_SNIPPET = """
+  const LP = { ROLL: 0.7, SAVOR: 0.8, FIELD: 2.4, PUNCH: 0.5, INK: 2.0, BUILD: 3.0 };
+  const LPX = { RACE_IN: 0.6, RACE_PERIOD: 1.2, RACE_SWAP: 0.7 };
+"""
+
+
+def test_the_race_clock_is_read_off_the_engine_and_never_guessed():
+    clock = mme.race_clock(ENGINE_CLOCK_SNIPPET)
+    assert clock["RACE_PERIOD"] == 1.2 and clock["RACE_IN"] == 0.6
+    assert clock["lead"] == pytest.approx(3.9)
+
+
+def test_a_missing_or_doubled_clock_constant_raises_rather_than_guessing():
+    with pytest.raises(SystemExit):
+        mme.race_clock("const LP = { SAVOR: 0.8, FIELD: 2.4 };")
+
+
+def test_the_joins_are_the_period_instants_from_the_scene_span():
+    timeline = {"scenes": [{"span": [2.0, 20.0], "world": {"kind": "ledger", "page": {
+        "builder": "race", "periods": [2019, 2020, 2021]}}}]}
+    joins = mme.race_joins(timeline, mme.race_clock(ENGINE_CLOCK_SNIPPET))
+    assert joins == [6.5, 7.7, 8.9]
+
+
+def test_a_timeline_with_no_race_page_is_refused():
+    with pytest.raises(SystemExit):
+        mme.race_joins({"scenes": [{"span": [0, 10], "world": {"page": {"builder": "combo"}}}]},
+                       mme.race_clock(ENGINE_CLOCK_SNIPPET))
+
+
+def test_the_engine_the_build_carries_is_the_one_the_clock_is_read_from(tmp_path):
+    """An arm built against a PATCHED engine copy must have its clock read from THAT copy."""
+    (tmp_path / "engine-x.mjs").write_text(ENGINE_CLOCK_SNIPPET.replace("1.2,", "2.5,"), encoding="utf-8")
+    (tmp_path / "player.json").write_text(json.dumps({"engine": "engine-x.mjs"}), encoding="utf-8")
+    assert mme.race_clock(mme.build_engine_text(tmp_path))["RACE_PERIOD"] == 2.5
 
 
 # --------------------------------------------------------------------------- headless smoke test

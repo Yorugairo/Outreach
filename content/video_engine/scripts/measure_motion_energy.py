@@ -25,12 +25,19 @@ Definitions (all deterministic given fps and the build):
 
 Translation energy is counted only when the element is visible in BOTH frames and its content
 signature is unchanged - a caption page swapping its words is a cut, not a 700 px/s pan.
+
+THE RACE READ (`--race --window t0 t1`, P52 T17 / R26-3). A second, narrower measurement on the
+same headless seek: the racing marks' own trajectories, split onto the two axes a "choppy" race
+could be failing on - the CURVATURE of the path (the geometry, which is the clothoid fitter's case)
+and the SPEED's second difference over the clock (the timing, which no curve fit touches). See the
+block below it is defined in; it prints both and adopts nothing.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import math
+import re
 import sys
 import time
 from collections import defaultdict
@@ -496,13 +503,455 @@ def _read_paragraph(report: dict) -> str:
                      "with one derived from our own footage and the references (BACKLOG X2)."])
 
 
+# --------------------------------------------------------------------------- P52 T17: the race read
+# R26-3's open half. The operator, 2026-09-06: "the race needs to be smoother, it feels a bit choppy."
+# Two candidate causes, and they are not the same defect:
+#
+#   GEOMETRY - curvature at the segment JOINS. A racing mark's path through (value, rank) is a chain
+#              of eased segments between period knots; where two segments meet, the curvature can
+#              jump. That is the clothoid fitter's case (`kinetics/clothoid.mjs`, doc 42 s42.4:
+#              Euler spirals hold dk/ds const and minimise E_MVS = integral (dk/ds)^2 ds).
+#   TIMING   - the mark's SPEED over the clock. `LPX.RACE_PERIOD` gives every segment the same
+#              duration and eases it in and out, so the speed can fall to nothing at every period.
+#              No curve fit touches that.
+#
+# The two are separated by measuring each on its own axis, so neither can be read as the other:
+#   * the geometry read resamples the traced path BY ARCLENGTH at a fixed spacing before it reads
+#     curvature, so the clock cannot show up in it at all (a mark that crawls and a mark that
+#     sprints along the same path give the same curvature),
+#   * the timing read is the speed's SECOND DIFFERENCE over time plus the depth of the speed dip at
+#     the period instants, which are properties of the clock and of no shape.
+#
+# Curvature is Menger's 1 / circumradius signed by the turn - the same law the fitter's own
+# `curvatureOf` uses (`kinetics/clothoid.mjs:276`), so an arm measured here and a curve measured
+# there are on one scale.
+RACE_RESAMPLE_PX = 2.0     # the arclength spacing the geometry read is taken at
+RACE_JOIN_GUARD = 3        # ... and how many of those samples either side of a join the jump is read across
+RACE_STALL_FRAC = 0.10     # a frame under this share of the window's mean speed is a STALL to the eye
+
+RACE_JS = r"""
+(args) => {
+  const stage = document.getElementById('stage');
+  const sr = stage.getBoundingClientRect();
+  const out = [];
+  let i = -1;
+  for (const b of document.querySelectorAll('svg.lp-chart rect.bar')) {
+    i += 1;
+    const r = b.getBoundingClientRect();
+    const row = b.parentElement, lab = row ? row.querySelector('text.lab') : null;
+    const name = lab ? String(lab.textContent || '').trim() : '';
+    /* the TIP of the racing mark - the bar's growing end at its own row - is what the eye tracks */
+    out.push({mark: name || ('bar' + i),
+              x: Math.round((r.x + r.width - sr.x) * 1e3) / 1e3,
+              y: Math.round((r.y + r.height / 2 - sr.y) * 1e3) / 1e3});
+  }
+  return out;
+}
+"""
+
+
+def race_tracks(frames) -> dict:
+    """[(t, [{mark, x, y}])] -> {mark: [(x, y)]}, keyed by the row's own NAME.
+
+    The engine repaints the rows in value order every frame (the overtaker comes forward), so DOM
+    order is not identity - the label is. A mark missing from a frame is dropped from every track,
+    because a trajectory with a hole in it is not a trajectory.
+    """
+    names = None
+    for _, marks in frames:
+        seen = {m["mark"] for m in marks}
+        names = seen if names is None else (names & seen)
+    tracks = {n: [] for n in sorted(names or ())}
+    for _, marks in frames:
+        by_name = {m["mark"]: m for m in marks}
+        for n in tracks:
+            tracks[n].append((by_name[n]["x"], by_name[n]["y"]))
+    return tracks
+
+
+# ---- the TIMING axis: speed over the clock -----------------------------------------------------
+def speed_track(track, fps: float) -> list[float]:
+    """|v| per frame pair, px/s. Length is len(track) - 1; pair k spans [t_k, t_k+1]."""
+    return [math.hypot(b[0] - a[0], b[1] - a[1]) * fps for a, b in zip(track, track[1:])]
+
+
+def timing_energy(speeds, fps: float) -> float:
+    """E_timing = sum (d2|v| / dt2)^2 dt, px^2/s^5 - the SECOND difference of speed.
+
+    Zero for any motion at a constant speed, however curved its path; large for a clock that
+    accelerates and brakes inside every period. It is the timing signal because it is blind to
+    where the mark goes and sees only how its speed is being driven.
+    """
+    if len(speeds) < 3:
+        return 0.0
+    return sum(((speeds[k + 1] - 2 * speeds[k] + speeds[k - 1]) * fps * fps) ** 2
+               for k in range(1, len(speeds) - 1)) / fps
+
+
+def stall_fraction(speeds, frac: float = RACE_STALL_FRAC) -> float:
+    """The share of frame pairs whose speed is under `frac` of the window's mean - the stop-and-go."""
+    if not speeds:
+        return 0.0
+    mean = sum(speeds) / len(speeds)
+    if mean <= 0:
+        return 1.0
+    return sum(1 for v in speeds if v < frac * mean) / len(speeds)
+
+
+def join_speed_dip(speeds, times, joins, half_window_s: float) -> dict:
+    """How far the speed falls AT the period instants, as a share of the window's mean speed.
+
+    `dip` near 0 means the mark stops dead at every period and starts again - the stop-and-go a
+    viewer calls choppy. Near 1 means the clock runs through the join.
+    """
+    if not speeds:
+        return {"dip": None, "joins_read": 0, "mean_px_s": 0.0}
+    mid = [0.5 * (times[k] + times[k + 1]) for k in range(len(speeds))]
+    mean = sum(speeds) / len(speeds)
+    at_join = [min((abs(m - j), v) for m, v in zip(mid, speeds))[1]
+               for j in joins if min(abs(m - j) for m in mid) <= half_window_s]
+    if not at_join or mean <= 0:
+        return {"dip": None, "joins_read": len(at_join), "mean_px_s": mean}
+    return {"dip": (sum(at_join) / len(at_join)) / mean, "joins_read": len(at_join),
+            "mean_px_s": mean, "min_at_join_px_s": min(at_join)}
+
+
+# ---- the GEOMETRY axis: curvature of the path, with the clock resampled out ---------------------
+def arclengths(track) -> list[float]:
+    """Cumulative arclength along a sampled trajectory, in px. Same length as the track."""
+    out = [0.0]
+    for a, b in zip(track, track[1:]):
+        out.append(out[-1] + math.hypot(b[0] - a[0], b[1] - a[1]))
+    return out
+
+
+def resample_by_arclength(track, spacing: float = RACE_RESAMPLE_PX) -> list[tuple[float, float]]:
+    """The same PATH, sampled every `spacing` px - the clock removed, the shape kept.
+
+    This is what makes the geometry read a geometry read: a mark that crawls through a join and a
+    mark that sprints through it resample to the same points, so curvature measured after this step
+    cannot be a disguised timing signal.
+    """
+    s = arclengths(track)
+    total = s[-1]
+    if total < spacing or spacing <= 0:
+        return []
+    out, i = [], 0
+    for n in range(int(total / spacing) + 1):
+        target = n * spacing
+        while i + 1 < len(s) - 1 and s[i + 1] < target:
+            i += 1
+        span = s[i + 1] - s[i]
+        f = 0.0 if span <= 0 else (target - s[i]) / span
+        out.append((track[i][0] + (track[i + 1][0] - track[i][0]) * f,
+                    track[i][1] + (track[i + 1][1] - track[i][1]) * f))
+    return out
+
+
+def curvature_of(pts) -> list[float]:
+    """Menger's 1 / circumradius, signed by the turn - `kinetics/clothoid.mjs:276`, in Python.
+
+    The ends copy their neighbours: three points are the smallest thing a curvature can be read
+    from. Units 1/px.
+    """
+    n = len(pts)
+    k = [0.0] * n
+    for i in range(1, n - 1):
+        a, b, c = pts[i - 1], pts[i], pts[i + 1]
+        abx, aby = b[0] - a[0], b[1] - a[1]
+        bcx, bcy = c[0] - b[0], c[1] - b[1]
+        den = math.hypot(abx, aby) * math.hypot(bcx, bcy) * math.hypot(c[0] - a[0], c[1] - a[1])
+        k[i] = (2 * (abx * bcy - aby * bcx) / den) if den > 0 else 0.0
+    if n > 2:
+        k[0], k[n - 1] = k[1], k[n - 2]
+    return k
+
+
+def curvature_energy(track, spacing: float = RACE_RESAMPLE_PX) -> dict:
+    """The two curvature integrals doc 42 s42.4 names, on the arclength-resampled path.
+
+      bending  = integral k^2 ds       [1/px]   - how hard the path bends at all
+      fairness = integral (dk/ds)^2 ds [1/px^3] - E_MVS, the functional Euler spirals MINIMISE;
+                 this is the one that answers "is the choppiness curvature at the joins", because a
+                 curvature that jumps at a join is exactly a large (dk/ds)^2 there.
+    """
+    pts = resample_by_arclength(track, spacing)
+    if len(pts) < 3:
+        return {"samples": len(pts), "length_px": arclengths(track)[-1], "bending": 0.0,
+                "fairness": 0.0, "kappa_max": 0.0}
+    k = curvature_of(pts)
+    fairness = sum(((k[i + 1] - k[i]) / spacing) ** 2 for i in range(len(k) - 1)) * spacing
+    return {"samples": len(pts), "length_px": arclengths(track)[-1],
+            "bending": sum(ki * ki for ki in k) * spacing, "fairness": fairness,
+            "kappa_max": max(abs(ki) for ki in k)}
+
+
+def join_curvature(track, times, joins, spacing: float = RACE_RESAMPLE_PX,
+                   guard: int = RACE_JOIN_GUARD) -> dict:
+    """The curvature AT each period join, two ways - because a join can fail in two ways.
+
+      peak = max |k| within `guard` arclength samples of the join. A CORNER - two segments meeting
+             at an angle - is a curvature SPIKE, and a spike is what peak sees.
+      step = |k after - k before| across the same window. A join whose two sides are each smooth but
+             bend by different amounts is a curvature STEP, which is what G2 continuity forbids and
+             what a clothoid chain is fitted to remove.
+
+    The join's position is found in ARCLENGTH (where the mark had got to at that instant), not in
+    frames, so a mark that is barely moving at the join is still read at the right place on its path.
+    """
+    s = arclengths(track)
+    pts = resample_by_arclength(track, spacing)
+    empty = {"joins": [], "peak_max": None, "peak_mean": None, "step_max": None, "step_mean": None}
+    if len(pts) < 2 * guard + 3:
+        return empty
+    k = curvature_of(pts)
+    rows = []
+    for j in joins:
+        if j <= times[0] or j >= times[-1]:
+            continue
+        f = (j - times[0]) / (times[-1] - times[0]) * (len(times) - 1)
+        i = min(int(f), len(s) - 2)
+        s_join = s[i] + (s[i + 1] - s[i]) * (f - i)
+        n = int(round(s_join / spacing))
+        if n - guard < 0 or n + guard >= len(k):
+            continue
+        rows.append({"at_s": round(j, 3), "arclength_px": round(s_join, 2),
+                     "k_before": k[n - guard], "k_after": k[n + guard],
+                     "step": abs(k[n + guard] - k[n - guard]),
+                     "peak": max(abs(v) for v in k[n - guard:n + guard + 1])})
+    if not rows:
+        return empty
+    peaks = [r["peak"] for r in rows]
+    steps = [r["step"] for r in rows]
+    return {"joins": rows, "peak_max": max(peaks), "peak_mean": sum(peaks) / len(peaks),
+            "step_max": max(steps), "step_mean": sum(steps) / len(steps)}
+
+
+# ---- the two reads, folded per mark and over the window ----------------------------------------
+def race_read(frames, fps: float, joins, spacing: float = RACE_RESAMPLE_PX) -> dict:
+    """Both axes on every racing mark in the window, and the window's totals."""
+    times = [t for t, _ in frames]
+    tracks = race_tracks(frames)
+    half = 1.0 / fps   # the frame PAIR that straddles a join, with a frame of slack for the float
+    marks = []
+    for name, track in tracks.items():
+        speeds = speed_track(track, fps)
+        geom = curvature_energy(track, spacing)
+        jn = join_curvature(track, times, joins, spacing)
+        dip = join_speed_dip(speeds, times, joins, half)
+        mean = (sum(speeds) / len(speeds)) if speeds else 0.0
+        sd = math.sqrt(sum((v - mean) ** 2 for v in speeds) / len(speeds)) if speeds else 0.0
+        marks.append({
+            "mark": name, "length_px": geom["length_px"], "samples": geom["samples"],
+            "timing_energy": timing_energy(speeds, fps), "speed_cv": (sd / mean) if mean > 0 else 0.0,
+            "stall_fraction": stall_fraction(speeds), "join_speed_dip": dip["dip"],
+            "mean_px_s": mean, "max_px_s": max(speeds) if speeds else 0.0,
+            "bending": geom["bending"], "fairness": geom["fairness"], "kappa_max": geom["kappa_max"],
+            "join_peak_mean": jn["peak_mean"], "join_peak_max": jn["peak_max"],
+            "join_step_mean": jn["step_mean"], "join_step_max": jn["step_max"], "joins": jn["joins"],
+        })
+    marks.sort(key=lambda m: m["mark"])
+    dips = [m["join_speed_dip"] for m in marks if m["join_speed_dip"] is not None]
+    return {
+        "fps": fps, "frames": len(frames), "from_s": times[0] if times else 0.0,
+        "to_s": times[-1] if times else 0.0, "joins": list(joins), "resample_px": spacing,
+        "marks": marks,
+        "totals": {
+            "marks": len(marks),
+            "timing_energy": sum(m["timing_energy"] for m in marks),
+            "speed_cv": (sum(m["speed_cv"] for m in marks) / len(marks)) if marks else 0.0,
+            "stall_fraction": (sum(m["stall_fraction"] for m in marks) / len(marks)) if marks else 0.0,
+            "join_speed_dip": (sum(dips) / len(dips)) if dips else None,
+            "bending": sum(m["bending"] for m in marks),
+            "fairness": sum(m["fairness"] for m in marks),
+            "join_peak_mean": _mean_of([m["join_peak_mean"] for m in marks]),
+            "join_peak_max": max([m["join_peak_max"] for m in marks if m["join_peak_max"] is not None] or [0.0]),
+            "join_step_mean": _mean_of([m["join_step_mean"] for m in marks]),
+            "join_step_max": max([m["join_step_max"] for m in marks if m["join_step_max"] is not None] or [0.0]),
+        },
+    }
+
+
+def _mean_of(values) -> float | None:
+    vals = [v for v in values if v is not None]
+    return (sum(vals) / len(vals)) if vals else None
+
+
+def race_markdown(read: dict, build_dir: Path) -> str:
+    t = read["totals"]
+    lines = [f"# The race read - {_rel(build_dir)}", "",
+             f"{read['frames']} frames at {read['fps']:g} fps over {read['from_s']:g}-{read['to_s']:g} s; "
+             f"{t['marks']} racing marks; the geometry axis resampled every {read['resample_px']:g} px of "
+             "arclength so the clock is out of it.", "",
+             "| axis | reading | value | what it is |", "|---|---|---:|---|",
+             f"| TIMING | timing energy (px^2/s^5) | {t['timing_energy']:,.0f} | "
+             "`integral (d2|v|/dt2)^2 dt` - zero at any constant speed, whatever the shape |",
+             f"| TIMING | speed CV | {t['speed_cv']:.3f} | the speed's own spread over the window |",
+             f"| TIMING | stall fraction | {t['stall_fraction']:.3f} | share of frames under "
+             f"{RACE_STALL_FRAC:.0%} of the mean speed |",
+             f"| TIMING | join speed dip | {_fmt(t['join_speed_dip'])} | speed AT a period, over the mean. "
+             "Near 0 = the mark stops dead at every period |",
+             f"| GEOMETRY | bending `integral k^2 ds` (1/px) | {t['bending']:.6f} | how hard the path bends |",
+             f"| GEOMETRY | fairness `E_MVS = integral (dk/ds)^2 ds` (1/px^3) | {t['fairness']:.6g} | "
+             "the functional Euler spirals minimise (42 s42.4) |",
+             f"| GEOMETRY | join curvature PEAK, mean (1/px) | {_fmt(t['join_peak_mean'], 6)} | "
+             "max |k| at the period knots - a CORNER is a spike |",
+             f"| GEOMETRY | join curvature peak, max (1/px) | {t['join_peak_max']:.6f} | the worst join |",
+             f"| GEOMETRY | join curvature STEP, mean (1/px) | {_fmt(t['join_step_mean'], 6)} | "
+             "|k after - k before| - what G2 continuity forbids, and what the fitter removes |", "",
+             "## Per mark", "",
+             "| mark | path (px) | mean px/s | timing energy | speed CV | stalls | join dip | bending | fairness | join peak | join step |",
+             "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
+    for m in read["marks"]:
+        lines.append(f"| {m['mark']} | {m['length_px']:,.0f} | {m['mean_px_s']:,.0f} | "
+                     f"{m['timing_energy']:,.0f} | {m['speed_cv']:.3f} | {m['stall_fraction']:.3f} | "
+                     f"{_fmt(m['join_speed_dip'])} | {m['bending']:.6f} | {m['fairness']:.6g} | "
+                     f"{_fmt(m['join_peak_max'], 6)} | {_fmt(m['join_step_max'], 6)} |")
+    return "\n".join(lines + ["", "Read the two axes against the OTHER ARM, never against a threshold: "
+                              "neither number has a published floor, and the A/B is the whole point.", "",
+                              "## What this read does and does not see", "",
+                              "- The GEOMETRY axis is measured on the mark\'s path in SCREEN pixels, which "
+                              "carries the axis glide (the race retargets `scaleMax` every frame as the "
+                              "leader grows). Both arms carry the same glide, so the A/B is fair, but an "
+                              "absolute curvature here is not the curvature of the data-space path a fitter "
+                              "would be fitting.",
+                              "- A row that never changes rank travels a straight horizontal line whatever "
+                              "the clock does, so its curvature is zero BY CONSTRUCTION. That row is the "
+                              "control: whatever choppiness it has cannot be curvature.",
+                              "- This is DOM geometry - the bar\'s tip, not pixels. Blur, colour, stroke "
+                              "width and anything inside a raster are invisible to it.", ""])
+
+
+def sample_race(build_dir: Path, fps: float, t_from: float, t_to: float, progress=None):
+    """Seek the built player to each sampled t and read every racing mark's tip under `svg.lp-chart`."""
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from render_baseline import prepare_page, serve                     # noqa: PLC0415 - optional dep
+    from playwright.sync_api import sync_playwright                     # noqa: PLC0415
+
+    player = build_dir / "player.html"
+    if not player.exists():
+        raise SystemExit(f"no player.html in {build_dir}")
+    aspect = str(load_timeline(build_dir).get("aspect") or "16:9")
+    width, height = STAGE_SIZE[aspect]
+    times = frame_times(t_from, t_to, fps)
+    frames = []
+    srv, port = serve(build_dir)
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_context(viewport={"width": width, "height": height},
+                                       device_scale_factor=1).new_page()
+            page.goto(f"http://127.0.0.1:{port}/player.html", wait_until="networkidle", timeout=180000)
+            prepare_page(page, width, height)
+            for i, t in enumerate(times):
+                page.evaluate("t => { const s = document.getElementById('scrub');"
+                              " s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+                marks = page.evaluate(RACE_JS, {})
+                if not marks:
+                    raise SystemExit(f"no racing marks under svg.lp-chart at t={t} - is {build_dir} a race?")
+                frames.append((t, marks))
+                if progress and i % 50 == 0:
+                    progress(i, len(times))
+            browser.close()
+    finally:
+        srv.shutdown()
+    return frames
+
+
+RACE_CLOCK_KEYS = ("ROLL", "SAVOR", "FIELD", "RACE_IN", "RACE_PERIOD")
+
+
+def race_clock(engine_text: str) -> dict:
+    """The page's own clock, READ OFF THE ENGINE the build was written against - never guessed.
+
+    `LP.ROLL + LP.SAVOR + LP.FIELD` is the lead before the build beat (`t3`, engine's paint call),
+    then `LPX.RACE_IN` of grow-in and `LPX.RACE_PERIOD` per period. A key that does not resolve to
+    exactly one number raises, because a measurement window derived from the wrong constant is worse
+    than no measurement.
+    """
+    clock = {}
+    for key in RACE_CLOCK_KEYS:
+        hits = re.findall(rf"\b{key}:\s*([0-9]+(?:\.[0-9]+)?)\s*,", engine_text)
+        if len(hits) != 1:
+            raise SystemExit(f"{key} resolves to {len(hits)} numbers in the engine, expected 1")
+        clock[key] = float(hits[0])
+    clock["lead"] = clock["ROLL"] + clock["SAVOR"] + clock["FIELD"]
+    return clock
+
+
+def build_engine_text(build_dir: Path) -> str:
+    """The engine COPY a split build carries (`player.json` names it), else the repo's own."""
+    manifest = build_dir / "player.json"
+    if manifest.exists():
+        name = (json.loads(manifest.read_text(encoding="utf-8")) or {}).get("engine")
+        if name and (build_dir / name).exists():
+            return (build_dir / name).read_text(encoding="utf-8")
+    return (REPO / "docs/content-video-engine/samples/scene-evidence-engine.mjs").read_text(encoding="utf-8")
+
+
+def race_scene(timeline: dict) -> tuple[dict, dict]:
+    """The first scene whose world is a ledger page built by the RACE builder, and that page."""
+    for sc in timeline.get("scenes") or []:
+        page = ((sc.get("world") or {}).get("page")) or {}
+        if page.get("builder") == "race" or page.get("variant") == "race":
+            return sc, page
+    raise SystemExit("no scene in this timeline carries a race page (world.page.builder == 'race')")
+
+
+def race_joins(timeline: dict, clock: dict) -> list[float]:
+    """The period instants, in episode seconds: the knots of the path AND the beats of the clock."""
+    scene, page = race_scene(timeline)
+    t0 = float((scene.get("span") or [0.0])[0]) + clock["lead"] + clock["RACE_IN"]
+    return [round(t0 + i * clock["RACE_PERIOD"], 4) for i in range(len(page.get("periods") or []))]
+
+
 # --------------------------------------------------------------------------- cli
+def run_race(build_dir: Path, timeline: dict, fps: float, window, report: Path | None) -> int:
+    """P52 T17: both arms of the race A/B are run through this - one page, one clock, two numbers."""
+    clock = race_clock(build_engine_text(build_dir))
+    joins = race_joins(timeline, clock)
+    if len(joins) < 2:
+        raise SystemExit("a race with fewer than two periods has no joins to read")
+    t_from, t_to = (float(window[0]), float(window[1])) if window else (joins[0], joins[-1])
+    started = time.time()
+    frames = sample_race(build_dir, fps, t_from, t_to,
+                         progress=lambda i, n: print(f"  sampled {i}/{n} frames", flush=True))
+    read = race_read(frames, fps, [j for j in joins if t_from <= j <= t_to])
+    read["build_dir"] = _rel(build_dir)
+    read["engine"] = (json.loads((build_dir / "player.json").read_text(encoding="utf-8"))
+                      if (build_dir / "player.json").exists() else {})
+    read["clock"] = clock
+    read["elapsed_s"] = round(time.time() - started, 1)
+    md_path = report or (build_dir / "RACE-MOTION.md")
+    json_path = md_path.with_suffix(".json") if md_path.suffix == ".md" else build_dir / "RACE-MOTION.json"
+    md_path.write_text(race_markdown(read, build_dir), encoding="utf-8")
+    json_path.write_text(json.dumps(read, indent=2), encoding="utf-8")
+    t = read["totals"]
+    print(f"{md_path}\n{json_path}")
+    print(f"race read: {read['frames']} frames {t_from:g}-{t_to:g}s, {t['marks']} marks, "
+          f"{len(read['joins'])} joins ({read['elapsed_s']}s)")
+    print(f"  TIMING    energy {t['timing_energy']:,.0f} px^2/s^5 | speed CV {t['speed_cv']:.3f} | "
+          f"stalls {t['stall_fraction']:.3f} | join dip {_fmt(t['join_speed_dip'])}")
+    print(f"  GEOMETRY  bending {t['bending']:.6f} 1/px | fairness {t['fairness']:.6g} 1/px^3")
+    print(f"  GEOMETRY  join curvature peak mean {_fmt(t['join_peak_mean'], 6)} "
+          f"max {t['join_peak_max']:.6f} | join curvature step mean {_fmt(t['join_step_mean'], 6)} "
+          f"max {t['join_step_max']:.6f}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Measure on-screen motion energy of a built player.")
     ap.add_argument("build_dir", type=Path)
     ap.add_argument("--fps", type=float, default=DEFAULT_FPS)
     ap.add_argument("--from", dest="t_from", type=float, default=0.0)
     ap.add_argument("--to", dest="t_to", type=float, default=None)
+    ap.add_argument("--window", nargs=2, type=float, metavar=("T0", "T1"),
+                    help="measure this window only; with --race it defaults to the race's own "
+                         "first-to-last period, read off the engine the build carries")
+    ap.add_argument("--race", action="store_true",
+                    help="the RACE read (P52 T17 / R26-3): per racing mark, the CURVATURE of its path "
+                         "with the clock resampled out (the geometry axis, the clothoid fitter's case) "
+                         "and the SPEED's second difference over the clock (the timing axis)")
     ap.add_argument("--max-depth", type=int, default=DEFAULT_MAX_DEPTH)
     ap.add_argument("--top", type=int, default=TOP_PIECES)
     ap.add_argument("--report", type=Path, default=None)
@@ -510,16 +959,20 @@ def main(argv: list[str] | None = None) -> int:
 
     build_dir = args.build_dir.resolve()
     timeline = load_timeline(build_dir)
-    t_to = args.t_to if args.t_to is not None else float(timeline.get("runtime_s") or 0.0)
+    if args.race:
+        return run_race(build_dir, timeline, args.fps, args.window, args.report)
+    t_from = args.window[0] if args.window else args.t_from
+    t_to = args.window[1] if args.window else (
+        args.t_to if args.t_to is not None else float(timeline.get("runtime_s") or 0.0))
     windows = scene_windows(timeline)
     if not windows:
         raise SystemExit(f"the timeline in {build_dir} declares no scenes")
 
     started = time.time()
-    frames = sample_build(build_dir, args.fps, args.t_from, t_to, args.max_depth,
+    frames = sample_build(build_dir, args.fps, t_from, t_to, args.max_depth,
                           progress=lambda i, n: print(f"  sampled {i}/{n} frames", flush=True))
     folded = accumulate(frames, args.fps, windows)
-    report = build_report(build_dir, timeline, folded, args.fps, args.t_from, t_to,
+    report = build_report(build_dir, timeline, folded, args.fps, t_from, t_to,
                           time.time() - started, args.max_depth)
 
     md_path = args.report or (build_dir / "MOTION-ENERGY.md")
