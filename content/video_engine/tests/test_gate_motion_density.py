@@ -1102,11 +1102,14 @@ def test_m27_refuses_a_card_docking_over_a_plot_drawing_or_finished():
     chart FINISHED is the same defect, and the row says which. A PARKED card is not this row's business
     (M25 scores the parked composition). The fuller set is in tests/test_dock_over_build.py; this is the
     row's own smoke."""
-    def inst(drawn, state, share, area=277066, t=10.29):
+    def inst(drawn, state, share, area=277066, t=10.29, data=True):
+        ov = [{"a": "dock-c-blue-ties-panel", "b": "page.plot", "area_px": area, "share_of_smaller": share}]
+        if data:   # E65: the plot's empty ROOM is a place the placer may choose; its INK is the fault
+            ov.append({"a": "dock-c-blue-ties-panel", "b": "page.data", "area_px": area, "share_of_smaller": share})
         return {"t": t, "why": "s02 dock dock-c-blue-ties-panel reading size",
                 "docks": [{"id": "dock-c-blue-ties-panel", "state": state, "box": [79, 552, 801, 474], "rest": 1}],
-                "page": {"plot": [230, 464, 580, 681]}, "texts": [],
-                "overlaps": [{"a": "dock-c-blue-ties-panel", "b": "page.plot", "area_px": area, "share_of_smaller": share}],
+                "page": {"plot": [230, 464, 580, 681], "data": [246, 500, 540, 600]}, "texts": [],
+                "overlaps": ov,
                 "clearances": {"safe_pct": {}}, "camera": {"scene": "s02", "zoom": 1.0, "look": [540, 960]},
                 "marks": {"n": 2, "drawn": drawn, "up": 1.0, "parked": False}}
 
@@ -1121,5 +1124,79 @@ def test_m27_refuses_a_card_docking_over_a_plot_drawing_or_finished():
     assert done.level == "FAIL" and "on the finished chart" in done.message, done.message
     assert G._over_build_gate({"aspect": "9:16", "instants": [inst(1.0, "reading", 72)]}, []).level == "FAIL", "no windows is not an exemption"
     assert G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "parked", 72)]}, M27_SCENES).level == "PASS"
-    assert G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "reading", 4, area=2147)]}, M27_SCENES).level == "WARN"
+    room = G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "reading", 72, data=False)]}, M27_SCENES)
+    assert room.level == "WARN" and "clear of the ink" in room.message, room.message   # E65's own placement
+    assert G._over_build_gate({"aspect": "9:16", "instants": [inst(0.5, "reading", 4, area=2147, data=False)]}, M27_SCENES).level == "WARN"
     assert G._over_build_gate(None, []).level == "INFO", "no probe file: said so, never silently green"
+
+
+# ---- M28 (R26-53, 2026-09-11): text on text among a page's own labels ----------------------------
+# The Tokyo Meta page's own boxes at 9:16 are the fixture, from both builds: the approved cut (no
+# lpFitValues - values 133 px wide, the callout's pill 7 px off "$604") and the side build that carries
+# the fit (values 122 px, the pill risen to its band). Neither TOUCHES; the defect the operator saw is
+# the air, so the row's FAIL tier is the intersection and its WARN tier is half a figure.
+META_APPROVED = [("val", "$665", [239, 567, 133, 67]), ("val", "$633", [395, 583, 133, 67]),
+                 ("val", "$604", [552, 598, 133, 67]), ("pill", "$577", [692, 559, 167, 85])]
+META_FITTED = [("val", "$665", [246, 575, 122, 61]), ("val", "$633", [401, 591, 122, 61]),
+               ("val", "$604", [557, 606, 122, 61]), ("pill", "$577", [690, 473, 166, 84])]
+# the same page with the pill shoved back over bar 3's number - R26-53 as a collision, which is what a
+# REGRESSION of lpPillBand would draw: 25 px x 67 px of shared box, 19 % of the smaller label
+META_CRASHED = META_APPROVED[:3] + [("pill", "$577", [660, 590, 167, 85])]
+META_CRASH_PAIR = ("val:$604", "pill:$577", 1675, 19)
+
+
+def _labels_instant(t: float, labels, pairs=(), vpx: int = 60) -> dict:
+    return {"t": t, "why": "s05 the Meta page", "docks": [], "page": {},
+            "texts": [{"k": "chart.val", "n": 3, "px": vpx, "css": round(vpx * 390 / 1080, 1)}],
+            "labels": [{"role": r, "text": x, "box": list(b)} for r, x, b in labels],
+            "overlaps": [{"a": a, "b": b, "area_px": ar, "share_of_smaller": sh} for a, b, ar, sh in pairs],
+            "clearances": {"safe_pct": {}}, "camera": {"scene": "s05", "zoom": 1.0, "look": [540, 960]},
+            "marks": {"n": 4, "drawn": 1.0, "up": 1.0, "parked": False}}
+
+
+def test_m28_is_info_until_the_probe_has_run():
+    """M18's, M25's and M26's pattern: measured or named, never a silent skip."""
+    assert G._labels_gate(None).level == "INFO" and "probe.py" in G._labels_gate(None).message
+    assert G._labels_gate("stale").level == "INFO" and "another player.html" in G._labels_gate("stale").message
+    assert G._labels_gate({"instants": []}).level == "INFO"
+    # ... and INFO, not PASS, when no page put two labels on screen at once - a plate has none
+    quiet = G._labels_gate({"instants": [_labels_instant(1.0, META_FITTED[:1])]})
+    assert quiet.level == "INFO" and "nothing to check" in quiet.message, quiet.message
+
+
+def test_m28_names_the_two_labels_that_sit_on_each_other():
+    """A regression of lpPillBand: the callout's pill back over bar 3's number. The row names the page's
+    scene, the instant, both labels, the px and the share - and says nothing about the three that are fine."""
+    g = G._labels_gate({"instants": [_labels_instant(71.0, META_CRASHED, [META_CRASH_PAIR])]})
+    assert g.level == "FAIL", g.message
+    assert "val:$604 on pill:$577" in g.message, g.message
+    assert "1:11" in g.message and "(s05)" in g.message and "1,675 px" in g.message and "19 %" in g.message, g.message
+    assert "$665" not in g.message and "$633" not in g.message, "the labels that clear each other are not named"
+    # the same pair at four instants is ONE row, not four
+    doc = {"instants": [_labels_instant(t, META_CRASHED, [META_CRASH_PAIR]) for t in (71.0, 71.5, 72.0, 73.0)]}
+    assert G._labels_gate(doc).message.startswith("1 pair(s)"), G._labels_gate(doc).message
+
+
+def test_m28_fails_the_value_row_the_eye_reads_as_one_string_and_warns_the_row_short_of_air():
+    """R26-53 as the frame actually is on the approved build: the pill's box clears "$604" by 7 px - under a
+    QUARTER of a figure at the page's own value size (60 px -> 8) - and the eye reads one string: the operator's
+    "crashing text" is a FAIL even though no box meets. Between a quarter and half a figure (17) the row has
+    lost the fit's air without crashing: a WARN."""
+    g = G._labels_gate({"instants": [_labels_instant(71.0, META_APPROVED)]})
+    assert g.level == "FAIL", g.message
+    assert "val:$604 and pill:$577" in g.message and "7 px of air" in g.message and "quarter of a figure" in g.message, g.message
+    assert "1:11" in g.message, g.message
+    nudged = [(r, x, [b[0] + 6, b[1], b[2], b[3]] if r == "pill" else list(b)) for r, x, b in META_APPROVED]   # 13 px of air
+    w = G._labels_gate({"instants": [_labels_instant(71.0, nudged)]})
+    assert w.level == "WARN", w.message
+    assert "val:$604 and pill:$577" in w.message and "13 px of air" in w.message and "17" in w.message, w.message
+
+
+def test_m28_passes_the_row_the_fit_has_fitted():
+    """build-short-vals' own boxes: one size for the row, a figure between neighbours, the pill in its band."""
+    g = G._labels_gate({"instants": [_labels_instant(70.0, META_FITTED, vpx=55)]})
+    assert g.level == "PASS", g.message
+    assert "6 label pair(s) checked" in g.message, g.message
+    # a tick under a negative bar's value keeps its own layer's gutter - the air law binds the VALUE row
+    tight = META_FITTED + [("tick", "5.5%", [727, 998, 91, 44]), ("tick", "5%", [589, 998, 58, 44])]
+    assert G._labels_gate({"instants": [_labels_instant(70.0, tight, vpx=55)]}).level == "PASS"

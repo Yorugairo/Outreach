@@ -69,9 +69,14 @@ captions do NOT count - they are what a viewer reads as stillness.
   M26  values (R26-40): every bar whose number is PRINTED       FAIL   (E28 / E53; INFO until probe.py <build>
        is drawn at that number on the scale the page prints            --gate has run, or when no value is printed)
        beside it. M25's sibling, from the same file
-  M27  the read over a plot (E63): a card that has not         FAIL   (E63; WARN when it is inside the plot's box
-       parked sits on a ledger page's plot - drawing or                 under 5 %; INFO until probe.py <build> --gate
-       finished. M25's sibling                                          has run)
+  M27  the read over a build (E63): a card that has not        FAIL   (E63; WARN when it is inside the plot's box
+       parked sits on a ledger page's INK - the data, the               clear of the ink - E65 puts a card in the
+       labels, the citation - drawing or finished. M25's                plot's own empty room; INFO until probe.py
+       sibling                                                          <build> --gate has run)
+  M28  text on text (R26-53): two of a page's OWN labels       FAIL   (E28; WARN when two of the VALUE row are
+       - values, ticks, pills, series names, brackets and               closer than half a figure, the air
+       figures - sit on each other at a probed instant.                 lpFitValues fits it with; INFO until
+       M25's sibling, from the same file                                probe.py <build> --gate has run)
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -148,11 +153,28 @@ SRC_M27 = ("E63 (operator 2026-09-11, on the Tokyo cut at 0:09.5-0:10.5: \"docki
            "standard practice ... as a rule we should probably use better handling now that we can manipulate scale/depth/placement "
            "easier\"; widened the same evening, on the read that came back over the finished chart: \"im confused, because you just "
            "left the dock over the chart now too. something went backwards\"): a card that has not parked yet may not sit on a "
-           "ledger page's plot, drawing or finished - the READ moves (the compiler's `read_moved` / `read_deferred`), never the "
-           "word. A PARKED card is E45's contract and M25's row. Read from the page's own DOM (probe.py --gate)")
-BUILD_OVER_SHARE = 0.05    # of the smaller box: over this the card is ON the build (the Tokyo panel card read 66-77 % of itself);
-                           # under it the card is merely inside the plot's box - the compiler's own line (READ_OVER_PLOT_SHARE),
-                           # so the placer and the gate draw it in the same place.
+           "ledger page's INK, drawing or finished - the READ moves (the compiler's `read_moved` / `read_deferred`), never the "
+           "word. The page's own INK is what the row scores (the data, the labels, the citation - M25's boxes): since E65 the "
+           "placer may put a card in the plot's own empty ROOM on purpose, so the plot box is the WARN tier and the ink is the "
+           "FAIL. A PARKED card is E45's contract and M25's row. Read from the page's own DOM (probe.py --gate)")
+BUILD_OVER_SHARE = 0.05    # of the smaller box: the compiler's own line (READ_OVER_PLOT_SHARE), kept so the placer and the
+                           # gate name the same number. Since E65 the row no longer SCORES it: a card in the plot's own empty
+                           # room is what the placer now chooses, so the plot BOX is the WARN tier and the INK is the FAIL.
+SRC_M28 = ("R26-53 (the operator, 2026-09-11: \"why are we now crashing text?\") - the Tokyo Meta page's four values "
+           "\"$665 $633 $604 $577\" touched each other and the callout's pill on bar 4 covered bar 3's label, on the "
+           "approved build and on every side build before f67c5ed, and no row saw it: M25 reads cards over ink, M26 the "
+           "value's height, and the probe's `overlaps` carried card-vs-ink and pill-vs-rail only. E28 (a chart reads "
+           "right at a glance): no two of a page's OWN labels may sit on each other, and the row that fits them "
+           "(lpFitValues / lpPillBand) leaves half a figure of air between them. From the page's own DOM (probe.py --gate)")
+LABEL_AIR_EM = 0.28        # HALF A FIGURE at the page's own value size - the air lpFitValues fits the value row with
+                           # (max(12 px, 0.5 x the figure width) each side) and lpPillBand clears the pill of it by. Under
+                           # it two numbers read as one crowded string even when their boxes have not met: measured at 6 px
+                           # on the approved Tokyo build, where the law asks 17.
+LABEL_TOUCH_EM = 0.14      # a QUARTER of a figure: under this the eye reads two labels as one string - the operator's word for the
+                           # Meta page's 6 px (2 CSS px on a phone) was "crashing text"; the frame's own arithmetic (a met box) is
+                           # not the only crash. FAIL under a quarter, WARN under half (LABEL_AIR_EM).
+LABEL_AIR_ROLES = ("val", "pill")   # the VALUE ROW and its callout pill - the register the fit's air law binds. A tick under a
+                           # negative bar's value, or two capsules on the page's rail, keep their own layer's gutter.
 # THE BAND. A printed number and a drawn height never agree to the pixel, and two things account for the gap:
 VALUE_TOL = 0.04           # (a) ROUNDING. A pill prints lpFmt's two decimals and a tick label lpTick's, and the height is
                            # measured off a rendered box - so a few hundredths of the TOP TICK is arithmetic, not a lie.
@@ -887,7 +909,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     g.append(_frozen_gate(frames))                                        # M18 (E49: nothing ever goes truly still)
     g.append(_layout_gate(layout))                                        # M25 (P51 T2: the layout gate, from probe.py's boxes)
     g.append(_values_gate(layout))                                        # M26 (R26-40: the printed value against the drawn height)
-    g.append(_over_build_gate(layout, tl.get("scenes", [])))              # M27 (E63: no card reads over a chart that is still drawing)
+    g.append(_over_build_gate(layout, tl.get("scenes", [])))              # M27 (E63/E65: no card reads over a ledger page's ink)
+    g.append(_labels_gate(layout))                                        # M28 (R26-53: text on text among the page's own labels)
     if (bt := _build_to_gate(tl.get("scenes", []))) is not None:
         g.append(bt)                                                      # M19 (P47 T2: the build_to holds, INFO)
     if (cg := _cadence_gate(tl.get("scenes", []))) is not None:
@@ -1227,7 +1250,8 @@ def _layout_faults(doc: dict) -> tuple[list[str], list[str]]:
 def _ink_name(key: str) -> str:
     return {"page.source": "the page's source line", "page.note": "a note", "page.title": "the title", "page.sub": "the sub",
             "pill": "a pill", "chart.lab": "an axis label", "chart.val": "a value", "chart.callout": "a callout",
-            "chart.sname": "a series name"}.get(key, key)
+            "chart.sname": "a series name", "chart.bklab": "a bracket label", "chart.bksub": "a bracket's sub line",
+            "chart.spanlab": "a span's label", "chart.wlab": "a wedge label"}.get(key, key)
 
 
 def _dedupe(lines: list[str]) -> list[str]:
@@ -1357,7 +1381,12 @@ def _over_build_faults(doc: dict, scenes: list[dict]) -> tuple[list[str], list[s
     is reported, never decisive: it averages every drawn path and reads 0.52 on Tokyo's finished line,
     whose second path is a stub by design. A PARKED card is E45's contract and M25's row. A card the
     compiler already answered for (E63's `read_moved` / `read_deferred`) is still measured, and still
-    fails if it is on the plot: the entry is a record of the decision, never an exemption from the frame."""
+    fails if it is on the ink: the entry is a record of the decision, never an exemption from the frame.
+
+    E65 (2026-09-11): the placer's own fall-through now puts a card in the plot's EMPTY ROOM when the page
+    leaves no band outside it - over the plot BOX and over no mark the chart drew. So the row scores what
+    M25 scores, the page's INK: the data by DATA_OVER_SHARE, a line of its labels or its citation by
+    INK_OVER_SHARE. The plot box on its own is the WARN tier, and the row says the card is clear of the ink."""
     handled = {str(d.get("slide")): ("moved" if d.get("read_moved") else "deferred")
                for s in (scenes or []) for d in (s.get("docks") or []) if d.get("read_moved") or d.get("read_deferred")}
     fails: list[str] = []
@@ -1369,16 +1398,30 @@ def _over_build_faults(doc: dict, scenes: list[dict]) -> tuple[list[str], list[s
         when = "while the chart draws" if _in_build_window(t, scenes) else "on the finished chart"
         state = {d["id"]: d.get("state") for d in inst.get("docks") or []}
         measured += sum(1 for st in state.values() if st not in (None, "parked"))
-        for o in inst.get("overlaps") or []:
-            if o.get("b") != "page.plot" or state.get(o.get("a")) in (None, "parked"):
-                continue                              # a PARKED card is E45's contract and M25's row; this one is the READ
+
+        def line(o: dict) -> str:
             note = f" - the compiler {handled[o['a']]} this read (E63) and it still lands here" if o["a"] in handled else ""
-            where = (f"at {_mm(t)}, {o['area_px']:,} px, {o['share_of_smaller']} % of the smaller box"
-                     + (f" (marks {float(drawn):.0%} drawn)" if drawn is not None else ""))
-            if o["share_of_smaller"] / 100.0 > BUILD_OVER_SHARE:
-                fails.append(f"{o['a']} reads on the plot {when}, {where}{note}")
-            else:
-                warns.append(f"{o['a']} is inside the plot's box {when}, {where}{note}")
+            return (f"at {_mm(t)}, {o['area_px']:,} px, {o['share_of_smaller']} % of the smaller box"
+                    + (f" (marks {float(drawn):.0%} drawn)" if drawn is not None else "") + note)
+
+        on_ink: set[str] = set()
+        box_only: list[tuple[str, str]] = []
+        for o in inst.get("overlaps") or []:
+            card, hit = str(o.get("a")), str(o.get("b"))
+            if state.get(card) in (None, "parked"):
+                continue                              # a PARKED card is E45's contract and M25's row; this one is the READ
+            share = o["share_of_smaller"] / 100.0
+            if hit == "page.data" and share > DATA_OVER_SHARE:
+                on_ink.add(card)
+                fails.append(f"{card} reads on the chart's data {when}, {line(o)}")
+            elif (hit in LAYOUT_INK or hit.startswith("chart.")) and share > INK_OVER_SHARE:
+                on_ink.add(card)
+                fails.append(f"{card} reads on {_ink_name(hit)} {when}, {line(o)}")
+            elif hit == "page.plot":
+                box_only.append((card, f"{card} is inside the plot's box, clear of the ink, {when}, {line(o)}"))
+        for card, msg in box_only:
+            if card not in on_ink:                    # E65: the plot's empty room is a PLACE, not a fault
+                warns.append(msg)
     return _dedupe(fails), _dedupe(warns), measured
 
 
@@ -1397,14 +1440,107 @@ def _over_build_gate(doc: dict | str | None, scenes: list[dict]) -> Gate:
     fails, warns, measured = _over_build_faults(doc, scenes)
     span = f"{len(instants)} instants probed"
     if fails:
-        return Gate("M27", "FAIL", f"{len(fails)} card(s) reading over a ledger page's plot over {span}: " + "; ".join(fails[:6])
+        return Gate("M27", "FAIL", f"{len(fails)} card(s) reading over a ledger page's ink over {span}: " + "; ".join(fails[:6])
                     + (" ..." if len(fails) > 6 else "") + f" - move the READ, never the word (E63): a free band at the "
-                    f"reading scale, else the scale that fits, else enter at the parked box", SRC_M27)
+                    f"reading scale, else the plot's own empty room (E65), else the scale that fits", SRC_M27)
     if warns:
-        return Gate("M27", "WARN", f"{len(warns)} card(s) inside the plot's box (under {BUILD_OVER_SHARE:.0%}) over {span}: "
-                    + "; ".join(warns[:4]) + (" ..." if len(warns) > 4 else ""), SRC_M27)
-    return Gate("M27", "PASS", f"no card reads over a ledger page's plot over {span} "
+        return Gate("M27", "WARN", f"{len(warns)} card(s) inside the plot's box, clear of its ink, over {span}: "
+                    + "; ".join(warns[:4]) + (" ..." if len(warns) > 4 else "")
+                    + " - E65's own placement; listed so the author sees where the read landed", SRC_M27)
+    return Gate("M27", "PASS", f"no card reads over a ledger page's ink over {span} "
                 f"({measured} not-parked card reading(s) measured)", SRC_M27)
+
+
+def _box_gap(a: list[float], b: list[float]) -> float:
+    """The shortest distance between two boxes, 0 when they meet (probe.gap_px, browser-free)."""
+    dx = max(b[0] - (a[0] + a[2]), a[0] - (b[0] + b[2]), 0.0)
+    dy = max(b[1] - (a[1] + a[3]), a[1] - (b[1] + b[3]), 0.0)
+    return (dx * dx + dy * dy) ** 0.5
+
+
+def _label_key(label: dict) -> str:
+    """How probe.label_key names a label in an overlap pair - "val:$604". The two must agree; the gate
+    never rebuilds a pair, it matches the names the probe wrote against the ones on `labels`."""
+    return f"{label['role']}:{label['text']}"
+
+
+def _label_faults(doc: dict) -> tuple[list[str], list[str], int]:
+    """(FAIL lines, WARN lines, how many label pairs were checked) over every probed instant.
+
+    FAIL is the frame's own arithmetic - two of the page's labels whose boxes MEET (probe.py wrote the pair
+    into `overlaps` when they met by more than a hairline on both axes and by more than the text box's own
+    leading) - and the eye's: two of the VALUE row under a QUARTER of a figure apart (the R26-53 frame, where
+    the pill's edge stood 6 px off "$604" and read as one string - the operator's "crashing text"). WARN is
+    the fit's own law: under half a figure without touching."""
+    fails: list[str] = []
+    warns: list[str] = []
+    pairs = 0
+    for inst in doc.get("instants") or []:
+        labels = [x for x in (inst.get("labels") or []) if isinstance(x, dict) and x.get("box")]
+        if len(labels) < 2:
+            continue
+        t = float(inst.get("t", 0.0))
+        scene = str((inst.get("camera") or {}).get("scene") or "?")
+        pairs += len(labels) * (len(labels) - 1) // 2
+        named = {_label_key(x) for x in labels}
+        touched: set[frozenset] = set()
+        for o in inst.get("overlaps") or []:
+            a, b = str(o.get("a")), str(o.get("b"))
+            if a not in named or b not in named:
+                continue                              # a card over the page's ink is M25's row, not this one
+            touched.add(frozenset((a, b)))
+            fails.append(f"{a} on {b} at {_mm(t)} ({scene}), {o['area_px']:,} px, "
+                         f"{o['share_of_smaller']} % of the smaller label")
+        # THE FIT'S OWN AIR. The value size the page is drawing at, from the same instant's type table.
+        vpx = next((float(x["px"]) for x in inst.get("texts") or [] if x.get("k") == "chart.val"), 0.0)
+        air = LABEL_AIR_EM * vpx
+        if air <= 0:
+            continue
+        row = [x for x in labels if x["role"] in LABEL_AIR_ROLES]
+        for n, la in enumerate(row):
+            for lb in row[n + 1:]:
+                ka, kb = _label_key(la), _label_key(lb)
+                if frozenset((ka, kb)) in touched:
+                    continue
+                gap = _box_gap(la["box"], lb["box"])
+                if gap < LABEL_TOUCH_EM * vpx:
+                    fails.append(f"{ka} and {kb} at {_mm(t)} ({scene}), {gap:.0f} px of air - under a quarter of a figure "
+                                 f"({LABEL_TOUCH_EM * vpx:.0f} at {vpx:.0f} px): the eye reads one string (R26-53)")
+                elif gap < air:
+                    warns.append(f"{ka} and {kb} at {_mm(t)} ({scene}), {gap:.0f} px of air where the row "
+                                 f"is fitted with {air:.0f} (half a figure at {vpx:.0f} px)")
+    return _dedupe(fails), _dedupe(warns), pairs
+
+
+def _labels_gate(doc: dict | str | None) -> Gate:
+    """M28 (R26-53): text on text among a ledger page's OWN labels. M25's sibling, from the same
+    layout-probe.json - M25 refuses a CARD over the page's ink; this row refuses the page's ink over
+    itself, which is the half the operator caught on the Meta page: four values touching and the
+    callout's pill on the fourth bar sitting on the third bar's number."""
+    if doc is None:
+        return Gate("M28", "INFO", f"text on text not measured - run probe.py <build> --gate (writes {LAYOUT_PROBE_NAME})", SRC_M28)
+    if doc == "stale":
+        return Gate("M28", "INFO", f"{LAYOUT_PROBE_NAME} measured another player.html (the build was rebuilt since) - re-run probe.py <build> --gate", SRC_M28)
+    instants = (doc or {}).get("instants") or []
+    if not instants:
+        return Gate("M28", "INFO", f"{LAYOUT_PROBE_NAME} carries no instants - re-run probe.py <build> --gate", SRC_M28)
+    fails, warns, pairs = _label_faults(doc)
+    span = f"{len(instants)} instants probed"
+    if not pairs:
+        return Gate("M28", "INFO", f"no page showed two labels at once at any of the {span} - nothing to check "
+                    "(a plate has no labels of its own)", SRC_M28)
+    if fails:
+        return Gate("M28", "FAIL", f"{len(fails)} pair(s) of a page's own labels sitting on each other over {span}: "
+                    + "; ".join(fails[:6]) + (" ..." if len(fails) > 6 else "")
+                    + " - fit the row (lpFitValues), raise the pill to its band (lpPillBand) or move the label; "
+                    "a number on a number is not a number", SRC_M28)
+    if warns:
+        return Gate("M28", "WARN", f"{len(warns)} pair(s) of the value row closer than half a figure over {span}: "
+                    + "; ".join(warns[:4]) + (" ..." if len(warns) > 4 else "")
+                    + " - the boxes clear each other and the eye does not (R26-53); the fit's air law is "
+                    "lpFitValues' own", SRC_M28)
+    return Gate("M28", "PASS", f"no two of a page's own labels touch, and the value row keeps half a figure of air, "
+                f"over {span} ({pairs:,} label pair(s) checked)", SRC_M28)
 
 
 def _build_to_holds(scenes: list[dict]) -> list[tuple[float, float]]:

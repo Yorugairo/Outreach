@@ -34,6 +34,31 @@ def _browser_ok() -> bool:
 
 needs_browser = pytest.mark.skipif(not _browser_ok(), reason="playwright chromium not installed")
 needs_tokyo = pytest.mark.skipif(not (BUILD / "player.html").exists(), reason="the Tokyo short build is not on disk")
+# R26-53's two sides: the APPROVED build (no lpFitValues) and the side build that carries the fit
+VALS = ROOT / "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-vals"
+needs_vals = pytest.mark.skipif(not (VALS / "player.html").exists(), reason="the Tokyo values side build is not on disk")
+META_FIXED, META_APPROVED = 70.0, 71.0     # the Meta page held on each build
+
+
+def _in_its_own_thread(build: Path, t: float) -> dict:
+    """One instant of a SECOND build. Playwright's sync API allows one running loop per thread and the
+    module-scoped `tokyo` Probe owns this one, so the second player is read on a thread of its own."""
+    import threading
+    out: dict = {}
+
+    def run() -> None:
+        try:
+            with P.Probe(build) as p:
+                out["inst"] = p.at(t, "the second build")
+        except BaseException as e:        # noqa: BLE001 - re-raised on the calling thread below
+            out["err"] = e
+
+    th = threading.Thread(target=run)
+    th.start()
+    th.join()
+    if "err" in out:
+        raise out["err"]
+    return out["inst"]
 
 
 @pytest.fixture(scope="module")
@@ -138,6 +163,62 @@ def test_a_seek_is_the_play_for_the_probe_too(tokyo):
     tokyo.at(UNPARKED)
     again = tokyo.at(PARKED)
     assert again["page"] == cold["page"] and again["docks"] == cold["docks"], (cold["page"], again["page"])
+
+
+@needs_browser
+@needs_tokyo
+@needs_vals
+def test_the_page_s_own_labels_are_boxes_and_the_value_row_s_air_is_measured(tokyo):
+    """R26-53, both sides of it. M28 needs one thing from the probe: every label the page draws, as a box
+    with a role, so two numbers sitting on each other are a NAMED pair. The Tokyo Meta page is the case -
+    four values and the callout's pill on bar 4 - and the two builds answer differently:
+
+      build-short-vals (lpFitValues / lpPillBand): values 122 px wide, 33 px between neighbours, the pill
+        risen to its band 50 px clear of "$604"
+      build-short (the approved cut, no fit): values 133 px wide, 23 px between neighbours, the pill 7 px
+        off "$604" - the boxes CLEAR each other and the frame reads "$604$577"
+
+    So the defect is the fit's own air, not an intersection: neither build has a label pair in `overlaps`,
+    and M28 carries a WARN tier under its FAIL for exactly this frame."""
+    def air(inst):
+        """(half a figure at the page's value size, the labels by name)"""
+        vpx = next(x["px"] for x in inst["texts"] if x["k"] == "chart.val")
+        return 0.28 * vpx, {P.label_key(x): x["box"] for x in inst["labels"]}
+
+    fixed = _in_its_own_thread(VALS, META_FIXED)
+    approved = tokyo.at(META_APPROVED, "the Meta page as the operator watched it")
+    for inst in (fixed, approved):
+        assert {"val:$665", "val:$633", "val:$604", "pill:$577"} <= {P.label_key(x) for x in inst["labels"]}, inst["labels"]
+        assert all(isinstance(v, int) for x in inst["labels"] for v in x["box"])
+        # nothing TOUCHES on either build - the four values and the pill keep their boxes apart
+        assert not [o for o in inst["overlaps"] if ":" in o["a"] and ":" in o["b"]], inst["overlaps"]
+
+    half, lab = air(fixed)
+    assert P.gap_px(lab["val:$604"], lab["pill:$577"]) > half, "the risen pill is clear of the value row"
+    assert P.gap_px(lab["val:$665"], lab["val:$633"]) >= 2 * half, "a figure of air between neighbours"
+
+    half, lab = air(approved)
+    assert 0 < P.gap_px(lab["val:$604"], lab["pill:$577"]) < half, "the pill stands inside the value's own air"
+    assert P.gap_px(lab["val:$665"], lab["val:$633"]) < 2 * half, "and the row itself is fitted too tight"
+
+
+@needs_browser
+def test_the_data_read_takes_a_treemap_s_tiles():
+    """A treemap's tiles carry no class of their own (`g.lp-cell > rect`), so the DATA read names them by
+    their cell. Before it did, the census page answered `page.data` None and `marks.n` 0 - a card parked
+    over the whole treemap read as parked on nothing, and M25 / M27 had nothing to refuse."""
+    import tempfile
+
+    import render_baseline as RB
+
+    assert "g.lp-cell rect" in P.READ_DOM
+    tl, uris, t, _aspect = RB.load_surface("treemap-cross")
+    with tempfile.TemporaryDirectory() as td:
+        RB.write_split(Path(td), tl, uris, "treemap-cross.timeline.json")
+        inst = _in_its_own_thread(Path(td), t)
+    plot, data = inst["page"]["plot"], inst["page"]["data"]
+    assert inst["marks"]["n"] >= 6, inst["marks"]            # one mark per tile
+    assert P.intersect_px(data, plot) > 0.9 * plot[2] * plot[3], (data, plot)   # the tiles ARE the plot
 
 
 @needs_browser

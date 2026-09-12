@@ -57,6 +57,17 @@ DEMOTED_SCALE = 0.95                      # text drawn below this share of its o
 # when it moves less than REST_PX over the next REST_DT - a park covers ~50 px in that window and a throw
 # far more, while a settled card's E49 idle drifts well under a pixel.
 REST_DT, REST_PX = 0.12, 4.0
+# M28 (R26-53): two of the page's OWN labels touch when their boxes meet by more than a hairline on both
+# axes. A glyph box carries a pixel or two of antialiasing padding on every side and two labels a pixel
+# apart still read as two labels; four pixels of shared ink is one ruined number.
+LABEL_TOUCH_PX = 2.0
+# ... and on the Y axis a text box is the LINE box, not the ink: the band above the caps and the descent
+# below the baseline are empty on most strings (a row of figures has no descenders at all). Two boxes that
+# share only that much of the shorter one's height are two labels with air between them - measured on the
+# Tokyo holdings page, where the June figure's empty descent brushed the series name's empty ascent by 7 px
+# of a 49 px box and nothing touched on screen.
+LABEL_LEAD_SHARE = 0.18
+LABEL_TEXT_MAX = 14     # what the label says, enough for a gate row to name it - one instant's JSON stays small
 
 
 def stage_size(aspect: str) -> tuple[int, int]:
@@ -89,8 +100,17 @@ READ_DOM = r"""
   /* the DATA and the AXES: what a chart with no declared plot box draws its plot out of */
   const MARKS = 'rect.bar, path.ser, path.wedge, line.ax, line.grid, line.hrule';
   /* the DATA alone - the marks that carry the numbers, and the numbers themselves. A card may sit in
-     a chart's empty corner (the Tokyo cup, approved 2026-09-09); it may never sit on the data. */
-  const DATA = 'rect.bar, path.ser, path.wedge, text.val, text.callout, rect.cpill';
+     a chart's empty corner (the Tokyo cup, approved 2026-09-09); it may never sit on the data.
+     A treemap's tiles carry no class of their own (`g.lp-cell > rect`), so they are named by their cell:
+     without them a card parked on a treemap reads as parked on nothing. measure_page_boxes.py takes the
+     same tiles into its ink mask. */
+  const DATA = 'rect.bar, path.ser, path.wedge, text.val, text.callout, rect.cpill, g.lp-cell rect';
+  /* M28 - THE PAGE'S OWN LABELS, by the class of the layer that draws them: the values and the tick
+     labels the chart builders write, the series names, the callout pill, and the perform layer's own
+     bracket / figure / spread / wedge labels. Every one is text a viewer reads off the page, and no two
+     of them may sit on each other (R26-53: four values touched and the pill covered the third). */
+  const LABEL_ROLE = { val: 'val', lab: 'tick', sname: 'sname', callout: 'pill',
+                       bklab: 'bracket', bksub: 'bracket.sub', spanlab: 'span', wlab: 'wedge' };
   const stg = document.getElementById('stage').getBoundingClientRect();
   const R = (el) => { const r = el.getBoundingClientRect();
     return [r.x - stg.x, r.y - stg.y, r.width, r.height]; };
@@ -159,7 +179,7 @@ READ_DOM = r"""
     return out;
   };
 
-  const out = { stage: [stg.width, stg.height], docks: [], items: [], plots: [], data: [], nmarks: 0, drawn: [], chart: null, caption: null, marks: null, bars: null };
+  const out = { stage: [stg.width, stg.height], docks: [], items: [], plots: [], data: [], nmarks: 0, drawn: [], chart: null, caption: null, marks: null, bars: null, labels: [] };
   for (const d of document.querySelectorAll('.dock')) {
     const o = eff(d); if (o <= 0.05) continue;
     out.docks.push({ el: d.id, name: d.dataset.slide || d.id, box: R(d), op: o,
@@ -176,7 +196,8 @@ READ_DOM = r"""
   const wB = document.getElementById('wB') || worlds[worlds.length - 1];
   const world = wB && wB.__lp && wB.classList.contains('ledger') && eff(wB) > 0.05 ? wB : null;
   /* a pill belongs to the page on screen or to a card - never to the page underneath it */
-  for (const p of [...(world ? world.querySelectorAll('.pill') : []), ...document.querySelectorAll('.dock .pill')]) {
+  const wpills = new Set(world ? world.querySelectorAll('.pill') : []);
+  for (const p of [...wpills, ...document.querySelectorAll('.dock .pill')]) {
     const o = eff(p); if (o <= 0.05) continue;
     const b = R(p); if (b[2] < 1 || b[3] < 1) continue;
     out.docks.push({ el: p.id || 'pill', name: 'pill', box: b, op: o, arriving: false, paper: false });
@@ -184,6 +205,10 @@ READ_DOM = r"""
     const runs = [...p.querySelectorAll('*')].filter((s) => (s.textContent || '').trim() && !s.children.length
       && s.getBoundingClientRect().height >= 2);   /* a run the portrait sheet lays out at nothing is not type on screen */
     out.items.push({ k: 'pill', box: b, px: runs.length ? Math.min(...runs.map(fs)) : fs(p), s: sc(p), txt: txt(p) });
+    /* M28: the PAGE's own capsule is a label among its labels; a card's pill belongs to the card. Named
+       `capsule`, not `pill` - `pill` is the CALLOUT's, and only the callout stands in the value row that
+       lpFitValues fits with half a figure of air. A rail of capsules keeps its own gutter. */
+    if (wpills.has(p)) out.labels.push({ role: 'capsule', text: txt(p), box: b });
   }
   /* a NOTE carries .lp-sub too (it is the page's ink at the sub's size): named once, as a note */
   const PAGE = { '.lp-title': 'title', '.lp-sub:not(.lp-note)': 'sub', '.lp-src': 'source', '.lp-note': 'note' };
@@ -242,6 +267,26 @@ READ_DOM = r"""
         const r = el.getBoundingClientRect(); if (r.width < 2 || r.height < 2) continue;
         const cls = (el.getAttribute('class') || 'text').split(' ')[0];
         out.items.push({ k: 'chart.' + cls, box: R(el), px: fs(el), s: sc(el), txt: txt(el) });
+        /* M28: the same run as a LABEL - its role, what it says, the box it takes on screen. A callout's
+           box is the PILL it is printed inside (rect.cpill is the ink; the glyphs are its content). A
+           label mid-write still counts - the frame is the frame - and one with no box at all (nothing
+           drawn yet) is already gone, on `eff` and the 2 px floor above. */
+        const par = el.parentNode, own = (sel) => (par && par !== chart && par.querySelectorAll
+          && par.querySelectorAll('text.bklab').length === 1 ? [...par.querySelectorAll(sel)] : []);
+        /* a bracket / figure / spread label and its own SUB are ONE block of ink, stacked by the layer that
+           draws them (the sub sits 1.3 line under the label, so the two line boxes share their leading by
+           construction): the sub is folded into its label, never paired against it */
+        if (cls === 'bksub' && own('text.bklab').length) continue;
+        let lbox = R(el);
+        const join = (q) => { lbox = [Math.min(lbox[0], q[0]), Math.min(lbox[1], q[1]),
+            Math.max(lbox[0] + lbox[2], q[0] + q[2]) - Math.min(lbox[0], q[0]),
+            Math.max(lbox[1] + lbox[3], q[1] + q[3]) - Math.min(lbox[1], q[1])]; };
+        if (cls === 'callout' && par && par !== chart && par.querySelector) {
+          const pr = par.querySelector('rect.cpill');   /* a callout's box is the PILL it is printed inside */
+          if (pr && eff(pr) > 0.05) join(R(pr));
+        }
+        if (cls === 'bklab') for (const sb of own('text.bksub')) { if (eff(sb) > 0.05) join(R(sb)); }
+        out.labels.push({ role: LABEL_ROLE[cls] || cls, text: txt(el), box: lbox });
       }
       /* M26 (R26-40): THE PRINTED VALUE AGAINST THE DRAWN HEIGHT. E28 and E53 say the scale and the value are
          printed at every instant; nothing checked that the bar's HEIGHT agreed with either. R26-39 was exactly
@@ -280,6 +325,20 @@ READ_DOM = r"""
                       v: (vEl && eff(vEl) >= 0.99) ? txt(vEl) : null });
         }
         if (axEl && tick && rows.length) { out.bars = { base: R(axEl)[1], tv: tick[0], ty: tick[1], b: rows }; barsOp = o; }
+      }
+    }
+    /* M28: the page's own NOTE is one of its labels when it is written ON the plot - off the plot it is
+       margin ink and M25's business. Line by line: a note's element box is mostly air. */
+    const plotU = out.plots.reduce((a, p) => (a ? [Math.min(a[0], p.box[0]), Math.min(a[1], p.box[1]),
+        Math.max(a[0] + a[2], p.box[0] + p.box[2]) - Math.min(a[0], p.box[0]),
+        Math.max(a[1] + a[3], p.box[1] + p.box[3]) - Math.min(a[1], p.box[1])] : p.box.slice()), null);
+    if (plotU) for (const el of world.querySelectorAll('.lp-note')) {
+      if (eff(el) <= 0.05 || written(el) <= 0.02) continue;
+      for (const b of inkLines(el)) {
+        if (b[2] < 2 || b[3] < 2) continue;
+        if (Math.min(b[0] + b[2], plotU[0] + plotU[2]) - Math.max(b[0], plotU[0]) <= 0) continue;
+        if (Math.min(b[1] + b[3], plotU[1] + plotU[3]) - Math.max(b[1], plotU[1]) <= 0) continue;
+        out.labels.push({ role: 'note', text: txt(el), box: b });
       }
     }
     out.chart = { up, box: chartBox, parked };
@@ -352,6 +411,19 @@ def _union(boxes: list[list[float]]) -> list[float] | None:
     x0 = min(b[0] for b in boxes); y0 = min(b[1] for b in boxes)
     x1 = max(b[0] + b[2] for b in boxes); y1 = max(b[1] + b[3] for b in boxes)
     return [x0, y0, x1 - x0, y1 - y0]
+
+
+def overlap_wh(a: list[float], b: list[float]) -> tuple[float, float]:
+    """How far two boxes meet on each axis (0 on an axis they do not meet on)."""
+    ax0, ay0, ax1, ay1 = _rect(a)
+    bx0, by0, bx1, by1 = _rect(b)
+    return (max(0.0, min(ax1, bx1) - max(ax0, bx0)), max(0.0, min(ay1, by1) - max(ay0, by0)))
+
+
+def label_key(label: dict) -> str:
+    """How a label is NAMED in an overlap pair - "val:$604", "pill:$577". The gate rebuilds nothing:
+    it reads the same names off `labels` and matches them. Kept in one place so the two agree."""
+    return f"{label['role']}:{label['text']}"
 
 
 def _pair(a_name: str, a_box: list[float], b_name: str, b_box: list[float]) -> dict | None:
@@ -463,6 +535,22 @@ def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: di
             p = _pair(an, ab, "caption", cap["box"])
             if p:
                 overlaps.append(p)
+    # M28 (R26-53): THE PAGE'S OWN LABELS against each other. `overlaps` carried card-vs-ink and
+    # pill-vs-rail only, so the Meta page's four values touching - and its callout pill covering the
+    # third - were invisible to every row. A pair counts when the boxes meet by more than a hairline on
+    # BOTH axes: antialiasing is not a collision.
+    labels = [{"role": str(l["role"]), "text": str(l.get("text") or "")[:LABEL_TEXT_MAX],
+               "box": [int(round(v)) for v in l["box"]]}
+              for l in (dom.get("labels") or []) if l["box"][2] >= 1 and l["box"][3] >= 1]
+    for n, la in enumerate(labels):
+        for lb in labels[n + 1:]:
+            w, h = overlap_wh(la["box"], lb["box"])
+            lead = LABEL_LEAD_SHARE * min(la["box"][3], lb["box"][3])
+            if w <= LABEL_TOUCH_PX or h <= max(LABEL_TOUCH_PX, lead):
+                continue
+            p = _pair(label_key(la), la["box"], label_key(lb), lb["box"])
+            if p:
+                overlaps.append(p)
     overlaps.sort(key=lambda p: -p["area_px"])
 
     # CLEARANCES: to the caption strip, and the depth every band of the safe zone is intruded on
@@ -477,7 +565,7 @@ def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: di
         clear["caption_px"] = int(round(min(gap_px(ab, cap["box"]) for _an, ab in solids)))
 
     out = {"t": round(t, 2), "why": why, "docks": docks, "page": page, "texts": texts,
-           "overlaps": overlaps, "clearances": clear,
+           "labels": labels, "overlaps": overlaps, "clearances": clear,
            "camera": {"scene": camera.get("scene"), "zoom": round(float(camera.get("zoom") or 1), 3),
                       "look": [int(round(v)) for v in (camera.get("look") or [0, 0])]}}
     if cap:
@@ -629,7 +717,10 @@ def human(inst: dict) -> str:
     pg = ", ".join(f"{k} {v}" for k, v in inst["page"].items()) or "no page"
     ov = "; ".join(f"{o['a']} over {o['b']} {o['area_px']} px ({o['share_of_smaller']} % of the smaller)" for o in inst["overlaps"][:4])
     ty = ", ".join(f"{x['k']} {x['px']}px/{x['css']}css" for x in inst["texts"])
+    lbs = inst.get("labels") or []
+    lb = ", ".join(label_key(x) for x in lbs[:10]) + (" ..." if len(lbs) > 10 else "")
     return (f"t={inst['t']:.2f}  {inst['why']}\n  docks: {d}\n  page: {pg}\n  type: {ty}\n"
+            f"  labels: {len(lbs)} {lb}\n"
             f"  caption: {inst.get('caption', {}).get('box', '-')} {inst.get('caption', {}).get('text', '')}\n"
             f"  overlaps: {ov or 'none'}\n  clearances: {inst['clearances']}  camera: {inst['camera']}  marks: {inst['marks']}")
 

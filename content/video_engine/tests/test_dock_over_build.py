@@ -273,11 +273,16 @@ def test_the_compiled_tokyo_timeline_carries_the_decision(build_dir):
 
 
 # ------------------------------------------------------------------ M27, the row that scores it
-def _instant(t: float, drawn: float | None, state: str, share: int, area: int = 277066) -> dict:
-    """One probed instant: a card over the page's plot while the marks say what they say."""
+def _instant(t: float, drawn: float | None, state: str, share: int, area: int = 277066, data: bool = True) -> dict:
+    """One probed instant: a card over the page's plot while the marks say what they say - and, unless
+    `data` says otherwise, over the INK the chart drew inside it. Since E65 the two are different things:
+    the placer may put a card in the plot's own empty ROOM on purpose, and the row scores the ink."""
+    ov = [{"a": PANEL, "b": "page.plot", "area_px": area, "share_of_smaller": share}]
+    if data:
+        ov.append({"a": PANEL, "b": "page.data", "area_px": area, "share_of_smaller": share})
     return {"t": t, "why": "s02 dock reading size", "docks": [{"id": PANEL, "state": state, "box": [79, 552, 801, 474], "rest": 1}],
-            "page": {"plot": [230, 464, 580, 681]}, "texts": [],
-            "overlaps": [{"a": PANEL, "b": "page.plot", "area_px": area, "share_of_smaller": share}],
+            "page": {"plot": [230, 464, 580, 681], "data": [246, 500, 540, 600]}, "texts": [],
+            "overlaps": ov,
             "clearances": {"safe_pct": {}}, "camera": {"scene": "s02", "zoom": 1.0, "look": [540, 960]},
             "marks": {"n": 2, "drawn": drawn, "up": 1.0, "parked": False}}
 
@@ -318,10 +323,22 @@ def test_m27_is_not_the_row_for_a_parked_card():
 
 
 def test_m27_warns_a_card_merely_inside_the_plots_box():
-    g = _m27([_instant(10.29, 0.5, "reading", 4, area=2147)])
+    g = _m27([_instant(10.29, 0.5, "reading", 4, area=2147, data=False)])
     assert g.level == "WARN" and "inside the plot's box" in g.message and "while the chart draws" in g.message, g.message
-    done = _m27([_instant(12.0, 0.52, "reading", 4, area=2147)])
+    done = _m27([_instant(12.0, 0.52, "reading", 4, area=2147, data=False)])
     assert done.level == "WARN" and "on the finished chart" in done.message, done.message
+
+
+def test_m27_lets_a_card_read_in_the_plots_own_empty_room():
+    """E65 (2026-09-11): on a page that leaves no band outside its plot the placer puts the card INSIDE
+    the plot, over its empty room and over no mark the chart drew. The row scores the INK - so that card
+    is a WARN the author can see, never a FAIL. Half the card's own box inside the plot and 0 px on the
+    data is the placer's own answer, not a defect."""
+    g = _m27([_instant(10.29, 0.5, "reading", 72, data=False)])
+    assert g.level == "WARN", g.message
+    assert "clear of the ink" in g.message and PANEL in g.message, g.message
+    # ... and the same card with the ink under it is the defect again
+    assert _m27([_instant(10.29, 0.5, "reading", 72)]).level == "FAIL"
 
 
 def test_m27_still_scores_a_read_the_compiler_answered():
