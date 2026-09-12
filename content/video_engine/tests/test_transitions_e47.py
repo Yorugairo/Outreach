@@ -222,6 +222,36 @@ def test_dip_and_blurzoom_may_declare_their_own_length():
     assert B.parse_exit("dip")[1] is None          # a bare dip leaves the player and the gate on DIP_S
 
 
+def test_a_melt_parses_with_and_without_its_own_length_register_and_point():
+    """P52 T9 (R26-15): `melt` | `melt:<s>` | `melt:splash` | `melt:<x>,<y>`, the suffixes in any order. Only a
+    bare number is a LENGTH - `melt:0.92,1.18` is the point the ball is thrown to, and reading it as 0.92 s (which
+    is what a plain `exit.split(':')[1]` does) would be a melt nobody authored. species/melt.mjs `meltOpts` reads
+    the same grammar in the player; these two are one statement made twice."""
+    assert B.parse_exit("melt") == ("melt", None)
+    assert B.parse_exit("melt:1.2") == ("melt:1.2", 1.2)
+    assert B.parse_exit("melt:splash") == ("melt:splash", None)
+    assert B.parse_exit("melt:0.92,1.18") == ("melt:0.92,1.18", None)
+    assert B.parse_exit("melt:1.2:splash") == ("melt:1.2:splash", 1.2)
+    assert B.parse_exit("melt:splash:1.2") == ("melt:splash:1.2", 1.2)
+    assert "melt" in B.SCENE_EXITS and "melt" in B.TIMED_EXITS
+    assert B.MELT_S == 1.6, "the default length the player's MELT.S carries too"
+    for bad in ("melt:sideways", "melt:-2", "melt:0", "melt:1,2,3", "melt:1,x"):
+        with pytest.raises(ValueError):
+            B.parse_exit(bad)
+
+
+def test_the_mechanical_default_is_never_a_melt():
+    """A melt is AUTHORED or it does not happen (E47 as corrected 2026-09-12): it takes the whole world for 1.6 s
+    and no rule may reach for it on its own. `scene_exit`'s table is the dip, the cut, and what the row says."""
+    for docks in (True, False):
+        for enter in (None, "mount", "spiral", "morph", "built"):
+            for changed in (True, False):
+                assert B.scene_exit(None, docks, enter, changed)[0] != "melt"
+    assert B.scene_exit("melt:splash", False, None, True) == ("melt:splash", None), "an authored melt still wins"
+    assert B.DEFAULT_EXIT_CHANGE != "melt" and B.DEFAULT_EXIT_BARE != "melt"
+    assert "melt" not in B.LEDGER_EXITS, "the page's own retract law is untouched: a melt takes the WORLD"
+
+
 def test_an_unknown_or_unusable_exit_is_a_build_error():
     for bad in ("slide", "dip:0", "dip:-1", "blurzoom:soon"):
         with pytest.raises(ValueError):
