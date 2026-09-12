@@ -76,7 +76,7 @@ def test_split_idle_reads_the_option_and_refuses_an_unknown_kind():
     assert B.split_idle("plate-07;idle=figure") == ("plate-07", "figure")
     with pytest.raises(ValueError, match="idle 'wobble' is not one of"):
         B.split_idle("plate-07;idle=wobble")
-    assert B.IDLE_KINDS == ("none", "breath", "drift", "pulse", "figure")
+    assert B.IDLE_KINDS == ("none", "breath", "drift", "pulse", "figure", "live")   # live: E49 amended on the first watch (72b7516, 2026-09-08) - breath + drift
 
 
 def test_world_for_plate_carries_the_idle_and_strips_it_from_the_id(tmp_path: Path):
