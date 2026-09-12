@@ -1,13 +1,13 @@
 ---
 id: P52-THE-SWEEP
 title: The sweep - the five unbuilt capabilities the operator ranked (the newsreel band and the surface above it, the cut's engine clock, the caption's one envelope, the melt exit, the last three Bravos species) and the thirteen backlog rows that clear the ground under them
-status: running
+status: complete
 operation: feature
 risk: standard
 owner: parent
 branch: main
 created: 2026-09-12
-updated: 2026-09-12 (approved by the operator the same day: "p52 approved."; running)
+updated: 2026-09-13 (all eighteen slices built and committed by the parent's session overnight on the operator's "/prp-implement all of P52, i will review the human gates all at once tomorrow"; gates 1-7 OPEN for the operator's read - the frames and folders are named below)
 ---
 
 # The sweep
@@ -144,6 +144,23 @@ Acceptance:
   later plan.
 
 ## Human Gates
+
+**Status 2026-09-13: every gate is built and framed; none is ruled.** The operator reads them all at once; each line names what to open. The paths are on the session's machine (`content/video_engine/...` under the main checkout; the private build dirs are gitignored and stand where they were built).
+
+- Gate 1 (T6, the band's first frame and the strip law): `tests/golden/frames/newsreel-band.png` (16:9, a head docked above the crawl), `newsreel-strip-9x16.png` (the DEFAULT: the caption keeps its E62 band, the crawl below), `newsreel-strip-above.png` (the ALTERNATIVE: `cap_band: "above"`). The proposed script line: the PROPOSAL block in `myth-of-historical-normal/SCRIPT-PRODUCTION.md` (untracked, with the bundle). The head docks as a framed card until R26-59.
+- Gate 2 (T9, the melt on a page): `tests/golden/frames/melt-page@proof-015.png`, `@proof-045`, `@proof-075`, `@proof-100`, and `melt-splash.png`; the dials in `species/melt.mjs` `MELT`.
+- Gate 3 (T7, T8, the three species on a proof page): `tests/golden/frames/species-proof@proof-count.png` (22.5 s), `species-proof@proof-agenda.png` (28.5 s), `species-proof@proof-ring.png` (12.6 s); in motion on the `species-proof` surface.
+- Gate 4 (T10, the caption stagger by eye): `tokyo-tea-break/build-short-t10/proof/GATE4-SHEET.png` (pop / control / stagger at 25.23, 25.33, 25.43 s); the dials `DUR_S` 0.34 and the pop's 0.05 s anticipation.
+- Gate 5 (T17, the race A/B): `tokyo-tea-break/build-short-t17/proof/race-strip.png` + twelve paired frames; the measurement says TIMING (the per-segment smoothstep), not curvature - the fitter is not adopted.
+- Gate 6 (T16, the publish package's first use): the folder `tokyo-tea-break/build-short-t16/publish/` (CHECKLIST.md first).
+- Gate 7 (T18, the press card's face): `tests/golden/frames/press-stack.png` (house, the default), `press-stack@face-serif.png`, `press-stack@face-condensed.png`.
+- Gate 8 (push authorization): standing all day; every commit pushed.
+
+One open ruling from T13: whether a DOCK's own landing licenses a transient cue inside 0:05-0:12 (M29 reads E44 s2a literally - only a page landing does).
+
+The wave-3 wiring commit for the shared files: 4cce4f8.
+
+The gates as planned:
 
 1. **The band's first frame** (T6): the operator reads one frame of the newsreel band with a head cutout docked above
    it and rules the strip law - does the caption take the E62 band ABOVE the crawl, or does the band yield the strip?
@@ -291,7 +308,7 @@ Acceptance:
 - Evidence: the registry, the ctx, the hook, span's painter moved, the SPACE rule (RED/GREEN by flipping span's line); 63 pytest + 233 node; 25/25 goldens byte-identical with the HEAD template and this engine (`p52/t5-golden-table.txt`); bracket / figure / spread named at the hook, not moved.
 
 ### T6: The newsreel band, and the surface above it
-- Status: pending
+- Status: complete (2026-09-12, 4e92433) - gate 1 open on three frames
 - Owner: parent (the strip law and the script line - gate 1); `implementation_luna` for the module
 - Depends on: T5; human gate 1
 - Write set: `content/video_engine/scripts/species/newsreel.mjs` (new: a stage-space band - the seam-free modulo wrap
@@ -313,10 +330,10 @@ Acceptance:
 - Validate: `node --test content/video_engine/tests/kinetics/newsreel.test.mjs`; `python -m pytest
   content/video_engine/tests/test_targeted_species.py content/video_engine/tests/test_caption_band.py
   content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_portrait_parity.py -q`
-- Evidence: pending
+- Evidence: `species/newsreel.mjs` (the band opens off its own foot on the spring, ONE measured run with two copies a width apart wrapping by `crawlX = -((t*speed) mod width)`, the right-edge gradient dissolve, a hard left edge with the coral tab, the strap writing on, the dateline the author wrote, `hold` as a life retreating over 0.38 s; cream on charcoal by the template's tokens); `newsreel` in SPECIES_KINDS / SPECIES_WHEN (the REPORTS act) with the compiler's refusals (empty or over-90-char headline, a region above the lower 40 %); THE STRIP LAW: the compiler REFUSES a row where the band and the caption's E62 strip overlap, naming both boxes and both exits - default shipped: the caption keeps its band and the crawl sits below (`y0 >= 0.75`); alternative `cap_band: "above"`; the band's region is reserved from the placer like CAPTION_ANCHOR; the gate credits a crawl as a standing element with a life. 17 node tests; life check 0 identical 0.25 s pairs over 4 s; the wrap hash pair identical one period apart; determinism identical. Gate 1 frames: `tests/golden/frames/newsreel-band.png` (16:9, the head above the crawl), `newsreel-strip-9x16.png` (the default: caption above, crawl below), `newsreel-strip-above.png` (the alternative). The PROPOSAL block for the next episode under the Bessent sentence: `myth-of-historical-normal/SCRIPT-PRODUCTION.md` (unapproved). Undone, named on R26-59: the head docks as a framed CARD (a frameless `cutout` dock kind is a template change); `centred_place` does not take the reserve; `cap_band: above` needs a card up.
 
 ### T7: The isometric count array
-- Status: pending
+- Status: complete (2026-09-12, 3d07ede) - gate 3 open on the proof page
 - Owner: `implementation_luna`
 - Depends on: T5
 - Write set: `content/video_engine/scripts/species/countarray.mjs` (new: N identical icons on an isometric grid,
@@ -332,10 +349,10 @@ Acceptance:
   field; goldens byte-identical without it; gate 3 read on the proof page.
 - Validate: `node --test content/video_engine/tests/kinetics/countarray.test.mjs`; `python -m pytest
   content/video_engine/tests/test_targeted_species.py content/video_engine/tests/test_golden_frames.py -q`
-- Evidence: pending
+- Evidence: `species/countarray.mjs`: N identical icons (lucide, `assets/icons/`, cited) on a 2:1 rhombus lattice - no perspective cheat, nothing spins - arriving in reading order one per word on the chip's two-spring landing, the count written as the claim; the compiler refuses a count with no number in the sentence. Golden `count-array`; proof `tests/golden/frames/species-proof@proof-count.png` (22.5 s); life 0 identical 0.25 s pairs. Follow-up: `lint_species_choice.py` has no COUNTS act yet (one row in ACTS / ACT_RE / ACT_SPECIES).
 
 ### T8: The numbered agenda, and the ring's dashed-ellipse form with its flag chip
-- Status: pending
+- Status: complete (2026-09-12, 3d07ede) - gate 3 open on the proof page
 - Owner: `implementation_luna`
 - Depends on: T5, T7 (the chip placement math the flag chip reuses)
 - Write set: `content/video_engine/scripts/species/agenda.mjs` (new: numbered rows revealed on their own words -
@@ -355,10 +372,10 @@ Acceptance:
   content/video_engine/tests/kinetics/ring.test.mjs`; `python -m pytest
   content/video_engine/tests/test_gate_ring_mechanism.py content/video_engine/tests/test_targeted_species.py
   content/video_engine/tests/test_golden_frames.py -q`
-- Evidence: pending
+- Evidence: `species/agenda.mjs` (2-4 numbered rows, the block laid out for the whole list so nothing is pushed; number, a nib-drawn rule, the text rising, one row per word, a named idle per row) and `species/ring.mjs` (`form: "dashed"` - an ellipse at the callout's own pads, cut by ARC LENGTH and drawn dash by dash, plus a flag chip on the chip module's placement math). E56 NOT widened: the ring is painted by an engine branch on `callout`, so the module is a new kind whose `_validate_ring` restates E56 word for word - a picture still FAILs, re-asserted. Write-set correction: `gate_ring_mechanism.py` is the RHETORICAL ring (G15b) and was not edited; E56's gate is the compiler's `_validate_callout` / `_validate_ring`. Goldens `agenda-two`, `ring-dashed-chip`; proofs `species-proof@proof-agenda.png` (28.5 s), `species-proof@proof-ring.png` (12.6 s); 46 node tests across the three modules; SPECIES-BY-SENTENCE: the COUNTS act, the SETS AN AGENDA act, the TURNS-ON-A-NUMBER act's dashed form.
 
 ### T9: The melt exit - the page melts, balls up on 2s, and is thrown or splashed
-- Status: pending
+- Status: complete (2026-09-12, 37fcd4c) - gate 2 open on four frames
 - Owner: parent (the chain crosses four owned laws); `implementation_luna` for the module under the parent's contract
 - Depends on: T5; human gate 2
 - Write set: `content/video_engine/scripts/species/melt.mjs` (new: the area polygon -> blur plus the K-M alpha
@@ -377,10 +394,10 @@ Acceptance:
 - Validate: `node --test content/video_engine/tests/kinetics/melt.test.mjs`; `python -m pytest
   content/video_engine/tests/test_transitions_e47.py content/video_engine/tests/test_golden_frames.py
   content/video_engine/tests/test_gate_motion_density.py -q`
-- Evidence: pending
+- Evidence: `species/melt.mjs` (SPACE stage, no painter - an EXIT the scene loop calls by name beside the suck): `melt[:<s>|:splash|:x,y]` in SCENE_EXITS + TIMED_EXITS, `MELT_S` 1.6, shares 0.30 melt / 0.25 ball / 0.45 throw-or-splash; the world's polygon sags (7 seeded drips, the top edge sinking furthest) under the gooey threshold (blur re-steepened by our own K-M `feFuncA slope`), balls up to `BALL_R` about its centroid by morph_a on the stepped clock (on 2s), then `throwXf` run backwards off the stage or a ring of K-M drops on `soakStepped`, then gone; the incoming world untouched beneath; `scene_exit`'s default never returns it (pinned). 15 node tests; 152 across the three suites; the six frames byte-identical over two cold runs. Gate 2: `tests/golden/frames/melt-page@proof-{015,045,075,100}.png` + `melt-splash.png`. The dials for the eye are all in `MELT` (S, the shares, SAG, DRIPS, BLUR, BALL_R, HOLD, TO, DROPS). Two findings: the page under a melt must declare `exit: cut` or its own retract empties it first (R26-60 - the shipped suck has the same trap); `test_golden_frames.SURFACES` pins the two new frames (the parent's line).
 
 ### T10: The caption's arrival as one stagger envelope
-- Status: pending
+- Status: built - awaiting human gate 4 (the operator's ear on the private Tokyo build)
 - Owner: `implementation_luna`; parent for the eye (gate 4)
 - Depends on: T4 (a frame hash must mean something before an arrival is judged by one)
 - Write set: `content/video_engine/scripts/kinetics/stagger.mjs` (new: one envelope with per-word offsets - y 22 px ->
@@ -399,7 +416,15 @@ Acceptance:
 - Validate: `node --test content/video_engine/tests/kinetics/stagger.test.mjs`; `python -m pytest
   content/video_engine/tests/test_caption_arrive.py content/video_engine/tests/test_caption_band.py
   content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_kinetics_flags.py -q`
-- Evidence: pending
+- Evidence: `kinetics/stagger.mjs` + `tests/kinetics/stagger.test.mjs` (9 pass) + `tests/test_caption_arrive.py`
+  (15 pass); `sync_kinetics --check` in sync; the validate set 67 passed all-green before the concurrent
+  press/species-proof edits landed. Private build `tokyo-tea-break/build-short-t10` (TOKYO_CAP_ARRIVE=fade_up) with
+  the control `build-short-t10-base` (var unset): the two timelines differ ONLY by 1 `caption_arrive` key + 53
+  `cap_arrive` page fields (+ the build dir's own name); `caption-pages.json` byte-identical across t0/base/t10.
+  M08 PASS naming the envelope; the pop-vs-stagger pixel diff sits entirely inside the caption strip; two renders
+  of each of three caption instants identical; the captions-layer life check 146/146 distinct frames on both.
+  Gate-4 frames + sheet: `build-short-t10/proof/`. Report: scratchpad `p52/T10-REPORT.md`. CAPABILITIES.md row
+  still to write (the dispatch forbade editing it) - the parent's call after the gate.
 
 ### T11: TR-13 - the cut is placed by the take's word clock
 - Status: complete (2026-09-12, 35d0cec)
@@ -479,7 +504,7 @@ Acceptance:
 - Evidence: Deviation: screens read off the scene timeline, not `-SCREENS.md` (doctrine, no chart). 54 viewer tests; Tokyo's .claude windows regenerated (words byte-identical, 6/6 with screens); stored reports re-scored 21/24 -> 23/24, the re-scored report committed beside the stored one as `SCRIPT-90S.claude-VIEWER.after-screens.md`; no model called.
 
 ### T15: M18 per layer (R26-13)
-- Status: pending
+- Status: complete (2026-09-12, 161c558)
 - Owner: `implementation_luna`
 - Depends on: T3
 - Write set: `docs/content-video-engine/samples/scene-evidence-player.template.html` (a `?layers=` switch on the shell
@@ -495,7 +520,7 @@ Acceptance:
 - Validate: `python -m pytest content/video_engine/tests/test_gate_motion_density.py
   content/video_engine/tests/test_idle_e49.py content/video_engine/tests/test_golden_frames.py -q`; `python
   content/video_engine/scripts/measure_frozen_frames.py <private build> --layers page,docks,captions`
-- Evidence: pending
+- Evidence: the switch and its nine selectors in the shell; `--layers` on the tool; `load_frame_layers` / `frozen_layer_verdicts` / the windowing (`layer_windows`, `_frames_in`) in the gate; +6 gate tests, +4 idle tests (159 passed with the goldens); the registry in sync; Tokyo `build-short-t15`: whole PASS | page PASS 0.08 s | docks PASS | captions PASS (`frame-hashes*.json` left as evidence). Judgement named: the per-layer read is windowed by the timeline.
 
 ### T16: The publish package (R26-8)
 - Status: complete (2026-09-12, b00cba7)
@@ -517,7 +542,7 @@ Acceptance:
 - Evidence: `publish_package.py` (528 lines) + 16 tests; `publish_row` on the bar + the 0:00 frame; PIPELINE stage 8; the folder for gate 6: `tokyo-tea-break/build-short-t16/publish/` (8 files; `CHECKLIST.md` names the master render and the two things not on disk). Two self-watch browser rows re-baselined on the frozen build's standing FAILs.
 
 ### T17: The race A/B on the clothoid fitter (R26-3's open half)
-- Status: pending
+- Status: complete (2026-09-12, c14caeb) - the measurement; gate 5 (the operator's ear and eye) open on the paired frames
 - Owner: `implementation_luna` (the measurement); the operator decides (gate 5)
 - Depends on: T4; E67's ink lane landed (`scene-evidence-engine.mjs:4209`, `:4281`, `:4377` neighbour the race builder
   at `:4478`)
@@ -532,10 +557,10 @@ Acceptance:
 - Validate: `python content/video_engine/scripts/measure_motion_energy.py <private build> --window <race>` for both
   arms; `python -m pytest content/video_engine/tests/test_measure_motion_energy.py
   content/video_engine/tests/test_golden_frames.py -q`
-- Evidence: pending
+- Evidence: the two-axis read (+459), 16 tests; both arms under `build-short-t17/` (arm-a, arm-b, `engine-clothoid.mjs` a generated copy, `RACE-MOTION.md` per arm); the answer: timing (join speed dip 0.036, stalls 0.248; the EPS control at zero curvature stalls the same); the fitter not adopted; `buildLedgerRace` untouched; frames for gate 5 in `build-short-t17/proof/`.
 
 ### T18: The press card's pulled phrase as live type (R26-55)
-- Status: pending
+- Status: complete (2026-09-12, dce2e71) - gate 7 (the face) open on three frames
 - Owner: `implementation_luna`; parent for the face (gate 7)
 - Depends on: T5; human gate 7
 - Write set: `content/video_engine/scripts/press_card.py` (the phrase's WORDS carried as data beside the raster, which
@@ -552,7 +577,7 @@ Acceptance:
 - Validate: `python -m pytest content/video_engine/tests/test_press_card.py
   content/video_engine/tests/test_press_dock.py content/video_engine/tests/test_golden_frames.py -q`; `node --test
   content/video_engine/tests/kinetics/press.test.mjs`
-- Evidence: pending
+- Evidence: `pressPhraseFit` / `pressColumn` / `pressPhoneRead` in press.mjs; `--phrase-text` on press_card.py (a card cut before the words compiles byte-for-byte as it did); the press dock's `phrase_text`; the three faces through FLAG_FRAMES; `press-stack` + `art-embed` frames and sources moved on purpose; 77 goldens unchanged; the poster reads 39.76 CSS px on a phone (from 16.33).
 
 ## Verification
 

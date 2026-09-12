@@ -95,11 +95,11 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
 ## capabilities
 
-- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +163 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
+- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; +171 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline
 
 ## backlog
 
-- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +110 more — terms: Z-stack; short-form; drawOn; G-g
+- docs/content-video-engine/BACKLOG.md — Backlog — content video engine — Hand-maintained. `STATE-OF-WORK.md` is t — defines: A0; A2a; +112 more — terms: Z-stack; short-form; drawOn; G-g
 
 ## pattern
 
@@ -299,7 +299,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/edit/EVIDENCE-COVERAGE.md — Full-Episode Evidence Layer Coverage & C — Episode: The Myth of "Historical Normal" — defines: — — terms: systems-and-blowups; myth-of-historical-normal; closed-form; #F4E6C7
 - content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/EVIDENCE-DOSSIER.md — EVIDENCE DOSSIER — The Myth of "Historic — A nominal interest rate is not an anchor — defines: — — terms: debt-to-GDP; near-zero; All-time; Dot-Com
 - content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/REVIEW_BRIEF_FOR_CLAUDE.md — Review Brief: "The Myth of Historical No — Repository Root: `C:/Users/Snipe/Downloa — defines: — — terms: September 2026; long-form; Scene-by-scene; Bravos-Style
-- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/SCRIPT-PRODUCTION.md — THE MYTH OF "HISTORICAL NORMAL" — Script — Locked Title: The Myth of "Historical No — defines: — — terms: hyper-leveraged; low-debt; twenty-two; [ring]
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/SCRIPT-PRODUCTION.md — THE MYTH OF "HISTORICAL NORMAL" — Script — Locked Title: The Myth of "Historical No — defines: P52 — terms: hyper-leveraged; low-debt; twenty-two; [ring]
 - content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/VISUAL-CHOREOGRAPHY.md — VISUAL & EVIDENCE CHOREOGRAPHY SPECIFICA — Standard: Doc 29 (`29-EVIDENCE-MOTION-ST — defines: P1; P6 — terms: DGS10; #F4E6C7; #25313C; #B23A22
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/single-world-index-mechanism-proof-v1/REVIEW.md — Single-World Index Mechanism Proof — Rev — Window: canonical narration words 1072–1 — defines: — — terms: long-tail; 10 largest holdings of 500 total; ≈40%; watch-review-boundaries
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/evidence-coverage-v1/coverage-summary.md — P32 Full-Episode Evidence Coverage Basel — Artifact: `ab547e586cefbb53e699bc69b8863 — defines: P32 — terms: Source-pack; composition-approved; production-ready; new-world-art
