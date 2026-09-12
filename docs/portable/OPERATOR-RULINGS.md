@@ -2150,6 +2150,12 @@ column on a poster), the type fitted to the surface's width, never stretched. Th
 card's own aspect letterboxed inside the surface - is retired. The legibility floor holds (the compiler's 25 % of the
 stage for a surface; the phrase never under the caption's quiet floor on a phone).
 
+**And a screen displays it** (the operator, the same minute: *"and yes, it should read as inside of the tv"*): a surface
+that is a screen - the TV, the laptop - shows the card as something the screen is displaying, not pasted on the glass:
+the plate's own glare and the bezel's falloff sit ABOVE the card as a sheen at a low strength, the surface's edge
+falls off inside the frame, and the phrase still reads at the phone floor under it. A poster and a paper get none of
+that; a card on paper is ink on paper.
+
 **Why.** The surface was ordered so the card would have a place in the ART world; a card that takes a band of it leaves
 the plate's own blank showing around the information, and the surface reads as a screen with a sticker on it rather
 than as the thing the scene is showing.
