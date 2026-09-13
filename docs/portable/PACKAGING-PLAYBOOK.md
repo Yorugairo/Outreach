@@ -1,5 +1,7 @@
 # PACKAGING PLAYBOOK — titles & thumbnails, portable
 
+Audited against the record 2026-09-13 (P54, docs/operator-ledger/PORTABLE-AUDIT.md).
+
 Source: AOY coaching base (ask_tim, two queries, 2026-08-30). Data
 recorded verbatim-in-substance; our-lane reconciliation at the end.
 
@@ -39,12 +41,19 @@ recorded verbatim-in-substance; our-lane reconciliation at the end.
 
 ## Our-lane reconciliation
 
-- Steel and Paper packaging: the iron spike IS the thumbnail object
-  (concrete, contrastable, already the ring token) — set against a
-  contrasting ground per the contrast rule. Channel-asset ruling still
-  stands: the nail is ONE episode's hook, never the channel identity.
-- Title carries the episode's specific numbers/names (Bravos as named
-  counterparty per the two-party rule; a real figure beats a theme).
+- Steel and Paper packaging: the iron spike is NOT the thumbnail
+  object. A1 (2026-08-25): a ring token belongs to one episode's
+  narrative machinery - never channel identity, "and not even its own
+  episode's thumbnail subject"; thumbnails sell the episode's QUESTION
+  or THESIS. The locked thumbnail asks "STEEL or PAPER?"
+  (`steel-and-paper/packaging/TITLE-CANDIDATES.md`, LOCKED 2026-09-01).
+- Title carries the episode's specific numbers/names and complements
+  the thumbnail, never repeats it: "Bravos Crash Crisis: can memory
+  keep AI alive?" was REJECTED as a colon-explainer that restates the
+  thumbnail's memory angle; the locked title is
+  "The AI Bubble Is Real. What Survives Is Steel."
+  (`TITLE-CANDIDATES.md`, LOCKED 2026-09-01). A real figure still beats
+  a theme.
 - Thumbnail-first applies to every FUTURE episode at the seed stage —
   add it to the episode-seed checklist before scripting begins.
 - AOY tooling exists for prep: review_title, ab_thumbnail,
@@ -61,15 +70,26 @@ niche. Inside the borrowed format, the recognition element is OURS:
 the robo mascot rides the mascot slot (never another channel's
 character - that slot swap is mandatory on every bend).
 
-- House-style thumbnails (the woodblock originals) are BANKED for A/B
-  testing once impression volume makes tests meaningful - not before
-  (native Test & Compare needs volume the channel doesn't have yet).
+- Thumbnails are being A/B tested now (E61, 2026-09-11, the operator:
+  *"we're A/B testing thumbnails now. we're not using what we used for
+  test 1 which was simple finance. We didn't test our own plates
+  yet."*). Whether the package leads with the ledger look is NOT ruled
+  until the test reads. E67 §4 (2026-09-12): the chart is the
+  thumbnail - a page's landing frame must read at 320 px wide with its
+  line, its title and its one figure.
 - Style-fatigue in the sparse-white niche is a portfolio-scale risk:
   revisit when there are enough videos for viewers to tire of, with
   data.
 - Every number on a bend must be swapped to script-verbatim figures
   and every logo strip to on-story companies before shipping - a
   borrowed format never ships borrowed FACTS.
+- Packaging art may echo a brand's shape but never puts a company's
+  trademark into our headline art on monetized packaging (the
+  operator's *"A variant of the Micron accent M/logo"* for the word
+  Memory, 2026-08-31, `c118036633bc`); and packaging copy never
+  contradicts the episode's own mechanism - "The largest debt ever,
+  1845" fought the thesis that 1845 was an equity-certificate mania
+  and became "biggest bet" (`3327a2cecd7a`).
 - Reusable asset: the robo cutout (transparent) lives in the cutout
   library; composite pipeline: erase mascot region on measured
   bounds, paste cutout, verify pixels BEFORE delivering.

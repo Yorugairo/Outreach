@@ -64,6 +64,11 @@ could never build a run. Three rules, enforced by the recorder's preflight:
    that is the voice, keep it — which is exactly why the tag budget stays
    small.
 
+**Superseded 2026-08-30 (§21, same day):** "NO tag ever enters the payload" - "§8's tag
+caps become historical; the ~3-tag practice is superseded by zero." The ≈3-tag target and
+the ration cap below are the record; the edit-pause plan they describe still carries
+every settle.
+
 **The practice target is ≈3 tags PER GENERATION (2026-08-30, after a failed
 take).** The provider's own guidance ("How can I add pauses?") warns that
 excessive SSML breaks cause speed-ups and artifacts, and its working figure
@@ -90,6 +95,7 @@ come from punctuation — a dash or em-dash reads as a small pause (our
 em-dash-heavy register is already doing this work), `--  --` for slightly
 longer. **Ellipses add hesitation/nervousness** — use only when hesitation
 is wanted, which in this voice is nearly never.
+(**Superseded 2026-08-30 by §21:** zero break tags; the punctuation guidance stands.)
 
 ## 2. Voice settings — codified baseline
 
@@ -115,6 +121,14 @@ troubleshooting names it specifically).
 Settings are a randomization *range*, not a dial — the API is
 non-deterministic. For retakes that must match, pass **`seed`** (supported on
 our endpoint).
+
+**Open — the brighter register (input to the YouTube voice question, E70).**
+The operator, 2026-08-30: *"almost everyody uses a higher, friendlier pitched
+registry even when the voice claims to be deep"* (LEDGER `1c2bf03ce42d`). The
+working hypothesis, untested: the register tracks prosody energy (swing,
+attack), not pitch - deep plus flat is what kills retention, and 0.40
+stability / 0.20 style lean flat - so a settings sweep on the same deep voice
+comes before auditioning brighter voices.
 
 ## 3. Long-form consistency — request stitching (unused, highest-value gap)
 
@@ -424,6 +438,17 @@ on two engines with two jobs:
   estimators (measured 1.8% off the EL take on the hook vs the
   estimators' ~10% spread).
 
+**The hook figure overstates the transfer.** On the whole script Kokoro read
+about 9% slower than the EL take (14.1 against 12.9 min) while the hook
+matched within 2%: relative structure transfers (which beats run long, where
+numerals bite), absolutes need a per-episode Kokoro-to-EL scale factor once a
+take exists (the operator, 2026-08-30: *"is the kokoro timing data actualyl
+valuable considering that elevenlabs and voice change it meaningfully?"*,
+LEDGER `52d62876faff`, `5320e2cc4a79`). Runtime is planned from a measured
+take, never an assumed rate: a 173 wpm estimate left every length estimate
+about 20 s short on a 90 s cap, where the scratch take read the script in
+117.8 s at 166.5 wpm (2026-09-04, `c75df7bb9b50`).
+
 The scratch tests OUR TEXT - ear failures, pronoun ambiguity, number
 reads, pacing shape - and calibrates timing. It CANNOT test ElevenLabs
 behavior (tags, seams, appended artifacts, our voice settings): the
@@ -482,7 +507,8 @@ room; the chart fills it. Ordinary house-style dashes get nothing.
 
 Mechanics: half-beats are EDITOR pauses (kind "half-*" in the edit-pause
 plan, applied by insert_edit_pauses.py after the dead-space kill), never
-TTS tags - the ~3-tag cap stands. Enumerate candidates by pattern
+TTS tags - the ~3-tag cap stands (**superseded 2026-08-30 by §21:** zero tags; half-beats
+stay editor pauses). Enumerate candidates by pattern
 (colon/dash + payload, threshold sentences), verdict each against the
 chart-sync filter, anchor verbatim and UNIQUELY (repeated phrases take
 longer anchors).
@@ -674,6 +700,18 @@ perfection." For a later episode, PVC is the standing candidate:
   it attacks the class-5c stutter family at the source.
 - Cost: paid tier + a recording session. Decision point: after episode
   one publishes, before episode two's record.
+
+**Re-voicing an existing take (2026-09-02).** ElevenLabs speech-to-speech
+changes the timbre and keeps the timing - a 72.000 s input came back at
+72.028 s - so the SRT and on-screen text stay valid; it returns audio only,
+and a transcript is a local Whisper step (LEDGER `8ca78c7291bd`,
+`6cca5ae18a48`). Over fixed picture the hard cuts and baked text bind, while
+dissolves forgive about ±300 ms: render the whole script in one pass (per-cue
+TTS breaks prosody where cues cut mid-phrase) and pick the voice by natural
+duration (75.16 s against the original's 75.35 s), not rate-fitting - Chirp's
+`speakingRate` is not linear (0.947 overshot to 80.1 s), and padding the tail
+leaves the middle running ahead of the text (`9821f0386743`, `29d32b0310bc`,
+`23c18c0bbdf0`).
 
 ### 23b. Stutter auto-scan: attempted, NEGATIVE (2026-08-30)
 

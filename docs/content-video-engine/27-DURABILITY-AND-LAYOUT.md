@@ -21,6 +21,14 @@ Because the class is a path prefix, three unrelated mechanisms each reduce to
 a one-line rule: `.gitignore` ignores the class roots, cleanup may delete
 `runtime/` wholesale, and backup concerns itself with `canonical/` only.
 
+**Why generated media stays out of git** (P54 fold). A regenerated image, clip
+or narration never matches its recorded sha256, so committing one buys
+storage, not reproducibility, while history bloat is effectively irreversible
+(`.git` had reached 19 GB). Durability of an irreplaceable binary is the
+store's job (`canonical/`, below), not a side effect of version control (the
+operator, 2026-08-23: *"do we realy need images to be commited at all right
+now?"*, `3bea8eb82d46`).
+
 ## The contract module
 
 `content/video_engine/src/services/paths.py` is the **single owner** of class

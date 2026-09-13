@@ -72,6 +72,15 @@ best-of-3, extraction cap 2, sources always delivered, manifest shape,
 `approvals.json` last. For a new style family, update the style blocks at the
 pack level — the order inherits them.
 
+**A corrected order leads with the rejection reason** (P54 K17). A rejected
+plate keeps its reason in `approvals.json`, and the fresh order (E1: a
+dispatched order is never edited) opens each slot with why v1 failed; the
+self-judge checks that reason first. The fault is usually the prompt, not the
+generator: two wave-7 plates were rejected because the order described the
+composition and not the meaning, and the generator built paper output from a
+hype machine and playing cards for disciplined de-risking (2026-08-29,
+`af4da2221767`, `6f2329b79917`).
+
 ## Motion library
 
 The animation pass resolves motion from the registered HyperFrames unit

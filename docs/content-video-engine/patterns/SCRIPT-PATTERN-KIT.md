@@ -160,6 +160,12 @@ python content/video_engine/scripts/run_script_gates.py <script> --ring "<token>
    (S08); the take is cut on gaps ≥ 0.30 s at 0.8 of the gap, mid-word ≤ 25 %
    (M13, measured on the reference — E38). A period is a cut point; a comma is
    not.
+9. **A flip follows the claim it refutes, and names it** (long form only -
+   doc 35 §5 rule 2; a short carries no flip, E41). Placed before its claim,
+   or left behind when the beat it refuted is cut, it refutes nothing - so
+   after any beat cut, re-check every sentence that pointed at the cut beat
+   (2026-09-05: with the head-fake gone the flip "was refuting nothing, and
+   it sat before the claim it belonged to", LEDGER `4482355fd4b7`).
 
 ## Output contract (what a finished script contains)
 

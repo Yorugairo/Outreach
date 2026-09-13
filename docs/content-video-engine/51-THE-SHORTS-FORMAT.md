@@ -21,6 +21,11 @@ production is what the engine is for.
 | **visual pulse** | a visual event every **1.2–2.5 s** (49 §49.6). Our long-form ASL is 6–10 s; that cadence is wrong here |
 | **minimum type** | **≥ 59 px on a 1920 stage**, or ≥ 12 px at portrait scale (50 §50.2). Below that, three quarters of the audience cannot read it |
 
+**No added runtime before the hold is proven** (P54 K18, 2026-09-08). The operator, refusing to lengthen a short to
+give its charts room: *"90 seconds is the max run time for most facebook benefit, and we haven't even proven that we
+can hold attention for 30 seconds average, so adding run-time isn't the move yet."* (`60d2ebeb9564`). Seconds are
+reclaimed inside the runtime - a chart entering built, a weak plate replaced - never added.
+
 ## 51.2 The shape
 
 ```
@@ -68,6 +73,11 @@ managing risk at a bank that neither of them knows.
 **That edge costs one sentence, not thirteen minutes.** It is what makes the short *true*
 rather than what makes it *long*. Put it in the mechanism beat and move on.
 
+**The stake is named in the lane audience's terms** (P54 K18). The operator, on the Tokyo short: *"Your borrowing
+costs" is better than "your mortgage" because most people consuming shorts on facebook are not home owners.*
+(2026-09-05, `2e2e84c1559f`). The sourcing held because the dossier row covers both the mortgage rate and the 10-year;
+a wider stake word still needs a source that covers it.
+
 ## 51.4 Production standard — deliberately lower
 
 > **Amended 2026-09-06 by E46** (`docs/portable/OPERATOR-RULINGS.md`): the exclusion list below is withdrawn for the chart
@@ -112,6 +122,11 @@ what the knowledge is *for*; the shorts are what gets anyone to the essays.
 The failure mode this document exists to prevent: **making every short justify the whole
 knowledge base.** Tokyo is the worked example — 11 evidence pages, 10 beat tags, 290
 words, 118 s against a 90 s cap. A compressed long-form episode wearing a short's runtime.
+
+**A short opens a loop the long form closes** (P54 K18). When the real cause is multi-part, the short does not assert
+a cause it cannot prove in one line: it opens the loop and lets the long-form episode close it, which keeps the short
+to one mechanism and hands the viewer to the catalogue. The operator on the Tokyo short's cause (Japan's own chip
+ramp, the weak yen, the weak dollar): *"too deep for this clip"* (2026-09-04, `68f44f207439`).
 
 ## 51.7 Plates are a retention asset, not an acquisition asset
 
@@ -190,6 +205,7 @@ retention-not-acquisition category of §51.7. It was never the answer to stillne
 
 - [ ] every object nameable in under a second, no interpretation
 - [ ] one mechanism, stated in one sentence — S02 / J50
+- [ ] the stake named in the lane audience's own terms (§51.3)
 - [ ] N instances of *that* mechanism, not N unrelated items — S03 / J51
 - [ ] the ring returns to the mechanism — S05
 - [ ] the operator's sentence — the thing only he can say — is in it

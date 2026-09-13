@@ -154,6 +154,12 @@ rate are different kinds of number; they were never in tension. Backlog B5 is wi
 
 **Operator, 2026-09-04:** we run closer to **180** than to 145.
 
+**Measure the opening AND the rest of the video (operator, 2026-09-13):** *"what we were actually saying is to measure
+the opening AND the rest of the video. We had an issue where the video average was good, but our opening was slow."*
+Ep1's whole-episode rate matched the reference while its opening was the slow stretch (LEDGER `631562550a3b`: *"the slowest
+thirty seconds in the whole video is 0:30 to 1:00, exactly where the drop lands"*). Report both - the opening windows
+and the body - never the episode average alone.
+
 *Lesson, and it is the one this document spent the day applying to other people's work: a
 number with no locator, repeated across three documents, starts to look sourced. The check
 is `grep` for its origin, not a recollection that it feels right.*

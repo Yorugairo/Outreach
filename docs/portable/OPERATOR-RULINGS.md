@@ -1836,6 +1836,11 @@ The second time in two days (E49 §3: *"you're circling beneath to avoid circlin
 4. **A held light is a held thing** — it breathes. `idle` on a spotlight (one of the IDLE_KINDS) breathes the hole's
    radius and drifts its centre on the same seeded, pure-function-of-t kinetics as every idle; absent = the old still
    light, so the goldens are byte-identical. The wafer light runs `idle: live`.
+5. **A mark over a label (2026-09-13, the operator, on the collision ledger M34):** *"A ring or callout drawn over a label
+   oesn't automatically fail, if the point is to draw a ring or highlight around that label - BUT, we have spotlight tools
+   that can provide more clarity while demanding less accuracy to work well."* So a ring or callout over the label it
+   targets WARNs and names the spotlight; over an unrelated label it FAILs. And a bracket's own figure may sit on the line
+   it measures (*"bracket should prboably be able to bypass tat rule."*); across another series' line it still FAILs.
 
 ## E57 — Flow generation is routed by size: an episode's plates go to Gemini over the bridge, a couple of plates we drive ourselves (2026-09-10)
 
@@ -2371,5 +2376,135 @@ register - a ledger plate arriving onto a narrative plate. Between two CHARTS a 
 
 Measured on the bridge review cut after the correction: the suck at 10.9 s and the melt at 34.0 s both 0.0 s empty.
 
+**CORRECTED 2026-09-13 - the exit convention (P54 T9's seam measure).** 2' and 4' above read a scene's `exit` as the
+transition OUT of that scene. It names the transition INTO the scene it sits on (E47; `SCENE_EXITS` in
+`build_scene_timeline_f.py`; the engine). So **chart to chart is a ledger page that follows a ledger page, WHATEVER the
+transition**: the review cut's cream at 0:34 followed a CUT between the two charts, not a melt, and the boundary named
+"the melt at 34.0 s" above was read under the old convention. `stamp_transition_pages` stamps `enter=axes` on any
+ledger page after a ledger page that declares no enter; R26-60's `exit=cut` goes on the OUTGOING page the suck or the
+melt takes; M31 FAILs an empty stage at any non-dip boundary with a ledger page on both sides. The operator's words
+above stand as recorded.
+
 Mechanisms: `build_scene_timeline_f.py` `stamp_transition_pages` (the hook stamp; the after-stamp removed),
 `gate_motion_density.py` M31 (INFO), `test_transition_stamps.py`.
+
+---
+
+## E74 — Long form is never under 8 minutes (2026-09-13)
+
+**Ruling (the operator, ruling the P54 triage candidate):** *"yes, longform should never be under 8 minutes."* The
+candidate was the operator's own, on 2026-08-29 (LEDGER `cf1f8b376e5e`): *"wait what duration video are you expecting ofr the response
+video? I thinkw e were well beyond 504 seconds, i dont think we make vdieos shorter than 8 minutes"*.
+
+**The reason.** The long-form machine - the six phases, their geometry, A3 at 10% of the runtime - is written for 8-20
+minutes, and a short is a different machine under 3:00 (E35, G2). Nothing stated the floor, so a 504 s cut could be
+treated as a long form, and the phase guides still carry sub-8-minute rows.
+
+*Apply:*
+1. **A long form's runtime is at least 8:00 (480 s).** A cut that comes in under it is extended with substance - never
+   padded - or rewritten as a short under 3:00. Nothing ships between the two machines.
+2. **The opening gate holds it:** G46 FAILs a long-form cut whose MEASURED clock is under 8:00, WARNs an estimated one.
+   The short mode never asks it.
+3. **The phase guides' sub-8-minute rows are historical** - they describe geometry, not a length the channel ships.
+
+Mechanisms: `content/video_engine/scripts/gate_opening_structure.py` `LONG_MIN_S` / G46,
+`content/video_engine/tests/test_gate_opening_structure.py` `test_g46_*`.
+
+---
+
+## E75 — A bar starts at zero; a level line may start near its own low (2026-09-13)
+
+**Ruling (the operator, ruling the P54 triage candidate):** *"the level line rule and bar chart separation sounds
+valid."* The candidate was the operator's, on the Japan short (2026-09-05, LEDGER `9e6d4f0a3f04`): *"maybe don't start from 0, maybe
+start from the lowest amount that japan has held since 2000?"*
+
+**The reason.** E28 set the zero baseline where a truncated axis lies: a BAR's height is its value, so a bar cut off
+above zero turns a tenth into a fall to nothing. A LEVEL LINE - an amount standing at each date (holdings, a yield, a
+debt load), not a change - is read by its shape; pinned to zero, a move from $1.06T to $1.13T draws as a flat line and
+the movement the sentence is about disappears.
+
+*Apply:*
+1. **Bars always include zero** (and a signed bar falls below it - E28 s1).
+2. **A level line's y-axis may start near the series' own low in its window**, and the axis ticks state where it
+   starts - the ticks are the honesty, never a hidden cut. A line that is compared against zero on purpose (a rate
+   crossing zero, a share of a whole) declares `axes.from_zero`.
+3. **Never both scales on one reading:** a page that puts bars and a level line together keeps the bars' zero; the
+   line takes E53 s4's overlay (no axis of its own, a terminal tag).
+
+Mechanisms: the ledger line builder already draws a line on its own padded data range and only pins zero when the
+series declares it (`docs/content-video-engine/samples/scene-evidence-engine.mjs` `buildLedgerLine`:
+`if (ax.from_zero && !ax.log) y0 = 0`); the bar builders always include zero (`Math.min(0, ...st.vals)`); a tier band
+defaults to zero and opts out with `from_zero: false` (`tierDomain`). `content/video_engine/scripts/ledger_page.py`
+`AXES_KEYS` carries `from_zero`.
+
+---
+
+## E76 — A figure is shown in the form that tells its story; a comparator carries it (2026-09-13)
+
+**Ruling (the operator, correcting the P54 reasoning candidate "valuation as money, never multiples"):** *"never p/e
+multiples isn't the rule, the rule should be to explore various display mechanisms, and that comparators (like dollar
+per share or change per $) show immediate narrative value. In fact, showing the P/E and then morphing it to a more
+visual number would be a great repeatable mechanism"*. The candidate came from the Tokyo short (2026-09-05, LEDGER `d3b1275488bd`):
+*"common folk don't kno what meta multiple at 24.8 vs 21.5x means value wise, and neither do i without calculating"*.
+
+**The reason.** A multiple is a ratio the viewer has to compute before it means anything; a comparator in the viewer's
+own units (dollars per share, the change on each dollar invested) reads at once. The market's own metric is not banned -
+it is where the number starts.
+
+*Apply:*
+1. **Explore the display forms before choosing one** for any headline figure: the quoted metric, per share, per dollar
+   invested, a share of a whole, a count of things.
+2. **Prefer the comparator that carries immediate narrative value**; the quoted metric may still appear beside it.
+3. **The repeatable mechanism (not built):** show the quoted metric (the P/E), then morph it into the visual comparator -
+   the number the market quotes becomes the number the viewer feels. BACKLOG R26-70.
+
+Recall: doc 43 §43.5 (the object->chart morph, two methods); E60 (the breakthrough's counter and rescale); CAPABILITIES
+(the stop-action counter step, P50 T13). None morphs one number into another.
+
+---
+
+## E77 — A derived figure is our analytical layer; it is set beside outside projections, not ranked over them (2026-09-13)
+
+**Ruling (the operator, correcting the P54 reasoning candidate):** *"Saying it outranks a borrowed projection might not
+be true, sometimes it might just be suport, sometimes it might slightly conflict, etc."* The layer itself is the
+operator's earlier word (LEDGER `bfb9c40b69b6`): *"Derived isn't a bad thing, it's our added layer which is required for
+"original content" these days."*
+
+*Apply:*
+1. **A derived figure is carried with authority, not as a liability**, labelled `[DERIVED: from <sources>, <how>]`
+   (GEMINI.md, research intake).
+2. **Where an outside projection exists, say how the two relate** - it supports, partly conflicts, or conflicts, and
+   why. No standing rule makes either outrank the other.
+
+---
+
+## E78 — An operator-written line is kept verbatim only when the operator says keep (2026-09-13)
+
+**Ruling (the operator, correcting the P54 reasoning candidate "operator-authored lines survive the fixpoint"):**
+*"This shuld only be true if i specify to keep it."* The candidate was an agent's own pin (LEDGER `00542a445286`):
+*"so no gate is allowed to optimize its shape away"*.
+
+*Apply:*
+1. **By default an operator-written line enters the strength loop like any other line.**
+2. **When the operator says to keep it, it is pinned:** the loop builds around it and a gate hit on it is logged as an
+   exception, never an edit.
+3. **An agent never pins a line on its own inference.**
+
+---
+
+## E79 — Side-by-side charts share one scale by default; unrelated measures may carry their own (2026-09-13)
+
+**Ruling (the operator, correcting the P54 reasoning candidate "small multiples share one computed scale"):** *"I'm not
+sure if side-by-side having exact same scale is always necessary, but it shold be the standard rule. but i could imagine
+2 completely unrelated measurements or chart styles on different scales being next to eachother."* The defect behind it
+(LEDGER `bb959e997c3c`): *"Each panel computed its own y-range from its own data"*, under a subtitle promising one scale.
+
+*Apply:*
+1. **Panels of the same measure compute one scale across all panels** - the standard.
+2. **Unrelated measurements or chart styles side by side may each keep their own scale**, each with its own ticks, and
+   nothing on the page implies they share one.
+3. **Gate owed** (P54 value pass K10): a WARN when same-unit panels carry different domains and the page does not declare
+   independent scales.
+
+Not ruled (the same pass): *"never change the voice and the opening in the same post"* was rejected - *"we actually have
+various data streams now so we can cover chanigng more than one vairable."*

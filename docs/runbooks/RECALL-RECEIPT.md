@@ -41,6 +41,12 @@ or a short's `build_short.py` without a `Recall:` line is refused by `scripts/ho
 printf '#!/bin/sh\npython scripts/hooks/recall_receipt.py "$1"\n' > .git/hooks/commit-msg && chmod +x .git/hooks/commit-msg
 ```
 
+**Why a receipt and not an instruction.** An instruction degrades over a long session: the manifest-grep
+rule already existed when E47 was re-derived twenty hours in (2026-09-08, LEDGER `eaff6ce7dcf0`). The
+receipt is a visible artifact and the hook refuses its absence, so it cannot fade the same way. It still
+proves only that the look happened, not that it came before the build (`9cdf34cb04b1`) - the order in §3
+stays a discipline.
+
 ## 3. The order — cheapest first; stop at the first layer that answers
 
 1. `python content/video_engine/scripts/docs_find.py "<noun>"` — one line per hit, cheapest layer first.

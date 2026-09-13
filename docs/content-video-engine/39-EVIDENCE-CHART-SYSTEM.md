@@ -162,7 +162,7 @@ Given the dwell budget, form is chosen by what a reader can finish.
 | Two subjects compared | Two lines, both direct-labelled | slots 1 + 2 |
 | Magnitude across ≤ 6 categories | Column | slot 1 for all |
 | Before → after | Dumbbell | one hue, two shades |
-| Part-to-whole | Stacked bar, ≤ 4 segments | slots in order |
+| Part-to-whole | ~~Stacked bar, ≤ 4 segments~~ **Superseded 2026-09-07 (E53 §2): never a stacked bar.** One named slice: pie/donut only under E53 §1's four conditions; otherwise grouped bars or small multiples | ~~slots in order~~ the named slice highlighted, the rest muted (E53 §1b) |
 
 **Emphasis is the default.** If a chart has more than two colours, justify
 it. If the story is "this one number," it is a stat tile — a one-bar bar
@@ -209,6 +209,21 @@ without exception:
 - [ ] Title + source line present; numerals verbatim
 - [ ] Rendered and **looked at** — label collisions, overflow, geometry
 - [ ] Checked against the reference anti-pattern list
+
+**Before building: fetch the live series, and date a broken premise**
+(P54 K13). Pull the current series before an evidence document or a
+renderer is built, because a script's central number can be years stale:
+the Tokyo short was written on a five percent Treasury and an underwater
+hedged trade, but the 10-year has not printed 5.00% since 2007-07-19 and
+the net hedged yield, negative for 35 months, turned positive after
+2024-11 (+2.14% at 2026-09;
+`tokyo-tea-break/EVIDENCE-FINDING-hedged-yield.md`). A premise the data
+breaks gets a date, not a retraction - it was a true story about 2023
+told in the present tense. Before settling for a weaker forecast frame
+(the operator: *"kinda weaker but i guess facts are facts."*), search
+the same data for a stronger present-tense story: the trade pays and
+Japan is selling anyway (`EVIDENCE-FINDING-2-the-real-story.md`;
+operator ledger 2026-09-04, `c59d92b435aa`, `531746575bf1`).
 
 ## 9. Provenance
 
@@ -362,6 +377,12 @@ the same file.
    Ease-out cubic is an acceptable substitute where spring is unavailable.
 5. **Honour `prefers-reduced-motion`** — render the settled final state,
    no typing, no sweep, no cursor.
+   **Superseded 2026-08-23 (operator, LEDGER `02dbf7702cd8`):** *"i tihnk
+   prefers-reduced-motion is mainly for website development, not video development"*.
+   Recorded in `.claude/PRPs/plans/P15-OPERATOR-CONSOLE.plan.md` (Motion):
+   "`prefers-reduced-motion` governs the console, never the artifact." The record
+   document is video content, so it always types and sweeps. Only console chrome
+   drops to instant.
 6. **One phrase marked, still.** §10 rule 1 holds under motion: one
    highlight per document, on exactly the words the narration speaks.
 
@@ -550,6 +571,27 @@ identical May values. The rule stands and is now root-caused: query
 - **The `.env` never appears on screen.** It holds live keys (DART, FRED,
   data.go.kr, OpenRouter, Gemini). Any screen capture of the CLI is
   checked for it first.
+- **An uncalibrated threshold is shown as the operator's number** (P54
+  K12). A self-declared level such as `FX_BREAK_LEVEL` 1525 is labelled
+  as our chosen line, never as the market's break level; unlabelled, it
+  dresses a judgment as a measurement (2026-08-28, `57813dca220c`).
+- **Freshness is verified per figure, not per panel.** A VKOSPI value
+  was printed after its feed had returned 404 (`57813dca220c`).
+- **No divergence number ships while its baskets overlap** - one ticker
+  sitting in both the contrast basket and the complex (2026-08-28,
+  `ca5f90f7f8e3`).
+- **Backtest a tripwire inside its regime** (P54 K13). The window starts
+  where the constraint it watches became binding, not at the start of
+  the history, because an aggregate series only measures that constraint
+  once its segment is the marginal buyer (the operator: *"It should
+  actually be at the point of which memory became the bottleneck."*,
+  2026-08-30, `3b196c6183ea`). On the DRAM customs series a real bust
+  fires the single weak print and the average-cross in the same month,
+  so a two-quarter confirmation only adds ~6 months of lag, and inside
+  the H100 regime that rule fired twice, both times wrong. A rule quiet
+  for years that then fires wrong once is worse than a noisy rule
+  answered with graduated trims
+  (`steel-and-paper/SCRIPT-G-STRENGTH-LOG.md` Round 9).
 
 **Built:** `evidence/ev-instrument-memory.html` → `objects/`, sized to
 content at 2112 × 1150.

@@ -114,6 +114,18 @@ The opening gate covers **P1–P2 only** and says so in its header. Nothing
 mechanical exists for P3–P6 beyond the audit's pivot pin, CTA windows, tell
 presence, and the lint's crude ring echo.
 
+**Reading a FAIL count on a legacy script.** An untagged baseline's FAIL
+count measures annotation, not quality: 18 of ep1's 28 opening FAILs were the
+gate reporting beats never annotated, and a flawless untagged script fails
+identically. Annotate the beats the text already contains first (the spoken
+hash is unchanged, so the take stays valid); a control fixture that is both
+tagged and good confounds the two (2026-09-03, LEDGER `0ae2254db65c`,
+`631562550a3b`). Build fixes cannot shrink a whole-runtime rewrite: parallax
+and tempo edits killed six of the eight motion FAILs, but a ring relates the
+open to the close and an anaphora arc resolves only in P6, so the re-script
+stays full-length (the operator: *"it doesnt actually shrink to the package
+and opening does it?"*, `92bc5a9aca6e`, `fdfe0bd26d43`).
+
 ## 3. The agent's territory — verdicted by name, every run
 
 ### 3a. Verify the declared beats (R2)
@@ -193,14 +205,14 @@ columns — the map is generated, and a second hand-kept roster would drift.
 
 | Device | Scale | Defined (the section that states it) | Craft map |
 |---|---|---|---|
-| the answer format | L6 | `35-ANSWER-FORMAT-DOCTRINE.md:87` · `docs/portable/DOCTRINE-CORE.md:152` | `docs/CRAFT-MAP.md:35` |
-| the assignment | L5 | `patterns/phase-guides/P6.md:83` · `docs/portable/DOCTRINE-CORE.md:40` | `docs/CRAFT-MAP.md:48` |
+| the answer format | L6 | `35-ANSWER-FORMAT-DOCTRINE.md:87` | `docs/CRAFT-MAP.md:35` |
+| the assignment | L5 | `patterns/phase-guides/P6.md:83` | `docs/CRAFT-MAP.md:48` |
 | peak-end | L5 | `31-FACELESS-CHANNEL-DOCTRINE.md:188` · `patterns/FULL-VIDEO-MAP.md:227` | `docs/CRAFT-MAP.md:49` |
 | the dopamine ladder | L5 | `31-FACELESS-CHANNEL-DOCTRINE.md:39` · `patterns/FULL-VIDEO-MAP.md:69` | `docs/CRAFT-MAP.md:53` |
 | the never-repeat rule | L5 | `31-FACELESS-CHANNEL-DOCTRINE.md:116` | `docs/CRAFT-MAP.md:57` |
 | the enumeration mandate | L6 | `patterns/STRENGTH-LOOP.md:165` · this file §5 (the enumeration mandate; line numbers move, cite the section) | `docs/CRAFT-MAP.md:63` |
 | instrument continuity | L6 | `patterns/STRENGTH-LOOP.md:96` | `docs/CRAFT-MAP.md:66` |
-| mechanisms not prescriptions | L6 | `docs/portable/DOCTRINE-CORE.md:172`, `:191` | `docs/CRAFT-MAP.md:67` |
+| mechanisms not prescriptions | L6 | `39-EVIDENCE-CHART-SYSTEM.md:553` · `36-WRITER-PERSONA.md:279` | `docs/CRAFT-MAP.md:67` |
 | the camera test | L0 | `31-FACELESS-CHANNEL-DOCTRINE.md:116` · `32-WRITING-FOR-THE-EAR.md:148` | `docs/CRAFT-MAP.md:97` |
 | the cadence wave | L1 | `32-WRITING-FOR-THE-EAR.md:75` · `patterns/STRENGTH-LOOP.md:42` | `docs/CRAFT-MAP.md:103` |
 | the named-subject rule | L1 | `patterns/SENTENCE-STRENGTH-CHECK.md:37`, `:77` | `docs/CRAFT-MAP.md:108` |

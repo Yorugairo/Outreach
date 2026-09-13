@@ -243,6 +243,13 @@ Find Trading Impossible — And 5% Find It Obvious" is a far stronger title than
 title, thumbnail, topic and presentation. Treat the 100x as a ceiling on how
 much presentation could possibly explain, not as proof it explains nothing.
 
+**Operator direction, same day (2026-08-22, LEDGER `ee466c018002`), recorded here
+because the paragraphs above argue the other way:** *"they often don't even animate much
+at all. It shows I feel we shoudl be able to win on presentation by bringing in actual
+facts and more context aware plates like mr finance runs"*. That direction is what the
+scene-evidence lane (doc 29, Part 8) now carries: "Every channel ships on the
+scene-evidence lane" (`29-EVIDENCE-MOTION-STANDARDS.md`, Current state).
+
 What it does prove is narrower and more useful: **a single well-chosen plate
 plus accurate word-timed captions is a commercially viable format at six-figure
 scale.** That is nearly free to produce, and `hyperframes_unit.schema.json`

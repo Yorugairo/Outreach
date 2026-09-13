@@ -46,6 +46,12 @@ McKee: beat → scene → sequence → act → story. Extended:
   pattern ratio"): alternate additional P3 blocks with mini-pivots every
   ~12–15 minutes; the single TRUE midpoint stays at global ~50%; one grand
   payoff, one ring.
+- **Added runtime carries verified content** (the floor is 8:00, E74; the
+  ceiling is the length the material defends). A video that visibly stalls
+  to reach a mid-roll costs more in retention than the mid-roll earns, so an
+  added unit brings new, verified material or is not added. The operator's
+  11–13 minute target, 2026-08-29: *"we can maybe fit an extra ad without
+  much extra effort"* (LEDGER `eb5fb03910e3`; answered `975e67d387eb`).
 
 | Phase | % of runtime | @30:00 | @16:00 | @8:00 |
 | --- | --- | --- | --- | --- |

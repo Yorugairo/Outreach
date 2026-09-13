@@ -44,6 +44,27 @@ GATE   add the check that would have caught it (same commit)
 DOC    if anything failed along the way, record the negative result
 ```
 
+## Tests that bite — the author's blind spot
+
+Tests written beside the code share its assumptions: a fresh read-only
+review found 16 confirmed defects in self-authored P15 T1/T2 work
+(2026-08-23, LEDGER `d4bfcb21ab5e`). Four habits close the gap:
+
+- **Break the code and watch the test fail.** A new test passed with the
+  bug present (`e436831bec02`) — law 2 applies to our own tests too.
+- **Fixture from real assets.** All 34 tests passed because the synthetic
+  fixtures sat at alpha exactly 255; the real asset tops out at 254.
+- **Assert on the written artifact the consumer reads, not stdout.** The
+  gates runner printed the viewer's FAIL while the written report — the
+  file that blocks a take — computed its VERDICT without it (2026-09-03,
+  `fc5f3c4a6ed2`).
+- **Verify a join by reading its output, never its count.** Keyed on
+  `chapter_index` instead of `beat_id`, a join gave every plate the next
+  chapter's excerpt; the labels read plausibly and the count was identical.
+  An exact-id match silently dropped 180 of 192 semantics. Cross-check
+  sample output against an independent key (the plate's own name)
+  (2026-08-29, `39c2082750a7`, `05a581ea4c1e`).
+
 ## Standing gate inventory
 
 The chain's gates are the suite; run state is the build state. All

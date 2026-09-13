@@ -80,6 +80,13 @@ substitutions and nothing else:
 relative paths renders black the moment it is opened anywhere but its own
 directory. That is not a bug to debug; it is the reason the template embeds.
 
+**Superseded for builds by the split player (P51 T1; stage 8 in the table above):** "the
+build writes `player.html` (a 46 KB shell), `assets.json` (the data URIs, fetched), a copy
+of `scene-evidence-engine.mjs` and `player.json` (its sha); `render_baseline.instantiate`
+still composes the single file for the goldens and the tests. Serve the build dir (`.mjs`
+as text/javascript); a `file://` open cannot fetch." The assets are still data URIs,
+never relative paths. What moved is where they live.
+
 **`__audio__` is one file.** A chained two-part take must be joined first —
 doc 37 §8.2: trim part one to its last word plus the 1.2s settle, then one
 re-encode pass with a short crossfade.

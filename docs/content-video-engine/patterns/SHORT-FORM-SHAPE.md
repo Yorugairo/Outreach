@@ -47,10 +47,12 @@ complete by 2.0 s.
 
 ## 2. The INSTANCES — `enter=axes`, stamped
 
-One page per instance, each arriving **with ink** because it follows a world-taking transition (a suck or a melt) out
-of another CHART - chart to chart, the empty cream is never on stage (E73 corrected: the cream roll-out is the mount's,
-a ledger plate onto a narrative plate). The author declares nothing: `stamp_transition_pages` stamps `enter=axes` on
-the page AFTER one and `exit=cut` on the page UNDER one, and the build prints each stamp (P53 T2/T6, R26-60).
+One page per instance, each arriving **with ink** because it follows another CHART, whatever the transition - chart to
+chart, the empty cream is never on stage (E73 corrected: the cream roll-out is the mount's, a ledger plate onto a
+narrative plate). The author declares nothing: `stamp_transition_pages` stamps `enter=axes` on a page that follows a
+page, and `exit=cut` on the OUTGOING page a suck or a melt takes. A scene's `exit` names the transition INTO it (E47),
+so that is the page BEFORE the scene whose exit is the suck or melt. The build prints each stamp (P53 T2/T6, R26-60;
+corrected 2026-09-13 - this section first read the exit as the one OUT of its scene).
 
 - **S03**: at least two `[new]`/`[catalyst]` instances between the mechanism and the ring.
 - **S04 / J51**: the instances share a spine — the same mechanism with different variables, never a pile (51.2, G-g).

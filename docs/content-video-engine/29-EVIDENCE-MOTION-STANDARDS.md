@@ -23,12 +23,12 @@ disagree, this section wins.
 **The lane.** Every channel ships on the scene-evidence lane (Part 8):
 one ken-burns vector per scene, translucent washi docks with opaque
 documents inside, verbatim badges, word-timed kinetic captions, wipes on
-evidence-free boundaries - except evidence that PERSISTS across a boundary, which holds untouched while the front passes (s9.15). Held stills with hard cuts are a defect. Lanes
+evidence-free boundaries - except evidence that PERSISTS across a boundary, which holds untouched while the front passes (s9.15) - never a chart (E25, §9.30, gate M12). Held stills with hard cuts are a defect. Lanes
 differ only in scripting — theme, audience, voice. *(§9 C1)*
 
 **Plate density is runtime-derived.** Target **runtime ÷ 12s** distinct
-world plates — a 7-minute episode needs ~38, not 10. Hard ceiling 20s on
-one plate, and only when two strong evidence documents dock over it.
+world plates — a 7-minute episode needs ~38, not 10. A still plate holds 20s
+at most; a hold is legal past 20s while the frame lives (E69, M05).
 Thumbnails, avatars and banners are not world plates. *(§9.13)*
 
 **Captions are dynamic, always** — word-by-word punch at canonical
@@ -937,6 +937,11 @@ rulings. Where these conflict with anything above, THESE win.
    never re-runs. This supersedes Part 6's evidence-free-boundary rule FOR
    SPANNING EVIDENCE ONLY; a card ending at the boundary is carried off by
    the front.
+   **Superseded for charts 2026-09-03 (E25, §9.30):** "a chart never survives a
+   plate change - if the narrative returns to it, it re-enters spotlit on the new
+   datum." §9.30 rule 2: "A dock that straddles a scene boundary is a defect, not a
+   held read." Gate M12 FAILs a chart dock that spans a scene
+   boundary. The spanning-evidence allowance above no longer covers a chart.
 3. **Near-boundary exits snap to the boundary.** An exit authored within
    ~1.4s of a scene turn used to fire fade + wash-off + wipe in under a
    second (the "repaste" flash). Those exits snap to the boundary; exits
@@ -1030,6 +1035,11 @@ move."*
 - **Applied test:** if the viewer paused on the card, would the narration
   they just heard explain what they're reading? If not, drop it — and
   either build the proper evidence or let the plate carry the beat.
+- **A directive or branded slide is never evidence**, however well it
+  matches the theme (P54 fold): a deck slide that tells the viewer
+  what to buy puts someone else's call on our stage, and one carrying
+  a third party's brand mark puts their brand there. The dock goes and
+  the world plate stays (Steel and Paper, 2026-08-29, `db62e228a744`).
 
 ### 9.7 Host-in-world plates approved (operator, 2026-08-25)
 
@@ -1303,6 +1313,15 @@ ARE NAMED BY LANDING MONTH ("the August print" carries July's numbers)
 and PLOTTED on information time - the day the market could know - never
 on data time. A data-time plot misaligns cause and reaction.
 
+**Superseded in part 2026-09-07 (E53 §4):** the combo is no longer a price line above
+with the events in a separate bottom band. E53 §4: when two units must be read against
+each other "it is an OVERLAY, never separate tiers - separating them throws away the
+comparison that justified the second scale. In that overlay the bars keep the plot and
+their own zero, the line rides over them on its own scale, the bars own every gridline,
+and the line owns no axis, carrying a terminal tag instead." E53 §4 also asks first
+whether the page needs the second unit at all. The print-naming and information-time
+rules above stand.
+
 **Ledger data hygiene:** SCML series queries filter
 `data_tier='production'` and full periods only - beta ten-day partials
 (`-P1/-P2/-P3`) are a different basis and print false spikes. The
@@ -1363,6 +1382,15 @@ dancing around the world plate, not static on the evidence layer"):
   extend ~1s past clear_at so the burst finishes ticking.
 - Item beats are absolute times on the authoring clock - a retime
   regenerates them from their verbatim phrases.
+- **One timing fact lives in one file** (P54 fold). The stack's beat
+  times lived in `evidence-dock.json` while its dock window, which
+  carries the background dimming, lived in the shot table; a re-clock
+  moved one and not the other and the dimming drifted 0.77 s from its
+  content (the operator: *"we had a regression in scene
+  transitions/light-handling, somewhere"*, 2026-09-01,
+  `95771669eba4`). Timings that belong together derive from one source
+  so they cannot shift separately (the same class as PIPELINE stage
+  7c, where the gate reads the timeline's own docks).
 
 **9.24b - the HYPERFRAMES blend (operator: "in that cut the evidence
 is actually dancing").** What makes the pilot dance is not the
@@ -1385,6 +1413,14 @@ gloss ("US Bureau of Economic Analysis data via FRED", never bare
 "BEA"). The audit that caught this: the yardstick chart shipped with
 TWO ENTIRELY UNNAMED SERIES - seven docked charts had unnamed lines.
 The mute test now includes: "could a stranger say what each line IS?"
+
+**Superseded in part 2026-09-07 (E53 §8):** the series name goes at the line's END, not
+its start. E53 §8: "the cure is a tag at the series' terminal point in the series'
+colour, and a right gutter reserved for it - never a legend box, and never a sub that
+has quietly become one. Where a plot has no gutter the fallback is the sub" - and it
+names this section: "(This is doc 29 s9.23b, now with its reason and its source.)"
+The naming rule above (audience words, measure before nickname, glossed acronyms)
+stands.
 
 ### 9.25 The screen never goes still; captions take the stage (operator, 2026-09-02)
 

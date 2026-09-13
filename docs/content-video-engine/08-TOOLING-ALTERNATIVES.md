@@ -93,6 +93,12 @@ SynthID uploads · Veo extension mechanics (~148s chained, third-party figure).
 
 ## 7. Magnific: adopt as a governed media workbench
 
+> **Superseded 2026-09-02 (operator, LEDGER `9821f0386743`):** *"i actually cancelled
+> mymagnific so it's not premium anymore; we could do the upscale ourselves locally."*
+> The adoption below is the record, not the current route: upscale runs locally. The
+> wrappers (`magnific_video.py`, `magnific_image.py`) remain on disk; this note does not
+> remove them.
+
 **Verdict: USE for reviewed asset production and stock intake; do not make it the
 documentary renderer.** The initial raw-prompt bakeoff proved that Magnific can
 materially improve print/cut-paper texture, but also showed uncontrolled semantic

@@ -146,6 +146,10 @@ When an initial frame is anchored, **never re-describe what is already visible i
 *   ❌ *Redundant Prompt:* `"A stickman wearing a vest stands on a cream paper background next to a balance scale. He reaches out..."`
 *   ✅ *Kinetic Delta Prompt:* `"Continuing from the starting frame, @Mike smoothly extends his right hand and places the brass coin into the right dish. At second 5, the balance scale tips downward on the right, and @Mike takes one step back, resting his hands at his sides. Completely locked static camera. Completely silent video."`
 
+### 3.3 The Start Frame and the Reference Outweigh the Prompt (P54 K17, recorded 2026-09-02/03)
+*   **Frame-conditioning beats wording.** Whatever the start frame, a reference or an Extend's source clip carries - a hand included - comes back whatever the prompt says: a tweezers clip kept the finger its start frame held (the operator, reading it as the negative prompt: *"it still had the finger. i think the negative prompt is keeping it in there"*, `ecb350abe417`). Models condition well on a first frame and unreliably on a last one. Fix the frame, or script the object leaving in the prompt's first sentence (`b29149579b4e`, `f3c5bab51164`). Frames to Video from a clip's last frame is the same continuity as Extend (`377104a363b7`).
+*   **Lettering in a reference garbles every frame.** Text baked into a reference (a thumbnail's wordart) pushes garbled lettering into each generated frame: crop baked text off a reference, and a generated hook takes the text-free title world as its reference, never the thumbnail (2026-09-03, `44cc6e686520`). Docs 13 and 21 reject lettering in outputs; this names the reference as its source.
+
 ---
 
 ## 4. Ingredients-to-Video Architecture

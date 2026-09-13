@@ -1,5 +1,7 @@
 # VOICE PACK — portable brand voice by exemplar
 
+Audited against the record 2026-09-13 (P54, docs/operator-ledger/PORTABLE-AUDIT.md).
+
 Third portable file, loaded with `DOCTRINE-CORE.md` and
 `OPERATOR-RULINGS.md`. Model-agnostic.
 
@@ -113,6 +115,9 @@ narrates its own symmetry):
   disclaimer.** "…and so am I. That week, I de-risk the builders on camera."
 - **Second person carries the payoff.** "Run your top five tonight." The
   video ends on an action, not a summary.
+  Craft note, not a ruling: a ring that opened in "our" closes on the shared
+  stake - the operator's 2026-09-04 correction "and the tab is ours", not
+  "The tab is yours." (LEDGER `0a23e0fb1762`, TRIAGE verdict craft).
 - **Address the viewer as competent, or becoming competent — never as the
   mark.** Operator, 2026-08-29, on a target-date aside: *"the default your
   retirement money hopefully doesn't sit in"* beats *"probably sits in"* —
@@ -139,7 +144,8 @@ fine on the page.
 4. **Active agents, named.** "They sold you the index" beats "the index
    was sold." An agent-hiding passive is a defect, not a style choice.
 5. **5–22 words.** Fragments only in licensed contraction runs at the
-   pivot or a triad.
+   pivot or a triad. On a short, 18 is the ceiling: S08 WARNs a longer
+   sentence, because it is several caption pages of one breath (E41 §3).
 6. **Numerals spoken, not printed.** "seventy percent," "two thousand" —
    exact numerals live on the on-screen evidence, not in narration.
 7. **Nothing in brackets but `[pre-key]` and `[post-key]`.** Any other
@@ -150,6 +156,17 @@ fine on the page.
    the real ones land flat.
 10. **Anaphora holds its opening constant and evolves its tail**, and
     resolves only in the final triad.
+11. **The hook never spends a later strong line in weakened form.** Pulled
+    forward without its chiasmus, the good line then reads as an echo of a
+    weaker one; the hook plants a different claim the close can pay off, so
+    the later line gains a setup. The operator, 2026-08-29: *"seems like
+    strong writing so i'm hesitant to move it to the front then kill it's
+    strength"* (LEDGER `e7f6357130f8`).
+12. **The hook's claim is literally true at 0:00.** Metaphorically true and
+    literally false at 0:00 ("you own this" over the 1845 spike) leaves an
+    unearned claim hanging until the argument pays it; a comparison stated
+    as one ("looks like") keeps the hook honest, so the weaker verb is the
+    accurate one (2026-08-29, `ce11a201334d`).
 
 ---
 
@@ -236,11 +253,16 @@ re-derive. Full profile: `33-VOICE-PROFILE.md`.
 
 ## 8. Aligning a Chirp take's clock (E70)
 
-Chirp does not ship on YouTube and does fine on Facebook, so a one-shot
-renders BOTH takes for the data. Kokoro carries its own word timestamps
+Chirp does not ship on YouTube and does fine on Facebook. YouTube's voice
+is OPEN (E70): not ElevenLabs by default either, and no YouTube cut ships
+on a synthetic body voice until it is settled. A one-shot renders BOTH
+takes for the data. Kokoro carries its own word timestamps
 out of the pipeline; Chirp carries none, so its clock has to be ALIGNED
 after the fact - `content/video_engine/scripts/align_take.py <audio>
---out <words.json> [--script <txt>]`. It runs Whisper LOCALLY
+--out <words.json> --script <txt>`. `--script` is REQUIRED for any take
+authored against: free recognition dropped 14 of 155 words and lagged
+0.84 s, so the clock is forced-aligned to the script (R26-69); without it
+the output is for listening only. It runs Whisper LOCALLY
 (faster-whisper) and writes the take's own words.json schema; it never
 calls a cloud STT service or a paid API - that is a hard rule, not a
 preference.

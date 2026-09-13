@@ -113,6 +113,18 @@ downstream of watch-time performance.
 → there is no data to learn from. §50.2 is a candidate root cause of the first link, and it
 is the only link we can act on directly.
 
+**Two reading rules, added later** (P54 fold). *Meta views are plays; 3-second views are
+people.* Meta's views count any play, autoplay and replays included, and Insights lags
+hours to a day; only 3-second views mean a person stayed, so a retention curve is drawn
+from that small number (the Tokyo short's first hours: a notification at 300 views, stats
+at 79, 3-second views 8; operator ledger 2026-09-06, `d3aa5f72dcf8`). A first short's zero
+YouTube traction is the default for a channel with no history, not a verdict. *A bump near
+a dock proves nothing when docks are dense.* On an absolute retention curve a rise can
+only come from rewinds, so a bump is real; but with docks every ~22-30 s every bump lands
+near a dock by chance, so the coincidence carries no causal information at this sample
+size. Ask the inverse: which few docks produced a rewind, and what they share (ep1,
+2026-09-08, `88109e64ea2a`).
+
 ## 50.5 What this changes
 
 | | |
