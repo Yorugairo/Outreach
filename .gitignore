@@ -176,3 +176,8 @@ docs/research/runs/bridge/
 
 # a reference watch keeps its downloaded video and captions locally, never in git (2026-09-10)
 **/claude-watch/download/
+
+# P54 T5: the operator casebook's frames are SOURCES (before/after of a defect the operator caught): always tracked
+!docs/agent-memory/operator/casebook/
+!docs/agent-memory/operator/casebook/*/
+!docs/agent-memory/operator/casebook/*/*.png

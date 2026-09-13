@@ -8,13 +8,12 @@ This repo also hosts a faceless YouTube production operation (three
 channels: Money Physics, Building Money, Martial Matters). It is a
 separate workstream from the SEO platform above and has its own doctrine.
 
-**Any agent doing script, visual, evidence, or channel work loads these
-two files first — they are model-agnostic and are the source of truth:**
+**Any agent doing script, visual, evidence, or channel work reads the full doc set through the index -
+`python content/video_engine/scripts/docs_find.py "<term>"` - starting from the rulings:**
 
-- [`docs/portable/DOCTRINE-CORE.md`](docs/portable/DOCTRINE-CORE.md) —
-  ~10k chars, always loaded: channels, narrator, retention clock,
-  six-phase architecture, sentence gates, packaging, production
-  standards, never-list. Sized to paste into any system-instruction box.
+- `docs/portable/DOCTRINE-CORE.md` is the **NotebookLM export** - the doctrine condensed under a 10,000-character
+  paste limit. Agents in this repo do not load it; where it and a canonical doc differ, the canonical doc wins
+  (the operator, 2026-09-13: "the agents in this repo should be reading the full doc set and using our index system").
 - [`docs/portable/OPERATOR-RULINGS.md`](docs/portable/OPERATOR-RULINGS.md)
   — the standing corrections ledger; each ruling carries the reason it
   was made, because the reason is what generalizes.
@@ -83,3 +82,8 @@ Three rules bind agents generating assets here:
    and the commit hook are in `docs/runbooks/RECALL-RECEIPT.md`. Inspect AND measure the
    output before delivering it. Subjective media edits: 2-3 cheap preview candidates first;
    image generation is cheap.
+5. **What has the operator corrected about X, and why?** (P54, 2026-09-13) - `docs_find "<term>"`, then
+   `docs/operator-ledger/TRIAGE-DIGEST.md` (every correction's verdict and where it now lives; candidates and
+   conflicts await the operator), `docs/operator-ledger/TRIAGE.jsonl` + `LEDGER.jsonl` (the operator's words
+   verbatim), `docs/agent-memory/operator/` (the promoted memories) and its `casebook/` (defects caught in a frame,
+   before/after). A `superseded` verdict is never a live rule.

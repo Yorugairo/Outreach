@@ -6,10 +6,9 @@ working on the video/content side of this repo. (Antigravity also reads
 
 ## Load order
 
-1. **`docs/portable/DOCTRINE-CORE.md`** — always. ~10k chars: channels,
-   narrator, retention clock, six-phase architecture, devices, sentence
-   gates, answer format, packaging, production awareness, never-list.
-   Small enough to paste into a system-instruction box verbatim.
+1. **The full doc set, through the index** — `python content/video_engine/scripts/docs_find.py "<term>"` and the
+   canonical docs it names. `docs/portable/DOCTRINE-CORE.md` is the **NotebookLM export** (a condensed paste under a
+   10,000-character limit), not a load file for an agent working in this repo (the operator, 2026-09-13).
 2. **`docs/portable/OPERATOR-RULINGS.md`** — always. The standing
    corrections ledger with the reason behind each ruling.
 3. **`docs/portable/VOICE-PACK.md`** — before writing ANY narration,
@@ -97,7 +96,9 @@ retrievable and is not evidence.
    the report and the regenerated `docs/DOCS-*` files together. A stale layer blocks commits in the Claude lane.
 9. **Retrieval order for every lane:** `python content/video_engine/scripts/docs_find.py "<term>"` (one compact
    line per hit across manifest → index → topics → registries, cheapest first, ~12x fewer bytes than a raw `rg` on a
-   layer; `--layer` to focus, `--limit` to widen) → `sed -n` the window it names → only then a new research order. Never search the live web for a fact already in the repo (Gemini protocol, golden rule).
+   layer; `--layer` to focus, `--limit` to widen) → `sed -n` the window it names → only then a new research order. Never search the live web for a fact already in the repo (Gemini protocol, golden rule). What the operator
+   corrected, and why: `docs/operator-ledger/TRIAGE-DIGEST.md` (verdicts), `LEDGER.jsonl` (verbatim) and
+   `docs/agent-memory/operator/` (memories + casebook); a `superseded` row is never a live rule.
 
 
 ### Gemini's research profiles, used against THIS repo (2026-09-05)

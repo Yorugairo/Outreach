@@ -28,6 +28,9 @@ rather than restating it.
   (every gate by id), `docs/ANIMATION-REGISTRY.md` (every formula, dial, law with
   status), `docs/CRAFT-MAP.md` (every writing device). Never say "we don't have it"
   before the manifest grep. Regenerate all: `build_docs_layers.py --write`.
+- **What has the operator corrected about X, and why?** → `docs_find` first, then
+  `docs/operator-ledger/TRIAGE-DIGEST.md` (verdict + where it lives), `LEDGER.jsonl` (verbatim),
+  `docs/agent-memory/operator/` (memories, `casebook/` frames). `superseded` is never a live rule.
 - **"Let's build / add / try / iterate / review the docs"** → the SAME recall, before
   anything is said or built: a proposal of a mechanism (transition, arrival, camera, chart
   form, species, kinetics, cue, plate prompt) opens with `Recall:` lines quoting the hits

@@ -19,6 +19,7 @@ matches the task. Skills outside this router are disabled for this project by
 | Performance and rendered QA | `web-perf`, `e2e-testing`, `playwright` |
 | Structural code search | `ast-grep`, `ast-grep-outline` |
 | Context control | `strategic-compact` |
+| Operator history: what was corrected, why a rule exists | no skill - `docs_find`, then `docs/operator-ledger/TRIAGE-DIGEST.md` and `docs/agent-memory/operator/` (P54) |
 
 Release management, workspace cleanup, broad infrastructure, unrelated
 industry operations, and generic agent-framework skills are disabled by
