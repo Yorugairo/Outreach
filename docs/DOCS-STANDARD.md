@@ -14,8 +14,8 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 18 | 338 | 95.3% | 93.2% | 3 | 97.5 |
-| Process (everything else) | 304 | 3364 | 97.6% | 92.0% | 11 | 100.0 |
-| All docs | 322 | 3702 | 97.4% | 92.1% | 14 | 100.0 |
+| Process (everything else) | 315 | 3401 | 97.6% | 92.0% | 11 | 100.0 |
+| All docs | 333 | 3739 | 97.4% | 92.1% | 14 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -38,9 +38,9 @@ item, a quote, a table row or a fence.
 | 82 | `content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/VIDEO-DESCRIPTION.md` | 2 | 2/2 | 1/2 | 0 |
 | 82 | `content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md` | 4 | 4/4 | 2/4 | 0 |
 | 82 | `docs/content-video-engine/patterns/INJECTION.md` | 6 | 6/6 | 3/6 | 0 |
+| 85 | `docs/portable/DOCTRINE-CORE.md` | 12 | 12/12 | 7/12 | 0 |
 | 86 | `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PACKAGING.md` | 5 | 5/5 | 3/5 | 0 |
 | 86 | `docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md` | 6 | 5/6 | 5/6 | 0 |
-| 86 | `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md` | 23 | 23/23 | 14/23 | 0 |
 
 ## Appendix A - sections missing a lead line
 
@@ -80,7 +80,7 @@ Non-exempt sections whose first real line is under 40 characters (96).
 - `docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:49` Audio identity and rights boundary
 - `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:135` 5. Episode 1 commands
 - `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:267` Part 8 — The scene-evidence lane (default production pattern)
-- `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:438` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30)
+- `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:463` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30)
 - `docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:196` 5. Worked instance
 - `docs/content-video-engine/53-THE-STICKMAN-LANE.md:183` 53.4 What this corrects in my own claims
 - `docs/content-video-engine/P13-GATE-A-ARMBAR-REVIEW.md:38` Locked Defaults
@@ -154,7 +154,7 @@ Headings that name a filing slot, not a concept (14).
 - `docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md:6` Context
 - `docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:8` Purpose
 - `docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:140` 5. Rules
-- `docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:267` Rules
+- `docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:282` Rules
 - `docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md:45` Status
 - `docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:542` Notes
 - `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:168` 6. Other

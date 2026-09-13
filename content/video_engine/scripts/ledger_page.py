@@ -13,6 +13,10 @@ Input shapes (every one needs ``title`` and a non-empty ``src``):
   story    {"bars": [{"label", "value", "color", "note"?}]}   <= STORY_MAX_VALUES
   dense    {"series": [{"label"|"name", "color", "pts": [[x, y], ...]}], + AXES_KEYS}
            or {"panels": [{"sub", "series": [...]}]}
+  tiers    {"tiers": [{"name", "unit", "series"|"pts"|"bars", + AXES_KEYS}], + AXES_KEYS}
+           E79: same-unit tiers share ONE scale by default; ``independent: true`` (on the page, or on
+           one tier) declares unrelated measures on their own scales. Undeclared same-unit tiers on
+           different y-domains are a WARN (``spec["warnings"]``, printed ``[WARN]``) - see scale_warnings.
   race     {"periods": [...], "series": [{"name", "values": [...], "color"?}]}
            (or dense series sharing one x grid of >= RACE_MIN_PERIODS points)
   decline  exactly one metric (a single dense series, or bars of >= DECLINE_MIN_VALUES);
@@ -76,7 +80,8 @@ AXES_KEYS = ("overflow", "log", "ylabel", "xticks", "from_zero", "highlight_from
              "name_clear",   # lift the inline series name clear of the data it would otherwise be written across
              "ymin", "ymax", "yfmt", "yunit", "panels",
              "domain", "xdomain",   # P48 T2: a derived rescale state names its exact y domain and x window
-             "overflow_placeholder", "overflow_capsule", "break_cadence")   # P50 T10 / T13: the breakthrough's furniture (E60)
+             "overflow_placeholder", "overflow_capsule", "break_cadence",   # P50 T10 / T13: the breakthrough's furniture (E60)
+             "independent")   # E79: this page (or this tier) carries unrelated measures, each on its own scale - nothing implies one
 UNCHARTABLE = {
     "checklist": "no chartable values: 'checklist' is a table, not a chart (keep it a dock)",
     "shares": ("'shares' is a donut, and E53 s1 ranks angle and area at the bottom of the perception hierarchy: "
@@ -479,6 +484,82 @@ def _tiers_block(series: dict) -> dict:
             # and not to any one band (a band that named the x would be claiming the page's only shared scale)
             **({"axes": axes} if axes else {}),
             "values": [], "value_strings": [], "colors": []}
+
+
+# ---- E79: side-by-side panels of the same measure share one scale (the operator, 2026-09-13) ------
+# The defect: each panel computed its own y-range from its own data, so 4.7% drew above 5.0% under a
+# subtitle promising one scale. The `panels` form already shares one scale in the engine; a `tiers`
+# band computes its own (tierDomain), so this is where same-unit panels can disagree. The compiler
+# WARNs; it does not set the domain, because the engine's band reads only its own data.
+TIERS_PAD = 0.08   # mirror of TIERS.PAD in scripts/species/tiers.mjs (proportional, so equal raw domains stay equal)
+
+
+def _declared_domain(axes: dict) -> tuple[float, float] | None:
+    dom = axes.get("domain")
+    if isinstance(dom, (list, tuple)) and len(dom) == 2:
+        lo, hi = to_number(dom[0]), to_number(dom[1])
+        if lo is not None and hi is not None and hi > lo:
+            return (lo, hi)
+    return None
+
+
+def tier_domain(tier: dict) -> tuple[float, float] | None:
+    """One tier's y-domain before padding: its stated `domain`, else its values with the zero kept
+    unless `from_zero: false` (tierDomain's rule), widened by any `ymin`/`ymax`. None without data."""
+    if not isinstance(tier, dict):
+        return None
+    stated = _declared_domain(tier)
+    if stated:
+        return stated
+    vals = [to_number(p[1]) for s in _tier_lines(tier) for p in _points(s)]
+    vals += [to_number(b.get("value")) for b in _bars(tier)]
+    vals += [to_number(tier.get(k)) for k in ("ymin", "ymax") if tier.get(k) is not None]
+    nums = [v for v in vals if v is not None]
+    if not nums:
+        return None
+    lo, hi = min(nums), max(nums)
+    if tier.get("from_zero") is not False:
+        lo, hi = min(0.0, lo), max(0.0, hi)
+    return (lo, hi)
+
+
+def _same_unit_groups(series: dict) -> dict[str, list[tuple[str, tuple[float, float]]]]:
+    """unit -> [(tier name, domain)] for every tier that shares a scale: none when the page declares
+    `independent`, and a tier that declares it leaves its group."""
+    if series.get("independent") is True:
+        return {}
+    groups: dict[str, list] = {}
+    for i, tier in enumerate(_tier_entries(series)):
+        if not isinstance(tier, dict) or tier.get("independent") is True or not _text(tier.get("unit")):
+            continue
+        dom = tier_domain(tier)
+        if dom is not None:
+            groups.setdefault(str(tier["unit"]), []).append((str(tier.get("name") or tier.get("title") or f"tiers[{i}]"), dom))
+    return {u: g for u, g in groups.items() if len(g) >= 2}
+
+
+def shared_tier_domains(series: dict) -> dict[str, tuple[float, float]]:
+    """E79's standard: the ONE domain each same-unit group should share - min and max across its panels. Pure."""
+    return {u: (min(d[0] for _, d in g), max(d[1] for _, d in g)) for u, g in _same_unit_groups(series).items()}
+
+
+def _dom_text(dom: tuple[float, float]) -> str:
+    return f"[{dom[0]:g}, {dom[1]:g}]"
+
+
+def scale_warnings(series: dict) -> list[str]:
+    """E79 WARN rows: same-unit panels on different y-domains with no `independent` declared. Pure."""
+    page = series.get("id") or series.get("title") or "page"
+    shared = shared_tier_domains(series)
+    out = []
+    for unit, group in _same_unit_groups(series).items():
+        if len({(round(lo, 9), round(hi, 9)) for _, (lo, hi) in group}) < 2:
+            continue
+        panels = "; ".join(f"{name} {_dom_text(dom)}" for name, dom in group)
+        out.append(f"E79 {page!s}: panels in {unit!r} carry different y-domains ({panels}) - panels of the same measure "
+                   f"share one scale (shared: {_dom_text(shared[unit])}); if these are unrelated measures, declare "
+                   "`independent: true` on the page or the tier")
+    return out
 
 
 # ---- TREEMAP (P50 T6; E53 s1's second amendment, the CENSUS exception, ruled 2026-09-10) ---------
@@ -920,6 +1001,9 @@ def build_spec(series: dict, variant: str, emphasize: int | None = None,
         return spec
     if builder in ("tiers", "treemap"):
         spec.update(_tiers_block(series) if builder == "tiers" else _treemap_block(series))
+        warnings = scale_warnings(series) if builder == "tiers" else []
+        if warnings:   # only when there is one: an untroubled page's spec stays byte-identical
+            spec["warnings"] = warnings
         spec["unit"] = str(series["unit"]) if _text(series.get("unit")) else ""
         spec["judge"] = review_notes(series)
         spec["badges"] = badges_for(series)
@@ -1386,6 +1470,8 @@ def main(argv: list[str] | None = None) -> int:
     spec = build_spec(series, variant, args.emphasize, args.quiet_zone)
     for note in spec.get("judge", []):
         print(f"  [JUDGE] {note}")
+    for warning in spec.get("warnings", []):
+        print(f"  [WARN] {warning}")
     if args.check:   # a check writes nothing: it says what the file IS a page of, and what the page will carry
         extra = (f" {len(spec['tiers'])} tiers sharing x" if spec["builder"] == "tiers" else
                  f" {len(spec['labels'])} cells, {spec['layout']['16:9']['unnamed']} unnamed (16:9)" if spec["builder"] == "treemap" else

@@ -411,6 +411,107 @@ def test_a_missing_index_is_refused_and_is_not_reported_as_staleness(tmp_path: P
     assert "INDEX ERROR" in out and "STALE" not in out
 
 
+# --- collapsed families ---------------------------------------------------------------------------
+
+def _entry(path: str, kind: str = "other") -> dict:
+    return {"path": path, "title": path.rsplit("/", 1)[-1], "kind": kind, "purpose": "A purpose.",
+            "defines": [], "key_terms": ["term"]}
+
+
+def test_a_collapsed_family_renders_as_one_row_per_folder_and_the_jsonl_keeps_every_file() -> None:
+    entries = [
+        _entry("docs/agent-memory/operator/MEMORY.md", "index"),
+        _entry("docs/agent-memory/operator/recall-system.md"),
+        _entry("docs/agent-memory/operator/casebook/README.md", "index"),
+        _entry("docs/agent-memory/operator/casebook/the-thin-one-shot/CASE.md"),
+        _entry("content/video_engine/sources/reference_analyses/bravos-x/REPORT.claude.md"),
+        _entry("content/video_engine/sources/reference_analyses/bravos-x/SHOT_LEDGER.claude.md"),
+        _entry("content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md", "index"),
+        _entry(DOCTRINE_REL, "doctrine"),
+    ]
+    text = BDM.render_md(entries)
+    lines = [line for line in text.splitlines() if line.startswith("- ")]
+    rows = [line for line in lines if " documents" in line]
+    assert [row.split(" — ")[0] for row in rows] == [
+        "- content/video_engine/sources/reference_analyses/bravos-x/",
+        "- docs/agent-memory/operator/",
+        "- docs/agent-memory/operator/casebook/",            # the narrower family wins its files
+    ]
+    assert "2 documents, index MEMORY.md" in rows[1] and "2 documents, index README.md" in rows[2]
+    assert "recall-system.md" not in text and "CASE.md" not in text.replace("one CASE.md", "")
+    assert any(DOCTRINE_REL in line for line in lines)                    # the rest keep a line each
+    assert any("MASTER_RESEARCH_INDEX.md" in line for line in lines)      # a loose file is not a family
+    assert f"## {BDM.FAMILIES_HEADING}" in text and "## other" not in text   # no empty kind section
+    assert f"{len(entries)} documents across" in text
+    jsonl = [json.loads(line)["path"] for line in BDM.render_jsonl(entries).splitlines()]
+    assert jsonl == [e["path"] for e in entries]
+
+
+def _folder_rows(text: str) -> list[str]:
+    section = text.split(f"\n## {BDM.FAMILIES_HEADING}\n", 1)
+    return [line for line in section[1].splitlines() if line.startswith("- ")] if len(section) == 2 else []
+
+
+def test_an_episode_folder_is_one_row_carrying_its_index_title_and_purpose() -> None:
+    lane = "content/video_engine/projects/lane"
+    entries = [
+        _entry(f"{lane}/episode/README.md", "index"),
+        _entry(f"{lane}/episode/SCRIPT-A.md"),
+        _entry(f"{lane}/episode/review-v1/NOTES.md"),
+        _entry(f"{lane}/pilots/p1/SCRIPT.md"),
+        _entry(f"{lane}/SEEDS.md"),
+    ]
+    text = BDM.render_md(entries)
+    assert _folder_rows(text) == [
+        f"- {lane}/episode/ — one episode's working folder — 3 documents, index README.md: README.md — A purpose.",
+        f"- {lane}/pilots/p1/ — one pilot's working folder — 1 document, index SCRIPT.md: SCRIPT.md — A purpose.",
+    ]
+    assert any(line.startswith(f"- {lane}/SEEDS.md — ") for line in text.splitlines())   # a lane file stays
+
+
+MEMORY_REL = "docs/agent-memory/operator/fake-memory.md"
+MEMORY_DOC = (
+    "---\n"
+    "name: fake-memory\n"
+    'description: "a recorded take is the record - never edit it in place"\n'
+    "metadata:\n"
+    "  type: feedback\n"
+    "---\n"
+    "\n"
+    "The VO text of a recorded take is not a draft: the timeline and the caption chain align to it.\n"
+)
+MEMORY_INDEX_REL = "docs/agent-memory/operator/MEMORY.md"
+
+
+def test_a_front_matter_document_with_no_heading_yields_one_record_named_by_its_front_matter(
+        tmp_path: Path) -> None:
+    root = _tree(tmp_path)
+    for rel_path, body in ((MEMORY_REL, MEMORY_DOC),
+                           (MEMORY_INDEX_REL, "- [Fake memory](fake-memory.md) — the recorded take rule\n")):
+        (root / rel_path).parent.mkdir(parents=True, exist_ok=True)
+        (root / rel_path).write_text(body, encoding="utf-8")
+    records = BDI.build_index(root, CONFIG)
+    assert not [r for r in records if r["path"] in (MEMORY_REL, MEMORY_INDEX_REL)]   # no heading to index
+    entries = _entries(root)
+    memory = entries[MEMORY_REL]
+    assert memory["title"] == "fake-memory"
+    assert memory["purpose"] == "a recorded take is the record - never edit it in place"
+    assert memory["sections"] == 1 and memory["headings"] == ["fake-memory"]
+    assert any("recorded take" in lead for lead in memory["leads"])        # the body, not the YAML
+    assert "feedback" not in json.dumps(memory)
+    assert entries[MEMORY_INDEX_REL]["title"] == "MEMORY.md" and entries[MEMORY_INDEX_REL]["purpose"]
+    stale = BDM.build([r for r in records if r["path"] != DOCTRINE_REL], root)
+    assert DOCTRINE_REL not in {e["path"] for e in stale}                   # a stale index is not masked
+
+
+def test_family_of_matches_whole_segments_only() -> None:
+    assert BDM.family_of("docs/agent-memory/explorer/MEMORY.md") == (
+        "docs/agent-memory/explorer/", "agent memory copies, one file per memory")
+    assert BDM.family_of("docs/agent-memory/README.md") is None               # the folder itself
+    assert BDM.family_of("docs/agent-memory-other/x/y.md") is None
+    assert BDM.family_of(DOCTRINE_REL) is None
+
+
 # --- the real tree ----------------------------------------------------------------------------------
 
 def _real_entries() -> dict[str, dict]:
@@ -469,3 +570,22 @@ def test_the_committed_markdown_is_byte_identical_after_the_jsonl_grew() -> None
     rebuilt = BDM.rendered(ROOT)[BDM.MD_REL].encode("utf-8")
     assert len(rebuilt) == len(committed) == (ROOT / BDM.MD_REL).stat().st_size
     assert rebuilt == committed
+
+
+def test_real_families_collapse_and_the_last_rung_still_fits_the_cap() -> None:
+    """The ladder is a runaway guard: when even its last rung misses the cap, the next document
+    tips the file over. Collapsed folders keep that rung under MD_MAX_BYTES; the JSONL keeps them."""
+    entries = list(_real_entries().values())
+    last = BDM.render_md(entries, BDM.MD_LADDER[-1])
+    assert len(last.encode("utf-8")) <= BDM.MD_MAX_BYTES
+    text = BDM.render_md(entries)
+    folders = {BDM.family_of(e["path"])[0] for e in entries if BDM.family_of(e["path"])}
+    assert "docs/agent-memory/operator/" in folders
+    walked = [p.relative_to(ROOT).as_posix() for p in BDI.doc_files(ROOT, BDI.load_config(ROOT))]
+    memories = [p for p in walked if p.startswith("docs/agent-memory/")]
+    paths = {e["path"] for e in entries}
+    assert memories and [p for p in memories if p not in paths] == []     # every memory is findable
+    for folder in folders:
+        assert sum(1 for line in text.splitlines() if line.startswith(f"- {folder} — ")) == 1
+    jsonl = [json.loads(line)["path"] for line in BDM.render_jsonl(entries).splitlines()]
+    assert jsonl == [e["path"] for e in entries]

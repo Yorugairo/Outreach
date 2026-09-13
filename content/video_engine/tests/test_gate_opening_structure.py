@@ -22,6 +22,7 @@ sys.path.insert(0, str(SCRIPTS))
 import gate_opening_structure as G   # noqa: E402
 import audit_script_doctrine as A     # noqa: E402
 import kit_spec                       # noqa: E402
+import beat_tags                      # noqa: E402
 
 EP = ROOT / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
 SCRIPT = EP / "SCRIPT-G-VO.txt"
@@ -400,3 +401,147 @@ def test_tokyo_s02_reads_its_first_page_under_two_seconds():
     gates, stats = G.run(text, G.load_timeline(TOKYO / "build-short/timeline.json"), ring="tea break", pages=pages)
     g = _by_id(gates)
     assert g["S02"].level == "PASS" and stats["first_page"] == f"{pages[0]:.2f}s"
+
+
+def test_g46_long_form_floor_is_eight_minutes():
+    """E74 (the operator, 2026-09-13): "longform should never be under 8 minutes". An estimated clock under 8:00 WARNs
+    (it is not the take); padded past 8:00 it passes; the short mode never asks it."""
+    s = _conforming_short()
+    g = _by_id(G.run(s, None, ring="tea break", short=False)[0])
+    assert g["G46"].level == "WARN" and "8:00" in g["G46"].message, g["G46"]
+    g = _by_id(G.run(_pad_to(s, 500), None, ring="tea break", short=False)[0])
+    assert g["G46"].level == "PASS", g["G46"]
+    assert "G46" not in _by_id(G.run(s, None, ring="tea break", short=True)[0])
+
+
+@needs_tokyo
+def test_g46_a_measured_short_forced_long_fails_the_floor():
+    """The Tokyo take is 82.7 s measured: judged as a long form it FAILs the floor, which is the point of E74."""
+    text = (TOKYO / "SCRIPT-90S-VO.claude.txt").read_text(encoding="utf-8")
+    g = _by_id(G.run(text, G.load_timeline(TOKYO / "build-short/timeline.json"), ring="tea break", short=False)[0])
+    assert g["G46"].level == "FAIL" and "measured" in g["G46"].message, g["G46"]
+
+
+# ---- G13 by function; G47 / G47b a script's promises about itself; G48 perishable anchors -----------
+
+def _timed(lines):
+    """[(start_s, sentence)] -> (text, a measured word timeline) so a sentence lands at an exact second."""
+    text = " ".join(s for _, s in lines)
+    tl = []
+    for start, s in lines:
+        for i, w in enumerate(re.findall(r"[A-Za-z0-9'%$]+", beat_tags.strip_marks(s))):
+            tl.append({"w": w, "start": start + 0.3 * i, "end": start + 0.3 * i + 0.25})
+    return text, tl
+
+
+A2_TEMPLATE = (62.0, "But here's where their own chart gets strange.")
+A1_DATED = (41.5, "By the end, you'll run it yourself: thirty seconds a stock.")
+
+
+def _rehook_lines(a1=A1_DATED, a2=A2_TEMPLATE):
+    lines = [(0.6, "The safest thing you own looks like this."), (3.0, "An iron spike ruined almost everyone who touched it.")]
+    lines += [x for x in (a1, a2) if x is not None]
+    return lines + [(800.0, "So the spike outlived the paper.")]
+
+
+def test_g13_a1_is_the_dated_promise_at_41_5s():
+    """C04-R016 (ledger b1f8c3fc2999): the template regex reported A1 missing while the dated promise sat at 41.5 s.
+    The dated promise IS A1 by doctrine (MAP s3), so G13 passes on it and says which function it read."""
+    text, tl = _timed(_rehook_lines())
+    g = _by_id(G.run(text, tl, short=False)[0])
+    assert g["G13"].level == "PASS", g["G13"]
+    assert "A1 at 0:41 (dated promise)" in g["G13"].message and "A2 at 1:02" in g["G13"].message, g["G13"].message
+
+
+def test_g13_fails_when_the_a1_slot_carries_no_rehook_function():
+    text, tl = _timed(_rehook_lines(a1=(41.5, "The receipt was long and nobody read it.")))
+    g = _by_id(G.run(text, tl, short=False)[0])
+    assert g["G13"].level == "FAIL" and "A1" in g["G13"].message and "A2 at 1:02" in g["G13"].message, g["G13"]
+
+
+def test_g13_a2_passes_on_a_forward_promise_with_a_time_anchor_not_a_template():
+    """The five template families are one sufficient signal, not the definition (C07-R007, ledger cac24f02ea0a)."""
+    fwd = (62.0, "In the next minute you'll see the second number the chart hides.")
+    text, tl = _timed(_rehook_lines(a2=fwd))
+    g = _by_id(G.run(text, tl, short=False)[0])
+    assert g["G13"].level == "PASS" and "A2 at 1:02 (forward promise)" in g["G13"].message, g["G13"]
+    text, tl = _timed(_rehook_lines(a2=(62.0, "The chart hides a second number.")))
+    g = _by_id(G.run(text, tl, short=False)[0])
+    assert g["G13"].level == "FAIL" and "A2" in g["G13"].message, g["G13"]
+
+
+def test_g13_declared_rehook_tag_is_the_function():
+    text, tl = _timed(_rehook_lines(a2=(62.0, "[rehook] The chart hides a second number.")))
+    g = _by_id(G.run(text, tl, short=False)[0])
+    assert g["G13"].level == "PASS" and "A2 at 1:02 ([rehook])" in g["G13"].message, g["G13"]
+
+
+def _runtime_claim(line: str, at: float = 0.6, end: float = 740.0):
+    return _timed([(at, line), (end, "So the spike outlived the paper.")])
+
+
+def test_g47_span_runtime_promise_against_the_measured_clock():
+    """C03-R011 (ledger e319a9d02fe4): 'The script promised eight minutes and ran twelve.' Measured: FAIL."""
+    text, tl = _runtime_claim("Give me the next eight minutes and you will see the whole machine.")
+    g = _by_id(G.run(text, tl, short=False)[0])
+    assert g["G47"].level == "FAIL" and "eight" in g["G47"].message and "measured" in g["G47"].message, g["G47"]
+    text, tl = _runtime_claim("Give me the next twelve minutes and you will see the whole machine.")
+    g = _by_id(G.run(text, tl, short=False)[0])
+    assert g["G47"].level == "PASS", g["G47"]
+
+
+def test_g47_estimated_clock_warns_and_no_claim_passes():
+    text, _ = _runtime_claim("Give me the next eight minutes and you will see the whole machine.")
+    g = _by_id(G.run(text, None, short=False)[0])
+    assert g["G47"].level == "WARN" and "estimated" in g["G47"].message, g["G47"]
+    text, tl = _runtime_claim("The spike ruined almost everyone who touched it.")
+    assert _by_id(G.run(text, tl, short=False)[0])["G47"].level == "PASS"
+
+
+def test_g47_deadline_promise_only_fails_when_it_overshoots_the_clock():
+    """'in the next three minutes, you'll calculate yours' (P1's own example) is a deadline inside the video, not its
+    runtime; it can only break by pointing past the end."""
+    text, tl = _runtime_claim("In the next three minutes, you'll calculate yours.", at=30.0)
+    assert _by_id(G.run(text, tl, short=False)[0])["G47"].level == "PASS"
+    text, tl = _runtime_claim("In the next 20 minutes, you'll calculate yours.", at=30.0)
+    g = _by_id(G.run(text, tl, short=False)[0])
+    assert g["G47"].level == "FAIL" and "20" in g["G47"].message, g["G47"]
+
+
+def test_g47_this_n_minute_video_is_the_whole_runtime():
+    text, tl = _runtime_claim("This 5-minute video is the whole map.")
+    assert _by_id(G.run(text, tl, short=False)[0])["G47"].level == "FAIL"
+    text, tl = _runtime_claim("This twelve-minute video is the whole map.")
+    assert _by_id(G.run(text, tl, short=False)[0])["G47"].level == "PASS"
+
+
+def test_g47b_bare_count_against_the_named_list():
+    """C03-R011 (ledger e319a9d02fe4): 'A viewer counts four and then hears five.' Heuristic, so WARN."""
+    base = "Nvidia, Microsoft, Apple and Amazon built the boom. The mechanism underneath moved. Now watch the {}. "
+    g = _by_id(G.run(base.format("five"), None, short=False)[0])
+    assert g["G47b"].level == "WARN" and "the five" in g["G47b"].message and "4" in g["G47b"].message, g["G47b"]
+    assert _by_id(G.run(base.format("four"), None, short=False)[0])["G47b"].level == "PASS"
+
+
+def test_g47b_counted_noun_against_the_ordinals_named():
+    s = "Three questions will catch it. The first question is cost. The second question is time. "
+    g = _by_id(G.run(s, None, short=False)[0])
+    assert g["G47b"].level == "WARN" and "three question" in g["G47b"].message.lower(), g["G47b"]
+    assert _by_id(G.run(s + "The third question is who pays. ", None, short=False)[0])["G47b"].level == "PASS"
+
+
+def test_g48_lists_publication_relative_anchors_with_the_clock():
+    """C09-R013 (ledger 8eb3d01c6196, 7e61f43b1162): a re-upload renews every relative anchor at today's date."""
+    text, tl = _timed([(0.6, "Yields jumped again this week."), (5.0, "Two weeks ago nobody noticed, and right now nobody is.")])
+    g = _by_id(G.run(text, tl, short=False)[0])
+    assert g["G48"].level == "WARN", g["G48"]
+    for bit in ("0:00 'this week'", "0:05 'Two weeks ago'", "'right now'", "re-upload"):
+        assert bit in g["G48"].message, (bit, g["G48"].message)
+    text, tl = _timed([(0.6, "Yields jumped again in March 2024."), (5.0, "Nobody noticed.")])
+    assert _by_id(G.run(text, tl, short=False)[0])["G48"].level == "PASS"
+
+
+def test_g47_g48_run_on_shorts_too():
+    """The defects are the script's words, not the long-form geometry: a short that says 'this week' rots the same."""
+    g = _by_id(G.run(_conforming_short() + "\nThis week the tab grew.\n", None, ring="tea break", short=True)[0])
+    assert g["G48"].level == "WARN" and {"G47", "G47b"} <= set(g)

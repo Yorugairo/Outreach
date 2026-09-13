@@ -1397,45 +1397,44 @@ def scene_exit(authored_exit: str | None, has_docks: bool, page_enter: str | Non
 WORLD_TAKING_EXITS = ("suck", "melt")   # P53 T2 / R26-60: a transition that TAKES the world - the page goes into a point or drips away
 
 
+def _page_of(sc: dict | None) -> dict | None:
+    w = (sc or {}).get("world") or {}
+    return w.get("page") if isinstance(w.get("page"), dict) else None
+
+
 def stamp_transition_pages(scenes: list[dict]) -> list[str]:
-    """The two defaults a world-taking transition implies, stamped where both sides of the boundary are visible.
+    """The defaults the transitions imply, stamped where both sides of every boundary are visible.
 
-    UNDER a suck or a melt (R26-60): a ledger page that does not declare `:cut` runs its own RETRACT first and has
-    emptied the sheet before the boundary, so the suck spins a blank cream page into its point and the melt would
-    drip one (`scratchpad/p52/dbg-wA-suck:0.5,0.5-15.15.png`, 2026-09-12).
+    THE CONVENTION (E47, SCENE_EXITS above; the engine): `exit` names the transition INTO the scene it sits on - so the
+    boundary between scenes[i-1] and scenes[i] is scenes[i]["exit"]. (P53 T6 and the first P54 cut read it as the exit
+    OUT of the scene; the seam measure of P54 T9 caught it, 2026-09-13.)
 
-    THE HOOK (the operator, 2026-09-12): the first scene's ledger page with no declared enter opens on `axes` - the
-    charcoal page on its axes, the chart drawing from frame 0, answered on the ledger at once.
+    UNDER a suck or a melt (R26-60): the transition into scenes[i] TAKES the outgoing world, scenes[i-1]. A ledger page
+    there that does not declare `:cut` runs its own RETRACT first and has emptied the sheet before the boundary, so the
+    suck spins a blank cream page into its point. The OUTGOING page is stamped `exit=cut`.
 
-    CHART TO CHART (the operator, 2026-09-12, correcting E73's first reading): a suck or a melt from one ledger page
-    to ANOTHER never shows the empty cream - the next page is on its axes under the outgoing one. The empty cream
-    roll-out is the MOUNT's register (a ledger plate onto a narrative plate), so a plate after the transition, or a
-    page that declares its enter, keeps its own arrival.
+    CHART TO CHART (the operator, 2026-09-12: "The empty cream stage isnt supposed to be on stage during the exits ...
+    It doesnt make sense to do that when transitioning from chart-to-chart, that is used for mounting a ledger plate to
+    a narrative plate"): a ledger page that follows a ledger page and declares no enter arrives on its axes, whatever
+    the transition - the empty cream roll-out is the MOUNT's register. A page after a plate keeps its own arrival.
 
-    A row that declares its own enter or exit is never touched: an author who has chosen is not corrected. Returns
-    one line per stamp, for the build to print - a default that is silent is a default nobody can argue with."""
+    THE HOOK (the operator, 2026-09-12): the first scene's ledger page with no declared enter opens on `axes`.
+
+    A row that declares its own enter or exit is never touched. Returns one line per stamp, for the build to print."""
     notes: list[str] = []
-    for i, sc in enumerate(scenes):
+    for i in range(1, len(scenes)):
+        prev, sc = scenes[i - 1], scenes[i]
         kind = str(sc.get("exit") or "").split(":")[0]
-        if kind not in WORLD_TAKING_EXITS:
-            continue
-        pg = ((sc.get("world") or {}).get("page")) if isinstance((sc.get("world") or {}).get("page"), dict) else None
-        if pg is not None and not pg.get("exit"):
-            pg["exit"] = "cut"
-            notes.append(f"{sc.get('scene_id', '?')}: exit=cut stamped - the page under a {kind} must not retract first (R26-60)")
-        # CHART TO CHART (the operator, 2026-09-12: "The empty cream stage isnt supposed to be on stage during the exits
-        # ... It doesnt make sense to do that when transitioning from chart-to-chart, that is used for mounting a ledger
-        # plate to a narrative plate"): the page a suck or a melt hands to is already on its axes under the outgoing one
-        nxt = scenes[i + 1] if i + 1 < len(scenes) else None
-        npg = ((nxt.get("world") or {}).get("page")) if nxt and isinstance((nxt.get("world") or {}).get("page"), dict) else None
-        if pg is not None and npg is not None and not npg.get("enter"):
-            npg["enter"] = "axes"
-            notes.append(f"{nxt.get('scene_id', '?')}: enter=axes stamped - chart to chart, the next page is on stage under the {kind}, never empty cream")
-    # THE HOOK (the operator, 2026-09-12: "hook should open on the axes register, then we immediately answer it on the
-    # ledger"): the first scene, a ledger page at t=0 with no declared enter, opens on its axes and draws from frame 0.
+        ppg, pg = _page_of(prev), _page_of(sc)
+        if kind in WORLD_TAKING_EXITS and ppg is not None and not ppg.get("exit"):
+            ppg["exit"] = "cut"
+            notes.append(f"{prev.get('scene_id', '?')}: exit=cut stamped - the page a {kind} takes must not retract first (R26-60)")
+        if ppg is not None and pg is not None and not pg.get("enter"):
+            pg["enter"] = "axes"
+            notes.append(f"{sc.get('scene_id', '?')}: enter=axes stamped - chart to chart ({kind or 'cut'}), the page is on its axes, never empty cream")
     if scenes:
         first = scenes[0]
-        fpg = ((first.get("world") or {}).get("page")) if isinstance((first.get("world") or {}).get("page"), dict) else None
+        fpg = _page_of(first)
         if fpg is not None and not fpg.get("enter") and float((first.get("span") or [1.0])[0]) <= 0.05:
             fpg["enter"] = "axes"
             notes.append(f"{first.get('scene_id', '?')}: enter=axes stamped - the hook opens on the axes register and is answered on the ledger")

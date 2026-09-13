@@ -87,6 +87,13 @@ captions do NOT count - they are what a viewer reads as stillness.
   M30  a returning character MOUNTS (E44 s2b / R26-6): a    FAIL   (E44 s2b; only when a scene DECLARES a
        `cut` into a scene whose first species is a character           character - world.character | a `character`
        an earlier scene already showed                                 species | an evidence species of `character`)
+  M34  the collision ledger (K9): a ring's or a callout's     FAIL   (the casebook's ring-on-the-tip-label and
+       stroke over any text but its own; a text box across             name-on-the-neighbour-line; WARN for a name
+       a series line it does not name. From the same file             across its own line away from its end, a
+       A bracket's text on the series it measures passes;             mark over its OWN target's text (use the
+       a mark over its own target's text WARNs                        spotlight) and a mark's text off its
+                                                                        ellipse; INFO until
+                                                                        probe.py <build> --gate writes the ledger)
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -1063,6 +1070,8 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     g.append(_values_gate(layout))                                        # M26 (R26-40: the printed value against the drawn height)
     g.append(_over_build_gate(layout, tl.get("scenes", [])))              # M27 (E63/E65: no card reads over a ledger page's ink)
     g.append(_labels_gate(layout))                                        # M28 (R26-53: text on text among the page's own labels)
+    if (cl := _collision_gate(layout)) is not None:
+        g.append(cl)                                                      # M34 (K9: the collision ledger - marks and lines against every text box)
     if (bt := _build_to_gate(tl.get("scenes", []))) is not None:
         g.append(bt)                                                      # M19 (P47 T2: the build_to holds, INFO)
     if (cg := _cadence_gate(tl.get("scenes", []))) is not None:
@@ -1077,6 +1086,9 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
         g.append(ifg)                                                     # M24 (P49 T6: the target is in the camera's frame when the species fires)
     if (mg := _morph_gate(tl.get("scenes", []), morph)) is not None:
         g.append(mg)                                                      # M17 (P47 T3: the match-cut invariants per morph page)
+    for _sm in (_seam_gate(BUILD_DIR[0] if BUILD_DIR else None), _spoken_visual_gate(BUILD_DIR[0] if BUILD_DIR else None)):
+        if _sm is not None:
+            g.append(_sm)                                                 # M32 the seam's black frames, M33 the spoken visual (P54 T9)
     sg = _stage_gap_gate(BUILD_DIR[0] if BUILD_DIR else None, tl.get("scenes", []))             # M31 (R26-66 / P53 T2: the empty stage, measured)
     if sg is not None:
         g.append(sg)
@@ -1240,6 +1252,61 @@ def _pulse_gate(tl: dict, A: dict) -> Gate:
     return Gate("M16", "PASS", msg, SRC_M16)
 
 
+SRC_M32 = ("P54 T9 (the operator, 2026-09-13: 'it's really the flash before or a second black frame that we're looking for'): "
+           "measure_seam_frames.py seeks every boundary frame by frame; near-black = mean luma < 8 [MEASURED on the approved "
+           "Japan short's six dips: darkest 0-6, cuts never under 52]. A declared dip's own dark core is the design; black "
+           "anywhere else at a seam is the fault the operator found by hand twice (2026-09-05, 2026-09-12)")
+SRC_M33 = ("P54 T9 (the operator, 2026-09-13: 'gating for narration without the chart on screen is probably valid'; 2026-08-29: "
+           "'you open on the \"spike\" but you don't have the spike ons creen, you talk about charts without the charts on "
+           "screen'): measure_spoken_visuals.py - a pointing phrase needs a page, a dock or a card on stage. WARN until the "
+           "approved shorts show a real example (their one hit is a figure of speech)")
+
+
+def _seam_gate(build: Path | None) -> Gate | None:
+    """M32: the black frame at a seam, read off `<build>/seam-frames.json` (measure_seam_frames.py) - INFO until measured."""
+    if build is None:
+        return None
+    p = Path(build) / "seam-frames.json"
+    if not p.is_file():
+        return Gate("M32", "INFO", "not measured - run measure_seam_frames.py <build> to read the seams frame by frame", SRC_M32)
+    try:
+        doc = json.loads(p.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return Gate("M32", "INFO", f"seam-frames.json unreadable ({exc})", SRC_M32)
+    bounds = doc.get("boundaries", [])
+    found = [(b, f) for b in bounds for f in b.get("faults", [])]
+    hard = [(b, f) for b, f in found if f.get("fault") in ("flash", "jump", "outside")
+            or (f.get("fault") == "hold" and not f.get("dark_world"))]
+    soft = [(b, f) for b, f in found if (b, f) not in hard]
+    line = lambda b, f: (f"{f.get('fault')} at {_mm(float(b.get('t', 0)))} {b.get('from_scene')}->{b.get('to_scene')} "
+                         f"exit={b.get('exit')} ({f.get('frames')} black frame(s))")
+    if hard:
+        return Gate("M32", "FAIL", f"{len(hard)} black-frame fault(s) at a seam: " + "; ".join(line(b, f) for b, f in hard[:4]), SRC_M32)
+    if soft:
+        return Gate("M32", "INFO", f"{len(bounds)} boundaries clean; {len(soft)} dip hold(s) over a world darker than the "
+                                   f"threshold can separate (not a held black): " + "; ".join(line(b, f) for b, f in soft[:3]), SRC_M32)
+    return Gate("M32", "PASS", f"{len(bounds)} boundaries read frame by frame: no flash, no jump, no black outside a dip's core", SRC_M32)
+
+
+def _spoken_visual_gate(build: Path | None) -> Gate | None:
+    """M33: narration that points at a visual with nothing on stage, read off `<build>/spoken-visuals.json`."""
+    if build is None:
+        return None
+    p = Path(build) / "spoken-visuals.json"
+    if not p.is_file():
+        return Gate("M33", "INFO", "not measured - run measure_spoken_visuals.py <build>", SRC_M33)
+    try:
+        doc = json.loads(p.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return Gate("M33", "INFO", f"spoken-visuals.json unreadable ({exc})", SRC_M33)
+    pts = doc.get("pointers", [])
+    unc = [x for x in pts if x.get("uncovered")]
+    if unc:
+        return Gate("M33", "WARN", f"{len(unc)} of {len(pts)} pointing phrase(s) with nothing on stage: " + "; ".join(
+            f"\"{x.get('phrase')}\" at {_mm(float(x.get('t', 0)))} ({str(x.get('context', ''))[:60]})" for x in unc[:3]), SRC_M33)
+    return Gate("M33", "PASS", f"{len(pts)} pointing phrase(s), each with a page, dock or card on stage", SRC_M33)
+
+
 def _stage_gap_gate(build: Path | None, scenes: list | None = None) -> Gate | None:
     """M31: the empty stage, read off `<build>/stage-gaps.json` (measure_stage_gaps.py) exactly as M25 reads the
     layout probe - INFO until it is measured, because a gate may not invent a measurement it did not take."""
@@ -1259,14 +1326,16 @@ def _stage_gap_gate(build: Path | None, scenes: list | None = None) -> Gate | No
     # supposed to be on stage during the exits ... It doesnt make sense to do that when transitioning from chart-to-chart,
     # that is used for mounting a ledger plate to a narrative plate"). The compiler puts the page after a suck or a melt
     # onto its axes; an empty run there is a FAIL. A plate after one is the mount's register, and the probe cannot see a
-    # plate world at all, so every other run stays a reading.
+    # plate world at all, so every other run stays a reading. `scene` is the OUTGOING scene and `exit` the transition
+    # into the next (E47); chart to chart is any non-dip boundary with a ledger page on BOTH sides.
     order = [str(sc.get("scene_id")) for sc in (scenes or [])]
     def _into_page(r: dict) -> bool:
         sid = str(r.get("scene"))
-        if str(r.get("exit") or "").split(":")[0] not in ("suck", "melt") or sid not in order:
+        if str(r.get("exit") or "").split(":")[0] == "dip" or sid not in order:
             return False
         k = order.index(sid)
-        return k + 1 < len(order) and isinstance(((scenes[k + 1].get("world") or {}).get("page")), dict)
+        page = lambda x: isinstance(((x.get("world") or {}).get("page")), dict)
+        return k + 1 < len(order) and page(scenes[k]) and page(scenes[k + 1])
     c2c = [r for r in rows if _into_page(r)]
     if c2c:
         worst = max(c2c, key=lambda r: float(r["gap_s"]))
@@ -2016,6 +2085,179 @@ def _labels_gate(doc: dict | str | None) -> Gate:
                     "lpFitValues' own", SRC_M28)
     return Gate("M28", "PASS", f"no two of a page's own labels touch, and the value row keeps half a figure of air, "
                 f"over {span} ({pairs:,} label pair(s) checked)", SRC_M28)
+
+
+# ---- M34 (K9): the collision ledger ------------------------------------------------------------------------------
+SRC_M34 = ("K9, the operator's reasoning items C05-R023 (\"every text element must be in the collision ledger, including "
+           "the ones that were already there\"; \"labels are all crashing with the lines\") and C09-R003 (\"the callout owns "
+           "its position\"; measure the rendered boxes, never estimate), and the two defects no row caught on "
+           "normal-for-which-bridge review-v1 (docs/agent-memory/operator/casebook/ring-on-the-tip-label: the dashed 123% "
+           "ring painted over \"x3.9 Federal debt\" at 0:57; .../name-on-the-neighbour-line: \"10-year\" written across the "
+           "30-year line at 0:19, the 4.83% arc clipping it). M28 pairs labels with labels; this row puts every text box "
+           "against every mark's stroke and every series polyline, from the page's own DOM (probe.py --gate). The operator, "
+           "2026-09-13: \"bracket should probably be able to bypass that rule\" - a bracket's or a figure's own text on the "
+           "series it measures is allowed (on a DIFFERENT series' line it still FAILs); and \"a ring or callout drawn over a "
+           "label doesn't automatically fail, if the point is to draw a ring or highlight around that label - but we have "
+           "spotlight tools that can provide more clarity while demanding less accuracy\" - a mark over its OWN target's text "
+           "(the datum it rings: a bar's value, its pill, a figure or bracket at that datum) WARNs and names the spotlight "
+           "(E56: a ring circles a number or a point on a chart); over any other text it FAILs")
+BRACKET_ROLES = ("bracket", "bracket.sub")   # probe LABEL_ROLE for bklab / bksub: the perform layer's bracket and figure text
+LINE_TOUCH_PX = 2.0        # probe.LABEL_TOUCH_PX: a glyph box carries a pixel or two of antialiasing on every side, so a
+                           # stroke's ink has to come further into a text box than that before the two are touching
+TIP_REACH_PX = {"9:16": 8 + 110, "16:9": 12 + 56}
+                           # how far from its own line's LAST drawn point a series name still sits AT the line's end - the
+                           # line builder's own numbers (scene-evidence-engine.mjs, 41bf55c): the name ends 8 px left of the
+                           # tip portrait (starts 12 px right of it landscape), plus `tipClr` 110 / 56 when a ring or callout
+                           # marks the tip. Inside that a name touching its own line is a direct label; beyond it the name
+                           # lies across its own line's body (WARN)
+MARRY_PX = 34 + 18         # the farthest the engine writes a mark's own text off its ellipse: RING.FLAG_GAP (34, the flag chip)
+                           # plus RING.LABEL_LIFT (18, the label lifted over a flagged ring). Farther and the text has left its
+                           # datum (C09-R003: a callout stays married to what it marks) - WARN
+ELLIPSE_SAMPLES = 48       # a mark's ellipse as a closed polyline: 7.5 deg a chord, under a pixel of sag at a 110 px radius
+
+
+def _seg_hits_box(p, q, box, pad: float) -> bool:
+    """Does the segment p-q enter the box grown by `pad` on every side (a negative pad shrinks it)? Liang-Barsky."""
+    x0, y0, x1, y1 = box[0] - pad, box[1] - pad, box[0] + box[2] + pad, box[1] + box[3] + pad
+    if x1 <= x0 or y1 <= y0:
+        return False
+    dx, dy = q[0] - p[0], q[1] - p[1]
+    lo, hi = 0.0, 1.0
+    for num, den in ((p[0] - x0, -dx), (x1 - p[0], dx), (p[1] - y0, -dy), (y1 - p[1], dy)):
+        if den == 0:
+            if num < 0:
+                return False
+            continue
+        r = num / den
+        if den < 0:
+            if r > hi:
+                return False
+            lo = max(lo, r)
+        else:
+            if r < lo:
+                return False
+            hi = min(hi, r)
+    return lo <= hi
+
+
+def _polyline_hits(pts, box, pad: float) -> bool:
+    return any(_seg_hits_box(a, b, box, pad) for a, b in zip(pts, pts[1:]))
+
+
+def _ellipse_pts(e) -> list[tuple[float, float]]:
+    import math
+    cx, cy, rx, ry = (float(v) for v in e)
+    return [(cx + rx * math.cos(2 * math.pi * i / ELLIPSE_SAMPLES), cy + ry * math.sin(2 * math.pi * i / ELLIPSE_SAMPLES))
+            for i in range(ELLIPSE_SAMPLES + 1)]
+
+
+def _x_gap(box, x: float) -> float:
+    """How far x stands outside the box's horizontal span (0 inside it)."""
+    return max(float(box[0]) - x, x - (float(box[0]) + float(box[2])), 0.0)
+
+
+def _is_target(mark: dict, label: dict) -> bool:
+    """Is this text the mark's own TARGET - the text of the datum its ellipse is drawn round (probe `tg`)?"""
+    return _label_key(label) in (mark.get("tg") or [])
+
+
+def _own_line_ok(theirs: str, mine: str, gap: float, reach: float) -> bool:
+    """A name touching its OWN series - the live line or its muted history (`s0:h`, the same series; parent decision
+    2026-09-13) - is a direct label while it stands within the end-of-line reach of the LIVE line's end."""
+    return theirs.split(":")[0] == mine.split(":")[0] and gap <= reach
+
+
+def _line_pts(ln: dict) -> list[list[float]]:
+    """A ledger line's points: probe.ledger writes a run FLAT (`p`: x0, y0, x1, y1 ...); a fixture may write pairs."""
+    if ln.get("p"):
+        flat = ln["p"]
+        return [[flat[i], flat[i + 1]] for i in range(0, len(flat) - 1, 2)]
+    return [list(q) for q in (ln.get("pts") or [])]
+
+
+def _instant_collisions(inst: dict, reach: float) -> tuple[list[str], list[str], int]:
+    """(FAIL lines, WARN lines, pairs checked) for one probed instant's ledger."""
+    led = inst.get("ledger") or {}
+    labels = [x for x in (inst.get("labels") or []) if isinstance(x, dict) and x.get("box")]
+    lines = [{**x, "pts": _line_pts(x)} for x in (led.get("lines") or []) if isinstance(x, dict)]
+    lines = [x for x in lines if len(x["pts"]) >= 2]
+    marks = [x for x in (led.get("marks") or []) if len(x.get("e") or []) == 4]
+    where = f"at {_mm(float(inst.get('t', 0.0)))} ({(inst.get('camera') or {}).get('scene') or '?'})"
+    tips = {str(ln.get("own")): (ln.get("tip") or ln["pts"][-1]) for ln in lines}   # probe.ledger writes a line's runs near text + its tip
+    fails: list[str] = []
+    warns: list[str] = []
+    checked = 0
+    for m in marks:
+        ring, pad, own = _ellipse_pts(m["e"]), float(m.get("hw") or 0) - LINE_TOUCH_PX, str(m.get("own"))
+        cx, cy, rx, ry = (float(v) for v in m["e"])
+        for lb in labels:
+            if str(lb.get("own")) == own:
+                checked += 1                      # its own text: checked for marriage, never for the stroke
+                gap = _box_gap(lb["box"], [cx - rx, cy - ry, 2 * rx, 2 * ry])
+                if gap > MARRY_PX:
+                    warns.append(f"{_label_key(lb)} off its {m.get('kind')} {own} {where}, {gap:.0f} px from the ellipse - no "
+                                 f"longer married to its datum (the engine writes a mark's text within {MARRY_PX} px)")
+                continue
+            checked += 1
+            if not _polyline_hits(ring, lb["box"], pad):
+                continue
+            if _is_target(m, lb):
+                warns.append(f"{m.get('kind')} {own} over its own target {_label_key(lb)} {where} - a mark may ring the number it "
+                             "marks (E56), but the spotlight says it clearer and asks less accuracy")
+            else:
+                fails.append(f"{m.get('kind')} {own} over {_label_key(lb)} {where} - the mark's stroke is painted across the text")
+    for lb in labels:
+        mine = str(lb.get("own"))
+        for ln in lines:
+            checked += 1
+            if not _polyline_hits(ln["pts"], lb["box"], float(ln.get("hw") or 0) - LINE_TOUCH_PX):
+                continue
+            theirs = str(ln.get("own"))
+            if lb.get("role") in BRACKET_ROLES and theirs.split(":")[0] == mine.split(":")[0]:
+                continue                                  # a bracket's own text on the series it measures (operator 2026-09-13)
+            if theirs.split(":")[0] != mine.split(":")[0]:   # a series' history and its live line are ONE series: one row
+                fails.append(f"{_label_key(lb)} on line {theirs.split(':')[0]} {where} - a text box on a line it does not name")
+                continue
+            tip = tips.get(mine) or ln.get("tip") or ln["pts"][-1]
+            gap = _x_gap(lb["box"], float(tip[0]))
+            if not _own_line_ok(theirs, mine, gap, reach):
+                warns.append(f"{_label_key(lb)} across its own line {theirs} {where}, {gap:.0f} px from the line's end "
+                             f"(a direct label sits within {reach:.0f})")
+    return fails, warns, checked
+
+
+def _collision_gate(doc: dict | str | None) -> Gate | None:
+    """M34 (K9): the collision ledger. None until the probe has run or when it is stale - M28, from the same file,
+    already names both - so the row never counts a measurement twice."""
+    if doc is None or doc == "stale" or not isinstance(doc, dict):
+        return None
+    instants = doc.get("instants") or []
+    measured = [x for x in instants if isinstance(x.get("ledger"), dict)]
+    if not measured:
+        return Gate("M34", "INFO", f"{LAYOUT_PROBE_NAME} predates the collision ledger (no series lines or marks in it) - "
+                    "re-run probe.py <build> --gate", SRC_M34)
+    reach = float(TIP_REACH_PX.get(str(doc.get("aspect") or "16:9"), TIP_REACH_PX["16:9"]))
+    fails: list[str] = []
+    warns: list[str] = []
+    checked = 0
+    for inst in measured:
+        f, w, n = _instant_collisions(inst, reach)
+        fails += f
+        warns += w
+        checked += n
+    fails, warns = _dedupe(fails), _dedupe(warns)
+    span = f"{len(measured)} instants probed"
+    if not checked:
+        return Gate("M34", "INFO", f"no text box met a mark or a series line at any of the {span} - nothing to check", SRC_M34)
+    if fails:
+        return Gate("M34", "FAIL", f"{len(fails)} collision(s) over {span}: " + "; ".join(fails[:6])
+                    + (" ..." if len(fails) > 6 else "") + " - a mark rings its datum and never a word; a name names the "
+                    "line it touches (the line builder's tip clearance and its side away from a neighbour, 41bf55c)", SRC_M34)
+    if warns:
+        return Gate("M34", "WARN", f"{len(warns)} reading(s) over {span}: " + "; ".join(warns[:4])
+                    + (" ..." if len(warns) > 4 else ""), SRC_M34)
+    return Gate("M34", "PASS", f"no mark over a text box and no text box on a line it does not name over {span} "
+                f"({checked:,} pair(s) checked)", SRC_M34)
 
 
 def _build_to_holds(scenes: list[dict]) -> list[tuple[float, float]]:

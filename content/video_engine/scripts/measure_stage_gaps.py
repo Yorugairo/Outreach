@@ -69,7 +69,8 @@ def measure(build: Path, step: float, lead: float, tail: float) -> dict:
         z = float(s["span"][1])
         if z >= runtime - 1e-6:
             continue
-        bounds.append((z, kind_of(s.get("exit")), str(s.get("scene_id", "?")),
+        # E47: `exit` names the transition INTO the scene it sits on - the boundary at scenes[i]'s end is scenes[i+1].exit
+        bounds.append((z, kind_of(scenes[i + 1].get("exit")) if i + 1 < len(scenes) else "none", str(s.get("scene_id", "?")),
                        str(((scenes[i + 1].get("world") or {}).get("page") or {}).get("enter") or "none")
                        if i + 1 < len(scenes) else "none"))
     rows, empty_total = [], 0.0

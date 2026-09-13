@@ -68,6 +68,14 @@ LABEL_TOUCH_PX = 2.0
 # of a 49 px box and nothing touched on screen.
 LABEL_LEAD_SHARE = 0.18
 LABEL_TEXT_MAX = 14     # what the label says, enough for a gate row to name it - one instant's JSON stays small
+# M34 (K9, the collision ledger): a series is written as the polyline of its DRAWN part, simplified to this many px -
+# the gate's hairline (LINE_TOUCH_PX 2) - so a daily series costs its bends, not its samples, and an instant stays small.
+LINE_SIMPLIFY_PX = 2.0
+# ... and a ring or a callout is probed once it has CLOSED: at its onset nothing is painted yet. The ring draws in
+# RING.DRAW_S 0.55 and its flag lands FLAG_LAG 0.14 later on the chip spring; the callout draws in SP.CALLOUT_DRAW 0.7
+# and pops its label over 0.25 from 0.8 of that (0.81). One second covers both.
+MARK_CLOSED_S = 1.0
+MARK_KINDS = ("ring", "callout")
 
 
 def stage_size(aspect: str) -> tuple[int, int]:
@@ -179,7 +187,25 @@ READ_DOM = r"""
     return out;
   };
 
-  const out = { stage: [stg.width, stg.height], docks: [], items: [], plots: [], data: [], nmarks: 0, drawn: [], chart: null, caption: null, marks: null, bars: null, labels: [] };
+  /* M34 (K9): a path's DRAWN part as stage points, and half its stroke on screen - the series lines of the collision ledger */
+  const drawnPts = (el) => {
+    if (!el.getPointAtLength || !el.getTotalLength || !el.getScreenCTM) return null;
+    const len = el.getTotalLength(); if (!(len > 0)) return null;
+    const off = parseFloat(el.getAttribute('stroke-dashoffset') || '0');
+    const da = parseFloat((el.getAttribute('stroke-dasharray') || '0').split(/[ ,]/)[0]) || 0;
+    const drawn = da > 0 ? Math.max(0, Math.min(len, len - off)) : len;
+    const m = el.getScreenCTM(); if (drawn <= 0 || !m) return null;
+    const n = Math.max(2, Math.min(240, Math.ceil(drawn / 4))), pts = [];
+    for (let i = 0; i <= n; i++) { const q = el.getPointAtLength(drawn * i / n);
+      pts.push([m.a * q.x + m.c * q.y + m.e - stg.x, m.b * q.x + m.d * q.y + m.f - stg.y]); }
+    return { pts, hw: (parseFloat(getComputedStyle(el).strokeWidth) || 4) * Math.hypot(m.a, m.b) / 2 };
+  };
+  const done = (el) => parseFloat(el.getAttribute('stroke-dashoffset') || '0') <= 0.5;   /* drawOn: offset = len x (1 - f) */
+  const halfStroke = (el) => { const m = el.getScreenCTM && el.getScreenCTM();
+    return (parseFloat(getComputedStyle(el).strokeWidth) || 0) * (m ? Math.hypot(m.a, m.b) : 1) / 2; };
+  const unite = (a, b) => (a ? [Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[0] + a[2], b[0] + b[2]) - Math.min(a[0], b[0]),
+    Math.max(a[1] + a[3], b[1] + b[3]) - Math.min(a[1], b[1])] : b.slice());
+  const out = { stage: [stg.width, stg.height], docks: [], items: [], plots: [], data: [], nmarks: 0, drawn: [], chart: null, caption: null, marks: null, bars: null, labels: [], lines: [], smarks: [] };
   for (const d of document.querySelectorAll('.dock')) {
     const o = eff(d); if (o <= 0.05) continue;
     out.docks.push({ el: d.id, name: d.dataset.slide || d.id, box: R(d), op: o,
@@ -231,6 +257,39 @@ READ_DOM = r"""
        are the same page on any seek path; before that, a cached page left __lp on the page BEFORE it,
        whose chart elements are detached (measured at 0:58 after a backward seek). */
     const states = S.states && S.states.length ? S.states : [S];
+    /* M34 (operator 2026-09-13): WHOSE TEXT IS WHOSE, from the engine's own records. A bracket's or a figure's text
+       measures ONE series (`si`) and may sit on that line; a DATUM's own text - a bar's value and, on the emphasised
+       bar, the callout's pill; a figure's or a bracket's label at its data - is what a ring or callout on that datum
+       circles (its target). Each datum is kept as a stage box (a bar) or a stage point (a line's datum). */
+    const bracketOf = new Map(), datumText = [];
+    const toStage = (el, q) => { const m = el && el.getScreenCTM && el.getScreenCTM();
+      return m && q ? [m.a * q[0] + m.c * q[1] + m.e - stg.x, m.b * q[0] + m.d * q[1] + m.f - stg.y] : null; };
+    for (const x of [S, ...(S.states || [])]) {
+      if (!x) continue;
+      for (const bb of x.bars || []) {
+        if (!bb || !bb.bar || eff(bb.bar) <= 0.05) continue;
+        const keys = bb.val ? ['val:' + txt(bb.val)] : [];
+        if (x.callout && x.chart && (x.bars || [])[x.emph] === bb) for (const c of x.chart.querySelectorAll('text.callout')) keys.push('pill:' + txt(c));
+        datumText.push({ box: R(bb.bar), keys });
+      }
+      const pf = x.perform; if (!pf) continue;
+      const own = (rec, els, pts) => {
+        const live = els.filter(Boolean); for (const el of live) bracketOf.set(el, 's' + (rec.si | 0));
+        const keys = live.filter((el) => el.classList.contains('bklab')).map((el) => 'bracket:' + txt(el));
+        for (const q of pts) { const p = toStage(live[0], q); if (p) datumText.push({ pt: p, keys }); }
+      };
+      for (const b of pf.brackets || []) if (b) own(b, [b.main, b.glow].filter(Boolean).flatMap((part) => [part.label, part.sub]), [b.A, b.B]);
+      for (const f of pf.figures || []) if (f) own(f, [f.label, f.sub], [f.D]);
+    }
+    const targetsOf = (box) => {   /* the text of every datum this mark's ellipse is drawn round */
+      const cx = box[0] + box[2] / 2, cy = box[1] + box[3] / 2, rx = Math.max(1, box[2] / 2), ry = Math.max(1, box[3] / 2), keys = [];
+      for (const d of datumText) {
+        const hit = d.box ? cx >= d.box[0] && cx <= d.box[0] + d.box[2] && cy >= d.box[1] && cy <= d.box[1] + d.box[3]
+                          : ((d.pt[0] - cx) / rx) ** 2 + ((d.pt[1] - cy) / ry) ** 2 <= 1;
+        if (hit) keys.push(...d.keys);
+      }
+      return keys;
+    };
     let up = 0, chartBox = null, parked = false, barsOp = -1;
     for (const chart of world.querySelectorAll('.lp-chart')) {
       const o = eff(chart); if (o <= 0.05) continue;
@@ -264,6 +323,19 @@ READ_DOM = r"""
           const off = parseFloat(el.getAttribute('stroke-dashoffset') || '0');
           out.drawn.push(len > 0 && da > 0 ? Math.max(0, Math.min(1, (len - off) / len)) : 1); }
       }
+      /* M34 (K9): THE SERIES LINES, each with its OWNER - the line builder's own record (`st.paths`: p the path,
+         name its terminal tag, si the series, muted the history) - so a name on its own line's end is told from a
+         name on a NEIGHBOUR's line (the casebook's name-on-the-neighbour-line), read off the drawn DOM */
+      const ownerOf = new Map();
+      for (const pp of ((st && st.paths) || [])) {
+        if (!pp || !pp.p) continue;
+        ownerOf.set(pp.p, 's' + (pp.si | 0) + (pp.muted ? ':h' : ''));
+        if (pp.name && !pp.muted) ownerOf.set(pp.name, 's' + (pp.si | 0));
+      }
+      for (const el of chart.querySelectorAll('path.ser')) {
+        if (eff(el) <= 0.05 || !ownerOf.has(el)) continue;
+        const d = drawnPts(el); if (d && d.pts.length >= 2) out.lines.push({ own: ownerOf.get(el), hw: d.hw, pts: d.pts });
+      }
       for (const el of chart.querySelectorAll('text')) {
         if (eff(el) <= 0.05) continue;
         const r = el.getBoundingClientRect(); if (r.width < 2 || r.height < 2) continue;
@@ -288,7 +360,8 @@ READ_DOM = r"""
           if (pr && eff(pr) > 0.05) join(R(pr));
         }
         if (cls === 'bklab') for (const sb of own('text.bksub')) { if (eff(sb) > 0.05) join(R(sb)); }
-        out.labels.push({ role: LABEL_ROLE[cls] || cls, text: txt(el), box: lbox });
+        const owner = ownerOf.get(el) || bracketOf.get(el);   /* a series name's line, or the series a bracket / figure measures */
+        out.labels.push({ role: LABEL_ROLE[cls] || cls, text: txt(el), box: lbox, ...(owner ? { own: owner } : {}) });
       }
       /* M26 (R26-40): THE PRINTED VALUE AGAINST THE DRAWN HEIGHT. E28 and E53 say the scale and the value are
          printed at every instant; nothing checked that the bar's HEIGHT agreed with either. R26-39 was exactly
@@ -341,6 +414,40 @@ READ_DOM = r"""
         if (Math.min(b[0] + b[2], plotU[0] + plotU[2]) - Math.max(b[0], plotU[0]) <= 0) continue;
         if (Math.min(b[1] + b[3], plotU[1] + plotU[3]) - Math.max(b[1], plotU[1]) <= 0) continue;
         out.labels.push({ role: 'note', text: txt(el), box: b });
+      }
+    }
+    /* M34 (K9): THE MARKS a ring or a callout paints over the page (the casebook's ring-on-the-tip-label) and the
+       text that belongs to each. A ring is a `g` of path.rngdash with its own text.lab and flag chip inside it; a
+       callout is a path.co with its text.lab as the next sibling. A mark is written once it has CLOSED - its last
+       stroke fully drawn, and for a ring a dash in the last quarter (it draws clockwise from the top) - because a
+       half-drawn arc's box is not its ellipse. Its text enters the labels either way: it is text on the page. */
+    for (const L of [document.getElementById('species'), document.getElementById('species-under')]) {
+      if (!L) continue;
+      for (const g of L.querySelectorAll(':scope > g')) {
+        const dashes = [...g.querySelectorAll(':scope > path.rngdash')].filter((d) => eff(d) > 0.05);
+        if (!dashes.length) continue;
+        const own = 'm' + out.smarks.length;
+        let box = null; for (const d of dashes) box = unite(box, R(d));
+        const cx = box[0] + box[2] / 2, cy = box[1] + box[3] / 2;
+        const lastQuarter = dashes.some((d) => { const b = R(d); return b[0] + b[2] < cx && b[1] + b[3] < cy; });
+        if (lastQuarter && done(dashes[dashes.length - 1])) out.smarks.push({ own, kind: 'ring', box, hw: halfStroke(dashes[0]), tg: targetsOf(box) });
+        for (const t of g.querySelectorAll(':scope > text.lab')) if (eff(t) > 0.05) out.labels.push({ role: 'mark', text: txt(t), box: R(t), own });
+        for (const fg of g.querySelectorAll(':scope > g')) {
+          const card = fg.querySelector('rect.chipcard'); if (!card || eff(card) <= 0.05) continue;
+          const cl = fg.querySelector('text.chiplab');
+          out.labels.push({ role: 'flag', text: cl ? txt(cl) : '', box: cl && eff(cl) > 0.05 ? unite(R(card), R(cl)) : R(card), own });
+        }
+      }
+      let cur = null;
+      for (const el of L.children) {
+        if (el.matches('path.co')) {
+          cur = eff(el) > 0.05 ? 'm' + out.smarks.length : null;
+          if (cur) { if (done(el)) out.smarks.push({ own: cur, kind: 'callout', box: R(el), hw: halfStroke(el), tg: targetsOf(R(el)) });
+                     else out.smarks.push({ own: cur, kind: 'callout', box: null, hw: 0 }); }
+        } else if (el.matches('text.lab') && cur) {
+          if (eff(el) > 0.05) out.labels.push({ role: 'mark', text: txt(el), box: R(el), own: cur });
+          cur = null;
+        } else cur = null;
       }
     }
     out.chart = { up, box: chartBox, parked };
@@ -459,6 +566,83 @@ def moved_px(a: list[float], b: list[float] | None) -> float:
     return max(abs(a[0] - b[0]), abs(a[1] - b[1]), abs(a[0] + a[2] - b[0] - b[2]), abs(a[1] + a[3] - b[1] - b[3]))
 
 
+def simplify(pts: list[list[int]], eps: float = LINE_SIMPLIFY_PX) -> list[list[int]]:
+    """Douglas-Peucker: the fewest of the points that keep the polyline within eps px of itself. Iterative."""
+    if len(pts) < 3:
+        return [list(p) for p in pts]
+    keep = [False] * len(pts)
+    keep[0] = keep[-1] = True
+    stack = [(0, len(pts) - 1)]
+    while stack:
+        a, b = stack.pop()
+        (ax, ay), (bx, by) = pts[a], pts[b]
+        dx, dy = bx - ax, by - ay
+        norm = (dx * dx + dy * dy) ** 0.5
+        far, at = -1.0, -1
+        for i in range(a + 1, b):
+            px, py = pts[i]
+            d = abs(dy * (px - ax) - dx * (py - ay)) / norm if norm else ((px - ax) ** 2 + (py - ay) ** 2) ** 0.5
+            if d > far:
+                far, at = d, i
+        if at >= 0 and far > eps:
+            keep[at] = True
+            stack += [(a, at), (at, b)]
+    return [list(p) for p, k in zip(pts, keep) if k]
+
+
+def _num(v: float) -> float | int:
+    """A tenth of a pixel, and an int when it is whole - `3` is a byte, `3.0` three."""
+    r = round(v, 1)
+    return int(r) if r == int(r) else r
+
+
+def _tg_key(key: str) -> str:
+    """A target's label key as the ledger names the label: its text cut to LABEL_TEXT_MAX (label_key's form)."""
+    role, _, text = str(key).partition(":")
+    return f"{role}:{text[:LABEL_TEXT_MAX]}"
+
+
+def _near_text(a, b, boxes: list[list[float]], pad: float) -> bool:
+    return any(G._seg_hits_box(a, b, box, pad) for box in boxes)
+
+
+def ledger(dom: dict) -> dict:
+    """M34 (K9): the collision ledger's geometry - each drawn series as its simplified polyline with its owner, half
+    its stroke and its TIP (the last drawn point), each CLOSED ring or callout as the ellipse its box describes (an
+    SVG box is the geometry, the stroke excluded). Ints. A line is written only in the RUNS of segments that come
+    within its ink + a hairline + a pixel of rounding of some text box - the gate reads nothing else, and a daily
+    series written whole is a kilobyte an instant (the probe's contract is 2 KB)."""
+    boxes = [l["box"] for l in (dom.get("labels") or []) if l.get("box")]
+    lines = []
+    for ln in dom.get("lines") or []:
+        pts = simplify([[int(round(x)), int(round(y))] for x, y in ln.get("pts") or []])
+        if len(pts) < 2:
+            continue
+        hw = _num(float(ln.get("hw") or 0))
+        pad = hw + G.LINE_TOUCH_PX + 1.0
+        run: list[list[int]] = []
+        for a, b in zip(pts, pts[1:]):
+            if _near_text(a, b, boxes, pad):
+                run = run or [a]
+                run.append(b)
+                continue
+            if run:
+                lines.append({"own": str(ln.get("own")), "hw": hw, "tip": pts[-1], "p": [v for q in run for v in q]})
+            run = []
+        if run:
+            lines.append({"own": str(ln.get("own")), "hw": hw, "tip": pts[-1], "p": [v for q in run for v in q]})
+    marks = []
+    for m in dom.get("smarks") or []:
+        b = m.get("box")
+        if not b or b[2] < 2 or b[3] < 2:
+            continue
+        marks.append({"own": str(m.get("own")), "kind": str(m.get("kind")),
+                      "e": [int(round(b[0] + b[2] / 2)), int(round(b[1] + b[3] / 2)), int(round(b[2] / 2)), int(round(b[3] / 2))],
+                      "hw": _num(float(m.get("hw") or 0)),
+                      **({"tg": sorted({_tg_key(k) for k in m["tg"]})} if m.get("tg") else {})})
+    return {"lines": lines, "marks": marks}
+
+
 def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: dict[str, dict],
            nxt: dict[str, list[float]] | None = None) -> dict:
     """The DOM at t, reduced to what a layout gate can refuse: boxes, named overlap pairs, type at the
@@ -542,7 +726,7 @@ def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: di
     # third - were invisible to every row. A pair counts when the boxes meet by more than a hairline on
     # BOTH axes: antialiasing is not a collision.
     labels = [{"role": str(l["role"]), "text": str(l.get("text") or "")[:LABEL_TEXT_MAX],
-               "box": [int(round(v)) for v in l["box"]]}
+               "box": [int(round(v)) for v in l["box"]], **({"own": str(l["own"])} if l.get("own") else {})}
               for l in (dom.get("labels") or []) if l["box"][2] >= 1 and l["box"][3] >= 1]
     for n, la in enumerate(labels):
         for lb in labels[n + 1:]:
@@ -567,7 +751,7 @@ def derive(dom: dict, t: float, why: str, camera: dict, aspect: str, entries: di
         clear["caption_px"] = int(round(min(gap_px(ab, cap["box"]) for _an, ab in solids)))
 
     out = {"t": round(t, 2), "why": why, "docks": docks, "page": page, "texts": texts,
-           "labels": labels, "overlaps": overlaps, "clearances": clear,
+           "labels": labels, "overlaps": overlaps, "clearances": clear, "ledger": ledger(dom),
            "camera": {"scene": camera.get("scene"), "zoom": round(float(camera.get("zoom") or 1), 3),
                       "look": [int(round(v)) for v in (camera.get("look") or [0, 0])]}}
     if cap:
@@ -657,6 +841,9 @@ def gate_instants(tl: dict) -> list[tuple[float, str]]:
             add(float(sp.get("at", 0.0)), f"{sid} {k} onset")
             if k == "chart_to":
                 add(G._transition_land(s, sp), f"{sid} chart_to {sp.get('to')} end")
+            if k in MARK_KINDS:   # M34: at the onset nothing is painted; the ledger reads the mark once it has closed
+                at, dur = float(sp.get("at", 0.0)), float(sp.get("dur", MARK_CLOSED_S + 0.02))
+                add(at + min(MARK_CLOSED_S, max(0.0, dur - 0.02)), f"{sid} {k} closed")
         for d in s.get("docks", []):
             nm = d.get("slide", "?")
             enter = float(d.get("enter", 0.0))

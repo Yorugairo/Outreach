@@ -8,7 +8,8 @@ it only refers to (`mentions`), its ten most frequent body terms, and its headin
 artifacts, the same records:
 
     docs/DOCS-MANIFEST.jsonl   one JSON object per document
-    docs/DOCS-MANIFEST.md      the same, grouped by kind, one line per document, <= 60 KB
+    docs/DOCS-MANIFEST.md      the same, grouped by kind, one line per document, <= MD_MAX_BYTES;
+                               a per-item folder (COLLAPSED_FAMILIES) is one row under `## folders`
 
     python content/video_engine/scripts/build_docs_manifest.py --write   # regenerate both
     python content/video_engine/scripts/build_docs_manifest.py --check   # exit 1 when stale
@@ -66,6 +67,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+import build_docs_index as BDI  # noqa: E402
 from build_docs_index import (  # noqa: E402
     HEADING, REPO, ROW_ID, ROW_LEVEL, TABLE_SEP, split_lines, strip_emphasis, truncate, unfenced,
 )
@@ -166,6 +168,7 @@ ABBREVIATIONS = frozenset({"e.g.", "i.e.", "cf.", "vs.", "etc.", "approx.", "no.
 NESTED_NUMBER = re.compile(r"\d+\.\d+\.$")
 INITIAL = re.compile(r"\b[A-Z]\.$")
 OPENERS = "\"'`(“‘[*"
+FRONT_MATTER_KEY = re.compile(r"^([A-Za-z_][\w-]*):[ \t]*(\S.*)$")   # top-level `key: value` only
 
 
 # --- text helpers -------------------------------------------------------------------------
@@ -272,12 +275,39 @@ def first_h2(lines: list[str]) -> str:
     return ""
 
 
+def front_matter(lines: list[str]) -> tuple[dict[str, str], int]:
+    """({key: value} of a leading `---` YAML block's top-level scalars, index of the first body
+    line). No block, or a `---` rule with no keys, is ({}, 0). Standard library, no YAML parser."""
+    if not lines or lines[0].strip("\ufeff \t") != "---":
+        return {}, 0
+    for end in range(1, len(lines)):
+        if lines[end].strip() != "---":
+            continue
+        fields: dict[str, str] = {}
+        for line in lines[1:end]:
+            m = FRONT_MATTER_KEY.match(line)
+            if m:
+                fields.setdefault(m.group(1), m.group(2).strip().strip("\"'"))
+        return (fields, end + 1) if fields else ({}, 0)
+    return {}, 0
+
+
 def document_head(rel_path: str, text: str) -> tuple[str, str, str | None]:
-    """(title, purpose, byline) read from the file. Purpose is the H1's lead paragraph, else the
-    first non-heading non-byline paragraph anywhere, else the first H2."""
-    lines = split_lines(text)
+    """(title, purpose, byline) read from the file. Title is the H1, else the front matter's
+    `name`, else the file name. Purpose is the front matter's `description`, else the H1's lead
+    paragraph, else the first non-heading non-byline paragraph anywhere, else the first H2."""
+    fields, start = front_matter(split_lines(text))
+    lines = split_lines(text)[start:]
     h1 = h1_position(lines)
-    title = plain(h1[2], TITLE_MAX) if h1 else rel_path.rsplit("/", 1)[-1]
+    fallback = plain(fields["name"], TITLE_MAX) if fields.get("name") else rel_path.rsplit("/", 1)[-1]
+    title = plain(h1[2], TITLE_MAX) if h1 else fallback
+    _, purpose, byline = body_head(title, lines, h1)
+    if fields.get("description"):
+        purpose = plain(fields["description"], PURPOSE_MAX)
+    return (title, purpose, byline)
+
+
+def body_head(title: str, lines: list[str], h1: tuple[int, int, str] | None) -> tuple[str, str, str | None]:
     byline: str | None = None
     lead_blocks = paragraphs(lines, h1[0] + 1, next_heading(lines, h1[0])) if h1 else []
     for block in lead_blocks:
@@ -418,9 +448,35 @@ def read_text(repo_root: Path, rel_path: str) -> str:
     return path.read_text(encoding="utf-8") if path.is_file() else ""
 
 
+def headingless_records(repo_root: Path, indexed: set[str]) -> list[dict]:
+    """One level-1 record for each walked document with no heading at all, which the index cannot
+    record: heading = front-matter `name` (else the file name), lead/labels/terms from the body.
+    Why: 2026-09-13 the operator's memory copies are front matter + prose, and docs_find missed
+    71 of 80. A file that HAS headings but no record is a stale index, and gets nothing here."""
+    root = Path(repo_root)
+    out: list[dict] = []
+    for path in BDI.doc_files(root, BDI.load_config(root)):
+        rel_path = path.relative_to(root).as_posix()
+        if rel_path in indexed:
+            continue
+        lines = split_lines(path.read_text(encoding="utf-8"))
+        fields, start = front_matter(lines)
+        end = len(lines)
+        if BDI.heading_positions(lines[start:]) or not "".join(lines[start:]).strip():
+            continue
+        heading = fields.get("name") or rel_path.rsplit("/", 1)[-1]
+        labels = BDI.labels_of(lines, start, end)
+        out.append(BDI.record(rel_path, start + 1, 1, BDI.doc_id(rel_path), heading,
+                              BDI.lead_of(lines, start, end), labels,
+                              BDI.terms_of(lines, start, end, heading, labels)))
+    return out
+
+
 def build(records: list[dict], repo_root: Path = REPO) -> list[dict]:
-    """One record per indexed document, sorted by path. Level-7 rows fold into their file."""
-    grouped = group_by_path(records)
+    """One record per indexed document (and per headingless walked document), sorted by path.
+    Level-7 rows fold into their file."""
+    indexed = {r["path"] for r in records}
+    grouped = group_by_path([*records, *headingless_records(repo_root, indexed)])
     out: list[dict] = []
     for rel_path in sorted(grouped, key=lambda p: (p.lower(), p)):
         file_records = grouped[rel_path]
@@ -467,6 +523,23 @@ def load_index(path: Path) -> list[dict]:
         raise ValueError(f"{Path(path).as_posix()}: no records")
     return records
 
+# Per-item folders the Markdown folds into ONE row per folder; the JSONL keeps every record. Why:
+# 2026-09-13 even the last MD_LADDER rung missed MD_MAX_BYTES (83,422) - sibling files of one item
+# (a memory copy, a case, one video's analysis dossier, one episode's working files) crowded out
+# the lines a grep lands on; with the episodes folded the richest rungs fit again.
+# A pattern is a folder prefix; a `*` segment makes one row per matched folder. First match wins,
+# so a narrower family precedes a wider one.
+COLLAPSED_FAMILIES = (
+    ("docs/agent-memory/operator/casebook/", "operator casebook, one CASE.md per case"),
+    ("docs/agent-memory/*/", "agent memory copies, one file per memory"),
+    ("content/video_engine/sources/reference_analyses/*/", "one video's reference-analysis dossier"),
+    ("content/video_engine/projects/*/pilots/*/", "one pilot's working folder"),
+    ("content/video_engine/projects/*/*/", "one episode's working folder"),
+)
+FAMILY_INDEX_NAMES = ("MEMORY.md", "README.md", "INDEX.md")   # the row names the first one present
+FAMILY_SCRIPT = "SCRIPT*.md"   # else a folder's ONLY top-level script is its index
+FAMILIES_HEADING = "folders"
+
 
 # --- rendering -------------------------------------------------------------------------------
 
@@ -483,6 +556,52 @@ def md_line(entry: dict, title_max: int, purpose_max: int, term_max: int, define
             f" — {truncate(entry['purpose'], purpose_max)}"
             f" — defines: {'; '.join(defines) if defines else '—'}"
             f" — terms: {'; '.join(entry['key_terms'][:term_max]) or '—'}")
+
+
+def family_of(rel_path: str) -> tuple[str, str] | None:
+    """(folder, label) of the first COLLAPSED_FAMILIES pattern holding the file, else None."""
+    parts = rel_path.split("/")
+    for pattern, label in COLLAPSED_FAMILIES:
+        segments = pattern.rstrip("/").split("/")
+        if len(parts) > len(segments) and all(
+                fnmatch.fnmatchcase(part, seg) for part, seg in zip(parts, segments)):
+            return "/".join(parts[:len(segments)]) + "/", label
+    return None
+
+
+def family_index(members: list[tuple[str, dict]]) -> tuple[str, dict] | None:
+    """(name, entry) of the folder's index: a FAMILY_INDEX_NAMES file at its top, else its only
+    top-level SCRIPT*.md, else None."""
+    top = [(name, entry) for name, entry in members if "/" not in name]
+    for want in FAMILY_INDEX_NAMES:
+        for name, entry in top:
+            if name == want:
+                return name, entry
+    scripts = [(name, entry) for name, entry in top if fnmatch.fnmatchcase(name, FAMILY_SCRIPT)]
+    return scripts[0] if len(scripts) == 1 else None
+
+
+def family_rows(entries: list[dict], title_max: int = TITLE_MAX, purpose_max: int = PURPOSE_MAX) -> list[str]:
+    """One Markdown row per collapsed folder, sorted by folder: label, count, and the index's
+    title and purpose when the folder has one."""
+    members: dict[str, list[tuple[str, dict]]] = {}
+    labels: dict[str, str] = {}
+    for entry in entries:
+        family = family_of(entry["path"])
+        if family:
+            members.setdefault(family[0], []).append((entry["path"][len(family[0]):], entry))
+            labels[family[0]] = family[1]
+    rows = []
+    for folder in sorted(members, key=lambda p: (p.lower(), p)):
+        count = len(members[folder])
+        row = f"- {folder} — {labels[folder]} — {count} document{'' if count == 1 else 's'}"
+        index = family_index(members[folder])
+        if index:
+            name, entry = index
+            row += (f", index {name}: {truncate(entry['title'], title_max)}"
+                    f" — {truncate(entry['purpose'], purpose_max)}")
+        rows.append(row)
+    return rows
 
 
 def render_md(entries: list[dict], budgets: tuple[int, int, int, int] | None = None) -> str:
@@ -510,16 +629,21 @@ def render_md(entries: list[dict], budgets: tuple[int, int, int, int] | None = N
         "`defines` is what a document OWNS — ruling ids from the ledger, gate and plan ids from",
         "its own headings, capability names, backlog ids. `terms` are its most frequent body",
         "terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;",
-        "the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.",
+        "the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`. A per-item",
+        f"folder is one row under `## {FAMILIES_HEADING}` (COLLAPSED_FAMILIES in the builder).",
         "",
         f"{len(entries)} documents across {len(kinds)} kinds.",
         "",
     ]
+    listed = [e for e in entries if family_of(e["path"]) is None]
     body: list[str] = []
     for kind in kinds:
-        body += [f"## {kind}", ""]
-        body += [md_line(e, *budgets) for e in entries if e["kind"] == kind]
-        body.append("")
+        lines = [md_line(e, *budgets) for e in listed if e["kind"] == kind]
+        if lines:
+            body += [f"## {kind}", "", *lines, ""]
+    rows = family_rows(entries, budgets[0], budgets[1])
+    if rows:
+        body += [f"## {FAMILIES_HEADING}", "", *rows, ""]
     return "\n".join(head + body)
 
 

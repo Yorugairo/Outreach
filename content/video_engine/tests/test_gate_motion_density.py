@@ -1494,3 +1494,31 @@ def test_a_spiral_page_lands_when_its_unwind_ends_never_on_its_first_frame():
     assert G._page_land_offset(sp) == G.LP_SPIRAL_IN_S
     for enter in ("snap", "built"):
         assert G._page_land_offset({"world": {"kind": "ledger", "page": {"enter": enter}}}) == 0.0, enter
+
+
+def _write_json(tmp_path, name, doc):
+    import json as _json
+    (tmp_path / name).write_text(_json.dumps(doc), encoding="utf-8")
+    return tmp_path
+
+
+def test_m32_a_flash_at_a_cut_fails_and_a_dark_world_hold_is_only_info(tmp_path):
+    """P54 T9: the operator wants the flash before a transition or a second black frame - never the dip's own core."""
+    assert G._seam_gate(tmp_path).level == "INFO"                                   # not measured
+    b = {"t": 12.0, "exit": "cut", "from_scene": "s01", "to_scene": "s02"}
+    _write_json(tmp_path, "seam-frames.json", {"boundaries": [{**b, "faults": [{"fault": "flash", "frames": 1}]}]})
+    assert G._seam_gate(tmp_path).level == "FAIL"
+    _write_json(tmp_path, "seam-frames.json", {"boundaries": [{**b, "exit": "dip", "faults": [{"fault": "hold", "frames": 5, "dark_world": True}]}]})
+    assert G._seam_gate(tmp_path).level == "INFO"
+    _write_json(tmp_path, "seam-frames.json", {"boundaries": [{**b, "exit": "dip", "faults": [{"fault": "hold", "frames": 5, "dark_world": False}]}]})
+    assert G._seam_gate(tmp_path).level == "FAIL"
+    _write_json(tmp_path, "seam-frames.json", {"boundaries": [{**b, "faults": []}]})
+    assert G._seam_gate(tmp_path).level == "PASS"
+
+
+def test_m33_a_pointing_phrase_with_nothing_on_stage_warns(tmp_path):
+    assert G._spoken_visual_gate(tmp_path).level == "INFO"
+    _write_json(tmp_path, "spoken-visuals.json", {"pointers": [{"phrase": "the chart", "t": 4.0, "context": "look at the chart", "uncovered": True}]})
+    assert G._spoken_visual_gate(tmp_path).level == "WARN"
+    _write_json(tmp_path, "spoken-visuals.json", {"pointers": [{"phrase": "the chart", "t": 4.0, "context": "", "uncovered": False}]})
+    assert G._spoken_visual_gate(tmp_path).level == "PASS"

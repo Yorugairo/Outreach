@@ -264,11 +264,15 @@ def test_m13_is_not_a_built_gate(real: list[dict]) -> None:
 
 
 def test_s02_cites_the_shorts_format_doc(real: list[dict]) -> None:
-    record = next(r for r in real if r["id"] == "S02")
+    records = [r for r in real if r["id"] == "S02"]
 
-    assert [c["path"] for c in record["cites"]] == [
-        "docs/content-video-engine/51-THE-SHORTS-FORMAT.md"]
-    assert all(c["line"] for c in record["cites"])
+    # every S02 row cites doc 51 first; the ledger-page rows (E44, 2026-09-08) also cite the ruling
+    assert records
+    for record in records:
+        paths = [c["path"] for c in record["cites"]]
+        assert paths[0] == "docs/content-video-engine/51-THE-SHORTS-FORMAT.md"
+        assert set(paths) <= {"docs/content-video-engine/51-THE-SHORTS-FORMAT.md", "docs/portable/OPERATOR-RULINGS.md"}
+        assert all(c["line"] for c in record["cites"])
 
 
 def test_every_checker_contributes_rows(real: list[dict]) -> None:

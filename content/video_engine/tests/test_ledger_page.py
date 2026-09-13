@@ -449,6 +449,59 @@ def test_three_tiers_build_three_bands_and_page_boxes_reports_them():
         assert abs(gutter - L.TIER_GAP * bands[0]["h"]) <= 1, (aspect, gutter)
 
 
+# --- E79: side-by-side panels of the same measure share one scale ------------------------------
+
+def test_e79_same_unit_tiers_on_different_domains_warn_naming_page_panels_and_domains():
+    series = _tiers(_tier("JAPAN"), _tier("UNITED STATES", base=695.0, step=-9.0), id="ev-reserves")
+    warns = L.scale_warnings(series)
+    assert len(warns) == 1
+    w = warns[0]
+    assert "E79" in w and "ev-reserves" in w and "'Mb'" in w
+    assert "JAPAN" in w and "UNITED STATES" in w
+    assert "[0, 300]" in w and "[0, 695]" in w, w
+    assert "independent" in w, "the warning names the opt-out"
+    spec = L.build_spec(series, "tiers", None, "right")
+    assert spec["warnings"] == warns
+
+
+def test_e79_page_that_declares_independent_scales_passes():
+    series = _tiers(_tier("JAPAN"), _tier("UNITED STATES", base=695.0, step=-9.0), independent=True)
+    assert L.scale_warnings(series) == []
+    spec = L.build_spec(series, "tiers", None, "right")
+    assert "warnings" not in spec and spec["axes"]["independent"] is True
+
+
+def test_e79_a_panel_declaring_independent_leaves_the_shared_group():
+    a, b = _tier("JAPAN"), {**_tier("UNITED STATES", base=695.0, step=-9.0), "independent": True}
+    assert L.scale_warnings(_tiers(a, b)) == []
+    c = _tier("CHINA", base=900.0)
+    assert len(L.scale_warnings(_tiers(a, b, c))) == 1, "the two panels still sharing a unit are still checked"
+
+
+def test_e79_different_units_pass():
+    series = _tiers(_tier("RESERVES", unit="Mb"), _tier("YIELD", unit="%", base=4.7, step=0.1))
+    assert L.scale_warnings(series) == []
+    assert "warnings" not in L.build_spec(series, "tiers", None, "right")
+
+
+def test_e79_same_unit_same_domain_passes_and_explicit_domains_are_compared():
+    same = _tiers(_tier("A"), _tier("B"))
+    assert L.scale_warnings(same) == []
+    stated = _tiers({**_tier("A"), "domain": [0, 800]}, {**_tier("B", base=695.0), "domain": [0, 800]})
+    assert L.scale_warnings(stated) == [], "an explicit equal domain is one scale"
+    differ = _tiers({**_tier("A"), "domain": [0, 400]}, {**_tier("B"), "domain": [0, 800]})
+    assert "[0, 400]" in L.scale_warnings(differ)[0]
+
+
+def test_e79_shared_domain_is_the_min_and_max_across_the_same_unit_panels():
+    series = _tiers(_tier("A", base=300.0, step=-2.0), _tier("B", base=695.0, step=-9.0),
+                    {**_tier("C", base=-50.0, step=1.0)})
+    assert L.shared_tier_domains(series) == {"Mb": (-50.0, 695.0)}
+    no_zero = _tiers({**_tier("A", base=300.0, step=-2.0), "from_zero": False},
+                     {**_tier("B", base=695.0, step=-9.0), "from_zero": False})
+    assert L.shared_tier_domains(no_zero) == {"Mb": (286.0, 695.0)}
+
+
 def test_tiers_on_different_x_ranges_are_refused_naming_both():
     series = _tiers(_tier("A"), _tier("B", x0=1990.0))
     errs = L.validate(series, "tiers")

@@ -107,6 +107,10 @@ RING_CLOSE_FRACTION = 0.12       # 47 s2 G-g: "the close" = the script's last 12
 # clock is a short: the shape is HOOK 0-3 s, THE MECHANISM by 0:10, N INSTANCES of ONE mechanism to 80% of the runtime, THE RING
 # in the last 20%; the retention cycle every 30 s (not 60); the brand line lives on the outro, never in the script (2026-09-05).
 SHORT_MAX_S = 180.0              # under three full minutes (the motion gate's SHORT_FULL_MINUTES)
+LONG_MIN_S = 480.0               # E74 (the operator, 2026-09-13): long form is never under 8 minutes - between 3:00 and 8:00 is neither machine
+SRC_G46 = ("E74: long form is never under 8 minutes (the operator, 2026-09-13: 'yes, longform should never be under 8 "
+           "minutes'; 2026-08-29: 'i dont think we make vdieos shorter than 8 minutes') - a cut under 8:00 is extended "
+           "with substance or run as a short (under 3:00, G2), never shipped as a long form in between")
 SHORT_HOOK_S = 3.0               # 51.2: the claim, spoken and on screen
 SHORT_MECH_BY_S = 10.0           # 51.2: the one thing this short is about, stated plainly - the [post-key] sentence lands by here
 SHORT_INSTANCES_MIN = 2          # 51.2: N instances, N >= 2 ([new] / [catalyst] beats between the mechanism and the ring)
@@ -170,6 +174,57 @@ PACKAGING_PREFIX_MIN = 4        # E24 G45: crude stems match by prefix ("surviv"
 SRC_G45 = ("E24 / doc 29 s9.29: proxy for 'the first sentence answers the thumbnail' - "
            "the title is the words packaged with it")
 SRC_J12 = "E24 / doc 29 s9.29: the first sentence answers what the thumbnail poses - open the thumbnail and read sentence 1 against it"
+# G13 (C04-R016 + C07-R007): the rehook is a FUNCTION - a line that re-justifies the next stretch (38 B4 "rehook slot #1",
+# 38 B5 "re-justifying the next 60 seconds"). The five template families illustrate how it usually sounds; they are one
+# sufficient signal, never the definition. The dated promise IS A1 (MAP s3) - the regex-only check reported A1 missing at 41.5 s.
+A1_ANCHOR = 30.0                # P1 QC: "Rehooks at ~0:30 (A1) and ~1:00 (A2)"
+A1_WIN = (A1_ANCHOR - 10.0, A2_ANCHOR - 5.0)   # MAP s3: the 0:30-0:60 dated promise IS A1; opens 10 s early, closes at A2's own
+                                               # lower edge (0:55) so one line never fills both slots
+FUTURE = re.compile(r"\b(?:you|we|I)['\u2019]?ll\b|\b(?:will|going to|gonna|about to)\b", re.I)
+TIME_ANCHOR = re.compile(
+    r"\b(?:by the end|at the end|in the next|within (?:the next )?\w+ (?:minutes?|seconds?)|in (?:a|one|\w+) (?:minutes?|moments?|seconds?)"
+    r"|(?:a )?(?:minute|moment) from now|later (?:in|on)|coming up|next (?:minute|section|part|chapter|question|step)"
+    r"|before (?:this|the) (?:video|episode) ends|by minute \w+)\b", re.I)
+SRC_G13 = ("PLATFORM rehook slots A1 ~0:30 and A2 ~1:00 by FUNCTION, a line that re-justifies the next stretch: a declared "
+           "[rehook] or [promise], the dated promise, a forward promise with a time or sequence anchor, or a template-family "
+           "line - the families are one signal, not the definition (38 B4 / 38 B5 / P1 QC / MAP s3; C04-R016 + C07-R007, "
+           "ledger b1f8c3fc2999: 'check the function doctrine specifies, not the phrasing it happens to illustrate')")
+# G47 / G47b (C03-R011): a script's promises about itself - invisible to a linter, broken in the first thirty seconds.
+NUM_WORDS = {w: i for i, w in enumerate("zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen "
+                                         "fifteen sixteen seventeen eighteen nineteen twenty".split())}
+NUM_WORDS.update(thirty=30, forty=40, fifty=50, sixty=60)
+ORDINALS = {w: i for i, w in enumerate("_ first second third fourth fifth sixth seventh eighth ninth tenth".split()) if i}
+_NUM_ALT = r"\d{1,2}|" + "|".join(sorted(NUM_WORDS, key=len, reverse=True))
+_NUM = "(" + _NUM_ALT + ")"
+SPAN_RUNTIME = re.compile(r"\b(?:(in|within)\s+)?the\s+next\s+" + _NUM + r"\s+minutes?\b", re.I)
+VIDEO_RUNTIME = re.compile(r"\bthis\s+" + _NUM + r"[- ]minutes?\s+(?:video|episode|film|story)\b", re.I)
+# A spoken runtime is a whole number of minutes (rounding alone is +-30 s) and a take lands inside the kit's 8% estimate
+# spread, so the tolerance is one full minute or 15% of the claim, whichever is larger: "the next ten minutes" holds for
+# 8:30-11:30 left; "the next eight minutes" with 11:30 left (the ledger case, 44% off) does not.
+RUNTIME_PROMISE_TOL_S = 60.0
+RUNTIME_PROMISE_TOL_FRAC = 0.15
+COUNT_UNITS = frozenset("minute second hour day week month year decade century time percent point dollar cent pound yen "
+                        "euro trillion billion million thousand hundred quarter half third".split())
+COUNTED_NOUN = re.compile(r"\b" + _NUM + r"\s+([a-z]{3,})\b", re.I)
+BARE_COUNT = re.compile(r"\b(?:all\s+)?the\s+" + _NUM + r"\b(?=\s*(?:[.,;:!?\"\u201d)]|$|of\s+them\b|(?:are|were|is|was|have|had|"
+                        r"will|did|do|can|could|would|that|who|which)\b))", re.I)
+_CAP = r"[A-Z][\w&'\u2019.-]*(?:\s+[A-Z][\w&'\u2019.-]*)*"
+NAMED_LIST = re.compile(_CAP + r"(?:\s*,\s*" + _CAP + r")+\s*,?\s+and\s+" + _CAP)
+SRC_G47 = ("A script's promises about itself: a self-referential runtime ('the next eight minutes', 'this ten-minute video') "
+           "agrees with the clock within max(60 s, 15%) - FAIL on a measured take, WARN on the estimate; a deadline ('in the "
+           "next N minutes') breaks only past the end (C03-R011, ledger e319a9d02fe4: 'The script promised eight minutes and ran twelve.')")
+SRC_G47B = ("A script's promises about itself: a counted promise ('the five', 'three questions') agrees with the items the "
+            "script names - the nearest named list, or the ordinals it walks - heuristic, so WARN (C03-R011, ledger "
+            "e319a9d02fe4: 'A viewer counts four and then hears five.')")
+# G48 (C09-R013): a publication-relative phrase is true on one date; a re-upload is a new assertion date.
+PERISHABLE = re.compile(
+    r"\b(?:this|last|next)\s+(?:week|month|year|quarter|morning|afternoon|evening|weekend|spring|summer|autumn|fall|winter)\b"
+    r"|\b(?:yesterday|today|tonight|tomorrow)\b|\bright now\b"
+    r"|\b(?:a|an|a few|a couple of|" + _NUM_ALT + r")\s+(?:days?|weeks?|months?|years?)\s+ago\b", re.I)
+SRC_G48 = ("Perishable time anchors: every publication-relative phrase ('this week', 'last month', 'yesterday', 'two weeks "
+           "ago', 'right now', 'this year') listed with its clock and re-screened at publish and at any re-upload - a false "
+           "time anchor is the same class of defect as a false figure (C09-R013, ledger 8eb3d01c6196, 7e61f43b1162: "
+           "'a re-upload renews them at today's date.')")
 
 
 @dataclass(frozen=True)
@@ -358,6 +413,124 @@ def _packaging_gates(sents, title: str | None, thumb: str | None, thumb_file: st
     return out
 
 
+def _rehook_functions(sents, tag_times) -> list[tuple[float, str]]:
+    """G13: every line that performs the rehook's function (re-justifies the next stretch, 38 B4-B5), with the signal read:
+    a declared [rehook] / [promise], the dated promise (A.A1_PROMISE), a forward promise with a time or sequence anchor,
+    or a template-family line. The families are one sufficient signal among these, never the definition (C04-R016)."""
+    hits = [(t, "[rehook]") for t in tag_times("rehook")] + [(t, "[promise]") for t in tag_times("promise")]
+    for st, _, s, _ in sents:
+        if re.search(A.A1_PROMISE, s, re.I):
+            hits.append((st, "dated promise"))
+        elif FUTURE.search(s) and TIME_ANCHOR.search(s):
+            hits.append((st, "forward promise"))
+        elif re.search("|".join(A.REHOOKS), s, re.I):
+            hits.append((st, "template family"))
+    return sorted(hits)
+
+
+def _num(word: str) -> int:
+    return int(word) if word.isdigit() else NUM_WORDS[word.lower()]
+
+
+def _mmss(s: float) -> str:
+    return f"{int(s // 60)}:{int(s % 60):02d}"
+
+
+def _singular(word: str) -> str | None:
+    w = word.lower()
+    if w.endswith("ies"):
+        return w[:-3] + "y"
+    if w.endswith("s") and not w.endswith("ss"):
+        return w[:-1]
+    return None
+
+
+def _runtime_promise_gate(sents, timeline) -> Gate:
+    """G47: a self-referential runtime against the clock. A span ('the next eight minutes', 'this 10-minute video') must
+    match what is left (or the runtime) within the tolerance; a deadline ('in/within the next N minutes, you'll...') is a
+    promise inside the video, so it breaks only when it points past the end."""
+    runtime = sents[-1][1] if sents else 0.0
+    clock = "measured" if timeline else "estimated"
+    claims, bad = 0, []
+    for st, en, s, _ in sents:
+        for m in SPAN_RUNTIME.finditer(s):
+            claims += 1
+            claim, left = _num(m.group(2)) * 60.0, max(runtime - en, 0.0)
+            deadline = bool(m.group(1))
+            off = claim - left if deadline else abs(claim - left)
+            if off > max(RUNTIME_PROMISE_TOL_S, RUNTIME_PROMISE_TOL_FRAC * claim):
+                bad.append(f"{_mmss(st)} '{m.group(0)}' = {_mmss(claim)} against {_mmss(left)} left"
+                           + (" (a deadline past the end)" if deadline else ""))
+        for m in VIDEO_RUNTIME.finditer(s):
+            claims += 1
+            claim = _num(m.group(1)) * 60.0
+            if abs(claim - runtime) > max(RUNTIME_PROMISE_TOL_S, RUNTIME_PROMISE_TOL_FRAC * claim):
+                bad.append(f"{_mmss(st)} '{m.group(0)}' = {_mmss(claim)} against a {_mmss(runtime)} runtime")
+    if bad:
+        return Gate("G47", SRC_G47, "FAIL" if timeline else "WARN",
+                    f"self-referential runtime disagrees with the {clock} clock: " + "; ".join(bad))
+    return Gate("G47", SRC_G47, "PASS", f"{claims} self-referential runtime claim(s), all within tolerance of the {clock} clock"
+                if claims else "no self-referential runtime claim")
+
+
+def _counted_promise_gate(sents) -> Gate:
+    """G47b: 'the five' against the nearest named list before it; 'three questions' against the ordinals the script walks
+    after it ('the first question', 'question two'). A count with nothing named to check it against is not judged."""
+    checked, bad, seen = 0, [], set()
+    last_list = None                                     # (clock, item count, text) of the nearest named list so far
+    for i, (st, _, s, _) in enumerate(sents):
+        lists = [(m.start(), m.group(0)) for m in NAMED_LIST.finditer(s)]
+        for m in BARE_COUNT.finditer(s):
+            n = _num(m.group(1))
+            prior = [x for x in lists if x[0] < m.start()]
+            ref = (st, *_list_size(prior[-1][1])) if prior else last_list
+            if n < 2 or ref is None:
+                continue
+            checked += 1
+            if ref[1] != n:
+                bad.append(f"{_mmss(st)} '{m.group(0)}' but the list at {_mmss(ref[0])} names {ref[1]} ({ref[2][:50]})")
+        if lists:
+            last_list = (st, *_list_size(lists[-1][1]))
+        for m in COUNTED_NOUN.finditer(s):
+            noun = _singular(m.group(2))
+            n = _num(m.group(1))
+            if noun is None or noun in COUNT_UNITS or n < 2 or (n, noun) in seen:
+                continue
+            seen.add((n, noun))
+            ords = re.compile(r"\b(" + "|".join(ORDINALS) + r")\s+" + re.escape(noun) + r"\b|\b" + re.escape(noun)
+                              + r"\s+(?:number\s+)?" + _NUM + r"\b", re.I)
+            named = [ORDINALS[x.group(1).lower()] if x.group(1) else _num(x.group(2))
+                     for _, _, later, _ in sents[i + 1:] for x in ords.finditer(later)]
+            if not named:
+                continue
+            checked += 1
+            if max(named) != n:
+                bad.append(f"{_mmss(st)} '{m.group(0)}' but the script names {noun}s up to #{max(named)}")
+    if bad:
+        return Gate("G47b", SRC_G47B, "WARN", "counted promise disagrees with the items named: " + "; ".join(bad))
+    return Gate("G47b", SRC_G47B, "PASS", f"{checked} counted promise(s) agree with what the script names"
+                if checked else "no counted promise with named items to check it against")
+
+
+def _list_size(listed: str) -> tuple[int, str]:
+    return len([x for x in re.split(r"\s*,\s*(?:and\s+)?|\s+and\s+", listed) if x.strip()]), listed
+
+
+def _perishable_gate(sents) -> Gate:
+    """G48: every publication-relative phrase with its clock and sentence - true on one date, re-screened at publish and
+    at any re-upload (C09-R013). Never a FAIL: the phrase may be right today; the row is the re-screen list."""
+    hits = [f"{_mmss(st)} '{m.group(0)}' in '{s[:60]}'" for st, _, s, _ in sents for m in PERISHABLE.finditer(s)]
+    if hits:
+        return Gate("G48", SRC_G48, "WARN", f"{len(hits)} publication-relative anchor(s) - re-screen each at publish and at any "
+                                            f"re-upload (a re-upload is a new assertion date): " + "; ".join(hits))
+    return Gate("G48", SRC_G48, "PASS", "no publication-relative time anchor")
+
+
+def _self_promise_gates(sents, timeline) -> list[Gate]:
+    """G47 / G47b / G48: what the script says about its own length, counts and date - shape-independent, so both modes."""
+    return [_runtime_promise_gate(sents, timeline), _counted_promise_gate(sents), _perishable_gate(sents)]
+
+
 # ---- the gate ---------------------------------------------------------------
 def _content_stems(sentence: str) -> set[str]:
     return {st for st in _stems(sentence) if st not in PACKAGING_STOPWORDS and len(st) >= PACKAGING_MIN_STEM}
@@ -445,6 +618,7 @@ def run_short(text: str, timeline: list[dict] | None, sents, marks, ring: str | 
     # S08 sentences short enough to speak and to caption (doc 37; the two-line caption gate holds 3-6 words a page)
     longest = max(((len(re.findall(r"[A-Za-z0-9'%$]+", s_)), s_) for _, _, s_, _ in sents), default=(0, ""))
     add("S08", f"doc 37 speech: sentences 10-15 words; over {SHORT_SENT_WARN_WORDS} is several caption pages of one breath", "WARN" if longest[0] > SHORT_SENT_WARN_WORDS else "PASS", f"longest sentence {longest[0]} words: '{longest[1][:70]}'")
+    g += _self_promise_gates(sents, timeline)           # C03-R011 G47 / G47b, C09-R013 G48: the words, not the shape
     stats = {"mode": "short (G2: doc 51 s51.2)", "runtime": mmss(runtime), "timing": "measured" if timeline else "estimated",
              "mechanism": sents[mech_k][2][:60] if mech_k is not None else "-", "instances": len(inst), "ring_close_from": mmss(close_start),
              "first_page": f"{min(pages):.2f}s" if pages else "-",   # E44: the page that carries the mechanism, when a scene timeline was read
@@ -488,6 +662,16 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
     rehook_hits = lambda lo, hi: sorted(set(
         [st for st, _, s, _ in sents if lo <= st <= hi and re.search("|".join(A.REHOOKS), s, re.I)]
         + [t for t in tag_times("rehook") if lo <= t <= hi]))
+
+    # E74: the long-form floor. A measured clock under 8:00 FAILs; an estimated one WARNs (the estimate is not the take).
+    if sents:
+        if runtime < LONG_MIN_S:
+            add("G46", SRC_G46, "FAIL" if timeline else "WARN",
+                f"runtime {mmss(runtime)} ({'measured' if timeline else 'estimated'}) is under the 8:00 floor - extend the "
+                f"argument with substance, or run it as a short under 3:00")
+        else:
+            add("G46", SRC_G46, "PASS", f"runtime {mmss(runtime)} ({'measured' if timeline else 'estimated'}) clears the 8:00 floor")
+    g += _self_promise_gates(sents, timeline)           # C03-R011 G47 / G47b, C09-R013 G48
 
     # ================= P1 - THE OPEN =================
     if sents:
@@ -569,9 +753,14 @@ def run(text: str, timeline: list[dict] | None = None, counterparty: str | None 
     tri1 = [t for t in tag_times("tricolon") if in_p1(t)]
     add("G12", "Rhetoric: ONE tricolon on the thesis line, none elsewhere in P1 (P1 B4 / doc 32 s3)", "PASS" if len(tri1) == 1 else "FAIL", f"{len(tri1)} declared in P1")
     add("J08", "Rhetoric: phonetic anchor only on the promise/payoff/tell (doc 32 s3)", "JUDGE", "read the promise line")
-    a2 = rehook_hits(A2_ANCHOR - 5, max(p1_end, A2_ANCHOR) * tol + 5)
-    add("G13", "PLATFORM rehook A2 ~1:00, template family (38 B5 / P1 QC)", "PASS" if a2 else "FAIL",
-        f"A2 at {mmss(a2[0])}" if a2 else f"no rehook construction in 0:55-{mmss(p1_end)}")
+    # C04-R016 + C07-R007: both P1 slots, by the rehook's function - the signal read is named on the row
+    fn = _rehook_functions(sents, tag_times)
+    slot = lambda lo, hi: next(((t, k) for t, k in fn if lo <= t <= hi), None)
+    a2_win = (A2_ANCHOR - 5, max(p1_end, A2_ANCHOR) * tol + 5)
+    slots = {"A1": (A1_WIN, slot(*A1_WIN)), "A2": (a2_win, slot(*a2_win))}
+    add("G13", SRC_G13, "PASS" if all(h for _, h in slots.values()) else "FAIL",
+        "; ".join(f"{k} at {mmss(h[0])} ({h[1]})" if h else f"{k} missing - no line re-justifies {mmss(w[0])}-{mmss(w[1])}"
+                  for k, (w, h) in slots.items()))
     # Truby Desire + Opponent, the map signpost - beat 5
     tdes = [t for t in tag_times("desire") if beat5_lo / tol <= t <= p1_end * tol]
     add("G38", "Truby Desire named: the goal the video pursues (38 B5)", "PASS" if tdes else "FAIL",
