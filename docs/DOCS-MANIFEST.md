@@ -15,7 +15,7 @@ its own headings, capability names, backlog ids. `terms` are its most frequent b
 terms. Purpose, terms and defines are truncated here to keep the file cheap to grep;
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 
-315 documents across 13 kinds.
+322 documents across 13 kinds.
 
 ## doctrine
 
@@ -118,7 +118,7 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - docs/content-video-engine/patterns/phase-guides/P6.md — P6 — THE CLOSE — Self-contained generation guide. Consume — defines: P6 — terms: {FORMAT}; audio-first; take-home; ring-native
 - docs/content-video-engine/patterns/SCRIPT-PATTERN-KIT.md — SCRIPT PATTERN KIT — A portable, deterministic script-generat — defines: — — terms: head-fake; long-form; micro-rules; channel-specific
 - docs/content-video-engine/patterns/SENTENCE-STRENGTH-CHECK.md — SENTENCE STRENGTH CHECK — the line-by-li — A per-sentence pass run AFTER a script c — defines: — — terms: Re-check; Re-run; page-ism; Attribution-first
-- docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md — SHORT-FORM SHAPE — the five positions an — What the one-shot proved (2026-09-12, `p — defines: — — terms: one-shot; LEDGER_ENTERS; axes; spiral
+- docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md — SHORT-FORM SHAPE — the five positions an — What the one-shot proved (2026-09-12, `p — defines: — — terms: one-shot; LEDGER_ENTERS; roll-out; axes
 - docs/content-video-engine/patterns/STRENGTH-LOOP.md — THE STRENGTH LOOP — gates at every scale — `SENTENCE-STRENGTH-CHECK.md` gates L0. T — defines: — — terms: trade-off; re-verifies; Cross-scale; Sub-sentence
 
 ## runbook
@@ -307,6 +307,13 @@ the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`.
 - content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/REVIEW_BRIEF_FOR_CLAUDE.md — Review Brief: "The Myth of Historical No — Repository Root: `C:/Users/Snipe/Downloa — defines: — — terms: September 2026; long-form; Scene-by-scene; Bravos-Style
 - content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/SCRIPT-PRODUCTION.md — THE MYTH OF "HISTORICAL NORMAL" — Script — Locked Title: The Myth of "Historical No — defines: P52 — terms: hyper-leveraged; low-debt; twenty-two; [ring]
 - content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/VISUAL-CHOREOGRAPHY.md — VISUAL & EVIDENCE CHOREOGRAPHY SPECIFICA — Standard: Doc 29 (`29-EVIDENCE-MOTION-ST — defines: P1; P6 — terms: DGS10; #F4E6C7; #25313C; #B23A22
+- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/GATES-MOTION.md — MOTION GATE — build-review — TIMELINE: bridge-short.timeline.json sha — defines: — — terms: bridge-short
+- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/CHECKLIST.md — Publish checklist - Normal For Which Bri — 9:16 - 0:57 - every step below is a HUMA — defines: — — terms: YouTube; per-platform; ## Title; thumbnail.png
+- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/DESCRIPTION-FACEBOOK.md — Normal For Which Bridge - the Facebook / — Written by `publish_package.py` from `bu — defines: — — terms: build-review; hand-written; normal-for-which-bridge; SCRIPT-SHORT-VO.txt
+- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/DESCRIPTION-YOUTUBE.md — Normal For Which Bridge - the YouTube de — Written by `publish_package.py` from `bu — defines: — — terms: build-review; hand-written; normal-for-which-bridge; SCRIPT-SHORT-VO.txt
+- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/PINNED-COMMENT.md — Normal For Which Bridge - the pinned com — Written by `publish_package.py` from `bu — defines: — — terms: build-review; hand-written; normal-for-which-bridge; SCRIPT-SHORT-VO.txt
+- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/SOURCES.md — Normal For Which Bridge - the sources bl — Written by `publish_package.py` from `bu — defines: — — terms: build-review; hand-written; normal-for-which-bridge; SCRIPT-SHORT-VO.txt
+- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/SELF-WATCH.md — SELF-WATCH - normal-for-which-bridge - b — player.html sha256 03bc793d089b - timeli — defines: — — terms: ev-federal-load; DESCRIPTION-FACEBOOK; DESCRIPTION-YOUTUBE; PINNED-COMMENT
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/single-world-index-mechanism-proof-v1/REVIEW.md — Single-World Index Mechanism Proof — Rev — Window: canonical narration words 1072–1 — defines: — — terms: long-tail; 10 largest holdings of 500 total; ≈40%; watch-review-boundaries
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/evidence-coverage-v1/coverage-summary.md — P32 Full-Episode Evidence Coverage Basel — Artifact: `ab547e586cefbb53e699bc69b8863 — defines: P32 — terms: Source-pack; composition-approved; production-ready; new-world-art
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/CLAUDE.md — HyperFrames Composition Project — Always invoke the relevant skill before — defines: — — terms: window.__timelines; framework-specific; data-*; shader-compatible

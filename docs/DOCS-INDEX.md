@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-3969 records across 315 files.
+3984 records across 322 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -270,6 +270,42 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L53 [3] B. The Ledger Page Chalkboard Component — - Component ID: `<LedgerChalkboardDeckle />` (Remotion / SVG) {Component ID:; Parameters:}
 - L66 [3] C. The Equity Cushion Balance Scale — - Component ID: `<EquityCushionBalanceScale />` (Remotion Physics Engine) {Component ID:; Governing Physics:; Deflection Calibrations:} <1982 State; 2026 State>
 - L74 [3] D. The Carrying Capacity Diagnostic Worksheet — - Component ID: `<CarryingCapacityWorksheet />` (SVG / Dynamic Typography) {Component ID:; Fields:} <Coverage; Maturity; Pricing Power; Gross Margin Delta (8 Quarters)>
+
+## content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/GATES-MOTION.md
+
+- L1 [1] MOTION GATE — build-review — TIMELINE: bridge-short.timeline.json sha256:a0d4c505a26ce49a12220af9e4ccdc66614cb9ea669706b3ad2f26567ae802d9 <bridge-short>
+
+## content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/CHECKLIST.md
+
+- L1 [1] Publish checklist - Normal For Which Bridge (Money Physics) - `build-review` — 9:16 - 0:57 - every step below is a HUMAN's. The package is written from the build's own artifacts; scheduling and API posting are out of scope (R26-8). {The master:} <YouTube; per-platform; ## Title; thumbnail.png; first-frame.png; TAGS.txt; ## First comment; hand-written; MANIFEST.json; EVIDENCE-DOSSIER>
+
+## content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/DESCRIPTION-FACEBOOK.md
+
+- L1 [1] Normal For Which Bridge - the Facebook / Instagram description (Money Physics) — Written by `publish_package.py` from `build-review`'s own artifacts - the take's sentences, the compiled timeline's title, aspect and source lines, the dossier' <build-review; hand-written; normal-for-which-bridge; SCRIPT-SHORT-VO.txt; vo-short; as-is>
+- L7 [2] Description (paste as-is)
+
+## content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/DESCRIPTION-YOUTUBE.md
+
+- L1 [1] Normal For Which Bridge - the YouTube description (Money Physics) — Written by `publish_package.py` from `build-review`'s own artifacts - the take's sentences, the compiled timeline's title, aspect and source lines, the dossier' <build-review; hand-written; normal-for-which-bridge; SCRIPT-SHORT-VO.txt; vo-short; as-is>
+- L7 [2] Title (paste into the title field)
+- L13 [2] Description (paste as-is)
+
+## content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/PINNED-COMMENT.md
+
+- L1 [1] Normal For Which Bridge - the pinned comment (Money Physics) — Written by `publish_package.py` from `build-review`'s own artifacts - the take's sentences, the compiled timeline's title, aspect and source lines, the dossier' <build-review; hand-written; normal-for-which-bridge; SCRIPT-SHORT-VO.txt; vo-short>
+- L7 [2] Pinned comment (post right after publishing, then pin it)
+
+## content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/SOURCES.md
+
+- L1 [1] Normal For Which Bridge - the sources block (Money Physics) — Written by `publish_package.py` from `build-review`'s own artifacts - the take's sentences, the compiled timeline's title, aspect and source lines, the dossier' <build-review; hand-written; normal-for-which-bridge; SCRIPT-SHORT-VO.txt; vo-short>
+- L7 [2] The block both descriptions carry
+
+## content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/SELF-WATCH.md
+
+- L1 [1] SELF-WATCH - normal-for-which-bridge - build-review - 2026-09-12 - short (1 min opening) — player.html sha256 03bc793d089b - timeline bridge-short.timeline.json - runtime 0:57 - aspect 9:16 - script SCRIPT-SHORT <bridge-short; SCRIPT-SHORT; ev-federal-load; DESCRIPTION-FACEBOOK; DESCRIPTION-YOUTUBE; PINNED-COMMENT; first-frame; EVIDENCE-DOSSIER; --html; sentence-act; no row>
+- L4 [2] 1. The gates (mechanical - a FAIL here ends the report) — | row | verdict | detail | <ev-federal-load; DESCRIPTION-FACEBOOK; DESCRIPTION-YOUTUBE; PINNED-COMMENT; first-frame; EVIDENCE-DOSSIER>
+- L16 [2] 2. The opening, read (the agent fills these by reading the sheets - never by the gates alone) — sheets: self-watch/ opening.1.png, opening.2.png, opening.3.png (28 tiles at 2 s steps from 0:00 to 0:54, 360 px, 12 per sheet) <self-watch; --html; sentence-act; no row>
+- L35 [2] 3. Verdict — TODO - the agent reads the sheets and fills O1-O10; CLEAN is written after the read
 
 ## content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/single-world-index-mechanism-proof-v1/REVIEW.md
 
@@ -3741,11 +3777,11 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1 [1] SHORT-FORM SHAPE — the five positions and the enter each one takes — What the one-shot proved (2026-09-12, `projects/systems-and-blowups/normal-for-which-bridge`: a NEW short written {how the world ARRIVES at each position} <one-shot; THE-SHORTS-FORMAT; chart-on-the-hook; LEDGER_ENTERS; SPECIES-BY-SENTENCE; axes; spiral; enter=axes; roll-out; world-taking; stamp_transition_pages; exit=cut>
 - L15 [2] The five positions — | # | Position | What the sentence does | `enter` | Bound by | {APEX READ; INSTANCES; THE TURN; THE COST; THE RING} <enter; axes; spiral; one-shot>
 - L35 [2] 1. The APEX READ — `enter=axes` — The charcoal page lands on its ground at frame 0 with its title, its scale, its ticks and its axes drawn, and the DATA {S01; S02} <LEDGER_ENTERS; one-shot; roll-out>
-- L48 [2] 2. The INSTANCES — `enter=axes`, stamped — One page per instance, each arriving with ink because it follows a world-taking transition (a suck or a melt). The {with ink; S03; S04 / J51; M31} <world-taking; stamp_transition_pages; exit=cut; [new]; [catalyst]; G-g>
-- L60 [2] 3. The TURN — `enter=spiral` — The page that opened the short comes back, already drawn, and unwinds from its point: no roll, no soak, no ink, no {already drawn; S06; M05 / E69} <re-build; LEDGER_ENTERS; SIGNATURE_ENTERS; re-draws; one-shot; build_to; figure; span; pages-only>
-- L71 [2] 4. The COST — `enter=axes`, stamped — Its own page, entered with ink after the melt, cut out again. It is an INSTANCE of the same mechanism, not a second {S03; J50} <one-shot; span>
-- L81 [2] 5. The RING — `enter=spiral` — The opening page returns a second time, already drawn, and is asked the hook's own question (`retitle` rewrites the {S05; E56} <retitle; figure; re-states>
-- L91 [2] Proposing the rows for a position — `lint_species_choice.py --propose` reads every sentence's ACT against the map and offers a draft row per available {proposer} <lint_species_choice.py --propose; facts>
+- L48 [2] 2. The INSTANCES — `enter=axes`, stamped — One page per instance, each arriving with ink because it follows a world-taking transition (a suck or a melt) out {with ink; S03; S04 / J51} <world-taking; roll-out; stamp_transition_pages; exit=cut; [new]; [catalyst]; G-g>
+- L61 [2] 3. The TURN — `enter=spiral` — The page that opened the short comes back, already drawn, and unwinds from its point: no roll, no soak, no ink, no {already drawn; S06; M05 / E69} <re-build; LEDGER_ENTERS; SIGNATURE_ENTERS; re-draws; one-shot; build_to; figure; span; pages-only>
+- L72 [2] 4. The COST — `enter=axes`, stamped — Its own page, entered with ink after the melt, cut out again. It is an INSTANCE of the same mechanism, not a second {S03; J50} <one-shot; span>
+- L82 [2] 5. The RING — `enter=spiral` — The opening page returns a second time, already drawn, and is asked the hook's own question (`retitle` rewrites the {S05; E56} <retitle; figure; re-states>
+- L92 [2] Proposing the rows for a position — `lint_species_choice.py --propose` reads every sentence's ACT against the map and offers a draft row per available {proposer} <lint_species_choice.py --propose; facts>
 
 ## docs/content-video-engine/patterns/STRENGTH-LOOP.md
 
@@ -4153,7 +4189,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L2259 [2] E70 — Chirp does not ship on YouTube; the lane splits by platform again, and a one-shot renders BOTH takes for the data (2026-09-12) — Ruling (the operator, asked which clock a one-shot should run on): *"I think Chirp can't ship on youtube, it got {Ruling (the operator, asked which clock a one-shot should ru; The reason.} <mass-produced; side-by-side; platform-side; ElevenLabs; scratch_take.py --engine both; near-free; --engine both>
 - L2286 [2] E71 — The first cut that ships is the first one clean of the gates AND of every defect the agent can see (2026-09-12) — Ruling (the operator, on how a one-shot should iterate): *"you have loop/editor/re-prompt permissions. The first {Ruling (the operator, on how a one-shot should iterate):; The reason.} <re-prompt; Gate-clean>
 - L2311 [2] E72 — Generating and using assets is the agent's; only the finished video needs the operator (2026-09-12) — Ruling (the operator, on how rich a one-shot's world should be): *"Full world, but we should start by building out {Ruling (the operator, on how rich a one-shot's world should; The chart comes first and is used to its limit.} <per-order; zero-credit; on_screen; create_flow_image>
-- L2337 [2] E73 — The hook opens on its axes and is answered on the ledger; the inked arrival is the exception, the mount stays alive (2026-09-12) — Ruling (the operator, reading P53's human gates): *"hook should open on the axes register, then we immediately {Ruling (the operator, reading P53's human gates):; The reason.} <roll-out; enter=axes; first-scene; exit=cut; built; stamp_transition_pages; after-stamp>
+- L2337 [2] E73 — The hook opens on its axes and is answered on the ledger; the inked arrival is the exception, the mount stays alive (2026-09-12) — Ruling (the operator, reading P53's human gates): *"hook should open on the axes register, then we immediately {Ruling (the operator, reading P53's human gates):; The reason.} <roll-out; enter=axes; first-scene; exit=cut; built; chart-to-chart; stamp_transition_pages; after-stamp>
 
 ## docs/portable/OUTRO-CTA-PLAYBOOK.md
 

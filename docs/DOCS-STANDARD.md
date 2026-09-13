@@ -14,8 +14,8 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 18 | 338 | 95.3% | 93.2% | 3 | 97.5 |
-| Process (everything else) | 297 | 3349 | 97.6% | 92.1% | 11 | 100.0 |
-| All docs | 315 | 3687 | 97.4% | 92.2% | 14 | 100.0 |
+| Process (everything else) | 304 | 3364 | 97.6% | 92.0% | 11 | 100.0 |
+| All docs | 322 | 3702 | 97.4% | 92.1% | 14 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -27,20 +27,20 @@ item, a quote, a table row or a fence.
 | 70 | `docs/seo-insights-platform-implementation-plan.md` | 27 | 17/27 | 18/27 | 0 |
 | 73 | `docs/seo-ingestion-implementation-tasks.md` | 14 | 10/14 | 9/14 | 0 |
 | 76 | `docs/content-video-engine/prompts/PROBE-AGENT-LOOP-V1.md` | 8 | 7/8 | 4/8 | 0 |
+| 77 | `content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/DESCRIPTION-YOUTUBE.md` | 3 | 3/3 | 1/3 | 0 |
 | 79 | `content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md` | 12 | 9/12 | 9/12 | 0 |
 | 79 | `content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md` | 12 | 9/12 | 9/12 | 0 |
 | 81 | `docs/seo-ingestion-pipeline-spec.md` | 21 | 16/21 | 17/21 | 0 |
 | 81 | `docs/seo-insights-platform-architecture.md` | 58 | 51/58 | 37/58 | 0 |
+| 82 | `content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/DESCRIPTION-FACEBOOK.md` | 2 | 2/2 | 1/2 | 0 |
+| 82 | `content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/PINNED-COMMENT.md` | 2 | 2/2 | 1/2 | 0 |
+| 82 | `content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/SOURCES.md` | 2 | 2/2 | 1/2 | 0 |
 | 82 | `content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/VIDEO-DESCRIPTION.md` | 2 | 2/2 | 1/2 | 0 |
 | 82 | `content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md` | 4 | 4/4 | 2/4 | 0 |
 | 82 | `docs/content-video-engine/patterns/INJECTION.md` | 6 | 6/6 | 3/6 | 0 |
 | 86 | `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PACKAGING.md` | 5 | 5/5 | 3/5 | 0 |
 | 86 | `docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md` | 6 | 5/6 | 5/6 | 0 |
 | 86 | `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md` | 23 | 23/23 | 14/23 | 0 |
-| 86 | `docs/run-centric-schema-notes.md` | 8 | 6/8 | 8/8 | 1 |
-| 87 | `content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md` | 5 | 4/5 | 5/5 | 1 |
-| 87 | `docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md` | 8 | 7/8 | 7/8 | 1 |
-| 88 | `content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md` | 4 | 3/4 | 4/4 | 0 |
 
 ## Appendix A - sections missing a lead line
 

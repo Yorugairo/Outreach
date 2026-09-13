@@ -4673,15 +4673,37 @@ async function mount(doc) {
       let clearY = my(last[1]);
       if (ax.name_clear) for (const q of drawn) for (const [qx, qv] of q.pts) { const px2 = mx(qx);
         if (px2 >= xEnd - spanX && px2 <= xEnd) clearY = Math.min(clearY, my(qv)); }
-      const name = lpEl("text", "sname", st.chart, P ? { x: (nameBelow ? W - R : Math.min(mx(last[0]), mx(prev[0])) - 8).toFixed(1), y: (nameBelow ? B - 28 : my(last[1]) - 30).toFixed(1), "text-anchor": "end", fill: col, opacity: 0 }
-                                                     : { x: (mx(last[0]) + 12).toFixed(1), y: (my(last[1]) + 8).toFixed(1), fill: col, opacity: 0 });
+      /* TIP CLEAR (normal-for-which-bridge review-v1, 2026-09-12): the last datum is the most-marked point on a line - a ring,
+         a callout - and the name ended 8 px from it, so the dashed ring at 0:57 sat on "x3.9 Federal debt". A page whose
+         ring or callout marks the tip (`tip_mark: [series]`, stamped by the compiler off the species' own targets) ends
+         the name past the ring's reach (a hugging ring's, not RING.MIN_RX's). Unmarked pages draw exactly as before. */
+      const tipClr = !s.muted && Array.isArray(pg.tip_mark) && pg.tip_mark.includes(s.si | 0) ? (P ? 110 : 56) : 0;   /* the ring's worst reach left of its datum: ringMark can take in ink up to e.rx (MIN_RX 54 + pad) back, then pads the mark by RX_PAD 22 + pad again - 76 px + 2 pad, measured 36 px short at 72 on review 0:57 */
+      /* THE SIDE AWAY FROM A NEIGHBOUR (the same review, 0:19): on a two-line page the name sits 30 px over its own tip, and
+         "10-year" was written on the 30-year line above it. A name whose box would cross ANOTHER series' line goes
+         UNDER its own line instead, when that room is clear - the name stays beside the line it names. */
+      let nameY = nameBelow ? B - 28 : my(last[1]) - 30;
+      const nameXEnd = nameBelow ? W - R : Math.min(mx(last[0]), mx(prev[0])) - 8 - tipClr;
+      if (P && !nameBelow && drawn.length > 1) {
+  /* the name's OWN width, not spanX: at 330 px the room under a dipping line read as taken (review 0:20.8, "10-year" 155 px wide) */
+  const nameW = Math.max(60, ((s.label ? s.label + " " : "") + (s.name || "")).length * 23);
+        const inSpan = (px2) => px2 >= nameXEnd - nameW && px2 <= nameXEnd + 8;
+        const crosses = (y) => drawn.some((q) => (q.si | 0) !== (s.si | 0) && q.pts.some(([qx, qv]) => inSpan(mx(qx)) && my(qv) >= y - 44 && my(qv) <= y + 12));
+        if (crosses(nameY)) {
+          let own = my(last[1]);
+          for (const [qx, qv] of s.pts) if (inSpan(mx(qx))) own = Math.max(own, my(qv));
+          const under = own + 52;
+          if (under <= B - 12 && !crosses(under)) nameY = under;
+        }
+      }
+      const name = lpEl("text", "sname", st.chart, P ? { x: nameXEnd.toFixed(1), y: nameY.toFixed(1), "text-anchor": "end", fill: col, opacity: 0 }
+                                                     : { x: (mx(last[0]) + 12 + tipClr).toFixed(1), y: (my(last[1]) + 8).toFixed(1), fill: col, opacity: 0 });
       st.linePts.push(s.pts.map(([x, v]) => [mx(x), my(v)]));   /* the exact datum positions, for the species' targets */
       name.textContent = s.muted ? "" : (s.label ? s.label + " " : "") + (s.name || "");   /* the muted history carries no name */
       /* DYNAMIC LABEL: the badge that keys this line rides its inline name as the tag, in the accent - one
          reveal, one real estate (operator, 2026-09-03) */
       const ib = (st.inlineBadges || {})[s.color];
       if (ib && ib.tag) { const tg = lpEl("tspan", "tagchip", name, { dx: 12, fill: col }); tg.textContent = ib.tag; }
-      const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: nameBelow ? B - 28 : my(last[1]) + (P ? -30 : 8),
+      const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: P ? nameY : my(last[1]) + 8,
                      pts: s.pts.map(([x, v]) => [mx(x), my(v)]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted,
                      data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum; P48 T2: and its DATA, so a rescale re-projects it */
       if (ax.name_clear && !nameBelow) rec.ny = Math.min(rec.ny, clearY - (P ? 34 : 20));

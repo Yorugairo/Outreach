@@ -18,10 +18,10 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-4986 topics, 6336 citation edges. The 200 largest topics follow,
+5002 topics, 6362 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
-## youtube (183)
+## youtube (185)
 
 - content/video_engine/projects/history-of-bjj/README.md:1 — History of BJJ Series — This directory contains source-controlled editorial inputs for History Documentary
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:1 — How Japan Tricked Trump — Production Hand-off Pack — Project: `japan-tariff-trick` (Systems & Blowups / Money Physics)
@@ -30,12 +30,12 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PACKAGING.md:32 — 3. Video Description (YouTube Shorts / Reels / TikTok)
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/sound/SOURCES.md:114 — Tokyo short - the press pack and the beds (2026-09-05) — Press clicks (operator: "press camera clicking noises for all of the people with their phones out starting at 0:09"):
 - content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/REVIEW_BRIEF_FOR_CLAUDE.md:1 — Review Brief: "The Myth of Historical Normal" Production Package — Repository Root: `C:/Users/Snipe/Downloads/Outreach Program`
+- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/CHECKLIST.md:1 — Publish checklist - Normal For Which Bridge (Money Physics) - `build-review` — 9:16 - 0:57 - every step below is a HUMAN's. The package is written from the build's own artifacts; scheduling and API p
+- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/DESCRIPTION-YOUTUBE.md:1 — Normal For Which Bridge - the YouTube description (Money Physics) — Written by `publish_package.py` from `build-review`'s own artifacts - the take's sentences, the compiled timeline's titl
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:7 — Editorial changes (the reason for the rewrite) — 1. Hook: the audience claim retargets to what is TRUE. The single
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:1 — SCRIPT H — REWRITE ORDER (draft 2026-09-08, awaiting operator confirmation) — SCOPE CORRECTED 2026-09-08 (operator). This began as an opening-only
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:48 — The evidence holds (render timeline, 2026-09-08) — Measured from `build-f/steel-and-paper.timeline.json` — runtime 806.5 s, which
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:224 — Publication (operator decision — RECOMMENDED, not confirmed) — Re-cut, unlist the original (never delete — it is the analytics baseline
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-C-PRODUCTION.md:1 — Steel and Paper — SCRIPT C (PRODUCTION TEXT) — Script B with Revision C applied. Structure, beats and the five hardest
-- … 171 more in `docs/DOCS-TOPICS.jsonl`
+- … 173 more in `docs/DOCS-TOPICS.jsonl`
 
 ## hyperframes (102)
 
@@ -691,6 +691,23 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:389 — C1: Shape Interpolation (ARAP) [Tier 1 Math — CLOSED] — - Polar decomposition of deformation gradient:
 - … 14 more in `docs/DOCS-TOPICS.jsonl`
 
+## roll-out (26)
+
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/sound/SOURCES.md:8 — Ledger page cues (P35 T9, sourced 2026-09-02) — Human Gate 5 DECIDED: CC0 via the Freesound v2 API, zero paid audio.
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/sound/SOURCES.md:55 — Slots in SOUND-PLAN.json (`page_cues`, page-relative) — The three slots live under a separate top-level `page_cues` list, not in
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/SOURCES.md:8 — Ledger page cues (P35 T9, sourced 2026-09-02) — Human Gate 5 DECIDED: CC0 via the Freesound v2 API, zero paid audio.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/SOURCES.md:55 — Slots in SOUND-PLAN.json (`page_cues`, page-relative) — The three slots live under a separate top-level `page_cues` list, not in
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:1 — Tokyo short v2 — the shot table under E44 (proposal for the operator, 2026-09-06) — Same take (`SCRIPT-90S-VO.claude.txt`, the paused master, 88.82 s), same clips, same three ledger pages, same outro.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:25 — v2 — the page rolls out on the hook, the clips become mounts and docks — | v2 | span | on the words | world | how it arrives | what it proves |
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:44 — The cues (`sound/SOUND-PLAN.json`) — | cue | v1 | v2 |
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md:8 — Ledger page cues (P35 T9, sourced 2026-09-02) — Human Gate 5 DECIDED: CC0 via the Freesound v2 API, zero paid audio.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md:55 — Slots in SOUND-PLAN.json (`page_cues`, page-relative) — The three slots live under a separate top-level `page_cues` list, not in
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:127 — 5. The Ledger Page as the Core Drawing & Animation Engine
+- content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:127 — 5. The Ledger Page as the Core Drawing & Animation Engine
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1463 — 9.26 The LEDGER PAGE — the plate-chart species, the channel's signature (operator, 2026-09-02) — Ruling E22. Operator: *"if we could roll out a cream paper that gets
+  cited by: content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/BRAVOS-STYLE-EVIDENCE-PACK.md:2, content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:1, content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md:162, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:7, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:158, +18 more
+- … 14 more in `docs/DOCS-TOPICS.jsonl`
+
 ## s-y (26)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:15 — Architecture Diagram & The 4 Core Mechanical Pillars
@@ -753,23 +770,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:31 — The unit as it should read (target ~62s, turn lands ~3:10) — > At the dot-com peak, that share hit twenty-three cents. Today it's
 - content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md:63 — 3. Information Architecture & Retention Pacing
 - content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md:65 — 6-Phase Retention Architecture Mapping
-- … 13 more in `docs/DOCS-TOPICS.jsonl`
-
-## roll-out (25)
-
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/sound/SOURCES.md:8 — Ledger page cues (P35 T9, sourced 2026-09-02) — Human Gate 5 DECIDED: CC0 via the Freesound v2 API, zero paid audio.
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/sound/SOURCES.md:55 — Slots in SOUND-PLAN.json (`page_cues`, page-relative) — The three slots live under a separate top-level `page_cues` list, not in
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/SOURCES.md:8 — Ledger page cues (P35 T9, sourced 2026-09-02) — Human Gate 5 DECIDED: CC0 via the Freesound v2 API, zero paid audio.
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/sound/SOURCES.md:55 — Slots in SOUND-PLAN.json (`page_cues`, page-relative) — The three slots live under a separate top-level `page_cues` list, not in
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:1 — Tokyo short v2 — the shot table under E44 (proposal for the operator, 2026-09-06) — Same take (`SCRIPT-90S-VO.claude.txt`, the paused master, 88.82 s), same clips, same three ledger pages, same outro.
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:25 — v2 — the page rolls out on the hook, the clips become mounts and docks — | v2 | span | on the words | world | how it arrives | what it proves |
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V2-PROPOSAL.md:44 — The cues (`sound/SOUND-PLAN.json`) — | cue | v1 | v2 |
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md:8 — Ledger page cues (P35 T9, sourced 2026-09-02) — Human Gate 5 DECIDED: CC0 via the Freesound v2 API, zero paid audio.
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/sound/SOURCES.md:55 — Slots in SOUND-PLAN.json (`page_cues`, page-relative) — The three slots live under a separate top-level `page_cues` list, not in
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:127 — 5. The Ledger Page as the Core Drawing & Animation Engine
-- content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:127 — 5. The Ledger Page as the Core Drawing & Animation Engine
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1463 — 9.26 The LEDGER PAGE — the plate-chart species, the channel's signature (operator, 2026-09-02) — Ruling E22. Operator: *"if we could roll out a cream paper that gets
-  cited by: content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/BRAVOS-STYLE-EVIDENCE-PACK.md:2, content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:1, content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md:162, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:7, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:1, content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:158, +18 more
 - … 13 more in `docs/DOCS-TOPICS.jsonl`
 
 ## seek-safe (25)
@@ -2727,7 +2727,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:184 — Track D — placement (the "where" question) — | # | question | why it matters here |
 - docs/content-video-engine/PIPELINE.md:109 — Captions — doc 29 Part 5, not your own design — - One fixed lower-third anchor. Evidence roams; the caption does not.
 - docs/portable/OPERATOR-RULINGS.md:557 — E21 — The screen never goes still; captions ARE the motion when nothing else moves (2026-09-02) — Operator, watching Steel and Paper after a week of flat performance: "we
-  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/VISUAL-CHOREOGRAPHY.md:2, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:24, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:48, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:105, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:243, +44 more
+  cited by: content/video_engine/projects/systems-and-blowups/korea-memory-toll/SHOT-TABLE-90S.md:30, content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/VISUAL-CHOREOGRAPHY.md:2, content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/SELF-WATCH.md:16, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:24, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:48, content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-H.md:105, +45 more
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
 ## model-agnostic (14)
@@ -3205,12 +3205,12 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md:1 — SHORT-FORM SHAPE — the five positions and the enter each one takes — What the one-shot proved (2026-09-12, `projects/systems-and-blowups/normal-for-which-bridge`: a NEW short written
 - docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md:15 — The five positions — | # | Position | What the sentence does | `enter` | Bound by |
 - docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md:35 — 1. The APEX READ — `enter=axes` — The charcoal page lands on its ground at frame 0 with its title, its scale, its ticks and its axes drawn, and the DATA
-- docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md:60 — 3. The TURN — `enter=spiral` — The page that opened the short comes back, already drawn, and unwinds from its point: no roll, no soak, no ink, no
-- docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md:71 — 4. The COST — `enter=axes`, stamped — Its own page, entered with ink after the melt, cut out again. It is an INSTANCE of the same mechanism, not a second
+- docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md:61 — 3. The TURN — `enter=spiral` — The page that opened the short comes back, already drawn, and unwinds from its point: no roll, no soak, no ink, no
+- docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md:72 — 4. The COST — `enter=axes`, stamped — Its own page, entered with ink after the melt, cut out again. It is an INSTANCE of the same mechanism, not a second
 - docs/portable/OPERATOR-RULINGS.md:2013 — E62 — Under a card the caption keeps its size and MOVES; it shrinks only when no band fits (2026-09-11) — The operator's words. On the first gate-1 read of the one-shot bar (P51 T3, the Tokyo cut), on the anchor caption
-  cited by: content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/SCRIPT-PRODUCTION.md:95, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1389, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:21, docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:86, +3 more
+  cited by: content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/SCRIPT-PRODUCTION.md:95, content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/SELF-WATCH.md:16, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1389, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:21, +4 more
 - docs/portable/OPERATOR-RULINGS.md:2228 — E69 — The 20-second hold ceiling is a relic of the still-plate era: a held frame is legal while it LIVES (2026-09-12) — Ruling (the operator, on the first pages-only short, whose three-page shape was cut into five worlds to clear the
-  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1143, docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md:15, docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md:60
+  cited by: docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1143, docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md:15, docs/content-video-engine/patterns/SHORT-FORM-SHAPE.md:61
 - docs/portable/OPERATOR-RULINGS.md:2259 — E70 — Chirp does not ship on YouTube; the lane splits by platform again, and a one-shot renders BOTH takes for the data (2026-09-12) — Ruling (the operator, asked which clock a one-shot should run on): *"I think Chirp can't ship on youtube, it got
   cited by: docs/portable/OPERATOR-RULINGS.md:1765, docs/portable/VOICE-PACK.md:237
 - … 1 more in `docs/DOCS-TOPICS.jsonl`

@@ -1405,9 +1405,12 @@ def stamp_transition_pages(scenes: list[dict]) -> list[str]:
     drip one (`scratchpad/p52/dbg-wA-suck:0.5,0.5-15.15.png`, 2026-09-12).
 
     THE HOOK (the operator, 2026-09-12): the first scene's ledger page with no declared enter opens on `axes` - the
-    charcoal page on its axes, the chart drawing from frame 0, answered on the ledger at once. (An earlier stamp put
-    `axes` on every page AFTER a suck or a melt; the operator withdrew it the same day: the inked arrival is for the
-    first frame or a row that needs speed, and the roll-out and the mount stay the normal arrivals.)
+    charcoal page on its axes, the chart drawing from frame 0, answered on the ledger at once.
+
+    CHART TO CHART (the operator, 2026-09-12, correcting E73's first reading): a suck or a melt from one ledger page
+    to ANOTHER never shows the empty cream - the next page is on its axes under the outgoing one. The empty cream
+    roll-out is the MOUNT's register (a ledger plate onto a narrative plate), so a plate after the transition, or a
+    page that declares its enter, keeps its own arrival.
 
     A row that declares its own enter or exit is never touched: an author who has chosen is not corrected. Returns
     one line per stamp, for the build to print - a default that is silent is a default nobody can argue with."""
@@ -1420,10 +1423,14 @@ def stamp_transition_pages(scenes: list[dict]) -> list[str]:
         if pg is not None and not pg.get("exit"):
             pg["exit"] = "cut"
             notes.append(f"{sc.get('scene_id', '?')}: exit=cut stamped - the page under a {kind} must not retract first (R26-60)")
-    # THE PAGE AFTER one is NOT stamped (withdrawn 2026-09-12, the operator: "I dont think next page arrives already
-    # inked most of the time, i think that's only for the first frame or when we need speed ... the mount isn't all of
-    # the sudden a dead component"). The inked arrival is the hook's register and a declared exception; after a suck
-    # or a melt the page arrives by its own roll-out or its mount.
+        # CHART TO CHART (the operator, 2026-09-12: "The empty cream stage isnt supposed to be on stage during the exits
+        # ... It doesnt make sense to do that when transitioning from chart-to-chart, that is used for mounting a ledger
+        # plate to a narrative plate"): the page a suck or a melt hands to is already on its axes under the outgoing one
+        nxt = scenes[i + 1] if i + 1 < len(scenes) else None
+        npg = ((nxt.get("world") or {}).get("page")) if nxt and isinstance((nxt.get("world") or {}).get("page"), dict) else None
+        if pg is not None and npg is not None and not npg.get("enter"):
+            npg["enter"] = "axes"
+            notes.append(f"{nxt.get('scene_id', '?')}: enter=axes stamped - chart to chart, the next page is on stage under the {kind}, never empty cream")
     # THE HOOK (the operator, 2026-09-12: "hook should open on the axes register, then we immediately answer it on the
     # ledger"): the first scene, a ledger page at t=0 with no declared enter, opens on its axes and draws from frame 0.
     if scenes:
@@ -1432,6 +1439,37 @@ def stamp_transition_pages(scenes: list[dict]) -> list[str]:
         if fpg is not None and not fpg.get("enter") and float((first.get("span") or [1.0])[0]) <= 0.05:
             fpg["enter"] = "axes"
             notes.append(f"{first.get('scene_id', '?')}: enter=axes stamped - the hook opens on the axes register and is answered on the ledger")
+    return notes
+
+
+TIP_MARK_KINDS = ("ring", "callout")   # the species that draw an ellipse round their datum
+
+
+def stamp_tip_marks(scenes: list[dict]) -> list[str]:
+    """A ledger page whose ring or callout lands on a line's LAST datum is stamped `tip_mark: [series, ...]`.
+
+    The line's terminal name is written just left of its tip, and the ellipse round that tip is at least RING.MIN_RX
+    wide - so on normal-for-which-bridge review-v1 (0:57) the dashed ring sat on "x3.9 Federal debt". A stage painter
+    cannot read the page's labels; the PAGE can keep the room, if it is told the tip will be marked. The engine's line
+    builder reads `tip_mark` and ends the name clear of the ring's reach. Within the last two data counts as the tip.
+    A page that declares its own `tip_mark` is not touched. Returns one line per stamp."""
+    notes: list[str] = []
+    for sc in scenes:
+        pg = ((sc.get("world") or {}).get("page")) if isinstance((sc.get("world") or {}).get("page"), dict) else None
+        if pg is None or "tip_mark" in pg:
+            continue
+        ser = pg.get("series") or []
+        marked: set[int] = set()
+        for sp in sc.get("species") or []:
+            tg = sp.get("target") or {}
+            if sp.get("kind") not in TIP_MARK_KINDS or tg.get("kind") != "datum":
+                continue
+            si = int(tg.get("series") or 0)
+            if 0 <= si < len(ser) and int(tg.get("index") or 0) >= len(ser[si].get("pts") or []) - 2:
+                marked.add(si)
+        if marked:
+            pg["tip_mark"] = sorted(marked)
+            notes.append(f"{sc.get('scene_id', '?')}: tip_mark={sorted(marked)} stamped - a ring or callout marks the line's last datum, so its name keeps clear")
     return notes
 
 
@@ -3927,7 +3965,7 @@ def main() -> int:
 
     # P53 T2 / R26-60: the two defaults a world-taking transition implies, stamped now that both sides of every
     # boundary are visible - and printed, because a default nobody can see is a default nobody can argue with
-    for _note in stamp_transition_pages(scenes):
+    for _note in stamp_transition_pages(scenes) + stamp_tip_marks(scenes):
         print(f"  transition  : {_note}")
 
     # P50 T16: the build says whose numbers it placed by. A page the fixture has not measured is placed

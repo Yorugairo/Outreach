@@ -2358,5 +2358,18 @@ a cream roll-out ARE the world on stage - the probe reads DOM boxes and cannot s
 3. **`axes` or `built` elsewhere is an authored exception** - a row that needs speed declares it.
 4. **M31 is a reading, not a gate.** It reports stretches with no page ink; it never fails a build on them.
 
+**CORRECTED THE SAME DAY - apply item 2 was the wrong reading.** The operator: *"The empty cream stage isnt supposed to
+be on stage during the exits. You misinterpreted that wrong. It doesnt make sense to do that when transitioning from
+chart-to-chart, that is used for mounting a ledger plate to a narrative plate."* The empty cream roll-out is the MOUNT's
+register - a ledger plate arriving onto a narrative plate. Between two CHARTS a suck or a melt never shows it:
+
+2'. **Chart to chart, the next page is already on its axes under the outgoing one.** `stamp_transition_pages` stamps
+   `enter=axes` on a ledger page that follows a suck or a melt out of another ledger page (a declared enter is left
+   alone). A plate after the transition keeps its own arrival.
+4'. **M31 FAILs an empty stage after a chart-to-chart suck or melt**; every other empty run (a plate world, which the
+   probe cannot see) stays a reading.
+
+Measured on the bridge review cut after the correction: the suck at 10.9 s and the melt at 34.0 s both 0.0 s empty.
+
 Mechanisms: `build_scene_timeline_f.py` `stamp_transition_pages` (the hook stamp; the after-stamp removed),
 `gate_motion_density.py` M31 (INFO), `test_transition_stamps.py`.

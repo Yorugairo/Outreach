@@ -1077,7 +1077,7 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
         g.append(ifg)                                                     # M24 (P49 T6: the target is in the camera's frame when the species fires)
     if (mg := _morph_gate(tl.get("scenes", []), morph)) is not None:
         g.append(mg)                                                      # M17 (P47 T3: the match-cut invariants per morph page)
-    sg = _stage_gap_gate(BUILD_DIR[0] if BUILD_DIR else None)             # M31 (R26-66 / P53 T2: the empty stage, measured)
+    sg = _stage_gap_gate(BUILD_DIR[0] if BUILD_DIR else None, tl.get("scenes", []))             # M31 (R26-66 / P53 T2: the empty stage, measured)
     if sg is not None:
         g.append(sg)
     add("J01", "JUDGE", "every savor beat holds its picture (card up, badge lit), never a bare plate with a drift", "doc 29 s9.25 #3")
@@ -1240,7 +1240,7 @@ def _pulse_gate(tl: dict, A: dict) -> Gate:
     return Gate("M16", "PASS", msg, SRC_M16)
 
 
-def _stage_gap_gate(build: Path | None) -> Gate | None:
+def _stage_gap_gate(build: Path | None, scenes: list | None = None) -> Gate | None:
     """M31: the empty stage, read off `<build>/stage-gaps.json` (measure_stage_gaps.py) exactly as M25 reads the
     layout probe - INFO until it is measured, because a gate may not invent a measurement it did not take."""
     if build is None:
@@ -1255,9 +1255,25 @@ def _stage_gap_gate(build: Path | None) -> Gate | None:
     rows = [r for r in doc.get("boundaries", []) if not r.get("licensed") and float(r.get("gap_s") or 0) > 0]
     spoken = [r for r in rows if r.get("spoken")]
     share = f"{100 * float(doc.get('empty_share') or 0):.1f}% of the runtime empty"
-    # INFO ONLY (2026-09-12): the probe reads the page's DOM boxes and cannot see a transition's own animation or a
-    # page's cream roll-out, so "no page ink" is not "no world" - the operator: "I dont think suck and melt get less
-    # screen time". A reading, never a verdict.
+    # CHART TO CHART IS A VERDICT (the operator, 2026-09-12, correcting E73's first reading: "The empty cream stage isnt
+    # supposed to be on stage during the exits ... It doesnt make sense to do that when transitioning from chart-to-chart,
+    # that is used for mounting a ledger plate to a narrative plate"). The compiler puts the page after a suck or a melt
+    # onto its axes; an empty run there is a FAIL. A plate after one is the mount's register, and the probe cannot see a
+    # plate world at all, so every other run stays a reading.
+    order = [str(sc.get("scene_id")) for sc in (scenes or [])]
+    def _into_page(r: dict) -> bool:
+        sid = str(r.get("scene"))
+        if str(r.get("exit") or "").split(":")[0] not in ("suck", "melt") or sid not in order:
+            return False
+        k = order.index(sid)
+        return k + 1 < len(order) and isinstance(((scenes[k + 1].get("world") or {}).get("page")), dict)
+    c2c = [r for r in rows if _into_page(r)]
+    if c2c:
+        worst = max(c2c, key=lambda r: float(r["gap_s"]))
+        return Gate("M31", "FAIL",
+                    f"{len(c2c)} chart-to-chart transition(s) leave empty cream on stage ({share}); worst {worst['scene']} "
+                    f"exit={worst['exit']} {worst['gap_s']:.1f}s at {_mm(float(worst['at']))} - the next page belongs on "
+                    f"its axes under the outgoing one (stamp_transition_pages)", SRC_M31)
     if spoken:
         worst = max(spoken, key=lambda r: float(r["gap_s"]))
         return Gate("M31", "INFO",
