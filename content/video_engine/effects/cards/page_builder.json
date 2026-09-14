@@ -1,0 +1,727 @@
+{
+  "schema_version": "effect_cards.v1",
+  "axis": "page_builder",
+  "cards": [
+    {
+      "id": "page_builder:bars",
+      "axis": "page_builder",
+      "token": "bars",
+      "title": "The bars ledger page",
+      "aliases": [
+        {
+          "name": "BAR charts",
+          "source": "docs/content-video-engine/CAPABILITIES.md:20"
+        }
+      ],
+      "does": "A ledger page whose bars grow in stagger with their values landing.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "ledger plate id  ledger:<series-id>:bars[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]",
+        "example": "'ledger:ev-parts-cascade-v1:bars:0:right:mount=0.8:cut;idle=live'",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:6",
+        "check": "chart"
+      },
+      "phases": [
+        {
+          "name": "roll",
+          "does": "the cream page rolls out",
+          "trigger": "the scene's start (enter default)",
+          "dials": {
+            "ROLL": "0.7"
+          }
+        },
+        {
+          "name": "savor",
+          "does": "the empty page holds",
+          "trigger": "ROLL elapsed",
+          "dials": {
+            "SAVOR": "0.8"
+          }
+        },
+        {
+          "name": "field",
+          "does": "the ink field",
+          "trigger": "ROLL + SAVOR",
+          "dials": {
+            "FIELD": "2.4"
+          }
+        },
+        {
+          "name": "punch",
+          "does": "the page punch",
+          "trigger": "ROLL + SAVOR + FIELD",
+          "dials": {
+            "PUNCH": "0.5",
+            "PUNCH_SCALE": "1.16"
+          }
+        },
+        {
+          "name": "build",
+          "does": "the bars grow from the zero baseline (a bars + line page: bars in reading order, then the line)",
+          "trigger": "ROLL + SAVOR + FIELD + PUNCH",
+          "dials": {
+            "BUILD": "3.0",
+            "COMBO_BUILD": "4.5",
+            "COMBO_BARS": "0.5",
+            "COMBO_LINE": "0.42"
+          }
+        },
+        {
+          "name": "badges",
+          "does": "the dock's pills spring in one at a time after the build",
+          "trigger": "LP_BADGE0 after the build, every LP_BADGE_STEP",
+          "dials": {
+            "LP_BADGE0": "0.4",
+            "LP_BADGE_STEP": "0.9",
+            "LP_BADGE_IN": "0.36"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "the ledger page signature (E22)",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:614",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "buildLedger",
+        "also": [
+          "paintLedgerCombo"
+        ],
+        "note": "buildLedger / builder \"story\" / \"combo\" (pick_builder); paintLedgerCombo for bars + a line"
+      },
+      "doctrine": [
+        "29 s9.26",
+        "E22",
+        "E53"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": "thread-baseline",
+        "test": "content/video_engine/tests/test_breakthrough.py::test_a_bars_page_without_a_domain_carries_no_axes",
+        "first_use": {
+          "project": "japan-tariff-trick",
+          "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
+          "t": 17.42
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_builder:checklist",
+      "axis": "page_builder",
+      "token": "checklist",
+      "title": "The checklist refused as a ledger page",
+      "aliases": [],
+      "does": "Not a page: ledger_page refuses `checklist` with a message and routes it elsewhere.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "a ledger id naming a series whose values are a checklist",
+        "example": "'ledger:ev-test-scorecard-v1:line'",
+        "example_source": null,
+        "check": "chart"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "compiler-only",
+        "path": "content/video_engine/scripts/ledger_page.py",
+        "symbol": "UNCHARTABLE",
+        "note": "UNCHARTABLE['checklist']"
+      },
+      "doctrine": [],
+      "status": "declared",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_ledger_page.py::test_scorecard_checklist_is_rejected_as_unchartable",
+        "first_use": null
+      },
+      "callable": {
+        "today": false,
+        "why": "UNCHARTABLE: no chartable values: 'checklist' is a table, not a chart (keep it a dock)"
+      }
+    },
+    {
+      "id": "page_builder:decline",
+      "axis": "page_builder",
+      "token": "decline",
+      "title": "The decline ledger page",
+      "aliases": [
+        {
+          "name": "decline-chart",
+          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1797"
+        }
+      ],
+      "does": "A single value's decline draws down the ledger page.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "ledger plate id  ledger:<series-id>:decline[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]",
+        "example": "'ledger:ev-x:decline'",
+        "example_source": null,
+        "check": "chart"
+      },
+      "phases": [
+        {
+          "name": "in",
+          "does": "the decline chart settles onto its page",
+          "trigger": "the build",
+          "dials": {
+            "DECLINE_BUILD": "3.6",
+            "DECLINE_IN": "0.15"
+          }
+        },
+        {
+          "name": "hold",
+          "does": "the line draws, the figure counts and the fill darkens",
+          "trigger": "DECLINE_IN share"
+        },
+        {
+          "name": "out",
+          "does": "the finished chart locks in place",
+          "trigger": "the last DECLINE_OUT share",
+          "dials": {
+            "DECLINE_OUT": "0.08"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "decline-chart (doc 29 harvest)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1797",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintLedgerDecline"
+      },
+      "doctrine": [
+        "29 s9.26"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_ledger_page.py::test_decline_takes_first_and_last_as_start_and_end",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_builder:line",
+      "axis": "page_builder",
+      "token": "line",
+      "title": "The line ledger page",
+      "aliases": [
+        {
+          "name": "LEDGER PAGE species",
+          "source": "docs/content-video-engine/CAPABILITIES.md:49"
+        },
+        {
+          "name": "line draw",
+          "source": "docs/content-video-engine/CAPABILITIES.md:20"
+        }
+      ],
+      "does": "A cream ledger page rolls out and its line series draws on in ink.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "ledger plate id  ledger:<series-id>:line[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]",
+        "example": "'ledger:ev-japan-holdings-v1:line:315:right:snap=dock-b-holdings:cut;idle=live'",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:4",
+        "check": "chart"
+      },
+      "phases": [
+        {
+          "name": "roll",
+          "does": "the cream page rolls out",
+          "trigger": "the scene's start (enter default)",
+          "dials": {
+            "ROLL": "0.7"
+          }
+        },
+        {
+          "name": "savor",
+          "does": "the empty page holds",
+          "trigger": "ROLL elapsed",
+          "dials": {
+            "SAVOR": "0.8"
+          }
+        },
+        {
+          "name": "field",
+          "does": "the ink field",
+          "trigger": "ROLL + SAVOR",
+          "dials": {
+            "FIELD": "2.4"
+          }
+        },
+        {
+          "name": "punch",
+          "does": "the page punch",
+          "trigger": "ROLL + SAVOR + FIELD",
+          "dials": {
+            "PUNCH": "0.5",
+            "PUNCH_SCALE": "1.16"
+          }
+        },
+        {
+          "name": "build",
+          "does": "the line strokes draw on the two-thirds-law pen",
+          "trigger": "ROLL + SAVOR + FIELD + PUNCH",
+          "dials": {
+            "BUILD": "3.0"
+          }
+        },
+        {
+          "name": "badges",
+          "does": "the dock's pills spring in one at a time after the build",
+          "trigger": "LP_BADGE0 after the build, every LP_BADGE_STEP",
+          "dials": {
+            "LP_BADGE0": "0.4",
+            "LP_BADGE_STEP": "0.9",
+            "LP_BADGE_IN": "0.36"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "the ledger page signature (E22)",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:614",
+          "tie": "recorded"
+        },
+        {
+          "source": "the two-thirds law (42 s42.1)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/42-DRAWING-KINETICS.md:12",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "buildLedger",
+        "note": "buildLedger / builder \"dense-line\" / \"story\" (pick_builder)"
+      },
+      "doctrine": [
+        "29 s9.26",
+        "E22",
+        "29 s9.28"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": "ledger-page-mid-build",
+        "test": "content/video_engine/tests/test_breakthrough.py::test_a_sound_overflow_page_validates_and_a_line_page_may_not_carry_one",
+        "first_use": {
+          "project": "japan-tariff-trick",
+          "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
+          "t": 1.82
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_builder:object",
+      "axis": "page_builder",
+      "token": "object",
+      "title": "The object ledger page",
+      "aliases": [
+        {
+          "name": "the breakthrough object",
+          "source": "docs/content-video-engine/BACKLOG.md:501"
+        }
+      ],
+      "does": "A ledger page built from a sourced object file (e.g. the breakthrough bars) with its stated scale.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "ledger plate id  ledger:<series-id>:object[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]",
+        "example": "'ledger:ev-x:object'",
+        "example_source": null,
+        "check": "chart"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "compiler-only",
+        "path": "content/video_engine/scripts/ledger_page.py",
+        "symbol": "build_spec",
+        "note": "build_spec builder \"object\" (no engine builder === \"object\" branch found)"
+      },
+      "doctrine": [
+        "E60"
+      ],
+      "status": "declared",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_ledger_object_variant.py::test_object_is_a_variant_and_the_chart_variants_are_pinned",
+        "first_use": null
+      },
+      "callable": {
+        "today": false,
+        "why": "compiles; no engine branch reads the object variant (decision 8)"
+      }
+    },
+    {
+      "id": "page_builder:progress",
+      "axis": "page_builder",
+      "token": "progress",
+      "title": "The progress ledger page",
+      "aliases": [],
+      "does": "A progress-to-target reading on the ledger page (builder resolves through pick_builder; no dedicated painter found).",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "ledger plate id  ledger:<series-id>:progress[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]",
+        "example": "'ledger:ev-x:progress'",
+        "example_source": null,
+        "check": "chart"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "compiler-only",
+        "path": "content/video_engine/scripts/ledger_page.py",
+        "symbol": "pick_builder",
+        "also": [
+          "PROGRESS_MAX"
+        ],
+        "note": "pick_builder never returns \"progress\" (falls to story / dense-line); PROGRESS_MAX"
+      },
+      "doctrine": [
+        "29 s9.26"
+      ],
+      "status": "declared",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_ledger_page.py::test_progress_out_of_range_needs_a_denominator",
+        "first_use": null
+      },
+      "callable": {
+        "today": false,
+        "why": "compiles; pick_builder never returns progress, it falls to story / dense-line (decision 8)"
+      }
+    },
+    {
+      "id": "page_builder:race",
+      "axis": "page_builder",
+      "token": "race",
+      "title": "The bar-chart race ledger page",
+      "aliases": [
+        {
+          "name": "bar-chart-race",
+          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1797"
+        }
+      ],
+      "does": "Ranked bars race across periods on the ledger page.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "ledger plate id  ledger:<series-id>:race[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]",
+        "example": "'ledger:ev-x:race'",
+        "example_source": null,
+        "check": "chart"
+      },
+      "phases": [
+        {
+          "name": "grow in",
+          "does": "bars grow into period 0",
+          "trigger": "the build",
+          "dials": {
+            "RACE_IN": "0.6"
+          }
+        },
+        {
+          "name": "periods",
+          "does": "the race steps period by period, rows swapping at crossings",
+          "trigger": "every RACE_PERIOD",
+          "dials": {
+            "RACE_PERIOD": "1.2",
+            "RACE_SWAP": "0.7"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "bar-chart-race (doc 29 harvest)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1797",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintLedgerRace"
+      },
+      "doctrine": [
+        "29 s9.26",
+        "BACKLOG R26-78",
+        "E91"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_ledger_page.py::test_race_with_periods_builds_ranked_rows",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_builder:share",
+      "axis": "page_builder",
+      "token": "share",
+      "title": "The share ledger page (the pie)",
+      "aliases": [
+        {
+          "name": "a pie of the holders",
+          "source": "content/video_engine/scripts/build_scene_timeline_f.py:328"
+        }
+      ],
+      "does": "A part-to-whole pie of five slices or fewer with one named slice highlighted and its figure written.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "ledger plate id  ledger:<series-id>:share[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]",
+        "example": "'ledger:ev-x:share'",
+        "example_source": null,
+        "check": "chart"
+      },
+      "phases": [
+        {
+          "name": "sweep",
+          "does": "the pie sweeps round",
+          "trigger": "the build",
+          "dials": {
+            "SHARE_BUILD": "3.2",
+            "SHARE_SWEEP": "0.78"
+          }
+        },
+        {
+          "name": "names write",
+          "does": "each slice's name writes as its slice completes",
+          "trigger": "each slice's completion",
+          "dials": {
+            "SHARE_LABEL": "0.12"
+          }
+        }
+      ],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintLedgerShare"
+      },
+      "doctrine": [
+        "E53",
+        "29 s9.26"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_share_page.py::test_the_share_variant_builds_a_share_page_from_the_object",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_builder:shares",
+      "axis": "page_builder",
+      "token": "shares",
+      "title": "The donut refused as a ledger page",
+      "aliases": [],
+      "does": "Not a page: ledger_page refuses `shares` with a message and routes it elsewhere.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "a ledger id naming a series whose values are shares (a donut)",
+        "example": "'ledger:ev-x:bars'",
+        "example_source": null,
+        "check": "chart"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "compiler-only",
+        "path": "content/video_engine/scripts/ledger_page.py",
+        "symbol": "UNCHARTABLE",
+        "note": "UNCHARTABLE['shares']"
+      },
+      "doctrine": [
+        "E53"
+      ],
+      "status": "declared",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_ledger_page.py::test_a_tiers_page_carries_the_pages_own_axes_for_the_one_shared_x",
+        "first_use": null
+      },
+      "callable": {
+        "today": false,
+        "why": "UNCHARTABLE: 'shares' is a donut, and E53 s1 ranks angle and area at the bottom of the perception hierarchy: it is refused for every variant except --variant share, which th"
+      }
+    },
+    {
+      "id": "page_builder:tiers",
+      "axis": "page_builder",
+      "token": "tiers",
+      "title": "The N-tier ledger page",
+      "aliases": [
+        {
+          "name": "N-TIER pages - small multiples",
+          "source": "docs/content-video-engine/CAPABILITIES.md:93"
+        }
+      ],
+      "does": "Two or more bands share one x, each with its own scale and honest zero, each drawn on its own word.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "ledger plate id  ledger:<series-id>:tiers[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]",
+        "example": "'ledger:two-reserves:tiers'",
+        "example_source": null,
+        "check": "chart"
+      },
+      "phases": [
+        {
+          "name": "bands in turn",
+          "does": "N bands draw in turn on one shared x",
+          "trigger": "the build",
+          "dials": {
+            "TIERS_BUILD": "4.5"
+          }
+        }
+      ],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/tiers.mjs",
+        "object": "TIERS"
+      },
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintLedgerTiers",
+        "note": "paintLedgerTiers (+ species/tiers.mjs)"
+      },
+      "doctrine": [
+        "CAPABILITIES N-TIER",
+        "BACKLOG R26-72"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "tiers-two",
+        "test": "content/video_engine/tests/kinetics/tiers.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_builder:treemap",
+      "axis": "page_builder",
+      "token": "treemap",
+      "title": "The treemap census ledger page",
+      "aliases": [],
+      "does": "A squarified treemap of a whole's many parts, labels only where they fit.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "ledger plate id  ledger:<series-id>:treemap[:<emphasize>[:<quiet_zone>[:<enter>[:<exit>]]]]",
+        "example": "'ledger:exports:treemap'",
+        "example_source": null,
+        "check": "chart"
+      },
+      "phases": [
+        {
+          "name": "cells land",
+          "does": "cells grow from RISE of their size in layout order",
+          "trigger": "the build (TREEMAP_BUILD), staggered over STAGGER",
+          "dials": {
+            "TREEMAP_BUILD": "3.6",
+            "CELL_IN": "0.30",
+            "STAGGER": "0.70",
+            "RISE": "0.35"
+          }
+        },
+        {
+          "name": "labels write",
+          "does": "a cell's name writes after its tile",
+          "trigger": "LABEL_AT of the cell's own landing",
+          "dials": {
+            "LABEL_AT": "0.55"
+          }
+        }
+      ],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/treemap.mjs",
+        "object": "TREEMAP"
+      },
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintLedgerTreemap",
+        "note": "paintLedgerTreemap (+ species/treemap.mjs)"
+      },
+      "doctrine": [
+        "E53",
+        "BACKLOG R26-56"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "treemap-cross",
+        "test": "content/video_engine/tests/kinetics/treemap.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    }
+  ]
+}

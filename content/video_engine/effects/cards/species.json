@@ -1,0 +1,1781 @@
+{
+  "schema_version": "effect_cards.v1",
+  "axis": "species",
+  "cards": [
+    {
+      "id": "species:agenda",
+      "axis": "species",
+      "token": "agenda",
+      "title": "The numbered agenda species",
+      "aliases": [
+        {
+          "name": "THE NUMBERED AGENDA",
+          "source": "docs/content-video-engine/CAPABILITIES.md:37"
+        }
+      ],
+      "does": "Two to four numbered rows are revealed one per word and hold at a named idle.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"agenda\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{\"kind\": \"agenda\", \"at\": 5.0, \"dur\": 14.0, \"idle\": \"breath\", \"rows\": [{\"text\": \"A Treasury page\", \"sub\": \"the sellers\"}, {\"text\": \"Your phone\", \"at\": 6.2, \"sub\": \"the bill\"}], \"target\": {\"kind\": \"region\", \"x0\": 0.30, \"y0\": 0.50, \"x1\": 0.95, \"y1\": 0.95}}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:1030",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "number writes",
+          "does": "the row's numeral fades in",
+          "trigger": "the row's own `at` (else STEP after the previous row)",
+          "dials": {
+            "STEP": "0.34",
+            "ROW_S": "0.42"
+          }
+        },
+        {
+          "name": "rule draws",
+          "does": "the nib draws the hairline under the row",
+          "trigger": "the row's `at`",
+          "dials": {
+            "RULE_S": "0.5"
+          }
+        },
+        {
+          "name": "text rises",
+          "does": "the row's text rises ROW_DY and fades in",
+          "trigger": "NUM_LEAD after the row's `at`",
+          "dials": {
+            "NUM_LEAD": "0.12",
+            "ROW_DY": "26"
+          }
+        },
+        {
+          "name": "hold alive",
+          "does": "each row holds on its own phase of the idle (breath by default)",
+          "trigger": "continuous"
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos 'China's Gameplan 1 | 2' board",
+          "became": "the whole arc",
+          "record": "content/video_engine/scripts/species/agenda.mjs:3",
+          "tie": "recorded"
+        },
+        {
+          "source": "E93 an agenda row carries an icon (ruled, not in this painter)",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:2723",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/agenda.mjs",
+        "object": "AGENDA"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/agenda.mjs",
+        "symbol": "paintAgenda"
+      },
+      "doctrine": [
+        "CAPABILITIES NUMBERED AGENDA",
+        "E93"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "agenda-two",
+        "test": "content/video_engine/tests/kinetics/agenda.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:arc",
+      "axis": "species",
+      "token": "arc",
+      "title": "The vector map arc species",
+      "aliases": [],
+      "does": "A clothoid arc draws from one place to another on the word, struck with an X when the flow is cut.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"arc\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{\"kind\": \"arc\", \"at\": 6.6, \"dur\": 12.0, \"crossed\": 11.5, \"from\": {\"kind\": \"mappoint\", \"x\": 644, \"y\": 178}, \"to\": {\"kind\": \"country\", \"id\": \"USA\"}}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:586",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "shaft draws",
+          "does": "the clothoid draws by length from one place to the other",
+          "trigger": "the species' `at`",
+          "dials": {
+            "DRAW_S": "0.9"
+          }
+        },
+        {
+          "name": "head lands",
+          "does": "the arrowhead draws over the last share of the clock",
+          "trigger": "HEAD_F of DRAW_S",
+          "dials": {
+            "HEAD_F": "0.74"
+          }
+        },
+        {
+          "name": "cut",
+          "does": "an X is struck at the midpoint and the arc dims (the X does not)",
+          "trigger": "`crossed`",
+          "dials": {
+            "CROSS_S": "0.45",
+            "DIM": "0.42"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "clothoid (42 s42.4)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/42-DRAWING-KINETICS.md:102",
+          "tie": "recorded"
+        },
+        {
+          "source": "the chip's X strokes (chipStrokes)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/CAPABILITIES.md:87",
+          "tie": "recorded"
+        },
+        {
+          "source": "Bravos world map, shots 57-80",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/CAPABILITIES.md:92",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/vecmap.mjs",
+        "object": "ARC"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/vecmap.mjs",
+        "symbol": "paintArc",
+        "note": "from = VECMAP_GULF written out (golden :565); plate must be vecmap"
+      },
+      "doctrine": [
+        "CAPABILITIES VECTOR MAP"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "vecmap-arc",
+        "test": "content/video_engine/tests/kinetics/vecmap.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:beat_freeze",
+      "axis": "species",
+      "token": "beat_freeze",
+      "title": "The beat-freeze chart exit species",
+      "aliases": [
+        {
+          "name": "Beat-freeze chart exit",
+          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1810"
+        }
+      ],
+      "does": "(Not built) The chart's final state would freeze as a hit, then a directional cut.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"beat_freeze\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{'kind': 'beat_freeze', 'at': 12.0, 'dur': 1.6, 'target': {'kind': 'point', 'x': 0.5, 'y': 0.5}}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "compiler-only",
+        "path": "content/video_engine/scripts/build_scene_timeline_f.py",
+        "symbol": "SPECIES_KINDS",
+        "also": [
+          "SPECIES_WHEN"
+        ],
+        "note": "SPECIES_KINDS (SPECIES_WHEN says NOT built)"
+      },
+      "doctrine": [
+        "29 s9.27",
+        "29 s9.27 row Beat-freeze chart exit",
+        "SPECIES-BY-SENTENCE s5"
+      ],
+      "status": "declared",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_targeted_species.py::test_beat_freeze_radial_push_take_only_point_or_region",
+        "first_use": null
+      },
+      "callable": {
+        "today": false,
+        "why": "compiles with no painter (SPECIES_WHEN: not built; 0 engine hits, no species module)"
+      }
+    },
+    {
+      "id": "species:callout",
+      "axis": "species",
+      "token": "callout",
+      "title": "The scribble callout species",
+      "aliases": [
+        {
+          "name": "Scribble callout",
+          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1800"
+        },
+        {
+          "name": "A ring has ONE use",
+          "source": "docs/portable/OPERATOR-RULINGS.md:1815"
+        }
+      ],
+      "does": "A hand-drawn ring closes round a number or a point on a chart, with its label popping beside it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"callout\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{'kind': 'callout', 'at': 9.77, 'dur': 7.65, 'label': '25%', 'pad': 22, 'label_scale': 2.2, 'target': {'kind': 'point', 'x': 0.65, 'y': 0.34}}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:5",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "circle draws",
+          "does": "the hand-drawn ellipse draws on by dash",
+          "trigger": "the species' `at`",
+          "dials": {
+            "CALLOUT_DRAW": "0.7"
+          }
+        },
+        {
+          "name": "label pops",
+          "does": "the label scales 0.7 -> 1.0 on spEase over 0.25 s",
+          "trigger": "0.8 x CALLOUT_DRAW into the draw",
+          "dials": {
+            "CALLOUT_DRAW": "0.7"
+          }
+        },
+        {
+          "name": "underline form (alternative)",
+          "does": "with form: underline, a squiggle stroke draws under the press card's phrase instead",
+          "trigger": "the species' `at`",
+          "dials": {
+            "SQUIG_DRAW": "0.45"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "hw-callout-circle (doc 29 harvest)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1800",
+          "tie": "recorded"
+        },
+        {
+          "source": "E56 a ring's one use",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:1815",
+          "tie": "recorded"
+        },
+        {
+          "source": "squiggle law for the underline form",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1805",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintSpecies",
+        "also": [
+          "calloutPath"
+        ],
+        "note": "paintSpecies / sp.kind === \"callout\" (calloutPath)"
+      },
+      "doctrine": [
+        "29 s9.27",
+        "29 s9.27 row Scribble callout",
+        "E56"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": "chart-callout",
+        "test": "content/video_engine/tests/test_targeted_species.py::test_callout_without_a_target_is_an_error_naming_the_kind",
+        "first_use": {
+          "project": "japan-tariff-trick",
+          "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
+          "t": 9.77
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:chip",
+      "axis": "species",
+      "token": "chip",
+      "title": "The icon chip species",
+      "aliases": [
+        {
+          "name": "The icon CHIP",
+          "source": "docs/content-video-engine/CAPABILITIES.md:87"
+        },
+        {
+          "name": "icon board",
+          "source": "content/video_engine/scripts/build_scene_timeline_f.py:211"
+        }
+      ],
+      "does": "A card with one sourced glyph and a label lands on its word and is crossed out on a later word.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"chip\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{\"kind\": \"chip\", \"at\": 10.0, \"dur\": 6.0, \"icon\": \"factory\", \"label\": \"STEEL\", \"target\": {\"kind\": \"point\", \"x\": 0.3, \"y\": 0.5}}",
+        "example_source": "content/video_engine/tests/test_targeted_species.py:176",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "land",
+          "does": "the card springs from POP_FROM and falls DROP_PX onto its word, fading in",
+          "trigger": "the species' `at`",
+          "dials": {
+            "LAND_S": "0.55",
+            "POP_FROM": "0.82",
+            "DROP_PX": "34",
+            "FADE_S": "0.14"
+          }
+        },
+        {
+          "name": "hold alive",
+          "does": "holds on its named idle",
+          "trigger": "landing complete"
+        },
+        {
+          "name": "cross out",
+          "does": "two X strokes draw one after the other and the card dims",
+          "trigger": "`cross_at`",
+          "dials": {
+            "CROSS_S": "0.5",
+            "DIM": "0.55"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos icon board, shots 26-28",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/CAPABILITIES.md:87",
+          "tie": "recorded"
+        },
+        {
+          "source": "the dock's spring (springPop, 42 s42.2)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/42-DRAWING-KINETICS.md:63",
+          "tie": "recorded"
+        },
+        {
+          "source": "the curvature stroke for the X (42 s42.1)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/42-DRAWING-KINETICS.md:12",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/chip.mjs",
+        "object": "CHIP"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/chip.mjs",
+        "symbol": "paintChip"
+      },
+      "doctrine": [
+        "CAPABILITIES icon CHIP",
+        "P50 T2"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "chip-board",
+        "test": "content/video_engine/tests/kinetics/chip.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:count_array",
+      "axis": "species",
+      "token": "count_array",
+      "title": "The isometric count array species",
+      "aliases": [
+        {
+          "name": "THE ISOMETRIC COUNT ARRAY",
+          "source": "docs/content-video-engine/CAPABILITIES.md:36"
+        }
+      ],
+      "does": "N identical sourced icons arrive in reading order on a 2:1 rhombus lattice and the count is written under them.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"count_array\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{\"kind\": \"count_array\", \"at\": 5.0, \"dur\": 14.0, \"count\": 6, \"icon\": \"factory\", \"idle\": \"breath\", \"claim\": \"SIX PLANTS\", \"target\": {\"kind\": \"region\", \"x0\": 0.08, \"y0\": 0.47, \"x1\": 0.92, \"y1\": 0.97}}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:1026",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "icons arrive",
+          "does": "one icon per word lands on the chip's spring in reading order on the 2:1 lattice",
+          "trigger": "at + i x STEP (or the row's `step`)",
+          "dials": {
+            "STEP": "0.34",
+            "LAND_S": "0.45",
+            "POP_FROM": "0.86",
+            "DROP_PX": "26",
+            "FADE_S": "0.12"
+          }
+        },
+        {
+          "name": "claim writes",
+          "does": "the count pops in under the field (0.72 -> 1.0)",
+          "trigger": "CLAIM_LAG after the last icon settles",
+          "dials": {
+            "CLAIM_LAG": "0.18",
+            "CLAIM_S": "0.4"
+          }
+        },
+        {
+          "name": "hold alive",
+          "does": "every cell holds on its own phase of the idle (breath by default)",
+          "trigger": "continuous"
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos count field (exploration review #59)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:59",
+          "tie": "recorded"
+        },
+        {
+          "source": "the chip's landing law",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/CAPABILITIES.md:87",
+          "tie": "recorded"
+        },
+        {
+          "source": "doc 46 word pitch (178 WPM)",
+          "became": "the whole arc",
+          "record": "content/video_engine/scripts/species/countarray.mjs:45",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/countarray.mjs",
+        "object": "COUNT"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/countarray.mjs",
+        "symbol": "paintCountArray"
+      },
+      "doctrine": [
+        "CAPABILITIES COUNT ARRAY"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "count-array",
+        "test": "content/video_engine/tests/kinetics/countarray.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:flow",
+      "axis": "species",
+      "token": "flow",
+      "title": "The flow diagram species",
+      "aliases": [
+        {
+          "name": "The FLOW DIAGRAM",
+          "source": "docs/content-video-engine/CAPABILITIES.md:89"
+        }
+      ],
+      "does": "Two to six named things and the clothoid arrows between them draw on; later one node swaps while the rest stands.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"flow\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{\"kind\": \"flow\", \"at\": 4.0, \"dur\": 18.0, \"idle\": \"breath\", \"target\": {\"kind\": \"region\", \"x0\": 0.10, \"y0\": 0.50, \"x1\": 0.90, \"y1\": 0.90}, \"nodes\": [{\"id\": \"plant\", \"icon\": \"factory\", \"label\": \"PLANTS\"}, {\"id\": \"freight\", \"icon\": \"ship\", \"label\": \"FREIGHT\"}, {\"id\": \"price\", \"icon\": \"coins\", \"label\": \"PRICE\"}], \"edges\": [[\"plant\", \"freight\"], [\"freight\", \"price\"]], \"swap\": {\"at\": 11.0, \"node\": \"freight\", \"icon\": \"cpu\", \"label\": \"CHIPS\"}, \"tag\": \"1973\"}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:514",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "frame draws",
+          "does": "the dashed box draws clockwise from the top-left, dash by dash",
+          "trigger": "the species' `at`",
+          "dials": {
+            "BOX_S": "0.9"
+          }
+        },
+        {
+          "name": "nodes land",
+          "does": "chips land one after another on the chip's spring",
+          "trigger": "BOX_LEAD of the frame's draw, then every NODE_STEP",
+          "dials": {
+            "BOX_LEAD": "0.55",
+            "NODE_STEP": "0.2",
+            "LAND_S": "0.55"
+          }
+        },
+        {
+          "name": "arrows draw",
+          "does": "clothoid arrows draw one at a time by length; each head lands over the last share of its clock",
+          "trigger": "EDGE_LAG after the last node lands",
+          "dials": {
+            "EDGE_LAG": "0.1",
+            "EDGE_S": "0.34",
+            "HEAD_F": "0.72"
+          }
+        },
+        {
+          "name": "year stamps",
+          "does": "the tag springs in at the box's top-right corner",
+          "trigger": "TAG_LAG after the last arrow",
+          "dials": {
+            "TAG_LAG": "0.12",
+            "TAG_S": "0.5"
+          }
+        },
+        {
+          "name": "swap",
+          "does": "the named node's landing runs backward and fades, then the new node lands in its place while the rest stand",
+          "trigger": "`swap.at`",
+          "dials": {
+            "SWAP_OUT_S": "0.3",
+            "SWAP_IN_S": "0.45"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos flow diagram, shots 82-86",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/CAPABILITIES.md:89",
+          "tie": "recorded"
+        },
+        {
+          "source": "clothoid arrows (42 s42.4)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/42-DRAWING-KINETICS.md:102",
+          "tie": "recorded"
+        },
+        {
+          "source": "the chip's landing",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/CAPABILITIES.md:87",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/flow.mjs",
+        "object": "FLOW"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/flow.mjs",
+        "symbol": "paintFlow"
+      },
+      "doctrine": [
+        "CAPABILITIES FLOW DIAGRAM",
+        "42 s42.4"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "flow-swap",
+        "test": "content/video_engine/tests/kinetics/flow.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:focus_zoom",
+      "axis": "species",
+      "token": "focus_zoom",
+      "title": "The focus zoom species",
+      "aliases": [
+        {
+          "name": "Focus zoom",
+          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1801"
+        }
+      ],
+      "does": "After a chart or document has entered, the view zooms and pans to one region and holds dead still.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"focus_zoom\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{'kind': 'focus_zoom', 'at': 3.0, 'dur': 2.0, 'target': {'kind': 'datum', 'index': 4}}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "zoom + pan",
+          "does": "scales to the anchor on an in-out ease over the first 1/1.8 of the window",
+          "trigger": "the species' `at`",
+          "dials": {
+            "FOCUS_SCALE": "1.32"
+          }
+        },
+        {
+          "name": "hold dead still",
+          "does": "the servo law: no drift once there",
+          "trigger": "k * 1.8 >= 1"
+        }
+      ],
+      "blends": [
+        {
+          "source": "ui-focus-zoom (doc 29 harvest)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1801",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/camera.mjs",
+        "object": "CAM"
+      },
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "camXf",
+        "note": "camXf / sp.kind === \"focus_zoom\""
+      },
+      "doctrine": [
+        "29 s9.27",
+        "29 s9.27 row Focus zoom",
+        "E59",
+        "29 s9.28 C3",
+        "E51",
+        "E59 s4"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_targeted_species.py::test_every_pointing_kind_requires_a_target",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:life",
+      "axis": "species",
+      "token": "life",
+      "title": "The declared life species",
+      "aliases": [],
+      "does": "Nothing is drawn: a declaration that the world animates on its own (a rendered clip, the outro), credited by the motion gate.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"life\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{'kind': 'life', 'at': 79.076, 'dur': 6.2}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:15",
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "compiler-only",
+        "path": "content/video_engine/scripts/build_scene_timeline_f.py",
+        "symbol": "SPECIES_KINDS",
+        "note": "SPECIES_KINDS 'life' (the template draws nothing; gate credit)"
+      },
+      "doctrine": [
+        "CHECK-RESPONSIBILITIES (declared)",
+        "E21"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_gate_motion_density.py::test_plate_life_steps_fill_a_bare_plate_and_pass_m01",
+        "first_use": {
+          "project": "japan-tariff-trick",
+          "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
+          "t": 79.076
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:light",
+      "axis": "species",
+      "token": "light",
+      "title": "The vector map light species",
+      "aliases": [],
+      "does": "A named country on the vector map fills with the accent on its word and holds.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"light\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{\"kind\": \"light\", \"at\": 5.0, \"dur\": 14.0, \"idle\": \"breath\", \"target\": {\"kind\": \"country\", \"id\": \"IRN\"}}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "light up",
+          "does": "the country's fill rises to the accent",
+          "trigger": "the species' `at`",
+          "dials": {
+            "IN_S": "0.3",
+            "MAX": "0.78"
+          }
+        },
+        {
+          "name": "hold breathing",
+          "does": "the fill's opacity breathes with the idle's scale",
+          "trigger": "rise complete",
+          "dials": {
+            "BREATH_K": "7"
+          }
+        },
+        {
+          "name": "light down",
+          "does": "the fill leaves",
+          "trigger": "OUT_S before at + dur",
+          "dials": {
+            "OUT_S": "0.35"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "the spotlight's cousin (SPECIES_WHEN)",
+          "became": "the whole arc",
+          "record": "content/video_engine/scripts/build_scene_timeline_f.py:219",
+          "tie": "recorded"
+        },
+        {
+          "source": "Bravos world map, shots 57-80",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/CAPABILITIES.md:92",
+          "tie": "recorded"
+        },
+        {
+          "source": "E56 a fill, never a ring",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:1815",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/vecmap.mjs",
+        "object": "LIGHT"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/vecmap.mjs",
+        "symbol": "paintLight"
+      },
+      "doctrine": [
+        "CAPABILITIES VECTOR MAP",
+        "E56"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "vecmap-arc",
+        "test": "content/video_engine/tests/kinetics/vecmap.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:newsreel",
+      "axis": "species",
+      "token": "newsreel",
+      "title": "The newsreel band species",
+      "aliases": [
+        {
+          "name": "THE NEWSREEL BAND",
+          "source": "docs/content-video-engine/CAPABILITIES.md:39"
+        }
+      ],
+      "does": "The sourced headlines crawl in a band in the lower 40 % under a surface that shows who said it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"newsreel\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{\"kind\": \"newsreel\", \"at\": 4.0, \"dur\": 9.0, \"headlines\": [\"A sourced headline off the dossier\"], \"target\": {\"kind\": \"region\", \"x0\": 0.0, \"y0\": 0.675, \"x1\": 1.0, \"y1\": 0.815}}",
+        "example_source": "content/video_engine/tests/test_caption_band.py:209",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "band opens",
+          "does": "the band scales up from a hairline about its foot on the spring",
+          "trigger": "the species' `at`",
+          "dials": {
+            "BAR_FOR": "0.42",
+            "HAIRLINE": "0.04"
+          }
+        },
+        {
+          "name": "crawl",
+          "does": "the sourced headlines crawl right to left",
+          "trigger": "CRAWL seconds after `at`",
+          "dials": {
+            "CRAWL": "0.4",
+            "SPEED": "140"
+          }
+        },
+        {
+          "name": "strap writes",
+          "does": "the strapline writes under the crawl",
+          "trigger": "STRAP seconds after `at`",
+          "dials": {
+            "STRAP": "0.46",
+            "STRAP_FOR": "0.5"
+          }
+        },
+        {
+          "name": "retreat",
+          "does": "the band closes and fades",
+          "trigger": "`hold` (else `dur`) elapsed",
+          "dials": {
+            "EXIT_FOR": "0.38"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "RU-4 beat plan",
+          "became": "the whole arc",
+          "record": "content/video_engine/scripts/species/newsreel.mjs:53",
+          "tie": "recorded"
+        },
+        {
+          "source": "E84 the crawl yields to the caption",
+          "became": "crawl",
+          "record": "docs/portable/OPERATOR-RULINGS.md:2574",
+          "tie": "recorded"
+        },
+        {
+          "source": "E68 external material on a surface",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:2206",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "cap_band:above",
+          "means": "Caption above the crawl: On 9:16 the news crawl takes the caption's own strip and the caption moves above it; refused unless a surface is docked above the band.",
+          "source_set": null
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/species/newsreel.mjs",
+        "object": "NEWSREEL"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/newsreel.mjs",
+        "symbol": "paintNewsreel",
+        "note": "row: headlines must be sourced titles"
+      },
+      "doctrine": [
+        "CAPABILITIES NEWSREEL",
+        "E68",
+        "E84"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "newsreel-band",
+        "test": "content/video_engine/tests/kinetics/newsreel.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:plate_life",
+      "axis": "species",
+      "token": "plate_life",
+      "title": "The plate life species",
+      "aliases": [
+        {
+          "name": "Plate life",
+          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1704"
+        }
+      ],
+      "does": "The cutouts on a bare world plate step at 10 fps - throw, land with squash, two-frame boil - so the plate never goes still.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"plate_life\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{'kind': 'plate_life', 'at': 1, 'dur': 3, 'cutouts': [{'asset': 'cut-host', 'x': 0.3, 'y': 0.9, 'w': 0.2, 'tween': 'floor'}]}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "throw and land",
+          "does": "each cutout drops 220 px on spEase with a squash near the end, staggered 0.15 s per cutout",
+          "trigger": "at + cutout.delay + index x 0.15, on the stepped clock",
+          "dials": {
+            "LIFE_LAND": "0.6",
+            "LIFE_FPS": "10"
+          }
+        },
+        {
+          "name": "boil",
+          "does": "a two-frame seeded jitter of position and rotation, forever",
+          "trigger": "every step of LIFE_FPS",
+          "dials": {
+            "BOIL_PX": "1.2",
+            "BOIL_DEG": "0.7"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "stop-motion-cadence (doc 29 harvest)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1798",
+          "tie": "recorded"
+        },
+        {
+          "source": "E21 the screen never still",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:557",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintSpecies",
+        "note": "paintSpecies / sp.kind === \"plate_life\""
+      },
+      "doctrine": [
+        "29 s9.27",
+        "29 s9.27 row Plate life",
+        "E21"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_targeted_species.py::test_plate_life_needs_no_target",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:pull_back",
+      "axis": "species",
+      "token": "pull_back",
+      "title": "The pull-back reveal species",
+      "aliases": [
+        {
+          "name": "Pull-back reveal",
+          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1802"
+        },
+        {
+          "name": "pull-back",
+          "source": "content/video_engine/scripts/build_scene_timeline_f.py:358"
+        }
+      ],
+      "does": "The hook holds on one large number, then one decelerating pull-back reveals the headline around it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"pull_back\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{'kind': 'pull_back', 'at': 12.0, 'dur': 2.0, 'target': {'kind': 'datum', 'index': 4}}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [
+        {
+          "source": "pull-back-reveal (doc 29 harvest)",
+          "became": "the effect",
+          "record": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1802",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/camera.mjs",
+        "object": "CAM"
+      },
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "camSpeciesState",
+        "note": "camSpeciesState / kind === \"pull_back\" (camera scale)"
+      },
+      "doctrine": [
+        "29 s9.27",
+        "29 s9.27 row Pull-back reveal",
+        "29 s9.28 C3",
+        "E51",
+        "E59 s4"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_targeted_species.py::test_every_pointing_kind_requires_a_target",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:punch",
+      "axis": "species",
+      "token": "punch",
+      "title": "The camera punch species",
+      "aliases": [
+        {
+          "name": "Camera punch",
+          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1799"
+        },
+        {
+          "name": "push-in",
+          "source": "docs/portable/OPERATOR-RULINGS.md:1671"
+        },
+        {
+          "name": "punch/push",
+          "source": "docs/portable/OPERATOR-RULINGS.md:2628"
+        }
+      ],
+      "does": "The camera pushes in on one named object that just landed, holds, and eases back out.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"punch\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{\"kind\": \"punch\", \"at\": 12.0, \"dur\": 1.6, \"target\": {\"kind\": \"embed\", \"name\": \"tv\"}}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "push in",
+          "does": "the camera scales up about the target on a cubic ease",
+          "trigger": "the species' `at`",
+          "dials": {
+            "PUNCH_IN": "0.42",
+            "PUNCH_SCALE": "1.14"
+          }
+        },
+        {
+          "name": "hold",
+          "does": "held at the punched scale",
+          "trigger": "PUNCH_IN elapsed"
+        },
+        {
+          "name": "ease out",
+          "does": "scales back to 1 on the cubic ease",
+          "trigger": "PUNCH_OUT before the window's end (at + dur)",
+          "dials": {
+            "PUNCH_OUT": "0.5"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "yt-camera-move (doc 29 harvest)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1799",
+          "tie": "recorded"
+        },
+        {
+          "source": "E51 a push-in tied to a landing",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:1671",
+          "tie": "recorded"
+        },
+        {
+          "source": "one persistent camera (E59)",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:1903",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/camera.mjs",
+        "object": "CAM"
+      },
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "camXf",
+        "note": "camXf / sp.kind === \"punch\""
+      },
+      "doctrine": [
+        "29 s9.27",
+        "29 s9.27 row Camera punch",
+        "E51",
+        "E59",
+        "29 s9.28 C3",
+        "E59 s4"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": "art-embed",
+        "test": "content/video_engine/tests/test_targeted_species.py::test_every_pointing_kind_requires_a_target",
+        "first_use": {
+          "project": "tokyo-tea-break",
+          "build": "build-short.v2 (render approved by the operator 2026-09-06, render/APPROVALS.json)",
+          "t": 45.0
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:push",
+      "axis": "species",
+      "token": "push",
+      "title": "The push hand-off species",
+      "aliases": [],
+      "does": "Not built as a species: dock A would push dock B in; the hand-off shipped instead as the press pile, a dock option on the press card.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"push\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{'kind': 'push', 'at': 12.0, 'dur': 1.6, 'target': {'kind': 'point', 'x': 0.5, 'y': 0.5}}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "compiler-only",
+        "path": "content/video_engine/scripts/build_scene_timeline_f.py",
+        "symbol": "SPECIES_KINDS",
+        "also": [
+          "SPECIES_WHEN"
+        ],
+        "note": "SPECIES_KINDS (SPECIES_WHEN says NOT built)"
+      },
+      "doctrine": [
+        "29 s9.27",
+        "29 s9.27 row Push hand-off",
+        "SPECIES-BY-SENTENCE s5"
+      ],
+      "status": "declared",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_targeted_species.py::test_beat_freeze_radial_push_take_only_point_or_region",
+        "first_use": null
+      },
+      "callable": {
+        "today": false,
+        "why": "compiles with no painter (SPECIES_WHEN: not built; 0 engine hits, no species module)"
+      }
+    },
+    {
+      "id": "species:radial",
+      "axis": "species",
+      "token": "radial",
+      "title": "The radial reveal species",
+      "aliases": [
+        {
+          "name": "Radial reveal",
+          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1808"
+        },
+        {
+          "name": "the radial reveal",
+          "source": "docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md:28"
+        }
+      ],
+      "does": "(Not built) The next thing would be revealed by a circle opening from the point the narration names.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"radial\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{'kind': 'radial', 'at': 12.0, 'dur': 1.6, 'target': {'kind': 'point', 'x': 0.5, 'y': 0.5}}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "compiler-only",
+        "path": "content/video_engine/scripts/build_scene_timeline_f.py",
+        "symbol": "SPECIES_KINDS",
+        "also": [
+          "SPECIES_WHEN"
+        ],
+        "note": "SPECIES_KINDS (SPECIES_WHEN says NOT built)"
+      },
+      "doctrine": [
+        "29 s9.27",
+        "29 s9.27 row Radial reveal",
+        "SPECIES-BY-SENTENCE s5"
+      ],
+      "status": "declared",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_targeted_species.py::test_beat_freeze_radial_push_take_only_point_or_region",
+        "first_use": null
+      },
+      "callable": {
+        "today": false,
+        "why": "compiles with no painter (SPECIES_WHEN: not built; 0 engine hits, no species module)"
+      }
+    },
+    {
+      "id": "species:ring",
+      "axis": "species",
+      "token": "ring",
+      "title": "The dashed ring species",
+      "aliases": [
+        {
+          "name": "THE RING'S DASHED-ELLIPSE FORM",
+          "source": "docs/content-video-engine/CAPABILITIES.md:38"
+        }
+      ],
+      "does": "A dashed ellipse draws round a datum, with an optional flag chip naming it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"ring\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{'kind': 'ring', 'at': 54.86, 'dur': 2.4, 'form': 'dashed', 'label': '123%', 'target': {'kind': 'datum', 'index': 240}, 'flag': 'today', 'flag_icon': 'landmark'}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/SHOT-TABLE-SHORT.py:8",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "dashes draw",
+          "does": "the dashed ellipse draws dash by dash round the datum's mark; the label fades in with it",
+          "trigger": "the species' `at`",
+          "dials": {
+            "DRAW_S": "0.55"
+          }
+        },
+        {
+          "name": "flag lands",
+          "does": "the flag chip lands beside the ellipse at a reduced chip scale",
+          "trigger": "FLAG_LAG after the ellipse closes",
+          "dials": {
+            "FLAG_LAG": "0.14",
+            "FLAG_K": "0.62"
+          }
+        },
+        {
+          "name": "hold alive",
+          "does": "the ring and flag breathe about the ellipse centre",
+          "trigger": "continuous"
+        }
+      ],
+      "blends": [
+        {
+          "source": "the callout's pads (calloutPath)",
+          "became": "the whole arc",
+          "record": "content/video_engine/scripts/species/ring.mjs:55",
+          "tie": "recorded"
+        },
+        {
+          "source": "the flow frame's dash rhythm",
+          "became": "the whole arc",
+          "record": "content/video_engine/scripts/species/ring.mjs:59",
+          "tie": "recorded"
+        },
+        {
+          "source": "E56 a ring's one use",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:1815",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/ring.mjs",
+        "object": "RING"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/ring.mjs",
+        "symbol": "paintRing"
+      },
+      "doctrine": [
+        "CAPABILITIES RING",
+        "E56"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "ring-dashed-chip",
+        "test": "content/video_engine/tests/kinetics/ring.test.mjs",
+        "first_use": {
+          "project": "systems-and-blowups",
+          "build": "SHOT-TABLE-SHORT.py (no approval record found for this build)",
+          "t": 54.86
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:spotlight",
+      "axis": "species",
+      "token": "spotlight",
+      "title": "The feathered spotlight species",
+      "aliases": [
+        {
+          "name": "Feathered spotlight",
+          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1804"
+        },
+        {
+          "name": "The light HOLDS",
+          "source": "docs/content-video-engine/CAPABILITIES.md:70"
+        }
+      ],
+      "does": "The frame dims except a feathered light that lands on a picture or datum and holds for the sentence.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"spotlight\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{'kind': 'spotlight', 'at': 2.67, 'dur': 'hold', 'target': {'kind': 'datum', 'index': 315}, 'until': 8.32}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:4",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "dim in",
+          "does": "the frame dims to SPOT_DIM around a feathered hole, fading in on spEase over 0.4 s",
+          "trigger": "the species' `at`",
+          "dials": {
+            "SPOT_DIM": "0.49"
+          }
+        },
+        {
+          "name": "glide",
+          "does": "the hole glides from target to target2 on spIO over 0.6 s",
+          "trigger": "at + glide_at"
+        },
+        {
+          "name": "hold alive",
+          "does": "the hole's radius breathes and its centre drifts by the named idle",
+          "trigger": "after the glide, until the window ends (dur 'hold' resolves to the sentence)"
+        },
+        {
+          "name": "dim out",
+          "does": "fades out over the last 0.4 s",
+          "trigger": "0.4 s before at + dur"
+        }
+      ],
+      "blends": [
+        {
+          "source": "yt-feather-highlight (doc 29 harvest)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1804",
+          "tie": "recorded"
+        },
+        {
+          "source": "E49 idle on the light",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:1494",
+          "tie": "recorded"
+        },
+        {
+          "source": "E25 amended: the light holds",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/CAPABILITIES.md:70",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintSpecies",
+        "note": "paintSpecies / sp.kind === \"spotlight\""
+      },
+      "doctrine": [
+        "29 s9.27",
+        "29 s9.27 row Feathered spotlight",
+        "E25",
+        "E56"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_targeted_species.py::test_every_pointing_kind_requires_a_target",
+        "first_use": {
+          "project": "japan-tariff-trick",
+          "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
+          "t": 2.67
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:squiggle",
+      "axis": "species",
+      "token": "squiggle",
+      "title": "The squiggle marks species",
+      "aliases": [
+        {
+          "name": "Squiggle marks",
+          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1805"
+        }
+      ],
+      "does": "A hand-drawn underline draws under a stressed caption word as it is said (stage captions only).",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"squiggle\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{'kind': 'squiggle', 'at': 20.0, 'dur': 1.0, 'target': {'kind': 'span', 'from_word': 1, 'to_word': 2}}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [
+        {
+          "source": "hw-underline (doc 29 harvest)",
+          "became": "the effect",
+          "record": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1805",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintSpecies",
+        "note": "paintSpecies / sp.kind === \"squiggle\""
+      },
+      "doctrine": [
+        "29 s9.27",
+        "29 s9.27 row Squiggle marks"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_targeted_species.py::test_every_pointing_kind_requires_a_target",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:stamp",
+      "axis": "species",
+      "token": "stamp",
+      "title": "The vector map stamp species",
+      "aliases": [],
+      "does": "A figure (or a year, smaller) writes at a country's centroid on its word.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"stamp\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{\"kind\": \"stamp\", \"at\": 10.4, \"dur\": 8.0, \"text\": \"1.4 Billion Barrels\", \"target\": {\"kind\": \"country\", \"id\": \"CHN\"}}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:589",
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [
+        {
+          "source": "the badge spring (springPop)",
+          "became": "the effect",
+          "record": "docs/content-video-engine/42-DRAWING-KINETICS.md:63",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/vecmap.mjs",
+        "object": "STAMP"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/vecmap.mjs",
+        "symbol": "paintStamp",
+        "note": "plate must be vecmap"
+      },
+      "doctrine": [
+        "CAPABILITIES VECTOR MAP"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "vecmap-arc",
+        "test": "content/video_engine/tests/kinetics/vecmap.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:steam",
+      "axis": "species",
+      "token": "steam",
+      "title": "The steam still-life species",
+      "aliases": [],
+      "does": "Wisps of steam or smoke rise off a named region of an approved still so the plate breathes.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"steam\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{'kind': 'steam', 'at': 38.96, 'dur': 5.92, 'target': {'kind': 'region', 'x0': 0.8, 'y0': 0.55, 'x1': 0.95, 'y1': 0.6}}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-SHORT.py:5",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "fade in",
+          "does": "three seeded wisps fade in over 0.6 s",
+          "trigger": "the species' `at`"
+        },
+        {
+          "name": "rise loop",
+          "does": "each wisp rises and curls on its own phase of the period",
+          "trigger": "continuous",
+          "dials": {
+            "STEAM_PERIOD": "2.6"
+          }
+        },
+        {
+          "name": "fade out",
+          "does": "fades out over the last 0.6 s",
+          "trigger": "0.6 s before at + dur"
+        }
+      ],
+      "blends": [
+        {
+          "source": "E49 still life",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:1494",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintSpecies",
+        "note": "paintSpecies / sp.kind === \"steam\""
+      },
+      "doctrine": [
+        "E49"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": null,
+        "first_use": {
+          "project": "tokyo-tea-break",
+          "build": "build-short.v2 (render approved by the operator 2026-09-06, render/APPROVALS.json)",
+          "t": 38.96
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:ticker",
+      "axis": "species",
+      "token": "ticker",
+      "title": "The ticker still-life species",
+      "aliases": [],
+      "does": "A tape of figures ticks cell by cell across a named region of an approved still.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"ticker\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{'kind': 'ticker', 'at': 39.160000000000004, 'dur': 5.72, 'density': 0.3, 'paper': '#EFE8D5', 'tilt': -4, 'col_lines': [0.602, 0.681, 0.75, 0.812], 'row_lines': [0.409, 0.431, 0.454, 0.477, 0.501, 0.525, 0.548], 'target': {'kind': 'region', 'x0': 0.602, 'y0': 0.409, 'x1': 0.812, 'y1': 0.548}}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-SHORT.py:5",
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [
+        {
+          "source": "STILL LIFE (compiler comment)",
+          "became": "the effect",
+          "record": "content/video_engine/scripts/build_scene_timeline_f.py:189",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintSpecies",
+        "note": "paintSpecies / sp.kind === \"ticker\""
+      },
+      "doctrine": [
+        "E49"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": null,
+        "first_use": {
+          "project": "tokyo-tea-break",
+          "build": "build-short.v2 (render approved by the operator 2026-09-06, render/APPROVALS.json)",
+          "t": 39.160000000000004
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "species:trace",
+      "axis": "species",
+      "token": "trace",
+      "title": "The trace hops species",
+      "aliases": [
+        {
+          "name": "Trace HOPS",
+          "source": "docs/content-video-engine/CAPABILITIES.md:71"
+        }
+      ],
+      "does": "A route draws between named points on a still, with hops, and stamps collect at each named point.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"trace\", \"at\", \"dur\", \"target\"} (shot row 7th element)",
+        "example": "{'kind': 'trace', 'at': 9.22, 'dur': 8.2, 'color': '#B0201F', 'target': {'kind': 'region', 'x0': 0.215, 'y0': 0.34, 'x1': 0.65, 'y1': 0.425}, 'hop': {'from': [0.215, 0.425], 'to': [0.65, 0.34], 'bow': 0.16, 'draw_s': 0.55, 'width': 9}}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:5",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "draw",
+          "does": "a seeded zigzag (or, with `hop`, one quadratic bow) draws on by dash",
+          "trigger": "the species' `at` (and every TRACE_PERIOD for the plain trace)",
+          "dials": {
+            "TRACE_DRAW": "1.1"
+          }
+        },
+        {
+          "name": "arrowhead lands",
+          "does": "the arrowhead appears when the line completes",
+          "trigger": "draw fraction reaches 1"
+        },
+        {
+          "name": "hold / fade / repeat",
+          "does": "plain: holds, fades over the last 18 % of the period, redraws; hop: held to the end",
+          "trigger": "phase > 0.82 of TRACE_PERIOD (plain only)",
+          "dials": {
+            "TRACE_PERIOD": "3.2"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Trace HOPS + stacked stamps",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/CAPABILITIES.md:71",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintSpecies",
+        "note": "paintSpecies / sp.kind === \"trace\""
+      },
+      "doctrine": [
+        "CAPABILITIES Trace HOPS"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_targeted_species.py::test_trace_hop_is_accepted_with_fraction_endpoints",
+        "first_use": {
+          "project": "japan-tariff-trick",
+          "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
+          "t": 9.22
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    }
+  ]
+}

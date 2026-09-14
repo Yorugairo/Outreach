@@ -1,0 +1,661 @@
+{
+  "schema_version": "effect_cards.v1",
+  "axis": "kinetics",
+  "cards": [
+    {
+      "id": "kinetics:arap",
+      "axis": "kinetics",
+      "token": "arap",
+      "title": "The ARAP morph kinetics module",
+      "aliases": [
+        {
+          "name": "ARAP",
+          "source": "docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:73"
+        }
+      ],
+      "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "the build's kinetics flags (build_short.py -> the compiler -> timeline kinetics)",
+        "example": "kinetics={\"arap_morph\": True}",
+        "example_source": null,
+        "check": "module"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/arap.mjs",
+        "object": "ARAP"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/arap.mjs",
+        "symbol": "ARAP"
+      },
+      "doctrine": [
+        "43 s43.5",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/kinetics/arap.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "kinetics:camera",
+      "axis": "kinetics",
+      "token": "camera",
+      "title": "The camera kinetics module",
+      "aliases": [
+        {
+          "name": "The camera: one persistent 2D similarity",
+          "source": "docs/content-video-engine/CAPABILITIES.md:78"
+        }
+      ],
+      "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "the build's kinetics flags (build_short.py -> the compiler -> timeline kinetics)",
+        "example": "kinetics={\"camera\": True}",
+        "example_source": null,
+        "check": "module"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/camera.mjs",
+        "object": "CAM"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/camera.mjs",
+        "symbol": "CAM"
+      },
+      "doctrine": [
+        "E59",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/kinetics/camera.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "kinetics:chartxf",
+      "axis": "kinetics",
+      "token": "chartxf",
+      "title": "The chart-transition kinetics module",
+      "aliases": [
+        {
+          "name": "CHART TRANSITIONS",
+          "source": "content/video_engine/scripts/kinetics/chartxf.mjs:1"
+        }
+      ],
+      "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "none: inlined whole into every player by sync_kinetics.py; reached through its callers",
+        "example": "(no flag - always inlined)",
+        "example_source": null,
+        "check": "none"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/chartxf.mjs",
+        "object": "XF"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/chartxf.mjs",
+        "symbol": "XF",
+        "note": "XF"
+      },
+      "doctrine": [
+        "E58",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "tags-to-bars",
+        "test": "content/video_engine/tests/kinetics/chartxf.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "kinetics:clothoid",
+      "axis": "kinetics",
+      "token": "clothoid",
+      "title": "The clothoid kinetics module",
+      "aliases": [
+        {
+          "name": "The CLOTHOID fitter",
+          "source": "docs/content-video-engine/CAPABILITIES.md:89"
+        },
+        {
+          "name": "Euler spirals",
+          "source": "docs/content-video-engine/42-DRAWING-KINETICS.md:102"
+        }
+      ],
+      "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "none: inlined whole into every player by sync_kinetics.py; reached through its callers",
+        "example": "(no flag - always inlined)",
+        "example_source": null,
+        "check": "none"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/clothoid.mjs",
+        "object": "CLOTHOID"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/clothoid.mjs",
+        "symbol": "CLOTHOID"
+      },
+      "doctrine": [
+        "42 s42.4",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "flow-swap",
+        "test": "content/video_engine/tests/kinetics/clothoid.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "kinetics:ease",
+      "axis": "kinetics",
+      "token": "ease",
+      "title": "The minimum-jerk ease kinetics module",
+      "aliases": [
+        {
+          "name": "minimum-jerk",
+          "source": "docs/content-video-engine/42-DRAWING-KINETICS.md:26"
+        }
+      ],
+      "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "the build's kinetics flags (build_short.py -> the compiler -> timeline kinetics)",
+        "example": "kinetics={\"min_jerk\": True}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short.py:400",
+        "check": "module"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/ease.mjs",
+        "symbol": "minJerk"
+      },
+      "doctrine": [
+        "42 s42.1",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/kinetics/ease.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "kinetics:homography",
+      "axis": "kinetics",
+      "token": "homography",
+      "title": "The homography kinetics module",
+      "aliases": [
+        {
+          "name": "Planar Homography",
+          "source": "content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:33"
+        }
+      ],
+      "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "none: inlined whole into every player by sync_kinetics.py; reached through its callers",
+        "example": "(no flag - always inlined)",
+        "example_source": null,
+        "check": "none"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/homography.mjs",
+        "symbol": "H_IDENTITY"
+      },
+      "doctrine": [
+        "CAPABILITIES ART-EMBED",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "art-embed",
+        "test": "content/video_engine/tests/kinetics/homography.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "kinetics:idle",
+      "axis": "kinetics",
+      "token": "idle",
+      "title": "The idle kinetics module",
+      "aliases": [],
+      "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "the build's kinetics flags (build_short.py -> the compiler -> timeline kinetics)",
+        "example": "kinetics={\"idle\": True}",
+        "example_source": null,
+        "check": "module"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/idle.mjs",
+        "object": "IDLE"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/idle.mjs",
+        "symbol": "IDLE"
+      },
+      "doctrine": [
+        "E49",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": "ledger-soak-page@idle",
+        "test": "content/video_engine/tests/kinetics/idle.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "kinetics:ink",
+      "axis": "kinetics",
+      "token": "ink",
+      "title": "The Kubelka-Munk ink kinetics module",
+      "aliases": [
+        {
+          "name": "Kubelka-Munk ink",
+          "source": "docs/content-video-engine/CAPABILITIES.md:53"
+        }
+      ],
+      "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "the build's kinetics flags (build_short.py -> the compiler -> timeline kinetics)",
+        "example": "kinetics={\"km_ink\": True}",
+        "example_source": null,
+        "check": "module"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/ink.mjs",
+        "object": "INK"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/ink.mjs",
+        "symbol": "INK"
+      },
+      "doctrine": [
+        "44 s44.1",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "ledger-soak-page@km_ink",
+        "test": "content/video_engine/tests/kinetics/ink.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "kinetics:morph_a",
+      "axis": "kinetics",
+      "token": "morph_a",
+      "title": "The vertex morph kinetics module (method A)",
+      "aliases": [
+        {
+          "name": "Morph METHOD A (vertex-based)",
+          "source": "docs/content-video-engine/CAPABILITIES.md:96"
+        }
+      ],
+      "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "none: inlined whole into every player by sync_kinetics.py; reached through its callers",
+        "example": "(no flag - always inlined)",
+        "example_source": null,
+        "check": "none"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/morph_a.mjs",
+        "object": "MORPH_A"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/morph_a.mjs",
+        "symbol": "MORPH_A"
+      },
+      "doctrine": [
+        "43 s43.5",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/kinetics/morph_a.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "kinetics:spring",
+      "axis": "kinetics",
+      "token": "spring",
+      "title": "The spring kinetics module",
+      "aliases": [
+        {
+          "name": "The full spring",
+          "source": "docs/content-video-engine/CAPABILITIES.md:54"
+        },
+        {
+          "name": "The settle",
+          "source": "docs/content-video-engine/42-DRAWING-KINETICS.md:63"
+        }
+      ],
+      "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "the build's kinetics flags (build_short.py -> the compiler -> timeline kinetics)",
+        "example": "kinetics={\"analytic_spring\": True}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short.py:400",
+        "check": "module"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/spring.mjs",
+        "object": "SPRING"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/spring.mjs",
+        "symbol": "SPRING"
+      },
+      "doctrine": [
+        "42 s42.2",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "ledger-soak-page@analytic_spring",
+        "test": "content/video_engine/tests/kinetics/spring.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "kinetics:squash",
+      "axis": "kinetics",
+      "token": "squash",
+      "title": "The area-preserving squash kinetics module",
+      "aliases": [
+        {
+          "name": "Area-preserving squash",
+          "source": "docs/content-video-engine/CAPABILITIES.md:55"
+        }
+      ],
+      "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "the build's kinetics flags (build_short.py -> the compiler -> timeline kinetics)",
+        "example": "kinetics={\"area_squash\": True}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short.py:400",
+        "check": "module"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/squash.mjs",
+        "object": "SQUASH"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/squash.mjs",
+        "symbol": "SQUASH"
+      },
+      "doctrine": [
+        "42 s42.3",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "ledger-soak-page@area_squash",
+        "test": "content/video_engine/tests/kinetics/squash.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "kinetics:stagger",
+      "axis": "kinetics",
+      "token": "stagger",
+      "title": "The stagger envelope kinetics module",
+      "aliases": [
+        {
+          "name": "STAGGER ENVELOPE",
+          "source": "docs/content-video-engine/CAPABILITIES.md:40"
+        }
+      ],
+      "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "none: inlined whole into every player by sync_kinetics.py; reached through its callers",
+        "example": "(no flag - always inlined)",
+        "example_source": null,
+        "check": "none"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/stagger.mjs",
+        "object": "FADE_UP"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/stagger.mjs",
+        "symbol": "FADE_UP"
+      },
+      "doctrine": [
+        "CAPABILITIES stagger",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/kinetics/stagger.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "kinetics:stopaction",
+      "axis": "kinetics",
+      "token": "stopaction",
+      "title": "The stop-action kinetics module",
+      "aliases": [],
+      "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "the build's kinetics flags (build_short.py -> the compiler -> timeline kinetics)",
+        "example": "kinetics={\"stop_action\": True}",
+        "example_source": null,
+        "check": "module"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/stopaction.mjs",
+        "object": "STOP"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/stopaction.mjs",
+        "symbol": "STOP"
+      },
+      "doctrine": [
+        "CAPABILITIES Stop-action",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/kinetics/stopaction.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "kinetics:stroke",
+      "axis": "kinetics",
+      "token": "stroke",
+      "title": "The curvature stroke kinetics module",
+      "aliases": [
+        {
+          "name": "Curvature stroke",
+          "source": "docs/content-video-engine/CAPABILITIES.md:52"
+        },
+        {
+          "name": "two-thirds law",
+          "source": "docs/content-video-engine/CAPABILITIES.md:52"
+        }
+      ],
+      "does": "Pure math inlined into the player between KINETICS markers; the viewer sees it only through the effects that call it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "the build's kinetics flags (build_short.py -> the compiler -> timeline kinetics)",
+        "example": "kinetics={\"curvature_stroke\": True}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short.py:400",
+        "check": "module"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/stroke.mjs",
+        "object": "STROKE"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/stroke.mjs",
+        "symbol": "STROKE"
+      },
+      "doctrine": [
+        "42 s42.1",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "chart-callout@curvature_stroke",
+        "test": "content/video_engine/tests/kinetics/stroke.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    }
+  ]
+}

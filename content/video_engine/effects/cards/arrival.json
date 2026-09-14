@@ -1,0 +1,299 @@
+{
+  "schema_version": "effect_cards.v1",
+  "axis": "arrival",
+  "cards": [
+    {
+      "id": "arrival:land",
+      "axis": "arrival",
+      "token": "land",
+      "title": "The land arrival",
+      "aliases": [],
+      "does": "The card drops straight down and lands with its material's weight.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "dock opts {\"arrive\": \"land\"} (or ;arrive=land)",
+        "example": "{'arrive': 'land', 'mass': 'metal', 'centre': True, 'card_aspect': 0.9167, 'centre_w': 0.42, 'centre_x': 0.76, 'centre_y': 0.316}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-SHORT.py:4",
+        "check": "arrival"
+      },
+      "phases": [
+        {
+          "name": "anticipation",
+          "does": "a small lift and clamp before the drop",
+          "trigger": "the dock's `enter`",
+          "dials": {
+            "ANTIC_S": "0.18",
+            "ANTIC_PX": "6",
+            "ANTIC_SQUASH": "0.05"
+          }
+        },
+        {
+          "name": "drop",
+          "does": "falls DROP_PX easing in",
+          "trigger": "ANTIC_S elapsed",
+          "dials": {
+            "DROP_S": "0.14",
+            "DROP_PX": "48"
+          }
+        },
+        {
+          "name": "settle",
+          "does": "impact and the material's spring to rest",
+          "trigger": "DROP_S elapsed",
+          "dials": {
+            "SETTLE_S": "1.2"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "HyperFrames SQUASH_ENV (stopaction header)",
+          "became": "the whole arc",
+          "record": "content/video_engine/scripts/kinetics/stopaction.mjs:56",
+          "tie": "recorded"
+        },
+        {
+          "source": "48 s48.6 mass before motion",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:111",
+          "tie": "recorded"
+        },
+        {
+          "source": "Stop-action mechanics (P47 T1)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/CAPABILITIES.md:68",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/stopaction.mjs",
+        "object": "STOP"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/stopaction.mjs",
+        "symbol": "landXf"
+      },
+      "doctrine": [
+        "E45",
+        "CAPABILITIES Stop-action"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_authoring_kit.py::test_record_words_land_the_highlighter_on_the_narrators_word",
+        "first_use": {
+          "project": "systems-and-blowups",
+          "build": "SHOT-TABLE-SHORT.py (no approval record found for this build)",
+          "t": null
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "arrival:spring",
+      "axis": "arrival",
+      "token": "spring",
+      "title": "The spring pop arrival",
+      "aliases": [
+        {
+          "name": "spring = E45's pop",
+          "source": "content/video_engine/scripts/build_scene_timeline_f.py:80"
+        }
+      ],
+      "does": "The dock pops in on E45's spring - the default when no arrival is named.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "dock opts {\"arrive\": \"spring\"} (or ;arrive=spring)",
+        "example": "{'arrive': 'spring'}",
+        "example_source": null,
+        "check": "arrival"
+      },
+      "phases": [
+        {
+          "name": "pop",
+          "does": "the dock springs from DOCK_POP_FROM to 1 and fades in",
+          "trigger": "the dock's `enter`",
+          "dials": {
+            "DOCK_POP_S": "0.45",
+            "DOCK_POP_FROM": "0.85",
+            "DOCK_FADE_S": "0.12"
+          }
+        },
+        {
+          "name": "retract",
+          "does": "the fast settle out",
+          "trigger": "the dock's `exit`",
+          "dials": {
+            "DOCK_RETRACT_S": "0.35"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "E45's pop",
+          "became": "pop",
+          "record": "content/video_engine/scripts/build_scene_timeline_f.py:80",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/spring.mjs",
+        "object": "SPRING"
+      },
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "arriveOf",
+        "also": [
+          "springPop"
+        ],
+        "note": "arriveOf / arriveOf (default \"spring\") + kinetics/spring.mjs springPop; default: arriveOf's default - every dock arrives on it unless the row names another"
+      },
+      "doctrine": [
+        "E45"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_stop_action.py::test_a_thrown_dock_is_off_its_spot_in_flight_and_lands_where_the_spring_would_have",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "arrival:throw",
+      "axis": "arrival",
+      "token": "throw",
+      "title": "The throw arrival",
+      "aliases": [],
+      "does": "The card is thrown in on a stepped arc and lands with its material's squash, dip and shadow.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "dock opts {\"arrive\": \"throw\"} (or ;arrive=throw)",
+        "example": "{'arrive': 'throw', 'mass': 'paper', 'centre': True, 'card_aspect': 1.8361}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:3",
+        "check": "arrival"
+      },
+      "phases": [
+        {
+          "name": "flight",
+          "does": "a ballistic chord with an arc lift and a tumble that unwinds, stepped on the cadence rule",
+          "trigger": "the dock's `enter`",
+          "dials": {
+            "FLIGHT_S": "0.45",
+            "ARC": "0.22",
+            "SPIN_DEG": "9"
+          }
+        },
+        {
+          "name": "impact",
+          "does": "the material's squash frames, the receiver dips, the contact shadow tightens",
+          "trigger": "FLIGHT_S elapsed",
+          "dials": {
+            "IMPACT_SQUASH": "0.22",
+            "DIP_PX": "4"
+          }
+        },
+        {
+          "name": "settle",
+          "does": "the material's spring (and restitution hop) brings it to rest",
+          "trigger": "impact",
+          "dials": {
+            "SETTLE_S": "1.2"
+          }
+        },
+        {
+          "name": "eye goes to it (opt-in)",
+          "does": "camera attention scales toward the landed card and back",
+          "trigger": "contact, when attention is on",
+          "dials": {
+            "SCALE": "1.06",
+            "IN": "0.5",
+            "OUT": "0.6"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "HyperFrames SQUASH_ENV (stopaction header)",
+          "became": "the whole arc",
+          "record": "content/video_engine/scripts/kinetics/stopaction.mjs:56",
+          "tie": "recorded"
+        },
+        {
+          "source": "48 s48.6 mass before motion",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:111",
+          "tie": "recorded"
+        },
+        {
+          "source": "Stop-action mechanics (P47 T1)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/CAPABILITIES.md:68",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "ink",
+          "means": "Mass: ink: The house standard: one squash frame, a small rebound.",
+          "source_set": "MASSES"
+        },
+        {
+          "token": "liquid",
+          "means": "Mass: liquid: A spread with no rebound, overdamped.",
+          "source_set": "MASSES"
+        },
+        {
+          "token": "metal",
+          "means": "Mass: metal: A heavy rigid thing: no squash, a dead stop, a deep dip.",
+          "source_set": "MASSES"
+        },
+        {
+          "token": "paper",
+          "means": "Mass: paper: A card: one squash frame, a low hop, a flutter.",
+          "source_set": "MASSES"
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/stopaction.mjs",
+        "object": "STOP"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/stopaction.mjs",
+        "symbol": "throwXf"
+      },
+      "doctrine": [
+        "E45",
+        "CAPABILITIES Stop-action"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_authoring_kit.py::test_the_bed_swells_from_the_throw_through_the_snap",
+        "first_use": {
+          "project": "japan-tariff-trick",
+          "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
+          "t": 0.0
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    }
+  ]
+}

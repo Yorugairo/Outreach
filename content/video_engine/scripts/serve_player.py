@@ -54,6 +54,15 @@ P51 T7 adds the WRITE side of the same loop - the editor's one door:
       and served on the BUILD's own origin so it can drive the served player.html in an iframe and
       fetch the build's timeline, words and sidecar. Nothing is copied into the build: a build stays
       data only, and the editor a build is opened with is always the current file on disk.
+
+    GET /docs/EFFECTS-CATALOG.jsonl
+      the repo's effects catalogue (P55 T8), read-only off disk as application/x-ndjson, so the
+      editor's species panel can carry each species' title, does and proof. 404 when absent.
+
+    GET /content/video_engine/tests/golden/frames/<name>
+      one golden proof frame, read-only, ONLY when the decoded <name> is `[A-Za-z0-9._@-]+.png`
+      (no slash, no `..` path, no encoded separator) and its resolved parent IS the frames
+      directory; anything else under that prefix is a 404. Every other path is the build, as ever.
 """
 from __future__ import annotations
 
@@ -68,7 +77,7 @@ import threading
 import time
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, unquote, urlparse
 
 SCRIPTS = Path(__file__).resolve().parent
 POLL_S = 0.25          # the watcher's tick: no third-party watcher, just os.stat
@@ -76,6 +85,12 @@ HOLD_S = 25.0          # how long /reload holds a request before answering on th
 MANIFEST_NAME = "player.json"
 OVERRIDES_NAME = "overrides.json"
 EDITOR_HTML = SCRIPTS.parent / "editor" / "editor.html"   # P51 T7: served from here, never copied into a build
+REPO = SCRIPTS.parents[2]
+CATALOG_ROUTE = "/docs/EFFECTS-CATALOG.jsonl"             # P55 T8: read-only, off the repo, never copied
+CATALOG_JSONL = REPO / "docs" / "EFFECTS-CATALOG.jsonl"
+FRAMES_ROUTE = "/content/video_engine/tests/golden/frames/"
+GOLDEN_FRAMES = SCRIPTS.parent / "tests" / "golden" / "frames"
+FRAME_NAME = re.compile(r"[A-Za-z0-9._@-]+\.png")         # fullmatch: no slash, no separator, png only
 CHECK_MAX = 6          # instants the server's own determinism check renders (the CLI checks all)
 
 
@@ -123,6 +138,11 @@ class ReviewHandler(SimpleHTTPRequestHandler):
             return self._reload()
         if path == "/editor.html":
             return self._editor()
+        if path == CATALOG_ROUTE:
+            return self._repo_file(CATALOG_JSONL, "application/x-ndjson; charset=utf-8")
+        decoded = unquote(path)
+        if decoded.startswith(FRAMES_ROUTE):
+            return self._frame(decoded[len(FRAMES_ROUTE):])
         return super().do_GET()
 
     def do_POST(self):
@@ -149,6 +169,27 @@ class ReviewHandler(SimpleHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
+
+    def _repo_file(self, file: Path, ctype: str):
+        """One read-only file off the repo tree (P55 T8), never a copy in the build."""
+        try:
+            body = file.read_bytes()
+        except OSError:
+            return self.send_error(404, f"not on disk: {file.name}")
+        self.send_response(200)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _frame(self, name: str):
+        """A golden proof frame by bare name; the name and the resolved parent are both checked."""
+        if not FRAME_NAME.fullmatch(name):
+            return self.send_error(404, "a proof frame is a bare <name>.png")
+        target = (GOLDEN_FRAMES / name).resolve()
+        if target.parent != GOLDEN_FRAMES.resolve():
+            return self.send_error(404, "a proof frame is a bare <name>.png")
+        return self._repo_file(target, "image/png")
 
     def _overrides(self):
         """The editor's write: one sidecar line, the compiler's refusal, never a silent drop."""

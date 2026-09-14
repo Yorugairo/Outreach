@@ -9,7 +9,8 @@ needs the locator and one line of context, then a `sed -n` window where it decid
     python content/video_engine/scripts/docs_find.py "hedged yield" --layer manifest --limit 4
     python content/video_engine/scripts/docs_find.py "G15b" --layer gates --json
 
-Default `--layer all` scans manifest -> index -> topics -> gates -> animation -> craft, cheapest first, and
+Default `--layer all` scans effects -> manifest -> index -> topics -> gates -> animation -> craft, cheapest
+first (the effects catalogue answers "what is it called, what does it do" before any document), and
 stops once `--limit` hits are printed. Two rules keep the cheap layer from eating the whole budget and the
 research bundle from burying the doctrine, because both make the cap useless in practice:
 
@@ -118,6 +119,13 @@ def first_of(record: dict, *dotted: str) -> str:
 
 LAYERS: tuple[Layer, ...] = (
     Layer(
+        "effects", "docs/EFFECTS-CATALOG.jsonl", ("id", "title", "aliases", "does", "token"),
+        name_of=lambda r: str(r.get("title") or ""),
+        detail_of=lambda r: f"{r.get('id') or ''} - {r.get('does') or ''}",
+        path_of=lambda r: str(dig(r, "lives.path") or ""),
+        detail_only=True,
+    ),
+    Layer(
         "manifest", "docs/DOCS-MANIFEST.jsonl",
         ("title", "purpose", "defines", "headings", "labels", "leads", "key_terms"),
         name_of=lambda r: str(r.get("title") or ""),
@@ -170,7 +178,7 @@ LAYERS: tuple[Layer, ...] = (
 )
 
 BY_NAME = {layer.name: layer for layer in LAYERS}
-ALL_ORDER = ("manifest", "index", "topics", "gates", "animation", "craft")
+ALL_ORDER = ("effects", "manifest", "index", "topics", "gates", "animation", "craft")
 CHOICES = (*(layer.name for layer in LAYERS), "all")
 
 
@@ -354,11 +362,22 @@ def render(result: Result, found: dict[str, list[Hit]], taken: dict[str, int]) -
         result.lines.extend(hit.text for hit in kept)
 
 
+EFFECT_CARD = 'python content/video_engine/scripts/effects_card.py "{card}"'
+
+
 def next_window(hits: Sequence[Hit]) -> str:
-    """The `sed -n` window of the first index hit - the one locator worth opening next."""
+    """The one locator worth opening next.
+
+    The `sed -n` window of the first hit that has a line, in any layer - an effects hit has no line
+    and never suppresses it. With no lined hit, the first effect's card is the window (its id leads
+    the effects snippet, `id - does`)."""
     for hit in hits:
-        if hit.layer == "index" and hit.path and isinstance(hit.line, int):
+        if hit.path and isinstance(hit.line, int) and not isinstance(hit.line, bool):
             return f"sed -n {max(1, hit.line - WINDOW)},{hit.line + WINDOW}p {hit.path}"
+    for hit in hits:
+        card = hit.snippet.split(" - ", 1)[0].strip() if hit.layer == "effects" else ""
+        if card:
+            return EFFECT_CARD.format(card=card)
     return ""
 
 
@@ -397,7 +416,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("term", help="case-insensitive substring or regex")
     parser.add_argument("--layer", choices=CHOICES, default="all",
-                        help="one layer, or all (default: manifest, index, topics, gates, animation, craft)")
+                        help="one layer, or all (default: effects, manifest, index, topics, gates, animation, craft)")
     parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT,
                         help=f"most hits to print across every layer (default: {DEFAULT_LIMIT})")
     parser.add_argument("--json", action="store_true", help="the same hits as one JSON object")

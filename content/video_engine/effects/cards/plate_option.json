@@ -1,0 +1,473 @@
+{
+  "schema_version": "effect_cards.v1",
+  "axis": "plate_option",
+  "cards": [
+    {
+      "id": "plate_option:arrive",
+      "axis": "plate_option",
+      "token": "arrive",
+      "title": "The arrive plate option",
+      "aliases": [],
+      "does": "A page's pills arrive by a stop-action throw or landing instead of the spring.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "`;arrive=<spring|throw|land>`",
+        "example": "'plate-07;arrive=throw'",
+        "example_source": null,
+        "check": "plate"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [
+        {
+          "token": "mass",
+          "means": "Page arrival material: The material a page's thrown or landed pills settle by.",
+          "source_set": "PLATE_OPTS"
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/stopaction.mjs",
+        "object": "STOP"
+      },
+      "lives": {
+        "form": "module",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "arriveOf",
+        "note": "engine `arriveOf(scene.world)` in paintLedger",
+        "also": [
+          "paintLedger"
+        ]
+      },
+      "doctrine": [
+        "ARRIVALS (P47 T1)"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_stop_action.py::test_plate_options_name_the_idle_the_arrival_and_the_mass",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "probe OK"
+      }
+    },
+    {
+      "id": "plate_option:clip",
+      "axis": "plate_option",
+      "token": "clip",
+      "title": "The clip world",
+      "aliases": [
+        {
+          "name": "a clip world",
+          "source": "docs/content-video-engine/CAPABILITIES.md:60"
+        }
+      ],
+      "does": "A generated clip IS the scene: the timeline marks it `world.kind: \"clip\"` beside `world.asset_id` / `clip_path`, and the player seeks one pooled <video> to the scene clock instead of painting a still.",
+      "when": "the beat is motion itself - the opening shot, the outro card - and a still would be the weaker frame; a clip that PROVES a sentence is a dock, never the world",
+      "when_source": "docs/content-video-engine/CAPABILITIES.md:60",
+      "author": {
+        "key": "the shot row's 3rd element `clip:<path to a silent mp4>` (CLIP_PREFIX) -> `world.kind: \"clip\"`",
+        "example": "(79.076, 85.276, 'clip:C:/Users/Snipe/Downloads/Outreach Program/content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/clips/outro-v2.mp4', (0, 0, 0), [], 'dip', [{'kind': 'life', 'at': 79.076, 'dur': 6.2}])",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:15",
+        "check": "none"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintClip",
+        "also": [
+          "seekVideo",
+          "parkClips"
+        ],
+        "note": "paintClip seeks the pooled <video> on the scene clock (seekVideo, awaited by __clipsSeeked); the compiler writes kind/asset_id/clip_path in _world_for_bare_plate"
+      },
+      "doctrine": [
+        "E46 (dissolves and clips are valid tools)",
+        "CAPABILITIES:60 (a clip lands as a card, never as the world - the world clip is its own path)"
+      ],
+      "status": "live",
+      "implicit": true,
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_effects_catalog_drift.py::test_the_world_and_clip_cards_are_the_walks_own_world_events",
+        "first_use": {
+          "project": "japan-tariff-trick",
+          "build": "build-short",
+          "t": 79.08
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": "implicit: a `clip:` plate id on a shot row is this world (Japan s09 / s12, Tokyo s01 / s07)"
+      }
+    },
+    {
+      "id": "plate_option:idle",
+      "axis": "plate_option",
+      "token": "idle",
+      "title": "The idle plate option",
+      "aliases": [],
+      "does": "Names the subtle idle a held plate or page carries (none, breath, drift, pulse, figure, live) - nothing held goes truly still.",
+      "when": "always (E49) - every held thing names its idle; `none` only on purpose",
+      "when_source": "docs/content-video-engine/CAPABILITIES.md:64",
+      "author": {
+        "key": "plate id suffix `;idle=<kind>` (IDLE_KINDS)",
+        "example": "'plate-podium;idle=drift'",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:3",
+        "check": "plate"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/idle.mjs",
+        "object": "IDLE"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/idle.mjs",
+        "symbol": "IDLE_KINDS",
+        "note": "idle kinds (inlined; engine idleOf / idleCssFor)",
+        "also": [
+          "IDLE"
+        ]
+      },
+      "doctrine": [
+        "E49",
+        "CAPABILITIES idle"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_idle_e49.py::test_split_idle_reads_the_option_and_refuses_an_unknown_kind",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "probe OK"
+      }
+    },
+    {
+      "id": "plate_option:ken",
+      "axis": "plate_option",
+      "token": "ken",
+      "title": "The Ken Burns push and drift",
+      "aliases": [
+        {
+          "name": "Ken Burns",
+          "source": "docs/portable/OPERATOR-RULINGS.md:1411"
+        },
+        {
+          "name": "the slow push",
+          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1920"
+        }
+      ],
+      "does": "A still world leans across its whole scene: the PUSH is `world.ken_burns.scale` (1 -> 1 + scale) and the DRIFT is its `x`/`y` in px, both on the scene's own 0->1 clock; a ledger page is clamped to the push.",
+      "when": "plate life on a still that holds - never the cure for a frozen frame (E49: name the idle instead), and never on a row that also carries a camera move",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:1509",
+      "author": {
+        "key": "the shot row's 4th element `ken_burns(scale, x, y)` -> `world.ken_burns {scale, x, y}` (no token of its own)",
+        "example": "(0.0, 7.7, \"world-spike-desk-v1\", (.05, 10, -6), [])",
+        "example_source": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:63",
+        "check": "none"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "ken_burns",
+        "also": [
+          "KB_MAX"
+        ],
+        "note": "the world paint scales by (1 + p * scale) and translates by (p * x, p * y) over the scene's p; a ledger page is clamped to LP.KB_MAX and takes no drift"
+      },
+      "doctrine": [
+        "E46",
+        "E49",
+        "29 s9.26 (a page's Ken Burns is a slow push only)"
+      ],
+      "status": "live",
+      "implicit": true,
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_effects_catalog_drift.py::test_the_ken_burns_card_is_implicit_and_docs_find_answers_with_it_first",
+        "first_use": {
+          "project": "steel-and-paper",
+          "build": "build-f",
+          "t": 0.0
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": "implicit: every shot row whose ken_burns scale is non-zero pushes its world"
+      }
+    },
+    {
+      "id": "plate_option:pill",
+      "axis": "plate_option",
+      "token": "pill",
+      "title": "The tip-riding pill plate option",
+      "aliases": [
+        {
+          "name": "the tip-riding pill",
+          "source": "docs/content-video-engine/CAPABILITIES.md:97"
+        }
+      ],
+      "does": "A dense-line page carries a value pill riding the line's tip, popping at a named datum (yes | no | <datum index>).",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "`;pill=yes|no|<datum index>`",
+        "example": "'ledger:ev-x:line;pill=yes'",
+        "example_source": null,
+        "check": "plate"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/tippill.mjs",
+        "object": "TIPPILL"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/tippill.mjs",
+        "symbol": "pillAt",
+        "also": [
+          "TIPPILL"
+        ],
+        "note": "pillAt / TIPPILL (inlined) + engine lpPaintPill"
+      },
+      "doctrine": [
+        "CAPABILITIES tip-riding pill"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": null,
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "probe OK"
+      }
+    },
+    {
+      "id": "plate_option:then",
+      "axis": "plate_option",
+      "token": "then",
+      "title": "The then plate option (the next chart state)",
+      "aliases": [],
+      "does": "Declares a second (or third) full chart the same page can turn into, built at load and hidden until a chart_to verb reaches it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "`;then=<series>:<variant>[:<emphasize>]`, repeatable",
+        "example": "'ledger:ev-japan-holdings-v1:line:315:right:spiral:cut;then=ev-japan-selling-v1:bars:3;then=ev-bonds-vs-chips-10y-v1:bars:1'",
+        "example_source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-SHORT.py:6",
+        "check": "plate"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "lpPaintStates",
+        "note": "lpPaintStates; compiler _page_state / derive_rescale_states (STATE_MAX 3)"
+      },
+      "doctrine": [
+        "P48 T4 then="
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": null,
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "probe OK"
+      }
+    },
+    {
+      "id": "plate_option:thread",
+      "axis": "plate_option",
+      "token": "thread",
+      "title": "The thread plate option",
+      "aliases": [
+        {
+          "name": "the thread",
+          "source": "docs/content-video-engine/CAPABILITIES.md:99"
+        }
+      ],
+      "does": "One mark of the page before (a series, a bar or a rule) survives the cut and is the arriving page's ground.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "`;thread=<mark key>` on the ARRIVING page",
+        "example": "'ledger:ev-meta-yield-v1:bars;thread=s0'",
+        "example_source": null,
+        "check": "plate"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/thread.mjs",
+        "object": "THREAD"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/thread.mjs",
+        "symbol": "THREAD",
+        "note": "thread region (inlined); compiler thread_mark_error",
+        "also": [
+          "threadCarry"
+        ]
+      },
+      "doctrine": [
+        "CAPABILITIES continuity three (HF-16)"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "thread-baseline",
+        "test": "content/video_engine/tests/test_chart_transitions.py::test_a_thread_is_a_plate_option_on_the_ARRIVING_page_not_a_species",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "probe OK"
+      }
+    },
+    {
+      "id": "plate_option:use",
+      "axis": "plate_option",
+      "token": "use",
+      "title": "The use plate option",
+      "aliases": [
+        {
+          "name": "E61's three plate uses",
+          "source": "docs/content-video-engine/SPECIES-BY-SENTENCE.md:61"
+        }
+      ],
+      "does": "Names which of the three things a plate is (landing, bridge, reset); nothing changes on screen - the lint reads it.",
+      "when": "A plate appears for ONE of three uses and names which on its row",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:2004",
+      "author": {
+        "key": "`;use=<landing|bridge|reset>`",
+        "example": "'plate-bridge-load;use=bridge'",
+        "example_source": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/SHOT-TABLE-SHORT.py:5",
+        "check": "plate"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [
+        {
+          "token": "bridge",
+          "means": "Bridge: A narration plate between ideas - B-roll.",
+          "source_set": "PLATE_USES"
+        },
+        {
+          "token": "landing",
+          "means": "Landing surface: A plate thrown onto the art world with evidence docked on it, or evidence docked straight onto the chart.",
+          "source_set": "PLATE_USES"
+        },
+        {
+          "token": "reset",
+          "means": "Reset: A plate that covers the world so the evidence clears and the next page mounts clean or on a new topic.",
+          "source_set": "PLATE_USES"
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "compiler-only",
+        "path": "content/video_engine/scripts/build_scene_timeline_f.py",
+        "symbol": "split_plate_opts",
+        "also": [
+          "_check_opt",
+          "PLATE_USES"
+        ],
+        "note": "split_plate_opts / _check_opt (PLATE_USES); read by content/video_engine/scripts/lint_species_choice.py; the engine never reads it"
+      },
+      "doctrine": [
+        "E61",
+        "SPECIES-BY-SENTENCE row 15"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_authoring_kit.py::test_a_plate_may_name_its_use",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "probe OK"
+      }
+    },
+    {
+      "id": "plate_option:world",
+      "axis": "plate_option",
+      "token": "world",
+      "title": "The narrative plate world",
+      "aliases": [
+        {
+          "name": "the world plate",
+          "source": "docs/portable/OPERATOR-RULINGS.md:406"
+        }
+      ],
+      "does": "A generated still IS the scene: the plate fills the frame as the ground every dock lands on and every species fires over - `world.asset_id` with no `page` and no clip. The long form's default world.",
+      "when": "the sentence is narration over a depicted beat, not a proof of ours - the plate carries it and the evidence docks onto it",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:406",
+      "author": {
+        "key": "the shot row's 3rd element: a bare plate id (no `ledger:` / `clip:` / `vecmap` prefix) -> `world.asset_id`",
+        "example": "(0.0, 7.7, \"world-spike-desk-v1\", (.05, 10, -6), [])",
+        "example_source": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:63",
+        "check": "none"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "asset_id",
+        "also": [
+          "backgroundImage",
+          "parkClips"
+        ],
+        "note": "the world paint sets the layer's backgroundImage from A[scene.world.asset_id] and parks the clip pool; the compiler resolves the id in _world_for_bare_plate"
+      },
+      "doctrine": [
+        "OPERATOR-RULINGS:406 (the world plate carries the narrative)",
+        "E61 (the plate's three uses)"
+      ],
+      "status": "live",
+      "implicit": true,
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_effects_catalog_drift.py::test_the_world_and_clip_cards_are_the_walks_own_world_events",
+        "first_use": {
+          "project": "steel-and-paper",
+          "build": "build-f",
+          "t": 0.0
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": "implicit: a bare plate id on a shot row is this world (Steel: 75 of 75 scenes)"
+      }
+    }
+  ]
+}

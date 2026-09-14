@@ -45,8 +45,12 @@ ANIMATION = {"kind": "formula", "name": "widgetEase", "expr": "w(t) = t^2", "pat
 CRAFT = {"device": "the widget beat", "scale": ["L1"], "macro_or_micro": "micro",
          "what": "what the widget does", "defined_in": [{"path": "docs/alpha.md", "line": 9, "heading": "H"}],
          "gates": [], "judge_only": False, "exemplar": {}}
+EFFECT = {"id": "dock_payload:widget", "axis": "dock_payload", "token": "widget", "title": "The widget card",
+          "aliases": [{"name": "widget wall", "source": "operator 2026-09-13"}], "does": "The widget lands on its beat.",
+          "lives": {"form": "inline", "path": "docs/alpha.mjs", "symbol": "drawWidget"}}
 
 RECORDS = {
+    "docs/EFFECTS-CATALOG.jsonl": EFFECT,
     "docs/DOCS-MANIFEST.jsonl": MANIFEST,
     "docs/DOCS-INDEX.jsonl": INDEX,
     "docs/DOCS-TOPICS.jsonl": TOPIC,
@@ -57,6 +61,7 @@ RECORDS = {
 }
 
 EXPECTED = [
+    "[effects] docs/alpha.mjs — The widget card — dock_payload:widget - The widget lands on its beat.",
     "[manifest] docs/alpha.md — Alpha doc — The widget purpose line.",
     "[index] docs/alpha.md:30 — Widget section — The lead about widgets.",
     "[topics] widget — 2 sections — docs/alpha.md:30, content/x.md:4",
@@ -64,7 +69,7 @@ EXPECTED = [
     "[animation] docs/alpha.md:77 — widgetEase — w(t) = t^2",
     "[craft] docs/alpha.md:9 — the widget beat — what the widget does",
 ]
-SUMMARY = ("6 hit(s) in manifest, index, topics, gates, animation, craft; "
+SUMMARY = ("7 hit(s) in effects, manifest, index, topics, gates, animation, craft; "
            "next: sed -n 10,50p docs/alpha.md")
 
 
@@ -124,16 +129,42 @@ def test_the_citation_graph_answers_only_when_it_is_asked_for(capsys, tree):
     # Assert
     assert not [line for line in everywhere if line.startswith("[cites]")]
     assert asked == ["[cites] docs/alpha.md:5 — Widget section — widget-42",
-                     "1 hit(s) in cites"]
+                     "1 hit(s) in cites; next: sed -n 1,25p docs/alpha.md"]
 
 
 def test_the_limit_caps_the_total_and_stops_scanning_further_layers(capsys, tree):
     # Act
     lines = run(capsys, tree, "widget", "--limit", "2")
 
-    # Assert: two layers answered, the rest were never opened, and the count says it was cut
-    assert lines == [EXPECTED[0], EXPECTED[1],
-                     "2+ hit(s) in manifest, index; next: sed -n 10,50p docs/alpha.md"]
+    # Assert: two layers answered, the rest were never opened, and the count says it was cut;
+    # neither hit has a line, so the effect's card is the window
+    assert lines == [EXPECTED[0], EXPECTED[1], "2+ hit(s) in effects, manifest; "
+                     'next: python content/video_engine/scripts/effects_card.py "dock_payload:widget"']
+
+
+def test_an_effects_hit_first_never_suppresses_the_window_of_a_lined_hit(capsys, tree):
+    # Arrange: no manifest or index, so the first lined hit under the cap is a gate
+    (tree / "docs/DOCS-MANIFEST.jsonl").unlink()
+    (tree / "docs/DOCS-INDEX.jsonl").unlink()
+
+    # Act
+    lines = run(capsys, tree, "widget", "--limit", "3")
+
+    # Assert
+    assert lines[0] == EXPECTED[0]
+    assert lines[-1] == ("3+ hit(s) in effects, manifest, index, topics, gates; "
+                         "next: sed -n 1,32p content/video_engine/scripts/t.py")
+
+
+def test_an_effects_only_answer_names_the_card_as_the_window(capsys, tree):
+    # Act
+    lines = run(capsys, tree, "widget", "--layer", "effects")
+    payload = json.loads("\n".join(run(capsys, tree, "widget", "--layer", "effects", "--json")))
+
+    # Assert: the text line and the JSON field name the same window
+    card = 'python content/video_engine/scripts/effects_card.py "dock_payload:widget"'
+    assert lines == [EXPECTED[0], f"1 hit(s) in effects; next: {card}"]
+    assert payload["next"] == card
 
 
 def test_a_layer_that_is_not_built_reports_itself_and_never_crashes(capsys, tree):
@@ -144,8 +175,8 @@ def test_a_layer_that_is_not_built_reports_itself_and_never_crashes(capsys, tree
     lines = run(capsys, tree, "widget")
 
     # Assert: the note sits in the layer's own place in the order, and is not counted as a hit
-    assert lines[3] == "[gates] not built (run build_docs_layers.py --write)"
-    assert lines[-1].startswith("5 hit(s) in manifest, index, topics, gates, animation, craft;")
+    assert lines[4] == "[gates] not built (run build_docs_layers.py --write)"
+    assert lines[-1].startswith("6 hit(s) in effects, manifest, index, topics, gates, animation, craft;")
 
 
 def test_a_corrupt_record_is_skipped_rather_than_raised(capsys, tree):
@@ -157,7 +188,7 @@ def test_a_corrupt_record_is_skipped_rather_than_raised(capsys, tree):
     lines = run(capsys, tree, "widget", "--layer", "index")
 
     # Assert
-    assert lines == [EXPECTED[1], "1 hit(s) in index; next: sed -n 10,50p docs/alpha.md"]
+    assert lines == [EXPECTED[2], "1 hit(s) in index; next: sed -n 10,50p docs/alpha.md"]
 
 
 def test_a_term_that_is_not_valid_regex_is_searched_as_a_literal(capsys, tree):
@@ -177,7 +208,7 @@ def test_no_hits_still_names_the_layers_it_searched(capsys, tree):
     lines = run(capsys, tree, "no-such-term-anywhere")
 
     # Assert
-    assert lines == ["0 hit(s) in manifest, index, topics, gates, animation, craft"]
+    assert lines == ["0 hit(s) in effects, manifest, index, topics, gates, animation, craft"]
 
 
 def test_json_carries_the_same_hits_plus_the_window(capsys, tree):
@@ -186,17 +217,17 @@ def test_json_carries_the_same_hits_plus_the_window(capsys, tree):
 
     # Assert
     assert payload["query"] == "widget"
-    assert payload["count"] == 6
+    assert payload["count"] == 7
     assert payload["truncated"] is False
     assert payload["missing"] == []
     assert payload["layers_scanned"] == list(DF.ALL_ORDER)
     assert payload["next"] == "sed -n 10,50p docs/alpha.md"
     assert [hit["layer"] for hit in payload["hits"]] == list(DF.ALL_ORDER)
-    assert payload["hits"][1] == {
+    assert payload["hits"][2] == {
         "layer": "index", "path": "docs/alpha.md", "line": 30, "name": "Widget section",
-        "snippet": "The lead about widgets.", "line_text": EXPECTED[1],
+        "snippet": "The lead about widgets.", "line_text": EXPECTED[2],
     }
-    assert payload["hits"][2]["sections"] == [{"path": "docs/alpha.md", "line": 30},
+    assert payload["hits"][3]["sections"] == [{"path": "docs/alpha.md", "line": 30},
                                               {"path": "content/x.md", "line": 4}]
 
 

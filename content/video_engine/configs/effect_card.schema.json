@@ -1,0 +1,464 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "effect_cards.v1",
+  "title": "Effect cards v1 - one file per axis under content/video_engine/effects/cards/ (P55 T2)",
+  "description": "One card per EFFECT the scene-evidence engine performs. A token that is only a parameter of an effect (a mass, an ease, a camera attention, a melt ending, a plate use) is listed in its parent card's options, never given its own card. The compiler owns the token sets and the SPECIES_WHEN / CHART_TO_WHEN text; cards READ them at build (build_effects_catalog.py) and never copy them. Values of dials are pulled from the module's frozen object at build, never written on a card. Anchors are path + symbol, never line numbers.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "axis",
+    "cards"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "effect_cards.v1"
+    },
+    "axis": {
+      "$ref": "#/$defs/axis"
+    },
+    "cards": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/card"
+      }
+    }
+  },
+  "$defs": {
+    "axis": {
+      "enum": [
+        "species",
+        "page_species",
+        "chart_to",
+        "page_builder",
+        "dock_kind",
+        "dock_payload",
+        "chart_dock",
+        "dock_option",
+        "exit",
+        "page_enter",
+        "page_exit",
+        "camera",
+        "idle",
+        "arrival",
+        "plate_option",
+        "caption",
+        "overflow",
+        "kinetics"
+      ]
+    },
+    "token": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9_:+.-]+$"
+    },
+    "card": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "axis",
+        "token",
+        "title",
+        "aliases",
+        "does",
+        "author",
+        "lives",
+        "status",
+        "proof",
+        "callable"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z_]+:[A-Za-z0-9_:+.-]+$",
+          "description": "<axis>:<token>, e.g. dock_payload:stack, dock_option:stack, overflow:stack, exit:blurzoom"
+        },
+        "axis": {
+          "$ref": "#/$defs/axis"
+        },
+        "token": {
+          "$ref": "#/$defs/token"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 80,
+          "description": "the canonical human name; operator-coined names pass HG1"
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "source"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 80
+              },
+              "source": {
+                "type": "string",
+                "minLength": 3,
+                "description": "path:line or 'operator YYYY-MM-DD (<where recorded>)'"
+              }
+            }
+          },
+          "description": "every name people and records use; unique across the whole catalogue (drift gate)"
+        },
+        "does": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 240,
+          "description": "one sentence: what the viewer sees"
+        },
+        "when": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 400,
+          "description": "authored only on axes without a compiler WHEN dict; MUST be null on species / page_species / chart_to (pulled from SPECIES_WHEN / CHART_TO_WHEN at build)"
+        },
+        "when_source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "serves": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "QUOTES",
+              "RANKS",
+              "COMPARES",
+              "DIVIDES",
+              "NAMES",
+              "EXPLAINS",
+              "TURNS",
+              "BREAKS",
+              "SPANS",
+              "SETS",
+              "RETRACTS"
+            ]
+          }
+        },
+        "author": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "key",
+            "example",
+            "check"
+          ],
+          "properties": {
+            "key": {
+              "type": "string",
+              "description": "the shot-row / timeline key the token is written under"
+            },
+            "example": {
+              "type": "string",
+              "minLength": 1,
+              "description": "a literal authoring fragment that compiles"
+            },
+            "example_source": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "path:line of a shipped use, or null"
+            },
+            "check": {
+              "enum": [
+                "species",
+                "exit",
+                "enter",
+                "dock",
+                "dock_option",
+                "camera",
+                "plate",
+                "chart",
+                "caption",
+                "overflow",
+                "idle",
+                "arrival",
+                "module",
+                "none"
+              ],
+              "description": "which compiler validator the drift gate runs the example through"
+            }
+          }
+        },
+        "phases": {
+          "type": "array",
+          "description": "a composite effect's arc, in order, read from the painter code (operator 2026-09-13: the verdict stack is enter one at a time -> focus -> recede to the mosaic -> idle -> burst, never 'N proofs fly in'). Empty for a single-phase effect. `does` summarises the WHOLE arc.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "does",
+              "trigger"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 40
+              },
+              "does": {
+                "type": "string",
+                "minLength": 10,
+                "maxLength": 240
+              },
+              "trigger": {
+                "type": "string",
+                "minLength": 2,
+                "maxLength": 160,
+                "description": "what fires it: a word beat, an `at`, the next item's beat, clear_at, the previous phase's end"
+              },
+              "dials": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "the literal values in the code today, name -> value as written, e.g. {\"DIP_S\": \"0.47\"}"
+              }
+            }
+          }
+        },
+        "blends": {
+          "type": "array",
+          "description": "the named techniques or references the effect fuses, each tied to the phase it became (the verdict stack: remotion-bits transform3d-showcase, mosaic-reframe, fracture-reassemble, and the hyperframes-opening-v1 focus hand-off)",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source",
+              "became"
+            ],
+            "properties": {
+              "source": {
+                "type": "string",
+                "minLength": 3,
+                "description": "the reference's name + URL or path"
+              },
+              "became": {
+                "type": "string",
+                "minLength": 3,
+                "description": "the phase or property it contributed"
+              },
+              "record": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "where the record ties them: path:line, ledger id or commit"
+              },
+              "tie": {
+                "enum": [
+                  "recorded",
+                  "inferred"
+                ],
+                "description": "inferred when no record names the tie"
+              }
+            }
+          }
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "token",
+              "means"
+            ],
+            "properties": {
+              "token": {
+                "$ref": "#/$defs/token"
+              },
+              "means": {
+                "type": "string",
+                "minLength": 3,
+                "maxLength": 200
+              },
+              "source_set": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "the compiler tuple the option token belongs to, e.g. MELT_ENDINGS"
+              }
+            }
+          }
+        },
+        "dials": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": false,
+          "required": [
+            "module",
+            "object"
+          ],
+          "properties": {
+            "module": {
+              "type": "string"
+            },
+            "object": {
+              "type": "string"
+            }
+          }
+        },
+        "lives": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "form",
+            "path",
+            "symbol"
+          ],
+          "properties": {
+            "form": {
+              "enum": [
+                "module",
+                "inline",
+                "compiler-only",
+                "declared-unbuilt"
+              ]
+            },
+            "path": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "symbol": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "pattern": "^[A-Za-z_$][A-Za-z0-9_$]*(\\.[A-Za-z_$][A-Za-z0-9_$]*)*$",
+              "description": "ONE identifier the drift gate greps for in path (dotted allowed: camEase.linear checks its last part); prose goes in note"
+            },
+            "also": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z_$][A-Za-z0-9_$]*$"
+              },
+              "description": "further identifiers in the same path the effect spans (e.g. dipIn, dipOut)"
+            },
+            "note": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 200
+            }
+          }
+        },
+        "doctrine": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          }
+        },
+        "status": {
+          "enum": [
+            "live",
+            "wired",
+            "draft",
+            "declared",
+            "planned",
+            "retired"
+          ]
+        },
+        "backlog": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^R[0-9]{2}-[0-9]+$"
+          }
+        },
+        "proof": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "golden": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "a SURFACES name or a frame file under tests/golden/frames"
+            },
+            "test": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "tests file path, optionally ::name"
+            },
+            "first_use": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "project": {
+                  "type": "string"
+                },
+                "build": {
+                  "type": "string"
+                },
+                "t": {
+                  "type": [
+                    "number",
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "callable": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "today"
+          ],
+          "properties": {
+            "today": {
+              "type": "boolean"
+            },
+            "why": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "implicit": {
+          "type": "boolean",
+          "description": "true for an effect with NO authoring token of its own (the page's default vortex retract, the chart-to-chart stamps): its token is a stable slug, the drift gate skips compiler acceptance of the token and instead requires author.example to be a row that produces it"
+        }
+      }
+    }
+  }
+}

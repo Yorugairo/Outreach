@@ -11,13 +11,14 @@ in dependency order, in one process tree, and prints one summary line per layer.
     | order | layer          | tool                    | artifact                            |
     |-------|----------------|-------------------------|-------------------------------------|
     | 1     | docs-index     | build_docs_index.py     | docs/DOCS-INDEX.jsonl + .md         |
-    | 2     | docs-manifest  | build_docs_manifest.py  | docs/DOCS-MANIFEST.jsonl + .md      |
-    | 3     | topic-index    | build_topic_index.py    | docs/DOCS-TOPICS.* + DOCS-CITATIONS |
-    | 4     | gates-registry | build_gates_registry.py | docs/GATES-REGISTRY.jsonl + .md     |
-    | 5     | animation-registry | build_animation_registry.py | docs/ANIMATION-REGISTRY.jsonl + .md |
-    | 6     | craft-map      | build_craft_map.py      | docs/CRAFT-MAP.jsonl + .md          |
-    | 7     | doc-overlap    | report_doc_overlap.py   | docs/DOC-OVERLAP.jsonl + .md        |
-    | 7     | docs-standard  | audit_docs_standard.py  | docs/DOCS-STANDARD.md               |
+    | 2     | effects-catalog | build_effects_catalog.py | docs/EFFECTS-CATALOG.jsonl + .md (cites via the index) |
+    | 3     | docs-manifest  | build_docs_manifest.py  | docs/DOCS-MANIFEST.jsonl + .md      |
+    | 4     | topic-index    | build_topic_index.py    | docs/DOCS-TOPICS.* + DOCS-CITATIONS |
+    | 5     | gates-registry | build_gates_registry.py | docs/GATES-REGISTRY.jsonl + .md     |
+    | 6     | animation-registry | build_animation_registry.py | docs/ANIMATION-REGISTRY.jsonl + .md |
+    | 7     | craft-map      | build_craft_map.py      | docs/CRAFT-MAP.jsonl + .md          |
+    | 8     | doc-overlap    | report_doc_overlap.py   | docs/DOC-OVERLAP.jsonl + .md        |
+    | 8     | docs-standard  | audit_docs_standard.py  | docs/DOCS-STANDARD.md               |
 
 A tool that is not in the tree yet is SKIPPED with a printed note, never silently: the stack grows
 a layer at a time and a missing script is a fact about this checkout, not a failure. The audit
@@ -51,6 +52,7 @@ class Layer:
 
 LAYERS = (
     Layer("docs-index", "build_docs_index.py"),
+    Layer("effects-catalog", "build_effects_catalog.py"),   # after the index: its doctrine cites resolve there
     Layer("docs-manifest", "build_docs_manifest.py"),
     Layer("topic-index", "build_topic_index.py"),
     Layer("gates-registry", "build_gates_registry.py"),

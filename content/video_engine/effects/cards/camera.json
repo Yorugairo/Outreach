@@ -1,0 +1,119 @@
+{
+  "schema_version": "effect_cards.v1",
+  "axis": "camera",
+  "cards": [
+    {
+      "id": "camera:keys",
+      "axis": "camera",
+      "token": "keys",
+      "title": "The camera row (keys and attention)",
+      "aliases": [
+        {
+          "name": "LOCKED by default",
+          "source": "docs/portable/OPERATOR-RULINGS.md:1903"
+        },
+        {
+          "name": "The attention law",
+          "source": "docs/content-video-engine/CAPABILITIES.md:77"
+        }
+      ],
+      "does": "A scene's own camera: authored keys zoom and pan one persistent 2D similarity between key times on a named ease, or the attention law leans the frame toward each landed card; with neither the camera stays locked.",
+      "when": "the stage is wider than the frame, or a move is tied to a landing (E51) - never a drift on a held chart; locked is the default",
+      "when_source": "content/video_engine/scripts/kinetics/camera.mjs",
+      "author": {
+        "key": "shot row 8th element {'keys': [{t, s, look, ease}], 'attention': 'locked' | 'landings'} (validate_camera / validate_camera_row)",
+        "example": "{'keys': [], 'attention': 'landings'}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-SHORT.py:4",
+        "check": "camera"
+      },
+      "phases": [
+        {
+          "name": "lean in",
+          "does": "with attention=landings the camera leans toward the landed card",
+          "trigger": "the dock's contact frame",
+          "dials": {
+            "SCALE": "1.06",
+            "IN": "0.5"
+          }
+        },
+        {
+          "name": "hold",
+          "does": "held while the card is up",
+          "trigger": "IN elapsed"
+        },
+        {
+          "name": "release",
+          "does": "eases back to identity before the card leaves",
+          "trigger": "dock exit - OUT",
+          "dials": {
+            "OUT": "0.6"
+          }
+        }
+      ],
+      "blends": [],
+      "options": [
+        {
+          "token": "cubic",
+          "means": "Camera ease: cubic: A camera key eases in by a cubic ease-out (the default).",
+          "source_set": "CAMERA_EASES"
+        },
+        {
+          "token": "hold",
+          "means": "Camera ease: hold: The previous key holds, then the camera steps to this key at its t.",
+          "source_set": "CAMERA_EASES"
+        },
+        {
+          "token": "inout",
+          "means": "Camera ease: inout: A camera key eases in and out symmetrically.",
+          "source_set": "CAMERA_EASES"
+        },
+        {
+          "token": "landings",
+          "means": "The attention pull: When a dock lands the camera leans 1.06 toward it from the contact frame, holds while the card is up, and releases before it leaves.",
+          "source_set": "CAMERA_ATTENTION"
+        },
+        {
+          "token": "linear",
+          "means": "Camera ease: linear: A camera key travels at constant speed.",
+          "source_set": "CAMERA_EASES"
+        },
+        {
+          "token": "locked",
+          "means": "The locked camera: The camera never moves on its own; with no keys it is the identity.",
+          "source_set": "CAMERA_ATTENTION"
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/camera.mjs",
+        "object": "CAM"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/camera.mjs",
+        "symbol": "camKeyState",
+        "also": [
+          "camAttentionState",
+          "camIdentity",
+          "camEase",
+          "ATTN"
+        ],
+        "note": "no T1 row of its own: six rows (the four eases, the two attentions) named camera:keys as their parent"
+      },
+      "doctrine": [
+        "E51",
+        "E59 s4",
+        "29 s9.28 C3"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_camera.py::test_authored_keys_pan_and_zoom_and_the_frustum_follows_the_look",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "the locked default runs on every build; keys and landings used only on the Tokyo test bed"
+      }
+    }
+  ]
+}

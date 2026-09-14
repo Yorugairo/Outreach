@@ -159,6 +159,47 @@ async function getJSON(url) {
   return r.json();
 }
 
+/* ---- the effects catalogue (P55 T8): title, does and proof beside a species; optional, never blocks ---- */
+const CATALOG_URL = new URLSearchParams(location.search).get("catalog") || "/docs/EFFECTS-CATALOG.jsonl";
+const FRAMES_URL = "/content/video_engine/tests/golden/frames";
+const FX = { byId: null, note: "" };
+
+async function loadCatalog() {
+  try {
+    const r = await fetch(CATALOG_URL, { cache: "no-store" });
+    if (!r.ok) throw new Error(`${CATALOG_URL} -> ${r.status}`);
+    const byId = new Map();
+    for (const line of (await r.text()).split("\n")) {
+      if (line.trim()) { const c = JSON.parse(line); byId.set(c.id, c); }
+    }
+    FX.byId = byId;
+  } catch (e) {
+    FX.byId = null;                                     /* the panel stays as it was; one quiet note */
+    FX.note = `effects catalogue not loaded (${(e && e.message) || e})`;
+  }
+  if (S.scene) paintSpecies();
+}
+
+function speciesCard(kind) {
+  if (!FX.byId) return null;
+  return FX.byId.get(`species:${kind}`) || [...FX.byId.values()].find((c) => c.token === kind) || null;
+}
+
+function catalogEntry(card) {
+  const span = document.createElement("span");
+  span.className = "mono";
+  span.textContent = ` ${card.title} - ${card.does} `;
+  const golden = (card.proof || {}).golden;
+  const proof = document.createElement(golden ? "a" : "span");
+  if (golden) {
+    proof.href = `${FRAMES_URL}/${encodeURIComponent(golden)}.png`; proof.target = "_blank"; proof.textContent = "proof";
+  } else {
+    proof.className = "note"; proof.textContent = "no proof yet";
+  }
+  span.appendChild(proof);
+  return span;
+}
+
 function status(msg) { $("status").textContent = msg; }
 function refuse(msg) { const el = $("refusal"); el.textContent = msg; el.classList.add("on"); }
 function clearRefusal() { $("refusal").classList.remove("on"); }
@@ -460,6 +501,8 @@ function paintSpecies() {
     m.className = "mono";
     m.innerHTML = `<span class="key">${key.split(".").pop()}</span> ${s.kind}`;
     row.appendChild(m);
+    const fx = speciesCard(s.kind);
+    if (fx) row.appendChild(catalogEntry(fx));
 
     row.appendChild(field("at", textBox(s.at === undefined ? "" : (+s.at).toFixed(2), "num", (v) => {
       if (v === "") return;
@@ -482,6 +525,11 @@ function paintSpecies() {
     row.appendChild(b);
     host.appendChild(row);
   });
+  if (!FX.byId && FX.note) {
+    const n = document.createElement("div");
+    n.className = "note"; n.textContent = FX.note;
+    host.appendChild(n);
+  }
 }
 
 function paintSidecar() {
@@ -557,6 +605,7 @@ async function boot() {
   selectScene(S.tl.scenes[0]);
   paintSidecar();
   seek(0);
+  loadCatalog();                                       /* not awaited: the catalogue decorates, it never gates */
   status(`${S.tl.scenes.length} scenes, ${fmt(S.runtime)} - the player is in the frame, the sidecar is the edit`);
   $("scrub").addEventListener("input", () => seek(+$("scrub").value));
   setInterval(mirrorPlayer, 200);

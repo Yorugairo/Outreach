@@ -1,0 +1,364 @@
+{
+  "schema_version": "effect_cards.v1",
+  "axis": "chart_dock",
+  "cards": [
+    {
+      "id": "chart_dock:bars",
+      "axis": "chart_dock",
+      "token": "bars",
+      "title": "The bars chart card",
+      "aliases": [],
+      "does": "Bars grow from the baseline, staggered, each note landing with its bar.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "`bars: [{label, value, color, note}]` in the dock asset's .series.json",
+        "example": "(\"ev-ig-credit-weighting-v1\",0,301.0,317.7)",
+        "example_source": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:94",
+        "check": "chart"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "fillDock",
+        "also": [
+          "drawChart"
+        ],
+        "note": "fillDock `if (C.bars)` mount + drawChart bars loop"
+      },
+      "doctrine": [],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": null,
+        "first_use": {
+          "project": "steel-and-paper",
+          "build": "build-f",
+          "t": 301.0
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": "a key on the series object"
+      }
+    },
+    {
+      "id": "chart_dock:checklist",
+      "axis": "chart_dock",
+      "token": "checklist",
+      "title": "The test card",
+      "aliases": [
+        {
+          "name": "test list",
+          "source": "operator 2026-09-13 (P55 plan Summary)"
+        },
+        {
+          "name": "three-question test card",
+          "source": "operator 2026-09-13 (P55 plan Summary)"
+        },
+        {
+          "name": "THE TEST card",
+          "source": "operator 2026-09-13 (P55 plan Summary)"
+        },
+        {
+          "name": "The three-question TEST card",
+          "source": "docs/content-video-engine/BACKLOG.md:487"
+        },
+        {
+          "name": "the three-question TEST table card",
+          "source": "docs/agent-memory/operator/resume-2026-09-12.md:113"
+        },
+        {
+          "name": "Steel and Paper's three-question test card",
+          "source": "docs/portable/OPERATOR-RULINGS.md:2735"
+        },
+        {
+          "name": "Checklist species",
+          "source": "docs/content-video-engine/CAPABILITIES.md:189"
+        },
+        {
+          "name": "the scorecard",
+          "source": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:142"
+        },
+        {
+          "name": "tripwire board",
+          "source": "docs/content-video-engine/CAPABILITIES.md:189"
+        },
+        {
+          "name": "CHECKLIST v2",
+          "source": "docs/content-video-engine/samples/scene-evidence-engine.mjs:3582"
+        },
+        {
+          "name": "checklist",
+          "source": "operator 2026-09-13 (P55 plan HG1)"
+        }
+      ],
+      "does": "A procedure table lands row by row on the narration: each question types on letter by letter, the other cells fade in, and the answer cells take a chisel-edged marker sweep; re-docked for under 12 s it replays as a recap.",
+      "when": "the sentence walks a PROCEDURE (a question, its answer) - rows land keyed to the narration",
+      "when_source": "docs/content-video-engine/CAPABILITIES.md:189",
+      "author": {
+        "key": "`checklist: {head: [...], rows: [{cells: [...], colors?}]}` in the dock asset's .series.json",
+        "example": "(\"ev-test-scorecard-v1\",0,492.3,543.0)",
+        "example_source": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:114",
+        "check": "chart"
+      },
+      "phases": [
+        {
+          "name": "fit",
+          "does": "the columns auto-fit once: natural widths measured, slack spread, over-long cells squeezed by textLength",
+          "trigger": "the first drawChart tick",
+          "dials": {
+            "PAD_px": "26"
+          }
+        },
+        {
+          "name": "row lands",
+          "does": "each row starts on its narration-keyed delay",
+          "trigger": "rows[i].delay from narration_key_delays; RECAP (dock hold < 12 s): i x 0.8 s",
+          "dials": {
+            "recap_hold_s": "12",
+            "recap_row_step_s": "0.8"
+          }
+        },
+        {
+          "name": "question types",
+          "does": "cell 0 types on character by character",
+          "trigger": "row start + 0",
+          "dials": {
+            "char_s": "0.045",
+            "fade_s": "0.35"
+          }
+        },
+        {
+          "name": "cells fade",
+          "does": "cells 1-3 fade in on their offsets",
+          "trigger": "row start + [0.6, 1.0, 1.6] s (recap [0.25, 0.45, 0.7])",
+          "dials": {
+            "fade_s": "0.35"
+          }
+        },
+        {
+          "name": "highlight sweep",
+          "does": "answer cells (column index >= 2) take a cap-height marker band swept left to right behind the text, its leading edge chisel-tilted",
+          "trigger": "that cell's offset",
+          "dials": {
+            "sweep_s": "0.55",
+            "ease": "cubic out",
+            "skewX_deg": "-7",
+            "band_h_px": "30",
+            "band_opacity": "0.28 (a K-M ink layer when kinetics km_ink)",
+            "default_cell_colours": "[\"#f4f6f8\", \"#dce3ea\", \"#3bc9b0\", \"#ff8a8c\"]"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "remotion-ui marker highlight (cap-height band, chisel-tilt edge)",
+          "became": "highlight sweep",
+          "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs:3583",
+          "tie": "recorded"
+        },
+        {
+          "source": "the typewriter (question cells TYPE on)",
+          "became": "question types",
+          "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs:3584",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/checklist.mjs",
+        "object": "CHECKLIST"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/checklist.mjs",
+        "symbol": "paintChecklist",
+        "also": [
+          "CHECKLIST",
+          "buildChecklist"
+        ],
+        "note": "P55 T7: out of fillDock's C.checklist build + drawChart's fit/row paint, goldens byte-identical; refused as a ledger PAGE (test_ledger_page.py)"
+      },
+      "doctrine": [
+        "CAPABILITIES checklist species",
+        "CAPABILITIES auto-fit",
+        "E93 #3",
+        "BACKLOG R26-81",
+        "BACKLOG R26-80",
+        "ledger_page UNCHARTABLE"
+      ],
+      "status": "live",
+      "backlog": [
+        "R26-81"
+      ],
+      "proof": {
+        "golden": "test-card",
+        "test": "content/video_engine/tests/kinetics/checklist.test.mjs",
+        "first_use": {
+          "project": "steel-and-paper",
+          "build": "build-f",
+          "t": 492.3
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": "16:9 long-form dock via .series.json; never on a short (R26-81: tokens, 9:16 rows, no frame on disk)"
+      }
+    },
+    {
+      "id": "chart_dock:panels",
+      "axis": "chart_dock",
+      "token": "panels",
+      "title": "The panels chart card",
+      "aliases": [],
+      "does": "The card lays its series out as panels (`C.panels`), one per entry, instead of one plot.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "`panels: [...]` in the dock asset's .series.json",
+        "example": "(\"ev-tnx-two-eras-v3\",0,172.3,190.4)",
+        "example_source": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:78",
+        "check": "chart"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "fillDock",
+        "note": "fillDock chart mount: `const panels = C.panels ? C.panels.map(...)`"
+      },
+      "doctrine": [],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": null,
+        "first_use": {
+          "project": "steel-and-paper",
+          "build": "build-f",
+          "t": 172.3
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": "a key on the series object"
+      }
+    },
+    {
+      "id": "chart_dock:series",
+      "axis": "chart_dock",
+      "token": "series",
+      "title": "The drawn-line chart card",
+      "aliases": [],
+      "does": "Each series line draws over the first stretch of the card's hold, eased and staggered so the base layers exist before the star lands, its end label and badges landing after the draw.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "`series: [...]` in the dock asset's .series.json",
+        "example": "(\"ev-bravos-original-v1\",0,9.5,50.4)",
+        "example_source": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:64",
+        "check": "chart"
+      },
+      "phases": [
+        {
+          "name": "draw",
+          "does": "the lines draw",
+          "trigger": "dock enter + CARD_IN x 0.6",
+          "dials": {
+            "DUR_S": "min(6, max(2.5, hold x 0.38))"
+          }
+        },
+        {
+          "name": "conclude",
+          "does": "badges land after the draw (the badge floor)",
+          "trigger": "st.doneAt"
+        }
+      ],
+      "blends": [],
+      "options": [
+        {
+          "token": "log",
+          "means": "Log scale (a series option): The series card's y axis is log10, its ticks doubling from 100.",
+          "source_set": null
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "drawChart",
+        "note": "drawChart paths"
+      },
+      "doctrine": [
+        "29 s9.23b"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": null,
+        "first_use": {
+          "project": "steel-and-paper",
+          "build": "build-f",
+          "t": 9.5
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": "a .series.json with series beside a docked asset"
+      }
+    },
+    {
+      "id": "chart_dock:shares",
+      "axis": "chart_dock",
+      "token": "shares",
+      "title": "The share-rows chart card",
+      "aliases": [],
+      "does": "Labelled tracks fill left to right to their fraction, staggered, the numeral riding the fill's edge (inside it when nearly full) and the note landing at the end.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "`shares: [{label, frac, value, color, note}]` in the dock asset's .series.json",
+        "example": "(\"ev-railway-gdp-tile-v1\",1,112.5,122.1)",
+        "example_source": "content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:74",
+        "check": "chart"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "fillDock",
+        "also": [
+          "drawChart"
+        ],
+        "note": "fillDock `if (C.shares)` mount + drawChart `b.share` branch"
+      },
+      "doctrine": [
+        "SPECIES-BY-SENTENCE row 4 (the share page)"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": null,
+        "first_use": {
+          "project": "steel-and-paper",
+          "build": "build-f",
+          "t": 112.5
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": "a key on the series object"
+      }
+    }
+  ]
+}

@@ -99,7 +99,8 @@ def served(tmp_path_factory):
     build = tmp_path_factory.mktemp("editor-build") / "build"
     build.mkdir(parents=True)
     for p in source.iterdir():
-        if p.name in HEAVY:
+        # A copied build must not inherit its sidecar: the POST test pins the sidecar it writes.
+        if p.name in HEAVY or p.name == SP.OVERRIDES_NAME:
             continue
         (shutil.copytree if p.is_dir() else shutil.copyfile)(p, build / p.name)
     table = EPISODE / "SHOT-TABLE-SHORT.t7test.py"
@@ -186,6 +187,76 @@ def test_editor_is_served_from_the_scripts_tree_not_the_build(served):
     assert not (build / "editor.html").exists()             # a build stays data only
 
 
+# ---- (a') the effects catalogue and its proof frames, read-only off the repo (P55 T8) -----------
+
+CATALOG = ROOT / "docs/EFFECTS-CATALOG.jsonl"
+FRAMES = ROOT / "content/video_engine/tests/golden/frames"
+FRAMES_URL = "/content/video_engine/tests/golden/frames"
+
+
+def _get_status(port: int, path: str) -> tuple[int, bytes, str]:
+    try:
+        with urllib.request.urlopen(f"http://127.0.0.1:{port}{path}", timeout=60) as r:
+            return r.status, r.read(), r.headers.get("Content-Type", "")
+    except urllib.error.HTTPError as e:
+        return e.code, e.read(), e.headers.get("Content-Type", "")
+
+
+@needs_tokyo
+def test_the_effects_catalogue_is_served_off_the_repo_as_ndjson(served):
+    build, port, _watch = served
+    status, body, ctype = _get_status(port, "/docs/EFFECTS-CATALOG.jsonl")
+    assert status == 200
+    assert body == CATALOG.read_bytes()
+    assert ctype == "application/x-ndjson; charset=utf-8"
+    assert not (build / "docs").exists()                    # nothing copied into the build
+
+
+@needs_tokyo
+def test_a_golden_proof_frame_is_served_off_the_frames_directory(served):
+    _build, port, _watch = served
+    status, body, ctype = _get_status(port, f"{FRAMES_URL}/verdict-stack.png")
+    assert status == 200 and ctype == "image/png"
+    assert body == (FRAMES / "verdict-stack.png").read_bytes()
+
+
+@needs_tokyo
+def test_a_frame_name_that_escapes_or_is_not_a_png_is_refused_even_where_the_build_has_one(served):
+    """Decoys planted in the build at the paths today's static handler normalises each request to:
+    before the route every one is served (200); with it every one is a 404."""
+    build, port, _watch = served
+    decoys = {
+        f"{FRAMES_URL}/..%2F..%2Fdocs%2FEFFECTS-CATALOG.jsonl": "content/video_engine/tests/docs/EFFECTS-CATALOG.jsonl",
+        f"{FRAMES_URL}/../serve_player.py": "content/video_engine/tests/golden/serve_player.py",
+        f"{FRAMES_URL}/verdict-stack.txt": "content/video_engine/tests/golden/frames/verdict-stack.txt",
+        f"{FRAMES_URL}/sub/verdict-stack.png": "content/video_engine/tests/golden/frames/sub/verdict-stack.png",
+        f"{FRAMES_URL}/sub%2Fverdict-stack.png": "content/video_engine/tests/golden/frames/sub/verdict-stack.png",
+    }
+    try:
+        for rel in decoys.values():
+            (build / rel).parent.mkdir(parents=True, exist_ok=True)
+            (build / rel).write_bytes(b"decoy")
+        for url in decoys:
+            status, _body, _ctype = _get_status(port, url)
+            assert status == 404, (url, status)
+    finally:
+        shutil.rmtree(build / "content", ignore_errors=True)
+
+
+@needs_tokyo
+def test_every_other_path_still_serves_from_the_build(served):
+    build, port, _watch = served
+    status, body, _ctype = _get_status(port, "/player.json")
+    assert status == 200 and body == (build / "player.json").read_bytes()
+    try:
+        (build / "docs").mkdir()
+        (build / "docs" / "other.txt").write_bytes(b"from the build")
+        status, body, _ctype = _get_status(port, "/docs/other.txt")
+        assert status == 200 and body == b"from the build"
+    finally:
+        shutil.rmtree(build / "docs", ignore_errors=True)
+
+
 @needs_tokyo
 @needs_browser
 def test_the_editor_lists_the_scenes_and_the_docks_over_the_served_build(served):
@@ -206,6 +277,8 @@ def test_the_editor_lists_the_scenes_and_the_docks_over_the_served_build(served)
         assert DOCK in docks and "dock-i-fab-wafer" in docks
         species = page.locator("#species").inner_text()
         assert "bracket" in species and "retitle" in species
+        page.wait_for_function("document.getElementById('species').innerText"
+                               ".includes('The bracket page species')", timeout=30000)   # its catalogue card (P55 T8)
         assert page.locator(f'.ghost[data-slide="{DOCK}"]').count() == 1
 
         frame = page.frame_locator("#player")                # the SHIPPED player, mounted, in the frame

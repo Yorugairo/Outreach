@@ -1,0 +1,203 @@
+{
+  "schema_version": "effect_cards.v1",
+  "axis": "overflow",
+  "cards": [
+    {
+      "id": "overflow:burst",
+      "axis": "overflow",
+      "token": "burst",
+      "title": "The breakthrough burst overflow",
+      "aliases": [
+        {
+          "name": "the burst",
+          "source": "docs/content-video-engine/SPECIES-BY-SENTENCE.md:28"
+        }
+      ],
+      "does": "The bar that cannot fit builds to the comparator's level, then shoots to its number while the scale rewrites under it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "series object (evidence/objects/*.series.json) \"domain\" + \"overflow\": \"burst\"",
+        "example": "{\"overflow\": \"burst\"}",
+        "example_source": null,
+        "check": "overflow"
+      },
+      "phases": [
+        {
+          "name": "build to the comparator",
+          "does": "the breaking bar builds to the tallest honest bar's level, a bar like the others (optional grey '?' track behind it)",
+          "trigger": "the page build (build_s or LP.BUILD)",
+          "dials": {
+            "BUILD": "3.0"
+          }
+        },
+        {
+          "name": "hold",
+          "does": "stands at the comparator's level; the optional placeholder track leaves",
+          "trigger": "the build's end",
+          "dials": {
+            "BT_HOLD": "0.5",
+            "PH_OUT_S": "0.18"
+          }
+        },
+        {
+          "name": "shoot + rescale",
+          "does": "the bar shoots to its true value while the scale rewrites, old ticks slide and fade, new ticks fade in, the pill counts; the glow ramps",
+          "trigger": "BT_HOLD after the build (optionally stepped: break_cadence 'stop')",
+          "dials": {
+            "BT_RUN": "0.6",
+            "BT_GLOW": "18"
+          }
+        },
+        {
+          "name": "overshoot settles",
+          "does": "the bar overshoots and settles back; the glow holds at half",
+          "trigger": "BT_RUN elapsed",
+          "dials": {
+            "BT_OVER": "0.05",
+            "BT_SETTLE": "0.3"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos 8:02.0-8:02.6 the SPR bar",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs:4817",
+          "tie": "recorded"
+        },
+        {
+          "source": "E60 the breakthrough is a rescale",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:1959",
+          "tie": "recorded"
+        },
+        {
+          "source": "stop-action cadence blend (break_cadence)",
+          "became": "the whole arc",
+          "record": "content/video_engine/scripts/species/breakthrough.mjs:1",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "break",
+          "means": "Break (burst's alias): Identical to burst: `break` resolves to the burst mechanic.",
+          "source_set": "OVERFLOW_MODES"
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/species/breakthrough.mjs",
+        "object": "BREAK"
+      },
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "buildLedgerBars",
+        "also": [
+          "btMode",
+          "BREAK"
+        ],
+        "note": "buildLedgerBars / btMode (pg.axes.overflow) + species/breakthrough.mjs BREAK"
+      },
+      "doctrine": [
+        "E60",
+        "BACKLOG R26-30"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_breakthrough.py::test_the_burst_shoots_while_the_scale_rewrites_and_lands_on_the_number",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "overflow:stack",
+      "axis": "overflow",
+      "token": "stack",
+      "title": "The stepped overflow",
+      "aliases": [
+        {
+          "name": "overflow stack",
+          "source": "operator 2026-09-13 (P55 plan HG1)"
+        }
+      ],
+      "does": "The bar that cannot fit grows one comparator per step off the page at the stated scale.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "series object (evidence/objects/*.series.json) \"domain\" + \"overflow\": \"stack\"",
+        "example": "{\"overflow\": \"stack\"}",
+        "example_source": null,
+        "check": "overflow"
+      },
+      "phases": [
+        {
+          "name": "build to the comparator",
+          "does": "the breaking bar builds to the comparator's level",
+          "trigger": "the page build",
+          "dials": {
+            "BUILD": "3.0"
+          }
+        },
+        {
+          "name": "hold",
+          "does": "stands at the comparator's level",
+          "trigger": "the build's end",
+          "dials": {
+            "BT_HOLD": "0.5"
+          }
+        },
+        {
+          "name": "step",
+          "does": "the scale holds and the bar grows one comparator per step past the plot, through the title, off the page; the top gridline snaps as it passes",
+          "trigger": "BT_HOLD after the build, every BT_STEP_S",
+          "dials": {
+            "BT_STEP_S": "0.06"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "E60 stack an option",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:1959",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/breakthrough.mjs",
+        "object": "BREAK"
+      },
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "buildLedgerBars",
+        "also": [
+          "btMode",
+          "BREAK"
+        ],
+        "note": "buildLedgerBars / btMode (pg.axes.overflow) + species/breakthrough.mjs BREAK"
+      },
+      "doctrine": [
+        "E60",
+        "BACKLOG R26-30"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_breakthrough.py::test_the_stack_grows_one_comparator_per_step_off_the_page_at_the_stated_scale",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    }
+  ]
+}

@@ -21,6 +21,8 @@
     "docs/ANIMATION-REGISTRY.md",
     "docs/DOC-OVERLAP.jsonl",
     "docs/DOC-OVERLAP.md",
+    "docs/EFFECTS-CATALOG.jsonl",
+    "docs/EFFECTS-CATALOG.md",
     "content/video_engine/projects/**/build-*/**",
     "content/video_engine/projects/**/*-GATES.md",
     "content/video_engine/projects/**/*-SCREENS.md",

@@ -1,0 +1,752 @@
+{
+  "schema_version": "effect_cards.v1",
+  "axis": "page_species",
+  "cards": [
+    {
+      "id": "page_species:bracket",
+      "axis": "page_species",
+      "token": "bracket",
+      "title": "The bracket page species",
+      "aliases": [],
+      "does": "The hand draws a measured span between two data, the number as its label.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"bracket\", \"at\", \"dur\", ...} on a ledger row",
+        "example": "{'kind': 'bracket', 'at': 46.72, 'dur': 2.4, 'from': 311, 'to': 315, 'label': '−$122.6B', 'sub': 'a tenth of the pile', 'color': 'neg'}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-SHORT.py:7",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "span draws",
+          "does": "the hairline (or bar form) draws between the two data",
+          "trigger": "the species' `at`, over BRACKET_DRAW of `dur`",
+          "dials": {
+            "BRACKET_DRAW": "0.5"
+          }
+        },
+        {
+          "name": "ticks pop",
+          "does": "the end ticks spring open",
+          "trigger": "after BRACKET_DRAW, over BRACKET_TICK",
+          "dials": {
+            "BRACKET_TICK": "0.15"
+          }
+        },
+        {
+          "name": "label writes",
+          "does": "the label writes glyph by glyph (70 %), then the sub (30 %)",
+          "trigger": "BRACKET_LABEL of `dur`",
+          "dials": {
+            "BRACKET_LABEL": "0.55"
+          }
+        },
+        {
+          "name": "retract (optional)",
+          "does": "an undraw after it takes the bracket with the line on the undraw's clock",
+          "trigger": "a series-less `undraw` or a recast/morph after the bracket"
+        }
+      ],
+      "blends": [
+        {
+          "source": "Build-on (P47 T2)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/CAPABILITIES.md:67",
+          "tie": "recorded"
+        },
+        {
+          "source": "Bravos shot 36 bar form",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs:5623",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintBracket"
+      },
+      "doctrine": [
+        "CAPABILITIES Build-on"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "tiers-two",
+        "test": "content/video_engine/tests/test_chart_transitions.py::test_a_bracket_follows_the_data_across_a_rescale_and_hides_when_its_datum_leaves_the_window",
+        "first_use": {
+          "project": "systems-and-blowups",
+          "build": "SHOT-TABLE-SHORT.py (no approval record found for this build)",
+          "t": 46.72
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_species:build_to",
+      "axis": "page_species",
+      "token": "build_to",
+      "title": "The build-to page species",
+      "aliases": [],
+      "does": "The line draws to a named datum and stops there, the rest drawing on a later word.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"build_to\", \"at\", \"dur\", ...} on a ledger row",
+        "example": "{'kind': 'build_to', 'at': 73.52, 'dur': 3.0, 'target': {'kind': 'datum', 'index': 45}}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:14",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "first cap",
+          "does": "the page's own build draws the line only up to the datum",
+          "trigger": "the page build (the build beat is spent on the first cap)",
+          "dials": {
+            "BUILD": "3.0"
+          }
+        },
+        {
+          "name": "later draw",
+          "does": "each later build_to moves the level from the last target to its own over its word",
+          "trigger": "that species' `at` / `dur` (segEase)"
+        }
+      ],
+      "blends": [
+        {
+          "source": "the two-thirds-law pen (strokeFrac, 42 s42.1)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/42-DRAWING-KINETICS.md:12",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "lpPaintChart",
+        "also": [
+          "pageSpecies"
+        ],
+        "note": "lpPaintChart / pageSpecies(scene, \"build_to\") caps"
+      },
+      "doctrine": [
+        "CAPABILITIES Build-on",
+        "E50"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": "tiers-two",
+        "test": "content/video_engine/tests/test_page_performs.py::test_the_gate_credits_each_page_species_and_lists_the_build_to_holds",
+        "first_use": {
+          "project": "japan-tariff-trick",
+          "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
+          "t": 73.52
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_species:chart_to",
+      "axis": "page_species",
+      "token": "chart_to",
+      "title": "The chart-to page species",
+      "aliases": [
+        {
+          "name": "A CHART BECOMES ANOTHER CHART BY RE-WRITING",
+          "source": "docs/content-video-engine/CAPABILITIES.md:27"
+        }
+      ],
+      "does": "The page's chart becomes another state of the same data - rescaled, extended, recast, parked or morphed - with no cut.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"chart_to\", \"at\", \"dur\", ...} on a ledger row",
+        "example": "{'kind': 'chart_to', 'at': 21.09, 'dur': 1.4, 'to': 'rescale', 'window': [2026.043, 2026.457]}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-SHORT.py:4",
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/chartxf.mjs",
+        "object": "XF"
+      },
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "lpPaintStates",
+        "note": "lpPaintStates / the chart_to state loop + kinetics/chartxf.mjs"
+      },
+      "doctrine": [
+        "E58",
+        "E64",
+        "SPECIES-BY-SENTENCE s2"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "tags-to-bars",
+        "test": "content/video_engine/tests/test_chart_transitions.py::test_chart_to_is_a_page_species_with_a_verb_and_a_state",
+        "first_use": {
+          "project": "systems-and-blowups",
+          "build": "SHOT-TABLE-SHORT.py (no approval record found for this build)",
+          "t": 21.09
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_species:cross",
+      "axis": "page_species",
+      "token": "cross",
+      "title": "The census X marks page species",
+      "aliases": [
+        {
+          "name": "the census exception",
+          "source": "docs/content-video-engine/CAPABILITIES.md:94"
+        }
+      ],
+      "does": "The named cells of a treemap page take an X on the word and their combined share is written on the page.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"cross\", \"at\", \"dur\", ...} on a ledger row",
+        "example": "{\"kind\": \"cross\", \"at\": 9.0, \"dur\": 3.0, \"cells\": [\"United States\", \"Japan\", \"Korea\"], \"text\": \"3 partners, 26 % of exports\"}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:472",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "X's strike",
+          "does": "each named cell takes two X strokes and its fill dims",
+          "trigger": "the species' `at`",
+          "dials": {
+            "CROSS_S": "0.5",
+            "DIM": "0.55"
+          }
+        },
+        {
+          "name": "share writes",
+          "does": "the crossed share writes glyph by glyph",
+          "trigger": "WRITE_AT after `at`, over WRITE of `dur`",
+          "dials": {
+            "WRITE_AT": "0.35",
+            "WRITE": "0.45"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "E53 s1 census exception",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:1705",
+          "tie": "recorded"
+        },
+        {
+          "source": "the chip's X law",
+          "became": "the whole arc",
+          "record": "content/video_engine/scripts/species/treemap.mjs:75",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/treemap.mjs",
+        "object": "TREEMAP"
+      },
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintCross",
+        "note": "paintCross (math: species/treemap.mjs); row: cells must be the treemap page's own labels"
+      },
+      "doctrine": [
+        "E53",
+        "CAPABILITIES TREEMAP"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "treemap-cross",
+        "test": "content/video_engine/tests/kinetics/treemap.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_species:figure",
+      "axis": "page_species",
+      "token": "figure",
+      "title": "The written figure page species",
+      "aliases": [],
+      "does": "The hand writes a number at its datum's spot on the page.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"figure\", \"at\", \"dur\", ...} on a ledger row",
+        "example": "{'kind': 'figure', 'at': 77.02, 'dur': 1.4, 'target': {'kind': 'datum', 'index': 43}, 'text': '$364bn a year', 'sub': 'customs duties, late 2025', 'color': 'neg', 'dy': -0.9}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:14",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "figure writes",
+          "does": "the number writes glyph by glyph at its datum",
+          "trigger": "the species' `at`, over the first 0.6 of `dur`"
+        },
+        {
+          "name": "sub writes",
+          "does": "the sub writes under it",
+          "trigger": "0.6 of `dur`, over the remaining 0.4"
+        }
+      ],
+      "blends": [
+        {
+          "source": "E50 the chart's next thing",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:1520",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintFigure"
+      },
+      "doctrine": [
+        "E50"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_chart_transitions.py::test_a_figure_follows_the_active_state_after_a_rescale_and_a_dropped_datum_shows_nothing",
+        "first_use": {
+          "project": "japan-tariff-trick",
+          "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
+          "t": 77.02
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_species:note",
+      "axis": "page_species",
+      "token": "note",
+      "title": "The handwritten note page species",
+      "aliases": [],
+      "does": "A line of handwriting appears in the page's quiet zone on a word.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"note\", \"at\", \"dur\", ...} on a ledger row",
+        "example": "{'kind': 'note', 'at': 38.96, 'dur': 2.2, 'text': 'the 30-year: 5.28% - every new bond prices off it'}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/SHOT-TABLE-SHORT.py:7",
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "buildPerform",
+        "also": [
+          "pageSpecies"
+        ],
+        "note": "buildPerform / pageSpecies(scene, \"note\")"
+      },
+      "doctrine": [
+        "P47 T7 (compiler comment)"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_page_performs.py::test_the_four_page_species_are_kinds_and_take_their_own_fields",
+        "first_use": {
+          "project": "systems-and-blowups",
+          "build": "SHOT-TABLE-SHORT.py (no approval record found for this build)",
+          "t": 38.96
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_species:peel",
+      "axis": "page_species",
+      "token": "peel",
+      "title": "The peel page species",
+      "aliases": [],
+      "does": "A share page's named slice peels off the pie and goes blood red.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"peel\", \"at\", \"dur\", ...} on a ledger row",
+        "example": "{'kind': 'peel', 'at': 17.4, 'dur': 1.6}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "buildLedgerShare",
+        "also": [
+          "lpMark"
+        ],
+        "note": "buildLedgerShare / lpMark(st, \"peel\") in the share builder"
+      },
+      "doctrine": [
+        "P48 T4 (compiler comment)",
+        "E53"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_chart_transitions.py::test_a_missing_then_object_fails_loudly_rather_than_rendering_an_empty_chart",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_species:relight",
+      "axis": "page_species",
+      "token": "relight",
+      "title": "The relight page species",
+      "aliases": [
+        {
+          "name": "the ring's echo",
+          "source": "content/video_engine/scripts/build_scene_timeline_f.py:309"
+        }
+      ],
+      "does": "A bracket or the title already on the page re-fires when the sentence returns to it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"relight\", \"at\", \"dur\", ...} on a ledger row",
+        "example": "{'kind': 'relight', 'at': 22.0, 'dur': 1.0, 'ref': 'bracket', 'index': 0}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "buildPerform",
+        "also": [
+          "pageSpecies"
+        ],
+        "note": "buildPerform / pageSpecies(scene, \"relight\")"
+      },
+      "doctrine": [
+        "CAPABILITIES Build-on"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_page_performs.py::test_the_four_page_species_are_kinds_and_take_their_own_fields",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_species:retitle",
+      "axis": "page_species",
+      "token": "retitle",
+      "title": "The retitle page species",
+      "aliases": [],
+      "does": "The page's title rewrites by the hand; a returning page arrives retitled.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"retitle\", \"at\", \"dur\", ...} on a ledger row",
+        "example": "{'kind': 'retitle', 'at': 27.78, 'dur': 2.4, 'text': \"The right lane: Detroit's parts bill\"}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:6",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "erase",
+          "does": "the standing title erases glyph after glyph",
+          "trigger": "the retitle's `at`",
+          "dials": {
+            "ERASE_S": "0.4"
+          }
+        },
+        {
+          "name": "write",
+          "does": "the new title writes glyph by glyph",
+          "trigger": "ERASE_S after `at`, over dur - ERASE_S"
+        }
+      ],
+      "blends": [
+        {
+          "source": "Build-on (P47 T2)",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/CAPABILITIES.md:67",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "buildPerform",
+        "also": [
+          "pageSpecies"
+        ],
+        "note": "buildPerform / pageSpecies(scene, \"retitle\")"
+      },
+      "doctrine": [
+        "CAPABILITIES Build-on",
+        "BACKLOG R26-46"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_page_performs.py::test_retitle_erases_the_old_title_glyph_by_glyph_before_the_new_one_writes",
+        "first_use": {
+          "project": "japan-tariff-trick",
+          "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
+          "t": 27.78
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_species:span",
+      "axis": "page_species",
+      "token": "span",
+      "title": "The span page species",
+      "aliases": [
+        {
+          "name": "The SPAN - a shaded stretch of time",
+          "source": "docs/content-video-engine/CAPABILITIES.md:91"
+        }
+      ],
+      "does": "A shaded stretch of time sits behind the chart with its name above it.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"span\", \"at\", \"dur\", ...} on a ledger row",
+        "example": "{\"kind\": \"span\", \"at\": 8.0, \"dur\": 8.0, \"from\": 40, \"to\": 150, \"label\": \"THE RUN-UP\", \"color\": \"cobalt\"}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:539",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "shade arrives",
+          "does": "the band fades in behind the chart",
+          "trigger": "the species' `at`",
+          "dials": {
+            "IN_S": "0.45",
+            "ALPHA": "0.16"
+          }
+        },
+        {
+          "name": "name writes",
+          "does": "the period's name writes glyph by glyph above (or inside) the band",
+          "trigger": "IN_S after `at`, over WRITE of `dur`",
+          "dials": {
+            "WRITE": "0.5"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos 107-110 'the decades'",
+          "became": "the whole arc",
+          "record": "docs/content-video-engine/CAPABILITIES.md:91",
+          "tie": "recorded"
+        },
+        {
+          "source": "the bracket/figure glyph law",
+          "became": "the whole arc",
+          "record": "content/video_engine/scripts/species/span.mjs:171",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/span.mjs",
+        "object": "SPAN"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/span.mjs",
+        "symbol": "paintSpan"
+      },
+      "doctrine": [
+        "CAPABILITIES SPAN",
+        "BACKLOG R26-25"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "span-decade",
+        "test": "content/video_engine/tests/kinetics/span.test.mjs",
+        "first_use": {
+          "project": "systems-and-blowups",
+          "build": "SHOT-TABLE-F.py (no approval record found for this build)",
+          "t": null
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_species:spread",
+      "axis": "page_species",
+      "token": "spread",
+      "title": "The spread page species",
+      "aliases": [],
+      "does": "The region between two drawn series bleeds full of ink on a word.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"spread\", \"at\", \"dur\", ...} on a ledger row",
+        "example": "{'kind': 'spread', 'at': 78.33, 'dur': 1.8, 'from': 0, 'to_rule': 0, 'from_index': 52, 'color': 'neg'}",
+        "example_source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-SHORT.py:9",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "bleed",
+          "does": "the region between the two series grows left to right on min-jerk",
+          "trigger": "the species' `at`, over SPREAD_BLEED of `dur`",
+          "dials": {
+            "SPREAD_BLEED": "0.55"
+          }
+        },
+        {
+          "name": "deepen",
+          "does": "the fill's alpha ramps to SPREAD_A",
+          "trigger": "the species' `at`, over 0.35 of `dur`",
+          "dials": {
+            "SPREAD_A": "0.30"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "the fifth watch",
+          "became": "the whole arc",
+          "record": "content/video_engine/scripts/build_scene_timeline_f.py:202",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintSpread"
+      },
+      "doctrine": [
+        "the fifth watch (compiler comment)"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_chart_transitions.py::test_a_spread_follows_the_active_state_across_a_rescale",
+        "first_use": {
+          "project": "systems-and-blowups",
+          "build": "SHOT-TABLE-SHORT.py (no approval record found for this build)",
+          "t": 78.33
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
+      "id": "page_species:undraw",
+      "axis": "page_species",
+      "token": "undraw",
+      "title": "The un-draw page species",
+      "aliases": [
+        {
+          "name": "un-draws",
+          "source": "docs/portable/OPERATOR-RULINGS.md:1520"
+        }
+      ],
+      "does": "The line unwinds from where it stands back to a datum or to nothing.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "species[] {\"kind\": \"undraw\", \"at\", \"dur\", ...} on a ledger row",
+        "example": "{'kind': 'undraw', 'at': 24.0, 'dur': 1.5, 'target': {'kind': 'datum', 'index': 0}}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintPerform",
+        "also": [
+          "pageSpecies",
+          "undrawAll"
+        ],
+        "note": "paintPerform / pageSpecies(scene, \"undraw\") / undrawAll"
+      },
+      "doctrine": [
+        "E50"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_page_performs.py::test_m21_the_deployed_life_runs_from_the_last_data_mark_to_the_exit_or_the_undraw",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,266 @@
+{
+  "schema_version": "effect_cards.v1",
+  "axis": "dock_kind",
+  "cards": [
+    {
+      "id": "dock_kind:cutout",
+      "axis": "dock_kind",
+      "token": "cutout",
+      "title": "The cutout dock",
+      "aliases": [
+        {
+          "name": "cutout dock",
+          "source": "docs/content-video-engine/CAPABILITIES.md:33"
+        },
+        {
+          "name": "a `cutout` dock kind",
+          "source": "docs/content-video-engine/BACKLOG.md:464"
+        }
+      ],
+      "does": "A person's cutout (a head, a bust) stands on the stage with no card, no paper, no border and no badge rail - a figure, not a document.",
+      "when": "a figure in our own argument may stand as a cutout on our stage over our crawl",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:2618",
+      "author": {
+        "key": "dock option {'cutout': True}",
+        "example": "{'cutout': True}",
+        "example_source": null,
+        "check": "dock"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "dockIsCutout",
+        "note": "dockIsCutout (engine) + the template's `.dock.cutout` CSS; compiler DOCK_KIND_CUTOUT from the dock option `cutout`"
+      },
+      "doctrine": [
+        "E86 #2",
+        "E68",
+        "E84",
+        "BACKLOG R26-59"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "newsreel-band",
+        "test": null,
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      },
+      "backlog": [
+        "R26-94"
+      ]
+    },
+    {
+      "id": "dock_kind:image",
+      "axis": "dock_kind",
+      "token": "image",
+      "title": "The image dock",
+      "aliases": [
+        {
+          "name": "DOCK",
+          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1865"
+        }
+      ],
+      "does": "A still (a stamped document, a chart PNG, a screenshot) lands as a card over the world with its badge rail, reads, then parks or exits - the default dock kind, never written onto the entry.",
+      "when": "anything READ: their document, their chart, a citation, a stamped slide, a record, an instrument",
+      "when_source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1865",
+      "author": {
+        "key": "dock tuple (asset_id, slot, enter, exit[, opts]) naming an asset that is not .mp4/.webm and carries no press/cutout",
+        "example": "('dock-h-pledge', 0, 56.82, 60.1, {'centre': True, 'card_aspect': 0.86, 'centre_y': 0.4021, 'centre_x': 0.4407, 'centre_w': 0.7407})",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:10",
+        "check": "dock"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "fillDock",
+        "also": [
+          "dockGeom"
+        ],
+        "note": "fillDock + dockGeom"
+      },
+      "doctrine": [
+        "29 s9.28 DOCK row",
+        "E45"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": "dock-pair-16x9",
+        "test": "content/video_engine/tests/test_video_dock.py::test_an_image_dock_asset_still_embeds_as_a_capped_jpeg",
+        "first_use": {
+          "project": "steel-and-paper",
+          "build": "build-f",
+          "t": 9.5
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": "the default kind; compiles on any row"
+      }
+    },
+    {
+      "id": "dock_kind:press",
+      "axis": "dock_kind",
+      "token": "press",
+      "title": "The press card dock",
+      "aliases": [
+        {
+          "name": "PRESS CARD dock",
+          "source": "docs/content-video-engine/CAPABILITIES.md:88"
+        },
+        {
+          "name": "the press card",
+          "source": "docs/content-video-engine/SPECIES-BY-SENTENCE.md:25"
+        }
+      ],
+      "does": "A headline cropped from its screenshot lands in the stage's centre box with its masthead source line and the quoted phrase, underlined as it is said; alone it lands, holds and retracts.",
+      "when": "the sentence QUOTES a headline or a claim with a masthead (row 1) - THEIR claim never pages (B1); one card for one claim, the stack when three claims land in a row",
+      "when_source": "docs/content-video-engine/CAPABILITIES.md:88",
+      "author": {
+        "key": "dock option {'press': <press_card.py meta dict or its JSON path>}",
+        "example": "{\"press\": {\"kind\": \"press\", \"source\": \"The Herald, 4 Mar 2026\", \"phrase\": {\"x0\": 0.12, \"y0\": 0.2, \"x1\": 0.66, \"y1\": 0.44}, \"phrase_text\": \"the historic normal was never normal\", \"card\": [1056, 313]}}",
+        "example_source": "content/video_engine/tests/test_press_dock.py:39",
+        "check": "dock"
+      },
+      "phases": [
+        {
+          "name": "land",
+          "does": "the card springs down into its box and fades up",
+          "trigger": "the dock's enter",
+          "dials": {
+            "LAND_S": "0.5",
+            "POP_FROM": "0.88",
+            "DROP_PX": "22",
+            "FADE_S": "0.12",
+            "ease": "springPop (kinetics/spring.mjs POP preset)"
+          }
+        },
+        {
+          "name": "underline",
+          "does": "a callout species with the `underline` form draws under the quoted phrase, decelerating into its end",
+          "trigger": "the callout's own `at` on a `phrase` target",
+          "dials": {
+            "UNDERLINE_EASE": "1 - (1 - u)^3"
+          }
+        },
+        {
+          "name": "retract",
+          "does": "past its exit the card holds the pose it left in and retracts on the dock's spring - never a dissolve",
+          "trigger": "the dock's exit",
+          "dials": {
+            "DOCK_RETRACT_S": "0.35"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "Bravos shots 5-10 (their claims as cards on the plate)",
+          "became": "the card and its pile",
+          "record": "content/video_engine/scripts/species/press.mjs:2",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "press",
+          "means": "press (the press-card meta): Marks the dock as a press card and carries press_card.py's meta (source, phrase box, phrase words).",
+          "source_set": "DOCK_OPTS"
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/species/press.mjs",
+        "object": "PRESS"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/press.mjs",
+        "symbol": "PRESS",
+        "also": [
+          "pressStack",
+          "underlineFrac"
+        ],
+        "note": "PRESS / pressStack / underlineFrac (the law, inlined by sync_kinetics) + engine paintPressCard / pressPose / pressMount (the DOM painter, inline); a real row passes the meta JSON path"
+      },
+      "doctrine": [
+        "CAPABILITIES press card",
+        "29 s9.27 Push hand-off",
+        "E89",
+        "E66",
+        "BACKLOG R26-55"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "press-stack",
+        "test": "content/video_engine/tests/test_press_dock.py::test_a_press_dock_carries_its_source_and_phrase_and_drops_the_provenance",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "probe: dock_opts({'press': {...}}) compiles; press_plate_error refuses it on a ledger page"
+      }
+    },
+    {
+      "id": "dock_kind:video",
+      "axis": "dock_kind",
+      "token": "video",
+      "title": "The video dock",
+      "aliases": [
+        {
+          "name": "Video dock",
+          "source": "docs/content-video-engine/CAPABILITIES.md:60"
+        }
+      ],
+      "does": "A silent generated clip plays inside the card's frame over the standing page, seeked to the scene clock, instead of a still.",
+      "when": "a generated clip depicts or proves the sentence over a standing page - it lands as a card, never as the world",
+      "when_source": "docs/content-video-engine/CAPABILITIES.md:60",
+      "author": {
+        "key": "a dock asset whose file ends .mp4/.webm (VIDEO_SUFFIXES); the kind is the asset's, not a row key",
+        "example": "('dock-c-blue-ties-panel', 0, 9.09, 18.95, {'arrive': 'throw', 'mass': 'paper'})",
+        "example_source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-SHORT.py:3",
+        "check": "dock"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "paintDockClip",
+        "also": [
+          "dockIsVideo"
+        ],
+        "note": "paintDockClip + dockIsVideo; compiler is_video_asset / dock_uri"
+      },
+      "doctrine": [
+        "CAPABILITIES Video dock",
+        "E86",
+        "BACKLOG R26-7"
+      ],
+      "status": "live",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_video_dock.py::test_a_video_dock_asset_embeds_raw_like_a_world_clip",
+        "first_use": {
+          "project": "tokyo-tea-break",
+          "build": "build-short.v2 (render approved by the operator 2026-09-06, render/APPROVALS.json; 4 video docks)",
+          "t": null
+        }
+      },
+      "callable": {
+        "today": true,
+        "why": "compiles for any .mp4/.webm dock asset"
+      }
+    }
+  ]
+}
