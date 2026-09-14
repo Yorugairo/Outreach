@@ -90,13 +90,20 @@ def page_transitions(plate_id: str) -> dict:
     `spiral` / `mount` / `snap` / `camera` (the entry), `cut` (no retract - the page leaves on the
     cut). NOTE `cut` is the literal `:cut` SUFFIX, so a row that appends `;then=` or `;idle=` after
     it does not read as a cut here; that is the behaviour the shipped cue plans were built on and
-    it is preserved deliberately."""
+    it is preserved deliberately. Any OTHER page option (`;form=`, `;depth=`, ...) is stripped first,
+    by the compiler's own split (build_scene_timeline_f.split_plate_opts: `bare, *parts = id.split(";")`),
+    so `...:cut;form=extruded_bar` still reads as a cut (P58 T7)."""
+    bare, *parts = plate_id.split(";")
+    keeps_suffix_reading = any(p.split("=", 1)[0] in LEGACY_SUFFIX_OPTS for p in parts)
     return {"ledger": plate_id.startswith("ledger:"),
             "spiral": ":spiral" in plate_id,
             "mount": ":mount" in plate_id,
             "snap": ":snap=" in plate_id,
             "camera": ":camera=" in plate_id,
-            "cut": plate_id.endswith(":cut")}
+            "cut": (plate_id if keeps_suffix_reading else bare).endswith(":cut")}
+
+
+LEGACY_SUFFIX_OPTS = ("then", "idle")   # the options whose rows the shipped cue plans read on the raw suffix
 
 
 def bed_envelope(rows, swell_db: float, snap_s: float, fallback_end, *,

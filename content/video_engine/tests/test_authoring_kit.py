@@ -190,6 +190,21 @@ def test_page_transitions_read_the_entry_and_the_exit():
     assert A.page_transitions("ledger:ev-x:line:3:right:camera=card-x:cut")["camera"] is True
 
 
+def test_page_transitions_cut_reads_past_a_page_option():
+    bare = "ledger:ev-meta-yield-v1:bars:3:right:mount=2.43:cut"
+    assert A.page_transitions(bare)["cut"] is True
+    assert A.page_transitions(bare + ";form=extruded_bar")["cut"] is True
+    assert A.page_transitions(bare + ";depth=0.5;form=extruded_bar")["cut"] is True
+    assert A.page_transitions("ledger:ev-x:line:3:right:mount=0.4")["cut"] is False
+    assert A.page_transitions("ledger:ev-x:line:3:right:mount=0.4;form=extruded_bar")["cut"] is False
+
+
+def test_page_transitions_then_and_idle_keep_the_shipped_suffix_reading():
+    assert A.page_transitions("ledger:ev-x:line:3:right:mount=0.4:cut;then=ev-y:line")["cut"] is False
+    assert A.page_transitions("ledger:ev-x:line:3:right:mount=0.4:cut;form=extruded_bar;then=ev-y:line")["cut"] is False
+    assert A.page_transitions("ledger:ev-x:line:3:right:cut;idle=drift")["cut"] is False
+
+
 def test_landing_contact_steps_a_throw_onto_a_frame():
     dials = {"FLIGHT_S": 0.5, "ANTIC_S": 0.2, "DROP_S": 0.3}
     assert A.landing_contact(2.0, "throw", dials) == 2.5
