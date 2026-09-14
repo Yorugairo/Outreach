@@ -10,7 +10,9 @@
 // read are pinned here as numbers as well as pixels.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { DIP, exitName, exitSecs, straddleSecs, dipAlpha, dipVeilOpacity } from "../../scripts/kinetics/transitions.mjs";
+import { DIP, exitName, exitSecs, straddleSecs, dipAlpha, dipVeilOpacity,
+         DOOR, doorOpts, doorOpenDeg, doorU, doorAngle, doorQuad, doorSpan, doorCss } from "../../scripts/kinetics/transitions.mjs";
+import { planeMatrix, cssMatrix3d, H_IDENTITY } from "../../scripts/kinetics/homography.mjs";
 
 const near = (a, b, eps = 1e-12) => Math.abs(a - b) <= eps;
 const DIP_S = 0.47;        // the engine's dial, which stays in the engine (the module's header says why)
@@ -112,4 +114,105 @@ test("the veil's opacity is the engine's toFixed(4), verbatim", () => {
   assert.equal(dipVeilOpacity(1), "1.0000");
   assert.equal(dipVeilOpacity(1 / 3), "0.3333");
   assert.equal(dipVeilOpacity(0.12345678), "0.1235", "four digits, rounded - an explicit numeric per frame");
+});
+
+// ---------------------------------------------------------------- THE EVIDENCE DOOR (E98 s7 / R26-134)
+// The door's invariants, as numbers: u = 0 is the identity (the frame before the door is today's), the projected
+// width falls monotonically in u, u = 1 is edge-on (zero width - the incoming world alone), the hinge never moves,
+// and the card never shows its back (the quad's winding never flips). The pixels are test_transitions_e47's.
+const STAGES = [[1080, 1920], [1920, 1080]];   // 9:16 and 16:9
+const OVERHANG = (W, H) => ({ x: -0.05 * W, y: -0.05 * H, w: 1.1 * W, h: 1.1 * H });   // the .world box (inset -5%)
+const signedArea = (q) => q.reduce((a, p, i) => { const r = q[(i + 1) % 4]; return a + p[0] * r[1] - r[0] * p[1]; }, 0) / 2;
+const deg = (r) => (r * 180) / Math.PI;
+
+test("the door's dials are frozen, and the length sits inside its own refusal range", () => {
+  assert.ok(Object.isFrozen(DOOR) && Object.isFrozen(DOOR.HINGES));
+  assert.equal(DOOR.S, 0.9, "1.5x the slide's 0.6 s - the derivation is in the module");
+  assert.equal(DOOR.S_MIN, DOOR.S / 2);
+  assert.equal(DOOR.S_MAX, DOOR.S * 2);
+  assert.deepEqual([...DOOR.HINGES], ["left", "right", "top", "bottom"]);
+  assert.equal(DOOR.HINGE, "left");
+  assert.equal(DOOR.EYE, 1.6, "build_scene_timeline_f.PAGE_DEPTH['EYE'] - the page's own lens");
+});
+
+test("doorOpts reads door[:<hinge>][:<s>] and treats anything else as unreadable (the caller's cut)", () => {
+  assert.deepEqual(doorOpts("door"), { hinge: "left", secs: 0.9 });
+  assert.deepEqual(doorOpts("door:right"), { hinge: "right", secs: 0.9 });
+  assert.deepEqual(doorOpts("door:top:1.2"), { hinge: "top", secs: 1.2 });
+  assert.deepEqual(doorOpts("door:0.6"), { hinge: "left", secs: 0.6 });
+  assert.equal(doorOpts("door:diagonal"), null, "an unknown hinge");
+  assert.equal(doorOpts("door:left:0.2"), null, "under S_MIN");
+  assert.equal(doorOpts("door:left:3"), null, "over S_MAX");
+  assert.equal(doorOpts("door:left:0.9:x"), null, "a third suffix");
+  assert.equal(doorOpts("door:0.9:left"), null, "the hinge comes first");
+  assert.equal(doorOpts("slide:left"), null, "not a door");
+  assert.equal(doorOpts(undefined), null);
+});
+
+test("the end angle is EDGE-ON - 180 - atan(d/h) - so the card is gone at u = 1 and never shows its back", () => {
+  assert.ok(near(doorOpenDeg("left", 1080, 1920), 180 - deg(Math.atan(3.2)), 1e-9), "107.4 deg: d/h = 1.6 * W / (W/2)");
+  assert.ok(near(doorOpenDeg("right", 1920, 1080), doorOpenDeg("left", 1080, 1920), 1e-9), "a side hinge is the same at either aspect");
+  assert.ok(near(doorOpenDeg("top", 1080, 1920), 180 - deg(Math.atan(1728 / 960)), 1e-9), "119.1 deg on 9:16");
+  assert.ok(near(doorOpenDeg("bottom", 1920, 1080), 180 - deg(Math.atan(3072 / 540)), 1e-9), "100.0 deg on 16:9");
+  for (const [W, H] of STAGES) for (const h of DOOR.HINGES) assert.ok(doorOpenDeg(h, W, H) > 90, "90 deg would leave a wedge on the stage");
+});
+
+test("u = 0 is the IDENTITY: every corner is its own and the matrix is the identity - the frame before the door is today's", () => {
+  for (const [W, H] of STAGES) for (const h of DOOR.HINGES) {
+    const box = OVERHANG(W, H), q = doorQuad(doorAngle(0, doorOpenDeg(h, W, H)), h, W, H, box);
+    const want = [[box.x, box.y], [box.x + box.w, box.y], [box.x + box.w, box.y + box.h], [box.x, box.y + box.h]];
+    q.forEach((p, i) => assert.ok(near(p[0], want[i][0], 1e-9) && near(p[1], want[i][1], 1e-9), `${h} ${W}x${H} corner ${i}`));
+    const m = planeMatrix(q.map(([x, y]) => [x - box.x, y - box.y]), box.w, box.h, box.w / 2, box.h / 2);
+    m.forEach((v, i) => assert.ok(near(v, H_IDENTITY[i], 1e-9), `${h}: matrix term ${i} is ${v}`));
+  }
+  assert.equal(doorU(15.0, 15.0, DOOR.S), 0, "the cut's own frame is u = 0");
+  assert.equal(doorU(14.5, 15.0, DOOR.S), 0);
+});
+
+test("the projected width falls MONOTONICALLY in u, and u = 1 is zero width - the incoming world alone", () => {
+  for (const [W, H] of STAGES) for (const h of DOOR.HINGES) {
+    const open = doorOpenDeg(h, W, H), full = h === "top" || h === "bottom" ? H : W;
+    let last = Infinity;
+    for (let i = 0; i <= 100; i++) {
+      const span = doorSpan(doorQuad(doorAngle(i / 100, open), h, W, H), h);
+      assert.ok(span < last || i === 0, `${h} ${W}x${H}: the width rose at u ${i / 100} (${span} after ${last})`);
+      last = span;
+    }
+    assert.ok(near(doorSpan(doorQuad(0, h, W, H), h), full, 1e-9), "u = 0 is the whole stage");
+    assert.ok(last < 1e-6 * full, `${h} ${W}x${H}: ${last} px left at u = 1`);
+  }
+});
+
+test("the hinge never moves, and the card never shows its BACK (the quad's winding never flips before u = 1)", () => {
+  for (const [W, H] of STAGES) for (const h of DOOR.HINGES) {
+    const open = doorOpenDeg(h, W, H), a0 = signedArea(doorQuad(0, h, W, H));
+    const hingeIdx = { left: [0, 3], right: [1, 2], top: [0, 1], bottom: [3, 2] }[h];
+    for (let i = 1; i < 100; i++) {
+      const q = doorQuad(doorAngle(i / 100, open), h, W, H), q0 = doorQuad(0, h, W, H);
+      assert.ok(Math.sign(signedArea(q)) === Math.sign(a0), `${h} ${W}x${H}: the back shows at u ${i / 100}`);
+      for (const k of hingeIdx) assert.ok(near(q[k][0], q0[k][0], 1e-9) && near(q[k][1], q0[k][1], 1e-9), `${h}: the hinge corner ${k} moved`);
+    }
+    const past = doorQuad(open + 2, h, W, H);
+    assert.ok(Math.sign(signedArea(past)) !== Math.sign(a0), `${h}: two degrees past OPEN the back would show - OPEN is the edge`);
+  }
+});
+
+test("the swing's clock is min-jerk on the door's own window, the angle linear in it", () => {
+  assert.ok(near(doorU(15.45, 15.0, 0.9), 0.5, 1e-12), "half the window is half the angle (min-jerk is symmetric)");
+  assert.equal(doorU(15.9, 15.0, 0.9), 1);
+  assert.equal(doorU(16.5, 15.0, 0.9), 1);
+  assert.ok(doorU(15.1, 15.0, 0.9) < 0.1 / 0.9, "it leaves slowly - a door with mass");
+  assert.equal(doorAngle(0.5, 100), 50);
+  assert.equal(doorAngle(2, 100), 100, "clamped");
+});
+
+test("doorCss is the one projective path's matrix3d - perspective terms mid-swing, none at rest", () => {
+  const W = 1080, H = 1920, box = OVERHANG(W, H);
+  const mid = doorCss(doorAngle(0.5, doorOpenDeg("left", W, H)), "left", W, H, box, box.w / 2, box.h / 2);
+  assert.ok(mid.startsWith("matrix3d("));
+  const terms = mid.slice(9, -1).split(", ").map(Number);
+  assert.ok(Math.abs(terms[3]) > 1e-6, "the horizontal perspective term (h20) is live mid-swing");
+  const rest = doorCss(0, "left", W, H, box, box.w / 2, box.h / 2).slice(9, -1).split(", ").map(Number);
+  const id = cssMatrix3d(H_IDENTITY).slice(9, -1).split(", ").map(Number);
+  rest.forEach((v, i) => assert.ok(near(v, id[i], 1e-9), `rest term ${i}`));
 });

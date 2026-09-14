@@ -2205,6 +2205,45 @@ SURFACES.update({   # P58 T6 (c): the slide whose two boards move through the de
 FRAME_T["slide-depth"] = SLIDE_CUT + SLIDE_S   # THE LANDING (u = 1): the flat slide's own landing, bit for bit
 
 
+# ---- E98 s7 / R26-134: THE EVIDENCE DOOR ---------------------------------------------------------------------
+# The operator, 2026-09-14: *"zoom in or cut-in on to the tariff bill card all the way flat so its just like a regular
+# plate, then we open that door and behind it is the vault plate."* A FLAT chart page - the line page every other golden
+# is built from, standing as a plate after its 15 s build - and at DOOR_CUT the transition INTO scene 2 is `door`: the
+# page swings open on its LEFT edge, away from the viewer, onto `melt-plate`'s own painted plate mounted beneath it.
+DOOR_CUT = 15.0
+DOOR_S = 0.9    # build_scene_timeline_f.DOOR_S and kinetics/transitions.mjs DOOR.S
+
+
+def door_open() -> tuple[dict, dict]:
+    """E98 s7 - THE EVIDENCE DOOR: `door` (hinge left, 0.9 s), and nothing else.
+
+    The compiler's own boundary pass runs on the two scenes (stamp_transition_pages): the door takes the world, so the
+    outgoing page is stamped exit=cut (it swings away with its chart on it and never retracts first), and the flat page
+    passes the door's refusals (no depth=, no plane=, no dock across the boundary). The instants: `@proof-early` (u 0.25)
+    and `@proof-mid` (u 0.5) on PROOF_FRAMES, and the base frame at the door's LENGTH (u = 1: edge-on, the plate alone)."""
+    import build_scene_timeline_f as BST
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", None, "right")
+    page["field"] = "scribble"
+    still = {"scale": 0, "x": 0, "y": 0}
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": dict(still)},
+               "exit": "cut", "span": [0.0, DOOR_CUT], "docks": [], "species": []},
+              {"scene_id": "s02", "world": {"asset_id": "plate-melt", "sha256": "0" * 64, "ken_burns": dict(still)},
+               "exit": "door", "span": [DOOR_CUT, RUNTIME], "docks": [], "species": []}]
+    assert BST.parse_exit("door") == ("door", None) and BST.door_hinge("door") == "left"   # the COMPILER's own grammar
+    BST.stamp_transition_pages(scenes)
+    assert page["exit"] == "cut", page.get("exit")
+    uris = _base_uris()
+    uris["plate-melt"] = uri("image/png", png_scene(320, 180))   # melt-plate's painted plate - an existing golden input
+    return _timeline("Golden: the flat chart opens like a door onto the plate behind it", scenes, {}, None), uris
+
+
+SURFACES.update({   # E98 s7: the door's landing (its two moving instants ride render_baseline.PROOF_FRAMES)
+    "door-open": door_open,
+})
+FRAME_T["door-open"] = DOOR_CUT + DOOR_S   # u = 1: edge-on, the plate alone - the plain cut's frame at this instant
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     SOURCES.mkdir(parents=True, exist_ok=True)

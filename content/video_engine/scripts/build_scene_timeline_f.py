@@ -82,7 +82,7 @@ SPECIES_LEDGER = "ledger"          # timeline["species"] entry; the player keys 
 # default; the carried-light cross-reveal stays reachable BY NAME as an effect and is the default
 # nowhere ("we made it the default because it worked, but we need a better default, and it can be
 # an effect at that point"). dip and blurzoom may carry their own length: `dip:<s>`, `blurzoom:<s>`.
-SCENE_EXITS = ("cut", "dip", "blurzoom", "dissolve", "wipe", "wipe_right", "suck", "melt", "slide")   # slide (R26-75, E87 s3): the incoming frame pushes the outgoing one off along one axis, both moving together - `slide:<left|right|up|down>[:<s>]`, the direction never defaulted   # melt (P52 T9, R26-15): the outgoing world sags into drips, balls up on 2s and is thrown off the stage or splashed - `melt`, `melt:<s>`, `melt:splash`, `melt:<x>,<y>` (the exit point in stage fractions), the suffixes in any order
+SCENE_EXITS = ("cut", "dip", "blurzoom", "dissolve", "wipe", "wipe_right", "suck", "melt", "slide", "door")   # door (E98 s7, R26-134): the EVIDENCE DOOR - the outgoing world swings open on one stage edge, away from the viewer, onto the incoming world mounted beneath it - `door[:<left|right|top|bottom>][:<s>]`, refused out of a page at a depth or on a plane and across a live dock   # slide (R26-75, E87 s3): the incoming frame pushes the outgoing one off along one axis, both moving together - `slide:<left|right|up|down>[:<s>]`, the direction never defaulted   # melt (P52 T9, R26-15): the outgoing world sags into drips, balls up on 2s and is thrown off the stage or splashed - `melt`, `melt:<s>`, `melt:splash`, `melt:<x>,<y>` (the exit point in stage fractions), the suffixes in any order
 IDLE_KINDS = ("none", "breath", "drift", "pulse", "figure", "live")   # live (2026-09-08): breath + drift - the breath has a fixed point at the centre, so a chart at the page centre read as still; the drift moves every pixel   # E49 / P47 T5: the player's named idles; `;idle=<kind>` on any plate id (`none` is explicit stillness)
 IDLE_OPT = ";idle="
 ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page's pills ARRIVE (spring = E45's pop, the default)
@@ -100,11 +100,17 @@ DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
-TIMED_EXITS = ("dip", "blurzoom", "melt", "slide")   # ... and only these read a suffix as SECONDS (the slide's is its SECOND suffix - the first is the direction, `slide:left:0.8` - so parse_exit reads it apart, as the melt's is) (suck's is a point); the melt's may be its length, `splash`, or its exit point, so parse_exit reads it apart
+TIMED_EXITS = ("dip", "blurzoom", "melt", "slide", "door")   # (the door's length follows its optional hinge, `door:left:0.9` or `door:0.9` - parse_exit reads it apart, as the slide's is) ... and only these read a suffix as SECONDS (the slide's is its SECOND suffix - the first is the direction, `slide:left:0.8` - so parse_exit reads it apart, as the melt's is) (suck's is a point); the melt's may be its length, `splash`, or its exit point, so parse_exit reads it apart
 MELT_S = 1.6            # P52 T9: a melt's default length, species/melt.mjs MELT.S - the two are one dial written twice (as DIP_S is, in the engine and in gate_motion_density), and test_transitions_e47 pins them together
 MELT_W_S = 1.15         # R26-118 / E88 s6: the WEIGHT phase's own length, species/melt.mjs MELT.W_S - a `melt:weight` that declares no length runs MELT_S + MELT_W_S (the four beats need their own seconds), and test_transitions_e47 pins that pair too
 SLIDE_DIRECTIONS = ("left", "right", "up", "down")   # R26-75 / E87 s3: WHICH WAY the incoming frame pushes the outgoing one off
 SLIDE_S = 0.6           # a slide's default length, the player's SLIDE_S - the two are one dial written twice (as DIP_S and MELT_S are)
+DOOR_HINGES = ("left", "right", "top", "bottom")   # E98 s7 / R26-134: the stage edge the outgoing world swings open on (kinetics/transitions.mjs DOOR.HINGES)
+DOOR_HINGE = "left"     # the default hinge (DOOR.HINGE)
+DOOR_S = 0.9            # the door's default length - kinetics/transitions.mjs DOOR.S, one dial written twice (as SLIDE_S is); the derivation lives there
+DOOR_S_MIN = 0.45       # DOOR.S_MIN: shorter is a flick, not a door
+DOOR_S_MAX = 1.8        # DOOR.S_MAX: longer holds the boundary on a move with no evidence in it (E49)
+DOOR_DOCK_TOL = 0.35    # the wipe's own boundary tolerance (the engine's allOut: a card leaving within this of the boundary belongs to the outgoing page)
 DEFAULT_EXIT_CHANGE = "dip"         # E47 #3 corrected 2026-09-12 (the operator: "the dip is supposed to be used as an actual transition when the
                                     # scene ACTUALLY changes ... what you said is that the dip was associated with any DOCK, not the dip being
                                     # associated to the scene change"): the natural default when the WORLD changes at the boundary - never for a
@@ -1719,6 +1725,68 @@ def slide_direction(exit_id: str | None) -> str | None:
     return _slide_parts(str(exit_id))[0]
 
 
+def _door_parts(exit_id: str) -> tuple[str, float | None]:
+    """THE EVIDENCE DOOR's suffixes (E98 s7, R26-134): ``door[:<hinge>][:<s>]`` - the HINGE first, one of DOOR_HINGES
+    (the stage edge the outgoing world swings open on, DOOR_HINGE when absent), then optionally its LENGTH in seconds,
+    inside DOOR_S_MIN..DOOR_S_MAX. The player's `doorOpts` (kinetics/transitions.mjs) reads exactly this grammar and
+    treats anything it cannot read as a cut, so every refusal is HERE, by name, with the fix in the message.
+    Returns (hinge, the declared length or None for DOOR_S)."""
+    bits = [b.strip() for b in str(exit_id).split(":")[1:]]
+    hinge = DOOR_HINGE
+    if bits and bits[0] in DOOR_HINGES:
+        hinge = bits.pop(0)
+    elif bits and not _is_number(bits[0]):
+        raise ValueError(f"exit {exit_id!r}: {bits[0]!r} is not a hinge - say door[:{'|'.join(DOOR_HINGES)}][:<s>] "
+                         "(the stage edge the outgoing world swings open on)")
+    if len(bits) > 1:
+        raise ValueError(f"exit {exit_id!r}: a door carries a hinge and at most a length, in that order - {bits[1:]!r} "
+                         "is neither; say door[:<hinge>][:<s>]")
+    if not bits:
+        return hinge, None
+    secs = float(bits[0])
+    if not DOOR_S_MIN <= secs <= DOOR_S_MAX:
+        raise ValueError(f"exit {exit_id!r}: a door of {secs:g} s is outside {DOOR_S_MIN:g}..{DOOR_S_MAX:g} s - shorter "
+                         "is a flick, longer holds the boundary on a move with no evidence in it (E49); say "
+                         f"door:{hinge}:<s> inside the range, or drop the length for {DOOR_S:g} s")
+    return hinge, secs
+
+
+def door_hinge(exit_id: str | None) -> str | None:
+    """The hinge a door exit swings on (``left`` | ``right`` | ``top`` | ``bottom``), or None for any other exit."""
+    if not exit_id or str(exit_id).split(":")[0] != "door":
+        return None
+    return _door_parts(str(exit_id))[0]
+
+
+def door_boundary_error(prev: dict, sc: dict) -> str | None:
+    """May the door INTO `sc` open here? The message, or None.
+
+    1. A door opens a card that LANDED FLAT (E98 s7: "a card's tilt is a MOTION, not a pose it jumps to"): an outgoing
+       page that already stands at `;depth=` or on `;plane=` is refused - the door IS that plane's motion.
+    2. Doc 29 Part 6: a decorated transition happens on an EVIDENCE-FREE boundary (documents exit -> cards retract ->
+       then the move). The rule mirrored is the WIPE's own at its boundary (the engine's `allOut`): a card belongs to the
+       outgoing page when it leaves within DOOR_DOCK_TOL of the boundary, and anything else up across the swing - an
+       outgoing card that stays, an incoming card that lands mid-swing, a coalesced document held through the
+       boundary - would float over a world turning in space, so it is refused by name."""
+    exit_id = sc.get("exit")
+    if str(exit_id or "").split(":")[0] != "door":
+        return None
+    secs = _door_parts(str(exit_id))[1] or DOOR_S
+    ppg = _page_of(prev)
+    if ppg is not None and (ppg.get("depth") is not None or ppg.get("plane")):
+        return f"exit {exit_id!r}: a door opens a card that landed flat - drop depth=/plane=, the door is the plane's motion"
+    b = float((sc.get("span") or [0.0])[0])
+    for side, s in (("outgoing", prev), ("incoming", sc)):
+        for d in s.get("docks") or []:
+            enter, leave = float(d.get("enter", b)), float(d.get("exit", b))
+            if enter < b + secs and leave > b + DOOR_DOCK_TOL:
+                return (f"exit {exit_id!r}: a door swings on an evidence-free boundary (doc 29 Part 6) - the {side} dock "
+                        f"{d.get('slide', '?')!r} is up across it ({enter:g}-{leave:g} s against the swing {b:g}-"
+                        f"{b + secs:g} s); let the card leave by the boundary (within {DOOR_DOCK_TOL:g} s, the wipe's "
+                        "own rule) or land after the door has opened, or say dip")
+    return None
+
+
 def parse_exit(exit_id: str) -> tuple[str, float | None]:
     """``cut`` | ``dip[:<s>]`` | ``blurzoom[:<s>]`` | ``wipe_right`` | ``suck:<x>,<y>`` |
     ``melt[:throw|:splash:chart|:splash:plate][:weight[:<material>]][:<s>][:<x>,<y>]`` | ``slide:<left|right|up|down>[:<s>][:depth=<k_out>,<k_in>]``
@@ -1735,6 +1803,8 @@ def parse_exit(exit_id: str) -> tuple[str, float | None]:
         return exit_id, _melt_exit(exit_id)
     if name == "slide":
         return exit_id, _slide_parts(exit_id)[1]   # the depths ride the exit string itself (slide_depth)
+    if name == "door":
+        return exit_id, _door_parts(exit_id)[1]    # the hinge rides the exit string itself (door_hinge)
     arg = str(exit_id).split(":")[1] if ":" in str(exit_id) else ""
     if name not in TIMED_EXITS or arg == "":
         return exit_id, None
@@ -1812,7 +1882,7 @@ def _melt_boundary(prev: dict, sc: dict, ppg: dict | None, pg: dict | None) -> l
     return []
 
 
-WORLD_TAKING_EXITS = ("suck", "melt")   # P53 T2 / R26-60: a transition that TAKES the world - the page goes into a point or drips away
+WORLD_TAKING_EXITS = ("suck", "melt", "door")   # E98 s7: the door takes the world too - the page swings away with its chart on it, so it must not retract first   # P53 T2 / R26-60: a transition that TAKES the world - the page goes into a point or drips away
 
 
 def _page_of(sc: dict | None) -> dict | None:
@@ -1855,6 +1925,9 @@ def stamp_transition_pages(scenes: list[dict]) -> list[str]:
             _err = slide_depth_world_error(sc.get("exit"), _w, _side)
             if _err:
                 raise ValueError(f"{prev.get('scene_id', '?')} -> {sc.get('scene_id', '?')} ({sc.get('exit')}): {_err}")
+        _err = door_boundary_error(prev, sc)   # E98 s7: a flat card, an evidence-free boundary
+        if _err:
+            raise ValueError(f"{prev.get('scene_id', '?')} -> {sc.get('scene_id', '?')} ({sc.get('exit')}): {_err}")
         if kind in WORLD_TAKING_EXITS and ppg is not None and not ppg.get("exit"):
             ppg["exit"] = "cut"
             notes.append(f"{prev.get('scene_id', '?')}: exit=cut stamped - the page a {kind} takes must not retract first (R26-60)")

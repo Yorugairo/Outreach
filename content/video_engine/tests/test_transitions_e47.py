@@ -169,7 +169,8 @@ def test_the_blurzoom_softens_the_outgoing_plate_and_magnifies_it_by_blurzoom_sc
 @needs_chromium
 @pytest.mark.parametrize("exit_id,banded,t", [("dip", False, BOUNDARY - 0.10),
                                               ("blurzoom", True, BOUNDARY - 0.05),
-                                              ("slide:up", True, BOUNDARY + 0.30)])
+                                              ("slide:up", True, BOUNDARY + 0.30),
+                                              ("door", True, BOUNDARY + 0.45)])   # E98 s7: mid-swing, the matrix3d a pure function of t
 def test_a_transition_frame_renders_identically_in_two_browsers(exit_id: str, banded: bool, t: float):
     tl, uris = _build(exit_id, banded)
     a, b = RB.rgb_bytes(_frame(tl, uris, t)), RB.rgb_bytes(_frame(tl, uris, t))
@@ -467,3 +468,136 @@ def test_an_unknown_or_unusable_exit_is_a_build_error():
     for bad in ("slide", "dip:0", "dip:-1", "blurzoom:soon"):
         with pytest.raises(ValueError):
             B.scene_exit(bad, True)
+
+
+# ---------------------------------------------------------------- THE EVIDENCE DOOR (E98 s7 / R26-134)
+DOOR_S = 0.9            # build_scene_timeline_f.DOOR_S and kinetics/transitions.mjs DOOR.S
+DOOR_EYE = 1.6          # PAGE_DEPTH["EYE"]: the door's lens is the page's
+
+
+def _door_u_time(u: float, secs: float = DOOR_S) -> float:
+    """The instant (on the 0.01 s scrub) at which the min-jerk clock reaches u - bisected, so the frames are the u named."""
+    lo, hi = 0.0, 1.0
+    for _ in range(60):
+        mid = (lo + hi) / 2
+        if mid ** 3 * (10 - 15 * mid + 6 * mid * mid) < u:
+            lo = mid
+        else:
+            hi = mid
+    return round(BOUNDARY + lo * secs, 2)
+
+
+def _door_far_edge(t: float, W: int = 1080) -> float:
+    """Where a LEFT door's far edge stands on the stage's centre row at t - the module's own geometry, in Python."""
+    import math
+    p = min(1.0, max(0.0, (t - BOUNDARY) / DOOR_S))
+    u = p ** 3 * (10 - 15 * p + 6 * p * p)
+    open_deg = 180 - math.degrees(math.atan(DOOR_EYE * W / (W / 2)))
+    th = math.radians(open_deg * u)
+    d = DOOR_EYE * W
+    k = d / (d + W * math.sin(th))
+    return W / 2 + (W * math.cos(th) - W / 2) * k
+
+
+def _centre_row(png: bytes) -> list[int]:
+    im = _grey(png)
+    w, h = im.size
+    px = im.load()
+    return [px[x, h // 2] for x in range(w)]
+
+
+def test_a_door_parses_its_hinge_and_length_and_is_refused_by_name():
+    """`door[:<hinge>][:<s>]`: the hinge first (left by default), the length inside DOOR_S_MIN..DOOR_S_MAX. The player's
+    doorOpts reads the same grammar and treats anything else as a cut, so the refusals are here, by name, with the fix."""
+    assert "door" in B.SCENE_EXITS and "door" in B.TIMED_EXITS and "door" in B.WORLD_TAKING_EXITS
+    assert (B.DOOR_S, B.DOOR_S_MIN, B.DOOR_S_MAX, B.DOOR_HINGE) == (0.9, 0.45, 1.8, "left")
+    assert B.DOOR_HINGES == ("left", "right", "top", "bottom")
+    assert B.parse_exit("door") == ("door", None) and B.door_hinge("door") == "left"
+    assert B.parse_exit("door:right") == ("door:right", None) and B.door_hinge("door:right") == "right"
+    assert B.parse_exit("door:top:1.2") == ("door:top:1.2", 1.2)
+    assert B.parse_exit("door:0.6") == ("door:0.6", 0.6) and B.door_hinge("door:0.6") == "left"
+    assert B.door_hinge("slide:left") is None
+    refusals = {"door:diagonal": "'diagonal' is not a hinge - say door[:left|right|top|bottom][:<s>]",
+                "door:": "'' is not a hinge",
+                "door:left:0.2": "a door of 0.2 s is outside 0.45..1.8 s",
+                "door:left:3": "a door of 3 s is outside 0.45..1.8 s",
+                "door:left:0.9:x": "a door carries a hinge and at most a length, in that order",
+                "door:0.9:left": "a door carries a hinge and at most a length, in that order"}
+    for exit_id, want in refusals.items():
+        with pytest.raises(ValueError) as exc:
+            B.parse_exit(exit_id)
+        assert want in str(exc.value), (exit_id, str(exc.value))
+
+
+def _door_pair(page: dict | None, docks_out: list | None = None, docks_in: list | None = None) -> list[dict]:
+    w_out = {"kind": "ledger", "page": page} if page is not None else {"asset_id": "plate-a"}
+    return [{"scene_id": "s06", "world": w_out, "exit": "cut", "span": [0.0, BOUNDARY], "docks": docks_out or []},
+            {"scene_id": "s07", "world": {"asset_id": "plate-vault"}, "exit": "door", "span": [BOUNDARY, RUNTIME],
+             "docks": docks_in or []}]
+
+
+def test_a_door_is_refused_out_of_a_page_at_a_depth_or_on_a_plane_and_takes_a_flat_page_whole():
+    """E98 s7: *"a card's tilt is a MOTION, not a pose it jumps to"* - the door IS the plane's motion, so a page that
+    already stands at a depth or on a plane is refused; a flat page is stamped exit=cut (the door takes the world)."""
+    for page in ({"builder": "bars", "depth": 1.15}, {"builder": "bars", "plane": {"kind": "tilt", "deg": 14}}):
+        with pytest.raises(ValueError) as exc:
+            B.stamp_transition_pages(_door_pair(page))
+        assert ("s06 -> s07 (door): exit 'door': a door opens a card that landed flat - drop depth=/plane=, the door is "
+                "the plane's motion") in str(exc.value), str(exc.value)
+    flat = {"builder": "bars"}
+    notes = B.stamp_transition_pages(_door_pair(flat))
+    assert flat["exit"] == "cut" and any("door takes must not retract first" in n for n in notes), notes
+
+
+def test_a_door_is_refused_on_a_boundary_a_dock_is_live_across():
+    """Doc 29 Part 6: a decorated transition happens on an EVIDENCE-FREE boundary. The wipe's own rule (the engine's
+    allOut): a card leaving within DOOR_DOCK_TOL of the boundary belongs to the outgoing page; anything up across the
+    swing is refused by name."""
+    leaving = [{"slide": "dock-a", "enter": 2.0, "exit": BOUNDARY + 0.2}]
+    B.stamp_transition_pages(_door_pair(None, docks_out=leaving))   # leaves with its page: evidence-free
+    late = [{"slide": "dock-b", "enter": BOUNDARY + DOOR_S + 0.1, "exit": RUNTIME}]
+    B.stamp_transition_pages(_door_pair(None, docks_in=late))       # lands after the door has opened
+    for docks_out, docks_in, side, name in (([{"slide": "dock-c", "enter": 2.0, "exit": BOUNDARY + 1.0}], None, "outgoing", "dock-c"),
+                                            (None, [{"slide": "dock-d", "enter": BOUNDARY + 0.3, "exit": RUNTIME}], "incoming", "dock-d")):
+        with pytest.raises(ValueError) as exc:
+            B.stamp_transition_pages(_door_pair(None, docks_out, docks_in))
+        assert (f"a door swings on an evidence-free boundary (doc 29 Part 6) - the {side} dock '{name}' is up across it"
+                in str(exc.value)), str(exc.value)
+
+
+@needs_chromium
+def test_the_frame_before_the_door_opens_is_the_outgoing_world_unchanged():
+    """u = 0 is the IDENTITY: the cut's own frame writes no matrix and no clip, so it is the frame before the boundary."""
+    tl, uris = _build("door", banded=True)
+    before, at = RB.rgb_bytes(_frame(tl, uris, BOUNDARY - 0.01)), RB.rgb_bytes(_frame(tl, uris, BOUNDARY))
+    assert before == at, "the door's first frame differs from the frame before it - the door jumped instead of opening"
+
+
+@needs_chromium
+def test_the_door_swings_open_on_its_hinge_onto_the_incoming_world():
+    """At u 0.25 / 0.5 / 0.75, down the stage's centre row: the hinge column is still the outgoing plate's band (the
+    door hangs on its edge), the far edge stands where the module's projection puts it (within 3 px), it travels one way
+    toward the hinge, and right of it is the incoming plate's own grey - what the opening shows is the next world."""
+    tl, uris = _build("door", banded=True)
+    edges = []
+    for u in (0.25, 0.5, 0.75):
+        t = _door_u_time(u)
+        row = _centre_row(_frame(tl, uris, t))
+        assert row[1] < 100, f"u {u}: the hinge column is not the outgoing band ({row[1]})"
+        edge = next(x for x in range(len(row)) if row[x] > 150)
+        want = _door_far_edge(t)
+        assert abs(edge - want) <= 3, f"u {u} (t {t}): the far edge is at x {edge}, the projection says {want:.1f}"
+        assert all(abs(v - 200) < 4 for v in row[edge + 4:]), f"u {u}: right of the door is not the incoming plate alone"
+        edges.append(edge)
+    assert edges[0] > edges[1] > edges[2] > 0, f"the door does not close one way toward its hinge: {edges}"
+
+
+@needs_chromium
+def test_a_door_at_its_end_is_the_incoming_world_alone_identical_to_a_cut():
+    """u = 1 is edge-on - zero width: the frame at the door's length is the plain cut's frame at the same instant, byte
+    for byte (nothing of the card is left to pop)."""
+    t = round(BOUNDARY + DOOR_S, 2)
+    door_tl, uris = _build("door", banded=True)
+    cut_tl, _ = _build("cut", banded=True)
+    assert RB.rgb_bytes(_frame(door_tl, uris, t)) == RB.rgb_bytes(_frame(cut_tl, uris, t)), (
+        "the landed door is not the cut's frame - something of the outgoing world is left on stage")

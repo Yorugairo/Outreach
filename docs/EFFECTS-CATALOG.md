@@ -16,7 +16,7 @@ lives (module | inline | compiler-only | declared-unbuilt, the path and the one 
 module - status and callable - proof - doctrine cites resolved to path:line - aliases. A token that is only a
 parameter of an effect is an option on its card, never a card.
 
-137 cards, 74 options, 18 axes. 42 recipes (15 proven).
+138 cards, 79 options, 18 axes. 42 recipes (15 proven).
 
 | axis | cards | options | live | wired | draft | declared | planned | retired |
 |---|---|---|---|---|---|---|---|---|
@@ -33,7 +33,7 @@ parameter of an effect is an option on its card, never a card.
 | idle | 6 | 0 | 3 | 3 | 0 | 0 | 0 | 0 |
 | arrival | 3 | 4 | 2 | 1 | 0 | 0 | 0 | 0 |
 | camera | 1 | 6 | 1 | 0 | 0 | 0 | 0 | 0 |
-| exit | 8 | 15 | 3 | 3 | 2 | 0 | 0 | 0 |
+| exit | 9 | 20 | 3 | 3 | 3 | 0 | 0 | 0 |
 | page_enter | 10 | 5 | 3 | 7 | 0 | 0 | 0 | 0 |
 | page_exit | 2 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
 | caption | 3 | 8 | 3 | 0 | 0 | 0 | 0 | 0 |
@@ -1505,6 +1505,23 @@ parameter of an effect is an option on its card, never a card.
 - **proof** golden none - test content/video_engine/tests/test_gate_motion_density.py::test_m30_passes_when_the_returning_character_arrives_on_a_transition - first use none
 - **doctrine** E47 s2 (the mount's own dissolve is a different thing) -> docs/portable/OPERATOR-RULINGS.md:1419; 46 s46.5 (reference: 0 dissolves) -> docs/content-video-engine/46-REFERENCE-RHYTHM.md:116
 - **aliases** "cross-fade" (docs/content-video-engine/samples/scene-evidence-engine.mjs:2425)
+
+### The evidence door scene exit
+
+- **id** `exit:door` - **does** A card that landed flat swings open on one stage edge, away from the viewer, through the one projective path, onto the next world already mounted beneath it, until it is edge-on and gone.
+- **when** A card's tilt is a MOTION, not a pose it jumps to: the card lands flat and fills the frame like a plate, then opens like a door onto the plate or chart behind it - on an evidence-free boundary. (docs/portable/OPERATOR-RULINGS.md:2889)
+- **example** `'door:left'` (authored; key: shot row 6th element 'door', 'door:<left|right|top|bottom>' or 'door:<hinge>:<s>' (validator: parse_exit/_door_parts; out of a depth or plane page, or across a live dock: stamp_transition_pages/door_boundary_error); check: exit)
+- **phases**
+  1. **the swing** - the outgoing world rides above the incoming one and rotates about its hinge edge on min-jerk, projected at PAGE_DEPTH EYE 1.6 into a matrix3d prepended to its own transform, clipped to its stage rect (trigger: the scene boundary (a door arrives on the cut, like the slide); dials: `DOOR.S`=0.9, `DOOR.EYE`=1.6)
+  2. **edge-on** - the swing ends at 180 - atan(d/h) degrees, where the eye lies in the card's plane: zero projected width, the back never shown, the incoming world alone (trigger: the boundary plus DOOR.S; dials: `DOOR.S`=0.9)
+- **blend** doc 29 Part 6's 3D book-flip, a structural reframe on an evidence-free boundary (never built until E98 s7) -> the reframe itself and the evidence-free boundary refusal (recorded; docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:243)
+- **blend** the operator's own ask - "open it -- that effect essentially will look like opening an evidence door to the plate or chart behind" -> the whole arc (recorded; docs/portable/OPERATOR-RULINGS.md:2889)
+- **options** `door` The door's own length: the door runs over the seconds its last suffix declares (after the optional hinge), inside 0.45..1.8 s, instead of its default dial. (TIMED_EXITS); `left` The door: hinged on the stage's left edge - it opens toward the left and the next world shows from the right (the default). (DOOR_HINGES); `right` The door: hinged on the stage's right edge - the next world shows from the left. (DOOR_HINGES); `top` The door: hinged on the stage's top edge - it lifts away and the next world shows from below. (DOOR_HINGES); `bottom` The door: hinged on the stage's bottom edge - it falls away and the next world shows from above. (DOOR_HINGES)
+- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `doorOn` - also `doorUNow`, `doorNamed`, `doorOpts`, `doorCss`, `DOOR` - the render loop's boundary block - THE DOOR (doorOn beside slideOn), painted after the slide; math in kinetics/transitions.mjs; compiler: _door_parts / door_boundary_error
+- **status** draft (backlog R26-134) - **callable** yes: in SCENE_EXITS, TIMED_EXITS and WORLD_TAKING_EXITS; parse_exit accepts door[:<hinge>][:<s>] and the engine paints it (goldens door-open and its two proofs) - it awaits the operator's watch in motion
+- **proof** golden door-open - test content/video_engine/tests/test_transitions_e47.py::test_the_door_swings_open_on_its_hinge_onto_the_incoming_world - first use none
+- **doctrine** E98 s7 -> docs/portable/OPERATOR-RULINGS.md:2832; E47 -> docs/portable/OPERATOR-RULINGS.md:1419; E49 -> docs/portable/OPERATOR-RULINGS.md:1494; R26-134 -> docs/content-video-engine/BACKLOG.md:566
+- **aliases** "evidence door" (docs/portable/OPERATOR-RULINGS.md:2889); "3D book-flip" (docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:243)
 
 ### The melt scene exit
 

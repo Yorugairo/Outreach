@@ -615,6 +615,124 @@
       }
     },
     {
+      "id": "exit:door",
+      "axis": "exit",
+      "token": "door",
+      "title": "The evidence door scene exit",
+      "aliases": [
+        {
+          "name": "evidence door",
+          "source": "docs/portable/OPERATOR-RULINGS.md:2889"
+        },
+        {
+          "name": "3D book-flip",
+          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:243"
+        }
+      ],
+      "does": "A card that landed flat swings open on one stage edge, away from the viewer, through the one projective path, onto the next world already mounted beneath it, until it is edge-on and gone.",
+      "when": "A card's tilt is a MOTION, not a pose it jumps to: the card lands flat and fills the frame like a plate, then opens like a door onto the plate or chart behind it - on an evidence-free boundary.",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:2889",
+      "author": {
+        "key": "shot row 6th element 'door', 'door:<left|right|top|bottom>' or 'door:<hinge>:<s>' (validator: parse_exit/_door_parts; out of a depth or plane page, or across a live dock: stamp_transition_pages/door_boundary_error)",
+        "example": "'door:left'",
+        "example_source": null,
+        "check": "exit"
+      },
+      "phases": [
+        {
+          "name": "the swing",
+          "does": "the outgoing world rides above the incoming one and rotates about its hinge edge on min-jerk, projected at PAGE_DEPTH EYE 1.6 into a matrix3d prepended to its own transform, clipped to its stage rect",
+          "trigger": "the scene boundary (a door arrives on the cut, like the slide)",
+          "dials": {
+            "DOOR.S": "0.9",
+            "DOOR.EYE": "1.6"
+          }
+        },
+        {
+          "name": "edge-on",
+          "does": "the swing ends at 180 - atan(d/h) degrees, where the eye lies in the card's plane: zero projected width, the back never shown, the incoming world alone",
+          "trigger": "the boundary plus DOOR.S",
+          "dials": {
+            "DOOR.S": "0.9"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "doc 29 Part 6's 3D book-flip, a structural reframe on an evidence-free boundary (never built until E98 s7)",
+          "became": "the reframe itself and the evidence-free boundary refusal",
+          "record": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:243",
+          "tie": "recorded"
+        },
+        {
+          "source": "the operator's own ask - \"open it -- that effect essentially will look like opening an evidence door to the plate or chart behind\"",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:2889",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "door",
+          "means": "The door's own length: the door runs over the seconds its last suffix declares (after the optional hinge), inside 0.45..1.8 s, instead of its default dial.",
+          "source_set": "TIMED_EXITS"
+        },
+        {
+          "token": "left",
+          "means": "The door: hinged on the stage's left edge - it opens toward the left and the next world shows from the right (the default).",
+          "source_set": "DOOR_HINGES"
+        },
+        {
+          "token": "right",
+          "means": "The door: hinged on the stage's right edge - the next world shows from the left.",
+          "source_set": "DOOR_HINGES"
+        },
+        {
+          "token": "top",
+          "means": "The door: hinged on the stage's top edge - it lifts away and the next world shows from below.",
+          "source_set": "DOOR_HINGES"
+        },
+        {
+          "token": "bottom",
+          "means": "The door: hinged on the stage's bottom edge - it falls away and the next world shows from above.",
+          "source_set": "DOOR_HINGES"
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "doorOn",
+        "also": [
+          "doorUNow",
+          "doorNamed",
+          "doorOpts",
+          "doorCss",
+          "DOOR"
+        ],
+        "note": "the render loop's boundary block - THE DOOR (doorOn beside slideOn), painted after the slide; math in kinetics/transitions.mjs; compiler: _door_parts / door_boundary_error"
+      },
+      "doctrine": [
+        "E98 s7",
+        "E47",
+        "E49",
+        "R26-134"
+      ],
+      "status": "draft",
+      "backlog": [
+        "R26-134"
+      ],
+      "proof": {
+        "golden": "door-open",
+        "test": "content/video_engine/tests/test_transitions_e47.py::test_the_door_swings_open_on_its_hinge_onto_the_incoming_world",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "in SCENE_EXITS, TIMED_EXITS and WORLD_TAKING_EXITS; parse_exit accepts door[:<hinge>][:<s>] and the engine paints it (goldens door-open and its two proofs) - it awaits the operator's watch in motion"
+      }
+    },
+    {
       "id": "exit:suck",
       "axis": "exit",
       "token": "suck",

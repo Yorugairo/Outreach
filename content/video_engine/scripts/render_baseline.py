@@ -72,6 +72,11 @@ PROOF_FRAMES = {
     # P58 T6 (b) - THE MELT'S BALL AT A DEPTH, at the instant the ending cannot show: the ball formed, the weight
     # phase opening, the eye mid-move - the ball at 1.15 and the board it came off at 1.0, parted.
     "melt-depth@proof-ball": ("melt-depth", {"camera": True}, 15.88),
+    # E98 s7 / R26-134 - THE EVIDENCE DOOR, at the two instants its landing cannot show: the flat chart swinging open on
+    # its left edge onto the plate mounted beneath it (the min-jerk clock from the cut at 15.0 over 0.9 s). No flag: a
+    # door is an authored exit, not a capability behind a switch.
+    "door-open@proof-early": ("door-open", {}, 15.32),   # u 0.25: the page turned 27 deg, its far edge drawn in toward the vanishing point, a strip of the plate showing
+    "door-open@proof-mid": ("door-open", {}, 15.45),     # u 0.50: 54 deg, the page a trapezoid on its hinge, most of the plate open behind it
     # P58 T6 (c) - THE SLIDE THROUGH THE DEPTH, mid-slide: the seam on the centre line, the eye moving, the outgoing
     # board read at 0.925 of the move and the incoming at 1.075 (the base frame is the landing, where both are flat).
     "slide-depth@proof-mid": ("slide-depth", {"camera": True}, 15.3),
