@@ -6295,10 +6295,90 @@ async function mount(doc) {
     return band < py ? band : null;   /* never a DROP: a pill already above the row stays where it is */
   };
 
+  /* ---- P58 T5 - THE TWO CHART FORMS IN 2.5D (E98 s3: *"bars with extrusion, a line on a tilted plane - the flat
+     page stays the default"*) ------------------------------------------------------------------------------------
+     A FORM is how a page's chart is DRAWN, never what it says. The spec, the scale, the value capsule, the axis
+     rule, every label and the build clock are the flat page's to the pixel; what changes is the surface the marks
+     stand on. `pg.form` is written ONLY when the row named `;form=<name>` (the compiler resolves the tilted
+     plane's four corners there, as it resolves `plane=`), so a page that named none carries no key, takes no
+     branch and paints exactly what it painted. Hard edges only - doc 29 s1.2: *"2.5D physical card - hard-edge
+     shadow, no fake 3D blur"*. */
+  const formOf = (pg, kind) => (pg && pg.form && pg.form.kind === kind ? pg.form : null);
+  const EXTRUDE = {
+    LIGHT_DEG: 35,       /* THE PAGE'S ONE LIGHT, as a bearing clockwise from straight up: 35 deg is over the reader's right shoulder. It fixes the depth direction AND which faces are lit - one dial, not two */
+    D_PX: 16,            /* the prism's depth in the chart's own units (portrait doubles it, as the type and the bloom do) */
+    D_SHARE: 0.26,       /* ... and never more than this share of the bar's OWN width: a thin bar's prism must not close the gap to its neighbour */
+    CLEAR_PX: 4,         /* ... and never inside this of the value's own gutter: the extrusion is drawn BEHIND the face and never reaches the number (E28: the number stays as readable as the flat page's) */
+    CAP_LIGHT: 0.80,     /* the cap face: the bar's OWN ink darkened to this share - a ratio on the fill the page already chose, never a second palette */
+    SIDE_LIGHT: 0.58,    /* the side face, which faces away from the light */
+    SHADOW_A: 0.20,      /* the hard-edge cast shadow's alpha (doc 29 s1.2 - a polygon, no blur, no filter) */
+    SHADOW_K: 0.55,      /* ... thrown this share of the depth vector, opposite the light, and CLIPPED at the zero line: a bar's shadow never crosses the axis it is measured from */
+  };
+  const pPts = (q) => q.map((p) => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+  /* THE DEPTH VECTOR. Its x is the light's, always; its y runs WITH THE VALUE - a rise's prism recedes up and
+     right, a drop's down and right - so the mass an extrusion adds always goes the way the number goes and no
+     extruded ink ever crosses the zero line. Sign is geometry (E28/E53): an extrusion that put a drop's mass
+     above zero would be the failed form. */
+  const extrudeVec = (D, neg) => { const th = EXTRUDE.LIGHT_DEG * Math.PI / 180;
+    return [D * Math.sin(th), (neg ? 1 : -1) * D * Math.cos(th)]; };
+  const extrudeDepth = (bw, P) => Math.min(EXTRUDE.D_PX * (P ? 2 : 1), EXTRUDE.D_SHARE * bw,
+    Math.max(1, ((P ? 22 : 14) - EXTRUDE.CLEAR_PX) / Math.cos(EXTRUDE.LIGHT_DEG * Math.PI / 180)));
+  /* One bar's prism: the cast shadow, the side face and the cap face, created BEFORE the bar's own rect so SVG
+     paint order puts all three BEHIND the face. Nothing else is touched - the value, the x label, the capsule and
+     the axis stand exactly where the flat page put them, which is the claim the label boxes prove. `set(k)` is a
+     pure function of the same u the face grows on. */
+  const extrudeFaces = (st, o) => {
+    const D = extrudeDepth(o.bw, o.P), v = extrudeVec(D, o.neg), x2 = o.x + o.bw;
+    const shadow = lpEl("polygon", "bx-shadow", st.chart, { points: "", fill: "#000", opacity: 0 });
+    const side = lpEl("polygon", "bar bx-side" + o.cls, st.chart, { points: "", opacity: 0 });
+    const cap = lpEl("polygon", "bar bx-cap" + o.cls, st.chart, { points: "", opacity: 0 });
+    side.style.filter = "brightness(" + EXTRUDE.SIDE_LIGHT + ")";
+    cap.style.filter = "brightness(" + EXTRUDE.CAP_LIGHT + ")";
+    const clip = (y) => (o.neg ? Math.max(o.base, y) : Math.min(o.base, y));
+    const set = (k) => {
+      const hk = Math.max(0, o.h * k), tip = o.neg ? o.base + hk : o.base - hk, on = hk > 0.5;
+      cap.setAttribute("points", pPts([[o.x, tip], [x2, tip], [x2 + v[0], tip + v[1]], [o.x + v[0], tip + v[1]]]));
+      side.setAttribute("points", pPts([[x2, tip], [x2, o.base], [x2 + v[0], o.base + v[1]], [x2 + v[0], tip + v[1]]]));
+      const sx = -v[0] * EXTRUDE.SHADOW_K, sy = -v[1] * EXTRUDE.SHADOW_K;
+      shadow.setAttribute("points", pPts([[o.x + sx, clip(tip + sy)], [x2 + sx, clip(tip + sy)],
+                                          [x2 + sx, clip(o.base + sy)], [o.x + sx, clip(o.base + sy)]]));
+      cap.setAttribute("opacity", on ? 1 : 0); side.setAttribute("opacity", on ? 1 : 0);
+      shadow.setAttribute("opacity", on ? EXTRUDE.SHADOW_A : 0);
+    };
+    set(0);
+    return { set, depth: D, vec: v, tint: (col) => { side.style.fill = col; cap.style.fill = col; },
+             boxes: () => [cap.getBBox ? cap.getBBox() : null, side.getBBox ? side.getBBox() : null] };
+  };
+  /* THE TILTED PLANE (`;form=tilted_line`). The compiler resolves the four corners exactly as `plane=` does - one
+     tilt, one geometry, one refusal (build_scene_timeline_f.page_form_spec) - and the player keeps ONE projective
+     path: kinetics/homography.mjs' `planeMatrix` and `hApply`, the same machinery that lays an ART-embed card on a
+     measured wall (P50 T7) and turns a whole page at a depth (P58 T4). The quad arrives in the fractions of a box,
+     and the PLOT REGION is that box.
+       What is drawn ON the plane is the line, the ruled baseline and the gridlines - so they converge to the
+     plane's own vanishing direction (the monograph s2.4: *"ruled ledger lines align with v_inf = K R d"*). What is
+     NOT is any text: the tick numbers, the x labels and the name at the line's end stand at their PROJECTED
+     anchors and are drawn upright, counter to the tilt, because a number that has to be read is never turned
+     (E28; E53's label at the line's end). At deg 0 the quad is the unit square and the projection is the
+     identity - which is why every unformed page keeps its pixels. */
+  const tiltProject = (quad, box) => {
+    if (!Array.isArray(quad) || quad.length !== 4 || !(box.w > 0) || !(box.h > 0)) return null;
+    const m = planeMatrix(quad.map((q) => [q[0] * box.w, q[1] * box.h]), box.w, box.h, 0, 0);
+    if (!m) return null;
+    return (x, y) => { const p = hApply(m, x - box.x, y - box.y);
+      return p ? [p[0] + box.x, p[1] + box.y] : [x, y]; };
+  };
+  /* a RULE drawn on the plane: its two ends projected, returned so a label can stand at either of them */
+  const tiltRule = (el, pj, x1, y1, x2, y2) => {
+    const a = pj(x1, y1), b = pj(x2, y2);
+    el.setAttribute("x1", a[0].toFixed(1)); el.setAttribute("y1", a[1].toFixed(1));
+    el.setAttribute("x2", b[0].toFixed(1)); el.setAttribute("y2", b[1].toFixed(1));
+    return [a, b];
+  };
   const buildLedgerBars = (st, pg) => {
     /* E28 (operator, 2026-09-03): a chart reads right at a glance - a drop is a bar going DOWN from a
        zero baseline. Values are SIGNED; the baseline sits at zero wherever the range puts it, bars hang
        below it for negatives, value labels ride the bar's far end, category labels stay along the bottom. */
+    const XF = formOf(pg, "extruded_bar");   /* P58 T5: opt-in (`;form=extruded_bar`); null is today's page, to the byte */
     const n = Math.max(1, st.vals.length);
     const lo0 = Math.min(0, ...st.vals), hi0 = Math.max(0, ...st.vals);
     /* THE BREAKTHROUGH (2026-09-10): a bars page may STATE its scale (`axes.domain`) that one value cannot fit. That bar builds
@@ -6348,6 +6428,9 @@ async function mount(doc) {
           height: T.h.toFixed(1), rx: 6, fill: "var(--lp-chalk)", opacity: 0 });
         /* the MARK stands where the number will - the track alone is covered by the bar it stands behind */
         stamp = lpText(st.chart, "val bstamp", S.x, S.y, "middle", phMark, { opacity: 0, style: "fill:var(--lp-chalk)" }); }
+      /* P58 T5 (`;form=extruded_bar`): the prism is built HERE, before the face, so all three of its polygons
+         paint behind the bar's own rect. Not one label, capsule, tick or axis moves for it. */
+      const ex = XF ? extrudeFaces(st, { x, bw, base, h, neg, P, cls: (neg ? " neg" : " pos") + (i === st.emph ? " emph" : "") }) : null;
       const bar = lpEl("rect", "bar" + (neg ? " neg" : " pos") + (i === st.emph ? " emph" : ""), st.chart,
         { x: x.toFixed(1), y: y.toFixed(1), width: bw.toFixed(1), height: h.toFixed(1), rx: 6 });   /* grows from the zero baseline, up or down */
       /* E53 s7: a DECLARED colour outranks the sign default. Without this the builder read only the value's sign,
@@ -6356,13 +6439,14 @@ async function mount(doc) {
          presentation attribute, so the declared fill goes through style. */
       const dcol = LP_PAL[(pg.colors || [])[i]];
       if (dcol) bar.style.fill = dcol;
+      if (dcol && ex) ex.tint(dcol);   /* P58 T5: the prism's faces are the bar's OWN ink at a ratio - a declared colour rules them too */
       bar.style.transformOrigin = "0 " + base.toFixed(1) + "px"; bar.style.transform = "scaleY(0)";
       const lab = lpEl("text", "lab", st.chart, { x: (x + bw / 2).toFixed(1), y: bottom + (P ? 52 : 34), "text-anchor": "middle", opacity: 0 });
       lab.textContent = (pg.labels || [])[i] || "";
       const vy = neg ? base + h + (P ? 62 : 26) : base - h - (P ? 22 : 14);
       const val = lpEl("text", "val", st.chart, { x: (x + bw / 2).toFixed(1), y: vy.toFixed(1), "text-anchor": "middle", opacity: 0 });
       val.textContent = lpWithUnit(st.vstr[i] != null ? String(st.vstr[i]) : lpFmt(v), unit);
-      const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + h : base - h, over, v, bx: x, bw, track, stamp };
+      const rec = { bar, lab, val, h, x: x + bw / 2, i, neg, end: neg ? base + h : base - h, over, v, bx: x, bw, track, stamp, ex };
       if (over && btMode === "stack") {   /* the top gridline SNAPS as the bar passes: its two broken ends kick up beside the bar */
         const mk = (ax, bx2) => lpEl("line", "grid snap", st.chart, { x1: ax.toFixed(1), y1: top.toFixed(1), x2: bx2.toFixed(1), y2: (top - 16).toFixed(1), stroke: "var(--lp-chalk)", "stroke-width": 3, "stroke-linecap": "round", opacity: 0 });
         rec.snap = [mk(x - 4, x - 24), mk(x + bw + 4, x + bw + 24)];
@@ -6543,6 +6627,7 @@ async function mount(doc) {
        and a step at this scale reads as a fault. `axes.hlines: [{y, label, color}]` draws it as what it is - a labelled rule
        across the plot, in its own colour, named at its right end - and it takes part in the scale so the series never hides it. */
     const HL = (ax.hlines || (ax.hline ? [ax.hline] : [])).filter((h) => h && Number.isFinite(+h.y));
+    const TF = formOf(pg, "tilted_line");   /* P58 T5: opt-in (`;form=tilted_line`); null is today's page, to the byte */
     let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
     for (const s of series) for (const [x, v] of s.pts) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, Y(v)); y1 = Math.max(y1, Y(v)); }
     for (const h of HL) { y0 = Math.min(y0, Y(+h.y)); y1 = Math.max(y1, Y(+h.y)); }
@@ -6568,13 +6653,22 @@ async function mount(doc) {
       st.plotClip = cid; }
     st.axisB = B;   /* P47 T3: the morph closes its target along the axis */
     st.plot = { L, R, T, B, W, x0, x1, y0, y1, log: !!ax.log };   /* P48 T1: the scale a transition interpolates */
-    lpMark(st, "axis", "axis", lpEl("line", "ax", st.chart, { x1: L, x2: W - R, y1: B, y2: B }), { x1: L, x2: W - R, y: B });
+    /* P58 T5 (`;form=tilted_line`): the plane the chart is drawn on - the PLOT REGION carried onto the compiler's
+       four corners. `pj` is the identity when the row named no form, and every `PJ ? ... : ...` below keeps the
+       flat page's own expression, so an unformed page writes the same attributes it always wrote. */
+    const PJ = TF ? tiltProject(TF.quad, { x: L, y: T, w: W - L - R, h: B - T }) : null;
+    const pj = (px, py) => (PJ ? PJ(px, py) : [px, py]);
+    const axEl = lpEl("line", "ax", st.chart, { x1: L, x2: W - R, y1: B, y2: B });
+    if (PJ) tiltRule(axEl, pj, L, B, W - R, B);   /* THE RULED BASELINE, on the plane, converging with it */
+    lpMark(st, "axis", "axis", axEl, { x1: L, x2: W - R, y: B });
     st.hlines = HL.map((h, hix) => {
       const col = PAL[h.color] || h.color || PAL.cobalt, y = my(+h.y);
       const line = lpEl("line", "hrule", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1), stroke: col });
-      const lab = h.label ? lpText(st.chart, "sname", W - R, y - (P ? 18 : 12), "end", String(h.label), { opacity: 0, style: LP_HALO + "fill:" + col + (P ? ";font-size:34px" : "") }) : null;
+      const pe = PJ ? tiltRule(line, pj, L, y, W - R, y) : null;   /* the comparator is a rule ON the page: it lies on the plane too (E53 s6) */
+      const ry = pe ? pe[1][1] : y;                                /* ... and its name stands upright at its projected right end */
+      const lab = h.label ? lpText(st.chart, "sname", pe ? pe[1][0] : W - R, ry - (P ? 18 : 12), "end", String(h.label), { opacity: 0, style: LP_HALO + "fill:" + col + (P ? ";font-size:34px" : "") }) : null;
       lpMark(st, "rule:" + hix, "rule", line, { y, v: +h.y, x1: L, x2: W - R });
-      if (lab) lpMark(st, "rulelab:" + hix, "rulelabel", lab, { x: W - R, y: y - (P ? 18 : 12) });
+      if (lab) lpMark(st, "rulelab:" + hix, "rulelabel", lab, { x: pe ? pe[1][0] : W - R, y: ry - (P ? 18 : 12) });
       return { h, y, line, lab, col };
     });
     /* both axes, always (operator, 2026-09-03): y ticks - on a log axis at doublings of a power of ten, else the nice-step helper */
@@ -6582,12 +6676,15 @@ async function mount(doc) {
       const lo = Math.pow(10, y0), hi = Math.pow(10, y1); let tv = Math.pow(10, Math.floor(y0));
       let n = 0;
       while (tv <= hi) { if (tv >= lo) { const y = my(tv);
-        lpMark(st, "tick:" + n, "tick", lpEl("line", "grid", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1) }), { v: tv, y, x1: L, x2: W - R });
-        lpMark(st, "ylab:" + n, "ylabel", lpText(st.chart, "lab", L - 10, y + 8, "end", lpTick(tv) + (ax.unit || "")), { v: tv, x: L - 10, y: y + 8 }); n++; } tv *= 2; }
-    } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10);
+        const gl = lpEl("line", "grid", st.chart, { x1: L, x2: W - R, y1: y.toFixed(1), y2: y.toFixed(1) });
+        const pe = PJ ? tiltRule(gl, pj, L, y, W - R, y) : null;   /* P58 T5: the decade rules lie on the plane; their numbers stay upright at the left end */
+        lpMark(st, "tick:" + n, "tick", gl, { v: tv, y, x1: L, x2: W - R });
+        lpMark(st, "ylab:" + n, "ylabel", lpText(st.chart, "lab", pe ? L - 10 + (pe[0][0] - L) : L - 10, pe ? pe[0][1] + 8 : y + 8, "end", lpTick(tv) + (ax.unit || "")), { v: tv, x: pe ? L - 10 + (pe[0][0] - L) : L - 10, y: pe ? pe[0][1] + 8 : y + 8 }); n++; } tv *= 2; }
+    } else lpYTicks(st, y0, y1, my, L, W - R, ax.unit || "", L - 10, undefined, PJ ? pj : null);
     lpYLabel(st, pg, L, T - 12);
-    (ax.xticks || []).forEach(([x, lab], i) => { const tx = lpEl("text", "lab", st.chart, { x: mx(x).toFixed(1), y: B + (P ? 52 : 32), "text-anchor": "middle" }); tx.textContent = lab;
-      lpMark(st, "xtick:" + i, "xtick", tx, { v: x, x: mx(x), y: B + (P ? 52 : 32) }); });
+    (ax.xticks || []).forEach(([x, lab], i) => { const pe = PJ ? pj(mx(x), B) : null;   /* P58 T5: the x label stands at its own place ON the baseline, and upright */
+      const tx = lpEl("text", "lab", st.chart, { x: (pe ? pe[0] : mx(x)).toFixed(1), y: pe ? pe[1] + (P ? 52 : 32) : B + (P ? 52 : 32), "text-anchor": "middle" }); tx.textContent = lab;
+      lpMark(st, "xtick:" + i, "xtick", tx, { v: x, x: pe ? pe[0] : mx(x), y: pe ? pe[1] + (P ? 52 : 32) : B + (P ? 52 : 32) }); });
     /* HIGHLIGHT (operator, 2026-09-05, the since-2000 holdings page): axes.highlight_from = an x; the points from there
        are the STORY'S window and take the sign colour, the history before it is drawn muted and thinner beneath - a
        26-year line that is up overall must not paint the last four months' selling green, nor the history red */
@@ -6601,7 +6698,12 @@ async function mount(doc) {
       } else drawn.push({ ...s, muted: false, si, k0: 0 });
     });
     drawn.forEach((s, i) => {
-      const d = s.pts.map(([x, v], k) => (k ? "L" : "M") + mx(x).toFixed(1) + " " + my(v).toFixed(1)).join(" ");
+      /* P58 T5: every datum through the ONE homography, once. The path, the travelling tip, the tip-riding pill,
+         the terminal name and the species' targets then all ride the same projected geometry - a line drawn ON the
+         plane, not a flat line with a picture of a plane behind it. Unprojected, `PT` is exactly `mx`/`my`. */
+      const PT = PJ ? s.pts.map(([x, v]) => PJ(mx(x), my(v))) : s.pts.map(([x, v]) => [mx(x), my(v)]);
+      const PE = PT[PT.length - 1] || [0, 0];
+      const d = PT.map(([qx, qy], k) => (k ? "L" : "M") + qx.toFixed(1) + " " + qy.toFixed(1)).join(" ");
       /* a single-metric line takes its SIGN colour (blood red down, green up); multi-line pages keep their series key */
       const endsDown = s.pts.length > 1 && +s.pts[s.pts.length - 1][1] < +s.pts[0][1];   /* numbers, never a string compare ('1116.7' < '325.8' is true) */
       /* the sign colour (a rise is green, a fall blood red) is the DEFAULT for a lone series, not a law over it: a series that
@@ -6642,8 +6744,8 @@ async function mount(doc) {
       /* THE SIDE AWAY FROM A NEIGHBOUR (the same review, 0:19): on a two-line page the name sits 30 px over its own tip, and
          "10-year" was written on the 30-year line above it. A name whose box would cross ANOTHER series' line goes
          UNDER its own line instead, when that room is clear - the name stays beside the line it names. */
-      let nameY = nameBelow ? B - 28 : my(last[1]) - 30;
-      const nameXEnd = nameBelow ? W - R : Math.min(mx(last[0]), mx(prev[0])) - 8 - tipClr;
+      let nameY = nameBelow ? B - 28 : (PJ ? PE[1] : my(last[1])) - 30;
+      const nameXEnd = nameBelow ? W - R : (PJ ? PE[0] : Math.min(mx(last[0]), mx(prev[0]))) - 8 - tipClr;
       if (P && !nameBelow && drawn.length > 1) {
   /* the name's OWN width, not spanX: at 330 px the room under a dipping line read as taken (review 0:20.8, "10-year" 155 px wide) */
   const nameW = Math.max(60, ((s.label ? s.label + " " : "") + (s.name || "")).length * 23);
@@ -6656,16 +6758,18 @@ async function mount(doc) {
           if (under <= B - 12 && !crosses(under)) nameY = under;
         }
       }
+      /* E53: the label at the LINE'S END - so on a tilted plane it stands at the end the line actually has, and
+         upright (the text is never turned; only the marks lie on the plane). */
       const name = lpEl("text", "sname", st.chart, P ? { x: nameXEnd.toFixed(1), y: nameY.toFixed(1), "text-anchor": "end", fill: col, opacity: 0 }
-                                                     : { x: (mx(last[0]) + 12 + tipClr).toFixed(1), y: (my(last[1]) + 8).toFixed(1), fill: col, opacity: 0 });
-      st.linePts.push(s.pts.map(([x, v]) => [mx(x), my(v)]));   /* the exact datum positions, for the species' targets */
+                                                     : { x: ((PJ ? PE[0] : mx(last[0])) + 12 + tipClr).toFixed(1), y: ((PJ ? PE[1] : my(last[1])) + 8).toFixed(1), fill: col, opacity: 0 });
+      st.linePts.push(PT.map((q) => [q[0], q[1]]));   /* the exact datum positions, for the species' targets */
       name.textContent = s.muted ? "" : (s.label ? s.label + " " : "") + (s.name || "");   /* the muted history carries no name */
       /* DYNAMIC LABEL: the badge that keys this line rides its inline name as the tag, in the accent - one
          reveal, one real estate (operator, 2026-09-03) */
       const ib = (st.inlineBadges || {})[s.color];
       if (ib && ib.tag) { const tg = lpEl("tspan", "tagchip", name, { dx: 12, fill: col }); tg.textContent = ib.tag; }
-      const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: P ? nameY : my(last[1]) + 8,
-                     pts: s.pts.map(([x, v]) => [mx(x), my(v)]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted,
+      const rec = { p, len, tip, name, stagger: i / Math.max(1, drawn.length), ny: P ? nameY : (PJ ? PE[1] : my(last[1])) + 8,
+                     pts: PT.map((q) => [q[0], q[1]]), si: s.si | 0, k0: s.k0 | 0, muted: !!s.muted,
                      data: s.pts.map(([x, v]) => [+x, +v]), d0: d, len0: len };   /* P47 T2: the path knows its data, so a build_to can cap it at a datum; P48 T2: and its DATA, so a rescale re-projects it */
       if (ax.name_clear && !nameBelow) rec.ny = Math.min(rec.ny, clearY - (P ? 34 : 20));
       st.paths.push(rec);
@@ -6825,16 +6929,21 @@ async function mount(doc) {
      best practices"): y gridlines carry TICK LABELS with the unit (nice step, 4-6 ticks, the zero line heavier), the
      unit comes from page.unit or axes.yunit, the basis (axes.ylabel) floats top-left inside the plot. */
   const lpUnit = (pg) => String(pg.unit || (pg.axes || {}).yunit || "");
-  const lpYTicks = (st, lo, hi, my, xa, xb, unit, labX, divs) => {
+  /* `pj` (P58 T5, opt-in and last): the projector of a page drawn on a tilted plane. The RULE is drawn on the
+     plane - it converges with it - and its number is written UPRIGHT at the rule's projected left end. Absent, as
+     it is at every other call site, not one attribute changes. */
+  const lpYTicks = (st, lo, hi, my, xa, xb, unit, labX, divs, pj) => {
     const step = lpNiceStep(Math.max(1e-9, (hi - lo) / (divs || 5))), out = [];
     let n = 0;
     for (let tv = Math.ceil(lo / step - 1e-9) * step; tv <= hi + 1e-9; tv += step) {
       const v = Math.abs(tv) < step * 1e-6 ? 0 : tv, y = my(v);
       const gl = lpEl("line", v === 0 ? "ax" : "grid", st.chart, { x1: xa, x2: xb, y1: y.toFixed(1), y2: y.toFixed(1) });
-      const tl = lpText(st.chart, "lab", labX, y + (st.portrait ? 14 : 8), "end", lpWithUnit(lpTick(v), unit));
+      const pe = pj ? tiltRule(gl, pj, xa, y, xb, y) : null;
+      const lx = pe ? labX + (pe[0][0] - xa) : labX, ly = pe ? pe[0][1] + (st.portrait ? 14 : 8) : y + (st.portrait ? 14 : 8);
+      const tl = lpText(st.chart, "lab", lx, ly, "end", lpWithUnit(lpTick(v), unit));
       out.push(gl); out.push(tl);
       lpMark(st, "tick:" + n, "tick", gl, { v, y, x1: xa, x2: xb });   /* P48 T1: a rescale retargets ticks by value, so the value rides with the mark */
-      lpMark(st, "ylab:" + n, "ylabel", tl, { v, x: labX, y: y + (st.portrait ? 14 : 8) });
+      lpMark(st, "ylab:" + n, "ylabel", tl, { v, x: lx, y: ly });
       n++;
     }
     return out;
@@ -9067,6 +9176,7 @@ async function mount(doc) {
       cs.bars.forEach((bb, i) => {
         const k = expoOut(clamp01((cb - i * 0.1) / 0.55));
         bb.bar.style.transform = "scaleY(" + k.toFixed(4) + ")";
+        if (bb.ex) bb.ex.set(k);   /* P58 T5: the prism grows WITH its face - the same u, one clock, no second state */
         bb.lab.setAttribute("opacity", clamp01((cb - i * 0.1 - 0.3) / 0.2).toFixed(2));
         bb.val.setAttribute("opacity", clamp01((k - 0.9) / 0.1).toFixed(2));
       });

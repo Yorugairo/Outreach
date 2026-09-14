@@ -16,7 +16,7 @@ lives (module | inline | compiler-only | declared-unbuilt, the path and the one 
 module - status and callable - proof - doctrine cites resolved to path:line - aliases. A token that is only a
 parameter of an effect is an option on its card, never a card.
 
-135 cards, 70 options, 18 axes. 40 recipes (15 proven).
+136 cards, 72 options, 18 axes. 40 recipes (15 proven).
 
 | axis | cards | options | live | wired | draft | declared | planned | retired |
 |---|---|---|---|---|---|---|---|---|
@@ -29,7 +29,7 @@ parameter of an effect is an option on its card, never a card.
 | dock_payload | 3 | 0 | 3 | 0 | 0 | 0 | 0 | 0 |
 | chart_dock | 5 | 1 | 5 | 0 | 0 | 0 | 0 | 0 |
 | dock_option | 8 | 14 | 3 | 5 | 0 | 0 | 0 | 0 |
-| plate_option | 11 | 4 | 4 | 7 | 0 | 0 | 0 | 0 |
+| plate_option | 12 | 6 | 4 | 8 | 0 | 0 | 0 | 0 |
 | idle | 6 | 0 | 3 | 3 | 0 | 0 | 0 | 0 |
 | arrival | 3 | 4 | 2 | 1 | 0 | 0 | 0 | 0 |
 | camera | 1 | 6 | 1 | 0 | 0 | 0 | 0 | 0 |
@@ -1191,6 +1191,18 @@ parameter of an effect is an option on its card, never a card.
 - **proof** golden none - test content/video_engine/tests/test_page_depth.py::test_depth_lands_on_the_page_as_the_cameras_own_factor - first use none
 - **doctrine** E98 s3 -> docs/portable/OPERATOR-RULINGS.md:2832; P58 T4 -> unresolved
 - **aliases** "a page at a depth" (docs/portable/OPERATOR-RULINGS.md:2832)
+
+### The form plate option (2.5D chart forms)
+
+- **id** `plate_option:form` - **does** Draws a page's chart in 2.5D (extruded_bar or tilted_line[:<deg>]); the flat page is the default reading form.
+- **when** none
+- **example** `'ledger:ev-x:bars;form=extruded_bar'` (authored; key: `;form=extruded_bar|tilted_line[:<deg>]` on a ledger page; check: plate)
+- **options** `extruded_bar` Every bar a prism: the flat face unmoved, a side and a cap under the page's one light, tinted from the bar's own ink, a hard-edge shadow clipped at zero. A drop's mass goes DOWN (E28). (CHART_FORMS); `tilted_line` The line, the ruled baseline and the gridlines drawn ON a tilted plane the compiler resolves (plane='s own geometry) and converging; every number upright at its projected anchor. (CHART_FORMS)
+- **lives** module - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `extrudeFaces` - also `tiltProject`, `formOf` - the two painters in the bars / dense-line builders; compiler page_form_spec / world_for_plate, one rule in ledger_page.form_error
+- **status** wired - **callable** yes: probe OK
+- **proof** golden form-extruded-bar - test content/video_engine/tests/test_chart_forms_2_5d.py::test_tilted_line_carries_the_plane_the_compiler_resolved - first use none
+- **doctrine** E98 s3 -> docs/portable/OPERATOR-RULINGS.md:2832; P58 T5 -> unresolved
+- **aliases** "the two chart forms in 2.5D" (docs/portable/OPERATOR-RULINGS.md:2832)
 
 ### The idle plate option
 

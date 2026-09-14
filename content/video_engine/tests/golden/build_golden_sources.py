@@ -796,6 +796,70 @@ def page_depth() -> tuple[dict, dict]:
     return tl, uris
 
 
+# ---- P58 T5: THE TWO CHART FORMS IN 2.5D ---------------------------------------------------------------------
+# Each form is goldened on data that is ALREADY a golden flat, so human gate 3 reads a pair and not a picture:
+#   `form-tilted-line`  beside `ledger-page-mid-build` - the same series, the same `build_spec(... "line", 0,
+#                       "right")`, the same scribble field; the ONLY difference on the page is `;form=tilted_line`
+#   `form-extruded-bar` beside `thread-baseline`'s scene 2 - the same four line-ends as bars, built by the same
+#                       `build_spec(bars, "bars", None, "right")`; the only difference is `;form=extruded_bar`
+# Both go through the COMPILER's own option (`page_form_spec`), so the golden proves the grammar, the refusal's
+# sibling and the painter together, and neither page names a species, a dock or a move: what the frames show is
+# the form, and nothing is added to make it visible (E49/E59).
+FORM_LINE_T = (6.0, 9.0, 28.5)   # the three instants both forms are read at: mid-BUILD (the same t the flat line page's golden is judged at), the HOLD, and mid-LEAVE
+
+
+def _form_bars_series() -> dict:
+    """The bars object `thread-baseline` builds its second page from: where the four lines end."""
+    import json
+    raw = json.loads(SERIES.read_text(encoding="utf-8"))
+    return {"title": "Where the four lines end", "sub": "index at the last point, 100 = Aug '25", "src": raw.get("src", ""), "unit": "",
+            "bars": [{"label": short, "value": round(float(sr["pts"][-1][1]), 1), "color": sr.get("color", "crimson")}
+                     for sr, short in zip(raw["series"], ("Memory", "Chips", "Mega-cap", "S&P 500"))]}
+
+
+def form_extruded_bar() -> tuple[dict, dict]:
+    """P58 T5 - THE EXTRUDED BAR (`;form=extruded_bar`): every bar a prism, and not one label moved.
+
+    The page is `thread-baseline`'s own second page - the same four values, the same builder, the same field - and
+    the option is the whole difference. Each bar gets three polygons BEHIND its face: a hard-edge cast shadow
+    (doc 29 s1.2, clipped at the zero line), the side face and the cap face, both the bar's OWN ink at a darkening
+    ratio under the page's one light. The face draws as it always did and the prism grows on the same u.
+
+    WHAT THE FRAMES SHOW. `@proof-build` (6.0) is mid-build: the prisms growing with their faces, each one's mass
+    running the way its own value runs. The base frame (9.0) is the HOLD - the page built, the values printed
+    exactly where the flat page prints them, the capsule on the emphasised bar untouched. `@proof-leave` (28.5)
+    is the retract."""
+    import build_scene_timeline_f as BST
+    page = LPG.build_spec(_form_bars_series(), "bars", None, "right")
+    page["field"] = "scribble"
+    page["form"] = BST.page_form_spec("extruded_bar", page["builder"], "golden")
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    return _timeline("Golden: the extruded bar", scenes, {}, None), _base_uris()
+
+
+def form_tilted_line() -> tuple[dict, dict]:
+    """P58 T5 - THE TILTED-PLANE LINE (`;form=tilted_line`): the line drawn ON a plane, its numbers upright.
+
+    The page is `ledger-page-mid-build`'s, to the key, plus the one option. The compiler resolves the plane's four
+    corners with `page_plane_quad` - the same closed form `plane=` uses - and the player projects the plot region
+    onto them through the ONE homography: the ruled baseline and the gridlines converge to the plane's vanishing
+    direction (the monograph s2.4), the series are drawn on the plane, and every number - the tick labels, the
+    month labels and the name at each line's end - stands at its projected anchor and is drawn UPRIGHT (E28).
+
+    WHAT THE FRAMES SHOW. `@proof-build` (6.0) is the same instant the FLAT page's golden is judged at, so the two
+    frames are read side by side. The base frame (9.0) is the HOLD, all four lines in and named at their ends.
+    `@proof-leave` (28.5) is the retract - a formed page leaves the way every page leaves."""
+    import build_scene_timeline_f as BST
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", 0, "right")
+    page["field"] = "scribble"
+    page["form"] = BST.page_form_spec("tilted_line", page["builder"], "golden")
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    return _timeline("Golden: the tilted-plane line", scenes, {}, None), _base_uris()
+
+
 def press_stack() -> tuple[dict, dict]:
     """P50 T3: THREE PRESS CARDS on a bare plate, stacking on three words (Bravos shots 5-10), the third carrying
     the underline on its quoted phrase (E56's one exception, the squiggle law §9.27).
@@ -1408,6 +1472,14 @@ SURFACES.update({   # P52 T6: the newsreel band and the two readings of the bott
 SURFACES.update({   # P55 T6: the two inline dock painters, pinned before T7 promotes them
     "verdict-stack": verdict_stack,
     "test-card": test_card,
+})
+SURFACES.update({   # P58 T5: the two 2.5D chart forms, each beside a flat golden of the same data (human gate 3)
+    "form-extruded-bar": form_extruded_bar,
+    "form-tilted-line": form_tilted_line,
+})
+FRAME_T.update({   # both are read at the HOLD; their build and their leave ride PROOF_FRAMES
+    "form-extruded-bar": FORM_LINE_T[1],
+    "form-tilted-line": FORM_LINE_T[1],
 })
 
 

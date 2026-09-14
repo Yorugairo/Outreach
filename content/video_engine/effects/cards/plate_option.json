@@ -566,6 +566,66 @@
         "today": true,
         "why": "probe OK"
       }
+    },
+    {
+      "id": "plate_option:form",
+      "axis": "plate_option",
+      "token": "form",
+      "title": "The form plate option (2.5D chart forms)",
+      "aliases": [
+        {
+          "name": "the two chart forms in 2.5D",
+          "source": "docs/portable/OPERATOR-RULINGS.md:2832"
+        }
+      ],
+      "does": "Draws a page's chart in 2.5D (extruded_bar or tilted_line[:<deg>]); the flat page is the default reading form.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "`;form=extruded_bar|tilted_line[:<deg>]` on a ledger page",
+        "example": "'ledger:ev-x:bars;form=extruded_bar'",
+        "example_source": null,
+        "check": "plate"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [
+        {
+          "token": "extruded_bar",
+          "means": "Every bar a prism: the flat face unmoved, a side and a cap under the page's one light, tinted from the bar's own ink, a hard-edge shadow clipped at zero. A drop's mass goes DOWN (E28).",
+          "source_set": "CHART_FORMS"
+        },
+        {
+          "token": "tilted_line",
+          "means": "The line, the ruled baseline and the gridlines drawn ON a tilted plane the compiler resolves (plane='s own geometry) and converging; every number upright at its projected anchor.",
+          "source_set": "CHART_FORMS"
+        }
+      ],
+      "dials": null,
+      "lives": {
+        "form": "module",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "extrudeFaces",
+        "also": [
+          "tiltProject",
+          "formOf"
+        ],
+        "note": "the two painters in the bars / dense-line builders; compiler page_form_spec / world_for_plate, one rule in ledger_page.form_error"
+      },
+      "doctrine": [
+        "E98 s3",
+        "P58 T5"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "form-extruded-bar",
+        "test": "content/video_engine/tests/test_chart_forms_2_5d.py::test_tilted_line_carries_the_plane_the_compiler_resolved",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "probe OK"
+      }
     }
   ]
 }

@@ -90,7 +90,7 @@ MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
 RACE_PATHS = ("eased", "clothoid")   # E91 s1 (R26-78): the path a racing mark takes BETWEEN two period knots - `eased` is the engine as it is (each coordinate on its own easing), `clothoid` is the fit through the SAME knots (P52 T17 arm B). The period clock, the knots and the ranks are identical in both: this names the SHAPE of the move and never its timing, and the operator chose it where the beat wants energy rather than smoothness
-PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane")   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form")   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
@@ -2211,6 +2211,9 @@ def _check_opt(key: str, value, where: str) -> None:
         if err:
             raise ValueError(err)
         return
+    if key == "form":   # P58 T5: the NAME and the tilt are the row's own grammar; the fit to the page's builder
+        page_form_geom(str(value), where)   # needs the page, and is checked where the page is read (ledger_world)
+        return
     allowed = {"idle": IDLE_KINDS, "arrive": ARRIVALS, "mass": MASSES, "morph": MORPH_SHAPES,
                "card": ("yes", "no"), "use": PLATE_USES, "path": RACE_PATHS}[key]
     if value not in allowed:
@@ -2578,6 +2581,56 @@ def page_depth_k(value: str, where: str) -> float:
     return k
 
 
+# ---- P58 T5: THE TWO CHART FORMS IN 2.5D ---------------------------------------------------------------------
+# E98 s3: *"bars with extrusion, a line on a tilted plane - the flat page stays the default"*. ONE page option,
+# `;form=<name>[:<deg>]`, and nothing else. What a form changes is how the page's marks are DRAWN; the spec, the
+# scale, the value capsule, the axis rule and every label stay the flat page's, so E50-E53 hold literally - the
+# chart still proves one sentence and leaves, the axis rule still states itself, and sign is still geometry.
+#   Which form a page may take is `ledger_page.form_error`'s (one rule, and the object file is held to it too).
+# The tilted line's PLANE is resolved here, exactly as `plane=` is: the compiler owns the tilt's geometry and the
+# player consumes one projective form (the quad) - a second tilt path would be a second geometry to get wrong.
+CHART_FORM_TILT = "tilted_line"
+
+
+def page_form_geom(value: str, where: str) -> dict:
+    """``<name>[:<deg>]`` -> the form and its plane, WITHOUT the fit to a builder (the row's own grammar). The
+    tilt's four corners are `page_plane_quad`'s - the same closed form, the same eye, the same fit inside the
+    frame - and they are refused by `page_plane_error`'s one law, so a plane too narrow to read on a phone is
+    refused by the SAME message here as under `plane=` (EMBED_MIN_W)."""
+    name, _, rest = value.partition(":")
+    if name not in LPG.CHART_FORMS:
+        raise ValueError(f"{where}: form {name!r} is not one of {'|'.join(LPG.CHART_FORMS)} "
+                         "(the two 2.5D chart forms; the flat page is the reading form and names none)")
+    if name != CHART_FORM_TILT:
+        if rest:
+            raise ValueError(f"{where}: form={value!r} takes no setting - form={name} is the whole option "
+                             f"(its depth and its light are the engine's dials, not the row's)")
+        return {"kind": name}
+    if rest and not _is_number(rest):
+        raise ValueError(f"{where}: form tilt {rest!r} is not a number of degrees - form={CHART_FORM_TILT}[:<deg>], "
+                         f"the turn of the line's own plane ({LPG.TILT_DEG:g} deg when the option names none)")
+    deg = float(rest) if rest else LPG.TILT_DEG
+    if not abs(deg) < PAGE_DEPTH["TILT_MAX"]:
+        raise ValueError(f"{where}: form tilt {deg:g} deg is past the {PAGE_DEPTH['TILT_MAX']:g} deg limit - "
+                         "a plane turned that far is edge-on and has no plot left to draw on")
+    axis = PAGE_DEPTH["AXES"][0]
+    plane = {"kind": "tilt", "deg": deg, "axis": axis, "quad": page_plane_quad(deg, axis)}
+    err = page_plane_error(plane, where)
+    if err:
+        raise ValueError(err.replace("the page's plane", "the line's plane")
+                            .replace(f"plane=tilt:{deg:g},{axis}", f"form={CHART_FORM_TILT}:{deg:g}"))
+    return {"kind": name, "deg": deg, "axis": axis, "quad": plane["quad"]}
+
+
+def page_form_spec(value: str, builder: str, where: str) -> dict:
+    """The row's form, refused BY NAME when this page's builder cannot draw it (`ledger_page.form_error`)."""
+    name = str(value).partition(":")[0]
+    err = LPG.form_error(name, builder, where)
+    if err:
+        raise ValueError(err)
+    return page_form_geom(str(value), where)
+
+
 def image_aspect(p: Path) -> float | None:
     """A picture's height over its width, or None for anything that is not a still. The PLAYER cannot ask this
     question in time - an <img> has no height until it decodes, the player paints once per seek, and a card
@@ -2817,6 +2870,21 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
             page["depth"] = page_depth_k(str(depth), repr(plate_id))
         if plane is not None:
             page["plane"] = page_plane_spec(str(plane), repr(plate_id))
+    form = opts.pop("form", None)
+    if form is not None:
+        # P58 T5 / E98 s3: the two 2.5D CHART FORMS. A LEDGER PAGE option, like depth= and plane= - a plate is a
+        # picture and declares its planes in its own sidecar (P58 T2) - and written on the page only when the row
+        # names it, so an unformed page's timeline entry is byte-identical.
+        if world.get("kind") != SPECIES_LEDGER:
+            raise ValueError(f"{plate_id!r}: form= is a LEDGER PAGE option - it is how a page's CHART is drawn "
+                             "(a plate is a picture: its own depth is its <plate>.layers.json's, P58 T2)")
+        page = world["page"]
+        spec = page_form_spec(str(form), str(page.get("builder") or "?"), repr(plate_id))
+        if page.get("plane"):
+            raise ValueError(f"{plate_id!r}: form={spec['kind']} and plane= on one page are two surfaces - ONE "
+                             "plane per page. A form draws the chart on its own plane; plane= turns the whole "
+                             "page as a card (P58 T4). Keep one: drop plane=, or drop form=")
+        page["form"] = spec
     world.update(opts)   # idle (E49), arrive / mass (P47 T1), use (E61) - written only when the row names them
     if thens:   # P48 T4: the other charts this page can become, each a full spec built at load
         if world.get("kind") != SPECIES_LEDGER:

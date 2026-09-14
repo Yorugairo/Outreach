@@ -208,9 +208,41 @@ def pick_builder(series: dict, variant: str) -> str:
     return "story"
 
 
+# ---- P58 T5: THE TWO 2.5D CHART FORMS ----------------------------------------------------------------------
+# E98 s3: *"bars with extrusion, a line on a tilted plane - the flat page stays the default"*. A FORM is how a
+# page's chart is DRAWN, never what it says: the spec, the scale, the labels, the value capsule and the clock
+# stay the flat page's, and the only thing that changes is the surface the marks stand on. Both are opt-in
+# (`;form=<name>` on the shot row), and a page that names none compiles and paints byte-for-byte as it did.
+#   The fit is a BUILDER's, not a variant's, because the builder is what owns the painter: `pick_builder` already
+# turns a variant and a data shape into one of nine, and a form its builder cannot draw is refused BY NAME here -
+# ONE rule, read by the compiler (which authors the row) and by `validate` (which reads an object naming one).
+CHART_FORMS = ("extruded_bar", "tilted_line")
+FORM_BUILDERS = {"extruded_bar": ("story",), "tilted_line": ("dense-line",)}
+FORM_READS = {"extruded_bar": "a BARS page - every bar is drawn as a prism",
+              "tilted_line": "a LINE page - the line is drawn on a tilted plane"}
+TILT_DEG = 14.0        # the tilted plane's default turn about the page's own vertical axis, in degrees (E98 s3)
+TILT_DEG_MAX = 89.0    # build_scene_timeline_f.PAGE_DEPTH["TILT_MAX"] - one limit, and the compiler checks it
+
+
+def form_error(form: str, builder: str, where: str) -> str | None:
+    """Is ``form`` a form THIS page's builder can draw? The message, or None. Pure."""
+    if form not in CHART_FORMS:
+        return (f"{where}: form {form!r} is not one of {'|'.join(CHART_FORMS)} "
+                "(the two 2.5D chart forms; the flat page is the reading form and names none)")
+    fits = FORM_BUILDERS[form]
+    if builder not in fits:
+        return (f"{where}: form={form} is {FORM_READS[form]}, and this page is built by {builder!r} "
+                f"(the form is drawn by {'|'.join(fits)}). The flat page is the reading form - drop the option")
+    return None
+
+
 def validate(series: dict, variant: str) -> list[str]:
     """Error strings; empty means the series is a page for this variant. Pure."""
     errors: list[str] = []
+    if series.get("form") is not None:   # P58 T5: an OBJECT naming a form is held to the same one rule the row is
+        err = form_error(str(series["form"]), pick_builder(series, variant), "form")
+        if err:
+            errors.append(err)
     if variant not in VARIANTS:
         errors.append(f"variant {variant!r} is not one of {'|'.join(VARIANTS)}")
     if not _text(series.get("title")):

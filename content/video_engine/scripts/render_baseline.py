@@ -69,6 +69,13 @@ PROOF_FRAMES = {
     # camera-layers (E59's module drives the move); the depth and the plane are AUTHORED on the page, not switched on.
     "page-depth@proof-build": ("page-depth", {"camera": True}, 9.8),    # MID-BUILD: the chart DRAWING on the tilted page - the page's own clock opens at 5.0 and this is its 4.8 s, the subtitle half written, two of the four series in, the nib at the front; the camera is still locked, so what turns the page is the plane alone
     "page-depth@proof-leave": ("page-depth", {"camera": True}, 28.5),   # THE LEAVING: half way down the retract's drain (the colours over the scene's last 2 s), the page still standing on its plane
+    # P58 T5 - THE TWO CHART FORMS, at the instants the held frame cannot show: the prisms GROWING with their
+    # faces / the line drawing ON the plane (6.0, the same t the flat line page's own golden is judged at), and
+    # the page LEAVING (28.5). No flag: a form is authored on the row, not switched on.
+    "form-extruded-bar@proof-build": ("form-extruded-bar", {}, 6.0),
+    "form-extruded-bar@proof-leave": ("form-extruded-bar", {}, 28.5),
+    "form-tilted-line@proof-build": ("form-tilted-line", {}, 6.0),
+    "form-tilted-line@proof-leave": ("form-tilted-line", {}, 28.5),
     "species-proof@proof-ring": ("species-proof", {"idle": True}, 12.6),     # the dashed ellipse closed round the series' own peak, its flag chip landed, the page breathing under it
     "species-proof@proof-count": ("species-proof", {"idle": True}, 22.5),    # the isometric field: all six icons in reading order, the count written as the claim
     "species-proof@proof-agenda": ("species-proof", {"idle": True}, 28.5),   # the numbered agenda: three rows revealed one per word, holding
