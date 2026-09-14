@@ -40,6 +40,7 @@ FRAME_T = {
     "ledger-page-mid-build": 6.0,   # field filled, outline drawn, ink and bars building
     "chart-callout": 12.0,          # the line has drawn, all four badges have landed
     "occluder-dock": 12.0,          # P50 T15 / HF-17: the card landed (4.0) and still, its lower half behind the plate's desk edge
+    "camera-layers": 7.9,           # P58 T3: inside the focus zoom's HOLD (it reaches FOCUS_SCALE at 6.0 + 2.0/1.8 = 7.11 and stands dead still to 8.0) - the move landed, every plane at its own share of it, and no fractional clock in the frame
     "ledger-soak-page": 2.7,        # mid-soak: stains spreading and overlapping (P43 T3 K-M ink is judged here)
     "dock-pair-16x9": 12.0,         # both cards up, badges landed
     "dock-pair-9x16": 12.0,
@@ -674,6 +675,62 @@ def occluder_dock() -> tuple[dict, dict]:
     return _timeline("Golden: the dock behind the plate's front", scenes, ev, None), uris
 
 
+# ---- P58 T3: THE CAMERA OVER PLANES ------------------------------------------------------------
+# The plate is the Tokyo customs dock (`world-tokyo-customs-dock-v1`, registered review_only by P58 T2), split by
+# P58 T1's b-sam route into four planes and COMMITTED at 480 px / 256 colours under inputs/dock-layers with its own
+# `<plate>.layers.json` - a golden's inputs are committed inputs (the same rule that committed the Bessent cutout).
+# The world's `layers` and its `ly:` asset keys are the COMPILER'S OWN (`plate_depth_planes` + `LY_PREFIX`), read
+# off that sidecar here exactly as a build reads one, so the golden proves the whole route and not a hand-written
+# shape. Doc 24's factors come with the roles: -far 1.0, -mid 1.15, subject 1.275 (DERIVED), -near 1.40.
+DOCK_LAYERS = HERE / "inputs" / "dock-layers"
+DOCK_PLATE = DOCK_LAYERS / "world-tokyo-customs-dock-v1.png"
+# the card lands low and right, over the quay - the region the eye then goes to
+CAMERA_LAYERS_PLACE = {"x": 1160, "y": 600, "w": 640, "h": 400}
+CAMERA_LAYERS_ENTER = 5.0      # the card arrives, stop-action (`land`: ANTIC_S + DROP_S to contact)
+CAMERA_LAYERS_AT = 6.0         # ... and the eye follows it in, one focus zoom, 2 s: E51 - a push is tied to a LANDING
+CAMERA_LAYERS_DUR = 2.0
+
+
+def camera_layers() -> tuple[dict, dict]:
+    """P58 T3 - ONE EYE, A DEPTH PER LAYER: the camera's move, taken by four planes at four parallax factors.
+
+    The move is the smallest authored one on the record and it has a reason that is not the parallax: a card
+    LANDS on the quay at 5.0 and the eye goes to it (E59's second reason, E51's law - a push is tied to a
+    landing). Nothing was added to show the depth off; the depth is what that one move does to a plate that
+    ships in planes. E49 is why this is the only kind of move allowed to exist here - a drift added to display
+    parallax is the crime, not the cure.
+
+    WHAT THE FRAMES SHOW. `@proof-start` is before the move (5.9): the camera is LOCKED, every k has nothing to
+    multiply, and the four planes paint the flat composite exactly. `@proof-mid` is mid-zoom (u 0.28). The base
+    frame (7.9) is inside the focus zoom's HOLD - the servo law: it reaches FOCUS_SCALE at u = 1/1.8 and then
+    stands dead still - so the pin is byte-exact and the lamp (1.40) has led the desk (1.275), which has led the
+    containers (1.15), which have led the sky (1.0)."""
+    import build_scene_timeline_f as BST
+    aid = "plate-dock"
+    planes = BST.plate_depth_planes(DOCK_PLATE)
+    layers = [{"key": f"{BST.LY_PREFIX}{aid}:{p['role']}", "k": p["depth"], "role": p["role"]} for p in planes]
+    dock = BST.dock_entry("ev-quay-card", 0, CAMERA_LAYERS_ENTER, RUNTIME, 2, BST.DOCK_KIND_IMAGE,
+                          CAMERA_LAYERS_PLACE, "land")
+    ev = {"ev-quay-card": {"title": "The card the eye goes to", "source": "P58 T3", "species": "deck",
+                           "document": {"path": "golden", "sha256": "0" * 64}, "badges": _badges()[:2]}}
+    P = CAMERA_LAYERS_PLACE
+    species = [{"kind": "focus_zoom", "at": CAMERA_LAYERS_AT, "dur": CAMERA_LAYERS_DUR,
+                "target": {"kind": "region", "x0": P["x"] / 1920, "y0": P["y"] / 1080,
+                           "x1": (P["x"] + P["w"]) / 1920, "y1": (P["y"] + P["h"]) / 1080}}]
+    scenes = [{"scene_id": "s01",
+               "world": {"asset_id": aid, "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0},
+                         "layers": layers},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [dock], "species": species}]
+    uris = _base_uris()
+    uris[aid] = BST.data_uri(DOCK_PLATE)                     # the flat plate the compiler always embeds (unpainted here)
+    for p, ly in zip(planes, layers):
+        uris[ly["key"]] = BST.data_uri(Path(p["file"]))      # RAW, as the compiler writes it: the alpha IS the plane
+    uris["ev-quay-card"] = uri("image/png", png_solid(640, 400, (23, 105, 194)))
+    tl = _timeline("Golden: one camera, four depth planes", scenes, ev, None)
+    tl["kinetics"] = {"camera": True}                        # E59's own module drives the species (camNow), not camXf
+    return tl, uris
+
+
 def press_stack() -> tuple[dict, dict]:
     """P50 T3: THREE PRESS CARDS on a bare plate, stacking on three words (Bravos shots 5-10), the third carrying
     the underline on its quoted phrase (E56's one exception, the squiggle law §9.27).
@@ -1254,6 +1311,7 @@ SURFACES = {
     "ledger-extend": ledger_extend,
     "ledger-keyed": ledger_keyed,
     "occluder-dock": occluder_dock,
+    "camera-layers": camera_layers,   # P58 T3: one camera, four depth planes
     "thread-baseline": thread_baseline,
     "tags-to-bars": tags_to_bars,
     "data-to-bars": data_to_bars,

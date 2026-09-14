@@ -2332,6 +2332,33 @@ def behind_error(world: dict, layers: dict, layer: str, where: str) -> str | Non
 
 
 
+# P58 T3 - THE DEPTH PLANES A WORLD CARRIES. HF-17's `fg:` route, one depth down: a plate that ships in PLANES
+# declares them in the SAME sidecar (`<plate>.layers.json`, `{"layers": [{path, role, depth, alpha, generator}]}`,
+# back to front - P58 T2 / doc 24 "2.5D depth planes"), and the compiler hands the player one element's worth of
+# information per plane: the asset key it rides, its parallax factor k, and its role.
+#
+#     world["layers"] = [{"key": "ly:<plate asset id>:<role>", "k": <doc 24's parallax factor>, "role": "<plane>"}]
+#
+# A FLAT plate's world is UNCHANGED - no key is added at all, so every timeline that compiled before this slice
+# compiles byte-identically. The PNG is embedded RAW, exactly as `fg:` is: the capped path re-encodes through RGB
+# and would throw the alpha away, which on a depth plane is the whole plane.
+#
+# THE REFUSALS ARE THE INDEXER'S, RUN AGAIN AT BUILD TIME (HF-17's rule: the two ways this goes wrong silently -
+# a plane the sidecar does not declare and a file that is not on disk - would each resolve to a frame nobody could
+# explain, a plate that simply never separated). build_plate_library.plate_depth_layers owns the vocabulary, the
+# role -> k table and every message, so there is ONE table; the library indexes, the compiler refuses again.
+LY_PREFIX = "ly:"          # the asset-map key a depth plane rides: `ly:<plate asset id>:<role>`
+
+
+def plate_depth_planes(path: Path | None) -> list[dict]:
+    """The DEPTH planes this plate declares, back to front, or [] when it ships flat. Raises ValueError, named,
+    when the sidecar declares planes that do not hold (the indexer's own refusals, at build time)."""
+    if path is None:
+        return []
+    import build_plate_library as BPL
+    return BPL.plate_depth_layers(Path(path)) or []
+
+
 # P50 T7 - THE ART-EMBED SURFACE. Bravos has the chart world and the TV world (their claims on a monitor in a lit
 # studio); we have the chart world (the ledger page) and the ART world - our own narrative plates. E33's objection to
 # docking anything to a generated plate is that it has no addressable coordinate space: a diffusion model decided
@@ -4201,6 +4228,20 @@ def main() -> int:
             uris[world["asset_id"]] = data_uri(Path(world.pop("clip_path")))   # raw mp4, keyed by the clip's stem
         elif "asset_id" in world:
             uris[world["asset_id"]] = data_uri(R.find_asset(world["asset_id"]), STAGE_W)   # the bare id (E49's `;idle=` is not part of it)
+        # P58 T3: the plate's own DEPTH PLANES, if it ships in planes - one asset key per plane, RAW (the alpha
+        # IS the plane), and {key, k, role} on the world so the camera can give each plane its share of the move.
+        # A flat plate adds nothing here, so its world is the world it has always been.
+        if world.get("asset_id") and world.get("kind") not in (SPECIES_CLIP, VECMAP_KIND):
+            _plate_path = R.find_asset(world["asset_id"])
+            try:
+                _planes = plate_depth_planes(_plate_path)
+            except ValueError as exc:
+                raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) world {world['asset_id']!r}: {exc}") from exc
+            if _planes:
+                world["layers"] = [{"key": f"{LY_PREFIX}{world['asset_id']}:{p['role']}",
+                                    "k": p["depth"], "role": p["role"]} for p in _planes]
+                for _p, _ly in zip(_planes, world["layers"]):
+                    uris[_ly["key"]] = data_uri(Path(_p["file"]))   # RAW: the capped path would drop the alpha
         # P50 T7: the SURFACES this plate declares, read once - the docks below land on them and the camera aims at
         # them by name. A world that is not a plate has none, and only a row that names one gets an error.
         _embeds = (plate_embeds(R.find_asset(world["asset_id"]))

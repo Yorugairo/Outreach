@@ -1,0 +1,29 @@
+{
+ "note": "P58 T3's golden input: the dock plate's four DEPTH PLANES (P58 T1's b-sam split - Depth Anything v2 vitl fp16 into four quantile bands, the occluder and the subject overridden by SAM 2.1 point masks, LaMa behind each nearer band), reduced to 480 px / 256 colours and COMMITTED here, because a golden's inputs are committed inputs and the probe's own split lives in an untracked build dir. The plate itself is registered review_only in assets/plates/plates.json; these copies are test inputs, not the plate. E98 s6: every plane records its origin.",
+ "layers": [
+  {
+   "path": "world-tokyo-customs-dock-v1-far.png",
+   "role": "background",
+   "alpha": false,
+   "generator": "depth-split-sam"
+  },
+  {
+   "path": "world-tokyo-customs-dock-v1-mid.png",
+   "role": "mid",
+   "alpha": true,
+   "generator": "depth-split-sam"
+  },
+  {
+   "path": "world-tokyo-customs-dock-v1-subject.png",
+   "role": "subject",
+   "alpha": true,
+   "generator": "depth-split-sam"
+  },
+  {
+   "path": "world-tokyo-customs-dock-v1-near.png",
+   "role": "occluder",
+   "alpha": true,
+   "generator": "depth-split-sam"
+  }
+ ]
+}

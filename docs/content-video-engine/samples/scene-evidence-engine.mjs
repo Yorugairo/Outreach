@@ -3567,6 +3567,34 @@ async function mount(doc) {
      Bravos, measured 2026-09-10 (P49's amendment): 37 of 45 held compositions are camera-still - LOCKED is the default;
      the camera moves for a stage wider than the frame or tied to a landing (E51), never as a drift on a held chart. */
 
+  /* P58 T3 - THE DEPTH TERM. One eye still (E59): the camera is ONE state per timeline, and a plate that ships in
+     PLANES (doc 24 "2.5D depth planes"; `<plate>.layers.json`, P58 T2) hands each plane a parallax factor k. A layer
+     at k takes the SHARE k of this one camera's translation (at - look) and of its zoom (s - 1):
+       screen_k = look + (at - look) * k + (1 + (s - 1) * k) * (p - look)
+     so k = 1 IS the camera above - the flat plate, arithmetic-identical - k > 1 moves MORE (nearer the eye) and k < 1
+     less. Parallax is therefore a CONSEQUENCE of the move the row already authored, never a mechanism of its own: with
+     the camera LOCKED (s = 1, at == look - the default, 37 of 45 Bravos compositions) every k collapses to the identity
+     and a layered world paints exactly the flat composite of its planes. E49 holds: nothing here adds a move.
+     THE TWO CITATIONS, and which one this code is.
+       - doc 24 `24-COMPOSITION-AND-SCALE-SPEC.md:156` (`parallax_factor`: -far 1.0 / -board 1.05 / -mid 1.15 /
+         -near 1.40) - the doctrine this implements. The role -> k table is the COMPILER'S (build_plate_library.py
+         LAYER_PLANES, P58 T2) and k arrives here on the timeline, so there is ONE table and it is not this file's.
+       - the monograph `sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:195-205`
+         s2.4: `Delta x = f * t_perp * (1/z2 - 1/z1)` - the same statement in INVERSE DEPTH. This module implements
+         doc 24's form: a 2D similarity has no focal length f and no per-pixel z, so the pinhole's `f * t_perp / z`
+         reduces to one scalar per PLANE - k = z_ref / z_layer, the normalised inverse-depth ratio, which IS doc 24's
+         factor. The displacement between two planes is then (at - look) * (k2 - k1): s2.4's Delta x with f * t_perp
+         folded into the camera's own translation. P58 T1 proved the same statement in PIL on 18 frames
+         (`probe_2_5d.py`: offset = (at - look) * k, scale = 1 + (s - 1) * k); this is that law in the camera's form.
+     OPEN DECISION 5 (the parent's answer, 2026-09-14): an ART-embed surface keeps its OWN quad - it is measured off
+     the still - and the layer's k applies to the PLATE BEHIND IT, never to the card on the surface. No embed golden
+     moves because of this term. */
+  const PARALLAX = Object.freeze({
+    FLAT: 1,        /* the flat plate, and doc 24's `-far` wall: the share at which this term IS the camera above */
+    K_MIN: 0,       /* a plane that takes none of the move (a thing pinned to the frame, not standing in the world) */
+    K_MAX: 4,       /* the compiler's own ceiling (build_plate_library: `0 < depth <= 4`), mirrored here as a clamp */
+  });
+
   const CAM = Object.freeze({
     PUNCH_IN: 0.42, PUNCH_OUT: 0.5, PUNCH_SCALE: 1.14,   /* the punch: in - hold - out, cubic ease (yt-camera-move) */
     FOCUS_SCALE: 1.32,                                     /* the focus zoom: zoom + pan to the anchor, then dead still (the servo law) */
@@ -3669,6 +3697,23 @@ async function mount(doc) {
   };
   /* where a world point lands on screen */
   const camProject = (st, p) => [st.at[0] + st.s * (p[0] - st.look[0]), st.at[1] + st.s * (p[1] - st.look[1])];
+
+  /* P58 T3: THIS camera as the plane at k sees it - the share k of the translation and of the zoom (the law in the
+     header). k === FLAT returns the state ITSELF, by identity and not by arithmetic: 1 + (s - 1) * 1 is not exactly s
+     in binary floating point (s = 0.1 gives 0.09999999999999998), and the flat plate must be the camera it has always
+     been - not a value that rounds to it. k is clamped to the compiler's own range, so a sidecar that got past the
+     indexer with nonsense cannot invert a plane. */
+  const camLayerState = (st, k) => {
+    const kk = Math.min(PARALLAX.K_MAX, Math.max(PARALLAX.K_MIN, +k));
+    if (!(kk >= PARALLAX.K_MIN) || kk === PARALLAX.FLAT) return st;   /* the flat plate, and NaN: an unknown depth never moves */
+    const [lx, ly] = st.look, [ax, ay] = st.at;
+    return { s: 1 + (st.s - 1) * kk, look: [lx, ly], at: [lx + (ax - lx) * kk, ly + (ay - ly) * kk] };
+  };
+  /* where a world point on the plane at k lands on screen (camProject at k = 1, exactly) */
+  const camProjectAt = (st, p, k) => camProject(camLayerState(st, k), p);
+  /* the CSS the plane at k gets, about the same stage-centre origin the world layer uses (camCssFor at k = 1, exactly
+     - the same string, so a layered world under a LOCKED camera writes what the flat world writes) */
+  const camLayerCss = (st, k, W, H) => camCssFor(camLayerState(st, k), W, H);
   /* KINETICS:END */
   /* KINETICS:BEGIN breakthrough */
   /* species/breakthrough.mjs - THE BREAKTHROUGH's FURNITURE and its STOP-MOTION cadence (P50 T10 + T13;
@@ -4616,7 +4661,7 @@ async function mount(doc) {
       embedSheenEl.style.backgroundImage = 'url("' + plate + '")';
       embedSheenEl.dataset.src = sc.world.asset_id;
     }
-    embedSheenEl.style.transform = wB.style.transform;   /* the plate's pose this frame: the light never slides on the glass */
+    embedSheenEl.style.transform = worldPose(wB);   /* the plate's pose this frame: the light never slides on the glass */
     const g = EMBED_GEO[d.slide], ox = STAGE_W * 0.05, oy = STAGE_H * 0.05;   /* the layer overhangs the stage by 5% */
     embedSheenEl.style.clipPath = "polygon(" + g.quad.map((p) => (p[0] + ox).toFixed(2) + "px "
       + (p[1] + oy).toFixed(2) + "px").join(", ") + ")";
@@ -9835,6 +9880,22 @@ async function mount(doc) {
   };
   const camCss = (xf) => (xf.ax != null && (xf.ax !== xf.ox || xf.ay !== xf.oy)) ? camCssFor({ s: xf.s, look: [xf.ox, xf.oy], at: [xf.ax, xf.ay] }, STAGE_W, STAGE_H) : xf.s === 1 ? "" :
     "translate(" + (xf.ox - STAGE_W / 2).toFixed(1) + "px, " + (xf.oy - STAGE_H / 2).toFixed(1) + "px) scale(" + xf.s.toFixed(4) + ") translate(" + (STAGE_W / 2 - xf.ox).toFixed(1) + "px, " + (STAGE_H / 2 - xf.oy).toFixed(1) + "px) ";
+  /* P58 T3 - THE CAMERA OVER PLANES. The same state, read at a depth: kinetics/camera.mjs camLayerState gives the
+     plane at parallax factor k the SHARE k of this one camera's translation and of its zoom, and the string is
+     written by camCss itself - so at k = 1 (PARALLAX.FLAT, doc 24's -far wall) it IS the string the flat world has
+     always had, and under a LOCKED camera every k gives "". Parallax is a consequence of the authored move; no move
+     is added anywhere (E59 / E49). */
+  const camCssAt = (xf, k) => {
+    if (!(k >= 0) || k === PARALLAX.FLAT) return camCss(xf);
+    const st = camLayerState({ s: xf.s, look: [xf.ox, xf.oy],
+                               at: [xf.ax != null ? xf.ax : xf.ox, xf.ay != null ? xf.ay : xf.oy] }, k);
+    return camCss({ s: st.s, ox: st.look[0], oy: st.look[1], ax: st.at[0], ay: st.at[1] });
+  };
+  /* THE PLATE'S POSE THIS FRAME, for the layers registered TO the plate rather than painted as one of its planes -
+     HF-17's foreground cutout and P50 T7's embed sheen. A flat world has its whole pose on the element, so this is
+     byte-identical to reading `.style.transform`; a LAYERED world moved the camera down onto its planes, so the
+     element carries only what every plane shares and `data-world-pose` carries the k = 1 pose those two want. */
+  const worldPose = (el) => (el.dataset.worldPose || "") + el.style.transform;
   const squigglePath = (b, seed) => {
     if (Array.isArray(b.quad) && b.quad.length === 4) {   /* P50 T7: the phrase is on an EMBEDDED card, so the target
          carries its four PROJECTED corners - the underline rides the phrase's own bottom edge, on the surface's
@@ -12341,6 +12402,30 @@ async function mount(doc) {
   /* the renderer awaits this after scrubbing to t (render_baseline.frame_png) */
   window.__clipsSeeked = () => Promise.all([...clipSeeks]);
 
+  /* P58 T3 - ONE ELEMENT PER PLANE, back to front, inside `.world`. The plane's box is `.world`'s own (inset 0 of
+     an element that is already the stage + its 5 % Ken Burns overhang, `cover`, centred), so a plane lands exactly
+     where the flat plate lands and its transform-origin is the stage's centre - which is the point camLayerCss
+     measures its translation about. The stack is rebuilt only when the keys change (a world change), so a held
+     scene sets four transforms a frame and nothing else. Order: background ... occluder, the sidecar's own order,
+     depth ASCENDING toward the viewer. HF-17's `#fgover` cutout still sits ABOVE all of them - it is mounted over
+     the dock layer, outside `.world` entirely - and so do the docks, the species and the caption. */
+  const WLY = "wly";
+  const paintPlanes = (el, plies, xf, rest) => {
+    let els = Array.prototype.slice.call(el.querySelectorAll("." + WLY));
+    if (els.length !== plies.length || els.some((e, i) => e.dataset.key !== plies[i].key)) {
+      els.forEach((e) => e.remove());
+      els = plies.map((ly) => {
+        const d = document.createElement("div");
+        d.className = WLY; d.setAttribute("aria-hidden", "true"); d.dataset.key = ly.key;
+        d.style.cssText = "position:absolute; inset:0; background-size:cover; background-position:center; "
+          + "background-repeat:no-repeat; transform-origin:50% 50%; pointer-events:none; will-change:transform;";
+        d.style.backgroundImage = 'url("' + A[ly.key] + '")';
+        el.appendChild(d);
+        return d;
+      });
+    }
+    els.forEach((d, i) => { d.style.transform = camCssAt(xf, plies[i].k) + rest; });
+  };
   const render = (t) => {
     let si = 0;
     for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;
@@ -12363,6 +12448,13 @@ async function mount(doc) {
          svg fitted to the stage and hand it to species/vecmap.mjs, which owns the fit, the paths and the idle.
          A world that is not a map drops a stale one, the way the other branches drop a stale page. */
       const isVecmap = scene.world.kind === "vecmap";
+      /* P58 T3 - A WORLD IN PLANES (doc 24's 2.5D depth planes; the sidecar P58 T2 indexes, the compiler's
+         `world.layers` = [{key, k, role}] back to front). A plate that declares planes is painted as one element
+         per plane inside `.world` instead of one background image; a plate that does not is untouched, and so is
+         every world that is not a plate. A declared plane whose asset never arrived is dropped rather than drawn
+         as a hole - the compiler refuses that case at build time (it is the indexer's refusal, run again). */
+      const plies = ((!isLedger && !isClip && !isVecmap && scene.world.layers) || []).filter((l) => l && A[l.key]);
+      if (!plies.length) el.querySelectorAll("." + WLY).forEach((x) => x.remove());   /* a stale stack never survives a world change */
       el.classList.toggle("ledger", isLedger);
       if (!isLedger) el.__lp = null;   /* R26-38: the page's ink is removed below - the state that described it goes with it */
       el.classList.toggle("vecmap", isVecmap);
@@ -12381,7 +12473,7 @@ async function mount(doc) {
         paintVecmapWorld({ scene, world: scene.world, t, A, root: vm, el: lpEl, idle: idleXf, hash: lpHash, idleOf, STAGE_W, STAGE_H });
       }
       else {
-        el.style.backgroundImage = `url("${A[scene.world.asset_id]}")`;
+        el.style.backgroundImage = plies.length ? "none" : `url("${A[scene.world.asset_id]}")`;   /* P58 T3: the planes ARE the picture */
         el.querySelectorAll(".lp").forEach((x) => x.remove());
       }
       if (!isClip) parkClips(el);   /* back to the pool, never destroyed */
@@ -12400,8 +12492,21 @@ async function mount(doc) {
       /* E49: an IMAGE plate that holds, holds at its idle - a ledger page and a clip carry their own motion */
       const zi = (isLedger || isClip || isVecmap) ? 1 : idleXf(idleOf("plate", scene.world.idle), t, lpHash(Math.round(scene.span[0] * 100), 0, 977)).scale;   /* a vecmap breathes INSIDE its svg (vmIdle), so a species over it can ride the same pose */
       const z = (1 + p * kb.scale) * zi;
-      el.style.transform = camCss(camNow(scene, t)) + `translateX(${dx.toFixed(1)}px) scale(${z.toFixed(4)}) `
+      const camXfNow = camNow(scene, t);
+      const worldRest = `translateX(${dx.toFixed(1)}px) scale(${z.toFixed(4)}) `
         + `translate(${(p*kb.x).toFixed(1)}px, ${(p*kb.y).toFixed(1)}px)`;
+      if (plies.length) {
+        /* P58 T3: the camera moves ONTO the planes. The element keeps everything the planes SHARE (the wipe's clip,
+           the blur-zoom's scale, the suck's spin, the slide's push - each of which still prepends to it and so still
+           applies to every plane at once); each plane carries the camera at its own k, so at k = 1, and under a
+           LOCKED camera at any k, the string a plane gets is exactly the string the flat world gets. */
+        el.dataset.worldPose = camCss(camXfNow) + worldRest;
+        el.style.transform = "";
+        paintPlanes(el, plies, camXfNow, worldRest);
+      } else {
+        if (el.dataset.worldPose) delete el.dataset.worldPose;
+        el.style.transform = camCss(camXfNow) + worldRest;
+      }
     };
     const prev = TL.scenes[si - 1];
     wA.style.display = "";
@@ -12504,7 +12609,7 @@ async function mount(doc) {
     { const fgEl = document.getElementById("fgover");
       const fgD = (sc.docks || []).find((d) => d && d.fg && A[d.fg] && t >= +d.enter && t <= +d.exit);
       if (fgD) { if (fgEl.dataset.src !== fgD.fg) { fgEl.style.backgroundImage = 'url("' + A[fgD.fg] + '")'; fgEl.dataset.src = fgD.fg; }
-                 fgEl.style.transform = wB.style.transform; fgEl.style.opacity = "1"; }
+                 fgEl.style.transform = worldPose(wB); fgEl.style.opacity = "1"; }
       else fgEl.style.opacity = "0"; }
     embedVeil(sc, t);   /* P50 T7: the room dims so the declared surface lights */
     { const blur = camArr ? SNAP_BLUR * 4 * camArr.u * (1 - camArr.u) : 0;   /* the whoosh rides the arrival's speed (the snap's own envelope) */

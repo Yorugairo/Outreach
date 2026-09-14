@@ -60,6 +60,11 @@ FLAG_FRAMES = {
 # named idle runs either way. On the two bare-plate scenes the flag changes no pixel (a flat plate breathing is a
 # flat plate), which is exactly why these are PROOF frames and not FLAG frames.
 PROOF_FRAMES = {
+    # P58 T3 - THE CAMERA OVER PLANES, at the two instants the landed frame cannot show. The card lands at 5.0 and
+    # the eye follows it in over 6.0 -> 8.0 (E51: a push is tied to a landing; E59's module is ON, as on the base
+    # frame). No flag makes the depth happen: a plate that ships in planes takes the authored move at four factors.
+    "camera-layers@proof-start": ("camera-layers", {"camera": True}, 5.9),   # BEFORE the move: the camera is LOCKED, so every k has nothing to multiply and the four planes paint exactly the flat composite
+    "camera-layers@proof-mid": ("camera-layers", {"camera": True}, 6.56),    # MID-ZOOM (u 0.28 of the clock, 0.50 of the servo's reach): the lamp (1.40) leading the desk (1.275), the containers (1.15) and the sky (1.0)
     "species-proof@proof-ring": ("species-proof", {"idle": True}, 12.6),     # the dashed ellipse closed round the series' own peak, its flag chip landed, the page breathing under it
     "species-proof@proof-count": ("species-proof", {"idle": True}, 22.5),    # the isometric field: all six icons in reading order, the count written as the claim
     "species-proof@proof-agenda": ("species-proof", {"idle": True}, 28.5),   # the numbered agenda: three rows revealed one per word, holding
