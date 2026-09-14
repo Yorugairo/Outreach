@@ -1,0 +1,12 @@
+{
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\n  \"success\": true,\n  \"totalScenes\": 1,\n  \"results\": [\n    {\n      \"sceneId\": \"host-enter-signal-box-dusk-v2\",\n      \"success\": true,\n      \"videoPath\": \"C:\\\\Users\\\\Snipe\\\\Downloads\\\\Outreach Program\\\\review\\\\claims\\\\mp-host-transitions-v1\\\\clips\\\\host-enter-signal-box-dusk-v2.mp4\",\n      \"rawVideoPath\": \"C:\\\\Users\\\\Snipe\\\\Downloads\\\\Outreach Program\\\\review\\\\claims\\\\mp-host-transitions-v1\\\\clips\\\\host-enter-signal-box-dusk-v2-raw.mp4\",\n      \"frame0Path\": \"C:\\\\Users\\\\Snipe\\\\Downloads\\\\Outreach Program\\\\review\\\\claims\\\\mp-host-transitions-v1\\\\clips\\\\host-enter-signal-box-dusk-v2_frame_0.png\",\n      \"frameEndPath\": \"C:\\\\Users\\\\Snipe\\\\Downloads\\\\Outreach Program\\\\review\\\\claims\\\\mp-host-transitions-v1\\\\clips\\\\host-enter-signal-box-dusk-v2_frame_end.png\",\n      \"metadataPath\": \"C:\\\\Users\\\\Snipe\\\\Downloads\\\\Outreach Program\\\\review\\\\claims\\\\mp-host-transitions-v1\\\\clips\\\\host-enter-signal-box-dusk-v2_meta.json\",\n      \"probe\": {\n        \"width\": 1280,\n        \"height\": 720,\n        \"duration\": \"6.000000\",\n        \"fps\": \"24/1\",\n        \"aspect_ratio\": \"16:9\"\n      }\n    }\n  ]\n}"
+      }
+    ]
+  },
+  "jsonrpc": "2.0",
+  "id": 2
+}

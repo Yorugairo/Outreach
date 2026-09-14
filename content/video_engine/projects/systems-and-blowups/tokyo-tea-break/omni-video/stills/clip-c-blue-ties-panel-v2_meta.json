@@ -1,0 +1,39 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T07:41:45.327Z",
+  "prompt": "Animate this exact drawing: 9:16 vertical, full bleed. Cream paper page, charcoal ink with a single blue accent. Three stick figures in matching blue ties sit behind a long news desk, each pointing a different direction, mouths moving. A crowd of tiny stick figures holding phones fills the lower background. The character, in his indigo suit and copper tie, steps in front of the desk, turns to face the camera and looks off to his left. A single still frame, no on-screen text.",
+  "references": [
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\approved\\still-c-blue-ties-panel.png",
+    "StickMike"
+  ],
+  "settings": {
+    "pillText": "Video · 720p · 10s crop_9_16 x1",
+    "creditsText": "Generating will use 20 credits",
+    "modelText": "Omni 1.1 Flash",
+    "credits": 20
+  },
+  "requested_ratio": "9:16",
+  "detected_dimensions": "720x1280",
+  "aspect_ratio": "9:16",
+  "duration_seconds": "10.000000",
+  "verification_error": null,
+  "reversed": false,
+  "files": {
+    "video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-c-blue-ties-panel-v2.mp4",
+      "sha256": "99843fa781833cf1373d61dd5d03626aa20c4494cc0068af6e5337f3e612ab72"
+    },
+    "raw_video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-c-blue-ties-panel-v2-raw.mp4",
+      "sha256": "99843fa781833cf1373d61dd5d03626aa20c4494cc0068af6e5337f3e612ab72"
+    },
+    "frame_start": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-c-blue-ties-panel-v2_frame_0.png",
+      "sha256": "e140de92d8286ae1f8bb3460e88c79cb0b15aad3c46b3a55d8c698f98a505758"
+    },
+    "frame_end": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-c-blue-ties-panel-v2_frame_end.png",
+      "sha256": "446a9ac706490ae7b7849db69a0e075b5b345cb95e873a1286159c7117e4d9dc"
+    }
+  }
+}

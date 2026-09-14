@@ -1,0 +1,40 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-03T22:56:08.271Z",
+  "prompt": "full bleed edge-to-edge 9:16 vertical. A continuous cinematic transition starting on @Mike in the investment bank boardroom as a bold red yield arrow spikes violently upward across the wall display screen. The camera dynamically tracks the surging red arrow as it pierces through the screen, arcing forward through space and plunging downward, physically slamming into the dark wooden household desk as an embossed red ink stamp across the open paper mortgage dossier, the shockwave rattling the reading glasses and fountain pen. Light application of woodblock print and vox newspaper with Anime richness and colors. Negative: no borders, no margins, no outer frame, no paper matting, no photorealism, no 3D render, no text, no numbers, no words, no letters, no logos.",
+  "references": [
+    "C:/Users/Snipe/Downloads/Outreach Program/content/video_engine/projects/systems-and-blowups/tokyo-tea-break/plates/plate-01-anime-richness-mike.png",
+    "C:/Users/Snipe/Downloads/Outreach Program/content/video_engine/projects/systems-and-blowups/tokyo-tea-break/plates/plate-02-bill-shock-desk.png",
+    "Mike"
+  ],
+  "settings": {
+    "pillText": "Video · 720p · 8s crop_9_16 x1",
+    "creditsText": "Generating will use 12 credits",
+    "modelText": "Omni 1.1 Flash",
+    "credits": 12
+  },
+  "requested_ratio": "9:16",
+  "detected_dimensions": "720x1280",
+  "aspect_ratio": "9:16",
+  "duration_seconds": "8.000000",
+  "verification_error": null,
+  "reversed": false,
+  "files": {
+    "video": {
+      "path": "C:/Users/Snipe/Downloads/Outreach Program/content/video_engine/projects/systems-and-blowups/tokyo-tea-break/omni-video/scene-01-02-red-arrow-transformation.mp4",
+      "sha256": "3e9e392a705166a088f0940432dd8177251206e268d78cbf9b8cec300b41f2e6"
+    },
+    "raw_video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\scene-01-02-red-arrow-transformation-raw.mp4",
+      "sha256": "3e9e392a705166a088f0940432dd8177251206e268d78cbf9b8cec300b41f2e6"
+    },
+    "frame_start": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\scene-01-02-red-arrow-transformation_frame_0.png",
+      "sha256": "3ff83b1ac19f9c3fa4ba67662d794228f25e507ff6d5fa7d86fc2cdd54a57e6e"
+    },
+    "frame_end": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\scene-01-02-red-arrow-transformation_frame_end.png",
+      "sha256": "621eba0201c2863cbcb96e70147273f3fea868867d3fc319a6857909614d6acf"
+    }
+  }
+}

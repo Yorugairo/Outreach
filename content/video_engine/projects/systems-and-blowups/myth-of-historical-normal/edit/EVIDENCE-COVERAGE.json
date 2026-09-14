@@ -1,0 +1,452 @@
+{
+  "artifact_version": "1.0",
+  "compiler": "evidence-motion-engine/v2.1",
+  "episode_slug": "myth-of-historical-normal",
+  "project_dir": "content/video_engine/projects/systems-and-blowups/myth-of-historical-normal",
+  "total_scenes": 11,
+  "total_runtime_s": 480.0,
+  "standards_enforced": {
+    "max_bare_plate_s": 12.0,
+    "solo_dock_hold_s": 7.0,
+    "intro_beat_s": 1.7,
+    "savor_beat_s": 2.2,
+    "analysis_vs_claim_ratio": "80/13",
+    "spring_damping_zeta": 0.82,
+    "spring_natural_freq_omega": 14.5
+  },
+  "scenes": [
+    {
+      "scene_id": "SC-01",
+      "phase": "P1",
+      "title": "The 5.5% Brass Calibration Weight",
+      "time_start_s": 0.0,
+      "time_end_s": 45.0,
+      "duration_s": 45.0,
+      "core_claim": "A 5% yield is framed as 'historically normal', but normal is a function of system carrying capacity.",
+      "world_plate": "Dark slate desk with top-down spotlight, textured cream washi card dock (#F4E6C7).",
+      "diegetic_tv": {
+        "clip_id": "clip_cnbc_yield_495",
+        "title": "CNBC Squawk Box — 10-Year Yield Hits 4.95%",
+        "source_url": "https://www.youtube.com/watch?v=TSxCiHVuObE",
+        "in_dock_at_s": 8.0,
+        "hold_s": 7.0,
+        "dock_position": "top_right_desk_monitor"
+      },
+      "press_cards": [
+        {
+          "press_id": "PRESS-01",
+          "publication": "Wall Street Journal",
+          "headline": "Treasury 10-Year Auction Tails to 4.95%, Straining Primary Dealers",
+          "accent": "coral",
+          "in_dock_at_s": 18.0,
+          "hold_s": 6.5
+        }
+      ],
+      "still_heads": [],
+      "verified_badges": [
+        {
+          "badge_id": "BADGE-01",
+          "label": "10-YEAR TREASURY YIELD",
+          "value": "4.95%",
+          "tag": "SEPTEMBER 2026 CLOSE",
+          "accent": "coral"
+        }
+      ],
+      "cadence": {
+        "intro_s": 1.7,
+        "settle_s": 1.1,
+        "savor_s": 2.2,
+        "max_bare_hold_s": 6.3
+      }
+    },
+    {
+      "scene_id": "SC-02",
+      "phase": "P2",
+      "title": "The Two Bridges — 1981 vs 2026",
+      "time_start_s": 45.0,
+      "time_end_s": 85.0,
+      "duration_s": 40.0,
+      "core_claim": "In 1981, US debt-to-GDP was 31%; today it is 124%. The carrying capacity of the bridge has inverted.",
+      "world_plate": "Vector schematic comparison showing 1981 lightweight bridge vs 2026 overloaded suspension bridge.",
+      "diegetic_tv": null,
+      "press_cards": [],
+      "still_heads": [
+        {
+          "head_id": "HEAD-01",
+          "subject": "Paul Volcker",
+          "year": 1981,
+          "asset_path": "assets/heads/head_volcker.png",
+          "dock_position": "left_bridge_tower"
+        }
+      ],
+      "verified_badges": [
+        {
+          "badge_id": "BADGE-02",
+          "label": "1981 DEBT-TO-GDP",
+          "value": "31.1%",
+          "tag": "HISTORICAL BENCHMARK",
+          "accent": "sunflower"
+        }
+      ],
+      "cadence": {
+        "intro_s": 1.7,
+        "settle_s": 1.1,
+        "savor_s": 2.2,
+        "max_bare_hold_s": 8.5
+      }
+    },
+    {
+      "scene_id": "SC-03",
+      "phase": "P2",
+      "title": "The Analytic Spring Balance Scale",
+      "time_start_s": 85.0,
+      "time_end_s": 135.0,
+      "duration_s": 50.0,
+      "core_claim": "A closed-form damped spring demonstrates how a fixed interest shock induces exponential oscillation under 124% sovereign leverage.",
+      "world_plate": "Cream washi ledger page with mechanical brass balance scale, live deflection needle.",
+      "diegetic_tv": {
+        "clip_id": "clip_bloomberg_bessent_buyback",
+        "title": "Bloomberg Surveillance — Scott Bessent $6B Debt Buyback",
+        "source_url": "https://www.youtube.com/watch?v=siklF94O8j0",
+        "in_dock_at_s": 105.0,
+        "hold_s": 7.0,
+        "dock_position": "top_right_desk_monitor"
+      },
+      "press_cards": [],
+      "still_heads": [
+        {
+          "head_id": "HEAD-03",
+          "subject": "Scott Bessent",
+          "year": 2026,
+          "asset_path": "assets/heads/head_bessent.png",
+          "dock_position": "dock_counterweight_slot"
+        },
+        {
+          "head_id": "HEAD-05",
+          "subject": "Jerome Powell",
+          "year": 2023,
+          "asset_path": "assets/heads/head_powell.png",
+          "dock_position": "rate_shock_pivot_slot"
+        }
+      ],
+      "verified_badges": [
+        {
+          "badge_id": "BADGE-03",
+          "label": "2026 DEBT-TO-GDP",
+          "value": "124.0%",
+          "tag": "Q3 2026 PAR VALUE",
+          "accent": "coral"
+        }
+      ],
+      "cadence": {
+        "intro_s": 1.7,
+        "settle_s": 1.1,
+        "savor_s": 2.2,
+        "max_bare_hold_s": 9.2
+      }
+    },
+    {
+      "scene_id": "SC-04",
+      "phase": "P3",
+      "title": "Thermal Stress & The Sovereign Interest Bill",
+      "time_start_s": 135.0,
+      "time_end_s": 190.0,
+      "duration_s": 55.0,
+      "core_claim": "Federal net interest exceeds $1.08 Trillion annually, absorbing 21.4% of all tax revenues.",
+      "world_plate": "Dark slate boiler room world plate with glowing thermal conduit and dial pressure gauge.",
+      "diegetic_tv": {
+        "clip_id": "clip_cnbc_oil_spr_300m",
+        "title": "CNBC Closing Bell — WTI Crude Surges / SPR < 300M bbl",
+        "source_url": "https://www.youtube.com/watch?v=D29pdfb6qms",
+        "in_dock_at_s": 150.0,
+        "hold_s": 7.0,
+        "dock_position": "top_right_desk_monitor"
+      },
+      "press_cards": [
+        {
+          "press_id": "PRESS-04",
+          "publication": "Reuters",
+          "headline": "Oil Rally Threatens to Reverse Disinflation Momentum Ahead of FOMC",
+          "accent": "amber",
+          "in_dock_at_s": 165.0,
+          "hold_s": 6.5
+        }
+      ],
+      "still_heads": [],
+      "verified_badges": [
+        {
+          "badge_id": "BADGE-04",
+          "label": "ANNUALIZED NET INTEREST",
+          "value": "$1.08 TRILLION",
+          "tag": "21.4% OF TAX REVENUES",
+          "accent": "coral"
+        },
+        {
+          "badge_id": "BADGE-05",
+          "label": "STRATEGIC PETROLEUM RESERVE",
+          "value": "< 300M BARRELS",
+          "tag": "LOWEST SINCE JAN 1983",
+          "accent": "sunflower"
+        }
+      ],
+      "cadence": {
+        "intro_s": 1.7,
+        "settle_s": 1.1,
+        "savor_s": 2.2,
+        "max_bare_hold_s": 7.8
+      }
+    },
+    {
+      "scene_id": "SC-05",
+      "phase": "P3",
+      "title": "Corporate Cash Flow Valves & The Refinancing Wall",
+      "time_start_s": 190.0,
+      "time_end_s": 240.0,
+      "duration_s": 50.0,
+      "core_claim": "Over $3.1 Trillion in corporate debt matures before 2028, converting zero-cost loans into 6.5% interest burdens.",
+      "world_plate": "Corporate manifold diagram showing cash flow valves diverting operating earnings directly to creditors.",
+      "diegetic_tv": {
+        "clip_id": "clip_foxbiz_warsh_fed_guidance",
+        "title": "Fox Business — Kevin Warsh on Fed Guidance and Long-Term Yields",
+        "source_url": "https://www.youtube.com/watch?v=t2Z3TxtKq68",
+        "in_dock_at_s": 205.0,
+        "hold_s": 7.0,
+        "dock_position": "top_right_desk_monitor"
+      },
+      "press_cards": [
+        {
+          "press_id": "PRESS-02",
+          "publication": "Financial Times",
+          "headline": "The Debt Wall Approaches: $3.1 Trillion Corporate Maturities Due by 2028",
+          "accent": "coral",
+          "in_dock_at_s": 220.0,
+          "hold_s": 6.5
+        }
+      ],
+      "still_heads": [
+        {
+          "head_id": "HEAD-04",
+          "subject": "Kevin Warsh",
+          "year": 2026,
+          "asset_path": "assets/heads/head_warsh.png",
+          "dock_position": "left_valve_pillar"
+        }
+      ],
+      "verified_badges": [
+        {
+          "badge_id": "BADGE-06",
+          "label": "CORPORATE DEBT WALL",
+          "value": "$3.1 TRILLION",
+          "tag": "DUE BY 2028",
+          "accent": "sunflower"
+        }
+      ],
+      "cadence": {
+        "intro_s": 1.7,
+        "settle_s": 1.1,
+        "savor_s": 2.2,
+        "max_bare_hold_s": 8.0
+      }
+    },
+    {
+      "scene_id": "SC-06",
+      "phase": "P4",
+      "title": "The Dot-Com Pivot — January 2000 Mirror",
+      "time_start_s": 240.0,
+      "time_end_s": 295.0,
+      "duration_s": 55.0,
+      "core_claim": "At exactly the 50% runtime mark, we pivot from the macro interest shock to asset valuation: Equity Risk Premium inverts to -0.95%.",
+      "world_plate": "Split institutional chart comparing January 2000 (10Y at 6.7%) and September 2026 (10Y at 4.95%, S&P ERP -0.95%).",
+      "diegetic_tv": {
+        "clip_id": "clip_bloomberg_erp_inversion",
+        "title": "Bloomberg Markets — Equity Risk Premium Inversion",
+        "source_url": "https://www.youtube.com/watch?v=irNbdnXX1ds",
+        "in_dock_at_s": 255.0,
+        "hold_s": 7.0,
+        "dock_position": "top_right_desk_monitor"
+      },
+      "press_cards": [
+        {
+          "press_id": "PRESS-03",
+          "publication": "Axios Macro",
+          "headline": "The $1 Trillion Interest Bill: Federal Debt Servicing Exceeds Defense Budget",
+          "accent": "coral",
+          "in_dock_at_s": 270.0,
+          "hold_s": 6.5
+        }
+      ],
+      "still_heads": [
+        {
+          "head_id": "HEAD-02",
+          "subject": "Alan Greenspan",
+          "year": 2000,
+          "asset_path": "assets/heads/head_greenspan.png",
+          "dock_position": "historical_comparison_dock"
+        }
+      ],
+      "verified_badges": [
+        {
+          "badge_id": "BADGE-07",
+          "label": "JANUARY 2000 10Y YIELD",
+          "value": "6.70%",
+          "tag": "EQUITY P/E: 29.5X",
+          "accent": "teal"
+        },
+        {
+          "badge_id": "BADGE-08",
+          "label": "SEPTEMBER 2026 ERP",
+          "value": "-0.95%",
+          "tag": "DEEPLY INVERTED",
+          "accent": "coral"
+        }
+      ],
+      "cadence": {
+        "intro_s": 1.7,
+        "settle_s": 1.1,
+        "savor_s": 2.2,
+        "max_bare_hold_s": 7.2
+      }
+    },
+    {
+      "scene_id": "SC-07",
+      "phase": "P5",
+      "title": "The Three Solvency Questions — Worksheet Rollout",
+      "time_start_s": 295.0,
+      "time_end_s": 335.0,
+      "duration_s": 40.0,
+      "core_claim": "The operator provides the viewer a practical diagnostic filter: Debt Rollover %, Operating Cash Flow Cushion, and Valuation Sensitivity.",
+      "world_plate": "Cream washi 3-row audit sheet scrolling smoothly into view with charcoal typography.",
+      "diegetic_tv": null,
+      "press_cards": [],
+      "still_heads": [],
+      "verified_badges": [],
+      "cadence": {
+        "intro_s": 1.7,
+        "settle_s": 1.1,
+        "savor_s": 2.2,
+        "max_bare_hold_s": 9.0
+      }
+    },
+    {
+      "scene_id": "SC-08",
+      "phase": "P5",
+      "title": "Question One — Debt Maturity Timing",
+      "time_start_s": 335.0,
+      "time_end_s": 375.0,
+      "duration_s": 40.0,
+      "core_claim": "If more than 20% of a company's debt matures within 24 months, earnings are at immediate risk of debt rollover repricing.",
+      "world_plate": "Bar schedule highlighting corporate debt maturing across Year 1 to Year 5.",
+      "diegetic_tv": null,
+      "press_cards": [],
+      "still_heads": [],
+      "verified_badges": [
+        {
+          "badge_id": "BADGE-09",
+          "label": "24-MONTH ROLLOVER THRESHOLD",
+          "value": "> 20.0%",
+          "tag": "HIGH RISK RED FLAG",
+          "accent": "coral"
+        }
+      ],
+      "cadence": {
+        "intro_s": 1.7,
+        "settle_s": 1.1,
+        "savor_s": 2.2,
+        "max_bare_hold_s": 10.0
+      }
+    },
+    {
+      "scene_id": "SC-09",
+      "phase": "P5",
+      "title": "Question Two — Operating Margin Cushion",
+      "time_start_s": 375.0,
+      "time_end_s": 415.0,
+      "duration_s": 40.0,
+      "core_claim": "Evaluating whether operating margins can absorb a 300 basis point surge in borrowing costs without eliminating free cash flow.",
+      "world_plate": "Waterfall cash flow chart showing revenues flowing through OPEX and interest servicing.",
+      "diegetic_tv": null,
+      "press_cards": [],
+      "still_heads": [],
+      "verified_badges": [
+        {
+          "badge_id": "BADGE-10",
+          "label": "INTEREST COVERAGE BENCHMARK",
+          "value": "< 3.0X",
+          "tag": "CASH FLOW TRIPWIRE",
+          "accent": "sunflower"
+        }
+      ],
+      "cadence": {
+        "intro_s": 1.7,
+        "settle_s": 1.1,
+        "savor_s": 2.2,
+        "max_bare_hold_s": 8.0
+      }
+    },
+    {
+      "scene_id": "SC-10",
+      "phase": "P5",
+      "title": "Question Three — Multiple Derating Sensitivity",
+      "time_start_s": 415.0,
+      "time_end_s": 455.0,
+      "duration_s": 40.0,
+      "core_claim": "Multiples of 25x earnings contract to 16x when long yields hold at 5%, imposing a 35% equity price drag independent of earnings growth.",
+      "world_plate": "Matrix chart showing P/E contraction as a function of 10-year discount rate.",
+      "diegetic_tv": null,
+      "press_cards": [],
+      "still_heads": [],
+      "verified_badges": [],
+      "cadence": {
+        "intro_s": 1.7,
+        "settle_s": 1.1,
+        "savor_s": 2.2,
+        "max_bare_hold_s": 10.5
+      }
+    },
+    {
+      "scene_id": "SC-11",
+      "phase": "P6",
+      "title": "The Dual-Needle Tell & Epilogue",
+      "time_start_s": 455.0,
+      "time_end_s": 480.0,
+      "duration_s": 25.0,
+      "core_claim": "Final synthesis: watch the sovereign net interest tripwire (22%) and corporate debt rollover velocity, not consensus commentary.",
+      "world_plate": "Twin brass dial gauges settling on clean cream ledger paper under spotlight.",
+      "diegetic_tv": null,
+      "press_cards": [
+        {
+          "press_id": "PRESS-05",
+          "publication": "Goldman Sachs Briefing",
+          "headline": "Historical Normal Is a Fallacy When Sovereign Leverage Exceeds 120%",
+          "accent": "coral",
+          "in_dock_at_s": 460.0,
+          "hold_s": 6.0
+        }
+      ],
+      "still_heads": [
+        {
+          "head_id": "HEAD-06",
+          "subject": "Mark Cabana",
+          "year": 2026,
+          "asset_path": "assets/heads/head_cabana.png",
+          "dock_position": "right_analyst_badge"
+        }
+      ],
+      "verified_badges": [
+        {
+          "badge_id": "BADGE-11",
+          "label": "SOVEREIGN INTEREST TRIPWIRE",
+          "value": "22.0%",
+          "tag": "TAX RECEIPT RATIO",
+          "accent": "coral"
+        }
+      ],
+      "cadence": {
+        "intro_s": 1.7,
+        "settle_s": 1.1,
+        "savor_s": 2.2,
+        "max_bare_hold_s": 5.0
+      }
+    }
+  ]
+}

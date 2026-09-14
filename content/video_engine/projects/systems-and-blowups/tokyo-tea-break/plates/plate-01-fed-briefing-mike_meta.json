@@ -1,0 +1,24 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-03T21:24:02.442Z",
+  "prompt": "[Cinematography]: 9:16 vertical, wide-angle 24mm, eye-level straight-on framing, deep focus keeping all depth layers sharp and legible, static camera with subtle linear foreground parallax. [Subject]: @Mike standing poised in the right 55% clear zone, wearing his signature tailored cobalt-blue suit #1769C2, amber tie, dreadlocks fade, and glasses, looking at the lens with a composed, knowing financial analyst expression. [Action]: Stands authoritative beside the wooden podium, gesturing with his left hand toward the wall frame while maintaining a steady posture. [Context]: Layered 2.5D Federal Reserve briefing room: near plane dark mahogany desk corner and vintage microphone lower-left; mid plane wooden press podium at 0.20 frame height on an unbroken floor baseline; safe board region an unadorned empty rectangular matte wall-frame mounted on the back wall; far plane tall mahogany-paneled wall with warm sconces. [Style & Ambiance]: Hand-cut layered paper collage with carved woodblock ink lines, visible paper grain, torn deckle edges. Palette: cream #F4E6C7, charcoal #25313C, cobalt #1769C2, teal #178C83, sunflower #F5B72E, coral #ED6A4A. Soft lighting from upper left, gentle shadows lower right. Matte finish, non-glossy, non-photographic. [Negative]: no text, no letters, no words, no numbers, no charts, no graphs, no logos, no watermarks, no photorealism, no bokeh, no shallow depth of field.",
+  "references": [],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\plates\\plate-01-fed-briefing-mike.mp4.png",
+      "sha256": "30fa3efe6c788e6ee7ad874296be3e8add70e8b73860ad6dfef3d4980ad971d3"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\plates\\plate-01-fed-briefing-mike-raw.png",
+      "sha256": "30fa3efe6c788e6ee7ad874296be3e8add70e8b73860ad6dfef3d4980ad971d3"
+    }
+  }
+}

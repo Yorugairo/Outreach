@@ -1,0 +1,26 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-03T22:03:50.060Z",
+  "prompt": "standing beside a wooden podium in a Federal Reserve press briefing room, wearing his tailored indigo suit, red tie, and floral red and gold paisley dress shoes, gesturing toward a blank rectangular wall frame behind him. Foreground vintage desk microphone lower-left, midground podium, background mahogany paneled wall with empty frame. Light application of woodblock print and vox woodblock print with rich colors. Negative: no text, no numbers, no charts, no logos.",
+  "references": [
+    "Mike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:/Users/Snipe/Downloads/Outreach Program/content/video_engine/projects/systems-and-blowups/tokyo-tea-break/plates/plate-01-mcp-native-mike.png",
+      "sha256": "dd3a8a0c47dede699ef2dd6becfe231ada79b16bbe147ccc31c11e66d187015c"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\plates\\plate-01-mcp-native-mike-raw.png",
+      "sha256": "dd3a8a0c47dede699ef2dd6becfe231ada79b16bbe147ccc31c11e66d187015c"
+    }
+  }
+}

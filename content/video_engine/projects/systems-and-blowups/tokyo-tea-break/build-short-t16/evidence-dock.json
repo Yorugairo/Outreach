@@ -1,0 +1,122 @@
+[
+ {
+  "asset": "dock-c-blue-ties-panel",
+  "title": "Three men in blue ties",
+  "source": "@StickMike \u00b7 Money Physics",
+  "species": "deck",
+  "badges": []
+ },
+ {
+  "asset": "dock-a2-counter-colder",
+  "title": "The host at the counter",
+  "source": "@StickMike \u00b7 Money Physics",
+  "species": "deck",
+  "badges": []
+ },
+ {
+  "asset": "dock-g-two-fingers",
+  "title": "Two numbers",
+  "source": "@StickMike \u00b7 Money Physics",
+  "species": "deck",
+  "badges": []
+ },
+ {
+  "asset": "dock-f-toll-gate-to-fab",
+  "title": "The gate to the fab",
+  "source": "@StickMike \u00b7 Money Physics",
+  "species": "deck",
+  "badges": []
+ },
+ {
+  "asset": "dock-i-fab-wafer",
+  "title": "Ten trillion yen for chips",
+  "source": "HollowStickMike \u00b7 Money Physics",
+  "species": "deck",
+  "badges": []
+ },
+ {
+  "asset": "dock-h-fed-vs-yields",
+  "title": "The Fed hasn't moved. Your borrowing costs climbed anyway.",
+  "source": "US Treasury TIC \u00b7 FRED \u00b7 Sep 2026",
+  "species": "chart",
+  "badges": []
+ },
+ {
+  "asset": "dock-k-pledge-record",
+  "title": "Japan to roll out $65bn in support for chips, AI",
+  "source": "Nikkei Asia \u00b7 12 Nov 2024",
+  "species": "record",
+  "badges": [],
+  "record": {
+   "hdr": [
+    "Nikkei Asia",
+    "12 November 2024"
+   ],
+   "kicker": "Japan to roll out $65bn in support for chips, AI",
+   "words": [
+    [
+     "...at",
+     55.31
+    ],
+    [
+     "least",
+     55.41
+    ],
+    [
+     "10",
+     55.71
+    ],
+    [
+     "trillion",
+     56.0
+    ],
+    [
+     "yen",
+     56.45
+    ],
+    [
+     "($65",
+     56.52
+    ],
+    [
+     "billion)",
+     56.59
+    ],
+    [
+     "in",
+     56.66
+    ],
+    [
+     "support",
+     56.73
+    ],
+    [
+     "through",
+     56.8
+    ],
+    [
+     "fiscal",
+     56.87
+    ],
+    [
+     "2030...",
+     56.94
+    ]
+   ],
+   "hl": [
+    0,
+    4
+   ],
+   "end": 56.99,
+   "attr": "Mari Ishibashi, Nikkei staff writer",
+   "src": "asia.nikkei.com \u00b7 fetched 2026-09-10 \u00b7 evidence/sources/nikkei-2024-11-12-japan-chips-ai-support.txt"
+  }
+ },
+ {
+  "asset": "dock-j-tea-cup",
+  "title": "The tea, still going",
+  "source": "@StickMike \u00b7 Money Physics",
+  "species": "deck",
+  "badges": []
+ }
+]

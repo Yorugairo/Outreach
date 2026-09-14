@@ -1,0 +1,1197 @@
+{
+  "scene_id": 1,
+  "duration_s": 89.303,
+  "request_id": "IjmGuk3KrYA3BnhBn3Xu",
+  "words": [
+    {
+      "w": "South",
+      "start_s": 0.0,
+      "end_s": 0.302
+    },
+    {
+      "w": "Korea",
+      "start_s": 0.348,
+      "end_s": 0.662
+    },
+    {
+      "w": "just",
+      "start_s": 0.72,
+      "end_s": 0.882
+    },
+    {
+      "w": "opened",
+      "start_s": 0.94,
+      "end_s": 1.184
+    },
+    {
+      "w": "a",
+      "start_s": 1.219,
+      "end_s": 1.242
+    },
+    {
+      "w": "silicon",
+      "start_s": 1.289,
+      "end_s": 1.765
+    },
+    {
+      "w": "toll",
+      "start_s": 1.834,
+      "end_s": 2.043
+    },
+    {
+      "w": "booth.",
+      "start_s": 2.113,
+      "end_s": 2.554
+    },
+    {
+      "w": "And",
+      "start_s": 2.937,
+      "end_s": 3.088
+    },
+    {
+      "w": "shattered",
+      "start_s": 3.146,
+      "end_s": 3.518
+    },
+    {
+      "w": "its",
+      "start_s": 3.553,
+      "end_s": 3.669
+    },
+    {
+      "w": "all-time",
+      "start_s": 3.704,
+      "end_s": 4.18
+    },
+    {
+      "w": "export",
+      "start_s": 4.226,
+      "end_s": 4.609
+    },
+    {
+      "w": "record",
+      "start_s": 4.656,
+      "end_s": 4.911
+    },
+    {
+      "w": "taxing",
+      "start_s": 4.946,
+      "end_s": 5.329
+    },
+    {
+      "w": "your",
+      "start_s": 5.375,
+      "end_s": 5.503
+    },
+    {
+      "w": "artificial",
+      "start_s": 5.561,
+      "end_s": 6.095
+    },
+    {
+      "w": "intelligence",
+      "start_s": 6.153,
+      "end_s": 6.711
+    },
+    {
+      "w": "models.",
+      "start_s": 6.757,
+      "end_s": 7.314
+    },
+    {
+      "w": "Turn",
+      "start_s": 7.918,
+      "end_s": 8.15
+    },
+    {
+      "w": "on",
+      "start_s": 8.208,
+      "end_s": 8.301
+    },
+    {
+      "w": "global",
+      "start_s": 8.359,
+      "end_s": 8.696
+    },
+    {
+      "w": "news:",
+      "start_s": 8.754,
+      "end_s": 9.311
+    },
+    {
+      "w": "anchors",
+      "start_s": 9.752,
+      "end_s": 10.112
+    },
+    {
+      "w": "celebrate",
+      "start_s": 10.17,
+      "end_s": 10.658
+    },
+    {
+      "w": "a",
+      "start_s": 10.693,
+      "end_s": 10.716
+    },
+    {
+      "w": "broad",
+      "start_s": 10.786,
+      "end_s": 11.099
+    },
+    {
+      "w": "Asian",
+      "start_s": 11.169,
+      "end_s": 11.413
+    },
+    {
+      "w": "recovery",
+      "start_s": 11.482,
+      "end_s": 12.074
+    },
+    {
+      "w": "while",
+      "start_s": 12.19,
+      "end_s": 12.446
+    },
+    {
+      "w": "ships",
+      "start_s": 12.492,
+      "end_s": 12.783
+    },
+    {
+      "w": "crowd",
+      "start_s": 12.829,
+      "end_s": 13.131
+    },
+    {
+      "w": "the",
+      "start_s": 13.177,
+      "end_s": 13.247
+    },
+    {
+      "w": "port",
+      "start_s": 13.293,
+      "end_s": 13.502
+    },
+    {
+      "w": "of",
+      "start_s": 13.537,
+      "end_s": 13.583
+    },
+    {
+      "w": "Busan.",
+      "start_s": 13.641,
+      "end_s": 14.315
+    },
+    {
+      "w": "Nobody",
+      "start_s": 14.64,
+      "end_s": 14.988
+    },
+    {
+      "w": "looked",
+      "start_s": 15.034,
+      "end_s": 15.232
+    },
+    {
+      "w": "at",
+      "start_s": 15.267,
+      "end_s": 15.325
+    },
+    {
+      "w": "the",
+      "start_s": 15.348,
+      "end_s": 15.418
+    },
+    {
+      "w": "manifests",
+      "start_s": 15.464,
+      "end_s": 15.986
+    },
+    {
+      "w": "to",
+      "start_s": 16.01,
+      "end_s": 16.079
+    },
+    {
+      "w": "see",
+      "start_s": 16.137,
+      "end_s": 16.277
+    },
+    {
+      "w": "what's",
+      "start_s": 16.312,
+      "end_s": 16.521
+    },
+    {
+      "w": "actually",
+      "start_s": 16.579,
+      "end_s": 16.973
+    },
+    {
+      "w": "leaving",
+      "start_s": 17.02,
+      "end_s": 17.275
+    },
+    {
+      "w": "the",
+      "start_s": 17.31,
+      "end_s": 17.38
+    },
+    {
+      "w": "dock.",
+      "start_s": 17.426,
+      "end_s": 17.832
+    },
+    {
+      "w": "South",
+      "start_s": 17.949,
+      "end_s": 18.204
+    },
+    {
+      "w": "Korea",
+      "start_s": 18.25,
+      "end_s": 18.576
+    },
+    {
+      "w": "exported",
+      "start_s": 18.645,
+      "end_s": 19.098
+    },
+    {
+      "w": "seven",
+      "start_s": 19.168,
+      "end_s": 19.458
+    },
+    {
+      "w": "hundred",
+      "start_s": 19.528,
+      "end_s": 19.795
+    },
+    {
+      "w": "and",
+      "start_s": 19.829,
+      "end_s": 19.899
+    },
+    {
+      "w": "nine",
+      "start_s": 19.98,
+      "end_s": 20.259
+    },
+    {
+      "w": "billion",
+      "start_s": 20.317,
+      "end_s": 20.654
+    },
+    {
+      "w": "dollars",
+      "start_s": 20.712,
+      "end_s": 21.048
+    },
+    {
+      "w": "in",
+      "start_s": 21.095,
+      "end_s": 21.165
+    },
+    {
+      "w": "just",
+      "start_s": 21.234,
+      "end_s": 21.478
+    },
+    {
+      "w": "eight",
+      "start_s": 21.536,
+      "end_s": 21.722
+    },
+    {
+      "w": "months.",
+      "start_s": 21.78,
+      "end_s": 22.326
+    },
+    {
+      "w": "Look",
+      "start_s": 22.767,
+      "end_s": 22.941
+    },
+    {
+      "w": "inside",
+      "start_s": 22.999,
+      "end_s": 23.382
+    },
+    {
+      "w": "the",
+      "start_s": 23.405,
+      "end_s": 23.475
+    },
+    {
+      "w": "customs",
+      "start_s": 23.51,
+      "end_s": 23.87
+    },
+    {
+      "w": "data:",
+      "start_s": 23.904,
+      "end_s": 24.392
+    },
+    {
+      "w": "passenger",
+      "start_s": 24.833,
+      "end_s": 25.274
+    },
+    {
+      "w": "car",
+      "start_s": 25.333,
+      "end_s": 25.518
+    },
+    {
+      "w": "exports",
+      "start_s": 25.576,
+      "end_s": 25.971
+    },
+    {
+      "w": "actually",
+      "start_s": 26.029,
+      "end_s": 26.412
+    },
+    {
+      "w": "fell",
+      "start_s": 26.459,
+      "end_s": 26.667
+    },
+    {
+      "w": "four",
+      "start_s": 26.749,
+      "end_s": 26.911
+    },
+    {
+      "w": "percent.",
+      "start_s": 26.958,
+      "end_s": 27.422
+    },
+    {
+      "w": "Consumer",
+      "start_s": 27.457,
+      "end_s": 27.898
+    },
+    {
+      "w": "demand",
+      "start_s": 27.956,
+      "end_s": 28.293
+    },
+    {
+      "w": "didn't",
+      "start_s": 28.351,
+      "end_s": 28.571
+    },
+    {
+      "w": "return.",
+      "start_s": 28.606,
+      "end_s": 29.152
+    },
+    {
+      "w": "Semiconductor",
+      "start_s": 29.431,
+      "end_s": 30.174
+    },
+    {
+      "w": "exports",
+      "start_s": 30.243,
+      "end_s": 30.673
+    },
+    {
+      "w": "exploded",
+      "start_s": 30.719,
+      "end_s": 31.149
+    },
+    {
+      "w": "one",
+      "start_s": 31.219,
+      "end_s": 31.369
+    },
+    {
+      "w": "hundred",
+      "start_s": 31.393,
+      "end_s": 31.613
+    },
+    {
+      "w": "and",
+      "start_s": 31.637,
+      "end_s": 31.706
+    },
+    {
+      "w": "seventy",
+      "start_s": 31.764,
+      "end_s": 32.078
+    },
+    {
+      "w": "percent",
+      "start_s": 32.136,
+      "end_s": 32.554
+    },
+    {
+      "w": "—",
+      "start_s": 32.67,
+      "end_s": 32.716
+    },
+    {
+      "w": "capturing",
+      "start_s": 32.867,
+      "end_s": 33.239
+    },
+    {
+      "w": "forty-one",
+      "start_s": 33.297,
+      "end_s": 33.738
+    },
+    {
+      "w": "percent",
+      "start_s": 33.773,
+      "end_s": 34.051
+    },
+    {
+      "w": "of",
+      "start_s": 34.086,
+      "end_s": 34.133
+    },
+    {
+      "w": "the",
+      "start_s": 34.179,
+      "end_s": 34.249
+    },
+    {
+      "w": "entire",
+      "start_s": 34.295,
+      "end_s": 34.655
+    },
+    {
+      "w": "nation.",
+      "start_s": 34.702,
+      "end_s": 35.236
+    },
+    {
+      "w": "Here",
+      "start_s": 35.932,
+      "end_s": 36.118
+    },
+    {
+      "w": "is",
+      "start_s": 36.164,
+      "end_s": 36.234
+    },
+    {
+      "w": "the",
+      "start_s": 36.28,
+      "end_s": 36.35
+    },
+    {
+      "w": "physical",
+      "start_s": 36.385,
+      "end_s": 36.722
+    },
+    {
+      "w": "toll",
+      "start_s": 36.78,
+      "end_s": 36.989
+    },
+    {
+      "w": "booth.",
+      "start_s": 37.035,
+      "end_s": 37.465
+    },
+    {
+      "w": "Producing",
+      "start_s": 37.592,
+      "end_s": 38.022
+    },
+    {
+      "w": "high-bandwidth",
+      "start_s": 38.092,
+      "end_s": 38.777
+    },
+    {
+      "w": "memory",
+      "start_s": 38.835,
+      "end_s": 39.124
+    },
+    {
+      "w": "for",
+      "start_s": 39.182,
+      "end_s": 39.287
+    },
+    {
+      "w": "AI",
+      "start_s": 39.357,
+      "end_s": 39.635
+    },
+    {
+      "w": "accelerators",
+      "start_s": 39.682,
+      "end_s": 40.32
+    },
+    {
+      "w": "consumes",
+      "start_s": 40.378,
+      "end_s": 40.819
+    },
+    {
+      "w": "three",
+      "start_s": 40.866,
+      "end_s": 41.075
+    },
+    {
+      "w": "times",
+      "start_s": 41.121,
+      "end_s": 41.423
+    },
+    {
+      "w": "the",
+      "start_s": 41.47,
+      "end_s": 41.539
+    },
+    {
+      "w": "wafer",
+      "start_s": 41.597,
+      "end_s": 41.864
+    },
+    {
+      "w": "space",
+      "start_s": 41.899,
+      "end_s": 42.213
+    },
+    {
+      "w": "of",
+      "start_s": 42.248,
+      "end_s": 42.306
+    },
+    {
+      "w": "standard",
+      "start_s": 42.352,
+      "end_s": 42.724
+    },
+    {
+      "w": "silicon.",
+      "start_s": 42.758,
+      "end_s": 43.443
+    },
+    {
+      "w": "That",
+      "start_s": 43.618,
+      "end_s": 43.792
+    },
+    {
+      "w": "three-X",
+      "start_s": 43.838,
+      "end_s": 44.279
+    },
+    {
+      "w": "wafer",
+      "start_s": 44.349,
+      "end_s": 44.616
+    },
+    {
+      "w": "penalty",
+      "start_s": 44.662,
+      "end_s": 45.08
+    },
+    {
+      "w": "starved",
+      "start_s": 45.231,
+      "end_s": 45.789
+    },
+    {
+      "w": "consumer",
+      "start_s": 45.847,
+      "end_s": 46.276
+    },
+    {
+      "w": "supply",
+      "start_s": 46.323,
+      "end_s": 46.694
+    },
+    {
+      "w": "and",
+      "start_s": 46.775,
+      "end_s": 46.845
+    },
+    {
+      "w": "handed",
+      "start_s": 46.903,
+      "end_s": 47.193
+    },
+    {
+      "w": "Korean",
+      "start_s": 47.251,
+      "end_s": 47.623
+    },
+    {
+      "w": "fabricators",
+      "start_s": 47.693,
+      "end_s": 48.343
+    },
+    {
+      "w": "seventy-six",
+      "start_s": 48.401,
+      "end_s": 49.051
+    },
+    {
+      "w": "percent",
+      "start_s": 49.109,
+      "end_s": 49.434
+    },
+    {
+      "w": "operating",
+      "start_s": 49.492,
+      "end_s": 49.933
+    },
+    {
+      "w": "margins.",
+      "start_s": 49.991,
+      "end_s": 50.63
+    },
+    {
+      "w": "Seoul",
+      "start_s": 51.013,
+      "end_s": 51.268
+    },
+    {
+      "w": "didn't",
+      "start_s": 51.327,
+      "end_s": 51.535
+    },
+    {
+      "w": "build",
+      "start_s": 51.57,
+      "end_s": 51.768
+    },
+    {
+      "w": "more",
+      "start_s": 51.814,
+      "end_s": 51.965
+    },
+    {
+      "w": "factories.",
+      "start_s": 52.0,
+      "end_s": 52.58
+    },
+    {
+      "w": "They",
+      "start_s": 52.638,
+      "end_s": 52.789
+    },
+    {
+      "w": "simply",
+      "start_s": 52.847,
+      "end_s": 53.126
+    },
+    {
+      "w": "charged",
+      "start_s": 53.172,
+      "end_s": 53.486
+    },
+    {
+      "w": "three",
+      "start_s": 53.521,
+      "end_s": 53.718
+    },
+    {
+      "w": "times",
+      "start_s": 53.753,
+      "end_s": 54.043
+    },
+    {
+      "w": "more",
+      "start_s": 54.113,
+      "end_s": 54.333
+    },
+    {
+      "w": "for",
+      "start_s": 54.38,
+      "end_s": 54.484
+    },
+    {
+      "w": "every",
+      "start_s": 54.566,
+      "end_s": 54.786
+    },
+    {
+      "w": "single",
+      "start_s": 54.833,
+      "end_s": 55.111
+    },
+    {
+      "w": "byte.",
+      "start_s": 55.146,
+      "end_s": 55.46
+    },
+    {
+      "w": "Which",
+      "start_s": 55.518,
+      "end_s": 55.715
+    },
+    {
+      "w": "brings",
+      "start_s": 55.761,
+      "end_s": 55.994
+    },
+    {
+      "w": "us",
+      "start_s": 56.04,
+      "end_s": 56.121
+    },
+    {
+      "w": "to",
+      "start_s": 56.168,
+      "end_s": 56.237
+    },
+    {
+      "w": "the",
+      "start_s": 56.307,
+      "end_s": 56.377
+    },
+    {
+      "w": "valuation",
+      "start_s": 56.423,
+      "end_s": 57.027
+    },
+    {
+      "w": "gap",
+      "start_s": 57.097,
+      "end_s": 57.329
+    },
+    {
+      "w": "on",
+      "start_s": 57.398,
+      "end_s": 57.468
+    },
+    {
+      "w": "your",
+      "start_s": 57.515,
+      "end_s": 57.619
+    },
+    {
+      "w": "screen.",
+      "start_s": 57.654,
+      "end_s": 58.223
+    },
+    {
+      "w": "The",
+      "start_s": 58.548,
+      "end_s": 58.676
+    },
+    {
+      "w": "S",
+      "start_s": 58.745,
+      "end_s": 58.919
+    },
+    {
+      "w": "and",
+      "start_s": 58.977,
+      "end_s": 59.059
+    },
+    {
+      "w": "P",
+      "start_s": 59.094,
+      "end_s": 59.21
+    },
+    {
+      "w": "five",
+      "start_s": 59.453,
+      "end_s": 59.744
+    },
+    {
+      "w": "hundred",
+      "start_s": 59.779,
+      "end_s": 60.069
+    },
+    {
+      "w": "trades",
+      "start_s": 60.092,
+      "end_s": 60.545
+    },
+    {
+      "w": "at",
+      "start_s": 60.603,
+      "end_s": 60.754
+    },
+    {
+      "w": "a",
+      "start_s": 60.8,
+      "end_s": 60.835
+    },
+    {
+      "w": "Shiller",
+      "start_s": 60.893,
+      "end_s": 61.183
+    },
+    {
+      "w": "price-to-earnings",
+      "start_s": 61.241,
+      "end_s": 61.938
+    },
+    {
+      "w": "ratio",
+      "start_s": 61.984,
+      "end_s": 62.484
+    },
+    {
+      "w": "above",
+      "start_s": 62.577,
+      "end_s": 62.913
+    },
+    {
+      "w": "forty-one",
+      "start_s": 62.971,
+      "end_s": 63.645
+    },
+    {
+      "w": "—",
+      "start_s": 63.714,
+      "end_s": 63.772
+    },
+    {
+      "w": "historical",
+      "start_s": 63.888,
+      "end_s": 64.492
+    },
+    {
+      "w": "dot-com",
+      "start_s": 64.562,
+      "end_s": 65.05
+    },
+    {
+      "w": "territory.",
+      "start_s": 65.108,
+      "end_s": 65.77
+    },
+    {
+      "w": "Meanwhile,",
+      "start_s": 66.095,
+      "end_s": 66.629
+    },
+    {
+      "w": "the",
+      "start_s": 66.652,
+      "end_s": 66.722
+    },
+    {
+      "w": "Korean",
+      "start_s": 66.791,
+      "end_s": 67.14
+    },
+    {
+      "w": "memory",
+      "start_s": 67.198,
+      "end_s": 67.499
+    },
+    {
+      "w": "giants",
+      "start_s": 67.557,
+      "end_s": 67.917
+    },
+    {
+      "w": "printing",
+      "start_s": 67.964,
+      "end_s": 68.277
+    },
+    {
+      "w": "eighty",
+      "start_s": 68.335,
+      "end_s": 68.544
+    },
+    {
+      "w": "percent",
+      "start_s": 68.602,
+      "end_s": 68.904
+    },
+    {
+      "w": "margins",
+      "start_s": 68.962,
+      "end_s": 69.334
+    },
+    {
+      "w": "trade",
+      "start_s": 69.38,
+      "end_s": 69.705
+    },
+    {
+      "w": "at",
+      "start_s": 69.74,
+      "end_s": 69.81
+    },
+    {
+      "w": "just",
+      "start_s": 69.868,
+      "end_s": 70.054
+    },
+    {
+      "w": "five",
+      "start_s": 70.123,
+      "end_s": 70.437
+    },
+    {
+      "w": "times",
+      "start_s": 70.483,
+      "end_s": 70.866
+    },
+    {
+      "w": "earnings.",
+      "start_s": 70.924,
+      "end_s": 71.424
+    },
+    {
+      "w": "Every",
+      "start_s": 71.598,
+      "end_s": 71.9
+    },
+    {
+      "w": "artificial",
+      "start_s": 71.958,
+      "end_s": 72.492
+    },
+    {
+      "w": "intelligence",
+      "start_s": 72.55,
+      "end_s": 73.119
+    },
+    {
+      "w": "model",
+      "start_s": 73.165,
+      "end_s": 73.421
+    },
+    {
+      "w": "in",
+      "start_s": 73.467,
+      "end_s": 73.537
+    },
+    {
+      "w": "California",
+      "start_s": 73.595,
+      "end_s": 74.268
+    },
+    {
+      "w": "must",
+      "start_s": 74.442,
+      "end_s": 74.64
+    },
+    {
+      "w": "pass",
+      "start_s": 74.686,
+      "end_s": 74.907
+    },
+    {
+      "w": "through",
+      "start_s": 74.941,
+      "end_s": 75.15
+    },
+    {
+      "w": "a",
+      "start_s": 75.185,
+      "end_s": 75.208
+    },
+    {
+      "w": "Korean",
+      "start_s": 75.278,
+      "end_s": 75.603
+    },
+    {
+      "w": "cleanroom.",
+      "start_s": 75.661,
+      "end_s": 76.253
+    },
+    {
+      "w": "When",
+      "start_s": 76.462,
+      "end_s": 76.648
+    },
+    {
+      "w": "physical",
+      "start_s": 76.718,
+      "end_s": 77.089
+    },
+    {
+      "w": "memory",
+      "start_s": 77.17,
+      "end_s": 77.449
+    },
+    {
+      "w": "eats",
+      "start_s": 77.507,
+      "end_s": 77.693
+    },
+    {
+      "w": "forty",
+      "start_s": 77.762,
+      "end_s": 78.018
+    },
+    {
+      "w": "percent",
+      "start_s": 78.076,
+      "end_s": 78.366
+    },
+    {
+      "w": "of",
+      "start_s": 78.401,
+      "end_s": 78.447
+    },
+    {
+      "w": "server",
+      "start_s": 78.505,
+      "end_s": 78.784
+    },
+    {
+      "w": "costs,",
+      "start_s": 78.83,
+      "end_s": 79.341
+    },
+    {
+      "w": "the",
+      "start_s": 79.423,
+      "end_s": 79.527
+    },
+    {
+      "w": "cloud",
+      "start_s": 79.574,
+      "end_s": 79.841
+    },
+    {
+      "w": "giants",
+      "start_s": 79.887,
+      "end_s": 80.212
+    },
+    {
+      "w": "work",
+      "start_s": 80.259,
+      "end_s": 80.433
+    },
+    {
+      "w": "for",
+      "start_s": 80.479,
+      "end_s": 80.56
+    },
+    {
+      "w": "the",
+      "start_s": 80.595,
+      "end_s": 80.665
+    },
+    {
+      "w": "fabricators.",
+      "start_s": 80.711,
+      "end_s": 81.466
+    },
+    {
+      "w": "Silicon",
+      "start_s": 81.675,
+      "end_s": 82.174
+    },
+    {
+      "w": "Valley",
+      "start_s": 82.244,
+      "end_s": 82.511
+    },
+    {
+      "w": "built",
+      "start_s": 82.569,
+      "end_s": 82.778
+    },
+    {
+      "w": "the",
+      "start_s": 82.813,
+      "end_s": 82.882
+    },
+    {
+      "w": "software",
+      "start_s": 82.929,
+      "end_s": 83.405
+    },
+    {
+      "w": "models.",
+      "start_s": 83.44,
+      "end_s": 83.823
+    },
+    {
+      "w": "But",
+      "start_s": 83.881,
+      "end_s": 84.043
+    },
+    {
+      "w": "South",
+      "start_s": 84.09,
+      "end_s": 84.334
+    },
+    {
+      "w": "Korea",
+      "start_s": 84.368,
+      "end_s": 84.705
+    },
+    {
+      "w": "built",
+      "start_s": 84.786,
+      "end_s": 84.984
+    },
+    {
+      "w": "the",
+      "start_s": 85.019,
+      "end_s": 85.088
+    },
+    {
+      "w": "toll",
+      "start_s": 85.135,
+      "end_s": 85.355
+    },
+    {
+      "w": "booth.",
+      "start_s": 85.413,
+      "end_s": 85.715
+    },
+    {
+      "w": "And",
+      "start_s": 85.889,
+      "end_s": 86.029
+    },
+    {
+      "w": "that",
+      "start_s": 86.087,
+      "end_s": 86.226
+    },
+    {
+      "w": "trillion-dollar",
+      "start_s": 86.272,
+      "end_s": 86.923
+    },
+    {
+      "w": "record",
+      "start_s": 86.992,
+      "end_s": 87.341
+    },
+    {
+      "w": "is",
+      "start_s": 87.41,
+      "end_s": 87.573
+    },
+    {
+      "w": "the",
+      "start_s": 87.631,
+      "end_s": 87.701
+    },
+    {
+      "w": "tax",
+      "start_s": 87.747,
+      "end_s": 88.002
+    },
+    {
+      "w": "you're",
+      "start_s": 88.049,
+      "end_s": 88.258
+    },
+    {
+      "w": "already",
+      "start_s": 88.293,
+      "end_s": 88.618
+    },
+    {
+      "w": "paying.",
+      "start_s": 88.676,
+      "end_s": 89.303
+    }
+  ]
+}

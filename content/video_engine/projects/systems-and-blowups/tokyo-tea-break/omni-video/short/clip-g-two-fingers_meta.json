@@ -1,0 +1,38 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T06:03:12.326Z",
+  "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink. @StickMike faces the camera in a medium shot, talking, and holds up two fingers, then taps each finger once. Static camera, silent, no on-screen text.",
+  "references": [
+    "StickMike"
+  ],
+  "settings": {
+    "pillText": "Video · 720p · 10s crop_9_16 x1",
+    "creditsText": "Generating will use 15 credits",
+    "modelText": "Omni 1.1 Flash",
+    "credits": 15
+  },
+  "requested_ratio": "9:16",
+  "detected_dimensions": "720x1280",
+  "aspect_ratio": "9:16",
+  "duration_seconds": "10.000000",
+  "verification_error": null,
+  "reversed": false,
+  "files": {
+    "video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\short\\clip-g-two-fingers.mp4",
+      "sha256": "77cb76061de34263035b46e877bfdcb369d43d9cc15aff6d718eae96c72afd7e"
+    },
+    "raw_video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\short\\clip-g-two-fingers-raw.mp4",
+      "sha256": "77cb76061de34263035b46e877bfdcb369d43d9cc15aff6d718eae96c72afd7e"
+    },
+    "frame_start": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\short\\clip-g-two-fingers_frame_0.png",
+      "sha256": "485f186e277e0ad211301138af55f5d247faa935e948761ce79e28e55c1309d1"
+    },
+    "frame_end": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\short\\clip-g-two-fingers_frame_end.png",
+      "sha256": "851ef67b324323ae67889f9a2d665a55bf2821516fc6fbf833718df68b8add00"
+    }
+  }
+}

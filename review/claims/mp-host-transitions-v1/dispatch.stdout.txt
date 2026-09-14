@@ -1,0 +1,107 @@
+ERROR after 3.1 min -> C:\Users\Snipe\Downloads\Outreach Program\review\claims\mp-host-transitions-v1\dispatch-result.json
+{
+  "error": "Video generation timed out after 180000ms.",
+  "stack": "Error: Video generation timed out after 180000ms.\n    at FlowCdpDriver.waitForGenerationAndDownload (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/src/cdp-driver.mjs:211:13)\n    at async FlowDagEngine.generateVideo (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/src/dag-engine.mjs:58:5)\n    at async FlowDagEngine.generateBatch (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/src/dag-engine.mjs:140:19)\n    at async file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/mcp/server.mjs:189:22\n    at async wrappedHandler (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/node_modules/@modelcontextprotocol/sdk/dist/esm/server/index.js:114:32)"
+}
+clips on disk: 0
+ERROR after 0.1 min -> C:\Users\Snipe\Downloads\Outreach Program\review\claims\mp-host-transitions-v1\dispatch-result.json
+{
+  "error": "REFUSED to submit - generation state not as declared:\n  - pill does not show model \"Omni 1.1 Flash\" (pill: \"x4\")",
+  "stack": "Error: REFUSED to submit - generation state not as declared:\n  - pill does not show model \"Omni 1.1 Flash\" (pill: \"x4\")\n    at FlowCdpDriver.configureSettings (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/src/cdp-driver.mjs:171:13)\n    at async FlowDagEngine.generateVideo (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/src/dag-engine.mjs:47:22)\n    at async FlowDagEngine.generateBatch (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/src/dag-engine.mjs:144:19)\n    at async file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/mcp/server.mjs:199:22\n    at async wrappedHandler (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/node_modules/@modelcontextprotocol/sdk/dist/esm/server/index.js:114:32)"
+}
+clips on disk: 0
+ERROR after 0.1 min -> C:\Users\Snipe\Downloads\Outreach Program\review\claims\mp-host-transitions-v1\dispatch-result.json
+{
+  "error": "REFUSED to submit - generation state not as declared:\n  - pill does not show model \"Omni 1.1 Flash\" (pill: \"Video � 720p � 6s crop_16_9 x1\")",
+  "stack": "Error: REFUSED to submit - generation state not as declared:\n  - pill does not show model \"Omni 1.1 Flash\" (pill: \"Video � 720p � 6s crop_16_9 x1\")\n    at FlowCdpDriver.configureSettings (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/src/cdp-driver.mjs:176:13)\n    at async FlowDagEngine.generateVideo (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/src/dag-engine.mjs:47:22)\n    at async FlowDagEngine.generateBatch (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/src/dag-engine.mjs:144:19)\n    at async file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/mcp/server.mjs:199:22\n    at async wrappedHandler (file:///C:/Users/Snipe/Downloads/Outreach%20Program/tools/google-flow-driver/node_modules/@modelcontextprotocol/sdk/dist/esm/server/index.js:114:32)"
+}
+clips on disk: 0
+ERROR after 0.8 min -> C:\Users\Snipe\Downloads\Outreach Program\review\claims\mp-host-transitions-v1\dispatch-result.json
+{
+  "error": "Command failed: ffmpeg -y -ss 0.1 -i \"C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-signal-box-dusk.mp4\" -frames:v 1 \"C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-signal-box-dusk_frame_0.png\"\nffmpeg version 8.1.2-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg developers\r\n  built with gcc 16.1.0 (Rev2, Built by MSYS2 project)\r\n  configuration: --enable-gpl --enable-version3 --enable-static --disable-w32threads --disable-autodetect --enable-cairo --enable-fontconfig --enable-iconv --enable-gnutls --enable-lcms2 --enable-libxml2 --enable-gmp --enable-bzlib --enable-lzma --enable-libsnappy --enable-zlib --enable-librist --enable-libsrt --enable-libssh --enable-libzmq --enable-avisynth --enable-libbluray --enable-libcaca --enable-libdvdnav --enable-libdvdread --enable-sdl2 --enable-libaribb24 --enable-libaribcaption --enable-libdav1d --enable-libdavs2 --enable-libopenjpeg --enable-libquirc --enable-libuavs3d --enable-libxevd --enable-libzvbi --enable-liboapv --enable-libqrencode --enable-librav1e --enable-libsvtav1 --enable-libvvenc --enable-libwebp --enable-libx264 --enable-libx265 --enable-libxavs2 --enable-libxeve --enable-libxvid --enable-libaom --enable-libjxl --enable-libsvtjpegxs --enable-libvpx --enable-mediafoundation --enable-libass --enable-frei0r --enable-libfreetype --enable-libfribidi --enable-libharfbuzz --enable-liblensfun --enable-libvidstab --enable-libvmaf --enable-libzimg --enable-amf --enable-cuda-llvm --enable-cuvid --enable-dxva2 --enable-d3d11va --enable-d3d12va --enable-ffnvcodec --enable-libvpl --enable-nvdec --enable-nvenc --enable-vaapi --enable-libshaderc --enable-vulkan --enable-libplacebo --enable-opencl --enable-libcdio --enable-openal --enable-libgme --enable-libmodplug --enable-libopenmpt --enable-libopencore-amrwb --enable-libmp3lame --enable-libshine --enable-libtheora --enable-libtwo
+clips on disk: 2
+     1.3 MB  host-enter-signal-box-dusk-raw.mp4
+     1.3 MB  host-enter-signal-box-dusk.mp4
+dispatching batch-day1-rest.json
+OK after 2.8 min -> C:\Users\Snipe\Downloads\Outreach Program\review\claims\mp-host-transitions-v1\dispatch-result.json
+{
+  "success": true,
+  "totalScenes": 3,
+  "results": [
+    {
+      "sceneId": "host-enter-korea-port",
+      "success": true,
+      "videoPath": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-korea-port.mp4",
+      "rawVideoPath": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-korea-port-raw.mp4",
+      "frame0Path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-korea-port_frame_0.png",
+      "frameEndPath": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-korea-port_frame_end.png",
+      "metadataPath": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-korea-port_meta.json",
+      "probe": {
+        "width": 1280,
+        "height": 720,
+        "duration": "6.000000",
+        "fps": "24/1",
+        "aspect_ratio": "16:9"
+      }
+    },
+    {
+      "sceneId": "host-enter-memory-fab-floor",
+      "success": true,
+      "videoPath": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-memory-fab-floor.mp4",
+      "rawVideoPath": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-memory-fab-floor-raw.mp4",
+      "frame0Path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-memory-fab-floor_frame_0.png",
+      "frameEndPath": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-memory-fab-floor_frame_end.png",
+      "metadataPath": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-memory-fab-floor_meta.json",
+      "probe": {
+        "width": 1280,
+        "height": 720,
+        "duration": "6.000000",
+        "fp
+clips on disk: 8
+     2.4 MB  host-enter-korea-port-raw.mp4
+     2.4 MB  host-enter-korea-port.mp4
+     2.5 MB  host-enter-memory-fab-floor-raw.mp4
+     2.5 MB  host-enter-memory-fab-floor.mp4
+     2.0 MB  host-enter-seoul-fab-skyline-raw.mp4
+     2.0 MB  host-enter-seoul-fab-skyline.mp4
+     1.3 MB  host-enter-signal-box-dusk-raw.mp4
+     1.3 MB  host-enter-signal-box-dusk.mp4
+dispatching batch-identity-test.json
+OK after 0.9 min -> C:\Users\Snipe\Downloads\Outreach Program\review\claims\mp-host-transitions-v1\dispatch-result.json
+{
+  "success": true,
+  "totalScenes": 1,
+  "results": [
+    {
+      "sceneId": "host-enter-signal-box-dusk-v2",
+      "success": true,
+      "videoPath": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-signal-box-dusk-v2.mp4",
+      "rawVideoPath": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-signal-box-dusk-v2-raw.mp4",
+      "frame0Path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-signal-box-dusk-v2_frame_0.png",
+      "frameEndPath": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-signal-box-dusk-v2_frame_end.png",
+      "metadataPath": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-signal-box-dusk-v2_meta.json",
+      "probe": {
+        "width": 1280,
+        "height": 720,
+        "duration": "6.000000",
+        "fps": "24/1",
+        "aspect_ratio": "16:9"
+      }
+    }
+  ]
+}
+clips on disk: 14
+     2.4 MB  host-enter-korea-port-raw.mp4
+     2.4 MB  host-enter-korea-port.mp4
+     2.5 MB  host-enter-memory-fab-floor-raw.mp4
+     2.5 MB  host-enter-memory-fab-floor.mp4
+     2.0 MB  host-enter-seoul-fab-skyline-raw.mp4
+     2.0 MB  host-enter-seoul-fab-skyline.mp4
+     1.3 MB  host-enter-signal-box-dusk-raw.mp4
+     3.3 MB  host-enter-signal-box-dusk-v2-raw.mp4
+     3.3 MB  host-enter-signal-box-dusk-v2.mp4
+     1.3 MB  host-enter-signal-box-dusk.mp4
+     1.0 MB  host-exit-korea-port.mp4
+     1.1 MB  host-exit-memory-fab-floor.mp4
+     0.8 MB  host-exit-seoul-fab-skyline.mp4
+     0.6 MB  host-exit-signal-box-dusk.mp4

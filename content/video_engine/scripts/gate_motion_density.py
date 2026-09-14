@@ -384,7 +384,9 @@ BED_SLOT_TOKENS = ("bed",)       # ... and a cue whose slot says so is a bed wha
 SRC_M29 = ("E44 s2a / R26-5 (operator 2026-09-06: \"the camera flash sound maybe shouldn't be as aggressive\"): the "
            "press / flash cue at a cut is not a hook device - at 0:09 it is the last thing a viewer hears before "
            "leaving, so no TRANSIENT cue lands inside 0:05-0:12 unless a PAGE lands with it (the page's own arrival "
-           "or its chart's landing, within 1.5 s). The beds are exempt: a bed marks no instant")
+           "or its chart's landing, within 1.5 s). E83 (operator 2026-09-13: \"for sound cue timing on docks: we "
+           "probably should have sound cues\"): a DOCK's own landing licenses the cue the same way - a card that "
+           "lands is an instant the cue marks, not a cut's flash. The beds are exempt: a bed marks no instant")
 # A RETURNING CHARACTER MOUNTS (ruling E44 s2b / backlog R26-6, 2026-09-06): "the character cuts on to the scene
 # instead of smoothly entering like he did in scene 1" - a character already introduced re-enters the way he first
 # entered (a dissolve on a word, doc 29 s9.15), never on a cut. A character is DECLARED, never guessed from an
@@ -1063,7 +1065,7 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     g += [_opening_still_gate(A["still"]), _first_chart_gate(tl, docks, mp), _chart_hold_gate(tl, docks)]
     g.append(_frozen_gate(frames, frame_layers, layer_windows(A)))        # M18 (E49: nothing ever goes truly still; R26-13: per layer)
     if (sg := _drop_window_sound_gate(tl, mp)) is not None:
-        g.append(sg)                                                      # M29 (E44 s2a / R26-5: a transient inside 0:05-0:12 needs a page landing)
+        g.append(sg)                                                      # M29 (E44 s2a / R26-5: a transient inside 0:05-0:12 needs a page landing; E83: or a dock's)
     if (mo := _mount_gate(tl.get("scenes", []), tl.get("evidence") or {})) is not None:
         g.append(mo)                                                      # M30 (E44 s2b / R26-6: a returning character mounts, it never cuts on)
     g.append(_layout_gate(layout))                                        # M25 (P51 T2: the layout gate, from probe.py's boxes)
@@ -1449,28 +1451,40 @@ def _page_landings(scenes: list[dict]) -> list[tuple[float, str]]:
     return out
 
 
+def _dock_landings(scenes: list[dict]) -> list[tuple[float, str]]:
+    """(instant, what) for every timeline dock's own landing - E83: it licenses a transient cue like a page landing.
+    The contact instant is _landings' (the enter, plus a throw's flight or a land's anticipation + drop)."""
+    out: list[tuple[float, str]] = []
+    for s in scenes:
+        sid = s.get("scene_id", "?")
+        out += [(round(t, 2), f"{sid} {what} lands") for t, what in _landings(s) if what.startswith("dock ")]
+    return out
+
+
 def _drop_window_transients(tl: dict, mp: dict) -> tuple[list[str], list[str]]:
-    """(unpaired, paired): every TRANSIENT cue inside DROP_WINDOW_S, split by whether a page lands with it -
-    within CUE_TOL_S, the tolerance M11 already gives the first chart's own cue."""
+    """(unpaired, paired): every TRANSIENT cue inside DROP_WINDOW_S, split by whether a page or a dock (E83) lands
+    with it - within CUE_TOL_S, the tolerance M11 already gives the first chart's own cue."""
     lo, hi = DROP_WINDOW_S
-    lands = _page_landings(tl.get("scenes", []))
+    scenes = tl.get("scenes", [])
+    lands = ([(t, what, "page") for t, what in _page_landings(scenes)]
+             + [(t, what, "dock") for t, what in _dock_landings(scenes)])
     unpaired, paired = [], []
     for c in _cues(tl, mp):
         if c["bed"] or not (lo <= c["at"] <= hi):
             continue
-        near = sorted((abs(t - c["at"]), t, what) for t, what in lands)
+        near = sorted((abs(t - c["at"]), t, what, kind) for t, what, kind in lands)
         gain = f" gain {c['gain']}" if isinstance(c["gain"], (int, float)) else ""
         head = f"{c['slot']} at {c['at']:.2f}s{gain}"
         if near and near[0][0] <= CUE_TOL_S:
             paired.append(f"{head} with {near[0][2]} at {near[0][1]:.2f}s")
         else:
-            unpaired.append(head + (f"; nearest page landing {near[0][2]} at {near[0][1]:.2f}s" if near
-                                    else "; no page lands anywhere in the build"))
+            unpaired.append(head + (f"; nearest {near[0][3]} landing {near[0][2]} at {near[0][1]:.2f}s" if near
+                                    else "; no page or dock lands anywhere in the build"))
     return unpaired, paired
 
 
 def _drop_window_sound_gate(tl: dict, mp: dict) -> Gate | None:
-    """M29 (E44 s2a / R26-5): no TRANSIENT sound cue lands inside 0:05-0:12 unless a page lands with it. Reported
+    """M29 (E44 s2a / R26-5, E83): no TRANSIENT sound cue lands inside 0:05-0:12 unless a page or a dock lands with it. Reported
     only when a cue lands in the window at all - the M19-M24 shape: a row for what the build actually carries."""
     unpaired, paired = _drop_window_transients(tl, mp)
     if not unpaired and not paired:
@@ -1480,8 +1494,8 @@ def _drop_window_sound_gate(tl: dict, mp: dict) -> Gate | None:
     if unpaired:
         return Gate("M29", "FAIL", f"{len(unpaired)} transient cue(s) marking nothing inside the drop window: "
                     + "; ".join(unpaired[:6]) + (" ..." if len(unpaired) > 6 else "")
-                    + " - drop the cue, or move it onto the page that lands" + win, SRC_M29)
-    return Gate("M29", "PASS", f"{len(paired)} transient cue(s) inside the drop window, each with a page landing on "
+                    + " - drop the cue, or move it onto the page or dock that lands" + win, SRC_M29)
+    return Gate("M29", "PASS", f"{len(paired)} transient cue(s) inside the drop window, each with a page or dock landing on "
                 "it: " + "; ".join(paired[:6]) + (" ..." if len(paired) > 6 else "") + win, SRC_M29)
 
 

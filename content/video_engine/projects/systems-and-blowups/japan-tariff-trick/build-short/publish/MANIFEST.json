@@ -1,0 +1,45 @@
+{
+ "schema": "publish_package.v1",
+ "episode": "japan-tariff-trick",
+ "project": "japan-tariff-trick",
+ "build": "build-short",
+ "title": "How Japan Tricked Trump",
+ "subtitle": "Money Physics - short",
+ "channel": "Money Physics - short",
+ "channel_slug": "money-physics-short",
+ "channel_line": null,
+ "channel_path": null,
+ "aspect": "9:16",
+ "runtime_s": 85.276,
+ "script": "SCRIPT-SHORT-VO.txt",
+ "take": "vo-short",
+ "master": "japan-short-full-1440p-2026-09-08-superseded.mp4",
+ "master_bytes": 49854513,
+ "first_frame": "frame-0000.0.png",
+ "thumbnail": null,
+ "fetched": null,
+ "keywords": "how japan tricked trump",
+ "tags": [
+  "#MoneyPhysicsShort",
+  "#HowJapanTrickedTrump",
+  "#Shorts"
+ ],
+ "inputs": {
+  "build:timeline.json": "91bce6c9cb489821",
+  "build:japan-short.timeline.json": "dbac920575b5f151",
+  "project:EVIDENCE-DOSSIER.md": "52f2a64a33975987"
+ },
+ "missing": [
+  "the channel's own words (channel-assets/money-physics-short/CHANNEL-DESCRIPTION.md)",
+  "the fetched sources' links (evidence/sources/*)",
+  "the thumbnail (*thumb*.png)"
+ ],
+ "counts": {
+  "hook": 2,
+  "figures": 6,
+  "close": 2,
+  "dossier_sources": 5,
+  "links": 0,
+  "onscreen_sources": 5
+ }
+}

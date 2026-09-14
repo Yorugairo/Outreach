@@ -1,0 +1,24 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-03T23:39:10.847Z",
+  "prompt": "full bleed edge-to-edge 9:16 vertical. In a messy YouTube creator studio, a comical cartoon stick figure character frantically draws bold red jagged arrows across a large whiteboard. The whiteboard is filled with hand-drawn red arrows pointing in all directions with expressive motion dashes. Microphones, ring lights, and scattered camera gear sit around the desk in the foreground. Light application of woodblock print and vox newspaper with Anime richness and colors. Negative: no borders, no margins, no outer frame, no paper matting, no photorealism, no 3D render, no text, no numbers, no words, no letters, no logos.",
+  "references": [],
+  "settings": {
+    "pillText": "",
+    "creditsText": "Generating will use 0 credits",
+    "modelText": "🍌 Nano Banana Pro",
+    "credits": 0
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:/Users/Snipe/Downloads/Outreach Program/content/video_engine/projects/systems-and-blowups/tokyo-tea-break/plates/plate-04-stick-figure-whiteboard.png",
+      "sha256": "a902682eddbd3085f74feb858a54701858e029a50e8e50150cd09b9ab2b25b35"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\plates\\plate-04-stick-figure-whiteboard-raw.png",
+      "sha256": "a902682eddbd3085f74feb858a54701858e029a50e8e50150cd09b9ab2b25b35"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T13:52:02.802Z",
+  "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink with warm sunset wash. A quiet shipping terminal baseline at dusk. Towering maritime gantry cranes silhouette against a calm horizon over the ocean. The character stands centered in a medium cowboy framing from mid-thigh up, arms relaxed, looking forward into the camera. A single still frame, no on-screen text.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-13-toll-booth-closing.mp4.png",
+      "sha256": "421febe30ea0b329bf22abc649b0d9fa3bb0b844f907bc00e7f68e26bf3e7a67"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-13-toll-booth-closing-raw.png",
+      "sha256": "421febe30ea0b329bf22abc649b0d9fa3bb0b844f907bc00e7f68e26bf3e7a67"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-13-toll-booth-closing-raw.png",
+        "sha256": "421febe30ea0b329bf22abc649b0d9fa3bb0b844f907bc00e7f68e26bf3e7a67"
+      }
+    ]
+  }
+}

@@ -1,0 +1,782 @@
+{
+ "engine": "kokoro-82M",
+ "voice": "am_michael",
+ "duration_s": 69.78,
+ "words": [
+  {
+   "w": "Five",
+   "start_s": 0.4,
+   "end_s": 0.7
+  },
+  {
+   "w": "percent",
+   "start_s": 0.7,
+   "end_s": 1.2
+  },
+  {
+   "w": "was",
+   "start_s": 1.2,
+   "end_s": 1.413
+  },
+  {
+   "w": "normal",
+   "start_s": 1.413,
+   "end_s": 1.825
+  },
+  {
+   "w": "once.",
+   "start_s": 1.825,
+   "end_s": 2.7
+  },
+  {
+   "w": "But",
+   "start_s": 3.375,
+   "end_s": 3.487
+  },
+  {
+   "w": "a",
+   "start_s": 3.487,
+   "end_s": 3.6
+  },
+  {
+   "w": "yield",
+   "start_s": 3.6,
+   "end_s": 4.05
+  },
+  {
+   "w": "is",
+   "start_s": 4.05,
+   "end_s": 4.2
+  },
+  {
+   "w": "a",
+   "start_s": 4.2,
+   "end_s": 4.312
+  },
+  {
+   "w": "weight,",
+   "start_s": 4.312,
+   "end_s": 4.975
+  },
+  {
+   "w": "not",
+   "start_s": 4.975,
+   "end_s": 5.188
+  },
+  {
+   "w": "a",
+   "start_s": 5.188,
+   "end_s": 5.275
+  },
+  {
+   "w": "number,",
+   "start_s": 5.275,
+   "end_s": 6.075
+  },
+  {
+   "w": "and",
+   "start_s": 6.075,
+   "end_s": 6.188
+  },
+  {
+   "w": "the",
+   "start_s": 6.188,
+   "end_s": 6.287
+  },
+  {
+   "w": "bridge",
+   "start_s": 6.287,
+   "end_s": 6.6
+  },
+  {
+   "w": "under",
+   "start_s": 6.6,
+   "end_s": 6.9
+  },
+  {
+   "w": "it",
+   "start_s": 6.9,
+   "end_s": 7.025
+  },
+  {
+   "w": "is",
+   "start_s": 7.025,
+   "end_s": 7.2
+  },
+  {
+   "w": "four",
+   "start_s": 7.2,
+   "end_s": 7.525
+  },
+  {
+   "w": "times",
+   "start_s": 7.525,
+   "end_s": 7.925
+  },
+  {
+   "w": "heavier.",
+   "start_s": 7.925,
+   "end_s": 8.875
+  },
+  {
+   "w": "Every",
+   "start_s": 9.6,
+   "end_s": 9.912
+  },
+  {
+   "w": "price",
+   "start_s": 9.912,
+   "end_s": 10.275
+  },
+  {
+   "w": "you",
+   "start_s": 10.275,
+   "end_s": 10.475
+  },
+  {
+   "w": "own",
+   "start_s": 10.475,
+   "end_s": 11.175
+  },
+  {
+   "w": "is",
+   "start_s": 11.175,
+   "end_s": 11.35
+  },
+  {
+   "w": "divided",
+   "start_s": 11.35,
+   "end_s": 11.875
+  },
+  {
+   "w": "by",
+   "start_s": 11.875,
+   "end_s": 12.05
+  },
+  {
+   "w": "that",
+   "start_s": 12.05,
+   "end_s": 12.325
+  },
+  {
+   "w": "number.",
+   "start_s": 12.325,
+   "end_s": 13.225
+  },
+  {
+   "w": "Start",
+   "start_s": 13.925,
+   "end_s": 14.212
+  },
+  {
+   "w": "with",
+   "start_s": 14.212,
+   "end_s": 14.337
+  },
+  {
+   "w": "the",
+   "start_s": 14.337,
+   "end_s": 14.425
+  },
+  {
+   "w": "number.",
+   "start_s": 14.425,
+   "end_s": 15.275
+  },
+  {
+   "w": "Two",
+   "start_s": 15.275,
+   "end_s": 15.525
+  },
+  {
+   "w": "weeks",
+   "start_s": 15.525,
+   "end_s": 15.787
+  },
+  {
+   "w": "ago",
+   "start_s": 15.787,
+   "end_s": 16.012
+  },
+  {
+   "w": "the",
+   "start_s": 16.012,
+   "end_s": 16.1
+  },
+  {
+   "w": "ten-year",
+   "start_s": 16.1,
+   "end_s": 16.537
+  },
+  {
+   "w": "paid",
+   "start_s": 16.537,
+   "end_s": 16.962
+  },
+  {
+   "w": "four",
+   "start_s": 16.962,
+   "end_s": 17.2
+  },
+  {
+   "w": "point",
+   "start_s": 17.2,
+   "end_s": 17.462
+  },
+  {
+   "w": "six",
+   "start_s": 17.462,
+   "end_s": 17.737
+  },
+  {
+   "w": "six.",
+   "start_s": 17.737,
+   "end_s": 18.6
+  },
+  {
+   "w": "By",
+   "start_s": 19.3,
+   "end_s": 19.462
+  },
+  {
+   "w": "Tuesday",
+   "start_s": 19.462,
+   "end_s": 20.025
+  },
+  {
+   "w": "it",
+   "start_s": 20.025,
+   "end_s": 20.125
+  },
+  {
+   "w": "paid",
+   "start_s": 20.125,
+   "end_s": 20.462
+  },
+  {
+   "w": "four",
+   "start_s": 20.462,
+   "end_s": 20.75
+  },
+  {
+   "w": "point",
+   "start_s": 20.75,
+   "end_s": 21.025
+  },
+  {
+   "w": "eight",
+   "start_s": 21.025,
+   "end_s": 21.262
+  },
+  {
+   "w": "three,",
+   "start_s": 21.262,
+   "end_s": 22.075
+  },
+  {
+   "w": "the",
+   "start_s": 22.075,
+   "end_s": 22.212
+  },
+  {
+   "w": "highest",
+   "start_s": 22.212,
+   "end_s": 22.7
+  },
+  {
+   "w": "since",
+   "start_s": 22.7,
+   "end_s": 22.938
+  },
+  {
+   "w": "October",
+   "start_s": 22.938,
+   "end_s": 23.475
+  },
+  {
+   "w": "twenty",
+   "start_s": 23.475,
+   "end_s": 23.775
+  },
+  {
+   "w": "twenty-three.",
+   "start_s": 23.775,
+   "end_s": 24.9
+  },
+  {
+   "w": "Now",
+   "start_s": 25.65,
+   "end_s": 25.85
+  },
+  {
+   "w": "put",
+   "start_s": 25.85,
+   "end_s": 26.075
+  },
+  {
+   "w": "that",
+   "start_s": 26.075,
+   "end_s": 26.337
+  },
+  {
+   "w": "number",
+   "start_s": 26.337,
+   "end_s": 26.725
+  },
+  {
+   "w": "on",
+   "start_s": 26.725,
+   "end_s": 26.863
+  },
+  {
+   "w": "the",
+   "start_s": 26.863,
+   "end_s": 26.988
+  },
+  {
+   "w": "bridge",
+   "start_s": 26.988,
+   "end_s": 27.525
+  },
+  {
+   "w": "it",
+   "start_s": 27.525,
+   "end_s": 27.637
+  },
+  {
+   "w": "actually",
+   "start_s": 27.637,
+   "end_s": 28.087
+  },
+  {
+   "w": "sits",
+   "start_s": 28.087,
+   "end_s": 28.4
+  },
+  {
+   "w": "on.",
+   "start_s": 28.4,
+   "end_s": 29.225
+  },
+  {
+   "w": "In",
+   "start_s": 29.975,
+   "end_s": 30.075
+  },
+  {
+   "w": "nineteen",
+   "start_s": 30.075,
+   "end_s": 30.525
+  },
+  {
+   "w": "eighty-one,",
+   "start_s": 30.525,
+   "end_s": 31.475
+  },
+  {
+   "w": "the",
+   "start_s": 31.475,
+   "end_s": 31.613
+  },
+  {
+   "w": "federal",
+   "start_s": 31.613,
+   "end_s": 31.975
+  },
+  {
+   "w": "load",
+   "start_s": 31.975,
+   "end_s": 32.35
+  },
+  {
+   "w": "was",
+   "start_s": 32.35,
+   "end_s": 32.562
+  },
+  {
+   "w": "thirty-one",
+   "start_s": 32.562,
+   "end_s": 33.125
+  },
+  {
+   "w": "percent",
+   "start_s": 33.125,
+   "end_s": 33.6
+  },
+  {
+   "w": "of",
+   "start_s": 33.6,
+   "end_s": 33.763
+  },
+  {
+   "w": "GDP.",
+   "start_s": 33.763,
+   "end_s": 35.1
+  },
+  {
+   "w": "Today",
+   "start_s": 35.8,
+   "end_s": 36.1
+  },
+  {
+   "w": "that",
+   "start_s": 36.1,
+   "end_s": 36.363
+  },
+  {
+   "w": "same",
+   "start_s": 36.363,
+   "end_s": 36.7
+  },
+  {
+   "w": "load",
+   "start_s": 36.7,
+   "end_s": 37.088
+  },
+  {
+   "w": "carries",
+   "start_s": 37.088,
+   "end_s": 37.825
+  },
+  {
+   "w": "one",
+   "start_s": 37.825,
+   "end_s": 38.05
+  },
+  {
+   "w": "hundred",
+   "start_s": 38.05,
+   "end_s": 38.4
+  },
+  {
+   "w": "twenty-three",
+   "start_s": 38.4,
+   "end_s": 38.925
+  },
+  {
+   "w": "percent.",
+   "start_s": 38.925,
+   "end_s": 39.95
+  },
+  {
+   "w": "And",
+   "start_s": 40.65,
+   "end_s": 40.788
+  },
+  {
+   "w": "the",
+   "start_s": 40.788,
+   "end_s": 40.888
+  },
+  {
+   "w": "load",
+   "start_s": 40.888,
+   "end_s": 41.3
+  },
+  {
+   "w": "sends",
+   "start_s": 41.3,
+   "end_s": 41.588
+  },
+  {
+   "w": "a",
+   "start_s": 41.588,
+   "end_s": 41.688
+  },
+  {
+   "w": "bill.",
+   "start_s": 41.688,
+   "end_s": 42.525
+  },
+  {
+   "w": "Federal",
+   "start_s": 42.525,
+   "end_s": 42.988
+  },
+  {
+   "w": "interest",
+   "start_s": 42.988,
+   "end_s": 43.525
+  },
+  {
+   "w": "runs",
+   "start_s": 43.525,
+   "end_s": 43.838
+  },
+  {
+   "w": "one",
+   "start_s": 43.838,
+   "end_s": 44.1
+  },
+  {
+   "w": "point",
+   "start_s": 44.1,
+   "end_s": 44.388
+  },
+  {
+   "w": "two",
+   "start_s": 44.388,
+   "end_s": 44.638
+  },
+  {
+   "w": "trillion",
+   "start_s": 44.638,
+   "end_s": 45.125
+  },
+  {
+   "w": "dollars",
+   "start_s": 45.125,
+   "end_s": 45.55
+  },
+  {
+   "w": "a",
+   "start_s": 45.55,
+   "end_s": 45.663
+  },
+  {
+   "w": "year.",
+   "start_s": 45.663,
+   "end_s": 46.525
+  },
+  {
+   "w": "The",
+   "start_s": 47.225,
+   "end_s": 47.338
+  },
+  {
+   "w": "thirty-year",
+   "start_s": 47.338,
+   "end_s": 47.9
+  },
+  {
+   "w": "carries",
+   "start_s": 47.9,
+   "end_s": 48.35
+  },
+  {
+   "w": "five",
+   "start_s": 48.35,
+   "end_s": 48.725
+  },
+  {
+   "w": "point",
+   "start_s": 48.725,
+   "end_s": 49.013
+  },
+  {
+   "w": "two",
+   "start_s": 49.013,
+   "end_s": 49.263
+  },
+  {
+   "w": "eight,",
+   "start_s": 49.263,
+   "end_s": 49.95
+  },
+  {
+   "w": "and",
+   "start_s": 49.95,
+   "end_s": 50.088
+  },
+  {
+   "w": "every",
+   "start_s": 50.088,
+   "end_s": 50.438
+  },
+  {
+   "w": "new",
+   "start_s": 50.438,
+   "end_s": 50.663
+  },
+  {
+   "w": "bond",
+   "start_s": 50.663,
+   "end_s": 51.063
+  },
+  {
+   "w": "is",
+   "start_s": 51.063,
+   "end_s": 51.213
+  },
+  {
+   "w": "priced",
+   "start_s": 51.213,
+   "end_s": 51.6
+  },
+  {
+   "w": "off",
+   "start_s": 51.6,
+   "end_s": 51.825
+  },
+  {
+   "w": "that",
+   "start_s": 51.825,
+   "end_s": 52.075
+  },
+  {
+   "w": "number.",
+   "start_s": 52.075,
+   "end_s": 52.975
+  },
+  {
+   "w": "Nothing",
+   "start_s": 53.75,
+   "end_s": 54.125
+  },
+  {
+   "w": "defaulted.",
+   "start_s": 54.125,
+   "end_s": 54.963
+  },
+  {
+   "w": "Nothing",
+   "start_s": 54.963,
+   "end_s": 55.388
+  },
+  {
+   "w": "crashed.",
+   "start_s": 55.388,
+   "end_s": 56.125
+  },
+  {
+   "w": "The",
+   "start_s": 56.125,
+   "end_s": 56.25
+  },
+  {
+   "w": "load",
+   "start_s": 56.25,
+   "end_s": 56.6
+  },
+  {
+   "w": "just",
+   "start_s": 56.6,
+   "end_s": 56.825
+  },
+  {
+   "w": "went",
+   "start_s": 56.825,
+   "end_s": 57.0
+  },
+  {
+   "w": "up.",
+   "start_s": 57.0,
+   "end_s": 57.7
+  },
+  {
+   "w": "So",
+   "start_s": 58.425,
+   "end_s": 58.575
+  },
+  {
+   "w": "when",
+   "start_s": 58.575,
+   "end_s": 58.763
+  },
+  {
+   "w": "someone",
+   "start_s": 58.763,
+   "end_s": 59.15
+  },
+  {
+   "w": "calls",
+   "start_s": 59.15,
+   "end_s": 59.55
+  },
+  {
+   "w": "five",
+   "start_s": 59.55,
+   "end_s": 59.925
+  },
+  {
+   "w": "percent",
+   "start_s": 59.925,
+   "end_s": 60.375
+  },
+  {
+   "w": "normal,",
+   "start_s": 60.375,
+   "end_s": 60.888
+  },
+  {
+   "w": "ask",
+   "start_s": 60.888,
+   "end_s": 61.25
+  },
+  {
+   "w": "them:",
+   "start_s": 61.25,
+   "end_s": 61.875
+  },
+  {
+   "w": "normal",
+   "start_s": 61.875,
+   "end_s": 62.35
+  },
+  {
+   "w": "for",
+   "start_s": 62.35,
+   "end_s": 62.5
+  },
+  {
+   "w": "which",
+   "start_s": 62.5,
+   "end_s": 62.763
+  },
+  {
+   "w": "bridge.",
+   "start_s": 62.763,
+   "end_s": 63.8
+  },
+  {
+   "w": "Nineteen",
+   "start_s": 63.8,
+   "end_s": 64.4
+  },
+  {
+   "w": "eighty-one",
+   "start_s": 64.4,
+   "end_s": 64.988
+  },
+  {
+   "w": "carried",
+   "start_s": 64.988,
+   "end_s": 65.45
+  },
+  {
+   "w": "thirty-one",
+   "start_s": 65.45,
+   "end_s": 66.025
+  },
+  {
+   "w": "percent.",
+   "start_s": 66.025,
+   "end_s": 66.988
+  },
+  {
+   "w": "This",
+   "start_s": 66.988,
+   "end_s": 67.225
+  },
+  {
+   "w": "one",
+   "start_s": 67.225,
+   "end_s": 67.463
+  },
+  {
+   "w": "carries",
+   "start_s": 67.463,
+   "end_s": 67.913
+  },
+  {
+   "w": "one",
+   "start_s": 67.913,
+   "end_s": 68.188
+  },
+  {
+   "w": "twenty-three.",
+   "start_s": 68.188,
+   "end_s": 69.425
+  }
+ ]
+}

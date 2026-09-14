@@ -1,0 +1,38 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T06:01:21.790Z",
+  "prompt": "9:16 vertical, full bleed. A cream paper page with a soft deckle edge, charcoal ink drawing. A small counter with one empty stool, a teacup on the counter with a thin curl of steam, and a folded paper tab standing beside it. @StickMike walks in from the left, stops at the empty stool and looks at the cup. Static camera, silent, no on-screen text.",
+  "references": [
+    "StickMike"
+  ],
+  "settings": {
+    "pillText": "Video · 720p · 10s crop_9_16 x1",
+    "creditsText": "Generating will use 15 credits",
+    "modelText": "Omni 1.1 Flash",
+    "credits": 15
+  },
+  "requested_ratio": "9:16",
+  "detected_dimensions": "720x1280",
+  "aspect_ratio": "9:16",
+  "duration_seconds": "10.000000",
+  "verification_error": null,
+  "reversed": false,
+  "files": {
+    "video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\short\\clip-a-counter-tab.mp4",
+      "sha256": "a46f31b99298c78b4e483e33dc70265d03b0fc496f257475ad7868877e563d55"
+    },
+    "raw_video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\short\\clip-a-counter-tab-raw.mp4",
+      "sha256": "a46f31b99298c78b4e483e33dc70265d03b0fc496f257475ad7868877e563d55"
+    },
+    "frame_start": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\short\\clip-a-counter-tab_frame_0.png",
+      "sha256": "ffad615fe6fecb4eb8b821701e6744fa433de63cc888da071360f50779ef7a1f"
+    },
+    "frame_end": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\short\\clip-a-counter-tab_frame_end.png",
+      "sha256": "dcf0e30a2c73ec53371eee40e692e7137605387b8f35c7963b76b02f99e74fbb"
+    }
+  }
+}

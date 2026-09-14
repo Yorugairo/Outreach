@@ -1,0 +1,39 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T07:55:52.008Z",
+  "prompt": "Animate this exact drawing: 9:16 vertical, full bleed. Cream paper page, charcoal ink. A toll gate stands open in the middle of the page with nobody passing through it. The character, in his indigo suit and copper tie, walks past the open gate toward a small drawn factory with lit windows at the far edge of the page. In the foreground corner, the folded paper tab rests on a counter. A single still frame, no on-screen text.",
+  "references": [
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\approved\\still-f-toll-gate-to-fab.png",
+    "StickMike"
+  ],
+  "settings": {
+    "pillText": "Video · 720p · 10s crop_9_16 x1",
+    "creditsText": "Generating will use 15 credits",
+    "modelText": "Omni 1.1 Flash",
+    "credits": 15
+  },
+  "requested_ratio": "9:16",
+  "detected_dimensions": "720x1280",
+  "aspect_ratio": "9:16",
+  "duration_seconds": "10.000000",
+  "verification_error": null,
+  "reversed": false,
+  "files": {
+    "video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-f-toll-gate-to-fab-v2.mp4",
+      "sha256": "ceb472b41d8a0687b20f29b448ec669b74d95b9c4cb2707218108b1c94631a7d"
+    },
+    "raw_video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-f-toll-gate-to-fab-v2-raw.mp4",
+      "sha256": "ceb472b41d8a0687b20f29b448ec669b74d95b9c4cb2707218108b1c94631a7d"
+    },
+    "frame_start": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-f-toll-gate-to-fab-v2_frame_0.png",
+      "sha256": "a2af72092c060187524431f05ccc86dbb69f1e287c44e1bc0cf395fef10da0be"
+    },
+    "frame_end": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-f-toll-gate-to-fab-v2_frame_end.png",
+      "sha256": "d6a01ffd69787d1b064f35cf5a564a72bc922e8790f6e0a04fb8c09c373984cc"
+    }
+  }
+}

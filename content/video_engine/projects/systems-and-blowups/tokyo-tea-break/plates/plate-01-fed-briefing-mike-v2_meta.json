@@ -1,0 +1,27 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-03T21:30:33.166Z",
+  "prompt": "[Cinematography]: 9:16 vertical orientation, wide-angle 24mm, eye-level straight-on framing, deep focus across all planes, static camera with subtle linear foreground parallax. [Subject]: @Mike, exactly matching the first reference: an original fictional Black male finance presenter in his thirties with rich warm brown skin, short sculpted loc twists with clean taper, black rectangular glasses, neatly trimmed goatee, tailored deep-indigo suit with fine dark cross-hatching, pale blue shirt, rust-red patterned tie, gold circuit lapel pin, and brown cap-toe dress shoes with handcrafted red-and-gold floral paisley textile on the vamp. Fully visible head to feet. [Action]: Stands authoritative in the right 55% clear zone beside the podium, gesturing with his left hand toward the wall frame with an engaged, confident analytical expression. [Context]: Layered 2.5D Federal Reserve briefing room: near plane dark mahogany desk corner and vintage microphone lower-left; mid plane wooden press podium at 0.20 frame height on an unbroken floor baseline; safe board region an unadorned empty rectangular matte wall-frame mounted on the back wall; far plane tall mahogany-paneled wall with warm glowing sconces. [Style & Ambiance]: Art style and tactile register exactly match the second reference: rich hand-cut crinkle-paper woodblock editorial illustration, deep saturated indigo #1769C2 and warm amber #F5B72E, bold carved ink contours #25313C, visible tactile paper grain and torn deckle edges, matte finish, soft directional lighting from upper left. [Negative]: no text, no words, no letters, no numbers, no charts, no graphs, no logos, no watermarks, no plain black shoes, no plain blue shoes, no pale washed out skin, no photorealism, no shallow depth of field.",
+  "references": [
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\assets\\generated\\cutouts\\actor-host-point-right-v1.png",
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-banker-apartment-v2.png"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\plates\\plate-01-fed-briefing-mike-v2.mp4.png",
+      "sha256": "e75517eb2ef5c9fcc0b7215050ef736cc608440c0aaa5bc728fae68f2cd145eb"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\plates\\plate-01-fed-briefing-mike-v2-raw.png",
+      "sha256": "e75517eb2ef5c9fcc0b7215050ef736cc608440c0aaa5bc728fae68f2cd145eb"
+    }
+  }
+}

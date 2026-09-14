@@ -1,0 +1,46 @@
+{
+ "page_s": 25.23,
+ "instants": [
+  25.23,
+  25.330000000000002,
+  25.43
+ ],
+ "frames": [
+  [
+   "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short-t10\\proof\\pop-25.23s.png",
+   "a0705e3866e6c4d77e767586ece5fdef81581f57999edf93e7fe4bd34db40313"
+  ],
+  [
+   "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short-t10\\proof\\pop-25.33s.png",
+   "cd3756548597abfc3653432317cd1a55379e393791767c437bfe467b62faf130"
+  ],
+  [
+   "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short-t10\\proof\\pop-25.43s.png",
+   "7aaeee32b72c6a222d7e23013371862252f1774256bda13298a031b5bc2302a1"
+  ],
+  [
+   "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short-t10\\proof\\pop-control-25.23s.png",
+   "b4439e4f5b47db9f2a8402e21d5007e687793672de9773f79c49a547ce01e258"
+  ],
+  [
+   "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short-t10\\proof\\pop-control-25.33s.png",
+   "5807095b8c36447f18d719468243216a64a0f475ff3a28f4761b5ad19378fbfa"
+  ],
+  [
+   "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short-t10\\proof\\pop-control-25.43s.png",
+   "c0cfd41c1a0109f8ca9380c77dbdbea929cb0f2a7821d8ecd13ab45d4919e491"
+  ],
+  [
+   "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short-t10\\proof\\stagger-25.23s.png",
+   "e7d1ca89599aa735f0d19254cc997c29aee6b555ea1af1f590a0c88e7bdef573"
+  ],
+  [
+   "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short-t10\\proof\\stagger-25.33s.png",
+   "e6329c6da86c299f7ca2c9dd7ad9e57978ec9b8a3e4298d0d528800fd4671f91"
+  ],
+  [
+   "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short-t10\\proof\\stagger-25.43s.png",
+   "3953832ba57de31e4631f5a7cde8acc66e8ed41089e2303945f33732414fed9e"
+  ]
+ ]
+}

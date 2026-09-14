@@ -1,0 +1,44 @@
+[
+ {
+  "asset": "dock-h-pledge",
+  "title": "Ten trillion yen for chips",
+  "source": "HollowStickMike - Money Physics",
+  "species": "deck",
+  "badges": []
+ },
+ {
+  "asset": "dock-c-two-lanes",
+  "title": "The left lane and the right lane",
+  "source": "HollowStickMike - Money Physics",
+  "species": "deck",
+  "badges": []
+ },
+ {
+  "asset": "dock-a-podium",
+  "title": "Washington signed a tariff",
+  "source": "HollowStickMike - Money Physics",
+  "species": "deck",
+  "badges": []
+ },
+ {
+  "asset": "dock-e-vault",
+  "title": "Tokyo checked the vault",
+  "source": "HollowStickMike - Money Physics",
+  "species": "deck",
+  "badges": []
+ },
+ {
+  "asset": "dock-b-holdings",
+  "title": "Japan is selling America's debt",
+  "source": "US Treasury TIC \u00b7 Sep 2026",
+  "species": "chart",
+  "badges": []
+ },
+ {
+  "asset": "dock-g-receipt",
+  "title": "The tariff bill on a $30,000 car",
+  "source": "DERIVED \u00b7 USTR + USITC HTS 8708 \u00b7 Sep 2026",
+  "species": "chart",
+  "badges": []
+ }
+]

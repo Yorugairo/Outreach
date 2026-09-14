@@ -1,0 +1,702 @@
+[
+  {
+    "shot": 1,
+    "start": 0.0,
+    "end": 12.88,
+    "dur": 12.88,
+    "kind": "COMP"
+  },
+  {
+    "shot": 2,
+    "start": 12.88,
+    "end": 19.35,
+    "dur": 6.47,
+    "kind": "build"
+  },
+  {
+    "shot": 3,
+    "start": 19.35,
+    "end": 23.1,
+    "dur": 3.75,
+    "kind": "COMP"
+  },
+  {
+    "shot": 4,
+    "start": 23.1,
+    "end": 26.92,
+    "dur": 3.82,
+    "kind": "COMP"
+  },
+  {
+    "shot": 5,
+    "start": 26.92,
+    "end": 33.82,
+    "dur": 6.9,
+    "kind": "build"
+  },
+  {
+    "shot": 6,
+    "start": 33.82,
+    "end": 36.32,
+    "dur": 2.5,
+    "kind": "COMP"
+  },
+  {
+    "shot": 7,
+    "start": 36.32,
+    "end": 38.35,
+    "dur": 2.03,
+    "kind": "COMP"
+  },
+  {
+    "shot": 8,
+    "start": 38.35,
+    "end": 39.93,
+    "dur": 1.58,
+    "kind": "COMP"
+  },
+  {
+    "shot": 9,
+    "start": 39.93,
+    "end": 44.75,
+    "dur": 4.82,
+    "kind": "COMP"
+  },
+  {
+    "shot": 10,
+    "start": 44.75,
+    "end": 54.88,
+    "dur": 10.13,
+    "kind": "build"
+  },
+  {
+    "shot": 11,
+    "start": 54.88,
+    "end": 61.0,
+    "dur": 6.12,
+    "kind": "COMP"
+  },
+  {
+    "shot": 12,
+    "start": 61.0,
+    "end": 70.98,
+    "dur": 9.98,
+    "kind": "COMP"
+  },
+  {
+    "shot": 13,
+    "start": 70.98,
+    "end": 75.37,
+    "dur": 4.39,
+    "kind": "COMP"
+  },
+  {
+    "shot": 14,
+    "start": 75.37,
+    "end": 78.65,
+    "dur": 3.28,
+    "kind": "build"
+  },
+  {
+    "shot": 15,
+    "start": 78.65,
+    "end": 79.92,
+    "dur": 1.27,
+    "kind": "COMP"
+  },
+  {
+    "shot": 16,
+    "start": 79.92,
+    "end": 91.77,
+    "dur": 11.85,
+    "kind": "build"
+  },
+  {
+    "shot": 17,
+    "start": 91.77,
+    "end": 95.42,
+    "dur": 3.65,
+    "kind": "build"
+  },
+  {
+    "shot": 18,
+    "start": 95.42,
+    "end": 105.62,
+    "dur": 10.2,
+    "kind": "build"
+  },
+  {
+    "shot": 19,
+    "start": 105.62,
+    "end": 112.52,
+    "dur": 6.9,
+    "kind": "COMP"
+  },
+  {
+    "shot": 20,
+    "start": 112.52,
+    "end": 121.22,
+    "dur": 8.7,
+    "kind": "COMP"
+  },
+  {
+    "shot": 21,
+    "start": 121.22,
+    "end": 129.6,
+    "dur": 8.38,
+    "kind": "COMP"
+  },
+  {
+    "shot": 22,
+    "start": 129.6,
+    "end": 131.92,
+    "dur": 2.32,
+    "kind": "COMP"
+  },
+  {
+    "shot": 23,
+    "start": 131.92,
+    "end": 134.18,
+    "dur": 2.26,
+    "kind": "COMP"
+  },
+  {
+    "shot": 24,
+    "start": 134.18,
+    "end": 134.22,
+    "dur": 0.1,
+    "kind": "COMP"
+  },
+  {
+    "shot": 25,
+    "start": 134.22,
+    "end": 134.28,
+    "dur": 0.1,
+    "kind": "build"
+  },
+  {
+    "shot": 26,
+    "start": 134.28,
+    "end": 134.35,
+    "dur": 0.1,
+    "kind": "COMP"
+  },
+  {
+    "shot": 27,
+    "start": 134.35,
+    "end": 134.62,
+    "dur": 0.27,
+    "kind": "COMP"
+  },
+  {
+    "shot": 28,
+    "start": 134.62,
+    "end": 139.63,
+    "dur": 5.01,
+    "kind": "COMP"
+  },
+  {
+    "shot": 29,
+    "start": 139.63,
+    "end": 142.55,
+    "dur": 2.92,
+    "kind": "COMP"
+  },
+  {
+    "shot": 30,
+    "start": 142.55,
+    "end": 150.48,
+    "dur": 7.93,
+    "kind": "COMP"
+  },
+  {
+    "shot": 31,
+    "start": 150.48,
+    "end": 167.15,
+    "dur": 16.67,
+    "kind": "COMP"
+  },
+  {
+    "shot": 32,
+    "start": 167.15,
+    "end": 175.8,
+    "dur": 8.65,
+    "kind": "COMP"
+  },
+  {
+    "shot": 33,
+    "start": 175.8,
+    "end": 187.35,
+    "dur": 11.55,
+    "kind": "build"
+  },
+  {
+    "shot": 34,
+    "start": 187.35,
+    "end": 193.5,
+    "dur": 6.15,
+    "kind": "build"
+  },
+  {
+    "shot": 35,
+    "start": 193.5,
+    "end": 203.47,
+    "dur": 9.97,
+    "kind": "build"
+  },
+  {
+    "shot": 36,
+    "start": 203.47,
+    "end": 215.18,
+    "dur": 11.71,
+    "kind": "COMP"
+  },
+  {
+    "shot": 37,
+    "start": 215.18,
+    "end": 222.95,
+    "dur": 7.77,
+    "kind": "COMP"
+  },
+  {
+    "shot": 38,
+    "start": 222.95,
+    "end": 227.37,
+    "dur": 4.42,
+    "kind": "build"
+  },
+  {
+    "shot": 39,
+    "start": 227.37,
+    "end": 228.42,
+    "dur": 1.05,
+    "kind": "COMP"
+  },
+  {
+    "shot": 40,
+    "start": 228.42,
+    "end": 229.03,
+    "dur": 0.61,
+    "kind": "COMP"
+  },
+  {
+    "shot": 41,
+    "start": 229.03,
+    "end": 234.4,
+    "dur": 5.37,
+    "kind": "COMP"
+  },
+  {
+    "shot": 42,
+    "start": 234.4,
+    "end": 241.12,
+    "dur": 6.72,
+    "kind": "COMP"
+  },
+  {
+    "shot": 43,
+    "start": 241.12,
+    "end": 251.92,
+    "dur": 10.8,
+    "kind": "COMP"
+  },
+  {
+    "shot": 44,
+    "start": 251.92,
+    "end": 259.33,
+    "dur": 7.41,
+    "kind": "build"
+  },
+  {
+    "shot": 45,
+    "start": 259.33,
+    "end": 263.12,
+    "dur": 3.79,
+    "kind": "COMP"
+  },
+  {
+    "shot": 46,
+    "start": 263.12,
+    "end": 263.23,
+    "dur": 0.11,
+    "kind": "COMP"
+  },
+  {
+    "shot": 47,
+    "start": 263.23,
+    "end": 269.47,
+    "dur": 6.24,
+    "kind": "build"
+  },
+  {
+    "shot": 48,
+    "start": 269.47,
+    "end": 279.37,
+    "dur": 9.9,
+    "kind": "COMP"
+  },
+  {
+    "shot": 49,
+    "start": 279.37,
+    "end": 280.38,
+    "dur": 1.01,
+    "kind": "COMP"
+  },
+  {
+    "shot": 50,
+    "start": 280.38,
+    "end": 286.72,
+    "dur": 6.34,
+    "kind": "COMP"
+  },
+  {
+    "shot": 51,
+    "start": 286.72,
+    "end": 294.77,
+    "dur": 8.05,
+    "kind": "COMP"
+  },
+  {
+    "shot": 52,
+    "start": 294.77,
+    "end": 306.53,
+    "dur": 11.76,
+    "kind": "COMP"
+  },
+  {
+    "shot": 53,
+    "start": 306.53,
+    "end": 313.07,
+    "dur": 6.54,
+    "kind": "build"
+  },
+  {
+    "shot": 54,
+    "start": 313.07,
+    "end": 313.13,
+    "dur": 0.1,
+    "kind": "COMP"
+  },
+  {
+    "shot": 55,
+    "start": 313.13,
+    "end": 313.17,
+    "dur": 0.1,
+    "kind": "build"
+  },
+  {
+    "shot": 56,
+    "start": 313.17,
+    "end": 313.23,
+    "dur": 0.1,
+    "kind": "build"
+  },
+  {
+    "shot": 57,
+    "start": 313.23,
+    "end": 313.3,
+    "dur": 0.1,
+    "kind": "build"
+  },
+  {
+    "shot": 58,
+    "start": 313.3,
+    "end": 313.37,
+    "dur": 0.1,
+    "kind": "build"
+  },
+  {
+    "shot": 59,
+    "start": 313.37,
+    "end": 313.43,
+    "dur": 0.1,
+    "kind": "build"
+  },
+  {
+    "shot": 60,
+    "start": 313.43,
+    "end": 313.47,
+    "dur": 0.1,
+    "kind": "build"
+  },
+  {
+    "shot": 61,
+    "start": 313.47,
+    "end": 313.53,
+    "dur": 0.1,
+    "kind": "build"
+  },
+  {
+    "shot": 62,
+    "start": 313.53,
+    "end": 316.35,
+    "dur": 2.82,
+    "kind": "build"
+  },
+  {
+    "shot": 63,
+    "start": 316.35,
+    "end": 320.45,
+    "dur": 4.1,
+    "kind": "COMP"
+  },
+  {
+    "shot": 64,
+    "start": 320.45,
+    "end": 326.73,
+    "dur": 6.28,
+    "kind": "COMP"
+  },
+  {
+    "shot": 65,
+    "start": 326.73,
+    "end": 339.08,
+    "dur": 12.35,
+    "kind": "COMP"
+  },
+  {
+    "shot": 66,
+    "start": 339.08,
+    "end": 339.9,
+    "dur": 0.82,
+    "kind": "build"
+  },
+  {
+    "shot": 67,
+    "start": 339.9,
+    "end": 345.98,
+    "dur": 6.08,
+    "kind": "build"
+  },
+  {
+    "shot": 68,
+    "start": 345.98,
+    "end": 349.72,
+    "dur": 3.74,
+    "kind": "build"
+  },
+  {
+    "shot": 69,
+    "start": 349.72,
+    "end": 359.2,
+    "dur": 9.48,
+    "kind": "build"
+  },
+  {
+    "shot": 70,
+    "start": 359.2,
+    "end": 368.25,
+    "dur": 9.05,
+    "kind": "COMP"
+  },
+  {
+    "shot": 71,
+    "start": 368.25,
+    "end": 369.8,
+    "dur": 1.55,
+    "kind": "COMP"
+  },
+  {
+    "shot": 72,
+    "start": 369.8,
+    "end": 377.22,
+    "dur": 7.42,
+    "kind": "build"
+  },
+  {
+    "shot": 73,
+    "start": 377.22,
+    "end": 383.05,
+    "dur": 5.83,
+    "kind": "build"
+  },
+  {
+    "shot": 74,
+    "start": 383.05,
+    "end": 386.42,
+    "dur": 3.37,
+    "kind": "COMP"
+  },
+  {
+    "shot": 75,
+    "start": 386.42,
+    "end": 393.67,
+    "dur": 7.25,
+    "kind": "COMP"
+  },
+  {
+    "shot": 76,
+    "start": 393.67,
+    "end": 401.98,
+    "dur": 8.31,
+    "kind": "COMP"
+  },
+  {
+    "shot": 77,
+    "start": 401.98,
+    "end": 408.55,
+    "dur": 6.57,
+    "kind": "build"
+  },
+  {
+    "shot": 78,
+    "start": 408.55,
+    "end": 412.05,
+    "dur": 3.5,
+    "kind": "build"
+  },
+  {
+    "shot": 79,
+    "start": 412.05,
+    "end": 419.68,
+    "dur": 7.63,
+    "kind": "COMP"
+  },
+  {
+    "shot": 80,
+    "start": 419.68,
+    "end": 443.42,
+    "dur": 23.74,
+    "kind": "COMP"
+  },
+  {
+    "shot": 81,
+    "start": 443.42,
+    "end": 446.3,
+    "dur": 2.88,
+    "kind": "build"
+  },
+  {
+    "shot": 82,
+    "start": 446.3,
+    "end": 461.33,
+    "dur": 15.03,
+    "kind": "COMP"
+  },
+  {
+    "shot": 83,
+    "start": 461.33,
+    "end": 472.95,
+    "dur": 11.62,
+    "kind": "COMP"
+  },
+  {
+    "shot": 84,
+    "start": 472.95,
+    "end": 479.22,
+    "dur": 6.27,
+    "kind": "build"
+  },
+  {
+    "shot": 85,
+    "start": 479.22,
+    "end": 490.6,
+    "dur": 11.38,
+    "kind": "build"
+  },
+  {
+    "shot": 86,
+    "start": 490.6,
+    "end": 496.52,
+    "dur": 5.92,
+    "kind": "build"
+  },
+  {
+    "shot": 87,
+    "start": 496.52,
+    "end": 505.87,
+    "dur": 9.35,
+    "kind": "build"
+  },
+  {
+    "shot": 88,
+    "start": 505.87,
+    "end": 512.05,
+    "dur": 6.18,
+    "kind": "COMP"
+  },
+  {
+    "shot": 89,
+    "start": 512.05,
+    "end": 516.18,
+    "dur": 4.13,
+    "kind": "COMP"
+  },
+  {
+    "shot": 90,
+    "start": 516.18,
+    "end": 530.55,
+    "dur": 14.37,
+    "kind": "build"
+  },
+  {
+    "shot": 91,
+    "start": 530.55,
+    "end": 540.23,
+    "dur": 9.68,
+    "kind": "build"
+  },
+  {
+    "shot": 92,
+    "start": 540.23,
+    "end": 545.72,
+    "dur": 5.49,
+    "kind": "build"
+  },
+  {
+    "shot": 93,
+    "start": 545.72,
+    "end": 554.77,
+    "dur": 9.05,
+    "kind": "build"
+  },
+  {
+    "shot": 94,
+    "start": 554.77,
+    "end": 560.78,
+    "dur": 6.01,
+    "kind": "COMP"
+  },
+  {
+    "shot": 95,
+    "start": 560.78,
+    "end": 575.93,
+    "dur": 15.15,
+    "kind": "build"
+  },
+  {
+    "shot": 96,
+    "start": 575.93,
+    "end": 583.92,
+    "dur": 7.99,
+    "kind": "COMP"
+  },
+  {
+    "shot": 97,
+    "start": 583.92,
+    "end": 585.88,
+    "dur": 1.96,
+    "kind": "COMP"
+  },
+  {
+    "shot": 98,
+    "start": 585.88,
+    "end": 590.9,
+    "dur": 5.02,
+    "kind": "COMP"
+  },
+  {
+    "shot": 99,
+    "start": 590.9,
+    "end": 605.58,
+    "dur": 14.68,
+    "kind": "build"
+  },
+  {
+    "shot": 100,
+    "start": 605.58,
+    "end": 617.85,
+    "dur": 12.27,
+    "kind": "COMP"
+  }
+]

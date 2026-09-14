@@ -9,6 +9,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 import build_scene_timeline_f as B  # noqa: E402
@@ -108,3 +110,49 @@ def test_a_declared_tip_mark_is_left_alone():
     sc["species"] = [{"kind": "ring", "target": {"kind": "datum", "index": 9}}]
     assert B.stamp_tip_marks([sc]) == []
     assert sc["world"]["page"]["tip_mark"] == []
+
+
+# ---- E88 / R26-76: THE MELT TAKES THE CHART, NOT THE BOARD ----------------------------------------------------------
+def _plate_scene(sid: str, a: float, b: float, exit_id: str | None = None) -> dict:
+    return {"scene_id": sid, "span": [a, b], "exit": exit_id, "world": {"asset_id": "plate-" + sid}}
+
+
+def test_a_melt_out_of_a_world_that_is_not_a_page_is_refused():
+    """The whole-world melt is retired: a melt takes a chart's ink and leaves the board, so there must be a page."""
+    for ending in ("melt", "melt:throw", "melt:splash:chart", "melt:splash:plate"):
+        scenes = [_plate_scene("s01", 1.0, 10.0, "cut"), _page_scene("s02", 10.0, 20.0, ending)]
+        with pytest.raises(ValueError, match="not a ledger page"):
+            B.stamp_transition_pages(scenes)
+
+
+def test_a_throw_and_a_chart_splash_need_a_page_to_draw_the_next_chart_on():
+    for ending in ("melt", "melt:throw", "melt:splash:chart"):
+        scenes = [_page_scene("s01", 1.0, 10.0, "cut"), _plate_scene("s02", 10.0, 20.0, ending)]
+        with pytest.raises(ValueError, match="s01 -> s02"):
+            B.stamp_transition_pages(scenes)
+
+
+def test_a_plate_splash_needs_a_plate():
+    scenes = [_page_scene("s01", 1.0, 10.0, "cut"), _page_scene("s02", 10.0, 20.0, "melt:splash:plate")]
+    with pytest.raises(ValueError, match="say melt:splash:chart"):
+        B.stamp_transition_pages(scenes)
+    ok = [_page_scene("s01", 1.0, 10.0, "cut"), _plate_scene("s02", 10.0, 20.0, "melt:splash:plate")]
+    notes = B.stamp_transition_pages(ok)
+    assert ok[0]["world"]["page"]["exit"] == "cut", "the page it takes still does not retract first (R26-60)"
+    assert any("exit=cut" in n for n in notes), notes
+
+
+def test_a_chart_splash_page_arrives_built_out_of_the_splatter():
+    scenes = [_page_scene("s01", 1.0, 10.0, "cut"), _page_scene("s02", 10.0, 20.0, "melt:splash:chart")]
+    notes = B.stamp_transition_pages(scenes)
+    assert scenes[1]["world"]["page"]["enter"] == "built", "not its normal build, and not the axes register"
+    assert any("s02" in n and "enter=built" in n for n in notes), notes
+    declared = [_page_scene("s01", 1.0, 10.0, "cut"), _page_scene("s02", 10.0, 20.0, "melt:splash:chart", enter="axes")]
+    with pytest.raises(ValueError, match="build under the stains"):
+        B.stamp_transition_pages(declared)
+
+
+def test_a_throw_hands_the_same_board_to_the_next_chart_on_its_axes():
+    scenes = [_page_scene("s01", 1.0, 10.0, "cut"), _page_scene("s02", 10.0, 20.0, "melt:throw")]
+    B.stamp_transition_pages(scenes)
+    assert scenes[1]["world"]["page"]["enter"] == "axes" and scenes[0]["world"]["page"]["exit"] == "cut"

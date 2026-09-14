@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T13:49:49.430Z",
+  "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink. A bustling customs terminal on a shipping dock. On the left, empty vehicle loading ramps. The character stands in a tailored suit holding a clipboard document, examining the empty cargo docks while massive container ships sit in the harbor. A single still frame, no on-screen text.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-03-busan-customs-dock.mp4.png",
+      "sha256": "11852d3d4ff67e5a898ac5297100c07daa268923f6facba7ecaa0111ecb53b4e"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-03-busan-customs-dock-raw.png",
+      "sha256": "11852d3d4ff67e5a898ac5297100c07daa268923f6facba7ecaa0111ecb53b4e"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-03-busan-customs-dock-raw.png",
+        "sha256": "11852d3d4ff67e5a898ac5297100c07daa268923f6facba7ecaa0111ecb53b4e"
+      }
+    ]
+  }
+}

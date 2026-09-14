@@ -1,0 +1,18 @@
+{
+  "_contract": "Plate 1 re-roll with explicit wide-angle desk and room framing.",
+  "mode": "image",
+  "model": "Nano Banana Pro",
+  "count": 1,
+  "ratio": "9:16",
+  "projectUrl": "https://flow.google.com/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+  "outputDir": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills",
+  "scenes": [
+    {
+      "id": "still-01-busan-container-toll",
+      "references": [
+        "HollowStickMike"
+      ],
+      "prompt": "9:16 vertical, wide establishing shot, full bleed. Cream paper page with a soft deckle edge, charcoal ink drawing with slate navy and crimson accents. In the foreground sits a wide wooden analyst desk seen from the front, with a white ceramic coffee cup giving off a curl of steam, and a paper shipping ledger. The character stands full-body behind the desk, arms at his sides, framed from knees up with generous room. Behind the desk, a giant warehouse window reveals towering maritime container cranes and container ships at dusk. A single still frame, no on-screen text."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-03T19:35:37.970Z",
+  "prompt": "Woodblock newsprint illustration, a cleanroom wafer line in full production, the exact scene of the first reference held as a locked camera. A flat black graphic silhouette of a man - the second reference, single tone, no face - steps in from frame left along the aisle, stops at left-third, and settles into explaining with both hands. Stylised, minimal leg articulation, ink-print texture, grain constant. Background static. No text, no lettering, no numerals, no screens, no readouts.",
+  "references": [
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-memory-fab-floor-v1.png",
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\assets\\generated\\cutouts\\actor-host-explain-both-hands-v1.png"
+  ],
+  "settings": {
+    "pillText": "Video · 720p · 6s crop_16_9 x1",
+    "creditsText": "Generating will use 10 credits",
+    "modelText": "Omni 1.1 Flash",
+    "credits": 10
+  },
+  "requested_ratio": "16:9",
+  "detected_dimensions": "1280x720",
+  "aspect_ratio": "16:9",
+  "duration_seconds": "6.000000",
+  "verification_error": null,
+  "reversed": false,
+  "files": {
+    "video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-memory-fab-floor.mp4",
+      "sha256": "71f9c0238f667ec38c7873d07db536427753e57bfed043761937eb551338d608"
+    },
+    "raw_video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-memory-fab-floor-raw.mp4",
+      "sha256": "71f9c0238f667ec38c7873d07db536427753e57bfed043761937eb551338d608"
+    },
+    "frame_start": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-memory-fab-floor_frame_0.png",
+      "sha256": "d2147534d9988aabb17dc70893f4b226cfd54dc6408391dde57ef67e3e7c3601"
+    },
+    "frame_end": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-memory-fab-floor_frame_end.png",
+      "sha256": "d32227578cb181d6838d28a19bcdb007a033ce98693c5173510c8de2626d6d42"
+    }
+  }
+}

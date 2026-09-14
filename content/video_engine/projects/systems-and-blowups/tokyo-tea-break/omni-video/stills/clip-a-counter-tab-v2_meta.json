@@ -1,0 +1,39 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T06:47:18.957Z",
+  "prompt": "Animate this exact drawing: 9:16 vertical, full bleed. A cream paper page with a soft deckle edge, charcoal ink drawing. A small counter with one empty stool, a teacup on the counter with a thin curl of steam, and a folded paper tab standing beside it. The character walks in from the left, stops at the empty stool and looks at the cup. Static camera, silent, no on-screen text.",
+  "references": [
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\approved\\still-a-counter-tab.png",
+    "StickMike"
+  ],
+  "settings": {
+    "pillText": "Video · 720p · 10s crop_9_16 x1",
+    "creditsText": "Generating will use 15 credits",
+    "modelText": "Omni 1.1 Flash",
+    "credits": 15
+  },
+  "requested_ratio": "9:16",
+  "detected_dimensions": "720x1280",
+  "aspect_ratio": "9:16",
+  "duration_seconds": "10.000000",
+  "verification_error": null,
+  "reversed": false,
+  "files": {
+    "video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-a-counter-tab-v2.mp4",
+      "sha256": "d50b7f5c116dedc4c2218267b81cfa2bd65fd6137de0a8f2e37cea9482694fd0"
+    },
+    "raw_video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-a-counter-tab-v2-raw.mp4",
+      "sha256": "d50b7f5c116dedc4c2218267b81cfa2bd65fd6137de0a8f2e37cea9482694fd0"
+    },
+    "frame_start": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-a-counter-tab-v2_frame_0.png",
+      "sha256": "143013078f4bb7b92ac0847586961899b3933c52d79e58c0011bf20d0c5ab03f"
+    },
+    "frame_end": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-a-counter-tab-v2_frame_end.png",
+      "sha256": "4c366aee91eae78732bd1d469f6dbf1aa2dcfd017b427a98112d535abc3dc1cd"
+    }
+  }
+}

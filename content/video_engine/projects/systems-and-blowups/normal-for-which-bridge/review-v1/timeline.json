@@ -1,0 +1,1055 @@
+{
+ "episode": "normal-for-which-bridge",
+ "script": "SCRIPT-SHORT-VO.txt",
+ "take": "vo-short",
+ "runtime_s": 56.904014,
+ "words": [
+  {
+   "w": "Five",
+   "start": 0.0,
+   "end": 0.74,
+   "part": 1
+  },
+  {
+   "w": "percent",
+   "start": 0.74,
+   "end": 1.02,
+   "part": 1
+  },
+  {
+   "w": "was",
+   "start": 1.02,
+   "end": 1.2,
+   "part": 1
+  },
+  {
+   "w": "normal",
+   "start": 1.2,
+   "end": 1.44,
+   "part": 1
+  },
+  {
+   "w": "once.",
+   "start": 1.44,
+   "end": 1.92,
+   "part": 1
+  },
+  {
+   "w": "But",
+   "start": 2.56,
+   "end": 2.84,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 2.84,
+   "end": 3.04,
+   "part": 1
+  },
+  {
+   "w": "yield",
+   "start": 3.04,
+   "end": 3.26,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 3.26,
+   "end": 3.5,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 3.5,
+   "end": 3.64,
+   "part": 1
+  },
+  {
+   "w": "weight,",
+   "start": 3.64,
+   "end": 3.9,
+   "part": 1
+  },
+  {
+   "w": "not",
+   "start": 4.14,
+   "end": 4.28,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 4.28,
+   "end": 4.42,
+   "part": 1
+  },
+  {
+   "w": "number,",
+   "start": 4.42,
+   "end": 4.62,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 4.78,
+   "end": 4.98,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 4.98,
+   "end": 5.12,
+   "part": 1
+  },
+  {
+   "w": "bridge",
+   "start": 5.12,
+   "end": 5.3,
+   "part": 1
+  },
+  {
+   "w": "under",
+   "start": 5.3,
+   "end": 5.68,
+   "part": 1
+  },
+  {
+   "w": "it",
+   "start": 5.68,
+   "end": 5.88,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 5.88,
+   "end": 6.08,
+   "part": 1
+  },
+  {
+   "w": "four",
+   "start": 6.08,
+   "end": 6.38,
+   "part": 1
+  },
+  {
+   "w": "times",
+   "start": 6.38,
+   "end": 6.68,
+   "part": 1
+  },
+  {
+   "w": "heavier.",
+   "start": 6.68,
+   "end": 7.08,
+   "part": 1
+  },
+  {
+   "w": "Every",
+   "start": 7.86,
+   "end": 8.14,
+   "part": 1
+  },
+  {
+   "w": "price",
+   "start": 8.14,
+   "end": 8.44,
+   "part": 1
+  },
+  {
+   "w": "you",
+   "start": 8.44,
+   "end": 8.64,
+   "part": 1
+  },
+  {
+   "w": "own",
+   "start": 8.64,
+   "end": 8.88,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 8.88,
+   "end": 9.08,
+   "part": 1
+  },
+  {
+   "w": "divided",
+   "start": 9.08,
+   "end": 9.42,
+   "part": 1
+  },
+  {
+   "w": "by",
+   "start": 9.42,
+   "end": 9.7,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 9.7,
+   "end": 9.88,
+   "part": 1
+  },
+  {
+   "w": "number.",
+   "start": 9.88,
+   "end": 10.22,
+   "part": 1
+  },
+  {
+   "w": "Start",
+   "start": 11.06,
+   "end": 11.34,
+   "part": 1
+  },
+  {
+   "w": "with",
+   "start": 11.34,
+   "end": 11.54,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 11.54,
+   "end": 11.7,
+   "part": 1
+  },
+  {
+   "w": "number.",
+   "start": 11.7,
+   "end": 11.92,
+   "part": 1
+  },
+  {
+   "w": "Two",
+   "start": 12.24,
+   "end": 12.46,
+   "part": 1
+  },
+  {
+   "w": "weeks",
+   "start": 12.46,
+   "end": 12.64,
+   "part": 1
+  },
+  {
+   "w": "ago",
+   "start": 12.64,
+   "end": 12.94,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 12.94,
+   "end": 13.16,
+   "part": 1
+  },
+  {
+   "w": "ten-year",
+   "start": 13.16,
+   "end": 13.56,
+   "part": 1
+  },
+  {
+   "w": "paid",
+   "start": 13.56,
+   "end": 13.84,
+   "part": 1
+  },
+  {
+   "w": "four",
+   "start": 13.84,
+   "end": 14.26,
+   "part": 1
+  },
+  {
+   "w": "point",
+   "start": 14.26,
+   "end": 14.633,
+   "part": 1
+  },
+  {
+   "w": "six",
+   "start": 14.633,
+   "end": 14.856,
+   "part": 1
+  },
+  {
+   "w": "six.",
+   "start": 14.856,
+   "end": 15.08,
+   "part": 1
+  },
+  {
+   "w": "By",
+   "start": 16.36,
+   "end": 16.62,
+   "part": 1
+  },
+  {
+   "w": "Tuesday",
+   "start": 16.62,
+   "end": 16.94,
+   "part": 1
+  },
+  {
+   "w": "it",
+   "start": 16.94,
+   "end": 17.24,
+   "part": 1
+  },
+  {
+   "w": "paid",
+   "start": 17.24,
+   "end": 17.46,
+   "part": 1
+  },
+  {
+   "w": "four",
+   "start": 17.46,
+   "end": 17.86,
+   "part": 1
+  },
+  {
+   "w": "point",
+   "start": 17.86,
+   "end": 18.087,
+   "part": 1
+  },
+  {
+   "w": "eight",
+   "start": 18.087,
+   "end": 18.313,
+   "part": 1
+  },
+  {
+   "w": "three,",
+   "start": 18.313,
+   "end": 18.54,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 19.1,
+   "end": 19.16,
+   "part": 1
+  },
+  {
+   "w": "highest",
+   "start": 19.16,
+   "end": 19.44,
+   "part": 1
+  },
+  {
+   "w": "since",
+   "start": 19.44,
+   "end": 19.78,
+   "part": 1
+  },
+  {
+   "w": "October",
+   "start": 19.78,
+   "end": 20.24,
+   "part": 1
+  },
+  {
+   "w": "twenty",
+   "start": 20.24,
+   "end": 20.579,
+   "part": 1
+  },
+  {
+   "w": "twenty-three.",
+   "start": 20.579,
+   "end": 21.2,
+   "part": 1
+  },
+  {
+   "w": "Now",
+   "start": 22.0,
+   "end": 22.08,
+   "part": 1
+  },
+  {
+   "w": "put",
+   "start": 22.08,
+   "end": 22.24,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 22.24,
+   "end": 22.42,
+   "part": 1
+  },
+  {
+   "w": "number",
+   "start": 22.42,
+   "end": 22.6,
+   "part": 1
+  },
+  {
+   "w": "on",
+   "start": 22.6,
+   "end": 22.84,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 22.84,
+   "end": 23.0,
+   "part": 1
+  },
+  {
+   "w": "bridge",
+   "start": 23.0,
+   "end": 23.2,
+   "part": 1
+  },
+  {
+   "w": "it",
+   "start": 23.2,
+   "end": 23.42,
+   "part": 1
+  },
+  {
+   "w": "actually",
+   "start": 23.42,
+   "end": 23.82,
+   "part": 1
+  },
+  {
+   "w": "sits",
+   "start": 23.82,
+   "end": 24.14,
+   "part": 1
+  },
+  {
+   "w": "on.",
+   "start": 24.14,
+   "end": 24.54,
+   "part": 1
+  },
+  {
+   "w": "In",
+   "start": 25.14,
+   "end": 25.44,
+   "part": 1
+  },
+  {
+   "w": "nineteen",
+   "start": 25.44,
+   "end": 25.788,
+   "part": 1
+  },
+  {
+   "w": "eighty-one,",
+   "start": 25.788,
+   "end": 26.18,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 26.18,
+   "end": 26.82,
+   "part": 1
+  },
+  {
+   "w": "federal",
+   "start": 26.82,
+   "end": 27.14,
+   "part": 1
+  },
+  {
+   "w": "load",
+   "start": 27.14,
+   "end": 27.48,
+   "part": 1
+  },
+  {
+   "w": "was",
+   "start": 27.48,
+   "end": 27.72,
+   "part": 1
+  },
+  {
+   "w": "thirty-one",
+   "start": 27.72,
+   "end": 28.12,
+   "part": 1
+  },
+  {
+   "w": "percent",
+   "start": 28.12,
+   "end": 28.64,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 28.64,
+   "end": 28.92,
+   "part": 1
+  },
+  {
+   "w": "GDP.",
+   "start": 28.92,
+   "end": 29.42,
+   "part": 1
+  },
+  {
+   "w": "Today",
+   "start": 30.32,
+   "end": 30.62,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 30.62,
+   "end": 30.88,
+   "part": 1
+  },
+  {
+   "w": "same",
+   "start": 30.88,
+   "end": 31.18,
+   "part": 1
+  },
+  {
+   "w": "load",
+   "start": 31.18,
+   "end": 31.42,
+   "part": 1
+  },
+  {
+   "w": "carries",
+   "start": 31.42,
+   "end": 31.78,
+   "part": 1
+  },
+  {
+   "w": "one",
+   "start": 31.78,
+   "end": 31.977,
+   "part": 1
+  },
+  {
+   "w": "hundred",
+   "start": 31.977,
+   "end": 32.437,
+   "part": 1
+  },
+  {
+   "w": "twenty-three",
+   "start": 32.437,
+   "end": 33.16,
+   "part": 1
+  },
+  {
+   "w": "percent.",
+   "start": 33.16,
+   "end": 33.62,
+   "part": 1
+  },
+  {
+   "w": "And",
+   "start": 34.06,
+   "end": 34.36,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 34.36,
+   "end": 34.52,
+   "part": 1
+  },
+  {
+   "w": "load",
+   "start": 34.52,
+   "end": 34.72,
+   "part": 1
+  },
+  {
+   "w": "sends",
+   "start": 34.72,
+   "end": 34.98,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 34.98,
+   "end": 35.18,
+   "part": 1
+  },
+  {
+   "w": "bill.",
+   "start": 35.18,
+   "end": 35.34,
+   "part": 1
+  },
+  {
+   "w": "Federal",
+   "start": 35.34,
+   "end": 35.64,
+   "part": 1
+  },
+  {
+   "w": "interest",
+   "start": 35.64,
+   "end": 36.1,
+   "part": 1
+  },
+  {
+   "w": "runs",
+   "start": 36.1,
+   "end": 36.4,
+   "part": 1
+  },
+  {
+   "w": "one",
+   "start": 36.4,
+   "end": 36.7,
+   "part": 1
+  },
+  {
+   "w": "point",
+   "start": 36.7,
+   "end": 37.0,
+   "part": 1
+  },
+  {
+   "w": "two",
+   "start": 37.0,
+   "end": 37.18,
+   "part": 1
+  },
+  {
+   "w": "trillion",
+   "start": 37.18,
+   "end": 37.319,
+   "part": 1
+  },
+  {
+   "w": "dollars",
+   "start": 37.319,
+   "end": 37.44,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 37.44,
+   "end": 38.0,
+   "part": 1
+  },
+  {
+   "w": "year.",
+   "start": 38.0,
+   "end": 38.32,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 38.96,
+   "end": 39.22,
+   "part": 1
+  },
+  {
+   "w": "thirty-year",
+   "start": 39.22,
+   "end": 39.7,
+   "part": 1
+  },
+  {
+   "w": "carries",
+   "start": 39.7,
+   "end": 40.12,
+   "part": 1
+  },
+  {
+   "w": "five",
+   "start": 40.12,
+   "end": 40.54,
+   "part": 1
+  },
+  {
+   "w": "point",
+   "start": 40.54,
+   "end": 40.817,
+   "part": 1
+  },
+  {
+   "w": "two",
+   "start": 40.817,
+   "end": 40.983,
+   "part": 1
+  },
+  {
+   "w": "eight,",
+   "start": 40.983,
+   "end": 41.26,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 41.26,
+   "end": 41.72,
+   "part": 1
+  },
+  {
+   "w": "every",
+   "start": 41.72,
+   "end": 41.98,
+   "part": 1
+  },
+  {
+   "w": "new",
+   "start": 41.98,
+   "end": 42.2,
+   "part": 1
+  },
+  {
+   "w": "bond",
+   "start": 42.2,
+   "end": 42.5,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 42.5,
+   "end": 42.68,
+   "part": 1
+  },
+  {
+   "w": "priced",
+   "start": 42.68,
+   "end": 42.9,
+   "part": 1
+  },
+  {
+   "w": "off",
+   "start": 42.9,
+   "end": 43.16,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 43.16,
+   "end": 43.36,
+   "part": 1
+  },
+  {
+   "w": "number.",
+   "start": 43.36,
+   "end": 43.66,
+   "part": 1
+  },
+  {
+   "w": "Nothing",
+   "start": 44.52,
+   "end": 44.84,
+   "part": 1
+  },
+  {
+   "w": "defaulted.",
+   "start": 44.84,
+   "end": 45.42,
+   "part": 1
+  },
+  {
+   "w": "Nothing",
+   "start": 45.58,
+   "end": 45.8,
+   "part": 1
+  },
+  {
+   "w": "crashed.",
+   "start": 45.8,
+   "end": 46.22,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 46.44,
+   "end": 46.62,
+   "part": 1
+  },
+  {
+   "w": "load",
+   "start": 46.62,
+   "end": 46.8,
+   "part": 1
+  },
+  {
+   "w": "just",
+   "start": 46.8,
+   "end": 46.98,
+   "part": 1
+  },
+  {
+   "w": "went",
+   "start": 46.98,
+   "end": 47.18,
+   "part": 1
+  },
+  {
+   "w": "up.",
+   "start": 47.18,
+   "end": 47.44,
+   "part": 1
+  },
+  {
+   "w": "So",
+   "start": 48.04,
+   "end": 48.22,
+   "part": 1
+  },
+  {
+   "w": "when",
+   "start": 48.22,
+   "end": 48.36,
+   "part": 1
+  },
+  {
+   "w": "someone",
+   "start": 48.36,
+   "end": 48.62,
+   "part": 1
+  },
+  {
+   "w": "calls",
+   "start": 48.62,
+   "end": 48.92,
+   "part": 1
+  },
+  {
+   "w": "five",
+   "start": 48.92,
+   "end": 49.24,
+   "part": 1
+  },
+  {
+   "w": "percent",
+   "start": 49.24,
+   "end": 49.62,
+   "part": 1
+  },
+  {
+   "w": "normal,",
+   "start": 49.62,
+   "end": 49.92,
+   "part": 1
+  },
+  {
+   "w": "ask",
+   "start": 50.18,
+   "end": 50.36,
+   "part": 1
+  },
+  {
+   "w": "them:",
+   "start": 50.36,
+   "end": 50.66,
+   "part": 1
+  },
+  {
+   "w": "normal",
+   "start": 51.24,
+   "end": 51.3,
+   "part": 1
+  },
+  {
+   "w": "for",
+   "start": 51.3,
+   "end": 51.6,
+   "part": 1
+  },
+  {
+   "w": "which",
+   "start": 51.6,
+   "end": 51.82,
+   "part": 1
+  },
+  {
+   "w": "bridge.",
+   "start": 51.82,
+   "end": 52.12,
+   "part": 1
+  },
+  {
+   "w": "Nineteen",
+   "start": 52.12,
+   "end": 52.609,
+   "part": 1
+  },
+  {
+   "w": "eighty-one",
+   "start": 52.609,
+   "end": 53.16,
+   "part": 1
+  },
+  {
+   "w": "carried",
+   "start": 53.16,
+   "end": 53.8,
+   "part": 1
+  },
+  {
+   "w": "thirty-one",
+   "start": 53.8,
+   "end": 54.396,
+   "part": 1
+  },
+  {
+   "w": "percent.",
+   "start": 54.396,
+   "end": 54.86,
+   "part": 1
+  },
+  {
+   "w": "This",
+   "start": 54.86,
+   "end": 55.26,
+   "part": 1
+  },
+  {
+   "w": "one",
+   "start": 55.26,
+   "end": 55.48,
+   "part": 1
+  },
+  {
+   "w": "carries",
+   "start": 55.48,
+   "end": 55.8,
+   "part": 1
+  },
+  {
+   "w": "one",
+   "start": 55.8,
+   "end": 55.877,
+   "part": 1
+  },
+  {
+   "w": "twenty-three.",
+   "start": 56.057,
+   "end": 56.34,
+   "part": 1
+  }
+ ],
+ "sentences": [
+  {
+   "text": "Five percent was normal once.",
+   "start": 0.0,
+   "end": 1.92,
+   "part": 1
+  },
+  {
+   "text": "But a yield is a weight, not a number, and the bridge under it is four times heavier.",
+   "start": 2.56,
+   "end": 7.08,
+   "part": 1
+  },
+  {
+   "text": "Every price you own is divided by that number.",
+   "start": 7.86,
+   "end": 10.22,
+   "part": 1
+  },
+  {
+   "text": "Start with the number.",
+   "start": 11.06,
+   "end": 11.92,
+   "part": 1
+  },
+  {
+   "text": "Two weeks ago the ten-year paid four point six six.",
+   "start": 12.24,
+   "end": 15.08,
+   "part": 1
+  },
+  {
+   "text": "By Tuesday it paid four point eight three, the highest since October twenty twenty-three.",
+   "start": 16.36,
+   "end": 21.2,
+   "part": 1
+  },
+  {
+   "text": "Now put that number on the bridge it actually sits on.",
+   "start": 22.0,
+   "end": 24.54,
+   "part": 1
+  },
+  {
+   "text": "In nineteen eighty-one, the federal load was thirty-one percent of GDP.",
+   "start": 25.14,
+   "end": 29.42,
+   "part": 1
+  },
+  {
+   "text": "Today that same load carries one hundred twenty-three percent.",
+   "start": 30.32,
+   "end": 33.62,
+   "part": 1
+  },
+  {
+   "text": "And the load sends a bill.",
+   "start": 34.06,
+   "end": 35.34,
+   "part": 1
+  },
+  {
+   "text": "Federal interest runs one point two trillion dollars a year.",
+   "start": 35.34,
+   "end": 38.32,
+   "part": 1
+  },
+  {
+   "text": "The thirty-year carries five point two eight, and every new bond is priced off that number.",
+   "start": 38.96,
+   "end": 43.66,
+   "part": 1
+  },
+  {
+   "text": "Nothing defaulted.",
+   "start": 44.52,
+   "end": 45.42,
+   "part": 1
+  },
+  {
+   "text": "Nothing crashed.",
+   "start": 45.58,
+   "end": 46.22,
+   "part": 1
+  },
+  {
+   "text": "The load just went up.",
+   "start": 46.44,
+   "end": 47.44,
+   "part": 1
+  },
+  {
+   "text": "So when someone calls five percent normal, ask them:",
+   "start": 48.04,
+   "end": 50.66,
+   "part": 1
+  },
+  {
+   "text": "normal for which bridge.",
+   "start": 51.24,
+   "end": 52.12,
+   "part": 1
+  },
+  {
+   "text": "Nineteen eighty-one carried thirty-one percent.",
+   "start": 52.12,
+   "end": 54.86,
+   "part": 1
+  },
+  {
+   "text": "This one carries one twenty-three.",
+   "start": 54.86,
+   "end": 56.34,
+   "part": 1
+  }
+ ],
+ "edit_pauses_applied": false
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T09:44:24.995Z",
+  "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink drawing, a single red accent. Two hands enter the frame: the left hand at the top holds a printed government table page with rows of numbers, the right hand at the bottom holds a phone showing one falling red line chart. Cream page between them, nothing else. A diptych of two objects. A single still frame, no on-screen text.",
+  "references": [],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x2",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\still-p2-two-objects.mp4.png",
+      "sha256": "7b3c38da85eedaa1b9c9e7c19bcce3ac18d21998a8ffd6f6e67119d29b2abece"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\still-p2-two-objects-raw.png",
+      "sha256": "7b3c38da85eedaa1b9c9e7c19bcce3ac18d21998a8ffd6f6e67119d29b2abece"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\still-p2-two-objects-raw.png",
+        "sha256": "7b3c38da85eedaa1b9c9e7c19bcce3ac18d21998a8ffd6f6e67119d29b2abece"
+      },
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\still-p2-two-objects-raw-2.png",
+        "sha256": "f1d4f3cf1517c122722673c7d23079634d962d66c0050b8683405016cf71a57e"
+      }
+    ]
+  }
+}

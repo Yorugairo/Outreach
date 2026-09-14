@@ -1,0 +1,20 @@
+{
+ "build": "build-review",
+ "timeline": "bridge-short.timeline.json",
+ "phrases": [
+  "this chart",
+  "the chart",
+  "this line",
+  "the line",
+  "look at",
+  "see the",
+  "watch the",
+  "the spike",
+  "the bar",
+  "on screen",
+  "here's the"
+ ],
+ "pointers": [],
+ "n_pointers": 0,
+ "n_uncovered": 0
+}

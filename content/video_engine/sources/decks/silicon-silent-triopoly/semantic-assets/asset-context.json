@@ -1,0 +1,9 @@
+{
+  "schema_version": "deck_asset_context.v1",
+  "deck_id": "silicon-silent-triopoly",
+  "assets": [],
+  "approval_record_path": "decks-operator-approval.v1.json",
+  "approved_at": "2026-08-29",
+  "status": "approved",
+  "artifact_hash": "sha256:8d105359aca854f3f61e34e550e01d62368f9bf05880c0b4fe07eb0a319d9055"
+}

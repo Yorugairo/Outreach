@@ -1,0 +1,39 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T08:00:38.563Z",
+  "prompt": "Animate this exact drawing: 9:16 vertical, full bleed. Cream paper page, charcoal ink, the same counter as before: one empty stool, the teacup now with no steam, the folded paper tab beside it. The character, in his indigo suit and copper tie, picks the tab up off the counter, turns it toward the camera and holds it there. A single still frame, no on-screen text.",
+  "references": [
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\approved\\still-a2-counter-colder.png",
+    "StickMike"
+  ],
+  "settings": {
+    "pillText": "Video · 720p · 10s crop_9_16 x1",
+    "creditsText": "Generating will use 15 credits",
+    "modelText": "Omni 1.1 Flash",
+    "credits": 15
+  },
+  "requested_ratio": "9:16",
+  "detected_dimensions": "720x1280",
+  "aspect_ratio": "9:16",
+  "duration_seconds": "10.000000",
+  "verification_error": null,
+  "reversed": false,
+  "files": {
+    "video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-a2-counter-colder-v2.mp4",
+      "sha256": "97bc38ff5cf12ffdbfb5df4a18a5f5d37ef5aeb7068747e42d72fe88175fd153"
+    },
+    "raw_video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-a2-counter-colder-v2-raw.mp4",
+      "sha256": "97bc38ff5cf12ffdbfb5df4a18a5f5d37ef5aeb7068747e42d72fe88175fd153"
+    },
+    "frame_start": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-a2-counter-colder-v2_frame_0.png",
+      "sha256": "72ec866634577787434b20f81e7befc5b55a5231486e1255661f93da9a56c930"
+    },
+    "frame_end": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\clip-a2-counter-colder-v2_frame_end.png",
+      "sha256": "c0346045d807191485293f69a4b4230725c0dd1fe133bc4d94f3f3abd0298bc7"
+    }
+  }
+}

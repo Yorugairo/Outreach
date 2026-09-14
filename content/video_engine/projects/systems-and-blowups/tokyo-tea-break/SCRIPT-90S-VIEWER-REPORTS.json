@@ -1,0 +1,150 @@
+{
+  "schema_version": "viewer_reports.v1",
+  "prompt_version": "v1",
+  "script": "SCRIPT-90S-VO.txt",
+  "windows_file": "SCRIPT-90S-VIEWER-WINDOWS.json",
+  "model": "(codex default)",
+  "effort": "high",
+  "lane": "codex",
+  "started_at": "2026-09-05T05:01:37+00:00",
+  "finished_at": "2026-09-05T05:03:09+00:00",
+  "windows_run": 10,
+  "package": {
+    "status": "asked",
+    "title": "Tokyo Tea Break",
+    "thumb_file": "",
+    "promised": "A quiet, atmospheric pause in Tokyo centered on tea. I expect to see the setting and ritual of a Japanese tea break and come away with a feel for the experience."
+  },
+  "reports": [
+    {
+      "i": 0,
+      "span": "0:00-0:15",
+      "new_things": [
+        "Tokyo supposedly pulled back from financing American debt.",
+        "That pullback allegedly left Washington with a funding gap and raised borrowing costs.",
+        "Finance analysts blame deficits, consumer debt, or signals from Jackson Hole."
+      ],
+      "held_question": "What exactly did Tokyo do with American debt, and why did it make borrowing more expensive?",
+      "asked_of_me": "Turn on finance news.",
+      "could_not_follow": [
+        "The final thought beginning with “Nobody” was cut off."
+      ],
+      "promise_answered": "not yet — I am still waiting to see a quiet Tokyo setting and the ritual or experience of a Japanese tea break.",
+      "answered_by": ""
+    },
+    {
+      "i": 1,
+      "span": "0:15-0:30",
+      "new_things": [
+        "The argument is that the Fed is not the main force driving the rate.",
+        "A Japanese balance sheet is presented as the real opposing force.",
+        "If a major buyer stops buying American debt, the bond auction determines the interest rate rather than the central bank."
+      ],
+      "held_question": "Which Japanese balance sheet is stepping away, and why?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 2,
+      "span": "0:30-0:45",
+      "new_things": [
+        "The situation is being framed as ordinary market mechanics, not panic or a conspiracy.",
+        "The explanation will connect Japan’s actions to American tech stocks.",
+        "Japan holds more than $1 trillion in U.S. debt."
+      ],
+      "held_question": "What number am I about to calculate, and what will it reveal about where the selling stops?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "The final sentence cut off before identifying the number."
+      ]
+    },
+    {
+      "i": 3,
+      "span": "0:45-1:00",
+      "new_things": [
+        "The upcoming number will track Japan's return and lead to two portfolio-protection moves.",
+        "Japan has sold $122 billion of U.S. Treasuries since February.",
+        "The usual explanation for the selling is currency-hedging costs.",
+        "Two years ago, hedging costs erased the yield."
+      ],
+      "held_question": "What number tracks Japan's return, and what are the two moves to protect a portfolio?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 4,
+      "span": "1:00-1:15",
+      "new_things": [
+        "Currency hedging is no longer a valid explanation because the trade now earns two percentage points.",
+        "When primary dealers cannot absorb more inventory, yields rise.",
+        "The selling has continued for four straight months and has drained liquidity."
+      ],
+      "held_question": "How does this Treasury selling and dealer strain reach my tech stocks?",
+      "asked_of_me": "",
+      "could_not_follow": [
+        "What “Tokyo’s tea break” refers to here.",
+        "The final sentence cuts off after “every,” so its destination is missing."
+      ]
+    },
+    {
+      "i": 5,
+      "span": "1:15-1:30",
+      "new_things": [
+        "Japan is selling Treasuries even though the trade is profitable after hedging.",
+        "Japan’s Treasury holdings are presented as the variable driving the discount rate.",
+        "The Treasury publishes Japan’s holdings monthly in TIC Table Five."
+      ],
+      "held_question": "What does TIC Table Five show about Japan’s holdings and where the discount rate is headed?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 6,
+      "span": "1:30-1:45",
+      "new_things": [
+        "Japan has switched from adding holdings to selling them.",
+        "Japan's holdings are down $122 billion since February.",
+        "The speaker's test is that if Japan starts buying again while yields remain high, their thesis is wrong, and they promise to acknowledge it."
+      ],
+      "held_question": "What is it that most people miss about how Japan's selling affects yields?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 7,
+      "span": "1:45-2:00",
+      "new_things": [
+        "The Japan bond issue is connected to more than bonds.",
+        "Meta's price-to-earnings multiple reflects the market's expectations for profits far into the future."
+      ],
+      "held_question": "How do Treasury yields affect Meta's price-to-earnings multiple?",
+      "asked_of_me": "Tonight, look up Meta and check its price-to-earnings multiple.",
+      "could_not_follow": []
+    },
+    {
+      "i": 8,
+      "span": "2:00-2:15",
+      "new_things": [
+        "At a 5% Treasury yield, one dollar received in ten years is worth about 61 cents today.",
+        "The speaker says that discounting can cut Meta’s stock value by 18% even if it loses no customers.",
+        "The speaker recommends trimming long-duration bond funds."
+      ],
+      "held_question": "Which companies facing refinancing does the speaker want me to sell?",
+      "asked_of_me": "Tonight, trim long-duration bond funds and sell companies that are refinancing.",
+      "could_not_follow": []
+    },
+    {
+      "i": 9,
+      "span": "2:15-2:30",
+      "new_things": [
+        "The companies to sell are those refinancing heavy corporate debt this year.",
+        "The Fed has not acted yet.",
+        "Tokyo is still sitting this out.",
+        "Washington’s unfunded debt burden is going to affect me."
+      ],
+      "held_question": "How will Washington’s debt burden come due for me personally?",
+      "asked_of_me": "Sell companies that have to refinance heavy corporate debt this year.",
+      "could_not_follow": []
+    }
+  ]
+}

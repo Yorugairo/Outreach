@@ -1,0 +1,16 @@
+{
+  "_contract": "Frozen WORK-ORDER (2026-09-12). E72: generation is the agent's; the video is the operator's. A change is a new order file. Dispatch: python omni-video/dispatch_plate.py plate-bridge-load.order.json",
+  "_beat": "the TURN - \"Now put that number on the bridge it actually sits on.\" The chart cannot say BRIDGE: this plate is the one picture the argument needs, held ~2.5 s as a bridge between the number page and the load page (E61 use=bridge). The load page MOUNTS over it (E73: the mount stays alive). The engine writes every figure; the plate carries no text, no numbers.",
+  "prompt": "9:16 vertical, full bleed. A light application of 2.5D woodblock print and vox newspaper meets rich anime colors. A long steel truss bridge spans a wide river at dusk, seen from a low angle on the near bank. On the middle of its deck sits an enormous stack of heavy charcoal ledger blocks, far too big for the bridge, and the deck visibly bows downward under the weight while the steel trusses strain. The river is calm and pale, the far bank is low and quiet, the sky a warm gradient. The upper third of the frame is open sky with nothing in it. The character, in his indigo suit and copper tie, stands very small on the near bank at the lower right, looking up at the bending bridge. A single still frame, no on-screen text, no numbers, no signs.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "ratio": "9:16",
+  "projectUrl": "https://labs.google/fx/tools/flow/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+  "outputPath": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/omni-video/stills/plate-bridge-load.png",
+  "budget": {
+    "kind": "zero_credit",
+    "model": "Nano Banana Pro"
+  },
+  "review_state": "generated under E72; offered to the operator inside the cut"
+}

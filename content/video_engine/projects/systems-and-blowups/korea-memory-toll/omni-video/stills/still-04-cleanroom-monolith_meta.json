@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T13:50:20.859Z",
+  "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink with amber and cobalt accents. An advanced semiconductor fabrication cleanroom. On the right, a large circular silicon wafer glows softly on a vertical mounting pedestal inside a vacuum chamber. The character stands on the left in a tailored navy suit and purple glasses, looking analytically toward the monolithic silicon disc. A single still frame, no on-screen text.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-04-cleanroom-monolith.mp4.png",
+      "sha256": "75e32314c46b1ff5af2ca5b0d1cc216f00402e4726f4ece2d13dea832a8f0199"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-04-cleanroom-monolith-raw.png",
+      "sha256": "75e32314c46b1ff5af2ca5b0d1cc216f00402e4726f4ece2d13dea832a8f0199"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-04-cleanroom-monolith-raw.png",
+        "sha256": "75e32314c46b1ff5af2ca5b0d1cc216f00402e4726f4ece2d13dea832a8f0199"
+      }
+    ]
+  }
+}

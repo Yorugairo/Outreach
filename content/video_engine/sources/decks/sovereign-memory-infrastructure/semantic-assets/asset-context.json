@@ -1,0 +1,9 @@
+{
+  "schema_version": "deck_asset_context.v1",
+  "deck_id": "sovereign-memory-infrastructure",
+  "assets": [],
+  "approval_record_path": "decks-operator-approval.v1.json",
+  "approved_at": "2026-08-29",
+  "status": "approved",
+  "artifact_hash": "sha256:4e308a5f9463c8998b1e2d61f8fa317354d7a2036a22cddda0cd5f760c3addb6"
+}

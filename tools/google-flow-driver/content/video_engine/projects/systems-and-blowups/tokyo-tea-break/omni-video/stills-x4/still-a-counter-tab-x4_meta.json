@@ -1,0 +1,44 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T06:20:15.231Z",
+  "prompt": "9:16 vertical, full bleed. A cream paper page with a soft deckle edge, charcoal ink drawing. A small counter with one empty stool, a teacup on the counter with a thin curl of steam, and a folded paper tab standing beside it. The character walks in from the left, stops at the empty stool and looks at the cup. A single still frame, no on-screen text.",
+  "references": [
+    "StickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x4",
+    "creditsText": "Generating will use 0 credits",
+    "modelText": "🍌 Nano Banana Pro",
+    "credits": 0
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills-x4\\still-a-counter-tab-x4.mp4.png",
+      "sha256": "e96bd2e14e94fde3adc63d54620c033abb1fe57fa01578b58f057b1e9e84a8ba"
+    },
+    "raw_image": {
+      "path": "content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills-x4\\still-a-counter-tab-x4-raw.png",
+      "sha256": "e96bd2e14e94fde3adc63d54620c033abb1fe57fa01578b58f057b1e9e84a8ba"
+    },
+    "raw_images": [
+      {
+        "path": "content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills-x4\\still-a-counter-tab-x4-raw.png",
+        "sha256": "e96bd2e14e94fde3adc63d54620c033abb1fe57fa01578b58f057b1e9e84a8ba"
+      },
+      {
+        "path": "content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills-x4\\still-a-counter-tab-x4-raw-2.png",
+        "sha256": "87e92afac43f5b066fb80aee9d423e403062603869b91a4a76bfceb1655e9816"
+      },
+      {
+        "path": "content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills-x4\\still-a-counter-tab-x4-raw-3.png",
+        "sha256": "06c8e7e0df5e3ca0aaad1edbc8e8eb41d9295297279e6d4366501059ae113412"
+      },
+      {
+        "path": "content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills-x4\\still-a-counter-tab-x4-raw-4.png",
+        "sha256": "3d8f9341ffa3d52accd4a0e1fa57ccadd9484237f57760862d535ebef3bb5e20"
+      }
+    ]
+  }
+}

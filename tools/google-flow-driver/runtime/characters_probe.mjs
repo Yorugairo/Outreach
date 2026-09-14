@@ -1,0 +1,13 @@
+import { chromium } from 'playwright-core';
+const browser = await chromium.connectOverCDP('http://127.0.0.1:9223');
+const flow = browser.contexts().flatMap(c => c.pages()).find(p => /flow\.google\.com/.test(p.url()));
+const tiles = () => flow.evaluate(() => Array.from(document.querySelectorAll('img[alt]')).map(i => i.getAttribute('alt').trim()).filter(a => a && !a.startsWith('http')));
+console.log('all-media tiles:', JSON.stringify(await tiles()));
+const nav = flow.locator('text=Characters').first();
+console.log('nav Characters count:', await nav.count());
+await nav.click(); await flow.waitForTimeout(1500);
+console.log('url now:', flow.url());
+console.log('characters view tiles:', JSON.stringify(await tiles()));
+console.log('characters view text:', (await flow.evaluate(() => document.body.innerText)).replace(/\s+/g,' ').slice(0, 600));
+await flow.locator('text=All media').first().click(); await flow.waitForTimeout(800);
+await browser.close();

@@ -136,7 +136,7 @@ Title: tension in the first ~40 characters, ≤~55 total; specificity beats
 cleverness; every promise is paid. Thumbnail: ONE subject, extreme value
 contrast, reads at 168 px, ≤3 punch words and only if the image is
 ambiguous; title and thumb split the work and never repeat; motifs
-compound across the catalogue; **no real faces**; thumbnails sell the
+compound across the catalogue; **no real faces** (the operator's on-camera face - E80); thumbnails sell the
 episode's question or thesis, never its opening prop.
 
 The thumbnail register is YouTube's, not the woodblock's: white ground,
@@ -180,6 +180,6 @@ never blur. Handwriting face: Kalam (Human Gate 2, decided 2026-09-03).
 
 No photographic or glossy render · no collage, torn edges or washi on
 plates · no readable text or numbers in generated art · no real faces
-(plates or thumbnails) · no info cards · no decorative motion · no held
+(plates or thumbnails; the operator's on-camera face - a drawn likeness is not one, E80) · no info cards · no decorative motion · no held
 still with a hard cut · no AI-purple, no gradients outside the six tokens
 · no kawaii or toy proportions · no burying the plate under evidence.

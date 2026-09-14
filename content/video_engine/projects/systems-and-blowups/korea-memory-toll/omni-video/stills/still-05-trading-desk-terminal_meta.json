@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T13:50:52.284Z",
+  "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink with amber highlights. A financial trading workstation with multiple terminal displays showing world trade maps and routing charts. The character stands beside the trading desk, facing the viewer with a composed analytical posture. A single still frame, no on-screen text.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-05-trading-desk-terminal.mp4.png",
+      "sha256": "7635eaba4f83680976ba3020e9503c2015f1da0986d4b1e0f2098437371c160d"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-05-trading-desk-terminal-raw.png",
+      "sha256": "7635eaba4f83680976ba3020e9503c2015f1da0986d4b1e0f2098437371c160d"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-05-trading-desk-terminal-raw.png",
+        "sha256": "7635eaba4f83680976ba3020e9503c2015f1da0986d4b1e0f2098437371c160d"
+      }
+    ]
+  }
+}

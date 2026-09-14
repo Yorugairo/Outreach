@@ -1,0 +1,38 @@
+{
+ "build": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short-t10",
+ "instants": [
+  {
+   "t": 25.23,
+   "why": "T10 caption arrival at 25.23s",
+   "warm": "e7d1ca89599aa735f0d19254cc997c29aee6b555ea1af1f590a0c88e7bdef573",
+   "cold": "e7d1ca89599aa735f0d19254cc997c29aee6b555ea1af1f590a0c88e7bdef573",
+   "match": true,
+   "known": null
+  },
+  {
+   "t": 25.330000000000002,
+   "why": "T10 caption arrival at 25.33s",
+   "warm": "e6329c6da86c299f7ca2c9dd7ad9e57978ec9b8a3e4298d0d528800fd4671f91",
+   "cold": "e6329c6da86c299f7ca2c9dd7ad9e57978ec9b8a3e4298d0d528800fd4671f91",
+   "match": true,
+   "known": null
+  },
+  {
+   "t": 25.43,
+   "why": "T10 caption arrival at 25.43s",
+   "warm": "0e6c82ba4a052788cd7d04123ce9f34da88ae3ae85975f4176c83c1e00de4d80",
+   "cold": "3953832ba57de31e4631f5a7cde8acc66e8ed41089e2303945f33732414fed9e",
+   "match": false,
+   "known": null,
+   "frames": [
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short-t10\\determinism\\25.43-warm.png",
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-short-t10\\determinism\\25.43-cold.png"
+   ]
+  }
+ ],
+ "ok": false,
+ "mismatches": 1,
+ "known": 0,
+ "truncated": 0,
+ "summary": "mismatch at 25.43"
+}

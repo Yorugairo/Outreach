@@ -1,0 +1,332 @@
+{
+  "fps": 60.0,
+  "frames": 433,
+  "from_s": 4.5,
+  "to_s": 11.7,
+  "joins": [
+    4.5,
+    5.7,
+    6.9,
+    8.1,
+    9.3,
+    10.5,
+    11.7
+  ],
+  "resample_px": 2.0,
+  "marks": [
+    {
+      "mark": "ALPHA",
+      "length_px": 347.57292848194635,
+      "samples": 174,
+      "timing_energy": 301014615185.1194,
+      "speed_cv": 1.0266575827696742,
+      "stall_fraction": 0.2222222222222222,
+      "join_speed_dip": 0.03782875321077053,
+      "mean_px_s": 48.27401784471475,
+      "max_px_s": 228.6425787118323,
+      "bending": 0.391634870887601,
+      "fairness": 0.08749142592739728,
+      "kappa_max": 0.2874696824350086,
+      "join_peak_mean": 0.06556755086417608,
+      "join_peak_max": 0.14546258019815467,
+      "join_step_mean": 0.02254609365343649,
+      "join_step_max": 0.04224560504344544,
+      "joins": [
+        {
+          "at_s": 5.7,
+          "arclength_px": 85.81,
+          "k_before": -0.015017092033164117,
+          "k_after": -0.02909534668784076,
+          "step": 0.014078254654676645,
+          "peak": 0.08582953337004785
+        },
+        {
+          "at_s": 6.9,
+          "arclength_px": 178.49,
+          "k_before": 0.0,
+          "k_after": 0.0,
+          "step": 0.0,
+          "peak": 0.0
+        },
+        {
+          "at_s": 8.1,
+          "arclength_px": 280.73,
+          "k_before": -0.0115206903364142,
+          "k_after": 0.02425067616130537,
+          "step": 0.03577136649771957,
+          "peak": 0.14546258019815467
+        },
+        {
+          "at_s": 9.3,
+          "arclength_px": 322.82,
+          "k_before": -0.020635242071340786,
+          "k_after": 0.0,
+          "step": 0.020635242071340786,
+          "peak": 0.04827282037633893
+        },
+        {
+          "at_s": 10.5,
+          "arclength_px": 326.12,
+          "k_before": -0.04224560504344544,
+          "k_after": 0.0,
+          "step": 0.04224560504344544,
+          "peak": 0.04827282037633893
+        }
+      ]
+    },
+    {
+      "mark": "BETA",
+      "length_px": 302.8842463362784,
+      "samples": 152,
+      "timing_energy": 289356554549.90533,
+      "speed_cv": 1.2748187615280813,
+      "stall_fraction": 0.3912037037037037,
+      "join_speed_dip": 0.04619241585742123,
+      "mean_px_s": 42.067256435594246,
+      "max_px_s": 220.04127794574234,
+      "bending": 0.369814646906159,
+      "fairness": 0.08354618925982135,
+      "kappa_max": 0.31780970185912116,
+      "join_peak_mean": 0.04084886898427035,
+      "join_peak_max": 0.07766395677987528,
+      "join_step_mean": 0.011917679542001305,
+      "join_step_max": 0.027731581757736413,
+      "joins": [
+        {
+          "at_s": 5.7,
+          "arclength_px": 75.5,
+          "k_before": -0.014701146095447683,
+          "k_after": -0.0066796892271801765,
+          "step": 0.008021456868267506,
+          "peak": 0.04488265017293576
+        },
+        {
+          "at_s": 6.9,
+          "arclength_px": 191.73,
+          "k_before": -0.008348785041695414,
+          "k_after": 0.019382796716040998,
+          "step": 0.027731581757736413,
+          "peak": 0.07766395677987528
+        },
+        {
+          "at_s": 8.1,
+          "arclength_px": 290.86,
+          "k_before": 0.0,
+          "k_after": 0.0,
+          "step": 0.0,
+          "peak": 0.0
+        }
+      ]
+    },
+    {
+      "mark": "CHI",
+      "length_px": 441.06678224960274,
+      "samples": 221,
+      "timing_energy": 498445667589.5222,
+      "speed_cv": 1.0529304187423472,
+      "stall_fraction": 0.14351851851851852,
+      "join_speed_dip": 0.04275840047904697,
+      "mean_px_s": 61.25927531244476,
+      "max_px_s": 260.5200000000025,
+      "bending": 4.810983115570318,
+      "fairness": 1.9635499428471654,
+      "kappa_max": 0.996616234623579,
+      "join_peak_mean": 0.20581793553751404,
+      "join_peak_max": 0.4046888825745699,
+      "join_step_mean": 0.011888396159508454,
+      "join_step_max": 0.026202813040355936,
+      "joins": [
+        {
+          "at_s": 5.7,
+          "arclength_px": 6.02,
+          "k_before": 0.0,
+          "k_after": 0.0,
+          "step": 0.0,
+          "peak": 0.0
+        },
+        {
+          "at_s": 6.9,
+          "arclength_px": 187.92,
+          "k_before": 0.00017687544502425652,
+          "k_after": -0.001029019426310808,
+          "step": 0.0012058948713350645,
+          "peak": 0.4046888825745699
+        },
+        {
+          "at_s": 8.1,
+          "arclength_px": 254.95,
+          "k_before": -0.004692114166799772,
+          "k_after": 0.010179505268763772,
+          "step": 0.014871619435563543,
+          "peak": 0.24433397166885878
+        },
+        {
+          "at_s": 9.3,
+          "arclength_px": 364.25,
+          "k_before": -0.007584480925958343,
+          "k_after": 0.018618332114397593,
+          "step": 0.026202813040355936,
+          "peak": 0.3449764751527233
+        },
+        {
+          "at_s": 10.5,
+          "arclength_px": 401.24,
+          "k_before": -0.017161653450287733,
+          "k_after": 0.0,
+          "step": 0.017161653450287733,
+          "peak": 0.035090348291418126
+        }
+      ]
+    },
+    {
+      "mark": "DELTA",
+      "length_px": 353.07900511706174,
+      "samples": 177,
+      "timing_energy": 250263776835.36926,
+      "speed_cv": 0.8298379563186169,
+      "stall_fraction": 0.0787037037037037,
+      "join_speed_dip": 0.04189264794928082,
+      "mean_px_s": 49.038750710703006,
+      "max_px_s": 179.67948463862203,
+      "bending": 3.1398321858616396,
+      "fairness": 1.0925990708251967,
+      "kappa_max": 0.7545105342806937,
+      "join_peak_mean": 0.3749158908649038,
+      "join_peak_max": 0.7545105342806937,
+      "join_step_mean": 0.09829732621428658,
+      "join_step_max": 0.42518613183823967,
+      "joins": [
+        {
+          "at_s": 5.7,
+          "arclength_px": 74.13,
+          "k_before": 0.0,
+          "k_after": 0.0,
+          "step": 0.0,
+          "peak": 0.0
+        },
+        {
+          "at_s": 6.9,
+          "arclength_px": 139.62,
+          "k_before": 0.0,
+          "k_after": -0.010622723821846104,
+          "step": 0.010622723821846104,
+          "peak": 0.7545105342806937
+        },
+        {
+          "at_s": 8.1,
+          "arclength_px": 191.3,
+          "k_before": -0.4584695411005768,
+          "k_after": -0.03328340926233714,
+          "step": 0.42518613183823967,
+          "peak": 0.4584695411005768
+        },
+        {
+          "at_s": 9.3,
+          "arclength_px": 282.61,
+          "k_before": 0.011846731340469716,
+          "k_after": -0.03066143121269174,
+          "step": 0.042508162553161456,
+          "peak": 0.6290411971395327
+        },
+        {
+          "at_s": 10.5,
+          "arclength_px": 315.67,
+          "k_before": 0.013169612858185683,
+          "k_after": 0.0,
+          "step": 0.013169612858185683,
+          "peak": 0.03255818180371572
+        }
+      ]
+    },
+    {
+      "mark": "EPS",
+      "length_px": 112.70399999999984,
+      "samples": 57,
+      "timing_energy": 35223661036.80018,
+      "speed_cv": 1.155091813122494,
+      "stall_fraction": 0.13425925925925927,
+      "join_speed_dip": 0.047639328303655464,
+      "mean_px_s": 15.653333333333281,
+      "max_px_s": 98.09999999999945,
+      "bending": 0.0,
+      "fairness": 0.0,
+      "kappa_max": 0.0,
+      "join_peak_mean": 0.0,
+      "join_peak_max": 0.0,
+      "join_step_mean": 0.0,
+      "join_step_max": 0.0,
+      "joins": [
+        {
+          "at_s": 5.7,
+          "arclength_px": 24.68,
+          "k_before": 0.0,
+          "k_after": 0.0,
+          "step": 0.0,
+          "peak": 0.0
+        },
+        {
+          "at_s": 6.9,
+          "arclength_px": 59.99,
+          "k_before": 0.0,
+          "k_after": 0.0,
+          "step": 0.0,
+          "peak": 0.0
+        },
+        {
+          "at_s": 8.1,
+          "arclength_px": 83.68,
+          "k_before": 0.0,
+          "k_after": 0.0,
+          "step": 0.0,
+          "peak": 0.0
+        },
+        {
+          "at_s": 9.3,
+          "arclength_px": 100.66,
+          "k_before": 0.0,
+          "k_after": 0.0,
+          "step": 0.0,
+          "peak": 0.0
+        },
+        {
+          "at_s": 10.5,
+          "arclength_px": 102.73,
+          "k_before": 0.0,
+          "k_after": 0.0,
+          "step": 0.0,
+          "peak": 0.0
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "marks": 5,
+    "timing_energy": 1374304275196.7163,
+    "speed_cv": 1.0678673064962427,
+    "stall_fraction": 0.19398148148148148,
+    "join_speed_dip": 0.043262309160035005,
+    "bending": 8.712264819225718,
+    "fairness": 3.227186628859581,
+    "join_peak_mean": 0.13743004925017285,
+    "join_peak_max": 0.7545105342806937,
+    "join_step_mean": 0.02892989911384657,
+    "join_step_max": 0.42518613183823967
+  },
+  "build_dir": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t17/arm-b",
+  "engine": {
+    "form": "split",
+    "engine": "engine-clothoid.mjs",
+    "engine_sha256": "b31a96268908097ec011f69ce4b5ec60f0d49081b9e5ecf1adf87f462d757630",
+    "timeline": "race.timeline.json",
+    "assets": "assets.json"
+  },
+  "clock": {
+    "ROLL": 0.7,
+    "SAVOR": 0.8,
+    "FIELD": 2.4,
+    "RACE_IN": 0.6,
+    "RACE_PERIOD": 1.2,
+    "lead": 3.9
+  },
+  "elapsed_s": 4.3
+}

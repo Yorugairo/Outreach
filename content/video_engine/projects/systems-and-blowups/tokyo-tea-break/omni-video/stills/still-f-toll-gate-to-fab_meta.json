@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T06:57:25.026Z",
+  "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink. A toll gate stands open in the middle of the page with nobody passing through it. The character, in his indigo suit and copper tie, walks past the open gate toward a small drawn factory with lit windows at the far edge of the page. In the foreground corner, the folded paper tab rests on a counter. A single still frame, no on-screen text.",
+  "references": [
+    "StickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\still-f-toll-gate-to-fab.mp4.png",
+      "sha256": "8883924e0646f0314120668f9fab4476cdf6a16bf5e3e9afc36f60b24929554e"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\still-f-toll-gate-to-fab-raw.png",
+      "sha256": "8883924e0646f0314120668f9fab4476cdf6a16bf5e3e9afc36f60b24929554e"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\still-f-toll-gate-to-fab-raw.png",
+        "sha256": "8883924e0646f0314120668f9fab4476cdf6a16bf5e3e9afc36f60b24929554e"
+      }
+    ]
+  }
+}

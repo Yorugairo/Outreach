@@ -1,0 +1,90 @@
+{
+  "schema_version": "viewer_windows.v1",
+  "script": "SCRIPT-90S-VO.txt",
+  "window_s": 15.0,
+  "memory_windows": 2,
+  "timing_source": "estimated",
+  "runtime_s": 146.347,
+  "windows": [
+    {
+      "i": 0,
+      "start_s": 0.0,
+      "end_s": 14.979,
+      "span": "0:00-0:15",
+      "text": "Tokyo took a tea break on American debt. And left Washington holding an unfunded bar tab while your borrowing costs jumped. Turn on finance news: analysts in matching blue ties blame deficits, consumer debt, or the vibes in Jackson Hole. Nobody",
+      "memory": ""
+    },
+    {
+      "i": 1,
+      "start_s": 15.0,
+      "end_s": 30.08,
+      "span": "0:15-0:30",
+      "text": "looked across the Pacific at what backs your mortgage. But here's where the consensus breaks. The opponent isn't the Fed; it's a balance sheet in Japan. When your biggest customer steps away, the bond auction sets the rate, not the central bank.",
+      "memory": "Tokyo took a tea break on American debt. And left Washington holding an unfunded bar tab while your borrowing costs jumped. Turn on finance news: analysts in matching blue ties blame deficits, consumer debt, or the vibes in Jackson Hole. Nobody"
+    },
+    {
+      "i": 2,
+      "start_s": 30.0,
+      "end_s": 45.181,
+      "span": "0:30-0:45",
+      "text": "Not a panic. Not a plot. Mechanics. Every investor wants to know where the selling stops. We'll trace the cash straight to your tech stocks. Japan holds over a trillion dollars of American debt. In sixty seconds, you'll calculate the number that",
+      "memory": "Tokyo took a tea break on American debt. And left Washington holding an unfunded bar tab while your borrowing costs jumped. Turn on finance news: analysts in matching blue ties blame deficits, consumer debt, or the vibes in Jackson Hole. Nobody looked across the Pacific at what backs your mortgage. But here's where the consensus breaks. The opponent isn't the Fed; it's a balance sheet in Japan. When your biggest customer steps away, the bond auction sets the rate, not the central bank."
+    },
+    {
+      "i": 3,
+      "start_s": 45.0,
+      "end_s": 60.037,
+      "span": "0:45-1:00",
+      "text": "tracks their return — and two moves to protect your portfolio. But since February, Japan dumped a hundred and twenty-two billion dollars of Treasuries. The standard explanation is currency hedging: two years ago, hedging wiped out the yield.",
+      "memory": "looked across the Pacific at what backs your mortgage. But here's where the consensus breaks. The opponent isn't the Fed; it's a balance sheet in Japan. When your biggest customer steps away, the bond auction sets the rate, not the central bank. Not a panic. Not a plot. Mechanics. Every investor wants to know where the selling stops. We'll trace the cash straight to your tech stocks. Japan holds over a trillion dollars of American debt. In sixty seconds, you'll calculate the number that"
+    },
+    {
+      "i": 4,
+      "start_s": 60.0,
+      "end_s": 75.261,
+      "span": "1:00-1:15",
+      "text": "But that excuse expired: today Tokyo's tea break is in a trade paying two full points of profit. But here's where it gets dangerous. When primary dealers choke on inventory, yields jump. Four straight months of selling drained liquidity from every",
+      "memory": "Not a panic. Not a plot. Mechanics. Every investor wants to know where the selling stops. We'll trace the cash straight to your tech stocks. Japan holds over a trillion dollars of American debt. In sixty seconds, you'll calculate the number that tracks their return — and two moves to protect your portfolio. But since February, Japan dumped a hundred and twenty-two billion dollars of Treasuries. The standard explanation is currency hedging: two years ago, hedging wiped out the yield."
+    },
+    {
+      "i": 5,
+      "start_s": 75.0,
+      "end_s": 90.055,
+      "span": "1:15-1:30",
+      "text": "desk. Therefore they are dumping paper into a trade that actually makes money. That brings us to what actually drives the discount rate on your screen. The variable: what Japan holds, published monthly by the Treasury in TIC Table Five. The",
+      "memory": "tracks their return — and two moves to protect your portfolio. But since February, Japan dumped a hundred and twenty-two billion dollars of Treasuries. The standard explanation is currency hedging: two years ago, hedging wiped out the yield. But that excuse expired: today Tokyo's tea break is in a trade paying two full points of profit. But here's where it gets dangerous. When primary dealers choke on inventory, yields jump. Four straight months of selling drained liquidity from every"
+    },
+    {
+      "i": 6,
+      "start_s": 90.0,
+      "end_s": 104.972,
+      "span": "1:30-1:45",
+      "text": "threshold: they were adding, now they're selling. Where we sit: down a hundred and twenty-two billion dollars since February. The flip: if they buy again and yields stay high, I was wrong — and I'll say it here. This is where most people miss",
+      "memory": "But that excuse expired: today Tokyo's tea break is in a trade paying two full points of profit. But here's where it gets dangerous. When primary dealers choke on inventory, yields jump. Four straight months of selling drained liquidity from every desk. Therefore they are dumping paper into a trade that actually makes money. That brings us to what actually drives the discount rate on your screen. The variable: what Japan holds, published monthly by the Treasury in TIC Table Five. The"
+    },
+    {
+      "i": 7,
+      "start_s": 105.0,
+      "end_s": 120.196,
+      "span": "1:45-2:00",
+      "text": "the connection. This was never just a bond story. Tonight, pull up Meta — you're probably on it right now — and check its price-to-earnings multiple. That multiple isn't a score; it's a time machine pricing profits ten years out. When the Treasury",
+      "memory": "desk. Therefore they are dumping paper into a trade that actually makes money. That brings us to what actually drives the discount rate on your screen. The variable: what Japan holds, published monthly by the Treasury in TIC Table Five. The threshold: they were adding, now they're selling. Where we sit: down a hundred and twenty-two billion dollars since February. The flip: if they buy again and yields stay high, I was wrong — and I'll say it here. This is where most people miss"
+    },
+    {
+      "i": 8,
+      "start_s": 120.0,
+      "end_s": 135.605,
+      "span": "2:00-2:15",
+      "text": "yield hits five percent, a dollar in ten years shrinks to sixty-one cents today. That is an eighteen percent haircut on the stock, without Meta losing a single customer. Two moves tonight: trim long-duration bond funds, and sell companies refinancing",
+      "memory": "threshold: they were adding, now they're selling. Where we sit: down a hundred and twenty-two billion dollars since February. The flip: if they buy again and yields stay high, I was wrong — and I'll say it here. This is where most people miss the connection. This was never just a bond story. Tonight, pull up Meta — you're probably on it right now — and check its price-to-earnings multiple. That multiple isn't a score; it's a time machine pricing profits ten years out. When the Treasury"
+    },
+    {
+      "i": 9,
+      "start_s": 135.0,
+      "end_s": 146.347,
+      "span": "2:15-2:30",
+      "text": "heavy corporate debt this year. The Fed still hasn't moved an inch. Tokyo is still on its tea break. And Washington's unfunded bar tab on American debt is coming due for you.",
+      "memory": "the connection. This was never just a bond story. Tonight, pull up Meta — you're probably on it right now — and check its price-to-earnings multiple. That multiple isn't a score; it's a time machine pricing profits ten years out. When the Treasury yield hits five percent, a dollar in ten years shrinks to sixty-one cents today. That is an eighteen percent haircut on the stock, without Meta losing a single customer. Two moves tonight: trim long-duration bond funds, and sell companies refinancing"
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "_contract": "Approved stills to video (Omni 1.1 Flash, ingredients mode with approved still + HollowStickMike chip). 10s, 9:16 vertical, silent video. Two-phase kinetics (0-5s / 5-10s) with locked static cameras.",
+  "mode": "video",
+  "submode": "ingredients",
+  "model": "Omni 1.1 Flash",
+  "count": 1,
+  "ratio": "9:16",
+  "duration": 10,
+  "projectUrl": "https://flow.google.com/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+  "outputDir": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\clips",
+  "scenes": [
+    {
+      "id": "clip-01-busan-container-toll",
+      "mode": "video",
+      "submode": "ingredients",
+      "model": "Omni 1.1 Flash",
+      "count": 1,
+      "duration": 10,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\approved\\still-01-busan-container-toll.png",
+        "HollowStickMike"
+      ],
+      "prompt": "Animate this exact drawing: 9:16 vertical, full bleed. Cream paper page, charcoal ink. The character stands on the left beside his wooden desk, holding a steaming coffee cup. Outside the large window, twilight shipping cranes slowly lower a container into the harbor. At second 5, the character lifts the coffee cup slightly and gazes out the window at the harbor. Locked-off static tripod camera. Completely silent video."
+    },
+    {
+      "id": "clip-02-broadcast-newsroom",
+      "mode": "video",
+      "submode": "ingredients",
+      "model": "Omni 1.1 Flash",
+      "count": 1,
+      "duration": 10,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\approved\\still-02-broadcast-newsroom.png",
+        "HollowStickMike"
+      ],
+      "prompt": "Animate this exact drawing: 9:16 vertical, full bleed. Cream paper page, charcoal ink with slate blue accents. The character stands composed in the foreground observing the news panel. Behind him, the three anchors gesture with animated hands and speak into their microphones, while the studio monitors pulse with green upward arrows. At second 5, the character turns to face the camera with a calm analytical expression. Locked-off static tripod camera. Completely silent video."
+    },
+    {
+      "id": "clip-03-busan-customs-dock",
+      "mode": "video",
+      "submode": "ingredients",
+      "model": "Omni 1.1 Flash",
+      "count": 1,
+      "duration": 10,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\approved\\still-03-busan-customs-dock.png",
+        "HollowStickMike"
+      ],
+      "prompt": "Animate this exact drawing: 9:16 vertical, full bleed. Cream paper page, charcoal ink. The character stands in the foreground holding his clipboard document, looking down at the manifest notes. In the background, crane cables gently adjust and distant harbor water ripples calmly against the docks. At second 5, the character looks up toward the empty vehicle loading ramps, holding the clipboard steady. Locked-off static tripod camera. Completely silent video."
+    },
+    {
+      "id": "clip-04-cleanroom-monolith",
+      "mode": "video",
+      "submode": "ingredients",
+      "model": "Omni 1.1 Flash",
+      "count": 1,
+      "duration": 10,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\approved\\still-04-cleanroom-monolith.png",
+        "HollowStickMike"
+      ],
+      "prompt": "Animate this exact drawing: 9:16 vertical, full bleed. Cream paper page, charcoal ink with amber and cobalt accents. The character stands on the left in his tailored navy suit, looking attentively at the glowing silicon wafer on the right. Soft golden light pulses across the microchip grid patterns of the circular wafer monolith. At second 5, the character points his right index finger directly at the center of the wafer pattern. Locked-off static tripod camera. Completely silent video."
+    },
+    {
+      "id": "clip-05-trading-desk-terminal",
+      "mode": "video",
+      "submode": "ingredients",
+      "model": "Omni 1.1 Flash",
+      "count": 1,
+      "duration": 10,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\approved\\still-05-trading-desk-terminal.png",
+        "HollowStickMike"
+      ],
+      "prompt": "Animate this exact drawing: 9:16 vertical, full bleed. Cream paper page, charcoal ink with amber highlights. The character stands beside the trading desk. The multiple terminal monitors display live illuminated charts and world trade lines. At second 5, the character extends his right hand toward the center screen, pointing at the global capital flow route. Locked-off static tripod camera. Completely silent video."
+    },
+    {
+      "id": "clip-07-empty-auto-lot",
+      "mode": "video",
+      "submode": "ingredients",
+      "model": "Omni 1.1 Flash",
+      "count": 1,
+      "duration": 10,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\approved\\still-07-empty-auto-lot.png",
+        "HollowStickMike"
+      ],
+      "prompt": "Animate this exact drawing: 9:16 vertical, full bleed. Cream paper page, charcoal ink. The character walks forward in a steady, measured pace along the white line between the long rows of parked cars. At second 5, he comes to a calm stop, looking off toward the harbor cranes in the gray overcast distance. Locked-off static camera, eye-level perpendicular perspective. Completely silent video."
+    },
+    {
+      "id": "clip-13-toll-booth-closing",
+      "mode": "video",
+      "submode": "ingredients",
+      "model": "Omni 1.1 Flash",
+      "count": 1,
+      "duration": 10,
+      "references": [
+        "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\approved\\still-13-toll-booth-closing.png",
+        "HollowStickMike"
+      ],
+      "prompt": "Animate this exact drawing: 9:16 vertical, full bleed. Cream paper page, charcoal ink with warm sunset wash. The character stands centered in cowboy framing against the sunset harbor and crane silhouette. The warm colors of the sky shift gently in the evening light. At second 5, the character brings his hands together in front of him in a composed, authoritative stance, facing the camera directly. Completely locked tripod camera. Completely silent video."
+    }
+  ]
+}

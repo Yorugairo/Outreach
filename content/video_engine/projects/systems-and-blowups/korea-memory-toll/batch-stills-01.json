@@ -1,0 +1,60 @@
+{
+  "_contract": "Stills-first (operator doctrine: Nano Banana Pro image mode, free; operator approves contact sheet, then video generates image-to-video). One 9:16 still per shot with the HollowStickMike chip. No '@' in text (driver inserts chip via references).",
+  "mode": "image",
+  "model": "Nano Banana Pro",
+  "count": 1,
+  "ratio": "9:16",
+  "projectUrl": "https://flow.google.com/project/d171ec1f-d4a2-4b79-b76e-32460193dccc",
+  "outputDir": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills",
+  "scenes": [
+    {
+      "id": "still-01-busan-container-toll",
+      "references": [
+        "HollowStickMike"
+      ],
+      "prompt": "9:16 vertical, full bleed. Cream paper page with a soft deckle edge, charcoal ink with deep navy and crimson accents. In the foreground, an analyst desk with a ceramic coffee cup and a folded shipping manifest. The character stands composed behind the desk, arms at his sides. In the background through an industrial steel-framed window, towering maritime container cranes stand over shipping docks at twilight. A single still frame, no on-screen text."
+    },
+    {
+      "id": "still-02-broadcast-newsroom",
+      "references": [
+        "HollowStickMike"
+      ],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink with slate blue accents. Three stylized figures in matching blue suits sit behind a television broadcast news desk with small table microphones. In the background wall, multiple studio monitors display green upward arrows. The character stands in the foreground, turning slightly to observe the news panel. A single still frame, no on-screen text."
+    },
+    {
+      "id": "still-03-busan-customs-dock",
+      "references": [
+        "HollowStickMike"
+      ],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink. A bustling customs terminal on a shipping dock. On the left, empty vehicle loading ramps. The character stands in a tailored suit holding a clipboard document, examining the empty cargo docks while massive container ships sit in the harbor. A single still frame, no on-screen text."
+    },
+    {
+      "id": "still-04-cleanroom-monolith",
+      "references": [
+        "HollowStickMike"
+      ],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink with amber and cobalt accents. An advanced semiconductor fabrication cleanroom. On the right, a large circular silicon wafer glows softly on a vertical mounting pedestal inside a vacuum chamber. The character stands on the left in a tailored navy suit and purple glasses, looking analytically toward the monolithic silicon disc. A single still frame, no on-screen text."
+    },
+    {
+      "id": "still-05-trading-desk-terminal",
+      "references": [
+        "HollowStickMike"
+      ],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink with amber highlights. A financial trading workstation with multiple terminal displays showing world trade maps and routing charts. The character stands beside the trading desk, facing the viewer with a composed analytical posture. A single still frame, no on-screen text."
+    },
+    {
+      "id": "still-07-empty-auto-lot",
+      "references": [
+        "HollowStickMike"
+      ],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink. An expansive asphalt shipping yard filled with long rows of parked, unsold passenger cars under an overcast gray industrial sky. The character walks past the row of cars along a wide painted line, looking toward the distant harbor cranes. A single still frame, no on-screen text."
+    },
+    {
+      "id": "still-13-toll-booth-closing",
+      "references": [
+        "HollowStickMike"
+      ],
+      "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink with warm sunset wash. A quiet shipping terminal baseline at dusk. Towering maritime gantry cranes silhouette against a calm horizon over the ocean. The character stands centered in a medium cowboy framing from mid-thigh up, arms relaxed, looking forward into the camera. A single still frame, no on-screen text."
+    }
+  ]
+}

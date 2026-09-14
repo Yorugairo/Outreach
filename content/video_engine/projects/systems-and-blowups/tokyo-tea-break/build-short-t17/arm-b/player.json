@@ -1,0 +1,7 @@
+{
+ "form": "split",
+ "engine": "engine-clothoid.mjs",
+ "engine_sha256": "7014b79aefdaf9f1c7cf118db58ccd6efede3832c567e885929d3ddda416df11",
+ "timeline": "race.timeline.json",
+ "assets": "assets.json"
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T09:43:54.512Z",
+  "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink drawing, a single red accent. Over-the-shoulder view of a stick figure sitting at a desk late at night, seen from behind. On the laptop screen in front of them a government data table with rows of numbers. In their raised hand a phone showing one falling red line chart. A mug beside the keyboard. Quiet, close, the viewer's own desk. A single still frame, no on-screen text.",
+  "references": [],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x2",
+    "creditsText": "Generating will use 0 credits",
+    "modelText": "🍌 Nano Banana Pro",
+    "credits": 0
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\still-p1-viewers-desk.mp4.png",
+      "sha256": "731303646870b776b7ffef6220446cac3a1c4776aba30edf21f1b788a90bc6dc"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\still-p1-viewers-desk-raw.png",
+      "sha256": "731303646870b776b7ffef6220446cac3a1c4776aba30edf21f1b788a90bc6dc"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\still-p1-viewers-desk-raw.png",
+        "sha256": "731303646870b776b7ffef6220446cac3a1c4776aba30edf21f1b788a90bc6dc"
+      },
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\stills\\still-p1-viewers-desk-raw-2.png",
+        "sha256": "67626425ab5ba3e5e208f7eed89b0eec5d4e645f6d08fbb4ec7c422247fa0138"
+      }
+    ]
+  }
+}

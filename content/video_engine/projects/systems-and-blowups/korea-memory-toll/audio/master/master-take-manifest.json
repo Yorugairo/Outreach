@@ -1,0 +1,19 @@
+{
+  "script": "SCRIPT-90S-VO.txt",
+  "seed": "4242",
+  "model": "eleven_multilingual_v2",
+  "voice_id": "LMNWDJCqXz0WdUKd2FE1",
+  "characters": 1574,
+  "words_count": 238,
+  "duration_s": 89.303,
+  "measured_wpm": 159.9,
+  "request_id": "IjmGuk3KrYA3BnhBn3Xu",
+  "audio": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\audio\\master\\elevenlabs-master.mp3",
+  "words": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\audio\\master\\elevenlabs-master.words.json",
+  "settings": {
+    "stability": 0.4,
+    "similarity_boost": 0.75,
+    "style": 0.2,
+    "use_speaker_boost": true
+  }
+}

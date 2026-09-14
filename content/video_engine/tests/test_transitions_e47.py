@@ -223,19 +223,25 @@ def test_dip_and_blurzoom_may_declare_their_own_length():
 
 
 def test_a_melt_parses_with_and_without_its_own_length_register_and_point():
-    """P52 T9 (R26-15): `melt` | `melt:<s>` | `melt:splash` | `melt:<x>,<y>`, the suffixes in any order. Only a
+    """P52 T9 (R26-15), E88 (R26-76): `melt` | `melt:throw` | `melt:splash:chart` | `melt:splash:plate`, `:<s>`, and on a
+    throw `:<x>,<y>`, the suffixes in any order. A bare `melt:splash` is refused - it names no ending since E88. Only a
     bare number is a LENGTH - `melt:0.92,1.18` is the point the ball is thrown to, and reading it as 0.92 s (which
     is what a plain `exit.split(':')[1]` does) would be a melt nobody authored. species/melt.mjs `meltOpts` reads
     the same grammar in the player; these two are one statement made twice."""
     assert B.parse_exit("melt") == ("melt", None)
     assert B.parse_exit("melt:1.2") == ("melt:1.2", 1.2)
-    assert B.parse_exit("melt:splash") == ("melt:splash", None)
+    assert B.parse_exit("melt:throw") == ("melt:throw", None)
+    assert B.parse_exit("melt:splash:chart") == ("melt:splash:chart", None)
     assert B.parse_exit("melt:0.92,1.18") == ("melt:0.92,1.18", None)
-    assert B.parse_exit("melt:1.2:splash") == ("melt:1.2:splash", 1.2)
-    assert B.parse_exit("melt:splash:1.2") == ("melt:splash:1.2", 1.2)
+    assert B.parse_exit("melt:1.2:splash:plate") == ("melt:1.2:splash:plate", 1.2)
+    assert B.parse_exit("melt:splash:chart:1.2") == ("melt:splash:chart:1.2", 1.2)
+    assert B.parse_exit("melt:throw:1.2:0.9,1.1") == ("melt:throw:1.2:0.9,1.1", 1.2)
+    assert [B.melt_ending(x) for x in ("melt", "melt:throw", "melt:splash:chart", "melt:1.2:splash:plate", "dip")] ==         ["throw", "throw", "splash:chart", "splash:plate", None]
+    assert B.MELT_ENDINGS == ("throw", "splash:chart", "splash:plate")
     assert "melt" in B.SCENE_EXITS and "melt" in B.TIMED_EXITS
     assert B.MELT_S == 1.6, "the default length the player's MELT.S carries too"
-    for bad in ("melt:sideways", "melt:-2", "melt:0", "melt:1,2,3", "melt:1,x"):
+    for bad in ("melt:sideways", "melt:-2", "melt:0", "melt:1,2,3", "melt:1,x", "melt:splash", "melt:splash:sideways",
+                "melt:chart", "melt:plate", "melt:throw:splash:chart", "melt:splash:plate:0.5,0.5", "melt:1.2:splash"):
         with pytest.raises(ValueError):
             B.parse_exit(bad)
 
@@ -247,7 +253,7 @@ def test_the_mechanical_default_is_never_a_melt():
         for enter in (None, "mount", "spiral", "morph", "built"):
             for changed in (True, False):
                 assert B.scene_exit(None, docks, enter, changed)[0] != "melt"
-    assert B.scene_exit("melt:splash", False, None, True) == ("melt:splash", None), "an authored melt still wins"
+    assert B.scene_exit("melt:splash:chart", False, None, True) == ("melt:splash:chart", None), "an authored melt still wins"
     assert B.DEFAULT_EXIT_CHANGE != "melt" and B.DEFAULT_EXIT_BARE != "melt"
     assert "melt" not in B.LEDGER_EXITS, "the page's own retract law is untouched: a melt takes the WORLD"
 

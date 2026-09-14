@@ -1,0 +1,38 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T06:04:31.613Z",
+  "prompt": "9:16 vertical, full bleed. Cream paper page, charcoal ink, the same counter as before: one empty stool, the teacup now with no steam, the folded paper tab beside it. @StickMike picks the tab up off the counter, turns it toward the camera and holds it there. Static camera, silent, no on-screen text.",
+  "references": [
+    "StickMike"
+  ],
+  "settings": {
+    "pillText": "Video · 720p · 10s crop_9_16 x1",
+    "creditsText": "Generating will use 15 credits",
+    "modelText": "Omni 1.1 Flash",
+    "credits": 15
+  },
+  "requested_ratio": "9:16",
+  "detected_dimensions": "720x1280",
+  "aspect_ratio": "9:16",
+  "duration_seconds": "10.000000",
+  "verification_error": null,
+  "reversed": false,
+  "files": {
+    "video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\short\\clip-a2-counter-colder.mp4",
+      "sha256": "e87ae26ba304b049a1147f03854f3e80c8eeb3177ebe89fd75b4c1d158423403"
+    },
+    "raw_video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\short\\clip-a2-counter-colder-raw.mp4",
+      "sha256": "e87ae26ba304b049a1147f03854f3e80c8eeb3177ebe89fd75b4c1d158423403"
+    },
+    "frame_start": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\short\\clip-a2-counter-colder_frame_0.png",
+      "sha256": "bb95570c48d773fae5db59c4103e189f3e15cd90cf74d02cb89fdfcf83076b31"
+    },
+    "frame_end": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\omni-video\\short\\clip-a2-counter-colder_frame_end.png",
+      "sha256": "0abc6e1460d7676bc3058cb6ae0bd251bcb44041f6da18b8b1c2e76007045958"
+    }
+  }
+}

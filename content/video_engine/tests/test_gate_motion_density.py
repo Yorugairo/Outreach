@@ -1263,6 +1263,29 @@ def test_m29_exempts_a_bed_and_carries_no_row_when_the_window_is_quiet():
     assert "M29" not in _by_id(G.run(tl, docks, mp)[0])
 
 
+def _with_dock(tl, enter, arrive="throw", slide="paper"):
+    """Put ONE timeline dock on the page scene s02 (E83: a dock's own landing licenses the cue)."""
+    s02 = next(s for s in tl["scenes"] if s["scene_id"] == "s02")
+    s02["docks"] = [{"slide": slide, "enter": enter, "exit": enter + 4.0, "arrive": arrive}]
+    return tl
+
+
+def test_m29_passes_a_transient_on_a_dock_landing_e83():
+    tl, docks, mp = _drop_window_build(cue_at=9.0)        # no page lands within 1.5s of 9.0s ...
+    _with_dock(tl, enter=8.54)                             # ... but a thrown card makes contact at 8.54 + 0.46 = 9.00s
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M29"].level == "PASS", g["M29"]
+    assert "with s02 dock paper throw lands at 9.00s" in g["M29"].message, g["M29"]
+
+
+def test_m29_still_fails_a_transient_with_no_page_or_dock_landing_near_it():
+    tl, docks, mp = _drop_window_build(cue_at=9.0)
+    _with_dock(tl, enter=20.0)                             # the only dock lands at 20.46s - far from the cue
+    g = _by_id(G.run(tl, docks, mp)[0])
+    assert g["M29"].level == "FAIL", g["M29"]
+    assert "nearest page landing s02 chart lands at 10.70s" in g["M29"].message, g["M29"]
+
+
 # ---- E44 s2b / R26-6 (M30): a returning character mounts, it never cuts on ----
 
 def _cast_build(back_exit="dissolve", asset_back="clip-host-desk", page_at=6.0, runtime=44.0, declare=True):

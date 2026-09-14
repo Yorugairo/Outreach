@@ -1,0 +1,24 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-03T23:38:34.663Z",
+  "prompt": "full bleed edge-to-edge 9:16 vertical. A satirical financial news television broadcast graphic split into three vertically stacked rectangular frames. In each frame sits an identical, stiff news anchor wearing an identical dark navy suit and identical bright cobalt blue tie, with serious, self-important expressions on their faces. Behind them are abstract blue television studio backdrop graphics. Light application of woodblock print and vox newspaper with Anime richness and colors. Negative: no borders, no margins, no outer frame, no paper matting, no photorealism, no 3D render, no text, no numbers, no words, no letters, no logos.",
+  "references": [],
+  "settings": {
+    "pillText": "",
+    "creditsText": "Generating will use 0 credits",
+    "modelText": "🍌 Nano Banana Pro",
+    "credits": 0
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:/Users/Snipe/Downloads/Outreach Program/content/video_engine/projects/systems-and-blowups/tokyo-tea-break/plates/plate-03-three-blue-ties.png",
+      "sha256": "a7bb838f5340c83896549b69847eb4421adadb106ebebe44e5ab971f13c9b33c"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\plates\\plate-03-three-blue-ties-raw.png",
+      "sha256": "a7bb838f5340c83896549b69847eb4421adadb106ebebe44e5ab971f13c9b33c"
+    }
+  }
+}

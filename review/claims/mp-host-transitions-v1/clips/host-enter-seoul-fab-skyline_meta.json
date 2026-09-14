@@ -1,0 +1,39 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-03T19:36:37.796Z",
+  "prompt": "Woodblock newsprint illustration, an industrial skyline at dawn, the exact scene of the first reference held as a locked camera. A flat black graphic silhouette of a man - the second reference, single tone, no face - walks in from frame right in a calm lateral stride, stops at right-third, and settles with arms crossed, looking out at the skyline. Stylised, minimal leg articulation, ink-print texture, grain constant. Background static. No text, no lettering, no numerals, no signage on the buildings.",
+  "references": [
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-seoul-fab-skyline-v1.png",
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\assets\\generated\\cutouts\\actor-host-arms-crossed-v1.png"
+  ],
+  "settings": {
+    "pillText": "Video · 720p · 6s crop_16_9 x1",
+    "creditsText": "Generating will use 10 credits",
+    "modelText": "Omni 1.1 Flash",
+    "credits": 10
+  },
+  "requested_ratio": "16:9",
+  "detected_dimensions": "1280x720",
+  "aspect_ratio": "16:9",
+  "duration_seconds": "6.000000",
+  "verification_error": null,
+  "reversed": false,
+  "files": {
+    "video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-seoul-fab-skyline.mp4",
+      "sha256": "e4197c9af52185c22cbc5f98d6d395f359286e03f75b5de5c74416e9a204c17a"
+    },
+    "raw_video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-seoul-fab-skyline-raw.mp4",
+      "sha256": "e4197c9af52185c22cbc5f98d6d395f359286e03f75b5de5c74416e9a204c17a"
+    },
+    "frame_start": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-seoul-fab-skyline_frame_0.png",
+      "sha256": "bbe561089a9037893e31c2453f1812ab45e7d44b84e2ec784d83acdba69bd179"
+    },
+    "frame_end": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-seoul-fab-skyline_frame_end.png",
+      "sha256": "fc3b3093f0a706375896a8b37e87b0e34dc4ba8e5db6e062af29af09be36e4ed"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-03T22:24:28.948Z",
+  "prompt": "full bleed edge-to-edge 9:16 vertical, 35mm, deep focus. A crisp paper mortgage statement and billing dossier resting on a dark polished wooden household desk with an embossed red ink stamp border. Foreground reading glasses and fountain pen lower-right, midground paper dossier on walnut desk, background softly lit domestic study with an amber desk lamp. Light application of woodblock print and vox newspaper with Anime richness and colors. Negative: no borders, no margins, no outer frame, no paper matting, no photorealism, no 3D render, no legible text, no readable numbers, no charts, no people, no logos.",
+  "references": [],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:/Users/Snipe/Downloads/Outreach Program/content/video_engine/projects/systems-and-blowups/tokyo-tea-break/plates/plate-02-bill-shock-desk.png",
+      "sha256": "b0363380e1f790e3d47084242ec3323458f532da384616d2e5c3fd796bef6876"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\plates\\plate-02-bill-shock-desk-raw.png",
+      "sha256": "b0363380e1f790e3d47084242ec3323458f532da384616d2e5c3fd796bef6876"
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": "deck_operator_approval.v1",
+  "approved_at": "2026-08-29",
+  "status": "approved",
+  "approval_scope": "production_visuals_and_evidence",
+  "evidence_approval_status": "approved",
+  "evidence_scope": "all_factual_contents",
+  "granted_by": "operator",
+  "ruling": "all of the evidence should be approved not review only",
+  "covers": {
+    "decks": 6,
+    "slides": 86,
+    "source_images": 86,
+    "cleaned_images": 86,
+    "semantic_crops": 9
+  },
+  "still_applies": [
+    "Per-asset reuse_policy caps (max_total_uses, min_nonadjacent_gap).",
+    "Figure verification against the episode dossier before any slide carrying a number is docked (doc 29 sec 9.3c).",
+    "Doc 39 chrome rules for any asset used as evidence on screen."
+  ],
+  "manifests_updated": [
+    "deck-asset-manifest.json",
+    "deck-sources.v1.json",
+    "deck-sources.v2.json",
+    "memory-supercycle/source-manifest.json",
+    "silicon-antidote/source-manifest.json",
+    "silicon-reality-gap/source-manifest.json",
+    "silicon-silent-triopoly/source-manifest.json",
+    "silicon-value-software-bubble/source-manifest.json",
+    "sovereign-memory-infrastructure/source-manifest.json",
+    "memory-supercycle/semantic-assets/asset-context.json",
+    "silicon-antidote/semantic-assets/asset-context.json",
+    "silicon-reality-gap/semantic-assets/asset-context.json",
+    "silicon-silent-triopoly/semantic-assets/asset-context.json",
+    "silicon-value-software-bubble/semantic-assets/asset-context.json",
+    "sovereign-memory-infrastructure/semantic-assets/asset-context.json",
+    "asset-selection-index.md"
+  ]
+}

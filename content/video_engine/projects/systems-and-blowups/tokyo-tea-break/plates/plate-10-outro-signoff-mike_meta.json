@@ -1,0 +1,26 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-03T22:28:17.956Z",
+  "prompt": "full bleed edge-to-edge 9:16 vertical, wide-angle 24mm, deep focus. standing in an executive financial observation lounge at night overlooking glowing city lights through floor-to-ceiling glass windows, wearing his tailored indigo suit, red tie, and floral red and gold paisley dress shoes, looking toward the viewer with a calm, confident knowing smile, gesturing toward a blank rectangular display frame on the wood-paneled wall beside him. Warm ambient architectural lighting. Light application of woodblock print and vox newspaper with Anime richness and colors. Negative: no borders, no margins, no outer frame, no paper matting, no photorealism, no 3D render, no text, no numbers, no charts, no logos.",
+  "references": [
+    "Mike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:/Users/Snipe/Downloads/Outreach Program/content/video_engine/projects/systems-and-blowups/tokyo-tea-break/plates/plate-10-outro-signoff-mike.png",
+      "sha256": "f1fa3cd4dda758714fe03ad70f20130d8ee555b15e9eb3b6d54cfd6895f1ed01"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\plates\\plate-10-outro-signoff-mike-raw.png",
+      "sha256": "f1fa3cd4dda758714fe03ad70f20130d8ee555b15e9eb3b6d54cfd6895f1ed01"
+    }
+  }
+}

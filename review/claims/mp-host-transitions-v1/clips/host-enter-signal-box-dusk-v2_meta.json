@@ -1,0 +1,39 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-03T19:44:41.598Z",
+  "prompt": "Woodblock newsprint illustration, dusk over a railway signal box, the exact scene of the first reference held as a locked camera. The host - the second reference, rendered EXACTLY as that cutout: full colour cartoon, navy suit, orange tie, glasses, locs, bare-headed, no added props - steps in from frame left in a calm lateral stride, stops at left-third, and settles into pointing right toward the rails. Stylised, minimal leg articulation; the world keeps its ink-print texture and constant grain, the host keeps his clean cartoon line and colour across the whole clip. The background does not move. No text, no lettering, no numerals, no signs.",
+  "references": [
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\review\\claims\\finance-episodes-plates-wave-1\\objects\\world-signal-box-dusk-v1.png",
+    "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\assets\\generated\\cutouts\\actor-host-point-right-v1.png"
+  ],
+  "settings": {
+    "pillText": "Video · 720p · 6s crop_16_9 x1",
+    "creditsText": "Generating will use 10 credits",
+    "modelText": "Omni 1.1 Flash",
+    "credits": 10
+  },
+  "requested_ratio": "16:9",
+  "detected_dimensions": "1280x720",
+  "aspect_ratio": "16:9",
+  "duration_seconds": "6.000000",
+  "verification_error": null,
+  "reversed": false,
+  "files": {
+    "video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-signal-box-dusk-v2.mp4",
+      "sha256": "38e49cca8e9bea6b3dc04ddc59eecb396f6f7e610358f5e8fdfe5313f99eabbe"
+    },
+    "raw_video": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-signal-box-dusk-v2-raw.mp4",
+      "sha256": "38e49cca8e9bea6b3dc04ddc59eecb396f6f7e610358f5e8fdfe5313f99eabbe"
+    },
+    "frame_start": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-signal-box-dusk-v2_frame_0.png",
+      "sha256": "0e8a8622ba86d44e457e385080f3764b0638a811a013d805e21d42907b30cd82"
+    },
+    "frame_end": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\review\\claims\\mp-host-transitions-v1\\clips\\host-enter-signal-box-dusk-v2_frame_end.png",
+      "sha256": "c6329cfad30029e12dbcceaf63f2d2c7c13f0a9f2b9ff6da9a8e5f783ba42247"
+    }
+  }
+}

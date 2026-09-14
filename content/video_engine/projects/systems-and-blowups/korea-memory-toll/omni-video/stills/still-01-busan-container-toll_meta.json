@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-05T13:53:41.863Z",
+  "prompt": "9:16 vertical, wide establishing shot, full bleed. Cream paper page with a soft deckle edge, charcoal ink drawing with slate navy and crimson accents. In the foreground sits a wide wooden analyst desk seen from the front, with a white ceramic coffee cup giving off a curl of steam, and a paper shipping ledger. The character stands full-body behind the desk, arms at his sides, framed from knees up with generous room. Behind the desk, a giant warehouse window reveals towering maritime container cranes and container ships at dusk. A single still frame, no on-screen text.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-01-busan-container-toll.mp4.png",
+      "sha256": "de42ed5c96c802ac9fbb0ab11b95aeb1dd54e73eadd007f51ec0884f2855f1d5"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-01-busan-container-toll-raw.png",
+      "sha256": "de42ed5c96c802ac9fbb0ab11b95aeb1dd54e73eadd007f51ec0884f2855f1d5"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\korea-memory-toll\\omni-video\\stills\\still-01-busan-container-toll-raw.png",
+        "sha256": "de42ed5c96c802ac9fbb0ab11b95aeb1dd54e73eadd007f51ec0884f2855f1d5"
+      }
+    ]
+  }
+}
