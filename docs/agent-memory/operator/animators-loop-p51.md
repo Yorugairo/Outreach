@@ -1,8 +1,11 @@
 ---
 name: animators-loop-p51
 description: "The grill of 2026-09-11 settled the animator's loop: P51 (draft) - the agent's loop first, the editor a client of a pure function of t, a one-shot bar before the operator watches, the chart as the world; AnimatorOS is the horizon"
-metadata:
+metadata: 
+  node_type: memory
   type: project
+  originSessionId: 45114c3b-258a-4ca8-9aaf-b674a804cc7e
+  modified: 2026-09-13T19:03:21.393Z
 ---
 
 The operator's grill (2026-09-11) settled: the time goes into watch-then-cut rounds because the first pass is not close
@@ -20,5 +23,13 @@ the published "strong" band; 60% at 0:30 IS the hook target. Records: `docs/cont
 
 **How to apply:** order after P50 T1: T0 kit -> T2 eyes -> T3 bar -> T1 split -> T4 reload -> T5 sidecar -> T6 change report
 -> T7 editor; T8 doctrine (E61) in parallel. Never a hand-count gate; never runtime state in the engine; eyes = numbers first.
-AnimatorOS (component library + canvas + Gemini/GPT/Claude agents, vidrush-style asset pulls) waits until P51 stands. See
+AnimatorOS (component library + canvas + Gemini/GPT/Claude agents, vidrush-style asset pulls) waits until P51 stands.
+
+**The purpose, in the operator's words (2026-09-13):** *"The whole point of upgrading the editor from the prior state was to
+begin building actual components and catalogues that other, less-informed, and less-capable agents could use
+reliably"*. An effect that lives only as logic inside the 10,600-line engine (the verdict stack = the "evidence wall",
+the checklist = the three-question test card) is invisible to such an agent (`docs_find "evidence wall"` = 0 hits). Before
+proposing any catalogue, map what exists (SPECIES_WHEN's assert, SPECIES-BY-SENTENCE, CAPABILITIES, the authoring kit,
+species/*.mjs) - the operator: *"i would've told you thath we already have done this somewhere"*. P55 plans the inventory
++ the catalogue on top of those. See
 [recall-before-propose](recall-before-propose.md), [judge-the-frame-not-the-diff](judge-the-frame-not-the-diff.md), [bravos-reference](bravos-reference.md).

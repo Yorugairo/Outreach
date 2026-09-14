@@ -108,7 +108,8 @@ the tests beside each, the goldens each moves on purpose, and the rows in `docs/
 1. **The opening register** (T1): the operator reads frame 0 and frame 0.5 of the axes register against the built
    register, on the same short, and rules which is the hook's default.
 2. **The hand-off rule** (T2): after the measurement, the operator rules whether the incoming ground goes under the
-   outgoing world for every non-dip transition, or whether the cut simply lands later.
+   outgoing world for every non-dip transition, or whether the cut simply lands later. **RULED 2026-09-13, E87: no
+   single rule - the transition is chosen for the scene from the kit, and its hand-off is its own grammar.**
 3. **The strobe row** (T5): the threshold a declared cadence must obey, given P50 T13's own burst travels 359 px/s.
 4. **The cutout dock's first frame** (T7): gate 1's 16:9 frame re-rendered with a head that carries no card.
 

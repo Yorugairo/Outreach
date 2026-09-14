@@ -1372,7 +1372,7 @@ dancing around the world plate, not static on the evidence layer"):
   asset docked with its own source earlier; the stack re-presents, it
   never introduces.
 - **Word-matched enters**: each card flies in from depth (translateZ
-  -940, rotateY, transform3d-showcase vocabulary) on its verbatim
+  -700 in the code today - the first cut's -940 is superseded - rotateY, transform3d-showcase vocabulary) on its verbatim
   narration beat; scattered asymmetric SPOTS keep the plate visible
   through the gaps; idle cards float.
 - **The burst**: on the pivot line every card is thrown RADIALLY off
@@ -1421,6 +1421,11 @@ has quietly become one. Where a plot has no gutter the fallback is the sub" - an
 names this section: "(This is doc 29 s9.23b, now with its reason and its source.)"
 The naming rule above (audience words, measure before nickname, glossed acronyms)
 stands.
+
+Recipes (P56, E96 2026-09-13): the stack's shipped use is the recipe `recipe:verdict-recap` (nine items over 26 s under two
+world cuts, Steel s67 @701.73), and every other proven combination lives beside it - generated, never copied here:
+`python content/video_engine/scripts/effects_card.py "<recipe>"`, `docs/EFFECTS-CATALOG.md` Recipes; a cut is measured
+against the floor (`gate_one_shot_floor.py`, M35-M42) before it is offered for a watch.
 
 ### 9.25 The screen never goes still; captions take the stage (operator, 2026-09-02)
 

@@ -11,6 +11,8 @@ separate workstream from the SEO platform above and has its own doctrine.
 **Any agent doing script, visual, evidence, or channel work reads the full doc set through the index -
 `python content/video_engine/scripts/docs_find.py "<term>"` - starting from the rulings:**
 
+- An effect by name - what it does, how to call it, where it lives, its proof: `python content/video_engine/scripts/effects_card.py "<name>"` (generated: `docs/EFFECTS-CATALOG.md`).
+- A beat is authored as a recipe, and a cut is measured before it is watched - author a beat as a RECIPE (a proven combination, E96): `python content/video_engine/scripts/effects_card.py "<recipe>"` (the catalogue `docs/EFFECTS-CATALOG.md` Recipes section; the floor before a watch: `gate_one_shot_floor.py <build>`, rows M35-M42 in SELF-WATCH) (P56).
 - `docs/portable/DOCTRINE-CORE.md` is the **NotebookLM export** - the doctrine condensed under a 10,000-character
   paste limit. Agents in this repo do not load it; where it and a canonical doc differ, the canonical doc wins
   (the operator, 2026-09-13: "the agents in this repo should be reading the full doc set and using our index system").

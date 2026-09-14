@@ -14,8 +14,8 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 18 | 338 | 95.3% | 93.2% | 3 | 97.5 |
-| Process (everything else) | 315 | 3401 | 97.6% | 92.0% | 11 | 100.0 |
-| All docs | 333 | 3739 | 97.4% | 92.1% | 14 | 100.0 |
+| Process (everything else) | 319 | 3451 | 97.7% | 92.1% | 12 | 100.0 |
+| All docs | 337 | 3789 | 97.5% | 92.2% | 15 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -145,7 +145,7 @@ Non-exempt sections whose first real line is under 40 characters (96).
 
 ## Appendix B - generic headings
 
-Headings that name a filing slot, not a concept (14).
+Headings that name a filing slot, not a concept (15).
 
 - `content/video_engine/projects/history-of-bjj/episode-2-research-questions.md:5` Questions
 - `content/video_engine/projects/history-of-bjj/episode-3-research-questions.md:5` Questions
@@ -156,6 +156,7 @@ Headings that name a filing slot, not a concept (14).
 - `docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:140` 5. Rules
 - `docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:282` Rules
 - `docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md:45` Status
+- `docs/content-video-engine/SELF-WATCH.md:115` See also
 - `docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:542` Notes
 - `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md:168` 6. Other
 - `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:36` 7. Other

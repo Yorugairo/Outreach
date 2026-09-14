@@ -18,7 +18,7 @@ find is not a decision waiting - it is a decision lost.
 Plan section: `.claude/PRPs/plans/P52-THE-SWEEP.plan.md:146`.
 Frame paths below are relative to `content/video_engine/tests/golden/frames/` unless the line says otherwise.
 
-### Gate 1 - The band's strip law (T6, the newsreel band)
+### Gate 1 - The band's strip law (T6, the newsreel band) - RULED 2026-09-13, E84
 
 | | |
 | :--- | :--- |
@@ -28,7 +28,7 @@ Frame paths below are relative to `content/video_engine/tests/golden/frames/` un
 | What it changes | The module's default and the strip law every later newsreel inherits. |
 | Also in this frame | The head docks as a FRAMED CARD, which is R26-59, not this gate. Read the strip law past the frame. |
 
-### Gate 2 - The melt's four instants and its dials (T9)
+### Gate 2 - The melt's four instants and its dials (T9) - RULED 2026-09-13, E88: the chart melts, not the board (rework R26-76)
 
 | | |
 | :--- | :--- |
@@ -37,7 +37,7 @@ Frame paths below are relative to `content/video_engine/tests/golden/frames/` un
 | The dials | `MELT` in `content/video_engine/scripts/species/melt.mjs` |
 | Tied to | R26-60: a page under a melt must declare `:cut` or the melt drips a blank sheet. |
 
-### Gate 3 - The three species on one proof page (T7, T8)
+### Gate 3 - The three species on one proof page (T7, T8) - FRAMES ACCEPTED 2026-09-13; motion awaits a served player; the agenda to beautify (R26-80)
 
 | | |
 | :--- | :--- |
@@ -45,7 +45,7 @@ Frame paths below are relative to `content/video_engine/tests/golden/frames/` un
 | The decision | The count array, the numbered agenda, and the ring's dashed-ellipse form with its flag chip - are these the forms, as frames and then in motion? |
 | Note | The ring obeys E56: it circles a number or a point on a chart only, compiler-gated. |
 
-### Gate 4 - The stagger against the pop (T10)
+### Gate 4 - The stagger against the pop (T10) - RULED 2026-09-13, E90: the pop leads, blended with the stagger, on Steel and Paper's caption (R26-77)
 
 | | |
 | :--- | :--- |
@@ -54,7 +54,7 @@ Frame paths below are relative to `content/video_engine/tests/golden/frames/` un
 | The dials | `DUR_S` 0.34 (the stagger envelope) and the pop's 0.05 s anticipation. |
 | Constraint | A private build dir, never a render. Tokyo is the test bed. |
 
-### Gate 5 - The race A/B (T17)
+### Gate 5 - The race A/B (T17) - RULED 2026-09-13, E91: two settings, eased default + clothoid by name (R26-78); swap collisions R26-79
 
 | | |
 | :--- | :--- |
@@ -63,14 +63,14 @@ Frame paths below are relative to `content/video_engine/tests/golden/frames/` un
 | What the measurement says | TIMING, not curvature. Every mark stops at every period because each segment eases with smoothstep. The fitter is NOT adopted in the build; the lever is the clock. |
 | So the gate is | Confirm that reading, or overrule it after looking at the pairs. |
 
-### Gate 6 - The publish folder's first use (T16)
+### Gate 6 - The publish folder's first use (T16) - RULED 2026-09-13, E92: a reference, not the final form
 
 | | |
 | :--- | :--- |
 | Open | the folder `.../tokyo-tea-break/build-short-t16/publish/` - `CHECKLIST.md` first, then `DESCRIPTION-YOUTUBE.md`, `DESCRIPTION-FACEBOOK.md`, `PINNED-COMMENT.md`, `SOURCES.md`, `TAGS.txt`, `MANIFEST.json`, `first-frame.png` |
 | The decision | Is this what a posting pass actually needs, on the next short? |
 
-### Gate 7 - The press card's face (T18)
+### Gate 7 - The press card's face (T18) - RULED 2026-09-13, E89: serif
 
 | | |
 | :--- | :--- |
@@ -85,7 +85,9 @@ Frame paths below are relative to `content/video_engine/tests/golden/frames/` un
 
 ## Part 2 - Open rulings that are not gates
 
-1. **Does a DOCK's own landing license a transient cue inside 0:05-0:12?** M29 as built reads E44 2a literally:
+**2026-09-13:** the head with a news band -> E86 (a surface holds video and images; someone else's words play on the TV, R26-74); the strobe ceiling's space -> a Gemini research order (strobing and stop-motion stepping, `docs/research/runs/strobe_stop_motion/`) before a ruling; P53 human gate 2 (the hand-off rule) -> E87 (no single rule; the transition is chosen per scene from the kit, and a `slide` joins it, R26-75).
+
+1. **RULED 2026-09-13 (E83): yes.** **Does a DOCK's own landing license a transient cue inside 0:05-0:12?** M29 as built reads E44 2a literally:
    only a PAGE landing licenses a transient cue in that window. A dock that lands is not a page. If the ruling is
    that a dock's landing counts, M29 widens and the check moves with it. Found by P52 T13.
 2. **R26-59 - the head above the band is a framed card, not a cutout**

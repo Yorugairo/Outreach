@@ -237,6 +237,9 @@ presentation of anything in this document. In this niche, production quality is
 not the variable separating winners from losers, and any plan premised on
 out-animating these channels is premised on the wrong axis.
 
+**Ruled 2026-09-13 (E85):** the finding stands, and presentation is still built - as a gap the successful channels
+leave open and a moat a cheap generator cannot copy, never as the reason a video wins.
+
 It also does not isolate one cause. Packaging is doing visible work — "Why 95%
 Find Trading Impossible — And 5% Find It Obvious" is a far stronger title than
 "Why Trading Less Earns You More Money," and a two-video sample cannot separate

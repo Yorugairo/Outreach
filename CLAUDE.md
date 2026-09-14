@@ -28,6 +28,8 @@ rather than restating it.
   (every gate by id), `docs/ANIMATION-REGISTRY.md` (every formula, dial, law with
   status), `docs/CRAFT-MAP.md` (every writing device). Never say "we don't have it"
   before the manifest grep. Regenerate all: `build_docs_layers.py --write`.
+- **Author a beat: a recipe, not an effect** → author a beat as a RECIPE (a proven combination, E96): `python content/video_engine/scripts/effects_card.py "<recipe>"` (the catalogue `docs/EFFECTS-CATALOG.md` Recipes section; the floor before a watch: `gate_one_shot_floor.py <build>`, rows M35-M42 in SELF-WATCH).
+- **Name an effect: what it does, how to call it** → `python content/video_engine/scripts/effects_card.py "<name>"` (the operator's word, a record's word or the token; several matches list their ids; the generated catalogue is `docs/EFFECTS-CATALOG.md`, cards in `content/video_engine/effects/cards/`).
 - **What has the operator corrected about X, and why?** → `docs_find` first, then
   `docs/operator-ledger/TRIAGE-DIGEST.md` (verdict + where it lives), `LEDGER.jsonl` (verbatim),
   `docs/agent-memory/operator/` (memories, `casebook/` frames). `superseded` is never a live rule.

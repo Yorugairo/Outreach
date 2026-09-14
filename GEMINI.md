@@ -99,6 +99,8 @@ retrievable and is not evidence.
    layer; `--layer` to focus, `--limit` to widen) → `sed -n` the window it names → only then a new research order. Never search the live web for a fact already in the repo (Gemini protocol, golden rule). What the operator
    corrected, and why: `docs/operator-ledger/TRIAGE-DIGEST.md` (verdicts), `LEDGER.jsonl` (verbatim) and
    `docs/agent-memory/operator/` (memories + casebook); a `superseded` row is never a live rule.
+   An effect by name (what it does, its phases, the example that compiles, its proof): `python content/video_engine/scripts/effects_card.py "<name>"` (generated catalogue `docs/EFFECTS-CATALOG.md`).
+   A beat is authored as a recipe: author a beat as a RECIPE (a proven combination, E96): `python content/video_engine/scripts/effects_card.py "<recipe>"` (the catalogue `docs/EFFECTS-CATALOG.md` Recipes section; the floor before a watch: `gate_one_shot_floor.py <build>`, rows M35-M42 in SELF-WATCH).
 
 
 ### Gemini's research profiles, used against THIS repo (2026-09-05)

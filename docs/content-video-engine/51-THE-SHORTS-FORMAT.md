@@ -73,7 +73,7 @@ managing risk at a bank that neither of them knows.
 **That edge costs one sentence, not thirteen minutes.** It is what makes the short *true*
 rather than what makes it *long*. Put it in the mechanism beat and move on.
 
-**The stake is named in the lane audience's terms** (P54 K18). The operator, on the Tokyo short: *"Your borrowing
+**The stake is named in the lane audience's terms** (P54 K18; the general rule is E82 - who a line lands on is chosen, a named group or everyone, and no rule picks the kind of stake). The operator, on the Tokyo short: *"Your borrowing
 costs" is better than "your mortgage" because most people consuming shorts on facebook are not home owners.*
 (2026-09-05, `2e2e84c1559f`). The sourcing held because the dossier row covers both the mortgage rate and the 10-year;
 a wider stake word still needs a source that covers it.

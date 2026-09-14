@@ -127,9 +127,9 @@ _none._
     - `:54` 7. Recognition hold — a stable map, timeline, relationship graph, or document
     - `:56` 8. CTA — invite viewers to explore the Registry or the next history question;
     - `:59` The conflict loop remains useful only when the conflict exists in the evidence.
-- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:62` — 4. Visual modes — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2212` 9.33 The chart is the WORLD — a long form is authored on the page; a plate is one of three things, and says which (operator, 2026-09-11) — h 0.00 / j 0.05 / b 0.00 — 1 rule
+- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:62` — 4. Visual modes — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2217` 9.33 The chart is the WORLD — a long form is authored on the page; a plate is one of three things, and says which (operator, 2026-09-11) — h 0.00 / j 0.05 / b 0.00 — 1 rule
     - `:66` research-only `longform-illustrated-history-v1` production profile. The earlier
-- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:71` — Production-profile fork — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2212` 9.33 The chart is the WORLD — a long form is authored on the page; a plate is one of three things, and says which (operator, 2026-09-11) — h 0.00 / j 0.05 / b 0.00 — 25 rules
+- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:71` — Production-profile fork — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2217` 9.33 The chart is the WORLD — a long form is authored on the page; a plate is one of three things, and says which (operator, 2026-09-11) — h 0.00 / j 0.05 / b 0.00 — 25 rules
     - `:74` reference to independent abstract atoms. A profile preserves a coherent set of:
     - `:76` - composition and shot-scale grammar;
     - `:77` - limited-animation economics;
@@ -164,7 +164,7 @@ _none._
 - `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:152` — World first, vectors second — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.07 / b 0.00 — 2 rules
     - `:160` For document and map compositions, generated imagery is background-only. A
     - `:164` world may be interpretive; the explanation layer must remain exact.
-- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:166` — V4.1 living-editorial cadence — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2140` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.06 / b 0.00 — 14 rules
+- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:166` — V4.1 living-editorial cadence — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2145` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.06 / b 0.00 — 14 rules
     - `:168` `editorial_coverage.v1` resolves visual coverage before treatments:
     - `:170` - every complete sentence receives at least one distinct visual concept;
     - `:171` - long sentences split only at contrast or meaningful clause boundaries;
@@ -201,7 +201,7 @@ _none._
 - `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:264` — Gate B — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1057` 9.8 Generated text, conditionally re-licensed (operator, 2026-08-25) — h 0.00 / j 0.05 / b 0.00 — 1 rule
     - `:266` Gate B reviews the landscape master, both native vertical clips, captions,
 - `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:270` — 8. Native verticals — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:277` — 9. Chapter subvideos — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1425` 9.25 The screen never goes still; captions take the stage (operator, 2026-09-02) — h 0.00 / j 0.05 / b 0.00 — 1 rule
+- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:277` — 9. Chapter subvideos — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1430` 9.25 The screen never goes still; captions take the stage (operator, 2026-09-02) — h 0.00 / j 0.05 / b 0.00 — 1 rule
     - `:279` Each chapter may become a landscape or vertical subvideo only when it has a
 - `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:288` — World-first generated plates for documentary explanation — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1044` 9.7 Host-in-world plates approved (operator, 2026-08-25) — h 0.00 / j 0.04 / b 0.00 — 5 rules
     - `:297` Remotion then adds the meaning-bearing layer from the approved episode:
@@ -214,7 +214,7 @@ _none._
     - `:321` literal noun-per-cut rule.
     - `:331` The generated-block style board and animatic are review-only revisions. They
     - `:333` the active board, Gate A snapshot, research packet, and rights-cleared asset
-- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:336` — Plate-to-video motion handoff — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1499` 9.26 The LEDGER PAGE — the plate-chart species, the channel's signature (operator, 2026-09-02) — h 0.00 / j 0.04 / b 0.00 — 1 rule
+- `docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:336` — Plate-to-video motion handoff — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1504` 9.26 The LEDGER PAGE — the plate-chart species, the channel's signature (operator, 2026-09-02) — h 0.00 / j 0.04 / b 0.00 — 1 rule
     - `:346` Provider clips remain quarantined. A completed Magnific/Kling manifest must be
 
 ### PARTIAL — the target carries some of it — check what it dropped
@@ -248,7 +248,7 @@ _none._
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:90` — Evidence — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.33 / b 0.07 — 1 rule
     - `:96` Generated paper, scrolls, desks, and frames may surround evidence. They never
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:99` — Explanation — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:106` — Transition — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1847` 9.28 The SURFACE GRAMMAR — page, dock, or transition, decided by rule (operator, 2026-09-03) — h 0.00 / j 0.03 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:106` — Transition — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1852` 9.28 The SURFACE GRAMMAR — page, dock, or transition, decided by rule (operator, 2026-09-03) — h 0.00 / j 0.03 / b 0.00 — 0 rules
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:112` — 3. Documentary beat grammar — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1189` 9.14 World plates MAY show screens, boards, and trend imagery (operator, 2026-08-25) — h 0.00 / j 0.04 / b 0.00 — 6 rules
     - `:114` Every factual passage uses this recurring sequence when applicable:
     - `:116` 1. Picture it — establish the human situation through world or character.
@@ -259,7 +259,7 @@ _none._
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:126` — 4. Fact surfaces — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:197` Part 4 — The literal evidence layer (teacher-stamped deck slides) — h 0.00 / j 0.07 / b 0.00 — 2 rules
     - `:130` | Date seal | Introduce one date and one event | One date only; source-bound |
     - `:134` | Relationship scroll | Connect named entities with sourced verbs | Unknown or contested edges are labelled, never completed silently |
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:141` — 5. Motion discipline — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2140` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.06 / b 0.00 — 7 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:141` — 5. Motion discipline — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2145` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.06 / b 0.00 — 7 rules
     - `:143` Motion is authored in this order:
     - `:145` 1. Character or prop action.
     - `:146` 2. Localized environmental action.
@@ -279,7 +279,7 @@ _none._
     - `:172` - fallbacks for unavailable motion assets.
     - `:179` Longer scenes are allowed only while character blocking, facts, props, or
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:182` — Google Flow terminology — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:178` 2.4 The world reacts to the evidence — h 0.00 / j 0.08 / b 0.00 — 0 rules
-- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:196` — Catalog and comparison rhythm — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1998` 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — h 0.00 / j 0.02 / b 0.00 — 0 rules
+- `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:196` — Catalog and comparison rhythm — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2003` 9.29 The OPENING MINUTE — the confirmation gap, the packaging match, and no full chart before the thesis (operator, 2026-09-03) — h 0.00 / j 0.02 / b 0.00 — 0 rules
 - `docs/content-video-engine/15-LIVING-SCENE-COMMUNICATION-LANGUAGE.md:208` — 7. Scene flow — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:278` 8.1 The shape — h 0.00 / j 0.14 / b 0.00 — 12 rules
     - `:210` Each adjacency declares at least one connector:
     - `:212` - `direction`: travel continues into a route trace;
@@ -415,7 +415,7 @@ _none._
 ### DELTA — nothing like it in the target — THIS IS THE LIFT LIST
 
 - `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:1` — Timestamped Plate Production — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1153` 9.13 Plate density is runtime-derived, not a flat floor (operator, 2026-08-25) — h 0.00 / j 0.06 / b 0.00 — 0 rules
-- `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:8` — 1. Decision — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2212` 9.33 The chart is the WORLD — a long form is authored on the page; a plate is one of three things, and says which (operator, 2026-09-11) — h 0.00 / j 0.04 / b 0.00 — 2 rules
+- `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:8` — 1. Decision — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2217` 9.33 The chart is the WORLD — a long form is authored on the page; a plate is one of three things, and says which (operator, 2026-09-11) — h 0.00 / j 0.04 / b 0.00 — 2 rules
     - `:46` remains the rule owner; the skill applies its schedule, world, quarantine, and
     - `:47` promotion rules without duplicating factual history.
 - `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:49` — 2. Congruence before generation — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:197` Part 4 — The literal evidence layer (teacher-stamped deck slides) — h 0.00 / j 0.06 / b 0.00 — 10 rules
@@ -455,7 +455,7 @@ _none._
     - `:181` The older manifests V1 and V2 are frozen candidate inventories only. They
     - `:189` canonical narration. A future Episode Production Gate must bind the active
     - `:191` does not start animation, narration, assembly, Gate A, or publication.
-- `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:193` — 7. Canonical-audio editorial binding — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1778` 9.27 The MOTION MENU — opt-in species, each with a slot, a mechanism, and a gate treatment (operator, 2026-09-02) — h 0.00 / j 0.04 / b 0.00 — 7 rules
+- `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:193` — 7. Canonical-audio editorial binding — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1783` 9.27 The MOTION MENU — opt-in species, each with a slot, a mechanism, and a gate treatment (operator, 2026-09-02) — h 0.00 / j 0.04 / b 0.00 — 7 rules
     - `:204` seconds. It must never absorb unrepresented narration into the preceding
     - `:213` then candidates for explicit semantic selection, never defaults. This preserves
     - `:219` new plate and a locked camera; only sparse, 1% focal-point pushes are allowed.
@@ -839,14 +839,14 @@ _none._
 
 ### DELTA — nothing like it in the target — THIS IS THE LIFT LIST
 
-- `docs/operator-ledger/PORTABLE-AUDIT.md:1` — The portable docs, audited against the later record (P54 T3, 2026-09-13) — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1425` 9.25 The screen never goes still; captions take the stage (operator, 2026-09-02) — h 0.00 / j 0.09 / b 0.00 — 2 rules
+- `docs/operator-ledger/PORTABLE-AUDIT.md:1` — The portable docs, audited against the later record (P54 T3, 2026-09-13) — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1430` 9.25 The screen never goes still; captions take the stage (operator, 2026-09-02) — h 0.00 / j 0.09 / b 0.00 — 2 rules
     - `:4` `docs/portable/` is loaded by any agent doing video work, so a stale claim there teaches every lane the wrong rule.
     - `:6` Three read-only explorers read each doc whole, listed its concrete claims, and checked each against the rulings dated
-- `docs/operator-ledger/PORTABLE-AUDIT.md:12` — Ranked — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1425` 9.25 The screen never goes still; captions take the stage (operator, 2026-09-02) — h 0.00 / j 0.10 / b 0.00 — 3 rules
+- `docs/operator-ledger/PORTABLE-AUDIT.md:12` — Ranked — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1430` 9.25 The screen never goes still; captions take the stage (operator, 2026-09-02) — h 0.00 / j 0.10 / b 0.00 — 3 rules
     - `:16` | 1 | `BUILD-PIPELINE.md` | 2026-08-30 | 14 | high | several gate-FAILing defaults: the 20 s ceiling E69 withdrew, the wipe on every plate (E47), a chart held a
     - `:23` | 8 | `MOTION-GRAMMAR.md` | 2026-08-30 | 3 | low | "slow sine wander" vs E49's named idle; "full-frame, never framed" over a ledger page vs E45/E63; CSS eases v
     - `:25` 46 stale claims in 8 docs. The two always-loaded files (`DOCTRINE-CORE`, `VOICE-PACK`) carry 13 of them.
-- `docs/operator-ledger/PORTABLE-AUDIT.md:27` — Stale outside `docs/portable/`, found on the way — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2140` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.04 / b 0.00 — 9 rules
+- `docs/operator-ledger/PORTABLE-AUDIT.md:27` — Stale outside `docs/portable/`, found on the way — `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2145` 9.32 Lifted from the compressed docs (15, 16) — 2026-09-05 — h 0.00 / j 0.04 / b 0.00 — 9 rules
     - `:29` - `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` §9.15 item 2 still lets evidence persist across a boundary (E25/§9.30 ban a chart held across plat
     - `:30` - `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md` §1 and §18 still carry the "~3 tags" cap that its own §21 retired.
     - `:31` - `docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md` line ~165 lists "Part-to-whole: stacked bar, <= 4 segments" (E53 §2: no stacked bars); §10.1 rule 5 ho

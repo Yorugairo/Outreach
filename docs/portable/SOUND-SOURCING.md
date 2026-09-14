@@ -75,7 +75,7 @@ throw; the sound pass does not invent its own timeline. Three rules bound them:
   press pack" (YouTube −28 LU / Facebook −26, 2026-09-05) predates it; the
   gain formula there, `bed_gain = 10^((VO_I − LU − bed_I)/20)`, still applies.
 - **Accents are background sounds, 8-10 dB under the voice** (Tokyo
-  `sound/SOURCES.md`, 2026-09-05).
+  `sound/SOURCES.md`, 2026-09-05) - the starting reference for every video, tuned by ear from there (E81).
 - A long-form bed level is not re-ruled after E54 in the record opened for
   this audit; read `docs/research/audio/SUBTHRESHOLD_BACKGROUND_MUSIC_RESEARCH_BLUEPRINT.md`
   before setting one.

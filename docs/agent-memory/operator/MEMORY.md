@@ -69,4 +69,6 @@
 - [Open local apps yourself](open-local-apps-yourself.md) — a lane needing Antigravity, a server or a GUI tool: launch it yourself (bypass permissions); never ask the operator to click it
 - [Never pipe gated steps to tail](never-pipe-gated-steps-to-tail.md) — tail's exit code masks a FAIL; twice a failure shipped; run gated steps unpiped or with pipefail
 - [Script changes go to the next letter](script-changes-go-to-next-letter.md) — a script needing several edits is never patched piecemeal: a rewrite order, then the next letter; the recorded one stays as recorded
+- [One-shot floor: recipes, not events/min](one-shot-floor-recipes-not-events.md) — a thin cut is busy but structureless; measure chart forms, docks, transforms, proven-recipe coverage; a beat is a recipe; chart_to never in an approved cut (E96/E97, 2026-09-13)
+- [Composite effects keep every phase](composite-effects-keep-every-phase.md) — the verdict stack is enter-one-at-a-time → focus → recede to the mosaic → idle → burst, blending 3 remotion-bits + the hyperframes pilot; never describe an effect by a doc one-liner
 - [Gate extraction orders](gate-extraction-orders.md) — on-disk extraction orders ship with a --verify gate (paths exist, quotes verbatim, 0-hit terms real, counts match), small chunks, a coverage table, no crib; the ungated Gemini reasoning run invented 13/14 paths

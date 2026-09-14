@@ -2508,3 +2508,283 @@ sure if side-by-side having exact same scale is always necessary, but it shold b
 
 Not ruled (the same pass): *"never change the voice and the opening in the same post"* was rejected - *"we actually have
 various data streams now so we can cover chanigng more than one vairable."*
+
+---
+
+## E80 — "No real faces" means the operator's on-camera face; advice built for channels meant to be sold does not bind (2026-09-13)
+
+**Ruling (the operator, ruling the P54 triage candidate `hybrid-brand-advice`):** *"\"no real faces\" is meaning my actual
+on camera face."* The candidate (2026-08-31, LEDGER `4b43b0fc0c51`): *"I know tim says don't use real photo but thats also
+because he tries to build people to flip their channel. this is more of a hybrid-brand channel, i don't intend to sell it"*.
+
+*Apply:*
+1. **Money Physics is a hybrid brand the operator does not intend to sell**, so advice whose reason is keeping a channel
+   delegable or sellable (no real photo, no personal identity) is an input, not a rule.
+2. **"No real faces" (BRAND-SHEET) means the operator's actual on-camera face** does not appear. A drawn likeness in the
+   house style is not a real face (the 2026-08-31 avatar answer). Generated plates still carry no real person's face.
+
+---
+
+## E81 — A number is where the art starts: foley and accents begin 8-10 dB under the voice in every video (2026-09-13)
+
+**Ruling (the operator, ruling the P54 triage candidate `foley-background-level`):** *"Foley at 8-10 dB should become the
+starting reference point for each video, so it could be a ruling in that sense. Numbers give us places to start, then we
+find the art."* The candidate (2026-09-05, LEDGER `7096b624ebee`): *"the sounds should still be background sounds not
+main effects, so iti should be like ~8-10 db below maybe"*.
+
+*Apply:*
+1. **Every video's transition foley and accents start 8-10 dB under the voice** - background, never a main effect
+   (SOUND-SOURCING, "Accents are background sounds").
+2. **A stated number is the starting reference, not a ceiling on judgment:** the cut is tuned by ear and eye from there,
+   and a departure is authored on the cue with its reason, never drifted into.
+
+---
+
+## E82 — Who the words land on is chosen, never accidental: a named group on purpose, or everyone on purpose (2026-09-13)
+
+**Ruling (the operator, ruling the P54 triage candidates `facebook-close-reader-stake` and `audience-borrowing-costs`
+together):** *"We shouldn't write any specific rule on types of deb though. sometimes writing about mortgages makes sense.
+some times credit card debt. That's an editorial decision for the story, but if we don't have a reason to specify, then
+that's a reason for us to choose to speak to everyone. The idea is that our speach should intentionally be directed at a
+specific target individual/group level person, or it should be specifically target to encompass the masses. the target
+landing shouldn't be accidental at all."* The candidates: the Facebook close (2026-09-02, LEDGER `cd2e32426cdd`): *"Most
+of these people aren't tracking anything. We need to be talking to average people and explaining to them HOW this tech/ai
+/ data center stuff impacts the market and why/how that impacts them."*; the stake word (2026-09-05, LEDGER
+`2e2e84c1559f`): *"\"Your borrowing costs\" is better than \"your mortgage\" because most people consuming shorts on
+facebook are not home owners."*
+
+*Apply:*
+1. **Every stake, close and "you" has a chosen target:** a specific person or group, named on purpose, or the widest
+   audience, on purpose. A draft states which in its brief; a line that lands on a group nobody chose is a defect.
+2. **No standing rule picks the kind of stake** (mortgages, credit cards, a 401k, borrowing costs): that is the story's
+   editorial decision. Without a reason to narrow, the default is to speak to everyone.
+3. **A close reaches the viewer it chose:** how the mechanism moves the market and so that viewer's own money - not an
+   analyst's hook the audience does not act on ("if you're tracking the printers").
+
+---
+
+## E83 — A dock's landing licenses a sound cue in the opening window, as a page's does (2026-09-13)
+
+**Ruling (the operator, on OPEN-GATES 2026-09-12 Part 2 item 1):** *"For sound cue timing on docks: we probably should have
+sound cues."* M29 read E44 2a literally - only a PAGE landing licensed a transient cue inside 0:05-0:12. A dock that lands
+now licenses one too; M29 moves with it (`content/video_engine/scripts/gate_motion_density.py`).
+
+---
+
+## E84 — The caption stays the main world; a news crawl yields to it by where the crawl lives (2026-09-13)
+
+**Ruling (the operator, human gate 1 of P52, the newsreel band's strip law):** *"if the news strip is applied to a surface
+like a TV or something, then captions stay pretty much centered, the captions are our main world and the newsreel is on a
+secondary surface. If the news crawl is applied to our whole reel, then I would think it's around the top of the bottom
+1/3, and the captions are above it, still pretty much centered."*
+
+*Apply:*
+1. **A crawl on a surface in the world** (a TV, a monitor, a card): the captions keep their normal, roughly centered
+   place - the captions are the main world, the newsreel a secondary surface.
+2. **A crawl across the whole reel:** the crawl sits around the top of the bottom third, and the captions sit above it,
+   still roughly centered.
+3. The newsreel module's default follows this (P52 T6, `cap_band`); any gap between the shipped strip and these two cases
+   is a backlog row, not a new gate.
+
+---
+
+## E85 — Presentation does not win by itself; it is a real gap and a moat (2026-09-13)
+
+**Ruling (the operator, ruling the P54 conflict `win-on-presentation` against doc 21):** *"the evidence absolutely doesn't
+support that we win on presentation - There are successful channels that just read script over blank pages, or do
+\"history stoires to sleep to.\" etc, but presentation is one of the gaps that exists that we can benefit from and act as a
+differentiator."* And: *"Anybody with a $20 gpt subscription can make the stick animations, whereas if we become
+successful we enjoy a bit more of a moat"*. The candidate (2026-08-22, LEDGER `ee466c018002`).
+
+*Apply:*
+1. **Doc 21's finding stands:** presentation is not the variable separating winners from losers in this niche; packaging,
+   topic and the script carry that, and no plan is premised on out-animating the field.
+2. **Presentation is still built as a differentiator and a moat:** a gap the successful channels leave open, and work a
+   cheap generator cannot copy - invested in, never sold as the reason a video wins.
+
+---
+
+## E86 — A surface in the world holds whatever the story needs: a press card, an image or a video clip (2026-09-13)
+
+**Ruling (the operator, on the head-in-a-news-band question after the Bravos read):** *"yes thats the tv surface should
+definitely be prepared to hold video and images - that would be silly if it didn't"*. Bravos shows someone else's words as
+the whole broadcast playing on a TV on a studio wall, the broadcaster's lower third inside the bezel, and keeps its own
+argument on a bare stage (`sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:53`).
+
+*Apply:*
+1. **An ART-embed surface (a TV, a laptop, a poster - E66, P50 T7) accepts an image dock and a video dock**, not only a
+   press card; the content fills the surface whole (E66), perspective-mapped to its quad, under its `darken`, and a camera
+   push into the surface (E59) still resolves. Build: BACKLOG R26-74.
+2. **Someone else's words on video go on a surface** (the clip on the TV); a figure in our own argument may stand as a
+   cutout on our stage over our crawl (P53 T7, E84).
+
+---
+
+## E87 — The transition is chosen for the scene from the whole kit; no single hand-off rule (2026-09-13)
+
+**Ruling (the operator, answering P53 human gate 2, "the hand-off rule"):** *"For transitions historically we we had the
+wipe/peel, we have the dip, We have the cream mount effect that can come before drawing the ledger, and we have tons of
+transition research and math on doc, and now we have the capability to have a transformation occur or to mount a surface
+and punch/push into that to become the full screen view right? we have lots of choices depending on whats best for the
+scene."* And, the same turn: *"We should also have a push/slide option, there are remotion and hyperframe examples, but
+basically literally pushing out one frame with the next, so that you keep some of that congruency"*.
+
+*Apply:*
+1. **No standing hand-off rule** (P53 HG2 closed): whether the incoming ground sits under the outgoing world or the cut
+   lands later is the chosen transition's own grammar, not a global default.
+2. **The kit a seam chooses from:** the cut; the dip (E47); the blur-zoom (E47); the wipe/peel (an effect by name, E47 s3);
+   the cream mount before a ledger page draws (a build, E48 s3; chart to chart hands over on axes, E73); the spiral (the
+   hero, E48); the morph - one element transforming into the next (doc 43 s43.5, P47 T3); the mount of a surface and a
+   push or snap into it until it is the full screen (E47 s3, E59, E66); and the **slide** below. E48 still binds: a short
+   declares its vocabulary - one primary, one or two accents, one hero - chosen for its scenes.
+3. **The slide (a push transition):** the incoming frame pushes the outgoing frame off the stage along one axis, both
+   moving together, so the two worlds stay spatially continuous. Named `slide` in our grammar, because `push` is already
+   the camera push-in. Not built: BACKLOG R26-75 (references: `@remotion/transitions` `slide`, the HyperFrames transitions
+   page E48 cites).
+
+---
+
+## E88 — The melt takes the chart, not the page: the ink balls up heavy, then leaves or paints what comes next (2026-09-13)
+
+**Ruling (the operator, human gate 2 of P52, the melt's four instants):** *"for the melt, i actually didn't envision melting
+the entire charcoal page, i envisioned melting only the chart information on the page, and compiling that into a dense heavy
+ball akin to the reference, and then either throwing it off of the screen, and drawing a new chart or splattering that back
+onto the page to either form a new chart or a narrative plate springs up, reading as having been \"painted\" - i didn't
+imagine melting the whole charcoal board"*. The original ask (2026-09-07, LEDGER `dc6fa75ec14e`, beside HyperFrames'
+`morph-text`): *"it would be cool to be able to melt the chart, turn it into a stop motion ink ball or something, then
+splash it eveywhere or toss it off the page"*. P52 T9 built the melt on the whole world's area polygon - the charcoal
+board itself sags, balls and leaves.
+
+*Apply:*
+1. **Only the chart's information melts** - the series, bars, marks, labels and annotations on the page. The charcoal
+   board, its deckle and the cream ground stay put.
+2. **The ink compiles into a dense, heavy ball** (the stop-motion ink ball of the original ask, on 2s), reading as mass,
+   not a light blob.
+3. **Then one of three endings, authored:** the ball is THROWN off the screen and a new chart draws on the same board; or
+   it SPLATTERS back onto the board and the splatter forms the new chart; or it splatters and a NARRATIVE PLATE springs up
+   out of it, reading as painted by that ink.
+4. The P52 T9 whole-page melt is not offered to a cut. Rework: BACKLOG R26-76.
+
+---
+
+## E89 — The press card wears the serif (2026-09-13)
+
+**Ruling (the operator, human gate 7 of P52, the press card's face):** *"Serif font for the news."* Of the three stand-ins
+(`press-stack.png` house, `press-stack@face-serif.png`, `press-stack@face-condensed.png`), the serif is the press card's
+default face; house and condensed stay available by name.
+
+---
+
+## E90 — Steel and Paper's captions are the base; the pop leads, the stagger's life rides under it (2026-09-13)
+
+**Ruling (the operator, human gate 4 of P52, the stagger against the pop):** *"caption pop looks beter than stagger, i
+think the blend of both makes sense, maybe add more pop effect. Ultimately, what we shipped on steel and paper is still the
+best we've produced, the real question is how do we take iron and steel captions and just add what we've learned about
+life/motion to them"*.
+
+*Apply:*
+1. **The base is the caption shipped on Steel and Paper** - STAGE mode (CAPABILITIES "Caption STAGE mode", doc 29 s9.25,
+   P34 T5): centred in the page's quiet zone, 64 px / 800, each word popping at its own spoken time (scale 1.16 -> 1.0,
+   alternating +-2.5 degrees tilt), moving to the free band under a dock at the same size (E62).
+2. **The pop leads, a little stronger; the stagger's envelope blends under it** (P52 T10: `DUR_S` 0.34, the pop's 0.05 s
+   anticipation) - the next caption pass is a BLEND, not a switch, judged by eye and ear on Tokyo's private build.
+3. **Then add what the record has learned about life and motion**, never replacing the base: E49 (nothing goes truly
+   still - a held page carries a named subtle idle), E21 (captions are the motion when nothing else moves), and the
+   caption-energy lessons (2026-09-05: energy from continuous, voice-timed motion; no per-word cursor or flash that pins
+   the eye). Where more pop and "no per-word event that pins the eye" pull against each other, the operator's eye on the
+   blend decides. Build: BACKLOG R26-77.
+
+---
+
+## E91 — The race has two settings, not a winner: the eased path is smoother, the clothoid path has more energy (2026-09-13)
+
+**Ruling (the operator, human gate 5 of P52, the race A/B):** *"both Arm A and B look good to me, Arm A is smoother, but Arm
+B has more dynamism/energy to it. seems like 2 settings to me, not a discard situation."* Arm A is the engine as it is (a
+racing mark's path eased coordinate-wise between period knots); arm B fits that path with clothoid segments
+(`build-short-t17/engine-clothoid.mjs`, `clothoidFit`), the period clock identical in both.
+
+*Apply:*
+1. **Both ship as a named setting on a race page:** the eased path (arm A) stays the default; the clothoid path (arm B)
+   is chosen by name where the beat wants energy. Build: BACKLOG R26-78.
+2. **Whichever setting, rows pass each other cleanly:** at a rank swap two labels or two values never print on top of
+   each other (arm B at 7.5 s read "ALBETA" and "136/138" in one row). Fix: BACKLOG R26-79.
+
+---
+
+## E92 — The publish folder is a reference, not the final form (2026-09-13)
+
+**Ruling (the operator, human gate 6 of P52, the publish folder's first use):** *"The publish folder is a solid reference but
+i don't want to lock us into it as THE final form"*. Tokyo's `build-short-t16/publish/` (CHECKLIST, the two descriptions,
+the pinned comment, SOURCES, TAGS, MANIFEST, the first frame) is the working reference a posting pass starts from; each
+real post may reshape it, and no gate or tool treats its file set as a required schema.
+
+---
+
+## E93 — An agenda row carries an icon, stamped on once its sentence has been read (2026-09-13)
+
+**Ruling (the operator, on beautifying P52's numbered agenda, gate 3):** *"i think agenda rows should carry icons, the icons
+can be stamped on after each sentence is read or something like that"*.
+
+*Apply:*
+1. **Each agenda row carries an icon** chosen from the icon catalogue by its semantic tags
+   (`content/video_engine/assets/icons/finance_icons_catalog.v1.json`, the operator's 44 woodblock cutouts; a v2 cutout
+   supersedes its v1).
+2. **The icon lands as a stamp after the row's sentence is spoken** - keyed to the end of that row's words, on the
+   stop-motion landing the stamps already use (the crossings map's stacked stamps; stopaction's squash on impact), so the
+   list accrues its icons as the narration walks it.
+3. The model for the rest of the row is Steel and Paper's three-question test card (the operator's pointer, 2026-09-13).
+   Build: BACKLOG R26-80. The icons render once the operator approves them (catalogue `review_state: review_only`).
+
+---
+
+## E94 — The operator's icon set is approved for use (2026-09-13)
+
+**Ruling (the operator):** *"delete the replaced V1's, then approve use of the icons."* The 44 woodblock icon cutouts in
+`content/video_engine/assets/icons/cutouts/` (cut from the operator's sheets `Icons1.png`-`Icons4.png`, tagged and
+catalogued in `finance_icons_catalog.v1.json`) are `review_state: approved`, `rights_state: operator_approved`,
+`render_eligible: true`, each entry carrying the approval's words and date. The three clipped v1 cutouts (central bank,
+crude oil, interest rates) were replaced by their v2 re-cuts and removed (sent to the Recycle Bin, 2026-09-13).
+
+---
+
+## E95 — A still fills a surface it lands on, as a clip does (2026-09-13)
+
+**Ruling (the operator, on R26-74's open choice):** *"Yes, stills should probably fill the tv surface"*. A still image
+docked onto an ART-embed surface (a TV, a laptop, a poster - E86) fills the surface by default (`fit: cover`), exactly as a
+video does; `fit: contain` letterboxes by name. The reflowed press CARD (E66) is unchanged. Build: the default in
+`build_scene_timeline_f.py` `embed_fit` (BACKLOG R26-74), with the `art-embed` golden regenerated as intended.
+
+---
+
+## E96 — A one-shot is measured against floors before it is watched; recipes are the unit of authoring (2026-09-13)
+
+**Ruling (the operator, the pipeline grill):** *"the individual effect is not really the key, it's blending a few of them together
+that creates the effect ... we require a capability and comparator plan per beat, effective combinations build the effective
+recipe, and what the director-critic is actually auditing is if the effect recipes are effective."* On the thin one-shot:
+*"there was minimal motion/transformation, and mixing of narrative panels and charts. You mostly changed words and used only 2
+charts."* The measure that explains it (`docs/content-video-engine/GRILL-PIPELINE-VALUE-2026-09-13.md` s1): the cut had 17.9
+events/min - as busy as Tokyo - and 1 chart form, 0 docks, 0 chart-to-chart transforms, no recurring combination.
+
+**The rule:** (1) a beat is authored as a RECIPE (an ordered combination of catalogue effects with offsets and a played instant
+that proves it), never as one effect; a recipe is `proven` only by an instant in an approved cut. (2) Before a one-shot is offered
+for a watch it is measured: >= 3 chart forms, >= 1 chart-to-chart transform, docks on >= 1/3 of its beats, >= 60% of beats on a
+proven recipe, narrative : chart >= 1 : 1, and parity with the best approved short on those five - a cut under a floor is not
+offered. (3) Events per minute is NOT a floor: the thin cut would have passed it. JUDGE keeps sequence and taste, read against the
+best approved short, never against the gates (the casebook `the-thin-one-shot`).
+
+---
+
+## E97 — The rig is relations; inheritance is translate-only unless widened; parents scale uniformly (2026-09-13)
+
+**Ruling (the operator):** *"rigging ... can also be used to move evidence around the screen and manipulate camera perspective ...
+If relations is feasible then that's clearly the winner"*; both grammar defaults approved. Verified on the Bravos reference
+(`docs/research/runs/grill_pipeline-value/BRAVOS-RIG-VERIFIED.md`, played at 2 fps): the elephant-ball-wire prop is five
+relations, all resolvable at compile time; the ball does NOT rotate, wobble or travel - the life is arrivals, the group's scale
+moves and the cards; the camera is locked.
+
+**The rule:** an object's place may be declared as a RELATION to another (`pin`, `aim`, `group`, `path`, `derive`, `camera
+follow`, `weight`) and the compiler resolves it as a pure function of t. Defaults: a pinned child inherits TRANSLATION only
+(`inherit: [translate]`; widen explicitly) - the elephant does not grow with the ball; a parent scales UNIFORMLY (non-uniform
+scale under rotation shears); a label pins, never parents; Z-order stays authored; only closed-form relations (no physics, no
+iteration, no order-dependent blending) - a seek must land the same frame. Evidence and the camera first; the figure rig stays
+parked (R26-61) with its trigger.

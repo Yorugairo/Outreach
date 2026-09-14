@@ -20,6 +20,8 @@ matches the task. Skills outside this router are disabled for this project by
 | Structural code search | `ast-grep`, `ast-grep-outline` |
 | Context control | `strategic-compact` |
 | Operator history: what was corrected, why a rule exists | no skill - `docs_find`, then `docs/operator-ledger/TRIAGE-DIGEST.md` and `docs/agent-memory/operator/` (P54) |
+| Name an effect: what it does, how to call it | no skill - `python content/video_engine/scripts/effects_card.py "<name>"`, the generated `docs/EFFECTS-CATALOG.md` (P55) |
+| Author a beat as a recipe; measure a cut against the one-shot floor before a watch | no skill - author a beat as a RECIPE (a proven combination, E96): `python content/video_engine/scripts/effects_card.py "<recipe>"` (the catalogue `docs/EFFECTS-CATALOG.md` Recipes section; the floor before a watch: `gate_one_shot_floor.py <build>`, rows M35-M42 in SELF-WATCH) (P56) |
 
 Release management, workspace cleanup, broad infrastructure, unrelated
 industry operations, and generic agent-framework skills are disabled by
