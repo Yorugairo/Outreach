@@ -135,6 +135,21 @@ export const embedMatrix = (quad, box) => {
   return hMul(hTranslate(-box.x, -box.y), hMul(H, toUnit));
 };
 
+/* P58 T4 - A WHOLE ELEMENT ONTO A QUAD. `embedMatrix` letterboxes a CARD inside a surface's bounding rectangle;
+   this is its sibling for the case where the element IS the rectangle being projected - the ledger page, laid out
+   at the stage and then turned into a card standing at a depth (E98 s3). `w` x `h` is the element's own box and
+   (ox, oy) its transform-origin measured from its top left, so the matrix composes under the CSS the element
+   already carries instead of demanding `transform-origin: 0 0`:
+     local p (from the origin) -> (p + o) / (w, h) -> the unit square -> H -> the quad, back to an offset from o.
+   The quad is in the element's own pixels. At the unit quad ((0,0) (1,0) (1,1) (0,1) scaled by w, h) this is the
+   IDENTITY, so a plane that is not tilted changes no pixel. */
+export const planeMatrix = (quad, w, h, ox = 0, oy = 0) => {
+  const H = hFromUnitSquare(quad);
+  if (!H || !(w > 0) || !(h > 0)) return null;
+  const toUnit = [1 / w, 0, ox / w, 0, 1 / h, oy / h, 0, 0];
+  return hMul(hTranslate(-ox, -oy), hMul(H, toUnit));
+};
+
 /* a rectangle INSIDE the card (the quoted phrase, a badge) carried onto the surface: its four projected corners in
    order and their bounding box - the quad for anything drawn in the projected space (the underline rides the bottom
    edge), the box for anything that still wants an axis-aligned target. `r` and `box` are in stage coordinates, `m`

@@ -46,6 +46,7 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "newsreel-strip-9x16",  # P52 T6: 9:16 THE DEFAULT strip law - the caption keeps its E62 band, the crawl runs below it
             "newsreel-strip-above", # P52 T6: 9:16 the ALTERNATIVE (`cap_band: "above"`) - the crawl takes the strip, the caption moves above it
             "occluder-dock",     # P50 T15 / HF-17: a dock BEHIND the plate's foreground layer - the depth cue by occlusion, not blur
+            "page-depth",        # P58 T4 / E98 s3: the ledger page as a CARD AT A DEPTH - `plane=tilt:14,y` turned by the embed grammar's own homography and `depth=1.15` taking that share of one focus zoom tied to a landing, over the layered dock plate (its build and its leaving ride PROOF_FRAMES)
             "camera-layers",     # P58 T3 / E59 + doc 24: ONE eye over four DEPTH PLANES - the dock plate split into -far / -mid / subject / -near, taking the shares 1.0 / 1.15 / 1.275 / 1.40 of one authored focus zoom tied to a landing (its locked instant and its mid-zoom ride PROOF_FRAMES)
             "ledger-extend", "ledger-keyed",   # P48 T3 / T4b: chart_to extend and the keyed recast - on disk since P48, checked from P55 T6 (decision 7)
             "verdict-stack",     # P55 T6: the inline drawStack mid-pile - four cards on their rail spots, the fifth active large near centre (its burst rides PROOF_FRAMES)

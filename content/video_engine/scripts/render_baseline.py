@@ -65,6 +65,10 @@ PROOF_FRAMES = {
     # frame). No flag makes the depth happen: a plate that ships in planes takes the authored move at four factors.
     "camera-layers@proof-start": ("camera-layers", {"camera": True}, 5.9),   # BEFORE the move: the camera is LOCKED, so every k has nothing to multiply and the four planes paint exactly the flat composite
     "camera-layers@proof-mid": ("camera-layers", {"camera": True}, 6.56),    # MID-ZOOM (u 0.28 of the clock, 0.50 of the servo's reach): the lamp (1.40) leading the desk (1.275), the containers (1.15) and the sky (1.0)
+    # P58 T4 - THE PAGE AS A CARD AT A DEPTH, at the two instants the held frame cannot show. Same flag as
+    # camera-layers (E59's module drives the move); the depth and the plane are AUTHORED on the page, not switched on.
+    "page-depth@proof-build": ("page-depth", {"camera": True}, 9.8),    # MID-BUILD: the chart DRAWING on the tilted page - the page's own clock opens at 5.0 and this is its 4.8 s, the subtitle half written, two of the four series in, the nib at the front; the camera is still locked, so what turns the page is the plane alone
+    "page-depth@proof-leave": ("page-depth", {"camera": True}, 28.5),   # THE LEAVING: half way down the retract's drain (the colours over the scene's last 2 s), the page still standing on its plane
     "species-proof@proof-ring": ("species-proof", {"idle": True}, 12.6),     # the dashed ellipse closed round the series' own peak, its flag chip landed, the page breathing under it
     "species-proof@proof-count": ("species-proof", {"idle": True}, 22.5),    # the isometric field: all six icons in reading order, the count written as the claim
     "species-proof@proof-agenda": ("species-proof", {"idle": True}, 28.5),   # the numbered agenda: three rows revealed one per word, holding

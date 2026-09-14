@@ -40,6 +40,7 @@ FRAME_T = {
     "ledger-page-mid-build": 6.0,   # field filled, outline drawn, ink and bars building
     "chart-callout": 12.0,          # the line has drawn, all four badges have landed
     "occluder-dock": 12.0,          # P50 T15 / HF-17: the card landed (4.0) and still, its lower half behind the plate's desk edge
+    "page-depth": 15.5,             # P58 T4: inside the focus zoom's HOLD (13.6 -> 15.6, at FOCUS_SCALE from 14.71) with the card landed and its badge settled - the page standing as a card at 1.15 on the dock's space, tilted 14 deg about its own vertical axis
     "camera-layers": 7.9,           # P58 T3: inside the focus zoom's HOLD (it reaches FOCUS_SCALE at 6.0 + 2.0/1.8 = 7.11 and stands dead still to 8.0) - the move landed, every plane at its own share of it, and no fractional clock in the frame
     "ledger-soak-page": 2.7,        # mid-soak: stains spreading and overlapping (P43 T3 K-M ink is judged here)
     "dock-pair-16x9": 12.0,         # both cards up, badges landed
@@ -731,6 +732,70 @@ def camera_layers() -> tuple[dict, dict]:
     return tl, uris
 
 
+# ---- P58 T4: THE PAGE AS A CARD AT A DEPTH -----------------------------------------------------
+# E98 s3: *"the ledger page is a card at a depth ... the flat page stays the default reading form"*. The page is
+# the SAME ledger line page every other golden reads, authoring the two new options and nothing else, over the
+# SAME layered dock plate and the SAME kind of move `camera-layers` uses - a focus zoom tied to a card LANDING
+# (E51). The plate is the scene BEFORE it: a `card` page's world is transparent (`.world.ledger.cardworld`) and
+# the player paints the previous scene into the other buffer, which is how a page stands in a plate's space at
+# all. The move is authored on BOTH scenes because both are on screen - the page in one buffer, the plate it
+# stands in front of in the other - and one eye moves over both.
+PAGE_DEPTH_CUT = 5.0            # the page arrives (a cut: the world change is the page)
+PAGE_DEPTH_CARD = 12.6          # ... builds, and a card LANDS on it (stop-action `land`)
+PAGE_DEPTH_AT = 13.6            # ... and the eye goes to that landing, one focus zoom, 2 s (E51: never to a thing that just sits there)
+PAGE_DEPTH_DUR = 2.0
+PAGE_DEPTH_K = 1.15             # the page's own parallax factor - doc 24's `-mid`: the page stands in the dock's space, nearer than the sky and behind the lamp
+PAGE_DEPTH_TILT = "tilt:14,y"   # turned 14 deg about its own vertical axis: the ruled lines converge to the right, the near edge is left
+PAGE_DEPTH_PLACE = {"x": 1160, "y": 600, "w": 640, "h": 400}
+
+
+def page_depth() -> tuple[dict, dict]:
+    """P58 T4 - THE LEDGER PAGE AS A CARD AT A DEPTH: `;plane=tilt:14,y;depth=1.15` on a page, and nothing else.
+
+    The page is drawn exactly as it is drawn today - the roll-out, the soak, the punch, its chart building on its
+    own clock - and then turned onto the plane the compiler resolved (four corners, TL TR BR BL, the ART-embed
+    grammar's own shape) and seen by the one camera at its own depth. The flat page is untouched: no option, no
+    string, the same bytes.
+
+    WHAT THE FRAMES SHOW. `@proof-build` (10.9) is mid-build: the chart drawing ON the tilted page, so the ink
+    lands on the surface rather than in front of it. The base frame (15.5) is the HOLD - the card landed, the eye
+    arrived, the page taking 1.15 of that move while the four planes behind it take 1.0 / 1.15 / 1.275 / 1.40:
+    the page is a thing standing in the dock's space, and the number on it still reads (E28). `@proof-leave`
+    (28.5) is the retract, half way down its drain - a page at a depth leaves the way every page leaves."""
+    import build_scene_timeline_f as BST
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", 0, "right")
+    page["card"] = True                                        # `;card=yes`: the page keeps the card's rounded corners and doc 29 s1.2's hard-edge shadow, and the world around it stays visible
+    page["depth"] = BST.page_depth_k(str(PAGE_DEPTH_K), "golden")
+    page["plane"] = BST.page_plane_spec(PAGE_DEPTH_TILT, "golden")
+    assert not BST.page_plane_error(page["plane"], "golden"), BST.page_plane_error(page["plane"], "golden")
+    aid = "plate-dock"
+    planes = BST.plate_depth_planes(DOCK_PLATE)
+    layers = [{"key": f"{BST.LY_PREFIX}{aid}:{p['role']}", "k": p["depth"], "role": p["role"]} for p in planes]
+    P = PAGE_DEPTH_PLACE
+    species = [{"kind": "focus_zoom", "at": PAGE_DEPTH_AT, "dur": PAGE_DEPTH_DUR,
+                "target": {"kind": "region", "x0": P["x"] / 1920, "y0": P["y"] / 1080,
+                           "x1": (P["x"] + P["w"]) / 1920, "y1": (P["y"] + P["h"]) / 1080}}]
+    dock = BST.dock_entry("ev-desk-card", 0, PAGE_DEPTH_CARD, RUNTIME, 1, BST.DOCK_KIND_IMAGE, P, "land")
+    ev = {"ev-desk-card": {"title": "The card the eye goes to", "source": "P58 T4", "species": "deck",
+                           "document": {"path": "golden", "sha256": "0" * 64}, "badges": _badges()[:1]}}
+    scenes = [
+        {"scene_id": "s01", "world": {"asset_id": aid, "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0},
+                                      "layers": layers},
+         "exit": "cut", "span": [0.0, PAGE_DEPTH_CUT], "docks": [], "species": list(species)},
+        {"scene_id": "s02", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+         "exit": "cut", "span": [PAGE_DEPTH_CUT, RUNTIME], "docks": [dock], "species": list(species)},
+    ]
+    uris = _base_uris()
+    uris[aid] = BST.data_uri(DOCK_PLATE)
+    for p, ly in zip(planes, layers):
+        uris[ly["key"]] = BST.data_uri(Path(p["file"]))        # RAW, as the compiler writes a plane: the alpha IS the plane
+    uris["ev-desk-card"] = uri("image/png", png_solid(640, 400, (23, 105, 194)))
+    tl = _timeline("Golden: the page as a card at a depth", scenes, ev, None)
+    tl["kinetics"] = {"camera": True}                          # E59's own module drives the species (camNow), as on camera-layers
+    return tl, uris
+
+
 def press_stack() -> tuple[dict, dict]:
     """P50 T3: THREE PRESS CARDS on a bare plate, stacking on three words (Bravos shots 5-10), the third carrying
     the underline on its quoted phrase (E56's one exception, the squiggle law §9.27).
@@ -1312,6 +1377,7 @@ SURFACES = {
     "ledger-keyed": ledger_keyed,
     "occluder-dock": occluder_dock,
     "camera-layers": camera_layers,   # P58 T3: one camera, four depth planes
+    "page-depth": page_depth,         # P58 T4: the ledger page as a card at a depth, on a plane the homography turns
     "thread-baseline": thread_baseline,
     "tags-to-bars": tags_to_bars,
     "data-to-bars": data_to_bars,

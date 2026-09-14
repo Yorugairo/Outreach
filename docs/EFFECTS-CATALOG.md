@@ -16,7 +16,7 @@ lives (module | inline | compiler-only | declared-unbuilt, the path and the one 
 module - status and callable - proof - doctrine cites resolved to path:line - aliases. A token that is only a
 parameter of an effect is an option on its card, never a card.
 
-133 cards, 70 options, 18 axes. 40 recipes (15 proven).
+135 cards, 70 options, 18 axes. 40 recipes (15 proven).
 
 | axis | cards | options | live | wired | draft | declared | planned | retired |
 |---|---|---|---|---|---|---|---|---|
@@ -29,7 +29,7 @@ parameter of an effect is an option on its card, never a card.
 | dock_payload | 3 | 0 | 3 | 0 | 0 | 0 | 0 | 0 |
 | chart_dock | 5 | 1 | 5 | 0 | 0 | 0 | 0 | 0 |
 | dock_option | 8 | 14 | 3 | 5 | 0 | 0 | 0 | 0 |
-| plate_option | 9 | 4 | 4 | 5 | 0 | 0 | 0 | 0 |
+| plate_option | 11 | 4 | 4 | 7 | 0 | 0 | 0 | 0 |
 | idle | 6 | 0 | 3 | 3 | 0 | 0 | 0 | 0 |
 | arrival | 3 | 4 | 2 | 1 | 0 | 0 | 0 | 0 |
 | camera | 1 | 6 | 1 | 0 | 0 | 0 | 0 | 0 |
@@ -1181,6 +1181,17 @@ parameter of an effect is an option on its card, never a card.
 - **doctrine** E46 (dissolves and clips are valid tools) -> docs/portable/OPERATOR-RULINGS.md:1398; CAPABILITIES:60 (a clip lands as a card, never as the world - the world clip is its own path) -> unresolved
 - **aliases** "a clip world" (docs/content-video-engine/CAPABILITIES.md:60)
 
+### The depth plate option
+
+- **id** `plate_option:depth` - **does** The page is a card at a depth, taking that share of the camera's move (kinetics/camera.mjs PARALLAX).
+- **when** none
+- **example** `'ledger:ev-x:line;depth=1.15'` (authored; key: `;depth=<k>` on a ledger page; check: plate)
+- **lives** module - `content/video_engine/scripts/kinetics/camera.mjs` - symbol `camLayerCss` - also `camLayerState`, `PARALLAX` - page depth in camera layer; compiler page_depth_k / world_for_plate
+- **status** wired - **callable** yes: probe OK
+- **proof** golden none - test content/video_engine/tests/test_page_depth.py::test_depth_lands_on_the_page_as_the_cameras_own_factor - first use none
+- **doctrine** E98 s3 -> docs/portable/OPERATOR-RULINGS.md:2832; P58 T4 -> unresolved
+- **aliases** "a page at a depth" (docs/portable/OPERATOR-RULINGS.md:2832)
+
 ### The idle plate option
 
 - **id** `plate_option:idle` - **does** Names the subtle idle a held plate or page carries (none, breath, drift, pulse, figure, live) - nothing held goes truly still.
@@ -1214,6 +1225,17 @@ parameter of an effect is an option on its card, never a card.
 - **proof** golden none - test none - first use none
 - **doctrine** CAPABILITIES tip-riding pill -> docs/content-video-engine/CAPABILITIES.md:103
 - **aliases** "the tip-riding pill" (docs/content-video-engine/CAPABILITIES.md:97)
+
+### The plane plate option
+
+- **id** `plate_option:plane` - **does** The surface the page is drawn on, projected by the embed grammar's own homography (tilt:<deg>[,<axis>] or quad:<8 numbers>).
+- **when** none
+- **example** `'ledger:ev-x:line;plane=tilt:15,y'` (authored; key: `;plane=tilt:<deg>[,<axis>]|quad:<8 numbers>` on a ledger page; check: plate)
+- **lives** module - `content/video_engine/scripts/kinetics/homography.mjs` - symbol `planeMatrix` - also `cssMatrix3d`, `hFromUnitSquare` - page plane matrix; compiler page_plane_spec / world_for_plate
+- **status** wired - **callable** yes: probe OK
+- **proof** golden none - test content/video_engine/tests/test_page_depth.py::test_a_tilt_resolves_four_corners_in_tl_tr_br_bl_order - first use none
+- **doctrine** E98 s3 -> docs/portable/OPERATOR-RULINGS.md:2832; P58 T4 -> unresolved
+- **aliases** "a page on a tilted plane" (docs/portable/OPERATOR-RULINGS.md:2832)
 
 ### The then plate option (the next chart state)
 

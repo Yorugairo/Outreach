@@ -5,7 +5,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   H_IDENTITY, quadPoints, hFromUnitSquare, hApply, hMul, hTranslate, hAffine, hAbout,
-  cssMatrix3d, quadBounds, embedBox, embedMatrix, embedRegion,
+  cssMatrix3d, quadBounds, embedBox, embedMatrix, embedRegion, planeMatrix,
 } from "../../scripts/kinetics/homography.mjs";
 
 const UNIT = [[0, 0], [1, 0], [1, 1], [0, 1]];
@@ -13,6 +13,52 @@ const UNIT = [[0, 0], [1, 0], [1, 1], [0, 1]];
 // in stage px at 1080 x 1920 - vertical sides, the top edge rising to the right, the right side the taller one
 const POSTER = [[397.9, 372.6], [897.2, 299.5], [897.2, 1199.4], [397.9, 1172.4]];
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) < eps;
+
+// P58 T4 - THE PAGE'S OWN PLANE. `planeMatrix` carries a WHOLE element (the ledger page, laid out at the stage)
+// onto a quad in its own pixels, about the transform-origin the element already uses. The quad here is the one the
+// compiler writes for `plane=tilt:14,y` (build_scene_timeline_f.page_plane_quad), in stage px at 1920 x 1080.
+const STAGE = [1920, 1080];
+const TILT14 = [[0.014852, 0.0], [0.916949, 0.070287], [0.916949, 0.929713], [0.014852, 1.0]]
+  .map(([x, y]) => [x * STAGE[0], y * STAGE[1]]);
+
+test("THE PAGE ON ITS PLANE: the element's four corners land on the quad's, about its own centre origin", () => {
+  const [W, H] = STAGE, o = [W / 2, H / 2];
+  const m = planeMatrix(TILT14, W, H, o[0], o[1]);
+  // the element's corners, measured FROM the transform-origin (what a CSS transform about that origin takes)
+  [[-o[0], -o[1]], [W - o[0], -o[1]], [W - o[0], H - o[1]], [-o[0], H - o[1]]].forEach((p, i) => {
+    const q = hApply(m, p[0], p[1]);
+    assert.ok(near(q[0] + o[0], TILT14[i][0], 1e-6) && near(q[1] + o[1], TILT14[i][1], 1e-6), `corner ${i}`);
+  });
+  // the same matrix at the element's top-left origin, the form embedMatrix writes in
+  const m0 = planeMatrix(TILT14, W, H);
+  [[0, 0], [W, 0], [W, H], [0, H]].forEach((p, i) => {
+    const q = hApply(m0, p[0], p[1]);
+    assert.ok(near(q[0], TILT14[i][0], 1e-6) && near(q[1], TILT14[i][1], 1e-6), `corner ${i} at 0 0`);
+  });
+  assert.equal(planeMatrix(TILT14, 0, H), null);
+  assert.equal(planeMatrix([[0, 0], [1, 0], [2, 0], [3, 0]], W, H), null);   // three corners on one line: no map
+});
+
+test("the TILTED page is narrower than the stage, and narrower the further it turns", () => {
+  const width = (q) => ((q[1][0] - q[0][0]) + (q[2][0] - q[3][0])) / 2;
+  assert.ok(width(TILT14) < STAGE[0], "a turned page does not stay stage-wide");
+  assert.ok(width(TILT14) / STAGE[0] > 0.25, "and it stays above the embed grammar's floor at 14 deg");
+  // the far edge is the shorter one: that IS the perspective, and it is what makes ruled lines converge
+  assert.ok(TILT14[2][1] - TILT14[1][1] < TILT14[3][1] - TILT14[0][1]);
+});
+
+test("a plane is a pure function of its quad: two calls at one t write the same string", () => {
+  const [W, H] = STAGE;
+  const a = cssMatrix3d(planeMatrix(TILT14, W, H, W / 2, H / 2));
+  const b = cssMatrix3d(planeMatrix(TILT14.map((p) => p.slice()), W, H, W / 2, H / 2));
+  assert.equal(a, b);
+  assert.ok(a.startsWith("matrix3d("));
+  // the FLAT page: the unit quad at the stage's own size is the identity, so a page that authors no tilt (or
+  // `tilt:0`) is not moved by one pixel - the flat page is the default reading form (E98 s3)
+  const flat = planeMatrix([[0, 0], [W, 0], [W, H], [0, H]], W, H, W / 2, H / 2);
+  flat.forEach((v, i) => assert.ok(near(v, H_IDENTITY[i], 1e-12), `identity ${i}`));
+  assert.equal(cssMatrix3d(flat), cssMatrix3d(H_IDENTITY));
+});
 
 test("the unit square to an AXIS-ALIGNED RECT is affine: no perspective terms, and the map is x -> a x + c", () => {
   const rect = [[100, 50], [500, 50], [500, 350], [100, 350]];

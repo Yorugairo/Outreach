@@ -36,6 +36,7 @@ import hashlib
 import copy
 import functools
 import json
+import math
 import re
 import mimetypes
 import subprocess
@@ -89,7 +90,7 @@ MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
 RACE_PATHS = ("eased", "clothoid")   # E91 s1 (R26-78): the path a racing mark takes BETWEEN two period knots - `eased` is the engine as it is (each coordinate on its own easing), `clothoid` is the fit through the SAME knots (P52 T17 arm B). The period clock, the knots and the ranks are identical in both: this names the SHAPE of the move and never its timing, and the operator chose it where the beat wants energy rather than smoothness
-PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path")   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane")   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
@@ -2202,6 +2203,14 @@ def _check_opt(key: str, value, where: str) -> None:
             return
         raise ValueError(f"{where}: pill {value!r} is not yes|no|<datum index> (the milestone the pill pops at - "
                          "a non-negative index of the page's first series)")
+    if key == "depth":   # P58 T4: the page's own parallax factor - the range is the camera's, not a second one
+        page_depth_k(str(value), where)
+        return
+    if key == "plane":   # P58 T4: the surface the page is drawn on - the quad is resolved and checked here
+        err = page_plane_error(page_plane_spec(str(value), where), where)
+        if err:
+            raise ValueError(err)
+        return
     allowed = {"idle": IDLE_KINDS, "arrive": ARRIVALS, "mass": MASSES, "morph": MORPH_SHAPES,
                "card": ("yes", "no"), "use": PLATE_USES, "path": RACE_PATHS}[key]
     if value not in allowed:
@@ -2466,6 +2475,109 @@ def embed_error(world: dict, embeds: dict, name: str, where: str, species: str |
     return embed_quad_error(name, embeds[name], where)
 
 
+# ---- P58 T4: THE LEDGER PAGE AS A CARD AT A DEPTH -----------------------------------------------------------
+# E98 s3: *"the ledger page is a card at a depth ... the flat page stays the default reading form"*. Two opt-in
+# page options and nothing else: `;depth=<k>` - the page takes the share k of the ONE camera's move (the parallax
+# factor kinetics/camera.mjs already implements, P58 T3) - and `;plane=tilt:<deg>[,<axis>]|quad:<8 numbers>` - the
+# SURFACE it is drawn on, four corners in the same TL TR BR BL stage fractions the ART-embed grammar authors
+# (P50 T7), projected by the SAME homography (kinetics/homography.mjs). Neither is a default and neither adds a
+# move: a page that names neither compiles byte-for-byte as it did, and E50-E53 hold - the flat page is the
+# reading form, the chart still proves one sentence and leaves.
+PAGE_DEPTH = {
+    "K_MIN": 0.0,        # kinetics/camera.mjs PARALLAX.K_MIN - a page pinned to the frame, taking none of the move
+    "K_MAX": 4.0,        # PARALLAX.K_MAX, and build_plate_library's own ceiling for a plane's depth: one range, three files
+    "TILT_MAX": 89.0,    # a page turned further is edge-on: there is no quad left, only a line
+    "EYE": 1.6,          # the eye's distance from the page in STAGE WIDTHS [DERIVED: a 1920 stage at CSS's default 1000 px perspective is 0.52; 1.6 is the gentler lens a reading page wants - a card on a desk, not a wide-angle wall]
+    "AXES": ("y", "x"),  # `y`: the page turns about its own VERTICAL axis (its ruled lines converge left or right); `x`: about its horizontal one (it lies back)
+    "NAME": "page",      # the name the quad's refusals carry into embed_quad_error
+}
+PAGE_PLANE_KINDS = ("tilt", "quad")
+PAGE_THROW_GROW_DEPTH = "depth"   # the growth ILLUSION on `throw=depth` (:2119) - refused beside a real depth (P58 open decision 6)
+
+
+def page_stage_aspect() -> float:
+    """The stage's height over its width for the aspect this build declares. The quad is written in FRACTIONS, as
+    every embed quad is, so it travels with the timeline into either aspect (the player carries one file for both)."""
+    return 16 / 9 if ASPECT == "9:16" else 9 / 16
+
+
+def page_plane_quad(deg: float, axis: str, aspect: float | None = None) -> list[list[float]]:
+    """A page TILTED about its own centre by ``deg`` degrees, as four corners TL TR BR BL in stage fractions.
+
+    One pinhole, closed form, no fitting: the page's corners in stage widths, rotated about its own centre axis
+    (``y``: x' = u cos, z = u sin; ``x``: the same in y), divided by the eye's distance (PAGE_DEPTH["EYE"]), then
+    scaled UNIFORMLY about the centre so the whole projected page sits back inside the stage - a tilt pushes the
+    near edge past the frame otherwise, and a page whose ink leaves the frame is not a reading form (E28). Exactly
+    the flat page at deg = 0."""
+    a = page_stage_aspect() if aspect is None else aspect
+    th, d = math.radians(deg), PAGE_DEPTH["EYE"]
+    cos, sin = math.cos(th), math.sin(th)
+    pts = []
+    for u, v in ((-0.5, -0.5 * a), (0.5, -0.5 * a), (0.5, 0.5 * a), (-0.5, 0.5 * a)):
+        x, y, z = (u * cos, v, u * sin) if axis == "y" else (u, v * cos, v * sin)
+        k = d / (d + z)
+        pts.append((x * k, y * k))
+    fit = min(1.0, 0.5 / max(abs(p[0]) for p in pts), 0.5 * a / max(abs(p[1]) for p in pts))
+    return [[round(min(1.0, max(0.0, 0.5 + x * fit)), 6), round(min(1.0, max(0.0, 0.5 + y * fit / a)), 6)]
+            for x, y in pts]
+
+
+def page_plane_spec(value: str, where: str) -> dict:
+    """``tilt:<deg>[,<axis>]`` or ``quad:<x0,y0 ... x3,y3>`` -> the plane the page is drawn on, its four corners
+    resolved HERE so the player keeps one projective path: the compiler owns the tilt's geometry exactly as it owns
+    the role -> k table (P58 T2/T3), and kinetics/homography.mjs only ever consumes a quad. ValueError names the
+    option; the caller names the row."""
+    kind, _, rest = value.partition(":")
+    if kind not in PAGE_PLANE_KINDS:
+        raise ValueError(f"{where}: plane {value!r} is not tilt:<deg>[,<axis>] or quad:<x0,y0,x1,y1,x2,y2,x3,y3> "
+                         "(the surface the page is drawn on: a tilt about its own centre, or its four corners)")
+    if kind == "tilt":
+        deg_s, _, axis = rest.partition(",")
+        axis = axis or PAGE_DEPTH["AXES"][0]
+        if not _is_number(deg_s):
+            raise ValueError(f"{where}: plane tilt {deg_s!r} is not a number of degrees "
+                             f"(plane=tilt:<deg>[,<axis {'|'.join(PAGE_DEPTH['AXES'])}>])")
+        if axis not in PAGE_DEPTH["AXES"]:
+            raise ValueError(f"{where}: plane tilt axis {axis!r} is not one of {'|'.join(PAGE_DEPTH['AXES'])} "
+                             "(y: the page turns about its own vertical axis; x: it lies back)")
+        deg = float(deg_s)
+        if not abs(deg) < PAGE_DEPTH["TILT_MAX"]:
+            raise ValueError(f"{where}: plane tilt {deg:g} deg is past the {PAGE_DEPTH['TILT_MAX']:g} deg limit - "
+                             "a page turned that far is edge-on and has no page left to read")
+        return {"kind": "tilt", "deg": deg, "axis": axis, "quad": page_plane_quad(deg, axis)}
+    bits = [b for b in rest.split(",") if b != ""]
+    if len(bits) != 8 or not all(_is_number(b) for b in bits):
+        raise ValueError(f"{where}: plane quad {rest!r} is not eight numbers - x0,y0,x1,y1,x2,y2,x3,y3, the four "
+                         "corners TL TR BR BL in stage fractions, authored the way an embed surface's corners are "
+                         "read off the plate")
+    v = [float(b) for b in bits]
+    return {"kind": "quad", "quad": [[v[0], v[1]], [v[2], v[3]], [v[4], v[5]], [v[6], v[7]]]}
+
+
+def page_plane_error(plane: dict, where: str) -> str | None:
+    """Is this a surface a PAGE can be read on? The message, or None - ``embed_quad_error``'s own law (four corners
+    on the stage, convex and in TL TR BR BL order, and at least EMBED_MIN_W of the stage wide), so a tilted page and
+    a card on a painted wall are refused by ONE rule and one floor rather than by two."""
+    err = embed_quad_error(PAGE_DEPTH["NAME"], {"quad": plane.get("quad")}, where)
+    if not err:
+        return None
+    tilt = f" (plane=tilt:{plane['deg']:g},{plane['axis']})" if plane.get("kind") == "tilt" else ""
+    return (err.replace(f"embed '{PAGE_DEPTH['NAME']}'", "the page's plane" + tilt)
+               .replace("a card projected onto it", "a page projected onto it"))
+
+
+def page_depth_k(value: str, where: str) -> float:
+    """``depth=<k>`` -> the page's parallax factor, refused BY NAME outside the camera's own range."""
+    if not _is_number(value):
+        raise ValueError(f"{where}: depth {value!r} is not a number - depth=<k>, the share of the camera's move the "
+                         f"page takes ({PAGE_DEPTH['K_MIN']:g} = pinned to the frame, 1 = the flat plate)")
+    k = float(value)
+    if not PAGE_DEPTH["K_MIN"] <= k <= PAGE_DEPTH["K_MAX"]:
+        raise ValueError(f"{where}: depth {k:g} is outside {PAGE_DEPTH['K_MIN']:g}..{PAGE_DEPTH['K_MAX']:g} - the "
+                         "parallax factor a plane may take of the camera's move (kinetics/camera.mjs PARALLAX)")
+    return k
+
+
 def image_aspect(p: Path) -> float | None:
     """A picture's height over its width, or None for anything that is not a still. The PLAYER cannot ask this
     question in time - an <img> has no height until it decodes, the player paints once per seek, and a card
@@ -2686,6 +2798,25 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
             raise ValueError(f"{plate_id!r}: pill= is a DENSE-LINE page option - the pill rides a line's drawing tip "
                              f"(this page is {((world.get('page') or {}).get('builder') or world.get('kind') or 'a plate')!r})")
         world["page"]["tip_pill"] = True if pill == "yes" else {"milestone": int(pill)}
+    depth = opts.pop("depth", None)
+    plane = opts.pop("plane", None)
+    if depth is not None or plane is not None:
+        # P58 T4 / E98 s3: the page as a CARD AT A DEPTH. Both are LEDGER PAGE options - a plate is a world and
+        # takes its depth from its own sidecar's planes (P58 T2), never from a row - and both are written on the
+        # page only when the row names them, so an unauthored page's timeline entry is byte-identical.
+        if world.get("kind") != SPECIES_LEDGER:
+            raise ValueError(f"{plate_id!r}: {'depth' if depth is not None else 'plane'}= is a LEDGER PAGE option - "
+                             "a plate declares its depth planes in its own <plate>.layers.json (P58 T2), not on the row")
+        page = world["page"]
+        if depth is not None:
+            if page.get("throw_grow") == PAGE_THROW_GROW_DEPTH:
+                raise ValueError(f"{plate_id!r}: throw={PAGE_THROW_GROW_DEPTH} and depth= on one page are two names "
+                                 "for one thing - throw=depth is the growth ILLUSION (the card grows as if from "
+                                 "depth), depth= is the real parallax factor. Keep one: drop depth=, or throw the "
+                                 "page with throw=snap")
+            page["depth"] = page_depth_k(str(depth), repr(plate_id))
+        if plane is not None:
+            page["plane"] = page_plane_spec(str(plane), repr(plate_id))
     world.update(opts)   # idle (E49), arrive / mass (P47 T1), use (E61) - written only when the row names them
     if thens:   # P48 T4: the other charts this page can become, each a full spec built at load
         if world.get("kind") != SPECIES_LEDGER:

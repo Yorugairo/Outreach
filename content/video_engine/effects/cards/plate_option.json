@@ -468,6 +468,104 @@
         "today": true,
         "why": "implicit: a bare plate id on a shot row is this world (Steel: 75 of 75 scenes)"
       }
+    },
+    {
+      "id": "plate_option:depth",
+      "axis": "plate_option",
+      "token": "depth",
+      "title": "The depth plate option",
+      "aliases": [
+        {
+          "name": "a page at a depth",
+          "source": "docs/portable/OPERATOR-RULINGS.md:2832"
+        }
+      ],
+      "does": "The page is a card at a depth, taking that share of the camera's move (kinetics/camera.mjs PARALLAX).",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "`;depth=<k>` on a ledger page",
+        "example": "'ledger:ev-x:line;depth=1.15'",
+        "example_source": null,
+        "check": "plate"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/camera.mjs",
+        "symbol": "camLayerCss",
+        "also": [
+          "camLayerState",
+          "PARALLAX"
+        ],
+        "note": "page depth in camera layer; compiler page_depth_k / world_for_plate"
+      },
+      "doctrine": [
+        "E98 s3",
+        "P58 T4"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_page_depth.py::test_depth_lands_on_the_page_as_the_cameras_own_factor",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "probe OK"
+      }
+    },
+    {
+      "id": "plate_option:plane",
+      "axis": "plate_option",
+      "token": "plane",
+      "title": "The plane plate option",
+      "aliases": [
+        {
+          "name": "a page on a tilted plane",
+          "source": "docs/portable/OPERATOR-RULINGS.md:2832"
+        }
+      ],
+      "does": "The surface the page is drawn on, projected by the embed grammar's own homography (tilt:<deg>[,<axis>] or quad:<8 numbers>).",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "`;plane=tilt:<deg>[,<axis>]|quad:<8 numbers>` on a ledger page",
+        "example": "'ledger:ev-x:line;plane=tilt:15,y'",
+        "example_source": null,
+        "check": "plate"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/homography.mjs",
+        "symbol": "planeMatrix",
+        "also": [
+          "cssMatrix3d",
+          "hFromUnitSquare"
+        ],
+        "note": "page plane matrix; compiler page_plane_spec / world_for_plate"
+      },
+      "doctrine": [
+        "E98 s3",
+        "P58 T4"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": null,
+        "test": "content/video_engine/tests/test_page_depth.py::test_a_tilt_resolves_four_corners_in_tl_tr_br_bl_order",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "probe OK"
+      }
     }
   ]
 }

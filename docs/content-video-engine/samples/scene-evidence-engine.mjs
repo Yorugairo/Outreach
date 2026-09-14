@@ -1834,6 +1834,21 @@ async function mount(doc) {
     return hMul(hTranslate(-box.x, -box.y), hMul(H, toUnit));
   };
 
+  /* P58 T4 - A WHOLE ELEMENT ONTO A QUAD. `embedMatrix` letterboxes a CARD inside a surface's bounding rectangle;
+     this is its sibling for the case where the element IS the rectangle being projected - the ledger page, laid out
+     at the stage and then turned into a card standing at a depth (E98 s3). `w` x `h` is the element's own box and
+     (ox, oy) its transform-origin measured from its top left, so the matrix composes under the CSS the element
+     already carries instead of demanding `transform-origin: 0 0`:
+       local p (from the origin) -> (p + o) / (w, h) -> the unit square -> H -> the quad, back to an offset from o.
+     The quad is in the element's own pixels. At the unit quad ((0,0) (1,0) (1,1) (0,1) scaled by w, h) this is the
+     IDENTITY, so a plane that is not tilted changes no pixel. */
+  const planeMatrix = (quad, w, h, ox = 0, oy = 0) => {
+    const H = hFromUnitSquare(quad);
+    if (!H || !(w > 0) || !(h > 0)) return null;
+    const toUnit = [1 / w, 0, ox / w, 0, 1 / h, oy / h, 0, 0];
+    return hMul(hTranslate(-ox, -oy), hMul(H, toUnit));
+  };
+
   /* a rectangle INSIDE the card (the quoted phrase, a badge) carried onto the surface: its four projected corners in
      order and their bounding box - the quad for anything drawn in the projected space (the underline rides the bottom
      edge), the box for anything that still wants an axis-aligned target. `r` and `box` are in stage coordinates, `m`
@@ -5982,6 +5997,24 @@ async function mount(doc) {
     return out;
   };
   const lpFmt = (v) => Math.abs(v) >= 100 ? v.toFixed(0) : Math.abs(v) >= 10 ? v.toFixed(1) : v.toFixed(2);
+  /* P58 T4 - THE PAGE AS A CARD AT A DEPTH (E98 s3: *"the ledger page is a card at a depth ... the flat page stays
+     the default reading form"*). Two readers, and they are the only place the two keys are read. Both are OPT-IN
+     and neither invents a value: a page that authored nothing takes neither string, and its transform, its element
+     and its shadow are exactly today's.
+       `pageDepthOf` - the page's own parallax factor (the compiler's `depth=<k>`). k = PARALLAX.FLAT is today by
+     construction (kinetics/camera.mjs: the flat plate IS the camera), so it reads as no depth at all and the world
+     element keeps the camera it has always carried.
+       `pagePlaneCss` - the SURFACE the page is drawn on: the compiler's four corners in stage fractions -> the
+     element's own pixels -> kinetics/homography.mjs `planeMatrix` -> the one `matrix3d` the browser divides by w'
+     per pixel. The SAME machinery that projects an ART-embed card onto a measured wall (P50 T7), not a second
+     projective path, and it is written about the origin the page's own envelope already uses. Hard edges only:
+     doc 29 s1.2's *"2.5D physical card - hard-edge shadow, no fake 3D blur"* - a planed page takes no filter. */
+  const pageDepthOf = (pg) => (pg && +pg.depth > 0 && +pg.depth !== PARALLAX.FLAT ? +pg.depth : 0);
+  const pagePlaneCss = (quad, oy) => {
+    if (!Array.isArray(quad) || quad.length !== 4) return "";
+    const m = planeMatrix(quad.map((p) => [p[0] * STAGE_W, p[1] * STAGE_H]), STAGE_W, STAGE_H, STAGE_W / 2, oy);
+    return m ? cssMatrix3d(m) + " " : "";
+  };
   const buildLedger = (el, scene) => {
     const pg = scene.world.page || {}, seed = 0x1B1EEDCA ^ (scene.scene_id || "").length;
     el.querySelectorAll(".lp").forEach((x) => x.remove());
@@ -9732,7 +9765,16 @@ async function mount(doc) {
                    follow: landed ? 0 : THROW_FOLLOW * h };
     } else st.throw = null;
     const cardCss = card ? "scale(" + CARD_SCALE + ") " : "";   /* the card's rest size: a little smaller than the stage, the world around it */
-    st.page.style.transform = snapCss + throwCss + cardCss + "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")"
+    /* P58 T4 - THE COMPOSITION ORDER, and it is the whole of the decision: the page's own ENVELOPE first (the snap,
+       the throw, the card, the roll-out, the punch, the idle - everything below, innermost and untouched, because a
+       CSS chain applies right to left), then the PLANE it stands on, then the CAMERA at the page's own depth. So the
+       page is drawn as the page it always was, turned onto its surface, and then seen by the one eye from where it
+       stands. The camera comes off the world element for a page that declares a depth (the paint block below), so it
+       is applied exactly once. Both strings are empty unless the row authored the option. */
+    const planeCss = pg.plane ? pagePlaneCss(pg.plane.quad, dropped ? STAGE_H : STAGE_H / 2) : "";
+    const depthK = pageDepthOf(pg);
+    const depthCss = depthK ? camCssAt(camNow(scene, t), depthK) + " " : "";
+    st.page.style.transform = depthCss + planeCss + snapCss + throwCss + cardCss + "translateX(" + ((rk - 1) * 100).toFixed(2) + "%) " + (mount ? "translateY(" + ((1 - mk) * LP_MOUNT_RISE).toFixed(1) + "px) " : "") + "scale(" + (1 + (LP.PUNCH_SCALE - 1) * pk).toFixed(4) + ")"
       + idleCssFor("page", pg.idle, t, st.seed, 1);   /* E49: the page breathes while it holds under a sentence */
     /* beat 6: the build - crisp, landing on the exact strings - on the punched page */
     const c = clamp01((t3 - LP.PUNCH) / (st.buildDur || LP.BUILD));   /* race/decline/combo declare their own envelope */
@@ -12495,6 +12537,9 @@ async function mount(doc) {
       const camXfNow = camNow(scene, t);
       const worldRest = `translateX(${dx.toFixed(1)}px) scale(${z.toFixed(4)}) `
         + `translate(${(p*kb.x).toFixed(1)}px, ${(p*kb.y).toFixed(1)}px)`;
+      /* P58 T4: a page at a DEPTH takes the camera itself, at its own k (paintLedger), so the element must not
+         carry it a second time - the same hand-off the planes make below, one element instead of four. */
+      const pageK = isLedger ? pageDepthOf(scene.world.page) : 0;
       if (plies.length) {
         /* P58 T3: the camera moves ONTO the planes. The element keeps everything the planes SHARE (the wipe's clip,
            the blur-zoom's scale, the suck's spin, the slide's push - each of which still prepends to it and so still
@@ -12503,6 +12548,12 @@ async function mount(doc) {
         el.dataset.worldPose = camCss(camXfNow) + worldRest;
         el.style.transform = "";
         paintPlanes(el, plies, camXfNow, worldRest);
+      } else if (pageK) {
+        /* the page took the camera down onto its own plane; the element keeps what the page's GROUND shares with it
+           - the authored Ken Burns and the wipe's push - and `data-world-pose` carries the k = 1 pose, so
+           worldPose(el) is still exactly the string a flat world writes. */
+        el.dataset.worldPose = camCss(camXfNow);
+        el.style.transform = worldRest;
       } else {
         if (el.dataset.worldPose) delete el.dataset.worldPose;
         el.style.transform = camCss(camXfNow) + worldRest;
