@@ -16,7 +16,7 @@ terms. Purpose, terms and defines are truncated here to keep the file cheap to g
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`. A per-item
 folder is one row under `## folders` (COLLAPSED_FAMILIES in the builder).
 
-415 documents across 13 kinds.
+417 documents across 13 kinds.
 
 ## doctrine
 
@@ -179,6 +179,8 @@ folder is one row under `## folders` (COLLAPSED_FAMILIES in the builder).
 - docs/research/markets/TREASURY_YIELD_SPIKE_SEPTEMBER_2026_RESEARCH_BLUEPRINT.md — US Treasury Yield Spike & Bond Market Stress (September 2026) — Research Bluepri — What are the empirical drivers, exact daily yield movements, auction clearing dynamics, and macro transmission mechanism — defines: — — terms: YouTube; January 1983; MoM; highest-yielding; the-markets; the-unrelenting-bond-selloff-puts-the; year-yield-on-the-cusp-of
 - docs/research/motion/BRIEF-WEIGHT-DENSITY-MASS-2026-09-07.md — Research brief — weight, density and mass in drawing, animation and stop-motion — Asked by: the operator, 2026-09-07, on Tokyo v3's first throw and landing (P47 T1, HG2): "The throw comes on, but it doe — defines: — — terms: area-preserving; mass-spring-damper; HyperFrames; stop-motion-cadence; headline-slam; three-frame; follow-up
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md — HyperFrames Motion, Transitions, and Kinetic Transformations — Research Blueprin — How does HeyGen HyperFrames structure motion design, scene transitions, stop-motion physics, and transformations, and ho — defines: — — terms: HyperFrames; HeyGen; on-twos; rules-and-anti-patterns; stop-motion; hand-drawn; WebGL
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md — Implicit-Surface Blends versus Ring Correspondence for Ink Shapes with Holes and — Pass Metadata: Workflow: Deep Research Engine (`/research --deep morphing ink shapes with holes and topology change`) Da — defines: — — terms: [source on file]; Phi_B; Phi_t; Phi_A; Cohen-Or; [practitioner doctrine]; Turk & O'Brien 1999
+- docs/research/motion/RIG_CONSTRAINTS_RELATION_LAYER_RESEARCH_BLUEPRINT.md — The Relation Layer: What 2D Rigs and Constraint Systems Get Right, Harvested — Pass Metadata: Workflow: Deep Research Engine (`/research --deep`) Date: 2026-09-14 Profile: `video-researcher` Order Re — defines: — — terms: s_x; translate-only; R26-105; seek-safe; M_B; s_y; x_T
 - docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md — Wealth Logic — where the picture change sits relative to the narration (J-cut / — TR-2 (`docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md` §1, from research brief B3, "the only question no pas — defines: — — terms: YouTube; split-edit; L-cut-like; J-cut-like; auto-captions; mid-speech; Voice-driven
 - docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md — Wealth Logic Transitions, Measured From The Pixels — What KIND of transition does the Wealth Logic reference use at each of its 99 shot boundaries - hard cut, dissolve, dip — defines: — — terms: blur-zoom; DIP_BRIGHT_FRAC 1.60; [t - 0.6 s, t + 0.8 s]; L_before; L_after; S_before; multi-frame
 - docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md — Wealth Logic Transitions Research Blueprint — Superseded 2026-09-06 by `WEALTH_LOGIC_TRANSITIONS_MEASURED.md` (our own frame-series measurement of all 99 boundaries: — defines: — — terms: blur-zooms; zoom-throughs; fade-throughs; frame-per-boundary; Zoom-through; blur-zoom; question-mark

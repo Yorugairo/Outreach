@@ -13,9 +13,9 @@ item, a quote, a table row or a fence.
 
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
-| Research (`docs/research/**`) | 18 | 338 | 95.3% | 93.2% | 3 | 97.5 |
+| Research (`docs/research/**`) | 20 | 410 | 95.9% | 93.4% | 3 | 97.5 |
 | Process (everything else) | 324 | 3484 | 97.7% | 92.2% | 12 | 100.0 |
-| All docs | 342 | 3822 | 97.5% | 92.3% | 15 | 100.0 |
+| All docs | 344 | 3894 | 97.5% | 92.3% | 15 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -44,7 +44,7 @@ item, a quote, a table row or a fence.
 
 ## Appendix A - sections missing a lead line
 
-Non-exempt sections whose first real line is under 40 characters (96).
+Non-exempt sections whose first real line is under 40 characters (97).
 
 - `content/video_engine/projects/martial-matters/pilots/marshall-monday-001/script-draft.md:1` Why Rap Violence is Actually a Sign of Peace | Marshall Matters Ep. 1
 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:13` Titles & Click Contracts
@@ -105,6 +105,7 @@ Non-exempt sections whose first real line is under 40 characters (96).
 - `docs/research/2026-07-28-accretive-revenue-assessment.md:287` 6. 30 / 60 / 90
 - `docs/research/2026-08-22-agent-design-tooling-assessment.md:1` Agent-Native Design Tooling: Buy, Borrow, or Build
 - `docs/research/markets/TREASURY_YIELD_SPIKE_SEPTEMBER_2026_RESEARCH_BLUEPRINT.md:62` 3. Transmission into Equities, Housing, and Corporate Credit
+- `docs/research/motion/RIG_CONSTRAINTS_RELATION_LAYER_RESEARCH_BLUEPRINT.md:329` Industry Comparison: Where Declarative Derivation Exists
 - `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:16` 1. Hard cut
 - `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:23` 3. Wipe
 - `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md:26` 4. Push
