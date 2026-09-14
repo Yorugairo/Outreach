@@ -1,0 +1,35 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:card-standing-in-the-plate",
+  "title": "The card standing in the plate",
+  "aliases": [],
+  "acts": [
+    "QUOTES",
+    "EXPLAINS"
+  ],
+  "members": [
+    {
+      "card": "plate_option:depth",
+      "offset_s": 0.0,
+      "role": "the page stands as a card at a parallax depth on a layered plate - the world has planes and the proof lives on one"
+    },
+    {
+      "card": "plate_option:plane",
+      "offset_s": 0.0,
+      "role": "the card is tilted on the page plane, its numbers upright at their projected anchors"
+    },
+    {
+      "card": "dock_option:depth",
+      "offset_s": 0.0,
+      "role": "a dock rides the mid plane under the camera move that already had a reason, parallaxing between the plate and the card"
+    }
+  ],
+  "does": "The page stands inside the plate instead of over it: a card at a parallax depth, tilted on its plane, with a dock riding the mid plane under a camera move the sentence already earned.",
+  "doctrine": [
+    "E98",
+    "BACKLOG R26-122"
+  ],
+  "status": "candidate",
+  "source": "P58 goldens page-depth, form-tilted-line and dock-depth - no approved cut has carried it",
+  "count": 0
+}

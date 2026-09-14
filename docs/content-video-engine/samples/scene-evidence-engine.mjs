@@ -6397,23 +6397,23 @@ async function mount(doc) {
     const D = extrudeDepth(o.bw, o.P), v = extrudeVec(D, o.neg), x2 = o.x + o.bw;
     const shadow = lpEl("polygon", "bx-shadow", st.chart, { points: "", fill: "#000", opacity: 0 });
     const side = lpEl("polygon", "bar bx-side" + o.cls, st.chart, { points: "", opacity: 0 });
-    const cap = lpEl("polygon", "bar bx-cap" + o.cls, st.chart, { points: "", opacity: 0 });
+    const topFace = lpEl("polygon", "bar bx-cap" + o.cls, st.chart, { points: "", opacity: 0 });
     side.style.filter = "brightness(" + EXTRUDE.SIDE_LIGHT + ")";
-    cap.style.filter = "brightness(" + EXTRUDE.CAP_LIGHT + ")";
+    topFace.style.filter = "brightness(" + EXTRUDE.CAP_LIGHT + ")";
     const clip = (y) => (o.neg ? Math.max(o.base, y) : Math.min(o.base, y));
     const set = (k) => {
       const hk = Math.max(0, o.h * k), tip = o.neg ? o.base + hk : o.base - hk, on = hk > 0.5;
-      cap.setAttribute("points", pPts([[o.x, tip], [x2, tip], [x2 + v[0], tip + v[1]], [o.x + v[0], tip + v[1]]]));
+      topFace.setAttribute("points", pPts([[o.x, tip], [x2, tip], [x2 + v[0], tip + v[1]], [o.x + v[0], tip + v[1]]]));
       side.setAttribute("points", pPts([[x2, tip], [x2, o.base], [x2 + v[0], o.base + v[1]], [x2 + v[0], tip + v[1]]]));
       const sx = -v[0] * EXTRUDE.SHADOW_K, sy = -v[1] * EXTRUDE.SHADOW_K;
       shadow.setAttribute("points", pPts([[o.x + sx, clip(tip + sy)], [x2 + sx, clip(tip + sy)],
                                           [x2 + sx, clip(o.base + sy)], [o.x + sx, clip(o.base + sy)]]));
-      cap.setAttribute("opacity", on ? 1 : 0); side.setAttribute("opacity", on ? 1 : 0);
+      topFace.setAttribute("opacity", on ? 1 : 0); side.setAttribute("opacity", on ? 1 : 0);
       shadow.setAttribute("opacity", on ? EXTRUDE.SHADOW_A : 0);
     };
     set(0);
-    return { set, depth: D, vec: v, tint: (col) => { side.style.fill = col; cap.style.fill = col; },
-             boxes: () => [cap.getBBox ? cap.getBBox() : null, side.getBBox ? side.getBBox() : null] };
+    return { set, depth: D, vec: v, tint: (col) => { side.style.fill = col; topFace.style.fill = col; },
+             boxes: () => [topFace.getBBox ? topFace.getBBox() : null, side.getBBox ? side.getBBox() : null] };
   };
   /* THE TILTED PLANE (`;form=tilted_line`). The compiler resolves the four corners exactly as `plane=` does - one
      tilt, one geometry, one refusal (build_scene_timeline_f.page_form_spec) - and the player keeps ONE projective

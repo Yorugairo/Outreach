@@ -16,7 +16,7 @@ lives (module | inline | compiler-only | declared-unbuilt, the path and the one 
 module - status and callable - proof - doctrine cites resolved to path:line - aliases. A token that is only a
 parameter of an effect is an option on its card, never a card.
 
-137 cards, 74 options, 18 axes. 40 recipes (15 proven).
+137 cards, 74 options, 18 axes. 42 recipes (15 proven).
 
 | axis | cards | options | live | wired | draft | declared | planned | retired |
 |---|---|---|---|---|---|---|---|---|
@@ -37,7 +37,7 @@ parameter of an effect is an option on its card, never a card.
 | page_enter | 10 | 5 | 3 | 7 | 0 | 0 | 0 | 0 |
 | page_exit | 2 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
 | caption | 3 | 8 | 3 | 0 | 0 | 0 | 0 | 0 |
-| kinetics | 17 | 0 | 2 | 15 | 0 | 0 | 0 | 0 |
+| kinetics | 17 | 0 | 2 | 14 | 1 | 0 | 0 | 0 |
 
 ## species
 
@@ -935,7 +935,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `drawChart` - also `fillDock` - drawChart + the fillDock chart mount
 - **status** live - **callable** yes: a .series.json beside a docked asset
 - **proof** golden none - test none - first use steel-and-paper build-f t=9.5
-- **doctrine** 29 s9.22 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1285; 29 s9.23 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1330; CAPABILITIES chart self-containment -> docs/content-video-engine/CAPABILITIES.md:176
+- **doctrine** 29 s9.22 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1285; 29 s9.23 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1330; CAPABILITIES chart self-containment -> docs/content-video-engine/CAPABILITIES.md:184
 - **aliases** "LIVE CHART payload" (content/video_engine/scripts/build_scene_timeline_f.py:3996)
 
 ### The record document dock payload
@@ -974,7 +974,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `VERDICT` in `content/video_engine/scripts/species/verdict.mjs`: `SPOTS`=Object.freeze([ /* the nine rail spots [left %, top %, width %]: four across the top, mid-frame flanks, three along the, `TILTS`=Object.freeze([-3, 2, -2, 3, -2.5, 2.5]), `CARD_W`=1056, `CARD_H`=480, `ACTIVE_X`=930, `ACTIVE_DX`=70, `ACTIVE_Y`=400, `ACTIVE_ROW_DY`=26, `ACTIVE_ROWS`=3, `ACTIVE_W`=840, `BURST_NORM_X`=700, `BURST_NORM_Y`=460, `REF_W`=1920, `REF_H`=1080, `ENTER_S`=0.9, `ENTER_SWING`=460, `ENTER_RISE`=-90, `ENTER_Z`=-700, `ENTER_ROT_Y`=30, `RECEDE_S`=1.0, `LAST_RECEDE_LEAD`=0.9, `DRIFT_W`=0.55, `DRIFT_PHASE`=1.7, `DRIFT_X_REST`=8, `DRIFT_X_ACTIVE`=26, `BOB_W`=0.7, `BOB_PHASE`=2.1, `BOB_REST`=5, `BOB_ACTIVE`=14, `DRIFT_SCALE`=0.008, `DRIFT_ROT`=0.6, `Z_SWITCH`=0.5, `Z_ACTIVE`=9, `Z_RAIL`=7, `BURST_X`=560, `BURST_Y`=420, `BURST_Z`=340, `BURST_SPIN`=24, `BURST_SCALE`=0.22, `BURST_STAGGER`=0.06, `BURST_S`=0.5, `REMOVE_AFTER`=1.4, `MOUNT_LEAD`=0.5
 - **status** live (backlog R26-82) - **callable** yes: long form 16:9: author the stack META (items + clear_at) and a host dock window past clear_at; the compiler has no validator for it and it has never been laid out for 9:16 (BACKLOG R26-82)
 - **proof** golden verdict-stack - test content/video_engine/tests/kinetics/verdict.test.mjs - first use steel-and-paper build-f t=701.73
-- **doctrine** 29 s9.24 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364; 29 s9.24b -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1; MOTION-GRAMMAR -> unresolved; CAPABILITIES verdict stack -> docs/content-video-engine/CAPABILITIES.md:175; BACKLOG R26-82 -> docs/content-video-engine/BACKLOG.md:488; E49 -> docs/portable/OPERATOR-RULINGS.md:1494
+- **doctrine** 29 s9.24 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364; 29 s9.24b -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1; MOTION-GRAMMAR -> unresolved; CAPABILITIES verdict stack -> docs/content-video-engine/CAPABILITIES.md:183; BACKLOG R26-82 -> docs/content-video-engine/BACKLOG.md:488; E49 -> docs/portable/OPERATOR-RULINGS.md:1494
 - **aliases** "evidence wall" (operator 2026-09-13 (P55 plan Summary)); "VERDICT STACK species" (docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364); "the evidence wall" (docs/content-video-engine/BACKLOG.md:488); "evidence-wall recap" (docs/agent-memory/operator/resume-2026-09-12.md:113); "nine-proof wall" (docs/content-video-engine/CAPABILITIES.md:169); "the verdict pile-up" (content/video_engine/scripts/build_scene_timeline_f.py:3992); "STACK species" (docs/content-video-engine/samples/scene-evidence-engine.mjs:3225); "pull back in all of our evidence cards" (operator 2026-09-13 (P55 plan HG1))
 
 ## chart_dock
@@ -1005,7 +1005,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `CHECKLIST` in `content/video_engine/scripts/species/checklist.mjs`: `COLORS`=Object.freeze(["#f4f6f8", "#dce3ea", "#3bc9b0", "#ff8a8c"]), `HEAD_DY`=18, `ROW0_DY`=64, `ROW_PITCH`=58, `ROW_DELAY_S`=3, `HL_FROM_COL`=2, `BAND_INSET`=8, `BAND_RISE`=21, `BAND_H`=30, `BAND_W0`=10, `BAND_RX`=4, `BAND_ALPHA`=0.28, `KM_GROUND`="#16181c", `RULE_DY`=18, `RULE_COLOR`="#24262b", `RULE_W`=1.5, `FIT_MARGIN`=28, `FIT_MIN_W`=40, `FIT_PAD`=26, `FIT_CHAR_W`=10, `FIT_X0`=64, `FIT_ROOM_SLACK`=8, `CHISEL_DEG`=-7, `RECAP_S`=12, `RECAP_ROW_S`=0.8, `OFFS`=Object.freeze([0, 0.6, 1.0, 1.6]), `RECAP_OFFS`=Object.freeze([0, 0.25, 0.45, 0.7]), `CELL_FADE_S`=0.35, `TYPE_S`=0.045, `SWEEP_S`=0.55, `SWEEP_W_FALLBACK`=300, `SWEEP_PAD`=18, `SWEEP_ROOM_PAD`=12
 - **status** live (backlog R26-81) - **callable** yes: 16:9 long-form dock via .series.json; never on a short (R26-81: tokens, 9:16 rows, no frame on disk)
 - **proof** golden test-card - test content/video_engine/tests/kinetics/checklist.test.mjs - first use steel-and-paper build-f t=492.3
-- **doctrine** CAPABILITIES checklist species -> docs/content-video-engine/CAPABILITIES.md:195; CAPABILITIES auto-fit -> unresolved; E93 #3 -> docs/portable/OPERATOR-RULINGS.md:2761; BACKLOG R26-81 -> docs/content-video-engine/BACKLOG.md:487; BACKLOG R26-80 -> docs/content-video-engine/BACKLOG.md:486; ledger_page UNCHARTABLE -> unresolved
+- **doctrine** CAPABILITIES checklist species -> docs/content-video-engine/CAPABILITIES.md:203; CAPABILITIES auto-fit -> unresolved; E93 #3 -> docs/portable/OPERATOR-RULINGS.md:2761; BACKLOG R26-81 -> docs/content-video-engine/BACKLOG.md:487; BACKLOG R26-80 -> docs/content-video-engine/BACKLOG.md:486; ledger_page UNCHARTABLE -> unresolved
 - **aliases** "test list" (operator 2026-09-13 (P55 plan Summary)); "three-question test card" (operator 2026-09-13 (P55 plan Summary)); "THE TEST card" (operator 2026-09-13 (P55 plan Summary)); "The three-question TEST card" (docs/content-video-engine/BACKLOG.md:487); "the three-question TEST table card" (docs/agent-memory/operator/resume-2026-09-12.md:113); "Steel and Paper's three-question test card" (docs/portable/OPERATOR-RULINGS.md:2735); "Checklist species" (docs/content-video-engine/CAPABILITIES.md:189); "the scorecard" (content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:142); "tripwire board" (docs/content-video-engine/CAPABILITIES.md:189); "CHECKLIST v2" (docs/content-video-engine/samples/scene-evidence-engine.mjs:3582); "checklist" (operator 2026-09-13 (P55 plan HG1))
 
 ### The panels chart card
@@ -1866,7 +1866,7 @@ parameter of an effect is an option on its card, never a card.
 - **example** `dropRing(centre, r, t, "metal", [{ at: 0, a: DROP.A }], { N: MELT.CIRCLE_N, spin: turn })` (content/video_engine/scripts/species/melt.mjs; key: not authored on a row: species/melt.mjs's WEIGHT phase (`melt:weight`) calls dropRing / dropModes / dropSpecular on the compiled ball, excited by the compile and by every landing and nudge; check: module)
 - **lives** module - `content/video_engine/scripts/kinetics/drop.mjs` - symbol `dropRing` - also `DROP`, `dropOmega`, `dropTau`, `dropAmp`, `dropModes`, `dropRadius`, `dropArea`, `dropSpecular` - P57 R26-118 / E88 s7: a kinetics LAW - no painter, no SPACE; its region sits before melt's, which imports it. The fluids are research run living_drop (unapproved); PX_PER_M and DAMP are ours
 - **dials** `DROP` in `content/video_engine/scripts/kinetics/drop.mjs`: `MODES`=[2, 3, 4], `N`=96, `PX_PER_M`=8500, `DAMP`=0.0028, `A`=[0.10, 0.055, 0.022], `PHI`=[0.0, 1.10, 2.30], `FLOOR`=[0.012, 0.007, 0.003], `KICK`=[0.085, 0.030, 0.010], `MAT`={ metal: { SIGMA: 0.4865, RHO: 13546, NU: 1.1265e-7 }, /* MERCURY: dense, taut, and it rings for ever [PLAUSIBLE] */ ink, `LIGHT_DEG`=-125, `HL_AT`=0.46, `HL_R`=0.20
-- **status** wired (backlog R26-118) - **callable** yes
+- **status** draft (backlog R26-118) - **callable** yes
 - **proof** golden melt-ball-roll - test content/video_engine/tests/kinetics/drop.test.mjs - first use none
 - **doctrine** E88 s7 -> docs/portable/OPERATOR-RULINGS.md:2661; E49 -> docs/portable/OPERATOR-RULINGS.md:1494; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 - **aliases** "the living ball, wriggling to contain itself" (docs/portable/OPERATOR-RULINGS.md (E88 s7))
@@ -2008,7 +2008,7 @@ a decoration; one that fires four times is a grammar.
 | status | recipes | members | fires (sum of count) |
 |---|---|---|---|
 | proven | 15 | 59 | 94 |
-| candidate | 25 | 98 | 0 |
+| candidate | 27 | 102 | 0 |
 
 ### The badge ladder
 
@@ -2052,6 +2052,16 @@ a decoration; one that fires four times is a grammar.
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R11 slot)
 - **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
+### The bars given weight
+
+- **id** `recipe:bars-given-weight` - **does** A story bars page given weight: every bar extruded into a prism under one light with a hard-edge shadow, labels where the flat bar puts them. The form is refused together with plane= on one page, which is why this is its own recipe.
+- **acts** COMPARES, RANKS - **window** 6s
+- **members**
+  - +0s -> `page_builder:bars` (The bars ledger page) - the story bars page the form is applied to: its bars grow in stagger with their values landing
+  - +0s -> `plate_option:form` (The form plate option (2.5D chart forms)) - each bar a prism, one light, a hard-edge shadow, every label where the flat bar puts it
+- **status** candidate - **count** 0 (unfired) - **source** P58 T5 golden form-extruded-bar - no approved cut has carried it
+- **doctrine** E98 -> docs/portable/OPERATOR-RULINGS.md:2832; BACKLOG R26-122 -> docs/content-video-engine/BACKLOG.md:554
+
 ### The card becomes the chart
 
 - **id** `recipe:card-becomes-the-chart` - **does** The prop you were just handed IS the evidence page: a thrown card lands on the plate, the world dips, and the chart grows out of that card's own rectangle to fill the stage.
@@ -2064,6 +2074,17 @@ a decoration; one that fires four times is a grammar.
 - **proof** japan-tariff-trick / build-short @ 0s - members at 0, 0.82, 1.82, 1.82 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json`
 - **status** proven - **count** 2 (a grammar) - **source** recipes_r1 R6; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R6
 - **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E61 -> docs/portable/OPERATOR-RULINGS.md:1991; E49 -> docs/portable/OPERATOR-RULINGS.md:1494
+
+### The card standing in the plate
+
+- **id** `recipe:card-standing-in-the-plate` - **does** The page stands inside the plate instead of over it: a card at a parallax depth, tilted on its plane, with a dock riding the mid plane under a camera move the sentence already earned.
+- **acts** QUOTES, EXPLAINS - **window** 6s
+- **members**
+  - +0s -> `plate_option:depth` (The depth plate option) - the page stands as a card at a parallax depth on a layered plate - the world has planes and the proof lives on one
+  - +0s -> `plate_option:plane` (The plane plate option) - the card is tilted on the page plane, its numbers upright at their projected anchors
+  - +0s -> `dock_option:depth` (The dock at a depth) - a dock rides the mid plane under the camera move that already had a reason, parallaxing between the plate and the card
+- **status** candidate - **count** 0 (unfired) - **source** P58 goldens page-depth, form-tilted-line and dock-depth - no approved cut has carried it
+- **doctrine** E98 -> docs/portable/OPERATOR-RULINGS.md:2832; BACKLOG R26-122 -> docs/content-video-engine/BACKLOG.md:554
 
 ### The pen carries on to the next month
 
@@ -2339,8 +2360,7 @@ a decoration; one that fires four times is a grammar.
 - **members**
   - +0s -> `page_species:figure` (The written figure page species) - the figure the market quotes is WRITTEN at its datum by the hand (E50) - '24.8x'
   - +6s -> `page_species:chart_to` (The chart-to page species) - the page-species carrier for the verb
-  - +6s -> `chart_to:compare` (The compare chart-to verb (metric to comparator)) - the quoted number's OUTLINES sag and BALL UP at the same datum, and the ball is MORPHED into the comparator's glyphs - '15% dearer' - the arithmetic authored (E77)
-  - +6s -> `kinetics:contour` (The contour kinetics module (marching squares)) - the outlines the morph needs, measured off the page's own ink by marching squares - no font file is parsed (E76 s5)
+  - +6s -> `chart_to:compare` (The compare chart-to verb (metric to comparator)) - the quoted number's OUTLINES (read off the page's own ink by kinetics:contour) sag and BALL UP at the datum, and the ball MORPHS into the comparator's glyphs - '15% dearer' (E77)
 - **status** candidate - **count** 0 (unfired) - **source** P57 T12 golden compare-morph (figure at 6.0 s, compare at 12.0 s), re-goldened onto the melt by P57 T12b and onto E76 s5's ball-then-morph by P57 T12c - no approved cut has carried it
 - **doctrine** E76 -> docs/portable/OPERATOR-RULINGS.md:2442; E76 s5 -> docs/portable/OPERATOR-RULINGS.md:2442; E73 -> docs/portable/OPERATOR-RULINGS.md:2342; E88 -> docs/portable/OPERATOR-RULINGS.md:2661; E77 -> docs/portable/OPERATOR-RULINGS.md:2480; E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-70 -> docs/content-video-engine/BACKLOG.md:476
 

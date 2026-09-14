@@ -21,12 +21,7 @@
     {
       "card": "chart_to:compare",
       "offset_s": 6.0,
-      "role": "the quoted number's OUTLINES sag and BALL UP at the same datum, and the ball is MORPHED into the comparator's glyphs - '15% dearer' - the arithmetic authored (E77)"
-    },
-    {
-      "card": "kinetics:contour",
-      "offset_s": 6.0,
-      "role": "the outlines the morph needs, measured off the page's own ink by marching squares - no font file is parsed (E76 s5)"
+      "role": "the quoted number's OUTLINES (read off the page's own ink by kinetics:contour) sag and BALL UP at the datum, and the ball MORPHS into the comparator's glyphs - '15% dearer' (E77)"
     }
   ],
   "window_s": 9.0,

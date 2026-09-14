@@ -1,0 +1,30 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:bars-given-weight",
+  "title": "The bars given weight",
+  "aliases": [],
+  "acts": [
+    "COMPARES",
+    "RANKS"
+  ],
+  "members": [
+    {
+      "card": "page_builder:bars",
+      "offset_s": 0.0,
+      "role": "the story bars page the form is applied to: its bars grow in stagger with their values landing"
+    },
+    {
+      "card": "plate_option:form",
+      "offset_s": 0.0,
+      "role": "each bar a prism, one light, a hard-edge shadow, every label where the flat bar puts it"
+    }
+  ],
+  "does": "A story bars page given weight: every bar extruded into a prism under one light with a hard-edge shadow, labels where the flat bar puts them. The form is refused together with plane= on one page, which is why this is its own recipe.",
+  "doctrine": [
+    "E98",
+    "BACKLOG R26-122"
+  ],
+  "status": "candidate",
+  "source": "P58 T5 golden form-extruded-bar - no approved cut has carried it",
+  "count": 0
+}
