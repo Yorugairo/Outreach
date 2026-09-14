@@ -8,8 +8,10 @@ import { MELT, MELT_ENDINGS, MELT_CSS, meltOpts, meltShares, meltPhase, meltBlur
          meltDepth, meltTop, meltOutline, meltRun, ballCircle, ballAt, meltSqueeze, meltBodyAlpha, ballFlat, meltSettle,
          meltMixInk, splashDrops, splashStains, meltThrowAt, meltState, meltFilterMarkup, meltMaskMarkup,
          meltInkFilterMarkup, meltRevealMarkup, meltBodyTransform, meltIsBoard, meltInkOf, meltTint, meltSplatPath, splashSats,
-         meltSpring, meltBodyGrow, meltTextFilterMarkup } from "../../scripts/species/melt.mjs";
-import { stepped, MASS, STOP } from "../../scripts/kinetics/stopaction.mjs";
+         meltSpring, meltBodyGrow, meltTextFilterMarkup, MELT_MATERIALS, meltWeightShare, meltWeightMass, meltWeightAt,
+         meltRollDir, meltMarkAt, meltBallRing } from "../../scripts/species/melt.mjs";
+import { stepped, MASS, STOP, rollXf } from "../../scripts/kinetics/stopaction.mjs";
+import { DROP, dropArea } from "../../scripts/kinetics/drop.mjs";
 import { hexToLin } from "../../scripts/kinetics/ink.mjs";
 
 const hash = (seed, i, salt) => {
@@ -64,9 +66,11 @@ test("the board and the ink are split by class: grain, roll edge, field and fiel
 
 // ---- the phases --------------------------------------------------------------------------------------------------
 test("the four phases: three shares that sum to 1, and the fourth is the end", () => {
-  const sh = meltShares();
+  const sh = meltShares();   /* four now (R26-118): melt, ball, WEIGHT, the ending - and the weight's is exactly 0
+                                unless the exit asked for it, which is why every melt that shipped is untouched */
   assert.ok(Math.abs(sh.reduce((a, b) => a + b, 0) - 1) < 1e-12);
-  assert.ok(sh.every((s) => s > 0));
+  assert.equal(sh[2], 0, "no weight phase unless `melt:weight` says so");
+  assert.ok([sh[0], sh[1], sh[3]].every((s) => s > 0));
   assert.equal(meltPhase(0.29).name, "melt");
   assert.equal(meltPhase(MELT.MELT_END).name, "ball");
   assert.equal(meltPhase(MELT.BALL_END).name, "fly");
@@ -300,4 +304,141 @@ test("the filters: blur under an alpha ramp; the run offsets the marks down; the
   assert.ok(r.includes('fill="#fff"') && r.includes('filter="url(#melts)"') && r.indexOf("<rect") < r.indexOf("<g "), "white first, the stains over it");
   const st = { centre: [100, 200], xf: { x: 10, y: 20, rot: 3 }, squash: { a: 0.3, theta: 0 } };
   assert.ok(/^translate\(110\.00 220\.00\) rotate\(3\.00\) matrix\(1\.3000 0\.0000 0\.0000 0\.7692 0 0\) translate\(-100\.00 -200\.00\)$/.test(meltBodyTransform(st)), meltBodyTransform(st));
+});
+
+// ---- THE WEIGHT PHASE (R26-118 / E88 s6-s7) ------------------------------------------------------------------------
+// The operator, 2026-09-14: *"we need to make sure our ball has real density, and we should probably roll it around or
+// manipulate it a bit for good measure to show that it has real mass & gravity"*. It is OPT-IN, so the first thing
+// these pin is that a melt which never said `weight` is the melt that shipped - phase for phase, share for share.
+const W = { weight: true, wmass: "metal", secs: MELT.S + MELT.W_S };
+
+test("the weight phase is opt-in: without it every phase, share and release is what it was", () => {
+  assert.equal(meltWeightShare(MELT.S), 0);
+  assert.equal(meltOpts("melt").weight, false);
+  assert.equal(meltPhase(MELT.MELT_END).name, "ball");
+  assert.equal(meltPhase(MELT.BALL_END).name, "fly");
+  assert.equal(meltRelease(), MELT.BALL_END + MELT.ANTIC * (1 - MELT.BALL_END));
+  assert.deepEqual(meltBallRing([0, 0], 10, {}), ballCircle([0, 0], 10, MELT.CIRCLE_N), "no weight, no living ring");
+});
+
+test("`melt:weight` parses, names its material, lengthens its own default window and refuses a stranger", () => {
+  const o = meltOpts("melt:weight");
+  assert.equal(o.weight, true);
+  assert.equal(o.wmass, "metal", "E88 s7: the ball is METAL by default");
+  assert.equal(o.secs, MELT.S + MELT.W_S, "the four beats need their own seconds");
+  for (const mat of MELT_MATERIALS) assert.equal(meltOpts("melt:weight:" + mat).wmass, mat);
+  assert.equal(meltOpts("melt:weight:2.8").secs, 2.8, "a declared length is the whole window");
+  assert.equal(meltOpts("melt:splash:plate:weight:ink").ending, "splash:plate");
+  assert.throws(() => meltOpts("melt:weight:bronze"), /bronze is not a material/);
+  assert.equal(meltWeightMass({ weight: true, wmass: "bronze" }), MELT.W_MASS, "an unknown material is never painted");
+});
+
+test("with weight the other three phases keep their shares of what is LEFT, and the weight takes W_S seconds", () => {
+  const secs = MELT.S + MELT.W_S, w = meltWeightShare(secs, W);
+  assert.ok(Math.abs(w * secs - MELT.W_S) < 1e-12);
+  const sh = meltShares(Object.assign({ secs }, W));
+  assert.ok(Math.abs(sh.reduce((a, b) => a + b, 0) - 1) < 1e-12);
+  assert.ok(Math.abs(sh[0] / sh[1] - MELT.MELT_END / (MELT.BALL_END - MELT.MELT_END)) < 1e-12, "melt : ball is untouched");
+  const P = Object.assign({ secs }, W);
+  assert.equal(meltPhase(MELT.MELT_END * (1 - w) + 1e-9, P).name, "ball");
+  assert.equal(meltPhase(MELT.BALL_END * (1 - w) + 1e-9, P).name, "weight");
+  assert.equal(meltPhase(MELT.BALL_END * (1 - w) + w + 1e-9, P).name, "fly");
+  assert.ok(meltRelease(P) > MELT.BALL_END * (1 - w) + w, "the board stays up until the ball is thrown");
+  // and W_MAX caps it: a short melt:weight cannot be all weight
+  assert.ok(Math.abs(meltWeightShare(1.0, W) - MELT.W_MAX) < 1e-12);
+});
+
+test("the roll does not slip: the turn angle is the distance over the radius, at every u", () => {
+  const r = 50, span = MELT.W_S;
+  for (const u of [0.3, 0.45, 0.62, 0.9]) {
+    const w = meltWeightAt(u * span, span, r, Object.assign({ dir: 1 }, W));
+    assert.ok(Math.abs(w.turn - w.x / r) < 1e-12, `u ${u}: ${w.turn} vs ${w.x / r}`);
+  }
+  const left = meltWeightAt(0.45 * span, span, r, Object.assign({ dir: -1 }, W));
+  const right = meltWeightAt(0.45 * span, span, r, Object.assign({ dir: 1 }, W));
+  assert.ok(Math.abs(left.x + right.x) < 1e-12 && Math.abs(left.turn + right.turn) < 1e-12, "the other way turns the other way");
+});
+
+test("the friction stops the roll at the authored distance, inside its own beat", () => {
+  const r = 50, span = MELT.W_S, beat = (MELT.W_ROLL - MELT.W_LAND) * span;
+  const roll = rollXf(MELT.W_ROLL_PX, r, MELT.W_ROLL_FRICTION, beat);
+  assert.ok(roll.T < beat, `the roll's own T (${roll.T}) has to land inside its beat (${beat})`);
+  assert.ok(Math.abs(roll.s - MELT.W_ROLL_PX) < 1e-9, "it stops where the math says");
+  const end = meltWeightAt(MELT.W_ROLL * span - 1e-6, span, r, Object.assign({ dir: 1 }, W));
+  assert.ok(Math.abs(end.x - MELT.W_ROLL_PX) < 1e-6, `the beat ends at the authored travel: ${end.x}`);
+  // the NUDGE adds its own, and it is sold BEFORE it moves: the ball leans BACK first (48 s48.6)
+  const lean = meltWeightAt((MELT.W_ROLL * span) + MELT.W_ANTIC_S / 2, span, r, Object.assign({ dir: 1 }, W));
+  assert.ok(lean.x < MELT.W_ROLL_PX, `the anticipation leans back: ${lean.x}`);
+  const rest = meltWeightAt(span, span, r, Object.assign({ dir: 1 }, W));
+  assert.ok(Math.abs(rest.x - (MELT.W_ROLL_PX + MELT.W_NUDGE_PX)) < 1e-6, `it settles at roll + nudge: ${rest.x}`);
+  assert.equal(rest.beat, "settle");
+});
+
+test("the four beats in order, and the contact shadow tightens as it falls and then rides a frame behind", () => {
+  const r = 50, span = MELT.W_S, at = (k) => meltWeightAt(k * span, span, r, Object.assign({ dir: 1 }, W));
+  assert.equal(at(0).beat, "fall");
+  assert.equal(at(MELT.W_LAND + 0.05).beat, "roll");
+  assert.equal(at(MELT.W_ROLL + 0.05).beat, "nudge");
+  assert.equal(at(MELT.W_SETTLE + 0.05).beat, "settle");
+  const high = at(0), low = at(MELT.W_LAND * 0.98);
+  assert.ok(high.h > low.h && low.y < 0, "it is still coming down");
+  assert.ok(low.shadow.scale > high.shadow.scale && low.shadow.blur < high.shadow.blur, "FAR to NEAR as it nears");
+  // the shadow is LAG_FRAMES behind the ball while it rolls (HF-2)
+  const mid = at(0.35);
+  assert.ok(mid.shadowX < mid.x && mid.x - mid.shadowX > 1, `the shadow lags: ${mid.shadowX} vs ${mid.x}`);
+  const back = meltWeightAt(0.35 * span - STOP.LAG_FRAMES / MELT.FPS, span, r, Object.assign({ dir: 1 }, W));
+  assert.ok(Math.abs(mid.shadowX - back.x) < 1e-9, "and it is exactly where the ball was a frame ago");
+});
+
+test("METAL is a dead stop: no squash, no rebound - the roll and the nudge carry the weight (E88 s7)", () => {
+  const r = 50, span = MELT.W_S, ts = MELT.W_LAND * span + 1 / MELT.FPS;
+  assert.equal(MASS.metal.squash_frames, 0);
+  const metal = meltWeightAt(ts, span, r, Object.assign({ dir: 1 }, W));
+  assert.equal(metal.squash.a, 0, "a rigid dense thing does not squash");
+  const ink = meltWeightAt(ts, span, r, Object.assign({ dir: 1 }, W, { wmass: "ink" }));
+  assert.ok(ink.squash.a > 0, "ink does");
+  assert.ok(metal.kick.length >= 1 && metal.kick[0].a[0] > 0, "the landing re-excites the drop's modes instead");
+});
+
+test("the ball is a LIVING ring under weight: its area is the circle's, and it is not the circle", () => {
+  const ring = meltBallRing([0, 0], 40, Object.assign({ te: 0.04, excite: [{ at: 0, a: DROP.A }] }, W));
+  assert.equal(ring.length, MELT.CIRCLE_N, "the morph's resample still lands ON the vertices");
+  assert.ok(Math.abs(dropArea(ring) / (Math.PI * 40 * 40) - 1) < 1e-6, "incompressible");
+  const rs = ring.map((p) => Math.hypot(p[0], p[1]));
+  assert.ok(Math.max(...rs) - Math.min(...rs) > 0.03 * 40, "it is wriggling to contain itself, not a circle");
+});
+
+test("the mark turns with the ball - that is what makes the roll a roll and not a slide", () => {
+  const c = [100, 100], r = 50;
+  const a = meltMarkAt(c, r, 0), b = meltMarkAt(c, r, Math.PI / 2);
+  assert.ok(Math.abs(Math.hypot(a.x - c[0], a.y - c[1]) - r * MELT.W_MARK_AT) < 1e-9, "it sits on the face, not the rim");
+  assert.ok(Math.hypot(a.x - b.x, a.y - b.y) > 0.5 * r, "a quarter turn moves it a long way");
+  assert.ok(Math.abs((b.deg - a.deg) - 90) < 1e-9, "and its streak turns with it");
+  assert.ok(a.rx > a.ry, "a streak, not a dot");
+});
+
+test("which way it rolls is the ending's own direction", () => {
+  const rect = { x: 0, y: 0, w: 400, h: 300 }, sb = { x: -20, y: -15, w: 440, h: 330 };
+  assert.equal(meltRollDir([100, 100], rect, { ending: "throw", to: [1.02, 1.32], stagebox: sb }), 1, "toward the exit");
+  assert.equal(meltRollDir([100, 100], rect, { ending: "throw", to: [-0.2, 1.3], stagebox: sb }), -1);
+  assert.equal(meltRollDir([300, 100], rect, { ending: "splash:chart", stagebox: sb }), -1, "toward the board's middle");
+});
+
+test("the weight phase is a pure function of t: two calls at one u are identical", () => {
+  const rect = { x: 40, y: 30, w: 520, h: 360 }, o = Object.assign({ rect, ending: "throw" }, W);
+  for (const u of [0.40, 0.55, 0.70, 0.86, 0.95]) {
+    const t = 3 + u * o.secs;
+    const a = meltState(3, t, o, rnd), b = meltState(3, t, o, rnd);
+    assert.deepEqual(a, b, `u ${u}`);
+  }
+  const mid = meltState(3, 3 + 0.62 * o.secs, o, rnd);
+  assert.equal(mid.phase, "weight");
+  assert.ok(mid.mark && mid.hl && mid.shadow, "the mark, the highlight and the contact shadow are all on it");
+  assert.ok(mid.body.startsWith("M"), "and it paints a path");
+  const land = meltState(3, 3 + (MELT.BALL_END * (1 - meltWeightShare(o.secs, o))) * o.secs + 0.001, o, rnd);
+  assert.equal(land.phase, "weight");
+  assert.equal(land.weight, "fall", "the phase opens with the last of its height");
+  const fly = meltState(3, 3 + 0.99 * o.secs, o, rnd);
+  assert.equal(fly.phase, "fly");
+  assert.ok(Math.abs(fly.turn - (MELT.W_ROLL_PX + MELT.W_NUDGE_PX) / fly.r) < 1e-6, "the ending keeps the turn the roll left");
 });

@@ -318,6 +318,27 @@ def test_a_melt_parses_with_and_without_its_own_length_register_and_point():
             B.parse_exit(bad)
 
 
+def test_a_melt_may_ask_for_the_weight_phase_and_name_its_material():
+    """R26-118 / E88 s6-s7 (the operator, 2026-09-14: *"we need to make sure our ball has real density, and we should
+    probably roll it around or manipulate it a bit"*): `weight` is a suffix like any other and may sit anywhere after
+    the name, optionally followed by a MATERIAL. It is OPT-IN - no melt on the record changes - and a material this
+    engine does not have is refused BY NAME, never silently painted as the default. species/melt.mjs `meltOpts` reads
+    the same grammar in the player, and MELT.W_S is the twin of MELT_W_S here."""
+    assert B.parse_exit("melt:weight") == ("melt:weight", None)
+    assert B.parse_exit("melt:weight:metal") == ("melt:weight:metal", None)
+    for mat in B.MELT_MATERIALS:
+        assert B.parse_exit(f"melt:weight:{mat}") == (f"melt:weight:{mat}", None)
+    assert B.parse_exit("melt:weight:2.8") == ("melt:weight:2.8", 2.8), "a bare number after weight is still the LENGTH"
+    assert B.parse_exit("melt:splash:plate:weight:ink") == ("melt:splash:plate:weight:ink", None)
+    assert B.melt_ending("melt:weight:ink") == "throw", "the weight phase does not change the ending"
+    assert B.melt_ending("melt:splash:chart:weight") == "splash:chart"
+    assert B.MELT_MATERIALS == ("metal", "ink", "paper", "liquid"), "species/melt.mjs MELT_MATERIALS"
+    assert B.MELT_W_S == 1.15, "the weight phase's own length, the player's MELT.W_S"
+    for bad in ("melt:weight:bronze", "melt:weight:steel", "melt:weight:chart"):
+        with pytest.raises(ValueError):
+            B.parse_exit(bad)
+
+
 def test_the_mechanical_default_is_never_a_melt():
     """A melt is AUTHORED or it does not happen (E47 as corrected 2026-09-12): it takes the whole world for 1.6 s
     and no rule may reach for it on its own. `scene_exit`'s table is the dip, the cut, and what the row says."""

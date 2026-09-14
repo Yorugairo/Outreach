@@ -101,6 +101,7 @@ CENTRE_W = 0.74                                     # a centred card's width as 
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
 TIMED_EXITS = ("dip", "blurzoom", "melt", "slide")   # ... and only these read a suffix as SECONDS (the slide's is its SECOND suffix - the first is the direction, `slide:left:0.8` - so parse_exit reads it apart, as the melt's is) (suck's is a point); the melt's may be its length, `splash`, or its exit point, so parse_exit reads it apart
 MELT_S = 1.6            # P52 T9: a melt's default length, species/melt.mjs MELT.S - the two are one dial written twice (as DIP_S is, in the engine and in gate_motion_density), and test_transitions_e47 pins them together
+MELT_W_S = 1.15         # R26-118 / E88 s6: the WEIGHT phase's own length, species/melt.mjs MELT.W_S - a `melt:weight` that declares no length runs MELT_S + MELT_W_S (the four beats need their own seconds), and test_transitions_e47 pins that pair too
 SLIDE_DIRECTIONS = ("left", "right", "up", "down")   # R26-75 / E87 s3: WHICH WAY the incoming frame pushes the outgoing one off
 SLIDE_S = 0.6           # a slide's default length, the player's SLIDE_S - the two are one dial written twice (as DIP_S and MELT_S are)
 DEFAULT_EXIT_CHANGE = "dip"         # E47 #3 corrected 2026-09-12 (the operator: "the dip is supposed to be used as an actual transition when the
@@ -1500,6 +1501,15 @@ def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str, str | Non
 
 
 MELT_ENDINGS = ("throw", "splash:chart", "splash:plate")   # E88 / R26-76: the three authored endings - species/melt.mjs MELT_ENDINGS
+MELT_MATERIALS = ("metal", "ink", "paper", "liquid")       # R26-118 / E88 s7: what `melt:weight:<material>` may name - species/melt.mjs MELT_MATERIALS
+
+
+def _is_number(bit: str) -> bool:
+    try:
+        float(bit)
+    except ValueError:
+        return False
+    return True
 
 
 def _melt_parts(exit_id: str) -> tuple[str, float | None]:
@@ -1507,6 +1517,11 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None]:
     ``splash:plate`` - a bare number, its LENGTH, and on a throw only an ``x,y`` pair, the point it is thrown to in
     stage fractions. A bare ``splash`` is REFUSED: since E88 a splash has two endings that need two different incoming
     worlds, and an alias would pick one silently.
+
+    R26-118 / E88 s6 adds ``weight``, optionally followed by a MATERIAL (``metal`` - the default, E88 s7 - ``ink``,
+    ``paper`` or ``liquid``): the ball lands, rolls, is nudged and settles before the ending, and its surface is the
+    living drop. It is opt-in, and a `melt:weight` that declares no length of its own runs MELT_S + MELT_W_S.
+    A material this engine does not have is refused BY NAME, never painted as the default.
 
     species/melt.mjs ``meltOpts`` reads exactly this grammar on the player's side; the two have to agree, and
     test_transitions_e47 pins the pair. Returns (ending, the declared length or None for MELT_S)."""
@@ -1531,6 +1546,14 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None]:
             if ending is not None:
                 raise ValueError(f"exit {exit_id!r}: two endings ({ending} and {end}) - a melt ends one way")
             ending = end
+            continue
+        if bit == "weight":   # R26-118: the weight phase, and the material the ball is made of
+            nxt = bits[i].strip() if i < len(bits) else ""
+            if nxt and "," not in nxt and nxt not in ("throw", "splash") and not _is_number(nxt):
+                if nxt not in MELT_MATERIALS:
+                    raise ValueError(f"exit {exit_id!r}: {nxt!r} is not a material - melt:weight takes "
+                                     + ", ".join(MELT_MATERIALS))
+                i += 1
             continue
         if bit in ("chart", "plate"):
             raise ValueError(f"exit {exit_id!r}: {bit!r} is a splash's ending - say splash:{bit}")
@@ -1611,7 +1634,7 @@ def slide_direction(exit_id: str | None) -> str | None:
 
 def parse_exit(exit_id: str) -> tuple[str, float | None]:
     """``cut`` | ``dip[:<s>]`` | ``blurzoom[:<s>]`` | ``wipe_right`` | ``suck:<x>,<y>`` |
-    ``melt[:throw|:splash:chart|:splash:plate][:<s>][:<x>,<y>]`` | ``slide:<left|right|up|down>[:<s>]``
+    ``melt[:throw|:splash:chart|:splash:plate][:weight[:<material>]][:<s>][:<x>,<y>]`` | ``slide:<left|right|up|down>[:<s>]``
     -> (name, seconds or None).
 
     Only dip, blurzoom, melt and slide read a suffix as a length; the suck's is the point it collapses

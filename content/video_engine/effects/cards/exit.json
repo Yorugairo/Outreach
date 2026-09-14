@@ -347,6 +347,28 @@
           "trigger": "u = BALL_END (the ball's end)"
         },
         {
+          "name": "weight",
+          "does": "the ball lands, rolls without slipping (the turn IS the distance over the radius), takes one nudge sold before it moves, and settles - its surface Rayleigh's modes, its ink mark turning with it, its highlight on the light",
+          "trigger": "u = BALL_END of what is left (the ball's end), on `melt:weight` only",
+          "dials": {
+            "W_S": "1.15",
+            "W_MAX": "0.55",
+            "W_MASS": "metal",
+            "W_DROP_PX": "34",
+            "W_LAND": "0.20",
+            "W_ROLL": "0.50",
+            "W_SETTLE": "0.84",
+            "W_ROLL_PX": "150",
+            "W_ROLL_FRICTION": "2800",
+            "W_NUDGE_PX": "46",
+            "W_ANTIC_PX": "5",
+            "W_ANTIC_S": "0.12",
+            "W_MARK_AT": "0.62",
+            "W_MARK_R": "0.30",
+            "HL_SHEEN": "0.82"
+          }
+        },
+        {
           "name": "gone",
           "does": "the outgoing world, its ink and the overlay are hidden",
           "trigger": "u >= 1"
@@ -410,6 +432,11 @@
           "token": "throw",
           "means": "The melt: thrown off: The ink ball is thrown off the stage and the next chart draws on the same board.",
           "source_set": "MELT_ENDINGS"
+        },
+        {
+          "token": "weight",
+          "means": "The melt: the ball has MASS - it lands, rolls without slipping (its ink mark turning), is nudged and settles, its surface the living drop. Opt-in `melt:weight[:<material>]`, metal by default.",
+          "source_set": null
         }
       ],
       "dials": {
@@ -422,20 +449,26 @@
         "symbol": "MELT",
         "also": [
           "MELT_ENDINGS",
-          "meltOpts",
-          "paintMelt",
+          "MELT_MATERIALS",
+          "clearMelt",
+          "meltBallRing",
           "meltMount",
-          "clearMelt"
+          "meltOpts",
+          "meltWeightAt",
+          "paintMelt"
         ],
         "note": "MELT / MELT_ENDINGS / meltOpts (engine glue: paintMelt, meltMount, clearMelt)"
       },
       "doctrine": [
+        "CAPABILITIES melt row",
         "E88",
-        "R26-76",
-        "CAPABILITIES melt row"
+        "E88 s6",
+        "E88 s7",
+        "R26-76"
       ],
       "status": "draft",
       "backlog": [
+        "R26-118",
         "R26-76"
       ],
       "proof": {

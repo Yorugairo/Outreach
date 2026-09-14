@@ -200,6 +200,19 @@ export const landXf = (mass, t, o = {}) => {
            shake: P.violent ? groundShake(ts, mass) : { x: 0, y: 0 } };
 };
 
+/* THE ROLL (R26-118, E88 s6: "roll it around ... to show that it has real mass & gravity"): a body rolling on a
+   surface with NO SLIP - the turn angle IS the distance over the radius - decelerated by a CONSTANT friction (px/s^2),
+   so it stops exactly where the math says: a roll of D px needs v0 = sqrt(2 a D) and takes T = v0 / a. Pure, and it
+   paints nothing by itself: the only caller is species/melt.mjs's weight phase, which steps it on the melt's own
+   clock. Added 2026-09-14 with NO change to anything this module already painted. */
+export const rollXf = (dist, radius, decel, ts) => {
+  const D = Math.max(0, dist), a = Math.max(1e-6, decel), r = Math.max(1e-6, radius);
+  const v0 = Math.sqrt(2 * a * D), T = v0 / a;
+  if (!(ts > 0)) return { s: 0, v: v0, turn: 0, T, done: !(D > 0) };
+  const t = Math.min(ts, T), s = v0 * t - 0.5 * a * t * t;
+  return { s, v: Math.max(0, v0 - a * t), turn: s / r, T, done: ts >= T };
+};
+
 /* the CSS a painter appends: translate, the tumble, the area-preserving squash - fixed decimals. A negative alpha is a
    clamp (compress along the axis, stretch across it) and goes through the same tensor with the axis turned. */
 export const stopCss = (s) => {

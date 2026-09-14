@@ -1674,6 +1674,19 @@ async function mount(doc) {
              shake: P.violent ? groundShake(ts, mass) : { x: 0, y: 0 } };
   };
 
+  /* THE ROLL (R26-118, E88 s6: "roll it around ... to show that it has real mass & gravity"): a body rolling on a
+     surface with NO SLIP - the turn angle IS the distance over the radius - decelerated by a CONSTANT friction (px/s^2),
+     so it stops exactly where the math says: a roll of D px needs v0 = sqrt(2 a D) and takes T = v0 / a. Pure, and it
+     paints nothing by itself: the only caller is species/melt.mjs's weight phase, which steps it on the melt's own
+     clock. Added 2026-09-14 with NO change to anything this module already painted. */
+  const rollXf = (dist, radius, decel, ts) => {
+    const D = Math.max(0, dist), a = Math.max(1e-6, decel), r = Math.max(1e-6, radius);
+    const v0 = Math.sqrt(2 * a * D), T = v0 / a;
+    if (!(ts > 0)) return { s: 0, v: v0, turn: 0, T, done: !(D > 0) };
+    const t = Math.min(ts, T), s = v0 * t - 0.5 * a * t * t;
+    return { s, v: Math.max(0, v0 - a * t), turn: s / r, T, done: ts >= T };
+  };
+
   /* the CSS a painter appends: translate, the tumble, the area-preserving squash - fixed decimals. A negative alpha is a
      clamp (compress along the axis, stretch across it) and goes through the same tensor with the axis turned. */
   const stopCss = (s) => {
@@ -2381,6 +2394,132 @@ async function mount(doc) {
     });
   };
   /* KINETICS:END */
+  /* KINETICS:BEGIN drop */
+  /* kinetics/drop.mjs - THE LIVING DROP: a heavy ball's boundary as RAYLEIGH SURFACE MODES (P57 R26-118; the operator
+     2026-09-14, E88 s7: "a more living ball, that is wriggling to contain itself, and has real, metallic mass and
+     density"). SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN drop
+     and KINETICS:END, BEFORE melt (species/melt.mjs imports it). It imports nothing: this is arithmetic.
+
+     THE LAW'S SHAPE (ours are the numbers, not the form):
+       r(theta, t) = R * (1 + sum over l of a_l(t) * cos(l * theta + phi_l))
+       a_l(t)      = sum over the impulses i of a_li * exp(-dt_i / tau_l) * cos(omega_l * dt_i)  +  FLOOR_l * cos(omega_l * t)
+       omega_l^2   = l (l - 1)(l + 2) * SIGMA / (RHO * R^3)        [Rayleigh 1879, Proc. R. Soc. Lond. 29, 71-97]
+       tau_l       = R^2 / ((l - 1)(2l + 1) * NU) * DAMP           [Lamb, Hydrodynamics 6th ed. 1932, s355 p. 640]
+     Modes l = 2, 3, 4 (l = 0 is the breathing an incompressible drop cannot do, l = 1 is a translation). Every frame the
+     ring's AREA is renormalised to pi R^2 on its own shoelace: the drop wobbles, it never grows.
+
+     THE NUMBERS, and what they are worth. SIGMA, RHO and NU come from `docs/research/runs/living_drop/` (the run is
+     QUARANTINED, unapproved, and no doctrine file cites it). The parent's gate on it, 2026-09-14: PLAUSIBLE at best -
+     the run fetched no pages to disk, so nothing here is CONFIRMED.
+       metal   MERCURY at 20 C [research run living_drop, unapproved: PLAUSIBLE - Rayleigh 1879 / Lamb 1932 / CRC 97th
+               ed. / Jasper 1972]. The run's other liquid metal, galinstan, is NOT dialled: its 0.535 N/m is CONTESTED
+               (Morley 2008 is usually cited near 0.718 N/m), and a contested number is not a default.
+       liquid  WATER at 20 C [research run living_drop, unapproved: PLAUSIBLE - IAPWS 2008 / 2014].
+       ink     [UNSOURCED]: the run's ink row carries no author, year or URL. Ours, by eye, until one does.
+     And they are only half of any dial: what a page px IS in metres is OURS (`PX_PER_M`) - a 60 px ball at 8500 px/m is
+     a 7.1 mm bead, ringing mode 2 at 4.5 Hz, which is the craft's own band for a wobble (a period of 167-250 ms, two to
+     three drawings on 2s). So is `DAMP`: the ideal bead rings for ~90 s at this size (Lamb) and a melt is seconds long,
+     so the decay is the stop-motion craft's - tau_2 = 0.25 s, about three visible cycles before the floor takes over,
+     inside the 80-220 ms settle the craft sells an impact with. Every one of these is a dial (42 s42.5), tuned by eye.
+
+     E49, never still: FLOOR is an amplitude the decay cannot take away, so the drop is always wriggling to contain
+     itself. Pure functions of (t, R, the material, the impulses): the same t twice is the same ring, so a scrubbed
+     frame is the played frame. */
+
+  const DROP = Object.freeze({
+    MODES: [2, 3, 4],       /* the Rayleigh modes we carry: l lobes each, l = 2 the squeeze the eye reads */
+    N: 96,                  /* the ring's samples (MELT.RING_N: the melt's morph lands on the same count) */
+    PX_PER_M: 8500,         /* OURS: how big the ball really is - a 60 px ball is a 7.1 mm bead (mode 2 at 4.5 Hz, a
+                               223 ms period: the craft's two-to-three drawings on 2s) */
+    DAMP: 0.0028,           /* OURS: Lamb's modulus of decay is ~90 s at this size; ours is tau_2 = 0.25 s - three visible
+                               cycles, the craft's 80-220 ms settle after an impact */
+    A: [0.10, 0.055, 0.022],    /* the COMPILE's excitation per mode, as a share of R: the squeeze's own asymmetry */
+    PHI: [0.0, 1.10, 2.30],     /* each mode's spatial phase (radians): where its lobes sit on the ball */
+    FLOOR: [0.012, 0.007, 0.003],  /* E49: the amplitude the decay never takes - the drop is never at rest */
+    KICK: [0.085, 0.030, 0.010],   /* a LANDING or a NUDGE re-excites the modes by this, scaled by the material's impact */
+    /* the fluids, at 20 C. SIGMA N/m, RHO kg/m^3, NU m^2/s [research run living_drop, unapproved] */
+    MAT: {
+      metal:  { SIGMA: 0.4865, RHO: 13546, NU: 1.1265e-7 },   /* MERCURY: dense, taut, and it rings for ever [PLAUSIBLE] */
+      ink:    { SIGMA: 0.0500, RHO: 1050,  NU: 3.0476e-6 },   /* india ink, a carbon-black dispersion [UNSOURCED - ours] */
+      liquid: { SIGMA: 0.0728, RHO: 998.2, NU: 1.0038e-6 },   /* water [PLAUSIBLE] */
+      paper:  { SIGMA: 0.0500, RHO: 1050,  NU: 3.0476e-6 },   /* a card is not a fluid: it borrows the ink's surface */
+    },
+    /* THE SPECULAR HIGHLIGHT (E88 s7: "so the metal reads as metal") - a lit spot offset toward the stage light. It is
+       pinned to the LIGHT, not to the surface, so under a roll it counter-rotates against the ink's mark. */
+    LIGHT_DEG: -125,        /* where the stage light is, degrees from +x with y DOWN (SVG): up and to the left */
+    HL_AT: 0.46,            /* how far out the spot sits, as a share of the local radius. The geometry behind it: the
+                               mirror seat of a light at theta_L sits at R sin(theta_L / 2) - 0.383 R at 45 degrees */
+    HL_R: 0.20,             /* its own radius, as a share of R [DERIVED, tuned by eye: the run's 0.15-0.20 R is
+                               MISATTRIBUTED to Cook & Torrance 1982 and is not a source] */
+  });
+
+  const dp01 = (v) => (v <= 0 ? 0 : v >= 1 ? 1 : v);   /* the engine inlines every module into ONE scope, so a private
+     helper carries the module's own prefix */
+  const dpMat = (name, P) => (P.MAT && P.MAT[name]) || DROP.MAT.metal;
+
+  /* omega_l in rad/s for a ball of R page px of `mat` (Rayleigh 1879), through PX_PER_M */
+  const dropOmega = (l, rPx, mat = "metal", o = {}) => {
+    const P = Object.assign({}, DROP, o), M = dpMat(mat, P), R = Math.max(1e-6, rPx) / P.PX_PER_M;
+    return Math.sqrt(l * (l - 1) * (l + 2) * M.SIGMA / (M.RHO * R * R * R));
+  };
+  /* tau_l in seconds (Lamb 1932), scaled by DAMP - the craft's decay, not the fluid's */
+  const dropTau = (l, rPx, mat = "metal", o = {}) => {
+    const P = Object.assign({}, DROP, o), M = dpMat(mat, P), R = Math.max(1e-6, rPx) / P.PX_PER_M;
+    return P.DAMP * R * R / ((l - 1) * (2 * l + 1) * M.NU);
+  };
+  /* ONE impulse's contribution to mode l at `dt` seconds after it: the decaying ring */
+  const dropAmp = (l, a0, dt, rPx, mat = "metal", o = {}) => {
+    if (!(dt >= 0)) return 0;
+    const P = Object.assign({}, DROP, o);
+    return a0 * Math.exp(-dt / dropTau(l, rPx, mat, P)) * Math.cos(dropOmega(l, rPx, mat, P) * dt);
+  };
+  /* EVERY LIVE MODE at t: the impulses' sum and the floor that never dies. `excite` is a list of { at, a } - `at` in the
+     same seconds as t, `a` an array per mode (or a scalar, taken through KICK's own shape). `spin` (an option) turns the
+     lobes with the surface: a rolling ball's ink turns, and its light does not. */
+  const dropModes = (t, rPx, mat = "metal", excite = [], o = {}) => {
+    const P = Object.assign({}, DROP, o), spin = +P.spin || 0;
+    return (P.MODES || DROP.MODES).map((l, i) => {
+      let a = (P.FLOOR[i] || 0) * Math.cos(dropOmega(l, rPx, mat, P) * t);
+      for (const e of excite || []) {
+        const dt = t - (+e.at || 0);
+        if (!(dt >= 0)) continue;
+        const av = Array.isArray(e.a) ? (e.a[i] || 0) : (+e.a || 0) * ((P.KICK[i] || 0) / Math.max(1e-9, P.KICK[0] || 1));
+        a += dropAmp(l, av, dt, rPx, mat, P);
+      }
+      return { l, a, phi: (P.PHI[i] || 0) - l * spin };   /* -l*spin turns the pattern BY +spin: r_spun(th) = r(th - spin) */
+    });
+  };
+  /* the radius at theta as a SHARE of R (1 is the circle) */
+  const dropRadius = (theta, modes) => {
+    let k = 1;
+    for (const m of modes || []) k += m.a * Math.cos(m.l * theta + m.phi);
+    return k;
+  };
+  /* a closed polygon's area, by its own shoelace - positive whichever way it is walked */
+  const dropArea = (pts) => {
+    let a = 0;
+    for (let i = 0, n = pts.length; i < n; i++) { const p = pts[i], q = pts[(i + 1) % n]; a += p[0] * q[1] - q[0] * p[1]; }
+    return Math.abs(a) / 2;
+  };
+  /* THE RING, area-renormalised to pi R^2 (incompressible): N points about `c`, walked the way a circle is walked. */
+  const dropRing = (c, rPx, t, mat = "metal", excite = [], o = {}) => {
+    const P = Object.assign({}, DROP, o), n = Math.max(8, P.N | 0), modes = dropModes(t, rPx, mat, excite, P), pts = [];
+    for (let i = 0; i < n; i++) {
+      const th = 2 * Math.PI * (i / n), k = Math.max(0.05, dropRadius(th, modes));
+      pts.push([c[0] + rPx * k * Math.cos(th), c[1] + rPx * k * Math.sin(th)]);
+    }
+    const want = Math.PI * rPx * rPx, got = dropArea(pts), s = Math.sqrt(want / Math.max(1e-9, got));
+    return pts.map((p) => [c[0] + (p[0] - c[0]) * s, c[1] + (p[1] - c[1]) * s]);
+  };
+  /* THE HIGHLIGHT: the lit spot in the ball's own px, offset toward the stage light and DIMPLING with the modes (it
+     rides the local radius). It never turns with the surface - that is what makes the roll read as a roll. */
+  const dropSpecular = (c, rPx, modes, o = {}) => {
+    const P = Object.assign({}, DROP, o), th = P.LIGHT_DEG * Math.PI / 180;
+    const k = Math.max(0.05, dropRadius(th, modes));
+    return { x: c[0] + rPx * k * P.HL_AT * Math.cos(th), y: c[1] + rPx * k * P.HL_AT * Math.sin(th),
+             r: rPx * P.HL_R * (0.85 + 0.15 * k), k: dp01(k / 1.5) };
+  };
+  /* KINETICS:END */
   /* KINETICS:BEGIN melt */
   /* SPACE: stage */
   /* species/melt.mjs - THE MELT EXIT (P52 T9; BACKLOG R26-15, reworked to E88 by R26-76). SOURCE OF TRUTH, inlined into
@@ -2423,6 +2562,21 @@ async function mount(doc) {
          splash:plate   the same splatter, and what grows through the stains is the next scene's NARRATIVE PLATE, springing
                         up (a small scale settle) as if painted by that ink; the board is painted over from the drops out.
        gone   u >= 1          the outgoing world, its ink and the overlay are hidden, exactly as the suck ends.
+
+     THE WEIGHT PHASE (R26-118, E88 s6 - the operator, 2026-09-14: "we need to make sure our ball has real density, and
+     we should probably roll it around or manipulate it a bit for good measure to show that it has real mass & gravity,
+     just like the hyperframes example did with their stop animation"), OPT-IN as `melt:weight[:<material>]`, sits
+     BETWEEN the ball and the ending and takes W_S seconds out of the window (the other three phases keep their shares of
+     what is left, so a melt without `weight` is the melt that shipped - every golden byte-identical). Its four beats are
+     stopaction's own: LAND (the receiver's dip, the contact shadow tightening from FAR to NEAR, the material's impact
+     squash, the board's three-frame answer), ROLL (rollXf: no slip, the turn angle IS the distance over the radius, a
+     constant friction stopping it where the math says), NUDGE (one second impulse, sold BEFORE it moves - 48 s48.6) and
+     SETTLE (the material's spring). E88 s7 widened it: with the weight phase the ball is a LIVING DROP - kinetics/
+     drop.mjs's Rayleigh ring, excited by the compile and re-excited by every landing and nudge, its area renormalised
+     every frame and never let go still (E49) - it is METAL by default (a dead stop that does not squash: the roll and
+     the nudge carry the weight instead), it keeps a MARK of its own ink so the rotation is VISIBLE, and it wears a
+     specular HIGHLIGHT pinned to the stage light, which counter-rotates against that mark. The compare verb (T12c) melts
+     through the same state and inherits all of it.
 
      Everything above the painter is a pure function of (t0, t, the rect, the dials, rnd): the same t twice is the same
      object, so a scrubbed frame is the played frame and a cold render is the warm one. `rnd(k)` is the caller's seeded
@@ -2515,10 +2669,40 @@ async function mount(doc) {
     SPRING: 0.09,      /* splash:plate - the plate SPRINGS UP: from 1 - SPRING of its size, over its rest by ~2.5 %, settled at
                           the end (a damped cosine; 0.05 settling one way was invisible). 1 - 0.09 of a world that overhangs
                           the stage by 5 % still covers it */
+    /* THE WEIGHT PHASE (R26-118), all of it opt-in behind `melt:weight` - not one of these is read by a melt that
+       does not ask for it. The shares below are of the PHASE's own length, and the phase's length is W_S seconds. */
+    W_S: 1.15,             /* how long the weight phase runs. A melt that asks for it and declares no length runs S + W_S
+                              (1.6 + 1.15 = 2.75 s): the four beats need the time, and stealing it from the melt and the
+                              ball would slow the compile the operator already approved [DERIVED, HG2] */
+    W_MAX: 0.55,           /* and it may never take more than this share of a DECLARED window (a 1.2 s melt:weight gets 0.66 s) */
+    W_MASS: "metal",       /* E88 s7: the ball is METAL unless `melt:weight:<material>` names another - MASS.metal is a
+                              dead stop with no squash and no rebound, so the roll and the nudge carry the weight */
+    W_DROP_PX: 34,         /* LAND: the last of its height, in the world's own px [DERIVED: STOP.DROP_PX 48 is a card's] */
+    W_LAND: 0.20,          /* the beats, as shares of the phase: LAND ends here ... */
+    W_ROLL: 0.50,          /* ... ROLL ends here (rollXf's own T at the dials below is 0.33 s, inside this 0.35 s) ... */
+    W_SETTLE: 0.84,        /* ... NUDGE runs to here, and the material's spring settles what is left */
+    W_ROLL_PX: 150,        /* the authored travel of the roll, in the world's own px */
+    W_ROLL_FRICTION: 2800, /* the rolling deceleration, px/s^2 [DERIVED: sized so the roll STOPS inside its own beat -
+                              v0 = sqrt(2 a D) = 916 px/s, T = 0.33 s; a slower friction rolls past the window] */
+    W_ROLL_SQUASH: 0.05,   /* the squash along the travel at full speed - a deformable material only (metal: none) */
+    W_NUDGE_PX: 46,        /* NUDGE: the second impulse, "manipulate it a bit" */
+    W_NUDGE_K: 0.55,       /* how hard it re-excites the drop's modes, against a landing's kick */
+    W_ANTIC_PX: 5,         /* 48 s48.6: weight is sold BEFORE the move - the ball leans back this far ... */
+    W_ANTIC_S: 0.12,       /* ... over this long, before the nudge takes it [DERIVED: STOP.ANTIC_S 0.18 is a whole
+                              landing's; a nudge's lean has to leave its own beat room to roll] */
+    W_MARK_AT: 0.62,       /* THE MARK the roll turns: how far out it sits, as a share of the ball's radius */
+    W_MARK_R: 0.30,        /* its own size, as a share of the radius ... */
+    W_MARK_FLAT: 0.42,     /* ... flattened this much along its long axis: a streak the sag left, not a dot */
+    W_MARK_PHI: 2.05,      /* where the sag left it on the ball (radians, before the roll turns it) */
+    W_SHADOW_A: 0.5,       /* the contact shadow's ink at its darkest (contactShadow's own alpha scales it) */
+    W_SHADOW_W: 1.15,      /* its width in ball radii (its height is a sixth of that: a slit on the board, doc 48) */
+    HL_SHEEN: 0.82,        /* the specular highlight: the ball's own lit ink taken this far toward white */
     INK_HEX: "#E9E2D2",    /* the marks' colour when the chart carries no stroke to read (a page of words) */
   });
 
   const MELT_ENDINGS = Object.freeze(["throw", "splash:chart", "splash:plate"]);
+  /* the materials `melt:weight:<material>` may name (stopaction MASS / drop DROP.MAT); metal is the default, E88 s7 */
+  const MELT_MATERIALS = Object.freeze(["metal", "ink", "paper", "liquid"]);
 
   const mc01 = (v) => (v <= 0 ? 0 : v >= 1 ? 1 : v);   /* the engine inlines every module into ONE scope, so a
      private helper carries the module's own prefix - `c01` is ink.mjs's */
@@ -2530,7 +2714,8 @@ async function mount(doc) {
      the name. Throws on anything else, so a typo in a shot table is a refusal and not a silent default. */
   const meltOpts = (exit, o = {}) => {
     const P = Object.assign({}, MELT, o), bits = String(exit == null ? "" : exit).split(":");
-    const out = { name: bits[0] || "", secs: P.S, ending: null, to: null };
+    const out = { name: bits[0] || "", secs: P.S, ending: null, to: null, weight: false, wmass: P.W_MASS };
+    let said = false;   /* did the row declare its own length? a weight phase lengthens only the DEFAULT window */
     const setEnding = (e) => {
       if (out.ending) throw new Error("melt: two endings (" + out.ending + " and " + e + ") - a melt ends one way");
       out.ending = e;
@@ -2539,6 +2724,17 @@ async function mount(doc) {
       const b = bits[i].trim();
       if (b === "") continue;
       if (b === "throw") { setEnding("throw"); continue; }
+      if (b === "weight") {   /* R26-118: the weight phase, and the material it is made of (metal unless it says) */
+        out.weight = true;
+        const nx = (bits[i + 1] || "").trim();
+        if (nx && nx.indexOf(",") < 0 && nx !== "throw" && nx !== "splash" && !Number.isFinite(Number(nx))) {
+          if (MELT_MATERIALS.indexOf(nx) < 0) {
+            throw new Error("melt: " + nx + " is not a material - melt:weight takes " + MELT_MATERIALS.join(", "));
+          }
+          out.wmass = nx; i++;
+        }
+        continue;
+      }
       if (b === "splash") {
         const nx = (bits[i + 1] || "").trim();
         if (nx !== "chart" && nx !== "plate") {
@@ -2554,43 +2750,56 @@ async function mount(doc) {
       }
       const v = Number(b);
       if (!(Number.isFinite(v) && v > 0)) throw new Error("melt: " + b + " is neither a length in seconds, nor an ending (throw, splash:chart, splash:plate), nor an x,y point");
-      out.secs = v;
+      out.secs = v; said = true;
     }
     out.ending = out.ending || "throw";
+    if (out.weight && !said) out.secs = P.S + P.W_S;   /* the four beats need their own seconds, not the compile's */
     if (out.to && out.ending !== "throw") throw new Error("melt: an x,y point is where a THROW goes - a splash lands on the board");
     out.to = out.to || [P.TO[0], P.TO[1]];
     return out;
   };
 
   /* ---- the phases ------------------------------------------------------------------------------------------------- */
+  /* THE WEIGHT PHASE's share of the window (R26-118): W_S seconds of it, capped at W_MAX, and exactly 0 unless the
+     exit asked for it - which is why every melt that shipped is byte-identical. */
+  const meltWeightShare = (secs, o = {}) => {
+    const P = Object.assign({}, MELT, o), s = Math.max(0.05, +secs || P.S);
+    if (!P.weight) return 0;
+    return mc01(Math.min(P.W_S, P.W_MAX * s) / s);
+  };
   const meltShares = (o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    return [P.MELT_END, P.BALL_END - P.MELT_END, 1 - P.BALL_END];
+    const P = Object.assign({}, MELT, o), w = meltWeightShare(P.secs, P), r = 1 - w;
+    return [P.MELT_END * r, (P.BALL_END - P.MELT_END) * r, w, (1 - P.BALL_END) * r];
   };
   const meltPhase = (u, o = {}) => {
     const P = Object.assign({}, MELT, o), k = mc01(u);
+    const w = meltWeightShare(P.secs, P), r = 1 - w, mEnd = P.MELT_END * r, bEnd = P.BALL_END * r, wEnd = bEnd + w;
     /* GONE takes the boundary itself: (t - t0) / secs cannot be trusted to reach exactly 1 in floating point */
     if (u >= 1 - 1e-9) return { name: "gone", k: 1, from: 1, span: 0 };
-    if (k < P.MELT_END) return { name: "melt", k: k / P.MELT_END, from: 0, span: P.MELT_END };
-    if (k < P.BALL_END) return { name: "ball", k: (k - P.MELT_END) / (P.BALL_END - P.MELT_END), from: P.MELT_END, span: P.BALL_END - P.MELT_END };
-    return { name: "fly", k: (k - P.BALL_END) / (1 - P.BALL_END), from: P.BALL_END, span: 1 - P.BALL_END };
+    if (k < mEnd) return { name: "melt", k: k / mEnd, from: 0, span: mEnd };
+    if (k < bEnd) return { name: "ball", k: (k - mEnd) / (bEnd - mEnd), from: mEnd, span: bEnd - mEnd };
+    if (k < wEnd) return { name: "weight", k: (k - bEnd) / Math.max(1e-6, w), from: bEnd, span: w };
+    return { name: "fly", k: (k - wEnd) / Math.max(1e-6, 1 - wEnd), from: wEnd, span: 1 - wEnd };
   };
   /* the outline's blur in px: up over the melt, back to 0 by the end of the ball (a ball is solid, not a cloud) */
   const meltBlur = (u, o = {}) => {
     const P = Object.assign({}, MELT, o), ph = meltPhase(u, P);
     if (ph.name === "melt") return P.BLUR * mEase(ph.k);
     if (ph.name === "ball") return P.BLUR * (1 - mEase(ph.k));
-    return 0;
+    return 0;   /* the weight phase and the ending: a ball is solid, not a cloud */
   };
   /* the throw's launch as a share of the window: the board is up until here, and the next chart's clock starts here */
   const meltRelease = (o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    return P.BALL_END + P.ANTIC * (1 - P.BALL_END);
+    const P = Object.assign({}, MELT, o), w = meltWeightShare(P.secs, P), from = P.BALL_END * (1 - w) + w;
+    return from + P.ANTIC * (1 - from);
   };
   /* how long the engine holds the NEXT page's clock under a throw: the new chart draws once the board is clear. A splash
      holds nothing (the chart arrives built, through the stains) and no melt holds a world that is not a page. */
   const meltDrawDelay = (opts, incomingIsPage, o = {}) =>
-    (opts && opts.ending === "throw" && incomingIsPage) ? meltRelease(o) * Math.max(0.05, +opts.secs || MELT.S) : 0;
+    /* the release is read through the EXIT's own options (R26-118: a `melt:weight` holds the board over its weight phase
+       too, and its window is longer), so the caller need not know which phases this melt has */
+    (opts && opts.ending === "throw" && incomingIsPage)
+      ? meltRelease(Object.assign({}, opts, o)) * Math.max(0.05, +opts.secs || MELT.S) : 0;
 
   /* ---- the sag ---------------------------------------------------------------------------------------------------- */
   const dripBump = (dx, w) => { const k = mc01(Math.abs(dx) / Math.max(1e-6, w)); const c = Math.cos(k * Math.PI / 2); return c * c; };
@@ -2650,8 +2859,17 @@ async function mount(doc) {
   const ballAt = (rect, k, rnd, o = {}) => {
     const P = Object.assign({}, MELT, o), src = meltOutline(rect, 1, rnd, P);
     const c = centroid(src), r = P.BALL_R * rect.h;
-    const prep = morphAPrepare(src, ballCircle(c, r, P.CIRCLE_N), { n: P.RING_N });
+    /* WITHOUT the weight phase the target is the circle it always was; WITH it the target is the LIVING DROP's ring at
+       the window's own t (E88 s7) - the ball that forms is already wriggling to contain itself. */
+    const prep = morphAPrepare(src, meltBallRing(c, r, P), { n: P.RING_N });
     return { outline: morphAAt(prep, mEase(k)).outline, centre: c, r, k: mc01(k) };
+  };
+  /* the ball's boundary: a plain circle, or - under `melt:weight` - drop.mjs's Rayleigh ring at `te` (the window's own
+     stepped seconds), excited by `excite` and turned by `spin` (the roll). Area-renormalised there, so it never grows. */
+  const meltBallRing = (c, r, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    if (!P.weight) return ballCircle(c, r, P.CIRCLE_N);
+    return dropRing(c, r, +P.te || 0, meltWeightMass(P), P.excite || [], { N: P.CIRCLE_N, spin: +P.spin || 0 });
   };
   /* THE SQUEEZE: the ink's scale about the ball's centre at ball-phase progress k - 1 at the start, and at the end the ink
      box's longer side is SQUEEZE ball-diameters. Monotone in k. */
@@ -2678,6 +2896,81 @@ async function mount(doc) {
   const meltSettle = (ts, o = {}) => {
     const P = Object.assign({}, MELT, o);
     return impactSquash(ts, P.MASS, P.HOLD, P.FPS, { IMPACT_SQUASH: P.SQUASH });
+  };
+
+  /* ---- the weight phase (R26-118) --------------------------------------------------------------------------------- */
+  /* the material the ball is made of: `melt:weight:<material>`, else METAL (E88 s7) */
+  const meltWeightMass = (o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return MASS[P.wmass] ? P.wmass : P.W_MASS;
+  };
+  /* WHICH WAY IT ROLLS: the ending's own direction - toward the point the throw is going, or toward the middle of the
+     board a splash will paint. Never 0: a roll with no direction is a wobble. */
+  const meltRollDir = (centre, rect, o = {}) => {
+    const P = Object.assign({}, MELT, o), sb = P.stagebox || rect, to = P.to || P.TO;
+    const target = P.ending && P.ending !== "throw" ? rect.x + rect.w / 2 : sb.x + to[0] * sb.w;
+    return target - centre[0] >= 0 ? 1 : -1;
+  };
+  /* THE FOUR BEATS, a pure function of the phase's own seconds `tw` (the caller steps the clock) and the ball's radius:
+       tw < W_LAND        FALL    the last of its height, easing IN (HF-6: impacts ease in), the contact shadow tightening
+                                  from FAR to NEAR as it nears the board
+       .. < W_ROLL        ROLL    rollXf: NO SLIP (the turn IS the distance over the radius), a constant friction bringing
+                                  it to a stop where the math says; the receiver's dip and the board's three-frame answer
+                                  are the contact's, and the squash along the travel is the material's (metal: none)
+       .. < W_SETTLE      NUDGE   the lean back first (48 s48.6), then the second, shorter roll
+       .. <= 1            SETTLE  the material's spring (groundDip / rebound) brings it to rest
+     Returns the ball's offset from its resting place, the angle it has turned, the squash, the board's shake, the contact
+     shadow (and where the shadow is, LAG_FRAMES behind it - HF-2), and the impulses the drop's surface is re-excited by,
+     in the PHASE's own seconds (meltState offsets them into the window's clock). */
+  const meltWeightAt = (tw, wsecs, r, o = {}) => {
+    const P = Object.assign({}, MELT, o), W = Math.max(0.05, wsecs), mass = meltWeightMass(P);
+    const dir = P.dir || 1, imp = massImpact(mass), fric = P.W_ROLL_FRICTION, rr = Math.max(1e-6, r);
+    const tLand = P.W_LAND * W, tRoll = P.W_ROLL * W, tSet = P.W_SETTLE * W;
+    const soft = (MASS[mass] || MASS.paper).squash_frames > 0 ? 1 : 0, v0 = Math.sqrt(2 * fric * P.W_ROLL_PX);
+    const kick = (k) => DROP.KICK.map((v) => v * imp * k);
+    /* the signed distance rolled `ts` seconds after the contact, and the speed it is going */
+    const travel = (ts) => {
+      if (!(ts > 0)) return { d: 0, v: 0 };
+      const roll = rollXf(P.W_ROLL_PX, rr, fric, ts), tn = ts - (tRoll - tLand);
+      let d = roll.s, v = roll.v;
+      if (tn > 0) {
+        v = 0;
+        if (tn < P.W_ANTIC_S) d -= P.W_ANTIC_PX * Math.sin(Math.PI * tn / P.W_ANTIC_S);   /* the weight, sold first */
+        else { const n = rollXf(P.W_NUDGE_PX, rr, fric, tn - P.W_ANTIC_S); d += n.s; v = n.v; }
+      }
+      return { d, v };
+    };
+    const st = { beat: "fall", x: 0, y: 0, h: 0, turn: 0, squash: { a: 0, theta: 0 }, shake: { x: 0, y: 0 },
+                 shadow: null, shadowX: 0, kick: [] };
+    if (tw < tLand) {
+      const u = mc01(tw / Math.max(1e-6, tLand));
+      st.h = P.W_DROP_PX * (1 - u * u * u);
+      st.y = -st.h;
+      st.shadow = contactShadow(st.h, 0);
+      return st;
+    }
+    const ts = tw - tLand, tr = travel(ts);
+    st.beat = tw < tRoll ? "roll" : (tw < tSet ? "nudge" : "settle");
+    st.x = dir * tr.d;
+    st.turn = dir * tr.d / rr;                                   /* NO SLIP: the turn IS the distance over the radius */
+    st.y = groundDip(ts, mass) + rebound(ts, mass, P.W_DROP_PX);  /* it rides the surface's dip; metal does not hop */
+    st.squash = { a: impactSquash(ts, mass, P.HOLD, P.FPS, { IMPACT_SQUASH: P.SQUASH })
+                     + soft * P.W_ROLL_SQUASH * mc01(tr.v / v0), theta: 0 };   /* stretched ALONG the travel */
+    st.shake = groundShake(ts, mass, P.FPS);
+    st.shadow = contactShadow(0, Math.abs(st.squash.a));
+    st.shadowX = dir * travel(ts - STOP.LAG_FRAMES / P.FPS).d;    /* what it drags settles a frame behind it (HF-2) */
+    st.kick = [{ at: tLand, a: kick(1) }];
+    if (tw >= tRoll + P.W_ANTIC_S) st.kick.push({ at: tRoll + P.W_ANTIC_S, a: kick(P.W_NUDGE_K) });
+    return st;
+  };
+  /* THE MARK THE ROLL TURNS. The ball is compiled from the chart's OWN ink and the sag leaves a knot in it - a streak of
+     that ink at CORE concentration, the darkest the ball has. It is kept ON THE BALL'S FACE: the ball is flat ink, so
+     the mark turns with it the way a mark on a coin's face does, at W_MARK_AT of the radius, its long axis along the
+     local tangent. Without it a plain disc rolling reads as a SLIDE, which is the whole point of the beat. */
+  const meltMarkAt = (c, r, turn, o = {}) => {
+    const P = Object.assign({}, MELT, o), a = P.W_MARK_PHI + turn;
+    return { x: c[0] + r * P.W_MARK_AT * Math.cos(a), y: c[1] + r * P.W_MARK_AT * Math.sin(a),
+             rx: r * P.W_MARK_R, ry: r * P.W_MARK_R * P.W_MARK_FLAT, deg: (a + Math.PI / 2) * 180 / Math.PI };
   };
 
   /* ---- the colour ------------------------------------------------------------------------------------------------- */
@@ -2773,7 +3066,10 @@ async function mount(doc) {
        scale    the ink's squeeze about `centre`                     bodyAlpha the ball's opacity
        run      the ink's smear, px; inkBlur its blur                 squash    { a, theta } on the ball, stopaction's tensor
        xf       the throw's offset and tumble                        drops     the splatter; stains / cover / rim the paint
-       boardUp  the outgoing board is on screen                      reveal    it wears the reveal mask; spring the plate's scale */
+       boardUp  the outgoing board is on screen                      reveal    it wears the reveal mask; spring the plate's scale
+       weight   which beat of the weight phase (null: none)          turn      how far the ball has rolled, radians
+       mark     the ink knot the roll turns (null: no weight)        hl        the specular highlight, pinned to the light
+       shadow   the contact shadow's scale/alpha/blur                shadowX   where it is, a frame behind the ball */
   const meltState = (t0, t, o = {}, rnd) => {
     const P = Object.assign({}, MELT, o), rect = P.rect, sb = P.stagebox || rect, to = P.to || P.TO;
     const ending = MELT_ENDINGS.indexOf(P.ending) >= 0 ? P.ending : "throw";
@@ -2781,7 +3077,8 @@ async function mount(doc) {
     const st = { u, secs, ending, phase: ph.name, k: ph.k, blur: meltBlur(u, P), inkBlur: 0, run: 0, scale: 1,
                  inkOpacity: 1, path: "", outline: null, body: "", bodyOutline: null, bodyAlpha: 0, centre: null, r: 0,
                  squash: { a: 0, theta: 0 }, xf: null, drops: [], stains: [], cover: 1, rim: 0, reveal: false,
-                 spring: 1, dropAlpha: 1, dropScale: 1, tint: 0, sats: [], textOpacity: 0, boardUp: true, gone: false };
+                 spring: 1, dropAlpha: 1, dropScale: 1, tint: 0, sats: [], textOpacity: 0, boardUp: true, gone: false,
+                 weight: null, turn: 0, mark: null, hl: null, shadow: null, shadowX: 0, shake: { x: 0, y: 0 } };
     st.inkBlur = P.INK_BLUR * st.blur / Math.max(1e-6, P.BLUR);
     if (ph.name === "gone") { st.gone = true; st.boardUp = false; st.inkOpacity = 0; st.cover = 0; return st; }
     if (ph.name === "melt") {
@@ -2795,11 +3092,19 @@ async function mount(doc) {
     /* the ball and the ending run on the STEPPED clock, each on its own phase-local seconds (a pure quantisation of t) */
     const tl = t - t0 - ph.from * secs, span = ph.span * secs, tq = stepped(Math.max(0, tl), P.HOLD, P.FPS);
     const kq = mc01(tq / Math.max(1e-6, span));
+    /* THE DROP's own clock is the WINDOW's, not a phase's: the surface rings on across the boundaries, and the compile's
+       and the landing's impulses are stamped in these seconds. `wShare` is 0 unless the exit asked for weight. */
+    const tqw = stepped(Math.max(0, t - t0), P.HOLD, P.FPS);
+    const wShare = meltWeightShare(secs, P), rest0 = 1 - wShare;
+    const bStart = P.MELT_END * rest0 * secs, wStart = P.BALL_END * rest0 * secs, wSpan = wShare * secs;
+    const wMass = meltWeightMass(P), born = [{ at: bStart, a: DROP.A }];   /* the compile's own excitation (E88 s7) */
     if (ph.name === "ball") {
-      const b = ballAt(rect, kq, rnd, P), s = meltSqueeze(rect, b.r, kq, P);
+      const b = ballAt(rect, kq, rnd, Object.assign({}, P, { te: tqw, excite: born })), s = meltSqueeze(rect, b.r, kq, P);
       st.k = kq; st.centre = b.centre; st.r = b.r; st.scale = s;
       st.bodyOutline = b.outline; st.bodyAlpha = meltBodyAlpha(kq, P);
-      st.body = morphAPath(ballCircle(b.centre, b.r * meltBodyGrow(kq, P), P.CIRCLE_N));   /* the SOLID ball: a crisp circle, never the box */
+      /* the SOLID ball: a crisp circle, never the box - and under `melt:weight` the living drop's own ring */
+      st.body = morphAPath(meltBallRing(b.centre, b.r * meltBodyGrow(kq, P), Object.assign({}, P, { te: tqw, excite: born })));
+      if (P.weight) st.hl = dropSpecular(b.centre, b.r * meltBodyGrow(kq, P), dropModes(tqw, b.r, wMass, born));
       st.tint = meltTint("ball", kq, P);
       st.inkBlur = st.inkBlur + P.BALL_FUSE * mEase(kq);   /* the marks FUSE into one body as they compact */
       /* the mask is in the ink's own px, and the ink is squeezed by s about the centre: the same body, unsqueezed */
@@ -2809,18 +3114,47 @@ async function mount(doc) {
       st.inkOpacity = 1 - mEase(mc01(kq / Math.max(1e-6, P.INK_OUT)));
       return st;
     }
-    const b = ballAt(rect, 1, rnd, P), circle = ballCircle(b.centre, b.r, P.CIRCLE_N);
+    /* the compiled ball: its centre and radius are the geometry's, whatever its surface is doing */
+    const b = ballAt(rect, 1, rnd, Object.assign({}, P, { weight: false }));
+    const dir = meltRollDir(b.centre, rect, P);
+    if (ph.name === "weight") {
+      const wst = meltWeightAt(tq, span, b.r, Object.assign({}, P, { dir }));
+      const excite = born.concat(wst.kick.map((k) => ({ at: wStart + k.at, a: k.a })));
+      st.k = kq; st.centre = b.centre; st.r = b.r; st.inkOpacity = 0; st.bodyAlpha = 1;
+      st.weight = wst.beat; st.turn = wst.turn; st.squash = wst.squash; st.shake = wst.shake;
+      st.shadow = wst.shadow; st.shadowX = wst.shadowX;
+      st.bodyOutline = dropRing(b.centre, b.r, tqw, wMass, excite, { N: P.CIRCLE_N, spin: wst.turn });
+      st.body = morphAPath(st.bodyOutline);
+      st.xf = { x: wst.x, y: wst.y, rot: 0, alpha: wst.squash.a, theta: wst.squash.theta, phase: wst.beat, u: kq,
+                hold: P.HOLD, h: wst.h, ground: 0, shake: wst.shake };
+      st.mark = meltMarkAt(b.centre, b.r, wst.turn, P);
+      st.hl = dropSpecular(b.centre, b.r, dropModes(tqw, b.r, wMass, excite, { spin: wst.turn }));
+      return st;
+    }
+    /* THE ENDING. Under `melt:weight` it starts from where the roll left the ball - its offset, its turn and the
+       impulses its surface still carries (the drop rings on into the flight or the splash). */
+    const rest = P.weight ? meltWeightAt(wSpan, wSpan, b.r, Object.assign({}, P, { dir })) : null;
+    const restX = rest ? rest.x : 0, spin = rest ? rest.turn : 0;
+    const excite = rest ? born.concat(rest.kick.map((k) => ({ at: wStart + k.at, a: k.a }))) : born;
+    const circle = P.weight ? dropRing(b.centre, b.r, tqw, wMass, excite, { N: P.CIRCLE_N, spin })
+                            : ballCircle(b.centre, b.r, P.CIRCLE_N);
     st.k = kq; st.centre = b.centre; st.r = b.r; st.inkOpacity = 0; st.bodyAlpha = 1;
+    if (P.weight) {
+      st.turn = spin;
+      st.mark = meltMarkAt(b.centre, b.r, spin, P);
+      st.hl = dropSpecular(b.centre, b.r, dropModes(tqw, b.r, wMass, excite, { spin }));
+    }
     if (ending === "throw") {
       st.bodyOutline = circle; st.body = morphAPath(circle);
       if (kq < P.ANTIC) {
         st.squash = { a: meltSettle(tq, P), theta: 0 };   /* stretched ACROSS, pressed down: the ball has weight before it moves */
         st.xf = meltThrowAt(0, { x: 0, y: 0 }, span, P);
       } else {
-        const from = { x: sb.x + to[0] * sb.w - b.centre[0], y: sb.y + to[1] * sb.h - b.centre[1] };
+        const from = { x: sb.x + to[0] * sb.w - b.centre[0] - restX, y: sb.y + to[1] * sb.h - b.centre[1] };
         st.xf = meltThrowAt((kq - P.ANTIC) / Math.max(1e-6, 1 - P.ANTIC), from, span * (1 - P.ANTIC), P);
         st.squash = { a: st.xf.alpha || 0, theta: st.xf.theta || 0 };   /* stretched along the flight */
       }
+      if (restX) st.xf = Object.assign({}, st.xf, { x: (st.xf.x || 0) + restX });
       st.boardUp = u < meltRelease(P);
       return st;
     }
@@ -2828,13 +3162,15 @@ async function mount(doc) {
        pose lands a hold early, and a paint that was 0.8 done on that pose would pop the board's last cover at `gone`. */
     const ks = mc01(tq / Math.max(1e-6, span - P.HOLD / P.FPS));
     const kb = mc01(ks / Math.max(1e-6, P.BURST_END)), g = mc01((ks - P.BURST_END) / Math.max(1e-6, 1 - P.BURST_END));
+    const sc = [b.centre[0] + restX, b.centre[1]];   /* it bursts where the roll left it */
     st.bodyOutline = ballFlat(circle, b.centre, kb, P); st.body = morphAPath(st.bodyOutline);
     st.bodyAlpha = 1 - mEase(mc01((kb - 0.5) / 0.5));   /* the ball holds its mass through the hit, then IS the splatter */
     st.squash = { a: meltSettle(tq, P), theta: 0 };
-    st.drops = splashDrops(b.centre, rect, kb, rnd, P);
+    if (restX) st.xf = { x: restX, y: 0, rot: 0 };
+    st.drops = splashDrops(sc, rect, kb, rnd, P);
     st.sats = splashSats(st.drops);
     if (kq >= P.BURST_END) {
-      const paint = splashStains(st.drops, b.centre, b.r, rect, g, rnd, P);
+      const paint = splashStains(st.drops, sc, b.r, rect, g, rnd, P);
       st.stains = paint.stains; st.cover = paint.cover; st.rim = paint.rim; st.reveal = true;
       const rate = ending === "splash:chart" ? P.SPLAT_OUT : 2.5;
       st.dropAlpha = 1 - mEase(mc01(g * rate));   /* a drop IS its stain's first ink: it soaks away as the stain opens */
@@ -3088,6 +3424,32 @@ async function mount(doc) {
     m.body.setAttribute("d", st.body || "");
     m.body.setAttribute("opacity", (st.body ? st.bodyAlpha : 0).toFixed(3));
     m.bodyG.setAttribute("transform", meltBodyTransform(st));
+    /* THE WEIGHT PHASE's three things (R26-118), each mounted the first frame it is asked for: a melt that never asked
+       for weight never creates one, so its DOM is the DOM it always had - which is why the goldens are byte-identical. */
+    if (st.shadow || m.shadow) {
+      if (!m.shadow) { m.shadow = el("ellipse", "meltshadow", m.svg, { fill: "#000" }); m.svg.insertBefore(m.shadow, m.drops); }
+      const sh = st.shadow, rx = sh ? st.r * MELT.W_SHADOW_W * sh.scale : 0;
+      m.shadow.setAttribute("cx", sh ? (st.centre[0] + st.shadowX).toFixed(2) : "0");
+      m.shadow.setAttribute("cy", sh ? (st.centre[1] + st.r).toFixed(2) : "0");
+      m.shadow.setAttribute("rx", rx.toFixed(2)); m.shadow.setAttribute("ry", (rx / 6).toFixed(2));
+      m.shadow.setAttribute("opacity", sh ? (sh.alpha * MELT.W_SHADOW_A).toFixed(3) : "0");
+      m.shadow.style.filter = sh ? "blur(" + sh.blur.toFixed(2) + "px)" : "";
+    }
+    if (st.mark || m.mark) {
+      if (!m.mark) m.mark = el("ellipse", "meltmark", m.bodyG, { fill: meltInkOf(m.hexes, MELT.CORE) });
+      const k = st.mark;
+      m.mark.setAttribute("cx", k ? k.x.toFixed(2) : "0"); m.mark.setAttribute("cy", k ? k.y.toFixed(2) : "0");
+      m.mark.setAttribute("rx", k ? k.rx.toFixed(2) : "0"); m.mark.setAttribute("ry", k ? k.ry.toFixed(2) : "0");
+      m.mark.setAttribute("transform", k ? "rotate(" + k.deg.toFixed(2) + " " + k.x.toFixed(2) + " " + k.y.toFixed(2) + ")" : "");
+      m.mark.setAttribute("opacity", k ? (st.bodyAlpha * 0.9).toFixed(3) : "0");
+    }
+    if (st.hl || m.hl) {
+      if (!m.hl) m.hl = el("ellipse", "melthl", m.bodyG, { fill: meltSheen(meltInkOf(m.hexes, MELT.LIGHT), MELT.HL_SHEEN) });
+      const h = st.hl;
+      m.hl.setAttribute("cx", h ? h.x.toFixed(2) : "0"); m.hl.setAttribute("cy", h ? h.y.toFixed(2) : "0");
+      m.hl.setAttribute("rx", h ? h.r.toFixed(2) : "0"); m.hl.setAttribute("ry", h ? (h.r * 0.72).toFixed(2) : "0");
+      m.hl.setAttribute("opacity", h ? (st.bodyAlpha * 0.85).toFixed(3) : "0");
+    }
     /* THE SPLATTER: opaque ink splats with their tails and satellites, and the torn stains cut through the board */
     meltDots(m.splats, st.drops.length, el, m.drops, { fill: "url(#" + id + "w)" }, "path").forEach((p, i) => {
       const d = st.drops[i], k = st.dropScale;
@@ -3106,6 +3468,11 @@ async function mount(doc) {
     /* THE BOARD: the outgoing world, its ink hidden - up, then painted through, then gone */
     wA.style.zIndex = 3;
     wA.style.opacity = st.boardUp ? st.cover.toFixed(4) : "0";
+    /* the board's three-frame ANSWER to the hit (stopaction groundShake), on the CSS `translate` property - never on
+       `transform`, which the clones copy off this world every frame */
+    if (st.shake.x || st.shake.y || wA.style.translate) {
+      wA.style.translate = (st.shake.x || st.shake.y) ? st.shake.x.toFixed(2) + "px " + st.shake.y.toFixed(2) + "px" : "";
+    }
     const rev = st.reveal ? "url(#" + id + "r)" : "";
     wA.style.mask = rev; wA.style.webkitMaskImage = rev;
     /* THE PLATE springs up as it is painted */
@@ -3128,6 +3495,7 @@ async function mount(doc) {
     wA.__melt = null;
     wA.classList.remove("meltboard");
     wA.style.mask = ""; wA.style.webkitMaskImage = "";
+    if (wA.style.translate) wA.style.translate = "";   /* the weight phase's board shake */
     if (wA.style.zIndex) wA.style.zIndex = "";
     if (wA.style.opacity !== "") wA.style.opacity = "";
     if (wA.style.transformOrigin) wA.style.transformOrigin = "";

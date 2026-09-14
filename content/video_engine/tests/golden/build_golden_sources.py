@@ -65,6 +65,11 @@ FRAME_T = {
     "melt-splash": 16.08,           # E88 / R26-76: splash:chart at u 0.675 - the BURST: the ball hit the board, flattening
                                    # and fading into its droplets, which are out along their rays toward where they
                                    # land; no stain has opened yet, so no blur is on screen and the pin is byte-exact
+    "melt-ball-roll": 16.28,        # R26-118 / E88 s6: MID-ROLL. The window is MELT_CUT + MELT.S + MELT.W_S (2.75 s),
+                                   # so the weight phase opens at 15.88 and its beats are LAND to 16.11, ROLL to 16.455,
+                                   # NUDGE to 16.846, SETTLE to 16.98. 16.28 is half way through the roll: the ball has
+                                   # turned ~100 degrees with its own ink MARK, its shadow rides a frame behind it, and
+                                   # its surface is out of round. Its landing and its rest ride PROOF_FRAMES
     "melt-plate": 16.44,            # E88 / R26-76: splash:plate at u 0.90 - the PAINT: the stains have opened from the
                                    # landed drops and the plate shows through them over the charcoal, springing to rest
     "count-array": 8.0,             # P52 T7: all six icons landed (5.0 + 5 * 0.34 + LAND_S = 7.15) and the count written as the claim (+ CLAIM_LAG + CLAIM_S = 7.73) - the field as it is read
@@ -896,7 +901,7 @@ def _dock_pair(aspect: str | None) -> tuple[dict, dict]:
     return _timeline(f"Golden: dock pair {aspect or '16:9'}", scenes, ev, aspect), uris
 
 
-def melt_page(ending: str = "throw") -> tuple[dict, dict]:
+def melt_page(ending: str = "throw", weight: bool = False) -> tuple[dict, dict]:
     """P52 T9 / R26-15, reworked to E88 / R26-76 - THE MELT TAKES THE CHART, NOT THE BOARD.
 
     Scene 1 is the line page every other golden is built from, given the whole 15 s to draw itself, so what melts is a
@@ -912,7 +917,13 @@ def melt_page(ending: str = "throw") -> tuple[dict, dict]:
 
     Each is pinned at an instant with no fractional blur band where one exists (the throw's ball at rest, the splash's
     burst), because a golden is a byte-exact pin - the Chromium filter-raster flake measured 2026-09-12. The plate's
-    paint cannot be pinned without its stains' gooey edge; it takes the instant the plate is mostly painted."""
+    paint cannot be pinned without its stains' gooey edge; it takes the instant the plate is mostly painted.
+
+    R26-118 / E88 s6-s7 adds a fourth surface off the same two pages: `melt-ball-roll`, the throw with `weight` on
+    (`melt:weight`, metal by default). Between the ball and the throw the ball LANDS on the board (the receiver's dip,
+    the contact shadow tightening, the board's three-frame answer), ROLLS a no-slip 150 px with its own ink mark
+    turning, is NUDGED once and SETTLES - and its surface is the living drop (Rayleigh modes, never still). The exit
+    declares no length, so it runs MELT_S + MELT_W_S = 2.75 s from the cut."""
     import json
     assert ending in ("throw", "splash:chart", "splash:plate"), ending
     series = LPG.load_series(SERIES)
@@ -935,10 +946,14 @@ def melt_page(ending: str = "throw") -> tuple[dict, dict]:
         page2["field"] = "scribble"   # the same board as scene 1's: the board is shared
         page2["enter"] = "axes" if ending == "throw" else "built"   # what stamp_transition_pages writes on this boundary
         world2 = {"kind": "ledger", "page": page2, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
-    scenes.append({"scene_id": "s02", "world": world2, "exit": "melt" if ending == "throw" else "melt:" + ending,
+    exit_id = "melt" if ending == "throw" else "melt:" + ending
+    if weight:
+        exit_id += ":weight"   # R26-118: metal, the default - the ball lands, rolls, is nudged and settles first
+    scenes.append({"scene_id": "s02", "world": world2, "exit": exit_id,
                    "span": [MELT_CUT, RUNTIME], "docks": [], "species": []})
-    return _timeline("Golden: the chart melts off its board and is " + {"throw": "thrown", "splash:chart": "splashed into the next chart",
-                                                                           "splash:plate": "splashed into a plate"}[ending], scenes, {}, None), uris
+    return _timeline("Golden: the chart melts off its board and is " + ("rolled in its own weight and " if weight else "")
+                     + {"throw": "thrown", "splash:chart": "splashed into the next chart",
+                        "splash:plate": "splashed into a plate"}[ending], scenes, {}, None), uris
 
 
 # ---- P52 T6: THE NEWSREEL BAND, AND THE SURFACE ABOVE IT ---------------------------------------
@@ -1257,6 +1272,7 @@ SURFACES = {
     "melt-page": melt_page,                                  # E88: the throw
     "melt-splash": lambda: melt_page("splash:chart"),        # E88: the splatter forms the next chart
     "melt-plate": lambda: melt_page("splash:plate"),         # E88: the splatter paints a narrative plate
+    "melt-ball-roll": lambda: melt_page("throw", weight=True),  # R26-118 / E88 s6-s7: the ball with MASS - it lands, rolls, is nudged and settles before the throw
 }
 
 

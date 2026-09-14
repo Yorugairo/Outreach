@@ -71,6 +71,11 @@ PROOF_FRAMES = {
     "melt-page@proof-045": ("melt-page", {}, 15.0 + 0.45 * 1.6),   # THE BALL, forming: the ink squeezed toward the centre on the stepped clock, the dense body coming up over it
     "melt-page@proof-075": ("melt-page", {}, 15.0 + 0.75 * 1.6),   # THE THROW: the heavy ball in flight off the bottom right, the next chart drawing on the same board
     "melt-page@proof-100": ("melt-page", {}, 15.0 + 1.00 * 1.6),   # GONE: the next chart on its board, drawing, nothing left of the ink that melted
+    # R26-118 / E88 s6-s7: THE BALL WITH MASS, at the two instants its mid-roll golden cannot show. The same two pages
+    # as `melt-page`, the exit `melt:weight` - so the window is 2.75 s from the cut at 15.0 and the weight phase runs
+    # 15.88 - 17.03. No flag: weight is authored on the exit, not switched on.
+    "melt-ball-roll@proof-land": ("melt-ball-roll", {}, 16.11),     # THE LANDING: the contact - the board dipped under it, the contact shadow tightened from FAR to NEAR, the surface re-excited by the hit
+    "melt-ball-roll@proof-settle": ("melt-ball-roll", {}, 16.98),   # AT REST before the ending: rolled and nudged its whole way, the mark turned round, the drop still wriggling to contain itself (E49)
     # P55 T6: THE VERDICT STACK's last phase - the radial BURST at clear_at (20.0) + 0.25 s: with the 60 ms stagger the
     # first card is half way through its 0.5 s throw and the fifth just leaving, each along its own bearing, spinning
     "verdict-stack@proof-burst": ("verdict-stack", {}, 20.25),

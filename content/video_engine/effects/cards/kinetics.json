@@ -257,6 +257,68 @@
       }
     },
     {
+      "id": "kinetics:drop",
+      "axis": "kinetics",
+      "token": "drop",
+      "title": "The drop kinetics module (Rayleigh surface modes)",
+      "aliases": [
+        {
+          "name": "the living ball, wriggling to contain itself",
+          "source": "docs/portable/OPERATOR-RULINGS.md (E88 s7)"
+        }
+      ],
+      "does": "Pure math inlined into the player: a radius, a time and the impulses a ball took in, a CLOSED RING out - Rayleigh's modes l = 2, 3, 4 damped by Lamb, area-renormalised every frame, never still (E49), and the light's own spot.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "not authored on a row: species/melt.mjs's WEIGHT phase (`melt:weight`) calls dropRing / dropModes / dropSpecular on the compiled ball, excited by the compile and by every landing and nudge",
+        "example": "dropRing(centre, r, t, \"metal\", [{ at: 0, a: DROP.A }], { N: MELT.CIRCLE_N, spin: turn })",
+        "example_source": "content/video_engine/scripts/species/melt.mjs",
+        "check": "module"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/drop.mjs",
+        "object": "DROP"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/drop.mjs",
+        "symbol": "dropRing",
+        "also": [
+          "DROP",
+          "dropOmega",
+          "dropTau",
+          "dropAmp",
+          "dropModes",
+          "dropRadius",
+          "dropArea",
+          "dropSpecular"
+        ],
+        "note": "P57 R26-118 / E88 s7: a kinetics LAW - no painter, no SPACE; its region sits before melt's, which imports it. The fluids are research run living_drop (unapproved); PX_PER_M and DAMP are ours"
+      },
+      "doctrine": [
+        "E88 s7",
+        "E49",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "backlog": [
+        "R26-118"
+      ],
+      "proof": {
+        "golden": "melt-ball-roll",
+        "test": "content/video_engine/tests/kinetics/drop.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "kinetics:ease",
       "axis": "kinetics",
       "token": "ease",
