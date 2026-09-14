@@ -2874,3 +2874,14 @@ that depth. Parallax is a consequence of the camera in a layered world, never a 
 
 Recall: E32 (`:1090`), E49 (`:1494`), E59 (`:1903`), E97 (`:2815`); `docs_find "2.5D"` -> the homography module and docs 42/43;
 `docs_find "depth map"` -> 0 hits (the depth-per-layer index is new).
+
+**E98 s6 - HG1, the layering route (the operator, 2026-09-14, on P58 T1's probe frames):** *"the desk worked really well, but there's
+actually quite a bit of blur on the banker apartment, because we removed the handles of the rower that were touching the couch, so I
+think it blurred because of that. It seems like it's good if we generate the individual images first, stacking them all together on the
+first generation caused the problem because then we tried to remove and blend."* Apply: **a layer is GENERATED, never cut out of a
+stacked generation** - each plane of a new plate is its own generation (one style, one camera brief, one reference, the E98 s5 intent
+line), and the depth split (Depth Anything + LaMa, `comfy_depth_split.py`) is the fallback for a plate that already exists flat, where
+the inpaint's blur is the known price. The probe's record: the split read as depth on both plates; its blur is where a near object
+touched what stood behind it (the rower's handles on the couch). Route (a) at GPT Image 2.5 is still unmeasured on our side - the
+headless lane's output is stamped gpt-image 2.0 and gives no transparency (P58 T1 evidence; the operator, the same day: *"i suspect that the image generator is actually using images 2.5 but is still writing the description as images 2.0"* - the model behind the stamp is unconfirmed; P59/P60, the operator's own capability probe, settles it); the generator per layer is recorded in the plate's
+sidecar so both origins coexist.

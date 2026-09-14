@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-5307 topics, 8198 citation edges. The 200 largest topics follow,
+5390 topics, 8244 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (192)
@@ -197,7 +197,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:115 — P5: The Payoff & The Tell (09:17 – 14:21) | Climax & Accessible Counterparts — - Pacing: 31 shots | 1,151 words | 227.1 WPM
 - … 49 more in `docs/DOCS-TOPICS.jsonl`
 
-## two-thirds (58)
+## two-thirds (61)
 
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:121 — 4. Animation Engine & Motion Recommendations
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:141 — Organic Inked Line Synthesis (Two-Thirds Power Law) — For drawing supply-chain paths, borders, and circuit traces on the cream washi ground, velocity scales with path curvatu
@@ -208,9 +208,25 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-PRODUCTION.md:1 — STEEL AND PAPER — Script G (production) — Base: Script F. Changes per REWRITE-ORDER-G. Pause marks per doc 37.
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-JUDGE.md:1 — SCRIPT H — JUDGE LEDGER (R2/R3, by hand, 2026-09-08) — The mechanical rows are the tools' (R1). These are the twelve JUDGE rows and the
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-H-JUDGE.md:63 — J07 — P2 image tensions concrete — **PASS** — Railways drawing a quarter-billion pounds then crashing two-thirds; the trains
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:49 — Pillar 1: Biomechanical Motor Control & Procedural Stroke Mechanics
-- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:51 — 1.1 The Two-Thirds Power Law of Human Drawing — In voluntary human handwriting, sketching, and mark-making, tangential speed is fundamentally coupled to path geometry (
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/00_README_INDEX.md:7 — File Inventory & Agent Navigation Guide — | File | Purpose & Contents | Recommended Consumer |
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-vignette.md:1 — Work Order — claim `p60-c-vignette` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-vignette.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-vignette.md:23 — p60-c-vignette  (world) — Create one landscape editorial vignette using image 1 as the identity reference for the exact toll gate and image 2 as h
+- … 49 more in `docs/DOCS-TOPICS.jsonl`
+
+## approvals.json (58)
+
+- content/video_engine/projects/systems-and-blowups/registration/README.md:16 — Files — | File | Role |
+- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:136 — When finished — Write `approvals.json`:
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:1 — Work Order — claim `p60-a-crate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:50 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:1 — Work Order — claim `p60-a-crate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:50 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:1 — Work Order — claim `p60-a-gate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:50 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:1 — Work Order — claim `p60-a-gate-green` — Follow this document exactly. It is self-contained: generate, extract,
 - … 46 more in `docs/DOCS-TOPICS.jsonl`
 
 ## pre-key (56)
@@ -229,6 +245,60 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/40-PROCESS-AS-EVIDENCE.md:34 — 2. The audit beat — the narration device — A five-step unit, 20–35 seconds. It is an anecdote with a reversal,
 - … 44 more in `docs/DOCS-TOPICS.jsonl`
 
+## read-only (52)
+
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/REWRITE-ORDER-B.md:1 — REWRITE ORDER B — "The Myth of Historical Normal" — Status: DRAFT — awaiting the operator's approval.
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:1 — Script G — strength log (the fixpoint audit trail) — Protocol: STRENGTH-LOOP.md. Round 1 walked every sentence (225); the
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:1 — Work Order — claim `p60-a-crate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:6 — Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:1 — Work Order — claim `p60-a-crate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:6 — Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:1 — Work Order — claim `p60-a-gate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:6 — Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:1 — Work Order — claim `p60-a-gate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:6 — Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:1 — Work Order — claim `p60-a-lever-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:6 — Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- … 40 more in `docs/DOCS-TOPICS.jsonl`
+
+## source-on-file (48)
+
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:27 — Verdict Up Front — 1. Turk & O'Brien (1999) Variational Implicit Functions handle topology changes seamlessly without correspondence tracki
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:37 — Master Table of Numbers — | Question | Physical / Algorithmic Cue | Value / Metric | Primary Authority & Location | Sourcing Tier | Evidentiary Ta
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:71 — 1. Variational Implicit Functions (Turk & O'Brien 1999 & Descendants)
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:73 — 1.1 The Mathematical Formulation — Turk & O'Brien (1999, "Shape Transformation Using Variational Implicit Functions") solve shape interpolation by embeddin
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:91 — 1.2 Topology Handling During Transformation — Because $f(u, v, t)$ is continuous, $C^1$-smooth, and globally defined, the shape transitions through topological change
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:98 — 1.3 Per-Frame Computational Cost and Scalability — Evaluating $f(x, y, t)$ at arbitrary coordinates requires evaluating all $n$ basis functions:
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:109 — 2. Signed-Distance-Field (SDF) Blends for 2D Shape Morphing
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:116 — 2.2 Known Artefacts: Ghost Blobs and Pinching / Vanishing — 1. Pinching, Thinning, and Premature Vanishing:
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:127 — 2.3 Algorithmic Remedies — 1. Anchor-Point Warp Pre-Conditioning (Cohen-Or et al. 1998):
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:149 — 3. Correspondence-Based Morphs with Topology Change
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:151 — 3.1 Sederberg & Greenwood (1992): Elastic Work Minimization — - Method: Minimizes the physical work needed to stretch edge segments and bend internal angles along the boundary contou
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:155 — 3.2 Alexa, Cohen-Or, Levin (2000): As-Rigid-As-Possible (ARAP) — - Method: Decomposes deformation across a triangular mesh into local rotation matrices and symmetric stretch tensors via
+- … 36 more in `docs/DOCS-TOPICS.jsonl`
+
+## derived (47)
+
+- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:1 — 45 — Parallax and plate motion: what may move, how much, and what is banned — Extracted from `05_comfyui_parallax_technical_standards.md` and
+  cited by: docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:164, docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:63, docs/portable/OPERATOR-RULINGS.md:1494
+- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:46 — 45.3 Our current dials, and what they should be — Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04.
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/RESEARCH-INDEX.md:35
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:1 — 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and
+  cited by: content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/BRAVOS-STYLE-EVIDENCE-PACK.md:2, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:8, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md:16, docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:46, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8, +3 more
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:60 — 46.3 The gap threshold — settled from the reference, 2026-09-04 — A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
+  cited by: docs/content-video-engine/46-REFERENCE-RHYTHM.md:187, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:368, docs/content-video-engine/BACKLOG.md:573, docs/content-video-engine/BACKLOG.md:627, docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md:129, +11 more
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:178 — 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames
+- docs/content-video-engine/46-REFERENCE-RHYTHM.md:187 — 46.6 Where the picture change sits in the pause — measured 2026-09-06 (TR-2) — `measure_cut_offsets.py` on TR-1's 99 boundaries, caption and Whisper word times, pause ≥ 0.30 s: the picture changes a
+- docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:137 — 4. DEMOTED — knowledge, not doctrine — Named honestly, because a finding that cannot carry a check should not sit in a doc
+- docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:154 — 48.8 Harmonisation, in our own tokens — The document integrates with E22 rather than around it:
+- docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:1 — 50 — The phone is the screen: ep1's real analytics, and what they say — Operator-supplied YouTube analytics for ep1, 2026-09-04. This is ground truth, not
+  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10, docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:128, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:209, docs/content-video-engine/BACKLOG.md:227, +3 more
+- docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:30 — 50.2 The finding: our type is illegible on a phone — 75.2 % of watch time is a phone. Our stage is 1920 px wide. On a phone in portrait —
+  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:210, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:88, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:15, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:219, docs/content-video-engine/BACKLOG.md:99, +1 more
+- docs/content-video-engine/BACKLOG.md:616 — EXPLORE — the first step is a measurement or a read, not a build (6) — | id | item — what and where | why / evidence | cost |
+- docs/content-video-engine/BACKLOG.md:644 — D3 / D6 — ruled 2026-09-06 (E42): poses first; tag all thirteen — | id | item — what and where | why / evidence | cost |
+- … 35 more in `docs/DOCS-TOPICS.jsonl`
+
 ## on-screen (47)
 
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:84 — The plate — READY TO GENERATE — The beat is now 9.5 s, not 4.57 s. Moving `t_gates` from `cut("When you buy")`
@@ -244,6 +314,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/07-PILOT-SEASON.md:164 — 5. Per-episode definition of done — - [ ] Storyboard approved at Gate A (rubric scores recorded in `job.json`)
 - docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:219 — 6. Narration and citation behavior — Narration should be precise, conversational, and explicit about uncertainty.
 - … 35 more in `docs/DOCS-TOPICS.jsonl`
+
+## three-quarter (42)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:1 — Work Order — claim `p60-a-crate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:23 — p60-a-crate-alpha  (prop) — Create ONE reusable editorial prop: a closed wooden shipping crate with visible lid, metal corner fittings and one compl
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:1 — Work Order — claim `p60-a-crate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:23 — p60-a-crate-green  (prop) — Create ONE reusable editorial prop: a closed wooden shipping crate with visible lid, metal corner fittings and one compl
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:1 — Work Order — claim `p60-a-gate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:23 — p60-a-gate-alpha  (prop) — Create ONE reusable editorial prop: a toll gate with one indigo pedestal and a copper-and-cream barrier bar, closed hori
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:1 — Work Order — claim `p60-a-gate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:23 — p60-a-gate-green  (prop) — Create ONE reusable editorial prop: a toll gate with one indigo pedestal and a copper-and-cream barrier bar, closed hori
+- … 30 more in `docs/DOCS-TOPICS.jsonl`
 
 ## cut-in (41)
 
@@ -261,8 +347,9 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:125 — Technique 4: Cut-In & Cut-Back Scale Punches (1.15x Accent Momentum) — - Observed Timestamp & Shot ID: Shot #66–#68 (`05:39 - 05:49`).
 - … 29 more in `docs/DOCS-TOPICS.jsonl`
 
-## lama (40)
+## lama (41)
 
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/RESULTS.md:35 — Existing local workflow — P58's docs/research/runs/p58-2-5d/HG1-SHEET.md supplies the relevant downstream context: Depth Anything + LaMa + SAM can
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:14 — The Root Cause: — Our current stack (`tools/google-flow-driver/src/parallax-runner.mjs` and `2_5d_parallax_inpaint.json`) paired `Depth An
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:136 — 5. The Professional Standard: Two-Plane Layer Inpainting — To achieve the 2.5D depth seen in professional documentaries (Ken Burns on steroids) where characters and props move aga
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/00_README_INDEX.md:29 — Key Architectural Decisions — 1. The Page is the Ground (`RULE-the-page-is-the-ground.md`): The cream Ledger Page (`#F4E6C7`) is not just a chart card
@@ -274,8 +361,7 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:76 — 2.1 The 5 Overlapping Synergies to Capitalize On — 1. Acoustic Silence Gaps $\times$ Scene Cuts $\times$ Saccadic Suppression $\times$ Tversky Savor Holds:
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:342 — 12. Unified Ledger Drawing Engine & ComfyUI Specification — The channel's signature Ledger Page (cream washi paper `#F4E6C7`, subtle grid `#E5D5B5`, 1080x720 active evidence board)
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:346 — The 3 Local ComfyUI Engines & Role Matrix — | Engine | Local Tech Stack | Role in Ledger Engine | Mathematical / Operational Law |
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:370 — 13. Animation Craft Breakthroughs & Three-Tier Pipeline Triage — Following the deep-research audit of Claude's Animation Craft Brief (`RESEARCH-BRIEF-animation-craft.md` and `RESPONSE-T
-- … 28 more in `docs/DOCS-TOPICS.jsonl`
+- … 29 more in `docs/DOCS-TOPICS.jsonl`
 
 ## ltx-video (40)
 
@@ -325,27 +411,21 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:212 — 2.4 Multi-Plane Geometry & Planar Homography — To project 2D drawings onto a tilted 2.5D ledger card with authentic camera perspective:
 - … 27 more in `docs/DOCS-TOPICS.jsonl`
 
-## derived (37)
+## unresolved (38)
 
-- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:1 — 45 — Parallax and plate motion: what may move, how much, and what is banned — Extracted from `05_comfyui_parallax_technical_standards.md` and
-  cited by: docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:37, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:164, docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:63, docs/portable/OPERATOR-RULINGS.md:1494
-- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:46 — 45.3 Our current dials, and what they should be — Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04.
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/RESEARCH-INDEX.md:35
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:1 — 46 — Reference rhythm: what the shot ledger actually measures — Extracted from `04_shot_ledger_100_cuts.md` (primary measurement, recomputed here) and
-  cited by: content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/BRAVOS-STYLE-EVIDENCE-PACK.md:2, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:8, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md:16, docs/content-video-engine/EXPLORATION-REVIEW-2026-09-10.md:46, docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:8, +3 more
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:60 — 46.3 The gap threshold — settled from the reference, 2026-09-04 — A `DERIVED` tag marks a computed figure: a starting reference to test, never a research finding (R6; E42 2026-09-06).
-  cited by: docs/content-video-engine/46-REFERENCE-RHYTHM.md:187, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/BACKLOG.md:368, docs/content-video-engine/BACKLOG.md:573, docs/content-video-engine/BACKLOG.md:627, docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md:129, +11 more
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:178 — 46.5 The reference's transition kinds — measured 2026-09-06 (TR-1) — `measure_cut_kinds.py` on the 720p upload, 99 boundaries: hard cut 36 (36.4 %), dip through black 35 (35.4 %, 14 frames
-- docs/content-video-engine/46-REFERENCE-RHYTHM.md:187 — 46.6 Where the picture change sits in the pause — measured 2026-09-06 (TR-2) — `measure_cut_offsets.py` on TR-1's 99 boundaries, caption and Whisper word times, pause ≥ 0.30 s: the picture changes a
-- docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:137 — 4. DEMOTED — knowledge, not doctrine — Named honestly, because a finding that cannot carry a check should not sit in a doc
-- docs/content-video-engine/48-THE-FIGURE-AND-THE-GROUND.md:154 — 48.8 Harmonisation, in our own tokens — The document integrates with E22 rather than around it:
-- docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:1 — 50 — The phone is the screen: ep1's real analytics, and what they say — Operator-supplied YouTube analytics for ep1, 2026-09-04. This is ground truth, not
-  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10, docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:128, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:209, docs/content-video-engine/BACKLOG.md:227, +3 more
-- docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:30 — 50.2 The finding: our type is illegible on a phone — 75.2 % of watch time is a phone. Our stage is 1920 px wide. On a phone in portrait —
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:210, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:88, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:15, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:219, docs/content-video-engine/BACKLOG.md:99, +1 more
-- docs/content-video-engine/BACKLOG.md:616 — EXPLORE — the first step is a measurement or a read, not a build (6) — | id | item — what and where | why / evidence | cost |
-- docs/content-video-engine/BACKLOG.md:644 — D3 / D6 — ruled 2026-09-06 (E42): poses first; tag all thirteen — | id | item — what and where | why / evidence | cost |
-- … 25 more in `docs/DOCS-TOPICS.jsonl`
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:1 — Work Order — claim `p60-a-crate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:1 — Work Order — claim `p60-a-crate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:1 — Work Order — claim `p60-a-gate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:1 — Work Order — claim `p60-a-gate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:1 — Work Order — claim `p60-a-lever-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:1 — Work Order — claim `p60-a-lever-magenta` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- … 26 more in `docs/DOCS-TOPICS.jsonl`
 
 ## full-frame (37)
 
@@ -398,6 +478,38 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:143 — 3. The full skeleton (phases 2–6, same fusion — to be expanded per use) — | Phase | Classical spine (doc 32) | Platform fill (doc 31) |
 - … 25 more in `docs/DOCS-TOPICS.jsonl`
 
+## upper-left (37)
+
+- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/README.md:1 — Finance Whiteboard Code-Drawn MVP — An isolated P27 HyperFrames proof for a warm whiteboard plate with a restrained
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:1 — Work Order — claim `p60-a-crate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:23 — p60-a-crate-alpha  (prop) — Create ONE reusable editorial prop: a closed wooden shipping crate with visible lid, metal corner fittings and one compl
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:1 — Work Order — claim `p60-a-crate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:23 — p60-a-crate-green  (prop) — Create ONE reusable editorial prop: a closed wooden shipping crate with visible lid, metal corner fittings and one compl
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:1 — Work Order — claim `p60-a-gate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:23 — p60-a-gate-alpha  (prop) — Create ONE reusable editorial prop: a toll gate with one indigo pedestal and a copper-and-cream barrier bar, closed hori
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:1 — Work Order — claim `p60-a-gate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- … 25 more in `docs/DOCS-TOPICS.jsonl`
+
+## best-of (35)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:1 — Work Order — claim `p60-a-crate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:1 — Work Order — claim `p60-a-crate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:1 — Work Order — claim `p60-a-gate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:1 — Work Order — claim `p60-a-gate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:1 — Work Order — claim `p60-a-lever-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:1 — Work Order — claim `p60-a-lever-magenta` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- … 23 more in `docs/DOCS-TOPICS.jsonl`
+
 ## cohen-or (35)
 
 - content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:159 — Pillar 2: As-Rigid-As-Possible (ARAP) Morphing & 2.5D Projective Geometry
@@ -412,6 +524,54 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:386 — 6. Authoritative Academic Citations — 1. Viviani, P., & Terzuolo, C. (1982). Trajectory determines movement dynamics. Neuroscience, 7(2), 431-437.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:387 — 5. Track C — The Drawing-Engine Builder
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:389 — C1: Shape Interpolation (ARAP) [Tier 1 Math — CLOSED] — - Polar decomposition of deformation gradient:
+- … 23 more in `docs/DOCS-TOPICS.jsonl`
+
+## self-contained (35)
+
+- content/video_engine/projects/history-of-bjj/README.md:1 — History of BJJ Series — This directory contains source-controlled editorial inputs for History Documentary
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:1 — Work Order — claim `p60-a-crate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:1 — Work Order — claim `p60-a-crate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:1 — Work Order — claim `p60-a-gate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:1 — Work Order — claim `p60-a-gate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:1 — Work Order — claim `p60-a-lever-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:1 — Work Order — claim `p60-a-lever-magenta` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-expanded.md:1 — Work Order — claim `p60-b-crate-expanded` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-short.md:1 — Work Order — claim `p60-b-crate-short` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-expanded.md:1 — Work Order — claim `p60-b-gate-expanded` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-short.md:1 — Work Order — claim `p60-b-gate-short` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-gate-open.md:1 — Work Order — claim `p60-c-gate-open` — Follow this document exactly. It is self-contained: generate, extract,
+- … 23 more in `docs/DOCS-TOPICS.jsonl`
+
+## self-judge (35)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:1 — Work Order — claim `p60-a-crate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:1 — Work Order — claim `p60-a-crate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:1 — Work Order — claim `p60-a-gate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:1 — Work Order — claim `p60-a-gate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:1 — Work Order — claim `p60-a-lever-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:1 — Work Order — claim `p60-a-lever-magenta` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- … 23 more in `docs/DOCS-TOPICS.jsonl`
+
+## world-board (35)
+
+- content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:1 — Style Spine v2 — woodblock vox newsprint (finance channel) — Correction of record (operator, 2026-08-25): generation drifted toward
+- content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:39 — WORLD-BOARD OVERRIDE (verbatim on world_board slots) — Quiet-zone rule: keep one side of the frame visually quiet (mostly bare
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:1 — Work Order — claim `p60-a-crate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:1 — Work Order — claim `p60-a-crate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:1 — Work Order — claim `p60-a-gate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:1 — Work Order — claim `p60-a-gate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:1 — Work Order — claim `p60-a-lever-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
 - … 23 more in `docs/DOCS-TOPICS.jsonl`
 
 ## attribution-first (34)
@@ -444,6 +604,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:122 — 5. Drawing Engine Mechanics & Coordinate Transform Pipeline
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:124 — 2D Affine Transformation Matrix (Homogeneous $3 \times 3$) — $$\mathbf{M} = \begin{bmatrix} a & c & e \\ b & d & f \\ 0 & 0 & 1 \end{bmatrix} = \begin{bmatrix} s_x \cos\theta - k_y
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:127 — Anchor Normalization — $$\mathbf{M}_{local} = \mathbf{T}(a_x, a_y) \times \mathbf{R}(\theta) \times \mathbf{S}(s_x, s_y) \times \mathbf{T}(-a_x
+- … 22 more in `docs/DOCS-TOPICS.jsonl`
+
+## true-alpha (34)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:1 — Work Order — claim `p60-a-crate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:1 — Work Order — claim `p60-a-crate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:1 — Work Order — claim `p60-a-gate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:1 — Work Order — claim `p60-a-gate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:1 — Work Order — claim `p60-a-lever-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:1 — Work Order — claim `p60-a-lever-magenta` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
 - … 22 more in `docs/DOCS-TOPICS.jsonl`
 
 ## verify (34)
@@ -542,6 +718,26 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:1 — Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt — - Author / Channel: Wealth Logic
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:32 — Comparative Scorecard: Tutorial vs. Wealth Logic vs. Outreach Doctrine — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:71 — 2. Comparative Scorecard & Production Benchmarks — | Metric / Dimension | Zapiwala (AI Stickman Tutorial) | Wealth Logic (High-Performing Finance) | Outreach Engine Target
+- … 19 more in `docs/DOCS-TOPICS.jsonl`
+
+## stop-motion (31)
+
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1330 — 9.23 A chart carries its OWN story (operator, 2026-08-30) — "The charts need to fully communicate their own story without
+  cited by: docs/content-video-engine/40-MEDIA-TDD.md:74, docs/content-video-engine/CAPABILITIES.md:154, docs/portable/OPERATOR-RULINGS.md:505
+- docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:86 — Part 2 - Open rulings that are not gates — 2026-09-13: the head with a news band -> E86 (a surface holds video and images; someone else's words play on the TV, R26
+- docs/content-video-engine/SPECIES-BY-SENTENCE.md:81 — 2. The widened rows (2026-09-10 / 11: E58, E59, E60, the dock read->park, E61) — | # | the sentence ... | the mechanism | its beat | declared on the row | gates | example |
+- docs/portable/OPERATOR-RULINGS.md:1959 — E60 — The BREAKTHROUGH is a rescale: the bar that cannot fit builds to the comparator's level, then shoots while the scale rewrites under it (2026-09-10) — The operator's words. On the first pass (a zigzag cut at the top gridline, the bar a little past it): *"is that squiggle
+  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:46, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:65, docs/agent-memory/operator/resume-2026-09-06.md:125, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1330, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2217, docs/content-video-engine/BACKLOG.md:422, +14 more
+- docs/portable/OPERATOR-RULINGS.md:2661 — E88 — The melt takes the chart, not the page: the ink balls up heavy, then leaves or paints what comes next (2026-09-13) — Ruling (the operator, human gate 2 of P52, the melt's four instants): *"for the melt, i actually didn't envision melting
+  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:31, docs/portable/OPERATOR-RULINGS.md:2442, docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md:12, +4 more
+- docs/portable/OPERATOR-RULINGS.md:2761 — E93 — An agenda row carries an icon, stamped on once its sentence has been read (2026-09-13) — Ruling (the operator, on beautifying P52's numbered agenda, gate 3): *"i think agenda rows should carry icons, the icons
+  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14
+- docs/research/motion/BRIEF-WEIGHT-DENSITY-MASS-2026-09-07.md:1 — Research brief — weight, density and mass in drawing, animation and stop-motion — Asked by: the operator, 2026-09-07, on Tokyo v3's first throw and landing (P47 T1, HG2): *"The throw comes on, but it
+- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:1 — HyperFrames Motion, Transitions, and Kinetic Transformations — Research Blueprint — Pass-3 deep extraction · 2026-09-06 · sources: HeyGen HyperFrames official documentation (overview, motion, transitions,
+- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:5 — The question — How does HeyGen HyperFrames structure motion design, scene transitions, stop-motion physics, and transformations, and ho
+- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:9 — Verdict up front — Motion is an epistemic claim, not a decorative layer. When a video feels cheap or disconnected, the instinct is to add t
+- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:85 — Rule 8 — Handmade Imperfection Stays Reproducible — Handmade, woodblock, paper-cutout, or stop-motion aesthetics require discrete stepped holds (on-twos). To prevent non-de
+- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:179 — 5. Stop-Motion Physics and Deterministic Frame Quantization — For paper-cutout, woodblock, and hand-animated aesthetics (e.g. Money Physics / Tokyo Tea Break), continuous floating-po
 - … 19 more in `docs/DOCS-TOPICS.jsonl`
 
 ## intensity (30)
@@ -707,6 +903,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/product-revenue-contract.md:102 — Explicit milestone exclusions — - no automated outbound or autonomous follow-up;
 - … 16 more in `docs/DOCS-TOPICS.jsonl`
 
+## practitioner-doctrine (28)
+
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:301 — 1. Practitioner Doctrine vs. Empirical Science — - Walter Murch (In the Blink of an Eye, 1995): Murch posits that cuts should align with natural eye blinks and conversat
+- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:321 — 1. Practitioner Doctrine vs. Empirical Science — - Walter Murch (In the Blink of an Eye, 1995): Murch posits that cuts should align with natural eye blinks and conversat
+- docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md:138 — RE-ASK 4 — B1, which did not answer the question asked — What was wrong. B1 restates our own measurement (82% of reference cuts in
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:141 — 2.4 Smooth Minimum (`smin`) and Metaball Meniscus — Shader programs commonly apply polynomial smooth minimum functions:
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:165 — 3.4 Degenerate Ring Collapse (Flubber / `compare.mjs` lines 475–520) — In lightweight vector graphics (including `species/compare.mjs`), topology changes are handled by "ring pairing heuristi
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:175 — 4. Browser Performance at 12 fps on Canvas / SVG Filter Chain
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:182 — 4.2 Distance Transform Precomputation: Felzenszwalb & Huttenlocher (2012) — The exact squared Euclidean Distance Transform (EDT) is computed via 1D parabolic lower-envelope minimization:
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:192 — 4.3 Per-Frame Execution Pipelines
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:222 — Pipeline C: SVG Filter Chain (Gooey Filter) — - Evaluated entirely in GPU compositor shaders (`feGaussianBlur` stdDev 26 + `feColorMatrix` alpha slope 24, as in `spec
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:257 — 5.4 What Reads as "Hand-Drawn" (The Motor Control Laws) — A simple linear SVG `stroke-dashoffset` reveal reads as an automated machine plotter. To read authentically as drawn by
+- docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md:55 — Verdict up front — A liquid metal drop is governed by an extreme ratio of high surface tension and density to ultra-low kinematic viscosity
+- docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md:172 — 2.4 Physical Evaluation of the Floor Amplitude Ruling — Operator ruling E88 s5–s7 mandates that the ball maintains a persistent non-zero "floor amplitude" ($A_{\text{floor}} >
+- … 16 more in `docs/DOCS-TOPICS.jsonl`
+
 ## push-in (28)
 
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:121 — 4. Animation Engine & Motion Recommendations
@@ -773,26 +985,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/seo-ingestion-implementation-tasks.md:98 — Success criteria for MVP — - ingest one domain end-to-end in under 5 minutes
 - … 15 more in `docs/DOCS-TOPICS.jsonl`
 
-## stop-motion (27)
-
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1330 — 9.23 A chart carries its OWN story (operator, 2026-08-30) — "The charts need to fully communicate their own story without
-  cited by: docs/content-video-engine/40-MEDIA-TDD.md:74, docs/content-video-engine/CAPABILITIES.md:154, docs/portable/OPERATOR-RULINGS.md:505
-- docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:86 — Part 2 - Open rulings that are not gates — 2026-09-13: the head with a news band -> E86 (a surface holds video and images; someone else's words play on the TV, R26
-- docs/content-video-engine/SPECIES-BY-SENTENCE.md:81 — 2. The widened rows (2026-09-10 / 11: E58, E59, E60, the dock read->park, E61) — | # | the sentence ... | the mechanism | its beat | declared on the row | gates | example |
-- docs/portable/OPERATOR-RULINGS.md:1959 — E60 — The BREAKTHROUGH is a rescale: the bar that cannot fit builds to the comparator's level, then shoots while the scale rewrites under it (2026-09-10) — The operator's words. On the first pass (a zigzag cut at the top gridline, the bar a little past it): *"is that squiggle
-  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:46, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:65, docs/agent-memory/operator/resume-2026-09-06.md:125, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1330, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2217, docs/content-video-engine/BACKLOG.md:422, +14 more
-- docs/portable/OPERATOR-RULINGS.md:2661 — E88 — The melt takes the chart, not the page: the ink balls up heavy, then leaves or paints what comes next (2026-09-13) — Ruling (the operator, human gate 2 of P52, the melt's four instants): *"for the melt, i actually didn't envision melting
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:31, docs/portable/OPERATOR-RULINGS.md:2442, docs/runbooks/WORK-ORDER-GEMINI-LIVING-DROP-2026-09-14.md:10
-- docs/portable/OPERATOR-RULINGS.md:2761 — E93 — An agenda row carries an icon, stamped on once its sentence has been read (2026-09-13) — Ruling (the operator, on beautifying P52's numbered agenda, gate 3): *"i think agenda rows should carry icons, the icons
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14
-- docs/research/motion/BRIEF-WEIGHT-DENSITY-MASS-2026-09-07.md:1 — Research brief — weight, density and mass in drawing, animation and stop-motion — Asked by: the operator, 2026-09-07, on Tokyo v3's first throw and landing (P47 T1, HG2): *"The throw comes on, but it
-- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:1 — HyperFrames Motion, Transitions, and Kinetic Transformations — Research Blueprint — Pass-3 deep extraction · 2026-09-06 · sources: HeyGen HyperFrames official documentation (overview, motion, transitions,
-- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:5 — The question — How does HeyGen HyperFrames structure motion design, scene transitions, stop-motion physics, and transformations, and ho
-- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:9 — Verdict up front — Motion is an epistemic claim, not a decorative layer. When a video feels cheap or disconnected, the instinct is to add t
-- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:85 — Rule 8 — Handmade Imperfection Stays Reproducible — Handmade, woodblock, paper-cutout, or stop-motion aesthetics require discrete stepped holds (on-twos). To prevent non-de
-- docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:179 — 5. Stop-Motion Physics and Deterministic Frame Quantization — For paper-cutout, woodblock, and hand-animated aesthetics (e.g. Money Physics / Tokyo Tea Break), continuous floating-po
-- … 15 more in `docs/DOCS-TOPICS.jsonl`
-
 ## strength (27)
 
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:27 — 1. Technical Anatomy of Our Current ComfyUI Stack — Our current pipeline executes the following graph in ComfyUI:
@@ -841,22 +1033,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/patterns/SENTENCE-STRENGTH-CHECK.md:1 — SENTENCE STRENGTH CHECK — the line-by-line gate — A per-sentence pass run AFTER a script conforms structurally and BEFORE it
 - … 14 more in `docs/DOCS-TOPICS.jsonl`
 
-## source-on-file (26)
-
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:27 — Verdict Up Front — 1. Turk & O'Brien (1999) Variational Implicit Functions handle topology changes seamlessly without correspondence tracki
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:37 — Master Table of Numbers — | Question | Physical / Algorithmic Cue | Value / Metric | Primary Authority & Location | Sourcing Tier | Evidentiary Ta
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:71 — 1. Variational Implicit Functions (Turk & O'Brien 1999 & Descendants)
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:73 — 1.1 The Mathematical Formulation — Turk & O'Brien (1999, "Shape Transformation Using Variational Implicit Functions") solve shape interpolation by embeddin
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:91 — 1.2 Topology Handling During Transformation — Because $f(u, v, t)$ is continuous, $C^1$-smooth, and globally defined, the shape transitions through topological change
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:98 — 1.3 Per-Frame Computational Cost and Scalability — Evaluating $f(x, y, t)$ at arbitrary coordinates requires evaluating all $n$ basis functions:
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:109 — 2. Signed-Distance-Field (SDF) Blends for 2D Shape Morphing
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:116 — 2.2 Known Artefacts: Ghost Blobs and Pinching / Vanishing — 1. Pinching, Thinning, and Premature Vanishing:
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:127 — 2.3 Algorithmic Remedies — 1. Anchor-Point Warp Pre-Conditioning (Cohen-Or et al. 1998):
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:149 — 3. Correspondence-Based Morphs with Topology Change
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:151 — 3.1 Sederberg & Greenwood (1992): Elastic Work Minimization — - Method: Minimizes the physical work needed to stretch edge segments and bend internal angles along the boundary contou
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:155 — 3.2 Alexa, Cohen-Or, Levin (2000): As-Rigid-As-Possible (ARAP) — - Method: Decomposes deformation across a triangular mesh into local rotation matrices and symmetric stretch tensors via
-- … 14 more in `docs/DOCS-TOPICS.jsonl`
-
 ## vit (26)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
@@ -887,6 +1063,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-NOTES-retention-2-46.md:31 — The unit as it should read (target ~62s, turn lands ~3:10) — > At the dot-com peak, that share hit twenty-three cents. Today it's
 - content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md:63 — 3. Information Architecture & Retention Pacing
 - content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md:65 — 6-Phase Retention Architecture Mapping
+- … 13 more in `docs/DOCS-TOPICS.jsonl`
+
+## powershell (25)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-expanded.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-short.md:1 — Work Order — claim `p60-b-crate-short` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-short.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-expanded.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-short.md:1 — Work Order — claim `p60-b-gate-short` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-short.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
 - … 13 more in `docs/DOCS-TOPICS.jsonl`
 
 ## deduped-audio-snippet (24)
@@ -1000,6 +1192,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:583 — 9.1 Empirical Psychophysics & Mathematics (Primary Scientific Evidence) — 1. Paolo Viviani & C. Terzuolo (1982). Trajectory determines movement dynamics. Neuroscience, 7(2), 431–437. DOI: 10.101
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:354 — The 6-Stage Ledger Choreography — 1. Stage 1 — Roll-Out (0.7s): Ledger card slides and unfolds from bottom margin onto the wooden desk ($Z_0 \to Z_1$).
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:398 — 13.4 Primary Academic & Empirical Citations — - Viviani & Terzuolo (1982), Trajectory determines movement dynamics, Neuroscience: Two-Thirds Power Law ($v \propto \ka
+- … 11 more in `docs/DOCS-TOPICS.jsonl`
+
+## t-0 (23)
+
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:146 — Minimum-Jerk Trajectories (Camera Zooms & Arm Gestures) — Camera push-ins (`focus_zoom`) and `@StickMike` arm gestures follow Flash & Hogan's 5th-order jerk-minimizing polynomial
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/GEMINI-CONVO-2026-09-10.md:115 — 5. Dual-Stage Viewport Split (`frame_0028.jpg`) — When explaining the oil deficit alongside the Strait of Hormuz, they run a synchronized dual layout:
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:23 — 1. The Five Core Architectural Techniques
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:42 — 3. Dual-Lane Synchronized Stage (Shot 28, 04:30.0–04:45.0) — - Visual Staging: Instead of cutting back and forth between charts and maps, Bravos splits the canvas into two synchroni
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:171 — 2.4 Kinematic Control Boundaries: When to Use FK vs. IK — 1. The Kinematic Arc Law (Disney Principle 7: Arcs):
+- docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md:48 — 3. The 6 Essential Financial Comparison & Combo Chart Archetypes
+- docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md:60 — Archetype 2: The Decoupling / Relative Performance Spread (Dual Line + Bicolored Shading) — - Use Case: Comparing two assets rebased to 100 (e.g. Tech Index vs Russell 2000) with shaded outperformance.
+- docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md:215 — Section 4: The Stop-Motion Craft of a Heavy Ball at 12 fps on 2s
+- docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md:217 — 4.1 Rigid Heavy Ball vs. Heavy Liquid Drop — - Rigid Ball Canon (Richard Williams Survival Kit, pp. 36–39, 263): A cannonball or bowling ball has ZERO squash. It imp
+- docs/research/motion/RIG_CONSTRAINTS_RELATION_LAYER_RESEARCH_BLUEPRINT.md:478 — 5.5 `weight` and `lag` Formulations
+- docs/research/motion/RIG_CONSTRAINTS_RELATION_LAYER_RESEARCH_BLUEPRINT.md:489 — 3. Closed-Form Critically Damped Settle — If a follower smooths into an abrupt step target $\mathbf{x}_{\text{target}}$ initiated at $t_0$, the exact analytical s
+- docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:73 — 1. The Frame Count of a Hit: Impact Squash Duration and Release Dynamics
 - … 11 more in `docs/DOCS-TOPICS.jsonl`
 
 ## third-party (23)
@@ -1123,6 +1331,22 @@ at most 12 sections each - the JSONL holds every one.
   cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.md:1, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-DOSSIER.md:97, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:11, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:132, docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/BACKLOG.md:281, +8 more
 - … 9 more in `docs/DOCS-TOPICS.jsonl`
 
+## get-filehash-algorithm-sha256-file (21)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-expanded.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-short.md:1 — Work Order — claim `p60-b-crate-short` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-short.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-expanded.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-short.md:61 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-gate-open.md:60 — Stage D — Deliver — Delivery folder (create subfolders as needed):
+- … 9 more in `docs/DOCS-TOPICS.jsonl`
+
 ## mask-pinned (21)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/00_README_INDEX.md:29 — Key Architectural Decisions — 1. The Page is the Ground (`RULE-the-page-is-the-ground.md`): The cream Ledger Page (`#F4E6C7`) is not just a chart card
@@ -1190,22 +1414,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:267 — Part 8 — The scene-evidence lane (default production pattern) — Status: accepted 2026-08-24. Proven by
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:335 — 8.5 Lane selection — | | scene-evidence lane | linked choreography |
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:615 — 8.14 The camera lock does not apply to this lane (correction, 2026-08-24) — 8.10 imported the skill's camera rule verbatim — "camera LOCKED between
-- … 9 more in `docs/DOCS-TOPICS.jsonl`
-
-## t-0 (21)
-
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:146 — Minimum-Jerk Trajectories (Camera Zooms & Arm Gestures) — Camera push-ins (`focus_zoom`) and `@StickMike` arm gestures follow Flash & Hogan's 5th-order jerk-minimizing polynomial
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/GEMINI-CONVO-2026-09-10.md:115 — 5. Dual-Stage Viewport Split (`frame_0028.jpg`) — When explaining the oil deficit alongside the Strait of Hormuz, they run a synchronized dual layout:
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:23 — 1. The Five Core Architectural Techniques
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:42 — 3. Dual-Lane Synchronized Stage (Shot 28, 04:30.0–04:45.0) — - Visual Staging: Instead of cutting back and forth between charts and maps, Bravos splits the canvas into two synchroni
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:171 — 2.4 Kinematic Control Boundaries: When to Use FK vs. IK — 1. The Kinematic Arc Law (Disney Principle 7: Arcs):
-- docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md:48 — 3. The 6 Essential Financial Comparison & Combo Chart Archetypes
-- docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md:60 — Archetype 2: The Decoupling / Relative Performance Spread (Dual Line + Bicolored Shading) — - Use Case: Comparing two assets rebased to 100 (e.g. Tech Index vs Russell 2000) with shaded outperformance.
-- docs/research/motion/RIG_CONSTRAINTS_RELATION_LAYER_RESEARCH_BLUEPRINT.md:478 — 5.5 `weight` and `lag` Formulations
-- docs/research/motion/RIG_CONSTRAINTS_RELATION_LAYER_RESEARCH_BLUEPRINT.md:489 — 3. Closed-Form Critically Damped Settle — If a follower smooths into an abrupt step target $\mathbf{x}_{\text{target}}$ initiated at $t_0$, the exact analytical s
-- docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:73 — 1. The Frame Count of a Hit: Impact Squash Duration and Release Dynamics
-- docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:75 — Traditional 2D Animation Doctrine (Richard Williams & Ken Harris) — Richard Williams, in The Animator's Survival Kit (Faber & Faber 2001, pp. 93–94), documents Ken Harris's foundational ru
-- docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:128 — Stop-Motion Practice at 12 fps on Twos (Aardman, Laika) — In traditional stop-motion production, the standard frame rate is 24 fps, but animators frequently shoot \"on twos\" (1
 - … 9 more in `docs/DOCS-TOPICS.jsonl`
 
 ## word-timed (21)
@@ -1325,22 +1533,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:1 — Graphic Silhouette + Combat Woodblock Explainer — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
 - … 8 more in `docs/DOCS-TOPICS.jsonl`
 
-## read-only (20)
-
-- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/REWRITE-ORDER-B.md:1 — REWRITE ORDER B — "The Myth of Historical Normal" — Status: DRAFT — awaiting the operator's approval.
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:1 — Script G — strength log (the fixpoint audit trail) — Protocol: STRENGTH-LOOP.md. Round 1 walked every sentence (225); the
-- docs/agent-context/SKILL_ROUTER.md:45 — Named Agent Routing — - Parent task: owns the critical path, shared-file integration, protected
-- docs/AGENT_START_HERE.md:1 — Agent Start Here — Status: current
-- docs/AGENT_START_HERE.md:23 — Task Routes
-- docs/AGENT_START_HERE.md:25 — Skill And Agent Router — The durable router is [`agent-context/SKILL_ROUTER.md`](agent-context/SKILL_ROUTER.md).
-- docs/content-video-engine/25-EDITOR-EMBEDDING-SPIKE.md:43 — Revisit triggers — Reopen this decision only if one of these becomes true: Remotion ships a
-- docs/content-video-engine/26-AGENT-GENERATION-LOOP.md:67 — Work-order authoring — The claim service renders the work order; do not hand-write one. It encodes:
-- docs/content-video-engine/27-DURABILITY-AND-LAYOUT.md:72 — The disaster-recovery contract — A bare catalogue plus credentials is sufficient to rebuild every canonical
-- docs/content-video-engine/40-MEDIA-TDD.md:47 — Tests that bite — the author's blind spot — Tests written beside the code share its assumptions: a fresh read-only
-- docs/content-video-engine/CAPABILITIES.md:209 — External evidence sources — | Source | Where | Gives | Rule |
-- docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md:1 — Exploration inventory (2026-09-10) — the explorer's mapping behind EXPLORATION-REVIEW-2026-09-10.md — Every Bravos term put through `docs_find`, every open backlog row with the maths it needs and whether that maths is on d
-- … 8 more in `docs/DOCS-TOPICS.jsonl`
-
 ## side-by-side (20)
 
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:1 — How Japan Tricked Trump — v3 build (own worlds, five distinct charts) and the pre-review pass (Claude, 2026-09-07) — APPROVED 2026-09-08 ("approved, huge success.") - the plates (map v9, the two chart cards), the card-then-snap arrival a
@@ -1441,6 +1633,23 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/53-THE-STICKMAN-LANE.md:463 — A0 closed — 2026-09-04 — Both sheets approved and promoted; `StickMike` is bound in Flow beside `Mike`. What the
 - … 7 more in `docs/DOCS-TOPICS.jsonl`
 
+## near-black (19)
+
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/VISUAL-CHOREOGRAPHY.md:12 — 1. Production Architecture & Visual Rules — 1. Non-Captioning Law (Doc 29 §9.15, VOICE-PACK §4):
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:1 — PRODUCTION REFERENCE REPORT (Claude, 2026-09-10): China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` - Bravos Research, 19:56.5 (1196.5 s), 1280x720 av1, 29.97 fps
+- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:50 — The grammar (what the frames say; what it maps to in our engine) — 1. One stage, one accent. Near-black charcoal, one pink, white type; green only for 'up' and the CTA. Titles top-centre
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:305 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:1 — PRODUCTION REFERENCE REPORT: Give Me 10 Minutes and I'll Make your Videos Addicting to Watch — - Source: `https://www.youtube.com/watch?v=DiZnbihU4NM`
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:36 — 2. Visual System & Stage Grammar
+- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:38 — The Ground & Environment — - Ground Type: Near-black charcoal void (`#14171A`) with dynamic floating graphic docks and screen recordings
+- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:304 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
+- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:81 — Lane C — `presenter_infographic` — Reference: personal-finance channel, presenter-anchored.
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:518 — 8.11 Do not blend a literal document (bug, 2026-08-24) — The first reveal-engine build drew nothing visible. The mask was correct —
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1852 — 9.28 The SURFACE GRAMMAR — page, dock, or transition, decided by rule (operator, 2026-09-03) — P35 T0. Operator: *"the first part of the plan is getting components
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:109, docs/agent-memory/operator/resume-2026-09-06.md:125, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2058, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2217, docs/content-video-engine/41-LEDGER-PAGE-SPECIES.md:1, docs/content-video-engine/41-LEDGER-PAGE-SPECIES.md:85, +10 more
+- docs/content-video-engine/briefs/ANSWER-BRAVOS-IMAGE-PACK.md:1 — Image Prompt Pack — "Steel and Paper" (GPT image generation) — Companion to [ANSWER-BRAVOS-HYPE-CYCLE.md](ANSWER-BRAVOS-HYPE-CYCLE.md).
+- … 7 more in `docs/DOCS-TOPICS.jsonl`
+
 ## per-frame (19)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/10_generative_video_tools_and_cross_platform_composition.md:131 — 3.2 DepthCrafter: Temporally Consistent Video Depth (CVPR 2025 Highlight) — - Paper: DepthCrafter: Generating Consistent Long Depth Sequences for Open-world Videos (Hu et al., Tencent AI Lab & HKU
@@ -1475,22 +1684,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/BACKLOG.md:616 — EXPLORE — the first step is a measurement or a read, not a build (6) — | id | item — what and where | why / evidence | cost |
 - docs/content-video-engine/BACKLOG.md:652 — Routed from the demoted list (47 §4) — Demoted from doctrine — not dropped. Each lands as a build item, an exploration, or a closure.
 - docs/content-video-engine/BACKLOG.md:660 — D3 Secondary-motion ratio — RESOLVED 2026-09-04 by 48 §48.6 — the analytic phase lag `φ = arctan(2ζ(ω_d/ω₀)/(1−(ω_d/ω₀)²))` on the `M_p` we already
-- … 7 more in `docs/DOCS-TOPICS.jsonl`
-
-## self-contained (19)
-
-- content/video_engine/projects/history-of-bjj/README.md:1 — History of BJJ Series — This directory contains source-controlled editorial inputs for History Documentary
-- docs/content-video-engine/07-PILOT-SEASON.md:1 — Pilot Season — Phase 0 Validation Cohort — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-- docs/content-video-engine/07-PILOT-SEASON.md:8 — History Documentary V4 cohort — 1. How Judo Became Brazilian Jiu-Jitsu — approximately 10-minute acceptance
-- docs/content-video-engine/10-HISTORY-DOCUMENTARY-EDITORIAL-SPEC.md:277 — 9. Chapter subvideos — Each chapter may become a landscape or vertical subvideo only when it has a
-- docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:1 — Recreation Brief — Alicia-Format Systems Test (3:00) — The end-to-end pipeline test: recreate the format of Alicia Invests'
-- docs/content-video-engine/briefs/ALICIA-SCRIPT-COMPARISON.md:148 — Four-way verdict — - Voice (the moat test): A wins by construction; C scored zero first-person
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:519 — Sources block (production gate) — | Claim | Source | Status |
-- docs/content-video-engine/patterns/phase-guides/P1.md:1 — P1 — THE OPEN — > Self-contained generation guide. Consume ONLY: the INJECTION block and
-- docs/content-video-engine/patterns/phase-guides/P2.md:1 — P2 — THE ENGINE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P3.md:1 — P3 — THE GAP (the pattern unit) — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P4.md:1 — P4 — THE MIDPOINT PIVOT — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P5.md:1 — P5 — REFLECTION & CONVERGENCE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
 - … 7 more in `docs/DOCS-TOPICS.jsonl`
 
 ## silicon-reality-gap (19)
@@ -1725,6 +1918,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/REPORT.md:44 — P6: The Close (Resolution & Ring Echo) [10:35 - 12:27] — - Pacing: 21 shots | 277 words | 148.4 WPM
 - … 6 more in `docs/DOCS-TOPICS.jsonl`
 
+## video-researcher (18)
+
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:1 — Implicit-Surface Blends versus Ring Correspondence for Ink Shapes with Holes and Topology Change: Research Blueprint — Pass Metadata:
+- docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md:1 — Research Blueprint — The Living Metallic Drop: Surface Modes, Damping, the Highlight, and the Stop-Motion Craft of a Heavy Ball — Date: 2026-09-14
+- docs/research/motion/RIG_CONSTRAINTS_RELATION_LAYER_RESEARCH_BLUEPRINT.md:1 — The Relation Layer: What 2D Rigs and Constraint Systems Get Right, Harvested — Pass Metadata:
+- docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:1 — Weight, Density, and Mass in Drawing, Animation, and Stop-Motion: Research Blueprint — Pass Metadata:
+- docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md:40 — What this repo does on its own side (done 2026-09-05) — - `GEMINI.md` carries the research-intake contract for THIS repo: where reports land, the evidence line
+- docs/runbooks/WORK-ORDER-GEMINI-BRIDGE-SHAPES-2026-09-07.md:1 — Work order — the bridge reply shapes, applied globally to the research profiles (2026-09-07) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`).
+- docs/runbooks/WORK-ORDER-GEMINI-BRIDGE-SHAPES-2026-09-07.md:16 — The order — Append this block, verbatim, to the "This repository's contract" section of `video-researcher`, `animation-video-researc
+- docs/runbooks/WORK-ORDER-GEMINI-HYPERFRAMES-TAGS-2026-09-06.md:1 — Work order — tag the HyperFrames report's figures and name our roots (2026-09-06) — To: the Gemini research lane (profile `video-researcher`). From: the Claude lane of `Outreach Program`, repo root
+- docs/runbooks/WORK-ORDER-GEMINI-IMPLICIT-MORPH-2026-09-14.md:1 — Work order - the morph that handles holes and topology: implicit-surface blends versus ring correspondence (2026-09-14) — To: the Gemini research lane (profile `video-researcher`). From: the Claude lane of `Outreach Program`, repo root
+- docs/runbooks/WORK-ORDER-GEMINI-LIVING-DROP-2026-09-14.md:1 — Work order - the living metallic drop: surface modes, damping, the highlight, and the stop-motion craft of a heavy ball (2026-09-14) — To: the Gemini research lane (profile `video-researcher`). From: the Claude lane of `Outreach Program`, repo root
+- docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md:1 — Work order — Gemini research profiles, corrections at the source (2026-09-05) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`).
+- docs/runbooks/WORK-ORDER-GEMINI-PROFILES-FLASH-2026-09-06.md:1 — Work order — the research profiles run on the flash tier (2026-09-06) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`).
+- … 6 more in `docs/DOCS-TOPICS.jsonl`
+
 ## wall-clock (18)
 
 - content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md:1 — PRODUCTION REFERENCE REPORT: The Bubble's Final Phase Has Begun. — - Source: `https://youtu.be/RUH3BPQ5fTo`
@@ -1806,23 +2015,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:344 — Improvement 4: Dynamic SVG Balance Scale Component — The iconic Wealth Logic visual is the dynamic balance scale balancing EARNS vs. COSTS / RENT. We build this as a paramet
 - … 5 more in `docs/DOCS-TOPICS.jsonl`
 
-## near-black (17)
-
-- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/VISUAL-CHOREOGRAPHY.md:12 — 1. Production Architecture & Visual Rules — 1. Non-Captioning Law (Doc 29 §9.15, VOICE-PACK §4):
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:1 — PRODUCTION REFERENCE REPORT (Claude, 2026-09-10): China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` - Bravos Research, 19:56.5 (1196.5 s), 1280x720 av1, 29.97 fps
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:50 — The grammar (what the frames say; what it maps to in our engine) — 1. One stage, one accent. Near-black charcoal, one pink, white type; green only for 'up' and the CTA. Titles top-centre
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:305 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
-- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:1 — PRODUCTION REFERENCE REPORT: Give Me 10 Minutes and I'll Make your Videos Addicting to Watch — - Source: `https://www.youtube.com/watch?v=DiZnbihU4NM`
-- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:36 — 2. Visual System & Stage Grammar
-- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:38 — The Ground & Environment — - Ground Type: Near-black charcoal void (`#14171A`) with dynamic floating graphic docks and screen recordings
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:304 — 10. Doctrine Rules, Operating Rulings, & Quality Gates — All engineering recommendations are cross-referenced with standing repository doctrine:
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:81 — Lane C — `presenter_infographic` — Reference: personal-finance channel, presenter-anchored.
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:518 — 8.11 Do not blend a literal document (bug, 2026-08-24) — The first reveal-engine build drew nothing visible. The mask was correct —
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1852 — 9.28 The SURFACE GRAMMAR — page, dock, or transition, decided by rule (operator, 2026-09-03) — P35 T0. Operator: *"the first part of the plan is getting components
-  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/REWRITE-ORDER-G.md:109, docs/agent-memory/operator/resume-2026-09-06.md:125, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2058, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2217, docs/content-video-engine/41-LEDGER-PAGE-SPECIES.md:1, docs/content-video-engine/41-LEDGER-PAGE-SPECIES.md:85, +10 more
-- docs/content-video-engine/briefs/ANSWER-BRAVOS-IMAGE-PACK.md:1 — Image Prompt Pack — "Steel and Paper" (GPT image generation) — Companion to [ANSWER-BRAVOS-HYPE-CYCLE.md](ANSWER-BRAVOS-HYPE-CYCLE.md).
-- … 5 more in `docs/DOCS-TOPICS.jsonl`
-
 ## not-yet (17)
 
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/COMPOSITING-VERDICT.md:1 — Is Wealth Logic composited or generated? — checked against the frames, 2026-09-04 — Gemini's read: "100% composited, not AI-generated into the scene." Agreed, and it
@@ -1837,6 +2029,23 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:128 — 2.2 Closed-Form Analytic Spring Physics (O(1) Seekable Dynamics) — Game engines simulate springs iteratively using Euler or Verlet integration ($\mathbf{v}_{t+1} = \mathbf{v}_t + \mathbf{
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:86 — 3. Forensic Visual Evidence & Proof of 2.5D Compositing — A central question in AI video production is whether top channels generate hosts into scenes via diffusion prompts or co
 - content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:116 — 2. Animation Mechanics & Deterministic Clocking
+- … 5 more in `docs/DOCS-TOPICS.jsonl`
+
+## operator-approved (17)
+
+- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:153 — Exclusion — Full-scene hand-draw replacement is not production-ready. A successful
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:1 — Script E — sentence-strength pass log — `patterns/SENTENCE-STRENGTH-CHECK.md`, run 2026-08-29. Every sentence
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:8 — Licensed exceptions claimed — | Where | Gate | Why |
+- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:78 — Round 4 — the ENUMERATED screens (operator audit, 2026-08-30) — The operator asked whether L1/L3 and the X1 orphan screen ran to the
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/RESULTS.md:1 — P60 image and prop capability tests — Status: measurement and independent review in progress. All outputs are quarantine-only, not operator-approved.
+- docs/content-video-engine/01-PRD.md:140 — 8. Phases — | Phase | Contents | Exit criteria |
+- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:1 — Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
+  cited by: docs/portable/OPERATOR-RULINGS.md:1398
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:396 — The decisive test, run: `review_script` + `review_title` on our own work — 2026-08-24 — Phase 2 of the harvest plan. Fed the Alicia-format script (narration only,
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
+- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:549 — 20. THE TEMPO FIELD - one choreography across script AND video (operator-approved 2026-08-30) — The realization (obvious only in hindsight, and only reachable through
+- docs/content-video-engine/CAPABILITIES.md:154 — Evidence & assets — Martial Matters episode 1 (merged from p16, 2026-08-29): 192 asset files
+- docs/content-video-engine/patterns/STRENGTH-LOOP.md:108 — 7. The loop protocol — Operator rulings, 2026-08-29.
 - … 5 more in `docs/DOCS-TOPICS.jsonl`
 
 ## paths-written (17)
@@ -1906,20 +2115,20 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:1 — Master Research & Evidence Dossier: High-Retention Video Production Engine — Unified Technical Synthesis: Video Deconstruction, Drawing Engines, Transform Mechanics, and Forensic Compositing Analys
 - … 5 more in `docs/DOCS-TOPICS.jsonl`
 
-## video-researcher (17)
+## woodblock-vox-newsprint (17)
 
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:1 — Implicit-Surface Blends versus Ring Correspondence for Ink Shapes with Holes and Topology Change: Research Blueprint — Pass Metadata:
-- docs/research/motion/RIG_CONSTRAINTS_RELATION_LAYER_RESEARCH_BLUEPRINT.md:1 — The Relation Layer: What 2D Rigs and Constraint Systems Get Right, Harvested — Pass Metadata:
-- docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:1 — Weight, Density, and Mass in Drawing, Animation, and Stop-Motion: Research Blueprint — Pass Metadata:
-- docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md:40 — What this repo does on its own side (done 2026-09-05) — - `GEMINI.md` carries the research-intake contract for THIS repo: where reports land, the evidence line
-- docs/runbooks/WORK-ORDER-GEMINI-BRIDGE-SHAPES-2026-09-07.md:1 — Work order — the bridge reply shapes, applied globally to the research profiles (2026-09-07) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`).
-- docs/runbooks/WORK-ORDER-GEMINI-BRIDGE-SHAPES-2026-09-07.md:16 — The order — Append this block, verbatim, to the "This repository's contract" section of `video-researcher`, `animation-video-researc
-- docs/runbooks/WORK-ORDER-GEMINI-HYPERFRAMES-TAGS-2026-09-06.md:1 — Work order — tag the HyperFrames report's figures and name our roots (2026-09-06) — To: the Gemini research lane (profile `video-researcher`). From: the Claude lane of `Outreach Program`, repo root
-- docs/runbooks/WORK-ORDER-GEMINI-IMPLICIT-MORPH-2026-09-14.md:1 — Work order - the morph that handles holes and topology: implicit-surface blends versus ring correspondence (2026-09-14) — To: the Gemini research lane (profile `video-researcher`). From: the Claude lane of `Outreach Program`, repo root
-- docs/runbooks/WORK-ORDER-GEMINI-LIVING-DROP-2026-09-14.md:1 — Work order - the living metallic drop: surface modes, damping, the highlight, and the stop-motion craft of a heavy ball (2026-09-14) — To: the Gemini research lane (profile `video-researcher`). From: the Claude lane of `Outreach Program`, repo root
-- docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md:1 — Work order — Gemini research profiles, corrections at the source (2026-09-05) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`).
-- docs/runbooks/WORK-ORDER-GEMINI-PROFILES-FLASH-2026-09-06.md:1 — Work order — the research profiles run on the flash tier (2026-09-06) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`).
-- docs/runbooks/WORK-ORDER-GEMINI-PROFILES-FLASH-2026-09-06.md:6 — The order — The operator's ruling (2026-09-06): bridge orders run on the flash tier. The current flash model (3.8) is stronger than
+- content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md:1 — Style Spine v2 — woodblock vox newsprint (finance channel) — Correction of record (operator, 2026-08-25): generation drifted toward
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:1 — Work Order — claim `p60-a-crate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:1 — Work Order — claim `p60-a-crate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:1 — Work Order — claim `p60-a-gate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:1 — Work Order — claim `p60-a-gate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:1 — Work Order — claim `p60-a-lever-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:1 — Work Order — claim `p60-a-lever-magenta` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-expanded.md:1 — Work Order — claim `p60-b-crate-expanded` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-short.md:1 — Work Order — claim `p60-b-crate-short` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-expanded.md:1 — Work Order — claim `p60-b-gate-expanded` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-short.md:1 — Work Order — claim `p60-b-gate-short` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-gate-open.md:1 — Work Order — claim `p60-c-gate-open` — Follow this document exactly. It is self-contained: generate, extract,
 - … 5 more in `docs/DOCS-TOPICS.jsonl`
 
 ## audio-visual (16)
@@ -1936,6 +2145,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md:111 — **Audio-Visual Counterpoint and Subtext** — In faceless visual media, a common pitfall is tautology—writing script narration that merely describes what is simultane
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md:130 — **Integrated Synthesis Framework for Long-Form Audio-Visual Scripts** — To synthesize these diverse methodologies into an operational workflow, the following master blueprint maps broadcast me
 - docs/research/2026-08-24-writing-for-the-ear-craft-source.md:143 — **Strategic Synthesis and Practical Execution** — Elevating faceless audio-visual scripts requires synthesizing acoustic precision with deep narrative engineering. At the
+- … 4 more in `docs/DOCS-TOPICS.jsonl`
+
+## deliver-the-source-anyway (16)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-expanded.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-short.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-expanded.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-short.md:37 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-gate-open.md:36 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-outpaint.md:36 — Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque.
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
 ## evidence-backed (16)
@@ -2171,23 +2396,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/patterns/CHECK-RESPONSIBILITIES.md:42 — 1. The rules — R1 — A tool's mechanical verdict is final. The agent does not re-derive
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
-## operator-approved (16)
-
-- content/video_engine/projects/systems-and-blowups/learning/continuous-learning-import.v1.md:153 — Exclusion — Full-scene hand-draw replacement is not production-ready. A successful
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:1 — Script E — sentence-strength pass log — `patterns/SENTENCE-STRENGTH-CHECK.md`, run 2026-08-29. Every sentence
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:8 — Licensed exceptions claimed — | Where | Gate | Why |
-- content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-STRENGTH-LOG.md:78 — Round 4 — the ENUMERATED screens (operator audit, 2026-08-30) — The operator asked whether L1/L3 and the X1 orphan screen ran to the
-- docs/content-video-engine/01-PRD.md:140 — 8. Phases — | Phase | Contents | Exit criteria |
-- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:1 — Script Transformation Spec — Essay/Corpus → Beat Sheet → Storyboard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/portable/OPERATOR-RULINGS.md:1398
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:396 — The decisive test, run: `review_script` + `review_title` on our own work — 2026-08-24 — Phase 2 of the harvest plan. Fed the Alicia-format script (narration only,
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18 — Current state — what actually governs production — Consolidated 2026-08-28. Where this section and anything below it
-- docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:549 — 20. THE TEMPO FIELD - one choreography across script AND video (operator-approved 2026-08-30) — The realization (obvious only in hindsight, and only reachable through
-- docs/content-video-engine/CAPABILITIES.md:154 — Evidence & assets — Martial Matters episode 1 (merged from p16, 2026-08-29): 192 asset files
-- docs/content-video-engine/patterns/STRENGTH-LOOP.md:108 — 7. The loop protocol — Operator rulings, 2026-08-29.
-- docs/content-video-engine/patterns/STRENGTH-LOOP.md:138 — Rewrite budget — the over-smoothing guard — Any sentence rewritten more than twice stops and goes to the operator
-- … 4 more in `docs/DOCS-TOPICS.jsonl`
-
 ## operator-supplied (16)
 
 - docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:1 — Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
@@ -2224,6 +2432,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:267 — SCRIPT B — **PRODUCTION TEXT** (sentence-strength pass; won the A/B ear test) — A/B verdict (operator, 2026-08-24, by ear): three matched pairs — open,
 - docs/content-video-engine/briefs/ANSWER-BRAVOS-HYPE-CYCLE.md:456 — Strength Log (A → B, gates per SENTENCE-STRENGTH-CHECK) — | # | A (original) | Gates failed | B (final) |
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:191 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
+- … 4 more in `docs/DOCS-TOPICS.jsonl`
+
+## resize-the-padded-canvas-to-exactly-1024x1024-lanczos (16)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-expanded.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-short.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-expanded.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-short.md:28 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-gate-open.md:27 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-outpaint.md:27 — Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
 ## risk-score (16)
@@ -2338,6 +2562,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-04.claude.md:158 — Production, same evening (stages 5-8) — - Take: ElevenLabs, one request (`record_short_take.py`), 81.2 s at 174 wpm, gaps intact; whisper
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:1 — Tokyo Tea Break — shot table (9:16, 2026-09-04): the long arm `SCRIPT-90S-VO.claude.v8-long.txt`, and the short `SCRIPT-90S-VO.claude.txt` (v9) below it — Authored, never generated (PIPELINE stage 7). Two clocks are quoted: the kit estimate
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:36 — Shots (kit clock first, Kokoro cut in brackets) — | # | span | beat | world | evidence / species | why this pairing |
+- … 4 more in `docs/DOCS-TOPICS.jsonl`
+
+## strengthen (16)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:50 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md:50 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:50 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:50 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md:50 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md:50 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-expanded.md:50 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-short.md:50 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-expanded.md:50 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-short.md:50 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-gate-open.md:49 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-outpaint.md:49 — Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
 
 ## z-stack (16)
@@ -2457,6 +2697,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:134 — Technique 3: The Outlier Multiplier Stat Badge & Spring Reveal (Shot #40 & Shot #48) — - Observed Timestamp & Shot ID: Shot #40 (`03:40.1 - 03:48.5`) and Shot #48 (`05:43.3 - 05:52.9`).
 - content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:155 — Technique 4: Contrast-Pair Title & Split-Screen Dissection (Shot #55–#56, 07:20 - 07:40) — - Observed Timestamp & Shot ID: Shot #55–#56 (`07:20.9 - 07:40.1`).
 - content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:109 — Technique 1: Luma-Clipped Silhouette Occlusion as a Conceptual Hook (Shot #01, 00:00 - 00:02) — - Observed Timestamp & Shot ID: Shot #01 (`00:00.0 - 00:02.1`).
+- … 3 more in `docs/DOCS-TOPICS.jsonl`
+
+## copper-and-cream (15)
+
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:1 — Work Order — claim `p60-a-gate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md:23 — p60-a-gate-alpha  (prop) — Create ONE reusable editorial prop: a toll gate with one indigo pedestal and a copper-and-cream barrier bar, closed hori
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:1 — Work Order — claim `p60-a-gate-green` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md:23 — p60-a-gate-green  (prop) — Create ONE reusable editorial prop: a toll gate with one indigo pedestal and a copper-and-cream barrier bar, closed hori
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-expanded.md:1 — Work Order — claim `p60-b-gate-expanded` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-expanded.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-expanded.md:23 — p60-b-gate-expanded  (prop) — Create ONE reusable editorial prop: a toll gate with one indigo pedestal and a copper-and-cream barrier bar, closed hori
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-short.md:1 — Work Order — claim `p60-b-gate-short` — Follow this document exactly. It is self-contained: generate, extract,
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-short.md:14 — Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-short.md:23 — p60-b-gate-short  (prop) — Create ONE reusable illustrated prop: a toll gate with one indigo pedestal and a copper-and-cream barrier bar, closed ho
 - … 3 more in `docs/DOCS-TOPICS.jsonl`
 
 ## depth-anything-v2-vitl-fp32.safetensors (15)
@@ -2623,22 +2879,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:134 — Technique 3: The Outlier Multiplier Stat Badge & Spring Reveal (Shot #40 & Shot #48) — - Observed Timestamp & Shot ID: Shot #40 (`03:40.1 - 03:48.5`) and Shot #48 (`05:43.3 - 05:52.9`).
 - content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:155 — Technique 4: Contrast-Pair Title & Split-Screen Dissection (Shot #55–#56, 07:20 - 07:40) — - Observed Timestamp & Shot ID: Shot #55–#56 (`07:20.9 - 07:40.1`).
 - content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:109 — Technique 1: Luma-Clipped Silhouette Occlusion as a Conceptual Hook (Shot #01, 00:00 - 00:02) — - Observed Timestamp & Shot ID: Shot #01 (`00:00.0 - 00:02.1`).
-- … 3 more in `docs/DOCS-TOPICS.jsonl`
-
-## practitioner-doctrine (15)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:301 — 1. Practitioner Doctrine vs. Empirical Science — - Walter Murch (In the Blink of an Eye, 1995): Murch posits that cuts should align with natural eye blinks and conversat
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:321 — 1. Practitioner Doctrine vs. Empirical Science — - Walter Murch (In the Blink of an Eye, 1995): Murch posits that cuts should align with natural eye blinks and conversat
-- docs/content-video-engine/briefs/RESPONSE-TO-RESEARCH-PASS-1.md:138 — RE-ASK 4 — B1, which did not answer the question asked — What was wrong. B1 restates our own measurement (82% of reference cuts in
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:141 — 2.4 Smooth Minimum (`smin`) and Metaball Meniscus — Shader programs commonly apply polynomial smooth minimum functions:
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:165 — 3.4 Degenerate Ring Collapse (Flubber / `compare.mjs` lines 475–520) — In lightweight vector graphics (including `species/compare.mjs`), topology changes are handled by "ring pairing heuristi
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:175 — 4. Browser Performance at 12 fps on Canvas / SVG Filter Chain
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:182 — 4.2 Distance Transform Precomputation: Felzenszwalb & Huttenlocher (2012) — The exact squared Euclidean Distance Transform (EDT) is computed via 1D parabolic lower-envelope minimization:
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:192 — 4.3 Per-Frame Execution Pipelines
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:222 — Pipeline C: SVG Filter Chain (Gooey Filter) — - Evaluated entirely in GPU compositor shaders (`feGaussianBlur` stdDev 26 + `feColorMatrix` alpha slope 24, as in `spec
-- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:257 — 5.4 What Reads as "Hand-Drawn" (The Motor Control Laws) — A simple linear SVG `stroke-dashoffset` reveal reads as an automated machine plotter. To read authentically as drawn by
-- docs/research/motion/RIG_CONSTRAINTS_RELATION_LAYER_RESEARCH_BLUEPRINT.md:30 — Verdict Up Front — 1. Rive's Harvestable Core is a Decompose-Lerp-Compose DAG: Rive implements 7 constraint primitives `[source on file]`.
-- docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:1 — Weight, Density, and Mass in Drawing, Animation, and Stop-Motion: Research Blueprint — Pass Metadata:
 - … 3 more in `docs/DOCS-TOPICS.jsonl`
 
 ## production-ready (15)
@@ -2870,6 +3110,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/patterns/phase-guides/P6.md:27 — Inputs — `{VOICE}` `{PERSONA}` `{FORMAT}` `{NEXT}` (the next video/segment's hook,
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
+## high-frequency (14)
+
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:387 — 5. Track C — The Drawing-Engine Builder
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:422 — C4: Deterministic Runtime Under Seek [Tier 1 Architecture — CLOSED] — - Chromium headless seek performance envelope:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:497 — 4.7 Visual Harmonization: Koschmieder's Law, Light Wrap, and Substrate Bleed — 1. Aerial Perspective & Koschmieder's Law (Koschmieder 1924):
+- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:407 — 5. Track C — The Drawing-Engine Builder
+- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:442 — C4: Deterministic Runtime Under Seek [Tier 1 Architecture — CLOSED] — - Chromium headless seek performance envelope:
+- docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md:1 — Intake — the ink bloom transition (operator, 2026-09-08) — The operator brought a MotionKit preset by hand: *"here's an ink bloom transition that is not the swirl; our swirl is
+- docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md:17 — 1. ObservableHQ Foundations: Why LLMs Fail on Combo Charts — Recent foundational research from ObservableHQ (Robert Kosara, Allison Horst, Mike Bostock) and Cleveland & McGill (1984
+- docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md:21 — A. Discrete vs Continuous Time Series (Robert Kosara, ObservableHQ) — - [When to Use Bar or Line Charts for Time Series Data | Analysis | Local Evidence: docs/research/runs/macro_chart_journ
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:149 — 3. Correspondence-Based Morphs with Topology Change
+- docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md:161 — 3.3 Surazhsky, Surazhsky, Barequet, Tal (2001): Polyhedral Slicing — - Method: Solves multi-genus polygon blending by lifting 2D polygons to parallel horizontal planes in 3D and constructin
+- docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md:146 — Section 2: Real Liquid-Metal Drop Landing, Rolling, and Settle Dynamics
+- docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md:148 — 2.1 Impact Phenomenology & Mode Decomposition — High-speed impact footage and experimental studies of liquid metal droplets impacting solid substrates (Zhao et al. 2024
+- … 2 more in `docs/DOCS-TOPICS.jsonl`
+
 ## kersten-et-al (14)
 
 - docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:1 — Weight, Density, and Mass in Drawing, Animation, and Stop-Motion: Research Blueprint — Pass Metadata:
@@ -2884,6 +3140,22 @@ at most 12 sections each - the JSONL holds every one.
 - docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:215 — Diagnostic Evaluation Against Literature: — 1. The Missing Blur Ramp: The current engine returns only `{ scale, alpha }`. When a card descends from $h = 160 ext{ px
 - docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:222 — Recommended Dial Specification: — To satisfy Kersten et al. (1997) and Doc 48 §48.7:
 - docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:522 — Synthesis and Kinetics Implementation Mapping — This section maps the empirical findings to the active kinetics dials in `content/video_engine/scripts/kinetics/stopacti
+- … 2 more in `docs/DOCS-TOPICS.jsonl`
+
+## non-zero (14)
+
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:159 — Pillar 2: As-Rigid-As-Possible (ARAP) Morphing & 2.5D Projective Geometry
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:161 — 2.1 The Mathematics of Zero Volume Collapse — When morphing an inked metaphor (e.g., a balance scale) into an institutional data chart (e.g., a bar chart), naive line
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:173 — Riemannian Geodesic Interpolation (Alexa, Cohen-Or, & Levin 2000) — Interpolate rotation on the $ ext{SO}(2)$ Lie algebra and stretch on the Riemannian manifold $ ext{Sym}^+(2)$:
+- content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:178 — Mathematical Proof of Zero Area Inversion: — $$\det(J_k(t)) = \det(R_k(t)) \cdot \det(S_k(t)) = 1 \cdot (\lambda_1 \lambda_2)^t > 0 \quad orall t \in [0, 1]$$
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:159 — Pillar 2: As-Rigid-As-Possible (ARAP) Morphing & 2.5D Projective Geometry
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:161 — 2.1 The Mathematics of Zero Volume Collapse — When morphing an inked metaphor (e.g., a balance scale) into an institutional data chart (e.g., a bar chart), naive line
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:173 — Riemannian Geodesic Interpolation (Alexa, Cohen-Or, & Levin 2000) — Interpolate rotation on the $ ext{SO}(2)$ Lie algebra and stretch on the Riemannian manifold $ ext{Sym}^+(2)$:
+- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:178 — Mathematical Proof of Zero Area Inversion: — $$\det(J_k(t)) = \det(R_k(t)) \cdot \det(S_k(t)) = 1 \cdot (\lambda_1 \lambda_2)^t > 0 \quad orall t \in [0, 1]$$
+- docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md:55 — Verdict up front — A liquid metal drop is governed by an extreme ratio of high surface tension and density to ultra-low kinematic viscosity
+- docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md:172 — 2.4 Physical Evaluation of the Floor Amplitude Ruling — Operator ruling E88 s5–s7 mandates that the ball maintains a persistent non-zero "floor amplitude" ($A_{\text{floor}} >
+- docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:142 — 2. The Moving Cast Shadow as Depth Cue: Size, Offset, Blur, and Darkness
+- docs/research/motion/WEIGHT_DENSITY_MASS_RESEARCH_BLUEPRINT.md:144 — Perceptual Hierarchy: Kersten, Mamassian, & Knill (1997) — The perceptual mechanics of moving cast shadows were established definitively by Daniel Kersten, Pascal Mamassian, and D
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
 ## not (14)
@@ -3046,288 +3318,3 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:10 — Render transcript window — The market may be labeling the wrong bubble. AI memory stocks have gone vertical and the earnings numbers look almost fa
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
-
-## three-quarter (14)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/09_2d_and_2_5d_body_animation_object_handling_and_grounding.md:214 — 2.6 Pseudo-3D Head Turns & Facial Cylindrical Projection — In a 2.5D explainer engine, rendering characters as full 3D polygon models looks sterile and violates hand-drawn brand d
-  cited by: docs/content-video-engine/BACKLOG.md:652
-- docs/content-video-engine/13-GOOGLE-FLOW-CHARACTER-BUILDER-SPEC.md:1 — Google Flow Character Builder — P13 V4.1 — The History of BJJ lane now treats Google Flow's character builder as an
-  cited by: docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:149
-- docs/content-video-engine/13-GOOGLE-FLOW-CHARACTER-BUILDER-SPEC.md:25 — Browser workflow — 1. Open Google Flow's character builder and select Nano Banana Pro.
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:1 — Art Style Reference Review — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:149, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:1, docs/operator-ledger/TRIAGE-DIGEST.md:17, docs/portable/OPERATOR-RULINGS.md:2605
-- docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:15 — The finding that matters — None of the reference channels animate characters. No articulated limbs, no rigs, no
-- docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:1 — 50 — The phone is the screen: ep1's real analytics, and what they say — Operator-supplied YouTube analytics for ep1, 2026-09-04. This is ground truth, not
-  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10, docs/content-video-engine/49-GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE.md:52, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:128, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:1, docs/content-video-engine/BACKLOG.md:209, docs/content-video-engine/BACKLOG.md:227, +3 more
-- docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:30 — 50.2 The finding: our type is illegible on a phone — 75.2 % of watch time is a phone. Our stage is 1920 px wide. On a phone in portrait —
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:210, docs/content-video-engine/50-THE-PHONE-IS-THE-SCREEN.md:88, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:15, docs/content-video-engine/51-THE-SHORTS-FORMAT.md:219, docs/content-video-engine/BACKLOG.md:99, +1 more
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:387 — 53.10 Two Mikes, and the character pack needs upgrading — Operator, 2026-09-04:
-  cited by: docs/content-video-engine/BACKLOG.md:281
-- docs/content-video-engine/53-THE-STICKMAN-LANE.md:394 — The gap in what we hold — `finance-host-flow-character-pack.v1.json` is well-formed — schema, art-bible hash, rights
-- docs/content-video-engine/BACKLOG.md:56 — The ground truth we hold: one retention curve — and now the analytics behind it — Updated 2026-09-04 with operator-supplied YouTube analytics. See
-- docs/content-video-engine/BACKLOG.md:281 — Build — carried, unchanged by the research — | # | item |
-- docs/content-video-engine/BACKLOG.md:652 — Routed from the demoted list (47 §4) — Demoted from doctrine — not dropped. Each lands as a build item, an exploration, or a closure.
-- … 2 more in `docs/DOCS-TOPICS.jsonl`
-
-## voice (14)
-
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:153 — 5. Audio Assets & Timestamp Artifacts Available — All audio assets are persisted in `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/scratch/`:
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:228 — 8. Inputs needed from the operator (blockers for P0, not for doc approval) — 1. Corpus inventory — how many technique records with transcripts exist? (Pilot needs ≥12.)
-- docs/content-video-engine/patterns/phase-guides/P1.md:1 — P1 — THE OPEN — > Self-contained generation guide. Consume ONLY: the INJECTION block and
-- docs/content-video-engine/patterns/phase-guides/P1.md:31 — Inputs (injection slots) — - `{TOPIC}` — one claim cluster, one dramatic question.
-- docs/content-video-engine/patterns/phase-guides/P2.md:1 — P2 — THE ENGINE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P2.md:24 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P1 ledger (ring token,
-- docs/content-video-engine/patterns/phase-guides/P3.md:1 — P3 — THE GAP (the pattern unit) — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P3.md:27 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P2 ledger (open loops,
-- docs/content-video-engine/patterns/phase-guides/P4.md:1 — P4 — THE MIDPOINT PIVOT — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P4.md:27 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` + P3 ledger (head-fake,
-- docs/content-video-engine/patterns/phase-guides/P5.md:1 — P5 — REFLECTION & CONVERGENCE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
-- docs/content-video-engine/patterns/phase-guides/P5.md:29 — Inputs — `{TOPIC}` `{VOICE}` `{PERSONA}` `{EVIDENCE}` `{TELL}` (variable +
-- … 2 more in `docs/DOCS-TOPICS.jsonl`
-
-## 0.18 (13)
-
-- content/video_engine/projects/systems-and-blowups/registration/WORK-ORDER.md:89 — 5. `figures[]` — verbatim numerals — Extract every printed number that states a fact. Exclude page numbers, axis
-- content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:27 — 1. Technical Anatomy of Our Current ComfyUI Stack — Our current pipeline executes the following graph in ComfyUI:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/05_comfyui_parallax_technical_standards.md:27 — 1. Technical Anatomy of Our Current ComfyUI Stack — Our current pipeline executes the following graph in ComfyUI:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/06_unified_ledger_drawing_engine_and_comfy_spec.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:262 — 8. Calibrated Parameter Dials & Node Contracts
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:264 — 8.1 Depthflow & Depth Anything v2 (Engine 1) — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large FP32; FP16 strictly banned).
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:261 — 8. Calibrated Parameter Dials & Node Contracts
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_INDEX.md:263 — 8.1 Depthflow & Depth Anything v2 (Engine 1) — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large FP32; FP16 strictly banned).
-- content/video_engine/sources/reference_analyses/UNIFIED_LEDGER_DRAWING_ENGINE_AND_COMFY_SPEC.md:73 — 2.4 Calibrated Dial Matrix for Engine 1 — - Model: `depth_anything_v2_vitl_fp32.safetensors` (ViT-Large in FP32; FP16 is strictly banned due to logit underflow).
-- docs/content-video-engine/45-PARALLAX-AND-PLATE-MOTION.md:46 — 45.3 Our current dials, and what they should be — Read from `tools/google-flow-driver/src/parallax-runner.mjs` on 2026-09-04.
-  cited by: docs/content-video-engine/47-FINDINGS-TO-CHECKS.md:62, docs/content-video-engine/RESEARCH-INDEX.md:35
-- docs/content-video-engine/P13-GATE-B-ARMBAR-REVIEW.md:1 — P13 Gate B Review — Armbar From Guard — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-- docs/content-video-engine/P13-GATE-B-ARMBAR-REVIEW.md:23 — Automated QC — `qc/report.json` is pass for duration drift, word-timing coverage, loudness,
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## ad-hoc (13)
-
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:1 — Dossier: Claude Code (Free Plan) + YouTube Deconstruction — Source Video: https://www.youtube.com/watch?v=WVT2FCjhDDY
-- content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/KEY_LEARNINGS_FOR_CLAUDE.md:55 — 4. Operational Context & MCP Server Role — - The Video Approach: Built a custom Chrome extension (ZAPI FLOW) to inject a queue loop into flow.google with 5-15s jit
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:1 — Deep Research Report: Drawing Engines, Animation Mechanics, Object Management, and Transform Architectures for Faceless Video Production — Generated: 2026-09-04 | Status: Authoritative Technical Architecture | Scope: Video Engine Rendering & Compositing
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:7 — Executive Summary — State-of-the-art programmatic video generation systems (such as Remotion, Motion Canvas, Figma Motion, and Rive) achieve
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:68 — 5 Actionable Upgrades for Our Pipeline — | Area | Current Approach | Target Upgrade (From Research) | Impact |
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:228 — 5. Architectural Blueprint for Outreach Video Engine — To elevate our current Remotion / HyperFrames / HTML player to institutional standards, we outline five concrete improve
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:232 — Improvement 1: Unified Affine Scene Node Interface — Replace ad-hoc CSS positioning (`top: 45%; left: 32%; transform: translate(-50%, -50%)`) with a structured `SceneNode` c
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:1 — Deep Research Report: Drawing Engines, Animation Mechanics, Object Management, and Transform Architectures for Faceless Video Production — Generated: 2026-09-04 | Status: Authoritative Technical Architecture | Scope: Video Engine Rendering & Compositing
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:7 — Executive Summary — State-of-the-art programmatic video generation systems (such as Remotion, Motion Canvas, Figma Motion, and Rive) achieve
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:68 — 5 Actionable Upgrades for Our Pipeline — | Area | Current Approach | Target Upgrade (From Research) | Impact |
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:228 — 5. Architectural Blueprint for Outreach Video Engine — To elevate our current Remotion / HyperFrames / HTML player to institutional standards, we outline five concrete improve
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:232 — Improvement 1: Unified Affine Scene Node Interface — Replace ad-hoc CSS positioning (`top: 45%; left: 32%; transform: translate(-50%, -50%)`) with a structured `SceneNode` c
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## ask-tim (13)
-
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:1 — 28 — Art of YouTube MCP: Trial Evaluation — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/content-video-engine/31-FACELESS-CHANNEL-DOCTRINE.md:1, docs/content-video-engine/31-FACELESS-CHANNEL-DOCTRINE.md:276, docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:55, docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:181, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:147, docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:19
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:15 — Scorecard (updated as tested) — | Tool | Tested | Verdict | Moat? |
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:84 — Partly confirmed — CORRECTED 2026-08-24 after a second probe — The first probe surfaced only two long-form structures, both timestamped to
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:122 — Where this lands on the moat question — The point-ordering rule and the loop-density numbers are the most transferable
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:152 — Production loop and analogy prompting — probed 2026-08-24 — Two operator hypotheses tested: (a) they prompt explicitly for analogies, for
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:197 — Worth adopting — - The Never Repeat Rule is the most directly implementable thing extracted
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:213 — The direct check is blocked — and that finding matters on its own — `search_library`, `get_document` and `list_library` all return the same
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:302 — Finding 5 — fabrication probe — Asked for a "Retention Pyramid framework — the five levels," a framework with
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:509 — Verdict (running) — Pending the script comparison and Niche_Hunter test. Early lean: the
-- docs/content-video-engine/31-FACELESS-CHANNEL-DOCTRINE.md:1 — 31 — Faceless Channel Doctrine (verified AOY extracts) — Niche-agnostic reference for ANY faceless lane — finance, history, or
-  cited by: content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:166, docs/content-video-engine/28-AOY-MCP-EVALUATION.md:486, docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:1, docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:148, docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:163, docs/content-video-engine/34-AOY-SCRIPT-WRITER-STUDY.md:1, +9 more
-- docs/content-video-engine/31-FACELESS-CHANNEL-DOCTRINE.md:276 — 11. Observed architecture note (2026-08-24) — Two retrievals returned a chunk that is not doctrine but an agent-directed
-- docs/portable/OUTRO-CTA-PLAYBOOK.md:1 — OUTRO / CTA / END-SCREEN PLAYBOOK — portable — Audited against the record 2026-09-13 (P54, docs/operator-ledger/PORTABLE-AUDIT.md).
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## date.now (13)
-
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/AGENTS.md:84 — Key Rules — 1. Every timed element needs `data-start`, `data-duration`, and `data-track-index`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/hyperframes-opening-v1/CLAUDE.md:84 — Key Rules — 1. Every timed element needs `data-start`, `data-duration`, and `data-track-index`
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:15 — Architecture Diagram & The 4 Core Mechanical Pillars
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:51 — Pillar 2: Deterministic Clocking & Closed-Form Spring Physics — - Video renderers do not run at real-time speeds; iterative physics loops (Euler/Verlet) or wall-clock timers (`Date.now
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:116 — 2. Animation Mechanics & Deterministic Clocking
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:118 — 2.1 The Deadly Flaw of Wall-Clock Animations in Headless Video — In interactive web browsers, animations rely on `requestAnimationFrame(timestamp)` or `setInterval`. If the CPU stutters
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:15 — Architecture Diagram & The 4 Core Mechanical Pillars
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:51 — Pillar 2: Deterministic Clocking & Closed-Form Spring Physics — - Video renderers do not run at real-time speeds; iterative physics loops (Euler/Verlet) or wall-clock timers (`Date.now
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:116 — 2. Animation Mechanics & Deterministic Clocking
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:118 — 2.1 The Deadly Flaw of Wall-Clock Animations in Headless Video — In interactive web browsers, animations rely on `requestAnimationFrame(timestamp)` or `setInterval`. If the CPU stutters
-- docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md:33 — 3. Technological & Mathematical Primary Grounding
-- docs/research/tech/MOTION_GRAPHICS_FROM_STILL_IMAGES_BLUEPRINT.md:41 — B. Frame-Deterministic React Timing — - The Remotion Frame Law: Remotion prohibits asynchronous clock dependencies (`Date.now()`, `requestAnimationFrame`). An
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## direct-to-camera (13)
-
-- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/BRAVOS-STYLE-EVIDENCE-PACK.md:55 — 3. Still Head Cutout Assets Needed — Each head cutout must be delivered as an isolated, high-contrast transparent PNG (B&W or desaturated with subtle edge-li
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-stealth-wealth-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-asset-blend-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-code-drawn-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-deck-asset-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-whiteboard-world-blend-proof-v1/source/narration.locked.md:14 — Beat map — | Time | Job | Visual anchor |
-- content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/finance-world-plate-evidence-rail-proof-v1/source/narration.locked.md:1 — P24 Narration Lock — - Proof: `finance-stealth-wealth-proof-v1`
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## directorial-lesson (13)
-
-- content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md:66 — P1: The Open (Hook & Contract) [00:00 - 01:30] — - Pacing: 8 events | 233 words | 155.3 WPM (active cadence: 165.3 WPM across 84.6s speech)
-- content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md:72 — P2: The Engine (Foundational Model: Equity vs Credit Divergence) [01:30 - 03:23] — - Pacing: 11 events | 358 words | 189.3 WPM (active cadence: 188.7 WPM across 113.8s speech)
-- content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md:84 — P4: The Pivot (The Revenue Bottleneck & Circularity Trap) [08:59 - 10:58] — - Pacing: 10 events | 344 words | 172.4 WPM (active cadence: 174.2 WPM across 118.5s speech)
-- content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md:90 — P5: The Payoff (The Elephant on the Beach Ball) [10:58 - 16:57] — - Pacing: 25 events | 1016 words | 169.8 WPM (active cadence: 169.6 WPM across 359.4s speech)
-- content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md:96 — P6: The Close (Resolution & Strategic Action) [16:57 - 19:57] — - Pacing: 13 events | 554 words | 185.1 WPM (active cadence: 185.7 WPM across 179.0s speech)
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:64 — P1: The Open (Hook & Contract) [00:00 - 01:30] — - Pacing: 11 events | 419 words | 279.3 WPM
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:70 — P2: The Engine (Foundational Model) [01:30 - 01:58] — - Pacing: 3 events | 167 words | 356.6 WPM
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:76 — P3: The Gap (Mounting Contradiction & Rules 1 & 2) [01:58 - 05:13] — - Pacing: 34 events | 838 words | 258.5 WPM
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:84 — P4: The Pivot (Chiastic Reversal) [05:13 - 06:22] — - Pacing: 5 events | 309 words | 266.9 WPM
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:98 — P6: The Close (Resolution & Ring Echo) [09:50 - 11:35] — - Pacing: 20 events | 483 words | 278.1 WPM
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:70 — P2: The Engine (Foundational Model & Rule 1 Intro) [01:30 - 01:50] — - Pacing: 4 events | 80 words | 240.0 WPM
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:92 — P5: The Payoff (Rule 5: Extreme Substance in a Minimalist Format) [06:13 - 07:30] — - Pacing: 12 events | 330 words | 268.4 WPM
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## ev-japan-holdings-v1 (13)
-
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:1 — CHART CHOREOGRAPHY — Japan Tariff Trick (short) — Operator, 2026-09-08: *"I think that choreography probably has to start being
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13 — As built (2026-09-08) — | # | chart | on | span | deployed (M21) | arrives | leaves | becomes |
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:50 — Evidence pass (E18) — what I verified myself vs. what the hand-off asserts — | figure | verdict |
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-DOSSIER.md:1 — Tokyo Tea Break — evidence dossier — Every figure the script speaks, its source, and the date it was fetched. Nothing here
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/EVIDENCE-DOSSIER.md:45 — Charts built — | sidecar | proves | form |
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:36 — Shots (kit clock first, Kokoro cut in brackets) — | # | span | beat | world | evidence / species | why this pairing |
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:56 — Density check (doc 29 / E21 / E25 / M10-M14) — - 15 shots in 2:15 kit (~2:05 delivered): mean 9 s; the longest world hold is shot 13
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:73 — The short (v11, `SCRIPT-90S-VO.claude.txt`, 236 spoken words, 1:22 kit / Chirp 1:18) — Same worlds, same pages, same bars. The operator's cuts for 1:30: no head-fake, no debate, no
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:1 — Tokyo Tea Break — shot table, 9:16 short — Authored 2026-09-04 against `SCRIPT-90S-VO.txt` (282 words, ~89 s after the tempo
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:13 — The shots — | # | beat | world | evidence dock | why this pairing |
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:31 — Density check (doc 29 / E21 / E25) — - 13 shots in ~89 s — mean 6.8 s, no still over 12 s (M01).
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.md:68 — REVISION 2026-09-04 — every plate re-briefed as an argument — Applying `RULE-abstract-to-concrete.md`. The table above briefed settings; this one
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## from (13)
-
-- docs/runbooks/BRIDGE-PACKET.md:1 — The bridge packet — one shape for Claude, Gemini and Astra (P46 T4, draft for Astra's review) — An order between lanes is a file and a send. Nobody polls a folder for orders; the sender emits the packet through the
-- docs/runbooks/BRIDGE-PACKET.md:8 — 1. The packet (`order.json`) — | field | required | meaning |
-- docs/runbooks/WORK-ORDER-GEMINI-BRIDGE-SHAPES-2026-09-07.md:1 — Work order — the bridge reply shapes, applied globally to the research profiles (2026-09-07) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`).
-- docs/runbooks/WORK-ORDER-GEMINI-HYPERFRAMES-TAGS-2026-09-06.md:1 — Work order — tag the HyperFrames report's figures and name our roots (2026-09-06) — To: the Gemini research lane (profile `video-researcher`). From: the Claude lane of `Outreach Program`, repo root
-- docs/runbooks/WORK-ORDER-GEMINI-IMPLICIT-MORPH-2026-09-14.md:1 — Work order - the morph that handles holes and topology: implicit-surface blends versus ring correspondence (2026-09-14) — To: the Gemini research lane (profile `video-researcher`). From: the Claude lane of `Outreach Program`, repo root
-- docs/runbooks/WORK-ORDER-GEMINI-LIVING-DROP-2026-09-14.md:1 — Work order - the living metallic drop: surface modes, damping, the highlight, and the stop-motion craft of a heavy ball (2026-09-14) — To: the Gemini research lane (profile `video-researcher`). From: the Claude lane of `Outreach Program`, repo root
-- docs/runbooks/WORK-ORDER-GEMINI-PROFILES-2026-09-05.md:1 — Work order — Gemini research profiles, corrections at the source (2026-09-05) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`).
-- docs/runbooks/WORK-ORDER-GEMINI-PROFILES-FLASH-2026-09-06.md:1 — Work order — the research profiles run on the flash tier (2026-09-06) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`).
-- docs/runbooks/WORK-ORDER-GEMINI-PROFILES-LOOP-2026-09-06.md:1 — Work order — the research profiles carry loop discipline (2026-09-06) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`).
-- docs/runbooks/WORK-ORDER-GEMINI-RIG-LAYER-2026-09-14.md:1 — Work order - the relation layer: what 2D rigs and constraint systems get right, harvested (2026-09-14) — To: the Gemini research lane (profile `video-researcher`). From: the Claude lane of `Outreach Program`, repo root
-- docs/runbooks/WORK-ORDER-GEMINI-WATCHER-PROFILE-2026-09-07.md:1 — Work order — a `video-watcher` profile at the source (2026-09-07) — To: the Gemini / Antigravity lane (the profile source, synced to every workspace's `.agents/agents/`).
-- docs/runbooks/WORK-ORDER-GEMINI-WEALTH-LOGIC-CUTS-2026-09-06.md:1 — Work order — classify every cut in the Wealth Logic reference by transition kind (2026-09-06) — To: the Gemini research lane (profile `video-researcher`). From: the Claude lane of `Outreach Program`.
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## hand-off (13)
-
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:1 — How Japan Tricked Trump — Production Hand-off Pack — Project: `japan-tariff-trick` (Systems & Blowups / Money Physics)
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:50 — Evidence pass (E18) — what I verified myself vs. what the hand-off asserts — | figure | verdict |
-- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:97 — Flow rules (anti-random-cut) — Automated video dies by disjointed jumps. Every scene boundary must be authored:
-- docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:54 — 1. Executive decisions — 1. Replace pose repetition with causal state changes. The unit of visual storytelling is
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364 — 9.24 The VERDICT STACK species (operator, s68, 2026-08-30) — At a verdict beat ("Everything we checked holds") the episode's best
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/agent-memory/operator/resume-2026-09-12.md:196, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:154, docs/portable/MOTION-GRAMMAR.md:1
-- docs/content-video-engine/CAPABILITIES.md:94 — The PRESS CARD dock and the STACK hand-off, WIRED — (2026-09-11, P50 T3; Bravos shots 5-10: their claims as cards on the plate, the previous one dimming and sliding back, t
-- docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:86 — Part 2 - Open rulings that are not gates — 2026-09-13: the head with a news band -> E86 (a surface holds video and images; someone else's words play on the TV, R26
-- docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md:50 — Explore — a register question, to be settled by eye, not by catalogue — | component | our nearest | gap | why |
-- docs/content-video-engine/SPECIES-BY-SENTENCE.md:170 — 5. Not built yet, by task (the map already names them so the lint can say "available" the day they land) — Recipes per act (P56, 2026-09-13): `lint_species_choice.py <project> --propose` lists the RECIPES whose `acts` include t
-- docs/portable/MOTION-GRAMMAR.md:1 — MOTION GRAMMAR — narration-locked choreography, portable — Audited against the record 2026-09-13 (P54, docs/operator-ledger/PORTABLE-AUDIT.md).
-- docs/portable/OPERATOR-RULINGS.md:2637 — E87 — The transition is chosen for the scene from the whole kit; no single hand-off rule (2026-09-13) — Ruling (the operator, answering P53 human gate 2, "the hand-off rule"): *"For transitions historically we we had the
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:86
-- docs/runbooks/HANDOFF-ASTRA-GEMINI-2026-09-05.md:1 — Hand-off note to the Astra plan and the Gemini protocol (2026-09-05) — From the Claude lane of `Outreach Program`, after a day of measurement. Paste-ready. Three sources:
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## hand-written (13)
-
-- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/CHECKLIST.md:1 — Publish checklist - Normal For Which Bridge (Money Physics) - `build-review` — 9:16 - 0:57 - every step below is a HUMAN's. The package is written from the build's own artifacts; scheduling and API p
-- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/DESCRIPTION-FACEBOOK.md:1 — Normal For Which Bridge - the Facebook / Instagram description (Money Physics) — Written by `publish_package.py` from `build-review`'s own artifacts - the take's sentences, the compiled timeline's titl
-- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/DESCRIPTION-YOUTUBE.md:1 — Normal For Which Bridge - the YouTube description (Money Physics) — Written by `publish_package.py` from `build-review`'s own artifacts - the take's sentences, the compiled timeline's titl
-- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/PINNED-COMMENT.md:1 — Normal For Which Bridge - the pinned comment (Money Physics) — Written by `publish_package.py` from `build-review`'s own artifacts - the take's sentences, the compiled timeline's titl
-- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/SOURCES.md:1 — Normal For Which Bridge - the sources block (Money Physics) — Written by `publish_package.py` from `build-review`'s own artifacts - the take's sentences, the compiled timeline's titl
-- docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:1 — 52 — Construct, don't inherit — Operator, 2026-09-04:
-- docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:56 — 52.3 That art is generated, and the prompt is the skill — Corrected 2026-09-04, same day, after the operator pushed back. The first version of
-  cited by: docs/content-video-engine/52-CONSTRUCT-DONT-INHERIT.md:120, docs/content-video-engine/BACKLOG.md:13, docs/content-video-engine/BACKLOG.md:281
-- docs/content-video-engine/PIPELINE.md:33 — Stage 7 is AUTHORED. There is no allocator. — This is the step that was replaced with a loop and broke the build.
-- docs/portable/OPERATOR-RULINGS.md:294 — E. Agent process — E1 — Work orders are immutable after dispatch. (2026-08-25.)
-- docs/portable/OPERATOR-RULINGS.md:1110 — E33 — Generated worlds are for illustration, not evidence (2026-09-04) — *"The stick figures work because you can build the world you need to convey; I was trying to
-  cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-90S.claude.md:10, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2145, docs/content-video-engine/BACKLOG.md:627, docs/content-video-engine/briefs/ART-EMBED-PLATE-ORDER-2026-09-11.md:1, docs/content-video-engine/TRIAGE-2026-09-05.md:147, docs/portable/OPERATOR-RULINGS.md:1218
-- docs/portable/SOUND-SOURCING.md:36 — Attribution SOP — Every sound asset carries its row in the project's `sound/SOURCES.md`
-- docs/runbooks/WORK-ORDER-GEMINI-IMPLICIT-MORPH-2026-09-14.md:1 — Work order - the morph that handles holes and topology: implicit-surface blends versus ring correspondence (2026-09-14) — To: the Gemini research lane (profile `video-researcher`). From: the Claude lane of `Outreach Program`, repo root
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## headslot (13)
-
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:61 — Pillar 4: Modular Vector Cutout Rigging (The Host Solution) — - Skeletal mesh deformation produces rubbery distortions; generating full-body images per frame causes severe AI face/st
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:68 — 5 Actionable Upgrades for Our Pipeline — | Area | Current Approach | Target Upgrade (From Research) | Impact |
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:205 — 4. Character Rigging & Vector Cutout Systems
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:210 — 4.2 The Winning Standard: Vector Cutout + Slot-Swapping — The institutional standard (used in South Park, Vyond, Moho, and Wealth Logic) is Modular Vector Cutout Rigging:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:30 — 1. Executive Summary & The 4 Core Pillars — State-of-the-art programmatic video generation systems (Remotion, Motion Canvas, Figma Motion, Rive) achieve institution
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:63 — The 4 Pillars: — 1. The Coordinate Transform Pipeline & Anchor Normalization: Elements live in local space and transform to screen space
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:61 — Pillar 4: Modular Vector Cutout Rigging (The Host Solution) — - Skeletal mesh deformation produces rubbery distortions; generating full-body images per frame causes severe AI face/st
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:68 — 5 Actionable Upgrades for Our Pipeline — | Area | Current Approach | Target Upgrade (From Research) | Impact |
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:205 — 4. Character Rigging & Vector Cutout Systems
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:210 — 4.2 The Winning Standard: Vector Cutout + Slot-Swapping — The institutional standard (used in South Park, Vyond, Moho, and Wealth Logic) is Modular Vector Cutout Rigging:
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:30 — 1. Executive Summary & The 4 Core Pillars — State-of-the-art programmatic video generation systems (Remotion, Motion Canvas, Figma Motion, Rive) achieve institution
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:63 — The 4 Pillars: — 1. The Coordinate Transform Pipeline & Anchor Normalization: Elements live in local space and transform to screen space
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## left-to-right (13)
-
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:1 — PRODUCTION REFERENCE REPORT (Claude, 2026-09-10): China Just Triggered A New World Order — - Source: `https://youtu.be/1ZS5_txbOsc` - Bravos Research, 19:56.5 (1196.5 s), 1280x720 av1, 29.97 fps
-- content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:50 — The grammar (what the frames say; what it maps to in our engine) — 1. One stage, one accent. Near-black charcoal, one pink, white type; green only for 'up' and the CTA. Titles top-centre
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:446 — 6. Track D — Placement (The "Where" Question)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:455 — D2: Non-Decorative Composition for 9:16 [Candidate Doctrine] — - Tangency Elimination Rule: Minimum clearance $\ge 24\text{px}$ OR deliberate overlap $\ge 48\text{px}$ with cast shado
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:441 — 8.9 Documents draw on, and they leave (operator correction, 2026-08-24) — Two failures in the v4 build, one cause: the dock was a state, not an event.
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:575 — 8.13 Hand pose set v2 — host-consistent, two poses, per-pose nib — The asset pack shipped exactly one hand: `draw-hand-a-v1`, light-skinned, and
-- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:398 — 11. Data documents animate too — the line is drawn by narration beats — Operator question, 2026-08-25: keep charts as they are, or move to manim?
-- docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:420 — The beat-keyed draw — The important idea, and the thing that makes this better than a chart
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:466 — 6. Track D — Placement (The "Where" Question)
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:475 — D2: Non-Decorative Composition for 9:16 [Candidate Doctrine] — - Tangency Elimination Rule: Minimum clearance $\ge 24\text{px}$ OR deliberate overlap $\ge 48\text{px}$ with cast shado
-- docs/content-video-engine/RULE-abstract-to-concrete.md:1 — The plate throws the punch — abstract-to-concrete, 2026-09-04 — Adopted from the doodle-channel master prompt's rule 5, which is the one genuinely
-- docs/content-video-engine/RULE-abstract-to-concrete.md:39 — Frame types that carry a punch — Adapted from the source's rule 8, kept where it fits our register and dropped where it
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## loophole (13)
-
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:47 — The 5 Foundational Takeaways for Our Channels (*Money Physics* / *Building Money*)
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74 — 4. Persistent Cast & Metaphorical Physical Props — - No Random AI Hallucinations: Wealth Logic uses a single consistent diegetic character (a calm, smart analyst in a whit
-- content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:129 — Visual Evidence Manifest — All reference frames extracted from the native stream are archived in `frames/`:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:47 — The 5 Foundational Takeaways for Our Channels (*Money Physics* / *Building Money*)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:74 — 4. Persistent Cast & Metaphorical Physical Props — - No Random AI Hallucinations: Wealth Logic uses a single consistent diegetic character (a calm, smart analyst in a whit
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/01_wealth_logic_production_report.md:129 — Visual Evidence Manifest — All reference frames extracted from the native stream are archived in `frames/`:
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/02_drawing_engine_and_transforms_research.md:128 — 2.2 Closed-Form Analytic Spring Physics (O(1) Seekable Dynamics) — Game engines simulate springs iteratively using Euler or Verlet integration ($\mathbf{v}_{t+1} = \mathbf{v}_t + \mathbf{
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:86 — 3. Forensic Visual Evidence & Proof of 2.5D Compositing — A central question in AI video production is whether top channels generate hosts into scenes via diffusion prompts or co
-- content/video_engine/sources/reference_analyses/DRAWING_ENGINE_ANIMATION_TRANSFORM_RESEARCH.md:128 — 2.2 Closed-Form Analytic Spring Physics (O(1) Seekable Dynamics) — Game engines simulate springs iteratively using Euler or Verlet integration ($\mathbf{v}_{t+1} = \mathbf{v}_t + \mathbf{
-- content/video_engine/sources/reference_analyses/MASTER_RESEARCH_AND_EVIDENCE_DOSSIER.md:86 — 3. Forensic Visual Evidence & Proof of 2.5D Compositing — A central question in AI video production is whether top channels generate hosts into scenes via diffusion prompts or co
-- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:47 — The 5 Foundational Takeaways for Our Channels (*Money Physics* / *Building Money*)
-- content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:74 — 4. Persistent Cast & Metaphorical Physical Props — - No Random AI Hallucinations: Wealth Logic uses a single consistent diegetic character (a calm, smart analyst in a whit
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## mass-spring-damper (13)
-
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:121 — 4. Animation Engine & Motion Recommendations
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:123 — Mass-Spring-Damper Dynamics (Remotion / GSAP / HyperFrames) — To ensure deterministic, seek-safe $O(1)$ animation evaluation without numerical integration drift, use the closed-form
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:149 — 3. Track A — The Animator (Timing and Motion)
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:205 — A3: Spring vs. Curve [RECLASSIFIED: Design Proposal]
-- content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:207 — Analytic Mass-Spring-Damper Formulation (Tier 1 Math) — $$m \ddot{x}(t) + c \dot{x}(t) + k x(t) = 0, \quad \omega_0 = \sqrt{\frac{k}{m}}, \quad \zeta = \frac{c}{2\sqrt{k m}}$$
-- docs/content-video-engine/BACKLOG.md:627 — RETIRE — struck from the triage list only; no doc line is deleted (R7) (12) — | id | item — what and where | why / evidence | cost |
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:163 — 3. Track A — The Animator (Timing and Motion)
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:223 — A3: Spring vs. Curve [RECLASSIFIED: Design Proposal]
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:225 — Analytic Mass-Spring-Damper Formulation (Tier 1 Math) — $$m \ddot{x}(t) + c \dot{x}(t) + k x(t) = 0, \quad \omega_0 = \sqrt{\frac{k}{m}}, \quad \zeta = \frac{c}{2\sqrt{k m}}$$
-- docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:230 — Material Parameter Presets [Tier 2 Proposal] — The material preset table above is ours. [DERIVED: from the mass-spring-damper formulation above (sources: not on file),
-- docs/content-video-engine/TRIAGE-2026-09-05.md:60 — 1. The triage table
-- docs/content-video-engine/TRIAGE-2026-09-05.md:62 — 1a. Orphaned in the animation registry — doc-side (10 names / 17 records) — | item | what it is (≤120 chars) | where (path \| heading) | status + evidence (registry line) | recent-stumble evidence
-- … 1 more in `docs/DOCS-TOPICS.jsonl`
-
-## metaphor-prop (13)
-
-- content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/REPORT.md:53 — Visual Species Distribution — | Species | Count | Share | Primary Function in Video |
-- content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/SHOT_LEDGER.md:1 — SHOT LEDGER: Dual-Track Visual Events & Composition Hierarchy — | Shot # | Start | End | Dur (s) | Kind | Camera | Keyframe | Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/SHOT_LEDGER.md:95 — Taxonomy Legend — - Kind: `COMP` = new base stage / scene cut; `build` = animated element or callout inside held composition.
-- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:36 — 2. Visual System & Stage Grammar
-- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:50 — Visual Species Distribution — | Species | Count | Share | Primary Function in Video |
-- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/SHOT_LEDGER.md:1 — SHOT LEDGER: Dual-Track Visual Events & Composition Hierarchy — | Shot # | Start | End | Dur (s) | Kind | Camera | Keyframe | Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/SHOT_LEDGER.md:106 — Taxonomy Legend — - Kind: `COMP` = new base stage / scene cut; `build` = animated element or callout inside held composition.
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/REPORT.md:50 — Visual Species Distribution — | Species | Count | Share | Primary Function in Video |
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/SHOT_LEDGER.md:1 — SHOT LEDGER: Dual-Track Visual Events & Composition Hierarchy — | Shot # | Start | End | Dur (s) | Kind | Camera | Keyframe | Species | Spoken Line / Audio Beat |
-- content/video_engine/sources/reference_analyses/i-found-the-pattern-behind-every-viral-video/SHOT_LEDGER.md:106 — Taxonomy Legend — - Kind: `COMP` = new base stage / scene cut; `build` = animated element or callout inside held composition.
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/REPORT.md:50 — Visual Species Distribution — | Species | Count | Share | Primary Function in Video |
-- content/video_engine/sources/reference_analyses/new-rules-faceless-channels-2026/SHOT_LEDGER.md:1 — SHOT LEDGER: Dual-Track Visual Events & Composition Hierarchy — | Shot # | Start | End | Dur (s) | Kind | Camera | Keyframe | Species | Spoken Line / Audio Beat |
-- … 1 more in `docs/DOCS-TOPICS.jsonl`

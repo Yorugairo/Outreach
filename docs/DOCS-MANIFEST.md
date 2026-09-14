@@ -16,7 +16,7 @@ terms. Purpose, terms and defines are truncated here to keep the file cheap to g
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`. A per-item
 folder is one row under `## folders` (COLLAPSED_FAMILIES in the builder).
 
-417 documents across 13 kinds.
+437 documents across 13 kinds.
 
 ## doctrine
 
@@ -180,6 +180,7 @@ folder is one row under `## folders` (COLLAPSED_FAMILIES in the builder).
 - docs/research/motion/BRIEF-WEIGHT-DENSITY-MASS-2026-09-07.md — Research brief — weight, density and mass in drawing, animation and stop-motion — Asked by: the operator, 2026-09-07, on Tokyo v3's first throw and landing (P47 T1, HG2): "The throw comes on, but it doe — defines: — — terms: area-preserving; mass-spring-damper; HyperFrames; stop-motion-cadence; headline-slam; three-frame; follow-up
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md — HyperFrames Motion, Transitions, and Kinetic Transformations — Research Blueprin — How does HeyGen HyperFrames structure motion design, scene transitions, stop-motion physics, and transformations, and ho — defines: — — terms: HyperFrames; HeyGen; on-twos; rules-and-anti-patterns; stop-motion; hand-drawn; WebGL
 - docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md — Implicit-Surface Blends versus Ring Correspondence for Ink Shapes with Holes and — Pass Metadata: Workflow: Deep Research Engine (`/research --deep morphing ink shapes with holes and topology change`) Da — defines: — — terms: [source on file]; Phi_B; Phi_t; Phi_A; Cohen-Or; [practitioner doctrine]; Turk & O'Brien 1999
+- docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md — Research Blueprint — The Living Metallic Drop: Surface Modes, Damping, the Highl — A liquid metal drop is governed by an extreme ratio of high surface tension and density to ultra-low kinematic viscosity — defines: — — terms: [source on file]; [practitioner doctrine]; [DERIVED]; tau_2; f_2; tau_l; Oblate-Prolate
 - docs/research/motion/RIG_CONSTRAINTS_RELATION_LAYER_RESEARCH_BLUEPRINT.md — The Relation Layer: What 2D Rigs and Constraint Systems Get Right, Harvested — Pass Metadata: Workflow: Deep Research Engine (`/research --deep`) Date: 2026-09-14 Profile: `video-researcher` Order Re — defines: — — terms: s_x; translate-only; R26-105; seek-safe; M_B; s_y; x_T
 - docs/research/motion/WEALTH_LOGIC_CUT_OFFSETS_MEASURED.md — Wealth Logic — where the picture change sits relative to the narration (J-cut / — TR-2 (`docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md` §1, from research brief B3, "the only question no pas — defines: — — terms: YouTube; split-edit; L-cut-like; J-cut-like; auto-captions; mid-speech; Voice-driven
 - docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md — Wealth Logic Transitions, Measured From The Pixels — What KIND of transition does the Wealth Logic reference use at each of its 99 shot boundaries - hard cut, dissolve, dip — defines: — — terms: blur-zoom; DIP_BRIGHT_FRAC 1.60; [t - 0.6 s, t + 0.8 s]; L_before; L_after; S_before; multi-frame
@@ -277,7 +278,7 @@ folder is one row under `## folders` (COLLAPSED_FAMILIES in the builder).
 - content/video_engine/projects/systems-and-blowups/registration/ — one episode's working folder — 2 documents, index README.md: Slide Semantic Registration — systems-and-blowups — Returned 2026-08-24, validated PASS: 86/86 slides, 340 verbatim figures, 0 errors, 0 low-confidence, 4 honest unmatched
 - content/video_engine/projects/systems-and-blowups/sources/ — one episode's working folder — 1 document
 - content/video_engine/projects/systems-and-blowups/steel-and-paper/ — one episode's working folder — 21 documents
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/ — one episode's working folder — 18 documents, index SCRIPT-90S-DESCRIPTION.md: Tokyo Tea Break — the publish description (YouTube Short) — Drafted 2026-09-06 against the approved render (`build-short/render/APPROVALS.json`) and the dossier (`EVIDENCE-DOSSIER.
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/ — one episode's working folder — 37 documents, index SCRIPT-90S-DESCRIPTION.md: Tokyo Tea Break — the publish description (YouTube Short) — Drafted 2026-09-06 against the approved render (`build-short/render/APPROVALS.json`) and the dossier (`EVIDENCE-DOSSIER.
 - content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/ — one video's reference-analysis dossier — 4 documents
 - content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/ — one video's reference-analysis dossier — 5 documents
 - content/video_engine/sources/reference_analyses/bravos-the-bubbles-final-phase-has-begun/ — one video's reference-analysis dossier — 2 documents

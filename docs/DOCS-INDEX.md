@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-4219 records across 344 files.
+4384 records across 363 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -777,6 +777,196 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L34 [2] What this does not yet say — Eight viewers cannot separate the hook from the timing test from the audience. The second step at 0:55 (s08, a clip <Re-read>
 - L40 [2] Second read, ~2 h after posting (n = 51 viewers, 282 views, 6 fifteen-second views, 3 interactions, 0 follows) — | metric | value | {0:07; The curve, read against the scene list} <drop-off; suck>
 - L67 [2] Third read, ~3 h after posting (n = 254 viewers, 303 views, 25 fifteen-second views, watch time 51 m 21 s) — | metric | value | {12 s; 0:04; 0:12; 50 % by 0:08, ~30 % by 0:22; Read against the scene list:} <drop-off>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md
+
+- L1 [1] Work Order — claim `p60-a-crate-alpha` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; three-quarter; upper-left; true-alpha; World-board; unresolved; approvals.json; p60-a-crate-alpha.manifest.json>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L14 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <a-crate-alpha; three-quarter; upper-left>
+- L23 [3] p60-a-crate-alpha  (prop) — Create ONE reusable editorial prop: a closed wooden shipping crate with visible lid, metal corner fittings and one completely blank cream rectangular label pane <three-quarter; upper-left>
+- L28 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L37 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L50 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L61 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <a-crate-alpha; p60-a-crate-alpha.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-green.md
+
+- L1 [1] Work Order — claim `p60-a-crate-green` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; three-quarter; upper-left; true-alpha; World-board; unresolved; approvals.json; p60-a-crate-green.manifest.json>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L14 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <a-crate-green; three-quarter; upper-left>
+- L23 [3] p60-a-crate-green  (prop) — Create ONE reusable editorial prop: a closed wooden shipping crate with visible lid, metal corner fittings and one completely blank cream rectangular label pane <three-quarter; upper-left>
+- L28 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L37 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L50 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L61 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <a-crate-green; p60-a-crate-green.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-alpha.md
+
+- L1 [1] Work Order — claim `p60-a-gate-alpha` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; copper-and-cream; three-quarter; upper-left; true-alpha; World-board; unresolved; approvals.json>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L14 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <a-gate-alpha; copper-and-cream; three-quarter; upper-left>
+- L23 [3] p60-a-gate-alpha  (prop) — Create ONE reusable editorial prop: a toll gate with one indigo pedestal and a copper-and-cream barrier bar, closed horizontally, visible round hinge, no toll b <copper-and-cream; three-quarter; upper-left>
+- L28 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L37 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L50 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L61 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <a-gate-alpha; p60-a-gate-alpha.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-gate-green.md
+
+- L1 [1] Work Order — claim `p60-a-gate-green` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; copper-and-cream; three-quarter; upper-left; true-alpha; World-board; unresolved; approvals.json>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L14 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <a-gate-green; copper-and-cream; three-quarter; upper-left>
+- L23 [3] p60-a-gate-green  (prop) — Create ONE reusable editorial prop: a toll gate with one indigo pedestal and a copper-and-cream barrier bar, closed horizontally, visible round hinge, no toll b <copper-and-cream; three-quarter; upper-left>
+- L28 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L37 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L50 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L61 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <a-gate-green; p60-a-gate-green.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-alpha.md
+
+- L1 [1] Work Order — claim `p60-a-lever-alpha` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; three-quarter; upper-left; true-alpha; World-board; unresolved; approvals.json; p60-a-lever-alpha.manifest.json>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L14 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <a-lever-alpha; three-quarter; upper-left>
+- L23 [3] p60-a-lever-alpha  (prop) — Create ONE reusable editorial prop: a locked industrial lever on a compact indigo housing, copper handle, visible padlock and one small bright GREEN indicator l <three-quarter; upper-left>
+- L28 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L37 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L50 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L61 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <a-lever-alpha; p60-a-lever-alpha.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-lever-magenta.md
+
+- L1 [1] Work Order — claim `p60-a-lever-magenta` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; three-quarter; upper-left; true-alpha; World-board; unresolved; approvals.json; p60-a-lever-magenta.manifest.json>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L14 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <a-lever-magenta; three-quarter; upper-left>
+- L23 [3] p60-a-lever-magenta  (prop) — Create ONE reusable editorial prop: a locked industrial lever on a compact indigo housing, copper handle, visible padlock and one small bright GREEN indicator l <three-quarter; upper-left>
+- L28 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L37 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L50 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L61 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <a-lever-magenta; p60-a-lever-magenta.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-expanded.md
+
+- L1 [1] Work Order — claim `p60-b-crate-expanded` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; three-quarter; upper-left; true-alpha; World-board; unresolved; approvals.json; p60-b-crate-expanded.manifest.json>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L14 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <b-crate-expanded; three-quarter; upper-left>
+- L23 [3] p60-b-crate-expanded  (prop) — Create ONE reusable editorial prop: a closed wooden shipping crate with visible lid, metal corner fittings and one completely blank cream rectangular label pane <three-quarter; upper-left>
+- L28 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L37 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L50 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L61 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <b-crate-expanded; p60-b-crate-expanded.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-crate-short.md
+
+- L1 [1] Work Order — claim `p60-b-crate-short` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; true-alpha; World-board; unresolved; approvals.json; p60-b-crate-short.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L14 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <b-crate-short>
+- L23 [3] p60-b-crate-short  (prop) — Create ONE reusable illustrated prop: a closed wooden shipping crate with visible lid, metal corner fittings and one completely blank cream rectangular label pa
+- L28 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L37 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L50 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L61 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <b-crate-short; p60-b-crate-short.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-expanded.md
+
+- L1 [1] Work Order — claim `p60-b-gate-expanded` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; copper-and-cream; three-quarter; upper-left; true-alpha; World-board; unresolved; approvals.json>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L14 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <b-gate-expanded; copper-and-cream; three-quarter; upper-left>
+- L23 [3] p60-b-gate-expanded  (prop) — Create ONE reusable editorial prop: a toll gate with one indigo pedestal and a copper-and-cream barrier bar, closed horizontally, visible round hinge, no toll b <copper-and-cream; three-quarter; upper-left>
+- L28 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L37 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L50 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L61 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <b-gate-expanded; p60-b-gate-expanded.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/B-gate-short.md
+
+- L1 [1] Work Order — claim `p60-b-gate-short` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; copper-and-cream; true-alpha; World-board; unresolved; approvals.json; p60-b-gate-short.manifest.json; PowerShell>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L14 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <b-gate-short; copper-and-cream>
+- L23 [3] p60-b-gate-short  (prop) — Create ONE reusable illustrated prop: a toll gate with one indigo pedestal and a copper-and-cream barrier bar, closed horizontally, visible round hinge, no toll <copper-and-cream>
+- L28 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L37 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L50 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L61 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <b-gate-short; p60-b-gate-short.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-gate-open.md
+
+- L1 [1] Work Order — claim `p60-c-gate-open` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; toll-gate; true-alpha; World-board; unresolved; approvals.json; p60-c-gate-open.manifest.json; PowerShell>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L13 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <c-gate-open; toll-gate>
+- L22 [3] p60-c-gate-open  (world) — Edit image 1 only: raise the existing toll-gate bar by 12 degrees above its current closed position, rotating it around the existing hinge center at approximate <toll-gate>
+- L27 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L36 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L49 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L60 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <c-gate-open; p60-c-gate-open.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-outpaint.md
+
+- L1 [1] Work Order — claim `p60-c-outpaint` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; true-alpha; World-board; unresolved; approvals.json; p60-c-outpaint.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L13 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <c-outpaint>
+- L22 [3] p60-c-outpaint  (world) — Extend this 768x1376 portrait house plate horizontally to a 2304x1376 landscape canvas. Place the original image unchanged at x=768..1535, y=0..1375; preserve t
+- L27 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L36 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L49 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L60 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <c-outpaint; p60-c-outpaint.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-remove-mug.md
+
+- L1 [1] Work Order — claim `p60-c-remove-mug` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; background-repair; true-alpha; World-board; unresolved; approvals.json; p60-c-remove-mug.manifest.json; PowerShell>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L13 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <c-remove-mug; background-repair>
+- L22 [3] p60-c-remove-mug  (world) — Edit this existing 768x1376 house plate. Remove ONLY the mug and its handle and local contact shadow on the desk at approximately x=75..180, y=980..1110. Recons <background-repair>
+- L27 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L36 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L49 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L60 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <c-remove-mug; p60-c-remove-mug.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/C-vignette.md
+
+- L1 [1] Work Order — claim `p60-c-vignette` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; copper-and-cream; two-thirds; code-rendered; true-alpha; World-board; unresolved; approvals.json>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L14 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <c-vignette; copper-and-cream; two-thirds; code-rendered>
+- L23 [3] p60-c-vignette  (world) — Create one landscape editorial vignette using image 1 as the identity reference for the exact toll gate and image 2 as house style reference. A light applicatio <copper-and-cream; two-thirds; code-rendered>
+- L28 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L37 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L50 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L61 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <c-vignette; p60-c-vignette.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/D-repeat-1.md
+
+- L1 [1] Work Order — claim `p60-d-repeat-1` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; true-alpha; World-board; unresolved; approvals.json; p60-d-repeat-1.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L14 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <d-repeat>
+- L23 [3] p60-d-repeat-1  (prop) — Create ONE reusable illustrated prop: a closed wooden shipping crate with visible lid, metal corner fittings and one completely blank cream rectangular label pa
+- L28 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L37 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L50 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L61 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <d-repeat; p60-d-repeat-1.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/D-repeat-2.md
+
+- L1 [1] Work Order — claim `p60-d-repeat-2` — Follow this document exactly. It is self-contained: generate, extract, <self-contained; self-judge; woodblock-vox-newsprint; read-only; best-of; three-quarter; upper-left; true-alpha; World-board; unresolved; approvals.json; p60-d-repeat-2.manifest.json>
+- L6 [2] Reference images (read-only inputs) — Pass these to your image generator as reference/conditioning inputs. Never
+- L14 [2] Stage A — Generate (best-of, opaque allowed) — For each subject below, generate up to 3 candidates and <d-repeat; three-quarter; upper-left>
+- L23 [3] p60-d-repeat-2  (prop) — Create ONE reusable editorial prop: a locked industrial lever on a compact indigo housing, copper handle, visible padlock and one small bright GREEN indicator l <three-quarter; upper-left>
+- L28 [2] Stage B — Extract — Matte each chosen source to a true-alpha cutout (rembg or equivalent), trim to {resize the padded canvas to exactly 1024x1024 (LANCZOS)} <true-alpha; World-board>
+- L37 [2] Stage C — Self-judge the cutout (max 2 extraction attempts per slot) — 1. Alpha is genuine — inspect the channel; full 0-255 range, subject opaque. {deliver the source anyway} <unresolved>
+- L50 [2] Prompt adaptation — permission with a boundary — When an attempt fails your own judgment, you may strengthen the prompt {strengthen} <approvals.json>
+- L61 [2] Stage D — Deliver — Delivery folder (create subfolders as needed): <d-repeat; p60-d-repeat-2.manifest.json; PowerShell; Get-FileHash -Algorithm SHA256 <file>; approvals.json>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/RESULTS.md
+
+- L1 [1] P60 image and prop capability tests — Status: measurement and independent review in progress. All outputs are quarantine-only, not operator-approved. <quarantine-only; operator-approved; built-in; Pillow-readable; gpt-image; A-gate-green; billing-equivalence; Prompt-authoring; zero-cost; native-alpha; D-repeat; B-crate-short>
+- L5 [2] What this tests — The built-in image_gen lane, using frozen prompts and real house references. It does not establish GPT Image 2.5 capabilities: the tool exposes no model/effort <built-in; Pillow-readable; gpt-image>
+- L11 [2] Calls and provenance — Sixteen planned slots produced sixteen raw images. One additional A-gate-green attempt was interrupted with no output, then explicitly recovered: 17 attempts, 1 {17 attempts, 16 outputs, one interruption, zero hidden aesth} <A-gate-green; billing-equivalence; Prompt-authoring; zero-cost; native-alpha; D-repeat; B-crate-short; C-remove-mug; C-outpaint>
+- L21 [2] Findings and workflow decisions — | Workflow | Observed result | Recommendation | <House-style; geometry-locked; B-crate-short; three-quarter; continuity-sensitive; pixel-locked; alternate-composition; T-handled; single-handle; IoU0; geometry-stable>
+- L35 [2] Measurement interpretation — The probe reports one result per slot, raw and derived hashes, actual alpha, key distribution, silhouette bounds, and review paths. Its PASS means evidence gene <production-ready; raw-edge; key-hue; near-key; border-connected; same-colored; green-screen; true-alpha; real-green; enclosed-hole; soft-edge; feature-tracker>
+- L47 [2] Existing local workflow — P58's docs/research/runs/p58-2-5d/HG1-SHEET.md supplies the relevant downstream context: Depth Anything + LaMa + SAM can derive depth layers from a flat plate w <LaMa; model-provenance; human-defined; depth-intent>
+- L53 [2] Validation and remaining acceptance evidence — Parent reran measure_probe.py --check: PASS,16/16 measured,0pending. Required three-file consumer suite:70passed in0.99s (independent reviewer also70passed). Pa <three-file; re-review; existing-consumer; Compiler-contract>
+
+## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/verification.md
+
+- L1 [1] P60 verification ledger — Parent checks, 2026-09-14: <PowerShell; Get-FileHash; FileHash; prompt-file; source-reference; tool-saved; source-file; A-gate-green; native-alpha; D-repeat; IMAGE-AND-PROP-CAPABILITY-TESTS; existing-consumer>
 
 ## content/video_engine/projects/systems-and-blowups/tokyo-tea-break/CLOSE-CANDIDATES-2026-09-03.md
 
@@ -4727,6 +4917,38 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L257 [3] 5.4 What Reads as "Hand-Drawn" (The Motor Control Laws) — A simple linear SVG `stroke-dashoffset` reveal reads as an automated machine plotter. To read authentically as drawn by a living hand, path playback must enforc {Viviani & Terzuolo (1982) Two-Thirds Power Law:; Kinetic Consequence:} <stroke-dashoffset; [source on file]; Flash & Hogan; Minimum-Jerk; Point-to-point; int_0; bell-shaped; Micro-Tremor; stroke-width; [practitioner doctrine]>
 - L273 [2] 6. Sourced Evidence & Proof Lines — The following formal proof lines document all primary literature and empirical figures cited in this report: <Turk & O'Brien 1999; Turk & O'Brien; Carr et al.; FastRBF; Morse et al.; Cohen-Or; Or et al.; Levin; Breen & Whitaker 2001; Level-Set; Hamilton-Jacobi; Phi_B>
 - L295 [2] NOT FOUND WHERE I LOOKED — The following primary search roots, repositories, and local codebase locations were exhaustively searched during this deep research pass: {Academic DOI & Publisher Registries:} <Turk & O'Brien 1999; Alexa et al.; Sederberg & Greenwood 1992; Zhang & Suen 1984; Cohen-Or; Or et al.; Breen & Whitaker 2001; Morse et al.; Lam & Yam 2009; Surazhsky et al.; Tereshin et al.; Felzenszwalb & Huttenlocher 2012>
+
+## docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md
+
+- L1 [1] Research Blueprint — The Living Metallic Drop: Surface Modes, Damping, the Highlight, and the Stop-Motion Craft of a Heavy Ball — Date: 2026-09-14 {Date:; Author:; Parent Brief:; Target Path:; Run Directory:; Status:} <video-researcher; RECALL-RECEIPT; [source on file]; Rayleigh; tau_l; tau_2; WebBook; Morley et al.; Release; f_2; T_2; [DERIVED]>
+- L12 [2] Master Numbers Table — | Question | Cue / Parameter | Number / Law | Primary Authority / Source | Tag | {Q1} <[source on file]; Rayleigh; tau_l; tau_2; WebBook; Morley et al.; Release; f_2; T_2; [DERIVED]; post-impact; Zhao et al.>
+- L55 [2] Verdict up front — A liquid metal drop is governed by an extreme ratio of high surface tension and density to ultra-low kinematic viscosity: in free space, a $2\,\text{mm}$ mercur <ultra-low; tau_2; [source on file]; non-zero; [practitioner doctrine]; k_d; F_0; stop-motion; wagon-wheel>
+- L67 [2] Section 1: Rayleigh Drop-Oscillation Modes & Lamb Viscous Damping <Formula; small-amplitude; [source on file]; Oblate-Prolate; f_2; Modulus; tau_n; tau_l; tau_2; tau_3; [DERIVED]; tau_4>
+- L69 [3] 1.1 Primary Governing Equations <Formula; small-amplitude; [source on file]; Oblate-Prolate; f_2; Modulus; tau_n; tau_l; tau_2; tau_3; [DERIVED]; tau_4>
+- L71 [4] Rayleigh Capillary Vibration Formula (1879) — In his foundational 1879 paper on the stability of liquid jets and globules, Lord Rayleigh solved the small-amplitude oscillation frequencies of an inviscid, sp <small-amplitude; [source on file]>
+- L86 [4] The Physical Significance of Harmonic Degrees — - $l = 0$ (Breathing Mode): $\omega_0 = 0$. Incompressible fluid flow requires $\nabla \cdot \mathbf{u} = 0$. Volume conservation precludes radial breathing; th {$l = 0$ (Breathing Mode):; $l = 1$ (Translation Mode):; $l = 2$ (Fundamental Quadrupole / Oblate-Prolate Mode):} <[source on file]; f_2>
+- L97 [4] Lamb Viscous Damping Modulus (1932) — Sir Horace Lamb derived the viscous damping rate of these oscillations in Hydrodynamics (6th ed. 1932, §355): <tau_n; tau_l; [source on file]; tau_2; tau_3; [DERIVED]; tau_4>
+- L120 [3] 1.2 Physical Properties Table (20°C / 293.15 K) — | Fluid | Density $\rho$ ($\text{kg/m}^3$) | Surface Tension $\sigma$ ($\text{N/m}$) | Dynamic Viscosity $\mu$ ($\text{Pa}\cdot\text{s}$) | Kinematic Viscosity {Mercury ($\text{Hg}$); Galinstan} <Jasper 1972; [source on file]; Morley et al.; Releases 2008>
+- L135 [3] 1.3 Benchmark $2\,\text{mm}$ Droplet Calculation ($R = 0.002\,\text{m}$) — Evaluating a $2\,\text{mm}$ radius drop illustrates the distinct kinetic behavior: {Mercury:; Galinstan:; Water:; India Ink:} <f_2; T_2; tau_2; [DERIVED]>
+- L146 [2] Section 2: Real Liquid-Metal Drop Landing, Rolling, and Settle Dynamics <High-speed; Zhao et al.; Rioboo et al.; ultra-thin; High-frequency; [source on file]; oblate-prolate; non-ideal; no-slip; de-pinning; micro-roughness; non-spherical>
+- L148 [3] 2.1 Impact Phenomenology & Mode Decomposition — High-speed impact footage and experimental studies of liquid metal droplets impacting solid substrates (Zhao et al. 2024, Droplet; Rioboo et al. 2002, Exp. Flui {The Inertial Splat:; The Capillary Rebound:} <High-speed; Zhao et al.; Rioboo et al.; ultra-thin; High-frequency; [source on file]; oblate-prolate>
+- L156 [3] 2.2 Settle Cycle Count on Substrates — While Lamb damping predicts seconds of oscillation for levitated drops, droplets on solid substrates come to rest in 3 to 6 visible cycles ($80\text{--}220\,\te {3 to 6 visible cycles ($80\text{--}220\,\text{ms}$); Viscous Boundary Layer Shear:; Contact Line Hysteresis:} <[source on file]; non-ideal; no-slip; de-pinning; micro-roughness; non-spherical>
+- L165 [3] 2.3 Does it Ever Rest? Thermal vs. Ambient Excitation — - Thermal Equilibrium: Thermal capillary fluctuations have root-mean-square amplitude $\sqrt{\langle h^2 \rangle} \sim \sqrt{\frac{k_B T}{2\pi \sigma} \ln(R/a)} {Thermal Equilibrium:; absolute, dead macroscopic rest; Ambient Excitation:} <root-mean-square; k_B; [source on file]; sub-atomic; chemo-mechanical>
+- L172 [3] 2.4 Physical Evaluation of the Floor Amplitude Ruling — Operator ruling E88 s5–s7 mandates that the ball maintains a persistent non-zero "floor amplitude" ($A_{\text{floor}} > 0$), "wriggling to contain itself" `[pra {Physical Reality:; NO basis in unforced fluid equilibrium; Honest Designation:; HONEST STYLISED PRAXIS (Practitioner Doctrine); Visual Function:} <non-zero; [practitioner doctrine]; [source on file]; micro-wobble>
+- L180 [2] Section 3: The Specular Highlight: Optics, Kinematics, and Metallic BRDF <[source on file]; [DERIVED]; P_l; high-intensity; [practitioner doctrine]; k_d; re-emit; F_0; Normal-incidence; near-black; Blinn-Phong; n_s>
+- L182 [3] 3.1 Specular Geometry on a Reflective Sphere — A shiny metal droplet behaves as a convex spherical mirror with focal length $f = -R/2$ `[source on file]`. <[source on file]; [DERIVED]>
+- L190 [3] 3.2 Highlight Motion Under Surface Modes vs. Rolling — - Under Rayleigh Modes ($l=2$): Surface normal deflects by $\delta \mathbf{n} \approx -\sum \epsilon_l \frac{\partial P_l}{\partial \theta} \hat{\boldsymbol{\th {Under Rayleigh Modes ($l=2$):; spreads laterally and migrates outward toward the perimeter; pinches into a high-intensity focus and migrates inward towa; Under Physical Rolling:; the highlight DOES NOT MOVE with rolling mass} <P_l; [DERIVED]; [practitioner doctrine]>
+- L194 [3] 3.3 The One Rendering Rule: Reading as METAL at a Glance — What distinguishes liquid metal from plastic, water, or paint on a dark board? {Zero Diffuse Reflectance ($k_d \equiv 0$):; High Specular Reflectance ($F_0 \ge 0.70 - 0.90$):} <re-emit; [source on file]; [practitioner doctrine]; Normal-incidence; near-black>
+- L206 [3] 3.4 Sourced Highlight Size as Share of Radius — - Optics & Blinn-Phong Derivation: For a studio light source subtending $\alpha_{\text{src}} \approx 35^\circ$ or Blinn-Phong exponent $n_s \approx 64 - 128$: {Optics & Blinn-Phong Derivation:; Animation Canon Standard:; $15\%\text{ to }20\%$ of the droplet radius ($r_{hl} = 0.15\} <n_s; [DERIVED]; [practitioner doctrine]>
+- L215 [2] Section 4: The Stop-Motion Craft of a Heavy Ball at 12 fps on 2s <t_0; micro-shudder; [source on file]; surface-tension; High-speed; [practitioner doctrine]; Slow-In; non-wetting; dead-sticks; Slow-Out>
+- L217 [3] 4.1 Rigid Heavy Ball vs. Heavy Liquid Drop — - Rigid Ball Canon (Richard Williams Survival Kit, pp. 36–39, 263): A cannonball or bowling ball has ZERO squash. It impacts on frame $t_0$, does not compress, {Rigid Ball Canon (Richard Williams Survival Kit, pp. 36–39,; ZERO squash; Liquid Metal Blob (Peter Lord & David Sproxton Cracking Anim; Drawing 1 (Frames 1–2):} <t_0; micro-shudder; [source on file]; Stop-Motion; surface-tension; High-speed; [practitioner doctrine]>
+- L231 [3] 4.2 Anticipation Before Nudge (Stationary Inertia) — Due to high mass ($m = \frac{4}{3}\pi R^3 \rho$), the acceleration $\mathbf{a} = \mathbf{F}/m$ is small. {Compressive Anticipation (1 Drawing on 2s):; Extreme Slow-In:; Proof Line} <[practitioner doctrine]>
+- L239 [3] 4.3 Ranking of Mass Cues: Which Sells Mass FIRST in a Flat Drawing? — In order of visual primacy: {RANK 1: Ground Contact Interface (Planar Meniscus Base / Zer; RANK 2: Arrival Spacing (Terminal Acceleration / Zero Inbetw} <non-wetting; [practitioner doctrine]; dead-sticks; Slow-In; Slow-Out>
+- L250 [2] Section 5: Ball Rolling with No Slip in Drawn Animation <[source on file]; x_k; [practitioner doctrine]; Wagon-Wheel; micro-oxide; reverse-aliasing>
+- L252 [3] 5.1 Kinematic Rule: Turn Per Frame — For a circular body of radius $R$ rolling without slip: {Proof Line} <[source on file]; x_k>
+- L263 [3] 5.2 Perceptual Failure Modes — 1. The "Sliding Disc" / Skidding Illusion: Occurs when $\Delta\theta < \Delta s / R$ or when only a stationary specular highlight is drawn on a featureless circ {The "Sliding Disc" / Skidding Illusion:; Strobing Spokes / Wagon-Wheel Effect (Temporal Aliasing):} <[practitioner doctrine]; [source on file]>
+- L272 [3] 5.3 The Exact Animator Fixes — 1. Speed Clamping & Cadence Stepping (Switching from 2s to 1s): {Speed Clamping & Cadence Stepping (Switching from 2s to 1s):; MUST drop from shooting on 2s to shooting on 1s (24 fps); Single Asymmetric Surface Landmark:} <[practitioner doctrine]; micro-oxide; reverse-aliasing>
+- L286 [2] ## NOT FOUND WHERE I LOOKED — The following directories and sources were systematically examined using `python content/video_engine/scripts/docs_find.py` and targeted searches, yielding no p <liquid-metal; stop-action>
 
 ## docs/research/motion/RIG_CONSTRAINTS_RELATION_LAYER_RESEARCH_BLUEPRINT.md
 
