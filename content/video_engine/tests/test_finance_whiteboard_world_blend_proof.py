@@ -2,6 +2,7 @@ import importlib.util
 import json
 from pathlib import Path
 import sys
+import pytest
 
 
 SCRIPT_PATH = Path(__file__).resolve().parents[1] / "scripts" / "build_finance_whiteboard_world_blend_proof.py"
@@ -12,6 +13,19 @@ sys.modules[SPEC.name] = builder
 SPEC.loader.exec_module(builder)
 
 
+# 2026-09-13 (absent-input triage): the analyst cutout, the proof's index.html and its review
+# render were never committed - all three are absent from every checkout.
+ANALYST_CUTOUT = Path(__file__).resolve().parents[3] / "content/video_engine/projects/systems-and-blowups/assets/generated/cutouts/actor-institutional-analyst-v1.png"
+PROOF_INDEX = builder.PROOF_ROOT / "index.html"
+PROOF_RENDER = builder.PROOF_ROOT / "render/finance-whiteboard-world-blend-proof.mp4"
+
+
+@pytest.mark.skipif(
+    not ANALYST_CUTOUT.exists(),
+    reason=(
+        "content/video_engine/projects/systems-and-blowups/assets/generated/cutouts/actor-institutional-analyst-v1.png is missing - never committed / absent from every checkout (2026-09-13); no repo command regenerates it, it is an operator-approved generated cutout"
+    ),
+)
 def test_world_and_evidence_inputs_are_hash_bound():
     receipts = builder.verify_inputs()
     assert receipts["world_asset_ids"] == [spec["asset_id"] for spec in builder.WORLD_SOURCES]
@@ -19,6 +33,12 @@ def test_world_and_evidence_inputs_are_hash_bound():
     assert receipts["p28_manifest_sha256"]
 
 
+@pytest.mark.skipif(
+    not PROOF_INDEX.exists(),
+    reason=(
+        "finance-whiteboard-world-blend-proof-v1/index.html is missing - never committed / absent from every checkout (2026-09-13); regenerate with python content/video_engine/scripts/build_finance_whiteboard_world_blend_proof.py"
+    ),
+)
 def test_world_blend_composition_contract():
     html = (builder.PROOF_ROOT / "index.html").read_text(encoding="utf-8")
     manifest = json.loads((builder.PROOF_ROOT / "proof-manifest.v1.json").read_text(encoding="utf-8"))
@@ -37,6 +57,12 @@ def test_world_blend_composition_contract():
     assert "Date.now" not in html
 
 
+@pytest.mark.skipif(
+    not PROOF_RENDER.exists(),
+    reason=(
+        "finance-whiteboard-world-blend-proof-v1/render/finance-whiteboard-world-blend-proof.mp4 is missing - never committed / absent from every checkout (2026-09-13); regenerate with python content/video_engine/scripts/build_finance_whiteboard_world_blend_proof.py --render"
+    ),
+)
 def test_review_render_contract():
     manifest = json.loads((builder.PROOF_ROOT / "proof-manifest.v1.json").read_text(encoding="utf-8"))
     assert manifest["status"] == "review_render_complete"

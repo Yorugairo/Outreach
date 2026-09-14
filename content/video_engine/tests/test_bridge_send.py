@@ -369,9 +369,13 @@ def test_claude_dry_run_builds_the_packet_command(fake_machine, tmp_path, capsys
 
     argv = BS.claude_argv({"packetId": "abc", "brief": "body"}, "reviewer")
 
-    assert argv[:6] == ["claude", "-p", "--output-format", "json", "--agent", "reviewer"]
+    # re-pinned 2026-09-13: claude_argv now resolves the launcher through shutil.which, so argv[0] is an absolute
+    # path (the npm launcher, claude.CMD on this machine) rather than the bare name. The contract under test
+    # launcher's identity plus the flag order, so argv[0] is asserted by basename and the flags exactly.
+    assert Path(argv[0]).stem.lower() == "claude", argv[0]
+    assert argv[1:6] == ["-p", "--output-format", "json", "--agent", "reviewer"]
     assert json.loads(argv[-1]) == {"packetId": "abc", "brief": "body"}
-    assert "claude -p --output-format json --agent reviewer" in out
+    assert "-p --output-format json --agent reviewer" in out
 
 
 def test_gemini_argv_carries_model_profile_and_title():

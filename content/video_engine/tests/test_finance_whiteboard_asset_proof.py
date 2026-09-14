@@ -2,6 +2,7 @@ import importlib.util
 import json
 from pathlib import Path
 import sys
+import pytest
 
 
 SCRIPT_PATH = Path(__file__).resolve().parents[1] / "scripts" / "build_finance_whiteboard_asset_proof.py"
@@ -10,6 +11,11 @@ assert SPEC and SPEC.loader
 builder = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = builder
 SPEC.loader.exec_module(builder)
+
+
+# 2026-09-13 (absent-input triage): the proof's index.html and review render were never committed.
+PROOF_INDEX = builder.PROOF_ROOT / "index.html"
+PROOF_RENDER = builder.PROOF_ROOT / "render/finance-whiteboard-asset-blend-proof.mp4"
 
 
 def test_source_receipts_match_the_approved_inputs():
@@ -42,6 +48,12 @@ def test_source_cards_keep_pdf_locator_and_timing_contract():
     assert all(card["source_locator"] and card["text_owner"] == "supplied source card" for card in binding["cards"])
 
 
+@pytest.mark.skipif(
+    not PROOF_INDEX.exists(),
+    reason=(
+        "finance-whiteboard-asset-blend-proof-v1/index.html is missing - never committed / absent from every checkout (2026-09-13); regenerate with python content/video_engine/scripts/build_finance_whiteboard_asset_proof.py"
+    ),
+)
 def test_hyperframes_composition_is_deterministic_and_face_readable():
     html = (builder.PROOF_ROOT / "index.html").read_text(encoding="utf-8")
     package = json.loads((builder.PROOF_ROOT / "package.json").read_text(encoding="utf-8"))
@@ -61,6 +73,12 @@ def test_hyperframes_composition_is_deterministic_and_face_readable():
     assert "fetch(" not in html
 
 
+@pytest.mark.skipif(
+    not PROOF_RENDER.exists(),
+    reason=(
+        "finance-whiteboard-asset-blend-proof-v1/render/finance-whiteboard-asset-blend-proof.mp4 is missing - never committed / absent from every checkout (2026-09-13); regenerate with python content/video_engine/scripts/build_finance_whiteboard_asset_proof.py --render"
+    ),
+)
 def test_review_manifest_is_a_real_delivery_artifact():
     manifest = json.loads((builder.PROOF_ROOT / "proof-manifest.v1.json").read_text(encoding="utf-8"))
     render = manifest["render"]

@@ -3,7 +3,7 @@
   "episode_id": "current-bubble-mechanism",
   "narration": {
     "audio_sha256": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
-    "words_sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+    "words_sha256": "ac64d4e18f5af6fdced497d6fb427f98c12c54a4def1d5c8776ba82bc660ad30",
     "word_count": 2445,
     "duration_s": 980.806
   },
@@ -8372,5 +8372,5 @@
       "short_membership": []
     }
   ],
-  "artifact_hash": "bce598f900344f360a50b4c09b983957dbc04e156bcbad656439e5bd0cb0e356"
+  "artifact_hash": "7d43aa40c3c82480fadaccf565acffa5cede88bd70a84a671824c3e0b8e7f8c5"
 }

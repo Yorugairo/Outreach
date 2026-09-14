@@ -3,8 +3,8 @@
   "episode_id": "marshall-monday-001",
   "timing_authority": "canonical_elevenlabs_word_timings",
   "canonical_audio_hash": "b5d8e372217e92529efaafee2493cbcb1c160ba21c6e084802a833d2413fda48",
-  "word_timing_sha256": "9bf403c6e9299663d6f29770a0f42d68c4d03c22d96598903973c4d7cfcdc403",
-  "cue_sheet_hash": "49a46788f24f08083c28465dc6dafffe96e07c5cd1cb130ae2b1d7c4e43b02c3",
+  "word_timing_sha256": "e2d4eb53bf658bfef51083bd005c317b2696313ea1c03d5443bd46e9dd9953c6",
+  "cue_sheet_hash": "45168eed51ac95ae812b713857afe94742a45138f4cbb5decb8527d0bdc5bdb1",
   "duration_s": 567.804,
   "timeline": [
     {
@@ -9602,5 +9602,5 @@
     "factual_text_and_citations_local_only": true,
     "render_eligible": false
   },
-  "artifact_hash": "748fe4afe7f864b859d56d8ab0458bdf6b50460a5ffb2e2857934c50ab3ec9b1"
+  "artifact_hash": "8dba377223bab0e5d07926b666767971da435d97ede84296b92f1d90495f5bea"
 }

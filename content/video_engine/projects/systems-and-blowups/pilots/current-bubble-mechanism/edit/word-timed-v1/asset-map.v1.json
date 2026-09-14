@@ -534,7 +534,7 @@
     "evidence-memory-contracts-v1": {
       "id": "evidence-memory-contracts-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-memory-contracts-v1.svg",
-      "sha256": "71ae044081dbfef76ade4483c592b3d7d24677291736b181e4715c4116b7ed26",
+      "sha256": "f6d3f3cb15e080d12c8ea945d035b8a0ac9dc82b105a6bb8883689ea5f39606c",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -545,7 +545,7 @@
     "evidence-sp500-concentration-v1": {
       "id": "evidence-sp500-concentration-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-sp500-concentration-v1.svg",
-      "sha256": "4d07e81763e9accef609da0ff5e3671211f9db78286f3121cd8584712c01e20b",
+      "sha256": "91d284606a02e26114266d91a246db260c772bfd1b42f3a6520b962235b4c2e4",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -556,7 +556,7 @@
     "evidence-index-inclusion-gate-v1": {
       "id": "evidence-index-inclusion-gate-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-index-inclusion-gate-v1.svg",
-      "sha256": "56569e1ebe9c0b7e3d7129f9459b70a673a26680bab993cab27b138a1639af91",
+      "sha256": "045d2a0962c323b4879fe4b35969ec064e3be11c03d8f3bfc3d54f5d782cab14",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -567,7 +567,7 @@
     "evidence-float-weighting-v1": {
       "id": "evidence-float-weighting-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-float-weighting-v1.svg",
-      "sha256": "c25f07a8e276b4325f01043732ce91d8ec7d74506b6b8ff162cc0f1749a92d79",
+      "sha256": "6fd5c6227be19009a9e9d5be60991fa85dcdfada0264ee2c6f0e20f841761fcc",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -578,7 +578,7 @@
     "evidence-automatic-business-mix-v1": {
       "id": "evidence-automatic-business-mix-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-automatic-business-mix-v1.svg",
-      "sha256": "8280ce8c8495e9c0a609765ca9363c3920af39d28112872ac4d2e8db9b7886b7",
+      "sha256": "96d65c433ed04c915732174fe1fa3515075b3b3de5956d5db21c8fab05e0ac3a",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -589,7 +589,7 @@
     "evidence-diworsification-plateau-v1": {
       "id": "evidence-diworsification-plateau-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-diworsification-plateau-v1.svg",
-      "sha256": "3ade7ee183ae7b50edfac7e4b11849c258ba18b2a4d6ebfd4c0a0e9cee5b55f6",
+      "sha256": "6e1c48496d43ec328c7a0d326cf5b4af7930de1eec3110a80224a6c8e38e8423",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -600,7 +600,7 @@
     "evidence-index-tail-absorption-v1": {
       "id": "evidence-index-tail-absorption-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-index-tail-absorption-v1.svg",
-      "sha256": "8921d41d652ac6cedb51772df0e338af4e5420fd434f8ae5ebcd0862d132fe63",
+      "sha256": "ca1154972519a3e39dabcc3836fa4c153b3a5b90d3a8080467727a44e132379e",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -611,7 +611,7 @@
     "evidence-korea-italy-v1": {
       "id": "evidence-korea-italy-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-korea-italy-v1.svg",
-      "sha256": "4dc4118eb893021944b819c17155c9b6dcb95d09f6d91bd769f0c140b030fe90",
+      "sha256": "9233b609241d3d4ffdb04f457a86ef30ee9eea735c433a7b556abfd1924f99c0",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -622,7 +622,7 @@
     "evidence-return-hurdle-v1": {
       "id": "evidence-return-hurdle-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-return-hurdle-v1.svg",
-      "sha256": "4641db590eb0aa0614a09014c127753e4ff13d7815187011cd68424b6fb5aafe",
+      "sha256": "066de2336f8b7a6bed0168b0defe82b1328d8b9814f6e34c0d71cda67c9b058a",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -633,7 +633,7 @@
     "evidence-market-leaders-v1": {
       "id": "evidence-market-leaders-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-market-leaders-v1.svg",
-      "sha256": "90998772685a4169ce1715944be72b4c8350b86dfa5b4a7809fbf9d5be65d9a9",
+      "sha256": "4f64a15e0445563b3233a823d4847f4154dd14b23caab556126a5bf37e32e962",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -644,7 +644,7 @@
     "evidence-index-scale-v1": {
       "id": "evidence-index-scale-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-index-scale-v1.svg",
-      "sha256": "649eea7c27d18ad22b5cb4e26374be3e59c1a165e4b2487b12a87249cf21409e",
+      "sha256": "c3c0ede4b243e50beac29786a985c51b1b3915423015e9045e44f99624b92b80",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -655,7 +655,7 @@
     "evidence-wealth-target-path-v1": {
       "id": "evidence-wealth-target-path-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-wealth-target-path-v1.svg",
-      "sha256": "2bf818acaabab79700acc47ab067ffda1eb6662562fd5cda86e6e45b94445cf4",
+      "sha256": "46e9e53f3324dfc9eedb8fb3f24b186dde1e9dd0c09747d2210592b60dd5d9b5",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -666,7 +666,7 @@
     "evidence-return-ten-percent-v1": {
       "id": "evidence-return-ten-percent-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-return-ten-percent-v1.svg",
-      "sha256": "f525d8cf8eae564ffa798c21dc108196c2ecc7077025d0d5ad41c811098cd7c2",
+      "sha256": "b32bcad25c78e0bd1c223e88ffdb39b19519fac212f50c04245861049304a85b",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -677,7 +677,7 @@
     "evidence-return-comparison-v1": {
       "id": "evidence-return-comparison-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-return-comparison-v1.svg",
-      "sha256": "ad0560010423d4096f8d49dfba826299d0a6ba1661c84d04dbec779da8f5b84f",
+      "sha256": "90ee54a716649eade3665e5464f4db056285ef39cf729e73167b518db3f3e309",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -688,7 +688,7 @@
     "evidence-wealth-levers-v1": {
       "id": "evidence-wealth-levers-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-wealth-levers-v1.svg",
-      "sha256": "a7ca4dbbbbc1f83f361d901c1614c8b8ad1050c6ff7a2ec511c5b8dc26e6baea",
+      "sha256": "3ba4f09c459438e52be20c29ca3f9b27f068b6b123f136228d61ce83927eb297",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -699,7 +699,7 @@
     "evidence-portfolio-jobs-v1": {
       "id": "evidence-portfolio-jobs-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-portfolio-jobs-v1.svg",
-      "sha256": "1505d17e735c9c445f2aeb4628e34d9268532a5248593a6e8fc1f17ccb427724",
+      "sha256": "b9fbd4aba86250988a25a7a78d9b9d5c135824e2485879da7d9a184c75dc5a13",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -710,7 +710,7 @@
     "evidence-market-leaders-basket-v1": {
       "id": "evidence-market-leaders-basket-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-market-leaders-basket-v1.svg",
-      "sha256": "7c3add58798f2f45f61251d89929984857aaef6c54cc723a7a0a6f69b4381c19",
+      "sha256": "b5f247717d9410f691d56badfa671dce143b39ce9b0300e760021ff7731180a3",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -721,7 +721,7 @@
     "evidence-market-leaders-backtest-v1": {
       "id": "evidence-market-leaders-backtest-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-market-leaders-backtest-v1.svg",
-      "sha256": "cab684dfc3c2e2318720cc3a7220de669e364172c5b1cc8c17ad7964c7de2f6e",
+      "sha256": "885ecf2569bf38555e8b80c216d1c410b925523bc7a28d55411452ed2f845ea5",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -732,7 +732,7 @@
     "evidence-market-leaders-drawdown-v1": {
       "id": "evidence-market-leaders-drawdown-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-market-leaders-drawdown-v1.svg",
-      "sha256": "052943a89bf25989c615e596d559c23b798eff31d6b6c68f38d9b6ac8632f17a",
+      "sha256": "c9cac3624c9c4979b339ae850784594f3ebaf2c22c694ad5dbbd666de5e8c163",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -743,7 +743,7 @@
     "evidence-concentrated-selection-risk-v1": {
       "id": "evidence-concentrated-selection-risk-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-concentrated-selection-risk-v1.svg",
-      "sha256": "62017f723b2565c1e0a819a01cb279d6db4f7a0c9e084e2e4e1f5883b09f00cb",
+      "sha256": "40c63af8a8d58567f41ec74821d1a6b84c96012891dbd0306e6aa0f292322418",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -754,7 +754,7 @@
     "evidence-defensive-sleeve-risk-v1": {
       "id": "evidence-defensive-sleeve-risk-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-defensive-sleeve-risk-v1.svg",
-      "sha256": "8174bbbbc7d8dcaf7dbf88cc577ed134e9dd8285f5f665ade4c9e42e82844fed",
+      "sha256": "5d1ea8226e0b2723d6c3b9a208318dbaaea8dfc9be7885bd75e22160b9c4c6b5",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -765,7 +765,7 @@
     "evidence-equal-weight-countercase-v1": {
       "id": "evidence-equal-weight-countercase-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-equal-weight-countercase-v1.svg",
-      "sha256": "71280a8474dc488cf6fd2dfdc5358da4875b03099339257e905c70d438d3b7a1",
+      "sha256": "a5d40fe6b0f3e535d1c3c73341e40d368308f388a24edc10286c6ab88b539724",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -776,7 +776,7 @@
     "evidence-bounded-conclusion-v1": {
       "id": "evidence-bounded-conclusion-v1",
       "path": "pilots/current-bubble-mechanism/edit/word-timed-v1/evidence/evidence-bounded-conclusion-v1.svg",
-      "sha256": "7619ef2c1449219b184596ca63212bdd3baa7948d0f0d89b0e5a15dfae3de301",
+      "sha256": "018ff1239163ce99d03f060873ab6be7def8a6b840dcf4dde32453440b6b591f",
       "kind": "deterministic_evidence",
       "render_eligible": true,
       "provider_output": false,
@@ -785,5 +785,5 @@
       "review_scope": "internal_review_only"
     }
   },
-  "artifact_hash": "2f9d82e1397ab5b6564d03cb3376798c3c269b8365c70b30ce916c03db6f619d"
+  "artifact_hash": "5b9b5953d5ee0515e8dfebb03c44a29301ad1589f560413656f86ed520c2bc95"
 }

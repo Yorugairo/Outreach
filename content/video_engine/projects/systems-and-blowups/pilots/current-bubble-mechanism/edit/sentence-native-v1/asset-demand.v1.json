@@ -4,8 +4,8 @@
   "source_bindings": {
     "semantic_beat_ledger": {
       "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/sentence-native-v1/semantic-beat-ledger.v1.json",
-      "sha256": "f83b2dad210f0d77bec0e9d8a1b7b799f1da54b0c19372ded9e4a7ec103f6cdb",
-      "artifact_hash": "a256f66ecdfec9879d2f6c1b644bddaf9c355f9964643e71b95663034379dd69"
+      "sha256": "822f3fa57cdb32774e060e3ea0bae5976c981a768026d6ac4e6b0d8ae1a30bde",
+      "artifact_hash": "93fa9713f2e27e24f5c154caebc13515467d80b5fd77982e149ef3598a0b28fe"
     },
     "asset_catalog": {
       "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/semantic-v2/asset-catalog.v2.json",
@@ -23,15 +23,15 @@
     },
     "research_evidence_supplement": {
       "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/semantic-v2/research-evidence-supplement.v1.json",
-      "sha256": "b382de2128ed003ab0909fdc9b156766c6c0de3b3ab8c6b61ad7013ff5d616a7",
+      "sha256": "e54263c43c2bc08c43b94fc88d4bfa4a5272cf856a0a2fad3a49365aaeb22bee",
       "artifact_hash": "a7d02d9933c7362e41a73b4e54b94dba4d00212a885091c60b1416ec8dfdcf0e"
     }
   },
   "planning_outputs": {
     "research_resolution": {
       "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/sentence-native-v1/research-resolution.v1.json",
-      "sha256": "d8813836d64dc8ece6a9edce9b03af9705f67ffcfc8d80ff5776bb7799c07827",
-      "artifact_hash": "3efa1f112b7b283c581631055f1749729300461a37a94dd2016664a84bd2e361"
+      "sha256": "3d90b08042b00f72b3dbc05637dc0f929f9b24bd5e0f4290f729b9eee9b99157",
+      "artifact_hash": "5d652cfdfab34e92d57668e0c82ca595fe546519aceec8aada450ebe2e750f08"
     },
     "generation_prompt_spine": {
       "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/sentence-native-v1/generation-prompt-spine.v1.json",
@@ -8006,5 +8006,5 @@
   ],
   "review_state": "draft",
   "render_eligible": false,
-  "artifact_hash": "a7c22c0e0dc445667399a6a817477b3c2dbf0b22d526c015556bab0a2c8f1e2c"
+  "artifact_hash": "45b724d52401257991dab221050fc3217f9303c5ce0bfc8c2a5a33931e779f29"
 }

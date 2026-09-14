@@ -17,7 +17,7 @@
     {
       "kind": "research_evidence_supplement",
       "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/semantic-v2/research-evidence-supplement.v1.json",
-      "sha256": "b382de2128ed003ab0909fdc9b156766c6c0de3b3ab8c6b61ad7013ff5d616a7",
+      "sha256": "e54263c43c2bc08c43b94fc88d4bfa4a5272cf856a0a2fad3a49365aaeb22bee",
       "artifact_hash": "a7d02d9933c7362e41a73b4e54b94dba4d00212a885091c60b1416ec8dfdcf0e"
     }
   ],
@@ -1980,5 +1980,5 @@
     }
   ],
   "review_state": "draft",
-  "artifact_hash": "3efa1f112b7b283c581631055f1749729300461a37a94dd2016664a84bd2e361"
+  "artifact_hash": "5d652cfdfab34e92d57668e0c82ca595fe546519aceec8aada450ebe2e750f08"
 }

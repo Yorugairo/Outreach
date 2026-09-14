@@ -6,11 +6,11 @@
   "reviewer": "Snipe",
   "reviewed_at": "2026-08-07T09:00:50.274Z",
   "reason": "Operator approved the exact r1 handoff for the P16 Gate A internal revision proof; no publication or catalog promotion.",
-  "base_edit_package_hash": "748fe4afe7f864b859d56d8ab0458bdf6b50460a5ffb2e2857934c50ab3ec9b1",
+  "base_edit_package_hash": "8dba377223bab0e5d07926b666767971da435d97ede84296b92f1d90495f5bea",
   "canonical_audio_manifest_hash": "3a04fe2318b8a01abc3113712fa8e7a86f2d1879b7bf07828af3a2e0a43bef31",
   "canonical_audio_hash": "b5d8e372217e92529efaafee2493cbcb1c160ba21c6e084802a833d2413fda48",
-  "word_timing_sha256": "9bf403c6e9299663d6f29770a0f42d68c4d03c22d96598903973c4d7cfcdc403",
-  "cue_sheet_hash": "49a46788f24f08083c28465dc6dafffe96e07c5cd1cb130ae2b1d7c4e43b02c3",
+  "word_timing_sha256": "e2d4eb53bf658bfef51083bd005c317b2696313ea1c03d5443bd46e9dd9953c6",
+  "cue_sheet_hash": "45168eed51ac95ae812b713857afe94742a45138f4cbb5decb8527d0bdc5bdb1",
   "selected_assets": [
     {
       "cue_id": "mm001-word-001",
@@ -975,5 +975,5 @@
   ],
   "publication_authorized": false,
   "catalog_promotion_authorized": false,
-  "artifact_hash": "d0e78c315b92bd75fffb25c62aa05666cc7868398280ebd50f4d3cca95dc798c"
+  "artifact_hash": "2112a6855cb6de64d8f45df0d0bdd8f7af022e4a568e6096501a69e14fcf3806"
 }

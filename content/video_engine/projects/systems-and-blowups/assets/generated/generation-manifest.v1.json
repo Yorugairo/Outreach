@@ -71,16 +71,20 @@
     {
       "asset_id": "mechanism-index-basket-v2",
       "request": "A sophisticated expandable woven index-fund basket made from precise thin washi strips and containing elegant portfolio slips, with three visibly larger holdings among many smaller holdings; hinged sides and removable rim for animation; explicitly not a toy.",
-      "source_path": "source/mechanism-index-basket-v2-source.png",
+      "source_path": null,
       "source_sha256": "4e61208d300145896635edd8b72f73bdb76d17a411ca1838cd3c000e5dffeff7",
+      "source_state": "struck",
+      "source_note": "source intermediate absent from every checkout 2026-09-14; the cutout verifies; struck by the operator's ruling",
       "cutout_path": "cutouts/mechanism-index-basket-v2.png",
       "cutout_sha256": "27fba8656654fc0ff02a429884a6180f68cede8024bfdf4e9b4d634d078df8fa"
     },
     {
       "asset_id": "mechanism-balance-ledger-v1",
       "request": "An open two-page balance-sheet ledger with a cobalt-and-teal frame, four removable paper trays, blank coin tokens, building tokens, and a visible central hinge.",
-      "source_path": "source/mechanism-balance-ledger-v1-source.png",
+      "source_path": null,
       "source_sha256": "2ef8022c53da7da199aaaaeafe8cf4da8dec37a3e2723c6f45e0bdb26a85a839",
+      "source_state": "struck",
+      "source_note": "source intermediate absent from every checkout 2026-09-14; the cutout verifies; struck by the operator's ruling",
       "cutout_path": "cutouts/mechanism-balance-ledger-v1.png",
       "cutout_sha256": "2735aa89f282b217cfdd4e9e41c01373a257ef5a0394c90cc1b3f1ea0d0dc0ce"
     },
@@ -95,8 +99,10 @@
     {
       "asset_id": "mechanism-economic-elevator-v1",
       "request": "A two-track economic elevator in a friendly civic facade: one platform carries a home and share-basket token, the other carries a wage-envelope token; visible gears and pulleys.",
-      "source_path": "source/mechanism-economic-elevator-v1-source.png",
+      "source_path": null,
       "source_sha256": "fada32a0aa430e22949df53f3d3065b8a859e3636ee637558bb53916352ba0a8",
+      "source_state": "struck",
+      "source_note": "source intermediate absent from every checkout 2026-09-14; the cutout verifies; struck by the operator's ruling",
       "cutout_path": "cutouts/mechanism-economic-elevator-v1.png",
       "cutout_sha256": "5b20a22f049dbef3ef9910de14c99b667cc6d985c63452306fe1a362117ebeca"
     },
@@ -124,7 +130,9 @@
       "asset_id": "mechanism-town-v1",
       "request": "A bright 16:9 interactive economic town with homes, factory, civic building, market, actors, copper flow lines, pulleys, levers, and blank placement sockets.",
       "flattened_path": "worlds/mechanism-town-v1.png",
-      "flattened_sha256": "e82ef03926ccd39363b3f5e2368d30848916f416395f2d7cb46d5fa8d86024c8"
+      "flattened_sha256": "e82ef03926ccd39363b3f5e2368d30848916f416395f2d7cb46d5fa8d86024c8",
+      "file_state": "regenerate",
+      "file_note": "plate absent from every checkout 2026-09-14; regenerate from its request when a cut needs it (operator ruling)"
     },
     {
       "asset_id": "finance-host-identity-master-v3",
@@ -145,9 +153,9 @@
     {
       "asset_id": "finance-host-presenter-direct-v1",
       "request": "Identity-preserving generated direct-to-camera finance presenter on flat chroma-key background.",
-      "source_path": "generated/stealth-wealth-v1/presenter-direct-v1-keyed-source.png",
-      "source_sha256": "9d9721031dcd3fe58e8208684b605888fd70539d1092df63a45c2a7c7e8fc9b3",
-      "cutout_path": "generated/stealth-wealth-v1/presenter-direct-v1.png",
+      "source_path": "stealth-wealth-v1/presenter-direct-v1-keyed-source.png",
+      "source_sha256": "263a3e8b6900757c14b94581291d59e5e623dbb291f439aaf79175add3decb07",
+      "cutout_path": "stealth-wealth-v1/presenter-direct-v1.png",
       "cutout_sha256": "9d9721031dcd3fe58e8208684b605888fd70539d1092df63a45c2a7c7e8fc9b3",
       "background_removal": "flat-chroma-key-plus-local-alpha",
       "render_state": "draft"
@@ -155,18 +163,19 @@
     {
       "asset_id": "stealth-wealth-warm-study-v1",
       "request": "Generated cinematic warm oak study with charcoal shadows, amber practicals, emerald accents, and negative space for cards.",
-      "flattened_path": "generated/stealth-wealth-v1/warm-oak-study-v1.png",
+      "flattened_path": "stealth-wealth-v1/warm-oak-study-v1.png",
       "flattened_sha256": "ead65484b509200df5cf36276779b573c638e5f39cb39296ba8b996ea3670317",
       "render_state": "draft"
     },
     {
       "asset_id": "stealth-wealth-cool-wafer-v1",
       "request": "Generated cool slate laboratory macro plate with an emerald silicon wafer and uncluttered card space.",
-      "flattened_path": "generated/stealth-wealth-v1/cool-wafer-lab-v1.png",
+      "flattened_path": "stealth-wealth-v1/cool-wafer-lab-v1.png",
       "flattened_sha256": "eb0ab9a6e574c92a31d23a98eabbbad308a06d3b8f2e9baf73d6f44d016b52ce",
       "render_state": "draft"
     }
   ],
   "promotion_state": "review_only",
-  "render_eligible": false
+  "render_eligible": false,
+  "artifact_hash": "c527716706795397c2b3b57fe7dbbb04bd2082a32415b742a030ba4534f2288a"
 }

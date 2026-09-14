@@ -13,7 +13,17 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.config import load_dotenv
+try:
+    from src.config import load_dotenv
+except ImportError:  # 2026-09-13: in a full pytest run `sys.modules["src"]` is already another package (nine `src`
+    # packages exist), so the root config vanishes and test_pipeline / test_history_v4_pipeline error at collection.
+    # Load the root config by its file path instead - the same module, found unambiguously.
+    import importlib.util as _ilu
+
+    _spec = _ilu.spec_from_file_location("_root_src_config", PROJECT_ROOT / "src" / "config.py")
+    _mod = _ilu.module_from_spec(_spec)
+    _spec.loader.exec_module(_mod)
+    load_dotenv = _mod.load_dotenv
 from content.video_engine.src.guards.storyboard_guard import guard
 from content.video_engine.src.models import VideoRun, VideoStageEvent
 from content.video_engine.src.pipeline import (

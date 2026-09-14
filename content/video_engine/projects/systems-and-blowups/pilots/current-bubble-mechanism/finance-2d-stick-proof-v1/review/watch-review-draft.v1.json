@@ -16,7 +16,7 @@
   },
   "transcript": {
     "path": "../../audio/canonical/history_episode_1_master.words.json",
-    "sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+    "sha256": "ac64d4e18f5af6fdced497d6fb427f98c12c54a4def1d5c8776ba82bc660ad30",
     "source": "canonical_word_timing"
   },
   "summary": {

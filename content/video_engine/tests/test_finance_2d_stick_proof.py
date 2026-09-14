@@ -10,7 +10,7 @@ import pytest
 REPO_ROOT = Path(__file__).resolve().parents[3]
 SCRIPT_PATH = REPO_ROOT / "content/video_engine/scripts/build_finance_2d_stick_proof.py"
 COMPONENT_PATH = REPO_ROOT / "content/video_engine/editor/src/Finance2DStickProof.tsx"
-ROOT_PATH = REPO_ROOT / "content/video_engine/editor/src/Root.tsx"
+ROOT_PATH = REPO_ROOT / "content/video_engine/editor/src/compositions.ts"
 
 
 def _module():
@@ -65,9 +65,12 @@ def test_component_is_native_2d_and_registered_separately() -> None:
     assert "Math.random" not in source
     assert "fetch(" not in source
     assert "https://" not in source
+    # re-pinned 2026-09-13: the Remotion registrations moved out of Root.tsx into the
+    # COMPOSITION_REGISTRY array in editor/src/compositions.ts (Root.tsx now renders that
+    # registry), so the ids are object entries `id: "X"` rather than JSX `id="X"`.
     assert "Finance2DStickProof" in root
-    assert "id=\"FinanceSketchbookProof\"" in root
-    assert "id=\"FinanceStealthWealthProof\"" in root
+    assert 'id: "FinanceSketchbookProof"' in root
+    assert 'id: "FinanceStealthWealthProof"' in root
 
 
 def test_builder_rejects_non_contiguous_ranges(monkeypatch: pytest.MonkeyPatch) -> None:

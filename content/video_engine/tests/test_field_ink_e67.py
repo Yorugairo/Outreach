@@ -90,8 +90,12 @@ def test_the_field_ink_is_one_table_and_not_a_set_of_copies():
     assert re.search(r"const PAL = LP_INK;", src), "the ledger line reads the one table"
     assert re.search(r"const PS_PAL = \{ \.\.\.LP_INK,", src), "the species palette spreads the one table"
     assert len(re.findall(r"const LP_INK = \{", src)) == 1, "LP_INK is declared once"
+    # re-pinned 2026-09-13: the engine now writes the old coral as a CSS custom-property FALLBACK,
+    # `var(--coral, #ED6A4A)` - the token is the source of truth and the literal is only the value used when the
+    # property is unset. That is not a copy of the table, so a var() fallback is allowed and a BARE literal is not.
+    bare = re.sub(r"var\(\s*--[A-Za-z0-9_-]+\s*,\s*(#[0-9A-Fa-f]{3,8})\s*\)", "", src)
     for dead in ("#ED6A4A", "#178C83"):   # the old field inks: gone from the engine, not merely shadowed
-        assert dead not in src, f"{dead} is still in the engine - a copy of the old table survives"
+        assert dead not in bare, f"{dead} is a bare literal in the engine - a copy of the old table survives"
     # the old cobalt survives in exactly ONE place: the dock tier's TPAL, which reads on #16181c and not on the field
     assert src.count("#8fb3f0") == 1, "the old cobalt is loose in the field's code again"
     # the DOCK tier keeps its own pair of tables (PAL graphic + TPAL text) - it draws on #16181c, not on the field

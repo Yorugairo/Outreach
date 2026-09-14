@@ -138,7 +138,10 @@ def test_real_current_bubble_snapshot_v2_is_deterministic_and_complete(tmp_path:
     caption = next(item for item in first["tracks"][2]["items"] if item["cue_id"] == "cbm-cue-002")
     assert caption["layout"] == {"x": -0.31, "y": -0.42, "width": 0.38, "height": 0.12}
     assert any(record["recommendation_state"] == "unmatched" for record in first["semantic_evidence_bindings"])
-    assert any("audio_media: missing" in item for item in first["degraded_inputs"])
+    # 2026-09-14: the assertion used to expect the gitignored audio master to be ABSENT ("audio_media: missing" among the
+    # degraded inputs) - a snapshot of the machine the test was written on, not the contract. The master is bound again
+    # (restored by sha256 from the review assets), so the contract is the real one: no degraded audio input.
+    assert not any("audio_media" in item for item in first["degraded_inputs"]), first["degraded_inputs"]
     validate_production_editor_snapshot(first)
 
 

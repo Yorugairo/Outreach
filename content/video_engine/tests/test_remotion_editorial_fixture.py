@@ -38,22 +38,28 @@ def _safe_local_asset(source: str | None) -> str | None:
 
 
 def test_editorial_motion_registers_dedicated_composition_and_preserves_legacy_lanes() -> None:
-    source = (EDITOR_ROOT / "src" / "Root.tsx").read_text(encoding="utf-8")
+    # re-pinned 2026-09-13: the Remotion registrations moved out of Root.tsx into the
+    # COMPOSITION_REGISTRY array in editor/src/compositions.ts (Root.tsx now renders that
+    # registry), so the ids are object entries `id: "X"` rather than JSX `id="X"`.
+    source = (EDITOR_ROOT / "src" / "compositions.ts").read_text(encoding="utf-8")
 
     assert 'EditorialMotionComposition,' in source
     assert re.search(
-        r'<Composition\s+id="Editorial"[\s\S]*?component=\{EditorialComposition\}',
+        r'id:\s*"Editorial"[\s\S]*?component:\s*EditorialComposition',
         source,
     )
     assert re.search(
-        r'<Composition\s+id="Documentary"[\s\S]*?component=\{DocumentaryComposition\}',
+        r'id:\s*"Documentary"[\s\S]*?component:\s*DocumentaryComposition',
         source,
     )
     assert re.search(
-        r'<Composition\s+id="EditorialMotion"[\s\S]*?component=\{EditorialMotionComposition\}',
+        r'id:\s*"EditorialMotion"[\s\S]*?component:\s*EditorialMotionComposition',
         source,
     )
-    assert "component={DocumentaryMotionComposition}" not in source
+    # re-pinned 2026-09-13: DocumentaryMotion used to be deliberately UNregistered; commit a9aebcf
+    # ("add read-only Remotion production console") gave it its own registry entry on purpose, so the
+    # old `not in` guard is stale. The lane is now asserted present rather than absent.
+    assert re.search(r'id:\s*"DocumentaryMotion"[\s\S]*?component:\s*DocumentaryMotionComposition', source)
 
 
 def test_two_shot_fixture_is_locked_local_and_uses_canonical_audio() -> None:

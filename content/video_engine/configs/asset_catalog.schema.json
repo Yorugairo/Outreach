@@ -65,13 +65,17 @@
             "pattern": "^[a-f0-9]{64}$"
           },
           "kind": {
+            "description": "2026-09-14 (E94/E95): carries the finance_asset_catalog.v1 vocabulary forward and keeps `world`. The operator approved the standalone world plates on 2026-09-13, and a world plate is not the `world_board` contact sheet it was cut from \u2014 v1 had only the sheet.",
             "enum": [
               "actor",
               "prop",
               "mechanism",
               "world",
               "world_board",
-              "cast_board"
+              "cast_board",
+              "component_board",
+              "evidence_template",
+              "hero_plate"
             ]
           },
           "style_version": {
@@ -110,11 +114,35 @@
           "contains_factual_text": {
             "type": "boolean"
           },
+          "file_state": {
+            "description": "2026-09-14 (operator ruling): whether the bytes at `path` are on disk. `present` (the default) means the file exists and its sha256 verifies against local bytes. `regenerate` records a plate absent from every checkout: the sha256 stays as the record of what was generated, the file is not required on disk, and the asset is never render-eligible until it is regenerated from its request and the state returns to `present`. The reason belongs in the accompanying `file_note`.",
+            "enum": [
+              "present",
+              "regenerate"
+            ],
+            "default": "present"
+          },
           "rights_state": {
             "type": "string"
           },
           "review_state": {
-            "type": "string"
+            "description": "2026-09-14 (E94/E95): `operator_approved` is the state the operator's 2026-09-13 pass over the icons and world plates writes. It is an approval and clears the render-eligibility gate the way `approved_reusable` does; it records that the operator, not a reviewer, granted it.",
+            "enum": [
+              "review_only",
+              "approved_reusable",
+              "operator_approved"
+            ]
+          },
+          "provenance": {
+            "type": "object",
+            "description": "2026-09-14 (E94/E95): who approved this asset and when. Written by the generation jobs and read back when an approval is questioned \u2014 `approved_by`/`approved_on` are what make `review_state: operator_approved` auditable rather than asserted.",
+            "additionalProperties": true,
+            "properties": {
+              "job": {"type": "string", "minLength": 1},
+              "character_id": {"type": "string", "minLength": 1},
+              "approved_by": {"type": "string", "minLength": 1},
+              "approved_on": {"type": "string", "minLength": 1}
+            }
           },
           "render_eligible": {
             "type": "boolean"

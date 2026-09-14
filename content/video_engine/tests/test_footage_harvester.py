@@ -10,10 +10,14 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import sys
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-
-from src.services.footage_harvester import FootageHarvesterService, ClipProvenance
+# Imported through the canonical package, NOT by pushing content/video_engine onto sys.path and
+# importing a top-level `src`: that bound sys.modules["src"] to the engine's src for every later
+# test in the session, and content/video_engine/cli.py imports the REPO-ROOT `src.config`. The
+# sys.path variant made test_console_runs pass alone and fail in the full tree.
+from content.video_engine.src.services.footage_harvester import (
+    FootageHarvesterService,
+    ClipProvenance,
+)
 
 
 class TestFootageHarvesterService(unittest.TestCase):

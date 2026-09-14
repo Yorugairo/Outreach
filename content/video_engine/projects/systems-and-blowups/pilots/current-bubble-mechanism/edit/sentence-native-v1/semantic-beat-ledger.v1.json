@@ -4,11 +4,11 @@
   "source_bindings": {
     "narration_manifest": {
       "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/current-bubble-mechanism-narration-master.v1.json",
-      "sha256": "4d9e640f2c45f4d8be082611515ae842e85e3b45e4d681ca6a3eed0683ba29ca"
+      "sha256": "a2cf7b4e4e2d52efc6fed4098004ed622d81bdf8f20bc3d12ca136f094571974"
     },
     "word_timing": {
       "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/canonical/history_episode_1_master.words.json",
-      "sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3"
+      "sha256": "ac64d4e18f5af6fdced497d6fb427f98c12c54a4def1d5c8776ba82bc660ad30"
     },
     "script": {
       "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/script-draft.v1.md",
@@ -7664,5 +7664,5 @@
       "notes": "Anchor and adjacent canonical word ranges manually matched to the narration segment."
     }
   ],
-  "artifact_hash": "a256f66ecdfec9879d2f6c1b644bddaf9c355f9964643e71b95663034379dd69"
+  "artifact_hash": "93fa9713f2e27e24f5c154caebc13515467d80b5fd77982e149ef3598a0b28fe"
 }

@@ -32,6 +32,7 @@ from content.video_engine.src.services.generated_block_images import (
     validate_timestamped_plate_plan,
 )
 from content.video_engine.src.services.history_contracts import canonical_sha256
+from content.video_engine.src.services.paths import runtime_dir
 
 
 MARTIAL_ADAPTER_MANIFEST_VERSION = "martial_editorial_adapter_manifest.v1"
@@ -528,7 +529,10 @@ def compile_martial_editorial(
     project = Path(project_root).expanduser().resolve() if project_root else _REPO_ROOT
     revision = _safe_revision_id(revision_id)
     job = Path(job_root).expanduser().resolve()
-    canonical_jobs = (_ENGINE_ROOT / "runtime" / "jobs").resolve()
+    # the path contract owns the class roots (2026-09-13): this hand-built
+    # `_ENGINE_ROOT / "runtime" / "jobs"` is the same directory, routed through
+    # services/paths.py so the structural sweep and the contract agree.
+    canonical_jobs = runtime_dir(_ENGINE_ROOT, "jobs")
     if not allow_external_job_root and not _inside(job, canonical_jobs):
         raise MartialEditorialAdapterError(
             "job_root must remain under content/video_engine/runtime/jobs"

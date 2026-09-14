@@ -3,7 +3,7 @@
   "project_id": "outreach-program",
   "generated_at": "2026-08-10T03:32:15.176427Z",
   "source_review_hashes": [
-    "73fd2304e6666f967586fe2229353c2956a3cb221c975ea5c5e2014793f56b2d"
+    "ef2174221cc73bfc7493ba5c853064cf3ad850aba02c30d931652c91dd60d364"
   ],
   "candidates": [
     {
@@ -17,7 +17,7 @@
       "observations": [
         {
           "review_id": "finance-sketchbook-proof-v1-draft",
-          "review_hash": "73fd2304e6666f967586fe2229353c2956a3cb221c975ea5c5e2014793f56b2d",
+          "review_hash": "ef2174221cc73bfc7493ba5c853064cf3ad850aba02c30d931652c91dd60d364",
           "finding_id": "operator-review-pending",
           "episode_id": "finance-sketchbook-proof-v1",
           "lane_id": "systems-and-blowups-finance",
@@ -32,5 +32,5 @@
       "operator_gate": "required"
     }
   ],
-  "artifact_hash": "f737b2857e7e533d17a711936122acf467c8fb1c309c31a9f94390f178c6b9a2"
+  "artifact_hash": "26a0b1bed0290c7fdff72b11d4ba03b92a0a810e90bb3f6ab66769525d715bd4"
 }

@@ -9,6 +9,7 @@ machine has them and skipped with a reason where it does not.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -21,6 +22,32 @@ import bridge_env as BE  # noqa: E402
 import bridge_handlers as BH  # noqa: E402
 
 REPLAY_REPLY = ROOT / "docs/research/runs/bridge/replay/7aaa9146-88f1-4f03-b004-d5bdf18a5492/reply.md"
+
+
+def _replay_world_intact() -> tuple[bool, str]:
+    """The replayed reply is a RECORDING of a DIFFERENT repo's tree on this machine - the
+    one-network worktrees under C:/dev/one-network-worktrees. `paths-written` re-checks every
+    path the reply named, so the replay only passes while that foreign tree is still on disk.
+
+    Skipped rather than deleted (2026-09-13): the recording and the grammar it exercises are both
+    still good; six of the eleven folders it names (otn/db-pool-resilience, otn/shared and four
+    more) have since been removed from that machine path, which this repo does not own or control.
+    """
+    if not REPLAY_REPLY.exists():
+        return False, f"no replayed reply on this machine: {REPLAY_REPLY}"
+    named = re.findall(r"`([A-Za-z]:\\[^`]+)`", REPLAY_REPLY.read_text(encoding="utf-8"))
+    missing = [n for n in named if not Path(n).exists()]
+    if not named:
+        return False, f"the replayed reply names no absolute path: {REPLAY_REPLY}"
+    if missing:
+        return False, (
+            f"{len(missing)} of {len(named)} folders the replay names are gone from this machine "
+            f"(another repo's worktrees under C:/dev/one-network-worktrees), first: {missing[0]}"
+        )
+    return True, ""
+
+
+_REPLAY_OK, _REPLAY_WHY = _replay_world_intact()
 PROFILES = ROOT / ".agents/agents"
 
 # Astra's real reply of 2026-09-06, first lines verbatim (the bullets are cut at the first sentence).
@@ -265,6 +292,7 @@ def test_an_unknown_shape_is_never_silently_closed(tmp_path):
 
 @pytest.mark.skipif(not REPLAY_REPLY.exists(), reason=f"no replayed reply on this machine: {REPLAY_REPLY}")
 @pytest.mark.skipif(not (PROFILES / "video-researcher.md").exists(), reason=f"the synced profiles are not in {PROFILES}")
+@pytest.mark.skipif(not _REPLAY_OK, reason=_REPLAY_WHY)
 def test_geminis_real_completion_report_closes_at_tier_zero_with_no_model():
     text = REPLAY_REPLY.read_text(encoding="utf-8")
 
@@ -274,7 +302,7 @@ def test_geminis_real_completion_report_closes_at_tier_zero_with_no_model():
     assert len([c for c in outcome["checks"] if c["ok"]]) >= 14, "the 11 synced folders and the three profiles"
 
 
-@pytest.mark.skipif(not REPLAY_REPLY.exists(), reason=f"no replayed reply on this machine: {REPLAY_REPLY}")
+@pytest.mark.skipif(not _REPLAY_OK, reason=_REPLAY_WHY)
 def test_the_cli_replays_the_worked_example_and_exits_zero(capsys):
     code = BH.main(["--replay", "7aaa9146-88f1-4f03-b004-d5bdf18a5492", "--repo", str(ROOT)])
 

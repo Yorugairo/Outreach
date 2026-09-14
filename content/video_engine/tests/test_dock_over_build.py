@@ -88,7 +88,14 @@ def test_each_drawing_beat_is_its_own_window(s02):
     # roll-out clock), and the cut's build_to was re-fitted to the same clock the same evening (4.49 -> 7.49, was 7.69 -> 10.69),
     # so the page's own beat and the authored cap draw as one window again
     assert s02["windows"] == [(1.99, pytest.approx(7.49)), (pytest.approx(4.49), pytest.approx(7.49)), (18.95, pytest.approx(20.15))]
-    assert B.page_build_windows({"kind": B.SPECIES_LEDGER, "page": {"enter": "spiral"}}, [], 4.0) == [], "a page that arrives BUILT never draws"
+    # re-pinned 2026-09-13: `spiral` is still named in ARRIVES_BUILT but left its behaviour on 2026-09-12 - it now
+    # plays a LP_SPIRAL_IN_S roll-in, so it DOES draw. The tokens that arrive with the chart already drawn are
+    # snap/built/throw/drop/camera, so the claim is pinned on those; spiral's 1.6s window is pinned beside it.
+    for token in ("snap", "built", "throw", "drop", "camera"):
+        assert B.page_build_windows({"kind": B.SPECIES_LEDGER, "page": {"enter": token}}, [], 4.0) == [], \
+            f"a page that arrives BUILT never draws ({token})"
+    assert B.page_build_windows({"kind": B.SPECIES_LEDGER, "page": {"enter": "spiral"}}, [], 4.0) == \
+        [(4.0, pytest.approx(5.6))], "spiral plays its roll-in, so it draws"
     assert B.page_build_windows({"kind": "plate", "asset_id": "plate-x"}, [], 0.0) == [], "a plain plate has no chart to draw"
 
 

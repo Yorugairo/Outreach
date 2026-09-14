@@ -16,13 +16,13 @@
     "end_s": 570.082
   },
   "audio_sha256": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
-  "words_sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
-  "plan_hash": "1de45ffcdc057255246e1fda578ee97f21d509cf4150df3efb8135f16926fb61",
-  "cue_sheet_hash": "bce598f900344f360a50b4c09b983957dbc04e156bcbad656439e5bd0cb0e356",
-  "edit_manifest_hash": "0150debd56abb6304a7d1030b334589bae2bf5a896acaa1237ab4444f1bdeccc",
+  "words_sha256": "ac64d4e18f5af6fdced497d6fb427f98c12c54a4def1d5c8776ba82bc660ad30",
+  "plan_hash": "8e721b550883ee6110fc9c9b28547dc64fbf5e8726eb74956f06a7b6a99e1388",
+  "cue_sheet_hash": "7d43aa40c3c82480fadaccf565acffa5cede88bd70a84a671824c3e0b8e7f8c5",
+  "edit_manifest_hash": "c6d81442acdb528d1d01d9510b824299f77fb8a54a462c2015c7b0c18e46ccd6",
   "semantic_resolution_hash": "01e48837d1b141c7ac92c0a123fcd099fa05d1bad5aa4ad3fd8c65903bb85238",
   "research_supplement_hash": "a7d02d9933c7362e41a73b4e54b94dba4d00212a885091c60b1416ec8dfdcf0e",
   "qc_overall": "pass",
   "review_output": "C:/Users/Snipe/.codex/worktrees/f10b/Outreach Program/content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/full-review-v1/current-bubble-mechanism-review-master.mp4",
-  "artifact_hash": "052a1156e470e1d88c3777822ec3afa39aa7651c412b8e6461197c66c13be729"
+  "artifact_hash": "3ecc18fdd75e1ffe95cf30400458106bfdfa6a6bd586a04fc89aaf8600da5374"
 }

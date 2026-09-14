@@ -10,6 +10,8 @@ from content.video_engine.src.services.finance_channel import (
     FinanceChannelValidationError,
     canonical_sha256,
     file_sha256,
+    generated_asset_file_errors,
+    generated_source_is_struck,
     load_json,
     score_topic,
     select_asset_strategy,
@@ -213,8 +215,32 @@ def test_cue_sheet_rejects_gaps_and_long_static_holds() -> None:
 def test_asset_catalog_hashes_paths_and_promotion_state() -> None:
     catalog = load_json(PROJECT_ROOT / "asset-catalog.v1.json")
     validated = validate_asset_catalog(catalog, PROJECT_ROOT)
-    assert len(validated["assets"]) == 15
-    assert all(not asset["render_eligible"] for asset in validated["assets"])
+    # 2026-09-14 (E94/E95): the catalogue declares the style-versioned schema and
+    # carries 45 assets after the operator's 2026-09-13 pass (was 15).
+    assert validated["schema_version"] == "finance_asset_catalog_styled.v1"
+    assert len(validated["assets"]) == 45
+    # The operator approved two host model sheets. Approving the picture is not a
+    # grant of rights: both still ship rights_state original_review_only, so the
+    # render-eligible set on disk is still empty. Assert the exact ids, not a mood.
+    assert {
+        asset["asset_id"] for asset in validated["assets"]
+        if asset["review_state"] == "operator_approved"
+    } == {"finance-host-v1-model-sheet", "finance-host-stick-v1-model-sheet"}
+    assert {asset["asset_id"] for asset in validated["assets"] if asset["render_eligible"]} == set()
+    # 2026-09-14 (operator ruling): the catalogue still carries 45 rows, but one plate
+    # is absent from every checkout and is marked for regeneration. The row keeps its
+    # sha256 as the record, is not required on disk, and is not render-eligible.
+    regenerate = {
+        asset["asset_id"] for asset in validated["assets"]
+        if asset.get("file_state") == "regenerate"
+    }
+    assert regenerate == {"mechanism-town-v1"}
+    assert regenerate.isdisjoint(
+        {asset["asset_id"] for asset in validated["assets"] if asset["render_eligible"]}
+    )
+    town = next(asset for asset in validated["assets"] if asset["asset_id"] == "mechanism-town-v1")
+    assert not (PROJECT_ROOT / town["path"]).exists()
+    assert len(town["sha256"]) == 64 and "operator ruling" in town["file_note"]
 
     escaped = copy.deepcopy(catalog)
     escaped["assets"][0]["path"] = "../outside.svg"
@@ -237,13 +263,116 @@ def test_generated_asset_manifest_binds_sources_and_cutouts() -> None:
     assert manifest["generation_mode"] == "built-in-imagegen"
     assert manifest["promotion_state"] == "review_only"
     assert manifest["render_eligible"] is False
-    assert len(manifest["assets"]) == 15
+    # 2026-09-14 (E94/E95): 19 generated assets on disk (was 15); the four host and
+    # stealth-wealth plates added by the 2026-09-13 pass are still render_state draft.
+    assert len(manifest["assets"]) == 19
+    assert {
+        asset["asset_id"] for asset in manifest["assets"]
+        if asset.get("render_state") == "draft"
+    } == {
+        "finance-host-presenter-plate-v1", "finance-host-presenter-direct-v1",
+        "stealth-wealth-warm-study-v1", "stealth-wealth-cool-wafer-v1",
+    }
+    # 2026-09-14 (operator ruling): three pre-cutout SOURCE intermediates are absent
+    # from every checkout and are struck - null source_path, sha kept as the record.
+    # Their cutouts are on disk and still verify, which is what the reader enforces.
+    assert {
+        asset["asset_id"] for asset in manifest["assets"]
+        if generated_source_is_struck(asset)
+    } == {
+        "mechanism-index-basket-v2", "mechanism-balance-ledger-v1",
+        "mechanism-economic-elevator-v1",
+    }
+    # The absent world plate is one asset in two ledgers: the manifest marks it for
+    # regeneration exactly as the catalogue row does, and no reader opens it.
+    assert {
+        asset["asset_id"] for asset in manifest["assets"]
+        if asset.get("file_state") == "regenerate"
+    } == {"mechanism-town-v1"}
+    assert manifest["artifact_hash"] == canonical_sha256(manifest)
     for asset in manifest["assets"]:
-        if "source_path" in asset:
-            assert file_sha256(root / asset["source_path"]) == asset["source_sha256"]
-            assert file_sha256(root / asset["cutout_path"]) == asset["cutout_sha256"]
-        else:
-            assert file_sha256(root / asset["flattened_path"]) == asset["flattened_sha256"]
+        assert generated_asset_file_errors(asset, root) == [], asset["asset_id"]
+
+
+def test_a_struck_source_is_skipped_but_its_cutout_is_still_hashed(tmp_path: Path) -> None:
+    """2026-09-14 operator ruling: strike the source, keep verifying the picture."""
+    (tmp_path / "cutouts").mkdir()
+    cutout = tmp_path / "cutouts" / "plate.png"
+    cutout.write_bytes(b"cutout-bytes")
+    absent = tmp_path / "source" / "plate-source.png"
+    absent.parent.mkdir()
+    absent.write_bytes(b"source-bytes")
+    source_sha = file_sha256(absent)
+    absent.unlink()  # the intermediate is absent from every checkout
+
+    struck = {
+        "asset_id": "fixture-mechanism",
+        "request": "A fixture mechanism.",
+        "source_path": None,
+        "source_sha256": source_sha,
+        "source_state": "struck",
+        "source_note": "source intermediate absent from every checkout 2026-09-14; the cutout verifies; struck by the operator's ruling",
+        "cutout_path": "cutouts/plate.png",
+        "cutout_sha256": file_sha256(cutout),
+    }
+    assert generated_source_is_struck(struck)
+    assert generated_asset_file_errors(struck, tmp_path) == []
+
+    # The strike covers the source only: the cutout is still hashed against bytes.
+    tampered = {**struck, "cutout_sha256": "0" * 64}
+    assert generated_asset_file_errors(tampered, tmp_path) == [
+        "fixture-mechanism cutout sha256 does not match local bytes"
+    ]
+    # And an unstruck entry still has to open the file it points at.
+    unstruck = {**struck, "source_state": "generated", "source_path": "source/plate-source.png"}
+    assert generated_asset_file_errors(unstruck, tmp_path) == [
+        "fixture-mechanism source file does not exist"
+    ]
+    nulled = {**struck, "source_state": "generated"}
+    assert generated_asset_file_errors(nulled, tmp_path) == [
+        "fixture-mechanism has a null source_path but is not struck"
+    ]
+
+
+def test_a_regenerate_asset_validates_without_the_file_and_never_renders(tmp_path: Path) -> None:
+    """2026-09-14 operator ruling: a plate absent from every checkout is not a failure."""
+    plate = tmp_path / "world.png"
+    plate.write_bytes(b"world-bytes")
+    plate_sha = file_sha256(plate)
+    plate.unlink()  # absent from every checkout
+
+    def _catalog(asset: dict) -> dict:
+        return with_artifact_hash(
+            {
+                "schema_version": "finance_asset_catalog_styled.v1",
+                "channel_id": "fixture",
+                "project_root": ".",
+                "resolution_order": ["exact_semantic_match", "reusable_component_composition", "deterministic_evidence_or_mechanism", "bespoke_plate"],
+                "assets": [asset],
+            }
+        )
+
+    row = {
+        "asset_id": "fixture-world", "path": "world.png", "sha256": plate_sha, "kind": "world",
+        "style_version": "crinkle-cut-v1", "visual_worlds": ["mechanism"], "semantic_tags": ["fixture"],
+        "identity_lenses": [], "resolution_tier": 2, "generated": True, "contains_factual_text": False,
+        "rights_state": "original_review_only", "review_state": "review_only", "render_eligible": False,
+        "file_state": "regenerate",
+        "file_note": "plate absent from every checkout 2026-09-14; regenerate from its request when a cut needs it (operator ruling)",
+    }
+    validated = validate_asset_catalog(_catalog(row), tmp_path)
+    assert validated["assets"][0]["sha256"] == plate_sha
+
+    approved_and_eligible = {
+        **row, "render_eligible": True, "review_state": "operator_approved", "rights_state": "approved",
+    }
+    with pytest.raises(FinanceChannelValidationError, match="regenerate asset can never be render-eligible"):
+        validate_asset_catalog(_catalog(approved_and_eligible), tmp_path)
+
+    # `present` is the default, and a present row still has to be on disk.
+    present = {key: value for key, value in row.items() if key != "file_state"}
+    with pytest.raises(FinanceChannelValidationError, match="file does not exist"):
+        validate_asset_catalog(_catalog(present), tmp_path)
 
 
 def test_generated_asset_cannot_embed_factual_text(tmp_path: Path) -> None:

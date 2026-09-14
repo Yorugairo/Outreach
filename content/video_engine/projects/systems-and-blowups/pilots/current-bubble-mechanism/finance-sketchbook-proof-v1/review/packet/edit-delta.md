@@ -1,6 +1,6 @@
 # Edit Delta — finance-sketchbook-proof-v1
 
-Bound to review `finance-sketchbook-proof-v1-draft` and hash `73fd2304e6666f967586fe2229353c2956a3cb221c975ea5c5e2014793f56b2d`.
+Bound to review `finance-sketchbook-proof-v1-draft` and hash `ef2174221cc73bfc7493ba5c853064cf3ad850aba02c30d931652c91dd60d364`.
 
 ## Episode Corrections
 

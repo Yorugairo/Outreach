@@ -4,17 +4,17 @@
   "source_bindings": {
     "semantic_beat_ledger": {
       "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/sentence-native-v1/semantic-beat-ledger.v1.json",
-      "sha256": "f83b2dad210f0d77bec0e9d8a1b7b799f1da54b0c19372ded9e4a7ec103f6cdb",
-      "artifact_hash": "a256f66ecdfec9879d2f6c1b644bddaf9c355f9964643e71b95663034379dd69"
+      "sha256": "822f3fa57cdb32774e060e3ea0bae5976c981a768026d6ac4e6b0d8ae1a30bde",
+      "artifact_hash": "93fa9713f2e27e24f5c154caebc13515467d80b5fd77982e149ef3598a0b28fe"
     },
     "asset_demand": {
       "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/edit/sentence-native-v1/asset-demand.v1.json",
-      "sha256": "2850ea36b6570925f769ec0d648cc7f09bbde5fff7499b6cf8370ed29f899523",
-      "artifact_hash": "a7c22c0e0dc445667399a6a817477b3c2dbf0b22d526c015556bab0a2c8f1e2c"
+      "sha256": "ceee0c2d85363244f79f6136ef227545ff014d79f0430d3f01ba894c520597f9",
+      "artifact_hash": "45b724d52401257991dab221050fc3217f9303c5ce0bfc8c2a5a33931e779f29"
     },
     "word_timing": {
       "path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/audio/canonical/history_episode_1_master.words.json",
-      "sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3"
+      "sha256": "ac64d4e18f5af6fdced497d6fb427f98c12c54a4def1d5c8776ba82bc660ad30"
     }
   },
   "timing": {
@@ -26067,5 +26067,5 @@
   ],
   "review_state": "draft",
   "render_eligible": false,
-  "artifact_hash": "a295f1acee2597b8f22ea95904989fdd9290b93fe4e534e49c61fa9e32eda085"
+  "artifact_hash": "15ad84d678f544f8709a3b0c73895d0b9b3ab679f39b5d92fe705a83f77e1ac9"
 }

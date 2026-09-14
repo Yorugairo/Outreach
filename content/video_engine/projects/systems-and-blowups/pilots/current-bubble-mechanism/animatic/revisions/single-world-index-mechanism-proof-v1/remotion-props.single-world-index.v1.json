@@ -2,14 +2,14 @@
   "plan": {
     "schema_version": "editorial_motion_plan.v1",
     "source_storyboard_hash": "8439049bc7a9d94ef34a053ed911e10e5b33819b3f8fd3d88ad005fa5e360cc6",
-    "source_beat_plan_hash": "f83b2dad210f0d77bec0e9d8a1b7b799f1da54b0c19372ded9e4a7ec103f6cdb",
+    "source_beat_plan_hash": "822f3fa57cdb32774e060e3ea0bae5976c981a768026d6ac4e6b0d8ae1a30bde",
     "scene_bundle_hashes": [
       "1c5c1897205713ca1fb550b47e83725a01103fc23994a30838c4c54bfe4d7137"
     ],
-    "scene_flow_graph_hash": "19f6e87e800027eaade47cc11d88a9e2583cc297f53acfea9c8fbcdef047149b",
+    "scene_flow_graph_hash": "72b129dd7cb189793b22d729375976ddb6de8a7d2eef38d2f38e6e67d3729134",
     "asset_map_hash": "cc792ac0cbedf438ceeb40da806cb7e4d27d074cad70c94d4a21f809c6f0e06d",
-    "audio_manifest_hash": "4d9e640f2c45f4d8be082611515ae842e85e3b45e4d681ca6a3eed0683ba29ca",
-    "pacing_recipe_hash": "7e0693bfcf3494fd442dfc1032b3c5018bbb4ff421a576f110816dd4c8098da1",
+    "audio_manifest_hash": "a2cf7b4e4e2d52efc6fed4098004ed622d81bdf8f20bc3d12ca136f094571974",
+    "pacing_recipe_hash": "3faf1f82581caf3d1e6c70302f263e72c7b4861242449c0b49375ece7a3de408",
     "duration_s": 13.942,
     "source_start_s": 423.867,
     "shots": [

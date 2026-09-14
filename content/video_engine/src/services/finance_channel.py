@@ -38,6 +38,10 @@ SCHEMAS = {
     "finance_edit_manifest.v1": "finance_edit_manifest.schema.json",
     "finance_asset_catalog.v1": "finance_asset_catalog.schema.json",
     "finance_asset_catalog.v2": "finance_asset_catalog_v2.schema.json",
+    # 2026-09-14 (E94/E95): the style-versioned project catalogue. `.v2` above is a
+    # different profile (semantic resolution: capability_anchors, reuse_policy) and
+    # is not a successor to `.v1`, so the styled profile carries its own id.
+    "finance_asset_catalog_styled.v1": "asset_catalog.schema.json",
     "finance_reference_learnings.v1": "finance_reference_learnings.schema.json",
 }
 
@@ -82,6 +86,89 @@ def file_sha256(path: str | Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+#: 2026-09-14 (operator ruling): the pre-cutout SOURCE intermediate of a generated
+#: asset can be *struck* - absent from every checkout, `source_path` null, and
+#: `source_sha256` kept as the record of what was generated. No reader opens a
+#: struck source; the cutout keyed out of it is on disk and must still verify.
+STRUCK_SOURCE_STATE = "struck"
+
+#: 2026-09-14 (operator ruling): a catalogue row whose plate is absent from every
+#: checkout carries `file_state: "regenerate"`. Its sha256 stays as the record, the
+#: file is not required on disk, and the row is never render-eligible until the
+#: plate is regenerated from its request and the state returns to `present`.
+PRESENT_FILE_STATE = "present"
+REGENERATE_FILE_STATE = "regenerate"
+
+
+def generated_source_is_struck(asset: Mapping[str, Any]) -> bool:
+    """True when a generation-manifest entry's pre-cutout source was struck."""
+    return str(asset.get("source_state") or "") == STRUCK_SOURCE_STATE
+
+
+def _file_hash_errors(path: Path, expected: Any, label: str) -> list[str]:
+    if not path.is_file():
+        return [f"{label} file does not exist"]
+    if file_sha256(path) != expected:
+        return [f"{label} sha256 does not match local bytes"]
+    return []
+
+
+def generated_asset_file_errors(
+    asset: Mapping[str, Any], generated_root: str | Path
+) -> list[str]:
+    """Errors for one `generation-manifest.v1.json` entry against bytes on disk.
+
+    A struck source is never opened - it must declare a null `source_path`, keep its
+    `source_sha256` as the record and say why in `source_note`. Every entry's own
+    picture (the cutout, or the flattened plate for a world) is still hashed against
+    local bytes unless the picture itself carries `file_state: "regenerate"`.
+    """
+    root = Path(generated_root)
+    label = str(asset.get("asset_id") or "<unknown>")
+    errors: list[str] = []
+    if generated_source_is_struck(asset):
+        if asset.get("source_path") is not None:
+            errors.append(f"{label} struck source must declare a null source_path")
+        if not asset.get("source_sha256"):
+            errors.append(f"{label} struck source must keep source_sha256 as the record")
+        if not asset.get("source_note"):
+            errors.append(f"{label} struck source must say why in source_note")
+    elif asset.get("source_path"):
+        errors.extend(
+            _file_hash_errors(
+                root / str(asset["source_path"]), asset.get("source_sha256"), f"{label} source"
+            )
+        )
+    elif "source_path" in asset:
+        errors.append(f"{label} has a null source_path but is not struck")
+    pictures = [
+        ("cutout_path", "cutout_sha256", "cutout"),
+        ("flattened_path", "flattened_sha256", "flattened plate"),
+    ]
+    declared = [item for item in pictures if asset.get(item[0])]
+    if not declared:
+        errors.append(f"{label} declares neither a cutout nor a flattened plate")
+    file_state = str(asset.get("file_state") or PRESENT_FILE_STATE)
+    if file_state not in (PRESENT_FILE_STATE, REGENERATE_FILE_STATE):
+        errors.append(f"{label} unsupported file_state: {file_state!r}")
+    elif file_state == REGENERATE_FILE_STATE:
+        # The plate itself is absent from every checkout. Its sha256 stays as the
+        # record of what was generated and nothing opens it until it is regenerated.
+        if not asset.get("file_note"):
+            errors.append(f"{label} a regenerate asset must say why in file_note")
+        for _, hash_key, name in declared:
+            if not asset.get(hash_key):
+                errors.append(f"{label} regenerate {name} must keep its sha256 as the record")
+    else:
+        for path_key, hash_key, name in declared:
+            errors.extend(
+                _file_hash_errors(
+                    root / str(asset[path_key]), asset.get(hash_key), f"{label} {name}"
+                )
+            )
+    return errors
 
 
 def with_artifact_hash(payload: Mapping[str, Any]) -> dict[str, Any]:
@@ -668,6 +755,17 @@ def _edit_manifest_errors(payload: Mapping[str, Any]) -> list[str]:
     return []
 
 
+#: Review states that count as visual approval for render eligibility.
+#: 2026-09-14 (E94/E95): the operator approved the icons and world plates on
+#: 2026-09-13 under `operator_approved`; it is an approval, not a third state.
+_APPROVING_REVIEW_STATES = frozenset({"approved_reusable", "operator_approved"})
+
+#: Schema versions a project-local `asset-catalog.v1.json` may declare.
+#: 2026-09-14: routing is by the *declared* version, so an old catalogue keeps
+#: validating against v1 while a style-versioned one gets the styled schema.
+ASSET_CATALOG_VERSIONS = ("finance_asset_catalog.v1", "finance_asset_catalog_styled.v1")
+
+
 def validate_asset_catalog(payload: Mapping[str, Any], project_root: str | Path) -> dict[str, Any]:
     errors = _schema_errors(payload) + _hash_errors(payload)
     expected_order = [
@@ -689,14 +787,28 @@ def validate_asset_catalog(payload: Mapping[str, Any], project_root: str | Path)
         except ValueError:
             errors.append(f"{label} path escapes project root")
             continue
-        if not candidate.is_file():
+        # 2026-09-14 (operator ruling): a `regenerate` row records a plate absent from
+        # every checkout. Its sha256 is the record of what was generated, not a claim
+        # about bytes here, so the file is not required - and it can never render.
+        file_state = str(asset.get("file_state") or PRESENT_FILE_STATE)
+        if file_state not in (PRESENT_FILE_STATE, REGENERATE_FILE_STATE):
+            errors.append(f"{label} unsupported file_state: {file_state!r}")
+        elif file_state == REGENERATE_FILE_STATE:
+            if asset.get("render_eligible"):
+                errors.append(f"{label} a regenerate asset can never be render-eligible")
+            if not asset.get("file_note"):
+                errors.append(f"{label} a regenerate asset must say why in file_note")
+        elif not candidate.is_file():
             errors.append(f"{label} file does not exist")
         elif file_sha256(candidate) != asset.get("sha256"):
             errors.append(f"{label} sha256 does not match local bytes")
         if asset.get("generated") and asset.get("contains_factual_text"):
             errors.append(f"{label} generated asset cannot contain factual text")
+        # 2026-09-14 (E94/E95): `operator_approved` is the state the operator's own
+        # 2026-09-13 approval pass writes; it approves as `approved_reusable` does.
         if asset.get("render_eligible") and (
-            asset.get("review_state") != "approved_reusable" or asset.get("rights_state") != "approved"
+            asset.get("review_state") not in _APPROVING_REVIEW_STATES
+            or asset.get("rights_state") != "approved"
         ):
             errors.append(f"{label} render eligibility requires visual and rights approval")
     if errors:
@@ -1091,20 +1203,24 @@ def validate_project(project_root: str | Path, *, include_pilots: bool = False) 
         "channel-profile.v1.json": "finance_channel_profile.v1",
         "programming-schedule.v1.json": "finance_schedule.v1",
         "reference-learnings.v1.json": "finance_reference_learnings.v1",
-        "asset-catalog.v1.json": "finance_asset_catalog.v1",
+        "asset-catalog.v1.json": ASSET_CATALOG_VERSIONS,
     }
     errors: list[str] = []
     validated: list[str] = []
     for relative, version in required.items():
+        # 2026-09-14: a tuple means several declared versions are accepted for this
+        # file; the declared one picks the schema (see ASSET_CATALOG_VERSIONS).
+        accepted = version if isinstance(version, tuple) else (version,)
         path = root / relative
         if not path.is_file():
             errors.append(f"missing {relative}")
             continue
         try:
             payload = load_json(path)
-            if payload.get("schema_version") != version:
+            declared = payload.get("schema_version")
+            if declared not in accepted:
                 errors.append(f"{relative} has wrong schema_version")
-            elif version == "finance_asset_catalog.v1":
+            elif declared in ASSET_CATALOG_VERSIONS:
                 validate_asset_catalog(payload, root)
             else:
                 validate_artifact(payload)
@@ -1133,6 +1249,8 @@ __all__ = [
     "TOPIC_WEIGHTS",
     "canonical_sha256",
     "file_sha256",
+    "generated_asset_file_errors",
+    "generated_source_is_struck",
     "load_json",
     "score_topic",
     "select_asset_strategy",

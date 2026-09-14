@@ -71,6 +71,11 @@ CLASSIFICATION = (
     ("world",        "class", PRIMARY,   "the world/plate layer - #wA/#wB, the beat's ground"),
     ("clipv",        "class", PRIMARY,   "the generative clip filling a world layer"),
     ("seam",         "id",    PRIMARY,   "the cross-reveal wipe front (29 s9.15) - the transition IS the beat"),
+    # added 2026-09-13: the live Tokyo DOM carries these three and the table had no row, so they read UNCLASSIFIED.
+    # bzveil/dipveil are transition fronts like #seam - the dip is the moment the world actually changes, so the
+    # veil IS the beat, not a decoration over it (E47).
+    ("bzveil",       "id",    PRIMARY,   "the blur-zoom transition veil (E47) - the transition IS the beat"),
+    ("dipveil",      "id",    PRIMARY,   "the dip-to-black transition veil (E47) - the dip is a world change"),
     ("lp",           "class", PRIMARY,   "the ledger page mount"),
     ("lp-page",      "class", PRIMARY,   "the ledger page build/retract/spiral (E22)"),
     ("lp-field",     "class", PRIMARY,   "the page field the ink lands in"),
@@ -101,6 +106,8 @@ CLASSIFICATION = (
     ("cpill",        "class", SECONDARY, "a chart callout badge"),
     ("callout",      "class", SECONDARY, "a chart callout label"),
     ("species",      "id",    SECONDARY, "species life (41-LEDGER-PAGE-SPECIES)"),
+    # added 2026-09-13: the species under-layer, the sibling #species rides above - same life, same class
+    ("species-under", "id",   SECONDARY, "species life drawn under the page (41-LEDGER-PAGE-SPECIES)"),
     ("plife",        "id",    SECONDARY, "plate life - boil / jitter"),
     ("lp-grain",     "class", SECONDARY, "paper grain boil on the page"),
     ("lp-rail",      "class", SECONDARY, "the page rail accent"),

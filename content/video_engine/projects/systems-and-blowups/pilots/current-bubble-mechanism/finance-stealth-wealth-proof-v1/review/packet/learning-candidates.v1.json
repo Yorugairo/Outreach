@@ -3,7 +3,7 @@
   "project_id": "outreach-program",
   "generated_at": "2026-08-10T04:20:21.938255Z",
   "source_review_hashes": [
-    "c6b5335e1c17672ff302d54138ee6070cffdf98cddaa17c0018455b62dad2d86"
+    "d712d4c450046e9b70b748c8d8f7cd3fc2b54d7e78c114d7fd1ecf4e8bda012a"
   ],
   "candidates": [
     {
@@ -17,7 +17,7 @@
       "observations": [
         {
           "review_id": "finance-stealth-wealth-proof-v1-draft",
-          "review_hash": "c6b5335e1c17672ff302d54138ee6070cffdf98cddaa17c0018455b62dad2d86",
+          "review_hash": "d712d4c450046e9b70b748c8d8f7cd3fc2b54d7e78c114d7fd1ecf4e8bda012a",
           "finding_id": "operator-review-pending",
           "episode_id": "finance-stealth-wealth-proof-v1",
           "lane_id": "systems-and-blowups-finance",
@@ -32,5 +32,5 @@
       "operator_gate": "required"
     }
   ],
-  "artifact_hash": "7d86d77ddd07406cd83ae92c417fb7ec7523a23677bdf351b69a1bf794460f3f"
+  "artifact_hash": "8b791cceff5960af4e7d858396cf35c36772d6dce7a1758d2726efd5eea2f745"
 }

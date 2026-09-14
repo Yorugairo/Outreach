@@ -440,9 +440,17 @@ def _synthetic_portrait_build(tmp_path: Path) -> tuple[Path, dict, dict]:
 
 
 def _clip_pixel_bbox(png: bytes) -> tuple[int, int, int, int] | None:
-    """The bounding box of the CLIP's own pixels. testsrc's bars carry cyan and magenta - a
-    saturated primary pair the ledger page's register (cream, charcoal, sunflower, the sign
-    colours) contains nowhere, so a cyan/magenta pixel is a clip pixel and nothing else."""
+    """The bounding box of the CLIP's own pixels. testsrc's bars carry cyan (0,255,255) and
+    magenta (255,0,255) - a saturated primary pair the ledger page's register contains nowhere.
+
+    Measured on the rendered 1080x1920 frame, 2026-09-13: the loose key
+    `(r < 90 and g > 170 and b > 170)` ALSO caught the page's up-sign mint, (52,245,197) and its
+    whole antialias ramp, which lives on the PLOT - so the detector reported (248, 454, 588, 656)
+    for a card that actually paints at (427, 454, 388, 265), inside its place rect. A clip pixel is
+    a primary: one channel near zero and the other TWO both near full AND equal to each other. The
+    mint fails on its blue (197, nowhere near its own green 245); cream, sunflower and the sign red
+    fail on not having two full channels.
+    """
     from PIL import Image
     import io
     im = Image.open(io.BytesIO(png)).convert("RGB")
@@ -451,8 +459,8 @@ def _clip_pixel_bbox(png: bytes) -> tuple[int, int, int, int] | None:
     xs, ys = [], []
     for y in range(0, h, 2):
         for x in range(0, w, 2):
-            r, g, b = px[x, y]
-            if (r < 90 and g > 170 and b > 170) or (r > 170 and g < 90 and b > 170):
+            lo, mid, hi = sorted(px[x, y])
+            if lo < 60 and mid > 230 and hi > 230 and hi - mid <= 25:
                 xs.append(x); ys.append(y)
     if not xs:
         return None

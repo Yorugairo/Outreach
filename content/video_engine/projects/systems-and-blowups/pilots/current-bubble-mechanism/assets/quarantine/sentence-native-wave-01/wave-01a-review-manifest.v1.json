@@ -4,7 +4,7 @@
   "wave_id": "current-bubble-mechanism-hook-wave-01a",
   "review_state": "operator_approved_for_composition",
   "operator_decision": "approved_for_composition",
-  "semantic_beat_ledger_artifact_hash": "a256f66ecdfec9879d2f6c1b644bddaf9c355f9964643e71b95663034379dd69",
+  "semantic_beat_ledger_artifact_hash": "93fa9713f2e27e24f5c154caebc13515467d80b5fd77982e149ef3598a0b28fe",
   "prompt_spine_artifact_hash": "7d44d3cc68723d598dbb426ef0e05e43d64e4c65b9af44d1ce0a054d2303c75b",
   "selection_policy": "exact spoken nouns and causal relationship before style; no convenient reuse or filler",
   "contact_sheet_path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/assets/quarantine/sentence-native-wave-01/wave-01a-review-contact-sheet.png",
@@ -141,5 +141,5 @@
     }
   ],
   "next_wave_authorized": true,
-  "artifact_hash": "98644b20f52d591d1351c18e87e9ec92068403ef21385f35d4e0173be26365a9"
+  "artifact_hash": "c9269a9847bcdb135d5f27d5d6ed3dd54c930a56406fb2cc1c874a17d47baa5c"
 }

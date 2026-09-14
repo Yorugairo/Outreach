@@ -1,7 +1,7 @@
 {
   "schema_version": "dynamic_caption_track.v1",
   "timing_authority": "canonical_elevenlabs_word_timings",
-  "word_timing_sha256": "9bf403c6e9299663d6f29770a0f42d68c4d03c22d96598903973c4d7cfcdc403",
+  "word_timing_sha256": "e2d4eb53bf658bfef51083bd005c317b2696313ea1c03d5443bd46e9dd9953c6",
   "style": {
     "mode": "cadence_pop",
     "text_owner": "local_compositor",

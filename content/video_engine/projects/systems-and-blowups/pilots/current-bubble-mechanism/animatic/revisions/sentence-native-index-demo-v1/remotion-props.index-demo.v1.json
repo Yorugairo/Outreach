@@ -1,15 +1,15 @@
 {
   "plan": {
     "schema_version": "editorial_motion_plan.v1",
-    "source_storyboard_hash": "90f6e17c8a719c9b063d7d21441baf5be3e7bb6702f04598eee07d24678f656b",
-    "source_beat_plan_hash": "f83b2dad210f0d77bec0e9d8a1b7b799f1da54b0c19372ded9e4a7ec103f6cdb",
+    "source_storyboard_hash": "d19dee986694f118b60a227039c00c701f4fb0806cac62b53c8853bc65186933",
+    "source_beat_plan_hash": "822f3fa57cdb32774e060e3ea0bae5976c981a768026d6ac4e6b0d8ae1a30bde",
     "scene_bundle_hashes": [
-      "00736344fcbbb0a647bee78085aec0b2f47090df5afd5ea3b9d7f07331f99564"
+      "f656e0708757c76d0544e4136c0daead2a88e1f134b44747654c98cfcea27d39"
     ],
-    "scene_flow_graph_hash": "19f6e87e800027eaade47cc11d88a9e2583cc297f53acfea9c8fbcdef047149b",
+    "scene_flow_graph_hash": "72b129dd7cb189793b22d729375976ddb6de8a7d2eef38d2f38e6e67d3729134",
     "asset_map_hash": "bba2100e5f219b3bc8bb699eb3d7bc92c8ba2f6c9649ac4ed8f47fa65058443c",
-    "audio_manifest_hash": "4d9e640f2c45f4d8be082611515ae842e85e3b45e4d681ca6a3eed0683ba29ca",
-    "pacing_recipe_hash": "7e0693bfcf3494fd442dfc1032b3c5018bbb4ff421a576f110816dd4c8098da1",
+    "audio_manifest_hash": "a2cf7b4e4e2d52efc6fed4098004ed622d81bdf8f20bc3d12ca136f094571974",
+    "pacing_recipe_hash": "3faf1f82581caf3d1e6c70302f263e72c7b4861242449c0b49375ece7a3de408",
     "duration_s": 49.958,
     "source_start_s": 410.26,
     "shots": [

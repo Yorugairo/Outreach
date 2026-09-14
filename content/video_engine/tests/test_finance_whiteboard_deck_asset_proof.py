@@ -2,6 +2,7 @@ import importlib.util
 import json
 from pathlib import Path
 import sys
+import pytest
 
 
 SCRIPT_PATH = Path(__file__).resolve().parents[1] / "scripts" / "build_finance_whiteboard_deck_asset_proof.py"
@@ -10,6 +11,11 @@ assert SPEC and SPEC.loader
 builder = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = builder
 SPEC.loader.exec_module(builder)
+
+
+# 2026-09-13 (absent-input triage): the proof's index.html and review render were never committed.
+PROOF_INDEX = builder.PROOF_ROOT / "index.html"
+PROOF_RENDER = builder.PROOF_ROOT / "render/finance-whiteboard-deck-asset-proof.mp4"
 
 
 def test_selected_assets_bind_to_p28_manifest():
@@ -21,6 +27,12 @@ def test_selected_assets_bind_to_p28_manifest():
     assert set(receipts["selected_asset_ids"]) <= source_ids
 
 
+@pytest.mark.skipif(
+    not PROOF_INDEX.exists(),
+    reason=(
+        "finance-whiteboard-deck-asset-proof-v1/index.html is missing - never committed / absent from every checkout (2026-09-13); regenerate with python content/video_engine/scripts/build_finance_whiteboard_deck_asset_proof.py"
+    ),
+)
 def test_proof_preserves_baked_text_and_hand_reveal_contract():
     html = (builder.PROOF_ROOT / "index.html").read_text(encoding="utf-8")
     proof = json.loads((builder.PROOF_ROOT / "proof-manifest.v1.json").read_text(encoding="utf-8"))
@@ -38,6 +50,12 @@ def test_proof_preserves_baked_text_and_hand_reveal_contract():
     assert "Date.now" not in html
 
 
+@pytest.mark.skipif(
+    not PROOF_RENDER.exists(),
+    reason=(
+        "finance-whiteboard-deck-asset-proof-v1/render/finance-whiteboard-deck-asset-proof.mp4 is missing - never committed / absent from every checkout (2026-09-13); regenerate with python content/video_engine/scripts/build_finance_whiteboard_deck_asset_proof.py --render"
+    ),
+)
 def test_review_render_contract():
     manifest = json.loads((builder.PROOF_ROOT / "proof-manifest.v1.json").read_text(encoding="utf-8"))
     assert manifest["status"] == "review_render_complete"

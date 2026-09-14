@@ -4,6 +4,8 @@ import copy
 import json
 from pathlib import Path
 
+import pytest
+
 from content.video_engine.src.services.full_episode_evidence_coverage import (
     compile_full_episode_evidence_coverage,
     validate_full_episode_evidence_coverage,
@@ -15,6 +17,16 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 PROJECT = REPO_ROOT / "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism"
 
 
+# 2026-09-13 (absent-input triage): the semantic-wave-03 world plate was never committed.
+WORLD_PLATE = PROJECT / "assets/review/semantic-wave-03/default-bubble-reaction-v1.png"
+
+
+@pytest.mark.skipif(
+    not WORLD_PLATE.exists(),
+    reason=(
+        "pilots/current-bubble-mechanism/assets/review/semantic-wave-03/default-bubble-reaction-v1.png is missing - never committed / absent from every checkout (2026-09-13); no repo command regenerates it, it is an operator-approved world plate"
+    ),
+)
 def test_compiles_the_full_canonical_episode_deterministically() -> None:
     first = compile_full_episode_evidence_coverage(PROJECT)
     second = compile_full_episode_evidence_coverage(PROJECT)
@@ -42,6 +54,12 @@ def test_compiles_the_full_canonical_episode_deterministically() -> None:
     assert {turn["state"] for turn in first["cadence_turns"]} >= {"sentence_native_candidate", "scene_authority_candidate", "new_world_art_gap"}
 
 
+@pytest.mark.skipif(
+    not WORLD_PLATE.exists(),
+    reason=(
+        "pilots/current-bubble-mechanism/assets/review/semantic-wave-03/default-bubble-reaction-v1.png is missing - never committed / absent from every checkout (2026-09-13); no repo command regenerates it, it is an operator-approved world plate"
+    ),
+)
 def test_writes_review_artifacts_and_detects_stale_output(tmp_path: Path) -> None:
     paths = write_full_episode_evidence_coverage(PROJECT, tmp_path)
     payload = json.loads(paths["coverage"].read_text(encoding="utf-8"))

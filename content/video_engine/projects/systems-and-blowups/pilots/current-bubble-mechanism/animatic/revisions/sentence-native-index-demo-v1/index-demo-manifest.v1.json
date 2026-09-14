@@ -14,10 +14,10 @@
   },
   "paper_motion_fps": 12,
   "delivery_fps": 24,
-  "wave_07_review_manifest_sha256": "90f6e17c8a719c9b063d7d21441baf5be3e7bb6702f04598eee07d24678f656b",
-  "wave_07_depth_manifest_sha256": "00736344fcbbb0a647bee78085aec0b2f47090df5afd5ea3b9d7f07331f99564",
+  "wave_07_review_manifest_sha256": "d19dee986694f118b60a227039c00c701f4fb0806cac62b53c8853bc65186933",
+  "wave_07_depth_manifest_sha256": "f656e0708757c76d0544e4136c0daead2a88e1f134b44747654c98cfcea27d39",
   "props_path": "content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/animatic/revisions/sentence-native-index-demo-v1/remotion-props.index-demo.v1.json",
-  "props_sha256": "8d5c234050ab8ac90f50516382fed97c044ee7d1e5cd328d9e6a71fb3e5c4d5f",
+  "props_sha256": "0338c7fca06a6efda8c6cf396ffc84570d48d8cddd871072ad55ab1f2c1ab674",
   "deterministic_surfaces": [
     "top-ten concentration card",
     "short local explanation surfaces",

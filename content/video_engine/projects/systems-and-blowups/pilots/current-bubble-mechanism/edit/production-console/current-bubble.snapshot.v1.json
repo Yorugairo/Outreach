@@ -1,12 +1,12 @@
 {
-  "artifact_hash": "d1e618286334a811374bb9a02842386a45a5e83d2532b2a509972966eb2a0f27",
+  "artifact_hash": "cfd7b7bfe8f2fdb0845f1944cb78131a7e0acc37cf25d7df7b4504088b746549",
   "artifacts": [
     {
       "artifact_id": "asset_map",
       "degraded_reason": null,
       "kind": "asset_map",
       "path": "edit/word-timed-v1/asset-map.v1.json",
-      "sha256": "f4d1201f84dbea9df2a5e2d4aa2c8ecc8a98445e1c5f1918909308fe3788cc02",
+      "sha256": "79cb5129218699bc772e0ff9c530ee64ce896f72c27455e7a93eb866d7f9fbea",
       "status": "available"
     },
     {
@@ -14,7 +14,7 @@
       "degraded_reason": null,
       "kind": "canonical_audio",
       "path": "audio/canonical-audio.v1.json",
-      "sha256": "ca01a01d1f0dadd050a5d12058d2118fe4f8d9338e4fb3060a1d874c108ea601",
+      "sha256": "054da5d9c2f754501e547a46b3c7fb4d2386ef8b661d7492d1011e3d84a4f316",
       "status": "available"
     },
     {
@@ -30,7 +30,7 @@
       "degraded_reason": null,
       "kind": "finance_visual_cue_sheet",
       "path": "edit/word-timed-v1/finance-visual-cue-sheet.v1.json",
-      "sha256": "7745afa455e54fea84360cd854119435e406f76c04245d652fb17d1dac808527",
+      "sha256": "6cab625432d7a0571eed840218fb9f8d04b019aa358cf74e906c08a89bc5e915",
       "status": "available"
     },
     {
@@ -38,7 +38,7 @@
       "degraded_reason": null,
       "kind": "finance_edit_manifest",
       "path": "edit/word-timed-v1/finance-edit-manifest.v1.json",
-      "sha256": "a04dcd8c5d8ea15a7e3d8e6ac7d15f19a894e6dfe1772677c3d6241dfb1c76dd",
+      "sha256": "bfcbbe57637b271f5c0fb54df9c371ec77aeb2e3c49a9a8a781bbdbc2c306772",
       "status": "available"
     },
     {
@@ -46,7 +46,7 @@
       "degraded_reason": null,
       "kind": "editorial_motion_plan",
       "path": "edit/word-timed-v1/editorial-motion-plan.v1.json",
-      "sha256": "1a60604031de15fe1ff5baa4aefbbba1f9dfbf3a546a689e0ae6b897e229877b",
+      "sha256": "b794a10a121b5563cf985abb648a9173fec91e0ddcf2b823bbfed0f074dd0014",
       "status": "available"
     },
     {
@@ -54,7 +54,7 @@
       "degraded_reason": null,
       "kind": "overlay_map",
       "path": "edit/word-timed-v1/overlay-map.v1.json",
-      "sha256": "a1a94366b87b455730747ddb536a653a90f21dbc8a901a9b19424192223de43f",
+      "sha256": "b1e3925cfd52db178b4ace95d463ae60221bbb32b115710e8a91bfbe7ca77ca4",
       "status": "available"
     },
     {
@@ -62,7 +62,7 @@
       "degraded_reason": null,
       "kind": "pacing_recipe",
       "path": "edit/word-timed-v1/pacing-recipe.v1.json",
-      "sha256": "7e0693bfcf3494fd442dfc1032b3c5018bbb4ff421a576f110816dd4c8098da1",
+      "sha256": "3faf1f82581caf3d1e6c70302f263e72c7b4861242449c0b49375ece7a3de408",
       "status": "available"
     },
     {
@@ -70,7 +70,7 @@
       "degraded_reason": null,
       "kind": "scene_bundles",
       "path": "edit/word-timed-v1/scene-bundles.v1.json",
-      "sha256": "7cd21c17df3913bc92e7c3bd884808286eae488969c34151fcfd78d18b6abbb6",
+      "sha256": "d6a585f98f4afec193483a6a558bccf40af8c8683328aacfc3caea60a4524a3b",
       "status": "available"
     },
     {
@@ -78,7 +78,7 @@
       "degraded_reason": null,
       "kind": "scene_flow_graph",
       "path": "edit/word-timed-v1/scene-flow-graph.v1.json",
-      "sha256": "19f6e87e800027eaade47cc11d88a9e2583cc297f53acfea9c8fbcdef047149b",
+      "sha256": "72b129dd7cb189793b22d729375976ddb6de8a7d2eef38d2f38e6e67d3729134",
       "status": "available"
     },
     {
@@ -86,7 +86,7 @@
       "degraded_reason": null,
       "kind": "word_timing",
       "path": "audio/canonical/history_episode_1_master.words.json",
-      "sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+      "sha256": "ac64d4e18f5af6fdced497d6fb427f98c12c54a4def1d5c8776ba82bc660ad30",
       "status": "available"
     }
   ],
@@ -1727,17 +1727,17 @@
     }
   ],
   "base_artifact_hashes": {
-    "asset_map": "f4d1201f84dbea9df2a5e2d4aa2c8ecc8a98445e1c5f1918909308fe3788cc02",
-    "audio_manifest": "ca01a01d1f0dadd050a5d12058d2118fe4f8d9338e4fb3060a1d874c108ea601",
+    "asset_map": "79cb5129218699bc772e0ff9c530ee64ce896f72c27455e7a93eb866d7f9fbea",
+    "audio_manifest": "054da5d9c2f754501e547a46b3c7fb4d2386ef8b661d7492d1011e3d84a4f316",
     "claim_ledger": "0f5c49a3ab764ba5ad6ed9d4b14b2fc24fa6c921b9d83342975a7cfe0080edcc",
-    "cue_sheet": "7745afa455e54fea84360cd854119435e406f76c04245d652fb17d1dac808527",
-    "edit_manifest": "a04dcd8c5d8ea15a7e3d8e6ac7d15f19a894e6dfe1772677c3d6241dfb1c76dd",
-    "motion_plan": "1a60604031de15fe1ff5baa4aefbbba1f9dfbf3a546a689e0ae6b897e229877b",
-    "overlay_map": "a1a94366b87b455730747ddb536a653a90f21dbc8a901a9b19424192223de43f",
-    "pacing_recipe": "7e0693bfcf3494fd442dfc1032b3c5018bbb4ff421a576f110816dd4c8098da1",
-    "scene_bundles": "7cd21c17df3913bc92e7c3bd884808286eae488969c34151fcfd78d18b6abbb6",
-    "scene_flow": "19f6e87e800027eaade47cc11d88a9e2583cc297f53acfea9c8fbcdef047149b",
-    "words": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3"
+    "cue_sheet": "6cab625432d7a0571eed840218fb9f8d04b019aa358cf74e906c08a89bc5e915",
+    "edit_manifest": "bfcbbe57637b271f5c0fb54df9c371ec77aeb2e3c49a9a8a781bbdbc2c306772",
+    "motion_plan": "b794a10a121b5563cf985abb648a9173fec91e0ddcf2b823bbfed0f074dd0014",
+    "overlay_map": "b1e3925cfd52db178b4ace95d463ae60221bbb32b115710e8a91bfbe7ca77ca4",
+    "pacing_recipe": "3faf1f82581caf3d1e6c70302f263e72c7b4861242449c0b49375ece7a3de408",
+    "scene_bundles": "d6a585f98f4afec193483a6a558bccf40af8c8683328aacfc3caea60a4524a3b",
+    "scene_flow": "72b129dd7cb189793b22d729375976ddb6de8a7d2eef38d2f38e6e67d3729134",
+    "words": "ac64d4e18f5af6fdced497d6fb427f98c12c54a4def1d5c8776ba82bc660ad30"
   },
   "composition_id": "EditorialMotion",
   "degraded_inputs": [

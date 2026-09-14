@@ -4,7 +4,7 @@
   "wave_id": "current-bubble-mechanism-semantic-wave-04",
   "review_state": "operator_approved_for_composition",
   "operator_decision": "approved",
-  "semantic_beat_ledger_artifact_hash": "f83b2dad210f0d77bec0e9d8a1b7b799f1da54b0c19372ded9e4a7ec103f6cdb",
+  "semantic_beat_ledger_artifact_hash": "822f3fa57cdb32774e060e3ea0bae5976c981a768026d6ac4e6b0d8ae1a30bde",
   "prompt_spine_artifact_hash": "360313709cfe4fb347ab0b82b844b75b445694c665893b4071943df983370c2b",
   "selection_policy": "exact spoken nouns and causal relationship before style; no convenient reuse or filler",
   "generation_route": "imagegen_builtin",

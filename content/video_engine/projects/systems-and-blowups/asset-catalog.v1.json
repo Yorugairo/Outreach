@@ -341,6 +341,8 @@
     {
       "asset_id": "mechanism-town-v1",
       "contains_factual_text": false,
+      "file_note": "plate absent from every checkout 2026-09-14; regenerate from its request when a cut needs it (operator ruling)",
+      "file_state": "regenerate",
       "generated": true,
       "identity_lenses": [
         "worker-to-owner",
@@ -1274,7 +1276,7 @@
     "deterministic_evidence_or_mechanism",
     "bespoke_plate"
   ],
-  "schema_version": "finance_asset_catalog.v1",
+  "schema_version": "finance_asset_catalog_styled.v1",
   "style_families": {
     "ep1-index-funds": [
       "paper-cut-reduced-density-v2",
@@ -1285,5 +1287,5 @@
       "crinkle-cut-v1"
     ]
   },
-  "artifact_hash": "3ffc827f8906beacfde6934e2ee3986f207d0320a6851452abb03ca14d123942"
+  "artifact_hash": "52cae0124d9d6a8b1099b7cff3096476b73c6684c0e35ece2a242f2da480b66f"
 }

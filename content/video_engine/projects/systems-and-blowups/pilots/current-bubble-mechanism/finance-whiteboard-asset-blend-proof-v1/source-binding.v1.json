@@ -7,10 +7,10 @@
       "The_Silicon_Antidote.pdf": "f77536dd8123f9c5ff3cc4cc674a6e65117ecbdb0bf1982e8593098bf6ba244f"
     },
     "audio_sha256": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
-    "canonical_words_sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
-    "p24_words_sha256": "547f2103d39778246ad80ab3e92c6a38906e90b3d4970d9384ab77177111d78a",
-    "p24_narration_sha256": "a08a708b2302f5e63a13b888d5c8aa88f1e4047f11c17dcd8a54644ace463302",
-    "p24_claim_ledger_sha256": "100288f9c76bfded155afdc8ab438d35d531f9bcdaf63912baf01d4ac777d619",
+    "canonical_words_sha256": "ac64d4e18f5af6fdced497d6fb427f98c12c54a4def1d5c8776ba82bc660ad30",
+    "p24_words_sha256": "69ff6be47e321cccdefca4bc9a54c5a2e3b11b5a4242abfccba9fe20499e3826",
+    "p24_narration_sha256": "6bb7879e72e42ea55e99f2921e43963f77f5ce567e812abc0bf0000bc25e05f6",
+    "p24_claim_ledger_sha256": "6dd73d3ada654011e2c2a518fb69171e1d84250d456b31e89f06d896648afb13",
     "hand_asset_sha256": "f50d4f592b0bb62eddc15cc31aa062943c339be079fb38672bf212bb5e7e9a68",
     "source_window": {
       "start_s": 0.0,

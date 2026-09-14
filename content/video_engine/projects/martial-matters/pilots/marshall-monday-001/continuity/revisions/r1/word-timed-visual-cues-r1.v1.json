@@ -6,7 +6,7 @@
   "canonical_audio_hash": "b5d8e372217e92529efaafee2493cbcb1c160ba21c6e084802a833d2413fda48",
   "canonical_audio_manifest_hash": "3a04fe2318b8a01abc3113712fa8e7a86f2d1879b7bf07828af3a2e0a43bef31",
   "word_timing_path": "content/video_engine/projects/martial-matters/pilots/marshall-monday-001/audio/revisions/r1/marshall-monday-001-master-r1.words.json",
-  "word_timing_sha256": "9bf403c6e9299663d6f29770a0f42d68c4d03c22d96598903973c4d7cfcdc403",
+  "word_timing_sha256": "e2d4eb53bf658bfef51083bd005c317b2696313ea1c03d5443bd46e9dd9953c6",
   "narration_hash": "5a112745b7907051b724dd0bc8e8d0874c5a30417315ad9985964459b21c7dbf",
   "duration_s": 567.804,
   "target_primary_states": 192,
@@ -9606,5 +9606,5 @@
       "render_eligible": false
     }
   ],
-  "artifact_hash": "49a46788f24f08083c28465dc6dafffe96e07c5cd1cb130ae2b1d7c4e43b02c3"
+  "artifact_hash": "45168eed51ac95ae812b713857afe94742a45138f4cbb5decb8527d0bdc5bdb1"
 }

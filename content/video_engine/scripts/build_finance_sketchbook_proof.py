@@ -41,9 +41,13 @@ DELIVERY_FPS = 24
 PAPER_MOTION_FPS = 12
 REVIEW_PROFILE = {"width": 1280, "height": 720, "fps": 24, "label": "review-720p-12-on-24"}
 AUTHORING_PROFILE = {"width": 1920, "height": 1080, "fps": 24}
+# 2026-09-13 line-ending re-pin: canonical_words was pinned to the CRLF checkout bytes
+# (3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3). .gitattributes now
+# marks pilots/** as -text, so the canonical bytes are the index's LF bytes. Ledger:
+# content/video_engine/projects/systems-and-blowups/pilots/LINE-ENDINGS-2026-09-13.md
 EXPECTED_HASHES = {
     "canonical_audio": "ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1",
-    "canonical_words": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+    "canonical_words": "ac64d4e18f5af6fdced497d6fb427f98c12c54a4def1d5c8776ba82bc660ad30",
     "claim_ledger": "0f5c49a3ab764ba5ad6ed9d4b14b2fc24fa6c921b9d83342975a7cfe0080edcc",
 }
 

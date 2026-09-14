@@ -1,6 +1,6 @@
 # P32 Full-Episode Evidence Coverage Baseline
 
-Artifact: `ab547e586cefbb53e699bc69b88633648d4ac2a4c5114929a58281bc87d18254`
+Artifact: `3fbb7b23cbb428c429d51db3519e8208321bf11630d4e9594084c1afb56bc870`
 
 This is a review plan only. It does not insert, crop, generate, or approve evidence.
 

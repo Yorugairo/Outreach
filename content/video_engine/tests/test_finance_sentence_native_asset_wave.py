@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import pytest
 
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -17,6 +18,19 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+# 2026-09-13 (absent-input triage): the sentence-native wave-01 quarantine renders were never
+# committed - they are absent from every checkout. One accepted candidate per manifest probes them.
+WAVE_01A_PROBE = WAVE_ROOT / "beat-01-002-memory-stocks-vertical-v1.png"
+WAVE_01B_PROBE = WAVE_ROOT / "beat-01-008-automatic-inflow-feedback-v1.png"
+WAVE_01C_PROBE = WAVE_ROOT / "beat-01-012-physical-bottleneck-repriced-v1.png"
+
+
+@pytest.mark.skipif(
+    not WAVE_01A_PROBE.exists(),
+    reason=(
+        "assets/quarantine/sentence-native-wave-01/beat-01-002-memory-stocks-vertical-v1.png is missing - the quarantine wave PNGs were never committed / absent from every checkout (2026-09-13); no repo command regenerates them, they come from the operator-approved image lane"
+    ),
+)
 def test_hook_wave_is_hash_bound_sentence_native_and_review_only() -> None:
     payload = json.loads(MANIFEST.read_text(encoding="utf-8"))
     artifact_hash = payload.pop("artifact_hash")
@@ -49,6 +63,12 @@ def test_hook_wave_is_hash_bound_sentence_native_and_review_only() -> None:
     assert payload["contact_sheet_sha256"] == _sha256(contact_sheet)
 
 
+@pytest.mark.skipif(
+    not WAVE_01B_PROBE.exists(),
+    reason=(
+        "assets/quarantine/sentence-native-wave-01/beat-01-008-automatic-inflow-feedback-v1.png is missing - the quarantine wave PNGs were never committed / absent from every checkout (2026-09-13); no repo command regenerates them, they come from the operator-approved image lane"
+    ),
+)
 def test_hook_wave_01b_is_distinct_and_operator_approved() -> None:
     payload = json.loads(MANIFEST_01B.read_text(encoding="utf-8"))
     artifact_hash = payload.pop("artifact_hash")
@@ -73,6 +93,12 @@ def test_hook_wave_01b_is_distinct_and_operator_approved() -> None:
     assert payload["contact_sheet_sha256"] == _sha256(contact_sheet)
 
 
+@pytest.mark.skipif(
+    not WAVE_01C_PROBE.exists(),
+    reason=(
+        "assets/quarantine/sentence-native-wave-01/beat-01-012-physical-bottleneck-repriced-v1.png is missing - the quarantine wave PNGs were never committed / absent from every checkout (2026-09-13); no repo command regenerates them, they come from the operator-approved image lane"
+    ),
+)
 def test_semantic_wave_01c_crosses_the_chapter_boundary_without_merging_beats() -> None:
     payload = json.loads(MANIFEST_01C.read_text(encoding="utf-8"))
     artifact_hash = payload.pop("artifact_hash")

@@ -16,7 +16,7 @@
   },
   "transcript": {
     "path": "evidence/transcript.json",
-    "sha256": "3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3",
+    "sha256": "ac64d4e18f5af6fdced497d6fb427f98c12c54a4def1d5c8776ba82bc660ad30",
     "source": "manual"
   },
   "summary": {
@@ -91,5 +91,5 @@
     "approved_at": null,
     "notes": "Awaiting explicit visual review."
   },
-  "artifact_hash": "73fd2304e6666f967586fe2229353c2956a3cb221c975ea5c5e2014793f56b2d"
+  "artifact_hash": "ef2174221cc73bfc7493ba5c853064cf3ad850aba02c30d931652c91dd60d364"
 }

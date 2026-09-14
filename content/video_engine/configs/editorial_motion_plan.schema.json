@@ -128,17 +128,38 @@
         "sha256": {"$ref": "#/definitions/hash"}
       }
     },
+    "layer_activation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start_s", "end_s", "action_start_s", "action_end_s",
+        "start_word_index", "end_word_index",
+        "action_start_word_index", "action_end_word_index"
+      ],
+      "properties": {
+        "start_s": {"type": "number", "minimum": 0},
+        "end_s": {"type": "number", "minimum": 0},
+        "action_start_s": {"type": "number", "minimum": 0},
+        "action_end_s": {"type": "number", "minimum": 0},
+        "start_word_index": {"type": "integer", "minimum": 0},
+        "end_word_index": {"type": "integer", "minimum": 0},
+        "action_start_word_index": {"type": "integer", "minimum": 0},
+        "action_end_word_index": {"type": "integer", "minimum": 0}
+      }
+    },
     "layer": {
       "type": "object",
       "additionalProperties": false,
       "required": ["asset_id", "role"],
       "properties": {
         "asset_id": {"$ref": "#/definitions/safe_id"},
-        "role": {"enum": ["world", "depth", "character", "prop", "ambient", "diagram"]},
+        "role": {"enum": ["world", "depth", "character", "prop", "ambient", "diagram",
+                          "subject", "mechanism", "evidence", "transition"]},
         "z_index": {"type": "integer"},
         "action": {"type": "string"},
         "mask_asset_id": {"$ref": "#/definitions/safe_id"},
         "timing": {"$ref": "#/definitions/layer_timing"},
+        "activation": {"$ref": "#/definitions/layer_activation"},
         "placement": {"$ref": "#/definitions/layer_placement"},
         "layout": {
           "type": "object",

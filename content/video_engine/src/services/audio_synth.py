@@ -185,6 +185,17 @@ class AudioSynthesisError(RuntimeError):
     """A provider or artifact failure that should fail the audio stage."""
 
 
+class CachedTimingError(AudioSynthesisError):
+    """A cache entry has no word-timing sidecar that matches this narration.
+
+    Distinct from the other cache failures on purpose (2026-09-13). A cache
+    entry that cannot validate is normally a MISS - it is dropped and the
+    scene is resynthesized. Missing or mismatched word timings are the one
+    case that must fail CLOSED instead: the only way to continue would be to
+    fabricate timings, and every caption downstream is cut on them.
+    """
+
+
 class AlignmentError(ValueError):
     """Provider character alignment cannot be reconciled with narration."""
 
@@ -694,6 +705,17 @@ class AudioSynthService:
                             ).get("request_id")
                         except (OSError, json.JSONDecodeError):
                             pass
+            except CachedTimingError:
+                # fail CLOSED (2026-09-13): resynthesizing here would be fine,
+                # but the sidecar is also how a REUSED entry proves its timings
+                # belong to this narration. Drop the poisoned entry so the rerun
+                # is a clean miss, then raise - never fabricate timings.
+                LOGGER.warning(
+                    "cached word timings do not match narration - dropping %s",
+                    cache_path)
+                cache_path.unlink(missing_ok=True)
+                cache_sidecar.unlink(missing_ok=True)
+                raise
             except AudioSynthesisError:
                 # a cache entry that cannot validate is a MISS, never a
                 # crash: drop it and resynthesize (2026-08-30 - the first
@@ -704,7 +726,11 @@ class AudioSynthService:
                 cache_path.unlink(missing_ok=True)
                 cache_sidecar.unlink(missing_ok=True)
                 cache_hit = False
-        else:
+        # NOT `else` (2026-09-13): a dropped cache entry set cache_hit False
+        # above and fell straight through to the write below with words /
+        # duration_s never bound - UnboundLocalError. The miss must actually
+        # resynthesize.
+        if not cache_hit:
             payload, request_id = self._request_with_retries(
                 voice_id=voice_id,
                 narration=compiled,
@@ -816,7 +842,7 @@ class AudioSynthService:
             except (OSError, ValueError, TypeError, KeyError, json.JSONDecodeError):
                 LOGGER.warning("ignoring invalid cached word timing artifact: %s", candidate)
 
-        raise AudioSynthesisError(
+        raise CachedTimingError(
             "cached audio is missing a valid word-timing sidecar; "
             "remove the incomplete cache entry and rerun the stage"
         )
@@ -1050,6 +1076,7 @@ __all__ = [
     "AlignmentError",
     "AudioSynthService",
     "AudioSynthesisError",
+    "CachedTimingError",
     "COST_PER_CHARACTER",
     "DEFAULT_ELEVENLABS_BASE_URL",
     "DEFAULT_ELEVENLABS_MODEL_ID",

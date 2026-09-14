@@ -172,7 +172,11 @@ def test_the_tokyo_report_is_written_with_the_sheets(tmp_path):
     sheets = sorted((build / SW.SHEET_DIR).glob("opening*.png"))
     assert len(sheets) == 3, sheets                       # 30 tiles, 12 a sheet
     assert (build / "layout-probe.json").is_file()        # M25's input was written
-    assert lines[-1].startswith("TODO - the agent reads the sheets")
+    # re-pinned 2026-09-13: the verdict line moved from TODO to NOT CLEAN. P56 T6/T7 put the one-shot floor rows
+    # (M35-M42) into section 1 and the frozen build-short stands at FAIL on M35/M38/M39 as well as the older M11/M27.
+    # A section-1 FAIL ends the report, so the TODO line is only reached when section 1 is clean - the floors are a
+    # P56 feature, not a regression. The O1-O11 TODO rows are still asserted above.
+    assert lines[-1].startswith("NOT CLEAN - "), lines[-1]
 
 
 @needs_build
@@ -188,8 +192,11 @@ def test_a_failing_script_gate_makes_it_not_clean(tmp_path):
     report = (build / SW.REPORT_NAME).read_text(encoding="utf-8")
     assert rc == 1
     last = report.splitlines()[-1]
-    assert last.startswith("NOT CLEAN - ") and "the script gates: VERDICT: FAIL" in report, last   # the motion gate's standing
-    #   FAILs on the frozen build (M11, M27, M28, M29) may be named first; the script gates' FAIL is still in the verdict line
+    # re-pinned 2026-09-13: the verdict names only the FIRST failing section-1 row, and on the frozen build-short the
+    # motion gate (M11/M27) and the P56 floors (M35/M38/M39) fail ahead of the script gates. So the script gates' FAIL
+    # is asserted where it is actually recorded - its own section-1 row - rather than in the one-line verdict.
+    assert last.startswith("NOT CLEAN - "), last
+    assert "| the script gates | FAIL | VERDICT: FAIL (1 viewer) |" in report, report
 
 
 # ---- the operator's copy (SELF-WATCH.html) ---------------------------------------------------------------------

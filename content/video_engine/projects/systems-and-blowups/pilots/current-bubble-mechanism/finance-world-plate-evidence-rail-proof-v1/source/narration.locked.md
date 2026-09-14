@@ -4,7 +4,7 @@
 - Duration: `105.000s`
 - Audio: first 105 seconds of the existing canonical finance master
 - Audio source SHA-256: `ecacf46c49aee85b912404bfa0e47c37acbae0397b637e2a966c51a625077ce1`
-- Word timing source SHA-256: `3773bdd611c96d5e431ed56749d9991825215bb3756043086f14fbbdbe0d1da3`
+- Word timing source SHA-256: `ac64d4e18f5af6fdced497d6fb427f98c12c54a4def1d5c8776ba82bc660ad30`
 - Editorial source SHA-256: `f153216f319f96b52a1a420f58a2fe6809084a60273ca8cb5f321cc4774f8c96`
 
 ## Render transcript window

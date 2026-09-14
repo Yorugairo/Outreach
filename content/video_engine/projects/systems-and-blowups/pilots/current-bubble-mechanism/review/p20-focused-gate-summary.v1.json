@@ -2,7 +2,7 @@
   "schema_version": "p20_focused_gate_summary.v1",
   "status": "pass",
   "reviewed_at": "2026-08-08",
-  "plan_hash": "1de45ffcdc057255246e1fda578ee97f21d509cf4150df3efb8135f16926fb61",
+  "plan_hash": "8e721b550883ee6110fc9c9b28547dc64fbf5e8726eb74956f06a7b6a99e1388",
   "delivery_fps": 24,
   "authored_paper_motion_fps": 12,
   "criteria": {

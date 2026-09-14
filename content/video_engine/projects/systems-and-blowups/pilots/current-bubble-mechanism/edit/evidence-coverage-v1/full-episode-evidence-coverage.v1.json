@@ -8,11 +8,11 @@
     "next_gate": "Gate A coverage-map approval before crop or generation"
   },
   "source_hashes": {
-    "asset_map": "2f9d82e1397ab5b6564d03cb3376798c3c269b8365c70b30ce916c03db6f619d",
+    "asset_map": "5b9b5953d5ee0515e8dfebb03c44a29301ad1589f560413656f86ed520c2bc95",
     "beat_plan": "fdf792e34617b6dac329a3f0a9aa40fd090dab21db51175965ecafadc27b4f1f",
     "claim_ledger": "7071bb052eda8190225d8d4847cee1643a41ecf802293932283a6bae030c467e",
-    "composition_spine": "b103bf6d0ac93bdb899057eda5eebbe85e00704123ca58aed63b716dc24e7c44",
-    "cue_sheet": "bce598f900344f360a50b4c09b983957dbc04e156bcbad656439e5bd0cb0e356",
+    "composition_spine": "6a51453c3e1d8983fd67d2fd7034f740b9e7e07b8e5d4d7b3e91a672d4ba4dba",
+    "cue_sheet": "7d43aa40c3c82480fadaccf565acffa5cede88bd70a84a671824c3e0b8e7f8c5",
     "deck_context_memory-supercycle": "3eb919d93809c04c8fbdf40833cf625cc1f5bf3d798e7cd6c918425a071aabf0",
     "deck_context_silicon-antidote": "49aad0859d43343ca5c3cbdb0b3203b66a094972409b215d47019f1ab8dc0cf8",
     "deck_context_silicon-reality-gap": "56533ad73b93a6f1315aff8fd24eb951c08b4784728dcae18bfad40433879173",
@@ -20,7 +20,7 @@
     "deck_context_silicon-value-software-bubble": "a7bbed2ce844282e91b177bddba7eb47b7ec6dd2c9c0a11e73bb8f7e7e857386",
     "deck_context_sovereign-memory-infrastructure": "326de6ccc9c9c8fb1b7761e62dc1107d67ffadfac6af5384ab9bb8b4cac27a1c",
     "resolution_map": "01e48837d1b141c7ac92c0a123fcd099fa05d1bad5aa4ad3fd8c65903bb85238",
-    "snapshot": "d1e618286334a811374bb9a02842386a45a5e83d2532b2a509972966eb2a0f27",
+    "snapshot": "cfd7b7bfe8f2fdb0845f1944cb78131a7e0acc37cf25d7df7b4504088b746549",
     "teacher_approval": "f9e7b0cdb69552cc7c5d3e130764be02345a97d424923d3fd5bab81268c8c36c"
   },
   "summary": {
@@ -705,7 +705,7 @@
       },
       "semantic_job": "Memory-chip modules become a steep physical skyline while an analyst confronts apparently unbelievable performance.",
       "narration_excerpt": "AI memory stocks have gone vertical and the earnings numbers look almost fake.",
-      "manifest_sha256": "14c671bc21241478ab75feb0c15685ee34ccc777c26854569e8584dca819da6e"
+      "manifest_sha256": "8f93c2fa3d5f2ce5589bb80a33e846ecc99912ee0b53bf7f5e448dd600b7961c"
     },
     {
       "asset_id": "sentence-native-beat-01-003-bubble-reflex-v1",
@@ -741,7 +741,7 @@
       },
       "semantic_job": "Rational investors visibly step backward from a memory-stock bubble before the narration complicates that reflex.",
       "narration_excerpt": "That is normally where sensible people step back and say: bubble.",
-      "manifest_sha256": "14c671bc21241478ab75feb0c15685ee34ccc777c26854569e8584dca819da6e"
+      "manifest_sha256": "8f93c2fa3d5f2ce5589bb80a33e846ecc99912ee0b53bf7f5e448dd600b7961c"
     },
     {
       "asset_id": "sentence-native-beat-01-004-factory-capacity-v1",
@@ -778,7 +778,7 @@
       },
       "semantic_job": "Customers continue arriving while an already-full semiconductor factory cannot expand fast enough.",
       "narration_excerpt": "But underneath the chart is a product customers cannot get enough of, factories that cannot expand quickly enough, and",
-      "manifest_sha256": "14c671bc21241478ab75feb0c15685ee34ccc777c26854569e8584dca819da6e"
+      "manifest_sha256": "8f93c2fa3d5f2ce5589bb80a33e846ecc99912ee0b53bf7f5e448dd600b7961c"
     },
     {
       "asset_id": "sentence-native-beat-01-006-index-safe-default-v2",
@@ -817,7 +817,7 @@
       },
       "semantic_job": "Retirement savers calmly feed recurring contributions into a broad multi-sector basket marketed as the safe default.",
       "narration_excerpt": "Meanwhile, the trade marketed as boring and diversified—the S&P 500 index fund—has",
-      "manifest_sha256": "14c671bc21241478ab75feb0c15685ee34ccc777c26854569e8584dca819da6e"
+      "manifest_sha256": "8f93c2fa3d5f2ce5589bb80a33e846ecc99912ee0b53bf7f5e448dd600b7961c"
     },
     {
       "asset_id": "sentence-native-beat-01-008-automatic-inflow-feedback-v1",
@@ -855,7 +855,7 @@
       },
       "semantic_job": "Automatic contributions enter an index basket whose widest pipes route the most capital to the already-largest companies.",
       "narration_excerpt": "automatic contributions keep buying them because they are already the biggest.",
-      "manifest_sha256": "0212620ca0934813529bacb434ea609f1dc76193e3db7fc66cd49a3f299acfbf"
+      "manifest_sha256": "cb365342914e7d289605c40ce32901fadc6b4f93e04de698b96f9e7eda7fca1a"
     },
     {
       "asset_id": "sentence-native-beat-01-009-memory-correction-v1",
@@ -890,7 +890,7 @@
       },
       "semantic_job": "The market price of memory pulls back while the physical factory and outbound shipments remain intact.",
       "narration_excerpt": "So here is the argument: the memory trade can absolutely correct.",
-      "manifest_sha256": "0212620ca0934813529bacb434ea609f1dc76193e3db7fc66cd49a3f299acfbf"
+      "manifest_sha256": "cb365342914e7d289605c40ce32901fadc6b4f93e04de698b96f9e7eda7fca1a"
     },
     {
       "asset_id": "sentence-native-beat-01-010-memory-overpriced-v1",
@@ -923,7 +923,7 @@
       },
       "semantic_job": "Excess bidding raises a memory module on a valuation pedestal far above its underlying productive base.",
       "narration_excerpt": "It can become overpriced.",
-      "manifest_sha256": "0212620ca0934813529bacb434ea609f1dc76193e3db7fc66cd49a3f299acfbf"
+      "manifest_sha256": "cb365342914e7d289605c40ce32901fadc6b4f93e04de698b96f9e7eda7fca1a"
     },
     {
       "asset_id": "sentence-native-beat-01-011-memory-cycle-v1",
@@ -956,7 +956,7 @@
       },
       "semantic_job": "Memory modules move through a recurring industrial loop of orders, inventory, idle capacity, and restart.",
       "narration_excerpt": "It can still be brutally cyclical.",
-      "manifest_sha256": "0212620ca0934813529bacb434ea609f1dc76193e3db7fc66cd49a3f299acfbf"
+      "manifest_sha256": "cb365342914e7d289605c40ce32901fadc6b4f93e04de698b96f9e7eda7fca1a"
     },
     {
       "asset_id": "sentence-native-beat-01-012-physical-bottleneck-repriced-v1",
@@ -996,7 +996,7 @@
       },
       "semantic_job": "Real server demand converges on a narrow physical memory bottleneck where scarce output is repriced.",
       "narration_excerpt": "But what we are seeing today looks more like a physical bottleneck being repriced than a demand-free fantasy.",
-      "manifest_sha256": "30a0504ff36f047133c587dfa583b963db2decb92e925b60f4da9a58578327e2"
+      "manifest_sha256": "527dfc724344ab3f012cc05e8ad30db51a7b01b87939ae7c22af99c9a14f5772"
     },
     {
       "asset_id": "sentence-native-beat-01-013-hidden-safe-index-loop-v1",
@@ -1037,7 +1037,7 @@
       },
       "semantic_job": "A respectable diversified exterior conceals automatic feedback gears that investors have stopped examining.",
       "narration_excerpt": "Bubble logic may be hiding inside the thing investors stopped examining because they were told it was safe.",
-      "manifest_sha256": "30a0504ff36f047133c587dfa583b963db2decb92e925b60f4da9a58578327e2"
+      "manifest_sha256": "527dfc724344ab3f012cc05e8ad30db51a7b01b87939ae7c22af99c9a14f5772"
     },
     {
       "asset_id": "sentence-native-beat-02-002-symptom-not-diagnosis-v1",
@@ -1066,7 +1066,7 @@
       },
       "semantic_job": "A rising price line is separated from the analyst's inspection of the economic mechanism underneath it.",
       "narration_excerpt": "That is a symptom, not a diagnosis.",
-      "manifest_sha256": "30a0504ff36f047133c587dfa583b963db2decb92e925b60f4da9a58578327e2"
+      "manifest_sha256": "527dfc724344ab3f012cc05e8ad30db51a7b01b87939ae7c22af99c9a14f5772"
     },
     {
       "asset_id": "sentence-native-beat-02-003-next-buyer-belief-v1",
@@ -1109,7 +1109,7 @@
       },
       "semantic_job": "A chain of buyers carries the same asset up a fragile staircase because each expects a still-higher buyer.",
       "narration_excerpt": "A real bubble forms when the price increasingly depends on the belief that somebody else will pay more, while",
-      "manifest_sha256": "30a0504ff36f047133c587dfa583b963db2decb92e925b60f4da9a58578327e2"
+      "manifest_sha256": "527dfc724344ab3f012cc05e8ad30db51a7b01b87939ae7c22af99c9a14f5772"
     },
     {
       "asset_id": "sentence-native-beat-03-002-hbm-stack-accelerator-v1",
@@ -1140,7 +1140,7 @@
       },
       "semantic_job": "Make HBM legible as stacked working memory beside an accelerator, with data visibly crossing the short connection.",
       "narration_excerpt": "",
-      "manifest_sha256": "aafa45ca405b031c3caec09658792ddb1294d9f1190089ca0bca43a867d4d877"
+      "manifest_sha256": "b51034bdf5d49f904ce50a63f22688949d5623f0b7f3c59794707ef1a720111e"
     },
     {
       "asset_id": "sentence-native-beat-03-004-gpu-hbm-fuel-system-v1",
@@ -1168,7 +1168,7 @@
       },
       "semantic_job": "Translate bandwidth into a literal engine, reservoir, valve, and widening fuel-line relationship.",
       "narration_excerpt": "",
-      "manifest_sha256": "aafa45ca405b031c3caec09658792ddb1294d9f1190089ca0bca43a867d4d877"
+      "manifest_sha256": "b51034bdf5d49f904ce50a63f22688949d5623f0b7f3c59794707ef1a720111e"
     },
     {
       "asset_id": "sentence-native-beat-03-008-009-physical-capacity-gate-v1",
@@ -1198,7 +1198,7 @@
       },
       "semantic_job": "Show multiple scarce production inputs converging on one packaging gate and forming a real queue.",
       "narration_excerpt": "",
-      "manifest_sha256": "aafa45ca405b031c3caec09658792ddb1294d9f1190089ca0bca43a867d4d877"
+      "manifest_sha256": "b51034bdf5d49f904ce50a63f22688949d5623f0b7f3c59794707ef1a720111e"
     },
     {
       "asset_id": "sentence-native-beat-03-011-015-bakery-capacity-analogy-v1",
@@ -1231,7 +1231,7 @@
       },
       "semantic_job": "Translate HBM capacity reallocation into a fixed-oven bakery where a larger, higher-value cake displaces ordinary loaves.",
       "narration_excerpt": "",
-      "manifest_sha256": "aafa45ca405b031c3caec09658792ddb1294d9f1190089ca0bca43a867d4d877"
+      "manifest_sha256": "b51034bdf5d49f904ce50a63f22688949d5623f0b7f3c59794707ef1a720111e"
     },
     {
       "asset_id": "sentence-native-beat-04-001-buyer-behavior-v1",
@@ -1262,7 +1262,7 @@
       },
       "semantic_job": "Shift attention from the production line to buyers reserving constrained memory capacity.",
       "narration_excerpt": "Now look at buyer behavior.",
-      "manifest_sha256": "ea21a0ffcda8048f50d34c05198b99a7e5400a57cd27fe3cfa48b46008e10e24"
+      "manifest_sha256": "f3d4b712c07163452973f8d344ecd4b85343a05f9a2817bc66d0dfa9cee2cded"
     },
     {
       "asset_id": "sentence-native-beat-04-003-classic-cycle-counterargument-v1",
@@ -1295,7 +1295,7 @@
       },
       "semantic_job": "Make the historical commodity-cycle objection visible as a loop and warning gate.",
       "narration_excerpt": "That history is the strongest argument against this entire video.",
-      "manifest_sha256": "ea21a0ffcda8048f50d34c05198b99a7e5400a57cd27fe3cfa48b46008e10e24"
+      "manifest_sha256": "f3d4b712c07163452973f8d344ecd4b85343a05f9a2817bc66d0dfa9cee2cded"
     },
     {
       "asset_id": "sentence-native-beat-04-004-changed-customer-behavior-v1",
@@ -1325,7 +1325,7 @@
       },
       "semantic_job": "Contrast casual spot demand with organized, committed infrastructure demand.",
       "narration_excerpt": "But customers are behaving differently this time.",
-      "manifest_sha256": "ea21a0ffcda8048f50d34c05198b99a7e5400a57cd27fe3cfa48b46008e10e24"
+      "manifest_sha256": "f3d4b712c07163452973f8d344ecd4b85343a05f9a2817bc66d0dfa9cee2cded"
     },
     {
       "asset_id": "sentence-native-beat-04-013-guidance-not-gospel-v2",
@@ -1354,7 +1354,7 @@
       },
       "semantic_job": "Separate a forecast scroll from grounded contracts, shipments, and revenue evidence.",
       "narration_excerpt": "Company guidance is not gospel.",
-      "manifest_sha256": "ea21a0ffcda8048f50d34c05198b99a7e5400a57cd27fe3cfa48b46008e10e24"
+      "manifest_sha256": "f3d4b712c07163452973f8d344ecd4b85343a05f9a2817bc66d0dfa9cee2cded"
     },
     {
       "asset_id": "sentence-native-beat-04-014-evidence-hierarchy-v2",
@@ -1400,7 +1400,7 @@
       },
       "semantic_job": "Ground the evidence hierarchy in physical contract, shipment, and ledger objects while speculative signals recede.",
       "narration_excerpt": "But contracts, shipments, and reported revenue are stronger evidence than clicks, token prices, or a pitch deck promising a market that does not exist.",
-      "manifest_sha256": "ea21a0ffcda8048f50d34c05198b99a7e5400a57cd27fe3cfa48b46008e10e24"
+      "manifest_sha256": "f3d4b712c07163452973f8d344ecd4b85343a05f9a2817bc66d0dfa9cee2cded"
     },
     {
       "asset_id": "sentence-native-beat-04-015-bottleneck-boom-v1",
@@ -1435,7 +1435,7 @@
       },
       "semantic_job": "Resolve the chapter as a constrained, productive memory pipeline rather than a speculative balloon.",
       "narration_excerpt": "That is why I would call this a bottleneck boom before I call it a bubble.",
-      "manifest_sha256": "ea21a0ffcda8048f50d34c05198b99a7e5400a57cd27fe3cfa48b46008e10e24"
+      "manifest_sha256": "f3d4b712c07163452973f8d344ecd4b85343a05f9a2817bc66d0dfa9cee2cded"
     },
     {
       "asset_id": "sentence-native-beat-05-001-beyond-three-memory-companies-v1",
@@ -1473,7 +1473,7 @@
       },
       "semantic_job": "Make three chip workshops visibly subordinate to the larger connected power, logistics, packaging, data-center, and robotics system.",
       "narration_excerpt": "This is also bigger than three memory companies.",
-      "manifest_sha256": "9573369290796799560b9af38d00e89d6ea5fc9ebd346eb213a6c4e27b1be37a"
+      "manifest_sha256": "fff9c5f5afa0f79375730b77602a3e9d22799be37b1aa70c9634bb795e5e2a61"
     },
     {
       "asset_id": "sentence-native-beat-05-002-strategic-chokepoints-v1",
@@ -1512,7 +1512,7 @@
       },
       "semantic_job": "Show physical trade, data, and power routes converging on advanced chips, memory, packaging, power equipment, robotics, and defense hardware.",
       "narration_excerpt": "The world economy is reorganizing around strategic chokepoints.",
-      "manifest_sha256": "9573369290796799560b9af38d00e89d6ea5fc9ebd346eb213a6c4e27b1be37a"
+      "manifest_sha256": "fff9c5f5afa0f79375730b77602a3e9d22799be37b1aa70c9634bb795e5e2a61"
     },
     {
       "asset_id": "sentence-native-beat-05-003-market-reprices-control-v2",
@@ -1549,7 +1549,7 @@
       },
       "semantic_job": "Use a document-free mechanical market lift to show investment revaluing control of tangible productive chokepoints.",
       "narration_excerpt": "Capital markets are beginning to raise the countries that control those chokepoints.",
-      "manifest_sha256": "9573369290796799560b9af38d00e89d6ea5fc9ebd346eb213a6c4e27b1be37a"
+      "manifest_sha256": "fff9c5f5afa0f79375730b77602a3e9d22799be37b1aa70c9634bb795e5e2a61"
     },
     {
       "asset_id": "sentence-native-beat-05-005-not-civilization-ranking-v1",
@@ -1588,7 +1588,7 @@
       },
       "semantic_job": "Keep two civic-industrial ecosystems equally intact while a separate transparent market lens narrows the comparison to listed-market mechanics.",
       "narration_excerpt": "This is not a GDP comparison, and it is not a vote on which civilization matters more.",
-      "manifest_sha256": "9573369290796799560b9af38d00e89d6ea5fc9ebd346eb213a6c4e27b1be37a"
+      "manifest_sha256": "fff9c5f5afa0f79375730b77602a3e9d22799be37b1aa70c9634bb795e5e2a61"
     },
     {
       "asset_id": "sentence-native-beat-05-006-listed-cash-flow-market-v1",
@@ -1628,7 +1628,7 @@
       },
       "semantic_job": "Show cash pipes from distinct public-company operations converging into a physically lifting market basket.",
       "narration_excerpt": "It is a comparison of listed equity markets—what investors believe future public-company cash flows are worth.",
-      "manifest_sha256": "9573369290796799560b9af38d00e89d6ea5fc9ebd346eb213a6c4e27b1be37a"
+      "manifest_sha256": "fff9c5f5afa0f79375730b77602a3e9d22799be37b1aa70c9634bb795e5e2a61"
     },
     {
       "asset_id": "sentence-native-beat-05-012-different-cash-flow-structures-v1",
@@ -1679,7 +1679,7 @@
       },
       "semantic_job": "Show two equally dignified productive ecosystems feeding separate market paths, so the viewer sees different expected cash-flow structures rather than a cultural ranking.",
       "narration_excerpt": "The company producing memory that feeds the digital age is being capitalized differently from a country with other productive strengths.",
-      "manifest_sha256": "9573369290796799560b9af38d00e89d6ea5fc9ebd346eb213a6c4e27b1be37a"
+      "manifest_sha256": "fff9c5f5afa0f79375730b77602a3e9d22799be37b1aa70c9634bb795e5e2a61"
     },
     {
       "asset_id": "sentence-native-beat-05-015-016-simple-joke-complex-mechanism-v1",
@@ -1717,7 +1717,7 @@
       },
       "semantic_job": "Open a modest storefront façade to reveal the dense logistics, factory, power, data, and automation machinery underneath.",
       "narration_excerpt": "There is a simple joke sitting on top of a complicated mechanism.",
-      "manifest_sha256": "3a132375a2f8fbc0fd7018f58c8857245bf22df2c36c6999f826db66e67aab09"
+      "manifest_sha256": "d011c0e3a31443620c9f232940f80b1f02f918b62361bc25612a491803e41d53"
     },
     {
       "asset_id": "sentence-native-beat-05-017-018-market-prices-cashflows-v1",
@@ -1760,7 +1760,7 @@
       },
       "semantic_job": "Route the output of labs, data centers, and industry into a physical market-pricing machine, leaving civic architecture as non-causal background.",
       "narration_excerpt": "Markets are not rewarding countries for cultural prestige. They are pricing expected cash flows.",
-      "manifest_sha256": "3a132375a2f8fbc0fd7018f58c8857245bf22df2c36c6999f826db66e67aab09"
+      "manifest_sha256": "d011c0e3a31443620c9f232940f80b1f02f918b62361bc25612a491803e41d53"
     },
     {
       "asset_id": "sentence-native-beat-05-020-tech-corridor-v1",
@@ -1799,7 +1799,7 @@
       },
       "semantic_job": "Make the power, fab, data-center, robotics, satellite, port, and subsea-cable corridor a single visible system.",
       "narration_excerpt": "The global order has aligned around forward technology.",
-      "manifest_sha256": "3a132375a2f8fbc0fd7018f58c8857245bf22df2c36c6999f826db66e67aab09"
+      "manifest_sha256": "d011c0e3a31443620c9f232940f80b1f02f918b62361bc25612a491803e41d53"
     },
     {
       "asset_id": "sentence-native-beat-05-021-subcontractor-strategic-upgrade-v1",
@@ -1838,7 +1838,7 @@
       },
       "semantic_job": "Turn a component-supply dock into a technology, research, energy, fabrication, and port coordination hub by way of a literal upward mechanical ramp.",
       "narration_excerpt": "Former subcontractors are becoming strategic powers.",
-      "manifest_sha256": "3a132375a2f8fbc0fd7018f58c8857245bf22df2c36c6999f826db66e67aab09"
+      "manifest_sha256": "d011c0e3a31443620c9f232940f80b1f02f918b62361bc25612a491803e41d53"
     },
     {
       "asset_id": "sentence-native-beat-05-022-memory-enables-work-v1",
@@ -1877,7 +1877,7 @@
       },
       "semantic_job": "Use a layered memory stack and copper connections to bring a dark accelerator-and-robotics workshop into active production.",
       "narration_excerpt": "Memory does not burn like oil. It enables machines to do useful work.",
-      "manifest_sha256": "3a132375a2f8fbc0fd7018f58c8857245bf22df2c36c6999f826db66e67aab09"
+      "manifest_sha256": "d011c0e3a31443620c9f232940f80b1f02f918b62361bc25612a491803e41d53"
     },
     {
       "asset_id": "sentence-native-beat-05-024-stranded-compute-bridge-v2",
@@ -1914,7 +1914,7 @@
       },
       "semantic_job": "Keep a powerful accelerator and idle robot physically separated from an active factory by a narrow broken memory bridge.",
       "narration_excerpt": "Without enough of it, powerful compute turns into stranded machinery.",
-      "manifest_sha256": "3a132375a2f8fbc0fd7018f58c8857245bf22df2c36c6999f826db66e67aab09"
+      "manifest_sha256": "d011c0e3a31443620c9f232940f80b1f02f918b62361bc25612a491803e41d53"
     },
     {
       "asset_id": "sentence-native-beat-06-001-003-index-product-elevator-v1",
@@ -1957,7 +1957,7 @@
       },
       "semantic_job": "Use the explicitly narrated elevator as the entrance to a broad investment basket, with a low-friction channel contrasted against a subordinate active-manager maze.",
       "narration_excerpt": "Now open the other elevator: the S&P 500 index fund. It can be an excellent product.",
-      "manifest_sha256": "90f6e17c8a719c9b063d7d21441baf5be3e7bb6702f04598eee07d24678f656b"
+      "manifest_sha256": "d19dee986694f118b60a227039c00c701f4fb0806cac62b53c8853bc65186933"
     },
     {
       "asset_id": "sentence-native-beat-06-004-007-dual-failure-v2",
@@ -1996,7 +1996,7 @@
       },
       "semantic_job": "Split one basket into a cracked protection side leaned on by three giant blocks and an upside engine restrained by a long ballast chain.",
       "narration_excerpt": "The index can be too concentrated for protection and too diluted for full upside.",
-      "manifest_sha256": "90f6e17c8a719c9b063d7d21441baf5be3e7bb6702f04598eee07d24678f656b"
+      "manifest_sha256": "d19dee986694f118b60a227039c00c701f4fb0806cac62b53c8853bc65186933"
     },
     {
       "asset_id": "sentence-native-beat-06-010-shared-causal-weather-v1",
@@ -2033,7 +2033,7 @@
       },
       "semantic_job": "Connect AI data, cloud construction, semiconductor, digital advertising, and research worlds to one visible weather machine.",
       "narration_excerpt": "Many leaders share the same causal weather system.",
-      "manifest_sha256": "90f6e17c8a719c9b063d7d21441baf5be3e7bb6702f04598eee07d24678f656b"
+      "manifest_sha256": "d19dee986694f118b60a227039c00c701f4fb0806cac62b53c8853bc65186933"
     },
     {
       "asset_id": "sentence-native-beat-06-011-016-automatic-size-weighting-v1",
@@ -2084,7 +2084,7 @@
       },
       "semantic_job": "Send a brilliant workshop, mature plant, older incumbent, and many smaller eligible businesses through one size gate into a broad basket without a quality selector.",
       "narration_excerpt": "The normal index automatically weights qualified companies by market size rather than selecting the best expected return.",
-      "manifest_sha256": "90f6e17c8a719c9b063d7d21441baf5be3e7bb6702f04598eee07d24678f656b"
+      "manifest_sha256": "d19dee986694f118b60a227039c00c701f4fb0806cac62b53c8853bc65186933"
     },
     {
       "asset_id": "sentence-native-beat-06-017-018-diworsification-v1",
@@ -2129,7 +2129,7 @@
       },
       "semantic_job": "Contrast a compact basket of distinct load-bearing supports with an overloaded basket of weak rods that crowd the strong supports and add weight without coverage.",
       "narration_excerpt": "Extra holdings can dilute the best ideas after useful independent protection is already captured.",
-      "manifest_sha256": "90f6e17c8a719c9b063d7d21441baf5be3e7bb6702f04598eee07d24678f656b"
+      "manifest_sha256": "d19dee986694f118b60a227039c00c701f4fb0806cac62b53c8853bc65186933"
     },
     {
       "asset_id": "sentence-native-beat-06-019-024-basketball-roster-v1",
@@ -2174,7 +2174,7 @@
       },
       "semantic_job": "Use the basketball roster analogy to make concentration, diluted upside, and the uncomfortable middle instantly legible.",
       "narration_excerpt": "Five superstars drive the result while a huge reserve bench consumes space and resources without improving either side.",
-      "manifest_sha256": "90f6e17c8a719c9b063d7d21441baf5be3e7bb6702f04598eee07d24678f656b"
+      "manifest_sha256": "d19dee986694f118b60a227039c00c701f4fb0806cac62b53c8853bc65186933"
     },
     {
       "asset_id": "shared-cause-automatic-allocation-v1",
@@ -15061,5 +15061,5 @@
       "requires_editorial_acceptance": true
     }
   ],
-  "artifact_hash": "ab547e586cefbb53e699bc69b88633648d4ac2a4c5114929a58281bc87d18254"
+  "artifact_hash": "3fbb7b23cbb428c429d51db3519e8208321bf11630d4e9594084c1afb56bc870"
 }
