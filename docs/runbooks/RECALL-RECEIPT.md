@@ -63,6 +63,10 @@ Never say "we don't have it" before step 1. Never reach step 5 before step 4. My
 code in front of me are not sources: a hit outranks what I remember; if the operator's memory disagrees
 with the record, show the `path:line` and let them rule (E39 was amended that way, 2026-09-08).
 
+The layers in step 1 and step 3 are GENERATED: regenerate all ten with `build_docs_layers.py --write` after an
+engine or doctrine lane settles - never while `scene-evidence-engine.mjs` is mid-edit (the animation registry reads
+the engine), and never inside a slice that does not own the layers (R26-92).
+
 ## 4. Inspect AND measure
 
 No visual or audio artifact is delivered, and no "fixed" is said, until both:

@@ -46,98 +46,15 @@
       "port": 8734
     },
     {
-      "name": "japan-short-player-fast",
-      "runtimeExecutable": "python",
-      "runtimeArgs": [
-        "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/serve_player.py",
-        "8735",
-        "build-short/candidates/fast"
-      ],
-      "port": 8735
-    },
-    {
-      "name": "japan-short-player-render",
-      "runtimeExecutable": "python",
-      "runtimeArgs": [
-        "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/serve_player.py",
-        "8736",
-        "build-short"
-      ],
-      "port": 8736
-    },
-    {
-      "name": "tokyo-short-player-b",
+      "name": "tokyo-short-player-v2",
       "runtimeExecutable": "python",
       "runtimeArgs": [
         "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/serve_player.py",
         "8738",
-        "build-short"
+        "build-short.v2"
       ],
       "port": 8738
-    },
-    {
-      "name": "chart-transitions-proof",
-      "runtimeExecutable": "python",
-      "runtimeArgs": [
-        "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/serve_player.py",
-        "8739",
-        "steel-and-paper/build-f"
-      ],
-      "port": 8739
-    },
-    {
-      "name": "tokyo-short-player-p48",
-      "runtimeExecutable": "python",
-      "runtimeArgs": [
-        "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/serve_player.py",
-        "8740",
-        "build-short-p48"
-      ],
-      "port": 8740
-    },
-    {
-      "name": "japan-short-player-p49",
-      "runtimeExecutable": "python",
-      "runtimeArgs": [
-        "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/serve_player.py",
-        "8741",
-        "build-short-p49"
-      ],
-      "port": 8741
-    },
-    {
-      "name": "tokyo-short-player-cam",
-      "runtimeExecutable": "python",
-      "runtimeArgs": [
-        "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/serve_player.py",
-        "8742",
-        "build-short-cam"
-      ],
-      "port": 8742
-    },
-    {
-      "name": "tokyo-editor",
-      "runtimeExecutable": "python",
-      "runtimeArgs": [
-        "content/video_engine/scripts/serve_player.py",
-        "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t7",
-        "--port",
-        "8744",
-        "--watch"
-      ],
-      "port": 8744,
-      "url": "http://127.0.0.1:8744/editor.html"
-    },
-    {
-      "name": "tokyo-side-t0",
-      "runtimeExecutable": "python",
-      "runtimeArgs": [
-        "content/video_engine/scripts/serve_player.py",
-        "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t0",
-        "--port",
-        "8746"
-      ],
-      "port": 8746
     }
-  ]
+  ],
+  "_rule": "R26-92 (P57 T4, 2026-09-14): at most FIVE configurations per worktree - one per build a human may be asked to watch (the episode, the two approved shorts, the brand cards, the current test bed). A proof or a lane's private build is served from a scratch dir by the lane itself and never enters this file; a superseded build's entry is deleted the day it is superseded."
 }

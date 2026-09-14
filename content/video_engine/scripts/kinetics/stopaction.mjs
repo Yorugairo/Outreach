@@ -22,8 +22,16 @@ import { springEval } from "./spring.mjs";
 import { squashAlpha, squashMatrix } from "./squash.mjs";
 
 export const CADENCE = Object.freeze({
-  ON1_PX_S: 250,     /* [DERIVED: the brief :185-193 - on-1s above 250 px/s; its E2 s7 says 100 px/s: the two disagree, measure on ours] */
-  STROBE_PX_S: 300,  /* [DERIVED: the brief - on-2s above 300 px/s strobes (Watson et al. 1986, not on file)] */
+  ON1_PX_S: 250,     /* OPERATOR-SET CONSTANT (R26-64 / R26-85, 2026-09-14): the on-1s threshold. The brief's derivation is
+                        STRIPPED - its 15-arcmin limit is Braddick 1974's random-dot correspondence limit misattributed to Baker &
+                        Braddick 1985, and Watson, Ahumada & Farrell 1986 REMOVES a px/s ceiling at 12/8 fps (r_max = (w_s - w_l)/u_0 < 0)
+                        - docs/research/runs/strobe_stop_motion/VERIFICATION-2026-09-13.md. The number stays as ours: every shipped throw
+                        runs 1188-2479 px/s and the threshold has never changed a hold. Cinema-parity reference, not a dial: RED's 1/7
+                        picture width per second = 154 px/s on the 1080 stage at 24 fps WITH a 180-degree shutter */
+  STROBE_PX_S: 300,  /* OPERATOR-SET CONSTANT (R26-64, 2026-09-14): the on-2s strobe ceiling. READ BY NOTHING - `cadence()` consults
+                        ON1_PX_S only, so anything past 300 is already on 1s; it binds only where a cadence is DECLARED against the speed
+                        (a `break_cadence` burst, a boil on 3s, an authored hold) and no gate checks that case yet (R26-85's space). Kept
+                        as the constant the future gate reads; the Watson 1986 derivation it carried is stripped (see ON1_PX_S) */
   FPS: 24,           /* the base frame rate the holds are counted in (on-1s = 24, on-2s = 12, on-3s = 8) */
 });
 /* MATERIALS. m, k, c [DERIVED: the brief :226-232] -> the spring's zeta and w0 (the report Q4: dense = critically damped, no
