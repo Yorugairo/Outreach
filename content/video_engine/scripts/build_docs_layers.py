@@ -11,6 +11,7 @@ in dependency order, in one process tree, and prints one summary line per layer.
     | order | layer          | tool                    | artifact                            |
     |-------|----------------|-------------------------|-------------------------------------|
     | 1     | docs-index     | build_docs_index.py     | docs/DOCS-INDEX.jsonl + .md         |
+    | 2     | research-ledger | build_research_ledger.py | docs/RESEARCH-LEDGER.jsonl + .md (the ingestion gate) |
     | 2     | effects-catalog | build_effects_catalog.py | docs/EFFECTS-CATALOG.jsonl + .md (cites via the index) |
     | 3     | docs-manifest  | build_docs_manifest.py  | docs/DOCS-MANIFEST.jsonl + .md      |
     | 4     | topic-index    | build_topic_index.py    | docs/DOCS-TOPICS.* + DOCS-CITATIONS |
@@ -52,6 +53,7 @@ class Layer:
 
 LAYERS = (
     Layer("docs-index", "build_docs_index.py"),
+    Layer("research-ledger", "build_research_ledger.py"),  # the ingestion gate: runs vs what cites them
     Layer("effects-catalog", "build_effects_catalog.py"),   # after the index: its doctrine cites resolve there
     Layer("docs-manifest", "build_docs_manifest.py"),
     Layer("topic-index", "build_topic_index.py"),
