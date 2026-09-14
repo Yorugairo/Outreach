@@ -16,7 +16,7 @@ terms. Purpose, terms and defines are truncated here to keep the file cheap to g
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`. A per-item
 folder is one row under `## folders` (COLLAPSED_FAMILIES in the builder).
 
-410 documents across 13 kinds.
+412 documents across 13 kinds.
 
 ## doctrine
 
@@ -265,8 +265,9 @@ folder is one row under `## folders` (COLLAPSED_FAMILIES in the builder).
 - content/video_engine/projects/systems-and-blowups/japan-tariff-trick/ — one episode's working folder — 9 documents
 - content/video_engine/projects/systems-and-blowups/korea-memory-toll/ — one episode's working folder — 4 documents
 - content/video_engine/projects/systems-and-blowups/learning/ — one episode's working folder — 3 documents
-- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/ — one episode's working folder — 6 documents, index SCRIPT-PRODUCTION.md: THE MYTH OF "HISTORICAL NORMAL" — Script Production — Locked Title: The Myth of "Historical Normal": How Small Changes Break Big Markets Channel: Money Physics Ring Token: The brass we
+- content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/ — one episode's working folder — 7 documents, index SCRIPT-PRODUCTION.md: THE MYTH OF "HISTORICAL NORMAL" — Script Production — Locked Title: The Myth of "Historical Normal": How Small Changes Break Big Markets Channel: Money Physics Ring Token: The brass we
 - content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/ — one episode's working folder — 7 documents
+- content/video_engine/projects/systems-and-blowups/pilots/ — one episode's working folder — 1 document
 - content/video_engine/projects/systems-and-blowups/pilots/current-bubble-mechanism/ — one pilot's working folder — 15 documents
 - content/video_engine/projects/systems-and-blowups/registration/ — one episode's working folder — 2 documents, index README.md: Slide Semantic Registration — systems-and-blowups — Returned 2026-08-24, validated PASS: 86/86 slides, 340 verbatim figures, 0 errors, 0 low-confidence, 4 honest unmatched (narrative
 - content/video_engine/projects/systems-and-blowups/sources/ — one episode's working folder — 1 document
