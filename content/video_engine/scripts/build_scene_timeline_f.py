@@ -29,6 +29,7 @@ present extend the timeline's top-level ``species`` list.
 """
 from __future__ import annotations
 
+import ast
 import base64
 import io
 import hashlib
@@ -259,7 +260,7 @@ AGENDA_STEP, AGENDA_ROW_S = 0.34, 0.54
 HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
 PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to",
                  SPECIES_SPAN, SPECIES_CROSS)   # P50 T4: a span is a page species - it is shaded behind the page's own chart, on the page's own clock and live scale (R26-28)
-CHART_TO_KINDS = ("recast", "rescale", "extend", "park", "morph")   # P48: recast (T4, a hand-over; keyed: T4b), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform), morph (T5: the area under the line becomes the target's by ARAP)
+CHART_TO_KINDS = ("recast", "rescale", "extend", "park", "morph", "compare")   # P48: recast (T4, a hand-over; keyed: T4b), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform), morph (T5: the area under the line becomes the target's by ARAP); compare (P57 T11 / R26-70: the quoted metric becomes the comparator, E76)
 MORPH_BUILDERS = ("dense-line",)                     # P48 T5: the shape a morph moves is the AREA UNDER A LINE - both sides of a morph_to are line pages
 MORPH_METHODS = ("a", "arap")                        # doc 43 s43.5: A = vertex-based (ring-normalise, resample, rotational alignment, lerp, cubic), B = triangle-based ARAP
 # The decision rule (doc 43 s43.5): "outline-to-outline with modest rotation -> Method A ... anything where the prop
@@ -283,6 +284,16 @@ RECAST_DATA_KEY = "data"
 RECAST_KEYS_ALL = RECAST_KEYS + (RECAST_DATA_KEY,)   # every legal value of `keyed`: the two MARK keys, and the DATA key
 RECAST_DATA_TOL = 0.005                              # 0.5 % of the larger magnitude: a bar and the line's own difference are the SAME
                                                      # number or the pair is not keyed on data - a near-miss is a refusal, never a tween
+# P57 T11 / R26-70, E76 (the operator, 2026-09-13: *"showing the P/E and then morphing it to a more visual number would be
+# a great repeatable mechanism"*): the METRIC-TO-COMPARATOR morph. The row names the figure the market quotes
+# (`metric`), the number the viewer feels (`comparator`), the authored `inputs` and the `derive` arithmetic that turns
+# the one into the other - so the comparator is DERIVED in the open and never invented by the engine (E77: figures are
+# never fabricated; the `source` string is the row's provenance). Compiler-only in this slice: the engine paints nothing
+# for this verb yet.
+COMPARE_TOL = 0.005        # 0.5 % of the larger magnitude, RECAST_DATA_TOL's spirit: the derived number and the authored
+                           # comparator are the SAME number or the row is refused - a near-miss is a refusal, never a tween
+COMPARE_HOLDS = ("metric", "gone")   # after the morph the quoted metric stays legible beside the comparator, or it is gone
+COMPARE_SOURCE_TAGS = ("[DERIVED:", "[SOURCE:")   # E77's provenance label, required on the row
 PARK_SCALE = (0.3, 0.95)                             # a parked chart is still a chart: never below 0.3 of itself, and 0.95 is not a park; exactly 1.0 is an UN-PARK (2026-09-10)
 # SPECIES BY SENTENCE (P50 T1, 2026-09-11; the operator: "do we already have an understanding mapped in docs to how/where to
 # know when to use these capabilities?"). One line per kind: WHICH SENTENCE calls for it. The map is
@@ -329,6 +340,7 @@ CHART_TO_WHEN = {
     "rescale": "the same series at another scale - 'since February', 'at full width': the window the story is about; never a window that drops the sentence's point",
     "extend": "more of the same series ('and then May') or a later series of the same file ('then consumption') - drawn on at the pen",
     "park": "room for the next thing beside the chart (a card, a second diagram); scale 1.0 is the UN-PARK when the cards leave; it moves no data and restarts no clock",
+    "compare": "the sentence quotes the market's figure and then says what it MEANS - the quoted number morphs into the number the viewer feels (E76); the arithmetic is authored, never invented",
     "morph": "a different LINE series in the same frame ('what the Fed charges against what America pays') - the area under the line becomes the target's by ARAP",
 }
 # P52 T6: THE NEWSREEL BAND (the operator, 2026-09-12: "run the newsreel and then above it we can have either a
@@ -583,6 +595,130 @@ def _validate_target(kind: str, target, allowed: tuple) -> list[str]:
     return errs
 
 
+DERIVE_NODES = (ast.Expression, ast.BinOp, ast.UnaryOp, ast.Name, ast.Load, ast.Constant,
+                ast.Add, ast.Sub, ast.Mult, ast.Div, ast.USub, ast.UAdd)
+
+
+def derive_compare(expr: str, inputs: dict) -> tuple[float | None, str | None]:
+    """P57 T11: the row's `derive` arithmetic over its own authored `inputs` -> (value, error).
+
+    Plain arithmetic and nothing else: + - * / parentheses, unary minus, numbers and the input NAMES. The string is
+    parsed and WALKED (ast), never `eval`'d - a call, an attribute, a subscript, a comparison or a name the row did not
+    author is refused by name, because the one thing this verb may not do is invent a figure (E77)."""
+    if not isinstance(expr, str) or not expr.strip():
+        return None, "the arithmetic is empty"
+    try:
+        tree = ast.parse(expr, mode="eval")
+    except SyntaxError as exc:
+        return None, f"it does not parse ({exc.msg})"
+    for node in ast.walk(tree):
+        if not isinstance(node, DERIVE_NODES):
+            return None, f"{type(node).__name__} is not plain arithmetic (+ - * / parentheses, unary minus, numbers, the input names)"
+        if isinstance(node, ast.Constant) and (isinstance(node.value, bool) or not isinstance(node.value, (int, float))):
+            return None, f"the constant {node.value!r} is not a number"
+        if isinstance(node, ast.Name) and node.id not in inputs:
+            return None, f"it names {node.id!r}, which is not one of the inputs ({', '.join(sorted(inputs)) or 'none authored'})"
+
+    def val(node):
+        if isinstance(node, ast.Expression):
+            return val(node.body)
+        if isinstance(node, ast.Constant):
+            return float(node.value)
+        if isinstance(node, ast.Name):
+            return float(inputs[node.id])
+        if isinstance(node, ast.UnaryOp):
+            v = val(node.operand)
+            return -v if isinstance(node.op, ast.USub) else v
+        a, b = val(node.left), val(node.right)
+        if isinstance(node.op, ast.Add):
+            return a + b
+        if isinstance(node.op, ast.Sub):
+            return a - b
+        if isinstance(node.op, ast.Mult):
+            return a * b
+        return a / b
+
+    try:
+        return float(val(tree)), None
+    except ZeroDivisionError:
+        return None, "it divides by zero"
+    except (TypeError, ValueError, OverflowError) as exc:
+        return None, f"it does not evaluate to a number ({exc})"
+
+
+def _validate_metric_comparator(entry: dict) -> list[str]:
+    """P57 T11 / R26-70: the `chart_to compare` row - E76's mechanism as a grammar.
+
+    `metric` is the figure the market quotes, `comparator` the number the viewer feels, `inputs` + `derive` the
+    arithmetic between them, `source` the provenance (E77), `hold` what becomes of the metric after the morph. Every
+    refusal here is a figure the row could not stand behind: a number with no arithmetic, an arithmetic that does not
+    reproduce it, a comparator nobody named, a provenance nobody wrote."""
+    errs: list[str] = []
+    num = lambda v: isinstance(v, (int, float)) and not isinstance(v, bool)
+    met, cmp_ = entry.get("metric"), entry.get("comparator")
+    if not isinstance(met, dict):
+        errs.append("chart_to compare: 'metric' must be {value: <number>, text: '<as quoted, e.g. \'24.8x\'>', "
+                    "label: '<what it is>'} - the figure the market quotes (E76)")
+        met = {}
+    if not isinstance(cmp_, dict):
+        errs.append("chart_to compare: 'comparator' must be {value: <number>, text: '<as felt>', label: '<what it "
+                    "means>'} - the number the viewer feels (E76)")
+        cmp_ = {}
+    if not num(met.get("value")):
+        errs.append("chart_to compare: metric.value must be a number - the figure the market quotes (E76: a P/E of 24.8x)")
+    if not num(cmp_.get("value")):
+        errs.append("chart_to compare: comparator.value must be a number - the number the viewer feels (E76: '15 % dearer than its own history')")
+    if not isinstance(met.get("text"), str) or not met["text"].strip():
+        errs.append("chart_to compare: metric.text must be the figure AS QUOTED ('24.8x') - the string the page's own "
+                    "`figure` species writes at its datum before it can morph (E50)")
+    if not isinstance(cmp_.get("label"), str) or not cmp_["label"].strip():
+        errs.append("chart_to compare: a morph with no comparator label - comparator.label says what the number MEANS, "
+                    "and a number nobody named is the multiple this verb exists to retire (E76)")
+    for who, d in (("metric", met), ("comparator", cmp_)):
+        for f in ("text", "label"):
+            if f in d and (not isinstance(d[f], str) or not d[f].strip()):
+                errs.append(f"chart_to compare: {who}.{f} must be a non-empty string")
+    inputs = entry.get("inputs")
+    if not isinstance(inputs, dict) or not inputs:
+        errs.append("chart_to compare: 'inputs' must be a non-empty dict of name -> number - the authored figures the "
+                    "arithmetic reads (E77: a derived figure says what it was derived FROM)")
+        inputs = {}
+    else:
+        for k, v in inputs.items():
+            if not isinstance(k, str) or not k.isidentifier():
+                errs.append(f"chart_to compare: input name {k!r} is not a plain name the arithmetic can read")
+            if not num(v):
+                errs.append(f"chart_to compare: input {k!r} must be a number")
+    clean = {k: v for k, v in inputs.items() if isinstance(k, str) and k.isidentifier() and num(v)}
+    expr = entry.get("derive")
+    if not isinstance(expr, str) or not expr.strip():
+        errs.append("chart_to compare: 'derive' must be the arithmetic that turns the inputs into the comparator "
+                    "(e.g. \"pe / hist - 1\") - a comparator the row cannot derive is a fabricated figure (E77)")
+    elif len(clean) == len(inputs):
+        got, why = derive_compare(expr, clean)
+        if why:
+            errs.append(f"chart_to compare: derive {expr!r} is refused - {why}")
+        elif num(cmp_.get("value")):
+            want = float(cmp_["value"])
+            tol = COMPARE_TOL * max(abs(want), abs(got), 1e-12)
+            if abs(got - want) > tol:
+                errs.append(f"chart_to compare: derive {expr!r} gives {got:.6g} where comparator.value is {want:.6g} - "
+                            f"the arithmetic must reproduce the comparator within {COMPARE_TOL:.1%} of the larger "
+                            "magnitude; a near-miss is a refusal, never a tween")
+    src_ = entry.get("source")
+    if not isinstance(src_, str) or not src_.strip().startswith(COMPARE_SOURCE_TAGS):
+        errs.append("chart_to compare: 'source' is required and starts with "
+                    f"{' or '.join(COMPARE_SOURCE_TAGS)} - the provenance string E77 asks of a derived figure "
+                    "(\"[DERIVED: from <sources>, <how>]\"); figures are never fabricated")
+    if entry.get("hold", "metric") not in COMPARE_HOLDS:
+        errs.append(f"chart_to compare: hold must be one of {'|'.join(COMPARE_HOLDS)} (default \"metric\": the quoted "
+                    "figure stays legible beside the comparator; \"gone\": the comparator has the stage)")
+    if "state" in entry:
+        errs.append("chart_to compare: 'state' is not named - the two numbers ARE the states (the quoted metric and the "
+                    "comparator it derives)")
+    return errs
+
+
 def _validate_page_fields(kind: str, entry: dict) -> list[str]:
     """P47 T2: the page species' own fields. bracket: integer `from`/`to` (data indices), a `label`, optional `sub`,
     `series`, `color`; retitle: a non-empty `text`; relight: `ref` bracket|title, optional `index`."""
@@ -688,6 +824,11 @@ def _validate_page_fields(kind: str, entry: dict) -> list[str]:
                 errs.append(f"chart_to morph: method must be one of {'|'.join(MORPH_METHODS)} "
                             "(a = the vertex lerp of doc 43 s43.5 Method A, arap = Method B's triangle solve); "
                             "absent, the compiler chooses by the pair's measured rotation")
+        if entry.get("to") == "compare":
+            # P57 T11: E76's mechanism. Nothing is derived into a page state - the metric and the comparator are the
+            # two states, and the arithmetic between them is the author's, checked here rather than trusted (E77).
+            errs += _validate_metric_comparator(entry)
+            return errs
         if entry.get("to") == "park":
             # P48 T2b: no state is derived - the ACTIVE chart is transformed as one piece; the row names how small and toward which side
             sc = entry.get("scale", 0.72)
@@ -1242,6 +1383,17 @@ def validate_species(row_species, ken, plate_id: str, pivot_span: tuple | None =
         errs += [f"{plate_id}: {e['kind']} is a vecmap species - it performs on a vector map world "
                  f"(`vecmap[:<ISO A3 list>]`), not on {plate_id!r}"
                  for e in row_species if isinstance(e, dict) and e.get("kind") in VECMAP_SPECIES]
+    for e in row_species:   # P57 T11 / E50: a compare morphs a figure the page has already WRITTEN at its datum -
+        # the check lands here, where the row's whole species list is known (a single entry cannot see its page's others)
+        if not (isinstance(e, dict) and e.get("kind") == "chart_to" and e.get("to") == "compare"):
+            continue
+        quoted = (e.get("metric") or {}).get("text") if isinstance(e.get("metric"), dict) else None
+        if not isinstance(quoted, str) or not quoted.strip():
+            continue
+        if not any(isinstance(f, dict) and f.get("kind") == "figure" and isinstance(f.get("text"), str)
+                   and f["text"].strip() == quoted.strip() for f in row_species):
+            errs.append(f"{plate_id}: chart_to compare quotes {quoted!r} and the page writes no `figure` species with "
+                        "that text - the number the sentence turns on is WRITTEN at its datum before it can morph (E50)")
     moves = [e["kind"] for e in row_species if isinstance(e, dict) and e.get("kind") in CAMERA_MOVES]
     if len(moves) > 1:
         errs.append(f"{plate_id}: {' + '.join(moves)} on one row - one camera move per window (s9.28 C3)")

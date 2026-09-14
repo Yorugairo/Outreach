@@ -292,7 +292,15 @@ def _ex_species(card: dict, value) -> list[str]:
     key = "to" if card["axis"] == "chart_to" else "kind"
     plate = ("ledger:x:line" if card["axis"] in ("page_species", "chart_to")
              else "vecmap" if value.get("kind") in B.VECMAP_SPECIES else "plate-x")
-    errs = list(B.validate_species([value], (0, 0, 0), plate))
+    row = [value]
+    if card["axis"] == "chart_to" and value.get("to") == "compare":
+        # P57 T11 / E50: a compare morphs a figure the PAGE has already WRITTEN, and that rule reads the row's WHOLE
+        # species list. A card's example is one declaration by construction, so the gate supplies the companion the
+        # page must carry - the example is still validated, against the page it would be authored on.
+        row = [{"kind": "figure", "at": value.get("at", 0), "dur": 1.0,
+                "text": (value.get("metric") or {}).get("text", ""),
+                "target": {"kind": "datum", "index": 0}}] + row
+    errs = list(B.validate_species(row, (0, 0, 0), plate))
     return errs + ([f"{key} {value.get(key)!r} is not the card's token"] if value.get(key) != card["token"] else [])
 
 

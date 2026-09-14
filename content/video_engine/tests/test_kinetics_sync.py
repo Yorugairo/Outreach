@@ -35,7 +35,9 @@ MODULES = ["ease", "spring", "stagger",   # P52 T10: the caption's stagger envel
            "camera", "arap",   # P50 T7 (homography): the planar projection that lands a card on a plate's declared surface - it imports nothing, and its region sits after the stop action whose impact it composes with
            "morph_a"]   # P43 T1 + P47 T5/T1/T3 + P50 T12 (morph_a: doc 43 s43.5 Method A, after arap - it imports it)
                                               # + P50 T14 the clothoid fitter, beside the stroke it is drawn by; in dependency order (the template's region order)
-SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span", "vecmap",
+SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span",
+           "compare",   # P57 T12 / R26-70b: the `chart_to compare` verb's paint - a PAGE species (PAGE_PAINTERS.compare), so its region sits with span's, before paintPerform closes over it
+           "vecmap",
            "thread",    # P50 T15 / HF-16: the WIRE - a page species' carry math, so it registers no painter either (span's case)
            "tippill",   # P50 T11: R26-34's pill - a line PAGE's option rather than a targeted kind, so it registers no painter   # P50 T2 on: one module per species kind, inlined into the species block; `press` is the
            "newsreel", "countarray", "agenda", "ring", "melt",

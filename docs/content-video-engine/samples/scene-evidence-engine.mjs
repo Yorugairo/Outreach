@@ -813,6 +813,230 @@ async function mount(doc) {
      so inlining keeps it and node - where no registry exists - still imports the file for the math. */
   if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.span = paintSpan;
   /* KINETICS:END */
+  /* KINETICS:BEGIN compare */
+  /* SPACE: page */
+  /* species/compare.mjs - THE COMPARE (P57 T12; BACKLOG R26-70b; the grammar is P57 T11's sixth `chart_to` verb).
+     SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN compare and
+     KINETICS:END. It imports the ease law only, and its region sits with the kinetics laws rather than in the species
+     block at the foot of the file - span.mjs's reason: a PAGE species' math is called by the page's PERFORM layer,
+     which is written hundreds of lines above that block, and a const has to exist before the function that closes
+     over it is built.
+
+     WHEN: the sentence quotes the market's own figure and then says what it MEANS. E76 (the operator, 2026-09-13):
+     *"never p/e multiples isn't the rule, the rule should be to explore various display mechanisms, and that
+     comparators (like dollar per share or change per $) show immediate narrative value. In fact, showing the P/E and
+     then morphing it to a more visual number would be a great repeatable mechanism"*. The page has already WRITTEN
+     the quoted figure at its datum (a `figure` species - E50, and the compiler refuses a compare whose metric text no
+     figure on the page carries); this verb turns that written number into the one the viewer feels.
+
+     THE FORM BUILT HERE IS THE COUNTER (E60), NOT THE GLYPH MORPH - and why. Method A (kinetics/morph_a.mjs: ring-
+     normalise, resample by arc length, rotational alignment, vertex lerp) morphs OUTLINES, and a figure on a ledger
+     page is not an outline: paintFigure writes it as an SVG <text> with one <tspan> per character, laid out by the
+     browser's own font engine. There are no glyph paths to resample, and the only way to get them is to vendor a
+     font-to-path library and re-implement the page's type - which the slice refuses (a second type engine would
+     drift from the one that draws every other word on the page). The doctrine already names the honest form for a
+     number becoming another number: E60's counter, the breakthrough's pill counting to its exact string while the
+     scale rewrites under it. So the number COUNTS, on min-jerk, and the words around it cross THROUGH ZERO at the
+     swap - no character ever cuts.
+
+     THE LAW, a pure function of t (u = (t - at) / dur, clamped):
+       count   - the quoted numeral runs to the comparator's numeral on min-jerk over COUNT of the window. It counts
+                 between the two TEXTS' own numerals ("24.8x" -> "15 % dearer" counts 24.8 -> 15), never between the
+                 authored `value`s: those are the ARITHMETIC the compiler checks (E77 - `inputs` + `derive` + `source`,
+                 a comparator the row cannot reproduce is refused), and they may be in another scale entirely
+                 (0.1535 IS "15 % dearer"). Nothing reaches the screen that the row did not author.
+       swap    - the metric's clothes (the text either side of its numeral, and its decimals) become the comparator's
+                 at SWAP, at the instant the affix glyphs are at zero opacity: the swap is invisible because there is
+                 nothing on screen to swap.
+       label   - the comparator's `label` - what the number MEANS, the thing a multiple never says - is written
+                 BENEATH by the hand from LABEL_AT, glyph after glyph at the figure's own overlap.
+       hold    - `hold: "metric"` (the default) stands the quoted figure beside the comparator at GHOST_A from the
+                 swap on, at GHOST_F of its size, so the two can be read against each other; `hold: "gone"` gives the
+                 comparator the stage alone.
+     A SEEK IS THE PLAY: every cell's character and opacity is written from u each frame, so a cold seek into the
+     middle of the morph paints exactly what playing into it paints. The cells, the ghost and the sub are created
+     idempotently (the painter grows them and never rebuilds them), and a frame before `at` restores the figure's own
+     text and leaves its glyphs' opacity to the figure's own hand - so the page before the word is the page.
+     The dials below are ours to tune (42 s42.5), not findings. */
+
+  const COMPARE = Object.freeze({
+    COUNT: 0.72,      /* the share of the window the numeral counts over, on min-jerk: it lands before the window does, so the comparator is STILL while its label is read */
+    SWAP: 0.5,        /* where the metric's words become the comparator's - the affix crosses through zero exactly here, so no character is ever cut */
+    CROSS: 0.2,       /* ... and the share of the window the crossing itself takes, centred on the swap: the words stand while the number counts and dissolve only where they change, so the page never looks like it is fading out */
+    LABEL_AT: 0.55,   /* when the comparator's label starts being written beneath (just after the swap: the number is already the new one when it is named) */
+    GHOST_A: 0.62,    /* the held metric's opacity beside the comparator (hold: "metric") - present, and plainly the quieter of the two */
+    GHOST_F: 0.74,    /* ... and its size, as a share of the figure's own: the quoted figure is where the number started, not what the sentence is about now */
+    GAP: 14,          /* the room between the comparator and the held metric, in the chart's viewBox units (the figure's own 14 px offset from its datum) */
+    SUB_DY: 1.3,      /* the label's baseline beneath the figure, in sub sizes - paintFigure's own step for a figure's sub */
+    WIDTH_EM: 0.56,   /* a glyph's width as a share of its size, for a caller with no text metrics (node, a probe): the browser's own getComputedTextLength is used wherever there is one */
+    PAD: 4,           /* spare glyph cells beyond what either end needs - a count between them is never wider than this allows, and the painter still grows on demand */
+    OVERLAP: 1.6,     /* the hand's glyph overlap, the figure's and the span's own: a run that stops exactly at n leaves its last letters half-inked */
+  });
+
+  const cmp01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* THE TEXT, split at its FIRST numeral: what is written before it, the numeral as quoted, what is written after,
+     how many decimals it carries and whether it is grouped by thousands. A partition - pre + num + post is the
+     string it came from, exactly - so the two ends of the morph are the authored strings and nothing else. */
+  const compareSplit = (text) => {
+    const s = text == null ? "" : String(text);
+    const m = /-?\d[\d,]*(?:\.\d+)?/.exec(s);
+    if (!m) return { pre: s, num: "", post: "", dec: 0, group: false, value: NaN };
+    const num = m[0], dot = num.indexOf(".");
+    return { pre: s.slice(0, m.index), num, post: s.slice(m.index + num.length),
+             dec: dot < 0 ? 0 : num.length - dot - 1, group: num.indexOf(",") >= 0,
+             value: parseFloat(num.replace(/,/g, "")) };
+  };
+
+  /* a counted value in one end's own clothes: its decimals, its thousands grouping, and a sign only when the
+     rounded number actually is one (a count that passes through -0.004 must not flash a minus) */
+  const compareFmt = (v, dec, group) => {
+    if (!Number.isFinite(v)) return "";
+    const s = Math.abs(v).toFixed(Math.max(0, Math.min(6, dec | 0)));
+    const cut = s.indexOf("."), whole = cut < 0 ? s : s.slice(0, cut), frac = cut < 0 ? "" : s.slice(cut);
+    return (v < 0 && parseFloat(s) !== 0 ? "-" : "")
+      + (group ? whole.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : whole) + frac;
+  };
+
+  /* THE FRAME at u: the whole state of the morph as numbers and one string, and the only place the law lives.
+       text   what is written this frame (u <= 0 is the metric AS QUOTED, u >= 1 the comparator AS AUTHORED)
+       value  the numeral this frame, min-jerk between the two quoted numerals - monotone in u, and null when
+              either end quotes no number at all (then the whole string cross-fades and nothing counts)
+       i0/i1  the numeral's span in `text`: those cells hold at full ink while the ones around them cross over
+       affix  the opacity of every cell outside the numeral - 1 at both ends, 0 exactly at the swap, and the
+              crossing itself only CROSS of the window wide, so the words stand while the number counts
+       sub    how far the comparator's label has been written; ghost: the held metric's opacity */
+  const compareFrame = (sp, u) => {
+    const S = sp || {}, M = compareSplit((S.metric || {}).text), C = compareSplit((S.comparator || {}).text);
+    const uu = cmp01(u), counts = Number.isFinite(M.value) && Number.isFinite(C.value);
+    const value = counts ? M.value + (C.value - M.value) * minJerk(cmp01(uu / COMPARE.COUNT)) : null;
+    const end = uu <= 0 ? M : uu >= 1 ? C : null, dress = end || (uu < COMPARE.SWAP ? M : C);
+    const num = end ? end.num : (counts ? compareFmt(value, dress.dec, dress.group || M.group) : dress.num);
+    const affix = end ? 1 : (uu < COMPARE.SWAP ? 1 - minJerk(cmp01((uu - (COMPARE.SWAP - COMPARE.CROSS)) / COMPARE.CROSS))
+                                               : minJerk(cmp01((uu - COMPARE.SWAP) / COMPARE.CROSS)));
+    return { text: dress.pre + num + dress.post, value, i0: dress.pre.length, i1: dress.pre.length + num.length,
+             affix, counts, u: uu,
+             sub: cmp01((uu - COMPARE.LABEL_AT) / (1 - COMPARE.LABEL_AT)),
+             ghost: cmp01((uu - COMPARE.SWAP) / (1 - COMPARE.SWAP)) * COMPARE.GHOST_A };
+  };
+
+  /* how many glyph cells the label needs for the whole morph: both authored strings, and the widest a counted
+     number in either end's clothes can be (the integer part of the larger magnitude, the deeper decimals, a point,
+     a sign and a comma group). The painter still grows on demand, so this is the room, never the limit. */
+  const compareCapacity = (sp) => {
+    const S = sp || {}, mt = (S.metric || {}).text == null ? "" : String((S.metric || {}).text);
+    const ct = (S.comparator || {}).text == null ? "" : String((S.comparator || {}).text);
+    const M = compareSplit(mt), C = compareSplit(ct);
+    const big = Math.max(Math.abs(M.value) || 0, Math.abs(C.value) || 0);
+    const digits = Number.isFinite(M.value) && Number.isFinite(C.value)
+      ? String(Math.floor(big)).length + Math.max(M.dec, C.dec) + 3
+      : Math.max(M.num.length, C.num.length);
+    const around = Math.max(M.pre.length + M.post.length, C.pre.length + C.post.length);
+    return Math.max(mt.length, ct.length, around + digits) + COMPARE.PAD;
+  };
+
+  /* one glyph of the label as the hand writes it - the figure's and the span's own share, with OVERLAP's slack so
+     the last letter is fully in exactly when the write ends */
+  const compareGlyph = (write, j, n) => {
+    const per = 1 / (Math.max(1, n | 0) + COMPARE.OVERLAP - 1);
+    return cmp01((write - j * per) / (per * COMPARE.OVERLAP));
+  };
+
+  /* the FIGURE this row morphs: the one the page wrote with the metric's own text (paintFigure's records carry
+     `sp.text`). The compiler has already refused a row with no such figure - here, a page that lost it paints
+     nothing rather than inventing a place to write. */
+  const compareFigure = (figures, sp) => {
+    const want = String((((sp || {}).metric) || {}).text == null ? "" : ((sp || {}).metric || {}).text).trim();
+    if (!want) return null;
+    return (figures || []).find((f) => f && f.sp && String(f.sp.text == null ? "" : f.sp.text).trim() === want) || null;
+  };
+
+  /* the written width of the label, for placing the held metric BESIDE it: the browser's own metrics where there
+     are any, the estimate where there are none (node, a probe) - both pure functions of the string on screen */
+  const compareWidth = (el, text, fs) =>
+    (el && typeof el.getComputedTextLength === "function" ? el.getComputedTextLength() : 0)
+    || String(text == null ? "" : text).length * fs * COMPARE.WIDTH_EM;
+
+  /* THE INK on one element: the attribute AND the inline style. The page's own class CSS carries an opacity for the
+     sub's class (`.lp-chart .bksub { opacity: .85 }`) and a class rule outranks a presentation ATTRIBUTE - the lesson
+     the bracket's inline `fill` was already written for (scene-evidence-engine.mjs: "the chart's class CSS outranks a
+     fill attribute"). The attribute is written too, so a caller with no CSSOM - node, a probe - still reads the law
+     off the element. Measured 2026-09-14: the held metric came back at .85 on every frame of the first render. */
+  const compareInk = (el, v) => {
+    if (!el) return;
+    const a = Math.min(1, Math.max(0, +v || 0)).toFixed(3);
+    el.setAttribute("opacity", a);
+    if (el.style) el.style.opacity = a;
+  };
+
+  /* the figure's OWN colour, read off the inline style paintFigure wrote it with (`font-size:NNpx;fill:COL`), so the
+     held metric and the comparator's label are the same ink as the number they belong to - never a colour of ours */
+  const compareFill = (fg) => {
+    const m = /fill:\s*([^;]+)/.exec(String((fg && fg.label && fg.label.getAttribute && fg.label.getAttribute("style")) || ""));
+    return m ? m[1].trim() : "var(--lp-chalk)";
+  };
+
+  /* THE MORPH'S OWN ELEMENTS, built once and grown, never rebuilt: the extra glyph cells the count needs beyond the
+     figure's own, the held metric beside it, and the comparator's label beneath. Idempotent on purpose - a cold seek
+     builds exactly what a play built, and a page whose figure was re-drawn gets them back on the next frame. */
+  const compareEnsure = (fg, sp, ctx, want) => {
+    const el = (ctx || {}).el;
+    let P = fg.__compare;
+    if (!P) {
+      const fs = +fg.fs || 28, fss = +fg.fss || fs * 0.6, anchor = fg.fits === false ? "end" : "start";
+      const col = compareFill(fg);
+      const ghost = el ? el("text", "bksub", fg.g, { x: 0, y: 0, "text-anchor": anchor, opacity: 0,
+        style: "font-size:" + (fs * COMPARE.GHOST_F).toFixed(1) + "px;fill:" + col + ";opacity:0" }) : null;
+      if (ghost) ghost.textContent = String(((sp.metric || {}).text) == null ? "" : (sp.metric || {}).text);
+      const sub = el ? el("text", "bksub", fg.g, { x: 0, y: 0, "text-anchor": anchor,
+        style: "font-size:" + fss.toFixed(1) + "px;fill:" + col + ";opacity:1" }) : null;
+      const lab = String(((sp.comparator || {}).label) == null ? "" : (sp.comparator || {}).label);
+      const sg = sub && el ? [...lab].map((ch) => { const ts = el("tspan", "", sub, { opacity: 0 });
+        ts.textContent = ch === " " ? " " : ch; return ts; }) : [];
+      P = fg.__compare = { cells: (fg.lg || []).slice(), ghost, sub, sg, fs, fss, anchor };
+    }
+    while (el && fg.label && P.cells.length < (want | 0)) {
+      const ts = el("tspan", "", fg.label, { opacity: 0 }); ts.textContent = ""; P.cells.push(ts);
+    }
+    return P;
+  };
+
+  /* THE PAINTER (the module rule's page half). Every number of it is the law above; this is the DOM. `sd` is what
+     the engine's chart_to dispatch hands it - the row `sp` and the page's built figures - `st` the page state, and
+     `ctx` the PAGE species context every page painter reaches the engine through (`el` is lpEl), so `node --test`
+     can call this with recorders and no DOM. */
+  const paintCompare = (sd, t, st, ctx) => {
+    const sp = (sd || {}).sp || {}, fg = compareFigure((sd || {}).figures, sp);
+    if (!fg || !fg.label) return;
+    const at = +sp.at || 0, u = cmp01((t - at) / Math.max(0.001, +sp.dur || 1)), F = compareFrame(sp, u);
+    const P = compareEnsure(fg, sp, ctx, Math.max(compareCapacity(sp), F.text.length));
+    const chars = [...F.text], before = t < at;
+    P.cells.forEach((ts, j) => {
+      const ch = j < chars.length ? chars[j] : "";
+      ts.textContent = ch === " " ? " " : ch;
+      if (before) { if (j >= (fg.lg || []).length) ts.setAttribute("opacity", 0); return; }   /* before the word the figure's own hand owns its glyphs; the cells this module added are not its business */
+      ts.setAttribute("opacity", (j >= chars.length ? 0 : (j >= F.i0 && j < F.i1 ? 1 : F.affix)).toFixed(3));
+    });
+    const fits = fg.fits !== false, x = +fg.x || 0, y = +fg.y || 0;
+    if (P.ghost) {
+      const w = compareWidth(fg.label, F.text, P.fs), gx = x + (fits ? 1 : -1) * (w + COMPARE.GAP);
+      P.ghost.setAttribute("x", gx.toFixed(1)); P.ghost.setAttribute("y", y.toFixed(1));
+      P.ghost.setAttribute("text-anchor", fits ? "start" : "end");
+      compareInk(P.ghost, before || sp.hold === "gone" ? 0 : F.ghost);
+    }
+    if (P.sub) {
+      const step = P.fss * COMPARE.SUB_DY;
+      P.sub.setAttribute("x", x.toFixed(1)); P.sub.setAttribute("y", (y + step * (fg.sub ? 2 : 1)).toFixed(1));
+      P.sub.setAttribute("text-anchor", fits ? "start" : "end");
+      compareInk(P.sub, 1);   /* the class's own .85 would dim the label the hand is writing; its glyphs carry the write */
+      P.sg.forEach((ts, j) => ts.setAttribute("opacity", (before ? 0 : compareGlyph(F.sub, j, P.sg.length)).toFixed(3)));
+    }
+  };
+
+  /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment, so
+     inlining keeps it and node - where no registry exists - still imports the file for the math. */
+  if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.compare = paintCompare;
+  /* KINETICS:END */
   /* KINETICS:BEGIN thread */
   /* species/thread.mjs - THE WIRE (P50 T15, HF-16: "the three threads - the wire, the ruler, the protagonist chip -
      one continuous line as the film's spine"). SOURCE OF TRUTH, inlined into the scene-evidence player by
@@ -1416,8 +1640,16 @@ async function mount(doc) {
      real seconds - a seek is the play. Every dial here is a starting reference (42 s42.5); HG2 tunes them by eye. */
 
   const CADENCE = Object.freeze({
-    ON1_PX_S: 250,     /* [DERIVED: the brief :185-193 - on-1s above 250 px/s; its E2 s7 says 100 px/s: the two disagree, measure on ours] */
-    STROBE_PX_S: 300,  /* [DERIVED: the brief - on-2s above 300 px/s strobes (Watson et al. 1986, not on file)] */
+    ON1_PX_S: 250,     /* OPERATOR-SET CONSTANT (R26-64 / R26-85, 2026-09-14): the on-1s threshold. The brief's derivation is
+                          STRIPPED - its 15-arcmin limit is Braddick 1974's random-dot correspondence limit misattributed to Baker &
+                          Braddick 1985, and Watson, Ahumada & Farrell 1986 REMOVES a px/s ceiling at 12/8 fps (r_max = (w_s - w_l)/u_0 < 0)
+                          - docs/research/runs/strobe_stop_motion/VERIFICATION-2026-09-13.md. The number stays as ours: every shipped throw
+                          runs 1188-2479 px/s and the threshold has never changed a hold. Cinema-parity reference, not a dial: RED's 1/7
+                          picture width per second = 154 px/s on the 1080 stage at 24 fps WITH a 180-degree shutter */
+    STROBE_PX_S: 300,  /* OPERATOR-SET CONSTANT (R26-64, 2026-09-14): the on-2s strobe ceiling. READ BY NOTHING - `cadence()` consults
+                          ON1_PX_S only, so anything past 300 is already on 1s; it binds only where a cadence is DECLARED against the speed
+                          (a `break_cadence` burst, a boil on 3s, an authored hold) and no gate checks that case yet (R26-85's space). Kept
+                          as the constant the future gate reads; the Watson 1986 derivation it carried is stripped (see ON1_PX_S) */
     FPS: 24,           /* the base frame rate the holds are counted in (on-1s = 24, on-2s = 12, on-3s = 8) */
   });
   /* MATERIALS. m, k, c [DERIVED: the brief :226-232] -> the spring's zeta and w0 (the report Q4: dense = critically damped, no
@@ -5828,7 +6060,14 @@ async function mount(doc) {
   const PS = { SPREAD_A: 0.30, SPREAD_BLEED: 0.55,   /* the fifth watch: the gap between two lines, bled full of ink - the alpha it lands at, and the share of the word the bleed takes to cross */
                ERASE_S: 0.4, BRACKET_DRAW: 0.5, BRACKET_TICK: 0.15, BRACKET_LABEL: 0.55, BRACKET_GAP: 34, BRACKET_TICK_W: 14,
                BRACKET_BAR_W: 26,   /* P50 T9: `form: "bar"` - the SAME span, drawn as a bar in the accent instead of a hairline (Bravos shot 36: the drop of one tier). The law is the bracket's: the bar grows from the first datum's level to the second as the span draws, so a fall goes DOWN (E28) */
-               BRACKET_ROOM: 200, RELIGHT_COL: "#F5B72E" };
+               BRACKET_ROOM: 200, RELIGHT_COL: "#F5B72E",
+               /* R26-71: a FIGURE's number may not be written across the stroke of its OWN series (the bridge
+                  short printed `31% of GDP` straight through the debt line it named). The box steps off the ink:
+                  FIGURE_STEP is one quantum as a share of the figure's size, FIGURE_STEPS the cap either side,
+                  FIGURE_PAD the daylight kept from the stroke (half the widest series line, and a hair),
+                  FIGURE_UP / FIGURE_DOWN the glyph box either side of the baseline (measured on the hand at 40:
+                  1.075 up, 0.525 down), FIGURE_CHAR_W the advance per character when nothing can measure the text. */
+               FIGURE_STEP: 0.6, FIGURE_STEPS: 4, FIGURE_PAD: 5, FIGURE_UP: 1.08, FIGURE_DOWN: 0.53, FIGURE_CHAR_W: 0.62 };
   const PS_PAL = { ...LP_INK, neg: "var(--lp-neg)", pos: "var(--lp-pos)" };   /* E67: a species keyed to a series is the SAME ink as the series */
   const pageSpecies = (scene, kind) => (scene.species || []).filter((sp) => sp && sp.kind === kind).sort((a, b) => a.at - b.at);
   const polyLenTo = (pts, i) => { let L = 0; for (let k = 1; k <= i && k < pts.length; k++) L += Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]); return L; };
@@ -5840,6 +6079,51 @@ async function mount(doc) {
     return tot > 0 ? polyLenTo(pts, i) / tot : 1;
   };
   const segEase = (u) => (kin("min_jerk") ? minJerk(u) : expoOut(clamp01(u)));
+  /* R26-71: does a segment meet a box grown by `pad`? Liang-Barsky - exact, allocation-free, and asked once per
+     segment of one series, so a page of figures costs the points it already holds. */
+  const segMeetsBox = (p0, p1, b, pad) => {
+    const x0 = b[0] - pad, y0 = b[1] - pad, x1 = b[0] + b[2] + pad, y1 = b[1] + b[3] + pad;
+    const dx = p1[0] - p0[0], dy = p1[1] - p0[1];
+    const P = [-dx, dx, -dy, dy], Q = [p0[0] - x0, x1 - p0[0], p0[1] - y0, y1 - p0[1]];
+    let t0 = 0, t1 = 1;
+    for (let i = 0; i < 4; i++) {
+      if (P[i] === 0) { if (Q[i] < 0) return false; continue; }
+      const r = Q[i] / P[i];
+      if (P[i] < 0) { if (r > t1) return false; if (r > t0) t0 = r; }
+      else { if (r < t0) return false; if (r < t1) t1 = r; }
+    }
+    return true;
+  };
+  /* the figure's text box for a baseline at (x, y): the advance, and the glyph box either side of the baseline
+     (a sub hangs under it by its own line) - the box the eye reads, in the chart's own viewBox units */
+  const figBox = (x, y, w, fs, anchor, subH) => [anchor === "end" ? x - w : x, y - PS.FIGURE_UP * fs, w,
+                                                 (PS.FIGURE_UP + PS.FIGURE_DOWN) * fs + (subH || 0)];
+  const figWidth = (el, text, fs) => {   /* measured when the glyphs are on the page; arithmetic when nothing can measure */
+    const n = el && el.getComputedTextLength ? el.getComputedTextLength() : 0;
+    return n > 0 ? n : String(text || "").length * fs * PS.FIGURE_CHAR_W;
+  };
+  /* R26-71: THE STEP-OFF. The authored place stands unless the box meets the stroke of its own series; then the
+     figure steps away in quanta of PS.FIGURE_STEP * fs - the side the authored `dy` already chose FIRST, then the
+     other - capped at PS.FIGURE_STEPS and at the chart's own box. A pure function of the datum, the series' live
+     points, `dy` and the measured width: a re-read frame on a changed chart state lands identically and a cold
+     seek lands where a play does (R26-28). Nowhere clear = the authored place, and the gate still says so. */
+  const figClearY = (x, yA, w, fs, anchor, dy, ptsNow, subH, H) => {
+    const pts = ptsNow || [];
+    if (pts.length < 2 || !(w > 0)) return yA;
+    const onInk = (yy) => {
+      const b = figBox(x, yy, w, fs, anchor, subH);
+      for (let i = 1; i < pts.length; i++) if (segMeetsBox(pts[i - 1], pts[i], b, PS.FIGURE_PAD)) return true;
+      return false;
+    };
+    if (!onInk(yA)) return yA;   /* the authored place is only ever left for ink - never for the chart's edge */
+    const inBox = (yy) => { const b = figBox(x, yy, w, fs, anchor, subH); return b[1] >= 0 && b[1] + b[3] <= (H || Infinity); };
+    const first = (Number(dy) || 0) <= 0 ? -1 : 1;   /* `dy` lifted it off the datum: it keeps lifting */
+    for (const side of [first, -first]) for (let k = 1; k <= PS.FIGURE_STEPS; k++) {
+      const yy = yA + side * k * PS.FIGURE_STEP * fs;
+      if (inBox(yy) && !onInk(yy)) return yy;
+    }
+    return yA;
+  };
   const buildPerform = (st, scene, pg) => {
     const P = !!st.portrait, fs = P ? 40 : 26, fss = P ? 32 : 20, G = st.geom || { W: 1000, H: 560 };
     /* P48 T7: on a page with chart STATES the perform layer (brackets, figures, spreads) draws on its OWN svg above every
@@ -5919,14 +6203,19 @@ async function mount(doc) {
       const col = sp.color ? (PS_PAL[sp.color] || sp.color) : "var(--lp-chalk)";
       const fits = D[0] + PS.BRACKET_GAP + PS.BRACKET_ROOM <= G.W;
       const x = fits ? D[0] + 14 : D[0] - 14, anchor = fits ? "start" : "end";
-      const y = D[1] + fs * 0.35 + (Number(sp.dy) || 0) * fs * 1.2;
+      const yA = D[1] + fs * 0.35 + (Number(sp.dy) || 0) * fs * 1.2;   /* the AUTHORED place: the datum, plus `dy` lines of its own size */
       const g = lpEl("g", "lp-figure", surf, { opacity: 0 });   /* no pin dot: the figure stands where the line was (the third watch: lingering dots read as strange) */
-      const label = lpEl("text", "bklab", g, { x: x.toFixed(1), y: y.toFixed(1), "text-anchor": anchor, style: "font-size:" + fs + "px;fill:" + col });
+      const label = lpEl("text", "bklab", g, { x: x.toFixed(1), y: yA.toFixed(1), "text-anchor": anchor, style: "font-size:" + fs + "px;fill:" + col });
       const lg = [...String(sp.text || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
       let sub = null, sg = [];
-      if (sp.sub) { sub = lpEl("text", "bksub", g, { x: x.toFixed(1), y: (y + fss * 1.3).toFixed(1), "text-anchor": anchor, style: "font-size:" + fss + "px;fill:" + col });
+      if (sp.sub) { sub = lpEl("text", "bksub", g, { x: x.toFixed(1), y: (yA + fss * 1.3).toFixed(1), "text-anchor": anchor, style: "font-size:" + fss + "px;fill:" + col });
         sg = [...String(sp.sub)].map((ch) => { const ts = lpEl("tspan", "", sub, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; }); }
-      return { sp, D, x, y, fits, g, label, lg, sub, sg, fi, fs, fss, W: G.W, si: sp.series | 0, idx: i };
+      /* R26-71: the step-off, HERE - the glyphs exist, so the advance is the written one, and the points are the
+         series' own. A figure with nothing in its way does not move by a thousandth. */
+      const subH = sp.sub ? fss * 1.3 : 0, tw = figWidth(label, sp.text, fs);
+      const y = figClearY(x, yA, tw, fs, anchor, sp.dy, pts, subH, G.H);
+      if (y !== yA) { label.setAttribute("y", y.toFixed(1)); if (sub) sub.setAttribute("y", (y + fss * 1.3).toFixed(1)); }
+      return { sp, D, x, y, fits, g, label, lg, sub, sg, fi, fs, fss, W: G.W, H: G.H, tw, subH, si: sp.series | 0, idx: i };
     }).filter(Boolean);
     /* NOTES (the third watch: "the page has plenty of space on the side to write things"): a line of handwriting in the page's
        QUIET ZONE beside the chart - the column the chart leaves free (the dock's band) - stacked in order, each written on its
@@ -6049,7 +6338,8 @@ async function mount(doc) {
       const D = lpMarkDatum(st, fg.si, fg.idx);
       if (!D) { fg.g.setAttribute("opacity", 0); return; }
       const fits = D[0] + PS.BRACKET_GAP + PS.BRACKET_ROOM <= fg.W, x = fits ? D[0] + 14 : D[0] - 14, anchor = fits ? "start" : "end";
-      const y = D[1] + fg.fs * 0.35 + (Number(sp.dy) || 0) * fg.fs * 1.2;
+      const yA = D[1] + fg.fs * 0.35 + (Number(sp.dy) || 0) * fg.fs * 1.2;
+      const y = figClearY(x, yA, fg.tw, fg.fs, anchor, sp.dy, lpPointsNow(st, fg.si).map((e) => e.p), fg.subH || 0, fg.H);   /* R26-71: the same step-off on the ACTIVE state's own points */
       fg.label.setAttribute("x", x.toFixed(1)); fg.label.setAttribute("y", y.toFixed(1)); fg.label.setAttribute("text-anchor", anchor);
       if (fg.sub) { fg.sub.setAttribute("x", x.toFixed(1)); fg.sub.setAttribute("y", (y + fg.fss * 1.3).toFixed(1)); fg.sub.setAttribute("text-anchor", anchor); }
       fg.D = D; fg.x = x; fg.y = y; fg.fits = fits;
@@ -6115,6 +6405,10 @@ async function mount(doc) {
        paintFigure and paintSpread still sit above as engine code, and each moves with its builder, not before it. */
     for (const sd of PF.spans || []) { const p = PAGE_PAINTERS[sd.sp.kind || "span"]; if (p) p(sd, t, st, PAGE_CTX); }
     for (const fg of PF.figures || []) paintFigure(fg, t, st);   /* E50: the chart's next thing */
+    /* P57 T12 / R26-70b / E76 - THE CHART_TO COMPARE, DISPATCHED: the quoted figure the page has already written becomes the
+       number the viewer feels. The law, the dials and the DOM are species/compare.mjs; this is the call, and it runs AFTER the
+       figures so the morph owns the glyphs its own clock is writing. */
+    for (const sp of pageSpecies(scene, "chart_to")) if (sp.to === "compare" && PAGE_PAINTERS.compare) PAGE_PAINTERS.compare({ sp, figures: PF.figures || [] }, t, st, PAGE_CTX);
     for (const cr of PF.crosses || []) paintCross(cr, t);        /* P50 T6: the census's X marks and the share they cross */
     for (const nt of PF.notes || []) { nt.div.style.opacity = t >= nt.sp.at ? "" : "0"; writeGlyphs(nt.glyphs, t - nt.sp.at, Math.max(0.05, nt.sp.dur || 1)); }
     /* RELIGHT: the sunflower twin rises and falls on a sine over dur */
@@ -6760,6 +7054,7 @@ async function mount(doc) {
     let cur = 0, cCur = cBase, leaving = false, xf = null, park = null, parkFrom = 1, hold = null, plain = null;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
+      if (sp.to === "compare") continue;   /* P57 T12: the compare morphs a FIGURE on the standing chart - it is not a state change, and it never un-draws the page it is written on (species/compare.mjs paints it from paintPerform) */
       if (sp.to === "park") { parkFrom = park ? (+park.scale || 0.72) : 1; park = sp; continue; }   /* P48 T2b: a transform on whichever state is active, never a state change; a later park moves from the standing one */
       hold = null;   /* a later transition to another state ends a morph's hold; the standing PARK stays - the new state stands where the old one did
                         (E60 Tokyo, 2026-09-10: the ten-year bars recast into the parked monthly bars' slot and burst there, the plant beneath them; a park to scale 1 un-parks) */
@@ -6810,7 +7105,7 @@ async function mount(doc) {
     let ink = 0, ue = 0, uw = 1;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
-      if (sp.to === "rescale" || sp.to === "extend" || sp.to === "park") continue;   /* P48 T2/T3/T2b: the words stay - it is the same chart */
+      if (sp.to === "rescale" || sp.to === "extend" || sp.to === "park" || sp.to === "compare") continue;   /* P48 T2/T3/T2b + P57 T12: the words stay - it is the same chart */
       const d = Math.max(PS.ERASE_S + 0.01, sp.dur || 1);
       ue = clamp01((t - sp.at) / PS.ERASE_S);
       uw = clamp01((t - sp.at - PS.ERASE_S) / (d - PS.ERASE_S));

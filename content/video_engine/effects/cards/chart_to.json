@@ -3,6 +3,114 @@
   "axis": "chart_to",
   "cards": [
     {
+      "id": "chart_to:compare",
+      "axis": "chart_to",
+      "token": "compare",
+      "title": "The compare chart-to verb (metric to comparator)",
+      "aliases": [
+        {
+          "name": "the metric-to-comparator morph",
+          "source": "docs/content-video-engine/BACKLOG.md:476"
+        },
+        {
+          "name": "morphing the P/E to a more visual number",
+          "source": "docs/portable/OPERATOR-RULINGS.md:2446"
+        }
+      ],
+      "does": "The figure the market quotes becomes the number the viewer feels: the quoted metric morphs into its authored comparator, which holds with the metric beside it or gone.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "chart_to {\"to\": \"compare\"}",
+        "example": "{\"kind\": \"chart_to\", \"at\": 32.0, \"dur\": 1.2, \"to\": \"compare\", \"metric\": {\"value\": 24.8, \"text\": \"24.8x\", \"label\": \"forward P/E\"}, \"comparator\": {\"value\": 0.1535, \"text\": \"15 % dearer\", \"label\": \"dearer than its own history\"}, \"inputs\": {\"pe\": 24.8, \"hist\": 21.5}, \"derive\": \"pe / hist - 1\", \"source\": \"[DERIVED: from ev-meta-pe-v1 + the 10-year median, pe / hist - 1]\"}",
+        "example_source": "content/video_engine/tests/test_metric_comparator.py:32",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the numeral counts",
+          "does": "the quoted numeral runs to the comparator's on min-jerk, in the metric's own clothes",
+          "trigger": "the chart_to's `at`",
+          "dials": {
+            "COUNT": "0.72"
+          }
+        },
+        {
+          "name": "the words cross",
+          "does": "the text either side of the numeral crosses THROUGH ZERO - the metric's clothes become the comparator's where there is nothing on screen to swap",
+          "trigger": "SWAP of `dur`, over CROSS of it",
+          "dials": {
+            "SWAP": "0.5",
+            "CROSS": "0.2"
+          }
+        },
+        {
+          "name": "the label is written",
+          "does": "the comparator's `label` - what the number MEANS - is written beneath by the hand",
+          "trigger": "LABEL_AT of `dur`",
+          "dials": {
+            "LABEL_AT": "0.55"
+          }
+        },
+        {
+          "name": "the metric holds beside it",
+          "does": "hold: \"metric\" (the default) stands the quoted figure beside the comparator, quieter and smaller; hold: \"gone\" gives the comparator the stage",
+          "trigger": "SWAP of `dur`",
+          "dials": {
+            "GHOST_A": "0.62",
+            "GHOST_F": "0.74"
+          }
+        }
+      ],
+      "blends": [],
+      "options": [
+        {
+          "token": "metric",
+          "means": "hold: the quoted metric stays legible beside the comparator (the default)",
+          "source_set": "COMPARE_HOLDS"
+        },
+        {
+          "token": "gone",
+          "means": "hold: the quoted metric leaves and the comparator has the stage",
+          "source_set": "COMPARE_HOLDS"
+        }
+      ],
+      "dials": {
+        "module": "content/video_engine/scripts/species/compare.mjs",
+        "object": "COMPARE"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/compare.mjs",
+        "symbol": "paintCompare",
+        "note": "species/compare.mjs on PAGE_PAINTERS.compare, dispatched from paintPerform after the figures it morphs; E60 counter form, not a glyph morph (a figure is SVG <text>)",
+        "also": [
+          "compareFrame"
+        ]
+      },
+      "doctrine": [
+        "E76",
+        "E73",
+        "E88",
+        "E77",
+        "E60",
+        "E50"
+      ],
+      "status": "wired",
+      "backlog": [
+        "R26-70"
+      ],
+      "proof": {
+        "golden": "compare-morph",
+        "test": "content/video_engine/tests/kinetics/compare.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "chart_to:extend",
       "axis": "chart_to",
       "token": "extend",

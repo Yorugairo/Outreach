@@ -74,6 +74,10 @@ PROOF_FRAMES = {
     # P55 T6: THE VERDICT STACK's last phase - the radial BURST at clear_at (20.0) + 0.25 s: with the 60 ms stagger the
     # first card is half way through its 0.5 s throw and the fifth just leaving, each along its own bearing, spinning
     "verdict-stack@proof-burst": ("verdict-stack", {}, 20.25),
+    # P57 T12 / R26-70b, E76: THE COMPARE, at the two instants its landed frame cannot show. The row runs 12.0 -> 14.4
+    # (the base golden `compare-morph` is judged at 14.9, held). No flag: the verb is authored on the row, not switched on.
+    "compare-morph@proof-quoted": ("compare-morph", {}, 11.9),   # THE QUOTED FIGURE: "24.8x" written at its datum by the hand, the page as it stands before the word
+    "compare-morph@proof-mid": ("compare-morph", {}, 12.0 + 0.35 * 2.4),   # MID-COUNT (u 0.35): the number between the two, still in the metric's own clothes, the words beginning to cross
 }
 # P52 T18 / R26-55, HUMAN GATE 7: THE FACE OF A PULLED PHRASE. The phrase is live type now, so it has a face, and
 # the face is the OPERATOR's to choose - never ours. The `press_face` DIAL names one of the three candidates

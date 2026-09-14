@@ -47,7 +47,8 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "occluder-dock",     # P50 T15 / HF-17: a dock BEHIND the plate's foreground layer - the depth cue by occlusion, not blur
             "ledger-extend", "ledger-keyed",   # P48 T3 / T4b: chart_to extend and the keyed recast - on disk since P48, checked from P55 T6 (decision 7)
             "verdict-stack",     # P55 T6: the inline drawStack mid-pile - four cards on their rail spots, the fifth active large near centre (its burst rides PROOF_FRAMES)
-            "test-card"]         # P55 T6: the inline checklist branch - every question typed, the answers swept by the marker
+            "test-card",         # P55 T6: the inline checklist branch - every question typed, the answers swept by the marker
+            "compare-morph"]     # P57 T12 / R26-70b: the `chart_to compare` verb - the quoted metric held as its comparator, its label written beneath (its two moving instants ride PROOF_FRAMES)
 
 
 def _chromium_available() -> bool:

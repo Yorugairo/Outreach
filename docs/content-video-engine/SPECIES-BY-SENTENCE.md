@@ -164,6 +164,7 @@ edit the compiler, then `lint_species_choice.py --write-doc` (`--check-doc` and 
 | `chart_to` -> `extend` | more of the same series ('and then May') or a later series of the same file ('then consumption') - drawn on at the pen |
 | `chart_to` -> `park` | room for the next thing beside the chart (a card, a second diagram); scale 1.0 is the UN-PARK when the cards leave; it moves no data and restarts no clock |
 | `chart_to` -> `morph` | a different LINE series in the same frame ('what the Fed charges against what America pays') - the area under the line becomes the target's by ARAP |
+| `chart_to` -> `compare` | the sentence quotes the market's figure and then says what it MEANS - the quoted number morphs into the number the viewer feels (E76); the arithmetic is authored, never invented |
 <!-- SPECIES_WHEN:END -->
 
 ## 5. Not built yet, by task (the map already names them so the lint can say "available" the day they land)

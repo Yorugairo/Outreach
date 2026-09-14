@@ -79,6 +79,9 @@ FRAME_T["newsreel-band"] = 11.0          # 16:9: the band in the lower 40 %, the
 FRAME_T["newsreel-strip-9x16"] = 11.0    # 9:16 THE DEFAULT: the caption keeps its E62 band, the crawl goes BELOW it
 FRAME_T["newsreel-strip-above"] = 11.0   # 9:16 THE ALTERNATIVE (`cap_band: "above"`): the crawl takes the strip, the caption moves above it
 # P55 T6: the two inline dock painters pinned BEFORE T7 lifts them into modules (goldens first).
+FRAME_T["compare-morph"] = 14.9   # P57 T12 / R26-70b: the compare HELD - the count landed at 12.0 + 0.72 * 2.4 = 13.73, the
+                                  # comparator's label fully written at 14.4, the quoted metric standing beside it at COMPARE.GHOST_A.
+                                  # At rest on purpose: the two moving instants are @proof-quoted and @proof-mid on PROOF_FRAMES.
 FRAME_T["verdict-stack"] = 12.5   # mid-pile: cards 1-4 (3.0 / 5.0 / 7.0 / 9.0) receded to their rail spots (each recede is 1.0 s off the next
                                   # item's `at`), card 5 (at 11.0) fully entered (+0.9) and ACTIVE large near centre, card 6 (13.0) not yet in.
                                   # Its @proof-burst instant (clear_at + 0.25) rides render_baseline.PROOF_FRAMES
@@ -1247,6 +1250,45 @@ SURFACES.update({   # P52 T6: the newsreel band and the two readings of the bott
 SURFACES.update({   # P55 T6: the two inline dock painters, pinned before T7 promotes them
     "verdict-stack": verdict_stack,
     "test-card": test_card,
+})
+
+
+# ---- P57 T12 / R26-70b: THE COMPARE (E76) -----------------------------------------------------------------
+# The row the compiler's own grammar test authors (test_metric_comparator.py:32): a forward P/E of 24.8x against a
+# 21.5x history, derived into "15 % dearer" and carrying its provenance. The page WRITES the quoted figure at its
+# datum first (E50 - the compiler refuses a compare whose metric no `figure` species on the page carries), and the
+# compare turns that written number into the one the viewer feels.
+COMPARE_FIGURE = {"kind": "figure", "at": 6.0, "dur": 2.0, "text": "24.8x", "series": 0, "dy": -7,
+                  "target": {"kind": "datum", "index": 20}}   # the page's own empty band, above the rising line and under the unit caption: the comparator is a LONGER string than the metric and takes a sub with it, and a figure is never written over drawn ink (M34)
+COMPARE_ROW = {"kind": "chart_to", "at": 12.0, "dur": 2.4, "to": "compare", "hold": "metric",
+               "metric": {"value": 24.8, "text": "24.8x", "label": "forward P/E"},
+               "comparator": {"value": 0.1535, "text": "15 % dearer", "label": "dearer than its own history"},
+               "inputs": {"pe": 24.8, "hist": 21.5}, "derive": "pe / hist - 1",
+               "source": "[DERIVED: from the golden's own two synthetic figures, pe / hist - 1]"}
+
+
+def compare_morph() -> tuple[dict, dict]:
+    """P57 T12 / R26-70b (E76: *"showing the P/E and then morphing it to a more visual number would be a great
+    repeatable mechanism"*): the sixth `chart_to` verb, PAINTED. A dense ledger LINE page - `span-decade`'s own,
+    every series drawn - writes "24.8x" at a datum by the hand (6.0), and at 12.0 that written figure becomes
+    "15 % dearer" over 2.4 s: the numeral counts on min-jerk, the words either side cross through zero at the
+    swap, the comparator's label is written beneath, and the quoted metric holds beside it (`hold: "metric"`).
+
+    The numbers are the golden's own synthetic ones, not a figure about the world; the ARITHMETIC is authored and
+    the compiler checks it here, as it would on any shot row (E77). Three instants are read: the quoted figure
+    standing before the word (`@proof-quoted`), the number mid-count in the metric's own clothes (`@proof-mid`),
+    and the comparator held with its label and the metric beside it (FRAME_T 14.9)."""
+    import build_scene_timeline_f as BST
+    species = [dict(COMPARE_FIGURE), dict(COMPARE_ROW)]
+    plate = "ledger:golden-line:line"
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": _line_page(), "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the quoted metric becomes its comparator", scenes, {}, None), _base_uris()
+
+
+SURFACES.update({   # P57 T12: the compare verb's paint (species/compare.mjs)
+    "compare-morph": compare_morph,
 })
 
 
