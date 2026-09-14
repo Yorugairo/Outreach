@@ -1,0 +1,40 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:outro-clip-life-still",
+  "title": "The outro clip, with the idle refused",
+  "aliases": [],
+  "acts": [
+    "SETS"
+  ],
+  "members": [
+    {
+      "card": "plate_option:clip",
+      "offset_s": 0.0,
+      "role": "the world is a clip, not a plate - the outro's motion is the asset's own"
+    },
+    {
+      "card": "species:life",
+      "offset_s": 0.0,
+      "role": "the outro clip world declares that it animates on its own and the motion gate credits it"
+    },
+    {
+      "card": "idle:none",
+      "offset_s": 0.0,
+      "role": "the explicit refusal, where stillness is the point"
+    },
+    {
+      "card": "exit:dip",
+      "offset_s": 6.2,
+      "role": "the clip runs its whole 6.2 s and the cut dips through black on its last frame"
+    }
+  ],
+  "window_s": 6.5,
+  "does": "R13 with the refusal stated: the outro clip is the world and carries its own motion, so the world's idle is declared none - the only place stillness is the point - and the cut dips on its last frame.",
+  "doctrine": [
+    "E96",
+    "BACKLOG R26-103"
+  ],
+  "status": "candidate",
+  "source": "recipes_r1 s4 (R13 slot)",
+  "count": 0
+}

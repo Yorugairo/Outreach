@@ -1,0 +1,56 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:read-park-build-write",
+  "title": "Read, park, build to the datum, write the figure",
+  "aliases": [],
+  "acts": [
+    "TURNS",
+    "COMPARES"
+  ],
+  "members": [
+    {
+      "card": "dock_option:read",
+      "option": "read_s",
+      "offset_s": 0.0,
+      "role": "the first card pops at its reading box and is read while the sentence sets the number up"
+    },
+    {
+      "card": "dock_option:read",
+      "option": "park_s",
+      "offset_s": 1.64,
+      "role": "a second card takes the same place and parks, clearing the chart for what comes next"
+    },
+    {
+      "card": "page_species:build_to",
+      "offset_s": 2.42,
+      "role": "the line builds along the page to the datum the sentence has just named"
+    },
+    {
+      "card": "page_species:figure",
+      "offset_s": 5.92,
+      "role": "the hand writes the figure at the datum the line arrived on"
+    }
+  ],
+  "window_s": 6.0,
+  "does": "The cards are read and parked, then the line runs out to the number the sentence just said and the hand writes that number at the spot it landed on.",
+  "doctrine": [
+    "E96",
+    "BACKLOG R26-103"
+  ],
+  "status": "proven",
+  "proof": {
+    "project": "japan-tariff-trick",
+    "build": "build-short",
+    "timeline": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json",
+    "t": 71.1,
+    "members_at": [
+      71.1,
+      72.74,
+      73.52,
+      77.02
+    ],
+    "scene": "s11"
+  },
+  "source": "recipes_r1 R10; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R10",
+  "count": 1
+}

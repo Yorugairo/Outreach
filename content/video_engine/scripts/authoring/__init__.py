@@ -6,6 +6,7 @@ dock registrations, the audio stitch and bed envelope, the shot-table hand-off t
 
     from authoring import Project
     from authoring import words as W, docks as D, audio as A, table as T
+    from authoring import effects as FX, recipes as RX   # the catalogue's names; a beat as a proven recipe (P55, P56)
 
 `scripts/` is already on `sys.path` in every build script, so the bare package import works.
 
@@ -18,9 +19,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from . import audio, docks, table, words
+from . import audio, docks, effects, recipes, table, words
 
-__all__ = ["Project", "audio", "docks", "table", "words"]
+__all__ = ["Project", "audio", "docks", "effects", "recipes", "table", "words"]
 
 
 @dataclass(frozen=True)

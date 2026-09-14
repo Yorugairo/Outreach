@@ -1,0 +1,52 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:held-dock-across-the-cut",
+  "title": "The dock outlives the world change",
+  "aliases": [
+    {
+      "name": "builds inside a held frame",
+      "source": "docs/research/runs/grill_pipeline-value/recipes_r1.md:99"
+    }
+  ],
+  "acts": [
+    "EXPLAINS",
+    "QUOTES"
+  ],
+  "members": [
+    {
+      "card": "dock_payload:chart",
+      "offset_s": 0.0,
+      "role": "the chart card enters and is kept: its exit (70.9) lies past this scene's span - record and stack payloads hold the same way"
+    },
+    {
+      "card": "exit:wipe",
+      "option": "wipe_right",
+      "offset_s": [
+        0.0,
+        21.9
+      ],
+      "role": "the world changes underneath the held card, a wipe rather than a plain cut - 16 ordered fires in Steel; the dock's own exit is not a card, it is simply later"
+    }
+  ],
+  "window_s": 22.0,
+  "does": "One piece of evidence carries a whole paragraph: the card enters, the room wipes or cuts away beneath it, and the same card is still standing in the next room (8.7-50.7 s, up to 3 cuts).",
+  "doctrine": [
+    "E96",
+    "BACKLOG R26-103",
+    "E61"
+  ],
+  "status": "proven",
+  "proof": {
+    "project": "steel-and-paper",
+    "build": "build-f",
+    "timeline": "content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f/steel-and-paper.timeline.json",
+    "t": 50.4,
+    "members_at": [
+      50.4,
+      57.3
+    ],
+    "scene": "s05"
+  },
+  "source": "recipes_r1 R3; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R3",
+  "count": 16
+}

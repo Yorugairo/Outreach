@@ -249,3 +249,66 @@ def test_the_bridge_short_is_proposed_for_from_its_own_facts():
     assert counts["rows"] > 0 and counts["proposed_for"] > 0
     assert 'facts("ev-' in joined and '["last_idx"]' in joined
     assert L.main([str(BRIDGE), "--build", BRIDGE_BUILD, "--propose"]) == 0
+
+
+# ---------------------------------------------------------------- --propose RECIPES (P56 T5): proven combinations
+# The rule the slice inherits from P53 T8: the proposal is APPENDED. The report stays byte for byte what it was and
+# so does the P53 sheet - the recipes block is additive, and `recipes=False` prints exactly yesterday's sheet.
+def test_the_proposers_limit_is_quoted_verbatim_in_the_recipes_header():
+    doc = " ".join((L.__doc__ or "").split())
+    assert " ".join(L.PROPOSER_LIMIT.split()) in doc               # the module's own words, never a paraphrase
+    assert L.PROPOSER_LIMIT in L.PROPOSE_RECIPES_HEADER
+    for phrase in ["no dock is authored", "binds or deletes", "Proven first, then by count", "nothing allocated"]:
+        assert phrase in L.PROPOSE_RECIPES_HEADER, phrase
+
+
+def test_an_offset_range_stays_a_range_on_the_sheet():
+    assert L.offset_label(0.0) == "0.00" and L.offset_label(2.05) == "2.05"
+    assert L.offset_label([2.4, 30.0]) == "2.40..30.00"
+
+
+def test_the_recipes_block_is_additive_and_the_p53_sheet_is_byte_for_byte(tmp_path):
+    project = _propose_project(tmp_path)
+    today, counts_today = L.propose(project, recipes=False)
+    new, counts_new = L.propose(project)
+    assert [l for l in new if not l.strip().startswith(L.RECIPE_MARK) and l != L.PROPOSE_RECIPES_HEADER] == today
+    assert counts_new == counts_today                              # a recipe line is never counted as a draft row
+    assert L.PROPOSE_RECIPES_HEADER not in today and L.PROPOSE_RECIPES_HEADER in new
+    assert new[0] == L.PROPOSE_HEADER
+
+
+def test_a_recipes_block_appears_above_the_draft_rows_with_its_proof_and_count(tmp_path):
+    lines, _ = L.propose(_propose_project(tmp_path))
+    head = next(i for i, l in enumerate(lines) if l.startswith("PROPOSAL"))
+    first_row = next(i for i, l in enumerate(lines) if l.strip().startswith("{"))
+    block = [l for l in lines[head:first_row] if l.strip().startswith(L.RECIPE_MARK)]
+    assert block and block[0].strip().startswith("# recipes for ")
+    assert block[0].split("# recipes for ")[1].split(" ")[0].rstrip(":") in L.ACTS, block[0]
+    proven = [l for l in block if "[proven]" in l]
+    assert proven, block
+    for line in proven:
+        assert "recipe:" in line and "members: +0.00 " in line and "proof: " in line and " count " in line
+
+
+def test_the_sheet_says_so_when_the_catalogue_is_not_readable(monkeypatch):
+    monkeypatch.setattr(L, "_RECIPE_KIT", (None, [], "docs/EFFECTS-CATALOG.jsonl is missing"))
+    lines = L.recipe_block(["QUOTES"])
+    assert len(lines) == 1 and "no effects catalogue" in lines[0] and "build_effects_catalog.py --write" in lines[0]
+
+
+def test_an_act_with_no_recipe_says_none_rather_than_going_quiet(monkeypatch):
+    class _None:
+        def for_act(self, act, records=None):
+            return []
+    monkeypatch.setattr(L, "_RECIPE_KIT", (_None(), [], ""))
+    assert L.recipe_block(["QUOTES"]) == ["    # recipes for QUOTES: none in the catalogue for this act"]
+
+
+@pytest.mark.skipif(not _has_build(TARIFF), reason="the tariff build-short is not on disk")
+def test_the_report_is_a_verbatim_prefix_of_the_tariffs_proposal_sheet(capsys):
+    report, _ = L.report(TARIFF)
+    assert L.main([str(TARIFF), "--propose"]) == 0
+    out = capsys.readouterr().out.splitlines()
+    assert out[:len(report)] == report                             # the report: byte for byte what it was
+    assert L.PROPOSE_RECIPES_HEADER in out
+    assert any("recipe:" in l and "[proven]" in l and "proof: " in l for l in out)

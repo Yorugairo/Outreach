@@ -1,0 +1,36 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:two-tiers-one-x",
+  "title": "Two bands on one x, and the gap between them",
+  "aliases": [],
+  "acts": [
+    "COMPARES",
+    "SPANS"
+  ],
+  "members": [
+    {
+      "card": "page_builder:tiers",
+      "offset_s": 0.0,
+      "role": "two bands, one x, honest zeros - a form we have never shipped"
+    },
+    {
+      "card": "page_species:bracket",
+      "offset_s": 2.4,
+      "role": "the measured span; the \"+$1,740\" badge drawn instead of printed"
+    },
+    {
+      "card": "page_species:spread",
+      "offset_s": 4.6,
+      "role": "when the argument IS the gap between two series, pooled by kinetics:ink"
+    }
+  ],
+  "window_s": 8.0,
+  "does": "Two measures share one x with their own honest zeros, the hand brackets the span the sentence measures, and the region between the two series bleeds full of ink when the gap IS the argument.",
+  "doctrine": [
+    "E96",
+    "BACKLOG R26-103"
+  ],
+  "status": "candidate",
+  "source": "recipes_r1 s4 (R14 slot)",
+  "count": 0
+}

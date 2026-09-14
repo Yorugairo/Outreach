@@ -1,0 +1,73 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:badge-ladder",
+  "title": "The badge ladder",
+  "aliases": [
+    {
+      "name": "The badge ladder (2.05 / 1.30)",
+      "source": "docs/research/runs/grill_pipeline-value/recipes_r1.md:74"
+    }
+  ],
+  "acts": [
+    "QUOTES",
+    "EXPLAINS"
+  ],
+  "members": [
+    {
+      "card": "dock_kind:image",
+      "offset_s": 0.0,
+      "role": "the proof card lands over the world and holds - the claim's evidence arrives before any qualification"
+    },
+    {
+      "card": "dock_option:badge",
+      "offset_s": 2.05,
+      "role": "the first badge stamps onto the card's rail, 2.05 s after it lands"
+    },
+    {
+      "card": "dock_option:badge",
+      "offset_s": 3.35,
+      "optional": true,
+      "role": "the second badge stamps one clause later, 1.30 s behind the first"
+    },
+    {
+      "card": "dock_option:badge",
+      "offset_s": 4.65,
+      "optional": true,
+      "role": "the third badge stamps on the next clause, the same 1.30 s beat"
+    },
+    {
+      "card": "dock_option:badge",
+      "offset_s": 5.95,
+      "optional": true,
+      "role": "the fourth badge stamps the last qualification, still on the 1.30 s beat"
+    }
+  ],
+  "window_s": 6.0,
+  "dials": {
+    "FIRST_BADGE_S": 2.05,
+    "BADGE_GAP_S": 1.3
+  },
+  "dials_source": "41 of 43 Steel docks, every first badge at dock_enter + 2.05 exactly; 40 gaps all exactly 1.30",
+  "does": "A proof card lands, then its qualifications stamp onto its rail one per clause: the first 2.05 s after the card arrives, every later one 1.30 s behind the last.",
+  "doctrine": [
+    "E96",
+    "BACKLOG R26-103"
+  ],
+  "status": "proven",
+  "proof": {
+    "project": "steel-and-paper",
+    "build": "build-f",
+    "timeline": "content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f/steel-and-paper.timeline.json",
+    "t": 50.4,
+    "members_at": [
+      50.4,
+      52.45,
+      53.75,
+      55.05,
+      56.35
+    ],
+    "scene": "s05"
+  },
+  "source": "recipes_r1 R1; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R1",
+  "count": 41
+}

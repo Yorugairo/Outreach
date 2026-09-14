@@ -1,0 +1,46 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:hook-opens-on-the-axes",
+  "title": "The hook that opens on the axes",
+  "aliases": [],
+  "acts": [
+    "SETS",
+    "TURNS"
+  ],
+  "members": [
+    {
+      "card": "page_enter:axes",
+      "offset_s": 0.0,
+      "role": "open on the axes register and answer immediately"
+    },
+    {
+      "card": "page_species:build_to",
+      "offset_s": 0.6,
+      "role": "the answer draws to its datum in the same breath as the question"
+    },
+    {
+      "card": "species:pull_back",
+      "offset_s": 3.2,
+      "role": "the hook's reverse - one number, then the headline round it"
+    },
+    {
+      "card": "species:ring",
+      "offset_s": 4.6,
+      "role": "the dashed ellipse as a MARKER on a datum (E56's one use)"
+    },
+    {
+      "card": "species:focus_zoom",
+      "offset_s": 6.0,
+      "role": "R4's declared \"focus\" phase; after a chart has entered"
+    }
+  ],
+  "window_s": 8.0,
+  "does": "The hook answers itself: the page is already on its axes at the first frame, the answer draws immediately, the frame pulls back to the headline round it and the ring marks the number.",
+  "doctrine": [
+    "E96",
+    "BACKLOG R26-103"
+  ],
+  "status": "candidate",
+  "source": "recipes_r1 s4 (R12 slot)",
+  "count": 0
+}

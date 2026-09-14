@@ -1,0 +1,36 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:the-decline-drawn-then-undrawn",
+  "title": "The decline drawn down, then taken back",
+  "aliases": [],
+  "acts": [
+    "EXPLAINS",
+    "RETRACTS"
+  ],
+  "members": [
+    {
+      "card": "page_builder:decline",
+      "offset_s": 0.0,
+      "role": "a single value's decline drawn down"
+    },
+    {
+      "card": "page_species:undraw",
+      "offset_s": 4.2,
+      "role": "the line unwinds when the sentence leaves the chart (E50), on kinetics:stroke reversed"
+    },
+    {
+      "card": "page_exit:retract",
+      "offset_s": 7.0,
+      "role": "the page empties before handing over to a plate"
+    }
+  ],
+  "window_s": 12.0,
+  "does": "The fall is drawn as a fall, and when the sentence leaves the chart the page gives it back: the line unwinds from where it stands and the sheet empties itself before the next thing mounts.",
+  "doctrine": [
+    "E96",
+    "BACKLOG R26-103"
+  ],
+  "status": "candidate",
+  "source": "recipes_r1 s4 (R15 slot)",
+  "count": 0
+}

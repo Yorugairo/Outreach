@@ -1,0 +1,50 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:spotlight-held-past-the-cut",
+  "title": "The spotlight that holds past its boundary",
+  "aliases": [
+    {
+      "name": "The spotlight that holds past its own boundary",
+      "source": "docs/research/runs/grill_pipeline-value/recipes_r1.md:174"
+    }
+  ],
+  "acts": [
+    "TURNS"
+  ],
+  "members": [
+    {
+      "card": "page_enter:snap",
+      "offset_s": 0.0,
+      "role": "the page arrives - snapped from the landed card here, mounted on the cream on the other two"
+    },
+    {
+      "card": "species:spotlight",
+      "offset_s": [
+        0.85,
+        11.23
+      ],
+      "role": "the light lands on the sentence's subject and is declared `held` with an `until` that runs past the scene's own span"
+    }
+  ],
+  "window_s": 12.0,
+  "does": "The subject of the sentence stays lit while the cut happens: the page arrives, the light lands on its datum and is declared held past the scene end, so nothing has to be relit on the other side.",
+  "doctrine": [
+    "E96",
+    "BACKLOG R26-103",
+    "E56"
+  ],
+  "status": "proven",
+  "proof": {
+    "project": "japan-tariff-trick",
+    "build": "build-short",
+    "timeline": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json",
+    "t": 1.82,
+    "members_at": [
+      1.82,
+      2.67
+    ],
+    "scene": "s02"
+  },
+  "source": "recipes_r1 R9; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R9",
+  "count": 2
+}

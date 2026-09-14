@@ -2,15 +2,25 @@
 
 The operator's watch begins only when this file is clean (the grill of 2026-09-11: "we don't come close enough to a
 first pass, then we spend a lot of time improving and iterating"). The runner is a pure function of the build: it runs
-the numbers first - the layout probe (M25's input), the motion gate, the species-by-sentence lint, the viewer's and the
-script gates' last verdicts - then grabs the OPENING as contact sheets (0:60 on a short, 3:00 on a long, at 2 s steps,
-12 tiles a sheet) and writes `<build>/SELF-WATCH.md`:
+the numbers first - the layout probe (M25's input), the motion gate, the ONE-SHOT FLOOR (M35-M42, P56 T6), the
+species-by-sentence lint, the viewer's and the script gates' last verdicts - then grabs the OPENING as contact sheets
+(0:60 on a short, 3:00 on a long, at 2 s steps, 12 tiles a sheet) and the RECIPE AUDIT SHEETS (one per beat that
+carries a proven recipe) and writes `<build>/SELF-WATCH.md`:
 
   section 1  the mechanical rows, every verdict filled by the tools (a FAIL here ends the report: NOT CLEAN)
-  section 2  the ten O-rows the AGENT fills by reading the sheets (Read on the PNGs, one sheet at a time) - the runner
-             writes them as TODO with the tile list; it never fills a read it did not do
+  section 2  the eleven O-rows the AGENT fills by reading the sheets (Read on the PNGs, one sheet at a time) - the
+             runner writes them as TODO with the tile list; it never fills a read it did not do
   section 3  ONE verdict line: `NOT CLEAN - <the first failing row>`, or `TODO - the agent reads the sheets and fills
-             O1-O10`. CLEAN is the agent's word, written after the read; a build handed to the operator carries CLEAN.
+             O1-O11`. CLEAN is the agent's word, written after the read; a build handed to the operator carries CLEAN.
+
+The floor rides as one row per id (E96, P56: a cut under a floor is never offered for a watch), measured by ONE
+subprocess of `gate_one_shot_floor.py` and parsed - the bar re-computes nothing, and a FAIL there reads
+`NOT CLEAN - the one-shot floor (M3x): ...`. M40 (the parity table) is JUDGE and M42 (the rates) is INFO: they ride as
+rows and never end the report; a floor gate that is missing or crashes is a WARN row naming it. The recipe audit sheet
+is the critic's raw material, never a judge: `<build>/self-watch/recipes/<beat>-<recipe>.png`, this cut's frames at the
+fire's member instants over the PROOF cut's frames at its own `members_at` - the proof build is read READ-ONLY through
+`probe.Probe` and never rebuilt (`review-link-frozen-copy`); a proof cut that is not on disk WARNs and is named. The
+doctrine page is `docs/content-video-engine/SELF-WATCH.md`.
 
 The bar also writes the POSTING side of the build, since a cut nobody can post is not one-shot: `publish_package.py`
 puts `<build>/publish/` on disk (the two descriptions, the pinned comment, the tags, the first frame, the checklist -
@@ -44,11 +54,22 @@ import lint_species_choice as L  # noqa: E402
 import gate_motion_density as G  # noqa: E402
 import probe as P  # noqa: E402
 import publish_package as PP  # noqa: E402
+try:                                            # the floor's own loaders (the recipes, the beats, the walk) - P56 T6
+    import gate_one_shot_floor as F  # noqa: E402
+    import recipe_walk as RW  # noqa: E402
+except Exception:                               # a checkout without the floor gate: the rows WARN, no sheet is drawn
+    F = RW = None
 
 HERE = Path(__file__).resolve().parent
+REPO = HERE.parents[2]
 GATE = HERE / "gate_motion_density.py"
+FLOOR = HERE / "gate_one_shot_floor.py"           # the one-shot floor (M35-M42), run as a subprocess like the gate
+FLOOR_ID_RE = re.compile(r"^M(?:3[5-9]|4[0-2])$")  # the ids the floor prints; the M40 table lines are not rows
+FLOOR_NAME = "the one-shot floor"                  # the section-1 row name, and what the verdict says
 REPORT_NAME = "SELF-WATCH.md"
 SHEET_DIR = "self-watch"
+RECIPE_DIR = "recipes"                             # <build>/self-watch/recipes/<beat>-<recipe>.png (the audit sheets)
+MAX_RECIPE_SHEETS = 24                             # sheets are frames: bounded, and the row says when it capped
 FIRST_FRAME = "frame-0000.0.png"          # the 0:00 frame the publish package copies (R26-8); `*-0000.0.png` is its glob
 LONG_FORM_S = 180.0                       # the script gates' route: a measured clock under 3:00 is a short
 OPENING_S = {"short": 60.0, "long": 180.0}   # the operator: "the first 3 minutes on long format, first 60 seconds on shorts"
@@ -68,6 +89,7 @@ O_ROWS = (
     ("O8", "the captions read as phrases, never chased (shorts: PHRASE captions; the strip never covers a figure; E62: under a card the caption keeps its size and MOVES to the free band - a shrink is a FAIL unless no band fits)"),
     ("O9", "every card lands on its word and leaves at the turn (E25 / E50): the landing tile and the exit tile named"),
     ("O10", "the chart is the world (E61): every plate row in the opening names its use; a plate that proves nothing and docks nothing is a bridge, said so"),
+    ("O11", "the recipe fired as its proof does: the members in order, at their offsets - name the beat where it did not"),
 )
 
 
@@ -92,6 +114,28 @@ def parse_gate(text: str) -> dict:
 def run_gate(build: Path) -> dict:
     r = subprocess.run([sys.executable, str(GATE), str(build)], capture_output=True, text=True, encoding="utf-8", errors="replace")
     return parse_gate((r.stdout or "") + "\n" + (r.stderr or ""))
+
+
+def run_floor(build: Path, project: Path | None = None) -> list[dict]:
+    """The one-shot floor's rows (M35-M42), from ONE subprocess of `gate_one_shot_floor.py` - nothing re-computed.
+
+    The gate prints `[LEVEL] M3x text` rows (plus M40's parity table and a `RESULT:` line, which `ROW_RE` ignores);
+    a gate that is not on disk, dies, or prints no row is ONE WARN row naming it - the bar never crashes on it."""
+    cmd = [sys.executable, str(FLOOR), str(build)] + (["--project", str(project)] if project else [])
+    def missing(why: str) -> list[dict]:
+        return [{"level": "WARN", "id": "M35-M42", "text": f"not measured - {why} ({FLOOR.name})"}]
+    if not FLOOR.is_file():
+        return missing("the floor gate is not on disk")
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace")
+    except Exception as e:                                   # no interpreter, no permission: say so, do not die
+        return missing(f"the floor gate could not be run: {type(e).__name__}: {trim(str(e), 160)}")
+    out = (r.stdout or "") + "\n" + (r.stderr or "")
+    rows = [row for row in parse_gate(out)["rows"] if FLOOR_ID_RE.match(row["id"])]
+    if not rows:
+        last = next((l.strip() for l in reversed(out.splitlines()) if l.strip()), "no output")
+        return missing(f"the floor gate printed no row (exit {r.returncode}): {trim(last, 200)}")
+    return rows
 
 
 def verdict_line(path: Path) -> str:
@@ -137,9 +181,186 @@ def opening_sheets(p: P.Probe, out_dir: Path, ts: list[float], tile: int) -> lis
     return P.contact_sheet([(t, p.png(t)) for t in ts], out_dir / "opening.png", tile, PER_SHEET)
 
 
+# ---------------------------------------------------------------- the recipe audit sheets (P56 T7, O11)
+def beat_of(beats: list[dict], t: float) -> int:
+    """The 1-based beat an instant lands in: the last beat that has started by then (a fire in a gap belongs to it)."""
+    n = 0
+    for i, b in enumerate(beats):
+        if float(b["start"]) - 0.005 <= t:
+            n = i + 1
+        else:
+            break
+    return n
+
+
+def proof_dir(proof: dict) -> Path | None:
+    """The PROOF cut's build dir: the parent of `proof.timeline` (repo-relative), or None when it is not on disk."""
+    rel = str((proof or {}).get("timeline") or "").replace("\\", "/")
+    if not rel:
+        return None
+    path = Path(rel) if Path(rel).is_absolute() else REPO / rel
+    return path.parent if path.is_file() else None
+
+
+def recipe_shots(build: Path, project: Path | None = None, catalog: Path | None = None,
+                 timeline_name: str | None = None, limit: int = MAX_RECIPE_SHEETS) -> tuple[list[dict], list[str]]:
+    """One shot per (beat, proven recipe) this cut fires: the fire's member instants, and the proof cut's own.
+
+    The fires are `recipe_walk.match` over this build's compiled timeline through the floor gate's loaders (the same
+    catalogue, the same beats file) - one shot per recipe per beat the fire STARTS in. Returns (shots, misses): a
+    recipe whose proof cut is not on disk is a miss, named, and draws no sheet (`review-link-frozen-copy`: the proof
+    is read where it lies, never rebuilt)."""
+    build = Path(build)
+    if F is None or RW is None:
+        return [], ["the floor gate is not importable - no recipe audit sheet was drawn"]
+    try:
+        tl_path = F.timeline_path(build, timeline_name)
+        timeline = json.loads(tl_path.read_text(encoding="utf-8"))
+        cat = Path(catalog or REPO / F.CATALOG_REL)
+        recipes = {str(r.get("id")): r for r in F.load_recipes(cat)}
+        beats = L.load_sentences(F.beats_path(build, timeline, project))
+        fires = F.recipe_fires(RW.events(timeline, F.card_options(cat)), list(recipes.values()))
+    except (Exception, SystemExit) as e:                     # a build mid-edit, a catalogue absent: say so, do not die
+        return [], [f"the fires could not be walked: {type(e).__name__}: {trim(str(e), 200)}"]
+    shots: list[dict] = []
+    misses: list[str] = []
+    seen: set[tuple] = set()
+    for rid in sorted(fires):
+        recipe = recipes[rid]
+        proof = recipe.get("proof") or {}
+        pdir = proof_dir(proof)
+        proof_at = [float(t) for t in (proof.get("members_at") or []) if t is not None]
+        if pdir is None or not proof_at:
+            misses.append(f"{rid}: the proof cut is not on disk ({proof.get('timeline') or 'no proof timeline'})")
+            continue
+        slug = rid.split(":", 1)[-1]
+        for fire in fires[rid]:
+            beat = beat_of(beats, fire.t)
+            key = (beat, rid)
+            if key in seen:
+                continue
+            seen.add(key)
+            shots.append({"key": key, "beat": beat, "recipe": rid, "slug": slug, "scene": fire.scene,
+                          "t": fire.t, "at": [float(t) for t in fire.members_at if t is not None],
+                          "proof_dir": pdir, "proof_name": f"{pdir.parent.name}/{pdir.name}",
+                          "proof_at": proof_at, "png": f"beat{beat:02d}-{slug}.png"})
+    shots.sort(key=lambda s: (s["beat"], s["recipe"]))
+    if len(shots) > limit:
+        misses.append(f"{len(shots)} (beat, recipe) pairs fire - the first {limit} are drawn (frames are bounded)")
+        shots = shots[:limit]
+    return shots, misses
+
+
+def recipe_frames(probe, shots: list[dict], build: Path) -> tuple[dict, dict, list[str]]:
+    """This cut's frames at every fire's member instants, in the session already open on this build.
+
+    A recipe whose PROOF cut is this same build is grabbed here too: playwright's sync API allows one session per
+    thread, so the proof cuts that live elsewhere are read afterwards by `proof_frames`."""
+    here: dict = {}
+    proof: dict = {}
+    warns: list[str] = []
+    build = Path(build).resolve()
+    for s in shots:
+        try:
+            here[s["key"]] = [(t, probe.png(t)) for t in s["at"]]
+            if Path(s["proof_dir"]).resolve() == build and s["recipe"] not in proof:
+                proof[s["recipe"]] = [(t, probe.png(t)) for t in s["proof_at"]]
+        except (Exception, SystemExit) as e:
+            warns.append(f"{s['recipe']} at beat {s['beat']}: {type(e).__name__}: {trim(str(e), 160)}")
+    return here, proof, warns
+
+
+def proof_frames(shots: list[dict], have: dict | None = None, open_probe=None) -> tuple[dict, list[str]]:
+    """{recipe id -> the PROOF cut's frames at its own `members_at`}: one READ-ONLY session per proof build.
+
+    The proof build is served and read where it lies - never rebuilt, never re-compiled (`review-link-frozen-copy`).
+    A proof cut that cannot be probed is a WARN naming it, never a crash."""
+    out = dict(have or {})
+    warns: list[str] = []
+    opener = open_probe or (P.Probe if hasattr(P, "Probe") else None)
+    by_dir: dict = {}
+    for s in shots:
+        if s["recipe"] in out:
+            continue
+        by_dir.setdefault(Path(s["proof_dir"]), {})[s["recipe"]] = s
+    for pdir, group in sorted(by_dir.items()):
+        try:
+            with opener(pdir) as q:                          # served and read where it lies; never rebuilt
+                for rid, s in sorted(group.items()):
+                    out[rid] = [(t, q.png(t)) for t in s["proof_at"]]
+        except (Exception, SystemExit) as e:
+            warns.append(f"the proof cut {pdir.name} could not be read: {type(e).__name__}: {trim(str(e), 160)}")
+    return out, warns
+
+
+def recipe_sheet(top: list, bottom: list, out: Path, tile: int, head: str,
+                 labels: tuple = ("this cut", "the proof")) -> Path | None:
+    """One sheet, two labelled rows of frames (change_report's two-frames-at-an-instant layout, a row per cut)."""
+    import io
+    from PIL import Image, ImageDraw
+    rows = [[(t, Image.open(io.BytesIO(b)).convert("RGB")) for t, b in r] for r in (top, bottom)]
+    ims = [im for r in rows for _t, im in r]
+    if not ims:
+        return None
+    th = max(round(tile * im.height / im.width) for im in ims)
+    cols = max(len(r) for r in rows)
+    head_h, pad = 26, 20
+    sheet = Image.new("RGB", (cols * tile, head_h + len(rows) * (th + pad)), (13, 15, 18))
+    d = ImageDraw.Draw(sheet)
+    d.text((8, 7), head, fill=(220, 227, 234))
+    for j, r in enumerate(rows):
+        y = head_h + j * (th + pad)
+        for i, (t, im) in enumerate(r):
+            sheet.paste(im.resize((tile, th)), (i * tile, y + pad))
+            label = f"{labels[j]} \u00b7 {t:.2f}s" if i == 0 else f"{t:.2f}s"
+            d.text((i * tile + 8, y + 4), label, fill=(220, 227, 234))
+    out.parent.mkdir(parents=True, exist_ok=True)
+    sheet.save(out, "PNG")
+    return out
+
+
+def write_recipe_sheets(build: Path, shots: list[dict], here: dict, proof: dict,
+                        tile: int = TILE_PX) -> tuple[list[Path], list[str]]:
+    """`<build>/self-watch/recipes/<beat>-<recipe>.png` per shot: this cut's members over the proof cut's own."""
+    out_dir = Path(build) / SHEET_DIR / RECIPE_DIR
+    paths: list[Path] = []
+    warns: list[str] = []
+    if not shots:
+        return paths, warns
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for old in out_dir.glob("*.png"):
+        old.unlink()
+    for s in shots:
+        top, bottom = here.get(s["key"]) or [], proof.get(s["recipe"]) or []
+        if not top or not bottom:
+            warns.append(f"{s['recipe']} at beat {s['beat']}: no frames for "
+                         f"{'this cut' if not top else 'the proof cut ' + s['proof_name']}")
+            continue
+        head = (f"beat {s['beat']} ({s['t']:.2f}s, {s['scene'] or 'no scene'}) \u00b7 {s['recipe']} \u00b7 "
+                f"this cut over {s['proof_name']} (the proof, read-only)")
+        p = recipe_sheet(top, bottom, out_dir / s["png"], tile, head)
+        if p is not None:
+            paths.append(p)
+    return paths, warns
+
+
+def recipe_row(sheets: list[Path], shots: list[dict], warns: list[str]) -> tuple[str, str, str]:
+    """The audit sheets as a section-1 row: INFO naming them (O11 is the agent's read), WARN when one is missing.
+
+    It can never FAIL: the sheets are the critic's raw material, and no judge rides in this plan (E96)."""
+    names = ", ".join(p.name for p in sheets)
+    beats = sorted({s["beat"] for s in shots})
+    detail = (f"{len(sheets)} sheet(s) in {SHEET_DIR}/{RECIPE_DIR}/ over {len(beats)} beat(s) carrying a recipe"
+              f"{': ' + names if names else ''}") if sheets else "no sheet: no proven recipe fires in this cut"
+    if warns:
+        detail += " \u00b7 " + "; ".join(warns)
+    return ("the recipe audit sheets (O11)", "WARN" if warns else "INFO", trim(detail, 1200))
+
+
 # ---------------------------------------------------------------- the report
-def section1(gate: dict, lint_lines: list[str], lint_counts: dict, viewer: str, sgates: str, fmt: str) -> list[tuple[str, str, str]]:
-    """(row, verdict, detail) - every verdict filled by a tool."""
+def section1(gate: dict, lint_lines: list[str], lint_counts: dict, viewer: str, sgates: str, fmt: str,
+             floor: "list[dict] | tuple" = ()) -> list[tuple[str, str, str]]:
+    """(row, verdict, detail) - every verdict filled by a tool. `floor` is `run_floor`'s rows, one row each."""
     g_detail = "; ".join(f"[{r['level']}] {r['id']} {trim(r['text'], 200)}" for r in gate["fails"] + gate["warns"]) or "no FAIL, no WARN"
     rows = [("motion gate (M01-M24)", gate["verdict"], trim(g_detail + " · " + gate["result"], 900))]
     m25 = gate["m25"]
@@ -156,6 +377,8 @@ def section1(gate: dict, lint_lines: list[str], lint_counts: dict, viewer: str, 
         rows.append(("E61 plates (long only)", "n/a", "a short"))
     rows.append(("the viewer (P36)", level_of(viewer), trim(viewer)))
     rows.append(("the script gates", level_of(sgates), trim(sgates)))
+    # the one-shot floor (E96, P56 T6): one row per id, the gate's own level - M40 JUDGE and M42 INFO ride, they never end it
+    rows += [(f"{FLOOR_NAME} ({r['id']})", r["level"], trim(r["text"], 900)) for r in floor]
     return rows
 
 
@@ -174,11 +397,23 @@ def publish_row(build: Path, project: Path) -> tuple[str, str, str]:
         return ("the publish package (R26-8)", "WARN", f"not written: {type(e).__name__}: {trim(str(e), 240)}")
 
 
+def floor_id(name: str) -> str:
+    """`the one-shot floor (M37)` -> `M37` (the row name carries the id, so the verdict can name it)."""
+    m = re.search(r"\(([^)]+)\)\s*$", name)
+    return m.group(1) if m else name
+
+
 def verdict(rows: list[tuple[str, str, str]]) -> str:
+    """ONE line: the FIRST failing section-1 row, or TODO. A floor FAIL names its id and lists the others after it."""
     bad = next(((name, detail) for name, lv, detail in rows if lv == "FAIL"), None)
     if bad:
-        return f"NOT CLEAN - {bad[0]}: {trim(bad[1], 240)}"
-    return "TODO - the agent reads the sheets and fills O1-O10; CLEAN is written after the read"
+        line = f"NOT CLEAN - {bad[0]}: {trim(bad[1], 240)}"
+        if bad[0].startswith(FLOOR_NAME):
+            others = [floor_id(n) for n, lv, _d in rows if lv == "FAIL" and n.startswith(FLOOR_NAME) and n != bad[0]]
+            if others:
+                line += " \u00b7 also under the floor: " + ", ".join(others)
+        return line
+    return "TODO - the agent reads the sheets and fills O1-O11; CLEAN is written after the read"
 
 
 def render(build: Path, project: Path, stem: str, fmt: str, sha: str, tl_name: str, runtime_s: float, aspect: str,
@@ -244,6 +479,10 @@ PLAIN = {
     "O10": ("Is the chart the world? When a picture is on screen instead, is it clearly a landing, a bridge or a reset?",
             "every picture has a job you can name",
             "a picture that proves nothing and docks nothing"),
+    "O11": ("On each recipe sheet, does the top row (this cut) do what the bottom row (the proof) does: the same "
+            "members, in order, at the same offsets?",
+            "the two rows read as the same move, beat by beat",
+            "a member missing, out of order, or arriving so late the combination reads as two unrelated things"),
 }
 
 # The instants an evidence cell names: `t=38`, `t=24-32`, `t=57.5 and 57.65`, `0:39-0:45`, `(9.1)`, `(48-50)`, a bare
@@ -488,18 +727,27 @@ def main(argv: list[str] | None = None) -> int:
     runtime_s = float(words.get("runtime_s") or 0.0)
     fmt = "long" if args.long else ("short" if args.short or runtime_s < LONG_FORM_S else "long")
     ts = opening_instants(runtime_s, fmt, args.step)
+    shots, r_warns = recipe_shots(build, project, timeline_name=args.timeline)   # the fires, before any browser
     with P.Probe(build, args.timeline) as p:
         P.write_gate(build, args.timeline, probe=p)                       # M25's input, keyed to this player
         sheets = opening_sheets(p, build / SHEET_DIR, ts, args.tile)
         # the frame at 0:00 at full stage size: the publish package's `first-frame.png` (R26-8 - what a platform picks
         # on its own when nobody uploads a thumbnail), and the tile O1 is read against
         (build / SHEET_DIR / FIRST_FRAME).write_bytes(p.png(0.0))
+        here, proof, w = recipe_frames(p, shots, build)                   # this cut's member frames, in this session
+        r_warns += w
         sha, tl_name, aspect = hashlib.sha256(p.html.read_bytes()).hexdigest()[:12], p.tl_path.name, p.aspect
+    proof, w = proof_frames(shots, proof)          # the proof cuts, one read-only session each, after this build's
+    r_warns += w
+    r_sheets, w = write_recipe_sheets(build, shots, here, proof, args.tile)
+    r_warns += w
     gate = run_gate(build)
+    floor = run_floor(build, project)              # ONE subprocess of the floor gate; its rows are parsed, not redone
     lint_lines, lint_counts = L.report(project, build=build.name, long=(fmt == "long"))
     viewer = verdict_line(project / f"{args.script}-VIEWER.md")
     sgates = verdict_line(project / f"{args.script}-GATES.md")
-    rows = section1(gate, lint_lines, lint_counts, viewer, sgates, fmt)
+    rows = section1(gate, lint_lines, lint_counts, viewer, sgates, fmt, floor)
+    rows.append(recipe_row(r_sheets, shots, r_warns))   # the audit sheets: O11's material, never a gate
     rows.append(publish_row(build, project))       # the posting side rides last: it reads the build, it never gates it
     text = render(build, project, args.script, fmt, sha, tl_name, runtime_s, aspect, rows, sheets, ts,
                   _dt.date.today().isoformat())

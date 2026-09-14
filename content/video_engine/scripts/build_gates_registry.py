@@ -65,6 +65,7 @@ BUILD_CMD = "python content/video_engine/scripts/build_gates_registry.py --write
 FAMILY = {
     "gate_opening_structure.py": "opening",      # split per function, see OPENING_FAMILY
     "gate_motion_density.py": "motion",
+    "gate_one_shot_floor.py": "floor",     # P56 T6: the whole-cut floors E96 ruled (M35-M42)
     "audit_script_doctrine.py": "audit",
     "lint_script_pattern.py": "lint",
     "viewer_score.py": "viewer",
@@ -72,7 +73,7 @@ FAMILY = {
 OPENING_FAMILY = {"run": "opening-long", "run_short": "opening-short"}
 OPENING_SHARED = "opening-shared"
 RUNNER = "run_script_gates.py"
-FAMILIES = ("opening-long", "opening-short", "opening-shared", "motion", "audit",
+FAMILIES = ("opening-long", "opening-short", "opening-shared", "motion", "floor", "audit",
             "lint", "viewer", "runner")
 
 LEVELS = ("FAIL", "WARN", "PASS", "JUDGE", "INFO")

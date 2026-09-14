@@ -227,6 +227,18 @@ FILL = "FILL: "       # a field only the author can write; pasted as-is it FAILS
 PROPOSE_HEADER = ("PROPOSE · draft rows only - every one is a CANDIDATE for the author to keep or delete, nothing was chosen by "
                   "count and no shot table was written (Stage 7 is AUTHORED: PIPELINE.md, \"There is no allocator\")")
 
+# The same refusal, one layer up (P56 T5): a RECIPE is a proven COMBINATION of cards (docs/EFFECTS-CATALOG.jsonl,
+# axis "recipe"), and the sheet prints the ones the sentence's act carries - proven first, then by count, nothing
+# else scored, nothing allocated, no shot table written. The proposer's LIMIT is inherited whole and said on the
+# sheet: a recipe whose members need a dock is proposed onto a beat with no dock, because this reads the world
+# UNDER the sentence and not its referent. The author binds or deletes - as with every draft row below it.
+RECIPE_MARK = "# recipe"      # every line the recipes block adds is a comment whose first word is this
+RECIPE_MEMBERS_SHOWN = 6      # the longest proven recipe carries 6 members; a longer one says how many are left
+PROPOSER_LIMIT = "`--propose` reads the WORLD UNDER a sentence, never the sentence's REFERENT."
+PROPOSE_RECIPES_HEADER = ("PROPOSE · recipes · the limit is unchanged: " + PROPOSER_LIMIT + " A recipe inherits it - a "
+                          "recipe whose members need a dock is proposed even where no dock is authored, and the author "
+                          "binds or deletes. Proven first, then by count; nothing else is scored, nothing allocated.")
+
 # What the map lists for an act that is NOT a row's species dict - the world, a dock or a page choice. Named here so a
 # new label in ACT_SPECIES cannot be dropped in silence (the test holds every label against this or a real kind).
 NOT_A_SPECIES = {
@@ -412,8 +424,65 @@ def draft_row(kind: str, fixed: dict, act: str, phrase: str, anchored: bool,
             + (" · " + " · ".join(notes) if notes else "") + " · when: " + when_of(kind, fixed))
 
 
+# ---------------------------------------------------------------- the recipes an act makes available (P56 T5)
+_RECIPE_KIT: tuple | None = None
+
+
+def recipe_kit() -> tuple[object | None, list[dict], str]:
+    """(the kit's `recipes` module, the catalogue records, why it is absent) - read once per process. The lint never
+    fails because the generated layer is missing: it says so on the sheet and goes on."""
+    global _RECIPE_KIT
+    if _RECIPE_KIT is None:
+        try:
+            from authoring import effects as FX
+            from authoring import recipes as RX
+            _RECIPE_KIT = (RX, FX.load(), "")
+        except (ImportError, OSError, ValueError) as exc:
+            _RECIPE_KIT = (None, [], str(exc))
+    return _RECIPE_KIT
+
+
+def offset_label(offset) -> str:
+    """A member's offset from the recipe's first member, as the record carries it (a range stays a range)."""
+    if isinstance(offset, (list, tuple)):
+        return f"{float(offset[0]):.2f}..{float(offset[1]):.2f}"
+    return f"{float(offset):.2f}"
+
+
+def recipe_line(preset: dict) -> str:
+    """One recipe on one line: its id, its title, its status, its members IN ORDER with their offsets, the instant
+    that proves it and how many times it fired (one fire is a decoration, four are a grammar - E96)."""
+    shown = preset["members"][:RECIPE_MEMBERS_SHOWN]
+    members = ", ".join(f"+{offset_label(m['offset_s'])} {m['card']}" for m in shown) or "-"
+    left = len(preset["members"]) - len(shown)
+    if left > 0:
+        members += f", +{left} more"
+    proof = preset.get("proof") or {}
+    where = (f"{proof.get('project')}/{proof.get('build')} @{float(proof['t']):.2f}" if proof
+             else f"none - {preset.get('candidate_reason')}")
+    return (f"{preset['id']}  \"{preset['title']}\"  [{preset['status']}]  members: {members}"
+            f"  proof: {where}  count {preset['count']}")
+
+
+def recipe_block(acts: list[str]) -> list[str]:
+    """The recipes the sentence's acts make available, one block per act, ABOVE that sentence's draft rows. An act
+    with none says so on its own line: silence would read as "there are none"."""
+    RX, records, why = recipe_kit()
+    if RX is None:
+        return [f"    {RECIPE_MARK}s: no effects catalogue readable here ({why}) - build_effects_catalog.py --write"]
+    out: list[str] = []
+    for act in acts:
+        presets = RX.for_act(act, records=records)
+        if not presets:
+            out.append(f"    {RECIPE_MARK}s for {act}: none in the catalogue for this act")
+            continue
+        out.append(f"    {RECIPE_MARK}s for {act} (proven first, then by count - the author binds or deletes):")
+        out += [f"      # {recipe_line(p)}" for p in presets]
+    return out
+
+
 def sentence_proposal(sent: dict, acts: list[str], rows: list[tuple], project: Path,
-                      take: list[dict] | None) -> list[str]:
+                      take: list[dict] | None, recipes: bool = True) -> list[str]:
     """The PROPOSAL block for one sentence: the sentence itself, a draft row per available species, and what its acts
     offer that is not a species row at all (a page, a dock, an overflow - said, never proposed)."""
     world = world_at(rows, sent["start"])
@@ -436,11 +505,11 @@ def sentence_proposal(sent: dict, acts: list[str], rows: list[tuple], project: P
             f" · on {world['kind'] + ':' + world['object'] if world else 'no world'}")
     tail = [f"    # not proposable on this world: {'; '.join(refused)}"] if refused else []
     tail += [f"    # not a species row (the world, a dock or a page): {'; '.join(not_species)}"] if not_species else []
-    return [head] + drafts + tail
+    return [head] + (recipe_block(acts) if recipes else []) + drafts + tail
 
 
 def propose(project: Path, build: str | None = None, table: Path | None = None,
-            words: Path | None = None) -> tuple[list[str], dict]:
+            words: Path | None = None, recipes: bool = True) -> tuple[list[str], dict]:
     """The proposal sheet. It writes nothing, counts nothing and chooses nothing: it offers what each sentence's own
     act makes available, and the author keeps or deletes."""
     table_p, words_p = resolve_inputs(project, build, table, words)
@@ -450,6 +519,8 @@ def propose(project: Path, build: str | None = None, table: Path | None = None,
              f"PROPOSE · {project.name} · {table_p.name} + {_rel(words_p, project)} · anchors are PHRASE"
              f" calls (authoring/words.py `at` reads the time out of the take) · every {FILL.strip()} field is the author's"
              + ("" if take else " · no words in the build's timeline - anchors are unchecked")]
+    if recipes:
+        lines.append(PROPOSE_RECIPES_HEADER)
     counts = {"proposed_for": 0, "rows": 0, "has_row": 0, "no_act": 0}
     for sent in sents:
         acts = classify(sent["text"])
@@ -459,7 +530,7 @@ def propose(project: Path, build: str | None = None, table: Path | None = None,
         if [e for e in row_events(rows, sent["start"], sent["end"], project) if not e.startswith("world ")]:
             counts["has_row"] += 1
             continue
-        block = sentence_proposal(sent, acts, rows, project, take)
+        block = sentence_proposal(sent, acts, rows, project, take, recipes)
         if not block:
             continue
         counts["proposed_for"] += 1

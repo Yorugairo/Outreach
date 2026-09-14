@@ -1,0 +1,41 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:badge-ladder-embedded",
+  "title": "The badge ladder on a declared surface",
+  "aliases": [],
+  "acts": [
+    "QUOTES",
+    "EXPLAINS"
+  ],
+  "members": [
+    {
+      "card": "dock_kind:image",
+      "offset_s": 0.0,
+      "role": "the proof card lands over the world and holds - the evidence arrives before any qualification"
+    },
+    {
+      "card": "dock_option:embed",
+      "offset_s": 0.0,
+      "role": "the card on a surface the plate declares, projected by kinetics:homography's four corners"
+    },
+    {
+      "card": "dock_option:badge",
+      "offset_s": 2.05,
+      "role": "the first badge stamps onto the card's rail, 2.05 s after it lands"
+    },
+    {
+      "card": "dock_option:badge",
+      "offset_s": 3.35,
+      "role": "the second badge stamps one clause later, 1.30 s behind the first"
+    }
+  ],
+  "window_s": 6.0,
+  "does": "R1's ladder, landed on the world instead of over it: the proof card is projected onto a surface the plate declares and its qualifications still stamp on the 2.05 / 1.30 beat.",
+  "doctrine": [
+    "E96",
+    "BACKLOG R26-103"
+  ],
+  "status": "candidate",
+  "source": "recipes_r1 s4 (R1 slot)",
+  "count": 0
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:the-named-slice-leaves",
+  "title": "The slice that leaves the pie",
+  "aliases": [],
+  "acts": [
+    "DIVIDES",
+    "NAMES"
+  ],
+  "members": [
+    {
+      "card": "page_builder:share",
+      "offset_s": 0.0,
+      "role": "the five-slice pie with one named slice"
+    },
+    {
+      "card": "page_species:peel",
+      "offset_s": 2.6,
+      "role": "the named slice leaves the pie, blood red (needs `page_builder:share`)"
+    },
+    {
+      "card": "page_species:note",
+      "offset_s": 4.8,
+      "role": "the side fact the chart cannot show, in the quiet zone"
+    }
+  ],
+  "window_s": 8.0,
+  "does": "The whole is drawn as five slices or fewer, the named one peels off blood red on its word, and the side fact the pie cannot carry is written by hand in the quiet zone.",
+  "doctrine": [
+    "E96",
+    "BACKLOG R26-103"
+  ],
+  "status": "candidate",
+  "source": "recipes_r1 s4 (R14 slot)",
+  "count": 0
+}

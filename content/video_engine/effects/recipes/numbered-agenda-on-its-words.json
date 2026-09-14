@@ -1,0 +1,41 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:numbered-agenda-on-its-words",
+  "title": "The numbered agenda on its own words",
+  "aliases": [],
+  "acts": [
+    "SETS",
+    "NAMES"
+  ],
+  "members": [
+    {
+      "card": "species:agenda",
+      "offset_s": 0.0,
+      "role": "the page-species form of the test card's numbered rows, staggered by kinetics:stagger"
+    },
+    {
+      "card": "species:chip",
+      "offset_s": 2.4,
+      "role": "one glyph per named thing, crossed out later (Bravos' rhyme)"
+    },
+    {
+      "card": "species:squiggle",
+      "offset_s": 2.6,
+      "role": "the stressed caption word underlined on the badge/row beat"
+    },
+    {
+      "card": "species:chip",
+      "offset_s": 4.8,
+      "role": "the second chip lands on its own named thing, on the same stagger"
+    }
+  ],
+  "window_s": 10.0,
+  "does": "The promise is enumerated on the page itself: two to four numbered rows arrive one per spoken clause, a glyph chip lands for each named thing, and the stressed word is underlined as it is said.",
+  "doctrine": [
+    "E96",
+    "BACKLOG R26-103"
+  ],
+  "status": "candidate",
+  "source": "recipes_r1 s4 (R5 slot)",
+  "count": 0
+}

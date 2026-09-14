@@ -1,0 +1,48 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:outro-clip-life",
+  "title": "The outro clip carries life",
+  "aliases": [],
+  "acts": [
+    "SETS"
+  ],
+  "members": [
+    {
+      "card": "plate_option:clip",
+      "offset_s": 0.0,
+      "role": "the world is a clip, not a plate - the outro's motion is the asset's own"
+    },
+    {
+      "card": "species:life",
+      "offset_s": 0.0,
+      "role": "the outro clip world declares that it animates on its own - nothing is drawn and the motion gate credits it"
+    },
+    {
+      "card": "exit:dip",
+      "offset_s": 6.2,
+      "role": "the clip runs its whole 6.2 s and the cut dips through black on its last frame"
+    }
+  ],
+  "window_s": 6.5,
+  "does": "The close: the outro clip is the world, its declared life carries the motion for its whole 6.2 s, and the cut dips through black on the last frame.",
+  "doctrine": [
+    "E96",
+    "BACKLOG R26-103",
+    "E49"
+  ],
+  "status": "proven",
+  "proof": {
+    "project": "japan-tariff-trick",
+    "build": "build-short",
+    "timeline": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json",
+    "t": 79.08,
+    "members_at": [
+      79.08,
+      79.076,
+      85.28
+    ],
+    "scene": "s12"
+  },
+  "source": "recipes_r1 R13; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R13",
+  "count": 1
+}
