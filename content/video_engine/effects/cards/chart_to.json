@@ -17,7 +17,7 @@
           "source": "docs/portable/OPERATOR-RULINGS.md:2446"
         }
       ],
-      "does": "The figure the market quotes becomes the number the viewer feels: the quoted metric morphs into its authored comparator, which holds with the metric beside it or gone.",
+      "does": "The figure the market quotes becomes the number the viewer feels: the metric's own outlines - measured off the page's ink - sag and BALL UP at its datum, and the ball becomes the comparator's glyphs (or bursts, or is thrown).",
       "when": null,
       "when_source": null,
       "author": {
@@ -28,8 +28,65 @@
       },
       "phases": [
         {
+          "name": "the ink sags",
+          "does": "`form: melt` (the default): the figure's own glyph outlines - measured off the page's ink by kinetics/contour.mjs - sag on melt.mjs's law, the top sinking and the foot hanging in seeded drips",
+          "trigger": "the chart_to's `at`, over MELT.MELT_END of `dur`",
+          "dials": {
+            "SAG_GAIN": "3.2",
+            "MELT.SAG": "0.40",
+            "MELT.TOP_SAG": "0.42"
+          }
+        },
+        {
+          "name": "the ink balls up",
+          "does": "every outline is carried by morph_a into ONE disc that holds the ink's own area (never MELT.BALL_R, a share of a PAGE's height), on melt's stepped clock: the number compiles into a heavy ball",
+          "trigger": "MELT.MELT_END of `dur`, to MELT.BALL_END",
+          "dials": {
+            "BALL_SWELL": "1.0",
+            "BALL_MIN": "0.34",
+            "MELT.HOLD": "2"
+          }
+        },
+        {
+          "name": "the ball becomes the comparator",
+          "does": "`then: morph` (the default): the ball's one ring is carried into the comparator's glyph rings by the pairing rule - by rank on centroid x, surplus rings born from the ball's own centre",
+          "trigger": "MELT.BALL_END of `dur`, over the rest",
+          "dials": {
+            "DEGEN_R": "0.6",
+            "MORPH_A.N": "96",
+            "SIMPLIFY": "1.2"
+          }
+        },
+        {
+          "name": "the ball bursts or is thrown",
+          "does": "`then: splash`: melt.mjs's seeded splatter at the figure's scale, drying as the hand writes. `then: throw`: the ball sits in its weight and is thrown off, the hand writing after melt's release",
+          "trigger": "MELT.BALL_END of `dur`",
+          "dials": {
+            "MELT.BURST_END": "0.40",
+            "MELT.ANTIC": "0.22",
+            "MELT.TO": "[1.02, 1.32]"
+          }
+        },
+        {
+          "name": "the quoted figure is taken away",
+          "does": "`form: streak` (P57 T12b): the glyphs melt where they stand, each a drip opening in the hand's reading order on melt's run. `form: collapse`: the hand takes the ink back, last glyph first",
+          "trigger": "the chart_to's `at`, over TAKE_SHARE of `dur`",
+          "dials": {
+            "TAKE_SHARE": "0.55",
+            "MELT_BOX": "3.2"
+          }
+        },
+        {
+          "name": "the hand re-writes the comparator",
+          "does": "on every form but the morph, the comparator's `text` is written at the SAME DATUM by the figure's own hand (species/figure.mjs's write clock), glyph after glyph",
+          "trigger": "TAKE_SHARE of `dur` (streak, collapse), the ending's own release (splash, throw)",
+          "dials": {
+            "FIGURE.WRITE": "0.6"
+          }
+        },
+        {
           "name": "the numeral counts",
-          "does": "the quoted numeral runs to the comparator's on min-jerk, in the metric's own clothes",
+          "does": "`form: count` (E60's counter, the form P57 T12 shipped): the quoted numeral runs to the comparator's on min-jerk, in the metric's own clothes",
           "trigger": "the chart_to's `at`",
           "dials": {
             "COUNT": "0.72"
@@ -37,7 +94,7 @@
         },
         {
           "name": "the words cross",
-          "does": "the text either side of the numeral crosses THROUGH ZERO - the metric's clothes become the comparator's where there is nothing on screen to swap",
+          "does": "`form: count`: the text either side of the numeral crosses THROUGH ZERO - the metric's clothes become the comparator's where there is nothing on screen to swap",
           "trigger": "SWAP of `dur`, over CROSS of it",
           "dials": {
             "SWAP": "0.5",
@@ -54,16 +111,52 @@
         },
         {
           "name": "the metric holds beside it",
-          "does": "hold: \"metric\" (the default) stands the quoted figure beside the comparator, quieter and smaller; hold: \"gone\" gives the comparator the stage",
-          "trigger": "SWAP of `dur`",
+          "does": "`hold: \"metric\"` stands the quoted figure beside the comparator at GHOST_A of the ink and GHOST_F of the size; `hold: \"gone\"` gives the comparator the stage",
+          "trigger": "once the comparator has landed",
           "dials": {
             "GHOST_A": "0.62",
-            "GHOST_F": "0.74"
+            "GHOST_F": "0.74",
+            "GAP": "14"
           }
         }
       ],
       "blends": [],
       "options": [
+        {
+          "token": "melt",
+          "means": "form: THE DEFAULT - the quoted figure's outlines sag on melt.mjs's law and BALL UP into one disc that holds the ink's own area; `then` says what becomes of the ball",
+          "source_set": "COMPARE_FORMS"
+        },
+        {
+          "token": "streak",
+          "means": "form: P57 T12b's text melt - the glyphs drip where they stand under melt's words streak, then the hand re-writes the comparator",
+          "source_set": "COMPARE_FORMS"
+        },
+        {
+          "token": "collapse",
+          "means": "form: the hand takes the quoted figure's ink back first (the undraw law), then re-writes the comparator",
+          "source_set": "COMPARE_FORMS"
+        },
+        {
+          "token": "count",
+          "means": "form: E60's counter - the numeral counts to the comparator's and the words cross through zero (P57 T12's form, kept as a setting)",
+          "source_set": "COMPARE_FORMS"
+        },
+        {
+          "token": "morph",
+          "means": "then: THE DEFAULT - the ball's one ring is carried by morph_a into the comparator's glyph rings (one ring into N), and the figure's <text> takes over at u = 1",
+          "source_set": "COMPARE_THENS"
+        },
+        {
+          "token": "splash",
+          "means": "then: the ball bursts onto the page (melt.mjs's seeded splatter) and the hand writes the comparator through the drying ink",
+          "source_set": "COMPARE_THENS"
+        },
+        {
+          "token": "throw",
+          "means": "then: the ball sits in its own weight and is thrown off the page (melt.mjs's flight), and the hand writes the comparator after it",
+          "source_set": "COMPARE_THENS"
+        },
         {
           "token": "metric",
           "means": "hold: the quoted metric stays legible beside the comparator (the default)",
@@ -83,13 +176,21 @@
         "form": "module",
         "path": "content/video_engine/scripts/species/compare.mjs",
         "symbol": "paintCompare",
-        "note": "species/compare.mjs on PAGE_PAINTERS.compare, dispatched from paintPerform after the figures it morphs; E60 counter form, not a glyph morph (a figure is SVG <text>)",
+        "note": "species/compare.mjs on PAGE_PAINTERS.compare, after the figures it morphs. P57 T12c (E76 s5): the default is composed from contour.mjs, morph_a.mjs, melt.mjs and figure.mjs",
         "also": [
-          "compareFrame"
+          "compareFrame",
+          "compareMorphFrame",
+          "compareBallFrame",
+          "compareForm",
+          "compareThen",
+          "compareShape",
+          "comparePairGroups",
+          "compareBallR"
         ]
       },
       "doctrine": [
         "E76",
+        "E76 s5",
         "E73",
         "E88",
         "E77",

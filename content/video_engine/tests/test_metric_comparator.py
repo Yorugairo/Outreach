@@ -50,6 +50,9 @@ def test_compare_is_the_sixth_chart_to_verb_and_carries_its_when():
     when = B.CHART_TO_WHEN["compare"]
     assert "E76" in when and "authored" in when, when
     assert B.COMPARE_TOL == 0.005 and B.COMPARE_HOLDS == ("metric", "gone")
+    assert B.COMPARE_FORMS == ("melt", "streak", "collapse", "count"), \
+        "P57 T12c: four forms, melt (the BALL) first because it is the default"
+    assert B.COMPARE_THENS == ("morph", "splash", "throw"), "P57 T12c: the ball's three endings, morph first"
 
 
 # ---- a valid row compiles, survives into the timeline, and M36 counts it ---------------------------------------------
@@ -152,3 +155,63 @@ def test_the_derive_evaluator_refuses_everything_that_is_not_arithmetic(expr, ne
 def test_the_derive_evaluator_reads_plain_arithmetic(expr, want):
     value, why = B.derive_compare(expr, {"pe": 24.8, "hist": 21.5})
     assert why is None and value == pytest.approx(want)
+
+
+# ---- P57 T12b: the FORM - the operator's correction of T12's counter -------------------------------------------------
+
+def test_the_form_defaults_to_melt_and_a_row_may_name_any_of_the_four():
+    """The operator, 2026-09-14: *"I don't understand why we can't do the full morph - just collapse or melt then
+    re-draw"*, and then (E76 s5) *"melt it into a ball, then we either throw it off the page, splatter it back on to
+    the canvas ... or morph it from the ball into the chart."* A row that names no form MELTS INTO A BALL. T12b's text
+    melt is kept whole as `streak`, and the counter T12 shipped as `count`."""
+    assert B.validate_species([FIGURE, compare_row()], (0, 0, 0), PLATE) == [], "no form authored: the default compiles"
+    for form in B.COMPARE_FORMS:
+        assert B.validate_species([FIGURE, compare_row(form=form)], (0, 0, 0), PLATE) == [], form
+
+
+def test_the_ball_s_ending_defaults_to_morph_and_a_row_may_name_any_of_the_three():
+    """E76 s5, the operator's three endings. A row that names no `then` MORPHS: the ball's one ring is carried into the
+    comparator's glyph rings. `splash` bursts it onto the page, `throw` throws it off, and the hand writes after both."""
+    assert B.validate_species([FIGURE, compare_row()], (0, 0, 0), PLATE) == [], "no ending authored: the default compiles"
+    for then in B.COMPARE_THENS:
+        assert B.validate_species([FIGURE, compare_row(then=then)], (0, 0, 0), PLATE) == [], then
+        assert B.validate_species([FIGURE, compare_row(form="melt", then=then)], (0, 0, 0), PLATE) == [], then
+
+
+def test_an_ending_nobody_named_is_refused_by_name():
+    for bad in ("morphed", "Splash", "", "splatter", "ball", 2, True):   # a None is dropped by compare_row, the way an unauthored key is
+        errs = B.validate_species([FIGURE, compare_row(then=bad)], (0, 0, 0), PLATE)
+        assert any("then must be one of morph|splash|throw" in e for e in errs), (bad, errs)
+
+
+def test_an_ending_on_a_form_that_makes_no_ball_is_refused():
+    """`then` is the BALL's ending. A row that names it on the streak, the collapse or the counter is a row about
+    nothing - and a key the compiler ignored would be a claim the page never paints."""
+    for form in ("streak", "collapse", "count"):
+        errs = B.validate_species([FIGURE, compare_row(form=form, then="morph")], (0, 0, 0), PLATE)
+        assert any("'then' is the BALL's ending" in e for e in errs), (form, errs)
+        assert any(f'form "{form}"' in e for e in errs), (form, errs)
+
+
+def test_a_form_nobody_named_is_refused_by_name():
+    """A typo in a shot table is a refusal, not a silent default - parse_exit's own rule, on this key."""
+    for bad in ("morph", "Melt", "", "fade", "counter", 3, True):
+        errs = B.validate_species([FIGURE, compare_row(form=bad)], (0, 0, 0), PLATE)
+        assert any("form must be one of melt|streak|collapse|count" in e for e in errs), (bad, errs)
+    errs = B.validate_species([FIGURE, compare_row(form="morph")], (0, 0, 0), PLATE)
+    assert any("the operator's correction" in e for e in errs), errs
+    assert any("SAG and BALL UP" in e for e in errs), errs
+
+
+def test_the_compiler_and_the_painter_name_THE_SAME_forms_and_endings():
+    """One grammar written twice: a form (or an ending) the compiler accepts and the painter refuses - or the other way
+    - is a row that compiles and paints nothing. `melt` and `morph` are first in both, because first is what an
+    unauthored row gets."""
+    import re
+    src = (ROOT / "content/video_engine/scripts/species/compare.mjs").read_text(encoding="utf-8")
+    m = re.search(r"COMPARE_FORMS = Object\.freeze\(\[(.*?)\]\)", src)
+    assert m, "species/compare.mjs no longer declares COMPARE_FORMS"
+    assert tuple(re.findall(r'"(\w+)"', m.group(1))) == B.COMPARE_FORMS
+    t = re.search(r"COMPARE_THENS = Object\.freeze\(\[(.*?)\]\)", src)
+    assert t, "species/compare.mjs no longer declares COMPARE_THENS"
+    assert tuple(re.findall(r'"(\w+)"', t.group(1))) == B.COMPARE_THENS

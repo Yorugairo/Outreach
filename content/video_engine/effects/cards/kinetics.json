@@ -196,6 +196,67 @@
       }
     },
     {
+      "id": "kinetics:contour",
+      "axis": "kinetics",
+      "token": "contour",
+      "title": "The contour kinetics module (marching squares)",
+      "aliases": [
+        {
+          "name": "the glyph outlines, computed in the engine",
+          "source": "docs/portable/OPERATOR-RULINGS.md (E76 s5)"
+        }
+      ],
+      "does": "Pure math inlined into the player: a thresholded bitmap in, CLOSED RINGS out - marching squares over the 0.5 level, the saddle resolved foreground-8-connected, holes told by containment, the staircase simplified off.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "not authored on a row: species/compare.mjs calls contourBitmap / contourShape on an offscreen raster of the figure's own <text>, at the figure's own face, size and weight",
+        "example": "contourShape(contourBitmap(img, w, h, 0.5), { tol: 1.2, map: (p) => [(p[0] + 0.5 - ox) / 4, (p[1] + 0.5 - oy) / 4] })",
+        "example_source": "content/video_engine/scripts/species/compare.mjs",
+        "check": "module"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/contour.mjs",
+        "object": "CONTOUR"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/contour.mjs",
+        "symbol": "contourRings",
+        "also": [
+          "CONTOUR",
+          "contourBitmap",
+          "contourSegments",
+          "contourWalk",
+          "contourShape",
+          "simplifyRing",
+          "pointInRing"
+        ],
+        "note": "P57 T12c / R26-70: a kinetics LAW, not a species - it registers no painter and declares no SPACE, and its region sits beside morph_a's (after arap) because it feeds it"
+      },
+      "doctrine": [
+        "E76 s5",
+        "43 s43.5",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "backlog": [
+        "R26-70"
+      ],
+      "proof": {
+        "golden": "compare-morph",
+        "test": "content/video_engine/tests/kinetics/contour.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "kinetics:ease",
       "axis": "kinetics",
       "token": "ease",

@@ -302,6 +302,18 @@ RECAST_DATA_TOL = 0.005                              # 0.5 % of the larger magni
 COMPARE_TOL = 0.005        # 0.5 % of the larger magnitude, RECAST_DATA_TOL's spirit: the derived number and the authored
                            # comparator are the SAME number or the row is refused - a near-miss is a refusal, never a tween
 COMPARE_HOLDS = ("metric", "gone")   # after the morph the quoted metric stays legible beside the comparator, or it is gone
+# P57 T12b + T12c, the operator's two corrections of T12's counter: HOW the quoted figure leaves before the comparator
+# stands at the same datum. `melt` is the DEFAULT and is E76 s5's own words (2026-09-14: "melt it into a ball, then we
+# either throw it off the page, splatter it back on to the canvas and build the chart/graph from that, or morph it from
+# the ball into the chart") - the figure's outlines sag and BALL UP, and `then` says what becomes of the ball. `streak`
+# is T12b's text melt (the glyphs drip where they stand under their own streak filter), kept whole; `collapse` is the
+# hand taking the ink back (the undraw law); `count` is T12's counter. Refused by name here and in species/compare.mjs,
+# so a typo in a shot table is a refusal, never a silent default.
+COMPARE_FORMS = ("melt", "streak", "collapse", "count")
+# ... and the ball's ENDING, the three the operator named. Only a form that MAKES a ball has one: `then` on any other
+# form is a row about nothing, and is refused rather than ignored.
+COMPARE_THENS = ("morph", "splash", "throw")
+COMPARE_BALL_FORM = "melt"
 COMPARE_SOURCE_TAGS = ("[DERIVED:", "[SOURCE:")   # E77's provenance label, required on the row
 PARK_SCALE = (0.3, 0.95)                             # a parked chart is still a chart: never below 0.3 of itself, and 0.95 is not a park; exactly 1.0 is an UN-PARK (2026-09-10)
 # SPECIES BY SENTENCE (P50 T1, 2026-09-11; the operator: "do we already have an understanding mapped in docs to how/where to
@@ -659,7 +671,10 @@ def _validate_metric_comparator(entry: dict) -> list[str]:
     """P57 T11 / R26-70: the `chart_to compare` row - E76's mechanism as a grammar.
 
     `metric` is the figure the market quotes, `comparator` the number the viewer feels, `inputs` + `derive` the
-    arithmetic between them, `source` the provenance (E77), `hold` what becomes of the metric after the morph. Every
+    arithmetic between them, `source` the provenance (E77), `form` HOW the quoted figure leaves before the hand
+    re-writes the comparator (P57 T12b/T12c: melt - the default ball - streak, collapse, or T12's count; `then` is the
+    ball's ending: morph, splash or throw), `hold` what becomes of the
+    metric after the morph. Every
     refusal here is a figure the row could not stand behind: a number with no arithmetic, an arithmetic that does not
     reproduce it, a comparator nobody named, a provenance nobody wrote."""
     errs: list[str] = []
@@ -719,6 +734,22 @@ def _validate_metric_comparator(entry: dict) -> list[str]:
         errs.append("chart_to compare: 'source' is required and starts with "
                     f"{' or '.join(COMPARE_SOURCE_TAGS)} - the provenance string E77 asks of a derived figure "
                     "(\"[DERIVED: from <sources>, <how>]\"); figures are never fabricated")
+    form = entry.get("form", COMPARE_FORMS[0])
+    if form not in COMPARE_FORMS:
+        errs.append(f"chart_to compare: form must be one of {'|'.join(COMPARE_FORMS)} (default \"{COMPARE_FORMS[0]}\": the "
+                    "quoted figure's outlines SAG and BALL UP, and `then` says what becomes of the ball; \"streak\": P57 "
+                    "T12b's text melt, the glyphs dripping where they stand before the hand re-writes the comparator; "
+                    "\"collapse\": the hand takes the ink back first; \"count\": E60's counter, T12's form) - P57 T12b + "
+                    "T12c, the operator's correction")
+    if "then" in entry:
+        if form != COMPARE_BALL_FORM:
+            errs.append(f"chart_to compare: 'then' is the BALL's ending and only form \"{COMPARE_BALL_FORM}\" makes a ball - "
+                        f"this row is form \"{form}\", which has nothing to end (P57 T12c)")
+        elif entry.get("then") not in COMPARE_THENS:
+            errs.append(f"chart_to compare: then must be one of {'|'.join(COMPARE_THENS)} (default \"{COMPARE_THENS[0]}\": the "
+                        "ball becomes the comparator's own glyphs, one ring carried into N by morph_a; \"splash\": it bursts "
+                        "onto the page and the hand writes through the splatter; \"throw\": it is thrown off the page and the "
+                        "hand writes after it) - E76 s5, the operator's three endings")
     if entry.get("hold", "metric") not in COMPARE_HOLDS:
         errs.append(f"chart_to compare: hold must be one of {'|'.join(COMPARE_HOLDS)} (default \"metric\": the quoted "
                     "figure stays legible beside the comparator; \"gone\": the comparator has the stage)")

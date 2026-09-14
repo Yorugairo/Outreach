@@ -893,230 +893,6 @@ async function mount(doc) {
      so inlining keeps it and node - where no registry exists - still imports the file for the math. */
   if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.span = paintSpan;
   /* KINETICS:END */
-  /* KINETICS:BEGIN compare */
-  /* SPACE: page */
-  /* species/compare.mjs - THE COMPARE (P57 T12; BACKLOG R26-70b; the grammar is P57 T11's sixth `chart_to` verb).
-     SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN compare and
-     KINETICS:END. It imports the ease law only, and its region sits with the kinetics laws rather than in the species
-     block at the foot of the file - span.mjs's reason: a PAGE species' math is called by the page's PERFORM layer,
-     which is written hundreds of lines above that block, and a const has to exist before the function that closes
-     over it is built.
-
-     WHEN: the sentence quotes the market's own figure and then says what it MEANS. E76 (the operator, 2026-09-13):
-     *"never p/e multiples isn't the rule, the rule should be to explore various display mechanisms, and that
-     comparators (like dollar per share or change per $) show immediate narrative value. In fact, showing the P/E and
-     then morphing it to a more visual number would be a great repeatable mechanism"*. The page has already WRITTEN
-     the quoted figure at its datum (a `figure` species - E50, and the compiler refuses a compare whose metric text no
-     figure on the page carries); this verb turns that written number into the one the viewer feels.
-
-     THE FORM BUILT HERE IS THE COUNTER (E60), NOT THE GLYPH MORPH - and why. Method A (kinetics/morph_a.mjs: ring-
-     normalise, resample by arc length, rotational alignment, vertex lerp) morphs OUTLINES, and a figure on a ledger
-     page is not an outline: paintFigure writes it as an SVG <text> with one <tspan> per character, laid out by the
-     browser's own font engine. There are no glyph paths to resample, and the only way to get them is to vendor a
-     font-to-path library and re-implement the page's type - which the slice refuses (a second type engine would
-     drift from the one that draws every other word on the page). The doctrine already names the honest form for a
-     number becoming another number: E60's counter, the breakthrough's pill counting to its exact string while the
-     scale rewrites under it. So the number COUNTS, on min-jerk, and the words around it cross THROUGH ZERO at the
-     swap - no character ever cuts.
-
-     THE LAW, a pure function of t (u = (t - at) / dur, clamped):
-       count   - the quoted numeral runs to the comparator's numeral on min-jerk over COUNT of the window. It counts
-                 between the two TEXTS' own numerals ("24.8x" -> "15 % dearer" counts 24.8 -> 15), never between the
-                 authored `value`s: those are the ARITHMETIC the compiler checks (E77 - `inputs` + `derive` + `source`,
-                 a comparator the row cannot reproduce is refused), and they may be in another scale entirely
-                 (0.1535 IS "15 % dearer"). Nothing reaches the screen that the row did not author.
-       swap    - the metric's clothes (the text either side of its numeral, and its decimals) become the comparator's
-                 at SWAP, at the instant the affix glyphs are at zero opacity: the swap is invisible because there is
-                 nothing on screen to swap.
-       label   - the comparator's `label` - what the number MEANS, the thing a multiple never says - is written
-                 BENEATH by the hand from LABEL_AT, glyph after glyph at the figure's own overlap.
-       hold    - `hold: "metric"` (the default) stands the quoted figure beside the comparator at GHOST_A from the
-                 swap on, at GHOST_F of its size, so the two can be read against each other; `hold: "gone"` gives the
-                 comparator the stage alone.
-     A SEEK IS THE PLAY: every cell's character and opacity is written from u each frame, so a cold seek into the
-     middle of the morph paints exactly what playing into it paints. The cells, the ghost and the sub are created
-     idempotently (the painter grows them and never rebuilds them), and a frame before `at` restores the figure's own
-     text and leaves its glyphs' opacity to the figure's own hand - so the page before the word is the page.
-     The dials below are ours to tune (42 s42.5), not findings. */
-
-  const COMPARE = Object.freeze({
-    COUNT: 0.72,      /* the share of the window the numeral counts over, on min-jerk: it lands before the window does, so the comparator is STILL while its label is read */
-    SWAP: 0.5,        /* where the metric's words become the comparator's - the affix crosses through zero exactly here, so no character is ever cut */
-    CROSS: 0.2,       /* ... and the share of the window the crossing itself takes, centred on the swap: the words stand while the number counts and dissolve only where they change, so the page never looks like it is fading out */
-    LABEL_AT: 0.55,   /* when the comparator's label starts being written beneath (just after the swap: the number is already the new one when it is named) */
-    GHOST_A: 0.62,    /* the held metric's opacity beside the comparator (hold: "metric") - present, and plainly the quieter of the two */
-    GHOST_F: 0.74,    /* ... and its size, as a share of the figure's own: the quoted figure is where the number started, not what the sentence is about now */
-    GAP: 14,          /* the room between the comparator and the held metric, in the chart's viewBox units (the figure's own 14 px offset from its datum) */
-    SUB_DY: 1.3,      /* the label's baseline beneath the figure, in sub sizes - paintFigure's own step for a figure's sub */
-    WIDTH_EM: 0.56,   /* a glyph's width as a share of its size, for a caller with no text metrics (node, a probe): the browser's own getComputedTextLength is used wherever there is one */
-    PAD: 4,           /* spare glyph cells beyond what either end needs - a count between them is never wider than this allows, and the painter still grows on demand */
-    OVERLAP: 1.6,     /* the hand's glyph overlap, the figure's and the span's own: a run that stops exactly at n leaves its last letters half-inked */
-  });
-
-  const cmp01 = (v) => Math.min(1, Math.max(0, v));
-
-  /* THE TEXT, split at its FIRST numeral: what is written before it, the numeral as quoted, what is written after,
-     how many decimals it carries and whether it is grouped by thousands. A partition - pre + num + post is the
-     string it came from, exactly - so the two ends of the morph are the authored strings and nothing else. */
-  const compareSplit = (text) => {
-    const s = text == null ? "" : String(text);
-    const m = /-?\d[\d,]*(?:\.\d+)?/.exec(s);
-    if (!m) return { pre: s, num: "", post: "", dec: 0, group: false, value: NaN };
-    const num = m[0], dot = num.indexOf(".");
-    return { pre: s.slice(0, m.index), num, post: s.slice(m.index + num.length),
-             dec: dot < 0 ? 0 : num.length - dot - 1, group: num.indexOf(",") >= 0,
-             value: parseFloat(num.replace(/,/g, "")) };
-  };
-
-  /* a counted value in one end's own clothes: its decimals, its thousands grouping, and a sign only when the
-     rounded number actually is one (a count that passes through -0.004 must not flash a minus) */
-  const compareFmt = (v, dec, group) => {
-    if (!Number.isFinite(v)) return "";
-    const s = Math.abs(v).toFixed(Math.max(0, Math.min(6, dec | 0)));
-    const cut = s.indexOf("."), whole = cut < 0 ? s : s.slice(0, cut), frac = cut < 0 ? "" : s.slice(cut);
-    return (v < 0 && parseFloat(s) !== 0 ? "-" : "")
-      + (group ? whole.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : whole) + frac;
-  };
-
-  /* THE FRAME at u: the whole state of the morph as numbers and one string, and the only place the law lives.
-       text   what is written this frame (u <= 0 is the metric AS QUOTED, u >= 1 the comparator AS AUTHORED)
-       value  the numeral this frame, min-jerk between the two quoted numerals - monotone in u, and null when
-              either end quotes no number at all (then the whole string cross-fades and nothing counts)
-       i0/i1  the numeral's span in `text`: those cells hold at full ink while the ones around them cross over
-       affix  the opacity of every cell outside the numeral - 1 at both ends, 0 exactly at the swap, and the
-              crossing itself only CROSS of the window wide, so the words stand while the number counts
-       sub    how far the comparator's label has been written; ghost: the held metric's opacity */
-  const compareFrame = (sp, u) => {
-    const S = sp || {}, M = compareSplit((S.metric || {}).text), C = compareSplit((S.comparator || {}).text);
-    const uu = cmp01(u), counts = Number.isFinite(M.value) && Number.isFinite(C.value);
-    const value = counts ? M.value + (C.value - M.value) * minJerk(cmp01(uu / COMPARE.COUNT)) : null;
-    const end = uu <= 0 ? M : uu >= 1 ? C : null, dress = end || (uu < COMPARE.SWAP ? M : C);
-    const num = end ? end.num : (counts ? compareFmt(value, dress.dec, dress.group || M.group) : dress.num);
-    const affix = end ? 1 : (uu < COMPARE.SWAP ? 1 - minJerk(cmp01((uu - (COMPARE.SWAP - COMPARE.CROSS)) / COMPARE.CROSS))
-                                               : minJerk(cmp01((uu - COMPARE.SWAP) / COMPARE.CROSS)));
-    return { text: dress.pre + num + dress.post, value, i0: dress.pre.length, i1: dress.pre.length + num.length,
-             affix, counts, u: uu,
-             sub: cmp01((uu - COMPARE.LABEL_AT) / (1 - COMPARE.LABEL_AT)),
-             ghost: cmp01((uu - COMPARE.SWAP) / (1 - COMPARE.SWAP)) * COMPARE.GHOST_A };
-  };
-
-  /* how many glyph cells the label needs for the whole morph: both authored strings, and the widest a counted
-     number in either end's clothes can be (the integer part of the larger magnitude, the deeper decimals, a point,
-     a sign and a comma group). The painter still grows on demand, so this is the room, never the limit. */
-  const compareCapacity = (sp) => {
-    const S = sp || {}, mt = (S.metric || {}).text == null ? "" : String((S.metric || {}).text);
-    const ct = (S.comparator || {}).text == null ? "" : String((S.comparator || {}).text);
-    const M = compareSplit(mt), C = compareSplit(ct);
-    const big = Math.max(Math.abs(M.value) || 0, Math.abs(C.value) || 0);
-    const digits = Number.isFinite(M.value) && Number.isFinite(C.value)
-      ? String(Math.floor(big)).length + Math.max(M.dec, C.dec) + 3
-      : Math.max(M.num.length, C.num.length);
-    const around = Math.max(M.pre.length + M.post.length, C.pre.length + C.post.length);
-    return Math.max(mt.length, ct.length, around + digits) + COMPARE.PAD;
-  };
-
-  /* one glyph of the label as the hand writes it - the figure's and the span's own share, with OVERLAP's slack so
-     the last letter is fully in exactly when the write ends */
-  const compareGlyph = (write, j, n) => {
-    const per = 1 / (Math.max(1, n | 0) + COMPARE.OVERLAP - 1);
-    return cmp01((write - j * per) / (per * COMPARE.OVERLAP));
-  };
-
-  /* the FIGURE this row morphs: the one the page wrote with the metric's own text (paintFigure's records carry
-     `sp.text`). The compiler has already refused a row with no such figure - here, a page that lost it paints
-     nothing rather than inventing a place to write. */
-  const compareFigure = (figures, sp) => {
-    const want = String((((sp || {}).metric) || {}).text == null ? "" : ((sp || {}).metric || {}).text).trim();
-    if (!want) return null;
-    return (figures || []).find((f) => f && f.sp && String(f.sp.text == null ? "" : f.sp.text).trim() === want) || null;
-  };
-
-  /* the written width of the label, for placing the held metric BESIDE it: the browser's own metrics where there
-     are any, the estimate where there are none (node, a probe) - both pure functions of the string on screen */
-  const compareWidth = (el, text, fs) =>
-    (el && typeof el.getComputedTextLength === "function" ? el.getComputedTextLength() : 0)
-    || String(text == null ? "" : text).length * fs * COMPARE.WIDTH_EM;
-
-  /* THE INK on one element: the attribute AND the inline style. The page's own class CSS carries an opacity for the
-     sub's class (`.lp-chart .bksub { opacity: .85 }`) and a class rule outranks a presentation ATTRIBUTE - the lesson
-     the bracket's inline `fill` was already written for (scene-evidence-engine.mjs: "the chart's class CSS outranks a
-     fill attribute"). The attribute is written too, so a caller with no CSSOM - node, a probe - still reads the law
-     off the element. Measured 2026-09-14: the held metric came back at .85 on every frame of the first render. */
-  const compareInk = (el, v) => {
-    if (!el) return;
-    const a = Math.min(1, Math.max(0, +v || 0)).toFixed(3);
-    el.setAttribute("opacity", a);
-    if (el.style) el.style.opacity = a;
-  };
-
-  /* the figure's OWN colour, read off the inline style paintFigure wrote it with (`font-size:NNpx;fill:COL`), so the
-     held metric and the comparator's label are the same ink as the number they belong to - never a colour of ours */
-  const compareFill = (fg) => {
-    const m = /fill:\s*([^;]+)/.exec(String((fg && fg.label && fg.label.getAttribute && fg.label.getAttribute("style")) || ""));
-    return m ? m[1].trim() : "var(--lp-chalk)";
-  };
-
-  /* THE MORPH'S OWN ELEMENTS, built once and grown, never rebuilt: the extra glyph cells the count needs beyond the
-     figure's own, the held metric beside it, and the comparator's label beneath. Idempotent on purpose - a cold seek
-     builds exactly what a play built, and a page whose figure was re-drawn gets them back on the next frame. */
-  const compareEnsure = (fg, sp, ctx, want) => {
-    const el = (ctx || {}).el;
-    let P = fg.__compare;
-    if (!P) {
-      const fs = +fg.fs || 28, fss = +fg.fss || fs * 0.6, anchor = fg.fits === false ? "end" : "start";
-      const col = compareFill(fg);
-      const ghost = el ? el("text", "bksub", fg.g, { x: 0, y: 0, "text-anchor": anchor, opacity: 0,
-        style: "font-size:" + (fs * COMPARE.GHOST_F).toFixed(1) + "px;fill:" + col + ";opacity:0" }) : null;
-      if (ghost) ghost.textContent = String(((sp.metric || {}).text) == null ? "" : (sp.metric || {}).text);
-      const sub = el ? el("text", "bksub", fg.g, { x: 0, y: 0, "text-anchor": anchor,
-        style: "font-size:" + fss.toFixed(1) + "px;fill:" + col + ";opacity:1" }) : null;
-      const lab = String(((sp.comparator || {}).label) == null ? "" : (sp.comparator || {}).label);
-      const sg = sub && el ? [...lab].map((ch) => { const ts = el("tspan", "", sub, { opacity: 0 });
-        ts.textContent = ch === " " ? " " : ch; return ts; }) : [];
-      P = fg.__compare = { cells: (fg.lg || []).slice(), ghost, sub, sg, fs, fss, anchor };
-    }
-    while (el && fg.label && P.cells.length < (want | 0)) {
-      const ts = el("tspan", "", fg.label, { opacity: 0 }); ts.textContent = ""; P.cells.push(ts);
-    }
-    return P;
-  };
-
-  /* THE PAINTER (the module rule's page half). Every number of it is the law above; this is the DOM. `sd` is what
-     the engine's chart_to dispatch hands it - the row `sp` and the page's built figures - `st` the page state, and
-     `ctx` the PAGE species context every page painter reaches the engine through (`el` is lpEl), so `node --test`
-     can call this with recorders and no DOM. */
-  const paintCompare = (sd, t, st, ctx) => {
-    const sp = (sd || {}).sp || {}, fg = compareFigure((sd || {}).figures, sp);
-    if (!fg || !fg.label) return;
-    const at = +sp.at || 0, u = cmp01((t - at) / Math.max(0.001, +sp.dur || 1)), F = compareFrame(sp, u);
-    const P = compareEnsure(fg, sp, ctx, Math.max(compareCapacity(sp), F.text.length));
-    const chars = [...F.text], before = t < at;
-    P.cells.forEach((ts, j) => {
-      const ch = j < chars.length ? chars[j] : "";
-      ts.textContent = ch === " " ? " " : ch;
-      if (before) { if (j >= (fg.lg || []).length) ts.setAttribute("opacity", 0); return; }   /* before the word the figure's own hand owns its glyphs; the cells this module added are not its business */
-      ts.setAttribute("opacity", (j >= chars.length ? 0 : (j >= F.i0 && j < F.i1 ? 1 : F.affix)).toFixed(3));
-    });
-    const fits = fg.fits !== false, x = +fg.x || 0, y = +fg.y || 0;
-    if (P.ghost) {
-      const w = compareWidth(fg.label, F.text, P.fs), gx = x + (fits ? 1 : -1) * (w + COMPARE.GAP);
-      P.ghost.setAttribute("x", gx.toFixed(1)); P.ghost.setAttribute("y", y.toFixed(1));
-      P.ghost.setAttribute("text-anchor", fits ? "start" : "end");
-      compareInk(P.ghost, before || sp.hold === "gone" ? 0 : F.ghost);
-    }
-    if (P.sub) {
-      const step = P.fss * COMPARE.SUB_DY;
-      P.sub.setAttribute("x", x.toFixed(1)); P.sub.setAttribute("y", (y + step * (fg.sub ? 2 : 1)).toFixed(1));
-      P.sub.setAttribute("text-anchor", fits ? "start" : "end");
-      compareInk(P.sub, 1);   /* the class's own .85 would dim the label the hand is writing; its glyphs carry the write */
-      P.sg.forEach((ts, j) => ts.setAttribute("opacity", (before ? 0 : compareGlyph(F.sub, j, P.sg.length)).toFixed(3)));
-    }
-  };
-
-  /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment, so
-     inlining keeps it and node - where no registry exists - still imports the file for the math. */
-  if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.compare = paintCompare;
-  /* KINETICS:END */
   /* KINETICS:BEGIN thread */
   /* species/thread.mjs - THE WIRE (P50 T15, HF-16: "the three threads - the wire, the ruler, the protagonist chip -
      one continuous line as the film's spine"). SOURCE OF TRUTH, inlined into the scene-evidence player by
@@ -2400,6 +2176,962 @@ async function mount(doc) {
 
   /* the ring's area, for a caller reporting a frame without re-deriving it (the centroid is arap.mjs's `centroid`) */
   const morphAArea = (pts) => Math.abs(polyArea(pts));
+  /* KINETICS:END */
+  /* KINETICS:BEGIN contour */
+  /* kinetics/contour.mjs - THE CONTOUR (P57 T12c; BACKLOG R26-70; E76 s5). SOURCE OF TRUTH, inlined into the
+     scene-evidence player by sync_kinetics.py between KINETICS:BEGIN contour and KINETICS:END, AFTER arap - it
+     imports arap.mjs's shoelace area and area centroid, and the import order IS the region order. Its region sits
+     beside morph_a's, because it exists to FEED morph_a: rings in, a morph out.
+
+     WHY IT EXISTS - the operator, 2026-09-14 (E76 s5): *"the entire point of having our math and engine is that even
+     for complex/difficult things we should be able to create solutions. it's just math."* P57 T12 had refused the
+     glyph-outline morph on the grounds that an SVG <text> has no outlines to resample and a font-to-path library
+     would be a second type engine. Both halves of that were wrong: the outlines do not have to be FETCHED from the
+     font, they can be MEASURED off the ink the page already draws. Draw the text once on an offscreen canvas at a
+     working scale, threshold its alpha, and walk the 0.5 level with MARCHING SQUARES: the rings that come back are
+     the glyphs, to a fraction of a page pixel, in the page's own face, at the page's own size and weight. No font
+     file is parsed and no second type engine stands beside the browser's.
+
+     BITMAP IN, RINGS OUT - and nothing else. This module knows nothing of canvases, glyphs, figures or morphs:
+       contourBitmap(alpha, w, h, level, stride, offset)  a typed array of samples -> { w, h, data } of 0/1
+       contourRings(bmp)                                  the bitmap -> closed rings, each with its hole/parent
+       simplifyRing(pts, tol)                             Douglas-Peucker on a CLOSED ring
+       pointInRing(p, ring)                               the even-odd crossing test the parenting is built on
+
+     SAMPLE SPACE: a ring's coordinates are in SAMPLE space - sample (i, j) is the CENTRE of bitmap pixel (i, j), so a
+     solid 3x3 block of pixels at (1..3, 1..3) comes back as the square (0.5, 0.5) - (3.5, 3.5), area 9. The grid is
+     padded with one ring of zero samples before the walk, so ink that touches the bitmap's edge still closes.
+
+     THE AMBIGUOUS SADDLE, stated. Each cell's four corners give a 4-bit code; twelve of the sixteen cases carry one
+     segment and are unambiguous. The two SADDLES - code 5 (the top-right and bottom-left corners are ink) and code 10
+     (the top-left and bottom-right are) - carry two segments, and which two is a choice about topology, not about
+     geometry: either the two ink corners are joined through the cell's centre or the two background corners are.
+     THE RULE HERE: THE FOREGROUND IS 8-CONNECTED (and therefore the background is 4-connected). The two segments cut
+     the two BACKGROUND corners off, and the ink runs through the middle - so code 5 emits L-T and B-R, code 10 emits
+     T-R and L-B. A glyph is one connected stroke of ink and the paper around it is one connected field; the other
+     choice splits a hairline join - the thin waist of an "8" at a small raster - into two rings that the morph would
+     then have to pair as two glyphs. Chosen once, here, so every caller gets the same rings from the same bitmap.
+
+     EVERY RING IS CLOSED and wound so its shoelace area is POSITIVE; `hole` and `parent` carry the topology instead
+     of the winding, because a caller that fills with even-odd does not care about winding and a caller that fills
+     with nonzero (species/compare.mjs does) reverses the holes itself, at the moment it emits them. All of it is a
+     pure function of the bitmap: the same samples give the same rings, vertex for vertex, so a cold seek that
+     re-rasterises lands exactly where a play did.
+     The dials below are ours to tune (42 s42.5), not findings. */
+
+  const CONTOUR = Object.freeze({
+    EPS: 1e-9,      /* a degenerate segment: two ring vertices closer than this are one vertex */
+    LEVEL: 0.5,     /* the threshold a sample is ink AT or above, as a share of the sample's full value */
+  });
+
+  /* ---- the bitmap --------------------------------------------------------------------------------------------- */
+  /* A typed array of samples (canvas RGBA's alpha channel: stride 4, offset 3) thresholded at `level` of `max` into
+     a bitmap of 0 and 1. `w * h` samples are read in row-major order, the order a canvas hands them back. */
+  const contourBitmap = (src, w, h, level = CONTOUR.LEVEL, stride = 4, offset = 3, max = 255) => {
+    const W = Math.max(0, w | 0), H = Math.max(0, h | 0), cut = Math.max(0, Math.min(1, +level)) * max;
+    const data = new Uint8Array(W * H);
+    for (let i = 0; i < W * H; i++) data[i] = src[i * stride + offset] >= cut ? 1 : 0;
+    return { w: W, h: H, data };
+  };
+
+  /* ---- the walk ----------------------------------------------------------------------------------------------- */
+  /* the padded sample: (x, y) runs over [0, w + 1] x [0, h + 1] and everything outside the bitmap is paper */
+  const cSample = (bmp, x, y) =>
+    (x <= 0 || y <= 0 || x > bmp.w || y > bmp.h) ? 0 : (bmp.data[(y - 1) * bmp.w + (x - 1)] ? 1 : 0);
+
+  /* the four edge midpoints of a cell whose top-left sample is (x, y), keyed on doubled coordinates so a midpoint is
+     an integer key and two cells that share an edge chain through the same one */
+  const cMid = { T: [0.5, 0], R: [1, 0.5], B: [0.5, 1], L: [0, 0.5] };
+  const cKey = (x, y) => Math.round(x * 2) + "," + Math.round(y * 2);
+
+  /* THE CASE TABLE: code = tl*8 + tr*4 + br*2 + bl, the segments as pairs of edge names. The two saddles carry the
+     FOREGROUND-8-CONNECTED choice stated in the header (5 -> L-T and B-R; 10 -> T-R and L-B). */
+  const CONTOUR_CASES = [
+    [], [["L", "B"]], [["B", "R"]], [["L", "R"]],
+    [["T", "R"]], [["L", "T"], ["B", "R"]], [["T", "B"]], [["L", "T"]],
+    [["T", "L"]], [["T", "B"]], [["T", "R"], ["L", "B"]], [["T", "R"]],
+    [["L", "R"]], [["B", "R"]], [["L", "B"]], [],
+  ];
+
+  /* every segment the bitmap's 0.5 level carries, as pairs of midpoint keys, with the points they name */
+  const contourSegments = (bmp) => {
+    const segs = [], pts = new Map();
+    for (let y = 0; y <= bmp.h; y++) {
+      for (let x = 0; x <= bmp.w; x++) {
+        const code = cSample(bmp, x, y) * 8 + cSample(bmp, x + 1, y) * 4
+                   + cSample(bmp, x + 1, y + 1) * 2 + cSample(bmp, x, y + 1);
+        for (const [a, b] of CONTOUR_CASES[code]) {
+          const pa = [x + cMid[a][0], y + cMid[a][1]], pb = [x + cMid[b][0], y + cMid[b][1]];
+          const ka = cKey(pa[0], pa[1]), kb = cKey(pb[0], pb[1]);
+          pts.set(ka, pa); pts.set(kb, pb);
+          segs.push([ka, kb]);
+        }
+      }
+    }
+    return { segs, pts };
+  };
+
+  /* the segments chained into closed rings. Every midpoint is shared by exactly two cells and each of them puts
+     exactly one segment end on it, so every key has degree two and the walk is forced - no nearest-point search,
+     no tolerance, and a bitmap whose rings touch at a saddle is resolved by the case table above, never here. */
+  const contourWalk = (bmp) => {
+    const { segs, pts } = contourSegments(bmp), at = new Map(), used = new Array(segs.length).fill(false);
+    segs.forEach(([a, b], i) => {
+      if (!at.has(a)) at.set(a, []);
+      if (!at.has(b)) at.set(b, []);
+      at.get(a).push(i); at.get(b).push(i);
+    });
+    const rings = [];
+    for (let s = 0; s < segs.length; s++) {
+      if (used[s]) continue;
+      used[s] = true;
+      const start = segs[s][0];
+      let key = segs[s][1];
+      const ring = [pts.get(start), pts.get(key)];
+      while (key !== start) {
+        const next = (at.get(key) || []).find((i) => !used[i]);
+        if (next === undefined) break;            /* an open chain cannot happen on a padded bitmap; a broken one is not walked twice */
+        used[next] = true;
+        key = segs[next][0] === key ? segs[next][1] : segs[next][0];
+        ring.push(pts.get(key));
+      }
+      if (key === start) ring.pop();               /* the walk closes on its own start: a ring is not given that vertex twice */
+      if (ring.length >= 3) rings.push(ring.map((p) => [p[0] - 1, p[1] - 1]));   /* the padded grid -> sample space */
+    }
+    return rings;
+  };
+
+  /* ---- the topology ------------------------------------------------------------------------------------------- */
+  /* the even-odd crossing test (Franklin's), on a ring given as [x, y] pairs */
+  const pointInRing = (p, ring) => {
+    let inside = false;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const a = ring[i], b = ring[j];
+      if ((a[1] > p[1]) !== (b[1] > p[1])
+          && p[0] < (b[0] - a[0]) * (p[1] - a[1]) / ((b[1] - a[1]) || CONTOUR.EPS) + a[0]) inside = !inside;
+    }
+    return inside;
+  };
+
+  /* THE RINGS: walked, wound positive, and told apart. A ring is a HOLE when it sits inside an ODD number of the
+     others (a counter island inside a hole - the dot inside a hollow "i" - is ink again), and its `parent` is the
+     smallest ring that contains it. Sorted largest area first, so a parent is always found before its children. */
+  const contourRings = (bmp) => {
+    const walked = contourWalk(bmp).map((pts) => {
+      const a = polyArea(pts);
+      return { pts: a < 0 ? pts.slice().reverse() : pts, area: Math.abs(a), c: centroid(pts) };
+    }).sort((p, q) => q.area - p.area);
+    return walked.map((r, i) => {
+      let parent = -1, depth = 0;
+      for (let j = 0; j < i; j++) {
+        if (!pointInRing(r.pts[0], walked[j].pts)) continue;
+        depth++;
+        if (parent < 0 || walked[j].area < walked[parent].area) parent = j;
+      }
+      return { pts: r.pts, area: r.area, c: r.c, hole: depth % 2 === 1, parent };
+    });
+  };
+
+  /* ---- the simplify ------------------------------------------------------------------------------------------- */
+  /* the perpendicular distance from p to the segment ab (to a, where the segment is a point) */
+  const cPerp = (p, a, b) => {
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy;
+    if (L < CONTOUR.EPS) return Math.hypot(p[0] - a[0], p[1] - a[1]);
+    const t = Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / L));
+    return Math.hypot(p[0] - (a[0] + dx * t), p[1] - (a[1] + dy * t));
+  };
+  const cDP = (pts, i, j, tol, keep) => {
+    let worst = -1, at = -1;
+    for (let k = i + 1; k < j; k++) { const d = cPerp(pts[k], pts[i], pts[j]); if (d > worst) { worst = d; at = k; } }
+    if (worst <= tol || at < 0) return;
+    keep[at] = true;
+    cDP(pts, i, at, tol, keep); cDP(pts, at, j, tol, keep);
+  };
+  /* DOUGLAS-PEUCKER ON A CLOSED RING: split it at its first vertex and the vertex FARTHEST from that one - two open
+     polylines that share both ends - so neither anchor of the simplification is arbitrary, and the staircase a
+     threshold leaves on a raster comes off without the ring's own corners coming with it. `tol` is in the ring's
+     own units, and a ring that would simplify below three vertices is handed back whole. */
+  const simplifyRing = (pts, tol) => {
+    const n = pts.length;
+    if (n < 4 || !(tol > 0)) return pts.slice();
+    let far = 0, best = -1;
+    for (let i = 1; i < n; i++) {
+      const d = Math.hypot(pts[i][0] - pts[0][0], pts[i][1] - pts[0][1]);
+      if (d > best) { best = d; far = i; }
+    }
+    const keep = new Array(n).fill(false);
+    keep[0] = true; keep[far] = true;
+    cDP(pts, 0, far, tol, keep);
+    const tail = pts.slice(far).concat([pts[0]]), tk = new Array(tail.length).fill(false);
+    tk[0] = true; tk[tail.length - 1] = true;
+    cDP(tail, 0, tail.length - 1, tol, tk);
+    for (let k = 1; k < tail.length - 1; k++) if (tk[k]) keep[far + k] = true;
+    const out = pts.filter((_p, i) => keep[i]);
+    return out.length >= 3 ? out : pts.slice();
+  };
+
+  /* THE ONE CALL A RASTER MAKES: the rings of a bitmap, simplified and carried out of sample space by one affine
+     step. `map` takes a sample point to the caller's own units (page px, viewBox units) and is applied AFTER the
+     simplification, so the tolerance is always stated in the units the bitmap was measured in. */
+  const contourShape = (bmp, o = {}) => {
+    const tol = +o.tol || 0, map = typeof o.map === "function" ? o.map : null;
+    return contourRings(bmp).map((r) => {
+      const pts = simplifyRing(r.pts, tol);
+      return { pts: map ? pts.map(map) : pts, hole: r.hole, parent: r.parent };
+    });
+  };
+  /* KINETICS:END */
+  /* KINETICS:BEGIN melt */
+  /* SPACE: stage */
+  /* species/melt.mjs - THE MELT EXIT (P52 T9; BACKLOG R26-15, reworked to E88 by R26-76). SOURCE OF TRUTH, inlined into
+     the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN melt and KINETICS:END, AFTER ink, squash,
+     stopaction, arap and morph_a - it imports all five, and the import order IS the region order.
+
+     E88 (the operator, 2026-09-13): "i envisioned melting only the chart information on the page, and compiling that into
+     a dense heavy ball akin to the reference, and then either throwing it off of the screen, and drawing a new chart or
+     splattering that back onto the page to either form a new chart or a narrative plate springs up, reading as having been
+     \"painted\" - i didn't imagine melting the whole charcoal board". P52 T9 melted the WORLD's area polygon, so the board
+     left with the chart. Now THE CHART'S INK melts and the BOARD STAYS:
+       the INK   a clone of the outgoing world with its board hidden (`.meltink`: the page's cream, grain, roll edge, field
+                 and field plate invisible) - the title, the series, the bars, the marks, the labels, the rail. It wears
+                 the melt's mask, its pixel filter and its squeeze.
+       the BOARD the outgoing world itself with its ink hidden (`.meltboard`) - the cream ground, the deckle, the charcoal.
+                 It never moves; under a splash it wears the REVEAL mask the painting grows through.
+
+     It registers NO painter: a melt is not a species kind, it is an EXIT law the engine's scene loop calls by name where
+     it handles the suck. `exit` names the transition INTO the scene it sits on (E47), so `s05.exit = "melt"` melts s04's
+     chart as s05 begins.
+
+     FOUR PHASES over the exit's window u = clamp01((t - t_boundary) / secs), the shares fixed dials that sum to 1:
+       melt   u 0    - 0.30   the ink SAGS and RUNS: its own pixels smear downward (RUN_COPIES offset copies merged) under
+                              the GOOEY THRESHOLD (a Gaussian blur re-steepened by a linear alpha ramp - HyperFrames'
+                              morph-text trick, our K-M chain's `feFuncA slope`), so neighbouring marks FUSE into one liquid
+                              body; the ink box's outline sags over seeded drips as its mask.
+       ball   u 0.30 - 0.55   the ink SQUEEZES toward its centroid while the outline MORPHS to a circle of BALL_R (morph_a,
+                              the vertex method) on the STEPPED clock (stopaction `stepped`, hold 2 - on 2s), and a DENSE
+                              ink body - the marks' own colours mixed by Kubelka-Munk and concentrated DENSITY times - comes
+                              up opaque over it: the chart compiles into a heavy ball.
+       end    u 0.55 - 1      one of three AUTHORED endings:
+         throw          the ball lands in its own weight (stopaction impactSquash on MASS, SQUASH, on 2s) for ANTIC of the
+                        phase, then is THROWN off the stage (throwXf run backwards: a landing played in reverse IS a launch),
+                        a low arc and little tumble because it is heavy. The board is up until the launch; the next scene's
+                        chart then draws on the same board (the engine delays that page's clock by meltDrawDelay).
+         splash:chart   the ball SLAMS onto the board (the same squash), flattens, and bursts into droplets that LAND on the
+                        board (soakStepped's staircase); the landed drops then grow as seeded stains through the board's
+                        REVEAL mask with a wet ink rim, and the next page's chart - already built beneath - is what shows
+                        through them: the chart arrives out of the splatter, not by its build.
+         splash:plate   the same splatter, and what grows through the stains is the next scene's NARRATIVE PLATE, springing
+                        up (a small scale settle) as if painted by that ink; the board is painted over from the drops out.
+       gone   u >= 1          the outgoing world, its ink and the overlay are hidden, exactly as the suck ends.
+
+     Everything above the painter is a pure function of (t0, t, the rect, the dials, rnd): the same t twice is the same
+     object, so a scrubbed frame is the played frame and a cold render is the warm one. `rnd(k)` is the caller's seeded
+     hash in [0, 1) - the engine passes lpHash bound to the scene, never Math.random.
+
+     The AUTHORED FORM: `melt` | `melt:throw` | `melt:splash:chart` | `melt:splash:plate`, with `:<s>` (the length) and, on a
+     throw only, `:<x>,<y>` (the exit point in STAGE fractions), in any order after the name. A bare `melt:splash` is
+     REFUSED: since E88 a splash has two endings that need two different incoming worlds (a chart page, a plate), and an
+     alias would pick one silently. build_scene_timeline_f.py's parse_exit reads the same grammar and refuses anything
+     else, naming the row. Every number here is a starting dial (doc 42 s42.5); HG2 tunes them by eye on the proof frames. */
+
+  const MELT = Object.freeze({
+    S: 1.6,            /* the exit's default length [DERIVED: the suck's 0.3 s is one phase of collapse; a melt is three
+                          (the sag, the ball, the ending) plus a throw's FLIGHT_S 0.45 - 3 x 0.38 + 0.45 ~ 1.6] */
+    MELT_END: 0.30,    /* the phase shares as CUTS of u: melt [0, 0.30), ball [0.30, 0.55), ending [0.55, 1] */
+    BALL_END: 0.55,
+    /* THE SAG (the ink box's outline, the mask the melting ink wears) */
+    DRIPS: 7,          /* how many drips the box's foot grows */
+    SAG: 0.40,         /* the deepest drip's reach, as a share of the box's height */
+    TOP_SAG: 0.42,     /* how far the TOP edge sinks by the end of the sag: a melting body loses height, its mass goes down */
+    BASE_SAG: 0.10,    /* the whole foot slumps this much besides */
+    DRIP_W: 0.11,      /* a drip's half-width as a share of the box's width */
+    DRIP_JIT: 0.55,    /* how far a drip's centre wanders from its even place, as a share of the even spacing */
+    DRIP_DELAY: 0.40,  /* the last drip starts this far into the melt phase: the drips open in a seeded order */
+    N: 33, TOP_N: 13, SIDE_N: 7,   /* the ring's samples: foot, top, each side (even-ish spacing - see meltOutline) */
+    /* THE GOOEY THRESHOLD */
+    BLUR: 26,          /* the outline's blur at the melt's peak, px at 1920 */
+    EDGE_SLOPE: 24,    /* the alpha ramp that re-steepens the outline's blur into a liquid edge */
+    /* THE RUN (E88: the MARKS melt, not a rectangle) - the ink's own pixels, smeared down and fused */
+    RUN: 0.22,         /* how far the ink runs at the sag's end, as a share of the ink box's height [DERIVED, HG2] */
+    RUN_COPIES: 6,     /* offset copies merged into the run: enough that the gooey blur joins them into one trail (3 read as
+                          stacked parallel copies of each line on the proof frames) */
+    INK_BLUR: 4,       /* the marks' own blur at the melt's peak, px - a 3 px line blurred to 7 px and ramped by INK_SLOPE
+                          comes back ~2.5x as thick, which is the swell of a wet line [DERIVED, HG2] */
+    BALL_FUSE: 40,     /* the squeezed ink's extra blur through the ball phase, in the ink's OWN px (the squeeze shrinks it ~10x
+                          on screen): without it the compacting chart read as stacked orange hatching, not one mass */
+    INK_SLOPE: 9,      /* the marks' alpha ramp (the outline's EDGE_SLOPE is 24: a mark is thinner than a body) */
+    /* THE BALL - dense and heavy (E88): smaller than P52 T9's 0.15, opaque, darker than its own marks */
+    BALL_R: 0.085,     /* the ball's radius as a share of the ink box's height [was 0.15 of the whole PAGE's height] */
+    CIRCLE_N: 96,      /* vertices on the circle = RING_N, so the morph's resample lands ON them (radius exact at the end) */
+    RING_N: 96,
+    HOLD: 2,           /* the stepped clock's hold: on 2s (stop-action, doc 42) */
+    FPS: CADENCE.FPS,
+    SQUEEZE: 1.15,     /* the ink box is squeezed until its longer side is SQUEEZE ball-diameters: the chart compiles INTO the
+                          ball instead of being cropped by it */
+    BODY_FROM: 0,      /* the ball is a CRISP opaque disc from the first frame of its phase (a ramp over the whole box read as
+                          a jelly slab; one that waited for the squeeze read as a soft chart silhouette at 045 - the parent's
+                          two reads, 2026-09-13) ... */
+    BODY_TO: 0.15,     /* ... fully opaque from here */
+    BODY_GROW: 0.4,    /* it GROWS from BODY_SEED of its radius to all of it by here of the ball phase, while ... */
+    BODY_SEED: 0.25,
+    INK_OUT: 0.45,     /* ... the squeezed ink fades into it, gone by here: at 045 there is only the round ball */
+    TINT_MELT: 0,      /* how far the marks have turned to the ink by the sag's end (all the way by the ball's middle). 0: through
+                          the sag every mark runs in its OWN colour - 0.6 turned the pale series and the grid salmon-pink */
+    INK_DEEP: 3,       /* THE INK: the chart's DOMINANT stroke (its first series) concentrated this many times by K-M - the
+                          same hue, deeper. Never a mix of every series: the golden page's four mixed land on green */
+    CORE: 12,          /* the ball's shaded side, the same ink at this concentration (the weight read in the shading) */
+    LIGHT: 1,          /* the ball's lit side: the stroke itself */
+    TEXT_STREAK: 1.6,  /* the words' streak: its vertical blur is half the run, it hangs 0.6 of the run below the glyph, and its
+                          spread alpha is lifted this much so it reads as ink trailing, not a haze */
+    SHEEN: 0.5,        /* its ONE highlight: the stroke taken this far toward white, a small spot up and to the left */
+    SPLAT_OUT: 3.5,    /* splash:chart - the landed splats fade this many times faster than the paint clock and ... */
+    SPLAT_SHRINK: 0.5, /* ... shrink by this much as the chart shows through: they resolve INTO it and never sit over its
+                          labels at full ink (they covered "Mega-cap" at 075 - the parent's read, 2026-09-13) */
+    /* THE WEIGHT (stopaction's dials, named): the ball lands in its own weight before it goes anywhere */
+    MASS: "liquid",    /* stopaction MASS for the squash: liquid holds its squash TWO frames (ink holds one) - a heavy wet body */
+    SQUASH: 0.30,      /* impactSquash's IMPACT_SQUASH for the ball (stopaction's card default is 0.22) */
+    ANTIC: 0.22,       /* the share of the throw phase the ball sits in that squash before the launch */
+    /* THE THROW - heavy: a low arc, little tumble, out the bottom */
+    TO: [1.02, 1.32],  /* the default exit point in STAGE fractions: off the bottom right [was 1.16, 1.22] */
+    ARC: 0.06,         /* throwXf's ARC for the ball (stopaction 0.22: a card lifts; a heavy ball barely does) */
+    SPIN_DEG: 4,       /* throwXf's SPIN_DEG for the ball (stopaction 9) */
+    /* THE SPLASH */
+    DROPS: 14,         /* droplets in the splatter */
+    BURST_END: 0.40,   /* the share of the ending the burst takes; the rest is the PAINT (the stains growing) */
+    SPLASH_SPREAD: 0.30,   /* the angular jitter (radians) on each droplet's ray */
+    LAND_MIN: 0.25,    /* where a droplet lands along its ray, as a share of the distance to the ink box's edge ... */
+    LAND_MAX: 0.92,    /* ... so the whole splatter lands ON the board */
+    DROP_R: 0.035,     /* a droplet's radius as a share of the box's height */
+    FLAT: 0.62,        /* how far the ball flattens as it bursts (1 - FLAT of its height) */
+    REVEAL_R: 0.75,    /* a stain's reach as a share of the box's height (seeded 0.6x - 1.4x) */
+    CORE_R: 0.70,      /* the stain under the ball's own impact */
+    FLOOD_FROM: 0.70,  /* the board's last cover fades out from here of the paint clock, so the reveal is whole at u = 1 */
+    TAIL: 2.2,         /* a landed splat's tail toward the impact, in its own radii (in flight it is longer: speed) */
+    LOBES: 14,         /* a splat's seeded lobes */
+    SPLAT_RAG: 16,     /* a splat's torn edge: the K-M soak's noise displacement, px */
+    STAIN_RAG: 70,     /* a paint stain's torn edge, px - the ink-bloom's ragged front (INTAKE-INK-BLOOM-2026-09-08) */
+    STAIN_BLUR: 6,     /* the stains' own gooey threshold: blur px ... */
+    STAIN_SLOPE: 12,   /* ... and ramp */
+    SPRING: 0.09,      /* splash:plate - the plate SPRINGS UP: from 1 - SPRING of its size, over its rest by ~2.5 %, settled at
+                          the end (a damped cosine; 0.05 settling one way was invisible). 1 - 0.09 of a world that overhangs
+                          the stage by 5 % still covers it */
+    INK_HEX: "#E9E2D2",    /* the marks' colour when the chart carries no stroke to read (a page of words) */
+  });
+
+  const MELT_ENDINGS = Object.freeze(["throw", "splash:chart", "splash:plate"]);
+
+  const mc01 = (v) => (v <= 0 ? 0 : v >= 1 ? 1 : v);   /* the engine inlines every module into ONE scope, so a
+     private helper carries the module's own prefix - `c01` is ink.mjs's */
+  const mSlump = (u) => { const k = mc01(u); return k * k; };
+  const mEase = (u) => { const k = mc01(u); return k * k * (3 - 2 * k); };
+
+  /* ---- the authored form ------------------------------------------------------------------------------------------ */
+  /* `melt` | `melt:throw` | `melt:splash:chart` | `melt:splash:plate`, `:<s>`, and on a throw `:<x>,<y>`, in any order after
+     the name. Throws on anything else, so a typo in a shot table is a refusal and not a silent default. */
+  const meltOpts = (exit, o = {}) => {
+    const P = Object.assign({}, MELT, o), bits = String(exit == null ? "" : exit).split(":");
+    const out = { name: bits[0] || "", secs: P.S, ending: null, to: null };
+    const setEnding = (e) => {
+      if (out.ending) throw new Error("melt: two endings (" + out.ending + " and " + e + ") - a melt ends one way");
+      out.ending = e;
+    };
+    for (let i = 1; i < bits.length; i++) {
+      const b = bits[i].trim();
+      if (b === "") continue;
+      if (b === "throw") { setEnding("throw"); continue; }
+      if (b === "splash") {
+        const nx = (bits[i + 1] || "").trim();
+        if (nx !== "chart" && nx !== "plate") {
+          throw new Error("melt: splash names no ending since E88 - say splash:chart (the splatter forms the next chart) or splash:plate (a narrative plate springs up out of it)");
+        }
+        setEnding("splash:" + nx); i++; continue;
+      }
+      if (b === "chart" || b === "plate") throw new Error("melt: " + b + " is a splash's ending - say splash:" + b);
+      if (b.indexOf(",") >= 0) {
+        const xy = b.split(",").map(Number);
+        if (xy.length !== 2 || !xy.every((v) => Number.isFinite(v))) throw new Error("melt: " + b + " is not an x,y point in stage fractions");
+        out.to = xy; continue;
+      }
+      const v = Number(b);
+      if (!(Number.isFinite(v) && v > 0)) throw new Error("melt: " + b + " is neither a length in seconds, nor an ending (throw, splash:chart, splash:plate), nor an x,y point");
+      out.secs = v;
+    }
+    out.ending = out.ending || "throw";
+    if (out.to && out.ending !== "throw") throw new Error("melt: an x,y point is where a THROW goes - a splash lands on the board");
+    out.to = out.to || [P.TO[0], P.TO[1]];
+    return out;
+  };
+
+  /* ---- the phases ------------------------------------------------------------------------------------------------- */
+  const meltShares = (o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return [P.MELT_END, P.BALL_END - P.MELT_END, 1 - P.BALL_END];
+  };
+  const meltPhase = (u, o = {}) => {
+    const P = Object.assign({}, MELT, o), k = mc01(u);
+    /* GONE takes the boundary itself: (t - t0) / secs cannot be trusted to reach exactly 1 in floating point */
+    if (u >= 1 - 1e-9) return { name: "gone", k: 1, from: 1, span: 0 };
+    if (k < P.MELT_END) return { name: "melt", k: k / P.MELT_END, from: 0, span: P.MELT_END };
+    if (k < P.BALL_END) return { name: "ball", k: (k - P.MELT_END) / (P.BALL_END - P.MELT_END), from: P.MELT_END, span: P.BALL_END - P.MELT_END };
+    return { name: "fly", k: (k - P.BALL_END) / (1 - P.BALL_END), from: P.BALL_END, span: 1 - P.BALL_END };
+  };
+  /* the outline's blur in px: up over the melt, back to 0 by the end of the ball (a ball is solid, not a cloud) */
+  const meltBlur = (u, o = {}) => {
+    const P = Object.assign({}, MELT, o), ph = meltPhase(u, P);
+    if (ph.name === "melt") return P.BLUR * mEase(ph.k);
+    if (ph.name === "ball") return P.BLUR * (1 - mEase(ph.k));
+    return 0;
+  };
+  /* the throw's launch as a share of the window: the board is up until here, and the next chart's clock starts here */
+  const meltRelease = (o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return P.BALL_END + P.ANTIC * (1 - P.BALL_END);
+  };
+  /* how long the engine holds the NEXT page's clock under a throw: the new chart draws once the board is clear. A splash
+     holds nothing (the chart arrives built, through the stains) and no melt holds a world that is not a page. */
+  const meltDrawDelay = (opts, incomingIsPage, o = {}) =>
+    (opts && opts.ending === "throw" && incomingIsPage) ? meltRelease(o) * Math.max(0.05, +opts.secs || MELT.S) : 0;
+
+  /* ---- the sag ---------------------------------------------------------------------------------------------------- */
+  const dripBump = (dx, w) => { const k = mc01(Math.abs(dx) / Math.max(1e-6, w)); const c = Math.cos(k * Math.PI / 2); return c * c; };
+  const meltDrips = (rect, rnd, o = {}) => {
+    const P = Object.assign({}, MELT, o), n = Math.max(1, P.DRIPS | 0), step = rect.w / n, out = [];
+    for (let i = 0; i < n; i++) {
+      out.push({ c: rect.x + step * (i + 0.5) + P.DRIP_JIT * step * (rnd(i) - 0.5),
+                 amp: 0.45 + 0.55 * rnd(40 + i), delay: P.DRIP_DELAY * rnd(70 + i), w: P.DRIP_W * rect.w });
+    }
+    return out;
+  };
+  const meltDepth = (x, k, rect, drips, o = {}) => {
+    const P = Object.assign({}, MELT, o), u = mc01(k);
+    let deepest = 0;
+    for (const d of drips) {
+      const own = mSlump(mc01((u - d.delay) / Math.max(1e-6, 1 - d.delay)));
+      deepest = Math.max(deepest, dripBump(x - d.c, d.w) * d.amp * own);
+    }
+    return rect.h * (P.SAG * deepest + P.BASE_SAG * mSlump(u));
+  };
+  const meltTop = (x, k, rect, drips, o = {}) => {
+    const P = Object.assign({}, MELT, o), u = mc01(k);
+    let over = 0;
+    for (const d of drips) over = Math.max(over, dripBump(x - d.c, d.w * 1.15) * d.amp);
+    return rect.y + rect.h * P.TOP_SAG * mSlump(u) * (0.55 + 0.45 * over);
+  };
+  /* THE MELTING OUTLINE: a closed ring walked clockwise from the top-left - the top edge, the right side, the foot sampled
+     right to left with the drips hung from it, the left side back up. Sampled even-ish all the way round: the closed
+     centripetal Catmull-Rom (morphAPath) bulges between two knots far apart next to two that are not. */
+  const meltOutline = (rect, k, rnd, o = {}) => {
+    const P = Object.assign({}, MELT, o), n = Math.max(3, P.N | 0), drips = meltDrips(rect, rnd, P);
+    const top = Math.max(2, P.TOP_N | 0), side = Math.max(1, P.SIDE_N | 0), foot = rect.y + rect.h, pts = [];
+    for (let j = 0; j < top; j++) { const x = rect.x + rect.w * (j / (top - 1)); pts.push([x, meltTop(x, k, rect, drips, P)]); }
+    const tR = meltTop(rect.x + rect.w, k, rect, drips, P), tL = meltTop(rect.x, k, rect, drips, P);
+    for (let j = 1; j <= side; j++) pts.push([rect.x + rect.w, tR + (foot - tR) * (j / (side + 1))]);
+    for (let j = n - 1; j >= 0; j--) {
+      const x = rect.x + rect.w * (j / (n - 1));
+      pts.push([x, foot + meltDepth(x, k, rect, drips, P)]);
+    }
+    for (let j = side; j >= 1; j--) pts.push([rect.x, tL + (foot - tL) * (j / (side + 1))]);
+    return pts;
+  };
+  /* THE RUN: how far the ink's pixels smear down (px). It grows with the sag and drains back into the ball as it forms. */
+  const meltRun = (phase, k, rect, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    if (phase === "melt") return P.RUN * rect.h * mSlump(k);
+    if (phase === "ball") return P.RUN * rect.h * (1 - mEase(k));
+    return 0;
+  };
+
+  /* ---- the ball --------------------------------------------------------------------------------------------------- */
+  const ballCircle = (c, r, n) => {
+    const out = [];
+    for (let i = 0; i < n; i++) { const a = 2 * Math.PI * (i / n); out.push([c[0] + r * Math.cos(a), c[1] + r * Math.sin(a)]); }
+    return out;
+  };
+  const ballAt = (rect, k, rnd, o = {}) => {
+    const P = Object.assign({}, MELT, o), src = meltOutline(rect, 1, rnd, P);
+    const c = centroid(src), r = P.BALL_R * rect.h;
+    const prep = morphAPrepare(src, ballCircle(c, r, P.CIRCLE_N), { n: P.RING_N });
+    return { outline: morphAAt(prep, mEase(k)).outline, centre: c, r, k: mc01(k) };
+  };
+  /* THE SQUEEZE: the ink's scale about the ball's centre at ball-phase progress k - 1 at the start, and at the end the ink
+     box's longer side is SQUEEZE ball-diameters. Monotone in k. */
+  const meltSqueeze = (rect, r, k, o = {}) => {
+    const P = Object.assign({}, MELT, o), end = Math.min(1, P.SQUEEZE * 2 * r / Math.max(1e-6, rect.w, rect.h));
+    return 1 + (end - 1) * mEase(k);
+  };
+  /* the ink body's opacity at ball-phase progress k: none, then up to solid before the ball moves */
+  const meltBodyAlpha = (k, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return mEase(mc01((k - P.BODY_FROM) / Math.max(1e-6, P.BODY_TO - P.BODY_FROM)));
+  };
+  /* the ball's radius as a share of BALL_R at ball-phase progress k: from a seed to whole, monotone */
+  const meltBodyGrow = (k, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return P.BODY_SEED + (1 - P.BODY_SEED) * mEase(mc01(k / Math.max(1e-6, P.BODY_GROW)));
+  };
+  const ballFlat = (outline, c, k, o = {}) => {
+    const P = Object.assign({}, MELT, o), f = 1 - P.FLAT * mEase(k), g = 1 + (1 / Math.max(0.05, f) - 1) * 0.5;
+    return outline.map((p) => [c[0] + (p[0] - c[0]) * g, c[1] + (p[1] - c[1]) * f]);
+  };
+  /* THE WEIGHT: the ball's squash `ts` seconds after it has formed (or hit the board) - stopaction's impactSquash on the
+     melt's material, on the melt's hold. 0 on the contact frame, SQUASH on the next hold, released by the material. */
+  const meltSettle = (ts, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return impactSquash(ts, P.MASS, P.HOLD, P.FPS, { IMPACT_SQUASH: P.SQUASH });
+  };
+
+  /* ---- the colour ------------------------------------------------------------------------------------------------- */
+  const meltRFromKs = (ks) => { const k = Math.max(0, ks); return 1 + k - Math.sqrt(k * k + 2 * k); };
+  /* THE INK THE BALL IS MADE OF: the marks' colours mixed by Kubelka-Munk (the mean K/S per channel - a subtractive mix, not
+     an average of lights) and concentrated `density` times. density 1 is the marks' own mix; above it, darker and deeper. */
+  const meltMixInk = (hexes, density = 1) => {
+    const list = (hexes || []).filter((h) => /^#[0-9a-fA-F]{6}$/.test(h));
+    const use = list.length ? list : [MELT.INK_HEX], ks = [0, 0, 0];
+    for (const h of use) hexToLin(h).forEach((v, i) => { ks[i] += ksFromR(v) / use.length; });
+    return linToHex(ks.map((k) => meltRFromKs(k * Math.max(0.01, density))));
+  };
+
+  /* THE INK the marks become and the ball is made of: the dominant stroke, concentrated */
+  const meltInkOf = (hexes, density = 1) => meltMixInk(((hexes || []).filter((h) => /^#[0-9a-fA-F]{6}$/.test(h))).slice(0, 1), density);
+  /* how far the marks have turned into that ink */
+  const meltTint = (phase, k, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    if (phase === "melt") return P.TINT_MELT * mEase(k);
+    if (phase === "ball") return P.TINT_MELT + (1 - P.TINT_MELT) * mEase(mc01(2 * k));
+    return 1;
+  };
+
+  /* ---- the splash ------------------------------------------------------------------------------------------------- */
+  /* A SPLAT: a seeded lobed blob with a tail pointing BACK along its ray to the impact (`back`, radians), drawn as a closed
+     centripetal Catmull-Rom - the shape an ink drop makes when it hits paper at an angle */
+  const meltSplatPath = (x, y, r, back, tail, rnd, salt, o = {}) => {
+    const P = Object.assign({}, MELT, o), n = Math.max(6, P.LOBES | 0), pts = [];
+    for (let j = 0; j < n; j++) {
+      const f = 2 * Math.PI * (j / n), c = Math.cos(f), rr = r * (0.72 + 0.5 * rnd(salt * 31 + j)) + (c > 0 ? Math.pow(c, 8) * tail : 0);
+      pts.push([x + Math.cos(back + f) * rr, y + Math.sin(back + f) * rr]);
+    }
+    return morphAPath(pts);
+  };
+  /* the satellite droplets thrown off behind each splat, along its ray */
+  const splashSats = (drops) => {
+    const out = [];
+    for (const d of drops) {
+      if (!(d.d > 0)) continue;
+      const cx = Math.cos(d.a), cy = Math.sin(d.a), ox = d.x - cx * d.d, oy = d.y - cy * d.d;
+      out.push({ x: ox + cx * d.d * 0.62, y: oy + cy * d.d * 0.62, r: d.r * 0.32 }, { x: ox + cx * d.d * 0.83, y: oy + cy * d.d * 0.83, r: d.r * 0.2 });
+    }
+    return out;
+  };
+  /* the plate's spring over the paint clock: up from 1 - SPRING, over its rest, settled at g = 1 (exactly 1 there) */
+  const meltSpring = (g, o = {}) => {
+    const P = Object.assign({}, MELT, o), k = mc01(g);
+    return k >= 1 ? 1 : 1 - P.SPRING * Math.exp(-3 * k) * Math.cos(2.5 * Math.PI * k);
+  };
+  /* the distance from c along the unit ray (cx, cy) to the box's edge */
+  const meltRayToEdge = (c, cx, cy, rect) => {
+    const tx = cx > 1e-9 ? (rect.x + rect.w - c[0]) / cx : cx < -1e-9 ? (rect.x - c[0]) / cx : Infinity;
+    const ty = cy > 1e-9 ? (rect.y + rect.h - c[1]) / cy : cy < -1e-9 ? (rect.y - c[1]) / cy : Infinity;
+    return Math.max(0, Math.min(tx, ty));
+  };
+  /* THE SPLATTER: DROPS droplets thrown out along seeded rays on the soak's own STEPPED clock (never contracting), each
+     LANDING on the board - a share of the way to the ink box's edge - and spreading a little as it lands. `d` is the
+     distance travelled along its ray: monotone in k and never past `land`. */
+  const splashDrops = (c, rect, k, rnd, o = {}) => {
+    const P = Object.assign({}, MELT, o), p = soakStepped(mc01(k), rnd), out = [];
+    for (let i = 0; i < Math.max(0, P.DROPS | 0); i++) {
+      const a = 2 * Math.PI * (i / P.DROPS) + P.SPLASH_SPREAD * (2 * rnd(300 + i) - 1), cx = Math.cos(a), cy = Math.sin(a);
+      const land = meltRayToEdge(c, cx, cy, rect) * (P.LAND_MIN + (P.LAND_MAX - P.LAND_MIN) * rnd(400 + i)), d = land * p;
+      const r = P.DROP_R * rect.h * (0.6 + 0.8 * rnd(500 + i)) * (1 + 0.6 * p);
+      out.push({ x: c[0] + cx * d, y: c[1] + cy * d, r, d, a, land, tail: p > 0 ? r * (P.TAIL + 3 * (1 - p)) : 0 });
+    }
+    return out;
+  };
+  /* THE PAINT: every landed drop grows as a seeded stain (its own stepped staircase), and one grows under the ball's own
+     impact. Radii are monotone in g. `cover` is the board's remaining opacity (whole until FLOOD_FROM, then out to exactly
+     0), `rim` the wet ink at the fronts (drying as they spread). */
+  const splashStains = (drops, c, r, rect, g, rnd, o = {}) => {
+    const P = Object.assign({}, MELT, o), h = rect.h, gg = mc01(g);
+    const grow = (salt) => (gg <= 0 ? 0 : soakStepped(gg, (k) => rnd(1000 + 37 * salt + k)));
+    const stains = drops.map((d, i) => ({ x: d.x, y: d.y, r: d.r + (P.REVEAL_R * h * (0.6 + 0.8 * rnd(600 + i)) - d.r) * grow(i + 1) }));
+    stains.push({ x: c[0], y: c[1], r: r + (P.CORE_R * h - r) * grow(0) });
+    return { stains, cover: 1 - mEase(mc01((gg - P.FLOOD_FROM) / Math.max(1e-6, 1 - P.FLOOD_FROM))), rim: 1 - mEase(gg) };
+  };
+
+  /* ---- the throw -------------------------------------------------------------------------------------------------- */
+  /* THE FLIGHT, BACKWARDS: throwXf brings a thing FROM an offset TO its rest; a launch is that landing in reverse. t' = F(1 - k):
+     at k = 0 the ball sits at rest and at k = 1 it is at `from`. The ball's ARC and SPIN_DEG are its own (heavy). */
+  const meltThrowAt = (k, from, secs, o = {}) => {
+    const P = Object.assign({}, MELT, o), F = Math.max(0.05, secs), kk = mc01(k);
+    if (kk <= 0) return { x: 0, y: 0, rot: 0, alpha: 0, theta: Math.PI / 2, phase: "flight", u: 1, hold: 1, h: 0, ground: 0, shake: { x: 0, y: 0 } };
+    return throwXf(from, P.MASS, F * (1 - kk), { FLIGHT_S: F, ARC: P.ARC, SPIN_DEG: P.SPIN_DEG });
+  };
+
+  /* ---- the frame -------------------------------------------------------------------------------------------------- */
+  /* EVERYTHING THE PAINTER NEEDS, in one object, from (t0, t, o, rnd) alone. o carries the geometry as well as any dial:
+     `rect` (the INK box, in the outgoing world's own px), `stagebox` (the stage's box in those px), `secs`, `ending`, `to`.
+       path     the ink's mask, in the ink's own (unsqueezed) px     body      the ball, in world px (null: no ball)
+       scale    the ink's squeeze about `centre`                     bodyAlpha the ball's opacity
+       run      the ink's smear, px; inkBlur its blur                 squash    { a, theta } on the ball, stopaction's tensor
+       xf       the throw's offset and tumble                        drops     the splatter; stains / cover / rim the paint
+       boardUp  the outgoing board is on screen                      reveal    it wears the reveal mask; spring the plate's scale */
+  const meltState = (t0, t, o = {}, rnd) => {
+    const P = Object.assign({}, MELT, o), rect = P.rect, sb = P.stagebox || rect, to = P.to || P.TO;
+    const ending = MELT_ENDINGS.indexOf(P.ending) >= 0 ? P.ending : "throw";
+    const secs = Math.max(0.05, +P.secs || P.S), u = mc01((t - t0) / secs), ph = meltPhase(u, P);
+    const st = { u, secs, ending, phase: ph.name, k: ph.k, blur: meltBlur(u, P), inkBlur: 0, run: 0, scale: 1,
+                 inkOpacity: 1, path: "", outline: null, body: "", bodyOutline: null, bodyAlpha: 0, centre: null, r: 0,
+                 squash: { a: 0, theta: 0 }, xf: null, drops: [], stains: [], cover: 1, rim: 0, reveal: false,
+                 spring: 1, dropAlpha: 1, dropScale: 1, tint: 0, sats: [], textOpacity: 0, boardUp: true, gone: false };
+    st.inkBlur = P.INK_BLUR * st.blur / Math.max(1e-6, P.BLUR);
+    if (ph.name === "gone") { st.gone = true; st.boardUp = false; st.inkOpacity = 0; st.cover = 0; return st; }
+    if (ph.name === "melt") {
+      st.outline = meltOutline(rect, ph.k, rnd, P);
+      st.path = morphAPath(st.outline);
+      st.run = meltRun("melt", ph.k, rect, P);
+      st.tint = meltTint("melt", ph.k, P);
+      st.textOpacity = meltTextAlpha(ph.k);   /* the words run down as their own glyphs and are gone by the ball */
+      return st;
+    }
+    /* the ball and the ending run on the STEPPED clock, each on its own phase-local seconds (a pure quantisation of t) */
+    const tl = t - t0 - ph.from * secs, span = ph.span * secs, tq = stepped(Math.max(0, tl), P.HOLD, P.FPS);
+    const kq = mc01(tq / Math.max(1e-6, span));
+    if (ph.name === "ball") {
+      const b = ballAt(rect, kq, rnd, P), s = meltSqueeze(rect, b.r, kq, P);
+      st.k = kq; st.centre = b.centre; st.r = b.r; st.scale = s;
+      st.bodyOutline = b.outline; st.bodyAlpha = meltBodyAlpha(kq, P);
+      st.body = morphAPath(ballCircle(b.centre, b.r * meltBodyGrow(kq, P), P.CIRCLE_N));   /* the SOLID ball: a crisp circle, never the box */
+      st.tint = meltTint("ball", kq, P);
+      st.inkBlur = st.inkBlur + P.BALL_FUSE * mEase(kq);   /* the marks FUSE into one body as they compact */
+      /* the mask is in the ink's own px, and the ink is squeezed by s about the centre: the same body, unsqueezed */
+      st.outline = b.outline.map((p) => [b.centre[0] + (p[0] - b.centre[0]) / s, b.centre[1] + (p[1] - b.centre[1]) / s]);
+      st.path = morphAPath(st.outline);
+      st.run = meltRun("ball", kq, rect, P);
+      st.inkOpacity = 1 - mEase(mc01(kq / Math.max(1e-6, P.INK_OUT)));
+      return st;
+    }
+    const b = ballAt(rect, 1, rnd, P), circle = ballCircle(b.centre, b.r, P.CIRCLE_N);
+    st.k = kq; st.centre = b.centre; st.r = b.r; st.inkOpacity = 0; st.bodyAlpha = 1;
+    if (ending === "throw") {
+      st.bodyOutline = circle; st.body = morphAPath(circle);
+      if (kq < P.ANTIC) {
+        st.squash = { a: meltSettle(tq, P), theta: 0 };   /* stretched ACROSS, pressed down: the ball has weight before it moves */
+        st.xf = meltThrowAt(0, { x: 0, y: 0 }, span, P);
+      } else {
+        const from = { x: sb.x + to[0] * sb.w - b.centre[0], y: sb.y + to[1] * sb.h - b.centre[1] };
+        st.xf = meltThrowAt((kq - P.ANTIC) / Math.max(1e-6, 1 - P.ANTIC), from, span * (1 - P.ANTIC), P);
+        st.squash = { a: st.xf.alpha || 0, theta: st.xf.theta || 0 };   /* stretched along the flight */
+      }
+      st.boardUp = u < meltRelease(P);
+      return st;
+    }
+    /* a SPLASH: the burst, then the paint. Its clock is measured to ONE HOLD before the window ends: the stepped clock's last
+       pose lands a hold early, and a paint that was 0.8 done on that pose would pop the board's last cover at `gone`. */
+    const ks = mc01(tq / Math.max(1e-6, span - P.HOLD / P.FPS));
+    const kb = mc01(ks / Math.max(1e-6, P.BURST_END)), g = mc01((ks - P.BURST_END) / Math.max(1e-6, 1 - P.BURST_END));
+    st.bodyOutline = ballFlat(circle, b.centre, kb, P); st.body = morphAPath(st.bodyOutline);
+    st.bodyAlpha = 1 - mEase(mc01((kb - 0.5) / 0.5));   /* the ball holds its mass through the hit, then IS the splatter */
+    st.squash = { a: meltSettle(tq, P), theta: 0 };
+    st.drops = splashDrops(b.centre, rect, kb, rnd, P);
+    st.sats = splashSats(st.drops);
+    if (kq >= P.BURST_END) {
+      const paint = splashStains(st.drops, b.centre, b.r, rect, g, rnd, P);
+      st.stains = paint.stains; st.cover = paint.cover; st.rim = paint.rim; st.reveal = true;
+      const rate = ending === "splash:chart" ? P.SPLAT_OUT : 2.5;
+      st.dropAlpha = 1 - mEase(mc01(g * rate));   /* a drop IS its stain's first ink: it soaks away as the stain opens */
+      if (ending === "splash:chart") st.dropScale = 1 - P.SPLAT_SHRINK * mEase(mc01(g * 2));
+      if (ending === "splash:plate") st.spring = meltSpring(g, P);
+    }
+    return st;
+  };
+
+  /* ---- the markup the painter mounts once ------------------------------------------------------------------------- */
+  /* THE GOOEY THRESHOLD as SVG primitives: blur, then re-steepen the alpha. Blur FIRST, then the ramp - the other way round
+     is a fade. The K-M colour stages are deliberately not here: they would flatten what they filter to one ink. */
+  const meltFilterMarkup = (id, u, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return '<filter id="' + id + '" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB">'
+      + '<feGaussianBlur stdDeviation="' + meltBlur(u, P).toFixed(2) + '"/>'
+      + '<feComponentTransfer><feFuncA type="linear" slope="' + P.EDGE_SLOPE + '" intercept="0"/></feComponentTransfer>'
+      + '</filter>';
+  };
+  /* the mask the melting ink wears: one path, filtered */
+  const meltMaskMarkup = (id, filterId) =>
+    '<mask id="' + id + '" maskUnits="objectBoundingBox" x="-0.4" y="-0.4" width="1.8" height="1.8">'
+    + '<g filter="url(#' + filterId + ')"><path fill="#fff" d=""/></g></mask>';
+  /* THE RUN on the marks' own pixels: RUN_COPIES copies offset downward and merged over the original, then the gooey
+     threshold - the lines swell, trail down and fuse. The region opens downward, where the ink goes. */
+  const meltInkFilterMarkup = (id, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    /* the marks first lose every FAINT pixel (alpha under a quarter): a near-transparent wash on the page - a grain, a plot
+       ground - would otherwise be ramped INK_SLOPE times into an opaque grey slab over the board (measured on the first
+       proof frame, 2026-09-13). A mark's own core is opaque and passes untouched. */
+    let offs = "", merge = '<feMergeNode in="' + id + 'k"/>';
+    for (let j = 1; j <= Math.max(1, P.RUN_COPIES | 0); j++) {
+      offs += '<feOffset in="' + id + 'k" dx="0" dy="0" result="' + id + "r" + j + '"/>';
+      merge += '<feMergeNode in="' + id + "r" + j + '"/>';
+    }
+    return '<filter id="' + id + '" x="-5%" y="-5%" width="110%" height="150%" color-interpolation-filters="sRGB">'
+      + '<feComponentTransfer in="SourceGraphic" result="' + id + 'k"><feFuncA type="table" tableValues="0 0 1 1 1"/></feComponentTransfer>'
+      + offs + "<feMerge>" + merge + "</feMerge>"
+      + '<feGaussianBlur stdDeviation="0"/>'
+      + '<feComponentTransfer result="' + id + 'o"><feFuncA type="linear" slope="' + P.INK_SLOPE + '" intercept="0"/></feComponentTransfer>'
+      /* THE TINT: the fused marks turned toward THE INK by k2 (the painter writes k2 = tint, k3 = 1 - tint each frame) */
+      + '<feFlood flood-color="#000" result="' + id + 'c"/><feComposite in="' + id + 'c" in2="' + id + 'o" operator="in" result="' + id + 't"/>'
+      + '<feComposite in="' + id + 't" in2="' + id + 'o" operator="arithmetic" k1="0" k2="0" k3="1" k4="0"/></filter>';
+  };
+  /* THE REVEAL: a luminance mask the BOARD wears under a splash - white everywhere, and the stains cut black through it,
+     under their own gooey threshold, so two stains that meet run together */
+  const meltRevealMarkup = (id, filterId) =>
+    '<mask id="' + id + '" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="-10000" y="-10000" width="20000" height="20000">'
+    + '<rect x="-10000" y="-10000" width="20000" height="20000" fill="#fff"/><g filter="url(#' + filterId + ')"></g></mask>';
+  const meltStainFilterMarkup = (id, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return '<filter id="' + id + '" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">'
+      + '<feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" seed="11" result="' + id + 'n"/>'
+      + '<feDisplacementMap in="SourceGraphic" in2="' + id + 'n" scale="' + P.STAIN_RAG + '" xChannelSelector="R" yChannelSelector="G"/>'
+      + '<feGaussianBlur stdDeviation="' + P.STAIN_BLUR + '"/>'
+      + '<feComponentTransfer><feFuncA type="linear" slope="' + P.STAIN_SLOPE + '" intercept="0"/></feComponentTransfer></filter>';
+  };
+  /* a SPLAT's torn edge: the soak's noise displacement and nothing else - no blur, so the ink stays opaque and crisp */
+  const meltSplatFilterMarkup = (id, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return '<filter id="' + id + '" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">'
+      + '<feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="5" result="' + id + 'n"/>'
+      + '<feDisplacementMap in="SourceGraphic" in2="' + id + 'n" scale="' + P.SPLAT_RAG + '" xChannelSelector="R" yChannelSelector="G"/></filter>';
+  };
+  /* a colour taken toward white by `k` (linear light) - the ball's one sheen */
+  const meltSheen = (hex, k) => linToHex(hexToLin(hex).map((v) => v + (1 - v) * mc01(k)));
+  /* the ball's body: THE INK, one small highlight up and to the left, the stroke, then concentrated toward its shaded side */
+  const meltBodyGradientMarkup = (id, hexes, o = {}) => {
+    const P = Object.assign({}, MELT, o), lit = meltInkOf(hexes, P.LIGHT);
+    return '<radialGradient id="' + id + '" cx="0.34" cy="0.3" r="0.8" fx="0.32" fy="0.26">'
+      + '<stop offset="0" stop-color="' + meltSheen(lit, P.SHEEN) + '"/>'
+      + '<stop offset="0.14" stop-color="' + lit + '"/>'
+      + '<stop offset="0.55" stop-color="' + meltInkOf(hexes, P.INK_DEEP) + '"/>'
+      + '<stop offset="1" stop-color="' + meltInkOf(hexes, P.CORE) + '"/></radialGradient>';
+  };
+  /* a SPLAT's wet ink: the stroke at its core, the ball's ink, and a dark wet rim at its edge (per splat, its own box) */
+  const meltSplatGradientMarkup = (id, hexes, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return '<radialGradient id="' + id + '" cx="0.5" cy="0.5" r="0.5">'
+      + '<stop offset="0" stop-color="' + meltInkOf(hexes, P.LIGHT) + '"/>'
+      + '<stop offset="0.55" stop-color="' + meltInkOf(hexes, P.INK_DEEP) + '"/>'
+      + '<stop offset="0.85" stop-color="' + meltInkOf(hexes, P.CORE) + '"/>'
+      + '<stop offset="1" stop-color="' + meltInkOf(hexes, P.CORE) + '"/></radialGradient>';
+  };
+  /* THE WORDS' RUN: ONE continuous streak under each glyph - its own ink blurred VERTICALLY only (stdDeviation "0 s", so a
+     letter's columns stay apart and never swell sideways into its box), pushed down by the run and a little denser, with the
+     crisp glyph drawn over it so its top edge stays legible. Merged offset copies read as six stacked echoes of each word
+     (the parent's read of 015, 2026-09-13); a one-axis blur has no copies to count. */
+  const meltTextFilterMarkup = (id, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return '<filter id="' + id + '" x="-5%" y="-10%" width="110%" height="160%" color-interpolation-filters="sRGB">'
+      + '<feGaussianBlur in="SourceGraphic" stdDeviation="0 0" result="' + id + 'b"/>'
+      + '<feOffset in="' + id + 'b" dx="0" dy="0" result="' + id + 'd"/>'
+      + '<feComponentTransfer in="' + id + 'd" result="' + id + 't"><feFuncA type="linear" slope="' + P.TEXT_STREAK + '" intercept="0"/></feComponentTransfer>'
+      + '<feMerge><feMergeNode in="' + id + 't"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+  };
+  /* THE TWO NUMBERS that filter is DRIVEN by, exactly as paintMelt has always written them: the vertical blur (half the
+     run - "0 s", so a letter's columns stay apart) and how far the streak hangs below the glyph (0.6 of it). Exported for
+     a caller that melts ONE text rather than a page of them - species/compare.mjs's `melt` form - so the streak is read
+     off this module and never copied into another. paintMelt writes what it wrote before, to the character. */
+  const meltTextStreak = (run) => ({ blur: "0 " + (Math.max(0, run) * 0.5).toFixed(2), dy: (Math.max(0, run) * 0.6).toFixed(1) });
+  /* THE WORDS' OWN INK over the sag: they run down as their own glyphs and are gone by the ball. meltState's
+     `textOpacity` IS this, and calls it. */
+  const meltTextAlpha = (k) => 1 - mEase(k);
+  /* the SVG transform of the ball: the flight's offset and tumble, and stopaction's area-preserving squash, about its centre */
+  const meltBodyTransform = (st) => {
+    if (!st.centre) return "";
+    const cx = st.centre[0], cy = st.centre[1], xf = st.xf || { x: 0, y: 0, rot: 0 }, a = Math.abs(st.squash.a || 0);
+    const th = (st.squash.a || 0) < 0 ? (st.squash.theta || 0) + Math.PI / 2 : (st.squash.theta || 0);
+    const m = a > 1e-6 ? squashMatrix(th, a) : [1, 0, 0, 1];
+    return "translate(" + (cx + (xf.x || 0)).toFixed(2) + " " + (cy + (xf.y || 0)).toFixed(2) + ") rotate(" + (xf.rot || 0).toFixed(2) + ") "
+      + "matrix(" + m.map((v) => v.toFixed(4)).join(" ") + " 0 0) translate(" + (-cx).toFixed(2) + " " + (-cy).toFixed(2) + ")";
+  };
+
+  /* ---- the painter ------------------------------------------------------------------------------------------------ */
+  const MELT_BOARD_CLASSES = ["lp-grain", "lp-edge", "lp-field", "lp-fieldplate"];
+  const meltIsBoard = (node) => !!(node && node.classList) && MELT_BOARD_CLASSES.some((c) => node.classList.contains(c));
+  /* the two halves of one page, by class: the INK clone hides the board, the BOARD world hides the ink */
+  const MELT_CSS = ".world.meltink{background:transparent!important;pointer-events:none}"
+    + ".meltink .lp-page{background:transparent!important}"
+    + MELT_BOARD_CLASSES.map((c) => ".meltink ." + c).join(",") + "{visibility:hidden!important}"
+    + ".meltboard .lp-page>" + MELT_BOARD_CLASSES.map((c) => ":not(." + c + ")").join("") + "{visibility:hidden!important}"
+    /* the WORDS are not marks: the marks clone never draws them, and the text clone draws nothing else */
+    + ".meltink .lp-ink,.meltink .lp-rail,.meltink .lp-chart line,.meltink .lp-chart text{visibility:hidden!important}"
+    + ".world.melttext{background:transparent!important;pointer-events:none}"
+    + ".melttext .lp-page{background:transparent!important}"
+    + ".melttext .lp-page *{visibility:hidden!important}"
+    + ".melttext .lp-ink,.melttext .lp-ink *,.melttext .lp-rail,.melttext .lp-rail *,.melttext .lp-chart line,.melttext .lp-chart text,.melttext .lp-chart text *{visibility:visible!important}";
+
+  /* the stage's box in the world's own px: `.world` overhangs the stage by 5% on every side */
+  const meltStageBox = (wA) => ({ x: wA.offsetWidth / 22, y: wA.offsetHeight / 22,
+                                         w: wA.offsetWidth * 10 / 11, h: wA.offsetHeight * 10 / 11 });
+  /* THE INK BOX in the world's own px: the union of the page's non-board children as laid out, clamped to the charcoal
+     field (the ink lives on the board). Read through client rects so the punch's transform is in it, and mapped back into
+     the world's px by the world's own scale. null when the world holds no page. */
+  const meltInkRect = (wA) => {
+    const page = wA.querySelector(".lp-page");
+    if (!page) return null;
+    const wr = wA.getBoundingClientRect(), kx = wA.offsetWidth / Math.max(1e-6, wr.width), ky = wA.offsetHeight / Math.max(1e-6, wr.height);
+    const field = page.querySelector(".lp-field"), fr = field && field.getBoundingClientRect(), pr = page.getBoundingClientRect();
+    const clip = fr && fr.width > 1 && fr.height > 1 ? fr : pr;
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const c of page.children) {
+      if (meltIsBoard(c)) continue;
+      const r = c.getBoundingClientRect();
+      if (!(r.width >= 1 && r.height >= 1)) continue;
+      x0 = Math.min(x0, r.left); y0 = Math.min(y0, r.top); x1 = Math.max(x1, r.right); y1 = Math.max(y1, r.bottom);
+    }
+    if (!(x1 > x0 && y1 > y0)) { x0 = clip.left; y0 = clip.top; x1 = clip.right; y1 = clip.bottom; }
+    x0 = Math.max(x0, clip.left); y0 = Math.max(y0, clip.top); x1 = Math.min(x1, clip.right); y1 = Math.min(y1, clip.bottom);
+    return { x: (x0 - wr.left) * kx, y: (y0 - wr.top) * ky, w: Math.max(1, (x1 - x0) * kx), h: Math.max(1, (y1 - y0) * ky) };
+  };
+  /* the marks' colours, as #rrggbb: every series stroke on the page's charts, as the browser computed it */
+  const meltHex = (css) => {
+    const m = /rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/.exec(String(css || ""));
+    return m ? "#" + [m[1], m[2], m[3]].map((v) => (+v).toString(16).padStart(2, "0")).join("") : (/^#[0-9a-fA-F]{6}$/.test(css) ? css : null);
+  };
+  const meltInkColours = (wA) => {
+    const out = [];
+    wA.querySelectorAll(".lp-chart .ser, .lp-chart rect[fill]").forEach((n) => {
+      const cs = getComputedStyle(n), hx = meltHex(n.classList.contains("ser") ? cs.stroke : cs.fill);
+      if (hx && out.indexOf(hx) < 0) out.push(hx);
+    });
+    return out;
+  };
+
+  /* the overlay, mounted ONCE and kept on wA.__melt: the ink clone (a sibling right after the board, so it rides above
+     it), and an svg sibling holding the filters, the masks, the stains' rims, the droplets and the ball. Nothing here reads
+     time; the ink box and the colours are read once, from the page as it stands at the boundary. */
+  const meltMount = (wA, el, id) => {
+    const doc = wA.ownerDocument;
+    if (!doc.getElementById("meltcss")) { const s = doc.createElement("style"); s.id = "meltcss"; s.textContent = MELT_CSS; doc.head.appendChild(s); }
+    const rect = meltInkRect(wA), hexes = meltInkColours(wA);
+    const ink = wA.cloneNode(true);
+    ink.removeAttribute("id"); ink.classList.add("meltink");
+    ink.querySelectorAll("video").forEach((v) => v.remove());
+    wA.parentNode.insertBefore(ink, wA.nextSibling);
+    const txt = wA.cloneNode(true);
+    txt.removeAttribute("id"); txt.classList.add("melttext");
+    txt.querySelectorAll("video").forEach((v) => v.remove());
+    wA.parentNode.insertBefore(txt, ink.nextSibling);
+    wA.classList.add("meltboard");
+    const svg = el("svg", "meltov", wA.parentNode, { "pointer-events": "none" });
+    const defs = el("defs", "", svg, {});
+    defs.innerHTML = meltFilterMarkup(id + "f", 0) + meltMaskMarkup(id + "m", id + "f") + meltInkFilterMarkup(id + "i")
+      + meltStainFilterMarkup(id + "s") + meltRevealMarkup(id + "r", id + "s") + meltSplatFilterMarkup(id + "p") + meltBodyGradientMarkup(id + "g", hexes)
+      + meltSplatGradientMarkup(id + "w", hexes) + meltTextFilterMarkup(id + "x");
+    const ink0 = meltInkOf(hexes, MELT.INK_DEEP);
+    defs.querySelector("#" + id + "i feFlood").setAttribute("flood-color", ink0);
+    const comps = defs.querySelectorAll("#" + id + "i feComposite");
+    const m = { id, svg, defs, ink, txt, rect, hexes, ink0, tintC: comps[comps.length - 1], toff: defs.querySelector("#" + id + "x feOffset"), tblur: defs.querySelector("#" + id + "x feGaussianBlur"),
+                blur: defs.querySelector("#" + id + "f feGaussianBlur"), path: defs.querySelector("mask path"),
+                iblur: defs.querySelector("#" + id + "i feGaussianBlur"), ioffs: [...defs.querySelectorAll("#" + id + "i feOffset")],
+                stainG: defs.querySelector("#" + id + "r g"),
+                drops: el("g", "meltdrops", svg, { filter: "url(#" + id + "p)" }),
+                bodyG: el("g", "meltbody", svg, {}), splats: [], sats: [], holes: [], sprung: null };
+    m.body = el("path", "", m.bodyG, { fill: "url(#" + id + "g)", d: "" });
+    svg.style.position = "absolute"; svg.style.overflow = "visible"; svg.style.pointerEvents = "none"; svg.style.zIndex = "4";
+    wA.__melt = m;
+    return m;
+  };
+  /* keep n circles (or paths) in a group, created once and moved after that */
+  const meltDots = (pool, n, el, parent, attrs, tag = "circle") => { while (pool.length < n) pool.push(el(tag, "", parent, attrs)); return pool; };
+  const meltCircle = (dot, c) => {
+    if (!c || c.r <= 0.2) { dot.setAttribute("r", "0"); return; }
+    dot.setAttribute("cx", c.x.toFixed(1)); dot.setAttribute("cy", c.y.toFixed(1)); dot.setAttribute("r", c.r.toFixed(1));
+  };
+
+  /* PAINT ONE FRAME. ctx: { wA, wB, t, t0, opts, rnd, el, id }. The state is meltState's; this only writes it down. A world
+     that holds no page is not melted (E88: the melt takes a chart's ink - there is no whole-world melt left to fall back
+     to); the engine cuts instead, and so does this. */
+  const paintMelt = (ctx) => {
+    const { wA, wB, el, rnd } = ctx, id = ctx.id || "melt";
+    if (!wA.__melt && !wA.querySelector(".lp-page")) return null;
+    if (wA.__melt && !(wA.__melt.svg && wA.__melt.svg.isConnected)) clearMelt(wA);   /* a stale mount: its clone and classes go first */
+    const m = wA.__melt ? wA.__melt : meltMount(wA, el, id);
+    const st = meltState(ctx.t0, ctx.t, Object.assign({ rect: m.rect, stagebox: meltStageBox(wA) }, ctx.opts), rnd);
+    m.svg.style.left = wA.offsetLeft + "px"; m.svg.style.top = wA.offsetTop + "px";
+    m.svg.style.width = wA.offsetWidth + "px"; m.svg.style.height = wA.offsetHeight + "px";
+    m.svg.setAttribute("viewBox", "0 0 " + wA.offsetWidth + " " + wA.offsetHeight);
+    m.svg.style.opacity = st.gone ? "0" : "1";
+    /* THE INK: masked, run, squeezed about the ball's centre - hidden once the ball is solid */
+    const ink = m.ink, showInk = !st.gone && st.inkOpacity > 0 && st.path;
+    ink.style.visibility = showInk ? "" : "hidden";
+    ink.style.zIndex = "3";
+    if (showInk) {
+      m.blur.setAttribute("stdDeviation", st.blur.toFixed(2));
+      m.path.setAttribute("d", st.path);
+      ink.style.mask = "url(#" + id + "m)"; ink.style.webkitMaskImage = "url(#" + id + "m)";
+      m.iblur.setAttribute("stdDeviation", st.inkBlur.toFixed(2));   /* on for every frame the ink shows: its faint-pixel cut is part of the ink */
+      m.ioffs.forEach((o, j) => o.setAttribute("dy", (st.run * (j + 1) / m.ioffs.length).toFixed(1)));
+      ink.style.filter = "url(#" + id + "i)";
+      m.tintC.setAttribute("k2", st.tint.toFixed(4)); m.tintC.setAttribute("k3", (1 - st.tint).toFixed(4));
+      ink.style.transformOrigin = st.centre ? st.centre[0].toFixed(1) + "px " + st.centre[1].toFixed(1) + "px" : "";
+      ink.style.transform = (st.scale !== 1 ? "scale(" + st.scale.toFixed(4) + ") " : "") + wA.style.transform;
+    }
+    /* THE WORDS: their own glyphs running down, fading out over the sag */
+    const txt = m.txt, showTxt = !st.gone && st.textOpacity > 0.002;
+    txt.style.display = showTxt ? "" : "none";   /* never `visibility`: the words' own !important visible would outrank it */
+    txt.style.zIndex = "3";
+    if (showTxt) {
+      const streak = meltTextStreak(st.run);
+      m.tblur.setAttribute("stdDeviation", streak.blur);
+      m.toff.setAttribute("dy", streak.dy);
+      txt.style.filter = "url(#" + id + "x)";
+      txt.style.opacity = st.textOpacity.toFixed(4);
+      txt.style.transform = wA.style.transform;
+    }
+    ink.style.opacity = showInk ? st.inkOpacity.toFixed(4) : "0";
+    /* THE BALL */
+    m.body.setAttribute("d", st.body || "");
+    m.body.setAttribute("opacity", (st.body ? st.bodyAlpha : 0).toFixed(3));
+    m.bodyG.setAttribute("transform", meltBodyTransform(st));
+    /* THE SPLATTER: opaque ink splats with their tails and satellites, and the torn stains cut through the board */
+    meltDots(m.splats, st.drops.length, el, m.drops, { fill: "url(#" + id + "w)" }, "path").forEach((p, i) => {
+      const d = st.drops[i], k = st.dropScale;
+      p.setAttribute("d", d && d.d > 0 ? meltSplatPath(d.x, d.y, d.r * k, d.a + Math.PI, d.tail * k, rnd, 500 + i) : "");
+    });
+    meltDots(m.sats, st.sats.length, el, m.drops, { fill: "url(#" + id + "w)" }).forEach((dot, i) => {
+      const s = st.sats[i];
+      meltCircle(dot, s ? { x: s.x, y: s.y, r: s.r * st.dropScale } : null);
+    });
+    m.sats.slice(st.sats.length).forEach((dot) => dot.setAttribute("r", "0"));
+    meltDots(m.holes, st.stains.length, el, m.stainG, { fill: "#000" }, "path").forEach((p, i) => {
+      const s = st.stains[i];
+      p.setAttribute("d", s && s.r > 0.2 ? meltSplatPath(s.x, s.y, s.r, 0, 0, rnd, 700 + i) : "");
+    });
+    m.drops.setAttribute("opacity", st.dropAlpha.toFixed(3));
+    /* THE BOARD: the outgoing world, its ink hidden - up, then painted through, then gone */
+    wA.style.zIndex = 3;
+    wA.style.opacity = st.boardUp ? st.cover.toFixed(4) : "0";
+    const rev = st.reveal ? "url(#" + id + "r)" : "";
+    wA.style.mask = rev; wA.style.webkitMaskImage = rev;
+    /* THE PLATE springs up as it is painted */
+    if (wB && st.spring !== 1) {
+      wB.style.transformOrigin = "50% 50%";
+      wB.style.transform = "scale(" + st.spring.toFixed(4) + ") " + wB.style.transform;
+      m.sprung = wB;
+    }
+    return st;
+  };
+
+  /* the reset, called on every frame that is NOT a melt - it touches only what the painter set */
+  const clearMelt = (wA) => {
+    if (!wA.__melt) return;
+    const m = wA.__melt;
+    if (m.svg && m.svg.parentNode) m.svg.parentNode.removeChild(m.svg);
+    if (m.ink && m.ink.parentNode) m.ink.parentNode.removeChild(m.ink);
+    if (m.txt && m.txt.parentNode) m.txt.parentNode.removeChild(m.txt);
+    if (m.sprung && m.sprung.style.transformOrigin) m.sprung.style.transformOrigin = "";
+    wA.__melt = null;
+    wA.classList.remove("meltboard");
+    wA.style.mask = ""; wA.style.webkitMaskImage = "";
+    if (wA.style.zIndex) wA.style.zIndex = "";
+    if (wA.style.opacity !== "") wA.style.opacity = "";
+    if (wA.style.transformOrigin) wA.style.transformOrigin = "";
+  };
   /* KINETICS:END */
   /* KINETICS:BEGIN chartxf */
   /* kinetics/chartxf.mjs - CHART TRANSITIONS (P48 T2, 2026-09-10): the interpolators a chart changes STATE by.
@@ -6693,6 +7425,736 @@ async function mount(doc) {
      so inlining keeps it and node - where no registry exists - still imports the file for the math. */
   if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.figure = paintFigure;
   /* KINETICS:END */
+  /* KINETICS:BEGIN compare */
+  /* SPACE: page */
+  /* species/compare.mjs - THE COMPARE (P57 T12; BACKLOG R26-70b; the grammar is P57 T11's sixth `chart_to` verb).
+     SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN compare and
+     KINETICS:END. It imports the ease law only, and its region sits with the kinetics laws rather than in the species
+     block at the foot of the file - span.mjs's reason: a PAGE species' math is called by the page's PERFORM layer,
+     which is written hundreds of lines above that block, and a const has to exist before the function that closes
+     over it is built.
+
+     WHEN: the sentence quotes the market's own figure and then says what it MEANS. E76 (the operator, 2026-09-13):
+     *"never p/e multiples isn't the rule, the rule should be to explore various display mechanisms, and that
+     comparators (like dollar per share or change per $) show immediate narrative value. In fact, showing the P/E and
+     then morphing it to a more visual number would be a great repeatable mechanism"*. The page has already WRITTEN
+     the quoted figure at its datum (a `figure` species - E50, and the compiler refuses a compare whose metric text no
+     figure on the page carries); this verb turns that written number into the one the viewer feels.
+
+     THE FOUR FORMS. T12 shipped a counter and called the glyph-outline morph impossible - a figure is an SVG <text>
+     with one <tspan> per character, morph_a morphs OUTLINES, and a font-to-path library would stand a second type
+     engine beside the browser's. The operator corrected that twice. First (2026-09-14, E76 s4): *"I don't understand
+     why we can't do the full morph - just collapse or melt then re-draw."* Then, on reading T12b (E76 s5): *"the
+     entire point of having our math and engine is that even for complex/difficult things we should be able to create
+     solutions. it's just math"*, and, on what the melt should do: *"melt it into a ball, then we either throw it off
+     the page, splatter it back on to the canvas and build the chart/graph from that, or morph it from the ball into
+     the chart."* Both corrections stand in the four forms below, and the outlines are neither fetched nor vendored:
+     they are MEASURED off the ink the page already draws (kinetics/contour.mjs - draw the string on an offscreen
+     canvas at the figure's own face, threshold the alpha, walk the 0.5 level with marching squares).
+       melt      THE DEFAULT (P57 T12c). The figure's own outlines SAG on melt.mjs's law - the box's top sinking, its
+                 foot hanging in seeded drips - and then BALL UP into one dense disc that holds the ink's own area.
+                 What becomes of the ball is the row's `then`:
+                   morph   THE DEFAULT ENDING: the ball's ONE ring is carried by morph_a into the comparator's glyph
+                           rings (the pairing rule below: one ring into N, every surplus born from the ball's centre),
+                           and the figure's own <text> is the thing on screen again at u = 1 exactly.
+                   splash  the ball bursts onto the page (melt.mjs's own splatter, seeded rays and landing drops) and
+                           the hand writes the comparator through the drying ink.
+                   throw   the ball sits in its own weight and is thrown off the page (melt.mjs's flight), and the
+                           hand writes the comparator once it has gone.
+       streak    P57 T12b's form, kept whole and byte-identical on its golden: the glyphs melt as ink where they stand,
+                 each one a drip opening in the hand's reading order, running down on melt.mjs's own run under its
+                 words' STREAK filter, and gone by the end of the take-away; then the hand re-writes the comparator.
+       collapse  The hand TAKES THE INK BACK: species/figure.mjs's own write, run backwards, the LAST glyph first - the
+                 undraw law (the line unwinds) on a number.
+       count     E60's counter, the form T12 shipped: the numeral runs to the comparator's on min-jerk and the words
+                 cross THROUGH ZERO at the swap, so no character ever cuts. Kept whole as the `form: "count"` setting -
+                 a number becoming another number by counting is still the honest form where the two are the same KIND
+                 of number - and byte-identical on its golden.
+     `form` and `then` are refused by name, here and in the compiler (build_scene_timeline_f.py's
+     _validate_metric_comparator), so a typo in a shot table is a refusal and never a silent default.
+
+     THE MORPH'S LAW (`streak` and `collapse`), a pure function of t (u = (t - at) / dur, clamped):
+       take-away  over TAKE_SHARE of the window the quoted figure LEAVES - `streak` on melt.mjs's own stepped clock
+                  (MELT.HOLD on 2s: stop-action ink), `collapse` on the hand's own smooth clock. The last drop falls
+                  exactly at TAKE_SHARE, which is where the write begins: the take-away ends before the hand starts.
+       re-draw    over the rest the comparator is written at the SAME DATUM by figure.mjs's hand - its `text` over
+                  FIGURE.WRITE of the re-draw, its `label` beneath as the SUB over the rest - figureGlyph and the
+                  figure's own WRITE/SUB split, not a clock of ours (the label's own glyphs ride T12's compareGlyph,
+                  which lands the last letter exactly as the window ends: see compareMorphFrame's `sub`).
+       hold       `hold: "metric"` ghosts the quoted figure small beside the comparator once the write has LANDED
+                  (T12's ghost, GHOST_A / GHOST_F); `hold: "gone"` gives the comparator the stage.
+
+     THE COUNT FORM'S LAW, a pure function of t, unchanged from T12:
+       count   - the quoted numeral runs to the comparator's numeral on min-jerk over COUNT of the window. It counts
+                 between the two TEXTS' own numerals ("24.8x" -> "15 % dearer" counts 24.8 -> 15), never between the
+                 authored `value`s: those are the ARITHMETIC the compiler checks (E77 - `inputs` + `derive` + `source`,
+                 a comparator the row cannot reproduce is refused), and they may be in another scale entirely
+                 (0.1535 IS "15 % dearer"). Nothing reaches the screen that the row did not author.
+       swap    - the metric's clothes (the text either side of its numeral, and its decimals) become the comparator's
+                 at SWAP, at the instant the affix glyphs are at zero opacity: the swap is invisible because there is
+                 nothing on screen to swap.
+       label   - the comparator's `label` - what the number MEANS, the thing a multiple never says - is written
+                 BENEATH by the hand from LABEL_AT, glyph after glyph at the figure's own overlap.
+       hold    - `hold: "metric"` (the default) stands the quoted figure beside the comparator at GHOST_A from the
+                 swap on, at GHOST_F of its size, so the two can be read against each other; `hold: "gone"` gives the
+                 comparator the stage alone.
+     A SEEK IS THE PLAY: every cell's character and opacity is written from u each frame, so a cold seek into the
+     middle of the morph paints exactly what playing into it paints. The cells, the ghost and the sub are created
+     idempotently (the painter grows them and never rebuilds them), and a frame before `at` restores the figure's own
+     text and leaves its glyphs' opacity to the figure's own hand - so the page before the word is the page.
+     The dials below are ours to tune (42 s42.5), not findings. */
+
+  const COMPARE = Object.freeze({
+    TAKE_SHARE: 0.55, /* `melt` / `collapse`: the share of the window the TAKE-AWAY owns - the melt's sag, the collapse's unwind. The hand's re-draw owns the rest, and the two never overlap: the last drop falls as the first glyph of the comparator arrives */
+    MELT_BOX: 3.2,    /* ... and the ROOM that melt's run is measured on, in the figure's own glyph-box heights: MELT.RUN is a share of a PAGE's ink box (hundreds of px), and a figure's box is one line tall, so a run measured on it alone would be a sag of a few px. The ink falls into the room under the number - where the label is about to be written */
+    COUNT: 0.72,      /* the share of the window the numeral counts over, on min-jerk: it lands before the window does, so the comparator is STILL while its label is read */
+    SWAP: 0.5,        /* where the metric's words become the comparator's - the affix crosses through zero exactly here, so no character is ever cut */
+    CROSS: 0.2,       /* ... and the share of the window the crossing itself takes, centred on the swap: the words stand while the number counts and dissolve only where they change, so the page never looks like it is fading out */
+    LABEL_AT: 0.55,   /* when the comparator's label starts being written beneath (just after the swap: the number is already the new one when it is named) */
+    GHOST_A: 0.62,    /* the held metric's opacity beside the comparator (hold: "metric") - present, and plainly the quieter of the two */
+    GHOST_F: 0.74,    /* ... and its size, as a share of the figure's own: the quoted figure is where the number started, not what the sentence is about now */
+    GAP: 14,          /* the room between the comparator and the held metric, in the chart's viewBox units (the figure's own 14 px offset from its datum) */
+    SUB_DY: 1.3,      /* the label's baseline beneath the figure, in sub sizes - paintFigure's own step for a figure's sub */
+    WIDTH_EM: 0.56,   /* a glyph's width as a share of its size, for a caller with no text metrics (node, a probe): the browser's own getComputedTextLength is used wherever there is one */
+    PAD: 4,           /* spare glyph cells beyond what either end needs - a count between them is never wider than this allows, and the painter still grows on demand */
+    OVERLAP: 1.6,     /* the hand's glyph overlap, the figure's and the span's own: a run that stops exactly at n leaves its last letters half-inked */
+    /* P57 T12c - THE RASTER (E76 s5, "it's just math"): how the engine gets a glyph's outline without a font file */
+    RASTER_S: 4,      /* the working scale: the string is drawn at this many device pixels to the page pixel, so the contour's staircase is a quarter of a page pixel before it is simplified at all (1 read as a jagged number at the stage's size; 8 quadruples the raster for a contour no eye can tell from this one) */
+    RASTER_A: 0.5,    /* ... and the alpha the raster is ink AT or above: the half-covered pixel is the glyph's own edge, which is where the browser itself puts it */
+    RASTER_PAD: 4,    /* the clear border round the drawn string, in device px: ink that touches the bitmap's edge would close its ring on that edge */
+    SIMPLIFY: 1.2,    /* the Douglas-Peucker tolerance, in the RASTER's own px (0.3 of a page px at RASTER_S 4): the staircase comes off and the glyph's corners stay, and morph_a gets a ring it can resample */
+    DEGEN_R: 0.6,     /* a degenerate ring's radius in page px - a shape that is BORN or DIES is a circle of nothing at a point, never a vertex count of nothing (a ring of no length cannot be resampled by arc length) */
+    BALL_SWELL: 1.0,  /* the ball's radius as a share of the disc that holds the ink's OWN area: 1 conserves the ink exactly (see compareBallR - MELT.BALL_R is a share of a PAGE's height and would ball a number up into a speck) */
+    BALL_MIN: 0.34,   /* ... and its floor, in figure sizes: a ball smaller than a third of the number it came from reads as the number blinking out, not as ink gathering */
+    SAG_GAIN: 3.2,    /* the sag's own gain, and MELT_BOX's twin for exactly MELT_BOX's reason: melt.mjs's SAG and TOP_SAG are shares of the melting box's HEIGHT, which on a page is hundreds of px and on a one-line figure is forty - at gain 1 the drips are two pixels and the number just stands there. The ink falls into the room under it, where the label is about to be written */
+    SEED: 7,          /* the salt on the figure's own seeded hash: a page species is handed no scene hash, so the drips and the droplets are seeded by the figure's datum (see compareRnd) */
+  });
+
+  const cmp01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* THE TEXT, split at its FIRST numeral: what is written before it, the numeral as quoted, what is written after,
+     how many decimals it carries and whether it is grouped by thousands. A partition - pre + num + post is the
+     string it came from, exactly - so the two ends of the morph are the authored strings and nothing else. */
+  const compareSplit = (text) => {
+    const s = text == null ? "" : String(text);
+    const m = /-?\d[\d,]*(?:\.\d+)?/.exec(s);
+    if (!m) return { pre: s, num: "", post: "", dec: 0, group: false, value: NaN };
+    const num = m[0], dot = num.indexOf(".");
+    return { pre: s.slice(0, m.index), num, post: s.slice(m.index + num.length),
+             dec: dot < 0 ? 0 : num.length - dot - 1, group: num.indexOf(",") >= 0,
+             value: parseFloat(num.replace(/,/g, "")) };
+  };
+
+  /* a counted value in one end's own clothes: its decimals, its thousands grouping, and a sign only when the
+     rounded number actually is one (a count that passes through -0.004 must not flash a minus) */
+  const compareFmt = (v, dec, group) => {
+    if (!Number.isFinite(v)) return "";
+    const s = Math.abs(v).toFixed(Math.max(0, Math.min(6, dec | 0)));
+    const cut = s.indexOf("."), whole = cut < 0 ? s : s.slice(0, cut), frac = cut < 0 ? "" : s.slice(cut);
+    return (v < 0 && parseFloat(s) !== 0 ? "-" : "")
+      + (group ? whole.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : whole) + frac;
+  };
+
+  /* THE FRAME at u: the whole state of the morph as numbers and one string, and the only place the law lives.
+       text   what is written this frame (u <= 0 is the metric AS QUOTED, u >= 1 the comparator AS AUTHORED)
+       value  the numeral this frame, min-jerk between the two quoted numerals - monotone in u, and null when
+              either end quotes no number at all (then the whole string cross-fades and nothing counts)
+       i0/i1  the numeral's span in `text`: those cells hold at full ink while the ones around them cross over
+       affix  the opacity of every cell outside the numeral - 1 at both ends, 0 exactly at the swap, and the
+              crossing itself only CROSS of the window wide, so the words stand while the number counts
+       sub    how far the comparator's label has been written; ghost: the held metric's opacity */
+  const compareFrame = (sp, u) => {
+    const S = sp || {}, M = compareSplit((S.metric || {}).text), C = compareSplit((S.comparator || {}).text);
+    const uu = cmp01(u), counts = Number.isFinite(M.value) && Number.isFinite(C.value);
+    const value = counts ? M.value + (C.value - M.value) * minJerk(cmp01(uu / COMPARE.COUNT)) : null;
+    const end = uu <= 0 ? M : uu >= 1 ? C : null, dress = end || (uu < COMPARE.SWAP ? M : C);
+    const num = end ? end.num : (counts ? compareFmt(value, dress.dec, dress.group || M.group) : dress.num);
+    const affix = end ? 1 : (uu < COMPARE.SWAP ? 1 - minJerk(cmp01((uu - (COMPARE.SWAP - COMPARE.CROSS)) / COMPARE.CROSS))
+                                               : minJerk(cmp01((uu - COMPARE.SWAP) / COMPARE.CROSS)));
+    return { text: dress.pre + num + dress.post, value, i0: dress.pre.length, i1: dress.pre.length + num.length,
+             affix, counts, u: uu,
+             sub: cmp01((uu - COMPARE.LABEL_AT) / (1 - COMPARE.LABEL_AT)),
+             ghost: cmp01((uu - COMPARE.SWAP) / (1 - COMPARE.SWAP)) * COMPARE.GHOST_A };
+  };
+
+  /* ---- THE MORPH (the operator's first correction, P57 T12b): the take-away, then the hand ------------------------- */
+  /* THE MORPH'S FRAME at u, for `streak` and `collapse` - the whole state as two clocks and one string:
+       take   the take-away's own progress, 1 exactly at TAKE_SHARE (`streak` reads it off melt's STEPPED clock, so the
+              ink leaves in stop-action poses on 2s, the clock its own drops and its ball already run on)
+       write  the hand's progress over the rest of the window, 0 until the take-away has ended
+       text   the metric AS QUOTED until the write begins, the comparator AS AUTHORED from there (u <= 0 is the metric,
+              u >= 1 the comparator - the ends are the authored strings, as they are for the counter)
+       sub    how far the comparator's LABEL has been written beneath: the re-draw splits into the number and its label
+              on figure.mjs's own share (FIGURE.WRITE), and the label is then written on T12's own hand (compareGlyph),
+              which lands its last letter exactly as the window ends - figureSubGlyph's OVERLAP slack overruns the
+              figure's window and leaves its last glyph at 0.625, which on a label beside a 0.62 ghost is not a label
+       ghost  the held metric's opacity: it arrives only once the hand has LANDED the comparator's own text (FIGURE.WRITE
+              of the re-draw), so the two numbers are never both half-written */
+  const compareMorphFrame = (sp, u, form) => {
+    const S = sp || {}, uu = cmp01(u), dur = Math.max(0.001, +S.dur || 1);
+    const uq = form === "collapse" ? uu : cmp01(stepped(Math.max(0, uu * dur), MELT.HOLD, MELT.FPS) / dur);
+    const take = cmp01(uq / COMPARE.TAKE_SHARE);
+    const write = cmp01((uu - COMPARE.TAKE_SHARE) / (1 - COMPARE.TAKE_SHARE));
+    const metric = String((S.metric || {}).text == null ? "" : (S.metric || {}).text);
+    const comparator = String((S.comparator || {}).text == null ? "" : (S.comparator || {}).text);
+    const sub = cmp01((write - FIGURE.WRITE) / (1 - FIGURE.WRITE));
+    return { form, metric, comparator, take, write, sub, u: uu, text: write > 0 ? comparator : metric,
+             ghost: sub * COMPARE.GHOST_A };
+  };
+
+  /* the glyph's own delay: the drips open in the hand's READING ORDER over MELT.DRIP_DELAY - melt's own dial ("the last
+     drop starts this far into the melt phase"), with melt's seeded order replaced by the one the hand wrote them in
+     (a page species is handed no seeded hash, and a number that melted out of order would read as a glitch) */
+  const cmpDrip = (take, j, n) => {
+    const d = MELT.DRIP_DELAY * ((j | 0) / Math.max(1, (n | 0) - 1));
+    return cmp01((cmp01(take) - d) / Math.max(1e-6, 1 - d));
+  };
+  /* ONE GLYPH OF THE TAKE-AWAY. streak: melt.mjs's own words-alpha on that glyph's drip. collapse: figure.mjs's own write
+     run BACKWARDS, the last glyph first - the hand takes the ink back the way it laid it down. */
+  const compareTakeGlyph = (form, take, j, n) => {
+    const m = Math.max(1, n | 0);
+    if (form === "collapse") return 1 - figureGlyph(cmp01(take), m - 1 - (j | 0), m);
+    return meltTextAlpha(cmpDrip(take, j, m));
+  };
+  /* ... and how far that glyph has RUN, in the chart's own viewBox units: melt.mjs's run on the room under the number */
+  const compareTakeFall = (form, take, j, n, h) =>
+    form === "streak" ? meltRun("melt", cmpDrip(take, j, Math.max(1, n | 0)), { h: h }) : 0;
+  /* the room the ink falls into, off the figure's OWN box law (species/figure.mjs) and the dial above */
+  const compareMeltBox = (fs) => (FIGURE.FIGURE_UP + FIGURE.FIGURE_DOWN) * (+fs || 0) * COMPARE.MELT_BOX;
+
+  /* how many glyph cells the label needs for the whole morph: both authored strings, and the widest a counted
+     number in either end's clothes can be (the integer part of the larger magnitude, the deeper decimals, a point,
+     a sign and a comma group). The painter still grows on demand, so this is the room, never the limit. */
+  const compareCapacity = (sp) => {
+    const S = sp || {}, mt = (S.metric || {}).text == null ? "" : String((S.metric || {}).text);
+    const ct = (S.comparator || {}).text == null ? "" : String((S.comparator || {}).text);
+    const M = compareSplit(mt), C = compareSplit(ct);
+    const big = Math.max(Math.abs(M.value) || 0, Math.abs(C.value) || 0);
+    const digits = Number.isFinite(M.value) && Number.isFinite(C.value)
+      ? String(Math.floor(big)).length + Math.max(M.dec, C.dec) + 3
+      : Math.max(M.num.length, C.num.length);
+    const around = Math.max(M.pre.length + M.post.length, C.pre.length + C.post.length);
+    return Math.max(mt.length, ct.length, around + digits) + COMPARE.PAD;
+  };
+
+  /* one glyph of the label as the hand writes it - the figure's and the span's own share, with OVERLAP's slack so
+     the last letter is fully in exactly when the write ends */
+  const compareGlyph = (write, j, n) => {
+    const per = 1 / (Math.max(1, n | 0) + COMPARE.OVERLAP - 1);
+    return cmp01((write - j * per) / (per * COMPARE.OVERLAP));
+  };
+
+  /* the FIGURE this row morphs: the one the page wrote with the metric's own text (paintFigure's records carry
+     `sp.text`). The compiler has already refused a row with no such figure - here, a page that lost it paints
+     nothing rather than inventing a place to write. */
+  const compareFigure = (figures, sp) => {
+    const want = String((((sp || {}).metric) || {}).text == null ? "" : ((sp || {}).metric || {}).text).trim();
+    if (!want) return null;
+    return (figures || []).find((f) => f && f.sp && String(f.sp.text == null ? "" : f.sp.text).trim() === want) || null;
+  };
+
+  /* the written width of the label, for placing the held metric BESIDE it: the browser's own metrics where there
+     are any, the estimate where there are none (node, a probe) - both pure functions of the string on screen */
+  const compareWidth = (el, text, fs) =>
+    (el && typeof el.getComputedTextLength === "function" ? el.getComputedTextLength() : 0)
+    || String(text == null ? "" : text).length * fs * COMPARE.WIDTH_EM;
+
+  /* THE INK on one element: the attribute AND the inline style. The page's own class CSS carries an opacity for the
+     sub's class (`.lp-chart .bksub { opacity: .85 }`) and a class rule outranks a presentation ATTRIBUTE - the lesson
+     the bracket's inline `fill` was already written for (scene-evidence-engine.mjs: "the chart's class CSS outranks a
+     fill attribute"). The attribute is written too, so a caller with no CSSOM - node, a probe - still reads the law
+     off the element. Measured 2026-09-14: the held metric came back at .85 on every frame of the first render. */
+  const compareInk = (el, v) => {
+    if (!el) return;
+    const a = Math.min(1, Math.max(0, +v || 0)).toFixed(3);
+    el.setAttribute("opacity", a);
+    if (el.style) el.style.opacity = a;
+  };
+
+  /* the figure's OWN colour, read off the inline style paintFigure wrote it with (`font-size:NNpx;fill:COL`), so the
+     held metric and the comparator's label are the same ink as the number they belong to - never a colour of ours */
+  const compareFill = (fg) => {
+    const m = /fill:\s*([^;]+)/.exec(String((fg && fg.label && fg.label.getAttribute && fg.label.getAttribute("style")) || ""));
+    return m ? m[1].trim() : "var(--lp-chalk)";
+  };
+
+  /* THE MORPH'S OWN ELEMENTS, built once and grown, never rebuilt: the extra glyph cells the count needs beyond the
+     figure's own, the held metric beside it, and the comparator's label beneath. Idempotent on purpose - a cold seek
+     builds exactly what a play built, and a page whose figure was re-drawn gets them back on the next frame. */
+  const compareEnsure = (fg, sp, ctx, want) => {
+    const el = (ctx || {}).el;
+    let P = fg.__compare;
+    if (!P) {
+      const fs = +fg.fs || 28, fss = +fg.fss || fs * 0.6, anchor = fg.fits === false ? "end" : "start";
+      const col = compareFill(fg);
+      const ghost = el ? el("text", "bksub", fg.g, { x: 0, y: 0, "text-anchor": anchor, opacity: 0,
+        style: "font-size:" + (fs * COMPARE.GHOST_F).toFixed(1) + "px;fill:" + col + ";opacity:0" }) : null;
+      if (ghost) ghost.textContent = String(((sp.metric || {}).text) == null ? "" : (sp.metric || {}).text);
+      const sub = el ? el("text", "bksub", fg.g, { x: 0, y: 0, "text-anchor": anchor,
+        style: "font-size:" + fss.toFixed(1) + "px;fill:" + col + ";opacity:1" }) : null;
+      const lab = String(((sp.comparator || {}).label) == null ? "" : (sp.comparator || {}).label);
+      const sg = sub && el ? [...lab].map((ch) => { const ts = el("tspan", "", sub, { opacity: 0 });
+        ts.textContent = ch === " " ? " " : ch; return ts; }) : [];
+      P = fg.__compare = { cells: (fg.lg || []).slice(), ghost, sub, sg, fs, fss, anchor };
+    }
+    while (el && fg.label && P.cells.length < (want | 0)) {
+      const ts = el("tspan", "", fg.label, { opacity: 0 }); ts.textContent = ""; P.cells.push(ts);
+    }
+    return P;
+  };
+
+  /* THE STREAK'S FILTER, mounted ONCE beside the figure: melt.mjs's own words filter (meltTextFilterMarkup), under an id
+     built from the figure's own datum - the page writes one figure per metric text, and the compiler refuses a compare
+     whose metric no figure on the page carries, so two melts on one page can never collide. A caller with no DOM parser
+     (node, a probe) gets the bundle with no primitives and paints the law without the pixels. */
+  const compareMeltEnsure = (fg, P, ctx) => {
+    if (P.melt) return P.melt;
+    const el = (ctx || {}).el, id = "cmpmelt" + (fg.si | 0) + "-" + (fg.idx | 0);
+    const host = el ? el("defs", "", fg.g, {}) : null;
+    let tblur = null, toff = null;
+    if (host && typeof host.querySelector === "function") {
+      host.innerHTML = meltTextFilterMarkup(id);
+      tblur = host.querySelector("feGaussianBlur"); toff = host.querySelector("feOffset");
+    }
+    P.melt = { id, host, tblur, toff };
+    return P.melt;
+  };
+
+  /* WHAT STANDS BESIDE AND BENEATH the morphing number, for every form: the held metric on the figure's own baseline
+     (the side the figure itself took), and the comparator's label written beneath it glyph by glyph. `subInk` is the
+     form's own hand - the counter's own write for `count`, the figure's SUB write for the two morph forms. */
+  const compareBeside = (fg, P, sp, text, before, ghost, subInk) => {
+    const fits = fg.fits !== false, x = +fg.x || 0, y = +fg.y || 0;
+    if (P.ghost) {
+      const w = compareWidth(fg.label, text, P.fs), gx = x + (fits ? 1 : -1) * (w + COMPARE.GAP);
+      P.ghost.setAttribute("x", gx.toFixed(1)); P.ghost.setAttribute("y", y.toFixed(1));
+      P.ghost.setAttribute("text-anchor", fits ? "start" : "end");
+      compareInk(P.ghost, before || sp.hold === "gone" ? 0 : ghost);
+    }
+    if (P.sub) {
+      const step = P.fss * COMPARE.SUB_DY;
+      P.sub.setAttribute("x", x.toFixed(1)); P.sub.setAttribute("y", (y + step * (fg.sub ? 2 : 1)).toFixed(1));
+      P.sub.setAttribute("text-anchor", fits ? "start" : "end");
+      compareInk(P.sub, 1);   /* the class's own .85 would dim the label the hand is writing; its glyphs carry the write */
+      P.sg.forEach((ts, j) => ts.setAttribute("opacity", (before ? 0 : subInk(j, P.sg.length)).toFixed(3)));
+    }
+  };
+
+  /* THE COUNT FORM'S PAINT (T12, unchanged to the digit - its golden is byte-identical): every cell's character and
+     opacity from the frame, the numeral at full ink while the words around it cross through zero. */
+  const paintCompareCount = (fg, sp, u, before, ctx) => {
+    const F = compareFrame(sp, u);
+    const P = compareEnsure(fg, sp, ctx, Math.max(compareCapacity(sp), F.text.length));
+    const chars = [...F.text];
+    P.cells.forEach((ts, j) => {
+      const ch = j < chars.length ? chars[j] : "";
+      ts.textContent = ch === " " ? " " : ch;
+      if (before) { if (j >= (fg.lg || []).length) ts.setAttribute("opacity", 0); return; }   /* before the word the figure's own hand owns its glyphs; the cells this module added are not its business */
+      ts.setAttribute("opacity", (j >= chars.length ? 0 : (j >= F.i0 && j < F.i1 ? 1 : F.affix)).toFixed(3));
+    });
+    compareBeside(fg, P, sp, F.text, before, F.ghost, (j, n) => compareGlyph(F.sub, j, n));
+  };
+
+  /* THE MORPH'S PAINT (`streak`, `collapse`): the metric's cells are TAKEN AWAY - each glyph on its own drip, running down
+     by melt's own run (a <tspan>'s `dy` is CUMULATIVE, so each cell carries the DELTA and the row reads as absolute
+     offsets) under melt's streak filter - and then the SAME cells are written back as the comparator by the figure's own
+     hand. Every attribute is written from u on every frame, including the frames before the word, so a cold seek into
+     the middle of the melt paints exactly what playing into it paints and a seek back is the page as it stood. */
+  const paintCompareMorph = (fg, sp, u, before, ctx, form) => {
+    const F = compareMorphFrame(sp, u, form);
+    const P = compareEnsure(fg, sp, ctx, Math.max(compareCapacity(sp), F.text.length));
+    const M = form === "streak" ? compareMeltEnsure(fg, P, ctx) : null;
+    const chars = [...F.text], n = chars.length, h = compareMeltBox(P.fs), taking = !before && F.write <= 0;
+    let off = 0;
+    P.cells.forEach((ts, j) => {
+      const ch = j < n ? chars[j] : "";
+      ts.textContent = ch === " " ? " " : ch;
+      const fall = taking && j < n ? compareTakeFall(form, F.take, j, n, h) : 0;
+      ts.setAttribute("dy", (fall - off).toFixed(2));
+      off = fall;
+      if (before) { if (j >= (fg.lg || []).length) ts.setAttribute("opacity", 0); return; }
+      const ink = j >= n ? 0 : (taking ? compareTakeGlyph(form, F.take, j, n) : figureGlyph(F.write, j, n));
+      ts.setAttribute("opacity", ink.toFixed(3));
+    });
+    if (M) {
+      const streak = meltTextStreak(taking ? meltRun("melt", F.take, { h: h }) : 0);
+      if (M.tblur) M.tblur.setAttribute("stdDeviation", streak.blur);
+      if (M.toff) M.toff.setAttribute("dy", streak.dy);
+      const use = taking && F.take > 0 ? "url(#" + M.id + ")" : "none";
+      fg.label.setAttribute("filter", use);
+      if (fg.label.style) fg.label.style.filter = use === "none" ? "" : use;
+    }
+    compareBeside(fg, P, sp, F.text, before, F.ghost, (j, n2) => compareGlyph(F.sub, j, n2));
+  };
+
+  /* ---- P57 T12c: THE BALL (E76 s5, the operator's second correction) ------------------------------------------------ */
+  /* THE FORM, by name. `melt` is the default because that is the correction: the quoted figure melts into a BALL and the
+     ending says what becomes of it. Anything else throws - the compiler refuses it first, and a painter that silently
+     picked a form would be a claim nobody made. */
+  const COMPARE_FORMS = Object.freeze(["melt", "streak", "collapse", "count"]);
+  const COMPARE_THENS = Object.freeze(["morph", "splash", "throw"]);
+  const compareForm = (sp) => {
+    const f = ((sp || {}).form) == null ? COMPARE_FORMS[0] : String((sp || {}).form);
+    if (COMPARE_FORMS.indexOf(f) < 0) {
+      throw new Error("compare: form " + f + " is not one of " + COMPARE_FORMS.join(" | ")
+        + " - melt (the default: the quoted figure sags and BALLS UP, then the ending says what becomes of the ball), "
+        + "streak (P57 T12b's text melt: the glyphs drip under their own streak filter and the hand re-writes), collapse "
+        + "(the hand takes the ink back first), count (E60's counter, T12's form)");
+    }
+    return f;
+  };
+  /* THE ENDING, by name, and only on the ball. `then` on a form that never makes a ball is a row about nothing - the
+     compiler says so first, and the painter says so here rather than painting something nobody authored. */
+  const compareThen = (sp) => {
+    const S = sp || {}, t = S.then == null ? COMPARE_THENS[0] : String(S.then);
+    if (COMPARE_THENS.indexOf(t) < 0) {
+      throw new Error("compare: then " + t + " is not one of " + COMPARE_THENS.join(" | ")
+        + " - morph (the default: the ball becomes the comparator's own glyphs), splash (it bursts onto the page and the "
+        + "hand writes through the splatter), throw (it is thrown off the page and the hand writes after it)");
+    }
+    return t;
+  };
+
+  /* THE SEEDED HASH a figure's own melt runs on: the drips, the droplets and their rays. A page species is handed no
+     scene hash, so it is seeded by the figure's OWN datum (its series and its index) - two figures on one page melt
+     differently, and the same figure melts identically on every frame, every seek and every render. */
+  const compareRnd = (fg) => {
+    const seed = (Math.imul((fg && fg.si) | 0, 131) + Math.imul((fg && fg.idx) | 0, 17) + COMPARE.SEED) >>> 0;
+    return (k) => {
+      let h = (seed + Math.imul((k | 0) + 1, 2654435761)) >>> 0;
+      h ^= h >>> 15; h = Math.imul(h, 2246822519) >>> 0;
+      h ^= h >>> 13; h = Math.imul(h, 3266489917) >>> 0;
+      return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+    };
+  };
+
+  /* ---- the raster: the page's own ink, measured ---------------------------------------------------------------- */
+  /* THE FACE the page is writing in, read off the element the page wrote - never a face of ours. A caller with no CSSOM
+     (node, a probe) gets null and the morph paints no outlines at all; it never guesses a font. */
+  const compareFace = (el, fs) => {
+    const cs = (typeof getComputedStyle === "function" && el && el.nodeType) ? getComputedStyle(el) : null;
+    if (!cs || !cs.fontFamily) return null;
+    return { style: cs.fontStyle || "normal", weight: String(cs.fontWeight || "400"),
+             family: cs.fontFamily, size: parseFloat(cs.fontSize) || +fs || 0 };
+  };
+  /* ... as one canvas font string, at a working scale: the raster is RASTER_S device pixels to the page pixel, so the
+     contour's staircase is a quarter of a page pixel before it is simplified at all */
+  const compareFontString = (face, scale = 1) =>
+    face.style + " " + face.weight + " " + (face.size * scale).toFixed(2) + "px " + face.family;
+
+  const CMP_SHAPES = new Map();   /* (text, face, scale) -> the rings. Computed ONCE per state: a cold seek into the
+     middle of a morph re-uses exactly the rings a play built, and the browser rasterises one string once per page. */
+
+  /* THE GLYPHS OF A STRING AS RINGS, in PAGE units relative to the text's pen origin (x = 0 is where the first glyph
+     starts, y = 0 is the baseline). The whole of E76 s5 is these fourteen lines: draw the string on an offscreen
+     canvas at the figure's own face, size and weight; threshold the alpha; walk the 0.5 level (kinetics/contour.mjs);
+     simplify the staircase off; divide by the working scale. No font file is parsed.
+       `rings` the outlines, each with its `hole` and its `parent`   `box`  their bounding box (the INK box the melt sags)
+       `adv`   the string's advance, for an `end`-anchored figure    `area` the ink's own area, which sizes the ball */
+  const compareShape = (text, face, o = {}) => {
+    const doc = (o.document !== undefined) ? o.document : (typeof document !== "undefined" ? document : null);
+    const str = String(text == null ? "" : text);
+    if (!doc || typeof doc.createElement !== "function" || !face || !str) return null;
+    const S = +o.scale || COMPARE.RASTER_S, font = compareFontString(face, S), key = str + " " + font;
+    if (CMP_SHAPES.has(key)) return CMP_SHAPES.get(key);
+    const cv = doc.createElement("canvas"), c2 = cv.getContext && cv.getContext("2d");
+    if (!c2) return null;
+    c2.font = font;
+    const m = c2.measureText(str), pad = COMPARE.RASTER_PAD;
+    const left = Math.ceil(Math.abs(m.actualBoundingBoxLeft || 0)), right = Math.ceil(Math.abs(m.actualBoundingBoxRight || 0));
+    const asc = Math.ceil(Math.abs(m.actualBoundingBoxAscent || 0)), desc = Math.ceil(Math.abs(m.actualBoundingBoxDescent || 0));
+    if (!(right + left > 0) || !(asc + desc > 0)) return null;
+    cv.width = left + right + 2 * pad; cv.height = asc + desc + 2 * pad;
+    c2.font = font;   /* sizing the canvas resets its context: the face is set again, after the box is known */
+    c2.textAlign = "left"; c2.textBaseline = "alphabetic"; c2.fillStyle = "#000";
+    const ox = pad + left, oy = pad + asc;
+    c2.fillText(str, ox, oy);
+    const img = c2.getImageData(0, 0, cv.width, cv.height).data;
+    const bmp = contourBitmap(img, cv.width, cv.height, COMPARE.RASTER_A);
+    const rings = contourShape(bmp, { tol: COMPARE.SIMPLIFY, map: (p) => [(p[0] + 0.5 - ox) / S, (p[1] + 0.5 - oy) / S] });
+    if (!rings.length) return null;
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity, area = 0;
+    for (const r of rings) {
+      area += (r.hole ? -1 : 1) * Math.abs(polyArea(r.pts));
+      for (const p of r.pts) { x0 = Math.min(x0, p[0]); y0 = Math.min(y0, p[1]); x1 = Math.max(x1, p[0]); y1 = Math.max(y1, p[1]); }
+    }
+    const shape = { rings, adv: m.width / S, area: Math.abs(area), box: { x: x0, y: y0, w: x1 - x0, h: y1 - y0 } };
+    /* the face loads over the network: a raster taken before it landed is the FALLBACK face's, and caching that would
+       freeze the wrong glyphs into the whole morph. It is used for this frame and computed again on the next one. */
+    if (!doc.fonts || typeof doc.fonts.check !== "function" || doc.fonts.check(font)) CMP_SHAPES.set(key, shape);
+    return shape;
+  };
+
+  /* the rings at the figure's own datum: the pen is the figure's x (its advance back from it where the page had no room
+     to the right and the text is anchored `end`), and its y is the baseline the hand wrote on */
+  const compareAtPen = (shape, fg) => {
+    const px = (fg.fits === false ? (+fg.x || 0) - shape.adv : (+fg.x || 0)), py = +fg.y || 0;
+    return { rings: shape.rings.map((r) => ({ hole: r.hole, parent: r.parent, pts: r.pts.map((p) => [px + p[0], py + p[1]]) })),
+             box: { x: px + shape.box.x, y: py + shape.box.y, w: shape.box.w, h: shape.box.h }, area: shape.area, adv: shape.adv };
+  };
+
+  /* ---- the pairing rule ---------------------------------------------------------------------------------------- */
+  /* A GLYPH is an outer ring and the holes inside it. A hole's `parent` is the ring it sits in, which may itself be a
+     hole (a counter island), so the walk up the parents ends at the ink the hole belongs to. */
+  const compareGroups = (rings) => {
+    const groups = [], of = new Array(rings.length).fill(-1);
+    rings.forEach((r, i) => { if (!r.hole) { of[i] = groups.length; groups.push({ outer: r.pts, holes: [], c: centroid(r.pts) }); } });
+    rings.forEach((r, i) => {
+      if (!r.hole) return;
+      let p = r.parent;
+      while (p >= 0 && rings[p].hole) p = rings[p].parent;
+      if (p >= 0 && of[p] >= 0) groups[of[p]].holes.push(r.pts);
+    });
+    for (const g of groups) g.holes.sort((a, b) => centroid(a)[0] - centroid(b)[0]);
+    return groups.sort((a, b) => a.c[0] - b.c[0]);
+  };
+
+  /* a DEGENERATE ring - the morph's own law for a shape that appears or disappears: a circle of nothing at a point */
+  const compareSeed = (c, r) => ballCircle(c, Math.max(1e-3, r), MELT.CIRCLE_N);
+
+  /* THE PAIRING RULE, stated once and used both ways round.
+       1. Both sets are sorted by their glyphs' CENTROID X - reading order, which is the order the hand wrote them in.
+       2. Outer rings pair with outer rings BY RANK: the i-th glyph of one becomes the i-th glyph of the other.
+       3. A SURPLUS glyph on either side has no rank to pair with. It collapses into - or is born from - a degenerate
+          ring at the centroid of its NEAREST paired neighbour's counterpart: the glyph beside it is where it goes.
+       4. HOLES pair with holes, inside a paired glyph, by the same rank rule on the same sorted order; a surplus hole
+          dies into (or is born from) a degenerate ring at its own glyph's counterpart centroid - a hole is a gap in
+          ONE glyph and has nowhere else to go.
+     `24.8x` -> `15 %` is the case the node test pins: five glyphs to three, so three pair by rank and the last two
+     collapse into the third's destination. The SAME rule carries one ring into many - which is exactly what the ball
+     becoming the comparator is: one glyph to N, every surplus born from the ball's own centre. */
+  const comparePairGroups = (A, B, degenR) => {
+    const As = (A || []).slice(), Bs = (B || []).slice(), n = Math.min(As.length, Bs.length), out = [];
+    const near = (from, i, to) => {   /* the nearest PAIRED neighbour's counterpart, by centroid x */
+      let best = 0, d = Infinity;
+      for (let k = 0; k < n; k++) { const dd = Math.abs(from[i].c[0] - from[k].c[0]); if (dd < d) { d = dd; best = k; } }
+      return to[best];
+    };
+    const holes = (a, b, cA, cB) => {
+      const m = Math.min(a.length, b.length);
+      for (let j = 0; j < m; j++) out.push({ src: a[j], dst: b[j], hole: true });
+      for (let j = m; j < a.length; j++) out.push({ src: a[j], dst: compareSeed(cB, degenR), hole: true, dies: true });
+      for (let j = m; j < b.length; j++) out.push({ src: compareSeed(cA, degenR), dst: b[j], hole: true, born: true });
+    };
+    for (let i = 0; i < n; i++) {
+      out.push({ src: As[i].outer, dst: Bs[i].outer, hole: false });
+      holes(As[i].holes, Bs[i].holes, As[i].c, Bs[i].c);
+    }
+    for (let i = n; i < As.length; i++) {
+      const to = near(As, i, Bs);
+      out.push({ src: As[i].outer, dst: compareSeed(to.c, degenR), hole: false, dies: true });
+      holes(As[i].holes, [], As[i].c, to.c);
+    }
+    for (let i = n; i < Bs.length; i++) {
+      const from = near(Bs, i, As);
+      out.push({ src: compareSeed(from.c, degenR), dst: Bs[i].outer, hole: false, born: true });
+      holes([], Bs[i].holes, from.c, Bs[i].c);
+    }
+    return out;
+  };
+
+  /* THE MORPH of a pair set, prepared once (Method A: ring-normalise, resample by arc length, rotational alignment) and
+     read at m every frame. morph_a refuses only a pair it is told not to resample (rings of different vertex counts);
+     every pair here is resampled to MORPH_A.N, which is what makes a five-ring set and a three-ring set commensurable. */
+  const comparePrepare = (pairs) => pairs.map((p) => ({ hole: p.hole, prep: morphAPrepare(p.src, p.dst, { n: MORPH_A.N }) }));
+  /* ... and the path they paint: ONE `d` for the whole set, one subpath per pair, holes WOUND THE OTHER WAY. The fill
+     is nonzero, so a hole subtracts from the glyph it sits in - which it can only do inside ONE fill, which is why this
+     is one <path> and not one per pair - and two glyphs that land on the same disc (every ring at the ball) make one
+     solid ball rather than cancelling each other out, which is what even-odd would have done. */
+  const comparePath = (preps, m) => preps.map((p) => {
+    const ring = morphAAt(p.prep, m).outline;
+    return morphAPath(p.hole ? ring.slice().reverse() : ring);
+  }).join(" ");
+
+  /* ---- the sag and the ball -------------------------------------------------------------------------------------- */
+  /* THE SAG on an outline, melt.mjs's own law applied to the INK rather than to a mask over it: the box's top sinks
+     (meltTop) and its foot hangs in seeded drips (meltDepth), and every point of the ink is carried between the two in
+     the share of the box it stands at. A page melts its pixels through a mask; a figure has its outlines, so the same
+     law moves the vertices themselves - the ink runs down and the drips are where it runs. */
+  const compareSagAt = (pts, k, box, drips) => {
+    const h = Math.max(1e-6, box.h), g = COMPARE.SAG_GAIN;
+    return pts.map((p) => {
+      const top = meltTop(p[0], k, box, drips), foot = box.y + box.h + meltDepth(p[0], k, box, drips);
+      const to = top + (foot - top) * ((p[1] - box.y) / h);
+      return [p[0], p[1] + (to - p[1]) * g];   /* the DISPLACEMENT is what the gain scales: at k = 0 melt's law moves nothing, and nothing times a gain is still nothing */
+    });
+  };
+  /* THE BALL'S RADIUS, and the one number of this slice that is NOT melt's. MELT.BALL_R is a share of the melting
+     box's HEIGHT, which on a page is hundreds of px and on a one-line figure is forty - it would ball a number up into
+     a speck of three pixels. The figure's ball is the disc that holds THE INK'S OWN AREA (the rings' area, holes taken
+     out), swelled by a dial, and never smaller than BALL_MIN of the figure's own size: the ink is conserved, which is
+     what "melt it into a ball" says. COMPARE.MELT_BOX made the same correction for the streak's run. */
+  const compareBallR = (area, fs) =>
+    Math.max(COMPARE.BALL_MIN * (+fs || 0), COMPARE.BALL_SWELL * Math.sqrt(Math.max(0, area) / Math.PI));
+  /* the ball's CENTRE: the sagged ink's own area-weighted centroid - where the mass ended up, not where it started */
+  const compareBallC = (groups) => {
+    let wx = 0, wy = 0, w = 0;
+    for (const g of groups) { const a = Math.abs(polyArea(g.outer)), c = centroid(g.outer); wx += c[0] * a; wy += c[1] * a; w += a; }
+    return w > 0 ? [wx / w, wy / w] : [0, 0];
+  };
+
+  /* THE BALL FORM'S FRAME at u - the whole state as melt's own phases and two clocks, a pure function of u:
+       phase  melt.mjs's own share of the window: `melt` the SAG [0, MELT_END), `ball` the ball [MELT_END, BALL_END),
+              `fly` the ENDING [BALL_END, 1), `gone` at u >= 1. The shares are melt's dials, not ours.
+       sag    the sag's progress, 1 from the ball on          ball  the ball's, 0 through the sag and 1 from the ending
+       morph  `then: morph` only - the ball into the comparator's glyphs, on min-jerk over the ending
+       write  when the HAND writes the comparator's own text: never on a morph (the outlines ARE the glyphs, and the
+              text takes over at u = 1 exactly), from melt's RELEASE on a throw (the ball is gone), from the burst's
+              end on a splash (the hand writes through the drying splatter)
+       text   the metric AS QUOTED until the ending begins, the comparator AS AUTHORED from there - so the element the
+              ghost is measured against carries the comparator through the whole ending and never jumps at the landing
+     The ball and the ending run on melt's STEPPED clock (on 2s, stop-action), each on its own phase-local seconds -
+     a pure quantisation of t, so a cold seek into the middle of the ball lands on the pose a play was holding. */
+  const compareBallFrame = (sp, u, then_) => {
+    const S = sp || {}, uu = cmp01(u), dur = Math.max(0.001, +S.dur || 1), ph = meltPhase(uu);
+    const span = Math.max(1e-6, ph.span * dur), tl = Math.max(0, uu * dur - ph.from * dur);
+    const kq = (ph.name === "melt" || ph.name === "gone") ? ph.k : cmp01(stepped(tl, MELT.HOLD, MELT.FPS) / span);
+    const kEnd = ph.name === "fly" ? kq : (ph.name === "gone" ? 1 : 0);
+    const release = meltRelease();
+    const write = then_ === "morph" ? (uu >= 1 ? 1 : 0)
+      : then_ === "throw" ? cmp01((uu - release) / Math.max(1e-6, 1 - release))
+      : cmp01((kEnd - MELT.BURST_END) / Math.max(1e-6, 1 - MELT.BURST_END));
+    const sub = cmp01((uu - COMPARE.LABEL_AT) / (1 - COMPARE.LABEL_AT));
+    return { then: then_, phase: ph.name, k: kq, kEnd, write, u: uu, sub, ghost: sub * COMPARE.GHOST_A,
+             sag: ph.name === "melt" ? ph.k : 1, ball: ph.name === "melt" ? 0 : (ph.name === "ball" ? minJerk(kq) : 1),
+             morph: then_ === "morph" ? minJerk(kEnd) : 0,
+             burst: then_ === "splash" ? cmp01(kEnd / Math.max(1e-6, MELT.BURST_END)) : 0,
+             fly: then_ === "throw" ? cmp01((kEnd - MELT.ANTIC) / Math.max(1e-6, 1 - MELT.ANTIC)) : 0,
+             text: uu >= MELT.BALL_END ? String((S.comparator || {}).text == null ? "" : (S.comparator || {}).text)
+                                       : String((S.metric || {}).text == null ? "" : (S.metric || {}).text) };
+  };
+
+  /* the squash tensor as a transform about a point: stretched along theta by a, pressed across it by the same - the
+     shape stopaction's impactSquash names, written out rather than mounted through squash.mjs's matrix */
+  const compareSquashXf = (c, a, theta) => {
+    if (!(Math.abs(a) > 1e-4)) return "";
+    const d = (theta || 0) * 180 / Math.PI;
+    return "translate(" + c[0].toFixed(2) + " " + c[1].toFixed(2) + ") rotate(" + d.toFixed(2) + ") scale("
+      + (1 + a).toFixed(4) + " " + (1 - a).toFixed(4) + ") rotate(" + (-d).toFixed(2) + ") translate("
+      + (-c[0]).toFixed(2) + " " + (-c[1]).toFixed(2) + ")";
+  };
+
+  /* THE BALL FORM'S OWN ELEMENTS, built once and never rebuilt: one <path> for the ink (the glyphs, the ball, the
+     comparator's glyphs - all of it one fill) and one for the splatter, inside a <g> the throw's flight transforms. */
+  const compareBallEnsure = (fg, P, ctx) => {
+    if (P.ball) return P.ball;
+    const el = (ctx || {}).el, col = compareFill(fg);
+    const g = el ? el("g", "", fg.g, {}) : null;
+    const ink = el && g ? el("path", "", g, { d: "", fill: col, "fill-rule": "nonzero", stroke: "none", opacity: 0 }) : null;
+    const drop = el && g ? el("path", "", g, { d: "", fill: col, "fill-rule": "nonzero", stroke: "none", opacity: 0 }) : null;
+    P.ball = { g, ink, drop, col, shape: null, key: "" };
+    return P.ball;
+  };
+
+  /* THE RINGS THIS FIGURE MORPHS, prepared once per (metric, comparator, face) and read every frame. Everything
+     expensive is here: two rasters, two contours, two pairings and their morph_a preparations. A page that lost its
+     face, a node caller and a probe all get null - and then the morph paints NO OUTLINES, which is not another form:
+     the ends are still the authored strings, and nothing between them is invented. */
+  const compareBallRings = (fg, P, sp, then_) => {
+    const B = P.ball;
+    const face = compareFace(fg.label, fg.fs);
+    if (!face) return null;
+    const key = compareFontString(face, 1) + " " + String((sp.metric || {}).text) + " " + String((sp.comparator || {}).text);
+    if (B.shape && B.key === key) return B.shape;
+    const M = compareShape((sp.metric || {}).text, face), C = compareShape((sp.comparator || {}).text, face);
+    if (!M) return null;
+    const mAt = compareAtPen(M, fg), rnd = compareRnd(fg), drips = meltDrips(mAt.box, rnd);
+    const sagged = compareGroups(mAt.rings).map((g) => ({
+      outer: compareSagAt(g.outer, 1, mAt.box, drips), holes: g.holes.map((h) => compareSagAt(h, 1, mAt.box, drips)), c: [0, 0] }));
+    sagged.forEach((g) => { g.c = centroid(g.outer); });
+    const r = compareBallR(mAt.area, fg.fs), c = compareBallC(sagged);
+    const ballG = [{ outer: ballCircle(c, r, MELT.CIRCLE_N), holes: [], c: c }];
+    const shape = { rings: mAt.rings, box: mAt.box, drips, rnd, r, c, groups: compareGroups(mAt.rings),
+                    toBall: comparePrepare(comparePairGroups(sagged, ballG, COMPARE.DEGEN_R)), toText: null };
+    if (then_ === "morph" && C) {
+      const cAt = compareAtPen(C, fg);
+      shape.toText = comparePrepare(comparePairGroups(ballG, compareGroups(cAt.rings), COMPARE.DEGEN_R));
+    }
+    B.shape = shape; B.key = key;
+    return shape;
+  };
+
+  /* THE BALL FORM'S PAINT (E76 s5). The quoted figure's own outlines SAG on melt's law, BALL UP into one disc that
+     holds the ink's area, and then the ending happens to the ball: `morph` carries it into the comparator's glyphs
+     (the pairing rule, one ring into N), `splash` bursts it onto the page, `throw` throws it off. The figure's own
+     <text> is dark while the outlines are on stage and is the thing on screen again at u = 1 exactly - so the landed
+     frame is the page's own type, and `hold: metric` ghosts beside it as it always did. */
+  const paintCompareBall = (fg, sp, u, before, ctx, then_) => {
+    const F = compareBallFrame(sp, u, then_);
+    const P = compareEnsure(fg, sp, ctx, Math.max(compareCapacity(sp), F.text.length));
+    const B = compareBallEnsure(fg, P, ctx);
+    const R = before ? null : compareBallRings(fg, P, sp, then_);
+    const chars = [...F.text], n = chars.length;
+    P.cells.forEach((ts, j) => {
+      const ch = j < n ? chars[j] : "";
+      ts.textContent = ch === " " ? " " : ch;
+      ts.setAttribute("dy", "0.00");   /* the ball never runs the glyphs themselves: the ink left the cells entirely */
+      if (before) { if (j >= (fg.lg || []).length) ts.setAttribute("opacity", 0); return; }
+      ts.setAttribute("opacity", (j >= n ? 0 : figureGlyph(F.write, j, n)).toFixed(3));
+    });
+    if (B.g) {
+      const on = !before && !!R && F.u > 0 && F.u < 1;
+      /* the SAG is painted from the rings themselves (the ball's own morph starts where it ends), the ball and the
+         ending from morph_a's prepared pairs - one law, three stages, every one of them a pure function of u */
+      let path = "";
+      if (on && F.phase === "melt") {
+        path = R.groups.map((g) => {
+          const outer = morphAPath(compareSagAt(g.outer, F.sag, R.box, R.drips));
+          return outer + " " + g.holes.map((h) => morphAPath(compareSagAt(h, F.sag, R.box, R.drips).slice().reverse())).join(" ");
+        }).join(" ");
+      } else if (on && F.phase === "ball") {
+        path = comparePath(R.toBall, F.ball);
+      } else if (on && then_ === "morph" && R.toText) {
+        path = comparePath(R.toText, F.morph);
+      } else if (on) {
+        const circle = ballCircle(R.c, R.r, MELT.CIRCLE_N);
+        path = morphAPath(then_ === "splash" ? ballFlat(circle, R.c, F.burst) : circle);
+      }
+      B.ink.setAttribute("d", path);
+      compareInk(B.ink, on && path ? 1 : 0);
+      let xf = "";
+      if (on && then_ === "throw" && F.phase === "fly") {
+        const to = { x: (+fg.W || 0) * MELT.TO[0] - R.c[0], y: (+fg.H || 0) * MELT.TO[1] - R.c[1] };
+        const span = Math.max(0.05, (+sp.dur || 1) * (1 - MELT.BALL_END));
+        if (F.kEnd < MELT.ANTIC) xf = compareSquashXf(R.c, meltSettle(F.kEnd * span), 0);
+        else {
+          const x = meltThrowAt(F.fly, to, span * (1 - MELT.ANTIC));
+          xf = "translate(" + (x.x || 0).toFixed(2) + " " + (x.y || 0).toFixed(2) + ") "
+             + compareSquashXf(R.c, x.alpha || 0, x.theta || 0);
+        }
+      }
+      B.g.setAttribute("transform", xf);
+      let drops = "";
+      if (on && then_ === "splash" && F.phase === "fly") {
+        const dd = splashDrops(R.c, R.box, F.burst, R.rnd);
+        drops = dd.map((p, i) => meltSplatPath(p.x, p.y, p.r, p.a, p.tail, R.rnd, i + 1)).join(" ")
+          + " " + splashSats(dd).map((s) => morphAPath(ballCircle([s.x, s.y], s.r, 16))).join(" ");
+      }
+      B.drop.setAttribute("d", drops);
+      compareInk(B.drop, drops ? 1 - minJerk(F.write) : 0);
+    }
+    compareBeside(fg, P, sp, F.text, before, F.ghost, (j, n2) => compareGlyph(F.sub, j, n2));
+  };
+
+  /* THE PAINTER (the module rule's page half). Every number of it is the law above; this is the DOM. `sd` is what
+     the engine's chart_to dispatch hands it - the row `sp` and the page's built figures - `st` the page state, and
+     `ctx` the PAGE species context every page painter reaches the engine through (`el` is lpEl), so `node --test`
+     can call this with recorders and no DOM. The FORM is read first: an unnamed one is `melt` - the ball - and an
+     unknown one throws; `then` is read on the ball alone, because a form that makes no ball has nothing to end. */
+  const paintCompare = (sd, t, st, ctx) => {
+    const sp = (sd || {}).sp || {}, fg = compareFigure((sd || {}).figures, sp);
+    if (!fg || !fg.label) return;
+    const form = compareForm(sp);
+    const at = +sp.at || 0, u = cmp01((t - at) / Math.max(0.001, +sp.dur || 1)), before = t < at;
+    if (form === "count") { paintCompareCount(fg, sp, u, before, ctx); return; }
+    if (form === "melt") { paintCompareBall(fg, sp, u, before, ctx, compareThen(sp)); return; }
+    paintCompareMorph(fg, sp, u, before, ctx, form);
+  };
+
+  /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment, so
+     inlining keeps it and node - where no registry exists - still imports the file for the math. */
+  if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.compare = paintCompare;
+  /* KINETICS:END */
   const buildPerform = (st, scene, pg) => {
     const P = !!st.portrait, fs = P ? 40 : 26, fss = P ? 32 : 20, G = st.geom || { W: 1000, H: 560 };
     /* P48 T7: on a page with chart STATES the perform layer (brackets, figures, spreads) draws on its OWN svg above every
@@ -10511,749 +11973,6 @@ async function mount(doc) {
   /* the renderer awaits this after scrubbing to t (render_baseline.frame_png) */
   window.__clipsSeeked = () => Promise.all([...clipSeeks]);
 
-  /* KINETICS:BEGIN melt */
-  /* SPACE: stage */
-  /* species/melt.mjs - THE MELT EXIT (P52 T9; BACKLOG R26-15, reworked to E88 by R26-76). SOURCE OF TRUTH, inlined into
-     the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN melt and KINETICS:END, AFTER ink, squash,
-     stopaction, arap and morph_a - it imports all five, and the import order IS the region order.
-
-     E88 (the operator, 2026-09-13): "i envisioned melting only the chart information on the page, and compiling that into
-     a dense heavy ball akin to the reference, and then either throwing it off of the screen, and drawing a new chart or
-     splattering that back onto the page to either form a new chart or a narrative plate springs up, reading as having been
-     \"painted\" - i didn't imagine melting the whole charcoal board". P52 T9 melted the WORLD's area polygon, so the board
-     left with the chart. Now THE CHART'S INK melts and the BOARD STAYS:
-       the INK   a clone of the outgoing world with its board hidden (`.meltink`: the page's cream, grain, roll edge, field
-                 and field plate invisible) - the title, the series, the bars, the marks, the labels, the rail. It wears
-                 the melt's mask, its pixel filter and its squeeze.
-       the BOARD the outgoing world itself with its ink hidden (`.meltboard`) - the cream ground, the deckle, the charcoal.
-                 It never moves; under a splash it wears the REVEAL mask the painting grows through.
-
-     It registers NO painter: a melt is not a species kind, it is an EXIT law the engine's scene loop calls by name where
-     it handles the suck. `exit` names the transition INTO the scene it sits on (E47), so `s05.exit = "melt"` melts s04's
-     chart as s05 begins.
-
-     FOUR PHASES over the exit's window u = clamp01((t - t_boundary) / secs), the shares fixed dials that sum to 1:
-       melt   u 0    - 0.30   the ink SAGS and RUNS: its own pixels smear downward (RUN_COPIES offset copies merged) under
-                              the GOOEY THRESHOLD (a Gaussian blur re-steepened by a linear alpha ramp - HyperFrames'
-                              morph-text trick, our K-M chain's `feFuncA slope`), so neighbouring marks FUSE into one liquid
-                              body; the ink box's outline sags over seeded drips as its mask.
-       ball   u 0.30 - 0.55   the ink SQUEEZES toward its centroid while the outline MORPHS to a circle of BALL_R (morph_a,
-                              the vertex method) on the STEPPED clock (stopaction `stepped`, hold 2 - on 2s), and a DENSE
-                              ink body - the marks' own colours mixed by Kubelka-Munk and concentrated DENSITY times - comes
-                              up opaque over it: the chart compiles into a heavy ball.
-       end    u 0.55 - 1      one of three AUTHORED endings:
-         throw          the ball lands in its own weight (stopaction impactSquash on MASS, SQUASH, on 2s) for ANTIC of the
-                        phase, then is THROWN off the stage (throwXf run backwards: a landing played in reverse IS a launch),
-                        a low arc and little tumble because it is heavy. The board is up until the launch; the next scene's
-                        chart then draws on the same board (the engine delays that page's clock by meltDrawDelay).
-         splash:chart   the ball SLAMS onto the board (the same squash), flattens, and bursts into droplets that LAND on the
-                        board (soakStepped's staircase); the landed drops then grow as seeded stains through the board's
-                        REVEAL mask with a wet ink rim, and the next page's chart - already built beneath - is what shows
-                        through them: the chart arrives out of the splatter, not by its build.
-         splash:plate   the same splatter, and what grows through the stains is the next scene's NARRATIVE PLATE, springing
-                        up (a small scale settle) as if painted by that ink; the board is painted over from the drops out.
-       gone   u >= 1          the outgoing world, its ink and the overlay are hidden, exactly as the suck ends.
-
-     Everything above the painter is a pure function of (t0, t, the rect, the dials, rnd): the same t twice is the same
-     object, so a scrubbed frame is the played frame and a cold render is the warm one. `rnd(k)` is the caller's seeded
-     hash in [0, 1) - the engine passes lpHash bound to the scene, never Math.random.
-
-     The AUTHORED FORM: `melt` | `melt:throw` | `melt:splash:chart` | `melt:splash:plate`, with `:<s>` (the length) and, on a
-     throw only, `:<x>,<y>` (the exit point in STAGE fractions), in any order after the name. A bare `melt:splash` is
-     REFUSED: since E88 a splash has two endings that need two different incoming worlds (a chart page, a plate), and an
-     alias would pick one silently. build_scene_timeline_f.py's parse_exit reads the same grammar and refuses anything
-     else, naming the row. Every number here is a starting dial (doc 42 s42.5); HG2 tunes them by eye on the proof frames. */
-
-  const MELT = Object.freeze({
-    S: 1.6,            /* the exit's default length [DERIVED: the suck's 0.3 s is one phase of collapse; a melt is three
-                          (the sag, the ball, the ending) plus a throw's FLIGHT_S 0.45 - 3 x 0.38 + 0.45 ~ 1.6] */
-    MELT_END: 0.30,    /* the phase shares as CUTS of u: melt [0, 0.30), ball [0.30, 0.55), ending [0.55, 1] */
-    BALL_END: 0.55,
-    /* THE SAG (the ink box's outline, the mask the melting ink wears) */
-    DRIPS: 7,          /* how many drips the box's foot grows */
-    SAG: 0.40,         /* the deepest drip's reach, as a share of the box's height */
-    TOP_SAG: 0.42,     /* how far the TOP edge sinks by the end of the sag: a melting body loses height, its mass goes down */
-    BASE_SAG: 0.10,    /* the whole foot slumps this much besides */
-    DRIP_W: 0.11,      /* a drip's half-width as a share of the box's width */
-    DRIP_JIT: 0.55,    /* how far a drip's centre wanders from its even place, as a share of the even spacing */
-    DRIP_DELAY: 0.40,  /* the last drip starts this far into the melt phase: the drips open in a seeded order */
-    N: 33, TOP_N: 13, SIDE_N: 7,   /* the ring's samples: foot, top, each side (even-ish spacing - see meltOutline) */
-    /* THE GOOEY THRESHOLD */
-    BLUR: 26,          /* the outline's blur at the melt's peak, px at 1920 */
-    EDGE_SLOPE: 24,    /* the alpha ramp that re-steepens the outline's blur into a liquid edge */
-    /* THE RUN (E88: the MARKS melt, not a rectangle) - the ink's own pixels, smeared down and fused */
-    RUN: 0.22,         /* how far the ink runs at the sag's end, as a share of the ink box's height [DERIVED, HG2] */
-    RUN_COPIES: 6,     /* offset copies merged into the run: enough that the gooey blur joins them into one trail (3 read as
-                          stacked parallel copies of each line on the proof frames) */
-    INK_BLUR: 4,       /* the marks' own blur at the melt's peak, px - a 3 px line blurred to 7 px and ramped by INK_SLOPE
-                          comes back ~2.5x as thick, which is the swell of a wet line [DERIVED, HG2] */
-    BALL_FUSE: 40,     /* the squeezed ink's extra blur through the ball phase, in the ink's OWN px (the squeeze shrinks it ~10x
-                          on screen): without it the compacting chart read as stacked orange hatching, not one mass */
-    INK_SLOPE: 9,      /* the marks' alpha ramp (the outline's EDGE_SLOPE is 24: a mark is thinner than a body) */
-    /* THE BALL - dense and heavy (E88): smaller than P52 T9's 0.15, opaque, darker than its own marks */
-    BALL_R: 0.085,     /* the ball's radius as a share of the ink box's height [was 0.15 of the whole PAGE's height] */
-    CIRCLE_N: 96,      /* vertices on the circle = RING_N, so the morph's resample lands ON them (radius exact at the end) */
-    RING_N: 96,
-    HOLD: 2,           /* the stepped clock's hold: on 2s (stop-action, doc 42) */
-    FPS: CADENCE.FPS,
-    SQUEEZE: 1.15,     /* the ink box is squeezed until its longer side is SQUEEZE ball-diameters: the chart compiles INTO the
-                          ball instead of being cropped by it */
-    BODY_FROM: 0,      /* the ball is a CRISP opaque disc from the first frame of its phase (a ramp over the whole box read as
-                          a jelly slab; one that waited for the squeeze read as a soft chart silhouette at 045 - the parent's
-                          two reads, 2026-09-13) ... */
-    BODY_TO: 0.15,     /* ... fully opaque from here */
-    BODY_GROW: 0.4,    /* it GROWS from BODY_SEED of its radius to all of it by here of the ball phase, while ... */
-    BODY_SEED: 0.25,
-    INK_OUT: 0.45,     /* ... the squeezed ink fades into it, gone by here: at 045 there is only the round ball */
-    TINT_MELT: 0,      /* how far the marks have turned to the ink by the sag's end (all the way by the ball's middle). 0: through
-                          the sag every mark runs in its OWN colour - 0.6 turned the pale series and the grid salmon-pink */
-    INK_DEEP: 3,       /* THE INK: the chart's DOMINANT stroke (its first series) concentrated this many times by K-M - the
-                          same hue, deeper. Never a mix of every series: the golden page's four mixed land on green */
-    CORE: 12,          /* the ball's shaded side, the same ink at this concentration (the weight read in the shading) */
-    LIGHT: 1,          /* the ball's lit side: the stroke itself */
-    TEXT_STREAK: 1.6,  /* the words' streak: its vertical blur is half the run, it hangs 0.6 of the run below the glyph, and its
-                          spread alpha is lifted this much so it reads as ink trailing, not a haze */
-    SHEEN: 0.5,        /* its ONE highlight: the stroke taken this far toward white, a small spot up and to the left */
-    SPLAT_OUT: 3.5,    /* splash:chart - the landed splats fade this many times faster than the paint clock and ... */
-    SPLAT_SHRINK: 0.5, /* ... shrink by this much as the chart shows through: they resolve INTO it and never sit over its
-                          labels at full ink (they covered "Mega-cap" at 075 - the parent's read, 2026-09-13) */
-    /* THE WEIGHT (stopaction's dials, named): the ball lands in its own weight before it goes anywhere */
-    MASS: "liquid",    /* stopaction MASS for the squash: liquid holds its squash TWO frames (ink holds one) - a heavy wet body */
-    SQUASH: 0.30,      /* impactSquash's IMPACT_SQUASH for the ball (stopaction's card default is 0.22) */
-    ANTIC: 0.22,       /* the share of the throw phase the ball sits in that squash before the launch */
-    /* THE THROW - heavy: a low arc, little tumble, out the bottom */
-    TO: [1.02, 1.32],  /* the default exit point in STAGE fractions: off the bottom right [was 1.16, 1.22] */
-    ARC: 0.06,         /* throwXf's ARC for the ball (stopaction 0.22: a card lifts; a heavy ball barely does) */
-    SPIN_DEG: 4,       /* throwXf's SPIN_DEG for the ball (stopaction 9) */
-    /* THE SPLASH */
-    DROPS: 14,         /* droplets in the splatter */
-    BURST_END: 0.40,   /* the share of the ending the burst takes; the rest is the PAINT (the stains growing) */
-    SPLASH_SPREAD: 0.30,   /* the angular jitter (radians) on each droplet's ray */
-    LAND_MIN: 0.25,    /* where a droplet lands along its ray, as a share of the distance to the ink box's edge ... */
-    LAND_MAX: 0.92,    /* ... so the whole splatter lands ON the board */
-    DROP_R: 0.035,     /* a droplet's radius as a share of the box's height */
-    FLAT: 0.62,        /* how far the ball flattens as it bursts (1 - FLAT of its height) */
-    REVEAL_R: 0.75,    /* a stain's reach as a share of the box's height (seeded 0.6x - 1.4x) */
-    CORE_R: 0.70,      /* the stain under the ball's own impact */
-    FLOOD_FROM: 0.70,  /* the board's last cover fades out from here of the paint clock, so the reveal is whole at u = 1 */
-    TAIL: 2.2,         /* a landed splat's tail toward the impact, in its own radii (in flight it is longer: speed) */
-    LOBES: 14,         /* a splat's seeded lobes */
-    SPLAT_RAG: 16,     /* a splat's torn edge: the K-M soak's noise displacement, px */
-    STAIN_RAG: 70,     /* a paint stain's torn edge, px - the ink-bloom's ragged front (INTAKE-INK-BLOOM-2026-09-08) */
-    STAIN_BLUR: 6,     /* the stains' own gooey threshold: blur px ... */
-    STAIN_SLOPE: 12,   /* ... and ramp */
-    SPRING: 0.09,      /* splash:plate - the plate SPRINGS UP: from 1 - SPRING of its size, over its rest by ~2.5 %, settled at
-                          the end (a damped cosine; 0.05 settling one way was invisible). 1 - 0.09 of a world that overhangs
-                          the stage by 5 % still covers it */
-    INK_HEX: "#E9E2D2",    /* the marks' colour when the chart carries no stroke to read (a page of words) */
-  });
-
-  const MELT_ENDINGS = Object.freeze(["throw", "splash:chart", "splash:plate"]);
-
-  const mc01 = (v) => (v <= 0 ? 0 : v >= 1 ? 1 : v);   /* the engine inlines every module into ONE scope, so a
-     private helper carries the module's own prefix - `c01` is ink.mjs's */
-  const mSlump = (u) => { const k = mc01(u); return k * k; };
-  const mEase = (u) => { const k = mc01(u); return k * k * (3 - 2 * k); };
-
-  /* ---- the authored form ------------------------------------------------------------------------------------------ */
-  /* `melt` | `melt:throw` | `melt:splash:chart` | `melt:splash:plate`, `:<s>`, and on a throw `:<x>,<y>`, in any order after
-     the name. Throws on anything else, so a typo in a shot table is a refusal and not a silent default. */
-  const meltOpts = (exit, o = {}) => {
-    const P = Object.assign({}, MELT, o), bits = String(exit == null ? "" : exit).split(":");
-    const out = { name: bits[0] || "", secs: P.S, ending: null, to: null };
-    const setEnding = (e) => {
-      if (out.ending) throw new Error("melt: two endings (" + out.ending + " and " + e + ") - a melt ends one way");
-      out.ending = e;
-    };
-    for (let i = 1; i < bits.length; i++) {
-      const b = bits[i].trim();
-      if (b === "") continue;
-      if (b === "throw") { setEnding("throw"); continue; }
-      if (b === "splash") {
-        const nx = (bits[i + 1] || "").trim();
-        if (nx !== "chart" && nx !== "plate") {
-          throw new Error("melt: splash names no ending since E88 - say splash:chart (the splatter forms the next chart) or splash:plate (a narrative plate springs up out of it)");
-        }
-        setEnding("splash:" + nx); i++; continue;
-      }
-      if (b === "chart" || b === "plate") throw new Error("melt: " + b + " is a splash's ending - say splash:" + b);
-      if (b.indexOf(",") >= 0) {
-        const xy = b.split(",").map(Number);
-        if (xy.length !== 2 || !xy.every((v) => Number.isFinite(v))) throw new Error("melt: " + b + " is not an x,y point in stage fractions");
-        out.to = xy; continue;
-      }
-      const v = Number(b);
-      if (!(Number.isFinite(v) && v > 0)) throw new Error("melt: " + b + " is neither a length in seconds, nor an ending (throw, splash:chart, splash:plate), nor an x,y point");
-      out.secs = v;
-    }
-    out.ending = out.ending || "throw";
-    if (out.to && out.ending !== "throw") throw new Error("melt: an x,y point is where a THROW goes - a splash lands on the board");
-    out.to = out.to || [P.TO[0], P.TO[1]];
-    return out;
-  };
-
-  /* ---- the phases ------------------------------------------------------------------------------------------------- */
-  const meltShares = (o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    return [P.MELT_END, P.BALL_END - P.MELT_END, 1 - P.BALL_END];
-  };
-  const meltPhase = (u, o = {}) => {
-    const P = Object.assign({}, MELT, o), k = mc01(u);
-    /* GONE takes the boundary itself: (t - t0) / secs cannot be trusted to reach exactly 1 in floating point */
-    if (u >= 1 - 1e-9) return { name: "gone", k: 1, from: 1, span: 0 };
-    if (k < P.MELT_END) return { name: "melt", k: k / P.MELT_END, from: 0, span: P.MELT_END };
-    if (k < P.BALL_END) return { name: "ball", k: (k - P.MELT_END) / (P.BALL_END - P.MELT_END), from: P.MELT_END, span: P.BALL_END - P.MELT_END };
-    return { name: "fly", k: (k - P.BALL_END) / (1 - P.BALL_END), from: P.BALL_END, span: 1 - P.BALL_END };
-  };
-  /* the outline's blur in px: up over the melt, back to 0 by the end of the ball (a ball is solid, not a cloud) */
-  const meltBlur = (u, o = {}) => {
-    const P = Object.assign({}, MELT, o), ph = meltPhase(u, P);
-    if (ph.name === "melt") return P.BLUR * mEase(ph.k);
-    if (ph.name === "ball") return P.BLUR * (1 - mEase(ph.k));
-    return 0;
-  };
-  /* the throw's launch as a share of the window: the board is up until here, and the next chart's clock starts here */
-  const meltRelease = (o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    return P.BALL_END + P.ANTIC * (1 - P.BALL_END);
-  };
-  /* how long the engine holds the NEXT page's clock under a throw: the new chart draws once the board is clear. A splash
-     holds nothing (the chart arrives built, through the stains) and no melt holds a world that is not a page. */
-  const meltDrawDelay = (opts, incomingIsPage, o = {}) =>
-    (opts && opts.ending === "throw" && incomingIsPage) ? meltRelease(o) * Math.max(0.05, +opts.secs || MELT.S) : 0;
-
-  /* ---- the sag ---------------------------------------------------------------------------------------------------- */
-  const dripBump = (dx, w) => { const k = mc01(Math.abs(dx) / Math.max(1e-6, w)); const c = Math.cos(k * Math.PI / 2); return c * c; };
-  const meltDrips = (rect, rnd, o = {}) => {
-    const P = Object.assign({}, MELT, o), n = Math.max(1, P.DRIPS | 0), step = rect.w / n, out = [];
-    for (let i = 0; i < n; i++) {
-      out.push({ c: rect.x + step * (i + 0.5) + P.DRIP_JIT * step * (rnd(i) - 0.5),
-                 amp: 0.45 + 0.55 * rnd(40 + i), delay: P.DRIP_DELAY * rnd(70 + i), w: P.DRIP_W * rect.w });
-    }
-    return out;
-  };
-  const meltDepth = (x, k, rect, drips, o = {}) => {
-    const P = Object.assign({}, MELT, o), u = mc01(k);
-    let deepest = 0;
-    for (const d of drips) {
-      const own = mSlump(mc01((u - d.delay) / Math.max(1e-6, 1 - d.delay)));
-      deepest = Math.max(deepest, dripBump(x - d.c, d.w) * d.amp * own);
-    }
-    return rect.h * (P.SAG * deepest + P.BASE_SAG * mSlump(u));
-  };
-  const meltTop = (x, k, rect, drips, o = {}) => {
-    const P = Object.assign({}, MELT, o), u = mc01(k);
-    let over = 0;
-    for (const d of drips) over = Math.max(over, dripBump(x - d.c, d.w * 1.15) * d.amp);
-    return rect.y + rect.h * P.TOP_SAG * mSlump(u) * (0.55 + 0.45 * over);
-  };
-  /* THE MELTING OUTLINE: a closed ring walked clockwise from the top-left - the top edge, the right side, the foot sampled
-     right to left with the drips hung from it, the left side back up. Sampled even-ish all the way round: the closed
-     centripetal Catmull-Rom (morphAPath) bulges between two knots far apart next to two that are not. */
-  const meltOutline = (rect, k, rnd, o = {}) => {
-    const P = Object.assign({}, MELT, o), n = Math.max(3, P.N | 0), drips = meltDrips(rect, rnd, P);
-    const top = Math.max(2, P.TOP_N | 0), side = Math.max(1, P.SIDE_N | 0), foot = rect.y + rect.h, pts = [];
-    for (let j = 0; j < top; j++) { const x = rect.x + rect.w * (j / (top - 1)); pts.push([x, meltTop(x, k, rect, drips, P)]); }
-    const tR = meltTop(rect.x + rect.w, k, rect, drips, P), tL = meltTop(rect.x, k, rect, drips, P);
-    for (let j = 1; j <= side; j++) pts.push([rect.x + rect.w, tR + (foot - tR) * (j / (side + 1))]);
-    for (let j = n - 1; j >= 0; j--) {
-      const x = rect.x + rect.w * (j / (n - 1));
-      pts.push([x, foot + meltDepth(x, k, rect, drips, P)]);
-    }
-    for (let j = side; j >= 1; j--) pts.push([rect.x, tL + (foot - tL) * (j / (side + 1))]);
-    return pts;
-  };
-  /* THE RUN: how far the ink's pixels smear down (px). It grows with the sag and drains back into the ball as it forms. */
-  const meltRun = (phase, k, rect, o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    if (phase === "melt") return P.RUN * rect.h * mSlump(k);
-    if (phase === "ball") return P.RUN * rect.h * (1 - mEase(k));
-    return 0;
-  };
-
-  /* ---- the ball --------------------------------------------------------------------------------------------------- */
-  const ballCircle = (c, r, n) => {
-    const out = [];
-    for (let i = 0; i < n; i++) { const a = 2 * Math.PI * (i / n); out.push([c[0] + r * Math.cos(a), c[1] + r * Math.sin(a)]); }
-    return out;
-  };
-  const ballAt = (rect, k, rnd, o = {}) => {
-    const P = Object.assign({}, MELT, o), src = meltOutline(rect, 1, rnd, P);
-    const c = centroid(src), r = P.BALL_R * rect.h;
-    const prep = morphAPrepare(src, ballCircle(c, r, P.CIRCLE_N), { n: P.RING_N });
-    return { outline: morphAAt(prep, mEase(k)).outline, centre: c, r, k: mc01(k) };
-  };
-  /* THE SQUEEZE: the ink's scale about the ball's centre at ball-phase progress k - 1 at the start, and at the end the ink
-     box's longer side is SQUEEZE ball-diameters. Monotone in k. */
-  const meltSqueeze = (rect, r, k, o = {}) => {
-    const P = Object.assign({}, MELT, o), end = Math.min(1, P.SQUEEZE * 2 * r / Math.max(1e-6, rect.w, rect.h));
-    return 1 + (end - 1) * mEase(k);
-  };
-  /* the ink body's opacity at ball-phase progress k: none, then up to solid before the ball moves */
-  const meltBodyAlpha = (k, o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    return mEase(mc01((k - P.BODY_FROM) / Math.max(1e-6, P.BODY_TO - P.BODY_FROM)));
-  };
-  /* the ball's radius as a share of BALL_R at ball-phase progress k: from a seed to whole, monotone */
-  const meltBodyGrow = (k, o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    return P.BODY_SEED + (1 - P.BODY_SEED) * mEase(mc01(k / Math.max(1e-6, P.BODY_GROW)));
-  };
-  const ballFlat = (outline, c, k, o = {}) => {
-    const P = Object.assign({}, MELT, o), f = 1 - P.FLAT * mEase(k), g = 1 + (1 / Math.max(0.05, f) - 1) * 0.5;
-    return outline.map((p) => [c[0] + (p[0] - c[0]) * g, c[1] + (p[1] - c[1]) * f]);
-  };
-  /* THE WEIGHT: the ball's squash `ts` seconds after it has formed (or hit the board) - stopaction's impactSquash on the
-     melt's material, on the melt's hold. 0 on the contact frame, SQUASH on the next hold, released by the material. */
-  const meltSettle = (ts, o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    return impactSquash(ts, P.MASS, P.HOLD, P.FPS, { IMPACT_SQUASH: P.SQUASH });
-  };
-
-  /* ---- the colour ------------------------------------------------------------------------------------------------- */
-  const meltRFromKs = (ks) => { const k = Math.max(0, ks); return 1 + k - Math.sqrt(k * k + 2 * k); };
-  /* THE INK THE BALL IS MADE OF: the marks' colours mixed by Kubelka-Munk (the mean K/S per channel - a subtractive mix, not
-     an average of lights) and concentrated `density` times. density 1 is the marks' own mix; above it, darker and deeper. */
-  const meltMixInk = (hexes, density = 1) => {
-    const list = (hexes || []).filter((h) => /^#[0-9a-fA-F]{6}$/.test(h));
-    const use = list.length ? list : [MELT.INK_HEX], ks = [0, 0, 0];
-    for (const h of use) hexToLin(h).forEach((v, i) => { ks[i] += ksFromR(v) / use.length; });
-    return linToHex(ks.map((k) => meltRFromKs(k * Math.max(0.01, density))));
-  };
-
-  /* THE INK the marks become and the ball is made of: the dominant stroke, concentrated */
-  const meltInkOf = (hexes, density = 1) => meltMixInk(((hexes || []).filter((h) => /^#[0-9a-fA-F]{6}$/.test(h))).slice(0, 1), density);
-  /* how far the marks have turned into that ink */
-  const meltTint = (phase, k, o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    if (phase === "melt") return P.TINT_MELT * mEase(k);
-    if (phase === "ball") return P.TINT_MELT + (1 - P.TINT_MELT) * mEase(mc01(2 * k));
-    return 1;
-  };
-
-  /* ---- the splash ------------------------------------------------------------------------------------------------- */
-  /* A SPLAT: a seeded lobed blob with a tail pointing BACK along its ray to the impact (`back`, radians), drawn as a closed
-     centripetal Catmull-Rom - the shape an ink drop makes when it hits paper at an angle */
-  const meltSplatPath = (x, y, r, back, tail, rnd, salt, o = {}) => {
-    const P = Object.assign({}, MELT, o), n = Math.max(6, P.LOBES | 0), pts = [];
-    for (let j = 0; j < n; j++) {
-      const f = 2 * Math.PI * (j / n), c = Math.cos(f), rr = r * (0.72 + 0.5 * rnd(salt * 31 + j)) + (c > 0 ? Math.pow(c, 8) * tail : 0);
-      pts.push([x + Math.cos(back + f) * rr, y + Math.sin(back + f) * rr]);
-    }
-    return morphAPath(pts);
-  };
-  /* the satellite droplets thrown off behind each splat, along its ray */
-  const splashSats = (drops) => {
-    const out = [];
-    for (const d of drops) {
-      if (!(d.d > 0)) continue;
-      const cx = Math.cos(d.a), cy = Math.sin(d.a), ox = d.x - cx * d.d, oy = d.y - cy * d.d;
-      out.push({ x: ox + cx * d.d * 0.62, y: oy + cy * d.d * 0.62, r: d.r * 0.32 }, { x: ox + cx * d.d * 0.83, y: oy + cy * d.d * 0.83, r: d.r * 0.2 });
-    }
-    return out;
-  };
-  /* the plate's spring over the paint clock: up from 1 - SPRING, over its rest, settled at g = 1 (exactly 1 there) */
-  const meltSpring = (g, o = {}) => {
-    const P = Object.assign({}, MELT, o), k = mc01(g);
-    return k >= 1 ? 1 : 1 - P.SPRING * Math.exp(-3 * k) * Math.cos(2.5 * Math.PI * k);
-  };
-  /* the distance from c along the unit ray (cx, cy) to the box's edge */
-  const meltRayToEdge = (c, cx, cy, rect) => {
-    const tx = cx > 1e-9 ? (rect.x + rect.w - c[0]) / cx : cx < -1e-9 ? (rect.x - c[0]) / cx : Infinity;
-    const ty = cy > 1e-9 ? (rect.y + rect.h - c[1]) / cy : cy < -1e-9 ? (rect.y - c[1]) / cy : Infinity;
-    return Math.max(0, Math.min(tx, ty));
-  };
-  /* THE SPLATTER: DROPS droplets thrown out along seeded rays on the soak's own STEPPED clock (never contracting), each
-     LANDING on the board - a share of the way to the ink box's edge - and spreading a little as it lands. `d` is the
-     distance travelled along its ray: monotone in k and never past `land`. */
-  const splashDrops = (c, rect, k, rnd, o = {}) => {
-    const P = Object.assign({}, MELT, o), p = soakStepped(mc01(k), rnd), out = [];
-    for (let i = 0; i < Math.max(0, P.DROPS | 0); i++) {
-      const a = 2 * Math.PI * (i / P.DROPS) + P.SPLASH_SPREAD * (2 * rnd(300 + i) - 1), cx = Math.cos(a), cy = Math.sin(a);
-      const land = meltRayToEdge(c, cx, cy, rect) * (P.LAND_MIN + (P.LAND_MAX - P.LAND_MIN) * rnd(400 + i)), d = land * p;
-      const r = P.DROP_R * rect.h * (0.6 + 0.8 * rnd(500 + i)) * (1 + 0.6 * p);
-      out.push({ x: c[0] + cx * d, y: c[1] + cy * d, r, d, a, land, tail: p > 0 ? r * (P.TAIL + 3 * (1 - p)) : 0 });
-    }
-    return out;
-  };
-  /* THE PAINT: every landed drop grows as a seeded stain (its own stepped staircase), and one grows under the ball's own
-     impact. Radii are monotone in g. `cover` is the board's remaining opacity (whole until FLOOD_FROM, then out to exactly
-     0), `rim` the wet ink at the fronts (drying as they spread). */
-  const splashStains = (drops, c, r, rect, g, rnd, o = {}) => {
-    const P = Object.assign({}, MELT, o), h = rect.h, gg = mc01(g);
-    const grow = (salt) => (gg <= 0 ? 0 : soakStepped(gg, (k) => rnd(1000 + 37 * salt + k)));
-    const stains = drops.map((d, i) => ({ x: d.x, y: d.y, r: d.r + (P.REVEAL_R * h * (0.6 + 0.8 * rnd(600 + i)) - d.r) * grow(i + 1) }));
-    stains.push({ x: c[0], y: c[1], r: r + (P.CORE_R * h - r) * grow(0) });
-    return { stains, cover: 1 - mEase(mc01((gg - P.FLOOD_FROM) / Math.max(1e-6, 1 - P.FLOOD_FROM))), rim: 1 - mEase(gg) };
-  };
-
-  /* ---- the throw -------------------------------------------------------------------------------------------------- */
-  /* THE FLIGHT, BACKWARDS: throwXf brings a thing FROM an offset TO its rest; a launch is that landing in reverse. t' = F(1 - k):
-     at k = 0 the ball sits at rest and at k = 1 it is at `from`. The ball's ARC and SPIN_DEG are its own (heavy). */
-  const meltThrowAt = (k, from, secs, o = {}) => {
-    const P = Object.assign({}, MELT, o), F = Math.max(0.05, secs), kk = mc01(k);
-    if (kk <= 0) return { x: 0, y: 0, rot: 0, alpha: 0, theta: Math.PI / 2, phase: "flight", u: 1, hold: 1, h: 0, ground: 0, shake: { x: 0, y: 0 } };
-    return throwXf(from, P.MASS, F * (1 - kk), { FLIGHT_S: F, ARC: P.ARC, SPIN_DEG: P.SPIN_DEG });
-  };
-
-  /* ---- the frame -------------------------------------------------------------------------------------------------- */
-  /* EVERYTHING THE PAINTER NEEDS, in one object, from (t0, t, o, rnd) alone. o carries the geometry as well as any dial:
-     `rect` (the INK box, in the outgoing world's own px), `stagebox` (the stage's box in those px), `secs`, `ending`, `to`.
-       path     the ink's mask, in the ink's own (unsqueezed) px     body      the ball, in world px (null: no ball)
-       scale    the ink's squeeze about `centre`                     bodyAlpha the ball's opacity
-       run      the ink's smear, px; inkBlur its blur                 squash    { a, theta } on the ball, stopaction's tensor
-       xf       the throw's offset and tumble                        drops     the splatter; stains / cover / rim the paint
-       boardUp  the outgoing board is on screen                      reveal    it wears the reveal mask; spring the plate's scale */
-  const meltState = (t0, t, o = {}, rnd) => {
-    const P = Object.assign({}, MELT, o), rect = P.rect, sb = P.stagebox || rect, to = P.to || P.TO;
-    const ending = MELT_ENDINGS.indexOf(P.ending) >= 0 ? P.ending : "throw";
-    const secs = Math.max(0.05, +P.secs || P.S), u = mc01((t - t0) / secs), ph = meltPhase(u, P);
-    const st = { u, secs, ending, phase: ph.name, k: ph.k, blur: meltBlur(u, P), inkBlur: 0, run: 0, scale: 1,
-                 inkOpacity: 1, path: "", outline: null, body: "", bodyOutline: null, bodyAlpha: 0, centre: null, r: 0,
-                 squash: { a: 0, theta: 0 }, xf: null, drops: [], stains: [], cover: 1, rim: 0, reveal: false,
-                 spring: 1, dropAlpha: 1, dropScale: 1, tint: 0, sats: [], textOpacity: 0, boardUp: true, gone: false };
-    st.inkBlur = P.INK_BLUR * st.blur / Math.max(1e-6, P.BLUR);
-    if (ph.name === "gone") { st.gone = true; st.boardUp = false; st.inkOpacity = 0; st.cover = 0; return st; }
-    if (ph.name === "melt") {
-      st.outline = meltOutline(rect, ph.k, rnd, P);
-      st.path = morphAPath(st.outline);
-      st.run = meltRun("melt", ph.k, rect, P);
-      st.tint = meltTint("melt", ph.k, P);
-      st.textOpacity = 1 - mEase(ph.k);   /* the words run down as their own glyphs and are gone by the ball */
-      return st;
-    }
-    /* the ball and the ending run on the STEPPED clock, each on its own phase-local seconds (a pure quantisation of t) */
-    const tl = t - t0 - ph.from * secs, span = ph.span * secs, tq = stepped(Math.max(0, tl), P.HOLD, P.FPS);
-    const kq = mc01(tq / Math.max(1e-6, span));
-    if (ph.name === "ball") {
-      const b = ballAt(rect, kq, rnd, P), s = meltSqueeze(rect, b.r, kq, P);
-      st.k = kq; st.centre = b.centre; st.r = b.r; st.scale = s;
-      st.bodyOutline = b.outline; st.bodyAlpha = meltBodyAlpha(kq, P);
-      st.body = morphAPath(ballCircle(b.centre, b.r * meltBodyGrow(kq, P), P.CIRCLE_N));   /* the SOLID ball: a crisp circle, never the box */
-      st.tint = meltTint("ball", kq, P);
-      st.inkBlur = st.inkBlur + P.BALL_FUSE * mEase(kq);   /* the marks FUSE into one body as they compact */
-      /* the mask is in the ink's own px, and the ink is squeezed by s about the centre: the same body, unsqueezed */
-      st.outline = b.outline.map((p) => [b.centre[0] + (p[0] - b.centre[0]) / s, b.centre[1] + (p[1] - b.centre[1]) / s]);
-      st.path = morphAPath(st.outline);
-      st.run = meltRun("ball", kq, rect, P);
-      st.inkOpacity = 1 - mEase(mc01(kq / Math.max(1e-6, P.INK_OUT)));
-      return st;
-    }
-    const b = ballAt(rect, 1, rnd, P), circle = ballCircle(b.centre, b.r, P.CIRCLE_N);
-    st.k = kq; st.centre = b.centre; st.r = b.r; st.inkOpacity = 0; st.bodyAlpha = 1;
-    if (ending === "throw") {
-      st.bodyOutline = circle; st.body = morphAPath(circle);
-      if (kq < P.ANTIC) {
-        st.squash = { a: meltSettle(tq, P), theta: 0 };   /* stretched ACROSS, pressed down: the ball has weight before it moves */
-        st.xf = meltThrowAt(0, { x: 0, y: 0 }, span, P);
-      } else {
-        const from = { x: sb.x + to[0] * sb.w - b.centre[0], y: sb.y + to[1] * sb.h - b.centre[1] };
-        st.xf = meltThrowAt((kq - P.ANTIC) / Math.max(1e-6, 1 - P.ANTIC), from, span * (1 - P.ANTIC), P);
-        st.squash = { a: st.xf.alpha || 0, theta: st.xf.theta || 0 };   /* stretched along the flight */
-      }
-      st.boardUp = u < meltRelease(P);
-      return st;
-    }
-    /* a SPLASH: the burst, then the paint. Its clock is measured to ONE HOLD before the window ends: the stepped clock's last
-       pose lands a hold early, and a paint that was 0.8 done on that pose would pop the board's last cover at `gone`. */
-    const ks = mc01(tq / Math.max(1e-6, span - P.HOLD / P.FPS));
-    const kb = mc01(ks / Math.max(1e-6, P.BURST_END)), g = mc01((ks - P.BURST_END) / Math.max(1e-6, 1 - P.BURST_END));
-    st.bodyOutline = ballFlat(circle, b.centre, kb, P); st.body = morphAPath(st.bodyOutline);
-    st.bodyAlpha = 1 - mEase(mc01((kb - 0.5) / 0.5));   /* the ball holds its mass through the hit, then IS the splatter */
-    st.squash = { a: meltSettle(tq, P), theta: 0 };
-    st.drops = splashDrops(b.centre, rect, kb, rnd, P);
-    st.sats = splashSats(st.drops);
-    if (kq >= P.BURST_END) {
-      const paint = splashStains(st.drops, b.centre, b.r, rect, g, rnd, P);
-      st.stains = paint.stains; st.cover = paint.cover; st.rim = paint.rim; st.reveal = true;
-      const rate = ending === "splash:chart" ? P.SPLAT_OUT : 2.5;
-      st.dropAlpha = 1 - mEase(mc01(g * rate));   /* a drop IS its stain's first ink: it soaks away as the stain opens */
-      if (ending === "splash:chart") st.dropScale = 1 - P.SPLAT_SHRINK * mEase(mc01(g * 2));
-      if (ending === "splash:plate") st.spring = meltSpring(g, P);
-    }
-    return st;
-  };
-
-  /* ---- the markup the painter mounts once ------------------------------------------------------------------------- */
-  /* THE GOOEY THRESHOLD as SVG primitives: blur, then re-steepen the alpha. Blur FIRST, then the ramp - the other way round
-     is a fade. The K-M colour stages are deliberately not here: they would flatten what they filter to one ink. */
-  const meltFilterMarkup = (id, u, o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    return '<filter id="' + id + '" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB">'
-      + '<feGaussianBlur stdDeviation="' + meltBlur(u, P).toFixed(2) + '"/>'
-      + '<feComponentTransfer><feFuncA type="linear" slope="' + P.EDGE_SLOPE + '" intercept="0"/></feComponentTransfer>'
-      + '</filter>';
-  };
-  /* the mask the melting ink wears: one path, filtered */
-  const meltMaskMarkup = (id, filterId) =>
-    '<mask id="' + id + '" maskUnits="objectBoundingBox" x="-0.4" y="-0.4" width="1.8" height="1.8">'
-    + '<g filter="url(#' + filterId + ')"><path fill="#fff" d=""/></g></mask>';
-  /* THE RUN on the marks' own pixels: RUN_COPIES copies offset downward and merged over the original, then the gooey
-     threshold - the lines swell, trail down and fuse. The region opens downward, where the ink goes. */
-  const meltInkFilterMarkup = (id, o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    /* the marks first lose every FAINT pixel (alpha under a quarter): a near-transparent wash on the page - a grain, a plot
-       ground - would otherwise be ramped INK_SLOPE times into an opaque grey slab over the board (measured on the first
-       proof frame, 2026-09-13). A mark's own core is opaque and passes untouched. */
-    let offs = "", merge = '<feMergeNode in="' + id + 'k"/>';
-    for (let j = 1; j <= Math.max(1, P.RUN_COPIES | 0); j++) {
-      offs += '<feOffset in="' + id + 'k" dx="0" dy="0" result="' + id + "r" + j + '"/>';
-      merge += '<feMergeNode in="' + id + "r" + j + '"/>';
-    }
-    return '<filter id="' + id + '" x="-5%" y="-5%" width="110%" height="150%" color-interpolation-filters="sRGB">'
-      + '<feComponentTransfer in="SourceGraphic" result="' + id + 'k"><feFuncA type="table" tableValues="0 0 1 1 1"/></feComponentTransfer>'
-      + offs + "<feMerge>" + merge + "</feMerge>"
-      + '<feGaussianBlur stdDeviation="0"/>'
-      + '<feComponentTransfer result="' + id + 'o"><feFuncA type="linear" slope="' + P.INK_SLOPE + '" intercept="0"/></feComponentTransfer>'
-      /* THE TINT: the fused marks turned toward THE INK by k2 (the painter writes k2 = tint, k3 = 1 - tint each frame) */
-      + '<feFlood flood-color="#000" result="' + id + 'c"/><feComposite in="' + id + 'c" in2="' + id + 'o" operator="in" result="' + id + 't"/>'
-      + '<feComposite in="' + id + 't" in2="' + id + 'o" operator="arithmetic" k1="0" k2="0" k3="1" k4="0"/></filter>';
-  };
-  /* THE REVEAL: a luminance mask the BOARD wears under a splash - white everywhere, and the stains cut black through it,
-     under their own gooey threshold, so two stains that meet run together */
-  const meltRevealMarkup = (id, filterId) =>
-    '<mask id="' + id + '" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="-10000" y="-10000" width="20000" height="20000">'
-    + '<rect x="-10000" y="-10000" width="20000" height="20000" fill="#fff"/><g filter="url(#' + filterId + ')"></g></mask>';
-  const meltStainFilterMarkup = (id, o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    return '<filter id="' + id + '" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">'
-      + '<feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" seed="11" result="' + id + 'n"/>'
-      + '<feDisplacementMap in="SourceGraphic" in2="' + id + 'n" scale="' + P.STAIN_RAG + '" xChannelSelector="R" yChannelSelector="G"/>'
-      + '<feGaussianBlur stdDeviation="' + P.STAIN_BLUR + '"/>'
-      + '<feComponentTransfer><feFuncA type="linear" slope="' + P.STAIN_SLOPE + '" intercept="0"/></feComponentTransfer></filter>';
-  };
-  /* a SPLAT's torn edge: the soak's noise displacement and nothing else - no blur, so the ink stays opaque and crisp */
-  const meltSplatFilterMarkup = (id, o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    return '<filter id="' + id + '" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">'
-      + '<feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="5" result="' + id + 'n"/>'
-      + '<feDisplacementMap in="SourceGraphic" in2="' + id + 'n" scale="' + P.SPLAT_RAG + '" xChannelSelector="R" yChannelSelector="G"/></filter>';
-  };
-  /* a colour taken toward white by `k` (linear light) - the ball's one sheen */
-  const meltSheen = (hex, k) => linToHex(hexToLin(hex).map((v) => v + (1 - v) * mc01(k)));
-  /* the ball's body: THE INK, one small highlight up and to the left, the stroke, then concentrated toward its shaded side */
-  const meltBodyGradientMarkup = (id, hexes, o = {}) => {
-    const P = Object.assign({}, MELT, o), lit = meltInkOf(hexes, P.LIGHT);
-    return '<radialGradient id="' + id + '" cx="0.34" cy="0.3" r="0.8" fx="0.32" fy="0.26">'
-      + '<stop offset="0" stop-color="' + meltSheen(lit, P.SHEEN) + '"/>'
-      + '<stop offset="0.14" stop-color="' + lit + '"/>'
-      + '<stop offset="0.55" stop-color="' + meltInkOf(hexes, P.INK_DEEP) + '"/>'
-      + '<stop offset="1" stop-color="' + meltInkOf(hexes, P.CORE) + '"/></radialGradient>';
-  };
-  /* a SPLAT's wet ink: the stroke at its core, the ball's ink, and a dark wet rim at its edge (per splat, its own box) */
-  const meltSplatGradientMarkup = (id, hexes, o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    return '<radialGradient id="' + id + '" cx="0.5" cy="0.5" r="0.5">'
-      + '<stop offset="0" stop-color="' + meltInkOf(hexes, P.LIGHT) + '"/>'
-      + '<stop offset="0.55" stop-color="' + meltInkOf(hexes, P.INK_DEEP) + '"/>'
-      + '<stop offset="0.85" stop-color="' + meltInkOf(hexes, P.CORE) + '"/>'
-      + '<stop offset="1" stop-color="' + meltInkOf(hexes, P.CORE) + '"/></radialGradient>';
-  };
-  /* THE WORDS' RUN: ONE continuous streak under each glyph - its own ink blurred VERTICALLY only (stdDeviation "0 s", so a
-     letter's columns stay apart and never swell sideways into its box), pushed down by the run and a little denser, with the
-     crisp glyph drawn over it so its top edge stays legible. Merged offset copies read as six stacked echoes of each word
-     (the parent's read of 015, 2026-09-13); a one-axis blur has no copies to count. */
-  const meltTextFilterMarkup = (id, o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    return '<filter id="' + id + '" x="-5%" y="-10%" width="110%" height="160%" color-interpolation-filters="sRGB">'
-      + '<feGaussianBlur in="SourceGraphic" stdDeviation="0 0" result="' + id + 'b"/>'
-      + '<feOffset in="' + id + 'b" dx="0" dy="0" result="' + id + 'd"/>'
-      + '<feComponentTransfer in="' + id + 'd" result="' + id + 't"><feFuncA type="linear" slope="' + P.TEXT_STREAK + '" intercept="0"/></feComponentTransfer>'
-      + '<feMerge><feMergeNode in="' + id + 't"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
-  };
-  /* the SVG transform of the ball: the flight's offset and tumble, and stopaction's area-preserving squash, about its centre */
-  const meltBodyTransform = (st) => {
-    if (!st.centre) return "";
-    const cx = st.centre[0], cy = st.centre[1], xf = st.xf || { x: 0, y: 0, rot: 0 }, a = Math.abs(st.squash.a || 0);
-    const th = (st.squash.a || 0) < 0 ? (st.squash.theta || 0) + Math.PI / 2 : (st.squash.theta || 0);
-    const m = a > 1e-6 ? squashMatrix(th, a) : [1, 0, 0, 1];
-    return "translate(" + (cx + (xf.x || 0)).toFixed(2) + " " + (cy + (xf.y || 0)).toFixed(2) + ") rotate(" + (xf.rot || 0).toFixed(2) + ") "
-      + "matrix(" + m.map((v) => v.toFixed(4)).join(" ") + " 0 0) translate(" + (-cx).toFixed(2) + " " + (-cy).toFixed(2) + ")";
-  };
-
-  /* ---- the painter ------------------------------------------------------------------------------------------------ */
-  const MELT_BOARD_CLASSES = ["lp-grain", "lp-edge", "lp-field", "lp-fieldplate"];
-  const meltIsBoard = (node) => !!(node && node.classList) && MELT_BOARD_CLASSES.some((c) => node.classList.contains(c));
-  /* the two halves of one page, by class: the INK clone hides the board, the BOARD world hides the ink */
-  const MELT_CSS = ".world.meltink{background:transparent!important;pointer-events:none}"
-    + ".meltink .lp-page{background:transparent!important}"
-    + MELT_BOARD_CLASSES.map((c) => ".meltink ." + c).join(",") + "{visibility:hidden!important}"
-    + ".meltboard .lp-page>" + MELT_BOARD_CLASSES.map((c) => ":not(." + c + ")").join("") + "{visibility:hidden!important}"
-    /* the WORDS are not marks: the marks clone never draws them, and the text clone draws nothing else */
-    + ".meltink .lp-ink,.meltink .lp-rail,.meltink .lp-chart line,.meltink .lp-chart text{visibility:hidden!important}"
-    + ".world.melttext{background:transparent!important;pointer-events:none}"
-    + ".melttext .lp-page{background:transparent!important}"
-    + ".melttext .lp-page *{visibility:hidden!important}"
-    + ".melttext .lp-ink,.melttext .lp-ink *,.melttext .lp-rail,.melttext .lp-rail *,.melttext .lp-chart line,.melttext .lp-chart text,.melttext .lp-chart text *{visibility:visible!important}";
-
-  /* the stage's box in the world's own px: `.world` overhangs the stage by 5% on every side */
-  const meltStageBox = (wA) => ({ x: wA.offsetWidth / 22, y: wA.offsetHeight / 22,
-                                         w: wA.offsetWidth * 10 / 11, h: wA.offsetHeight * 10 / 11 });
-  /* THE INK BOX in the world's own px: the union of the page's non-board children as laid out, clamped to the charcoal
-     field (the ink lives on the board). Read through client rects so the punch's transform is in it, and mapped back into
-     the world's px by the world's own scale. null when the world holds no page. */
-  const meltInkRect = (wA) => {
-    const page = wA.querySelector(".lp-page");
-    if (!page) return null;
-    const wr = wA.getBoundingClientRect(), kx = wA.offsetWidth / Math.max(1e-6, wr.width), ky = wA.offsetHeight / Math.max(1e-6, wr.height);
-    const field = page.querySelector(".lp-field"), fr = field && field.getBoundingClientRect(), pr = page.getBoundingClientRect();
-    const clip = fr && fr.width > 1 && fr.height > 1 ? fr : pr;
-    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
-    for (const c of page.children) {
-      if (meltIsBoard(c)) continue;
-      const r = c.getBoundingClientRect();
-      if (!(r.width >= 1 && r.height >= 1)) continue;
-      x0 = Math.min(x0, r.left); y0 = Math.min(y0, r.top); x1 = Math.max(x1, r.right); y1 = Math.max(y1, r.bottom);
-    }
-    if (!(x1 > x0 && y1 > y0)) { x0 = clip.left; y0 = clip.top; x1 = clip.right; y1 = clip.bottom; }
-    x0 = Math.max(x0, clip.left); y0 = Math.max(y0, clip.top); x1 = Math.min(x1, clip.right); y1 = Math.min(y1, clip.bottom);
-    return { x: (x0 - wr.left) * kx, y: (y0 - wr.top) * ky, w: Math.max(1, (x1 - x0) * kx), h: Math.max(1, (y1 - y0) * ky) };
-  };
-  /* the marks' colours, as #rrggbb: every series stroke on the page's charts, as the browser computed it */
-  const meltHex = (css) => {
-    const m = /rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/.exec(String(css || ""));
-    return m ? "#" + [m[1], m[2], m[3]].map((v) => (+v).toString(16).padStart(2, "0")).join("") : (/^#[0-9a-fA-F]{6}$/.test(css) ? css : null);
-  };
-  const meltInkColours = (wA) => {
-    const out = [];
-    wA.querySelectorAll(".lp-chart .ser, .lp-chart rect[fill]").forEach((n) => {
-      const cs = getComputedStyle(n), hx = meltHex(n.classList.contains("ser") ? cs.stroke : cs.fill);
-      if (hx && out.indexOf(hx) < 0) out.push(hx);
-    });
-    return out;
-  };
-
-  /* the overlay, mounted ONCE and kept on wA.__melt: the ink clone (a sibling right after the board, so it rides above
-     it), and an svg sibling holding the filters, the masks, the stains' rims, the droplets and the ball. Nothing here reads
-     time; the ink box and the colours are read once, from the page as it stands at the boundary. */
-  const meltMount = (wA, el, id) => {
-    const doc = wA.ownerDocument;
-    if (!doc.getElementById("meltcss")) { const s = doc.createElement("style"); s.id = "meltcss"; s.textContent = MELT_CSS; doc.head.appendChild(s); }
-    const rect = meltInkRect(wA), hexes = meltInkColours(wA);
-    const ink = wA.cloneNode(true);
-    ink.removeAttribute("id"); ink.classList.add("meltink");
-    ink.querySelectorAll("video").forEach((v) => v.remove());
-    wA.parentNode.insertBefore(ink, wA.nextSibling);
-    const txt = wA.cloneNode(true);
-    txt.removeAttribute("id"); txt.classList.add("melttext");
-    txt.querySelectorAll("video").forEach((v) => v.remove());
-    wA.parentNode.insertBefore(txt, ink.nextSibling);
-    wA.classList.add("meltboard");
-    const svg = el("svg", "meltov", wA.parentNode, { "pointer-events": "none" });
-    const defs = el("defs", "", svg, {});
-    defs.innerHTML = meltFilterMarkup(id + "f", 0) + meltMaskMarkup(id + "m", id + "f") + meltInkFilterMarkup(id + "i")
-      + meltStainFilterMarkup(id + "s") + meltRevealMarkup(id + "r", id + "s") + meltSplatFilterMarkup(id + "p") + meltBodyGradientMarkup(id + "g", hexes)
-      + meltSplatGradientMarkup(id + "w", hexes) + meltTextFilterMarkup(id + "x");
-    const ink0 = meltInkOf(hexes, MELT.INK_DEEP);
-    defs.querySelector("#" + id + "i feFlood").setAttribute("flood-color", ink0);
-    const comps = defs.querySelectorAll("#" + id + "i feComposite");
-    const m = { id, svg, defs, ink, txt, rect, hexes, ink0, tintC: comps[comps.length - 1], toff: defs.querySelector("#" + id + "x feOffset"), tblur: defs.querySelector("#" + id + "x feGaussianBlur"),
-                blur: defs.querySelector("#" + id + "f feGaussianBlur"), path: defs.querySelector("mask path"),
-                iblur: defs.querySelector("#" + id + "i feGaussianBlur"), ioffs: [...defs.querySelectorAll("#" + id + "i feOffset")],
-                stainG: defs.querySelector("#" + id + "r g"),
-                drops: el("g", "meltdrops", svg, { filter: "url(#" + id + "p)" }),
-                bodyG: el("g", "meltbody", svg, {}), splats: [], sats: [], holes: [], sprung: null };
-    m.body = el("path", "", m.bodyG, { fill: "url(#" + id + "g)", d: "" });
-    svg.style.position = "absolute"; svg.style.overflow = "visible"; svg.style.pointerEvents = "none"; svg.style.zIndex = "4";
-    wA.__melt = m;
-    return m;
-  };
-  /* keep n circles (or paths) in a group, created once and moved after that */
-  const meltDots = (pool, n, el, parent, attrs, tag = "circle") => { while (pool.length < n) pool.push(el(tag, "", parent, attrs)); return pool; };
-  const meltCircle = (dot, c) => {
-    if (!c || c.r <= 0.2) { dot.setAttribute("r", "0"); return; }
-    dot.setAttribute("cx", c.x.toFixed(1)); dot.setAttribute("cy", c.y.toFixed(1)); dot.setAttribute("r", c.r.toFixed(1));
-  };
-
-  /* PAINT ONE FRAME. ctx: { wA, wB, t, t0, opts, rnd, el, id }. The state is meltState's; this only writes it down. A world
-     that holds no page is not melted (E88: the melt takes a chart's ink - there is no whole-world melt left to fall back
-     to); the engine cuts instead, and so does this. */
-  const paintMelt = (ctx) => {
-    const { wA, wB, el, rnd } = ctx, id = ctx.id || "melt";
-    if (!wA.__melt && !wA.querySelector(".lp-page")) return null;
-    if (wA.__melt && !(wA.__melt.svg && wA.__melt.svg.isConnected)) clearMelt(wA);   /* a stale mount: its clone and classes go first */
-    const m = wA.__melt ? wA.__melt : meltMount(wA, el, id);
-    const st = meltState(ctx.t0, ctx.t, Object.assign({ rect: m.rect, stagebox: meltStageBox(wA) }, ctx.opts), rnd);
-    m.svg.style.left = wA.offsetLeft + "px"; m.svg.style.top = wA.offsetTop + "px";
-    m.svg.style.width = wA.offsetWidth + "px"; m.svg.style.height = wA.offsetHeight + "px";
-    m.svg.setAttribute("viewBox", "0 0 " + wA.offsetWidth + " " + wA.offsetHeight);
-    m.svg.style.opacity = st.gone ? "0" : "1";
-    /* THE INK: masked, run, squeezed about the ball's centre - hidden once the ball is solid */
-    const ink = m.ink, showInk = !st.gone && st.inkOpacity > 0 && st.path;
-    ink.style.visibility = showInk ? "" : "hidden";
-    ink.style.zIndex = "3";
-    if (showInk) {
-      m.blur.setAttribute("stdDeviation", st.blur.toFixed(2));
-      m.path.setAttribute("d", st.path);
-      ink.style.mask = "url(#" + id + "m)"; ink.style.webkitMaskImage = "url(#" + id + "m)";
-      m.iblur.setAttribute("stdDeviation", st.inkBlur.toFixed(2));   /* on for every frame the ink shows: its faint-pixel cut is part of the ink */
-      m.ioffs.forEach((o, j) => o.setAttribute("dy", (st.run * (j + 1) / m.ioffs.length).toFixed(1)));
-      ink.style.filter = "url(#" + id + "i)";
-      m.tintC.setAttribute("k2", st.tint.toFixed(4)); m.tintC.setAttribute("k3", (1 - st.tint).toFixed(4));
-      ink.style.transformOrigin = st.centre ? st.centre[0].toFixed(1) + "px " + st.centre[1].toFixed(1) + "px" : "";
-      ink.style.transform = (st.scale !== 1 ? "scale(" + st.scale.toFixed(4) + ") " : "") + wA.style.transform;
-    }
-    /* THE WORDS: their own glyphs running down, fading out over the sag */
-    const txt = m.txt, showTxt = !st.gone && st.textOpacity > 0.002;
-    txt.style.display = showTxt ? "" : "none";   /* never `visibility`: the words' own !important visible would outrank it */
-    txt.style.zIndex = "3";
-    if (showTxt) {
-      m.tblur.setAttribute("stdDeviation", "0 " + (st.run * 0.5).toFixed(2));
-      m.toff.setAttribute("dy", (st.run * 0.6).toFixed(1));
-      txt.style.filter = "url(#" + id + "x)";
-      txt.style.opacity = st.textOpacity.toFixed(4);
-      txt.style.transform = wA.style.transform;
-    }
-    ink.style.opacity = showInk ? st.inkOpacity.toFixed(4) : "0";
-    /* THE BALL */
-    m.body.setAttribute("d", st.body || "");
-    m.body.setAttribute("opacity", (st.body ? st.bodyAlpha : 0).toFixed(3));
-    m.bodyG.setAttribute("transform", meltBodyTransform(st));
-    /* THE SPLATTER: opaque ink splats with their tails and satellites, and the torn stains cut through the board */
-    meltDots(m.splats, st.drops.length, el, m.drops, { fill: "url(#" + id + "w)" }, "path").forEach((p, i) => {
-      const d = st.drops[i], k = st.dropScale;
-      p.setAttribute("d", d && d.d > 0 ? meltSplatPath(d.x, d.y, d.r * k, d.a + Math.PI, d.tail * k, rnd, 500 + i) : "");
-    });
-    meltDots(m.sats, st.sats.length, el, m.drops, { fill: "url(#" + id + "w)" }).forEach((dot, i) => {
-      const s = st.sats[i];
-      meltCircle(dot, s ? { x: s.x, y: s.y, r: s.r * st.dropScale } : null);
-    });
-    m.sats.slice(st.sats.length).forEach((dot) => dot.setAttribute("r", "0"));
-    meltDots(m.holes, st.stains.length, el, m.stainG, { fill: "#000" }, "path").forEach((p, i) => {
-      const s = st.stains[i];
-      p.setAttribute("d", s && s.r > 0.2 ? meltSplatPath(s.x, s.y, s.r, 0, 0, rnd, 700 + i) : "");
-    });
-    m.drops.setAttribute("opacity", st.dropAlpha.toFixed(3));
-    /* THE BOARD: the outgoing world, its ink hidden - up, then painted through, then gone */
-    wA.style.zIndex = 3;
-    wA.style.opacity = st.boardUp ? st.cover.toFixed(4) : "0";
-    const rev = st.reveal ? "url(#" + id + "r)" : "";
-    wA.style.mask = rev; wA.style.webkitMaskImage = rev;
-    /* THE PLATE springs up as it is painted */
-    if (wB && st.spring !== 1) {
-      wB.style.transformOrigin = "50% 50%";
-      wB.style.transform = "scale(" + st.spring.toFixed(4) + ") " + wB.style.transform;
-      m.sprung = wB;
-    }
-    return st;
-  };
-
-  /* the reset, called on every frame that is NOT a melt - it touches only what the painter set */
-  const clearMelt = (wA) => {
-    if (!wA.__melt) return;
-    const m = wA.__melt;
-    if (m.svg && m.svg.parentNode) m.svg.parentNode.removeChild(m.svg);
-    if (m.ink && m.ink.parentNode) m.ink.parentNode.removeChild(m.ink);
-    if (m.txt && m.txt.parentNode) m.txt.parentNode.removeChild(m.txt);
-    if (m.sprung && m.sprung.style.transformOrigin) m.sprung.style.transformOrigin = "";
-    wA.__melt = null;
-    wA.classList.remove("meltboard");
-    wA.style.mask = ""; wA.style.webkitMaskImage = "";
-    if (wA.style.zIndex) wA.style.zIndex = "";
-    if (wA.style.opacity !== "") wA.style.opacity = "";
-    if (wA.style.transformOrigin) wA.style.transformOrigin = "";
-  };
-  /* KINETICS:END */
   const render = (t) => {
     let si = 0;
     for (let i = 0; i < TL.scenes.length; i++) if (t >= TL.scenes[i].span[0]) si = i;

@@ -16,13 +16,13 @@ lives (module | inline | compiler-only | declared-unbuilt, the path and the one 
 module - status and callable - proof - doctrine cites resolved to path:line - aliases. A token that is only a
 parameter of an effect is an option on its card, never a card.
 
-131 cards, 62 options, 18 axes. 40 recipes (15 proven).
+132 cards, 69 options, 18 axes. 40 recipes (15 proven).
 
 | axis | cards | options | live | wired | draft | declared | planned | retired |
 |---|---|---|---|---|---|---|---|---|
 | species | 23 | 1 | 7 | 13 | 0 | 3 | 0 | 0 |
 | page_species | 12 | 0 | 2 | 10 | 0 | 0 | 0 | 0 |
-| chart_to | 6 | 2 | 0 | 6 | 0 | 0 | 0 | 0 |
+| chart_to | 6 | 9 | 0 | 6 | 0 | 0 | 0 | 0 |
 | page_builder | 11 | 3 | 2 | 5 | 0 | 4 | 0 | 0 |
 | overflow | 2 | 1 | 0 | 2 | 0 | 0 | 0 | 0 |
 | dock_kind | 4 | 1 | 2 | 2 | 0 | 0 | 0 | 0 |
@@ -37,7 +37,7 @@ parameter of an effect is an option on its card, never a card.
 | page_enter | 10 | 5 | 3 | 7 | 0 | 0 | 0 | 0 |
 | page_exit | 2 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
 | caption | 3 | 8 | 3 | 0 | 0 | 0 | 0 | 0 |
-| kinetics | 15 | 0 | 2 | 13 | 0 | 0 | 0 | 0 |
+| kinetics | 16 | 0 | 2 | 14 | 0 | 0 | 0 | 0 |
 
 ## species
 
@@ -57,7 +57,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `AGENDA` in `content/video_engine/scripts/species/agenda.mjs`: `MIN_ROWS`=2, `MAX_ROWS`=4, `ROW_H`=132, `NUM_W`=92, `NUM_SIZE`=64, `TEXT_SIZE`=54, `SUB_SIZE`=34, `ROW_S`=0.42, `ROW_DY`=26, `RULE_S`=0.5, `RULE_DY`=22, `NUM_LEAD`=0.12, `STEP`=0.34, `MIN_K`=0.45
 - **status** wired - **callable** yes
 - **proof** golden agenda-two - test content/video_engine/tests/kinetics/agenda.test.mjs - first use none
-- **doctrine** CAPABILITIES NUMBERED AGENDA -> docs/content-video-engine/CAPABILITIES.md:42; E93 -> docs/portable/OPERATOR-RULINGS.md:2723
+- **doctrine** CAPABILITIES NUMBERED AGENDA -> docs/content-video-engine/CAPABILITIES.md:42; E93 -> docs/portable/OPERATOR-RULINGS.md:2761
 - **aliases** "THE NUMBERED AGENDA" (docs/content-video-engine/CAPABILITIES.md:37)
 
 ### The vector map arc species
@@ -228,7 +228,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `NEWSREEL` in `content/video_engine/scripts/species/newsreel.mjs`: `SPEED`=140, `BAND_H`=0.14, `GAP`=88, `BULLET`="•", `EDGE`=0.12, `PAD_X`=34, `TAB_W`=12, `CRAWL_ROW`=0.56, `STRAP_ROW`=0.88, `TYPE`=0.7, `STRAP_TYPE`=0.56, `DEEMPH`=0.62, `HAIRLINE`=0.04, `EST_PX_PER_CHAR`=0.52, `BEATS`=Object.freeze({ /* RU-4's beat plan as a named table in seconds, ours to re-time */ BAR: 0, /* the band starts opening o, `COL`=Object.freeze({ /* the tokens the template already defines, each with its own value as the fallback so the band paints t
 - **status** wired - **callable** yes
 - **proof** golden newsreel-band - test content/video_engine/tests/kinetics/newsreel.test.mjs - first use none
-- **doctrine** CAPABILITIES NEWSREEL -> docs/content-video-engine/CAPABILITIES.md:44; E68 -> docs/portable/OPERATOR-RULINGS.md:2206; E84 -> docs/portable/OPERATOR-RULINGS.md:2574
+- **doctrine** CAPABILITIES NEWSREEL -> docs/content-video-engine/CAPABILITIES.md:44; E68 -> docs/portable/OPERATOR-RULINGS.md:2206; E84 -> docs/portable/OPERATOR-RULINGS.md:2588
 - **aliases** "THE NEWSREEL BAND" (docs/content-video-engine/CAPABILITIES.md:39)
 
 ### The plate life species
@@ -572,20 +572,26 @@ parameter of an effect is an option on its card, never a card.
 
 ### The compare chart-to verb (metric to comparator)
 
-- **id** `chart_to:compare` - **does** The figure the market quotes becomes the number the viewer feels: the quoted metric morphs into its authored comparator, which holds with the metric beside it or gone.
+- **id** `chart_to:compare` - **does** The figure the market quotes becomes the number the viewer feels: the metric's own outlines - measured off the page's ink - sag and BALL UP at its datum, and the ball becomes the comparator's glyphs (or bursts, or is thrown).
 - **when** the sentence quotes the market's figure and then says what it MEANS - the quoted number morphs into the number the viewer feels (E76); the arithmetic is authored, never invented (content/video_engine/scripts/build_scene_timeline_f.py CHART_TO_WHEN)
 - **example** `{"kind": "chart_to", "at": 32.0, "dur": 1.2, "to": "compare", "metric": {"value": 24.8, "text": "24.8x", "label": "forward P/E"}, "comparator": {"value": 0.1535, "text": "15 % dearer", "label": "dearer than its own history"}, "inputs": {"pe": 24.8, "hist": 21.5}, "derive": "pe / hist - 1", "source": "[DERIVED: from ev-meta-pe-v1 + the 10-year median, pe / hist - 1]"}` (content/video_engine/tests/test_metric_comparator.py:32; key: chart_to {"to": "compare"}; check: species)
 - **phases**
-  1. **the numeral counts** - the quoted numeral runs to the comparator's on min-jerk, in the metric's own clothes (trigger: the chart_to's `at`; dials: `COUNT`=0.72)
-  2. **the words cross** - the text either side of the numeral crosses THROUGH ZERO - the metric's clothes become the comparator's where there is nothing on screen to swap (trigger: SWAP of `dur`, over CROSS of it; dials: `SWAP`=0.5, `CROSS`=0.2)
-  3. **the label is written** - the comparator's `label` - what the number MEANS - is written beneath by the hand (trigger: LABEL_AT of `dur`; dials: `LABEL_AT`=0.55)
-  4. **the metric holds beside it** - hold: "metric" (the default) stands the quoted figure beside the comparator, quieter and smaller; hold: "gone" gives the comparator the stage (trigger: SWAP of `dur`; dials: `GHOST_A`=0.62, `GHOST_F`=0.74)
-- **options** `metric` hold: the quoted metric stays legible beside the comparator (the default) (COMPARE_HOLDS); `gone` hold: the quoted metric leaves and the comparator has the stage (COMPARE_HOLDS)
-- **lives** module - `content/video_engine/scripts/species/compare.mjs` - symbol `paintCompare` - also `compareFrame` - species/compare.mjs on PAGE_PAINTERS.compare, dispatched from paintPerform after the figures it morphs; E60 counter form, not a glyph morph (a figure is SVG <text>)
-- **dials** `COMPARE` in `content/video_engine/scripts/species/compare.mjs`: `COUNT`=0.72, `SWAP`=0.5, `CROSS`=0.2, `LABEL_AT`=0.55, `GHOST_A`=0.62, `GHOST_F`=0.74, `GAP`=14, `SUB_DY`=1.3, `WIDTH_EM`=0.56, `PAD`=4, `OVERLAP`=1.6
+  1. **the ink sags** - `form: melt` (the default): the figure's own glyph outlines - measured off the page's ink by kinetics/contour.mjs - sag on melt.mjs's law, the top sinking and the foot hanging in seeded drips (trigger: the chart_to's `at`, over MELT.MELT_END of `dur`; dials: `SAG_GAIN`=3.2, `MELT.SAG`=0.40, `MELT.TOP_SAG`=0.42)
+  2. **the ink balls up** - every outline is carried by morph_a into ONE disc that holds the ink's own area (never MELT.BALL_R, a share of a PAGE's height), on melt's stepped clock: the number compiles into a heavy ball (trigger: MELT.MELT_END of `dur`, to MELT.BALL_END; dials: `BALL_SWELL`=1.0, `BALL_MIN`=0.34, `MELT.HOLD`=2)
+  3. **the ball becomes the comparator** - `then: morph` (the default): the ball's one ring is carried into the comparator's glyph rings by the pairing rule - by rank on centroid x, surplus rings born from the ball's own centre (trigger: MELT.BALL_END of `dur`, over the rest; dials: `DEGEN_R`=0.6, `MORPH_A.N`=96, `SIMPLIFY`=1.2)
+  4. **the ball bursts or is thrown** - `then: splash`: melt.mjs's seeded splatter at the figure's scale, drying as the hand writes. `then: throw`: the ball sits in its weight and is thrown off, the hand writing after melt's release (trigger: MELT.BALL_END of `dur`; dials: `MELT.BURST_END`=0.40, `MELT.ANTIC`=0.22, `MELT.TO`=[1.02, 1.32])
+  5. **the quoted figure is taken away** - `form: streak` (P57 T12b): the glyphs melt where they stand, each a drip opening in the hand's reading order on melt's run. `form: collapse`: the hand takes the ink back, last glyph first (trigger: the chart_to's `at`, over TAKE_SHARE of `dur`; dials: `TAKE_SHARE`=0.55, `MELT_BOX`=3.2)
+  6. **the hand re-writes the comparator** - on every form but the morph, the comparator's `text` is written at the SAME DATUM by the figure's own hand (species/figure.mjs's write clock), glyph after glyph (trigger: TAKE_SHARE of `dur` (streak, collapse), the ending's own release (splash, throw); dials: `FIGURE.WRITE`=0.6)
+  7. **the numeral counts** - `form: count` (E60's counter, the form P57 T12 shipped): the quoted numeral runs to the comparator's on min-jerk, in the metric's own clothes (trigger: the chart_to's `at`; dials: `COUNT`=0.72)
+  8. **the words cross** - `form: count`: the text either side of the numeral crosses THROUGH ZERO - the metric's clothes become the comparator's where there is nothing on screen to swap (trigger: SWAP of `dur`, over CROSS of it; dials: `SWAP`=0.5, `CROSS`=0.2)
+  9. **the label is written** - the comparator's `label` - what the number MEANS - is written beneath by the hand (trigger: LABEL_AT of `dur`; dials: `LABEL_AT`=0.55)
+  10. **the metric holds beside it** - `hold: "metric"` stands the quoted figure beside the comparator at GHOST_A of the ink and GHOST_F of the size; `hold: "gone"` gives the comparator the stage (trigger: once the comparator has landed; dials: `GHOST_A`=0.62, `GHOST_F`=0.74, `GAP`=14)
+- **options** `melt` form: THE DEFAULT - the quoted figure's outlines sag on melt.mjs's law and BALL UP into one disc that holds the ink's own area; `then` says what becomes of the ball (COMPARE_FORMS); `streak` form: P57 T12b's text melt - the glyphs drip where they stand under melt's words streak, then the hand re-writes the comparator (COMPARE_FORMS); `collapse` form: the hand takes the quoted figure's ink back first (the undraw law), then re-writes the comparator (COMPARE_FORMS); `count` form: E60's counter - the numeral counts to the comparator's and the words cross through zero (P57 T12's form, kept as a setting) (COMPARE_FORMS); `morph` then: THE DEFAULT - the ball's one ring is carried by morph_a into the comparator's glyph rings (one ring into N), and the figure's <text> takes over at u = 1 (COMPARE_THENS); `splash` then: the ball bursts onto the page (melt.mjs's seeded splatter) and the hand writes the comparator through the drying ink (COMPARE_THENS); `throw` then: the ball sits in its own weight and is thrown off the page (melt.mjs's flight), and the hand writes the comparator after it (COMPARE_THENS); `metric` hold: the quoted metric stays legible beside the comparator (the default) (COMPARE_HOLDS); `gone` hold: the quoted metric leaves and the comparator has the stage (COMPARE_HOLDS)
+- **lives** module - `content/video_engine/scripts/species/compare.mjs` - symbol `paintCompare` - also `compareFrame`, `compareMorphFrame`, `compareBallFrame`, `compareForm`, `compareThen`, `compareShape`, `comparePairGroups`, `compareBallR` - species/compare.mjs on PAGE_PAINTERS.compare, after the figures it morphs. P57 T12c (E76 s5): the default is composed from contour.mjs, morph_a.mjs, melt.mjs and figure.mjs
+- **dials** `COMPARE` in `content/video_engine/scripts/species/compare.mjs`: `TAKE_SHARE`=0.55, `MELT_BOX`=3.2, `COUNT`=0.72, `SWAP`=0.5, `CROSS`=0.2, `LABEL_AT`=0.55, `GHOST_A`=0.62, `GHOST_F`=0.74, `GAP`=14, `SUB_DY`=1.3, `WIDTH_EM`=0.56, `PAD`=4, `OVERLAP`=1.6, `RASTER_S`=4, `RASTER_A`=0.5, `RASTER_PAD`=4, `SIMPLIFY`=1.2, `DEGEN_R`=0.6, `BALL_SWELL`=1.0, `BALL_MIN`=0.34, `SAG_GAIN`=3.2, `SEED`=7
 - **status** wired (backlog R26-70) - **callable** yes
 - **proof** golden compare-morph - test content/video_engine/tests/kinetics/compare.test.mjs - first use none
-- **doctrine** E76 -> docs/portable/OPERATOR-RULINGS.md:2442; E73 -> docs/portable/OPERATOR-RULINGS.md:2342; E88 -> docs/portable/OPERATOR-RULINGS.md:2647; E77 -> docs/portable/OPERATOR-RULINGS.md:2466; E60 -> docs/portable/OPERATOR-RULINGS.md:1959; E50 -> docs/portable/OPERATOR-RULINGS.md:1520
+- **doctrine** E76 -> docs/portable/OPERATOR-RULINGS.md:2442; E76 s5 -> docs/portable/OPERATOR-RULINGS.md:2442; E73 -> docs/portable/OPERATOR-RULINGS.md:2342; E88 -> docs/portable/OPERATOR-RULINGS.md:2661; E77 -> docs/portable/OPERATOR-RULINGS.md:2480; E60 -> docs/portable/OPERATOR-RULINGS.md:1959; E50 -> docs/portable/OPERATOR-RULINGS.md:1520
 - **aliases** "the metric-to-comparator morph" (docs/content-video-engine/BACKLOG.md:476); "morphing the P/E to a more visual number" (docs/portable/OPERATOR-RULINGS.md:2446)
 
 ### The extend chart-to verb
@@ -771,7 +777,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintLedgerRace` - also `lpRacePos`, `lpRaceFits`
 - **status** wired - **callable** yes
 - **proof** golden none - test content/video_engine/tests/test_ledger_page.py::test_race_with_periods_builds_ranked_rows - first use none
-- **doctrine** 29 s9.26 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1504; BACKLOG R26-78 -> docs/content-video-engine/BACKLOG.md:484; E91 -> docs/portable/OPERATOR-RULINGS.md:2699
+- **doctrine** 29 s9.26 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1504; BACKLOG R26-78 -> docs/content-video-engine/BACKLOG.md:484; E91 -> docs/portable/OPERATOR-RULINGS.md:2737
 - **aliases** "bar-chart-race" (docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1797)
 
 ### The share ledger page (the pie)
@@ -876,7 +882,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `dockIsCutout` - dockIsCutout (engine) + the template's `.dock.cutout` CSS; compiler DOCK_KIND_CUTOUT from the dock option `cutout`
 - **status** wired (backlog R26-94) - **callable** yes
 - **proof** golden newsreel-band - test none - first use none
-- **doctrine** E86 #2 -> docs/portable/OPERATOR-RULINGS.md:2607; E68 -> docs/portable/OPERATOR-RULINGS.md:2206; E84 -> docs/portable/OPERATOR-RULINGS.md:2574; BACKLOG R26-59 -> docs/content-video-engine/BACKLOG.md:464
+- **doctrine** E86 #2 -> docs/portable/OPERATOR-RULINGS.md:2621; E68 -> docs/portable/OPERATOR-RULINGS.md:2206; E84 -> docs/portable/OPERATOR-RULINGS.md:2588; BACKLOG R26-59 -> docs/content-video-engine/BACKLOG.md:464
 - **aliases** "cutout dock" (docs/content-video-engine/CAPABILITIES.md:33); "a `cutout` dock kind" (docs/content-video-engine/BACKLOG.md:464)
 
 ### The image dock
@@ -905,7 +911,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `PRESS` in `content/video_engine/scripts/species/press.mjs`: `LAND_S`=0.5, `POP_FROM`=0.88, `DROP_PX`=22, `FADE_S`=0.12, `PUSH_S`=0.38, `STEP_PX`=30, `STEP_H`=0.22, `STEP_SCALE`=0.05, `BACK_SCALE`=0.78, `DIM`=0.22, `DIM_MIN`=0.34, `PUSH_DX`=26, `SQUEEZE`=0.035, `SKEW_DEG`=2.4, `UNDERLINE_EASE`=3, `FACE`="house", `TYPE_MIN`=12, `TYPE_MAX`=220, `TYPE_Q`=0.25, `LINE_H`=1.08, `WORD_AIR`=0.012, `PROV_SHARE`=0.3, `PROV_GAP`=0.04, `PHONE_FLOOR`=17
 - **status** wired - **callable** yes: probe: dock_opts({'press': {...}}) compiles; press_plate_error refuses it on a ledger page
 - **proof** golden press-stack - test content/video_engine/tests/test_press_dock.py::test_a_press_dock_carries_its_source_and_phrase_and_drops_the_provenance - first use none
-- **doctrine** CAPABILITIES press card -> docs/content-video-engine/CAPABILITIES.md:32; 29 s9.27 Push hand-off -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1783; E89 -> docs/portable/OPERATOR-RULINGS.md:2670; E66 -> docs/portable/OPERATOR-RULINGS.md:2146; BACKLOG R26-55 -> docs/content-video-engine/BACKLOG.md:461
+- **doctrine** CAPABILITIES press card -> docs/content-video-engine/CAPABILITIES.md:32; 29 s9.27 Push hand-off -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1783; E89 -> docs/portable/OPERATOR-RULINGS.md:2708; E66 -> docs/portable/OPERATOR-RULINGS.md:2146; BACKLOG R26-55 -> docs/content-video-engine/BACKLOG.md:461
 - **aliases** "PRESS CARD dock" (docs/content-video-engine/CAPABILITIES.md:88); "the press card" (docs/content-video-engine/SPECIES-BY-SENTENCE.md:25)
 
 ### The video dock
@@ -916,7 +922,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintDockClip` - also `dockIsVideo` - paintDockClip + dockIsVideo; compiler is_video_asset / dock_uri
 - **status** live - **callable** yes: compiles for any .mp4/.webm dock asset
 - **proof** golden none - test content/video_engine/tests/test_video_dock.py::test_a_video_dock_asset_embeds_raw_like_a_world_clip - first use tokyo-tea-break build-short.v2 (render approved by the operator 2026-09-06, render/APPROVALS.json; 4 video docks) t=None
-- **doctrine** CAPABILITIES Video dock -> docs/content-video-engine/CAPABILITIES.md:66; E86 -> docs/portable/OPERATOR-RULINGS.md:2607; BACKLOG R26-7 -> docs/content-video-engine/BACKLOG.md:432
+- **doctrine** CAPABILITIES Video dock -> docs/content-video-engine/CAPABILITIES.md:66; E86 -> docs/portable/OPERATOR-RULINGS.md:2621; BACKLOG R26-7 -> docs/content-video-engine/BACKLOG.md:432
 - **aliases** "Video dock" (docs/content-video-engine/CAPABILITIES.md:60)
 
 ## dock_payload
@@ -999,7 +1005,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `CHECKLIST` in `content/video_engine/scripts/species/checklist.mjs`: `COLORS`=Object.freeze(["#f4f6f8", "#dce3ea", "#3bc9b0", "#ff8a8c"]), `HEAD_DY`=18, `ROW0_DY`=64, `ROW_PITCH`=58, `ROW_DELAY_S`=3, `HL_FROM_COL`=2, `BAND_INSET`=8, `BAND_RISE`=21, `BAND_H`=30, `BAND_W0`=10, `BAND_RX`=4, `BAND_ALPHA`=0.28, `KM_GROUND`="#16181c", `RULE_DY`=18, `RULE_COLOR`="#24262b", `RULE_W`=1.5, `FIT_MARGIN`=28, `FIT_MIN_W`=40, `FIT_PAD`=26, `FIT_CHAR_W`=10, `FIT_X0`=64, `FIT_ROOM_SLACK`=8, `CHISEL_DEG`=-7, `RECAP_S`=12, `RECAP_ROW_S`=0.8, `OFFS`=Object.freeze([0, 0.6, 1.0, 1.6]), `RECAP_OFFS`=Object.freeze([0, 0.25, 0.45, 0.7]), `CELL_FADE_S`=0.35, `TYPE_S`=0.045, `SWEEP_S`=0.55, `SWEEP_W_FALLBACK`=300, `SWEEP_PAD`=18, `SWEEP_ROOM_PAD`=12
 - **status** live (backlog R26-81) - **callable** yes: 16:9 long-form dock via .series.json; never on a short (R26-81: tokens, 9:16 rows, no frame on disk)
 - **proof** golden test-card - test content/video_engine/tests/kinetics/checklist.test.mjs - first use steel-and-paper build-f t=492.3
-- **doctrine** CAPABILITIES checklist species -> docs/content-video-engine/CAPABILITIES.md:195; CAPABILITIES auto-fit -> unresolved; E93 #3 -> docs/portable/OPERATOR-RULINGS.md:2723; BACKLOG R26-81 -> docs/content-video-engine/BACKLOG.md:487; BACKLOG R26-80 -> docs/content-video-engine/BACKLOG.md:486; ledger_page UNCHARTABLE -> unresolved
+- **doctrine** CAPABILITIES checklist species -> docs/content-video-engine/CAPABILITIES.md:195; CAPABILITIES auto-fit -> unresolved; E93 #3 -> docs/portable/OPERATOR-RULINGS.md:2761; BACKLOG R26-81 -> docs/content-video-engine/BACKLOG.md:487; BACKLOG R26-80 -> docs/content-video-engine/BACKLOG.md:486; ledger_page UNCHARTABLE -> unresolved
 - **aliases** "test list" (operator 2026-09-13 (P55 plan Summary)); "three-question test card" (operator 2026-09-13 (P55 plan Summary)); "THE TEST card" (operator 2026-09-13 (P55 plan Summary)); "The three-question TEST card" (docs/content-video-engine/BACKLOG.md:487); "the three-question TEST table card" (docs/agent-memory/operator/resume-2026-09-12.md:113); "Steel and Paper's three-question test card" (docs/portable/OPERATOR-RULINGS.md:2735); "Checklist species" (docs/content-video-engine/CAPABILITIES.md:189); "the scorecard" (content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:142); "tripwire board" (docs/content-video-engine/CAPABILITIES.md:189); "CHECKLIST v2" (docs/content-video-engine/samples/scene-evidence-engine.mjs:3582); "checklist" (operator 2026-09-13 (P55 plan HG1))
 
 ### The panels chart card
@@ -1058,7 +1064,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `badge_at` - also `LP_BADGE_IN`, `LP_BADGE_STEP`, `LP_BADGE_COL` - a card's pills light at d.badge_at[i], floored at the chart's draw-complete; a page's rail springs each badge in over LP_BADGE_IN on the LP_BADGE_STEP ladder; compiler dock_entry / badges_for
 - **status** live (implicit: no token of its own) - **callable** yes: implicit: the compiler writes badge_at for every dock whose evidence carries badges (Steel: 41 of 43)
 - **proof** golden none - test content/video_engine/tests/test_effects_catalog_drift.py::test_the_badge_card_is_the_walks_badge_event_on_a_dock_rail_and_a_page_rail - first use steel-and-paper build-f t=11.55
-- **doctrine** operator 2026-09-03 ('we need the badges back') -> unresolved; E45 (the dock choreography that lands the rail) -> docs/portable/OPERATOR-RULINGS.md:1361; E96 (the badge ladder recipe's member) -> docs/portable/OPERATOR-RULINGS.md:2759
+- **doctrine** operator 2026-09-03 ('we need the badges back') -> unresolved; E45 (the dock choreography that lands the rail) -> docs/portable/OPERATOR-RULINGS.md:1361; E96 (the badge ladder recipe's member) -> docs/portable/OPERATOR-RULINGS.md:2797
 - **aliases** "badge rail" (docs/portable/OPERATOR-RULINGS.md:1378); "the badges back" (docs/content-video-engine/samples/scene-evidence-engine.mjs:4225)
 
 ### The behind-the-plate dock option
@@ -1092,7 +1098,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** compiler-only - `content/video_engine/scripts/build_scene_timeline_f.py` - symbol `dock_opts` - also `DOCK_KIND_CUTOUT` - `{'cutout': True}` -> the dock's kind: cutout (no card, no paper, no border - a head above the crawl); refused with press, stack, embed and fit (R26-94, fixed 2026-09-13)
 - **status** wired (backlog R26-94) - **callable** yes
 - **proof** golden newsreel-band - test content/video_engine/tests/test_dock_cutout_option.py - first use none
-- **doctrine** E86 #2 -> docs/portable/OPERATOR-RULINGS.md:2607
+- **doctrine** E86 #2 -> docs/portable/OPERATOR-RULINGS.md:2621
 
 ### The art-embed surface dock option
 
@@ -1109,7 +1115,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `embedPaint` - also `paintEmbeddedPress`, `embedDark` - embedPaint + paintEmbeddedPress + embedDark; projection kinetics/homography.mjs; row: the plate's layers.json must declare the surface
 - **status** wired - **callable** yes: probe OK; the plate must declare the surface
 - **proof** golden art-embed - test content/video_engine/tests/test_art_embed_media.py - first use none
-- **doctrine** CAPABILITIES ART-embed -> docs/content-video-engine/CAPABILITIES.md:32; E66 -> docs/portable/OPERATOR-RULINGS.md:2146; E86 -> docs/portable/OPERATOR-RULINGS.md:2607; E95 -> docs/portable/OPERATOR-RULINGS.md:2750; E59 -> docs/portable/OPERATOR-RULINGS.md:1903; BACKLOG R26-74 -> docs/content-video-engine/BACKLOG.md:480
+- **doctrine** CAPABILITIES ART-embed -> docs/content-video-engine/CAPABILITIES.md:32; E66 -> docs/portable/OPERATOR-RULINGS.md:2146; E86 -> docs/portable/OPERATOR-RULINGS.md:2621; E95 -> docs/portable/OPERATOR-RULINGS.md:2788; E59 -> docs/portable/OPERATOR-RULINGS.md:1903; BACKLOG R26-74 -> docs/content-video-engine/BACKLOG.md:480
 - **aliases** "THE ART-EMBED SURFACE" (docs/content-video-engine/CAPABILITIES.md:31); "the tv surface" (docs/portable/OPERATOR-RULINGS.md:2609); "the art-embed plate" (docs/content-video-engine/SPECIES-BY-SENTENCE.md:173); "it should read as inside of the TV" (docs/content-video-engine/samples/scene-evidence-engine.mjs:2749)
 
 ### The read-then-park dock option
@@ -1412,7 +1418,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `bzIn` - also `bzOut` - render / THE BLURZOOM (E47 #1) block + bzIn/bzOut; the half-windows come from kinetics/transitions.mjs straddleSecs, the only line it shares with the dip (P57 T23)
 - **status** wired - **callable** yes: in SCENE_EXITS and TIMED_EXITS; authored by name only
 - **proof** golden none - test content/video_engine/tests/test_transitions_e47.py::test_the_blurzoom_softens_the_outgoing_plate_and_magnifies_it_by_blurzoom_scale - first use none
-- **doctrine** E47 s1 -> docs/portable/OPERATOR-RULINGS.md:1419; 46 s46.5 -> docs/content-video-engine/46-REFERENCE-RHYTHM.md:116; E87 s2 -> docs/portable/OPERATOR-RULINGS.md:2623
+- **doctrine** E47 s1 -> docs/portable/OPERATOR-RULINGS.md:1419; 46 s46.5 -> docs/content-video-engine/46-REFERENCE-RHYTHM.md:116; E87 s2 -> docs/portable/OPERATOR-RULINGS.md:2637
 - **aliases** "blur-zoom" (docs/portable/OPERATOR-RULINGS.md:1428)
 
 ### The cut scene exit
@@ -1440,7 +1446,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** module - `content/video_engine/scripts/kinetics/transitions.mjs` - symbol `dipAlpha` - also `DIP`, `straddleSecs`, `dipVeilOpacity`, `exitName`, `exitSecs` - P57 T23: the ramp and the boundary clock, promoted with every golden byte-identical; the render loop calls them by name (no registry) and keeps the veil, the element and DIP_S
 - **status** live - **callable** yes: in SCENE_EXITS and TIMED_EXITS; the default on a world change
 - **proof** golden dip-boundary - test content/video_engine/tests/test_transitions_e47.py::test_the_dip_puts_a_black_frame_on_the_boundary_and_ramps_into_and_out_of_it - first use japan-tariff-trick build-short t=8.32
-- **doctrine** E47 s1+s3 -> docs/portable/OPERATOR-RULINGS.md:1419; 46 s46.5 -> docs/content-video-engine/46-REFERENCE-RHYTHM.md:116; E87 s2 -> docs/portable/OPERATOR-RULINGS.md:2623; memory dip-is-a-world-change -> unresolved
+- **doctrine** E47 s1+s3 -> docs/portable/OPERATOR-RULINGS.md:1419; 46 s46.5 -> docs/content-video-engine/46-REFERENCE-RHYTHM.md:116; E87 s2 -> docs/portable/OPERATOR-RULINGS.md:2637; memory dip-is-a-world-change -> unresolved
 - **aliases** "dip through black" (docs/portable/OPERATOR-RULINGS.md:1419); "the dip" (docs/portable/OPERATOR-RULINGS.md:2635)
 
 ### The dissolve scene exit
@@ -1475,7 +1481,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `MELT` in `content/video_engine/scripts/species/melt.mjs`: `S`=1.6, `MELT_END`=0.30, `BALL_END`=0.55, `DRIPS`=7, `SAG`=0.40, `TOP_SAG`=0.42, `BASE_SAG`=0.10, `DRIP_W`=0.11, `DRIP_JIT`=0.55, `DRIP_DELAY`=0.40, `N`=33, `TOP_N`=13, `SIDE_N`=7, `BLUR`=26, `EDGE_SLOPE`=24, `RUN`=0.22, `RUN_COPIES`=6, `INK_BLUR`=4, `BALL_FUSE`=40, `INK_SLOPE`=9, `BALL_R`=0.085, `CIRCLE_N`=96, `RING_N`=96, `HOLD`=2, `FPS`=CADENCE.FPS, `SQUEEZE`=1.15, `BODY_FROM`=0, `BODY_TO`=0.15, `BODY_GROW`=0.4, `BODY_SEED`=0.25, `INK_OUT`=0.45, `TINT_MELT`=0, `INK_DEEP`=3, `CORE`=12, `LIGHT`=1, `TEXT_STREAK`=1.6, `SHEEN`=0.5, `SPLAT_OUT`=3.5, `SPLAT_SHRINK`=0.5, `MASS`="liquid", `SQUASH`=0.30, `ANTIC`=0.22, `TO`=[1.02, 1.32], `ARC`=0.06, `SPIN_DEG`=4, `DROPS`=14, `BURST_END`=0.40, `SPLASH_SPREAD`=0.30, `LAND_MIN`=0.25, `LAND_MAX`=0.92, `DROP_R`=0.035, `FLAT`=0.62, `REVEAL_R`=0.75, `CORE_R`=0.70, `FLOOD_FROM`=0.70, `TAIL`=2.2, `LOBES`=14, `SPLAT_RAG`=16, `STAIN_RAG`=70, `STAIN_BLUR`=6, `STAIN_SLOPE`=12, `SPRING`=0.09, `INK_HEX`="#E9E2D2"
 - **status** draft (backlog R26-76) - **callable** yes: compiles; the R26-76 rework's look pass 3 was accepted on the parent's frame read 2026-09-13 but is uncommitted and awaits the operator's watch in motion; bare melt:splash refused
 - **proof** golden melt-page - test content/video_engine/tests/test_transitions_e47.py::test_a_melt_parses_with_and_without_its_own_length_register_and_point - first use normal-for-which-bridge not recorded in the table t=25.02
-- **doctrine** E88 -> docs/portable/OPERATOR-RULINGS.md:2647; R26-76 -> docs/content-video-engine/BACKLOG.md:482; CAPABILITIES melt row -> unresolved
+- **doctrine** E88 -> docs/portable/OPERATOR-RULINGS.md:2661; R26-76 -> docs/content-video-engine/BACKLOG.md:482; CAPABILITIES melt row -> unresolved
 - **aliases** "stop motion ink ball" (docs/portable/OPERATOR-RULINGS.md:2654); "toss it off the page" (docs/portable/OPERATOR-RULINGS.md:2655)
 
 ### The slide scene exit
@@ -1492,7 +1498,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `slideOn` - also `slideU`, `slideOpts`, `SLIDE_S`, `SLIDE_AXES` - the render loop's boundary block - THE SLIDE (slideOn/slideU beside dipIn/bzIn) and its paint beside the suck's; the compiler half is _slide_parts / SLIDE_DIRECTIONS / SLIDE_S, read by parse_exit
 - **status** draft (backlog R26-75) - **callable** yes: in SCENE_EXITS and TIMED_EXITS; parse_exit accepts slide:<left|right|up|down>[:<s>] and the engine paints it (goldens slide-mid / slide-landed) - it awaits the operator's watch in motion before a short ships it
 - **proof** golden slide-mid - test content/video_engine/tests/test_transitions_e47.py::test_the_slide_pushes_both_worlds_together_and_the_two_abut_at_the_seam - first use none
-- **doctrine** E87 s3 -> docs/portable/OPERATOR-RULINGS.md:2623; E47 -> docs/portable/OPERATOR-RULINGS.md:1419; E73 -> docs/portable/OPERATOR-RULINGS.md:2342; R26-75 -> docs/content-video-engine/BACKLOG.md:481; CAPABILITIES slide row -> unresolved
+- **doctrine** E87 s3 -> docs/portable/OPERATOR-RULINGS.md:2637; E47 -> docs/portable/OPERATOR-RULINGS.md:1419; E73 -> docs/portable/OPERATOR-RULINGS.md:2342; R26-75 -> docs/content-video-engine/BACKLOG.md:481; CAPABILITIES slide row -> unresolved
 - **aliases** "push/slide option" (docs/portable/OPERATOR-RULINGS.md:2629); "push transition" (docs/content-video-engine/BACKLOG.md:481)
 
 ### The suck scene exit
@@ -1519,7 +1525,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `wk` - render / const wk + THE HARD-EDGE CLIP WIPE block (+ seam, + THE PAGE WIPE CLEARS THE PAGE in the dock loop)
 - **status** wired - **callable** yes: in SCENE_EXITS; retired as the world-change default (E47 s3), reachable by name
 - **proof** golden none - test content/video_engine/tests/test_transitions_e47.py::test_an_authored_exit_still_wins_and_the_wipe_is_still_reachable_by_name - first use none
-- **doctrine** 29 s9.15 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:900; 29 Part 6 -> unresolved; E47 s3 -> docs/portable/OPERATOR-RULINGS.md:1419; E87 s2 -> docs/portable/OPERATOR-RULINGS.md:2623
+- **doctrine** 29 s9.15 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:900; 29 Part 6 -> unresolved; E47 s3 -> docs/portable/OPERATOR-RULINGS.md:1419; E87 s2 -> docs/portable/OPERATOR-RULINGS.md:2637
 - **aliases** "wipe/peel" (docs/portable/OPERATOR-RULINGS.md:2626); "carried-light cross-reveal" (docs/portable/OPERATOR-RULINGS.md:1439); "CROSS-REVEAL with carried light" (docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:907); "page wipe" (docs/portable/OPERATOR-RULINGS.md:1425); "Directional wipe" (docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:242)
 
 ## page_enter
@@ -1595,7 +1601,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintMorph` - also `paintLedger`, `morphOn` - paintMorph (+ kinetics/arap.mjs; paintLedger const morphOn)
 - **status** wired - **callable** yes: compiles; paints only behind kinetics.arap_morph, else falls back to a mount
 - **proof** golden none - test content/video_engine/tests/test_morph.py::test_the_ledger_id_takes_a_morph_enter_with_its_seconds - first use none
-- **doctrine** E48 s4 -> docs/portable/OPERATOR-RULINGS.md:1461; E87 s2 -> docs/portable/OPERATOR-RULINGS.md:2623
+- **doctrine** E48 s4 -> docs/portable/OPERATOR-RULINGS.md:1461; E87 s2 -> docs/portable/OPERATOR-RULINGS.md:2637
 - **aliases** "one element transforming into the next" (docs/portable/OPERATOR-RULINGS.md:2637); "The morph: the object becomes the chart" (docs/content-video-engine/CAPABILITIES.md:111)
 
 ### The cream mount page enter
@@ -1614,7 +1620,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintLedger` - also `LP_MOUNT_RISE`, `mountIn` - paintLedger mount branch (const mount / mk / LP_MOUNT_RISE) + render const mountIn
 - **status** live - **callable** yes: in LEDGER_ENTERS; a signature (no dip in front)
 - **proof** golden none - test content/video_engine/tests/test_page_performs.py::test_the_mounting_pages_soak_opens_on_the_scenes_first_frame_and_its_ink_follows_mount_s - first use japan-tariff-trick build-short t=17.42
-- **doctrine** 29 s9.31 (the mount) -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2100; E45 -> docs/portable/OPERATOR-RULINGS.md:1361; E47 s2 -> docs/portable/OPERATOR-RULINGS.md:1419; E48 s3 -> docs/portable/OPERATOR-RULINGS.md:1461; E73 -> docs/portable/OPERATOR-RULINGS.md:2342; E87 s2 -> docs/portable/OPERATOR-RULINGS.md:2623
+- **doctrine** 29 s9.31 (the mount) -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2100; E45 -> docs/portable/OPERATOR-RULINGS.md:1361; E47 s2 -> docs/portable/OPERATOR-RULINGS.md:1419; E48 s3 -> docs/portable/OPERATOR-RULINGS.md:1461; E73 -> docs/portable/OPERATOR-RULINGS.md:2342; E87 s2 -> docs/portable/OPERATOR-RULINGS.md:2637
 - **aliases** "cream mount" (docs/portable/OPERATOR-RULINGS.md:2626); "THE DANCE" (docs/content-video-engine/CAPABILITIES.md:57); "fade/mount transition" (docs/portable/OPERATOR-RULINGS.md:1364)
 
 ### The card-then-snap page enter
@@ -1659,7 +1665,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** compiler-only - `content/video_engine/scripts/build_scene_timeline_f.py` - symbol `stamp_transition_pages` - also `_melt_boundary` - stamps enter=axes / enter=built / exit=cut; painted by the axes and built enters (decision 3)
 - **status** wired (implicit: no token of its own) - **callable** yes: implicit: stamped by the compiler
 - **proof** golden none - test content/video_engine/tests/test_transition_stamps.py::test_chart_to_chart_the_next_page_is_on_its_axes_whatever_the_transition - first use none
-- **doctrine** E88 -> docs/portable/OPERATOR-RULINGS.md:2647; R26-60 -> docs/content-video-engine/BACKLOG.md:465; SHORT-FORM-SHAPE s2 -> unresolved
+- **doctrine** E88 -> docs/portable/OPERATOR-RULINGS.md:2661; R26-60 -> docs/content-video-engine/BACKLOG.md:465; SHORT-FORM-SHAPE s2 -> unresolved
 
 ### The throw page enter
 
@@ -1741,7 +1747,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `LIFE` in `content/video_engine/scripts/kinetics/stagger.mjs`: `POP_LEAD`=1.22, `POP_S`=0.20, `ANTICIP_S`=0.05, `OPACITY_K`=2, `MP`=0.04
 - **status** live - **callable** yes: every compiled build
 - **proof** golden none - test content/video_engine/tests/test_gate_motion_density.py::test_stage_captions_count_as_events - first use steel-and-paper build-f t=0.0
-- **doctrine** 29 s9.25 #2 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1430; E21 -> docs/portable/OPERATOR-RULINGS.md:557; E90 -> docs/portable/OPERATOR-RULINGS.md:2678; CAPABILITIES -> unresolved
+- **doctrine** 29 s9.25 #2 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1430; E21 -> docs/portable/OPERATOR-RULINGS.md:557; E90 -> docs/portable/OPERATOR-RULINGS.md:2716; CAPABILITIES -> unresolved
 - **aliases** "Caption STAGE mode" (docs/content-video-engine/CAPABILITIES.md:23); "STAGE mode" (content/video_engine/scripts/gate_motion_density.py:1054); "explosive" (docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1450); "staggered-fade-up" (content/video_engine/scripts/build_scene_timeline_f.py:66); "ONE STAGGER ENVELOPE" (docs/content-video-engine/CAPABILITIES.md:40)
 
 ## kinetics
@@ -1793,6 +1799,18 @@ parameter of an effect is an option on its card, never a card.
 - **proof** golden flow-swap - test content/video_engine/tests/kinetics/clothoid.test.mjs - first use none
 - **doctrine** 42 s42.4 -> docs/content-video-engine/42-DRAWING-KINETICS.md:102; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 - **aliases** "The CLOTHOID fitter" (docs/content-video-engine/CAPABILITIES.md:89); "Euler spirals" (docs/content-video-engine/42-DRAWING-KINETICS.md:102)
+
+### The contour kinetics module (marching squares)
+
+- **id** `kinetics:contour` - **does** Pure math inlined into the player: a thresholded bitmap in, CLOSED RINGS out - marching squares over the 0.5 level, the saddle resolved foreground-8-connected, holes told by containment, the staircase simplified off.
+- **when** none
+- **example** `contourShape(contourBitmap(img, w, h, 0.5), { tol: 1.2, map: (p) => [(p[0] + 0.5 - ox) / 4, (p[1] + 0.5 - oy) / 4] })` (content/video_engine/scripts/species/compare.mjs; key: not authored on a row: species/compare.mjs calls contourBitmap / contourShape on an offscreen raster of the figure's own <text>, at the figure's own face, size and weight; check: module)
+- **lives** module - `content/video_engine/scripts/kinetics/contour.mjs` - symbol `contourRings` - also `CONTOUR`, `contourBitmap`, `contourSegments`, `contourWalk`, `contourShape`, `simplifyRing`, `pointInRing` - P57 T12c / R26-70: a kinetics LAW, not a species - it registers no painter and declares no SPACE, and its region sits beside morph_a's (after arap) because it feeds it
+- **dials** `CONTOUR` in `content/video_engine/scripts/kinetics/contour.mjs`: `EPS`=1e-9, `LEVEL`=0.5
+- **status** wired (backlog R26-70) - **callable** yes
+- **proof** golden compare-morph - test content/video_engine/tests/kinetics/contour.test.mjs - first use none
+- **doctrine** E76 s5 -> docs/portable/OPERATOR-RULINGS.md:2442; 43 s43.5 -> docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:62; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
+- **aliases** "the glyph outlines, computed in the engine" (docs/portable/OPERATOR-RULINGS.md (E76 s5))
 
 ### The minimum-jerk ease kinetics module
 
@@ -1931,7 +1949,7 @@ a decoration; one that fires four times is a grammar.
 | status | recipes | members | fires (sum of count) |
 |---|---|---|---|
 | proven | 15 | 59 | 94 |
-| candidate | 25 | 97 | 0 |
+| candidate | 25 | 98 | 0 |
 
 ### The badge ladder
 
@@ -1946,7 +1964,7 @@ a decoration; one that fires four times is a grammar.
 - **dials** `FIRST_BADGE_S`=2.05, `BADGE_GAP_S`=1.3 (41 of 43 Steel docks, every first badge at dock_enter + 2.05 exactly; 40 gaps all exactly 1.30)
 - **proof** steel-and-paper / build-f @ 50.4s - members at 50.4, 52.45, 53.75, 55.05, 56.35 - `content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f/steel-and-paper.timeline.json`
 - **status** proven - **count** 41 (a grammar) - **source** recipes_r1 R1; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R1
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 - **aliases** "The badge ladder (2.05 / 1.30)" (docs/research/runs/grill_pipeline-value/recipes_r1.md:74)
 
 ### The badge ladder on a declared surface
@@ -1959,7 +1977,7 @@ a decoration; one that fires four times is a grammar.
   - +2.05s -> `dock_option:badge` (The badge rail) - the first badge stamps onto the card's rail, 2.05 s after it lands
   - +3.35s -> `dock_option:badge` (The badge rail) - the second badge stamps one clause later, 1.30 s behind the first
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R1 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The bare plate that lives
 
@@ -1973,7 +1991,7 @@ a decoration; one that fires four times is a grammar.
   - +2.6s -> `dock_option:behind` (The behind-the-plate dock option) - depth by occlusion - the plate's foreground over the card
   - +6.2s -> `exit:dissolve` (The dissolve scene exit) - the outgoing world keeps playing under the breather
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R11 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The card becomes the chart
 
@@ -1986,7 +2004,7 @@ a decoration; one that fires four times is a grammar.
   - +1.82..5.12s -> `page_enter:snap` (The card-then-snap page enter) - the ledger page grows out of that same card's rectangle - `snap_from` names the dock the viewer was just shown
 - **proof** japan-tariff-trick / build-short @ 0s - members at 0, 0.82, 1.82, 1.82 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json`
 - **status** proven - **count** 2 (a grammar) - **source** recipes_r1 R6; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R6
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E61 -> docs/portable/OPERATOR-RULINGS.md:1991; E49 -> docs/portable/OPERATOR-RULINGS.md:1494
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E61 -> docs/portable/OPERATOR-RULINGS.md:1991; E49 -> docs/portable/OPERATOR-RULINGS.md:1494
 
 ### The pen carries on to the next month
 
@@ -1999,7 +2017,7 @@ a decoration; one that fires four times is a grammar.
   - +3.4s -> `chart_to:extend` (The extend chart-to verb) - the pen carries on - "and then May" after `build_to` reaches its datum, on kinetics:chartxf's one clock
   - +6.2s -> `page_species:figure` (The written figure page species) - the hand writes the figure the extension arrived at
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R10 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### One line becomes the other in the same frame
 
@@ -2011,7 +2029,7 @@ a decoration; one that fires four times is a grammar.
   - +2.6s -> `page_species:chart_to` (The chart-to page species) - the page-species carrier for all five verbs above
   - +2.6s -> `chart_to:morph` (The morph-to chart-to verb (ARAP)) - the ARAP hand-off between two line series in one frame (kinetics:arap under kinetics:chartxf's clock)
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R6 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The chart parks and their claim lands beside it
 
@@ -2025,7 +2043,7 @@ a decoration; one that fires four times is a grammar.
   - +4.4s -> `dock_option:stack` (The press pile) - the press pile - R4's pulse applied to external claims
   - +6s -> `species:newsreel` (The newsreel band species) - the sourced crawl under a surface that shows who said it
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R8 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The same data in the other form
 
@@ -2038,7 +2056,7 @@ a decoration; one that fires four times is a grammar.
   - +2.4s -> `chart_to:recast` (The recast chart-to verb) - the same data in the other form; the `emphasize` bar keyed out of the line by kinetics:chartxf
   - +5.4s -> `species:spotlight` (The feathered spotlight species) - the light lands on the bar the page had already marked, now that the form has changed
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R14 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The window the sentence is about
 
@@ -2053,7 +2071,7 @@ a decoration; one that fires four times is a grammar.
   - +4s -> `idle:pulse` (The pulse idle) - the held thing's luminance dips and returns
   - +7.2s -> `page_species:relight` (The relight page species) - the return to a number already lit
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R9 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### Chart to chart, no cream between
 
@@ -2064,7 +2082,7 @@ a decoration; one that fires four times is a grammar.
   - +0s -> `plate_option:thread` (The thread plate option) - one mark survives the cut and grounds the arriving page
   - +1.2s -> `page_species:build_to` (The build-to page species) - the arriving page's line builds on from the mark that survived
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R3 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The dock lands, the page renames itself
 
@@ -2076,7 +2094,7 @@ a decoration; one that fires four times is a grammar.
   - +10.36s -> `page_species:retitle` (The retitle page species) - the page's own title is rewritten to the thing the parked card proves
 - **proof** japan-tariff-trick / build-short @ 17.42s - members at 17.42, 25.58, 27.78 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json`
 - **status** proven - **count** 1 (a decoration) - **source** recipes_r1 R15; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R15
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E61 -> docs/portable/OPERATOR-RULINGS.md:1991
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E61 -> docs/portable/OPERATOR-RULINGS.md:1991
 
 ### The page drops and the punch lands
 
@@ -2087,7 +2105,7 @@ a decoration; one that fires four times is a grammar.
   - +0.4s -> `species:punch` (The camera punch species) - the camera punches to the datum almost on the page's own frame
   - +3.6s -> `species:callout` (The scribble callout species) - the scribble names the number once the viewer has already looked at it
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R12 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The emphasized bar, badged then lit
 
@@ -2100,7 +2118,7 @@ a decoration; one that fires four times is a grammar.
 - **dials** `EMPHASIZE_EQUALS_DATUM`=True (3 of 3, Japan s06/s08 + Tokyo s05)
 - **proof** japan-tariff-trick / build-short @ 35.26s - members at 35.26, 35.26, 42.81 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json`
 - **status** proven - **count** 2 (a grammar) - **source** recipes_r1 R14; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R14
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E56 -> docs/portable/OPERATOR-RULINGS.md:1815
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E56 -> docs/portable/OPERATOR-RULINGS.md:1815
 - **aliases** "emphasize == the spotlight's / punch's datum index" (docs/research/runs/grill_pipeline-value/recipes_r1.md:226)
 
 ### The composition that is whole at its first frame
@@ -2113,7 +2131,7 @@ a decoration; one that fires four times is a grammar.
   - +2.2s -> `dock_option:cutout` (The cutout dock option) - asks for the cutout kind
   - +6.4s -> `dock_option:embed` (The art-embed surface dock option) - the card on a surface the plate declares, projected by kinetics:homography's four corners
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R8 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The dock outlives the world change
 
@@ -2124,7 +2142,7 @@ a decoration; one that fires four times is a grammar.
   - +0..21.9s -> `exit:wipe + wipe_right` (The wipe scene exit) - the world changes underneath the held card, a wipe rather than a plain cut - 16 ordered fires in Steel; the dock's own exit is not a card, it is simply later
 - **proof** steel-and-paper / build-f @ 50.4s - members at 50.4, 57.3 - `content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f/steel-and-paper.timeline.json`
 - **status** proven - **count** 16 (a grammar) - **source** recipes_r1 R3; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R3
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E61 -> docs/portable/OPERATOR-RULINGS.md:1991
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E61 -> docs/portable/OPERATOR-RULINGS.md:1991
 - **aliases** "builds inside a held frame" (docs/research/runs/grill_pipeline-value/recipes_r1.md:99)
 
 ### The held page that hosts the docks
@@ -2141,7 +2159,7 @@ a decoration; one that fires four times is a grammar.
   - +34.59s -> `dock_kind:video` (The video dock) - a third moving card lands late in the same composition, still with no cut - optional
 - **proof** tokyo-tea-break / build-short.v2 @ 1.99s - members at 1.99, 9.09, 10.79, 15.34, 19.71, 23.1, 36.58 - `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short.v2/tokyo-short.timeline.json`
 - **status** proven - **count** 1 (a decoration) - **source** recipes_r1 R8; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R8
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E61 -> docs/portable/OPERATOR-RULINGS.md:1991
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E61 -> docs/portable/OPERATOR-RULINGS.md:1991
 - **aliases** "The held page that hosts three video docks" (docs/research/runs/grill_pipeline-value/recipes_r1.md:160)
 
 ### The hook that opens on the axes
@@ -2155,7 +2173,7 @@ a decoration; one that fires four times is a grammar.
   - +4.6s -> `species:ring` (The dashed ring species) - the dashed ellipse as a MARKER on a datum (E56's one use)
   - +6s -> `species:focus_zoom` (The focus zoom species) - R4's declared "focus" phase; after a chart has entered
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R12 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The mechanism drawn, then counted
 
@@ -2166,7 +2184,7 @@ a decoration; one that fires four times is a grammar.
   - +2.6s -> `species:callout` (The scribble callout species) - the scribble names the node that swapped
   - +4.6s -> `species:count_array` (The isometric count array species) - six crossings counted on an isometric lattice, not traced
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R7 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The numbered agenda on its own words
 
@@ -2178,7 +2196,7 @@ a decoration; one that fires four times is a grammar.
   - +2.6s -> `species:squiggle` (The squiggle marks species) - the stressed caption word underlined on the badge/row beat
   - +4.8s -> `species:chip` (The icon chip species) - the second chip lands on its own named thing, on the same stagger
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R5 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The outro clip carries life
 
@@ -2190,7 +2208,7 @@ a decoration; one that fires four times is a grammar.
   - +6.2s -> `exit:dip` (The dip-through-black scene exit) - the clip runs its whole 6.2 s and the cut dips through black on its last frame - the ramp is kinetics:transitions (P57 T23)
 - **proof** japan-tariff-trick / build-short @ 79.08s - members at 79.08, 79.076, 85.28 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json`
 - **status** proven - **count** 1 (a decoration) - **source** recipes_r1 R13; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R13
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E49 -> docs/portable/OPERATOR-RULINGS.md:1494
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E49 -> docs/portable/OPERATOR-RULINGS.md:1494
 
 ### The outro clip, with the idle refused
 
@@ -2202,7 +2220,7 @@ a decoration; one that fires four times is a grammar.
   - +0s -> `idle:none` (The no-idle setting) - the explicit refusal, where stillness is the point
   - +6.2s -> `exit:dip` (The dip-through-black scene exit) - the clip runs its whole 6.2 s and the cut dips through black on its last frame
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R13 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The page arrives thrown
 
@@ -2213,7 +2231,7 @@ a decoration; one that fires four times is a grammar.
   - +0s -> `plate_option:arrive` (The arrive plate option) - a page's pills arrive by throw instead of spring (the spring is kinetics:spring)
   - +2.4s -> `page_species:figure` (The written figure page species) - the hand writes the figure once the thrown page has settled
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R6 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The pill that rides the line's tip
 
@@ -2224,7 +2242,7 @@ a decoration; one that fires four times is a grammar.
   - +0.4s -> `page_species:build_to` (The build-to page species) - the line builds along the page to the datum the sentence has just named
   - +3.4s -> `page_species:figure` (The written figure page species) - the hand writes the figure at the datum the pill stopped on
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R10 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The plate, the dock and the carried wipe
 
@@ -2239,7 +2257,7 @@ a decoration; one that fires four times is a grammar.
   - +2.4..30s -> `exit:wipe + wipe_right` (The wipe scene exit) - the hard-edge wipe carries the card's light off the plate and reveals the next room under it
 - **proof** steel-and-paper / build-f @ 595.5s - members at 595.5, 595.5, 595.6, 595.6, 597.65, 598 - `content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f/steel-and-paper.timeline.json`
 - **status** proven - **count** 15 (a grammar) - **source** recipes_r1 R2; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R2
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E61 -> docs/portable/OPERATOR-RULINGS.md:1991
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E61 -> docs/portable/OPERATOR-RULINGS.md:1991
 - **aliases** "Plate, Ken Burns, the dock lands, the wipe carries the light" (docs/research/runs/grill_pipeline-value/recipes_r1.md:87)
 
 ### The punch, then the callout names it
@@ -2252,19 +2270,20 @@ a decoration; one that fires four times is a grammar.
   - +3.88s -> `species:callout` (The scribble callout species) - the scribble names the number nearly four seconds later, once the viewer has already looked at it
 - **proof** tokyo-tea-break / build-short.v2 @ 44.88s - members at 44.88, 45, 48.76 - `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short.v2/tokyo-short.timeline.json`
 - **status** proven - **count** 1 (a decoration) - **source** recipes_r1 R12; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R12
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E56 -> docs/portable/OPERATOR-RULINGS.md:1815
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E56 -> docs/portable/OPERATOR-RULINGS.md:1815
 - **aliases** "The punch on the emphasized datum, then the callout names it" (docs/research/runs/grill_pipeline-value/recipes_r1.md:208)
 
 ### The quoted figure becomes the number the viewer feels
 
-- **id** `recipe:quoted-figure-becomes-the-felt-number` - **does** A market figure is shown as quoted, then morphs into what it means: the same datum, two numbers, one frame - the multiple nobody feels becomes the percentage everybody does (E76).
+- **id** `recipe:quoted-figure-becomes-the-felt-number` - **does** A market figure is shown as quoted, then MELTS INTO A BALL and the ball becomes what it means: one datum, two numbers - the multiple nobody feels becomes the percentage everybody does (E76).
 - **acts** COMPARES, EXPLAINS - **window** 9s
 - **members**
   - +0s -> `page_species:figure` (The written figure page species) - the figure the market quotes is WRITTEN at its datum by the hand (E50) - '24.8x'
   - +6s -> `page_species:chart_to` (The chart-to page species) - the page-species carrier for the verb
-  - +6s -> `chart_to:compare` (The compare chart-to verb (metric to comparator)) - the quoted number counts into the number the viewer feels - '15% dearer' - with the metric ghosted beside it (hold: metric) or gone; the arithmetic is authored, never invented (E77)
-- **status** candidate - **count** 0 (unfired) - **source** P57 T12 golden compare-morph (figure at 6.0 s, compare at 12.0 s) - no approved cut has carried it
-- **doctrine** E76 -> docs/portable/OPERATOR-RULINGS.md:2442; E73 -> docs/portable/OPERATOR-RULINGS.md:2342; E88 -> docs/portable/OPERATOR-RULINGS.md:2647; E77 -> docs/portable/OPERATOR-RULINGS.md:2466; E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-70 -> docs/content-video-engine/BACKLOG.md:476
+  - +6s -> `chart_to:compare` (The compare chart-to verb (metric to comparator)) - the quoted number's OUTLINES sag and BALL UP at the same datum, and the ball is MORPHED into the comparator's glyphs - '15% dearer' - the arithmetic authored (E77)
+  - +6s -> `kinetics:contour` (The contour kinetics module (marching squares)) - the outlines the morph needs, measured off the page's own ink by marching squares - no font file is parsed (E76 s5)
+- **status** candidate - **count** 0 (unfired) - **source** P57 T12 golden compare-morph (figure at 6.0 s, compare at 12.0 s), re-goldened onto the melt by P57 T12b and onto E76 s5's ball-then-morph by P57 T12c - no approved cut has carried it
+- **doctrine** E76 -> docs/portable/OPERATOR-RULINGS.md:2442; E76 s5 -> docs/portable/OPERATOR-RULINGS.md:2442; E73 -> docs/portable/OPERATOR-RULINGS.md:2342; E88 -> docs/portable/OPERATOR-RULINGS.md:2661; E77 -> docs/portable/OPERATOR-RULINGS.md:2480; E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-70 -> docs/content-video-engine/BACKLOG.md:476
 
 ### The race and the bar that cannot fit
 
@@ -2275,7 +2294,7 @@ a decoration; one that fires four times is a grammar.
   - +3.4s -> `overflow:burst` (The breakthrough burst overflow) - the bar that cannot fit shoots past the comparator
   - +5.6s -> `species:spotlight` (The feathered spotlight species) - the light lands on the bar that broke the scale
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R14 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### Read, park, build to the datum, write the figure
 
@@ -2288,7 +2307,7 @@ a decoration; one that fires four times is a grammar.
   - +5.92s -> `page_species:figure` (The written figure page species) - the hand writes the figure at the datum the line arrived on
 - **proof** japan-tariff-trick / build-short @ 71.1s - members at 71.1, 72.74, 73.52, 77.02 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json`
 - **status** proven - **count** 1 (a decoration) - **source** recipes_r1 R10; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R10
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The spotlight that holds past its boundary
 
@@ -2299,7 +2318,7 @@ a decoration; one that fires four times is a grammar.
   - +0.85..11.23s -> `species:spotlight` (The feathered spotlight species) - the light lands on the sentence's subject and is declared `held` with an `until` that runs past the scene's own span
 - **proof** japan-tariff-trick / build-short @ 1.82s - members at 1.82, 2.67 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json`
 - **status** proven - **count** 2 (a grammar) - **source** recipes_r1 R9; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R9
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E56 -> docs/portable/OPERATOR-RULINGS.md:1815
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E56 -> docs/portable/OPERATOR-RULINGS.md:1815
 - **aliases** "The spotlight that holds past its own boundary" (docs/research/runs/grill_pipeline-value/recipes_r1.md:174)
 
 ### The bar counted off the page in comparators
@@ -2311,7 +2330,7 @@ a decoration; one that fires four times is a grammar.
   - +2.2s -> `overflow:stack` (The stepped overflow) - the same, one comparator per step
   - +5s -> `page_species:figure` (The written figure page species) - the hand writes the figure the steps arrived at
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R14 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The still-life breather
 
@@ -2325,7 +2344,7 @@ a decoration; one that fires four times is a grammar.
   - +5.92s -> `exit:suck` (The suck scene exit) - the breather ends by collapsing into a point, spinning, and the argument resumes
 - **proof** tokyo-tea-break / build-short.v2 @ 38.96s - members at 38.96, 38.96, 39.16, 39.26, 44.88 - `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short.v2/tokyo-short.timeline.json`
 - **status** proven - **count** 1 (a decoration) - **source** recipes_r1 R11; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R11
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E49 -> docs/portable/OPERATOR-RULINGS.md:1494; E61 -> docs/portable/OPERATOR-RULINGS.md:1991
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E49 -> docs/portable/OPERATOR-RULINGS.md:1494; E61 -> docs/portable/OPERATOR-RULINGS.md:1991
 
 ### The test card's rows on their words
 
@@ -2337,7 +2356,7 @@ a decoration; one that fires four times is a grammar.
   - +5.42..9.66s -> `chart_dock:checklist` (The test card) - the next row types on the next numbered clause and its answer cell takes the marker sweep
 - **proof** steel-and-paper / build-f @ 492.3s - members at 492.3, 495.16, 501.96 - `content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f/steel-and-paper.timeline.json`
 - **status** proven - **count** 5 (a grammar) - **source** recipes_r1 R5; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R5
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 - **aliases** "The test card, rows anchored to spoken words" (docs/research/runs/grill_pipeline-value/recipes_r1.md:124)
 
 ### The decline drawn down, then taken back
@@ -2349,7 +2368,7 @@ a decoration; one that fires four times is a grammar.
   - +4.2s -> `page_species:undraw` (The un-draw page species) - the line unwinds when the sentence leaves the chart (E50), on kinetics:stroke reversed
   - +7s -> `page_exit:retract` (The vortex retract page exit) - the page empties before handing over to a plate
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R15 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The slice that leaves the pie
 
@@ -2360,7 +2379,7 @@ a decoration; one that fires four times is a grammar.
   - +2.6s -> `page_species:peel` (The peel page species) - the named slice leaves the pie, blood red (needs `page_builder:share`)
   - +4.8s -> `page_species:note` (The handwritten note page species) - the side fact the chart cannot show, in the quiet zone
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R14 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The card lands and the camera takes it
 
@@ -2372,7 +2391,7 @@ a decoration; one that fires four times is a grammar.
   - +1.7s -> `page_enter:camera` (The camera arrival page enter) - the camera variant of "the thrown card becomes the world" (E59 r3), driven by kinetics:camera
   - +5.6s -> `exit:blurzoom` (The blur-zoom scene exit) - a world change between two of the same kind, on kinetics:ease's min-jerk
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R6 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The trace-callout ladder
 
@@ -2387,7 +2406,7 @@ a decoration; one that fires four times is a grammar.
   - +3.07s -> `species:callout` (The scribble callout species) - the third label lands and the picture now carries the number at every crossing - defaults `label_scale`=2.2
 - **proof** japan-tariff-trick / build-short @ 9.22s - members at 9.22, 9.77, 10.48, 11.03, 11.74, 12.29 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json`
 - **status** proven - **count** 4 (a grammar) - **source** recipes_r1 R7; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R7
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 - **aliases** "The trace-callout ladder on a narrative plate" (docs/research/runs/grill_pipeline-value/recipes_r1.md:149)
 
 ### The census and the cells that answer it
@@ -2399,7 +2418,7 @@ a decoration; one that fires four times is a grammar.
   - +3.2s -> `page_species:cross` (The census X marks page species) - the X-marked subset of a treemap and its written share
   - +5.4s -> `species:callout` (The scribble callout species) - the scribble names what the crossed cells add up to
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R14 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### Two bands on one x, and the gap between them
 
@@ -2410,7 +2429,7 @@ a decoration; one that fires four times is a grammar.
   - +2.4s -> `page_species:bracket` (The bracket page species) - the measured span; the "+$1,740" badge drawn instead of printed
   - +4.6s -> `page_species:spread` (The spread page species) - when the argument IS the gap between two series, pooled by kinetics:ink
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R14 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The place named, lit and stamped
 
@@ -2421,7 +2440,7 @@ a decoration; one that fires four times is a grammar.
   - +1.4s -> `species:arc` (The vector map arc species) - the clothoid flow, X-struck when cut - the curve is kinetics:clothoid
   - +2.8s -> `species:stamp` (The vector map stamp species) - the figure writes at a place's centroid
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R7 slot)
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 
 ### The nine-proof recap
 
@@ -2433,7 +2452,7 @@ a decoration; one that fires four times is a grammar.
   - +25.25s -> `dock_payload:stack` (The verdict stack) - the rail clears on the pivot line: the nine railed cards burst radially and the recap is over
 - **proof** steel-and-paper / build-f @ 701.73s - members at 701.73, 702.87, 726.98 - `content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f/steel-and-paper.timeline.json`
 - **status** proven - **count** 1 (a decoration) - **source** recipes_r1 R4; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R4
-- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; 29 s9.24 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; 29 s9.24 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364
 - **aliases** "nine proofs" (content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:136)
 
 ## Ambiguous names

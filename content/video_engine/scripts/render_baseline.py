@@ -74,10 +74,20 @@ PROOF_FRAMES = {
     # P55 T6: THE VERDICT STACK's last phase - the radial BURST at clear_at (20.0) + 0.25 s: with the 60 ms stagger the
     # first card is half way through its 0.5 s throw and the fifth just leaving, each along its own bearing, spinning
     "verdict-stack@proof-burst": ("verdict-stack", {}, 20.25),
-    # P57 T12 / R26-70b, E76: THE COMPARE, at the two instants its landed frame cannot show. The row runs 12.0 -> 14.4
-    # (the base golden `compare-morph` is judged at 14.9, held). No flag: the verb is authored on the row, not switched on.
-    "compare-morph@proof-quoted": ("compare-morph", {}, 11.9),   # THE QUOTED FIGURE: "24.8x" written at its datum by the hand, the page as it stands before the word
-    "compare-morph@proof-mid": ("compare-morph", {}, 12.0 + 0.35 * 2.4),   # MID-COUNT (u 0.35): the number between the two, still in the metric's own clothes, the words beginning to cross
+    # P57 T12 / R26-70b, E76, re-goldened by T12b and again by T12c: THE COMPARE, at the instants its landed frame
+    # cannot show. The row runs 12.0 -> 14.4 (the base golden `compare-morph` is judged at 14.9, held). No flag: the
+    # verb is authored on the row, not switched on - and since T12b the FORM is too, so each form has its own surface
+    # and its own proofs. The DEFAULT form is E76 s5's ball, on melt.mjs's own phase shares (MELT_END 0.30, BALL_END
+    # 0.55), so its three instants are one per phase: the sag, the ball, and the morph's own half-way point - which is
+    # u 0.775 of the WINDOW, because the morph is the last 0.45 of it and 0.50 of the window is still the ball.
+    "compare-morph@proof-sag": ("compare-morph", {}, 12.0 + 0.15 * 2.4),   # MID-SAG (u 0.15, the sag at 0.50): the glyphs' own outlines hanging in seeded drips, the chart whole behind them
+    "compare-morph@proof-ball": ("compare-morph", {}, 12.0 + 0.53 * 2.4),   # THE BALL (u 0.53, the ball phase at 0.92 - one hold before the ending takes it): the number compiled into one dense disc that holds its own ink
+    "compare-morph@proof-050": ("compare-morph", {}, 12.0 + 0.775 * 2.4),   # THE MORPH AT 0.50 (u 0.775): the ball opening into "15 % dearer" - neither the ball nor the number
+    # P57 T12b's TEXT melt, kept whole as `form: "streak"` by T12c: the three instants it shipped, byte-identical.
+    "compare-streak@proof-quoted": ("compare-streak", {}, 11.9),   # THE QUOTED FIGURE: "24.8x" written at its datum by the hand, the page as it stands before the word
+    "compare-streak@proof-melt": ("compare-streak", {}, 12.0 + 0.35 * 2.4),   # MID-MELT (u 0.35, take 0.64): the glyphs sagging and running down under melt's own streak, the chart whole behind them
+    "compare-streak@proof-write": ("compare-streak", {}, 12.0 + 0.71 * 2.4),   # MID-WRITE (u 0.71, write 0.36): the hand part way through "15 % dearer" at the same datum, the ink of the metric gone
+    "compare-count@proof-mid": ("compare-count", {}, 12.0 + 0.35 * 2.4),   # MID-COUNT (u 0.35): the number between the two, still in the metric's own clothes, the words beginning to cross - T12's own proof instant, byte-identical
     # P57 T19 / R26-96, E49 + E56: THE LIGHT'S OWN LIFE. The base golden `spotlight-hold` is judged at 8.0, held on
     # its first datum before the glide. These two are taken after the glide has landed on `target2` (9.0 + 0.6), so
     # the ONLY thing that differs between them is the `live` idle - the hole's radius breathing and its centre

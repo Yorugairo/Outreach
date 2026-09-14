@@ -82,9 +82,16 @@ FRAME_T["newsreel-band"] = 11.0          # 16:9: the band in the lower 40 %, the
 FRAME_T["newsreel-strip-9x16"] = 11.0    # 9:16 THE DEFAULT: the caption keeps its E62 band, the crawl goes BELOW it
 FRAME_T["newsreel-strip-above"] = 11.0   # 9:16 THE ALTERNATIVE (`cap_band: "above"`): the crawl takes the strip, the caption moves above it
 # P55 T6: the two inline dock painters pinned BEFORE T7 lifts them into modules (goldens first).
-FRAME_T["compare-morph"] = 14.9   # P57 T12 / R26-70b: the compare HELD - the count landed at 12.0 + 0.72 * 2.4 = 13.73, the
-                                  # comparator's label fully written at 14.4, the quoted metric standing beside it at COMPARE.GHOST_A.
-                                  # At rest on purpose: the two moving instants are @proof-quoted and @proof-mid on PROOF_FRAMES.
+FRAME_T["compare-morph"] = 14.9   # P57 T12 / R26-70b, re-goldened by T12b and again by T12c: the compare HELD - the DEFAULT
+                                  # form is now E76 s5's BALL, so what stands here at 14.9 is the figure's own <text>, which took
+                                  # the morph's landed outlines back at u = 1 (14.4), with its label beneath and the quoted metric
+                                  # held beside it at COMPARE.GHOST_A. At rest on purpose: its three moving instants are
+                                  # @proof-sag, @proof-ball and @proof-050 on PROOF_FRAMES.
+FRAME_T["compare-streak"] = 14.9  # P57 T12c: the same row with `form: "streak"` - P57 T12b's TEXT melt, kept whole when the
+                                  # default became the ball, and pinned byte-identical to the bytes `compare-morph` carried
+                                  # before T12c (its three instants ride PROOF_FRAMES).
+FRAME_T["compare-count"] = 14.9   # P57 T12b: the same row and the same instant with `form: "count"` - T12's counter, kept whole
+                                  # as a setting and pinned byte-identical to the bytes `compare-morph` carried before T12b.
 # P57 T13 / R26-75: THE SLIDE (E87 s3), read at the two instants a push has. The travel is the .world box's own
 # span (inset -5%), so at u = 0.5 the two boxes ABUT at mid-stage - the seam is the stage's own centre line.
 FRAME_T["slide-mid"] = SLIDE_CUT + SLIDE_S / 2    # MID-SLIDE: both worlds on stage, the outgoing chart half off to the
@@ -1285,10 +1292,19 @@ def compare_morph() -> tuple[dict, dict]:
     "15 % dearer" over 2.4 s: the numeral counts on min-jerk, the words either side cross through zero at the
     swap, the comparator's label is written beneath, and the quoted metric holds beside it (`hold: "metric"`).
 
+    P57 T12c re-goldened it onto the DEFAULT form as the operator corrected it a second time (E76 s5: *"melt it into
+    a ball, then we either throw it off the page, splatter it back on to the canvas and build the chart/graph from
+    that, or morph it from the ball into the chart"*, and *"it's just math"*). The row names no `form` and no `then`,
+    so the quoted figure's own OUTLINES - measured off the page's ink by kinetics/contour.mjs, never fetched from a
+    font - sag on melt.mjs's law over the first 0.30 of the window, BALL UP into one disc that holds the ink's own
+    area by 0.55, and are then carried by morph_a into the comparator's glyph rings, which the figure's own <text>
+    replaces at u = 1 exactly.
+
     The numbers are the golden's own synthetic ones, not a figure about the world; the ARITHMETIC is authored and
-    the compiler checks it here, as it would on any shot row (E77). Three instants are read: the quoted figure
-    standing before the word (`@proof-quoted`), the number mid-count in the metric's own clothes (`@proof-mid`),
-    and the comparator held with its label and the metric beside it (FRAME_T 14.9)."""
+    the compiler checks it here, as it would on any shot row (E77). Four instants are read: the ink mid-SAG
+    (`@proof-sag`), the BALL formed (`@proof-ball`), the morph's own half-way point (`@proof-050` - neither a ball
+    nor a number), and the landed frame - the comparator with its label and the metric ghosted beside it
+    (FRAME_T 14.9). T12b's text melt is the `compare-streak` surface, the counter T12 shipped the `compare-count`."""
     import build_scene_timeline_f as BST
     species = [dict(COMPARE_FIGURE), dict(COMPARE_ROW)]
     plate = "ledger:golden-line:line"
@@ -1298,8 +1314,42 @@ def compare_morph() -> tuple[dict, dict]:
     return _timeline("Golden: the quoted metric becomes its comparator", scenes, {}, None), _base_uris()
 
 
-SURFACES.update({   # P57 T12: the compare verb's paint (species/compare.mjs)
+def compare_streak() -> tuple[dict, dict]:
+    """P57 T12c: THE SAME ROW, authoring `form: "streak"` - the text melt P57 T12b shipped as the default, kept whole
+    when the operator's second correction (E76 s5: *"melt it into a ball, then we either throw it off the page,
+    splatter it back on to the canvas ... or morph it from the ball into the chart"*) made the BALL the default. The
+    glyphs still drip where they stand, on melt.mjs's own run and stepped clock under its words' streak filter, and the
+    hand still re-writes the comparator at the same datum. This surface is what says the rename changed no pixel: its
+    four frames are byte-identical to the ones `compare-morph` carried before T12c. Nothing but the `form` key differs
+    from compare_morph()."""
+    import build_scene_timeline_f as BST
+    species = [dict(COMPARE_FIGURE), dict(COMPARE_ROW, form="streak")]
+    plate = "ledger:golden-line:line"
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": _line_page(), "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the quoted metric becomes its comparator", scenes, {}, None), _base_uris()
+
+
+def compare_count() -> tuple[dict, dict]:
+    """P57 T12b: THE SAME ROW, authoring `form: "count"` - E60's counter, the form T12 shipped and the operator
+    corrected (*"just collapse or melt then re-draw"*). It is kept whole as a setting, because a number becoming
+    another number by counting is still the honest form where the two are the same KIND of number, and this surface is
+    what says so in pixels: its frames are byte-identical to the ones `compare-morph` carried before T12b re-goldened
+    it onto the melt. Nothing but the `form` key differs from compare_morph()."""
+    import build_scene_timeline_f as BST
+    species = [dict(COMPARE_FIGURE), dict(COMPARE_ROW, form="count")]
+    plate = "ledger:golden-line:line"
+    assert not BST.validate_species(species, (0, 0, 0), plate), BST.validate_species(species, (0, 0, 0), plate)
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": _line_page(), "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the quoted metric becomes its comparator", scenes, {}, None), _base_uris()
+
+
+SURFACES.update({   # P57 T12: the compare verb's paint (species/compare.mjs) - T12b/T12c: one surface per FORM
     "compare-morph": compare_morph,
+    "compare-streak": compare_streak,
+    "compare-count": compare_count,
 })
 
 

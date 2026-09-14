@@ -5,8 +5,14 @@
 // its ctx, so `el` is a recorder and the figure is the shape paintFigure's records carry.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { COMPARE, compareSplit, compareFmt, compareFrame, compareCapacity, compareGlyph, compareFigure,
-         compareWidth, compareEnsure, compareInk, compareFill, paintCompare } from "../../scripts/species/compare.mjs";
+import { COMPARE, COMPARE_FORMS, COMPARE_THENS, compareSplit, compareFmt, compareFrame, compareCapacity, compareGlyph,
+         compareFigure, compareWidth, compareEnsure, compareInk, compareFill, paintCompare, compareForm, compareThen,
+         compareMorphFrame, compareTakeGlyph, compareTakeFall, compareMeltBox, compareBallFrame, compareBallR,
+         compareBallC, compareGroups, comparePairGroups, comparePrepare, comparePath, compareSagAt, compareRnd,
+         compareSeed } from "../../scripts/species/compare.mjs";
+import { FIGURE } from "../../scripts/species/figure.mjs";
+import { MELT, meltDrips } from "../../scripts/species/melt.mjs";
+import { polyArea, centroid } from "../../scripts/kinetics/arap.mjs";
 
 /* the acceptance row (test_metric_comparator.py's own): a P/E of 24.8x against a 21.5x history, "15 % dearer" */
 const row = (o = {}) => Object.assign({
@@ -16,6 +22,11 @@ const row = (o = {}) => Object.assign({
   inputs: { pe: 24.8, hist: 21.5 }, derive: "pe / hist - 1",
   source: "[DERIVED: from ev-meta-pe-v1 + the 10-year median, pe / hist - 1]",
 }, o);
+
+/* T12's counter, now a SETTING: the tests that pin the count's own law author it by name */
+const countRow = (o = {}) => row(Object.assign({ form: "count" }, o));
+/* ... and P57 T12b's text melt, which P57 T12c kept whole under the name `streak` when the DEFAULT became the ball */
+const streakRow = (o = {}) => row(Object.assign({ form: "streak" }, o));
 
 test("the dials are the compare's, and every one of them is a share or a room", () => {
   assert.ok(COMPARE.COUNT > 0 && COMPARE.COUNT <= 1, "the count is a share of the window");
@@ -198,8 +209,8 @@ test("the ends on the page: the metric before the word, the comparator and its l
   assert.equal(gone.__compare.ghost.at.opacity, "0.000", "hold: gone gives the comparator the stage");
 });
 
-test("the MIDDLE is a number in transition, not a cut", () => {
-  const R = recorder(), sp = row(), ctx = { el: R.el }, fg = figureFor("24.8x", R);
+test("the MIDDLE of the COUNT form is a number in transition, not a cut", () => {
+  const R = recorder(), sp = countRow(), ctx = { el: R.el }, fg = figureFor("24.8x", R);
   paintCompare({ sp, figures: [fg] }, 32.0 + 1.2 * 0.42, {}, ctx);
   const shown = fg.__compare.cells.map((c) => c.text).join("").replace(/ /g, " ").trim();
   assert.notEqual(shown, "24.8x");
@@ -243,4 +254,317 @@ test("the ink is written as an INLINE STYLE as well - a class rule outranks a pr
   assert.equal(compareFill({ label: { getAttribute: () => "font-size:28px;fill:var(--lp-chalk)" } }), "var(--lp-chalk)");
   assert.equal(compareFill({ label: { getAttribute: () => "font-size:28px;fill:#e8763a" } }), "#e8763a", "the figure's own accent, never a colour of ours");
   assert.equal(compareFill({}), "var(--lp-chalk)", "a figure with no style written is chalk");
+});
+
+// ---------------------------------------------------------------- P57 T12b: THE THREE FORMS (the operator's correction)
+test("the form is MELT unless the row says otherwise, and an unknown one is refused BY NAME", () => {
+  assert.deepEqual([...COMPARE_FORMS], ["melt", "streak", "collapse", "count"]);
+  assert.equal(compareForm(row()), "melt", "the default is the operator's correction: the figure balls up");
+  assert.equal(compareForm(streakRow()), "streak");
+  assert.equal(compareForm(row({ form: "collapse" })), "collapse");
+  assert.equal(compareForm(countRow()), "count");
+  assert.throws(() => compareForm(row({ form: "morph" })), /form morph is not one of melt \| streak \| collapse \| count/,
+                "`morph` is an ENDING, not a form - a row naming it as one is refused, never read as the other key");
+  assert.throws(() => compareForm(row({ form: "" })), /is not one of/, "an empty form is a typo, not a default");
+  assert.ok(COMPARE.TAKE_SHARE > 0 && COMPARE.TAKE_SHARE < 1, "the take-away is a share of the window");
+});
+
+test("THE ENDING is MORPH unless the row says otherwise, and an unknown one is refused BY NAME", () => {
+  assert.deepEqual([...COMPARE_THENS], ["morph", "splash", "throw"]);
+  assert.equal(compareThen(row()), "morph", "the operator's default: the ball becomes the comparator's glyphs");
+  for (const t of COMPARE_THENS) assert.equal(compareThen(row({ then: t })), t);
+  assert.throws(() => compareThen(row({ then: "melt" })), /then melt is not one of morph \| splash \| throw/);
+  assert.throws(() => compareThen(row({ then: "" })), /is not one of/);
+});
+
+test("u = 0 is the metric and u = 1 the comparator FOR ALL FOUR FORMS - the ends are the authored strings", () => {
+  for (const form of COMPARE_FORMS) {
+    const sp = row({ form });
+    const F = (u) => (form === "count" ? compareFrame(sp, u)
+                    : form === "melt" ? compareBallFrame(sp, u, "morph") : compareMorphFrame(sp, u, form));
+    assert.equal(F(0).text, "24.8x", form);
+    assert.equal(F(1).text, "15 % dearer", form);
+    assert.equal(F(-2).text, "24.8x", form + " - before the word, the page is the page");
+    assert.equal(F(7).text, "15 % dearer", form + " - after it, the comparator holds");
+  }
+});
+
+test("THE FOUR FORMS DIFFER AT ONE u - one row, four different pages mid-morph", () => {
+  const R = recorder(), ctx = { el: R.el }, u = 0.3, t = 32.0 + 1.2 * u;
+  const seen = COMPARE_FORMS.map((form) => {
+    const fg = figureFor("24.8x", R);
+    paintCompare({ sp: row({ form }), figures: [fg] }, t, {}, ctx);
+    return { form, ink: fg.__compare.cells.map((c) => c.at.opacity).join(","),
+             dy: fg.__compare.cells.map((c) => c.at.dy).join(","),
+             text: fg.__compare.cells.map((c) => c.text).join("") };
+  });
+  const [ball, streak, collapse, count] = seen;
+  assert.notEqual(streak.ink, collapse.ink, "the ink melts in the hand's reading order; the collapse takes it back last glyph first");
+  assert.notEqual(streak.ink, count.ink, "and the counter never dims its numeral at all");
+  assert.notEqual(streak.dy, collapse.dy, "only the streak RUNS: the collapse's glyphs never move");
+  assert.equal(ball.ink.split(",").every((v) => v === "0.000"), true,
+               "the BALL form takes the ink out of the <text> entirely - mid-window the glyphs are outlines, not type: " + ball.ink);
+  assert.equal(count.dy.replace(/,/g, ""), "",
+               "the COUNT form writes no dy at all - not one attribute of T12's paint changes, and its golden is byte-identical");
+  assert.equal(count.text.replace(/\u00a0/g, " ").trim().endsWith("x"), true, "mid-count the page is still in the metric's clothes: " + count.text);
+});
+
+test("THE TAKE-AWAY ENDS BEFORE THE WRITE BEGINS - the last drop falls as the first glyph arrives", () => {
+  for (const form of ["streak", "collapse"]) {
+    const sp = row({ form });
+    const at = compareMorphFrame(sp, COMPARE.TAKE_SHARE, form);
+    assert.equal(at.take, 1, form + ": the take-away is whole exactly at TAKE_SHARE");
+    assert.equal(at.write, 0, form + ": and the hand has not started");
+    assert.equal(at.text, "24.8x", form + ": the quoted figure is still the string on the page");
+    for (let i = 0; i <= 60; i++) {
+      const u = i / 60, F = compareMorphFrame(sp, u, form);
+      assert.ok(!(F.take < 1 && F.write > 0), form + ": the two never overlap (u=" + u + ")");
+      assert.ok(F.take >= compareMorphFrame(sp, Math.max(0, u - 1 / 60), form).take - 1e-12, form + ": the take-away never goes back");
+    }
+    const n = 5;
+    for (let j = 0; j < n; j++) {
+      assert.equal(compareTakeGlyph(form, 0, j, n), 1, form + ": every glyph is whole before the take-away");
+      assert.ok(compareTakeGlyph(form, 1, j, n) < 1e-9, form + ": and gone at the end of it");
+    }
+  }
+  assert.equal(compareTakeFall("collapse", 0.5, 0, 5, 100), 0, "a collapse is the hand, not a liquid: nothing runs");
+  assert.ok(compareTakeFall("streak", 1, 0, 5, 100) > 0, "a streak RUNS - melt.mjs's own run, on the room under the number");
+  assert.equal(compareTakeFall("streak", 0, 0, 5, 100), 0);
+  assert.ok(compareMeltBox(28) > (FIGURE.FIGURE_UP + FIGURE.FIGURE_DOWN) * 28, "the ink falls into the room under the figure, not into its own box");
+});
+
+test("TWO CALLS AT ONE u GIVE THE SAME ANSWER for the morph forms too (a cold seek is the play)", () => {
+  for (const form of ["streak", "collapse"]) {
+    for (const u of [0, 0.137, COMPARE.TAKE_SHARE, 0.56, 0.8, 0.9999, 1]) {
+      assert.deepEqual(compareMorphFrame(row({ form }), u, form), compareMorphFrame(row({ form }), u, form), form + " u=" + u);
+    }
+  }
+  const R = recorder(), ctx = { el: R.el };
+  for (const form of ["streak", "collapse"]) {
+    const sp = row({ form });
+    const read = (fg) => ({ chars: fg.__compare.cells.map((c) => c.text), ink: fg.__compare.cells.map((c) => c.at.opacity),
+                            dy: fg.__compare.cells.map((c) => c.at.dy), ghost: fg.__compare.ghost.at.opacity });
+    for (const t of [31.0, 32.3, 32.66, 32.9, 33.2]) {
+      const cold = figureFor("24.8x", R);
+      paintCompare({ sp, figures: [cold] }, t, {}, ctx);
+      const played = figureFor("24.8x", R);
+      for (let k = 0; k <= 30; k++) paintCompare({ sp, figures: [played] }, 31.4 + (t - 31.4) * k / 30, {}, ctx);
+      assert.deepEqual(read(cold), read(played), form + ": a cold seek to " + t + " lands where the play does");
+    }
+  }
+});
+
+test("the STREAK re-draws the comparator by the HAND, with its label beneath and the metric ghosted", () => {
+  const R = recorder(), ctx = { el: R.el }, sp = streakRow(), fg = figureFor("24.8x", R);
+  paintCompare({ sp, figures: [fg] }, 32.0 + 1.2 * 0.75, {}, ctx);   // mid-write
+  const ink = fg.__compare.cells.map((c) => +c.at.opacity);
+  assert.equal(fg.__compare.cells.map((c) => c.text).join("").replace(/\u00a0/g, " ").trim(), "15 % dearer",
+               "the cells carry the comparator AS AUTHORED once the hand starts");
+  const n = "15 % dearer".length;
+  assert.ok(ink.slice(0, n).every((v, j, a) => j === 0 || v <= a[j - 1] + 1e-9), "the hand writes it left to right: " + ink.slice(0, n).join(" "));
+  assert.ok(ink[0] === 1 && ink[n - 1] < 1, "its first letters are in and its last are still arriving: " + ink.slice(0, n).join(" "));
+  assert.equal(fg.__compare.cells.every((c) => +c.at.dy === 0), true, "nothing is still falling once the ink has gone");
+  paintCompare({ sp, figures: [fg] }, 33.2, {}, ctx);
+  assert.equal(fg.__compare.cells.map((c) => c.text).join("").replace(/\u00a0/g, " ").trim(), "15 % dearer");
+  assert.equal(fg.__compare.sg.every((c) => c.at.opacity === "1.000"), true, "the label lands whole, exactly as the window ends");
+  assert.equal(fg.__compare.ghost.at.opacity, COMPARE.GHOST_A.toFixed(3), "and the quoted figure is held beside it");
+  const gone = figureFor("24.8x", R);
+  paintCompare({ sp: streakRow({ hold: "gone" }), figures: [gone] }, 33.2, {}, ctx);
+  assert.equal(gone.__compare.ghost.at.opacity, "0.000");
+});
+
+test("the STREAK leaves the page as it stood before the word, and takes the ink DOWN over the take-away", () => {
+  const R = recorder(), ctx = { el: R.el }, sp = streakRow(), fg = figureFor("24.8x", R);
+  paintCompare({ sp, figures: [fg] }, 31.0, {}, ctx);
+  assert.equal(fg.lg.every((c) => c.at.opacity === undefined), true, "before the word the figure's own hand owns its glyphs");
+  assert.equal(fg.__compare.cells.every((c) => +c.at.dy === 0), true, "and nothing has moved");
+  paintCompare({ sp, figures: [fg] }, 32.0 + 1.2 * 0.4, {}, ctx);
+  const dy = fg.lg.map((c) => +c.at.dy);
+  assert.ok(dy.some((v) => v > 0), "mid-melt the ink is running down: " + dy.join(" "));
+  assert.ok(+fg.lg[0].at.opacity < 1, "the first drip opens first");
+  assert.ok(+fg.lg[0].at.opacity <= +fg.lg[fg.lg.length - 1].at.opacity + 1e-9, "the drips open in the hand's reading order");
+  assert.equal(fg.__compare.melt.id, "cmpmelt0-5", "the streak's filter is mounted once, under the figure's own datum");
+});
+
+// ---------------------------------------------------------------- P57 T12c: THE BALL (E76 s5)
+/* a glyph as a BOX ring, which is all the pairing rule reads: an outer ring and its centroid */
+const boxRing = (x, w, h = 10) => [[x, 0], [x + w, 0], [x + w, h], [x, h]];
+const boxGroup = (x, w, holes = []) => ({ outer: boxRing(x, w), holes, c: centroid(boxRing(x, w)) });
+
+test("the T12c dials are shares, rooms and scales - and the ball is never a speck", () => {
+  assert.ok(COMPARE.RASTER_S >= 2, "the raster is drawn above the page's own scale");
+  assert.ok(COMPARE.RASTER_A > 0 && COMPARE.RASTER_A < 1, "the threshold is a share of full ink");
+  assert.ok(COMPARE.SIMPLIFY > 0 && COMPARE.DEGEN_R > 0 && COMPARE.BALL_SWELL > 0 && COMPARE.BALL_MIN > 0);
+  assert.equal(Object.isFrozen(COMPARE), true);
+});
+
+test("THE PAIRING RULE on 24.8x -> 15 %: five glyphs to three, by rank, the surplus into its neighbour's destination", () => {
+  /* the five glyphs of "24.8x" and the three of "15 %", as boxes in reading order */
+  const A = [0, 10, 20, 26, 34].map((x) => boxGroup(x, 8));
+  const B = [0, 14, 28].map((x) => boxGroup(x, 10));
+  const pairs = comparePairGroups(A, B, COMPARE.DEGEN_R);
+  assert.equal(pairs.length, 5, "every ring of the larger set is in exactly one pair");
+  for (let i = 0; i < 3; i++) {
+    assert.deepEqual(pairs[i].src, A[i].outer, "rank " + i + " pairs with rank " + i);
+    assert.deepEqual(pairs[i].dst, B[i].outer);
+    assert.ok(!pairs[i].dies && !pairs[i].born, "a paired ring is neither born nor dying");
+  }
+  for (const p of pairs.slice(3)) {
+    assert.equal(p.dies, true, "the surplus glyphs COLLAPSE - nothing is born on this side");
+    const c = centroid(p.dst);
+    assert.ok(Math.abs(c[0] - B[2].c[0]) < 1e-6 && Math.abs(c[1] - B[2].c[1]) < 1e-6,
+              "into a degenerate ring at the nearest paired neighbour's destination: " + c.join(","));
+    assert.ok(Math.abs(polyArea(p.dst)) < Math.abs(polyArea(B[2].outer)) / 20, "and it is a ring of nothing: " + Math.abs(polyArea(p.dst)).toFixed(2));
+  }
+});
+
+test("THE SAME RULE carries ONE ring into N - which is what the ball becoming the comparator IS", () => {
+  const ball = [boxGroup(20, 12)], glyphs = [0, 14, 28].map((x) => boxGroup(x, 10));
+  const pairs = comparePairGroups(ball, glyphs, COMPARE.DEGEN_R);
+  assert.equal(pairs.length, 3);
+  assert.deepEqual(pairs[0].src, ball[0].outer, "one glyph is carried out of the ball itself");
+  assert.equal(pairs.filter((p) => p.born).length, 2, "and the rest are BORN from it");
+  for (const p of pairs.filter((q) => q.born)) {
+    const c = centroid(p.src);
+    assert.ok(Math.abs(c[0] - ball[0].c[0]) < 1e-6, "every one of them out of the ball's own centre: " + c[0]);
+  }
+});
+
+test("HOLES pair with HOLES inside a paired glyph, and a surplus hole closes into its own glyph", () => {
+  const withHole = { outer: boxRing(0, 20, 20), holes: [boxRing(5, 10, 10)], c: centroid(boxRing(0, 20, 20)) };
+  const plain = boxGroup(0, 20);
+  const shut = comparePairGroups([withHole], [plain], COMPARE.DEGEN_R);
+  assert.equal(shut.length, 2);
+  assert.equal(shut[1].hole, true);
+  assert.equal(shut[1].dies, true, "the ink fuses: a hole has nowhere to go but its own glyph's destination");
+  const open = comparePairGroups([plain], [withHole], COMPARE.DEGEN_R);
+  assert.equal(open[1].born, true, "and the other way round it opens");
+  assert.equal(open[1].hole, true);
+  const both = comparePairGroups([withHole], [withHole], COMPARE.DEGEN_R);
+  assert.deepEqual(both.map((p) => p.hole), [false, true], "two glyphs with one hole each pair outer to outer, hole to hole");
+  assert.ok(!both[1].born && !both[1].dies);
+});
+
+test("the pairing and its morph are PURE - the same sets give the same path at one m", () => {
+  const A = [0, 12].map((x) => boxGroup(x, 8)), B = [boxGroup(4, 14)];
+  const once = comparePath(comparePrepare(comparePairGroups(A, B, COMPARE.DEGEN_R)), 0.37);
+  const twice = comparePath(comparePrepare(comparePairGroups(A, B, COMPARE.DEGEN_R)), 0.37);
+  assert.equal(once, twice, "two calls at one m give the same d, to the digit");
+  assert.ok(once.startsWith("M") && once.indexOf("C") > 0, "and it is a path of cubics, not of chords");
+  assert.notEqual(once, comparePath(comparePrepare(comparePairGroups(A, B, COMPARE.DEGEN_R)), 0.62), "and m moves it");
+});
+
+test("THE BALL'S RADIUS holds the INK'S OWN AREA - never MELT.BALL_R, which is a share of a PAGE's height", () => {
+  const area = 900;   /* 900 square page px of ink */
+  assert.ok(Math.abs(compareBallR(area, 28) - Math.sqrt(area / Math.PI) * COMPARE.BALL_SWELL) < 1e-9,
+            "the ball is the disc that holds the ink");
+  assert.equal(compareBallR(0, 28), COMPARE.BALL_MIN * 28, "and never smaller than its floor in figure sizes");
+  assert.ok(compareBallR(area, 28) > MELT.BALL_R * 45,
+            "a figure's ink box is one line tall: melt's page rule would ball this number up into a speck");
+  const c = compareBallC([boxGroup(0, 10), boxGroup(90, 10)]);
+  assert.ok(Math.abs(c[0] - 50) < 1e-6, "the centre is the ink's area-weighted centroid: " + c.join(","));
+});
+
+test("THE SAG is melt.mjs's own law on the OUTLINES - the top sinks, the foot hangs, the ink never leaves its x", () => {
+  const box = { x: 0, y: 0, w: 100, h: 40 }, rnd = compareRnd({ si: 0, idx: 5 }), drips = meltDrips(box, rnd);
+  const ring = boxRing(10, 30, 40);
+  assert.deepEqual(compareSagAt(ring, 0, box, drips), ring, "at k = 0 the ink stands exactly where the page wrote it");
+  const sagged = compareSagAt(ring, 1, box, drips);
+  assert.deepEqual(sagged.map((p) => p[0]), ring.map((p) => p[0]), "a melt runs DOWN: no point of the ink moves sideways");
+  const foot = Math.max(...sagged.map((p) => p[1])), top = Math.min(...sagged.map((p) => p[1]));
+  assert.ok(foot > box.y + box.h, "the foot hangs below the ink box: " + foot);
+  assert.ok(top > 0, "and the top has sunk: " + top);
+  assert.deepEqual(compareSagAt(ring, 0.5, box, drips), compareSagAt(ring, 0.5, box, drips), "a pure function of k");
+});
+
+test("THE SEEDED HASH is the figure's OWN datum - two figures melt differently, one figure melts identically", () => {
+  const a = compareRnd({ si: 0, idx: 5 }), b = compareRnd({ si: 1, idx: 5 }), a2 = compareRnd({ si: 0, idx: 5 });
+  const read = (r) => [0, 1, 2, 40, 300].map(r);
+  assert.deepEqual(read(a), read(a2), "the same datum is the same melt on every frame, seek and render");
+  assert.notDeepEqual(read(a), read(b), "another datum is another melt");
+  for (const v of read(a)) assert.ok(v >= 0 && v < 1, "a seeded hash is in [0, 1): " + v);
+});
+
+test("THE BALL FORM'S FRAME runs melt's OWN phases and lands on the authored strings at both ends", () => {
+  const sp = row();
+  assert.equal(compareBallFrame(sp, 0, "morph").phase, "melt", "the SAG is melt's first phase");
+  assert.equal(compareBallFrame(sp, MELT.MELT_END + 1e-6, "morph").phase, "ball");
+  assert.equal(compareBallFrame(sp, MELT.BALL_END + 1e-6, "morph").phase, "fly", "and the ENDING is its third");
+  assert.equal(compareBallFrame(sp, 1, "morph").phase, "gone");
+  assert.equal(compareBallFrame(sp, 0, "morph").text, "24.8x");
+  assert.equal(compareBallFrame(sp, -4, "morph").text, "24.8x");
+  assert.equal(compareBallFrame(sp, 1, "morph").text, "15 % dearer");
+  assert.equal(compareBallFrame(sp, 9, "morph").text, "15 % dearer");
+  assert.equal(compareBallFrame(sp, 1, "morph").morph, 1, "the morph is WHOLE at the end");
+  assert.equal(compareBallFrame(sp, 1, "morph").write, 1, "and the figure's own type is what stands there");
+  assert.equal(compareBallFrame(sp, 0.99, "morph").write, 0, "the hand never writes the number on a morph: the outlines ARE the glyphs");
+  assert.equal(compareBallFrame(sp, 0, "morph").sag, 0);
+  assert.equal(compareBallFrame(sp, MELT.MELT_END - 1e-9, "morph").ball, 0, "the ball has not begun while the ink is still sagging");
+  assert.equal(compareBallFrame(sp, MELT.BALL_END, "morph").ball, 1, "and is whole exactly when the ending starts");
+});
+
+test("THE THREE ENDINGS differ, and each writes the comparator on its OWN clock", () => {
+  const sp = row();
+  const at = (u, t) => compareBallFrame(sp, u, t);
+  assert.equal(at(0.9, "morph").write, 0, "a morph never hands the number to the hand");
+  assert.ok(at(0.99, "throw").write > 0, "a throw hands it over once the ball has gone (melt's own release)");
+  assert.ok(at(0.99, "splash").write > 0, "a splash hands it over as the splatter dries");
+  assert.equal(at(MELT.BALL_END + 1e-6, "throw").write, 0, "neither of them writes while the ball is still on stage");
+  assert.equal(at(MELT.BALL_END + 1e-6, "splash").write, 0);
+  for (const t of COMPARE_THENS) {
+    assert.equal(at(1, t).write, 1, t + ": the comparator is whole at the end");
+    assert.equal(at(1, t).text, "15 % dearer", t);
+    assert.equal(at(0, t).text, "24.8x", t);
+  }
+  assert.ok(at(0.7, "splash").burst > 0 && at(0.7, "morph").burst === 0, "only a splash bursts");
+  assert.ok(at(0.99, "throw").fly > 0 && at(0.99, "morph").fly === 0, "only a throw flies");
+});
+
+test("TWO CALLS AT ONE u GIVE THE SAME ANSWER for the ball form too (a cold seek is the play)", () => {
+  for (const then of COMPARE_THENS) {
+    for (const u of [0, 0.1, MELT.MELT_END, 0.42, MELT.BALL_END, 0.8, 0.9999, 1]) {
+      assert.deepEqual(compareBallFrame(row(), u, then), compareBallFrame(row(), u, then), then + " u=" + u);
+    }
+  }
+  const R = recorder(), ctx = { el: R.el }, sp = row();
+  const read = (fg) => ({ chars: fg.__compare.cells.map((c) => c.text), ink: fg.__compare.cells.map((c) => c.at.opacity),
+                          ghost: fg.__compare.ghost.at.opacity, d: fg.__compare.ball.ink.at.d,
+                          xf: fg.__compare.ball.g.at.transform });
+  for (const t of [31.0, 32.2, 32.5, 32.8, 33.1, 33.2, 34.0]) {
+    const cold = figureFor("24.8x", R);
+    paintCompare({ sp, figures: [cold] }, t, {}, ctx);
+    const played = figureFor("24.8x", R);
+    for (let k = 0; k <= 30; k++) paintCompare({ sp, figures: [played] }, 31.4 + (t - 31.4) * k / 30, {}, ctx);
+    assert.deepEqual(read(cold), read(played), "a cold seek to " + t + " lands where the play does");
+  }
+});
+
+test("A CALLER WITH NO CANVAS gets the law with NO OUTLINES - never another form, and never an invented face", () => {
+  const R = recorder(), ctx = { el: R.el }, sp = row(), fg = figureFor("24.8x", R);
+  paintCompare({ sp, figures: [fg] }, 32.0 + 1.2 * 0.4, {}, ctx);   // node: no document, no getComputedStyle
+  assert.equal(fg.__compare.ball.ink.at.d, "", "nothing is painted where nothing could be measured");
+  assert.equal(fg.__compare.ball.ink.at.opacity, "0.000");
+  paintCompare({ sp, figures: [fg] }, 33.2, {}, ctx);
+  assert.equal(fg.__compare.cells.map((c) => c.text).join("").replace(/\u00a0/g, " ").trim(), "15 % dearer",
+               "and the ends are still the authored strings");
+  assert.equal(fg.__compare.ghost.text, "24.8x");
+});
+
+test("a degenerate ring is a CIRCLE OF NOTHING at a point - a ring of no length cannot be resampled", () => {
+  const seed = compareSeed([12, 34], COMPARE.DEGEN_R);
+  assert.ok(seed.length >= 3);
+  const c = centroid(seed);
+  assert.ok(Math.abs(c[0] - 12) < 1e-6 && Math.abs(c[1] - 34) < 1e-6);
+  assert.ok(Math.abs(polyArea(seed)) > 0, "it has an area, so morph_a can walk it by arc length");
+});
+
+test("compareGroups reads a GLYPH off the rings: an outer and the holes inside it, in reading order", () => {
+  const rings = [{ pts: boxRing(40, 20, 20), hole: false, parent: -1 },
+                 { pts: boxRing(0, 20, 20), hole: false, parent: -1 },
+                 { pts: boxRing(45, 6, 6), hole: true, parent: 0 }];
+  const groups = compareGroups(rings);
+  assert.equal(groups.length, 2, "two outers are two glyphs");
+  assert.ok(groups[0].c[0] < groups[1].c[0], "sorted by centroid x - the order the hand wrote them in");
+  assert.equal(groups[0].holes.length, 0);
+  assert.equal(groups[1].holes.length, 1, "and the hole belongs to the glyph it sits in");
 });

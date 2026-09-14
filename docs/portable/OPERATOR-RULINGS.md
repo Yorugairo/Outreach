@@ -2455,8 +2455,22 @@ it is where the number starts.
 1. **Explore the display forms before choosing one** for any headline figure: the quoted metric, per share, per dollar
    invested, a share of a whole, a count of things.
 2. **Prefer the comparator that carries immediate narrative value**; the quoted metric may still appear beside it.
-3. **The repeatable mechanism (not built):** show the quoted metric (the P/E), then morph it into the visual comparator -
-   the number the market quotes becomes the number the viewer feels. BACKLOG R26-70.
+3. **The repeatable mechanism (BUILT, P57 T11/T12, 2026-09-14 - the sixth `chart_to` verb, `compare`):** show the quoted
+   metric (the P/E), then morph it into the visual comparator - the number the market quotes becomes the number the
+   viewer feels. BACKLOG R26-70. The grammar authors the arithmetic (`inputs` + `derive`, checked, never invented - E77).
+4. **What "morph" means here (the operator, 2026-09-14, correcting the first paint, which counted the digits up because
+   the glyphs were text and not outlines):** *"I don't understand why we can't do the full morph - just collapse or melt
+   then re-draw. I don't see why we would need a 'vendored font to path library'."* The morph is a BEAT composed of what
+   the engine owns, not vertex math over glyph outlines: the quoted figure's ink MELTS (E88's melt - the ink, never the
+   board) or COLLAPSES (the figure's own erase), and the comparator is RE-DRAWN by the hand at the same datum (E50's
+   write). `form: melt` is the default, `collapse` and `count` are named settings (E91's rule: settings ship named, not
+   discarded).
+5. **And the full morph too - it is just math (the operator, 2026-09-14):** *"yes, i think it'd be cool to have a full,
+   morph-only effect. but the entire point of having our math and engine is that even for complex/difficult things we
+   should be able to create solutions. it's just math."* `form: morph`: the glyphs' outlines are COMPUTED, never fetched
+   from a library - the browser rasterises the text on a canvas, marching squares lifts the contours, and
+   `kinetics/morph_a.mjs` (doc 43 s43.5 Method A) carries one number's rings into the other's. A capability the record
+   says is missing is a capability to derive, not a reason to fall back. BACKLOG R26-70 (T12c).
 
 Recall: doc 43 §43.5 (the object->chart morph, two methods); E60 (the breakthrough's counter and rescale); CAPABILITIES
 (the stop-action counter step, P50 T13). None morphs one number into another.
@@ -2664,6 +2678,30 @@ board itself sags, balls and leaves.
    it SPLATTERS back onto the board and the splatter forms the new chart; or it splatters and a NARRATIVE PLATE springs up
    out of it, reading as painted by that ink.
 4. The P52 T9 whole-page melt is not offered to a cut. Rework: BACKLOG R26-76.
+5. **The fourth ending, and the ball is the unit (the operator, 2026-09-14, on the compare verb's melt):** *"what happens
+   to the ink when it melts? I think we should melt it into a ball, then we either throw it off the page, splatter it
+   back on to the canvas and build the chart/graph from that, or morph it from the ball into the chart."* So every melt -
+   a page's or a figure's - goes THROUGH the ball, and the ball takes one of THREE endings: `throw`, `splash` (the
+   chart or plate grows through the stains), or `morph` (the ball's outline is carried by morph_a into the next thing's
+   outline - the chart's, or a figure's glyphs). The text-streak melt is a named setting, not the default. BACKLOG
+   R26-117 (the page's `melt:morph`), R26-70 T12c (the compare's `then: morph | splash | throw`).
+6. **The ball has MASS, and shows it (the operator, 2026-09-14):** *"we need to make sure our ball has real density, and we
+   should probably roll it around or manipulate it a bit for good measure to show that it has real mass & gravity, just
+   like the hyperframes example did with their stop animation."* A ball that forms and goes is a shape; a ball that
+   LANDS (the board dips under it, the contact shadow tightens, the squash on the one frame), ROLLS a short way on 2s
+   (no slip - the turn is the distance over the radius - a named friction slowing it, the squash tensor along the
+   travel, the shadow following) and SETTLES before its ending is a thing with weight. The reference is the HyperFrames
+   stop-motion example the P47 dials were measured from (`stopaction.mjs`: SQUASH_ENV, the headline slam, the contact
+   shadow); the machinery is P47's and the melt must use all of it, not two exports. BACKLOG R26-118.
+7. **A LIVING ball, metallic (the operator, 2026-09-14):** *"yes i think we can use more advanced math and what we've learned
+   from our ink manipulations to make a more living ball, that is wriggling to contain itself, and has real, metallic
+   mass and density."* The ball is a DROP, not a disc: its boundary is a ring of damped surface modes (Rayleigh's drop
+   oscillations - the l = 2, 3, 4 harmonics, each with its own frequency and damping from the material, excited by the
+   compile and re-excited by every landing and nudge, and never let go still - E49), the area held constant every
+   frame so it reads as incompressible, the ink fused by the gooey threshold we already own, the material METAL by
+   default (stopaction's `MASS.metal`: heavy, dead stop, no squash, no rebound) with a highlight that slides on the
+   surface as it turns. Recall: the record had 0 hits for surface tension, Rayleigh, specular - new math, ours to
+   derive. BACKLOG R26-118 (widened).
 
 ---
 
@@ -2788,3 +2826,51 @@ follow`, `weight`) and the compiler resolves it as a pure function of t. Default
 scale under rotation shears); a label pins, never parents; Z-order stays authored; only closed-form relations (no physics, no
 iteration, no order-dependent blending) - a seek must land the same frame. Evidence and the camera first; the figure rig stays
 parked (R26-61) with its trigger.
+
+---
+
+## E98 - The stage is 2.5D: every plate is prompted in depth layers, and charts are drawn as objects in that space (2026-09-14)
+
+**Ruling (the operator):** *"i also think that most of bravos work is 2.5d, and that's how we started out as well, i think we need
+to get back to prompting every plate and probably drawing charts/graphs as 2.5d."*
+
+**What the record already holds.** The Bravos analysis
+(`content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.md:28-31, :102-111`)
+specifies *Planar Homography & Depth Layers*, a *4-Layer Depth Separation*, and a micro camera pan that *"automatically yields
+natural parallax between the wall, screen, and highlights"*. We built the homography (`kinetics/homography.mjs`, the ART-embed
+surface, P50 T7) and the camera (E59, one persistent eye) - and left the plates as single flat generations and the charts as flat
+pages. The 2.5D monograph the drawing docs were extracted from
+(`sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md`, docs 42/43) is on disk; the Depth
+Anything + DepthFlow workflow (`workflows/2_5d_parallax_inpaint.json`) is on disk, retired by E32 as a MOTION source.
+
+**How this sits with E32 and E49.** E32 retired *"motion means animation -> I need generative video"*; E49 retired Ken Burns and
+parallax as the CURE for stillness. Neither says the stage is flat. 2.5D is the SPACE: the plate has depth, the camera moves in it
+for a reason the frame can name (E59), and every mechanism we own - the docks, the ball, the slide, the rig (E97) - moves through
+that depth. Parallax is a consequence of the camera in a layered world, never a mechanism authored for its own sake (E49 stands).
+
+*Apply:*
+1. **Every plate is prompted as depth layers** - the four-layer separation the Bravos analysis names (background, mid, subject,
+   foreground/occluder) as separate generations or a depth-split of one, each with its own alpha, indexed in the plate library with
+   its layer order and a depth per layer. A flat plate is the exception and says so.
+2. **The camera is a true camera over the layers** - E59's one eye, with a depth per layer so a push, a pan or a follow yields the
+   parallax the layers imply; the camera's law (locked by default, moves for a reason) is unchanged.
+3. **Charts are drawn as objects in that space** - the ledger page is a card at a depth, and a chart form may stand in it (bars
+   with extrusion, a line on a tilted plane, a treemap as a board) when the sentence wants the camera to move around it; the flat
+   page stays the default reading form (E50-E53 unchanged: the chart proves one sentence and leaves).
+4. **Not a restage.** Approved cuts are read, never rebuilt (E45); the 2.5D stage lands as a PRP (BACKLOG R26-122) with its own
+   goldens, and the first cut to use it is a NEW one.
+5. **Every layer prompt states the intent (the operator, 2026-09-14, on Codex's read of GPT Image 2.5):** *"of course we have to
+   adapt it to our style and the specific plate, but I think the takeaway is that the reasoning involved with the image generation
+   is smart enough that it deserves to be told that the intention is that we're going to turn this into a 2.5d parallax
+   composition."* A generator that reasons during generation makes the choices the intent needs (a full silhouette, clean edge
+   separation, no ground plane, no cast shadow, nothing cropped) only when told what the asset is for. So a plate is never one
+   generation asked for a layered scene: it is ONE transparent asset per layer (background / mid / subject / occluder), each prompt
+   carrying the brand sheet's style, the plate's own brief, the SHARED camera brief and reference image for the set, and the
+   sentence that names the intent - Codex's pattern as the template: *"Create ONLY the foreground subject as an isolated transparent
+   PNG asset. Match the supplied composition reference exactly: 50mm eye-level camera, subject centered at x=62%, lower edge at
+   y=92%, full silhouette visible. No background, no ground plane, no cast shadow, no text. Designed for 2.5D parallax compositing;
+   clean edge separation and no cropped limbs."* The depth, the roles and the camera path are ours (the sidecar), never the
+   generator's - it returns a flattened raster with alpha and nothing structured. P58 T1/T8.
+
+Recall: E32 (`:1090`), E49 (`:1494`), E59 (`:1903`), E97 (`:2815`); `docs_find "2.5D"` -> the homography module and docs 42/43;
+`docs_find "depth map"` -> 0 hits (the depth-per-layer index is new).

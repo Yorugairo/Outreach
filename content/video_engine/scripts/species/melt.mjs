@@ -410,7 +410,7 @@ export const meltState = (t0, t, o = {}, rnd) => {
     st.path = morphAPath(st.outline);
     st.run = meltRun("melt", ph.k, rect, P);
     st.tint = meltTint("melt", ph.k, P);
-    st.textOpacity = 1 - mEase(ph.k);   /* the words run down as their own glyphs and are gone by the ball */
+    st.textOpacity = meltTextAlpha(ph.k);   /* the words run down as their own glyphs and are gone by the ball */
     return st;
   }
   /* the ball and the ending run on the STEPPED clock, each on its own phase-local seconds (a pure quantisation of t) */
@@ -552,6 +552,14 @@ export const meltTextFilterMarkup = (id, o = {}) => {
     + '<feComponentTransfer in="' + id + 'd" result="' + id + 't"><feFuncA type="linear" slope="' + P.TEXT_STREAK + '" intercept="0"/></feComponentTransfer>'
     + '<feMerge><feMergeNode in="' + id + 't"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
 };
+/* THE TWO NUMBERS that filter is DRIVEN by, exactly as paintMelt has always written them: the vertical blur (half the
+   run - "0 s", so a letter's columns stay apart) and how far the streak hangs below the glyph (0.6 of it). Exported for
+   a caller that melts ONE text rather than a page of them - species/compare.mjs's `melt` form - so the streak is read
+   off this module and never copied into another. paintMelt writes what it wrote before, to the character. */
+export const meltTextStreak = (run) => ({ blur: "0 " + (Math.max(0, run) * 0.5).toFixed(2), dy: (Math.max(0, run) * 0.6).toFixed(1) });
+/* THE WORDS' OWN INK over the sag: they run down as their own glyphs and are gone by the ball. meltState's
+   `textOpacity` IS this, and calls it. */
+export const meltTextAlpha = (k) => 1 - mEase(k);
 /* the SVG transform of the ball: the flight's offset and tumble, and stopaction's area-preserving squash, about its centre */
 export const meltBodyTransform = (st) => {
   if (!st.centre) return "";
@@ -689,8 +697,9 @@ export const paintMelt = (ctx) => {
   txt.style.display = showTxt ? "" : "none";   /* never `visibility`: the words' own !important visible would outrank it */
   txt.style.zIndex = "3";
   if (showTxt) {
-    m.tblur.setAttribute("stdDeviation", "0 " + (st.run * 0.5).toFixed(2));
-    m.toff.setAttribute("dy", (st.run * 0.6).toFixed(1));
+    const streak = meltTextStreak(st.run);
+    m.tblur.setAttribute("stdDeviation", streak.blur);
+    m.toff.setAttribute("dy", streak.dy);
     txt.style.filter = "url(#" + id + "x)";
     txt.style.opacity = st.textOpacity.toFixed(4);
     txt.style.transform = wA.style.transform;
