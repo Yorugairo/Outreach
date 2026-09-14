@@ -404,7 +404,7 @@ def test_every_wired_card_is_in_a_recipe():
     assert uncovered == [], f"wired cards in no recipe: {uncovered}"
     assert excluded == ["kinetics:arap", "kinetics:camera", "kinetics:chartxf", "kinetics:clothoid",
                         "kinetics:ease", "kinetics:homography", "kinetics:ink", "kinetics:morph_a",
-                        "kinetics:spring", "kinetics:squash", "kinetics:stagger", "kinetics:stroke"]
+                        "kinetics:spring", "kinetics:squash", "kinetics:stagger", "kinetics:stroke", "kinetics:transitions"]
     # ... and each excluded module stays reachable: it is named in the role of the member it parameterises
     assert [i for i in excluded if i not in roles] == []
     assert [i for i in excluded if i in in_a_recipe] == [], "a kinetics module is never a member of its own"

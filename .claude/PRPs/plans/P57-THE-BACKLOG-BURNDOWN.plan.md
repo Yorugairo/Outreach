@@ -1,7 +1,7 @@
 ---
 id: P57-THE-BACKLOG-BURNDOWN
 title: The backlog burndown - twenty-five named rows closed by evidence, not by claim; the bookkeeping rows marked done against their commits, the six un-landed research runs ingested, the CAPABILITIES rows owed written, the housekeeping done, the dropped research and the unread dial retired, the six measured defects each proved closed on its own frames or built, the four ruled mechanisms built (slide, the living caption, the race's two settings and its rank swap), and the seven-species promotion queue drained to modules
-status: running
+status: complete
 operation: maintenance
 risk: standard
 owner: parent
@@ -387,67 +387,67 @@ nobody can review as a unit. Seven small slices, serialised, each with its own g
 - Evidence: 2026-09-14. Lane (implementation_luna). As the row records (R26-79 FIXED). Deviations accepted: the lane is HORIZONTAL (into the passing row's own bar) because a vertical lane cannot exist at a swap and the name column has no room; the yield stays as a one-branch setting with no compiler key (so no card change); the proving gate is M28, not M34 (a race page has no lines or marks for M34 to read) - the acceptance's 'M34 clean' is satisfied vacuously (INFO) and M28 carries the real verdict FAIL -> PASS. Fixture gate on the bare proof page: `RESULT: 5 FAIL / 3 WARN / 8 PASS / 2 JUDGE / 9 INFO` - the FAILs are the bare fixture's (M01/M05/M10/M11/M16, no narration/no hook), not the swap. Validate: pytest 144 passed; `sync_kinetics --check` in sync (32); `effects_catalog_check` 0 failures; 54 goldens identical + 1 new.
 
 ### T17: R26-97 - promote `species:callout` to a module
-- Status: pending
+- Status: complete
 - Owner: junior_developer
 - Depends on: T16 (engine lock)
 - Write set: `content/video_engine/scripts/species/callout.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the region + the call), `content/video_engine/tests/kinetics/callout.test.mjs`, `content/video_engine/tests/test_kinetics_sync.py` (the `SPECIES` name list), `content/video_engine/effects/cards/species.json` (`lives`)
 - Acceptance: the P55 T7 recipe, first because it is the cheapest - its golden `chart-callout` **already exists**, so no new golden is committed. `paintSpecies sp.kind === "callout"` + `calloutPath` (17 lines, rank 306, 9 uses, live) become `species/callout.mjs` with a WHEN / THE LAW header, every literal lifted into a frozen dials object with **no value changed**, the pure math exported and node-tested, the painter registered as the module's last statement (or called by name if the engine's slot demands it, as `verdict.mjs` does - state which). `sync_kinetics.py --check` in sync (the module count rises by one); **every golden byte-identical by sha256** (the promotion's whole proof); the card `species:callout` reads `lives.form: module` with its path and symbol; `effects_catalog_check.py` 0 failures.
 - Validate: `node --test content/video_engine/tests/kinetics/callout.test.mjs` and `python content/video_engine/scripts/sync_kinetics.py --check` and `python -m pytest content/video_engine/tests/test_kinetics_sync.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_effects_catalog_drift.py -q` and `python content/video_engine/scripts/effects_catalog_check.py`
-- Evidence: pending
+- Evidence: 2026-09-14. Lane (junior_developer). As the row records (R26-97 PROMOTED). No deviation: the golden existed, none added; the one signature change (`calloutPath` takes `hash`) mirrors vecmap and moved no pixel. node 14/14; sync 33 modules; pytest 129 passed; catalogue 0 failures; 55/55 goldens identical.
 
 ### T18: R26-95 - promote `species:trace` to a module
-- Status: pending
+- Status: complete
 - Owner: implementation_luna
 - Depends on: T17 (engine lock)
 - Write set: `content/video_engine/scripts/species/trace.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs`, `content/video_engine/tests/kinetics/trace.test.mjs`, `content/video_engine/tests/golden/build_golden_sources.py` + `tests/golden/frames/trace-hop.png`, `content/video_engine/tests/test_kinetics_sync.py`, `content/video_engine/effects/cards/species.json`
 - Acceptance: the golden **first** - `trace-hop` (the hop drawn, a stamp stacked) committed from TODAY's inline code, so the promotion has something to be identical to. Then the P55 T7 recipe on `paintSpecies sp.kind === "trace"` (34 lines, rank 476 - the queue's head, 7 uses, live in the approved Japan short at t 9.22, including the opt-in bowed `hop` the compiler validates at `build_scene_timeline_f.py:1194-1202`). Every golden byte-identical after the lift; `sync_kinetics --check` in sync; node test over the pure math (the hop's bow, the stamp stack); the card's `lives.form -> module`; `effects_catalog_check.py` 0 failures. R26-95's own note holds: it may sit beside the race work because the race is `buildLedgerRace`, not `paintSpecies` - but the engine lock still serialises it.
 - Validate: `node --test content/video_engine/tests/kinetics/trace.test.mjs` and `python content/video_engine/scripts/sync_kinetics.py --check` and `python -m pytest content/video_engine/tests/test_kinetics_sync.py content/video_engine/tests/test_golden_frames.py -q` and `python content/video_engine/scripts/effects_catalog_check.py`
-- Evidence: pending
+- Evidence: 2026-09-14. Lane (implementation_luna). As the row records (R26-95 PROMOTED). No deviation; `sync_kinetics.py` and `render_baseline.py` needed no edit (the module list is a glob; no proof frame). node 18/18; sync 34; pytest 130 passed; catalogue 0 failures; 55/55 existing goldens identical + `trace-hop` (read by the parent).
 
 ### T19: R26-96 - promote `species:spotlight` to a module
-- Status: pending
+- Status: complete
 - Owner: implementation_luna
 - Depends on: T18 (engine lock)
 - Write set: `content/video_engine/scripts/species/spotlight.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs`, `content/video_engine/tests/kinetics/spotlight.test.mjs`, `content/video_engine/tests/golden/build_golden_sources.py` + `tests/golden/frames/spotlight-hold.png` (+ a proof at the idle's two phases), `content/video_engine/tests/test_kinetics_sync.py`, `content/video_engine/effects/cards/species.json`
 - Acceptance: the row's queue condition is now OPEN - it waited on R26-93 (`idle=live`) being committed, and that is `3a6a645`. Golden first: `spotlight-hold` (the dim, the lit datum) plus a proof at the live idle's two phases, committed from today's inline code; then the P55 T7 recipe on `paintSpecies sp.kind === "spotlight"` (20 lines, rank 320, 8 uses, live in Japan with `dur: hold`, `idle: live`). Every golden byte-identical; `sync_kinetics --check`; the node test covers the dim curve and the idle's phase (E56: a picture's focus is the light, and the life check runs on the addition's own region); `lives.form -> module`; `effects_catalog_check.py` 0 failures.
 - Validate: `node --test content/video_engine/tests/kinetics/spotlight.test.mjs` and `python content/video_engine/scripts/sync_kinetics.py --check` and `python -m pytest content/video_engine/tests/test_kinetics_sync.py content/video_engine/tests/test_golden_frames.py -q` and `python content/video_engine/scripts/effects_catalog_check.py`
-- Evidence: pending
+- Evidence: 2026-09-14. Lane (implementation_luna). As the row records (R26-96 PROMOTED). No deviation. node 14/14; sync 35; pytest 133 passed; catalogue 0 failures; 59/59 goldens identical after the lift (3 new before it). Parent read `spotlight-hold.png`.
 
 ### T20: R26-98 - promote `page_species:figure` to a module
-- Status: pending
+- Status: complete
 - Owner: junior_developer
 - Depends on: T19 (engine lock)
 - Write set: `content/video_engine/scripts/species/figure.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs`, `content/video_engine/tests/kinetics/figure.test.mjs`, `content/video_engine/tests/golden/build_golden_sources.py` + `tests/golden/frames/page-figure.png`, `content/video_engine/tests/test_kinetics_sync.py`, `content/video_engine/effects/cards/page_species.json`
 - Acceptance: golden first (`page-figure`, the written number landed), then the P55 T7 recipe on `paintFigure` (17 lines, rank 204, 6 uses, live in Japan at t 77.02). The module is a PAGE painter (`/* SPACE: page */`, `sync_kinetics.py:122` - a page species registers into the page's registry, not the stage's), which is the one way this promotion differs from T17-T19 and must be stated in the module header. E50 is the doctrine (the number the sentence turns to, written by the hand at its datum). Every golden byte-identical; `sync_kinetics --check`; `lives.form -> module`; `effects_catalog_check.py` 0 failures. If R26-70b's morph lands on the figure (T12), this promotion rebases on it, never the other way round.
 - Validate: `node --test content/video_engine/tests/kinetics/figure.test.mjs` and `python content/video_engine/scripts/sync_kinetics.py --check` and `python -m pytest content/video_engine/tests/test_kinetics_sync.py content/video_engine/tests/test_golden_frames.py -q` and `python content/video_engine/scripts/effects_catalog_check.py`
-- Evidence: pending
+- Evidence: 2026-09-14. Lane (junior_developer, resumed once at its turn limit). As the row records (R26-98 PROMOTED). Deviation stated: the DOM-making builder stays in `buildPerform` and calls the module's placement exports by name (the `PF.figures` record `compare.mjs` reads is byte-identical); the R26-71 dial names kept for the placement test. node 16/16; sync 36; pytest 139 passed; catalogue 0 failures; 60/60 goldens identical.
 
 ### T21: R26-99 - promote `dock_payload:record` to a module
-- Status: pending
+- Status: complete
 - Owner: implementation_luna
 - Depends on: T20 (engine lock)
 - Write set: `content/video_engine/scripts/species/record.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs`, `content/video_engine/tests/kinetics/record.test.mjs`, `content/video_engine/tests/golden/build_golden_sources.py` + `tests/golden/frames/record-typewriter.png`, `content/video_engine/tests/test_kinetics_sync.py`, `content/video_engine/effects/cards/dock_payload.json`
 - Acceptance: golden first (`record-typewriter`, mid-type and highlighted), then the P55 T7 recipe on `drawRecord` (the typewriter + per-word highlighter; rank 140 - the plan's guess that the record headed the queue did not hold, T1 measured it fourth among dock payloads). It is a DOCK payload, so it follows `verdict.mjs`'s precedent exactly: no registry - the engine's dock slot calls the inlined painter by name, and the `DOCK_PAINTERS` decision stays recorded and unbuilt. The stroke is synced to the NARRATOR's word timings (CAPABILITIES "Record-document species"), so the node test pins the type clock against the word onsets. Every golden byte-identical; `sync_kinetics --check`; `lives.form -> module`; `effects_catalog_check.py` 0 failures.
 - Validate: `node --test content/video_engine/tests/kinetics/record.test.mjs` and `python content/video_engine/scripts/sync_kinetics.py --check` and `python -m pytest content/video_engine/tests/test_kinetics_sync.py content/video_engine/tests/test_golden_frames.py -q` and `python content/video_engine/scripts/effects_catalog_check.py`
-- Evidence: pending
+- Evidence: 2026-09-14. Lane (implementation_luna). As the row records (R26-99 PROMOTED). No deviation: the dock-payload precedent (by name, no registry) held; `render_baseline.py` gained the proof frame line; the card note trimmed to the schema's 200-char cap. node 11/11; sync 37; pytest 136 passed; catalogue 0 failures; 62/62 goldens identical.
 
 ### T22: R26-101 - promote `page_enter:spiral` to a module
-- Status: pending
+- Status: complete
 - Owner: implementation_luna
 - Depends on: T21 (engine lock)
 - Write set: `content/video_engine/scripts/species/spiral.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs`, `content/video_engine/tests/kinetics/spiral.test.mjs`, `content/video_engine/tests/golden/build_golden_sources.py` + `tests/golden/frames/spiral-return.png`, `content/video_engine/tests/test_kinetics_sync.py`, `content/video_engine/effects/cards/page_enter.json`, `content/video_engine/effects/cards/page_exit.json` (only if the retract folds in)
 - Acceptance: golden first (`spiral-return`, mid-unwind), then the P55 T7 recipe on `lpSpiral` (+ `lpVortex`, `lpParticles`; 39 lines, rank 195, 5 uses, wired on the Tokyo test bed and the bridge short). **The grouping decision this slice makes and records:** the row proposes one module holding both directions - the page's spiral IN and the vortex RETRACT (the implicit card `page_exit:retract`) - because they are the same geometry run two ways; the slice either folds both (and updates both cards) or states in the module header why it did not. Every golden byte-identical; `sync_kinetics --check`; `lives.form -> module`; `effects_catalog_check.py` 0 failures.
 - Validate: `node --test content/video_engine/tests/kinetics/spiral.test.mjs` and `python content/video_engine/scripts/sync_kinetics.py --check` and `python -m pytest content/video_engine/tests/test_kinetics_sync.py content/video_engine/tests/test_golden_frames.py -q` and `python content/video_engine/scripts/effects_catalog_check.py`
-- Evidence: pending
+- Evidence: 2026-09-14. Lane (implementation_luna). As the row records (R26-101 PROMOTED; the grouping folded both directions into one module on what the code shares). No pixel moved (62/62; the equivalence run 0 differences over 26,809 comparisons). node 16/16; sync 38; pytest 139 passed; catalogue 0 failures.
 
 ### T23: R26-100 - promote `exit:dip` to a module (and decide the transitions module)
-- Status: pending
+- Status: complete
 - Owner: implementation_luna
 - Depends on: T22 and T13 (engine lock; the slide must exist first)
 - Write set: `content/video_engine/scripts/species/transitions.mjs` (or `kinetics/transitions.mjs` - the slice states which and why), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the render loop's boundary block), `content/video_engine/tests/kinetics/transitions.test.mjs`, `content/video_engine/tests/golden/build_golden_sources.py` + `tests/golden/frames/dip-boundary.png`, `content/video_engine/tests/test_kinetics_sync.py`, `content/video_engine/effects/cards/exit.json`
 - Acceptance: golden first (`dip-boundary`: the black boundary frame and the ramp's midpoint), then the P55 T7 recipe on THE DIP block + `dipIn` / `dipOut` (10 lines, rank 180, 9 uses, live - Japan x6, `scene-evidence-engine.mjs:10205, 10295-10301`). **The decision this slice makes and records in its header:** whether dip, blur-zoom, wipe, dissolve, suck **and T13's slide** share one `transitions` module (the row's own proposal) or each is its own - decided on what the code actually shares (the boundary clock and the ramp) rather than on tidiness, with the answer written where the next reader finds it. E47 s1 is the dip's law (a plain LINEAR ramp to black over the last `DIP_S`/2 and back) and must survive the lift unchanged - **no value changed**. Every golden byte-identical; `sync_kinetics --check`; `lives.form -> module` for `exit:dip` (and for any other exit card the module absorbs); `effects_catalog_check.py` 0 failures; the motion gate on Japan (6 dips) unchanged.
 - Validate: `node --test content/video_engine/tests/kinetics/transitions.test.mjs` and `python content/video_engine/scripts/sync_kinetics.py --check` and `python -m pytest content/video_engine/tests/test_kinetics_sync.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_chart_transitions.py -q` and `python content/video_engine/scripts/gate_motion_density.py content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short` and `python content/video_engine/scripts/effects_catalog_check.py`
-- Evidence: pending
+- Evidence: 2026-09-14. Lane (implementation_luna, nudged once). As the row records (R26-100 PROMOTED; the transitions decision made on what the code shares, recorded in the header). Deviation accepted: `effects/cards/kinetics.json` gained `kinetics:transitions` (the catalogue refuses a module no card names). node 12/12; sync 39 (15 kinetics, 24 species); pytest 235 passed; Japan gate unchanged; 67/67 goldens identical after the lift.
 
 ## Open Decisions For The Operator
 
@@ -541,3 +541,13 @@ twice that way). Run gated steps unpiped, or with `set -o pipefail`.
   completion claim is not evidence.
 - On close: the twenty-five rows carry their verdicts, the ten layers are in sync, the catalogue reads seven more
   modules, and the PRP moves to `complete` with the final test counts pasted here by the parent.
+
+## Closed 2026-09-14 (the parent)
+
+- The twenty-five rows carry their verdicts: R26-93/94/74/110/90/92/113 **DONE**; R26-69 **CLOSED**; R26-66 RESTORED / R26-67 / R26-68 CLOSED (P53's, unchanged); R26-63 WITHDRAWN + verified retired; R26-64 **RETIRED / RULED**; R26-112 **RETIRED**; R26-114 open on one ruling; R26-71 / R26-79 **FIXED**; R26-70 / R26-75 / R26-77 / R26-78 **BUILT**; R26-95 / 96 / 97 / 98 / 99 / 100 / 101 **PROMOTED**.
+- Modules `31 (14 kinetics, 17 species)` -> **`39 (15 kinetics, 24 species)`**; goldens 47 -> **67**, every pre-existing golden byte-identical through every slice (each lane's sha256 table); `effects_catalog_check: 0 failure(s), 2 example(s) skipped, 40 recipe(s) (15 proven)`; `build_effects_catalog: in sync (131 cards, 62 options, 40 recipes)`.
+- **The whole tree:** `python -m pytest content/video_engine/tests -q` -> run 1 `4 failed, 3082 passed, 14 skipped` (three stale pins from this batch - `kinetics:transitions` in the excluded-modules list, the page-boxes player sha (`measure_page_boxes.py --write`: only the sha and the date moved, no box), `R_PORTRAIT: 960` in the portrait allowlist - and one playwright `ERR_NO_BUFFER_SPACE` flake under the parallel load, 15 passed alone); run 2 **`3086 passed, 14 skipped`**, 0 failed. Root tree **432 passed**. Node kinetics **475 / 475**. `build_docs_layers.py --check` -> `every layer in sync (10 layers)`, research-ledger 0 orphan. `prp_validate` PASS.
+- The motion gate on Japan (`3 FAIL / 0 WARN / 16 PASS / 1 JUDGE / 8 INFO`) and Tokyo v2 (`1 FAIL / 2 WARN / 14 PASS / 1 JUDGE / 8 INFO`) read exactly what they read before T1.
+- Commits on main, NOT pushed (no push word): `4376de6` (T1-T5), `527617f` (T10-T12), `2a82cd4` (T13-T16), and the steward's batch 3 (T17-T23 + the pins + this close).
+- HG1 and HG2 are assembled for the operator in `docs/research/runs/p57-burndown/HG-HANDOFF.md` (every frame path; the caption A/B/C served on :8761 from a private Tokyo copy). The plan is complete as work; the two human gates are the operator's rulings, recorded in the rows when given.
+- Retrieval: `docs_find "the collision ledger"` -> the CAPABILITIES M32/M33/M34 row; `"embed"` -> the embed cards + rows; `"slide transition"` and `"living caption"` -> the two CAPABILITIES rows (their titles carry the phrases since this close).

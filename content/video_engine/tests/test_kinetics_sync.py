@@ -33,7 +33,8 @@ import sync_kinetics as SK  # noqa: E402
 MODULES = ["ease", "spring", "stagger",   # P52 T10: the caption's stagger envelope - after spring, before the caption block uses it
            "stroke", "clothoid", "ink", "squash", "idle", "stopaction", "homography", "chartxf",
            "camera", "arap",   # P50 T7 (homography): the planar projection that lands a card on a plate's declared surface - it imports nothing, and its region sits after the stop action whose impact it composes with
-           "morph_a"]   # P43 T1 + P47 T5/T1/T3 + P50 T12 (morph_a: doc 43 s43.5 Method A, after arap - it imports it)
+           "morph_a",   # P43 T1
+           "transitions"]   # P57 T23 / R26-100: THE BOUNDARY CLOCK and the dip's LINEAR ramp (E47 s1) - a TRANSITION, not a species, so it lives in kinetics/, registers no painter and declares no SPACE; the render loop calls straddleSecs / dipAlpha / dipVeilOpacity by name and its region sits where the engine declared exitName/exitSecs, which it absorbed + P47 T5/T1/T3 + P50 T12 (morph_a: doc 43 s43.5 Method A, after arap - it imports it)
                                               # + P50 T14 the clothoid fitter, beside the stroke it is drawn by; in dependency order (the template's region order)
 SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span",
            "compare",   # P57 T12 / R26-70b: the `chart_to compare` verb's paint - a PAGE species (PAGE_PAINTERS.compare), so its region sits with span's, before paintPerform closes over it
@@ -41,7 +42,13 @@ SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span",
            "thread",    # P50 T15 / HF-16: the WIRE - a page species' carry math, so it registers no painter either (span's case)
            "tippill",   # P50 T11: R26-34's pill - a line PAGE's option rather than a targeted kind, so it registers no painter   # P50 T2 on: one module per species kind, inlined into the species block; `press` is the
            "newsreel", "countarray", "agenda", "ring", "melt",
-           "verdict", "checklist"]   # P52 T6 / T7 / T8 / T9: the wave-3 species, in the engine's region order (melt registers no painter - an exit)
+           "verdict", "checklist",   # P52 T6 / T7 / T8 / T9: the wave-3 species, in the engine's region order (melt registers no painter - an exit)
+           "record",    # P57 T21 / R26-99: the record DOCUMENT - a dock payload like verdict, so it registers no painter either; its region sits where drawRecord did, after verdict's and before the dock loop that calls it
+           "callout",   # P57 T17 / R26-97: the hand's ring, promoted from the engine's own branch - its region sits after ring's, and after press's, whose underlineFrac the underline form imports
+           "trace",     # P57 T18 / R26-95: the route on a still (the still life's redraw and the opt-in bowed hop), promoted the same way - it imports nothing, so its region sits last, after callout's
+           "spotlight", # P57 T19 / R26-96: the LIGHT (E56 - a picture's focus is the light, and its own region carries the life check), promoted the same way and for the same reason; it imports nothing either, so its region sits after trace's
+           "figure",    # P57 T20 / R26-98: E50's written number - a PAGE species (PAGE_PAINTERS.figure), so its region sits with span's and compare's, BEFORE paintPerform closes over it, and its builder stays in the engine's buildPerform
+           "spiral"]    # P57 T22 / R26-101: THE PAGE VORTEX, both directions in one module (the row's proposal, taken) - neither a kind nor a dock payload but a page TRANSITION, so it registers no painter and the ledger slot calls lpSpiral by name; its region sits where the inline vortex did, before paintLedger, and it imports squash's scaleBy, whose region is far earlier
                               # `verdict` and `checklist` (P55 T7) are the verdict stack (a dock payload) and the test card (a chart-dock form),
                               # promoted from inline engine code; neither registers a painter - the dock slot calls them by name.
                               # `breakthrough` (P50 T10/T13) is a third that registers no painter: the burst is a PAGE

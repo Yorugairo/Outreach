@@ -306,13 +306,20 @@
       "phases": [
         {
           "name": "figure writes",
-          "does": "the number writes glyph by glyph at its datum",
-          "trigger": "the species' `at`, over the first 0.6 of `dur`"
+          "does": "the number writes glyph by glyph at its datum, stepping off its own series' ink where it has to (R26-71)",
+          "trigger": "the species' `at`, over WRITE of `dur`",
+          "dials": {
+            "WRITE": "0.6",
+            "OVERLAP": "1.6"
+          }
         },
         {
           "name": "sub writes",
           "does": "the sub writes under it",
-          "trigger": "0.6 of `dur`, over the remaining 0.4"
+          "trigger": "WRITE of `dur`, over the remaining SUB_WRITE",
+          "dials": {
+            "SUB_WRITE": "0.4"
+          }
         }
       ],
       "blends": [
@@ -324,18 +331,32 @@
         }
       ],
       "options": [],
-      "dials": null,
+      "dials": {
+        "module": "content/video_engine/scripts/species/figure.mjs",
+        "object": "FIGURE"
+      },
       "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "paintFigure"
+        "form": "module",
+        "path": "content/video_engine/scripts/species/figure.mjs",
+        "symbol": "paintFigure",
+        "also": [
+          "figurePlace",
+          "figClearY",
+          "figBox",
+          "figWidth",
+          "segMeetsBox",
+          "figureGlyph",
+          "figureSubGlyph"
+        ],
+        "note": "promoted P57 T20 / R26-98: a PAGE painter (registers PAGE_PAINTERS.figure, inlined between KINETICS:BEGIN figure and KINETICS:END); the builder stays in buildPerform and calls the module by name"
       },
       "doctrine": [
-        "E50"
+        "E50",
+        "BACKLOG R26-71"
       ],
-      "status": "live",
+      "status": "wired",
       "proof": {
-        "golden": null,
+        "golden": "page-figure",
         "test": "content/video_engine/tests/test_chart_transitions.py::test_a_figure_follows_the_active_state_after_a_rescale_and_a_dropped_datum_shows_nothing",
         "first_use": {
           "project": "japan-tariff-trick",

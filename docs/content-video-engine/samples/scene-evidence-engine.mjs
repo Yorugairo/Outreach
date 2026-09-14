@@ -2788,12 +2788,109 @@ async function mount(doc) {
     const secs = bits.length > 2 ? parseFloat(bits[2]) : SLIDE_S;
     return (secs > 0 && isFinite(secs)) ? { dir: bits[1], secs } : null;
   };
-  /* `dip`, `dip:<s>`, `blurzoom`, `blurzoom:<s>`, `suck:<x>,<y>` - the name, and the seconds when the row declares them */
+  /* KINETICS:BEGIN transitions */
+  /* kinetics/transitions.mjs - THE BOUNDARY CLOCK, AND THE DIP THAT RIDES IT (P57 T23 / R26-100; ruling E47 s1,
+     operator 2026-09-06; doc 46 s46.5 + docs/research/motion/WEALTH_LOGIC_TRANSITIONS_MEASURED.md; CAPABILITIES.md
+     "Dip and blur-zoom exits, WIRED"). SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py
+     between KINETICS:BEGIN transitions and KINETICS:END, where the engine used to declare exitName/exitSecs. It
+     imports nothing - the boundary clock is arithmetic on the timeline's own spans.
+
+     A TRANSITION IS NOT A SPECIES, so this module lives in kinetics/ and not species/: it registers no painter and
+     declares no SPACE. A species is a thing ON the stage with a kind, a target and an idle; a transition is a LAW
+     ABOUT TIME AT A BOUNDARY that every layer obeys at once (E47 s1: "the veil sits above every layer, so the docks,
+     the stage captions and the species ride the ramp down with the world"). The engine's render loop calls these by
+     name, the way it calls verdict.mjs's, record.mjs's and spiral.mjs's painters - no registry.
+
+     ------------------------------------------------------------------------------------------------------------
+     THE DECISION (R26-100 proposed ONE `transitions` module for dip + blur-zoom + wipe + dissolve + suck + slide;
+     this module makes it, on what the code SHARES and not on tidiness). There are two clocks in the engine's
+     boundary block, not one, and they are the seam the grouping runs along:
+
+       THE STRADDLE CLOCK - the transition owns half of the OUTGOING scene and half of the INCOMING one, so a scene
+       must read its OWN exit for the half after its start and the NEXT scene's exit for the half before its end
+       (E47: `exit` names the transition INTO the scene it sits on). Exactly two transitions ride it - the DIP and
+       the BLUR-ZOOM - and they ride it through the same four lines. `straddleSecs` below IS those four lines, and
+       both call it: that is one piece of code genuinely shared, and it lives here.
+
+       THE ARRIVAL CLOCK - the transition arrives ON THE CUT and runs off the incoming scene's start alone:
+       `clamp01((t - sc.span[0]) / S)`. The suck, the melt, the dissolve, the slide and the wipe all ride that, and
+       what they share is `clamp01` and a division - the engine's own clamp, not a clock worth a module. They stay
+       INLINE this slice (named, so the next reader knows this was decided and not missed):
+         wipe      a clip-path front plus the seam element, rewritten on wA/wB every frame (doc 29 s9.15 ruling 1)
+         dissolve  one opacity on wB (DISSOLVE_S)
+         suck      a transform-origin, a spin and a scale on the OUTGOING world (SUCK_S / SUCK_TURN)
+         slide     two clipped translates, one per world, in whole pixels (E87 s3 / R26-75; T13's own promotion)
+         melt      already a module of its own - species/melt.mjs owns every number and every pixel
+       Each of those is a PAINT on a world with its own dials and its own DOM surface; they have no line in common
+       with each other beyond the clamp. Folding five painters into one file to make a tidy heading would produce a
+       module that is five modules in a trench coat, and sync_kinetics.py's one-region-per-module rule would then
+       make every future change to any one of them a change to the file all five live in.
+
+       THE DIP'S RAMP lifts with the clock because it is the clock's only pure consumer: `dipAlpha` is a function of
+       t and the two half-windows, and nothing else. The BLUR-ZOOM's paint stays inline: its state is a CSS scale on
+       wB plus a backdrop-filter radius on the veil, its dials (BLURZOOM_S / _SCALE / _BLUR / _IN) are the engine's
+       declared E47 block that `build_animation_registry.py` and `test_page_performs.py` read out of the engine's
+       text, and it needs minJerk - so lifting it would move four dials for no shared line. It calls `straddleSecs`
+       from here, which is the whole of what it shares.
+
+     DIP_S ITSELF STAYS IN THE ENGINE, beside its derivation comment ([DERIVED: the reference, 14 frames at 30 fps,
+     all 35 of its dips]) and beside the blur-zoom dials it was measured with. It is not this module's to move:
+     `build_animation_registry.py:76` scrapes it from the engine's text, `test_page_performs.py:653` asserts on
+     `DIP_S = <n>` there, and `gate_motion_density.py:348` carries its twin. The length is the CALLER's; the ramp
+     and the clock are this module's. No value changed anywhere in the lift.
+     ------------------------------------------------------------------------------------------------------------
+
+     WHEN (CAPABILITIES.md, verbatim): "a dip when the WORLD actually changes at the boundary, a cut otherwise" -
+     the dip between ideas (E61's reset), the blur-zoom into the next.
+
+     THE LAW - THE DIP (E47 s1, operator 2026-09-06): "a plain LINEAR ramp to black over the last DIP_S/2 of the
+     outgoing scene and back over the first DIP_S/2 of the incoming one. Both halves reach 1 at the boundary, so the
+     boundary frame IS black and the cut happens inside it." LINEAR is the ruling and not a default: the reference's
+     dip is linear to the frame (doc 46 s46.5, all 35 measured). No ease is applied here and none may be added
+     without a ruling - `golden dip-boundary` (the black boundary frame) and `dip-boundary@proof-ramp` (the ramp at
+     14.88 s, dipA 0.4894) are what would move. */
+
+  const DIP = Object.freeze({
+    HALVES: 2,       /* the transition straddles the boundary: half its seconds in each scene, so each half's window is secs / this */
+    OPACITY_DP: 4,   /* the veil's opacity as a string, to this many digits - an explicit numeric per frame, so a cold seek lands where a play does */
+  });
+
+  /* THE EXIT GRAMMAR. `dip`, `dip:<s>`, `blurzoom`, `blurzoom:<s>`, `suck:<x>,<y>`, `slide:<dir>[:<s>]`, `melt[:...]`,
+     `cut`, `wipe`, `wipe_right`, `dissolve` - the name, and the seconds when the row declares them. Every transition
+     in the engine reads its row through these two, which is why they sit with the clock rather than with any one of
+     them. A form the player cannot read is the caller's to treat as a cut; the compiler is where an authored exit is
+     refused (build_scene_timeline_f.parse_exit). */
   const exitName = (e) => (typeof e === "string" ? e.split(":")[0] : "");
   const exitSecs = (e, dflt) => {
     const v = parseFloat(typeof e === "string" ? (e.split(":")[1] || "") : "");
     return v > 0 ? v : dflt;
   };
+
+  /* THE STRADDLE CLOCK. How many seconds of `name`'s transition this side of the boundary owns, or 0 when this side
+     has no neighbour or the row names another transition. `has` is the neighbouring scene (prev for the half after
+     this scene's start, nxt for the half before its end) and `exit` is the row that NAMES the transition - always
+     the incoming scene's, since `exit` names the transition INTO the scene it sits on (E47). A missing neighbour
+     gives 0, which is how the first and last scenes of a timeline take no half. */
+  const straddleSecs = (has, exit, name, dflt) => (has && exitName(exit) === name ? exitSecs(exit, dflt) : 0);
+
+  /* the engine's clamp01, verbatim - so the module stands alone under `node --test` */
+  const tr01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* THE DIP'S RAMP at t: 0 outside the transition, 1 on the boundary frame. LINEAR in t on both sides (E47 s1) and
+     a pure function of t, the two half-windows and the two scene edges - no wall clock, no rAF state, so a cold seek
+     into the dip lands exactly where a play does. Math.max, not a sum: a scene may own an outgoing half and an
+     incoming one at once (a one-scene-long dip in and out), and the deeper black wins. */
+  const dipAlpha = (t, sceneStart, nextStart, dipIn, dipOut, D = DIP) => {
+    let dipA = 0;
+    if (dipOut) dipA = Math.max(dipA, 1 - tr01((nextStart - t) / (dipOut / D.HALVES)));
+    if (dipIn)  dipA = Math.max(dipA, 1 - tr01((t - sceneStart) / (dipIn / D.HALVES)));
+    return dipA;
+  };
+
+  /* the veil's opacity as the painter sets it (the element is the caller's: #dipveil sits above every layer, so the
+     docks, the stage captions and the species ride the ramp down with the world and rise with the next one) */
+  const dipVeilOpacity = (dipA, D = DIP) => dipA.toFixed(D.OPACITY_DP);
+  /* KINETICS:END */
   /* remotion-ui directional-wipe port (2026-08-30): FEATHER is the soft
      edge as a share of the frame (their edgeSoftness); DEPTH is the
      parallax the pages carry under the wipe. The mask edge travels from
@@ -4495,27 +4592,96 @@ async function mount(doc) {
       b.note.setAttribute("opacity", clamp01((bp - 0.9) / 0.1).toFixed(2));
     }
   };
-  const drawRecord = (slot, t) => {
-    const st = recState[slot]; if (!st) return;
-    const { r, q } = st, W = r.words;
+  /* KINETICS:BEGIN record */
+  /* species/record.mjs - THE RECORD DOCUMENT (P57 T21 / R26-99; doc 29's record species; CAPABILITIES
+     "Record-document species"; the extraction of the scene-evidence player's `drawRecord`). SOURCE OF TRUTH,
+     inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN record and KINETICS:END.
+     It imports nothing, so its place in the region order is only a place.
+
+     A DOCK PAYLOAD, not a species kind - so it follows verdict.mjs's precedent exactly: this module registers NO
+     painter. The engine's dock slot keeps the two lines that are the ENGINE's (the slot's `recState` lookup) and
+     calls paintRecord BY NAME. P55 T7's decision stands unchanged and unbuilt: a DOCK_PAINTERS registry waits for
+     a third dock painter - recorded, not built. Promoted from inline engine code with every golden byte-identical
+     (`record-typewriter`, `record-typewriter@proof-attr`): each literal below is the value the inline code
+     carried, to the digit, and no expression was re-associated.
+
+     WHEN (`dock_payload:record`, CAPABILITIES.md:19, verbatim): "the sentence QUOTES someone's claim and the
+     words themselves are the proof - the record types the line and the highlighter lands on the phrase as it is
+     said".
+
+     THE LAW - THE STROKE IS THE NARRATOR'S. The type clock is not a constant characters-per-second: every word
+     appears on ITS OWN ONSET from the take's word timings (`record.words` [[word, t]], the same sidecar the
+     captions read), and the word being spoken is cut over 0.72 of its own gap to the next onset, so a fast word
+     types fast and a held word lingers. Three things the inline code decided and this module keeps:
+       the CUT      the growing word is STRING-SLICED (`w.slice(0, round(len * p))`), never per-character opacity
+                    or per-character nodes - a glyph is either typed or not, and no half-drawn glyph ever renders.
+       the MARKER   the pulled phrase (`hl`, inclusive at both ends) is one `.hw` span per word whose
+                    background-size sweeps 0 -> 100 % over SWEEP_S on a cubic-out from THAT word's onset, so the
+                    highlighter lands on the phrase exactly as it is said.
+       the SPACE    the space after the phrase's last word is a text node OUTSIDE the stroke (Tokyo 2026-09-10,
+                    "yen($65 billion)" - inside it, the marker ran on past the quotation into the next word).
+     The landing is the document's own: the attribution at end + ATTR_AFTER, the source line at end + SRC_AFTER -
+     the paper says who said it only once the line has been said. Everything below is a pure function of t
+     (scrub-safe: nothing is stored between frames, the whole quotation is rebuilt each frame from the onsets).
+     The dials are ours to tune (42 s42.5), not findings. */
+
+  const RECORD = Object.freeze({
+    TYPE_FRAC: 0.72,    /* a word types over this fraction of its own gap to the NEXT onset [the engine's `* 0.72`] */
+    SPAN_MIN: 0.08,     /* ... floored here, in seconds, so two onsets a frame apart still show a stroke */
+    SWEEP_S: 0.2,       /* the marker's sweep across one highlighted word, in seconds (cubic-out) */
+    ATTR_AFTER: 0.15,   /* the attribution appears this long after the quotation's `end` ... */
+    SRC_AFTER: 0.45,    /* ... and the source line this long after it */
+    HL_CLASS: "hw",     /* the marker span's class (the template's `.paper .hw` gradient) */
+    CUR_CLASS: "pcur",  /* the block cursor's class, appended after the last typed word */
+  });
+
+  /* HOW MANY WORDS HAVE BEEN SPOKEN at t: the index of the last word whose onset has passed, -1 before the first.
+     The onsets are the narrator's, so this is the whole clock - there is no characters/s anywhere in the file. */
+  const recordTyped = (words, t) => {
     let i = -1;
-    while (i + 1 < W.length && W[i + 1][1] <= t) i++;
+    while (i + 1 < words.length && words[i + 1][1] <= t) i++;
+    return i;
+  };
+
+  /* THE SPAN one word types over: 0.72 of its own gap to the next onset (the last word's gap is to `end`),
+     floored at SPAN_MIN so a word crushed against the next still has a stroke rather than a jump. */
+  const recordSpan = (ts, next, R = RECORD) => Math.max(R.SPAN_MIN, (next - ts) * R.TYPE_FRAC);
+
+  /* THE TYPE CLOCK of the word being spoken, 0 at its onset and 1 by onset + span, clamped at both ends. */
+  const recordTypeClock = (t, ts, next, R = RECORD) =>
+    Math.max(0, Math.min(1, (t - ts) / recordSpan(ts, next, R)));
+
+  /* HOW MANY CHARACTERS of that word stand at p - the string cut, rounded to a whole glyph. */
+  const recordCut = (w, p) => Math.round(w.length * p);
+
+  /* THE MARKER'S WINDOW on a highlighted word: 0 at its onset, 1 by onset + SWEEP_S, on a cubic-out - the value
+     the painter writes as the `.hw` span's background-size percentage. */
+  const recordSweep = (t, ts, R = RECORD) => {
+    const swept = Math.max(0, Math.min(1, (t - ts) / R.SWEEP_S));
+    return 1 - Math.pow(1 - swept, 3);
+  };
+
+  /* THE LANDING: which of the paper's two feet are shown at t, from the quotation's own `end`. */
+  const recordLanded = (t, end, R = RECORD) =>
+    ({ attr: t > end + R.ATTR_AFTER, src: t > end + R.SRC_AFTER });
+
+  /* THE PAINTER. `st` is the engine's record state for the slot ({r, q, attr, src} - the payload and the three
+     elements fillDock mounted); the engine's dock slot looks that up and calls this by name. */
+  function paintRecord(st, t, R = RECORD) {
+    const { r, q } = st, W = r.words;
+    const i = recordTyped(W, t);
     const frag = document.createDocumentFragment();
     for (let k = 0; k <= i; k++) {
       const [w, ts] = W[k];
       const next = W[k + 1] ? W[k + 1][1] : r.end;
       let txt = w;
-      if (k === i) {          // string slicing, never per-character opacity
-        const span = Math.max(0.08, (next - ts) * 0.72);
-        const p = Math.max(0, Math.min(1, (t - ts) / span));
-        txt = w.slice(0, Math.round(w.length * p));
-      }
+      if (k === i)            // string slicing, never per-character opacity
+        txt = w.slice(0, recordCut(w, recordTypeClock(t, ts, next, R)));
       if (k >= r.hl[0] && k <= r.hl[1]) {
         const sp = document.createElement("span");
-        sp.className = "hw";
+        sp.className = R.HL_CLASS;
         sp.textContent = (k < i && k < r.hl[1]) ? txt + " " : txt;
-        const swept = Math.max(0, Math.min(1, (t - ts) / 0.2));
-        sp.style.backgroundSize = ((1 - Math.pow(1 - swept, 3)) * 100) + "% 100%";
+        sp.style.backgroundSize = (recordSweep(t, ts, R) * 100) + "% 100%";
         frag.append(sp);
         if (k === r.hl[1] && k < i) frag.append(document.createTextNode(" "));   /* the space after the phrase, outside the stroke (Tokyo 2026-09-10: "yen($65 billion)") */
       } else {
@@ -4524,10 +4690,19 @@ async function mount(doc) {
       }
     }
     const cur = document.createElement("span");
-    cur.className = "pcur"; frag.append(cur);
+    cur.className = R.CUR_CLASS; frag.append(cur);
     q.replaceChildren(frag);
-    st.attr.classList.toggle("shown", t > r.end + 0.15);
-    st.src.classList.toggle("shown", t > r.end + 0.45);
+    const landed = recordLanded(t, r.end, R);
+    st.attr.classList.toggle("shown", landed.attr);
+    st.src.classList.toggle("shown", landed.src);
+  }
+  /* KINETICS:END */
+  /* THE RECORD DOCUMENT's dock slot (species/record.mjs, P57 T21): the state is the ENGINE's - `recState[slot]`
+     is what fillDock mounted - and the painting is the module's. A dock payload registers no painter, so the slot
+     calls it by name, exactly as `drawStack` calls paintVerdict (P55 T7: DOCK_PAINTERS is recorded, not built). */
+  const drawRecord = (slot, t) => {
+    const st = recState[slot]; if (!st) return;
+    paintRecord(st, t);
   };
   /* ================= LEDGER PAGE species (doc 29 s9.26 / P35 T3) =================
      Four beats, all from t (seconds since the scene opened):
@@ -6152,27 +6327,97 @@ async function mount(doc) {
     if (S.ptext) S.ptext.setAttribute("opacity", clamp01((k - 0.35) / 0.3).toFixed(2));
     if (S.psub) S.psub.setAttribute("opacity", clamp01((k - 0.6) / 0.3).toFixed(2));
   };
-  /* RETRACT as a VORTEX (operator, 2026-09-05: "a true spiral of everything getting sucked back into the cream as if a
-     vortex / whirlpool"): every colour on the page is a PARTICLE - each ink glyph, each bar, value, tick and label, each
-     pill, each point of the series line - with a home position and a distance r from the drain (the board centre).
-     The map is analytic in u (FINDING-the-animation-math s3: a seek renderer may only use closed forms):
-       the drain takes the centre first     ui  = clamp((u - LAG*rn) / (1 - LAG)),  rn = r / Rmax
-       the radius falls slowly, then fast   r'  = r * (1 - ui^1.7)
-       differential rotation (the whirl)    th  = TURNS * 2pi * ui * (0.6 + 0.9 * (1 - rn))   - the centre spins faster
-       stretch along the flow, area kept    diag(1+a, 1/(1+a)) about the tangent (s4), a = ALPHA * 4ui(1-ui)
-       the particle shrinks                 s   = (1 - ui)^0.7
-     The series line is re-drawn from its mapped points, so it curls into the drain like a noodle. Phase two: the crisp
-     charcoal fades and the STAINS it settled over are sucked down the same drain. A page declared enter:"spiral"
-     ARRIVES by the same map run backwards (E25: a returning chart is not drawn like new); exit:"cut" skips the retract
-     (a punch that must land on the last line, E40 #5: no species over a spiral out). Idle frames touch nothing. */
   const LP_STATE_MAX = 3;   /* P48: charts on one page. A fourth is a new page or a card - the player's size and the reader's memory both say so */
   const LP_MOUNT_RISE = 28;   /* px a mounting page rises while it dissolves in (enter=mount) */
-  const LP_RETRACT = { COLOURS: 1.0, CHARCOAL: 1.0, IN: 1.6, TURNS: 3.0, LAG: 0.25, ALPHA: 0.85, RECT_FADE: 0.3 };   /* operator: "a way tighter vortex, almost celestial" - three turns, the core spinning four times the rim */
+  /* KINETICS:BEGIN spiral */
+  /* species/spiral.mjs - THE PAGE VORTEX (P57 T22 / R26-101; doc 29 s9.31 "The page VORTEX - how a page leaves,
+     and how it returns"; CAPABILITIES.md "The page VORTEX"). SOURCE OF TRUTH, inlined into the scene-evidence
+     player by sync_kinetics.py between KINETICS:BEGIN spiral and KINETICS:END, AFTER squash - the one thing it
+     imports is that module's `scaleBy`, which is the engine's own.
+
+     NEITHER a species kind NOR a dock payload: a PAGE TRANSITION. So it registers no painter and declares no
+     SPACE - it follows verdict.mjs's and record.mjs's precedent, where the engine's own slot calls the painter BY
+     NAME (`lpSpiral(st, scene, t, pg)`, the last act of paintLedger's frame). Promoted from inline engine code
+     with every golden byte-identical (`spiral-return`, `spiral-return@proof-retract`, `spiral-return@proof-fade`):
+     each literal below is the value the inline code carried, to the digit, and no expression was re-associated.
+
+     THE GROUPING DECISION (R26-101 proposed one module for both directions; this module makes it): ONE module
+     holds the page's spiral IN and the vortex RETRACT, and both cards - `page_enter:spiral` and
+     `page_exit:retract` - point at this file. Not because the two resemble each other, but because on disk they
+     are not two things at all: `lpSpiral` is ONE function with ONE map (`lpVortex`) driven by ONE pair of clocks
+     (`spiralClocks`), and the only difference between leaving and coming back is which clock wins the Math.max on
+     uc and uf. Splitting the file would mean copying the map, the particles and the painter into both halves and
+     keeping them in step by hand - the exact drift sync_kinetics.py exists to refuse.
+
+     WHEN (CAPABILITIES.md "The page VORTEX", verbatim): "the page's argument is over and the next thing is a
+     different page or a plate - it leaves by the vortex; the same data in another form is E58's verb, never a
+     vortex".
+
+     THE LAW - RETRACT AS A VORTEX (operator, 2026-09-05: "a true spiral of everything getting sucked back into
+     the cream as if a vortex / whirlpool"; "a way tighter vortex, almost celestial" - three turns, the core
+     spinning four times the rim): every colour on the page is a PARTICLE - each ink glyph, each bar, value, tick
+     and label, each pill, each point of the series line - with a home position and a distance r from the drain
+     (the board centre). The map is analytic in u (FINDING-the-animation-math s3: a seek renderer may only use
+     closed forms):
+       the drain takes the centre first     ui  = clamp((u - LAG*rn) / (1 - LAG)),  rn = r / Rmax
+       the radius falls slowly, then fast   r'  = r * (1 - ui^R_FALL)
+       differential rotation (the whirl)    th  = TURNS * 2pi * ui * (CORE_BASE + CORE_GAIN * (1 - rn)^CORE_FALL)
+       stretch along the flow, area kept    diag(1+a, 1/(1+a)) about the tangent (s4), a = ALPHA * 4ui(1-ui)
+       the particle shrinks                 s   = (1 - ui)^SHRINK
+     The series line is re-drawn from its mapped points, so it curls into the drain like a noodle. Phase two: the
+     crisp charcoal fades and the STAINS it settled over are sucked down the same drain. A page declared
+     enter:"spiral" ARRIVES by the same map run backwards (E25: a returning chart is not drawn like new);
+     exit:"cut" skips the retract (a punch that must land on the last line, E40 #5: no species over a spiral out).
+     Idle frames touch nothing - the early-out reads no layout, because reading it re-snaps text a sub-pixel on the
+     punched page and every golden would move. The dials are the operator's and ours (42 s42.5), not findings. */
+
+  const LP_RETRACT = Object.freeze({
+    COLOURS: 1.0,       /* phase one, in seconds: the colours down the drain at the scene's end */
+    CHARCOAL: 1.0,      /* phase two: the crisp charcoal fades to the stains, and the stains follow them down */
+    IN: 1.6,            /* the RETURN: the same map run backwards over this long at the scene's start */
+    TURNS: 3.0,         /* how many turns the rim makes - "a way tighter vortex, almost celestial" (operator) */
+    LAG: 0.25,          /* the drain takes the centre first: a particle at the rim waits this share of u */
+    ALPHA: 0.85,        /* the area-preserving stretch along the flow, at its peak (u = 0.5) */
+    RECT_FADE: 0.3,     /* phase two: the share of uf the charcoal's own fade takes */
+    R_FALL: 1.7,        /* the radius falls slowly then fast: r * (1 - ui^this) [the engine's `Math.pow(ui, 1.7)`] */
+    CORE_BASE: 0.4,     /* the rim's share of the whirl ... */
+    CORE_GAIN: 1.6,     /* ... and what the core adds on top of it (the core spins ~4x the rim: spiral arms, not a wheel) */
+    CORE_FALL: 1.5,     /* how sharply that gain falls off with the normalised radius: (1 - rn)^this */
+    SHRINK: 0.7,        /* the particle shrinks as (1 - ui)^this */
+    IN_FIELD: 0.55,     /* the RETURN's phases: the stains surface over the first this much of the return ... */
+    IN_COLOUR_AT: 0.4,  /* ... and the colours unwind from here ... */
+    IN_COLOUR_S: 0.6,   /* ... over this much of it [the engine's `(ui - 0.4) / 0.6`] */
+    LINE_W: 8,          /* the series line thins as it curls in: this many px at rest ... */
+    LINE_RATE: 1.15,    /* ... reaching nothing at uc = 1/this ... */
+    LINE_FALL: 0.7,     /* ... on this power ... */
+    LINE_MIN: 0.5,      /* ... over a floor of this many px, so the noodle never vanishes before its home does */
+  });
+
+  /* the engine's clamp01, verbatim - so the module stands alone under `node --test` */
+  const sp01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* THE TWO CLOCKS, and the whole of the grouping decision in six lines: how far the colours (uc) and the field
+     (uf) are down the drain at t. The RETRACT runs off the scene's END (its last COLOURS + CHARCOAL, skipped by
+     exit "cut"); the RETURN runs off its START, backwards, and wins by Math.max - the field surfaces first, the
+     colours follow. A page that does both in one scene is a page that leaves the way it came. */
+  const spiralClocks = (t, a, z, exit, enter, R = LP_RETRACT) => {
+    let uc = 0, uf = 0;
+    const to = t - (z - R.COLOURS - R.CHARCOAL);
+    if (exit !== "cut" && to > 0) { uc = sp01(to / R.COLOURS); uf = sp01((to - R.COLOURS) / R.CHARCOAL); }
+    if (enter === "spiral") {   /* the field surfaces first, the colours follow */
+      const ui = sp01((t - a) / R.IN);
+      uf = Math.max(uf, 1 - sp01(ui / R.IN_FIELD)); uc = Math.max(uc, 1 - sp01((ui - R.IN_COLOUR_AT) / R.IN_COLOUR_S));   /* the stains surface over the first 0.9 s, the colours unwind over the last 1 s */
+    }
+    return { uc, uf };
+  };
+
+  /* THE MAP: one particle's home (x, y) to where it stands at u, about the drain c with the space's own Rmax.
+     Pure, closed-form and the only geometry in the file - both directions are this function under two clocks. */
   const lpVortex = (x, y, c, Rmax, u) => {
     const dx = x - c.x, dy = y - c.y, r = Math.hypot(dx, dy) || 1e-6, phi = Math.atan2(dy, dx), rn = Math.min(1, r / Rmax);
-    const ui = clamp01((u - LP_RETRACT.LAG * rn) / (1 - LP_RETRACT.LAG));
-    const rr = r * (1 - Math.pow(ui, 1.7)), th = LP_RETRACT.TURNS * 2 * Math.PI * ui * (0.4 + 1.6 * Math.pow(1 - rn, 1.5));   /* the core spins ~4x the rim: spiral arms, not a wheel */
-    const a = LP_RETRACT.ALPHA * 4 * ui * (1 - ui), s = Math.pow(1 - ui, 0.7);
+    const ui = sp01((u - LP_RETRACT.LAG * rn) / (1 - LP_RETRACT.LAG));
+    const rr = r * (1 - Math.pow(ui, LP_RETRACT.R_FALL)), th = LP_RETRACT.TURNS * 2 * Math.PI * ui * (LP_RETRACT.CORE_BASE + LP_RETRACT.CORE_GAIN * Math.pow(1 - rn, LP_RETRACT.CORE_FALL));   /* the core spins ~4x the rim: spiral arms, not a wheel */
+    const a = LP_RETRACT.ALPHA * 4 * ui * (1 - ui), s = Math.pow(1 - ui, LP_RETRACT.SHRINK);
     const ang = phi + th;
     const q = scaleBy(s, a);   /* the area-preserving stretch along the tangent (42 s42.3 helper, P43 T4) */
     return { x: c.x + rr * Math.cos(ang), y: c.y + rr * Math.sin(ang), th: th * 180 / Math.PI, tan: ang * 180 / Math.PI + 90, sx: q.sx, sy: q.sy, ui };
@@ -6211,15 +6456,15 @@ async function mount(doc) {
     const Rpage = Math.hypot(page.offsetWidth, page.offsetHeight) / 2;
     return { glyphs, pills, svg, c, cChart, cField, Rpage, Rchart: Rpage / k, Rfield: Math.hypot(fvb.width, fvb.height) / 2 };
   };
+  /* THE NOODLE'S WIDTH at uc, as the style string the painter sets (the "px" is the painter's): the series line
+     thins from LINE_W to LINE_MIN as it curls into the drain, reaching the floor at uc = 1 / LINE_RATE. */
+  const spiralLineWidth = (uc, R = LP_RETRACT) =>
+    (R.LINE_W * Math.pow(1 - Math.min(1, uc * R.LINE_RATE), R.LINE_FALL) + R.LINE_MIN).toFixed(2);
+
+  /* THE PAINTER, called by name from the engine's ledger slot (no registry - verdict.mjs's precedent). */
   const lpSpiral = (st, scene, t, pg) => {
     const a = scene.span ? scene.span[0] : 0, z = scene.span ? scene.span[1] : Infinity;
-    let uc = 0, uf = 0;   /* how far the colours, the field, are down the drain */
-    const to = t - (z - LP_RETRACT.COLOURS - LP_RETRACT.CHARCOAL);
-    if (pg.exit !== "cut" && to > 0) { uc = clamp01(to / LP_RETRACT.COLOURS); uf = clamp01((to - LP_RETRACT.COLOURS) / LP_RETRACT.CHARCOAL); }
-    if (pg.enter === "spiral") {   /* the field surfaces first, the colours follow */
-      const ui = clamp01((t - a) / LP_RETRACT.IN);
-      uf = Math.max(uf, 1 - clamp01(ui / 0.55)); uc = Math.max(uc, 1 - clamp01((ui - 0.4) / 0.6));   /* the stains surface over the first 0.9 s, the colours unwind over the last 1 s */
-    }
+    const { uc, uf } = spiralClocks(t, a, z, pg.exit, pg.enter);   /* how far the colours, the field, are down the drain */
     const on = uc > 0 || uf > 0;
     const S = (st.states && st.states[st.active | 0]) || st;   /* the chart the drain takes: the active state's */
     if (!on && !S.spiralOn) return;   /* idle: touch no style, read no layout (either re-snaps text a sub-pixel on the punched page) */
@@ -6238,18 +6483,19 @@ async function mount(doc) {
       if (!pts) return;
       if (uc > 0) {
         const d = pts.map(([x, y], k) => { const v = lpVortex(x, y, P.cChart, P.Rchart, uc); return (k ? "L" : "M") + v.x.toFixed(1) + " " + v.y.toFixed(1); }).join(" ");
-        pp.p.setAttribute("d", d); pp.p.setAttribute("stroke-dashoffset", 0); pp.p.style.strokeWidth = (8 * Math.pow(1 - Math.min(1, uc * 1.15), 0.7) + 0.5).toFixed(2) + "px"; pp.tip.style.display = "none";
+        pp.p.setAttribute("d", d); pp.p.setAttribute("stroke-dashoffset", 0); pp.p.style.strokeWidth = spiralLineWidth(uc) + "px"; pp.tip.style.display = "none";
       } else { pp.p.setAttribute("d", pts.map(([x, y], k) => (k ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ")); pp.p.style.strokeWidth = ""; pp.tip.style.display = ""; }
     });
     /* phase two: the crisp charcoal fades to the stains beneath, and the stains go down the drain */
-    st.rect.style.opacity = uf > 0 ? (1 - clamp01(uf / LP_RETRACT.RECT_FADE)).toFixed(3) : "";
-    if (st.fieldPlate) st.fieldPlate.style.opacity = uf > 0 ? (1 - clamp01(uf / LP_RETRACT.RECT_FADE)).toFixed(3) : st.fieldPlate.style.opacity;
+    st.rect.style.opacity = uf > 0 ? (1 - sp01(uf / LP_RETRACT.RECT_FADE)).toFixed(3) : "";
+    if (st.fieldPlate) st.fieldPlate.style.opacity = uf > 0 ? (1 - sp01(uf / LP_RETRACT.RECT_FADE)).toFixed(3) : st.fieldPlate.style.opacity;
     for (const bl of st.blobs) {
       if (uf > 0) { const v = lpVortex(bl.cx, bl.cy, P.cField, P.Rfield, uf); bl.c.setAttribute("transform", "translate(" + v.x.toFixed(1) + " " + v.y.toFixed(1) + ") rotate(" + v.th.toFixed(1) + ") scale(" + (bl.R * v.sx).toFixed(2) + " " + (bl.R * v.sy).toFixed(2) + ")"); }
       /* else: the soak beat has already painted the blob's home transform this frame */
     }
     for (const sk of st.strokes || []) sk.p.style.opacity = uf > 0 ? (1 - uf).toFixed(3) : "";
   };
+  /* KINETICS:END */
   /* ================= BUILD-ON (P47 T2; operator 2026-09-06: "we're being a bit too lazy with the world plates ... perform some
      transformations on the chart"; SHOT-TABLE-V3-PROPOSAL part B). The page performs on a WORD: three PAGE species authored in the
      scene's species list, painted here on the page's own surfaces (never in the overlay), every one a pure function of t.
@@ -6268,14 +6514,9 @@ async function mount(doc) {
   const PS = { SPREAD_A: 0.30, SPREAD_BLEED: 0.55,   /* the fifth watch: the gap between two lines, bled full of ink - the alpha it lands at, and the share of the word the bleed takes to cross */
                ERASE_S: 0.4, BRACKET_DRAW: 0.5, BRACKET_TICK: 0.15, BRACKET_LABEL: 0.55, BRACKET_GAP: 34, BRACKET_TICK_W: 14,
                BRACKET_BAR_W: 26,   /* P50 T9: `form: "bar"` - the SAME span, drawn as a bar in the accent instead of a hairline (Bravos shot 36: the drop of one tier). The law is the bracket's: the bar grows from the first datum's level to the second as the span draws, so a fall goes DOWN (E28) */
-               BRACKET_ROOM: 200, RELIGHT_COL: "#F5B72E",
-               /* R26-71: a FIGURE's number may not be written across the stroke of its OWN series (the bridge
-                  short printed `31% of GDP` straight through the debt line it named). The box steps off the ink:
-                  FIGURE_STEP is one quantum as a share of the figure's size, FIGURE_STEPS the cap either side,
-                  FIGURE_PAD the daylight kept from the stroke (half the widest series line, and a hair),
-                  FIGURE_UP / FIGURE_DOWN the glyph box either side of the baseline (measured on the hand at 40:
-                  1.075 up, 0.525 down), FIGURE_CHAR_W the advance per character when nothing can measure the text. */
-               FIGURE_STEP: 0.6, FIGURE_STEPS: 4, FIGURE_PAD: 5, FIGURE_UP: 1.08, FIGURE_DOWN: 0.53, FIGURE_CHAR_W: 0.62 };
+               BRACKET_ROOM: 200, RELIGHT_COL: "#F5B72E" };
+  /* P57 T20 / R26-98: R26-71's FIGURE_* dials left with their painter - they are the FIGURE object's, frozen,
+     in species/figure.mjs (the region below), and every one carries the value it carried here, to the digit. */
   const PS_PAL = { ...LP_INK, neg: "var(--lp-neg)", pos: "var(--lp-pos)" };   /* E67: a species keyed to a series is the SAME ink as the series */
   const pageSpecies = (scene, kind) => (scene.species || []).filter((sp) => sp && sp.kind === kind).sort((a, b) => a.at - b.at);
   const polyLenTo = (pts, i) => { let L = 0; for (let k = 1; k <= i && k < pts.length; k++) L += Math.hypot(pts[k][0] - pts[k - 1][0], pts[k][1] - pts[k - 1][1]); return L; };
@@ -6287,6 +6528,72 @@ async function mount(doc) {
     return tot > 0 ? polyLenTo(pts, i) / tot : 1;
   };
   const segEase = (u) => (kin("min_jerk") ? minJerk(u) : expoOut(clamp01(u)));
+  /* KINETICS:BEGIN figure */
+  /* SPACE: page */
+  /* species/figure.mjs - THE FIGURE (P57 T20 / R26-98). SOURCE OF TRUTH, inlined into the scene-evidence player
+     by sync_kinetics.py between KINETICS:BEGIN figure and KINETICS:END. It imports nothing, and its region sits
+     with the kinetics laws rather than in the species block at the foot of the file, for the reason span.mjs
+     gives: a PAGE species' math is called by the page's PERFORM layer, written hundreds of lines above the
+     species block, and a const has to exist before the function that closes over it is built.
+
+     THIS IS A PAGE PAINTER - the one way this promotion differs from T17-T19 (`trace`, `spotlight` and the
+     stage species before them). A page species is painted in a different space: inside the chart's viewBox, on
+     the page state `st`, under the active state's park transform, off the page's perform clock. So the last
+     statement registers it into PAGE_PAINTERS, never SPECIES_PAINTERS - which hands its painters the stage-px
+     overlay and the scene's clock - and the `SPACE: page` line above, the module's first line in a comment of
+     its own, is that declaration. `sync_kinetics --check` holds the module to it by name (:122).
+
+     WHEN (`SPECIES_WHEN["figure"]`, build_scene_timeline_f.py:331, verbatim): "the sentence TURNS on a number -
+     the hand writes it at its datum's spot (a note when the datum has no room)".
+
+     THE LAW - E50 (P47 T6, the chart's next thing): THE NUMBER THE SENTENCE TURNS TO, WRITTEN BY THE HAND AT
+     ITS DATUM. Not stamped, not typed: written glyph after glyph in the page's own hand, in its series' ink
+     (E67), at the place the line was - no pin dot, because the third watch found lingering dots read as strange.
+     R26-71 (2026-09-14) is the second half of the law: THE BOX STEPS OFF ITS OWN SERIES' INK. The bridge short
+     printed `31% of GDP` straight through the debt line it named; a number written across the line it names is
+     unreadable, and a figure that has to move moves in NAMED QUANTA - never a search, never a solver.
+
+     THE FORM, all of it a pure function of the datum, the live points and t:
+       the place  beside the datum: to the RIGHT when the chart has room there (`fits` - the bracket's own room
+                  test), else LEFTWARD from it, anchored `end`, which is what a peak at the right edge takes.
+                  The baseline is the datum plus BASE_DY of the figure's size, plus the authored `dy` in LINEs
+                  of that size (negative lifts it), and the sub hangs SUB_DY of its own size beneath.
+       the step   R26-71: the authored place STANDS unless the figure's box meets the stroke of its own series.
+                  Then it steps in quanta of FIGURE_STEP * fs - the side the authored `dy` already chose FIRST,
+                  then the other - capped at FIGURE_STEPS and at the chart's own box. Nowhere clear leaves the
+                  authored place (and the collision gate still says so). The advance is MEASURED off the written
+                  glyphs where they are on the page, arithmetic (FIGURE_CHAR_W) where nothing can measure.
+       the write  the figure writes glyph by glyph over the first WRITE of its word, the sub over the rest, each
+                  glyph over its share with the OVERLAP the bracket and the span use - so it reads as a hand and
+                  not as a ticker.
+       the state  P48 T7: on a page with chart STATES the figure follows the ACTIVE state's datum every frame -
+                  a datum the window dropped shows nothing - and the step-off is re-run on that state's own live
+                  points, so a cold seek lands exactly where a play does (R26-28).
+     The dials below are ours to tune (42 s42.5), not findings. Promoted from inline engine code (`paintFigure`
+     + R26-71's `segMeetsBox` / `figBox` / `figClearY` and the `PS.FIGURE_*` dials) with every golden byte-
+     identical: each literal below is the value the inline code carried, to the digit, and no expression was
+     re-associated. The six R26-71 dials KEEP their inline names inside this object, because R26-71's own test
+     (`tests/test_figure_placement.py`) reads `FIGURE_STEP:` and `FIGURE_STEPS:` off the engine's text by name -
+     a rename there would be a silent claim about a number nobody changed. */
+
+  const FIGURE = Object.freeze({
+    FIGURE_STEP: 0.6,    /* R26-71: one step off the ink, as a share of the figure's size ... */
+    FIGURE_STEPS: 4,     /* ... and the cap either side of the authored place: past this, nothing is clear */
+    FIGURE_PAD: 5,       /* the daylight kept from the stroke (half the widest series line, and a hair) */
+    FIGURE_UP: 1.08,     /* the glyph box above the baseline, in sizes (measured on the hand at 40: 1.075) ... */
+    FIGURE_DOWN: 0.53,   /* ... and below it (0.525) - the box the EYE reads, not the font's own metrics */
+    FIGURE_CHAR_W: 0.62, /* the advance per character when nothing can measure the text (no glyphs on a page yet) */
+    X_PAD: 14,           /* the daylight between the datum and the first glyph, either side */
+    BASE_DY: 0.35,       /* the baseline's own drop from the datum, in figure sizes (the type sits ON the point) */
+    LINE: 1.2,           /* one authored `dy` line, in figure sizes: `dy: -0.9` lifts it nine tenths of a line */
+    SUB_DY: 1.3,         /* the sub's baseline beneath the figure's, in SUB sizes */
+    WRITE: 0.6,          /* the share of the word the figure's own hand takes ... */
+    SUB_WRITE: 0.4,      /* ... and the share the sub takes after it (the two are the whole word) */
+    OVERLAP: 1.6,        /* each glyph fades over this many of its own shares - the hand's overlap, not a ticker's */
+  });
+
+  const fig01 = (v) => Math.min(1, Math.max(0, v));   /* the engine's clamp01, verbatim */
+
   /* R26-71: does a segment meet a box grown by `pad`? Liang-Barsky - exact, allocation-free, and asked once per
      segment of one series, so a page of figures costs the points it already holds. */
   const segMeetsBox = (p0, p1, b, pad) => {
@@ -6302,36 +6609,90 @@ async function mount(doc) {
     }
     return true;
   };
+
   /* the figure's text box for a baseline at (x, y): the advance, and the glyph box either side of the baseline
      (a sub hangs under it by its own line) - the box the eye reads, in the chart's own viewBox units */
-  const figBox = (x, y, w, fs, anchor, subH) => [anchor === "end" ? x - w : x, y - PS.FIGURE_UP * fs, w,
-                                                 (PS.FIGURE_UP + PS.FIGURE_DOWN) * fs + (subH || 0)];
+  const figBox = (x, y, w, fs, anchor, subH) => [anchor === "end" ? x - w : x, y - FIGURE.FIGURE_UP * fs, w,
+                                                        (FIGURE.FIGURE_UP + FIGURE.FIGURE_DOWN) * fs + (subH || 0)];
+
   const figWidth = (el, text, fs) => {   /* measured when the glyphs are on the page; arithmetic when nothing can measure */
     const n = el && el.getComputedTextLength ? el.getComputedTextLength() : 0;
-    return n > 0 ? n : String(text || "").length * fs * PS.FIGURE_CHAR_W;
+    return n > 0 ? n : String(text || "").length * fs * FIGURE.FIGURE_CHAR_W;
   };
+
   /* R26-71: THE STEP-OFF. The authored place stands unless the box meets the stroke of its own series; then the
-     figure steps away in quanta of PS.FIGURE_STEP * fs - the side the authored `dy` already chose FIRST, then the
-     other - capped at PS.FIGURE_STEPS and at the chart's own box. A pure function of the datum, the series' live
-     points, `dy` and the measured width: a re-read frame on a changed chart state lands identically and a cold
-     seek lands where a play does (R26-28). Nowhere clear = the authored place, and the gate still says so. */
+     figure steps away in quanta of FIGURE.FIGURE_STEP * fs - the side the authored `dy` already chose FIRST, then
+     the other - capped at FIGURE.FIGURE_STEPS and at the chart's own box. A pure function of the datum, the
+     series' live points, `dy` and the measured width: a re-read frame on a changed chart state lands identically
+     and a cold seek lands where a play does (R26-28). Nowhere clear = the authored place, and the gate still says so. */
   const figClearY = (x, yA, w, fs, anchor, dy, ptsNow, subH, H) => {
     const pts = ptsNow || [];
     if (pts.length < 2 || !(w > 0)) return yA;
     const onInk = (yy) => {
       const b = figBox(x, yy, w, fs, anchor, subH);
-      for (let i = 1; i < pts.length; i++) if (segMeetsBox(pts[i - 1], pts[i], b, PS.FIGURE_PAD)) return true;
+      for (let i = 1; i < pts.length; i++) if (segMeetsBox(pts[i - 1], pts[i], b, FIGURE.FIGURE_PAD)) return true;
       return false;
     };
     if (!onInk(yA)) return yA;   /* the authored place is only ever left for ink - never for the chart's edge */
     const inBox = (yy) => { const b = figBox(x, yy, w, fs, anchor, subH); return b[1] >= 0 && b[1] + b[3] <= (H || Infinity); };
     const first = (Number(dy) || 0) <= 0 ? -1 : 1;   /* `dy` lifted it off the datum: it keeps lifting */
-    for (const side of [first, -first]) for (let k = 1; k <= PS.FIGURE_STEPS; k++) {
-      const yy = yA + side * k * PS.FIGURE_STEP * fs;
+    for (const side of [first, -first]) for (let k = 1; k <= FIGURE.FIGURE_STEPS; k++) {
+      const yy = yA + side * k * FIGURE.FIGURE_STEP * fs;
       if (inBox(yy) && !onInk(yy)) return yy;
     }
     return yA;
   };
+
+  /* THE AUTHORED PLACE, from the datum alone: which side the number is written on (the bracket's own room test -
+     `gap` and `room` are PS.BRACKET_GAP and PS.BRACKET_ROOM, handed in so this module owns no bracket dial), and
+     the baseline before R26-71 has had its say. The BUILDER and the PAINTER both come through here, which is what
+     makes a re-read frame land on the built one to the digit. */
+  const figurePlace = (D, fs, dy, W, gap, room) => {
+    const fits = D[0] + gap + room <= W, x = fits ? D[0] + FIGURE.X_PAD : D[0] - FIGURE.X_PAD;
+    return { fits, x, anchor: fits ? "start" : "end",
+             yA: D[1] + fs * FIGURE.BASE_DY + (Number(dy) || 0) * fs * FIGURE.LINE };
+  };
+
+  /* one glyph of the FIGURE as the hand writes it: each glyph over its share of WRITE, fading over OVERLAP
+     shares, so the last glyph is still arriving as the word ends and the line never reads as a ticker */
+  const figureGlyph = (u, j, n) => {
+    const per = FIGURE.WRITE / Math.max(1, n);
+    return fig01((u - j * per) / (per * FIGURE.OVERLAP));
+  };
+
+  /* one glyph of the SUB: the same hand, over SUB_WRITE, starting where the figure's own write ended */
+  const figureSubGlyph = (u, j, n) => {
+    const per = FIGURE.SUB_WRITE / Math.max(1, n);
+    return fig01((u - FIGURE.WRITE - j * per) / (per * FIGURE.OVERLAP));
+  };
+
+  /* THE PAINTER (P47 T6; P48 T7; R26-71). `fg` is the perform layer's BUILT figure - the declaration `sp`, its
+     datum `D`, its glyphs `lg` / `sg`, the measured advance `tw`, the sizes and the chart's box - `st` the page
+     state, and `ctx` the PAGE species context the engine hands every page painter (PAGE_PAINTERS in the engine):
+     the engine's helpers arrive BY NAME - `markDatum` is lpMarkDatum, `pointsNow` lpPointsNow, `PS` the page
+     species dials the bracket owns - never as free identifiers, so `node --test` can call this with recorders
+     and no DOM. The BUILDER stays in the engine's buildPerform, where the DOM it makes belongs; it calls this
+     module's `figurePlace`, `figWidth` and `figClearY` by name, so the place is authored in one law only. */
+  const paintFigure = (fg, t, st, ctx) => {
+    const sp = fg.sp, dur = Math.max(0.001, sp.dur || 1), u = fig01((t - sp.at) / dur);
+    fg.g.setAttribute("opacity", t >= sp.at ? 1 : 0);
+    if (st && (st.states || []).length > 1) {   /* P48 T7: the figure stands at its datum on the ACTIVE state - a datum the window dropped shows nothing */
+      const D = ctx.markDatum(st, fg.si, fg.idx);
+      if (!D) { fg.g.setAttribute("opacity", 0); return; }
+      const q = figurePlace(D, fg.fs, sp.dy, fg.W, ctx.PS.BRACKET_GAP, ctx.PS.BRACKET_ROOM);
+      const y = figClearY(q.x, q.yA, fg.tw, fg.fs, q.anchor, sp.dy, ctx.pointsNow(st, fg.si).map((e) => e.p), fg.subH || 0, fg.H);   /* R26-71: the same step-off on the ACTIVE state's own points */
+      fg.label.setAttribute("x", q.x.toFixed(1)); fg.label.setAttribute("y", y.toFixed(1)); fg.label.setAttribute("text-anchor", q.anchor);
+      if (fg.sub) { fg.sub.setAttribute("x", q.x.toFixed(1)); fg.sub.setAttribute("y", (y + fg.fss * FIGURE.SUB_DY).toFixed(1)); fg.sub.setAttribute("text-anchor", q.anchor); }
+      fg.D = D; fg.x = q.x; fg.y = y; fg.fits = q.fits;   /* the record species/compare.mjs reads (PF.figures) - the same fields, in the same place */
+    }
+    fg.lg.forEach((ts, j) => ts.setAttribute("opacity", figureGlyph(u, j, fg.lg.length).toFixed(3)));
+    fg.sg.forEach((ts, j) => ts.setAttribute("opacity", figureSubGlyph(u, j, fg.sg.length).toFixed(3)));
+  };
+
+  /* THE MODULE RULE, the page half of it: the last statement registers the painter, a plain guarded assignment,
+     so inlining keeps it and node - where no registry exists - still imports the file for the math. */
+  if (typeof PAGE_PAINTERS !== "undefined") PAGE_PAINTERS.figure = paintFigure;
+  /* KINETICS:END */
   const buildPerform = (st, scene, pg) => {
     const P = !!st.portrait, fs = P ? 40 : 26, fss = P ? 32 : 20, G = st.geom || { W: 1000, H: 560 };
     /* P48 T7: on a page with chart STATES the perform layer (brackets, figures, spreads) draws on its OWN svg above every
@@ -6409,20 +6770,21 @@ async function mount(doc) {
       const i = Math.max(0, Math.min(pts.length - 1, ((sp.target || {}).index | 0))), D = pts[i];
       /* a figure is ink on the page: the chalk unless a colour is named (an emphasised page's unmuted stroke is its coral tail) */
       const col = sp.color ? (PS_PAL[sp.color] || sp.color) : "var(--lp-chalk)";
-      const fits = D[0] + PS.BRACKET_GAP + PS.BRACKET_ROOM <= G.W;
-      const x = fits ? D[0] + 14 : D[0] - 14, anchor = fits ? "start" : "end";
-      const yA = D[1] + fs * 0.35 + (Number(sp.dy) || 0) * fs * 1.2;   /* the AUTHORED place: the datum, plus `dy` lines of its own size */
+      /* the AUTHORED place, the module's own law (species/figure.mjs): beside the datum on the side with the
+         room, the baseline dropped BASE_DY and moved by `dy` lines of the figure's own size. The PAINTER reads
+         it through the same function, which is why a re-read frame lands on the built one to the digit. */
+      const { fits, x, anchor, yA } = figurePlace(D, fs, sp.dy, G.W, PS.BRACKET_GAP, PS.BRACKET_ROOM);
       const g = lpEl("g", "lp-figure", surf, { opacity: 0 });   /* no pin dot: the figure stands where the line was (the third watch: lingering dots read as strange) */
       const label = lpEl("text", "bklab", g, { x: x.toFixed(1), y: yA.toFixed(1), "text-anchor": anchor, style: "font-size:" + fs + "px;fill:" + col });
       const lg = [...String(sp.text || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
       let sub = null, sg = [];
-      if (sp.sub) { sub = lpEl("text", "bksub", g, { x: x.toFixed(1), y: (yA + fss * 1.3).toFixed(1), "text-anchor": anchor, style: "font-size:" + fss + "px;fill:" + col });
+      if (sp.sub) { sub = lpEl("text", "bksub", g, { x: x.toFixed(1), y: (yA + fss * FIGURE.SUB_DY).toFixed(1), "text-anchor": anchor, style: "font-size:" + fss + "px;fill:" + col });
         sg = [...String(sp.sub)].map((ch) => { const ts = lpEl("tspan", "", sub, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; }); }
       /* R26-71: the step-off, HERE - the glyphs exist, so the advance is the written one, and the points are the
          series' own. A figure with nothing in its way does not move by a thousandth. */
-      const subH = sp.sub ? fss * 1.3 : 0, tw = figWidth(label, sp.text, fs);
+      const subH = sp.sub ? fss * FIGURE.SUB_DY : 0, tw = figWidth(label, sp.text, fs);
       const y = figClearY(x, yA, tw, fs, anchor, sp.dy, pts, subH, G.H);
-      if (y !== yA) { label.setAttribute("y", y.toFixed(1)); if (sub) sub.setAttribute("y", (y + fss * 1.3).toFixed(1)); }
+      if (y !== yA) { label.setAttribute("y", y.toFixed(1)); if (sub) sub.setAttribute("y", (y + fss * FIGURE.SUB_DY).toFixed(1)); }
       return { sp, D, x, y, fits, g, label, lg, sub, sg, fi, fs, fss, W: G.W, H: G.H, tw, subH, si: sp.series | 0, idx: i };
     }).filter(Boolean);
     /* NOTES (the third watch: "the page has plenty of space on the side to write things"): a line of handwriting in the page's
@@ -6538,25 +6900,6 @@ async function mount(doc) {
     sd.path.setAttribute("d", d);
     sd.path.setAttribute("fill-opacity", (PS.SPREAD_A * clamp01(u / 0.35)).toFixed(3));
   };
-  /* the figure's write: the figure writes glyph by glyph over the first 0.6 of its word, the sub over the rest */
-  const paintFigure = (fg, t, st) => {
-    const sp = fg.sp, dur = Math.max(0.001, sp.dur || 1), u = clamp01((t - sp.at) / dur);
-    fg.g.setAttribute("opacity", t >= sp.at ? 1 : 0);
-    if (st && (st.states || []).length > 1) {   /* P48 T7: the figure stands at its datum on the ACTIVE state - a datum the window dropped shows nothing */
-      const D = lpMarkDatum(st, fg.si, fg.idx);
-      if (!D) { fg.g.setAttribute("opacity", 0); return; }
-      const fits = D[0] + PS.BRACKET_GAP + PS.BRACKET_ROOM <= fg.W, x = fits ? D[0] + 14 : D[0] - 14, anchor = fits ? "start" : "end";
-      const yA = D[1] + fg.fs * 0.35 + (Number(sp.dy) || 0) * fg.fs * 1.2;
-      const y = figClearY(x, yA, fg.tw, fg.fs, anchor, sp.dy, lpPointsNow(st, fg.si).map((e) => e.p), fg.subH || 0, fg.H);   /* R26-71: the same step-off on the ACTIVE state's own points */
-      fg.label.setAttribute("x", x.toFixed(1)); fg.label.setAttribute("y", y.toFixed(1)); fg.label.setAttribute("text-anchor", anchor);
-      if (fg.sub) { fg.sub.setAttribute("x", x.toFixed(1)); fg.sub.setAttribute("y", (y + fg.fss * 1.3).toFixed(1)); fg.sub.setAttribute("text-anchor", anchor); }
-      fg.D = D; fg.x = x; fg.y = y; fg.fits = fits;
-    }
-    const nl = Math.max(1, fg.lg.length), perL = 0.6 / nl, uL = u;
-    fg.lg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uL - j * perL) / (perL * 1.6)).toFixed(3)));
-    const ns = Math.max(1, fg.sg.length), perS = 0.4 / ns, uS = u - 0.6;
-    fg.sg.forEach((ts, j) => ts.setAttribute("opacity", clamp01((uS - j * perS) / (perS * 1.6)).toFixed(3)));
-  };
   const paintBracket = (b, t, ud, st) => {
     const sp = b.sp, dur = Math.max(0.001, sp.dur || 1);
     if (st && (st.states || []).length > 1) {   /* R26-28: the two anchors and the series' points, this frame, on the active state (lerped across a rescale / extend) */
@@ -6609,10 +6952,11 @@ async function mount(doc) {
     for (const sd of PF.spreads || []) paintSpread(sd, t, st);   /* the fifth watch: the gap between the lines, bled full; R26-28: on the active state */
     /* THE PAGE REGISTRY HOOK (P52 T5; R26-41) - the only page painting written in this layer. The kind comes off the
        DECLARATION, so the registry routes it; `span` (P50 T4: the named stretch of time, shaded behind the chart on the
-       live scale) is the first page species through it. NEXT, in this order: `bracket`, `figure`, `spread` - paintBracket,
-       paintFigure and paintSpread still sit above as engine code, and each moves with its builder, not before it. */
+       live scale) was the first page species through it and `figure` (P57 T20 / R26-98: E50's number, written by the hand
+       at its datum) is the second - species/figure.mjs, its BUILDER still below in buildPerform, where its DOM belongs.
+       NEXT, in this order: `bracket`, `spread` - paintBracket and paintSpread still sit above as engine code. */
     for (const sd of PF.spans || []) { const p = PAGE_PAINTERS[sd.sp.kind || "span"]; if (p) p(sd, t, st, PAGE_CTX); }
-    for (const fg of PF.figures || []) paintFigure(fg, t, st);   /* E50: the chart's next thing */
+    for (const fg of PF.figures || []) if (PAGE_PAINTERS.figure) PAGE_PAINTERS.figure(fg, t, st, PAGE_CTX);   /* E50: the chart's next thing - species/figure.mjs, named as the compare's dispatch names its own: ONE hook reads the registry by key (the span's), and it is the span's */
     /* P57 T12 / R26-70b / E76 - THE CHART_TO COMPARE, DISPATCHED: the quoted figure the page has already written becomes the
        number the viewer feels. The law, the dials and the DOM are species/compare.mjs; this is the call, and it runs AFTER the
        figures so the morph owns the glyphs its own clock is writing. */
@@ -7554,11 +7898,9 @@ async function mount(doc) {
      (build validate_species + gate M09). Plate life quantizes t to 10 fps FIRST and derives every
      pose from the step (stop-motion law). Everything from t; jitter only via lpHash. */
   const SP = { PUNCH_IN: 0.42, PUNCH_OUT: 0.5, PUNCH_SCALE: 1.14, FOCUS_SCALE: 1.32, PULL_FROM: 1.9,
-               CALLOUT_DRAW: 0.7, SQUIG_DRAW: 0.45, LIFE_FPS: 10, LIFE_LAND: 0.6, BOIL_PX: 1.2, BOIL_DEG: 0.7,
-               SPOT_DIM: 0.49,   /* operator 2026-09-03: 0.55 was 'way too dark', 0.44 too light - settled at 0.49 */
-               STEAM_PERIOD: 2.6, TRACE_PERIOD: 3.2, TRACE_DRAW: 1.1, TICK_STEP: 0.5 };   /* STILL LIFE (2026-09-05): steam, trace, ticker */
+               SQUIG_DRAW: 0.45, LIFE_FPS: 10, LIFE_LAND: 0.6, BOIL_PX: 1.2, BOIL_DEG: 0.7,
+               STEAM_PERIOD: 2.6, TICK_STEP: 0.5 };   /* STILL LIFE (2026-09-05): steam and the ticker (the trace carries its own two in species/trace.mjs, the light its dim and its portrait radius in species/spotlight.mjs) */
   const CAMERA = new Set(["punch", "focus_zoom", "pull_back"]);
-  const SPOT_R_PORTRAIT = 960;   /* PORTRAIT ? the spotlight's gradient radius keeps its landscape size (a round hole the width of the short side), userSpaceOnUse - the one landscape number kept on purpose */
   const spTop = $("species"), spUnder = $("species-under"), plife = $("plife");
   let spSvg = spTop;   /* the layer the species painter draws into - chosen per species in paintSpecies */
   const spEase = (k) => 1 - Math.pow(1 - clamp01(k), 3);
@@ -7663,14 +8005,6 @@ async function mount(doc) {
   };
   const camCss = (xf) => (xf.ax != null && (xf.ax !== xf.ox || xf.ay !== xf.oy)) ? camCssFor({ s: xf.s, look: [xf.ox, xf.oy], at: [xf.ax, xf.ay] }, STAGE_W, STAGE_H) : xf.s === 1 ? "" :
     "translate(" + (xf.ox - STAGE_W / 2).toFixed(1) + "px, " + (xf.oy - STAGE_H / 2).toFixed(1) + "px) scale(" + xf.s.toFixed(4) + ") translate(" + (STAGE_W / 2 - xf.ox).toFixed(1) + "px, " + (STAGE_H / 2 - xf.oy).toFixed(1) + "px) ";
-  /* a wobbled ellipse around a box (hw-callout-circle): seeded, drawn by dash-offset */
-  const calloutPath = (b, seed, pad) => {
-    const pd = Number.isFinite(+pad) ? +pad : 0;   /* a datum resolves to a point: `pad` is how wide the hand rings it (the fifth watch) */
-    const cx = b.x + b.w / 2, cy = b.y + b.h / 2, rx = b.w / 2 + 22 + pd, ry = b.h / 2 + 18 + pd, n = 28, pts = [];
-    for (let i = 0; i <= n; i++) { const a = -Math.PI * 0.6 + i / n * Math.PI * 2.08; const j = 1 + (lpHash(seed, i, 21) - 0.5) * 0.12;
-      pts.push([cx + Math.cos(a) * rx * j, cy + Math.sin(a) * ry * j]); }
-    return pts.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
-  };
   const squigglePath = (b, seed) => {
     if (Array.isArray(b.quad) && b.quad.length === 4) {   /* P50 T7: the phrase is on an EMBEDDED card, so the target
          carries its four PROJECTED corners - the underline rides the phrase's own bottom edge, on the surface's
@@ -9622,6 +9956,377 @@ async function mount(doc) {
      import this file for the math above without the engine's registry */
   if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.ring = paintRing;
   /* KINETICS:END */
+  /* KINETICS:BEGIN callout */
+  /* SPACE: stage */
+  /* species/callout.mjs - THE HAND'S RING ROUND A NUMBER (P57 T17 / R26-97; doc 29 s9.27 "Scribble callout",
+     the hw-callout-circle harvest; the underline form is P50 T3's one exception).
+     SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN callout
+     and KINETICS:END, AFTER press - it imports underlineFrac from it, and the import order IS the region order.
+
+     THE MODULE RULE (the operator, 2026-09-11): a species is a module here, never a branch in the engine's body.
+     The last statement registers the painter in SPECIES_PAINTERS; node, where no such registry exists, still
+     imports the file for the pure math below. Promoted from inline engine code (`paintSpecies sp.kind ===
+     "callout"` + `calloutPath`) with every golden byte-identical: each literal below is the value the inline
+     code carried, to the digit, and no expression was re-associated.
+
+     WHEN (`SPECIES_WHEN["callout"]`, build_scene_timeline_f.py:313, verbatim): "the sentence names a NUMBER or a
+     POINT on a chart to ring (E56: a ring's one use); the label is the sentence's figure".
+
+     THE LAW - E56 (the operator, 2026-09-09; docs/portable/OPERATOR-RULINGS.md): A RING CIRCLES A NUMBER OR A
+     POINT ON A CHART; a picture's focus is a LIGHT. Nothing here widens that: the USE is enforced where it always
+     was, in the compiler (`_validate_callout`, which refuses a ring on a card and a label with no digit in it).
+     The one exception is P50 T3's: an UNDERLINE under a QUOTED PHRASE on a press card, declared `form:
+     "underline"` on a `phrase` target - the squiggle law (s9.27), the same hand and the same .sq stroke, on the
+     underline's own clock (species/press.mjs underlineFrac, over the engine's SQUIG_DRAW).
+
+     THE FORM, all of it a pure function of t:
+       the circle - a WOBBLED ellipse round the resolved target: rx = w/2 + RX_PAD + pad, ry = h/2 + RY_PAD + pad,
+                    SEGMENTS chords from -START_A half-turns through SWEEP half-turns (past 2, so the hand closes
+                    over its own start), every vertex's radius jittered by JITTER off the seeded hash - never
+                    Math.random. It draws on by dash-offset over DRAW_S.
+       the label  - LABEL_AT into the draw, the sentence's figure pops from LABEL_FROM to 1 on the cubic ease over
+                    LABEL_POP_S, written LABEL_DX right of the box's right edge and LABEL_DY above its top (a pad
+                    pushes it up by PAD_DY_K of itself), scaled about its own anchor by the row's `label_scale`
+                    (opt-in, 2026-09-08: a stamp on a plate reads at phone size).
+     Nothing is stored: every visual reads from k, dur and the seed, so a scrubbed frame is the played frame. The
+     dials below are ours to tune (42 s42.5), not findings. */
+
+  const CALLOUT = Object.freeze({
+    DRAW_S: 0.7,        /* the whole ellipse's draw, in seconds [the engine's SP.CALLOUT_DRAW, verbatim] */
+    RX_PAD: 22,         /* the ellipse's half-width over the target's own box ... [calloutPath, verbatim] */
+    RY_PAD: 18,         /* ... and its half-height - the pads species/ring.mjs rings the same datum at */
+    SEGMENTS: 28,       /* the chords the ellipse is drawn as: a hand's line, not an <ellipse> */
+    START_A: 0.6,       /* the nib starts this many half-turns BEFORE 0 (the expression negates it): up and left */
+    SWEEP: 2.08,        /* ... and runs this many half-turns: past the full turn, so the ring closes over itself */
+    JITTER: 0.12,       /* each vertex's radius wobbles +/- half of this, off the seeded hash (never random) */
+    HASH_SALT: 21,      /* the salt the jitter's hash is taken with - the callout's own stream */
+    LABEL_AT: 0.8,      /* the label appears this far into DRAW_S ... */
+    LABEL_POP_S: 0.25,  /* ... and pops over this long, on the cubic ease */
+    LABEL_FROM: 0.7,    /* the pop's scale from ... */
+    LABEL_SPAN: 0.3,    /* ... and how much it adds (never a pop out of nothing) */
+    LABEL_DX: 34,       /* the label's x off the target box's RIGHT edge (the pad pushes it out too) ... */
+    LABEL_DY: -10,      /* ... and its y off the box's TOP edge: above the ring, clear of the number */
+    PAD_DY_K: 0.4,      /* ... which a pad lifts by this much of itself */
+  });
+
+  /* THE PAD the row asked the hand to ring at: a datum resolves to a POINT, and `pad` is how wide the ring is
+     drawn round it (the fifth watch). Absent or not a number: none. */
+  const calloutPad = (v) => (Number.isFinite(+v) ? +v : 0);
+
+  /* THE ELLIPSE as a path, in stage px: SEGMENTS chords round the box's centre, each vertex's radius wobbled by
+     the seeded `hash` (seed, i, HASH_SALT) -> [0, 1). `hash` is handed in - the engine's lpHash in the player,
+     a stub under node - because the jitter's only source is that one pure hash (handwriting-text rule 2). */
+  const calloutPath = (b, seed, pad, hash, C = CALLOUT) => {
+    const pd = calloutPad(pad);
+    const cx = b.x + b.w / 2, cy = b.y + b.h / 2, rx = b.w / 2 + C.RX_PAD + pd, ry = b.h / 2 + C.RY_PAD + pd, n = C.SEGMENTS, pts = [];
+    for (let i = 0; i <= n; i++) { const a = -Math.PI * C.START_A + i / n * Math.PI * C.SWEEP; const j = 1 + (hash(seed, i, C.HASH_SALT) - 0.5) * C.JITTER;
+      pts.push([cx + Math.cos(a) * rx * j, cy + Math.sin(a) * ry * j]); }
+    return pts.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
+  };
+
+  /* the draw fraction handed to drawOn: the species' elapsed time over DRAW_S (drawOn clamps and eases it). */
+  const calloutDrawF = (k, dur, C = CALLOUT) => k * dur / C.DRAW_S;
+
+  /* THE LABEL at k: where it is written, how big it is, and whether the hand has got there yet. `ls` is the
+     row's opt-in label_scale (a positive number, else 1). */
+  const calloutLabel = (b, pd, k, dur, ls, ease, C = CALLOUT) => {
+    const lx = b.x + b.w + C.LABEL_DX + pd, ly = b.y + C.LABEL_DY - pd * C.PAD_DY_K;
+    const s = Number.isFinite(+ls) && +ls > 0 ? +ls : 1;
+    const pop = ease((k * dur - C.DRAW_S * C.LABEL_AT) / C.LABEL_POP_S);
+    return { shown: k * dur > C.DRAW_S * C.LABEL_AT, x: lx, y: ly, pop, scale: (C.LABEL_FROM + C.LABEL_SPAN * pop) * s };
+  };
+
+  /* THE PAINTER. ctx is the engine's species context (SPECIES_PAINTERS in the player): the declaration, the
+     clock, the layer already chosen for the kind's target, and the shared helpers by name - `squigglePath` and
+     `SQUIG_DRAW` among them, because the underline form is the SQUIGGLE's stroke and clock, not the ring's. */
+  function paintCallout(ctx) {
+    const { sp, k, dur, svg, el, resolveTarget, drawOn, ease, hash, seed, squigglePath, SQUIG_DRAW } = ctx;
+    const b = resolveTarget(sp.target);
+    if (!b) return;   /* the targeting law: no resolved target, nothing painted */
+    if (sp.form === "underline") {   /* P50 T3 / E56's ONE exception: a ring circles a number or a point on a chart,
+         but an underline under a QUOTED PHRASE is the squiggle law (s9.27) - the same hand, the same .sq stroke,
+         drawn from `at` over SQUIG_DRAW on the underline's own clock, riding the card's live geometry. */
+      drawOn(el("path", "sq", svg, { d: squigglePath(b, seed) }), underlineFrac(k * dur / SQUIG_DRAW));
+      return;
+    }
+    const pd = calloutPad(sp.pad);
+    drawOn(el("path", "co", svg, { d: calloutPath(b, seed, pd, hash) }), calloutDrawF(k, dur));
+    if (!sp.label) return;
+    const L = calloutLabel(b, pd, k, dur, sp.label_scale, ease);
+    if (!L.shown) return;
+    const tx = el("text", "lab", svg, { x: L.x.toFixed(1), y: L.y.toFixed(1) }); tx.textContent = sp.label;
+    tx.setAttribute("transform", "translate(" + L.x.toFixed(1) + " " + L.y.toFixed(1) + ") scale(" + L.scale.toFixed(3) + ") translate(" + (-L.x).toFixed(1) + " " + (-L.y).toFixed(1) + ")");
+  }
+
+  /* the module rule's registration: a plain assignment (inline_text keeps it), guarded so `node --test` can
+     import this file for the math above without the engine's registry */
+  if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.callout = paintCallout;
+  /* KINETICS:END */
+  /* KINETICS:BEGIN trace */
+  /* SPACE: stage */
+  /* species/trace.mjs - THE ROUTE ON A STILL (P57 T18 / R26-95; the STILL LIFE species of 2026-09-05 - "the arrow
+     on the phone redraws" - and the opt-in bowed HOP of 2026-09-08, the crossings map the approved Japan short
+     ships at t 9.22).
+     SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN trace
+     and KINETICS:END, AFTER callout - it imports nothing, so its place in the order is only a place.
+
+     THE MODULE RULE (the operator, 2026-09-11): a species is a module here, never a branch in the engine's body.
+     The last statement registers the painter in SPECIES_PAINTERS; node, where no such registry exists, still
+     imports the file for the pure math below. Promoted from inline engine code (`paintSpecies sp.kind ===
+     "trace"`) with every golden byte-identical: each literal below is the value the inline code carried, to the
+     digit, and no expression was re-associated.
+
+     WHEN (`SPECIES_WHEN["trace"]`, build_scene_timeline_f.py:323, verbatim): "the sentence NAMES places and flows
+     on a still - a route draws with hops between named points, stamps stack at them".
+
+     THE LAW - the still-life law (the operator, 2026-09-05) and E49 (nothing ever goes truly still): a picture we
+     cannot re-shoot is given its own small life, and that life is a PURE FUNCTION OF t - the plain trace redraws
+     itself on its own period, so a cold seek into the middle of a hold lands exactly where a play does, and the
+     jitter's only source is the seeded hash, never Math.random. The `hop` is the ONE crossing form, and what may
+     be declared on it is the COMPILER's (`build_scene_timeline_f.py:1344` - from / to as stage fractions 0..1,
+     bow / draw_s / width numbers, draw_s > 0); the painter carries no opinion about where it was pointed.
+
+     THE FORM, all of it a pure function of t:
+       the trace - a seeded zigzag down the region's own diagonal: N + 1 points from (X0, Y0) to (X0 + X_SPAN,
+                   Y0 + Y_SPAN) of the box, every interior point jogged by up to half of JAG_K of the box's
+                   height off the seeded hash. It draws on by dash over DRAW_S, holds, fades over the last
+                   FADE_SPAN of the period, and goes again every PERIOD - a still life, not an event.
+       the hop   - ONE quadratic bow from point to point in STAGE fractions, sampled to the SAME N + 1 points, so
+                   the arrowhead law below is shared: the control point is the chord's midpoint pushed along the
+                   chord's normal by bow x BOW_K x the chord's own length (the sign is the side). Drawn ONCE over
+                   hop.draw_s and HELD to the end of dur - a crossing, not a redraw.
+       the head  - when the line lands (drawK >= 1), two strokes back from the last point at +/- HEAD_A radians
+                   off the last segment's angle, HEAD_K stroke-widths long on a hop and HEAD_W of the box's width
+                   on a trace. It carries the line's own opacity, so the two arrive and leave as one mark.
+     Nothing is stored: every visual reads from t, k, dur and the seed. The dials below are ours to tune
+     (42 s42.5), not findings. */
+
+  const TRACE = Object.freeze({
+    PERIOD: 3.2,        /* the plain trace's whole redraw cycle, in seconds [the engine's SP.TRACE_PERIOD, verbatim] */
+    DRAW_S: 1.1,        /* ... of which this is the draw [SP.TRACE_DRAW] - and a hop's draw when it declares none */
+    N: 7,               /* the segments both forms are sampled to: a hand's line, and one arrowhead law for both */
+    MIN_DRAW_S: 0.05,   /* the floor under a declared hop.draw_s, so no division by zero reaches the dash */
+    BOW: 0.18,          /* a hop's default arc height, as a fraction of the chord (signed for the side) ... */
+    BOW_K: 2,           /* ... doubled into the quadratic's control point, which a curve passes at half its offset */
+    JAG_K: 0.35,        /* the zigzag's jog: +/- half of this, times the box's height, off the seeded hash */
+    HASH_SALT: 44,      /* the salt that jitter's hash is taken with - the trace's own stream (steam 41-43, ticker 45-47) */
+    X0: 0.08,           /* the zigzag's first point, as a fraction of the box ... */
+    X_SPAN: 0.84,       /* ... and how far across it runs (inset both ends: a mark on a picture, not an edge) */
+    Y0: 0.12,
+    Y_SPAN: 0.76,
+    WIDTH: 7,           /* a hop's stroke width when it declares none ... */
+    WIDTH_K: 0.045,     /* ... and a plain trace's, as a fraction of the box's width ... */
+    WIDTH_MIN: 3,       /* ... with this floor, so a small region still reads at phone size */
+    FADE_AT: 0.82,      /* the plain trace holds until this far through its period ... */
+    FADE_SPAN: 0.18,    /* ... then fades out over the rest of it (the two are the whole period by construction) */
+    IN_S: 0.4,          /* the species' own fade in - and out, which a hop does not take (it is held) */
+    HEAD_K: 3,          /* a hop's arrowhead, in stroke widths ... */
+    HEAD_MIN: 8,        /* ... a plain trace's, floored here ... */
+    HEAD_W: 0.12,       /* ... and taken as this fraction of the box's width */
+    HEAD_A: 0.5,        /* each barb's angle off the last segment, in radians */
+    COLOR: "#B0201F",   /* the mark's colour when the row declares none: the ledger's own red */
+  });
+
+  /* THE HOP the row declared, or none. Both ends are required - a hop with one end is not a crossing, and the
+     plain still-life trace is what the species is without it (the compiler checks the rest). */
+  const traceHopOf = (sp) => (sp.hop && sp.hop.from && sp.hop.to ? sp.hop : null);
+
+  /* WHERE IN ITS PERIOD the plain trace is at t: 0..1 from the species' own `at`, and 0 for a hop, which has no
+     period at all - it is drawn once and held. */
+  const tracePhase = (t, at, hop, T = TRACE) => (hop ? 0 : (((t - at) / T.PERIOD) % 1 + 1) % 1);
+
+  /* THE DRAW FRACTION handed to drawOn: a hop's own elapsed time over its draw, a trace's phase over the draw's
+     share of the period. `clamp` is handed in (the engine's clamp01) - the same one the inline code used. */
+  const traceDrawK = (t, at, hop, ph, clamp, T = TRACE) =>
+    (hop ? clamp((t - at) / Math.max(T.MIN_DRAW_S, +hop.draw_s || T.DRAW_S)) : clamp(ph * T.PERIOD / T.DRAW_S));
+
+  /* THE HOP as N + 1 points in stage px: a quadratic bow whose control point is the chord's midpoint pushed along
+     the chord's NORMAL by bow x BOW_K x the chord's length. `from` / `to` are stage fractions (the compiler's law). */
+  const traceHopPoints = (hop, stageW, stageH, T = TRACE) => {
+    const n = T.N, pts = [];
+    const x0 = hop.from[0] * stageW, y0 = hop.from[1] * stageH, x1 = hop.to[0] * stageW, y1 = hop.to[1] * stageH;
+    const mx = (x0 + x1) / 2, my = (y0 + y1) / 2, dx = x1 - x0, dy = y1 - y0, L0 = Math.hypot(dx, dy) || 1;
+    const bow = Number.isFinite(+hop.bow) ? +hop.bow : T.BOW, cx2 = mx - dy / L0 * bow * L0 * T.BOW_K, cy2 = my + dx / L0 * bow * L0 * T.BOW_K;
+    for (let i = 0; i <= n; i++) { const u = i / n, v = 1 - u;
+      pts.push([v * v * x0 + 2 * v * u * cx2 + u * u * x1, v * v * y0 + 2 * v * u * cy2 + u * u * y1]); }
+    return pts;
+  };
+
+  /* THE PLAIN TRACE as N + 1 points in stage px: down the box's diagonal, every INTERIOR point jogged off the
+     seeded `hash` (the engine's lpHash in the player, a stub under node) - never Math.random. */
+  const tracePlainPoints = (b, seed, hash, T = TRACE) => {
+    const n = T.N, pts = [];
+    for (let i = 0; i <= n; i++) {
+      const s2 = i / n, jag = i && i < n ? (hash(seed, i, T.HASH_SALT) - 0.5) * b.h * T.JAG_K : 0;
+      pts.push([b.x + b.w * (T.X0 + T.X_SPAN * s2), b.y + b.h * (T.Y0 + T.Y_SPAN * s2) + jag]);
+    }
+    return pts;
+  };
+
+  /* the sampled points as a path, in stage px - one line, so both forms draw the same way */
+  const tracePathD = (pts) => pts.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
+
+  /* THE STROKE WIDTH: a hop's declared one (or the dial), a trace's from the box it crosses, floored. */
+  const traceWidth = (hop, b, T = TRACE) =>
+    (hop ? (Number.isFinite(+hop.width) ? +hop.width : T.WIDTH) : Math.max(T.WIDTH_MIN, b.w * T.WIDTH_K));
+
+  /* THE OPACITY at k: the plain trace's own fade at the end of its period, times the species' fade in and out -
+     which a hop takes on the way in only, because it is HELD to the end of dur. */
+  const traceOpacity = (ph, k, dur, hop, clamp, T = TRACE) => {
+    const fade = hop ? 1 : (ph > T.FADE_AT ? 1 - (ph - T.FADE_AT) / T.FADE_SPAN : 1);
+    return fade * clamp(Math.min(k * dur / T.IN_S, hop ? 1 : (1 - k) * dur / T.IN_S));
+  };
+
+  /* THE ARROWHEAD, as a path: two barbs back from the last point along the last segment's own angle. It is drawn
+     only when the line has landed, which is the whole point - the head lands when the line does. */
+  const traceHead = (pts, sw, hop, b, T = TRACE) => {
+    const n = T.N;
+    const [ax, ay] = pts[n], [bx2, by2] = pts[n - 1], ang = Math.atan2(ay - by2, ax - bx2), L2 = hop ? sw * T.HEAD_K : Math.max(T.HEAD_MIN, b.w * T.HEAD_W);
+    return "M" + (ax - L2 * Math.cos(ang - T.HEAD_A)).toFixed(1) + " " + (ay - L2 * Math.sin(ang - T.HEAD_A)).toFixed(1) + " L" + ax.toFixed(1) + " " + ay.toFixed(1) + " L" + (ax - L2 * Math.cos(ang + T.HEAD_A)).toFixed(1) + " " + (ay - L2 * Math.sin(ang + T.HEAD_A)).toFixed(1);
+  };
+
+  /* the mark's stroke, shared by the line and its head so the two read as one hand */
+  const traceStroke = (sp, sw, T = TRACE) =>
+    ({ stroke: sp.color || T.COLOR, "stroke-width": sw.toFixed(1), fill: "none", "stroke-linejoin": "round", "stroke-linecap": "round" });
+
+  /* THE PAINTER. ctx is the engine's species context (SPECIES_PAINTERS in the player): the declaration, the clock,
+     the layer already chosen for the kind's target, and the shared helpers by name. */
+  function paintTrace(ctx) {
+    const { sp, k, dur, t, svg, el, resolveTarget, drawOn, clamp, hash, seed, STAGE_W, STAGE_H } = ctx;
+    const b = resolveTarget(sp.target);
+    if (!b) return;   /* the targeting law: no resolved target, nothing painted */
+    const hop = traceHopOf(sp);
+    const ph = tracePhase(t, sp.at, hop), drawK = traceDrawK(t, sp.at, hop, ph, clamp);
+    const pts = hop ? traceHopPoints(hop, STAGE_W, STAGE_H) : tracePlainPoints(b, seed, hash);
+    const sw = traceWidth(hop, b), stroke = traceStroke(sp, sw);
+    const p = el("path", "", svg, Object.assign({ d: tracePathD(pts) }, stroke));
+    p.setAttribute("opacity", traceOpacity(ph, k, dur, hop, clamp).toFixed(3));
+    drawOn(p, drawK);
+    if (drawK >= 1) el("path", "", svg, Object.assign({ d: traceHead(pts, sw, hop, b) }, stroke, { opacity: p.getAttribute("opacity") }));
+  }
+
+  /* the module rule's registration: a plain assignment (inline_text keeps it), guarded so `node --test` can
+     import this file for the math above without the engine's registry */
+  if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.trace = paintTrace;
+  /* KINETICS:END */
+
+  /* KINETICS:BEGIN spotlight */
+  /* SPACE: stage */
+  /* species/spotlight.mjs - THE LIGHT (P57 T19 / R26-96; the operator's own species: "the drawn circles should be
+     on the layer beneath the card" is the RING's law, and this is the other one - the focus that is not a mark at
+     all). SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN
+     spotlight and KINETICS:END, AFTER trace - it imports nothing, so its place in the order is only a place.
+
+     THE MODULE RULE (the operator, 2026-09-11): a species is a module here, never a branch in the engine's body.
+     The last statement registers the painter in SPECIES_PAINTERS; node, where no such registry exists, still
+     imports the file for the pure math below. Promoted from inline engine code (`paintSpecies sp.kind ===
+     "spotlight"`) with every golden byte-identical: each literal below is the value the inline code carried, to
+     the digit (SP.SPOT_DIM and SPOT_R_PORTRAIT among them), and no expression was re-associated.
+
+     WHEN (`SPECIES_WHEN["spotlight"]`, build_scene_timeline_f.py:315, verbatim): "the sentence's focus is a
+     PICTURE or a datum and the rest may dim - the light lands on it and holds until the sentence has a reason to
+     leave (dur 'hold', E25 amended)".
+
+     THE LAW - E56 (the ring's one use, 2026-09-08): a ring circles a number or a point on a CHART only; A
+     PICTURE'S FOCUS IS THE LIGHT. So this species is what points at everything a ring may not, and it points by
+     taking light AWAY from the rest of the frame - one dimmed rect over the whole stage with a feathered hole
+     punched in it, never an outline, never a shape drawn on the thing itself. E56's second half is why the hole
+     is alive: THE LIFE CHECK RUNS ON THE ADDITION'S OWN REGION, so the light itself carries a named idle (E49,
+     2026-09-09: "make sure all of the new additions pass the life check with the pixels shifting") - absent, it
+     is explicitly still. E25 amended (the operator, 2026-09-08: "right now we flash it on, and really, it should
+     hold until it has a reason not to"): `dur: "hold"` is resolved by the COMPILER (build_scene_timeline_f.py
+     :4086-4094, to the next event on the row or the row's end, floored by HOLD_MIN_S), so the painter below sees
+     plain seconds and carries no opinion about how long a light should hold.
+
+     THE FORM, all of it a pure function of t:
+       the dim    ONE rect over the whole stage, filled with a radial gradient of black: transparent out to r0,
+                  feathered to full DIM over the next FEATHER of the gradient's radius, and DIM from there to the
+                  edge. Two stops at 0 and r0 (not one) are what make the hole flat-clear rather than a vignette.
+       the hole   its radius is the TARGET's own half-width (floored at W_MIN, so a datum - which resolves to a
+                  point, w = 0 - still gets a pool to sit in) plus PAD, as a fraction of the gradient's radius:
+                  the landscape half-stage, kept AT R_PORTRAIT in portrait on purpose (the one landscape number
+                  the portrait pass left alone, 2026-09-08 - a round hole the width of the short side).
+       the glide  the centre runs from `target`'s centre to `target2`'s over GLIDE_S on the io ease, starting at
+                  at + glide_at. No target2 is the same target, so the glide is a stillness, not a special case.
+       the idle   the hole's radius breathes by the idle's SCALE and its centre drifts by the idle's OFFSET - the
+                  same seeded pure-function-of-t kinetics every held thing carries, phased off lpHash so two
+                  lights in one scene are never in step. Absent, or "none": {scale: 1, dx: 0, dy: 0}, still.
+       the fade   the species' own in and out over IN_S at each end of dur, on the cubic ease.
+     Nothing is stored: every visual reads from t, k, dur and the seed. The dials below are ours to tune
+     (42 s42.5), not findings - DIM is the operator's own (2026-09-03: 0.55 "way too dark", 0.44 too light). */
+
+  const SPOTLIGHT = Object.freeze({
+    GLIDE_S: 0.6,       /* the travel between the two declared targets, in seconds [the engine's `/ 0.6`, verbatim] */
+    IN_S: 0.4,          /* the species' own fade in - and out, at each end of dur */
+    DIM: 0.49,          /* how dark the rest of the frame goes [SP.SPOT_DIM - operator 2026-09-03: 0.55 was "way too dark", 0.44 too light] */
+    FEATHER: 0.12,      /* the soft edge, as a fraction of the gradient's radius: clear at r0, full DIM at r0 + this */
+    W_MIN: 240,         /* the floor under the target's width, so a DATUM (a point, w = 0) still gets a pool ... */
+    PAD: 60,            /* ... and this much stage px of room around whatever the half-width came to */
+    R_PORTRAIT: 960,    /* PORTRAIT: the gradient's radius in userSpaceOnUse - half the LANDSCAPE width, kept on purpose (2026-09-08) */
+    R_LANDSCAPE: 0.5,   /* landscape: the gradient is in objectBoundingBox units, so its radius is half the box */
+    HASH_SALT: 991,     /* the salt the idle's phase is taken with - the light's own stream */
+    INK: "#000",        /* the dim is black taken away from the frame, never a colour laid over it */
+  });
+
+  /* THE GLIDE at t: 0 before at + glide_at, 1 from GLIDE_S after it. `io` is handed in (the engine's spIO, which
+     clamps) - the same one the inline code used. A species with no glide_at begins gliding at `at`. */
+  const spotlightGlide = (t, sp, io, S = SPOTLIGHT) => io((t - sp.at - (sp.glide_at || 0)) / S.GLIDE_S);
+
+  /* THE IDLE the row declared, as a transform, or the identity. `idle` is the engine's idleXf and `phase` the
+     seeded phase; an undeclared idle and an explicit "none" are the same still light (E49's declared stillness). */
+  const spotlightIdle = (sp, t, phase, idle) =>
+    (sp.idle && sp.idle !== "none" ? idle(sp.idle, t, phase) : { scale: 1, dx: 0, dy: 0 });
+
+  /* THE HOLE'S CENTRE in stage px: between the two targets' centres at g, plus the idle's own drift. */
+  const spotlightCentre = (ca, cz, g, ix) =>
+    ({ cx: ca.cx + (cz.cx - ca.cx) * g + ix.dx, cy: ca.cy + (cz.cy - ca.cy) * g + ix.dy });
+
+  /* THE HOLE'S RADIUS as a fraction of the gradient's own radius: the FIRST target's half-width (floored) plus
+     PAD, breathed by the idle's scale. The first target sizes it for the whole glide - a light does not change
+     size because it moved. */
+  const spotlightRadius = (a, ix, portrait, stageW, S = SPOTLIGHT) =>
+    ((Math.max(a.w, S.W_MIN) / 2 + S.PAD) * ix.scale) / (portrait ? S.R_PORTRAIT : stageW / 2);
+
+  /* THE GRADIENT's own attributes: userSpaceOnUse in portrait (a round hole, the offsets keeping their landscape
+     size), the default objectBoundingBox in landscape, where the centre is a fraction of the stage. */
+  const spotlightGradient = (id, cx, cy, portrait, stageW, stageH, S = SPOTLIGHT) =>
+    (portrait ? { id, gradientUnits: "userSpaceOnUse", cx: cx.toFixed(1), cy: cy.toFixed(1), r: S.R_PORTRAIT }
+              : { id, cx: (cx / stageW).toFixed(4), cy: (cy / stageH).toFixed(4), r: S.R_LANDSCAPE });
+
+  /* THE FOUR STOPS, in order: clear at the middle, clear at r0 (the flat hole), DIM at r0 + FEATHER, DIM at the
+     edge. Dropping either of the first two turns the light into a vignette. */
+  const spotlightStops = (r0, S = SPOTLIGHT) => [
+    { offset: 0, "stop-color": S.INK, "stop-opacity": 0 },
+    { offset: r0.toFixed(3), "stop-color": S.INK, "stop-opacity": 0 },
+    { offset: (r0 + S.FEATHER).toFixed(3), "stop-color": S.INK, "stop-opacity": S.DIM },
+    { offset: 1, "stop-color": S.INK, "stop-opacity": S.DIM },
+  ];
+
+  /* THE FADE at k: in over IN_S and out over IN_S, on the cubic ease handed in (the engine's spEase). */
+  const spotlightFade = (k, dur, ease, S = SPOTLIGHT) =>
+    Math.min(ease(k * dur / S.IN_S), ease((1 - k) * dur / S.IN_S));
+
+  /* THE PAINTER. ctx is the engine's species context (SPECIES_PAINTERS in the player): the declaration, the clock,
+     the layer already chosen for the kind's target, and the shared helpers by name. */
+  function paintSpotlight(ctx) {
+    const { sp, k, dur, t, si, seed, svg, el, resolveTarget, centre, ease, io, idle, hash, STAGE_W, STAGE_H, PORTRAIT } = ctx;
+    const a = resolveTarget(sp.target), z = resolveTarget(sp.target2) || a;
+    if (!a) return;   /* the targeting law: no resolved target, nothing painted */
+    const g = spotlightGlide(t, sp, io);
+    const ix = spotlightIdle(sp, t, hash(seed | 0, si | 0, SPOTLIGHT.HASH_SALT), idle);
+    const { cx, cy } = spotlightCentre(centre(a), centre(z), g, ix);
+    const r0 = spotlightRadius(a, ix, PORTRAIT, STAGE_W), id = "spot" + si;
+    const defs = el("defs", "", svg);
+    const rg = el("radialGradient", "", defs, spotlightGradient(id, cx, cy, PORTRAIT, STAGE_W, STAGE_H));
+    spotlightStops(r0).forEach((stop) => el("stop", "", rg, stop));
+    el("rect", "", svg, { x: 0, y: 0, width: STAGE_W, height: STAGE_H, fill: "url(#" + id + ")",
+                          opacity: spotlightFade(k, dur, ease).toFixed(2) });
+  }
+
+  /* the module rule's registration: a plain assignment (inline_text keeps it), guarded so `node --test` can
+     import this file for the math above without the engine's registry */
+  if (typeof SPECIES_PAINTERS !== "undefined") SPECIES_PAINTERS.spotlight = paintSpotlight;
+  /* KINETICS:END */
   /* a ledger page's declared focus (page.focus = {kind, target?, label?}) is an implicit species at LP_FOCUS_AT;
      the target defaults to the emphasized datum (E22 addendum 6) */
   const pageFocus = (sc) => {
@@ -9650,46 +10355,12 @@ async function mount(doc) {
       if (painter) {
         painter({ sp, k, dur, t, sc, si, seed, svg: spSvg, el: lpEl, A, resolveTarget, centre, stageBox,
                   ease: spEase, io: spIO, clamp: clamp01, drawOn, springPop, idle: idleXf, hash: lpHash,
+                  squigglePath, SQUIG_DRAW: SP.SQUIG_DRAW,   /* P57 T17: the callout's UNDERLINE form is the squiggle's stroke and clock, not the ring's - the one kind whose painter reaches for another kind's law */
                   camNow, idleOf,   /* P50 T5: a species ON A WORLD (the map's light, arc and stamp) rides the world's own camera and idle - the species layer is not the world div and carries neither by itself */
                   STAGE_W, STAGE_H, PORTRAIT });
         return;
       }
-      if (sp.kind === "callout") {
-        const b = resolveTarget(sp.target); if (!b) return;
-        if (sp.form === "underline") {   /* P50 T3 / E56's ONE exception: a ring circles a number or a point on a chart,
-             but an underline under a QUOTED PHRASE is the squiggle law (s9.27) - the same hand, the same .sq stroke,
-             drawn from `at` over SQUIG_DRAW on the underline's own clock, riding the card's live geometry. */
-          drawOn(lpEl("path", "sq", spSvg, { d: squigglePath(b, seed) }), underlineFrac(k * dur / SP.SQUIG_DRAW));
-          return;
-        }
-        const pd = Number.isFinite(+sp.pad) ? +sp.pad : 0;
-        drawOn(lpEl("path", "co", spSvg, { d: calloutPath(b, seed, pd) }), k * dur / SP.CALLOUT_DRAW);
-        if (sp.label && k * dur > SP.CALLOUT_DRAW * 0.8) {
-          const lx = b.x + b.w + 34 + pd, ly = b.y - 10 - pd * 0.4, pop = spEase((k * dur - SP.CALLOUT_DRAW * 0.8) / 0.25);
-          const ls = Number.isFinite(+sp.label_scale) && +sp.label_scale > 0 ? +sp.label_scale : 1;   /* opt-in (2026-09-08): a stamp on a plate reads at phone size */
-          const tx = lpEl("text", "lab", spSvg, { x: lx.toFixed(1), y: ly.toFixed(1) }); tx.textContent = sp.label;
-          tx.setAttribute("transform", "translate(" + lx.toFixed(1) + " " + ly.toFixed(1) + ") scale(" + ((0.7 + 0.3 * pop) * ls).toFixed(3) + ") translate(" + (-lx).toFixed(1) + " " + (-ly).toFixed(1) + ")");
-        }
-      } else if (sp.kind === "spotlight") { /* dim the frame except a feathered hole gliding between two declared targets */
-        const a = resolveTarget(sp.target), z = resolveTarget(sp.target2) || a; if (!a) return;
-        const g = spIO((t - sp.at - (sp.glide_at || 0)) / 0.6);
-        const ca = centre(a), cz = centre(z);
-        /* E49 on the light itself (operator, 2026-09-09: "make sure all of the new additions pass the life check with the pixels
-           shifting"): `idle` on a spotlight names one of IDLE_KINDS for the HOLE - its radius breathes by the idle's scale and its
-           centre drifts by the idle's offset, the same seeded pure-function-of-t kinetics every held thing carries. Absent = still. */
-        const ix = sp.idle && sp.idle !== "none" ? idleXf(sp.idle, t, lpHash(seed | 0, si | 0, 991)) : { scale: 1, dx: 0, dy: 0 };
-        const cx = ca.cx + (cz.cx - ca.cx) * g + ix.dx, cy = ca.cy + (cz.cy - ca.cy) * g + ix.dy;
-        const r0 = ((Math.max(a.w, 240) / 2 + 60) * ix.scale) / (PORTRAIT ? SPOT_R_PORTRAIT : STAGE_W / 2), id = "spot" + si;   /* the hole as a fraction of the gradient radius: the landscape half-width, kept on purpose in portrait (below) */
-        const defs = lpEl("defs", "", spSvg);
-        const rg = lpEl("radialGradient", "", defs, PORTRAIT ? { id, gradientUnits: "userSpaceOnUse", cx: cx.toFixed(1), cy: cy.toFixed(1), r: 960 }   /* portrait: a round hole, the offsets below keep their landscape size (960 = half the landscape width) */
-                                                            : { id, cx: (cx / STAGE_W).toFixed(4), cy: (cy / STAGE_H).toFixed(4), r: 0.5 });
-        lpEl("stop", "", rg, { offset: 0, "stop-color": "#000", "stop-opacity": 0 });
-        lpEl("stop", "", rg, { offset: r0.toFixed(3), "stop-color": "#000", "stop-opacity": 0 });
-        lpEl("stop", "", rg, { offset: (r0 + 0.12).toFixed(3), "stop-color": "#000", "stop-opacity": SP.SPOT_DIM });
-        lpEl("stop", "", rg, { offset: 1, "stop-color": "#000", "stop-opacity": SP.SPOT_DIM });
-        const fade = Math.min(spEase(k * dur / 0.4), spEase((1 - k) * dur / 0.4));
-        lpEl("rect", "", spSvg, { x: 0, y: 0, width: STAGE_W, height: STAGE_H, fill: "url(#" + id + ")", opacity: fade.toFixed(2) });
-      } else if (sp.kind === "squiggle") {   /* a hand-drawn underline under a declared caption word span (stage mode only) */
+      if (sp.kind === "squiggle") {   /* a hand-drawn underline under a declared caption word span (stage mode only) */
         const b = resolveTarget(sp.target); if (!b || !cap.classList.contains("stage")) return;
         drawOn(lpEl("path", "sq", spSvg, { d: squigglePath(b, seed) }), k * dur / SP.SQUIG_DRAW);
       } else if (sp.kind === "steam") {   /* STILL LIFE (operator, 2026-09-05): wisps rising off a declared region's top edge - three seeded
@@ -9708,39 +10379,6 @@ async function mount(doc) {
           }
           const op = (0.35 + 0.65 * Math.sin(u * Math.PI)) * clamp01(Math.min(k * dur / 0.6, (1 - k) * dur / 0.6));
           lpEl("path", "", g, { d, stroke: col, "stroke-width": (3 + 3 * u).toFixed(1), opacity: op.toFixed(3), filter: "blur(4px)" });
-        }
-      } else if (sp.kind === "trace") {   /* the arrow on the phone redraws: a seeded zigzag down the region's diagonal, drawn by dash over
-           TRACE_DRAW, held, faded, again every TRACE_PERIOD */
-        const b = resolveTarget(sp.target); if (!b) return;
-        const hop = sp.hop && sp.hop.from && sp.hop.to ? sp.hop : null;   /* opt-in (2026-09-08, the crossings map): ONE bowed hop from a
-           point to a point, drawn once over hop.draw_s (default TRACE_DRAW) and HELD to the end of dur - a crossing, not a still-life
-           redraw. The plain trace is untouched when `hop` is absent. Coordinates are stage fractions; bow is the arc's height as a
-           fraction of the chord, signed for the side. */
-        const ph = hop ? 0 : (((t - sp.at) / SP.TRACE_PERIOD) % 1 + 1) % 1;
-        const drawK = hop ? clamp01((t - sp.at) / Math.max(0.05, +hop.draw_s || SP.TRACE_DRAW)) : clamp01(ph * SP.TRACE_PERIOD / SP.TRACE_DRAW);
-        const n = 7, pts = [];
-        if (hop) {   /* a quadratic bow sampled to the same n points, so the arrowhead law below is shared */
-          const x0 = hop.from[0] * STAGE_W, y0 = hop.from[1] * STAGE_H, x1 = hop.to[0] * STAGE_W, y1 = hop.to[1] * STAGE_H;
-          const mx = (x0 + x1) / 2, my = (y0 + y1) / 2, dx = x1 - x0, dy = y1 - y0, L0 = Math.hypot(dx, dy) || 1;
-          const bow = Number.isFinite(+hop.bow) ? +hop.bow : 0.18, cx2 = mx - dy / L0 * bow * L0 * 2, cy2 = my + dx / L0 * bow * L0 * 2;
-          for (let i = 0; i <= n; i++) { const u = i / n, v = 1 - u;
-            pts.push([v * v * x0 + 2 * v * u * cx2 + u * u * x1, v * v * y0 + 2 * v * u * cy2 + u * u * y1]); }
-        } else {
-          for (let i = 0; i <= n; i++) {
-            const s2 = i / n, jag = i && i < n ? (lpHash(seed, i, 44) - 0.5) * b.h * 0.35 : 0;
-            pts.push([b.x + b.w * (0.08 + 0.84 * s2), b.y + b.h * (0.12 + 0.76 * s2) + jag]);
-          }
-        }
-        const d = pts.map(([x, y], i) => (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1)).join(" ");
-        const sw = hop ? (Number.isFinite(+hop.width) ? +hop.width : 7) : Math.max(3, b.w * 0.045);
-        const p = lpEl("path", "", spSvg, { d, stroke: sp.color || "#B0201F", "stroke-width": sw.toFixed(1), fill: "none", "stroke-linejoin": "round", "stroke-linecap": "round" });
-        const fade = hop ? 1 : (ph > 0.82 ? 1 - (ph - 0.82) / 0.18 : 1);
-        p.setAttribute("opacity", (fade * clamp01(Math.min(k * dur / 0.4, hop ? 1 : (1 - k) * dur / 0.4))).toFixed(3));
-        drawOn(p, drawK);
-        if (drawK >= 1) {   /* the arrowhead lands when the line does */
-          const [ax, ay] = pts[n], [bx2, by2] = pts[n - 1], ang = Math.atan2(ay - by2, ax - bx2), L2 = hop ? sw * 3 : Math.max(8, b.w * 0.12);
-          lpEl("path", "", spSvg, { d: "M" + (ax - L2 * Math.cos(ang - 0.5)).toFixed(1) + " " + (ay - L2 * Math.sin(ang - 0.5)).toFixed(1) + " L" + ax.toFixed(1) + " " + ay.toFixed(1) + " L" + (ax - L2 * Math.cos(ang + 0.5)).toFixed(1) + " " + (ay - L2 * Math.sin(ang + 0.5)).toFixed(1),
-                                     stroke: sp.color || "#B0201F", "stroke-width": sw.toFixed(1), fill: "none", "stroke-linejoin": "round", "stroke-linecap": "round", opacity: p.getAttribute("opacity") });
         }
       } else if (sp.kind === "ticker") {   /* the numbers on the laptop tick: a rows x cols grid over the region; each cell flips on its own
            seeded clock (every TICK_STEP, phase per cell) - a paper patch (sp.paper) covers the drawn digit and a new one is
@@ -10705,10 +11343,12 @@ async function mount(doc) {
        itself is a cut: no wipe front, no seam (wk = 1 below), because the boundary frame is black (dip) or past
        the plate's detail (blur-zoom). */
     const nxt = TL.scenes[si + 1];
-    const dipIn  = prev && exitName(sc.exit) === "dip" ? exitSecs(sc.exit, DIP_S) : 0;
-    const dipOut = nxt && exitName(nxt.exit) === "dip" ? exitSecs(nxt.exit, DIP_S) : 0;
-    const bzIn   = prev && exitName(sc.exit) === "blurzoom" ? exitSecs(sc.exit, BLURZOOM_S) : 0;
-    const bzOut  = nxt && exitName(nxt.exit) === "blurzoom" ? exitSecs(nxt.exit, BLURZOOM_S) : 0;
+    /* THE STRADDLE CLOCK (kinetics/transitions.mjs, P57 T23): each side's half, read off the row that NAMES the
+       transition - this scene's own exit for the half after its start, the NEXT scene's for the half before its end */
+    const dipIn  = straddleSecs(prev, sc.exit, "dip", DIP_S);
+    const dipOut = straddleSecs(nxt, nxt && nxt.exit, "dip", DIP_S);
+    const bzIn   = straddleSecs(prev, sc.exit, "blurzoom", BLURZOOM_S);
+    const bzOut  = straddleSecs(nxt, nxt && nxt.exit, "blurzoom", BLURZOOM_S);
     /* THE SLIDE (E87 s3 / R26-75) arrives ON THE CUT, like the suck and the melt: `exit` names the transition INTO
        the scene it sits on, so the whole hand-off runs over the first slideOn.secs of THIS scene and the outgoing
        world rides along beneath. It is a hand-off, not a world-taking transition - the page it hands to arrives on
@@ -10804,11 +11444,10 @@ async function mount(doc) {
     /* THE DIP (E47 #1): a plain LINEAR ramp to black over the last DIP_S/2 of the outgoing scene and back over the
        first DIP_S/2 of the incoming one. Both halves reach 1 at the boundary, so the boundary frame IS black and
        the cut happens inside it. The veil sits above every layer, so the docks, the stage captions and the
-       species ride the ramp down with the world and rise with the next one. */
-    let dipA = 0;
-    if (dipOut) dipA = Math.max(dipA, 1 - clamp01((nxt.span[0] - t) / (dipOut / 2)));
-    if (dipIn)  dipA = Math.max(dipA, 1 - clamp01((t - sc.span[0]) / (dipIn / 2)));
-    dipveil.style.opacity = dipA.toFixed(4);
+       species ride the ramp down with the world and rise with the next one. kinetics/transitions.mjs owns the
+       ramp, the clock and the exit grammar (P57 T23 / R26-100); the veil and its element are the engine's. */
+    const dipA = dipAlpha(t, sc.span[0], nxt ? nxt.span[0] : 0, dipIn, dipOut);
+    dipveil.style.opacity = dipVeilOpacity(dipA);
     if (suck && su < 1) {
       const [px, py] = (suck.split(":")[1] || "0.5,0.5").split(",").map(Number);
       const ox = px * STAGE_W - wA.offsetLeft, oy = py * STAGE_H - wA.offsetTop;   /* the point in wA's own box (the world overhangs the stage 5%) */

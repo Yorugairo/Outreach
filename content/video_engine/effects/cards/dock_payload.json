@@ -122,13 +122,19 @@
       "options": [],
       "dials": null,
       "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "drawRecord",
+        "form": "module",
+        "path": "content/video_engine/scripts/species/record.mjs",
+        "symbol": "paintRecord",
         "also": [
+          "RECORD",
+          "recordTyped",
+          "recordTypeClock",
+          "recordCut",
+          "recordSweep",
+          "recordLanded",
           "fillDock"
         ],
-        "note": "drawRecord + the fillDock record mount"
+        "note": "P57 T21: extracted from the engine's drawRecord with every golden byte-identical; the dock slot keeps the fillDock mount and calls paintRecord by name (no DOCK_PAINTERS registry)"
       },
       "doctrine": [
         "39 s10",
@@ -138,8 +144,8 @@
       ],
       "status": "live",
       "proof": {
-        "golden": null,
-        "test": "content/video_engine/tests/test_authoring_kit.py::test_record_words_land_the_highlighter_on_the_narrators_word",
+        "golden": "record-typewriter",
+        "test": "content/video_engine/tests/kinetics/record.test.mjs",
         "first_use": {
           "project": "steel-and-paper",
           "build": "build-f",

@@ -78,6 +78,33 @@ PROOF_FRAMES = {
     # (the base golden `compare-morph` is judged at 14.9, held). No flag: the verb is authored on the row, not switched on.
     "compare-morph@proof-quoted": ("compare-morph", {}, 11.9),   # THE QUOTED FIGURE: "24.8x" written at its datum by the hand, the page as it stands before the word
     "compare-morph@proof-mid": ("compare-morph", {}, 12.0 + 0.35 * 2.4),   # MID-COUNT (u 0.35): the number between the two, still in the metric's own clothes, the words beginning to cross
+    # P57 T19 / R26-96, E49 + E56: THE LIGHT'S OWN LIFE. The base golden `spotlight-hold` is judged at 8.0, held on
+    # its first datum before the glide. These two are taken after the glide has landed on `target2` (9.0 + 0.6), so
+    # the ONLY thing that differs between them is the `live` idle - the hole's radius breathing and its centre
+    # drifting. They are 2.0 s apart, exactly half the breath's 4.0 s period (IDLE.BREATH_HZ 0.25), so whatever
+    # phase the seeded hash hands this species they sit at opposite ends of one inhale. No flag: `idle: "live"` is
+    # authored ON THE SPECIES and runs either way (E49's switch turns on the WORLD's breath, which is not this).
+    "spotlight-hold@proof-idle-a": ("spotlight-hold", {}, 12.0),
+    "spotlight-hold@proof-idle-b": ("spotlight-hold", {}, 14.0),
+    # P57 T21 / R26-99: THE RECORD'S LANDING, the instant its base golden (7.62, mid-type) cannot show. The
+    # quotation's `end` is 9.66, so at 10.26 the last word is whole (its slice clamped at 1), the cursor is
+    # parked after it, and the two toggles the painter carries have both fired - the attribution at end + 0.15
+    # and the source line at end + 0.45. No flag: a record types either way.
+    "record-typewriter@proof-attr": ("record-typewriter", {}, 10.26),
+    # P57 T22 / R26-101: THE RETRACT, the direction the base golden cannot show. `spiral-return` is judged
+    # mid-RETURN (16.12), so these two take the other half of the same geometry off scene 1's own clock, which
+    # runs over its last COLOURS + CHARCOAL (1.0 + 1.0 s) from 13.0: phase one the colours down the drain, phase
+    # two the crisp charcoal fading to the stains as they follow. No flag: a page retracts unless its row says
+    # `exit: "cut"`.
+    "spiral-return@proof-retract": ("spiral-return", {}, 13.5),   # PHASE ONE at uc 0.5 - the twin of the base frame, run the other way: every colour at half its home radius, the series lines curling into the drain
+    "spiral-return@proof-fade": ("spiral-return", {}, 14.5),      # PHASE TWO at uc 1, uf 0.5 - the colours gone, the charcoal fully faded to the field beneath it (uf past RECT_FADE 0.3) and the scribble strokes at half opacity, on their way down the same drain
+    # P57 T23 / R26-100, E47 s1: THE RAMP, the half of the dip its black boundary frame cannot show. The base
+    # golden `dip-boundary` is the boundary frame itself (15.0, dipA 1). This one is taken on the OUTGOING half,
+    # where the fully drawn line page is still the picture: the scrub carries step="0.01", so the ramp's exact
+    # midpoint (15.0 - DIP_S/4 = 14.8825) is not reachable and 14.88 is the frame beside it - dipA
+    # 1 - 0.12/0.235 = 0.4894, the plate at just over half its light. LINEAR is what this pins: on any eased ramp
+    # the same instant sits visibly off that value. No flag: a dip is an authored exit, not a capability.
+    "dip-boundary@proof-ramp": ("dip-boundary", {}, 14.88),
 }
 # P52 T18 / R26-55, HUMAN GATE 7: THE FACE OF A PULLED PHRASE. The phrase is live type now, so it has a face, and
 # the face is the OPERATOR's to choose - never ours. The `press_face` DIAL names one of the three candidates

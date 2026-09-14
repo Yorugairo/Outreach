@@ -260,15 +260,15 @@
           "does": "the hand-drawn ellipse draws on by dash",
           "trigger": "the species' `at`",
           "dials": {
-            "CALLOUT_DRAW": "0.7"
+            "CALLOUT.DRAW_S": "0.7"
           }
         },
         {
           "name": "label pops",
           "does": "the label scales 0.7 -> 1.0 on spEase over 0.25 s",
-          "trigger": "0.8 x CALLOUT_DRAW into the draw",
+          "trigger": "CALLOUT.LABEL_AT (0.8) x DRAW_S into the draw",
           "dials": {
-            "CALLOUT_DRAW": "0.7"
+            "CALLOUT.DRAW_S": "0.7"
           }
         },
         {
@@ -303,13 +303,13 @@
       "options": [],
       "dials": null,
       "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "paintSpecies",
+        "form": "module",
+        "path": "content/video_engine/scripts/species/callout.mjs",
+        "symbol": "paintCallout",
         "also": [
           "calloutPath"
         ],
-        "note": "paintSpecies / sp.kind === \"callout\" (calloutPath)"
+        "note": "promoted from the engine's own branch (P57 T17 / R26-97): the module registers SPECIES_PAINTERS.callout and is inlined into the engine between KINETICS:BEGIN callout and KINETICS:END"
       },
       "doctrine": [
         "29 s9.27",
@@ -1454,10 +1454,16 @@
       "options": [],
       "dials": null,
       "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "paintSpecies",
-        "note": "paintSpecies / sp.kind === \"spotlight\""
+        "form": "module",
+        "path": "content/video_engine/scripts/species/spotlight.mjs",
+        "symbol": "paintSpotlight",
+        "also": [
+          "spotlightGlide",
+          "spotlightRadius",
+          "spotlightStops",
+          "spotlightFade"
+        ],
+        "note": "promoted from the engine's own branch (P57 T19 / R26-96): the module registers SPECIES_PAINTERS.spotlight and is inlined into the engine between KINETICS:BEGIN spotlight and KINETICS:END"
       },
       "doctrine": [
         "29 s9.27",
@@ -1467,7 +1473,7 @@
       ],
       "status": "live",
       "proof": {
-        "golden": null,
+        "golden": "spotlight-hold",
         "test": "content/video_engine/tests/test_targeted_species.py::test_every_pointing_kind_requires_a_target",
         "first_use": {
           "project": "japan-tariff-trick",
@@ -1724,9 +1730,9 @@
         {
           "name": "draw",
           "does": "a seeded zigzag (or, with `hop`, one quadratic bow) draws on by dash",
-          "trigger": "the species' `at` (and every TRACE_PERIOD for the plain trace)",
+          "trigger": "the species' `at` (and every TRACE.PERIOD for the plain trace)",
           "dials": {
-            "TRACE_DRAW": "1.1"
+            "TRACE.DRAW_S": "1.1"
           }
         },
         {
@@ -1737,9 +1743,9 @@
         {
           "name": "hold / fade / repeat",
           "does": "plain: holds, fades over the last 18 % of the period, redraws; hop: held to the end",
-          "trigger": "phase > 0.82 of TRACE_PERIOD (plain only)",
+          "trigger": "phase > 0.82 of TRACE.PERIOD (plain only)",
           "dials": {
-            "TRACE_PERIOD": "3.2"
+            "TRACE.PERIOD": "3.2"
           }
         }
       ],
@@ -1754,17 +1760,22 @@
       "options": [],
       "dials": null,
       "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "paintSpecies",
-        "note": "paintSpecies / sp.kind === \"trace\""
+        "form": "module",
+        "path": "content/video_engine/scripts/species/trace.mjs",
+        "symbol": "paintTrace",
+        "also": [
+          "traceHopPoints",
+          "tracePlainPoints",
+          "traceHead"
+        ],
+        "note": "promoted from the engine's own branch (P57 T18 / R26-95): the module registers SPECIES_PAINTERS.trace and is inlined into the engine between KINETICS:BEGIN trace and KINETICS:END"
       },
       "doctrine": [
         "CAPABILITIES Trace HOPS"
       ],
       "status": "live",
       "proof": {
-        "golden": null,
+        "golden": "trace-hop",
         "test": "content/video_engine/tests/test_targeted_species.py::test_trace_hop_is_accepted_with_fraction_endpoints",
         "first_use": {
           "project": "japan-tariff-trick",

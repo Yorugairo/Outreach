@@ -27,6 +27,9 @@ ALLOW = (
     "PORTRAIT ?",                       # an explicit portrait branch
     "REF_W: 1920", "REF_H: 1080",       # species/verdict.mjs (P55 T7): the landscape stage the verdict stack's burst normalisers
                                         # were MEASURED on, only ever used as a fraction of the stage (was the inline `STAGE_W * 700 / 1920`)
+    "R_PORTRAIT: 960",                  # species/spotlight.mjs (P57 T19): the gradient's radius in userSpaceOnUse on the PORTRAIT stage -
+                                        # half the landscape width, the value the approved Japan short was lit with (was the inline
+                                        # module-scope `SPOT_R_PORTRAIT`, which sat behind an explicit portrait branch)
 )
 
 

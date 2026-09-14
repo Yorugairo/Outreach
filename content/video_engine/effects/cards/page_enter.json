@@ -666,15 +666,17 @@
       "options": [],
       "dials": null,
       "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "form": "module",
+        "path": "content/video_engine/scripts/species/spiral.mjs",
         "symbol": "lpSpiral",
         "also": [
+          "LP_RETRACT",
+          "spiralClocks",
           "lpVortex",
           "lpParticles",
-          "spiralIn"
+          "spiralLineWidth"
         ],
-        "note": "lpSpiral (+ lpVortex, lpParticles; render const spiralIn)"
+        "note": "P57 T22: the RETURN and the retract are one module (both cards point here); the engine's render const spiralIn takes the wipe off the boundary"
       },
       "doctrine": [
         "29 s9.31",

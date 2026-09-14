@@ -16,12 +16,12 @@ lives (module | inline | compiler-only | declared-unbuilt, the path and the one 
 module - status and callable - proof - doctrine cites resolved to path:line - aliases. A token that is only a
 parameter of an effect is an option on its card, never a card.
 
-130 cards, 62 options, 18 axes. 40 recipes (15 proven).
+131 cards, 62 options, 18 axes. 40 recipes (15 proven).
 
 | axis | cards | options | live | wired | draft | declared | planned | retired |
 |---|---|---|---|---|---|---|---|---|
 | species | 23 | 1 | 7 | 13 | 0 | 3 | 0 | 0 |
-| page_species | 12 | 0 | 3 | 9 | 0 | 0 | 0 | 0 |
+| page_species | 12 | 0 | 2 | 10 | 0 | 0 | 0 | 0 |
 | chart_to | 6 | 2 | 0 | 6 | 0 | 0 | 0 | 0 |
 | page_builder | 11 | 3 | 2 | 5 | 0 | 4 | 0 | 0 |
 | overflow | 2 | 1 | 0 | 2 | 0 | 0 | 0 | 0 |
@@ -37,7 +37,7 @@ parameter of an effect is an option on its card, never a card.
 | page_enter | 10 | 5 | 3 | 7 | 0 | 0 | 0 | 0 |
 | page_exit | 2 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
 | caption | 3 | 8 | 3 | 0 | 0 | 0 | 0 | 0 |
-| kinetics | 14 | 0 | 2 | 12 | 0 | 0 | 0 | 0 |
+| kinetics | 15 | 0 | 2 | 13 | 0 | 0 | 0 | 0 |
 
 ## species
 
@@ -57,7 +57,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `AGENDA` in `content/video_engine/scripts/species/agenda.mjs`: `MIN_ROWS`=2, `MAX_ROWS`=4, `ROW_H`=132, `NUM_W`=92, `NUM_SIZE`=64, `TEXT_SIZE`=54, `SUB_SIZE`=34, `ROW_S`=0.42, `ROW_DY`=26, `RULE_S`=0.5, `RULE_DY`=22, `NUM_LEAD`=0.12, `STEP`=0.34, `MIN_K`=0.45
 - **status** wired - **callable** yes
 - **proof** golden agenda-two - test content/video_engine/tests/kinetics/agenda.test.mjs - first use none
-- **doctrine** CAPABILITIES NUMBERED AGENDA -> docs/content-video-engine/CAPABILITIES.md:40; E93 -> docs/portable/OPERATOR-RULINGS.md:2723
+- **doctrine** CAPABILITIES NUMBERED AGENDA -> docs/content-video-engine/CAPABILITIES.md:42; E93 -> docs/portable/OPERATOR-RULINGS.md:2723
 - **aliases** "THE NUMBERED AGENDA" (docs/content-video-engine/CAPABILITIES.md:37)
 
 ### The vector map arc species
@@ -76,7 +76,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `ARC` in `content/video_engine/scripts/species/vecmap.mjs`: `DRAW_S`=0.9, `BOW`=0.5, `ENTER_K`=0.45, `SAMPLES`=48, `HEAD`=26, `HEAD_A`=0.42, `HEAD_F`=0.74, `CROSS_S`=0.45, `CROSS_ARM`=26, `DIM`=0.42
 - **status** wired - **callable** yes
 - **proof** golden vecmap-arc - test content/video_engine/tests/kinetics/vecmap.test.mjs - first use none
-- **doctrine** CAPABILITIES VECTOR MAP -> docs/content-video-engine/CAPABILITIES.md:95
+- **doctrine** CAPABILITIES VECTOR MAP -> docs/content-video-engine/CAPABILITIES.md:98
 
 ### The beat-freeze chart exit species
 
@@ -95,13 +95,13 @@ parameter of an effect is an option on its card, never a card.
 - **when** the sentence names a NUMBER or a POINT on a chart to ring (E56: a ring's one use); the label is the sentence's figure (content/video_engine/scripts/build_scene_timeline_f.py SPECIES_WHEN)
 - **example** `{'kind': 'callout', 'at': 9.77, 'dur': 7.65, 'label': '25%', 'pad': 22, 'label_scale': 2.2, 'target': {'kind': 'point', 'x': 0.65, 'y': 0.34}}` (content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:5; key: species[] {"kind": "callout", "at", "dur", "target"} (shot row 7th element); check: species)
 - **phases**
-  1. **circle draws** - the hand-drawn ellipse draws on by dash (trigger: the species' `at`; dials: `CALLOUT_DRAW`=0.7)
-  2. **label pops** - the label scales 0.7 -> 1.0 on spEase over 0.25 s (trigger: 0.8 x CALLOUT_DRAW into the draw; dials: `CALLOUT_DRAW`=0.7)
+  1. **circle draws** - the hand-drawn ellipse draws on by dash (trigger: the species' `at`; dials: `CALLOUT.DRAW_S`=0.7)
+  2. **label pops** - the label scales 0.7 -> 1.0 on spEase over 0.25 s (trigger: CALLOUT.LABEL_AT (0.8) x DRAW_S into the draw; dials: `CALLOUT.DRAW_S`=0.7)
   3. **underline form (alternative)** - with form: underline, a squiggle stroke draws under the press card's phrase instead (trigger: the species' `at`; dials: `SQUIG_DRAW`=0.45)
 - **blend** hw-callout-circle (doc 29 harvest) -> the whole arc (recorded; docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1800)
 - **blend** E56 a ring's one use -> the whole arc (recorded; docs/portable/OPERATOR-RULINGS.md:1815)
 - **blend** squiggle law for the underline form -> the whole arc (recorded; docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1805)
-- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintSpecies` - also `calloutPath` - paintSpecies / sp.kind === "callout" (calloutPath)
+- **lives** module - `content/video_engine/scripts/species/callout.mjs` - symbol `paintCallout` - also `calloutPath` - promoted from the engine's own branch (P57 T17 / R26-97): the module registers SPECIES_PAINTERS.callout and is inlined into the engine between KINETICS:BEGIN callout and KINETICS:END
 - **status** live - **callable** yes
 - **proof** golden chart-callout - test content/video_engine/tests/test_targeted_species.py::test_callout_without_a_target_is_an_error_naming_the_kind - first use japan-tariff-trick build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44) t=9.77
 - **doctrine** 29 s9.27 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1783; 29 s9.27 row Scribble callout -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1783; E56 -> docs/portable/OPERATOR-RULINGS.md:1815
@@ -123,7 +123,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `CHIP` in `content/video_engine/scripts/species/chip.mjs`: `SIZE`=168, `RX`=22, `GLYPH`=92, `LABEL_DY`=46, `LAND_S`=0.55, `POP_FROM`=0.82, `DROP_PX`=34, `FADE_S`=0.14, `CROSS_S`=0.5, `DIM`=0.55
 - **status** wired - **callable** yes
 - **proof** golden chip-board - test content/video_engine/tests/kinetics/chip.test.mjs - first use none
-- **doctrine** CAPABILITIES icon CHIP -> docs/content-video-engine/CAPABILITIES.md:90; P50 T2 -> unresolved
+- **doctrine** CAPABILITIES icon CHIP -> docs/content-video-engine/CAPABILITIES.md:93; P50 T2 -> unresolved
 - **aliases** "The icon CHIP" (docs/content-video-engine/CAPABILITIES.md:87); "icon board" (content/video_engine/scripts/build_scene_timeline_f.py:211)
 
 ### The isometric count array species
@@ -142,7 +142,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `COUNT` in `content/video_engine/scripts/species/countarray.mjs`: `MIN`=2, `MAX`=12, `PITCH`=190, `RISE`=0.5, `ICON`=120, `TILE_K`=0.86, `STEP`=0.34, `LAND_S`=0.45, `POP_FROM`=0.86, `DROP_PX`=26, `FADE_S`=0.12, `CLAIM_LAG`=0.18, `CLAIM_S`=0.4, `CLAIM_DY`=78, `CLAIM_SIZE`=58, `MIN_K`=0.4
 - **status** wired - **callable** yes
 - **proof** golden count-array - test content/video_engine/tests/kinetics/countarray.test.mjs - first use none
-- **doctrine** CAPABILITIES COUNT ARRAY -> docs/content-video-engine/CAPABILITIES.md:39
+- **doctrine** CAPABILITIES COUNT ARRAY -> docs/content-video-engine/CAPABILITIES.md:41
 - **aliases** "THE ISOMETRIC COUNT ARRAY" (docs/content-video-engine/CAPABILITIES.md:36)
 
 ### The flow diagram species
@@ -163,7 +163,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `FLOW` in `content/video_engine/scripts/species/flow.mjs`: `BOX_S`=0.9, `BOX_LEAD`=0.55, `DASH`=26, `DASH_GAP`=15, `NODE_STEP`=0.2, `EDGE_LAG`=0.1, `EDGE_S`=0.34, `BOW`=0.42, `ENTER_K`=0.45, `EDGE_GAP`=16, `HEAD`=28, `HEAD_A`=0.42, `HEAD_F`=0.72, `SAMPLES`=40, `SWAP_OUT_S`=0.3, `SWAP_IN_S`=0.45, `TAG_LAG`=0.12, `TAG_S`=0.5, `TAG_PAD`=26, `TAG_SIZE`=34, `PITCH_K`=1.5, `CROSS_K`=1.15, `MIN_K`=0.4, `LABEL_H`=34
 - **status** wired - **callable** yes
 - **proof** golden flow-swap - test content/video_engine/tests/kinetics/flow.test.mjs - first use none
-- **doctrine** CAPABILITIES FLOW DIAGRAM -> docs/content-video-engine/CAPABILITIES.md:93; 42 s42.4 -> docs/content-video-engine/42-DRAWING-KINETICS.md:102
+- **doctrine** CAPABILITIES FLOW DIAGRAM -> docs/content-video-engine/CAPABILITIES.md:96; 42 s42.4 -> docs/content-video-engine/42-DRAWING-KINETICS.md:102
 - **aliases** "The FLOW DIAGRAM" (docs/content-video-engine/CAPABILITIES.md:89)
 
 ### The focus zoom species
@@ -208,7 +208,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `LIGHT` in `content/video_engine/scripts/species/vecmap.mjs`: `IN_S`=0.3, `OUT_S`=0.35, `MAX`=0.78, `BREATH_K`=7
 - **status** wired - **callable** yes
 - **proof** golden vecmap-arc - test content/video_engine/tests/kinetics/vecmap.test.mjs - first use none
-- **doctrine** CAPABILITIES VECTOR MAP -> docs/content-video-engine/CAPABILITIES.md:95; E56 -> docs/portable/OPERATOR-RULINGS.md:1815
+- **doctrine** CAPABILITIES VECTOR MAP -> docs/content-video-engine/CAPABILITIES.md:98; E56 -> docs/portable/OPERATOR-RULINGS.md:1815
 
 ### The newsreel band species
 
@@ -228,7 +228,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `NEWSREEL` in `content/video_engine/scripts/species/newsreel.mjs`: `SPEED`=140, `BAND_H`=0.14, `GAP`=88, `BULLET`="•", `EDGE`=0.12, `PAD_X`=34, `TAB_W`=12, `CRAWL_ROW`=0.56, `STRAP_ROW`=0.88, `TYPE`=0.7, `STRAP_TYPE`=0.56, `DEEMPH`=0.62, `HAIRLINE`=0.04, `EST_PX_PER_CHAR`=0.52, `BEATS`=Object.freeze({ /* RU-4's beat plan as a named table in seconds, ours to re-time */ BAR: 0, /* the band starts opening o, `COL`=Object.freeze({ /* the tokens the template already defines, each with its own value as the fallback so the band paints t
 - **status** wired - **callable** yes
 - **proof** golden newsreel-band - test content/video_engine/tests/kinetics/newsreel.test.mjs - first use none
-- **doctrine** CAPABILITIES NEWSREEL -> docs/content-video-engine/CAPABILITIES.md:42; E68 -> docs/portable/OPERATOR-RULINGS.md:2206; E84 -> docs/portable/OPERATOR-RULINGS.md:2574
+- **doctrine** CAPABILITIES NEWSREEL -> docs/content-video-engine/CAPABILITIES.md:44; E68 -> docs/portable/OPERATOR-RULINGS.md:2206; E84 -> docs/portable/OPERATOR-RULINGS.md:2574
 - **aliases** "THE NEWSREEL BAND" (docs/content-video-engine/CAPABILITIES.md:39)
 
 ### The plate life species
@@ -332,9 +332,9 @@ parameter of an effect is an option on its card, never a card.
 - **blend** yt-feather-highlight (doc 29 harvest) -> the whole arc (recorded; docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1804)
 - **blend** E49 idle on the light -> the whole arc (recorded; docs/portable/OPERATOR-RULINGS.md:1494)
 - **blend** E25 amended: the light holds -> the whole arc (recorded; docs/content-video-engine/CAPABILITIES.md:70)
-- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintSpecies` - paintSpecies / sp.kind === "spotlight"
+- **lives** module - `content/video_engine/scripts/species/spotlight.mjs` - symbol `paintSpotlight` - also `spotlightGlide`, `spotlightRadius`, `spotlightStops`, `spotlightFade` - promoted from the engine's own branch (P57 T19 / R26-96): the module registers SPECIES_PAINTERS.spotlight and is inlined into the engine between KINETICS:BEGIN spotlight and KINETICS:END
 - **status** live - **callable** yes
-- **proof** golden none - test content/video_engine/tests/test_targeted_species.py::test_every_pointing_kind_requires_a_target - first use japan-tariff-trick build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44) t=2.67
+- **proof** golden spotlight-hold - test content/video_engine/tests/test_targeted_species.py::test_every_pointing_kind_requires_a_target - first use japan-tariff-trick build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44) t=2.67
 - **doctrine** 29 s9.27 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1783; 29 s9.27 row Feathered spotlight -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1783; E25 -> docs/portable/OPERATOR-RULINGS.md:761; E56 -> docs/portable/OPERATOR-RULINGS.md:1815
 - **aliases** "Feathered spotlight" (docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1804); "The light HOLDS" (docs/content-video-engine/CAPABILITIES.md:70)
 
@@ -360,7 +360,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `STAMP` in `content/video_engine/scripts/species/vecmap.mjs`: `IN_S`=0.45, `FADE_S`=0.16, `RISE`=0.5, `POP_FROM`=0.72, `FIGURE_PX`=46, `EDGE`=28, `CHAR_W`=0.56, `YEAR_PX`=32, `DY`=-18
 - **status** wired - **callable** yes
 - **proof** golden vecmap-arc - test content/video_engine/tests/kinetics/vecmap.test.mjs - first use none
-- **doctrine** CAPABILITIES VECTOR MAP -> docs/content-video-engine/CAPABILITIES.md:95
+- **doctrine** CAPABILITIES VECTOR MAP -> docs/content-video-engine/CAPABILITIES.md:98
 
 ### The steam still-life species
 
@@ -394,14 +394,14 @@ parameter of an effect is an option on its card, never a card.
 - **when** the sentence NAMES places and flows on a still - a route draws with hops between named points, stamps stack at them (content/video_engine/scripts/build_scene_timeline_f.py SPECIES_WHEN)
 - **example** `{'kind': 'trace', 'at': 9.22, 'dur': 8.2, 'color': '#B0201F', 'target': {'kind': 'region', 'x0': 0.215, 'y0': 0.34, 'x1': 0.65, 'y1': 0.425}, 'hop': {'from': [0.215, 0.425], 'to': [0.65, 0.34], 'bow': 0.16, 'draw_s': 0.55, 'width': 9}}` (content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:5; key: species[] {"kind": "trace", "at", "dur", "target"} (shot row 7th element); check: species)
 - **phases**
-  1. **draw** - a seeded zigzag (or, with `hop`, one quadratic bow) draws on by dash (trigger: the species' `at` (and every TRACE_PERIOD for the plain trace); dials: `TRACE_DRAW`=1.1)
+  1. **draw** - a seeded zigzag (or, with `hop`, one quadratic bow) draws on by dash (trigger: the species' `at` (and every TRACE.PERIOD for the plain trace); dials: `TRACE.DRAW_S`=1.1)
   2. **arrowhead lands** - the arrowhead appears when the line completes (trigger: draw fraction reaches 1)
-  3. **hold / fade / repeat** - plain: holds, fades over the last 18 % of the period, redraws; hop: held to the end (trigger: phase > 0.82 of TRACE_PERIOD (plain only); dials: `TRACE_PERIOD`=3.2)
+  3. **hold / fade / repeat** - plain: holds, fades over the last 18 % of the period, redraws; hop: held to the end (trigger: phase > 0.82 of TRACE.PERIOD (plain only); dials: `TRACE.PERIOD`=3.2)
 - **blend** Trace HOPS + stacked stamps -> the whole arc (recorded; docs/content-video-engine/CAPABILITIES.md:71)
-- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintSpecies` - paintSpecies / sp.kind === "trace"
+- **lives** module - `content/video_engine/scripts/species/trace.mjs` - symbol `paintTrace` - also `traceHopPoints`, `tracePlainPoints`, `traceHead` - promoted from the engine's own branch (P57 T18 / R26-95): the module registers SPECIES_PAINTERS.trace and is inlined into the engine between KINETICS:BEGIN trace and KINETICS:END
 - **status** live - **callable** yes
-- **proof** golden none - test content/video_engine/tests/test_targeted_species.py::test_trace_hop_is_accepted_with_fraction_endpoints - first use japan-tariff-trick build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44) t=9.22
-- **doctrine** CAPABILITIES Trace HOPS -> docs/content-video-engine/CAPABILITIES.md:74
+- **proof** golden trace-hop - test content/video_engine/tests/test_targeted_species.py::test_trace_hop_is_accepted_with_fraction_endpoints - first use japan-tariff-trick build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44) t=9.22
+- **doctrine** CAPABILITIES Trace HOPS -> docs/content-video-engine/CAPABILITIES.md:77
 - **aliases** "Trace HOPS" (docs/content-video-engine/CAPABILITIES.md:71)
 
 ## page_species
@@ -421,7 +421,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintBracket`
 - **status** wired - **callable** yes
 - **proof** golden tiers-two - test content/video_engine/tests/test_chart_transitions.py::test_a_bracket_follows_the_data_across_a_rescale_and_hides_when_its_datum_leaves_the_window - first use systems-and-blowups SHOT-TABLE-SHORT.py (no approval record found for this build) t=46.72
-- **doctrine** CAPABILITIES Build-on -> docs/content-video-engine/CAPABILITIES.md:70
+- **doctrine** CAPABILITIES Build-on -> docs/content-video-engine/CAPABILITIES.md:73
 
 ### The build-to page species
 
@@ -435,7 +435,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `lpPaintChart` - also `pageSpecies` - lpPaintChart / pageSpecies(scene, "build_to") caps
 - **status** live - **callable** yes
 - **proof** golden tiers-two - test content/video_engine/tests/test_page_performs.py::test_the_gate_credits_each_page_species_and_lists_the_build_to_holds - first use japan-tariff-trick build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44) t=73.52
-- **doctrine** CAPABILITIES Build-on -> docs/content-video-engine/CAPABILITIES.md:70; E50 -> docs/portable/OPERATOR-RULINGS.md:1520
+- **doctrine** CAPABILITIES Build-on -> docs/content-video-engine/CAPABILITIES.md:73; E50 -> docs/portable/OPERATOR-RULINGS.md:1520
 
 ### The chart-to page species
 
@@ -463,7 +463,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `TREEMAP` in `content/video_engine/scripts/species/treemap.mjs`: `CELL_IN`=0.30, `STAGGER`=0.70, `LABEL_AT`=0.55, `RISE`=0.35, `CROSS_S`=0.5, `CROSS_INSET`=0.12, `DIM`=0.55, `WRITE`=0.45, `WRITE_AT`=0.35
 - **status** wired - **callable** yes
 - **proof** golden treemap-cross - test content/video_engine/tests/kinetics/treemap.test.mjs - first use none
-- **doctrine** E53 -> docs/portable/OPERATOR-RULINGS.md:1705; CAPABILITIES TREEMAP -> docs/content-video-engine/CAPABILITIES.md:97
+- **doctrine** E53 -> docs/portable/OPERATOR-RULINGS.md:1705; CAPABILITIES TREEMAP -> docs/content-video-engine/CAPABILITIES.md:100
 - **aliases** "the census exception" (docs/content-video-engine/CAPABILITIES.md:94)
 
 ### The written figure page species
@@ -472,13 +472,14 @@ parameter of an effect is an option on its card, never a card.
 - **when** the sentence TURNS on a number - the hand writes it at its datum's spot (a note when the datum has no room) (content/video_engine/scripts/build_scene_timeline_f.py SPECIES_WHEN)
 - **example** `{'kind': 'figure', 'at': 77.02, 'dur': 1.4, 'target': {'kind': 'datum', 'index': 43}, 'text': '$364bn a year', 'sub': 'customs duties, late 2025', 'color': 'neg', 'dy': -0.9}` (content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:14; key: species[] {"kind": "figure", "at", "dur", ...} on a ledger row; check: species)
 - **phases**
-  1. **figure writes** - the number writes glyph by glyph at its datum (trigger: the species' `at`, over the first 0.6 of `dur`)
-  2. **sub writes** - the sub writes under it (trigger: 0.6 of `dur`, over the remaining 0.4)
+  1. **figure writes** - the number writes glyph by glyph at its datum, stepping off its own series' ink where it has to (R26-71) (trigger: the species' `at`, over WRITE of `dur`; dials: `WRITE`=0.6, `OVERLAP`=1.6)
+  2. **sub writes** - the sub writes under it (trigger: WRITE of `dur`, over the remaining SUB_WRITE; dials: `SUB_WRITE`=0.4)
 - **blend** E50 the chart's next thing -> the whole arc (recorded; docs/portable/OPERATOR-RULINGS.md:1520)
-- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintFigure`
-- **status** live - **callable** yes
-- **proof** golden none - test content/video_engine/tests/test_chart_transitions.py::test_a_figure_follows_the_active_state_after_a_rescale_and_a_dropped_datum_shows_nothing - first use japan-tariff-trick build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44) t=77.02
-- **doctrine** E50 -> docs/portable/OPERATOR-RULINGS.md:1520
+- **lives** module - `content/video_engine/scripts/species/figure.mjs` - symbol `paintFigure` - also `figurePlace`, `figClearY`, `figBox`, `figWidth`, `segMeetsBox`, `figureGlyph`, `figureSubGlyph` - promoted P57 T20 / R26-98: a PAGE painter (registers PAGE_PAINTERS.figure, inlined between KINETICS:BEGIN figure and KINETICS:END); the builder stays in buildPerform and calls the module by name
+- **dials** `FIGURE` in `content/video_engine/scripts/species/figure.mjs`: `FIGURE_STEP`=0.6, `FIGURE_STEPS`=4, `FIGURE_PAD`=5, `FIGURE_UP`=1.08, `FIGURE_DOWN`=0.53, `FIGURE_CHAR_W`=0.62, `X_PAD`=14, `BASE_DY`=0.35, `LINE`=1.2, `SUB_DY`=1.3, `WRITE`=0.6, `SUB_WRITE`=0.4, `OVERLAP`=1.6
+- **status** wired - **callable** yes
+- **proof** golden page-figure - test content/video_engine/tests/test_chart_transitions.py::test_a_figure_follows_the_active_state_after_a_rescale_and_a_dropped_datum_shows_nothing - first use japan-tariff-trick build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44) t=77.02
+- **doctrine** E50 -> docs/portable/OPERATOR-RULINGS.md:1520; BACKLOG R26-71 -> docs/content-video-engine/BACKLOG.md:477
 
 ### The handwritten note page species
 
@@ -508,7 +509,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `buildPerform` - also `pageSpecies` - buildPerform / pageSpecies(scene, "relight")
 - **status** wired - **callable** yes
 - **proof** golden none - test content/video_engine/tests/test_page_performs.py::test_the_four_page_species_are_kinds_and_take_their_own_fields - first use none
-- **doctrine** CAPABILITIES Build-on -> docs/content-video-engine/CAPABILITIES.md:70
+- **doctrine** CAPABILITIES Build-on -> docs/content-video-engine/CAPABILITIES.md:73
 - **aliases** "the ring's echo" (content/video_engine/scripts/build_scene_timeline_f.py:309)
 
 ### The retitle page species
@@ -523,7 +524,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `buildPerform` - also `pageSpecies` - buildPerform / pageSpecies(scene, "retitle")
 - **status** live - **callable** yes
 - **proof** golden none - test content/video_engine/tests/test_page_performs.py::test_retitle_erases_the_old_title_glyph_by_glyph_before_the_new_one_writes - first use japan-tariff-trick build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44) t=27.78
-- **doctrine** CAPABILITIES Build-on -> docs/content-video-engine/CAPABILITIES.md:70; BACKLOG R26-46 -> docs/content-video-engine/BACKLOG.md:452
+- **doctrine** CAPABILITIES Build-on -> docs/content-video-engine/CAPABILITIES.md:73; BACKLOG R26-46 -> docs/content-video-engine/BACKLOG.md:452
 
 ### The span page species
 
@@ -539,7 +540,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `SPAN` in `content/video_engine/scripts/species/span.mjs`: `IN_S`=0.45, `ALPHA`=0.16, `WRITE`=0.5, `PAD_T`=44, `PAD_B`=44, `LABEL_DY`=16, `LABEL_IN`=2.1, `LABEL_ROOM`=1.3, `MIN_W`=6, `LABEL_CLEAR`=0.55
 - **status** wired - **callable** yes
 - **proof** golden span-decade - test content/video_engine/tests/kinetics/span.test.mjs - first use systems-and-blowups SHOT-TABLE-F.py (no approval record found for this build) t=None
-- **doctrine** CAPABILITIES SPAN -> docs/content-video-engine/CAPABILITIES.md:94; BACKLOG R26-25 -> docs/content-video-engine/BACKLOG.md:507
+- **doctrine** CAPABILITIES SPAN -> docs/content-video-engine/CAPABILITIES.md:97; BACKLOG R26-25 -> docs/content-video-engine/BACKLOG.md:507
 - **aliases** "The SPAN - a shaded stretch of time" (docs/content-video-engine/CAPABILITIES.md:91)
 
 ### The spread page species
@@ -808,7 +809,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `TIERS` in `content/video_engine/scripts/species/tiers.mjs`: `GAP`=0.20, `PAD`=0.08, `TICKS`=2, `NAME_DY`=6, `STAGGER`=0.34, `MIN_H`=46
 - **status** wired - **callable** yes
 - **proof** golden tiers-two - test content/video_engine/tests/kinetics/tiers.test.mjs - first use none
-- **doctrine** CAPABILITIES N-TIER -> docs/content-video-engine/CAPABILITIES.md:96; BACKLOG R26-72 -> docs/content-video-engine/BACKLOG.md:478
+- **doctrine** CAPABILITIES N-TIER -> docs/content-video-engine/CAPABILITIES.md:99; BACKLOG R26-72 -> docs/content-video-engine/BACKLOG.md:478
 - **aliases** "N-TIER pages - small multiples" (docs/content-video-engine/CAPABILITIES.md:93)
 
 ### The treemap census ledger page
@@ -915,7 +916,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintDockClip` - also `dockIsVideo` - paintDockClip + dockIsVideo; compiler is_video_asset / dock_uri
 - **status** live - **callable** yes: compiles for any .mp4/.webm dock asset
 - **proof** golden none - test content/video_engine/tests/test_video_dock.py::test_a_video_dock_asset_embeds_raw_like_a_world_clip - first use tokyo-tea-break build-short.v2 (render approved by the operator 2026-09-06, render/APPROVALS.json; 4 video docks) t=None
-- **doctrine** CAPABILITIES Video dock -> docs/content-video-engine/CAPABILITIES.md:63; E86 -> docs/portable/OPERATOR-RULINGS.md:2607; BACKLOG R26-7 -> docs/content-video-engine/BACKLOG.md:432
+- **doctrine** CAPABILITIES Video dock -> docs/content-video-engine/CAPABILITIES.md:66; E86 -> docs/portable/OPERATOR-RULINGS.md:2607; BACKLOG R26-7 -> docs/content-video-engine/BACKLOG.md:432
 - **aliases** "Video dock" (docs/content-video-engine/CAPABILITIES.md:60)
 
 ## dock_payload
@@ -928,7 +929,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `drawChart` - also `fillDock` - drawChart + the fillDock chart mount
 - **status** live - **callable** yes: a .series.json beside a docked asset
 - **proof** golden none - test none - first use steel-and-paper build-f t=9.5
-- **doctrine** 29 s9.22 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1285; 29 s9.23 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1330; CAPABILITIES chart self-containment -> docs/content-video-engine/CAPABILITIES.md:173
+- **doctrine** 29 s9.22 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1285; 29 s9.23 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1330; CAPABILITIES chart self-containment -> docs/content-video-engine/CAPABILITIES.md:176
 - **aliases** "LIVE CHART payload" (content/video_engine/scripts/build_scene_timeline_f.py:3996)
 
 ### The record document dock payload
@@ -941,9 +942,9 @@ parameter of an effect is an option on its card, never a card.
   2. **highlight** - words hl[0]..hl[1] carry the highlighter stroke, swept in from each word's own time (trigger: each highlighted word's timestamp; dials: `sweep_s`=0.2, `ease`=cubic out)
   3. **attribute** - the attribution line shows, then the source line (trigger: record.end; dials: `attr_after_end_s`=0.15, `src_after_end_s`=0.45)
 - **blend** typewriter + highlighter (operator design call 2026-08-25) -> type + highlight (recorded; docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:247)
-- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `drawRecord` - also `fillDock` - drawRecord + the fillDock record mount
+- **lives** module - `content/video_engine/scripts/species/record.mjs` - symbol `paintRecord` - also `RECORD`, `recordTyped`, `recordTypeClock`, `recordCut`, `recordSweep`, `recordLanded`, `fillDock` - P57 T21: extracted from the engine's drawRecord with every golden byte-identical; the dock slot keeps the fillDock mount and calls paintRecord by name (no DOCK_PAINTERS registry)
 - **status** live - **callable** yes: author the META `record` (the kit builds it from the take); no validator, no golden
-- **proof** golden none - test content/video_engine/tests/test_authoring_kit.py::test_record_words_land_the_highlighter_on_the_narrators_word - first use steel-and-paper build-f t=226.6
+- **proof** golden record-typewriter - test content/video_engine/tests/kinetics/record.test.mjs - first use steel-and-paper build-f t=226.6
 - **doctrine** 39 s10 -> docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:240; CAPABILITIES record -> docs/content-video-engine/CAPABILITIES.md:19; CAPABILITIES record in portrait -> unresolved; SPECIES-BY-SENTENCE row 1 -> unresolved
 - **aliases** "Record-document species" (docs/content-video-engine/CAPABILITIES.md:19); "typewriter + highlighter" (docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:240); "the record dock" (docs/content-video-engine/SPECIES-BY-SENTENCE.md:25)
 
@@ -967,7 +968,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `VERDICT` in `content/video_engine/scripts/species/verdict.mjs`: `SPOTS`=Object.freeze([ /* the nine rail spots [left %, top %, width %]: four across the top, mid-frame flanks, three along the, `TILTS`=Object.freeze([-3, 2, -2, 3, -2.5, 2.5]), `CARD_W`=1056, `CARD_H`=480, `ACTIVE_X`=930, `ACTIVE_DX`=70, `ACTIVE_Y`=400, `ACTIVE_ROW_DY`=26, `ACTIVE_ROWS`=3, `ACTIVE_W`=840, `BURST_NORM_X`=700, `BURST_NORM_Y`=460, `REF_W`=1920, `REF_H`=1080, `ENTER_S`=0.9, `ENTER_SWING`=460, `ENTER_RISE`=-90, `ENTER_Z`=-700, `ENTER_ROT_Y`=30, `RECEDE_S`=1.0, `LAST_RECEDE_LEAD`=0.9, `DRIFT_W`=0.55, `DRIFT_PHASE`=1.7, `DRIFT_X_REST`=8, `DRIFT_X_ACTIVE`=26, `BOB_W`=0.7, `BOB_PHASE`=2.1, `BOB_REST`=5, `BOB_ACTIVE`=14, `DRIFT_SCALE`=0.008, `DRIFT_ROT`=0.6, `Z_SWITCH`=0.5, `Z_ACTIVE`=9, `Z_RAIL`=7, `BURST_X`=560, `BURST_Y`=420, `BURST_Z`=340, `BURST_SPIN`=24, `BURST_SCALE`=0.22, `BURST_STAGGER`=0.06, `BURST_S`=0.5, `REMOVE_AFTER`=1.4, `MOUNT_LEAD`=0.5
 - **status** live (backlog R26-82) - **callable** yes: long form 16:9: author the stack META (items + clear_at) and a host dock window past clear_at; the compiler has no validator for it and it has never been laid out for 9:16 (BACKLOG R26-82)
 - **proof** golden verdict-stack - test content/video_engine/tests/kinetics/verdict.test.mjs - first use steel-and-paper build-f t=701.73
-- **doctrine** 29 s9.24 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364; 29 s9.24b -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1; MOTION-GRAMMAR -> unresolved; CAPABILITIES verdict stack -> docs/content-video-engine/CAPABILITIES.md:172; BACKLOG R26-82 -> docs/content-video-engine/BACKLOG.md:488; E49 -> docs/portable/OPERATOR-RULINGS.md:1494
+- **doctrine** 29 s9.24 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364; 29 s9.24b -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1; MOTION-GRAMMAR -> unresolved; CAPABILITIES verdict stack -> docs/content-video-engine/CAPABILITIES.md:175; BACKLOG R26-82 -> docs/content-video-engine/BACKLOG.md:488; E49 -> docs/portable/OPERATOR-RULINGS.md:1494
 - **aliases** "evidence wall" (operator 2026-09-13 (P55 plan Summary)); "VERDICT STACK species" (docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364); "the evidence wall" (docs/content-video-engine/BACKLOG.md:488); "evidence-wall recap" (docs/agent-memory/operator/resume-2026-09-12.md:113); "nine-proof wall" (docs/content-video-engine/CAPABILITIES.md:169); "the verdict pile-up" (content/video_engine/scripts/build_scene_timeline_f.py:3992); "STACK species" (docs/content-video-engine/samples/scene-evidence-engine.mjs:3225); "pull back in all of our evidence cards" (operator 2026-09-13 (P55 plan HG1))
 
 ## chart_dock
@@ -998,7 +999,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `CHECKLIST` in `content/video_engine/scripts/species/checklist.mjs`: `COLORS`=Object.freeze(["#f4f6f8", "#dce3ea", "#3bc9b0", "#ff8a8c"]), `HEAD_DY`=18, `ROW0_DY`=64, `ROW_PITCH`=58, `ROW_DELAY_S`=3, `HL_FROM_COL`=2, `BAND_INSET`=8, `BAND_RISE`=21, `BAND_H`=30, `BAND_W0`=10, `BAND_RX`=4, `BAND_ALPHA`=0.28, `KM_GROUND`="#16181c", `RULE_DY`=18, `RULE_COLOR`="#24262b", `RULE_W`=1.5, `FIT_MARGIN`=28, `FIT_MIN_W`=40, `FIT_PAD`=26, `FIT_CHAR_W`=10, `FIT_X0`=64, `FIT_ROOM_SLACK`=8, `CHISEL_DEG`=-7, `RECAP_S`=12, `RECAP_ROW_S`=0.8, `OFFS`=Object.freeze([0, 0.6, 1.0, 1.6]), `RECAP_OFFS`=Object.freeze([0, 0.25, 0.45, 0.7]), `CELL_FADE_S`=0.35, `TYPE_S`=0.045, `SWEEP_S`=0.55, `SWEEP_W_FALLBACK`=300, `SWEEP_PAD`=18, `SWEEP_ROOM_PAD`=12
 - **status** live (backlog R26-81) - **callable** yes: 16:9 long-form dock via .series.json; never on a short (R26-81: tokens, 9:16 rows, no frame on disk)
 - **proof** golden test-card - test content/video_engine/tests/kinetics/checklist.test.mjs - first use steel-and-paper build-f t=492.3
-- **doctrine** CAPABILITIES checklist species -> docs/content-video-engine/CAPABILITIES.md:192; CAPABILITIES auto-fit -> unresolved; E93 #3 -> docs/portable/OPERATOR-RULINGS.md:2723; BACKLOG R26-81 -> docs/content-video-engine/BACKLOG.md:487; BACKLOG R26-80 -> docs/content-video-engine/BACKLOG.md:486; ledger_page UNCHARTABLE -> unresolved
+- **doctrine** CAPABILITIES checklist species -> docs/content-video-engine/CAPABILITIES.md:195; CAPABILITIES auto-fit -> unresolved; E93 #3 -> docs/portable/OPERATOR-RULINGS.md:2723; BACKLOG R26-81 -> docs/content-video-engine/BACKLOG.md:487; BACKLOG R26-80 -> docs/content-video-engine/BACKLOG.md:486; ledger_page UNCHARTABLE -> unresolved
 - **aliases** "test list" (operator 2026-09-13 (P55 plan Summary)); "three-question test card" (operator 2026-09-13 (P55 plan Summary)); "THE TEST card" (operator 2026-09-13 (P55 plan Summary)); "The three-question TEST card" (docs/content-video-engine/BACKLOG.md:487); "the three-question TEST table card" (docs/agent-memory/operator/resume-2026-09-12.md:113); "Steel and Paper's three-question test card" (docs/portable/OPERATOR-RULINGS.md:2735); "Checklist species" (docs/content-video-engine/CAPABILITIES.md:189); "the scorecard" (content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:142); "tripwire board" (docs/content-video-engine/CAPABILITIES.md:189); "CHECKLIST v2" (docs/content-video-engine/samples/scene-evidence-engine.mjs:3582); "checklist" (operator 2026-09-13 (P55 plan HG1))
 
 ### The panels chart card
@@ -1046,7 +1047,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `STOP` in `content/video_engine/scripts/kinetics/stopaction.mjs`: `FLIGHT_S`=0.45, `ARC`=0.22, `SPIN_DEG`=9, `ANTIC_S`=0.18, `ANTIC_PX`=6, `ANTIC_SQUASH`=0.05, `DROP_S`=0.14, `DROP_PX`=48, `SETTLE_S`=1.2, `IMPACT_SQUASH`=0.22, `SHADOW_FAR`={ scale: 0.55, alpha: 0.55, blur: 16 }, `SHADOW_NEAR`={ scale: 1.05, alpha: 0.85, blur: 0.8 }, `SHADOW_H_PX`=160, `DIP_PX`=4, `SHAKE_PX`=[[6, -3], [-4, 2], [0, 0]], `G_PX_S2`=2400, `LAG_FRAMES`=1
 - **status** live - **callable** yes: probe OK; the throw/land paints only when the build turns kinetics stop_action on (arriveOf)
 - **proof** golden none - test content/video_engine/tests/test_stop_action.py::test_dock_options_are_a_dict_of_arrive_and_mass_and_are_written_only_when_named - first use tokyo-tea-break build-short t=9.09
-- **doctrine** CAPABILITIES card-then-snap -> docs/content-video-engine/CAPABILITIES.md:72; ARRIVALS (P47 T1) -> unresolved
+- **doctrine** CAPABILITIES card-then-snap -> docs/content-video-engine/CAPABILITIES.md:75; ARRIVALS (P47 T1) -> unresolved
 - **aliases** "stop-action throw" (docs/content-video-engine/CAPABILITIES.md:69)
 
 ### The badge rail
@@ -1068,7 +1069,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `fgD` - render: the `fgD` foreground pass (`(sc.docks || []).find((d) => d && d.fg ...)`); compiler plate_layers / behind_error
 - **status** wired - **callable** yes: probe OK; the plate must declare the layer
 - **proof** golden occluder-dock - test content/video_engine/tests/test_targeted_species.py::test_behind_is_a_dock_option_and_the_plate_declares_its_fronts - first use none
-- **doctrine** CAPABILITIES continuity three (HF-17) -> docs/content-video-engine/CAPABILITIES.md:102; DOCK_OPTS HF-17 -> unresolved
+- **doctrine** CAPABILITIES continuity three (HF-17) -> docs/content-video-engine/CAPABILITIES.md:105; DOCK_OPTS HF-17 -> unresolved
 - **aliases** "the occluder" (docs/content-video-engine/CAPABILITIES.md:99)
 
 ### The centred dock option
@@ -1080,7 +1081,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** compiler-only - `content/video_engine/scripts/build_scene_timeline_f.py` - symbol `centred_place` - also `solo_centre_by_clock` - centred_place / solo_centre_by_clock (the player paints the compiled `place` box via dockGeom)
 - **status** live - **callable** yes: probe OK
 - **proof** golden none - test content/video_engine/tests/test_page_boxes.py::test_a_centred_solo_card_lands_in_a_measured_free_band_and_never_on_the_plot - first use tokyo-tea-break build-short t=36.58
-- **doctrine** CAPABILITIES centred dock -> docs/content-video-engine/CAPABILITIES.md:78; E55 -> docs/portable/OPERATOR-RULINGS.md:1792; E65 -> docs/portable/OPERATOR-RULINGS.md:2111
+- **doctrine** CAPABILITIES centred dock -> docs/content-video-engine/CAPABILITIES.md:81; E55 -> docs/portable/OPERATOR-RULINGS.md:1792; E65 -> docs/portable/OPERATOR-RULINGS.md:2111
 - **aliases** "A centred dock in an AUTHORED box" (docs/content-video-engine/CAPABILITIES.md:75)
 
 ### The cutout dock option
@@ -1183,7 +1184,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `IDLE` in `content/video_engine/scripts/kinetics/idle.mjs`: `BREATH_AMP`=0.012, `BREATH_HZ`=0.25, `DRIFT_PX`=2.0, `DRIFT_HZ`=[0.11, 0.17], `PULSE_AMP`=0.03, `PULSE_HZ`=0.2, `FIGURE_IE`=1.75, `FIGURE_PAUSE_S`=0.7, `SWAY_PX`=1.5, `SWAY_HZ`=[0.15, 0.25], `SWAY_WANDER`=0.12, `SWAY_WANDER_HZ`=[0.031, 0.047], `STEP_FPS`=0
 - **status** live - **callable** yes: probe OK
 - **proof** golden none - test content/video_engine/tests/test_idle_e49.py::test_split_idle_reads_the_option_and_refuses_an_unknown_kind - first use none
-- **doctrine** E49 -> docs/portable/OPERATOR-RULINGS.md:1494; CAPABILITIES idle -> docs/content-video-engine/CAPABILITIES.md:67
+- **doctrine** E49 -> docs/portable/OPERATOR-RULINGS.md:1494; CAPABILITIES idle -> docs/content-video-engine/CAPABILITIES.md:70
 
 ### The Ken Burns push and drift
 
@@ -1205,7 +1206,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `TIPPILL` in `content/video_engine/scripts/species/tippill.mjs`: `DX`=30, `DY`=-40, `POP_MP`=0.05, `POP_F`=0.06, `SETTLE`=0.10, `LEAD_GAP`=7, `PAD_X`=14, `PAD_Y`=9
 - **status** wired - **callable** yes: probe OK
 - **proof** golden none - test none - first use none
-- **doctrine** CAPABILITIES tip-riding pill -> docs/content-video-engine/CAPABILITIES.md:100
+- **doctrine** CAPABILITIES tip-riding pill -> docs/content-video-engine/CAPABILITIES.md:103
 - **aliases** "the tip-riding pill" (docs/content-video-engine/CAPABILITIES.md:97)
 
 ### The then plate option (the next chart state)
@@ -1227,7 +1228,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `THREAD` in `content/video_engine/scripts/species/thread.mjs`: `ALPHA`=0.34, `FROM`=0.85, `FADE_S`=0.9, `WIDTH`=0.62, `MIN_PTS`=2
 - **status** wired - **callable** yes: probe OK
 - **proof** golden thread-baseline - test content/video_engine/tests/test_chart_transitions.py::test_a_thread_is_a_plate_option_on_the_ARRIVING_page_not_a_species - first use none
-- **doctrine** CAPABILITIES continuity three (HF-16) -> docs/content-video-engine/CAPABILITIES.md:102
+- **doctrine** CAPABILITIES continuity three (HF-16) -> docs/content-video-engine/CAPABILITIES.md:105
 - **aliases** "the thread" (docs/content-video-engine/CAPABILITIES.md:99)
 
 ### The use plate option
@@ -1338,7 +1339,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `STOP` in `content/video_engine/scripts/kinetics/stopaction.mjs`: `FLIGHT_S`=0.45, `ARC`=0.22, `SPIN_DEG`=9, `ANTIC_S`=0.18, `ANTIC_PX`=6, `ANTIC_SQUASH`=0.05, `DROP_S`=0.14, `DROP_PX`=48, `SETTLE_S`=1.2, `IMPACT_SQUASH`=0.22, `SHADOW_FAR`={ scale: 0.55, alpha: 0.55, blur: 16 }, `SHADOW_NEAR`={ scale: 1.05, alpha: 0.85, blur: 0.8 }, `SHADOW_H_PX`=160, `DIP_PX`=4, `SHAKE_PX`=[[6, -3], [-4, 2], [0, 0]], `G_PX_S2`=2400, `LAG_FRAMES`=1
 - **status** wired - **callable** yes
 - **proof** golden none - test content/video_engine/tests/test_authoring_kit.py::test_record_words_land_the_highlighter_on_the_narrators_word - first use systems-and-blowups SHOT-TABLE-SHORT.py (no approval record found for this build) t=None
-- **doctrine** E45 -> docs/portable/OPERATOR-RULINGS.md:1361; CAPABILITIES Stop-action -> docs/content-video-engine/CAPABILITIES.md:71
+- **doctrine** E45 -> docs/portable/OPERATOR-RULINGS.md:1361; CAPABILITIES Stop-action -> docs/content-video-engine/CAPABILITIES.md:74
 
 ### The spring pop arrival
 
@@ -1374,7 +1375,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `STOP` in `content/video_engine/scripts/kinetics/stopaction.mjs`: `FLIGHT_S`=0.45, `ARC`=0.22, `SPIN_DEG`=9, `ANTIC_S`=0.18, `ANTIC_PX`=6, `ANTIC_SQUASH`=0.05, `DROP_S`=0.14, `DROP_PX`=48, `SETTLE_S`=1.2, `IMPACT_SQUASH`=0.22, `SHADOW_FAR`={ scale: 0.55, alpha: 0.55, blur: 16 }, `SHADOW_NEAR`={ scale: 1.05, alpha: 0.85, blur: 0.8 }, `SHADOW_H_PX`=160, `DIP_PX`=4, `SHAKE_PX`=[[6, -3], [-4, 2], [0, 0]], `G_PX_S2`=2400, `LAG_FRAMES`=1
 - **status** live - **callable** yes
 - **proof** golden none - test content/video_engine/tests/test_authoring_kit.py::test_the_bed_swells_from_the_throw_through_the_snap - first use japan-tariff-trick build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44) t=0.0
-- **doctrine** E45 -> docs/portable/OPERATOR-RULINGS.md:1361; CAPABILITIES Stop-action -> docs/content-video-engine/CAPABILITIES.md:71
+- **doctrine** E45 -> docs/portable/OPERATOR-RULINGS.md:1361; CAPABILITIES Stop-action -> docs/content-video-engine/CAPABILITIES.md:74
 
 ## camera
 
@@ -1408,7 +1409,7 @@ parameter of an effect is an option on its card, never a card.
 - **blend** the reference's measured blur-zoom (28 of 99, median 8 frames) -> the whole arc (recorded; docs/content-video-engine/46-REFERENCE-RHYTHM.md:178)
 - **blend** the suck's shape, not inverted -> the whole arc (recorded; docs/portable/OPERATOR-RULINGS.md:1429)
 - **options** `blurzoom` The blur-zoom's own length: The blurzoom runs over the seconds its suffix declares instead of its default dial. (TIMED_EXITS)
-- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `bzIn` - also `bzOut` - render / THE BLURZOOM (E47 #1) block + bzIn/bzOut
+- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `bzIn` - also `bzOut` - render / THE BLURZOOM (E47 #1) block + bzIn/bzOut; the half-windows come from kinetics/transitions.mjs straddleSecs, the only line it shares with the dip (P57 T23)
 - **status** wired - **callable** yes: in SCENE_EXITS and TIMED_EXITS; authored by name only
 - **proof** golden none - test content/video_engine/tests/test_transitions_e47.py::test_the_blurzoom_softens_the_outgoing_plate_and_magnifies_it_by_blurzoom_scale - first use none
 - **doctrine** E47 s1 -> docs/portable/OPERATOR-RULINGS.md:1419; 46 s46.5 -> docs/content-video-engine/46-REFERENCE-RHYTHM.md:116; E87 s2 -> docs/portable/OPERATOR-RULINGS.md:2623
@@ -1436,9 +1437,9 @@ parameter of an effect is an option on its card, never a card.
 - **blend** the reference's measured dip through black (35 of 99 boundaries, 14 frames) -> the whole arc (recorded; docs/content-video-engine/46-REFERENCE-RHYTHM.md:178)
 - **blend** a plain ramp - the reference's dip is linear to the frame -> the whole arc (recorded; docs/portable/OPERATOR-RULINGS.md:1431)
 - **options** `dip` The dip's own length: The dip runs over the seconds its suffix declares instead of its default dial. (TIMED_EXITS)
-- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `dipIn` - also `dipOut` - render / THE DIP (E47 #1) block + dipIn/dipOut
+- **lives** module - `content/video_engine/scripts/kinetics/transitions.mjs` - symbol `dipAlpha` - also `DIP`, `straddleSecs`, `dipVeilOpacity`, `exitName`, `exitSecs` - P57 T23: the ramp and the boundary clock, promoted with every golden byte-identical; the render loop calls them by name (no registry) and keeps the veil, the element and DIP_S
 - **status** live - **callable** yes: in SCENE_EXITS and TIMED_EXITS; the default on a world change
-- **proof** golden none - test content/video_engine/tests/test_transitions_e47.py::test_the_dip_puts_a_black_frame_on_the_boundary_and_ramps_into_and_out_of_it - first use japan-tariff-trick build-short t=8.32
+- **proof** golden dip-boundary - test content/video_engine/tests/test_transitions_e47.py::test_the_dip_puts_a_black_frame_on_the_boundary_and_ramps_into_and_out_of_it - first use japan-tariff-trick build-short t=8.32
 - **doctrine** E47 s1+s3 -> docs/portable/OPERATOR-RULINGS.md:1419; 46 s46.5 -> docs/content-video-engine/46-REFERENCE-RHYTHM.md:116; E87 s2 -> docs/portable/OPERATOR-RULINGS.md:2623; memory dip-is-a-world-change -> unresolved
 - **aliases** "dip through black" (docs/portable/OPERATOR-RULINGS.md:1419); "the dip" (docs/portable/OPERATOR-RULINGS.md:2635)
 
@@ -1563,7 +1564,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `CAM` in `content/video_engine/scripts/kinetics/camera.mjs`: `PUNCH_IN`=0.42, `PUNCH_OUT`=0.5, `PUNCH_SCALE`=1.14, `FOCUS_SCALE`=1.32, `PULL_FROM`=1.9
 - **status** wired - **callable** yes: in LEDGER_ENTERS; opt-in until its HG2 watch
 - **proof** golden none - test content/video_engine/tests/test_camera.py::test_the_compiler_admits_enter_camera_and_the_gate_ties_the_arrival_to_its_card - first use tokyo-tea-break build-short-p53t10 t=76.83
-- **doctrine** E59 s3 -> docs/portable/OPERATOR-RULINGS.md:1903; CAPABILITIES camera arrival -> docs/content-video-engine/CAPABILITIES.md:80
+- **doctrine** E59 s3 -> docs/portable/OPERATOR-RULINGS.md:1903; CAPABILITIES camera arrival -> docs/content-video-engine/CAPABILITIES.md:83
 - **aliases** "The camera arrival" (docs/content-video-engine/CAPABILITIES.md:77); "the eye goes to the landed card" (docs/content-video-engine/CAPABILITIES.md:77)
 
 ### The drop page enter
@@ -1578,7 +1579,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintLedger` - also `throwIn` - paintLedger const dropped + render const throwIn (shared with throw)
 - **status** wired - **callable** yes: compiles; refused on the operator's watch 2026-09-08 and kept only as an opt-in
 - **proof** golden none - test none - first use none
-- **doctrine** CAPABILITIES card-then-snap (refused on the watch, kept as opt-in) -> docs/content-video-engine/CAPABILITIES.md:72
+- **doctrine** CAPABILITIES card-then-snap (refused on the watch, kept as opt-in) -> docs/content-video-engine/CAPABILITIES.md:75
 - **aliases** "falling down into the frame" (content/video_engine/scripts/build_scene_timeline_f.py:56)
 
 ### The morph page enter
@@ -1630,7 +1631,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintLedger` - also `snapIn`, `SNAP_FROM`, `SNAP_S` - paintLedger const snap + render const snapIn (SNAP_FROM, SNAP_S)
 - **status** live - **callable** yes: in LEDGER_ENTERS; needs a thrown chart-card dock to snap from
 - **proof** golden none - test content/video_engine/tests/test_gate_motion_density.py::test_a_spiral_page_lands_when_its_unwind_ends_never_on_its_first_frame - first use japan-tariff-trick build-short t=1.82
-- **doctrine** E50 -> docs/portable/OPERATOR-RULINGS.md:1520; CAPABILITIES card-then-snap -> docs/content-video-engine/CAPABILITIES.md:72
+- **doctrine** E50 -> docs/portable/OPERATOR-RULINGS.md:1520; CAPABILITIES card-then-snap -> docs/content-video-engine/CAPABILITIES.md:75
 - **aliases** "Card-then-snap" (docs/content-video-engine/CAPABILITIES.md:69)
 
 ### The spiral page enter
@@ -1644,7 +1645,7 @@ parameter of an effect is an option on its card, never a card.
   3. **holds built** - the page stands drawn - its roll, soak, ink and build clocks are all behind it (trigger: the unwind's end)
 - **blend** the page VORTEX retract run backwards (closed form in time) -> the whole arc (recorded; docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2095)
 - **blend** Analytic in t (FINDING-the-animation-math s3) -> the whole arc (recorded; docs/content-video-engine/CAPABILITIES.md:50)
-- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `lpSpiral` - also `lpVortex`, `lpParticles`, `spiralIn` - lpSpiral (+ lpVortex, lpParticles; render const spiralIn)
+- **lives** module - `content/video_engine/scripts/species/spiral.mjs` - symbol `lpSpiral` - also `LP_RETRACT`, `spiralClocks`, `lpVortex`, `lpParticles`, `spiralLineWidth` - P57 T22: the RETURN and the retract are one module (both cards point here); the engine's render const spiralIn takes the wipe off the boundary
 - **status** live - **callable** yes: in LEDGER_ENTERS; a signature, so the default exit cuts
 - **proof** golden none - test content/video_engine/tests/test_gate_motion_density.py::test_a_spiral_page_lands_when_its_unwind_ends_never_on_its_first_frame - first use tokyo-tea-break build-short.v2 (render approved by the operator 2026-09-06, render/APPROVALS.json) t=44.88
 - **doctrine** 29 s9.31 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2100; E48 s2 -> docs/portable/OPERATOR-RULINGS.md:1461; E47 s2 -> docs/portable/OPERATOR-RULINGS.md:1419; SHORT-FORM-SHAPE s3 -> unresolved
@@ -1672,7 +1673,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintLedger` - also `throwXf`, `throwIn` - paintLedger throw block (const thrown, throwXf) + render const throwIn
 - **status** wired - **callable** yes: compiles; refused on the operator's watch 2026-09-08 and kept only as an opt-in
 - **proof** golden none - test content/video_engine/tests/test_page_performs.py::test_enter_throw_arrives_built_and_is_a_known_enter - first use none
-- **doctrine** CAPABILITIES card-then-snap (refused on the watch, kept as opt-in) -> docs/content-video-engine/CAPABILITIES.md:72
+- **doctrine** CAPABILITIES card-then-snap (refused on the watch, kept as opt-in) -> docs/content-video-engine/CAPABILITIES.md:75
 - **aliases** "the whole page is THROWN onto the world" (content/video_engine/scripts/build_scene_timeline_f.py:56)
 
 ## page_exit
@@ -1693,7 +1694,7 @@ parameter of an effect is an option on its card, never a card.
 - **id** `page_exit:retract` - **does** A ledger page that does not declare :cut empties itself before the boundary: its marks spiral into a tight vortex and the sheet is left bare cream.
 - **when** the page hands over to a plate or mounts a new topic; a page that must land on its last line exits on the cut instead (docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md)
 - **example** `'ledger:ev-federal-load-v1:line:240:right:spiral'` (authored; key: a ledger id with no 7th part (no :cut) - the default page leave; check: enter)
-- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `lpSpiral` - also `lpVortex`, `LP_RETRACT` - no token of its own; its only negation is page_exit:cut (decision 3)
+- **lives** module - `content/video_engine/scripts/species/spiral.mjs` - symbol `lpSpiral` - also `LP_RETRACT`, `spiralClocks`, `lpVortex`, `lpVortexCss`, `lpVortexSvg` - P57 T22: the same map as page_enter:spiral, run by the scene-end clock; no token of its own, its only negation is page_exit:cut
 - **status** wired (implicit: no token of its own) - **callable** yes: implicit: every ledger page without :cut retracts
 - **proof** golden none - test content/video_engine/tests/test_transition_stamps.py::test_the_page_a_suck_takes_is_stamped_cut - first use none
 - **doctrine** 29 s9.31 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2100; R26-60 -> docs/content-video-engine/BACKLOG.md:465
@@ -1721,7 +1722,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `PHRASE` - engine `const PHRASE = TL.caption_style === "phrase"` + the caption block's phrase branch
 - **status** live - **callable** yes: any value is accepted; only "phrase" does anything
 - **proof** golden none - test none - first use tokyo-tea-break build-short t=None
-- **doctrine** CAPABILITIES PHRASE captions -> docs/content-video-engine/CAPABILITIES.md:62
+- **doctrine** CAPABILITIES PHRASE captions -> docs/content-video-engine/CAPABILITIES.md:65
 - **aliases** "PHRASE captions (shorts)" (docs/content-video-engine/CAPABILITIES.md:59)
 
 ### The STAGE caption mode
@@ -1754,7 +1755,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `ARAP` in `content/video_engine/scripts/kinetics/arap.mjs`: `N`=96, `CENTROID_MAX`=0.06, `AXIS_MAX_DEG`=15, `AREA_MIN_RATIO`=0.60
 - **status** wired - **callable** yes
 - **proof** golden none - test content/video_engine/tests/kinetics/arap.test.mjs - first use none
-- **doctrine** 43 s43.5 -> docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:62; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:54
+- **doctrine** 43 s43.5 -> docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:62; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 - **aliases** "ARAP" (docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:73)
 
 ### The camera kinetics module
@@ -1766,7 +1767,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `CAM` in `content/video_engine/scripts/kinetics/camera.mjs`: `PUNCH_IN`=0.42, `PUNCH_OUT`=0.5, `PUNCH_SCALE`=1.14, `FOCUS_SCALE`=1.32, `PULL_FROM`=1.9
 - **status** wired - **callable** yes
 - **proof** golden none - test content/video_engine/tests/kinetics/camera.test.mjs - first use none
-- **doctrine** E59 -> docs/portable/OPERATOR-RULINGS.md:1903; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:54
+- **doctrine** E59 -> docs/portable/OPERATOR-RULINGS.md:1903; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 - **aliases** "The camera: one persistent 2D similarity" (docs/content-video-engine/CAPABILITIES.md:78)
 
 ### The chart-transition kinetics module
@@ -1778,7 +1779,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `XF` in `content/video_engine/scripts/kinetics/chartxf.mjs`: `LEAVE`=0.5, `ARRIVE`=0.5
 - **status** wired - **callable** yes
 - **proof** golden tags-to-bars - test content/video_engine/tests/kinetics/chartxf.test.mjs - first use none
-- **doctrine** E58 -> docs/portable/OPERATOR-RULINGS.md:1854; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:54
+- **doctrine** E58 -> docs/portable/OPERATOR-RULINGS.md:1854; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 - **aliases** "CHART TRANSITIONS" (content/video_engine/scripts/kinetics/chartxf.mjs:1)
 
 ### The clothoid kinetics module
@@ -1790,7 +1791,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `CLOTHOID` in `content/video_engine/scripts/kinetics/clothoid.mjs`: `SERIES_R`=3.4, `SERIES_MAX`=64, `SERIES_EPS`=1e-17, `ASYMP_MAX`=64, `SMALL_A`=0.5, `GL_PHASE`=2.0, `GL_PANELS_MAX`=64, `GUESS_K`=3, `BRACKET_STEP`=0.5, `BRACKET_GROW`=1.6, `BRACKET_MAX`=64, `A_MAX`=4000, `BISECT`=80, `SAMPLES`=48, `BEZ_HANDLE`=0.5, `JOIN_SWEEP`=2.4, `JOIN_STEPS`=48, `JOIN_AT`=0.5
 - **status** wired - **callable** yes
 - **proof** golden flow-swap - test content/video_engine/tests/kinetics/clothoid.test.mjs - first use none
-- **doctrine** 42 s42.4 -> docs/content-video-engine/42-DRAWING-KINETICS.md:102; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:54
+- **doctrine** 42 s42.4 -> docs/content-video-engine/42-DRAWING-KINETICS.md:102; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 - **aliases** "The CLOTHOID fitter" (docs/content-video-engine/CAPABILITIES.md:89); "Euler spirals" (docs/content-video-engine/42-DRAWING-KINETICS.md:102)
 
 ### The minimum-jerk ease kinetics module
@@ -1801,7 +1802,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** module - `content/video_engine/scripts/kinetics/ease.mjs` - symbol `minJerk`
 - **status** wired - **callable** yes
 - **proof** golden none - test content/video_engine/tests/kinetics/ease.test.mjs - first use none
-- **doctrine** 42 s42.1 -> docs/content-video-engine/42-DRAWING-KINETICS.md:12; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:54
+- **doctrine** 42 s42.1 -> docs/content-video-engine/42-DRAWING-KINETICS.md:12; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 - **aliases** "minimum-jerk" (docs/content-video-engine/42-DRAWING-KINETICS.md:26)
 
 ### The homography kinetics module
@@ -1812,7 +1813,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** module - `content/video_engine/scripts/kinetics/homography.mjs` - symbol `H_IDENTITY`
 - **status** wired - **callable** yes
 - **proof** golden art-embed - test content/video_engine/tests/kinetics/homography.test.mjs - first use none
-- **doctrine** CAPABILITIES ART-EMBED -> docs/content-video-engine/CAPABILITIES.md:32; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:54
+- **doctrine** CAPABILITIES ART-EMBED -> docs/content-video-engine/CAPABILITIES.md:32; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 - **aliases** "Planar Homography" (content/video_engine/sources/reference_analyses/ACADEMIC_LITERATURE_DRAWING_AND_2_5D_ANIMATION_ENGINE.md:33)
 
 ### The idle kinetics module
@@ -1824,7 +1825,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `IDLE` in `content/video_engine/scripts/kinetics/idle.mjs`: `BREATH_AMP`=0.012, `BREATH_HZ`=0.25, `DRIFT_PX`=2.0, `DRIFT_HZ`=[0.11, 0.17], `PULSE_AMP`=0.03, `PULSE_HZ`=0.2, `FIGURE_IE`=1.75, `FIGURE_PAUSE_S`=0.7, `SWAY_PX`=1.5, `SWAY_HZ`=[0.15, 0.25], `SWAY_WANDER`=0.12, `SWAY_WANDER_HZ`=[0.031, 0.047], `STEP_FPS`=0
 - **status** live - **callable** yes
 - **proof** golden ledger-soak-page@idle - test content/video_engine/tests/kinetics/idle.test.mjs - first use none
-- **doctrine** E49 -> docs/portable/OPERATOR-RULINGS.md:1494; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:54
+- **doctrine** E49 -> docs/portable/OPERATOR-RULINGS.md:1494; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 
 ### The Kubelka-Munk ink kinetics module
 
@@ -1835,7 +1836,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `INK` in `content/video_engine/scripts/kinetics/ink.mjs`: `S1`=0.03, `TABLE_N`=33, `ALPHA_SLOPE`=8, `COVERAGE`=0.5, `HIGHLIGHT_X`=0.4, `WASH_NEUTRAL`=0.8
 - **status** wired - **callable** yes
 - **proof** golden ledger-soak-page@km_ink - test content/video_engine/tests/kinetics/ink.test.mjs - first use none
-- **doctrine** 44 s44.1 -> docs/content-video-engine/44-INK-AND-SURFACE.md:9; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:54
+- **doctrine** 44 s44.1 -> docs/content-video-engine/44-INK-AND-SURFACE.md:9; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 - **aliases** "Kubelka-Munk ink" (docs/content-video-engine/CAPABILITIES.md:53)
 
 ### The vertex morph kinetics module (method A)
@@ -1847,7 +1848,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `MORPH_A` in `content/video_engine/scripts/kinetics/morph_a.mjs`: `N`=96, `ALPHA`=0.5, `EPS`=1e-9
 - **status** wired - **callable** yes
 - **proof** golden none - test content/video_engine/tests/kinetics/morph_a.test.mjs - first use none
-- **doctrine** 43 s43.5 -> docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:62; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:54
+- **doctrine** 43 s43.5 -> docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:62; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 - **aliases** "Morph METHOD A (vertex-based)" (docs/content-video-engine/CAPABILITIES.md:96)
 
 ### The spring kinetics module
@@ -1859,7 +1860,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `SPRING` in `content/video_engine/scripts/kinetics/spring.mjs`: `MP`=0.04, `SETTLE`=6
 - **status** wired - **callable** yes
 - **proof** golden ledger-soak-page@analytic_spring - test content/video_engine/tests/kinetics/spring.test.mjs - first use none
-- **doctrine** 42 s42.2 -> docs/content-video-engine/42-DRAWING-KINETICS.md:63; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:54
+- **doctrine** 42 s42.2 -> docs/content-video-engine/42-DRAWING-KINETICS.md:63; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 - **aliases** "The full spring" (docs/content-video-engine/CAPABILITIES.md:54); "The settle" (docs/content-video-engine/42-DRAWING-KINETICS.md:63)
 
 ### The area-preserving squash kinetics module
@@ -1871,7 +1872,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `SQUASH` in `content/video_engine/scripts/kinetics/squash.mjs`: `KV`=0.0004, `KA`=0.00002, `MAX`=0.25
 - **status** wired - **callable** yes
 - **proof** golden ledger-soak-page@area_squash - test content/video_engine/tests/kinetics/squash.test.mjs - first use none
-- **doctrine** 42 s42.3 -> docs/content-video-engine/42-DRAWING-KINETICS.md:91; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:54
+- **doctrine** 42 s42.3 -> docs/content-video-engine/42-DRAWING-KINETICS.md:91; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 - **aliases** "Area-preserving squash" (docs/content-video-engine/CAPABILITIES.md:55)
 
 ### The stagger envelope kinetics module
@@ -1883,7 +1884,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `FADE_UP` in `content/video_engine/scripts/kinetics/stagger.mjs`: `RISE_PX`=22, `FROM_SCALE`=0.92, `BLUR_PX`=5, `STAGGER_S`=0.055, `DUR_S`=0.34
 - **status** wired - **callable** yes
 - **proof** golden none - test content/video_engine/tests/kinetics/stagger.test.mjs - first use none
-- **doctrine** CAPABILITIES stagger -> docs/content-video-engine/CAPABILITIES.md:43; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:54
+- **doctrine** CAPABILITIES stagger -> docs/content-video-engine/CAPABILITIES.md:45; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 - **aliases** "STAGGER ENVELOPE" (docs/content-video-engine/CAPABILITIES.md:40)
 
 ### The stop-action kinetics module
@@ -1895,7 +1896,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `STOP` in `content/video_engine/scripts/kinetics/stopaction.mjs`: `FLIGHT_S`=0.45, `ARC`=0.22, `SPIN_DEG`=9, `ANTIC_S`=0.18, `ANTIC_PX`=6, `ANTIC_SQUASH`=0.05, `DROP_S`=0.14, `DROP_PX`=48, `SETTLE_S`=1.2, `IMPACT_SQUASH`=0.22, `SHADOW_FAR`={ scale: 0.55, alpha: 0.55, blur: 16 }, `SHADOW_NEAR`={ scale: 1.05, alpha: 0.85, blur: 0.8 }, `SHADOW_H_PX`=160, `DIP_PX`=4, `SHAKE_PX`=[[6, -3], [-4, 2], [0, 0]], `G_PX_S2`=2400, `LAG_FRAMES`=1
 - **status** live - **callable** yes
 - **proof** golden none - test content/video_engine/tests/kinetics/stopaction.test.mjs - first use none
-- **doctrine** CAPABILITIES Stop-action -> docs/content-video-engine/CAPABILITIES.md:71; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:54
+- **doctrine** CAPABILITIES Stop-action -> docs/content-video-engine/CAPABILITIES.md:74; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 
 ### The curvature stroke kinetics module
 
@@ -1906,8 +1907,19 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `STROKE` in `content/video_engine/scripts/kinetics/stroke.mjs`: `KAPPA0`=1 / 300, `GAMMA`=1, `LAMBDA_W`=0.12, `ALPHA_W`=1, `SMOOTH`=2, `SAMPLE_PX`=6, `MIN_N`=24, `MAX_N`=240
 - **status** wired - **callable** yes
 - **proof** golden chart-callout@curvature_stroke - test content/video_engine/tests/kinetics/stroke.test.mjs - first use none
-- **doctrine** 42 s42.1 -> docs/content-video-engine/42-DRAWING-KINETICS.md:12; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:54
+- **doctrine** 42 s42.1 -> docs/content-video-engine/42-DRAWING-KINETICS.md:12; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 - **aliases** "Curvature stroke" (docs/content-video-engine/CAPABILITIES.md:52); "two-thirds law" (docs/content-video-engine/CAPABILITIES.md:52)
+
+### The transitions kinetics module
+
+- **id** `kinetics:transitions` - **does** Pure math inlined into the player between KINETICS markers: the exit grammar every transition reads its row through, the STRADDLE CLOCK the dip and the blur-zoom share, and the dip's linear ramp.
+- **when** none
+- **example** `(8.32, 17.42, 'plate-gates;idle=drift', (0, 0, 0), [], 'dip')` (content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:5; key: the shot row's 6th element (exit), read through exitName/exitSecs; the render loop calls straddleSecs / dipAlpha / dipVeilOpacity by name; check: module)
+- **lives** module - `content/video_engine/scripts/kinetics/transitions.mjs` - symbol `dipAlpha` - also `DIP`, `straddleSecs`, `dipVeilOpacity`, `exitName`, `exitSecs` - P57 T23 / R26-100: a transition is not a species - it registers no painter and declares no SPACE, and its region sits where the engine declared exitName/exitSecs
+- **dials** `DIP` in `content/video_engine/scripts/kinetics/transitions.mjs`: `HALVES`=2, `OPACITY_DP`=4
+- **status** wired - **callable** yes
+- **proof** golden dip-boundary - test content/video_engine/tests/kinetics/transitions.test.mjs - first use none
+- **doctrine** E47 s1 -> docs/portable/OPERATOR-RULINGS.md:1419; 46 s46.5 -> docs/content-video-engine/46-REFERENCE-RHYTHM.md:116; CAPABILITIES Kinetics modules + sync -> docs/content-video-engine/CAPABILITIES.md:57
 
 ## Recipes
 
@@ -2175,7 +2187,7 @@ a decoration; one that fires four times is a grammar.
 - **members**
   - +0s -> `plate_option:clip` (The clip world) - the world is a clip, not a plate - the outro's motion is the asset's own
   - +0s -> `species:life` (The declared life species) - the outro clip world declares that it animates on its own - nothing is drawn and the motion gate credits it
-  - +6.2s -> `exit:dip` (The dip-through-black scene exit) - the clip runs its whole 6.2 s and the cut dips through black on its last frame
+  - +6.2s -> `exit:dip` (The dip-through-black scene exit) - the clip runs its whole 6.2 s and the cut dips through black on its last frame - the ramp is kinetics:transitions (P57 T23)
 - **proof** japan-tariff-trick / build-short @ 79.08s - members at 79.08, 79.076, 85.28 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json`
 - **status** proven - **count** 1 (a decoration) - **source** recipes_r1 R13; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R13
 - **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E49 -> docs/portable/OPERATOR-RULINGS.md:1494

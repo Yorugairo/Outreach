@@ -79,14 +79,17 @@
       "options": [],
       "dials": null,
       "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "form": "module",
+        "path": "content/video_engine/scripts/species/spiral.mjs",
         "symbol": "lpSpiral",
         "also": [
+          "LP_RETRACT",
+          "spiralClocks",
           "lpVortex",
-          "LP_RETRACT"
+          "lpVortexCss",
+          "lpVortexSvg"
         ],
-        "note": "no token of its own; its only negation is page_exit:cut (decision 3)"
+        "note": "P57 T22: the same map as page_enter:spiral, run by the scene-end clock; no token of its own, its only negation is page_exit:cut"
       },
       "doctrine": [
         "29 s9.31",

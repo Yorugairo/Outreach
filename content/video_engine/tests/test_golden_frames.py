@@ -49,7 +49,13 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "verdict-stack",     # P55 T6: the inline drawStack mid-pile - four cards on their rail spots, the fifth active large near centre (its burst rides PROOF_FRAMES)
             "test-card",         # P55 T6: the inline checklist branch - every question typed, the answers swept by the marker
             "slide-mid", "slide-landed",   # P57 T13 / R26-75: the SLIDE (E87 s3) - one chart page pushing the next onto the stage, read mid-push (the two frames abutting on the stage centre line) and at the landing (the outgoing one exactly off)
-            "compare-morph"]     # P57 T12 / R26-70b: the `chart_to compare` verb - the quoted metric held as its comparator, its label written beneath (its two moving instants ride PROOF_FRAMES)
+            "compare-morph",     # P57 T12 / R26-70b: the `chart_to compare` verb - the quoted metric held as its comparator, its label written beneath (its two moving instants ride PROOF_FRAMES)
+            "trace-hop",         # P57 T18 / R26-95: the route on a still, pinned BEFORE `trace` became a module - one hop landed with its arrowhead and its stamp, one MID-DRAW, and the plain still-life redraw mid-draw beside them
+            "spotlight-hold",    # P57 T19 / R26-96: the light on a datum, pinned BEFORE `spotlight` became a module - the frame dimmed to a feathered hole over a held datum (its two `live`-idle phases ride PROOF_FRAMES)
+            "page-figure",       # P57 T20 / R26-98: the written figure, pinned BEFORE `page_species:figure` became a module - E50's number landed at its datum (the peak), written leftward where the page has no room to the right, its sub under it
+            "record-typewriter",  # P57 T21 / R26-99: the record document, pinned BEFORE `dock_payload:record` became a module - the quotation mid-type on the NARRATOR's onsets, two characters of its eighth word cut and the cursor after them, one word under the marker with its space outside the stroke (its landing rides PROOF_FRAMES)
+            "dip-boundary",      # P57 T23 / R26-100: THE DIP (E47 s1), pinned BEFORE the boundary clock became a module - the BLACK boundary frame between two chart pages, the cut inside it (its ramp's midpoint rides PROOF_FRAMES)
+            "spiral-return"]     # P57 T22 / R26-101: THE PAGE VORTEX, pinned BEFORE `page_enter:spiral` became a module - the page coming back UP the drain mid-unwind (uc 0.5), every glyph, mark and series line on its own spiral arm, the charcoal whole behind them (the RETRACT's two phases ride PROOF_FRAMES, off the same surface's first scene)
 
 
 def _chromium_available() -> bool:

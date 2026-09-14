@@ -1463,6 +1463,309 @@ SURFACES.update({   # P57 T16: the crossing itself - two rows, two names, two nu
 })
 
 
+# ---- P57 T18 / R26-95: THE ROUTE ON A STILL, PINNED BEFORE `trace` BECOMES A MODULE -----------------------
+# The golden FIRST: `species:trace` is lifted out of the engine's body into species/trace.mjs, and this frame is
+# what that lift has to keep byte-identical. It carries BOTH forms the painter has, so neither can move unseen:
+#   the HOP      the opt-in bowed crossing (2026-09-08, the crossings map), drawn once over `draw_s` and HELD -
+#                one hop landed with its arrowhead, one MID-DRAW, the shape the approved Japan short ships at
+#                t 9.22 (`from` / `to` as stage fractions, `bow` the arc's height as a fraction of the chord).
+#   the TRACE    the plain still-life redraw: a seeded zigzag down the region's diagonal, drawn by dash over
+#                TRACE_DRAW, held, faded, and again every TRACE_PERIOD - caught mid-draw on its second pass.
+# The STAMP the `when` names ("stamps stack at them") is the Japan short's own pairing: a callout's label at the
+# point the first hop lands, at rest by this instant.
+TRACE_A = [0.18, 0.62]    # the route's three named points, as stage fractions
+TRACE_B = [0.52, 0.30]
+TRACE_C = [0.82, 0.56]
+TRACE_AT = 5.0            # the first hop's `at` - the plain trace starts with it
+TRACE_HOP2_AT = 8.0       # the second hop's, drawn over 0.9 s
+FRAME_T["trace-hop"] = TRACE_HOP2_AT + 0.54   # 8.54: hop 2 exactly 0.6 through its draw (mid-flight, its head not
+                                  # yet landed), hop 1 drawn and HELD with its arrowhead, and the plain trace 0.309
+                                  # into the draw of its second period ((8.54 - 5.0) / TRACE_PERIOD 3.2 = 1.106)
+
+
+def _trace_region(p: list[float], q: list[float]) -> dict:
+    """The REGION the targeting law (s9.27) needs on a trace: the box the hop crosses. A hop's own coordinates
+    are stage fractions and never read it - but a species with no declared target does not fire."""
+    return {"kind": "region", "x0": min(p[0], q[0]), "y0": min(p[1], q[1]), "x1": max(p[0], q[0]), "y1": max(p[1], q[1])}
+
+
+def trace_hop() -> tuple[dict, dict]:
+    """P57 T18 - THE ROUTE: two bowed hops across a narrative still, the plain redraw beside them, and the
+    figure stamped where the first hop lands. One plate scene, one clock, judged at FRAME_T 8.54."""
+    import build_scene_timeline_f as BST
+    species = [
+        {"kind": "trace", "at": TRACE_AT, "dur": 12.0, "color": "#B0201F", "target": _trace_region(TRACE_A, TRACE_B),
+         "hop": {"from": TRACE_A, "to": TRACE_B, "bow": 0.16, "draw_s": 0.55, "width": 9}},
+        {"kind": "callout", "at": 6.0, "dur": 8.0, "label": "25%", "pad": 22, "label_scale": 2.2,
+         "target": {"kind": "point", "x": TRACE_B[0], "y": TRACE_B[1]}},
+        {"kind": "trace", "at": TRACE_HOP2_AT, "dur": 9.0, "color": "#B0201F", "target": _trace_region(TRACE_B, TRACE_C),
+         "hop": {"from": TRACE_B, "to": TRACE_C, "bow": -0.2, "draw_s": 0.9, "width": 7}},
+        {"kind": "trace", "at": TRACE_AT, "dur": 12.0, "color": "#25313C",
+         "target": {"kind": "region", "x0": 0.30, "y0": 0.68, "x1": 0.72, "y1": 0.86}},
+    ]
+    errs = BST.validate_species(species, (0, 0, 0), "plate-trace")
+    assert not errs, errs
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-trace", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    uris = _base_uris()
+    uris["plate-trace"] = uri("image/png", png_scene(320, 180))   # a picture to cross: the melt's own committed stand-in
+    return _timeline("Golden: the route hops across a still", scenes, {}, None), uris
+
+
+SURFACES.update({   # P57 T18: the hop mid-draw, the hop landed, the plain redraw and the stamp
+    "trace-hop": trace_hop,
+})
+
+
+# ---- P57 T19 / R26-96: THE LIGHT ON A DATUM, PINNED BEFORE `spotlight` BECOMES A MODULE -------------------
+# The golden FIRST: `species:spotlight` is lifted out of the engine's body into species/spotlight.mjs, and these
+# three frames are what that lift has to keep byte-identical. Together they carry every branch the painter has:
+#   the DIM       the frame darkened to SPOT_DIM everywhere except a feathered hole (E56: a picture's focus is
+#                 the LIGHT, never a ring) - read on the base frame, the light settled on its first datum.
+#   `dur: hold`   the operator's own 2026-09-08 ruling on this species ("right now we flash it on, and really,
+#                 it should hold until it has a reason not to"), resolved by the compiler's rule (:4086-4094).
+#   the GLIDE     the hole travelling between the two DECLARED targets over GLIDE_S on the io ease - the proof
+#                 frames are taken after it has landed on `target2`, so the second target is pinned too.
+#   the IDLE      `idle: "live"` (E49, R26-93's restored branch): the hole's radius BREATHES by the idle's scale
+#                 and its centre DRIFTS by the idle's offset. The life check runs on the addition's OWN region
+#                 (E56), which is why the two proof frames are the proof: the same surface, the same landed
+#                 glide, the same dim - and 2.0 s apart, exactly HALF the breath's 4.0 s period, so whatever
+#                 phase the seeded hash hands this species the two sit at opposite ends of one inhale.
+SPOT_AT = 6.0             # the light lands - 0.4 s of fade-in, then it holds
+SPOT_GLIDE_AT = 3.0       # ... and at at + this (9.0) it starts its 0.6 s glide to the second datum
+SPOT_FROM = 60            # the datum it lands on: a point on the line page's first series ...
+SPOT_TO = 191             # ... and the peak it walks to (the same datum `ring-dashed-chip` rings: pts[191])
+
+FRAME_T["spotlight-hold"] = 8.0   # HELD on the first datum: the fade-in is over and the glide has not begun
+                                  # (8.0 - 6.0 - 3.0 < 0, so the ease clamps to 0 and the hole sits on `target`)
+
+
+def _hold(entry: dict, row_end: float) -> dict:
+    """`dur: "hold"` resolved as the COMPILER resolves it (build_scene_timeline_f.py:4086-4094): held until the
+    next event on the row, or the row's end. A golden is written straight from authored scenes, so the rule is
+    applied here rather than assumed - and `held` is written beside it, as the compiler writes it."""
+    import build_scene_timeline_f as BST
+    assert entry["dur"] == "hold", entry
+    dur = round(max(0.05, row_end - float(entry["at"])), 2)
+    assert dur >= BST.HOLD_MIN_S, f"a held light with no room is a flash, and a flash is a glitch: {dur}"
+    return {**entry, "dur": dur, "held": True}
+
+
+def spotlight_hold() -> tuple[dict, dict]:
+    """P57 T19 - THE LIGHT: the frame dimmed except a feathered hole over a declared datum of a ledger line page,
+    held (`dur: "hold"`), gliding to a second datum at SPOT_GLIDE_AT, and breathing on the `live` idle the whole
+    time. One ledger scene, one clock; judged at FRAME_T 8.0 and at the two PROOF_FRAMES instants."""
+    import build_scene_timeline_f as BST
+    species = [{"kind": "spotlight", "at": SPOT_AT, "dur": "hold", "idle": "live", "glide_at": SPOT_GLIDE_AT,
+                "target": {"kind": "datum", "index": SPOT_FROM}, "target2": {"kind": "datum", "index": SPOT_TO}}]
+    species = [_hold(species[0], RUNTIME)]   # no later event on the row: the light holds to the row's end
+    errs = BST.validate_species(species, (0, 0, 0), "ledger:golden-line:line")   # ... and validate_species reads the RESOLVED row, as the compiler hands it one
+    assert not errs, errs
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": _line_page(), "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the light holds on a datum and glides", scenes, {}, None), _base_uris()
+
+
+SURFACES.update({   # P57 T19: the dim, the lit datum, the held light (its two idle phases ride PROOF_FRAMES)
+    "spotlight-hold": spotlight_hold,
+})
+
+
+# ---- P57 T20 / R26-98: THE WRITTEN FIGURE, PINNED BEFORE `page_species:figure` BECOMES A MODULE ------------
+# The golden FIRST: `paintFigure` and R26-71's step-off are lifted out of the engine's body into
+# species/figure.mjs, and this frame is what that lift has to keep byte-identical. It carries the branches the
+# painter has:
+#   E50           the number the sentence turns to, WRITTEN BY THE HAND at its datum's spot (P47 T6) - glyph by
+#                 glyph over the first 0.6 of the word, the sub under it over the remaining 0.4, both fully in
+#                 at the judged instant, so the frame is the LANDED figure and not a phase of the write.
+#   the PLACE     the authored place: beside the datum, the baseline `dy` lines of the figure's own size above
+#                 it, in its own series' ink (E67). The peak stands where the chart has no room to its RIGHT
+#                 (`fits` false: D[0] + BRACKET_GAP + BRACKET_ROOM > the page's W), so the number is written
+#                 LEFTWARD from it, anchored `end` - the branch a figure at the right of a page always takes.
+#   R26-71        the step-off: the box is measured on the WRITTEN glyphs and, where it meets the stroke of its
+#                 OWN series, steps away in quanta of PS.FIGURE_STEP. Above a PEAK there is nothing to step off,
+#                 which is what this frame pins - the clear case moves by nothing, and the frame proves it.
+FIG_AT, FIG_DUR = 12.0, 2.0      # the word: the page has long since built (its last series draws at its own 9.5 s)
+FIG_SERIES, FIG_INDEX = 0, 191   # the memory makers' OWN peak - the datum `ring-dashed-chip` rings: pts[191] = 1074.29
+
+FRAME_T["page-figure"] = 14.4    # LANDED: the figure is fully written (its last glyph is in at 12.0 + 0.69 * 2.0)
+                                 # and the sub has taken the rest of the word - its own last glyph holding at the
+                                 # 0.625 the inline write clock has always left it at, which this frame pins too
+
+
+def page_figure() -> tuple[dict, dict]:
+    """P57 T20 - THE FIGURE: the number the sentence turns to, written by the hand at its datum's spot on a
+    ledger LINE page (`span-decade`'s own page, no emphasis so every series is drawn), with its sub beneath it
+    and its baseline lifted by the authored `dy`. One ledger scene, one clock; judged at FRAME_T 14.4, by which
+    both the figure and its sub are fully written. The text is the page's OWN datum (series 0, index 191 =
+    1074.29 on the index its y axis names - `ring-dashed-chip`'s peak), never a number we made up (E53)."""
+    import build_scene_timeline_f as BST
+    species = [{"kind": "figure", "at": FIG_AT, "dur": FIG_DUR, "text": "1,074 index",
+                "sub": "the peak", "color": "crimson", "dy": -0.9,
+                "series": FIG_SERIES, "target": {"kind": "datum", "index": FIG_INDEX}}]
+    errs = BST.validate_species(species, (0, 0, 0), "ledger:golden-line:line")
+    assert not errs, errs
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": _line_page(), "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline("Golden: the figure written at its datum", scenes, {}, None), _base_uris()
+
+
+SURFACES.update({   # P57 T20: the written number landed at its datum, its sub under it (E50)
+    "page-figure": page_figure,
+})
+
+
+# ---- P57 T21 / R26-99: THE RECORD DOCUMENT, PINNED BEFORE `dock_payload:record` BECOMES A MODULE ----------
+# The golden FIRST: `drawRecord` is lifted out of the engine's body into species/record.mjs, and these two
+# frames are what that lift has to keep byte-identical. Between them they carry every branch the painter has:
+#   the TYPE clock   each word appears whole on its own onset; the word being spoken is SLICED by a string cut
+#                    (never a per-character opacity) over 0.72 of its own gap to the next onset, so the stroke
+#                    is the NARRATOR's (CAPABILITIES "Record-document species"), not a constant characters/s.
+#   the HIGHLIGHTER  the pulled phrase (`hl`, one word here) takes the marker, whose background-size sweeps
+#                    0 -> 100 % over 0.2 s on a cubic-out from that word's own onset - swept long before the
+#                    judged instant, so the base frame pins the stroke at rest and the cursor mid-word.
+#   the SPACE        `hl[1]`'s trailing space is a text node OUTSIDE the stroke (Tokyo 2026-09-10,
+#                    "yen($65 billion)"), which the phrase's one word makes visible in the frame.
+#   the LANDING      the attribution at end + 0.15 and the source line at end + 0.45 - the @proof-attr frame's
+#                    two toggles, with the quotation whole and the cursor parked after its last word.
+REC_WORDS = [("The", 5.00), ("record", 5.34), ("types", 5.72), ("its", 6.06), ("quotation", 6.30),
+             ("word", 6.88), ("by", 7.22), ("word,", 7.50), ("on", 7.90), ("the", 8.12),
+             ("narrator's", 8.36), ("own", 8.90), ("clock.", 9.16)]
+REC_HL = [4, 4]          # ONE word under the marker: "quotation" (`hl` is inclusive at both ends)
+REC_END = 9.66           # the quotation's last instant - the attribution and the source line hang off it
+
+FRAME_T["record-typewriter"] = 7.62   # MID-TYPE: words 0-6 stand whole, the marker at rest on "quotation" with its
+                                      # space outside the stroke, and word 7 ("word,") is 0.417 through its own
+                                      # 0.288 s span (0.72 * the 0.4 s to the next onset) - two of its five
+                                      # characters cut, the block cursor after them. Chosen 0.1 clear of the
+                                      # nearest rounding boundary of Math.round(len * p), so the pin is a
+                                      # character count no float can flip
+
+
+def record_typewriter() -> tuple[dict, dict]:
+    """P57 T21 - THE RECORD DOCUMENT (dock payload `record`, doc 29 / CAPABILITIES "Record-document species"),
+    drawn by the inline `drawRecord`.
+
+    One host dock carrying the payload the kit authors ({hdr, kicker, words, hl, end, attr, src} - the shape of
+    Tokyo's pledge record), with a SYNTHETIC quotation that describes the mechanism rather than the world (a
+    golden never carries a claim about anyone). The word onsets ARE this golden's narration: the engine's type
+    clock reads them straight off `words`. Judged mid-type (FRAME_T 7.62) and after the landing (PROOF_FRAMES
+    @proof-attr)."""
+    import build_scene_timeline_f as BST
+    rec = "ev-golden-record"
+    record = {"hdr": ["The Golden Register", "14 September 2026"],
+              "kicker": "A synthetic quotation - the record's own clock, not a claim about the world",
+              "words": [[w, ts] for w, ts in REC_WORDS], "hl": list(REC_HL), "end": REC_END,
+              "attr": "The golden surface, typed by the narrator's own onsets",
+              "src": "golden - tests/golden/build_golden_sources.py, not a document about the world"}
+    evidence = {rec: {"title": "The record", "source": "golden", "species": "record",
+                      "document": {"path": "golden", "sha256": "0" * 64}, "badges": [], "record": record}}
+    docks = [BST.dock_entry(rec, 0, 2.0, RUNTIME, 0)]
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": docks, "species": []}]
+    uris = _base_uris()
+    uris[rec] = uri("image/png", png_solid(64, 29, (22, 24, 28)))
+    return _timeline("Golden: the record document", scenes, evidence, None), uris
+
+
+SURFACES.update({   # P57 T21: the typewriter mid-word, the marker at rest on the pulled phrase (R26-99)
+    "record-typewriter": record_typewriter,
+})
+
+
+# ---- P57 T22 / R26-101: THE PAGE VORTEX, PINNED BEFORE `page_enter:spiral` BECOMES A MODULE ----------------
+# The golden FIRST: `lpSpiral` (+ `lpVortex`, `lpParticles`) is lifted out of the engine's body into
+# species/spiral.mjs, and these three frames are what that lift has to keep byte-identical. ONE geometry runs
+# BOTH directions (doc 29 s9.31, CAPABILITIES "The page VORTEX"), so the surface carries both on one clock:
+#   the RETRACT   scene 1's page does not declare `exit: "cut"`, so over its last COLOURS + CHARCOAL (1.0 + 1.0 s)
+#                 every colour on the page goes down the drain at the board centre - phase one the ink, the
+#                 marks and the series line (@proof-retract, uc 0.5), phase two the crisp charcoal fading to the
+#                 FIELD it settled over, which follows it down (@proof-fade, uc 1, uf 0.5 - on this page's
+#                 scribble field that is the strokes at half opacity; a soak page's stains take the same map).
+#   the RETURN    scene 2 is the same page declared `enter: "spiral"`: the SAME map run backwards over IN
+#                 (1.6 s) with no wipe, no roll, no soak and no build - a chart that comes back is never drawn
+#                 like new (E25). The base frame is judged mid-unwind.
+# Between them they carry every branch the painter has: both clocks, both phases, the CSS particles (the page's
+# glyphs), the SVG ones (the chart's marks), the series line re-drawn from its mapped points, and the fade.
+SPIRAL_CUT = 15.0        # where the page retracts and comes back: scene 1's end, scene 2's start
+SPIRAL_IN = 1.6          # the engine's LP_RETRACT.IN - the length of the return this golden reads against
+
+FRAME_T["spiral-return"] = SPIRAL_CUT + 0.70 * SPIRAL_IN   # MID-UNWIND (ui 0.70): the colours are exactly half
+                                  # way back out of the drain (uc = 1 - (ui - 0.4) / 0.6 = 0.5) - every glyph,
+                                  # pill and chart mark at half its home radius, 1.5 of the vortex's 3 turns
+                                  # still to unwind, the series line curled toward the centre like a noodle -
+                                  # and the field has already surfaced (uf 0 from ui 0.55), so the charcoal is
+                                  # whole behind them. No blurred band in the frame: the pin is byte-exact
+
+
+def spiral_return() -> tuple[dict, dict]:
+    """P57 T22 - THE PAGE VORTEX, both ways on one clock (doc 29 s9.31; operator 2026-09-05: "a true spiral of
+    everything getting sucked back into the cream as if a vortex / whirlpool", "a way tighter vortex, almost
+    celestial").
+
+    The ledger LINE page every other golden is built from takes the first 15 s to draw itself and then leaves by
+    the RETRACT (its page declares no `exit`, so the vortex runs over its last 2.0 s). Scene 2 is that same page
+    declared `enter: "spiral"` - it ARRIVES by the same map run backwards, with no wipe at the boundary
+    (`spiralIn` suppresses it), no roll-out, no soak and no build. Judged mid-unwind (FRAME_T), with the
+    retract's two phases on PROOF_FRAMES."""
+    import copy
+    page = _line_page()
+    page2 = copy.deepcopy(page)
+    page2["enter"] = "spiral"   # E25 / E40: the transition IS the spiral - the page comes back, it is not drawn again
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, SPIRAL_CUT], "docks": [], "species": []},
+              {"scene_id": "s02", "world": {"kind": "ledger", "page": page2, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [SPIRAL_CUT, RUNTIME], "docks": [], "species": []}]
+    return _timeline("Golden: the page goes down the vortex and comes back up it", scenes, {}, None), _base_uris()
+
+
+SURFACES.update({   # P57 T22: the vortex mid-unwind on the way back (its two retract phases ride PROOF_FRAMES)
+    "spiral-return": spiral_return,
+})
+
+
+# ---- P57 T23 / R26-100: THE DIP (E47 s1) ------------------------------------------------------------------
+DIP_CUT = 15.0   # P57 T23: where the `dip-boundary` golden hands one chart page to the next - and the frame DIPS across it
+DIP_S = 0.47     # the engine's DIP_S and gate_motion_density's: the length this golden declares none against
+# THE BOUNDARY FRAME. Both halves of the ramp reach 1 at the boundary, so this frame is BLACK and the cut happens
+# inside it (E47 s1). It is the pin the promotion needs: any change to which scene owns which half, or to where the
+# clock is centred, moves this frame off black. The ramp's own shape is pinned by `@proof-ramp` on PROOF_FRAMES.
+FRAME_T["dip-boundary"] = DIP_CUT
+
+
+def dip_pages() -> tuple[dict, dict]:
+    """E47 s1 (the operator, 2026-09-06) - THE DIP: a plain LINEAR ramp to black over the last DIP_S/2 of the
+    outgoing scene and back over the first DIP_S/2 of the incoming one, the cut inside the black.
+
+    The same two pages the slide golden hands over between, so the two transitions are read on one piece of
+    evidence: the line page draws itself over the first 15 s and at DIP_CUT the bars page of where those lines end
+    takes the world. `exit` names the transition INTO the scene it sits on (E47), so the dip is scene 2's, and it
+    STRADDLES the boundary - which is the whole reason two frames are pinned here and not one.
+
+    The incoming page declares no `enter`: a dip is a world-taking transition, so the new page builds from its own
+    cream the way a cut's does. The outgoing page declares `exit: "cut"` (LEDGER_EXITS / E40 #5), so the only
+    motion across the boundary is the dip's own veil."""
+    import json
+    page = _line_page()
+    page["exit"] = "cut"   # no retract: the dip is how this chart leaves
+    raw = json.loads(SERIES.read_text(encoding="utf-8"))
+    bars = {"title": "Where the four lines end", "sub": "index at the last point, 100 = Aug \'25", "src": raw.get("src", ""), "unit": "",
+            "bars": [{"label": short, "value": round(float(sr["pts"][-1][1]), 1), "color": sr.get("color", "crimson")}
+                     for sr, short in zip(raw["series"], ("Memory", "Chips", "Mega-cap", "S&P 500"))]}
+    page2 = LPG.build_spec(bars, "bars", None, "right")
+    page2["field"] = "scribble"
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, DIP_CUT], "docks": [], "species": []},
+              {"scene_id": "s02", "world": {"kind": "ledger", "page": page2, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "dip", "span": [DIP_CUT, RUNTIME], "docks": [], "species": []}]
+    return _timeline("Golden: the frame dips to black between two charts", scenes, {}, None), _base_uris()
+
+
+SURFACES.update({   # P57 T23: the dip's black boundary frame (its ramp's midpoint rides PROOF_FRAMES)
+    "dip-boundary": dip_pages,
+})
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     SOURCES.mkdir(parents=True, exist_ok=True)

@@ -656,6 +656,57 @@
         "today": true,
         "why": null
       }
+    },
+    {
+      "id": "kinetics:transitions",
+      "axis": "kinetics",
+      "token": "transitions",
+      "title": "The transitions kinetics module",
+      "aliases": [],
+      "does": "Pure math inlined into the player between KINETICS markers: the exit grammar every transition reads its row through, the STRADDLE CLOCK the dip and the blur-zoom share, and the dip's linear ramp.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "the shot row's 6th element (exit), read through exitName/exitSecs; the render loop calls straddleSecs / dipAlpha / dipVeilOpacity by name",
+        "example": "(8.32, 17.42, 'plate-gates;idle=drift', (0, 0, 0), [], 'dip')",
+        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:5",
+        "check": "module"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/transitions.mjs",
+        "object": "DIP"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/kinetics/transitions.mjs",
+        "symbol": "dipAlpha",
+        "also": [
+          "DIP",
+          "straddleSecs",
+          "dipVeilOpacity",
+          "exitName",
+          "exitSecs"
+        ],
+        "note": "P57 T23 / R26-100: a transition is not a species - it registers no painter and declares no SPACE, and its region sits where the engine declared exitName/exitSecs"
+      },
+      "doctrine": [
+        "E47 s1",
+        "46 s46.5",
+        "CAPABILITIES Kinetics modules + sync"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "dip-boundary",
+        "test": "content/video_engine/tests/kinetics/transitions.test.mjs",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
     }
   ]
 }

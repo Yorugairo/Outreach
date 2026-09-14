@@ -95,7 +95,7 @@ folder is one row under `## folders` (COLLAPSED_FAMILIES in the builder).
 
 ## capabilities
 
-- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything. — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; `park`: the chart makes room by one affine transform, WIRED; `recast` keyed: n lines become n bars, by series, WIRED; `rescale`: the chart's axes retarget on one clock, WIRED; A centred dock in an AUTHORED box, and a ring inside it; A CHART BECOMES ANOTHER CHART BY RE-WRITING (E64): the data-; A dock that READS at one box and PARKS at another; +185 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline; text-tier; per-word; drawRecord; dock_payload:record
+- docs/content-video-engine/CAPABILITIES.md — CAPABILITIES — what is already built — Check this file before building anything. — defines: `extend`: new points (or a later series) draw on at the pen,; `morph_to`: the area under the line becomes another line's a; `park`: the chart makes room by one affine transform, WIRED; `recast` keyed: n lines become n bars, by series, WIRED; `rescale`: the chart's axes retarget on one clock, WIRED; A centred dock in an AUTHORED box, and a ring inside it; A CHART BECOMES ANOTHER CHART BY RE-WRITING (E64): the data-; A dock that READS at one box and PARKS at another; +189 more — terms: cross-reveal; snap-to-boundary; dock-owned; one-baseline; text-tier; per-word; drawRecord; dock_payload:record
 
 ## backlog
 
