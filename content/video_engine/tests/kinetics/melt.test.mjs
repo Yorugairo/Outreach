@@ -442,3 +442,23 @@ test("the weight phase is a pure function of t: two calls at one u are identical
   assert.equal(fly.phase, "fly");
   assert.ok(Math.abs(fly.turn - (MELT.W_ROLL_PX + MELT.W_NUDGE_PX) / fly.r) < 1e-6, "the ending keeps the turn the roll left");
 });
+
+import { meltOpts as meltOptsAt, meltState as meltStateAt } from "../../scripts/species/melt.mjs";
+
+test("P58 T6 (b): a melt at a depth parses, is refused by name outside the range, and is a pure function of u", () => {
+  const o = meltOptsAt("melt:weight:depth=1.15");
+  assert.equal(o.depth, 1.15); assert.equal(o.weight, true); assert.equal(o.wmass, MELT.W_MASS);
+  assert.equal(meltOptsAt("melt:weight").depth, 0, "absent is the flat clone");
+  assert.deepEqual([MELT.DEPTH_MIN, MELT.DEPTH_MAX, MELT.DEPTH_FLAT], [0, 4, 1]);
+  assert.throws(() => meltOptsAt("melt:depth=9"), /depth 9 is outside 0\.\.4/);
+  assert.throws(() => meltOptsAt("melt:depth=x"), /is not a number - depth=<k>/);
+  assert.throws(() => meltOptsAt("melt:depth=1.1:depth=1.2"), /two depths/);
+  const rect = { x: 400, y: 300, w: 900, h: 500 }, stagebox = { x: 87, y: 49, w: 1920, h: 1080 };
+  const rnd = (k) => ((k * 2654435761) % 1000) / 1000;
+  for (const u of [0.15, 0.32, 0.5, 0.85]) {
+    const t = 15 + u * o.secs;
+    const a = meltStateAt(15, t, Object.assign({ rect, stagebox }, o), rnd);
+    const b = meltStateAt(15, t, Object.assign({ rect, stagebox }, o), rnd);
+    assert.deepEqual(a, b, "two calls at one u are identical at depth 1.15 (u " + u + ")");
+  }
+});

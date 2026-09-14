@@ -96,7 +96,7 @@ PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill", 
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
 STATE_MAX = 3
 DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s",
-             "press", "stack", "behind", "embed", "cutout", "fit")   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+             "press", "stack", "behind", "embed", "cutout", "fit", "depth")   # P58 T6 / E98 s4: depth=<k> - the card stands on a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs PARALLAX - the page's own vocabulary and the same range); it composes with behind= and the pair is refused by name when they disagree   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -1503,6 +1503,7 @@ def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str, str | Non
 
 MELT_ENDINGS = ("throw", "splash:chart", "splash:plate")   # E88 / R26-76: the three authored endings - species/melt.mjs MELT_ENDINGS
 MELT_MATERIALS = ("metal", "ink", "paper", "liquid")       # R26-118 / E88 s7: what `melt:weight:<material>` may name - species/melt.mjs MELT_MATERIALS
+DEPTH_SUFFIX = "depth="   # P58 T6 (b) / E98 s4: the plane a MECHANISM happens at, as an exit suffix - `melt:...:depth=<k>` today; species/melt.mjs reads the same string on the player's side, and the slide's own depth is NOT built (P58 T6 (c) is not in this slice)
 
 
 def _is_number(bit: str) -> bool:
@@ -1519,15 +1520,22 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None]:
     stage fractions. A bare ``splash`` is REFUSED: since E88 a splash has two endings that need two different incoming
     worlds, and an alias would pick one silently.
 
+    P58 T6 (b) / E98 s4 adds ``depth=<k>`` - the PLANE the ball melts at: the clone takes that share of the one
+    camera's move (`camLayerCss`), so the ball, its drips and its ending happen at a depth in the plate's space
+    instead of on the glass. It is the dock's own vocabulary, range and refusal (`depth_k`), and a melt names at
+    most one - a melt happens at one plane.
+
     R26-118 / E88 s6 adds ``weight``, optionally followed by a MATERIAL (``metal`` - the default, E88 s7 - ``ink``,
     ``paper`` or ``liquid``): the ball lands, rolls, is nudged and settles before the ending, and its surface is the
     living drop. It is opt-in, and a `melt:weight` that declares no length of its own runs MELT_S + MELT_W_S.
     A material this engine does not have is refused BY NAME, never painted as the default.
 
     species/melt.mjs ``meltOpts`` reads exactly this grammar on the player's side; the two have to agree, and
-    test_transitions_e47 pins the pair. Returns (ending, the declared length or None for MELT_S)."""
+    test_transitions_e47 pins the pair. Returns (ending, the declared length or None for MELT_S, the declared
+    depth or None for the flat clone)."""
     secs: float | None = None
     ending: str | None = None
+    depth: float | None = None   # P58 T6 (b): validated here, carried to the player on the exit string itself
     point = False
     bits = str(exit_id).split(":")[1:]
     i = 0
@@ -1548,9 +1556,14 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None]:
                 raise ValueError(f"exit {exit_id!r}: two endings ({ending} and {end}) - a melt ends one way")
             ending = end
             continue
+        if bit.startswith(DEPTH_SUFFIX):   # P58 T6 (b): the PLANE the ball melts at - the dock's own vocabulary and range
+            if depth is not None:
+                raise ValueError(f"exit {exit_id!r}: two depths - a melt happens at ONE plane")
+            depth = depth_k(bit[len(DEPTH_SUFFIX):], f"exit {exit_id!r}", "ball")
+            continue
         if bit == "weight":   # R26-118: the weight phase, and the material the ball is made of
             nxt = bits[i].strip() if i < len(bits) else ""
-            if nxt and "," not in nxt and nxt not in ("throw", "splash") and not _is_number(nxt):
+            if nxt and "," not in nxt and nxt not in ("throw", "splash") and not nxt.startswith(DEPTH_SUFFIX) and not _is_number(nxt):
                 if nxt not in MELT_MATERIALS:
                     raise ValueError(f"exit {exit_id!r}: {nxt!r} is not a material - melt:weight takes "
                                      + ", ".join(MELT_MATERIALS))
@@ -1578,7 +1591,14 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None]:
     ending = ending or "throw"
     if point and ending != "throw":
         raise ValueError(f"exit {exit_id!r}: an x,y point is where a THROW goes - a splash lands on the board")
-    return ending, secs
+    return ending, secs, depth
+
+
+def melt_depth(exit_id: str | None) -> float | None:
+    """The PLANE a melt happens at (`melt:...:depth=<k>`), or None - absent is the flat clone the melt always had."""
+    if not exit_id or str(exit_id).split(":")[0] != "melt":
+        return None
+    return _melt_parts(str(exit_id))[2]
 
 
 def melt_ending(exit_id: str | None) -> str | None:
@@ -2581,6 +2601,54 @@ def page_depth_k(value: str, where: str) -> float:
     return k
 
 
+
+# ---- P58 T6 (a): THE DOCK AT A DEPTH --------------------------------------------------------------------------
+# E98 s4: *"the docks, the ball and the slide move THROUGH the depth"*. ONE dock option, `depth=<k>`, written in the
+# page's own vocabulary (PAGE_DEPTH's range IS the camera's, and this slice adds no second one): the card stands on
+# a LAYER'S plane and takes that share of the one camera's move (kinetics/camera.mjs `camLayerCss`) instead of
+# standing in screen space, as every dock has. Nothing else about the card changes - E45's arrival, its reading box,
+# its park and M25's settled card are the choreography they were, composed INSIDE the depth - and a dock that names
+# no depth compiles byte-for-byte as it did.
+#   IT COMPOSES WITH `behind=` (HF-17, P50 T15) RATHER THAN DUPLICATING IT. Occlusion is the depth CUE; the parallax
+# is the depth itself, and one card may carry both - but only if the two agree. `behind` puts the card UNDER the
+# plate's foreground cutout, which is the plane doc 24 calls `-near` and build_plate_library indexes at k 1.40, so a
+# card behind that front cannot also sit nearer than it. The pair is refused BY NAME rather than painted as a card
+# that occludes the very thing it is behind.
+DOCK_DEPTH = {
+    "K_MIN": PAGE_DEPTH["K_MIN"],   # ONE range for every depth in this slice - the camera's own (PARALLAX.K_MIN)
+    "K_MAX": PAGE_DEPTH["K_MAX"],   # ... and PARALLAX.K_MAX
+    "BEHIND_K": 1.40,   # build_plate_library.LAYER_PLANES["occluder"] - doc 24's `-near` foreground cutout, the plane `behind=` puts a card under. One dial written twice (as MELT_S and SLIDE_S are), and test_dock_depth pins the pair
+}
+
+
+def depth_k(value, where: str, what: str = "card") -> float:
+    """``depth=<k>`` -> the parallax factor of the thing named by `what`, refused BY NAME outside the camera's own
+    range - `page_depth_k`'s range and `page_depth_k`'s message with that noun in the page's place, because there is
+    ONE depth vocabulary in this engine and not one per thing that can stand on a plane (P58 T6: the card, the ball
+    and each of the slide's two frames all come through here)."""
+    if isinstance(value, bool) or not (isinstance(value, (int, float)) or _is_number(str(value))):
+        raise ValueError(f"{where}: depth {value!r} is not a number - depth=<k>, the share of the camera's move the "
+                         f"{what} takes ({DOCK_DEPTH['K_MIN']:g} = pinned to the frame, 1 = the flat plate)")
+    k = float(value)
+    if not DOCK_DEPTH["K_MIN"] <= k <= DOCK_DEPTH["K_MAX"]:
+        raise ValueError(f"{where}: depth {k:g} is outside {DOCK_DEPTH['K_MIN']:g}..{DOCK_DEPTH['K_MAX']:g} - the "
+                         "parallax factor a plane may take of the camera's move (kinetics/camera.mjs PARALLAX)")
+    return k
+
+
+def dock_depth_k(value, where: str) -> float:
+    """``depth=<k>`` on a DOCK row -> the card's parallax factor (`depth_k`'s one law, the card's noun)."""
+    return depth_k(value, where, "card")
+
+
+def dock_depth_behind_error(k: float, layer: str, where: str) -> str | None:
+    """Do a card's `depth=` and its `behind=` agree? The message, or None (HF-17's occluder plane is the ceiling)."""
+    if k <= DOCK_DEPTH["BEHIND_K"]:
+        return None
+    return (f"{where}: depth={k:g} with behind={layer!r} - a card behind the plate's front cannot sit nearer than "
+            f"it: depth <= {DOCK_DEPTH['BEHIND_K']:g} with behind=, or drop one")
+
+
 # ---- P58 T5: THE TWO CHART FORMS IN 2.5D ---------------------------------------------------------------------
 # E98 s3: *"bars with extrusion, a line on a tilted plane - the flat page stays the default"*. ONE page option,
 # `;form=<name>[:<deg>]`, and nothing else. What a form changes is how the page's marks are DRAWN; the spec, the
@@ -2742,6 +2810,9 @@ def dock_opts(raw) -> dict:
             if not isinstance(v, str) or not v.strip():
                 raise ValueError("dock: behind must name a foreground layer of the scene's plate (<plate>.layers.json)")
             continue
+        if k == "depth":   # P58 T6 (a): the plane the card stands on - the camera's own range, checked against `behind` below
+            dock_depth_k(v, "dock")
+            continue
         if k == EMBED_KEY:   # P50 T7: the plate's surface this card lands ON; the plate and the quad are checked at the row
             if not isinstance(v, str) or not v.strip():
                 raise ValueError("dock: embed must NAME a surface the scene's plate declares (<plate>.layers.json)")
@@ -2813,6 +2884,16 @@ def dock_opts(raw) -> dict:
         raise ValueError("dock: fit is how a picture takes a SURFACE - it needs the row's embed=<surface>")
     if out.get("fit") is not None and out.get("press"):
         raise ValueError("dock: fit is a picture's option - a press card REFLOWS to its surface (E66), it is never cropped to it")
+    if out.get("depth") is not None:   # P58 T6 (a): the plane the card stands on - resolved here, so every caller downstream sees the number
+        out["depth"] = dock_depth_k(out["depth"], "dock")
+        if out.get(EMBED_KEY):   # a card ON a declared surface already stands in the plate's space: the surface IS its plane
+            raise ValueError("dock: embed and depth are two names for one thing - a card that lands on a declared "
+                             "surface stands on that surface's own plane (P50 T7), so it takes the camera's move "
+                             "through the world it is part of: drop depth= or drop embed=")
+        if out.get("behind"):   # HF-17's occluder plane is the ceiling: a card behind the front is never nearer than it
+            _derr = dock_depth_behind_error(out["depth"], out["behind"], "dock")
+            if _derr:
+                raise ValueError(_derr)
     return out
 
 
@@ -3893,7 +3974,7 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                centre: bool = False, read_place: dict | None = None, read_s: float | None = None, park_s: float | None = None,
                press: dict | None = None, stack: bool = False, behind: str | None = None, fg: str | None = None,
                rid: str | None = None, read_moved: dict | None = None, read_deferred: bool = False,
-               embed: dict | None = None, cutout: bool = False) -> dict:
+               embed: dict | None = None, cutout: bool = False, depth: float | None = None) -> dict:
     """One dock on a compiled scene.
 
     Spans come from the dock: evidence enters before its claim and holds through the whole
@@ -3920,6 +4001,9 @@ def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
         # P50 T7: the SURFACE this card lands on - its name, its four corners and the second the room dims. Written
         # ONLY when the row asks, so every build that does not is byte-for-byte what it was.
         **({EMBED_KEY: embed} if embed else {}),
+        # P58 T6 (a): the PLANE this card stands on - the share of the camera's move it takes (kinetics/camera.mjs
+        # PARALLAX). Written ONLY when the row asks, so every build that does not is byte-for-byte what it was.
+        **({"depth": float(depth)} if depth else {}),
         "enter": round(enter, 2), "exit": round(exitt, 2),
         "badge_at": [round(enter + 0.75 + 1.3 * (n + 1), 2) for n in range(n_badges)],
         **({"kind": DOCK_KIND_VIDEO} if kind == DOCK_KIND_VIDEO else {}),
@@ -4577,6 +4661,7 @@ def main() -> int:
                                         read_place=rplace, read_s=dopt.get("read_s"), park_s=dopt.get("park_s"),
                                         press=dopt.get("press"), stack=bool(dopt.get("stack")),
                                         behind=dopt.get("behind"), fg=fg_key, embed=embed, rid=dock_row_id(sid, aid),
+                                        depth=dopt.get("depth"),   # P58 T6 (a): the plane the card stands on
                                         read_moved=e63.get("read_moved"), read_deferred=bool(e63.get("read_deferred")),
                                         cutout=bool(dopt.get("cutout"))))
         assign_press_stack(docks)   # P50 T3: the scene's press pile, in enter order

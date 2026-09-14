@@ -302,7 +302,7 @@
       "when": "Only the chart's information melts",
       "when_source": "docs/portable/OPERATOR-RULINGS.md:2659",
       "author": {
-        "key": "shot row 6th element 'melt[:throw|:splash:chart|:splash:plate][:<s>][:<x>,<y>]' (validator: parse_exit (via scene_exit); melt boundaries: stamp_transition_pages/_melt_boundary)",
+        "key": "shot row 6th element 'melt[:throw|:splash:chart|:splash:plate][:weight[:<material>]][:depth=<k>][:<s>][:<x>,<y>]' (validator: parse_exit (via scene_exit); melt boundaries: stamp_transition_pages/_melt_boundary)",
         "example": "(25.02, 33.97, 'ledger:ev-federal-load-v1:line:240:right:spiral:cut', (0, 0, 0), [], 'melt')",
         "example_source": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/SHOT-TABLE-SHORT.py:6",
         "check": "exit"
@@ -414,6 +414,11 @@
       ],
       "options": [
         {
+          "token": "depth",
+          "means": "The melt at a depth: melt:...:depth=<k> puts the ink clone and the ball overlay on the camera read at k (camLayerCss), so the ball melts, lands and is thrown at that plane.",
+          "source_set": null
+        },
+        {
           "token": "melt",
           "means": "The melt's own length: The melt runs over the seconds its suffix declares instead of its default dial.",
           "source_set": "TIMED_EXITS"
@@ -464,7 +469,8 @@
         "E88",
         "E88 s6",
         "E88 s7",
-        "R26-76"
+        "R26-76",
+        "E98 s4"
       ],
       "status": "draft",
       "backlog": [

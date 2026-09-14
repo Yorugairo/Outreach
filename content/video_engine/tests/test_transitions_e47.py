@@ -339,6 +339,29 @@ def test_a_melt_may_ask_for_the_weight_phase_and_name_its_material():
             B.parse_exit(bad)
 
 
+def test_a_melt_may_name_the_plane_it_happens_at_and_is_refused_by_name_outside_it():
+    """P58 T6 (b) / E98 s4 (*"the docks, the ball and the slide move THROUGH the depth"*): `depth=<k>` is a suffix
+    like `weight`, anywhere after the name - the PLANE the ball melts, lands and is thrown at. It is the dock's own
+    vocabulary (`depth_k`: the camera's range, the same words with the ball as the noun), a melt names at most one,
+    and absent is the flat clone every melt on the record already is. species/melt.mjs `meltOpts` reads the same
+    string, and MELT.DEPTH_MIN / DEPTH_MAX are the twins of DOCK_DEPTH's range."""
+    assert B.parse_exit("melt:weight:depth=1.15") == ("melt:weight:depth=1.15", None)
+    assert B.parse_exit("melt:weight:metal:depth=1.15:2.0") == ("melt:weight:metal:depth=1.15:2.0", 2.0)
+    assert B.melt_depth("melt:weight:depth=1.15") == 1.15
+    assert B.melt_depth("melt:depth=1.4:splash:chart") == 1.4 and B.melt_ending("melt:depth=1.4:splash:chart") == "splash:chart"
+    assert B.melt_depth("melt:weight") is None and B.melt_depth("dip") is None, "absent is the flat clone"
+    assert B.parse_exit("melt:weight:depth=1.15")[0] == "melt:weight:depth=1.15", "the weight lookahead never eats a depth as a material"
+    assert (B.DOCK_DEPTH["K_MIN"], B.DOCK_DEPTH["K_MAX"]) == (0.0, 4.0), "species/melt.mjs MELT.DEPTH_MIN / DEPTH_MAX"
+    refusals = {"melt:depth=9": "depth 9 is outside 0..4",
+                "melt:depth=x": "depth 'x' is not a number - depth=<k>, the share of the camera's move the ball takes",
+                "melt:weight:depth=nope": "is not a number - depth=<k>",
+                "melt:depth=1.1:depth=1.2": "two depths - a melt happens at ONE plane"}
+    for bad, words in refusals.items():
+        with pytest.raises(ValueError) as exc:
+            B.parse_exit(bad)
+        assert words in str(exc.value), (bad, str(exc.value))
+
+
 def test_the_mechanical_default_is_never_a_melt():
     """A melt is AUTHORED or it does not happen (E47 as corrected 2026-09-12): it takes the whole world for 1.6 s
     and no rule may reach for it on its own. `scene_exit`'s table is the dip, the cut, and what the row says."""

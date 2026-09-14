@@ -293,6 +293,59 @@
       ]
     },
     {
+      "id": "dock_option:depth",
+      "axis": "dock_option",
+      "token": "depth",
+      "title": "The dock at a depth",
+      "aliases": [
+        {
+          "name": "the docks move through the depth",
+          "source": "docs/portable/OPERATOR-RULINGS.md:2848"
+        }
+      ],
+      "does": "The card stands on a layer's plane and takes that share of the ONE camera's move, instead of standing still in screen space while the world moves behind it.",
+      "when": "Only under a move the frame can already name (E59) and on a plate that ships in planes: parallax is a consequence of the camera in a layered world, never a move authored to show depth off (E49).",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:2848",
+      "author": {
+        "key": "dock option {'depth': <k>} (0..4 - kinetics/camera.mjs PARALLAX, the page's own range and words)",
+        "example": "{'depth': 1.15}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:DOCK_DEPTH_K",
+        "check": "dock_option"
+      },
+      "phases": [],
+      "blends": [],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/camera.mjs",
+        "object": "PARALLAX"
+      },
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "dockCam",
+        "also": [
+          "dockDepthOf"
+        ],
+        "note": "the dock paint's own prefix (dockCam / dockDepthOf, beside embedCam); the compiler half is DOCK_DEPTH / dock_depth_k / dock_depth_behind_error, read by dock_opts"
+      },
+      "doctrine": [
+        "E98 s4",
+        "HF-17",
+        "E45",
+        "P58 T3 camLayerCss"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "dock-depth",
+        "test": "content/video_engine/tests/test_dock_depth.py::test_a_card_behind_the_front_and_nearer_than_it_is_refused_by_name",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "probe OK; it moves only under an authored camera move, and `behind=` composes with it up to the occluder's own plane (1.40)"
+      }
+    },
+    {
       "id": "dock_option:embed",
       "axis": "dock_option",
       "token": "embed",

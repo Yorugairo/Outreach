@@ -2028,6 +2028,127 @@ SURFACES.update({   # P57 T23: the dip's black boundary frame (its ramp's midpoi
 })
 
 
+# ---- P58 T6 (a): THE DOCK AT A DEPTH -----------------------------------------------------------
+# E98 s4: *"the docks, the ball and the slide move THROUGH the depth"*. The scene is `camera-layers`' own - the
+# same layered dock plate, the same card landing on the quay at 5.0, the same focus zoom tied to that landing
+# (E51; nothing is added to make the parallax visible, E49/E59) - and the ONLY difference is `depth=1.15` on the
+# dock's options. So a diff between the two goldens is the card's plane and nothing else: at `camera-layers` the
+# card is pinned to the screen while the plate's planes move under it; here it rides the plane the containers
+# ride, between the sky (1.0) and the lamp (1.40).
+DOCK_DEPTH_K = 1.15   # doc 24's `-mid`: the card stands in the dock's own space - nearer than the sky, behind the lamp - and 1.15 <= DOCK_DEPTH["BEHIND_K"], so it could also name `behind`
+
+
+def dock_depth() -> tuple[dict, dict]:
+    """P58 T6 (a) - THE DOCK AT A DEPTH: `{"depth": 1.15}` on a dock row, and nothing else.
+
+    The card arrives, lands and parks exactly as E45 has it - the arrival, the badges and the settle are the
+    choreography they were - and the ONE camera move the scene already had now reaches it: the card takes the
+    share 1.15 of the eye's translation and of its zoom, the same share the `-mid` plane takes, instead of
+    standing still in screen space while the world moves behind it.
+
+    The option goes through the COMPILER'S own validator (`dock_opts`), so the golden proves the grammar, its
+    refusals' sibling and the paint together. Read at the HOLD (FRAME_T 7.9, inside the focus zoom's dead-still
+    tail) and mid-move (`@proof-move` 6.56, the instant `camera-layers@proof-mid` is read at, so the two frames
+    are directly comparable)."""
+    import build_scene_timeline_f as BST
+    aid = "plate-dock"
+    planes = BST.plate_depth_planes(DOCK_PLATE)
+    layers = [{"key": f"{BST.LY_PREFIX}{aid}:{p['role']}", "k": p["depth"], "role": p["role"]} for p in planes]
+    opts = BST.dock_opts({"arrive": "land", "depth": DOCK_DEPTH_K})   # the row's own options, validated as a build's are
+    dock = BST.dock_entry("ev-quay-card", 0, CAMERA_LAYERS_ENTER, RUNTIME, 2, BST.DOCK_KIND_IMAGE,
+                          CAMERA_LAYERS_PLACE, opts.get("arrive"), depth=opts.get("depth"))
+    ev = {"ev-quay-card": {"title": "The card on the mid plane", "source": "P58 T6", "species": "deck",
+                           "document": {"path": "golden", "sha256": "0" * 64}, "badges": _badges()[:2]}}
+    P = CAMERA_LAYERS_PLACE
+    species = [{"kind": "focus_zoom", "at": CAMERA_LAYERS_AT, "dur": CAMERA_LAYERS_DUR,
+                "target": {"kind": "region", "x0": P["x"] / 1920, "y0": P["y"] / 1080,
+                           "x1": (P["x"] + P["w"]) / 1920, "y1": (P["y"] + P["h"]) / 1080}}]
+    scenes = [{"scene_id": "s01",
+               "world": {"asset_id": aid, "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0},
+                         "layers": layers},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [dock], "species": species}]
+    uris = _base_uris()
+    uris[aid] = BST.data_uri(DOCK_PLATE)
+    for p, ly in zip(planes, layers):
+        uris[ly["key"]] = BST.data_uri(Path(p["file"]))        # RAW, as the compiler writes a plane: the alpha IS the plane
+    uris["ev-quay-card"] = uri("image/png", png_solid(640, 400, (23, 105, 194)))
+    tl = _timeline("Golden: the dock on a layer's plane", scenes, ev, None)
+    tl["kinetics"] = {"camera": True}                          # E59's own module drives the species (camNow), as on camera-layers
+    return tl, uris
+
+
+SURFACES.update({   # P58 T6 (a): the card that stands on a plane instead of on the screen
+    "dock-depth": dock_depth,
+})
+FRAME_T["dock-depth"] = FRAME_T["camera-layers"]   # the same instant camera-layers is judged at: the move landed, the eye dead still
+
+
+# ---- P58 T6 (b): THE MELT'S BALL AT A DEPTH -----------------------------------------------------
+# E98 s4: *"the docks, the ball and the slide move THROUGH the depth"*. The two pages are `melt-ball-roll`'s own -
+# the line page every golden is built from, melting into the bars page of where its lines end, with `weight` on so
+# the ball LANDS, rolls, is nudged and settles - and the two things added are a card that lands on the page at
+# MELT_DEPTH_CARD and the one focus zoom tied to that landing (E51/E59: the move already had a reason; nothing here
+# was added to make the parallax visible, E49). The exit then names the plane: `melt:weight:depth=1.15`.
+#   What that changes is ONE string: the melt's ink clone, its words' clone and the overlay that carries the ball,
+# its drips and its ending take the camera at 1.15 instead of at 1.0, so the ball melts, lands and is thrown IN the
+# space in front of the board rather than on the glass. The board itself is untouched - it is the outgoing world's
+# own element, at the camera it always had.
+MELT_DEPTH_K = 1.15           # doc 24's `-mid`: the ball hangs in front of the board, not on it
+MELT_DEPTH_CARD = 13.0        # the card lands on the page (stop-action `land`) ...
+MELT_DEPTH_AT = 14.0          # ... and the eye goes to that landing, one focus zoom (E51)
+MELT_DEPTH_DUR = 4.0          # ... long enough that the eye is still in its hold at the ending, so the base frame is a dead-still pin
+MELT_DEPTH_PLACE = {"x": 1210, "y": 640, "w": 600, "h": 375}
+
+
+def melt_depth() -> tuple[dict, dict]:
+    """P58 T6 (b) - THE BALL MELTS AT A PLANE: `melt:weight:depth=1.15`, and nothing else.
+
+    WHAT THE FRAMES SHOW. `@proof-ball` (15.88) is the instant the ball is formed and the weight phase opens - the
+    same u `melt-page` is judged at - with the eye mid-move: the ball stands at 1.15 of that move while the board
+    it came off stands at 1.0, so the two have parted. The base frame (17.34) is inside the ending, the throw in
+    flight, with the eye in its hold - dead still, so the pin is byte-exact - and the ball leaves from the plane it
+    melted on. R26-118 is unchanged: the highlight sits on the light, the ink mark turns with the roll."""
+    import json as _json
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", None, "right")
+    page["field"] = "scribble"
+    page["exit"] = "cut"   # LEDGER_EXITS / E40 #5, R26-60: NO RETRACT - the melt is how this chart leaves
+    raw = _json.loads(SERIES.read_text(encoding="utf-8"))
+    bars = {"title": "Where the four lines end", "sub": "index at the last point, 100 = Aug '25", "src": raw.get("src", ""), "unit": "",
+            "bars": [{"label": short, "value": round(float(sr["pts"][-1][1]), 1), "color": sr.get("color", "crimson")}
+                     for sr, short in zip(raw["series"], ("Memory", "Chips", "Mega-cap", "S&P 500"))]}
+    page2 = LPG.build_spec(bars, "bars", None, "right")
+    page2["field"] = "scribble"      # the same board as scene 1's: the board is shared
+    page2["enter"] = "axes"          # what stamp_transition_pages writes on a chart-to-chart boundary
+    import build_scene_timeline_f as BST
+    P = MELT_DEPTH_PLACE
+    species = [{"kind": "focus_zoom", "at": MELT_DEPTH_AT, "dur": MELT_DEPTH_DUR,
+                "target": {"kind": "region", "x0": P["x"] / 1920, "y0": P["y"] / 1080,
+                           "x1": (P["x"] + P["w"]) / 1920, "y1": (P["y"] + P["h"]) / 1080}}]
+    dock = BST.dock_entry("ev-melt-card", 0, MELT_DEPTH_CARD, MELT_CUT, 1, BST.DOCK_KIND_IMAGE, P, "land")
+    ev = {"ev-melt-card": {"title": "The card the eye goes to", "source": "P58 T6", "species": "deck",
+                           "document": {"path": "golden", "sha256": "0" * 64}, "badges": _badges()[:1]}}
+    exit_id = "melt:weight:depth=" + f"{MELT_DEPTH_K:g}"
+    assert BST.melt_depth(exit_id) == MELT_DEPTH_K, exit_id       # the COMPILER's own grammar, not a hand-written string
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, MELT_CUT], "docks": [dock], "species": list(species)},
+              {"scene_id": "s02", "world": {"kind": "ledger", "page": page2, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": exit_id, "span": [MELT_CUT, RUNTIME], "docks": [], "species": list(species)}]
+    uris = _base_uris()
+    uris["ev-melt-card"] = uri("image/png", png_solid(600, 375, (23, 105, 194)))
+    tl = _timeline("Golden: the chart's ink balls up and is thrown at a depth", scenes, ev, None)
+    tl["kinetics"] = {"camera": True}   # E59's own module drives the species (camNow), as on camera-layers
+    return tl, uris
+
+
+SURFACES.update({   # P58 T6 (b): the ball that melts, lands and is thrown at the `-mid` plane
+    "melt-depth": melt_depth,
+})
+FRAME_T["melt-depth"] = 17.34   # THE ENDING: the window is MELT_CUT + MELT.S + MELT.W_S (2.75 s), so the weight phase
+                                # runs 15.88 -> 16.98 and the throw takes what is left; 17.34 is 0.46 through the
+                                # throw, with the eye inside its hold (14.0 + 4.0/1.8 = 16.22) - a dead-still pin
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     SOURCES.mkdir(parents=True, exist_ok=True)

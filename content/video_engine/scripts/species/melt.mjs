@@ -179,11 +179,19 @@ export const MELT = Object.freeze({
   W_MARK_PHI: 2.05,      /* where the sag left it on the ball (radians, before the roll turns it) */
   W_SHADOW_A: 0.5,       /* the contact shadow's ink at its darkest (contactShadow's own alpha scales it) */
   W_SHADOW_W: 1.15,      /* its width in ball radii (its height is a sixth of that: a slit on the board, doc 48) */
+  /* P58 T6 (b) / E98 s4: THE PLANE THE BALL MELTS AT (`melt:...:depth=<k>`) - kinetics/camera.mjs PARALLAX's own
+     range, written here so this module stays self-contained, and build_scene_timeline_f.DOCK_DEPTH's the same three
+     numbers (one dial written twice, as MELT.S and MELT_S are; test_transitions_e47 pins the pair). */
+  DEPTH_MIN: 0,          /* pinned to the frame: the ball takes none of the camera's move */
+  DEPTH_MAX: 4,          /* ... and the camera's own ceiling */
+  DEPTH_FLAT: 1,         /* doc 24's far wall - the flat clone, so `depth=1` is the melt that always shipped */
   HL_SHEEN: 0.82,        /* the specular highlight: the ball's own lit ink taken this far toward white */
   INK_HEX: "#E9E2D2",    /* the marks' colour when the chart carries no stroke to read (a page of words) */
 });
 
 export const MELT_ENDINGS = Object.freeze(["throw", "splash:chart", "splash:plate"]);
+/* P58 T6 (b): the suffix that names the plane a mechanism happens at - build_scene_timeline_f.DEPTH_SUFFIX */
+const MELT_DEPTH = "depth=";
 /* the materials `melt:weight:<material>` may name (stopaction MASS / drop DROP.MAT); metal is the default, E88 s7 */
 export const MELT_MATERIALS = Object.freeze(["metal", "ink", "paper", "liquid"]);
 
@@ -197,7 +205,7 @@ const mEase = (u) => { const k = mc01(u); return k * k * (3 - 2 * k); };
    the name. Throws on anything else, so a typo in a shot table is a refusal and not a silent default. */
 export const meltOpts = (exit, o = {}) => {
   const P = Object.assign({}, MELT, o), bits = String(exit == null ? "" : exit).split(":");
-  const out = { name: bits[0] || "", secs: P.S, ending: null, to: null, weight: false, wmass: P.W_MASS };
+  const out = { name: bits[0] || "", secs: P.S, ending: null, to: null, weight: false, wmass: P.W_MASS, depth: 0 };
   let said = false;   /* did the row declare its own length? a weight phase lengthens only the DEFAULT window */
   const setEnding = (e) => {
     if (out.ending) throw new Error("melt: two endings (" + out.ending + " and " + e + ") - a melt ends one way");
@@ -207,10 +215,17 @@ export const meltOpts = (exit, o = {}) => {
     const b = bits[i].trim();
     if (b === "") continue;
     if (b === "throw") { setEnding("throw"); continue; }
+    if (b.indexOf(MELT_DEPTH) === 0) {   /* P58 T6 (b): the PLANE the ball melts at - the compiler's own vocabulary, range and words */
+      if (out.depth) throw new Error("melt: two depths - a melt happens at ONE plane");
+      const v = Number(b.slice(MELT_DEPTH.length));
+      if (!Number.isFinite(v)) throw new Error("melt: " + b.slice(MELT_DEPTH.length) + " is not a number - depth=<k>, the share of the camera's move the ball takes (" + P.DEPTH_MIN + " = pinned to the frame, 1 = the flat plate)");
+      if (!(v >= P.DEPTH_MIN && v <= P.DEPTH_MAX)) throw new Error("melt: depth " + v + " is outside " + P.DEPTH_MIN + ".." + P.DEPTH_MAX + " - the parallax factor a plane may take of the camera's move (kinetics/camera.mjs PARALLAX)");
+      out.depth = v; continue;
+    }
     if (b === "weight") {   /* R26-118: the weight phase, and the material it is made of (metal unless it says) */
       out.weight = true;
       const nx = (bits[i + 1] || "").trim();
-      if (nx && nx.indexOf(",") < 0 && nx !== "throw" && nx !== "splash" && !Number.isFinite(Number(nx))) {
+      if (nx && nx.indexOf(",") < 0 && nx !== "throw" && nx !== "splash" && nx.indexOf(MELT_DEPTH) !== 0 && !Number.isFinite(Number(nx))) {
         if (MELT_MATERIALS.indexOf(nx) < 0) {
           throw new Error("melt: " + nx + " is not a material - melt:weight takes " + MELT_MATERIALS.join(", "));
         }
@@ -867,6 +882,13 @@ const meltCircle = (dot, c) => {
    to); the engine cuts instead, and so does this. */
 export const paintMelt = (ctx) => {
   const { wA, wB, el, rnd } = ctx, id = ctx.id || "melt";
+  /* P58 T6 (b) / E98 s4 - THE PLANE THE BALL MELTS AT. The melt's three elements (the ink clone, the words' clone and
+     the overlay that carries the ball, its drips, its shadow and its ending) have always taken the OUTGOING world's
+     own transform; a melt that authored `depth=<k>` takes the same string with the camera read at k instead
+     (`camLayerCss`, the engine's `meltDepthCss` - the one place that knows the camera, exactly as the dock's own
+     depth does). `ctx.worldCss` is undefined for every melt that named no depth, so the string is the one it always
+     was and every melt golden is byte-identical. */
+  const wCss = typeof ctx.worldCss === "string" ? ctx.worldCss : wA.style.transform;
   if (!wA.__melt && !wA.querySelector(".lp-page")) return null;
   if (wA.__melt && !(wA.__melt.svg && wA.__melt.svg.isConnected)) clearMelt(wA);   /* a stale mount: its clone and classes go first */
   const m = wA.__melt ? wA.__melt : meltMount(wA, el, id);
@@ -875,6 +897,10 @@ export const paintMelt = (ctx) => {
   m.svg.style.width = wA.offsetWidth + "px"; m.svg.style.height = wA.offsetHeight + "px";
   m.svg.setAttribute("viewBox", "0 0 " + wA.offsetWidth + " " + wA.offsetHeight);
   m.svg.style.opacity = st.gone ? "0" : "1";
+  /* the BALL's own overlay rides the plane too (its box is wA's, so the same string about the same centre): the drops
+     fall on it and the ending runs from it. Written ONLY at a depth - an overlay that carried no transform keeps none. */
+  if (typeof ctx.worldCss === "string") { m.svg.style.transformOrigin = "50% 50%"; m.svg.style.transform = wCss; }
+  else if (m.svg.style.transform) { m.svg.style.transform = ""; m.svg.style.transformOrigin = ""; }
   /* THE INK: masked, run, squeezed about the ball's centre - hidden once the ball is solid */
   const ink = m.ink, showInk = !st.gone && st.inkOpacity > 0 && st.path;
   ink.style.visibility = showInk ? "" : "hidden";
@@ -888,7 +914,7 @@ export const paintMelt = (ctx) => {
     ink.style.filter = "url(#" + id + "i)";
     m.tintC.setAttribute("k2", st.tint.toFixed(4)); m.tintC.setAttribute("k3", (1 - st.tint).toFixed(4));
     ink.style.transformOrigin = st.centre ? st.centre[0].toFixed(1) + "px " + st.centre[1].toFixed(1) + "px" : "";
-    ink.style.transform = (st.scale !== 1 ? "scale(" + st.scale.toFixed(4) + ") " : "") + wA.style.transform;
+    ink.style.transform = (st.scale !== 1 ? "scale(" + st.scale.toFixed(4) + ") " : "") + wCss;
   }
   /* THE WORDS: their own glyphs running down, fading out over the sag */
   const txt = m.txt, showTxt = !st.gone && st.textOpacity > 0.002;
@@ -900,7 +926,7 @@ export const paintMelt = (ctx) => {
     m.toff.setAttribute("dy", streak.dy);
     txt.style.filter = "url(#" + id + "x)";
     txt.style.opacity = st.textOpacity.toFixed(4);
-    txt.style.transform = wA.style.transform;
+    txt.style.transform = wCss;
   }
   ink.style.opacity = showInk ? st.inkOpacity.toFixed(4) : "0";
   /* THE BALL */

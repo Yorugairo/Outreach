@@ -16,7 +16,7 @@ lives (module | inline | compiler-only | declared-unbuilt, the path and the one 
 module - status and callable - proof - doctrine cites resolved to path:line - aliases. A token that is only a
 parameter of an effect is an option on its card, never a card.
 
-136 cards, 72 options, 18 axes. 40 recipes (15 proven).
+137 cards, 73 options, 18 axes. 40 recipes (15 proven).
 
 | axis | cards | options | live | wired | draft | declared | planned | retired |
 |---|---|---|---|---|---|---|---|---|
@@ -28,12 +28,12 @@ parameter of an effect is an option on its card, never a card.
 | dock_kind | 4 | 1 | 2 | 2 | 0 | 0 | 0 | 0 |
 | dock_payload | 3 | 0 | 3 | 0 | 0 | 0 | 0 | 0 |
 | chart_dock | 5 | 1 | 5 | 0 | 0 | 0 | 0 | 0 |
-| dock_option | 8 | 14 | 3 | 5 | 0 | 0 | 0 | 0 |
+| dock_option | 9 | 14 | 3 | 6 | 0 | 0 | 0 | 0 |
 | plate_option | 12 | 6 | 4 | 8 | 0 | 0 | 0 | 0 |
 | idle | 6 | 0 | 3 | 3 | 0 | 0 | 0 | 0 |
 | arrival | 3 | 4 | 2 | 1 | 0 | 0 | 0 | 0 |
 | camera | 1 | 6 | 1 | 0 | 0 | 0 | 0 | 0 |
-| exit | 8 | 13 | 3 | 3 | 2 | 0 | 0 | 0 |
+| exit | 8 | 14 | 3 | 3 | 2 | 0 | 0 | 0 |
 | page_enter | 10 | 5 | 3 | 7 | 0 | 0 | 0 | 0 |
 | page_exit | 2 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
 | caption | 3 | 8 | 3 | 0 | 0 | 0 | 0 | 0 |
@@ -1100,6 +1100,18 @@ parameter of an effect is an option on its card, never a card.
 - **proof** golden newsreel-band - test content/video_engine/tests/test_dock_cutout_option.py - first use none
 - **doctrine** E86 #2 -> docs/portable/OPERATOR-RULINGS.md:2621
 
+### The dock at a depth
+
+- **id** `dock_option:depth` - **does** The card stands on a layer's plane and takes that share of the ONE camera's move, instead of standing still in screen space while the world moves behind it.
+- **when** Only under a move the frame can already name (E59) and on a plate that ships in planes: parallax is a consequence of the camera in a layered world, never a move authored to show depth off (E49). (docs/portable/OPERATOR-RULINGS.md:2848)
+- **example** `{'depth': 1.15}` (content/video_engine/tests/golden/build_golden_sources.py:DOCK_DEPTH_K; key: dock option {'depth': <k>} (0..4 - kinetics/camera.mjs PARALLAX, the page's own range and words); check: dock_option)
+- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `dockCam` - also `dockDepthOf` - the dock paint's own prefix (dockCam / dockDepthOf, beside embedCam); the compiler half is DOCK_DEPTH / dock_depth_k / dock_depth_behind_error, read by dock_opts
+- **dials** `PARALLAX` in `content/video_engine/scripts/kinetics/camera.mjs`: `FLAT`=1, `K_MIN`=0, `K_MAX`=4
+- **status** wired - **callable** yes: probe OK; it moves only under an authored camera move, and `behind=` composes with it up to the occluder's own plane (1.40)
+- **proof** golden dock-depth - test content/video_engine/tests/test_dock_depth.py::test_a_card_behind_the_front_and_nearer_than_it_is_refused_by_name - first use none
+- **doctrine** E98 s4 -> docs/portable/OPERATOR-RULINGS.md:2832; HF-17 -> unresolved; E45 -> docs/portable/OPERATOR-RULINGS.md:1361; P58 T3 camLayerCss -> unresolved
+- **aliases** "the docks move through the depth" (docs/portable/OPERATOR-RULINGS.md:2848)
+
 ### The art-embed surface dock option
 
 - **id** `dock_option:embed` - **does** The card lands ON a surface the plate declares, projected onto its four corners; a bare still or clip COVERS its surface by default, while a card carrying badges, a record, a chart or proofs stays a reflowed card (E95).
@@ -1498,7 +1510,7 @@ parameter of an effect is an option on its card, never a card.
 
 - **id** `exit:melt` - **does** Only the outgoing chart's ink sags, fuses and compiles on 2s into a dense heavy ball while the board stays; then one of three authored endings.
 - **when** Only the chart's information melts (docs/portable/OPERATOR-RULINGS.md:2659)
-- **example** `(25.02, 33.97, 'ledger:ev-federal-load-v1:line:240:right:spiral:cut', (0, 0, 0), [], 'melt')` (content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/SHOT-TABLE-SHORT.py:6; key: shot row 6th element 'melt[:throw|:splash:chart|:splash:plate][:<s>][:<x>,<y>]' (validator: parse_exit (via scene_exit); melt boundaries: stamp_transition_pages/_melt_boundary); check: exit)
+- **example** `(25.02, 33.97, 'ledger:ev-federal-load-v1:line:240:right:spiral:cut', (0, 0, 0), [], 'melt')` (content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/SHOT-TABLE-SHORT.py:6; key: shot row 6th element 'melt[:throw|:splash:chart|:splash:plate][:weight[:<material>]][:depth=<k>][:<s>][:<x>,<y>]' (validator: parse_exit (via scene_exit); melt boundaries: stamp_transition_pages/_melt_boundary); check: exit)
 - **phases**
   1. **sag** - the chart's ink (never the board) smears downward in offset copies under the gooey threshold and fuses; its box outline grows seeded drips and slumps (trigger: the scene boundary (u = 0 of the exit window); dials: `S`=1.6, `MELT_END`=0.30, `DRIPS`=7, `SAG`=0.40, `TOP_SAG`=0.42, `BLUR`=26, `EDGE_SLOPE`=24, `RUN`=0.22, `RUN_COPIES`=6, `INK_BLUR`=4)
   2. **ball** - on the stepped clock (on 2s) the ink squeezes to its centroid while the outline morphs to a circle and an opaque K-M-concentrated body grows over it (trigger: u = MELT_END (the sag's end); dials: `BALL_END`=0.55, `BALL_R`=0.085, `HOLD`=2, `SQUEEZE`=1.15, `BALL_FUSE`=40, `BODY_GROW`=0.4, `INK_OUT`=0.45, `INK_DEEP`=3, `CORE`=12)
@@ -1511,12 +1523,12 @@ parameter of an effect is an option on its card, never a card.
 - **blend** morph_a vertex outline morph -> the whole arc (recorded; content/video_engine/scripts/species/melt.mjs:56)
 - **blend** the ink-bloom's ragged front -> the whole arc (recorded; content/video_engine/scripts/species/melt.mjs:133)
 - **blend** four laws we already owned, chained (R26-15's melt lesson) -> the whole arc (recorded; docs/content-video-engine/CAPABILITIES.md:35)
-- **options** `melt` The melt's own length: The melt runs over the seconds its suffix declares instead of its default dial. (TIMED_EXITS); `splash:chart` The melt: splash into the next chart: The ink ball splatters back onto the board and the splatter forms the next chart, which arrives built. (MELT_ENDINGS); `splash:plate` The melt: splash that paints a plate: The ink ball splatters and a narrative plate springs up out of it, reading as painted by that ink. (MELT_ENDINGS); `throw` The melt: thrown off: The ink ball is thrown off the stage and the next chart draws on the same board. (MELT_ENDINGS); `weight` The melt: the ball has MASS - it lands, rolls without slipping (its ink mark turning), is nudged and settles, its surface the living drop. Opt-in `melt:weight[:<material>]`, metal by default.
+- **options** `depth` The melt at a depth: melt:...:depth=<k> puts the ink clone and the ball overlay on the camera read at k (camLayerCss), so the ball melts, lands and is thrown at that plane.; `melt` The melt's own length: The melt runs over the seconds its suffix declares instead of its default dial. (TIMED_EXITS); `splash:chart` The melt: splash into the next chart: The ink ball splatters back onto the board and the splatter forms the next chart, which arrives built. (MELT_ENDINGS); `splash:plate` The melt: splash that paints a plate: The ink ball splatters and a narrative plate springs up out of it, reading as painted by that ink. (MELT_ENDINGS); `throw` The melt: thrown off: The ink ball is thrown off the stage and the next chart draws on the same board. (MELT_ENDINGS); `weight` The melt: the ball has MASS - it lands, rolls without slipping (its ink mark turning), is nudged and settles, its surface the living drop. Opt-in `melt:weight[:<material>]`, metal by default.
 - **lives** module - `content/video_engine/scripts/species/melt.mjs` - symbol `MELT` - also `MELT_ENDINGS`, `MELT_MATERIALS`, `clearMelt`, `meltBallRing`, `meltMount`, `meltOpts`, `meltWeightAt`, `paintMelt` - MELT / MELT_ENDINGS / meltOpts (engine glue: paintMelt, meltMount, clearMelt)
-- **dials** `MELT` in `content/video_engine/scripts/species/melt.mjs`: `S`=1.6, `MELT_END`=0.30, `BALL_END`=0.55, `DRIPS`=7, `SAG`=0.40, `TOP_SAG`=0.42, `BASE_SAG`=0.10, `DRIP_W`=0.11, `DRIP_JIT`=0.55, `DRIP_DELAY`=0.40, `N`=33, `TOP_N`=13, `SIDE_N`=7, `BLUR`=26, `EDGE_SLOPE`=24, `RUN`=0.22, `RUN_COPIES`=6, `INK_BLUR`=4, `BALL_FUSE`=40, `INK_SLOPE`=9, `BALL_R`=0.085, `CIRCLE_N`=96, `RING_N`=96, `HOLD`=2, `FPS`=CADENCE.FPS, `SQUEEZE`=1.15, `BODY_FROM`=0, `BODY_TO`=0.15, `BODY_GROW`=0.4, `BODY_SEED`=0.25, `INK_OUT`=0.45, `TINT_MELT`=0, `INK_DEEP`=3, `CORE`=12, `LIGHT`=1, `TEXT_STREAK`=1.6, `SHEEN`=0.5, `SPLAT_OUT`=3.5, `SPLAT_SHRINK`=0.5, `MASS`="liquid", `SQUASH`=0.30, `ANTIC`=0.22, `TO`=[1.02, 1.32], `ARC`=0.06, `SPIN_DEG`=4, `DROPS`=14, `BURST_END`=0.40, `SPLASH_SPREAD`=0.30, `LAND_MIN`=0.25, `LAND_MAX`=0.92, `DROP_R`=0.035, `FLAT`=0.62, `REVEAL_R`=0.75, `CORE_R`=0.70, `FLOOD_FROM`=0.70, `TAIL`=2.2, `LOBES`=14, `SPLAT_RAG`=16, `STAIN_RAG`=70, `STAIN_BLUR`=6, `STAIN_SLOPE`=12, `SPRING`=0.09, `W_S`=1.15, `W_MAX`=0.55, `W_MASS`="metal", `W_DROP_PX`=34, `W_LAND`=0.20, `W_ROLL`=0.50, `W_SETTLE`=0.84, `W_ROLL_PX`=150, `W_ROLL_FRICTION`=2800, `W_ROLL_SQUASH`=0.05, `W_NUDGE_PX`=46, `W_NUDGE_K`=0.55, `W_ANTIC_PX`=5, `W_ANTIC_S`=0.12, `W_MARK_AT`=0.62, `W_MARK_R`=0.30, `W_MARK_FLAT`=0.42, `W_MARK_PHI`=2.05, `W_SHADOW_A`=0.5, `W_SHADOW_W`=1.15, `HL_SHEEN`=0.82, `INK_HEX`="#E9E2D2"
+- **dials** `MELT` in `content/video_engine/scripts/species/melt.mjs`: `S`=1.6, `MELT_END`=0.30, `BALL_END`=0.55, `DRIPS`=7, `SAG`=0.40, `TOP_SAG`=0.42, `BASE_SAG`=0.10, `DRIP_W`=0.11, `DRIP_JIT`=0.55, `DRIP_DELAY`=0.40, `N`=33, `TOP_N`=13, `SIDE_N`=7, `BLUR`=26, `EDGE_SLOPE`=24, `RUN`=0.22, `RUN_COPIES`=6, `INK_BLUR`=4, `BALL_FUSE`=40, `INK_SLOPE`=9, `BALL_R`=0.085, `CIRCLE_N`=96, `RING_N`=96, `HOLD`=2, `FPS`=CADENCE.FPS, `SQUEEZE`=1.15, `BODY_FROM`=0, `BODY_TO`=0.15, `BODY_GROW`=0.4, `BODY_SEED`=0.25, `INK_OUT`=0.45, `TINT_MELT`=0, `INK_DEEP`=3, `CORE`=12, `LIGHT`=1, `TEXT_STREAK`=1.6, `SHEEN`=0.5, `SPLAT_OUT`=3.5, `SPLAT_SHRINK`=0.5, `MASS`="liquid", `SQUASH`=0.30, `ANTIC`=0.22, `TO`=[1.02, 1.32], `ARC`=0.06, `SPIN_DEG`=4, `DROPS`=14, `BURST_END`=0.40, `SPLASH_SPREAD`=0.30, `LAND_MIN`=0.25, `LAND_MAX`=0.92, `DROP_R`=0.035, `FLAT`=0.62, `REVEAL_R`=0.75, `CORE_R`=0.70, `FLOOD_FROM`=0.70, `TAIL`=2.2, `LOBES`=14, `SPLAT_RAG`=16, `STAIN_RAG`=70, `STAIN_BLUR`=6, `STAIN_SLOPE`=12, `SPRING`=0.09, `W_S`=1.15, `W_MAX`=0.55, `W_MASS`="metal", `W_DROP_PX`=34, `W_LAND`=0.20, `W_ROLL`=0.50, `W_SETTLE`=0.84, `W_ROLL_PX`=150, `W_ROLL_FRICTION`=2800, `W_ROLL_SQUASH`=0.05, `W_NUDGE_PX`=46, `W_NUDGE_K`=0.55, `W_ANTIC_PX`=5, `W_ANTIC_S`=0.12, `W_MARK_AT`=0.62, `W_MARK_R`=0.30, `W_MARK_FLAT`=0.42, `W_MARK_PHI`=2.05, `W_SHADOW_A`=0.5, `W_SHADOW_W`=1.15, `DEPTH_MIN`=0, `DEPTH_MAX`=4, `DEPTH_FLAT`=1, `HL_SHEEN`=0.82, `INK_HEX`="#E9E2D2"
 - **status** draft (backlog R26-118, R26-76) - **callable** yes: compiles; the R26-76 rework's look pass 3 was accepted on the parent's frame read 2026-09-13 but is uncommitted and awaits the operator's watch in motion; bare melt:splash refused
 - **proof** golden melt-page - test content/video_engine/tests/test_transitions_e47.py::test_a_melt_parses_with_and_without_its_own_length_register_and_point - first use normal-for-which-bridge not recorded in the table t=25.02
-- **doctrine** CAPABILITIES melt row -> unresolved; E88 -> docs/portable/OPERATOR-RULINGS.md:2661; E88 s6 -> docs/portable/OPERATOR-RULINGS.md:2661; E88 s7 -> docs/portable/OPERATOR-RULINGS.md:2661; R26-76 -> docs/content-video-engine/BACKLOG.md:482
+- **doctrine** CAPABILITIES melt row -> unresolved; E88 -> docs/portable/OPERATOR-RULINGS.md:2661; E88 s6 -> docs/portable/OPERATOR-RULINGS.md:2661; E88 s7 -> docs/portable/OPERATOR-RULINGS.md:2661; R26-76 -> docs/content-video-engine/BACKLOG.md:482; E98 s4 -> docs/portable/OPERATOR-RULINGS.md:2832
 - **aliases** "stop motion ink ball" (docs/portable/OPERATOR-RULINGS.md:2654); "toss it off the page" (docs/portable/OPERATOR-RULINGS.md:2655)
 
 ### The slide scene exit

@@ -2711,11 +2711,19 @@ async function mount(doc) {
     W_MARK_PHI: 2.05,      /* where the sag left it on the ball (radians, before the roll turns it) */
     W_SHADOW_A: 0.5,       /* the contact shadow's ink at its darkest (contactShadow's own alpha scales it) */
     W_SHADOW_W: 1.15,      /* its width in ball radii (its height is a sixth of that: a slit on the board, doc 48) */
+    /* P58 T6 (b) / E98 s4: THE PLANE THE BALL MELTS AT (`melt:...:depth=<k>`) - kinetics/camera.mjs PARALLAX's own
+       range, written here so this module stays self-contained, and build_scene_timeline_f.DOCK_DEPTH's the same three
+       numbers (one dial written twice, as MELT.S and MELT_S are; test_transitions_e47 pins the pair). */
+    DEPTH_MIN: 0,          /* pinned to the frame: the ball takes none of the camera's move */
+    DEPTH_MAX: 4,          /* ... and the camera's own ceiling */
+    DEPTH_FLAT: 1,         /* doc 24's far wall - the flat clone, so `depth=1` is the melt that always shipped */
     HL_SHEEN: 0.82,        /* the specular highlight: the ball's own lit ink taken this far toward white */
     INK_HEX: "#E9E2D2",    /* the marks' colour when the chart carries no stroke to read (a page of words) */
   });
 
   const MELT_ENDINGS = Object.freeze(["throw", "splash:chart", "splash:plate"]);
+  /* P58 T6 (b): the suffix that names the plane a mechanism happens at - build_scene_timeline_f.DEPTH_SUFFIX */
+  const MELT_DEPTH = "depth=";
   /* the materials `melt:weight:<material>` may name (stopaction MASS / drop DROP.MAT); metal is the default, E88 s7 */
   const MELT_MATERIALS = Object.freeze(["metal", "ink", "paper", "liquid"]);
 
@@ -2729,7 +2737,7 @@ async function mount(doc) {
      the name. Throws on anything else, so a typo in a shot table is a refusal and not a silent default. */
   const meltOpts = (exit, o = {}) => {
     const P = Object.assign({}, MELT, o), bits = String(exit == null ? "" : exit).split(":");
-    const out = { name: bits[0] || "", secs: P.S, ending: null, to: null, weight: false, wmass: P.W_MASS };
+    const out = { name: bits[0] || "", secs: P.S, ending: null, to: null, weight: false, wmass: P.W_MASS, depth: 0 };
     let said = false;   /* did the row declare its own length? a weight phase lengthens only the DEFAULT window */
     const setEnding = (e) => {
       if (out.ending) throw new Error("melt: two endings (" + out.ending + " and " + e + ") - a melt ends one way");
@@ -2739,10 +2747,17 @@ async function mount(doc) {
       const b = bits[i].trim();
       if (b === "") continue;
       if (b === "throw") { setEnding("throw"); continue; }
+      if (b.indexOf(MELT_DEPTH) === 0) {   /* P58 T6 (b): the PLANE the ball melts at - the compiler's own vocabulary, range and words */
+        if (out.depth) throw new Error("melt: two depths - a melt happens at ONE plane");
+        const v = Number(b.slice(MELT_DEPTH.length));
+        if (!Number.isFinite(v)) throw new Error("melt: " + b.slice(MELT_DEPTH.length) + " is not a number - depth=<k>, the share of the camera's move the ball takes (" + P.DEPTH_MIN + " = pinned to the frame, 1 = the flat plate)");
+        if (!(v >= P.DEPTH_MIN && v <= P.DEPTH_MAX)) throw new Error("melt: depth " + v + " is outside " + P.DEPTH_MIN + ".." + P.DEPTH_MAX + " - the parallax factor a plane may take of the camera's move (kinetics/camera.mjs PARALLAX)");
+        out.depth = v; continue;
+      }
       if (b === "weight") {   /* R26-118: the weight phase, and the material it is made of (metal unless it says) */
         out.weight = true;
         const nx = (bits[i + 1] || "").trim();
-        if (nx && nx.indexOf(",") < 0 && nx !== "throw" && nx !== "splash" && !Number.isFinite(Number(nx))) {
+        if (nx && nx.indexOf(",") < 0 && nx !== "throw" && nx !== "splash" && nx.indexOf(MELT_DEPTH) !== 0 && !Number.isFinite(Number(nx))) {
           if (MELT_MATERIALS.indexOf(nx) < 0) {
             throw new Error("melt: " + nx + " is not a material - melt:weight takes " + MELT_MATERIALS.join(", "));
           }
@@ -3399,6 +3414,13 @@ async function mount(doc) {
      to); the engine cuts instead, and so does this. */
   const paintMelt = (ctx) => {
     const { wA, wB, el, rnd } = ctx, id = ctx.id || "melt";
+    /* P58 T6 (b) / E98 s4 - THE PLANE THE BALL MELTS AT. The melt's three elements (the ink clone, the words' clone and
+       the overlay that carries the ball, its drips, its shadow and its ending) have always taken the OUTGOING world's
+       own transform; a melt that authored `depth=<k>` takes the same string with the camera read at k instead
+       (`camLayerCss`, the engine's `meltDepthCss` - the one place that knows the camera, exactly as the dock's own
+       depth does). `ctx.worldCss` is undefined for every melt that named no depth, so the string is the one it always
+       was and every melt golden is byte-identical. */
+    const wCss = typeof ctx.worldCss === "string" ? ctx.worldCss : wA.style.transform;
     if (!wA.__melt && !wA.querySelector(".lp-page")) return null;
     if (wA.__melt && !(wA.__melt.svg && wA.__melt.svg.isConnected)) clearMelt(wA);   /* a stale mount: its clone and classes go first */
     const m = wA.__melt ? wA.__melt : meltMount(wA, el, id);
@@ -3407,6 +3429,10 @@ async function mount(doc) {
     m.svg.style.width = wA.offsetWidth + "px"; m.svg.style.height = wA.offsetHeight + "px";
     m.svg.setAttribute("viewBox", "0 0 " + wA.offsetWidth + " " + wA.offsetHeight);
     m.svg.style.opacity = st.gone ? "0" : "1";
+    /* the BALL's own overlay rides the plane too (its box is wA's, so the same string about the same centre): the drops
+       fall on it and the ending runs from it. Written ONLY at a depth - an overlay that carried no transform keeps none. */
+    if (typeof ctx.worldCss === "string") { m.svg.style.transformOrigin = "50% 50%"; m.svg.style.transform = wCss; }
+    else if (m.svg.style.transform) { m.svg.style.transform = ""; m.svg.style.transformOrigin = ""; }
     /* THE INK: masked, run, squeezed about the ball's centre - hidden once the ball is solid */
     const ink = m.ink, showInk = !st.gone && st.inkOpacity > 0 && st.path;
     ink.style.visibility = showInk ? "" : "hidden";
@@ -3420,7 +3446,7 @@ async function mount(doc) {
       ink.style.filter = "url(#" + id + "i)";
       m.tintC.setAttribute("k2", st.tint.toFixed(4)); m.tintC.setAttribute("k3", (1 - st.tint).toFixed(4));
       ink.style.transformOrigin = st.centre ? st.centre[0].toFixed(1) + "px " + st.centre[1].toFixed(1) + "px" : "";
-      ink.style.transform = (st.scale !== 1 ? "scale(" + st.scale.toFixed(4) + ") " : "") + wA.style.transform;
+      ink.style.transform = (st.scale !== 1 ? "scale(" + st.scale.toFixed(4) + ") " : "") + wCss;
     }
     /* THE WORDS: their own glyphs running down, fading out over the sag */
     const txt = m.txt, showTxt = !st.gone && st.textOpacity > 0.002;
@@ -3432,7 +3458,7 @@ async function mount(doc) {
       m.toff.setAttribute("dy", streak.dy);
       txt.style.filter = "url(#" + id + "x)";
       txt.style.opacity = st.textOpacity.toFixed(4);
-      txt.style.transform = wA.style.transform;
+      txt.style.transform = wCss;
     }
     ink.style.opacity = showInk ? st.inkOpacity.toFixed(4) : "0";
     /* THE BALL */
@@ -4551,6 +4577,30 @@ async function mount(doc) {
     const cx = STAGE_W / 2 - box.x, cy = STAGE_H / 2 - box.y;
     return "translate(" + cx.toFixed(2) + "px," + cy.toFixed(2) + "px) " + cam
       + " translate(" + (-cx).toFixed(2) + "px," + (-cy).toFixed(2) + "px) ";
+  };
+
+
+  /* P58 T6 (a) - THE DOCK AT A DEPTH (E98 s4: *"the docks, the ball and the slide move THROUGH the depth"*). A dock
+     that authored `depth=<k>` stands on a LAYER'S plane instead of in screen space: it takes the share k of the one
+     camera's move - kinetics/camera.mjs `camLayerCss`, the same term the plate's planes and a depth page take -
+     wrapped about the CARD'S own transform-origin (embedCam's wrapper above: translate that origin onto the stage's
+     centre, which is the point the camera's string measures its translation about, apply the camera, translate
+     back). Nothing else about the card moves: the arrival, the reading pop, the park and the idle are composed
+     INSIDE it, and E45's settled card is the card that settles. "" for a dock that named no depth and "" while the
+     eye is still, so every frame outside a camera window is byte-identical. `behind=` still paints the plate's
+     front over it - occlusion is the depth CUE, this is the depth. */
+  const dockDepthOf = (d) => (d && +d.depth > 0 && +d.depth !== PARALLAX.FLAT ? +d.depth : 0);
+  const dockCam = (d, t, el) => {
+    const k = dockDepthOf(d);
+    if (!k || !d.scene) return "";
+    const cam = camCssAt(camNow(d.scene, t), k);
+    if (!cam) return "";
+    const org = (getComputedStyle(el).transformOrigin || "").split(" ").map(parseFloat);
+    const ox = el.offsetLeft + (Number.isFinite(org[0]) ? org[0] : (el.offsetWidth || 0) / 2);
+    const oy = el.offsetTop + (Number.isFinite(org[1]) ? org[1] : (el.offsetHeight || 0) / 2);
+    const cx = STAGE_W / 2 - ox, cy = STAGE_H / 2 - oy;
+    return "translate(" + cx.toFixed(2) + "px," + cy.toFixed(2) + "px) " + cam
+      + "translate(" + (-cx).toFixed(2) + "px," + (-cy).toFixed(2) + "px) ";
   };
 
   /* the whole transform at t: the projection, the arrival composed around it, the idle inside it */
@@ -10043,6 +10093,28 @@ async function mount(doc) {
                                at: [xf.ax != null ? xf.ax : xf.ox, xf.ay != null ? xf.ay : xf.oy] }, k);
     return camCss({ s: st.s, ox: st.look[0], oy: st.look[1], ax: st.at[0], ay: st.at[1] });
   };
+
+  /* P58 T6 - THE SAME WORLD, SEEN FROM ANOTHER PLANE. A world element's transform is written in ONE order -
+     `camCss(camNow(scene, t)) + worldRest` (the paint block) - so the camera at another depth is that same string
+     with its first term replaced: `camLayerCss(st, k)` in place of `camLayerCss(st, 1)`, and everything the element
+     shares (the Ken Burns drift, the wipe's push, a blur-zoom's scale) untouched beneath it. Returns undefined when
+     there is nothing to swap - no depth, a flat camera (`camCssAt` is "" under a locked eye, so k does nothing and
+     the frame is byte-identical), or an element that does NOT carry the flat camera because a layered world or a
+     depth page already took it down onto its own planes: painting the camera twice would be worse than not
+     painting the depth at all, and the compiler is where that pair is refused. */
+  const camDepthSwap = (el, scene, t, k) => {
+    if (!(k > 0) || k === PARALLAX.FLAT || !scene || !el) return undefined;
+    /* `data-world-rest` is the string the paint block wrote UNDER the camera, recorded there rather than sliced off
+       `style.transform` here: the browser re-serialises a transform it is handed, so a prefix written this frame is
+       not always the prefix read back. Absent (a layered world or a depth page already took the camera down onto
+       its own planes, and `data-world-pose` says so) is left alone - painting the camera twice would be worse than
+       not painting the depth, and the compiler is where that pair is refused. */
+    if (el.dataset.worldPose !== undefined || el.dataset.worldRest === undefined) return undefined;
+    const cam = camCssAt(camNow(scene, t), k);
+    if (!cam) return undefined;                  /* the eye is still: every k gives the string it already has */
+    return cam + el.dataset.worldRest;
+  };
+
   /* THE PLATE'S POSE THIS FRAME, for the layers registered TO the plate rather than painted as one of its planes -
      HF-17's foreground cutout and P50 T7's embed sheen. A flat world has its whole pose on the element, so this is
      byte-identical to reading `.style.transform`; a LAYERED world moved the camera down onto its planes, so the
@@ -12656,6 +12728,7 @@ async function mount(doc) {
            applies to every plane at once); each plane carries the camera at its own k, so at k = 1, and under a
            LOCKED camera at any k, the string a plane gets is exactly the string the flat world gets. */
         el.dataset.worldPose = camCss(camXfNow) + worldRest;
+        if (el.dataset.worldRest !== undefined) delete el.dataset.worldRest;   /* P58 T6: the camera is on the planes, not under this element */
         el.style.transform = "";
         paintPlanes(el, plies, camXfNow, worldRest);
       } else if (pageK) {
@@ -12663,9 +12736,11 @@ async function mount(doc) {
            - the authored Ken Burns and the wipe's push - and `data-world-pose` carries the k = 1 pose, so
            worldPose(el) is still exactly the string a flat world writes. */
         el.dataset.worldPose = camCss(camXfNow);
+        if (el.dataset.worldRest !== undefined) delete el.dataset.worldRest;   /* P58 T6: the page took the camera onto its own plane */
         el.style.transform = worldRest;
       } else {
         if (el.dataset.worldPose) delete el.dataset.worldPose;
+        el.dataset.worldRest = worldRest;   /* P58 T6: what sits UNDER the camera on this element, for a mechanism read at another depth (camDepthSwap) */
         el.style.transform = camCss(camXfNow) + worldRest;
       }
     };
@@ -12836,6 +12911,8 @@ async function mount(doc) {
       shift(wA, slideU); shift(wB, slideU - 1);
     } else if (wA.style.clipPath) wA.style.clipPath = "";   /* the slide is over: wA takes no clip again (wB's is the wipe's, rewritten every frame) */
     if (meltOn) paintMelt({ wA, wB, t, t0: sc.span[0], el: lpEl, opts: meltOn,
+                            /* P58 T6 (b): the plane the ball melts at - the OUTGOING world's own camera, read at k */
+                            worldCss: camDepthSwap(wA, prev, t, +meltOn.depth || 0),
                             rnd: (k) => lpHash(0x3E17 ^ ((sc.scene_id || "").length * 131), k, 977) });
     else if (wA.__melt) clearMelt(wA);   /* the same reset the suck does above, and only for a world that melted */
     seam.style.opacity = seaming ? 1 : 0;
@@ -13040,6 +13117,9 @@ async function mount(doc) {
         el.style.transform = "translate(" + (st.ax + st.s * (Cx - st.ox) - Cx).toFixed(2) + "px, " + (st.ay + st.s * (Cy - st.oy) - Cy).toFixed(2) + "px) scale(" + st.s.toFixed(5) + ") " + el.style.transform;
         const blur = SNAP_BLUR * 4 * camArr.u * (1 - camArr.u); el.style.filter = blur > 0.2 ? "blur(" + blur.toFixed(2) + "px)" : "";
       } else if (el.style.filter) el.style.filter = "";
+      /* P58 T6 (a): THE CARD'S OWN PLANE, prepended last so the whole choreography above rides it (a card on a
+         declared surface is refused a depth by the compiler - the surface is already its plane). */
+      { const dcam = embedOf(d) ? "" : dockCam(d, t, el); if (dcam) el.style.transform = dcam + el.style.transform; }
       const shk = arr !== "spring" ? expoOut(clamp01((lag(t) - d.enter) / CARD_IN)) : ck;   /* HF-2: a thrown or landed card's shadow settles one frame after it */
       const sh = 12 * shk * (swept ? (1 - wk) : 1);   // light leaves with the page
       /* P53 T7: a CUTOUT casts no card's lift - the hard offset shadow drew a ghost card edge down the right and along the

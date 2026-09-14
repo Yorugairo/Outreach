@@ -69,6 +69,12 @@ PROOF_FRAMES = {
     # camera-layers (E59's module drives the move); the depth and the plane are AUTHORED on the page, not switched on.
     "page-depth@proof-build": ("page-depth", {"camera": True}, 9.8),    # MID-BUILD: the chart DRAWING on the tilted page - the page's own clock opens at 5.0 and this is its 4.8 s, the subtitle half written, two of the four series in, the nib at the front; the camera is still locked, so what turns the page is the plane alone
     "page-depth@proof-leave": ("page-depth", {"camera": True}, 28.5),   # THE LEAVING: half way down the retract's drain (the colours over the scene's last 2 s), the page still standing on its plane
+    # P58 T6 (b) - THE MELT'S BALL AT A DEPTH, at the instant the ending cannot show: the ball formed, the weight
+    # phase opening, the eye mid-move - the ball at 1.15 and the board it came off at 1.0, parted.
+    "melt-depth@proof-ball": ("melt-depth", {"camera": True}, 15.88),
+    # P58 T6 (a) - THE DOCK AT A DEPTH, at the instant the landed frame cannot show: the same flag and the same
+    # t as `camera-layers@proof-mid`, so the pair reads the card's plane and nothing else.
+    "dock-depth@proof-move": ("dock-depth", {"camera": True}, 6.56),   # MID-ZOOM (u 0.28 of the clock): the card riding the containers' plane (1.15) between the sky (1.0) and the lamp (1.40), its own park untouched
     # P58 T5 - THE TWO CHART FORMS, at the instants the held frame cannot show: the prisms GROWING with their
     # faces / the line drawing ON the plane (6.0, the same t the flat line page's own golden is judged at), and
     # the page LEAVING (28.5). No flag: a form is authored on the row, not switched on.
