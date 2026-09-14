@@ -1,0 +1,29 @@
+{
+ "note": "P58 T1's depth split (b-sam: Depth Anything v2 vitl fp16 -> four quantile bands, the occluder and the subject overridden by SAM 2.1 point masks, LaMa behind each nearer band). E98 s6: a layer is generated, never cut out of a stacked generation - the split is the fallback for an existing flat plate, which is what both of these are.",
+ "layers": [
+  {
+   "path": "../../build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-far.png",
+   "role": "background",
+   "alpha": false,
+   "generator": "depth-split-sam"
+  },
+  {
+   "path": "../../build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-mid.png",
+   "role": "mid",
+   "alpha": true,
+   "generator": "depth-split-sam"
+  },
+  {
+   "path": "../../build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-subject.png",
+   "role": "subject",
+   "alpha": true,
+   "generator": "depth-split-sam"
+  },
+  {
+   "path": "../../build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-near.png",
+   "role": "occluder",
+   "alpha": true,
+   "generator": "depth-split-sam"
+  }
+ ]
+}

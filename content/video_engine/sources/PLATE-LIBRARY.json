@@ -1,8 +1,8 @@
 {
- "schema_version": "plate_library.v1",
+ "schema_version": "plate_library.v2",
  "built": "2026-08-29",
- "note": "Status comes from the MANIFEST, never the path (ruling E10). The pilot's quarantine/ directory is misnamed - every manifest inside reads operator_approved.",
- "count": 327,
+ "note": "Status comes from the MANIFEST, never the path (ruling E10). The pilot's quarantine/ directory is misnamed - every manifest inside reads operator_approved. v2 (P58 T2): every plate reads `layers` - doc 24's depth planes, back to front, declared in <plate>.layers.json - or `flat` + `flat_reason`.",
+ "count": 328,
  "plates": [
   {
    "id": "world-banker-apartment-v2",
@@ -12,7 +12,45 @@
    "channel": "money-physics",
    "source": "steel-and-paper/finance-episodes-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "layers": [
+    {
+     "path": "../../../../tokyo-tea-break/build-p58-probe/split-sam/world-banker-apartment-v2/world-banker-apartment-v2-far.png",
+     "file": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\split-sam\\world-banker-apartment-v2\\world-banker-apartment-v2-far.png",
+     "role": "background",
+     "plane": "building_or_environment",
+     "depth": 1.0,
+     "alpha": false,
+     "generator": "depth-split-sam"
+    },
+    {
+     "path": "../../../../tokyo-tea-break/build-p58-probe/split-sam/world-banker-apartment-v2/world-banker-apartment-v2-mid.png",
+     "file": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\split-sam\\world-banker-apartment-v2\\world-banker-apartment-v2-mid.png",
+     "role": "mid",
+     "plane": "actor_or_machine",
+     "depth": 1.15,
+     "alpha": true,
+     "generator": "depth-split-sam"
+    },
+    {
+     "path": "../../../../tokyo-tea-break/build-p58-probe/split-sam/world-banker-apartment-v2/world-banker-apartment-v2-subject.png",
+     "file": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\split-sam\\world-banker-apartment-v2\\world-banker-apartment-v2-subject.png",
+     "role": "subject",
+     "plane": "cast_between_mid_and_near",
+     "depth": 1.275,
+     "alpha": true,
+     "generator": "depth-split-sam"
+    },
+    {
+     "path": "../../../../tokyo-tea-break/build-p58-probe/split-sam/world-banker-apartment-v2/world-banker-apartment-v2-near.png",
+     "file": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\split-sam\\world-banker-apartment-v2\\world-banker-apartment-v2-near.png",
+     "role": "occluder",
+     "plane": "foreground_cutout",
+     "depth": 1.4,
+     "alpha": true,
+     "generator": "depth-split-sam"
+    }
+   ]
   },
   {
    "id": "world-budtender-apartment-v1",
@@ -22,7 +60,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/finance-episodes-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-dram-terrain-v1",
@@ -32,7 +72,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/finance-episodes-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-korea-port-v1",
@@ -42,7 +84,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/finance-episodes-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-memory-fab-floor-v1",
@@ -52,7 +96,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/finance-episodes-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-receipt-macro-v1",
@@ -62,7 +108,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/finance-episodes-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-seoul-fab-skyline-v1",
@@ -72,7 +120,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/finance-episodes-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-signal-box-dusk-v1",
@@ -82,7 +132,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/finance-episodes-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-signal-box-levers-v1",
@@ -92,7 +144,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/finance-episodes-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-till-drawer-v1",
@@ -102,7 +156,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/finance-episodes-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "hero-barbell-v1",
@@ -112,7 +168,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "hero-contract-ovens-v1",
@@ -122,7 +180,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "hero-countercase-v1",
@@ -132,7 +192,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "hero-fab-constraint-v1",
@@ -142,7 +204,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "hero-hbm-bandwidth-v1",
@@ -152,7 +216,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "hero-korea-italy-v1",
@@ -162,7 +228,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "hero-sp500-double-failure-v1",
@@ -172,7 +240,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "hero-wrong-bubble-v1",
@@ -182,7 +252,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/pilot-hero-plates-borrowed",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-bankrupt-club-v1",
@@ -192,7 +264,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-certificate-wall-v1",
@@ -202,7 +276,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-circuit-terrain-v1",
@@ -212,7 +288,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-exhibition-hall-morning-v1",
@@ -222,7 +300,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-modern-certificate-v1",
@@ -232,7 +312,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-spike-certificate-ring-v1",
@@ -242,7 +324,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-spike-desk-v1",
@@ -252,7 +336,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-spike-rest-v1",
@@ -262,7 +348,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-two-rooms-divergence-v1",
@@ -272,7 +360,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-viaduct-train-rain-v1",
@@ -282,7 +372,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-workbench-triad-v1",
@@ -292,7 +384,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-1",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-spike-certificate-ring-v2",
@@ -302,7 +396,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-1b",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-spike-rest-v2",
@@ -312,7 +408,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-1b",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-adviser-signature-v1",
@@ -322,7 +420,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-broadcast-set-v1",
@@ -332,7 +432,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-budget-burndown-v1",
@@ -342,7 +444,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-datacenter-aisle-v1",
@@ -352,7 +456,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-dawn-factory-v1",
@@ -362,7 +468,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-dotcom-server-room-v1",
@@ -372,7 +480,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-empty-racks-v1",
@@ -382,7 +492,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-fiber-trench-v1",
@@ -392,7 +504,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-gpu-crate-dock-v1",
@@ -402,7 +516,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-index-weights-v1",
@@ -412,7 +528,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-internal-memo-v1",
@@ -422,7 +540,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-ledger-page-v1",
@@ -432,7 +552,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-license-cabinet-v1",
@@ -442,7 +564,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-memory-wafer-v1",
@@ -452,7 +576,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-navvy-cutting-v1",
@@ -462,7 +588,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-orderbook-stamped-v1",
@@ -472,7 +600,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-pressure-gauge-v1",
@@ -482,7 +612,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-price-board-wiped-v1",
@@ -492,7 +624,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-railway-acts-desk-v1",
@@ -502,7 +636,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-scales-coin-paper-v1",
@@ -512,7 +648,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-sell-ticket-v1",
@@ -522,7 +660,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-share-office-queue-v1",
@@ -532,7 +672,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-substation-feed-v1",
@@ -542,7 +684,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-target-date-envelope-v1",
@@ -552,7 +696,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-three-notch-slate-v1",
@@ -562,7 +708,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-3",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-broadcast-set-v2",
@@ -572,7 +720,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-4",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-listing-barge-v1",
@@ -582,7 +732,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-4",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-allocation-board",
@@ -592,7 +744,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-bond-prospectus",
@@ -602,7 +756,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-club-interior-papered",
@@ -612,7 +768,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-datacenter-shell",
@@ -622,7 +780,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-exchange-floor-1845",
@@ -632,7 +792,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-hbm-die-stack",
@@ -642,7 +804,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-index-board-swelling",
@@ -652,7 +816,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-laptop-shelf",
@@ -662,7 +828,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-lease-contracts-bound",
@@ -672,7 +840,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-molten-pour-v2",
@@ -682,7 +852,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-signature-close",
@@ -692,7 +864,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-statement-kitchen",
@@ -702,7 +876,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-steel-mill-night",
@@ -712,7 +888,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-trading-desk-dark",
@@ -722,7 +900,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-treasury-cash-count",
@@ -732,7 +912,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-5",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-paper-and-steel-press-v1",
@@ -742,7 +924,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-6",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-signature-nib-v2",
@@ -752,7 +936,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-6",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-assay-sort-v1",
@@ -762,7 +948,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-7",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-steelman-build-v1",
@@ -772,7 +960,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-7",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-hype-machine-v2",
@@ -782,7 +972,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-7b",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "world-unwind-desk-v2",
@@ -792,7 +984,9 @@
    "channel": "money-physics",
    "source": "steel-and-paper/steel-and-paper-plates-wave-7b",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-001",
@@ -803,7 +997,9 @@
    "source": "martial-matters/marshall-monday-001-wave-001-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-002",
@@ -814,7 +1010,9 @@
    "source": "martial-matters/marshall-monday-001-wave-001-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-003",
@@ -825,7 +1023,9 @@
    "source": "martial-matters/marshall-monday-001-wave-001-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-004",
@@ -836,7 +1036,9 @@
    "source": "martial-matters/marshall-monday-001-wave-001-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-005",
@@ -847,7 +1049,9 @@
    "source": "martial-matters/marshall-monday-001-wave-001-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-006",
@@ -858,7 +1062,9 @@
    "source": "martial-matters/marshall-monday-001-wave-001-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-007",
@@ -869,7 +1075,9 @@
    "source": "martial-matters/marshall-monday-001-wave-001-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-009",
@@ -880,7 +1088,9 @@
    "source": "martial-matters/marshall-monday-001-wave-001-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-010",
@@ -891,7 +1101,9 @@
    "source": "martial-matters/marshall-monday-001-wave-001-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-011",
@@ -902,7 +1114,9 @@
    "source": "martial-matters/marshall-monday-001-wave-001-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-012",
@@ -913,7 +1127,9 @@
    "source": "martial-matters/marshall-monday-001-wave-001-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-014",
@@ -924,7 +1140,9 @@
    "source": "martial-matters/marshall-monday-001-wave-001-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-008-contained-peace",
@@ -935,7 +1153,9 @@
    "source": "martial-matters/marshall-monday-001-wave-002-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-013-comparison",
@@ -946,7 +1166,9 @@
    "source": "martial-matters/marshall-monday-001-wave-002-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-015-game-rules",
@@ -957,7 +1179,9 @@
    "source": "martial-matters/marshall-monday-001-wave-002-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-016-empty-host",
@@ -968,7 +1192,9 @@
    "source": "martial-matters/marshall-monday-001-wave-002-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-017-rules-audience",
@@ -979,7 +1205,9 @@
    "source": "martial-matters/marshall-monday-001-wave-002-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-018-reaction-wave",
@@ -990,7 +1218,9 @@
    "source": "martial-matters/marshall-monday-001-wave-002-word-timed",
    "chapter": "cold-open-peace-inversion",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-019-nature-display",
@@ -1001,7 +1231,9 @@
    "source": "martial-matters/marshall-monday-001-wave-002-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-020-costly-prize",
@@ -1012,7 +1244,9 @@
    "source": "martial-matters/marshall-monday-001-wave-002-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-021-aftermath",
@@ -1023,7 +1257,9 @@
    "source": "martial-matters/marshall-monday-001-wave-002-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-022-cost-ledger",
@@ -1034,7 +1270,9 @@
    "source": "martial-matters/marshall-monday-001-wave-002-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-023-display-montage",
@@ -1045,7 +1283,9 @@
    "source": "martial-matters/marshall-monday-001-wave-002-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-024-decision-map",
@@ -1056,7 +1296,9 @@
    "source": "martial-matters/marshall-monday-001-wave-002-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-025-animal-display",
@@ -1067,7 +1309,9 @@
    "source": "martial-matters/marshall-monday-001-wave-003-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-026-preconflict-walk",
@@ -1078,7 +1322,9 @@
    "source": "martial-matters/marshall-monday-001-wave-003-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-027-public-audition",
@@ -1089,7 +1335,9 @@
    "source": "martial-matters/marshall-monday-001-wave-003-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-028-flex-deterrence",
@@ -1100,7 +1348,9 @@
    "source": "martial-matters/marshall-monday-001-wave-003-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-029-bad-decision",
@@ -1111,7 +1361,9 @@
    "source": "martial-matters/marshall-monday-001-wave-003-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-030-translation-station",
@@ -1122,7 +1374,9 @@
    "source": "martial-matters/marshall-monday-001-wave-003-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-031-rap-chestbeat",
@@ -1133,7 +1387,9 @@
    "source": "martial-matters/marshall-monday-001-wave-003-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-032-ancient-os",
@@ -1144,7 +1400,9 @@
    "source": "martial-matters/marshall-monday-001-wave-003-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-033-rhyme-machine",
@@ -1155,7 +1413,9 @@
    "source": "martial-matters/marshall-monday-001-wave-003-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-034-projection",
@@ -1166,7 +1426,9 @@
    "source": "martial-matters/marshall-monday-001-wave-003-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-035-crowd-scorecard",
@@ -1177,7 +1439,9 @@
    "source": "martial-matters/marshall-monday-001-wave-003-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-036-aggression-point",
@@ -1188,7 +1452,9 @@
    "source": "martial-matters/marshall-monday-001-wave-003-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-037-linkedin-contrast",
@@ -1199,7 +1465,9 @@
    "source": "martial-matters/marshall-monday-001-wave-004-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-038-dominance-performed",
@@ -1210,7 +1478,9 @@
    "source": "martial-matters/marshall-monday-001-wave-004-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-039-mic-not-harm",
@@ -1221,7 +1491,9 @@
    "source": "martial-matters/marshall-monday-001-wave-004-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-040-room-agree",
@@ -1232,7 +1504,9 @@
    "source": "martial-matters/marshall-monday-001-wave-004-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-041-consensus",
@@ -1243,7 +1517,9 @@
    "source": "martial-matters/marshall-monday-001-wave-004-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-042-winner-without-contact",
@@ -1254,7 +1530,9 @@
    "source": "martial-matters/marshall-monday-001-wave-004-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-043-no-ambulance",
@@ -1265,7 +1543,9 @@
    "source": "martial-matters/marshall-monday-001-wave-004-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-044-agreement-machine",
@@ -1276,7 +1556,9 @@
    "source": "martial-matters/marshall-monday-001-wave-004-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-045-two-witnesses",
@@ -1287,7 +1569,9 @@
    "source": "martial-matters/marshall-monday-001-wave-004-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-046-left-standing",
@@ -1298,7 +1582,9 @@
    "source": "martial-matters/marshall-monday-001-wave-004-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-047-many-witnesses",
@@ -1309,7 +1595,9 @@
    "source": "martial-matters/marshall-monday-001-wave-004-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-048-public-memory",
@@ -1320,7 +1608,9 @@
    "source": "martial-matters/marshall-monday-001-wave-004-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-049-public-memory",
@@ -1331,7 +1621,9 @@
    "source": "martial-matters/marshall-monday-001-wave-005-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-050-loser-status",
@@ -1342,7 +1634,9 @@
    "source": "martial-matters/marshall-monday-001-wave-005-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-051-winner-reaction",
@@ -1353,7 +1647,9 @@
    "source": "martial-matters/marshall-monday-001-wave-005-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-052-contained-exit",
@@ -1364,7 +1660,9 @@
    "source": "martial-matters/marshall-monday-001-wave-005-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-053-infrastructure",
@@ -1375,7 +1673,9 @@
    "source": "martial-matters/marshall-monday-001-wave-005-word-timed",
    "chapter": "act-i-flex-cost",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-054-human-complexity",
@@ -1386,7 +1686,9 @@
    "source": "martial-matters/marshall-monday-001-wave-005-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-055-court-seating",
@@ -1397,7 +1699,9 @@
    "source": "martial-matters/marshall-monday-001-wave-005-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-056-elias-translation",
@@ -1408,7 +1712,9 @@
    "source": "martial-matters/marshall-monday-001-wave-005-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-057-broad-argument",
@@ -1419,7 +1725,9 @@
    "source": "martial-matters/marshall-monday-001-wave-005-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-058-state-power",
@@ -1430,7 +1738,9 @@
    "source": "martial-matters/marshall-monday-001-wave-005-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-059-etiquette-boundary",
@@ -1441,7 +1751,9 @@
    "source": "martial-matters/marshall-monday-001-wave-005-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-060-tools-change",
@@ -1452,7 +1764,9 @@
    "source": "martial-matters/marshall-monday-001-wave-005-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-061-dinner-boundary",
@@ -1463,7 +1777,9 @@
    "source": "martial-matters/marshall-monday-001-wave-006-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-062-anonymous-king-boundary",
@@ -1474,7 +1790,9 @@
    "source": "martial-matters/marshall-monday-001-wave-006-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-063-warrior-energy",
@@ -1485,7 +1803,9 @@
    "source": "martial-matters/marshall-monday-001-wave-006-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-064-ego-not-retired",
@@ -1496,7 +1816,9 @@
    "source": "martial-matters/marshall-monday-001-wave-006-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-065-new-arena-court",
@@ -1507,7 +1829,9 @@
    "source": "martial-matters/marshall-monday-001-wave-006-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-066-courtly-status-games",
@@ -1518,7 +1842,9 @@
    "source": "martial-matters/marshall-monday-001-wave-006-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-067-symbolic-insult",
@@ -1529,7 +1855,9 @@
    "source": "martial-matters/marshall-monday-001-wave-006-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-068-anonymous-host-gag",
@@ -1540,7 +1868,9 @@
    "source": "martial-matters/marshall-monday-001-wave-006-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-069-court-to-cypher-bridge",
@@ -1551,7 +1881,9 @@
    "source": "martial-matters/marshall-monday-001-wave-006-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-070-not-palace-cypher",
@@ -1562,7 +1894,9 @@
    "source": "martial-matters/marshall-monday-001-wave-006-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-071-shared-hard-truth",
@@ -1573,7 +1907,9 @@
    "source": "martial-matters/marshall-monday-001-wave-006-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-072-anonymous-host-station",
@@ -1584,7 +1920,9 @@
    "source": "martial-matters/marshall-monday-001-wave-006-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-073-fight-gets-smarter",
@@ -1595,7 +1933,9 @@
    "source": "martial-matters/marshall-monday-001-wave-007-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-074-theatrical-shared-time",
@@ -1606,7 +1946,9 @@
    "source": "martial-matters/marshall-monday-001-wave-007-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-075-pressure-opens-arena",
@@ -1617,7 +1959,9 @@
    "source": "martial-matters/marshall-monday-001-wave-007-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-076-dj-bboy-talent",
@@ -1628,7 +1972,9 @@
    "source": "martial-matters/marshall-monday-001-wave-007-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-077-anonymous-roles",
@@ -1639,7 +1985,9 @@
    "source": "martial-matters/marshall-monday-001-wave-007-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-078-stakes-get-stage",
@@ -1650,7 +1998,9 @@
    "source": "martial-matters/marshall-monday-001-wave-007-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-079-engineering-not-weakness",
@@ -1661,7 +2011,9 @@
    "source": "martial-matters/marshall-monday-001-wave-007-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-080-fire-into-furnace",
@@ -1672,7 +2024,9 @@
    "source": "martial-matters/marshall-monday-001-wave-007-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-081-furnace-matters",
@@ -1683,7 +2037,9 @@
    "source": "martial-matters/marshall-monday-001-wave-007-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-082-shared-clock",
@@ -1694,7 +2050,9 @@
    "source": "martial-matters/marshall-monday-001-wave-007-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-083-shared-place-memory",
@@ -1705,7 +2063,9 @@
    "source": "martial-matters/marshall-monday-001-wave-007-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-084-round-can-stop",
@@ -1716,7 +2076,9 @@
    "source": "martial-matters/marshall-monday-001-wave-007-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-085-rivalry-event",
@@ -1727,7 +2089,9 @@
    "source": "martial-matters/marshall-monday-001-wave-008-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-086-stop-before-incident",
@@ -1738,7 +2102,9 @@
    "source": "martial-matters/marshall-monday-001-wave-008-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-087-martial-hiphop-comparison",
@@ -1749,7 +2115,9 @@
    "source": "martial-matters/marshall-monday-001-wave-008-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-088-stakes-acknowledged",
@@ -1760,7 +2128,9 @@
    "source": "martial-matters/marshall-monday-001-wave-008-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-089-stakes-real",
@@ -1771,7 +2141,9 @@
    "source": "martial-matters/marshall-monday-001-wave-008-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-090-higher-resolution-language",
@@ -1782,7 +2154,9 @@
    "source": "martial-matters/marshall-monday-001-wave-008-word-timed",
    "chapter": "act-ii-court-furnace",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-091-near-fight-question",
@@ -1793,7 +2167,9 @@
    "source": "martial-matters/marshall-monday-001-wave-008-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-092-battle-border",
@@ -1804,7 +2180,9 @@
    "source": "martial-matters/marshall-monday-001-wave-008-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-093-play-theorist-entry",
@@ -1815,7 +2193,9 @@
    "source": "martial-matters/marshall-monday-001-wave-008-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-094-play-space",
@@ -1826,7 +2206,9 @@
    "source": "martial-matters/marshall-monday-001-wave-008-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-095-temporary-world",
@@ -1837,7 +2219,9 @@
    "source": "martial-matters/marshall-monday-001-wave-008-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-096-normal-world-outside",
@@ -1848,7 +2232,9 @@
    "source": "martial-matters/marshall-monday-001-wave-008-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-097-outside-battery",
@@ -1859,7 +2245,9 @@
    "source": "martial-matters/marshall-monday-001-wave-009-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-098-new-order-inside-circle",
@@ -1870,7 +2258,9 @@
    "source": "martial-matters/marshall-monday-001-wave-009-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-099-basketball-court",
@@ -1881,7 +2271,9 @@
    "source": "martial-matters/marshall-monday-001-wave-009-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-100-handshake-after-contest",
@@ -1892,7 +2284,9 @@
    "source": "martial-matters/marshall-monday-001-wave-009-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-101-boxing-clean-shot",
@@ -1903,7 +2297,9 @@
    "source": "martial-matters/marshall-monday-001-wave-009-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-102-context-contrast",
@@ -1914,7 +2310,9 @@
    "source": "martial-matters/marshall-monday-001-wave-009-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-103-outfit-battle",
@@ -1925,7 +2323,9 @@
    "source": "martial-matters/marshall-monday-001-wave-009-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-104-symbolic-insults",
@@ -1936,7 +2336,9 @@
    "source": "martial-matters/marshall-monday-001-wave-009-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-105-crowd-verdict",
@@ -1947,7 +2349,9 @@
    "source": "martial-matters/marshall-monday-001-wave-009-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-106-craft-spectacle",
@@ -1958,7 +2362,9 @@
    "source": "martial-matters/marshall-monday-001-wave-009-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-107-threat-reclassified",
@@ -1969,7 +2375,9 @@
    "source": "martial-matters/marshall-monday-001-wave-009-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-108-evaluated-as-craft",
@@ -1980,7 +2388,9 @@
    "source": "martial-matters/marshall-monday-001-wave-009-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-109-ritual-study",
@@ -1991,7 +2401,9 @@
    "source": "martial-matters/marshall-monday-001-wave-010-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-110-tradition-form",
@@ -2002,7 +2414,9 @@
    "source": "martial-matters/marshall-monday-001-wave-010-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-111-form-matters",
@@ -2013,7 +2427,9 @@
    "source": "martial-matters/marshall-monday-001-wave-010-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-112-timing-matters",
@@ -2024,7 +2440,9 @@
    "source": "martial-matters/marshall-monday-001-wave-010-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-113-language-lands",
@@ -2035,7 +2453,9 @@
    "source": "martial-matters/marshall-monday-001-wave-010-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-114-shared-contest",
@@ -2046,7 +2466,9 @@
    "source": "martial-matters/marshall-monday-001-wave-010-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-115-weak-line-groan",
@@ -2057,7 +2479,9 @@
    "source": "martial-matters/marshall-monday-001-wave-010-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-116-brilliant-line",
@@ -2068,7 +2492,9 @@
    "source": "martial-matters/marshall-monday-001-wave-010-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-117-smile-through-pressure",
@@ -2079,7 +2505,9 @@
    "source": "martial-matters/marshall-monday-001-wave-010-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-118-emotional-control",
@@ -2090,7 +2518,9 @@
    "source": "martial-matters/marshall-monday-001-wave-010-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-119-four-craft-tests",
@@ -2101,7 +2531,9 @@
    "source": "martial-matters/marshall-monday-001-wave-010-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-120-stage-not-street",
@@ -2112,7 +2544,9 @@
    "source": "martial-matters/marshall-monday-001-wave-010-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-121-empty-host-translation",
@@ -2123,7 +2557,9 @@
    "source": "martial-matters/marshall-monday-001-wave-011-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-122-crowd-rulebook",
@@ -2134,7 +2570,9 @@
    "source": "martial-matters/marshall-monday-001-wave-011-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-123-two-targets",
@@ -2145,7 +2583,9 @@
    "source": "martial-matters/marshall-monday-001-wave-011-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-124-opponent-target",
@@ -2156,7 +2596,9 @@
    "source": "martial-matters/marshall-monday-001-wave-011-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-125-audience-target",
@@ -2167,7 +2609,9 @@
    "source": "martial-matters/marshall-monday-001-wave-011-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-126-not-merely-saying",
@@ -2178,7 +2622,9 @@
    "source": "martial-matters/marshall-monday-001-wave-011-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-127-attention-control",
@@ -2189,7 +2635,9 @@
    "source": "martial-matters/marshall-monday-001-wave-011-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-128-room-attention",
@@ -2200,7 +2648,9 @@
    "source": "martial-matters/marshall-monday-001-wave-011-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-129-angle-not-threat",
@@ -2211,7 +2661,9 @@
    "source": "martial-matters/marshall-monday-001-wave-011-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-130-temporary-verdict",
@@ -2222,7 +2674,9 @@
    "source": "martial-matters/marshall-monday-001-wave-011-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-131-that-is-martial",
@@ -2233,7 +2687,9 @@
    "source": "martial-matters/marshall-monday-001-wave-011-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-132-combat-rule-set",
@@ -2244,7 +2700,9 @@
    "source": "martial-matters/marshall-monday-001-wave-011-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-133-legible-violence",
@@ -2255,7 +2713,9 @@
    "source": "martial-matters/marshall-monday-001-wave-012-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-134-no-physical-performance",
@@ -2266,7 +2726,9 @@
    "source": "martial-matters/marshall-monday-001-wave-012-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-135-crowd-matters",
@@ -2277,7 +2739,9 @@
    "source": "martial-matters/marshall-monday-001-wave-012-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-136-crowd-not-decoration",
@@ -2288,7 +2752,9 @@
    "source": "martial-matters/marshall-monday-001-wave-012-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-137-referee-witness",
@@ -2299,7 +2765,9 @@
    "source": "martial-matters/marshall-monday-001-wave-012-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-138-scoreboard-memory",
@@ -2310,7 +2778,9 @@
    "source": "martial-matters/marshall-monday-001-wave-012-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-139-punchline-lives-on",
@@ -2321,7 +2791,9 @@
    "source": "martial-matters/marshall-monday-001-wave-012-word-timed",
    "chapter": "act-iii-circle-rules",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-140-beautiful-part",
@@ -2332,7 +2804,9 @@
    "source": "martial-matters/marshall-monday-001-wave-012-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-141-co-performance",
@@ -2343,7 +2817,9 @@
    "source": "martial-matters/marshall-monday-001-wave-012-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-142-generic-sociologist",
@@ -2354,7 +2830,9 @@
    "source": "martial-matters/marshall-monday-001-wave-012-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-143-social-performance",
@@ -2365,7 +2843,9 @@
    "source": "martial-matters/marshall-monday-001-wave-012-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-144-front-back-stage",
@@ -2376,7 +2856,9 @@
    "source": "martial-matters/marshall-monday-001-wave-012-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-145-scene-agreements",
@@ -2387,7 +2869,9 @@
    "source": "martial-matters/marshall-monday-001-wave-013-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-146-battle-rap-bass",
@@ -2398,7 +2882,9 @@
    "source": "martial-matters/marshall-monday-001-wave-013-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-147-front-stage",
@@ -2409,7 +2895,9 @@
    "source": "martial-matters/marshall-monday-001-wave-013-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-148-back-stage-turn",
@@ -2420,7 +2908,9 @@
    "source": "martial-matters/marshall-monday-001-wave-013-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-149-reaction-contract",
@@ -2431,7 +2921,9 @@
    "source": "martial-matters/marshall-monday-001-wave-013-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-150-do-not-ruin-show",
@@ -2442,7 +2934,9 @@
    "source": "martial-matters/marshall-monday-001-wave-013-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-151-hold-the-line",
@@ -2453,7 +2947,9 @@
    "source": "martial-matters/marshall-monday-001-wave-013-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-152-crowd-understands",
@@ -2464,7 +2960,9 @@
    "source": "martial-matters/marshall-monday-001-wave-013-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-153-reward-rules",
@@ -2475,7 +2973,9 @@
    "source": "martial-matters/marshall-monday-001-wave-013-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-154-host-temperature",
@@ -2486,7 +2986,9 @@
    "source": "martial-matters/marshall-monday-001-wave-013-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-155-secret-alliance",
@@ -2497,7 +2999,9 @@
    "source": "martial-matters/marshall-monday-001-wave-013-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-156-not-soft",
@@ -2508,7 +3012,9 @@
    "source": "martial-matters/marshall-monday-001-wave-013-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-157-professional-contest",
@@ -2519,7 +3025,9 @@
    "source": "martial-matters/marshall-monday-001-wave-014-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-158-full-volume-contract",
@@ -2530,7 +3038,9 @@
    "source": "martial-matters/marshall-monday-001-wave-014-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-159-risk-the-line",
@@ -2541,7 +3051,9 @@
    "source": "martial-matters/marshall-monday-001-wave-014-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-160-composure-to-land",
@@ -2552,7 +3064,9 @@
    "source": "martial-matters/marshall-monday-001-wave-014-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-161-room-knows-difference",
@@ -2563,7 +3077,9 @@
    "source": "martial-matters/marshall-monday-001-wave-014-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-162-clean-strike-vs-noise",
@@ -2574,7 +3090,9 @@
    "source": "martial-matters/marshall-monday-001-wave-014-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-163-agreements-hold",
@@ -2585,7 +3103,9 @@
    "source": "martial-matters/marshall-monday-001-wave-014-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-164-hostility-craft",
@@ -2596,7 +3116,9 @@
    "source": "martial-matters/marshall-monday-001-wave-014-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-165-performance-over",
@@ -2607,7 +3129,9 @@
    "source": "martial-matters/marshall-monday-001-wave-014-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-166-real-world-boundary",
@@ -2618,7 +3142,9 @@
    "source": "martial-matters/marshall-monday-001-wave-014-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-167-machine-broke",
@@ -2629,7 +3155,9 @@
    "source": "martial-matters/marshall-monday-001-wave-014-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-168-bar-died",
@@ -2640,7 +3168,9 @@
    "source": "martial-matters/marshall-monday-001-wave-014-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-169-not-co-stars",
@@ -2651,7 +3181,9 @@
    "source": "martial-matters/marshall-monday-001-wave-015-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-170-hold-the-ritual",
@@ -2662,7 +3194,9 @@
    "source": "martial-matters/marshall-monday-001-wave-015-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-171-create-the-thing",
@@ -2673,7 +3207,9 @@
    "source": "martial-matters/marshall-monday-001-wave-015-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-172-controlled-danger-art",
@@ -2684,7 +3220,9 @@
    "source": "martial-matters/marshall-monday-001-wave-015-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-173-public-skill-test",
@@ -2695,7 +3233,9 @@
    "source": "martial-matters/marshall-monday-001-wave-015-word-timed",
    "chapter": "act-iv-costars-contract",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-174-rap-too-violent",
@@ -2706,7 +3246,9 @@
    "source": "martial-matters/marshall-monday-001-wave-015-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-175-do-not-panic",
@@ -2717,7 +3259,9 @@
    "source": "martial-matters/marshall-monday-001-wave-015-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-176-prefer-what",
@@ -2728,7 +3272,9 @@
    "source": "martial-matters/marshall-monday-001-wave-015-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-177-hidden-until-explodes",
@@ -2739,7 +3285,9 @@
    "source": "martial-matters/marshall-monday-001-wave-015-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-178-open-language",
@@ -2750,7 +3298,9 @@
    "source": "martial-matters/marshall-monday-001-wave-015-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-179-beat-crowd",
@@ -2761,7 +3311,9 @@
    "source": "martial-matters/marshall-monday-001-wave-015-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-180-keep-your-nerve",
@@ -2772,7 +3324,9 @@
    "source": "martial-matters/marshall-monday-001-wave-015-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "001_mm001-word-181-evolution-conflict",
@@ -2783,7 +3337,9 @@
    "source": "martial-matters/marshall-monday-001-wave-016-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "002_mm001-word-182-gorilla-chestbeat",
@@ -2794,7 +3350,9 @@
    "source": "martial-matters/marshall-monday-001-wave-016-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "003_mm001-word-183-knight-sword-rapper",
@@ -2805,7 +3363,9 @@
    "source": "martial-matters/marshall-monday-001-wave-016-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "004_mm001-word-184-witnesses",
@@ -2816,7 +3376,9 @@
    "source": "martial-matters/marshall-monday-001-wave-016-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "005_mm001-word-185-public-outperform",
@@ -2827,7 +3389,9 @@
    "source": "martial-matters/marshall-monday-001-wave-016-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "006_mm001-word-186-battlefield-to-beat",
@@ -2838,7 +3402,9 @@
    "source": "martial-matters/marshall-monday-001-wave-016-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "007_mm001-word-187-peace-talks-reckless",
@@ -2849,7 +3415,9 @@
    "source": "martial-matters/marshall-monday-001-wave-016-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "008_mm001-word-188-host-fallback",
@@ -2860,7 +3428,9 @@
    "source": "martial-matters/marshall-monday-001-wave-016-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "009_mm001-word-189-martial-matters",
@@ -2871,7 +3441,9 @@
    "source": "martial-matters/marshall-monday-001-wave-016-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "010_mm001-word-190-three-archetypes",
@@ -2882,7 +3454,9 @@
    "source": "martial-matters/marshall-monday-001-wave-016-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "011_mm001-word-191-meet-practice-circle",
@@ -2893,7 +3467,9 @@
    "source": "martial-matters/marshall-monday-001-wave-016-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "012_mm001-word-192-trained-instinct",
@@ -2904,7 +3480,9 @@
    "source": "martial-matters/marshall-monday-001-wave-016-word-timed",
    "chapter": "final-round-callback",
    "state": "candidate",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "crowd-support-alpha-v1",
@@ -2944,7 +3522,9 @@
    },
    "claim_refs": [
     "memory-bottleneck-not-bubble-inference"
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "crowd-support-keyed-v1",
@@ -2954,7 +3534,9 @@
    "channel": "money-physics",
    "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
    "state": "unstated",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "industrial-support-stack-alpha-v1",
@@ -2996,7 +3578,9 @@
    "claim_refs": [
     "memory-bottleneck-not-bubble-inference",
     "micron-strategic-customer-agreements"
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "industrial-support-stack-keyed-v1",
@@ -3006,7 +3590,9 @@
    "channel": "money-physics",
    "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
    "state": "unstated",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "memory-module-queue-alpha-v1",
@@ -3045,7 +3631,9 @@
    "claim_refs": [
     "memory-architecture-dependency",
     "hbm-capacity-trade-ratio"
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "memory-module-queue-keyed-v1",
@@ -3055,7 +3643,9 @@
    "channel": "money-physics",
    "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
    "state": "unstated",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "top-ten-weighted-tiles-alpha-v1",
@@ -3094,7 +3684,9 @@
    },
    "claim_refs": [
     "sp500-top-ten-concentration"
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "top-ten-weighted-tiles-keyed-v1",
@@ -3104,7 +3696,9 @@
    "channel": "money-physics",
    "source": "pilot/current-bubble-mechanism/components/semantic-wave-01",
    "state": "unstated",
-   "render_eligible": false
+   "render_eligible": false,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-01-002-memory-stocks-vertical-v1",
@@ -3123,7 +3717,9 @@
      "start_word_index": 8,
      "end_word_index": 10
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-01-003-bubble-reflex-v1",
@@ -3142,7 +3738,9 @@
      "start_word_index": 31,
      "end_word_index": 31
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-01-004-factory-capacity-v1",
@@ -3161,7 +3759,9 @@
      "start_word_index": 39,
      "end_word_index": 39
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-01-006-index-safe-default-rejected-v1",
@@ -3180,7 +3780,9 @@
      "start_word_index": 68,
      "end_word_index": 69
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-01-006-index-safe-default-v2",
@@ -3199,7 +3801,9 @@
      "start_word_index": 68,
      "end_word_index": 69
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-01-008-automatic-inflow-feedback-v1",
@@ -3218,7 +3822,9 @@
      "start_word_index": 83,
      "end_word_index": 84
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-01-009-memory-correction-v1",
@@ -3237,7 +3843,9 @@
      "start_word_index": 100,
      "end_word_index": 101
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-01-010-memory-overpriced-v1",
@@ -3256,7 +3864,9 @@
      "start_word_index": 108,
      "end_word_index": 108
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-01-011-memory-cycle-v1",
@@ -3275,7 +3885,9 @@
      "start_word_index": 114,
      "end_word_index": 114
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-01-012-physical-bottleneck-repriced-v1",
@@ -3294,7 +3906,9 @@
      "start_word_index": 125,
      "end_word_index": 126
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-01-013-hidden-safe-index-loop-v1",
@@ -3319,7 +3933,9 @@
      "start_word_index": 141,
      "end_word_index": 141
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-02-002-symptom-not-diagnosis-v1",
@@ -3338,7 +3954,9 @@
      "start_word_index": 167,
      "end_word_index": 167
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-02-003-next-buyer-belief-v1",
@@ -3363,7 +3981,9 @@
      "start_word_index": 174,
      "end_word_index": 174
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-03-002-hbm-stack-accelerator-v1",
@@ -3388,7 +4008,9 @@
      "start_word_index": 291,
      "end_word_index": 291
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-03-004-gpu-hbm-fuel-system-v1",
@@ -3419,7 +4041,9 @@
      "start_word_index": 329,
      "end_word_index": 330
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-03-008-009-physical-capacity-gate-v1",
@@ -3438,7 +4062,9 @@
      "start_word_index": 375,
      "end_word_index": 375
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-03-011-015-bakery-capacity-analogy-v1",
@@ -3463,7 +4089,9 @@
      "start_word_index": 407,
      "end_word_index": 407
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-03-016-hbm-pressures-dram-v1",
@@ -3494,7 +4122,9 @@
      "start_word_index": 460,
      "end_word_index": 460
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-03-017-production-pull-complexity-v1",
@@ -3513,7 +4143,9 @@
      "start_word_index": 468,
      "end_word_index": 468
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-03-020-price-fairness-separation-v1",
@@ -3532,7 +4164,9 @@
      "start_word_index": 512,
      "end_word_index": 512
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-03-021-shortage-not-imaginary-v1",
@@ -3551,7 +4185,9 @@
      "start_word_index": 520,
      "end_word_index": 520
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-04-001-buyer-behavior-v1",
@@ -3570,7 +4206,9 @@
      "start_word_index": 529,
      "end_word_index": 529
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-04-003-classic-cycle-counterargument-v1",
@@ -3589,7 +4227,9 @@
      "start_word_index": 555,
      "end_word_index": 555
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-04-004-changed-customer-behavior-v1",
@@ -3608,7 +4248,9 @@
      "start_word_index": 562,
      "end_word_index": 562
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-04-013-guidance-not-gospel-v1",
@@ -3627,7 +4269,9 @@
      "start_word_index": 674,
      "end_word_index": 674
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-04-013-guidance-not-gospel-v2",
@@ -3646,7 +4290,9 @@
      "start_word_index": 674,
      "end_word_index": 674
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-04-014-evidence-hierarchy-v1",
@@ -3677,7 +4323,9 @@
      "start_word_index": 697,
      "end_word_index": 697
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-04-014-evidence-hierarchy-v2",
@@ -3708,7 +4356,9 @@
      "start_word_index": 697,
      "end_word_index": 697
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-04-015-bottleneck-boom-v1",
@@ -3727,7 +4377,9 @@
      "start_word_index": 717,
      "end_word_index": 717
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-05-001-beyond-three-memory-companies-v1",
@@ -3752,7 +4404,9 @@
      "start_word_index": 725,
      "end_word_index": 725
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-05-002-strategic-chokepoints-v1",
@@ -3783,7 +4437,9 @@
      "start_word_index": 739,
      "end_word_index": 739
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-05-003-market-reprices-control-v2",
@@ -3814,7 +4470,9 @@
      "start_word_index": 755,
      "end_word_index": 755
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-05-005-not-civilization-ranking-v1",
@@ -3833,7 +4491,9 @@
      "start_word_index": 784,
      "end_word_index": 784
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-05-006-listed-cash-flow-market-v1",
@@ -3858,7 +4518,9 @@
      "start_word_index": 799,
      "end_word_index": 799
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-05-012-different-cash-flow-structures-v1",
@@ -3883,7 +4545,9 @@
      "start_word_index": 881,
      "end_word_index": 882
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-05-015-016-simple-joke-complex-mechanism-v1",
@@ -3902,7 +4566,9 @@
      "start_word_index": 919,
      "end_word_index": 919
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-05-017-018-market-prices-cashflows-v1",
@@ -3921,7 +4587,9 @@
      "start_word_index": 931,
      "end_word_index": 931
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-05-020-tech-corridor-v1",
@@ -3940,7 +4608,9 @@
      "start_word_index": 977,
      "end_word_index": 977
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-05-021-subcontractor-strategic-upgrade-v1",
@@ -3959,7 +4629,9 @@
      "start_word_index": 978,
      "end_word_index": 978
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-05-022-memory-enables-work-v1",
@@ -3978,7 +4650,9 @@
      "start_word_index": 990,
      "end_word_index": 990
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-05-024-stranded-compute-bridge-v2",
@@ -3997,7 +4671,9 @@
      "start_word_index": 1024,
      "end_word_index": 1024
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-06-001-003-index-product-elevator-v1",
@@ -4022,7 +4698,9 @@
      "start_word_index": 1031,
      "end_word_index": 1034
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-06-004-007-dual-failure-v2",
@@ -4041,7 +4719,9 @@
      "start_word_index": 1066,
      "end_word_index": 1066
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-06-010-shared-causal-weather-v1",
@@ -4060,7 +4740,9 @@
      "start_word_index": 1146,
      "end_word_index": 1146
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-06-011-016-automatic-size-weighting-v1",
@@ -4079,7 +4761,9 @@
      "start_word_index": 1163,
      "end_word_index": 1163
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-06-017-018-diworsification-v1",
@@ -4098,7 +4782,9 @@
      "start_word_index": 1255,
      "end_word_index": 1255
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "beat-06-019-024-basketball-roster-v1",
@@ -4117,7 +4803,9 @@
      "start_word_index": 1284,
      "end_word_index": 1284
     }
-   ]
+   ],
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
   },
   {
    "id": "plate-p-viewers-desk",
@@ -4127,7 +4815,58 @@
    "channel": "money-physics",
    "source": "tokyo-tea-break/promise-plate (Nano Banana Pro, 0 credits, 2026-09-05)",
    "state": "approved",
-   "render_eligible": true
+   "render_eligible": true,
+   "flat": true,
+   "flat_reason": "pre-E98 back catalogue"
+  },
+  {
+   "id": "world-tokyo-customs-dock-v1",
+   "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\assets\\plates\\world-tokyo-customs-dock-v1.png",
+   "semantic": "Tokyo container dock at dusk, crane far, containers mid, a customs clerk's ledger desk near, a hanging lamp occluder",
+   "register": "woodblock-vox-newsprint",
+   "channel": "money-physics",
+   "source": "p58-probe",
+   "state": "review_only",
+   "render_eligible": false,
+   "generator": "gpt-image-2.0",
+   "layers": [
+    {
+     "path": "../../build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-far.png",
+     "file": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\split-sam\\world-tokyo-customs-dock-v1\\world-tokyo-customs-dock-v1-reference-far.png",
+     "role": "background",
+     "plane": "building_or_environment",
+     "depth": 1.0,
+     "alpha": false,
+     "generator": "depth-split-sam"
+    },
+    {
+     "path": "../../build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-mid.png",
+     "file": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\split-sam\\world-tokyo-customs-dock-v1\\world-tokyo-customs-dock-v1-reference-mid.png",
+     "role": "mid",
+     "plane": "actor_or_machine",
+     "depth": 1.15,
+     "alpha": true,
+     "generator": "depth-split-sam"
+    },
+    {
+     "path": "../../build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-subject.png",
+     "file": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\split-sam\\world-tokyo-customs-dock-v1\\world-tokyo-customs-dock-v1-reference-subject.png",
+     "role": "subject",
+     "plane": "cast_between_mid_and_near",
+     "depth": 1.275,
+     "alpha": true,
+     "generator": "depth-split-sam"
+    },
+    {
+     "path": "../../build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-near.png",
+     "file": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\tokyo-tea-break\\build-p58-probe\\split-sam\\world-tokyo-customs-dock-v1\\world-tokyo-customs-dock-v1-reference-near.png",
+     "role": "occluder",
+     "plane": "foreground_cutout",
+     "depth": 1.4,
+     "alpha": true,
+     "generator": "depth-split-sam"
+    }
+   ]
   }
  ]
 }

@@ -1,0 +1,25 @@
+{
+ "note": "Plates a project registers itself, outside a claim wave. Status is the claim manifest's, never the path (ruling E10): review_only and NOT render-eligible until the operator says otherwise - the wave's approvals.json records an agent self-judgement only.",
+ "plates": {
+  "world-tokyo-customs-dock-v1": {
+   "semantic": "Tokyo container dock at dusk, crane far, containers mid, a customs clerk's ledger desk near, a hanging lamp occluder",
+   "register": "woodblock-vox-newsprint",
+   "channel": "money-physics",
+   "source": "p58-probe",
+   "generator": "gpt-image-2.0",
+   "state": "review_only",
+   "render_eligible": false,
+   "origin": "review/claims/p58-tokyo-dock-ref-v1/objects/world-tokyo-customs-dock-v1-reference.png"
+  },
+  "plate-p-viewers-desk": {
+   "path": "omni-video/stills/approved/still-p-viewers-desk.png",
+   "semantic": "the viewer's desk at night: a stick figure at a laptop of numbers, a phone with one falling red line, a mug",
+   "register": "stick-on-cream",
+   "channel": "money-physics",
+   "source": "tokyo-tea-break/promise-plate (Nano Banana Pro, 0 credits, 2026-09-05)",
+   "state": "approved",
+   "render_eligible": true,
+   "origin": "carried forward verbatim from PLATE-LIBRARY.json, where it was hand-appended and no scanner reproduced it - every rebuild since had been dropping it silently (found 2026-09-14, P58 T2). The approval is the operator's own, in omni-video/stills/APPROVALS.json: approved_by 'operator', 2026-09-05."
+  }
+ }
+}
