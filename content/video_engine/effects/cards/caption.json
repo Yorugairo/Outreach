@@ -187,7 +187,20 @@
           "trigger": "a live dock"
         }
       ],
-      "blends": [],
+      "blends": [
+        {
+          "source": "The caption Steel and Paper shipped (STAGE mode, doc 29 s9.25 #2, P34 T5)",
+          "became": "the blend's scale, tilt and opacity - the pop, one notch stronger, leading",
+          "record": "docs/portable/OPERATOR-RULINGS.md E90",
+          "tie": "recorded"
+        },
+        {
+          "source": "The staggered fade-up envelope (P52 T10) [DERIVED: HyperFrames staggered-fade-up]",
+          "became": "the blend's rise - the minimum-jerk y the word is carried up on, under the pop",
+          "record": "content/video_engine/scripts/kinetics/stagger.mjs",
+          "tie": "recorded"
+        }
+      ],
       "options": [
         {
           "token": "fade_up",
@@ -195,19 +208,38 @@
           "source_set": "CAPTION_ARRIVALS"
         },
         {
+          "token": "life:blend",
+          "means": "The life setting `blend` (E90 s2, a blend not a switch): the pop's scale and tilt ride ON TOP of the stagger's rise, the pop leading by its 0.05 s anticipation, the held page breathing under it (E49).",
+          "source_set": "CAPTION_LIVES"
+        },
+        {
+          "token": "life:pop",
+          "means": "The life setting `pop`: the shipped stage pop one notch stronger - scale 1.22 -> 1.0 on the spring (LIFE.POP_LEAD against the base's 1.16), the alternating tilt settling as before.",
+          "source_set": "CAPTION_LIVES"
+        },
+        {
+          "token": "life:stagger",
+          "means": "The life setting `stagger`: P52 T10's envelope alone under each word - rise 22 px, scale 0.92 -> 1, blur 5 px -> 0 over 0.34 s, no tilt. The quiet register, on the word's own spoken time.",
+          "source_set": "CAPTION_LIVES"
+        },
+        {
           "token": "pop",
           "means": "The pop: Each stage word pops in at its own spoken time - the arrival every shipped build uses (no field is written).",
           "source_set": "CAPTION_ARRIVALS"
         }
       ],
-      "dials": null,
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/stagger.mjs",
+        "object": "LIFE"
+      },
       "lives": {
         "form": "inline",
         "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
         "symbol": "stagePop",
         "note": "render caption block + the template's `#caption.stage` CSS",
         "also": [
-          "carded"
+          "carded",
+          "lifeAt"
         ]
       },
       "doctrine": [

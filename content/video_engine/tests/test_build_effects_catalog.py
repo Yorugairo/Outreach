@@ -418,7 +418,9 @@ def test_a_candidate_recipe_carries_no_proof_and_a_zero_count():
     assert candidates
     for recipe in candidates:
         assert "proof" not in recipe and recipe["count"] == 0, recipe["id"]
-        assert "recipes_r1 s4" in recipe["source"], recipe["id"]
+        # P57 T12: a candidate is born from the seed (recipes_r1 s4) OR from a golden a new mechanism shipped with -
+        # either way its source names where it came from, and it still carries no proof and a zero count
+        assert "recipes_r1 s4" in recipe["source"] or "golden" in recipe["source"], recipe["id"]
         assert len(recipe["members"]) >= 2, recipe["id"]
 
 

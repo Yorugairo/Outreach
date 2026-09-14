@@ -66,6 +66,12 @@ CAPTION_ARRIVE: str | None = None   # timeline.caption_arrive + page.cap_arrive 
                                     # every build shipped before the slice, and NO field is written, so every golden and both shorts compile byte-identical.
 CAPTION_ARRIVALS = ("pop", "fade_up")   # "fade_up" [DERIVED: HyperFrames staggered-fade-up]: ONE envelope, per-word offsets - y 22 px -> 0, scale 0.92 -> 1,
                                         # blur 5 px -> 0, stagger 0.055 s (kinetics/stagger.mjs) - the quiet register, "more caption motion without overcrowding"
+CAPTION_LIFE: str | None = None     # timeline.caption_life + page.cap_life - the caption's LIFE (E90, P57 T14). None = the caption Steel and
+                                    # Paper shipped; no field is written, so every golden and both approved shorts compile byte-identical.
+CAPTION_LIVES = ("pop", "stagger", "blend")   # "pop" = the shipped pop one notch stronger (kinetics/stagger.mjs LIFE.POP_LEAD 1.22 against the base's
+                                    # 1.16); "stagger" = P52 T10's envelope alone; "blend" = the pop's scale and tilt riding ON TOP of the stagger's
+                                    # 22 px rise, no blur (E90 s2 "a blend, not a switch"), the held page breathing under it (E49). All three renderable
+                                    # so the operator's eye rules at HG2 (E90 s3) - the slice ships the dial, not one baked answer.
 LEDGER_EXITS = ("cut",)            # exit=cut: no retract - the page leaves on the cut (for a beat that must land on the last line, E40 #5)
 SPECIES_LEDGER = "ledger"          # timeline["species"] entry; the player keys on world.kind == "ledger"
 
@@ -75,14 +81,15 @@ SPECIES_LEDGER = "ledger"          # timeline["species"] entry; the player keys 
 # default; the carried-light cross-reveal stays reachable BY NAME as an effect and is the default
 # nowhere ("we made it the default because it worked, but we need a better default, and it can be
 # an effect at that point"). dip and blurzoom may carry their own length: `dip:<s>`, `blurzoom:<s>`.
-SCENE_EXITS = ("cut", "dip", "blurzoom", "dissolve", "wipe", "wipe_right", "suck", "melt")   # melt (P52 T9, R26-15): the outgoing world sags into drips, balls up on 2s and is thrown off the stage or splashed - `melt`, `melt:<s>`, `melt:splash`, `melt:<x>,<y>` (the exit point in stage fractions), the suffixes in any order
+SCENE_EXITS = ("cut", "dip", "blurzoom", "dissolve", "wipe", "wipe_right", "suck", "melt", "slide")   # slide (R26-75, E87 s3): the incoming frame pushes the outgoing one off along one axis, both moving together - `slide:<left|right|up|down>[:<s>]`, the direction never defaulted   # melt (P52 T9, R26-15): the outgoing world sags into drips, balls up on 2s and is thrown off the stage or splashed - `melt`, `melt:<s>`, `melt:splash`, `melt:<x>,<y>` (the exit point in stage fractions), the suffixes in any order
 IDLE_KINDS = ("none", "breath", "drift", "pulse", "figure", "live")   # live (2026-09-08): breath + drift - the breath has a fixed point at the centre, so a chart at the page centre read as still; the drift moves every pixel   # E49 / P47 T5: the player's named idles; `;idle=<kind>` on any plate id (`none` is explicit stillness)
 IDLE_OPT = ";idle="
 ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page's pills ARRIVE (spring = E45's pop, the default)
 MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets (stopaction.mjs MASS) a throw or a landing settles by
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
-PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread")   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+RACE_PATHS = ("eased", "clothoid")   # E91 s1 (R26-78): the path a racing mark takes BETWEEN two period knots - `eased` is the engine as it is (each coordinate on its own easing), `clothoid` is the fit through the SAME knots (P52 T17 arm B). The period clock, the knots and the ranks are identical in both: this names the SHAPE of the move and never its timing, and the operator chose it where the beat wants energy rather than smoothness
+PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path")   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
@@ -92,8 +99,10 @@ DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
-TIMED_EXITS = ("dip", "blurzoom", "melt")   # ... and only these read a suffix as SECONDS (suck's is a point); the melt's may be its length, `splash`, or its exit point, so parse_exit reads it apart
+TIMED_EXITS = ("dip", "blurzoom", "melt", "slide")   # ... and only these read a suffix as SECONDS (the slide's is its SECOND suffix - the first is the direction, `slide:left:0.8` - so parse_exit reads it apart, as the melt's is) (suck's is a point); the melt's may be its length, `splash`, or its exit point, so parse_exit reads it apart
 MELT_S = 1.6            # P52 T9: a melt's default length, species/melt.mjs MELT.S - the two are one dial written twice (as DIP_S is, in the engine and in gate_motion_density), and test_transitions_e47 pins them together
+SLIDE_DIRECTIONS = ("left", "right", "up", "down")   # R26-75 / E87 s3: WHICH WAY the incoming frame pushes the outgoing one off
+SLIDE_S = 0.6           # a slide's default length, the player's SLIDE_S - the two are one dial written twice (as DIP_S and MELT_S are)
 DEFAULT_EXIT_CHANGE = "dip"         # E47 #3 corrected 2026-09-12 (the operator: "the dip is supposed to be used as an actual transition when the
                                     # scene ACTUALLY changes ... what you said is that the dip was associated with any DOCK, not the dip being
                                     # associated to the scene change"): the natural default when the WORLD changes at the boundary - never for a
@@ -1529,18 +1538,62 @@ def _melt_exit(exit_id: str) -> float | None:
     return _melt_parts(exit_id)[1]
 
 
+def _slide_parts(exit_id: str) -> tuple[str, float | None]:
+    """A slide's suffixes (E87 s3, R26-75): the DIRECTION first - `left`, `right`, `up` or `down`, which way the
+    incoming frame pushes the outgoing one off - and then, optionally, its LENGTH in seconds.
+
+    The direction is never defaulted: the whole point is the axis and the sign the scene chose, and a silent default
+    would paint a hand-off nobody authored. `push` is refused by name: it is OUR camera push-in (E87 s3, "Named
+    `slide` in our grammar, because `push` is already the camera push-in"), never a direction.
+
+    The player's `slideOpts` (scene-evidence-engine.mjs, THE SLIDE) reads exactly this grammar on its side; the two
+    have to agree, and test_transition_stamps pins the pair. Returns (direction, the declared length or None for SLIDE_S)."""
+    bits = str(exit_id).split(":")[1:]
+    direction = bits[0].strip() if bits else ""
+    if direction == "":
+        raise ValueError(f"exit {exit_id!r}: a slide names no direction - say slide:left|right|up|down[:<s>] "
+                         "(which way the incoming frame pushes the outgoing one off)")
+    if direction == "push":
+        raise ValueError(f"exit {exit_id!r}: `push` is the camera push-in, never a slide's direction (E87 s3) - "
+                         "say slide:left|right|up|down")
+    if direction not in SLIDE_DIRECTIONS:
+        raise ValueError(f"exit {exit_id!r}: {direction!r} is not one of {'|'.join(SLIDE_DIRECTIONS)}")
+    if len(bits) > 2:
+        raise ValueError(f"exit {exit_id!r}: a slide carries a direction and at most a length - {bits[2:]!r} is neither")
+    if len(bits) < 2 or bits[1].strip() == "":
+        return direction, None
+    try:
+        secs = float(bits[1])
+    except ValueError:
+        raise ValueError(f"exit {exit_id!r}: {bits[1]!r} is not a length in seconds") from None
+    if secs <= 0:
+        raise ValueError(f"exit {exit_id!r}: a length must be positive")
+    return direction, secs
+
+
+def slide_direction(exit_id: str | None) -> str | None:
+    """The authored direction of a slide exit (``left`` | ``right`` | ``up`` | ``down``), or None for any other exit."""
+    if not exit_id or str(exit_id).split(":")[0] != "slide":
+        return None
+    return _slide_parts(str(exit_id))[0]
+
+
 def parse_exit(exit_id: str) -> tuple[str, float | None]:
     """``cut`` | ``dip[:<s>]`` | ``blurzoom[:<s>]`` | ``wipe_right`` | ``suck:<x>,<y>`` |
-    ``melt[:throw|:splash:chart|:splash:plate][:<s>][:<x>,<y>]`` -> (name, seconds or None).
+    ``melt[:throw|:splash:chart|:splash:plate][:<s>][:<x>,<y>]`` | ``slide:<left|right|up|down>[:<s>]``
+    -> (name, seconds or None).
 
-    Only dip, blurzoom and melt read a suffix as a length; the suck's is the point it collapses into,
-    the melt's may be a length AND an ending AND a point (``_melt_parts``), and every other exit is a
-    bare name. ValueError names the exit; the caller names the row."""
+    Only dip, blurzoom, melt and slide read a suffix as a length; the suck's is the point it collapses
+    into, the melt's may be a length AND an ending AND a point (``_melt_parts``), the slide's length
+    follows its direction (``_slide_parts``), and every other exit is a bare name. ValueError names the
+    exit; the caller names the row."""
     name = str(exit_id).split(":")[0]
     if name not in SCENE_EXITS:
         raise ValueError(f"exit {exit_id!r} is not one of {'|'.join(SCENE_EXITS)}")
     if name == "melt":
         return exit_id, _melt_exit(exit_id)
+    if name == "slide":
+        return exit_id, _slide_parts(exit_id)[1]
     arg = str(exit_id).split(":")[1] if ":" in str(exit_id) else ""
     if name not in TIMED_EXITS or arg == "":
         return exit_id, None
@@ -2096,7 +2149,7 @@ def _check_opt(key: str, value, where: str) -> None:
         raise ValueError(f"{where}: pill {value!r} is not yes|no|<datum index> (the milestone the pill pops at - "
                          "a non-negative index of the page's first series)")
     allowed = {"idle": IDLE_KINDS, "arrive": ARRIVALS, "mass": MASSES, "morph": MORPH_SHAPES,
-               "card": ("yes", "no"), "use": PLATE_USES}[key]
+               "card": ("yes", "no"), "use": PLATE_USES, "path": RACE_PATHS}[key]
     if value not in allowed:
         raise ValueError(f"{where}: {key} {value!r} is not one of {'|'.join(allowed)}")
 
@@ -2533,6 +2586,16 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
         if world.get("kind") != SPECIES_LEDGER:
             raise ValueError(f"{plate_id!r}: thread= is a LEDGER PAGE option - a wire is one mark of a page, carried onto the next page")
         world["page"]["thread"] = {"key": thread}   # `from` is the scene before this one: the build loop fills it, and checks it
+    path = opts.pop("path", None)
+    if path is not None:
+        # E91 s1 (R26-78): the path between the period knots is a RACE PAGE's setting and it is the ROW's word,
+        # not the object's - the series file carries the data, how this shot moves through it is the plate id's,
+        # as `card=` and `pill=` are. `eased` is the default and names the engine as it is; `clothoid` fits the
+        # same knots on the same clock. `_check_opt` has already refused any other word by name.
+        if world.get("kind") != SPECIES_LEDGER or (world.get("page") or {}).get("builder") != "race":
+            raise ValueError(f"{plate_id!r}: path= is a RACE page option - it is the path a racing mark takes between "
+                             f"two periods (this page is {((world.get('page') or {}).get('builder') or world.get('kind') or 'a plate')!r})")
+        world["page"]["path"] = path
     pill = opts.pop("pill", None)
     if pill is not None and pill != "no":
         # P50 T11 (R26-34): the tip-riding pill is a LINE PAGE's option and it is the ROW's word, not the object's -
@@ -3249,6 +3312,22 @@ def _caption_arrive() -> str | None:
         return None
     if a not in CAPTION_ARRIVALS:
         raise SystemExit(f"caption arrival {a!r} is not one of {CAPTION_ARRIVALS} (build_scene_timeline_f.CAPTION_ARRIVE)")
+    return a
+
+
+def _caption_life() -> str | None:
+    """P57 T14 / E90: the LIFE a stage page's words carry, or None for the caption as it shipped.
+
+    Unlike the arrival, "pop" is a REAL setting here and is written: it is the shipped pop made a notch stronger
+    (E90 s2 "maybe add more pop effect"), so a build that asks for it must get it. Only silence means the base -
+    and silence is what every build on disk says, which is the byte-identity of the goldens and of both approved
+    shorts. An unknown setting is refused by name: a typo silently shipping the base is the failure mode this
+    exists to stop (the same rule `_caption_arrive` has)."""
+    a = (CAPTION_LIFE or "").strip() or None
+    if a is None:
+        return None
+    if a not in CAPTION_LIVES:
+        raise SystemExit(f"caption life {a!r} is not one of {CAPTION_LIVES} (build_scene_timeline_f.CAPTION_LIFE)")
     return a
 
 
@@ -4280,6 +4359,10 @@ def main() -> int:
     # that never asks; that absence is the byte-identity of every golden and both shorts)
     if _caption_arrive():
         pages = [{**pg, "cap_arrive": _caption_arrive()} for pg in pages]
+    # P57 T14 / E90: and the LIFE each page's words carry, beside the arrival - written only when the build asks,
+    # for exactly the same reason (an absent field is the shipped caption, and no build on disk carries one)
+    if _caption_life():
+        pages = [{**pg, "cap_life": _caption_life()} for pg in pages]
     # E62: and the BAND each card leaves the caption free - the demotion under a card is in position,
     # not in size. A dock whose window carries a caption takes `caption_band`; null means no band
     # holds a two-line strip clear of the card and of the data, and the player takes the quiet anchor.
@@ -4341,6 +4424,9 @@ def main() -> int:
         # P52 T10: the ARRIVAL the stage words take, for a player reading the timeline rather than a page
         # (a page's own `cap_arrive` wins). Omitted entirely when the build does not ask - see CAPTION_ARRIVE.
         **({"caption_arrive": _caption_arrive()} if _caption_arrive() else {}),
+        # P57 T14 / E90: the LIFE the stage words carry (a page's own `cap_life` wins). Omitted entirely when the
+        # build does not ask - see CAPTION_LIFE.
+        **({"caption_life": _caption_life()} if _caption_life() else {}),
         "sound": sound_cues,
         "evidence": evidence,
         "scenes": (extend_camera_cards(scenes) and scenes) or scenes,   # P49 T5: a camera page's card stays up to the match

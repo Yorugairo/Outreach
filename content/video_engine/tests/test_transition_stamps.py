@@ -156,3 +156,54 @@ def test_a_throw_hands_the_same_board_to_the_next_chart_on_its_axes():
     scenes = [_page_scene("s01", 1.0, 10.0, "cut"), _page_scene("s02", 10.0, 20.0, "melt:throw")]
     B.stamp_transition_pages(scenes)
     assert scenes[1]["world"]["page"]["enter"] == "axes" and scenes[0]["world"]["page"]["exit"] == "cut"
+
+
+# ---- E87 s3 / R26-75: THE SLIDE - A HAND-OFF, NOT A WORLD-TAKING TRANSITION -----------------------------------------
+def test_a_slide_names_the_direction_it_pushes_along_and_may_carry_its_own_length():
+    """E87 s3 (the operator, 2026-09-13: *"We should also have a push/slide option ... basically literally pushing out
+    one frame with the next, so that you keep some of that congruency"*): `slide:<left|right|up|down>[:<s>]`. The
+    direction is the axis AND the sign - which way the outgoing frame is pushed - and is never defaulted: a slide with
+    no direction is a slide nobody authored. The player's `slideOpts` reads the same grammar; these two are one
+    statement made twice."""
+    for d in B.SLIDE_DIRECTIONS:
+        assert B.parse_exit(f"slide:{d}") == (f"slide:{d}", None), d
+        assert B.parse_exit(f"slide:{d}:0.9") == (f"slide:{d}:0.9", 0.9), d
+        assert B.scene_exit(f"slide:{d}", True) == (f"slide:{d}", None), "an authored slide wins"
+    assert B.SLIDE_DIRECTIONS == ("left", "right", "up", "down")
+    assert "slide" in B.SCENE_EXITS and "slide" in B.TIMED_EXITS
+    assert B.SLIDE_S == 0.6, "the default length the player's SLIDE_S carries too"
+
+
+def test_a_slide_with_no_direction_an_unknown_one_or_push_is_refused():
+    """`push` is OUR camera push-in and the name is not reused (E87 s3) - this transition is `slide`."""
+    with pytest.raises(ValueError, match="names no direction"):
+        B.parse_exit("slide")
+    with pytest.raises(ValueError, match="the camera push-in"):
+        B.parse_exit("slide:push")
+    for bad in ("slide:", "slide:sideways", "slide:LEFT", "slide:0.5", "slide:left:0", "slide:left:-1",
+                "slide:left:soon", "slide:left:0.5:0.5"):
+        with pytest.raises(ValueError):
+            B.parse_exit(bad)
+
+
+def test_the_mechanical_default_is_never_a_slide():
+    """A slide is AUTHORED or it does not happen: `scene_exit`'s table is the dip, the cut, and what the row says."""
+    for docks in (True, False):
+        for enter in (None, "mount", "spiral", "morph", "built"):
+            for changed in (True, False):
+                assert B.scene_exit(None, docks, enter, changed)[0] != "slide"
+    assert "slide" not in B.LEDGER_EXITS, "the page's own retract law is untouched: a slide hands over the WORLD"
+
+
+def test_a_slide_hands_over_and_never_takes_the_outgoing_world():
+    """The slide is a HAND-OFF: the outgoing page keeps its own law (it is not stamped `exit=cut` the way the page a
+    suck or a melt TAKES is), and the incoming chart arrives on its axes exactly as it does across a cut - so M31
+    reads the boundary as chart-to-chart (any non-dip boundary with a page on both sides, gate_motion_density.py
+    `_into_page`) and never sees empty cream there."""
+    assert "slide" not in B.WORLD_TAKING_EXITS
+    for kind in ("slide:left", "slide:up:0.4"):
+        scenes = [_page_scene("s01", 1.0, 10.0, "cut"), _page_scene("s02", 10.0, 20.0, kind)]
+        notes = B.stamp_transition_pages(scenes)
+        assert "exit" not in scenes[0]["world"]["page"], kind
+        assert scenes[1]["world"]["page"]["enter"] == "axes", kind
+        assert any("s02" in n and "enter=axes" in n and "slide" in n for n in notes), (kind, notes)

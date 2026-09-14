@@ -33,6 +33,7 @@
    the stagger so neighbours overlap into one wave rather than a queue of separate events. */
 
 import { minJerk } from "./ease.mjs";
+import { springPop } from "./spring.mjs";
 
 export const FADE_UP = Object.freeze({
   RISE_PX: 22,       /* [DERIVED: HyperFrames staggered-fade-up] --hf-word-y 22 px -> 0 */
@@ -77,3 +78,83 @@ export const fadeUpPage = (t, starts, P = FADE_UP) => (starts || []).map((s) => 
 /* how long the page spends arriving: the last word's offset plus one envelope (0 when there are no words) */
 export const staggerSpan = (starts, P = FADE_UP) =>
   (starts && starts.length ? starts[starts.length - 1] - starts[0] + P.DUR_S : 0);
+
+/* ---- E90: THE CAPTION'S LIFE - the pop LEADS, the stagger's envelope rides UNDER it (P57 T14) ----
+
+   E90 (the operator, P52 human gate 4): "caption pop looks beter than stagger, i think the blend of both makes
+   sense, maybe add more pop effect ... what we shipped on steel and paper is still the best we've produced".
+   So the base is not replaced and nothing here is a switch: `life` is a caption option with three NAMED settings,
+   and its absence is the shipped caption to the bit (no golden and neither approved short authors one).
+
+     pop       the shipped stage pop, one notch stronger - scale POP_LEAD -> 1 on the spring, the word's
+               alternating tilt settling to 0. ONE number is different and it is stated: POP_LEAD 1.22
+               against the base's 1.16 (E90 s2 "a little stronger").
+     stagger   P52 T10's envelope ALONE (fadeUpAt): y RISE_PX -> 0, scale FROM_SCALE -> 1, blur BLUR_PX -> 0
+               off one minimum-jerk progress; no tilt, because the tilt is punctuation and this register
+               exists to remove punctuation.
+     blend     BOTH, composed: the pop's SCALE rides on top of the stagger's Y - the word enters big
+               (POP_LEAD) and shrinking on the spring while the envelope's rise carries it up into place, lit
+               on the pop's clock. The pop LEADS by construction: it opens ANTICIP_S before the spoken onset
+               the stagger starts on (the same 0.05 s anticipation the shipped pop has), so its whole clock is
+               spent before the stagger reaches its middle.
+
+               TWO channels of the envelope the blend does NOT take, and the frames are why (the T10 instants
+               on Tokyo's private build, 2026-09-14):
+                 the stagger's SCALE - two scales multiplied put the word below rest at the onset
+                 (1.055 x 0.92 = 0.97), which reads as the quiet register arriving, not as a pop leading;
+                 the stagger's BLUR - a 5 px blur at u = 0 is the word unreadable at the instant it is spoken,
+                 and on a short the caption IS the read (E21, E62). The blur stays where P52 T10 put it: in
+                 the `stagger` setting, which is renderable beside this one so the operator's eye can rule.
+
+   Why springPop and not the engine's back-ease: the composition is the MODULE's, so its pop is the house
+   spring (kinetics/spring.mjs, Mp 4 %) - the law the shipped builds already turn on (`analytic_spring`).
+
+   What is NOT here, on purpose (the caption-energy lessons, 2026-09-05: "energy = continuous voice-timed
+   motion"): no cursor, no flash, no per-word highlight. Every channel is a continuous function of the word's
+   own voice time, and the HELD page's life is E49's - the engine's `idle` kind `breath` on the caption strip,
+   reused, never reinvented.
+
+   A pure function of t like everything else in this file: a cold seek lands where a play does. */
+
+export const LIFE = Object.freeze({
+  POP_LEAD: 1.22,     /* ours (E90 s2): the pop's start scale under a life setting - the base's 1.16 plus one notch */
+  POP_S: 0.20,        /* the shipped stage pop's window, unchanged (the engine's STAGE_POP_S) */
+  ANTICIP_S: 0.05,    /* the shipped pop's anticipation - it opens this much before the onset, which is HOW the pop leads */
+  OPACITY_K: 2,       /* the shipped opacity ramp: opaque by the pop's half - min(1, e * K) */
+  MP: 0.04,           /* the house overshoot (kinetics/spring.mjs SPRING.MP), named here so the caption's pop is readable in one file */
+});
+
+export const LIVES = Object.freeze(["pop", "stagger", "blend"]);
+
+/* the dials as ONE preset, overridden whole - the same rule fadeUpDials has */
+export const lifeDials = (o) => Object.freeze(Object.assign({}, LIFE, o || {}));
+
+/* the POP alone at t, for a word whose spoken onset is `start`: the base's scale, opacity and settling tilt.
+   `e` is the arrival's CLOCK (0 -> 1 over POP_S from the anticipation), never the spring's value - the spring
+   passes 1 at its overshoot and "landed" has to mean landed. */
+export const popAt = (t, start, P = LIFE) => {
+  const u = Math.min(1, Math.max(0, (t + P.ANTICIP_S - start) / P.POP_S));
+  const k = springPop(u, P.MP);
+  return { e: u, o: Math.min(1, k * P.OPACITY_K), y: 0, s: u >= 1 ? 1 : P.POP_LEAD + (1 - P.POP_LEAD) * k,
+           b: 0, tilt: 1 - k };
+};
+
+/* THE COMPOSITION: one word's life at t under a named setting. Returns the five channels the caption paints
+   (opacity, y px, scale, blur px, tilt factor) plus `e`, the arrival's clock - 1 means landed, and only a
+   landed word takes the spoken lift and the boil. An unknown setting THROWS: a typo must never silently
+   paint the base (the compiler refuses it by name first; this is the second door). */
+export const lifeAt = (t, start, kind = "blend", P = LIFE, F = FADE_UP) => {
+  if (kind === "pop") return popAt(t, start, P);
+  const f = fadeUpAt(t, start, F);
+  if (kind === "stagger") return { e: f.e, o: f.o, y: f.y, s: f.s, b: f.b, tilt: 0 };
+  if (kind !== "blend") throw new RangeError(`caption life ${kind} is not one of ${LIVES.join(", ")}`);
+  const p = popAt(t, start, P);
+  /* the pop on top of the stagger: the SCALE and the tilt are the pop's, the RISE is the stagger's, no blur
+     (see above), and the word is lit on whichever clock is further on - which is the pop, because it opened
+     first. `e` (landed) is the later of the two: a word is not landed while either is still moving it. */
+  return { e: Math.min(p.e, f.e), o: Math.max(p.o, f.o), y: f.y, s: p.s, b: 0, tilt: p.tilt };
+};
+
+/* the whole page at t, in word order - the same shape fadeUpPage has */
+export const lifePage = (t, starts, kind = "blend", P = LIFE, F = FADE_UP) =>
+  (starts || []).map((s) => lifeAt(t, s, kind, P, F));

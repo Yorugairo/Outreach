@@ -463,41 +463,106 @@
           "source": "docs/content-video-engine/BACKLOG.md:481"
         }
       ],
-      "does": "The incoming frame pushes the outgoing frame off the stage along one axis, both moving together.",
-      "when": "so the two worlds stay spatially continuous",
+      "does": "The incoming frame pushes the outgoing one off the stage along one axis, both moving together by the same distance over SLIDE_S, each clipped to its own stage rect, so the two frames abut at every instant.",
+      "when": "A HAND-OFF, not a world-taking transition: when the next world should read as the same picture carried on - chart to chart on the same board - so the two worlds stay spatially continuous.",
       "when_source": "docs/portable/OPERATOR-RULINGS.md:2641",
       "author": {
-        "key": "an exit kind with a direction (R26-75; not yet accepted by parse_exit)",
-        "example": "'slide'",
+        "key": "shot row 6th element 'slide:<left|right|up|down>' or 'slide:<dir>:<s>' (validator: parse_exit (via scene_exit); the direction is never defaulted and `push` is refused by name)",
+        "example": "'slide:left'",
         "example_source": null,
         "check": "exit"
       },
-      "phases": [],
-      "blends": [],
-      "options": [],
+      "phases": [
+        {
+          "name": "the push",
+          "does": "the outgoing world travels sign * u * the stage's span and the incoming world (u - 1) * the same span, on min-jerk, each clipped to its own stage rect - one distance, opposite ends, so the two frames abut at every u",
+          "trigger": "the scene boundary (a slide arrives on the cut, like the suck and the melt)",
+          "dials": {
+            "SLIDE_S": "0.6"
+          }
+        },
+        {
+          "name": "the landing",
+          "does": "the outgoing frame is exactly off the stage and the incoming one stands at its own place; the page it hands to has been building on its axes throughout",
+          "trigger": "the boundary plus SLIDE_S",
+          "dials": {
+            "SLIDE_S": "0.6"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "@remotion/transitions' `slide` presentation (the editor already imports the package - editor/src/TransitionEvidence60sProof.tsx)",
+          "became": "the geometry: the enter and the exit translate are one pair, one distance, opposite ends",
+          "record": "docs/content-video-engine/BACKLOG.md:481",
+          "tie": "recorded"
+        },
+        {
+          "source": "the operator's own ask - \"literally pushing out one frame with the next, so that you keep some of that congruency\"",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:2629",
+          "tie": "recorded"
+        }
+      ],
+      "options": [
+        {
+          "token": "slide",
+          "means": "The slide's own length: the slide runs over the seconds its SECOND suffix declares (after the direction) instead of its default dial.",
+          "source_set": "TIMED_EXITS"
+        },
+        {
+          "token": "left",
+          "means": "The slide: pushed off to the left - the incoming frame arrives from the right.",
+          "source_set": "SLIDE_DIRECTIONS"
+        },
+        {
+          "token": "right",
+          "means": "The slide: pushed off to the right - the incoming frame arrives from the left.",
+          "source_set": "SLIDE_DIRECTIONS"
+        },
+        {
+          "token": "up",
+          "means": "The slide: pushed off upward - the incoming frame arrives from below.",
+          "source_set": "SLIDE_DIRECTIONS"
+        },
+        {
+          "token": "down",
+          "means": "The slide: pushed off downward - the incoming frame arrives from above.",
+          "source_set": "SLIDE_DIRECTIONS"
+        }
+      ],
       "dials": null,
       "lives": {
-        "form": "declared-unbuilt",
-        "path": "docs/content-video-engine/BACKLOG.md",
-        "symbol": null,
-        "note": "BACKLOG row R26-75: not built, not in SCENE_EXITS"
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "slideOn",
+        "also": [
+          "slideU",
+          "slideOpts",
+          "SLIDE_S",
+          "SLIDE_AXES"
+        ],
+        "note": "the render loop's boundary block - THE SLIDE (slideOn/slideU beside dipIn/bzIn) and its paint beside the suck's; the compiler half is _slide_parts / SLIDE_DIRECTIONS / SLIDE_S, read by parse_exit"
       },
       "doctrine": [
         "E87 s3",
-        "R26-75"
+        "E47",
+        "E73",
+        "R26-75",
+        "CAPABILITIES slide row"
       ],
-      "status": "planned",
+      "status": "draft",
       "backlog": [
         "R26-75"
       ],
       "proof": {
-        "golden": null,
-        "test": null,
+        "golden": "slide-mid",
+        "test": "content/video_engine/tests/test_transitions_e47.py::test_the_slide_pushes_both_worlds_together_and_the_two_abut_at_the_seam",
         "first_use": null
       },
       "callable": {
-        "today": false,
-        "why": "not in SCENE_EXITS; parse_exit refuses it (BACKLOG R26-75)"
+        "today": true,
+        "why": "in SCENE_EXITS and TIMED_EXITS; parse_exit accepts slide:<left|right|up|down>[:<s>] and the engine paints it (goldens slide-mid / slide-landed) - it awaits the operator's watch in motion before a short ships it"
       }
     },
     {

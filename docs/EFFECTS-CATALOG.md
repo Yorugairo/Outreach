@@ -16,14 +16,14 @@ lives (module | inline | compiler-only | declared-unbuilt, the path and the one 
 module - status and callable - proof - doctrine cites resolved to path:line - aliases. A token that is only a
 parameter of an effect is an option on its card, never a card.
 
-130 cards, 51 options, 18 axes. 39 recipes (15 proven).
+130 cards, 62 options, 18 axes. 40 recipes (15 proven).
 
 | axis | cards | options | live | wired | draft | declared | planned | retired |
 |---|---|---|---|---|---|---|---|---|
 | species | 23 | 1 | 7 | 13 | 0 | 3 | 0 | 0 |
 | page_species | 12 | 0 | 3 | 9 | 0 | 0 | 0 | 0 |
 | chart_to | 6 | 2 | 0 | 6 | 0 | 0 | 0 | 0 |
-| page_builder | 11 | 0 | 2 | 5 | 0 | 4 | 0 | 0 |
+| page_builder | 11 | 3 | 2 | 5 | 0 | 4 | 0 | 0 |
 | overflow | 2 | 1 | 0 | 2 | 0 | 0 | 0 | 0 |
 | dock_kind | 4 | 1 | 2 | 2 | 0 | 0 | 0 | 0 |
 | dock_payload | 3 | 0 | 3 | 0 | 0 | 0 | 0 | 0 |
@@ -33,10 +33,10 @@ parameter of an effect is an option on its card, never a card.
 | idle | 6 | 0 | 3 | 3 | 0 | 0 | 0 | 0 |
 | arrival | 3 | 4 | 2 | 1 | 0 | 0 | 0 | 0 |
 | camera | 1 | 6 | 1 | 0 | 0 | 0 | 0 | 0 |
-| exit | 8 | 7 | 3 | 3 | 1 | 0 | 1 | 0 |
+| exit | 8 | 12 | 3 | 3 | 2 | 0 | 0 | 0 |
 | page_enter | 10 | 5 | 3 | 7 | 0 | 0 | 0 | 0 |
 | page_exit | 2 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
-| caption | 3 | 5 | 3 | 0 | 0 | 0 | 0 | 0 |
+| caption | 3 | 8 | 3 | 0 | 0 | 0 | 0 | 0 |
 | kinetics | 14 | 0 | 2 | 12 | 0 | 0 | 0 | 0 |
 
 ## species
@@ -766,7 +766,8 @@ parameter of an effect is an option on its card, never a card.
   1. **grow in** - bars grow into period 0 (trigger: the build; dials: `RACE_IN`=0.6)
   2. **periods** - the race steps period by period, rows swapping at crossings (trigger: every RACE_PERIOD; dials: `RACE_PERIOD`=1.2, `RACE_SWAP`=0.7)
 - **blend** bar-chart-race (doc 29 harvest) -> the whole arc (recorded; docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1797)
-- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintLedgerRace`
+- **options** `path` The row's `;path=eased|clothoid` names which way a mark travels between two period knots. Both ship (E91 s1); the knots and the period clock are identical in either. (PLATE_OPTS); `eased` path=eased, THE DEFAULT: the engine as it is - the value smoothstepped, the rank sliding through its swap window. The operator: smoother.; `clothoid` path=clothoid: the same knots on the same clock fitted as clothoid segments (kinetics/clothoid.mjs) - the mark turns where the eased path corners. The operator: more energy.
+- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `paintLedgerRace` - also `lpRacePos`, `lpRaceFits`
 - **status** wired - **callable** yes
 - **proof** golden none - test content/video_engine/tests/test_ledger_page.py::test_race_with_periods_builds_ranked_rows - first use none
 - **doctrine** 29 s9.26 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1504; BACKLOG R26-78 -> docs/content-video-engine/BACKLOG.md:484; E91 -> docs/portable/OPERATOR-RULINGS.md:2699
@@ -1478,13 +1479,19 @@ parameter of an effect is an option on its card, never a card.
 
 ### The slide scene exit
 
-- **id** `exit:slide` - **does** The incoming frame pushes the outgoing frame off the stage along one axis, both moving together.
-- **when** so the two worlds stay spatially continuous (docs/portable/OPERATOR-RULINGS.md:2641)
-- **example** `'slide'` (authored; key: an exit kind with a direction (R26-75; not yet accepted by parse_exit); check: exit)
-- **lives** declared-unbuilt - `docs/content-video-engine/BACKLOG.md` - no symbol - BACKLOG row R26-75: not built, not in SCENE_EXITS
-- **status** planned (backlog R26-75) - **callable** no: not in SCENE_EXITS; parse_exit refuses it (BACKLOG R26-75)
-- **proof** golden none - test none - first use none
-- **doctrine** E87 s3 -> docs/portable/OPERATOR-RULINGS.md:2623; R26-75 -> docs/content-video-engine/BACKLOG.md:481
+- **id** `exit:slide` - **does** The incoming frame pushes the outgoing one off the stage along one axis, both moving together by the same distance over SLIDE_S, each clipped to its own stage rect, so the two frames abut at every instant.
+- **when** A HAND-OFF, not a world-taking transition: when the next world should read as the same picture carried on - chart to chart on the same board - so the two worlds stay spatially continuous. (docs/portable/OPERATOR-RULINGS.md:2641)
+- **example** `'slide:left'` (authored; key: shot row 6th element 'slide:<left|right|up|down>' or 'slide:<dir>:<s>' (validator: parse_exit (via scene_exit); the direction is never defaulted and `push` is refused by name); check: exit)
+- **phases**
+  1. **the push** - the outgoing world travels sign * u * the stage's span and the incoming world (u - 1) * the same span, on min-jerk, each clipped to its own stage rect - one distance, opposite ends, so the two frames abut at every u (trigger: the scene boundary (a slide arrives on the cut, like the suck and the melt); dials: `SLIDE_S`=0.6)
+  2. **the landing** - the outgoing frame is exactly off the stage and the incoming one stands at its own place; the page it hands to has been building on its axes throughout (trigger: the boundary plus SLIDE_S; dials: `SLIDE_S`=0.6)
+- **blend** @remotion/transitions' `slide` presentation (the editor already imports the package - editor/src/TransitionEvidence60sProof.tsx) -> the geometry: the enter and the exit translate are one pair, one distance, opposite ends (recorded; docs/content-video-engine/BACKLOG.md:481)
+- **blend** the operator's own ask - "literally pushing out one frame with the next, so that you keep some of that congruency" -> the whole arc (recorded; docs/portable/OPERATOR-RULINGS.md:2629)
+- **options** `slide` The slide's own length: the slide runs over the seconds its SECOND suffix declares (after the direction) instead of its default dial. (TIMED_EXITS); `left` The slide: pushed off to the left - the incoming frame arrives from the right. (SLIDE_DIRECTIONS); `right` The slide: pushed off to the right - the incoming frame arrives from the left. (SLIDE_DIRECTIONS); `up` The slide: pushed off upward - the incoming frame arrives from below. (SLIDE_DIRECTIONS); `down` The slide: pushed off downward - the incoming frame arrives from above. (SLIDE_DIRECTIONS)
+- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `slideOn` - also `slideU`, `slideOpts`, `SLIDE_S`, `SLIDE_AXES` - the render loop's boundary block - THE SLIDE (slideOn/slideU beside dipIn/bzIn) and its paint beside the suck's; the compiler half is _slide_parts / SLIDE_DIRECTIONS / SLIDE_S, read by parse_exit
+- **status** draft (backlog R26-75) - **callable** yes: in SCENE_EXITS and TIMED_EXITS; parse_exit accepts slide:<left|right|up|down>[:<s>] and the engine paints it (goldens slide-mid / slide-landed) - it awaits the operator's watch in motion before a short ships it
+- **proof** golden slide-mid - test content/video_engine/tests/test_transitions_e47.py::test_the_slide_pushes_both_worlds_together_and_the_two_abut_at_the_seam - first use none
+- **doctrine** E87 s3 -> docs/portable/OPERATOR-RULINGS.md:2623; E47 -> docs/portable/OPERATOR-RULINGS.md:1419; E73 -> docs/portable/OPERATOR-RULINGS.md:2342; R26-75 -> docs/content-video-engine/BACKLOG.md:481; CAPABILITIES slide row -> unresolved
 - **aliases** "push/slide option" (docs/portable/OPERATOR-RULINGS.md:2629); "push transition" (docs/content-video-engine/BACKLOG.md:481)
 
 ### The suck scene exit
@@ -1726,8 +1733,11 @@ parameter of an effect is an option on its card, never a card.
   1. **pop** - each word enters at its own spoken time, scale 1.16 -> 1.0, its alternating tilt settling to 0 (trigger: word.s - 0.05; dials: `STAGE_POP_S`=0.2, `from_scale`=1.16, `tilt_deg`=2.5)
   2. **lift** - the spoken word lifts while the voice is on it (trigger: word.s <= t < word.e; dials: `lift`=1.06)
   3. **band move** - under a card the strip keeps its size and moves to the band the compiler wrote (E62); quiet only when no band fits (trigger: a live dock)
-- **options** `fade_up` The staggered fade-up: The page's words rise 22 px through a 5 px blur from scale 0.92 on one minimum-jerk envelope over 0.34 s, 0.055 s apart - a wave, not a queue of pops. (CAPTION_ARRIVALS); `pop` The pop: Each stage word pops in at its own spoken time - the arrival every shipped build uses (no field is written). (CAPTION_ARRIVALS)
-- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `stagePop` - also `carded` - render caption block + the template's `#caption.stage` CSS
+- **blend** The caption Steel and Paper shipped (STAGE mode, doc 29 s9.25 #2, P34 T5) -> the blend's scale, tilt and opacity - the pop, one notch stronger, leading (recorded; docs/portable/OPERATOR-RULINGS.md E90)
+- **blend** The staggered fade-up envelope (P52 T10) [DERIVED: HyperFrames staggered-fade-up] -> the blend's rise - the minimum-jerk y the word is carried up on, under the pop (recorded; content/video_engine/scripts/kinetics/stagger.mjs)
+- **options** `fade_up` The staggered fade-up: The page's words rise 22 px through a 5 px blur from scale 0.92 on one minimum-jerk envelope over 0.34 s, 0.055 s apart - a wave, not a queue of pops. (CAPTION_ARRIVALS); `life:blend` The life setting `blend` (E90 s2, a blend not a switch): the pop's scale and tilt ride ON TOP of the stagger's rise, the pop leading by its 0.05 s anticipation, the held page breathing under it (E49). (CAPTION_LIVES); `life:pop` The life setting `pop`: the shipped stage pop one notch stronger - scale 1.22 -> 1.0 on the spring (LIFE.POP_LEAD against the base's 1.16), the alternating tilt settling as before. (CAPTION_LIVES); `life:stagger` The life setting `stagger`: P52 T10's envelope alone under each word - rise 22 px, scale 0.92 -> 1, blur 5 px -> 0 over 0.34 s, no tilt. The quiet register, on the word's own spoken time. (CAPTION_LIVES); `pop` The pop: Each stage word pops in at its own spoken time - the arrival every shipped build uses (no field is written). (CAPTION_ARRIVALS)
+- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `stagePop` - also `carded`, `lifeAt` - render caption block + the template's `#caption.stage` CSS
+- **dials** `LIFE` in `content/video_engine/scripts/kinetics/stagger.mjs`: `POP_LEAD`=1.22, `POP_S`=0.20, `ANTICIP_S`=0.05, `OPACITY_K`=2, `MP`=0.04
 - **status** live - **callable** yes: every compiled build
 - **proof** golden none - test content/video_engine/tests/test_gate_motion_density.py::test_stage_captions_count_as_events - first use steel-and-paper build-f t=0.0
 - **doctrine** 29 s9.25 #2 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1430; E21 -> docs/portable/OPERATOR-RULINGS.md:557; E90 -> docs/portable/OPERATOR-RULINGS.md:2678; CAPABILITIES -> unresolved
@@ -1909,7 +1919,7 @@ a decoration; one that fires four times is a grammar.
 | status | recipes | members | fires (sum of count) |
 |---|---|---|---|
 | proven | 15 | 59 | 94 |
-| candidate | 24 | 94 | 0 |
+| candidate | 25 | 97 | 0 |
 
 ### The badge ladder
 
@@ -2233,6 +2243,17 @@ a decoration; one that fires four times is a grammar.
 - **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535; E56 -> docs/portable/OPERATOR-RULINGS.md:1815
 - **aliases** "The punch on the emphasized datum, then the callout names it" (docs/research/runs/grill_pipeline-value/recipes_r1.md:208)
 
+### The quoted figure becomes the number the viewer feels
+
+- **id** `recipe:quoted-figure-becomes-the-felt-number` - **does** A market figure is shown as quoted, then morphs into what it means: the same datum, two numbers, one frame - the multiple nobody feels becomes the percentage everybody does (E76).
+- **acts** COMPARES, EXPLAINS - **window** 9s
+- **members**
+  - +0s -> `page_species:figure` (The written figure page species) - the figure the market quotes is WRITTEN at its datum by the hand (E50) - '24.8x'
+  - +6s -> `page_species:chart_to` (The chart-to page species) - the page-species carrier for the verb
+  - +6s -> `chart_to:compare` (The compare chart-to verb (metric to comparator)) - the quoted number counts into the number the viewer feels - '15% dearer' - with the metric ghosted beside it (hold: metric) or gone; the arithmetic is authored, never invented (E77)
+- **status** candidate - **count** 0 (unfired) - **source** P57 T12 golden compare-morph (figure at 6.0 s, compare at 12.0 s) - no approved cut has carried it
+- **doctrine** E76 -> docs/portable/OPERATOR-RULINGS.md:2442; E73 -> docs/portable/OPERATOR-RULINGS.md:2342; E88 -> docs/portable/OPERATOR-RULINGS.md:2647; E77 -> docs/portable/OPERATOR-RULINGS.md:2466; E96 -> docs/portable/OPERATOR-RULINGS.md:2759; BACKLOG R26-70 -> docs/content-video-engine/BACKLOG.md:476
+
 ### The race and the bar that cannot fit
 
 - **id** `recipe:ranked-bars-race-then-burst` - **does** The ranking is watched, not read: bars race across the periods and stamp their order, then the bar that cannot fit builds to the comparator and shoots past it while the scale rewrites.
@@ -2429,7 +2450,6 @@ a decoration; one that fires four times is a grammar.
 - `chart_dock:series` - The drawn-line chart card (live)
 - `chart_dock:shares` - The share-rows chart card (live)
 - `dock_payload:chart` - The live chart dock payload (live)
-- `exit:slide` - The slide scene exit (planned)
 - `page_enter:drop` - The drop page enter (wired)
 - `plate_option:pill` - The tip-riding pill plate option (wired)
 - `plate_option:then` - The then plate option (the next chart state) (wired)

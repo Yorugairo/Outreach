@@ -1,0 +1,40 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:quoted-figure-becomes-the-felt-number",
+  "title": "The quoted figure becomes the number the viewer feels",
+  "aliases": [],
+  "acts": [
+    "COMPARES",
+    "EXPLAINS"
+  ],
+  "members": [
+    {
+      "card": "page_species:figure",
+      "offset_s": 0.0,
+      "role": "the figure the market quotes is WRITTEN at its datum by the hand (E50) - '24.8x'"
+    },
+    {
+      "card": "page_species:chart_to",
+      "offset_s": 6.0,
+      "role": "the page-species carrier for the verb"
+    },
+    {
+      "card": "chart_to:compare",
+      "offset_s": 6.0,
+      "role": "the quoted number counts into the number the viewer feels - '15% dearer' - with the metric ghosted beside it (hold: metric) or gone; the arithmetic is authored, never invented (E77)"
+    }
+  ],
+  "window_s": 9.0,
+  "does": "A market figure is shown as quoted, then morphs into what it means: the same datum, two numbers, one frame - the multiple nobody feels becomes the percentage everybody does (E76).",
+  "doctrine": [
+    "E76",
+    "E73",
+    "E88",
+    "E77",
+    "E96",
+    "BACKLOG R26-70"
+  ],
+  "status": "candidate",
+  "source": "P57 T12 golden compare-morph (figure at 6.0 s, compare at 12.0 s) - no approved cut has carried it",
+  "count": 0
+}

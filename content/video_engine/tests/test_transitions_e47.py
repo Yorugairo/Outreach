@@ -168,13 +168,85 @@ def test_the_blurzoom_softens_the_outgoing_plate_and_magnifies_it_by_blurzoom_sc
 # ---------------------------------------------------------------- determinism (P39 T2's law)
 @needs_chromium
 @pytest.mark.parametrize("exit_id,banded,t", [("dip", False, BOUNDARY - 0.10),
-                                              ("blurzoom", True, BOUNDARY - 0.05)])
+                                              ("blurzoom", True, BOUNDARY - 0.05),
+                                              ("slide:up", True, BOUNDARY + 0.30)])
 def test_a_transition_frame_renders_identically_in_two_browsers(exit_id: str, banded: bool, t: float):
     tl, uris = _build(exit_id, banded)
     a, b = RB.rgb_bytes(_frame(tl, uris, t)), RB.rgb_bytes(_frame(tl, uris, t))
     assert a[0] == b[0] == RB.STAGE[ASPECT]
     assert hashlib.sha256(a[1]).hexdigest() == hashlib.sha256(b[1]).hexdigest(), (
         f"{exit_id}: two renders of the same frame differ - the transition is not a pure function of t")
+
+
+# ---------------------------------------------------------------- the slide (E87 s3 / R26-75)
+SLIDE_S = 0.6           # build_scene_timeline_f.SLIDE_S and the engine's - the default this build declares none against
+
+
+def _row_means(png: bytes) -> list[float]:
+    """One mean per row of the stage - the profile a vertical push moves through."""
+    im = _grey(png)
+    w, h = im.size
+    px = im.load()
+    return [sum(px[x, y] for x in range(0, w, 4)) / len(range(0, w, 4)) for y in range(h)]
+
+
+def _first_row_below(rows: list[float], lo: float, hi: float, y0: int) -> int:
+    """The first row at or after y0 whose mean sits inside (lo, hi) - the incoming plate's own value."""
+    return next((y for y in range(y0, len(rows)) if lo < rows[y] < hi), -1)
+
+
+def _band_rows(rows: list[float]) -> tuple[int, int]:
+    """The outgoing plate's band, top and bottom row (-1, -1 once it has left the stage)."""
+    dark = [y for y, v in enumerate(rows) if v < 130]
+    return (dark[0], dark[-1]) if dark else (-1, -1)
+
+
+@needs_chromium
+def test_the_slide_pushes_both_worlds_together_and_the_two_abut_at_the_seam():
+    """E87 s3 (the operator: *"literally pushing out one frame with the next, so that you keep some of that
+    congruency"*). `slide:up` on a BANDED outgoing plate: the band is the known element, and a vertical push moves it.
+
+    The stage is 9:16 and the plate is 108x192 - the same aspect, so `cover` crops nothing and the band's rows 64-128
+    of 192 sit at 1/3 - 2/3 of the .world box, which spans 1.1 H from -0.05 H (the Ken Burns overhang). At u = 0.5 the
+    outgoing box has travelled 0.55 H up, so its trailing edge - and therefore the SEAM - is exactly at mid-stage, and
+    the band has moved from 0.353-0.683 H to the top 0.133 H of the frame. Three statements in one frame:
+    the outgoing world moved, the incoming world moved by the same distance, and they abut with no gap and no overlap."""
+    tl, uris = _build("slide:up", banded=True)
+    mid = _row_means(_frame(tl, uris, BOUNDARY + SLIDE_S / 2))
+    before = _row_means(_frame(tl, uris, BOUNDARY - 0.10))
+    h = len(mid)
+    incoming = 200.0     # plate-b's own grey; plate-a is GROUND 230 with a BAND at 30
+    # 1. the OUTGOING world moved: the band was nowhere near the top of the frame, and at mid-slide it is there
+    assert before[int(0.05 * h)] > 200, f"the band is not where the build put it: row 5% = {before[int(0.05 * h)]:.1f}"
+    assert mid[int(0.05 * h)] < 100, f"the outgoing world did not move up: row 5% = {mid[int(0.05 * h)]:.1f}"
+    assert mid[int(0.30 * h)] > 200, f"the outgoing plate's ground is not under the band: row 30% = {mid[int(0.30 * h)]:.1f}"
+    # 2. the INCOMING world is on stage with it, at its own value
+    assert abs(mid[int(0.75 * h)] - incoming) < 3, f"the incoming plate is not on stage: row 75% = {mid[int(0.75 * h)]:.1f}"
+    # 3. they ABUT at mid-stage: one distance, opposite ends (a stage-width travel would put the seam 5% early)
+    seam = _first_row_below(mid, incoming - 3, incoming + 3, int(0.2 * h))
+    assert abs(seam - h / 2) <= 2, f"the seam is at row {seam} of {h}, not at mid-stage - the two worlds do not abut"
+
+
+@needs_chromium
+def test_a_slide_arrives_on_the_cut_and_lands_exactly_at_its_own_length():
+    """The congruency the ruling asks for, in pixels: the frame just after the boundary is the frame just before it
+    (the incoming world is still wholly off-stage - nothing flashes, nothing is half-arrived), and at SLIDE_S the
+    outgoing world is wholly gone. Between them the seam travels one way only."""
+    tl, uris = _build("slide:up", banded=True)
+    before, after = _row_means(_frame(tl, uris, BOUNDARY - 0.01)), _row_means(_frame(tl, uris, BOUNDARY + 0.01))
+    # judged on the band's place and the frame's own mean, not row by row: this build's plate is 192 px shown 11x, so
+    # its band edge is a ~10-row ramp, and clipping a layer to the stage rect resamples that ramp's sub-pixel phase
+    # (measured 2026-09-14 - a fixture artifact of an upscaled synthetic PNG; a page is DOM and a real plate is full
+    # res). A flash, or a world half arrived, moves the band rows and the mean by far more than this.
+    assert abs(_band_rows(before)[0] - _band_rows(after)[0]) <= 2 and abs(_band_rows(before)[1] - _band_rows(after)[1]) <= 2, (
+        f"the outgoing world is not where it was on the cut: band {_band_rows(before)} -> {_band_rows(after)}")
+    assert abs(sum(before) - sum(after)) / len(before) < 0.5, "the boundary frame is not congruent - the slide flashes"
+    landed = _row_means(_frame(tl, uris, BOUNDARY + SLIDE_S))
+    assert _band_rows(landed) == (-1, -1), f"the outgoing world is still on stage at the landing: band {_band_rows(landed)}"
+    assert max(abs(v - 200.0) for v in landed) < 3, "the landed frame is not the incoming plate alone"
+    seams = [_first_row_below(_row_means(_frame(tl, uris, BOUNDARY + d)), 197, 203, 0)
+             for d in (0.15, 0.30, 0.45)]
+    assert seams[0] > seams[1] > seams[2] >= 0, f"the seam does not travel one way: rows {seams}"
 
 
 # ---------------------------------------------------------------- the compiler's default (E47 #3)

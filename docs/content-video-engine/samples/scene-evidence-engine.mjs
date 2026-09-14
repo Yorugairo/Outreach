@@ -233,6 +233,86 @@ async function mount(doc) {
   /* how long the page spends arriving: the last word's offset plus one envelope (0 when there are no words) */
   const staggerSpan = (starts, P = FADE_UP) =>
     (starts && starts.length ? starts[starts.length - 1] - starts[0] + P.DUR_S : 0);
+
+  /* ---- E90: THE CAPTION'S LIFE - the pop LEADS, the stagger's envelope rides UNDER it (P57 T14) ----
+
+     E90 (the operator, P52 human gate 4): "caption pop looks beter than stagger, i think the blend of both makes
+     sense, maybe add more pop effect ... what we shipped on steel and paper is still the best we've produced".
+     So the base is not replaced and nothing here is a switch: `life` is a caption option with three NAMED settings,
+     and its absence is the shipped caption to the bit (no golden and neither approved short authors one).
+
+       pop       the shipped stage pop, one notch stronger - scale POP_LEAD -> 1 on the spring, the word's
+                 alternating tilt settling to 0. ONE number is different and it is stated: POP_LEAD 1.22
+                 against the base's 1.16 (E90 s2 "a little stronger").
+       stagger   P52 T10's envelope ALONE (fadeUpAt): y RISE_PX -> 0, scale FROM_SCALE -> 1, blur BLUR_PX -> 0
+                 off one minimum-jerk progress; no tilt, because the tilt is punctuation and this register
+                 exists to remove punctuation.
+       blend     BOTH, composed: the pop's SCALE rides on top of the stagger's Y - the word enters big
+                 (POP_LEAD) and shrinking on the spring while the envelope's rise carries it up into place, lit
+                 on the pop's clock. The pop LEADS by construction: it opens ANTICIP_S before the spoken onset
+                 the stagger starts on (the same 0.05 s anticipation the shipped pop has), so its whole clock is
+                 spent before the stagger reaches its middle.
+
+                 TWO channels of the envelope the blend does NOT take, and the frames are why (the T10 instants
+                 on Tokyo's private build, 2026-09-14):
+                   the stagger's SCALE - two scales multiplied put the word below rest at the onset
+                   (1.055 x 0.92 = 0.97), which reads as the quiet register arriving, not as a pop leading;
+                   the stagger's BLUR - a 5 px blur at u = 0 is the word unreadable at the instant it is spoken,
+                   and on a short the caption IS the read (E21, E62). The blur stays where P52 T10 put it: in
+                   the `stagger` setting, which is renderable beside this one so the operator's eye can rule.
+
+     Why springPop and not the engine's back-ease: the composition is the MODULE's, so its pop is the house
+     spring (kinetics/spring.mjs, Mp 4 %) - the law the shipped builds already turn on (`analytic_spring`).
+
+     What is NOT here, on purpose (the caption-energy lessons, 2026-09-05: "energy = continuous voice-timed
+     motion"): no cursor, no flash, no per-word highlight. Every channel is a continuous function of the word's
+     own voice time, and the HELD page's life is E49's - the engine's `idle` kind `breath` on the caption strip,
+     reused, never reinvented.
+
+     A pure function of t like everything else in this file: a cold seek lands where a play does. */
+
+  const LIFE = Object.freeze({
+    POP_LEAD: 1.22,     /* ours (E90 s2): the pop's start scale under a life setting - the base's 1.16 plus one notch */
+    POP_S: 0.20,        /* the shipped stage pop's window, unchanged (the engine's STAGE_POP_S) */
+    ANTICIP_S: 0.05,    /* the shipped pop's anticipation - it opens this much before the onset, which is HOW the pop leads */
+    OPACITY_K: 2,       /* the shipped opacity ramp: opaque by the pop's half - min(1, e * K) */
+    MP: 0.04,           /* the house overshoot (kinetics/spring.mjs SPRING.MP), named here so the caption's pop is readable in one file */
+  });
+
+  const LIVES = Object.freeze(["pop", "stagger", "blend"]);
+
+  /* the dials as ONE preset, overridden whole - the same rule fadeUpDials has */
+  const lifeDials = (o) => Object.freeze(Object.assign({}, LIFE, o || {}));
+
+  /* the POP alone at t, for a word whose spoken onset is `start`: the base's scale, opacity and settling tilt.
+     `e` is the arrival's CLOCK (0 -> 1 over POP_S from the anticipation), never the spring's value - the spring
+     passes 1 at its overshoot and "landed" has to mean landed. */
+  const popAt = (t, start, P = LIFE) => {
+    const u = Math.min(1, Math.max(0, (t + P.ANTICIP_S - start) / P.POP_S));
+    const k = springPop(u, P.MP);
+    return { e: u, o: Math.min(1, k * P.OPACITY_K), y: 0, s: u >= 1 ? 1 : P.POP_LEAD + (1 - P.POP_LEAD) * k,
+             b: 0, tilt: 1 - k };
+  };
+
+  /* THE COMPOSITION: one word's life at t under a named setting. Returns the five channels the caption paints
+     (opacity, y px, scale, blur px, tilt factor) plus `e`, the arrival's clock - 1 means landed, and only a
+     landed word takes the spoken lift and the boil. An unknown setting THROWS: a typo must never silently
+     paint the base (the compiler refuses it by name first; this is the second door). */
+  const lifeAt = (t, start, kind = "blend", P = LIFE, F = FADE_UP) => {
+    if (kind === "pop") return popAt(t, start, P);
+    const f = fadeUpAt(t, start, F);
+    if (kind === "stagger") return { e: f.e, o: f.o, y: f.y, s: f.s, b: f.b, tilt: 0 };
+    if (kind !== "blend") throw new RangeError(`caption life ${kind} is not one of ${LIVES.join(", ")}`);
+    const p = popAt(t, start, P);
+    /* the pop on top of the stagger: the SCALE and the tilt are the pop's, the RISE is the stagger's, no blur
+       (see above), and the word is lit on whichever clock is further on - which is the pop, because it opened
+       first. `e` (landed) is the later of the two: a word is not landed while either is still moving it. */
+    return { e: Math.min(p.e, f.e), o: Math.max(p.o, f.o), y: f.y, s: p.s, b: 0, tilt: p.tilt };
+  };
+
+  /* the whole page at t, in word order - the same shape fadeUpPage has */
+  const lifePage = (t, starts, kind = "blend", P = LIFE, F = FADE_UP) =>
+    (starts || []).map((s) => lifeAt(t, s, kind, P, F));
   /* KINETICS:END */
   /* KINETICS:BEGIN stroke */
   /* kinetics/stroke.mjs - the curvature-reparameterised stroke (42 s42.1; FINDING-the-animation-math s1; 47 s1 rows
@@ -2681,6 +2761,33 @@ async function mount(doc) {
      magnified. The veil samples with edge clamping, so the frame stays filled, and it softens the docks, the
      stage captions and the species with the plate - a world change takes the whole frame. */
   const DIP_S = 0.47, BLURZOOM_S = 0.27, BLURZOOM_SCALE = 1.35, BLURZOOM_BLUR = 18, BLURZOOM_IN = 1.10;
+  /* THE SLIDE (ruling E87 s3, operator 2026-09-13; BACKLOG R26-75). The incoming frame pushes the outgoing one off
+     the stage along one axis, BOTH MOVING TOGETHER by the same distance, so the two worlds stay spatially continuous -
+     the operator: "basically literally pushing out one frame with the next, so that you keep some of that congruency".
+     Named `slide` because `push` is our camera push-in. The geometry is @remotion/transitions' `slide` presentation's
+     (the editor already imports the package, TransitionEvidence60sProof.tsx): the enter and the exit translate are one
+     pair, one distance, opposite ends - read, never vendored.
+       SLIDE_S 0.6      the default length when the row declares none; build_scene_timeline_f.SLIDE_S is the same dial
+                        written twice, and test_transition_stamps pins the pair.
+     THE FRAME IS THE STAGE. A .world layer is 110% of the stage (`inset: -5%`) so Ken Burns has somewhere to move;
+     the picture is the stage rect inside it, and everything outside that rect is scenery the viewer never sees. So
+     the travel is the STAGE's own span and each world is CLIPPED to its own stage rect while it slides: the two
+     frames then abut exactly - at u the outgoing frame's trailing edge and the incoming frame's leading edge are
+     both at (1 - u) of the stage - and at u = 1 the outgoing one is exactly off. Travelling the ELEMENT's span
+     instead opens the two overhangs as a 2 x 5% band between the worlds (192 px of a 1920 stage, measured
+     2026-09-14: on a ledger page it read as a cream gutter between two boards, not as one frame pushing another). */
+  const SLIDE_S = 0.6;
+  const SLIDE_AXES = { left: { axis: "x", sign: -1 }, right: { axis: "x", sign: 1 },
+                       up: { axis: "y", sign: -1 }, down: { axis: "y", sign: 1 } };   /* the direction is the axis AND the sign: which way the OUTGOING frame is pushed */
+  /* `slide:<left|right|up|down>[:<s>]` exactly as build_scene_timeline_f `_slide_parts` writes it. A form this player
+     cannot read (a timeline compiled before R26-75, or a direction it does not know) is a CUT, never a crash - the
+     compiler is where an authored slide is refused. */
+  const slideOpts = (e) => {
+    const bits = String(e || "").split(":");
+    if (!SLIDE_AXES[bits[1]]) return null;
+    const secs = bits.length > 2 ? parseFloat(bits[2]) : SLIDE_S;
+    return (secs > 0 && isFinite(secs)) ? { dir: bits[1], secs } : null;
+  };
   /* `dip`, `dip:<s>`, `blurzoom`, `blurzoom:<s>`, `suck:<x>,<y>` - the name, and the seconds when the row declares them */
   const exitName = (e) => (typeof e === "string" ? e.split(":")[0] : "");
   const exitSecs = (e, dflt) => {
@@ -5262,8 +5369,16 @@ async function mount(doc) {
     RACE_PERIOD: 1.2,    /* seconds per period (bar-chart-race defaults 2): a beat on the page, not a film */
     RACE_SWAP: 0.7,      /* fraction of a period one row swap takes when the crossing is mid-period, centred on it (operator: "smoother") */
     RACE_SWAP_MIN: 0.4,  /* a crossing near a period's end swaps over at least this much - narrower so it stays near the crossing */
+    RACE_LANE_NEAR: 1.0, /* E91 s2 (R26-79): a crossing pair is passing from a whole ROW apart - the lane opens across that approach. The gap the two rows read on the page, not a window in periods, IS the window: measured, the clothoid path carries a crossing up to 0.23 of a period off the centre the swap solved, so only the geometry holds on both settings */
+    RACE_LANE_FULL: 0.7, /* ... and the lane is fully open while the pair is still this much of a row apart - 56 px, twice a label's height - so the step into the lane is FINISHED before two rows can touch, and the slide itself never crosses another name */
+    RACE_LANE_PAD: 12,   /* px inside the bar the stepped label's left edge and the stepped value's right edge sit: the passing row's own bar is the lane, and its ink is a label's own bar, never another row's */
+    RACE_LANE_HALO: 3,   /* px of field-coloured outline the stepped label and value carry, faded in with the lane: white ink on the bar's own grey needs an edge, and LP_HALO's 7 px - sized for a LINE crossing a label - closes a 24 px bold name into a blob (read on the frame) */
+    RACE_CROSS: "lane",  /* the cure AT a crossing: "lane" (THE DEFAULT, read on the race-swap fixture) or "yield" - the passing row's label and value fading out for the crossing's duration. E91 s2 names both; the lane is kept because it never takes a name off the page */
     RACE_SETTLE: 0.01,   /* within this of a period (in period units) the exact value strings show; between, interpolations */
     RACE_TICKS: 14,      /* tick pool: the coarse set plus the finer set that fades out as the axis glides (never pops) */
+    RACE_PATH: "eased",  /* E91 s1 (R26-78): the DEFAULT path a mark travels BETWEEN two period knots - "eased" is the engine as it has always been (arm A); a page may name "clothoid" (arm B) instead, and the compiler refuses anything else BY NAME */
+    RACE_FIT_VMIN: 1e-6, /* clothoid path: the floor under the value scale the knots are mapped into px with - a race whose every value is 0 still has a track to divide by */
+    RACE_FIT_CHORD: 1e-9,   /* clothoid path: a Catmull-Rom chord shorter than this is degenerate (a knot sitting on its neighbour), and the forward chord gives the tangent instead */
     DECLINE_BUILD: 3.6, DECLINE_IN: 0.15, DECLINE_OUT: 0.08,   /* decline-chart: IN settles, HOLD draws + counts + darkens, OUT locks */
     COMBO_BUILD: 4.5, COMBO_BARS: 0.5, COMBO_LINE: 0.42,        /* data-chart: bars in reading order, then the line at one speed */
     COMBO_LABEL_SHARE: 0.55,   /* [DERIVED, the fourth watch]: a combo prints a bar's value only for the emphasised bar or one at this share of the biggest move */
@@ -5279,6 +5394,7 @@ async function mount(doc) {
   const lpNiceStep = (x) => { const e = Math.pow(10, Math.floor(Math.log10(x))), f = x / e; return e * (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10); };
   const lpTick = (v) => String(Math.round(v * 100) / 100);
   const LP_HALO = "paint-order:stroke;stroke:#25313C;stroke-width:7px;stroke-linejoin:round;";   /* a field-coloured halo: a direct label stays legible where a line crosses it */
+  const LP_ROW_NAME = "font-weight:700;fill:#F2F2F2";   /* a race row's name; the crossing lane adds the halo to it, because in the lane it is drawn over its own bar */
   /* ---- THE MARK MODEL (P48 T1) ------------------------------------------------------------------
      Every builder registers each thing it draws as a KEYED MARK: the ELEMENT it created and the GEOM
      (the numbers that placed it), under a key that is stable across chart states - `b:<i>` for the i-th
@@ -5413,21 +5529,63 @@ async function mount(doc) {
       ticks.push({ line: lpEl("line", "grid", st.chart, { y1: G.TOP - 6, y2: G.TOP + G.H, opacity: 0 }), lab: lpText(st.chart, "lab", 0, G.TOP - 18, "middle", "", { opacity: 0 }) });
     const items = rows.map((_, j) => {   /* a row: the name at the left of the track, the bar, the exact value at its end */
       const g = lpEl("g", "", st.chart);
-      lpText(g, "lab", G.NAME_X, G.PITCH / 2 + 9, "end", String((pg.labels || [])[j] ?? ""), { style: "font-weight:700;fill:#F2F2F2" });
       const bar = lpEl("rect", "bar", g, { x: G.TRACK_X, y: ((G.PITCH - G.BAR_H) / 2).toFixed(1), width: 0, height: G.BAR_H.toFixed(1), rx: 4 });
+      /* the name is drawn AFTER the bar (E91 s2): at rest the two cannot meet - the column ends at 150 and
+         the track starts at 172 - but in the crossing lane the name rides ON its own bar */
+      const lab = lpText(g, "lab", G.NAME_X, G.PITCH / 2 + 9, "end", String((pg.labels || [])[j] ?? ""), { style: LP_ROW_NAME });
       const val = lpText(g, "val", G.TRACK_X, G.PITCH / 2 + 9, "start", "");
-      const rec = { g, bar, val };
+      const rec = { g, bar, val, lab };   /* E91 s2: the name is kept because a crossing moves it out of its lane */
       lpMark(st, "r:" + j, "row", bar, { x: G.TRACK_X, h: G.BAR_H, pitch: G.PITCH, j }, rec);
       return rec;
     });
     const period = lpText(st.chart, "callout", 985, 548, "end", "", { style: "fill:#F2F2F2;font-size:60px", opacity: 0 });   /* below the rows, clear of every bar */
     st.race = { G, periods, rows, T, N, unit, valueAt, ranks, swaps, ticks, items, period };
+    /* E91 s1 (R26-78) - THE PATH SETTING. `eased` (the default, LPX.RACE_PATH) is arm A, the engine as it is;
+       `clothoid` is arm B, ported from the P52 T17 A/B. THE PERIOD CLOCK AND THE KNOTS ARE IDENTICAL IN BOTH
+       (st.buildDur, st.sync and every row's position at every period boundary are untouched) - only the path
+       BETWEEN two knots differs. The compiler is the gate on the word (build_scene_timeline_f.RACE_PATHS);
+       anything else read here is the default. */
+    st.race.path = pg.path === "clothoid" ? "clothoid" : LPX.RACE_PATH;
+    if (st.race.path === "clothoid") st.race.fit = lpRaceFits(G, rows, ranks, T);
     st.buildDur = LPX.RACE_IN + Math.max(0, T - 1) * LPX.RACE_PERIOD;
     /* rank-settled per period, seconds from the scene's open: period 0 when the grow-in lands, period i at u = i,
        where its values and ranks are exact (the parent reads st.sync to cue a caption or a sound on the settle) */
     const T0 = LP.ROLL + LP.SAVOR + LP.FIELD + LPX.RACE_IN;
     st.sync = periods.map((p, i) => ({ period: p, at: +(T0 + i * LPX.RACE_PERIOD).toFixed(3) }));
     st.paint = paintLedgerRace;
+  };
+  /* THE CLOTHOID PATH's fit (E91 s1, arm B of the P52 T17 A/B; kinetics/clothoid.mjs, doc 42 s42.4). A row's
+     path through (value, rank) is fitted as a CHAIN of clothoid segments through the period knots, mapped into
+     the track's own pixels, with G1 tangents from the Catmull-Rom chords - so the mark turns with a curvature
+     that is a straight line in arclength instead of taking a corner at each knot. Baked ONCE from the data,
+     never from the clock, exactly as the ranks are: a cold seek lands where a play does. */
+  const lpRaceFits = (G, rows, ranks, T) => {
+    const VMAX = Math.max(LPX.RACE_FIT_VMIN, ...rows.map((r) => Math.max(...r.map((v) => Math.abs(+v) || 0))));
+    const KX = G.TRACK_W / VMAX, KY = G.PITCH;
+    const knots = rows.map((_, j) => Array.from({ length: T }, (_, i) => ({ x: rows[j][i] * KX, y: ranks[i][j] * KY })));
+    const tangentAt = (K, i) => {
+      const a = K[Math.max(0, i - 1)], b = K[Math.min(K.length - 1, i + 1)];
+      const dx = b.x - a.x, dy = b.y - a.y;
+      if (Math.hypot(dx, dy) > LPX.RACE_FIT_CHORD) return Math.atan2(dy, dx);
+      return Math.atan2(K[Math.min(K.length - 1, i + 1)].y - K[i].y, K[Math.min(K.length - 1, i + 1)].x - K[i].x);
+    };
+    return { VMAX, KX, KY, knots,
+             fits: knots.map((K) => Array.from({ length: Math.max(0, T - 1) }, (_, i) =>
+               clothoidFit(K[i], tangentAt(K, i), K[i + 1], tangentAt(K, i + 1)))) };
+  };
+  /* A ROW'S (value, rank) AT u - the ONE place the two path settings differ, and a pure function of u in both.
+     At every integer u the two agree exactly: `eased` reads its knot, and a clothoid segment's ends ARE the
+     knots it was fitted to. */
+  const lpRacePos = (R, u, j) => {
+    if (R.path !== "clothoid" || !R.fit) return { v: R.valueAt(u, j), r: lpRankPos(R, u, j) };   /* arm A: each coordinate on its own easing, the rank carrying its swap windows */
+    if (R.T < 2) return { v: R.rows[j][0], r: R.ranks[0][j] };
+    const uu = Math.min(Math.max(u, 0), R.T - 1), i = Math.min(Math.floor(uu), R.T - 2), fit = R.fit.fits[j][i];
+    const f = smoothstep(uu - i);   /* THE CLOCK, UNCHANGED: the segment is traversed on arm A's own easing, so only the SHAPE differs */
+    if (!fit || !fit.ok) {   /* a degenerate pair keeps the eased read for that segment, and says so */
+      return { v: R.valueAt(u, j), r: R.ranks[i][j] + (R.ranks[i + 1][j] - R.ranks[i][j]) * f, fallback: true };
+    }
+    const q = clothoidAt(fit, f);
+    return { v: q.x / R.fit.KX, r: q.y / R.fit.KY };
   };
   const lpRankPos = (R, u, j) => {   /* period rank plus the swaps in flight: continuous, exact at every integer u */
     if (R.T < 2) return R.ranks[0][j];
@@ -5440,10 +5598,50 @@ async function mount(doc) {
     }
     return pos;
   };
+  /* THE CROSSING LANE (E91 s2, R26-79). A rank swap puts two rows at ONE row position at the crossing:
+     their names print on a single baseline (the measured "ALBETA") and their values, equal there by
+     definition, print on one another ("136" over "138"). The cure is a lane in the sense an overtaking car
+     takes one - the PASSING row's label and value step INTO ITS OWN BAR while it passes, and step back out
+     when it is clear. It is the axis it has to be: two labels that exchange VERTICAL order must pass
+     through one another whatever share of a row they are shifted by (measured on this fixture - a vertical
+     lane only moved the collision earlier, to t=7.227), and the name column is 150 px wide with no room
+     beside it, while the bar the row is standing on is 500 px of empty ink.
+     WHO passes WHOM is the build's own record (`st.race.swaps` for this period: `up` is the row coming
+     through, `down` the row being passed, which never moves). HOW OPEN the lane is, is the pair's own
+     separation ON THE PAGE this frame - which is why it holds on either path setting (the clothoid path
+     reaches its crossing up to 0.23 of a period from the centre the swap solved). A pure function of u,
+     continuous, and exactly shut at every period boundary, where a pair is a whole row apart. */
+  const lpRaceLane = (R, u, j) => {
+    if (R.T < 2) return 0;
+    const uu = Math.min(Math.max(u, 0), R.T - 1), i = Math.min(Math.floor(uu), R.T - 2);
+    const mine = R.swaps[i].filter((sw) => sw.up === j);   /* only the row coming THROUGH takes a lane */
+    if (!mine.length) return 0;
+    const rj = lpRacePos(R, uu, j).r;
+    let open = 0;
+    for (const sw of mine) {
+      const gap = Math.abs(rj - lpRacePos(R, uu, sw.down).r);
+      open = Math.max(open, smoothstep(clamp01((LPX.RACE_LANE_NEAR - gap) / (LPX.RACE_LANE_NEAR - LPX.RACE_LANE_FULL))));
+    }
+    return open;   /* 0 nothing in flight, 1 fully in the lane */
+  };
+  /* in the lane the text is drawn over its own bar's grey, so it takes a field-coloured edge, faded in with
+     the lane - and nothing at all when the lane is shut */
+  const lpRaceEdge = (lane) => (lane ? "paint-order:stroke;stroke:#25313C;stroke-width:" + LPX.RACE_LANE_HALO
+                                       + "px;stroke-linejoin:round;stroke-opacity:" + lane.toFixed(2) + ";" : "");
+  /* a drawn string's width in the chart's own units - measured from the page, because how far a label has
+     to step to be clear of the column it came from is its own width. A row's NAME never changes, so it is
+     measured once; a value is re-written every frame, so it is measured when the lane asks. */
+  const lpRaceTextW = (el, cache) => {
+    if (cache && el.__lpw > 0) return el.__lpw;
+    const w = el.getComputedTextLength ? el.getComputedTextLength() : String(el.textContent || "").length * 14;
+    if (cache) el.__lpw = w;
+    return w;
+  };
   const paintLedgerRace = (st, c, secs) => {
     const R = st.race, G = R.G, u = Math.max(0, secs - LPX.RACE_IN) / LPX.RACE_PERIOD;
     const grow = expoOut(clamp01(secs / LPX.RACE_IN));
-    const vals = R.items.map((_, j) => R.valueAt(u, j));
+    const pos = R.items.map((_, j) => lpRacePos(R, u, j));   /* E91 s1: the page's path setting - eased (valueAt + lpRankPos) or clothoid */
+    const vals = pos.map((p) => p.v);
     const byV = vals.map((_, j) => j).sort((a, b) => vals[b] - vals[a] || a - b), leader = byV[0];
     const scaleMax = Math.max(vals[leader] * 1.06, 1e-6), step = lpNiceStep(scaleMax / 5);
     /* the axis glides: every tick slides with the scale; when the nice step coarsens (1-2-5), the finer set fades
@@ -5465,12 +5663,22 @@ async function mount(doc) {
     for (const j of [...byV].reverse()) st.chart.appendChild(R.items[j].g);   /* paint order follows value: the overtaker comes forward */
     R.items.forEach((it, j) => {
       const w = vals[j] / scaleMax * G.TRACK_W * grow;
-      it.g.setAttribute("transform", "translate(0 " + (G.TOP + lpRankPos(R, u, j) * G.PITCH).toFixed(2) + ")");
+      it.g.setAttribute("transform", "translate(0 " + (G.TOP + pos[j].r * G.PITCH).toFixed(2) + ")");
       it.bar.setAttribute("width", w.toFixed(2));
       it.bar.setAttribute("class", "bar" + (j === leader ? " emph" : ""));
-      it.val.setAttribute("x", (G.TRACK_X + w + 12).toFixed(1));
-      it.val.setAttribute("opacity", clamp01((grow - 0.85) / 0.15).toFixed(2));
       it.val.textContent = settled ? String((st.vstr[j] || [])[near] ?? lpFmt(vals[j])) : lpFmt(vals[j]);
+      /* E91 s2 (R26-79): the passing row steps into its bar - or, on the other setting, yields. Away from a
+         crossing both terms are 0 and every attribute below is the string it has always been. */
+      const cross = lpRaceLane(R, u, j), yielding = LPX.RACE_CROSS === "yield";
+      const lane = yielding ? 0 : cross, hide = yielding ? cross : 0;
+      const labX = lane ? G.NAME_X + lane * (G.TRACK_X + LPX.RACE_LANE_PAD + lpRaceTextW(it.lab, true) - G.NAME_X) : G.NAME_X;
+      const valX = G.TRACK_X + w + 12 - (lane ? lane * (12 + LPX.RACE_LANE_PAD + lpRaceTextW(it.val, false)) : 0);
+      it.lab.setAttribute("x", labX.toFixed(1));
+      it.lab.setAttribute("style", LP_ROW_NAME + lpRaceEdge(lane));
+      it.val.setAttribute("x", valX.toFixed(1));
+      if (lane || it.val.hasAttribute("style")) it.val.setAttribute("style", lpRaceEdge(lane));
+      if (yielding) it.lab.setAttribute("opacity", (1 - hide).toFixed(2));
+      it.val.setAttribute("opacity", (clamp01((grow - 0.85) / 0.15) * (1 - hide)).toFixed(2));
     });
   };
   /* DECLINE (decline-chart): one metric. The line draws downward from start to end while the value
@@ -10501,6 +10709,12 @@ async function mount(doc) {
     const dipOut = nxt && exitName(nxt.exit) === "dip" ? exitSecs(nxt.exit, DIP_S) : 0;
     const bzIn   = prev && exitName(sc.exit) === "blurzoom" ? exitSecs(sc.exit, BLURZOOM_S) : 0;
     const bzOut  = nxt && exitName(nxt.exit) === "blurzoom" ? exitSecs(nxt.exit, BLURZOOM_S) : 0;
+    /* THE SLIDE (E87 s3 / R26-75) arrives ON THE CUT, like the suck and the melt: `exit` names the transition INTO
+       the scene it sits on, so the whole hand-off runs over the first slideOn.secs of THIS scene and the outgoing
+       world rides along beneath. It is a hand-off, not a world-taking transition - the page it hands to arrives on
+       its axes the way a cut's does (stamp_transition_pages), and M31 reads the boundary as chart to chart. */
+    const slideOn = prev && exitName(sc.exit) === "slide" ? slideOpts(sc.exit) : null;
+    const slideU = slideOn ? minJerk(clamp01((t - sc.span[0]) / slideOn.secs)) : 1;
     /* DISSOLVE (operator, 2026-09-05, on the wipe into the outro card - "what is this madness?"): a row whose exit reads dissolve
        arrives by a plain cross-fade over DISSOLVE_S - no front, no seam, the outgoing world keeps playing underneath */
     const snapIn = prev && sc.world && sc.world.kind === "ledger" && sc.world.page && sc.world.page.enter === "snap";   /* the card becomes the world: the page grows over the outgoing scene, which stays until covered */
@@ -10539,7 +10753,7 @@ async function mount(doc) {
        a row that says `cut` is a cut - one frame, both plates steady, the reference's own most common boundary. Until
        2026-09-08 a `cut` row fell through to the wipe here, which is why two built pages arrived by a wipe nobody declared. */
     const hardCut = prev && exitName(sc.exit) === "cut";
-    const wk = prev && !hardCut && !spiralIn && !snapIn && !throwIn && !suck && !(prev && exitName(sc.exit) === "melt") && !dissolve && !mountIn && !dipIn && !bzIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
+    const wk = prev && !hardCut && !spiralIn && !snapIn && !throwIn && !suck && !(prev && exitName(sc.exit) === "melt") && !dissolve && !mountIn && !dipIn && !bzIn && !slideOn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const seaming = prev && wk > 0 && wk < 1;
     /* THE HARD-EDGE CLIP WIPE (restored 2026-09-01). The remotion-ui
        directional-wipe port (dd9e476, 2026-08-30) replaced this with a
@@ -10603,6 +10817,32 @@ async function mount(doc) {
       wA.style.transform = "rotate(" + (SUCK_TURN * (kin("min_jerk") ? minJerk(su) : su)).toFixed(1) + "deg) scale(" + sk.toFixed(4) + ") " + wA.style.transform;
       wA.style.zIndex = 3;   /* the outgoing world rides above the incoming plate while it collapses */
     } else { if (wA.style.zIndex) wA.style.zIndex = ""; if (wA.style.opacity !== "") wA.style.opacity = ""; }
+    /* THE SLIDE'S PAINT. At u the outgoing world stands at sign * u * span and the incoming at sign * (u - 1) * span,
+       so they abut at every instant and arrive together: one distance, opposite ends. min-jerk on u (the ruling's
+       shape for a world change; `minJerk` is the same law the blur-zoom and the snap ride) and an explicit numeric
+       translate per frame - no wall clock, no rAF state, so a cold seek into the slide lands exactly where a play
+       does. It prepends to each world's own transform, the way the blur-zoom's scale and the suck's spin do, so the
+       Ken Burns move underneath is untouched and the slide is applied last, in stage coordinates. No veil and no
+       seam: under a push both worlds are the picture, and the docks and the caption keep the cut's own law. */
+    if (slideOn && slideU < 1) {
+      const ax = SLIDE_AXES[slideOn.dir];
+      const span = ax.axis === "x" ? STAGE_W : STAGE_H;
+      /* each world clipped to ITS OWN stage rect: the overhang is Ken Burns' room, never part of the picture, and a
+         sliding world that shows it would slide something the stage has never shown. Whole pixels, off the layout
+         box, so the clip lands where the stage's own edge does. */
+      const inX = Math.round(((wA.offsetWidth || STAGE_W) - STAGE_W) / 2), inY = Math.round(((wA.offsetHeight || STAGE_H) - STAGE_H) / 2);
+      const frame = `inset(${inY}px ${inX}px)`;
+      const shift = (el, u) => {
+        /* WHOLE PIXELS. A fractional translate makes Chromium resample the layer, and the outgoing plate's own
+           edges then differ from the untransformed frame before the boundary (measured 2026-09-14: two rows of
+           the E47 band by 13 grey levels at u = 0.005). A push is a translation of the picture, not a resample
+           of it - and a golden is a byte-exact pin. The stage span it rides is whole to begin with. */
+        const px = Math.round(ax.sign * u * span);
+        el.style.transform = (ax.axis === "x" ? `translateX(${px}px) ` : `translateY(${px}px) `) + el.style.transform;
+        el.style.clipPath = frame;
+      };
+      shift(wA, slideU); shift(wB, slideU - 1);
+    } else if (wA.style.clipPath) wA.style.clipPath = "";   /* the slide is over: wA takes no clip again (wB's is the wipe's, rewritten every frame) */
     if (meltOn) paintMelt({ wA, wB, t, t0: sc.span[0], el: lpEl, opts: meltOn,
                             rnd: (k) => lpHash(0x3E17 ^ ((sc.scene_id || "").length * 131), k, 977) });
     else if (wA.__melt) clearMelt(wA);   /* the same reset the suck does above, and only for a world that melted */
@@ -10879,6 +11119,10 @@ async function mount(doc) {
          rendered outro after the last word (the Remotion kit card, 2026-09-05) shows nothing but itself */
       if (pi >= 0 && pi === PG.length - 1 && PG[pi].e != null && t > PG[pi].e + CAP_LAST_HOLD_S) pi = -1;   /* an EMPTY page list (a bare-hold build) left pi = -1 = length - 1 and threw on PG[-1] - the throw at load skipped every later definition (P47 T2) */
       const pg = pi >= 0 ? PG[pi] : null;
+      /* P57 T14 / E90: the page's LIFE - `pop` | `stagger` | `blend` (`cap_life` on the page, `caption_life` on the
+         timeline, the page's own winning). ABSENT is the caption Steel and Paper shipped, to the bit: no build on disk
+         authors one, so every golden and both approved shorts paint exactly what they painted before this slice. */
+      const lifeKind = (pg && stage) ? (pg.cap_life || TL.caption_life || null) : null;
       if (pi !== cap._pi) {
         cap._pi = pi;
         cap.innerHTML = pg ? '<span class="cg">' + pg.t.map((x, j) =>
@@ -10907,7 +11151,27 @@ async function mount(doc) {
           /* stage: each word pops in at its own spoken time (words.json), never at the page boundary.
              The pop is a pure function of t painted inline (see stagePop) so a scrubbed render
              captures mid-pop frames and two renders of one second are identical. */
-          if (fuStarts) {   /* T10 [DERIVED: HyperFrames staggered-fade-up]: this word's own offset into the page's ONE envelope -
+          if (lifeKind) {   /* P57 T14 / E90 ("the pop leads, the stagger's life rides under it"): the caption's LIFE, composed by
+             kinetics/stagger.mjs `lifeAt` - `pop` is the shipped pop one notch stronger (LIFE.POP_LEAD 1.22 against the base's 1.16),
+             `stagger` is P52 T10's envelope alone, `blend` is the pop's scale and tilt riding ON TOP of the stagger's rise and blur.
+             The word keeps its own SPOKEN time in all three (E90 s1's base; the envelope's spread starts are the fade_up register's,
+             and the motion gate reads a life page at its onsets exactly as it reads the pop). What is unchanged around it: the
+             keyword's box sweep, the spoken word's lift and the phrase mode's boil on a landed word. No cursor, no flash, no
+             per-word highlight - the caption-energy lessons - and the HELD page's own life is E49's breath on the strip below. */
+            const f = lifeAt(t, x.s, lifeKind), e = f.e;
+            const hk = x.k ? pow2out(clamp01((t - x.s) / MARK.SWEEP_S)) : 0;                 /* the keyword's box sweeps in when spoken, stays */
+            const tick = Math.floor(t * SP.LIFE_FPS), bseed = Math.round(pg.s * 100) + j * 97, boil = PHRASE && e >= 1;
+            const bx = boil ? (lpHash(bseed, tick, 61) - 0.5) * 2 * MARK.BOIL_PX : 0, by = boil ? (lpHash(bseed, tick, 62) - 0.5) * 2 * MARK.BOIL_PX : 0;
+            const bdeg = boil ? (lpHash(bseed, tick, 63) - 0.5) * 2 * MARK.BOIL_DEG : 0;
+            const sc = f.s * (on && e >= 1 ? MARK.LIFT : 1);
+            ws[j].style.opacity = f.o.toFixed(3);
+            ws[j].style.transform = "translate(" + bx.toFixed(2) + "px," + (f.y + by).toFixed(2) + "px) scale(" + sc.toFixed(4)
+              + ") rotate(calc(var(--tilt, 0deg) * " + f.tilt.toFixed(3) + " + " + bdeg.toFixed(2) + "deg))";
+            ws[j].style.filter = f.b > 0.01 ? "blur(" + f.b.toFixed(2) + "px)" : "";        /* the blur is the WORD span's, never the strip's */
+            ws[j].style.backgroundImage = hk > 0 ? markBox(MARK.RED, 1) : "";
+            ws[j].style.backgroundSize = hk > 0 ? (hk * 100).toFixed(1) + "% 100%" : "";
+            ws[j].classList.toggle("lit", hk > 0.5); }
+          else if (fuStarts) {   /* T10 [DERIVED: HyperFrames staggered-fade-up]: this word's own offset into the page's ONE envelope -
              y 22 -> 0, scale 0.92 -> 1, blur 5 px -> 0 and opacity 0 -> 1 off a single minimum-jerk progress, so the page arrives as a
              wave and no word snaps. What the arrival does NOT touch: the keyword's box sweep, the spoken word's lift and the boil after
              landing are the pop path's, unchanged (the lift is MARK.LIFT in both registers; the boil only where the phrase mode boils). What it drops: the +-2.5deg tilt and the keyword's extra pop - both are punctuation,
@@ -10947,7 +11211,7 @@ async function mount(doc) {
             const sc = (1.16 + (1 - 1.16) * e) * (on && e >= 1 ? 1.06 : 1);
             ws[j].style.transform = "scale(" + sc.toFixed(4) + ") rotate(calc(var(--tilt, 0deg) * " + (1 - e).toFixed(3) + "))"; }
           else { ws[j].style.opacity = ""; ws[j].style.transform = ""; } } }); }
-      cap.style.transform = (pg && !(stage && PHRASE)) ? idleCssFor("caption", undefined, t, Math.round(pg.s * 100), 5) : "";   /* E49: the strip at its idle beneath the words' own pops (phrase mode boils already) */
+      cap.style.transform = (pg && (lifeKind || !(stage && PHRASE))) ? idleCssFor("caption", undefined, t, Math.round(pg.s * 100), 5) : "";   /* E49: the strip at its idle beneath the words' own pops (phrase mode boils already; a LIFE page takes the breath too - E90 s3's "nothing goes truly still" on a HELD caption page, the existing idle kind `breath`, never a new one) */
       cap.style.opacity = pg ? 1 : 0;
     } else {
       let line = null;

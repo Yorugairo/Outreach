@@ -48,6 +48,7 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "ledger-extend", "ledger-keyed",   # P48 T3 / T4b: chart_to extend and the keyed recast - on disk since P48, checked from P55 T6 (decision 7)
             "verdict-stack",     # P55 T6: the inline drawStack mid-pile - four cards on their rail spots, the fifth active large near centre (its burst rides PROOF_FRAMES)
             "test-card",         # P55 T6: the inline checklist branch - every question typed, the answers swept by the marker
+            "slide-mid", "slide-landed",   # P57 T13 / R26-75: the SLIDE (E87 s3) - one chart page pushing the next onto the stage, read mid-push (the two frames abutting on the stage centre line) and at the landing (the outgoing one exactly off)
             "compare-morph"]     # P57 T12 / R26-70b: the `chart_to compare` verb - the quoted metric held as its comparator, its label written beneath (its two moving instants ride PROOF_FRAMES)
 
 

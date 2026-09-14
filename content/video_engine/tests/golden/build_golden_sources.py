@@ -13,6 +13,7 @@ from __future__ import annotations
 import base64
 import io
 import json
+import math
 import struct
 import sys
 import wave
@@ -32,6 +33,8 @@ import ledger_page as LPG  # noqa: E402
 RUNTIME = 30.0
 THREAD_CUT = 15.0   # P50 T15 / HF-16: where the `thread-baseline` golden cuts from its line page to its bars page
 MELT_CUT = 15.0     # P52 T9: where the `melt-page` golden hands its finished page to a plate - and the page MELTS across it
+SLIDE_CUT = 15.0    # P57 T13: where the `slide-*` goldens hand one chart page to the next - and the two SLIDE across it
+SLIDE_S = 0.6       # build_scene_timeline_f.SLIDE_S and the engine's: the length this golden declares none against
 # the frame each surface is judged at - chosen so the thing under test is on screen and mid-motion
 FRAME_T = {
     "ledger-page-mid-build": 6.0,   # field filled, outline drawn, ink and bars building
@@ -82,6 +85,14 @@ FRAME_T["newsreel-strip-above"] = 11.0   # 9:16 THE ALTERNATIVE (`cap_band: "abo
 FRAME_T["compare-morph"] = 14.9   # P57 T12 / R26-70b: the compare HELD - the count landed at 12.0 + 0.72 * 2.4 = 13.73, the
                                   # comparator's label fully written at 14.4, the quoted metric standing beside it at COMPARE.GHOST_A.
                                   # At rest on purpose: the two moving instants are @proof-quoted and @proof-mid on PROOF_FRAMES.
+# P57 T13 / R26-75: THE SLIDE (E87 s3), read at the two instants a push has. The travel is the .world box's own
+# span (inset -5%), so at u = 0.5 the two boxes ABUT at mid-stage - the seam is the stage's own centre line.
+FRAME_T["slide-mid"] = SLIDE_CUT + SLIDE_S / 2    # MID-SLIDE: both worlds on stage, the outgoing chart half off to the
+                                  # left with its seam at the centre, the arriving chart's axes coming in behind it -
+                                  # min-jerk is exactly 0.5 at u = 0.5, so the travel is exactly half the box
+FRAME_T["slide-landed"] = SLIDE_CUT + SLIDE_S     # THE LANDING: u = 1 - the outgoing box's trailing edge is exactly off
+                                  # the stage (a stage-width travel would leave 5% of it showing) and the arriving page
+                                  # stands at its own place, 0.6 s into its axes build
 FRAME_T["verdict-stack"] = 12.5   # mid-pile: cards 1-4 (3.0 / 5.0 / 7.0 / 9.0) receded to their rail spots (each recede is 1.0 s off the next
                                   # item's `at`), card 5 (at 11.0) fully entered (+0.9) and ACTIVE large near centre, card 6 (13.0) not yet in.
                                   # Its @proof-burst instant (clear_at + 0.25) rides render_baseline.PROOF_FRAMES
@@ -1289,6 +1300,166 @@ def compare_morph() -> tuple[dict, dict]:
 
 SURFACES.update({   # P57 T12: the compare verb's paint (species/compare.mjs)
     "compare-morph": compare_morph,
+})
+
+
+# ---- P57 T13 / R26-75: THE SLIDE (E87 s3) -----------------------------------------------------------------
+def slide_pages() -> tuple[dict, dict]:
+    """E87 s3 (the operator, 2026-09-13: *"We should also have a push/slide option ... basically literally pushing out
+    one frame with the next, so that you keep some of that congruency"*) - ONE CHART PUSHES THE NEXT ONTO THE STAGE.
+
+    The same two pages the melt golden hands over between, so the two transitions are read on the same evidence: the
+    line page every other golden is built from takes the whole 15 s to draw itself, and at SLIDE_CUT the bars page of
+    where those lines end pushes it off to the LEFT. `exit` names the transition INTO the scene it sits on (E47), so
+    the slide is scene 2's. Its page arrives on its AXES - the stamp a chart-to-chart boundary gets, and the stamp a
+    slide gets, because a slide hands the world over and never takes it (it is not in WORLD_TAKING_EXITS).
+
+    Both worlds are mounted and both move: the outgoing box travels -u * its own span and the incoming (1 - u) * the
+    same span, so they abut at every instant. Two instants are read - mid-slide (FRAME_T slide-mid, the seam on the
+    stage's centre line) and the landing (slide-landed)."""
+    import json
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", None, "right")
+    page["field"] = "scribble"
+    page["exit"] = "cut"   # LEDGER_EXITS / E40 #5: no retract - the slide is how this chart leaves
+    raw = json.loads(SERIES.read_text(encoding="utf-8"))
+    bars = {"title": "Where the four lines end", "sub": "index at the last point, 100 = Aug '25", "src": raw.get("src", ""), "unit": "",
+            "bars": [{"label": short, "value": round(float(sr["pts"][-1][1]), 1), "color": sr.get("color", "crimson")}
+                     for sr, short in zip(raw["series"], ("Memory", "Chips", "Mega-cap", "S&P 500"))]}
+    page2 = LPG.build_spec(bars, "bars", None, "right")
+    page2["field"] = "scribble"
+    page2["enter"] = "axes"   # what stamp_transition_pages writes on this boundary: chart to chart, never empty cream
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, SLIDE_CUT], "docks": [], "species": []},
+              {"scene_id": "s02", "world": {"kind": "ledger", "page": page2, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "slide:left", "span": [SLIDE_CUT, RUNTIME], "docks": [], "species": []}]
+    return _timeline("Golden: the next chart pushes this one off the stage", scenes, {}, None), _base_uris()
+
+
+SURFACES.update({   # P57 T13: the slide's two instants
+    "slide-mid": slide_pages,
+    "slide-landed": slide_pages,
+})
+
+
+# ---- P57 T15 / R26-78: THE RACE'S TWO PATH SETTINGS (E91 s1) ----------------------------------------------
+# The operator, human gate 5 of P52: *"both Arm A and B look good to me, Arm A is smoother, but Arm B has more
+# dynamism/energy to it. seems like 2 settings to me, not a discard situation."* The PAIR is the same race page
+# at the same instant under the two settings, so the only thing a diff between them can show is the path a mark
+# takes BETWEEN two period knots - the clock, the knots, the ranks and every label are identical in both.
+#
+# The data are the A/B's own five synthetic rows (`tokyo-tea-break/build-short-t17/build_race_arms.py`), which is
+# the evidence E91 was ruled on. Synthetic, and said to be synthetic on the page: this surface measures a MOTION
+# LAW, and a figure about the world has no business in a test rig (the research gate - UNSOURCED never ships).
+RACE_PERIODS = [2019, 2020, 2021, 2022, 2023, 2024, 2025]
+RACE_ROWS = [
+    ("ALPHA", [100, 118, 131, 140, 152, 168, 181]),
+    ("BETA", [92, 108, 126, 148, 171, 190, 212]),      # passes ALPHA and CHI mid-run
+    ("CHI", [118, 122, 125, 129, 133, 138, 142]),      # opens as the leader, is passed twice
+    ("DELTA", [64, 79, 96, 118, 142, 149, 155]),
+    ("EPS", [51, 57, 66, 78, 86, 95, 103]),
+]
+RACE_LEAD = 3.9        # LP.ROLL 0.7 + LP.SAVOR 0.8 + LP.FIELD 2.4: the page's lead before its build clock starts
+RACE_IN = 0.6          # LPX.RACE_IN: the grow-in into period 0, so the bars are full height at every instant below
+RACE_PERIOD_S = 1.2    # LPX.RACE_PERIOD: one period, the same in both settings by construction
+RACE_U = 0.5           # MID-PERIOD in the FIRST segment (2019 -> 2020), where the two paths differ most and NO
+                       # rank swap is in flight in either setting - so the pair reads the PATH and nothing else
+                       # (measured: the clothoid carries ALPHA 4.9 px and BETA 4.1 px off their lanes and CHI
+                       # 2.4 px the other way, with every bar's width off by up to 0.9 px; at u = 0 and u = 1 the
+                       # two settings agree to the last bit, because a clothoid segment's ends ARE its knots)
+
+
+def race_t(u: float) -> float:
+    """Scene seconds at period fraction `u` - the same clock in both settings (E91 s1)."""
+    return round(RACE_LEAD + RACE_IN + u * RACE_PERIOD_S, 3)
+
+
+FRAME_T["race-path-eased"] = race_t(RACE_U)
+FRAME_T["race-path-clothoid"] = race_t(RACE_U)
+
+
+def race_series() -> dict:
+    return {"title": "Five rows, seven periods",
+            "sub": "a synthetic race - the motion law under test, not a figure about the world",
+            "src": "Synthetic series for the P57 T15 race-path pair (E91 s1); not a claim",
+            "periods": list(RACE_PERIODS),
+            "series": [{"name": name, "values": list(values)} for name, values in RACE_ROWS]}
+
+
+def race_page(path: str) -> dict:
+    """The race page with its PATH setting named. `eased` is the engine's default written out loud; the compiler's
+    own grammar for the key is `ledger:<series>:race;path=<setting>` (build_scene_timeline_f.RACE_PATHS)."""
+    page = LPG.build_spec(race_series(), "race", None, "right")
+    page["field"] = "scribble"
+    page["path"] = path
+    return page
+
+
+def race_path_surface(path: str) -> tuple[dict, dict]:
+    """One arm of the pair. No captions and no Ken Burns: the only thing that moves on this page is the race."""
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": race_page(path), "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
+    tl = _timeline(f"Golden: the race on its {path} path", scenes, {}, None)
+    tl["captions"], tl["caption_pages"] = [], []
+    return tl, _base_uris()
+
+
+def race_path_eased() -> tuple[dict, dict]:
+    return race_path_surface("eased")
+
+
+def race_path_clothoid() -> tuple[dict, dict]:
+    return race_path_surface("clothoid")
+
+
+SURFACES.update({   # P57 T15: the two settings, one instant, one page
+    "race-path-eased": race_path_eased,
+    "race-path-clothoid": race_path_clothoid,
+})
+
+
+# ---- P57 T16 / R26-79: THE RANK SWAP (E91 s2) --------------------------------------------------------------
+# E91 s2: *"whichever setting, rows pass each other cleanly: at a rank swap two labels or two values never
+# print on top of each other"*. The failure was measured on these very rows - arm B at 7.5 s printed BETA and
+# ALPHA in one row ("ALBETA") with "136" over "138" - because at the crossing the two rows ARE at the same row
+# position, so their names sit on one baseline and their values, equal there by definition, print on one
+# another. This surface is the SAME five rows at that instant, on the DEFAULT path (the setting that ships);
+# test_race_swap.py reads the clothoid arm at the same instant through the player.
+
+
+def _inv_smooth(s: float) -> float:
+    """smoothstep's inverse, closed form - the engine's own `lpInvSmooth`."""
+    return 0.5 - math.sin(math.asin(1 - 2 * min(max(s, 0.0), 1.0)) / 3)
+
+
+def race_crossing(a: str, b: str) -> float:
+    """u (in period units) where rows `a` and `b` cross, solved exactly as `buildLedgerRace` solves it: the
+    segment whose ends disagree about the order, then the eased difference's own root. The engine centres
+    that pair's swap window here, so this is the instant the two rows are on top of each other."""
+    rows = dict(RACE_ROWS)
+    A, B = rows[a], rows[b]
+    for i in range(len(RACE_PERIODS) - 1):
+        if (A[i] > B[i]) == (A[i + 1] > B[i + 1]):
+            continue
+        den = (A[i + 1] - A[i]) - (B[i + 1] - B[i])
+        return i + (_inv_smooth((B[i] - A[i]) / den) if den else 0.0)
+    raise AssertionError(f"{a} and {b} never cross in this fixture")
+
+
+RACE_SWAP_PAIR = ("ALPHA", "BETA")     # the pair the operator's still caught: BETA takes second place off ALPHA
+RACE_SWAP_U = race_crossing(*RACE_SWAP_PAIR)   # 2.4225 periods: mid-segment 2021 -> 2022, the crossing itself
+
+FRAME_T["race-swap"] = race_t(RACE_SWAP_U)     # 7.407 s - and the gate's own "the chart's landing" instant is 7.40
+
+
+def race_swap() -> tuple[dict, dict]:
+    """The race at the crossing of its two middle rows. The page is the path pair's page and the clock is
+    the path pair's clock: only the instant differs, so a diff against `race-path-eased` is the swap."""
+    return race_path_surface("eased")
+
+
+SURFACES.update({   # P57 T16: the crossing itself - two rows, two names, two numbers, none on another
+    "race-swap": race_swap,
 })
 
 

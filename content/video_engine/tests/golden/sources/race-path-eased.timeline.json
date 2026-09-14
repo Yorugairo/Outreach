@@ -1,0 +1,173 @@
+{
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [],
+ "captions": [],
+ "episode_id": "golden",
+ "evidence": {},
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 30.0,
+ "scenes": [
+  {
+   "docks": [],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    30.0
+   ],
+   "species": [],
+   "world": {
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "kind": "ledger",
+    "page": {
+     "badges": [],
+     "builder": "race",
+     "colors": [
+      null,
+      null,
+      null,
+      null,
+      null
+     ],
+     "emphasize": null,
+     "field": "scribble",
+     "judge": [],
+     "labels": [
+      "ALPHA",
+      "BETA",
+      "CHI",
+      "DELTA",
+      "EPS"
+     ],
+     "path": "eased",
+     "periods": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+     ],
+     "quiet_zone": "right",
+     "schema_version": "ledger_page.v1",
+     "source": "Synthetic series for the P57 T15 race-path pair (E91 s1); not a claim",
+     "sub": "a synthetic race - the motion law under test, not a figure about the world",
+     "surface": "page",
+     "title": "Five rows, seven periods",
+     "unit": "",
+     "value_strings": [
+      [
+       "100",
+       "118",
+       "131",
+       "140",
+       "152",
+       "168",
+       "181"
+      ],
+      [
+       "92",
+       "108",
+       "126",
+       "148",
+       "171",
+       "190",
+       "212"
+      ],
+      [
+       "118",
+       "122",
+       "125",
+       "129",
+       "133",
+       "138",
+       "142"
+      ],
+      [
+       "64",
+       "79",
+       "96",
+       "118",
+       "142",
+       "149",
+       "155"
+      ],
+      [
+       "51",
+       "57",
+       "66",
+       "78",
+       "86",
+       "95",
+       "103"
+      ]
+     ],
+     "values": [
+      [
+       100.0,
+       118.0,
+       131.0,
+       140.0,
+       152.0,
+       168.0,
+       181.0
+      ],
+      [
+       92.0,
+       108.0,
+       126.0,
+       148.0,
+       171.0,
+       190.0,
+       212.0
+      ],
+      [
+       118.0,
+       122.0,
+       125.0,
+       129.0,
+       133.0,
+       138.0,
+       142.0
+      ],
+      [
+       64.0,
+       79.0,
+       96.0,
+       118.0,
+       142.0,
+       149.0,
+       155.0
+      ],
+      [
+       51.0,
+       57.0,
+       66.0,
+       78.0,
+       86.0,
+       95.0,
+       103.0
+      ]
+     ],
+     "variant": "race"
+    }
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: the race on its eased path"
+}

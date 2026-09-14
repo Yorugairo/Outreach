@@ -479,12 +479,32 @@
           "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "path",
+          "means": "The row's `;path=eased|clothoid` names which way a mark travels between two period knots. Both ship (E91 s1); the knots and the period clock are identical in either.",
+          "source_set": "PLATE_OPTS"
+        },
+        {
+          "token": "eased",
+          "means": "path=eased, THE DEFAULT: the engine as it is - the value smoothstepped, the rank sliding through its swap window. The operator: smoother.",
+          "source_set": null
+        },
+        {
+          "token": "clothoid",
+          "means": "path=clothoid: the same knots on the same clock fitted as clothoid segments (kinetics/clothoid.mjs) - the mark turns where the eased path corners. The operator: more energy.",
+          "source_set": null
+        }
+      ],
       "dials": null,
       "lives": {
         "form": "inline",
         "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "paintLedgerRace"
+        "symbol": "paintLedgerRace",
+        "also": [
+          "lpRacePos",
+          "lpRaceFits"
+        ]
       },
       "doctrine": [
         "29 s9.26",
