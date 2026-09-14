@@ -362,6 +362,95 @@ def test_a_melt_may_name_the_plane_it_happens_at_and_is_refused_by_name_outside_
         assert words in str(exc.value), (bad, str(exc.value))
 
 
+def _melt_pair(exit_id: str, prev_page: dict | None, prev_world: dict | None = None) -> list[dict]:
+    prev = {"scene_id": "s01", "world": prev_world or {"kind": B.SPECIES_LEDGER, "page": prev_page}, "exit": "cut"}
+    nxt = {"scene_id": "s02", "world": {"kind": B.SPECIES_LEDGER, "page": {"builder": "bars"}}, "exit": exit_id}
+    return [prev, nxt]
+
+
+def test_a_melt_at_a_depth_is_refused_on_a_page_that_already_took_the_camera():
+    """P58 T6 / R26-132 (1): a page authoring `;depth=` takes the camera onto its own plane (the player writes
+    `data-world-pose`), so camDepthSwap has no flat camera to swap and `melt:weight:depth=1.15` would paint the flat
+    melt and say nothing. The compiler refuses the pair BY NAME at the boundary, as it refuses `throw=depth` + `depth=`;
+    on a flat page (no depth, or depth=1 - the flat plate) the same exit still compiles."""
+    with pytest.raises(ValueError) as exc:
+        B.stamp_transition_pages(_melt_pair("melt:weight:depth=1.15", {"builder": "line", "depth": 1.4}))
+    assert ("exit 'melt:weight:depth=1.15': a melt at a depth on a page that already stands at depth=1.4 - the page took "
+            "the camera onto its own plane, so the ball would melt flat; drop one") in str(exc.value), str(exc.value)
+    for flat in ({"builder": "line"}, {"builder": "line", "depth": 1.0}):
+        B.stamp_transition_pages(_melt_pair("melt:weight:depth=1.15", dict(flat)))   # compiles
+    B.stamp_transition_pages(_melt_pair("melt:weight", {"builder": "line", "depth": 1.4}))   # a flat ball on a depth page is the melt that shipped
+
+
+def test_a_melt_cannot_leave_a_layered_plate_world_at_all():
+    """The layered-world half of R26-132 (1): `paintMelt` needs the page's `.lp-page`, and the compiler already refuses
+    a melt whose outgoing world is not a ledger page - so a plate that ships in planes never reaches the depth pair."""
+    layered = {"kind": "plate", "asset_id": "plate-x", "layers": [{"key": "ly:plate-x:mid", "k": 1.15, "role": "mid"}]}
+    with pytest.raises(ValueError) as exc:
+        B.stamp_transition_pages(_melt_pair("melt:weight:depth=1.15", None, layered))
+    assert "the outgoing world is not a ledger page" in str(exc.value)
+
+
+def test_a_slide_may_name_the_two_planes_it_moves_through_and_is_refused_by_name_outside_them():
+    """P58 T6 (c) / E98 s4: `slide:<dir>[:<s>]:depth=<k_out>,<k_in>` - the dock's and the melt's one depth vocabulary
+    and range, TWO numbers (one plane per frame), last. Absent is the flat slide; the engine's SLIDE.DEPTH_* are the
+    twins of DOCK_DEPTH's range."""
+    assert B.parse_exit("slide:left:depth=0.85,1.15") == ("slide:left:depth=0.85,1.15", None)
+    assert B.parse_exit("slide:up:0.9:depth=1,1.4") == ("slide:up:0.9:depth=1,1.4", 0.9)
+    assert B.slide_depth("slide:left:depth=0.85,1.15") == (0.85, 1.15)
+    assert B.slide_depth("slide:left") is None and B.slide_depth("melt:depth=1.1") is None
+    assert B.slide_direction("slide:right:depth=0,4") == "right"
+    engine = RB.ENGINE.read_text(encoding="utf-8")
+    for key, v in (("DEPTH_MIN", 0), ("DEPTH_MAX", 4), ("DEPTH_FLAT", 1)):
+        assert f"    {key}: {v}," in engine.split("const SLIDE = Object.freeze({", 1)[1].split("});", 1)[0], key
+    refusals = {"slide:left:depth=x,1": "depth 'x' is not a number - depth=<k>, the share of the camera's move the outgoing frame takes",
+                "slide:left:depth=1,9": "depth 9 is outside 0..4",
+                "slide:left:depth=1.15": "a slide names TWO depths - depth=<k_out>,<k_in>",
+                "slide:left:depth=1,1,1": "a slide names TWO depths",
+                "slide:left:depth=1,1:0.6": "depth= comes last and once"}
+    for bad, words in refusals.items():
+        with pytest.raises(ValueError) as exc:
+            B.parse_exit(bad)
+        assert words in str(exc.value), (bad, str(exc.value))
+
+
+def test_a_slide_at_a_depth_is_refused_beside_a_page_or_plate_that_already_took_the_camera():
+    """P58 T6 (c): a page at a depth and a layered plate both carry the camera on their own planes, so camDepthSwap has
+    nothing to swap and that frame would slide flat in silence - refused by name at the boundary, either side."""
+    exit_id = "slide:left:depth=0.85,1.15"
+    with pytest.raises(ValueError) as exc:
+        B.stamp_transition_pages(_melt_pair(exit_id, {"builder": "line", "depth": 1.4}))
+    assert ("a slide at a depth on the outgoing page that already stands at depth=1.4 - the page took the camera onto "
+            "its own plane, so that frame would slide flat; drop one") in str(exc.value), str(exc.value)
+    layered = {"kind": "plate", "asset_id": "plate-x", "layers": [{"key": "ly:plate-x:mid", "k": 1.15, "role": "mid"}]}
+    pair = _melt_pair(exit_id, None, None)
+    pair[1]["world"] = layered
+    with pytest.raises(ValueError) as exc:
+        B.stamp_transition_pages(pair)
+    assert "a slide at a depth on the incoming layered plate - the plate took the camera onto its own planes" in str(exc.value)
+    B.stamp_transition_pages(_melt_pair(exit_id, {"builder": "line"}))                       # flat pages: compiles
+    B.stamp_transition_pages(_melt_pair("slide:left", {"builder": "line", "depth": 1.4}))   # a flat slide off a depth page is today's
+
+
+@needs_chromium
+def test_a_slide_through_the_depth_lands_on_the_flat_slides_own_frame():
+    """The u = 1 identity: the landing of `slide:left:depth=0.85,1.15` is the landing of `slide:left`, pixel for pixel -
+    under the SAME landing-tied focus zoom, so the camera is moving and the depth is not a no-op on the way there."""
+    t = BG.SLIDE_CUT + BG.SLIDE_S
+    frames = []
+    for exit_id in (None, "slide:left"):
+        tl, uris = BG.slide_depth(exit_id)
+        frames.append(RB.rgb_bytes(_frame_as(tl, uris, t, str(tl.get("aspect") or "16:9")))[1])
+    assert frames[0] == frames[1], "the slide through the depth does not land on the flat slide's frame"
+
+
+def _frame_as(tl: dict, uris: dict, t: float, aspect: str) -> bytes:
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / "slide-depth.html"
+        html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
+        return RB.render_frame(html, t, aspect)
+
+
 def test_the_mechanical_default_is_never_a_melt():
     """A melt is AUTHORED or it does not happen (E47 as corrected 2026-09-12): it takes the whole world for 1.6 s
     and no rule may reach for it on its own. `scene_exit`'s table is the dip, the cut, and what the row says."""

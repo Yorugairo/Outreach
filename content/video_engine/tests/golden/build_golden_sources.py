@@ -2149,6 +2149,62 @@ FRAME_T["melt-depth"] = 17.34   # THE ENDING: the window is MELT_CUT + MELT.S + 
                                 # throw, with the eye inside its hold (14.0 + 4.0/1.8 = 16.22) - a dead-still pin
 
 
+# ---- P58 T6 (c): THE SLIDE THROUGH THE DEPTH -----------------------------------------------------
+# E98 s4: *"the docks, the ball and the slide move THROUGH the depth"*. The two pages are `slide-mid`'s own, and the
+# two things added are `melt-depth`'s: a card that lands on the outgoing page and the one focus zoom tied to that
+# landing (E51/E59 - under a LOCKED camera a depth has nothing to multiply, and nothing here was added to make the
+# parallax visible, E49). The exit then names the two planes: `slide:left:depth=0.85,1.15` - the outgoing board
+# recedes to the far side of the plate as it leaves, the incoming one arrives from in front of it.
+SLIDE_DEPTH_K = (0.85, 1.15)
+
+
+def slide_depth(exit_id: str | None = None) -> tuple[dict, dict]:
+    """P58 T6 (c) - THE SLIDE THROUGH THE DEPTH: `slide:left:depth=0.85,1.15`, and nothing else.
+
+    `@proof-mid` (SLIDE_CUT + SLIDE_S / 2) is the seam on the centre line with the eye moving: the outgoing board at
+    0.925 of the move, the incoming at 1.075. The base frame is the LANDING (u = 1), which is the flat slide's own
+    landing bit for bit - `exit_id` lets the test build the same surface with the flat `slide:left` to prove it."""
+    import json as _json
+    import build_scene_timeline_f as BST
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", None, "right")
+    page["field"] = "scribble"
+    page["exit"] = "cut"   # LEDGER_EXITS / E40 #5: no retract - the slide is how this chart leaves
+    raw = _json.loads(SERIES.read_text(encoding="utf-8"))
+    bars = {"title": "Where the four lines end", "sub": "index at the last point, 100 = Aug '25", "src": raw.get("src", ""), "unit": "",
+            "bars": [{"label": short, "value": round(float(sr["pts"][-1][1]), 1), "color": sr.get("color", "crimson")}
+                     for sr, short in zip(raw["series"], ("Memory", "Chips", "Mega-cap", "S&P 500"))]}
+    page2 = LPG.build_spec(bars, "bars", None, "right")
+    page2["field"] = "scribble"
+    page2["enter"] = "axes"   # what stamp_transition_pages writes on this boundary
+    P = MELT_DEPTH_PLACE
+    species = [{"kind": "focus_zoom", "at": MELT_DEPTH_AT, "dur": MELT_DEPTH_DUR,
+                "target": {"kind": "region", "x0": P["x"] / 1920, "y0": P["y"] / 1080,
+                           "x1": (P["x"] + P["w"]) / 1920, "y1": (P["y"] + P["h"]) / 1080}}]
+    dock = BST.dock_entry("ev-slide-card", 0, MELT_DEPTH_CARD, SLIDE_CUT, 1, BST.DOCK_KIND_IMAGE, P, "land")
+    ev = {"ev-slide-card": {"title": "The card the eye goes to", "source": "P58 T6", "species": "deck",
+                            "document": {"path": "golden", "sha256": "0" * 64}, "badges": _badges()[:1]}}
+    if exit_id is None:
+        exit_id = "slide:left:depth=" + ",".join(f"{k:g}" for k in SLIDE_DEPTH_K)
+        assert BST.slide_depth(exit_id) == SLIDE_DEPTH_K, exit_id   # the COMPILER's own grammar
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, SLIDE_CUT], "docks": [dock], "species": list(species)},
+              {"scene_id": "s02", "world": {"kind": "ledger", "page": page2, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": exit_id, "span": [SLIDE_CUT, RUNTIME], "docks": [], "species": list(species)}]
+    BST.stamp_transition_pages(scenes)   # the boundary refusals a build runs (a depth page / a layered plate)
+    uris = _base_uris()
+    uris["ev-slide-card"] = uri("image/png", png_solid(600, 375, (23, 105, 194)))
+    tl = _timeline("Golden: the next chart pushes this one off, through the depth", scenes, ev, None)
+    tl["kinetics"] = {"camera": True}   # E59's own module drives the move (camNow), as on melt-depth
+    return tl, uris
+
+
+SURFACES.update({   # P58 T6 (c): the slide whose two boards move through the depth
+    "slide-depth": slide_depth,
+})
+FRAME_T["slide-depth"] = SLIDE_CUT + SLIDE_S   # THE LANDING (u = 1): the flat slide's own landing, bit for bit
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     SOURCES.mkdir(parents=True, exist_ok=True)

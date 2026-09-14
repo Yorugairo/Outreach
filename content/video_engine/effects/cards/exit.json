@@ -510,7 +510,7 @@
       "when": "A HAND-OFF, not a world-taking transition: when the next world should read as the same picture carried on - chart to chart on the same board - so the two worlds stay spatially continuous.",
       "when_source": "docs/portable/OPERATOR-RULINGS.md:2641",
       "author": {
-        "key": "shot row 6th element 'slide:<left|right|up|down>' or 'slide:<dir>:<s>' (validator: parse_exit (via scene_exit); the direction is never defaulted and `push` is refused by name)",
+        "key": "shot row 6th element 'slide:<left|right|up|down>' or 'slide:<dir>:<s>', optionally ending ':depth=<k_out>,<k_in>' (validator: parse_exit (via scene_exit); the direction is never defaulted and `push` is refused by name; a depth beside a depth page or a layered plate: stamp_transition_pages/slide_depth_world_error)",
         "example": "'slide:left'",
         "example_source": null,
         "check": "exit"
@@ -549,6 +549,11 @@
       ],
       "options": [
         {
+          "token": "depth",
+          "means": "The slide through the depth: slide:<dir>[:<s>]:depth=<k_out>,<k_in> - the outgoing world goes 1 -> k_out as it leaves, the incoming k_in -> 1 as it lands (camDepthSwap).",
+          "source_set": null
+        },
+        {
           "token": "slide",
           "means": "The slide's own length: the slide runs over the seconds its SECOND suffix declares (after the direction) instead of its default dial.",
           "source_set": "TIMED_EXITS"
@@ -583,7 +588,8 @@
           "slideU",
           "slideOpts",
           "SLIDE_S",
-          "SLIDE_AXES"
+          "SLIDE_AXES",
+          "SLIDE"
         ],
         "note": "the render loop's boundary block - THE SLIDE (slideOn/slideU beside dipIn/bzIn) and its paint beside the suck's; the compiler half is _slide_parts / SLIDE_DIRECTIONS / SLIDE_S, read by parse_exit"
       },

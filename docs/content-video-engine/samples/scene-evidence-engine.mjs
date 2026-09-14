@@ -3968,11 +3968,27 @@ async function mount(doc) {
   /* `slide:<left|right|up|down>[:<s>]` exactly as build_scene_timeline_f `_slide_parts` writes it. A form this player
      cannot read (a timeline compiled before R26-75, or a direction it does not know) is a CUT, never a crash - the
      compiler is where an authored slide is refused. */
+  /* P58 T6 (c) / E98 s4: THE SLIDE THROUGH THE DEPTH (`slide:<dir>[:<s>]:depth=<k_out>,<k_in>`) - the camera's own
+     PARALLAX range, the same three numbers as MELT.DEPTH_* and build_scene_timeline_f.DOCK_DEPTH (one dial written
+     again, as SLIDE_S and SLIDE_S are; test_transitions_e47 pins the pair). */
+  const SLIDE = Object.freeze({
+    DEPTH_MIN: 0,     /* pinned to the frame: the world takes none of the camera's move */
+    DEPTH_MAX: 4,     /* ... and the camera's own ceiling */
+    DEPTH_FLAT: 1,    /* the flat plate - where each frame is while it IS the whole picture (u = 0 out, u = 1 in) */
+  });
+  const SLIDE_DEPTH = "depth=";   /* build_scene_timeline_f.DEPTH_SUFFIX */
   const slideOpts = (e) => {
     const bits = String(e || "").split(":");
     if (!SLIDE_AXES[bits[1]]) return null;
+    let depth = null;
+    if (bits.length > 2 && bits[bits.length - 1].indexOf(SLIDE_DEPTH) === 0) {
+      const ks = bits.pop().slice(SLIDE_DEPTH.length).split(",").map(Number);
+      if (ks.length !== 2 || !ks.every((k) => Number.isFinite(k) && k >= SLIDE.DEPTH_MIN && k <= SLIDE.DEPTH_MAX)) return null;
+      depth = ks;
+    }
     const secs = bits.length > 2 ? parseFloat(bits[2]) : SLIDE_S;
-    return (secs > 0 && isFinite(secs)) ? { dir: bits[1], secs } : null;
+    if (!(secs > 0 && isFinite(secs))) return null;
+    return depth ? { dir: bits[1], secs, depth } : { dir: bits[1], secs };
   };
   /* KINETICS:BEGIN transitions */
   /* kinetics/transitions.mjs - THE BOUNDARY CLOCK, AND THE DIP THAT RIDES IT (P57 T23 / R26-100; ruling E47 s1,
@@ -12908,6 +12924,18 @@ async function mount(doc) {
         el.style.transform = (ax.axis === "x" ? `translateX(${px}px) ` : `translateY(${px}px) `) + el.style.transform;
         el.style.clipPath = frame;
       };
+      if (slideOn.depth) {
+        /* P58 T6 (c): THROUGH THE DEPTH. Each frame is on the flat plate while it IS the picture and at its declared
+           plane while it is off - the outgoing one goes 1 -> k_out as it leaves, the incoming one k_in -> 1 as it
+           lands - so the cut frame and the landing are the flat slide's own, and in between the two boards are read
+           by the one camera at two planes (camDepthSwap: the melt's swap, undefined under a locked eye). The swap
+           replaces only the camera term; the blur-zoom's scale, if one is running on wB, is put back in front. */
+        const kAt = (k0, k1, w) => { const k = k0 + (k1 - k0) * w; return Math.abs(k - SLIDE.DEPTH_FLAT) < 1e-6 ? SLIDE.DEPTH_FLAT : k; };
+        const swA = camDepthSwap(wA, prev, t, kAt(SLIDE.DEPTH_FLAT, slideOn.depth[0], slideU));
+        const swB = camDepthSwap(wB, sc, t, kAt(slideOn.depth[1], SLIDE.DEPTH_FLAT, slideU));
+        if (swA !== undefined) wA.style.transform = swA;
+        if (swB !== undefined) wB.style.transform = (bzScale !== 1 ? `scale(${bzScale.toFixed(4)}) ` : "") + swB;
+      }
       shift(wA, slideU); shift(wB, slideU - 1);
     } else if (wA.style.clipPath) wA.style.clipPath = "";   /* the slide is over: wA takes no clip again (wB's is the wipe's, rewritten every frame) */
     if (meltOn) paintMelt({ wA, wB, t, t0: sc.span[0], el: lpEl, opts: meltOn,

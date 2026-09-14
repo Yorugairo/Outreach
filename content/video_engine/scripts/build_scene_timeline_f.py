@@ -1503,7 +1503,7 @@ def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str, str | Non
 
 MELT_ENDINGS = ("throw", "splash:chart", "splash:plate")   # E88 / R26-76: the three authored endings - species/melt.mjs MELT_ENDINGS
 MELT_MATERIALS = ("metal", "ink", "paper", "liquid")       # R26-118 / E88 s7: what `melt:weight:<material>` may name - species/melt.mjs MELT_MATERIALS
-DEPTH_SUFFIX = "depth="   # P58 T6 (b) / E98 s4: the plane a MECHANISM happens at, as an exit suffix - `melt:...:depth=<k>` today; species/melt.mjs reads the same string on the player's side, and the slide's own depth is NOT built (P58 T6 (c) is not in this slice)
+DEPTH_SUFFIX = "depth="   # P58 T6 (b) / E98 s4: the plane a MECHANISM happens at, as an exit suffix - `melt:...:depth=<k>` and `slide:<dir>[:<s>]:depth=<k_out>,<k_in>` (P58 T6 (c)); species/melt.mjs and the engine's slideOpts read the same string on the player's side
 
 
 def _is_number(bit: str) -> bool:
@@ -1601,6 +1601,25 @@ def melt_depth(exit_id: str | None) -> float | None:
     return _melt_parts(str(exit_id))[2]
 
 
+def page_camera_k(page: dict | None) -> float:
+    """The depth at which a ledger page took the camera onto its own plane, or 0 for a flat page - the player's
+    `pageDepthOf` exactly (a page at depth 1 IS the flat page, so it keeps the camera on its element)."""
+    try:
+        k = float((page or {}).get("depth") or 0)
+    except (TypeError, ValueError):
+        return 0.0
+    return k if k > 0 and k != 1 else 0.0
+
+
+def melt_depth_page_error(exit_id: str | None, page: dict | None) -> str | None:
+    """P58 T6 / R26-132 (1): does a melt's `depth=` meet a page that already stands at a depth? The message, or None."""
+    k_page, k_ball = page_camera_k(page), melt_depth(exit_id)
+    if k_ball is None or not k_page:
+        return None
+    return (f"exit {exit_id!r}: a melt at a depth on a page that already stands at depth={k_page:g} - the page took the "
+            "camera onto its own plane, so the ball would melt flat; drop one")
+
+
 def melt_ending(exit_id: str | None) -> str | None:
     """The authored ending of a melt exit (``throw`` | ``splash:chart`` | ``splash:plate``), or None for any other exit."""
     if not exit_id or str(exit_id).split(":")[0] != "melt":
@@ -1613,16 +1632,34 @@ def _melt_exit(exit_id: str) -> float | None:
     return _melt_parts(exit_id)[1]
 
 
-def _slide_parts(exit_id: str) -> tuple[str, float | None]:
+def _slide_depths(exit_id: str, raw: str) -> tuple[float, float]:
+    """``depth=<k_out>,<k_in>`` on a slide -> the two planes (P58 T6 (c)). TWO, always: the plane the outgoing frame
+    leaves at and the plane the incoming frame arrives from - one number would pick the other frame's plane silently."""
+    ks = raw.split(",")
+    if len(ks) != 2:
+        raise ValueError(f"exit {exit_id!r}: a slide names TWO depths - depth=<k_out>,<k_in>, the plane the outgoing "
+                         f"frame leaves at and the plane the incoming frame arrives from; {raw!r} names "
+                         f"{'one' if len(ks) == 1 else len(ks)}")
+    where = f"exit {exit_id!r}"
+    return depth_k(ks[0].strip(), where, "outgoing frame"), depth_k(ks[1].strip(), where, "incoming frame")
+
+
+def _slide_parts(exit_id: str) -> tuple[str, float | None, tuple[float, float] | None]:
     """A slide's suffixes (E87 s3, R26-75): the DIRECTION first - `left`, `right`, `up` or `down`, which way the
     incoming frame pushes the outgoing one off - and then, optionally, its LENGTH in seconds.
+
+    P58 T6 (c) / E98 s4 adds ``depth=<k_out>,<k_in>`` after them - the slide THROUGH the depth: the outgoing frame
+    goes from the flat plate to the camera read at k_out as it leaves, and the incoming one from k_in to the flat
+    plate as it lands, so both ends of the slide are the frames a flat slide paints. The dock's and the melt's own
+    vocabulary and range (`depth_k`), and absent is the flat slide every row on the record already is.
 
     The direction is never defaulted: the whole point is the axis and the sign the scene chose, and a silent default
     would paint a hand-off nobody authored. `push` is refused by name: it is OUR camera push-in (E87 s3, "Named
     `slide` in our grammar, because `push` is already the camera push-in"), never a direction.
 
     The player's `slideOpts` (scene-evidence-engine.mjs, THE SLIDE) reads exactly this grammar on its side; the two
-    have to agree, and test_transition_stamps pins the pair. Returns (direction, the declared length or None for SLIDE_S)."""
+    have to agree, and test_transition_stamps pins the pair. Returns (direction, the declared length or None for
+    SLIDE_S, the two declared depths or None for the flat slide)."""
     bits = str(exit_id).split(":")[1:]
     direction = bits[0].strip() if bits else ""
     if direction == "":
@@ -1633,17 +1670,46 @@ def _slide_parts(exit_id: str) -> tuple[str, float | None]:
                          "say slide:left|right|up|down")
     if direction not in SLIDE_DIRECTIONS:
         raise ValueError(f"exit {exit_id!r}: {direction!r} is not one of {'|'.join(SLIDE_DIRECTIONS)}")
-    if len(bits) > 2:
+    rest = [b.strip() for b in bits[1:]]
+    depths: tuple[float, float] | None = None
+    if rest and rest[-1].startswith(DEPTH_SUFFIX):   # P58 T6 (c): the two planes, LAST
+        depths = _slide_depths(exit_id, rest.pop()[len(DEPTH_SUFFIX):])
+    if any(b.startswith(DEPTH_SUFFIX) for b in rest):
+        raise ValueError(f"exit {exit_id!r}: depth= comes last and once - slide:<dir>[:<s>]:depth=<k_out>,<k_in>")
+    if len(rest) > 1:
         raise ValueError(f"exit {exit_id!r}: a slide carries a direction and at most a length - {bits[2:]!r} is neither")
-    if len(bits) < 2 or bits[1].strip() == "":
-        return direction, None
+    if not rest or rest[0] == "":
+        return direction, None, depths
     try:
-        secs = float(bits[1])
+        secs = float(rest[0])
     except ValueError:
-        raise ValueError(f"exit {exit_id!r}: {bits[1]!r} is not a length in seconds") from None
+        raise ValueError(f"exit {exit_id!r}: {rest[0]!r} is not a length in seconds") from None
     if secs <= 0:
         raise ValueError(f"exit {exit_id!r}: a length must be positive")
-    return direction, secs
+    return direction, secs, depths
+
+
+def slide_depth(exit_id: str | None) -> tuple[float, float] | None:
+    """The two planes a slide moves through (`slide:...:depth=<k_out>,<k_in>`), or None - absent is the flat slide."""
+    if not exit_id or str(exit_id).split(":")[0] != "slide":
+        return None
+    return _slide_parts(str(exit_id))[2]
+
+
+def slide_depth_world_error(exit_id: str | None, world: dict | None, side: str) -> str | None:
+    """P58 T6 (c): may this side's world take a slide's depth? A page at a depth or a LAYERED plate already took the
+    camera onto its own plane(s) - the player's camDepthSwap finds no flat camera there, so that frame would slide
+    flat and say nothing. The message, or None."""
+    if slide_depth(exit_id) is None or not isinstance(world, dict):
+        return None
+    k_page = page_camera_k(world.get("page") if world.get("kind") == SPECIES_LEDGER else None)
+    if k_page:
+        return (f"exit {exit_id!r}: a slide at a depth on {side} page that already stands at depth={k_page:g} - the "
+                "page took the camera onto its own plane, so that frame would slide flat; drop one")
+    if world.get("kind") != SPECIES_LEDGER and world.get("layers"):
+        return (f"exit {exit_id!r}: a slide at a depth on {side} layered plate - the plate took the camera onto its "
+                "own planes, so that frame would slide flat; drop one")
+    return None
 
 
 def slide_direction(exit_id: str | None) -> str | None:
@@ -1655,7 +1721,7 @@ def slide_direction(exit_id: str | None) -> str | None:
 
 def parse_exit(exit_id: str) -> tuple[str, float | None]:
     """``cut`` | ``dip[:<s>]`` | ``blurzoom[:<s>]`` | ``wipe_right`` | ``suck:<x>,<y>`` |
-    ``melt[:throw|:splash:chart|:splash:plate][:weight[:<material>]][:<s>][:<x>,<y>]`` | ``slide:<left|right|up|down>[:<s>]``
+    ``melt[:throw|:splash:chart|:splash:plate][:weight[:<material>]][:<s>][:<x>,<y>]`` | ``slide:<left|right|up|down>[:<s>][:depth=<k_out>,<k_in>]``
     -> (name, seconds or None).
 
     Only dip, blurzoom, melt and slide read a suffix as a length; the suck's is the point it collapses
@@ -1668,7 +1734,7 @@ def parse_exit(exit_id: str) -> tuple[str, float | None]:
     if name == "melt":
         return exit_id, _melt_exit(exit_id)
     if name == "slide":
-        return exit_id, _slide_parts(exit_id)[1]
+        return exit_id, _slide_parts(exit_id)[1]   # the depths ride the exit string itself (slide_depth)
     arg = str(exit_id).split(":")[1] if ":" in str(exit_id) else ""
     if name not in TIMED_EXITS or arg == "":
         return exit_id, None
@@ -1723,6 +1789,13 @@ def _melt_boundary(prev: dict, sc: dict, ppg: dict | None, pg: dict | None) -> l
     if ppg is None:
         raise ValueError(f"{row}: a melt takes a chart's ink and leaves the board (E88) - the outgoing world is not a ledger page; "
                          "the whole-world melt is retired")
+    # P58 T6 / R26-132 (1): a melt at a depth on a page that already TOOK the camera onto its own plane. The player's
+    # camDepthSwap finds no flat camera on that world to swap (`data-world-pose`), so the ball would melt flat and say
+    # nothing - refused here by name, as the pair `throw=depth` + `depth=` already is. (A LAYERED plate never reaches
+    # this: a melt's outgoing world must be a ledger page, refused just above, and a page carries no plate planes.)
+    _err = melt_depth_page_error(sc.get("exit"), ppg)
+    if _err:
+        raise ValueError(f"{row}: {_err}")
     if ending in ("throw", "splash:chart") and pg is None:
         raise ValueError(f"{row}: a {ending} hands the same board to the next chart (E88) - the incoming world is not a ledger page; "
                          "say melt:splash:plate to paint a plate")
@@ -1778,6 +1851,10 @@ def stamp_transition_pages(scenes: list[dict]) -> list[str]:
         kind = str(sc.get("exit") or "").split(":")[0]
         ppg, pg = _page_of(prev), _page_of(sc)
         notes += _melt_boundary(prev, sc, ppg, pg)
+        for _w, _side in ((prev.get("world"), "the outgoing"), (sc.get("world"), "the incoming")):   # P58 T6 (c)
+            _err = slide_depth_world_error(sc.get("exit"), _w, _side)
+            if _err:
+                raise ValueError(f"{prev.get('scene_id', '?')} -> {sc.get('scene_id', '?')} ({sc.get('exit')}): {_err}")
         if kind in WORLD_TAKING_EXITS and ppg is not None and not ppg.get("exit"):
             ppg["exit"] = "cut"
             notes.append(f"{prev.get('scene_id', '?')}: exit=cut stamped - the page a {kind} takes must not retract first (R26-60)")

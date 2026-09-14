@@ -72,6 +72,9 @@ PROOF_FRAMES = {
     # P58 T6 (b) - THE MELT'S BALL AT A DEPTH, at the instant the ending cannot show: the ball formed, the weight
     # phase opening, the eye mid-move - the ball at 1.15 and the board it came off at 1.0, parted.
     "melt-depth@proof-ball": ("melt-depth", {"camera": True}, 15.88),
+    # P58 T6 (c) - THE SLIDE THROUGH THE DEPTH, mid-slide: the seam on the centre line, the eye moving, the outgoing
+    # board read at 0.925 of the move and the incoming at 1.075 (the base frame is the landing, where both are flat).
+    "slide-depth@proof-mid": ("slide-depth", {"camera": True}, 15.3),
     # P58 T6 (a) - THE DOCK AT A DEPTH, at the instant the landed frame cannot show: the same flag and the same
     # t as `camera-layers@proof-mid`, so the pair reads the card's plane and nothing else.
     "dock-depth@proof-move": ("dock-depth", {"camera": True}, 6.56),   # MID-ZOOM (u 0.28 of the clock): the card riding the containers' plane (1.15) between the sky (1.0) and the lamp (1.40), its own park untouched

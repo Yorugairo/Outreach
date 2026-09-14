@@ -16,7 +16,7 @@ lives (module | inline | compiler-only | declared-unbuilt, the path and the one 
 module - status and callable - proof - doctrine cites resolved to path:line - aliases. A token that is only a
 parameter of an effect is an option on its card, never a card.
 
-137 cards, 73 options, 18 axes. 40 recipes (15 proven).
+137 cards, 74 options, 18 axes. 40 recipes (15 proven).
 
 | axis | cards | options | live | wired | draft | declared | planned | retired |
 |---|---|---|---|---|---|---|---|---|
@@ -33,7 +33,7 @@ parameter of an effect is an option on its card, never a card.
 | idle | 6 | 0 | 3 | 3 | 0 | 0 | 0 | 0 |
 | arrival | 3 | 4 | 2 | 1 | 0 | 0 | 0 | 0 |
 | camera | 1 | 6 | 1 | 0 | 0 | 0 | 0 | 0 |
-| exit | 8 | 14 | 3 | 3 | 2 | 0 | 0 | 0 |
+| exit | 8 | 15 | 3 | 3 | 2 | 0 | 0 | 0 |
 | page_enter | 10 | 5 | 3 | 7 | 0 | 0 | 0 | 0 |
 | page_exit | 2 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
 | caption | 3 | 8 | 3 | 0 | 0 | 0 | 0 | 0 |
@@ -1535,14 +1535,14 @@ parameter of an effect is an option on its card, never a card.
 
 - **id** `exit:slide` - **does** The incoming frame pushes the outgoing one off the stage along one axis, both moving together by the same distance over SLIDE_S, each clipped to its own stage rect, so the two frames abut at every instant.
 - **when** A HAND-OFF, not a world-taking transition: when the next world should read as the same picture carried on - chart to chart on the same board - so the two worlds stay spatially continuous. (docs/portable/OPERATOR-RULINGS.md:2641)
-- **example** `'slide:left'` (authored; key: shot row 6th element 'slide:<left|right|up|down>' or 'slide:<dir>:<s>' (validator: parse_exit (via scene_exit); the direction is never defaulted and `push` is refused by name); check: exit)
+- **example** `'slide:left'` (authored; key: shot row 6th element 'slide:<left|right|up|down>' or 'slide:<dir>:<s>', optionally ending ':depth=<k_out>,<k_in>' (validator: parse_exit (via scene_exit); the direction is never defaulted and `push` is refused by name; a depth beside a depth page or a layered plate: stamp_transition_pages/slide_depth_world_error); check: exit)
 - **phases**
   1. **the push** - the outgoing world travels sign * u * the stage's span and the incoming world (u - 1) * the same span, on min-jerk, each clipped to its own stage rect - one distance, opposite ends, so the two frames abut at every u (trigger: the scene boundary (a slide arrives on the cut, like the suck and the melt); dials: `SLIDE_S`=0.6)
   2. **the landing** - the outgoing frame is exactly off the stage and the incoming one stands at its own place; the page it hands to has been building on its axes throughout (trigger: the boundary plus SLIDE_S; dials: `SLIDE_S`=0.6)
 - **blend** @remotion/transitions' `slide` presentation (the editor already imports the package - editor/src/TransitionEvidence60sProof.tsx) -> the geometry: the enter and the exit translate are one pair, one distance, opposite ends (recorded; docs/content-video-engine/BACKLOG.md:481)
 - **blend** the operator's own ask - "literally pushing out one frame with the next, so that you keep some of that congruency" -> the whole arc (recorded; docs/portable/OPERATOR-RULINGS.md:2629)
-- **options** `slide` The slide's own length: the slide runs over the seconds its SECOND suffix declares (after the direction) instead of its default dial. (TIMED_EXITS); `left` The slide: pushed off to the left - the incoming frame arrives from the right. (SLIDE_DIRECTIONS); `right` The slide: pushed off to the right - the incoming frame arrives from the left. (SLIDE_DIRECTIONS); `up` The slide: pushed off upward - the incoming frame arrives from below. (SLIDE_DIRECTIONS); `down` The slide: pushed off downward - the incoming frame arrives from above. (SLIDE_DIRECTIONS)
-- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `slideOn` - also `slideU`, `slideOpts`, `SLIDE_S`, `SLIDE_AXES` - the render loop's boundary block - THE SLIDE (slideOn/slideU beside dipIn/bzIn) and its paint beside the suck's; the compiler half is _slide_parts / SLIDE_DIRECTIONS / SLIDE_S, read by parse_exit
+- **options** `depth` The slide through the depth: slide:<dir>[:<s>]:depth=<k_out>,<k_in> - the outgoing world goes 1 -> k_out as it leaves, the incoming k_in -> 1 as it lands (camDepthSwap).; `slide` The slide's own length: the slide runs over the seconds its SECOND suffix declares (after the direction) instead of its default dial. (TIMED_EXITS); `left` The slide: pushed off to the left - the incoming frame arrives from the right. (SLIDE_DIRECTIONS); `right` The slide: pushed off to the right - the incoming frame arrives from the left. (SLIDE_DIRECTIONS); `up` The slide: pushed off upward - the incoming frame arrives from below. (SLIDE_DIRECTIONS); `down` The slide: pushed off downward - the incoming frame arrives from above. (SLIDE_DIRECTIONS)
+- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `slideOn` - also `slideU`, `slideOpts`, `SLIDE_S`, `SLIDE_AXES`, `SLIDE` - the render loop's boundary block - THE SLIDE (slideOn/slideU beside dipIn/bzIn) and its paint beside the suck's; the compiler half is _slide_parts / SLIDE_DIRECTIONS / SLIDE_S, read by parse_exit
 - **status** draft (backlog R26-75) - **callable** yes: in SCENE_EXITS and TIMED_EXITS; parse_exit accepts slide:<left|right|up|down>[:<s>] and the engine paints it (goldens slide-mid / slide-landed) - it awaits the operator's watch in motion before a short ships it
 - **proof** golden slide-mid - test content/video_engine/tests/test_transitions_e47.py::test_the_slide_pushes_both_worlds_together_and_the_two_abut_at_the_seam - first use none
 - **doctrine** E87 s3 -> docs/portable/OPERATOR-RULINGS.md:2637; E47 -> docs/portable/OPERATOR-RULINGS.md:1419; E73 -> docs/portable/OPERATOR-RULINGS.md:2342; R26-75 -> docs/content-video-engine/BACKLOG.md:481; CAPABILITIES slide row -> unresolved
