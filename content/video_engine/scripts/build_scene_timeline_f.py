@@ -87,7 +87,7 @@ PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill", 
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
 STATE_MAX = 3
 DOCK_OPTS = ("arrive", "mass", "centre", "card_aspect", "centre_w", "centre_band", "centre_y", "centre_x", "read", "read_s", "park_s",
-             "press", "stack", "behind", "embed", "cutout")   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
+             "press", "stack", "behind", "embed", "cutout", "fit")   # P50 T7: embed=<name> - the card lands ON a surface the plate declares (a poster, a screen, a paper), projected onto its four measured corners   # P50 T15 / HF-17: behind=<layer> - the world plate's foreground cutout paints OVER this card (the depth cue by occlusion, not blur)   # P50 T3: press = the card meta press_card.py wrote (or its path) - the dock is a PRESS CARD; stack = it joins the scene's press pile (the push hand-off, doc 29 s9.27)   # the optional 5th element of a shot row's dock tuple: a dict of these; centre: True parks the card centred on the page; card_aspect: the card's h / w (a chart card), so the centred box is the card's own
 CENTRE_MAX_H = 0.58                                 # a centred card takes at most this share of the stage height (the page's title and source stay in view)
 CENTRE_W = 0.74                                     # a centred card's width as a share of the stage - the reading size, not the parked card's
 CENTRE_BAND = 0.64                                  # ... and is centred in the band ABOVE the caption strip (which sits at ~0.64-0.70 of a portrait stage), never under it
@@ -1307,17 +1307,41 @@ def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str, str | Non
     return series_id, variant, emphasize, quiet_zone, enter, exit_
 
 
-def _melt_exit(exit_id: str) -> float | None:
-    """A melt's suffixes, in any order: a bare number is its LENGTH, ``splash`` is the register (the
-    default is the throw), and an ``x,y`` pair is the point it is thrown to, in stage fractions.
+MELT_ENDINGS = ("throw", "splash:chart", "splash:plate")   # E88 / R26-76: the three authored endings - species/melt.mjs MELT_ENDINGS
 
-    species/melt.mjs ``meltOpts`` reads exactly this grammar on the player's side; the two have to
-    agree, and test_transitions_e47 pins the pair. Returns the declared length, or None for MELT_S."""
+
+def _melt_parts(exit_id: str) -> tuple[str, float | None]:
+    """A melt's suffixes, in any order (E88, R26-76): an ENDING - ``throw`` (the default), ``splash:chart`` or
+    ``splash:plate`` - a bare number, its LENGTH, and on a throw only an ``x,y`` pair, the point it is thrown to in
+    stage fractions. A bare ``splash`` is REFUSED: since E88 a splash has two endings that need two different incoming
+    worlds, and an alias would pick one silently.
+
+    species/melt.mjs ``meltOpts`` reads exactly this grammar on the player's side; the two have to agree, and
+    test_transitions_e47 pins the pair. Returns (ending, the declared length or None for MELT_S)."""
     secs: float | None = None
-    for raw in str(exit_id).split(":")[1:]:
-        bit = raw.strip()
-        if bit in ("", "splash"):
+    ending: str | None = None
+    point = False
+    bits = str(exit_id).split(":")[1:]
+    i = 0
+    while i < len(bits):
+        bit = bits[i].strip()
+        i += 1
+        if bit == "":
             continue
+        if bit in ("throw", "splash"):
+            end = bit
+            if bit == "splash":
+                nxt = bits[i].strip() if i < len(bits) else ""
+                if nxt not in ("chart", "plate"):
+                    raise ValueError(f"exit {exit_id!r}: splash names no ending since E88 - say splash:chart (the splatter "
+                                     "forms the next chart) or splash:plate (a narrative plate springs up out of it)")
+                end, i = f"splash:{nxt}", i + 1
+            if ending is not None:
+                raise ValueError(f"exit {exit_id!r}: two endings ({ending} and {end}) - a melt ends one way")
+            ending = end
+            continue
+        if bit in ("chart", "plate"):
+            raise ValueError(f"exit {exit_id!r}: {bit!r} is a splash's ending - say splash:{bit}")
         if "," in bit:
             xy = bit.split(",")
             try:
@@ -1326,23 +1350,39 @@ def _melt_exit(exit_id: str) -> float | None:
                 [float(v) for v in xy]
             except ValueError:
                 raise ValueError(f"exit {exit_id!r}: {bit!r} is not an x,y point in stage fractions") from None
+            point = True
             continue
         try:
             secs = float(bit)
         except ValueError:
-            raise ValueError(f"exit {exit_id!r}: {bit!r} is neither a length in seconds, nor splash, "
-                             "nor an x,y point") from None
+            raise ValueError(f"exit {exit_id!r}: {bit!r} is neither a length in seconds, nor an ending "
+                             "(throw, splash:chart, splash:plate), nor an x,y point") from None
         if secs <= 0:
             raise ValueError(f"exit {exit_id!r}: a length must be positive")
-    return secs
+    ending = ending or "throw"
+    if point and ending != "throw":
+        raise ValueError(f"exit {exit_id!r}: an x,y point is where a THROW goes - a splash lands on the board")
+    return ending, secs
+
+
+def melt_ending(exit_id: str | None) -> str | None:
+    """The authored ending of a melt exit (``throw`` | ``splash:chart`` | ``splash:plate``), or None for any other exit."""
+    if not exit_id or str(exit_id).split(":")[0] != "melt":
+        return None
+    return _melt_parts(str(exit_id))[0]
+
+
+def _melt_exit(exit_id: str) -> float | None:
+    """The declared length of a melt, or None for MELT_S (the grammar is ``_melt_parts``)."""
+    return _melt_parts(exit_id)[1]
 
 
 def parse_exit(exit_id: str) -> tuple[str, float | None]:
     """``cut`` | ``dip[:<s>]`` | ``blurzoom[:<s>]`` | ``wipe_right`` | ``suck:<x>,<y>`` |
-    ``melt[:<s>][:splash][:<x>,<y>]`` -> (name, seconds or None).
+    ``melt[:throw|:splash:chart|:splash:plate][:<s>][:<x>,<y>]`` -> (name, seconds or None).
 
     Only dip, blurzoom and melt read a suffix as a length; the suck's is the point it collapses into,
-    the melt's may be a length AND a register AND a point (``_melt_exit``), and every other exit is a
+    the melt's may be a length AND an ending AND a point (``_melt_parts``), and every other exit is a
     bare name. ValueError names the exit; the caller names the row."""
     name = str(exit_id).split(":")[0]
     if name not in SCENE_EXITS:
@@ -1394,6 +1434,31 @@ def scene_exit(authored_exit: str | None, has_docks: bool, page_enter: str | Non
     return parse_exit(DEFAULT_EXIT_CHANGE)
 
 
+def _melt_boundary(prev: dict, sc: dict, ppg: dict | None, pg: dict | None) -> list[str]:
+    """E88's three boundary rules for the melt INTO `sc` (see stamp_transition_pages). Returns the stamp it made, if any."""
+    ending = melt_ending(sc.get("exit"))
+    if ending is None:
+        return []
+    row = f"{prev.get('scene_id', '?')} -> {sc.get('scene_id', '?')} ({sc.get('exit')})"
+    if ppg is None:
+        raise ValueError(f"{row}: a melt takes a chart's ink and leaves the board (E88) - the outgoing world is not a ledger page; "
+                         "the whole-world melt is retired")
+    if ending in ("throw", "splash:chart") and pg is None:
+        raise ValueError(f"{row}: a {ending} hands the same board to the next chart (E88) - the incoming world is not a ledger page; "
+                         "say melt:splash:plate to paint a plate")
+    if ending == "splash:plate" and pg is not None:
+        raise ValueError(f"{row}: a splash:plate paints a narrative plate (E88) - the incoming world is a ledger page; "
+                         "say melt:splash:chart")
+    if ending == "splash:chart":
+        if not pg.get("enter"):
+            pg["enter"] = "built"
+            return [f"{sc.get('scene_id', '?')}: enter=built stamped - a splash:chart's page arrives out of the splatter, not by its build (E88)"]
+        if pg.get("enter") != "built":
+            raise ValueError(f"{row}: a splash:chart's page arrives out of the splatter (E88) - enter={pg.get('enter')} would build "
+                             "under the stains; drop the enter or say built")
+    return []
+
+
 WORLD_TAKING_EXITS = ("suck", "melt")   # P53 T2 / R26-60: a transition that TAKES the world - the page goes into a point or drips away
 
 
@@ -1420,12 +1485,19 @@ def stamp_transition_pages(scenes: list[dict]) -> list[str]:
 
     THE HOOK (the operator, 2026-09-12): the first scene's ledger page with no declared enter opens on `axes`.
 
+    THE MELT (E88, R26-76): a melt takes a CHART's ink and the board stays, so the outgoing world must be a ledger page;
+    a throw and a chart splash hand the SAME board to a chart, so the incoming world must be a page; a plate splash
+    paints a narrative plate, so the incoming world must not be one. A chart splash's page arrives out of the splatter,
+    built - its row gets `enter=built` stamped, and a row that declares another enter is refused (it would build under
+    the stains). Refusals raise ValueError naming both scenes.
+
     A row that declares its own enter or exit is never touched. Returns one line per stamp, for the build to print."""
     notes: list[str] = []
     for i in range(1, len(scenes)):
         prev, sc = scenes[i - 1], scenes[i]
         kind = str(sc.get("exit") or "").split(":")[0]
         ppg, pg = _page_of(prev), _page_of(sc)
+        notes += _melt_boundary(prev, sc, ppg, pg)
         if kind in WORLD_TAKING_EXITS and ppg is not None and not ppg.get("exit"):
             ppg["exit"] = "cut"
             notes.append(f"{prev.get('scene_id', '?')}: exit=cut stamped - the page a {kind} takes must not retract first (R26-60)")
@@ -2023,6 +2095,8 @@ EMBED_KEY = "embed"
 EMBED_MIN_W = 0.25         # the surface's width as a share of the stage: under this a projected card cannot be read on a phone
                            # (the plate ORDER asks for 40 %; the compiler's floor is the hard one - a quarter of the frame)
 EMBED_REFUSED_SPECIES = ("chart",)   # B1: the argument's own charts never embed
+EMBED_FITS = ("cover", "contain")    # 2026-09-13: how a PICTURE (a still or a clip) takes its surface - `fit` on the row
+EMBED_FIT_DEFAULT = "cover"          # E95: a still or a clip on a surface fills it, whole, unless the row says contain
 
 
 def plate_embeds(path: Path | None) -> dict:
@@ -2120,7 +2194,38 @@ def image_aspect(p: Path) -> float | None:
         return None
 
 
-def embed_entry(name: str, spec: dict, words=None, card_aspect: float | None = None) -> dict:
+EMBED_CARD_PAYLOADS = ("record", "chart", "stack")   # evidence that makes a dock a CARD: the engine paints a `fit` entry as a bare picture
+
+
+def embed_card_reason(evidence: dict | None) -> str | None:
+    """Why a dock's evidence is a CARD, not a picture - its badge rail, record, chart or stack - else None."""
+    ev = evidence or {}
+    if ev.get("badges"):
+        return "badges"
+    return next((k for k in EMBED_CARD_PAYLOADS if ev.get(k)), None)
+
+
+def embed_fit(dopt: dict, asset: Path | None, evidence: dict | None = None) -> str | None:
+    """How a dock's picture takes its surface (the operator, 2026-09-13: "the tv surface should definitely be prepared
+    to hold video and images"; E95: "stills should probably fill the tv surface"). `cover` is for a PICTURE only - the
+    engine draws any entry carrying `fit` as "not a card: no paper, no masthead, no rail" (the parent, 2026-09-13):
+    (1) the row's own `fit` - refused on a card; (2) None for a PRESS card, which REFLOWS to its surface (E66);
+    (3) None - the reflowed CARD it always was - when the dock's `evidence` carries badges, a record, a chart or a
+    stack; (4) else `cover`, a bare still or a clip. `asset` is kept for the call site; the default ignores its kind."""
+    if not (dopt or {}).get(EMBED_KEY):
+        return None
+    card = embed_card_reason(evidence)
+    if dopt.get("fit") is not None:
+        if card:
+            raise ValueError(f"fit={dopt['fit']!r} on a dock whose evidence carries {card}: a card is not a picture - "
+                             "a `fit` entry is painted with no paper, masthead or rail, so drop `fit` and it reflows onto the surface")
+        return dopt["fit"]
+    if dopt.get("press") or card:
+        return None
+    return EMBED_FIT_DEFAULT
+
+
+def embed_entry(name: str, spec: dict, words=None, card_aspect: float | None = None, fit: str | None = None) -> dict:
     """What the dock carries onto the timeline: the surface's name, its quad, the SECOND the room dims on, and
     the card PICTURE's aspect (so the player can letterbox the card on the surface without measuring it).
 
@@ -2131,6 +2236,10 @@ def embed_entry(name: str, spec: dict, words=None, card_aspect: float | None = N
     for key in ("kind", "sheen"):      # E66: the surface's own treatment as the plate declares it (screen | paper; the sheen's strength)
         if spec.get(key) is not None:
             out[key] = spec[key]
+    if fit is not None:   # 2026-09-13: a PICTURE on the surface (cover | contain); absent, the entry is what it always was
+        if fit not in EMBED_FITS:
+            raise ValueError(f"embed {name!r}: fit={fit!r} is not one of {'|'.join(EMBED_FITS)}")
+        out["fit"] = fit
     if card_aspect is not None and float(card_aspect) > 0:
         out["img"] = round(float(card_aspect), 5)
     dk = spec.get("darken")
@@ -2186,9 +2295,17 @@ def dock_opts(raw) -> dict:
             if not isinstance(v, str) or not v.strip():
                 raise ValueError("dock: embed must NAME a surface the scene's plate declares (<plate>.layers.json)")
             continue
+        if k == "fit":   # 2026-09-13: a picture on a surface - checked against the row's embed and press below
+            if v not in EMBED_FITS:
+                raise ValueError(f"dock: fit must be {'|'.join(EMBED_FITS)} - how a picture takes its surface, not {v!r}")
+            continue
         if k == "centre":
             if v is not True:
                 raise ValueError("dock: centre must be True (the card parks centred on the page)")
+            continue
+        if k == "cutout":   # P53 T7 / R26-94: the dock is a person, not a document - checked against press/stack/embed/fit below
+            if v is not True:
+                raise ValueError("dock: cutout must be True - the dock is a cutout, no card")
             continue
         if k == "card_aspect":
             if isinstance(v, bool) or not isinstance(v, (int, float)) or v <= 0:
@@ -2226,6 +2343,13 @@ def dock_opts(raw) -> dict:
                 raise ValueError("dock: stack must be True (the card joins the scene's press pile)")
             continue
         _check_opt(k, v, "dock")
+    if raw.get("cutout"):   # R26-94: a cutout is neither a card nor a picture on a surface (the painter's `.dock.cutout`)
+        for other, why in (("press", "a press card's kind overwrites the cutout's and the pile keys on it"),
+                           ("stack", "the press stack is a pile of cards"),
+                           ("embed", "the surface's projection repaints a card's shadow, vignette and lift over it"),
+                           ("fit", "fit is how a picture takes a surface")):
+            if other in raw:
+                raise ValueError(f"dock: cutout and {other} cannot be combined - a cutout has no card ({why})")
     out = dict(raw)
     if "press" in out:
         out["press"] = press_meta(out["press"])   # a path resolves here, so every caller downstream sees the dict
@@ -2234,6 +2358,10 @@ def dock_opts(raw) -> dict:
     if out.get(EMBED_KEY) and out.get("stack"):   # P50 T7: a card on a surface has no pile - the surface is the park
         raise ValueError("dock: embed and stack are two different arrivals - a card that lands ON a surface is not "
                          "pushed into a pile (E45's park is the surface itself)")
+    if out.get("fit") is not None and not out.get(EMBED_KEY):
+        raise ValueError("dock: fit is how a picture takes a SURFACE - it needs the row's embed=<surface>")
+    if out.get("fit") is not None and out.get("press"):
+        raise ValueError("dock: fit is a picture's option - a press card REFLOWS to its surface (E66), it is never cropped to it")
     return out
 
 
@@ -3835,8 +3963,9 @@ def main() -> int:
                 if _eerr:
                     raise SystemExit(f"FAIL: {_eerr}")
                 try:
+                    _eap = dock_asset_path(aid, EP)
                     embed = embed_entry(dopt[EMBED_KEY], _embeds[dopt[EMBED_KEY]], tl.get("words"),
-                                        dopt.get("card_aspect") or image_aspect(dock_asset_path(aid, EP)))
+                                        dopt.get("card_aspect") or image_aspect(_eap), fit=embed_fit(dopt, _eap, d))
                 except ValueError as exc:
                     raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) dock {aid}: {exc}") from exc
             rd = dopt.get("read") or {}   # the box a centred card POPS at before it parks to dplace (2026-09-10)

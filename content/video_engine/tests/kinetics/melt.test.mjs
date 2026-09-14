@@ -1,274 +1,303 @@
-// P52 T9 - the melt exit (R26-15): the world sags into drips under the gooey threshold, balls up on 2s, and is
-// thrown off the stage or splashed. Every assertion below is on the PURE math: the phases' shares, the sag's
-// monotonicity, the ball's radius at the end of its phase, the splash's droplets, the throw's exit - and the one
-// that the rest rests on, that meltState is a function of t and of nothing else.
+// P52 T9 - the melt exit (R26-15), reworked to E88 (R26-76): the CHART'S INK sags and runs under the gooey threshold,
+// is squeezed into a dense heavy ball on 2s, and ends one of three authored ways - thrown (the next chart draws on the
+// same board), splashed into the next chart, or splashed into a narrative plate. The board never melts. Every assertion
+// below is on the PURE math, and the one the rest rests on: meltState is a function of t and of nothing else.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { MELT, meltOpts, meltShares, meltPhase, meltBlur, meltDrips, meltDepth, meltTop, meltOutline, ballCircle, ballAt,
-         ballFlat, splashDrops, splashFade, meltThrowAt, meltState, meltFilterMarkup, meltMaskMarkup } from "../../scripts/species/melt.mjs";
-import { stepped } from "../../scripts/kinetics/stopaction.mjs";
+import { MELT, MELT_ENDINGS, MELT_CSS, meltOpts, meltShares, meltPhase, meltBlur, meltRelease, meltDrawDelay, meltDrips,
+         meltDepth, meltTop, meltOutline, meltRun, ballCircle, ballAt, meltSqueeze, meltBodyAlpha, ballFlat, meltSettle,
+         meltMixInk, splashDrops, splashStains, meltThrowAt, meltState, meltFilterMarkup, meltMaskMarkup,
+         meltInkFilterMarkup, meltRevealMarkup, meltBodyTransform, meltIsBoard, meltInkOf, meltTint, meltSplatPath, splashSats,
+         meltSpring, meltBodyGrow, meltTextFilterMarkup } from "../../scripts/species/melt.mjs";
+import { stepped, MASS, STOP } from "../../scripts/kinetics/stopaction.mjs";
+import { hexToLin } from "../../scripts/kinetics/ink.mjs";
 
-// the engine's own seeded hash, bound the way the scene loop binds it: rnd(k) in [0, 1), never Math.random
 const hash = (seed, i, salt) => {
   let h = (seed ^ Math.imul(i + 1, 0x9E3779B1) ^ Math.imul(salt + 1, 0x85EBCA77)) >>> 0;
   h = Math.imul(h ^ (h >>> 15), 0x2C1B3C6D); h = Math.imul(h ^ (h >>> 12), 0x297A2D39);
   return ((h ^ (h >>> 15)) >>> 0) / 4294967296;
 };
 const rnd = (k) => hash(0x3E17, k, 5);
-const RECT = { x: 87, y: 49, w: 1745, h: 981 };          // a 1920x1080 stage's page box in the world's own px
-const SB = { x: 87, y: 49, w: 1745, h: 981 };
-const OPTS = (extra = {}) => Object.assign({ rect: RECT, stagebox: SB, secs: MELT.S }, extra);
+const RECT = { x: 190, y: 120, w: 1540, h: 830 };          // the INK box: the chart's marks on a 1920x1080 page's board
+const SB = { x: 96, y: 54, w: 1920, h: 1080 };
+const OPTS = (extra = {}) => Object.assign({ rect: RECT, stagebox: SB, secs: MELT.S, ending: "throw" }, extra);
+const lum = (hex) => { const l = hexToLin(hex); return 0.2126 * l[0] + 0.7152 * l[1] + 0.0722 * l[2]; };
 
 // ---- the authored form -------------------------------------------------------------------------------------------
-test("the exit's suffix is read as seconds, as splash, or as an x,y point - never guessed", () => {
-  assert.equal(meltOpts("melt").secs, MELT.S, "a bare melt takes the default length");
-  assert.equal(meltOpts("melt").splash, false, "and is a THROW: the splash is asked for by name");
+test("E88's grammar: throw is the default, a splash names its ending, and a bare splash is refused", () => {
+  assert.deepEqual(MELT_ENDINGS, ["throw", "splash:chart", "splash:plate"]);
+  assert.equal(meltOpts("melt").ending, "throw", "a bare melt is a THROW");
+  assert.equal(meltOpts("melt").secs, MELT.S);
   assert.deepEqual(meltOpts("melt").to, [MELT.TO[0], MELT.TO[1]]);
-  assert.equal(meltOpts("melt:1.2").secs, 1.2);
-  assert.equal(meltOpts("melt:splash").splash, true);
-  assert.equal(meltOpts("melt:splash").secs, MELT.S, "splash says nothing about the length");
-  assert.deepEqual(meltOpts("melt:0.92,1.18").to, [0.92, 1.18]);
-  assert.equal(meltOpts("melt:0.92,1.18").secs, MELT.S, "an x,y is a POINT: the engine's exitSecs would have read 0.92 s");
-  const both = meltOpts("melt:1.2:splash");
-  assert.equal(both.secs, 1.2); assert.equal(both.splash, true);
+  assert.equal(meltOpts("melt:throw").ending, "throw");
+  assert.equal(meltOpts("melt:splash:chart").ending, "splash:chart");
+  assert.equal(meltOpts("melt:splash:plate").ending, "splash:plate");
+  assert.equal(meltOpts("melt:1.2:splash:plate").secs, 1.2);
+  assert.equal(meltOpts("melt:splash:chart:1.2").ending, "splash:chart");
+  assert.equal(meltOpts("melt:splash:chart:1.2").secs, 1.2);
+  assert.deepEqual(meltOpts("melt:throw:0.92,1.18").to, [0.92, 1.18]);
+  assert.equal(meltOpts("melt:0.92,1.18").secs, MELT.S, "an x,y is a POINT, never 0.92 s");
+  assert.throws(() => meltOpts("melt:splash"), /splash names no ending since E88/);
+  assert.throws(() => meltOpts("melt:splash:sideways"), /splash names no ending/);
+  assert.throws(() => meltOpts("melt:chart"), /a splash's ending/);
+  assert.throws(() => meltOpts("melt:throw:splash:chart"), /two endings/);
+  assert.throws(() => meltOpts("melt:splash:plate:0.5,0.5"), /where a THROW goes/);
   assert.throws(() => meltOpts("melt:sideways"), /neither a length/);
   assert.throws(() => meltOpts("melt:1,2,3"), /not an x,y point/);
   assert.throws(() => meltOpts("melt:-2"), /neither a length/);
 });
 
+// ---- the board is not the ink --------------------------------------------------------------------------------------
+test("the board and the ink are split by class: grain, roll edge, field and field plate are the board", () => {
+  const node = (cls) => ({ classList: { contains: (c) => cls.split(" ").includes(c) } });
+  for (const c of ["lp-grain", "lp-edge", "lp-field", "lp-fieldplate"]) assert.ok(meltIsBoard(node(c)), c);
+  for (const c of ["lp-chart", "lp-ink lp-title", "lp-rail", "lp-chart lp-perform", "lp-ink lp-sub lp-note"]) assert.ok(!meltIsBoard(node(c)), c);
+  assert.ok(MELT_CSS.includes(".meltink .lp-field") && MELT_CSS.includes(".meltink .lp-page{background:transparent"), "the ink clone hides the board and the cream");
+  assert.ok(MELT_CSS.includes(".meltboard .lp-page>:not(.lp-grain):not(.lp-edge):not(.lp-field):not(.lp-fieldplate)"), "the board world hides everything else");
+  assert.ok(MELT_CSS.includes(".meltink .lp-ink,.meltink .lp-rail,.meltink .lp-chart line,.meltink .lp-chart text{visibility:hidden"), "the marks clone never draws the words or the rules");
+  assert.ok(MELT_CSS.includes(".melttext .lp-chart text *{visibility:visible"), "the text clone draws only the words");
+  const tf = meltTextFilterMarkup("meltx");
+  assert.ok(tf.includes('stdDeviation="0 0"') && !tf.includes("feFlood"), "a glyph runs down a VERTICAL-only blur, untinted - it never swells into its box");
+  assert.equal((tf.match(/<feOffset /g) || []).length, 1, "ONE streak, never stacked copies of the word");
+  assert.ok(tf.lastIndexOf('in="SourceGraphic"/>') > tf.indexOf("<feMerge>"), "the crisp glyph is drawn over its streak, legible at its top");
+});
+
 // ---- the phases --------------------------------------------------------------------------------------------------
 test("the four phases: three shares that sum to 1, and the fourth is the end", () => {
   const sh = meltShares();
-  assert.equal(sh.length, 3);
-  assert.ok(Math.abs(sh.reduce((a, b) => a + b, 0) - 1) < 1e-12, `the shares sum to ${sh.reduce((a, b) => a + b, 0)}`);
-  assert.ok(sh.every((s) => s > 0), "no phase is empty");
-  assert.equal(meltPhase(0).name, "melt");
+  assert.ok(Math.abs(sh.reduce((a, b) => a + b, 0) - 1) < 1e-12);
+  assert.ok(sh.every((s) => s > 0));
   assert.equal(meltPhase(0.29).name, "melt");
   assert.equal(meltPhase(MELT.MELT_END).name, "ball");
-  assert.equal(meltPhase(0.54).name, "ball");
   assert.equal(meltPhase(MELT.BALL_END).name, "fly");
-  assert.equal(meltPhase(0.99).name, "fly");
   assert.equal(meltPhase(1).name, "gone");
-  assert.equal(meltPhase(4).name, "gone");
-  for (const u of [0, 0.15, 0.3, 0.45, 0.55, 0.8, 0.999]) {   // each phase's own clock runs 0 -> 1 inside it
+  for (const u of [0, 0.15, 0.3, 0.45, 0.55, 0.8, 0.999]) {
     const ph = meltPhase(u);
-    assert.ok(ph.k >= 0 && ph.k <= 1, `${u}: k out of range`);
-    assert.ok(Math.abs((ph.from + ph.k * ph.span) - u) < 1e-12, `${u}: the phase's clock does not place it`);
+    assert.ok(Math.abs((ph.from + ph.k * ph.span) - u) < 1e-12, `${u}`);
   }
-  assert.equal(meltPhase(0).k, 0);
-  assert.ok(Math.abs(meltPhase(MELT.MELT_END - 1e-9).k - 1) < 1e-6, "the melt phase ends at 1");
-});
-
-test("the gooey blur rises over the melt and is exactly 0 once the ball has formed", () => {
   assert.equal(meltBlur(0), 0);
-  assert.ok(meltBlur(0.15) > 0 && meltBlur(0.15) < MELT.BLUR);
-  assert.ok(Math.abs(meltBlur(MELT.MELT_END - 1e-9) - MELT.BLUR) < 1e-3, "the peak is at the phase boundary");
-  assert.ok(meltBlur(0.45) < MELT.BLUR && meltBlur(0.45) > 0, "it falls back through the ball phase");
+  assert.ok(Math.abs(meltBlur(MELT.MELT_END - 1e-9) - MELT.BLUR) < 1e-3);
   assert.ok(Math.abs(meltBlur(MELT.BALL_END - 1e-9)) < 1e-6, "a ball is solid, not a cloud");
-  assert.equal(meltBlur(0.75), 0);
-  assert.equal(meltBlur(1), 0);
 });
 
-// ---- the sag -----------------------------------------------------------------------------------------------------
-test("the melting outline is a closed ring whose sag grows monotonically with u", () => {
+// ---- the sag and the run -----------------------------------------------------------------------------------------
+test("the ink box's outline sags monotonically and never leaves the box sideways", () => {
   const foot = RECT.y + RECT.h;
   let last = -1, lastTop = -1;
-  for (const k of [0, 0.1, 0.2, 0.3, 0.45, 0.6, 0.75, 0.9, 1]) {
+  for (const k of [0, 0.2, 0.45, 0.75, 1]) {
     const ring = meltOutline(RECT, k, rnd);
-    assert.ok(ring.length >= 3, "a ring");
-    assert.notDeepEqual(ring[0], ring[ring.length - 1], "closed IMPLICITLY - a ring never repeats its first vertex");
-    assert.equal(ring[0][0], RECT.x, "the ring starts at the left edge");
-    assert.equal(ring[MELT.TOP_N - 1][0], RECT.x + RECT.w, "and walks the top edge to the right one");
-    if (k === 0) assert.deepEqual(ring[0], [RECT.x, RECT.y], "at u = 0 the ring IS the rect");
-    assert.ok(ring[0][1] >= RECT.y - 1e-9, "the top edge only ever SINKS: a melting body loses height");
-    const gaps = ring.map((p, i) => Math.hypot(p[0] - ring[(i + 1) % ring.length][0], p[1] - ring[(i + 1) % ring.length][1]));
-    assert.ok(Math.max(...gaps) < RECT.w / 4, `a ${Math.max(...gaps).toFixed(0)} px gap between knots: the closed Catmull-Rom bulges across it`);
-    for (const p of ring) {
-      assert.ok(p[0] >= RECT.x - 1e-9 && p[0] <= RECT.x + RECT.w + 1e-9, "no vertex leaves the box sideways");
-      assert.ok(p[1] >= RECT.y - 1e-9, "and none rises above the rect's own top edge");
-    }
-    const sunk = Math.min(...ring.map((p) => p[1])) - RECT.y;   /* how far the highest point of the body has sunk */
-    assert.ok(sunk >= lastTop - 1e-9, `the top edge rose again at k=${k}`);
-    assert.ok(sunk <= RECT.h * MELT.TOP_SAG + 1e-6, "and never past its dial");
-    lastTop = sunk;
-    const deepest = Math.max(...ring.map((p) => p[1])) - foot;
-    assert.ok(deepest >= last - 1e-9, `the sag went back up at k=${k}: ${deepest} < ${last}`);
-    if (k > 0.5) assert.ok(deepest > last + 1e-9, `the sag stalled at k=${k}`);
-    last = deepest;
+    if (k === 0) assert.deepEqual(ring[0], [RECT.x, RECT.y]);
+    for (const p of ring) assert.ok(p[0] >= RECT.x - 1e-9 && p[0] <= RECT.x + RECT.w + 1e-9 && p[1] >= RECT.y - 1e-9);
+    const sunk = Math.min(...ring.map((p) => p[1])) - RECT.y, deepest = Math.max(...ring.map((p) => p[1])) - foot;
+    assert.ok(sunk >= lastTop - 1e-9 && deepest >= last - 1e-9, `k=${k}`);
+    lastTop = sunk; last = deepest;
   }
-  assert.ok(last <= RECT.h * (MELT.SAG + MELT.BASE_SAG) + 1e-6, "and it never hangs past its two dials");
-  assert.ok(last > RECT.h * MELT.SAG * 0.5, "the deepest drip is a real drip");
+  const d = meltDrips(RECT, rnd);
+  assert.deepEqual(d, meltDrips(RECT, rnd), "seeded");
+  assert.equal(meltDepth(RECT.x, 0, RECT, d), 0);
+  assert.equal(meltTop(RECT.x, 0, RECT, d), RECT.y);
 });
 
-test("every drip has its own place, size and start - all seeded, none random", () => {
-  const d1 = meltDrips(RECT, rnd), d2 = meltDrips(RECT, rnd);
-  assert.equal(d1.length, MELT.DRIPS);
-  assert.deepEqual(d1, d2, "the same seed is the same drips");
-  assert.ok(new Set(d1.map((d) => d.c)).size === MELT.DRIPS, "no two drips share a centre");
-  assert.ok(d1.every((d) => d.c > RECT.x && d.c < RECT.x + RECT.w), "and all of them are on the edge");
-  assert.ok(d1.some((d) => d.delay > 0.05), "the drips do not all open at once");
-  assert.ok(Math.max(...d1.map((d) => d.delay)) <= MELT.DRIP_DELAY + 1e-9, "the last one still has most of the phase to run");
-  const at = (x, k) => meltDepth(x, k, RECT, d1);
-  assert.equal(at(RECT.x, 0), 0, "nothing hangs at u = 0");
-  assert.ok(at(d1[0].c, 1) > at(d1[0].c + d1[0].w * 1.2, 1), "a drip is deepest at its own centre");
-  assert.equal(meltTop(RECT.x, 0, RECT, d1), RECT.y, "and the top has not sunk at u = 0");
-  const xs = []; for (let i = 0; i <= 40; i++) xs.push(RECT.x + RECT.w * (i / 40));
-  const tops = xs.map((x) => meltTop(x, 1, RECT, d1));
-  assert.ok(Math.max(...tops) - Math.min(...tops) > RECT.h * 0.03, "the sunk top is a WAVE, not a straight edge - it sinks furthest where the mass went");
-  assert.ok(meltTop(RECT.x, 1, RECT, d1) > meltTop(RECT.x, 0.5, RECT, d1), "and it keeps sinking");
+test("the marks RUN: the smear grows over the sag and drains back into the ball", () => {
+  assert.equal(meltRun("melt", 0, RECT), 0);
+  let last = -1;
+  for (const k of [0, 0.25, 0.5, 0.75, 1]) { const r = meltRun("melt", k, RECT); assert.ok(r >= last); last = r; }
+  assert.ok(Math.abs(last - MELT.RUN * RECT.h) < 1e-9, "the run reaches its dial at the sag's end");
+  assert.ok(Math.abs(meltRun("ball", 0, RECT) - last) < 1e-9, "continuous into the ball");
+  assert.equal(meltRun("ball", 1, RECT), 0, "and gone once the ball is formed");
+  assert.equal(meltRun("fly", 0.5, RECT), 0);
 });
 
 // ---- the ball ----------------------------------------------------------------------------------------------------
-test("the outline balls up: at the end of the phase every vertex is BALL_R from the centroid", () => {
-  const b0 = ballAt(RECT, 0, rnd), b1 = ballAt(RECT, 1, rnd);
-  assert.ok(Math.abs(b1.r - MELT.BALL_R * RECT.h) < 1e-9, "the radius IS the dial");
+test("the ball is dense: smaller than P52 T9's, a circle of BALL_R at the end of its phase", () => {
+  assert.ok(MELT.BALL_R < 0.15, "smaller than the whole-page melt's ball");
+  const b1 = ballAt(RECT, 1, rnd);
   const rr = b1.outline.map((p) => Math.hypot(p[0] - b1.centre[0], p[1] - b1.centre[1]));
-  assert.ok(Math.max(...rr) - Math.min(...rr) < 1e-6, "a circle, not a blob, at k = 1");
-  assert.ok(Math.abs(Math.max(...rr) - b1.r) < 1e-6, `the ball's radius reaches BALL_R: ${Math.max(...rr)} vs ${b1.r}`);
-  const spread0 = Math.max(...b0.outline.map((p) => Math.hypot(p[0] - b0.centre[0], p[1] - b0.centre[1])));
-  assert.ok(spread0 > b1.r * 3, "at k = 0 it is still the page, not the ball");
-  let last = Infinity;   // it contracts, never expands
+  assert.ok(Math.max(...rr) - Math.min(...rr) < 1e-6 && Math.abs(Math.max(...rr) - MELT.BALL_R * RECT.h) < 1e-6);
+  let last = Infinity;
   for (const k of [0, 0.25, 0.5, 0.75, 1]) {
-    const b = ballAt(RECT, k, rnd);
-    const far = Math.max(...b.outline.map((p) => Math.hypot(p[0] - b.centre[0], p[1] - b.centre[1])));
-    assert.ok(far <= last + 1e-9, `the ball grew again at k=${k}`);
-    last = far;
+    const b = ballAt(RECT, k, rnd), far = Math.max(...b.outline.map((p) => Math.hypot(p[0] - b.centre[0], p[1] - b.centre[1])));
+    assert.ok(far <= last + 1e-9); last = far;
   }
-  assert.deepEqual(ballAt(RECT, 0.4, rnd).outline, ballAt(RECT, 0.4, rnd).outline, "pure in k");
 });
 
-test("ballCircle is a circle and ballFlat squashes it about its own centre", () => {
-  const c = [100, 200], ring = ballCircle(c, 30, 16);
-  assert.equal(ring.length, 16);
-  for (const p of ring) assert.ok(Math.abs(Math.hypot(p[0] - c[0], p[1] - c[1]) - 30) < 1e-9);
-  const flat = ballFlat(ring, c, 1);
-  const hy = Math.max(...flat.map((p) => Math.abs(p[1] - c[1]))), wx = Math.max(...flat.map((p) => Math.abs(p[0] - c[0])));
-  assert.ok(Math.abs(hy - 30 * (1 - MELT.FLAT)) < 1e-9, "it loses exactly FLAT of its height");
-  assert.ok(wx > 30, "and gains across");
-  assert.deepEqual(ballFlat(ring, c, 0), ring, "and does nothing at k = 0");
+test("the ink is SQUEEZED into the ball, not cropped by it, and the body comes up solid before it moves", () => {
+  const r = MELT.BALL_R * RECT.h;
+  assert.equal(meltSqueeze(RECT, r, 0), 1);
+  const end = meltSqueeze(RECT, r, 1);
+  assert.ok(Math.abs(end * Math.max(RECT.w, RECT.h) - MELT.SQUEEZE * 2 * r) < 1e-6, "the box's longer side ends at SQUEEZE diameters");
+  let last = 2;
+  for (const k of [0, 0.3, 0.6, 1]) { const s = meltSqueeze(RECT, r, k); assert.ok(s <= last + 1e-12); last = s; }
+  assert.equal(meltBodyAlpha(0), 0);
+  assert.equal(meltBodyGrow(0), MELT.BODY_SEED);
+  assert.equal(meltBodyGrow(MELT.BODY_GROW), 1, "whole by BODY_GROW");
+  const at45 = meltState(4.0, 4.0 + 0.45 * MELT.S, OPTS(), rnd);
+  assert.ok(at45.bodyAlpha === 1 && at45.inkOpacity === 0, "by 045 the chart is a round, solid ball and nothing else");
+  const nums45 = at45.body.match(/-?\d+(\.\d+)?/g).map(Number), rr45 = [];
+  for (let i = 0; i + 1 < nums45.length; i += 2) rr45.push(Math.hypot(nums45[i] - at45.centre[0], nums45[i + 1] - at45.centre[1]));
+  assert.ok(Math.abs(Math.max(...rr45) - at45.r) < at45.r * 0.05, "at its full radius");
+  assert.ok(meltState(4.0, 4.0 + 0.15 * MELT.S, OPTS(), rnd).textOpacity > 0.3 && meltState(4.0, 4.0 + 0.45 * MELT.S, OPTS(), rnd).textOpacity === 0, "the words run and are gone by the ball");
+  assert.equal(meltBodyAlpha(MELT.BODY_TO), 1, "solid from BODY_TO");
+  assert.equal(meltBodyAlpha(1), 1);
+  const t0 = 4.0, at = (u) => meltState(t0, t0 + u * MELT.S, OPTS(), rnd);
+  const b = at(0.45);
+  assert.equal(b.phase, "ball");
+  assert.ok(b.scale < 1 && b.body.length > 0, "mid-ball: squeezed, with a body");
+  const c = b.centre, bodyFar = Math.max(...b.bodyOutline.map((p) => Math.hypot(p[0] - c[0], p[1] - c[1])));
+  const maskFar = Math.max(...b.outline.map((p) => Math.hypot(p[0] - c[0], p[1] - c[1])));
+  assert.ok(Math.abs(maskFar * b.scale - bodyFar) < 1e-6, "the mask is the body, unsqueezed into the ink's own px");
 });
 
-// ---- the splash --------------------------------------------------------------------------------------------------
-test("the splash throws DROPS droplets outward, each monotone along its own ray, all gone at k = 1", () => {
-  const c = [900, 500], ks = [0, 0.2, 0.4, 0.6, 0.8, 1];
-  const runs = ks.map((k) => splashDrops(c, RECT.h, k, rnd));
-  for (const drops of runs) assert.equal(drops.length, MELT.DROPS, "the ring's count is the dial");
-  for (let i = 0; i < MELT.DROPS; i++) {
-    let last = -1;
-    for (let j = 0; j < ks.length; j++) {
-      const d = runs[j][i];
-      assert.ok(d.d >= last - 1e-9, `droplet ${i} came back at k=${ks[j]}`);
-      last = d.d;
-    }
-    assert.ok(last > 0, `droplet ${i} never left`);
-    assert.ok(runs[0][i].d === 0, "and none of them is out before the burst");
-  }
-  assert.ok(runs[ks.length - 1].every((d) => d.alpha === 0), "every droplet has faded to nothing at k = 1");
-  assert.ok(runs[1].every((d) => d.alpha === 1), "ink does not thin as it flies: it is at full strength on the way out");
-  assert.ok(runs[4].every((d) => d.alpha > 0 && d.alpha < 1), "and is going by the end");
-  for (let i = 0; i < MELT.DROPS; i++) {
-    let a = 2;
-    for (const drops of runs) { assert.ok(drops[i].alpha <= a + 1e-9, `droplet ${i} got darker again`); a = drops[i].alpha; }
-  }
-  const angles = runs[3].map((d) => d.a);
-  assert.equal(new Set(angles).size, MELT.DROPS, "a RING: no two droplets on one ray");
-  assert.ok(runs[4].every((d) => d.y > c[1] - RECT.h), "gravity pulls them down, never up out of the frame");
-  assert.deepEqual(splashDrops(c, RECT.h, 0.5, rnd), splashDrops(c, RECT.h, 0.5, rnd), "seeded, not random");
+test("the ball ink is the marks' own mix, concentrated: the same family, darker", () => {
+  const marks = ["#FF8A4C", "#2EE6B0", "#4FB3FF", "#C9CED6"];
+  const own = meltMixInk(marks, 1), dense = meltMixInk(marks, 3), core = meltMixInk(marks, 12);
+  assert.ok(lum(dense) < lum(own) && lum(core) < lum(dense), `${own} > ${dense} > ${core}`);
+  const self = hexToLin(meltMixInk(["#FF8A4C"], 1)), want = hexToLin("#FF8A4C");   // ink.mjs ksFromR clamps R to 0.995
+  assert.ok(self.every((v, i) => Math.abs(v - want[i]) < 0.01), "one colour mixed with itself is itself (to the K-M clamp)");
+  assert.ok(/^#[0-9a-f]{6}$/.test(meltMixInk([], 2)), "a page with no strokes still has an ink");
+  // THE INK is the DOMINANT stroke, never the mix (the mix of the golden page's series lands on green)
+  const inkH = hexToLin(meltInkOf(marks, 1)), orange = hexToLin("#FF8A4C");
+  assert.ok(inkH.every((v, i) => Math.abs(v - orange[i]) < 0.01), "the ink is the first series' stroke");
+  const deep = hexToLin(meltInkOf(marks, MELT.INK_DEEP));
+  assert.ok(deep[0] > deep[1] && deep[1] > deep[2] && lum(meltInkOf(marks, MELT.INK_DEEP)) < lum("#FF8A4C"), "the same hue, deeper - not green");
+  assert.equal(meltTint("melt", 0), 0);
+  assert.ok(Math.abs(meltTint("melt", 1) - MELT.TINT_MELT) < 1e-12 && Math.abs(meltTint("ball", 0) - MELT.TINT_MELT) < 1e-12, "continuous");
+  assert.equal(meltTint("ball", 0.5), 1, "the marks are all ink by the ball's middle");
+});
+
+// ---- the weight --------------------------------------------------------------------------------------------------
+test("the ball has WEIGHT: stopaction's squash on the melt's material, held on 2s, heavier than a card's", () => {
+  assert.equal(MELT.MASS, "liquid");
+  assert.ok(MASS[MELT.MASS].squash_frames >= 2, "a heavy wet body holds its squash two frames");
+  assert.ok(MELT.SQUASH > STOP.IMPACT_SQUASH, "and squashes harder than a card");
+  assert.ok(MELT.ARC < STOP.ARC && MELT.SPIN_DEG < STOP.SPIN_DEG, "a heavy ball lifts and tumbles less than a card");
+  assert.equal(meltSettle(0), 0, "the contact frame is uncompressed");
+  const seen = [];
+  for (let f = 0; f < 10; f++) seen.push(meltSettle(f / MELT.FPS));
+  assert.ok(Math.max(...seen) === MELT.SQUASH, `the squash reaches its dial: ${seen}`);
+  assert.equal(seen[seen.length - 1], 0, "and is released");
 });
 
 // ---- the throw ---------------------------------------------------------------------------------------------------
-test("the throw starts at rest and leaves the stage", () => {
+test("the throw: the ball sits in its squash, launches, and leaves the stage; the board goes at the launch", () => {
   const to = { x: 1500, y: 900 }, F = 0.72;
-  const a = meltThrowAt(0, to, F);
-  assert.ok(Math.hypot(a.x, a.y) < 1e-9, "at k = 0 the ball is where the page was");
+  assert.ok(Math.hypot(meltThrowAt(0, to, F).x, meltThrowAt(0, to, F).y) < 1e-9);
   const z = meltThrowAt(1, to, F);
-  assert.ok(Math.abs(z.x - to.x) < 1e-6 && Math.abs(z.y - to.y) < 1e-6, "at k = 1 it is at the declared point");
-  let last = -1;
-  for (const k of [0, 0.2, 0.4, 0.6, 0.8, 1]) {
-    const s = meltThrowAt(k, to, F);
-    assert.ok(Math.hypot(s.x, s.y) >= last - 1e-9, `the flight doubled back at ${k}`);
-    last = Math.hypot(s.x, s.y);
-    if (k > 0) assert.equal(s.phase, "flight", "it never lands: a thrown page has no landing on this stage");
+  assert.ok(Math.abs(z.x - to.x) < 1e-6 && Math.abs(z.y - to.y) < 1e-6);
+  const t0 = 4.0, at = (u) => meltState(t0, t0 + u * MELT.S, OPTS(), rnd);
+  const rest = at(MELT.BALL_END + 0.02);
+  assert.equal(rest.phase, "fly");
+  assert.ok(rest.boardUp && Math.hypot(rest.xf.x, rest.xf.y) < 1e-9, "at rest, on the board");
+  const rel = meltRelease();
+  assert.ok(at(rel - 0.01).boardUp && !at(rel + 0.01).boardUp, "the board is up until the launch");
+  const end = at(0.999), cx = end.centre[0] + end.xf.x, cy = end.centre[1] + end.xf.y;
+  assert.ok(cx - end.r > SB.x + SB.w || cy - end.r > SB.y + SB.h, `still on stage at (${cx.toFixed(0)}, ${cy.toFixed(0)})`);
+  assert.equal(end.drops.length, 0); assert.equal(end.reveal, false);
+  assert.equal(meltDrawDelay(meltOpts("melt"), true), rel * MELT.S, "the next chart's clock starts at the launch");
+  assert.equal(meltDrawDelay(meltOpts("melt"), false), 0, "a world that is not a page has no clock to hold");
+  assert.equal(meltDrawDelay(meltOpts("melt:splash:chart"), true), 0, "a splash's chart arrives built, through the stains");
+});
+
+// ---- the splash --------------------------------------------------------------------------------------------------
+test("the splatter lands ON the board: every drop along its own ray, monotone, never past its landing", () => {
+  const c = [900, 520], ks = [0, 0.2, 0.4, 0.6, 0.8, 1], runs = ks.map((k) => splashDrops(c, RECT, k, rnd));
+  for (let i = 0; i < MELT.DROPS; i++) {
+    let last = -1;
+    for (const drops of runs) { assert.ok(drops[i].d >= last - 1e-9 && drops[i].d <= drops[i].land + 1e-9); last = drops[i].d; }
+    const d = runs[ks.length - 1][i];
+    assert.ok(Math.abs(d.d - d.land) < 1e-9, "landed at k = 1");
+    assert.ok(d.x >= RECT.x && d.x <= RECT.x + RECT.w && d.y >= RECT.y && d.y <= RECT.y + RECT.h, `drop ${i} landed off the board`);
   }
-  assert.ok(Math.abs(meltThrowAt(0.5, to, F).rot) > 0, "and it tumbles on the way out");
+  assert.equal(new Set(runs[3].map((d) => d.a)).size, MELT.DROPS, "no two drops on one ray");
+  assert.deepEqual(splashDrops(c, RECT, 0.5, rnd), splashDrops(c, RECT, 0.5, rnd), "seeded");
+  const mid = runs[2], land = runs[ks.length - 1];
+  assert.ok(mid.every((d, i) => d.tail > land[i].tail), "a drop in flight trails a longer tail than a landed splat");
+  assert.equal(splashSats(runs[0]).length, 0, "no satellites before the burst");
+  assert.equal(splashSats(land).length, 2 * MELT.DROPS, "two satellites behind every splat");
+  const d0 = land[0], sp = meltSplatPath(d0.x, d0.y, d0.r, d0.a + Math.PI, d0.tail, rnd, 500);
+  assert.ok(sp.startsWith("M") && sp.endsWith("Z") && sp === meltSplatPath(d0.x, d0.y, d0.r, d0.a + Math.PI, d0.tail, rnd, 500), "a closed, seeded splat");
+  const nums = sp.match(/-?\d+(\.\d+)?/g).map(Number), far = [];
+  for (let i = 0; i + 1 < nums.length; i += 2) far.push(Math.hypot(nums[i] - d0.x, nums[i + 1] - d0.y));
+  assert.ok(Math.max(...far) > d0.r * 2, "its tail reaches past its body");
 });
 
-test("the whole ball leaves the stage by the end of a default melt", () => {
-  const st = meltState(4.0, 4.0 + MELT.S * 0.999, OPTS(), rnd);
-  assert.equal(st.phase, "fly");
-  const cx = st.centre[0] + st.xf.x, cy = st.centre[1] + st.xf.y;
-  const out = cx - st.r > SB.x + SB.w || cy - st.r > SB.y + SB.h || cx + st.r < SB.x || cy + st.r < SB.y;
-  assert.ok(out, `the ball is still on the stage at (${cx.toFixed(0)}, ${cy.toFixed(0)}) r=${st.r.toFixed(0)}`);
-});
-
-// ---- the state ---------------------------------------------------------------------------------------------------
-test("meltState is a pure function of t: the same instant twice is the same object", () => {
-  for (const u of [0, 0.1, 0.3, 0.45, 0.55, 0.7, 0.95, 1.2]) {
-    const t = 4.0 + u * MELT.S;
-    const a = meltState(4.0, t, OPTS(), rnd), b = meltState(4.0, t, OPTS(), rnd);
-    assert.deepEqual(a, b, `u=${u} is not a pure function of t`);
-    const c = meltState(4.0, t, OPTS({ splash: true }), rnd), d = meltState(4.0, t, OPTS({ splash: true }), rnd);
-    assert.deepEqual(c, d, `u=${u} (splash) is not a pure function of t`);
+test("the paint: stains grow from the drops and the ball's impact, the board's cover goes to exactly nothing", () => {
+  const c = [900, 520], r = MELT.BALL_R * RECT.h, drops = splashDrops(c, RECT, 1, rnd);
+  const gs = [0, 0.25, 0.5, 0.75, 0.999, 1], paints = gs.map((g) => splashStains(drops, c, r, RECT, g, rnd));
+  for (const p of paints) assert.equal(p.stains.length, MELT.DROPS + 1, "one per drop and one under the impact");
+  for (let i = 0; i <= MELT.DROPS; i++) {
+    let last = -1;
+    for (const p of paints) { assert.ok(p.stains[i].r >= last - 1e-9, `stain ${i} shrank`); last = p.stains[i].r; }
   }
+  assert.ok(Math.abs(paints[0].stains[0].r - drops[0].r) < 1e-9, "a stain starts as its drop");
+  assert.equal(paints[0].cover, 1); assert.equal(paints[paints.length - 1].cover, 0);
+  assert.equal(paints[0].rim, 1); assert.equal(paints[paints.length - 1].rim, 0);
 });
 
-test("meltState walks the four phases and hands the painter what each one needs", () => {
-  const t0 = 4.0, at = (u, extra) => meltState(t0, t0 + u * MELT.S, OPTS(extra), rnd);
-  const m = at(0.15);
-  assert.equal(m.phase, "melt");
-  assert.ok(m.blur > 0 && m.path.startsWith("M") && m.path.endsWith("Z"), "a closed path and a blur");
-  assert.equal(m.xf, null); assert.equal(m.drops.length, 0); assert.equal(m.opacity, 1);
-  const b = at(0.45);
-  assert.equal(b.phase, "ball");
-  assert.ok(b.r > 0 && b.centre.length === 2 && b.path.length > 0);
-  assert.equal(b.xf, null);
-  const f = at(0.75);
-  assert.equal(f.phase, "fly");
-  assert.ok(f.xf && Math.hypot(f.xf.x, f.xf.y) > 0, "the throw is under way");
-  assert.equal(f.drops.length, 0, "a throw has no droplets");
-  const s = at(0.75, { splash: true });
+test("meltState walks each ending: the board is up and never melts, the ink goes, and gone is gone", () => {
+  const t0 = 4.0, at = (u, ending) => meltState(t0, t0 + u * MELT.S, OPTS({ ending }), rnd);
+  for (const ending of MELT_ENDINGS) {
+    const m = at(0.15, ending);
+    assert.equal(m.phase, "melt");
+    assert.ok(m.boardUp && m.cover === 1 && !m.reveal, `${ending}: the board is whole through the sag`);
+    assert.ok(m.run > 0 && m.inkBlur > 0 && m.path.startsWith("M"), "the marks run under the goo");
+    assert.equal(m.body, "", "no ball yet");
+    const b = at(0.45, ending);
+    assert.ok(b.boardUp && b.cover === 1, `${ending}: the board is whole while the ball forms`);
+    const g = at(1.0, ending);
+    assert.ok(g.gone && !g.boardUp && g.inkOpacity === 0);
+  }
+  const s = at(0.62, "splash:chart");
   assert.equal(s.xf, null, "a splash does not travel");
   assert.equal(s.drops.length, MELT.DROPS);
-  assert.ok(s.flat < 1, "the ball flattens as it bursts");
-  assert.ok(at(0.999, { splash: true }).opacity < 0.35, "and is all but gone by the end of its own clock");
-  assert.equal(splashFade(1), 0, "which is exactly nothing when that clock reaches 1");
-  assert.equal(splashFade(0), 1);
-  assert.equal(splashFade(MELT.FADE_FROM), 1, "the ink holds until FADE_FROM, then goes");
-  const g = at(1.0);
-  assert.equal(g.phase, "gone");
-  assert.equal(g.gone, true); assert.equal(g.opacity, 0);
-  assert.equal(at(2.0).phase, "gone", "and it stays gone");
+  assert.ok(s.boardUp && !s.reveal, "the burst lands on a whole board");
+  const p = at(0.85, "splash:chart");
+  assert.ok(p.reveal && p.stains.length === MELT.DROPS + 1 && p.boardUp, "then the board is painted through");
+  assert.equal(p.spring, 1, "a chart does not spring");
+  assert.notEqual(at(0.85, "splash:plate").spring, 1, "a plate springs as it is painted");
+  const sp = []; for (let g = 0; g <= 1.0001; g += 0.02) sp.push(meltSpring(g));
+  assert.ok(Math.min(...sp) <= 1 - MELT.SPRING + 1e-9 && Math.max(...sp) > 1.02, `up from small, over its rest: ${Math.min(...sp)} ${Math.max(...sp)}`);
+  assert.equal(meltSpring(1), 1, "and settled");
+  assert.ok(at(0.999, "splash:plate").cover < 0.05, "and the board's cover is all but gone by the end");
+  assert.ok(at(0.62, "splash:chart").dropAlpha === 1 && at(0.95, "splash:chart").dropAlpha < 0.05, "a landed drop soaks into its stain");
+  assert.ok(at(0.75, "splash:chart").dropAlpha < 0.5 && at(0.75, "splash:chart").dropScale < 1, "by 075 the splats are receding into the chart, never at full ink over it");
+  assert.equal(at(0.75, "splash:plate").dropScale, 1, "the plate's splats keep their size");
 });
 
-test("the ball and the flight ride the STEPPED clock - on 2s, the integer frame index", () => {
-  const t0 = 4.0, seen = new Set();
-  const fps = MELT.FPS, ballFrom = t0 + MELT.MELT_END * MELT.S;
-  for (let f = 0; f < Math.round((MELT.BALL_END - MELT.MELT_END) * MELT.S * fps); f++) {
-    seen.add(meltState(t0, ballFrom + f / fps, OPTS(), rnd).k.toFixed(9));
+test("meltState is a pure function of t: the same instant twice is the same object", () => {
+  for (const ending of MELT_ENDINGS) {
+    for (const u of [0, 0.1, 0.3, 0.45, 0.55, 0.7, 0.85, 0.95, 1.2]) {
+      const t = 4.0 + u * MELT.S;
+      assert.deepEqual(meltState(4.0, t, OPTS({ ending }), rnd), meltState(4.0, t, OPTS({ ending }), rnd), `${ending} u=${u}`);
+    }
   }
+});
+
+test("the ball and the ending ride the STEPPED clock - on 2s - and the sag does not", () => {
+  const t0 = 4.0, fps = MELT.FPS, ballFrom = t0 + MELT.MELT_END * MELT.S, seen = new Set();
   const frames = Math.round((MELT.BALL_END - MELT.MELT_END) * MELT.S * fps);
-  assert.ok(seen.size <= Math.ceil(frames / MELT.HOLD) + 1, `${seen.size} distinct poses over ${frames} frames: not on 2s`);
-  assert.ok(seen.size > 1, "and it does move");
-  // the quantisation IS stopaction's, not a second implementation
+  for (let f = 0; f < frames; f++) seen.add(meltState(t0, ballFrom + f / fps, OPTS(), rnd).k.toFixed(9));
+  assert.ok(seen.size <= Math.ceil(frames / MELT.HOLD) + 1 && seen.size > 1, `${seen.size} poses over ${frames} frames`);
   const span = (MELT.BALL_END - MELT.MELT_END) * MELT.S, tl = 0.1875;
   assert.ok(Math.abs(meltState(t0, ballFrom + tl, OPTS(), rnd).k - stepped(tl, MELT.HOLD, fps) / span) < 1e-12);
-});
-
-test("the melt phase is NOT stepped: a sag is a liquid, and liquid does not step", () => {
-  const t0 = 4.0, ks = [];
-  for (let f = 0; f < 6; f++) ks.push(meltState(t0, t0 + f / MELT.FPS, OPTS(), rnd).k);
-  assert.equal(new Set(ks).size, 6, "every frame of the sag is its own");
+  const ks = [];
+  for (let f = 0; f < 6; f++) ks.push(meltState(t0, t0 + f / fps, OPTS(), rnd).k);
+  assert.equal(new Set(ks).size, 6, "liquid does not step");
 });
 
 // ---- the markup --------------------------------------------------------------------------------------------------
-test("the filter is a blur under an alpha ramp, and the mask is one filtered path", () => {
+test("the filters: blur under an alpha ramp; the run offsets the marks down; the reveal is white cut by filtered stains", () => {
   const f = meltFilterMarkup("meltf", 0.15);
-  assert.ok(f.includes('id="meltf"'));
-  assert.ok(/<feGaussianBlur stdDeviation="\d+\.\d\d"\/>/.test(f), f);
-  assert.ok(f.includes('slope="' + MELT.EDGE_SLOPE + '"'), "the gooey threshold");
-  assert.ok(f.indexOf("feGaussianBlur") < f.indexOf("feFuncA"), "blur FIRST, then the ramp - the other way round is a fade");
-  assert.ok(!f.includes("feColorMatrix"), "the K-M colour stages would flatten the world to a silhouette");
+  assert.ok(f.indexOf("feGaussianBlur") < f.indexOf("feFuncA") && f.includes('slope="' + MELT.EDGE_SLOPE + '"'));
+  assert.ok(!f.includes("feColorMatrix"));
   const m = meltMaskMarkup("meltm", "meltf");
-  assert.ok(m.includes('<mask id="meltm"') && m.includes('filter="url(#meltf)"') && m.includes('fill="#fff"'));
-  assert.ok(m.includes('maskUnits="objectBoundingBox"'));
+  assert.ok(m.includes('<mask id="meltm"') && m.includes('filter="url(#meltf)"'));
+  const i = meltInkFilterMarkup("melti");
+  assert.equal((i.match(/<feOffset /g) || []).length, MELT.RUN_COPIES);
+  assert.ok(i.includes('tableValues="0 0 1 1 1"') && i.indexOf("tableValues") < i.indexOf("feOffset"), "faint pixels are cut BEFORE the run: a wash would ramp into a slab");
+  assert.ok(i.indexOf("feMerge") < i.indexOf("feGaussianBlur") && i.indexOf("feGaussianBlur") < i.lastIndexOf("feFuncA"), "merge the run, then the goo");
+  const r = meltRevealMarkup("meltr", "melts");
+  assert.ok(r.includes('fill="#fff"') && r.includes('filter="url(#melts)"') && r.indexOf("<rect") < r.indexOf("<g "), "white first, the stains over it");
+  const st = { centre: [100, 200], xf: { x: 10, y: 20, rot: 3 }, squash: { a: 0.3, theta: 0 } };
+  assert.ok(/^translate\(110\.00 220\.00\) rotate\(3\.00\) matrix\(1\.3000 0\.0000 0\.0000 0\.7692 0 0\) translate\(-100\.00 -200\.00\)$/.test(meltBodyTransform(st)), meltBodyTransform(st));
 });

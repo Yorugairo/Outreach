@@ -6,8 +6,8 @@ import { IDLE, IDLE_KINDS, idleClock, breath, drift, pulse, figureBreath, figure
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 
-test("the kinds are the five E49 names and the dials carry the starting references", () => {
-  assert.deepEqual([...IDLE_KINDS], ["none", "breath", "drift", "pulse", "figure"]);
+test("the kinds are the E49 names (live restored by R26-93) and the dials carry the starting references", () => {
+  assert.deepEqual([...IDLE_KINDS], ["none", "breath", "drift", "pulse", "figure", "live"]);
   assert.ok(IDLE.BREATH_AMP >= 0.01 && IDLE.BREATH_AMP <= 0.02, "E49: a breathing scale of 1-2 %");
   assert.ok(IDLE.BREATH_HZ >= 0.20 && IDLE.BREATH_HZ <= 0.30, "48 s48.4: 0.20-0.30 Hz");
   assert.ok(IDLE.FIGURE_IE >= 1.5 && IDLE.FIGURE_IE <= 2.0, "48 s48.4: I:E 1:1.5 to 1:2");
@@ -88,6 +88,22 @@ test("idleXf: none is the identity to the string; each kind moves only its own c
   const f = idleXf("figure", 1.0, 0.25);
   assert.ok(f.scale >= 1 && f.lum === 1);
   assert.deepEqual(idleXf("not-a-kind", 1, 0), id, "an unknown kind is stillness, never a throw");
+});
+
+test("R26-93: live is exactly breath + drift, so a chart at the page centre moves (dx/dy and scale both change)", () => {
+  assert.ok(IDLE_KINDS.includes("live"));
+  let moved = false, scaled = false;
+  for (let i = 0; i <= 60; i++) {   /* t in [0, 2] s at 30 fps */
+    const t = i / 30, l = idleXf("live", t), b = idleXf("breath", t), d = idleXf("drift", t);
+    if (l.dx !== 0 || l.dy !== 0) moved = true;
+    if (l.scale !== 1) scaled = true;
+    assert.equal(l.scale, b.scale, `t=${t}: scale is the breath's`);
+    assert.equal(l.dx, d.dx, `t=${t}: dx is the drift's`);
+    assert.equal(l.dy, d.dy, `t=${t}: dy is the drift's`);
+    assert.equal(l.lum, 1);
+  }
+  assert.ok(moved, "live translates: the pixel at the page centre is never still");
+  assert.ok(scaled, "live breathes");
 });
 
 test("idleCss writes fixed decimals so two seeks to one t write one string", () => {

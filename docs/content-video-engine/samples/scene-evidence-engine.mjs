@@ -1297,10 +1297,10 @@ async function mount(doc) {
      Kinds: breath - a scale that inhales ABOVE rest and never below it (a plate shrinking under its box shows its
      edge); drift - a bounded Lissajous walk of a few px; pulse - a luminance dip; figure - the asymmetric breath doc 48
      s48.4 prescribes for a standing figure (inspiratory:expiratory 1:1.5-1:2, a post-expiratory pause) with its two-rate
-     sway; none - explicit stillness, declared.
+     sway; live - breath + drift; none - explicit stillness, declared.
      Every number below is a starting reference, tagged where it came from; the operator's eye moves them (42 s42.5). */
 
-  const IDLE_KINDS = Object.freeze(["none", "breath", "drift", "pulse", "figure"]);
+  const IDLE_KINDS = Object.freeze(["none", "breath", "drift", "pulse", "figure", "live"]);
 
   const IDLE = Object.freeze({
     BREATH_AMP: 0.012,        /* [DERIVED: HyperFrames /prompting/motion "1-2 %", verified 2026-09-06; measure on ours] - a 1.2 % inhale */
@@ -1380,6 +1380,10 @@ async function mount(doc) {
     if (kind === "drift") { const d = drift(tq, phase, P); return Object.assign(id, { dx: d[0], dy: d[1] }); }
     if (kind === "pulse") return Object.assign(id, { lum: pulse(tq, phase, P) });
     if (kind === "figure") { const s = sway(tq, phase, P); return Object.assign(id, { scale: 1 + P.BREATH_AMP * figureBreath(tq, phase, P), dx: s[0], dy: s[1] }); }
+      if (kind === "live") {   /* breath + drift (2026-09-08): a breath is a scale with a fixed point at the centre, so a chart at the page centre
+                                  stayed bit-identical while the page "breathed" (operator: "even our charts need some sort of life, even if it's
+                                  just 1 pixel shifts"); the drift moves every pixel by the same 1-2 px walk, so nothing on the page is ever still */
+        const d = drift(tq, phase, P); return Object.assign(id, { scale: breath(tq, phase, P), dx: d[0], dy: d[1] }); }
     return id;
   };
 
@@ -2755,6 +2759,15 @@ async function mount(doc) {
                           COOL CAST the order allowed is skipped on purpose - it fights the cream (E22's ground). */
   });
   const embedOf = (d) => (d && d.embed && Array.isArray(d.embed.quad) && d.embed.quad.length === 4 ? d.embed : null);
+  /* A PICTURE ON A SURFACE (the operator, 2026-09-13: "the tv surface should definitely be prepared to hold video and
+     images - that would be silly if it didn't"; Bravos plays the whole broadcast clip on the studio's TV). An image dock
+     or a clip whose entry carries `fit` (the compiler writes `cover` for a still or a clip on a surface unless the row says
+     `contain`) is not a card: no paper, no masthead, no rail - the slide-frame takes the surface's WHOLE box (E66) and
+     the picture covers it, or is contained on the screen's own dark, projected by the same homography as the card.
+     An entry without `fit` is the reflowed card it always was. */
+  const EMBED_FITS = new Set(["cover", "contain"]);
+  const EMBED_FILL_GROUND = "#05131e";   /* a contained picture's bars on a SCREEN: the room's own ink, a dark screen */
+  const embedFitOf = (em) => (em && EMBED_FITS.has(em.fit) ? em.fit : null);
   const EMBED_GEO = Object.create(null);   /* per slide: the live surface, box and matrix - what the underline reads */
   const embedQuadPx = (em) => em.quad.map((p) => [p[0] * STAGE_W, p[1] * STAGE_H]);   /* the manifest's stage fractions */
 
@@ -2790,14 +2803,16 @@ async function mount(doc) {
     const em = embedOf(d), quad = embedQuadPx(em), bb = quadBounds(quad);
     if (!bb || !(bb.w > 2) || !(bb.h > 2)) return null;
     el.style.transform = "none"; el.style.transformOrigin = "0 0";
-    const css = embedCss(el, el.id || d.slide);
-    const k = pressTypeScale(bb.w, css.w);
+    const fit = embedFitOf(em);
+    const css = fit ? null : embedCss(el, el.id || d.slide);   /* a picture has no authored card to scale */
+    const k = fit ? 1 : pressTypeScale(bb.w, css.w);
     el.style.left = bb.x.toFixed(2) + "px"; el.style.top = bb.y.toFixed(2) + "px";
     el.style.width = bb.w.toFixed(2) + "px"; el.style.height = bb.h.toFixed(2) + "px";
-    embedReflow(el, d, css, k, +em.img > 0 ? +em.img : 0);
+    if (fit) embedFill(el, fit, embedKindOf(em) === "screen", bb.w);
+    else embedReflow(el, d, css, k, +em.img > 0 ? +em.img : 0);
     const box = { x: bb.x, y: bb.y, w: bb.w, h: bb.h };
     const m = embedMatrix(quad, box);
-    return m ? { quad, box, m, k, em, kind: embedKindOf(em) } : null;
+    return m ? { quad, box, m, k, em, kind: embedKindOf(em), fit } : null;
   };
 
   /* THE CARD'S AUTHORED PX, read from the CSS ONCE per card and never again: the width its layout is written at
@@ -2894,6 +2909,54 @@ async function mount(doc) {
     }
   };
 
+  /* THE PICTURE TAKES THE BOX: the card's chrome stands down and the frame fills the surface, the <img> or the dock's
+     pooled <video> (paintDockClip, already mounted this frame) filling the frame by `object-fit`. A SCREEN's inner
+     falloff cannot be the card's inset shadow here - the picture covers the element's own background, where an inset
+     shadow paints - so it is one positioned overlay inside the frame, above the picture. Pure layout: nothing here
+     waits on a decode. embedUnfill hands the slot back when it next carries something else. */
+  const EMBED_FILL_EL = ["display", "padding", "border", "borderRadius", "background", "overflow"];
+  const EMBED_FILL_FRAME = ["width", "height", "margin", "border", "borderRadius", "aspectRatio", "background", "position"];
+  const embedFill = (el, fit, screen, bw) => {
+    el.dataset.embedFill = fit;
+    Object.assign(el.style, { display: "block", padding: "0px", border: "0px", borderRadius: "0px",
+                              background: "transparent", overflow: "hidden" });
+    for (const n of el.querySelectorAll(".pmast, .rail")) n.style.display = "none";
+    const frame = el.querySelector(".slide-frame"); if (!frame) return;
+    Object.assign(frame.style, { width: "100%", height: "100%", margin: "0px", border: "0px", borderRadius: "0px",
+                                 aspectRatio: "auto", position: "relative",
+                                 background: fit === "contain" && screen ? EMBED_FILL_GROUND : "transparent" });
+    for (const im of frame.querySelectorAll("img")) Object.assign(im.style, { width: "100%", height: "100%", objectFit: fit });
+    /* the clip's own CSS already fills and covers; only `contain` is written, so a pooled clip carries nothing away */
+    for (const v of frame.querySelectorAll("video.clipv")) v.style.objectFit = fit === "contain" ? fit : "";
+    let vig = frame.querySelector(".embedvig");
+    if (screen && !vig) {
+      vig = document.createElement("div"); vig.className = "embedvig"; vig.setAttribute("aria-hidden", "true");
+      vig.style.cssText = "position:absolute; inset:0; pointer-events:none;"; frame.appendChild(vig);
+    }
+    if (vig) vig.style.boxShadow = screen ? "inset 0 0 " + (EMBED.VIGNETTE * bw).toFixed(1) + "px " + EMBED.VIG_INK : "none";
+  };
+  const embedUnfill = (el) => {
+    if (!el.dataset.embedFill) return;
+    delete el.dataset.embedFill;
+    for (const p of EMBED_FILL_EL) el.style[p] = "";
+    for (const n of el.querySelectorAll(".pmast, .rail")) n.style.display = "";
+    const frame = el.querySelector(".slide-frame"); if (!frame) return;
+    for (const p of EMBED_FILL_FRAME) frame.style[p] = "";
+    for (const m of frame.querySelectorAll("img, video.clipv")) { m.style.width = ""; m.style.height = ""; m.style.objectFit = ""; }
+    const vig = frame.querySelector(".embedvig"); if (vig) vig.remove();
+  };
+  /* E59 reason 4, carried to what the surface holds: a camera move is ONE transform on the world layer about the
+     stage's centre, and a surface is PART of that world - so what lands on it rides the same move (left in screen
+     space, a clip slid off the TV mid-push). Written about the card's own origin (0 0 at its box corner); "" while the
+     eye is still, so every frame outside a camera window is byte-identical. */
+  const embedCam = (d, t, box) => {
+    const cam = d && d.scene ? camCss(camNow(d.scene, t)) : "";
+    if (!cam) return "";
+    const cx = STAGE_W / 2 - box.x, cy = STAGE_H / 2 - box.y;
+    return "translate(" + cx.toFixed(2) + "px," + cy.toFixed(2) + "px) " + cam
+      + " translate(" + (-cx).toFixed(2) + "px," + (-cy).toFixed(2) + "px) ";
+  };
+
   /* the whole transform at t: the projection, the arrival composed around it, the idle inside it */
   const embedPaint = (el, d, t) => {
     const g = embedPlace(el, d);
@@ -2913,14 +2976,17 @@ async function mount(doc) {
     }
     const cx = (g.box.w / 2).toFixed(2), cy = (g.box.h / 2).toFixed(2);
     const idle = idleCssFor("dock", d.idle, t, Math.round(d.enter * 100) + (d.slot | 0), 3);   /* E49, in the card's own plane */
-    el.style.transform = cssMatrix3d(m)
+    el.style.transform = embedCam(d, t, g.box) + cssMatrix3d(m)
       + (idle ? " translate(" + cx + "px," + cy + "px)" + idle + " translate(-" + cx + "px,-" + cy + "px)" : "");
     /* THE CARD'S EDGE. On a PAPER the card lies on the surface and carries its own small shadow there. On a SCREEN
        there is nothing for a shadow to fall on - the card IS the picture the screen is showing - so the shadow comes
        off and the bezel's INNER falloff goes on instead (an inset vignette a few % of the surface's width, in the
        room's own ink), which is what makes the card read as inside the frame rather than stuck to the glass; and the
        card's paper is lifted toward that light by EMBED.LIFT. */
-    if (g.kind === "screen") {
+    if (g.fit && g.kind === "screen") {   /* a picture on a screen: the falloff is the frame's overlay, and no paper to lift */
+      el.style.boxShadow = "none";
+      el.style.filter = "";
+    } else if (g.kind === "screen") {
       el.style.boxShadow = "inset 0 0 " + (EMBED.VIGNETTE * g.box.w).toFixed(1) + "px " + EMBED.VIG_INK;
       el.style.filter = "brightness(" + EMBED.LIFT.toFixed(2) + ")";
     } else {
@@ -3174,37 +3240,26 @@ async function mount(doc) {
          (the dock stays as an invisible lifecycle anchor). Scattered
          asymmetric placement keeps the plate breathing through the
          gaps; the burst throws each card radially off its position. */
-      /* nine rail spots: four across the top, mid-frame flanks, three
-         along the bottom - the center stays open for the active card */
-      const SPOTS = [
-        [2, 5, 24], [27, 3, 22], [51, 4, 22], [74, 5, 24],
-        [1, 40, 22], [77, 40, 22],
-        [4, 62, 26], [37, 66, 24], [68, 62, 26]];
+      /* nine rail spots (VERDICT.SPOTS): four across the top, mid-frame flanks,
+         three along the bottom - the center stays open for the active card */
       const sb = document.createElement("div");
       sb.className = "stackbox";
       const items = ev.stack.items.map((it, i) => {
-        const [L, T, W] = SPOTS[i % SPOTS.length];
+        /* hyperframes geometry (operator: "the evidence is actually
+           dancing" in that cut): the base CSS rect is the card's RAIL
+           spot; the ACTIVE pose is a transform relative to it - both,
+           and the burst's bearing, from species/verdict.mjs (P55 T7) */
+        const g = verdictGeometry(i, STAGE_W, STAGE_H);
         const card = document.createElement("div");
         card.className = "stackcard";
-        card.style.left = L + "%"; card.style.top = T + "%";
-        card.style.width = W + "%";
+        card.style.left = g.L + "%"; card.style.top = g.T + "%";
+        card.style.width = g.W + "%";
         const img = document.createElement("img");
         img.src = A[it.id] || "";
         card.appendChild(img);
         sb.appendChild(card);
-        /* hyperframes geometry (operator: "the evidence is actually
-           dancing" in that cut): the base CSS rect is the card's RAIL
-           spot; the ACTIVE pose (large, near stage center, where the
-           card lives WHILE ITS LINE IS SPOKEN) is a transform relative
-           to it. Stage is 1920x1080. */
-        const wpx = W / 100 * STAGE_W, hpx = wpx * 480 / 1056;
-        const cx = L / 100 * STAGE_W + wpx / 2, cy = T / 100 * STAGE_H + hpx / 2;
-        const acx = 930 + (i % 2 ? 70 : -70), acy = 400 + (i % 3) * 26;
-        return { card, at: it.at,
-                 tilt: [-3, 2, -2, 3, -2.5, 2.5][i % 6],
-                 dir: i % 2 ? 1 : -1,
-                 adx: acx - cx, ady: acy - cy, asc: 840 / wpx,
-                 bx: (cx - STAGE_W / 2) / (STAGE_W * 700 / 1920), by: (cy - STAGE_H / 2) / (STAGE_H * 460 / 1080) };   /* the burst's normalised offset from the STAGE centre; the 700/460 divisors were landscape px, kept as fractions so landscape is identical (2026-09-08) */
+        return { card, at: it.at, tilt: g.tilt, dir: g.dir,
+                 adx: g.adx, ady: g.ady, asc: g.asc, bx: g.bx, by: g.by };
       });
       document.getElementById("stage").appendChild(sb);
       stackState[slot] = { sb, items, clear_at: ev.stack.clear_at };
@@ -3528,45 +3583,11 @@ async function mount(doc) {
            cells run into their neighbours. Columns now AUTO-FIT: text
            is measured at the first animation tick (needs the DOM),
            widths distribute across the usable span, and any cell still
-           over its allotment squeezes via textLength. */
-        const defCol = ["#f4f6f8", "#dce3ea", "#3bc9b0", "#ff8a8c"];
-        const headEls = C.checklist.head.map((h) =>
-          mk("text", { class: "csr", x: PL, y: PT + 18 }, h));
-        st.rowEls = [];
-        C.checklist.rows.forEach((r, i) => {
-          const y = PT + 64 + i * 58;
-          const colr = r.colors || defCol;
-          const cells = [];
-          r.cells.forEach((cell, ci) => {
-            const g2 = mk("g", { opacity: 0 });
-            let sweep = null, band = null;
-            if (ci >= 2 && cell) {
-              /* the band: cap-height, behind the text, clipped by a
-                 chisel-tilted wipe. The skew pivots about the BAND'S
-                 OWN corner - a bare skewX(-7) pivots about the SVG
-                 origin and slides the clip tan(7deg)*y (~20-50px)
-                 left, amputating the highlight's right end (the
-                 "incomplete highlighter" QC class). */
-              const cid2 = "hl" + slot + i + ci;
-              const cp2 = mk("clipPath", { id: cid2 }, null,
-                             mk("defs", {}, null, g2));
-              sweep = mk("rect", { x: PL - 8, y: y - 21,
-                width: 0, height: 30 }, null, cp2);
-              const kmBand = kin("km_ink") && /^#[0-9a-f]{6}$/i.test(colr[ci]);   /* K-M (44 s44.1): the band IS a layer of ink over #16181c */
-              band = mk("rect", { x: PL - 8, y: y - 21, width: 10,
-                 height: 30, rx: 4, fill: kmBand ? kmHex("#16181c", colr[ci], INK.HIGHLIGHT_X) : colr[ci], opacity: kmBand ? 1 : 0.28,
-                 "clip-path": `url(#${cid2})`, class: "hlband" + slot + i + ci }, null, g2);
-            }
-            const tx = mk("text", { class: "cs", x: PL, y,
-               fill: colr[ci] }, ci === 0 ? "" : cell, g2);
-            cells.push({ el: g2, tx, txt: cell, ci, sweep, band, y,
-                         bandCls: "hlband" + slot + i + ci });
-          });
-          mk("line", { x1: PL, x2: CW - PR, y1: y + 18, y2: y + 18,
-             stroke: "#24262b", "stroke-width": 1.5 });
-          st.rowEls.push({ d: r.delay || i * 3, cells, y });
-        });
-        st.chkFit = { headEls, done: false, usable: CW - PL - 28 };
+           over its allotment squeezes via textLength.
+           The build and the paint live in species/checklist.mjs (P55 T7). */
+        const built = buildChecklist(C.checklist, { mk, slot, PL, PT, CW, PR, kin });
+        st.rowEls = built.rowEls;
+        st.chkFit = built.chkFit;
       }
       if (C.shares) {
         const rows = C.shares, rh = 46, gap2 = 30;
@@ -3653,54 +3674,374 @@ async function mount(doc) {
   const recState = [null, null];
   const chartState = [null, null];
   const stackState = [null, null];
-  /* the verdict stack: fly-in from depth on each item's word beat,
-     idle float while holding, stagger-burst on the clear beat */
-  const drawStack = (slot, t, d) => {
-    const st = stackState[slot]; if (!st) return;
-    if (t > st.clear_at + 1.4 || t < d.enter - 0.5) {
-      st.sb.remove(); stackState[slot] = null; return;
+  /* KINETICS:BEGIN verdict */
+  /* species/verdict.mjs - THE VERDICT STACK (P55 T7; doc 29 s9.24 / s9.24b; docs/portable/MOTION-GRAMMAR.md, the
+     extraction of the scene-evidence player's `stackbox`/`drawStack`; the Steel and Paper verdict beat, 2026-08-30).
+     SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN verdict and
+     KINETICS:END. It imports nothing; its region sits beside the dock painters it replaced (before `drawStack`).
+
+     A DOCK PAYLOAD, not a species kind: this module registers NO painter. The engine's dock slot calls paintVerdict
+     by name from its `drawStack` (P55 T7's decision: a DOCK_PAINTERS registry waits for a third dock painter -
+     recorded, not built). Promoted from inline engine code with every frame byte-identical (the goldens
+     `verdict-stack`, `verdict-stack@proof-burst`): each literal below is the value the inline code carried.
+
+     WHEN: the episode's verdict line names the proofs it rests on - the stack re-presents documents ALREADY docked
+     elsewhere, one per verbatim beat, and clears on the pivot line (`clear_at`).
+
+     THE LAW: the stack re-presents documents already docked; the dance is the FOCUS HAND-OFF; every pose is a pure
+     function of t (scrub-safe - nothing is stored between frames).
+
+     PHASES and the BLENDS they came from (the operator's references of 2026-08-31, LEDGER ddc90e1656f9):
+       enter  - one card at a time on its word beat, from depth: translateZ ENTER_Z, swung ENTER_SWING px to its
+                side, rotateY ENTER_ROT_Y, over ENTER_S on an out-cubic (remotion-bits transform3d-showcase).
+       focus  - large near stage centre (ACTIVE_X +/- ACTIVE_DX, ACTIVE_Y + row * ACTIVE_ROW_DY, ACTIVE_W px wide)
+                while its phrase is spoken, drifting (the hyperframes-opening-v1 focus hand-off).
+       recede - when the NEXT card's beat lands (the last card: LAST_RECEDE_LEAD before clear_at) it returns over
+                RECEDE_S on an in-out cubic to one of the nine asymmetric SPOTS - the page re-composes as a mosaic
+                (remotion-bits mosaic-reframe).
+       idle   - railed cards float on the drift (DRIFT_* / BOB_*), tilted by TILTS.
+       burst  - on clear_at each card is thrown radially along its own bearing from the stage centre, spinning,
+                BURST_STAGGER apart over BURST_S (remotion-bits fracture-reassemble, inferred); removed at
+                clear_at + REMOVE_AFTER.
+     The dials below are ours to tune (42 s42.5), not findings. doc 29 s9.24's translateZ -940 is stale: the code is -700. */
+
+  const VERDICT = Object.freeze({
+    SPOTS: Object.freeze([           /* the nine rail spots [left %, top %, width %]: four across the top, mid-frame flanks, three along the bottom - the centre stays open for the active card */
+      Object.freeze([2, 5, 24]), Object.freeze([27, 3, 22]), Object.freeze([51, 4, 22]), Object.freeze([74, 5, 24]),
+      Object.freeze([1, 40, 22]), Object.freeze([77, 40, 22]),
+      Object.freeze([4, 62, 26]), Object.freeze([37, 66, 24]), Object.freeze([68, 62, 26])]),
+    TILTS: Object.freeze([-3, 2, -2, 3, -2.5, 2.5]),   /* the railed card's tilt in deg, cycled by index */
+    CARD_W: 1056,          /* the docked document's aspect: width ... */
+    CARD_H: 480,           /* ... and height (hpx = wpx * CARD_H / CARD_W) */
+    ACTIVE_X: 930,         /* the focus pose's centre x in stage px ... */
+    ACTIVE_DX: 70,         /* ... alternating +/- this by index (odd right, even left) */
+    ACTIVE_Y: 400,         /* the focus pose's centre y in stage px ... */
+    ACTIVE_ROW_DY: 26,     /* ... stepped down this per row ... */
+    ACTIVE_ROWS: 3,        /* ... cycling over this many rows (i % 3) */
+    ACTIVE_W: 840,         /* the focus pose's width in stage px (scale = ACTIVE_W / rail width) */
+    BURST_NORM_X: 700,     /* the burst's x normaliser in landscape px (kept as a fraction of REF_W, 2026-09-08) */
+    BURST_NORM_Y: 460,     /* the burst's y normaliser in landscape px (a fraction of REF_H) */
+    REF_W: 1920,           /* the landscape stage the normalisers were measured on: width ... */
+    REF_H: 1080,           /* ... and height */
+    ENTER_S: 0.9,          /* the enter's clock (out-cubic) */
+    ENTER_SWING: 460,      /* the enter's side swing in px, signed by the card's dir */
+    ENTER_RISE: -90,       /* the enter's vertical offset in px (from above) */
+    ENTER_Z: -700,         /* the enter's depth: translateZ px (doc 29 s9.24's -940 is stale) */
+    ENTER_ROT_Y: 30,       /* the enter's rotateY in deg, signed by dir */
+    RECEDE_S: 1.0,         /* the recede's clock (in-out cubic) */
+    LAST_RECEDE_LEAD: 0.9, /* the last card recedes this long before clear_at */
+    DRIFT_W: 0.55,         /* the x drift's angular rate (rad/s) ... */
+    DRIFT_PHASE: 1.7,      /* ... phased per index */
+    DRIFT_X_REST: 8,       /* the x drift amplitude on the rail ... */
+    DRIFT_X_ACTIVE: 26,    /* ... plus this much more in focus */
+    BOB_W: 0.7,            /* the y bob's angular rate (rad/s) ... */
+    BOB_PHASE: 2.1,        /* ... phased per index */
+    BOB_REST: 5,           /* the y bob amplitude on the rail ... */
+    BOB_ACTIVE: 14,        /* ... plus this much more in focus */
+    DRIFT_SCALE: 0.008,    /* the scale breath in focus, times the drift */
+    DRIFT_ROT: 0.6,        /* the rotation drift in focus (deg), times the drift */
+    Z_SWITCH: 0.5,         /* the blend above which the card is on top ... */
+    Z_ACTIVE: 9,           /* ... at this z-index ... */
+    Z_RAIL: 7,             /* ... and below it at this one */
+    BURST_X: 560,          /* the burst's x throw in px along the bearing */
+    BURST_Y: 420,          /* the burst's y throw in px along the bearing */
+    BURST_Z: 340,          /* the burst's translateZ toward the viewer */
+    BURST_SPIN: 24,        /* the burst's spin in deg, signed by dir */
+    BURST_SCALE: 0.22,     /* the burst's added scale */
+    BURST_STAGGER: 0.06,   /* card i bursts this long after card i-1 */
+    BURST_S: 0.5,          /* each card's burst clock (quadratic in) */
+    REMOVE_AFTER: 1.4,     /* the stackbox is removed this long after clear_at ... */
+    MOUNT_LEAD: 0.5,       /* ... and when t is earlier than the dock's enter less this */
+  });
+
+  const verdict01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* THE RAIL SPOT and the focus pose of card i, from the stage size: the base CSS rect is the rail spot, the focus
+     pose is a transform relative to it; bx/by are the burst's normalised offset from the stage centre. */
+  const verdictGeometry = (i, stageW, stageH, V = VERDICT) => {
+    const [L, T, W] = V.SPOTS[i % V.SPOTS.length];
+    const wpx = W / 100 * stageW, hpx = wpx * V.CARD_H / V.CARD_W;
+    const cx = L / 100 * stageW + wpx / 2, cy = T / 100 * stageH + hpx / 2;
+    const acx = V.ACTIVE_X + (i % 2 ? V.ACTIVE_DX : -V.ACTIVE_DX), acy = V.ACTIVE_Y + (i % V.ACTIVE_ROWS) * V.ACTIVE_ROW_DY;
+    return { L, T, W,
+             tilt: V.TILTS[i % V.TILTS.length],
+             dir: i % 2 ? 1 : -1,
+             adx: acx - cx, ady: acy - cy, asc: V.ACTIVE_W / wpx,
+             bx: (cx - stageW / 2) / (stageW * V.BURST_NORM_X / V.REF_W), by: (cy - stageH / 2) / (stageH * V.BURST_NORM_Y / V.REF_H) };
+  };
+
+  /* when card i hands the focus on: the next card's beat, or LAST_RECEDE_LEAD before the clear for the last */
+  const verdictNextAt = (items, i, clearAt, V = VERDICT) =>
+    i + 1 < items.length ? items[i + 1].at : clearAt - V.LAST_RECEDE_LEAD;
+
+  /* THE POSE before the clear: enter -> focus -> recede -> idle. a = the pose blend (0 rail, 1 focus). */
+  const verdictPose = (item, i, t, nextAt, clearAt, V = VERDICT) => {
+    const e = verdict01((t - item.at) / V.ENTER_S);
+    const ee = 1 - Math.pow(1 - e, 3);
+    const r = verdict01((t - nextAt) / V.RECEDE_S);
+    const rr = r < 0.5 ? 4 * r * r * r
+                       : 1 - Math.pow(-2 * r + 2, 3) / 2;
+    const a = ee * (1 - rr);
+    const drift = Math.sin(t * V.DRIFT_W + i * V.DRIFT_PHASE);
+    const dx = item.adx * a + drift * (V.DRIFT_X_REST + V.DRIFT_X_ACTIVE * a);
+    const dy = item.ady * a + Math.cos(t * V.BOB_W + i * V.BOB_PHASE) * (V.BOB_REST + V.BOB_ACTIVE * a);
+    const sc = 1 + (item.asc - 1) * a + drift * V.DRIFT_SCALE * a;
+    return { tx: dx + (1 - ee) * V.ENTER_SWING * item.dir,
+             ty: dy + (1 - ee) * V.ENTER_RISE,
+             tz: (1 - ee) * V.ENTER_Z,
+             rotY: (1 - ee) * V.ENTER_ROT_Y * item.dir,
+             rot: item.tilt * (1 - a) + drift * V.DRIFT_ROT * a,
+             scale: sc, opacity: ee, z: a > V.Z_SWITCH ? V.Z_ACTIVE : V.Z_RAIL, a };
+  };
+
+  /* THE BURST from clear_at: card i thrown along its own bearing (bx, by), BURST_STAGGER after card i-1. */
+  const verdictBurst = (item, i, t, clearAt, V = VERDICT) => {
+    const cb = verdict01((t - clearAt - i * V.BURST_STAGGER) / V.BURST_S);
+    const cbe = cb * cb;
+    return { cb, tx: cbe * V.BURST_X * item.bx, ty: cbe * V.BURST_Y * item.by, tz: cbe * V.BURST_Z,
+             rot: item.tilt + cbe * V.BURST_SPIN * item.dir, scale: 1 + cbe * V.BURST_SCALE, opacity: 1 - cb };
+  };
+
+  /* THE PAINTER: writes every card's pose at t. Returns false when the stack is outside its life (the stackbox is
+     removed - the caller forgets its state), true otherwise. */
+  function paintVerdict(st, t, d, V = VERDICT) {
+    if (t > st.clear_at + V.REMOVE_AFTER || t < d.enter - V.MOUNT_LEAD) {
+      st.sb.remove(); return false;
     }
     st.items.forEach((it, i) => {
       if (t >= st.clear_at) {
-        /* radial burst: each card is thrown outward from stage center
-           along its own bearing, spinning as it goes */
-        const cb = clamp01((t - st.clear_at - i * 0.06) / 0.5);
-        const cbe = cb * cb;
-        it.card.style.opacity = (1 - cb).toFixed(2);
+        const b = verdictBurst(it, i, t, st.clear_at, V);
+        it.card.style.opacity = b.opacity.toFixed(2);
         it.card.style.transform =
-          `translate(${cbe * 560 * it.bx}px, ${cbe * 420 * it.by}px)` +
-          ` translateZ(${cbe * 340}px)` +
-          ` rotate(${it.tilt + cbe * 24 * it.dir}deg)` +
-          ` scale(${1 + cbe * 0.22})`;
+          `translate(${b.tx}px, ${b.ty}px)` +
+          ` translateZ(${b.tz}px)` +
+          ` rotate(${b.rot}deg)` +
+          ` scale(${b.scale})`;
         return;
       }
-      /* hyperframes focus hand-off: enter LARGE at stage center while
-         the phrase is spoken; when the NEXT proof's beat lands, recede
-         to the rail spot; drift the whole time. Pure function of t -
-         scrub-safe. */
-      const nextAt = i + 1 < st.items.length
-        ? st.items[i + 1].at : st.clear_at - 0.9;
-      const e = clamp01((t - it.at) / 0.9);
-      const ee = 1 - Math.pow(1 - e, 3);
-      const r = clamp01((t - nextAt) / 1.0);
-      const rr = r < 0.5 ? 4 * r * r * r
-                         : 1 - Math.pow(-2 * r + 2, 3) / 2;
-      // pose blend: 0 = rail, 1 = active
-      const a = ee * (1 - rr);
-      const drift = Math.sin(t * 0.55 + i * 1.7);
-      const dx = it.adx * a + drift * (8 + 26 * a);
-      const dy = it.ady * a + Math.cos(t * 0.7 + i * 2.1) * (5 + 14 * a);
-      const sc = 1 + (it.asc - 1) * a + drift * 0.008 * a;
-      it.card.style.opacity = ee.toFixed(2);
-      it.card.style.zIndex = a > 0.5 ? 9 : 7;
+      const p = verdictPose(it, i, t, verdictNextAt(st.items, i, st.clear_at, V), st.clear_at, V);
+      it.card.style.opacity = p.opacity.toFixed(2);
+      it.card.style.zIndex = p.z;
       it.card.style.transform =
-        `translate(${(dx + (1 - ee) * 460 * it.dir).toFixed(1)}px,` +
-        ` ${(dy + (1 - ee) * -90).toFixed(1)}px)` +
-        ` translateZ(${(1 - ee) * -700}px)` +
-        ` rotateY(${(1 - ee) * 30 * it.dir}deg)` +
-        ` rotate(${(it.tilt * (1 - a) + drift * 0.6 * a).toFixed(2)}deg)` +
-        ` scale(${sc.toFixed(3)})`;
+        `translate(${p.tx.toFixed(1)}px,` +
+        ` ${p.ty.toFixed(1)}px)` +
+        ` translateZ(${p.tz}px)` +
+        ` rotateY(${p.rotY}deg)` +
+        ` rotate(${p.rot.toFixed(2)}deg)` +
+        ` scale(${p.scale.toFixed(3)})`;
     });
+    return true;
+  }
+  /* KINETICS:END */
+  /* KINETICS:BEGIN checklist */
+  /* species/checklist.mjs - THE TEST CARD (P55 T7; the chart dock's `checklist` form, CHECKLIST v2 - typewriter +
+     marker-highlight, technique ported from remotion-ui: cap-height band, chisel-tilt leading edge, ~0.3 ink over dark
+     ground). SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN
+     checklist and KINETICS:END, AFTER ink - it imports kmHex and INK, and the import order IS the region order.
+
+     A CHART-DOCK FORM, not a species kind: this module registers NO painter. The engine's chart build calls
+     buildChecklist and its drawChart calls paintChecklist by name (P55 T7: no new registry). Promoted from inline
+     engine code with every frame byte-identical (the golden `test-card`): each literal below is the value the inline
+     code carried.
+
+     WHEN (the checklist v2 comment in the engine): a question is put to several candidates - rows whose question cells
+     TYPE on and whose answer cells get the highlighter swept through them; optional per-row cell colours (r.colors)
+     make it a status board.
+
+     THE LAW, all of it a pure function of the dock's clock tRel except the one-time column fit (which needs the DOM):
+       fit    - QC 2026-08-30: columns AUTO-FIT. Natural width per column (headers and cells, col 0 measured with its
+                full text), distributed across the usable span; slack spreads evenly, a deficit squeezes proportionally,
+                and an over-long cell compresses via textLength.
+       rows   - row i lands at its `delay` (else i * ROW_DELAY_S); a checklist on a hold under RECAP_S is a RECAP and
+                fills fast (ri * RECAP_ROW_S) - QC 2026-08-30, the s73 scorecard showed EMPTY.
+       cells  - inside a row: the question TYPES at +0 (one char per TYPE_S), the next cell fades at +0.6, the answers
+                sweep at +1.0 and +1.6 (OFFS; RECAP_OFFS on a recap); each cell fades in over CELL_FADE_S.
+       sweep  - the band is cap-height, behind the text, clipped by a chisel-tilted wipe that grows on an out-cubic over
+                SWEEP_S; the skew pivots about the BAND'S OWN corner (a bare skewX pivots about the SVG origin and
+                amputates the highlight's right end - the "incomplete highlighter" QC class).
+     The dials below are ours to tune (42 s42.5), not findings. */
+
+  const CHECKLIST = Object.freeze({
+    COLORS: Object.freeze(["#f4f6f8", "#dce3ea", "#3bc9b0", "#ff8a8c"]),   /* the default column colours: question, detail, steel, paper */
+    HEAD_DY: 18,           /* the header row's baseline below the plot top */
+    ROW0_DY: 64,           /* the first row's baseline below the plot top ... */
+    ROW_PITCH: 58,         /* ... and the row pitch */
+    ROW_DELAY_S: 3,        /* a row with no `delay` lands at i * this */
+    HL_FROM_COL: 2,        /* cells from this column on carry the highlighter band */
+    BAND_INSET: 8,         /* the band starts this far left of its column ... */
+    BAND_RISE: 21,         /* ... and this far above the baseline ... */
+    BAND_H: 30,            /* ... cap-height tall ... */
+    BAND_W0: 10,           /* ... at this initial width ... */
+    BAND_RX: 4,            /* ... with this corner radius ... */
+    BAND_ALPHA: 0.28,      /* ... at this ink alpha (without the K-M flag) */
+    KM_GROUND: "#16181c",  /* the dark ground the K-M band is a layer of ink over (44 s44.1) */
+    RULE_DY: 18,           /* the row rule below the baseline ... */
+    RULE_COLOR: "#24262b", /* ... its colour ... */
+    RULE_W: 1.5,           /* ... and its stroke width */
+    FIT_MARGIN: 28,        /* the usable span = CW - PL - this */
+    FIT_MIN_W: 40,         /* a column's natural width floor */
+    FIT_PAD: 26,           /* the padding added to every column's natural width */
+    FIT_CHAR_W: 10,        /* the width per character when the DOM cannot measure */
+    FIT_X0: 64,            /* the first column's x */
+    FIT_ROOM_SLACK: 8,     /* a cell's room = its allotment - FIT_PAD + this */
+    CHISEL_DEG: -7,        /* the wipe's chisel tilt (skewX) */
+    RECAP_S: 12,           /* a hold shorter than this is a RECAP */
+    RECAP_ROW_S: 0.8,      /* the recap's row step */
+    OFFS: Object.freeze([0, 0.6, 1.0, 1.6]),          /* the cell offsets inside a row: types, fades, steel sweep, paper sweep */
+    RECAP_OFFS: Object.freeze([0, 0.25, 0.45, 0.7]),  /* ... and on a recap */
+    CELL_FADE_S: 0.35,     /* each cell's fade-in */
+    TYPE_S: 0.045,         /* the type-on rate: one character per this */
+    SWEEP_S: 0.55,         /* the highlighter's sweep clock (out-cubic) */
+    SWEEP_W_FALLBACK: 300, /* the text width (and room) when the DOM cannot measure */
+    SWEEP_PAD: 18,         /* the sweep runs this past the text ... */
+    SWEEP_ROOM_PAD: 12,    /* ... capped at the cell's room plus this */
+  });
+
+  const checklist01 = (v) => Math.min(1, Math.max(0, v));
+
+  /* row i's baseline from the plot top */
+  const checklistRowY = (pt, i, V = CHECKLIST) => pt + V.ROW0_DY + i * V.ROW_PITCH;
+
+  /* is the hold a recap? */
+  const checklistRecap = (d, V = CHECKLIST) => (d.exit - d.enter) < V.RECAP_S;
+
+  /* row ri's delay: its declared one (r.d), or the recap's fast step */
+  const checklistRowDelay = (r, ri, recap, V = CHECKLIST) => recap ? ri * V.RECAP_ROW_S : r.d;
+
+  /* cell k's clock inside its row */
+  const checklistCellClock = (tRel, rowDelay, k, recap, V = CHECKLIST) => {
+    const offs = recap ? V.RECAP_OFFS : V.OFFS;
+    return tRel - rowDelay - offs[Math.min(k, 3)];
+  };
+
+  /* the number of characters typed at the cell's clock */
+  const checklistTyped = (ct, V = CHECKLIST) => Math.max(0, Math.floor(ct / V.TYPE_S));
+
+  /* the highlighter's sweep fraction at the cell's clock */
+  const checklistSweep = (ct, V = CHECKLIST) => {
+    const p = checklist01(ct / V.SWEEP_S);
+    return 1 - Math.pow(1 - p, 3);
+  };
+
+  /* THE COLUMN FIT from the natural widths: allotments, the squeeze, the spread slack and each column's x */
+  const checklistColumns = (natW, usable, V = CHECKLIST) => {
+    const NC = natW.length;
+    const alloc = natW.map((w) => w + V.FIT_PAD);
+    const total = alloc.reduce((a, b) => a + b, 0);
+    const scale2 = total > usable ? usable / total : 1;
+    const extra = total < usable ? (usable - total) / NC : 0;
+    const xs = []; let acc = V.FIT_X0;
+    for (let ci = 0; ci < NC; ci++) {
+      xs.push(acc); acc += alloc[ci] * scale2 + extra;
+    }
+    return { alloc, scale2, extra, xs };
+  };
+
+  /* THE BUILD, inside the chart build: ctx = { mk, slot, PL, PT, CW, PR, kin } from the engine's chart scope.
+     Returns { rowEls, chkFit } for the chart state. */
+  function buildChecklist(spec, ctx, V = CHECKLIST) {
+    const { mk, slot, PL, PT, CW, PR, kin } = ctx;
+    const headEls = spec.head.map((h) =>
+      mk("text", { class: "csr", x: PL, y: PT + V.HEAD_DY }, h));
+    const rowEls = [];
+    spec.rows.forEach((r, i) => {
+      const y = checklistRowY(PT, i, V);
+      const colr = r.colors || V.COLORS;
+      const cells = [];
+      r.cells.forEach((cell, ci) => {
+        const g2 = mk("g", { opacity: 0 });
+        let sweep = null, band = null;
+        if (ci >= V.HL_FROM_COL && cell) {
+          const cid2 = "hl" + slot + i + ci;
+          const cp2 = mk("clipPath", { id: cid2 }, null,
+                         mk("defs", {}, null, g2));
+          sweep = mk("rect", { x: PL - V.BAND_INSET, y: y - V.BAND_RISE,
+            width: 0, height: V.BAND_H }, null, cp2);
+          const kmBand = kin("km_ink") && /^#[0-9a-f]{6}$/i.test(colr[ci]);   /* K-M (44 s44.1): the band IS a layer of ink over the ground */
+          band = mk("rect", { x: PL - V.BAND_INSET, y: y - V.BAND_RISE, width: V.BAND_W0,
+             height: V.BAND_H, rx: V.BAND_RX, fill: kmBand ? kmHex(V.KM_GROUND, colr[ci], INK.HIGHLIGHT_X) : colr[ci], opacity: kmBand ? 1 : V.BAND_ALPHA,
+             "clip-path": `url(#${cid2})`, class: "hlband" + slot + i + ci }, null, g2);
+        }
+        const tx = mk("text", { class: "cs", x: PL, y,
+           fill: colr[ci] }, ci === 0 ? "" : cell, g2);
+        cells.push({ el: g2, tx, txt: cell, ci, sweep, band, y,
+                     bandCls: "hlband" + slot + i + ci });
+      });
+      mk("line", { x1: PL, x2: CW - PR, y1: y + V.RULE_DY, y2: y + V.RULE_DY,
+         stroke: V.RULE_COLOR, "stroke-width": V.RULE_W });
+      rowEls.push({ d: r.delay || i * V.ROW_DELAY_S, cells, y });
+    });
+    return { rowEls, chkFit: { headEls, done: false, usable: CW - PL - V.FIT_MARGIN } };
+  }
+
+  /* the one-time column fit - measurement needs the DOM */
+  const fitChecklist = (st, V) => {
+    const F = st.chkFit, NC = F.headEls.length, PAD = V.FIT_PAD;
+    const natW = new Array(NC).fill(V.FIT_MIN_W);
+    const meas = (el) => el.getComputedTextLength
+      ? el.getComputedTextLength() : (el.textContent.length * V.FIT_CHAR_W);
+    F.headEls.forEach((h, ci) => natW[ci] = Math.max(natW[ci], meas(h)));
+    for (const r of st.rowEls) for (const c of r.cells) {
+      const keep = c.tx.textContent;
+      if (c.ci === 0) c.tx.textContent = c.txt;
+      natW[c.ci] = Math.max(natW[c.ci], meas(c.tx));
+      if (c.ci === 0) c.tx.textContent = keep;
+    }
+    const { alloc, scale2, extra, xs } = checklistColumns(natW, F.usable, V);
+    F.headEls.forEach((h, ci) => h.setAttribute("x", xs[ci]));
+    for (const r of st.rowEls) for (const c of r.cells) {
+      c.tx.setAttribute("x", xs[c.ci]);
+      const room = alloc[c.ci] * scale2 + extra - PAD + V.FIT_ROOM_SLACK;
+      if (c.ci > 0 && natW[c.ci] >= room && meas(c.tx) > room) {
+        c.tx.setAttribute("textLength", room.toFixed(0));
+        c.tx.setAttribute("lengthAdjust", "spacingAndGlyphs");
+      }
+      c.room = room;
+      if (c.sweep) {
+        const x0 = xs[c.ci] - V.BAND_INSET, y0 = c.y - V.BAND_RISE;
+        for (const el of [c.sweep, c.band]) {
+          el.setAttribute("x", x0); el.setAttribute("y", y0);
+        }
+        c.sweep.setAttribute("transform",
+          `translate(${x0} ${y0}) skewX(${V.CHISEL_DEG}) translate(${-x0} ${-y0})`);
+      }
+    }
+    F.done = true;
+  };
+
+  /* THE PAINTER, inside drawChart on the dock's clock tRel: the one-time fit, then every row's cells. */
+  function paintChecklist(st, tRel, d, V = CHECKLIST) {
+    if (st.chkFit && !st.chkFit.done && st.rowEls && st.rowEls.length) fitChecklist(st, V);
+    const recap = checklistRecap(d, V);
+    (st.rowEls || []).forEach((r, ri) => {
+      const rowDelay = checklistRowDelay(r, ri, recap, V);
+      r.cells.forEach((c, k) => {
+        const ct = checklistCellClock(tRel, rowDelay, k, recap, V);
+        const o = checklist01(ct / V.CELL_FADE_S);
+        c.el.setAttribute("opacity", o.toFixed(2));
+        if (c.ci === 0) {
+          const want = c.txt.slice(0, checklistTyped(ct, V));
+          if (c.tx.textContent !== want) c.tx.textContent = want;
+        }
+        if (c.sweep) {
+          const ease = checklistSweep(ct, V);
+          const w = Math.min((c.tx.getComputedTextLength
+            ? c.tx.getComputedTextLength() : V.SWEEP_W_FALLBACK) + V.SWEEP_PAD,
+            (c.room || V.SWEEP_W_FALLBACK) + V.SWEEP_ROOM_PAD);
+          c.sweep.setAttribute("width", (ease * w).toFixed(1));
+          const band = c.el.querySelector("." + c.bandCls);
+          if (band) band.setAttribute("width", (w).toFixed(1));
+        }
+      });
+    });
+  }
+  /* KINETICS:END */
+  /* the verdict stack: fly-in from depth on each item's word beat,
+     idle float while holding, stagger-burst on the clear beat -
+     species/verdict.mjs paints it (P55 T7); false = past its life */
+  const drawStack = (slot, t, d) => {
+    const st = stackState[slot]; if (!st) return;
+    if (!paintVerdict(st, t, d)) stackState[slot] = null;
   };
   /* the line is drawn over the first stretch of the hold - eased, series
      staggered so the base layers exist before the star lands on top */
@@ -3787,82 +4128,10 @@ async function mount(doc) {
         ? clamp01((p - m.at) / 0.06).toFixed(2) : 0);
     }
     /* bars grow staggered from the baseline; the note lands with the bar */
-    if (st.chkFit && !st.chkFit.done && st.rowEls && st.rowEls.length) {
-      /* one-time column fit - measurement needs the DOM. Natural width
-         per column (headers + cells, col-0 measured with its full text
-         restored after), distributed across the usable span; slack
-         spreads evenly, deficit squeezes columns proportionally and
-         over-long cells compress via textLength. */
-      const F = st.chkFit, NC = F.headEls.length, PAD = 26;
-      const natW = new Array(NC).fill(40);
-      const meas = (el) => el.getComputedTextLength
-        ? el.getComputedTextLength() : (el.textContent.length * 10);
-      F.headEls.forEach((h, ci) => natW[ci] = Math.max(natW[ci], meas(h)));
-      for (const r of st.rowEls) for (const c of r.cells) {
-        const keep = c.tx.textContent;
-        if (c.ci === 0) c.tx.textContent = c.txt;
-        natW[c.ci] = Math.max(natW[c.ci], meas(c.tx));
-        if (c.ci === 0) c.tx.textContent = keep;
-      }
-      const alloc = natW.map((w) => w + PAD);
-      const total = alloc.reduce((a, b) => a + b, 0);
-      const scale2 = total > F.usable ? F.usable / total : 1;
-      const extra = total < F.usable ? (F.usable - total) / NC : 0;
-      const xs = []; let acc = 64;
-      for (let ci = 0; ci < NC; ci++) {
-        xs.push(acc); acc += alloc[ci] * scale2 + extra;
-      }
-      F.headEls.forEach((h, ci) => h.setAttribute("x", xs[ci]));
-      for (const r of st.rowEls) for (const c of r.cells) {
-        c.tx.setAttribute("x", xs[c.ci]);
-        const room = alloc[c.ci] * scale2 + extra - PAD + 8;
-        if (c.ci > 0 && natW[c.ci] >= room && meas(c.tx) > room) {
-          c.tx.setAttribute("textLength", room.toFixed(0));
-          c.tx.setAttribute("lengthAdjust", "spacingAndGlyphs");
-        }
-        c.room = room;
-        if (c.sweep) {
-          const x0 = xs[c.ci] - 8, y0 = c.y - 21;
-          for (const el of [c.sweep, c.band]) {
-            el.setAttribute("x", x0); el.setAttribute("y", y0);
-          }
-          c.sweep.setAttribute("transform",
-            `translate(${x0} ${y0}) skewX(-7) translate(${-x0} ${-y0})`);
-        }
-      }
-      F.done = true;
-    }
-    /* QC 2026-08-30 (the s73 scorecard showed EMPTY): row delays are
-       resolved against the FIRST showing's narration and shared across
-       instances - on a short re-dock every row landed past the exit.
-       A checklist on a short hold is a RECAP: it fills fast. */
-    const recap = (d.exit - d.enter) < 12;
-    (st.rowEls || []).forEach((r, ri) => {
-      const rowDelay = recap ? ri * 0.8 : r.d;
-      /* cell choreography inside a row: question TYPES at +0, where
-         fades at +0.6, steel sweep at +1.0, paper sweep at +1.6 */
-      const offs = recap ? [0, 0.25, 0.45, 0.7] : [0, 0.6, 1.0, 1.6];
-      r.cells.forEach((c, k) => {
-        const ct = tRel - rowDelay - offs[Math.min(k, 3)];
-        const o = clamp01(ct / 0.35);
-        c.el.setAttribute("opacity", o.toFixed(2));
-        if (c.ci === 0) {
-          const nch = Math.max(0, Math.floor(ct / 0.045));
-          const want = c.txt.slice(0, nch);
-          if (c.tx.textContent !== want) c.tx.textContent = want;
-        }
-        if (c.sweep) {
-          const p = clamp01(ct / 0.55);
-          const ease = 1 - Math.pow(1 - p, 3);
-          const w = Math.min((c.tx.getComputedTextLength
-            ? c.tx.getComputedTextLength() : 300) + 18,
-            (c.room || 300) + 12);
-          c.sweep.setAttribute("width", (ease * w).toFixed(1));
-          const band = c.el.querySelector("." + c.bandCls);
-          if (band) band.setAttribute("width", (w).toFixed(1));
-        }
-      });
-    });
+    /* the test card (species/checklist.mjs, P55 T7): the one-time column fit
+       (measurement needs the DOM), then every row on tRel. QC 2026-08-30 (the
+       s73 scorecard showed EMPTY): a checklist on a short hold is a RECAP. */
+    paintChecklist(st, tRel, d);
     for (const b of st.bars) {
       const bp = expoOut(clamp01((p - b.stagger * 0.4) / 0.6));
       if (b.share) {           /* proportion row: fill grows rightward */
@@ -9086,7 +9355,7 @@ async function mount(doc) {
      it, because a card holding a frozen last frame is the still card this ruling exists to remove.
      The mount/retract choreography above is untouched: the <video> only replaces the <img>. */
   const parkDockClips = (el) => el.querySelectorAll(".slide-frame video.clipv")
-    .forEach((x) => { x.pause(); clipHold.appendChild(x); });
+    .forEach((x) => { x.pause(); x.style.objectFit = ""; clipHold.appendChild(x); });   /* a contained clip on a surface leaves its fit behind */
   const paintDockClip = (el, d, t) => {
     const frame = el.querySelector(".slide-frame"); if (!frame) return;
     let v = frame.querySelector("video.clipv");
@@ -9103,160 +9372,217 @@ async function mount(doc) {
 
   /* KINETICS:BEGIN melt */
   /* SPACE: stage */
-  /* species/melt.mjs - THE MELT EXIT (P52 T9; BACKLOG R26-15, the HyperFrames harvest's morph-text row; the operator,
-     2026-09-07: "it would be cool to be able to melt the chart, turn it into a stop motion ink ball, then splash it
-     everywhere or toss it off the page"). SOURCE OF TRUTH, inlined into the scene-evidence player by sync_kinetics.py
-     between KINETICS:BEGIN melt and KINETICS:END, AFTER ink, stopaction, arap and morph_a - it imports all four, and
-     the import order IS the region order.
+  /* species/melt.mjs - THE MELT EXIT (P52 T9; BACKLOG R26-15, reworked to E88 by R26-76). SOURCE OF TRUTH, inlined into
+     the scene-evidence player by sync_kinetics.py between KINETICS:BEGIN melt and KINETICS:END, AFTER ink, squash,
+     stopaction, arap and morph_a - it imports all five, and the import order IS the region order.
 
-     It registers NO painter: a melt is not a species kind (nothing targets it), it is an EXIT law the engine's scene
-     loop calls by name where it handles the suck. `exit` names the transition INTO the scene it sits on (the player's
-     law), so `s05.exit = "melt"` melts s04's world as s05 begins; the incoming world is untouched beneath throughout.
+     E88 (the operator, 2026-09-13): "i envisioned melting only the chart information on the page, and compiling that into
+     a dense heavy ball akin to the reference, and then either throwing it off of the screen, and drawing a new chart or
+     splattering that back onto the page to either form a new chart or a narrative plate springs up, reading as having been
+     \"painted\" - i didn't imagine melting the whole charcoal board". P52 T9 melted the WORLD's area polygon, so the board
+     left with the chart. Now THE CHART'S INK melts and the BOARD STAYS:
+       the INK   a clone of the outgoing world with its board hidden (`.meltink`: the page's cream, grain, roll edge, field
+                 and field plate invisible) - the title, the series, the bars, the marks, the labels, the rail. It wears
+                 the melt's mask, its pixel filter and its squeeze.
+       the BOARD the outgoing world itself with its ink hidden (`.meltboard`) - the cream ground, the deckle, the charcoal.
+                 It never moves; under a splash it wears the REVEAL mask the painting grows through.
+
+     It registers NO painter: a melt is not a species kind, it is an EXIT law the engine's scene loop calls by name where
+     it handles the suck. `exit` names the transition INTO the scene it sits on (E47), so `s05.exit = "melt"` melts s04's
+     chart as s05 begins.
 
      FOUR PHASES over the exit's window u = clamp01((t - t_boundary) / secs), the shares fixed dials that sum to 1:
-       melt   u 0    - 0.30   the world's area polygon SAGS: its bottom edge grows N seeded drips, and the silhouette
-                              runs through the GOOEY THRESHOLD (a Gaussian blur re-steepened by a linear alpha ramp -
-                              HyperFrames' morph-text trick, which is our own K-M chain's `feFuncA slope` (ink.mjs
-                              kmFilterMarkup) pointed at a silhouette instead of at summed stain coverage), so two
-                              drips that touch FUSE into one liquid body instead of crossing as two edges.
-       ball   u 0.30 - 0.55   that dripped outline MORPHS to a circle of BALL_R about its own centroid (morph_a, the
-                              vertex method) on the STEPPED clock (stopaction `stepped`, hold 2 - on 2s), the blur
-                              falling to 0 so the blob lands as a solid ink ball. The world's pixels ride inside it.
-       throw  u 0.55 - 1      the ball is THROWN off the stage: stopaction's `throwXf` on the ink material, its
-         or splash            ballistic chord run BACKWARDS (a landing played in reverse IS a launch: the chord is
-                              constant-speed, the arc symmetric, and the tumble that unwinds into a landing winds up
-                              out of a rest) - or, with `melt:splash`, the ball FLATTENS on the same stepped clock and
-                              soakStepped (ink.mjs's seeded staircase of bursts) drives a ring of droplets outward,
-                              each an ink drop by kmHex, fading to nothing at u = 1.
-       gone   u >= 1          the outgoing world is hidden, exactly as the suck ends.
+       melt   u 0    - 0.30   the ink SAGS and RUNS: its own pixels smear downward (RUN_COPIES offset copies merged) under
+                              the GOOEY THRESHOLD (a Gaussian blur re-steepened by a linear alpha ramp - HyperFrames'
+                              morph-text trick, our K-M chain's `feFuncA slope`), so neighbouring marks FUSE into one liquid
+                              body; the ink box's outline sags over seeded drips as its mask.
+       ball   u 0.30 - 0.55   the ink SQUEEZES toward its centroid while the outline MORPHS to a circle of BALL_R (morph_a,
+                              the vertex method) on the STEPPED clock (stopaction `stepped`, hold 2 - on 2s), and a DENSE
+                              ink body - the marks' own colours mixed by Kubelka-Munk and concentrated DENSITY times - comes
+                              up opaque over it: the chart compiles into a heavy ball.
+       end    u 0.55 - 1      one of three AUTHORED endings:
+         throw          the ball lands in its own weight (stopaction impactSquash on MASS, SQUASH, on 2s) for ANTIC of the
+                        phase, then is THROWN off the stage (throwXf run backwards: a landing played in reverse IS a launch),
+                        a low arc and little tumble because it is heavy. The board is up until the launch; the next scene's
+                        chart then draws on the same board (the engine delays that page's clock by meltDrawDelay).
+         splash:chart   the ball SLAMS onto the board (the same squash), flattens, and bursts into droplets that LAND on the
+                        board (soakStepped's staircase); the landed drops then grow as seeded stains through the board's
+                        REVEAL mask with a wet ink rim, and the next page's chart - already built beneath - is what shows
+                        through them: the chart arrives out of the splatter, not by its build.
+         splash:plate   the same splatter, and what grows through the stains is the next scene's NARRATIVE PLATE, springing
+                        up (a small scale settle) as if painted by that ink; the board is painted over from the drops out.
+       gone   u >= 1          the outgoing world, its ink and the overlay are hidden, exactly as the suck ends.
 
      Everything above the painter is a pure function of (t0, t, the rect, the dials, rnd): the same t twice is the same
      object, so a scrubbed frame is the played frame and a cold render is the warm one. `rnd(k)` is the caller's seeded
      hash in [0, 1) - the engine passes lpHash bound to the scene, never Math.random.
 
-     The AUTHORED FORM: `melt` | `melt:<s>` | `melt:splash` | `melt:<x>,<y>` (the exit point in STAGE fractions, the
-     mirror of the suck's declared point) in any order after the name: `melt:1.2:splash`. build_scene_timeline_f.py's
-     parse_exit reads the same grammar and refuses anything else, naming the row.
-     Every number here is a starting dial (doc 42 s42.5); HG2 tunes them by eye on the four proof frames. */
+     The AUTHORED FORM: `melt` | `melt:throw` | `melt:splash:chart` | `melt:splash:plate`, with `:<s>` (the length) and, on a
+     throw only, `:<x>,<y>` (the exit point in STAGE fractions), in any order after the name. A bare `melt:splash` is
+     REFUSED: since E88 a splash has two endings that need two different incoming worlds (a chart page, a plate), and an
+     alias would pick one silently. build_scene_timeline_f.py's parse_exit reads the same grammar and refuses anything
+     else, naming the row. Every number here is a starting dial (doc 42 s42.5); HG2 tunes them by eye on the proof frames. */
 
   const MELT = Object.freeze({
     S: 1.6,            /* the exit's default length [DERIVED: the suck's 0.3 s is one phase of collapse; a melt is three
-                          (the sag, the ball, the flight) plus a throw's FLIGHT_S 0.45 - 3 x 0.38 + 0.45 ~ 1.6] */
-    MELT_END: 0.30,    /* the phase shares as CUTS of u: melt [0, 0.30), ball [0.30, 0.55), throw|splash [0.55, 1] */
-    BALL_END: 0.55,    /* [DERIVED: the sag has to be read as a sag before it balls, and the flight is the longest
-                          phase because it is the one that carries the eye off the page] */
-    /* THE SAG */
-    DRIPS: 7,          /* how many drips the bottom edge grows [DERIVED: at 1745 px of page width, one drip per ~250 px
-                          reads as a run of drips rather than as a scallop] */
-    SAG: 0.40,         /* the deepest drip's reach, as a share of the rect's height */
-    TOP_SAG: 0.42,     /* how far the TOP edge sinks by the end of the sag, as a share of the height. A melting body
-                          loses height - its mass goes downward - and on a page that fills the stage this is the half
-                          of the melt the viewer can actually SEE: the drips below its foot hang off the frame. It
-                          sinks FURTHEST above a drip, because that is where the mass went. */
-    BASE_SAG: 0.10,    /* the whole bottom edge slumps this much besides (a share of the height): a melting thing loses
-                          its edge everywhere, not only under the drips */
-    DRIP_W: 0.11,      /* a drip's half-width as a share of the rect's width */
+                          (the sag, the ball, the ending) plus a throw's FLIGHT_S 0.45 - 3 x 0.38 + 0.45 ~ 1.6] */
+    MELT_END: 0.30,    /* the phase shares as CUTS of u: melt [0, 0.30), ball [0.30, 0.55), ending [0.55, 1] */
+    BALL_END: 0.55,
+    /* THE SAG (the ink box's outline, the mask the melting ink wears) */
+    DRIPS: 7,          /* how many drips the box's foot grows */
+    SAG: 0.40,         /* the deepest drip's reach, as a share of the box's height */
+    TOP_SAG: 0.42,     /* how far the TOP edge sinks by the end of the sag: a melting body loses height, its mass goes down */
+    BASE_SAG: 0.10,    /* the whole foot slumps this much besides */
+    DRIP_W: 0.11,      /* a drip's half-width as a share of the box's width */
     DRIP_JIT: 0.55,    /* how far a drip's centre wanders from its even place, as a share of the even spacing */
     DRIP_DELAY: 0.40,  /* the last drip starts this far into the melt phase: the drips open in a seeded order */
-    N: 33,             /* samples across the bottom edge (odd, so a drip can sit on the centre) */
-    TOP_N: 13,         /* samples across the TOP edge, and SIDE_N down each side. The ring is drawn as a closed
-                          centripetal Catmull-Rom (morphAPath), which INTERPOLATES its knots but bulges between two that
-                          sit far apart next to two that do not: sampled at two corners only, the top edge of a 1745 px
-                          page arched 220 px ABOVE the page. Even-ish spacing all the way round is the cure, and the
-                          bottom stays the densest because it is the edge that has to read as liquid. */
-    SIDE_N: 7,
+    N: 33, TOP_N: 13, SIDE_N: 7,   /* the ring's samples: foot, top, each side (even-ish spacing - see meltOutline) */
     /* THE GOOEY THRESHOLD */
-    BLUR: 26,          /* the silhouette's blur at the melt's peak, px at 1920 [DERIVED: the fuse gap - two drips
-                          within ~2 sigma of each other join; tuned on the proof frames] */
-    EDGE_SLOPE: 24,    /* the alpha ramp that re-steepens the blur into a liquid EDGE. INK.ALPHA_SLOPE (8) is the
-                          stain's ramp - a stain wants a gradient at its front; a melting body wants a wet edge, so
-                          this is three of them [DERIVED: measured on the proof frames] */
-    /* THE BALL */
-    BALL_R: 0.15,      /* the ball's radius as a share of the rect's height */
-    CIRCLE_N: 96,      /* vertices on the circle. It is RING_N so the morph's arc-length resample lands ON them and
-                          the ball's radius is exactly BALL_R at the end - a coarser circle resamples onto its CHORDS
-                          and the ball ends a fraction of a percent small */
-    RING_N: 96,        /* the morph's resample count (MORPH_A.N) */
+    BLUR: 26,          /* the outline's blur at the melt's peak, px at 1920 */
+    EDGE_SLOPE: 24,    /* the alpha ramp that re-steepens the outline's blur into a liquid edge */
+    /* THE RUN (E88: the MARKS melt, not a rectangle) - the ink's own pixels, smeared down and fused */
+    RUN: 0.22,         /* how far the ink runs at the sag's end, as a share of the ink box's height [DERIVED, HG2] */
+    RUN_COPIES: 6,     /* offset copies merged into the run: enough that the gooey blur joins them into one trail (3 read as
+                          stacked parallel copies of each line on the proof frames) */
+    INK_BLUR: 4,       /* the marks' own blur at the melt's peak, px - a 3 px line blurred to 7 px and ramped by INK_SLOPE
+                          comes back ~2.5x as thick, which is the swell of a wet line [DERIVED, HG2] */
+    BALL_FUSE: 40,     /* the squeezed ink's extra blur through the ball phase, in the ink's OWN px (the squeeze shrinks it ~10x
+                          on screen): without it the compacting chart read as stacked orange hatching, not one mass */
+    INK_SLOPE: 9,      /* the marks' alpha ramp (the outline's EDGE_SLOPE is 24: a mark is thinner than a body) */
+    /* THE BALL - dense and heavy (E88): smaller than P52 T9's 0.15, opaque, darker than its own marks */
+    BALL_R: 0.085,     /* the ball's radius as a share of the ink box's height [was 0.15 of the whole PAGE's height] */
+    CIRCLE_N: 96,      /* vertices on the circle = RING_N, so the morph's resample lands ON them (radius exact at the end) */
+    RING_N: 96,
     HOLD: 2,           /* the stepped clock's hold: on 2s (stop-action, doc 42) */
-    FPS: CADENCE.FPS,  /* the frame rate the hold is counted in */
-    /* THE THROW */
-    TO: [1.16, 1.22],  /* the default exit point in STAGE fractions: off the lower right corner */
-    MASS: "ink",       /* the material the flight and its tumble are read in (stopaction MASS) */
+    FPS: CADENCE.FPS,
+    SQUEEZE: 1.15,     /* the ink box is squeezed until its longer side is SQUEEZE ball-diameters: the chart compiles INTO the
+                          ball instead of being cropped by it */
+    BODY_FROM: 0,      /* the ball is a CRISP opaque disc from the first frame of its phase (a ramp over the whole box read as
+                          a jelly slab; one that waited for the squeeze read as a soft chart silhouette at 045 - the parent's
+                          two reads, 2026-09-13) ... */
+    BODY_TO: 0.15,     /* ... fully opaque from here */
+    BODY_GROW: 0.4,    /* it GROWS from BODY_SEED of its radius to all of it by here of the ball phase, while ... */
+    BODY_SEED: 0.25,
+    INK_OUT: 0.45,     /* ... the squeezed ink fades into it, gone by here: at 045 there is only the round ball */
+    TINT_MELT: 0,      /* how far the marks have turned to the ink by the sag's end (all the way by the ball's middle). 0: through
+                          the sag every mark runs in its OWN colour - 0.6 turned the pale series and the grid salmon-pink */
+    INK_DEEP: 3,       /* THE INK: the chart's DOMINANT stroke (its first series) concentrated this many times by K-M - the
+                          same hue, deeper. Never a mix of every series: the golden page's four mixed land on green */
+    CORE: 12,          /* the ball's shaded side, the same ink at this concentration (the weight read in the shading) */
+    LIGHT: 1,          /* the ball's lit side: the stroke itself */
+    TEXT_STREAK: 1.6,  /* the words' streak: its vertical blur is half the run, it hangs 0.6 of the run below the glyph, and its
+                          spread alpha is lifted this much so it reads as ink trailing, not a haze */
+    SHEEN: 0.5,        /* its ONE highlight: the stroke taken this far toward white, a small spot up and to the left */
+    SPLAT_OUT: 3.5,    /* splash:chart - the landed splats fade this many times faster than the paint clock and ... */
+    SPLAT_SHRINK: 0.5, /* ... shrink by this much as the chart shows through: they resolve INTO it and never sit over its
+                          labels at full ink (they covered "Mega-cap" at 075 - the parent's read, 2026-09-13) */
+    /* THE WEIGHT (stopaction's dials, named): the ball lands in its own weight before it goes anywhere */
+    MASS: "liquid",    /* stopaction MASS for the squash: liquid holds its squash TWO frames (ink holds one) - a heavy wet body */
+    SQUASH: 0.30,      /* impactSquash's IMPACT_SQUASH for the ball (stopaction's card default is 0.22) */
+    ANTIC: 0.22,       /* the share of the throw phase the ball sits in that squash before the launch */
+    /* THE THROW - heavy: a low arc, little tumble, out the bottom */
+    TO: [1.02, 1.32],  /* the default exit point in STAGE fractions: off the bottom right [was 1.16, 1.22] */
+    ARC: 0.06,         /* throwXf's ARC for the ball (stopaction 0.22: a card lifts; a heavy ball barely does) */
+    SPIN_DEG: 4,       /* throwXf's SPIN_DEG for the ball (stopaction 9) */
     /* THE SPLASH */
-    DROPS: 14,         /* droplets in the ring */
-    SPLASH_R: 0.85,    /* the ring's reach as a share of the rect's height */
+    DROPS: 14,         /* droplets in the splatter */
+    BURST_END: 0.40,   /* the share of the ending the burst takes; the rest is the PAINT (the stains growing) */
     SPLASH_SPREAD: 0.30,   /* the angular jitter (radians) on each droplet's ray */
-    SPLASH_FALL: 0.22,     /* how far gravity pulls a droplet below its ray by the end (a share of the height) */
-    DROP_R: 0.045,     /* a droplet's radius as a share of the rect's height */
-    DROP_SX: 0.20,     /* a droplet's optical thickness through the K-M model - INK.S1 (0.03) is ONE stain, so a drop
-                          is ~7 of them: measured, kmHex(cream, charcoal, 0.20) = #253240, the ink itself rather than
-                          the grey wash one stain gives (#7a9a99) - which is what a DROP is, thick enough to hide paper */
-    FADE_FROM: 0.55,   /* the splash holds its ink for this much of its own clock and only then fades out. Ink does not
-                          thin as it flies; it has to be GONE by the end (the next scene owns the frame), so the fade is
-                          the last of the phase, not all of it - faded from the first frame it read as grey, not ink. */
-    FLAT: 0.55,        /* how far the ball flattens as it bursts (1 - FLAT of its height) */
-    PAPER: "#F4E6C7",  /* the cream ground and the charcoal the droplets are mixed over (E22; the page's own two) */
-    INK_HEX: "#25313C",
+    LAND_MIN: 0.25,    /* where a droplet lands along its ray, as a share of the distance to the ink box's edge ... */
+    LAND_MAX: 0.92,    /* ... so the whole splatter lands ON the board */
+    DROP_R: 0.035,     /* a droplet's radius as a share of the box's height */
+    FLAT: 0.62,        /* how far the ball flattens as it bursts (1 - FLAT of its height) */
+    REVEAL_R: 0.75,    /* a stain's reach as a share of the box's height (seeded 0.6x - 1.4x) */
+    CORE_R: 0.70,      /* the stain under the ball's own impact */
+    FLOOD_FROM: 0.70,  /* the board's last cover fades out from here of the paint clock, so the reveal is whole at u = 1 */
+    TAIL: 2.2,         /* a landed splat's tail toward the impact, in its own radii (in flight it is longer: speed) */
+    LOBES: 14,         /* a splat's seeded lobes */
+    SPLAT_RAG: 16,     /* a splat's torn edge: the K-M soak's noise displacement, px */
+    STAIN_RAG: 70,     /* a paint stain's torn edge, px - the ink-bloom's ragged front (INTAKE-INK-BLOOM-2026-09-08) */
+    STAIN_BLUR: 6,     /* the stains' own gooey threshold: blur px ... */
+    STAIN_SLOPE: 12,   /* ... and ramp */
+    SPRING: 0.09,      /* splash:plate - the plate SPRINGS UP: from 1 - SPRING of its size, over its rest by ~2.5 %, settled at
+                          the end (a damped cosine; 0.05 settling one way was invisible). 1 - 0.09 of a world that overhangs
+                          the stage by 5 % still covers it */
+    INK_HEX: "#E9E2D2",    /* the marks' colour when the chart carries no stroke to read (a page of words) */
   });
+
+  const MELT_ENDINGS = Object.freeze(["throw", "splash:chart", "splash:plate"]);
 
   const mc01 = (v) => (v <= 0 ? 0 : v >= 1 ? 1 : v);   /* the engine inlines every module into ONE scope, so a
      private helper carries the module's own prefix - `c01` is ink.mjs's */
-  /* the melt's own two easings: a SLUMP accelerates (it is gravity), everything else is smooth at both ends */
   const mSlump = (u) => { const k = mc01(u); return k * k; };
   const mEase = (u) => { const k = mc01(u); return k * k * (3 - 2 * k); };
 
   /* ---- the authored form ------------------------------------------------------------------------------------------ */
-  /* `melt` | `melt:<s>` | `melt:splash` | `melt:<x>,<y>`, in any order after the name. Throws on anything else, so a
-     typo in a shot table is a refusal and not a silent default. The engine's own exitSecs cannot read this: it takes
-     the first suffix as a number, and `melt:0.92,1.18` would be 0.92 SECONDS of melt to a point nobody declared. */
+  /* `melt` | `melt:throw` | `melt:splash:chart` | `melt:splash:plate`, `:<s>`, and on a throw `:<x>,<y>`, in any order after
+     the name. Throws on anything else, so a typo in a shot table is a refusal and not a silent default. */
   const meltOpts = (exit, o = {}) => {
     const P = Object.assign({}, MELT, o), bits = String(exit == null ? "" : exit).split(":");
-    const out = { name: bits[0] || "", secs: P.S, splash: false, to: [P.TO[0], P.TO[1]] };
+    const out = { name: bits[0] || "", secs: P.S, ending: null, to: null };
+    const setEnding = (e) => {
+      if (out.ending) throw new Error("melt: two endings (" + out.ending + " and " + e + ") - a melt ends one way");
+      out.ending = e;
+    };
     for (let i = 1; i < bits.length; i++) {
       const b = bits[i].trim();
       if (b === "") continue;
-      if (b === "splash") { out.splash = true; continue; }
+      if (b === "throw") { setEnding("throw"); continue; }
+      if (b === "splash") {
+        const nx = (bits[i + 1] || "").trim();
+        if (nx !== "chart" && nx !== "plate") {
+          throw new Error("melt: splash names no ending since E88 - say splash:chart (the splatter forms the next chart) or splash:plate (a narrative plate springs up out of it)");
+        }
+        setEnding("splash:" + nx); i++; continue;
+      }
+      if (b === "chart" || b === "plate") throw new Error("melt: " + b + " is a splash's ending - say splash:" + b);
       if (b.indexOf(",") >= 0) {
         const xy = b.split(",").map(Number);
         if (xy.length !== 2 || !xy.every((v) => Number.isFinite(v))) throw new Error("melt: " + b + " is not an x,y point in stage fractions");
         out.to = xy; continue;
       }
       const v = Number(b);
-      if (!(Number.isFinite(v) && v > 0)) throw new Error("melt: " + b + " is neither a length in seconds, nor splash, nor an x,y point");
+      if (!(Number.isFinite(v) && v > 0)) throw new Error("melt: " + b + " is neither a length in seconds, nor an ending (throw, splash:chart, splash:plate), nor an x,y point");
       out.secs = v;
     }
+    out.ending = out.ending || "throw";
+    if (out.to && out.ending !== "throw") throw new Error("melt: an x,y point is where a THROW goes - a splash lands on the board");
+    out.to = out.to || [P.TO[0], P.TO[1]];
     return out;
   };
 
   /* ---- the phases ------------------------------------------------------------------------------------------------- */
-  /* the three shares, as shares of the window - they sum to 1 by construction */
   const meltShares = (o = {}) => {
     const P = Object.assign({}, MELT, o);
     return [P.MELT_END, P.BALL_END - P.MELT_END, 1 - P.BALL_END];
   };
-  /* which phase u is in, and how far through THAT phase it is */
   const meltPhase = (u, o = {}) => {
     const P = Object.assign({}, MELT, o), k = mc01(u);
-    /* GONE takes the boundary itself: (t - t0) / secs cannot be trusted to reach exactly 1 in floating point (4.0 +
-       1.6 - 4.0 is 1.5999999999999996), and a frame that lands on the end of a melt must be gone, not mid-flight. */
+    /* GONE takes the boundary itself: (t - t0) / secs cannot be trusted to reach exactly 1 in floating point */
     if (u >= 1 - 1e-9) return { name: "gone", k: 1, from: 1, span: 0 };
     if (k < P.MELT_END) return { name: "melt", k: k / P.MELT_END, from: 0, span: P.MELT_END };
     if (k < P.BALL_END) return { name: "ball", k: (k - P.MELT_END) / (P.BALL_END - P.MELT_END), from: P.MELT_END, span: P.BALL_END - P.MELT_END };
     return { name: "fly", k: (k - P.BALL_END) / (1 - P.BALL_END), from: P.BALL_END, span: 1 - P.BALL_END };
   };
-  /* the silhouette's blur in px: up over the melt, back to 0 by the end of the ball (a ball is solid, not a cloud) */
+  /* the outline's blur in px: up over the melt, back to 0 by the end of the ball (a ball is solid, not a cloud) */
   const meltBlur = (u, o = {}) => {
     const P = Object.assign({}, MELT, o), ph = meltPhase(u, P);
     if (ph.name === "melt") return P.BLUR * mEase(ph.k);
     if (ph.name === "ball") return P.BLUR * (1 - mEase(ph.k));
     return 0;
   };
+  /* the throw's launch as a share of the window: the board is up until here, and the next chart's clock starts here */
+  const meltRelease = (o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return P.BALL_END + P.ANTIC * (1 - P.BALL_END);
+  };
+  /* how long the engine holds the NEXT page's clock under a throw: the new chart draws once the board is clear. A splash
+     holds nothing (the chart arrives built, through the stains) and no melt holds a world that is not a page. */
+  const meltDrawDelay = (opts, incomingIsPage, o = {}) =>
+    (opts && opts.ending === "throw" && incomingIsPage) ? meltRelease(o) * Math.max(0.05, +opts.secs || MELT.S) : 0;
 
   /* ---- the sag ---------------------------------------------------------------------------------------------------- */
-  /* a drip's window: 1 at its centre, 0 at DRIP_W, cos^2 between - so drips that overlap ADD nothing (the deepest wins)
-     and the gooey threshold, not the arithmetic, is what fuses them */
   const dripBump = (dx, w) => { const k = mc01(Math.abs(dx) / Math.max(1e-6, w)); const c = Math.cos(k * Math.PI / 2); return c * c; };
-  /* the drips of a rect, as {c, amp, delay, w} - seeded once, read at every u */
   const meltDrips = (rect, rnd, o = {}) => {
     const P = Object.assign({}, MELT, o), n = Math.max(1, P.DRIPS | 0), step = rect.w / n, out = [];
     for (let i = 0; i < n; i++) {
@@ -9265,8 +9591,6 @@ async function mount(doc) {
     }
     return out;
   };
-  /* how deep the edge hangs below the rect's foot at x, at melt-phase progress k. Monotone in k by construction: every
-     drip's own clock is monotone, and the edge takes the DEEPEST of them plus the whole edge's slump. */
   const meltDepth = (x, k, rect, drips, o = {}) => {
     const P = Object.assign({}, MELT, o), u = mc01(k);
     let deepest = 0;
@@ -9276,29 +9600,34 @@ async function mount(doc) {
     }
     return rect.h * (P.SAG * deepest + P.BASE_SAG * mSlump(u));
   };
-  /* where the TOP edge has sunk to at x, at melt-phase progress k: down by TOP_SAG of the height, deepest over a drip.
-     Monotone in k for the same reason the foot is - every term is. */
   const meltTop = (x, k, rect, drips, o = {}) => {
     const P = Object.assign({}, MELT, o), u = mc01(k);
     let over = 0;
-    for (const d of drips) over = Math.max(over, dripBump(x - d.c, d.w * 1.15) * d.amp);   /* a touch wider than the drip itself: the hollow above it is broader than its neck */
+    for (const d of drips) over = Math.max(over, dripBump(x - d.c, d.w * 1.15) * d.amp);
     return rect.y + rect.h * P.TOP_SAG * mSlump(u) * (0.55 + 0.45 * over);
   };
-  /* THE MELTING OUTLINE: a closed ring walked clockwise from the top-left - the top edge, the right side, the foot
-     sampled right to left with the drips hung from it, the left side back up. Passed to morphAPath for the path string
-     the mask carries, and to morphAPrepare as the shape the ball comes from. */
+  /* THE MELTING OUTLINE: a closed ring walked clockwise from the top-left - the top edge, the right side, the foot sampled
+     right to left with the drips hung from it, the left side back up. Sampled even-ish all the way round: the closed
+     centripetal Catmull-Rom (morphAPath) bulges between two knots far apart next to two that are not. */
   const meltOutline = (rect, k, rnd, o = {}) => {
     const P = Object.assign({}, MELT, o), n = Math.max(3, P.N | 0), drips = meltDrips(rect, rnd, P);
     const top = Math.max(2, P.TOP_N | 0), side = Math.max(1, P.SIDE_N | 0), foot = rect.y + rect.h, pts = [];
     for (let j = 0; j < top; j++) { const x = rect.x + rect.w * (j / (top - 1)); pts.push([x, meltTop(x, k, rect, drips, P)]); }
     const tR = meltTop(rect.x + rect.w, k, rect, drips, P), tL = meltTop(rect.x, k, rect, drips, P);
-    for (let j = 1; j <= side; j++) pts.push([rect.x + rect.w, tR + (foot - tR) * (j / (side + 1))]);   /* down the right */
-    for (let j = n - 1; j >= 0; j--) {                                                             /* the foot, right to left, dripping */
+    for (let j = 1; j <= side; j++) pts.push([rect.x + rect.w, tR + (foot - tR) * (j / (side + 1))]);
+    for (let j = n - 1; j >= 0; j--) {
       const x = rect.x + rect.w * (j / (n - 1));
       pts.push([x, foot + meltDepth(x, k, rect, drips, P)]);
     }
-    for (let j = side; j >= 1; j--) pts.push([rect.x, tL + (foot - tL) * (j / (side + 1))]);        /* up the left */
+    for (let j = side; j >= 1; j--) pts.push([rect.x, tL + (foot - tL) * (j / (side + 1))]);
     return pts;
+  };
+  /* THE RUN: how far the ink's pixels smear down (px). It grows with the sag and drains back into the ball as it forms. */
+  const meltRun = (phase, k, rect, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    if (phase === "melt") return P.RUN * rect.h * mSlump(k);
+    if (phase === "ball") return P.RUN * rect.h * (1 - mEase(k));
+    return 0;
   };
 
   /* ---- the ball --------------------------------------------------------------------------------------------------- */
@@ -9307,100 +9636,206 @@ async function mount(doc) {
     for (let i = 0; i < n; i++) { const a = 2 * Math.PI * (i / n); out.push([c[0] + r * Math.cos(a), c[1] + r * Math.sin(a)]); }
     return out;
   };
-  /* the dripped outline BECOMES a circle of BALL_R about its own centroid: morph_a's vertex method, exact at both ends.
-     k is the ball phase's progress, already quantised to the stepped clock by meltState. */
   const ballAt = (rect, k, rnd, o = {}) => {
     const P = Object.assign({}, MELT, o), src = meltOutline(rect, 1, rnd, P);
     const c = centroid(src), r = P.BALL_R * rect.h;
     const prep = morphAPrepare(src, ballCircle(c, r, P.CIRCLE_N), { n: P.RING_N });
     return { outline: morphAAt(prep, mEase(k)).outline, centre: c, r, k: mc01(k) };
   };
-  /* the ball FLATTENS as it bursts: what it loses in height it gains across, about its own centre */
+  /* THE SQUEEZE: the ink's scale about the ball's centre at ball-phase progress k - 1 at the start, and at the end the ink
+     box's longer side is SQUEEZE ball-diameters. Monotone in k. */
+  const meltSqueeze = (rect, r, k, o = {}) => {
+    const P = Object.assign({}, MELT, o), end = Math.min(1, P.SQUEEZE * 2 * r / Math.max(1e-6, rect.w, rect.h));
+    return 1 + (end - 1) * mEase(k);
+  };
+  /* the ink body's opacity at ball-phase progress k: none, then up to solid before the ball moves */
+  const meltBodyAlpha = (k, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return mEase(mc01((k - P.BODY_FROM) / Math.max(1e-6, P.BODY_TO - P.BODY_FROM)));
+  };
+  /* the ball's radius as a share of BALL_R at ball-phase progress k: from a seed to whole, monotone */
+  const meltBodyGrow = (k, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return P.BODY_SEED + (1 - P.BODY_SEED) * mEase(mc01(k / Math.max(1e-6, P.BODY_GROW)));
+  };
   const ballFlat = (outline, c, k, o = {}) => {
     const P = Object.assign({}, MELT, o), f = 1 - P.FLAT * mEase(k), g = 1 + (1 / Math.max(0.05, f) - 1) * 0.5;
     return outline.map((p) => [c[0] + (p[0] - c[0]) * g, c[1] + (p[1] - c[1]) * f]);
   };
+  /* THE WEIGHT: the ball's squash `ts` seconds after it has formed (or hit the board) - stopaction's impactSquash on the
+     melt's material, on the melt's hold. 0 on the contact frame, SQUASH on the next hold, released by the material. */
+  const meltSettle = (ts, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return impactSquash(ts, P.MASS, P.HOLD, P.FPS, { IMPACT_SQUASH: P.SQUASH });
+  };
+
+  /* ---- the colour ------------------------------------------------------------------------------------------------- */
+  const meltRFromKs = (ks) => { const k = Math.max(0, ks); return 1 + k - Math.sqrt(k * k + 2 * k); };
+  /* THE INK THE BALL IS MADE OF: the marks' colours mixed by Kubelka-Munk (the mean K/S per channel - a subtractive mix, not
+     an average of lights) and concentrated `density` times. density 1 is the marks' own mix; above it, darker and deeper. */
+  const meltMixInk = (hexes, density = 1) => {
+    const list = (hexes || []).filter((h) => /^#[0-9a-fA-F]{6}$/.test(h));
+    const use = list.length ? list : [MELT.INK_HEX], ks = [0, 0, 0];
+    for (const h of use) hexToLin(h).forEach((v, i) => { ks[i] += ksFromR(v) / use.length; });
+    return linToHex(ks.map((k) => meltRFromKs(k * Math.max(0.01, density))));
+  };
+
+  /* THE INK the marks become and the ball is made of: the dominant stroke, concentrated */
+  const meltInkOf = (hexes, density = 1) => meltMixInk(((hexes || []).filter((h) => /^#[0-9a-fA-F]{6}$/.test(h))).slice(0, 1), density);
+  /* how far the marks have turned into that ink */
+  const meltTint = (phase, k, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    if (phase === "melt") return P.TINT_MELT * mEase(k);
+    if (phase === "ball") return P.TINT_MELT + (1 - P.TINT_MELT) * mEase(mc01(2 * k));
+    return 1;
+  };
 
   /* ---- the splash ------------------------------------------------------------------------------------------------- */
-  /* a ring of DROPS droplets thrown outward on the soak's own STEPPED clock (ink.mjs soakStepped: a seeded staircase of
-     bursts, never contracting), each falling a little as it goes and fading to nothing at k = 1. `d` is the distance
-     travelled along the droplet's own ray - monotone in k, which is what the test pins. */
-  /* the ink's own fade: 1 until FADE_FROM of the burst's clock, then out to exactly 0 at the end */
-  const splashFade = (p, o = {}) => {
-    const P = Object.assign({}, MELT, o);
-    return 1 - mEase(mc01((mc01(p) - P.FADE_FROM) / Math.max(1e-6, 1 - P.FADE_FROM)));
+  /* A SPLAT: a seeded lobed blob with a tail pointing BACK along its ray to the impact (`back`, radians), drawn as a closed
+     centripetal Catmull-Rom - the shape an ink drop makes when it hits paper at an angle */
+  const meltSplatPath = (x, y, r, back, tail, rnd, salt, o = {}) => {
+    const P = Object.assign({}, MELT, o), n = Math.max(6, P.LOBES | 0), pts = [];
+    for (let j = 0; j < n; j++) {
+      const f = 2 * Math.PI * (j / n), c = Math.cos(f), rr = r * (0.72 + 0.5 * rnd(salt * 31 + j)) + (c > 0 ? Math.pow(c, 8) * tail : 0);
+      pts.push([x + Math.cos(back + f) * rr, y + Math.sin(back + f) * rr]);
+    }
+    return morphAPath(pts);
   };
-  const splashDrops = (c, h, k, rnd, o = {}) => {
-    const P = Object.assign({}, MELT, o), p = soakStepped(mc01(k), rnd), out = [];
-    for (let i = 0; i < Math.max(0, P.DROPS | 0); i++) {
-      const a = 2 * Math.PI * (i / P.DROPS) + P.SPLASH_SPREAD * (2 * rnd(300 + i) - 1);
-      const reach = P.SPLASH_R * h * (0.55 + 0.9 * rnd(400 + i)), d = reach * p;
-      out.push({ x: c[0] + Math.cos(a) * d, y: c[1] + Math.sin(a) * d + P.SPLASH_FALL * h * p * p,
-                 r: P.DROP_R * h * (0.6 + 0.8 * rnd(500 + i)) * (1 - 0.35 * p), d, a, alpha: splashFade(p, P) });
+  /* the satellite droplets thrown off behind each splat, along its ray */
+  const splashSats = (drops) => {
+    const out = [];
+    for (const d of drops) {
+      if (!(d.d > 0)) continue;
+      const cx = Math.cos(d.a), cy = Math.sin(d.a), ox = d.x - cx * d.d, oy = d.y - cy * d.d;
+      out.push({ x: ox + cx * d.d * 0.62, y: oy + cy * d.d * 0.62, r: d.r * 0.32 }, { x: ox + cx * d.d * 0.83, y: oy + cy * d.d * 0.83, r: d.r * 0.2 });
     }
     return out;
   };
+  /* the plate's spring over the paint clock: up from 1 - SPRING, over its rest, settled at g = 1 (exactly 1 there) */
+  const meltSpring = (g, o = {}) => {
+    const P = Object.assign({}, MELT, o), k = mc01(g);
+    return k >= 1 ? 1 : 1 - P.SPRING * Math.exp(-3 * k) * Math.cos(2.5 * Math.PI * k);
+  };
+  /* the distance from c along the unit ray (cx, cy) to the box's edge */
+  const meltRayToEdge = (c, cx, cy, rect) => {
+    const tx = cx > 1e-9 ? (rect.x + rect.w - c[0]) / cx : cx < -1e-9 ? (rect.x - c[0]) / cx : Infinity;
+    const ty = cy > 1e-9 ? (rect.y + rect.h - c[1]) / cy : cy < -1e-9 ? (rect.y - c[1]) / cy : Infinity;
+    return Math.max(0, Math.min(tx, ty));
+  };
+  /* THE SPLATTER: DROPS droplets thrown out along seeded rays on the soak's own STEPPED clock (never contracting), each
+     LANDING on the board - a share of the way to the ink box's edge - and spreading a little as it lands. `d` is the
+     distance travelled along its ray: monotone in k and never past `land`. */
+  const splashDrops = (c, rect, k, rnd, o = {}) => {
+    const P = Object.assign({}, MELT, o), p = soakStepped(mc01(k), rnd), out = [];
+    for (let i = 0; i < Math.max(0, P.DROPS | 0); i++) {
+      const a = 2 * Math.PI * (i / P.DROPS) + P.SPLASH_SPREAD * (2 * rnd(300 + i) - 1), cx = Math.cos(a), cy = Math.sin(a);
+      const land = meltRayToEdge(c, cx, cy, rect) * (P.LAND_MIN + (P.LAND_MAX - P.LAND_MIN) * rnd(400 + i)), d = land * p;
+      const r = P.DROP_R * rect.h * (0.6 + 0.8 * rnd(500 + i)) * (1 + 0.6 * p);
+      out.push({ x: c[0] + cx * d, y: c[1] + cy * d, r, d, a, land, tail: p > 0 ? r * (P.TAIL + 3 * (1 - p)) : 0 });
+    }
+    return out;
+  };
+  /* THE PAINT: every landed drop grows as a seeded stain (its own stepped staircase), and one grows under the ball's own
+     impact. Radii are monotone in g. `cover` is the board's remaining opacity (whole until FLOOD_FROM, then out to exactly
+     0), `rim` the wet ink at the fronts (drying as they spread). */
+  const splashStains = (drops, c, r, rect, g, rnd, o = {}) => {
+    const P = Object.assign({}, MELT, o), h = rect.h, gg = mc01(g);
+    const grow = (salt) => (gg <= 0 ? 0 : soakStepped(gg, (k) => rnd(1000 + 37 * salt + k)));
+    const stains = drops.map((d, i) => ({ x: d.x, y: d.y, r: d.r + (P.REVEAL_R * h * (0.6 + 0.8 * rnd(600 + i)) - d.r) * grow(i + 1) }));
+    stains.push({ x: c[0], y: c[1], r: r + (P.CORE_R * h - r) * grow(0) });
+    return { stains, cover: 1 - mEase(mc01((gg - P.FLOOD_FROM) / Math.max(1e-6, 1 - P.FLOOD_FROM))), rim: 1 - mEase(gg) };
+  };
 
   /* ---- the throw -------------------------------------------------------------------------------------------------- */
-  /* THE FLIGHT, BACKWARDS. stopaction's throwXf brings a thing FROM an offset TO its rest; a launch is that landing run
-     in reverse - the chord is covered at constant speed, the arc's lift is symmetric about the middle, and the tumble
-     that unwinds into a landing winds up out of a rest. So t' = F(1 - k): at k = 0 the ball sits at rest (0, 0) and at
-     k = 1 it is at `from`, which is the declared exit point. The flight fills the phase exactly (FLIGHT_S = F), so the
-     stepped cadence throwXf picks is the phase's own. */
+  /* THE FLIGHT, BACKWARDS: throwXf brings a thing FROM an offset TO its rest; a launch is that landing in reverse. t' = F(1 - k):
+     at k = 0 the ball sits at rest and at k = 1 it is at `from`. The ball's ARC and SPIN_DEG are its own (heavy). */
   const meltThrowAt = (k, from, secs, o = {}) => {
     const P = Object.assign({}, MELT, o), F = Math.max(0.05, secs), kk = mc01(k);
-    /* k = 0 is REST, said here rather than left to the reversal: t' = F is the instant throwXf has already landed, and
-       a landing is a settle (a 4 px ground dip), not the pose of a ball that has not moved yet. */
     if (kk <= 0) return { x: 0, y: 0, rot: 0, alpha: 0, theta: Math.PI / 2, phase: "flight", u: 1, hold: 1, h: 0, ground: 0, shake: { x: 0, y: 0 } };
-    return throwXf(from, P.MASS, F * (1 - kk), { FLIGHT_S: F });
+    return throwXf(from, P.MASS, F * (1 - kk), { FLIGHT_S: F, ARC: P.ARC, SPIN_DEG: P.SPIN_DEG });
   };
 
   /* ---- the frame -------------------------------------------------------------------------------------------------- */
-  /* EVERYTHING THE PAINTER NEEDS, in one object, from (t0, t, o, rnd) alone.
-     o carries the geometry as well as any dial: `rect` (the melting box, in the outgoing world's own px), `stagebox`
-     (the stage's box in those same px - what a declared x,y fraction is measured in), `secs`, `splash`, `to`. */
+  /* EVERYTHING THE PAINTER NEEDS, in one object, from (t0, t, o, rnd) alone. o carries the geometry as well as any dial:
+     `rect` (the INK box, in the outgoing world's own px), `stagebox` (the stage's box in those px), `secs`, `ending`, `to`.
+       path     the ink's mask, in the ink's own (unsqueezed) px     body      the ball, in world px (null: no ball)
+       scale    the ink's squeeze about `centre`                     bodyAlpha the ball's opacity
+       run      the ink's smear, px; inkBlur its blur                 squash    { a, theta } on the ball, stopaction's tensor
+       xf       the throw's offset and tumble                        drops     the splatter; stains / cover / rim the paint
+       boardUp  the outgoing board is on screen                      reveal    it wears the reveal mask; spring the plate's scale */
   const meltState = (t0, t, o = {}, rnd) => {
     const P = Object.assign({}, MELT, o), rect = P.rect, sb = P.stagebox || rect, to = P.to || P.TO;
+    const ending = MELT_ENDINGS.indexOf(P.ending) >= 0 ? P.ending : "throw";
     const secs = Math.max(0.05, +P.secs || P.S), u = mc01((t - t0) / secs), ph = meltPhase(u, P);
-    const st = { u, secs, phase: ph.name, k: ph.k, blur: meltBlur(u, P), splash: !!P.splash,
-                 opacity: 1, outline: null, path: "", centre: null, r: 0, drops: [], xf: null, flat: 1, gone: false };
-    if (ph.name === "gone") { st.gone = true; st.opacity = 0; return st; }
+    const st = { u, secs, ending, phase: ph.name, k: ph.k, blur: meltBlur(u, P), inkBlur: 0, run: 0, scale: 1,
+                 inkOpacity: 1, path: "", outline: null, body: "", bodyOutline: null, bodyAlpha: 0, centre: null, r: 0,
+                 squash: { a: 0, theta: 0 }, xf: null, drops: [], stains: [], cover: 1, rim: 0, reveal: false,
+                 spring: 1, dropAlpha: 1, dropScale: 1, tint: 0, sats: [], textOpacity: 0, boardUp: true, gone: false };
+    st.inkBlur = P.INK_BLUR * st.blur / Math.max(1e-6, P.BLUR);
+    if (ph.name === "gone") { st.gone = true; st.boardUp = false; st.inkOpacity = 0; st.cover = 0; return st; }
     if (ph.name === "melt") {
       st.outline = meltOutline(rect, ph.k, rnd, P);
       st.path = morphAPath(st.outline);
+      st.run = meltRun("melt", ph.k, rect, P);
+      st.tint = meltTint("melt", ph.k, P);
+      st.textOpacity = 1 - mEase(ph.k);   /* the words run down as their own glyphs and are gone by the ball */
       return st;
     }
-    /* the ball and the flight run on the STEPPED clock, each on its own phase-local seconds (a pure quantisation of t) */
-    const tl = t - t0 - ph.from * secs, span = ph.span * secs;
-    const kq = mc01(stepped(Math.max(0, tl), P.HOLD, P.FPS) / Math.max(1e-6, span));
+    /* the ball and the ending run on the STEPPED clock, each on its own phase-local seconds (a pure quantisation of t) */
+    const tl = t - t0 - ph.from * secs, span = ph.span * secs, tq = stepped(Math.max(0, tl), P.HOLD, P.FPS);
+    const kq = mc01(tq / Math.max(1e-6, span));
     if (ph.name === "ball") {
-      const b = ballAt(rect, kq, rnd, P);
-      st.outline = b.outline; st.centre = b.centre; st.r = b.r; st.k = kq;
+      const b = ballAt(rect, kq, rnd, P), s = meltSqueeze(rect, b.r, kq, P);
+      st.k = kq; st.centre = b.centre; st.r = b.r; st.scale = s;
+      st.bodyOutline = b.outline; st.bodyAlpha = meltBodyAlpha(kq, P);
+      st.body = morphAPath(ballCircle(b.centre, b.r * meltBodyGrow(kq, P), P.CIRCLE_N));   /* the SOLID ball: a crisp circle, never the box */
+      st.tint = meltTint("ball", kq, P);
+      st.inkBlur = st.inkBlur + P.BALL_FUSE * mEase(kq);   /* the marks FUSE into one body as they compact */
+      /* the mask is in the ink's own px, and the ink is squeezed by s about the centre: the same body, unsqueezed */
+      st.outline = b.outline.map((p) => [b.centre[0] + (p[0] - b.centre[0]) / s, b.centre[1] + (p[1] - b.centre[1]) / s]);
       st.path = morphAPath(st.outline);
+      st.run = meltRun("ball", kq, rect, P);
+      st.inkOpacity = 1 - mEase(mc01(kq / Math.max(1e-6, P.INK_OUT)));
       return st;
     }
-    const b = ballAt(rect, 1, rnd, P);
-    st.centre = b.centre; st.r = b.r; st.k = kq;
-    if (st.splash) {
-      st.flat = 1 - P.FLAT * mEase(kq);
-      st.outline = ballFlat(b.outline, b.centre, kq, P);
-      st.drops = splashDrops(b.centre, rect.h, kq, rnd, P);
-      st.opacity = splashFade(kq, P);
-    } else {
-      st.outline = b.outline;
-      st.xf = meltThrowAt(kq, { x: sb.x + to[0] * sb.w - b.centre[0], y: sb.y + to[1] * sb.h - b.centre[1] }, span, P);
+    const b = ballAt(rect, 1, rnd, P), circle = ballCircle(b.centre, b.r, P.CIRCLE_N);
+    st.k = kq; st.centre = b.centre; st.r = b.r; st.inkOpacity = 0; st.bodyAlpha = 1;
+    if (ending === "throw") {
+      st.bodyOutline = circle; st.body = morphAPath(circle);
+      if (kq < P.ANTIC) {
+        st.squash = { a: meltSettle(tq, P), theta: 0 };   /* stretched ACROSS, pressed down: the ball has weight before it moves */
+        st.xf = meltThrowAt(0, { x: 0, y: 0 }, span, P);
+      } else {
+        const from = { x: sb.x + to[0] * sb.w - b.centre[0], y: sb.y + to[1] * sb.h - b.centre[1] };
+        st.xf = meltThrowAt((kq - P.ANTIC) / Math.max(1e-6, 1 - P.ANTIC), from, span * (1 - P.ANTIC), P);
+        st.squash = { a: st.xf.alpha || 0, theta: st.xf.theta || 0 };   /* stretched along the flight */
+      }
+      st.boardUp = u < meltRelease(P);
+      return st;
     }
-    st.path = morphAPath(st.outline);
+    /* a SPLASH: the burst, then the paint. Its clock is measured to ONE HOLD before the window ends: the stepped clock's last
+       pose lands a hold early, and a paint that was 0.8 done on that pose would pop the board's last cover at `gone`. */
+    const ks = mc01(tq / Math.max(1e-6, span - P.HOLD / P.FPS));
+    const kb = mc01(ks / Math.max(1e-6, P.BURST_END)), g = mc01((ks - P.BURST_END) / Math.max(1e-6, 1 - P.BURST_END));
+    st.bodyOutline = ballFlat(circle, b.centre, kb, P); st.body = morphAPath(st.bodyOutline);
+    st.bodyAlpha = 1 - mEase(mc01((kb - 0.5) / 0.5));   /* the ball holds its mass through the hit, then IS the splatter */
+    st.squash = { a: meltSettle(tq, P), theta: 0 };
+    st.drops = splashDrops(b.centre, rect, kb, rnd, P);
+    st.sats = splashSats(st.drops);
+    if (kq >= P.BURST_END) {
+      const paint = splashStains(st.drops, b.centre, b.r, rect, g, rnd, P);
+      st.stains = paint.stains; st.cover = paint.cover; st.rim = paint.rim; st.reveal = true;
+      const rate = ending === "splash:chart" ? P.SPLAT_OUT : 2.5;
+      st.dropAlpha = 1 - mEase(mc01(g * rate));   /* a drop IS its stain's first ink: it soaks away as the stain opens */
+      if (ending === "splash:chart") st.dropScale = 1 - P.SPLAT_SHRINK * mEase(mc01(g * 2));
+      if (ending === "splash:plate") st.spring = meltSpring(g, P);
+    }
     return st;
   };
 
   /* ---- the markup the painter mounts once ------------------------------------------------------------------------- */
-  /* THE GOOEY THRESHOLD as SVG primitives: blur the silhouette, then re-steepen its alpha. Two drips whose blurs
-     overlap cross the ramp together and come out as ONE body with a concave neck - HyperFrames' morph-text trick,
-     which is ink.mjs's kmFilterMarkup `feFuncA slope` applied to a shape instead of to summed coverage. The COLOUR
-     stages of the K-M chain are deliberately not here: they take alpha into the colour channels, which would flatten
-     the melting world to an ink silhouette and throw away the chart the viewer is watching melt. The droplets, which
-     ARE ink and carry no picture, take the K-M model instead - through kmHex, per drop. */
+  /* THE GOOEY THRESHOLD as SVG primitives: blur, then re-steepen the alpha. Blur FIRST, then the ramp - the other way round
+     is a fade. The K-M colour stages are deliberately not here: they would flatten what they filter to one ink. */
   const meltFilterMarkup = (id, u, o = {}) => {
     const P = Object.assign({}, MELT, o);
     return '<filter id="' + id + '" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB">'
@@ -9408,81 +9843,270 @@ async function mount(doc) {
       + '<feComponentTransfer><feFuncA type="linear" slope="' + P.EDGE_SLOPE + '" intercept="0"/></feComponentTransfer>'
       + '</filter>';
   };
-  /* the mask the outgoing world wears: one path, filtered. The mask's region is opened well past the element's own box
-     so neither the blur nor a drip is clipped by it. */
+  /* the mask the melting ink wears: one path, filtered */
   const meltMaskMarkup = (id, filterId) =>
     '<mask id="' + id + '" maskUnits="objectBoundingBox" x="-0.4" y="-0.4" width="1.8" height="1.8">'
     + '<g filter="url(#' + filterId + ')"><path fill="#fff" d=""/></g></mask>';
-
-  /* ---- the painter ------------------------------------------------------------------------------------------------ */
-  /* THE MELTING BOX in the outgoing world's own pixels: a ledger world melts its PAGE (the card box `.lp-page`, whose
-     LAYOUT box is where the page stands whatever transform it carries - the same reading the camera arrival takes);
-     any other world melts the stage. `.world` overhangs the stage by 5% on every side, so the stage sits at 1/22 of
-     the world's box and takes 10/11 of it. */
-  const meltStageBox = (wA) => ({ x: wA.offsetWidth / 22, y: wA.offsetHeight / 22,
-                                         w: wA.offsetWidth * 10 / 11, h: wA.offsetHeight * 10 / 11 });
-  const meltRect = (wA) => {
-    const page = wA.querySelector(".lp-page");
-    if (page && page.offsetWidth > 0 && page.offsetHeight > 0) {
-      const host = page.offsetParent && page.offsetParent !== wA ? page.offsetParent : null;
-      return { x: page.offsetLeft + (host ? host.offsetLeft : 0), y: page.offsetTop + (host ? host.offsetTop : 0),
-               w: page.offsetWidth, h: page.offsetHeight };
+  /* THE RUN on the marks' own pixels: RUN_COPIES copies offset downward and merged over the original, then the gooey
+     threshold - the lines swell, trail down and fuse. The region opens downward, where the ink goes. */
+  const meltInkFilterMarkup = (id, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    /* the marks first lose every FAINT pixel (alpha under a quarter): a near-transparent wash on the page - a grain, a plot
+       ground - would otherwise be ramped INK_SLOPE times into an opaque grey slab over the board (measured on the first
+       proof frame, 2026-09-13). A mark's own core is opaque and passes untouched. */
+    let offs = "", merge = '<feMergeNode in="' + id + 'k"/>';
+    for (let j = 1; j <= Math.max(1, P.RUN_COPIES | 0); j++) {
+      offs += '<feOffset in="' + id + 'k" dx="0" dy="0" result="' + id + "r" + j + '"/>';
+      merge += '<feMergeNode in="' + id + "r" + j + '"/>';
     }
-    return meltStageBox(wA);
+    return '<filter id="' + id + '" x="-5%" y="-5%" width="110%" height="150%" color-interpolation-filters="sRGB">'
+      + '<feComponentTransfer in="SourceGraphic" result="' + id + 'k"><feFuncA type="table" tableValues="0 0 1 1 1"/></feComponentTransfer>'
+      + offs + "<feMerge>" + merge + "</feMerge>"
+      + '<feGaussianBlur stdDeviation="0"/>'
+      + '<feComponentTransfer result="' + id + 'o"><feFuncA type="linear" slope="' + P.INK_SLOPE + '" intercept="0"/></feComponentTransfer>'
+      /* THE TINT: the fused marks turned toward THE INK by k2 (the painter writes k2 = tint, k3 = 1 - tint each frame) */
+      + '<feFlood flood-color="#000" result="' + id + 'c"/><feComposite in="' + id + 'c" in2="' + id + 'o" operator="in" result="' + id + 't"/>'
+      + '<feComposite in="' + id + 't" in2="' + id + 'o" operator="arithmetic" k1="0" k2="0" k3="1" k4="0"/></filter>';
+  };
+  /* THE REVEAL: a luminance mask the BOARD wears under a splash - white everywhere, and the stains cut black through it,
+     under their own gooey threshold, so two stains that meet run together */
+  const meltRevealMarkup = (id, filterId) =>
+    '<mask id="' + id + '" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="-10000" y="-10000" width="20000" height="20000">'
+    + '<rect x="-10000" y="-10000" width="20000" height="20000" fill="#fff"/><g filter="url(#' + filterId + ')"></g></mask>';
+  const meltStainFilterMarkup = (id, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return '<filter id="' + id + '" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">'
+      + '<feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="3" seed="11" result="' + id + 'n"/>'
+      + '<feDisplacementMap in="SourceGraphic" in2="' + id + 'n" scale="' + P.STAIN_RAG + '" xChannelSelector="R" yChannelSelector="G"/>'
+      + '<feGaussianBlur stdDeviation="' + P.STAIN_BLUR + '"/>'
+      + '<feComponentTransfer><feFuncA type="linear" slope="' + P.STAIN_SLOPE + '" intercept="0"/></feComponentTransfer></filter>';
+  };
+  /* a SPLAT's torn edge: the soak's noise displacement and nothing else - no blur, so the ink stays opaque and crisp */
+  const meltSplatFilterMarkup = (id, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return '<filter id="' + id + '" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">'
+      + '<feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="5" result="' + id + 'n"/>'
+      + '<feDisplacementMap in="SourceGraphic" in2="' + id + 'n" scale="' + P.SPLAT_RAG + '" xChannelSelector="R" yChannelSelector="G"/></filter>';
+  };
+  /* a colour taken toward white by `k` (linear light) - the ball's one sheen */
+  const meltSheen = (hex, k) => linToHex(hexToLin(hex).map((v) => v + (1 - v) * mc01(k)));
+  /* the ball's body: THE INK, one small highlight up and to the left, the stroke, then concentrated toward its shaded side */
+  const meltBodyGradientMarkup = (id, hexes, o = {}) => {
+    const P = Object.assign({}, MELT, o), lit = meltInkOf(hexes, P.LIGHT);
+    return '<radialGradient id="' + id + '" cx="0.34" cy="0.3" r="0.8" fx="0.32" fy="0.26">'
+      + '<stop offset="0" stop-color="' + meltSheen(lit, P.SHEEN) + '"/>'
+      + '<stop offset="0.14" stop-color="' + lit + '"/>'
+      + '<stop offset="0.55" stop-color="' + meltInkOf(hexes, P.INK_DEEP) + '"/>'
+      + '<stop offset="1" stop-color="' + meltInkOf(hexes, P.CORE) + '"/></radialGradient>';
+  };
+  /* a SPLAT's wet ink: the stroke at its core, the ball's ink, and a dark wet rim at its edge (per splat, its own box) */
+  const meltSplatGradientMarkup = (id, hexes, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return '<radialGradient id="' + id + '" cx="0.5" cy="0.5" r="0.5">'
+      + '<stop offset="0" stop-color="' + meltInkOf(hexes, P.LIGHT) + '"/>'
+      + '<stop offset="0.55" stop-color="' + meltInkOf(hexes, P.INK_DEEP) + '"/>'
+      + '<stop offset="0.85" stop-color="' + meltInkOf(hexes, P.CORE) + '"/>'
+      + '<stop offset="1" stop-color="' + meltInkOf(hexes, P.CORE) + '"/></radialGradient>';
+  };
+  /* THE WORDS' RUN: ONE continuous streak under each glyph - its own ink blurred VERTICALLY only (stdDeviation "0 s", so a
+     letter's columns stay apart and never swell sideways into its box), pushed down by the run and a little denser, with the
+     crisp glyph drawn over it so its top edge stays legible. Merged offset copies read as six stacked echoes of each word
+     (the parent's read of 015, 2026-09-13); a one-axis blur has no copies to count. */
+  const meltTextFilterMarkup = (id, o = {}) => {
+    const P = Object.assign({}, MELT, o);
+    return '<filter id="' + id + '" x="-5%" y="-10%" width="110%" height="160%" color-interpolation-filters="sRGB">'
+      + '<feGaussianBlur in="SourceGraphic" stdDeviation="0 0" result="' + id + 'b"/>'
+      + '<feOffset in="' + id + 'b" dx="0" dy="0" result="' + id + 'd"/>'
+      + '<feComponentTransfer in="' + id + 'd" result="' + id + 't"><feFuncA type="linear" slope="' + P.TEXT_STREAK + '" intercept="0"/></feComponentTransfer>'
+      + '<feMerge><feMergeNode in="' + id + 't"/><feMergeNode in="SourceGraphic"/></feMerge></filter>';
+  };
+  /* the SVG transform of the ball: the flight's offset and tumble, and stopaction's area-preserving squash, about its centre */
+  const meltBodyTransform = (st) => {
+    if (!st.centre) return "";
+    const cx = st.centre[0], cy = st.centre[1], xf = st.xf || { x: 0, y: 0, rot: 0 }, a = Math.abs(st.squash.a || 0);
+    const th = (st.squash.a || 0) < 0 ? (st.squash.theta || 0) + Math.PI / 2 : (st.squash.theta || 0);
+    const m = a > 1e-6 ? squashMatrix(th, a) : [1, 0, 0, 1];
+    return "translate(" + (cx + (xf.x || 0)).toFixed(2) + " " + (cy + (xf.y || 0)).toFixed(2) + ") rotate(" + (xf.rot || 0).toFixed(2) + ") "
+      + "matrix(" + m.map((v) => v.toFixed(4)).join(" ") + " 0 0) translate(" + (-cx).toFixed(2) + " " + (-cy).toFixed(2) + ")";
   };
 
-  /* the overlay, mounted ONCE and kept on wA.__melt: an svg SIBLING of the outgoing world (never a child - a child
-     would wear the mask its own defs define, and the droplets would be cut to the ball), holding the filter, the mask
-     and the droplet group. Nothing here reads time. */
+  /* ---- the painter ------------------------------------------------------------------------------------------------ */
+  const MELT_BOARD_CLASSES = ["lp-grain", "lp-edge", "lp-field", "lp-fieldplate"];
+  const meltIsBoard = (node) => !!(node && node.classList) && MELT_BOARD_CLASSES.some((c) => node.classList.contains(c));
+  /* the two halves of one page, by class: the INK clone hides the board, the BOARD world hides the ink */
+  const MELT_CSS = ".world.meltink{background:transparent!important;pointer-events:none}"
+    + ".meltink .lp-page{background:transparent!important}"
+    + MELT_BOARD_CLASSES.map((c) => ".meltink ." + c).join(",") + "{visibility:hidden!important}"
+    + ".meltboard .lp-page>" + MELT_BOARD_CLASSES.map((c) => ":not(." + c + ")").join("") + "{visibility:hidden!important}"
+    /* the WORDS are not marks: the marks clone never draws them, and the text clone draws nothing else */
+    + ".meltink .lp-ink,.meltink .lp-rail,.meltink .lp-chart line,.meltink .lp-chart text{visibility:hidden!important}"
+    + ".world.melttext{background:transparent!important;pointer-events:none}"
+    + ".melttext .lp-page{background:transparent!important}"
+    + ".melttext .lp-page *{visibility:hidden!important}"
+    + ".melttext .lp-ink,.melttext .lp-ink *,.melttext .lp-rail,.melttext .lp-rail *,.melttext .lp-chart line,.melttext .lp-chart text,.melttext .lp-chart text *{visibility:visible!important}";
+
+  /* the stage's box in the world's own px: `.world` overhangs the stage by 5% on every side */
+  const meltStageBox = (wA) => ({ x: wA.offsetWidth / 22, y: wA.offsetHeight / 22,
+                                         w: wA.offsetWidth * 10 / 11, h: wA.offsetHeight * 10 / 11 });
+  /* THE INK BOX in the world's own px: the union of the page's non-board children as laid out, clamped to the charcoal
+     field (the ink lives on the board). Read through client rects so the punch's transform is in it, and mapped back into
+     the world's px by the world's own scale. null when the world holds no page. */
+  const meltInkRect = (wA) => {
+    const page = wA.querySelector(".lp-page");
+    if (!page) return null;
+    const wr = wA.getBoundingClientRect(), kx = wA.offsetWidth / Math.max(1e-6, wr.width), ky = wA.offsetHeight / Math.max(1e-6, wr.height);
+    const field = page.querySelector(".lp-field"), fr = field && field.getBoundingClientRect(), pr = page.getBoundingClientRect();
+    const clip = fr && fr.width > 1 && fr.height > 1 ? fr : pr;
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    for (const c of page.children) {
+      if (meltIsBoard(c)) continue;
+      const r = c.getBoundingClientRect();
+      if (!(r.width >= 1 && r.height >= 1)) continue;
+      x0 = Math.min(x0, r.left); y0 = Math.min(y0, r.top); x1 = Math.max(x1, r.right); y1 = Math.max(y1, r.bottom);
+    }
+    if (!(x1 > x0 && y1 > y0)) { x0 = clip.left; y0 = clip.top; x1 = clip.right; y1 = clip.bottom; }
+    x0 = Math.max(x0, clip.left); y0 = Math.max(y0, clip.top); x1 = Math.min(x1, clip.right); y1 = Math.min(y1, clip.bottom);
+    return { x: (x0 - wr.left) * kx, y: (y0 - wr.top) * ky, w: Math.max(1, (x1 - x0) * kx), h: Math.max(1, (y1 - y0) * ky) };
+  };
+  /* the marks' colours, as #rrggbb: every series stroke on the page's charts, as the browser computed it */
+  const meltHex = (css) => {
+    const m = /rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)/.exec(String(css || ""));
+    return m ? "#" + [m[1], m[2], m[3]].map((v) => (+v).toString(16).padStart(2, "0")).join("") : (/^#[0-9a-fA-F]{6}$/.test(css) ? css : null);
+  };
+  const meltInkColours = (wA) => {
+    const out = [];
+    wA.querySelectorAll(".lp-chart .ser, .lp-chart rect[fill]").forEach((n) => {
+      const cs = getComputedStyle(n), hx = meltHex(n.classList.contains("ser") ? cs.stroke : cs.fill);
+      if (hx && out.indexOf(hx) < 0) out.push(hx);
+    });
+    return out;
+  };
+
+  /* the overlay, mounted ONCE and kept on wA.__melt: the ink clone (a sibling right after the board, so it rides above
+     it), and an svg sibling holding the filters, the masks, the stains' rims, the droplets and the ball. Nothing here reads
+     time; the ink box and the colours are read once, from the page as it stands at the boundary. */
   const meltMount = (wA, el, id) => {
+    const doc = wA.ownerDocument;
+    if (!doc.getElementById("meltcss")) { const s = doc.createElement("style"); s.id = "meltcss"; s.textContent = MELT_CSS; doc.head.appendChild(s); }
+    const rect = meltInkRect(wA), hexes = meltInkColours(wA);
+    const ink = wA.cloneNode(true);
+    ink.removeAttribute("id"); ink.classList.add("meltink");
+    ink.querySelectorAll("video").forEach((v) => v.remove());
+    wA.parentNode.insertBefore(ink, wA.nextSibling);
+    const txt = wA.cloneNode(true);
+    txt.removeAttribute("id"); txt.classList.add("melttext");
+    txt.querySelectorAll("video").forEach((v) => v.remove());
+    wA.parentNode.insertBefore(txt, ink.nextSibling);
+    wA.classList.add("meltboard");
     const svg = el("svg", "meltov", wA.parentNode, { "pointer-events": "none" });
     const defs = el("defs", "", svg, {});
-    defs.innerHTML = meltFilterMarkup(id + "f", 0) + meltMaskMarkup(id + "m", id + "f");
-    const m = { id, svg, defs, blur: defs.querySelector("feGaussianBlur"), path: defs.querySelector("mask path"),
-                drops: el("g", "meltdrops", svg, {}), dots: [] };
+    defs.innerHTML = meltFilterMarkup(id + "f", 0) + meltMaskMarkup(id + "m", id + "f") + meltInkFilterMarkup(id + "i")
+      + meltStainFilterMarkup(id + "s") + meltRevealMarkup(id + "r", id + "s") + meltSplatFilterMarkup(id + "p") + meltBodyGradientMarkup(id + "g", hexes)
+      + meltSplatGradientMarkup(id + "w", hexes) + meltTextFilterMarkup(id + "x");
+    const ink0 = meltInkOf(hexes, MELT.INK_DEEP);
+    defs.querySelector("#" + id + "i feFlood").setAttribute("flood-color", ink0);
+    const comps = defs.querySelectorAll("#" + id + "i feComposite");
+    const m = { id, svg, defs, ink, txt, rect, hexes, ink0, tintC: comps[comps.length - 1], toff: defs.querySelector("#" + id + "x feOffset"), tblur: defs.querySelector("#" + id + "x feGaussianBlur"),
+                blur: defs.querySelector("#" + id + "f feGaussianBlur"), path: defs.querySelector("mask path"),
+                iblur: defs.querySelector("#" + id + "i feGaussianBlur"), ioffs: [...defs.querySelectorAll("#" + id + "i feOffset")],
+                stainG: defs.querySelector("#" + id + "r g"),
+                drops: el("g", "meltdrops", svg, { filter: "url(#" + id + "p)" }),
+                bodyG: el("g", "meltbody", svg, {}), splats: [], sats: [], holes: [], sprung: null };
+    m.body = el("path", "", m.bodyG, { fill: "url(#" + id + "g)", d: "" });
     svg.style.position = "absolute"; svg.style.overflow = "visible"; svg.style.pointerEvents = "none"; svg.style.zIndex = "4";
     wA.__melt = m;
     return m;
   };
+  /* keep n circles (or paths) in a group, created once and moved after that */
+  const meltDots = (pool, n, el, parent, attrs, tag = "circle") => { while (pool.length < n) pool.push(el(tag, "", parent, attrs)); return pool; };
+  const meltCircle = (dot, c) => {
+    if (!c || c.r <= 0.2) { dot.setAttribute("r", "0"); return; }
+    dot.setAttribute("cx", c.x.toFixed(1)); dot.setAttribute("cy", c.y.toFixed(1)); dot.setAttribute("r", c.r.toFixed(1));
+  };
 
-  /* PAINT ONE FRAME. ctx: { wA, t, t0, opts, rnd, el, id }. The state is meltState's; this only writes it down - the
-     mask's path and blur, the world's mask / transform / opacity, and the droplets. */
+  /* PAINT ONE FRAME. ctx: { wA, wB, t, t0, opts, rnd, el, id }. The state is meltState's; this only writes it down. A world
+     that holds no page is not melted (E88: the melt takes a chart's ink - there is no whole-world melt left to fall back
+     to); the engine cuts instead, and so does this. */
   const paintMelt = (ctx) => {
-    const { wA, el, rnd } = ctx, id = ctx.id || "melt";
-    const m = (wA.__melt && wA.__melt.svg && wA.__melt.svg.isConnected) ? wA.__melt : meltMount(wA, el, id);
-    const st = meltState(ctx.t0, ctx.t, ctx.opts, rnd);
+    const { wA, wB, el, rnd } = ctx, id = ctx.id || "melt";
+    if (!wA.__melt && !wA.querySelector(".lp-page")) return null;
+    if (wA.__melt && !(wA.__melt.svg && wA.__melt.svg.isConnected)) clearMelt(wA);   /* a stale mount: its clone and classes go first */
+    const m = wA.__melt ? wA.__melt : meltMount(wA, el, id);
+    const st = meltState(ctx.t0, ctx.t, Object.assign({ rect: m.rect, stagebox: meltStageBox(wA) }, ctx.opts), rnd);
     m.svg.style.left = wA.offsetLeft + "px"; m.svg.style.top = wA.offsetTop + "px";
     m.svg.style.width = wA.offsetWidth + "px"; m.svg.style.height = wA.offsetHeight + "px";
     m.svg.setAttribute("viewBox", "0 0 " + wA.offsetWidth + " " + wA.offsetHeight);
-    m.blur.setAttribute("stdDeviation", st.blur.toFixed(2));
-    m.path.setAttribute("d", st.path);
-    wA.style.mask = "url(#" + id + "m)"; wA.style.webkitMaskImage = "url(#" + id + "m)";
-    wA.style.zIndex = 3;                          /* the outgoing world rides above the incoming plate, as the suck's does */
-    wA.style.opacity = st.gone ? "0" : st.opacity.toFixed(4);
     m.svg.style.opacity = st.gone ? "0" : "1";
-    if (st.xf) {   /* the flight: the whole world travels, mask and all, about the ball's own centre */
-      wA.style.transformOrigin = st.centre[0].toFixed(1) + "px " + st.centre[1].toFixed(1) + "px";
-      wA.style.transform = "translate(" + st.xf.x.toFixed(2) + "px," + st.xf.y.toFixed(2) + "px) rotate("
-        + st.xf.rot.toFixed(2) + "deg) " + wA.style.transform;
+    /* THE INK: masked, run, squeezed about the ball's centre - hidden once the ball is solid */
+    const ink = m.ink, showInk = !st.gone && st.inkOpacity > 0 && st.path;
+    ink.style.visibility = showInk ? "" : "hidden";
+    ink.style.zIndex = "3";
+    if (showInk) {
+      m.blur.setAttribute("stdDeviation", st.blur.toFixed(2));
+      m.path.setAttribute("d", st.path);
+      ink.style.mask = "url(#" + id + "m)"; ink.style.webkitMaskImage = "url(#" + id + "m)";
+      m.iblur.setAttribute("stdDeviation", st.inkBlur.toFixed(2));   /* on for every frame the ink shows: its faint-pixel cut is part of the ink */
+      m.ioffs.forEach((o, j) => o.setAttribute("dy", (st.run * (j + 1) / m.ioffs.length).toFixed(1)));
+      ink.style.filter = "url(#" + id + "i)";
+      m.tintC.setAttribute("k2", st.tint.toFixed(4)); m.tintC.setAttribute("k3", (1 - st.tint).toFixed(4));
+      ink.style.transformOrigin = st.centre ? st.centre[0].toFixed(1) + "px " + st.centre[1].toFixed(1) + "px" : "";
+      ink.style.transform = (st.scale !== 1 ? "scale(" + st.scale.toFixed(4) + ") " : "") + wA.style.transform;
     }
-    /* the droplets: one circle per drop, created once and moved after that (ink by the K-M model, over the cream) */
-    while (m.dots.length < st.drops.length) m.dots.push(el("circle", "", m.drops, { fill: kmHex(MELT.PAPER, MELT.INK_HEX, MELT.DROP_SX) }));
-    m.dots.forEach((dot, i) => {
-      const d = st.drops[i];
-      if (!d || d.r <= 0.2 || d.alpha <= 0.002) { dot.setAttribute("r", "0"); dot.setAttribute("opacity", "0"); return; }
-      dot.setAttribute("cx", d.x.toFixed(1)); dot.setAttribute("cy", d.y.toFixed(1));
-      dot.setAttribute("r", d.r.toFixed(1)); dot.setAttribute("opacity", d.alpha.toFixed(3));
+    /* THE WORDS: their own glyphs running down, fading out over the sag */
+    const txt = m.txt, showTxt = !st.gone && st.textOpacity > 0.002;
+    txt.style.display = showTxt ? "" : "none";   /* never `visibility`: the words' own !important visible would outrank it */
+    txt.style.zIndex = "3";
+    if (showTxt) {
+      m.tblur.setAttribute("stdDeviation", "0 " + (st.run * 0.5).toFixed(2));
+      m.toff.setAttribute("dy", (st.run * 0.6).toFixed(1));
+      txt.style.filter = "url(#" + id + "x)";
+      txt.style.opacity = st.textOpacity.toFixed(4);
+      txt.style.transform = wA.style.transform;
+    }
+    ink.style.opacity = showInk ? st.inkOpacity.toFixed(4) : "0";
+    /* THE BALL */
+    m.body.setAttribute("d", st.body || "");
+    m.body.setAttribute("opacity", (st.body ? st.bodyAlpha : 0).toFixed(3));
+    m.bodyG.setAttribute("transform", meltBodyTransform(st));
+    /* THE SPLATTER: opaque ink splats with their tails and satellites, and the torn stains cut through the board */
+    meltDots(m.splats, st.drops.length, el, m.drops, { fill: "url(#" + id + "w)" }, "path").forEach((p, i) => {
+      const d = st.drops[i], k = st.dropScale;
+      p.setAttribute("d", d && d.d > 0 ? meltSplatPath(d.x, d.y, d.r * k, d.a + Math.PI, d.tail * k, rnd, 500 + i) : "");
     });
+    meltDots(m.sats, st.sats.length, el, m.drops, { fill: "url(#" + id + "w)" }).forEach((dot, i) => {
+      const s = st.sats[i];
+      meltCircle(dot, s ? { x: s.x, y: s.y, r: s.r * st.dropScale } : null);
+    });
+    m.sats.slice(st.sats.length).forEach((dot) => dot.setAttribute("r", "0"));
+    meltDots(m.holes, st.stains.length, el, m.stainG, { fill: "#000" }, "path").forEach((p, i) => {
+      const s = st.stains[i];
+      p.setAttribute("d", s && s.r > 0.2 ? meltSplatPath(s.x, s.y, s.r, 0, 0, rnd, 700 + i) : "");
+    });
+    m.drops.setAttribute("opacity", st.dropAlpha.toFixed(3));
+    /* THE BOARD: the outgoing world, its ink hidden - up, then painted through, then gone */
+    wA.style.zIndex = 3;
+    wA.style.opacity = st.boardUp ? st.cover.toFixed(4) : "0";
+    const rev = st.reveal ? "url(#" + id + "r)" : "";
+    wA.style.mask = rev; wA.style.webkitMaskImage = rev;
+    /* THE PLATE springs up as it is painted */
+    if (wB && st.spring !== 1) {
+      wB.style.transformOrigin = "50% 50%";
+      wB.style.transform = "scale(" + st.spring.toFixed(4) + ") " + wB.style.transform;
+      m.sprung = wB;
+    }
     return st;
   };
 
-  /* the reset, called on every frame that is NOT a melt - the same shape as the suck's, and it touches only what the
-     painter set (a world that never melted is never written to). */
+  /* the reset, called on every frame that is NOT a melt - it touches only what the painter set */
   const clearMelt = (wA) => {
     if (!wA.__melt) return;
     const m = wA.__melt;
     if (m.svg && m.svg.parentNode) m.svg.parentNode.removeChild(m.svg);
+    if (m.ink && m.ink.parentNode) m.ink.parentNode.removeChild(m.ink);
+    if (m.txt && m.txt.parentNode) m.txt.parentNode.removeChild(m.txt);
+    if (m.sprung && m.sprung.style.transformOrigin) m.sprung.style.transformOrigin = "";
     wA.__melt = null;
+    wA.classList.remove("meltboard");
     wA.style.mask = ""; wA.style.webkitMaskImage = "";
     if (wA.style.zIndex) wA.style.zIndex = "";
     if (wA.style.opacity !== "") wA.style.opacity = "";
@@ -9561,12 +10185,17 @@ async function mount(doc) {
        into that point of the new plate over SUCK_S, spinning - no wipe front, no seam */
     const suck = prev && typeof sc.exit === "string" && sc.exit.startsWith("suck") ? sc.exit : null;
     const su = suck ? clamp01((t - sc.span[0]) / SUCK_S) : 1;
-    /* MELT (P52 T9; R26-15; the operator, 2026-09-07: "melt the chart, turn it into a stop motion ink ball, then
-       splash it everywhere or toss it off the page"): a row whose exit reads melt sags the OUTGOING world into
-       drips under the gooey threshold, balls it up on 2s and throws it off the stage - or, with melt:splash,
-       bursts it into droplets. Like the suck it arrives on the CUT and takes no wipe front, and it is one world
-       change, so the gate credits it once. species/melt.mjs owns every number and every pixel; this is the call. */
-    const meltOn = prev && exitName(sc.exit) === "melt" ? meltOpts(sc.exit) : null;
+    /* MELT (P52 T9; R26-15; reworked to E88 by R26-76 - the operator, 2026-09-13: "i envisioned melting only the chart
+       information on the page ... i didn't imagine melting the whole charcoal board"): a row whose exit reads melt
+       melts the OUTGOING page's CHART INK - the board stays - into a dense ball on 2s, and ends as authored: thrown off
+       the stage (melt | melt:throw; the next chart then draws on the same board, its clock held by meltDrawDelay),
+       splashed into the next chart (melt:splash:chart) or into a narrative plate (melt:splash:plate). Like the suck it
+       arrives on the CUT and takes no wipe front, and it is one world change, so the gate credits it once. A world
+       that is not a page has no chart to melt - the whole-world melt is retired - and a form the player cannot read
+       (a timeline compiled before E88) is a cut, never a crash. species/melt.mjs owns every number and every pixel. */
+    const meltOn = prev && exitName(sc.exit) === "melt" && prev.world && prev.world.kind === "ledger"
+      ? (() => { try { return meltOpts(sc.exit); } catch (e) { return null; } })() : null;
+    const meltDelay = meltOn ? meltDrawDelay(meltOn, !!(sc.world && sc.world.kind === "ledger")) : 0;
     /* E47 (operator 2026-09-06): DIP and BLURZOOM straddle the boundary, so a scene reads its OWN exit for the
        half after its start and the NEXT scene's exit for the half before its end. `exit` names the transition INTO
        the scene it sits on - the same law the wipe, the suck and the dissolve above already follow. The switch
@@ -9615,7 +10244,7 @@ async function mount(doc) {
        a row that says `cut` is a cut - one frame, both plates steady, the reference's own most common boundary. Until
        2026-09-08 a `cut` row fell through to the wipe here, which is why two built pages arrived by a wipe nobody declared. */
     const hardCut = prev && exitName(sc.exit) === "cut";
-    const wk = prev && !hardCut && !spiralIn && !snapIn && !throwIn && !suck && !meltOn && !dissolve && !mountIn && !dipIn && !bzIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
+    const wk = prev && !hardCut && !spiralIn && !snapIn && !throwIn && !suck && !(prev && exitName(sc.exit) === "melt") && !dissolve && !mountIn && !dipIn && !bzIn ? (kin("min_jerk") ? minJerk : quartIO)(clamp01((t - sc.span[0]) / WIPE)) : 1;
     const seaming = prev && wk > 0 && wk < 1;
     /* THE HARD-EDGE CLIP WIPE (restored 2026-09-01). The remotion-ui
        directional-wipe port (dd9e476, 2026-08-30) replaced this with a
@@ -9632,7 +10261,8 @@ async function mount(doc) {
     wB.style.clipPath = sc.exit === "wipe_right"
       ? `inset(0 0 0 ${(1-wk)*100}%)` : `inset(0 ${(1-wk)*100}% 0 0)`;
     paint(wA, prev || sc);
-    paint(wB, sc);
+    /* E88: under a throw the next chart draws once the ball has launched - its page's clock starts meltDelay later */
+    paint(wB, meltDelay > 0 ? Object.assign({}, sc, { span: [sc.span[0] + meltDelay, sc.span[1]] }) : sc);
     /* HF-17: the plate's foreground, over the cards. One layer per scene - a plate has one front - and it is up
        exactly while the dock that declared it is up, so a scene with no occluded dock costs nothing. */
     { const fgEl = document.getElementById("fgover");
@@ -9678,7 +10308,7 @@ async function mount(doc) {
       wA.style.transform = "rotate(" + (SUCK_TURN * (kin("min_jerk") ? minJerk(su) : su)).toFixed(1) + "deg) scale(" + sk.toFixed(4) + ") " + wA.style.transform;
       wA.style.zIndex = 3;   /* the outgoing world rides above the incoming plate while it collapses */
     } else { if (wA.style.zIndex) wA.style.zIndex = ""; if (wA.style.opacity !== "") wA.style.opacity = ""; }
-    if (meltOn) paintMelt({ wA, t, t0: sc.span[0], el: lpEl, opts: Object.assign({ rect: meltRect(wA), stagebox: meltStageBox(wA) }, meltOn),
+    if (meltOn) paintMelt({ wA, wB, t, t0: sc.span[0], el: lpEl, opts: meltOn,
                             rnd: (k) => lpHash(0x3E17 ^ ((sc.scene_id || "").length * 131), k, 977) });
     else if (wA.__melt) clearMelt(wA);   /* the same reset the suck does above, and only for a world that melted */
     seam.style.opacity = seaming ? 1 : 0;
@@ -9894,7 +10524,7 @@ async function mount(doc) {
         embedPaint(el, d, t);
         el.style.opacity = embedAlpha(d, t).toFixed(3);
         if (contact) contact.style.opacity = "0";
-      }
+      } else embedUnfill(el);   /* a slot that carried a picture on a surface gets its card back */
 
       const badges = (TL.evidence[d.slide] || {}).badges || [];
       /* THE CALLOUT IS THE CONCLUSION (remotion-ui comparison-bars,

@@ -52,17 +52,18 @@ FRAME_T = {
     "treemap-cross": 10.9,          # P50 T6: the census has landed (the build ends at 8.0), the three X's are struck (9.0 + CROSS_S) and the crossed share is written (9.0 + WRITE_AT + 3.0 * WRITE = 10.7)
     "tags-to-bars": 12.2,           # P50 T11: mid-hand-over of the KEYED-TAGS recast (12 s + 2 s): the two terminal tags are halfway to their bars and growing into the bars' own type, the lines have left half their history beneath them, the bars are half grown, and no value has been drawn twice
     "data-to-bars": 13.0,           # E64 / R26-49: dur * 0.5 of the DATA-keyed recast (12 s + 2 s) - the four data in flight between the line and their bars, the bars part-grown beneath them, the old tick labels most of the way un-written and the new ones started
-    "melt-page": 15.88,             # P52 T9: MELT_CUT + 0.55 of MELT.S (1.6 s) - THE BALL, formed and still at rest on
-                                   # the frame the flight starts: the morph is exactly the circle of BALL_R, and the
-                                   # gooey blur is exactly 0. Mid-morph (0.45) is the livelier picture and is what the
+    "melt-page": 15.88,             # P52 T9, E88: MELT_CUT + 0.55 of MELT.S (1.6 s) - THE BALL, formed, solid and at rest on
+                                   # its BOARD on the frame the throw's squash starts: the morph is exactly the circle of
+                                   # BALL_R, the ink behind it is hidden, and the gooey blur is exactly 0. Mid-morph (0.45) is the livelier picture and is what the
                                    # PROOF frames show, but its mask carries a 9 px blurred edge, and one render in
                                    # eight came back with 15 pixels of that edge off by 2 (a Chromium filter-raster
                                    # flake, measured 2026-09-12) - a golden is a byte-exact pin and takes the instant
                                    # with no fractional band to flake
-    "melt-splash": 16.2,            # P52 T9: the OTHER register, at 0.75 of the same window - the ball flattened on
-                                   # the stepped clock and the ring of K-M ink droplets thrown outward over the paper
-                                   # (the throw's own 0.75 is `melt-page@proof-075`). The blur is 0 through the whole
-                                   # phase, so this instant is a byte-exact pin like the other.
+    "melt-splash": 16.08,           # E88 / R26-76: splash:chart at u 0.675 - the BURST: the ball hit the board, flattening
+                                   # and fading into its droplets, which are out along their rays toward where they
+                                   # land; no stain has opened yet, so no blur is on screen and the pin is byte-exact
+    "melt-plate": 16.44,            # E88 / R26-76: splash:plate at u 0.90 - the PAINT: the stains have opened from the
+                                   # landed drops and the plate shows through them over the charcoal, springing to rest
     "count-array": 8.0,             # P52 T7: all six icons landed (5.0 + 5 * 0.34 + LAND_S = 7.15) and the count written as the claim (+ CLAIM_LAG + CLAIM_S = 7.73) - the field as it is read
     "agenda-two": 7.2,              # P52 T8: both rows revealed (5.0 and 6.2 + NUM_LEAD + ROW_S = 6.74) and both rules fully drawn - the agenda as it stands
     "ring-dashed-chip": 10.6,       # P52 T8: the page has built (3.9 + 0.5 + 3.0), the dashed ellipse has closed round the datum (9.0 + DRAW_S) and the flag chip has landed beside it (+ FLAG_LAG + CHIP.LAND_S = 10.24)
@@ -77,6 +78,13 @@ FRAME_T = {
 FRAME_T["newsreel-band"] = 11.0          # 16:9: the band in the lower 40 %, the caption at its own 40 % home
 FRAME_T["newsreel-strip-9x16"] = 11.0    # 9:16 THE DEFAULT: the caption keeps its E62 band, the crawl goes BELOW it
 FRAME_T["newsreel-strip-above"] = 11.0   # 9:16 THE ALTERNATIVE (`cap_band: "above"`): the crawl takes the strip, the caption moves above it
+# P55 T6: the two inline dock painters pinned BEFORE T7 lifts them into modules (goldens first).
+FRAME_T["verdict-stack"] = 12.5   # mid-pile: cards 1-4 (3.0 / 5.0 / 7.0 / 9.0) receded to their rail spots (each recede is 1.0 s off the next
+                                  # item's `at`), card 5 (at 11.0) fully entered (+0.9) and ACTIVE large near centre, card 6 (13.0) not yet in.
+                                  # Its @proof-burst instant (clear_at + 0.25) rides render_baseline.PROOF_FRAMES
+FRAME_T["test-card"] = 11.4       # tRel = t - enter(2.0) - CARD_IN * 0.6 = 8.95: rows 1-2 (delays 1.0 / 4.0) fully typed and both answers swept;
+                                  # row 3 (delay 7.0) typed (17 chars x 0.045 s), its where-cell in (+0.6), its left answer swept (+1.0 + 0.55),
+                                  # its right answer fully faded in (+1.6 + 0.35) with the marker 0.64 of the way through its sweep
 
 
 def png_solid(w: int, h: int, rgb: tuple[int, int, int]) -> bytes:
@@ -105,6 +113,33 @@ def png_bars(w: int, h: int, rgb: tuple[int, int, int], bars: list[tuple[float, 
                 if x0 * w <= x < x1 * w and y0 * h <= y < y1 * h:
                     c = ink
                     break
+            line += bytes(c)
+        raw += line
+
+    def chunk(tag: bytes, data: bytes) -> bytes:
+        return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
+
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(bytes(raw), 9)) + chunk(b"IEND", b""))
+
+
+def png_scene(w: int, h: int) -> bytes:
+    """A synthetic NARRATIVE PLATE for the melt's plate splash (E88): a dusk sky, a sun, a far and a near hill line.
+    Deterministic and stdlib-only, like png_solid - a committed input, not an asset."""
+    import math
+    sky0, sky1, sun, far, near = (250, 222, 170), (226, 140, 90), (255, 238, 196), (120, 82, 92), (58, 44, 52)
+    raw = bytearray()
+    for y in range(h):
+        line = bytearray(b"\x00")
+        for x in range(w):
+            k = y / max(1, h - 1)
+            c = tuple(int(sky0[i] + (sky1[i] - sky0[i]) * k) for i in range(3))
+            if (x - 0.70 * w) ** 2 + (y - 0.36 * h) ** 2 <= (0.12 * h) ** 2:
+                c = sun
+            if y >= 0.62 * h + 0.06 * h * math.sin(x / w * 2 * math.pi * 1.3 + 0.5):
+                c = far
+            if y >= 0.80 * h + 0.05 * h * math.sin(x / w * 2 * math.pi * 0.8 + 2.0):
+                c = near
             line += bytes(c)
         raw += line
 
@@ -771,8 +806,18 @@ def art_embed() -> tuple[dict, dict]:
                             "card": list(PRESS_CROP)})
     # the picture's own aspect, as the compiler writes it off the file (image_aspect): the press card's
     # headline crop is 528 x 160, the record on the desk 640 x 400
-    tv = BST.embed_entry("tv", {"quad": ART_TV, "darken": ART_DARKEN}, card_aspect=160 / 528)
-    paper = BST.embed_entry("paper", {"quad": ART_PAPER}, card_aspect=400 / 640)
+    evidence = {
+        quote: {"title": "The claim on the screen", "source": source, "species": "press",
+                "document": {"path": "golden", "sha256": "0" * 64}, "badges": []},
+        still: {"title": "The record on the desk", "source": "P50 T7", "species": "deck",
+                "document": {"path": "golden", "sha256": "0" * 64}, "badges": _badges()[:2]},
+    }
+    # E95: each surface's `fit` is the COMPILER's own `embed_fit` - the press card reflows (E66) and the record on the
+    # desk carries two badges, so it stays the card: a card is not a picture (neither entry carries `fit`)
+    tv = BST.embed_entry("tv", {"quad": ART_TV, "darken": ART_DARKEN}, card_aspect=160 / 528,
+                         fit=BST.embed_fit({"embed": "tv", "press": press}, None, evidence[quote]))
+    paper = BST.embed_entry("paper", {"quad": ART_PAPER}, card_aspect=400 / 640,
+                            fit=BST.embed_fit({"embed": "paper"}, None, evidence[still]))
     docks = [
         BST.dock_entry(quote, 0, 5.0, RUNTIME, 0, BST.DOCK_KIND_IMAGE, None, "throw", "paper", False,
                        press=press, embed=tv),
@@ -785,12 +830,6 @@ def art_embed() -> tuple[dict, dict]:
         {"kind": "punch", "at": 12.0, "dur": 1.6, "target": {"kind": "embed", "name": "tv"}},
     ]
     BST.resolve_embed_targets(species, {"tv": {"quad": ART_TV}, "paper": {"quad": ART_PAPER}}, "golden art-embed")
-    evidence = {
-        quote: {"title": "The claim on the screen", "source": source, "species": "press",
-                "document": {"path": "golden", "sha256": "0" * 64}, "badges": []},
-        still: {"title": "The record on the desk", "source": "P50 T7", "species": "deck",
-                "document": {"path": "golden", "sha256": "0" * 64}, "badges": _badges()[:2]},
-    }
     scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-study", "sha256": "0" * 64,
                                             "ken_burns": {"scale": 0, "x": 0, "y": 0}},
                "exit": "cut", "span": [0.0, RUNTIME], "docks": docks, "species": species}]
@@ -836,37 +875,49 @@ def _dock_pair(aspect: str | None) -> tuple[dict, dict]:
     return _timeline(f"Golden: dock pair {aspect or '16:9'}", scenes, ev, aspect), uris
 
 
-def melt_page(splash: bool = False) -> tuple[dict, dict]:
-    """P52 T9 / R26-15 - THE MELT: a finished ledger page hands the stage to a plate, and MELTS across the boundary.
+def melt_page(ending: str = "throw") -> tuple[dict, dict]:
+    """P52 T9 / R26-15, reworked to E88 / R26-76 - THE MELT TAKES THE CHART, NOT THE BOARD.
 
     Scene 1 is the line page every other golden is built from, given the whole 15 s to draw itself, so what melts is a
-    page that has been read. Scene 2 is a plain plate whose `exit` is `melt` - `exit` names the transition INTO the
-    scene it sits on (the player's law, E47), so the melt takes scene 1's world as scene 2 begins: the page's card box
-    sags into drips under the gooey threshold, balls up on 2s about its own centroid, and the ball is thrown off the
-    lower right of the stage, leaving the plate alone. The default register is the THROW; the splash is asked for by
-    name (`melt:splash`) and is rendered as its own proof frame.
+    chart that has been read. Scene 2's `exit` is the melt - `exit` names the transition INTO the scene it sits on (E47),
+    so the melt takes scene 1's CHART INK as scene 2 begins, while scene 1's board (the cream ground, the deckle, the
+    charcoal) stays exactly where it is. The three authored endings are three surfaces:
+      throw         (`melt-page`)   scene 2 is a bars page of where the lines end, on its axes (the stamp a chart-to-chart
+                                    boundary gets): the ink balls up and is thrown off; the bars then draw on the board.
+      splash:chart  (`melt-splash`) the same bars page, arriving BUILT (the stamp a chart splash gets): the ball splatters
+                                    onto the board and the bars show through the stains.
+      splash:plate  (`melt-plate`)  scene 2 is a narrative plate stand-in (a warm ground with dark forms - a synthetic
+                                    PNG, a committed input like every other): the splatter paints it up over the board.
 
-    Judged at the BALL instant (FRAME_T 15.72 = the cut + 0.45 of the 1.6 s window), where the two halves that could
-    fail are both on screen: the morph has to be a solid ink ball of BALL_R, and the blur that fused the drips has to
-    be gone."""
+    Each is pinned at an instant with no fractional blur band where one exists (the throw's ball at rest, the splash's
+    burst), because a golden is a byte-exact pin - the Chromium filter-raster flake measured 2026-09-12. The plate's
+    paint cannot be pinned without its stains' gooey edge; it takes the instant the plate is mostly painted."""
+    import json
+    assert ending in ("throw", "splash:chart", "splash:plate"), ending
     series = LPG.load_series(SERIES)
     page = LPG.build_spec(series, "line", None, "right")
     page["field"] = "scribble"
-    page["exit"] = "cut"   # LEDGER_EXITS / E40 #5: NO RETRACT. A page whose world is about to melt must not spiral its
-    # ink back into the cream first - the melt IS how this page leaves, and the vortex would have emptied it two seconds
-    # before the boundary (measured: without this the melt sagged a blank cream sheet, and so does the shipped suck).
+    page["exit"] = "cut"   # LEDGER_EXITS / E40 #5, R26-60: NO RETRACT - the melt is how this chart leaves
     scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
-               "exit": "cut", "span": [0.0, MELT_CUT], "docks": [], "species": []},
-              {"scene_id": "s02", "world": {"asset_id": "plate-melt", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
-               "exit": "melt", "span": [MELT_CUT, RUNTIME], "docks": [], "species": []}]
-    # the incoming world is PAPER, not the shared slate plate: the thing that melts is ink (the page's charcoal field,
-    # and the K-M droplets of the splash are ink over cream by the model), and ink on slate is one dark on another -
-    # the four proof frames a human reads have to show the silhouette, the ball and the droplets, not guess them.
+               "exit": "cut", "span": [0.0, MELT_CUT], "docks": [], "species": []}]
     uris = _base_uris()
-    uris["plate-melt"] = uri("image/png", png_solid(64, 36, (232, 220, 195)))
-    if splash:
-        scenes[1]["exit"] = "melt:splash"
-    return _timeline("Golden: the page melts, balls up and is " + ("splashed" if splash else "thrown"), scenes, {}, None), uris
+    if ending == "splash:plate":
+        # the narrative plate stand-in: a dusk landscape (sky, sun, two hill lines), so the paint reads as a PICTURE arriving
+        uris["plate-melt"] = uri("image/png", png_scene(320, 180))
+        world2 = {"asset_id": "plate-melt", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    else:
+        raw = json.loads(SERIES.read_text(encoding="utf-8"))
+        bars = {"title": "Where the four lines end", "sub": "index at the last point, 100 = Aug '25", "src": raw.get("src", ""), "unit": "",
+                "bars": [{"label": short, "value": round(float(sr["pts"][-1][1]), 1), "color": sr.get("color", "crimson")}
+                         for sr, short in zip(raw["series"], ("Memory", "Chips", "Mega-cap", "S&P 500"))]}
+        page2 = LPG.build_spec(bars, "bars", None, "right")
+        page2["field"] = "scribble"   # the same board as scene 1's: the board is shared
+        page2["enter"] = "axes" if ending == "throw" else "built"   # what stamp_transition_pages writes on this boundary
+        world2 = {"kind": "ledger", "page": page2, "ken_burns": {"scale": 0, "x": 0, "y": 0}}
+    scenes.append({"scene_id": "s02", "world": world2, "exit": "melt" if ending == "throw" else "melt:" + ending,
+                   "span": [MELT_CUT, RUNTIME], "docks": [], "species": []})
+    return _timeline("Golden: the chart melts off its board and is " + {"throw": "thrown", "splash:chart": "splashed into the next chart",
+                                                                           "splash:plate": "splashed into a plate"}[ending], scenes, {}, None), uris
 
 
 # ---- P52 T6: THE NEWSREEL BAND, AND THE SURFACE ABOVE IT ---------------------------------------
@@ -1082,6 +1133,82 @@ def species_proof() -> tuple[dict, dict]:
     return _timeline("Golden: the last three Bravos species, one clock (P52 human gate 3)", scenes, {}, None), uris
 
 
+# ---- P55 T6: THE VERDICT STACK AND THE TEST CARD, AS THE INLINE ENGINE DRAWS THEM TODAY -------------------
+# Goldens first: T7 lifts `drawStack` and the `C.checklist` branch of `drawChart` out of scene-evidence-engine.mjs into
+# species modules, and these frames are what that refactor must keep byte-identical.
+SEVEN_SEG = {"a": (0.0, 0.0, 1.0, 0.12), "b": (0.84, 0.0, 1.0, 0.54), "c": (0.84, 0.46, 1.0, 1.0),
+             "d": (0.0, 0.88, 1.0, 1.0), "e": (0.0, 0.46, 0.16, 1.0), "f": (0.0, 0.0, 0.16, 0.54),
+             "g": (0.0, 0.44, 1.0, 0.56)}
+DIGIT_SEGS = {1: "bc", 2: "abged", 3: "abgcd", 4: "fgbc", 5: "afgcd", 6: "afgedc"}
+STACK_COLOURS = [(196, 58, 64), (38, 110, 196), (30, 150, 120), (214, 150, 20), (128, 72, 176), (226, 110, 150)]
+STACK_ITEMS_AT = [3.0, 5.0, 7.0, 9.0, 11.0, 13.0]
+STACK_CLEAR_AT = 20.0
+
+
+def png_numbered_card(n: int, rgb: tuple[int, int, int]) -> bytes:
+    """A synthetic stack MEMBER: a coloured ground carrying its big seven-segment number on the left and three
+    headline bars on the right, in the card's own 1056:480 aspect (the `.stackcard` box) - so a frame read tells the
+    six cards apart by colour AND by number. Stdlib-only, via png_bars."""
+    box = (0.07, 0.14, 0.30, 0.86)
+    segs = [(box[0] + (box[2] - box[0]) * x0, box[1] + (box[3] - box[1]) * y0,
+             box[0] + (box[2] - box[0]) * x1, box[1] + (box[3] - box[1]) * y1)
+            for x0, y0, x1, y1 in (SEVEN_SEG[s] for s in DIGIT_SEGS[n])]
+    lines = [(0.40, 0.22, 0.93, 0.34), (0.40, 0.46, 0.86, 0.58), (0.40, 0.70, 0.72, 0.80)]
+    return png_bars(264, 120, rgb, segs + lines, ink=(250, 247, 240))
+
+
+def verdict_stack() -> tuple[dict, dict]:
+    """P55 T6 - THE VERDICT STACK (dock payload `stack`, doc 29 s9.24 / s9.24b), drawn by the inline `drawStack`.
+
+    Six numbered members, the shape of Steel and Paper build-f `ev-holds-stack-v1` (`stack.items[{id, at}]` and
+    `clear_at`), on one host dock that is a lifecycle anchor only. All five phases are on this clock: ENTER one at a
+    time from depth on each `at`, FOCUS large near centre, RECEDE to a rail spot when the next beat lands, IDLE drift,
+    BURST radially on `clear_at`. The dock entry is the COMPILER's own `dock_entry`, and the exit sits at clear_at +
+    0.65 as the shipped row does. Judged mid-pile (FRAME_T 12.5) and at the burst (PROOF_FRAMES @proof-burst)."""
+    import build_scene_timeline_f as BST
+    host = "ev-golden-verdict-stack"
+    items = [{"id": f"ev-golden-stack-{i + 1}", "at": at} for i, at in enumerate(STACK_ITEMS_AT)]
+    evidence = {host: {"title": "Everything we checked holds", "source": "golden", "species": "stack",
+                       "document": {"path": "golden", "sha256": "0" * 64}, "badges": [],
+                       "stack": {"items": items, "clear_at": STACK_CLEAR_AT}}}
+    docks = [BST.dock_entry(host, 0, 2.0, round(STACK_CLEAR_AT + 0.65, 2), 0)]
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": docks, "species": []}]
+    uris = _base_uris()
+    uris[host] = uri("image/png", png_solid(64, 29, (22, 24, 28)))
+    for i, it in enumerate(items):
+        uris[it["id"]] = uri("image/png", png_numbered_card(i + 1, STACK_COLOURS[i]))
+    return _timeline("Golden: the verdict stack", scenes, evidence, None), uris
+
+
+def test_card() -> tuple[dict, dict]:
+    """P55 T6 - THE TEST CARD (chart-dock form `checklist`), drawn by the `if (C.checklist)` branch of `drawChart`.
+
+    The shape of Steel and Paper build-f `ev-test-scorecard-v1` (a head of four, three rows of four cells, each row
+    keyed by `delay`), with synthetic words. On a hold of 12 s or more a row lands at its own delay and its cells run
+    the long offsets: the question TYPES (0.045 s a character), the where-cell fades at +0.6, the two answer cells take
+    the marker sweep at +1.0 and +1.6. The delays are literal (the compiler's `narration_key_delays` needs a take's
+    words; a golden has none). Judged with every question typed and the answers swept (FRAME_T 11.4)."""
+    import build_scene_timeline_f as BST
+    card = "ev-golden-test-card"
+    chart = {"title": "THE TEST - three questions", "sub": "Left: what holds.  Right: what is believed.",
+             "src": "golden - the three-question test",
+             "checklist": {"head": ["Ask", "Where to look", "Holds", "Believed"],
+                           "rows": [{"cells": ["1  Scarce?", "the order book", "sold out", "abundant"], "delay": 1.0},
+                                    {"cells": ["2  Cash or paper?", "the share count", "earns cash", "issues paper"], "delay": 4.0},
+                                    {"cells": ["3  Used tomorrow?", "the product", "still used", "needs a story"], "delay": 7.0}]}}
+    evidence = {card: {"title": "THE TEST", "source": "golden", "species": "data",
+                       "document": {"path": "golden", "sha256": "0" * 64},
+                       "badges": [{"label": "THE TEST", "value": "30 seconds", "tag": "a holding", "accent": "sunflower"}],
+                       "chart": chart}}
+    docks = [BST.dock_entry(card, 0, 2.0, RUNTIME, 1)]
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": docks, "species": []}]
+    uris = _base_uris()
+    uris[card] = uri("image/png", png_solid(64, 29, (22, 24, 28)))
+    return _timeline("Golden: the test card", scenes, evidence, None), uris
+
+
 SURFACES = {
     "ledger-page-mid-build": ledger_page_mid_build,
     "chart-callout": chart_callout,
@@ -1106,8 +1233,9 @@ SURFACES = {
     "agenda-two": agenda_two,            # P52 T8
     "ring-dashed-chip": ring_dashed_chip,   # P52 T8
     "species-proof": species_proof,      # P52 T7 + T8: the proof page for human gate 3
-    "melt-page": melt_page,
-    "melt-splash": lambda: melt_page(splash=True),
+    "melt-page": melt_page,                                  # E88: the throw
+    "melt-splash": lambda: melt_page("splash:chart"),        # E88: the splatter forms the next chart
+    "melt-plate": lambda: melt_page("splash:plate"),         # E88: the splatter paints a narrative plate
 }
 
 
@@ -1116,20 +1244,35 @@ SURFACES.update({   # P52 T6: the newsreel band and the two readings of the bott
     "newsreel-strip-9x16": newsreel_strip_9x16,
     "newsreel-strip-above": newsreel_strip_above,
 })
+SURFACES.update({   # P55 T6: the two inline dock painters, pinned before T7 promotes them
+    "verdict-stack": verdict_stack,
+    "test-card": test_card,
+})
 
 
-def write_sources() -> list[Path]:
+def write_surface(name: str) -> list[Path]:
+    """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     SOURCES.mkdir(parents=True, exist_ok=True)
+    tl, uris = SURFACES[name]()
     out = []
-    for name, fn in SURFACES.items():
-        tl, uris = fn()
-        for suffix, payload in (("timeline", tl), ("uris", uris)):
-            p = SOURCES / f"{name}.{suffix}.json"
-            p.write_text(json.dumps(payload, indent=1, sort_keys=True) + "\n", encoding="utf-8")
-            out.append(p)
+    for suffix, payload in (("timeline", tl), ("uris", uris)):
+        p = SOURCES / f"{name}.{suffix}.json"
+        p.write_text(json.dumps(payload, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+        out.append(p)
+    return out
+
+
+def write_sources(names: list[str] | None = None) -> list[Path]:
+    """Every surface's sources, or only the named ones (`python build_golden_sources.py verdict-stack test-card`)."""
+    out = []
+    for name in (names or list(SURFACES)):
+        out += write_surface(name)
     return out
 
 
 if __name__ == "__main__":
-    for p in write_sources():
+    unknown = [n for n in sys.argv[1:] if n not in SURFACES]
+    if unknown:
+        raise SystemExit(f"unknown surface(s): {unknown}; known: {sorted(SURFACES)}")
+    for p in write_sources(sys.argv[1:] or None):
         print(f"{p.stat().st_size:>9,}  {p.relative_to(REPO)}")

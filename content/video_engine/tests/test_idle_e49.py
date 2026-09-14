@@ -62,9 +62,20 @@ def test_the_flag_exists_defaults_off_and_the_module_is_inlined():
 
 def test_the_idle_is_a_named_kind_and_the_module_carries_its_tags():
     src = (ROOT / "content/video_engine/scripts/kinetics/idle.mjs").read_text(encoding="utf-8")
-    assert '["none", "breath", "drift", "pulse", "figure"]' in src
+    assert '["none", "breath", "drift", "pulse", "figure", "live"]' in src   # live restored by R26-93
     assert "[DERIVED: HyperFrames /prompting/motion" in src, "the 1-2 % amplitude is a starting reference, tagged"
     assert "48 s48.4" in src, "the figure's breath and the sway cite doc 48"
+
+
+def test_every_compiler_idle_kind_is_a_kind_the_module_paints():
+    """R26-93: the compiler accepted `live` while the module (the source the engine is synced from) had lost it, so an
+    `;idle=live` page compiled clean and held still. Every kind the compiler accepts must be one the module exports."""
+    src = (ROOT / "content/video_engine/scripts/kinetics/idle.mjs").read_text(encoding="utf-8")
+    m = re.search(r"export const IDLE_KINDS = Object\.freeze\(\[(.*?)\]\);", src, re.S)
+    assert m, "the module's IDLE_KINDS literal is where the parser looks"
+    module_kinds = set(re.findall(r'"([^"]+)"', m.group(1)))
+    missing = [k for k in B.IDLE_KINDS if k not in module_kinds]
+    assert not missing, f"compiler IDLE_KINDS the module never paints: {missing}"
 
 
 # ---- the compiler ----------------------------------------------------------------------------

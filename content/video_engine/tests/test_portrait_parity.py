@@ -25,6 +25,8 @@ ALLOW = (
     'viewBox="0 0 1920 1080"',          # the two species SVG defaults - re-fitted to the stage at start-up (template: $("species").setAttribute("viewBox", ...))
     "STAGE_W", "STAGE_H",               # the constants themselves and any line that already speaks in them
     "PORTRAIT ?",                       # an explicit portrait branch
+    "REF_W: 1920", "REF_H: 1080",       # species/verdict.mjs (P55 T7): the landscape stage the verdict stack's burst normalisers
+                                        # were MEASURED on, only ever used as a fraction of the stage (was the inline `STAGE_W * 700 / 1920`)
 )
 
 

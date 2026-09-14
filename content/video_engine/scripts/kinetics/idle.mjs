@@ -11,10 +11,10 @@
    Kinds: breath - a scale that inhales ABOVE rest and never below it (a plate shrinking under its box shows its
    edge); drift - a bounded Lissajous walk of a few px; pulse - a luminance dip; figure - the asymmetric breath doc 48
    s48.4 prescribes for a standing figure (inspiratory:expiratory 1:1.5-1:2, a post-expiratory pause) with its two-rate
-   sway; none - explicit stillness, declared.
+   sway; live - breath + drift; none - explicit stillness, declared.
    Every number below is a starting reference, tagged where it came from; the operator's eye moves them (42 s42.5). */
 
-export const IDLE_KINDS = Object.freeze(["none", "breath", "drift", "pulse", "figure"]);
+export const IDLE_KINDS = Object.freeze(["none", "breath", "drift", "pulse", "figure", "live"]);
 
 export const IDLE = Object.freeze({
   BREATH_AMP: 0.012,        /* [DERIVED: HyperFrames /prompting/motion "1-2 %", verified 2026-09-06; measure on ours] - a 1.2 % inhale */
@@ -94,6 +94,10 @@ export const idleXf = (kind, t, phase = 0, o = {}) => {
   if (kind === "drift") { const d = drift(tq, phase, P); return Object.assign(id, { dx: d[0], dy: d[1] }); }
   if (kind === "pulse") return Object.assign(id, { lum: pulse(tq, phase, P) });
   if (kind === "figure") { const s = sway(tq, phase, P); return Object.assign(id, { scale: 1 + P.BREATH_AMP * figureBreath(tq, phase, P), dx: s[0], dy: s[1] }); }
+    if (kind === "live") {   /* breath + drift (2026-09-08): a breath is a scale with a fixed point at the centre, so a chart at the page centre
+                                stayed bit-identical while the page "breathed" (operator: "even our charts need some sort of life, even if it's
+                                just 1 pixel shifts"); the drift moves every pixel by the same 1-2 px walk, so nothing on the page is ever still */
+      const d = drift(tq, phase, P); return Object.assign(id, { scale: breath(tq, phase, P), dx: d[0], dy: d[1] }); }
   return id;
 };
 

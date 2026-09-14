@@ -38,7 +38,10 @@ MODULES = ["ease", "spring", "stagger",   # P52 T10: the caption's stagger envel
 SPECIES = ["tiers", "treemap", "breakthrough", "chip", "press", "flow", "span", "vecmap",
            "thread",    # P50 T15 / HF-16: the WIRE - a page species' carry math, so it registers no painter either (span's case)
            "tippill",   # P50 T11: R26-34's pill - a line PAGE's option rather than a targeted kind, so it registers no painter   # P50 T2 on: one module per species kind, inlined into the species block; `press` is the
-           "newsreel", "countarray", "agenda", "ring", "melt"]   # P52 T6 / T7 / T8 / T9: the wave-3 species, in the engine's region order (melt registers no painter - an exit)
+           "newsreel", "countarray", "agenda", "ring", "melt",
+           "verdict", "checklist"]   # P52 T6 / T7 / T8 / T9: the wave-3 species, in the engine's region order (melt registers no painter - an exit)
+                              # `verdict` and `checklist` (P55 T7) are the verdict stack (a dock payload) and the test card (a chart-dock form),
+                              # promoted from inline engine code; neither registers a painter - the dock slot calls them by name.
                               # `breakthrough` (P50 T10/T13) is a third that registers no painter: the burst is a PAGE
                               # mechanic painted by lpPaintBreakthrough off the page's build clock, and it PREDATES the
                               # module rule - only its new math (the placeholder, the axis capsule, the stepped cadence)

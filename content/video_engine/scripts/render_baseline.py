@@ -63,13 +63,17 @@ PROOF_FRAMES = {
     "species-proof@proof-ring": ("species-proof", {"idle": True}, 12.6),     # the dashed ellipse closed round the series' own peak, its flag chip landed, the page breathing under it
     "species-proof@proof-count": ("species-proof", {"idle": True}, 22.5),    # the isometric field: all six icons in reading order, the count written as the claim
     "species-proof@proof-agenda": ("species-proof", {"idle": True}, 28.5),   # the numbered agenda: three rows revealed one per word, holding
-    # P52 T9 / R26-15, HUMAN GATE 2: THE MELT, one frame per phase of its 1.6 s window from the cut at 15.0. They carry
-    # no flag (a melt is an authored EXIT, not a capability behind a switch), which is what makes them proofs and not
-    # flag frames. The fifth frame of the gate is `frames/melt-splash.png` - the other register, its own surface.
-    "melt-page@proof-015": ("melt-page", {}, 15.0 + 0.15 * 1.6),   # THE SAG: the top edge sinking over its drips, the gooey threshold fusing the edge
-    "melt-page@proof-045": ("melt-page", {}, 15.0 + 0.45 * 1.6),   # THE BALL, forming: the outline mid-morph toward the circle on the stepped clock
-    "melt-page@proof-075": ("melt-page", {}, 15.0 + 0.75 * 1.6),   # THE THROW: the ink ball in flight, carrying the page's own pixels off the lower right
-    "melt-page@proof-100": ("melt-page", {}, 15.0 + 1.00 * 1.6),   # GONE: the incoming world alone, untouched, nothing left of the one that melted
+    # P52 T9 / R26-15, HUMAN GATE 2, reworked to E88 / R26-76: THE MELT (the THROW ending), one frame per phase of its
+    # 1.6 s window from the cut at 15.0. They carry no flag (a melt is an authored EXIT, not a capability behind a switch),
+    # which is what makes them proofs and not flag frames. The other two endings are their own surfaces:
+    # `frames/melt-splash.png` (splash:chart) and `frames/melt-plate.png` (splash:plate). In every one the board stays.
+    "melt-page@proof-015": ("melt-page", {}, 15.0 + 0.15 * 1.6),   # THE SAG: the chart's marks swelling and running down under the goo, the board whole behind them
+    "melt-page@proof-045": ("melt-page", {}, 15.0 + 0.45 * 1.6),   # THE BALL, forming: the ink squeezed toward the centre on the stepped clock, the dense body coming up over it
+    "melt-page@proof-075": ("melt-page", {}, 15.0 + 0.75 * 1.6),   # THE THROW: the heavy ball in flight off the bottom right, the next chart drawing on the same board
+    "melt-page@proof-100": ("melt-page", {}, 15.0 + 1.00 * 1.6),   # GONE: the next chart on its board, drawing, nothing left of the ink that melted
+    # P55 T6: THE VERDICT STACK's last phase - the radial BURST at clear_at (20.0) + 0.25 s: with the 60 ms stagger the
+    # first card is half way through its 0.5 s throw and the fifth just leaving, each along its own bearing, spinning
+    "verdict-stack@proof-burst": ("verdict-stack", {}, 20.25),
 }
 # P52 T18 / R26-55, HUMAN GATE 7: THE FACE OF A PULLED PHRASE. The phrase is live type now, so it has a face, and
 # the face is the OPERATOR's to choose - never ours. The `press_face` DIAL names one of the three candidates

@@ -4221,7 +4221,7 @@
   },
   {
    "docks": [],
-   "exit": "melt",
+   "exit": "melt:splash:plate",
    "scene_id": "s02",
    "span": [
     15.0,
@@ -4229,57 +4229,18 @@
    ],
    "species": [],
    "world": {
+    "asset_id": "plate-melt",
     "ken_burns": {
      "scale": 0,
      "x": 0,
      "y": 0
     },
-    "kind": "ledger",
-    "page": {
-     "badges": [],
-     "builder": "story",
-     "colors": [
-      "crimson",
-      "teal",
-      "cobalt",
-      "deemph"
-     ],
-     "emphasize": null,
-     "enter": "axes",
-     "field": "scribble",
-     "judge": [],
-     "labels": [
-      "Memory",
-      "Chips",
-      "Mega-cap",
-      "S&P 500"
-     ],
-     "quiet_zone": "right",
-     "schema_version": "ledger_page.v1",
-     "source": "Yahoo Finance - pairing after Bravos Research",
-     "sub": "index at the last point, 100 = Aug '25",
-     "surface": "page",
-     "title": "Where the four lines end",
-     "unit": "",
-     "value_strings": [
-      "712.5",
-      "204.6",
-      "120.8",
-      "121.5"
-     ],
-     "values": [
-      712.5,
-      204.6,
-      120.8,
-      121.5
-     ],
-     "variant": "bars"
-    }
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
    }
   }
  ],
  "schema_version": "scene_evidence_timeline.v1",
  "sound": [],
  "subtitle": "P39 golden surface",
- "title": "Golden: the chart melts off its board and is thrown"
+ "title": "Golden: the chart melts off its board and is splashed into a plate"
 }
