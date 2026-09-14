@@ -27,6 +27,13 @@ pack summary to `runtime/claim-packs/<claim-id>.summary.json`, and registers
 any declared paid follow-ups as **pending** gate jobs. It performs no network
 call and releases nothing.
 
+**A plate claim opens one slot per layer** (E98 s6, `docs/portable/OPERATOR-RULINGS.md:2878`). A new world plate is
+ordered as its layers - background, mid, subject, occluder - each slot its own generation with one style, one sitting
+and the E98 s5 intent line, so the four register; never one stacked image to be cut apart afterwards (the banker
+apartment blurred exactly where a near object was removed from one). A flat plate is the exception and its order
+says why. Name each layer's `role` in the order: `build_plate_library.py` reads the plate's `<plate>.layers.json` and
+refuses an unknown role or generator by name.
+
 ## The watchdog (fallback trigger)
 
 For batches run by hand in a desktop app:

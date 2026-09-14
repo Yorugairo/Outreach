@@ -164,6 +164,13 @@ python content/video_engine/scripts/build_plate_library.py "memory"   # search
 
 Search it by MEANING, not filename. That is the field you author against.
 
+**Layers (P58, E98 s6).** A plate's sidecar `<plate>.layers.json` lists `layers[] {path, role, depth, alpha,
+generator}` back to front (roles `background` 1.0, `board` 1.05, `mid` 1.15, `subject` 1.275 derived, `occluder`
+1.40); the library is `plate_library.v2` and a plate without layers says `flat: true` with its reason. A NEW plate is
+prompted as its layers, each its own generation - never cut out of a stacked one; the depth split is the fallback
+for a plate that already exists flat. The camera paints each plane at its own depth, so parallax follows a move
+that already had a reason (E59) and is never authored for its own sake (E49).
+
 **Status comes from the manifest, never the path** (E10). The library exists
 because the pilot's 195 approved plates sat in a directory named
 `quarantine/` and were skipped, the stamped visuals resolve by `image_id`

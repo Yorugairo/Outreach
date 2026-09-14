@@ -76,6 +76,13 @@ not tags**: every plate carries a `channel` and every consumer filters by
 it — a martial-arts plate never resolves into a finance episode, however
 well its semantic matches. Search with `--channel <name>`.
 
+**A new plate is prompted in layers** (E98 s6, `docs/portable/OPERATOR-RULINGS.md:2878`): background, mid, subject,
+occluder - each layer its own generation, one style and one sitting across the four so they register, the E98 s5
+intent line on every prompt; a layer is never cut out of a stacked generation. A flat plate is the exception and
+says why (`flat: true` + `flat_reason` in the library). An existing flat plate is split instead
+(`comfy_depth_split.py`, the fallback - its inpaint blur is the known price), and the plate's `<plate>.layers.json`
+records every layer's role, depth and generator.
+
 ## Stage 6 is AUTHORED — there is no allocator
 
 Someone reads the narration beat by beat and chooses the plate that depicts

@@ -2885,3 +2885,15 @@ the inpaint's blur is the known price. The probe's record: the split read as dep
 touched what stood behind it (the rower's handles on the couch). Route (a) at GPT Image 2.5 is still unmeasured on our side - the
 headless lane's output is stamped gpt-image 2.0 and gives no transparency (P58 T1 evidence; the operator, the same day: *"i suspect that the image generator is actually using images 2.5 but is still writing the description as images 2.0"* - the model behind the stamp is unconfirmed; P59/P60, the operator's own capability probe, settles it); the generator per layer is recorded in the plate's
 sidecar so both origins coexist.
+
+**E98 s7 - the evidence door (the operator, 2026-09-14, on the HG2 frames of P58 T7's Japan 2.5D cut):** *"the actual interesting
+thing i see is that if we do the land flat on arrival, and then instead of letting it kind of jump to the layered effect we see at
+35.72, but instead open it -- that effect essentially will look like opening an evidence door to the plate or chart behind"*, and
+*"i'd actually like to see us mount the treasury vault image underneath ... zoom in or cut-in on to the tariff bill card all the way
+flat so its just like a regular plate, then we open that door and behind it is the vault plate."* Apply: **a card's tilt is a MOTION,
+not a pose it jumps to** - the card lands FLAT and fills the frame like a plate, then swings open on a hinge through the one projective
+path (P58 T4's page plane, `kinetics/homography.mjs`), and the world mounted underneath it - a plate or a chart - is what the door
+reveals. First instance: Japan's tariff bill page opening onto the Treasury vault (`japan-tariff-trick/build_short.py:285` -> `:289`).
+Recall: docs_find 0 hits for "swing", "evidence door" and "open the page"; the nearest built reveal is `exit:wipe`
+(`docs/content-video-engine/samples/scene-evidence-engine.mjs`, an incoming plate revealed behind a clip front); `species:radial`
+(a circle opening from a point) is carded and not built (`content/video_engine/scripts/build_scene_timeline_f.py`).
