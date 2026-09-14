@@ -17,6 +17,10 @@ For coding, debugging, review, refactoring, or architecture:
    discovery.
 5. Read the smallest relevant source and test set.
 
+For docs, doctrine or the video engine: `python content/video_engine/scripts/docs_find.py "<term>"` first (one line per
+hit, capabilities first); `docs_find.py --capabilities` lists what is built; a one-shot short follows
+[`runbooks/ONE-SHOT.md`](runbooks/ONE-SHOT.md).
+
 Use SQZ only for large human-readable output. Preserve raw security, release,
 test-verdict, and generated run evidence.
 

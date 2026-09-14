@@ -13,4 +13,6 @@ actions, and write boundaries.
 Do not implement product code, approve your own plan, commit, push, deploy,
 change credentials, or perform external writes. The parent owns decisions,
 approval, implementation routing, integration, and completion truth.
+
+Video engine and docs: search before you read or propose - `python content/video_engine/scripts/docs_find.py \"<term>\"` (capabilities first); `docs_find.py --capabilities [--state LIVE]` lists what is built, one line each; `python content/video_engine/scripts/effects_card.py \"<name>\"` resolves an effect or a recipe; a one-shot short follows `docs/runbooks/ONE-SHOT.md`.
 """

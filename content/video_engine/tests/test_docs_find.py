@@ -49,7 +49,14 @@ EFFECT = {"id": "dock_payload:widget", "axis": "dock_payload", "token": "widget"
           "aliases": [{"name": "widget wall", "source": "operator 2026-09-13"}], "does": "The widget lands on its beat.",
           "lives": {"form": "inline", "path": "docs/alpha.mjs", "symbol": "drawWidget"}}
 
+CAPABILITY = {"id": "widget-engine", "name": "Widget engine", "section": "Rendering", "line": 12,
+              "what": "draws the widget on its word.", "where": ["docs/alpha.mjs"], "state": "LIVE",
+              "state_note": "LIVE", "proof": [], "cards": ["dock_payload:widget"], "rulings": [],
+              "backlog": [], "form": "four", "terms": ["widget", "draws"]}
+CAP_DOC = "docs/content-video-engine/CAPABILITIES.md"
+
 RECORDS = {
+    "docs/CAPABILITIES-INDEX.jsonl": CAPABILITY,
     "docs/EFFECTS-CATALOG.jsonl": EFFECT,
     "docs/DOCS-MANIFEST.jsonl": MANIFEST,
     "docs/DOCS-INDEX.jsonl": INDEX,
@@ -61,6 +68,7 @@ RECORDS = {
 }
 
 EXPECTED = [
+    f"[capabilities] {CAP_DOC}:12 — Widget engine — LIVE - draws the widget on its word.",
     "[effects] docs/alpha.mjs — The widget card — dock_payload:widget - The widget lands on its beat.",
     "[manifest] docs/alpha.md — Alpha doc — The widget purpose line.",
     "[index] docs/alpha.md:30 — Widget section — The lead about widgets.",
@@ -69,8 +77,8 @@ EXPECTED = [
     "[animation] docs/alpha.md:77 — widgetEase — w(t) = t^2",
     "[craft] docs/alpha.md:9 — the widget beat — what the widget does",
 ]
-SUMMARY = ("7 hit(s) in effects, manifest, index, topics, gates, animation, craft; "
-           "next: sed -n 10,50p docs/alpha.md")
+SUMMARY = ("8 hit(s) in capabilities, effects, manifest, index, topics, gates, animation, craft; "
+           f"next: sed -n 12p {CAP_DOC}")
 
 
 @pytest.fixture()
@@ -133,17 +141,22 @@ def test_the_citation_graph_answers_only_when_it_is_asked_for(capsys, tree):
 
 
 def test_the_limit_caps_the_total_and_stops_scanning_further_layers(capsys, tree):
+    # Arrange: no capabilities layer, so the first two built layers carry no line
+    (tree / "docs/CAPABILITIES-INDEX.jsonl").unlink()
+
     # Act
     lines = run(capsys, tree, "widget", "--limit", "2")
 
     # Assert: two layers answered, the rest were never opened, and the count says it was cut;
     # neither hit has a line, so the effect's card is the window
-    assert lines == [EXPECTED[0], EXPECTED[1], "2+ hit(s) in effects, manifest; "
+    assert lines == ["[capabilities] not built (run build_docs_layers.py --write)",
+                     EXPECTED[1], EXPECTED[2], "2+ hit(s) in capabilities, effects, manifest; "
                      'next: python content/video_engine/scripts/effects_card.py "dock_payload:widget"']
 
 
 def test_an_effects_hit_first_never_suppresses_the_window_of_a_lined_hit(capsys, tree):
-    # Arrange: no manifest or index, so the first lined hit under the cap is a gate
+    # Arrange: no capabilities, manifest or index, so the first lined hit under the cap is a gate
+    (tree / "docs/CAPABILITIES-INDEX.jsonl").unlink()
     (tree / "docs/DOCS-MANIFEST.jsonl").unlink()
     (tree / "docs/DOCS-INDEX.jsonl").unlink()
 
@@ -151,9 +164,61 @@ def test_an_effects_hit_first_never_suppresses_the_window_of_a_lined_hit(capsys,
     lines = run(capsys, tree, "widget", "--limit", "3")
 
     # Assert
-    assert lines[0] == EXPECTED[0]
-    assert lines[-1] == ("3+ hit(s) in effects, manifest, index, topics, gates; "
+    assert lines[1] == EXPECTED[1]
+    assert lines[-1] == ("3+ hit(s) in capabilities, effects, manifest, index, topics, gates; "
                          "next: sed -n 1,32p content/video_engine/scripts/t.py")
+
+
+def test_a_capabilities_hit_leads_and_its_window_is_its_one_row(capsys, tree):
+    # Act
+    lines = run(capsys, tree, "widget", "--limit", "1")
+
+    # Assert
+    assert lines == [EXPECTED[0], f"1+ hit(s) in capabilities; next: sed -n 12p {CAP_DOC}"]
+
+
+def test_a_capability_named_for_the_term_ranks_before_one_that_only_says_it(capsys, tree):
+    # Arrange: the first record says "gizmo" only in its prose terms, the second names it
+    prose = {**CAPABILITY, "id": "a", "name": "Alpha", "line": 5, "terms": ["gizmo"]}
+    named = {**CAPABILITY, "id": "b", "name": "The gizmo gate", "line": 9}
+    (tree / "docs/CAPABILITIES-INDEX.jsonl").write_text(
+        json.dumps(prose) + "\n" + json.dumps(named) + "\n", encoding="utf-8")
+
+    # Act
+    lines = run(capsys, tree, "gizmo", "--layer", "capabilities")
+
+    # Assert
+    assert [line.split(" — ")[1] for line in lines[:2]] == ["The gizmo gate", "Alpha"]
+
+
+def test_the_capabilities_list_prints_the_page_lines_filtered_by_state_and_section(capsys, tree):
+    # Arrange
+    wired = {**CAPABILITY, "id": "w", "name": "Wired thing", "section": "Gates", "line": 40,
+             "state": "WIRED", "what": ""}
+    (tree / "docs/CAPABILITIES-INDEX.jsonl").write_text(
+        json.dumps(CAPABILITY) + "\n" + json.dumps(wired) + "\n", encoding="utf-8")
+
+    # Act
+    everything = run(capsys, tree, "--capabilities")
+    live = run(capsys, tree, "--capabilities", "--state", "live")
+    gates = run(capsys, tree, "--capabilities", "--section", "gate")
+
+    # Assert
+    assert everything[:4] == ["## Rendering",
+                              "- Widget engine - LIVE - draws the widget on its word. (CAPABILITIES.md:12)",
+                              "## Gates", "- Wired thing - WIRED (CAPABILITIES.md:40)"]
+    assert everything[-1].startswith("2 of 2 capabilities; open a row: sed -n <line>p ")
+    assert live[:2] == everything[:2] and live[-1].startswith("1 of 2 capabilities (state live)")
+    assert gates[:2] == everything[2:4]
+
+
+def test_the_capabilities_list_without_the_layer_prints_one_line(capsys, tree):
+    # Arrange
+    (tree / "docs/CAPABILITIES-INDEX.jsonl").unlink()
+
+    # Act / Assert
+    assert run(capsys, tree, "--capabilities") == [
+        "[capabilities] not built (run build_capabilities_index.py --write)"]
 
 
 def test_an_effects_only_answer_names_the_card_as_the_window(capsys, tree):
@@ -163,7 +228,7 @@ def test_an_effects_only_answer_names_the_card_as_the_window(capsys, tree):
 
     # Assert: the text line and the JSON field name the same window
     card = 'python content/video_engine/scripts/effects_card.py "dock_payload:widget"'
-    assert lines == [EXPECTED[0], f"1 hit(s) in effects; next: {card}"]
+    assert lines == [EXPECTED[1], f"1 hit(s) in effects; next: {card}"]
     assert payload["next"] == card
 
 
@@ -175,8 +240,9 @@ def test_a_layer_that_is_not_built_reports_itself_and_never_crashes(capsys, tree
     lines = run(capsys, tree, "widget")
 
     # Assert: the note sits in the layer's own place in the order, and is not counted as a hit
-    assert lines[4] == "[gates] not built (run build_docs_layers.py --write)"
-    assert lines[-1].startswith("6 hit(s) in effects, manifest, index, topics, gates, animation, craft;")
+    assert lines[5] == "[gates] not built (run build_docs_layers.py --write)"
+    assert lines[-1].startswith(
+        "7 hit(s) in capabilities, effects, manifest, index, topics, gates, animation, craft;")
 
 
 def test_a_corrupt_record_is_skipped_rather_than_raised(capsys, tree):
@@ -188,7 +254,7 @@ def test_a_corrupt_record_is_skipped_rather_than_raised(capsys, tree):
     lines = run(capsys, tree, "widget", "--layer", "index")
 
     # Assert
-    assert lines == [EXPECTED[2], "1 hit(s) in index; next: sed -n 10,50p docs/alpha.md"]
+    assert lines == [EXPECTED[3], "1 hit(s) in index; next: sed -n 10,50p docs/alpha.md"]
 
 
 def test_a_term_that_is_not_valid_regex_is_searched_as_a_literal(capsys, tree):
@@ -208,7 +274,7 @@ def test_no_hits_still_names_the_layers_it_searched(capsys, tree):
     lines = run(capsys, tree, "no-such-term-anywhere")
 
     # Assert
-    assert lines == ["0 hit(s) in effects, manifest, index, topics, gates, animation, craft"]
+    assert lines == ["0 hit(s) in capabilities, effects, manifest, index, topics, gates, animation, craft"]
 
 
 def test_json_carries_the_same_hits_plus_the_window(capsys, tree):
@@ -217,17 +283,17 @@ def test_json_carries_the_same_hits_plus_the_window(capsys, tree):
 
     # Assert
     assert payload["query"] == "widget"
-    assert payload["count"] == 7
+    assert payload["count"] == 8
     assert payload["truncated"] is False
     assert payload["missing"] == []
     assert payload["layers_scanned"] == list(DF.ALL_ORDER)
-    assert payload["next"] == "sed -n 10,50p docs/alpha.md"
+    assert payload["next"] == f"sed -n 12p {CAP_DOC}"
     assert [hit["layer"] for hit in payload["hits"]] == list(DF.ALL_ORDER)
-    assert payload["hits"][2] == {
+    assert payload["hits"][3] == {
         "layer": "index", "path": "docs/alpha.md", "line": 30, "name": "Widget section",
-        "snippet": "The lead about widgets.", "line_text": EXPECTED[2],
+        "snippet": "The lead about widgets.", "line_text": EXPECTED[3],
     }
-    assert payload["hits"][3]["sections"] == [{"path": "docs/alpha.md", "line": 30},
+    assert payload["hits"][4]["sections"] == [{"path": "docs/alpha.md", "line": 30},
                                               {"path": "content/x.md", "line": 4}]
 
 
@@ -249,6 +315,43 @@ def test_a_long_record_is_clamped_to_one_readable_line(capsys, tree):
 # --------------------------------------------------------------------------- the real tree
 
 REAL_INDEX = ROOT / "docs/DOCS-INDEX.jsonl"
+REAL_CAPABILITIES = ROOT / "docs/CAPABILITIES-INDEX.jsonl"
+CAPABILITY_LINE_MAX = 240
+needs_capabilities = pytest.mark.skipif(
+    not REAL_CAPABILITIES.is_file(), reason="build_capabilities_index.py --write has not run here")
+
+
+@needs_capabilities
+@pytest.mark.parametrize("term", ["suck", "ledger page", "melt", "plate library", "one-shot floor"])
+def test_the_real_tree_answers_a_capability_term_from_the_capabilities_layer_first(capsys, term):
+    # Arrange: does a capability row carry the term in a searched field?
+    pattern = DF.build_pattern(term)
+    layer = DF.BY_NAME["capabilities"]
+    has_row = any(DF.matched_field(r, layer, pattern) for r in DF.read_records(REAL_CAPABILITIES))
+
+    # Act
+    assert DF.main([term, "--repo", str(ROOT)]) == 0
+    lines = capsys.readouterr().out.splitlines()
+
+    # Assert
+    assert has_row, term
+    assert lines[0].startswith("[capabilities] docs/content-video-engine/CAPABILITIES.md:")
+    assert all(len(line) < CAPABILITY_LINE_MAX for line in lines if line.startswith("[capabilities]"))
+
+
+@needs_capabilities
+def test_the_real_capabilities_list_is_the_index_page_line_for_line(capsys):
+    # Arrange
+    page = (ROOT / "docs/CAPABILITIES-INDEX.md").read_text(encoding="utf-8")
+    body = page.split("\n## Rows the doc should fix", 1)[0]
+    want = [line for line in body.splitlines() if line.startswith(("- ", "## "))]
+
+    # Act
+    assert DF.main(["--capabilities", "--repo", str(ROOT)]) == 0
+    lines = capsys.readouterr().out.splitlines()
+
+    # Assert
+    assert lines[:-1] == want
 
 
 @pytest.mark.skipif(not REAL_INDEX.is_file(),

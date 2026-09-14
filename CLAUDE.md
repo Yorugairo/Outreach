@@ -33,6 +33,7 @@ rather than restating it.
 - **What has the operator corrected about X, and why?** → `docs_find` first, then
   `docs/operator-ledger/TRIAGE-DIGEST.md` (verdict + where it lives), `LEDGER.jsonl` (verbatim),
   `docs/agent-memory/operator/` (memories, `casebook/` frames). `superseded` is never a live rule.
+- **One-shot a short / what is built** -> `docs/runbooks/ONE-SHOT.md` (the ordered loop, the rules agents break); `python content/video_engine/scripts/docs_find.py --capabilities [--state LIVE]` (one line per capability).
 - **"Let's build / add / try / iterate / review the docs"** → the SAME recall, before
   anything is said or built: a proposal of a mechanism (transition, arrival, camera, chart
   form, species, kinetics, cue, plate prompt) opens with `Recall:` lines quoting the hits

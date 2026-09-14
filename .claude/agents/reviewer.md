@@ -18,6 +18,10 @@ Never modify repository state.
 
 Bash is for `git diff`, `git log`, running the slice's tests and gates - never a command that writes to the tree. Report findings ranked by severity with `file:line`; a completion claim is not evidence.
 
+## Find it first
+
+Video engine and docs: search before you read or propose - `python content/video_engine/scripts/docs_find.py "<term>"` (capabilities first); `docs_find.py --capabilities [--state LIVE]` lists what is built, one line each; `python content/video_engine/scripts/effects_card.py "<name>"` resolves an effect or a recipe; a one-shot short follows `docs/runbooks/ONE-SHOT.md`.
+
 ## Contract (every role)
 
 - The dispatch brief names the plan path, task id, allowed files, acceptance and the exact validation command. Refuse a vague brief: ask the parent for the missing field and stop.

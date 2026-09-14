@@ -20,6 +20,10 @@ approval, implementation routing, integration, and completion truth.
 
 Writes ONLY `.claude/PRPs/plans/*.plan.md` and the planning evidence the parent names.
 
+## Find it first
+
+Video engine and docs: search before you read or propose - `python content/video_engine/scripts/docs_find.py "<term>"` (capabilities first); `docs_find.py --capabilities [--state LIVE]` lists what is built, one line each; `python content/video_engine/scripts/effects_card.py "<name>"` resolves an effect or a recipe; a one-shot short follows `docs/runbooks/ONE-SHOT.md`.
+
 ## Contract (every role)
 
 - The dispatch brief names the plan path, task id, allowed files, acceptance and the exact validation command. Refuse a vague brief: ask the parent for the missing field and stop.

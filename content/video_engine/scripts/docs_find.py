@@ -9,8 +9,11 @@ needs the locator and one line of context, then a `sed -n` window where it decid
     python content/video_engine/scripts/docs_find.py "hedged yield" --layer manifest --limit 4
     python content/video_engine/scripts/docs_find.py "G15b" --layer gates --json
 
-Default `--layer all` scans effects -> manifest -> index -> topics -> gates -> animation -> craft, cheapest
-first (the effects catalogue answers "what is it called, what does it do" before any document), and
+    python content/video_engine/scripts/docs_find.py --capabilities --state LIVE --section chart
+
+Default `--layer all` scans capabilities -> effects -> manifest -> index -> topics -> gates -> animation ->
+craft, cheapest first (the capabilities index answers "do we have X, where, is it live, what proves it",
+then the effects catalogue "what is it called, what does it do", before any document), and
 stops once `--limit` hits are printed. Two rules keep the cheap layer from eating the whole budget and the
 research bundle from burying the doctrine, because both make the cap useless in practice:
 
@@ -21,7 +24,11 @@ research bundle from burying the doctrine, because both make the cap useless in 
     `content/video_engine/sources/` research bundle is the background - and file order breaks ties.
 
 The citation graph (`cites`) is not in `all`: it answers "what cites section Y", which is a follow-up, not a
-first lookup. Ask for it with `--layer cites`. A missing layer file prints one line and never raises; the
+first lookup. Ask for it with `--layer cites`. `--capabilities` prints the one-screen capability list (the
+lines of `docs/CAPABILITIES-INDEX.md`, by section), filtered by `--state` and `--section`. A capabilities
+hit's window is its one row (`sed -n <line>p`), since a row runs to kilobytes, and inside that layer a hit
+on the name, `what`, paths, cards or state ranks before a hit on the row's prose `terms`. A missing layer
+file prints one line and never raises; the
 term is compiled as a case-insensitive regex and falls back to a literal when it is not valid regex, so
 `42§42.2` and `f(t) = t^2` are searchable as typed. Standard library only.
 """
@@ -107,6 +114,7 @@ class Layer:
     line_of: Callable[[dict], Any] = lambda record: None
     token_fields: tuple[str, ...] = ()
     detail_only: bool = False
+    rank_by_field: bool = False      # hits on an earlier field rank first (after docs-first)
 
 
 def first_of(record: dict, *dotted: str) -> str:
@@ -117,7 +125,19 @@ def first_of(record: dict, *dotted: str) -> str:
     return ""
 
 
+CAPABILITIES_DOC = "docs/content-video-engine/CAPABILITIES.md"
+CAPABILITIES_REL = "docs/CAPABILITIES-INDEX.jsonl"
+
 LAYERS: tuple[Layer, ...] = (
+    Layer(
+        "capabilities", CAPABILITIES_REL, ("name", "what", "where", "cards", "state", "terms"),
+        name_of=lambda r: str(r.get("name") or ""),
+        detail_of=lambda r: f"{r.get('state') or ''} - {r.get('what') or ''}",
+        path_of=lambda r: CAPABILITIES_DOC,
+        line_of=lambda r: r.get("line"),
+        detail_only=True,
+        rank_by_field=True,
+    ),
     Layer(
         "effects", "docs/EFFECTS-CATALOG.jsonl", ("id", "title", "aliases", "does", "token"),
         name_of=lambda r: str(r.get("title") or ""),
@@ -178,7 +198,7 @@ LAYERS: tuple[Layer, ...] = (
 )
 
 BY_NAME = {layer.name: layer for layer in LAYERS}
-ALL_ORDER = ("effects", "manifest", "index", "topics", "gates", "animation", "craft")
+ALL_ORDER = ("capabilities", "effects", "manifest", "index", "topics", "gates", "animation", "craft")
 CHOICES = (*(layer.name for layer in LAYERS), "all")
 
 
@@ -289,14 +309,16 @@ def scan_layer(layer: Layer, pattern: re.Pattern[str], repo: Path) -> list[Hit] 
     path = repo / layer.rel
     if not path.is_file():
         return None
-    hits: list[Hit] = []
+    ranked: list[tuple[int, int, Hit]] = []
     for record in read_records(path):
         matched = matched_field(record, layer, pattern)
         if matched is None:
             continue
-        hits.append(topic_hit(record, layer) if layer.name == "topics"
-                    else record_hit(record, layer, *matched))
-    return sorted(hits, key=lambda hit: docs_first(hit.path))
+        hit = (topic_hit(record, layer) if layer.name == "topics"
+               else record_hit(record, layer, *matched))
+        rank = layer.fields.index(matched[0]) if layer.rank_by_field else 0
+        ranked.append((docs_first(hit.path), rank, hit))
+    return [hit for _, _, hit in sorted(ranked, key=lambda item: (item[0], item[1]))]
 
 
 # --------------------------------------------------------------------------- the search
@@ -373,6 +395,8 @@ def next_window(hits: Sequence[Hit]) -> str:
     the effects snippet, `id - does`)."""
     for hit in hits:
         if hit.path and isinstance(hit.line, int) and not isinstance(hit.line, bool):
+            if hit.layer == "capabilities":          # one row is the whole capability, and it is long
+                return f"sed -n {hit.line}p {hit.path}"
             return f"sed -n {max(1, hit.line - WINDOW)},{hit.line + WINDOW}p {hit.path}"
     for hit in hits:
         card = hit.snippet.split(" - ", 1)[0].strip() if hit.layer == "effects" else ""
@@ -412,18 +436,59 @@ def use_utf8(*streams) -> None:
             pass
 
 
+def capability_line(record: dict) -> str:
+    """The `docs/CAPABILITIES-INDEX.md` line of one record (build_capabilities_index.md_line)."""
+    what = f" - {record.get('what')}" if record.get("what") else ""
+    return f"- {record.get('name')} - {record.get('state')}{what} (CAPABILITIES.md:{record.get('line')})"
+
+
+def list_capabilities(repo: Path, state: str | None, section: str | None) -> list[str]:
+    """The one-screen capability list by section, filtered by exact state and section substring."""
+    path = Path(repo) / CAPABILITIES_REL
+    if not path.is_file():
+        return ["[capabilities] not built (run build_capabilities_index.py --write)"]
+    records = list(read_records(path))
+    lines: list[str] = []
+    current = None
+    shown = 0
+    for record in records:
+        if state and str(record.get("state") or "").upper() != state.upper():
+            continue
+        if section and section.lower() not in str(record.get("section") or "").lower():
+            continue
+        if record.get("section") != current:
+            current = record.get("section")
+            lines.append(f"## {current}")
+        lines.append(capability_line(record))
+        shown += 1
+    filters = ", ".join(f"{k} {v}" for k, v in (("state", state), ("section", section)) if v)
+    lines.append(f"{shown} of {len(records)} capabilities" + (f" ({filters})" if filters else "")
+                 + f"; open a row: sed -n <line>p {CAPABILITIES_DOC}")
+    return lines
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    parser.add_argument("term", help="case-insensitive substring or regex")
+    parser.add_argument("term", nargs="?", help="case-insensitive substring or regex")
     parser.add_argument("--layer", choices=CHOICES, default="all",
-                        help="one layer, or all (default: effects, manifest, index, topics, gates, animation, craft)")
+                        help="one layer, or all (default: " + ", ".join(ALL_ORDER) + ")")
     parser.add_argument("--limit", type=int, default=DEFAULT_LIMIT,
                         help=f"most hits to print across every layer (default: {DEFAULT_LIMIT})")
     parser.add_argument("--json", action="store_true", help="the same hits as one JSON object")
+    parser.add_argument("--capabilities", action="store_true",
+                        help="list every capability, one line each by section (no term needed)")
+    parser.add_argument("--state", help="with --capabilities: only this state (LIVE, WIRED, BUILT, ...)")
+    parser.add_argument("--section", help="with --capabilities: only sections containing this text")
     parser.add_argument("--repo", type=Path, default=REPO, help="repository root (default: this checkout)")
     args = parser.parse_args(argv)
+    if not args.capabilities and not args.term:
+        parser.error("a term is required (or --capabilities for the list)")
 
     use_utf8(sys.stdout, sys.stderr)
+    if args.capabilities:
+        for line in list_capabilities(Path(args.repo), args.state, args.section):
+            print(line)
+        return 0
     names = list(ALL_ORDER) if args.layer == "all" else [args.layer]
     result = search(args.term, names, Path(args.repo), max(0, args.limit))
     if args.json:
