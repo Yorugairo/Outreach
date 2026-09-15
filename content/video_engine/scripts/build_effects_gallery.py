@@ -7,25 +7,32 @@ frame of every member whose card has one - so a combination can be read as the s
 golden frames are COPIED beside the page (a served review link is a frozen copy); a card whose golden does not resolve
 shows an explicit "no proof yet" marker so the gap stays visible. No external requests: system fonts, inline CSS/JS.
 
-    python content/video_engine/scripts/build_effects_gallery.py [--out DIR] [--catalog PATH] [--frames DIR]
+P61 T9: the build is half its old wall clock (ONE directory listing instead of ~300 globs, no re-copy of unchanged
+frames, one tally, no import a build does not need); the page carries three golden frames of its own so "faster" can
+never mean "renders less" (--pin, checked by tests/test_effects_gallery.py); and a card whose effect a still cannot
+show carries its rendered clip as a <video> when one is beside the page (`frames/<card-id>.mp4`, rendered by
+review_queue_proofs.py's clip path).
 
-Deterministic: the same catalogue and frames give byte-identical index.html. Stdlib only.
+    python content/video_engine/scripts/build_effects_gallery.py [--out DIR] [--catalog PATH] [--frames DIR]
+    python content/video_engine/scripts/build_effects_gallery.py --pin        # re-take the three golden frames
+
+Deterministic: the same catalogue and frames give byte-identical index.html. Stdlib only (playwright only for --pin).
 """
 from __future__ import annotations
 
-import argparse
 import html
 import json
-import shutil
+import os
 import sys
 from pathlib import Path
-from urllib.parse import quote
+from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[3]
 CATALOG_REL = "docs/EFFECTS-CATALOG.jsonl"
 FRAMES_REL = "content/video_engine/tests/golden/frames"
 OUT_REL = "content/video_engine/effects/gallery"
 FRAMES_SUBDIR = "frames"
+CLIP_SUFFIX = ".mp4"      # P61 T9 (c): a motion example, rendered by review_queue_proofs' clip path
 STATUSES = ("live", "wired", "draft", "declared", "planned")
 RECIPE_AXIS = "recipe"
 NO_PROOF_MARKER = "no proof yet"
@@ -54,17 +61,80 @@ def split_recipes(records: list[dict]) -> tuple[list[dict], list[dict]]:
             [r for r in records if r.get("axis") == RECIPE_AXIS])
 
 
-def resolve_proof(golden: str | None, frames_dir: Path) -> tuple[str | None, list[str]]:
+def names_ending(directory: Path | None, suffix: str) -> list[str]:
+    """One `scandir`: the file names in `directory` ending in `suffix` (empty when it is not there)."""
+    try:
+        return [e.name for e in os.scandir(directory) if e.name.endswith(suffix) and e.is_file()]
+    except (FileNotFoundError, NotADirectoryError, TypeError):
+        return []
+
+
+def clip_name(card_id: str) -> str:
+    """`dock_payload:stack` -> `dock_payload-stack.mp4`; a colon is not a file name on Windows."""
+    return f"{card_id.replace(':', '-')}{CLIP_SUFFIX}"
+
+
+class FrameIndex:
+    """ONE listing of the golden frames, reused by every card (P61 T9 (a): the build's dominant stage).
+
+    `resolve_proof` used to glob the frames directory once per card, once per counted card and once
+    per recipe member - some 300 scans of a 99-file directory. The same answers come from a single
+    `scandir`, and the strip is grouped exactly as the old glob matched: `<surface>@proof-*` only,
+    never `<surface>@something@proof-*`.
+    """
+    __slots__ = ("directory", "stems", "strips", "clips")
+
+    def __init__(self, directory: Path, clips_dir: Path | None = None) -> None:
+        self.directory = Path(directory)
+        self.stems: set[str] = set()
+        self.strips: dict[str, list[str]] = {}
+        # P61 T9 (c): the motion examples that live BESIDE the page, not among the goldens
+        self.clips: set[str] = set(names_ending(clips_dir, CLIP_SUFFIX)) if clips_dir else set()
+        for name in names_ending(self.directory, ".png"):
+            stem = name[: -len(".png")]
+            self.stems.add(stem)
+            surface, _, rest = stem.partition("@")
+            if rest.startswith("proof-"):
+                self.strips.setdefault(surface, []).append(stem)
+        for strip in self.strips.values():
+            strip.sort()
+
+    def resolve(self, golden: str | None) -> tuple[str | None, list[str]]:
+        """(the main frame stem or None, the sorted @proof-* stems of the same surface)."""
+        if not golden or golden not in self.stems:
+            return None, []
+        return golden, [s for s in self.strips.get(golden.partition("@")[0], ()) if s != golden]
+
+    def clip_of(self, card_id: str) -> str | None:
+        """The motion example rendered for this card, when one is beside the page (P61 T9 (c))."""
+        name = clip_name(card_id)
+        return name if name in self.clips else None
+
+
+def frame_index(frames: "FrameIndex | Path") -> FrameIndex:
+    """Take the index or the directory it was built from - a caller holding a plain path still works."""
+    return frames if isinstance(frames, FrameIndex) else FrameIndex(frames)
+
+
+def resolve_proof(golden: str | None, frames: "FrameIndex | Path") -> tuple[str | None, list[str]]:
     """Return (main frame stem or None, sorted @proof-* stems of the same surface)."""
-    if not golden or not (frames_dir / f"{golden}.png").is_file():
-        return None, []
-    surface = golden.split("@", 1)[0]
-    strip = sorted(p.stem for p in frames_dir.glob(f"{surface}@proof-*.png") if p.stem != golden)
-    return golden, strip
+    return frame_index(frames).resolve(golden)
+
+
+SAFE = frozenset("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_.-~/")
+
+
+def pct(stem: str) -> str:
+    """`urllib.parse.quote` for a frame stem, without paying for the urllib import on every build.
+
+    `@` -> `%40` is the only escape a committed stem has ever needed; test_effects_gallery checks
+    this against urllib itself over every stem on disk, so the page's bytes cannot drift.
+    """
+    return "".join(c if c in SAFE else "".join(f"%{b:02X}" for b in c.encode("utf-8")) for c in stem)
 
 
 def img_src(stem: str) -> str:
-    return f"{FRAMES_SUBDIR}/{quote(stem)}.png"
+    return f"{FRAMES_SUBDIR}/{pct(stem)}.png"
 
 
 def render_aliases(card: dict) -> str:
@@ -118,21 +188,34 @@ def render_callable(card: dict) -> str:
     return ""
 
 
-def render_proof(card: dict, frames_dir: Path) -> str:
+def render_motion(card: dict, frames: FrameIndex) -> str:
+    """The clip of an effect a still cannot show (P61 T9 (c)): a composite of more than one phase
+    whose golden already needed extra `@proof-*` instants pinned beside it. Rendered by
+    `review_queue_proofs.render_clip` - the review queue's own headless-Chromium -> ffmpeg path."""
+    name = frames.clip_of(card["id"])
+    if not name:
+        return ""
+    return (f'<video class="motion" src="{FRAMES_SUBDIR}/{pct(name)}" controls muted loop playsinline '
+            f'preload="metadata"></video><p class="cap">motion: the phases a still cannot show</p>')
+
+
+def render_proof(card: dict, frames: FrameIndex) -> str:
     proof = card.get("proof") or {}
-    main, strip = resolve_proof(proof.get("golden"), frames_dir)
+    main, strip = resolve_proof(proof.get("golden"), frames)
+    motion = render_motion(card, frames)
     test = proof.get("test")
     test_html = f'<p class="test">test: <code>{esc(test)}</code></p>' if test else ""
     if main is None:
         missing = f" (golden {esc(proof['golden'])} not found)" if proof.get("golden") else ""
-        return f'<div class="proof none"><p class="noproof">{NO_PROOF_MARKER}{missing}</p>{test_html}</div>'
+        return (f'<div class="proof none"><p class="noproof">{NO_PROOF_MARKER}{missing}</p>'
+                f'{motion}{test_html}</div>')
     thumbs = "".join(
         f'<a href="{img_src(s)}" title="{esc(s)}"><img loading="lazy" src="{img_src(s)}" alt="{esc(s)}"></a>'
         for s in strip)
     strip_html = f'<div class="strip">{thumbs}</div>' if thumbs else ""
     return (f'<div class="proof"><a href="{img_src(main)}"><img class="golden" loading="lazy" '
             f'src="{img_src(main)}" alt="{esc(main)}"></a><p class="cap">{esc(main)}</p>'
-            f'{strip_html}{test_html}</div>')
+            f'{strip_html}{motion}{test_html}</div>')
 
 
 def search_text(card: dict) -> str:
@@ -141,7 +224,8 @@ def search_text(card: dict) -> str:
     return " ".join(str(f) for f in fields if f).lower()
 
 
-def render_card(card: dict, frames_dir: Path) -> str:
+def render_card(card: dict, frames: "FrameIndex | Path") -> str:
+    frames = frame_index(frames)
     status = card.get("status") or "unknown"
     backlog = "".join(f'<span class="backlog">{esc(b)}</span>' for b in card.get("backlog") or [])
     return (
@@ -150,7 +234,7 @@ def render_card(card: dict, frames_dir: Path) -> str:
         f'<p class="meta"><code class="id">{esc(card["id"])}</code> '
         f'<span class="pill s-{esc(status)}">{esc(status)}</span>{backlog}</p>'
         f'{render_aliases(card)}<p class="does">{esc(card.get("does"))}</p>'
-        f'{render_proof(card, frames_dir)}{render_phases(card)}{render_blends(card)}'
+        f'{render_proof(card, frames)}{render_phases(card)}{render_blends(card)}'
         f'{render_author(card)}{render_lives(card)}{render_callable(card)}</article>'
     )
 
@@ -162,17 +246,17 @@ def offset_text(value) -> str:
     return f"+{float(value or 0):g}s"
 
 
-def member_frame(member: dict, by_id: dict, frames_dir: Path) -> str:
+def member_frame(member: dict, by_id: dict, frames: "FrameIndex | Path") -> str:
     """The member card's own proof frame, where it has one - the combination read as stills."""
     card = by_id.get(member.get("card")) or {}
-    main, _ = resolve_proof((card.get("proof") or {}).get("golden"), frames_dir)
+    main, _ = resolve_proof((card.get("proof") or {}).get("golden"), frames)
     if not main:
         return ""
     return (f'<a href="{img_src(main)}" title="{esc(main)}">'
             f'<img class="member-frame" loading="lazy" src="{img_src(main)}" alt="{esc(main)}"></a>')
 
 
-def render_members(recipe: dict, by_id: dict, frames_dir: Path) -> str:
+def render_members(recipe: dict, by_id: dict, frames: "FrameIndex | Path") -> str:
     items = []
     for member in recipe.get("members") or []:
         option = f' <span class="opt">{esc(member["option"])}</span>' if member.get("option") else ""
@@ -181,7 +265,7 @@ def render_members(recipe: dict, by_id: dict, frames_dir: Path) -> str:
         items.append(f'<li class="member"><b>{esc(offset_text(member.get("offset_s")))}</b> '
                      f'<code>{esc(member.get("card"))}</code>{option} - {title}{optional}'
                      f'<span class="role">{esc(member.get("role"))}</span>'
-                     f'{member_frame(member, by_id, frames_dir)}</li>')
+                     f'{member_frame(member, by_id, frames)}</li>')
     return f'<h4>Members</h4><ol class="members">{"".join(items)}</ol>'
 
 
@@ -196,7 +280,7 @@ def render_recipe_proof(recipe: dict) -> str:
             f'<p class="check"><code>{esc(proof.get("timeline"))}</code></p>')
 
 
-def render_recipe(recipe: dict, by_id: dict, frames_dir: Path) -> str:
+def render_recipe(recipe: dict, by_id: dict, frames: "FrameIndex | Path") -> str:
     status = recipe.get("status") or "unknown"
     count = recipe.get("count") or 0
     says = "a decoration" if count == 1 else ("unfired" if count < 1 else "a grammar")
@@ -212,17 +296,17 @@ def render_recipe(recipe: dict, by_id: dict, frames_dir: Path) -> str:
         f'<span class="backlog">count {esc(count)} ({esc(says)})</span></p>'
         f'{render_aliases(recipe)}<p class="does">{esc(recipe.get("does"))}</p>'
         f'<p class="check">acts: {esc(", ".join(recipe.get("acts") or []))} - window {esc(window)}s</p>'
-        f'{render_members(recipe, by_id, frames_dir)}{render_recipe_proof(recipe)}{dial_html}</article>'
+        f'{render_members(recipe, by_id, frames)}{render_recipe_proof(recipe)}{dial_html}</article>'
     )
 
 
-def compute_counts(cards: list[dict], frames_dir: Path) -> dict:
+def compute_counts(cards: list[dict], frames: "FrameIndex | Path") -> dict:
     cards, recipes = split_recipes(cards)
     counts = {"cards": len(cards), **{s: 0 for s in STATUSES}, "with golden": 0, "with test": 0, "no proof": 0,
               "recipes": len(recipes)}
     for c in cards:
         counts[c.get("status")] = counts.get(c.get("status"), 0) + 1
-        has_golden = resolve_proof((c.get("proof") or {}).get("golden"), frames_dir)[0] is not None
+        has_golden = resolve_proof((c.get("proof") or {}).get("golden"), frames)[0] is not None
         has_test = bool((c.get("proof") or {}).get("test"))
         counts["with golden"] += has_golden
         counts["with test"] += has_test
@@ -263,6 +347,7 @@ pre.example{background:#f2f2f2;padding:6px;overflow-x:auto;white-space:pre-wrap;
 .note{color:#666}.proof img.golden{display:block;max-width:100%;height:auto;border:1px solid #ccc}
 .strip{display:flex;gap:4px;overflow-x:auto;margin-top:4px}.strip img{height:64px;width:auto;border:1px solid #ccc}
 .proof.none{border:2px dashed #c33;padding:8px;background:#fff6f6}.noproof{margin:0;color:#a11;font-weight:600}
+video.motion{display:block;width:100%;height:auto;border:1px solid #ccc;margin-top:4px;background:#222}
 .hidden{display:none}
 """
 
@@ -275,21 +360,23 @@ sec.classList.toggle('hidden',shown===0);});});})();
 """
 
 
-def render_page(records: list[dict], frames_dir: Path) -> str:
+def render_page(records: list[dict], frames: "FrameIndex | Path", line: str | None = None) -> str:
+    """`line` is the counts line when the caller already has it - build() did the same tally twice."""
+    frames = frame_index(frames)
     cards, recipes = split_recipes(records)
     by_id = {c["id"]: c for c in cards}
     axes = axes_in_order(cards)
-    line = counts_line(compute_counts(records, frames_dir))
+    line = counts_line(compute_counts(records, frames)) if line is None else line
     nav = "".join(
         f'<a href="#axis-{esc(a)}">{esc(a)} ({sum(c["axis"] == a for c in cards)})</a>' for a in axes)
     if recipes:
         nav += f'<a href="#axis-recipe">recipes ({len(recipes)})</a>'
     sections = []
     for a in axes:
-        tiles = "".join(render_card(c, frames_dir) for c in cards if c["axis"] == a)
+        tiles = "".join(render_card(c, frames) for c in cards if c["axis"] == a)
         sections.append(f'<section class="axis" id="axis-{esc(a)}"><h2>{esc(a)}</h2><div class="grid">{tiles}</div></section>')
     if recipes:
-        tiles = "".join(render_recipe(r, by_id, frames_dir) for r in recipes)
+        tiles = "".join(render_recipe(r, by_id, frames) for r in recipes)
         sections.append(f'<section class="axis" id="axis-recipe"><h2>recipes</h2>'
                         f'<div class="grid">{tiles}</div></section>')
     return (
@@ -302,13 +389,28 @@ def render_page(records: list[dict], frames_dir: Path) -> str:
     )
 
 
-def frames_to_copy(cards: list[dict], frames_dir: Path) -> list[str]:
+def frames_to_copy(cards: list[dict], frames: "FrameIndex | Path") -> list[str]:
     stems: set[str] = set()
     for c in split_recipes(cards)[0]:
-        main, strip = resolve_proof((c.get("proof") or {}).get("golden"), frames_dir)
+        main, strip = resolve_proof((c.get("proof") or {}).get("golden"), frames)
         if main:
             stems.update([main, *strip])
     return sorted(stems)
+
+
+def copy_if_stale(src: Path, dst: Path) -> bool:
+    """Copy one frame only when the copy beside the page is not already it - the gallery re-copied
+    19.3 MB of unchanged PNGs on every build. True when it wrote."""
+    source = src.stat()
+    try:
+        have = dst.stat()
+    except FileNotFoundError:
+        pass
+    else:
+        if have.st_size == source.st_size and have.st_mtime_ns >= source.st_mtime_ns:
+            return False
+    dst.write_bytes(src.read_bytes())
+    return True
 
 
 def build(catalog: Path, frames_dir: Path, out_dir: Path) -> tuple[Path, str]:
@@ -316,25 +418,112 @@ def build(catalog: Path, frames_dir: Path, out_dir: Path) -> tuple[Path, str]:
     out_dir.mkdir(parents=True, exist_ok=True)
     target_frames = out_dir / FRAMES_SUBDIR
     target_frames.mkdir(exist_ok=True)
-    for stem in frames_to_copy(cards, frames_dir):
-        shutil.copyfile(frames_dir / f"{stem}.png", target_frames / f"{stem}.png")
+    frames = FrameIndex(frames_dir, clips_dir=target_frames)
+    for stem in frames_to_copy(cards, frames):
+        copy_if_stale(frames_dir / f"{stem}.png", target_frames / f"{stem}.png")
+    line = counts_line(compute_counts(cards, frames))
     index = out_dir / "index.html"
-    index.write_bytes(render_page(cards, frames_dir).encode("utf-8"))
-    return index, counts_line(compute_counts(cards, frames_dir))
+    index.write_bytes(render_page(cards, frames, line).encode("utf-8"))
+    return index, line
 
 
-def main(argv: list[str] | None = None) -> int:
+# ---------------------------------------------------------------- the pinned page (P61 T9 (b))
+# "Faster" must never be allowed to mean "renders less", so the built page carries golden frames of
+# its own: ONE fixed viewport, three anchors - the top, one mid-page axis section, the foot. They are
+# served and captured through render_baseline's own local server (reused, never re-implemented) and
+# checked by content/video_engine/tests/test_effects_gallery.py. Refresh deliberately, never by
+# accident, the way render_baseline.py --update is run:
+#     python content/video_engine/scripts/build_effects_gallery.py --pin
+PIN_VIEWPORT = (1280, 900)
+PIN_FRAMES = {
+    # the header, its counts line and the nav - what the page promises before a card is read
+    "gallery-top": "() => window.scrollTo(0, 0)",
+    # a mid-page axis section: `kinetics` is the 11th of the 18 axes and 17 cards deep, so the frame
+    # holds tiles, their copied golden proofs and the sticky nav over them
+    "gallery-axis-kinetics": "() => document.getElementById('axis-kinetics').scrollIntoView(true)",
+    # the foot: the end of the recipes section - the last tile the page has to draw
+    "gallery-foot": "() => window.scrollTo(0, document.body.scrollHeight)",
+}
+PIN_SETTLE_MS = 200
+
+
+def _render_baseline():
+    """The golden harness itself - its local server serves the page the frames are captured from."""
+    here = str(Path(__file__).resolve().parent)
+    if here not in sys.path:
+        sys.path.insert(0, here)
+    import render_baseline
+    return render_baseline
+
+
+def capture_frames(page_dir: Path, out_dir: Path, names: list[str] | None = None) -> list[Path]:
+    """Screenshot the built page at PIN_VIEWPORT at every anchor of PIN_FRAMES; return what was written.
+
+    Playwright is imported HERE, never at module scope: a build must not pay for the pinning path.
+    """
+    from playwright.sync_api import sync_playwright
+    width, height = PIN_VIEWPORT
+    wanted = [n for n in PIN_FRAMES if not names or n in names]
+    out_dir.mkdir(parents=True, exist_ok=True)
+    srv, port = _render_baseline().serve(page_dir)
+    written: list[Path] = []
+    try:
+        with sync_playwright() as pw:
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_context(viewport={"width": width, "height": height},
+                                       device_scale_factor=1).new_page()
+            page.goto(f"http://127.0.0.1:{port}/index.html", wait_until="networkidle", timeout=180000)
+            # the tiles' thumbnails are loading="lazy", so a frame below the fold would screenshot
+            # their empty boxes: make every image eager, then wait for all of them and for the fonts
+            page.add_style_tag(content="*,*::before,*::after{transition:none!important;animation:none!important}")
+            page.evaluate("() => { for (const i of document.images) i.loading = 'eager'; }")
+            page.wait_for_function("() => Array.from(document.images).every(i => i.complete)", timeout=180000)
+            page.evaluate("document.fonts.ready")
+            for name in wanted:
+                page.evaluate(PIN_FRAMES[name])
+                page.wait_for_timeout(PIN_SETTLE_MS)
+                target = out_dir / f"{name}.png"
+                target.write_bytes(page.screenshot(type="png"))
+                written.append(target)
+            browser.close()
+    finally:
+        srv.shutdown()
+    return written
+
+
+def parse_args(argv: list[str] | None) -> SimpleNamespace:
+    """A build with no flags - the one the gallery is rebuilt with - never constructs a parser.
+
+    `argparse` pulls in `shutil`, `gettext` and `locale` the moment a parser is built: 11 ms of a
+    111 ms build, and the plain `python build_effects_gallery.py` has nothing to parse. Every
+    invocation that does carry a flag still goes through argparse itself, so `--help` stays true.
+    """
+    flags = sys.argv[1:] if argv is None else argv
+    if not flags:
+        return SimpleNamespace(catalog=ROOT / CATALOG_REL, frames=ROOT / FRAMES_REL,
+                               out=ROOT / OUT_REL, pin=False, pin_into=None)
+    import argparse
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--catalog", type=Path, default=ROOT / CATALOG_REL)
     ap.add_argument("--frames", type=Path, default=ROOT / FRAMES_REL)
     ap.add_argument("--out", type=Path, default=ROOT / OUT_REL)
-    args = ap.parse_args(argv)
+    ap.add_argument("--pin", action="store_true",
+                    help="re-capture the page's three golden frames into tests/golden/frames/")
+    ap.add_argument("--pin-into", type=Path, help="write the pinned frames here instead (to compare a pair)")
+    return ap.parse_args(flags)
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
     if not args.catalog.is_file():
         print(f"catalogue not found: {args.catalog}", file=sys.stderr)
         return 2
     index, line = build(args.catalog, args.frames, args.out)
     print(index)
     print(line)
+    if args.pin or args.pin_into:
+        for path in capture_frames(index.parent, args.pin_into or (ROOT / FRAMES_REL)):
+            print(f"pinned {path}")
     return 0
 
 

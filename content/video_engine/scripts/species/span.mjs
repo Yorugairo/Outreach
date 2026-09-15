@@ -57,6 +57,7 @@ export const SPAN = Object.freeze({
   LABEL_ROOM: 1.3,  /* "room above" means this many label sizes clear of the chart's top - otherwise the name is written inside the band */
   MIN_W: 6,         /* a band narrower than this is not a period - it is two adjacent data, which is a bracket's job */
   LABEL_CLEAR: 0.55,/* R26-68: how far short of a page label's baseline the shade's top stops, in the span's own label sizes - a page's series tag is the DATA's name and reads on the ground, never inside a wash */
+  DARK: "#000",     /* E99 s7: the DARK tone's ground. The shade and its name part company - the name keeps the span's own colour, the ground goes to this at ALPHA. Black and not a palette token on purpose: a shade must DARKEN whatever it stands on and tint it with nothing, and the palette's only dark (`--lp-char`) IS the charcoal page, so on the page the operator was reading it is invisible. On a cream page it is the same shade, read the other way up. */
 });
 
 const span01 = (v) => Math.min(1, Math.max(0, v));
@@ -160,6 +161,17 @@ export const spanBand = (entries, lists, from, to, H, labels, clear) => {
 export const spanLabelY = (band, fs) => { const y = band.yTop != null ? band.yTop : band.y;
   return y >= fs * SPAN.LABEL_ROOM ? y - SPAN.LABEL_DY : y + fs * SPAN.LABEL_IN; };
 
+/* THE SHADE'S SETTLED DEPTH for a BUILT span (E99 s7, the operator: "that light of gray makes it read washed
+   out"). SPAN.ALPHA is the law and stays it; a build that wants a darker wash hands the number down ON the built
+   span as `sd.alpha`, which the engine fills from the `span_alpha` kinetics dial - absent -> undefined -> ALPHA, so
+   every frame rendered before this is the frame it was. It arrives BY NAME on `sd`, never as a free identifier, so
+   `node --test` still calls the painter with no engine around it. A zero, a negative or a nonsense value is not a
+   darker shade but a missing one, so it falls back to the law; 1 is the ceiling an opacity has. */
+export const spanAlphaOf = (sd) => {
+  const a = +(sd && sd.alpha);
+  return Number.isFinite(a) && a > 0 ? Math.min(1, a) : SPAN.ALPHA;
+};
+
 /* THE POSE at t: is it up, how deep is the shade, how far has the hand written. */
 export const spanPose = (sp, t) => {
   const at = +sp.at, dur = Math.max(0.001, +sp.dur || 1), d = t - at;
@@ -195,7 +207,7 @@ export const paintSpan = (sd, t, st, ctx) => {
   spanSink(sd.rect, spanGroundLayer(st));   /* R26-68: a shade is GROUND - under the state's own ink every frame, or it is not a shade */
   sd.rect.setAttribute("x", band.x.toFixed(1)); sd.rect.setAttribute("y", band.y.toFixed(1));
   sd.rect.setAttribute("width", band.w.toFixed(1)); sd.rect.setAttribute("height", band.h.toFixed(1));
-  sd.rect.setAttribute("fill-opacity", pose.alpha.toFixed(3));
+  sd.rect.setAttribute("fill-opacity", (spanAlphaOf(sd) * pose.shade).toFixed(3));   /* E99 s7: the SETTLED depth is the build's (span_alpha) or the law's; the fade-in is the pose's either way */
   sd.label.setAttribute("opacity", 1);
   sd.label.setAttribute("x", band.cx.toFixed(1));
   sd.label.setAttribute("y", spanLabelY(band, sd.fs).toFixed(1));

@@ -63,7 +63,26 @@ async function mount(doc) {
      in while the operator decides (species/press.mjs PRESS_FACES; the default is the house face, so a timeline
      that names none renders what it always did). A dial is named here so the typo warning below stays true: an
      unknown name IS ignored, and a dial is not unknown. */
-  const KINETICS_DIALS = Object.freeze({ press_face: "the press card's display face: house | serif | condensed" });
+  const KINETICS_DIALS = Object.freeze({
+    press_face: "the press card's display face: house | serif | condensed",
+    /* E99 s7 / R26-68, the operator: "that light of gray makes it read washed out". The span's SETTLED shade, 0..1.
+       Absent - which is every timeline on disk - leaves species/span.mjs SPAN.ALPHA (0.16), so no committed frame
+       moves; a build that carries a number darkens the wash and nothing else about the span. */
+    span_alpha: "the span's settled shade, 0 .. 1 (absent = span.mjs SPAN.ALPHA)",
+    /* E99 s7 again, the design call (2026-09-15): `span_alpha` alone could not answer the operator, because the
+       default wash is CHALK over a charcoal page - every increase of the alpha lifts the region toward white,
+       measured +24 L over the page at 0.16 and +62 L at 0.36. `dark` parts the shade from its name: the GROUND
+       goes to SPAN.DARK at the alpha (a darkening region, tinting nothing) and the label keeps `col` - the chalk,
+       or the span's own `sp.color`. Default "light" is the chalk-at-alpha every committed frame carries. */
+    span_tone: "the span's ground: light (the span's own colour, today) | dark (SPAN.DARK under the same name)",
+    /* R26-133: a plate world's idle is read for its `.scale` alone, so `drift` ({scale: 1, dx, dy}) holds perfectly
+       still. True lets the dx/dy PAINT - on the world's rest term, and on a layered plate per plane at its own share
+       k, the way camLayerState shares the camera's translation. It is a DIAL and not a capability flag on purpose:
+       KINETICS_DEFAULTS is doc 47 s1's designed-out set, pinned name-for-name by test_kinetics_flags.py, and this is
+       a defect's cure held behind a switch until the operator has seen it - the five drift plates of an APPROVED cut
+       move the day it goes on. Absent = the scale-only read every approved cut was rendered under. */
+    plate_idle_paints: "true = a plate world's idle paints its dx/dy (absent = the scale-only read)",
+  });
   const KIN = Object.assign({}, KINETICS_DEFAULTS,
     (TL.kinetics && typeof TL.kinetics === "object") ? TL.kinetics : {});
   for (const k of Object.keys(TL.kinetics || {}))
@@ -744,6 +763,7 @@ async function mount(doc) {
     LABEL_ROOM: 1.3,  /* "room above" means this many label sizes clear of the chart's top - otherwise the name is written inside the band */
     MIN_W: 6,         /* a band narrower than this is not a period - it is two adjacent data, which is a bracket's job */
     LABEL_CLEAR: 0.55,/* R26-68: how far short of a page label's baseline the shade's top stops, in the span's own label sizes - a page's series tag is the DATA's name and reads on the ground, never inside a wash */
+    DARK: "#000",     /* E99 s7: the DARK tone's ground. The shade and its name part company - the name keeps the span's own colour, the ground goes to this at ALPHA. Black and not a palette token on purpose: a shade must DARKEN whatever it stands on and tint it with nothing, and the palette's only dark (`--lp-char`) IS the charcoal page, so on the page the operator was reading it is invisible. On a cream page it is the same shade, read the other way up. */
   });
 
   const span01 = (v) => Math.min(1, Math.max(0, v));
@@ -847,6 +867,17 @@ async function mount(doc) {
   const spanLabelY = (band, fs) => { const y = band.yTop != null ? band.yTop : band.y;
     return y >= fs * SPAN.LABEL_ROOM ? y - SPAN.LABEL_DY : y + fs * SPAN.LABEL_IN; };
 
+  /* THE SHADE'S SETTLED DEPTH for a BUILT span (E99 s7, the operator: "that light of gray makes it read washed
+     out"). SPAN.ALPHA is the law and stays it; a build that wants a darker wash hands the number down ON the built
+     span as `sd.alpha`, which the engine fills from the `span_alpha` kinetics dial - absent -> undefined -> ALPHA, so
+     every frame rendered before this is the frame it was. It arrives BY NAME on `sd`, never as a free identifier, so
+     `node --test` still calls the painter with no engine around it. A zero, a negative or a nonsense value is not a
+     darker shade but a missing one, so it falls back to the law; 1 is the ceiling an opacity has. */
+  const spanAlphaOf = (sd) => {
+    const a = +(sd && sd.alpha);
+    return Number.isFinite(a) && a > 0 ? Math.min(1, a) : SPAN.ALPHA;
+  };
+
   /* THE POSE at t: is it up, how deep is the shade, how far has the hand written. */
   const spanPose = (sp, t) => {
     const at = +sp.at, dur = Math.max(0.001, +sp.dur || 1), d = t - at;
@@ -882,7 +913,7 @@ async function mount(doc) {
     spanSink(sd.rect, spanGroundLayer(st));   /* R26-68: a shade is GROUND - under the state's own ink every frame, or it is not a shade */
     sd.rect.setAttribute("x", band.x.toFixed(1)); sd.rect.setAttribute("y", band.y.toFixed(1));
     sd.rect.setAttribute("width", band.w.toFixed(1)); sd.rect.setAttribute("height", band.h.toFixed(1));
-    sd.rect.setAttribute("fill-opacity", pose.alpha.toFixed(3));
+    sd.rect.setAttribute("fill-opacity", (spanAlphaOf(sd) * pose.shade).toFixed(3));   /* E99 s7: the SETTLED depth is the build's (span_alpha) or the law's; the fade-in is the pose's either way */
     sd.label.setAttribute("opacity", 1);
     sd.label.setAttribute("x", band.cx.toFixed(1));
     sd.label.setAttribute("y", spanLabelY(band, sd.fs).toFixed(1));
@@ -1471,6 +1502,25 @@ async function mount(doc) {
      string. The identity writes an explicit no-op so a flagged-off render and a `none` render differ by nothing. */
   const idleCss = (x) => (x.scale === 1 && x.dx === 0 && x.dy === 0) ? ""
     : " translate(" + x.dx.toFixed(2) + "px," + x.dy.toFixed(2) + "px) scale(" + x.scale.toFixed(4) + ")";
+
+  const IDLE_K = Object.freeze({ MIN: 0, MAX: 4 });   /* kinetics/camera.mjs PARALLAX.K_MIN / K_MAX, mirrored - a module imports nothing */
+
+  /* R26-133 (E49; the operator, 2026-09-14: "Plate idle should probably paint, but would have to see what it looks
+     like"): the TRANSLATION half of an idle, alone, as the CSS a WORLD's rest term takes. The scale is deliberately
+     not here - a plate world's scale is already the world's own `z`, and it was by reading the idle for its `.scale`
+     alone that the player made `drift` ({scale: 1, dx, dy}) a no-op: the plate held perfectly still.
+     A PLANE of a layered plate takes the SHARE k of the same walk, the way camLayerState shares the camera's own
+     translation, so the near plane drifts further than the far wall off ONE idle and no second motion is invented
+     (E49: a camera move is a camera move; a hold holds at its idle). k is clamped to the compiler's own depth range,
+     as the camera clamps it, so a sidecar with nonsense cannot invert a plane. Fixed decimals, so two seeks to one t
+     write one string; "" for a pose that moves nothing, so a caller concatenates unconditionally and a breath - or a
+     dial that is off - writes exactly the string it has always written. */
+  const idleDriftCss = (x, k = 1) => {
+    const kk = Math.min(IDLE_K.MAX, Math.max(IDLE_K.MIN, +k));
+    const s = Number.isFinite(kk) ? kk : 1;
+    const px = (+(x && x.dx) || 0) * s, py = (+(x && x.dy) || 0) * s;
+    return (px === 0 && py === 0) ? "" : " translate(" + px.toFixed(2) + "px," + py.toFixed(2) + "px)";
+  };
   /* KINETICS:END */
 
   /* KINETICS:BEGIN stopaction */
@@ -9019,11 +9069,12 @@ async function mount(doc) {
        every line; the name is ink, on top, written glyph by glyph by the hand. */
     const spans = pageSpecies(scene, "span").map((sp) => {
       const col = sp.color ? (PS_PAL[sp.color] || sp.color) : "var(--lp-chalk)";
-      const rect = lpEl("rect", "lp-span", surf, { x: 0, y: 0, width: 0, height: 0, fill: col, "fill-opacity": 0 });
+      const ground = KIN.span_tone === "dark" ? SPAN.DARK : col;   /* E99 s7: the shade and its NAME part company - the ground darkens, the name keeps `col`. Any other value, and absence, is "light": the one colour it has always been. */
+      const rect = lpEl("rect", "lp-span", surf, { x: 0, y: 0, width: 0, height: 0, fill: ground, "fill-opacity": 0 });
       surf.insertBefore(rect, surf.firstChild);
       const label = lpEl("text", "spanlab", surf, { x: 0, y: 0, "text-anchor": "middle", opacity: 0, style: "font-size:" + fs + "px;fill:" + col });
       const lg = [...String(sp.label || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
-      return { sp, si: sp.series | 0, rect, label, lg, fs };
+      return { sp, si: sp.series | 0, rect, label, lg, fs, alpha: KIN.span_alpha };   /* E99 s7: the span_alpha dial, read ONCE onto the built span - spanAlphaOf falls back to SPAN.ALPHA when it is absent */
     });
     /* THE CENSUS'S X MARKS (P50 T6; E53 s1's second amendment, 2026-09-10; Bravos shots 89-91). The
        named cells take an X and dim; the crossed SHARE is written by the hand above the map. Both halves
@@ -12757,7 +12808,7 @@ async function mount(doc) {
      depth ASCENDING toward the viewer. HF-17's `#fgover` cutout still sits ABOVE all of them - it is mounted over
      the dock layer, outside `.world` entirely - and so do the docks, the species and the caption. */
   const WLY = "wly";
-  const paintPlanes = (el, plies, xf, rest) => {
+  const paintPlanes = (el, plies, xf, rest, idleAt) => {
     let els = Array.prototype.slice.call(el.querySelectorAll("." + WLY));
     if (els.length !== plies.length || els.some((e, i) => e.dataset.key !== plies[i].key)) {
       els.forEach((e) => e.remove());
@@ -12771,7 +12822,7 @@ async function mount(doc) {
         return d;
       });
     }
-    els.forEach((d, i) => { d.style.transform = camCssAt(xf, plies[i].k) + rest; });
+    els.forEach((d, i) => { d.style.transform = camCssAt(xf, plies[i].k) + rest + (idleAt ? idleAt(plies[i].k) : ""); });   /* R26-133: the world's idle drifts each plane at its own share of the same walk */
   };
   const render = (t) => {
     let si = 0;
@@ -12837,11 +12888,20 @@ async function mount(doc) {
          of one scene judged in isolation. The authored Ken Burns is the
          only world motion. */
       /* E49: an IMAGE plate that holds, holds at its idle - a ledger page and a clip carry their own motion */
-      const zi = (isLedger || isClip || isVecmap) ? 1 : idleXf(idleOf("plate", scene.world.idle), t, lpHash(Math.round(scene.span[0] * 100), 0, 977)).scale;   /* a vecmap breathes INSIDE its svg (vmIdle), so a species over it can ride the same pose */
+      const idlePose = (isLedger || isClip || isVecmap) ? { scale: 1, dx: 0, dy: 0 }
+        : idleXf(idleOf("plate", scene.world.idle), t, lpHash(Math.round(scene.span[0] * 100), 0, 977));   /* a vecmap breathes INSIDE its svg (vmIdle), so a species over it can ride the same pose */
+      const zi = idlePose.scale;
+      /* R26-133: this block read the plate's idle for its `.scale` ALONE, so `drift` ({scale: 1, dx, dy}) delivered
+         nothing and a plate authored `;idle=drift` held perfectly still. The dx/dy now PAINT - on the world's rest
+         term, and on a layered plate per plane at its own share k - behind the `plate_idle_paints` dial, because the
+         day it goes on the five drift plates of an APPROVED cut start moving: that is the operator's eye to give,
+         not a silent patch. Off (absent), every string written below is the string it has always been. */
+      const idleDrift = (k) => (KIN.plate_idle_paints === true ? idleDriftCss(idlePose, k) : "");
       const z = (1 + p * kb.scale) * zi;
       const camXfNow = camNow(scene, t);
       const worldRest = `translateX(${dx.toFixed(1)}px) scale(${z.toFixed(4)}) `
         + `translate(${(p*kb.x).toFixed(1)}px, ${(p*kb.y).toFixed(1)}px)`;
+      const restFlat = worldRest + idleDrift(PARALLAX.FLAT);   /* the flat world's rest, and the k = 1 pose camDepthSwap and worldPose read */
       /* P58 T4: a page at a DEPTH takes the camera itself, at its own k (paintLedger), so the element must not
          carry it a second time - the same hand-off the planes make below, one element instead of four. */
       const pageK = isLedger ? pageDepthOf(scene.world.page) : 0;
@@ -12850,21 +12910,21 @@ async function mount(doc) {
            the blur-zoom's scale, the suck's spin, the slide's push - each of which still prepends to it and so still
            applies to every plane at once); each plane carries the camera at its own k, so at k = 1, and under a
            LOCKED camera at any k, the string a plane gets is exactly the string the flat world gets. */
-        el.dataset.worldPose = camCss(camXfNow) + worldRest;
+        el.dataset.worldPose = camCss(camXfNow) + restFlat;
         if (el.dataset.worldRest !== undefined) delete el.dataset.worldRest;   /* P58 T6: the camera is on the planes, not under this element */
         el.style.transform = "";
-        paintPlanes(el, plies, camXfNow, worldRest);
+        paintPlanes(el, plies, camXfNow, worldRest, idleDrift);
       } else if (pageK) {
         /* the page took the camera down onto its own plane; the element keeps what the page's GROUND shares with it
            - the authored Ken Burns and the wipe's push - and `data-world-pose` carries the k = 1 pose, so
            worldPose(el) is still exactly the string a flat world writes. */
         el.dataset.worldPose = camCss(camXfNow);
         if (el.dataset.worldRest !== undefined) delete el.dataset.worldRest;   /* P58 T6: the page took the camera onto its own plane */
-        el.style.transform = worldRest;
+        el.style.transform = restFlat;   /* a page's world idle is the identity here (isLedger), so this IS worldRest */
       } else {
         if (el.dataset.worldPose) delete el.dataset.worldPose;
-        el.dataset.worldRest = worldRest;   /* P58 T6: what sits UNDER the camera on this element, for a mechanism read at another depth (camDepthSwap) */
-        el.style.transform = camCss(camXfNow) + worldRest;
+        el.dataset.worldRest = restFlat;   /* P58 T6: what sits UNDER the camera on this element, for a mechanism read at another depth (camDepthSwap) */
+        el.style.transform = camCss(camXfNow) + restFlat;
       }
     };
     const prev = TL.scenes[si - 1];

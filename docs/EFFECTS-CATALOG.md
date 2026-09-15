@@ -537,7 +537,7 @@ parameter of an effect is an option on its card, never a card.
 - **blend** Bravos 107-110 'the decades' -> the whole arc (recorded; docs/content-video-engine/CAPABILITIES.md:91)
 - **blend** the bracket/figure glyph law -> the whole arc (recorded; content/video_engine/scripts/species/span.mjs:171)
 - **lives** module - `content/video_engine/scripts/species/span.mjs` - symbol `paintSpan`
-- **dials** `SPAN` in `content/video_engine/scripts/species/span.mjs`: `IN_S`=0.45, `ALPHA`=0.16, `WRITE`=0.5, `PAD_T`=44, `PAD_B`=44, `LABEL_DY`=16, `LABEL_IN`=2.1, `LABEL_ROOM`=1.3, `MIN_W`=6, `LABEL_CLEAR`=0.55
+- **dials** `SPAN` in `content/video_engine/scripts/species/span.mjs`: `IN_S`=0.45, `ALPHA`=0.16, `WRITE`=0.5, `PAD_T`=44, `PAD_B`=44, `LABEL_DY`=16, `LABEL_IN`=2.1, `LABEL_ROOM`=1.3, `MIN_W`=6, `LABEL_CLEAR`=0.55, `DARK`="#000"
 - **status** wired - **callable** yes
 - **proof** golden span-decade - test content/video_engine/tests/kinetics/span.test.mjs - first use systems-and-blowups SHOT-TABLE-F.py (no approval record found for this build) t=None
 - **doctrine** CAPABILITIES SPAN -> docs/content-video-engine/CAPABILITIES.md:98; BACKLOG R26-25 -> docs/content-video-engine/BACKLOG.md:507

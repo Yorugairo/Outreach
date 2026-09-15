@@ -1,7 +1,7 @@
 ---
 id: P61-WHAT-THE-REVIEW-OWES
 title: What the review owes - the BUILD group of the 2026-09-15 queue sort: the whole-chart morph first (it unblocks P47 T6/T7 and P48 T5b), then the two 2.5D fixes, the ball's shadows, the melt gathered to a dense point, the verdict stack's choreography and the agenda page, the gallery's speed and its motion examples, and a DESIGN slice for saved states - each slice returning as a queue card with a proof a person can judge
-status: draft
+status: running
 operation: feature
 risk: standard
 owner: parent
@@ -11,6 +11,8 @@ updated: 2026-09-15
 ---
 
 # What the review owes
+
+> **APPROVED 2026-09-15** - the operator invoked `/prp-implement P61` after answering the two open decisions (E99 s34); running from T1. Approval is the operator's word; this line records it.
 
 ## Summary
 
@@ -117,7 +119,7 @@ that page only with the operator's ruling written to `docs/portable/OPERATOR-RUL
 
 | gate | slice | queue card | the ONE question the card asks |
 | --- | --- | --- | --- |
-| **HG1** | T2 | `r26-70-compare-morph` (rewritten) | "Watch the two clips end to end. Does the WHOLE chart become the next chart - every series, every datum, the axes and the labels - or does something cut? Approve, or name what cuts." |
+| **HG1** | T2 | `r26-70-compare-morph` (rewritten) | "Watch the two clips end to end. Does it **read as a transformation, not a cut, and read as intentional** (E99 s34)? The entire chart should transform - every series, datum and axis. Approve, or name what cuts or reads as accidental." |
 | **HG2** | T3 | `r26-117-ball-into-the-next-chart` (**created by the parent at T3's dispatch** - it does not exist today; it supersedes the `"missing": true` line on `r26-70-compare-morph`) | "The page melts, balls up, and the ball becomes the NEXT FULL CHART with no cut between. Watch 0:00-0:08. Does the hand-over hold, or does it read as a jump?" |
 | **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" |
 | **HG3** | T4a | `p58-hg3-extruded-bar-leave` | "`form-extruded-bar@proof-leave` beside `form-tilted-line@proof-leave`, as clips. Do the prism's shapes break down enough now? Approve, or say 'more'." |
@@ -137,8 +139,9 @@ that page only with the operator's ruling written to `docs/portable/OPERATOR-RUL
 opens at `:2901`. s1 (the whole-chart morph), s2 (the melt gathers), s3 (the ball's shadows), s4 (judged in video; the
 extruded bar's leave), s14 (a proof a person can judge), s15 (a card names the moment and the question), s16 (the
 agenda page still owed), s18 (mount, not scribble; no clearing to cream), s20 (the gallery), s21 (the verdict stack's
-choreography), s23 (saved states or per-agent copies), s24 (the three research runs released). Also **E45** (no
-approved cut is rebuilt), **E47** (a scene's `exit` is the transition INTO it - the reading that made two "hand-off"
+choreography), s23 (saved states or per-agent copies), s24 (the three research runs released), and **s34 at `:3143`**
+(P61's own two decisions: the morph's bar is that it reads as a transformation and as intentional; the text may be
+rewritten OR morphed; Japan is re-rendered later, not now). Also **E45** (no approved cut is rebuilt), **E47** (a scene's `exit` is the transition INTO it - the reading that made two "hand-off"
 clips read as jumps, E99 s19), **E50/E53** (a chart un-draws OR becomes the next thing; a chart changes state, never
 cuts to another chart of the same data), **E64** (the recast re-writes or morphs, never cuts), **E88** (the chart
 melts, the board stays), **E93** (an agenda row carries a catalogued icon), **E96/E97** (the one-shot floor; a beat is
@@ -231,7 +234,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 ## Task Slices
 
 ### T1: THE TRACE - what `recast`, `morph_to`, `compare` and the page-enter morph actually transform today
-- Status: pending
+- Status: complete (2026-09-15) - the trace verified; T2 briefed from it
 - Owner: `explorer` (read-only; no engine lock)
 - Depends on: none
 - Write set: `docs/research/runs/p61-whole-chart-morph/TRACE.md` (gitignored disk-as-bus) ONLY
@@ -241,12 +244,34 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   the title, the rail, the page's scribble field - each cell `morphed` / `re-written` / `crossfaded` / `cut` /
   `untouched`, every cell carrying a `path:line` in `samples/scene-evidence-engine.mjs`,
   `build_scene_timeline_f.py`, `kinetics/chartxf.mjs`, `kinetics/morph_a.mjs` or `kinetics/arap.mjs`. Plus: the exact
-  gap list to "full chart becomes full chart", and what `contour.mjs` costs per glyph at 12 fps as measured, not
-  guessed. Report "not found in <the places I searched>", never "does not exist".
+  gap list to "full chart becomes full chart". **Plus the text decision, which E99 s34 handed to measurement:** the
+  operator does not mind *"if the text is re-written or directly morphed - both is a transformation"*, so T1 measures
+  **BOTH routes** on the same label set and reports numbers, not a preference - (a) the CONTOUR route: `contour.mjs`'s
+  cost per glyph at 12 fps (raster at RASTER_S 4 device px per page px, marching squares, Douglas-Peucker, cached per
+  (text, face)), measured for a chart's full tick-label count, not one glyph, and whether the frame budget holds;
+  (b) the RE-WRITE route: `figure.mjs`'s `figureGlyph` re-writing at the datum (E76 s4, the operator's own *"just
+  collapse or melt then re-draw"*), its cost and what it needs from the compiler. Each route's failure mode is named.
+  T2 takes the one that READS, on the two readings the bar states; T1 supplies the cost so that choice is not a guess.
+  Report "not found in <the places I searched>", never "does not exist".
 - Validate: `python content/video_engine/scripts/docs_find.py "chart_to"` and
   `python scripts/sigmap_context.py query "chart_to transform" --top 5` run and quoted in the trace's header; then the
   parent verifies every `path:line` in the table resolves with one `rg` each before T2 is briefed
-- Evidence: pending
+- Evidence: `docs/research/runs/p61-whole-chart-morph/TRACE.md` (gitignored; written in the worktree, copied into main by
+  the parent). Header quotes both recall commands (`docs_find "chart_to"` 20+ hits; SigMap ranks nothing in the engine -
+  its index carries no `.mjs` symbols). The 9x9 table (s1) with the compiler's admissions (`C:280` CHART_TO_KINDS, `C:281`
+  MORPH_BUILDERS, the line->bars refusal `C:2127-2137`); the gap list (s2, nine items: no verb morphs a bars page; `morph_to`
+  moves ONE series (`E:9761` lpStrip) and CROSSFADES the whole axis layer (`E:9799`/`:9801`) though `lpAxisHandOver`
+  (`E:9584`) already is the no-cut hand-over; no datum correspondence outside `keyed: "data"`; no rect<->polyline pairing;
+  the title never changes on any verb; tick labels re-write only on a recast; `st.xfNow` (`E:9880`) has no whole-chart
+  phase; rail and field outside every verb). The text decision measured (s3), same 16-string / 92-glyph label set, HeadlessChrome
+  149 on the i9-13900KF: route (a) contour - one morph frame 5.53 ms (6.56 with the DOM write), 12.6x inside the 12 fps frame,
+  but a ONE-TIME 121.5 ms prepare (64.2 raster + 57.3 pair) that must land at page build, never on the morph's first frame;
+  route (b) re-write - 0.012 ms per frame, no prepare, and the tick-label re-write is ALREADY shipped as `lpWriteText`
+  (`E:9567`) through `sweep` (`E:9600-9606`). Failure modes named for both (contour: the prepare hitch, no node coverage, the
+  webfont race, 16 simultaneous rank-collapses unmeasured; re-write: the '20 20 20' stub (closed by sweep), no direction of
+  its own, churn on unchanged strings, tspan-bearing labels skipped). Remaining (s5): `keyed: "data"` (`E:9712-9751`) is the
+  nearest existing shape to a whole-chart morph and T2 starts from it. Parent spot-checked `E:9761`, `E:9584`, `E:9795`,
+  `E:9880`, `E:9851`, `C:280`, `C:281`, `C:2137` with grep against the post-C2 engine: all resolve (one cite off by one line).
 
 ### T2: THE WHOLE-CHART MORPH - line -> bars and bars -> line, every series, datum, axis and label
 - Status: pending
@@ -258,11 +283,21 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   via `sync_kinetics.py --write`), `content/video_engine/tests/kinetics/*.test.mjs`,
   `content/video_engine/tests/test_whole_chart_morph.py` (NEW), `content/video_engine/tests/golden/` (the new goldens +
   their sources), `content/video_engine/effects/cards/chart_to.json`
-- Acceptance: a `chart_to` row makes a FULL chart become a FULL chart on one clock with no cut anywhere in the window -
-  the series' geometry morphs (`morph_a` under the existing pairing rule), the datum marks travel to their
-  counterparts, the axes' rules morph or hand over on the same clock, and the tick LABELS and series names arrive by
-  the mechanism the operator rules at HG1 (morph by contour, or re-written at the datum by `figure.mjs`'s
-  `figureGlyph`, E76 s4's route) - never a crossfade and never a frame where both charts are drawn flat. Two pairs
+- **THE BAR, from the operator (E99 s34, `OPERATOR-RULINGS.md:3143`), verbatim:** *"I don't think I'm picky. to me, i
+  care that the morph reads as a transformation, not a cut, and that it reads as intentional. The entire chart should
+  transform, but I don't much mind if the text is re-written or directly morphed - both is a transformation."* Apply
+  (the ruling's own words): the bar is **two readings, not a mechanism** - a viewer sees ONE thing becoming the next
+  (no cut, nothing left behind, nothing appearing from nowhere) and sees it as MEANT (the motion has a direction and a
+  rhythm, not a dissolve); every series, datum and axis transforms; the labels and titles **may morph glyph by glyph
+  or be rewritten, and the choice is made by what reads, measured in T1**.
+- Acceptance: a `chart_to` row makes a FULL chart become a FULL chart on one clock and clears the bar above - no cut
+  anywhere in the window, nothing left behind, nothing arriving from nowhere, and the motion carrying a direction and
+  a rhythm rather than a dissolve. The series' geometry morphs (`morph_a` under the existing pairing rule), the datum
+  marks travel to their counterparts, the axes' rules morph or hand over on the same clock. **The tick LABELS, series
+  names and title take whichever of the two routes T1 measured as the one that READS** - morph by `contour.mjs` glyph
+  by glyph, or re-written at the datum by `figure.mjs`'s `figureGlyph` (E76 s4's route); E99 s34 permits either and
+  both, and the slice records which it took and why in Evidence. A crossfade is still refused, and no frame draws both
+  charts flat. Two pairs
   ship: `line -> bars` and `bars -> line`. The compiler REFUSES by name any pair it cannot key and points at the verb
   that can. A probe asserts the invariant a jump cannot satisfy: at u = 0.5 neither the source nor the target chart is
   drawable as itself (the `@proof-050` pattern of P57 T12c). Pure function of t (u=0 exact source, u=1 exact target,
@@ -445,6 +480,13 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   `parse_exit("melt:splash:chart")` are unchanged tuples, and every existing `melt*` golden
   (`melt-plate`, `melt-depth*`, the throw/chart/plate proofs) re-renders byte-identical under
   `test_golden_frames.py`. E45 and the approved Japan short are protected by that byte-identity, not by intent.
+  **E99 s34 settles the rest** (`OPERATOR-RULINGS.md:3143`; the operator: *"Japan will be re-rendered eventually, but
+  it's not a concern right now."* Apply: *"`melt:gather` (and every P61 flag) stays off on the approved Japan short;
+  its re-render is a later item on the record, not a P61 acceptance."*). So: **`melt:gather` is never authored into
+  the Japan short's rows inside this plan**, and no P61 slice re-renders it. The re-render is a NAMED FOLLOW-UP ROW the
+  parent writes to `docs/content-video-engine/BACKLOG.md` at T11 - *"the approved Japan tariff short is re-rendered
+  with the P61 mechanisms the operator approved (E99 s34: eventually, not now)"*, blocked on nothing, scheduled by the
+  operator - and it is explicitly NOT an acceptance criterion of this plan.
 - Recall (`docs/runbooks/RECALL-RECEIPT.md`): `docs_find "melt"` -> *"[capabilities] CAPABILITIES.md:37 - THE MELT
   EXIT, REWORKED TO E88: THE CHART MELTS, THE BOARD STAYS (P52 T9 -> BAC... - WIRED - exit:
   melt[:throw|:splash:chart|:splash:plate][:<s>][:<x>,<y>]"* and *"[effects] species/melt.mjs - The melt scene exit -
@@ -513,7 +555,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - CAPABILITIES row changed: **:43** (THE NUMBERED AGENDA) gains the page/plate form
 
 ### T9: THE GALLERY - a faster build, and a clip where a still cannot show the effect
-- Status: pending
+- Status: complete (2026-09-15) - HG9 open on the queue as `p55-gallery-speed-and-motion` (watch)
 - Owner: `junior_developer` (**NO engine lock** - the code runs beside T2-T8; **but the TIMING runs of (a) are
   scheduled when no engine lane is executing**, both the before and the after, or the numbers mean nothing)
 - Depends on: none
@@ -558,11 +600,29 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   (a), machine idle) then
   `python content/video_engine/scripts/effects_catalog_check.py` (0 failures - the catalogue must not drift) then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only p55-gallery-speed-and-motion`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T9.md` (parent read it, the two pinned frames and one mid-window frame of
+  each clip). (a) SPEED: baseline 0.206 / 0.201 / 0.194 s (median 0.201; idle check busy_python 0, CPU 10.2 / 4.7 / 5.6 %)
+  -> after 0.106 / 0.096 / 0.098 s (median 0.098 = 0.488x, CPU 3.3 / 8.1 / 6.1 %): the dominant stage was the directory scan
+  (`resolve_proof` globbed the frames dir ~300 times); now ONE `scandir` (`FrameIndex`), `copy_if_stale` (19.3 MB no longer
+  re-copied), one tally, no argparse/shutil/urllib on the no-flag path. (b) PINNED: `gallery-top`, `gallery-axis-kinetics`,
+  `gallery-foot` at 1280x900, byte-identical before and after (955b0da0.., f58c925f.., e8f8a1fc..); 180 records = 180 tiles
+  asserted; a 1 px CSS perturbation test proves the pin bites. **Deviation ratified by the parent:** the three are a sibling
+  `PAGE_SURFACES` register (`build_golden_sources.py`, `test_golden_frames.py`), not `SURFACES` members - a static page has
+  no `#scrub` to seek, so membership would break `render_baseline.py --check/--update`; the comparison lives in
+  `test_effects_gallery.py` (20 tests). Write set extended by acceptance (b), which names `test_golden_frames.py`:
+  that file and `tests/golden/build_golden_sources.py` gained the `PAGE_SURFACES` register and the three `*.page.json`
+  sources + `gallery-*.png` goldens - ratified. The pin is of the clip-free page (goldens derive from committed inputs; the mp4s
+  are gitignored). (c) MOTION by a stated rule (more than one phase AND a golden that already needed extra `@proof-*`
+  instants; ranked by phases then instants; re-derived by a test): `chart_to:compare` (10/3, compare-morph 12.0-15.4 s),
+  `exit:melt` (5/4, melt-page 14.8-17.6 s), `dock_payload:stack` (5/1, verdict-stack 2.4-20.8 s; window tightened from
+  21.2 s after the parent-style read of its contact strip); rendered by CALLING `review_queue_proofs.render_clip`; the tiles
+  carry them as `<video class="motion">`. Validate: `122 passed in 214.43s`; the build's counts line, exit 0;
+  `effects_catalog_check: 0 failure(s), 2 example(s) skipped, 42 recipe(s) (15 proven, 7 decoration(s))`. Not done here:
+  CAPABILITIES:318 (T11's).
 - CAPABILITIES row changed: **:318** (The effects catalogue) - the gallery's line gains the motion examples
 
 ### T10: SAVED STATES OR PER-AGENT ENGINE COPIES - a DESIGN sheet, three routes with their costs
-- Status: pending
+- Status: complete (2026-09-15) - HG10 open on the queue as `r26-84-engine-saved-states` (kind rule)
 - Owner: `architect_sol` -> parent (**NO engine lock**; no product code)
 - Depends on: none
 - Write set: `docs/research/runs/p61-saved-states/OPTIONS.md` (gitignored disk-as-bus) ONLY
@@ -588,7 +648,17 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   `python content/video_engine/scripts/docs_find.py "hot reload"` quoted in the sheet's Recall header (the first
   returns 0 hits - that is the finding, and `Recall: docs_find 0 hits for "saved states"` is the receipt); then the
   parent verifies every `path:line` in the sheet resolves
-- Evidence: pending
+- Evidence: `docs/research/runs/p61-saved-states/OPTIONS.md` (gitignored, `.gitignore:53`). Recall receipt in its
+  header: `docs_find` 0 hits for "saved states" (the finding), 3 hits each for "override sidecar" (CAPABILITIES:108)
+  and "hot reload" (CAPABILITIES:109). Parent verified the load-bearing `path:line`s with rg: `authoring/table.py:59`
+  (`table = Path(ep) / shot_table_file`) and `:69` (`write_shot_table(table, rows, header)`) - the write-back defect;
+  `render_baseline.py:270` (a served build never reaches back into docs/) and `:283` (`engine_sha256`);
+  `BACKLOG.md:490` (R26-84 REVIEWED 2026-09-14: not yet); `OPERATOR-RULINGS.md:3037` (E99 s23). Three routes,
+  each with what it is, its cost, what it breaks, what it does not solve, and the proof of identity (byte-identical
+  re-compile + `determinism_check.py --against`). Recommendation: route 2 as its own plan P62; route 3 refused as
+  E99 s23's sprawl with fewer tools; route 1 already built and solves five row fields, not the engine. One P61 slice
+  proposed: `apply_sidecar` stops rewriting the shared episode shot table (`table.py:59`, `:69`) - which moves the
+  human-readable literal into the build dir, a doctrine change for HG10's ruling. No code written, no git state changed.
 - CAPABILITIES rows cited (not changed by T10): **:108**, **:109**
 
 ### T11: THE RECORD - the CAPABILITIES rows, the backlog rows, the queue, the layers
@@ -596,7 +666,8 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - Owner: parent (Claude/Fable docs lane)
 - Depends on: every gate ruled
 - Write set: `docs/content-video-engine/CAPABILITIES.md`, `docs/content-video-engine/BACKLOG.md` (rows R26-70, R26-76,
-  R26-80, R26-82, R26-84, R26-86, R26-117, R26-118 and P47/P48's status lines only),
+  R26-80, R26-82, R26-84, R26-86, R26-117, R26-118, **a NEW row for the Japan re-render (E99 s34: "eventually, not
+  now")** and P47/P48's status lines only),
   `docs/content-video-engine/review-queue.v1.json` + the generated `REVIEW-QUEUE.md`,
   `docs/portable/OPERATOR-RULINGS.md` (the new rulings the gates produce), the generated docs layers
 - Acceptance: each ruled gate's answer written verbatim to `OPERATOR-RULINGS.md` with its Apply line; each backlog row
@@ -672,32 +743,36 @@ practice from the 2026-09-11 incident, not an operator ruling (E99 s11).
 **Open decisions for the operator (the record does not settle these; the parent asks them, the plan does not assume
 an answer).**
 
-1. **How far does "the entire data set/chart" reach into TEXT?** Every series, datum and axis morphing is clear. The
-   tick LABELS, series names and the title are `<text>` with one tspan per glyph; P57 T12b established the operator's
-   own preferred route for text - *"just collapse or melt then re-draw"* (E76 s4) - while P57 T12c then built the full
-   glyph morph by `contour.mjs`. Both are on disk. Which one does a whole-chart morph use for its labels? (T2's
-   acceptance is written to take either.)
-2. **Which pair and which data is the canonical proof** - `line -> bars`, `bars -> line`, or both, and on the Tokyo
+1. **Which pair and which data is the canonical proof** - `line -> bars`, `bars -> line`, or both, and on the Tokyo
    test bed or a new private build?
-3. **The melt's default.** T6 ships the new melt behind a flag defaulting to today's look because the Japan short is
-   approved and rendered. Once HG6 approves the new melt, does the approved short keep today's melt forever (E45), or
-   is it re-rendered once?
-4. **T10's home.** Whether saved states becomes its own plan (the agent's reading: yes for routes 2 and 3) is HG10's
+2. **T10's home.** Whether saved states becomes its own plan (the agent's reading: yes for routes 2 and 3) is HG10's
    second half.
+
+**Answered since the draft - E99 s34 (`OPERATOR-RULINGS.md:3143`), both items closed and folded into the slices:**
+
+- *How far does "the entire chart" reach into TEXT?* **Answered.** The bar is two readings, not a mechanism: it reads
+  as a transformation, not a cut, and reads as intentional; the entire chart transforms; *"the text is re-written or
+  directly morphed - both is a transformation"*. T1 measures both routes, T2 takes the one that reads (T2's bar block;
+  T1's acceptance). No longer open.
+- *Is the approved Japan short re-rendered with the new melt?* **Answered:** *"Japan will be re-rendered eventually,
+  but it's not a concern right now."* `melt:gather` and every P61 flag stay OFF on that short; the re-render is a named
+  backlog row written at T11, not a P61 acceptance. No longer open.
 
 **The three biggest risks.**
 
-1. **The whole-chart bar may not be reachable for labels at cost.** `contour.mjs` measures outlines off the page's own
-   ink by canvas raster (RASTER_S 4 device px per page px) + marching squares, cached per (text, face). A chart has
-   dozens of tick labels; at 12 fps the per-glyph cost is unmeasured. If it does not fit, the honest answer is the
-   re-write route (open decision 1), NOT a crossfade - E99 s1 would refuse a crossfade the same way it refused the
-   compare.
+1. **The whole-chart bar is a READING, so it cannot be unit-tested.** E99 s34 set the bar as "reads as a
+   transformation, not a cut, and reads as intentional" - the probes in T2 (no frame draws both charts flat; at
+   u = 0.5 neither chart is drawable as itself) can refute a cut but cannot prove *intentional*. Only HG1 can, so a
+   slice that passes every gate can still fail the gate that matters. The cost risk is now bounded rather than open:
+   E99 s34 permits either text route, T1 measures both, and if `contour.mjs` does not fit the frame budget the answer
+   is the re-write route - never a crossfade, which E99 s1 would refuse the way it refused the compare.
 2. **Engine-lock serialization is the schedule.** Seven of eleven slices hold the lock. Only T1, T9, T10 and T11 run
    beside it. A slice that overruns delays everything behind it, and two agents editing
    `scene-evidence-engine.mjs` is how a parallel run corrupts itself (PRP_EXECUTION).
 3. **T6 changes a mechanism that ships in an approved cut.** The melt is authored in the Japan tariff short. The
    `melt:gather` token keeps today's look as the default - proven byte-identical by `test_transitions_e47` and the
    existing `melt*` goldens, not promised - but it grows the melt's token surface beside `weight`, `depth=` and the
-   three endings, and a token whose default is never flipped is how a refused look survives. **HG6 must produce a
-   DEFAULT, not just an approval**: if the operator approves the gather, the ruling has to say whether `melt` bare
-   becomes the gather (and the approved short pinned to `melt:legacy`), or the gather stays opt-in.
+   three endings, and a token whose default is never flipped is how a refused look survives. E99 s34 removed the
+   scheduling half of this risk (the flag stays off on Japan; the re-render is a later row) but not the drift half:
+   **HG6 must still produce a DEFAULT for NEW cuts, not just an approval** - whether a bare `melt` becomes the gather
+   going forward, or the gather stays opt-in and every new cut has to remember to ask for it.

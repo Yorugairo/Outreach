@@ -78,39 +78,80 @@
         "R26-131 item 4",
         "R26-122 (open beside it)"
       ],
-      "kind": "owed",
+      "kind": "watch",
       "title": "A plate's drift idle paints nothing",
-      "judge": "See a drift plate PAINTED vs HELD side by side before any fix - the fix changes how approved plates move (five of Japan's approved plates hold still). The operator, 2026-09-14: \"Plate idle should probably paint, but would have to see what it looks like\".",
+      "judge": "Watch the four seconds of one plate world's authored idle, drift, held (today: one byte-identical frame) against painted (the 2 px Lissajous walk the idle was authored for): does the drift read as life, and should it paint on the five drift plates of the approved Japan short?",
       "where": [
         {
-          "label": "a drift plate painted vs held, side by side (the record names it as the next step; not built)",
-          "missing": true
+          "label": "held t0-t3 and painted t0-t3",
+          "path": "content/video_engine/review/assembly/r26-133-drift-idle-paints-nothing/"
         },
         {
           "label": "the affected timeline (5 idle: drift)",
           "path": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json"
         },
         {
-          "label": "the engine line (:12733)",
+          "label": "the paint block (:12891-12900), paintPlanes (:12811)",
           "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs"
+        },
+        {
+          "label": "idleDriftCss (:121-126)",
+          "path": "content/video_engine/scripts/kinetics/idle.mjs"
         }
       ],
       "options": [
-        "fix it",
-        "leave it"
+        "paint",
+        "hold"
       ],
-      "recommendation": "the parent: \"the next step is a look, not a fix\"",
+      "recommendation": "paint - the whole excursion is 2.3 px and the fastest step at 15 fps is 0.126 px (eight frames to move one pixel), so it reads as life, never as jitter; it is the E49 idle the five drift plates of the approved Japan short were authored for and have never been given",
       "blocks": "the R26-133 fix and its gate; P58 HG2 ruling 4",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:565",
         "docs/research/runs/p58-2-5d/HG2-SHEET.md:51-52",
         "docs/content-video-engine/BACKLOG.md:554",
-        "docs/content-video-engine/BACKLOG.md:563"
+        "docs/content-video-engine/BACKLOG.md:563",
+        "content/video_engine/scripts/kinetics/idle.mjs:109-126",
+        "content/video_engine/tests/golden/build_golden_sources.py:2247-2282"
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": "watch",
-      "owed": "Missing proof: the drift plate painted vs held, side by side, was never built - the agent renders the two as clips before it asks fix or leave."
+      "was_kind": "owed",
+      "owed": "Delivered 2026-09-15: the plate-drift golden, held vs painted clips and frames, behind the plate_idle_paints dial",
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "PAINTED - the plate at its drift idle (16:9)",
+          "t0": 0.0,
+          "t1": 4.0,
+          "surface": "plate-drift",
+          "aspect": "16:9",
+          "flags": {
+            "idle": true,
+            "plate_idle_paints": true
+          },
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated with the flags overriding tl.kinetics, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "HELD - the same plate as it renders today (16:9)",
+          "t0": 0.0,
+          "t1": 4.0,
+          "surface": "plate-drift",
+          "aspect": "16:9",
+          "flags": {
+            "idle": true
+          },
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated with the flags overriding tl.kinetics, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "crop",
+          "label": "one instant of the same plate, held vs painted (t = 3.0 s)",
+          "before": "content/video_engine/review/assembly/r26-133-drift-idle-paints-nothing/held-t3.png",
+          "after": "content/video_engine/review/assembly/r26-133-drift-idle-paints-nothing/painted-t3.png",
+          "before_label": "held - the four seconds are ONE byte-identical frame",
+          "after_label": "painted - +2 px x, -1 px y off the same walk"
+        }
+      ]
     },
     {
       "id": "r26-123-caption-default",
@@ -2520,20 +2561,77 @@
         "P57 HG1",
         "E99 s7"
       ],
-      "kind": "owed",
-      "was_kind": "look",
+      "kind": "look",
+      "was_kind": "owed",
       "title": "The span's grey reads darker",
-      "owed": "E99 s7 - the operator: the span's light grey reads washed out; the agent darkens its shade and returns it as a before / after crop at the same instant.",
-      "judge": "",
-      "where": [],
-      "options": [],
-      "recommendation": null,
+      "owed": "Delivered 2026-09-15: the dark tone chosen at 0.30, the before/after crop and the clip pair",
+      "judge": "Does the span now read as a darker region behind the line, with its name still clear? - at 38.0 s of build-short-axes (your own frame) the span's ground goes from chalk at 0.16, which reads 24 L LIGHTER than the page, to black at 0.30, which reads 21 L darker, under the same untouched name; the 16:9 clip pair is the span-decade golden, dark against today.",
+      "where": [
+        {
+          "label": "the before / after and the candidate frames 0.24 / 0.30 / 0.36 / 0.45 on both pages",
+          "path": "content/video_engine/review/assembly/r26-68-span-darker/"
+        },
+        {
+          "label": "the span_alpha / span_tone dials (:66-79)",
+          "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs"
+        },
+        {
+          "label": "SPAN.DARK (:60), spanAlphaOf (:170-173)",
+          "path": "content/video_engine/scripts/species/span.mjs"
+        }
+      ],
+      "options": [
+        "yes",
+        "darker still",
+        "too dark"
+      ],
+      "recommendation": "span_tone dark at span_alpha 0.30 - the band sits 21 L BELOW the page instead of 24 L above it, the gridlines and both figures still read through it, and the name is untouched",
       "blocks": "P57 HG1 (R26-68)",
       "status": "open",
       "ruling": null,
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md:2943-2947 (E99 s7)",
-        "docs/research/runs/p57-burndown/HG-HANDOFF.md"
+        "docs/research/runs/p57-burndown/HG-HANDOFF.md",
+        "content/video_engine/scripts/species/span.mjs:60,170-173"
+      ],
+      "proofs": [
+        {
+          "type": "crop",
+          "label": "your own frame: build-short-axes at 38.0 s, the span's ground (9:16)",
+          "before": "content/video_engine/review/assembly/r26-68-span-darker/before-light-0.16.png",
+          "after": "content/video_engine/review/assembly/r26-68-span-darker/after-dark-0.30.png",
+          "before_label": "today - chalk at 0.16: the band reads 24 L LIGHTER than the page",
+          "after_label": "span_tone dark, span_alpha 0.30: 21 L darker, the name unchanged",
+          "caption_box": [
+            0,
+            1280,
+            1080,
+            1420
+          ]
+        },
+        {
+          "type": "clip",
+          "label": "the span arriving as a darker region (16:9)",
+          "t0": 7.6,
+          "t1": 13.0,
+          "surface": "span-decade",
+          "aspect": "16:9",
+          "flags": {
+            "span_tone": "dark",
+            "span_alpha": 0.3
+          },
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated with the flags overriding tl.kinetics, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "the same span as it renders today (16:9)",
+          "t0": 7.6,
+          "t1": 13.0,
+          "surface": "span-decade",
+          "aspect": "16:9",
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated with the flags overriding tl.kinetics, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        }
       ]
     },
     {
@@ -2585,22 +2683,84 @@
       "ids": [
         "P55 HG2",
         "R26-86",
-        "E99 s20"
+        "E99 s20",
+        "P61 HG9"
       ],
-      "kind": "owed",
-      "title": "The effects gallery: a faster build and motion examples",
-      "judge": "Owed by the agent - E99 s20: the gallery's build is faster, and an effect a still cannot show carries a sequence, gif or video",
-      "where": [],
+      "kind": "watch",
+      "title": "The effects gallery: half the build time, and three effects a still cannot show now carry a clip",
+      "judge": "Three clips, each one effect the gallery could only show as a still until now: chart_to:compare (12.0-15.4 s of compare-morph - the quoted figure's outlines sag, ball up and are carried into the comparator), exit:melt (14.8-17.6 s of melt-page - the page's ink sags, fuses into the heavy ball and takes its ending) and dock_payload:stack (2.4-20.8 s of verdict-stack - five cards enter one at a time, each held, each receding to its rail spot, then the burst). The build went from 0.201 s to 0.098 s on an idle machine with the page pinned byte-identical. Is it fast enough and clear enough - approve, or name what is still unreadable?",
+      "where": [
+        {
+          "label": "the gallery page (rebuild: python content/video_engine/scripts/build_effects_gallery.py)",
+          "path": "content/video_engine/effects/gallery/index.html"
+        },
+        {
+          "label": "the three clips beside the page, as the tiles carry them",
+          "path": "content/video_engine/effects/gallery/frames/chart_to-compare.mp4"
+        },
+        {
+          "label": "exit:melt",
+          "path": "content/video_engine/effects/gallery/frames/exit-melt.mp4"
+        },
+        {
+          "label": "dock_payload:stack",
+          "path": "content/video_engine/effects/gallery/frames/dock_payload-stack.mp4"
+        },
+        {
+          "label": "the pinned page (top, the kinetics axis, the foot; byte-identical before and after the speed work)",
+          "path": "content/video_engine/tests/golden/frames/gallery-top.png"
+        },
+        {
+          "label": "the speed measurement and the rule that picked the three (T9's report, sections a and c)",
+          "command": "python content/video_engine/scripts/build_effects_gallery.py"
+        }
+      ],
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "chart_to:compare - the quoted figure's own outlines sag, ball up and are carried into the comparator",
+          "t0": 12.0,
+          "t1": 15.4,
+          "surface": "compare-morph",
+          "aspect": "16:9",
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated as the gallery renders it, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "exit:melt - the outgoing page's ink sags, fuses into the heavy ball and takes its ending",
+          "t0": 14.8,
+          "t1": 17.6,
+          "surface": "melt-page",
+          "aspect": "16:9",
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated as the gallery renders it, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "dock_payload:stack - five cards enter one at a time, each held, each receding to its rail spot, then the burst",
+          "t0": 2.4,
+          "t1": 20.8,
+          "surface": "verdict-stack",
+          "aspect": "16:9",
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated as the gallery renders it, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        }
+      ],
       "options": [],
-      "recommendation": null,
-      "blocks": "the item's next review",
+      "recommendation": "Approve. The three are picked by a stated rule (more than one phase AND a golden that already needed extra @proof-* instants), re-derived by a test; the next qualifier, species:spotlight, is not rendered. The build's 0.488x is measured on three warm runs at CPU under 11%.",
+      "blocks": "HG9; the CAPABILITIES gallery row (T11)",
       "sources": [
-        "docs/portable/OPERATOR-RULINGS.md (E99 s20)"
+        "docs/portable/OPERATOR-RULINGS.md (E99 s20)",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md:557-603 (T9)",
+        "content/video_engine/scripts/build_effects_gallery.py",
+        "content/video_engine/tests/test_effects_gallery.py",
+        "content/video_engine/tests/golden/build_golden_sources.py (PAGE_SURFACES)"
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": null,
-      "owed": "E99 s20: the gallery's build is faster, and an effect a still cannot show carries a sequence, gif or video"
+      "was_kind": "owed",
+      "owed": "Delivered 2026-09-15 (P61 T9): the build at 0.488x, the page pinned, three clips beside the tiles"
     },
     {
       "id": "r26-82-verdict-stack-choreography",
@@ -2627,22 +2787,47 @@
       "id": "r26-84-engine-saved-states",
       "ids": [
         "R26-84",
-        "E99 s23"
+        "E99 s23",
+        "P61 HG10"
       ],
-      "kind": "owed",
-      "title": "Parallel agents without worktrees: saved states or per-agent engine copies",
-      "judge": "Owed by the agent - E99 s23: an engine or editor with saved states, or a per-agent copy of the engine and compiler",
-      "where": [],
-      "options": [],
-      "recommendation": null,
-      "blocks": "the item's next review",
+      "kind": "rule",
+      "title": "Parallel agents without worktrees: which route",
+      "judge": "Three routes to a second agent on a build without a second worktree, each costed in the sheet: (1) the sidecar - already built, five row fields on one build, touches neither the engine nor the compiler; (2) saved states - a named, restorable, diffable snapshot of a build's inputs plus the engine revision, four of its seven parts already on disk, about 3-4 slices, makes engine work reversible but not parallel; (3) per-agent engine copies - 12 scripts hardcode the engine path, the inliner gains a second target, the species modules still collide, and the two 13,806-line engines merge by hand without git. Which route do we take?",
+      "where": [
+        {
+          "label": "the options sheet (three routes, costs, what each breaks, how a state is proven identical)",
+          "path": "docs/research/runs/p61-saved-states/OPTIONS.md"
+        },
+        {
+          "label": "the recommendation and the one slice that stays in P61 (:233-257)",
+          "path": "docs/research/runs/p61-saved-states/OPTIONS.md"
+        },
+        {
+          "label": "the sidecar write-back defect it found: apply_sidecar rewrites the shared episode shot table (:59, :69)",
+          "path": "content/video_engine/scripts/authoring/table.py"
+        }
+      ],
+      "options": [
+        "route 1 - the sidecar only",
+        "route 2 - saved states",
+        "route 3 - per-agent engine copies"
+      ],
+      "recommendation": "Route 2, as its own plan P62 (data-model work, AGENTS.md section 9), proven by byte-identical re-compile plus determinism_check.py --against. Route 3 is E99 s23's sprawl inside one checkout with fewer tools. Whichever route: one P61 slice fixes apply_sidecar so two builds off one episode stop rewriting the episode's shot table; that fix moves the human-readable 'what was compiled' literal into the build dir, which is a doctrine change the operator rules on, not the agent.",
+      "blocks": "P62 (saved states) or the P61 sidecar slice; R26-84's next review",
       "sources": [
-        "docs/portable/OPERATOR-RULINGS.md (E99 s23)"
+        "docs/portable/OPERATOR-RULINGS.md:3037-3041 (E99 s23)",
+        "docs/content-video-engine/BACKLOG.md:490 (R26-84)",
+        "docs/research/runs/p61-saved-states/OPTIONS.md:97-136 (route 1)",
+        "docs/research/runs/p61-saved-states/OPTIONS.md:140-183 (route 2)",
+        "docs/research/runs/p61-saved-states/OPTIONS.md:187-229 (route 3)",
+        "docs/research/runs/p61-saved-states/OPTIONS.md:233-257 (the recommendation)",
+        "content/video_engine/scripts/authoring/table.py:59,69 (the write-back)",
+        "content/video_engine/scripts/render_baseline.py:276,283 (engine copy + engine_sha256)"
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": null,
-      "owed": "E99 s23: an engine or editor with saved states, or a per-agent copy of the engine and compiler"
+      "was_kind": "owed",
+      "owed": "Delivered 2026-09-15 (P61 T10): the options sheet at docs/research/runs/p61-saved-states/OPTIONS.md"
     }
   ]
 }

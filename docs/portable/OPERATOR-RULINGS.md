@@ -3139,3 +3139,14 @@ grace / SLA / residue budget ratified) are withdrawn - `docs/runbooks/BRIDGE-PAC
 (fields, caps, reply grammar, lane register, the file-AND-send rule; grace 10 min, SLA 60 min, 6 runs / 200k tokens as the module's
 defaults), kept current by the agent, never a question the operator owes; Astra's review packet on the contract never ran and is not
 required. P46 T4 is complete on that record and P46 closes.
+
+**E99 s34 - A morph must read as a transformation and as intentional; the text may be rewritten or morphed; Japan is re-rendered
+later, not now (P61 decisions 1 and 2).** Asked how far "the entire chart" reaches into text, and whether the approved Japan short
+is re-rendered with the new melt: *"I don't think I'm picky. to me, i care that the morph reads as a transformation, not a cut, and
+that it reads as intentional. The entire chart should transform, but I don't much mind if the text is re-written or directly morphed -
+both is a transformation."* / *"Japan will be re-rendered eventually, but it's not a concern right now."* Apply: the whole-chart
+morph's bar is two readings, not a mechanism - a viewer sees ONE thing becoming the next (no cut, nothing left behind, nothing
+appearing from nowhere) and sees it as meant (the motion has a direction and a rhythm, not a dissolve); every series, datum and axis
+transforms; the labels and titles may morph glyph by glyph or be rewritten, and the choice is made by what reads, measured in T1.
+`melt:gather` (and every P61 flag) stays off on the approved Japan short; its re-render is a later item on the record, not a P61
+acceptance.

@@ -1,0 +1,17 @@
+{
+ "anchor": "() => window.scrollTo(0, 0)",
+ "built_by": "content/video_engine/scripts/build_effects_gallery.py",
+ "built_from": "docs/EFFECTS-CATALOG.jsonl",
+ "capture": "build_effects_gallery.capture_frames",
+ "checked_by": "content/video_engine/tests/test_effects_gallery.py",
+ "kind": "page",
+ "page": "content/video_engine/effects/gallery/index.html",
+ "pinned_without": "the generated .mp4 motion examples (P61 T9 (c)) - a golden derives from committed inputs only, and the gallery directory is gitignored; the served page carries them on top of this",
+ "refresh": "python content/video_engine/scripts/build_effects_gallery.py --pin",
+ "settle_ms": 200,
+ "viewport": {
+  "device_scale_factor": 1,
+  "height": 900,
+  "width": 1280
+ }
+}

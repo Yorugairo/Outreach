@@ -29,6 +29,7 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "press-stack",  # P50 T3: three press cards stacked, the newest lit, the underline drawn on its phrase
             "flow-swap",    # P50 T4: the three-node diagram after its swap - the new node in place, both clothoid arrows standing, the year stamped
             "span-decade",  # P50 T4: a ledger line page with a named stretch of time shaded behind it
+            "plate-drift",  # R26-133: a plate world authored `idle: "drift"`, HELD - the `.scale`-only read the player shipped, against which the `plate_idle_paints` dial's painted frames are judged
             "tiers-two",    # P50 T9: two bands on one shared x, each with its own scale and honest zero, the second drawn on its own word and its drop measured as a bar
             "treemap-cross",  # P50 T6: the census page - a squarified treemap, three partners crossed on a word and their share written
             "tags-to-bars",   # P50 T11: two terminal tags mid-flight into their two bars, the lines un-drawing beneath them
@@ -67,6 +68,26 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "record-typewriter",  # P57 T21 / R26-99: the record document, pinned BEFORE `dock_payload:record` became a module - the quotation mid-type on the NARRATOR's onsets, two characters of its eighth word cut and the cursor after them, one word under the marker with its space outside the stroke (its landing rides PROOF_FRAMES)
             "dip-boundary",      # P57 T23 / R26-100: THE DIP (E47 s1), pinned BEFORE the boundary clock became a module - the BLACK boundary frame between two chart pages, the cut inside it (its ramp's midpoint rides PROOF_FRAMES)
             "spiral-return"]     # P57 T22 / R26-101: THE PAGE VORTEX, pinned BEFORE `page_enter:spiral` became a module - the page coming back UP the drain mid-unwind (uc 0.5), every glyph, mark and series line on its own spiral arm, the charcoal whole behind them (the RETRACT's two phases ride PROOF_FRAMES, off the same surface's first scene)
+
+
+# P61 T9 (b): THE PAGES. A golden need not be a timeline - the effects gallery is a static review
+# page, and "a faster build" must never be allowed to mean "renders less", so its three frames (the
+# top, one mid-page axis section, the foot) are pinned exactly like a surface: a committed source
+# beside the others (`<name>.page.json`, the capture recipe), a committed frame in tests/golden/
+# frames/, and any pixel change FAILS. They are a SIBLING of SURFACES, never a member: every name in
+# SURFACES is instantiated by render_baseline through the player template, which a page has no
+# #scrub for. The renderer and the comparison live in test_effects_gallery.py - it owns the browser,
+# this file owns the register.
+#     python content/video_engine/scripts/build_effects_gallery.py --pin       # refresh, deliberately
+PAGE_SURFACES = ["gallery-top",            # the header, its counts line and the nav
+                 "gallery-axis-kinetics",  # a mid-page axis section: 17 tiles and their copied proofs
+                 "gallery-foot"]           # the foot - the last recipe tile the page has to draw
+
+
+def test_every_page_surface_has_a_committed_source_and_golden() -> None:
+    for name in PAGE_SURFACES:
+        assert (RB.SOURCES / f"{name}.page.json").exists(), f"{name}: no source - run build_golden_sources.py {name}"
+        assert (RB.FRAMES / f"{name}.png").exists(), f"{name}: no golden frame - run build_effects_gallery.py --pin"
 
 
 def _chromium_available() -> bool:

@@ -2244,8 +2244,89 @@ SURFACES.update({   # E98 s7: the door's landing (its two moving instants ride r
 FRAME_T["door-open"] = DOOR_CUT + DOOR_S   # u = 1: edge-on, the plate alone - the plain cut's frame at this instant
 
 
+# ---- R26-133: A PLATE WORLD AT ITS `drift` IDLE ------------------------------------------------
+# The smallest surface that can answer the operator's question ("Plate idle should probably paint, but would have
+# to see what it looks like", 2026-09-14): ONE plate world, nothing docked, nothing drawn over it, no caption - a
+# COMMITTED photographic plate (the Tokyo customs dock `camera-layers` splits into planes, read flat here) authored
+# `idle: "drift"`. HELD and PAINTED are the SAME source: only the `plate_idle_paints` dial differs between the two
+# renders, so the pair proves the dial and nothing else. The captions are cleared on purpose - a caption page moving
+# over the plate is the one motion the eye must NOT be reading while it judges a 2 px walk (E49's DRIFT_PX).
+# The `idle` flag is ON in the source because without it `idleOf` returns "none" and there is no idle to paint at
+# all (the engine's IDLE_CLASS / idleOf); the flag alone still renders a still plate - that is the HELD frame.
+PLATE_DRIFT_RUNTIME = 4.0   # a short hold: the four proof frames are its seconds 0, 1, 2, 3
+
+
+def plate_drift() -> tuple[dict, dict]:
+    """R26-133: a plate authored `;idle=drift` - the case the player read for its `.scale` alone, so it held
+    perfectly still. `drift` opens at [0, 0] and walks a bounded Lissajous of +-DRIFT_PX (2.0 stage px) x, +-0.6 of
+    it in y, on two rates whose common period is 100 s, so four seconds carries four different poses and none of
+    them repeats. Judged at 2.0 - a second clear of the rest it opens from (FRAME_T)."""
+    import build_scene_timeline_f as BST
+    aid = "plate-drift"
+    scenes = [{"scene_id": "s01",
+               "world": {"asset_id": aid, "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0},
+                         "idle": "drift"},
+               "exit": "cut", "span": [0.0, PLATE_DRIFT_RUNTIME], "docks": [], "species": []}]
+    uris = _base_uris()
+    uris[aid] = BST.data_uri(DOCK_PLATE)      # the same committed input camera-layers reads, flat
+    tl = _timeline("Golden: a plate world at its drift idle", scenes, {}, None)
+    tl["runtime_s"] = PLATE_DRIFT_RUNTIME
+    tl["captions"], tl["caption_pages"] = [], []   # nothing on the stage but the plate
+    tl["kinetics"] = {"idle": True}                # E49's switch: without it there is no idle to read
+    return tl, uris
+
+
+SURFACES.update({   # R26-133: the drift plate, held (this source) and painted (the `plate_idle_paints` dial)
+    "plate-drift": plate_drift,
+})
+FRAME_T["plate-drift"] = 2.0
+
+
+# ---- P61 T9 (b): THE EFFECTS GALLERY'S OWN PAGE ------------------------------------------------
+# The gallery is not a timeline. It is the static review page `build_effects_gallery.py` generates
+# from docs/EFFECTS-CATALOG.jsonl, so it has no (timeline, uris) pair and it is deliberately NOT a
+# member of SURFACES - render_baseline instantiates every one of those through the player template
+# and would try to seek a #scrub the page does not have. What is committed beside the engine's
+# sources is the RECIPE each page frame is captured by (the page, the viewport, the anchor), so the
+# three frames can be re-taken on any checkout:
+#     python content/video_engine/scripts/build_effects_gallery.py --pin
+# The frames themselves live in tests/golden/frames/ with every other golden; the checker is
+# content/video_engine/tests/test_effects_gallery.py, and test_golden_frames.py lists the three in
+# PAGE_SURFACES beside SURFACES.
+PAGE_SURFACES = ("gallery-top", "gallery-axis-kinetics", "gallery-foot")
+
+
+def page_source(name: str) -> dict:
+    """The capture recipe of one page frame, read off the builder itself so it can never drift."""
+    import build_effects_gallery as BEG
+    width, height = BEG.PIN_VIEWPORT
+    return {"kind": "page",
+            "page": "content/video_engine/effects/gallery/index.html",
+            "built_by": "content/video_engine/scripts/build_effects_gallery.py",
+            "built_from": "docs/EFFECTS-CATALOG.jsonl",
+            "viewport": {"width": width, "height": height, "device_scale_factor": 1},
+            "anchor": BEG.PIN_FRAMES[name],
+            "settle_ms": BEG.PIN_SETTLE_MS,
+            "capture": "build_effects_gallery.capture_frames",
+            "refresh": "python content/video_engine/scripts/build_effects_gallery.py --pin",
+            "pinned_without": ("the generated .mp4 motion examples (P61 T9 (c)) - a golden derives "
+                               "from committed inputs only, and the gallery directory is gitignored; "
+                               "the served page carries them on top of this"),
+            "checked_by": "content/video_engine/tests/test_effects_gallery.py"}
+
+
+def write_page_source(name: str) -> list[Path]:
+    """Write ONE page frame's source - the recipe, beside the engine surfaces' timelines."""
+    SOURCES.mkdir(parents=True, exist_ok=True)
+    p = SOURCES / f"{name}.page.json"
+    p.write_text(json.dumps(page_source(name), indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    return [p]
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
+    if name in PAGE_SURFACES:
+        return write_page_source(name)
     SOURCES.mkdir(parents=True, exist_ok=True)
     tl, uris = SURFACES[name]()
     out = []
@@ -2259,14 +2340,14 @@ def write_surface(name: str) -> list[Path]:
 def write_sources(names: list[str] | None = None) -> list[Path]:
     """Every surface's sources, or only the named ones (`python build_golden_sources.py verdict-stack test-card`)."""
     out = []
-    for name in (names or list(SURFACES)):
+    for name in (names or [*SURFACES, *PAGE_SURFACES]):
         out += write_surface(name)
     return out
 
 
 if __name__ == "__main__":
-    unknown = [n for n in sys.argv[1:] if n not in SURFACES]
+    unknown = [n for n in sys.argv[1:] if n not in SURFACES and n not in PAGE_SURFACES]
     if unknown:
-        raise SystemExit(f"unknown surface(s): {unknown}; known: {sorted(SURFACES)}")
+        raise SystemExit(f"unknown surface(s): {unknown}; known: {sorted([*SURFACES, *PAGE_SURFACES])}")
     for p in write_sources(sys.argv[1:] or None):
         print(f"{p.stat().st_size:>9,}  {p.relative_to(REPO)}")

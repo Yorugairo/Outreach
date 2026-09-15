@@ -105,3 +105,22 @@ export const idleXf = (kind, t, phase = 0, o = {}) => {
    string. The identity writes an explicit no-op so a flagged-off render and a `none` render differ by nothing. */
 export const idleCss = (x) => (x.scale === 1 && x.dx === 0 && x.dy === 0) ? ""
   : " translate(" + x.dx.toFixed(2) + "px," + x.dy.toFixed(2) + "px) scale(" + x.scale.toFixed(4) + ")";
+
+const IDLE_K = Object.freeze({ MIN: 0, MAX: 4 });   /* kinetics/camera.mjs PARALLAX.K_MIN / K_MAX, mirrored - a module imports nothing */
+
+/* R26-133 (E49; the operator, 2026-09-14: "Plate idle should probably paint, but would have to see what it looks
+   like"): the TRANSLATION half of an idle, alone, as the CSS a WORLD's rest term takes. The scale is deliberately
+   not here - a plate world's scale is already the world's own `z`, and it was by reading the idle for its `.scale`
+   alone that the player made `drift` ({scale: 1, dx, dy}) a no-op: the plate held perfectly still.
+   A PLANE of a layered plate takes the SHARE k of the same walk, the way camLayerState shares the camera's own
+   translation, so the near plane drifts further than the far wall off ONE idle and no second motion is invented
+   (E49: a camera move is a camera move; a hold holds at its idle). k is clamped to the compiler's own depth range,
+   as the camera clamps it, so a sidecar with nonsense cannot invert a plane. Fixed decimals, so two seeks to one t
+   write one string; "" for a pose that moves nothing, so a caller concatenates unconditionally and a breath - or a
+   dial that is off - writes exactly the string it has always written. */
+export const idleDriftCss = (x, k = 1) => {
+  const kk = Math.min(IDLE_K.MAX, Math.max(IDLE_K.MIN, +k));
+  const s = Number.isFinite(kk) ? kk : 1;
+  const px = (+(x && x.dx) || 0) * s, py = (+(x && x.dy) || 0) * s;
+  return (px === 0 && py === 0) ? "" : " translate(" + px.toFixed(2) + "px," + py.toFixed(2) + "px)";
+};
