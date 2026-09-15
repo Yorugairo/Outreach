@@ -27,7 +27,7 @@ sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import measure_cut_offsets as MO  # noqa: E402
 
-FPS = 30.0
+FPS = MO.FPS   # the render clock, read from the dial - never a second copy of it (E99 s36: 30 -> 24)
 
 SYNTHETIC_VTT = """WEBVTT
 Kind: captions

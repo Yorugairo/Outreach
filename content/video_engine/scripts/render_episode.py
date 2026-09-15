@@ -30,7 +30,12 @@ import os
 EP = REPO / "content/video_engine/projects/systems-and-blowups/steel-and-paper"
 BUILD = Path(os.environ.get("RENDER_BUILD") or (EP / "build-f"))
 OUT = BUILD / "render"
-FPS = 30
+# THE RENDER CLOCK (E99 s36, P61 T12): "yes, render should be 24 fps. align plate life to 12 fps." 24 is the base the
+# stop-action cadence counts its holds in (kinetics/stopaction.mjs CADENCE.FPS), so on-1s = 24, on-2s = 12 and on-3s = 8
+# all land as whole frames; at 30 a 12 fps hold resampled onto the grid alternated 2- and 3-frame holds (the jitter).
+# Every frame COUNT below is derived from FPS and every duration stays in SECONDS - the audio mux (-ss / -t) and the
+# caption clock are seconds and do not move.
+FPS = 24
 URL = os.environ.get("RENDER_URL") or "http://127.0.0.1:8731/player.html"
 NAME = os.environ.get("RENDER_NAME") or "steel-and-paper"
 GATE_REPORT = "GATES-MOTION.md"  # gate_motion_density.write_report output; last line VERDICT: PASS|FAIL

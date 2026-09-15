@@ -957,7 +957,7 @@
           "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1704"
         }
       ],
-      "does": "The cutouts on a bare world plate step at 10 fps - throw, land with squash, two-frame boil - so the plate never goes still.",
+      "does": "The cutouts on a bare world plate step at 12 fps, the 2s grid of the 24 fps render (E99 s36) - throw, land with squash, two-frame boil - so the plate never goes still.",
       "when": null,
       "when_source": null,
       "author": {
@@ -973,7 +973,7 @@
           "trigger": "at + cutout.delay + index x 0.15, on the stepped clock",
           "dials": {
             "LIFE_LAND": "0.6",
-            "LIFE_FPS": "10"
+            "LIFE_FPS": "12"
           }
         },
         {

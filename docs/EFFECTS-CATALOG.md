@@ -233,11 +233,11 @@ parameter of an effect is an option on its card, never a card.
 
 ### The plate life species
 
-- **id** `species:plate_life` - **does** The cutouts on a bare world plate step at 10 fps - throw, land with squash, two-frame boil - so the plate never goes still.
+- **id** `species:plate_life` - **does** The cutouts on a bare world plate step at 12 fps, the 2s grid of the 24 fps render (E99 s36) - throw, land with squash, two-frame boil - so the plate never goes still.
 - **when** a bare world plate with no evidence must live (E21) - our cutouts stepped at 10 fps for the window (content/video_engine/scripts/build_scene_timeline_f.py SPECIES_WHEN)
 - **example** `{'kind': 'plate_life', 'at': 1, 'dur': 3, 'cutouts': [{'asset': 'cut-host', 'x': 0.3, 'y': 0.9, 'w': 0.2, 'tween': 'floor'}]}` (authored; key: species[] {"kind": "plate_life", "at", "dur", "target"} (shot row 7th element); check: species)
 - **phases**
-  1. **throw and land** - each cutout drops 220 px on spEase with a squash near the end, staggered 0.15 s per cutout (trigger: at + cutout.delay + index x 0.15, on the stepped clock; dials: `LIFE_LAND`=0.6, `LIFE_FPS`=10)
+  1. **throw and land** - each cutout drops 220 px on spEase with a squash near the end, staggered 0.15 s per cutout (trigger: at + cutout.delay + index x 0.15, on the stepped clock; dials: `LIFE_LAND`=0.6, `LIFE_FPS`=12)
   2. **boil** - a two-frame seeded jitter of position and rotation, forever (trigger: every step of LIFE_FPS; dials: `BOIL_PX`=1.2, `BOIL_DEG`=0.7)
 - **blend** stop-motion-cadence (doc 29 harvest) -> the whole arc (recorded; docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1798)
 - **blend** E21 the screen never still -> the whole arc (recorded; docs/portable/OPERATOR-RULINGS.md:557)

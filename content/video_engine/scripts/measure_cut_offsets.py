@@ -41,7 +41,8 @@ from measure_cut_gaps import gaps as silences  # the P40 gap definition, not a s
 
 RULE_A = 0.30
 RULE_B = 0.45
-FPS = 30.0
+FPS = 24.0      # THE RENDER CLOCK (E99 s36, P61 T12): render_episode.FPS. Only the ms -> frames conversion and the
+                # one-frame TR-13 tolerance read it; every threshold in this file is SECONDS and does not move.
 
 PICTURE_LEADS = "picture-leads"
 AUDIO_LEADS = "audio-leads"
@@ -178,7 +179,9 @@ def scene_boundaries(path: Path) -> list[dict]:
     return out
 
 
-CUT_LEAD_S = 0.10      # TR-13: a cut lands 3 frames (at 30 fps) before the next onset [DERIVED: doc 46 s46.6]; a dip's black sits ON it
+CUT_LEAD_S = 0.10      # TR-13: a cut lands 0.10 s before the next onset [DERIVED: doc 46 s46.6]; a dip's black sits ON it.
+                       # SECONDS is the dial - it was derived as "3 frames" on the reference's 30 fps grid and is 2.4 frames
+                       # on our 24 fps render clock (E99 s36); the value itself is unchanged.
 
 
 def tr13_rows(rows: list[dict], onsets: list[float], fps: float = FPS) -> list[dict]:

@@ -4483,10 +4483,13 @@ async function mount(doc) {
 
   /* THE STEPPED CLOCK. stopaction's `stepped` short-circuits hold <= 1 and returns t unchanged,
      because it assumes the renderer's own clock IS the cadence clock (a 24 fps renderer seeking at
-     frame / fps is already on 1s). Ours is not: render_episode.py delivers 30 fps, so an on-1s burst
-     left unquantised is the continuous one. The frame index is therefore taken here (HF-1:
-     frame = round(t * fps), step = floor(frame / hold)) and `stepped` is used verbatim for hold > 1,
-     where the two are the same formula. */
+     frame / fps is already on 1s). Since E99 s36 (P61 T12) render_episode.py delivers 24 fps, so on the
+     RENDER grid that assumption now holds and this quantisation is a no-op there (round(t * 24) / 24 on
+     t = i / 24 returns t). It stays because the clock is not only the renderer's: the live preview scrubs
+     continuously and any probe may seek off the frame grid, and an on-1s burst left unquantised there is
+     the continuous one. The frame index is therefore taken here (HF-1: frame = round(t * fps),
+     step = floor(frame / hold)) and `stepped` is used verbatim for hold > 1, where the two are the same
+     formula. */
   const breakStep = (t, hold = 1, fps = BREAK.STEP_FPS) => {
     if (!(t > 0)) return 0;
     const h = Math.max(1, hold | 0);
@@ -10943,10 +10946,10 @@ async function mount(doc) {
      stage pixels at render time (a datum on a ledger page, a point/region of the frame, a caption
      word span). Camera moves (punch / focus_zoom / pull_back) are ONE transform on the world layer -
      docks stay fixed in screen space (this lane's drawing surface) - and are exclusive per window
-     (build validate_species + gate M09). Plate life quantizes t to 10 fps FIRST and derives every
+     (build validate_species + gate M09). Plate life quantizes t to 12 fps FIRST and derives every
      pose from the step (stop-motion law). Everything from t; jitter only via lpHash. */
   const SP = { PUNCH_IN: 0.42, PUNCH_OUT: 0.5, PUNCH_SCALE: 1.14, FOCUS_SCALE: 1.32, PULL_FROM: 1.9,
-               SQUIG_DRAW: 0.45, LIFE_FPS: 10, LIFE_LAND: 0.6, BOIL_PX: 1.2, BOIL_DEG: 0.7,
+               SQUIG_DRAW: 0.45, LIFE_FPS: 12, LIFE_LAND: 0.6, BOIL_PX: 1.2, BOIL_DEG: 0.7,   /* LIFE_FPS 10 -> 12, E99 s36 (P61 T12): plate life on the 2s grid of the 24 fps render */
                STEAM_PERIOD: 2.6, TICK_STEP: 0.5 };   /* STILL LIFE (2026-09-05): steam and the ticker (the trace carries its own two in species/trace.mjs, the light its dim and its portrait radius in species/spotlight.mjs) */
   const CAMERA = new Set(["punch", "focus_zoom", "pull_back"]);
   const spTop = $("species"), spUnder = $("species-under"), plife = $("plife");

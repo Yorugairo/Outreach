@@ -779,7 +779,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - CAPABILITIES rows cited (not changed by T10): **:108**, **:109**
 
 ### T12: THE FRAME CLOCK - the render at 24 fps, plate life on the 2s grid (E99 s36)
-- Status: pending
+- Status: complete (2026-09-15) - proven by measurement, no gate asked
 - Owner: `junior_developer` (**ENGINE LOCK** - one dial in the engine; takes the lock after T6)
 - Depends on: T6 (the lock only)
 - Write set: `content/video_engine/scripts/render_episode.py` (FPS 30 -> 24), `docs/content-video-engine/samples/scene-evidence-engine.mjs`
@@ -801,7 +801,21 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - Validate: `python -m pytest content/video_engine/tests/test_render_clock.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_kinetics_flags.py -q` then
   `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python content/video_engine/scripts/gate_motion_density.py content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short` (unchanged reading)
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T12.md`. Moved: `render_episode.py` FPS 30 -> 24 (every frame count derived from it;
+  the audio mux and the captions stay seconds); the engine's plate-life dial `LIFE_FPS` 10 -> 12 (+ its stale '10 fps' comment);
+  `species/breakthrough.mjs`'s 30 fps comment + `sync_kinetics --write` (41 regions); `measure_cut_offsets.py` FPS 24.0 with
+  `CUT_LEAD_S` 0.10 unchanged (re-expressed in seconds); `measure_seam_frames.py` gains `FPS = 24.0`, `DIP_CORE_FRAMES` stays 2
+  (grid-independent: 2 frames at 30 = 0.067 s = 1.6 at 24, rounds to 2). NEW `test_render_clock.py`: the render clock 24, the
+  plate-life dial 12 read out of the engine text, CADENCE.FPS 24 / ON1_PX_S 154 / SOAK_STEP.FPS 8 unchanged, and THE EVEN-HOLD
+  PROBE - a stepped element rendered over one second at the render clock: on 1s [1 x 24], on 2s [2 x 12], on 3s [3 x 8], plate
+  life [2 x 12]; the controls show the defect the ruling removed - 30 fps on 2s alternates [2, 3, 2, 3, ...] and plate life at
+  10 on a 24 grid runs [3, 2, 3, 2, 2, 3, ...]. GOLDENS RE-PINNED: NONE - 113/113 byte-identical, proven correct rather than
+  lucky: `LIFE_FPS`'s only consumers are the `plate_life` species (0 golden sources use it) and the PHRASE boil (`caption_style`
+  None in all 58 sources). Validate: pytest 131 passed; node 572/572; sync in sync; the measure + page-boxes tests 73 passed;
+  registry 0 orphaned; gate_motion_density on the approved Japan cut byte-identical under both dials (A/B with the engine
+  restored; its reading is 4 FAIL / 16 PASS since M44 - E45, the cut untouched). Page-boxes re-pinned sha-only. One line in
+  `test_measure_cut_offsets.py` (a duplicated dial de-duplicated) ratified. The catalogue card that still said plate life is
+  10 fps corrected by the parent with the catalogue rebuilt.
 - CAPABILITIES rows changed: **:75** (stop-action mechanics gains the render clock) and the plate-life line of **:121**
 
 ### T11: THE RECORD - the CAPABILITIES rows, the backlog rows, the queue, the layers

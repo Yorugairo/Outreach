@@ -127,10 +127,13 @@ export const burstCadence = (plot, lo, hi0, hi1, comp, v, run_s, o = {}) =>
 
 /* THE STEPPED CLOCK. stopaction's `stepped` short-circuits hold <= 1 and returns t unchanged,
    because it assumes the renderer's own clock IS the cadence clock (a 24 fps renderer seeking at
-   frame / fps is already on 1s). Ours is not: render_episode.py delivers 30 fps, so an on-1s burst
-   left unquantised is the continuous one. The frame index is therefore taken here (HF-1:
-   frame = round(t * fps), step = floor(frame / hold)) and `stepped` is used verbatim for hold > 1,
-   where the two are the same formula. */
+   frame / fps is already on 1s). Since E99 s36 (P61 T12) render_episode.py delivers 24 fps, so on the
+   RENDER grid that assumption now holds and this quantisation is a no-op there (round(t * 24) / 24 on
+   t = i / 24 returns t). It stays because the clock is not only the renderer's: the live preview scrubs
+   continuously and any probe may seek off the frame grid, and an on-1s burst left unquantised there is
+   the continuous one. The frame index is therefore taken here (HF-1: frame = round(t * fps),
+   step = floor(frame / hold)) and `stepped` is used verbatim for hold > 1, where the two are the same
+   formula. */
 export const breakStep = (t, hold = 1, fps = BREAK.STEP_FPS) => {
   if (!(t > 0)) return 0;
   const h = Math.max(1, hold | 0);

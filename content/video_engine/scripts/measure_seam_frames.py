@@ -14,7 +14,7 @@ WHICH EXIT A BOUNDARY HAS. `exit` names the transition INTO the scene it sits on
 reads its OWN exit for the half after its start and the NEXT scene's for the half before its end). The boundary at
 scenes[i].span[1] therefore takes scenes[i + 1].exit.
 
-    python measure_seam_frames.py <build> [--fps 30] [--window 0.6] [--json] [--out <path>]
+    python measure_seam_frames.py <build> [--fps 24] [--window 0.6] [--json] [--out <path>]
 
 Opens the build's player ONCE in headless Chromium (render_baseline's server, prepare_page and frame_png), seeks every
 boundary's window on the render's own frame grid (k / fps), and writes `<build>/seam-frames.json` (or --out).
@@ -36,11 +36,15 @@ SCRIPTS = Path(os.environ.get("VIDEO_ENGINE_SCRIPTS") or HERE)
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
+FPS = 24.0                # THE RENDER CLOCK (E99 s36, P61 T12): render_episode.FPS - this script seeks the render's own
+                          # frame grid (k / fps), so it follows the renderer. Every dial below is SECONDS or luma.
 DIP_S = 0.47              # [DERIVED: the engine's DIP_S and gate_motion_density.DIP_S - the reference's 14 frames at 30 fps]
-DIP_CORE_FRAMES = 2       # the brief's dark core at 30 fps: a linear dip is fully black only AT the boundary, so on a frame
-                          # grid at most the two frames straddling it read near-black (measured: see NEAR_BLACK_LUMA)
+DIP_CORE_FRAMES = 2       # the dark core, IN FRAMES, on whatever grid --fps names: a linear dip is fully black only AT the
+                          # boundary, so at most the two frames STRADDLING it read near-black. Grid-independent by that
+                          # geometry, and the same-seconds re-expression agrees - 2 frames at 30 fps (0.067 s) is 1.6 at
+                          # 24 fps, which rounds to 2 (0.083 s). Unchanged at 24 (measured: see NEAR_BLACK_LUMA)
 NEAR_BLACK_LUMA = 8.0     # mean luma (0-255) of a downscaled frame below which a frame reads as black. MEASURED on the
-                          # approved Japan short's six dips (2026-09-13, 30 fps grid): the darkest dip frame read 6, 3, 4,
+                          # approved Japan short's six dips (2026-09-13, on the then-30 fps grid): the darkest dip frame read 6, 3, 4,
                           # 0, 0, 1; the ramp frames beside it read 10-17 on four of the six (6/6 and 7/4 over the darker
                           # 38- and 43-luma worlds); no cut boundary went below 56. 8 (~3 % of full scale) takes every
                           # dip's black core and none of its ramp over a cream world. A world darker than
@@ -114,7 +118,7 @@ def dark_world_luma(dip_s: float, fps: float, threshold: float, allowed: int) ->
 
 
 def seam_faults(ts: list[float], lumas: list[float], at: float, kind: str, dip_s: float | None,
-                fps: float = 30.0, threshold: float = NEAR_BLACK_LUMA) -> list[dict]:
+                fps: float = FPS, threshold: float = NEAR_BLACK_LUMA) -> list[dict]:
     """The faults in one boundary's luma series. Pure: no browser. The window's first and last frames stand for the
     settled worlds either side (a `dark_world` hold is one whose world is too dark for the threshold to separate)."""
     faults = []
@@ -201,7 +205,7 @@ def summary_lines(doc: dict) -> list[str]:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="the black frame at a seam: the flash, the jump, the second black frame")
     ap.add_argument("build", type=Path)
-    ap.add_argument("--fps", type=float, default=30.0)
+    ap.add_argument("--fps", type=float, default=FPS)
     ap.add_argument("--window", type=float, default=0.6)
     ap.add_argument("--threshold", type=float, default=NEAR_BLACK_LUMA)
     ap.add_argument("--json", action="store_true", help="print the document instead of the summary")
