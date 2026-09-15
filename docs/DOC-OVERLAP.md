@@ -785,28 +785,28 @@ _none._
 
 ### DELTA — nothing like it in the target — THIS IS THE LIFT LIST
 
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:1` — Open gates and open questions - 2026-09-12 — `docs/content-video-engine/REVIEW-QUEUE.md:1` REVIEW QUEUE - what the operator can judge now — h 0.00 / j 0.08 / b 0.00 — 6 rules
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:1` — Open gates and open questions - 2026-09-12 — `docs/content-video-engine/REVIEW-QUEUE.md:1` REVIEW QUEUE - what the operator can judge now — h 0.00 / j 0.09 / b 0.00 — 6 rules
     - `:5` Everything waiting on a decision after P52 THE SWEEP, in one place. Written because the gates and the questions
     - `:9` - Head: 290a481, `main`, pushed. P52 is `status: complete` (`.claude/PRPs/plans/P52-THE-SWEEP.plan.md`).
     - `:10` - Nothing here blocks a build. Every gate's subject is built; the gates rule on form, not on whether it works.
     - `:11` - The paths are on the session's machine, under the main checkout
     - `:13` gitignored and stand where they were built. A served review copy is never rebuilt - these are frozen.
     - `:14` - Source of record for each item stays its own row; this page points at it and never restates the ruling.
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:18` — Part 1 - The seven human gates (all built, all framed, none ruled) — `docs/content-video-engine/REVIEW-QUEUE.md:10` Watch (3) — h 0.00 / j 0.07 / b 0.00 — 0 rules
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:23` — Gate 1 - The band's strip law (T6, the newsreel band) - RULED 2026-09-13, E84 — `docs/content-video-engine/REVIEW-QUEUE.md:61` Ruled since the last pass — h 0.00 / j 0.01 / b 0.00 — 1 rule
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:18` — Part 1 - The seven human gates (all built, all framed, none ruled) — `docs/content-video-engine/REVIEW-QUEUE.md:60` Ruled since the last pass — h 0.00 / j 0.04 / b 0.00 — 0 rules
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:23` — Gate 1 - The band's strip law (T6, the newsreel band) - RULED 2026-09-13, E84 — `docs/content-video-engine/REVIEW-QUEUE.md:60` Ruled since the last pass — h 0.00 / j 0.02 / b 0.00 — 1 rule
     - `:31` | Also in this frame | The head docks as a FRAMED CARD, which is R26-59, not this gate. Read the strip law past the frame. |
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:33` — Gate 2 - The melt's four instants and its dials (T9) - RULED 2026-09-13, E88: the chart melts, not the board (rework R26-76) — `docs/content-video-engine/REVIEW-QUEUE.md:61` Ruled since the last pass — h 0.00 / j 0.04 / b 0.00 — 1 rule
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:33` — Gate 2 - The melt's four instants and its dials (T9) - RULED 2026-09-13, E88: the chart melts, not the board (rework R26-76) — `docs/content-video-engine/REVIEW-QUEUE.md:16` Look (4) — h 0.00 / j 0.04 / b 0.00 — 1 rule
     - `:40` | Tied to | R26-60: a page under a melt must declare `:cut` or the melt drips a blank sheet. |
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:42` — Gate 3 - The three species on one proof page (T7, T8) - FRAMES ACCEPTED 2026-09-13; motion awaits a served player; the agenda to beautify (R26-80) — `docs/content-video-engine/REVIEW-QUEUE.md:10` Watch (3) — h 0.00 / j 0.09 / b 0.00 — 1 rule
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:42` — Gate 3 - The three species on one proof page (T7, T8) - FRAMES ACCEPTED 2026-09-13; motion awaits a served player; the agenda to beautify (R26-80) — `docs/content-video-engine/REVIEW-QUEUE.md:60` Ruled since the last pass — h 0.00 / j 0.04 / b 0.00 — 1 rule
     - `:48` | Note | The ring obeys E56: it circles a number or a point on a chart only, compiler-gated. |
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:50` — Gate 4 - The stagger against the pop (T10) - RULED 2026-09-13, E90: the pop leads, blended with the stagger, on Steel and Paper's caption (R26-77) — `docs/content-video-engine/REVIEW-QUEUE.md:61` Ruled since the last pass — h 0.00 / j 0.03 / b 0.00 — 1 rule
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:50` — Gate 4 - The stagger against the pop (T10) - RULED 2026-09-13, E90: the pop leads, blended with the stagger, on Steel and Paper's caption (R26-77) — `docs/content-video-engine/REVIEW-QUEUE.md:60` Ruled since the last pass — h 0.00 / j 0.03 / b 0.00 — 1 rule
     - `:57` | Constraint | A private build dir, never a render. Tokyo is the test bed. |
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:59` — Gate 5 - The race A/B (T17) - RULED 2026-09-13, E91: two settings, eased default + clothoid by name (R26-78); swap collisions R26-79 — `docs/content-video-engine/REVIEW-QUEUE.md:61` Ruled since the last pass — h 0.00 / j 0.07 / b 0.00 — 1 rule
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:59` — Gate 5 - The race A/B (T17) - RULED 2026-09-13, E91: two settings, eased default + clothoid by name (R26-78); swap collisions R26-79 — `docs/content-video-engine/REVIEW-QUEUE.md:60` Ruled since the last pass — h 0.00 / j 0.07 / b 0.00 — 1 rule
     - `:66` | So the gate is | Confirm that reading, or overrule it after looking at the pairs. |
 - `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:68` — Gate 6 - The publish folder's first use (T16) - RULED 2026-09-13, E92: a reference, not the final form — `docs/content-video-engine/REVIEW-QUEUE.md:1` REVIEW QUEUE - what the operator can judge now — h 0.00 / j 0.04 / b 0.00 — 0 rules
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:75` — Gate 7 - The press card's face (T18) - RULED 2026-09-13, E89: serif — `docs/content-video-engine/REVIEW-QUEUE.md:61` Ruled since the last pass — h 0.00 / j 0.01 / b 0.00 — 0 rules
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:82` — Gate 8 - Push authorization — `docs/content-video-engine/REVIEW-QUEUE.md:34` Approve / push (4) — h 0.00 / j 0.02 / b 0.00 — 0 rules
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:88` — Part 2 - Open rulings that are not gates — `docs/content-video-engine/REVIEW-QUEUE.md:61` Ruled since the last pass — h 0.00 / j 0.04 / b 0.00 — 13 rules
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:75` — Gate 7 - The press card's face (T18) - RULED 2026-09-13, E89: serif — `docs/content-video-engine/REVIEW-QUEUE.md:60` Ruled since the last pass — h 0.00 / j 0.02 / b 0.00 — 0 rules
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:82` — Gate 8 - Push authorization — `docs/content-video-engine/REVIEW-QUEUE.md:32` Approve / push (4) — h 0.00 / j 0.02 / b 0.00 — 0 rules
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:88` — Part 2 - Open rulings that are not gates — `docs/content-video-engine/REVIEW-QUEUE.md:60` Ruled since the last pass — h 0.00 / j 0.09 / b 0.00 — 13 rules
     - `:90` 2026-09-13: the head with a news band -> E86 (a surface holds video and images; someone else's words play on the TV, R26-74); the strobe ceiling's space -> a Ge
     - `:92` 1. RULED 2026-09-13 (E83): yes. Does a DOCK's own landing license a transient cue inside 0:05-0:12? M29 as built reads E44 2a literally:
     - `:93` only a PAGE landing licenses a transient cue in that window. A dock that lands is not a page. If the ruling is
@@ -820,14 +820,14 @@ _none._
     - `:113` can never bind on the helper's own choice. It binds where a cadence is DECLARED against the speed - a
     - `:115` burst at 359 px/s. This is a gate row to write: a thing stepping on 2s or 3s faster than `STROBE_PX_S` strobes
     - `:116` and must go on 1s.
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:120` — Part 3 - Open measurements (no ruling needed, someone has to run them) — `docs/content-video-engine/REVIEW-QUEUE.md:61` Ruled since the last pass — h 0.00 / j 0.03 / b 0.00 — 4 rules
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:120` — Part 3 - Open measurements (no ruling needed, someone has to run them) — `docs/content-video-engine/REVIEW-QUEUE.md:60` Ruled since the last pass — h 0.00 / j 0.07 / b 0.00 — 4 rules
     - `:122` 1. R26-57 - the stage-space text at default `text-rendering` (`BACKLOG.md:470`). R26-48's cure covers the page's
     - `:125` build that does (a chip board, a flow diagram, a map), widen the rule in that commit, regenerate the goldens it
     - `:127` 2. R26-58 - a thrown dock's flight differs warm versus cold (`BACKLOG.md:463`). At Tokyo 75.79 the contact
     - `:131` 3. `ON1_PX_S` 250 against the brief's own 100 px/s (E2 7). Neither number is measured on our own motion. Do
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:136` — Part 4 - Settled in the sweep, listed so nothing reads as missing — `docs/content-video-engine/REVIEW-QUEUE.md:43` Owed by the agent before it comes back to you (13) — h 0.00 / j 0.03 / b 0.00 — 1 rule
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:136` — Part 4 - Settled in the sweep, listed so nothing reads as missing — `docs/content-video-engine/REVIEW-QUEUE.md:41` Owed by the agent before it comes back to you (14) — h 0.00 / j 0.03 / b 0.00 — 1 rule
     - `:145` The rule that came out of it: a triage verdict is not real until a row carries it verbatim. The 2026-09-05
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:151` — Part 5 - Known defects and loose ends — `docs/content-video-engine/REVIEW-QUEUE.md:27` Rule (2) — h 0.00 / j 0.03 / b 0.00 — 3 rules
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:151` — Part 5 - Known defects and loose ends — `docs/content-video-engine/REVIEW-QUEUE.md:25` Rule (2) — h 0.00 / j 0.03 / b 0.00 — 3 rules
     - `:153` 1. One known red, pre-existing: `test_measure_motion_energy::test_headless_sampling_returns_stage_elements_smoke`
     - `:156` 2. The plan's `updated:` line says 2026-09-13 while the commit clock says 09-12
     - `:158` 3. A bridge reply is waiting: `f4541f7f6808`, a review of "The Myth of Historical Normal" returning REQUEST

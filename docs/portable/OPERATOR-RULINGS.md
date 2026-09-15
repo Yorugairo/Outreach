@@ -2975,3 +2975,23 @@ And on the gallery item: *"why are you suggesting to potentially trim or retire 
 only with a proof framed for a viewer - motion as a served player or a clip, a crop on what changes, a before and after - and an item
 without one is the agent's work, never the operator's; a gate question is not copied into the queue as options the record never argued
 (P55 HG2's "keep, trim, or retire" had no recommendation behind it).
+
+**E99 s15 - A review card states the moment to watch and what is being asked; the 2.5D plate is depth-first, the slant only as a
+transition or behind a foreground (P58 HG2).** On the rebuilt pass, 19:53: *"i don't know if i know exactly what you're asking here,
+at all, i need more context and the timing of the action you're wanting me to respond to. But we probably need depth first; the slanted
+view only has value when we use it for a transition or when we have an evidence layer or some other foreground in front of it."* Apply:
+a review card names the exact time range to watch, what changes in it, and the question in one plain sentence - a card without them is
+the agent's to fix before it returns (E99 s14). The operator leans depth-first for the next 2.5D cut; a slanted page is used only as a
+transition (the door of E98 s7, a pull, a push) or with an evidence layer or another foreground in front of it (with E99 s4). HG2 stays
+open on the card's rewrite.
+
+**E99 s16 - The species proof is approved in motion; the beautified agenda page is still owed (P52 gate 3, R26-80).** 19:55:
+*"Approved, still need the beautified agenda page, which i think we discussed as basically just being the plate version of our list
+effect."* Apply: the count array, the numbered agenda and the ring's dashed ellipse with its flag chip are approved in motion; the
+agenda page's beautification (R26-80) is owed as the plate version of the list effect.
+
+**E99 s17 - The editor is not yet useful to a person (P51 gates 2 and 3).** 20:00: *"there's not really 3 edits worth making, especially
+because we don't have the timeline built out yet. as it is now, the editor's pretty useless to a human, all i can do is edit integers
+which doesnt mean much to me."* Apply: P51's gates 2 and 3 (three real edits through the editor) are closed as not yet meaningful; an
+editor that exposes integers is not a human editing surface, and the timeline comes before any further editor gate (with E99 s13: the
+studio is planned with GPT and Claude together).

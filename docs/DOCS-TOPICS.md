@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-5498 topics, 8949 citation edges. The 200 largest topics follow,
+5498 topics, 8974 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (192)
@@ -745,9 +745,9 @@ at most 12 sections each - the JSONL holds every one.
 - docs/portable/OPERATOR-RULINGS.md:1959 — E60 — The BREAKTHROUGH is a rescale: the bar that cannot fit builds to the comparator's level, then shoots while the scale rewrites under it (2026-09-10) — The operator's words. On the first pass (a zigzag cut at the top gridline, the bar a little past it): *"is that squiggle
   cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:46, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:65, docs/agent-memory/operator/resume-2026-09-06.md:125, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1330, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2217, docs/content-video-engine/BACKLOG.md:422, +14 more
 - docs/portable/OPERATOR-RULINGS.md:2661 — E88 — The melt takes the chart, not the page: the ink balls up heavy, then leaves or paints what comes next (2026-09-13) — Ruling (the operator, human gate 2 of P52, the melt's four instants): *"for the melt, i actually didn't envision melting
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/CAPABILITIES-INDEX.md:10, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:33, docs/content-video-engine/REVIEW-QUEUE.md:43, +8 more
+  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/CAPABILITIES-INDEX.md:10, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:33, docs/content-video-engine/REVIEW-QUEUE.md:41, +8 more
 - docs/portable/OPERATOR-RULINGS.md:2761 — E93 — An agenda row carries an icon, stamped on once its sentence has been read (2026-09-13) — Ruling (the operator, on beautifying P52's numbered agenda, gate 3): *"i think agenda rows should carry icons, the icons
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/REVIEW-QUEUE.md:10
+  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/REVIEW-QUEUE.md:41
 - docs/research/motion/BRIEF-WEIGHT-DENSITY-MASS-2026-09-07.md:1 — Research brief — weight, density and mass in drawing, animation and stop-motion — Asked by: the operator, 2026-09-07, on Tokyo v3's first throw and landing (P47 T1, HG2): *"The throw comes on, but it
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:1 — HyperFrames Motion, Transitions, and Kinetic Transformations — Research Blueprint — Pass-3 deep extraction · 2026-09-06 · sources: HeyGen HyperFrames official documentation (overview, motion, transitions,
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:5 — The question — How does HeyGen HyperFrames structure motion design, scene transitions, stop-motion physics, and transformations, and ho
@@ -3173,7 +3173,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/portable/OPERATOR-RULINGS.md:2637 — E87 — The transition is chosen for the scene from the whole kit; no single hand-off rule (2026-09-13) — Ruling (the operator, answering P53 human gate 2, "the hand-off rule"): *"For transitions historically we we had the
   cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/CAPABILITIES-INDEX.md:10, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/CAPABILITIES.md:131, docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:88
 - docs/portable/OPERATOR-RULINGS.md:2901 — E99 - The review pass of 2026-09-14: a morph proves the whole chart, the melt gathers into a dense point, a transformation is judged in motion (2026-09-14) — The operator's answers, marked in the review queue (`docs/content-video-engine/review-answers.jsonl`, 2026-09-14 18:04-1
-  cited by: docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/REVIEW-QUEUE.md:1, docs/content-video-engine/REVIEW-QUEUE.md:18, docs/content-video-engine/REVIEW-QUEUE.md:43, docs/content-video-engine/REVIEW-QUEUE.md:61
+  cited by: docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/REVIEW-QUEUE.md:1, docs/content-video-engine/REVIEW-QUEUE.md:10, docs/content-video-engine/REVIEW-QUEUE.md:16, docs/content-video-engine/REVIEW-QUEUE.md:41, docs/content-video-engine/REVIEW-QUEUE.md:60
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
 ## high-frequency (14)
@@ -3300,7 +3300,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:8 — 1. Settled — | decision | the operator's words | what it binds |
 - docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:52 — 5. The horizon: AnimatorOS — The operator: *"we need like an 'AnimatorOS' where we start a component library + editor similar to how i built with cod
 - docs/content-video-engine/GRILL-PIPELINE-VALUE-2026-09-13.md:123 — 5. Immediate build order (each a plan slice; none started here) — 1. Recipe cards + the drift gate's proof rule + `authoring/recipes.py` (P55's own generator and gate extend; no engine w
-- docs/content-video-engine/REVIEW-QUEUE.md:43 — Owed by the agent before it comes back to you (13) — | id | item | what the agent owes | blocks |
+- docs/content-video-engine/REVIEW-QUEUE.md:41 — Owed by the agent before it comes back to you (14) — | id | item | what the agent owes | blocks |
 - docs/content-video-engine/SELF-WATCH.md:1 — SELF-WATCH - the one-shot bar a cut clears before anybody watches it — The operator's watch begins only when this file is clean. The grill of 2026-09-11: *"we don't come close enough to a
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
