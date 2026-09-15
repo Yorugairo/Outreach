@@ -1327,9 +1327,11 @@ def _stage_gap_gate(build: Path | None, scenes: list | None = None) -> Gate | No
     # CHART TO CHART IS A VERDICT (the operator, 2026-09-12, correcting E73's first reading: "The empty cream stage isnt
     # supposed to be on stage during the exits ... It doesnt make sense to do that when transitioning from chart-to-chart,
     # that is used for mounting a ledger plate to a narrative plate"). The compiler puts the page after a suck or a melt
-    # onto its axes; an empty run there is a FAIL. A plate after one is the mount's register, and the probe cannot see a
-    # plate world at all, so every other run stays a reading. `scene` is the OUTGOING scene and `exit` the transition
-    # into the next (E47); chart to chart is any non-dip boundary with a ledger page on BOTH sides.
+    # onto its axes; an empty run there is a FAIL. ON STAGE (measure_stage_gaps, P58 2026-09-14) is a page's ink or a
+    # paper dock in the probe's record, OR a picture world (plate, clip, vecmap) the timeline holds outside a dip's
+    # black ramp - so a plate on stage is no longer an empty run, while a page with no ink yet still is. Every run that
+    # is not chart to chart stays a reading. `scene` is the OUTGOING scene and `exit` the transition into the next
+    # (E47); chart to chart is any non-dip boundary with a ledger page on BOTH sides.
     order = [str(sc.get("scene_id")) for sc in (scenes or [])]
     def _into_page(r: dict) -> bool:
         sid = str(r.get("scene"))
