@@ -16,13 +16,13 @@ lives (module | inline | compiler-only | declared-unbuilt, the path and the one 
 module - status and callable - proof - doctrine cites resolved to path:line - aliases. A token that is only a
 parameter of an effect is an option on its card, never a card.
 
-138 cards, 79 options, 18 axes. 42 recipes (15 proven).
+139 cards, 79 options, 18 axes. 42 recipes (15 proven).
 
 | axis | cards | options | live | wired | draft | declared | planned | retired |
 |---|---|---|---|---|---|---|---|---|
 | species | 23 | 1 | 7 | 13 | 0 | 3 | 0 | 0 |
 | page_species | 12 | 0 | 2 | 10 | 0 | 0 | 0 | 0 |
-| chart_to | 6 | 9 | 0 | 6 | 0 | 0 | 0 | 0 |
+| chart_to | 7 | 9 | 0 | 7 | 0 | 0 | 0 | 0 |
 | page_builder | 11 | 3 | 2 | 5 | 0 | 4 | 0 | 0 |
 | overflow | 2 | 1 | 0 | 2 | 0 | 0 | 0 | 0 |
 | dock_kind | 4 | 1 | 2 | 2 | 0 | 0 | 0 | 0 |
@@ -660,6 +660,25 @@ parameter of an effect is an option on its card, never a card.
 - **proof** golden data-to-bars - test content/video_engine/tests/test_chart_transitions.py::test_a_recast_seeks_exactly - first use systems-and-blowups SHOT-TABLE-SHORT.py (no approval record found for this build) t=50.3
 - **doctrine** E58 -> docs/portable/OPERATOR-RULINGS.md:1854; E64 -> docs/portable/OPERATOR-RULINGS.md:2079; BACKLOG R26-49 -> docs/content-video-engine/BACKLOG.md:455
 - **aliases** "`recast` keyed: n lines become n bars" (docs/content-video-engine/CAPABILITIES.md:108); "the hand-over" (content/video_engine/scripts/build_scene_timeline_f.py:273)
+
+### The whole-chart remake
+
+- **id** `chart_to:remake` - **does** A full chart becomes a full chart on one clock: every series, datum, axis, label and the title transform, line <-> bars.
+- **when** the sentence turns the SAME data into the other whole chart ('month by month, this is what it did') - every series, datum, axis, label and the title transform on one clock, line <-> bars; when only the scale, the window or the form changes, the verb is rescale, extend or recast (content/video_engine/scripts/build_scene_timeline_f.py CHART_TO_WHEN)
+- **example** `{'kind': 'chart_to', 'at': 12.0, 'dur': 2.4, 'to': 'remake', 'state': 1}` (authored; key: chart_to {"to": "remake"}; check: species)
+- **phases**
+  1. **the history leaves** - the dash window slides from the line's start to the first keyed datum; the bars page's own numbers un-write (trigger: the chart_to's `at`; dials: `LEAVE`=0.28)
+  2. **the ink drops into the columns** - each keyed datum's share of the source's ink fills as the stroke over it leaves (trigger: LEAVE share of `dur`; dials: `INK`=0.35 of the travel)
+  3. **the shapes travel** - every ring morphs into its counterpart by morph_a, the datum marks travel to their bars' tops, the axes hand over and the labels re-write (trigger: MOVE share of the travel; dials: `MOVE`=0.2 of the travel)
+  4. **the target's own ink takes over** - a bars target's rectangles take the landed rings' place and their numbers write; a line target strokes along the landed top edge while the fill leaves with it (trigger: DRAW (a line) / TRAVEL (bars) share of `dur`; dials: `DRAW`=0.62, `TRAVEL`=0.9)
+- **blend** E99 s34 a morph reads as a transformation, not a cut -> the whole arc (recorded; docs/portable/OPERATOR-RULINGS.md:3143)
+- **blend** E64 the data-keyed recast (the datum travels, the axes hand over) -> the correspondence and the hand-over (recorded; docs/content-video-engine/BACKLOG.md:455)
+- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `lpPaintRemake` - also `lpRemakeFor`, `lpAxisHandOver` - lpPaintRemake (+ kinetics/chartxf.mjs's rings and clock, kinetics/morph_a.mjs's pairing)
+- **dials** `REMAKE` in `content/video_engine/scripts/kinetics/chartxf.mjs`: `COLS`=8, `LEAVE`=0.28, `DRAW`=0.62, `TRAVEL`=0.9
+- **status** wired - **callable** yes
+- **proof** golden remake-line-to-bars - test content/video_engine/tests/test_whole_chart_morph.py::test_at_u_050_neither_chart_is_drawable_as_itself - first use none
+- **doctrine** E99 -> docs/portable/OPERATOR-RULINGS.md:2901; E64 -> docs/portable/OPERATOR-RULINGS.md:2079; E50 -> docs/portable/OPERATOR-RULINGS.md:1520
+- **aliases** "the whole-chart morph" (docs/portable/OPERATOR-RULINGS.md:3143)
 
 ### The rescale chart-to verb
 

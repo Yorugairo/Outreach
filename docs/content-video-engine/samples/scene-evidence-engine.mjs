@@ -3648,6 +3648,88 @@ async function mount(doc) {
   /* xfRect - a bar between two states: every edge lerps, so a bar that grows keeps its baseline and a bar that moves keeps
      its width law. geom is {x, y, w, h}. */
   const xfRect = (ga, gb, u) => ({ x: xfLerp(ga.x, gb.x, u), y: xfLerp(ga.y, gb.y, u), w: xfLerp(ga.w, gb.w, u), h: xfLerp(ga.h, gb.h, u) });
+
+  /* ---- P61 T2 - THE WHOLE-CHART REMAKE -----------------------------------------------------------------------------
+     A full chart becomes a full chart on one clock. The law: every KEYED datum of the source owns a share of the source's
+     own ink, and that share becomes its counterpart's - a datum's column of the area under a line becomes its bar, a bar
+     becomes its datum's column. Both shares are described as ONE ring, built column by column in one order (lpStrip's own
+     shape, E:9761), so morph_a corresponds them with `resample: false, normalise: false` and returns offset 0 - the
+     remake adds no pairing law of its own, it hands morph_a two descriptions that already correspond.
+     E99 s34, the bar: a viewer sees ONE thing becoming the next, and sees it as meant. Nothing here fades. */
+  const REMAKE = Object.freeze({
+    COLS: 8,        /* the columns a datum's share is described by: 8 per side is 16 vertices a bar's rectangle is still exactly a rectangle at, and the line's own leg inside one datum's share is straight [DERIVED: MORPH.COLS 48 describes a WHOLE line; a column of it needs the corner, not the curve] */
+    LEAVE: 0.28,    /* the share of the clock the source's own ink takes to leave into its area (XF_MORPH.LEAVE 0.3's law, one notch earlier because the travel is longer here) */
+    DRAW: 0.62,     /* a LINE target strokes on from here, along the landed top edge, while the area's fill leaves with it (lpPaintMorphHold's own law) */
+    TRAVEL: 0.9,    /* every ring has landed on its counterpart by here - the clock's last tenth belongs to the target's own ink (KEYED_TAG_HAND 0.92's law: hand over on the CLOCK, not on the eased travel) */
+  });
+
+  /* xfSpanTop - n points along a POLYLINE between two x, at the polyline's own y (lpStrip's yAt, sampled over a span
+     rather than the whole line). Outside the polyline the end value holds: a datum's share may reach past the last
+     datum, and a straight continuation invents a number the page never drew. */
+  const xfSpanTop = (pts, x0, x1, n) => {
+    const P = (pts || []).filter((q) => q && q.length >= 2);
+    const yAt = (x) => {
+      if (!P.length) return 0;
+      if (x <= P[0][0]) return P[0][1];
+      for (let i = 0; i + 1 < P.length; i++) {
+        const a = P[i], b = P[i + 1];
+        if (x >= a[0] - 1e-9 && x <= b[0] + 1e-9) {
+          const u = (x - a[0]) / Math.max(1e-9, b[0] - a[0]);
+          return a[1] + (b[1] - a[1]) * Math.min(1, Math.max(0, u));
+        }
+      }
+      return P[P.length - 1][1];
+    };
+    const m = Math.max(2, n | 0);
+    return [...Array(m).keys()].map((i) => { const x = x0 + (i / (m - 1)) * (x1 - x0); return [x, yAt(x)]; });
+  };
+
+  /* xfStripRing - the closed ring of a strip: its top row left to right, then its bottom row right to left. The two rows
+     share their x, so the ring's i-th vertex is the i-th column on both sides of any pair built this way. */
+  const xfStripRing = (top, bot) => [...top, ...bot.slice().reverse()];
+
+  /* xfBarRing - a bar described as the same ring: n points along its VALUE edge, n along its base. A negative bar's
+     value edge is the one BELOW its base (geom.neg), so the ring is the same description upside down and the morph
+     carries the sign instead of flipping it. */
+  const xfBarRing = (g, n) => {
+    const m = Math.max(2, n | 0), x0 = +g.x, x1 = +g.x + +g.w;
+    const base = g.base != null ? +g.base : +g.y + +g.h;
+    const edge = g.end != null ? +g.end : (g.neg ? base + Math.abs(+g.h) : base - Math.abs(+g.h));
+    const xs = [...Array(m).keys()].map((i) => x0 + (i / (m - 1)) * (x1 - x0));
+    return xfStripRing(xs.map((x) => [x, edge]), xs.map((x) => [x, base]));
+  };
+
+  /* xfRingPath - the ring as a closed POLYLINE. Deliberately not morph_a's cubic reconstruction: a bar's rectangle
+     drawn as a centripetal Catmull-Rom is a rectangle with rounded corners, and the remake hands the landed ring over
+     to the page's own <rect> - the two must be the same shape or the hand-over is the cut this verb exists to avoid. */
+  const xfRingPath = (pts) => (!pts || !pts.length ? ""
+    : pts.map((p, i) => (i ? "L" : "M") + (+p[0]).toFixed(1) + " " + (+p[1]).toFixed(1)).join(" ") + " Z");
+
+  /* xfRemakeClock - ONE clock, four shares of it. `leave`: the source's own ink into its area. `travel`: every ring onto
+     its counterpart. `draw`: a line target's stroke along the landed edge. `hand`: the target's own ink taking the rings'
+     place. Exact at both ends by construction, and every phase is a pure function of u - the caller eases each one.
+     `toLine` says which way the remake runs: a BARS target takes over at REMAKE.TRAVEL, so the rings travel until then;
+     a LINE target must have its rings LANDED before its own stroke runs along their top edge, so on that run the travel
+     ends at REMAKE.DRAW and the last share of the clock is the line drawing while the area's fill leaves with it. */
+  const xfRemakeClock = (u, toLine) => {
+    const c = Math.min(1, Math.max(0, u)), cl = (v) => Math.min(1, Math.max(0, v));
+    const end = toLine ? REMAKE.DRAW : REMAKE.TRAVEL;
+    return {
+      leave: cl(c / REMAKE.LEAVE),
+      travel: cl((c - REMAKE.LEAVE) / (end - REMAKE.LEAVE)),
+      draw: cl((c - REMAKE.DRAW) / (1 - REMAKE.DRAW)),
+      hand: cl((c - REMAKE.TRAVEL) / (1 - REMAKE.TRAVEL)),
+    };
+  };
+
+  /* the two beats INSIDE the travel, so the ink is never in two places at once: `ink` is the share of the travel over
+     which the source's own stroke drops into its columns (the tail leaves as they fill), and `move` is the share after
+     which the shapes have any distance to cover. They overlap - nothing waits, which is E64's own word for it. */
+  const REMAKE_BEAT = Object.freeze({ INK: 0.35, MOVE: 0.2 });
+  const xfRemakeTravel = (travel) => ({
+    ink: Math.min(1, Math.max(0, travel / REMAKE_BEAT.INK)),
+    move: Math.min(1, Math.max(0, (travel - REMAKE_BEAT.MOVE) / (1 - REMAKE_BEAT.MOVE))),
+  });
   /* KINETICS:END */
   /* KINETICS:BEGIN camera */
   /* kinetics/camera.mjs - THE CAMERA (P49 T1-T3): one persistent 2D similarity per timeline - a zoom s, the world point it
@@ -6403,6 +6485,7 @@ async function mount(doc) {
                    marks: [], markBy: {}, badges: [], inkEls: [],
                    vals: pg2.values || [], vstr: pg2.value_strings || [],
                    emph: Number.isInteger(pg2.emphasize) ? pg2.emphasize : -1, kind: pg2.builder || "story",
+                   titleText: pg2.title == null ? null : String(pg2.title),   /* P61 T2: the state's own TITLE, as a string - its ink is built only if a verb re-writes it (lpStateTitle), so no page grows a hidden run it never uses */
                    windowOffsets: pg2.window_offsets || null };   /* P48 T2: a derived (windowed) state maps the page's datum indices */
       (builders[s2.kind] || buildLedgerBars)(s2, pg2);
       /* ... and its own SUB and SOURCE. A caption that goes on describing the chart that left is a lie on the page, so a
@@ -7108,7 +7191,7 @@ async function mount(doc) {
      switch, and hide while the data they measure is off the window. */
   const lpDatumNow = (st, si, i) => {
     const xf = st.xfNow;
-    if (xf && !xf.keyed && !xf.morph && st.states) {
+    if (xf && !xf.keyed && !xf.morph && !xf.remake && st.states) {
       const a = lpMarkDatumOn(st.states[xf.from], si, i), b = lpMarkDatumOn(st.states[xf.to], si, i);
       if (!a || !b) return null;
       const u = xf.extend ? segEase(clamp01(xf.u / XF_EXTEND.RESCALE)) : xf.u;
@@ -7122,7 +7205,7 @@ async function mount(doc) {
     const idx = (S) => { const B = S.markBy || {}, str = B["s" + si]; if (!str || !str.geom.pts) return [];
       const off = (S.windowOffsets || [])[si] | 0, k0 = str.geom.k0 | 0; return str.geom.pts.map((p, j) => ({ i: off + k0 + j, p })); };
     const xf = st.xfNow;
-    if (xf && !xf.keyed && !xf.morph && st.states) {
+    if (xf && !xf.keyed && !xf.morph && !xf.remake && st.states) {
       const A = new Map(idx(st.states[xf.from]).map((q) => [q.i, q.p])), out = [];
       const u = xf.extend ? segEase(clamp01(xf.u / XF_EXTEND.RESCALE)) : xf.u;
       for (const q of idx(st.states[xf.to])) { const a = A.get(q.i); if (a) out.push({ i: q.i, p: [xfLerp(a[0], q.p[0], u), xfLerp(a[1], q.p[1], u)] }); }
@@ -7133,7 +7216,7 @@ async function mount(doc) {
   const lpRuleYNow = (st, k) => {   /* a reference rule's y this frame (its value re-projected by the active state; lerped across a rescale) */
     const S0 = (st.states && st.states[st.active | 0]) || st, xf = st.xfNow;
     const on = (S) => { const r = (S.hlines || [])[k]; return r ? r.y : null; };
-    if (xf && !xf.keyed && !xf.morph && st.states) { const a = on(st.states[xf.from]), b = on(st.states[xf.to]); if (a == null || b == null) return null;
+    if (xf && !xf.keyed && !xf.morph && !xf.remake && st.states) { const a = on(st.states[xf.from]), b = on(st.states[xf.to]); if (a == null || b == null) return null;
       return xfLerp(a, b, xf.extend ? segEase(clamp01(xf.u / XF_EXTEND.RESCALE)) : xf.u); }
     return on(S0);
   };
@@ -9482,7 +9565,7 @@ async function mount(doc) {
       else if (m.role === "ylabel" || m.role === "rulelabel" || m.role === "name") { e.setAttribute("x", (+g.x).toFixed(1)); e.setAttribute("y", (+g.y).toFixed(1)); e.style.opacity = "";
         if (e.hasAttribute("transform")) e.removeAttribute("transform"); }   /* P50 T11: a tag that grew into a bar shrinks back on a seek */
       else if (m.role === "xtick" || m.role === "xlabel" || m.role === "value") { e.setAttribute("x", (+g.x).toFixed(1)); e.setAttribute("y", (+g.y).toFixed(1)); e.style.opacity = ""; }
-      else if (m.role === "bar") { e.setAttribute("x", g.x.toFixed(1)); e.setAttribute("y", g.y.toFixed(1)); e.setAttribute("width", g.w.toFixed(1)); e.setAttribute("height", g.h.toFixed(1)); e.style.transformOrigin = "0 " + g.base.toFixed(1) + "px"; }
+      else if (m.role === "bar") { e.setAttribute("x", g.x.toFixed(1)); e.setAttribute("y", g.y.toFixed(1)); e.setAttribute("width", g.w.toFixed(1)); e.setAttribute("height", g.h.toFixed(1)); e.style.transformOrigin = "0 " + g.base.toFixed(1) + "px"; e.style.opacity = ""; }   /* P61 T2: a bar the remake handed to its ring stands again the moment no transition is on */
     }
     S.xfDirty = false;
   };
@@ -9563,7 +9646,7 @@ async function mount(doc) {
      string, w = 0 is a bare axis, and everything between is the string being written (or un-written) one glyph at a time,
      as a pure function of the transition's clock. The full string is remembered on the element at first use and put back
      by lpRestoreState, so a seek out of a hand-over paints the label exactly as it was built. */
-  const TEXT_HAND = ["ylabel", "rulelabel", "xtick", "axislabel", "xlabel"];
+  const TEXT_HAND = ["ylabel", "rulelabel", "xtick", "axislabel", "xlabel", "value"];   /* P61 T2: a bars page's own NUMBER is re-written by the remake, so it is restored by the same hand - the list is what lpUnwriteRestore puts back, and it puts back only what lpWriteText actually cut (__full is set nowhere else) */
   const lpWriteText = (e, w) => {
     if (!e || e.firstElementChild) return;   /* a string with a tspan in it (an inline tag chip) is not ours to re-cut */
     if (e.__full == null) e.__full = e.textContent || "";
@@ -9581,7 +9664,11 @@ async function mount(doc) {
   const AXIS_LABELS = ["ylabel", "rulelabel", "xtick", "axislabel"];   /* what is WRITTEN: every string on the axes */
   const lpTickRanks = (S) => (S.marks || []).filter((m) => m.role === "tick" && m.el).sort((a, b) => (a.geom.y || 0) - (b.geom.y || 0));
   const axisLabelN = (S, role) => { S.axisN = S.axisN || {}; if (S.axisN[role] == null) S.axisN[role] = (S.marks || []).filter((m) => m.el && m.role === role).length; return S.axisN[role]; };
-  const lpAxisHandOver = (A, Bs, u) => {
+  /* P61 T2 (T1's re-write failure mode 3): `hold` names the labels that do not change - same role, same string, same
+     place - on both sides. A held label is not erased and re-written for nothing: the standing one stays WHOLE and its
+     twin stays empty until the clock ends, which is the same-string hand-over `keyed: "tags"` already ships
+     (KEYED_TAG_HAND). No caller that passes nothing sees any difference. */
+  const lpAxisHandOver = (A, Bs, u, hold) => {
     const ta = lpTickRanks(A), tb = lpTickRanks(Bs), k = segEase(clamp01(u));
     const out = clamp01(u / AXIS_HAND.OUT), inn = clamp01((u - AXIS_HAND.IN) / (1 - AXIS_HAND.IN));
     const cross = clamp01((u - AXIS_HAND.CROSS) / (1 - AXIS_HAND.CROSS));
@@ -9597,10 +9684,10 @@ async function mount(doc) {
     /* ONE HAND, not six: the labels of a role leave (and arrive) in their own order, each with its own slot of the
        share, exactly as writeGlyphs staggers a title's glyphs. Un-written all at once, six year labels became six
        identical stubs - "20 20 20 20 20 20" - which reads as breakage, not as writing (the Tokyo probe at 50.9). */
-    const sweep = (S, w, ahead) => { const seen = {};
+    const sweep = (S, w, ahead, held) => { const seen = {};
       for (const m of S.marks || []) { if (!m.el || !AXIS_LABELS.includes(m.role)) continue;
         const i = (seen[m.role] = (seen[m.role] == null ? 0 : seen[m.role] + 1)), n = axisLabelN(S, m.role);
-        lpWriteText(m.el, ahead ? clamp01((w * (n + 1) - i) / 1.6) : 1 - clamp01((w * (n + 1) - i) / 1.6));
+        lpWriteText(m.el, held && held.has(m.key) ? (ahead ? 0 : 1) : (ahead ? clamp01((w * (n + 1) - i) / 1.6) : 1 - clamp01((w * (n + 1) - i) / 1.6)));
         m.el.style.opacity = "";
       } };
     for (const m of A.marks || []) {
@@ -9610,7 +9697,7 @@ async function mount(doc) {
       } else if (AXIS_LINES.includes(m.role)) e.style.opacity = (1 - cross).toFixed(3);   /* lit all the way to the target's place, then handed over where the two coincide */
       else if (FURNITURE.includes(m.role)) e.style.opacity = xfFade(false, false, u).toFixed(3);
     }
-    sweep(A, out, false);
+    sweep(A, out, false, hold && hold.a);
     /* the target's furniture is what the eye reads through the hand-over; its data wait for their own law. A target
        that HAS no axes (a pie, a treemap) has nothing to hand over and its layer is not raised for it: the recast into
        one is the hand-over it always was. */
@@ -9621,7 +9708,7 @@ async function mount(doc) {
       else if (AXIS_LINES.includes(m.role)) e.style.opacity = cross.toFixed(3);
       else if (FURNITURE.includes(m.role)) e.style.opacity = xfFade(true, true, u).toFixed(3);
     }
-    sweep(Bs, inn, true);
+    sweep(Bs, inn, true, hold && hold.b);
     A.xfDirty = true; Bs.xfDirty = true;
   };
   /* P50 T11 - the TAG form (`keyed: "tags"`, Bravos 104-105). The same hand-over keyed on the other mark: each
@@ -9702,12 +9789,16 @@ async function mount(doc) {
     for (let i = 1; i < pts.length; i++) { const s = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); tot += s; if (i <= j) at += s; }
     return tot > 0 ? at / tot : 1;
   };
-  const lpDataDots = (A, map) => {   /* the travelling data: one dot per bar and one for the anchor the first change is measured from, built once per page and hidden by lpRestoreState */
-    if (A.dataKey && A.dataKey.n === map.length) return A.dataKey;
+  const lpDataDots = (A, map, o) => {   /* the travelling data: one dot per bar and one for the anchor the first change is measured from, built once per page and hidden by lpRestoreState */
+    /* P61 T2: the remake travels the SAME data on the same shape, so it reaches this one path rather than inventing a
+       second - it only says where the dots live (its ring overlay, above both charts) and in whose ink (the line's,
+       which on a bars -> line remake is the state that is ARRIVING). A caller that says nothing is exactly as it was. */
+    const parent = (o && o.parent) || A.chart;
+    if (A.dataKey && A.dataKey.n === map.length && A.dataKey.parent === parent) return A.dataKey;
     const lead = (A.paths || []).filter((pp) => !pp.muted)[0] || (A.paths || [])[0] || {};
-    const stroke = lead.p ? lead.p.getAttribute("stroke") : "var(--lp-chalk)";
-    const dots = map.concat([null]).map(() => lpEl("circle", "", A.chart, { r: 9, fill: stroke, opacity: 0 }));   /* a datum's own ink: the nib is 6 and this has to read as it crosses a portrait plot */
-    return (A.dataKey = { dots, n: map.length, stroke });
+    const stroke = (o && o.stroke) || (lead.p ? lead.p.getAttribute("stroke") : "var(--lp-chalk)");
+    const dots = map.concat([null]).map(() => lpEl("circle", "", parent, { r: 9, fill: stroke, opacity: 0 }));   /* a datum's own ink: the nib is 6 and this has to read as it crosses a portrait plot */
+    return (A.dataKey = { dots, n: map.length, stroke, parent });
   };
   const lpPaintRecastData = (states, xf, t3, scene, t) => {
     const A = states[xf.from], Bs = states[xf.to], u = xf.u, map = (xf.key_map || []).map((m) => ({ datum: m.datum | 0, bar: m.bar | 0, from: m.from | 0 }));
@@ -9812,6 +9903,151 @@ async function mount(doc) {
     M.path.setAttribute("fill-opacity", (MORPH.FILL_A * (1 - clamp01(c))).toFixed(3));
     M.svg.style.opacity = c < 1 ? "1" : "0"; M.u = 1;
   };
+  /* ================= P61 T2 - THE WHOLE-CHART REMAKE (`chart_to {to: "remake"}`) =================================
+     E99 s34, the operator, on how far "the entire chart" reaches: *"i care that the morph reads as a transformation,
+     not a cut, and that it reads as intentional. The entire chart should transform, but I don't much mind if the text
+     is re-written or directly morphed - both is a transformation."* A FULL chart becomes a FULL chart on ONE clock.
+
+     WHAT TRAVELS, and why nothing is left behind and nothing arrives from nowhere:
+
+     - THE SERIES' GEOMETRY. Every keyed datum owns its share of the source's ink - the column of the area under the
+       line that stands over it, or the bar that IS it - and that share becomes its counterpart's. Both shares are
+       described column by column in one order (kinetics/chartxf.mjs: xfSpanTop -> xfStripRing, xfBarRing), so
+       morph_a's existing pairing rule corresponds them with `resample: false, normalise: false` and returns offset 0.
+       The remake adds no pairing law of its own; it hands morph_a two descriptions that already correspond, and the
+       ring is drawn as a POLYLINE (xfRingPath) because a landed bar must be the page's own rectangle, not a curve.
+     - THE DATUM MARKS. `mark_map` is the compiler's, the same shape as the data-keyed recast's `key_map` (E64), and
+       the dots ride lpDataDots - that one travelling-data path, parented into this verb's overlay. The correspondence
+       is never re-derived here.
+     - THE AXES. lpAxisHandOver on the WHOLE clock (lpPaintRecastData's own call): the gridlines slide by rank to the
+       target's places and change hands where they coincide; the tick labels un-write and write by character. NEVER
+       the whole-<svg> opacity crossfade lpPaintMorphTo does - E99 s1 refused a crossfade, and T1 named it the largest
+       gap and the cheapest to close.
+     - THE TEXT: the RE-WRITE route (P61 T1 route (b)), because it READS and because it is already this engine's hand:
+       0.012 ms a frame against the contour route's 6.56 ms and a 121.5 ms preparation that would have to be moved off
+       the first frame; it ships today through lpWriteText + sweep with the per-role stagger that closed the
+       "20 20 20" stub; and T1's one argument against it - "a re-write carries no direction of its own" - is answered
+       by this verb, whose geometry is n rings and n data in flight rather than the dissolve it was measured beside.
+       Its remaining failure mode is closed here: a label whose string and place do not change is HELD WHOLE (`hold`).
+     - THE TITLE. T1's gap 6: no chart_to verb touched it. Here it takes the sub's and the source's own hand (erase
+       over PS.ERASE_S, the arriving state's written over the rest), from a title ink built for the state at first
+       need. The compiler refuses a retitle on a row that remakes: two hands would write one string twice.
+
+     PURE FUNCTION OF t: u = 0 paints the exact source (every phase is 0, the rings carry no ink, the target's labels
+     are empty), u = 1 the exact target. Nothing is integrated; the only thing cached is the PAIR, whose geometry was
+     fixed at load. No frame draws both charts flat - by REMAKE.LEAVE the source's own ink is inside its rings, and
+     the target's own does not stand until REMAKE.TRAVEL. */
+  const lpRemakeHold = (A, Bs) => {   /* the labels that change nothing: same role, same string, same place */
+    const str = (m) => (m.el.__full != null ? m.el.__full : (m.el.textContent || ""));
+    const key = (m) => m.role + "|" + str(m) + "|" + Math.round(+m.geom.x || 0) + "," + Math.round(+m.geom.y || 0);
+    const seen = new Map(), a = new Set(), b = new Set();
+    for (const m of Bs.marks || []) if (m.el && AXIS_LABELS.includes(m.role) && !seen.has(key(m))) seen.set(key(m), m.key);
+    for (const m of A.marks || []) { if (!m.el || !AXIS_LABELS.includes(m.role)) continue;
+      const tw = seen.get(key(m)); if (tw && !b.has(tw)) { a.add(m.key); b.add(tw); } }
+    return { a, b };
+  };
+  const lpRemakeWrite = (els, w, ahead) => {   /* sweep's own stagger, for the strings a bars page carries that the axes' sweep does not */
+    const n = els.length;
+    els.forEach((e, i) => { if (e) lpWriteText(e, ahead ? clamp01((w * (n + 1) - i) / 1.6) : 1 - clamp01((w * (n + 1) - i) / 1.6)); });
+  };
+  const lpStateTitle = (st, S) => {   /* the arriving state's TITLE ink, built once at first need (lpMorphFor's shape) */
+    if (S.titleInk !== undefined) return S.titleInk;
+    const from = st.titleEl;
+    if (!from || S.titleText == null || S.titleText === "") return (S.titleInk = null);
+    const d = lpEl("div", from.className || "lp-ink lp-title", st.page);
+    if (from.getAttribute("style")) d.setAttribute("style", from.getAttribute("style"));
+    const gs = st.portrait ? lpGlyphsWrap(d, S.titleText, (st.seed || 0) + 90 + (st.states || []).indexOf(S))
+                           : lpGlyphs(d, S.titleText, (st.seed || 0) + 90 + (st.states || []).indexOf(S));
+    for (const g of gs) g.style.setProperty("--w", "0");
+    return (S.titleInk = { div: d, glyphs: gs });
+  };
+  const lpRemakeFor = (st, xf) => {   /* built once per pair, at first need; the states' geometry is fixed at load, so it is pure */
+    const key = "rm:" + xf.from + ">" + xf.to; st.morphTo = st.morphTo || {};
+    if (key in st.morphTo) return st.morphTo[key];
+    const A = st.states[xf.from], Bs = st.states[xf.to], lineIsFrom = xf.line_at !== "to";
+    const L = lineIsFrom ? A : Bs, BR = lineIsFrom ? Bs : A, n = REMAKE.COLS;
+    const map = (xf.mark_map || []).map((m) => ({ datum: m.datum | 0, bar: m.bar | 0 }));
+    const line = (L.linePts || [])[0];
+    if (!map.length || !line || line.length < 2 || !(L.axisB > 0)) return (st.morphTo[key] = null);
+    const at = map.map((m) => lpMarkDatumOn(L, 0, m.datum));
+    if (at.some((q) => !q)) return (st.morphTo[key] = null);
+    /* a datum's SHARE of the plot is the gap to its neighbours: the shares tile the area under the line, so no ink is
+       drawn twice and none is left out - which is what "nothing left behind" means for a line that becomes n bars */
+    const gaps = at.slice(1).map((q, i) => q[0] - at[i][0]);
+    const step = gaps.length ? gaps.reduce((s, g) => s + g, 0) / gaps.length
+                             : +(((BR.markBy || {})["b:" + map[0].bar] || { geom: {} }).geom.w || 80);
+    const svg = lpEl("svg", "lp-chart lp-remake", st.page, { viewBox: A.chart.getAttribute("viewBox") });
+    svg.setAttribute("style", A.chart.getAttribute("style") || ""); svg.style.opacity = "0";
+    const pairs = [];
+    map.forEach((m, k) => {
+      const bar = (BR.markBy || {})["b:" + m.bar]; if (!bar || !bar.el) return;
+      const top = xfSpanTop(line, at[k][0] - step / 2, at[k][0] + step / 2, n);
+      const col = xfStripRing(top, top.map((q) => [q[0], L.axisB]));
+      const rect = xfBarRing(bar.geom, n);
+      const from = lineIsFrom ? col : rect, to = lineIsFrom ? rect : col;
+      const fill = (getComputedStyle(bar.el) || {}).fill || "var(--lp-chalk)";
+      const path = lpEl("path", "remake", svg, { d: xfRingPath(from), fill, "fill-opacity": 0, stroke: "none" });
+      const tip = [bar.geom.cx, bar.geom.end];
+      pairs.push({ path, prep: morphAPrepare(from, to, { resample: false, normalise: false }), A: from, B: to,
+                   bar, p0: lineIsFrom ? at[k] : tip, p1: lineIsFrom ? tip : at[k] });
+    });
+    if (!pairs.length) { svg.remove(); return (st.morphTo[key] = null); }
+    const lead = (L.paths || []).filter((pp) => !pp.muted)[0] || (L.paths || [])[0] || {};
+    const dots = lpDataDots(A, map, { parent: svg, stroke: lead.p ? lead.p.getAttribute("stroke") : "var(--lp-chalk)" });
+    return (st.morphTo[key] = { svg, pairs, dots, map, lineIsFrom, L, BR, hold: lpRemakeHold(A, Bs), u: 0 });
+  };
+  const lpPaintRemake = (st, states, xf, t3, scene, t) => {
+    const A = states[xf.from], Bs = states[xf.to], u = xf.u, R = lpRemakeFor(st, xf), lineIsFrom = xf.line_at !== "to";
+    const ph = xfRemakeClock(u, !lineIsFrom), bt = xfRemakeTravel(ph.travel);
+    const kL = segEase(ph.leave), kT = minJerk(bt.move), kI = segEase(bt.ink), kD = segEase(ph.draw), hand = ph.hand;
+    for (let i = 0; i < states.length; i++) if (i !== xf.from && i !== xf.to) lpPaintChart(states[i], 0, t3, scene, t);
+    lpPaintChart(A, 1, t3, scene, t);
+    A.chart.style.opacity = "1";   /* E99 s1: the axes are the hand-over's business - this layer never fades */
+    lpPaintChart(Bs, lineIsFrom ? 0 : kD, t3, scene, t);   /* a LINE target strokes on over the landed edge by its own law */
+    A.xfDirty = true; Bs.xfDirty = true;
+    if (lineIsFrom) {   /* the HISTORY leaves first and what the bars need STANDS until its ink drops into the columns
+                           (lpPaintRecastData's own law, E:9723-9730): the dash window slides from the start to the first
+                           keyed datum on the leave clock, and the rest follows as the columns fill */
+      const off0 = (A.windowOffsets || [])[0] | 0, keep = ((xf.mark_map || [])[0] || {}).datum | 0;
+      for (const pp of A.paths || []) {
+        if (!pp.pts || !pp.pts.length) continue;
+        const fk = lpPathFrac(pp, keep - off0 - (pp.k0 | 0)), gone = fk * kL + (1 - fk) * kI;
+        pp.p.setAttribute("stroke-dashoffset", (-(pp.len * gone)).toFixed(1));
+        pp.p.style.opacity = gone > 0.996 ? "0" : "";   /* E50 (the third watch, "dots that linger"): a fully slid dash window still paints its round cap at the path's end - a stray mark left behind by a line that has gone */
+        pp.tip.setAttribute("opacity", 0);
+        if (pp.pill) pp.pill.g.setAttribute("opacity", 0);
+        pp.name.setAttribute("opacity", (1 - kL).toFixed(2));
+      }
+    }
+    lpHideMorphs(st, R); if (!R) return;
+    R.svg.style.opacity = "1"; R.u = u;
+    R.pairs.forEach((q, k) => {
+      const pts = kT <= 0 ? q.A : (kT >= 1 ? q.B : morphAAt(q.prep, kT).outline);
+      q.path.setAttribute("d", xfRingPath(pts));
+      /* the ring's ink: it FILLS as the line leaves, and on the other run it stands from the first frame in the bar's
+         own place and colour (two congruent shapes in one ink: no frame differs) and leaves as the line draws over it */
+      const inked = lineIsFrom ? kI * (1 - hand) : (u > 0 ? 1 - kD : 0);
+      q.path.setAttribute("fill-opacity", inked.toFixed(3));
+      const rec = q.bar.rec || {};
+      if (lineIsFrom) {   /* the target's own bar takes the landed ring's place - the same rectangle, in the same ink */
+        if (rec.bar) { rec.bar.style.transform = "scaleY(" + (hand > 0 ? 1 : 0).toFixed(4) + ")"; }
+        if (rec.val) rec.val.setAttribute("opacity", hand.toFixed(3));   /* the bar's number takes the landed datum's place */
+        if (rec.lab) { rec.lab.setAttribute("opacity", clamp01((kT - 0.25) / 0.35).toFixed(3)); lpWriteText(rec.lab, clamp01((kT - 0.3) / 0.5)); }
+      } else if (rec.bar) rec.bar.style.opacity = u > 0 ? "0" : "";   /* the leaving bar is its ring from the first frame on */
+      const dot = (R.dots.dots || [])[k];
+      if (dot) {   /* the datum travels to its counterpart - born as the source's ink leaves, gone as the target's arrives */
+        dot.setAttribute("cx", xfLerp(q.p0[0], q.p1[0], kT).toFixed(1));
+        dot.setAttribute("cy", xfLerp(q.p0[1], q.p1[1], kT).toFixed(1));
+        dot.setAttribute("opacity", ((lineIsFrom ? kI : minJerk(clamp01(u / (REMAKE.LEAVE * 0.6)))) * (1 - hand) * (lineIsFrom ? 1 : 1 - kD)).toFixed(3));
+      }
+    });
+    if ((R.dots.dots || []).length > R.pairs.length) R.dots.dots[R.dots.dots.length - 1].setAttribute("opacity", 0);   /* the data key's anchor dot is not this verb's */
+    if (!lineIsFrom) {   /* the bars page's own strings leave by the same hand that re-writes the axes - never a fade */
+      lpRemakeWrite((A.marks || []).filter((m) => m.role === "value").map((m) => m.el), clamp01(u / AXIS_HAND.OUT), false);
+      lpRemakeWrite((A.marks || []).filter((m) => m.role === "xlabel").map((m) => m.el), clamp01(u / AXIS_HAND.OUT), false);
+    }
+    lpAxisHandOver(A, Bs, u, R.hold);   /* the axes hand over on the WHOLE clock: the travel is only its middle */
+  };
   const PARK_ORIGIN = Object.freeze({ top: "0 0", bottom: "0 100%", left: "0 0", right: "100% 0" });
   const lpPaintPark = (S, sp, t, fromScale) => {
     /* a park moves the chart from where it STANDS: from full size, or from the previous park's scale - so a park to scale 1 is an
@@ -9865,6 +10101,10 @@ async function mount(doc) {
         if (t < sp.at + d) { xf = { from: cur, to: k, u: clamp01((t - sp.at) / d), morph: true, method: sp.method }; break; }
         hold = { from: cur, to: k, method: sp.method }; cur = k; cCur = clamp01((t - (sp.at + d)) / (states[k].buildDur || LP.BUILD)); continue;
       }
+      if (sp.to === "remake") {   /* P61 T2: the WHOLE chart becomes the whole chart on one clock - every series, datum, axis, label and the title */
+        if (t < sp.at + d) { xf = { from: cur, to: k, u: clamp01((t - sp.at) / d), remake: true, mark_map: sp.mark_map, line_at: sp.line_at }; break; }
+        cur = k; cCur = 1; continue;
+      }
       if (sp.keyed) {   /* P48 T4b: the keyed tween - one clock, both states painted by lpPaintRecastKeyed, the target built at its end */
         /* E64: the DATA key's choreography has a floor - four data leave the line, cross the plot and land on their bars,
            and a row that gives it less time gets the longer clock, not a faster cut (the row's own dur is still the row's
@@ -9876,10 +10116,11 @@ async function mount(doc) {
       if (t < sp.at + d) { cCur = 1 - segEase(clamp01((t - sp.at) / d)); leaving = true; plain = { from: cur, to: k, u: clamp01((t - sp.at) / d) }; break; }   /* the standing chart is leaving - E64: with its axes handing over to the one arriving */
       cur = k; cCur = clamp01((t - (sp.at + d)) / (states[k].buildDur || LP.BUILD));
     }
-    st.active = xf ? ((xf.extend && xf.u >= XF_EXTEND.RESCALE) || (xf.morph && xf.u >= XF_MORPH.LEAVE) ? xf.to : xf.from) : cur;   /* the state a species target resolves against (P48 T2) */
-    st.xfNow = xf ? { from: xf.from, to: xf.to, u: xf.u, extend: !!xf.extend, keyed: !!xf.keyed, morph: !!xf.morph } : null;   /* R26-28: the perform layer lerps its anchors on this clock */
-    if (!(xf && xf.morph) && !(!xf && hold)) lpHideMorphs(st, null);   /* P48 T5: a morph's strip shows only while it morphs or holds under the target's build */
-    if (xf && xf.extend) { lpPaintExtend(states, xf, t3, scene, t); }
+    st.active = xf ? ((xf.extend && xf.u >= XF_EXTEND.RESCALE) || (xf.morph && xf.u >= XF_MORPH.LEAVE) || (xf.remake && xf.u >= REMAKE.TRAVEL) ? xf.to : xf.from) : cur;   /* the state a species target resolves against (P48 T2; P61 T2: a remake's marks are in flight until they land) */
+    st.xfNow = xf ? { from: xf.from, to: xf.to, u: xf.u, extend: !!xf.extend, keyed: !!xf.keyed, morph: !!xf.morph, remake: !!xf.remake } : null;   /* R26-28: the perform layer lerps its anchors on this clock. P61 T2 (T1's gap 8): the WHOLE-CHART phase is named here, so a species anchored to the chart resolves against the state that is actually drawable and never lerps across a pair the page keyed mark by mark */
+    if (!(xf && (xf.morph || xf.remake)) && !(!xf && hold)) lpHideMorphs(st, null);   /* P48 T5: a morph's strip (P61 T2: a remake's rings) shows only while it morphs or holds under the target's build */
+    if (xf && xf.remake) { for (const S of states) { lpRestoreState(S); S.extendCap = null; } lpPaintRemake(st, states, xf, t3, scene, t); }
+    else if (xf && xf.extend) { lpPaintExtend(states, xf, t3, scene, t); }
     else if (xf && xf.morph) { for (const S of states) { lpRestoreState(S); S.extendCap = null; } lpPaintMorphTo(st, states, xf, t3, scene, t); }
     else if (xf && xf.keyed) { for (const S of states) lpRestoreState(S); (xf.keyed === "data" ? lpPaintRecastData : lpPaintRecastKeyed)(states, xf, t3, scene, t); }
     else if (xf) { lpPaintRescale(states, xf, t3, scene, t); }
@@ -9896,7 +10137,7 @@ async function mount(doc) {
     if (park && !xf) lpPaintPark(states[st.active | 0], park, t, parkFrom);
     /* the words that describe the chart move with it: the standing sub and source erase over the transition's first
        PS.ERASE_S, the arriving state's write over the rest. State 0's are the page's own, written by the page's build. */
-    let ink = 0, ue = 0, uw = 1;
+    let ink = 0, ue = 0, uw = 1, titleHand = false;
     for (const sp of pageSpecies(scene, "chart_to")) {
       if (t < sp.at) break;
       if (sp.to === "rescale" || sp.to === "extend" || sp.to === "park" || sp.to === "compare") continue;   /* P48 T2/T3/T2b + P57 T12: the words stay - it is the same chart */
@@ -9904,6 +10145,7 @@ async function mount(doc) {
       ue = clamp01((t - sp.at) / PS.ERASE_S);
       uw = clamp01((t - sp.at - PS.ERASE_S) / (d - PS.ERASE_S));
       ink = Math.max(0, Math.min(states.length - 1, sp.state | 0));
+      titleHand = sp.to === "remake";   /* P61 T2 / E99 s34: the title is part of the chart, and only the verb that transforms the WHOLE chart touches it */
     }
     for (let i = 1; i < states.length; i++) {
       const on = i === ink;
@@ -9914,6 +10156,17 @@ async function mount(doc) {
     if (ink > 0) for (const r of [{ glyphs: st.subGlyphs || [] }, { glyphs: st.srcGlyphs || [] }]) {
       const n = r.glyphs.length;
       r.glyphs.forEach((g, j) => g.style.setProperty("--w", eraseFactor(n, j, ue).toFixed(3)));
+    }
+    /* P61 T2 (T1's gap 6) - THE TITLE, with the sub's and the source's own hand: the standing one is erased glyph by
+       glyph over PS.ERASE_S and the arriving state's writes over the rest. The erase scales the width the PAGE's own
+       ink beat wrote THIS frame (R26-46: never its own last answer), so a seek paints the same title at the same t. */
+    if (titleHand && ink > 0) {
+      const ti = lpStateTitle(st, states[ink]);
+      if (ti) {
+        writeGlyphs(ti.glyphs, uw * (ti.glyphs.length + 2), ti.glyphs.length);
+        const tg = st.titleGlyphs || [], n = tg.length;
+        tg.forEach((g, j) => g.style.setProperty("--w", ((g.__w != null ? g.__w : 1) * eraseFactor(n, j, ue)).toFixed(3)));
+      }
     }
   };
   /* HF-16 (P50 T15) - THE WIRE, in the player. The arriving page's plate id named a mark on the page BEFORE it

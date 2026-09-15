@@ -2323,6 +2323,95 @@ def write_page_source(name: str) -> list[Path]:
     return [p]
 
 
+# ---- P61 T2 / E99 s34 - THE WHOLE-CHART REMAKE, both ways round ---------------------------------
+# One fixture read twice: six monthly prints of a level as a LINE, and the six bars that ARE those
+# prints. The compiler derives the correspondence itself (`remake_mark_map`, keyed on `level`: bar k
+# IS datum k), so these goldens prove the derivation, the mark map, the ring pairing and the painter
+# together - exactly as `data-to-bars` does for E64's change key.
+REMAKE_AT, REMAKE_S = 12.0, 2.4   # the row's own clock; the instants below are shares of it
+
+
+BARS_N = 5   # the bars ARE the line's last five prints: a long line and a few bars is this family's own idiom (`data-to-bars` is 36 months -> 4)
+
+
+def _remake_pages() -> tuple[dict, dict]:
+    months = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+    steps = [0.0, 9.4, -4.2, 12.1, -6.6, 5.3, 14.2, -9.9, 3.7, 11.4, -12.8, 6.9, 4.1, -7.3, 10.6]   # a level that wanders, month by month
+    pts, v = [], 1180.4
+    for i, s in enumerate(steps):
+        v = round(v + s, 1)
+        pts.append([round(2025 + i / 12, 4), v])
+    tail = pts[-BARS_N:]
+    line = {"title": "The pile, month by month", "sub": "holdings, $bn, monthly", "src": "Golden fixture",
+            "unit": "$", "ylabel": "$bn",
+            "series": [{"name": "Holdings", "label": "fifteen months", "color": "crimson", "pts": pts}]}
+    bars = {"title": "Where it stood, month by month", "sub": "holdings, $bn, at each print",
+            "src": "Golden fixture", "unit": "$",
+            "bars": [{"label": months[int(round((pt[0] - int(pt[0])) * 12)) % 12], "value": pt[1], "color": "teal"}
+                     for pt in tail]}
+    return line, bars
+
+
+def _remake(order: str) -> tuple[dict, dict]:
+    """`order` is "line-to-bars" or "bars-to-line": which page the row STARTS on. Everything else - the
+    fixture, the clock, the derivation - is the same, so the pair reads as one mechanism run both ways."""
+    import json
+    import tempfile
+    import build_scene_timeline_f as BST
+    line, bars = _remake_pages()
+    first, second = ("line", "bars") if order == "line-to-bars" else ("bars", "line")
+    species = [{"kind": "chart_to", "at": REMAKE_AT, "dur": REMAKE_S, "to": "remake", "state": 1}]
+    with tempfile.TemporaryDirectory() as td:
+        ep = Path(td); (ep / "evidence/objects").mkdir(parents=True)
+        (ep / "evidence/objects/golden-level.series.json").write_text(json.dumps(line), encoding="utf-8")
+        (ep / "evidence/objects/golden-prints.series.json").write_text(json.dumps(bars), encoding="utf-8")
+        ids = {"line": "golden-level:line", "bars": "golden-prints:bars"}
+        plate = f"ledger:{ids[first]};then={ids[second]}"
+        world = BST.world_for_plate(plate, (0, 0, 0), ep)
+        world["ken_burns"] = {"scale": 0, "x": 0, "y": 0}
+        world["page"]["field"] = "soak"
+        BST.derive_rescale_states(world, species, plate, ep, sid="s01")
+    assert len(species[0].get("mark_map") or []) == BARS_N and species[0].get("keyed_on") == "level", species[0]
+    assert species[0].get("line_at") == ("from" if first == "line" else "to"), species[0]
+    scenes = [{"scene_id": "s01", "world": world, "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": species}]
+    return _timeline(f"Golden: remake {order}", scenes, {}, None), _base_uris()
+
+
+def remake_line_to_bars() -> tuple[dict, dict]:
+    """THE WHOLE-CHART REMAKE, line -> bars (P61 T2; the bar is E99 s34's two readings).
+
+    The line page's six monthly data become the six bars that ARE them, on ONE clock: each datum's own
+    column of the area under the line morphs into its bar (morph_a's pairing rule on two rings built
+    column by column), the datum marks travel to their bars' tops, the axes hand over through
+    lpAxisHandOver (never the whole-layer crossfade E99 s1 refused), every tick label and the page's
+    TITLE are re-written by the hand that already re-writes a recast's labels, and a label that changes
+    neither string nor place is held whole instead of being re-written for nothing.
+
+    Judged at the morph's own half-way point (u 0.50): the instant a jump cannot fake - the line is
+    gone into its columns, the bars have not been drawn, and what stands is six shapes that are neither.
+    Its quarter and three-quarter instants ride PROOF_FRAMES."""
+    return _remake("line-to-bars")
+
+
+def remake_bars_to_line() -> tuple[dict, dict]:
+    """THE SAME MECHANISM, run the other way: bars -> line (the direction no verb had at all - T1's gap 1).
+
+    Each bar hands its rectangle to its ring, the rings become the columns of the area under the arriving
+    line, the data travel back to their places on it, and the line strokes along the landed top edge over
+    the clock's last share while the area's fill leaves with it (lpPaintMorphHold's own law). Judged at
+    u 0.50, the same instant as its twin."""
+    return _remake("bars-to-line")
+
+
+SURFACES.update({
+    "remake-line-to-bars": remake_line_to_bars,
+    "remake-bars-to-line": remake_bars_to_line,
+})
+FRAME_T["remake-line-to-bars"] = REMAKE_AT + 0.50 * REMAKE_S   # 13.2 - THE INVARIANT INSTANT (@proof-050's own): neither
+FRAME_T["remake-bars-to-line"] = REMAKE_AT + 0.50 * REMAKE_S   # chart is drawable as itself, so no cut can produce it
+
+
+
 def write_surface(name: str) -> list[Path]:
     """Write ONE surface's two source files - a new golden never rewrites another lane's sources."""
     if name in PAGE_SURFACES:

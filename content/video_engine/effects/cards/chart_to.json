@@ -533,6 +533,106 @@
       }
     },
     {
+      "id": "chart_to:remake",
+      "axis": "chart_to",
+      "token": "remake",
+      "title": "The whole-chart remake",
+      "aliases": [
+        {
+          "name": "the whole-chart morph",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3143"
+        }
+      ],
+      "does": "A full chart becomes a full chart on one clock: every series, datum, axis, label and the title transform, line <-> bars.",
+      "when": null,
+      "when_source": null,
+      "author": {
+        "key": "chart_to {\"to\": \"remake\"}",
+        "example": "{'kind': 'chart_to', 'at': 12.0, 'dur': 2.4, 'to': 'remake', 'state': 1}",
+        "example_source": null,
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the history leaves",
+          "does": "the dash window slides from the line's start to the first keyed datum; the bars page's own numbers un-write",
+          "trigger": "the chart_to's `at`",
+          "dials": {
+            "LEAVE": "0.28"
+          }
+        },
+        {
+          "name": "the ink drops into the columns",
+          "does": "each keyed datum's share of the source's ink fills as the stroke over it leaves",
+          "trigger": "LEAVE share of `dur`",
+          "dials": {
+            "INK": "0.35 of the travel"
+          }
+        },
+        {
+          "name": "the shapes travel",
+          "does": "every ring morphs into its counterpart by morph_a, the datum marks travel to their bars' tops, the axes hand over and the labels re-write",
+          "trigger": "MOVE share of the travel",
+          "dials": {
+            "MOVE": "0.2 of the travel"
+          }
+        },
+        {
+          "name": "the target's own ink takes over",
+          "does": "a bars target's rectangles take the landed rings' place and their numbers write; a line target strokes along the landed top edge while the fill leaves with it",
+          "trigger": "DRAW (a line) / TRAVEL (bars) share of `dur`",
+          "dials": {
+            "DRAW": "0.62",
+            "TRAVEL": "0.9"
+          }
+        }
+      ],
+      "blends": [
+        {
+          "source": "E99 s34 a morph reads as a transformation, not a cut",
+          "became": "the whole arc",
+          "record": "docs/portable/OPERATOR-RULINGS.md:3143",
+          "tie": "recorded"
+        },
+        {
+          "source": "E64 the data-keyed recast (the datum travels, the axes hand over)",
+          "became": "the correspondence and the hand-over",
+          "record": "docs/content-video-engine/BACKLOG.md:455",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/kinetics/chartxf.mjs",
+        "object": "REMAKE"
+      },
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "lpPaintRemake",
+        "also": [
+          "lpRemakeFor",
+          "lpAxisHandOver"
+        ],
+        "note": "lpPaintRemake (+ kinetics/chartxf.mjs's rings and clock, kinetics/morph_a.mjs's pairing)"
+      },
+      "doctrine": [
+        "E99",
+        "E64",
+        "E50"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "remake-line-to-bars",
+        "test": "content/video_engine/tests/test_whole_chart_morph.py::test_at_u_050_neither_chart_is_drawable_as_itself",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "chart_to:rescale",
       "axis": "chart_to",
       "token": "rescale",

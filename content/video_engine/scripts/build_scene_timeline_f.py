@@ -277,7 +277,16 @@ AGENDA_STEP, AGENDA_ROW_S = 0.34, 0.54
 HOLD_MIN_S = 1.0   # a held species with less room than this before the next event is dropped, not flashed (2026-09-08) [DERIVED: E25 - a light that cannot hold its sentence has nothing to prove]
 PAGE_SPECIES = ("build_to", "bracket", "retitle", "relight", "undraw", "figure", "note", "spread", "peel", "chart_to",
                  SPECIES_SPAN, SPECIES_CROSS)   # P50 T4: a span is a page species - it is shaded behind the page's own chart, on the page's own clock and live scale (R26-28)
-CHART_TO_KINDS = ("recast", "rescale", "extend", "park", "morph", "compare")   # P48: recast (T4, a hand-over; keyed: T4b), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform), morph (T5: the area under the line becomes the target's by ARAP); compare (P57 T11 / R26-70: the quoted metric becomes the comparator, E76)
+CHART_TO_KINDS = ("recast", "rescale", "extend", "park", "morph", "compare", "remake")   # P48: recast (T4, a hand-over; keyed: T4b), rescale (T2), extend (T3), park (T2b: the chart makes room by one affine transform), morph (T5: the area under the line becomes the target's by ARAP); compare (P57 T11 / R26-70: the quoted metric becomes the comparator, E76); remake (P61 T2 / E99 s34: the WHOLE chart becomes the whole chart - the seventh verb, and the only one under which every series, datum, axis, label and the title transform on one clock)
+# P61 T2 - THE WHOLE-CHART REMAKE. The six verbs above each transform PART of a chart: a rescale moves its scale, an
+# extend its window, a recast hands its axes over while its series are re-written, a morph moves the area under ONE
+# line, a park moves the whole thing without changing it, a compare morphs a written figure. E99 s34 asked for the
+# one that moves ALL of it, and it needs a correspondence the compiler can see for itself - so a remake is admitted
+# on a LINE <-> BARS pair only, and only when the bars ARE the line's own data: its VALUES (bar k is datum i) or,
+# failing that, its CHANGES (E64's data key, re-used whole rather than re-derived). Anything else is refused by name
+# and told which verb can do it. Figures are never fabricated: a bar merely CLOSE to a datum is a refusal.
+REMAKE_PAIRS = (("dense-line", "story"), ("story", "dense-line"))
+REMAKE_KEYS = ("level", "change")   # the two honest correspondences: the bar IS the datum, or the bar IS the step into it
 MORPH_BUILDERS = ("dense-line",)                     # P48 T5: the shape a morph moves is the AREA UNDER A LINE - both sides of a morph_to are line pages
 MORPH_METHODS = ("a", "arap")                        # doc 43 s43.5: A = vertex-based (ring-normalise, resample, rotational alignment, lerp, cubic), B = triangle-based ARAP
 # The decision rule (doc 43 s43.5): "outline-to-outline with modest rotation -> Method A ... anything where the prop
@@ -371,6 +380,7 @@ CHART_TO_WHEN = {
     "park": "room for the next thing beside the chart (a card, a second diagram); scale 1.0 is the UN-PARK when the cards leave; it moves no data and restarts no clock",
     "compare": "the sentence quotes the market's figure and then says what it MEANS - the quoted number morphs into the number the viewer feels (E76); the arithmetic is authored, never invented",
     "morph": "a different LINE series in the same frame ('what the Fed charges against what America pays') - the area under the line becomes the target's by ARAP",
+    "remake": "the sentence turns the SAME data into the other whole chart ('month by month, this is what it did') - every series, datum, axis, label and the title transform on one clock, line <-> bars; when only the scale, the window or the form changes, the verb is rescale, extend or recast",
 }
 # P52 T6: THE NEWSREEL BAND (the operator, 2026-09-12: "run the newsreel and then above it we can have either a
 # talking news head, actual news footage, or a narrative plate, we don't always have to fill the whole thing with
@@ -2100,6 +2110,41 @@ def recast_data_key(A: dict, Bs: dict, tol: float = RECAST_DATA_TOL) -> tuple[li
     return (None, "; ".join(off)) if off else (key_map, "")
 
 
+def remake_mark_map(line: dict, bars: dict, tol: float = RECAST_DATA_TOL) -> tuple[list | None, str, str]:
+    """P61 T2 - THE WHOLE-CHART REMAKE's correspondence, derived and never authored: which datum of the line becomes
+    which bar. Two keys, in order, and both are the bars' own numbers checked against the line's own:
+
+      level   bar k IS the line's datum (its last n data, in order) - "month by month, this is what it stood at"
+      change  bar k IS the line's own step into that datum - E64's data key, re-used whole (`recast_data_key`), so
+              there is ONE rule for "a bar is a change" on this page and the remake does not re-derive it
+
+    Returns ``([{datum, bar}, ...], <key>, "")`` or ``(None, "", <the reason>)``. The reason names the numbers that
+    disagree: a bar that is merely close to a datum is not that datum (E77 - figures are never fabricated)."""
+    lines = [s for s in (line.get("series") or []) if not s.get("later")]
+    vals = list(bars.get("values") or [])
+    n = len(vals)
+    if len(lines) != 1:
+        return None, "", f"a remake carries ONE line's own data into n bars and the line page draws {len(lines)} series"
+    if not n:
+        return None, "", "the bars page has no bars - a remake hands every bar a datum of the line"
+    pts = list(lines[0].get("pts") or [])
+    if len(pts) < n:
+        return None, "", f"{n} bar(s) need the line's last {n} data and it carries {len(pts)}"
+    tail = pts[len(pts) - n:]
+    off = []
+    for k, v in enumerate(vals):
+        d, v = float(tail[k][1]), float(v)
+        if abs(d - v) > tol * max(abs(d), abs(v), 1e-9):
+            off.append(f"bar {k} is {v:g} and the line's datum {len(pts) - n + k} is {d:g}")
+    if not off:
+        return [{"datum": len(pts) - n + k, "bar": k} for k in range(n)], "level", ""
+    key_map, why = recast_data_key(line, bars, tol)
+    if key_map:
+        return [{"datum": m["datum"], "bar": m["bar"]} for m in key_map], "change", ""
+    return None, "", ("the bars are neither the line's own VALUES (" + "; ".join(off[:3])
+                      + ") nor its own CHANGES (" + why + ")")
+
+
 def derive_recast_key(A: dict, Bs: dict) -> tuple[object, list | None, str]:
     """E64: the key the COMPILER can see for itself, so a recast whose two states share their data is never the
     un-draw-then-draw the operator read as a cut. In order: by SERIES (the datum, `true`), by the terminal TAGS
@@ -2152,6 +2197,39 @@ def derive_rescale_states(world: dict, row_species: list, plate_id: str, ep_dir:
             # doc 43 s43.5's decision rule, on the measured rotation; the row may name the method and override it
             sp["method"] = sp.get("method") or ("a" if inv["axis_deg"] <= METHOD_A_MAX_DEG else "arap")
             sp["invariants"] = {k2: round(inv[k2], 4) for k2 in ("centroid_shift", "axis_deg", "area_ratio")}
+    for sp in (row_species or []):   # P61 T2 / E99 s34: the WHOLE-chart remake - the pair and its correspondence, checked before a frame exists
+        if not (isinstance(sp, dict) and sp.get("kind") == "chart_to" and sp.get("to") == "remake"):
+            continue
+        if world.get("kind") != SPECIES_LEDGER:
+            raise ValueError("chart_to remake: only a LEDGER PAGE has chart states")
+        states = [world.get("page") or {}] + list(world.get("page_states") or [])
+        k = int(sp.get("state", 0))
+        if not (0 < k < len(states)):
+            raise ValueError(f"chart_to remake: state {k} is not one of the page's other chart states")
+        A, Bs = states[0], states[k]
+        pair = (A.get("builder"), Bs.get("builder"))
+        if pair not in REMAKE_PAIRS:
+            if pair[0] == pair[1] == "dense-line":
+                raise ValueError("chart_to remake: dense-line -> dense-line - the same form at another scale is the RESCALE, "
+                                 "more of it is the EXTEND, and one line's area becoming another's is chart_to morph. A remake "
+                                 "turns a chart into the OTHER form (line <-> bars)")
+            raise ValueError(f"chart_to remake: {pair[0]} -> {pair[1]} is not a pair a remake can key ("
+                             + ", ".join(f"{a} -> {b}" for a, b in REMAKE_PAIRS) + "); the same data in another form with no "
+                             "datum correspondence is the recast (the hand-over, E64), n lines -> n bars is the keyed recast "
+                             "(keyed: true), and a pair neither can honestly key is a cut")
+        line_at = "from" if pair[0] == "dense-line" else "to"
+        line_spec, bars_spec = (A, Bs) if line_at == "from" else (Bs, A)
+        mark_map, key, why = remake_mark_map(line_spec, bars_spec)
+        if not mark_map:
+            raise ValueError(f"chart_to remake: state {k} - {why}. A remake carries every datum to its own bar, so the "
+                             "correspondence must be the data themselves (E64's rule, not a guess); use the recast (the "
+                             "hand-over), keyed: true / \"tags\" (the series key), or a cut")
+        if any(isinstance(e, dict) and e.get("kind") == "retitle" for e in (row_species or [])):
+            raise ValueError("chart_to remake: the remake re-writes the page's TITLE itself (E99 s34: the entire chart "
+                             "transforms) - a retitle on the same row would write that one string twice. Drop the retitle, "
+                             "or use the recast, which leaves the title alone")
+        sp["mark_map"], sp["line_at"], sp["keyed_on"] = mark_map, line_at, key
+        print(f"  {sid or 'row'} chart_to remake at {sp.get('at')}: {len(mark_map)} mark(s) keyed on {key} ({pair[0]} -> {pair[1]})")
     for sp in (row_species or []):   # P50 T6: a cross names CELLS - of a treemap page, and only labels that page carries
         if isinstance(sp, dict) and sp.get("kind") == SPECIES_CROSS:
             page = (world or {}).get("page") or {}

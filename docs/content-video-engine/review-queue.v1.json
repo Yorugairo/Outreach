@@ -668,63 +668,117 @@
       "ids": [
         "R26-70",
         "R26-70 T12c",
-        "R26-117",
-        "R26-125 (its R26-70 line)"
+        "E99 s1",
+        "E99 s34",
+        "P61 HG1"
       ],
-      "kind": "owed",
-      "title": "The compare morph, and the ball morphing into the next chart",
-      "judge": "The quoted figure balls up and the ball MORPHS into the comparator (built). The page-level melt:morph (the ball -> the next chart, R26-117) is NOT built.",
+      "kind": "watch",
+      "title": "The whole chart becomes the whole other chart (chart_to remake)",
+      "judge": "Watch the two clips end to end (11.6-14.9 s; the verb runs 12.0-14.4 s). Line -> bars: the line's history wipes, its last five months' ink drops into five blocks, the blocks fly to their bars with their own data riding them, the axes hand over and the title re-writes. Bars -> line: the same run the other way. Does it read as a transformation, not a cut, and read as intentional (E99 s34)? The entire chart should transform - every series, datum and axis. Approve, or name what cuts or reads as accidental.",
       "where": [
         {
-          "label": "compare-morph",
-          "path": "content/video_engine/tests/golden/frames/compare-morph.png"
+          "label": "line -> bars at u 0.25 (the history gone, the tail standing, labels mid-un-write)",
+          "path": "content/video_engine/tests/golden/frames/remake-line-to-bars@proof-025.png"
         },
         {
-          "label": "compare-morph@proof-sag",
-          "path": "content/video_engine/tests/golden/frames/compare-morph@proof-sag.png"
+          "label": "line -> bars at u 0.50 (five shapes that are neither chart - the frame no cut can produce)",
+          "path": "content/video_engine/tests/golden/frames/remake-line-to-bars.png"
         },
         {
-          "label": "compare-morph@proof-ball",
-          "path": "content/video_engine/tests/golden/frames/compare-morph@proof-ball.png"
+          "label": "line -> bars at u 0.75 (almost bars, the new labels arriving)",
+          "path": "content/video_engine/tests/golden/frames/remake-line-to-bars@proof-075.png"
         },
         {
-          "label": "compare-morph@proof-050",
-          "path": "content/video_engine/tests/golden/frames/compare-morph@proof-050.png"
+          "label": "bars -> line at u 0.25 / 0.50 / 0.75",
+          "path": "content/video_engine/tests/golden/frames/remake-bars-to-line@proof-025.png"
         },
         {
-          "label": "compare-streak@proof-quoted (HG-HANDOFF.md:13 calls it compare-morph@proof-quoted, which does not exist)",
-          "path": "content/video_engine/tests/golden/frames/compare-streak@proof-quoted.png"
+          "label": "bars -> line, the base golden (u 0.50)",
+          "path": "content/video_engine/tests/golden/frames/remake-bars-to-line.png"
         },
         {
-          "label": "compare-streak@proof-melt (HG-HANDOFF.md:13 calls it compare-morph@proof-melt, which does not exist)",
-          "path": "content/video_engine/tests/golden/frames/compare-streak@proof-melt.png"
+          "label": "bars -> line at u 0.75 (the line drawn across, the fill receding behind the tail)",
+          "path": "content/video_engine/tests/golden/frames/remake-bars-to-line@proof-075.png"
         },
         {
-          "label": "compare-streak@proof-write (HG-HANDOFF.md:13 calls it compare-morph@proof-write, which does not exist)",
-          "path": "content/video_engine/tests/golden/frames/compare-streak@proof-write.png"
+          "label": "the probe: at u 0.50 neither chart is drawable as itself; both layers at opacity 1 (no crossfade)",
+          "path": "content/video_engine/tests/test_whole_chart_morph.py"
         },
         {
-          "label": "compare-count@proof-mid",
-          "path": "content/video_engine/tests/golden/frames/compare-count@proof-mid.png"
-        },
-        {
-          "label": "R26-117 the page-level ball-to-chart morph (not built)",
-          "missing": true
+          "label": "the verb's law (rings, clock)",
+          "path": "content/video_engine/scripts/kinetics/chartxf.mjs"
         }
       ],
       "options": [],
-      "recommendation": "on R26-70: \"the melt form is the default per your ruling; MELT_BOX (3.2) is the dial to tune by eye if the sag reads too small on a one-line figure\"",
-      "blocks": "the R26-117 build (after T12c)",
+      "recommendation": "Approve as the whole-chart standard. One thing to read for: with 15 data and 5 bars the un-keyed first ten months WIPE by the dash window (E50's law) rather than becoming something - every keyed datum transforms; a page that wants the whole line to become bars authors n bars for n data. If that wipe reads as 'left behind', say so and the verb gains a rule. The compare frames that used to sit here are one figure balling up, refused as a morph proof by E99 s1; the ball -> next-chart ending is R26-117's own card now.",
+      "blocks": "T3 (the ball becomes the next full chart) and P47 T6/T7's blocker; the CAPABILITIES rows :116 / :27 (T11)",
       "sources": [
+        "docs/portable/OPERATOR-RULINGS.md:3143 (E99 s34)",
+        "docs/portable/OPERATOR-RULINGS.md:2901 (E99 s1)",
         "docs/content-video-engine/BACKLOG.md:476",
-        "docs/content-video-engine/BACKLOG.md:549",
-        "docs/portable/OPERATOR-RULINGS.md:2684-2687",
-        "docs/research/runs/p57-burndown/HG-HANDOFF.md:13-15"
+        "content/video_engine/scripts/build_scene_timeline_f.py:280 (CHART_TO_KINDS), :2113 (remake_mark_map), :2199-2234 (the refusals)",
+        "content/video_engine/scripts/kinetics/chartxf.mjs (REMAKE, xfRemakeClock)",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md:261-331 (T2)"
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": "look",
-      "owed": "E99 s1 - refused as a morph proof: a morph transforms the WHOLE chart (every series, datum, axis and label) into the next chart; the compare frames ball up one figure, and R26-117 is built to the whole-chart standard before it returns as a clip."
+      "was_kind": "owed",
+      "owed": "Delivered 2026-09-15 (P61 T2): chart_to remake, both pairs, six goldens, the two clips",
+      "proofs": [
+        {
+          "type": "clip",
+          "surface": "remake-line-to-bars",
+          "t0": 11.6,
+          "t1": 14.9,
+          "aspect": "16:9",
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)",
+          "label": "line -> bars: the whole chart becomes the whole other chart on one clock - the history wipes, the last five months' ink drops into five blocks, the blocks fly to their bars with their own data riding them, the axes hand over and the title re-writes"
+        },
+        {
+          "type": "clip",
+          "surface": "remake-bars-to-line",
+          "t0": 11.6,
+          "t1": 14.9,
+          "aspect": "16:9",
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)",
+          "label": "bars -> line: the same mechanism run the other way - five bars become the area under the arriving line, the data travel back to their places, and the line strokes along the landed edge as the fill leaves with it"
+        }
+      ]
+    },
+    {
+      "id": "r26-117-ball-into-the-next-chart",
+      "ids": [
+        "R26-117",
+        "P61 HG2",
+        "E99 s1",
+        "E99 s2"
+      ],
+      "kind": "owed",
+      "title": "The page melts, balls up, and the ball becomes the NEXT full chart",
+      "judge": "Owed by the agent - R26-117: exit melt:morph hands the ball's one ring to the next page's page_enter:morph as its prop outline on one clock, and the page it opens into is a full chart built to the whole-chart standard (P61 T2). Then: watch 0:00-0:08 - does the hand-over hold, or does it read as a jump?",
+      "where": [
+        {
+          "label": "the hand-over golden (not built)",
+          "missing": true
+        },
+        {
+          "label": "the ball today (exit:melt), the prop-outline page enter today (page_enter:morph)",
+          "path": "content/video_engine/scripts/species/melt.mjs"
+        }
+      ],
+      "options": [],
+      "recommendation": null,
+      "blocks": "P61 T3; P48 T5b's planted source rides the same slice",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:549 (R26-117)",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md:333-369 (T3)"
+      ],
+      "status": "open",
+      "ruling": null,
+      "was_kind": null,
+      "owed": "P61 T3 builds the third melt ending (melt:morph) and the hand-over golden; the card returns as a clip through review_queue_proofs.py --clips --only r26-117-ball-into-the-next-chart"
     },
     {
       "id": "r26-124-slide-seam-and-swap-lane",

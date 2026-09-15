@@ -67,6 +67,7 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "page-figure",       # P57 T20 / R26-98: the written figure, pinned BEFORE `page_species:figure` became a module - E50's number landed at its datum (the peak), written leftward where the page has no room to the right, its sub under it
             "record-typewriter",  # P57 T21 / R26-99: the record document, pinned BEFORE `dock_payload:record` became a module - the quotation mid-type on the NARRATOR's onsets, two characters of its eighth word cut and the cursor after them, one word under the marker with its space outside the stroke (its landing rides PROOF_FRAMES)
             "dip-boundary",      # P57 T23 / R26-100: THE DIP (E47 s1), pinned BEFORE the boundary clock became a module - the BLACK boundary frame between two chart pages, the cut inside it (its ramp's midpoint rides PROOF_FRAMES)
+            "remake-line-to-bars", "remake-bars-to-line",   # P61 T2 / E99 s34: THE WHOLE-CHART REMAKE both ways - the whole chart becoming the whole other chart, judged at u 0.50, the instant neither chart is drawable as itself (its quarter and three-quarter instants ride PROOF_FRAMES)
             "spiral-return"]     # P57 T22 / R26-101: THE PAGE VORTEX, pinned BEFORE `page_enter:spiral` became a module - the page coming back UP the drain mid-unwind (uc 0.5), every glyph, mark and series line on its own spiral arm, the charcoal whole behind them (the RETRACT's two phases ride PROOF_FRAMES, off the same surface's first scene)
 
 

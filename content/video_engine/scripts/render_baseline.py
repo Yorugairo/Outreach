@@ -150,6 +150,14 @@ PROOF_FRAMES = {
     # 1 - 0.12/0.235 = 0.4894, the plate at just over half its light. LINEAR is what this pins: on any eased ramp
     # the same instant sits visibly off that value. No flag: a dip is an authored exit, not a capability.
     "dip-boundary@proof-ramp": ("dip-boundary", {}, 14.88),
+    # P61 T2 / E99 s34: THE WHOLE-CHART REMAKE, at the two instants its 0.50 frame cannot show. The row runs
+    # 12.0 -> 14.4 and the base golden of each surface IS its u = 0.50 (13.2), the instant a jump cannot fake -
+    # so these two are the quarter and the three-quarter: the ink leaving its own form, and the ink arriving in
+    # the other. No flag: the verb is authored on the row, not switched on.
+    "remake-line-to-bars@proof-025": ("remake-line-to-bars", {}, 12.6),   # u 0.25: the line gone into its six columns, the data born, the rings just moving
+    "remake-line-to-bars@proof-075": ("remake-line-to-bars", {}, 13.8),   # u 0.75: the columns nearly their bars, the data over their tops, the arriving labels writing
+    "remake-bars-to-line@proof-025": ("remake-bars-to-line", {}, 12.6),   # u 0.25: the bars' own rectangles moving as rings, their numbers un-writing
+    "remake-bars-to-line@proof-075": ("remake-bars-to-line", {}, 13.8),   # u 0.75: the rings landed as the area under the line, the line striking along their top edge
 }
 # P52 T18 / R26-55, HUMAN GATE 7: THE FACE OF A PULLED PHRASE. The phrase is live type now, so it has a face, and
 # the face is the OPERATOR's to choose - never ours. The `press_face` DIAL names one of the three candidates

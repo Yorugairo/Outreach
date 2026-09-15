@@ -274,7 +274,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   `E:9880`, `E:9851`, `C:280`, `C:281`, `C:2137` with grep against the post-C2 engine: all resolve (one cite off by one line).
 
 ### T2: THE WHOLE-CHART MORPH - line -> bars and bars -> line, every series, datum, axis and label
-- Status: pending
+- Status: complete (2026-09-15) - HG1 open on the queue as `r26-70-compare-morph` (watch, two clips)
 - Owner: `implementation_luna` (**ENGINE LOCK #1**)
 - Depends on: T1
 - Write set: `content/video_engine/scripts/kinetics/morph_a.mjs`, `content/video_engine/scripts/kinetics/chartxf.mjs`,
@@ -319,7 +319,38 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   (unchanged reading) then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-70-compare-morph`
   - each run UNPIPED (a gated step never goes into `tail`)
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T2.md` (287 lines; the parent read it, the module + compiler + card diffs, and all
+  six pinned frames as a viewer). THE VERB: `chart_to {to: "remake", state: k}` - the seventh, admitted on a line <-> bars pair
+  only (`REMAKE_PAIRS`, `REMAKE_KEYS` level | change; `remake_mark_map` `build_scene_timeline_f.py:2113`; refusals by name
+  `:2199-2234`, incl. dense-line -> dense-line -> use rescale/extend/morph, a retitle on the same row, a bar merely close to a
+  datum - E77). ONE pairing law: every keyed datum's share of the source's ink (its column of the area, or its bar) described
+  as one ring column by column (`chartxf.mjs` `xfSpanTop`/`xfStripRing`/`xfBarRing`, `REMAKE` COLS 8 LEAVE 0.28 DRAW 0.62
+  TRAVEL 0.9, `xfRemakeClock`, `REMAKE_BEAT`), so `morphAPrepare(resample:false, normalise:false)` returns offset 0 - the
+  node test asserts it; the ring drawn as a polyline (`xfRingPath`) so a landed bar hands over to the page's own <rect>. Datum
+  marks travel on `lpDataDots` (the one travelling-data path, generalised); the axes hand over on the WHOLE clock through
+  `lpAxisHandOver` - never the whole-svg crossfade; a browser test asserts both layers at opacity 1 at u 0.25/0.5/0.75.
+  TEXT: the RE-WRITE route (T1 route b) - 0.012 ms/frame vs 6.56 + a 121.5 ms prepare; already the engine's hand
+  (`lpWriteText` through `sweep`); its open failure mode closed: a label whose string AND place do not change is held whole
+  (`lpRemakeHold`, `sweep`'s `held`). The TITLE transforms (gap 6: erased and the target's written from a title ink built at
+  first need, `lpStateTitle`). `st.xfNow.remake` + `st.active` resolve to the target once the marks land (gap 8). Engine:
+  `lpPaintRemake` :9999, `lpRemakeFor` :9964, `xfNow.remake` :10120. FRAMES (parent's read): u 0.25 the history gone, the tail
+  standing, y labels mid-un-write, the title being re-written; u 0.50 five shapes that are NEITHER chart (the line's wedges
+  on top, the bars' baseline below, the data riding) - the frame no cut can produce; u 0.75 almost bars with the new labels
+  arriving; the mirror reads the same the other way. The lane's own first read changed the choreography (the whole line had
+  un-drawn at u 0.25 - a disappearance then an appearance) to lpPaintRecastData's law: history leaves by the dash window,
+  the tail stands until its ink drops into the columns; it also caught and fixed a lingering dot cap (E50). Goldens:
+  `remake-line-to-bars`, `remake-bars-to-line` + @proof-025/@proof-075 each (six new, every pre-existing golden byte-identical).
+  Validate: node 561/561 EXIT 0 (the plan's `node --test <dir>` form fails on node 24 - CJS directory resolution, identical on
+  a pristine HEAD; the `*.test.mjs` glob form is the one that runs - T11 corrects the runbook line); sync in sync; pytest 145
+  passed (test_whole_chart_morph 17 + the register); effects_catalog_check 0 failures; gate_motion_density on the approved Japan
+  cut UNCHANGED (3 FAIL / 16 PASS, identical from a pristine HEAD copy - it reads the build's frozen player.html); registry in
+  sync 930 records 0 orphaned; page-boxes re-pinned sha-only (44 passed). DEVIATIONS ratified: `render_baseline.py` PROOF_FRAMES
+  gained the four proof instants (outside the literal write set; it is where every other lane's @proof-* instants live).
+  RECORDED, not fixed: a 6 px corner detail at the two hand-over instants (rx 6 rect vs polyline ring; below the reading's
+  threshold); a WARM player's pixels are not byte-stable on any surface (13 bytes across three captures of the shipped
+  data-to-bars; pre-existing - T11 writes the backlog row); the un-keyed history WIPES by the dash window with 15 data -> 5
+  bars (named in HG1's recommendation for the operator to read); compare beside a remake untested and unrefused. HG1's card
+  rewritten by the parent with the two clip records; `r26-117-ball-into-the-next-chart` created (owed) as T3's prerequisite.
 - CAPABILITIES rows changed: **:116** (`morph_to`) gains the whole-chart form; **:27** (the recast/E64 row) gains the
   pointer; a NEW row for the verb. **What this closes, precisely:** `P47:173` (T6) and `P47:183` (T7) are both marked
   `Status: blocked on P48` on the operator's sentence *"we still don't redraw/rebuild a new chart"*, and both say the
