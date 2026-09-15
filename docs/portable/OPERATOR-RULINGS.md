@@ -3050,3 +3050,13 @@ and have depth and growth be 2 different things."* Apply: the growth law keeps i
 name `throw=growth`; `depth=<k>` is only ever the real plane in the scene; the compiler refuses `throw=depth` by name, naming the new word;
 and because they are now two different things, a page may carry both - the pair refusal, which existed only because two names meant one
 thing, is lifted.
+
+**E99 s26 - The 2.5D stage is depth-first; the slanted page is a transition or sits behind a foreground, and it already paid for the
+door (P58 HG2).** In the session: *"we probably need depth first; the slanted view only has value when we use it for a transition or when
+we have an evidence layer or some other foreground in front of it. but it already earned its keep by giving us the material we needed to
+create the door transition."* And on the card: *"I dont understand what the point of showing the planes sheet ... is or why the black and
+white thing is in the frame in the mid-arrival compare."* Apply: HG2 is ruled - the next 2.5D cut is authored depth-first; a page at a
+depth or tilt is used only as a transition (the evidence door of E98 s7, a pull, a push) or with an evidence layer or another foreground in
+front of it; the P58 T4 page plane is kept because it is the door's material. The planes sheet (the depth split's four layers, magenta
+where a layer is transparent) and the mid-arrival compare's difference map (white where the layered and the flat frame differ) are the
+agent's evidence and never belong on a review card (E99 s14).

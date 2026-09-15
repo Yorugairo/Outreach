@@ -5,7 +5,7 @@ Generated from `docs/content-video-engine/CAPABILITIES.md` by `content/video_eng
 full row with `sed -n <line>p`. Search: `docs_find.py "<term>"` (capabilities first); list:
 `docs_find.py --capabilities [--state LIVE] [--section <text>]`.
 
-**184 capabilities: 106 LIVE, 51 WIRED, 13 BUILT, 4 REFERENCE, 3 INSTALLED, 3 PROVED, 2 RETIRED, 1 CLOSED, 1 RULED.**
+**184 capabilities: 107 LIVE, 51 WIRED, 11 BUILT, 4 REFERENCE, 3 INSTALLED, 3 PROVED, 2 RETIRED, 2 RULED, 1 CLOSED.**
 
 ## Rendering & playback
 
@@ -131,10 +131,10 @@ full row with `sed -n <line>p`. Search: `docs_find.py "<term>"` (capabilities fi
 - The plate library knows its layers - LIVE - a plate's sidecar <plate>.layers.json lists layers[] {path, role, depth, alpha, generator} back to front (depth = the… (CAPABILITIES.md:144)
 - The camera over layers - LIVE - a layered world paints each plane with the ONE camera read at its own k (doc 24's planes: far 1.0, board 1.05, mid… (CAPABILITIES.md:145)
 - The ledger page as a card at a depth - LIVE - page options ;depth=<k> and ;plane=tilt:<deg>[,y|x] or quad:<8 numbers>, projected by the ART-embed homography (one… (CAPABILITIES.md:146)
-- Two chart forms in 2.5D - BUILT - ;form=extruded_bar (a prism per bar, one light, a hard-edge cast shadow, every label where the flat bar puts it, a drop… (CAPABILITIES.md:147)
+- Two chart forms in 2.5D - LIVE - ;form=extruded_bar (a prism per bar, one light, a hard-edge cast shadow, every label where the flat bar puts it, a drop… (CAPABILITIES.md:147)
 - The docks and the melt's ball at a depth - LIVE - a dock option depth=<k> takes the camera's move at its plane (0..4; refused nearer than the occluder's 1.40 with… (CAPABILITIES.md:148)
 - The slide through the depth - LIVE - slide:<dir>[:<s>]:depth=<k_out>,<k_in>: the outgoing board eases to k_out as it leaves and the incoming eases from k_in… (CAPABILITIES.md:149)
-- The first 2.5D cut - BUILT - the Japan tariff short rebuilt privately with its ship plate layered under the receipt page's camera arrival, that page… (CAPABILITIES.md:150)
+- The first 2.5D cut - RULED - the Japan tariff short rebuilt privately with its ship plate layered under the receipt page's camera arrival, that page… (CAPABILITIES.md:150)
 - LTX-Video 2B DiT ambient engine - INSTALLED - local physical motion loops (haze, embers, drifting cloud, water) on a still plate, ~12s on the local GPU, zero cloud… (CAPABILITIES.md:151)
 - Google Flow driver - LIVE - zero-credit multi-reference generative diffusion over an ACTIVE Chrome CDP session (port 9222); the CDP path is the… (CAPABILITIES.md:152)
 - Video engine MCP - TWO surfaces, verified by live handshake 2026-09-03 - LIVE (CAPABILITIES.md:153)

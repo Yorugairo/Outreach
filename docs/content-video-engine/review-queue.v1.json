@@ -48,8 +48,8 @@
         "docs/content-video-engine/BACKLOG.md:554",
         "docs/content-video-engine/BACKLOG.md:563"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s26",
       "proofs": [
         {
           "type": "player",

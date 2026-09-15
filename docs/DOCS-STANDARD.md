@@ -14,7 +14,7 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 21 | 439 | 95.9% | 93.8% | 3 | 98.0 |
-| Process (everything else) | 360 | 3697 | 97.7% | 91.8% | 18 | 100.0 |
+| Process (everything else) | 360 | 3697 | 97.6% | 91.8% | 18 | 100.0 |
 | All docs | 381 | 4136 | 97.5% | 92.0% | 21 | 100.0 |
 
 ## The 20 lowest-scoring docs
@@ -22,8 +22,8 @@ item, a quote, a table row or a fence.
 | Score | Doc | Headings | Leads | Termed | Generic |
 |---:|---|---:|---:|---:|---:|
 | 22 | `content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-GATES-2026-09-03-at-record.md` | 5 | 0/5 | 1/5 | 0 |
+| 51 | `docs/content-video-engine/REVIEW-QUEUE.md` | 7 | 3/7 | 3/7 | 0 |
 | 54 | `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md` | 13 | 8/13 | 4/13 | 2 |
-| 64 | `docs/content-video-engine/REVIEW-QUEUE.md` | 7 | 4/7 | 4/7 | 0 |
 | 65 | `content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/PINNED-COMMENT.md` | 2 | 2/2 | 0/2 | 0 |
 | 70 | `docs/seo-insights-platform-implementation-plan.md` | 27 | 17/27 | 18/27 | 0 |
 | 73 | `docs/seo-ingestion-implementation-tasks.md` | 14 | 10/14 | 9/14 | 0 |
@@ -44,7 +44,7 @@ item, a quote, a table row or a fence.
 
 ## Appendix A - sections missing a lead line
 
-Non-exempt sections whose first real line is under 40 characters (104).
+Non-exempt sections whose first real line is under 40 characters (105).
 
 - `content/video_engine/projects/martial-matters/pilots/marshall-monday-001/script-draft.md:1` Why Rap Violence is Actually a Sign of Peace | Marshall Matters Ep. 1
 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:13` Titles & Click Contracts
@@ -87,9 +87,10 @@ Non-exempt sections whose first real line is under 40 characters (104).
 - `docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:196` 5. Worked instance
 - `docs/content-video-engine/53-THE-STICKMAN-LANE.md:183` 53.4 What this corrects in my own claims
 - `docs/content-video-engine/P13-GATE-A-ARMBAR-REVIEW.md:38` Locked Defaults
-- `docs/content-video-engine/REVIEW-QUEUE.md:16` Look (0)
-- `docs/content-video-engine/REVIEW-QUEUE.md:20` Rule (0)
-- `docs/content-video-engine/REVIEW-QUEUE.md:24` Approve / push (0)
+- `docs/content-video-engine/REVIEW-QUEUE.md:10` Watch (0)
+- `docs/content-video-engine/REVIEW-QUEUE.md:14` Look (0)
+- `docs/content-video-engine/REVIEW-QUEUE.md:18` Rule (0)
+- `docs/content-video-engine/REVIEW-QUEUE.md:22` Approve / push (0)
 - `docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:1` Alicia Script — Persona Pass (v2)
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:187` The On-1s / On-2s / On-3s Decision Rule (Proposal)
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:435` C3: Nested Coordinate Spaces [Tier 1 Architecture — CLOSED]
