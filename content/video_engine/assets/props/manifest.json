@@ -1,0 +1,612 @@
+{
+  "schema": "finance_props_catalog.v1",
+  "total_assets": 24,
+  "props": [
+    {
+      "id": "prop-ai-hype-bubble-v1",
+      "name": "AI Hype Bubble",
+      "anchor": [
+        141,
+        131
+      ],
+      "tier": "prop",
+      "category": "ai_market",
+      "tags": [
+        "bubble",
+        "speculation",
+        "ai",
+        "hype",
+        "great-wave",
+        "microchip",
+        "euphoria"
+      ],
+      "context": "Market euphoria, AI speculative valuation bubble, rising equity trends amidst volatility waves.",
+      "filename": "prop-ai-hype-bubble-v1.png",
+      "path": "assets/props/cutouts/prop-ai-hype-bubble-v1.png",
+      "width": 245,
+      "height": 242,
+      "sha256": "7acaca113379c2f29bb60ca45f6d2f4443b432b29cf60eadc7050cbd8f7e0d8f",
+      "source_sheet": "Propsheet1_AI_Memory"
+    },
+    {
+      "id": "prop-memory-steel-ibeam-v1",
+      "name": "Memory Structural I-Beam",
+      "anchor": [
+        395,
+        133
+      ],
+      "tier": "prop",
+      "category": "infrastructure",
+      "tags": [
+        "memory",
+        "i-beam",
+        "steel",
+        "foundation",
+        "infrastructure",
+        "hardware",
+        "structural"
+      ],
+      "context": "Memory bandwidth and capacity as the foundational structural backbone supporting AI architectures.",
+      "filename": "prop-memory-steel-ibeam-v1.png",
+      "path": "assets/props/cutouts/prop-memory-steel-ibeam-v1.png",
+      "width": 242,
+      "height": 213,
+      "sha256": "abe710cf213e7e1013ddeae83f275b656ae1f5877f7e7a0312c3f38f350f05ea",
+      "source_sheet": "Propsheet1_AI_Memory"
+    },
+    {
+      "id": "prop-dram-memory-module-v1",
+      "name": "DRAM Memory DIMM Stick",
+      "anchor": [
+        644,
+        140
+      ],
+      "tier": "prop",
+      "category": "semiconductor",
+      "tags": [
+        "dram",
+        "ram",
+        "memory",
+        "pcb",
+        "dimm",
+        "semiconductor",
+        "micron",
+        "samsung"
+      ],
+      "context": "Working system DRAM memory modules, memory supercycle demand, and commodity chip pricing.",
+      "filename": "prop-dram-memory-module-v1.png",
+      "path": "assets/props/cutouts/prop-dram-memory-module-v1.png",
+      "width": 317,
+      "height": 229,
+      "sha256": "1cd7c22905c3a251b75c1554e9072aceb377fd17654e8f92db16fe7532bcf2ab",
+      "source_sheet": "Propsheet1_AI_Memory"
+    },
+    {
+      "id": "prop-hbm-stacked-die-v1",
+      "name": "3D Stacked HBM Chip",
+      "anchor": [
+        907,
+        137
+      ],
+      "tier": "prop",
+      "category": "semiconductor",
+      "tags": [
+        "hbm",
+        "hbm3e",
+        "sk-hynix",
+        "stacked-silicon",
+        "bandwidth",
+        "through-silicon-via"
+      ],
+      "context": "High Bandwidth Memory (HBM) 3D stacked dies on interposer packaging powering next-gen AI accelerators.",
+      "filename": "prop-hbm-stacked-die-v1.png",
+      "path": "assets/props/cutouts/prop-hbm-stacked-die-v1.png",
+      "width": 213,
+      "height": 191,
+      "sha256": "dcf2a056e9db89fe61877595c2d04a778731ddaff616953512f16475de548c33",
+      "source_sheet": "Propsheet1_AI_Memory"
+    },
+    {
+      "id": "prop-gpu-accelerator-card-v1",
+      "name": "GPU Compute Accelerator Card",
+      "anchor": [
+        146,
+        378
+      ],
+      "tier": "prop",
+      "category": "compute",
+      "tags": [
+        "gpu",
+        "nvidia",
+        "compute",
+        "blackwell",
+        "hopper",
+        "triple-fan",
+        "graphics-card"
+      ],
+      "context": "High-density enterprise GPU hardware driving parallel compute clusters for model training and inference.",
+      "filename": "prop-gpu-accelerator-card-v1.png",
+      "path": "assets/props/cutouts/prop-gpu-accelerator-card-v1.png",
+      "width": 262,
+      "height": 200,
+      "sha256": "cd464a6127cbae776e8067e78629e7f387ae277da11d554c82485d3c46dc33e3",
+      "source_sheet": "Propsheet1_AI_Memory"
+    },
+    {
+      "id": "prop-ai-server-rack-cabinet-v1",
+      "name": "AI Supercomputer Server Rack",
+      "anchor": [
+        376,
+        369
+      ],
+      "tier": "prop",
+      "category": "datacenter",
+      "tags": [
+        "server-rack",
+        "datacenter",
+        "supercomputer",
+        "nvlink",
+        "enterprise",
+        "ukiyo-e"
+      ],
+      "context": "Multi-node AI server rack enclosure with active cooling, high-speed interconnects, and cloud deployment.",
+      "filename": "prop-ai-server-rack-cabinet-v1.png",
+      "path": "assets/props/cutouts/prop-ai-server-rack-cabinet-v1.png",
+      "width": 162,
+      "height": 220,
+      "sha256": "5dbb96a8f73fc5853c60f517423755a8b746bd3334a938498341a0fc5327179d",
+      "source_sheet": "Propsheet1_AI_Memory"
+    },
+    {
+      "id": "prop-hyperscale-datacenter-v1",
+      "name": "Hyperscale Data Center Campus",
+      "anchor": [
+        631,
+        382
+      ],
+      "tier": "prop",
+      "category": "infrastructure",
+      "tags": [
+        "datacenter",
+        "cloud-facility",
+        "infrastructure",
+        "capex",
+        "rising-sun",
+        "pines"
+      ],
+      "context": "Physical hyperscale datacenter capex, cloud campus buildouts, gigawatt electricity consumption, and real estate.",
+      "filename": "prop-hyperscale-datacenter-v1.png",
+      "path": "assets/props/cutouts/prop-hyperscale-datacenter-v1.png",
+      "width": 319,
+      "height": 198,
+      "sha256": "bc1b8e2a44d4710a2c1788bbf93cc9034bd6cf42795bb25d02b9eda7e640e208",
+      "source_sheet": "Propsheet1_AI_Memory"
+    },
+    {
+      "id": "prop-silicon-wafer-semiconductor-v1",
+      "name": "Semiconductor Silicon Wafer",
+      "anchor": [
+        910,
+        367
+      ],
+      "tier": "prop",
+      "category": "semiconductor",
+      "tags": [
+        "silicon-wafer",
+        "tsmc",
+        "foundry",
+        "photolithography",
+        "sakura",
+        "nanometer"
+      ],
+      "context": "Monocrystalline silicon wafer patterned with microscopic integrated circuits, foundry fabrication, and supply chain.",
+      "filename": "prop-silicon-wafer-semiconductor-v1.png",
+      "path": "assets/props/cutouts/prop-silicon-wafer-semiconductor-v1.png",
+      "width": 223,
+      "height": 237,
+      "sha256": "93ccd64442626b187b74afdbcc808086606fc0f2081700f9b8fcd8d48ac86c55",
+      "source_sheet": "Propsheet1_AI_Memory"
+    },
+    {
+      "id": "prop-neural-cloud-brain-v1",
+      "name": "Neural Cloud Brain",
+      "anchor": [
+        140,
+        615
+      ],
+      "tier": "prop",
+      "category": "ai_models",
+      "tags": [
+        "neural-network",
+        "cloud",
+        "ai-model",
+        "llm",
+        "synapse",
+        "intelligence",
+        "weights"
+      ],
+      "context": "Cloud-hosted foundation models, cognitive algorithms, neural network parameter weights, and frontier AI intelligence.",
+      "filename": "prop-neural-cloud-brain-v1.png",
+      "path": "assets/props/cutouts/prop-neural-cloud-brain-v1.png",
+      "width": 253,
+      "height": 187,
+      "sha256": "c26bd88a8100fc9c379df0bc1ea0c160041e2427576be65bf933bc503f8cef35",
+      "source_sheet": "Propsheet1_AI_Memory"
+    },
+    {
+      "id": "prop-bigtech-capital-tower-v1",
+      "name": "Big Tech Capital Monolith Tower",
+      "anchor": [
+        395,
+        628
+      ],
+      "tier": "prop",
+      "category": "capital_flows",
+      "tags": [
+        "magnificent-seven",
+        "hedge-fund",
+        "capital-inflows",
+        "monolith",
+        "big-tech"
+      ],
+      "context": "Hedge fund and institutional capital concentrating heavily into Mega-Cap tech conglomerates.",
+      "filename": "prop-bigtech-capital-tower-v1.png",
+      "path": "assets/props/cutouts/prop-bigtech-capital-tower-v1.png",
+      "width": 281,
+      "height": 275,
+      "sha256": "a8215e7c99e1d5fcd5a2ae5edd31fe8f4b23371d70792a4862762adbd0dfecb4",
+      "source_sheet": "Propsheet1_AI_Memory"
+    },
+    {
+      "id": "prop-memory-wall-breach-v1",
+      "name": "The Memory Wall Breach",
+      "anchor": [
+        658,
+        626
+      ],
+      "tier": "mechanism",
+      "category": "bottleneck",
+      "tags": [
+        "memory-wall",
+        "bottleneck",
+        "bandwidth-limit",
+        "von-neumann",
+        "structural-failure"
+      ],
+      "context": "The Memory Wall: computational scaling hitting memory bandwidth transfer ceilings and hardware bottlenecks.",
+      "filename": "prop-memory-wall-breach-v1.png",
+      "path": "assets/props/cutouts/prop-memory-wall-breach-v1.png",
+      "width": 270,
+      "height": 277,
+      "sha256": "477613eea6080acc8424eed7520a701473612b2a0cde1123eab08668b62da6cc",
+      "source_sheet": "Propsheet1_AI_Memory"
+    },
+    {
+      "id": "prop-ai-journey-roadmap-fuji-v1",
+      "name": "AI Adoption Roadmap to Fuji",
+      "anchor": [
+        912,
+        625
+      ],
+      "tier": "prop",
+      "category": "roadmap",
+      "tags": [
+        "roadmap",
+        "timeline",
+        "fuji",
+        "adoption-curve",
+        "maturity",
+        "infrastructure-phase"
+      ],
+      "context": "The multi-year AI investment horizon, transitioning from early hype to infrastructure buildout and maturity.",
+      "filename": "prop-ai-journey-roadmap-fuji-v1.png",
+      "path": "assets/props/cutouts/prop-ai-journey-roadmap-fuji-v1.png",
+      "width": 219,
+      "height": 277,
+      "sha256": "ad8d7087a2c0f8c6527ea470c3e20a85ea97b232e0d2ef0edf179cdbb2650c62",
+      "source_sheet": "Propsheet1_AI_Memory"
+    },
+    {
+      "id": "prop-triple-witching-opex-v1",
+      "name": "Triple Witching OpEx Calendar",
+      "anchor": [
+        141,
+        153
+      ],
+      "tier": "prop",
+      "category": "macro_events",
+      "tags": [
+        "triple-witching",
+        "opex",
+        "options-expiry",
+        "futures",
+        "quarterly-rebalance"
+      ],
+      "context": "Quarterly Triple Witching expiration of stock options, index options, and futures contracts causing high volume volatility.",
+      "filename": "prop-triple-witching-opex-v1.png",
+      "path": "assets/props/cutouts/prop-triple-witching-opex-v1.png",
+      "width": 255,
+      "height": 232,
+      "sha256": "d2060a266928bdf31fe7d15ee0bc5303de179ee4d45108cb9c2a88c58a606b0f",
+      "source_sheet": "Propsheet2_Macro_Catalysts"
+    },
+    {
+      "id": "prop-federal-reserve-building-v1",
+      "name": "Federal Reserve Headquarters",
+      "anchor": [
+        402,
+        174
+      ],
+      "tier": "prop",
+      "category": "central_bank",
+      "tags": [
+        "federal-reserve",
+        "fed",
+        "central-bank",
+        "monetary-policy",
+        "fomc",
+        "interest-rates",
+        "eccles-building",
+        "rate-decision",
+        "us-central-bank"
+      ],
+      "context": "Sovereign monetary authority, discount window lending, interest rate target bands, and liquidity governance.",
+      "filename": "prop-federal-reserve-building-v1.png",
+      "path": "assets/props/cutouts/prop-federal-reserve-building-v1.png",
+      "width": 282,
+      "height": 259,
+      "sha256": "aebc6e5962659ce4fafefe30923500453d374cb91c0d247418cc83ebf865d45b",
+      "source_sheet": "Propsheet2_Macro_Catalysts"
+    },
+    {
+      "id": "prop-dot-plot-projections-v1",
+      "name": "FOMC Dot Plot Projections",
+      "anchor": [
+        653,
+        132
+      ],
+      "tier": "prop",
+      "category": "central_bank",
+      "tags": [
+        "dot-plot",
+        "federal-reserve",
+        "fomc",
+        "rate-projections",
+        "economic-forecast",
+        "terminal-rate",
+        "central-bank-policy"
+      ],
+      "context": "FOMC members' individual interest rate forecasts and terminal policy rate trajectories across forward years.",
+      "filename": "prop-dot-plot-projections-v1.png",
+      "path": "assets/props/cutouts/prop-dot-plot-projections-v1.png",
+      "width": 238,
+      "height": 224,
+      "sha256": "0405b8115580171612dce419e11e67b06fc719300dc6613076c134e951df86b3",
+      "source_sheet": "Propsheet2_Macro_Catalysts"
+    },
+    {
+      "id": "prop-treasury-yield-gauge-5pct-v1",
+      "name": "10Y Treasury Yield Speedometer",
+      "anchor": [
+        899,
+        142
+      ],
+      "tier": "mechanism",
+      "category": "rates_bonds",
+      "tags": [
+        "treasury-yield",
+        "10-year",
+        "bond-market",
+        "rate-spike",
+        "speedometer",
+        "gauge"
+      ],
+      "context": "Surging benchmark 10-year sovereign bond yields tightening financial conditions and compressing equity multiples.",
+      "filename": "prop-treasury-yield-gauge-5pct-v1.png",
+      "path": "assets/props/cutouts/prop-treasury-yield-gauge-5pct-v1.png",
+      "width": 223,
+      "height": 247,
+      "sha256": "65cb13dce394754b6ccc65332b48f156774076c596d47296d340a06a3b117bc8",
+      "source_sheet": "Propsheet2_Macro_Catalysts"
+    },
+    {
+      "id": "prop-crude-oil-barrel-spike-v1",
+      "name": "Crude Oil Price Shock Barrel",
+      "anchor": [
+        125,
+        413
+      ],
+      "tier": "prop",
+      "category": "commodities",
+      "tags": [
+        "crude-oil",
+        "brent",
+        "wti",
+        "commodity-spike",
+        "energy-cost",
+        "inflation-driver"
+      ],
+      "context": "Energy price spikes, Brent/WTI crude oil supply disruptions, and input-cost headline inflation pressures.",
+      "filename": "prop-crude-oil-barrel-spike-v1.png",
+      "path": "assets/props/cutouts/prop-crude-oil-barrel-spike-v1.png",
+      "width": 251,
+      "height": 228,
+      "sha256": "5ecf8e5bc38fde402e1c9f6f8fba7113f8d357fd664ce1b45e090b55e93492a5",
+      "source_sheet": "Propsheet2_Macro_Catalysts"
+    },
+    {
+      "id": "prop-geopolitical-conflict-globe-v1",
+      "name": "Geopolitical Conflict & War Globe",
+      "anchor": [
+        393,
+        405
+      ],
+      "tier": "prop",
+      "category": "geopolitics",
+      "tags": [
+        "geopolitical-risk",
+        "war",
+        "defense",
+        "tank",
+        "warship",
+        "supply-choke"
+      ],
+      "context": "Regional war outbreaks, defense escalation, trade chokepoint closures, and sovereign supply chain ruptures.",
+      "filename": "prop-geopolitical-conflict-globe-v1.png",
+      "path": "assets/props/cutouts/prop-geopolitical-conflict-globe-v1.png",
+      "width": 296,
+      "height": 239,
+      "sha256": "a565600da44587d4af8fd848b3fb0b792435b8974bf089eaaaf418aff2221666",
+      "source_sheet": "Propsheet2_Macro_Catalysts"
+    },
+    {
+      "id": "prop-hedge-fund-tech-funnel-v1",
+      "name": "Hedge Fund Capital Tech Funnel",
+      "anchor": [
+        658,
+        393
+      ],
+      "tier": "mechanism",
+      "category": "capital_flows",
+      "tags": [
+        "hedge-fund",
+        "capital-allocation",
+        "passive-inflows",
+        "momentum",
+        "tech-basket"
+      ],
+      "context": "Institutional smart money and hedge fund liquidity funneled aggressively into dominant mega-cap technology balance sheets.",
+      "filename": "prop-hedge-fund-tech-funnel-v1.png",
+      "path": "assets/props/cutouts/prop-hedge-fund-tech-funnel-v1.png",
+      "width": 238,
+      "height": 263,
+      "sha256": "3c2fb4be1243bd3a0d5834faf8bef78b8d80ad46b12f77994afd49f95f5588f0",
+      "source_sheet": "Propsheet2_Macro_Catalysts"
+    },
+    {
+      "id": "prop-tech-sp500-concentration-v1",
+      "name": "Tech to S&P 500 Concentration Flow",
+      "anchor": [
+        895,
+        420
+      ],
+      "tier": "mechanism",
+      "category": "market_structure",
+      "tags": [
+        "market-breadth",
+        "concentration-risk",
+        "sp500",
+        "index-weighting",
+        "passive-flow"
+      ],
+      "context": "Unprecedented index concentration where top tech equities dictate the entirety of broader S&P 500 returns.",
+      "filename": "prop-tech-sp500-concentration-v1.png",
+      "path": "assets/props/cutouts/prop-tech-sp500-concentration-v1.png",
+      "width": 268,
+      "height": 187,
+      "sha256": "e2cfab49f3f4f891ee8ff398e1dfb1cb8fc5bfdbec89cc919e288fd69d5d0748",
+      "source_sheet": "Propsheet2_Macro_Catalysts"
+    },
+    {
+      "id": "prop-vix-volatility-tempest-v1",
+      "name": "VIX Volatility Tempest Waves",
+      "anchor": [
+        132,
+        638
+      ],
+      "tier": "prop",
+      "category": "volatility",
+      "tags": [
+        "vix",
+        "volatility",
+        "fear-index",
+        "storm",
+        "tail-risk",
+        "market-crash"
+      ],
+      "context": "Violent spikes in the Cboe Volatility Index (VIX), equity hedging demand surges, and market tail risk liquidation.",
+      "filename": "prop-vix-volatility-tempest-v1.png",
+      "path": "assets/props/cutouts/prop-vix-volatility-tempest-v1.png",
+      "width": 257,
+      "height": 244,
+      "sha256": "e9e2259c9da9aba8bb6c8f4339711e09633a152a7f28a1a136a1f9dfcf20d496",
+      "source_sheet": "Propsheet2_Macro_Catalysts"
+    },
+    {
+      "id": "prop-liquidity-drain-pump-v1",
+      "name": "Quantitative Tightening Liquidity Drain",
+      "anchor": [
+        385,
+        635
+      ],
+      "tier": "mechanism",
+      "category": "monetary_policy",
+      "tags": [
+        "liquidity-drain",
+        "quantitative-tightening",
+        "qt",
+        "balance-sheet-runoff",
+        "cash-drain"
+      ],
+      "context": "Quantitative Tightening (QT), commercial bank reserve drains, and central bank balance sheet contraction.",
+      "filename": "prop-liquidity-drain-pump-v1.png",
+      "path": "assets/props/cutouts/prop-liquidity-drain-pump-v1.png",
+      "width": 270,
+      "height": 225,
+      "sha256": "e5fb648721d04c6d6944867f2c942839c151a1eca84e68d0db8d17da24ae0520",
+      "source_sheet": "Propsheet2_Macro_Catalysts"
+    },
+    {
+      "id": "prop-ai-pause-roadblock-barrier-v1",
+      "name": "AI Moratorium Roadblock Barrier",
+      "anchor": [
+        653,
+        624
+      ],
+      "tier": "prop",
+      "category": "governance",
+      "tags": [
+        "ai-pause",
+        "moratorium",
+        "regulation",
+        "governance",
+        "safety",
+        "roadblock"
+      ],
+      "context": "Calls for regulatory moratoriums, safety halts, frontier model deployment licensing, and governmental friction.",
+      "filename": "prop-ai-pause-roadblock-barrier-v1.png",
+      "path": "assets/props/cutouts/prop-ai-pause-roadblock-barrier-v1.png",
+      "width": 247,
+      "height": 224,
+      "sha256": "71c50a3218d8ac12cdaacf0185b0d7d5522662862d798412f6825eb0c0a0dc18",
+      "source_sheet": "Propsheet2_Macro_Catalysts"
+    },
+    {
+      "id": "prop-upcoming-catalysts-calendar-v1",
+      "name": "Upcoming Catalysts Macro Calendar",
+      "anchor": [
+        901,
+        635
+      ],
+      "tier": "prop",
+      "category": "macro_events",
+      "tags": [
+        "catalysts",
+        "fed-decision",
+        "federal-reserve",
+        "inflation-data",
+        "cpi",
+        "earnings-season",
+        "geopolitical-risk",
+        "macro-events"
+      ],
+      "context": "High-impact market catalyst roadmap tracking Fed meetings, CPI/inflation releases, quarterly earnings, and geopolitical risks.",
+      "filename": "prop-upcoming-catalysts-calendar-v1.png",
+      "path": "assets/props/cutouts/prop-upcoming-catalysts-calendar-v1.png",
+      "width": 245,
+      "height": 237,
+      "sha256": "bad723eb4c373d7bb71f1dcdf03ae0914e86d515c7b527a6668a5ce7d821c830",
+      "source_sheet": "Propsheet2_Macro_Catalysts"
+    }
+  ]
+}

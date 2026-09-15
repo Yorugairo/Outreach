@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Finance & AI Hero Props Review Sheet</title>
+<style>
+  body { background: #0F1218; color: #E5E7EB; font-family: system-ui, sans-serif; padding: 32px; }
+  h1 { font-size: 24px; margin-bottom: 8px; color: #F3F4F6; }
+  p { color: #9CA3AF; margin-bottom: 24px; font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  .card { background: #181D26; border: 1px solid #2B3342; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
+  .preview-box { height: 220px; display: flex; align-items: center; justify-content: center; position: relative; }
+  .washi-bg { background: #F4E6C7; background-image: radial-gradient(#E8D7B2 1px, transparent 0); background-size: 8px 8px; }
+  .preview-box img { max-width: 90%; max-height: 90%; object-fit: contain; }
+  .meta { padding: 14px; font-size: 12px; flex-grow: 1; display: flex; flex-direction: column; gap: 6px; }
+  .title { font-weight: 600; font-size: 14px; color: #F9FAFB; }
+  .tier-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+  .tier-prop { background: #1E3A8A; color: #93C5FD; }
+  .tier-mechanism { background: #831843; color: #FBCFE8; }
+  .tags { color: #9CA3AF; font-size: 11px; }
+  .hash { font-family: monospace; color: #6B7280; font-size: 10px; }
+  .toggle-bar { margin-bottom: 16px; }
+  button { background: #2563EB; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
+  button:hover { background: #1D4ED8; }
+</style>
+</head>
+<body>
+<h1>Finance & AI Hero Props — Visual QA Contact Sheet (24 Assets)</h1>
+<p>Proofing lossless alpha cutouts against production cream washi (#F4E6C7) and dark slate (#181D26).</p>
+<div class="toggle-bar">
+  <button onclick="toggleBg()">Toggle Canvas Background (Washi Cream / Dark Slate)</button>
+</div>
+<div class="grid">
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-ai-hype-bubble-v1">
+      <img src="cutouts/prop-ai-hype-bubble-v1.png" alt="AI Hype Bubble">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">AI Hype Bubble</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">bubble · speculation · ai · hype</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Market euphoria, AI speculative valuation bubble, rising equity trends amidst volatility waves.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">245×242 px · SHA: 7acaca113379c2f2...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-memory-steel-ibeam-v1">
+      <img src="cutouts/prop-memory-steel-ibeam-v1.png" alt="Memory Structural I-Beam">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">Memory Structural I-Beam</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">memory · i-beam · steel · foundation</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Memory bandwidth and capacity as the foundational structural backbone supporting AI architectures.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">242×213 px · SHA: abe710cf213e7e10...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-dram-memory-module-v1">
+      <img src="cutouts/prop-dram-memory-module-v1.png" alt="DRAM Memory DIMM Stick">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">DRAM Memory DIMM Stick</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">dram · ram · memory · pcb</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Working system DRAM memory modules, memory supercycle demand, and commodity chip pricing.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">317×229 px · SHA: 1cd7c22905c3a251...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-hbm-stacked-die-v1">
+      <img src="cutouts/prop-hbm-stacked-die-v1.png" alt="3D Stacked HBM Chip">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">3D Stacked HBM Chip</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">hbm · hbm3e · sk-hynix · stacked-silicon</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">High Bandwidth Memory (HBM) 3D stacked dies on interposer packaging powering next-gen AI accelerators.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">213×191 px · SHA: dcf2a056e9db89fe...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-gpu-accelerator-card-v1">
+      <img src="cutouts/prop-gpu-accelerator-card-v1.png" alt="GPU Compute Accelerator Card">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">GPU Compute Accelerator Card</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">gpu · nvidia · compute · blackwell</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">High-density enterprise GPU hardware driving parallel compute clusters for model training and inference.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">262×200 px · SHA: cd464a6127cbae77...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-ai-server-rack-cabinet-v1">
+      <img src="cutouts/prop-ai-server-rack-cabinet-v1.png" alt="AI Supercomputer Server Rack">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">AI Supercomputer Server Rack</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">server-rack · datacenter · supercomputer · nvlink</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Multi-node AI server rack enclosure with active cooling, high-speed interconnects, and cloud deployment.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">162×220 px · SHA: 5dbb96a8f73fc585...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-hyperscale-datacenter-v1">
+      <img src="cutouts/prop-hyperscale-datacenter-v1.png" alt="Hyperscale Data Center Campus">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">Hyperscale Data Center Campus</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">datacenter · cloud-facility · infrastructure · capex</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Physical hyperscale datacenter capex, cloud campus buildouts, gigawatt electricity consumption, and real estate.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">319×198 px · SHA: bc1b8e2a44d4710a...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-silicon-wafer-semiconductor-v1">
+      <img src="cutouts/prop-silicon-wafer-semiconductor-v1.png" alt="Semiconductor Silicon Wafer">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">Semiconductor Silicon Wafer</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">silicon-wafer · tsmc · foundry · photolithography</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Monocrystalline silicon wafer patterned with microscopic integrated circuits, foundry fabrication, and supply chain.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">223×237 px · SHA: 93ccd64442626b18...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-neural-cloud-brain-v1">
+      <img src="cutouts/prop-neural-cloud-brain-v1.png" alt="Neural Cloud Brain">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">Neural Cloud Brain</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">neural-network · cloud · ai-model · llm</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Cloud-hosted foundation models, cognitive algorithms, neural network parameter weights, and frontier AI intelligence.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">253×187 px · SHA: c26bd88a8100fc9c...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-bigtech-capital-tower-v1">
+      <img src="cutouts/prop-bigtech-capital-tower-v1.png" alt="Big Tech Capital Monolith Tower">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">Big Tech Capital Monolith Tower</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">magnificent-seven · hedge-fund · capital-inflows · monolith</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Hedge fund and institutional capital concentrating heavily into Mega-Cap tech conglomerates.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">281×275 px · SHA: a8215e7c99e1d5fc...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-memory-wall-breach-v1">
+      <img src="cutouts/prop-memory-wall-breach-v1.png" alt="The Memory Wall Breach">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">The Memory Wall Breach</span>
+        <span class="tier-badge tier-mechanism">mechanism</span>
+      </div>
+      <div class="tags">memory-wall · bottleneck · bandwidth-limit · von-neumann</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">The Memory Wall: computational scaling hitting memory bandwidth transfer ceilings and hardware bottlenecks.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">270×277 px · SHA: 477613eea6080acc...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-ai-journey-roadmap-fuji-v1">
+      <img src="cutouts/prop-ai-journey-roadmap-fuji-v1.png" alt="AI Adoption Roadmap to Fuji">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">AI Adoption Roadmap to Fuji</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">roadmap · timeline · fuji · adoption-curve</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">The multi-year AI investment horizon, transitioning from early hype to infrastructure buildout and maturity.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">219×277 px · SHA: ad8d7087a2c0f8c6...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-triple-witching-opex-v1">
+      <img src="cutouts/prop-triple-witching-opex-v1.png" alt="Triple Witching OpEx Calendar">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">Triple Witching OpEx Calendar</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">triple-witching · opex · options-expiry · futures</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Quarterly Triple Witching expiration of stock options, index options, and futures contracts causing high volume volatility.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">255×232 px · SHA: d2060a266928bdf3...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-federal-reserve-building-v1">
+      <img src="cutouts/prop-federal-reserve-building-v1.png" alt="Federal Reserve Headquarters">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">Federal Reserve Headquarters</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">federal-reserve · fed · central-bank · monetary-policy</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Sovereign monetary authority, discount window lending, interest rate target bands, and liquidity governance.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">282×259 px · SHA: aebc6e5962659ce4...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-dot-plot-projections-v1">
+      <img src="cutouts/prop-dot-plot-projections-v1.png" alt="FOMC Dot Plot Projections">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">FOMC Dot Plot Projections</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">dot-plot · federal-reserve · fomc · rate-projections</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">FOMC members' individual interest rate forecasts and terminal policy rate trajectories across forward years.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">238×224 px · SHA: 0405b81155801716...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-treasury-yield-gauge-5pct-v1">
+      <img src="cutouts/prop-treasury-yield-gauge-5pct-v1.png" alt="10Y Treasury Yield Speedometer">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">10Y Treasury Yield Speedometer</span>
+        <span class="tier-badge tier-mechanism">mechanism</span>
+      </div>
+      <div class="tags">treasury-yield · 10-year · bond-market · rate-spike</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Surging benchmark 10-year sovereign bond yields tightening financial conditions and compressing equity multiples.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">223×247 px · SHA: 65cb13dce394754b...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-crude-oil-barrel-spike-v1">
+      <img src="cutouts/prop-crude-oil-barrel-spike-v1.png" alt="Crude Oil Price Shock Barrel">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">Crude Oil Price Shock Barrel</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">crude-oil · brent · wti · commodity-spike</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Energy price spikes, Brent/WTI crude oil supply disruptions, and input-cost headline inflation pressures.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">251×228 px · SHA: 5ecf8e5bc38fde40...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-geopolitical-conflict-globe-v1">
+      <img src="cutouts/prop-geopolitical-conflict-globe-v1.png" alt="Geopolitical Conflict & War Globe">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">Geopolitical Conflict & War Globe</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">geopolitical-risk · war · defense · tank</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Regional war outbreaks, defense escalation, trade chokepoint closures, and sovereign supply chain ruptures.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">296×239 px · SHA: a565600da44587d4...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-hedge-fund-tech-funnel-v1">
+      <img src="cutouts/prop-hedge-fund-tech-funnel-v1.png" alt="Hedge Fund Capital Tech Funnel">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">Hedge Fund Capital Tech Funnel</span>
+        <span class="tier-badge tier-mechanism">mechanism</span>
+      </div>
+      <div class="tags">hedge-fund · capital-allocation · passive-inflows · momentum</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Institutional smart money and hedge fund liquidity funneled aggressively into dominant mega-cap technology balance sheets.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">238×263 px · SHA: 3c2fb4be1243bd3a...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-tech-sp500-concentration-v1">
+      <img src="cutouts/prop-tech-sp500-concentration-v1.png" alt="Tech to S&P 500 Concentration Flow">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">Tech to S&P 500 Concentration Flow</span>
+        <span class="tier-badge tier-mechanism">mechanism</span>
+      </div>
+      <div class="tags">market-breadth · concentration-risk · sp500 · index-weighting</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Unprecedented index concentration where top tech equities dictate the entirety of broader S&P 500 returns.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">268×187 px · SHA: e2cfab49f3f4f891...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-vix-volatility-tempest-v1">
+      <img src="cutouts/prop-vix-volatility-tempest-v1.png" alt="VIX Volatility Tempest Waves">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">VIX Volatility Tempest Waves</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">vix · volatility · fear-index · storm</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Violent spikes in the Cboe Volatility Index (VIX), equity hedging demand surges, and market tail risk liquidation.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">257×244 px · SHA: e9e2259c9da9aba8...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-liquidity-drain-pump-v1">
+      <img src="cutouts/prop-liquidity-drain-pump-v1.png" alt="Quantitative Tightening Liquidity Drain">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">Quantitative Tightening Liquidity Drain</span>
+        <span class="tier-badge tier-mechanism">mechanism</span>
+      </div>
+      <div class="tags">liquidity-drain · quantitative-tightening · qt · balance-sheet-runoff</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Quantitative Tightening (QT), commercial bank reserve drains, and central bank balance sheet contraction.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">270×225 px · SHA: e5fb648721d04c6d...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-ai-pause-roadblock-barrier-v1">
+      <img src="cutouts/prop-ai-pause-roadblock-barrier-v1.png" alt="AI Moratorium Roadblock Barrier">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">AI Moratorium Roadblock Barrier</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">ai-pause · moratorium · regulation · governance</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">Calls for regulatory moratoriums, safety halts, frontier model deployment licensing, and governmental friction.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">247×224 px · SHA: 71c50a3218d8ac12...</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="preview-box washi-bg" id="box-prop-upcoming-catalysts-calendar-v1">
+      <img src="cutouts/prop-upcoming-catalysts-calendar-v1.png" alt="Upcoming Catalysts Macro Calendar">
+    </div>
+    <div class="meta">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="title">Upcoming Catalysts Macro Calendar</span>
+        <span class="tier-badge tier-prop">prop</span>
+      </div>
+      <div class="tags">catalysts · fed-decision · federal-reserve · inflation-data</div>
+      <div style="color: #D1D5DB; font-size: 11px; margin-top: 4px;">High-impact market catalyst roadmap tracking Fed meetings, CPI/inflation releases, quarterly earnings, and geopolitical risks.</div>
+      <div class="hash" style="margin-top: auto; padding-top: 8px;">245×237 px · SHA: bad723eb4c373d7b...</div>
+    </div>
+  </div>
+</div>
+<script>
+let washi = true;
+function toggleBg() {
+  washi = !washi;
+  const boxes = document.querySelectorAll('.preview-box');
+  boxes.forEach(b => {
+    if (washi) {
+      b.classList.add('washi-bg');
+      b.style.background = '#F4E6C7';
+    } else {
+      b.classList.remove('washi-bg');
+      b.style.background = '#111827';
+    }
+  });
+}
+</script>
+</body>
+</html>
