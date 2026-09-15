@@ -1,0 +1,28 @@
+{
+  "_contract": "INTAKE record (E99 s28, P50 T7). The operator supplied this still on 2026-09-14 from their own generator session; it replaces the retired art-embed-washi-tv direction. The still is QUARANTINED (gitignored under stills/) until the operator approves the frame. Its generated cream and charcoal stay as painted (no hex fill). Surfaces are measured by `measure_embed_quads.py` into `<stem>.layers.json`.",
+  "source": {
+    "path": "C:\\Users\\Snipe\\Downloads\\DualScreen1",
+    "supplied_by": "operator",
+    "supplied_at": "2026-09-14",
+    "generator": "not recorded - the operator's own session; ask before claiming a model"
+  },
+  "still": {
+    "path": "content/video_engine/channel-assets/money-physics/plates/stills/art-embed-dual-tv-laptop-1.png",
+    "sha256": "a37121f5c07c865ebf89003795f7cea77e732c345d16960d69c97c2ac90d4525",
+    "bytes": 1923033,
+    "size_px": [
+      941,
+      1672
+    ],
+    "ratio": "9:16"
+  },
+  "painted": "the wall, lamp and shelf with a CREAM TV face, over a dark desk with an open laptop (DARK blank screen), a pen cup, a cup and a chair back in the foreground",
+  "surfaces": [
+    "tv"
+  ],
+  "colour_target": "steel-and-paper/build-f/assets/world-ledger-page-v1.png (E99 s28)",
+  "review_state": "quarantined until the operator approves the frame",
+  "unmeasured": {
+    "laptop": "bottom edge rms 1.10 px over the 1.0 px limit on two windows (the lid's lower bezel meets the hinge); not declared - re-measure by hand or use art-embed-dual-tv-laptop-2's laptop"
+  }
+}

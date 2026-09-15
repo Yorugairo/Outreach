@@ -102,6 +102,33 @@ SURFACES = {
                   "note": "the washi ground: full stage width, from just under the deckle's LOWEST tear to the "
                           "frame's bottom edge - below that y every column is paper, so a record lies flat on it"},
     },
+    # E99 s28 (2026-09-14): the operator's five split plates - a straight wooden shelf is the seam, never a deckle
+    "art-embed-split-tv-paper": {
+        "tv": {"kind": "edges", "window": (0.165, 0.097, 0.898, 0.359),
+               "note": "the dark screen inside the thin bezel, square-on; the lamp's cone crosses its left"},
+        "paper": {"kind": "deckle", "bright": 180.0, "run": 24, "margin": 2, "search": (0.40, 0.55),
+                  "note": "the generated cream panel under the straight shelf: full width to the frame's bottom edge"},
+    },
+    "art-embed-split-tv-charcoal": {
+        "tv": {"kind": "edges", "window": (0.173, 0.118, 0.882, 0.359),
+               "note": "the cream screen face inside the dark bezel; the charcoal board under the shelf is a chart's ground, never an embed (B1)"},
+    },
+    "art-embed-split-tv-desk": {
+        "tv": {"kind": "edges", "window": (0.173, 0.123, 0.880, 0.368),
+               "note": "the cream screen face inside the dark bezel; the desk, chair and cup are the foreground"},
+    },
+    "art-embed-dual-tv-laptop-1": {
+        "tv": {"kind": "edges", "window": (0.173, 0.114, 0.882, 0.364),
+               "note": "the cream screen face inside the dark bezel"},
+        # "laptop" NOT declared: its bottom edge fits at rms 1.10 px (over RESIDUAL_LIMIT) - the lid's lower bezel meets the
+        # hinge; art-embed-dual-tv-laptop-2 carries a measured laptop
+    },
+    "art-embed-dual-tv-laptop-2": {
+        "tv": {"kind": "edges", "window": (0.173, 0.094, 0.882, 0.365),
+               "note": "the cream screen face inside the dark bezel"},
+        "laptop": {"kind": "edges", "window": (0.154, 0.465, 0.871, 0.703),
+                   "note": "the large dark laptop screen; its top edge sits just under the shelf"},
+    },
 }
 SIDES = ("left", "right", "top", "bottom")
 

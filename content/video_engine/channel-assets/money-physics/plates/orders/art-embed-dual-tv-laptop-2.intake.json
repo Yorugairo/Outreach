@@ -1,0 +1,26 @@
+{
+  "_contract": "INTAKE record (E99 s28, P50 T7). The operator supplied this still on 2026-09-14 from their own generator session; it replaces the retired art-embed-washi-tv direction. The still is QUARANTINED (gitignored under stills/) until the operator approves the frame. Its generated cream and charcoal stay as painted (no hex fill). Surfaces are measured by `measure_embed_quads.py` into `<stem>.layers.json`.",
+  "source": {
+    "path": "C:\\Users\\Snipe\\Downloads\\Dualscreen2",
+    "supplied_by": "operator",
+    "supplied_at": "2026-09-14",
+    "generator": "not recorded - the operator's own session; ask before claiming a model"
+  },
+  "still": {
+    "path": "content/video_engine/channel-assets/money-physics/plates/stills/art-embed-dual-tv-laptop-2.png",
+    "sha256": "ae86d2fa96237af3a4a787e81e9e734350c3d66abdf450325a5f2e47a9e9456e",
+    "bytes": 1740512,
+    "size_px": [
+      941,
+      1672
+    ],
+    "ratio": "9:16"
+  },
+  "painted": "as DualScreen1 with a larger laptop whose DARK screen rises to just under the shelf",
+  "surfaces": [
+    "tv",
+    "laptop"
+  ],
+  "colour_target": "steel-and-paper/build-f/assets/world-ledger-page-v1.png (E99 s28)",
+  "review_state": "quarantined until the operator approves the frame"
+}

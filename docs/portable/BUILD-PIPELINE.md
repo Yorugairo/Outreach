@@ -83,6 +83,13 @@ says why (`flat: true` + `flat_reason` in the library). An existing flat plate i
 (`comfy_depth_split.py`, the fallback - its inpaint blur is the known price), and the plate's `<plate>.layers.json`
 records every layer's role, depth and generator.
 
+**A plate's colour is the generated page's, and its seams are shelves** (E99 s28, `docs/portable/OPERATOR-RULINGS.md`, rg `E99 s28`):
+a plate order names the Steel and Paper build-f page as the colour target (the generated cream page with the charcoal mounted to its
+deckle - `steel-and-paper/build-f/assets/world-ledger-page-v1.png`; cream ~`#EEDCB6`, a blue-cast charcoal ~`#2D363E`), and the
+generated cream and charcoal stay as painted - the brand hexes fill only where no generated plate exists. A seam between two worlds
+(a screen over a paper panel, a wall over a board) is prompted as **a straight wooden shelf or ledge**; never write "deckle" in a
+plate prompt - the model paints it torn.
+
 ## Stage 6 is AUTHORED — there is no allocator
 
 Someone reads the narration beat by beat and chooses the plate that depicts

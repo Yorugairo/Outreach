@@ -1,0 +1,26 @@
+{
+  "_contract": "INTAKE record (E99 s28, P50 T7). The operator supplied this still on 2026-09-14 from their own generator session; it replaces the retired art-embed-washi-tv direction. The still is QUARANTINED (gitignored under stills/) until the operator approves the frame. Its generated cream and charcoal stay as painted (no hex fill). Surfaces are measured by `measure_embed_quads.py` into `<stem>.layers.json`.",
+  "source": {
+    "path": "C:\\Users\\Snipe\\Downloads\\Split",
+    "supplied_by": "operator",
+    "supplied_at": "2026-09-14",
+    "generator": "not recorded - the operator's own session; ask before claiming a model"
+  },
+  "still": {
+    "path": "content/video_engine/channel-assets/money-physics/plates/stills/art-embed-split-tv-paper.png",
+    "sha256": "29c660ae724603d25d2d587b520cdd1393770d3315ea98977f7ce5a2f870cdcd",
+    "bytes": 1930936,
+    "size_px": [
+      941,
+      1672
+    ],
+    "ratio": "9:16"
+  },
+  "painted": "a dark wall at night, a desk lamp's cone from the left, a flat TV square-on with a DARK blank screen, a straight wooden shelf, and a generated CREAM paper panel filling the lower half",
+  "surfaces": [
+    "tv",
+    "paper"
+  ],
+  "colour_target": "steel-and-paper/build-f/assets/world-ledger-page-v1.png (E99 s28)",
+  "review_state": "quarantined until the operator approves the frame"
+}

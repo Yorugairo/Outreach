@@ -3068,3 +3068,21 @@ the eight P13 plans (flywheel, video-engine implementation, visual v3, living sc
 Higgsfield, the Remotion install / HyperFrames lane), P14, P16, P29, P30, P31, P32, P33, P38 and the portable script pattern carry
 `status: retired` - their unruled gates are withdrawn, not answered, and no queue or agent asks them again; P28 closes `complete`
 (T1-T5 done, `52148c2`). Work a retired plan named that is still wanted returns as a row or a new plan, never by reopening it.
+
+**E99 s28 - A plate keeps its generated cream and charcoal; the build-f page is the colour target; a seam is a shelf, never a deckle
+(P50 T7).** Shown the torn `art-embed-washi-tv` still beside five split plates of their own (a TV over a cream or charcoal panel, a
+desk, a TV over a laptop): *"we have this torn deckle plate but it's a torn edge. I think we'd want it smooth like this ... I think
+the way they're prompted make for easy 2.5d generation and evidence display."* On filling the panels with the brand hexes: *"i
+actually don't know that we NEED it filled with the cream or charcoal, our own cream has varied. for example our own art-embed-washi
+is more white than i'd like. I think our generated cream + generated charcoal that we then mounted the charcoal to ... is the best
+colors/richness we had so far"* - then *"go"*. Apply: (1) a generated plate's cream and charcoal stay as painted - no flat
+`#F4E6C7` / `#25313C` fill over them; the brand hexes remain only the fallback where no generated plate exists (E22); (2) the colour
+target a plate order names is the Steel and Paper build-f page - the generated cream page with the charcoal mounted to its deckle
+(`content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f/assets/world-ledger-page-v1.png`, the filmstrip
+`build-f/render/ledger-deckle-filmstrip.jpg`; measured 2026-09-14: cream ~`#EEDCB6`, raw plate `#F8E4B7`; charcoal ~`#2D363E`, a
+blue-cast charcoal) - the washi still measured `#F9F5E9` (too white), the five split plates `#EACDAA`-`#EED0AE` with a neutral
+`#272729` charcoal; (3) a seam between two worlds in a plate is prompted as a straight wooden shelf or ledge - the word "deckle" in a
+plate prompt paints a torn edge (the washi order asked for "a soft deckle" and got a tear); (4) the five split plates replace the
+washi still as P50 T7's direction, held in quarantine for the operator's frame read, each with an intake record and its measured
+surfaces (`measure_embed_quads.py`); the washi still is retired. The engine goldens still draw the flat hex page, not the generated
+mount - the richer look is the target, not what the goldens show.
