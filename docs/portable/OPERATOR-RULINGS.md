@@ -3043,3 +3043,10 @@ engine and compiler, so agents can work in parallel without the worktree drift.
 **E99 s24 - The three research runs are released (R26-119, R26-120, R26-121).** Marked *release* on each (20:19). Apply: each run's
 findings the research gate marked usable may be built on; the findings it marked not usable, unsourced or rejected stay excluded
 (`docs/research/runs/p58-2-5d/research-gate-2026-09-14.md`).
+
+**E99 s25 - Growth and depth are two different things: `throw=depth` becomes `throw=growth` (P58 open decision 6).** In the session,
+after the answer to *"What does keep throw=depth as it is mean?"*: *"it sounds like we should rename depth to growth and keep the effect,
+and have depth and growth be 2 different things."* Apply: the growth law keeps its effect (the page grows as it is thrown in) under the
+name `throw=growth`; `depth=<k>` is only ever the real plane in the scene; the compiler refuses `throw=depth` by name, naming the new word;
+and because they are now two different things, a page may carry both - the pair refusal, which existed only because two names meant one
+thing, is lifted.

@@ -15,7 +15,8 @@ The refusals are the slice's real surface, so each one is asserted BY NAME with 
     floor the embed grammar refuses a too-small surface with (one law, not two)
   - a quad that is not a quad (off the stage, wound the wrong way) - `embed_quad_error`'s own law
   - either option on a PLATE: a plate declares its depth planes in its own sidecar (P58 T2), never on a row
-  - `throw=depth` and a real `depth=` on one page: two names for one thing (P58 open decision 6)
+  - `throw=depth` by its old name: renamed `throw=growth` (E99 s25). The growth law and a real `depth=` are two
+    different things, so one page may carry both
   - B1, unchanged: a chart never lands on a plate's painted surface
 """
 from __future__ import annotations
@@ -152,12 +153,19 @@ def test_either_option_on_a_plate_is_refused_by_name(monkeypatch: pytest.MonkeyP
 
 
 @needs_series
-def test_the_growth_illusion_and_a_real_depth_are_refused_together() -> None:
-    thrown = f"ledger:{SERIES_ID}:line:0:right:throw=depth"
-    assert world(thrown)["page"]["throw_grow"] == "depth"           # the illusion is untouched: P58 keeps both names
+def test_the_growth_law_and_a_real_depth_may_meet_on_one_page() -> None:
+    # E99 s25: growth and depth are two different things - the pair refusal (P58 open decision 6) is lifted.
+    thrown = f"ledger:{SERIES_ID}:line:0:right:throw=growth"
+    assert world(thrown)["page"]["throw_grow"] == "growth"          # the growth law, the effect unchanged
     assert world(f"ledger:{SERIES_ID}:line:0:right:throw=snap;depth=1.15")["page"]["depth"] == 1.15
-    msg = refusal(f"{thrown};depth=1.15")
-    assert "two names for one thing" in msg and "throw=snap" in msg
+    page = world(f"{thrown};depth=1.15")["page"]
+    assert page["throw_grow"] == "growth" and page["depth"] == 1.15
+
+
+@needs_series
+def test_throw_depth_is_refused_by_its_old_name_with_the_new_one_in_the_message() -> None:
+    msg = refusal(f"ledger:{SERIES_ID}:line:0:right:throw=depth")
+    assert "throw=depth was renamed throw=growth (E99 s25)" in msg and "depth=<k>" in msg, msg
 
 
 def test_a_chart_still_never_lands_on_a_plates_surface() -> None:

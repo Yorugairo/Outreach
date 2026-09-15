@@ -1274,8 +1274,8 @@
         "docs/content-video-engine/BACKLOG.md:489",
         "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:80-82"
       ],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "pushed 3163de3 (the operator's word in the session, 2026-09-14)"
     },
     {
       "id": "r26-119-release-living-drop",

@@ -1861,7 +1861,7 @@ def _melt_boundary(prev: dict, sc: dict, ppg: dict | None, pg: dict | None) -> l
                          "the whole-world melt is retired")
     # P58 T6 / R26-132 (1): a melt at a depth on a page that already TOOK the camera onto its own plane. The player's
     # camDepthSwap finds no flat camera on that world to swap (`data-world-pose`), so the ball would melt flat and say
-    # nothing - refused here by name, as the pair `throw=depth` + `depth=` already is. (A LAYERED plate never reaches
+    # nothing - refused here by name. (A LAYERED plate never reaches
     # this: a melt's outgoing world must be a ledger page, refused just above, and a page carries no plate planes.)
     _err = melt_depth_page_error(sc.get("exit"), ppg)
     if _err:
@@ -2287,10 +2287,13 @@ def ledger_world(plate_id: str, ken: tuple, ep_dir: Path, dock_badges: list | No
         page["enter"] = enter.split("=")[0]   # the player: a returning page unwinds from its point (LP_RETRACT.IN); a mount builds its cream first
         if "=" in enter and (enter.startswith("snap") or enter.startswith("camera")):
             page["snap_from"] = enter.split("=", 1)[1]   # the dock asset the page grows from - or, for enter=camera, the card the eye goes to (P49 T5)
-        elif "=" in enter and enter.startswith("throw"):   # throw=<grow>[,<from>[,<s>]] - the growth law (snap | depth), the side, the flight
+        elif "=" in enter and enter.startswith("throw"):   # throw=<grow>[,<from>[,<s>]] - the growth law (snap | growth), the side, the flight
             grow, *rest = enter.split("=", 1)[1].split(",")
-            if grow not in ("snap", "depth"):
-                raise ValueError(f"{plate_id!r}: throw grow {grow!r} is not snap|depth")
+            if grow == "depth":   # E99 s25: renamed - growth and depth are two different things
+                raise ValueError(f"{plate_id!r}: throw=depth was renamed throw={PAGE_THROW_GROW_GROWTH} (E99 s25): the "
+                                 f"growth law is not a depth - say throw={PAGE_THROW_GROW_GROWTH}, or depth=<k> for a real plane")
+            if grow not in ("snap", PAGE_THROW_GROW_GROWTH):
+                raise ValueError(f"{plate_id!r}: throw grow {grow!r} is not snap|{PAGE_THROW_GROW_GROWTH}")
             page["throw_grow"] = grow
             if rest and rest[0]:
                 if rest[0] not in ("below", "above", "left", "right"):
@@ -2665,7 +2668,7 @@ PAGE_DEPTH = {
     "NAME": "page",      # the name the quad's refusals carry into embed_quad_error
 }
 PAGE_PLANE_KINDS = ("tilt", "quad")
-PAGE_THROW_GROW_DEPTH = "depth"   # the growth ILLUSION on `throw=depth` (:2119) - refused beside a real depth (P58 open decision 6)
+PAGE_THROW_GROW_GROWTH = "growth"   # the growth law on `throw=growth` (E99 s25: renamed from throw=depth; it may meet a real depth=)
 
 
 def page_stage_aspect() -> float:
@@ -3093,11 +3096,6 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
                              "a plate declares its depth planes in its own <plate>.layers.json (P58 T2), not on the row")
         page = world["page"]
         if depth is not None:
-            if page.get("throw_grow") == PAGE_THROW_GROW_DEPTH:
-                raise ValueError(f"{plate_id!r}: throw={PAGE_THROW_GROW_DEPTH} and depth= on one page are two names "
-                                 "for one thing - throw=depth is the growth ILLUSION (the card grows as if from "
-                                 "depth), depth= is the real parallax factor. Keep one: drop depth=, or throw the "
-                                 "page with throw=snap")
             page["depth"] = page_depth_k(str(depth), repr(plate_id))
         if plane is not None:
             page["plane"] = page_plane_spec(str(plane), repr(plate_id))

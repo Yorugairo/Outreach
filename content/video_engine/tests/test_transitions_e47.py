@@ -372,7 +372,8 @@ def _melt_pair(exit_id: str, prev_page: dict | None, prev_world: dict | None = N
 def test_a_melt_at_a_depth_is_refused_on_a_page_that_already_took_the_camera():
     """P58 T6 / R26-132 (1): a page authoring `;depth=` takes the camera onto its own plane (the player writes
     `data-world-pose`), so camDepthSwap has no flat camera to swap and `melt:weight:depth=1.15` would paint the flat
-    melt and say nothing. The compiler refuses the pair BY NAME at the boundary, as it refuses `throw=depth` + `depth=`;
+    melt and say nothing. The compiler refuses the pair BY NAME at the boundary (`throw=growth` + `depth=` is NOT a
+    pair it refuses: growth and depth are two different things, E99 s25);
     on a flat page (no depth, or depth=1 - the flat plate) the same exit still compiles."""
     with pytest.raises(ValueError) as exc:
         B.stamp_transition_pages(_melt_pair("melt:weight:depth=1.15", {"builder": "line", "depth": 1.4}))

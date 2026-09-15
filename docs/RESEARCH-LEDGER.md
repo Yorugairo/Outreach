@@ -12,7 +12,7 @@ directory name, the file count and the newest file's date are read.
 |---|---|---|---|---|
 | `hyperframes_motion` | 2026-09-06 | 5 | referenced | `docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:10`, `docs/runbooks/WORK-ORDER-GEMINI-HYPERFRAMES-TAGS-2026-09-06.md:42` |
 | `macro_chart_journalism` | 2026-09-07 | 6 | referenced | `docs/content-video-engine/MACRO-CHART-INTAKE-2026-09-07.md:4`, `docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md:22`, `docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md:36`, +5 more |
-| `studio_readiness` | 2026-09-13 | 2 | referenced | `docs/agent-memory/operator/resume-2026-09-12.md:171`, `docs/content-video-engine/REVIEW-QUEUE.md:61`, `docs/content-video-engine/STUDIO-READINESS-REVIEW-2026-09-13.md:7` |
+| `studio_readiness` | 2026-09-13 | 2 | referenced | `docs/agent-memory/operator/resume-2026-09-12.md:171`, `docs/content-video-engine/REVIEW-QUEUE.md:59`, `docs/content-video-engine/STUDIO-READINESS-REVIEW-2026-09-13.md:7` |
 | `studio_session_link` | 2026-09-13 | 1 | referenced | `docs/agent-memory/operator/resume-2026-09-12.md:171`, `docs/content-video-engine/STUDIO-READINESS-REVIEW-2026-09-13.md:8`, `docs/content-video-engine/STUDIO-READINESS-REVIEW-2026-09-13.md:104` |
 | `bridge` | 2026-09-14 | 189 | landed | `docs/content-video-engine/BACKLOG.md:495`, `docs/content-video-engine/BACKLOG.md:561`, `.claude/PRPs/plans/P46-BRIDGE-ADAPTER.plan.md:36`, +8 more |
 | `grill_animator-iteration` | 2026-09-11 | 1 | landed | `.claude/PRPs/plans/P51-THE-ANIMATORS-LOOP.plan.md:18`, `docs/agent-memory/operator/animators-loop-p51.md:22`, `docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:4` |

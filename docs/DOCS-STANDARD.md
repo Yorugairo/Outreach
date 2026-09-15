@@ -23,10 +23,10 @@ item, a quote, a table row or a fence.
 |---:|---|---:|---:|---:|---:|
 | 22 | `content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-GATES-2026-09-03-at-record.md` | 5 | 0/5 | 1/5 | 0 |
 | 54 | `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md` | 13 | 8/13 | 4/13 | 2 |
+| 64 | `docs/content-video-engine/REVIEW-QUEUE.md` | 7 | 4/7 | 4/7 | 0 |
 | 65 | `content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/PINNED-COMMENT.md` | 2 | 2/2 | 0/2 | 0 |
 | 70 | `docs/seo-insights-platform-implementation-plan.md` | 27 | 17/27 | 18/27 | 0 |
 | 73 | `docs/seo-ingestion-implementation-tasks.md` | 14 | 10/14 | 9/14 | 0 |
-| 76 | `docs/content-video-engine/REVIEW-QUEUE.md` | 7 | 5/7 | 5/7 | 0 |
 | 76 | `docs/content-video-engine/prompts/PROBE-AGENT-LOOP-V1.md` | 8 | 7/8 | 4/8 | 0 |
 | 77 | `content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/DESCRIPTION-YOUTUBE.md` | 3 | 3/3 | 1/3 | 0 |
 | 79 | `content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md` | 12 | 9/12 | 9/12 | 0 |
@@ -44,7 +44,7 @@ item, a quote, a table row or a fence.
 
 ## Appendix A - sections missing a lead line
 
-Non-exempt sections whose first real line is under 40 characters (103).
+Non-exempt sections whose first real line is under 40 characters (104).
 
 - `content/video_engine/projects/martial-matters/pilots/marshall-monday-001/script-draft.md:1` Why Rap Violence is Actually a Sign of Peace | Marshall Matters Ep. 1
 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:13` Titles & Click Contracts
@@ -89,6 +89,7 @@ Non-exempt sections whose first real line is under 40 characters (103).
 - `docs/content-video-engine/P13-GATE-A-ARMBAR-REVIEW.md:38` Locked Defaults
 - `docs/content-video-engine/REVIEW-QUEUE.md:16` Look (0)
 - `docs/content-video-engine/REVIEW-QUEUE.md:20` Rule (0)
+- `docs/content-video-engine/REVIEW-QUEUE.md:24` Approve / push (0)
 - `docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:1` Alicia Script — Persona Pass (v2)
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:187` The On-1s / On-2s / On-3s Decision Rule (Proposal)
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:435` C3: Nested Coordinate Spaces [Tier 1 Architecture — CLOSED]

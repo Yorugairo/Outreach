@@ -4389,9 +4389,9 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L10 [2] Watch (1) — | id | item | what to judge | proof | documents | options | agent's recommendation | blocks | sources | {The first 2.5D cut (Japan)} <p58-hg2-first-2-5d-cut; tariff-bill; depth-first; p58-hg2-first-2-5d-cut-1.mp4; mid-arrival; content-video-engine>
 - L16 [2] Look (0) — Nothing open.
 - L20 [2] Rule (0) — Nothing open.
-- L24 [2] Approve / push (1) — | id | item | what to judge | proof | documents | options | agent's recommendation | blocks | sources | {The push word} <r26-126-push-word; rev-list; left-right; one-time; content-video-engine; OPEN-GATES-AND-QUESTIONS>
-- L30 [2] Owed by the agent before it comes back to you (20) — | id | item | what the agent owes | blocks | {A plate's drift idle paints nothing; The melt's three endings in motion (the ink splat, the ball} <r26-133-drift-idle-paints-nothing; r26-76-melt-endings-in-motion; high-resolution; p48-hg3-morph-onto-planted; chart-to-chart; r26-118-metallic-ball; opt-in; r26-125-p57-hg1-measured-defects; HG-HANDOFF; build-short-axes; hand-off; r26-70-compare-morph>
-- L55 [2] Ruled since the last pass — | id | item | ruling / evidence | sources | {The caption's default setting, by ear} <r26-123-caption-default; HG-HANDOFF; content-video-engine; THE-BACKLOG-BURNDOWN; OPERATOR-RULINGS; p52-gate3-species-proof-motion; OPEN-GATES-AND-QUESTIONS; p51-editor-gates-2-3; OPERATOR-DECISIONS; THE-ANIMATORS-LOOP; p58-hg3-chart-forms; r26-124-slide-seam-and-swap-lane>
+- L24 [2] Approve / push (0) — Nothing open.
+- L28 [2] Owed by the agent before it comes back to you (20) — | id | item | what the agent owes | blocks | {A plate's drift idle paints nothing; The melt's three endings in motion (the ink splat, the ball} <r26-133-drift-idle-paints-nothing; r26-76-melt-endings-in-motion; high-resolution; p48-hg3-morph-onto-planted; chart-to-chart; r26-118-metallic-ball; opt-in; r26-125-p57-hg1-measured-defects; HG-HANDOFF; build-short-axes; hand-off; r26-70-compare-morph>
+- L53 [2] Ruled since the last pass — | id | item | ruling / evidence | sources | {The caption's default setting, by ear} <r26-123-caption-default; HG-HANDOFF; content-video-engine; THE-BACKLOG-BURNDOWN; OPERATOR-RULINGS; p52-gate3-species-proof-motion; OPEN-GATES-AND-QUESTIONS; p51-editor-gates-2-3; OPERATOR-DECISIONS; THE-ANIMATORS-LOOP; p58-hg3-chart-forms; r26-124-slide-seam-and-swap-lane>
 
 ## docs/content-video-engine/RULE-abstract-to-concrete.md
 

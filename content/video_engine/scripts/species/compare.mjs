@@ -434,7 +434,7 @@ export const compareShape = (text, face, o = {}) => {
   const doc = (o.document !== undefined) ? o.document : (typeof document !== "undefined" ? document : null);
   const str = String(text == null ? "" : text);
   if (!doc || typeof doc.createElement !== "function" || !face || !str) return null;
-  const S = +o.scale || COMPARE.RASTER_S, font = compareFontString(face, S), key = str + " " + font;
+  const S = +o.scale || COMPARE.RASTER_S, font = compareFontString(face, S), key = str + "\x00" + font;
   if (CMP_SHAPES.has(key)) return CMP_SHAPES.get(key);
   const cv = doc.createElement("canvas"), c2 = cv.getContext && cv.getContext("2d");
   if (!c2) return null;
@@ -633,7 +633,7 @@ export const compareBallRings = (fg, P, sp, then_) => {
   const B = P.ball;
   const face = compareFace(fg.label, fg.fs);
   if (!face) return null;
-  const key = compareFontString(face, 1) + " " + String((sp.metric || {}).text) + " " + String((sp.comparator || {}).text);
+  const key = compareFontString(face, 1) + "\x00" + String((sp.metric || {}).text) + "\x00" + String((sp.comparator || {}).text);
   if (B.shape && B.key === key) return B.shape;
   const M = compareShape((sp.metric || {}).text, face), C = compareShape((sp.comparator || {}).text, face);
   if (!M) return null;

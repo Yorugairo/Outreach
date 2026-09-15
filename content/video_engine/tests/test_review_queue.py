@@ -337,6 +337,6 @@ def test_answers_cli_names_an_answered_but_open_item(tmp_path, data, capsys):
     answers = tmp_path / "answers.jsonl"
     answers.write_text(json.dumps({"item": "r26-126-push-word", "choice": "hold", "note": "", "at": "2026-09-14T10:00:00+09:00",
                                    "by": "operator"}) + "\n", encoding="utf-8")
-    assert BRQ.main(["--answers", "--answers-file", str(answers)]) == 0
+    assert BRQ.main(["--answers", "--data", str(FIXTURE), "--answers-file", str(answers)]) == 0
     out = capsys.readouterr().out
     assert "r26-126-push-word: 'hold' at 2026-09-14T10:00:00+09:00 - NOT APPLIED (still open)" in out

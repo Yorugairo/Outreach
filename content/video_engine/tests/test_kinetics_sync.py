@@ -75,6 +75,12 @@ def test_committed_engine_is_in_sync() -> None:
     assert SK.check() == []
 
 
+def test_the_engine_and_every_synced_module_carry_no_nul_byte() -> None:
+    # A raw NUL makes rg/grep treat the whole engine as binary past it and silently drop every later match - write "\x00".
+    for path in [SK.ENGINE, *SK.module_files().values()]:
+        assert path.read_bytes().count(0) == 0, f"{SK.rel(path)} carries a raw NUL byte - write it as the escape \\x00"
+
+
 def test_every_t1_module_exists_and_has_one_region() -> None:
     html = SK.ENGINE.read_text(encoding="utf-8")
     for name in MODULES:
