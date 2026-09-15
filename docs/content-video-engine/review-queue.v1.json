@@ -1,0 +1,1678 @@
+{
+  "schema": "review-queue.v1",
+  "as_of": "2026-09-14",
+  "head": "9c9c358",
+  "note": "Every open item waiting on the operator. Built from the explorer's fact sheet of 2026-09-14; the parent applies answers.",
+  "items": [
+    {
+      "id": "p58-hg2-first-2-5d-cut",
+      "ids": [
+        "P58 HG2",
+        "R26-131 item 4",
+        "R26-122 (AWAITING HG2)",
+        "HG2-SHEET"
+      ],
+      "kind": "watch",
+      "title": "The first 2.5D cut (Japan)",
+      "judge": "Three rulings on the Japan 2.5D cut: (1) the layered plate - author the next cut depth-first / keep layers as an option only / refuse; (2) the page at a depth and a 14 deg tilt - take / refuse; (3) the receipt's arrival - snap (approved) or camera (M38 recipe coverage 0.76 -> 0.64). Ruling (4), the drift idle, is its own item: \"A plate's drift idle paints nothing\".",
+      "where": [
+        {
+          "label": "the Japan 2.5D cut (served)",
+          "url": "http://127.0.0.1:8764/player.html",
+          "build": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-p58-2-5d/"
+        },
+        {
+          "label": "the HG2 sheet",
+          "path": "docs/research/runs/p58-2-5d/HG2-SHEET.md"
+        },
+        {
+          "label": "contact sheet",
+          "path": "docs/research/runs/p58-2-5d/HG2-contact-sheet.png"
+        },
+        {
+          "label": "mid-arrival compare",
+          "path": "docs/research/runs/p58-2-5d/HG2-mid-arrival-compare.png"
+        },
+        {
+          "label": "the planes sheet",
+          "path": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-p58-2-5d/plates/planes-sheet-2.png"
+        }
+      ],
+      "options": [],
+      "recommendation": "(1) \"My lean: depth-first.\" (2) \"My lean: take - it reads at the landing.\" (3) \"My lean: keep snap unless the next cut is authored around the camera arrival.\"",
+      "blocks": "P58 T7 and T8 (\"HG2 + HG3 outstanding\"); P58 completion",
+      "sources": [
+        ".claude/PRPs/plans/P58-THE-2-5D-STAGE.plan.md:216-218",
+        ".claude/PRPs/plans/P58-THE-2-5D-STAGE.plan.md:367-373",
+        ".claude/PRPs/plans/P58-THE-2-5D-STAGE.plan.md:376-382",
+        "docs/research/runs/p58-2-5d/HG2-SHEET.md:44-52",
+        "docs/content-video-engine/BACKLOG.md:554",
+        "docs/content-video-engine/BACKLOG.md:563"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-133-drift-idle-paints-nothing",
+      "ids": [
+        "R26-133",
+        "P58 HG2 ruling 4",
+        "R26-131 item 4",
+        "R26-122 (open beside it)"
+      ],
+      "kind": "watch",
+      "title": "A plate's drift idle paints nothing",
+      "judge": "See a drift plate PAINTED vs HELD side by side before any fix - the fix changes how approved plates move (five of Japan's approved plates hold still). The operator, 2026-09-14: \"Plate idle should probably paint, but would have to see what it looks like\".",
+      "where": [
+        {
+          "label": "a drift plate painted vs held, side by side (the record names it as the next step; not built)",
+          "missing": true
+        },
+        {
+          "label": "the affected timeline (5 idle: drift)",
+          "path": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json"
+        },
+        {
+          "label": "the engine line (:12733)",
+          "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs"
+        }
+      ],
+      "options": [
+        "fix it",
+        "leave it"
+      ],
+      "recommendation": "the parent: \"the next step is a look, not a fix\"",
+      "blocks": "the R26-133 fix and its gate; P58 HG2 ruling 4",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:565",
+        "docs/research/runs/p58-2-5d/HG2-SHEET.md:51-52",
+        "docs/content-video-engine/BACKLOG.md:554",
+        "docs/content-video-engine/BACKLOG.md:563"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-123-caption-default",
+      "ids": [
+        "R26-123",
+        "P57 HG2",
+        "HG-HANDOFF.md:22",
+        "R26-77"
+      ],
+      "kind": "watch",
+      "title": "The caption's default setting, by ear",
+      "judge": "Which cap_life becomes the compiler default (pop / stagger / blend, or none yet), and whether POP_LEAD 1.22 / POP_S 0.20 move. The direction is already ruled (E90 s2: the pop leads, the stagger blends under it).",
+      "where": [
+        {
+          "label": "ear: the pop player",
+          "url": "http://127.0.0.1:8761/player-pop.html",
+          "build": "scratchpad/p57/t14/tokyo-private/",
+          "stale": true,
+          "note": "answered 200 at the 2026-09-14 build, but it is a session's scratch server (BACKLOG R26-127: it dies with the session) and not in .claude/launch.json - treat it as stale"
+        },
+        {
+          "label": "ear: the stagger player",
+          "url": "http://127.0.0.1:8761/player-stagger.html",
+          "build": "scratchpad/p57/t14/tokyo-private/",
+          "stale": true,
+          "note": "answered 200 at the 2026-09-14 build, but it is a session's scratch server (BACKLOG R26-127: it dies with the session) and not in .claude/launch.json - treat it as stale"
+        },
+        {
+          "label": "ear: the blend player",
+          "url": "http://127.0.0.1:8761/player-blend.html",
+          "build": "scratchpad/p57/t14/tokyo-private/",
+          "stale": true,
+          "note": "answered 200 at the 2026-09-14 build, but it is a session's scratch server (BACKLOG R26-127: it dies with the session) and not in .claude/launch.json - treat it as stale"
+        },
+        {
+          "label": "eye: contact sheet",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/self-watch-p57-t14/contact-sheet.png"
+        },
+        {
+          "label": "eye: the band sheet",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/self-watch-p57-t14/contact-sheet-band.png"
+        }
+      ],
+      "options": [
+        "pop",
+        "stagger",
+        "blend",
+        "none yet"
+      ],
+      "recommendation": "\"the BLEND reads at every instant, the stagger alone loses the word to the voice, the pop is crisp but flat\"",
+      "blocks": "one compiler default (nothing in a plan; P57 complete)",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:555",
+        "docs/research/runs/p57-burndown/HG-HANDOFF.md:22",
+        ".claude/PRPs/plans/P57-THE-BACKLOG-BURNDOWN.plan.md:170-173",
+        ".claude/PRPs/plans/P57-THE-BACKLOG-BURNDOWN.plan.md:571",
+        "docs/content-video-engine/BACKLOG.md:483"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-76-melt-endings-in-motion",
+      "ids": [
+        "R26-76",
+        "E88"
+      ],
+      "kind": "watch",
+      "title": "The melt's three endings in motion (the ink splat, the ball thrown off the page)",
+      "judge": "The three endings IN MOTION - melt:throw (the ball off the page), melt:splash:chart, melt:splash:plate (the ink splat) - and the ball's colour (bright orange is an operator dial).",
+      "where": [
+        {
+          "label": "a served player of the three endings (\"not yet served\")",
+          "missing": true
+        },
+        {
+          "label": "melt-splash",
+          "path": "content/video_engine/tests/golden/frames/melt-splash.png"
+        },
+        {
+          "label": "melt-plate",
+          "path": "content/video_engine/tests/golden/frames/melt-plate.png"
+        },
+        {
+          "label": "melt-page@proof-015",
+          "path": "content/video_engine/tests/golden/frames/melt-page@proof-015.png"
+        },
+        {
+          "label": "melt-page@proof-045",
+          "path": "content/video_engine/tests/golden/frames/melt-page@proof-045.png"
+        },
+        {
+          "label": "melt-page@proof-075",
+          "path": "content/video_engine/tests/golden/frames/melt-page@proof-075.png"
+        },
+        {
+          "label": "melt-page@proof-100",
+          "path": "content/video_engine/tests/golden/frames/melt-page@proof-100.png"
+        },
+        {
+          "label": "the throw / chart / plate frames (session scratch, unverified)",
+          "path": "scratchpad/lanes/melt/proof/",
+          "stale": true,
+          "note": "a session-relative scratch path, not under the checkout"
+        }
+      ],
+      "options": [],
+      "recommendation": "parent PASS 3 accepted on frames 2026-09-13; \"the ball's colour is an operator dial\"",
+      "blocks": "nothing recorded",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:482",
+        "docs/content-video-engine/CAPABILITIES.md:37",
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:31"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p52-gate3-species-proof-motion",
+      "ids": [
+        "P52 gate 3",
+        "R26-87",
+        "OG Gate 3"
+      ],
+      "kind": "watch",
+      "title": "The species proof in motion (count array, numbered agenda, ring)",
+      "judge": "The count array, the numbered agenda and the ring form in motion; is the ring instant's charcoal-to-edge (not the golden's cream rim) wrong?",
+      "where": [
+        {
+          "label": "the species-proof player",
+          "url": "http://127.0.0.1:8756/player.html",
+          "build": "content/video_engine/review/gates-2026-09-13/species-proof-player/",
+          "stale": true,
+          "note": "nothing answered on this port at the 2026-09-14 build and it is not in .claude/launch.json"
+        },
+        {
+          "label": "species-proof@proof-count",
+          "path": "content/video_engine/tests/golden/frames/species-proof@proof-count.png"
+        },
+        {
+          "label": "species-proof@proof-agenda",
+          "path": "content/video_engine/tests/golden/frames/species-proof@proof-agenda.png"
+        },
+        {
+          "label": "species-proof@proof-ring",
+          "path": "content/video_engine/tests/golden/frames/species-proof@proof-ring.png"
+        }
+      ],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (P52 complete); the agenda beautify is ruled E93 and unbuilt (R26-80)",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:493",
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:40-46",
+        "docs/content-video-engine/BACKLOG.md:486"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p51-editor-gates-2-3",
+      "ids": [
+        "P51 gate 2",
+        "P51 gate 3",
+        "R26-87",
+        "R26-17 (gate 3 open)",
+        "R26-102 prerequisite",
+        "OPERATOR-DECISIONS.md:16"
+      ],
+      "kind": "watch",
+      "title": "The editor: three hand edits, the change report, the cited reply",
+      "judge": "The operator's three hand edits in the page, the change report the agent gets, and the reply that cites it.",
+      "where": [
+        {
+          "label": "tokyo-editor",
+          "url": "http://127.0.0.1:8744/editor.html",
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short-t7/",
+          "stale": true,
+          "note": "nothing answered on this port at the 2026-09-14 build and it is not in .claude/launch.json"
+        }
+      ],
+      "options": [],
+      "recommendation": "the operator's ruling 2026-09-13: close them IN the first studio session",
+      "blocks": "P51 completion (running); the R26-102 studio prerequisite",
+      "sources": [
+        ".claude/PRPs/plans/P51-THE-ANIMATORS-LOOP.plan.md:234",
+        ".claude/PRPs/plans/P51-THE-ANIMATORS-LOOP.plan.md:244",
+        ".claude/PRPs/plans/P51-THE-ANIMATORS-LOOP.plan.md:247",
+        ".claude/PRPs/plans/P51-THE-ANIMATORS-LOOP.plan.md:258",
+        "docs/content-video-engine/BACKLOG.md:493",
+        "docs/content-video-engine/BACKLOG.md:514",
+        "docs/content-video-engine/BACKLOG.md:534",
+        "docs/research/runs/studio_readiness/OPERATOR-DECISIONS.md:14-16"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p48-hg3-morph-onto-planted",
+      "ids": [
+        "P48 HG3",
+        "P48 T5b",
+        "P48 HG1 (no explicit close, unverified)",
+        "R26-16"
+      ],
+      "kind": "watch",
+      "title": "The chart-to-chart transform onto a planted element",
+      "judge": "The morph onto a PLANTED element (R26-16, the tie) - T5b is unbuilt; HG1 (the rescale / extend read) has no explicit close in the plan (unverified).",
+      "where": [
+        {
+          "label": "the morph onto a planted element (P48 T5b, unbuilt)",
+          "missing": true
+        },
+        {
+          "label": "Tokyo v2 player",
+          "url": "http://127.0.0.1:8738/player.html",
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short.v2/",
+          "stale": true,
+          "note": "nothing answered on this port at the 2026-09-14 build and it is not in .claude/launch.json"
+        },
+        {
+          "label": "the casebook: empty cream chart to chart",
+          "path": "docs/agent-memory/operator/casebook/empty-cream-chart-to-chart/CASE.md"
+        }
+      ],
+      "options": [],
+      "recommendation": null,
+      "blocks": "P48 completion (running)",
+      "sources": [
+        ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:178-186",
+        ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:412",
+        ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:451",
+        ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:480-481",
+        ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:521",
+        "docs/agent-memory/operator/one-shot-floor-recipes-not-events.md:3",
+        "docs/agent-memory/operator/one-shot-floor-recipes-not-events.md:15"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p58-hg3-chart-forms",
+      "ids": [
+        "P58 HG3",
+        "R26-131 item 1",
+        "R26-122",
+        "HG3-SHEET",
+        "CAPABILITIES BUILT - AWAITING HG3"
+      ],
+      "kind": "look",
+      "title": "The two 2.5D chart forms beside their flat pairs",
+      "judge": "Three rulings: (1) the prism - take / refuse; (2) the tilted line - take / take-only-on-a-layered-plate / refuse; (3) throw=depth - keep / rename / retire. A refused form is deleted.",
+      "where": [
+        {
+          "label": "the HG3 sheet",
+          "path": "docs/research/runs/p58-2-5d/HG3-SHEET.md"
+        },
+        {
+          "label": "form-extruded-bar",
+          "path": "content/video_engine/tests/golden/frames/form-extruded-bar.png"
+        },
+        {
+          "label": "form-extruded-bar@proof-build",
+          "path": "content/video_engine/tests/golden/frames/form-extruded-bar@proof-build.png"
+        },
+        {
+          "label": "form-extruded-bar@proof-leave",
+          "path": "content/video_engine/tests/golden/frames/form-extruded-bar@proof-leave.png"
+        },
+        {
+          "label": "thread-baseline (the flat pair of the prism)",
+          "path": "content/video_engine/tests/golden/frames/thread-baseline.png"
+        },
+        {
+          "label": "form-tilted-line",
+          "path": "content/video_engine/tests/golden/frames/form-tilted-line.png"
+        },
+        {
+          "label": "form-tilted-line@proof-build",
+          "path": "content/video_engine/tests/golden/frames/form-tilted-line@proof-build.png"
+        },
+        {
+          "label": "form-tilted-line@proof-leave",
+          "path": "content/video_engine/tests/golden/frames/form-tilted-line@proof-leave.png"
+        },
+        {
+          "label": "ledger-page-mid-build (the flat pair of the tilted line)",
+          "path": "content/video_engine/tests/golden/frames/ledger-page-mid-build.png"
+        },
+        {
+          "label": "page-depth",
+          "path": "content/video_engine/tests/golden/frames/page-depth.png"
+        },
+        {
+          "label": "page-depth@proof-build",
+          "path": "content/video_engine/tests/golden/frames/page-depth@proof-build.png"
+        },
+        {
+          "label": "page-depth@proof-leave",
+          "path": "content/video_engine/tests/golden/frames/page-depth@proof-leave.png"
+        }
+      ],
+      "options": [],
+      "recommendation": "prism: \"TAKE it as a page option (opt-in; flat stays the default)\"; tilted line: \"KEEP it opt-in for a page that sits on a layered plate under a camera move (where the tilt is the plate's), REFUSE it as a flat-page look\"; throw=depth: \"keep throw=depth as it is (a growth law, not a depth) and let the pair-refusal stand\"",
+      "blocks": "P58 T8 and completion; the CAPABILITIES rows \"BUILT - AWAITING HG3\"",
+      "sources": [
+        ".claude/PRPs/plans/P58-THE-2-5D-STAGE.plan.md:211-214",
+        ".claude/PRPs/plans/P58-THE-2-5D-STAGE.plan.md:355",
+        ".claude/PRPs/plans/P58-THE-2-5D-STAGE.plan.md:382",
+        "docs/research/runs/p58-2-5d/HG3-SHEET.md:22-34",
+        "docs/content-video-engine/BACKLOG.md:563",
+        "docs/content-video-engine/BACKLOG.md:554"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-118-metallic-ball",
+      "ids": [
+        "R26-118",
+        "R26-131 item 2",
+        "E88 s7"
+      ],
+      "kind": "look",
+      "title": "Does the living ball read metallic",
+      "judge": "Does the living ball read METALLIC (E88 s7) or glossy; and does the weight phase go into the default melt length (it stays opt-in melt:weight until ruled)?",
+      "where": [
+        {
+          "label": "melt-ball-roll",
+          "path": "content/video_engine/tests/golden/frames/melt-ball-roll.png"
+        },
+        {
+          "label": "melt-ball-roll@proof-land",
+          "path": "content/video_engine/tests/golden/frames/melt-ball-roll@proof-land.png"
+        },
+        {
+          "label": "melt-ball-roll@proof-settle",
+          "path": "content/video_engine/tests/golden/frames/melt-ball-roll@proof-settle.png"
+        },
+        {
+          "label": "melt-depth@proof-ball",
+          "path": "content/video_engine/tests/golden/frames/melt-depth@proof-ball.png"
+        }
+      ],
+      "options": [
+        "reads metallic",
+        "reads glossy"
+      ],
+      "recommendation": "\"the surface reads GLOSSY (a gel ball) more than METALLIC: the next dial is a dark Fresnel rim + a reflection band; the operator judges the frame\"",
+      "blocks": "the next dial; the weight phase stays opt-in melt:weight until ruled",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:550",
+        "docs/content-video-engine/BACKLOG.md:563",
+        "docs/portable/OPERATOR-RULINGS.md:2696-2704"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-125-p57-hg1-measured-defects",
+      "ids": [
+        "R26-125",
+        "P57 HG1",
+        "HG-HANDOFF.md:5-15",
+        "R26-66",
+        "R26-67",
+        "R26-68",
+        "R26-71"
+      ],
+      "kind": "look",
+      "title": "P57 HG1: the measured defects' frames in one sitting",
+      "judge": "Read in one sitting: R26-66 the empty stage, R26-67 the ring's flag, R26-68 the span's shade, R26-71 the figure off its own line. R26-70 (the compare morph) is its own item: \"The compare morph, and the ball morphing into the next chart\".",
+      "where": [
+        {
+          "label": "the handoff sheet",
+          "path": "docs/research/runs/p57-burndown/HG-HANDOFF.md",
+          "note": "HG-HANDOFF.md:13 names compare-morph@proof-{quoted,melt,write}.png, which do not exist; the real frames are compare-streak@proof-{quoted,melt,write}.png (linked on the compare-morph item)"
+        },
+        {
+          "label": "R26-66 the empty stage (handoff)",
+          "path": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-axes/self-watch/handoff/opening.png"
+        },
+        {
+          "label": "R26-67 the ring's flag",
+          "path": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-axes/self-watch/ring2/opening.png"
+        },
+        {
+          "label": "R26-68 the span's shade",
+          "path": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-axes/self-watch/species/opening.png"
+        },
+        {
+          "label": "R26-66 stage gaps",
+          "path": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-axes/stage-gaps.json"
+        },
+        {
+          "label": "R26-71 before (31.78 s)",
+          "path": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-review/self-watch/p57-t10/before-t31p78.png"
+        },
+        {
+          "label": "R26-71 after (31.78 s)",
+          "path": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-review/self-watch/p57-t10/after-t31p78.png"
+        },
+        {
+          "label": "R26-71 after (29.32 s)",
+          "path": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-review/self-watch/p57-t10/after-t29p32.png"
+        },
+        {
+          "label": "R26-71 after (53.92 s)",
+          "path": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-review/self-watch/p57-t10/after-t53p92.png"
+        }
+      ],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (P57 complete; \"recorded in the rows when given\")",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:557",
+        "docs/research/runs/p57-burndown/HG-HANDOFF.md:5-15",
+        ".claude/PRPs/plans/P57-THE-BACKLOG-BURNDOWN.plan.md:163-168",
+        ".claude/PRPs/plans/P57-THE-BACKLOG-BURNDOWN.plan.md:571",
+        "docs/content-video-engine/BACKLOG.md:472",
+        "docs/content-video-engine/BACKLOG.md:473",
+        "docs/content-video-engine/BACKLOG.md:474",
+        "docs/content-video-engine/BACKLOG.md:475",
+        "docs/content-video-engine/BACKLOG.md:476",
+        "docs/content-video-engine/BACKLOG.md:477"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-70-compare-morph",
+      "ids": [
+        "R26-70",
+        "R26-70 T12c",
+        "R26-117",
+        "R26-125 (its R26-70 line)"
+      ],
+      "kind": "look",
+      "title": "The compare morph, and the ball morphing into the next chart",
+      "judge": "The quoted figure balls up and the ball MORPHS into the comparator (built). The page-level melt:morph (the ball -> the next chart, R26-117) is NOT built.",
+      "where": [
+        {
+          "label": "compare-morph",
+          "path": "content/video_engine/tests/golden/frames/compare-morph.png"
+        },
+        {
+          "label": "compare-morph@proof-sag",
+          "path": "content/video_engine/tests/golden/frames/compare-morph@proof-sag.png"
+        },
+        {
+          "label": "compare-morph@proof-ball",
+          "path": "content/video_engine/tests/golden/frames/compare-morph@proof-ball.png"
+        },
+        {
+          "label": "compare-morph@proof-050",
+          "path": "content/video_engine/tests/golden/frames/compare-morph@proof-050.png"
+        },
+        {
+          "label": "compare-streak@proof-quoted (HG-HANDOFF.md:13 calls it compare-morph@proof-quoted, which does not exist)",
+          "path": "content/video_engine/tests/golden/frames/compare-streak@proof-quoted.png"
+        },
+        {
+          "label": "compare-streak@proof-melt (HG-HANDOFF.md:13 calls it compare-morph@proof-melt, which does not exist)",
+          "path": "content/video_engine/tests/golden/frames/compare-streak@proof-melt.png"
+        },
+        {
+          "label": "compare-streak@proof-write (HG-HANDOFF.md:13 calls it compare-morph@proof-write, which does not exist)",
+          "path": "content/video_engine/tests/golden/frames/compare-streak@proof-write.png"
+        },
+        {
+          "label": "compare-count@proof-mid",
+          "path": "content/video_engine/tests/golden/frames/compare-count@proof-mid.png"
+        },
+        {
+          "label": "R26-117 the page-level ball-to-chart morph (not built)",
+          "missing": true
+        }
+      ],
+      "options": [],
+      "recommendation": "on R26-70: \"the melt form is the default per your ruling; MELT_BOX (3.2) is the dial to tune by eye if the sag reads too small on a one-line figure\"",
+      "blocks": "the R26-117 build (after T12c)",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:476",
+        "docs/content-video-engine/BACKLOG.md:549",
+        "docs/portable/OPERATOR-RULINGS.md:2684-2687",
+        "docs/research/runs/p57-burndown/HG-HANDOFF.md:13-15"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-124-slide-seam-and-swap-lane",
+      "ids": [
+        "R26-124",
+        "P57 HG2",
+        "HG-HANDOFF.md:21",
+        "HG-HANDOFF.md:24",
+        "R26-75",
+        "R26-79"
+      ],
+      "kind": "look",
+      "title": "The slide's seam and the race's rank-swap lane",
+      "judge": "(1) The slide's seam at mid-slide - boards, or a seam to close (the deckle notch)? (2) The race's rank-swap lane - does it read as two rows? (The race path default is already ruled, E91 s1.)",
+      "where": [
+        {
+          "label": "slide-mid",
+          "path": "content/video_engine/tests/golden/frames/slide-mid.png"
+        },
+        {
+          "label": "slide-landed",
+          "path": "content/video_engine/tests/golden/frames/slide-landed.png"
+        },
+        {
+          "label": "race-swap",
+          "path": "content/video_engine/tests/golden/frames/race-swap.png"
+        },
+        {
+          "label": "race-path-eased (already ruled: the default)",
+          "path": "content/video_engine/tests/golden/frames/race-path-eased.png"
+        },
+        {
+          "label": "race-path-clothoid (already ruled: by name)",
+          "path": "content/video_engine/tests/golden/frames/race-path-clothoid.png"
+        }
+      ],
+      "options": [],
+      "recommendation": null,
+      "blocks": "\"each one dial or a golden\"",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:556",
+        "docs/research/runs/p57-burndown/HG-HANDOFF.md:21-26",
+        ".claude/PRPs/plans/P57-THE-BACKLOG-BURNDOWN.plan.md:170-173",
+        "docs/content-video-engine/BACKLOG.md:481",
+        "docs/content-video-engine/BACKLOG.md:485"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p58-t6c-slide-depth",
+      "ids": [
+        "P58 T6c"
+      ],
+      "kind": "look",
+      "title": "The slide through the depth",
+      "judge": "Does slide:...:depth= earn its keep? It reads ~20 px at 0.85 / 1.15 on two charcoal boards.",
+      "where": [
+        {
+          "label": "slide-depth",
+          "path": "content/video_engine/tests/golden/frames/slide-depth.png"
+        },
+        {
+          "label": "slide-depth@proof-mid",
+          "path": "content/video_engine/tests/golden/frames/slide-depth@proof-mid.png"
+        }
+      ],
+      "options": [],
+      "recommendation": "\"it earns its keep only where the two worlds differ in ground or scale (a question for the operator's eye, not a defect)\"",
+      "blocks": "nothing",
+      "sources": [
+        ".claude/PRPs/plans/P58-THE-2-5D-STAGE.plan.md:364"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p55-hg2-effects-gallery",
+      "ids": [
+        "P55 HG2",
+        "R26-86"
+      ],
+      "kind": "look",
+      "title": "The effects gallery earns its keep",
+      "judge": "Keep, trim, or retire P55 T9, the effects gallery.",
+      "where": [
+        {
+          "label": "the gallery page",
+          "path": "content/video_engine/effects/gallery/index.html"
+        },
+        {
+          "label": "p55-effects-gallery",
+          "url": "http://127.0.0.1:8758/index.html",
+          "build": "content/video_engine/effects/gallery/",
+          "stale": true,
+          "note": "nothing answered on this port at the 2026-09-14 build and it is not in .claude/launch.json"
+        }
+      ],
+      "options": [
+        "keep",
+        "trim",
+        "retire"
+      ],
+      "recommendation": null,
+      "blocks": "P55 T9 \"built - awaiting HG2\" (frontmatter already complete)",
+      "sources": [
+        ".claude/PRPs/plans/P55-THE-EFFECTS-CATALOGUE.plan.md:154-155",
+        ".claude/PRPs/plans/P55-THE-EFFECTS-CATALOGUE.plan.md:350",
+        ".claude/PRPs/plans/P55-THE-EFFECTS-CATALOGUE.plan.md:356",
+        "docs/content-video-engine/BACKLOG.md:492"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p56-hg2-one-shot-floor",
+      "ids": [
+        "P56 HG2",
+        "R26-104"
+      ],
+      "kind": "look",
+      "title": "The first cut measured under the one-shot floor",
+      "judge": "Keep, move or retire the M35-M42 thresholds, including the coverage reading.",
+      "where": [
+        {
+          "label": "the first cut's self-watch report + recipe audit sheet (no build named)",
+          "missing": true
+        },
+        {
+          "label": "nearest numbers: the HG2 sheet :31-36 (floor 2 FAIL / 1 WARN / 3 PASS, M38 0.76 / 0.64)",
+          "path": "docs/research/runs/p58-2-5d/HG2-SHEET.md"
+        }
+      ],
+      "options": [
+        "keep",
+        "move",
+        "retire"
+      ],
+      "recommendation": "\"the parent may raise the bar to count >= 2 at HG2\"",
+      "blocks": "nothing (\"the rows are data until then\")",
+      "sources": [
+        ".claude/PRPs/plans/P56-EFFECT-RECIPES-AND-THE-ONE-SHOT-FLOOR.plan.md:214-216",
+        ".claude/PRPs/plans/P56-EFFECT-RECIPES-AND-THE-ONE-SHOT-FLOOR.plan.md:508",
+        "docs/content-video-engine/BACKLOG.md:536"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p53-hg1-opening-register",
+      "ids": [
+        "P53 HG1",
+        "R26-65",
+        "R26-87"
+      ],
+      "kind": "look",
+      "title": "The opening register",
+      "judge": "Frame 0 and 0.5 of the axes register vs the built: which is the hook's default?",
+      "where": [
+        {
+          "label": "the axes self-watch (unverified which frames)",
+          "path": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-axes/self-watch/axes/"
+        }
+      ],
+      "options": [
+        "the axes register",
+        "the built"
+      ],
+      "recommendation": null,
+      "blocks": "P53 completion (running)",
+      "sources": [
+        ".claude/PRPs/plans/P53-WHAT-THE-ONE-SHOT-TAUGHT.plan.md:108-109",
+        "docs/content-video-engine/BACKLOG.md:471",
+        "docs/content-video-engine/BACKLOG.md:493"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p53-hg4-cutout-dock-first-frame",
+      "ids": [
+        "P53 HG4",
+        "R26-59",
+        "OG Part 2 item 2",
+        "R26-87"
+      ],
+      "kind": "look",
+      "title": "The cutout dock's first frame",
+      "judge": "Gate 1's 16:9 frame re-rendered with a head that carries no card (the authoring is fixed, R26-94).",
+      "where": [
+        {
+          "label": "gate 1's 16:9 frame re-rendered with a cardless head (not re-rendered on record)",
+          "missing": true
+        },
+        {
+          "label": "newsreel-band (the nearest golden)",
+          "path": "content/video_engine/tests/golden/frames/newsreel-band.png"
+        }
+      ],
+      "options": [],
+      "recommendation": null,
+      "blocks": "P53 completion",
+      "sources": [
+        ".claude/PRPs/plans/P53-WHAT-THE-ONE-SHOT-TAUGHT.plan.md:10",
+        ".claude/PRPs/plans/P53-WHAT-THE-ONE-SHOT-TAUGHT.plan.md:114",
+        ".claude/PRPs/plans/P53-WHAT-THE-ONE-SHOT-TAUGHT.plan.md:238",
+        ".claude/PRPs/plans/P53-WHAT-THE-ONE-SHOT-TAUGHT.plan.md:249",
+        "docs/content-video-engine/BACKLOG.md:464",
+        "docs/content-video-engine/BACKLOG.md:500",
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:93-97"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-82-verdict-stack-short",
+      "ids": [
+        "R26-82"
+      ],
+      "kind": "look",
+      "title": "The vertical evidence wall (verdict stack) on a short",
+      "judge": "The verdict stack's phases (enter one at a time, focus, recede, idle, burst) as a candidate for a short.",
+      "where": [
+        {
+          "label": "verdict-stack",
+          "path": "content/video_engine/tests/golden/frames/verdict-stack.png"
+        },
+        {
+          "label": "verdict-stack@proof-burst",
+          "path": "content/video_engine/tests/golden/frames/verdict-stack@proof-burst.png"
+        },
+        {
+          "label": "the long form: ev-holds-stack-v1 at :1198, 702.87-723.69 s",
+          "path": "content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f/evidence-dock.json"
+        }
+      ],
+      "options": [],
+      "recommendation": "the test bed = the bridge short's pass 2 (R26-88)",
+      "blocks": "nothing; no short uses it",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:488",
+        "docs/content-video-engine/BACKLOG.md:494"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-114-apex-chart-read",
+      "ids": [
+        "R26-114"
+      ],
+      "kind": "rule",
+      "title": "The Apex Chart Read against E24",
+      "judge": "The \"Apex Chart Read\" (frame 0 on the live chart at its apex) against E24 \"never open on the full chart\".",
+      "where": [
+        {
+          "label": "the blueprint",
+          "path": "docs/research/retention/CHART_APEX_RETENTION_ARCHITECTURE_RESEARCH_BLUEPRINT.md"
+        },
+        {
+          "label": "the retention findings",
+          "path": "docs/research/runs/vidiq_retention_zones/findings_retention.md"
+        }
+      ],
+      "options": [],
+      "recommendation": null,
+      "blocks": "one slice",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:546"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-136-four-unrecorded-rules",
+      "ids": [
+        "R26-136"
+      ],
+      "kind": "rule",
+      "title": "Four rules used but never recorded as rulings",
+      "judge": "A fix never lowers motion; a served review build is never rebuilt; never pipe a gated step into tail; recall before propose - each needs the operator's recorded words.",
+      "where": [
+        {
+          "label": "the backlog row (:568)",
+          "path": "docs/content-video-engine/BACKLOG.md"
+        }
+      ],
+      "options": [],
+      "recommendation": "\"each needs the operator's recorded words written as a ruling\"",
+      "blocks": "R26-136",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:568"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-109-myth-rewrite-order-b",
+      "ids": [
+        "R26-109"
+      ],
+      "kind": "rule",
+      "title": "The Myth of Historical Normal: REWRITE-ORDER-B and the ring token",
+      "judge": "\"The Myth of Historical Normal\" REWRITE-ORDER-B (DRAFT) and the ring token (the gates FAIL either way).",
+      "where": [
+        {
+          "label": "REWRITE-ORDER-B",
+          "path": "content/video_engine/projects/systems-and-blowups/myth-of-historical-normal/REWRITE-ORDER-B.md"
+        }
+      ],
+      "options": [],
+      "recommendation": "proposes ERP -0.80% [verify], the 565.4 s clock, zeta 0.82 / w0 14.5 kept",
+      "blocks": "the next letter of that script",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:541"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-102-studio-plan",
+      "ids": [
+        "R26-102"
+      ],
+      "kind": "rule",
+      "title": "The studio plan: who drafts it, P30, its home",
+      "judge": "Who drafts the studio plan (Astra or Fable), a ruling on P30, and the plan's home across lanes.",
+      "where": [
+        {
+          "label": "the readiness review",
+          "path": "docs/content-video-engine/STUDIO-READINESS-REVIEW-2026-09-13.md"
+        },
+        {
+          "label": "the operator decisions (:1-27)",
+          "path": "docs/research/runs/studio_readiness/OPERATOR-DECISIONS.md"
+        }
+      ],
+      "options": [
+        "Astra drafts",
+        "Fable drafts"
+      ],
+      "recommendation": "\"No plan is drafted by the Claude lane\"",
+      "blocks": "the studio (R26-102)",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:534"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p58-hg1-follow-ups",
+      "ids": [
+        "P58 HG1 follow-ups",
+        "HG1-SHEET ruling 2",
+        "R26-131 item 3",
+        "P60 (another session)"
+      ],
+      "kind": "rule",
+      "title": "P58 HG1 follow-ups: route (a) at GPT Image 2.5, the subject plane's depth",
+      "judge": "(a) Hand-generate one plate's four layers in GPT Image 2.5 for the real route-(a) comparison (optional; P60 in another session overlaps); (b) the subject plane's depth 1.275 vs on mid (not quoted as ruled - unverified).",
+      "where": [
+        {
+          "label": "the HG1 sheet (:38-41)",
+          "path": "docs/research/runs/p58-2-5d/HG1-SHEET.md"
+        },
+        {
+          "label": "the prompts (unverified)",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/prompted/"
+        },
+        {
+          "label": "the probe contact sheet",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/frames/contact-sheet.png",
+          "note": "HG1-SHEET.md:4 says it is served at the :8762 root; on disk it is here"
+        },
+        {
+          "label": "the probe folder (HG1-SHEET.md:4)",
+          "url": "http://127.0.0.1:8762/contact-sheet.png",
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/frames/",
+          "stale": true,
+          "note": "answered 200 at the 2026-09-14 build, but it is a session's scratch server (BACKLOG R26-127: it dies with the session) and not in .claude/launch.json - treat it as stale"
+        }
+      ],
+      "options": [],
+      "recommendation": "\"no slice waits on it\"; T2 proposes 1.275",
+      "blocks": "nothing",
+      "sources": [
+        "docs/research/runs/p58-2-5d/HG1-SHEET.md:34-41",
+        "docs/content-video-engine/BACKLOG.md:563",
+        "docs/portable/OPERATOR-RULINGS.md:2885-2887",
+        ".claude/PRPs/plans/P60-IMAGE-AND-PROP-CAPABILITY-TESTS.plan.md:160"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-hg2-triage-digest",
+      "ids": [
+        "P54 HG2"
+      ],
+      "kind": "rule",
+      "title": "The triage digest",
+      "judge": "Every ruling-candidate, gate-candidate and conflict in the digest - including the two gate-candidates: a ring on a tip tag, a name on a neighbour's line.",
+      "where": [
+        {
+          "label": "the operator ledger (the digest's location unverified)",
+          "path": "docs/operator-ledger/"
+        }
+      ],
+      "options": [],
+      "recommendation": null,
+      "blocks": "P54 completion (running)",
+      "sources": [
+        ".claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:105-106",
+        ".claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:150",
+        ".claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:274-277",
+        ".claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:284"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-hg3-astra-fable-bakeoff",
+      "ids": [
+        "P54 HG3",
+        "P54 T7",
+        "R26-87"
+      ],
+      "kind": "rule",
+      "title": "The Astra-vs-Fable bake-off",
+      "judge": "The bake-off brief before dispatch, then the verdict after the (unlabelled) watch.",
+      "where": [
+        {
+          "label": "the bake-off brief docs/runbooks/BAKEOFF-ASTRA-FABLE.md (not on disk)",
+          "missing": true
+        }
+      ],
+      "options": [],
+      "recommendation": null,
+      "blocks": "P54 T7 (pending) and completion",
+      "sources": [
+        ".claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:107",
+        ".claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:190-195",
+        "docs/content-video-engine/BACKLOG.md:493"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p46-hg1-hg3-bridge-contract",
+      "ids": [
+        "P46 HG1",
+        "P46 HG3"
+      ],
+      "kind": "rule",
+      "title": "The bridge: the packet contract and the budget",
+      "judge": "Ratify the packet contract (T4 pending), and the grace / SLA / residue budget (defaults grace 10 min, SLA 60 min, 6 runs / 200k tokens set in the module; ratification not recorded - unverified).",
+      "where": [
+        {
+          "label": "the packet runbook",
+          "path": "docs/runbooks/BRIDGE-PACKET.md"
+        }
+      ],
+      "options": [],
+      "recommendation": null,
+      "blocks": "P46 T4 and completion (running)",
+      "sources": [
+        ".claude/PRPs/plans/P46-BRIDGE-ADAPTER.plan.md:71-73",
+        ".claude/PRPs/plans/P46-BRIDGE-ADAPTER.plan.md:139-146",
+        ".claude/PRPs/plans/P46-BRIDGE-ADAPTER.plan.md:165"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-84-astra-on-the-engine",
+      "ids": [
+        "R26-84"
+      ],
+      "kind": "rule",
+      "title": "Astra back on the engine",
+      "judge": "Astra back on the engine (its own worktree, one writer per engine / compiler file) - the operator's go is not recorded.",
+      "where": [
+        {
+          "label": "the backlog row (:490)",
+          "path": "docs/content-video-engine/BACKLOG.md"
+        }
+      ],
+      "options": [
+        "go",
+        "not yet"
+      ],
+      "recommendation": "the three conditions listed; (1) R26-83 is now done",
+      "blocks": "unverified (Astra lane work; P54 T7's Astra run)",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:490"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "gemini-rerun-vs-split",
+      "ids": [
+        "memory 2026-09-12",
+        "P54 extraction"
+      ],
+      "kind": "rule",
+      "title": "A gated Gemini rerun, or a Gemini-coverage + Opus-judgement split",
+      "judge": "For the P54 extraction: a stronger gated Gemini rerun vs a split of Gemini coverage and Opus judgement (unverified still open).",
+      "where": [
+        {
+          "label": "the resume memory (:42-43)",
+          "path": "docs/agent-memory/operator/resume-2026-09-12.md"
+        }
+      ],
+      "options": [
+        "a stronger gated Gemini rerun",
+        "Gemini coverage + Opus judgement"
+      ],
+      "recommendation": null,
+      "blocks": "nothing recorded",
+      "sources": [
+        "docs/agent-memory/operator/resume-2026-09-12.md:42"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-126-push-word",
+      "ids": [
+        "R26-126",
+        "R26-131 item 5",
+        "R26-83 tail",
+        "OG Gate 8"
+      ],
+      "kind": "approve",
+      "title": "The push word",
+      "judge": "main is 22 commits ahead of origin (git rev-list --left-right --count main...origin/main = \"22 0\" at 9c9c358, 2026-09-14; BACKLOG R26-131 says 12, which is stale). Push, or hold.",
+      "where": [
+        {
+          "label": "the commits",
+          "command": "git log --oneline origin/main..main"
+        },
+        {
+          "label": "the count",
+          "command": "git rev-list --left-right --count main...origin/main"
+        }
+      ],
+      "options": [
+        "push",
+        "hold"
+      ],
+      "recommendation": "\"nothing is pushed without the word (the 09-14 push word was one-time)\"",
+      "blocks": "origin; the layer commit waits on the other session (P58:382)",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:558",
+        "docs/content-video-engine/BACKLOG.md:563",
+        "docs/content-video-engine/BACKLOG.md:489",
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:80-82"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-119-release-living-drop",
+      "ids": [
+        "R26-119"
+      ],
+      "kind": "approve",
+      "title": "Release the living-drop research from quarantine",
+      "judge": "Release the living metallic drop research (gate: PLAUSIBLE).",
+      "where": [
+        {
+          "label": "the run",
+          "path": "docs/research/runs/living_drop/"
+        },
+        {
+          "label": "the blueprint",
+          "path": "docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md"
+        },
+        {
+          "label": "the gate table",
+          "path": "docs/research/runs/p58-2-5d/research-gate-2026-09-14.md"
+        }
+      ],
+      "options": [
+        "release",
+        "keep quarantined"
+      ],
+      "recommendation": "usable: tau_2, the settle window, the highlight seat; NOT: galinstan sigma, the ink row, the highlight size",
+      "blocks": "R26-118's dials",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:551"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-120-release-implicit-morph",
+      "ids": [
+        "R26-120"
+      ],
+      "kind": "approve",
+      "title": "Release the implicit-morph research from quarantine",
+      "judge": "Release the implicit / SDF morph research (gate: UNSOURCED-editorial; the cost claim REJECTED).",
+      "where": [
+        {
+          "label": "the run",
+          "path": "docs/research/runs/implicit_morph/"
+        },
+        {
+          "label": "the blueprint",
+          "path": "docs/research/motion/IMPLICIT_MORPH_RESEARCH_BLUEPRINT.md"
+        },
+        {
+          "label": "the gate table",
+          "path": "docs/research/runs/p58-2-5d/research-gate-2026-09-14.md"
+        }
+      ],
+      "options": [
+        "release",
+        "keep quarantined"
+      ],
+      "recommendation": "\"Keep as hypotheses only\"",
+      "blocks": "the form: morph field-blend decision",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:552"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-121-release-rig-layer",
+      "ids": [
+        "R26-121"
+      ],
+      "kind": "approve",
+      "title": "Release the rig-layer research from quarantine",
+      "judge": "Release the relation / rig layer research (gate: PLAUSIBLE, the best-formed).",
+      "where": [
+        {
+          "label": "the run",
+          "path": "docs/research/runs/rig_layer/"
+        },
+        {
+          "label": "the blueprint",
+          "path": "docs/research/motion/RIG_CONSTRAINTS_RELATION_LAYER_RESEARCH_BLUEPRINT.md"
+        },
+        {
+          "label": "the gate table",
+          "path": "docs/research/runs/p58-2-5d/research-gate-2026-09-14.md"
+        }
+      ],
+      "options": [
+        "release",
+        "keep quarantined"
+      ],
+      "recommendation": "usable: the Spine overwrite rule, two-bone IK; ignore s3.2",
+      "blocks": "R26-105's plan",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:553"
+      ],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "r26-134-evidence-door-watch",
+      "ids": [
+        "R26-134",
+        "E98 s7"
+      ],
+      "kind": "watch",
+      "title": "The evidence door, watched",
+      "judge": "WATCHED 2026-09-14; the card stays a DRAFT until a cut authored with it is approved; the empty-stage measure follow-up is in the build.",
+      "where": [
+        {
+          "label": "the Japan evidence door (served)",
+          "url": "http://127.0.0.1:8765/player.html",
+          "build": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-p58-door/"
+        },
+        {
+          "label": "door-open",
+          "path": "content/video_engine/tests/golden/frames/door-open.png"
+        },
+        {
+          "label": "door-open@proof-early",
+          "path": "content/video_engine/tests/golden/frames/door-open@proof-early.png"
+        },
+        {
+          "label": "door-open@proof-mid",
+          "path": "content/video_engine/tests/golden/frames/door-open@proof-mid.png"
+        }
+      ],
+      "options": [],
+      "recommendation": "the parent: \"the flat bill swings open on its right edge onto the vault\"",
+      "blocks": "the card stays draft; no plan",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:566",
+        "docs/portable/OPERATOR-RULINGS.md:2889-2899"
+      ],
+      "status": "ruled",
+      "ruling": "BACKLOG R26-134 (docs/content-video-engine/BACKLOG.md:566) WATCHED 2026-09-14: \"the door effect works well\"; the card is E98 s7 (docs/portable/OPERATOR-RULINGS.md:2889-2899)"
+    },
+    {
+      "id": "og-gates-1-2-4-5-6-7",
+      "ids": [
+        "OG gates 1, 2, 4, 5, 6, 7"
+      ],
+      "kind": "look",
+      "title": "The 2026-09-12 page's gates 1, 2, 4, 5, 6, 7 (\"none ruled\")",
+      "judge": "The 2026-09-12 page's gates 1, 2, 4, 5, 6, 7 (\"none ruled\")",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:16",
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:21",
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:31",
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:48",
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:57",
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:66",
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:73",
+        "docs/portable/OPERATOR-RULINGS.md:2708"
+      ],
+      "status": "ruled",
+      "ruling": "RULED per their headings: E84 (OG:21), E88 (OG:31), E90 (OG:48), E91 (OG:57), E92 (OG:66), E89 (OG:73; RUL:2708)"
+    },
+    {
+      "id": "og-dock-landing-licenses-cue",
+      "ids": [
+        "OG Part 2 item 1",
+        "BACKLOG :528"
+      ],
+      "kind": "rule",
+      "title": "Whether a dock's own landing licenses its cue",
+      "judge": "Whether a dock's own landing licenses its cue",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:90",
+        "docs/content-video-engine/BACKLOG.md:528"
+      ],
+      "status": "ruled",
+      "ruling": "E83 \"yes\" (OG:90)"
+    },
+    {
+      "id": "r26-60-compiler-stamp",
+      "ids": [
+        "OG Part 2 item 3",
+        "R26-60"
+      ],
+      "kind": "rule",
+      "title": "The R26-60 compiler stamp",
+      "judge": "The R26-60 compiler stamp",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:465"
+      ],
+      "status": "ruled",
+      "ruling": "BACKLOG :465 CLOSED 2026-09-12"
+    },
+    {
+      "id": "r26-64-r26-85-strobe-dials",
+      "ids": [
+        "OG Part 2 items 4-5",
+        "R26-64",
+        "P53 HG3 strobe row",
+        "R26-85"
+      ],
+      "kind": "rule",
+      "title": "IMPACT_S and STROBE_PX_S (the strobe ceiling)",
+      "judge": "IMPACT_S and STROBE_PX_S (the strobe ceiling)",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:469",
+        "docs/content-video-engine/BACKLOG.md:491",
+        "docs/content-video-engine/BACKLOG.md:493",
+        ".claude/PRPs/plans/P53-WHAT-THE-ONE-SHOT-TAUGHT.plan.md:113"
+      ],
+      "status": "ruled",
+      "ruling": "BACKLOG :469 RULED 2026-09-14 (P57 T5) per the operator-accepted recommendation on R26-85: IMPACT_S deleted dd859b6, 300/250 kept as operator-set constants, the derivation stripped (the gate row itself is still owed work, not a ruling)"
+    },
+    {
+      "id": "bridge-reply-f4541f7f6808",
+      "ids": [
+        "OG Part 5 item 3",
+        "R26-89"
+      ],
+      "kind": "rule",
+      "title": "The unread bridge reply f4541f7f6808",
+      "judge": "The unread bridge reply f4541f7f6808",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:495",
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:156-157"
+      ],
+      "status": "ruled",
+      "ruling": "BACKLOG :495 R26-89 DONE 2026-09-13"
+    },
+    {
+      "id": "og-gate-8-push-09-12",
+      "ids": [
+        "OG Gate 8"
+      ],
+      "kind": "approve",
+      "title": "The 2026-09-12 push (Gate 8)",
+      "judge": "The 2026-09-12 push (Gate 8)",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:558",
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:80-82"
+      ],
+      "status": "ruled",
+      "ruling": "superseded by R26-126 (BACKLOG :558), the push word item in this queue"
+    },
+    {
+      "id": "r26-83-commit-batch",
+      "ids": [
+        "R26-83"
+      ],
+      "kind": "approve",
+      "title": "The 2026-09-13 evening commit batch",
+      "judge": "The 2026-09-13 evening commit batch",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:489"
+      ],
+      "status": "ruled",
+      "ruling": "BACKLOG :489 DONE 2026-09-13 night"
+    },
+    {
+      "id": "d3-d6-pending",
+      "ids": [
+        "BACKLOG :578 D3 / D6"
+      ],
+      "kind": "rule",
+      "title": "The pending D3 / D6",
+      "judge": "The pending D3 / D6",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:578",
+        "docs/content-video-engine/BACKLOG.md:651"
+      ],
+      "status": "ruled",
+      "ruling": "BACKLOG :651 \"ruled 2026-09-06 (E42)\""
+    },
+    {
+      "id": "p47-tokyo-remake-watch-render",
+      "ids": [
+        "P47 HG1-3",
+        "the Tokyo remake :8738"
+      ],
+      "kind": "watch",
+      "title": "The Tokyo remake's watch and the render word",
+      "judge": "The Tokyo remake's watch and the render word",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        ".claude/PRPs/plans/P47-STOP-ACTION-BUILD-ON-AND-THE-CHART-MORPH.plan.md:4",
+        ".claude/PRPs/plans/P47-STOP-ACTION-BUILD-ON-AND-THE-CHART-MORPH.plan.md:137",
+        ".claude/PRPs/plans/P47-STOP-ACTION-BUILD-ON-AND-THE-CHART-MORPH.plan.md:140",
+        ".claude/PRPs/plans/P47-STOP-ACTION-BUILD-ON-AND-THE-CHART-MORPH.plan.md:192",
+        "docs/agent-memory/operator/tokyo-short-render.md:79-93"
+      ],
+      "status": "ruled",
+      "ruling": "watch \"8742>8738\" 2026-09-10 and 2026-09-11 \"DO NOT ASK FOR A RENDER ... Stop listing 'the render word'\" (docs/agent-memory/operator/tokyo-short-render.md:79-93); P47 HG1/2/3 read 2026-09-07 incl. HG3 morph \"it reads but not effectively\""
+    },
+    {
+      "id": "p49-hg1-hg3",
+      "ids": [
+        "P49 HG1",
+        "P49 HG3"
+      ],
+      "kind": "watch",
+      "title": "P49's human gates",
+      "judge": "P49's human gates",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        ".claude/PRPs/plans/P49-THE-CAMERA.plan.md:246",
+        ".claude/PRPs/plans/P49-THE-CAMERA.plan.md:263",
+        ".claude/PRPs/plans/P49-THE-CAMERA.plan.md:267",
+        ".claude/PRPs/plans/P49-THE-CAMERA.plan.md:330",
+        ".claude/PRPs/plans/P49-THE-CAMERA.plan.md:340"
+      ],
+      "status": "ruled",
+      "ruling": "PLAN:P49:246, :267 CLOSED 2026-09-10 \"8742>8738\"; :340 HG3 closed; frontmatter complete"
+    },
+    {
+      "id": "p48-hg2-hg4",
+      "ids": [
+        "P48 HG2",
+        "P48 HG4"
+      ],
+      "kind": "look",
+      "title": "P48 HG2 and HG4",
+      "judge": "P48 HG2 and HG4",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:353",
+        ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:521"
+      ],
+      "status": "ruled",
+      "ruling": "PLAN:P48:353 \"HG2 answered\"; PLAN:P48:521 HG4 round 2 applied 2026-09-10 + the 8742>8738 watch (the HG4 close is inferred - unverified)"
+    },
+    {
+      "id": "p45-p35-p46-gates",
+      "ids": [
+        "P45 HG1-3",
+        "P35 gates 1-3",
+        "P46 HG2"
+      ],
+      "kind": "look",
+      "title": "P45 HG1-3, P35 gates 1-3, P46 HG2",
+      "judge": "P45 HG1-3, P35 gates 1-3, P46 HG2",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        ".claude/PRPs/plans/P45-CORPUS-RECONCILIATION.plan.md:142",
+        ".claude/PRPs/plans/P45-CORPUS-RECONCILIATION.plan.md:195",
+        ".claude/PRPs/plans/P35-LEDGER-PAGE-PLATE-CHARTS.plan.md:278",
+        ".claude/PRPs/plans/P35-LEDGER-PAGE-PLATE-CHARTS.plan.md:322",
+        ".claude/PRPs/plans/P35-LEDGER-PAGE-PLATE-CHARTS.plan.md:354",
+        ".claude/PRPs/plans/P46-BRIDGE-ADAPTER.plan.md:149"
+      ],
+      "status": "ruled",
+      "ruling": "closed in their plans: PLAN:P45:142, :195; PLAN:P35:278, :322, :354; PLAN:P46:149"
+    },
+    {
+      "id": "p54-p55-p56-hg1",
+      "ids": [
+        "P54 HG1",
+        "P55 HG1",
+        "P56 HG1"
+      ],
+      "kind": "rule",
+      "title": "P54 HG1, P55 HG1, P56 HG1",
+      "judge": "P54 HG1, P55 HG1, P56 HG1",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        ".claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:10",
+        ".claude/PRPs/plans/P55-THE-EFFECTS-CATALOGUE.plan.md:146",
+        ".claude/PRPs/plans/P56-EFFECT-RECIPES-AND-THE-ONE-SHOT-FLOOR.plan.md:212",
+        ".claude/PRPs/plans/P56-EFFECT-RECIPES-AND-THE-ONE-SHOT-FLOOR.plan.md:427"
+      ],
+      "status": "ruled",
+      "ruling": "closed in their plans: PLAN:P54:10; PLAN:P55:146; PLAN:P56:212, :427"
+    },
+    {
+      "id": "p58-hg1-the-route",
+      "ids": [
+        "P58 HG1 ruling 1"
+      ],
+      "kind": "rule",
+      "title": "P58 HG1: the route",
+      "judge": "P58 HG1: the route",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        "docs/portable/OPERATOR-RULINGS.md:2878-2887",
+        ".claude/PRPs/plans/P58-THE-2-5D-STAGE.plan.md:319"
+      ],
+      "status": "ruled",
+      "ruling": "E98 s6 (RUL:2878-2887; PLAN:P58:319) - a layer is generated, never split; split = fallback"
+    },
+    {
+      "id": "r26-124-race-path-default",
+      "ids": [
+        "R26-124 part 3"
+      ],
+      "kind": "look",
+      "title": "Which race path is the default",
+      "judge": "Which race path is the default",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        "docs/portable/OPERATOR-RULINGS.md:2745",
+        "docs/content-video-engine/BACKLOG.md:556"
+      ],
+      "status": "ruled",
+      "ruling": "E91 s1 (RUL:2745): eased default, clothoid by name"
+    },
+    {
+      "id": "r26-123-caption-direction",
+      "ids": [
+        "R26-123 (the direction)"
+      ],
+      "kind": "watch",
+      "title": "The caption's direction",
+      "judge": "The caption's direction",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        "docs/portable/OPERATOR-RULINGS.md:2727",
+        "docs/content-video-engine/BACKLOG.md:555"
+      ],
+      "status": "ruled",
+      "ruling": "E90 s2 (RUL:2727): the pop leads, the stagger blends under it - only the dial default and POP_LEAD / POP_S remain (the open caption item)"
+    },
+    {
+      "id": "r26-132-melt-depth-refusal",
+      "ids": [
+        "R26-132 part 1"
+      ],
+      "kind": "rule",
+      "title": "The melt's depth refusal",
+      "judge": "The melt's depth refusal",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        "docs/content-video-engine/BACKLOG.md:564"
+      ],
+      "status": "ruled",
+      "ruling": "BACKLOG :564 CLOSED 2026-09-14 by P58 T6c"
+    },
+    {
+      "id": "p54-commit",
+      "ids": [
+        "resume-2026-09-12.md:43"
+      ],
+      "kind": "approve",
+      "title": "The commit of P54",
+      "judge": "The commit of P54",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        "docs/agent-memory/operator/resume-2026-09-12.md:43",
+        "docs/agent-memory/operator/resume-2026-09-12.md:68"
+      ],
+      "status": "ruled",
+      "ruling": "resume-2026-09-12.md:68 COMMITTED f2c2a31"
+    },
+    {
+      "id": "icons-render-eligible",
+      "ids": [
+        "BACKLOG :486 icons"
+      ],
+      "kind": "approve",
+      "title": "The icons' render eligibility",
+      "judge": "The icons' render eligibility",
+      "where": [],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (ruled)",
+      "sources": [
+        "docs/portable/OPERATOR-RULINGS.md:2778",
+        "docs/content-video-engine/BACKLOG.md:486",
+        "docs/content-video-engine/BACKLOG.md:496"
+      ],
+      "status": "ruled",
+      "ruling": "E94 (RUL:2778); BACKLOG :496 \"render_eligible: true\""
+    }
+  ]
+}

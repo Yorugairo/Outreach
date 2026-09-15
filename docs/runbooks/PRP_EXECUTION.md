@@ -203,6 +203,8 @@ Required sections:
 - `## Verification`
 - `## Evidence And Handoff`
 
+Every human gate a plan names (HG1, HG2, ...) gets a row in [`docs/content-video-engine/REVIEW-QUEUE.md`](../content-video-engine/REVIEW-QUEUE.md) in the same change that frames it - what to judge, where to look, what it blocks - and leaves that page only with the operator's ruling, written to `docs/portable/OPERATOR-RULINGS.md` and to the plan. A backlog row whose status waits on the operator gets a queue row the same way.
+
 Task slices use:
 
 ```markdown

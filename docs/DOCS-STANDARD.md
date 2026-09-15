@@ -14,8 +14,8 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 21 | 439 | 95.9% | 93.8% | 3 | 98.0 |
-| Process (everything else) | 342 | 3619 | 97.8% | 91.9% | 12 | 100.0 |
-| All docs | 363 | 4058 | 97.6% | 92.1% | 15 | 100.0 |
+| Process (everything else) | 360 | 3695 | 97.8% | 91.9% | 18 | 100.0 |
+| All docs | 381 | 4134 | 97.6% | 92.1% | 21 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -30,6 +30,7 @@ item, a quote, a table row or a fence.
 | 77 | `content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/DESCRIPTION-YOUTUBE.md` | 3 | 3/3 | 1/3 | 0 |
 | 79 | `content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md` | 12 | 9/12 | 9/12 | 0 |
 | 79 | `content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/NICHE_BEND_DOSSIER.md` | 12 | 9/12 | 9/12 | 0 |
+| 80 | `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/flow-comparison/orders/F-crate-short.md` | 5 | 5/5 | 3/5 | 2 |
 | 81 | `docs/seo-ingestion-pipeline-spec.md` | 21 | 16/21 | 17/21 | 0 |
 | 81 | `docs/seo-insights-platform-architecture.md` | 58 | 51/58 | 37/58 | 0 |
 | 82 | `content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/DESCRIPTION-FACEBOOK.md` | 2 | 2/2 | 1/2 | 0 |
@@ -40,11 +41,10 @@ item, a quote, a table row or a fence.
 | 82 | `docs/content-video-engine/patterns/INJECTION.md` | 6 | 6/6 | 3/6 | 0 |
 | 85 | `docs/portable/DOCTRINE-CORE.md` | 12 | 12/12 | 7/12 | 0 |
 | 86 | `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PACKAGING.md` | 5 | 5/5 | 3/5 | 0 |
-| 86 | `docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md` | 6 | 5/6 | 5/6 | 0 |
 
 ## Appendix A - sections missing a lead line
 
-Non-exempt sections whose first real line is under 40 characters (98).
+Non-exempt sections whose first real line is under 40 characters (101).
 
 - `content/video_engine/projects/martial-matters/pilots/marshall-monday-001/script-draft.md:1` Why Rap Violence is Actually a Sign of Peace | Marshall Matters Ep. 1
 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:13` Titles & Click Contracts
@@ -55,6 +55,9 @@ Non-exempt sections whose first real line is under 40 characters (98).
 - `content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-GATES-2026-09-03-at-record.md:26` audit_script_doctrine.py
 - `content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-GATES-2026-09-03-at-record.md:63` gate_opening_structure.py
 - `content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-GATES-2026-09-03-at-record.md:191` enumerate_strength_screens.py
+- `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/flow-comparison/COMPARISON.md:1` P60 Evaluation: Flow (Nano Banana Pro) vs. GPT Built-In Baseline
+- `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/flow-comparison/INTAKE.md:1` P60 Flow Comparison Intake Preparation Report
+- `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/flow-comparison/verification.md:1` P60 Flow Comparison Verification Ledger
 - `content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1` Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt
 - `content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:18` Core Production Metrics
 - `content/video_engine/sources/reference_analyses/Wealth_Logic_6_Ways_Rich_People_Make_Money_With_Debt_Research_Report.md:1` Production Research Report: Wealth Logic — 6 Ways Rich People Make Money With Debt
@@ -147,12 +150,18 @@ Non-exempt sections whose first real line is under 40 characters (98).
 
 ## Appendix B - generic headings
 
-Headings that name a filing slot, not a concept (15).
+Headings that name a filing slot, not a concept (21).
 
 - `content/video_engine/projects/history-of-bjj/episode-2-research-questions.md:5` Questions
 - `content/video_engine/projects/history-of-bjj/episode-3-research-questions.md:5` Questions
 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PLATE-ORDER-MAP-BEAT.md:305` Status
 - `content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:7` Purpose
+- `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/flow-comparison/orders/F-crate-short.md:6` References
+- `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/flow-comparison/orders/F-crate-short.md:20` Status
+- `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/flow-comparison/orders/F-lever-magenta.md:6` References
+- `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/flow-comparison/orders/F-lever-magenta.md:20` Status
+- `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/flow-comparison/orders/F-vignette.md:6` References
+- `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/flow-comparison/orders/F-vignette.md:20` Status
 - `docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md:6` Context
 - `docs/content-video-engine/18-GRAPHIC-SILHOUETTE-WOODBLOCK-EXPLAINER-SPEC.md:8` Purpose
 - `docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:140` 5. Rules

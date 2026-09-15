@@ -1,5 +1,7 @@
 # Open gates and open questions - 2026-09-12
 
+> **Superseded 2026-09-14 by [`REVIEW-QUEUE.md`](REVIEW-QUEUE.md)** - the live queue of everything waiting on the operator; this dated page is kept as it was.
+
 Everything waiting on a decision after P52 THE SWEEP, in one place. Written because the gates and the questions
 were scattered across a plan's status block, eight BACKLOG rows and a session's messages, and a decision nobody can
 find is not a decision waiting - it is a decision lost.
