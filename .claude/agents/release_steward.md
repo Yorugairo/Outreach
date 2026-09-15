@@ -3,7 +3,7 @@ name: release_steward
 description: Git steward for reviewed commits and explicitly authorized pushes. Use for the `release_steward` role named in docs/runbooks/PRP_EXECUTION.md.
 tools: Read, Grep, Glob, Bash
 model: opus
-maxTurns: 30
+maxTurns: 60
 effort: high
 ---
 

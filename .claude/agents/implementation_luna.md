@@ -4,7 +4,7 @@ description: Bounded implementation agent for well-defined moderate features and
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: opus
 skills: [quality-rules]
-maxTurns: 120
+maxTurns: 200
 effort: high
 ---
 

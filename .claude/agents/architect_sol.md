@@ -3,7 +3,7 @@ name: architect_sol
 description: Lead architect and planner for repository research and implementation-ready PRP drafts. Use for the `architect_sol` role named in docs/runbooks/PRP_EXECUTION.md.
 tools: Read, Grep, Glob, Edit, Write, Bash, WebFetch, WebSearch
 model: opus
-maxTurns: 120
+maxTurns: 200
 effort: high
 ---
 

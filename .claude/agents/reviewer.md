@@ -5,7 +5,7 @@ tools: Read, Grep, Glob, Bash
 model: opus
 memory: local
 skills: [quality-rules, retrieval-layers]
-maxTurns: 60
+maxTurns: 120
 effort: high
 ---
 

@@ -4,7 +4,7 @@ description: Junior developer for bounded implementation, scoped fixes, and expl
 tools: Read, Grep, Glob, Edit, Write, Bash
 model: opus
 skills: [quality-rules]
-maxTurns: 60
+maxTurns: 120
 effort: high
 ---
 
