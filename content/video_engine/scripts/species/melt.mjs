@@ -65,7 +65,7 @@
    alias would pick one silently. build_scene_timeline_f.py's parse_exit reads the same grammar and refuses anything
    else, naming the row. Every number here is a starting dial (doc 42 s42.5); HG2 tunes them by eye on the proof frames. */
 import { hexToLin, linToHex, ksFromR, soakStepped } from "../kinetics/ink.mjs";
-import { squashMatrix } from "../kinetics/squash.mjs";
+import { squashMatrix, scaleBy } from "../kinetics/squash.mjs";
 import { CADENCE, stepped, throwXf, impactSquash, rollXf, contactShadow, groundDip, groundShake, rebound, massImpact, MASS, STOP } from "../kinetics/stopaction.mjs";
 import { DROP, dropRing, dropModes, dropSpecular, dropRimAlpha, dropBandAlpha, dropPitAlpha, dropDeepPoint, dropLightAxis } from "../kinetics/drop.mjs";
 import { centroid } from "../kinetics/arap.mjs";
@@ -221,6 +221,55 @@ export const MELT = Object.freeze({
   DEPTH_FLAT: 1,         /* doc 24's far wall - the flat clone, so `depth=1` is the melt that always shipped */
   HL_SHEEN: 0.82,        /* the specular highlight: the ball's own lit ink taken this far toward white */
   INK_HEX: "#E9E2D2",    /* the marks' colour when the chart carries no stroke to read (a page of words) */
+  /* ---- P61 T6 / E99 s2 - THE GATHER (`melt:gather`), all of it opt-in ---------------------------------------------
+     The operator (OPERATOR-RULINGS.md:2912-2920): "for the melt, i expect almost like our swirl effect, i don't want
+     the melt to be blur or a wipe, it should be closer to the swirl except for instead of a whirlpool, vortexing
+     around a single point, it collects and amasses into a single point, that single point should be dense, heavy,
+     and vibrating with energy". So for a melt that asks, the SAG is replaced by the PAGE VORTEX's own motion (doc 29
+     s9.31, species/spiral.mjs `lpVortex`) aimed at the BALL'S CENTRE instead of at a drain: every mark on the page is
+     a particle that TRAVELS to that point and AMASSES there - and the gooey blur, the ink's run and the words' streak
+     are all 0 across the window, because a blur is the thing the ruling refuses.
+     THE ONE DIFFERENCE from the retract, and it is the whole of the ruling: a retract's particle shrinks to NOTHING at
+     the drain (spiral's SHRINK, `(1 - ui)^0.7`); a gather's particle shrinks only to G_KEEP of itself and lands ON the
+     point, so what the eye reads is ink collected, not ink drained away.
+     The terms below are s9.31's, to the digit where they carry the same meaning (LP_RETRACT TURNS 3.0, LAG 0.25,
+     ALPHA 0.85, R_FALL 1.7, CORE_BASE 0.4, CORE_GAIN 1.6, CORE_FALL 1.5, SHRINK 0.7). This module cannot IMPORT
+     spiral.mjs - sync_kinetics refuses an import whose region is later in the engine, and spiral's region is at
+     scene-evidence-engine.mjs:8236 against melt's :2686 - so they are written here and `test_melt_gather.py` pins
+     every one of them against species/spiral.mjs's own LP_RETRACT, which is what keeps the two from drifting. */
+  G_TURNS: 3.0,          /* how many turns the RIM makes on its way in - s9.31's "a way tighter vortex, almost celestial" */
+  G_LAG: 0.25,           /* the point takes the nearest ink first: a particle at the rim waits this share of the window */
+  G_ALPHA: 0.85,         /* the area-preserving stretch along the flow at its peak (ui = 0.5): ink thins across its travel */
+  G_R_FALL: 1.7,         /* the radius falls slowly, then fast: r * (1 - ui^this) */
+  G_CORE_BASE: 0.4,      /* the rim's share of the whirl ... */
+  G_CORE_GAIN: 1.6,      /* ... and what the core adds (the core turns ~4x the rim: arms, not a wheel) */
+  G_CORE_FALL: 1.5,      /* how sharply that gain falls off with the normalised radius */
+  G_SHRINK: 0.7,         /* the particle's own scale, (1 - ui)^this, floored at ... */
+  G_KEEP: 0.10,          /* ... this, so it AMASSES on the point instead of vanishing into it [DERIVED: a tenth of
+                            itself is still ink on the frame at the handover, and it is inside the ball's silhouette] */
+  G_DEEP: 0.85,          /* how far the marks have turned to the ball's own INK by the gather's end: they arrive as one
+                            colour, so what lands on the point reads as a mass and not as a heap of four series [DERIVED] */
+  /* THE POINT, forming under the arriving ink */
+  G_CORE_AT: 0.55,       /* the core opens at this share of the gather ... */
+  G_CORE_SEED: 0.30,     /* ... at this share of the ball's radius, and grows to all of it by the gather's end [DERIVED] */
+  /* THE VIBRATION (E49: nothing ever goes truly still). NOT a new law - it is kinetics/drop.mjs's OWN idle, the FLOOR
+     amplitude its decay can never take away, with an amplitude dial over it, so the point wriggles to contain itself
+     from the frame it exists. `melt:weight` then stacks the landing's and the nudge's kicks on top, as it always did. */
+  G_VIB: 3.0,            /* the amplitude dial: the drop's FLOOR times this while the point gathers. 1 is the resting
+                            wriggle a landed ball has; the ruling asks for "vibrating with energy", and 3 puts mode 2
+                            at ~3.6 % of R - visible at the ball's size, well inside the ring's own area
+                            renormalisation [DERIVED, HG6 tunes it by eye on the proof frames] */
+  G_VIB_FALL: 0.45,      /* it falls back to the resting floor over this share of the BALL phase: the point stops
+                            shaking once it has everything [DERIVED] */
+  G_LINE_N: 160,         /* THE NOODLE (doc 29 s9.31: "the series line is redrawn point by point through the same
+                            map, so it curls into the drain"): how many points a chart PATH is sampled at, once, at the
+                            boundary. A path turned rigidly reads as a stick swung across the board - the first build's
+                            own defect, read on the frame; 160 samples hold an area band's jagged top and a four-year
+                            line's shape while they curl [DERIVED, read on melt-gather's midpoint] */
+  G_S: 0.9,              /* how much a gather adds to the DEFAULT window, the way W_S does: the sag's own share of a
+                            1.6 s melt is 0.48 s, and three turns in 0.48 s is a jump, not a swirl. With it the
+                            gather runs MELT_END of (S + G_S) = 0.75 s [DERIVED, HG6]. A row that declares its own
+                            length gets exactly that length, gather or not */
 });
 
 export const MELT_ENDINGS = Object.freeze(["throw", "splash:chart", "splash:plate"]);
@@ -236,10 +285,12 @@ const mEase = (u) => { const k = mc01(u); return k * k * (3 - 2 * k); };
 
 /* ---- the authored form ------------------------------------------------------------------------------------------ */
 /* `melt` | `melt:throw` | `melt:splash:chart` | `melt:splash:plate`, `:<s>`, and on a throw `:<x>,<y>`, in any order after
-   the name. Throws on anything else, so a typo in a shot table is a refusal and not a silent default. */
+   the name. P61 T6 / E99 s2 adds `gather` - a PHASE token beside `weight`, composable with both of them and with every
+   ending: the sag becomes the page vortex gathered to the ball's own centre. Throws on anything else, so a typo in a
+   shot table is a refusal and not a silent default. */
 export const meltOpts = (exit, o = {}) => {
   const P = Object.assign({}, MELT, o), bits = String(exit == null ? "" : exit).split(":");
-  const out = { name: bits[0] || "", secs: P.S, ending: null, to: null, weight: false, wmass: P.W_MASS, depth: 0 };
+  const out = { name: bits[0] || "", secs: P.S, ending: null, to: null, weight: false, wmass: P.W_MASS, depth: 0, gather: false };
   let said = false;   /* did the row declare its own length? a weight phase lengthens only the DEFAULT window */
   const setEnding = (e) => {
     if (out.ending) throw new Error("melt: two endings (" + out.ending + " and " + e + ") - a melt ends one way");
@@ -256,10 +307,11 @@ export const meltOpts = (exit, o = {}) => {
       if (!(v >= P.DEPTH_MIN && v <= P.DEPTH_MAX)) throw new Error("melt: depth " + v + " is outside " + P.DEPTH_MIN + ".." + P.DEPTH_MAX + " - the parallax factor a plane may take of the camera's move (kinetics/camera.mjs PARALLAX)");
       out.depth = v; continue;
     }
+    if (b === "gather") { out.gather = true; continue; }   /* P61 T6 / E99 s2: the sag becomes the vortex, gathered to one point */
     if (b === "weight") {   /* R26-118: the weight phase, and the material it is made of (metal unless it says) */
       out.weight = true;
       const nx = (bits[i + 1] || "").trim();
-      if (nx && nx.indexOf(",") < 0 && nx !== "throw" && nx !== "splash" && nx.indexOf(MELT_DEPTH) !== 0 && !Number.isFinite(Number(nx))) {
+      if (nx && nx.indexOf(",") < 0 && nx !== "throw" && nx !== "splash" && nx !== "gather" && nx.indexOf(MELT_DEPTH) !== 0 && !Number.isFinite(Number(nx))) {
         if (MELT_MATERIALS.indexOf(nx) < 0) {
           throw new Error("melt: " + nx + " is not a material - melt:weight takes " + MELT_MATERIALS.join(", "));
         }
@@ -281,11 +333,14 @@ export const meltOpts = (exit, o = {}) => {
       out.to = xy; continue;
     }
     const v = Number(b);
-    if (!(Number.isFinite(v) && v > 0)) throw new Error("melt: " + b + " is neither a length in seconds, nor an ending (throw, splash:chart, splash:plate), nor an x,y point");
+    if (!(Number.isFinite(v) && v > 0)) throw new Error("melt: " + b + " is neither a length in seconds, nor an ending (throw, splash:chart, splash:plate), nor a phase (gather, weight), nor an x,y point");
     out.secs = v; said = true;
   }
   out.ending = out.ending || "throw";
-  if (out.weight && !said) out.secs = P.S + P.W_S;   /* the four beats need their own seconds, not the compile's */
+  if (!said) {   /* a row that declared its own length gets exactly it; a default window makes room for what was asked for */
+    if (out.weight) out.secs = P.S + P.W_S;   /* the four beats need their own seconds, not the compile's */
+    if (out.gather) out.secs += P.G_S;        /* P61 T6: and the travel needs its own - three turns in 0.48 s is a jump */
+  }
   if (out.to && out.ending !== "throw") throw new Error("melt: an x,y point is where a THROW goes - a splash lands on the board");
   out.to = out.to || [P.TO[0], P.TO[1]];
   return out;
@@ -316,6 +371,10 @@ export const meltPhase = (u, o = {}) => {
 /* the outline's blur in px: up over the melt, back to 0 by the end of the ball (a ball is solid, not a cloud) */
 export const meltBlur = (u, o = {}) => {
   const P = Object.assign({}, MELT, o), ph = meltPhase(u, P);
+  /* P61 T6 / E99 s2 ("i don't want the melt to be blur or a wipe"): a GATHER never blurs. The sag's gooey threshold
+     existed to FUSE neighbouring marks in place; a gather moves them instead, so there is nothing to fuse and the
+     stdDeviation the engine writes is 0 on every frame of the window. */
+  if (P.gather) return 0;
   if (ph.name === "melt") return P.BLUR * mEase(ph.k);
   if (ph.name === "ball") return P.BLUR * (1 - mEase(ph.k));
   return 0;   /* the weight phase and the ending: a ball is solid, not a cloud */
@@ -382,6 +441,66 @@ export const meltRun = (phase, k, rect, o = {}) => {
   return 0;
 };
 
+/* ---- the gather (P61 T6 / E99 s2) -------------------------------------------------------------------------------
+   THE MAP. One particle's HOME (x, y) to where it stands at u, about the point c, with the space's own Rmax. The five
+   terms are the page VORTEX's (doc 29 s9.31, species/spiral.mjs `lpVortex`) - the point takes the nearest ink first,
+   the radius falls slowly then fast, the whirl is differential so the core turns about four times the rim (arms, not
+   a wheel), the particle stretches along the flow with its area kept, and it shrinks as it goes. The SIXTH is the
+   ruling's: `G_KEEP` floors that shrink, so the ink AMASSES on the point instead of draining out of the world.
+   Pure and closed-form (a seek renderer may not integrate): the same u twice is the same pose. */
+export const meltGatherAt = (x, y, c, Rmax, u, o = {}) => {
+  const P = Object.assign({}, MELT, o);
+  const dx = x - c[0], dy = y - c[1], r = Math.hypot(dx, dy) || 1e-6, phi = Math.atan2(dy, dx);
+  const rn = Math.min(1, r / Math.max(1e-6, Rmax));
+  const ui = mc01((mc01(u) - P.G_LAG * rn) / (1 - P.G_LAG));
+  const rr = r * (1 - Math.pow(ui, P.G_R_FALL));
+  const th = P.G_TURNS * 2 * Math.PI * ui * (P.G_CORE_BASE + P.G_CORE_GAIN * Math.pow(1 - rn, P.G_CORE_FALL));
+  const a = P.G_ALPHA * 4 * ui * (1 - ui), s = Math.max(P.G_KEEP, Math.pow(1 - ui, P.G_SHRINK));
+  const ang = phi + th, q = scaleBy(s, a);   /* the area-preserving stretch along the tangent - squash.mjs's own helper, 42 s42.3 */
+  return { x: c[0] + rr * Math.cos(ang), y: c[1] + rr * Math.sin(ang), th: th * 180 / Math.PI,
+           tan: ang * 180 / Math.PI + 90, sx: q.sx, sy: q.sy, ui };
+};
+/* the same pose as a CSS transform (an HTML particle, about its own home) and as an SVG one (user units) */
+export const meltGatherCss = (v, hx, hy) =>
+  "translate(" + (v.x - hx).toFixed(2) + "px," + (v.y - hy).toFixed(2) + "px) rotate(" + v.tan.toFixed(2)
+  + "deg) scale(" + v.sx.toFixed(4) + "," + v.sy.toFixed(4) + ") rotate(" + (v.th - v.tan).toFixed(2) + "deg)";
+export const meltGatherSvg = (v, hx, hy) =>
+  "translate(" + v.x.toFixed(2) + " " + v.y.toFixed(2) + ") rotate(" + v.tan.toFixed(2) + ") scale("
+  + v.sx.toFixed(4) + " " + v.sy.toFixed(4) + ") rotate(" + (v.th - v.tan).toFixed(2) + ") translate("
+  + (-hx).toFixed(2) + " " + (-hy).toFixed(2) + ")";
+/* THE CONVERGENCE, as ONE number: the RMS distance of the mapped particles from the point, in px. It is what the
+   probe reads - "it collects and amasses into a single point" is a spread that falls, every step, to the ball's own
+   radius. A blur cannot make this number move; only travel can. */
+export const meltGatherSpread = (homes, c, Rmax, u, o = {}) => {
+  const pts = homes || [];
+  if (!pts.length) return 0;
+  let s = 0;
+  for (const h of pts) {
+    const v = meltGatherAt(h[0], h[1], c, Rmax, u, o);
+    s += (v.x - c[0]) * (v.x - c[0]) + (v.y - c[1]) * (v.y - c[1]);
+  }
+  return Math.sqrt(s / pts.length);
+};
+/* THE POINT forming under the arriving ink: its alpha and its radius through the gather (0 before G_CORE_AT). */
+export const meltGatherCore = (k, o = {}) => {
+  const P = Object.assign({}, MELT, o), g = mc01((mc01(k) - P.G_CORE_AT) / Math.max(1e-6, 1 - P.G_CORE_AT));
+  return { alpha: mEase(g), grow: P.G_CORE_SEED + (1 - P.G_CORE_SEED) * mEase(g), k: g };
+};
+/* THE VIBRATION (E49). NOT a new law: kinetics/drop.mjs's own FLOOR - the amplitude its decay never takes - lifted by
+   G_VIB while the point is collecting, and let back down to the resting floor over the ball phase. `gain` is 1 at the
+   gather and falls to 0 across G_VIB_FALL of the ball; a melt that never asked for a gather never calls this. */
+export const meltVibGain = (phase, k, o = {}) => {
+  const P = Object.assign({}, MELT, o);
+  if (!P.gather) return 0;
+  if (phase === "melt") return 1;
+  if (phase === "ball") return 1 - mc01(mc01(k) / Math.max(1e-6, P.G_VIB_FALL));
+  return 0;
+};
+export const meltVibFloor = (gain, o = {}) => {
+  const P = Object.assign({}, MELT, o), g = 1 + (P.G_VIB - 1) * mc01(gain);
+  return DROP.FLOOR.map((v) => v * g);
+};
+
 /* ---- the ball --------------------------------------------------------------------------------------------------- */
 export const ballCircle = (c, r, n) => {
   const out = [];
@@ -400,8 +519,13 @@ export const ballAt = (rect, k, rnd, o = {}) => {
    stepped seconds), excited by `excite` and turned by `spin` (the roll). Area-renormalised there, so it never grows. */
 export const meltBallRing = (c, r, o = {}) => {
   const P = Object.assign({}, MELT, o);
-  if (!P.weight) return ballCircle(c, r, P.CIRCLE_N);
-  return dropRing(c, r, +P.te || 0, meltWeightMass(P), P.excite || [], { N: P.CIRCLE_N, spin: +P.spin || 0 });
+  if (!P.weight && !P.gather) return ballCircle(c, r, P.CIRCLE_N);
+  /* P61 T6: a GATHERED point is the living drop whether or not the row asked for weight - it is the thing the ink
+     amasses into, and E99 s2 asks for it "vibrating with energy". `vib` is the gain meltVibGain returned; absent (every
+     melt on the record) no FLOOR key is written at all, so drop.mjs reads its own and the goldens do not move. */
+  const ring = { N: P.CIRCLE_N, spin: +P.spin || 0 };
+  if (+P.vib > 0) ring.FLOOR = meltVibFloor(+P.vib, P);
+  return dropRing(c, r, +P.te || 0, meltWeightMass(P), P.excite || [], ring);
 };
 /* THE SQUEEZE: the ink's scale about the ball's centre at ball-phase progress k - 1 at the start, and at the end the ink
    box's longer side is SQUEEZE ball-diameters. Monotone in k. */
@@ -611,10 +735,34 @@ export const meltState = (t0, t, o = {}, rnd) => {
                squash: { a: 0, theta: 0 }, xf: null, drops: [], stains: [], cover: 1, rim: 0, reveal: false,
                spring: 1, dropAlpha: 1, dropScale: 1, tint: 0, sats: [], textOpacity: 0, boardUp: true, gone: false,
                weight: null, turn: 0, mark: null, hl: null, shadow: null, shadowX: 0, shake: { x: 0, y: 0 },
-               mass: false, occl: null };   /* P61 T5: `mass` is the one flag the three MATERIAL overlays ride - true
+               mass: false, occl: null, gather: null };   /* P61 T6: `gather` is the particles' clock and their
+               point, and it is null for every melt that did not ask - the engine mounts no particles for those.
+               P61 T5: `mass` is the one flag the three MATERIAL overlays ride - true
                exactly when a `melt:weight` has a ball on screen; `occl` is the contact shadow's own dark core */
   st.inkBlur = P.INK_BLUR * st.blur / Math.max(1e-6, P.BLUR);
   if (ph.name === "gone") { st.gone = true; st.boardUp = false; st.inkOpacity = 0; st.cover = 0; return st; }
+  /* P61 T6 / E99 s2 - THE GATHER replaces the sag for a melt that asked for it: no outline, no mask, no blur and no
+     run. The ink does not smear where it stands, it TRAVELS (the engine walks the particles through meltGatherAt),
+     and the point it travels to is the ball's own centre - so the gather hands the ball phase a mass that is already
+     where the ball forms. The point opens under the arriving ink at G_CORE_AT and vibrates from its first frame. */
+  if (ph.name === "melt" && P.gather) {
+    const b = ballAt(rect, 1, rnd, Object.assign({}, P, { weight: false, gather: false }));
+    const core = meltGatherCore(ph.k, P), vib = meltVibGain("melt", ph.k, P);
+    const tqw = stepped(Math.max(0, t - t0), P.HOLD, P.FPS);   /* the drop's clock is the WINDOW's, on 2s */
+    st.blur = 0; st.inkBlur = 0; st.run = 0;
+    st.centre = b.centre; st.r = b.r;
+    st.tint = P.G_DEEP * mEase(ph.k);   /* the marks turn to the ball's own ink as they arrive: one mass, not four series */
+    st.textOpacity = 1;                 /* the words TRAVEL - they do not drip and they do not fade in place */
+    st.gather = { on: true, k: ph.k, c: b.centre, R: Math.hypot(rect.w, rect.h) / 2 };
+    if (core.alpha > 0) {
+      const r = b.r * core.grow, mass = meltWeightMass(P);
+      st.bodyAlpha = core.alpha; st.mass = true;   /* the point wears T5's material from the frame it exists */
+      st.bodyOutline = meltBallRing(b.centre, r, Object.assign({}, P, { te: tqw, vib }));
+      st.body = morphAPath(st.bodyOutline);
+      st.hl = dropSpecular(b.centre, r, dropModes(tqw, r, mass, [], { FLOOR: meltVibFloor(vib, P) }));
+    }
+    return st;
+  }
   if (ph.name === "melt") {
     st.outline = meltOutline(rect, ph.k, rnd, P);
     st.path = morphAPath(st.outline);
@@ -633,19 +781,22 @@ export const meltState = (t0, t, o = {}, rnd) => {
   const bStart = P.MELT_END * rest0 * secs, wStart = P.BALL_END * rest0 * secs, wSpan = wShare * secs;
   const wMass = meltWeightMass(P), born = [{ at: bStart, a: DROP.A }];   /* the compile's own excitation (E88 s7) */
   if (ph.name === "ball") {
-    const b = ballAt(rect, kq, rnd, Object.assign({}, P, { te: tqw, excite: born })), s = meltSqueeze(rect, b.r, kq, P);
+    /* P61 T6: under a gather the point is ALREADY there and already alive - the ink amassed on it - so the ball phase
+       only lets the vibration settle (meltVibGain falls to 0 across G_VIB_FALL) and the ink is gone, not squeezed. */
+    const vib = meltVibGain("ball", kq, P);
+    const b = ballAt(rect, kq, rnd, Object.assign({}, P, { te: tqw, excite: born, vib })), s = meltSqueeze(rect, b.r, kq, P);
     st.k = kq; st.centre = b.centre; st.r = b.r; st.scale = s;
-    st.bodyOutline = b.outline; st.bodyAlpha = meltBodyAlpha(kq, P);
-    /* the SOLID ball: a crisp circle, never the box - and under `melt:weight` the living drop's own ring */
-    st.body = morphAPath(meltBallRing(b.centre, b.r * meltBodyGrow(kq, P), Object.assign({}, P, { te: tqw, excite: born })));
-    if (P.weight) { st.mass = true; st.hl = dropSpecular(b.centre, b.r * meltBodyGrow(kq, P), dropModes(tqw, b.r, wMass, born)); }
+    st.bodyOutline = b.outline; st.bodyAlpha = P.gather ? 1 : meltBodyAlpha(kq, P);
+    /* the SOLID ball: a crisp circle, never the box - and under `melt:weight` (or a gather) the living drop's own ring */
+    st.body = morphAPath(meltBallRing(b.centre, b.r * (P.gather ? 1 : meltBodyGrow(kq, P)), Object.assign({}, P, { te: tqw, excite: born, vib })));
+    if (P.weight || P.gather) { st.mass = true; st.hl = dropSpecular(b.centre, b.r * (P.gather ? 1 : meltBodyGrow(kq, P)), dropModes(tqw, b.r, wMass, born, { FLOOR: meltVibFloor(vib, P) })); }
     st.tint = meltTint("ball", kq, P);
-    st.inkBlur = st.inkBlur + P.BALL_FUSE * mEase(kq);   /* the marks FUSE into one body as they compact */
+    st.inkBlur = P.gather ? 0 : st.inkBlur + P.BALL_FUSE * mEase(kq);   /* the marks FUSE into one body as they compact - a GATHER has no ink left to fuse, and writes no blur anywhere in its window */
     /* the mask is in the ink's own px, and the ink is squeezed by s about the centre: the same body, unsqueezed */
     st.outline = b.outline.map((p) => [b.centre[0] + (p[0] - b.centre[0]) / s, b.centre[1] + (p[1] - b.centre[1]) / s]);
     st.path = morphAPath(st.outline);
     st.run = meltRun("ball", kq, rect, P);
-    st.inkOpacity = 1 - mEase(mc01(kq / Math.max(1e-6, P.INK_OUT)));
+    st.inkOpacity = P.gather ? 0 : 1 - mEase(mc01(kq / Math.max(1e-6, P.INK_OUT)));
     return st;
   }
   /* the compiled ball: its centre and radius are the geometry's, whatever its surface is doing */
@@ -939,6 +1090,77 @@ export const meltInkColours = (wA) => {
   return out;
 };
 
+/* P61 T6 / E99 s2 - THE PARTICLES A GATHER MOVES: every colour on the outgoing page, measured ONCE (nothing here
+   reads time; the homes are the page as it stands at the boundary). TWO SPACES, exactly as the page vortex has
+   (species/spiral.mjs `lpParticles`): the WORLD's own px for the page's own children, and each chart SVG's viewBox
+   units for the chart's - a chart child's `transform` is written in ITS units, so the point and the reach are mapped
+   into them by that chart's own meet scale. `root` is one of the melt's two clones; BOTH are walked, so the marks
+   travel and the words travel with them. */
+const meltGatherParts = (root, wA, c, Rmax) => {
+  const page = root && root.querySelector(".lp-page");
+  if (!page) return [];
+  const wr = wA.getBoundingClientRect();
+  if (!(wr.width > 1 && wr.height > 1)) return [];
+  const kx = wA.offsetWidth / wr.width, ky = wA.offsetHeight / wr.height, out = [];
+  for (const el of page.children) {
+    if (meltIsBoard(el)) continue;
+    if (el.classList && el.classList.contains("lp-chart")) continue;   /* a chart's CHILDREN are the particles, not the chart */
+    const r = el.getBoundingClientRect();
+    if (!(r.width >= 1 && r.height >= 1)) continue;
+    out.push({ el, x: (r.left + r.width / 2 - wr.left) * kx, y: (r.top + r.height / 2 - wr.top) * ky, c, R: Rmax, svg: false });
+  }
+  for (const chart of page.querySelectorAll("svg.lp-chart")) {
+    const vb = chart.viewBox && chart.viewBox.baseVal, cr = chart.getBoundingClientRect();
+    if (!vb || !(vb.width > 0 && vb.height > 0) || !(cr.width > 1 && cr.height > 1)) continue;
+    const cw = cr.width * kx, ch = cr.height * ky;                     /* the chart's box in the WORLD's own px */
+    const x0 = (cr.left - wr.left) * kx, y0 = (cr.top - wr.top) * ky;
+    const k = Math.min(cw / vb.width, ch / vb.height) || 1;            /* xMidYMid meet: world px per user unit */
+    const cc = [(c[0] - x0 - (cw - vb.width * k) / 2) / k, (c[1] - y0 - (ch - vb.height * k) / 2) / k];
+    for (const el of chart.children) {
+      if (el.tagName === "defs") continue;
+      let b = null;
+      try { b = el.getBBox(); } catch (x) { b = null; }
+      if (!b || !(b.width > 0 || b.height > 0)) continue;
+      /* a PATH curls: it is sampled ONCE along its own length and redrawn point by point through the map every frame
+         (s9.31's noodle). Everything else - a bar, a tick, a label - travels as one particle, as the retract's do. */
+      const pts = el.tagName === "path" ? meltPathPoints(el, MELT.G_LINE_N) : null;
+      if (pts && pts.length > 1) out.push({ el, pts, closed: /[zZ]\s*$/.test(el.getAttribute("d") || ""), c: cc, R: Rmax / k, svg: true, line: true });
+      else out.push({ el, x: b.x + b.width / 2, y: b.y + b.height / 2, c: cc, R: Rmax / k, svg: true });
+    }
+  }
+  return out;
+};
+/* A PATH's own points, in its chart's user units: n samples along its length, taken ONCE (getPointAtLength is the
+   browser's; the samples are the homes, and the map is what runs every frame). Null when the element cannot be walked. */
+const meltPathPoints = (el, n) => {
+  let len = 0;
+  try { len = el.getTotalLength(); } catch (x) { return null; }
+  if (!(len > 1) || typeof el.getPointAtLength !== "function") return null;
+  const m = Math.max(8, n | 0), pts = [];
+  for (let i = 0; i <= m; i++) {
+    const q = el.getPointAtLength(len * i / m);
+    pts.push([q.x, q.y]);
+  }
+  return pts;
+};
+/* ONE frame of the travel: every particle to its pose at u. Pure per particle, so a seek writes what a play wrote. */
+const meltGatherWrite = (parts, u, o) => {
+  for (const p of parts || []) {
+    if (p.line) {   /* the noodle: every sampled point through the same map, redrawn - it curls, it does not swing */
+      let d = "";
+      for (let i = 0; i < p.pts.length; i++) {
+        const q = meltGatherAt(p.pts[i][0], p.pts[i][1], p.c, p.R, u, o);
+        d += (i ? "L" : "M") + q.x.toFixed(1) + " " + q.y.toFixed(1) + " ";
+      }
+      p.el.setAttribute("d", d + (p.closed ? "Z" : ""));
+      continue;
+    }
+    const v = meltGatherAt(p.x, p.y, p.c, p.R, u, o);
+    if (p.svg) p.el.setAttribute("transform", meltGatherSvg(v, p.x, p.y));
+    else p.el.style.transform = meltGatherCss(v, p.x, p.y);
+  }
+};
+
 /* the overlay, mounted ONCE and kept on wA.__melt: the ink clone (a sibling right after the board, so it rides above
    it), and an svg sibling holding the filters, the masks, the stains' rims, the droplets and the ball. Nothing here reads
    time; the ink box and the colours are read once, from the page as it stands at the boundary. */
@@ -968,7 +1190,7 @@ const meltMount = (wA, el, id) => {
               iblur: defs.querySelector("#" + id + "i feGaussianBlur"), ioffs: [...defs.querySelectorAll("#" + id + "i feOffset")],
               stainG: defs.querySelector("#" + id + "r g"),
               drops: el("g", "meltdrops", svg, { filter: "url(#" + id + "p)" }),
-              bodyG: el("g", "meltbody", svg, {}), splats: [], sats: [], holes: [], sprung: null,
+              bodyG: el("g", "meltbody", svg, {}), splats: [], sats: [], holes: [], sprung: null, parts: null,
               band: null, rim: null, pit: null, occl: null };   /* P61 T5: the three MATERIAL overlays and the
                  occlusion core - mounted only when a `melt:weight` asks; null here is the melt that shipped */
   m.body = el("path", "", m.bodyG, { fill: "url(#" + id + "g)", d: "" });
@@ -1007,20 +1229,29 @@ export const paintMelt = (ctx) => {
      fall on it and the ending runs from it. Written ONLY at a depth - an overlay that carried no transform keeps none. */
   if (typeof ctx.worldCss === "string") { m.svg.style.transformOrigin = "50% 50%"; m.svg.style.transform = wCss; }
   else if (m.svg.style.transform) { m.svg.style.transform = ""; m.svg.style.transformOrigin = ""; }
-  /* THE INK: masked, run, squeezed about the ball's centre - hidden once the ball is solid */
-  const ink = m.ink, showInk = !st.gone && st.inkOpacity > 0 && st.path;
+  /* THE INK: masked, run, squeezed about the ball's centre - hidden once the ball is solid. P61 T6 / E99 s2: under a
+     GATHER it is none of those. The marks and the words TRAVEL, one particle at a time, to the ball's own centre;
+     there is no mask (a mask would clip a mark where it no longer is), no run and no squeeze, and the stdDeviation
+     written on both filters is 0 on every frame of the window - "i don't want the melt to be blur or a wipe". */
+  const ink = m.ink, gth = st.gather, showInk = !st.gone && st.inkOpacity > 0 && (st.path || !!gth);
   ink.style.visibility = showInk ? "" : "hidden";
   ink.style.zIndex = "3";
   if (showInk) {
     m.blur.setAttribute("stdDeviation", st.blur.toFixed(2));
-    m.path.setAttribute("d", st.path);
-    ink.style.mask = "url(#" + id + "m)"; ink.style.webkitMaskImage = "url(#" + id + "m)";
+    if (gth) {
+      if (ink.style.mask) { ink.style.mask = ""; ink.style.webkitMaskImage = ""; }
+      if (!m.parts) m.parts = meltGatherParts(ink, wA, gth.c, gth.R).concat(meltGatherParts(m.txt, wA, gth.c, gth.R));
+      meltGatherWrite(m.parts, gth.k, ctx.opts);
+    } else {
+      m.path.setAttribute("d", st.path);
+      ink.style.mask = "url(#" + id + "m)"; ink.style.webkitMaskImage = "url(#" + id + "m)";
+    }
     m.iblur.setAttribute("stdDeviation", st.inkBlur.toFixed(2));   /* on for every frame the ink shows: its faint-pixel cut is part of the ink */
     m.ioffs.forEach((o, j) => o.setAttribute("dy", (st.run * (j + 1) / m.ioffs.length).toFixed(1)));
     ink.style.filter = "url(#" + id + "i)";
     m.tintC.setAttribute("k2", st.tint.toFixed(4)); m.tintC.setAttribute("k3", (1 - st.tint).toFixed(4));
-    ink.style.transformOrigin = st.centre ? st.centre[0].toFixed(1) + "px " + st.centre[1].toFixed(1) + "px" : "";
-    ink.style.transform = (st.scale !== 1 ? "scale(" + st.scale.toFixed(4) + ") " : "") + wCss;
+    ink.style.transformOrigin = (st.centre && !gth) ? st.centre[0].toFixed(1) + "px " + st.centre[1].toFixed(1) + "px" : "";
+    ink.style.transform = (st.scale !== 1 && !gth ? "scale(" + st.scale.toFixed(4) + ") " : "") + wCss;
   }
   /* THE WORDS: their own glyphs running down, fading out over the sag */
   const txt = m.txt, showTxt = !st.gone && st.textOpacity > 0.002;

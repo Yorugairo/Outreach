@@ -340,6 +340,36 @@ def test_a_melt_may_ask_for_the_weight_phase_and_name_its_material():
             B.parse_exit(bad)
 
 
+def test_a_melt_may_ask_for_the_gather_and_every_melt_without_it_parses_to_the_tuple_it_always_did():
+    """P61 T6 / E99 s2 (the operator, 2026-09-14: *"instead of a whirlpool, vortexing around a single point, it
+    collects and amasses into a single point"*): `gather` is a PHASE token like `weight`, anywhere after the name and
+    composable with it, with the material, with a depth, with a length and with every ending. It is OPT-IN, and what
+    that means is pinned HERE: `parse_exit` returns for every melt on the record exactly the tuple it always did.
+    species/melt.mjs `meltOpts` reads the same grammar in the player, and MELT.G_S is the twin of MELT_G_S here;
+    test_melt_gather.py pins the pair and the byte-identity of the frames."""
+    # THE DEFAULT - not one melt on the record moves
+    assert B.parse_exit("melt") == ("melt", None)
+    assert B.parse_exit("melt:splash:chart") == ("melt:splash:chart", None)
+    assert B.parse_exit("melt:throw") == ("melt:throw", None)
+    assert B.parse_exit("melt:1.2:splash:plate") == ("melt:1.2:splash:plate", 1.2)
+    assert B.melt_gather("melt") is False and B.melt_gather("melt:weight:metal") is False
+    # THE TOKEN
+    assert B.parse_exit("melt:gather") == ("melt:gather", None)
+    assert B.parse_exit("melt:gather:splash:plate") == ("melt:gather:splash:plate", None)
+    assert B.parse_exit("melt:splash:chart:gather:2.4") == ("melt:splash:chart:gather:2.4", 2.4)
+    assert B.parse_exit("melt:weight:metal:gather:depth=1.15") == ("melt:weight:metal:gather:depth=1.15", None)
+    assert all(B.melt_gather(x) for x in ("melt:gather", "melt:gather:splash:plate", "melt:splash:chart:gather",
+                                          "melt:weight:gather", "melt:gather:weight:ink"))
+    assert B.melt_ending("melt:gather:splash:plate") == "splash:plate", "a phase does not change the ending"
+    assert B.melt_depth("melt:gather:depth=1.4") == 1.4, "nor the plane"
+    assert B.MELT_G_S == 0.9, "what the gather adds to the DEFAULT window, the player's MELT.G_S"
+    for bad in ("melt:gathers", "melt:vortex", "melt:swirl"):
+        with pytest.raises(ValueError, match=r"phase \(gather, weight\)"):
+            B.parse_exit(bad)
+    with pytest.raises(ValueError, match="is not a material"):
+        B.parse_exit("melt:weight:gatherr")
+
+
 def test_a_melt_may_name_the_plane_it_happens_at_and_is_refused_by_name_outside_it():
     """P58 T6 (b) / E98 s4 (*"the docks, the ball and the slide move THROUGH the depth"*): `depth=<k>` is a suffix
     like `weight`, anywhere after the name - the PLANE the ball melts, lands and is thrown at. It is the dock's own

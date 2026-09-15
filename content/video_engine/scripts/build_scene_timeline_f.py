@@ -104,6 +104,7 @@ TIMED_EXITS = ("dip", "blurzoom", "melt", "slide", "door")   # (the door's lengt
 MELT_S = 1.6            # P52 T9: a melt's default length, species/melt.mjs MELT.S - the two are one dial written twice (as DIP_S is, in the engine and in gate_motion_density), and test_transitions_e47 pins them together
 MELT_W_S = 1.15         # R26-118 / E88 s6: the WEIGHT phase's own length, species/melt.mjs MELT.W_S - a `melt:weight` that declares no length runs MELT_S + MELT_W_S (the four beats need their own seconds), and test_transitions_e47 pins that pair too
 SLIDE_DIRECTIONS = ("left", "right", "up", "down")   # R26-75 / E87 s3: WHICH WAY the incoming frame pushes the outgoing one off
+MELT_G_S = 0.9          # P61 T6 / E99 s2: what the GATHER adds to a melt's default window, species/melt.mjs MELT.G_S - a `melt:gather` that declares no length runs its window plus this (three turns in the sag's own 0.48 s is a jump, not a swirl), and test_melt_gather pins the pair
 SLIDE_S = 0.6           # a slide's default length, the player's SLIDE_S - the two are one dial written twice (as DIP_S and MELT_S are)
 DOOR_HINGES = ("left", "right", "top", "bottom")   # E98 s7 / R26-134: the stage edge the outgoing world swings open on (kinetics/transitions.mjs DOOR.HINGES)
 DOOR_HINGE = "left"     # the default hinge (DOOR.HINGE)
@@ -1530,7 +1531,7 @@ def _is_number(bit: str) -> bool:
     return True
 
 
-def _melt_parts(exit_id: str) -> tuple[str, float | None]:
+def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool]:
     """A melt's suffixes, in any order (E88, R26-76): an ENDING - ``throw`` (the default), ``splash:chart`` or
     ``splash:plate`` - a bare number, its LENGTH, and on a throw only an ``x,y`` pair, the point it is thrown to in
     stage fractions. A bare ``splash`` is REFUSED: since E88 a splash has two endings that need two different incoming
@@ -1546,12 +1547,18 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None]:
     living drop. It is opt-in, and a `melt:weight` that declares no length of its own runs MELT_S + MELT_W_S.
     A material this engine does not have is refused BY NAME, never painted as the default.
 
+    P61 T6 / E99 s2 adds ``gather`` - a PHASE token beside ``weight``, composable with it and with every ending: the
+    SAG becomes the page vortex (doc 29 s9.31) gathered to the ball's own centre, every mark travelling to one point
+    and amassing on it, no blur and no wipe anywhere in the window. It is opt-in the same way, and a `melt:gather`
+    that declares no length of its own runs its window plus MELT_G_S. E99 s34: it stays OFF the approved Japan short.
+
     species/melt.mjs ``meltOpts`` reads exactly this grammar on the player's side; the two have to agree, and
     test_transitions_e47 pins the pair. Returns (ending, the declared length or None for MELT_S, the declared
-    depth or None for the flat clone)."""
+    depth or None for the flat clone, whether the row asked for the gather)."""
     secs: float | None = None
     ending: str | None = None
     depth: float | None = None   # P58 T6 (b): validated here, carried to the player on the exit string itself
+    gather = False               # P61 T6 / E99 s2: the phase token, carried to the player on the exit string too
     point = False
     bits = str(exit_id).split(":")[1:]
     i = 0
@@ -1577,9 +1584,12 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None]:
                 raise ValueError(f"exit {exit_id!r}: two depths - a melt happens at ONE plane")
             depth = depth_k(bit[len(DEPTH_SUFFIX):], f"exit {exit_id!r}", "ball")
             continue
+        if bit == "gather":   # P61 T6 / E99 s2: the sag becomes the vortex, gathered to ONE point
+            gather = True
+            continue
         if bit == "weight":   # R26-118: the weight phase, and the material the ball is made of
             nxt = bits[i].strip() if i < len(bits) else ""
-            if nxt and "," not in nxt and nxt not in ("throw", "splash") and not nxt.startswith(DEPTH_SUFFIX) and not _is_number(nxt):
+            if nxt and "," not in nxt and nxt not in ("throw", "splash", "gather") and not nxt.startswith(DEPTH_SUFFIX) and not _is_number(nxt):
                 if nxt not in MELT_MATERIALS:
                     raise ValueError(f"exit {exit_id!r}: {nxt!r} is not a material - melt:weight takes "
                                      + ", ".join(MELT_MATERIALS))
@@ -1601,13 +1611,14 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None]:
             secs = float(bit)
         except ValueError:
             raise ValueError(f"exit {exit_id!r}: {bit!r} is neither a length in seconds, nor an ending "
-                             "(throw, splash:chart, splash:plate), nor an x,y point") from None
+                             "(throw, splash:chart, splash:plate), nor a phase (gather, weight), nor an "
+                             "x,y point") from None
         if secs <= 0:
             raise ValueError(f"exit {exit_id!r}: a length must be positive")
     ending = ending or "throw"
     if point and ending != "throw":
         raise ValueError(f"exit {exit_id!r}: an x,y point is where a THROW goes - a splash lands on the board")
-    return ending, secs, depth
+    return ending, secs, depth, gather
 
 
 def melt_depth(exit_id: str | None) -> float | None:
@@ -1615,6 +1626,14 @@ def melt_depth(exit_id: str | None) -> float | None:
     if not exit_id or str(exit_id).split(":")[0] != "melt":
         return None
     return _melt_parts(str(exit_id))[2]
+
+
+def melt_gather(exit_id: str | None) -> bool:
+    """P61 T6 / E99 s2: did this melt ask for the GATHER? False for every other exit and for every melt on the
+    record - the sag is what a melt that does not ask for it still renders, to the byte."""
+    if not exit_id or str(exit_id).split(":")[0] != "melt":
+        return False
+    return _melt_parts(str(exit_id))[3]
 
 
 def page_camera_k(page: dict | None) -> float:
@@ -1799,7 +1818,7 @@ def door_boundary_error(prev: dict, sc: dict) -> str | None:
 
 def parse_exit(exit_id: str) -> tuple[str, float | None]:
     """``cut`` | ``dip[:<s>]`` | ``blurzoom[:<s>]`` | ``wipe_right`` | ``suck:<x>,<y>`` |
-    ``melt[:throw|:splash:chart|:splash:plate][:weight[:<material>]][:<s>][:<x>,<y>]`` | ``slide:<left|right|up|down>[:<s>][:depth=<k_out>,<k_in>]``
+    ``melt[:throw|:splash:chart|:splash:plate][:gather][:weight[:<material>]][:<s>][:<x>,<y>]`` | ``slide:<left|right|up|down>[:<s>][:depth=<k_out>,<k_in>]``
     -> (name, seconds or None).
 
     Only dip, blurzoom, melt and slide read a suffix as a length; the suck's is the point it collapses

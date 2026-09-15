@@ -217,17 +217,15 @@
     {
       "id": "r26-76-melt-endings-in-motion",
       "ids": [
-        "R26-76",
-        "E88"
+        "E88",
+        "E99 s2",
+        "P61 HG6",
+        "R26-76"
       ],
       "kind": "owed",
-      "title": "The melt's three endings in motion (the ink splat, the ball thrown off the page)",
-      "judge": "The three endings IN MOTION - melt:throw (the ball off the page), melt:splash:chart, melt:splash:plate (the ink splat) - and the ball's colour (bright orange is an operator dial).",
+      "title": "The melt gathers to one dense, heavy, vibrating point and splashes into a world plate (proof A) - into a full chart (proof B) to follow",
+      "judge": "Owed by the agent until proof B: E99 s2 - the melt as the page vortex's motion gathered into ONE point (not a whirlpool), dense and heavy (T5's ball) and vibrating, splashing into a scenic high-resolution world plate (proof A, built) and into a fully assembled chart (proof B, after T3 / HG1). Then HG6, asked once with both: watch the gather and the splash - approve the new default, or keep today's look behind the flag.",
       "where": [
-        {
-          "label": "a served player of the three endings (\"not yet served\")",
-          "missing": true
-        },
         {
           "label": "melt-splash",
           "path": "content/video_engine/tests/golden/frames/melt-splash.png"
@@ -257,20 +255,56 @@
           "path": "scratchpad/lanes/melt/proof/",
           "stale": true,
           "note": "a session-relative scratch path, not under the checkout"
+        },
+        {
+          "label": "proof A - the gather's midpoint (the series curl into one spiral converging on the point)",
+          "path": "content/video_engine/tests/golden/frames/melt-gather.png"
+        },
+        {
+          "label": "proof A - the point: T5's ball with the last words streaming in, vibrating on the drop's own floor",
+          "path": "content/video_engine/tests/golden/frames/melt-gather@proof-point.png"
+        },
+        {
+          "label": "proof A - the splash mid-bloom, painting the dock plate up through the ink",
+          "path": "content/video_engine/tests/golden/frames/melt-gather@proof-splash.png"
+        },
+        {
+          "label": "proof A - the plate landed whole",
+          "path": "content/video_engine/tests/golden/frames/melt-gather@proof-plate.png"
+        },
+        {
+          "label": "the gather (melt.mjs: meltOpts 'gather', meltGatherAt, G_KEEP / G_VIB; the compiler's _melt_parts / melt_gather)",
+          "path": "content/video_engine/scripts/species/melt.mjs"
         }
       ],
       "options": [],
-      "recommendation": "parent PASS 3 accepted on frames 2026-09-13; \"the ball's colour is an operator dial\"",
-      "blocks": "nothing recorded",
+      "recommendation": "Proof A reads as the ruling's words: the swirl collecting into one point that is dense, heavy and alive, and a splash that lands IN the plate - no blur, no wipe (ink spread 265.5 -> 59.9 px, peak contrast unchanged at 575). Ask HG6 once proof B is on the card, unless you want to rule on proof A alone sooner - say so and it becomes a watch.",
+      "blocks": "HG6 (both proofs); the default melt stays today's look until ruled; the Japan short untouched (E99 s34)",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:482",
         "docs/content-video-engine/CAPABILITIES.md:37",
-        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:31"
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:31",
+        "docs/portable/OPERATOR-RULINGS.md:2912-2920 (E99 s2)",
+        "content/video_engine/scripts/species/melt.mjs",
+        "content/video_engine/tests/test_melt_gather.py",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T6)"
       ],
       "status": "open",
       "ruling": null,
       "was_kind": "watch",
-      "owed": "E99 s2 - the melt and the splash are refused as they look: the melt is rebuilt as the vortex's motion gathered into one dense, heavy, vibrating point that splashes into a high-resolution world plate or a full chart (an ink splat into the ink bloom is accepted), and returns as a clip."
+      "owed": "Proof A delivered 2026-09-15 (P61 T6): melt:gather + the splash into the dock plate, four goldens, the clip. Still owed: proof B - the same gather splashing into a fully assembled chart built to T2/T3's standard (after T3, which waits on HG1). HG6 is asked once with both.",
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "proof A - melt:gather:splash:plate - 0.3 s of the finished chart, the gather (15.0-15.75 s), the point, the weight phase, the splash and the landed plate",
+          "surface": "melt-gather",
+          "aspect": "16:9",
+          "t0": 14.7,
+          "t1": 18.9,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        }
+      ]
     },
     {
       "id": "p52-gate3-species-proof-motion",
@@ -673,8 +707,8 @@
         "content/video_engine/scene-evidence-engine.mjs:3954",
         "content/video_engine/scene-evidence-engine.mjs:2633"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "RULED FROM THE ANSWERS FILE: the operator answered this card twice on 2026-09-14 (review-answers.jsonl - the span reads washed out -> E99 s7 / r26-68-span-darker; 'the figure across its own line looks like a good fix, the ring flag looks good'); the remaining two were folded into r26-68 and r26-133. Nothing further to watch; it blocked nothing.",
       "answer": {
         "at": "2026-09-14T18:28:36-07:00",
         "ruling": "E99 s7",
@@ -991,8 +1025,8 @@
         "docs/research/runs/p58-2-5d/HG2-SHEET.md:31-36",
         "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-2-5d/SELF-WATCH.md:14-21"
       ],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "AGENT DECISION 2026-09-15 under the operator's word that this never needed approval: keep M35, M39, M41; MOVE M38 - hold 0.60 but stop counting a recipe that fires once (the gate itself calls a single fire a decoration); retire nothing. Thresholds come from the reference (E38), and this is the reference's own reading. Applied at the next gate pass."
     },
     {
       "id": "p53-hg1-opening-register",
@@ -1150,8 +1184,8 @@
           "route": "as the first pair, on this plate's own quad"
         }
       ],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "AGENT DECISION 2026-09-15 under the operator's word that this never needed approval: fix the lit-face blend - a contrast guard on sheen when the face is light; three numbers in three .layers.json files. DONE 2026-09-15: sheen 0.08 on the tv surface of split-tv-charcoal, split-tv-desk and dual-tv-laptop-2 (one line each, no engine line); the lit-face contrast 7.6 -> 15.4, 6.1 -> 15.1, 14.9 -> 15.4, paper untouched at 17.5; the parent read the before/after: the headline is charcoal again and the screen still glows. Frames in review/assembly/p50-t7-fill-sheen/ (gitignored)."
     },
     {
       "id": "r26-82-verdict-stack-short",
@@ -1410,8 +1444,8 @@
         "ledger ee466c018002 2026-08-22T20:54"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "RULED FROM THE RECORD 2026-09-15 (the card should never have been asked): E85 - doc 21's finding stands (presentation is not the variable that separates winners) AND presentation is built as a differentiator and a moat (docs/portable/OPERATOR-RULINGS.md:2605-2618). Both, as this card recommended - already ruled."
     },
     {
       "id": "p54-digest-reduced-motion-video",
@@ -1445,8 +1479,8 @@
         "ledger 02dbf7702cd8 2026-08-23T06:11"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "RULED FROM THE RECORD 2026-09-15 (the card should never have been asked): doc 39 s10.1 rule 5 already carries the superseding note (2026-08-23, LEDGER 02dbf7702cd8): prefers-reduced-motion governs the console, never the artifact; the record document always types and sweeps (docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:378-385). Nothing to edit."
     },
     {
       "id": "p54-digest-magnific-cancelled-local-upscale",
@@ -1481,8 +1515,8 @@
         "ledger 9821f0386743 2026-09-02T05:07"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "RULED FROM THE RECORD 2026-09-15 (the card should never have been asked): doc 08 s7 already carries the superseding note (2026-09-02, LEDGER 9821f0386743): Magnific cancelled, upscale runs locally, the wrappers stay on disk as a record (docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:94-100). Nothing to edit."
     },
     {
       "id": "p54-digest-long-form-runtime-floor",
@@ -1512,8 +1546,8 @@
         "ledger cf1f8b376e5e 2026-08-29T07:19"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "RULED FROM THE RECORD 2026-09-15 (the card should never have been asked): E74 - long form is never under 8 minutes (docs/portable/OPERATOR-RULINGS.md:2393)."
     },
     {
       "id": "p54-digest-hybrid-brand-advice",
@@ -1543,8 +1577,8 @@
         "ledger 4b43b0fc0c51 2026-08-31T20:31"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "RULED FROM THE RECORD 2026-09-15 (the card should never have been asked): E80 - 'no real faces' means the operator's on-camera face; advice built for channels meant to be sold does not bind (docs/portable/OPERATOR-RULINGS.md:2528)."
     },
     {
       "id": "p54-digest-facebook-close-reader-stake",
@@ -1574,8 +1608,8 @@
         "ledger cd2e32426cdd 2026-09-02T19:27"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "RULED FROM THE RECORD 2026-09-15 (the card should never have been asked): E82 apply 3 - a close reaches the viewer it chose: how the mechanism moves the market and so that viewer's own money (docs/portable/OPERATOR-RULINGS.md:2557-2576)."
     },
     {
       "id": "p54-digest-audience-borrowing-costs",
@@ -1605,8 +1639,8 @@
         "ledger 2e2e84c1559f 2026-09-05T05:53"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "RULED FROM THE RECORD 2026-09-15 (the card should never have been asked): E82 apply 2, ruled the OTHER way from this card's recommendation - no standing rule picks the kind of stake; it is the story's editorial decision, and without a reason to narrow the default is to speak to everyone (docs/portable/OPERATOR-RULINGS.md:2573-2574)."
     },
     {
       "id": "p54-digest-level-line-axis-floor",
@@ -1636,8 +1670,8 @@
         "ledger 9e6d4f0a3f04 2026-09-05T10:47"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "RULED FROM THE RECORD 2026-09-15 (the card should never have been asked): E75 - a bar starts at zero; a level line may start near its own low (docs/portable/OPERATOR-RULINGS.md:2415)."
     },
     {
       "id": "p54-digest-foley-background-level",
@@ -1667,8 +1701,8 @@
         "ledger 7096b624ebee 2026-09-05T19:19"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "RULED FROM THE RECORD 2026-09-15 (the card should never have been asked): E81 - foley and accents begin 8-10 dB under the voice in every video (docs/portable/OPERATOR-RULINGS.md:2542)."
     },
     {
       "id": "p54-digest-derived-is-added-layer",
@@ -1698,8 +1732,8 @@
         "ledger bfb9c40b69b6 2026-09-08T15:25"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "RULED FROM THE RECORD 2026-09-15 (the card should never have been asked): E77 - a derived figure is our analytical layer, labelled [DERIVED: from <sources>, <how>], set beside outside projections (docs/portable/OPERATOR-RULINGS.md:2480)."
     },
     {
       "id": "p54-digest-spoken-chart-not-on-screen",
@@ -1740,8 +1774,8 @@
         "content/video_engine/scripts/measure_spoken_visuals.py"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "RULED FROM THE RECORD 2026-09-15 (the card should never have been asked): M33 exists (docs/GATES-REGISTRY.md:151, P54 T9): measure_spoken_visuals.py, WARN by the operator's own word until the approved shorts show a real example. Stays WARN."
     },
     {
       "id": "p54-digest-sub-6s-plate",
@@ -1771,8 +1805,8 @@
         "ledger 69ff558bdf67 2026-08-29T22:46"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "AGENT DECISION 2026-09-15 under the operator's word that this never needed approval: build it - WARN under 6 s, FAIL when the short plate carries a dock, as the card recommended. BUILT 2026-09-15 as M44 (a world plate under 6 s WARNs; with a dock FAILs). It FAILs the approved Japan cut - s01 1.8 s and s05 5.1 s each carry a dock; s07 2.1 s and s10 3.5 s are bare - the cut is approved and untouched (E45); the reading goes to the Japan re-render row at T11."
     },
     {
       "id": "p54-digest-thumbnail-text-clipping",
@@ -1804,8 +1838,8 @@
         "docs/GATES-REGISTRY.md:111"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "AGENT DECISION 2026-09-15 under the operator's word that this never needed approval: build it - each glyph's pixel box on the thumbnail and the sticker against the frame edges at display size, as the card recommended. BUILT 2026-09-15 as G49 (gate_thumbnail_text.py: every text box against the frame edges at display size, margin dial default 0 px; no builder lays out thumbnail text - they are Flow rasters - so it reads the layout probe); PASS on the Japan cut's probe at 21.72 s."
     },
     {
       "id": "p54-digest-punch-crops-text",
@@ -1836,8 +1870,8 @@
         "docs/GATES-REGISTRY.md:132"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "AGENT DECISION 2026-09-15 under the operator's word that this never needed approval: build it - a gate is build work under the standing rule that every operator-caught defect ships one; folded into the layout probe (M25/M28/M34's file) as the card recommended. BUILT 2026-09-15 as M43 (gate_motion_density.py: the camera frustum at a punch / focus-zoom / zoom-key landing against the probe's text boxes - wholly in or out passes, cut partway FAILs); no row on the Japan cut (it authors no camera move)."
     },
     {
       "id": "p54-digest-black-frame-at-seam",
@@ -1912,8 +1946,8 @@
         "docs/agent-memory/operator/casebook/ring-on-the-tip-label/CASE.md"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "RULED FROM THE RECORD 2026-09-15 (the card should never have been asked): M34 the collision ledger (K9) already FAILs a ring's or a callout's stroke over any text but its own, naming the casebook's ring-on-the-tip-label (gate_motion_density.py:90-94). Built."
     },
     {
       "id": "p54-digest-name-on-neighbour-line",
@@ -1949,8 +1983,8 @@
         "docs/agent-memory/operator/casebook/name-on-the-neighbour-line/CASE.md"
       ],
       "proofs": [],
-      "status": "open",
-      "ruling": null
+      "status": "ruled",
+      "ruling": "RULED FROM THE RECORD 2026-09-15 (the card should never have been asked): M34 the collision ledger (K9) already FAILs a text box across a series line it does not name, naming the casebook's name-on-the-neighbour-line (gate_motion_density.py:90-94). Built."
     },
     {
       "id": "p54-hg3-astra-fable-bakeoff",
@@ -2957,8 +2991,8 @@
         "content/video_engine/tests/test_effects_gallery.py",
         "content/video_engine/tests/golden/build_golden_sources.py (PAGE_SURFACES)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "AGENT DECISION 2026-09-15 under the operator's word that this never needed approval: HG9's bar was a number and it was met: 0.201 s -> 0.098 s median of three warm runs on an idle machine (0.488x against the 0.50x bar), the page pinned byte-identical, three clips by a stated rule (P61 T9). Approved.",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-15 (P61 T9): the build at 0.488x, the page pinned, three clips beside the tiles"
     },

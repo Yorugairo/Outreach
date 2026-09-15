@@ -3168,3 +3168,25 @@ stay rendered as clips on the record. The LEAVE is the soak's recede for both - 
 soak (the plate fade-out is retired as a leave). The scribble (`page.field = "scribble"`) is an opt-in back-up, never a default, and
 nothing is built for it; s18's Apply line read "does not clear its scribbles" as "keep the scribbles" - wrong, corrected there. A
 formed page (E98 s3's two forms) takes exactly this rule; T4b re-authors the form goldens on it.
+
+**E99 s36 - The frame clock: the render is 24 fps, camera and speed on 1s, everything else on 2s at 12, plate life on the same
+grid (P61 T12).** The operator, 2026-09-15, after reading on cadence: *"it seems like we should do our camera work and overall
+rendering at 24 fps but do everything else at 12 fps would you agree? google thought this would give us animation that is readable
+to human, without jittering when we need speed and smoothness"* - and, told that the stop-action cadence (kinetics/stopaction.mjs:
+CADENCE.FPS 24, camera on 1s, on 2s below the 154 px/s cinema-parity threshold, on 3s for a boil) already is that law while the
+episode renderer captures at 30 (a 12 fps hold resampled onto 30 lands as alternating 2- and 3-frame holds) and plate life quantises
+to 10: *"yes, render should be 24 fps. align plate life to 12 fps."* Apply: `render_episode.py` delivers 24 fps; plate life's clock
+is 12 fps (LIFE_FPS 10 -> 12) so it sits on the 2s grid; the stop-action split stands unchanged - a camera move and anything faster
+than ON1_PX_S (154 px/s, P53) step every frame, everything else on 2s, a background boil on 3s (8 fps, which 24 carries exactly), the
+soak's own 8 fps step likewise; every frame-count guard in the measurement scripts that was written at 30 (a cut lands 3 frames
+before the onset, the dip's dark core in frames) is re-expressed at 24 or in seconds, and the gates' seconds-valued dials (DIP_S,
+BLURZOOM_S) do not move. Goldens are stills and hold, except any frame plate life re-quantises - those re-pin and are named.
+
+**E99 s37 - Magnific and Higgsfield are not used for anything; the local stack and the Gemini research lanes are the route
+(closes the P54 digest's `magnific-cancelled-local-upscale`; extends doc 08 s3).** The operator, 2026-09-15: *"we already have our
+entire local capabilites documented with comfy, sam, etc. and we have our own research lanes from gemini to extract heads and video, so
+we don't use magnific or higgsfield for anything, too expensive."* Apply: no plan, slice or intake proposes Magnific (cancelled
+2026-09-02) or Higgsfield (any product, the Explainer included) for any step - upscale, heads, cutouts, video, audio-driven scenes;
+the routes are the local stack the record documents (ComfyUI, SAM, local Whisper, the Comfy model layout) and the Gemini research
+lanes that extract heads and video; doc 08 s3's 'monitor the Explainer' and doc 14's audio-driven lane are records of what was
+looked at, not routes; a paid generator enters only on the operator's word in chat (the standing rule on paid spend).

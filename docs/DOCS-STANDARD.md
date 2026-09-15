@@ -80,14 +80,14 @@ Non-exempt sections whose first real line is under 40 characters (102).
 - `docs/AGENT_START_HERE.md:1` Agent Start Here
 - `docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md:1` Architecture Decision: SEO Insights Platform over Script-First Pipeline
 - `docs/agent-context/SKILL_ROUTER.md:1` Skill And Agent Router
-- `docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:49` Audio identity and rights boundary
+- `docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:51` Audio identity and rights boundary
 - `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:135` 5. Episode 1 commands
 - `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:267` Part 8 — The scene-evidence lane (default production pattern)
 - `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:463` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30)
 - `docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:196` 5. Worked instance
 - `docs/content-video-engine/53-THE-STICKMAN-LANE.md:183` 53.4 What this corrects in my own claims
 - `docs/content-video-engine/P13-GATE-A-ARMBAR-REVIEW.md:38` Locked Defaults
-- `docs/content-video-engine/REVIEW-QUEUE.md:53` Approve / push (0)
+- `docs/content-video-engine/REVIEW-QUEUE.md:33` Approve / push (0)
 - `docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:1` Alicia Script — Persona Pass (v2)
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:187` The On-1s / On-2s / On-3s Decision Rule (Proposal)
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:435` C3: Nested Coordinate Spaces [Tier 1 Architecture — CLOSED]

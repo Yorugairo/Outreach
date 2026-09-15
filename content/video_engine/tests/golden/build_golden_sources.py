@@ -2193,6 +2193,60 @@ FRAME_T["melt-depth"] = 17.34   # THE ENDING: the window is MELT_CUT + MELT.S + 
                                 # throw, with the eye inside its hold (14.0 + 4.0/1.8 = 16.22) - a dead-still pin
 
 
+# ---- P61 T6 / E99 s2: THE MELT GATHERS TO ONE POINT AND SPLASHES INTO A WORLD PLATE --------------
+# The operator (OPERATOR-RULINGS.md:2912): *"it should be closer to the swirl except for instead of a whirlpool,
+# vortexing around a single point, it collects and amasses into a single point, that single point should be dense,
+# heavy, and vibrating with energy, and when it splashes, it should splash into a scenic, high-resolution world plate
+# or fully assembled chart."* This is PROOF A - the world plate, which the ruling names first and which needs no
+# chart work at all. Two things differ from `melt-plate`, and nothing else does:
+#   the EXIT     `melt:gather:weight:splash:plate` - the gather takes the sag's place (every mark travels to the
+#                ball's own centre and amasses on it, no blur and no wipe), the weight phase gives the point T5's
+#                material to wear, and the splash is the ink-splat -> ink-bloom route already on disk (MELT.STAIN_RAG,
+#                INTAKE-INK-BLOOM-2026-09-08) painting the incoming world up through its stains.
+#   the PLATE    the committed TOKYO CUSTOMS DOCK plate (`DOCK_PLATE`, the one `camera-layers` and `dock-depth` are
+#                built on), not `melt-plate`'s 320x180 synthetic dusk stand-in: "scenic, high-resolution" is the
+#                acceptance, and a stand-in cannot carry it.
+# The window is MELT_CUT + MELT.S + MELT.W_S + MELT.G_S = 3.65 s, so the phases are
+#   gather 15.00 -> 15.75, ball 15.75 -> 16.375, weight 16.375 -> 17.525, splash 17.525 -> 18.65
+# and the four instants read as frames are the gather's midpoint (the base), the point, mid-bloom and the landed
+# plate. E99 s34: `gather` is authored HERE and nowhere near the approved Japan short.
+MELT_GATHER_S = 3.65
+MELT_GATHER_EXIT = "melt:gather:weight:splash:plate"
+
+
+def melt_gather() -> tuple[dict, dict]:
+    """P61 T6 - THE GATHER, AND THE SPLASH INTO A WORLD PLATE (proof A of the card r26-76-melt-endings-in-motion).
+
+    Scene 1 is `melt_page`'s own line page, given the whole 15 s to draw itself, so what gathers is a chart that has
+    been read. Scene 2's world is the committed dock plate and its `exit` is the melt, so - E47, an exit names the
+    transition INTO the scene it sits on - the gather takes scene 1's chart ink as scene 2 begins and the plate is
+    what grows through the splatter. No cut anywhere: the plate is on the board as the bloom clears."""
+    import build_scene_timeline_f as BST
+    assert BST.melt_gather(MELT_GATHER_EXIT), MELT_GATHER_EXIT     # the COMPILER's own grammar, not a hand-written string
+    assert BST.melt_ending(MELT_GATHER_EXIT) == "splash:plate", MELT_GATHER_EXIT
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", None, "right")
+    page["field"] = "scribble"
+    page["exit"] = "cut"   # LEDGER_EXITS / E40 #5, R26-60: NO RETRACT - the melt is how this chart leaves
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, MELT_CUT], "docks": [], "species": []},
+              {"scene_id": "s02", "world": {"asset_id": "plate-dock", "sha256": "0" * 64,
+                                            "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": MELT_GATHER_EXIT, "span": [MELT_CUT, RUNTIME], "docks": [], "species": []}]
+    uris = _base_uris()
+    uris["plate-dock"] = BST.data_uri(DOCK_PLATE)   # the scenic, high-resolution world plate the ruling asks for
+    return _timeline("Golden: the chart gathers to one dense vibrating point and splashes into a world plate",
+                     scenes, {}, None), uris
+
+
+SURFACES.update({   # P61 T6 / E99 s2: the gather, the point, the splash and the plate
+    "melt-gather": melt_gather,
+})
+FRAME_T["melt-gather"] = 15.375   # THE GATHER at its midpoint (0.5 of 15.00 -> 15.75): the page's marks and words out
+                                  # on the vortex's arms, each one turned along its own flow and part way to the point,
+                                  # the board whole behind them - and not one blurred pixel (MELT.G_* / meltBlur = 0)
+
+
 # ---- P58 T6 (c): THE SLIDE THROUGH THE DEPTH -----------------------------------------------------
 # E98 s4: *"the docks, the ball and the slide move THROUGH the depth"*. The two pages are `slide-mid`'s own, and the
 # two things added are `melt-depth`'s: a card that lands on the outgoing page and the one focus zoom tied to that

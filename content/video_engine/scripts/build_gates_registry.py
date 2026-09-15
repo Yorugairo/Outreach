@@ -69,12 +69,13 @@ FAMILY = {
     "audit_script_doctrine.py": "audit",
     "lint_script_pattern.py": "lint",
     "viewer_score.py": "viewer",
+    "gate_thumbnail_text.py": "package",   # G49 (ledger 3570a6280d20): the thumbnail's text against the frame edges
 }
 OPENING_FAMILY = {"run": "opening-long", "run_short": "opening-short"}
 OPENING_SHARED = "opening-shared"
 RUNNER = "run_script_gates.py"
 FAMILIES = ("opening-long", "opening-short", "opening-shared", "motion", "floor", "audit",
-            "lint", "viewer", "runner")
+            "lint", "viewer", "package", "runner")
 
 LEVELS = ("FAIL", "WARN", "PASS", "JUDGE", "INFO")
 LEVEL_RE = re.compile(r"\b(" + "|".join(LEVELS) + r")\b")

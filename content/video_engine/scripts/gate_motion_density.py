@@ -94,6 +94,14 @@ captions do NOT count - they are what a viewer reads as stillness.
        a mark over its own target's text WARNs                        spotlight) and a mark's text off its
                                                                         ellipse; INFO until
                                                                         probe.py <build> --gate writes the ledger)
+  M43  punch crops text (the operator 2026-09-03): a camera     FAIL   (ledger 16d1b9558a10; the frustum M24
+       landing - a punch, a focus zoom or an authored key                  computes from the row's own camera against
+       over zoom 1 - whose frame cuts one of the page's text               probe.py's boxes; INFO until probe.py
+       boxes PARTWAY. Wholly in frame reads, wholly out of                 <build> --gate has run; no row unless a
+       frame is the author's choice. M25's family, same file               move lands zoomed in)
+  M44  a world plate under 6s (the operator 2026-08-29):       WARN   (ledger 69ff558bdf67; FAIL when the short
+       the eye cannot take it in - and one that carries a                  plate also carries a DOCK. From the
+       DOCK asks it to read evidence inside the flash                      timeline's scenes; no browser, no render)
   J01  savor beats keep their picture (card up, badge lit) JUDGE
 
     python gate_motion_density.py <build-dir> [--timeline NAME.timeline.json]
@@ -1074,6 +1082,10 @@ def run(tl: dict, docks: list[dict], mp: dict, frames: list[dict] | str | None =
     g.append(_labels_gate(layout))                                        # M28 (R26-53: text on text among the page's own labels)
     if (cl := _collision_gate(layout)) is not None:
         g.append(cl)                                                      # M34 (K9: the collision ledger - marks and lines against every text box)
+    if (cp := _crop_gate(layout, tl.get("scenes", []), str(tl.get("aspect") or "16:9"))) is not None:
+        g.append(cp)                                                      # M43 (punch-crops-text: a camera landing that cuts a text box partway)
+    if (pl := _plate_length_gate(tl.get("scenes", []))) is not None:
+        g.append(pl)                                                      # M44 (sub-6s-plate: a world plate the eye cannot take in)
     if (bt := _build_to_gate(tl.get("scenes", []))) is not None:
         g.append(bt)                                                      # M19 (P47 T2: the build_to holds, INFO)
     if (cg := _cadence_gate(tl.get("scenes", []))) is not None:
@@ -2274,6 +2286,197 @@ def _collision_gate(doc: dict | str | None) -> Gate | None:
                     + (" ..." if len(warns) > 4 else ""), SRC_M34)
     return Gate("M34", "PASS", f"no mark over a text box and no text box on a line it does not name over {span} "
                 f"({checked:,} pair(s) checked)", SRC_M34)
+
+
+# ---- M43 (punch-crops-text, the operator 2026-09-03, ledger 16d1b9558a10) -----------------------------------------
+# A page punch is a camera move, and a camera move that lands with a text box HALF inside the frame crops a word:
+# the operator watched the focus land and asked "what should we do about the fact that we wrote 'If you're so
+# bullish why trim?' up in the corner like that and then we zoom in and it's gone but there's still some text
+# that's not cut off?" - GONE is a choice, HALF GONE is a defect. The rect is the camera's own frustum in world
+# (pre-camera) stage px, from the authored row: M24's camera_state_at + camera_frustum, the same arithmetic the
+# player draws with. The text boxes are the probe's - M25's family, read from layout-probe.json, never a browser.
+SRC_M43 = ("punch-crops-text (the operator, 2026-09-03, ledger 16d1b9558a10; docs/operator-ledger/TRIAGE-DIGEST.md): "
+           "a text box the camera's landed frame cuts PARTWAY is a cropped word. Fully inside reads, fully outside is a "
+           "choice the author made; half of a sentence hanging off the frame edge is neither. The frame is the frustum "
+           "M24 computes from the row's own camera (camera_state_at + camera_frustum); the boxes are probe.py --gate's "
+           "(layout-probe.json), the file M25/M26/M27/M28/M34 already read")
+CAM_PUNCH_IN_S = 0.42      # [mirrors the engine's CAM.PUNCH_IN] - a punch is fully in this long after its `at`
+CAM_PUNCH_SCALE = 1.14     # [mirrors CAM.PUNCH_SCALE]
+CAM_FOCUS_SCALE = 1.32     # [mirrors CAM.FOCUS_SCALE]
+CAM_FOCUS_LAND_K = 1 / 1.8  # [mirrors camSpeciesState: focus_zoom eases over min(1, k * 1.8), so it lands at k = 1/1.8]
+CROP_EDGE_PX = 2.0         # a glyph box carries a pixel or two of antialiasing padding (probe.py's own note): a box
+                           # whose worst edge hangs this far outside the frame is flush with it, not cropped
+LABEL_NAME_MAX = 40       # enough of a run to recognise the line the author wrote, short enough for one row
+CROP_INSTANT_S = 1.5       # how far from the landing an identity-camera probe instant may stand and still be read as
+                           # "the page at that landing" - the punch's own clock (PUNCH_IN + the hold) rounded up
+
+
+def _page_plot(s: dict, aspect: str) -> dict | None:
+    """The scene's page plot box, M24's datum proxy - None when the page has no box model."""
+    page = (s.get("world") or {}).get("page")
+    if not isinstance(page, dict):
+        return None
+    try:
+        return LPG.page_boxes(page, aspect).get("plot")
+    except Exception:
+        return None
+
+
+def _cam_landings(scenes: list[dict], aspect: str) -> list[tuple[dict, str, str, float, dict]]:
+    """(scene, scene_id, what, t landed, frustum) for every camera move that LANDS zoomed in: the punch and the
+    focus zoom at the instant their scale peaks, and every authored key whose zoom is over 1 at the key's own t.
+    The frustum is in world (pre-camera) stage px - the coordinates the probe's boxes are in at the identity camera."""
+    sw, sh = (1080.0, 1920.0) if aspect == "9:16" else (1920.0, 1080.0)
+    out: list[tuple[dict, str, str, float, dict]] = []
+    for s in scenes:
+        sid = str(s.get("scene_id", "?"))
+        a, z = (float(s["span"][0]), float(s["span"][1])) if s.get("span") else (0.0, 0.0)
+        plot = _page_plot(s, aspect)
+        for sp in s.get("species", []):
+            kind = str(sp.get("kind", ""))
+            if kind not in ("punch", "focus_zoom"):
+                continue
+            c = _cam_point(sp.get("target"), sw, sh, plot)
+            if c is None:
+                continue          # a species with no resolvable target frames nothing this row can measure
+            at, dur = float(sp.get("at", 0.0)), float(sp.get("dur", 0.0) or 0.0)
+            if kind == "punch":
+                land, scale = at + min(CAM_PUNCH_IN_S, dur or CAM_PUNCH_IN_S), CAM_PUNCH_SCALE
+            else:
+                land, scale = at + (dur or 1.0) * CAM_FOCUS_LAND_K, CAM_FOCUS_SCALE
+            out.append((s, sid, f"{kind} at {_mm(at)}", round(land, 3),
+                        camera_frustum({"s": scale, "look": c, "at": c}, sw, sh)))
+        for k in ((s.get("camera") or {}).get("keys") or []):
+            if not isinstance(k, dict) or not isinstance(k.get("t"), (int, float)) or float(k.get("zoom", 1) or 1) <= 1.0:
+                continue
+            t = max(a, min(float(k["t"]), z)) if z > a else float(k["t"])
+            out.append((s, sid, f"camera key zoom {float(k['zoom']):.2f} at {_mm(t)}", round(t, 3),
+                        camera_frustum(camera_state_at(s, t, sw, sh, plot), sw, sh)))
+    return out
+
+
+def _instant_texts(inst: dict) -> list[tuple[str, list[float]]]:
+    """Every TEXT box the probe recorded at an instant: the page's own runs (title, sub, source, note) and every
+    label the chart and the perform layer wrote. A dock is a card and a caption is chrome over the stage - neither
+    rides the world the camera moves, so neither is here."""
+    out: list[tuple[str, list[float]]] = []
+    for k in ("title", "sub", "source", "note"):
+        b = (inst.get("page") or {}).get(k)
+        if b:
+            out.append((f"page.{k}", [float(v) for v in b]))
+    for la in inst.get("labels") or []:
+        b = la.get("box")
+        if b:
+            out.append((f"{la.get('role', 'label')}:{(la.get('text') or '')[:LABEL_NAME_MAX]}", [float(v) for v in b]))
+    return out
+
+
+def _crop_px(fr: dict, box: list[float]) -> tuple[float, str] | None:
+    """(the worst edge's overrun in px, which edge) when the frame CUTS the box, None when it is wholly inside or
+    wholly outside. A box that misses the frame entirely is out of shot on purpose; a box flush with the edge inside
+    CROP_EDGE_PX is the glyph's own padding."""
+    x, y, w, h = box[0], box[1], box[2], box[3]
+    if min(fr["x1"], x + w) - max(fr["x0"], x) <= 0 or min(fr["y1"], y + h) - max(fr["y0"], y) <= 0:
+        return None                                    # wholly outside: the move left it behind, whole
+    over = (("left", fr["x0"] - x), ("top", fr["y0"] - y), ("right", (x + w) - fr["x1"]), ("bottom", (y + h) - fr["y1"]))
+    edge, px = max(over, key=lambda e: e[1])
+    return (px, edge) if px > CROP_EDGE_PX else None
+
+
+def _crop_faults(doc: dict, scenes: list[dict], aspect: str) -> tuple[list[str], int, int]:
+    """(one line per cropped text box, landings measured, boxes measured). The boxes are read at the probe instant
+    nearest the landing on the SAME scene with the camera still at identity - the page as it stands when the move
+    begins, in the world coordinates the frustum is computed in."""
+    idents = [i for i in (doc.get("instants") or []) if abs(float((i.get("camera") or {}).get("zoom", 1.0)) - 1.0) < 1e-6]
+    fails: list[str] = []
+    measured = boxes = 0
+    for s, sid, what, land, fr in _cam_landings(scenes, aspect):
+        a, z = (float(s["span"][0]), float(s["span"][1])) if s.get("span") else (0.0, land)
+        near = [i for i in idents if a - 1e-6 <= float(i.get("t", -1)) <= z + 1e-6]
+        inst = min(near, key=lambda i: abs(float(i["t"]) - land), default=None)
+        if inst is None or abs(float(inst["t"]) - land) > CROP_INSTANT_S:
+            continue                                   # nothing probed near this landing: counted by the row's INFO tier
+        measured += 1
+        texts = _instant_texts(inst)
+        boxes += len(texts)
+        for name, box in texts:
+            cut = _crop_px(fr, box)
+            if cut is None:
+                continue
+            px, edge = cut
+            fails.append(f"{sid} {what}: the frame cuts \"{name}\" by {px:.0f} px off its {edge} edge "
+                         f"(box {box[0]:.0f},{box[1]:.0f} {box[2]:.0f}x{box[3]:.0f}; frame "
+                         f"{fr['x0']:.0f},{fr['y0']:.0f}-{fr['x1']:.0f},{fr['y1']:.0f}; read at {_mm(float(inst['t']))})")
+    return _dedupe(fails), measured, boxes
+
+
+def _crop_gate(doc: dict | str | None, scenes: list[dict], aspect: str) -> Gate | None:
+    """M43: no camera landing cuts a text box partway. No row unless the build authors a move that lands zoomed in
+    (the M19-M24 shape: a row for what the build actually carries)."""
+    landings = _cam_landings(scenes, aspect)
+    if not landings:
+        return None
+    if doc is None:
+        return Gate("M43", "INFO", f"{len(landings)} camera landing(s) unmeasured - run probe.py <build> --gate "
+                    f"(writes {LAYOUT_PROBE_NAME})", SRC_M43)
+    if doc == "stale":
+        return Gate("M43", "INFO", f"{LAYOUT_PROBE_NAME} measured another player.html (the build was rebuilt since) - "
+                    "re-run probe.py <build> --gate", SRC_M43)
+    if not (doc or {}).get("instants"):
+        return Gate("M43", "INFO", f"{LAYOUT_PROBE_NAME} carries no instants - re-run probe.py <build> --gate", SRC_M43)
+    fails, measured, boxes = _crop_faults(doc, scenes, aspect)
+    if fails:
+        return Gate("M43", "FAIL", f"{len(fails)} text box(es) cut partway by a camera landing: " + "; ".join(fails[:6])
+                    + (" ..." if len(fails) > 6 else "") + " - land the move clear of the box, or push far enough "
+                    "that the box leaves the frame whole", SRC_M43)
+    if not measured:
+        return Gate("M43", "INFO", f"{len(landings)} camera landing(s), none with an identity-camera probe instant "
+                    f"within {CROP_INSTANT_S:.1f}s on its own scene - add those instants to probe.py --gate", SRC_M43)
+    return Gate("M43", "PASS", f"{measured} of {len(landings)} camera landing(s) measured against {boxes} text box(es): "
+                "every one wholly in frame or wholly out of it", SRC_M43)
+
+
+# ---- M44 (sub-6s-plate, the operator 2026-08-29, ledger 69ff558bdf67) ----------------------------------------------
+PLATE_MIN_S = 6.0          # the operator, on the balloon dock: "why do we have a plate less than 6 seconds long?"
+SRC_M44 = ("sub-6s-plate (the operator, 2026-08-29, ledger 69ff558bdf67; docs/operator-ledger/TRIAGE-DIGEST.md: "
+           "\"the baloon dock doesn't even make sense ... why do we have a plate less than 6 seconds long?\"): a world "
+           "plate under 6 s is a flash the eye cannot take in, and one that also carries a DOCK asks the eye to read "
+           "evidence inside that flash. BUILD-PIPELINE says only \"under ~8s one piece or none\" and nothing checked "
+           "plate length. Read from the timeline's own scenes - no browser, no render")
+
+
+def _plate_scenes(scenes: list[dict]) -> list[tuple[str, float, int]]:
+    """(scene_id, seconds, docks) for every WORLD PLATE scene - a world with an asset_id that is neither a ledger
+    page nor a clip. A world with no `kind` and an asset_id is the plate the compiler writes."""
+    out: list[tuple[str, float, int]] = []
+    for s in scenes:
+        w = s.get("world") or {}
+        if not w.get("asset_id") or (w.get("kind") or "plate") != "plate" or not s.get("span"):
+            continue
+        out.append((str(s.get("scene_id", "?")), float(s["span"][1]) - float(s["span"][0]), len(s.get("docks") or [])))
+    return out
+
+
+def _plate_length_gate(scenes: list[dict]) -> Gate | None:
+    """M44: a world plate shorter than 6 s WARNs; one that also carries a dock FAILs. No row on a build with no
+    world plate at all (the M19-M24 shape)."""
+    plates = _plate_scenes(scenes)
+    if not plates:
+        return None
+    short = [(sid, dur, nd) for sid, dur, nd in plates if dur < PLATE_MIN_S]
+    fails = [f"{sid} {dur:.1f}s with {nd} dock(s)" for sid, dur, nd in short if nd]
+    warns = [f"{sid} {dur:.1f}s" for sid, dur, nd in short if not nd]
+    span = f"{len(plates)} world plate(s), floor {PLATE_MIN_S:.0f}s"
+    if fails:
+        return Gate("M44", "FAIL", f"{len(fails)} world plate(s) under {PLATE_MIN_S:.0f}s carrying a dock ({span}): "
+                    + ", ".join(fails[:6]) + (" ..." if len(fails) > 6 else "")
+                    + (f"; and {len(warns)} bare short plate(s): " + ", ".join(warns[:6]) if warns else "")
+                    + " - give the plate its 6 s, or move the evidence to the page that can hold it", SRC_M44)
+    if warns:
+        return Gate("M44", "WARN", f"{len(warns)} world plate(s) under {PLATE_MIN_S:.0f}s ({span}): "
+                    + ", ".join(warns[:8]) + (" ..." if len(warns) > 8 else "")
+                    + " - a plate the eye cannot take in; lengthen it or fold it into its neighbour", SRC_M44)
+    return Gate("M44", "PASS", f"every world plate holds at least {PLATE_MIN_S:.0f}s ({span})", SRC_M44)
 
 
 def _build_to_holds(scenes: list[dict]) -> list[tuple[float, float]]:

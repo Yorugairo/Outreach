@@ -44,6 +44,7 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "newsreel-band",        # P52 T6: the newsreel band 16:9 - the wire crawling under a docked surface, mid-run
             "melt-ball-roll",   # R26-118 / E88 s6-s7: the melt ball with MASS - mid-roll, its own ink mark turned, the living drop surface out of round (its landing and its rest ride PROOF_FRAMES)
             "melt-page", "melt-splash", "melt-plate",   # P52 T9 / E88: the melt's three endings - the throw at its ball instant (its four @proof-* instants ride PROOF_FRAMES), the chart splash's burst, the plate splash's paint
+            "melt-gather",      # P61 T6 / E99 s2: THE GATHER - `melt:gather:weight:splash:plate`, the page's marks and words travelling the vortex to ONE point and amassing on it (no blur, no wipe), the point dense and vibrating, the splash painting the committed dock plate up through its stains (its point, its bloom and its landed plate ride PROOF_FRAMES)
             "newsreel-strip-9x16",  # P52 T6: 9:16 THE DEFAULT strip law - the caption keeps its E62 band, the crawl runs below it
             "newsreel-strip-above", # P52 T6: 9:16 the ALTERNATIVE (`cap_band: "above"`) - the crawl takes the strip, the caption moves above it
             "occluder-dock",     # P50 T15 / HF-17: a dock BEHIND the plate's foreground layer - the depth cue by occlusion, not blur

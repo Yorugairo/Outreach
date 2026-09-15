@@ -1,5 +1,7 @@
 # P13 Higgsfield Audio-Driven Explainer Lane
 
+> **Superseded 2026-09-15 (operator, E99 s37):** *"we don't use magnific or higgsfield for anything, too expensive"* - this lane is a record of what was looked at, not a route; the audio-driven scene is built by the engine and the local stack.
+
 > **STATUS: RECORD.** A point-in-time research note, review, or planning document. Not maintained, and not current doctrine — read it for how a decision was reached, not for what to do now. Live doctrine is indexed in [README.md](README.md).
 
 ## Narration ownership correction

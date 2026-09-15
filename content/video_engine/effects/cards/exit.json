@@ -302,12 +302,32 @@
       "when": "Only the chart's information melts",
       "when_source": "docs/portable/OPERATOR-RULINGS.md:2659",
       "author": {
-        "key": "shot row 6th element 'melt[:throw|:splash:chart|:splash:plate][:weight[:<material>]][:depth=<k>][:<s>][:<x>,<y>]' (validator: parse_exit (via scene_exit); melt boundaries: stamp_transition_pages/_melt_boundary)",
+        "key": "shot row 6th element 'melt[:throw|:splash:chart|:splash:plate][:gather][:weight[:<material>]][:depth=<k>][:<s>][:<x>,<y>]' (validator: parse_exit (via scene_exit); melt boundaries: stamp_transition_pages/_melt_boundary)",
         "example": "(25.02, 33.97, 'ledger:ev-federal-load-v1:line:240:right:spiral:cut', (0, 0, 0), [], 'melt')",
         "example_source": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/SHOT-TABLE-SHORT.py:6",
         "check": "exit"
       },
       "phases": [
+        {
+          "name": "gather",
+          "does": "on `melt:gather` the sag is replaced: every mark and word on the page travels the page vortex's own map to the ball's centre and amasses there, turning to one ink; the point opens under them and vibrates",
+          "trigger": "the scene boundary (u = 0), on `melt:gather` only - a melt without it renders the sag byte for byte",
+          "dials": {
+            "G_S": "0.9",
+            "G_TURNS": "3.0",
+            "G_LAG": "0.25",
+            "G_R_FALL": "1.7",
+            "G_ALPHA": "0.85",
+            "G_SHRINK": "0.7",
+            "G_KEEP": "0.10",
+            "G_DEEP": "0.85",
+            "G_LINE_N": "160",
+            "G_CORE_AT": "0.55",
+            "G_CORE_SEED": "0.30",
+            "G_VIB": "3.0",
+            "G_VIB_FALL": "0.45"
+          }
+        },
         {
           "name": "sag",
           "does": "the chart's ink (never the board) smears downward in offset copies under the gooey threshold and fuses; its box outline grows seeded drips and slumps",
@@ -419,6 +439,11 @@
           "source_set": null
         },
         {
+          "token": "gather",
+          "means": "P61 T6 / E99 s2: the sag becomes the page vortex gathered to ONE point - every mark and word travels there and amasses on it, no blur, no wipe. Opt-in, composes with weight and any ending.",
+          "source_set": null
+        },
+        {
           "token": "melt",
           "means": "The melt's own length: The melt runs over the seconds its suffix declares instead of its default dial.",
           "source_set": "TIMED_EXITS"
@@ -457,8 +482,10 @@
           "MELT_MATERIALS",
           "clearMelt",
           "meltBallRing",
+          "meltGatherAt",
           "meltMount",
           "meltOpts",
+          "meltVibFloor",
           "meltWeightAt",
           "paintMelt"
         ],

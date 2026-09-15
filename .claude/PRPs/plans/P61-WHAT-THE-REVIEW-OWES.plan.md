@@ -538,7 +538,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - CAPABILITIES rows changed: **:37** (the melt exit's ball) and the `melt:weight` note on R26-118's row
 
 ### T6: THE MELT GATHERS TO ONE DENSE, HEAVY, VIBRATING POINT - and splashes into a full chart or a world plate
-- Status: pending
+- Status: complete for proof A (2026-09-15); proof B appends to `r26-76-melt-endings-in-motion` when T3 lands; HG6 asked once with both
 - Owner: `implementation_luna` (**ENGINE LOCK #6**)
 - Depends on: **T5 only** (the point IS the ball; its material must land first). **T6 is NOT held behind T2/HG1.** The
   operator ranked the melt second, and putting it behind the whole-chart morph would park the second-ranked item
@@ -600,7 +600,26 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   `python content/video_engine/scripts/gate_motion_density.py content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short`
   (M31's empty-stage reading must not worsen) then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-76-melt-endings-in-motion`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T6.md` (14 sections). THE TOKEN `melt:gather` - read in exactly one place per side
+  (`_melt_parts` / `melt_gather` / `MELT_G_S` in the compiler; `meltOpts` in `species/melt.mjs`), composable with weight / material /
+  depth / length / every ending, an unknown token refused by name; `parse_exit("melt")` and `parse_exit("melt:splash:chart")`
+  unchanged tuples (test_transitions_e47, 30 tests) and every pre-existing melt golden byte-identical (166 passed). THE GATHER: the
+  page vortex's own map (doc 29 s9.31) aimed at the ball's centre - every mark and word travels there and amasses (`G_KEEP`); the
+  point wears T5's material and vibrates on `drop.mjs`'s own FLOOR at `G_VIB` (no new motion law); the splash is the existing
+  ink-splat -> bloom painting the committed Tokyo dock plate up through its stains. No blur, no mask, no wipe - measured: ink spread
+  265.5 -> 59.9 px, pixel count 3725 -> 2305, peak contrast 575 -> 575. The FRAME caught what the diff could not: series paths
+  turned rigidly as sticks; s9.31's own words ('redrawn point by point') were the fix - paths are sampled and curl. Parent's read of
+  the four goldens: the series curl into one spiral converging on the point; the point is the ball with the last words streaming in;
+  the splash paints the plate up from the left through a lumpy ink boundary; the plate lands whole - the ruling's words. Tests:
+  test_melt_gather.py (23: the grammar both sides, the refusal, the default byte-identity, the convergence probe, the no-blur/no-wipe
+  probe, the idle amplitude, two seeks identical, every gather dial pinned to LP_RETRACT's numbers and the pose to lpVortex's
+  output), melt.test.mjs (+6). Validate: node 572/572; sync in sync; 166 passed; effects_catalog_check 0 + build_effects_catalog
+  --check in sync (the card's generated layer written); registry 0 orphaned; page-boxes 44; M31 on the Japan cut unchanged (INFO).
+  Goldens: `melt-gather` + @proof-point / @proof-splash / @proof-plate (PROOF_FRAMES). FOLLOW-UPS to the backlog at T11 (named,
+  not done): (1) the vortex map is written twice (`meltGatherAt` carries lpVortex's five terms because sync_kinetics refuses an
+  import from a later region) - pinned by tests, the real fix a shared `kinetics/vortex.mjs` with spiral's region moved, a slice
+  of its own; (2) the axis hairlines (`<line>` children) still turn rigidly - converting them to sampled polylines finishes the
+  swirl. Proof A on the card `r26-76-melt-endings-in-motion` (surface melt-gather 14.7-18.9 s); the card stays owed until proof B.
 - CAPABILITIES row changed: **:37** (THE MELT EXIT) - the gather replaces the sag/ball description behind its flag
 
 ### T7: THE VERDICT STACK ON A SHORT - Steel and Paper's choreography, so the burst lands
@@ -758,6 +777,32 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   proposed: `apply_sidecar` stops rewriting the shared episode shot table (`table.py:59`, `:69`) - which moves the
   human-readable literal into the build dir, a doctrine change for HG10's ruling. No code written, no git state changed.
 - CAPABILITIES rows cited (not changed by T10): **:108**, **:109**
+
+### T12: THE FRAME CLOCK - the render at 24 fps, plate life on the 2s grid (E99 s36)
+- Status: pending
+- Owner: `junior_developer` (**ENGINE LOCK** - one dial in the engine; takes the lock after T6)
+- Depends on: T6 (the lock only)
+- Write set: `content/video_engine/scripts/render_episode.py` (FPS 30 -> 24), `docs/content-video-engine/samples/scene-evidence-engine.mjs`
+  (the plate-life block's `LIFE_FPS` 10 -> 12 ONLY - it is inline engine code, not a module), `content/video_engine/scripts/species/breakthrough.mjs`
+  (its comment that names the 30 fps delivery, :130) + `sync_kinetics.py --write`, `content/video_engine/scripts/measure_cut_offsets.py`
+  (`FPS = 30.0` :44, the 3-frame `CUT_LEAD_S` note :181), `content/video_engine/scripts/measure_seam_frames.py` (`DIP_CORE_FRAMES` :40 and the
+  30 fps grid notes :39-43), `content/video_engine/tests/test_render_clock.py` (NEW), `content/video_engine/tests/golden/` (any golden plate
+  life re-quantises), `content/video_engine/assets/page-boxes.v1.json` (sha only), `docs/ANIMATION-REGISTRY.{jsonl,md}`
+- Acceptance: E99 s36 verbatim - *"yes, render should be 24 fps. align plate life to 12 fps."* The renderer captures at 24; a 2s hold
+  lands as exactly two rendered frames and a 3s hold as three (a probe renders a stepped element over one second and asserts every hold
+  is the same length - no 2/3 alternation); plate life quantises to 12; the stop-action split (`CADENCE.FPS` 24, `ON1_PX_S` 154, camera
+  on 1s, boil on 3s) and the soak's 8 fps step are UNCHANGED and a test pins them; the measurement scripts' frame guards say 24 (or
+  seconds) and their tests still pass; the gates' seconds-valued dials do not move (`DIP_S`, `BLURZOOM_S` byte-identical); every golden
+  byte-identical except those plate life re-quantises, which are listed by name in Evidence with their instants. No approved cut is
+  re-rendered (E45; the Japan short's re-render is the T11 backlog row).
+- Recall (`docs/runbooks/RECALL-RECEIPT.md`): `docs_find "stop-action"` -> CAPABILITIES:75 (stop-action mechanics, LIVE) and
+  `kinetics/stopaction.mjs` CADENCE.FPS 24 / ON1_PX_S 154 - the split already exists; `docs_find "on 2s"` -> the animation-craft brief's
+  cadence rule (:187) and the drop blueprint's s4 at 12 fps on 2s; the one contradiction is `render_episode.py:33` FPS = 30.
+- Validate: `python -m pytest content/video_engine/tests/test_render_clock.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_kinetics_flags.py -q` then
+  `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python content/video_engine/scripts/gate_motion_density.py content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short` (unchanged reading)
+- Evidence: pending
+- CAPABILITIES rows changed: **:75** (stop-action mechanics gains the render clock) and the plate-life line of **:121**
 
 ### T11: THE RECORD - the CAPABILITIES rows, the backlog rows, the queue, the layers
 - Status: pending

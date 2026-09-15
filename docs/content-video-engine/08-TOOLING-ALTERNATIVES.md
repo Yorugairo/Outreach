@@ -37,6 +37,8 @@ proven recipe. At these prices the calibration experiment is nearly free.
 
 ## 3. Higgsfield: mostly avoid, one thing to monitor seriously
 
+> **Superseded 2026-09-15 (operator, E99 s37):** *"we don't use magnific or higgsfield for anything, too expensive"* - the local stack (ComfyUI, SAM, local Whisper) and the Gemini research lanes cover heads, cutouts, video and upscale. The monitoring note below is a record of what was looked at, not a route.
+
 What it is (mid-2026): a social-first AI video suite aggregating 15+ frontier models (Sora 2,
 Veo 3.1, Kling 3.0, Seedance 2.0) + proprietary **Soul 2.0** (photoreal/editorial image model
 with character-consistency "Soul ID"), with a developer API (async queue, ~$0.10/s third-party

@@ -1545,3 +1545,127 @@ def test_m33_a_pointing_phrase_with_nothing_on_stage_warns(tmp_path):
     assert G._spoken_visual_gate(tmp_path).level == "WARN"
     _write_json(tmp_path, "spoken-visuals.json", {"pointers": [{"phrase": "the chart", "t": 4.0, "context": "", "uncovered": False}]})
     assert G._spoken_visual_gate(tmp_path).level == "PASS"
+
+
+# ---- M43 (punch-crops-text, ledger 16d1b9558a10): a camera landing that cuts a text box partway ----------------
+# The operator, 2026-09-03, on the focus that landed over the corner line: "we wrote 'If you're so bullish why
+# trim?' up in the corner like that and then we zoom in and it's gone but there's still some text that's not cut
+# off?" The fixture is that page at 9:16: a punch onto the page's centre at scale 1.14 frames x[66,1014] y[118,1802],
+# so a run at x 40-140 is cut by 26 px, a run at x 0-50 is wholly out of frame, and the title at x 200-800 is whole.
+PUNCH_SCENE = {
+    "scene_id": "s05", "span": [40.0, 52.0],
+    "world": {"kind": "ledger"},
+    "species": [{"kind": "punch", "at": 44.0, "dur": 1.6, "target": {"kind": "point", "x": 0.5, "y": 0.5}}],
+}
+CROPPED_RUN = ("note", "If you're so bullish why trim?", [40, 300, 100, 60])   # straddles the frame's left edge
+OUTSIDE_RUN = ("note", "off stage entirely", [0, 300, 50, 60])                  # wholly outside: a choice, not a crop
+WHOLE_RUN = ("sname", "10-year", [200, 300, 600, 60])                           # wholly inside
+
+
+def _crop_instant(t: float, labels, zoom: float = 1.0, page=None) -> dict:
+    return {"t": t, "why": "s05 punch onset", "docks": [], "page": page or {},
+            "texts": [], "labels": [{"role": r, "text": x, "box": list(b)} for r, x, b in labels],
+            "overlaps": [], "clearances": {"safe_pct": {}},
+            "camera": {"scene": "s05", "zoom": zoom, "look": [540, 960]},
+            "marks": {"n": 0, "drawn": None, "up": 0.0, "parked": False}}
+
+
+def test_m43_has_no_row_until_the_build_authors_a_move_that_lands_zoomed_in():
+    """The M19-M24 shape: a row for what the build actually carries. A still camera frames everything."""
+    quiet = [{"scene_id": "s01", "span": [0.0, 9.0], "world": {"asset_id": "plate-a"},
+              "species": [{"kind": "spotlight", "at": 2.0}]}]
+    assert G._crop_gate({"instants": []}, quiet, "9:16") is None
+    assert G._crop_gate(None, quiet, "9:16") is None
+
+
+def test_m43_is_info_until_the_probe_has_run():
+    """M18's, M25's and M28's pattern: measured or named, never a silent skip."""
+    assert G._crop_gate(None, [PUNCH_SCENE], "9:16").level == "INFO"
+    assert "probe.py" in G._crop_gate(None, [PUNCH_SCENE], "9:16").message
+    assert G._crop_gate("stale", [PUNCH_SCENE], "9:16").level == "INFO"
+    assert "another player.html" in G._crop_gate("stale", [PUNCH_SCENE], "9:16").message
+    assert G._crop_gate({"instants": []}, [PUNCH_SCENE], "9:16").level == "INFO"
+    # ... and INFO, never PASS, when the probe holds instants but none near this landing on its own scene
+    far = {"instants": [_crop_instant(2.0, [WHOLE_RUN])]}
+    g = G._crop_gate(far, [PUNCH_SCENE], "9:16")
+    assert g.level == "INFO" and "none with an identity-camera probe instant" in g.message, g.message
+
+
+def test_m43_names_the_text_box_the_punch_cuts_and_says_by_how_much():
+    doc = {"instants": [_crop_instant(44.0, [CROPPED_RUN, WHOLE_RUN, OUTSIDE_RUN])]}
+    g = G._crop_gate(doc, [PUNCH_SCENE], "9:16")
+    assert g.level == "FAIL", g.message
+    assert "If you're so bullish why trim?" in g.message, g.message
+    assert "26 px off its left edge" in g.message, g.message
+    assert "punch at 0:44" in g.message and "s05" in g.message, g.message
+    # the two that are whole - inside the frame and outside it - are not named
+    assert "10-year" not in g.message and "off stage entirely" not in g.message, g.message
+
+
+def test_m43_passes_when_every_box_is_wholly_in_frame_or_wholly_out_of_it():
+    doc = {"instants": [_crop_instant(44.0, [WHOLE_RUN, OUTSIDE_RUN])]}
+    g = G._crop_gate(doc, [PUNCH_SCENE], "9:16")
+    assert g.level == "PASS", g.message
+    assert "1 of 1 camera landing(s) measured against 2 text box(es)" in g.message, g.message
+
+
+def test_m43_reads_an_authored_key_over_zoom_1_and_the_pages_own_runs():
+    """A focus zoom is not the only move that lands in: an authored key at zoom 1.5 frames less again, and a page's
+    own title/sub/source/note runs are text the same as a chart label."""
+    scene = {"scene_id": "s05", "span": [40.0, 52.0], "world": {"kind": "ledger"},
+             "camera": {"keys": [{"t": 40.0, "zoom": 1.0, "look": [0.5, 0.5]},
+                                 {"t": 44.0, "zoom": 1.5, "look": [0.5, 0.5]}]}, "species": []}
+    doc = {"instants": [_crop_instant(44.0, [], page={"source": [300, 300, 200, 40]})]}
+    assert G._crop_gate(doc, [scene], "9:16").level == "FAIL", G._crop_gate(doc, [scene], "9:16").message
+    assert "page.source" in G._crop_gate(doc, [scene], "9:16").message
+    # the same run pulled inside the zoom-1.5 frame (x[180,900] y[320,1600]) reads whole
+    ok = {"instants": [_crop_instant(44.0, [], page={"source": [300, 420, 200, 40]})]}
+    assert G._crop_gate(ok, [scene], "9:16").level == "PASS", G._crop_gate(ok, [scene], "9:16").message
+
+
+def test_m43_ignores_a_probe_instant_taken_mid_move():
+    """The boxes are read in WORLD coordinates, which is what the probe records while the camera is at identity.
+    An instant taken with the camera already pushed in is measured in screen px and is not this row's evidence."""
+    doc = {"instants": [_crop_instant(44.0, [CROPPED_RUN], zoom=1.14)]}
+    assert G._crop_gate(doc, [PUNCH_SCENE], "9:16").level == "INFO"
+
+
+# ---- M44 (sub-6s-plate, ledger 69ff558bdf67): a world plate the eye cannot take in ----------------------------
+def _plate(sid: str, a: float, z: float, docks: int = 0, kind=None) -> dict:
+    world = {"asset_id": f"plate-{sid}"} if kind is None else {"kind": kind, "asset_id": f"{kind}-{sid}"}
+    return {"scene_id": sid, "span": [a, z], "world": world,
+            "docks": [{"slide": f"dock-{sid}-{i}", "enter": a, "exit": z} for i in range(docks)], "species": []}
+
+
+def test_m44_has_no_row_on_a_build_with_no_world_plate():
+    pages = [{"scene_id": "s01", "span": [0.0, 12.0], "world": {"kind": "ledger"}},
+             _plate("s02", 12.0, 20.0, kind="clip")]
+    assert G._plate_length_gate(pages) is None
+
+
+def test_m44_passes_when_every_plate_holds_its_six_seconds():
+    g = G._plate_length_gate([_plate("s01", 0.0, 6.0), _plate("s02", 6.0, 14.0, docks=1)])
+    assert g.level == "PASS", g.message
+    assert "2 world plate(s), floor 6s" in g.message, g.message
+
+
+def test_m44_warns_a_bare_short_plate_and_fails_one_that_carries_a_dock():
+    warn = G._plate_length_gate([_plate("s01", 0.0, 4.5), _plate("s02", 4.5, 14.0)])
+    assert warn.level == "WARN", warn.message
+    assert "s01 4.5s" in warn.message and "s02" not in warn.message, warn.message
+    fail = G._plate_length_gate([_plate("s01", 0.0, 1.8, docks=1), _plate("s02", 1.8, 6.3)])
+    assert fail.level == "FAIL", fail.message
+    assert "s01 1.8s with 1 dock(s)" in fail.message, fail.message
+    assert "1 bare short plate(s): s02 4.5s" in fail.message, fail.message
+
+
+@pytest.mark.skipif(not (ROOT / "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short"
+                         / "japan-short.timeline.json").exists(), reason="the approved short is not on disk")
+def test_m44_fires_on_the_approved_japan_cut():
+    """The row the operator's complaint asks for, on the cut that carries the defect: s01 is 1.8 s of plate with a
+    dock on it and s05 is 5.1 s with one. Recorded, not fixed - the approved cut is not this lane's to change."""
+    b = ROOT / "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short"
+    tl, _docks, _mp = G._load(b, "japan-short.timeline.json")
+    g = G._plate_length_gate(tl["scenes"])
+    assert g.level == "FAIL", g.message
+    assert "s01 1.8s with 1 dock(s)" in g.message and "s05 5.1s with 1 dock(s)" in g.message, g.message

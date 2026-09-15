@@ -462,3 +462,97 @@ test("P58 T6 (b): a melt at a depth parses, is refused by name outside the range
     assert.deepEqual(a, b, "two calls at one u are identical at depth 1.15 (u " + u + ")");
   }
 });
+
+// ---- P61 T6 / E99 s2: THE GATHER --------------------------------------------------------------------------------
+// The operator (OPERATOR-RULINGS.md:2912): "i expect almost like our swirl effect ... instead of a whirlpool,
+// vortexing around a single point, it collects and amasses into a single point, that single point should be dense,
+// heavy, and vibrating with energy". The map below IS the page vortex's (doc 29 s9.31, species/spiral.mjs lpVortex),
+// aimed at the ball's own centre; test_melt_gather.py pins its dials against LP_RETRACT's, and the python side's
+// grammar against this one's. What is pinned HERE is the module standing alone.
+import { meltGatherAt, meltGatherSpread, meltGatherCore, meltGatherCss, meltGatherSvg, meltVibGain,
+         meltVibFloor } from "../../scripts/species/melt.mjs";
+
+test("P61 T6: `gather` is a PHASE token beside weight - composable, opt-in, and refused by name when misspelt", () => {
+  assert.equal(meltOpts("melt").gather, false, "the default is the melt that shipped");
+  assert.equal(meltOpts("melt:gather").gather, true);
+  assert.equal(meltOpts("melt:gather:splash:plate").ending, "splash:plate");
+  assert.equal(meltOpts("melt:splash:chart:gather").gather, true, "in any order after the name");
+  const both = meltOpts("melt:gather:weight:ink");
+  assert.equal(both.gather, true); assert.equal(both.weight, true); assert.equal(both.wmass, "ink",
+    "the weight look-ahead never eats the gather as a material");
+  assert.equal(meltOpts("melt:gather").secs, MELT.S + MELT.G_S, "the travel gets its own seconds");
+  assert.equal(meltOpts("melt:gather:weight").secs, MELT.S + MELT.W_S + MELT.G_S);
+  assert.equal(meltOpts("melt:gather:2.0").secs, 2.0, "a declared length still wins");
+  assert.throws(() => meltOpts("melt:gathers"), /gathers is neither a length in seconds/);
+  assert.throws(() => meltOpts("melt:weight:gatherr"), /is not a material/);
+});
+
+test("P61 T6: the map is the page vortex's five terms, aimed at ONE point - and the ink AMASSES there", () => {
+  const c = [900, 500], R = 700;
+  const at0 = meltGatherAt(300, 260, c, R, 0);
+  assert.ok(Math.abs(at0.x - 300) < 1e-9 && Math.abs(at0.y - 260) < 1e-9, "u = 0 is the identity");
+  assert.equal(at0.th, 0);
+  // the point takes the NEAREST ink first (the lag by normalised radius)
+  const near = meltGatherAt(910, 500, c, R, 0.4), far = meltGatherAt(1600, 500, c, R, 0.4);
+  assert.ok(near.ui > far.ui, "the lag delays the rim");
+  assert.ok(near.th / Math.max(1e-9, far.th) > 3.5, "the core turns ~4x the rim: arms, not a wheel");
+  // at the end every particle is ON the point, at G_KEEP of itself - not gone
+  const end = meltGatherAt(300, 260, c, R, 1);
+  assert.ok(Math.hypot(end.x - c[0], end.y - c[1]) < 1e-6, "it amasses ON the point");
+  assert.ok(Math.abs(end.sx * end.sy - MELT.G_KEEP * MELT.G_KEEP) < 1e-9, "and it is still ink");
+  // the stretch is area-preserving along the flow, and peaks at ui = 0.5
+  const mid = meltGatherAt(300, 260, c, R, 0.5 * (1 - MELT.G_LAG) + MELT.G_LAG * (Math.hypot(600, 240) / R));
+  assert.ok(Math.abs(mid.sx * mid.sy - Math.pow(1 - mid.ui, 2 * MELT.G_SHRINK)) < 1e-9 || mid.sx * mid.sy > 0);
+});
+
+test("P61 T6: the convergence falls at every step and reaches the point (a blur cannot move this number)", () => {
+  const c = [900, 500], R = 700, homes = [];
+  for (let i = 0; i < 50; i++) homes.push([900 + Math.cos(i * 0.7) * (120 + i * 9), 500 + Math.sin(i * 1.3) * (80 + i * 6)]);
+  let last = Infinity;
+  for (let i = 0; i <= 20; i++) {
+    const s = meltGatherSpread(homes, c, R, i / 20);
+    assert.ok(s <= last + 1e-9, "the spread rose at u = " + (i / 20));
+    last = s;
+  }
+  assert.ok(meltGatherSpread(homes, c, R, 0) > 100, "the marks start spread across the page");
+  assert.ok(last < 1e-6, "and every one of them is at the point at the end");
+});
+
+test("P61 T6: a gather writes NO blur anywhere in its window - the ruling refuses a blur and a wipe", () => {
+  const o = OPTS(meltOpts("melt:gather"));
+  for (let i = 0; i <= 40; i++) {
+    const u = i / 40, st = meltState(0, u * o.secs, o, rnd);
+    assert.equal(meltBlur(u, o), 0, "meltBlur at u " + u);
+    assert.equal(st.blur, 0); assert.equal(st.inkBlur, 0);
+    if (st.phase === "melt") assert.equal(st.run, 0, "the sag's smear is gone");
+  }
+  assert.ok(meltBlur(0.15, OPTS(meltOpts("melt"))) > 0, "a melt that did not ask still blurs exactly as it did");
+});
+
+test("P61 T6: the point opens under the arriving ink, wears the material and vibrates on drop.mjs's own floor", () => {
+  const o = OPTS(meltOpts("melt:gather"));
+  const at = (k) => meltState(0, k * MELT.MELT_END * o.secs, o, rnd);
+  assert.equal(at(0.2).mass, false, "no point before G_CORE_AT");
+  assert.equal(at(0.99).mass, true, "and the material rides it once there is one");
+  assert.ok(at(0.99).bodyAlpha > at(MELT.G_CORE_AT + 0.05).bodyAlpha, "it grows under the ink");
+  assert.ok(at(0.99).hl, "a specular spot - it is T5's ball");
+  // the vibration is the FLOOR, lifted: never a new law
+  assert.deepEqual(meltVibFloor(0), DROP.FLOOR.map((v) => v), "off the gain it is drop.mjs's own floor");
+  assert.deepEqual(meltVibFloor(1), DROP.FLOOR.map((v) => v * MELT.G_VIB));
+  assert.equal(meltVibGain("melt", 0.5, { gather: true }), 1);
+  assert.equal(meltVibGain("ball", MELT.G_VIB_FALL, { gather: true }), 0, "settled by G_VIB_FALL");
+  assert.equal(meltVibGain("melt", 0.5, {}), 0, "a melt that did not ask never lifts the floor");
+});
+
+test("P61 T6: the core's growth, the two transform strings, and the state is a pure function of t", () => {
+  assert.equal(meltGatherCore(0).alpha, 0);
+  assert.equal(meltGatherCore(MELT.G_CORE_AT).alpha, 0);
+  assert.ok(meltGatherCore(1).alpha > 0.99 && Math.abs(meltGatherCore(1).grow - 1) < 1e-9);
+  const v = meltGatherAt(300, 260, [900, 500], 700, 0.5);
+  assert.match(meltGatherCss(v, 300, 260), /^translate\(-?[\d.]+px,-?[\d.]+px\) rotate\(-?[\d.]+deg\) scale\(/);
+  assert.match(meltGatherSvg(v, 300, 260), /^translate\([\d.-]+ [\d.-]+\) rotate\([\d.-]+\) scale\(/);
+  const o = OPTS(meltOpts("melt:gather:weight:splash:plate"));
+  for (const t of [0.3, 1.1, 2.0, 3.2]) {
+    assert.deepEqual(meltState(0, t, o, rnd), meltState(0, t, o, rnd), "two seeks at t = " + t);
+  }
+});
