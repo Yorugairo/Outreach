@@ -14,8 +14,8 @@ item, a quote, a table row or a fence.
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
 | Research (`docs/research/**`) | 21 | 439 | 95.9% | 93.8% | 3 | 98.0 |
-| Process (everything else) | 360 | 3697 | 97.8% | 91.9% | 18 | 100.0 |
-| All docs | 381 | 4136 | 97.6% | 92.1% | 21 | 100.0 |
+| Process (everything else) | 360 | 3697 | 97.7% | 91.8% | 18 | 100.0 |
+| All docs | 381 | 4136 | 97.5% | 92.0% | 21 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -26,6 +26,7 @@ item, a quote, a table row or a fence.
 | 65 | `content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/PINNED-COMMENT.md` | 2 | 2/2 | 0/2 | 0 |
 | 70 | `docs/seo-insights-platform-implementation-plan.md` | 27 | 17/27 | 18/27 | 0 |
 | 73 | `docs/seo-ingestion-implementation-tasks.md` | 14 | 10/14 | 9/14 | 0 |
+| 76 | `docs/content-video-engine/REVIEW-QUEUE.md` | 7 | 5/7 | 5/7 | 0 |
 | 76 | `docs/content-video-engine/prompts/PROBE-AGENT-LOOP-V1.md` | 8 | 7/8 | 4/8 | 0 |
 | 77 | `content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/publish/DESCRIPTION-YOUTUBE.md` | 3 | 3/3 | 1/3 | 0 |
 | 79 | `content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/NICHE_BEND_DOSSIER.md` | 12 | 9/12 | 9/12 | 0 |
@@ -40,11 +41,10 @@ item, a quote, a table row or a fence.
 | 82 | `content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md` | 4 | 4/4 | 2/4 | 0 |
 | 82 | `docs/content-video-engine/patterns/INJECTION.md` | 6 | 6/6 | 3/6 | 0 |
 | 85 | `docs/portable/DOCTRINE-CORE.md` | 12 | 12/12 | 7/12 | 0 |
-| 86 | `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/PACKAGING.md` | 5 | 5/5 | 3/5 | 0 |
 
 ## Appendix A - sections missing a lead line
 
-Non-exempt sections whose first real line is under 40 characters (101).
+Non-exempt sections whose first real line is under 40 characters (103).
 
 - `content/video_engine/projects/martial-matters/pilots/marshall-monday-001/script-draft.md:1` Why Rap Violence is Actually a Sign of Peace | Marshall Matters Ep. 1
 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:13` Titles & Click Contracts
@@ -87,6 +87,8 @@ Non-exempt sections whose first real line is under 40 characters (101).
 - `docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:196` 5. Worked instance
 - `docs/content-video-engine/53-THE-STICKMAN-LANE.md:183` 53.4 What this corrects in my own claims
 - `docs/content-video-engine/P13-GATE-A-ARMBAR-REVIEW.md:38` Locked Defaults
+- `docs/content-video-engine/REVIEW-QUEUE.md:16` Look (0)
+- `docs/content-video-engine/REVIEW-QUEUE.md:20` Rule (0)
 - `docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:1` Alicia Script — Persona Pass (v2)
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:187` The On-1s / On-2s / On-3s Decision Rule (Proposal)
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:435` C3: Nested Coordinate Spaces [Tier 1 Architecture — CLOSED]

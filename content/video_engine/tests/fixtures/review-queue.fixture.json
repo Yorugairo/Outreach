@@ -14,7 +14,7 @@
       ],
       "kind": "watch",
       "title": "The first 2.5D cut (Japan)",
-      "judge": "Watch 34.8 to 36.2 s of the Japan cut. At 35.26 s the tariff-bill page arrives by camera over the ship plate, which is split into four depth layers; by 35.72 s it lands tilted 14 degrees at a depth. One question: with a dock or evidence layer in front of it, or used as a transition, does this slanted page earn its place - or should the next 2.5D cut be authored depth-first without it? (E99 s15: you lean depth-first; a slant only as a transition or behind a foreground.)",
+      "judge": "Three rulings on the Japan 2.5D cut: (1) the layered plate - author the next cut depth-first / keep layers as an option only / refuse; (2) the page at a depth and a 14 deg tilt - take / refuse; (3) the receipt's arrival - snap (approved) or camera (M38 recipe coverage 0.76 -> 0.64). Ruling (4), the drift idle, is owed by the agent (no painted-vs-held proof yet).",
       "where": [
         {
           "label": "the HG2 sheet",
@@ -33,12 +33,8 @@
           "path": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-p58-2-5d/plates/planes-sheet-2.png"
         }
       ],
-      "options": [
-        "depth-first, drop the slant here",
-        "keep the slant as a transition only",
-        "keep the slant behind a foreground"
-      ],
-      "recommendation": "(1) \"My lean: depth-first.\" (2) \"My lean: take - it reads at the landing.\" (3) \"My lean: keep snap unless the next cut is authored around the camera arrival.\" | rewritten 2026-09-14 per E99 s15: the moment to watch (34.8-36.2 s) and one plain question",
+      "options": [],
+      "recommendation": "(1) \"My lean: depth-first.\" (2) \"My lean: take - it reads at the landing.\" (3) \"My lean: keep snap unless the next cut is authored around the camera arrival.\"",
       "blocks": "P58 T7 and T8 (\"HG2 + HG3 outstanding\"); P58 completion",
       "sources": [
         ".claude/PRPs/plans/P58-THE-2-5D-STAGE.plan.md:216-218",
@@ -57,16 +53,6 @@
           "url": "http://127.0.0.1:8764/player.html",
           "build": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-p58-2-5d/",
           "confirmed": "GET 200 on 2026-09-14 19:19 (-07:00)"
-        },
-        {
-          "type": "clip",
-          "label": "34.8-36.2 s: the tariff page arrives by camera over the layered ship plate and lands tilted at a depth",
-          "build": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-p58-2-5d",
-          "page": "player.html",
-          "aspect": "9:16",
-          "t0": 34.8,
-          "t1": 36.2,
-          "route": "review_queue_proofs.py --clips: the served build-p58-2-5d player seeked across 34.8-36.2 s in one headless browser at 15 fps, piped to ffmpeg (silent H.264, 720 wide, 9:16)"
         }
       ]
     },
@@ -263,8 +249,8 @@
         "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:40-46",
         "docs/content-video-engine/BACKLOG.md:486"
       ],
-      "status": "ruled",
-      "ruling": "E99 s16",
+      "status": "open",
+      "ruling": null,
       "proofs": [
         {
           "type": "clip",
@@ -335,8 +321,8 @@
         "docs/content-video-engine/BACKLOG.md:534",
         "docs/research/runs/studio_readiness/OPERATOR-DECISIONS.md:14-16"
       ],
-      "status": "ruled",
-      "ruling": "E99 s17",
+      "status": "open",
+      "ruling": null,
       "proofs": [
         {
           "type": "player",
@@ -421,8 +407,8 @@
         "docs/content-video-engine/BACKLOG.md:563",
         "docs/content-video-engine/BACKLOG.md:554"
       ],
-      "status": "ruled",
-      "ruling": "E99 s18",
+      "status": "open",
+      "ruling": null,
       "answer": {
         "at": "2026-09-14T18:22:14-07:00",
         "ruling": "E99 s4",
@@ -540,7 +526,7 @@
         "R26-68",
         "R26-71"
       ],
-      "kind": "owed",
+      "kind": "look",
       "title": "P57 HG1: the measured defects' frames in one sitting",
       "judge": "(1) R26-66 the empty-stage hand-off, now in motion at both boundaries (the suck at 13.79 s, the melt at 40.51 s): does the next world arrive with no empty cream? (2) R26-71, re-presented as one crop at the same instant: the label '31% of GDP' printed through the orange rise (before) vs standing under the 1980 trough (after). (3) R26-67 the ring's flag at the apex, in motion. The span's darker grey (R26-68) is owed by the agent (E99 s7).",
       "where": [
@@ -619,8 +605,7 @@
           ],
           "route": "build_review_queue.py --write: diff_box over the two self-watch frames, the caption strip excluded, 32 px margin"
         }
-      ],
-      "owed": "E99 s19: rewrite build-short-axes' exits to the E47 reading (its suck and melt sit on s01 and s03, so 13.79 s and 40.51 s are cuts), then show the hand-off as the whole sequence (build, read, melt or suck, hand off, the next chart forms)"
+      ]
     },
     {
       "id": "r26-70-compare-morph",
@@ -789,8 +774,8 @@
         ".claude/PRPs/plans/P55-THE-EFFECTS-CATALOGUE.plan.md:356",
         "docs/content-video-engine/BACKLOG.md:492"
       ],
-      "status": "ruled",
-      "ruling": "E99 s20",
+      "status": "open",
+      "ruling": null,
       "proofs": [
         {
           "type": "player",
@@ -927,8 +912,8 @@
         "docs/content-video-engine/BACKLOG.md:488",
         "docs/content-video-engine/BACKLOG.md:494"
       ],
-      "status": "ruled",
-      "ruling": "E99 s21",
+      "status": "open",
+      "ruling": null,
       "proofs": [
         {
           "type": "clip",
@@ -1165,7 +1150,7 @@
         "P46 HG1",
         "P46 HG3"
       ],
-      "kind": "owed",
+      "kind": "rule",
       "title": "The bridge: the packet contract and the budget",
       "judge": "Ratify the packet contract (T4 pending), and the grace / SLA / residue budget (defaults grace 10 min, SLA 60 min, 6 runs / 200k tokens set in the module; ratification not recorded - unverified).",
       "where": [
@@ -1183,8 +1168,7 @@
         ".claude/PRPs/plans/P46-BRIDGE-ADAPTER.plan.md:165"
       ],
       "status": "open",
-      "ruling": null,
-      "owed": "E99 s22: justify P46's bridge gates or retire them - they reached the operator without a reason"
+      "ruling": null
     },
     {
       "id": "r26-84-astra-on-the-engine",
@@ -1209,8 +1193,8 @@
       "sources": [
         "docs/content-video-engine/BACKLOG.md:490"
       ],
-      "status": "ruled",
-      "ruling": "E99 s23"
+      "status": "open",
+      "ruling": null
     },
     {
       "id": "gemini-rerun-vs-split",
@@ -1266,7 +1250,7 @@
         "push",
         "hold"
       ],
-      "recommendation": "\"nothing is pushed without the word (the 09-14 push word was one-time)\" | answered 'push' in the page 2026-09-14 20:19 - the parent confirms a push in chat before pushing",
+      "recommendation": "\"nothing is pushed without the word (the 09-14 push word was one-time)\"",
       "blocks": "origin; the layer commit waits on the other session (P58:382)",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:558",
@@ -1308,8 +1292,8 @@
       "sources": [
         "docs/content-video-engine/BACKLOG.md:551"
       ],
-      "status": "ruled",
-      "ruling": "E99 s24"
+      "status": "open",
+      "ruling": null
     },
     {
       "id": "r26-120-release-implicit-morph",
@@ -1342,8 +1326,8 @@
       "sources": [
         "docs/content-video-engine/BACKLOG.md:552"
       ],
-      "status": "ruled",
-      "ruling": "E99 s24"
+      "status": "open",
+      "ruling": null
     },
     {
       "id": "r26-121-release-rig-layer",
@@ -1376,8 +1360,8 @@
       "sources": [
         "docs/content-video-engine/BACKLOG.md:553"
       ],
-      "status": "ruled",
-      "ruling": "E99 s24"
+      "status": "open",
+      "ruling": null
     },
     {
       "id": "r26-134-evidence-door-watch",
@@ -1853,114 +1837,6 @@
         "docs/portable/OPERATOR-RULINGS.md:2943-2947 (E99 s7)",
         "docs/research/runs/p57-burndown/HG-HANDOFF.md"
       ]
-    },
-    {
-      "id": "r26-80-agenda-page-owed",
-      "ids": [
-        "R26-80",
-        "E93",
-        "E99 s16"
-      ],
-      "kind": "owed",
-      "title": "The beautified agenda page",
-      "judge": "Owed by the agent: the agenda page beautified as the plate version of the list effect (E99 s16).",
-      "where": [],
-      "options": [],
-      "recommendation": null,
-      "blocks": "the agenda page on a short",
-      "sources": [
-        "docs/portable/OPERATOR-RULINGS.md (E99 s16)",
-        "docs/content-video-engine/BACKLOG.md (R26-80)"
-      ],
-      "status": "open",
-      "ruling": null,
-      "proofs": null,
-      "owed": "E99 s16: the beautified agenda page, the plate version of the list effect"
-    },
-    {
-      "id": "p58-hg3-forms-mount-not-scribble",
-      "ids": [
-        "P58 HG3",
-        "E99 s18"
-      ],
-      "kind": "owed",
-      "title": "The chart forms: a charcoal mount, no scribble clearing to cream",
-      "judge": "Owed by the agent - E99 s18: a formed page is introduced by mounting the charcoal, and its leave does not clear its scribble lines to cream",
-      "where": [],
-      "options": [],
-      "recommendation": null,
-      "blocks": "the item's next review",
-      "sources": [
-        "docs/portable/OPERATOR-RULINGS.md (E99 s18)"
-      ],
-      "status": "open",
-      "ruling": null,
-      "was_kind": null,
-      "owed": "E99 s18: a formed page is introduced by mounting the charcoal, and its leave does not clear its scribble lines to cream"
-    },
-    {
-      "id": "p55-gallery-speed-and-motion",
-      "ids": [
-        "P55 HG2",
-        "R26-86",
-        "E99 s20"
-      ],
-      "kind": "owed",
-      "title": "The effects gallery: a faster build and motion examples",
-      "judge": "Owed by the agent - E99 s20: the gallery's build is faster, and an effect a still cannot show carries a sequence, gif or video",
-      "where": [],
-      "options": [],
-      "recommendation": null,
-      "blocks": "the item's next review",
-      "sources": [
-        "docs/portable/OPERATOR-RULINGS.md (E99 s20)"
-      ],
-      "status": "open",
-      "ruling": null,
-      "was_kind": null,
-      "owed": "E99 s20: the gallery's build is faster, and an effect a still cannot show carries a sequence, gif or video"
-    },
-    {
-      "id": "r26-82-verdict-stack-choreography",
-      "ids": [
-        "R26-82",
-        "E99 s21"
-      ],
-      "kind": "owed",
-      "title": "The verdict stack on a short: Steel and Paper's choreography",
-      "judge": "Owed by the agent - E99 s21: cards that move rather than a horizontal line, and the burst that choreography earned in Steel and Paper",
-      "where": [],
-      "options": [],
-      "recommendation": null,
-      "blocks": "the item's next review",
-      "sources": [
-        "docs/portable/OPERATOR-RULINGS.md (E99 s21)"
-      ],
-      "status": "open",
-      "ruling": null,
-      "was_kind": null,
-      "owed": "E99 s21: cards that move rather than a horizontal line, and the burst that choreography earned in Steel and Paper"
-    },
-    {
-      "id": "r26-84-engine-saved-states",
-      "ids": [
-        "R26-84",
-        "E99 s23"
-      ],
-      "kind": "owed",
-      "title": "Parallel agents without worktrees: saved states or per-agent engine copies",
-      "judge": "Owed by the agent - E99 s23: an engine or editor with saved states, or a per-agent copy of the engine and compiler",
-      "where": [],
-      "options": [],
-      "recommendation": null,
-      "blocks": "the item's next review",
-      "sources": [
-        "docs/portable/OPERATOR-RULINGS.md (E99 s23)"
-      ],
-      "status": "open",
-      "ruling": null,
-      "was_kind": null,
-      "owed": "E99 s23: an engine or editor with saved states, or a per-agent copy of the engine and compiler"
     }
   ]
 }

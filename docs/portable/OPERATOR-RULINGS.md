@@ -2995,3 +2995,51 @@ because we don't have the timeline built out yet. as it is now, the editor's pre
 which doesnt mean much to me."* Apply: P51's gates 2 and 3 (three real edits through the editor) are closed as not yet meaningful; an
 editor that exposes integers is not a human editing surface, and the timeline comes before any further editor gate (with E99 s13: the
 studio is planned with GPT and Claude together).
+
+**E99 s18 - The chart forms: no scribble clearing to cream, the charcoal mount over the scribble build, the tilted line for a pair
+of near-identical charts (P58 HG3).** 20:06: *"i don't think we need those scribble lines to clear to cream. I also think mounting the
+charcoal is a much better look than the scribble drawing. The page at a depth building is interesting, but not yet valuable. The
+tilted plane line i think i can only envision one use case, and that's to share a chart and then another same or similar chart with 1
+change like time axes or company (two stock charts for example) so it's not totally useless, i think your recommendations are
+probably right. What does keep throw=depth as it is mean?"* Apply: the HG3 sheet's recommendations stand (the prism taken as an opt-in
+page option; `throw=depth` kept as the growth law with the pair refusal); a formed page's leave does not clear its scribble lines to
+cream, and a form is introduced by mounting the charcoal rather than by the scribble drawing; the page building at a depth is not yet
+valuable; the tilted line's one use is a pair of the same or a near-identical chart that differs in one thing (the time axis, the
+company).
+
+**E99 s19 - The figure fix and the ring flag are good; a hand-off is shown as the whole sequence, and the one shown was a jump (R26-125,
+R26-71, R26-67, R26-66).** 20:10: *"the figure across its own line looks like a good fix. the ring flag looks good, for the other 2 i'm
+not quite sure what i'm looking at. i don't think it makes sense unless you're going to show the actual sequence - one chart builds,
+reads, melts, hands off, new chart forms. What you're showing me looks like what is still the same old problem: we just jump from one
+chart to another chart on the next frame, no actual transformation occurs to reach it. i don't see a melt or a suck in either video you
+linked so i have no idea what i'm watching."* Apply: R26-71 (the figure clear of its own line) and R26-67 (the ring's flag) are
+accepted; a chart-to-chart hand-off is proven only by the whole sequence - the chart builds, reads, melts or is sucked, hands off, and
+the next chart forms. The two clips shown were hard cuts: in `normal-for-which-bridge/build-short-axes` the suck and the melt are
+authored on s01 and s03 (by E47 a scene's `exit` is the transition INTO it), so the boundaries the card named "the suck" (13.79 s) and
+"the melt" (40.51 s) are s02's and s04's `cut` - that build's rows still carry the pre-E47 reading. The agent rewrites them and returns
+the hand-off as the whole sequence.
+
+**E99 s20 - The effects gallery does its job; it builds slowly and needs motion examples (P55 HG2).** Marked *it does*: *"yes, but the
+page builds slow, and the examples are only pictures when sometimes someone would need to see a sequence, a gif, or a video to
+understand."* Apply: the gallery is kept; it owes a faster build and motion examples (a sequence, a gif or a video) where a still
+cannot show the effect.
+
+**E99 s21 - The evidence wall on a short is the right direction and misses Steel and Paper's choreography (R26-82).** 20:14: *"We're
+missing some of the choreography, our cards in steel and paper felt much more alive, and also it didn't just place them horizontally, we
+had real choreography and movement, which then made the burst better as well, but this is the right direction."* Apply: the short's
+verdict stack keeps its direction and owes Steel and Paper's choreography - cards that move and do not simply line up horizontally - so
+the burst lands the way it did there.
+
+**E99 s22 - The bridge's gates were asked without a reason (P46 HG1, HG3).** 20:15: *"why do we need this? how did bridge packets make
+their way into a codex engine readiness sprint?"* Apply: the queue pulled P46's unratified gates only because the plan is still marked
+running; they are the agent's to justify or retire before they return, not a question the operator owes (with E99 s14).
+
+**E99 s23 - Astra does not take a separate worktree on the engine; the engine owes saved states or per-agent copies (R26-84).** Marked
+*not yet*: *"we already experienced a big drift/sprawl mess from using worktrees. I'd rather not diverge to different worktrees, cant we
+just make a better engine/editor so that we can have saved states, or build copies of the engine/compiler per agent?"* Apply: no second
+engine writer in its own worktree; the route the operator prefers is an engine or editor with saved states, or a per-agent copy of the
+engine and compiler, so agents can work in parallel without the worktree drift.
+
+**E99 s24 - The three research runs are released (R26-119, R26-120, R26-121).** Marked *release* on each (20:19). Apply: each run's
+findings the research gate marked usable may be built on; the findings it marked not usable, unsourced or rejected stay excluded
+(`docs/research/runs/p58-2-5d/research-gate-2026-09-14.md`).

@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-5498 topics, 8974 citation edges. The 200 largest topics follow,
+5496 topics, 9005 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (192)
@@ -494,22 +494,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:143 — 3. The full skeleton (phases 2–6, same fusion — to be expanded per use) — | Phase | Classical spine (doc 32) | Platform fill (doc 31) |
 - … 25 more in `docs/DOCS-TOPICS.jsonl`
 
-## one-shot (36)
-
-- docs/agent-memory/operator/casebook/README.md:1 — The casebook - defects the operator caught in a frame, and what fixed them — Each case is a folder: `before.png` and `after.png` (540x960, half of the 9:16 stage, seeked with the engine's own
-- docs/agent-memory/operator/casebook/README.md:11 — By defect family — | family | case | gate |
-- docs/agent-memory/operator/casebook/the-thin-one-shot/CASE.md:1 — The thin one-shot — The operator, three messages typed while the agent was mid-turn (2026-09-13):
-- docs/agent-memory/operator/resume-2026-09-12.md:173 — The pipeline grill - COMPLETE (2026-09-13 night) — `docs/content-video-engine/GRILL-PIPELINE-VALUE-2026-09-13.md` published (docs_find "effect recipe"); rulings E96 (floor
-- docs/AGENT_START_HERE.md:1 — Agent Start Here — Status: current
-- docs/AGENT_START_HERE.md:9 — Discovery — For coding, debugging, review, refactoring, or architecture:
-- docs/CAPABILITIES-INDEX.md:212 — The effects catalogue, the recipes and the one-shot floor (P55 / P56, 2026-09-13) — - The effects catalogue - LIVE - one card per effect the engine performs (129 cards on 18 axes: id <axis>:<token>, alias
-- docs/content-video-engine/CAPABILITIES.md:92 — THE ONE-SHOT BAR: the self-watch as a build artifact, WIRED — (2026-09-11, P51 T3; the operator: "we need to be able to essentially 1-shot shorts"; the bar: gates green plus a self-w
-- docs/content-video-engine/CAPABILITIES.md:311 — The effects catalogue, the recipes and the one-shot floor (P55 / P56, 2026-09-13) — E96: a beat is authored as a RECIPE - a proven combination of catalogue effects with offsets - and a cut is measured aga
-- docs/content-video-engine/CAPABILITIES.md:320 — The one-shot floor v2 — (P56 T6-T7; E96, HG1 = A) - rows M35-M42 measured from a compiled timeline: M35 distinct chart forms >= 3; M36 chart-to-
-- docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:1 — Grill: the animator's loop — decision ledger (2026-09-11) — `/grill-me let's find the most powerful features we could add to make you a better animator, and improve our iteration
-- docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:8 — 1. Settled — | decision | the operator's words | what it binds |
-- … 24 more in `docs/DOCS-TOPICS.jsonl`
-
 ## best-of (35)
 
 - content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/quarantine/p60-image-props/orders/A-crate-alpha.md:1 — Work Order — claim `p60-a-crate-alpha` — Follow this document exactly. It is self-contained: generate, extract,
@@ -540,6 +524,22 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:386 — 6. Authoritative Academic Citations — 1. Viviani, P., & Terzuolo, C. (1982). Trajectory determines movement dynamics. Neuroscience, 7(2), 431-437.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:387 — 5. Track C — The Drawing-Engine Builder
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:389 — C1: Shape Interpolation (ARAP) [Tier 1 Math — CLOSED] — - Polar decomposition of deformation gradient:
+- … 23 more in `docs/DOCS-TOPICS.jsonl`
+
+## one-shot (35)
+
+- docs/agent-memory/operator/casebook/README.md:1 — The casebook - defects the operator caught in a frame, and what fixed them — Each case is a folder: `before.png` and `after.png` (540x960, half of the 9:16 stage, seeked with the engine's own
+- docs/agent-memory/operator/casebook/README.md:11 — By defect family — | family | case | gate |
+- docs/agent-memory/operator/casebook/the-thin-one-shot/CASE.md:1 — The thin one-shot — The operator, three messages typed while the agent was mid-turn (2026-09-13):
+- docs/agent-memory/operator/resume-2026-09-12.md:173 — The pipeline grill - COMPLETE (2026-09-13 night) — `docs/content-video-engine/GRILL-PIPELINE-VALUE-2026-09-13.md` published (docs_find "effect recipe"); rulings E96 (floor
+- docs/AGENT_START_HERE.md:1 — Agent Start Here — Status: current
+- docs/AGENT_START_HERE.md:9 — Discovery — For coding, debugging, review, refactoring, or architecture:
+- docs/CAPABILITIES-INDEX.md:212 — The effects catalogue, the recipes and the one-shot floor (P55 / P56, 2026-09-13) — - The effects catalogue - LIVE - one card per effect the engine performs (129 cards on 18 axes: id <axis>:<token>, alias
+- docs/content-video-engine/CAPABILITIES.md:92 — THE ONE-SHOT BAR: the self-watch as a build artifact, WIRED — (2026-09-11, P51 T3; the operator: "we need to be able to essentially 1-shot shorts"; the bar: gates green plus a self-w
+- docs/content-video-engine/CAPABILITIES.md:311 — The effects catalogue, the recipes and the one-shot floor (P55 / P56, 2026-09-13) — E96: a beat is authored as a RECIPE - a proven combination of catalogue effects with offsets - and a cut is measured aga
+- docs/content-video-engine/CAPABILITIES.md:320 — The one-shot floor v2 — (P56 T6-T7; E96, HG1 = A) - rows M35-M42 measured from a compiled timeline: M35 distinct chart forms >= 3; M36 chart-to-
+- docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:1 — Grill: the animator's loop — decision ledger (2026-09-11) — `/grill-me let's find the most powerful features we could add to make you a better animator, and improve our iteration
+- docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:8 — 1. Settled — | decision | the operator's words | what it binds |
 - … 23 more in `docs/DOCS-TOPICS.jsonl`
 
 ## self-contained (35)
@@ -745,9 +745,9 @@ at most 12 sections each - the JSONL holds every one.
 - docs/portable/OPERATOR-RULINGS.md:1959 — E60 — The BREAKTHROUGH is a rescale: the bar that cannot fit builds to the comparator's level, then shoots while the scale rewrites under it (2026-09-10) — The operator's words. On the first pass (a zigzag cut at the top gridline, the bar a little past it): *"is that squiggle
   cited by: content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:46, content/video_engine/sources/reference_analyses/bravos-china-just-triggered-a-new-world-order/REPORT.claude.md:65, docs/agent-memory/operator/resume-2026-09-06.md:125, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1330, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2217, docs/content-video-engine/BACKLOG.md:422, +14 more
 - docs/portable/OPERATOR-RULINGS.md:2661 — E88 — The melt takes the chart, not the page: the ink balls up heavy, then leaves or paints what comes next (2026-09-13) — Ruling (the operator, human gate 2 of P52, the melt's four instants): *"for the melt, i actually didn't envision melting
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/CAPABILITIES-INDEX.md:10, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:33, docs/content-video-engine/REVIEW-QUEUE.md:41, +8 more
+  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/CAPABILITIES-INDEX.md:10, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:33, docs/content-video-engine/REVIEW-QUEUE.md:30, +8 more
 - docs/portable/OPERATOR-RULINGS.md:2761 — E93 — An agenda row carries an icon, stamped on once its sentence has been read (2026-09-13) — Ruling (the operator, on beautifying P52's numbered agenda, gate 3): *"i think agenda rows should carry icons, the icons
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/REVIEW-QUEUE.md:41
+  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/REVIEW-QUEUE.md:30
 - docs/research/motion/BRIEF-WEIGHT-DENSITY-MASS-2026-09-07.md:1 — Research brief — weight, density and mass in drawing, animation and stop-motion — Asked by: the operator, 2026-09-07, on Tokyo v3's first throw and landing (P47 T1, HG2): *"The throw comes on, but it
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:1 — HyperFrames Motion, Transitions, and Kinetic Transformations — Research Blueprint — Pass-3 deep extraction · 2026-09-06 · sources: HeyGen HyperFrames official documentation (overview, motion, transitions,
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:5 — The question — How does HeyGen HyperFrames structure motion design, scene transitions, stop-motion physics, and transformations, and ho
@@ -1272,7 +1272,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md:1 — Intake — the ink bloom transition (operator, 2026-09-08) — The operator brought a MotionKit preset by hand: *"here's an ink bloom transition that is not the swirl; our swirl is
 - docs/content-video-engine/TRANSITIONS-REVIEW-2026-09-06.md:157 — 6. TR-1 landed — the reference's transition mix, measured (2026-09-06, same day) — `content/video_engine/scripts/measure_cut_kinds.py` over the 720p upload (30 fps), all 99 boundaries in 2.4 s, calibrate
 - docs/portable/OPERATOR-RULINGS.md:1419 — E47 — The dip through black and the blur-zoom enter the kit for world changes; the mount, the spiral and the mount's dissolve are signatures; the wipe is retired as the world-change default (2026-09-06) — Ruled on the measured reference mix (doc 46 §46.5: 36 hard cuts, 35 dips through black at 0.47 s, 28 blur-zooms, 0 disso
-  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:12, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/agent-memory/operator/casebook/empty-cream-chart-to-chart/CASE.md:1, docs/agent-memory/operator/resume-2026-09-06.md:92, docs/agent-memory/operator/resume-2026-09-12.md:0, +37 more
+  cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REMAKE-2026-09-09.md:12, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:88, docs/agent-memory/operator/casebook/empty-cream-chart-to-chart/CASE.md:1, docs/agent-memory/operator/resume-2026-09-06.md:92, docs/agent-memory/operator/resume-2026-09-12.md:0, +39 more
 - docs/portable/OPERATOR-RULINGS.md:1461 — E48 — A declared transition vocabulary with one hero, the spiral; the primaries are not prescribed yet; the mount is a build; cut minimally, one thread (2026-09-06, amended the same hour) — From the HyperFrames transitions page the operator brought in by hand (`hyperframes.heygen.com/prompting/transitions`, r
   cited by: content/video_engine/projects/systems-and-blowups/japan-tariff-trick/CHART-CHOREOGRAPHY.md:13, content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:22, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-V3-PROPOSAL.md:72, docs/agent-memory/operator/resume-2026-09-06.md:0, docs/agent-memory/operator/resume-2026-09-06.md:92, docs/CAPABILITIES-INDEX.md:10, +10 more
 - docs/portable/OPERATOR-RULINGS.md:2637 — E87 — The transition is chosen for the scene from the whole kit; no single hand-off rule (2026-09-13) — Ruling (the operator, answering P53 human gate 2, "the hand-off rule"): *"For transitions historically we we had the
@@ -2792,6 +2792,24 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/patterns/phase-guides/P6.md:1 — P6 — THE CLOSE — > Self-contained generation guide. Consume ONLY: the INJECTION block, the
 - … 3 more in `docs/DOCS-TOPICS.jsonl`
 
+## hand-off (15)
+
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:1 — How Japan Tricked Trump — Production Hand-off Pack — Project: `japan-tariff-trick` (Systems & Blowups / Money Physics)
+- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:50 — Evidence pass (E18) — what I verified myself vs. what the hand-off asserts — | figure | verdict |
+- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:97 — Flow rules (anti-random-cut) — Automated video dies by disjointed jumps. Every scene boundary must be authored:
+- docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:54 — 1. Executive decisions — 1. Replace pose repetition with causal state changes. The unit of visual storytelling is
+- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364 — 9.24 The VERDICT STACK species (operator, s68, 2026-08-30) — At a verdict beat ("Everything we checked holds") the episode's best
+  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/agent-memory/operator/resume-2026-09-12.md:196, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:163, docs/portable/MOTION-GRAMMAR.md:1
+- docs/content-video-engine/CAPABILITIES.md:95 — The PRESS CARD dock and the STACK hand-off, WIRED — (2026-09-11, P50 T3; Bravos shots 5-10: their claims as cards on the plate, the previous one dimming and sliding back, t
+- docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:88 — Part 2 - Open rulings that are not gates — 2026-09-13: the head with a news band -> E86 (a surface holds video and images; someone else's words play on the TV, R26
+- docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md:50 — Explore — a register question, to be settled by eye, not by catalogue — | component | our nearest | gap | why |
+- docs/content-video-engine/REVIEW-QUEUE.md:30 — Owed by the agent before it comes back to you (20) — | id | item | what the agent owes | blocks |
+- docs/content-video-engine/SPECIES-BY-SENTENCE.md:170 — 5. Not built yet, by task (the map already names them so the lint can say "available" the day they land) — Recipes per act (P56, 2026-09-13): `lint_species_choice.py <project> --propose` lists the RECIPES whose `acts` include t
+- docs/portable/MOTION-GRAMMAR.md:1 — MOTION GRAMMAR — narration-locked choreography, portable — Audited against the record 2026-09-13 (P54, docs/operator-ledger/PORTABLE-AUDIT.md).
+- docs/portable/OPERATOR-RULINGS.md:2637 — E87 — The transition is chosen for the scene from the whole kit; no single hand-off rule (2026-09-13) — Ruling (the operator, answering P53 human gate 2, "the hand-off rule"): *"For transitions historically we we had the
+  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/CAPABILITIES-INDEX.md:10, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/CAPABILITIES.md:131, docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:88
+- … 3 more in `docs/DOCS-TOPICS.jsonl`
+
 ## intensity-1.0 (15)
 
 - content/video_engine/sources/reference_analyses/COMFYUI_PARALLAX_TECHNICAL_STANDARDS_RESEARCH.md:96 — 4. Dial Calibration Guide for ComfyUI Depthflow — When an image qualifies as artistically viable (continuous environmental ground), apply these exact dialed parameters:
@@ -3157,25 +3175,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/TRIAGE-2026-09-05.md:166 — 2. The research-side orphans by theme (128 records / 39 names, `ANIMATION-REGISTRY.md (the "orphaned" formula section)`) — | theme | records | names | rec | the one derivation that matters most, and why |
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
-## hand-off (14)
-
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:1 — How Japan Tricked Trump — Production Hand-off Pack — Project: `japan-tariff-trick` (Systems & Blowups / Money Physics)
-- content/video_engine/projects/systems-and-blowups/japan-tariff-trick/REVIEW-CLAUDE.md:50 — Evidence pass (E18) — what I verified myself vs. what the hand-off asserts — | figure | verdict |
-- docs/content-video-engine/06-SCRIPT-TRANSFORMATION-SPEC.md:97 — Flow rules (anti-random-cut) — Automated video dies by disjointed jumps. Every scene boundary must be authored:
-- docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:54 — 1. Executive decisions — 1. Replace pose repetition with causal state changes. The unit of visual storytelling is
-- docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364 — 9.24 The VERDICT STACK species (operator, s68, 2026-08-30) — At a verdict beat ("Everything we checked holds") the episode's best
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/agent-memory/operator/resume-2026-09-12.md:196, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:163, docs/portable/MOTION-GRAMMAR.md:1
-- docs/content-video-engine/CAPABILITIES.md:95 — The PRESS CARD dock and the STACK hand-off, WIRED — (2026-09-11, P50 T3; Bravos shots 5-10: their claims as cards on the plate, the previous one dimming and sliding back, t
-- docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:88 — Part 2 - Open rulings that are not gates — 2026-09-13: the head with a news band -> E86 (a surface holds video and images; someone else's words play on the TV, R26
-- docs/content-video-engine/REMOTION-UI-INTAKE-2026-09-07.md:50 — Explore — a register question, to be settled by eye, not by catalogue — | component | our nearest | gap | why |
-- docs/content-video-engine/SPECIES-BY-SENTENCE.md:170 — 5. Not built yet, by task (the map already names them so the lint can say "available" the day they land) — Recipes per act (P56, 2026-09-13): `lint_species_choice.py <project> --propose` lists the RECIPES whose `acts` include t
-- docs/portable/MOTION-GRAMMAR.md:1 — MOTION GRAMMAR — narration-locked choreography, portable — Audited against the record 2026-09-13 (P54, docs/operator-ledger/PORTABLE-AUDIT.md).
-- docs/portable/OPERATOR-RULINGS.md:2637 — E87 — The transition is chosen for the scene from the whole kit; no single hand-off rule (2026-09-13) — Ruling (the operator, answering P53 human gate 2, "the hand-off rule"): *"For transitions historically we we had the
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/CAPABILITIES-INDEX.md:10, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/CAPABILITIES.md:131, docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:88
-- docs/portable/OPERATOR-RULINGS.md:2901 — E99 - The review pass of 2026-09-14: a morph proves the whole chart, the melt gathers into a dense point, a transformation is judged in motion (2026-09-14) — The operator's answers, marked in the review queue (`docs/content-video-engine/review-answers.jsonl`, 2026-09-14 18:04-1
-  cited by: docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/REVIEW-QUEUE.md:1, docs/content-video-engine/REVIEW-QUEUE.md:10, docs/content-video-engine/REVIEW-QUEUE.md:16, docs/content-video-engine/REVIEW-QUEUE.md:41, docs/content-video-engine/REVIEW-QUEUE.md:60
-- … 2 more in `docs/DOCS-TOPICS.jsonl`
-
 ## high-frequency (14)
 
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/08_answers_animation_craft_brief.md:387 — 5. Track C — The Drawing-Engine Builder
@@ -3288,22 +3287,6 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/07_academic_literature_drawing_and_2_5d_animation_engine.md:178 — Mathematical Proof of Zero Area Inversion: — $$\det(J_k(t)) = \det(R_k(t)) \cdot \det(S_k(t)) = 1 \cdot (\lambda_1 \lambda_2)^t > 0 \quad orall t \in [0, 1]$$
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
-## self-watch (14)
-
-- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/SELF-WATCH.md:1 — SELF-WATCH - normal-for-which-bridge - build-review - 2026-09-12 - short (1 min opening) — player.html sha256 03bc793d089b - timeline bridge-short.timeline.json - runtime 0:57 - aspect 9:16 - script SCRIPT-SHORT
-- content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/SELF-WATCH.md:16 — 2. The opening, read (the agent fills these by reading the sheets - never by the gates alone) — sheets: self-watch/ opening.1.png, opening.2.png, opening.3.png (28 tiles at 2 s steps from 0:00 to 0:54, 360 px, 12 per
-- docs/agent-memory/operator/resume-2026-09-12.md:185 — P56 APPROVED - next implementation (2026-09-13 night) — `.claude/PRPs/plans/P56-EFFECT-RECIPES-AND-THE-ONE-SHOT-FLOOR.plan.md` on MAIN, status approved (the operator: "A sounds
-- docs/AGENTS-VIDEO-ENGINE.md:1 — AGENTS — Content video engine (the doctrine section) — Moved out of the always-loaded `AGENTS.md` on 2026-09-05 (P45 grill: the dispatch floor). Every subagent dispatch re-pai
-- docs/AGENTS-VIDEO-ENGINE.md:5 — Content video engine (second workstream) — This repo also hosts a faceless YouTube production operation (three
-- docs/content-video-engine/CAPABILITIES.md:92 — THE ONE-SHOT BAR: the self-watch as a build artifact, WIRED — (2026-09-11, P51 T3; the operator: "we need to be able to essentially 1-shot shorts"; the bar: gates green plus a self-w
-- docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:1 — Grill: the animator's loop — decision ledger (2026-09-11) — `/grill-me let's find the most powerful features we could add to make you a better animator, and improve our iteration
-- docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:8 — 1. Settled — | decision | the operator's words | what it binds |
-- docs/content-video-engine/GRILL-ANIMATOR-ITERATION-2026-09-11.md:52 — 5. The horizon: AnimatorOS — The operator: *"we need like an 'AnimatorOS' where we start a component library + editor similar to how i built with cod
-- docs/content-video-engine/GRILL-PIPELINE-VALUE-2026-09-13.md:123 — 5. Immediate build order (each a plan slice; none started here) — 1. Recipe cards + the drift gate's proof rule + `authoring/recipes.py` (P55's own generator and gate extend; no engine w
-- docs/content-video-engine/REVIEW-QUEUE.md:41 — Owed by the agent before it comes back to you (14) — | id | item | what the agent owes | blocks |
-- docs/content-video-engine/SELF-WATCH.md:1 — SELF-WATCH - the one-shot bar a cut clears before anybody watches it — The operator's watch begins only when this file is clean. The grill of 2026-09-11: *"we don't come close enough to a
-- … 2 more in `docs/DOCS-TOPICS.jsonl`
-
 ## sold-out (14)
 
 - content/video_engine/projects/systems-and-blowups/EPISODE-SEEDS.md:1 — EPISODE SEEDS — banked hooks and mechanisms (operator, 2026-08-30)
@@ -3318,4 +3301,20 @@ at most 12 sections each - the JSONL holds every one.
 - docs/content-video-engine/briefs/STEEL-AND-PAPER-REVISION-C.md:96 — 3. UPGRADE — the tell becomes an instrument — The tell is the channel's standing audit and now has real apparatus
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:191 — VOICE PACK — portable brand voice by exemplar — Third portable file, loaded with `DOCTRINE-CORE.md` and
 - docs/content-video-engine/SCRIPT-CONTEXT-COMBINED.md:250 — 2. Approved production lines, by function — From Script B ("Steel and Paper"), which won a seed-locked A/B by ear
+- … 2 more in `docs/DOCS-TOPICS.jsonl`
+
+## sovereign-memory-infrastructure (14)
+
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:431 — S01 · The Memory Chokepoint — Opening source plate framing memory as the strategic bottleneck in sovereign compute infrastructure.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:437 — S02 · Compute Has Crossed the Rubicon — Source plate contrasting legacy IT operating expense with sovereign infrastructure capital expense.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:443 — S03 · The Nine-Layer Compute Stack — Source mechanism plate mapping accelerator silicon, HBM, thermal management, packaging, and power layers.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:449 — S04 · Hitting the Physical Limits of AI — Source plate showing compute throughput, interconnect, and memory-bandwidth walls in scaled AI systems.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:455 — S05 · The Geographic Monopoly — Source map showing the geographic concentration of advanced memory and packaging supply chains.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:461 — S06 · Financial Physics: S&P 500 versus Sovereign Scalers — Source comparison of the S&P 500 allocator and the capital requirements of strategic memory infrastructure.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:467 — S07 · The Accretive Burn Framework — Source framework separating incremental return, backlog-to-burn conversion, and capital-growth metrics.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:473 — S08 · CapEx Mechanics of the Memory Giants — Source plate comparing capital expenditure and manufacturing posture across Micron, Samsung, and SK hynix.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:479 — S09 · The Structural Re-Rating Cycle — Source cycle diagram showing how memory technology, physical capacity, and earnings can drive a structural re-rating.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:485 — S10 · Trend One: Reshoring versus Sovereign Stacks — Source supply-chain map contrasting domestic reshoring with integrated sovereign AI stacks.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:491 — S11 · Trend Two: The Advanced Packaging Bottleneck — Source mechanism plate showing advanced packaging as the critical interface between HBM stacks and AI logic.
+- content/video_engine/projects/systems-and-blowups/sources/decks/asset-selection-index.md:497 — S12 · Trend Three: Co-Packaged Optics — Source mechanism plate showing the optical interconnect wall and the proposed co-packaged optics response.
 - … 2 more in `docs/DOCS-TOPICS.jsonl`

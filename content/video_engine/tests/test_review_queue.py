@@ -30,13 +30,14 @@ import review_queue_proofs as RQP  # noqa: E402
 import serve_review_queue as SRQ  # noqa: E402
 
 DATA = ROOT / BRQ.DATA_REL
+FIXTURE = Path(__file__).resolve().parent / "fixtures" / "review-queue.fixture.json"
 OWED_ID = "r26-76-melt-endings-in-motion"
 RULED_ID = "r26-123-caption-default"
 
 
 @pytest.fixture(scope="module")
 def data() -> dict:
-    return BRQ.load_data(DATA)
+    return BRQ.load_data(FIXTURE)
 
 
 @pytest.fixture(scope="module")
@@ -99,10 +100,17 @@ def test_an_owed_item_must_say_what_it_owes(data):
         BRQ.validate(items)
 
 
-def test_the_tracked_data_passes_and_every_kind_has_open_items(data):
+def test_the_fixture_passes_and_every_kind_has_open_items(data):
     kinds = {i["kind"] for i in BRQ.open_items(data)}
     assert kinds == set(BRQ.KINDS)
     for rec in BRQ.answerable_items(data):
+        if rec["kind"] in BRQ.PROOF_KINDS:
+            assert rec["proofs"], rec["id"]
+
+
+def test_the_live_queue_data_validates_and_every_open_proof_kind_has_a_proof():
+    live = BRQ.load_data(DATA)
+    for rec in BRQ.answerable_items(live):
         if rec["kind"] in BRQ.PROOF_KINDS:
             assert rec["proofs"], rec["id"]
 
@@ -245,7 +253,7 @@ def test_the_tracked_crop_differs_outside_its_caption(data):
 def server(tmp_path):
     answers = tmp_path / "answers.jsonl"
     answers.write_text("", encoding="utf-8")
-    httpd = SRQ.make_server(0, DATA, tmp_path / "page", answers, quiet=True, probe=False)
+    httpd = SRQ.make_server(0, FIXTURE, tmp_path / "page", answers, quiet=True, probe=False)
     thread = threading.Thread(target=httpd.serve_forever, daemon=True)
     thread.start()
     yield f"http://127.0.0.1:{httpd.server_address[1]}", answers
