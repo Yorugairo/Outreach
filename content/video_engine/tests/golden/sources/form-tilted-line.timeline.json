@@ -400,10 +400,16 @@
        "value": "+21%"
       }
      ],
+     "board": {
+      "h": 0.9667,
+      "w": 0.9708,
+      "x": 0.0151,
+      "y": 0.0176
+     },
      "builder": "dense-line",
      "colors": [],
      "emphasize": 0,
-     "field": "scribble",
+     "field_plate": "world-ledger-inked-deckle-cream-v1",
      "form": {
       "axis": "y",
       "deg": 14.0,
@@ -434,6 +440,7 @@
       "MEGA-CAP TECH STOCKS",
       "S&P 500 (the market)"
      ],
+     "plate": "world-ledger-blank-page-cream-v1",
      "quiet_zone": "right",
      "schema_version": "ledger_page.v1",
      "series": [

@@ -90,6 +90,14 @@ PROOF_FRAMES = {
     "form-extruded-bar@proof-leave": ("form-extruded-bar", {}, 28.5),
     "form-tilted-line@proof-build": ("form-tilted-line", {}, 6.0),
     "form-tilted-line@proof-leave": ("form-tilted-line", {}, 28.5),
+    # P61 T4b / E99 s35 - THE CROSS-FADE PAGE LEAVING BY THE SOAK'S RECEDE, at the instant only phase two of the
+    # drain can show (the colours are gone by 29.0; the charcoal's own second runs 29.0 -> 30.0). At 29.35 the
+    # inked plate and the crisp rect have faded off the seeps beneath them and the seeps are receding down the
+    # vortex - the leave the operator chose for BOTH fields: "the leave-soak is much better than the two plate leave".
+    # 29.6 is uf 0.60: the ink is one lumpy island and the PLATE'S OWN cream paper is uncovered all round it. The
+    # instant is chosen for what it proves - at 29.35 the recede has only bitten the corners, and the two-plate
+    # leave this replaces was flat cream a full second earlier (the reference clip `formed-page-leave-twoplate.mp4`).
+    "form-tilted-line@proof-recede": ("form-tilted-line", {}, 29.6),
     "species-proof@proof-ring": ("species-proof", {"idle": True}, 12.6),     # the dashed ellipse closed round the series' own peak, its flag chip landed, the page breathing under it
     "species-proof@proof-count": ("species-proof", {"idle": True}, 22.5),    # the isometric field: all six icons in reading order, the count written as the claim
     "species-proof@proof-agenda": ("species-proof", {"idle": True}, 28.5),   # the numbered agenda: three rows revealed one per word, holding

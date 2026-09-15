@@ -817,6 +817,47 @@ def _form_bars_series() -> dict:
                      for sr, short in zip(raw["series"], ("Memory", "Chips", "Mega-cap", "S&P 500"))]}
 
 
+# ---- P61 T4b / E99 s35 - THE TWO GENERATED LEDGER PLATES ------------------------------------------------------
+# The decided ledger-page signature (E22, doc 41): a generated CREAM page and the same page with the charcoal filled
+# to its DECKLE, cross-faded over it. Both are quarantine objects of the claim `steel-and-paper-ledger-page-v1` and
+# are gitignored - E99 s31: an approved image leaves quarantine, it never enters git - so this fixture READS them
+# where they lie and encodes them into the source's `uris`, exactly as the arm-b race build does
+# (`build_race_arms.plate_file` / `plate_uri`, the same JPEG q88). Neither file is copied into a tracked path.
+#   review/claims/steel-and-paper-ledger-page-v1/objects/world-ledger-blank-page-cream-v1.png
+#     1920x1080, sha256 39f98e295c0f85fc8f779904661365dd886f2789e5f5c36b0db2250ff31709f8
+#   review/claims/steel-and-paper-ledger-page-v1/objects/world-ledger-inked-deckle-cream-v1.png
+#     1920x1080, sha256 6960fa61406cbfabfde9f0b601b62caa54f4f56cbabbe7490009fbf52cb485e7
+# The BOARD is the deckle's innermost rectangle, read from the tracked `proofs/ledger/deckle-edge.json` - the chart
+# is never drawn over the torn edge.
+PLATE_CLAIM = "review/claims/steel-and-paper-ledger-page-v1/objects"
+PLATE_BLANK, PLATE_INKED = "world-ledger-blank-page-cream-v1", "world-ledger-inked-deckle-cream-v1"
+DECKLE_EDGE = REPO / "content/video_engine/scripts/proofs/ledger/deckle-edge.json"
+
+
+def _plate_file(pid: str) -> Path:
+    """Where the gitignored plate lies - the checkout's own quarantine, or the worktree's. READ only."""
+    rels = (Path("content/video_engine") / PLATE_CLAIM / f"{pid}.png", Path(PLATE_CLAIM) / f"{pid}.png")
+    roots = (REPO, REPO / ".claude/worktrees/sweet-villani-1c3a16")
+    for root in roots:
+        for rel in rels:
+            if (root / rel).exists():
+                return root / rel
+    raise SystemExit(f"the generated ledger plate {pid!r} is in neither the checkout nor the worktree "
+                     f"({PLATE_CLAIM}) - it is a gitignored quarantine object (E99 s31) and this source cannot be "
+                     "rebuilt without it; the committed source and its frames stand until it is back")
+
+
+def _two_plate_page(page: dict, uris: dict) -> None:
+    """Give a page the two-plate cross-fade ground and put the plates in the uris (E99 s35's continuity field)."""
+    from PIL import Image
+    page["plate"], page["field_plate"] = PLATE_BLANK, PLATE_INKED
+    page["board"] = json.loads(DECKLE_EDGE.read_text(encoding="utf-8"))["inner"]
+    for pid in (PLATE_BLANK, PLATE_INKED):
+        im = Image.open(_plate_file(pid)).convert("RGB")
+        buf = io.BytesIO(); im.save(buf, "JPEG", quality=88, optimize=True)
+        uris[pid] = "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
 def form_extruded_bar() -> tuple[dict, dict]:
     """P58 T5 - THE EXTRUDED BAR (`;form=extruded_bar`): every bar a prism, and not one label moved.
 
@@ -831,7 +872,7 @@ def form_extruded_bar() -> tuple[dict, dict]:
     is the retract."""
     import build_scene_timeline_f as BST
     page = LPG.build_spec(_form_bars_series(), "bars", None, "right")
-    page["field"] = "scribble"
+    page["field"] = "soak"   # P61 T4b / E99 s35: this page INTRODUCES the four values - the soak is its transition
     page["form"] = BST.page_form_spec("extruded_bar", page["builder"], "golden")
     scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
                "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
@@ -853,11 +894,14 @@ def form_tilted_line() -> tuple[dict, dict]:
     import build_scene_timeline_f as BST
     series = LPG.load_series(SERIES)
     page = LPG.build_spec(series, "line", 0, "right")
-    page["field"] = "scribble"
     page["form"] = BST.page_form_spec("tilted_line", page["builder"], "golden")
+    uris = _base_uris()
+    # P61 T4b / E99 s35: this page SPEAKS ACROSS the flat page of the same series (`ledger-page-mid-build`), so its
+    # ground is the two-plate CROSS-FADE - continuity, the operator's own division of the two first-class fields.
+    _two_plate_page(page, uris)
     scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
                "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": []}]
-    return _timeline("Golden: the tilted-plane line", scenes, {}, None), _base_uris()
+    return _timeline("Golden: the tilted-plane line", scenes, {}, None), uris
 
 
 def press_stack() -> tuple[dict, dict]:

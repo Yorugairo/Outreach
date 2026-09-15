@@ -123,7 +123,7 @@ that page only with the operator's ruling written to `docs/portable/OPERATOR-RUL
 | **HG2** | T3 | `r26-117-ball-into-the-next-chart` (**created by the parent at T3's dispatch** - it does not exist today; it supersedes the `"missing": true` line on `r26-70-compare-morph`) | "The page melts, balls up, and the ball becomes the NEXT FULL CHART with no cut between. Watch 0:00-0:08. Does the hand-over hold, or does it read as a jump?" |
 | **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" |
 | **HG3** | T4a | `p58-hg3-extruded-bar-leave` | "`form-extruded-bar@proof-leave` beside `form-tilted-line@proof-leave`, as clips. Do the prism's shapes break down enough now? Approve, or say 'more'." |
-| **HG4** | T4b | `p58-hg3-forms-mount-not-scribble` | "A formed page arriving by the charcoal mount, and leaving without clearing its scribbles to cream. Watch the enter and the leave. Approve, or name what still clears." |
+| **HG4** | T4b | `p58-hg3-forms-mount-not-scribble` | "The formed page arriving by the two-plate cross-fade and by the soak, each leaving by the soak's recede (E99 s35). Watch both enters and the leave. Approve, or name what still reads wrong." |
 | **HG5** | T5 | `r26-118-metallic-ball` | "The ball, before and after: more shadow, a dark Fresnel rim, a metallic band, one point of deep shadow depth. Does it read metallic and heavy now, or still glossy?" |
 | **HG6** | T6 | `r26-76-melt-endings-in-motion` | "The melt as the vortex's motion gathered into one dense, heavy, vibrating point, splashing into a full chart / world plate. Watch the gather and the splash. Approve the new default, or keep today's look behind the flag." |
 | **HG7** | T7 | `r26-82-verdict-stack-choreography` | "The verdict stack on a short with Steel and Paper's choreography - cards that move, then the burst. Watch it beside the Steel and Paper reference clip. Approve, or name the phase that is still flat." |
@@ -402,7 +402,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   source. Closes **P48 T5b** and its card; `P48:185` (HG3) can then be answered
 
 ### T4a: THE EXTRUDED BAR'S LEAVE BREAKS ITS SHAPES DOWN MORE
-- Status: pending
+- Status: complete (2026-09-15) - HG3 open on the queue as `p58-hg3-extruded-bar-leave` (watch, two clips)
 - Owner: `junior_developer` (**ENGINE LOCK #3**; small)
 - Depends on: none (may take the lock between T2 and T3 if the schedule wants it)
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (`buildLedgerBars` / the `EXTRUDE` leave
@@ -416,29 +416,72 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - Validate: `python -m pytest content/video_engine/tests/test_chart_forms_2_5d.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only p58-hg3-extruded-bar-leave`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T4.md` (T4a sections). Parent read the committed golden against the re-baselined one:
+  before, four prisms carried off as rigid bodies with their dark sides welded on; after, the sides and caps tumble away from
+  their bars while the coloured face rides alone - the tilted line's kind of break-down. The change: `extrudeFaces` records each
+  face's own centre (engine :6646, :6656-6658); `shed(u, P)` re-drives every face through the vortex's own map at its own clock
+  (`SHED` LEAD [0.12, 0.30, 0.52], SPIN [-150, 220, 340], DRIFT [2.4, 3.2, 4.4], :6661-6696); `lpShedPrisms` :6705-6712, called
+  after `lpSpiral` (:10450) so the drain's lazy home measurement sees the faces at home on any seek order - two seeks to 28.5 s
+  with a seek away between return byte-identical transforms. Only `form-extruded-bar@proof-leave` changed; `form-extruded-bar`,
+  `@proof-build`, `form-tilted-line@proof-leave`, `thread-baseline` measured SAME before re-baselining; the flat path untouched.
+  Tests: a served-player harness + 2 (`test_chart_forms_2_5d.py:246-285`) - the acceptance measured (no two faces of one prism
+  share a transform at the leave instant; nothing written at 6.0 s). Validate: 127 passed; sync in sync; page-boxes 44; registry in
+  sync. The card's two clip records written by the parent.
 - CAPABILITIES row changed: **:147** (Two chart forms in 2.5D - the "owed" note on the leave is retired)
 
-### T4b: A FORMED PAGE MOUNTS ITS CHARCOAL, AND ITS LEAVE DOES NOT CLEAR ITS SCRIBBLES TO CREAM
-- Status: pending
+### T4b: A FORMED PAGE TAKES THE SOAK OR THE CROSS-FADE BY ITS JOB, AND LEAVES BY THE SOAK (E99 s35)
+- Status: complete (2026-09-15) - HG4 open on the queue as `p58-hg3-forms-mount-not-scribble` (watch, three clips)
 - Owner: `junior_developer` (**ENGINE LOCK #4**; small)
 - Depends on: T4a (same files)
-- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the formed page's enter + leave),
-  `content/video_engine/scripts/build_scene_timeline_f.py` (the form's enter option), `content/video_engine/scripts/ledger_page.py`
-  (only if the mount needs a spec field), `content/video_engine/tests/test_chart_forms_2_5d.py`,
-  `content/video_engine/tests/golden/` (a new enter golden + the leave re-baselined)
-- Acceptance: E99 s18 verbatim - *"i don't think we need those scribble lines to clear to cream. I also think mounting
-  the charcoal is a much better look than the scribble drawing."* A formed page ARRIVES by mounting the charcoal (the
-  cream mount page enter, CAPABILITIES:26/:64, E22's mount) instead of by the scribble drawing, and its LEAVE leaves
-  the scribble lines as they are rather than clearing them to cream. Two goldens: the mount arrival, the leave with
-  the scribbles intact. The non-formed ledger page is untouched and every one of its goldens byte-identical.
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the ledger page's field enter + leave regions ONLY),
+  `content/video_engine/scripts/build_scene_timeline_f.py` (the page's field option + its refusal), `content/video_engine/scripts/ledger_page.py`
+  (only if a spec field is needed), `content/video_engine/tests/test_chart_forms_2_5d.py`, `content/video_engine/tests/golden/`
+  (the two form goldens re-authored + a leave golden, with sources), `content/video_engine/effects/cards/page_enter.json` / `page_exit.json`
+  (the two entries as first-class cards)
+- Acceptance: E99 s35 verbatim - *"I think they should both be first class effects. When we are trying to maintain continuity, connecting
+  ideas, speaking across plates i think the cross-fade is the answer, when we are building an idea or introducing a new idea or looking
+  to fill space to separate ideas, the soak is the transition."* and *"the leave-soak is much better than the two plate leave"*. Three
+  things: (1) BOTH field entries are first-class and authored by the sentence's job - the two-plate cross-fade (`page.plate` +
+  `page.field_plate` + `page.board`, the generated plates) for continuity, the soak (`page.field = "soak"`) for a new idea or a
+  separator; a formed page takes whichever its row names, never the scribble by default. (2) THE LEAVE IS THE SOAK'S RECEDE FOR BOTH:
+  a page that arrived by the cross-fade leaves by the soak recede (today its inked plate fades out to the cream plate - retired as a
+  leave). (3) The scribble (`page.field = "scribble"`) stays an opt-in back-up, untouched, never a default; NO work on its leave.
+  Goldens: `form-tilted-line` re-authored on the two-plate cross-fade (its plates as URIs in the source, the way other goldens carry
+  `DOCK_PLATE`), `form-extruded-bar` re-authored on the soak, and one leave golden of the cross-fade page leaving by the soak recede; the
+  non-formed ledger page's goldens byte-identical (`ledger-soak-page`, `ledger-page-mid-build` - the latter is authored on the scribble
+  and stays so as the back-up's own pin). The parent's three rendered clips of 2026-09-15 (scribble / soak / two-plate enter and leave
+  on the formed page, scratchpad `assembly/t4b/`) are the reference the operator judged; the slice's clips match them.
 - Validate: `python -m pytest content/video_engine/tests/test_chart_forms_2_5d.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python content/video_engine/scripts/effects_catalog_check.py` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only p58-hg3-forms-mount-not-scribble`
-- Evidence: pending
-- CAPABILITIES row changed: **:147** (the "a formed page mounts its charcoal and does not clear its scribbles to cream
-  (owed)" clause becomes LIVE)
+- Evidence: report `scratchpad/assembly/P61-T4.md` (T4b sections; the lane read the parent's three reference clips first). (1) THE
+  LEAVE: `lpPlateRecede` (engine :6705-6728, called :10472 BEFORE `lpSpiral` because the drain measures the field's box on its
+  first on-frame) - a two-plate page's seeps and crisp rect are already built and merely hidden while the plate carries the ground,
+  so the leave lets them stand on the drain's own clock, fades the plate + rect on RECT_FADE and the seeps ride the vortex as a
+  soak page's; a page with no field_plate takes none of it (`ledger-soak-page`, `ledger-page-mid-build` byte-identical). (2) THE
+  GRAMMAR: `;field=soak|plates|scribble` (`PLATE_OPTS` :93, `_check_opt` :2468-2470, `PAGE_FIELDS` / `PAGE_FIELD_PLATES` /
+  `page_field_spec` :2929-2963, applied only when named :3235-3243); `plates` refused by name when the page has no plate /
+  field_plate, printing the two ids; `ledger_page.py` untouched. (3) THE CARDS: `plate_option:field` (the ruling verbatim as
+  `when`), `page_enter:field_soak` + `page_enter:field_plates` (first-class, implicit - the row asks with `;field=`),
+  `page_exit:retract` (the ground recedes with the marks whichever field it arrived on); effects_catalog_check was red first and
+  named every drift, all fixed at the source. (4) THE GOLDENS: `form-extruded-bar` re-authored on the soak, `form-tilted-line` on
+  the cross-fade (the two plates read from the quarantine objects at fixture-build time, paths + sha256 recorded, nothing copied
+  into a tracked path), new `form-tilted-line@proof-recede` (29.6 s) in PROOF_FRAMES; six frames moved, every other golden
+  byte-identical. Parent's read: the tilted line's base frame is the chart on the inked plate; @proof-recede is one lumpy ink
+  island with the plate's own cream paper eaten in - the soak clip's event; the extruded bar builds on the seeped charcoal.
+  (5) TESTS: 9 new (26 total; `test_chart_forms_2_5d.py:307-382`), incl. the measured acceptance in a browser (held: field hidden,
+  plate opaque, no seep transformed; at the recede: field standing, plate < 0.01, every seep on the vortex; seek back = held).
+  Validate: 135 passed; sync in sync; effects_catalog_check 0 failures; page-boxes re-pinned sha-only (44 passed); registry in
+  sync 930 / 0 orphaned. DECISIONS by the parent: the tilted line's `uris.json` grows to ~390 KB of base64 plate - within the
+  golden sources' precedent (camera-layers / dock-depth / page-depth carry 310 KB of the dock plate each, 57 uris files tracked);
+  accepted. `render_baseline.py` PROOF_FRAMES entry ratified (where every @proof-* instant lives). Left to T11: CAPABILITIES
+  :147 / :56 and doc 41 s2 beat 3. The first T4b brief ("keep the scribbles") was withdrawn before any code on the operator's
+  challenge; E99 s35 ruled on the three clips the parent rendered from one source (`scratchpad/assembly/t4b/render_variants.py`). (T4b's first brief - "mount the charcoal and leave the scribbles intact" - was withdrawn before any code on the
+  operator's challenge of 2026-09-15; the parent rendered the three field entries as clips from the form-tilted-line source and the
+  operator ruled E99 s35 on them)
+- CAPABILITIES row changed: **:147** (the "owed" clause becomes: a formed page takes the soak or the cross-fade by its job and leaves by
+  the soak, E99 s35); **:56** (the field's two first-class entries and the scribble as back-up); doc 41 s2 beat 3 (T11)
 
 ### T5: THE BALL'S SHADOWS - a dark Fresnel rim, a metallic band, one point of deep shadow depth
 - Status: pending

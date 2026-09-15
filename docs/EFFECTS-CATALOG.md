@@ -16,7 +16,7 @@ lives (module | inline | compiler-only | declared-unbuilt, the path and the one 
 module - status and callable - proof - doctrine cites resolved to path:line - aliases. A token that is only a
 parameter of an effect is an option on its card, never a card.
 
-139 cards, 79 options, 18 axes. 42 recipes (15 proven).
+142 cards, 82 options, 18 axes. 42 recipes (15 proven).
 
 | axis | cards | options | live | wired | draft | declared | planned | retired |
 |---|---|---|---|---|---|---|---|---|
@@ -29,12 +29,12 @@ parameter of an effect is an option on its card, never a card.
 | dock_payload | 3 | 0 | 3 | 0 | 0 | 0 | 0 | 0 |
 | chart_dock | 5 | 1 | 5 | 0 | 0 | 0 | 0 | 0 |
 | dock_option | 9 | 14 | 3 | 6 | 0 | 0 | 0 | 0 |
-| plate_option | 12 | 6 | 4 | 8 | 0 | 0 | 0 | 0 |
+| plate_option | 13 | 9 | 4 | 9 | 0 | 0 | 0 | 0 |
 | idle | 6 | 0 | 3 | 3 | 0 | 0 | 0 | 0 |
 | arrival | 3 | 4 | 2 | 1 | 0 | 0 | 0 | 0 |
 | camera | 1 | 6 | 1 | 0 | 0 | 0 | 0 | 0 |
 | exit | 9 | 20 | 3 | 3 | 3 | 0 | 0 | 0 |
-| page_enter | 10 | 5 | 3 | 7 | 0 | 0 | 0 | 0 |
+| page_enter | 12 | 5 | 3 | 9 | 0 | 0 | 0 | 0 |
 | page_exit | 2 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
 | caption | 3 | 8 | 3 | 0 | 0 | 0 | 0 | 0 |
 | kinetics | 17 | 0 | 2 | 14 | 1 | 0 | 0 | 0 |
@@ -1223,6 +1223,18 @@ parameter of an effect is an option on its card, never a card.
 - **doctrine** E98 s3 -> docs/portable/OPERATOR-RULINGS.md:2832; P58 T4 -> unresolved
 - **aliases** "a page at a depth" (docs/portable/OPERATOR-RULINGS.md:2832)
 
+### The field plate option (the page's ground)
+
+- **id** `plate_option:field` - **does** Names the GROUND a page's charcoal arrives on: the soak (seeded stains through the paper), the two-plate cross-fade (the charcoal deckle faded over the cream page) or the scribble (the opt-in back-up); all leave by the soak's recede.
+- **when** When we are trying to maintain continuity, connecting ideas, speaking across plates i think the cross-fade is the answer, when we are building an idea or introducing a new idea or looking to fill space to separate ideas, the soak is the transition. (docs/portable/OPERATOR-RULINGS.md:3156)
+- **example** `'ledger:ev-x:bars;field=soak'` (authored; key: `;field=soak|plates|scribble` on a ledger page (validator: page_field_spec); check: plate)
+- **options** `soak` Seeded charcoal stains creep and then flood through the paper to the deckle (E22's signature). The engine's own default: a page that names no field takes it. (PAGE_FIELDS); `plates` The two generated plates: the charcoal filled to the deckle cross-fades over the cream page (doc 41's decided signature). Refused by name unless the page carries both plate and field_plate. (PAGE_FIELDS); `scribble` The BACK-UP: charcoal strokes written across the deckle one at a time with the nib at the front. Never a default, and nothing is built on it. (PAGE_FIELDS)
+- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `buildLedger` - also `lpPlateRecede` - the field beat's build (mode = pg.field === scribble ? scribble : soak) and the two-plate path beside it; compiler page_field_spec / PAGE_FIELDS
+- **status** wired - **callable** yes: in PLATE_OPTS; page_field_spec refuses every other name
+- **proof** golden form-extruded-bar - test content/video_engine/tests/test_chart_forms_2_5d.py::test_the_field_is_named_on_the_row_and_the_soak_is_the_default - first use none
+- **doctrine** E99 s35 -> docs/portable/OPERATOR-RULINGS.md:2901; E22 -> docs/portable/OPERATOR-RULINGS.md:614; 41 s2 -> docs/content-video-engine/41-LEDGER-PAGE-SPECIES.md:15
+- **aliases** "the page's field" (docs/portable/OPERATOR-RULINGS.md:3156)
+
 ### The form plate option (2.5D chart forms)
 
 - **id** `plate_option:form` - **does** Draws a page's chart in 2.5D (extruded_bar or tilted_line[:<deg>]); the flat page is the default reading form.
@@ -1671,6 +1683,33 @@ parameter of an effect is an option on its card, never a card.
 - **doctrine** CAPABILITIES card-then-snap (refused on the watch, kept as opt-in) -> docs/content-video-engine/CAPABILITIES.md:76
 - **aliases** "falling down into the frame" (content/video_engine/scripts/build_scene_timeline_f.py:56)
 
+### The two-plate cross-fade field (a page keeping continuity)
+
+- **id** `page_enter:field_plates` - **does** Beat 3 of the page's arrival, the decided signature: the generated charcoal-filled deckle fades in over the generated cream page on the field clock; the ground arrives smooth and whole and the chart draws inside the deckle's board.
+- **when** When we are trying to maintain continuity, connecting ideas, speaking across plates i think the cross-fade is the answer, when we are building an idea or introducing a new idea or looking to fill space to separate ideas, the soak is the transition. (docs/portable/OPERATOR-RULINGS.md:3156)
+- **example** `'ledger:ev-x:bars;field=plates'` (authored; key: `;field=plates` on a ledger page whose build gave it plate + field_plate + board; check: none)
+- **phases**
+  1. **the inked plate arrives** - the charcoal filled to the deckle fades in over the cream page on expoOut of the field clock (trigger: the roll and the savor behind it; dials: `FIELD`=2.4)
+- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `buildLedger` - also `lpPlateRecede` - the fieldPlate branch of the field beat (page.field_plate over page.plate); it LEAVES by the soak's recede, never by fading back out (E99 s35)
+- **status** wired (implicit: no token of its own) - **callable** yes: implicit: the page's own plate keys; `;field=plates` is the row's way to ask
+- **proof** golden form-tilted-line - test content/video_engine/tests/test_chart_forms_2_5d.py::test_a_cross_fade_page_leaves_by_the_soaks_recede - first use none
+- **doctrine** E99 s35 -> docs/portable/OPERATOR-RULINGS.md:2901; E22 -> docs/portable/OPERATOR-RULINGS.md:614; 41 s2 -> docs/content-video-engine/41-LEDGER-PAGE-SPECIES.md:15
+- **aliases** "the two-plate cross-fade" (docs/portable/OPERATOR-RULINGS.md:3156)
+
+### The soak field (a page introducing an idea)
+
+- **id** `page_enter:field_soak` - **does** Beat 3 of the page's arrival: seeded charcoal stains creep and then flood through the cream to the deckle, deepening where they overlap, and end on the crisp rect. The eye has more to watch than a cross-fade gives it.
+- **when** When we are trying to maintain continuity, connecting ideas, speaking across plates i think the cross-fade is the answer, when we are building an idea or introducing a new idea or looking to fill space to separate ideas, the soak is the transition. (docs/portable/OPERATOR-RULINGS.md:3156)
+- **example** `'ledger:ev-x:bars;field=soak'` (authored; key: `;field=soak` on a ledger page - or no field at all: the soak is the engine's own default; check: none)
+- **phases**
+  1. **the stains creep** - each seeded stain grows from its own lag on the field clock, deepening where two overlap (trigger: the roll and the savor behind it (the scene's first frame on a mount); dials: `FIELD`=2.4, `SEEPS`=9)
+  2. **the ground closes** - the crisp charcoal rect takes over the last fifth, so the ground is flat before the title inks (trigger: b 0.78 of the field clock; dials: `rect`=0.78 -> 1.0)
+- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `buildLedger` - also `lpPlateRecede` - the soak branch of the field beat; the same stains are what the page's leave recedes
+- **status** wired (implicit: no token of its own) - **callable** yes: implicit: the ground of every page that names no field
+- **proof** golden form-extruded-bar - test content/video_engine/tests/test_chart_forms_2_5d.py::test_the_field_is_named_on_the_row_and_the_soak_is_the_default - first use none
+- **doctrine** E99 s35 -> docs/portable/OPERATOR-RULINGS.md:2901; E22 -> docs/portable/OPERATOR-RULINGS.md:614
+- **aliases** "the soak field" (docs/portable/OPERATOR-RULINGS.md:3156)
+
 ### The morph page enter
 
 - **id** `page_enter:morph` - **does** The page's prop outline (tab, plate or card) deforms by ARAP into the chart's shape, then the build lands; with the arap_morph flag off it is a mount of the same length.
@@ -1780,13 +1819,13 @@ parameter of an effect is an option on its card, never a card.
 
 ### The vortex retract page exit
 
-- **id** `page_exit:retract` - **does** A ledger page that does not declare :cut empties itself before the boundary: its marks spiral into a tight vortex and the sheet is left bare cream.
+- **id** `page_exit:retract` - **does** A ledger page that does not declare :cut empties itself before the boundary: its marks spiral into a tight vortex and the GROUND recedes after them - the soak's seeps down the same drain, whichever field it arrived on (E99 s35).
 - **when** the page hands over to a plate or mounts a new topic; a page that must land on its last line exits on the cut instead (docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md)
 - **example** `'ledger:ev-federal-load-v1:line:240:right:spiral'` (authored; key: a ledger id with no 7th part (no :cut) - the default page leave; check: enter)
-- **lives** module - `content/video_engine/scripts/species/spiral.mjs` - symbol `lpSpiral` - also `LP_RETRACT`, `spiralClocks`, `lpVortex`, `lpVortexCss`, `lpVortexSvg` - P57 T22: the same map as page_enter:spiral, run by the scene-end clock; no token of its own, its only negation is page_exit:cut
+- **lives** module - `content/video_engine/scripts/species/spiral.mjs` - symbol `lpSpiral` - also `LP_RETRACT`, `lpVortex`, `lpVortexCss`, `lpVortexSvg`, `spiralClocks` - P57 T22: page_enter:spiral's map, scene-end clock; its only negation is page_exit:cut | P61 T4b: lpPlateRecede lets a two-plate page's seeps stand in the drain: one leave for all fields (E99 s35)
 - **status** wired (implicit: no token of its own) - **callable** yes: implicit: every ledger page without :cut retracts
 - **proof** golden none - test content/video_engine/tests/test_transition_stamps.py::test_the_page_a_suck_takes_is_stamped_cut - first use none
-- **doctrine** 29 s9.31 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2100; R26-60 -> docs/content-video-engine/BACKLOG.md:465
+- **doctrine** 29 s9.31 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2100; E99 s35 -> docs/portable/OPERATOR-RULINGS.md:2901; R26-60 -> docs/content-video-engine/BACKLOG.md:465
 - **aliases** "The page VORTEX" (docs/content-video-engine/CAPABILITIES.md:50)
 
 ## caption

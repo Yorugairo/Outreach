@@ -65,7 +65,7 @@
           "source": "docs/content-video-engine/CAPABILITIES.md:50"
         }
       ],
-      "does": "A ledger page that does not declare :cut empties itself before the boundary: its marks spiral into a tight vortex and the sheet is left bare cream.",
+      "does": "A ledger page that does not declare :cut empties itself before the boundary: its marks spiral into a tight vortex and the GROUND recedes after them - the soak's seeps down the same drain, whichever field it arrived on (E99 s35).",
       "when": "the page hands over to a plate or mounts a new topic; a page that must land on its last line exits on the cut instead",
       "when_source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md",
       "author": {
@@ -84,15 +84,16 @@
         "symbol": "lpSpiral",
         "also": [
           "LP_RETRACT",
-          "spiralClocks",
           "lpVortex",
           "lpVortexCss",
-          "lpVortexSvg"
+          "lpVortexSvg",
+          "spiralClocks"
         ],
-        "note": "P57 T22: the same map as page_enter:spiral, run by the scene-end clock; no token of its own, its only negation is page_exit:cut"
+        "note": "P57 T22: page_enter:spiral's map, scene-end clock; its only negation is page_exit:cut | P61 T4b: lpPlateRecede lets a two-plate page's seeps stand in the drain: one leave for all fields (E99 s35)"
       },
       "doctrine": [
         "29 s9.31",
+        "E99 s35",
         "R26-60"
       ],
       "status": "wired",

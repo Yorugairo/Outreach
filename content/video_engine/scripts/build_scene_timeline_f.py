@@ -90,7 +90,7 @@ MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
 RACE_PATHS = ("eased", "clothoid")   # E91 s1 (R26-78): the path a racing mark takes BETWEEN two period knots - `eased` is the engine as it is (each coordinate on its own easing), `clothoid` is the fit through the SAME knots (P52 T17 arm B). The period clock, the knots and the ranks are identical in both: this names the SHAPE of the move and never its timing, and the operator chose it where the beat wants energy rather than smoothness
-PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form")   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field")   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
@@ -2465,6 +2465,9 @@ def _check_opt(key: str, value, where: str) -> None:
     if key == "form":   # P58 T5: the NAME and the tilt are the row's own grammar; the fit to the page's builder
         page_form_geom(str(value), where)   # needs the page, and is checked where the page is read (ledger_world)
         return
+    if key == "field":   # E99 s35: the NAME is the row's own grammar; whether `plates` HAS its two plates needs the
+        page_field_spec(str(value), None, where)   # page, and is checked where the page is read (ledger_world)
+        return
     allowed = {"idle": IDLE_KINDS, "arrive": ARRIVALS, "mass": MASSES, "morph": MORPH_SHAPES,
                "card": ("yes", "no"), "use": PLATE_USES, "path": RACE_PATHS}[key]
     if value not in allowed:
@@ -2921,6 +2924,43 @@ def page_form_geom(value: str, where: str) -> dict:
     return {"kind": name, "deg": deg, "axis": axis, "quad": plane["quad"]}
 
 
+# ---- E99 s35 - THE PAGE'S FIELD: the soak, the two-plate cross-fade, and the scribble as the back-up ----------
+# The operator, 2026-09-15, shown one formed page rendered three ways: *"I think they should both be first class
+# effects. When we are trying to maintain continuity, connecting ideas, speaking across plates i think the cross-fade
+# is the answer, when we are building an idea or introducing a new idea or looking to fill space to separate ideas,
+# the soak is the transition."* So the field is authored by the sentence's JOB, on the row, and is not a property of
+# the page's form or its builder. `soak` is what a page with no `field` has always taken (the engine's own default),
+# `plates` is doc 41's decided signature (the charcoal-filled deckle cross-faded over the cream page), and `scribble`
+# is the opt-in back-up, never a default and never built on. The LEAVE is the soak's recede for all three (the engine
+# `lpPlateRecede`), which is why the field names an ARRIVAL and nothing else.
+PAGE_FIELDS = ("soak", "plates", "scribble")
+# the two generated plates the record uses (E22 / doc 41's ledger-page signature; the claim
+# `steel-and-paper-ledger-page-v1`). A row may only ASK for the cross-fade - the ids are the page's, put there by the
+# build that owns the assets, because an image never enters the compiler (E99 s31).
+PAGE_FIELD_PLATES = ("world-ledger-blank-page-cream-v1", "world-ledger-inked-deckle-cream-v1")
+
+
+def page_field_spec(value: str, page: dict | None, where: str) -> str:
+    """The `;field=` option's name, refused BY NAME - and, once the page is in hand (`page` not None), `plates`
+    refused unless that page carries both plates. The row's grammar is checked without a page (`_check_opt`); the
+    fit to the page is checked where the page is read, exactly as `form=`'s is."""
+    name = str(value).strip()
+    if name not in PAGE_FIELDS:
+        raise ValueError(f"{where}: field={name!r} is not one of {'|'.join(PAGE_FIELDS)} - the soak (a new idea, or "
+                         "space between two), the two-plate cross-fade (continuity: connecting ideas, speaking "
+                         "across plates) or the scribble (the opt-in back-up). E99 s35")
+    if name == "plates" and page is not None:
+        missing = [k for k in ("plate", "field_plate") if not page.get(k)]
+        if missing:
+            raise ValueError(f"{where}: field=plates is the TWO-PLATE CROSS-FADE and this page carries no "
+                             f"{' and no '.join(missing)}. The page needs BOTH: plate={PAGE_FIELD_PLATES[0]!r} (the "
+                             f"generated cream page) and field_plate={PAGE_FIELD_PLATES[1]!r} (the charcoal filled "
+                             "to the deckle, cross-faded over it), with `board` the deckle's inner rectangle - the "
+                             "build that owns the assets writes all three (E99 s31: no image reaches the compiler). "
+                             "Without them, name field=soak")
+    return name
+
+
 def page_form_spec(value: str, builder: str, where: str) -> dict:
     """The row's form, refused BY NAME when this page's builder cannot draw it (`ledger_page.form_error`)."""
     name = str(value).partition(":")[0]
@@ -3192,6 +3232,15 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
                              "plane per page. A form draws the chart on its own plane; plane= turns the whole "
                              "page as a card (P58 T4). Keep one: drop plane=, or drop form=")
         page["form"] = spec
+    fld = opts.pop("field", None)
+    if fld is not None:
+        # E99 s35: the page's GROUND, authored by the sentence's job. A LEDGER PAGE option - a plate is a picture and
+        # IS its own ground - and written on the page only when the row names it, so a page that names none is
+        # byte-identical (and a `field` key that reached the page from elsewhere, as a golden fixture's does, stands).
+        if world.get("kind") != SPECIES_LEDGER:
+            raise ValueError(f"{plate_id!r}: field= is a LEDGER PAGE option - it names the GROUND a page's charcoal "
+                             "arrives on (E99 s35); a plate is a picture and is its own ground")
+        world["page"]["field"] = page_field_spec(str(fld), world["page"], repr(plate_id))
     world.update(opts)   # idle (E49), arrive / mass (P47 T1), use (E61) - written only when the row names them
     if thens:   # P48 T4: the other charts this page can become, each a full spec built at load
         if world.get("kind") != SPECIES_LEDGER:

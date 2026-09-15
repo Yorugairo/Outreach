@@ -2590,22 +2590,64 @@
       "id": "p58-hg3-extruded-bar-leave",
       "ids": [
         "P58 HG3",
-        "E99 s4"
+        "E99 s4",
+        "P61 HG3"
       ],
-      "kind": "owed",
-      "was_kind": "look",
+      "kind": "watch",
+      "was_kind": "owed",
       "title": "The extruded bar's leave breaks its shapes down more",
-      "owed": "E99 s4 - the operator: the shapes in form-extruded-bar@proof-leave break down more, to look like form-tilted-line@proof-leave; the agent rebuilds the leave and returns it as a clip beside the tilted line's.",
-      "judge": "",
-      "where": [],
+      "owed": "Delivered 2026-09-15 (P61 T4a): the shed, the re-baselined golden, the clip pair",
+      "judge": "The extruded bar's leave beside the tilted line's, as clips (27.6-30.0 s of each golden; the page vortex runs 28.0-30.0). Before, each prism was carried off whole with its dark side welded on; now each prism's shadow, side and cap part on the vortex's own map at their own lead, spin and drift. Do the prism's shapes break down enough now? Approve, or say 'more'.",
+      "where": [
+        {
+          "label": "the extruded bar's leave golden, re-baselined (28.5 s)",
+          "path": "content/video_engine/tests/golden/frames/form-extruded-bar@proof-leave.png"
+        },
+        {
+          "label": "the tilted line's leave golden, the look the prism was asked to resemble (28.5 s)",
+          "path": "content/video_engine/tests/golden/frames/form-tilted-line@proof-leave.png"
+        },
+        {
+          "label": "the shed (SHED dials, lpShedPrisms) - engine :6661-6712, the call :10450",
+          "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs"
+        },
+        {
+          "label": "the measured acceptance: no two faces of one prism share a transform at the leave instant",
+          "path": "content/video_engine/tests/test_chart_forms_2_5d.py"
+        }
+      ],
       "options": [],
-      "recommendation": null,
+      "recommendation": "Approve. Read side by side the two are now the same kind of event - a page coming apart into pieces that each go their own way - and each piece is still a hard-edged face of a prism (doc 29 s1.2 holds).",
       "blocks": "P58 HG3",
       "status": "open",
       "ruling": null,
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md:2927-2934 (E99 s4)",
-        "docs/content-video-engine/review-answers.jsonl (p58-hg3-chart-forms)"
+        "docs/content-video-engine/review-answers.jsonl (p58-hg3-chart-forms)",
+        "docs/content-video-engine/samples/scene-evidence-engine.mjs:6661-6712,10450",
+        "content/video_engine/tests/test_chart_forms_2_5d.py:246-285"
+      ],
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "the extruded bar's leave, rebuilt: each prism's faces part and go their own way (27.6-30.0 s)",
+          "surface": "form-extruded-bar",
+          "aspect": "16:9",
+          "t0": 27.6,
+          "t1": 30.0,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "the tilted line's leave - the look the operator asked the prism to resemble (27.6-30.0 s)",
+          "surface": "form-tilted-line",
+          "aspect": "16:9",
+          "t0": 27.6,
+          "t1": 30.0,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        }
       ]
     },
     {
@@ -2715,22 +2757,81 @@
       "id": "p58-hg3-forms-mount-not-scribble",
       "ids": [
         "P58 HG3",
-        "E99 s18"
+        "E99 s18",
+        "E99 s35",
+        "P61 HG4"
       ],
-      "kind": "owed",
-      "title": "The chart forms: a charcoal mount, no scribble clearing to cream",
-      "judge": "Owed by the agent - E99 s18: a formed page is introduced by mounting the charcoal, and its leave does not clear its scribble lines to cream",
-      "where": [],
+      "kind": "watch",
+      "title": "The chart forms: the soak or the cross-fade by the sentence's job, the leave by the soak",
+      "judge": "Three clips on the formed pages. The CROSS-FADE arrival (the charcoal deckle fades in over the cream page, 0-8 s of the tilted line), the SOAK arrival (the seeded stains creep and flood to the deckle, 0-8 s of the extruded bar), and the cross-fade page LEAVING by the soak's recede (25.5-30.0 s) - the one leave for both fields, where before the plate faded to flat cream. Each entry is authored by the sentence's job (E99 s35). Approve, or name what still reads wrong.",
+      "where": [
+        {
+          "label": "the tilted line on the cross-fade, built (6.0 s)",
+          "path": "content/video_engine/tests/golden/frames/form-tilted-line@proof-build.png"
+        },
+        {
+          "label": "the cross-fade page mid-recede (29.6 s) - the new golden",
+          "path": "content/video_engine/tests/golden/frames/form-tilted-line@proof-recede.png"
+        },
+        {
+          "label": "the extruded bar on the soak, built (6.0 s)",
+          "path": "content/video_engine/tests/golden/frames/form-extruded-bar@proof-build.png"
+        },
+        {
+          "label": "the recede (lpPlateRecede :6705-6728, called :10472 before the drain); the grammar field=soak|plates|scribble (compiler :2929-2963)",
+          "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs"
+        },
+        {
+          "label": "the three reference clips the operator ruled on (scribble / soak / two-plate from one source)",
+          "command": "python scratchpad/assembly/t4b/render_variants.py  (the parent's scratchpad, 2026-09-15)"
+        }
+      ],
       "options": [],
-      "recommendation": null,
+      "recommendation": "Approve. The recede on the cross-fade page is one lumpy ink island with the plate's own cream paper eaten in - the soak clip's event - where the old two-plate leave was flat cream a second early. The two arrivals are the two you ruled first-class; the scribble stays the opt-in and untouched.",
       "blocks": "the item's next review",
       "sources": [
-        "docs/portable/OPERATOR-RULINGS.md (E99 s18)"
+        "docs/portable/OPERATOR-RULINGS.md (E99 s18, corrected 2026-09-15; E99 s35)",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T4b)",
+        "docs/content-video-engine/samples/scene-evidence-engine.mjs:6705-6728,10472",
+        "content/video_engine/scripts/build_scene_timeline_f.py:2929-2963",
+        "content/video_engine/tests/test_chart_forms_2_5d.py:307-382"
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": null,
-      "owed": "E99 s18: a formed page is introduced by mounting the charcoal, and its leave does not clear its scribble lines to cream"
+      "was_kind": "owed",
+      "owed": "Delivered 2026-09-15 (P61 T4b): the recede, the field grammar, the two entries as cards, the goldens, the three clips",
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "the CROSS-FADE arrival - continuity: the charcoal deckle fades in over the cream page (0-8 s)",
+          "surface": "form-tilted-line",
+          "aspect": "16:9",
+          "t0": 0.0,
+          "t1": 8.0,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "the SOAK arrival - a new idea: the seeded stains creep and flood to the deckle (0-8 s)",
+          "surface": "form-extruded-bar",
+          "aspect": "16:9",
+          "t0": 0.0,
+          "t1": 8.0,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "the CROSS-FADE page LEAVING by the soak's recede - the one leave, both fields (25.5-30.0 s)",
+          "surface": "form-tilted-line",
+          "aspect": "16:9",
+          "t0": 25.5,
+          "t1": 30.0,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        }
+      ]
     },
     {
       "id": "p55-gallery-speed-and-motion",

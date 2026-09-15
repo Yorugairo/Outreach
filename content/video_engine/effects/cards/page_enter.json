@@ -817,6 +817,132 @@
         "today": true,
         "why": "compiles; refused on the operator's watch 2026-09-08 and kept only as an opt-in"
       }
+    },
+    {
+      "id": "page_enter:field_soak",
+      "axis": "page_enter",
+      "token": "field_soak",
+      "title": "The soak field (a page introducing an idea)",
+      "aliases": [
+        {
+          "name": "the soak field",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3156"
+        }
+      ],
+      "does": "Beat 3 of the page's arrival: seeded charcoal stains creep and then flood through the cream to the deckle, deepening where they overlap, and end on the crisp rect. The eye has more to watch than a cross-fade gives it.",
+      "when": "When we are trying to maintain continuity, connecting ideas, speaking across plates i think the cross-fade is the answer, when we are building an idea or introducing a new idea or looking to fill space to separate ideas, the soak is the transition.",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:3156",
+      "author": {
+        "key": "`;field=soak` on a ledger page - or no field at all: the soak is the engine's own default",
+        "example": "'ledger:ev-x:bars;field=soak'",
+        "example_source": null,
+        "check": "none"
+      },
+      "phases": [
+        {
+          "name": "the stains creep",
+          "does": "each seeded stain grows from its own lag on the field clock, deepening where two overlap",
+          "trigger": "the roll and the savor behind it (the scene's first frame on a mount)",
+          "dials": {
+            "FIELD": "2.4",
+            "SEEPS": "9"
+          }
+        },
+        {
+          "name": "the ground closes",
+          "does": "the crisp charcoal rect takes over the last fifth, so the ground is flat before the title inks",
+          "trigger": "b 0.78 of the field clock",
+          "dials": {
+            "rect": "0.78 -> 1.0"
+          }
+        }
+      ],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "buildLedger",
+        "also": [
+          "lpPlateRecede"
+        ],
+        "note": "the soak branch of the field beat; the same stains are what the page's leave recedes"
+      },
+      "doctrine": [
+        "E99 s35",
+        "E22"
+      ],
+      "status": "wired",
+      "implicit": true,
+      "proof": {
+        "golden": "form-extruded-bar",
+        "test": "content/video_engine/tests/test_chart_forms_2_5d.py::test_the_field_is_named_on_the_row_and_the_soak_is_the_default",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "implicit: the ground of every page that names no field"
+      }
+    },
+    {
+      "id": "page_enter:field_plates",
+      "axis": "page_enter",
+      "token": "field_plates",
+      "title": "The two-plate cross-fade field (a page keeping continuity)",
+      "aliases": [
+        {
+          "name": "the two-plate cross-fade",
+          "source": "docs/portable/OPERATOR-RULINGS.md:3156"
+        }
+      ],
+      "does": "Beat 3 of the page's arrival, the decided signature: the generated charcoal-filled deckle fades in over the generated cream page on the field clock; the ground arrives smooth and whole and the chart draws inside the deckle's board.",
+      "when": "When we are trying to maintain continuity, connecting ideas, speaking across plates i think the cross-fade is the answer, when we are building an idea or introducing a new idea or looking to fill space to separate ideas, the soak is the transition.",
+      "when_source": "docs/portable/OPERATOR-RULINGS.md:3156",
+      "author": {
+        "key": "`;field=plates` on a ledger page whose build gave it plate + field_plate + board",
+        "example": "'ledger:ev-x:bars;field=plates'",
+        "example_source": null,
+        "check": "none"
+      },
+      "phases": [
+        {
+          "name": "the inked plate arrives",
+          "does": "the charcoal filled to the deckle fades in over the cream page on expoOut of the field clock",
+          "trigger": "the roll and the savor behind it",
+          "dials": {
+            "FIELD": "2.4"
+          }
+        }
+      ],
+      "blends": [],
+      "options": [],
+      "dials": null,
+      "lives": {
+        "form": "inline",
+        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+        "symbol": "buildLedger",
+        "also": [
+          "lpPlateRecede"
+        ],
+        "note": "the fieldPlate branch of the field beat (page.field_plate over page.plate); it LEAVES by the soak's recede, never by fading back out (E99 s35)"
+      },
+      "doctrine": [
+        "E99 s35",
+        "E22",
+        "41 s2"
+      ],
+      "status": "wired",
+      "implicit": true,
+      "proof": {
+        "golden": "form-tilted-line",
+        "test": "content/video_engine/tests/test_chart_forms_2_5d.py::test_a_cross_fade_page_leaves_by_the_soaks_recede",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": "implicit: the page's own plate keys; `;field=plates` is the row's way to ask"
+      }
     }
   ]
 }

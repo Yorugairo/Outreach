@@ -6641,6 +6641,9 @@ async function mount(doc) {
     side.style.filter = "brightness(" + EXTRUDE.SIDE_LIGHT + ")";
     topFace.style.filter = "brightness(" + EXTRUDE.CAP_LIGHT + ")";
     const clip = (y) => (o.neg ? Math.max(o.base, y) : Math.min(o.base, y));
+    /* P61 T4a: each face's own centre in the chart's units, written by `set` - the pivot its leave turns about. A
+       parallelogram's bounding-box middle is the very point the drain measures, so this is the face's own home in it. */
+    const home = [[0, 0], [0, 0], [0, 0]];
     const set = (k) => {
       const hk = Math.max(0, o.h * k), tip = o.neg ? o.base + hk : o.base - hk, on = hk > 0.5;
       topFace.setAttribute("points", pPts([[o.x, tip], [x2, tip], [x2 + v[0], tip + v[1]], [o.x + v[0], tip + v[1]]]));
@@ -6650,10 +6653,85 @@ async function mount(doc) {
                                           [x2 + sx, clip(o.base + sy)], [o.x + sx, clip(o.base + sy)]]));
       topFace.setAttribute("opacity", on ? 1 : 0); side.setAttribute("opacity", on ? 1 : 0);
       shadow.setAttribute("opacity", on ? EXTRUDE.SHADOW_A : 0);
+      home[0] = [o.x + o.bw / 2 + sx, (clip(tip + sy) + clip(o.base + sy)) / 2];
+      home[1] = [x2 + v[0] / 2, (tip + o.base) / 2 + v[1] / 2];
+      home[2] = [o.x + o.bw / 2 + v[0] / 2, tip + v[1] / 2];
     };
     set(0);
-    return { set, depth: D, vec: v, tint: (col) => { side.style.fill = col; topFace.style.fill = col; },
+    /* P61 T4a - THE PRISM'S LEAVE, FACE BY FACE (E99 s4, the operator on the pair of proof frames: *"would like to
+       see the shapes break down more in form-extruded-bar@proof-leave to look more similar to
+       form-tilted-line@proof-leave"*).
+         WHY THE BLOCK READ AS ONE. The tilted line's leave decomposes because its stroke is re-drawn POINT BY POINT
+       down the drain (`lpSpiral`'s noodle), so one mark becomes many arcs at many radii. The prism's three polygons
+       are three particles of the SAME drain sitting a few px apart, and the vortex map is smooth there - three
+       neighbours travel as one rigid body, which is the block "fading as one" the operator read.
+         WHAT IT IS NOW. Each face is its own piece of the same whirl: ahead of its neighbours by its own LEAD, so
+       the three enter the drain at three depths and part; tumbling by its own SPIN about its own centre; drifting
+       off the prism's axis along its own bearing (the shadow away from the light, the side across it, the cap along
+       it). ONE map (`lpVortex`) and ONE clock (`spiralClocks`) - no second state, no new element, no new geometry:
+       a pure function of t, so a seek lands on the frame a playthrough lands on.
+         WHAT IT IS NOT. The front face is the flat page's own `.bar` rect and is NOT touched by any of this - it
+       rides the drain exactly as the flat page's bar does, and the cap, the side and the cast shadow peel off it.
+       That is the invariant CAPABILITIES:147 carries (M25/M28 read identical rows flat vs formed) held at the leave. */
+    const dirs = [[-v[0], -v[1]], [v[1], -v[0]], [v[0], v[1]]];
+    const shed = (u, P) => {
+      if (!(u > 0) || !P) return;
+      [shadow, side, topFace].forEach((el, j) => {
+        const uj = sp01(u * (1 + SHED.LEAD[j])), h = home[j], d = SHED.DRIFT[j] * u;
+        const q = lpVortex(h[0], h[1], P.cChart, P.Rchart, uj);
+        el.style.transformOrigin = ""; el.style.transform = "";
+        el.setAttribute("transform", "translate(" + (dirs[j][0] * d).toFixed(2) + " " + (dirs[j][1] * d).toFixed(2) + ") "
+          + lpVortexSvg(q, h[0], h[1]) + " rotate(" + (SHED.SPIN[j] * u).toFixed(2) + " " + h[0].toFixed(2) + " " + h[1].toFixed(2) + ")");
+      });
+    };
+    return { set, shed, depth: D, vec: v, tint: (col) => { side.style.fill = col; topFace.style.fill = col; },
              boxes: () => [topFace.getBBox ? topFace.getBBox() : null, side.getBBox ? side.getBBox() : null] };
+  };
+  /* the three dials of that leave, one entry per face in PAINT order (shadow, side, cap), so no two pieces of one
+     prism share a depth in the drain, a spin or a bearing. Ours, not findings (42 s42.5's rule for a dial). */
+  const SHED = Object.freeze({
+    LEAD: [0.12, 0.30, 0.52],   /* the share of the drain each face runs AHEAD by: the cap is deepest in first, the shadow last */
+    SPIN: [-150, 220, 340],     /* ... the extra degrees it tumbles about its OWN centre over the whole drain */
+    DRIFT: [2.4, 3.2, 4.4],     /* ... and how many of the prism's own depths it drifts off the axis, on its own bearing */
+  });
+  /* THE LEAVE'S SLOT. Called from `paintLedger` immediately AFTER `lpSpiral`, on the SAME clock and the SAME
+     particle cache - two reasons, both about being a pure function of t:
+       - the drain measures every particle's home the first frame it is ON (`lpParticles`, lazily). Running after it
+         means the faces are always at home when that measurement is taken - on a direct seek to any instant as much
+         as on a playthrough - so the two agree to the pixel;
+       - the vortex writes the faces' `transform` as it writes every chart child's; the shed is the last word on the
+         three it owns, and writes nothing at all while the drain is shut (uc === 0), which is when `lpSpiral` itself
+         clears them. A page that named no form has no `ex` on any bar and takes none of this. */
+  /* P61 T4b - A TWO-PLATE PAGE LEAVES BY THE SOAK'S RECEDE (E99 s35, on the three field entries rendered from one
+     source: *"the leave-soak is much better than the two plate leave"*; the two-plate cross-fade and the soak are
+     both first-class ARRIVALS, chosen by the sentence's job, but there is only ONE leave).
+       WHAT IT WAS. A page that arrived by the cross-fade (`page.plate` + `page.field_plate`, doc 41's decided
+     signature) left by fading its inked plate out to the cream one: a linear opacity ramp over `RECT_FADE` with
+     nothing to watch, and the cream was there before the drain had turned (the reference clip
+     `formed-page-leave-twoplate.mp4` is flat cream a second in, where the soak's is still receding).
+       WHAT IT IS. It leaves by the SOAK's own recede, and no new mechanism is written for that: the procedural
+     field is BUILT for a two-plate page already - the seeded seeps and the crisp rect are made whatever the field
+     is, and only their display is off while the inked plate carries the ground (`:6413`). So the drain has only to
+     let them stand again. From the frame the drain OPENS they do - under a plate that is still opaque, so not one
+     frame of the arrival or of the hold moves - and phase two then fades the plate and the crisp rect together on
+     the same `RECT_FADE`, uncovering the seeps, and carries them down the very vortex the soak page's ride.
+       WHY HERE and not in `lpSpiral`: the drain MEASURES the field's box the first frame it is on (`lpParticles`),
+     so the field has to be standing by then - this runs immediately before it. `uc > 0 || uf > 0` is that same
+     frame's test, so the two agree by construction. A page with no `field_plate` takes none of this, which is why
+     every soak and scribble page's leave is what it was to the byte. */
+  const lpPlateRecede = (st, scene, t, pg) => {
+    if (!st.fieldPlate || !st.field) return;
+    const a = scene.span ? scene.span[0] : 0, z = scene.span ? scene.span[1] : Infinity;
+    const { uc, uf } = spiralClocks(t, a, z, pg.exit, pg.enter);
+    st.field.style.display = (uc > 0 || uf > 0) ? "" : "none";
+  };
+  const lpShedPrisms = (st, scene, t, pg) => {
+    const S = (st.states && st.states[st.active | 0]) || st;
+    if (!S.parts || !(S.bars || []).length) return;
+    const a = scene.span ? scene.span[0] : 0, z = scene.span ? scene.span[1] : Infinity;
+    const { uc } = spiralClocks(t, a, z, pg.exit, pg.enter);
+    if (!(uc > 0)) return;
+    for (const bb of S.bars) if (bb.ex && bb.ex.shed) bb.ex.shed(uc, S.parts);
   };
   /* THE TILTED PLANE (`;form=tilted_line`). The compiler resolves the four corners exactly as `plane=` does - one
      tilt, one geometry, one refusal (build_scene_timeline_f.page_form_spec) - and the player keeps ONE projective
@@ -10391,7 +10469,9 @@ async function mount(doc) {
         + idleCssFor("pill", pg.idle === "none" ? "none" : undefined, t, st.seed, 20 + (st.badges || []).indexOf(bd));   /* E49: each pill at its own phase */
     }
     paintPerform(st, scene, t, pg);   /* P47 T2: the bracket, the retitle, the relight - on the page, on the word */
+    lpPlateRecede(st, scene, t, pg);   /* P61 T4b: a two-plate page's field stands again the moment the drain opens - BEFORE it measures */
     lpSpiral(st, scene, t, pg);   /* the retract at the scene's end; the spiral entry at its start */
+    lpShedPrisms(st, scene, t, pg);   /* P61 T4a: ... and the prisms come apart in that same drain - AFTER it, so the drain's particle cache is always taken from faces at home */
   };
 
   /* ================= MOTION MENU species (doc 29 s9.27; P35 T6 / T7) =================

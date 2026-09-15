@@ -3002,8 +3002,10 @@ charcoal is a much better look than the scribble drawing. The page at a depth bu
 tilted plane line i think i can only envision one use case, and that's to share a chart and then another same or similar chart with 1
 change like time axes or company (two stock charts for example) so it's not totally useless, i think your recommendations are
 probably right. What does keep throw=depth as it is mean?"* Apply: the HG3 sheet's recommendations stand (the prism taken as an opt-in
-page option; `throw=depth` kept as the growth law with the pair refusal); a formed page's leave does not clear its scribble lines to
-cream, and a form is introduced by mounting the charcoal rather than by the scribble drawing; the page building at a depth is not yet
+page option; `throw=depth` kept as the growth law with the pair refusal); a form is introduced by mounting the charcoal (the soak or the
+two-plate cross-fade, by the sentence's job - E99 s35) rather than by the scribble drawing, which stays an opt-in back-up;
+[corrected 2026-09-15: this line first read "a formed page's leave does not clear its scribble lines to cream" and P61 T4b took
+it as keeping the scribbles - the operator: the scribble is a back-up function; with the mount there is nothing to clear]; the page building at a depth is not yet
 valuable; the tilted line's one use is a pair of the same or a near-identical chart that differs in one thing (the time axis, the
 company).
 
@@ -3150,3 +3152,19 @@ appearing from nowhere) and sees it as meant (the motion has a direction and a r
 transforms; the labels and titles may morph glyph by glyph or be rewritten, and the choice is made by what reads, measured in T1.
 `melt:gather` (and every P61 flag) stays off on the approved Japan short; its re-render is a later item on the record, not a P61
 acceptance.
+
+**E99 s35 - The soak and the two-plate cross-fade are BOTH first-class field entries, chosen by the sentence's job; the leave is the
+soak's recede; the scribble is the opt-in back-up (P61 T4b, corrects s18's Apply).** Shown the formed page rendered three ways from one
+source (scribble / soak / the generated cream plate with the charcoal plate cross-faded over it), 2026-09-15: *"the leave-soak is much
+better than the two plate leave, but my wife and i are split on the cross-fade. The cross-fade is smooth, the soak gives the eye more to
+watch. I think they should both be first class effects. When we are trying to maintain continuity, connecting ideas, speaking across
+plates i think the cross-fade is the answer, when we are building an idea or introducing a new idea or looking to fill space to separate
+ideas, the soak is the transition."* And before it, on T4b's premise: *"why are we keeping scribbles? i thought we said the scribbles
+should be a back-up function and that it's better to use the charcoal mounting through the cream like we did for paper and steel."*
+Apply: a ledger page's field is authored by the sentence's JOB, not by its form - the two-plate cross-fade (`page.plate` +
+`page.field_plate`, doc 41's decided signature) when the page keeps continuity: connecting ideas, speaking across plates; the soak
+(`page.field = "soak"`) when the page builds or introduces a new idea, or fills space to separate ideas. Both are first-class and both
+stay rendered as clips on the record. The LEAVE is the soak's recede for both - a page that arrived by the cross-fade still leaves by the
+soak (the plate fade-out is retired as a leave). The scribble (`page.field = "scribble"`) is an opt-in back-up, never a default, and
+nothing is built for it; s18's Apply line read "does not clear its scribbles" as "keep the scribbles" - wrong, corrected there. A
+formed page (E98 s3's two forms) takes exactly this rule; T4b re-authors the form goldens on it.
