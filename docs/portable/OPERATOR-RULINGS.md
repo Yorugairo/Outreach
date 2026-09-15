@@ -3086,3 +3086,34 @@ plate prompt paints a torn edge (the washi order asked for "a soft deckle" and g
 washi still as P50 T7's direction, held in quarantine for the operator's frame read, each with an intake record and its measured
 surfaces (`measure_embed_quads.py`); the washi still is retired. The engine goldens still draw the flat hex page, not the generated
 mount - the richer look is the target, not what the goldens show.
+
+**E99 s29 - Four split plates approved; DualScreen1 turned down (P50 T7).** In the session, after the five were measured: *"sounds like dualscreen 1 shouldn't make it and the others should be approved"*.
+Apply: `art-embed-split-tv-paper`, `art-embed-split-tv-charcoal`, `art-embed-split-tv-desk` and `art-embed-dual-tv-laptop-2` leave
+quarantine - approved on disk; the stills themselves stay out of git (E99 s31), their intake records and layers files are the record;
+`art-embed-dual-tv-laptop-1` is rejected (its laptop screen never measured under the 1.0 px residual, and DualScreen2 carries the
+same composition with a measured laptop) - its still stays untracked, its intake record says rejected, and no build names it.
+
+**E99 s30 - The on-1s threshold is 154 px/s, the cinema-parity reference the evidence confirms; 250 and 300 were never the operator's
+(P53 T5; R26-64, R26-85).** In the session: *"I didn't ever set 250 and 300, those were either set or came from the reference. That's
+why you did research to find what we should actually use."* On the recommendation: *"p53 sounds right, gotta start with what the
+evidence says then review"*. Apply: `CADENCE.ON1_PX_S` is 154 px/s - RED's pan rule, 1/7 picture width per second on the 1080 stage
+at 24 fps with a 180-degree shutter, the one number the verification CONFIRMED
+(`docs/research/runs/strobe_stop_motion/VERIFICATION-2026-09-13.md`); 250 came from the stop-motion brief and the "OPERATOR-SET"
+labels on it and on `STROBE_PX_S` 300 were false and are removed. 300 keeps its value only as the constant a future declared-cadence
+gate reads, with no evidence behind it: the law is speed x edge sharpness (Watson 1986), so that gate needs a sharpness term before
+a ceiling. Every shipped throw runs 1188-2479 px/s, so no shipped hold changes. The number is a starting point to REVIEW on real
+motion, not a closed question.
+
+**E99 s31 - Approved images stay on disk, never in git; the 24 prop cutouts are approved to render; research, props and icons are
+indexed like the docs.** In the session, told that `docs_find "prop catalogue"` finds nothing because the index covers `docs/`
+only: *"that sounds like a search problem, no wonder it's still hard for us to find things sometimes. Yes they should be approved to
+render, no, i don't think they should go into the repo, i thought we learned that putting plate stills in the repo was a mistake?"*
+Then: *"Research should be indexed the same as docs, and our icon and props should also be"* (`content/video_engine/assets/props`,
+`content/video_engine/assets/icons`). Earlier: *"gemini cut out the props and indexed them, i verified accurate tagging"*. Apply:
+(1) approval moves a still or a cutout out of QUARANTINE, not into git - the image stays on disk under the `.gitignore` image block
+(generated imagery is not source, not byte-reproducible, and `.git` was 19GB), and the committed record is its intake/order json,
+its layers file or its manifest; no brief ever force-adds an image (a force-add of the four split stills on the `a1b3be3`
+precedent was stopped before it committed - that precedent is the mistake); (2) Gemini's 24 prop cutouts from Propsheets 1 and 2
+(`content/video_engine/assets/props/manifest.json`, `finance_props_catalog.v1`) are approved to render, their tags verified by the
+operator; (3) the retrieval layer covers research runs the way it covers docs, and the prop and icon libraries are searchable by
+name, tag and category from `docs_find` - an asset that exists and cannot be found is treated as not existing.

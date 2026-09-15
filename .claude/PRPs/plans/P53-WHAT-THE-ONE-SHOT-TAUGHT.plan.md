@@ -206,7 +206,7 @@ by the parent in every case - a subagent's PASS is not evidence (E71).
   agent hit its turn limit before validating; the parent synced and read the frames. Node tests 12 pass.
 
 ### T5: R26-64's two dials
-- Status: done for (A) and (B); the strobe row is placed, its threshold is a human gate
+- Status: complete (2026-09-14) - (A) and (B) done; the threshold's human gate RULED E99 s30: the on-1s threshold is 154 px/s, the cinema-parity reference the strobe verification confirmed (250 and 300 were never the operator's)
 - Owner: implementation_luna
 - Depends on: none
 - Write set: `content/video_engine/scripts/kinetics/stopaction.mjs`, `content/video_engine/scripts/gate_motion_density.py`, `content/video_engine/tests/test_kinetics_stopaction.py` (or the test beside the module), `docs/content-video-engine/47-FINDINGS-TO-CHECKS.md`
