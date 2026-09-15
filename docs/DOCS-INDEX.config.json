@@ -25,6 +25,8 @@
     "docs/EFFECTS-CATALOG.md",
     "docs/RESEARCH-LEDGER.jsonl",
     "docs/RESEARCH-LEDGER.md",
+    "docs/ASSETS-INDEX.jsonl",
+    "docs/ASSETS-INDEX.md",
     "content/video_engine/projects/**/build-*/**",
     "content/video_engine/projects/**/*-GATES.md",
     "content/video_engine/projects/**/*-SCREENS.md",

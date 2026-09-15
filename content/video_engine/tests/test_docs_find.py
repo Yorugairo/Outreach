@@ -54,9 +54,15 @@ CAPABILITY = {"id": "widget-engine", "name": "Widget engine", "section": "Render
               "state_note": "LIVE", "proof": [], "cards": ["dock_payload:widget"], "rulings": [],
               "backlog": [], "form": "four", "terms": ["widget", "draws"]}
 CAP_DOC = "docs/content-video-engine/CAPABILITIES.md"
+ASSET = {"library": "props", "id": "prop-gadget-v1", "name": "Gadget prop", "category": "macro",
+         "tier": "prop", "kind": None, "tags": ["gadget"], "context": "a gadget on the desk",
+         "path": "content/video_engine/assets/props/cutouts/prop-gadget-v1.png", "size": "2x2",
+         "sha256": "aa", "catalogue": "content/video_engine/assets/props/CATALOGUE.md",
+         "on_disk": True, "render_eligible": None}
 
 RECORDS = {
     "docs/CAPABILITIES-INDEX.jsonl": CAPABILITY,
+    "docs/ASSETS-INDEX.jsonl": ASSET,
     "docs/EFFECTS-CATALOG.jsonl": EFFECT,
     "docs/DOCS-MANIFEST.jsonl": MANIFEST,
     "docs/DOCS-INDEX.jsonl": INDEX,
@@ -77,7 +83,7 @@ EXPECTED = [
     "[animation] docs/alpha.md:77 — widgetEase — w(t) = t^2",
     "[craft] docs/alpha.md:9 — the widget beat — what the widget does",
 ]
-SUMMARY = ("8 hit(s) in capabilities, effects, manifest, index, topics, gates, animation, craft; "
+SUMMARY = ("8 hit(s) in capabilities, assets, effects, manifest, index, topics, gates, animation, craft; "
            f"next: sed -n 12p {CAP_DOC}")
 
 
@@ -150,7 +156,7 @@ def test_the_limit_caps_the_total_and_stops_scanning_further_layers(capsys, tree
     # Assert: two layers answered, the rest were never opened, and the count says it was cut;
     # neither hit has a line, so the effect's card is the window
     assert lines == ["[capabilities] not built (run build_docs_layers.py --write)",
-                     EXPECTED[1], EXPECTED[2], "2+ hit(s) in capabilities, effects, manifest; "
+                     EXPECTED[1], EXPECTED[2], "2+ hit(s) in capabilities, assets, effects, manifest; "
                      'next: python content/video_engine/scripts/effects_card.py "dock_payload:widget"']
 
 
@@ -165,7 +171,7 @@ def test_an_effects_hit_first_never_suppresses_the_window_of_a_lined_hit(capsys,
 
     # Assert
     assert lines[1] == EXPECTED[1]
-    assert lines[-1] == ("3+ hit(s) in capabilities, effects, manifest, index, topics, gates; "
+    assert lines[-1] == ("3+ hit(s) in capabilities, assets, effects, manifest, index, topics, gates; "
                          "next: sed -n 1,32p content/video_engine/scripts/t.py")
 
 
@@ -242,7 +248,7 @@ def test_a_layer_that_is_not_built_reports_itself_and_never_crashes(capsys, tree
     # Assert: the note sits in the layer's own place in the order, and is not counted as a hit
     assert lines[5] == "[gates] not built (run build_docs_layers.py --write)"
     assert lines[-1].startswith(
-        "7 hit(s) in capabilities, effects, manifest, index, topics, gates, animation, craft;")
+        "7 hit(s) in capabilities, assets, effects, manifest, index, topics, gates, animation, craft;")
 
 
 def test_a_corrupt_record_is_skipped_rather_than_raised(capsys, tree):
@@ -274,7 +280,7 @@ def test_no_hits_still_names_the_layers_it_searched(capsys, tree):
     lines = run(capsys, tree, "no-such-term-anywhere")
 
     # Assert
-    assert lines == ["0 hit(s) in capabilities, effects, manifest, index, topics, gates, animation, craft"]
+    assert lines == ["0 hit(s) in capabilities, assets, effects, manifest, index, topics, gates, animation, craft"]
 
 
 def test_json_carries_the_same_hits_plus_the_window(capsys, tree):
@@ -288,7 +294,7 @@ def test_json_carries_the_same_hits_plus_the_window(capsys, tree):
     assert payload["missing"] == []
     assert payload["layers_scanned"] == list(DF.ALL_ORDER)
     assert payload["next"] == f"sed -n 12p {CAP_DOC}"
-    assert [hit["layer"] for hit in payload["hits"]] == list(DF.ALL_ORDER)
+    assert [hit["layer"] for hit in payload["hits"]] == [n for n in DF.ALL_ORDER if n != "assets"]
     assert payload["hits"][3] == {
         "layer": "index", "path": "docs/alpha.md", "line": 30, "name": "Widget section",
         "snippet": "The lead about widgets.", "line_text": EXPECTED[3],
@@ -367,3 +373,60 @@ def test_the_real_tree_reaches_the_doctrine_document_inside_a_five_hit_budget(ca
     assert all(len(line) <= MAX_LINE for line in lines)
     assert lines[-1].startswith("5+ hit(s) in ")
     assert "; next: sed -n " in lines[-1]
+
+
+def test_the_assets_layer_is_searched_right_after_capabilities(capsys, tree):
+    # Arrange / Act
+    lines = run(capsys, tree, "gadget prop", "--limit", "5")
+
+    # Assert
+    assert DF.ALL_ORDER[:2] == ("capabilities", "assets")
+    assert lines[0].startswith("[assets] content/video_engine/assets/props/cutouts/prop-gadget-v1.png")
+    assert "catalogue content/video_engine/assets/props/CATALOGUE.md" in lines[0]
+
+
+TAGGED_ASSET = {**ASSET, "id": "prop-fed-v1", "name": "Fed building", "tags": ["federal-reserve"],
+                "context": "the central bank"}
+
+
+def test_a_plain_spaced_query_matches_a_hyphenated_tag(capsys, tree):
+    # Arrange
+    (tree / "docs/ASSETS-INDEX.jsonl").write_text(json.dumps(TAGGED_ASSET) + "\n", encoding="utf-8")
+
+    # Act
+    lines = run(capsys, tree, "federal reserve", "--layer", "assets")
+
+    # Assert
+    assert lines[0].startswith("[assets] content/video_engine/assets/props/cutouts/prop-gadget-v1.png — Fed building")
+    assert lines[-1] == "1 hit(s) in assets"
+
+
+def test_a_regex_query_compiles_exactly_as_before(capsys, tree):
+    # Arrange / Act
+    pattern = DF.build_pattern(r"\bG99\b")
+    lines = run(capsys, tree, r"\bG99\b", "--layer", "gates")
+
+    # Assert
+    assert pattern.pattern == r"\bG99\b"
+    assert DF.build_pattern("federal-reserve").pattern == "federal-reserve"     # a hyphen is not plain
+    assert lines == [EXPECTED[5], "1 hit(s) in gates; next: sed -n 1,32p content/video_engine/scripts/t.py"]
+
+
+def test_all_words_answers_only_when_the_phrase_hits_nothing(capsys, tree):
+    # Arrange / Act: no record says "gadget catalogue", but the asset carries both words
+    lines = run(capsys, tree, "gadget catalogue", "--layer", "assets")
+
+    # Assert
+    assert lines[0].startswith("[assets] content/video_engine/assets/props/cutouts/prop-gadget-v1.png")
+    assert lines[-1] == "1 hit(s) in assets (all words)"
+
+
+def test_a_phrase_that_hits_never_falls_back(capsys, tree):
+    # Arrange / Act
+    lines = run(capsys, tree, "gadget prop", "--layer", "assets")
+    payload = json.loads("\n".join(run(capsys, tree, "gadget prop", "--layer", "assets", "--json")))
+
+    # Assert
+    assert lines[-1] == "1 hit(s) in assets"
+    assert "(all words)" not in "\n".join(lines)
+    assert payload["all_words"] is False

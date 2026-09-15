@@ -11,9 +11,10 @@ needs the locator and one line of context, then a `sed -n` window where it decid
 
     python content/video_engine/scripts/docs_find.py --capabilities --state LIVE --section chart
 
-Default `--layer all` scans capabilities -> effects -> manifest -> index -> topics -> gates -> animation ->
-craft, cheapest first (the capabilities index answers "do we have X, where, is it live, what proves it",
-then the effects catalogue "what is it called, what does it do", before any document), and
+Default `--layer all` scans capabilities -> assets -> effects -> manifest -> index -> topics -> gates ->
+animation -> craft, cheapest first (the capabilities index answers "do we have X, where, is it live, what
+proves it", the assets index "is there a prop, icon or glyph for it", then the effects catalogue "what is
+it called, what does it do", before any document), and
 stops once `--limit` hits are printed. Two rules keep the cheap layer from eating the whole budget and the
 research bundle from burying the doctrine, because both make the cap useless in practice:
 
@@ -24,13 +25,20 @@ research bundle from burying the doctrine, because both make the cap useless in 
     `content/video_engine/sources/` research bundle is the background - and file order breaks ties.
 
 The citation graph (`cites`) is not in `all`: it answers "what cites section Y", which is a follow-up, not a
-first lookup. Ask for it with `--layer cites`. `--capabilities` prints the one-screen capability list (the
+first lookup. Ask for it with `--layer cites`. The assets layer (`docs/ASSETS-INDEX.jsonl`, built by
+`build_asset_index.py` from the prop manifest, the icon catalog and the sourced glyphs under
+`content/video_engine/assets/`) matches name, id, tags, category, context and library; a hit prints the
+asset's file path and names its catalogue, and says NOT ON DISK when the catalogued file is absent - an
+asset that exists and cannot be found is treated as not existing (the operator, 2026-09-15). `--capabilities` prints the one-screen capability list (the
 lines of `docs/CAPABILITIES-INDEX.md`, by section), filtered by `--state` and `--section`. A capabilities
 hit's window is its one row (`sed -n <line>p`), since a row runs to kilobytes, and inside that layer a hit
 on the name, `what`, paths, cards or state ranks before a hit on the row's prose `terms`. A missing layer
 file prints one line and never raises; the
 term is compiled as a case-insensitive regex and falls back to a literal when it is not valid regex, so
-`42§42.2` and `f(t) = t^2` are searchable as typed. Standard library only.
+`42§42.2` and `f(t) = t^2` are searchable as typed. A PLAIN query (letters, digits and spaces only) reads a
+space as any run of space, hyphen or underscore, so `federal reserve` hits a `federal-reserve` tag; and when a
+multi-word plain query hits nothing as a phrase, it runs once more matching records that carry EVERY word
+(any order, any searched field) and the summary says `(all words)`. A phrase that hits never falls back. Standard library only.
 """
 from __future__ import annotations
 
@@ -127,6 +135,15 @@ def first_of(record: dict, *dotted: str) -> str:
 
 CAPABILITIES_DOC = "docs/content-video-engine/CAPABILITIES.md"
 CAPABILITIES_REL = "docs/CAPABILITIES-INDEX.jsonl"
+ASSETS_REL = "docs/ASSETS-INDEX.jsonl"
+
+
+def asset_detail(record: dict) -> str:
+    """`library kind - catalogue <path>`, flagged when the catalogued file is not on disk."""
+    kind = record.get("kind") or record.get("tier") or ""
+    missing = "NOT ON DISK - " if record.get("on_disk") is False else ""
+    head = " ".join(str(x) for x in (record.get("library"), kind) if x)
+    return f"{missing}{head} - catalogue {record.get('catalogue') or 'none'}"
 
 LAYERS: tuple[Layer, ...] = (
     Layer(
@@ -135,6 +152,14 @@ LAYERS: tuple[Layer, ...] = (
         detail_of=lambda r: f"{r.get('state') or ''} - {r.get('what') or ''}",
         path_of=lambda r: CAPABILITIES_DOC,
         line_of=lambda r: r.get("line"),
+        detail_only=True,
+        rank_by_field=True,
+    ),
+    Layer(
+        "assets", ASSETS_REL, ("name", "id", "tags", "category", "context", "library", "catalogue"),
+        name_of=lambda r: str(r.get("name") or r.get("id") or ""),
+        detail_of=asset_detail,
+        path_of=lambda r: str(r.get("path") or ""),
         detail_only=True,
         rank_by_field=True,
     ),
@@ -198,7 +223,7 @@ LAYERS: tuple[Layer, ...] = (
 )
 
 BY_NAME = {layer.name: layer for layer in LAYERS}
-ALL_ORDER = ("capabilities", "effects", "manifest", "index", "topics", "gates", "animation", "craft")
+ALL_ORDER = ("capabilities", "assets", "effects", "manifest", "index", "topics", "gates", "animation", "craft")
 CHOICES = (*(layer.name for layer in LAYERS), "all")
 
 
@@ -222,8 +247,21 @@ class Hit:
         return record
 
 
+PLAIN_QUERY = re.compile(r"[A-Za-z0-9 ]+")
+SEPARATOR_RUN = r"[\s_-]+"
+
+
+def plain_words(term: str) -> list[str]:
+    """The words of a plain query (letters, digits, spaces); empty when the query carries anything else."""
+    return term.split() if PLAIN_QUERY.fullmatch(term or "") else []
+
+
 def build_pattern(term: str) -> re.Pattern[str]:
-    """The term as a case-insensitive regex; a literal when it is not valid regex."""
+    """The term as a case-insensitive regex; a literal when it is not valid regex. A plain multi-word
+    query reads each space as any run of space, hyphen or underscore."""
+    words = plain_words(term)
+    if len(words) > 1:
+        return re.compile(SEPARATOR_RUN.join(re.escape(w) for w in words), re.IGNORECASE)
     try:
         return re.compile(term, re.IGNORECASE)
     except re.error:
@@ -245,8 +283,25 @@ def read_records(path: Path) -> Iterable[dict]:
                 yield record
 
 
-def matched_field(record: dict, layer: Layer, pattern: re.Pattern[str]) -> tuple[str, str] | None:
+class AllWords:
+    """The fallback matcher: a record hits when every word appears somewhere in its searched fields."""
+
+    def __init__(self, words: Sequence[str]) -> None:
+        self.words = tuple(w.lower() for w in words)
+
+    def search(self, text: str) -> bool:
+        low = text.lower()
+        return any(w in low for w in self.words)
+
+    def covers(self, record: dict, layer: Layer) -> bool:
+        blob = "\n".join(t for name in layer.fields for t in strings(record.get(name))).lower()
+        return all(w in blob for w in self.words)
+
+
+def matched_field(record: dict, layer: Layer, pattern: Any) -> tuple[str, str] | None:
     """The first searchable (field, string) in this record that the pattern hits, in field order."""
+    if isinstance(pattern, AllWords) and not pattern.covers(record, layer):
+        return None
     for name in layer.fields:
         for text in strings(record.get(name)):
             if pattern.search(text):
@@ -304,7 +359,7 @@ def record_hit(record: dict, layer: Layer, field_name: str, field_text: str) -> 
                compose(layer.name, locate(path, line), name, snippet))
 
 
-def scan_layer(layer: Layer, pattern: re.Pattern[str], repo: Path) -> list[Hit] | None:
+def scan_layer(layer: Layer, pattern: Any, repo: Path) -> list[Hit] | None:
     """Every hit in one layer, docs-tree paths first; None when the artifact is not built."""
     path = repo / layer.rel
     if not path.is_file():
@@ -330,6 +385,7 @@ class Result:
     scanned: list[str]
     truncated: bool
     lines: list[str]
+    all_words: bool = False
 
 
 def share_of(remaining: int, layers_left: int) -> int:
@@ -338,8 +394,18 @@ def share_of(remaining: int, layers_left: int) -> int:
 
 
 def search(term: str, layer_names: Sequence[str], repo: Path, limit: int) -> Result:
+    """The phrase first; a multi-word plain query that hits nothing runs once more on all its words."""
+    result = search_with(build_pattern(term), layer_names, repo, limit)
+    words = plain_words(term)
+    if result.hits or len(words) < 2:
+        return result
+    fallback = search_with(AllWords(words), layer_names, repo, limit)
+    fallback.all_words = True
+    return fallback
+
+
+def search_with(pattern: Any, layer_names: Sequence[str], repo: Path, limit: int) -> Result:
     """Scan the layers in order on a shared budget, then render them grouped, in the same order."""
-    pattern = build_pattern(term)
     result = Result(hits=[], missing=[], scanned=[], truncated=False, lines=[])
     found: dict[str, list[Hit]] = {}
     taken: dict[str, int] = {}
@@ -409,7 +475,8 @@ def summary_line(result: Result) -> str:
     count = f"{len(result.hits)}{'+' if result.truncated else ''}"
     scanned = ", ".join(result.scanned) or "no layers"
     window = next_window(result.hits)
-    return f"{count} hit(s) in {scanned}" + (f"; next: {window}" if window else "")
+    line = f"{count} hit(s) in {scanned}" + (f"; next: {window}" if window else "")
+    return line + (" (all words)" if result.all_words else "")
 
 
 def render_json(term: str, result: Result) -> str:
@@ -419,6 +486,7 @@ def render_json(term: str, result: Result) -> str:
         "missing": result.missing,
         "count": len(result.hits),
         "truncated": result.truncated,
+        "all_words": result.all_words,
         "next": next_window(result.hits) or None,
         "hits": [hit.as_dict() for hit in result.hits],
     }
