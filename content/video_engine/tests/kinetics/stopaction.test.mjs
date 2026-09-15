@@ -7,11 +7,17 @@ import { squashMatrix, det2 } from "../../scripts/kinetics/squash.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 
-test("the cadence rule: on 1s above 250 px/s or for a camera, on 2s below, on 3s for a background boil", () => {
-  assert.equal(cadence(300).hold, 1); assert.equal(cadence(250).hold, 2); assert.equal(cadence(40).hold, 2);
+test("the cadence rule: on 1s above 154 px/s or for a camera, on 2s below, on 3s for a background boil", () => {
+  assert.equal(cadence(300).hold, 1); assert.equal(cadence(154).hold, 2); assert.equal(cadence(40).hold, 2);
   assert.equal(cadence(10, "camera").hold, 1); assert.equal(cadence(10, "boil").hold, 3);
   assert.equal(cadence(300).fps, CADENCE.FPS); assert.equal(cadence(40).fps, CADENCE.FPS / 2); assert.equal(cadence(1, "boil").fps, CADENCE.FPS / 3);
-  assert.equal(CADENCE.ON1_PX_S, 250);
+});
+
+test("E99 s30: the on-1s threshold is the cinema-parity reference, 154 px/s (RED 1/7 picture width per second, 1080 stage, 24 fps)", () => {
+  assert.equal(CADENCE.ON1_PX_S, 154);
+  assert.equal(cadence(200).hold, 1, "200 px/s was on 2s under the old 250; it is on 1s now");
+  assert.equal(cadence(150).hold, 2, "150 px/s stays on 2s");
+  assert.equal(CADENCE.STROBE_PX_S, 300, "the unread strobe ceiling keeps its value");
 });
 
 test("the stepped clock quantises on the INTEGER frame index: round(t * fps) then floor(frame / hold)", () => {

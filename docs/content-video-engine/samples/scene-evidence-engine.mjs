@@ -1496,16 +1496,18 @@ async function mount(doc) {
      real seconds - a seek is the play. Every dial here is a starting reference (42 s42.5); HG2 tunes them by eye. */
 
   const CADENCE = Object.freeze({
-    ON1_PX_S: 250,     /* OPERATOR-SET CONSTANT (R26-64 / R26-85, 2026-09-14): the on-1s threshold. The brief's derivation is
-                          STRIPPED - its 15-arcmin limit is Braddick 1974's random-dot correspondence limit misattributed to Baker &
-                          Braddick 1985, and Watson, Ahumada & Farrell 1986 REMOVES a px/s ceiling at 12/8 fps (r_max = (w_s - w_l)/u_0 < 0)
-                          - docs/research/runs/strobe_stop_motion/VERIFICATION-2026-09-13.md. The number stays as ours: every shipped throw
-                          runs 1188-2479 px/s and the threshold has never changed a hold. Cinema-parity reference, not a dial: RED's 1/7
-                          picture width per second = 154 px/s on the 1080 stage at 24 fps WITH a 180-degree shutter */
-    STROBE_PX_S: 300,  /* OPERATOR-SET CONSTANT (R26-64, 2026-09-14): the on-2s strobe ceiling. READ BY NOTHING - `cadence()` consults
-                          ON1_PX_S only, so anything past 300 is already on 1s; it binds only where a cadence is DECLARED against the speed
-                          (a `break_cadence` burst, a boil on 3s, an authored hold) and no gate checks that case yet (R26-85's space). Kept
-                          as the constant the future gate reads; the Watson 1986 derivation it carried is stripped (see ON1_PX_S) */
+    ON1_PX_S: 154,     /* the on-1s threshold = the CINEMA-PARITY reference: RED's pan rule, 1/7 picture width per second = 154 px/s
+                          on the 1080 stage at 24 fps with a 180-degree shutter (CONFIRMED in
+                          docs/research/runs/strobe_stop_motion/VERIFICATION-2026-09-13.md). Chosen by the evidence and set 2026-09-14
+                          (E99 s30, R26-64 / R26-85, P53 T5), pending review on real motion. It replaces 250, which came from the
+                          stop-motion brief, not the operator - the brief's derivation does not hold (its 15-arcmin limit is Braddick
+                          1974's random-dot limit misattributed to Baker & Braddick 1985; Watson, Ahumada & Farrell 1986 removes a px/s
+                          ceiling at 12/8 fps). Every shipped throw runs 1188-2479 px/s, so no shipped hold changes */
+    STROBE_PX_S: 300,  /* the on-2s strobe ceiling - NOT operator-set: the number came from a derivation the verification found unsound
+                          (VERIFICATION-2026-09-13.md). READ BY NOTHING - `cadence()` consults ON1_PX_S only; only a future
+                          declared-cadence gate (a `break_cadence` burst, a boil on 3s, an authored hold; R26-85's space) would read it.
+                          No evidence-backed value exists yet: the law is speed x edge sharpness (Watson 1986), so that gate needs a
+                          sharpness term before it can state a ceiling */
     FPS: 24,           /* the base frame rate the holds are counted in (on-1s = 24, on-2s = 12, on-3s = 8) */
   });
   /* MATERIALS. m, k, c [DERIVED: the brief :226-232] -> the spring's zeta and w0 (the report Q4: dense = critically damped, no

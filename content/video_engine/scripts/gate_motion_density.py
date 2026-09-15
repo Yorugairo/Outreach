@@ -55,7 +55,7 @@ captions do NOT count - they are what a viewer reads as stillness.
   M19  build_to holds (P47 T2): the line resting at a datum   INFO   (only when a build_to is declared)
        between two caps, listed by name
   M20  the cadence rule per arrival (P47 T1): a thrown card  INFO   (only when a dock arrives by throw|land)
-       steps on 1s above 250 px/s, on 2s below
+       steps on 1s above 154 px/s, on 2s below
   M23  chart transitions (P48): every chart_to listed with  FAIL   (a page with two states and no transition;
        its clock; one inside the build beat or within 0.5s of        WARN inside the build / at the edge; ledger pages only)
        the exit WARNs; two states and no chart_to FAILs
@@ -122,9 +122,9 @@ MORPH_INVARIANTS_NAME = "morph-invariants.json"   # written by measure_morph.py 
 SRC_M17 = "P47 T3 / the brief B4 [DERIVED: :390-396]: a morph reads as one thing changing when its centroid moves <= 6 % of W, its dominant axis turns <= 15 deg and its bounding area keeps >= 60 % - measured in the player by measure_morph.py"
 STOP_FLIGHT_S = 0.45       # P47 T1 [DERIVED: stopaction.mjs STOP.FLIGHT_S] - a thrown card lands this long after its enter
 STOP_LAND_S = 0.32         # P47 T1 [DERIVED: STOP.ANTIC_S + STOP.DROP_S] - a landed card hits its spot this long after its enter
-STOP_ON1_PX_S = 250        # P47 T1 [DERIVED: CADENCE.ON1_PX_S, the brief :185-193] - faster than this steps on 1s
+STOP_ON1_PX_S = 154        # P47 T1, E99 s30 [mirrors CADENCE.ON1_PX_S: RED 1/7 picture width/s, cinema parity] - faster than this steps on 1s
 STOP_THROW_DX, STOP_THROW_DY, CARD_W_DEFAULT = 240, 160, 864   # the template's throw offsets and the .dock width, mirrored
-SRC_M20 = "P47 T1 (the brief :185-193, the cadence rule): a throw steps on 1s above 250 px/s, on 2s below - reported, not scored, until HG2 tunes it"
+SRC_M20 = "P47 T1 + E99 s30 (the cadence rule, cinema parity): a throw steps on 1s above 154 px/s, on 2s below - reported, not scored, until HG2 tunes it"
 DEPLOY_AVG_S, DEPLOY_MAX_S = 8.0, 12.0   # E50 [OPERATOR 2026-09-07]: a chart's deployed life - 6-8 s from its LAST data mark on average, 12 s at most
 DEPLOY_MIN_S = 6.0   # ... and 6 s is E50's own LOWER bound, enforced ONLY on a page that ARRIVES BUILT.
                      # E50's ceiling exists because a chart HELD static killed ep1. The floor exists for the opposite

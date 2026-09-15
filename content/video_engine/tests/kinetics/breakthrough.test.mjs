@@ -120,9 +120,9 @@ test("the burst's own speed is the TIP's travel over the run, and the rule puts 
   const cad = burstCadence(TOKYO.plot, TOKYO.lo, TOKYO.hi0, TOKYO.hi1, TOKYO.comp, TOKYO.v, TOKYO.run_s);
   assert.equal(cad.hold, 1, "on 1s: a bar crossing ~940 units/s strobes on anything slower");
   assert.equal(cad.fps, CADENCE.FPS);
-  // ... and THAT is why the cadence is read on the page's own units: the same page halved (a park) would fall
-  // to on-2s, so a parked burst would step differently from the one the page was designed on
-  assert.equal(burstCadence(TOKYO.plot / 2, TOKYO.lo, TOKYO.hi0, TOKYO.hi1, TOKYO.comp, TOKYO.v, TOKYO.run_s).hold, 2);
+  // ... and THAT is why the cadence is read on the page's own units: the same page quartered (a park; ~90 px/s, under
+  // the 154 px/s on-1s threshold, E99 s30) would fall to on-2s, so a parked burst steps differently from the designed one
+  assert.equal(burstCadence(TOKYO.plot / 4, TOKYO.lo, TOKYO.hi0, TOKYO.hi1, TOKYO.comp, TOKYO.v, TOKYO.run_s).hold, 2);
   // a slow crawl of a burst would step on 2s - the rule is the module's, not a constant here
   assert.equal(burstCadence(40, TOKYO.lo, TOKYO.hi0, TOKYO.hi1, TOKYO.comp, TOKYO.v, TOKYO.run_s).hold, 2);
 });
