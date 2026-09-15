@@ -14,7 +14,7 @@
         "required": ["asset_id", "path", "sha256", "kind", "visual_worlds", "semantic_tags", "identity_lenses", "resolution_tier", "generated", "contains_factual_text", "rights_state", "review_state", "render_eligible"],
         "properties": {
           "asset_id": {"type": "string", "pattern": "^[a-z0-9-]+$"}, "path": {"type": "string", "minLength": 1}, "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-          "kind": {"enum": ["cast_board", "component_board", "world_board", "actor", "prop", "mechanism", "evidence_template", "hero_plate"]},
+          "kind": {"enum": ["cast_board", "component_board", "world_board", "actor", "prop", "icon", "mechanism", "evidence_template", "hero_plate"]},
           "visual_worlds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["story", "mechanism", "evidence"]}},
           "semantic_tags": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string"}},
           "identity_lenses": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},

@@ -27,7 +27,10 @@ research bundle from burying the doctrine, because both make the cap useless in 
 The citation graph (`cites`) is not in `all`: it answers "what cites section Y", which is a follow-up, not a
 first lookup. Ask for it with `--layer cites`. The assets layer (`docs/ASSETS-INDEX.jsonl`, built by
 `build_asset_index.py` from the prop manifest, the icon catalog and the sourced glyphs under
-`content/video_engine/assets/`) matches name, id, tags, category, context and library; a hit prints the
+`content/video_engine/assets/`) matches name, kind, library, tags, category, context, id and catalogue, and
+ranks in that field order - a word that says what an asset IS (`kind` is `icon` for the icons library,
+`prop` for the props library; the catalog's own value is `catalog_kind`, not searched) ranks before a
+word that only sits inside another asset's id or filename; a hit prints the
 asset's file path and names its catalogue, and says NOT ON DISK when the catalogued file is absent - an
 asset that exists and cannot be found is treated as not existing (the operator, 2026-09-15). `--capabilities` prints the one-screen capability list (the
 lines of `docs/CAPABILITIES-INDEX.md`, by section), filtered by `--state` and `--section`. A capabilities
@@ -38,7 +41,8 @@ term is compiled as a case-insensitive regex and falls back to a literal when it
 `42§42.2` and `f(t) = t^2` are searchable as typed. A PLAIN query (letters, digits and spaces only) reads a
 space as any run of space, hyphen or underscore, so `federal reserve` hits a `federal-reserve` tag; and when a
 multi-word plain query hits nothing as a phrase, it runs once more matching records that carry EVERY word
-(any order, any searched field) and the summary says `(all words)`. A phrase that hits never falls back. Standard library only.
+(any order, any searched field) and the summary says `(all words)`; in a field-ranked layer the fallback
+ranks a record by the sum of each word's earliest field, so words landing in earlier fields rank first. A phrase that hits never falls back. Standard library only.
 """
 from __future__ import annotations
 
@@ -140,7 +144,7 @@ ASSETS_REL = "docs/ASSETS-INDEX.jsonl"
 
 def asset_detail(record: dict) -> str:
     """`library kind - catalogue <path>`, flagged when the catalogued file is not on disk."""
-    kind = record.get("kind") or record.get("tier") or ""
+    kind = " ".join(str(x) for x in (record.get("kind"), record.get("form")) if x) or record.get("tier") or ""
     missing = "NOT ON DISK - " if record.get("on_disk") is False else ""
     head = " ".join(str(x) for x in (record.get("library"), kind) if x)
     return f"{missing}{head} - catalogue {record.get('catalogue') or 'none'}"
@@ -156,7 +160,7 @@ LAYERS: tuple[Layer, ...] = (
         rank_by_field=True,
     ),
     Layer(
-        "assets", ASSETS_REL, ("name", "id", "tags", "category", "context", "library", "catalogue"),
+        "assets", ASSETS_REL, ("name", "kind", "library", "tags", "category", "context", "id", "catalogue"),
         name_of=lambda r: str(r.get("name") or r.get("id") or ""),
         detail_of=asset_detail,
         path_of=lambda r: str(r.get("path") or ""),
@@ -294,8 +298,18 @@ class AllWords:
         return any(w in low for w in self.words)
 
     def covers(self, record: dict, layer: Layer) -> bool:
-        blob = "\n".join(t for name in layer.fields for t in strings(record.get(name))).lower()
-        return all(w in blob for w in self.words)
+        return self.rank(record, layer) is not None
+
+    def rank(self, record: dict, layer: Layer) -> int | None:
+        """The sum of each word's earliest field index; None when a word is in no searched field."""
+        texts = [" ".join(strings(record.get(name))).lower() for name in layer.fields]
+        total = 0
+        for word in self.words:
+            first = next((i for i, text in enumerate(texts) if word in text), None)
+            if first is None:
+                return None
+            total += first
+        return total
 
 
 def matched_field(record: dict, layer: Layer, pattern: Any) -> tuple[str, str] | None:
@@ -359,6 +373,16 @@ def record_hit(record: dict, layer: Layer, field_name: str, field_text: str) -> 
                compose(layer.name, locate(path, line), name, snippet))
 
 
+def field_rank(record: dict, layer: Layer, pattern: Any, field_name: str) -> int:
+    """0 unless the layer ranks by field: then the matched field's index, or for all-words the sum of
+    each word's earliest field."""
+    if not layer.rank_by_field:
+        return 0
+    if isinstance(pattern, AllWords):
+        return pattern.rank(record, layer) or 0
+    return layer.fields.index(field_name)
+
+
 def scan_layer(layer: Layer, pattern: Any, repo: Path) -> list[Hit] | None:
     """Every hit in one layer, docs-tree paths first; None when the artifact is not built."""
     path = repo / layer.rel
@@ -371,7 +395,7 @@ def scan_layer(layer: Layer, pattern: Any, repo: Path) -> list[Hit] | None:
             continue
         hit = (topic_hit(record, layer) if layer.name == "topics"
                else record_hit(record, layer, *matched))
-        rank = layer.fields.index(matched[0]) if layer.rank_by_field else 0
+        rank = field_rank(record, layer, pattern, matched[0])
         ranked.append((docs_first(hit.path), rank, hit))
     return [hit for _, _, hit in sorted(ranked, key=lambda item: (item[0], item[1]))]
 

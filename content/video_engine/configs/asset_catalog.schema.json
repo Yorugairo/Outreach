@@ -69,6 +69,7 @@
             "enum": [
               "actor",
               "prop",
+              "icon",
               "mechanism",
               "world",
               "world_board",

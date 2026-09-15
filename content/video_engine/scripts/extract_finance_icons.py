@@ -2,7 +2,7 @@
 Extract, segment, antialias, and catalogue 44 finance icons from Icons1.png - Icons4.png.
 
 Adheres strictly to content video engine doctrine:
-- kind: 'prop' (tier 2)
+- kind: 'icon' (tier 2; the operator 2026-09-15: "the icon kind should be icon")
 - rights_state: 'original_review_only'
 - review_state: 'review_only'
 - render_eligible: False
@@ -689,7 +689,7 @@ def main():
             "asset_id": meta["asset_id"],
             "path": item["path"],
             "sha256": item["sha256"],
-            "kind": "prop",
+            "kind": "icon",
             "visual_worlds": ["mechanism", "evidence", "story"],
             "semantic_tags": meta["tags"],
             "identity_lenses": meta["lenses"],
@@ -734,7 +734,7 @@ def main():
         "# Finance & Macro Icons Catalogue (44 Cutouts)",
         "",
         "Extracted, segmented, and defringed from `Icons1.png` - `Icons4.png`.",
-        "Registered under doctrine tier 2 as `kind: prop`, `rights_state: original_review_only`, `review_state: review_only`, `render_eligible: false`.",
+        "Registered under doctrine tier 2 as `kind: icon`, `rights_state: original_review_only`, `review_state: review_only`, `render_eligible: false`.",
         "",
         "## Summary",
         f"- **Total Cutouts:** {len(all_assets)}",

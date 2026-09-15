@@ -18,7 +18,7 @@
           "asset_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
           "path": {"type": "string", "minLength": 1},
           "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-          "kind": {"enum": ["actor", "prop", "world", "mechanism", "evidence_template", "hero_plate", "component"]},
+          "kind": {"enum": ["actor", "prop", "icon", "world", "mechanism", "evidence_template", "hero_plate", "component"]},
           "visual_worlds": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"enum": ["story", "mechanism", "evidence"]}},
           "semantic_tags": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
           "capability_anchors": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 2}},

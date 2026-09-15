@@ -55,7 +55,8 @@ CAPABILITY = {"id": "widget-engine", "name": "Widget engine", "section": "Render
               "backlog": [], "form": "four", "terms": ["widget", "draws"]}
 CAP_DOC = "docs/content-video-engine/CAPABILITIES.md"
 ASSET = {"library": "props", "id": "prop-gadget-v1", "name": "Gadget prop", "category": "macro",
-         "tier": "prop", "kind": None, "tags": ["gadget"], "context": "a gadget on the desk",
+         "tier": "prop", "kind": "prop", "catalog_kind": None, "form": None, "tags": ["gadget"],
+         "context": "a gadget on the desk",
          "path": "content/video_engine/assets/props/cutouts/prop-gadget-v1.png", "size": "2x2",
          "sha256": "aa", "catalogue": "content/video_engine/assets/props/CATALOGUE.md",
          "on_disk": True, "render_eligible": None}
@@ -430,3 +431,27 @@ def test_a_phrase_that_hits_never_falls_back(capsys, tree):
     assert lines[-1] == "1 hit(s) in assets"
     assert "(all words)" not in "\n".join(lines)
     assert payload["all_words"] is False
+
+
+PROPS_RECORD = {**ASSET, "id": "prop-desk-v1", "name": "Desk", "tags": ["furniture"], "context": "an office desk",
+                "path": "content/video_engine/assets/props/cutouts/prop-desk-v1.png"}
+ICON_RECORD = {**ASSET, "library": "icons", "id": "prop-icon-desk-v1", "name": "Desk badge", "tier": 2,
+               "kind": "icon", "catalog_kind": "prop", "tags": ["furniture"], "context": "a desk badge",
+               "path": "content/video_engine/assets/icons/cutouts/prop-icon-desk-v1.png",
+               "catalogue": "content/video_engine/assets/icons/CATALOGUE.md"}
+
+
+@pytest.mark.parametrize("term", ["prop", "prop catalogue"])
+def test_what_an_asset_is_ranks_before_a_word_inside_another_assets_id(capsys, tree, term):
+    # Arrange: the icon comes first in file order and its id starts `prop-`
+    rows = [ICON_RECORD, PROPS_RECORD]
+    (tree / "docs/ASSETS-INDEX.jsonl").write_text(
+        "".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+
+    # Act
+    lines = run(capsys, tree, term, "--layer", "assets")
+
+    # Assert
+    assert lines[0].startswith("[assets] content/video_engine/assets/props/cutouts/prop-desk-v1.png — Desk — props prop")
+    assert lines[1].startswith("[assets] content/video_engine/assets/icons/cutouts/prop-icon-desk-v1.png — Desk badge — icons icon")
+    assert lines[-1].startswith("2 hit(s) in assets")

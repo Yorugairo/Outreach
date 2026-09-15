@@ -11,8 +11,13 @@ reserve"` never reached the Federal Reserve prop. This reads them and writes one
     python content/video_engine/scripts/build_asset_index.py --write   # regenerate both
     python content/video_engine/scripts/build_asset_index.py --check   # exit 1 when stale (the default)
 
-A record: `{library, id, name, category, tier, kind, tags, context, path (repo-relative), size,
-sha256, catalogue, on_disk, render_eligible}`. The sources, per library folder
+A record: `{library, id, name, category, tier, kind, catalog_kind, form, tags, context, path
+(repo-relative), size, sha256, catalogue, on_disk, render_eligible}`. `kind` says what the asset IS
+to a reader, by library (the operator, 2026-09-15: "the icon kind should be icon ... and the props get
+the prop"): everything in `icons` is `icon`, everything in `props` is `prop`; any other library keeps
+its catalog's value. `catalog_kind` is the source catalog's own `kind`, unchanged - kept so a catalog
+that disagrees with its library shows it (the icon catalog was relabelled `prop` -> `icon` on 2026-09-15). `form` is `glyph`
+for a sourced `*.svg`, else null. The sources, per library folder
 `content/video_engine/assets/<library>/`:
 
   * `manifest.json` or any `*catalog*.json` in a shape this tool recognises - today
@@ -46,6 +51,7 @@ MD_REL = "docs/ASSETS-INDEX.md"
 CATALOGUE_NAME = "CATALOGUE.md"
 SOURCES_NAME = "SOURCES.md"
 CATALOG_GLOBS = ("manifest.json", "*catalog*.json")
+LIBRARY_KIND = {"icons": "icon", "props": "prop"}   # what an asset IS, by the library it lives in
 
 PROPS_SCHEMA = "finance_props_catalog.v1"
 ICONS_SCHEMA = "finance_asset_catalog.v1"
@@ -122,13 +128,16 @@ def resolve_asset(repo: Path, library_dir: Path, data: dict, raw_path: str) -> P
 def asset_record(repo: Path, library_dir: Path, catalogue: str | None, fields: dict,
                  file_path: Path) -> dict:
     """The record, keys in the contract's order."""
+    catalog_kind = fields.get("kind")
     return {
         "library": library_dir.name,
         "id": fields["id"],
         "name": fields.get("name") or fields["id"],
         "category": fields.get("category"),
         "tier": fields.get("tier"),
-        "kind": fields.get("kind"),
+        "kind": LIBRARY_KIND.get(library_dir.name, catalog_kind),
+        "catalog_kind": catalog_kind,
+        "form": fields.get("form"),
         "tags": list(fields.get("tags") or []),
         "context": fields.get("context") or "",
         "path": repo_rel(repo, file_path),
@@ -198,7 +207,7 @@ def glyph_records(repo: Path, library_dir: Path) -> list[dict]:
     for svg in svgs:
         listed = f"`{svg.name}`" in text
         fields = {
-            "id": f"icon:{svg.stem}", "name": svg.stem, "category": icon_set, "kind": "glyph",
+            "id": f"icon:{svg.stem}", "name": svg.stem, "category": icon_set, "form": "glyph",
             "tags": [svg.stem], "sha256": hashlib.sha256(svg.read_bytes()).hexdigest(),
             "context": f"{origin} glyph, the chip's icon:{svg.stem}"
                        + ("" if listed else f" (not listed in {SOURCES_NAME})"),
@@ -236,7 +245,7 @@ def render_jsonl(records: list[dict]) -> str:
 
 def md_line(record: dict) -> str:
     state = "" if record["on_disk"] else " (NOT ON DISK)"
-    kind = record["kind"] or record["tier"] or ""
+    kind = " ".join(str(x) for x in (record["kind"], record["form"]) if x) or record["tier"] or ""
     head = f"- `{record['id']}` - {record['name']} - {record['category'] or ''} {kind}".rstrip()
     return f"{head} - `{record['path']}`{state} - catalogue `{record['catalogue']}`"
 
@@ -249,7 +258,9 @@ def render_md(records: list[dict]) -> str:
     libraries = sorted({r["library"] for r in records})
     for library in libraries:
         rows = [r for r in records if r["library"] == library]
-        lines += ["", f"## {library} ({len(rows)})", ""]
+        kinds = ", ".join(sorted({str(r["kind"]) for r in rows if r["kind"]}))
+        label = f"{library} - {kinds}" if kinds else library
+        lines += ["", f"## {label} ({len(rows)})", ""]
         lines += [md_line(r) for r in rows]
     return "\n".join(lines) + "\n"
 

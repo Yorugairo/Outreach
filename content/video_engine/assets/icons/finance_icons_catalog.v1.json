@@ -13,7 +13,7 @@
       "asset_id": "prop-badge-dram-memory-etf-v1",
       "path": "assets/icons/cutouts/prop-badge-dram-memory-etf-v1.png",
       "sha256": "655d880bb930003cd960085e80d3781ed4a06fe8875e2a82a8c471acb39e0c7a",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -48,7 +48,7 @@
       "asset_id": "prop-badge-fundamental-financial-audit-v1",
       "path": "assets/icons/cutouts/prop-badge-fundamental-financial-audit-v1.png",
       "sha256": "147ff55b246257e09d123d7e8709a053027e1a3de49a2c57d2cdd24eb4cb5078",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -83,7 +83,7 @@
       "asset_id": "prop-badge-pe-ratio-valuation-v1",
       "path": "assets/icons/cutouts/prop-badge-pe-ratio-valuation-v1.png",
       "sha256": "71ed6efdc4a3f05e3a01bb7a83be3efac16a2fe7ad1c18f0c76bb0708c4a7d84",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -118,7 +118,7 @@
       "asset_id": "prop-badge-soxx-semiconductor-etf-v1",
       "path": "assets/icons/cutouts/prop-badge-soxx-semiconductor-etf-v1.png",
       "sha256": "0e99d765e04857fb7d8330ec0cfd8eb59ac345e8d0e1ecefa47a2aa85cd4937d",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -153,7 +153,7 @@
       "asset_id": "prop-badge-sp500-us-index-v1",
       "path": "assets/icons/cutouts/prop-badge-sp500-us-index-v1.png",
       "sha256": "b67798b79379f8c3b05a8d209007d1d780c930fe2451208b0c292466dd685677",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -188,7 +188,7 @@
       "asset_id": "prop-icon-ai-neural-compute-v1",
       "path": "assets/icons/cutouts/prop-icon-ai-neural-compute-v1.png",
       "sha256": "457ec305747ea0475c891676ddae5c05f77c34b558696b7274ce855324e66a63",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -223,7 +223,7 @@
       "asset_id": "prop-icon-ai-neural-processor-mind-v1",
       "path": "assets/icons/cutouts/prop-icon-ai-neural-processor-mind-v1.png",
       "sha256": "c76291ffbf6ad11fb7f5f9886e2f3dea7c513965f3c371cf54d922b6ee6a7662",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -258,7 +258,7 @@
       "asset_id": "prop-icon-bear-market-v1",
       "path": "assets/icons/cutouts/prop-icon-bear-market-v1.png",
       "sha256": "065d769be4d88a5b0fcb8fad3a931b05c1d6ef9be6e5d5ed44361c8224fb436d",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -293,7 +293,7 @@
       "asset_id": "prop-icon-bull-market-v1",
       "path": "assets/icons/cutouts/prop-icon-bull-market-v1.png",
       "sha256": "90e30deda701a823f1d954b3b876035f84d713c91b999a67bd2c991c6d09c12f",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -328,7 +328,7 @@
       "asset_id": "prop-icon-candlestick-price-action-v1",
       "path": "assets/icons/cutouts/prop-icon-candlestick-price-action-v1.png",
       "sha256": "17233e854c127746a911e508c7cb20d4549ceee224226c5e91f216fa66c0e710",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -363,7 +363,7 @@
       "asset_id": "prop-icon-cash-liquidity-stack-v1",
       "path": "assets/icons/cutouts/prop-icon-cash-liquidity-stack-v1.png",
       "sha256": "257707d87421ba9eaba7f896b7daafb002f96805c9e164f504feb9edb9502987",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -398,7 +398,7 @@
       "asset_id": "prop-icon-central-bank-fx-v2",
       "path": "assets/icons/cutouts/prop-icon-central-bank-fx-v2.png",
       "sha256": "0ee7167d6cd3a996f69361a505799153a8154d28ed9a7cec0eba462cb7d5b5a7",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -434,7 +434,7 @@
       "asset_id": "prop-icon-chiplet-bga-package-v1",
       "path": "assets/icons/cutouts/prop-icon-chiplet-bga-package-v1.png",
       "sha256": "6bc2a7fb2ad9118a2bbf717196fb9de8000741ee4443b1ae301cf4f5e3938622",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -469,7 +469,7 @@
       "asset_id": "prop-icon-cpi-inflation-basket-v1",
       "path": "assets/icons/cutouts/prop-icon-cpi-inflation-basket-v1.png",
       "sha256": "2d4eb11058e116c87810e92c186ba22100e296524807738b33fdfa90031eb1e4",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -504,7 +504,7 @@
       "asset_id": "prop-icon-critical-minerals-mining-v1",
       "path": "assets/icons/cutouts/prop-icon-critical-minerals-mining-v1.png",
       "sha256": "b5f2b444ba0bafa91b07d7f955868b33c77221f4ddf6a1de571be2ef367526b6",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -539,7 +539,7 @@
       "asset_id": "prop-icon-crude-oil-energy-v2",
       "path": "assets/icons/cutouts/prop-icon-crude-oil-energy-v2.png",
       "sha256": "ce5748b98c0555799feef99d47b409419d024cf9292d1da10b194bc098fd43c5",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -575,7 +575,7 @@
       "asset_id": "prop-icon-datacenter-hyperscaler-clusters-v1",
       "path": "assets/icons/cutouts/prop-icon-datacenter-hyperscaler-clusters-v1.png",
       "sha256": "d87ec559b01f61d10a4d53d26abc80fa336902ce24bb26c3ebc2bb3644ee029d",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -610,7 +610,7 @@
       "asset_id": "prop-icon-dram-hbm-memory-modules-v1",
       "path": "assets/icons/cutouts/prop-icon-dram-hbm-memory-modules-v1.png",
       "sha256": "d5ceae3242375ad4c7daad63f7b1bedaf993b6b7366165d28e05c94f53349843",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -645,7 +645,7 @@
       "asset_id": "prop-icon-earnings-beat-bullish-filing-v1",
       "path": "assets/icons/cutouts/prop-icon-earnings-beat-bullish-filing-v1.png",
       "sha256": "5787846f65c9937998cff61bb3cf84439325253e876631b52e2ee86b2fb26a13",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -680,7 +680,7 @@
       "asset_id": "prop-icon-earnings-miss-bearish-filing-v1",
       "path": "assets/icons/cutouts/prop-icon-earnings-miss-bearish-filing-v1.png",
       "sha256": "056cbd1164eae61cfa95fdc6f0ea18251c8b792661aacf253a0e7225f6aebfd5",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -715,7 +715,7 @@
       "asset_id": "prop-icon-electrical-grid-transmission-v1",
       "path": "assets/icons/cutouts/prop-icon-electrical-grid-transmission-v1.png",
       "sha256": "e6616c9131ff3e3d0658c0adbbaa1d31f674d56432a632077e412c573c518b71",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -750,7 +750,7 @@
       "asset_id": "prop-icon-energy-demand-surge-v1",
       "path": "assets/icons/cutouts/prop-icon-energy-demand-surge-v1.png",
       "sha256": "299dd6392a70d46d266c99bc8168eabb7d44c3b0b9d4f02d986cc66ae0c05e43",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -785,7 +785,7 @@
       "asset_id": "prop-icon-four-pillar-asset-allocation-v1",
       "path": "assets/icons/cutouts/prop-icon-four-pillar-asset-allocation-v1.png",
       "sha256": "e95913ca2ec2b53832a86f9a9727f00d64e1a8f69042a9ba2f2a254a5dd0f516",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -820,7 +820,7 @@
       "asset_id": "prop-icon-fuji-structural-growth-v1",
       "path": "assets/icons/cutouts/prop-icon-fuji-structural-growth-v1.png",
       "sha256": "2e130736af7fcee0396f7d924f99bda746562a0e703a97f7b4068cc8b7170976",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -855,7 +855,7 @@
       "asset_id": "prop-icon-geopolitical-strategy-v1",
       "path": "assets/icons/cutouts/prop-icon-geopolitical-strategy-v1.png",
       "sha256": "e820956ec38254c1b50c1ed14d65b00190187b09d09a8d989d393c817bf0a694",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -890,7 +890,7 @@
       "asset_id": "prop-icon-global-macro-expansion-v2",
       "path": "assets/icons/cutouts/prop-icon-global-macro-expansion-v2.png",
       "sha256": "30d7de7080f103d0920e4ecd9f83b703d927b74327c08b08e454cdf264b2c31c",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -925,7 +925,7 @@
       "asset_id": "prop-icon-global-macro-growth-v1",
       "path": "assets/icons/cutouts/prop-icon-global-macro-growth-v1.png",
       "sha256": "234f6ef77c1261eb332a3ad1c3919a7ea44f952f7c9f7ae1a371eb14bfaa0b8e",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -960,7 +960,7 @@
       "asset_id": "prop-icon-gpu-ai-accelerator-v1",
       "path": "assets/icons/cutouts/prop-icon-gpu-ai-accelerator-v1.png",
       "sha256": "0510fe266e33df4cbdc07465000d3a56aa421372694eaa78cf04bfd48d696a2f",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -995,7 +995,7 @@
       "asset_id": "prop-icon-hardware-display-workstation-v1",
       "path": "assets/icons/cutouts/prop-icon-hardware-display-workstation-v1.png",
       "sha256": "5cf3e61de224f132a5d82f9ecbd0173753d42362c18b100664b00c4cf0aed25c",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1030,7 +1030,7 @@
       "asset_id": "prop-icon-innovation-ip-capital-v1",
       "path": "assets/icons/cutouts/prop-icon-innovation-ip-capital-v1.png",
       "sha256": "abedc8f48e63fd3659f7f1a8d9b5acaefe83f17723e04225e976698a5a1c2743",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1065,7 +1065,7 @@
       "asset_id": "prop-icon-interest-rates-monetary-policy-v2",
       "path": "assets/icons/cutouts/prop-icon-interest-rates-monetary-policy-v2.png",
       "sha256": "217ccca8fce82bd41e553aba898fb35da2399029b6313c97e7af1b12ba38d31f",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1101,7 +1101,7 @@
       "asset_id": "prop-icon-japan-macro-equities-v1",
       "path": "assets/icons/cutouts/prop-icon-japan-macro-equities-v1.png",
       "sha256": "ea254d415c3b3a1db22398464c7eb183112b6acfac54e521f48855c9881e538f",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1136,7 +1136,7 @@
       "asset_id": "prop-icon-japan-nikkei-expansion-v1",
       "path": "assets/icons/cutouts/prop-icon-japan-nikkei-expansion-v1.png",
       "sha256": "6b38d74914c1d2564b321bb7b5ee03d1a7aaa7aecb129b031bef809c3c53e8b6",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1171,7 +1171,7 @@
       "asset_id": "prop-icon-maritime-shipping-logistics-v1",
       "path": "assets/icons/cutouts/prop-icon-maritime-shipping-logistics-v1.png",
       "sha256": "9651f9d301dd3d89c57e0ffb2f272f039bf1f2e6c5ec02fe457252f4e547b775",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1206,7 +1206,7 @@
       "asset_id": "prop-icon-market-tsunami-crash-v1",
       "path": "assets/icons/cutouts/prop-icon-market-tsunami-crash-v1.png",
       "sha256": "5dfed2ab5066a17236457237453365ad497e92be0d9863f07fc8a85b1c4ef249",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1241,7 +1241,7 @@
       "asset_id": "prop-icon-micron-memory-orbit-v1",
       "path": "assets/icons/cutouts/prop-icon-micron-memory-orbit-v1.png",
       "sha256": "a4572941eb04cab4f0952e4a9ac48c7f6b96eb3500394b07185281a9b29427e6",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1276,7 +1276,7 @@
       "asset_id": "prop-icon-microprocessor-silicon-die-v1",
       "path": "assets/icons/cutouts/prop-icon-microprocessor-silicon-die-v1.png",
       "sha256": "558cb0e7b3854a5e276eb358dbaa5a962bc93c01cf9c7499f7c649771c3f0946",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1311,7 +1311,7 @@
       "asset_id": "prop-icon-money-printing-liquidity-v1",
       "path": "assets/icons/cutouts/prop-icon-money-printing-liquidity-v1.png",
       "sha256": "3424cebd091f6b3baede5e8ecc65064f7d40d613747fe83d8332d86c756cfa15",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1346,7 +1346,7 @@
       "asset_id": "prop-icon-nuclear-energy-smr-v1",
       "path": "assets/icons/cutouts/prop-icon-nuclear-energy-smr-v1.png",
       "sha256": "d65675b89a1b05e8b04cc37cf204f0e50b04890e93d08d1f7b3e0463028faeef",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1381,7 +1381,7 @@
       "asset_id": "prop-icon-seed-capital-growth-v1",
       "path": "assets/icons/cutouts/prop-icon-seed-capital-growth-v1.png",
       "sha256": "b09ef487b4de0cb3a6e4540ce1d1e6b7391242e39902c9220f1e70a688a3c2d6",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1416,7 +1416,7 @@
       "asset_id": "prop-icon-semiconductor-silicon-v1",
       "path": "assets/icons/cutouts/prop-icon-semiconductor-silicon-v1.png",
       "sha256": "1c1150e651cf2db7f8eab04c8ab3b4f6433683cd11998b90c299e273e9115bc6",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1451,7 +1451,7 @@
       "asset_id": "prop-icon-us-dollar-reserve-v1",
       "path": "assets/icons/cutouts/prop-icon-us-dollar-reserve-v1.png",
       "sha256": "5b9f1abf3b22eb0b21ad59db1c504acb4dbfa06ed1dff49a778993768b1790ed",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1486,7 +1486,7 @@
       "asset_id": "prop-icon-us-sovereign-markets-v1",
       "path": "assets/icons/cutouts/prop-icon-us-sovereign-markets-v1.png",
       "sha256": "602aa25429eab3b9b69b159db0ff553491abd356c902df37a2dda8bf24862119",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1521,7 +1521,7 @@
       "asset_id": "prop-icon-wafer-foundry-advanced-packaging-v1",
       "path": "assets/icons/cutouts/prop-icon-wafer-foundry-advanced-packaging-v1.png",
       "sha256": "053050dd5aaea322f5265cfb6939ebefc0de8a639f0364da936ecbddf8a533bd",
-      "kind": "prop",
+      "kind": "icon",
       "visual_worlds": [
         "mechanism",
         "evidence",
@@ -1553,5 +1553,5 @@
       }
     }
   ],
-  "artifact_hash": "f154287ac30e2e0d7b879adfe85efd17a75c8ba69fc37ed020c45a8d9572024f"
+  "artifact_hash": "8658044c426d742f2d7738c77a03ecd4eb6faac70a57bd09d80d6a7cc25366b9"
 }

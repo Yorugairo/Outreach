@@ -513,3 +513,52 @@ def test_a_well_formed_layered_world_passes():
 
 def test_a_flat_world_is_still_valid():
     assert load_catalog(_catalog(_world("world-flat-v1")))
+
+
+# 2026-09-15 (the operator): the 44 icon cutouts are `kind: icon`, not `prop`.
+_VIDEO_ENGINE = Path(__file__).resolve().parents[1]
+_ICONS_CATALOG = _VIDEO_ENGINE / "assets/icons/finance_icons_catalog.v1.json"
+_CATALOG_SCHEMAS = (
+    "finance_asset_catalog.schema.json",
+    "finance_asset_catalog_v2.schema.json",
+    "asset_catalog.schema.json",
+)
+
+
+def _schema_kind(schema_name: str) -> dict:
+    schema = json.loads((_VIDEO_ENGINE / "configs" / schema_name).read_text(encoding="utf-8"))
+    return schema["properties"]["assets"]["items"]["properties"]["kind"]
+
+
+@pytest.mark.parametrize("schema_name", _CATALOG_SCHEMAS)
+def test_every_icon_cutout_is_kind_icon_and_every_catalog_schema_accepts_it(schema_name):
+    from jsonschema import Draft7Validator
+
+    assets = json.loads(_ICONS_CATALOG.read_text(encoding="utf-8"))["assets"]
+    validator = Draft7Validator(_schema_kind(schema_name))
+
+    assert len(assets) == 44
+    assert {a["kind"] for a in assets} == {"icon"}
+    assert all(validator.is_valid(a["kind"]) for a in assets)
+    assert validator.is_valid("prop"), "adding icon keeps every existing kind"
+
+
+def test_the_icons_catalog_hash_matches_its_assets_under_the_extractor_serialization():
+    import hashlib
+
+    catalog = json.loads(_ICONS_CATALOG.read_text(encoding="utf-8"))
+    serialized = json.dumps(catalog["assets"], sort_keys=True)
+
+    assert catalog["artifact_hash"] == hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+    catalogue_md = (_ICONS_CATALOG.parent / "CATALOGUE.md").read_text(encoding="utf-8")
+    assert f"**Artifact SHA-256:** `{catalog['artifact_hash']}`" in catalogue_md
+
+
+def test_a_tier_two_icon_resolves_exactly_as_a_tier_two_prop_did():
+    slot = _slot("s1", "an index basket of shares")
+
+    as_prop = resolve_slot(slot, _catalog(_asset("prop-icon-basket-v1", kind="prop", tier=2, tags=["index", "basket"])))
+    as_icon = resolve_slot(slot, _catalog(_asset("prop-icon-basket-v1", kind="icon", tier=2, tags=["index", "basket"])))
+
+    assert as_icon["resolved_tier"] == "reusable_component_composition"
+    assert as_icon == as_prop

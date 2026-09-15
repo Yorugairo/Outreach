@@ -87,7 +87,8 @@ def test_the_prop_manifest_and_icon_catalog_build_the_expected_records(tree: Pat
         "icon:coins", "prop-icon-bear-v1", "prop-icon-bull-v1", "prop-fed-v1", "prop-oil-v1"]
     assert by_id["prop-fed-v1"] == {
         "library": "props", "id": "prop-fed-v1", "name": "Federal Reserve", "category": "macro",
-        "tier": "prop", "kind": None, "tags": ["federal-reserve", "fed"],
+        "tier": "prop", "kind": "prop", "catalog_kind": None, "form": None,
+        "tags": ["federal-reserve", "fed"],
         "context": "Monetary authority.",
         "path": "content/video_engine/assets/props/cutouts/prop-fed-v1.png", "size": "20x10",
         "sha256": "aa", "catalogue": f"{PROPS_DIR}/CATALOGUE.md", "on_disk": True,
@@ -101,8 +102,24 @@ def test_the_prop_manifest_and_icon_catalog_build_the_expected_records(tree: Pat
     assert bull["catalogue"] == f"{ICONS_DIR}/CATALOGUE.md"
     assert by_id["prop-icon-bear-v1"]["name"] == "prop-icon-bear-v1"     # no catalogue row: the id
     coins = by_id["icon:coins"]
-    assert (coins["kind"], coins["category"], coins["catalogue"], coins["on_disk"]) == (
-        "glyph", "Lucide", f"{ICONS_DIR}/SOURCES.md", True)
+    assert (coins["kind"], coins["form"], coins["category"], coins["catalogue"], coins["on_disk"]) == (
+        "icon", "glyph", "Lucide", f"{ICONS_DIR}/SOURCES.md", True)
+
+
+def test_kind_says_what_the_asset_is_by_library_and_keeps_the_catalogs_value(tree: Path) -> None:
+    # Act
+    by_id = {r["id"]: r for r in BAI.build(tree)}
+
+    # Assert: the icon catalog says `prop`; the index says `icon` and keeps `prop` as catalog_kind
+    bull = by_id["prop-icon-bull-v1"]
+    assert (bull["kind"], bull["catalog_kind"], bull["form"], bull["tier"]) == ("icon", "prop", None, 2)
+    coins = by_id["icon:coins"]
+    assert (coins["kind"], coins["catalog_kind"], coins["form"]) == ("icon", None, "glyph")
+    assert [(by_id[i]["kind"], by_id[i]["tier"]) for i in ("prop-fed-v1", "prop-oil-v1")] == [
+        ("prop", "prop"), ("prop", "mechanism")]
+    md = BAI.render_md(BAI.build(tree))
+    assert "## icons - icon (3)" in md and "## props - prop (2)" in md
+    assert "Lucide icon glyph" in md and "equities icon" in md
 
 
 def test_on_disk_is_false_for_a_catalogued_file_that_is_missing(tree: Path) -> None:

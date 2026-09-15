@@ -1,12 +1,12 @@
 # Finance & Macro Icons Catalogue (44 Cutouts)
 
 Extracted, segmented, and defringed from `Icons1.png` - `Icons4.png`.
-Registered under doctrine tier 2 as `kind: prop`, `rights_state: operator_approved`, `review_state: approved`, `render_eligible: true` (the operator, 2026-09-13, E94).
+Registered under doctrine tier 2 as `kind: icon`, `rights_state: operator_approved`, `review_state: approved`, `render_eligible: true` (the operator, 2026-09-13, E94).
 
 ## Summary
 - **Total Cutouts:** 44 (44 v1 + 3 v2 re-cuts of clipped v1 cutouts)
 - **Catalogue Schema:** `finance_asset_catalog.v1` (`finance_icons_catalog.v1.json`)
-- **Artifact SHA-256:** `f154287ac30e2e0d7b879adfe85efd17a75c8ba69fc37ed020c45a8d9572024f`
+- **Artifact SHA-256:** `8658044c426d742f2d7738c77a03ecd4eb6faac70a57bd09d80d6a7cc25366b9`
 - **Asset Directory:** [`assets/icons/cutouts/`](file:///C:/Users/Snipe/Downloads/Outreach%20Program/content/video_engine/assets/icons/cutouts/)
 
 ## Asset Registry
