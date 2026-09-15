@@ -531,44 +531,89 @@
       "ids": [
         "R26-118",
         "R26-131 item 2",
-        "E88 s7"
+        "E88 s7",
+        "E99 s3",
+        "P61 HG5"
       ],
-      "kind": "owed",
-      "title": "Does the living ball read metallic",
-      "judge": "Does the living ball read METALLIC (E88 s7) or glossy; and does the weight phase go into the default melt length (it stays opt-in melt:weight until ruled)?",
+      "kind": "look",
+      "title": "The ball's shadows: does it read metallic and heavy now",
+      "judge": "The ball before and after, at the same settle instant (melt-ball-roll, 16.98 s): a dark grazing rim toward the silhouette, a metallic band across the lower half, one point of deep shadow depth opposite the highlight, and a tight occlusion core in the cast shadow - all behind the melt:weight opt-in, the default melt untouched. Does it read metallic and heavy now, or still glossy?",
       "where": [
         {
-          "label": "melt-ball-roll",
-          "path": "content/video_engine/tests/golden/frames/melt-ball-roll.png"
+          "label": "the settle, before / after (full frames)",
+          "path": "content/video_engine/review/assembly/r26-118-metallic-ball/settle-after.png"
         },
         {
-          "label": "melt-ball-roll@proof-land",
-          "path": "content/video_engine/tests/golden/frames/melt-ball-roll@proof-land.png"
+          "label": "the land and the roll, before / after crops",
+          "path": "content/video_engine/review/assembly/r26-118-metallic-ball/crop-melt-ball-roll-proof-land-after.png"
         },
         {
-          "label": "melt-ball-roll@proof-settle",
+          "label": "the opt-in's goldens, re-baselined (settle)",
           "path": "content/video_engine/tests/golden/frames/melt-ball-roll@proof-settle.png"
         },
         {
-          "label": "melt-depth@proof-ball",
-          "path": "content/video_engine/tests/golden/frames/melt-depth@proof-ball.png"
+          "label": "the dials with their sources and gate tiers (drop.mjs :60-108; melt.mjs :182-215)",
+          "path": "content/video_engine/scripts/kinetics/drop.mjs"
+        },
+        {
+          "label": "the measured shift: silhouette luminance 120.7 -> 64.6, contact shadow 26.9 -> 10.5 under the ball; the body 141 -> 149",
+          "path": "content/video_engine/tests/test_ball_material.py"
         }
       ],
-      "options": [
-        "reads metallic",
-        "reads glossy"
-      ],
-      "recommendation": "\"the surface reads GLOSSY (a gel ball) more than METALLIC: the next dial is a dark Fresnel rim + a reflection band; the operator judges the frame\"",
-      "blocks": "the next dial; the weight phase stays opt-in melt:weight until ruled",
+      "options": [],
+      "recommendation": "Heavy: yes - the silhouette went from brighter than the body to 43% of it and the contact shadow to 22% of the board. Metal: not yet, for two nameable reasons. The body is still the chart's saturated orange because the melt's conceit is that the ball IS the chart's ink; the blueprint's metal is a near-black body lit only by speculars, and going there is a ruling (the ball stops carrying the chart's colour), not a dial. And the band is a straight stripe of constant width where a real reflection on a sphere curves toward the silhouette; one SVG gradient cannot do that, a mesh could. Approve the weight, and say whether the ball may lose its colour.",
+      "blocks": "whether the weight phase enters the default melt (it stays opt-in until ruled); T6's gathered point is this ball",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:550",
         "docs/content-video-engine/BACKLOG.md:563",
-        "docs/portable/OPERATOR-RULINGS.md:2696-2704"
+        "docs/portable/OPERATOR-RULINGS.md:2696-2704",
+        "docs/portable/OPERATOR-RULINGS.md:2922-2925 (E99 s3)",
+        "docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md:191-201 (s3.3, gate tier PLAUSIBLE)",
+        "docs/research/runs/p58-2-5d/research-gate-2026-09-14.md (R26-119: PLAUSIBLE; the ink row EXCLUDED)",
+        "content/video_engine/scripts/kinetics/drop.mjs:60-108",
+        "content/video_engine/scripts/species/melt.mjs:182-215",
+        "content/video_engine/review/assembly/r26-118-metallic-ball/crop-record.json"
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": "look",
-      "owed": "E99 s3 - marked reads glossy: the ball gains more shadow, a dark Fresnel rim, a metallic band and at least one point of deep shadow depth, and returns as a clip."
+      "was_kind": "owed",
+      "owed": "Delivered 2026-09-15 (P61 T5): the four shadow dials behind melt:weight, the before/after crop, the clips",
+      "proofs": [
+        {
+          "type": "crop",
+          "label": "the ball's shadows at the settle: a dark grazing rim, a metallic band, a point of deep shadow depth and an occlusion core (melt:weight only)",
+          "before": "content/video_engine/review/assembly/r26-118-metallic-ball/settle-before.png",
+          "after": "content/video_engine/review/assembly/r26-118-metallic-ball/settle-after.png",
+          "caption_box": [
+            1050,
+            380,
+            1920,
+            560
+          ],
+          "before_label": "today - melt:weight as it shipped: one white spot on an evenly lit orange dome, a floating grey slit",
+          "after_label": "this slice - the rim, the band, the well, the contact core"
+        },
+        {
+          "type": "clip",
+          "label": "the ball with its shadows: the land, the roll and the settle (melt:weight, 14.8-17.8 s)",
+          "surface": "melt-ball-roll",
+          "aspect": "16:9",
+          "t0": 14.8,
+          "t1": 17.8,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "the default melt as every approved cut renders it, unchanged by this slice (no weight phase, 14.8-16.6 s)",
+          "surface": "melt-page",
+          "aspect": "16:9",
+          "t0": 14.8,
+          "t1": 16.6,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        }
+      ]
     },
     {
       "id": "r26-125-p57-hg1-measured-defects",

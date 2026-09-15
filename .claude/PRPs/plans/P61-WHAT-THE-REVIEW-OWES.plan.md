@@ -484,7 +484,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   the soak, E99 s35); **:56** (the field's two first-class entries and the scribble as back-up); doc 41 s2 beat 3 (T11)
 
 ### T5: THE BALL'S SHADOWS - a dark Fresnel rim, a metallic band, one point of deep shadow depth
-- Status: pending
+- Status: complete (2026-09-15) - HG5 open on the queue as `r26-118-metallic-ball` (look: the crop + two clips)
 - Owner: `implementation_luna` (**ENGINE LOCK #5**)
 - Depends on: none (independent of T2/T3's geometry; ordered after T4 per the operator)
 - Write set: `content/video_engine/scripts/kinetics/drop.mjs`, `content/video_engine/scripts/species/melt.mjs` (the
@@ -510,7 +510,31 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - Validate: `node --test content/video_engine/tests/kinetics/` then `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python -m pytest content/video_engine/tests/test_ball_material.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-118-metallic-ball`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T5.md`. The ball today (lane's read, parent's agreed): a rubber bouncy ball - one
+  white spot on an evenly lit saturated dome, the silhouette its BRIGHTEST region, no band, no deep shadow, a floating grey slit
+  for a shadow. THE GATE READ FIRST: R26-119 (the living drop) is PLAUSIBLE overall, nothing CONFIRMED, the galinstan sigma
+  and the ink row EXCLUDED (E99 s24 honoured). Twenty named dials: the material's profiles in `kinetics/drop.mjs:60-108`
+  (RIM_AT 0.42 / RIM_GAMMA 1.15 / RIM_A 0.97; BAND_P 0.60 / BAND_H 0.055 / BAND_A 0.85; PIT_AT 0.44 / PIT_R 0.52 /
+  PIT_GAMMA 1.4 / PIT_A 0.80 - every one DERIVED and says so; the licence for a rim and a band at all is s3.3's zero-diffuse
+  metal, gate tier PLAUSIBLE) and the ball's paint in `species/melt.mjs:182-215` (the W_OCCL_* / W_RIM_* / W_BAND_* / W_PIT_*
+  paint dials). The SIGN is the operator's and contradicts the finding, written down as such: the blueprint's grazing rim is
+  bright, E99 s3 asks for a dark one, the ruling wins (RECALL-RECEIPT s3) and is right on our board (no bright environment
+  to mirror); the profile is the physical 1 - cos(theta) geometry, only the sign inverted. `melt:weight` has NO kinetics
+  key - the opt-in is a token in the authored exit string (compiler :1511), so the flag-off proof is the surface `melt-page`
+  and its four goldens, byte-identical; the five opt-in goldens that MAY move (`melt-ball-roll` x3, `melt-depth` x2) did.
+  Frames (parent's read of settle-before / settle-after / the land crop): a dark rim all round, a bright band across the lower
+  half, a well opposite the highlight, a tight dark contact core - heavier, plainly; metallic-ish, not metal. Measured: the
+  silhouette ring's luminance 120.7 -> 64.6 (from brighter than the body to 43% of it), the contact shadow 26.9 -> 10.5
+  (57% -> 22% of the board), the body 141 -> 149. Tests: `test_ball_material.py` (15: dials + sources declared, flag-off
+  strings byte-identical, rim monotone toward the silhouette, band + pit present, two seeks identical, the four flag-off
+  goldens by sha256) + `drop.test.mjs`. Validate: node 566/566; sync in sync; 124 passed; effects_catalog_check 0
+  failures; `build_effects_catalog.py --check` STALE by two derived dials_values fields (a generated layer outside the write
+  set - the parent ran `--write`); page-boxes re-pinned sha-only (44); registry 955 records, 0 orphaned. A render flake on
+  `page-depth@proof-leave` in one batch run, identical to its golden on three isolated re-renders. HONEST LIMIT for HG5,
+  named in the card's recommendation: the body stays the chart's orange (the blueprint's near-black metal is a RULING - the
+  ball stops carrying the chart's colour - not a dial; the shape of that dial, `W_BODY_SHADE`, is described), and the band is
+  a straight stripe (a mesh could curve it). The card rewritten by the parent: the crop (diff_box [734, 714, 962, 963]) +
+  the weight clip + the default melt clip.
 - CAPABILITIES rows changed: **:37** (the melt exit's ball) and the `melt:weight` note on R26-118's row
 
 ### T6: THE MELT GATHERS TO ONE DENSE, HEAVY, VIBRATING POINT - and splashes into a full chart or a world plate

@@ -54,6 +54,58 @@ export const DROP = Object.freeze({
                              mirror seat of a light at theta_L sits at R sin(theta_L / 2) - 0.383 R at 45 degrees */
   HL_R: 0.20,             /* its own radius, as a share of R [DERIVED, tuned by eye: the run's 0.15-0.20 R is
                              MISATTRIBUTED to Cook & Torrance 1982 and is not a source] */
+
+  /* ---- P61 T5 / E99 s3 - THE SHADOWS THE WEIGHT COMES FROM ------------------------------------------------------
+     The operator (OPERATOR-RULINGS.md:2922-2925): "We definitely need more shadows. The shadows are where the
+     weight/mass largely come from i think, dark fresnel rim + metallic band and I imagine incorporating at least one
+     point of deep shadow depth." Three of the four are the MATERIAL's and live here; the fourth, the contact shadow
+     under the ball, is the melt's (MELT.W_OCCL_*). The ball's PAINT - which ink at which K-M concentration, and the
+     SVG the profiles below become - is the melt's too: these are the profiles, in the ball's own normalised geometry.
+
+     THE NAME. `docs_find "Fresnel"` returns three hits and not one is a shading term: `clothoid.mjs:115 fresnel`,
+     `:147 fresnelMoments` and `CAPABILITIES.md:96` are the CLOTHOID fitter's Fresnel INTEGRAL, a curve-fitting
+     function. Nothing here is named for it and nothing here imports it. The mechanism's name in code is the GRAZING
+     RIM; "dark fresnel rim" stays the operator's words, in prose.
+
+     THE SOURCES, each with its research-gate tier (`docs/research/runs/p58-2-5d/research-gate-2026-09-14.md` s6:
+     R26-119 is PLAUSIBLE overall and usable as dial seeds under [DERIVED]; NOTHING in it is CONFIRMED, because the
+     run fetched no page to disk; its galinstan sigma and its whole ink row are EXCLUDED and are not read here):
+       - the near-black silhouette, k_d = 0, F0 0.70-0.90 (mercury 0.7788 at 550 nm) [blueprint s3.3, :191-201 -
+         gate tier PLAUSIBLE, "the metal rule, F0"]. This is why a rim and a band may be drawn at all: a metal has no
+         diffuse term, so its whole read is specular STRUCTURE on a near-black body - contrast bands ARE the material.
+       - the SIGN of the rim is the OPERATOR's, and it is the opposite of the blueprint's. s3.3 says the silhouette
+         is lit by "bright grazing Fresnel rims (F -> 1.0)" [practitioner doctrine inside the PLAUSIBLE Q3 block];
+         E99 s3 asks for a DARK one. The ruling outranks the finding (RECALL-RECEIPT s3) and it is the right call on
+         OUR board: the ball is the chart's own ink on charcoal, so a grazing rim has no bright environment to mirror
+         - what the grazing angle buys us here is DEPTH. The PROFILE below is the physical one; the sign is inverted.
+       - the grazing profile itself, `1 - cos(theta_view) = 1 - sqrt(1 - s^2)` at radius share s on a sphere: pure
+         geometry [DERIVED], the same quantity every Fresnel term is a function of. RIM_GAMMA shapes it; it is ours.
+       - the highlight spreads outward under oblate flattening and pinches inward under prolate elongation [blueprint
+         s3.2 - tagged [DERIVED] in the run, PLAUSIBLE as part of Q3]. `dropSpecular` already carries it; the band
+         below rides the same light axis, so it breathes with the same modes.
+       - the BAND and the DEEP POINT have NO gate-usable finding behind them at all. Their defaults are DERIVED,
+         measured by eye against the `melt-ball-roll` goldens, and say so (E99 s24: a dial whose only source is an
+         excluded finding gets a DERIVED default and says so - these have no source, excluded or otherwise).
+     All nine are pure functions of position on the ball: the same t twice is the same shading. */
+  RIM_AT: 0.42,           /* THE DARK GRAZING RIM ("dark fresnel rim"): where the band starts, as a share of R. Inside
+                             it the body is untouched; outside it the ink deepens all the way to the silhouette
+                             [DERIVED: 0.42 R is the widest band that still clears the specular seat (HL_AT 0.46) on the light side - narrower
+                             read as a drawn outline, wider swallowed the highlight] */
+  RIM_GAMMA: 1.15,         /* how hard it turns on across that band. 1 is the raw grazing term; above 1 holds the
+                             darkening back into the last fifth of the radius, which is what reads as a rolled metal
+                             edge rather than a photographic vignette [DERIVED] */
+  RIM_A: 0.97,            /* its alpha AT the silhouette: all but opaque, so the ball's own outline is the darkest ink
+                             it has and the lit side has something to be lit against [DERIVED] */
+  BAND_P: 0.60,           /* THE METALLIC BAND: where its centre sits along the LIGHT AXIS - 0 the lit pole, 1 the dark
+                             pole - just past the equator, between the highlight and the terminator, where a turned
+                             metal sphere carries its anisotropic reflection [DERIVED - no gate-usable finding] */
+  BAND_H: 0.055,           /* its half-width along that axis (a Gaussian's sigma): a stripe, not a second falloff [DERIVED] */
+  BAND_A: 0.85,           /* its peak alpha, well under the specular spot's: a band is a sheen, not a highlight [DERIVED] */
+  PIT_AT: 0.44,           /* THE POINT OF DEEP SHADOW DEPTH: how far out its seat sits, as a share of R, on the axis
+                             OPPOSITE the light (LIGHT_DEG + 180) - the terminator's own well [DERIVED] */
+  PIT_R: 0.52,            /* its reach from that seat, as a share of R [DERIVED] */
+  PIT_GAMMA: 1.4,         /* its falloff: soft enough to read as depth and not as a drawn dot [DERIVED] */
+  PIT_A: 0.80,            /* its alpha at the seat [DERIVED] */
 });
 
 const dp01 = (v) => (v <= 0 ? 0 : v >= 1 ? 1 : v);   /* the engine inlines every module into ONE scope, so a private
@@ -121,4 +173,48 @@ export const dropSpecular = (c, rPx, modes, o = {}) => {
   const k = Math.max(0.05, dropRadius(th, modes));
   return { x: c[0] + rPx * k * P.HL_AT * Math.cos(th), y: c[1] + rPx * k * P.HL_AT * Math.sin(th),
            r: rPx * P.HL_R * (0.85 + 0.15 * k), k: dp01(k / 1.5) };
+};
+
+/* ---- P61 T5 / E99 s3: the three MATERIAL profiles ----------------------------------------------------------------
+   Each is a pure function of a normalised coordinate on the ball and returns an ALPHA in [0, 1]. What colour that
+   alpha is painted in is the melt's (species/melt.mjs turns each into SVG gradient stops in the ball's own K-M ink),
+   so the material's law and the ball's ink stay one dial apart. */
+
+/* the grazing term at radius share s (0 at the centre, 1 at the silhouette): 1 - cos(theta_view) on a sphere, which
+   is what every Fresnel factor is a function of. Pure geometry [DERIVED]; NOT clothoid.mjs's Fresnel integral. */
+const dpGraze = (s) => 1 - Math.sqrt(Math.max(0, 1 - dp01(s) * dp01(s)));
+
+/* THE DARK GRAZING RIM ("dark fresnel rim", E99 s3). Zero inside RIM_AT, then MONOTONE NON-DECREASING to RIM_A at the
+   silhouette: the darkening only ever deepens toward the outline, never lightens. The sign is the operator's - the
+   blueprint's grazing rim is BRIGHT (s3.3, practitioner doctrine inside a PLAUSIBLE block) and ours is dark. */
+export const dropRimAlpha = (s, o = {}) => {
+  const P = Object.assign({}, DROP, o), x = dp01(s);
+  if (x <= P.RIM_AT) return 0;
+  const g0 = dpGraze(P.RIM_AT);
+  return P.RIM_A * Math.pow(dp01((dpGraze(x) - g0) / Math.max(1e-9, 1 - g0)), P.RIM_GAMMA);
+};
+
+/* THE METALLIC BAND: a Gaussian stripe NORMAL to the light axis, at p along it (0 the lit pole, 1 the dark pole).
+   [DERIVED - no gate-usable finding; see the dial block] */
+export const dropBandAlpha = (p, o = {}) => {
+  const P = Object.assign({}, DROP, o), d = (dp01(p) - P.BAND_P) / Math.max(1e-6, P.BAND_H);
+  return P.BAND_A * Math.exp(-d * d);
+};
+
+/* THE POINT OF DEEP SHADOW DEPTH: its seat, in the ball's own px, on the axis OPPOSITE the light - and the falloff
+   from it, at distance share s of PIT_R (monotone NON-INCREASING, PIT_A at the seat, 0 at its reach). */
+export const dropDeepPoint = (c, rPx, o = {}) => {
+  const P = Object.assign({}, DROP, o), th = (P.LIGHT_DEG + 180) * Math.PI / 180;
+  return { x: c[0] + rPx * P.PIT_AT * Math.cos(th), y: c[1] + rPx * P.PIT_AT * Math.sin(th), r: rPx * P.PIT_R };
+};
+export const dropPitAlpha = (s, o = {}) => {
+  const P = Object.assign({}, DROP, o);
+  return P.PIT_A * Math.pow(1 - dp01(s), P.PIT_GAMMA);
+};
+
+/* THE LIGHT AXIS as a pair of points in an SVG objectBoundingBox (0..1 over the ball's own box): the lit pole, then
+   the dark one. The melt's band gradient runs between them, so the stripe is always normal to the light. */
+export const dropLightAxis = (o = {}) => {
+  const P = Object.assign({}, DROP, o), th = P.LIGHT_DEG * Math.PI / 180, lx = Math.cos(th), ly = Math.sin(th);
+  return { x1: 0.5 + 0.5 * lx, y1: 0.5 + 0.5 * ly, x2: 0.5 - 0.5 * lx, y2: 0.5 - 0.5 * ly };
 };

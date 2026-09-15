@@ -5,7 +5,7 @@
 // scrubbed frame is built on: the same t twice is the same ring, vertex for vertex.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { DROP, dropOmega, dropTau, dropAmp, dropModes, dropRadius, dropArea, dropRing, dropSpecular }
+import { DROP, dropOmega, dropTau, dropAmp, dropModes, dropRadius, dropArea, dropRing, dropSpecular, dropRimAlpha, dropBandAlpha, dropPitAlpha, dropDeepPoint, dropLightAxis }
   from "../../scripts/kinetics/drop.mjs";
 
 const R = 60;                      // a page ball: 60 px is 7.1 mm at PX_PER_M
@@ -96,4 +96,94 @@ test("two calls at one t are identical, vertex for vertex", () => {
   const a = dropRing([12, 34], R, 0.37, "metal", HIT), b = dropRing([12, 34], R, 0.37, "metal", HIT);
   assert.deepEqual(a, b);
   assert.deepEqual(dropModes(0.37, R, "metal", HIT), dropModes(0.37, R, "metal", HIT));
+});
+
+// ---- P61 T5 / E99 s3: THE BALL'S SHADOWS ------------------------------------------------------------------------
+// The operator (OPERATOR-RULINGS.md:2922-2925): "We definitely need more shadows. The shadows are where the
+// weight/mass largely come from i think, dark fresnel rim + metallic band and I imagine incorporating at least one
+// point of deep shadow depth." These pin the MATERIAL's three profiles: the rim DARKENS monotonically toward the
+// silhouette (never a bright ring), the band is a stripe normal to the light with one peak, and the deep point is
+// seated OPPOSITE the light and falls off monotonically. The paint they become is species/melt.mjs's, checked by
+// tests/test_ball_material.py.
+
+test("the shadow dials are frozen, declared, and carry their measured defaults", () => {
+  assert.equal(Object.isFrozen(DROP), true);
+  // (b) the dark grazing rim, (c) the metallic band, (d) the point of deep shadow depth - every one a NAMED dial
+  for (const k of ["RIM_AT", "RIM_GAMMA", "RIM_A", "BAND_P", "BAND_H", "BAND_A", "PIT_AT", "PIT_R", "PIT_GAMMA", "PIT_A"]) {
+    assert.ok(Number.isFinite(DROP[k]), `${k} is not a number`);
+  }
+  // the rim may START inside the specular seat (RIM_AT 0.42 against HL_AT 0.46) - what must hold is that it is
+  // still NEGLIGIBLE there, or a wider rim would swallow the one highlight the metal reads by
+  assert.ok(dropRimAlpha(DROP.HL_AT) < 0.05 * DROP.RIM_A,
+    `the rim darkens the specular seat: ${dropRimAlpha(DROP.HL_AT)} of ${DROP.RIM_A}`);
+  assert.ok(DROP.BAND_A < 1 && DROP.BAND_A > 0, "the band is a sheen, not an opaque decal");
+});
+
+test("the DARK grazing rim: zero inside RIM_AT, MONOTONE toward the silhouette, darkest AT it", () => {
+  assert.equal(dropRimAlpha(0), 0);
+  assert.equal(dropRimAlpha(DROP.RIM_AT), 0, "nothing inside the band's start");
+  assert.ok(dropRimAlpha(DROP.RIM_AT - 0.01) === 0, "and nothing just inside it either");
+  let prev = -1;
+  for (let i = 0; i <= 400; i++) {
+    const a = dropRimAlpha(i / 400);
+    assert.ok(a >= prev - 1e-12, `not monotone at s=${i / 400}: ${a} after ${prev}`);
+    assert.ok(a >= 0 && a <= 1, `alpha out of range at s=${i / 400}: ${a}`);
+    prev = a;
+  }
+  near(dropRimAlpha(1), DROP.RIM_A, 1e-12, "at the silhouette");
+  // it is a RIM and not a vignette: the outer tenth of the radius carries most of the darkening
+  assert.ok(dropRimAlpha(0.9) < 0.5 * DROP.RIM_A, "the rim turns on late");
+  assert.ok(dropRimAlpha(1) - dropRimAlpha(0.9) > dropRimAlpha(0.9) - dropRimAlpha(0.5), "most of it is the last tenth");
+  // s is clamped: a wobble that pushes a sample past the nominal radius does not overshoot
+  assert.equal(dropRimAlpha(1.4), dropRimAlpha(1));
+});
+
+test("the METALLIC BAND: one peak at BAND_P, normal to the light, falling away either side", () => {
+  near(dropBandAlpha(DROP.BAND_P), DROP.BAND_A, 1e-12, "the peak");
+  let up = true, prev = dropBandAlpha(0), peaks = 0;
+  for (let i = 1; i <= 500; i++) {
+    const a = dropBandAlpha(i / 500);
+    if (up && a < prev) { peaks++; up = false; }
+    if (!up && a > prev + 1e-12) up = true;
+    prev = a;
+  }
+  assert.equal(peaks, 1, "exactly one band, not a stripe pattern");
+  assert.ok(dropBandAlpha(0) < 0.02 * DROP.BAND_A && dropBandAlpha(1) < 0.02 * DROP.BAND_A, "the poles are clear of it");
+  // the axis it runs along IS the light's: the lit pole first, the dark pole second (dropLightAxis, in bbox units)
+  const ax = dropLightAxis(), th = DROP.LIGHT_DEG * Math.PI / 180;
+  near(ax.x1, 0.5 + 0.5 * Math.cos(th), 1e-12, "the lit pole x");
+  near(ax.y1, 0.5 + 0.5 * Math.sin(th), 1e-12, "the lit pole y");
+  near(ax.x2, 1 - ax.x1, 1e-12, "and the dark pole is opposite it");
+  near(ax.y2, 1 - ax.y1, 1e-12, "and the dark pole is opposite it");
+});
+
+test("the POINT OF DEEP SHADOW DEPTH sits OPPOSITE the light and falls off monotonically", () => {
+  const seat = dropDeepPoint([0, 0], R);
+  const wrap = (a) => Math.atan2(Math.sin(a), Math.cos(a));
+  near(wrap(Math.atan2(seat.y, seat.x)), wrap((DROP.LIGHT_DEG + 180) * Math.PI / 180), 1e-12, "the seat's bearing");
+  near(Math.hypot(seat.x, seat.y) / R, DROP.PIT_AT, 1e-12, "how far out it sits");
+  assert.ok(seat.r > 0 && seat.r < R, "the well is on the ball");
+  // and it is on the OTHER side from the specular spot: the highlight and the well never share a hemisphere
+  const hl = dropSpecular([0, 0], R, dropModes(0.2, R, "metal", HIT));
+  assert.ok(hl.x * seat.x + hl.y * seat.y < 0, "the well is opposite the highlight");
+  near(dropPitAlpha(0), DROP.PIT_A, 1e-12, "deepest at the seat");
+  assert.equal(dropPitAlpha(1), 0, "and gone at its reach");
+  let prev = 2;
+  for (let i = 0; i <= 400; i++) {
+    const a = dropPitAlpha(i / 400);
+    assert.ok(a <= prev + 1e-12, `not monotone at s=${i / 400}`);
+    prev = a;
+  }
+});
+
+test("every shading profile is a PURE function of t: two reads at one instant are identical", () => {
+  for (const t of [0, 0.083, 0.37, 1.6]) {
+    const a = dropModes(t, R, "metal", HIT), b = dropModes(t, R, "metal", HIT);
+    assert.deepEqual(a, b);
+    // the rim rides the local radius, so the same modes give the same shading at the same theta
+    const sa = dropRadius(0.7, a), sb = dropRadius(0.7, b);
+    assert.equal(dropRimAlpha(sa), dropRimAlpha(sb));
+    assert.deepEqual(dropDeepPoint([0, 0], R), dropDeepPoint([0, 0], R));
+    assert.deepEqual(dropLightAxis(), dropLightAxis());
+  }
 });
