@@ -2,13 +2,14 @@
 
     python content/video_engine/scripts/serve_review_queue.py [--port 8766] [--no-open]
 
-At start it FIRST regenerates the page and its frames from review-queue.v1.json (build_review_queue.build_page), so the
-operator never opens a stale page, then serves the page folder on 127.0.0.1 only with `Cache-Control: no-store`.
+At start it FIRST regenerates the page, its frames and crops from review-queue.v1.json (build_review_queue.build_page),
+probing every player link so one that does not answer is never shown as a link, then serves the page folder on 127.0.0.1 only with `Cache-Control: no-store`.
 
     GET  /answers  ->  200 {"<item id>": {item, choice, note, at, by}, ...}   the latest line per item
     POST /answer   <-  one JSON object {item, choice, note}
                    ->  200 {"ok": true, "answer": {...}} and ONE line appended to review-answers.jsonl
-                   ->  400 {"ok": false, "error": "..."} naming the refusal; nothing appended
+                   ->  400 {"ok": false, "error": "..."} naming the refusal; nothing appended (an item owed by the
+                           agent, a ruled item and an unknown id are all refused by name)
 
 Mirrors serve_player.py's write door: one POST route, a validated body, a JSON answer, a named refusal. The answers
 file is append-only - never rewritten, never truncated; the latest line per item is its answer. The server never
@@ -37,14 +38,17 @@ BODY_MAX = 64_000        # bytes in one POST body
 ANSWER_KEYS = {"item", "choice", "note"}
 
 
-def refuse_reason(body: object, items_by_id: dict[str, dict]) -> str | None:
-    """The named reason a POST /answer body is refused, or None when it is a valid answer."""
+def refuse_reason(body: object, items_by_id: dict[str, dict], owed_by_id: dict[str, dict] | None = None) -> str | None:
+    """The named reason a POST /answer body is refused, or None when it is a valid answer. `items_by_id` holds only the
+    answerable items; an owed item is refused by name (E99 s14: it is the agent's work, never the operator's)."""
     if not isinstance(body, dict):
         return "the body is not one JSON object: send {\"item\": ..., \"choice\": ..., \"note\": ...}"
     extra = sorted(set(body) - ANSWER_KEYS)
     if extra:
         return f"unknown field(s) {', '.join(extra)}: an answer is {{item, choice, note}}"
     item = body.get("item")
+    if isinstance(item, str) and item in (owed_by_id or {}):
+        return f"{item} is owed by the agent, not open for an answer: {owed_by_id[item]['owed']}"
     if not isinstance(item, str) or item not in items_by_id:
         return f"unknown item {item!r}: not an id in review-queue.v1.json"
     choices = [*items_by_id[item]["options"], BRQ.OTHER]
@@ -60,8 +64,9 @@ def refuse_reason(body: object, items_by_id: dict[str, dict]) -> str | None:
 
 
 class QueueHandler(SimpleHTTPRequestHandler):
-    def __init__(self, *a, items_by_id=None, answers_path=None, lock=None, quiet=False, **kw):
+    def __init__(self, *a, items_by_id=None, owed_by_id=None, answers_path=None, lock=None, quiet=False, **kw):
         self.items_by_id = items_by_id or {}
+        self.owed_by_id = owed_by_id or {}
         self.answers_path = answers_path
         self.lock = lock
         self.quiet = quiet
@@ -109,7 +114,7 @@ class QueueHandler(SimpleHTTPRequestHandler):
 
     def _answer(self):
         body, error = self._read_body()
-        reason = error or refuse_reason(body, self.items_by_id)
+        reason = error or refuse_reason(body, self.items_by_id, self.owed_by_id)
         if reason:
             return self._json(400, {"ok": False, "error": reason})
         answer = {"item": body["item"], "choice": body["choice"], "note": body.get("note") or "",
@@ -123,12 +128,13 @@ class QueueHandler(SimpleHTTPRequestHandler):
 
 
 def make_server(port: int, data_path: Path, out_dir: Path, answers_path: Path, root: Path = BRQ.ROOT,
-                quiet: bool = False) -> ThreadingHTTPServer:
+                quiet: bool = False, probe: bool = True) -> ThreadingHTTPServer:
     """Regenerate the page from the data, then bind 127.0.0.1:port (0 = a free port). Not yet serving."""
     data = BRQ.load_data(data_path)
-    BRQ.build_page(data, root, out_dir)
-    items_by_id = {i["id"]: i for i in BRQ.open_items(data)}   # a ruled item takes no new answer
-    handler = functools.partial(QueueHandler, directory=str(out_dir), items_by_id=items_by_id,
+    BRQ.build_page(data, root, out_dir, BRQ.probe_players(data) if probe else None)
+    items_by_id = {i["id"]: i for i in BRQ.answerable_items(data)}   # a ruled or an owed item takes no answer
+    owed_by_id = {i["id"]: i for i in BRQ.owed_items(data)}
+    handler = functools.partial(QueueHandler, directory=str(out_dir), items_by_id=items_by_id, owed_by_id=owed_by_id,
                                 answers_path=answers_path, lock=threading.Lock(), quiet=quiet)
     return ThreadingHTTPServer(("127.0.0.1", port), handler)
 

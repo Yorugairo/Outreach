@@ -2897,3 +2897,81 @@ reveals. First instance: Japan's tariff bill page opening onto the Treasury vaul
 Recall: docs_find 0 hits for "swing", "evidence door" and "open the page"; the nearest built reveal is `exit:wipe`
 (`docs/content-video-engine/samples/scene-evidence-engine.mjs`, an incoming plate revealed behind a clip front); `species:radial`
 (a circle opening from a point) is carded and not built (`content/video_engine/scripts/build_scene_timeline_f.py`).
+
+## E99 - The review pass of 2026-09-14: a morph proves the whole chart, the melt gathers into a dense point, a transformation is judged in motion (2026-09-14)
+
+The operator's answers, marked in the review queue (`docs/content-video-engine/review-answers.jsonl`, 2026-09-14 18:04-18:41) and
+typed in the session. Quoted as written; the Apply lines are the parent's reading. Each item's source row carries a pointer here.
+
+**E99 s1 - A morph proves it can morph the entire chart (R26-70, R26-117).** On the compare-morph card: *"that's an extremely stupid
+morph, the morph needs to prove that it can morph the entire data set/chart."* Apply: a morph proof transforms the WHOLE chart - every
+series, every datum, the axes and the labels - into the next chart. The P57 T12c compare (one quoted figure balling up into the
+comparator's glyphs) is not a morph proof; the morph is proven only when a full chart becomes a full chart, and R26-117 (the ball into
+the next chart) is built and judged to that standard.
+
+**E99 s2 - The melt gathers into one dense, heavy, vibrating point; the splash lands in a scenic plate or a full chart (R26-76, E88).**
+*"that ball doesn't read as dense/heavy to me, and the melt and melt splash is ugly. for the melt, i expect almost like our swirl effect,
+i don't want the melt to be blur or a wipe, it should be closer to the swirl except for instead of a whirlpool, vortexing around a single
+point, it collects and amasses into a single point, that single point should be dense, heavy, and vibrating with energy, and when it
+splashes, it should splash into a scenic, high-resolution world plate or fully assembled chart. I could imagine that one way to do it
+would be an ink splat essentially triggers the ink bloom transition mechanics into a new chart or world plate, that would be an
+acceptable outcome."* Apply: the current melt and splash are refused as they look; the melt is the vortex's motion gathered to a point
+(never a blur or a wipe), the point reads dense, heavy and alive with energy, and the splash arrives in a high-resolution world plate or a
+fully assembled chart - an ink splat that triggers the ink-bloom transition into the next chart or plate is an accepted route.
+
+**E99 s3 - The ball's weight is in its shadows (R26-118, E88 s7).** Marked *reads glossy*: *"We definitely need more shadows. The
+shadows are where the weight/mass largely come from i think, dark fresnel rim + metallic band and I imagine incorporating at least one
+point of deep shadow depth."* Apply: the metallic ball gains more shadow, a dark Fresnel rim, a metallic band, and at least one point of
+deep shadow depth.
+
+**E99 s4 - A transformation is judged in video; a slanted page earns its place only in front of something or into the next plate
+(P58 HG3).** *"these are transformations so it's impossible to actually judge without watching video, but my initial impression is that
+the page-depth on a slant only pays value with something docked in front of it, or if we're purposefully going to lead into the next
+plate with that, because we can either then "pull" the top page, like opening a book, or we can swing it in as a door, or we can push it
+across. would like to see the shapes break down more in form-extruded-bar@proof-leave to look more similar to
+form-tilted-line@proof-leave."* Apply: HG3 stays open until the forms are shown in motion; a page at a depth or slant is used only with a
+dock in front of it or as the lead into the next plate (a book-page pull, the door of E98 s7, or a push); the extruded bar's leave breaks
+the shapes down more, the way the tilted line's leave does.
+
+**E99 s5 - Depth on a slide does not earn its keep (P58 T6c).** *"it does not earn its keep here. agreed with agent recommendation, it
+earns its keep only where the two worlds differ in ground or scale ... or when we have evidence etc in the foreground potentially. not on
+a slide."* Apply: `slide:...:depth=` stays built and unused on a plain slide; it is authored only where the two worlds differ in ground or
+scale, or with evidence in the foreground.
+
+**E99 s6 - The caption default is the blend (R26-123, P57 HG2).** Marked `blend`.
+
+**E99 s7 - The span reads darker; the empty-stage hand-off and R26-71 need a proof a person can read (R26-125, P57 HG1).** *"if the
+span is the gray back that's sitting over the top, it needs to read a bit more shaded/darker, that light of gray makes it read washed out.
+I'd have to see the empty stage handoff to see how it actually transitions. For R26-71 i dont understand what you're showing me, all 4 of
+those images are the same, are you just showing that the line isn't drawing on collision at 53.92s but it is on the other 3?"* Apply:
+the span's grey reads darker; the empty-stage hand-off is shown in motion; the R26-71 proof is re-presented so its difference is visible.
+
+**E99 s8 - The slide is good; the race reads as separate rules (R26-124, P57 HG2).** *"slide looks good to me. the race reads as separate
+rules as far as i can see but these are stills not video. i already thought it looked fine before even with the clash."*
+
+**E99 s9 - The opening register is the axes register (P53 HG1).** Marked `the axes register`.
+
+**E99 s10 - Opening on a full chart was never refused (R26-114).** *"we never said to never open on a full chart."* Apply: a row or
+agent reading that treats opening on a full chart as forbidden is corrected.
+
+**E99 s11 - Three working rules confirmed; the frozen review link is not the operator's (R26-136).** *"i believe you already made the
+piped tail rule, but yes, A fix never lowers motion, never pipe a gated step into tail; recall before propose. I dont know what the served
+review is never rebuilt thing comes from."* Apply: **a fix never lowers motion**, **never pipe a gated step into tail**, and **recall
+before propose** are the operator's rules. "A served review build is never rebuilt" is an agent practice from the 2026-09-11 incident
+(`review-link-frozen-copy`), not an operator ruling.
+
+**E99 s12 - The Myth rewrite order B is approved (R26-109).** *"approved"*
+
+**E99 s13 - The studio plan is dated; GPT and Claude plan and animate together (R26-102).** *"well, this is kind of dated now. We've
+already been building out most of it, the actual integration piece for GPT+Claude to be able to work together, and most likely we will
+have both fable and astra plan together. Both Claude and GPT will likely be animators/designers in the repo so we will need to be used to
+plans from either."* Apply: the 2026-09-13 readiness review is superseded; plans are written to be executed by either Claude or GPT, and
+Fable and Astra plan together.
+
+**E99 s14 - A review item reaches the operator only with a proof a person can judge.** On the queue itself: *"a lot of what you ask for
+doesn't appear to be served or have no proofs. i dont understand why something like this is here, when there's literally nothing
+changing on screen besides captions"*, and *"this is a bad review. i answered a lot of what i could, you need to create a better pass."*
+And on the gallery item: *"why are you suggesting to potentially trim or retire the effects gallery?"* Apply: an item enters the review
+only with a proof framed for a viewer - motion as a served player or a clip, a crop on what changes, a before and after - and an item
+without one is the agent's work, never the operator's; a gate question is not copied into the queue as options the record never argued
+(P55 HG2's "keep, trim, or retire" had no recommendation behind it).

@@ -1,10 +1,13 @@
-"""THE REVIEW QUEUE: the data's schema, the deterministic builder, and the answer server's one write door.
+"""THE REVIEW QUEUE: the data's schema, the deterministic builder, the proofs, and the answer server's one write door.
 
-The pins: the schema refuses a missing field, an unknown kind and a duplicate id by name; --write then --check passes
-and a one-word data edit makes --check fail naming REVIEW-QUEUE.md; the markdown and the page are byte-identical
-across two writes; every open id appears once in the page and once in the markdown, a ruled id only under "Ruled since
-the last pass"; the server appends exactly one operator line per valid answer, refuses the four bad bodies with a named
-400 and appends nothing, and GET /answers returns the latest line per item. Every write goes to a temp path.
+The pins: the schema refuses a missing field, an unknown kind, a duplicate id, and an open watch / look item with no
+proof (E99 s14) by name; --write then --check passes and a one-word data edit makes --check fail naming REVIEW-QUEUE.md;
+the markdown and the page are byte-identical across two writes; every answerable id appears once as a card, an owed id
+only in the collapsed owed list with no answer controls, a ruled id only under "Ruled since the last pass" with its ruling
+id; the progress line counts only answerable items; a player link that did not answer is never a link; the crop helper's
+box holds every differing pixel and a caption-only pair is refused; the server appends exactly one operator line per
+valid answer, refuses the bad bodies and an owed item with a named 400 and appends nothing, and GET /answers returns the
+latest line per item. Every write goes to a temp path.
 """
 from __future__ import annotations
 
@@ -23,14 +26,22 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
 import build_review_queue as BRQ  # noqa: E402
+import review_queue_proofs as RQP  # noqa: E402
 import serve_review_queue as SRQ  # noqa: E402
 
 DATA = ROOT / BRQ.DATA_REL
+OWED_ID = "r26-76-melt-endings-in-motion"
+RULED_ID = "r26-123-caption-default"
 
 
 @pytest.fixture(scope="module")
 def data() -> dict:
     return BRQ.load_data(DATA)
+
+
+@pytest.fixture(scope="module")
+def page(data) -> str:
+    return BRQ.render_page(data, ROOT)
 
 
 def write_data(path: Path, payload: dict) -> Path:
@@ -39,7 +50,13 @@ def write_data(path: Path, payload: dict) -> Path:
 
 
 def run_cli(tmp: Path, data_path: Path, *mode: str) -> int:
-    return BRQ.main([*mode, "--data", str(data_path), "--md", str(tmp / "REVIEW-QUEUE.md"), "--out", str(tmp / "page")])
+    extra = ["--no-probe"] if "--write" in mode else []
+    return BRQ.main([*mode, *extra, "--data", str(data_path), "--md", str(tmp / "REVIEW-QUEUE.md"),
+                     "--out", str(tmp / "page")])
+
+
+def card_of(page: str, item_id: str) -> str:
+    return re.search(rf'<article class="card" data-id="{re.escape(item_id)}".*?</article>', page, re.S).group(0)
 
 
 # ---------------------------------------------------------------- schema
@@ -65,9 +82,29 @@ def test_schema_refuses_a_duplicate_id_by_name(data):
         BRQ.validate(items)
 
 
+@pytest.mark.parametrize("kind", ["watch", "look"])
+def test_the_builder_refuses_an_open_watch_or_look_item_with_no_proof(data, kind):
+    items = copy.deepcopy(data["items"])
+    rec = next(i for i in items if i["status"] == "open" and i["kind"] in BRQ.PROOF_KINDS)
+    rec["kind"], rec["proofs"] = kind, []
+    with pytest.raises(BRQ.QueueError, match=rf"{rec['id']}: an open {kind} item has no proof entry \(E99 s14\)"):
+        BRQ.validate(items)
+
+
+def test_an_owed_item_must_say_what_it_owes(data):
+    items = copy.deepcopy(data["items"])
+    rec = next(i for i in items if i["id"] == OWED_ID)
+    rec["owed"] = ""
+    with pytest.raises(BRQ.QueueError, match=rf"{OWED_ID}: an owed item says what it owes"):
+        BRQ.validate(items)
+
+
 def test_the_tracked_data_passes_and_every_kind_has_open_items(data):
     kinds = {i["kind"] for i in BRQ.open_items(data)}
     assert kinds == set(BRQ.KINDS)
+    for rec in BRQ.answerable_items(data):
+        if rec["kind"] in BRQ.PROOF_KINDS:
+            assert rec["proofs"], rec["id"]
 
 
 # ---------------------------------------------------------------- builder
@@ -89,46 +126,117 @@ def test_the_markdown_and_the_page_are_byte_identical_across_two_writes(tmp_path
     assert run_cli(tmp_path, data_path, "--write") == 0
     md1 = (tmp_path / "REVIEW-QUEUE.md").read_bytes()
     page1 = (tmp_path / "page/index.html").read_bytes()
+    crops1 = {p.name: p.read_bytes() for p in (tmp_path / "page/crops").iterdir()}
     frames1 = sorted(p.name for p in (tmp_path / "page/frames").iterdir())
     assert run_cli(tmp_path, data_path, "--write") == 0
     assert (tmp_path / "REVIEW-QUEUE.md").read_bytes() == md1
     assert (tmp_path / "page/index.html").read_bytes() == page1
+    assert {p.name: p.read_bytes() for p in (tmp_path / "page/crops").iterdir()} == crops1
     assert sorted(p.name for p in (tmp_path / "page/frames").iterdir()) == frames1
 
 
-def test_every_open_id_appears_once_and_a_ruled_id_only_under_the_ruled_section(data):
-    page = BRQ.render_page(data, ROOT)
+def test_answerable_ids_are_cards_owed_ids_are_listed_and_ruled_ids_carry_their_ruling(data, page):
     md = BRQ.render_markdown(data)
-    md_open, md_ruled = md.split(f"## {BRQ.RULED_HEADING}")
-    page_open, page_ruled = page.split('<section id="ruled">')
-    for rec in BRQ.open_items(data):
-        assert page.count(f'data-id="{rec["id"]}"') == 1, rec["id"]
-        assert md.count(f"| `{rec['id']}` |") == 1, rec["id"]
+    md_open, md_rest = md.split(f"## {BRQ.OWED_HEADING}")
+    md_owed, md_ruled = md_rest.split(f"## {BRQ.RULED_HEADING}")
+    page_open, page_rest = page.split('<section id="owed">')
+    page_owed, page_ruled = page_rest.split('<section id="ruled">')
+    for rec in BRQ.answerable_items(data):
+        assert page_open.count(f'data-id="{rec["id"]}"') == 1, rec["id"]
+        assert md_open.count(f"| `{rec['id']}` |") == 1, rec["id"]
+    for rec in BRQ.owed_items(data):
+        assert f'data-id="{rec["id"]}"' not in page and f'data-owed-id="{rec["id"]}"' in page_owed, rec["id"]
+        assert f"| `{rec['id']}` |" in md_owed and f"`{rec['id']}`" not in md_open, rec["id"]
     ruled = BRQ.ruled_items(data)
     assert ruled, "the tracked data carries the ruled-since-the-last-pass records"
     for rec in ruled:
-        assert f"`{rec['id']}`" not in md_open and f"| `{rec['id']}` |" in md_ruled, rec["id"]
+        assert f"`{rec['id']}`" not in md_open + md_owed and f"| `{rec['id']}` |" in md_ruled, rec["id"]
         assert f'data-id="{rec["id"]}"' not in page
-        assert esc_in(rec["ruling"], page_ruled) and not esc_in(rec["ruling"], page_open), rec["id"]
+        assert BRQ.esc(rec["ruling"]) in page_ruled and BRQ.esc(rec["ruling"]) not in page_open, rec["id"]
 
 
-def esc_in(text: str, blob: str) -> bool:
-    return BRQ.esc(text) in blob
+def test_a_ruled_item_shows_its_ruling_id(data, page):
+    rec = next(i for i in BRQ.ruled_items(data) if i["id"] == RULED_ID)
+    assert rec["ruling"] == "E99 s6"
+    row = re.search(rf"<tr><td><b>{re.escape(BRQ.esc(rec['title']))}</b>.*?</tr>", page, re.S).group(0)
+    assert '<td class="ruling">E99 s6</td>' in row
+    assert f"| `{RULED_ID}` |" in BRQ.render_markdown(data) and "| E99 s6 |" in BRQ.render_markdown(data)
 
 
-def test_a_missing_proof_shows_the_marker_and_a_stale_port_its_serve_command(data):
-    page = BRQ.render_page(data, ROOT)
-    card = re.search(r'<article class="card" data-id="r26-133-drift-idle-paints-nothing".*?</article>', page, re.S).group(0)
-    assert BRQ.NO_PROOF_MARKER in card
-    card = re.search(r'<article class="card" data-id="p52-gate3-species-proof-motion".*?</article>', page, re.S).group(0)
-    assert 'class="stale"' in card and "serve_player.py content/video_engine/review/gates-2026-09-13/species-proof-player/ --port 8756" in card
-    assert 'href="http://127.0.0.1:8756' not in card
+def test_an_owed_item_renders_without_answer_controls(page):
+    owed = page.split('<section id="owed">')[1].split('<section id="ruled">')[0]
+    li = re.search(rf'<li data-owed-id="{OWED_ID}">.*?</li>', owed, re.S).group(0)
+    assert "E99 s2" in li
+    assert "<form" not in owed and "<input" not in owed and "<textarea" not in owed and "<button" not in owed
+    assert "<details>" in owed
 
 
-def test_the_page_makes_no_external_request(data):
-    page = BRQ.render_page(data, ROOT)
+def test_the_progress_line_counts_only_answerable_items(data, page):
+    total = len(BRQ.answerable_items(data))
+    assert total < len(BRQ.open_items(data))
+    assert f'data-total="{total}"' in page and f">0 of {total} answered<" in page
+    assert page.count('<article class="card"') == total == page.count("<form class=\"answer\">")
+
+
+def test_a_player_link_that_did_not_answer_is_never_a_link(data):
+    rec = next(i for i in BRQ.answerable_items(data) if any(p["type"] == "player" for p in i.get("proofs") or []))
+    url = next(p["url"] for p in rec["proofs"] if p["type"] == "player")
+    dead = card_of(BRQ.render_page(data, ROOT, {url: False}), rec["id"])
+    assert f'href="{url}"' not in dead and "not answering when this page was built" in dead and "serve_player.py" in dead
+    alive = card_of(BRQ.render_page(data, ROOT, {url: True}), rec["id"])
+    assert f'href="{url}"' in alive
+
+
+def test_a_clip_proof_names_its_build_and_time_range(data, page):
+    rec, n, proof = RQP.clip_proofs(data, "p58-hg3-chart-forms")[0]
+    card = card_of(page, rec["id"])
+    assert f"golden {proof['surface']} - {proof['t0']:g} to {proof['t1']:g} s" in card
+    assert f"clips/{RQP.clip_name(rec['id'], n)}" in card or "clip not rendered yet" in card
+
+
+def test_the_page_makes_no_external_request(page):
     assert not re.search(r'(src|href)="https?://(?!127\.0\.0\.1)', page)
     assert "<link" not in page and "@import" not in page
+
+
+# ---------------------------------------------------------------- crops
+
+def _pair(size=(200, 120)):
+    from PIL import Image, ImageDraw
+    a = Image.new("RGB", size, (244, 230, 199))
+    b = a.copy()
+    return a, b, ImageDraw.Draw(b)
+
+
+def test_the_crop_box_contains_every_differing_pixel():
+    from PIL import ImageChops
+    a, b, draw = _pair()
+    draw.rectangle([40, 30, 59, 44], fill=(37, 49, 60))
+    draw.point((150, 100), fill=(184, 64, 42))
+    box = RQP.diff_box(a, b, margin=4)
+    diff = ImageChops.difference(a, b).convert("L").point(lambda v: 255 if v >= RQP.DIFF_THRESHOLD else 0)
+    changed = [(x, y) for y in range(a.height) for x in range(a.width) if diff.getpixel((x, y))]
+    assert changed and all(box[0] <= x < box[2] and box[1] <= y < box[3] for x, y in changed)
+    assert box == (36, 26, 155, 105)
+
+
+def test_the_crop_refuses_a_pair_that_differs_only_inside_the_caption_box():
+    a, b, draw = _pair()
+    draw.rectangle([20, 95, 180, 110], fill=(240, 180, 40))    # a caption word changed, nothing else
+    with pytest.raises(RQP.NoVisibleChange, match="outside the caption box"):
+        RQP.diff_box(a, b, caption_box=[0, 90, 200, 120])
+    draw.rectangle([10, 10, 20, 20], fill=(37, 49, 60))         # now the stage changes too
+    box = RQP.diff_box(a, b, caption_box=[0, 90, 200, 120], margin=0)
+    assert box == (10, 10, 21, 21)
+
+
+def test_the_tracked_crop_differs_outside_its_caption(data):
+    crops = [(i, p) for i in BRQ.answerable_items(data) for p in i.get("proofs") or [] if p["type"] == "crop"]
+    assert crops
+    for rec, proof in crops:
+        x0, y0, x1, y1 = RQP.crop_box(proof, ROOT)
+        cap = proof.get("caption_box")
+        assert not cap or y1 <= cap[1] or y0 >= cap[3] or x1 <= cap[0] or x0 >= cap[2], rec["id"]
 
 
 # ---------------------------------------------------------------- server
@@ -137,7 +245,7 @@ def test_the_page_makes_no_external_request(data):
 def server(tmp_path):
     answers = tmp_path / "answers.jsonl"
     answers.write_text("", encoding="utf-8")
-    httpd = SRQ.make_server(0, DATA, tmp_path / "page", answers, quiet=True)
+    httpd = SRQ.make_server(0, DATA, tmp_path / "page", answers, quiet=True, probe=False)
     thread = threading.Thread(target=httpd.serve_forever, daemon=True)
     thread.start()
     yield f"http://127.0.0.1:{httpd.server_address[1]}", answers
@@ -168,8 +276,8 @@ def lines_of(path: Path) -> list[dict]:
 
 def test_the_server_regenerates_and_serves_the_page(server):
     base, _ = server
-    code, page = request(f"{base}/")
-    assert code == 200 and 'data-id="r26-126-push-word"' in page
+    code, body = request(f"{base}/")
+    assert code == 200 and 'data-id="r26-126-push-word"' in body and f'data-owed-id="{OWED_ID}"' in body
 
 
 def test_a_valid_answer_appends_exactly_one_operator_line(server):
@@ -187,6 +295,8 @@ def test_a_valid_answer_appends_exactly_one_operator_line(server):
     ({"item": "r26-126-push-word", "choice": "maybe", "note": ""}, "invalid choice 'maybe' for r26-126-push-word"),
     ({"item": "r26-126-push-word", "choice": "other", "note": "x" * (SRQ.NOTE_MAX + 1)}, "over NOTE_MAX"),
     (["r26-126-push-word", "hold"], "the body is not one JSON object"),
+    ({"item": OWED_ID, "choice": "other", "note": ""}, f"{OWED_ID} is owed by the agent, not open for an answer"),
+    ({"item": RULED_ID, "choice": "other", "note": ""}, f"unknown item '{RULED_ID}'"),
 ])
 def test_a_bad_answer_is_refused_by_name_and_appends_nothing(server, payload, reason):
     base, answers = server
@@ -208,7 +318,7 @@ def test_get_answers_returns_the_latest_line_per_item(server):
     assert code == 200 and body == {}
     post(base, {"item": "r26-126-push-word", "choice": "hold", "note": "first"})
     post(base, {"item": "r26-126-push-word", "choice": "push", "note": "second"})
-    post(base, {"item": "p55-hg2-effects-gallery", "choice": "keep", "note": ""})
+    post(base, {"item": "p55-hg2-effects-gallery", "choice": "it does", "note": ""})
     code, body = request(f"{base}/answers")
     assert code == 200 and set(body) == {"r26-126-push-word", "p55-hg2-effects-gallery"}
     assert body["r26-126-push-word"]["choice"] == "push" and body["r26-126-push-word"]["note"] == "second"
