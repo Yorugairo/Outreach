@@ -1,4 +1,4 @@
-# The bridge packet — one shape for Claude, Gemini and Astra (P46 T4, draft for Astra's review)
+# The bridge packet — one shape for Claude, Gemini and Astra (P46 T4, the record of what the tools do)
 
 An order between lanes is **a file and a send**. Nobody polls a folder for orders; the sender emits the packet through the
 addressee's own CLI, and the packet file is the durable record. This page fixes the shape so the three lanes stop re-deriving it.
@@ -76,11 +76,16 @@ toast to the operator. A live session sees `N bridge replies waiting` on its nex
 
 ## 5. The ledger
 
-`evals/BRIDGE-LOG.jsonl` (per machine, gitignored): one line per event — `sent`, `replied`, `tier0`, `tier1`, `timeout`,
-`escalated` — with `lane`, `packetId`, `conversationId`, seconds since `sentAt`, usage where the transcript exposes it (null
-otherwise). The escape rate (tier 1 ÷ replied) is the number that decides whether the residue role stays on Opus.
+`evals/BRIDGE-LOG.jsonl` (per machine, gitignored): one line per event — `sent`, `replied`, `followup`, `tier0`, `tier1`,
+`timeout`, `escalated`, `repair`, `repaired` (`bridge_env.py:56` `LEDGER_EVENTS`) — with `lane`, `packetId`, `conversationId`,
+seconds since `sentAt`, usage where the transcript exposes it (null otherwise). The escape rate (tier 1 ÷ replied) is the
+number that decides whether the residue role stays on Opus.
 
-## 6. Open for Astra's review (sent through the bridge as a `review` packet)
+## 6. Known divergences from P2 (not blocking)
+
+This page is the record of what the tools already do, maintained by the agent from the code; there is no review or
+ratification step (E99 s33 — the operator: "yes, i dont think i need to approve anything"). The items below are a
+Codex-lane schema reconciliation, not open questions.
 
 1. Field names: match P2's execution-order schema where one exists (`packetId` vs P2's run/task ids; `replyShape` vs P2's return schema).
 2. The 6 KB cap and the 250-word reply cap — P2's limits are 12,000 input / 1,500 output tokens per retrieval trial; this page is for orders, not trials. Reconcile or keep both.

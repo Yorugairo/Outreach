@@ -540,22 +540,36 @@
         "R26-68",
         "R26-71"
       ],
-      "kind": "owed",
+      "kind": "watch",
       "title": "P57 HG1: the measured defects' frames in one sitting",
-      "judge": "(1) R26-66 the empty-stage hand-off, now in motion at both boundaries (the suck at 13.79 s, the melt at 40.51 s): does the next world arrive with no empty cream? (2) R26-71, re-presented as one crop at the same instant: the label '31% of GDP' printed through the orange rise (before) vs standing under the 1980 trough (after). (3) R26-67 the ring's flag at the apex, in motion. The span's darker grey (R26-68) is owed by the agent (E99 s7).",
+      "judge": "The debt page tilts, spins and shrinks into a point while the long-end page's axes are already drawn beneath; the melt sags to drips, gathers into the ball, and the interest-bill page forms after it; the ball sits alone ~0.6 s (M31) - E99 s2's gather-and-splash is the fix. Watch both hand-offs end to end. Are these transformations, not cuts?",
       "where": [
+        {
+          "label": "the E47 build (the suck at 10.89 s, the melt at 33.97 s)",
+          "path": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-e47/",
+          "note": "supersedes build-short-axes, whose 13.79 / 40.51 clocks were the s01 / s03 cuts"
+        },
+        {
+          "label": "the build's stage gaps",
+          "path": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-e47/stage-gaps.json"
+        },
+        {
+          "label": "the build's motion gate",
+          "path": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-e47/GATES-MOTION.md",
+          "note": "1 FAIL (M31, the ball alone ~0.6 s) / 1 WARN / 18 PASS / 1 JUDGE / 7 INFO"
+        },
         {
           "label": "the handoff sheet",
           "path": "docs/research/runs/p57-burndown/HG-HANDOFF.md",
           "note": "HG-HANDOFF.md:13 names compare-morph@proof-{quoted,melt,write}.png, which do not exist; the real frames are compare-streak@proof-{quoted,melt,write}.png (linked on the compare-morph item)"
-        },
-        {
-          "label": "R26-66 stage gaps",
-          "path": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-axes/stage-gaps.json"
         }
       ],
-      "options": [],
-      "recommendation": null,
+      "options": [
+        "yes",
+        "no",
+        "the melt's empty 0.6 s"
+      ],
+      "recommendation": "yes - a page is picked up, spun and thrown into the middle of the page that replaced it, and the chart genuinely melts, balls up, is thrown off and the next chart forms under it. The one caveat to answer with it is the ~0.6 s at 34.6-35.2 where the board carries only the ball (M31's row).",
       "blocks": "nothing (P57 complete; \"recorded in the rows when given\")",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:557",
@@ -567,7 +581,11 @@
         "docs/content-video-engine/BACKLOG.md:474",
         "docs/content-video-engine/BACKLOG.md:475",
         "docs/content-video-engine/BACKLOG.md:476",
-        "docs/content-video-engine/BACKLOG.md:477"
+        "docs/content-video-engine/BACKLOG.md:477",
+        "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-e47/bridge-short.timeline.json",
+        "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-e47/stage-gaps.json",
+        "content/video_engine/scene-evidence-engine.mjs:3954",
+        "content/video_engine/scene-evidence-engine.mjs:2633"
       ],
       "status": "open",
       "ruling": null,
@@ -579,48 +597,30 @@
       "proofs": [
         {
           "type": "clip",
-          "label": "R26-66 the hand-off at the suck (13.79 s)",
-          "build": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-axes/",
+          "label": "The suck hand-off, whole (E99 s19): the bridge chart builds, is read, is sucked into a point, and the long-end chart forms",
+          "build": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-e47",
           "aspect": "9:16",
-          "t0": 12.3,
-          "t1": 17.3,
+          "t0": 4.2,
+          "t1": 16.9,
           "route": "review_queue_proofs.py --clips: the built player served from its folder, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
         },
         {
           "type": "clip",
-          "label": "R26-66 the hand-off at the melt (40.51 s)",
-          "build": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-axes/",
+          "label": "The melt hand-off, whole (E99 s19): the bridge chart is read at 31% and 123%, its ink sags, drips, balls up and is thrown, and the interest-bill chart forms",
+          "build": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-e47",
           "aspect": "9:16",
-          "t0": 38.8,
-          "t1": 44.3,
+          "t0": 31.6,
+          "t1": 44.4,
           "route": "review_queue_proofs.py --clips: the built player served from its folder, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
         },
         {
-          "type": "clip",
-          "label": "R26-67 the ring's flag at the apex (67.8-69.3 s)",
-          "build": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-axes/",
-          "aspect": "9:16",
-          "t0": 65.5,
-          "t1": 69.7,
-          "route": "review_queue_proofs.py --clips: the built player served from its folder, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
-        },
-        {
-          "type": "crop",
-          "label": "R26-71 the figure across its own line, at 31.78 s",
-          "before": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-review/self-watch/p57-t10/before-t31p78.png",
-          "after": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-review/self-watch/p57-t10/after-t31p78.png",
-          "before_label": "before (31.78 s)",
-          "after_label": "after (31.78 s)",
-          "caption_box": [
-            0,
-            1280,
-            1080,
-            1420
-          ],
-          "route": "build_review_queue.py --write: diff_box over the two self-watch frames, the caption strip excluded, 32 px margin"
+          "type": "player",
+          "label": "the E47 bridge short, the whole cut",
+          "url": "http://127.0.0.1:8767/player.html",
+          "build": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/build-short-e47/",
+          "confirmed": "GET 200 on 2026-09-15 10:09 (-07:00)"
         }
-      ],
-      "owed": "E99 s19: rewrite build-short-axes' exits to the E47 reading (its suck and melt sit on s01 and s03, so 13.79 s and 40.51 s are cuts), then show the hand-off as the whole sequence (build, read, melt or suck, hand off, the next chart forms)"
+      ]
     },
     {
       "id": "r26-70-compare-morph",
@@ -807,17 +807,33 @@
         "P56 HG2",
         "R26-104"
       ],
-      "kind": "owed",
+      "kind": "rule",
       "title": "The first cut measured under the one-shot floor",
-      "judge": "Keep, move or retire the M35-M42 thresholds, including the coverage reading.",
+      "judge": "M35-M42 on the first cuts measured under the floor: keep, move or retire? The three sheets are attached below. `floor-rows-both-cuts.png` is the eight rows on BOTH cuts named build-p58-2-5d (they are two different builds, not two runs: tokyo-tea-break 3 FAIL / 1 WARN / 2 PASS, M38 0.12 spanning; japan-tariff-trick 2 FAIL / 1 WARN / 3 PASS, M38 0.64 spanning - the cut HG2 actually served). `beat11-still-life-breather.png` is the recipe audit sheet for beat 11, this cut over the proof, five member instants - readable, and its last column (44.88 s) is empty cream in BOTH rows. `beat25-outro-clip-life.png` is nearly unreadable: four of six panels are pure black, because the recipe fires on a clip whose member instants land on black frames.",
       "where": [
         {
-          "label": "the first cut's self-watch report + recipe audit sheet (no build named)",
-          "missing": true
+          "label": "the one-shot floor's eight rows on both cuts",
+          "path": "content/video_engine/review/assembly/p56-hg2-one-shot-floor/floor-rows-both-cuts.png"
         },
         {
-          "label": "nearest numbers: the HG2 sheet :31-36 (floor 2 FAIL / 1 WARN / 3 PASS, M38 0.76 / 0.64)",
+          "label": "the recipe audit sheet, beat 11 (still-life-breather)",
+          "path": "content/video_engine/review/assembly/p56-hg2-one-shot-floor/beat11-still-life-breather.png"
+        },
+        {
+          "label": "the recipe audit sheet, beat 25 (outro-clip-life)",
+          "path": "content/video_engine/review/assembly/p56-hg2-one-shot-floor/beat25-outro-clip-life.png"
+        },
+        {
+          "label": "the HG2 sheet (the Japan reading, :31-36)",
           "path": "docs/research/runs/p58-2-5d/HG2-SHEET.md"
+        },
+        {
+          "label": "the Tokyo reading",
+          "path": "content/video_engine/review/assembly/p56-hg2-one-shot-floor/TOKYO-SELF-WATCH.md"
+        },
+        {
+          "label": "the gate",
+          "command": "python content/video_engine/scripts/gate_one_shot_floor.py <build> --project <project> --reference content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short"
         }
       ],
       "options": [
@@ -825,17 +841,18 @@
         "move",
         "retire"
       ],
-      "recommendation": "\"the parent may raise the bar to count >= 2 at HG2\"",
+      "recommendation": "KEEP M35, M39, M41. MOVE M38: hold 0.60 but stop counting a recipe that fires ONCE (the gate itself calls them \"a decoration\") - Japan's 0.64 PASS rests on 3 of its 5 recipes being single fires, and Tokyo's 0.12 is two decorations. Retire nothing. The floor is right and BOTH cuts are thin: each carries 2 chart forms where the reference also carries 2 and Bravos carries ~6.",
       "blocks": "nothing (\"the rows are data until then\")",
       "sources": [
         ".claude/PRPs/plans/P56-EFFECT-RECIPES-AND-THE-ONE-SHOT-FLOOR.plan.md:214-216",
         ".claude/PRPs/plans/P56-EFFECT-RECIPES-AND-THE-ONE-SHOT-FLOOR.plan.md:508",
-        "docs/content-video-engine/BACKLOG.md:536"
+        "docs/content-video-engine/BACKLOG.md:536",
+        "docs/research/runs/p58-2-5d/HG2-SHEET.md:3-4",
+        "docs/research/runs/p58-2-5d/HG2-SHEET.md:31-36",
+        "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-2-5d/SELF-WATCH.md:14-21"
       ],
       "status": "open",
-      "ruling": null,
-      "was_kind": "look",
-      "owed": "Missing proof: no build names the first cut's self-watch report and recipe audit sheet, and the record carries no argument for moving or retiring M35-M42 - the agent names the cut and its readings first."
+      "ruling": null
     },
     {
       "id": "p53-hg1-opening-register",
@@ -876,21 +893,25 @@
         "OG Part 2 item 2",
         "R26-87"
       ],
-      "kind": "owed",
+      "kind": "look",
       "title": "The cutout dock's first frame",
-      "judge": "Gate 1's 16:9 frame re-rendered with a head that carries no card (the authoring is fixed, R26-94).",
+      "judge": "Gate 1's 16:9 frame, the head above the crawl: the framed card the operator sent back (R26-59) against the committed golden's cutout dock. Everything else in the frame - the band, the crawl's phase, the caption, the world - is pixel-for-pixel the same, so the pair isolates the one change.",
       "where": [
         {
-          "label": "gate 1's 16:9 frame re-rendered with a cardless head (not re-rendered on record)",
-          "missing": true
+          "label": "the committed golden (the after)",
+          "path": "content/video_engine/tests/golden/frames/newsreel-band.png",
+          "note": "proved current by `python content/video_engine/scripts/render_baseline.py --check` -> \"PASS 98 golden frames identical\""
         },
         {
-          "label": "newsreel-band (the nearest golden)",
-          "path": "content/video_engine/tests/golden/frames/newsreel-band.png"
+          "label": "the framed render (the before)",
+          "path": "content/video_engine/review/assembly/p53-hg4-cutout-dock-first-frame/before-framed.png"
         }
       ],
-      "options": [],
-      "recommendation": null,
+      "options": [
+        "yes",
+        "no"
+      ],
+      "recommendation": "yes - and with it R26-59 and the P53 T7 \"STILL OPEN\" line close. The re-render was already on disk; what was missing was the pair that shows what changed.",
       "blocks": "P53 completion",
       "sources": [
         ".claude/PRPs/plans/P53-WHAT-THE-ONE-SHOT-TAUGHT.plan.md:10",
@@ -903,8 +924,94 @@
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": "look",
-      "owed": "Missing proof: gate 1's 16:9 frame has not been re-rendered with a cardless head."
+      "proofs": [
+        {
+          "type": "crop",
+          "label": "gate 1's 16:9 frame: the head above the crawl, framed card vs cutout",
+          "before": "content/video_engine/review/assembly/p53-hg4-cutout-dock-first-frame/before-framed.png",
+          "after": "content/video_engine/tests/golden/frames/newsreel-band.png",
+          "before_label": "the card the operator sent back (R26-59)",
+          "after_label": "the committed golden, P53 T7's cutout dock",
+          "route": "AFTER = content/video_engine/tests/golden/frames/newsreel-band.png, proved current by 'python content/video_engine/scripts/render_baseline.py --check' -> 'PASS 98 golden frames identical'. BEFORE = the SAME committed source (tests/golden/sources/newsreel-band.timeline.json) with kind:'cutout' popped off the head's evidence entry - the only key the engine reads (scene-evidence-engine.mjs:12690) - rendered through render_baseline.instantiate() + render_frame() at the golden's own FRAME_T 11.0. Nothing under tests/golden was written."
+        }
+      ]
+    },
+    {
+      "id": "p50-t7-fill-sheen",
+      "ids": [
+        "P50 T7",
+        "E66"
+      ],
+      "kind": "look",
+      "title": "The card's fill and sheen on the four approved embed plates",
+      "judge": "E66's two halves on the four approved plates. THE FILL IS RIGHT ON ALL FOUR: the card's cream runs corner to corner inside the bezel, the headline re-lines per quad, nothing is letterboxed or stretched. THE SHEEN IS WRONG ON THREE: art-embed-split-tv-charcoal, art-embed-split-tv-desk and art-embed-dual-tv-laptop-2 paint the TV face as a LIT screen, so the 0.4 screen-blend pours the glass's own light over the print - the ink lifts from L 22 to L 96-99 and contrast collapses from ~15.6:1 to ~5.5:1 (a 65 % loss); the headline reads as a warm mid-grey-brown on near-white. Only art-embed-split-tv-paper, whose glass is painted dark, holds at 13.3:1. Does the card read on each screen? The three lit screens wash the ink - fix the blend on a lit face, or accept?",
+      "where": [
+        {
+          "label": "E66, the ruling the pair answers",
+          "path": "docs/portable/OPERATOR-RULINGS.md",
+          "note": "lines 2146-2167"
+        },
+        {
+          "label": "the sheen the engine applies",
+          "path": "content/video_engine/scene-evidence-engine.mjs",
+          "note": ":4529 embedSheenOf, :4822 the sheen is static, :4824 / :4857 the only contrast guard rides on the room's DIM - and these plates declare darken:null"
+        },
+        {
+          "label": "the eight frames",
+          "path": "content/video_engine/review/assembly/p50-t7-fill-sheen/"
+        }
+      ],
+      "options": [
+        "accept",
+        "fix the lit-face blend"
+      ],
+      "recommendation": "fix the lit-face blend (a contrast guard on `sheen` when the face is light). The cheapest cure is three numbers in three .layers.json files - the plate declares its own `sheen` beside the quad, which embed_entry already carries and embedSheenOf already reads, zero engine lines.",
+      "blocks": "P50 T7's close",
+      "sources": [
+        ".claude/PRPs/plans/P50-THE-SPECIES-BY-SENTENCE-MAP.plan.md",
+        "docs/portable/OPERATOR-RULINGS.md:2146-2167",
+        "content/video_engine/scripts/build_golden_sources.py"
+      ],
+      "proofs": [
+        {
+          "type": "crop",
+          "label": "split-tv-paper: the card on the TV, screen light on vs off",
+          "before": "content/video_engine/review/assembly/p50-t7-fill-sheen/art-embed-split-tv-paper/sheen-off-t9.png",
+          "after": "content/video_engine/review/assembly/p50-t7-fill-sheen/art-embed-split-tv-paper/landed-t9.png",
+          "before_label": "sheen 0 (control) - ink L 22.0, 13.6:1",
+          "after_label": "sheen 0.4 (shipped) - ink L 25.2, 13.3:1 - RIGHT",
+          "route": "a PRIVATE timeline built the way build_golden_sources.art_embed() builds its own - the plate still as the world, one press dock with embed_entry('tv', {quad: the plate's own measured quad from <stem>.layers.json, darken: None}), the E56 underline - rendered through render_baseline.instantiate() + render_frame() at the golden's own FRAME_T['art-embed'] = 9.0, 9:16. The sheen is static (engine :4822) and these plates declare darken:null, so t=9.0 IS the sheen's peak; the control is the same instant with sheen:0 through the compiler's own embed_entry. Nothing under tests/golden written."
+        },
+        {
+          "type": "crop",
+          "label": "split-tv-charcoal: the card on the TV, screen light on vs off",
+          "before": "content/video_engine/review/assembly/p50-t7-fill-sheen/art-embed-split-tv-charcoal/sheen-off-t9.png",
+          "after": "content/video_engine/review/assembly/p50-t7-fill-sheen/art-embed-split-tv-charcoal/landed-t9.png",
+          "before_label": "sheen 0 (control) - ink L 22.0, 15.6:1",
+          "after_label": "sheen 0.4 (shipped) - ink L 97.3, 5.5:1 - WASHED",
+          "route": "as the first pair, on this plate's own quad"
+        },
+        {
+          "type": "crop",
+          "label": "split-tv-desk: the card on the TV, screen light on vs off",
+          "before": "content/video_engine/review/assembly/p50-t7-fill-sheen/art-embed-split-tv-desk/sheen-off-t9.png",
+          "after": "content/video_engine/review/assembly/p50-t7-fill-sheen/art-embed-split-tv-desk/landed-t9.png",
+          "before_label": "sheen 0 (control) - ink L 22.0, 15.6:1",
+          "after_label": "sheen 0.4 (shipped) - ink L 96.4, 5.6:1 - WASHED",
+          "route": "as the first pair, on this plate's own quad"
+        },
+        {
+          "type": "crop",
+          "label": "dual-tv-laptop-2: the card on the TV, screen light on vs off",
+          "before": "content/video_engine/review/assembly/p50-t7-fill-sheen/art-embed-dual-tv-laptop-2/sheen-off-t9.png",
+          "after": "content/video_engine/review/assembly/p50-t7-fill-sheen/art-embed-dual-tv-laptop-2/landed-t9.png",
+          "before_label": "sheen 0 (control) - ink L 22.0, 15.7:1",
+          "after_label": "sheen 0.4 (shipped) - ink L 99.4, 5.4:1 - WASHED (and the headline re-lines to 3)",
+          "route": "as the first pair, on this plate's own quad"
+        }
+      ],
+      "status": "open",
+      "ruling": null
     },
     {
       "id": "r26-82-verdict-stack-short",
@@ -1097,8 +1204,8 @@
         "docs/portable/OPERATOR-RULINGS.md:2885-2887",
         ".claude/PRPs/plans/P60-IMAGE-AND-PROP-CAPABILITY-TESTS.plan.md:160"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "(a) optional row, no slice waits (R26-131 item 3 keeps it); (b) answered - P58 T2 shipped subject = 1.275 (build_plate_library.py:98-105) and the operator watched the 2.5D cut carrying it (E99 s26)",
       "was_kind": "rule",
       "owed": "No question the record argues: (a) is optional agent work P60 overlaps and (b) is unverified as still open - the agent checks (b) against HG1-SHEET and E98 before it asks."
     },
@@ -1125,10 +1232,585 @@
         ".claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:274-277",
         ".claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:284"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "split into one card per candidate (E99 s14) - see the p54-digest-* cards",
       "was_kind": "rule",
       "owed": "Missing proof: the digest's location is unverified - the agent names the digest file and quotes each candidate before it asks."
+    },
+    {
+      "id": "p54-digest-win-on-presentation",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE win-on-presentation",
+        "ee466c018002"
+      ],
+      "kind": "rule",
+      "title": "Winning on presentation, with real facts",
+      "judge": "The operator, 2026-08-22T20:54: \"also alicia invests / nick invests are performing better than stick trader and casual finance is doing better than them.  /watch:watch https://www.youtube.com/@ZenTraderXBT/videos and https://www.youtube.com/watch?v=qkY2vaoARBU  and https://www.youtube.com/watch?v=win4jTx0KBc they often don't even animate much at all. It shows I feel we shoudl be able to win on presentation by bringing in actual f\" - Your words or doc 21 - can we win on presentation?",
+      "where": [
+        {
+          "label": "the anchor the row contradicts",
+          "path": "docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:What this does and does not prove"
+        },
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 24-26"
+        }
+      ],
+      "options": [
+        "the operator: yes, with real facts + context-aware plates",
+        "doc 21: the evidence does not support it",
+        "both (doc 21 keeps its limit, we keep the bet)"
+      ],
+      "recommendation": "both - doc 21 gains one line separating \"this natural experiment does not prove it\" from \"presentation + real facts is our bet\", so neither record is deleted. doc 21's sentence is about the strength of one experiment, not a ban on the strategy.",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:24-26",
+        "ledger ee466c018002 2026-08-22T20:54"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-reduced-motion-video",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE reduced-motion-video",
+        "02dbf7702cd8"
+      ],
+      "kind": "rule",
+      "title": "prefers-reduced-motion: the video, or only the console",
+      "judge": "The operator, 2026-08-23T06:11: \"i tihnk prefers-reduced-motion is mainly for website development, not video development\" - Does prefers-reduced-motion govern the video, or only the console?",
+      "where": [
+        {
+          "label": "the anchor the row contradicts",
+          "path": "docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md:10.1 The record document is ANIMATED — it reads along with the voice"
+        },
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 27-29"
+        }
+      ],
+      "options": [
+        "the operator: console only",
+        "doc 39: honour it on the animated record too"
+      ],
+      "recommendation": "the operator - doc 39 s10.1 rule 5 drops the honour-reduced-motion clause for the rendered video and keeps it for the console: a rendered MP4 cannot read a browser media query, so the doc's rule is dead text that misleads an author.",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:27-29",
+        "ledger 02dbf7702cd8 2026-08-23T06:11"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-magnific-cancelled-local-upscale",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE magnific-cancelled-local-upscale",
+        "9821f0386743"
+      ],
+      "kind": "rule",
+      "title": "Magnific cancelled - upscale locally",
+      "judge": "The operator, 2026-09-02T05:07: \"i actually cancelled mymagnific so it's not premium anymore; we could do the upscale ourselves locally. I would prefer chirps because elevenlabs is expensive and i'd rather save it for youtube\" - Is Magnific still adopted, or retired for a local upscale?",
+      "where": [
+        {
+          "label": "the anchor the row contradicts",
+          "path": "docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:7. Magnific: adopt as a governed media workbench"
+        },
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 30-32"
+        }
+      ],
+      "options": [
+        "retired - upscale locally",
+        "keep doc 08 s7 as written",
+        "re-subscribe later"
+      ],
+      "recommendation": "retired - doc 08 s7 becomes \"RETIRED 2026-09-02 (subscription cancelled); upscale runs locally\", the Kling wrapper and API-key steps struck. This is a fact, not a preference: an agent following the doc stalls on a missing key. (The Chirp half of the row is already recorded, E70.)",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:30-32",
+        "ledger 9821f0386743 2026-09-02T05:07"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-long-form-runtime-floor",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE long-form-runtime-floor",
+        "cf1f8b376e5e"
+      ],
+      "kind": "rule",
+      "title": "The 8-minute floor for long form",
+      "judge": "The operator, 2026-08-29T07:19: \"wait what duration video are you expecting ofr the response video? I thinkw e were well beyond 504 seconds, i dont think we make vdieos shorter than 8 minutes\" - Is 8 minutes a hard floor for long form?",
+      "where": [
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 36-38; no anchor: the kit and phase guides treat 8:00 as a table column; P1.md carries a \"< 5 min\" row"
+        }
+      ],
+      "options": [
+        "record as a ruling",
+        "not a ruling"
+      ],
+      "recommendation": "record it as a floor - no floor is stated anywhere, and the gap already produced a contradicting \"< 5 min\" row.",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:36-38",
+        "ledger cf1f8b376e5e 2026-08-29T07:19"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-hybrid-brand-advice",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE hybrid-brand-advice",
+        "4b43b0fc0c51"
+      ],
+      "kind": "rule",
+      "title": "The hybrid-brand channel and the operator's own photo",
+      "judge": "The operator, 2026-08-31T20:31: \"does tim have anything to say about banners? what about my picture, use the finance host, the robot, or my real photo? I know tim says don't use real photo but thats also because he tries to build people to flip their channel. this is more of a hybrid-brand channel, i don't intend to sell it\" - Does flip-a-channel advice (no real photo) bind a channel you do not intend to sell?",
+      "where": [
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 39-41; no anchor doc"
+        }
+      ],
+      "options": [
+        "record as a ruling",
+        "not a ruling"
+      ],
+      "recommendation": "record it - it decides every banner / avatar / host question in advance and is currently re-argued each time; the operator states the reason (not built to flip), so the ruling carries its own why.",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:39-41",
+        "ledger 4b43b0fc0c51 2026-08-31T20:31"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-facebook-close-reader-stake",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE facebook-close-reader-stake",
+        "cd2e32426cdd"
+      ],
+      "kind": "rule",
+      "title": "The Facebook close lands on the viewer's own money",
+      "judge": "The operator, 2026-09-02T19:27: \"re-write me the 300 word facebook script. write now it challenges \"if you're tracking the printers..\" but that's not the right close. Most of these people aren't tracking anything. We need to be talking to average people and explaining to them HOW this tech/ai / data center stuff impacts the market and why/how that impacts them.\" - Does the Facebook close have to land on the viewer's own money?",
+      "where": [
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 42-44; no anchor: brand-voice carries register only (0 hits)"
+        }
+      ],
+      "options": [
+        "record as a ruling",
+        "not a ruling"
+      ],
+      "recommendation": "record it, scoped to the Facebook / shorts lane - the close is the one line the lane is judged on and it has been hand-rewritten each time; recorded, it becomes a script-gate question instead of a taste argument.",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:42-44",
+        "ledger cd2e32426cdd 2026-09-02T19:27"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-audience-borrowing-costs",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE audience-borrowing-costs",
+        "2e2e84c1559f"
+      ],
+      "kind": "rule",
+      "title": "\"Your borrowing costs\", not \"your mortgage\"",
+      "judge": "The operator, 2026-09-05T05:53: \"yes, i think the other thing to say that we applied yesterday and dropped: \"Your borrowing costs\" is better than \"your mortgage\" because most people consuming shorts on facebook are not home owners.  after that, i approve elevenlabs and we can move to production\" - Say \"your borrowing costs\" instead of \"your mortgage\" on shorts and Facebook?",
+      "where": [
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 45-47; no anchor: only the dossier carries the phrase"
+        }
+      ],
+      "options": [
+        "record as a ruling",
+        "not a ruling"
+      ],
+      "recommendation": "record it - the same shape as the Facebook close, but a word swap a gate can check; the phrase sits in the dossier with no reason attached, and the reason (shorts / Facebook viewers mostly do not own homes) is the part worth keeping.",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:45-47",
+        "ledger 2e2e84c1559f 2026-09-05T05:53"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-level-line-axis-floor",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE level-line-axis-floor",
+        "9e6d4f0a3f04"
+      ],
+      "kind": "rule",
+      "title": "A level line's y-axis starts at the series' own low",
+      "judge": "The operator, 2026-09-05T10:47: \"maybe don't start from 0, maybe start from the lowest amount that japan has held since 2000?\" - Does a level line's y-axis start at the series' own low in the window, not 0?",
+      "where": [
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 48-50; no anchor: E28 s1's zero baseline covers bars; E53 s4 covers shared scales"
+        }
+      ],
+      "options": [
+        "record as a ruling",
+        "not a ruling"
+      ],
+      "recommendation": "record it - chart form is law (E50-E53) and E28 s1's zero baseline is being misapplied from bars to level lines, which flattens the very move the chart exists to show.",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:48-50",
+        "ledger 9e6d4f0a3f04 2026-09-05T10:47"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-foley-background-level",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE foley-background-level",
+        "7096b624ebee"
+      ],
+      "kind": "rule",
+      "title": "Transition foley 8-10 dB under the voice",
+      "judge": "The operator, 2026-09-05T19:19: \"why is the freesound token empty? we should have access. Maybe it's on the other worktree where we made the first short. That whoosh sound is too mechanical, it sounds like a jet almost, ours shoudl sound like a whirl/whirlpool/spinning/spiralling. alos the sounds should still be background sounds not main effects, so iti should be like ~8-10 db below maybe\" - Is transition foley fixed at 8-10 dB under the voice?",
+      "where": [
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 51-53; no anchor: only per-cue gains exist"
+        }
+      ],
+      "options": [
+        "record as a ruling",
+        "not a ruling"
+      ],
+      "recommendation": "record the level rule; the whirl-not-jet half is craft, not a rule. A per-cue gain has to be re-derived every build; one recorded offset is checkable and matches the other recorded levels (bed -20 LU, the press cue). \"~8-10 db below maybe\" is hedged - the number wants fixing here.",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:51-53",
+        "ledger 7096b624ebee 2026-09-05T19:19"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-derived-is-added-layer",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE derived-is-added-layer",
+        "bfb9c40b69b6"
+      ],
+      "kind": "rule",
+      "title": "A reproducible derived figure is our added layer",
+      "judge": "The operator, 2026-09-08T15:25: \"Better, but Did you review the rest of the video or only that chart?  also 6240 is reproducible by taking the $30k car and applying the 25% tariffs. Derived isn't a bad thing, it's our added layer which is required for \"original content\" these days. We kept the cars at $30k a piece for simplicity, even though in real life trucks cost more.  But I do think that the chart itself should probably be a\" - Is a reproducible derived figure our originality layer, or a risk to avoid?",
+      "where": [
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 54-56; no anchor: the choreography ask is already in japan-tariff-trick/CHART-CHOREOGRAPHY.md"
+        }
+      ],
+      "options": [
+        "record as a ruling",
+        "not a ruling"
+      ],
+      "recommendation": "record it, with the boundary written in - derived is allowed only when every input is sourced and the arithmetic is shown on the page; it never becomes an excuse to invent an input. Unrecorded, it keeps colliding with \"figures are never fabricated\".",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:54-56",
+        "ledger bfb9c40b69b6 2026-09-08T15:25"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-spoken-chart-not-on-screen",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE spoken-chart-not-on-screen",
+        "dc64bab50209"
+      ],
+      "kind": "rule",
+      "title": "Narration about a chart that is not on screen (M33)",
+      "judge": "The operator, 2026-08-29T20:15: \"also you open on the \"spike\" but you don't have the spike ons creen, you talk about charts without the charts on screen. we have descriptions/semantics saved fora r eason.  Are you  sayin you completely skipped making a manifest of plates ->evidence? option A is what you were supposed to have done already done..why is process collapsing today?\" - M33 warns today; make it FAIL?",
+      "where": [
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 60-62"
+        },
+        {
+          "label": "M33 in the registry",
+          "path": "docs/GATES-REGISTRY.md",
+          "note": "line 151 - WARN until the approved shorts show a real example"
+        },
+        {
+          "label": "the measure",
+          "path": "content/video_engine/scripts/measure_spoken_visuals.py"
+        }
+      ],
+      "options": [
+        "keep WARN",
+        "make FAIL"
+      ],
+      "recommendation": "keep WARN - the registry's own reason still holds: M33 WARNs \"until the approved shorts show a real example (their one hit is a figure of speech)\", so there is no measured case to justify a FAIL yet. The gate exists: measure_spoken_visuals.py, gate_motion_density.py:1299.",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:60-62",
+        "ledger dc64bab50209 2026-08-29T20:15",
+        "docs/GATES-REGISTRY.md:151",
+        "content/video_engine/scripts/measure_spoken_visuals.py"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-sub-6s-plate",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE sub-6s-plate",
+        "69ff558bdf67"
+      ],
+      "kind": "rule",
+      "title": "The world plate under 6 seconds",
+      "judge": "The operator, 2026-08-29T22:46: \"the baloon dock doesn't even make sense, i dont know why we have such a short plate and evidence there -- it doesnt add anything, and i'm not sure why it exists, why do we have a plate less than 6 seconds long?\" - Build a gate that flags a world plate under 6 s and fails one that carries a dock?",
+      "where": [
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 63-65"
+        }
+      ],
+      "options": [
+        "build the gate",
+        "no gate"
+      ],
+      "recommendation": "build it: WARN under 6 s, FAIL when the short plate carries a dock. Nothing measures plate length today (0 registry hits); BUILD-PIPELINE only says \"under ~8s one piece or none\", and the fault the operator caught was exactly a short plate carrying a dock.",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:63-65",
+        "ledger 69ff558bdf67 2026-08-29T22:46"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-thumbnail-text-clipping",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE thumbnail-text-clipping",
+        "3570a6280d20"
+      ],
+      "kind": "rule",
+      "title": "Thumbnail text clipped at the frame edge",
+      "judge": "The operator, 2026-09-02T00:39: \"it's better but still aprtially cut, i dont know why you can't see that.\" - Build a gate that measures each glyph's pixel box on the thumbnail against the frame edges?",
+      "where": [
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 66-68"
+        }
+      ],
+      "options": [
+        "build the gate",
+        "no gate"
+      ],
+      "recommendation": "build it, for the thumbnail and the sticker - G45 and J12 check only the WORDS (GATES-REGISTRY:107, :111); the operator has caught clipped glyphs twice and the measurement is a DOM box read, the same \"numbers before pixels\" shape the layout probe already uses.",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:66-68",
+        "ledger 3570a6280d20 2026-09-02T00:39",
+        "docs/GATES-REGISTRY.md:107",
+        "docs/GATES-REGISTRY.md:111"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-punch-crops-text",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE punch-crops-text",
+        "16d1b9558a10"
+      ],
+      "kind": "rule",
+      "title": "A page punch that cuts a text box partway",
+      "judge": "The operator, 2026-09-03T07:29: \"that focus actiong ot way too dark, the gemini agent was wrong about 80%, try 64% if that was 80%.  what should we do about the fact that we wrote \"If you're so bullish why trim?\" up in the corner like that and then we zoom in and it's gone but there's still some text that's not cut off?\" - Build a gate that finds a text box the page punch-in cuts partway?",
+      "where": [
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 69-71"
+        }
+      ],
+      "options": [
+        "build the gate",
+        "no gate"
+      ],
+      "recommendation": "fold it into the layout probe (the M25 / M28 family), not a new tool - the probe already holds every text box's DOM rect and the punch rect is authored, so \"partly inside the zoomed frame\" is one intersection test. M14 is the only punch row and it checks overlap with an evidence build, not clipping.",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:69-71",
+        "ledger 16d1b9558a10 2026-09-03T07:29",
+        "docs/GATES-REGISTRY.md:132"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-black-frame-at-seam",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE black-frame-at-seam",
+        "ec736d324128"
+      ],
+      "kind": "rule",
+      "title": "A black frame at the seam (M32)",
+      "judge": "The operator, 2026-09-05T10:45: \"we're having a frame glitch on the wipe timings, our timing is off i tihnk because we've delt with this before, probably broke on the-build. as soon as the scene change happens there's a black flash, THEN the page wipes\" - already built; nothing is owed.",
+      "where": [
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 72-74"
+        },
+        {
+          "label": "M32 in the registry",
+          "path": "docs/GATES-REGISTRY.md",
+          "note": "line 150 - near-black = mean luma < 8, measured on the approved Japan short's six dips"
+        },
+        {
+          "label": "the measure",
+          "path": "content/video_engine/scripts/measure_seam_frames.py"
+        }
+      ],
+      "options": [],
+      "recommendation": null,
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:72-74",
+        "ledger ec736d324128 2026-09-05T10:45",
+        "docs/GATES-REGISTRY.md:150",
+        "content/video_engine/scripts/measure_seam_frames.py"
+      ],
+      "proofs": [],
+      "status": "ruled",
+      "ruling": "already built: M32 (P54 T9, GATES-REGISTRY)"
+    },
+    {
+      "id": "p54-digest-ring-on-tip-label",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE ring-on-tip-label",
+        "8086dab785f2"
+      ],
+      "kind": "rule",
+      "title": "A ring landing on a line's tip label",
+      "judge": "The operator, 2026-09-13T03:11: \"the host is offline.  But it sounds like there were some engine improvements related to albels you should improve. The empty cream stage isnt supposed to be on stage during the exits. You misinterpreted that wrong.  It doesnt make sense to do that when transitioning from chart-to-chart, that is used for mounting a ledger plate to a narrative plate\" - Build a gate that measures a terminal series name against a ring or callout's ellipse?",
+      "where": [
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 75-77"
+        },
+        {
+          "label": "the case",
+          "path": "docs/agent-memory/operator/casebook/ring-on-the-tip-label/CASE.md"
+        }
+      ],
+      "options": [
+        "build the gate",
+        "no gate"
+      ],
+      "recommendation": "fold it into the layout probe - the case file already names the two inputs (the ring's resolved box and the name's DOM box). The fix in 41bf55c is a compiler stamp (`tip_mark`), so an author who does not stamp gets the collision back and every gate still passes: M28 reads label pairs, not a label against a species ellipse.",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:75-77",
+        "ledger 8086dab785f2 2026-09-13T03:11",
+        ".claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:274-277",
+        "docs/agent-memory/operator/casebook/ring-on-the-tip-label/CASE.md"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
+    },
+    {
+      "id": "p54-digest-name-on-neighbour-line",
+      "ids": [
+        "P54 HG2",
+        "TRIAGE name-on-neighbour-line",
+        "8086dab785f2"
+      ],
+      "kind": "rule",
+      "title": "A series name written on the neighbour's line",
+      "judge": "The operator, 2026-09-13T03:11: \"the host is offline.  But it sounds like there were some engine improvements related to albels you should improve. The empty cream stage isnt supposed to be on stage during the exits. You misinterpreted that wrong.  It doesnt make sense to do that when transitioning from chart-to-chart, that is used for mounting a ledger plate to a narrative plate\" - Build a gate that measures a direct label's box against OTHER series' paths?",
+      "where": [
+        {
+          "label": "the digest row",
+          "path": "docs/operator-ledger/TRIAGE-DIGEST.md",
+          "note": "lines 78-80"
+        },
+        {
+          "label": "the case",
+          "path": "docs/agent-memory/operator/casebook/name-on-the-neighbour-line/CASE.md"
+        }
+      ],
+      "options": [
+        "build the gate",
+        "no gate"
+      ],
+      "recommendation": "fold it into the layout probe, the same pass as the ring on the tip label - M28 checks label pairs, not a label against a series path; the first fix measured a fixed 330 px span and put the name straight back on the neighbour, a defect only a frame caught.",
+      "blocks": "nothing (the digest's rows are data until they are ruled)",
+      "sources": [
+        "docs/operator-ledger/TRIAGE-DIGEST.md:78-80",
+        "ledger 8086dab785f2 2026-09-13T03:11",
+        ".claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:274-277",
+        "docs/agent-memory/operator/casebook/name-on-the-neighbour-line/CASE.md"
+      ],
+      "proofs": [],
+      "status": "open",
+      "ruling": null
     },
     {
       "id": "p54-hg3-astra-fable-bakeoff",
@@ -1182,8 +1864,8 @@
         ".claude/PRPs/plans/P46-BRIDGE-ADAPTER.plan.md:139-146",
         ".claude/PRPs/plans/P46-BRIDGE-ADAPTER.plan.md:165"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s33 - the gates retired, P46 closed",
       "owed": "E99 s22: justify P46's bridge gates or retire them - they reached the operator without a reason"
     },
     {
@@ -1236,8 +1918,8 @@
       "sources": [
         "docs/agent-memory/operator/resume-2026-09-12.md:42"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "settled by action - the gated rerun PASSED (P54 T11) and \"judgement goes to Opus\" (gate-extraction-orders.md)",
       "was_kind": "rule",
       "owed": "Unverified still open: the agent checks whether the P54 extraction route was settled after 2026-09-12 before it asks."
     },

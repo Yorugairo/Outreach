@@ -3129,3 +3129,13 @@ carry `contains_factual_text: false` with a note saying so and stay render-eligi
 may not carry factual text) stands unchanged. Also fixed without a ruling: the E94 approval fields are allowed by the v1 schema
 (E94 requires "each entry carrying the approval's words and date"), and the catalogue's `artifact_hash` uses the validator's
 `canonical_sha256`, which `extract_finance_icons.py` now imports.
+
+**E99 s33 - The bridge's gates are retired; the packet contract is a record, not a ratification (P46 HG1, HG3; closes P46).**
+Asked, after E99 s22, whether the bridge's packet contract and its budget needed their approval: *"yes, i dont think i need to
+approve anything."* And, on the folder name that confused the two: *"calling it the bridge build is not good, i thought you meant
+the bridge to gemini/gpt"* - "the bridge" names only the P46 lane tooling (`bridge_send.py`, `bridge_watch.py`, `bridge_daemon.py`,
+the packets to Gemini and Astra); the Normal for Which short is named by its title. Apply: HG1 (the contract ratified) and HG3 (the
+grace / SLA / residue budget ratified) are withdrawn - `docs/runbooks/BRIDGE-PACKET.md` is the RECORD of what the tools already do
+(fields, caps, reply grammar, lane register, the file-AND-send rule; grace 10 min, SLA 60 min, 6 runs / 200k tokens as the module's
+defaults), kept current by the agent, never a question the operator owes; Astra's review packet on the contract never ran and is not
+required. P46 T4 is complete on that record and P46 closes.

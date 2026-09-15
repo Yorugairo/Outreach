@@ -1,0 +1,703 @@
+---
+id: P61-WHAT-THE-REVIEW-OWES
+title: What the review owes - the BUILD group of the 2026-09-15 queue sort: the whole-chart morph first (it unblocks P47 T6/T7 and P48 T5b), then the two 2.5D fixes, the ball's shadows, the melt gathered to a dense point, the verdict stack's choreography and the agenda page, the gallery's speed and its motion examples, and a DESIGN slice for saved states - each slice returning as a queue card with a proof a person can judge
+status: draft
+operation: feature
+risk: standard
+owner: parent
+branch: main
+created: 2026-09-15
+updated: 2026-09-15
+---
+
+# What the review owes
+
+## Summary
+
+The review queue (`docs/content-video-engine/review-queue.v1.json` -> `REVIEW-QUEUE.md`) carries 20 items marked
+**owed by the agent**: E99 s14 (`docs/portable/OPERATOR-RULINGS.md:2901`) ruled that *"a lot of what you ask for
+doesn't appear to be served or have no proofs ... this is a bad review. i answered a lot of what i could, you need to
+create a better pass."* An item reaches the operator only with a proof framed for a viewer - a clip that plays, a
+player link that answers, or a crop on what changes - and until then the item is the agent's work, never the
+operator's.
+
+The operator sorted those 20 on 2026-09-15 into **assemble** (items whose proof already exists on disk and only has to
+be gathered - a separate pass, not this plan) and **build** (items that owe a BUILD before a card can exist). This plan
+is the build group, in the operator's order.
+
+Nothing here is a new subsystem. Every slice is a named refusal against a named built mechanism:
+
+| # | what the operator refused | the built thing it lands on |
+| --- | --- | --- |
+| 1 | the compare-morph is *"an extremely stupid morph"* - a morph must prove the WHOLE data set / chart (E99 s1) | the six `chart_to` verbs (`rescale` **:113**, `extend` **:114**, `recast keyed` **:115**, `morph_to` **:116**, `park` **:117**, `compare` **:28**, with the E64 recast rule at **:27**), `kinetics/morph_a.mjs`, `kinetics/arap.mjs`, `kinetics/contour.mjs`, `kinetics/chartxf.mjs`. **CAPABILITIES:118 is a different thing** - P47 T3's object-becomes-the-chart morph (the page-enter path) - and belongs to slice 2's hand-over, not to the chart-to verbs |
+| 2 | the melt and its splash are *"ugly"*; the melt must gather like the vortex into one dense, heavy, vibrating point (E99 s2) | `species/melt.mjs` (`exit: melt[:throw|:splash:chart|:splash:plate]`, CAPABILITIES:37), `kinetics/drop.mjs`, the page vortex (CAPABILITIES:57), the ink bloom (`INTAKE-INK-BLOOM-2026-09-08.md`) |
+| 3 | the living ball *"reads glossy"* - it owes shadow, a dark Fresnel rim, a metallic band, one point of deep shadow depth (E99 s3) | the ball's paint in `species/melt.mjs`, `kinetics/drop.mjs`, `docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md` (released by E99 s24) |
+| 4 | the extruded bar's leave must break its shapes down more (E99 s4); a formed page mounts its charcoal and its leave does not clear its scribbles to cream (E99 s18) | the two 2.5D chart forms (CAPABILITIES:147, P58 T5), the cream mount page enter (CAPABILITIES:26, :64) |
+| 5 | the short's evidence wall *"didn't just place them horizontally, we had real choreography"* (E99 s21); the beautified agenda page is *"still owed"* (E99 s16) | the VERDICT STACK's five phases (CAPABILITIES:184, `species/verdict.mjs`, `drawStack`), `species/agenda.mjs` (CAPABILITIES:43) |
+| 6 | the gallery *"builds slow, and the examples are only pictures"* (E99 s20) | `build_effects_gallery.py` -> `content/video_engine/effects/gallery/index.html` + `frames/`; the catalogue (CAPABILITIES:318) |
+| 7 | *"cant we just make a better engine/editor so that we can have saved states, or build copies of the engine/compiler per agent?"* (E99 s23) | the OVERRIDE SIDECAR (CAPABILITIES:108, P51 T5), HOT RELOAD + the determinism check (CAPABILITIES:109, P51 T4) |
+
+**Slice 1 is first because three other things hang on it.** P47 T6 and T7 are both marked
+`Status: blocked on P48` on the operator's 2026-09-10 sentence *"we still don't redraw/rebuild a new chart"*
+(`.claude/PRPs/plans/P47-STOP-ACTION-BUILD-ON-AND-THE-CHART-MORPH.plan.md:174,183`); P48 T5b (the morph onto a planted
+element) is unbuilt, so its card `p48-hg3-morph-onto-planted` has nothing to watch; and R26-117 (the ball into the next
+chart) is the page-level form of the same hand-over. E99 s1 raised the bar under all three at once.
+
+All repo paths below are the MAIN checkout (`C:/Users/Snipe/Downloads/Outreach Program`); `python` =
+`C:/Users/Snipe/AppData/Local/hermes/hermes-agent/venv/Scripts/python.exe`. This draft was written from the
+sweet-villani worktree and copied into MAIN by script (the harness refuses the Write tool against the main checkout's
+`.claude/`). No git state was changed while drafting.
+
+## Intent And Acceptance
+
+**Intent.** Turn the seven refusals above into built mechanisms, each returning to the operator as ONE queue card with
+a proof a person can judge, so the "owed by the agent" list shrinks by work, not by rewording.
+
+**Acceptance (the whole plan).**
+
+1. Every build slice ends with (a) a GOLDEN for the new behaviour, (b) every pre-existing golden byte-identical
+   (`python -m pytest content/video_engine/tests/test_golden_frames.py -q`), and (c) a queue proof on disk - a clip
+   through `review_queue_proofs.py --clips --only <item id>` (its source is a golden `surface` + `flags`, or a
+   `build` + `page` directory) or a before/after crop through the same file's `diff_box` (which REFUSES a pair whose
+   only difference is inside the caption box).
+2. Every queue card states, in one plain sentence, the exact time range to watch, what changes in it, and the question
+   (E99 s15). No card offers options the record never argued (E99 s14).
+3. `python content/video_engine/scripts/gate_motion_density.py <build>` keeps M23 (chart transitions), M31 (the empty
+   stage) and M25/M28 at or better than the reading recorded in the slice's Evidence; `gate_one_shot_floor.py` keeps
+   M35-M42 where a slice touches a cut.
+4. No approved cut is rebuilt (E45). Any change to how an approved cut renders ships behind a kinetics/compiler flag
+   whose DEFAULT is today's look until the operator rules; the Japan tariff short and the Tokyo remake are read as
+   regression fixtures, never re-authored.
+5. `python content/video_engine/scripts/effects_catalog_check.py` 0 failures; `sync_kinetics.py --check` in sync; every
+   slice names the `docs/content-video-engine/CAPABILITIES.md` row it changes and that row carries the change.
+6. `python scripts/prp_validate.py .claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md` PASS.
+
+**Not acceptance.** An agent's opinion that a proof "reads better". Every slice's Evidence is a path, a frame, a gate
+reading or a command tail.
+
+## Scope
+
+- `docs/content-video-engine/samples/scene-evidence-engine.mjs` and its synced regions (the engine).
+- `content/video_engine/scripts/kinetics/**` and `content/video_engine/scripts/species/**` (`melt.mjs`, `drop.mjs`,
+  `verdict.mjs`, `agenda.mjs`, `morph_a.mjs`, `arap.mjs`, `contour.mjs`, `chartxf.mjs`).
+- `content/video_engine/scripts/build_scene_timeline_f.py` (the compiler: new verbs, options, refusals) and
+  `ledger_page.py` where a form needs a spec field.
+- `content/video_engine/tests/**` (node kinetics tests, pytest, goldens + their sources).
+- `content/video_engine/scripts/build_effects_gallery.py` and `content/video_engine/effects/gallery/**`.
+- `content/video_engine/effects/cards/*.json` (the catalogue cards for anything new).
+- Private, NEW build directories for proofs (never an approved cut's directory).
+- `docs/content-video-engine/review-queue.v1.json` + the generated `REVIEW-QUEUE.md`, `CAPABILITIES.md`, `BACKLOG.md`
+  rows, and the generated docs layers - parent (docs lane) only.
+- `docs/research/runs/p61-*/` - the trace, the design options sheet, run transcripts (gitignored disk-as-bus).
+
+## Not Building
+
+- **The assemble pass.** The queue items whose proof already exists and only has to be gathered
+  (`r26-133-drift-idle-paints-nothing`, `r26-125-p57-hg1-measured-defects`, `p56-hg2-one-shot-floor`,
+  `p53-hg4-cutout-dock-first-frame`, `p58-hg1-follow-ups`, `p54-hg2-triage-digest`, `p54-hg3-astra-fable-bakeoff`,
+  `p46-hg1-hg3-bridge-contract`, `gemini-rerun-vs-split`, `r26-68-span-darker`) run as a separate pass. This plan
+  touches none of their write sets.
+- **Re-rendering or re-authoring an approved cut** (E45; the Japan tariff short is APPROVED + rendered 2026-09-09, and
+  the operator's standing instruction on Tokyo is *"DO NOT ASK FOR A RENDER"*, `docs/agent-memory/operator/tokyo-short-render.md:79-93`).
+- **A second engine writer in its own worktree** (E99 s23 refused it outright: *"we already experienced a big
+  drift/sprawl mess from using worktrees"*).
+- **An SDF / implicit-field rewrite of the morph.** R26-120's research landed UNSOURCED-editorial and its cost figure
+  was REJECTED (`docs/content-video-engine/BACKLOG.md:552`); E99 s24 released it as hypotheses only. `morph_a` stays
+  the law in this plan; any field blend is a later row with its own goldens.
+- **Any editor gate.** E99 s17 closed P51 gates 2 and 3: *"the editor's pretty useless to a human, all i can do is edit
+  integers"*, and the timeline comes before any further editor gate. T10 designs saved state, it does not build editor UI.
+- **A morph proof built on the compare verb.** E99 s1 refused exactly that shape; the compare verb stays as built.
+
+## Human Gates
+
+One gate per slice - the operator's answer on that slice's queue card. T3 lands TWO cards (the ball into the next
+chart, and the morph onto a planted element), so it carries two gates. Each gate gets its row in
+`docs/content-video-engine/REVIEW-QUEUE.md` in the same change that frames it (PRP_EXECUTION "PRP Format"), and leaves
+that page only with the operator's ruling written to `docs/portable/OPERATOR-RULINGS.md` and back into this plan.
+
+| gate | slice | queue card | the ONE question the card asks |
+| --- | --- | --- | --- |
+| **HG1** | T2 | `r26-70-compare-morph` (rewritten) | "Watch the two clips end to end. Does the WHOLE chart become the next chart - every series, every datum, the axes and the labels - or does something cut? Approve, or name what cuts." |
+| **HG2** | T3 | `r26-117-ball-into-the-next-chart` (**created by the parent at T3's dispatch** - it does not exist today; it supersedes the `"missing": true` line on `r26-70-compare-morph`) | "The page melts, balls up, and the ball becomes the NEXT FULL CHART with no cut between. Watch 0:00-0:08. Does the hand-over hold, or does it read as a jump?" |
+| **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" |
+| **HG3** | T4a | `p58-hg3-extruded-bar-leave` | "`form-extruded-bar@proof-leave` beside `form-tilted-line@proof-leave`, as clips. Do the prism's shapes break down enough now? Approve, or say 'more'." |
+| **HG4** | T4b | `p58-hg3-forms-mount-not-scribble` | "A formed page arriving by the charcoal mount, and leaving without clearing its scribbles to cream. Watch the enter and the leave. Approve, or name what still clears." |
+| **HG5** | T5 | `r26-118-metallic-ball` | "The ball, before and after: more shadow, a dark Fresnel rim, a metallic band, one point of deep shadow depth. Does it read metallic and heavy now, or still glossy?" |
+| **HG6** | T6 | `r26-76-melt-endings-in-motion` | "The melt as the vortex's motion gathered into one dense, heavy, vibrating point, splashing into a full chart / world plate. Watch the gather and the splash. Approve the new default, or keep today's look behind the flag." |
+| **HG7** | T7 | `r26-82-verdict-stack-choreography` | "The verdict stack on a short with Steel and Paper's choreography - cards that move, then the burst. Watch it beside the Steel and Paper reference clip. Approve, or name the phase that is still flat." |
+| **HG8** | T8 | `r26-80-agenda-page-owed` | "The beautified agenda page - the plate version of the list effect, each row with its catalogued icon stamped after its sentence (E93). Beside today's three plain rows. Approve, or name the change." |
+| **HG9** | T9 | `p55-gallery-speed-and-motion` | "The gallery: its build time before and after, and three effects a still cannot show now carrying a clip. Is it fast enough and clear enough? Approve, or name what is still unreadable." |
+| **HG10** | T10 | `r26-84-engine-saved-states` | "Three routes to parallel agents without worktrees, each with its cost and what it breaks, and the agent's recommendation. Which route do we take - or does it need its own plan?" |
+
+**HG10 is the only gate with options**, and the record argues each (E99 s14's bar). No other card offers a menu.
+
+## Mandatory Reads
+
+**Rulings (read the Apply line verbatim before touching the slice).** `docs/portable/OPERATOR-RULINGS.md` - **E99**
+opens at `:2901`. s1 (the whole-chart morph), s2 (the melt gathers), s3 (the ball's shadows), s4 (judged in video; the
+extruded bar's leave), s14 (a proof a person can judge), s15 (a card names the moment and the question), s16 (the
+agenda page still owed), s18 (mount, not scribble; no clearing to cream), s20 (the gallery), s21 (the verdict stack's
+choreography), s23 (saved states or per-agent copies), s24 (the three research runs released). Also **E45** (no
+approved cut is rebuilt), **E47** (a scene's `exit` is the transition INTO it - the reading that made two "hand-off"
+clips read as jumps, E99 s19), **E50/E53** (a chart un-draws OR becomes the next thing; a chart changes state, never
+cuts to another chart of the same data), **E64** (the recast re-writes or morphs, never cuts), **E88** (the chart
+melts, the board stays), **E93** (an agenda row carries a catalogued icon), **E96/E97** (the one-shot floor; a beat is
+a recipe), **E99 s25** (`throw=depth` -> `throw=growth`).
+
+**Doctrine.** `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` §9.24 (the verdict stack, `:1364`), §9.28,
+§9.31 (the page vortex, `:2100`), §9.33 (the chart is the WORLD, `:2217`); `43-SCENE-GRAPH-AND-TRANSFORM.md` §43.5
+(the morph - two methods and when each applies; the heading is at **`:62`**, Method B's cotangent weights at `:91`);
+`41-LEDGER-PAGE-SPECIES.md`;
+`INTAKE-INK-BLOOM-2026-09-08.md:19` (the bloom preset E99 s2 names as an accepted route).
+
+**The record of what is built.** `docs/content-video-engine/CAPABILITIES.md` rows 27, 28, 37, 43, 57, 64, 103, 104,
+108, 109, 113, 114, 115, 116, 117, 118, 147, 148, 184, 318. `docs/content-video-engine/BACKLOG.md` rows R26-16, R26-49
+(`:455`), R26-70 (`:476`), R26-76 (`:482`), R26-80 (`:486`), R26-82 (`:488`), R26-84 (`:490`), R26-86 (`:492`),
+R26-116 (`:548`), R26-117 (`:549`), R26-118 (`:550`), R26-120 (`:552`).
+
+**Plans.** `.claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md` (T4/T5 evidence; HG3 at `:185`; the T5b
+deviation at `:412` and `:451`; the second-verb note at `:517`), `P47-STOP-ACTION-BUILD-ON-AND-THE-CHART-MORPH.plan.md`
+(T6 `:173`, T7 `:182` - both blocked), `P58-THE-2-5D-STAGE.plan.md` (T5 the two forms; HG3),
+`P51-THE-ANIMATORS-LOOP.plan.md` (T4 hot reload + determinism, T5 the override sidecar),
+`P55-THE-EFFECTS-CATALOGUE.plan.md` (the gallery, HG2), `P52` (T8 the agenda, T9 the melt).
+
+**Gates.** `docs/GATES-REGISTRY.md` - M23 (`:141`), M31 (`:149`), M35-M42 (`:156-163`).
+
+**Process.** `docs/runbooks/PRP_EXECUTION.md` (dispatch mapping, lane write sets, the return contract),
+`docs/runbooks/RECALL-RECEIPT.md` (the receipt every proposed mechanism opens with),
+`docs/runbooks/RENDER-REGRESSION.md`.
+
+## Execution Path
+
+```
+T1 (trace, read-only, NO lock)
+  -> T2 the whole-chart morph            [LOCK]  -> HG1   removes P47 T6/T7's BLOCKER (not the watch)
+       -> T3 ball -> next full chart      [LOCK]  -> HG2  + HG2b (planted) -> closes P48 T5b
+  -> T4a extruded-bar leave              [LOCK]  -> HG3
+  -> T4b mount, not scribble             [LOCK]  -> HG4
+  -> T5 the ball's shadows               [LOCK]  -> HG5
+  -> T6 the melt gathers to a point      [LOCK]  -> HG6   (depends on T5 ONLY - proof A lands in a WORLD PLATE;
+                                                   proof B, the full-chart splash, is appended when T3 lands)
+  -> T7 the verdict stack choreography   [LOCK]  -> HG7
+  -> T8 the agenda page                  [LOCK]  -> HG8
+  -> T11 the record (parent, docs lane)
+
+beside them, no lock:
+  T9  the gallery (speed + motion examples)      -> HG9
+  T10 saved states - a DESIGN sheet, not code    -> HG10
+```
+
+**The engine lock.** `docs/content-video-engine/samples/scene-evidence-engine.mjs`, `kinetics/**`, `species/**`,
+`build_scene_timeline_f.py` and the player template take ONE writer at a time (PRP_EXECUTION "Lane write sets";
+BACKLOG R26-84 `:490` states the same rule). Slices T2-T8 hold it and run strictly one at a time, in the order above.
+T1, T9, T10 and T11 do not touch those files and may run beside the lock holder. The parent hands the lock out
+explicitly in each dispatch brief and takes it back with the reviewed diff.
+
+**Dispatch (PRP_EXECUTION "Dispatch mapping"; every delegated role runs Opus 5, effort high).**
+
+| slice | route | why |
+| --- | --- | --- |
+| T1 | `explorer` (read-only) | an open-ended "what does this actually transform" trace across engine + compiler |
+| T2, T3, T5, T6, T7, T8 | `implementation_luna` (one at a time) | coherent moderate engine slices with tests and goldens |
+| T4a, T4b | `junior_developer` | two small bounded fixes with the lines named, still needing implementation reasoning |
+| T9 | `junior_developer` | tooling only, off the engine |
+| T10 | `architect_sol` -> parent | architecture; options and costs, the operator decides |
+| T11 | parent (Claude/Fable docs lane) | shared files (`CAPABILITIES.md`, `BACKLOG.md`, the queue) are the parent's |
+| before every `complete` | `reviewer` | every delegated diff is reviewed before integration |
+
+Human gates, briefs, the diff reads and the completion claim stay with the parent regardless of slice size.
+
+## Patterns To Mirror
+
+- **The chart-to verbs' shape** (`build_scene_timeline_f.py`, `CHART_TO_KINDS`): a verb is a compiler-checked row with
+  named refusals (`MORPH_BUILDERS` / `RECAST_PAIRS` refuse any pair they cannot do and POINT at the verb that can). A
+  new whole-chart verb refuses by name and names its alternative; it never tweens a pair it cannot key.
+- **A painter is a pure function of t** (P51 "the agent's loop"; the compare painter's 18 node tests: u=0 exact source,
+  u=1 exact target, identical on two calls). Every new painter gets the same three tests.
+- **The region-synced engine** (`sync_kinetics.py --check`): a module is authored once under `kinetics/` or `species/`
+  and mirrored into `scene-evidence-engine.mjs` by region. Never hand-edit both. R26-115 is the module-order rule.
+- **The outlines are ours** (`kinetics/contour.mjs`, P57 T12c): geometry is measured off the page's own ink by
+  canvas raster + marching squares - no font file parsed, no vendored library. T2/T3 reuse it for labels and marks.
+- **A golden proves the compiler and the player together** (`ledger-extend` at the mid-tail, `compare-morph@proof-*`):
+  a golden names the INSTANT that matters, not just the end state.
+- **The melt's own composition** (T12b reused `meltRun` / `meltTextFilterMarkup` from `species/melt.mjs` and changed no
+  pixel it paints): a new behaviour composes the existing exports before it adds any.
+- **The queue proof pipeline** (`review_queue_proofs.py`): `--clips` renders from a golden surface + flags or a build +
+  page in ONE headless browser across the window and pipes to ffmpeg; crops come from `diff_box`, which refuses a pair
+  that differs only inside the caption box. Slices produce proofs THROUGH this file, never by hand.
+- **The recall receipt** (`docs/runbooks/RECALL-RECEIPT.md`): every proposed mechanism opens with `Recall:` lines
+  quoting the hits. `Recall: docs_find 0 hits for "<term>"` is valid; silence is not.
+
+## Task Slices
+
+### T1: THE TRACE - what `recast`, `morph_to`, `compare` and the page-enter morph actually transform today
+- Status: pending
+- Owner: `explorer` (read-only; no engine lock)
+- Depends on: none
+- Write set: `docs/research/runs/p61-whole-chart-morph/TRACE.md` (gitignored disk-as-bus) ONLY
+- Acceptance: a table with one row per transform (`rescale`, `extend`, `recast` plain, `recast keyed:true`,
+  `recast keyed:"tags"`, `morph_to`, `park`, `compare`, `page_enter:morph`) and one column per chart part - series
+  paths, individual datum marks, the x axis + its ticks, the y axis + its ticks, the tick LABELS, series names/tags,
+  the title, the rail, the page's scribble field - each cell `morphed` / `re-written` / `crossfaded` / `cut` /
+  `untouched`, every cell carrying a `path:line` in `samples/scene-evidence-engine.mjs`,
+  `build_scene_timeline_f.py`, `kinetics/chartxf.mjs`, `kinetics/morph_a.mjs` or `kinetics/arap.mjs`. Plus: the exact
+  gap list to "full chart becomes full chart", and what `contour.mjs` costs per glyph at 12 fps as measured, not
+  guessed. Report "not found in <the places I searched>", never "does not exist".
+- Validate: `python content/video_engine/scripts/docs_find.py "chart_to"` and
+  `python scripts/sigmap_context.py query "chart_to transform" --top 5` run and quoted in the trace's header; then the
+  parent verifies every `path:line` in the table resolves with one `rg` each before T2 is briefed
+- Evidence: pending
+
+### T2: THE WHOLE-CHART MORPH - line -> bars and bars -> line, every series, datum, axis and label
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK #1**)
+- Depends on: T1
+- Write set: `content/video_engine/scripts/kinetics/morph_a.mjs`, `content/video_engine/scripts/kinetics/chartxf.mjs`,
+  `content/video_engine/scripts/kinetics/contour.mjs` (additive exports only), `content/video_engine/scripts/build_scene_timeline_f.py`
+  (the verb + its refusals), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the chart-to region ONLY,
+  via `sync_kinetics.py --write`), `content/video_engine/tests/kinetics/*.test.mjs`,
+  `content/video_engine/tests/test_whole_chart_morph.py` (NEW), `content/video_engine/tests/golden/` (the new goldens +
+  their sources), `content/video_engine/effects/cards/chart_to.json`
+- Acceptance: a `chart_to` row makes a FULL chart become a FULL chart on one clock with no cut anywhere in the window -
+  the series' geometry morphs (`morph_a` under the existing pairing rule), the datum marks travel to their
+  counterparts, the axes' rules morph or hand over on the same clock, and the tick LABELS and series names arrive by
+  the mechanism the operator rules at HG1 (morph by contour, or re-written at the datum by `figure.mjs`'s
+  `figureGlyph`, E76 s4's route) - never a crossfade and never a frame where both charts are drawn flat. Two pairs
+  ship: `line -> bars` and `bars -> line`. The compiler REFUSES by name any pair it cannot key and points at the verb
+  that can. A probe asserts the invariant a jump cannot satisfy: at u = 0.5 neither the source nor the target chart is
+  drawable as itself (the `@proof-050` pattern of P57 T12c). Pure function of t (u=0 exact source, u=1 exact target,
+  identical on two calls). Every pre-existing golden byte-identical. **The slice is not done until the queue proof is
+  on disk**: the parent rewrites the card `r26-70-compare-morph` to HG1's question (the two clips, the one plain
+  sentence, no options) and the clip renders through `review_queue_proofs.py --clips --only r26-70-compare-morph`.
+- Recall (`docs/runbooks/RECALL-RECEIPT.md`): `docs_find "morph_to"` -> *"[capabilities] CAPABILITIES.md:116 -
+  morph_to: the area under the line becomes another line's area by ARAP, mid-page... - LIVE - chart_to {at, dur,
+  to: 'morph', state} between two LINE pages (MOR..."*; `docs_find "recast"` -> *"[capabilities] CAPABILITIES.md:27 -
+  A CHART BECOMES ANOTHER CHART BY RE-WRITING (E64): the data-keyed recast and th... - WIRED"* and *"[effects]
+  recipe:chart-recast-into-the-other-form - The argument keeps the data and changes its form"*; `docs_find "chart_to"`
+  -> nine capability rows (`:27 :28 :104 :113 :114 :115 :116 :117 :270`), so a SEVENTH verb must justify itself
+  against six that exist. Nothing in any layer claims a WHOLE-chart morph - that is the gap.
+- Validate: `node --test content/video_engine/tests/kinetics/` then
+  `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python -m pytest content/video_engine/tests/test_whole_chart_morph.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_kinetics_sync.py -q` then
+  `python content/video_engine/scripts/effects_catalog_check.py` then
+  `python content/video_engine/scripts/gate_motion_density.py content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short`
+  (unchanged reading) then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-70-compare-morph`
+  - each run UNPIPED (a gated step never goes into `tail`)
+- Evidence: pending
+- CAPABILITIES rows changed: **:116** (`morph_to`) gains the whole-chart form; **:27** (the recast/E64 row) gains the
+  pointer; a NEW row for the verb. **What this closes, precisely:** `P47:173` (T6) and `P47:183` (T7) are both marked
+  `Status: blocked on P48` on the operator's sentence *"we still don't redraw/rebuild a new chart"*, and both say the
+  slice closes "when a Tokyo page becomes the next chart on the page". T2 removes that BLOCKER - the mechanism exists
+  and is proven in a PRIVATE Tokyo test-bed build directory, the approved cut untouched (E45; Tokyo is the test bed,
+  no render). **T2 does not close T6 or T7.** P47 T7 is the THIRD WATCH (`P47:182-183`) - an operator watch that is
+  not scheduled by this plan and cannot be, because Tokyo is under the operator's standing *"DO NOT ASK FOR A RENDER"*
+  (`docs/agent-memory/operator/tokyo-short-render.md:79-93`). The watch stays P47's to schedule; T11 records only that
+  the blocker is gone.
+
+### T3: THE BALL BECOMES THE NEXT FULL CHART - R26-117's third ending, and P48 T5b's planted source
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK #2**)
+- Depends on: T2, HG1
+- Write set: `content/video_engine/scripts/species/melt.mjs`, `content/video_engine/scripts/build_scene_timeline_f.py`
+  (the `melt:morph` ending + `world.morph` planted source), `docs/content-video-engine/samples/scene-evidence-engine.mjs`
+  (the melt + page-enter regions), `content/video_engine/tests/test_melt_morph.py` (NEW),
+  `content/video_engine/tests/golden/` (the hand-over goldens + sources),
+  `content/video_engine/effects/cards/exit.json` + `page_enter.json`
+- Acceptance: `exit: melt:morph` hands the ball's ONE ring to the next page's `page_enter:morph` as its prop outline on
+  ONE clock with no cut between (R26-117 names exactly this: *"the ball is the prop it starts from"*), and the page it
+  opens into is a FULL chart built to T2's standard (E99 s1). A golden sits AT the hand-over frame. Separately, the
+  planted-element source lands: `world.morph = {poly: [...]}` traced from a planted element's silhouette
+  (`P48:451`, R26-16's tie) with its own golden - that is P48 T5b, and its card `p48-hg3-morph-onto-planted` (which
+  already exists on the queue, today carrying "Missing proof: P48 T5b ... is unbuilt, so there is nothing to watch")
+  gets a clip for the first time. The three-ending grammar stays `then: morph | splash | throw`; a bare ending is
+  refused.
+- **Card prerequisite (parent, at dispatch):** `r26-117-ball-into-the-next-chart` DOES NOT EXIST on the queue today -
+  R26-117 lives only as the "not built" line inside `r26-70-compare-morph`'s `where` array
+  (`docs/content-video-engine/review-queue.v1.json`, item `r26-70-compare-morph`, the entry
+  `{"label": "R26-117 the page-level ball-to-chart morph (not built)", "missing": true}`). Queue writes are the
+  parent's (T11's write set), so the PARENT creates the card in `review-queue.v1.json` and regenerates
+  `REVIEW-QUEUE.md` **at T3's dispatch, before the slice runs**, so that T3's `--only r26-117-ball-into-the-next-chart`
+  resolves. The delegated agent never edits the queue.
+- Recall (`docs/runbooks/RECALL-RECEIPT.md`): `docs_find "morph"` -> *"[effects] The morph page enter -
+  page_enter:morph - The page's prop outline (tab, plate or card) deforms by ARAP into the chart's sh..."* - the
+  hand-over target already exists as a page enter; BACKLOG `:549` (R26-117) says it in the same words: *"page_enter:morph
+  already deforms a prop outline into the chart's shape, so the ball is the prop it starts from"*. `docs_find "melt"`
+  -> *"[effects] content/video_engine/scripts/species/melt.mjs - The melt scene exit - exit:melt - Only the outgoing
+  chart's ink sags, fuses and compiles on 2s into a dense heavy ball wh..."* - the ball exists; only the third ending
+  does not.
+- Validate: `node --test content/video_engine/tests/kinetics/` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python -m pytest content/video_engine/tests/test_melt_morph.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/effects_catalog_check.py` then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-117-ball-into-the-next-chart` then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only p48-hg3-morph-onto-planted`
+- Evidence: pending
+- CAPABILITIES rows changed: **:37** (the melt exit) gains the third ending; **:118** / **:116** gain the planted
+  source. Closes **P48 T5b** and its card; `P48:185` (HG3) can then be answered
+
+### T4a: THE EXTRUDED BAR'S LEAVE BREAKS ITS SHAPES DOWN MORE
+- Status: pending
+- Owner: `junior_developer` (**ENGINE LOCK #3**; small)
+- Depends on: none (may take the lock between T2 and T3 if the schedule wants it)
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (`buildLedgerBars` / the `EXTRUDE` leave
+  path ONLY), `content/video_engine/tests/test_chart_forms_2_5d.py`, `content/video_engine/tests/golden/`
+  (`form-extruded-bar@proof-leave` re-baselined + its source)
+- Acceptance: the prism's leave decomposes the way the tilted line's does (E99 s4: *"would like to see the shapes break
+  down more in form-extruded-bar@proof-leave to look more similar to form-tilted-line@proof-leave"*) - each prism's
+  faces separate and go their own way rather than the block fading as one. Only `form-extruded-bar*` goldens change;
+  every other golden byte-identical. The flat page's rows are untouched (M25/M28 read identical flat vs formed, the
+  invariant CAPABILITIES:147 already carries).
+- Validate: `python -m pytest content/video_engine/tests/test_chart_forms_2_5d.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only p58-hg3-extruded-bar-leave`
+- Evidence: pending
+- CAPABILITIES row changed: **:147** (Two chart forms in 2.5D - the "owed" note on the leave is retired)
+
+### T4b: A FORMED PAGE MOUNTS ITS CHARCOAL, AND ITS LEAVE DOES NOT CLEAR ITS SCRIBBLES TO CREAM
+- Status: pending
+- Owner: `junior_developer` (**ENGINE LOCK #4**; small)
+- Depends on: T4a (same files)
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the formed page's enter + leave),
+  `content/video_engine/scripts/build_scene_timeline_f.py` (the form's enter option), `content/video_engine/scripts/ledger_page.py`
+  (only if the mount needs a spec field), `content/video_engine/tests/test_chart_forms_2_5d.py`,
+  `content/video_engine/tests/golden/` (a new enter golden + the leave re-baselined)
+- Acceptance: E99 s18 verbatim - *"i don't think we need those scribble lines to clear to cream. I also think mounting
+  the charcoal is a much better look than the scribble drawing."* A formed page ARRIVES by mounting the charcoal (the
+  cream mount page enter, CAPABILITIES:26/:64, E22's mount) instead of by the scribble drawing, and its LEAVE leaves
+  the scribble lines as they are rather than clearing them to cream. Two goldens: the mount arrival, the leave with
+  the scribbles intact. The non-formed ledger page is untouched and every one of its goldens byte-identical.
+- Validate: `python -m pytest content/video_engine/tests/test_chart_forms_2_5d.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python content/video_engine/scripts/effects_catalog_check.py` then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only p58-hg3-forms-mount-not-scribble`
+- Evidence: pending
+- CAPABILITIES row changed: **:147** (the "a formed page mounts its charcoal and does not clear its scribbles to cream
+  (owed)" clause becomes LIVE)
+
+### T5: THE BALL'S SHADOWS - a dark Fresnel rim, a metallic band, one point of deep shadow depth
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK #5**)
+- Depends on: none (independent of T2/T3's geometry; ordered after T4 per the operator)
+- Write set: `content/video_engine/scripts/kinetics/drop.mjs`, `content/video_engine/scripts/species/melt.mjs` (the
+  ball's paint / the MASS material), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the melt region),
+  `content/video_engine/tests/kinetics/drop.test.mjs`, `content/video_engine/tests/test_ball_material.py` (NEW),
+  `content/video_engine/tests/golden/` (the ball goldens + sources)
+- Acceptance: E99 s3 verbatim - *"We definitely need more shadows. The shadows are where the weight/mass largely come
+  from i think, dark fresnel rim + metallic band and I imagine incorporating at least one point of deep shadow depth."*
+  The ball gains (a) more cast/contact shadow, (b) a DARK Fresnel rim (grazing-angle darkening, not a bright
+  highlight ring), (c) a metallic band, (d) at least one point of deep shadow depth - each a named dial with a
+  measured default, sourced to `docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md` §2.1 where the
+  blueprint's finding is one the research gate marked usable (E99 s24: the excluded findings stay excluded). The new
+  look ships behind the existing `melt:weight` opt-in until HG5, so no approved cut's frames move; every pre-existing
+  golden byte-identical. A before/after crop at the same instant through `diff_box`.
+- Recall (`docs/runbooks/RECALL-RECEIPT.md`): **`docs_find "Fresnel"` returns 3 hits and NOT ONE is a shading term** -
+  *"[animation] content/video_engine/scripts/kinetics/clothoid.mjs:115 - fresnel - export const fresnel = (x) => {"*,
+  `clothoid.mjs:147 fresnelMoments`, and `CAPABILITIES.md:96` (the CLOTHOID fitter, Euler spirals). That is the Fresnel
+  INTEGRAL for curve fitting, a different thing from the Fresnel rim the operator asked for; **the slice must not reuse
+  the name or the module**. The material the record does have: `docs_find "splat"` ->
+  *"[manifest] docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md - Research Blueprint - The Living
+  Metallic Drop: Surface Modes, Damping, the High..."* and its `:148` *"2.1 Impact Phenomenology & Mode
+  Decomposition"* - released by E99 s24, usable findings only.
+- Validate: `node --test content/video_engine/tests/kinetics/` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python -m pytest content/video_engine/tests/test_ball_material.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-118-metallic-ball`
+- Evidence: pending
+- CAPABILITIES rows changed: **:37** (the melt exit's ball) and the `melt:weight` note on R26-118's row
+
+### T6: THE MELT GATHERS TO ONE DENSE, HEAVY, VIBRATING POINT - and splashes into a full chart or a world plate
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK #6**)
+- Depends on: **T5 only** (the point IS the ball; its material must land first). **T6 is NOT held behind T2/HG1.** The
+  operator ranked the melt second, and putting it behind the whole-chart morph would park the second-ranked item
+  behind the first gate. So the slice ships in two proofs on ONE card (`r26-76-melt-endings-in-motion`):
+  **proof A (this slice, T5 only)** - the gather and the splash landing in a high-resolution WORLD PLATE, which E99 s2
+  names first (*"a scenic, high-resolution world plate or fully assembled chart"*) and which needs no chart work at
+  all; **proof B (added when T3 lands)** - the same gather splashing into a FULLY ASSEMBLED chart built to T2/T3's
+  standard, appended to the same card before HG6 is asked. HG6 is asked once, with both proofs, unless the operator
+  wants proof A alone sooner
+- Write set: `content/video_engine/scripts/species/melt.mjs`, `content/video_engine/scripts/kinetics/drop.mjs`,
+  `content/video_engine/scripts/build_scene_timeline_f.py` (the new gather form + the flag),
+  `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the melt region), the ink-bloom module it composes,
+  `content/video_engine/tests/test_melt_gather.py` (NEW), `content/video_engine/tests/kinetics/*.test.mjs`,
+  `content/video_engine/tests/golden/` (the gather + splash goldens), `content/video_engine/effects/cards/exit.json`
+- Acceptance: E99 s2 verbatim - *"i expect almost like our swirl effect, i don't want the melt to be blur or a wipe, it
+  should be closer to the swirl except for instead of a whirlpool, vortexing around a single point, it collects and
+  amasses into a single point, that single point should be dense, heavy, and vibrating with energy, and when it
+  splashes, it should splash into a scenic, high-resolution world plate or fully assembled chart."* So: (a) the
+  gather is the page VORTEX's motion (CAPABILITIES:57, doc 29 §9.31) aimed at ONE point rather than a whirlpool - a
+  measurable convergence, no blur filter and no wipe anywhere in the window; (b) the point vibrates on a named idle
+  (E49: nothing ever goes truly still) with an amplitude dial; (c) the splash lands in a **high-resolution world plate
+  (proof A)** and, once T3 has landed, in a **fully assembled chart (proof B)**; the ink-splat -> ink-bloom route
+  (`INTAKE-INK-BLOOM-2026-09-08.md:19`) is explicitly permitted by the ruling and is the first candidate because it
+  composes a preset already on disk. A probe asserts no frame in the window is a blur or a wipe (the gather's pixels
+  travel; they do not lose contrast in place).
+- **THE FLAG, named.** The melt has no `kinetics.*` config flag - **its opt-ins are tokens in the authored exit
+  string**, parsed once on the compiler side and mirrored once on the player side. The pattern to copy is `melt:weight`
+  (R26-118 / E88 s6): `build_scene_timeline_f.py:105` lists `melt` in `TIMED_EXITS`, `:1511` holds `MELT_ENDINGS`
+  (`"throw", "splash:chart", "splash:plate"`) and `MELT_MATERIALS`, and `:1536` documents the grammar -
+  *"R26-118 / E88 s6 adds ``weight``, optionally followed by a MATERIAL ... It is opt-in ... A material this engine
+  does not have is refused BY NAME, never painted as the default."* So this slice adds the token **`melt:gather`**
+  (a phase token beside `weight`, composable with the endings), **read in exactly ONE place per side**:
+  `parse_exit` in `build_scene_timeline_f.py` (the `MELT_ENDINGS` / grammar region at `:1511`-`:1540`) and `meltOpts`
+  in `species/melt.mjs` - *"the two have to agree, and test_transitions_e47 pins the pair"* (`:1540`). An unknown token
+  is refused BY NAME. **The default - an exit string with no `gather` token - renders today's melt byte-identical**,
+  and that is a TEST, not a promise: `test_transitions_e47` gains a case asserting `parse_exit("melt")` and
+  `parse_exit("melt:splash:chart")` are unchanged tuples, and every existing `melt*` golden
+  (`melt-plate`, `melt-depth*`, the throw/chart/plate proofs) re-renders byte-identical under
+  `test_golden_frames.py`. E45 and the approved Japan short are protected by that byte-identity, not by intent.
+- Recall (`docs/runbooks/RECALL-RECEIPT.md`): `docs_find "melt"` -> *"[capabilities] CAPABILITIES.md:37 - THE MELT
+  EXIT, REWORKED TO E88: THE CHART MELTS, THE BOARD STAYS (P52 T9 -> BAC... - WIRED - exit:
+  melt[:throw|:splash:chart|:splash:plate][:<s>][:<x>,<y>]"* and *"[effects] species/melt.mjs - The melt scene exit -
+  exit:melt - Only the outgoing chart's ink sags, fuses and compiles on 2s into a dense heavy ball wh..."*;
+  `docs_find "mount"` -> *"[capabilities] CAPABILITIES.md:57 - The page VORTEX - LIVE - how a ledger page leaves and
+  how it returns"* (the swirl the operator compares the gather to, doc 29 §9.31 at `:2100`); `docs_find "splat"` ->
+  *"[index] docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md:19 - What the preset is (the source, kept
+  verbatim below) - A Canvas 2D bloom from the frame centre: a 40-segment blob whose radius carries two-harmonic
+  n..."* - the accepted route is a preset already on disk, not a new one.
+- Validate: `node --test content/video_engine/tests/kinetics/` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python -m pytest content/video_engine/tests/test_melt_gather.py content/video_engine/tests/test_transitions_e47.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/effects_catalog_check.py` then
+  `python content/video_engine/scripts/gate_motion_density.py content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short`
+  (M31's empty-stage reading must not worsen) then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-76-melt-endings-in-motion`
+- Evidence: pending
+- CAPABILITIES row changed: **:37** (THE MELT EXIT) - the gather replaces the sag/ball description behind its flag
+
+### T7: THE VERDICT STACK ON A SHORT - Steel and Paper's choreography, so the burst lands
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK #7**)
+- Depends on: none
+- Write set: `content/video_engine/scripts/species/verdict.mjs`,
+  `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the stack's mount + `drawStack` region),
+  `content/video_engine/scripts/build_scene_timeline_f.py` (the short's stack options),
+  `content/video_engine/tests/test_verdict_stack.py` (NEW/extended), `content/video_engine/tests/golden/` (one golden
+  per phase), `content/video_engine/effects/cards/dock_payload.json`
+- Acceptance: E99 s21 verbatim - *"We're missing some of the choreography, our cards in steel and paper felt much more
+  alive, and also it didn't just place them horizontally, we had real choreography and movement, which then made the
+  burst better as well, but this is the right direction."* The short's stack keeps ALL FIVE phases (memory
+  `composite-effects-keep-every-phase`: enter one at a time from depth -> FOCUS large near centre while its phrase is
+  spoken -> RECEDE to an asymmetric rail spot so the page re-composes as a MOSAIC -> railed cards IDLE -> radial BURST
+  on the pivot line, 60 ms apart) - CAPABILITIES:184 and `drawStack` already carry them for 16:9; the short's version
+  must not flatten any phase into a horizontal row. A golden at EACH of the five phases. The Steel and Paper reference
+  (`build-f/evidence-dock.json` `ev-holds-stack-v1`, nine proofs 702.87-723.69 s, BACKLOG R26-82 `:488`) is rendered
+  as a side-by-side reference clip for the card - read, never modified.
+- Validate: `node --test content/video_engine/tests/kinetics/` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python -m pytest content/video_engine/tests/test_verdict_stack.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/effects_catalog_check.py` then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-82-verdict-stack-choreography`
+- Evidence: pending
+- CAPABILITIES row changed: **:184** (THE VERDICT STACK) gains the short's form with its five phases named
+
+### T8: THE BEAUTIFIED AGENDA PAGE - the plate version of the list effect
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK #8**)
+- Depends on: none
+- Write set: `content/video_engine/scripts/species/agenda.mjs`,
+  `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the agenda region),
+  `content/video_engine/scripts/build_scene_timeline_f.py` (the page form of the agenda),
+  `content/video_engine/tests/test_agenda_page.py` (NEW), `content/video_engine/tests/golden/`,
+  `content/video_engine/effects/cards/species.json` + `page_species.json`
+- Acceptance: E99 s16 verbatim - *"still need the beautified agenda page, which i think we discussed as basically just
+  being the plate version of our list effect."* Today (`species-proof@proof-agenda.png`, 28.5 s, BACKLOG R26-80 `:486`)
+  it is three plain rows - a gold numeral, white bold sans, a grey hairline - parked bottom-right with the upper
+  two-thirds of the page EMPTY. The page form fills its own plate: rows placed and scaled to the page's quiet zone,
+  each row carrying its CATALOGUED icon stamped on after its sentence is read (E93, heading at
+  `OPERATOR-RULINGS.md:2760`;
+  `render_eligible: true` per E94), the model being Steel and Paper's three-question TEST card. The dock form of the
+  agenda is untouched and byte-identical.
+- Validate: `python -m pytest content/video_engine/tests/test_agenda_page.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python content/video_engine/scripts/effects_catalog_check.py` then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-80-agenda-page-owed`
+- Evidence: pending
+- CAPABILITIES row changed: **:43** (THE NUMBERED AGENDA) gains the page/plate form
+
+### T9: THE GALLERY - a faster build, and a clip where a still cannot show the effect
+- Status: pending
+- Owner: `junior_developer` (**NO engine lock** - the code runs beside T2-T8; **but the TIMING runs of (a) are
+  scheduled when no engine lane is executing**, both the before and the after, or the numbers mean nothing)
+- Depends on: none
+- Write set: `content/video_engine/scripts/build_effects_gallery.py`, `content/video_engine/effects/gallery/**`
+  (generated), `content/video_engine/tests/test_effects_gallery.py` (NEW/extended)
+- Acceptance: E99 s20 verbatim - *"yes, but the page builds slow, and the examples are only pictures when sometimes
+  someone would need to see a sequence, a gif, or a video to understand."* Three measurable bars:
+
+  **(a) SPEED - a number, not "materially faster".** Record the BASELINE first: three consecutive runs of
+  `python content/video_engine/scripts/build_effects_gallery.py` on an otherwise **idle machine - no engine lane
+  running, no clip render, no golden suite in flight** (the engine lanes T2-T8 saturate the same CPU and would make
+  any before/after meaningless), median wall-clock in seconds, written to Evidence with the machine and the timestamp.
+  **The bar: the after-median is <= 0.50x the before-median** on the same three-run protocol. If the slice cannot
+  reach 0.50x it reports the number it did reach and WHY (which stage dominates), and the parent decides - it never
+  silently lowers the bar.
+
+  **(b) THE PAGE IS PINNED.** The gallery page gets a pinned frame set so "faster" can never mean "renders less":
+  a golden capture of the built `content/video_engine/effects/gallery/index.html` at a fixed viewport - the top of the
+  page, one mid-page axis section, and the foot - registered in `test_golden_frames.py` the way every other golden is,
+  plus an assertion that the built page still lists **every** card in `docs/EFFECTS-CATALOG.jsonl` (count equal, no
+  card dropped). The three frames must be byte-identical before and after the speed work, except where a motion
+  example replaced a still (those cases named in Evidence).
+
+  **(c) MOTION - three effects, named, with the command.** An effect a still cannot show carries a sequence, gif or
+  video, rendered through `review_queue_proofs.py`'s existing headless-Chromium-to-ffmpeg path, REUSED, never
+  re-implemented. The effects that get motion are chosen by a STATED rule - a composite with more than one phase, or a
+  card whose `does` names a change over time - not by taste. HG9 asks about **three** of them, and the card's clips
+  are rendered by: `python content/video_engine/scripts/review_queue_proofs.py --clips --only p55-gallery-speed-and-motion`
+  (the card's `where` carrying the three clip paths, one per effect; the three are named in Evidence before the card
+  is asked). `dock_payload:stack` (five phases) and `exit:melt` (sag, ball, ending) are the obvious two by the rule;
+  the third is the slice's to pick and justify.
+
+  The catalogue's cards and `docs/EFFECTS-CATALOG.{jsonl,md}` are not edited by this slice. E99 s14 stands: the gallery
+  is KEPT - *"why are you suggesting to potentially trim or retire the effects gallery?"* - no keep/trim/retire
+  question returns.
+- Recall (`docs/runbooks/RECALL-RECEIPT.md`): `docs_find "gallery"` returns **exactly 1 hit** -
+  *"[capabilities] CAPABILITIES.md:318 - The effects catalogue - LIVE - one card per effect the engine performs
+  (129 cards on 18 axes...)"* - the gallery itself is documented only as a line inside the catalogue's row, which is
+  why its build has no timing on record to beat. The baseline in (a) IS the record.
+- Validate: `python -m pytest content/video_engine/tests/test_effects_gallery.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/build_effects_gallery.py` (the timing printed; the three-run median protocol of
+  (a), machine idle) then
+  `python content/video_engine/scripts/effects_catalog_check.py` (0 failures - the catalogue must not drift) then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only p55-gallery-speed-and-motion`
+- Evidence: pending
+- CAPABILITIES row changed: **:318** (The effects catalogue) - the gallery's line gains the motion examples
+
+### T10: SAVED STATES OR PER-AGENT ENGINE COPIES - a DESIGN sheet, three routes with their costs
+- Status: pending
+- Owner: `architect_sol` -> parent (**NO engine lock**; no product code)
+- Depends on: none
+- Write set: `docs/research/runs/p61-saved-states/OPTIONS.md` (gitignored disk-as-bus) ONLY
+- Acceptance: E99 s23 verbatim - *"we already experienced a big drift/sprawl mess from using worktrees. I'd rather not
+  diverge to different worktrees, cant we just make a better engine/editor so that we can have saved states, or build
+  copies of the engine/compiler per agent?"* The sheet states the problem as the record has it (the engine and
+  compiler take ONE writer at a time - PRP_EXECUTION "Lane write sets", BACKLOG R26-84 `:490`; worktree sprawl is
+  refused - memory `worktree-sprawl`), then gives AT LEAST THREE routes, each with: what it is in this repo's terms,
+  what it costs to build, what it breaks, what it does NOT solve, and how a saved state is proven identical (the
+  DETERMINISM CHECK of CAPABILITIES:109 is the existing proof mechanism). The routes the record already argues and
+  which the sheet must at minimum evaluate: (1) **the sidecar route** - per-agent `overrides.json` layered over one
+  engine (CAPABILITIES:108, P51 T5: keyed by row id and field), the smallest change and the one already built;
+  (2) **the saved-state route** - a named, addressable snapshot of a build's inputs + the engine revision, restorable
+  and diffable, proven by the hot-reload determinism check (CAPABILITIES:109, P51 T4); (3) **the per-agent engine copy
+  route** - the engine + compiler vendored per agent under one checkout with a merge discipline, which is what the
+  operator literally asked about and which must be costed against the sprawl it is meant to avoid. The sheet ends with
+  ONE recommendation and says plainly whether the chosen route is a slice of this plan or its own plan.
+  **The agent's current reading (to be argued, not assumed): this becomes its own plan (P62) if the operator picks
+  route 2 or 3 - both are a persistence/identity model for builds, which is PRP-sized work of exactly the kind
+  PRP_EXECUTION reserves for a plan - and stays a slice here only if route 1 is picked.** No code is written in T10.
+- Validate: `python content/video_engine/scripts/docs_find.py "saved states"` and
+  `python content/video_engine/scripts/docs_find.py "override sidecar"` and
+  `python content/video_engine/scripts/docs_find.py "hot reload"` quoted in the sheet's Recall header (the first
+  returns 0 hits - that is the finding, and `Recall: docs_find 0 hits for "saved states"` is the receipt); then the
+  parent verifies every `path:line` in the sheet resolves
+- Evidence: pending
+- CAPABILITIES rows cited (not changed by T10): **:108**, **:109**
+
+### T11: THE RECORD - the CAPABILITIES rows, the backlog rows, the queue, the layers
+- Status: pending
+- Owner: parent (Claude/Fable docs lane)
+- Depends on: every gate ruled
+- Write set: `docs/content-video-engine/CAPABILITIES.md`, `docs/content-video-engine/BACKLOG.md` (rows R26-70, R26-76,
+  R26-80, R26-82, R26-84, R26-86, R26-117, R26-118 and P47/P48's status lines only),
+  `docs/content-video-engine/review-queue.v1.json` + the generated `REVIEW-QUEUE.md`,
+  `docs/portable/OPERATOR-RULINGS.md` (the new rulings the gates produce), the generated docs layers
+- Acceptance: each ruled gate's answer written verbatim to `OPERATOR-RULINGS.md` with its Apply line; each backlog row
+  carrying the verdict VERBATIM in bold (memory `orphan-tracking-registry`: a triage verdict is not real until a row
+  carries it verbatim in bold); each CAPABILITIES row named in T1-T9 carrying its change; each queue card moved from
+  "Owed" to "Ruled since the last pass" with its ruling and sources; P47 T6/T7 and P48 T5b status lines updated with
+  what actually closed them; the ten generated layers rebuilt and `--check` clean.
+- Validate: `python content/video_engine/scripts/build_review_queue.py --write` then
+  `python content/video_engine/scripts/build_docs_layers.py --write` then
+  `python content/video_engine/scripts/build_docs_layers.py --check` then
+  `python -m pytest content/video_engine/tests/test_build_docs_index.py -q` then
+  `python scripts/prp_validate.py .claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md`
+- Evidence: pending
+
+## Verification
+
+**Per slice, in this order, each command run UNPIPED** (memory `never-pipe-gated-steps-to-tail`: `tail`'s exit code
+masks a FAIL, and a failure shipped twice that way):
+
+1. `node --test content/video_engine/tests/kinetics/` - the pure-function tests for any kinetics module touched.
+2. `python content/video_engine/scripts/sync_kinetics.py --check` - the engine's mirrored regions are in sync.
+3. `python -m pytest <the slice's new test file> content/video_engine/tests/test_golden_frames.py -q` - the new
+   behaviour proven AND every pre-existing golden byte-identical.
+4. `python content/video_engine/scripts/effects_catalog_check.py` - 0 failures (no phantom card, no missing anchor, no
+   proof that is not on disk, no example the compiler rejects).
+5. `python content/video_engine/scripts/gate_motion_density.py <the slice's build>` - M23, M25, M28, M31 at or better
+   than the reading recorded in Evidence; `python content/video_engine/scripts/gate_one_shot_floor.py <build>` where a
+   cut is touched (M35-M42).
+6. `python content/video_engine/scripts/review_queue_proofs.py --clips --only <the slice's item id>` - the card's clip
+   exists on disk; or the before/after crop through the same file's `diff_box` (which REFUSES a pair differing only
+   inside the caption box).
+7. **The frame read.** After a visual change, the parent reads the RENDERED frames at the instants that matter as a
+   viewer, not the diff (memory `judge-the-frame-not-the-diff`), and measures the geometry behind them. Verifying your
+   own change is a different check and misses everything you did not touch.
+
+**Plan-level:** `python scripts/prp_validate.py .claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md` must PASS, and
+`python scripts/prp_status.py` must show this plan.
+
+**Standing constraints checked at every integration:**
+
+- No approved cut is rebuilt (E45). The Japan tariff short (APPROVED + rendered 2026-09-09) and the Tokyo remake are
+  regression fixtures. A change to how they render ships behind a flag defaulting to today's look.
+- A fix never lowers motion (E99 s11). If a gate's motion reading drops, the slice is not done.
+- Figures are never fabricated; the record outranks recollection and the code in front of you.
+- Every proposed mechanism opens with its `Recall:` receipt (`docs/runbooks/RECALL-RECEIPT.md`) - and the rule binds
+  this plan first: **T2, T3, T5, T6 and T9 each carry a `Recall:` line that QUOTES its `docs_find` hit** (T5's is the
+  finding that `Fresnel` in this repo is the Euler-spiral integral in `kinetics/clothoid.mjs`, not a shading term;
+  T9's is that `gallery` returns exactly one hit). `Recall: docs_find 0 hits for "<term>"` is a valid receipt - T10's
+  is exactly that for `saved states`; a bare assertion that recall was run is not.
+
+## Evidence And Handoff
+
+**Where evidence goes.** Per-slice run transcripts, trace tables and option sheets go to
+`docs/research/runs/p61-<slug>/` (gitignored disk-as-bus), command logs through `sqz compress --mode safe` - never the
+test verdicts, hashes or security evidence. Goldens and their sources go to `content/video_engine/tests/golden/`.
+Queue clips land in `content/video_engine/review/queue/clips/` (gitignored) via `review_queue_proofs.py --clips`.
+Proof builds go to NEW private build directories, never an approved cut's.
+
+**The delegation contract** (PRP_EXECUTION "Hand-off policy"). Each brief names: this plan path, the task id, the
+allowed files, the acceptance, the exact validation command, the answer cap (<= 200 words as `path:line` + values), and
+where the full evidence goes. A delegated agent returns "not found in <the places I searched>", never "does not exist".
+The parent verifies every negative with one grep, reads every diff, and runs the slice's validation itself before
+integrating. A subagent summary is not proof.
+
+**How a gate is asked.** The parent updates `review-queue.v1.json` (the card's `judge` = the one plain sentence with
+the time range and what changes; `where` = the clip or crop paths; `options` = empty for HG1-HG9), regenerates
+`REVIEW-QUEUE.md` with `build_review_queue.py --write`, and serves
+`python content/video_engine/scripts/serve_review_queue.py` (http://127.0.0.1:8766/). The operator's answer appends to
+`review-answers.jsonl`; the parent applies it (`build_review_queue.py --answers`) and writes it to
+`OPERATOR-RULINGS.md` and back into this plan. A served review build is never rebuilt under the operator - an agent
+practice from the 2026-09-11 incident, not an operator ruling (E99 s11).
+
+**Open decisions for the operator (the record does not settle these; the parent asks them, the plan does not assume
+an answer).**
+
+1. **How far does "the entire data set/chart" reach into TEXT?** Every series, datum and axis morphing is clear. The
+   tick LABELS, series names and the title are `<text>` with one tspan per glyph; P57 T12b established the operator's
+   own preferred route for text - *"just collapse or melt then re-draw"* (E76 s4) - while P57 T12c then built the full
+   glyph morph by `contour.mjs`. Both are on disk. Which one does a whole-chart morph use for its labels? (T2's
+   acceptance is written to take either.)
+2. **Which pair and which data is the canonical proof** - `line -> bars`, `bars -> line`, or both, and on the Tokyo
+   test bed or a new private build?
+3. **The melt's default.** T6 ships the new melt behind a flag defaulting to today's look because the Japan short is
+   approved and rendered. Once HG6 approves the new melt, does the approved short keep today's melt forever (E45), or
+   is it re-rendered once?
+4. **T10's home.** Whether saved states becomes its own plan (the agent's reading: yes for routes 2 and 3) is HG10's
+   second half.
+
+**The three biggest risks.**
+
+1. **The whole-chart bar may not be reachable for labels at cost.** `contour.mjs` measures outlines off the page's own
+   ink by canvas raster (RASTER_S 4 device px per page px) + marching squares, cached per (text, face). A chart has
+   dozens of tick labels; at 12 fps the per-glyph cost is unmeasured. If it does not fit, the honest answer is the
+   re-write route (open decision 1), NOT a crossfade - E99 s1 would refuse a crossfade the same way it refused the
+   compare.
+2. **Engine-lock serialization is the schedule.** Seven of eleven slices hold the lock. Only T1, T9, T10 and T11 run
+   beside it. A slice that overruns delays everything behind it, and two agents editing
+   `scene-evidence-engine.mjs` is how a parallel run corrupts itself (PRP_EXECUTION).
+3. **T6 changes a mechanism that ships in an approved cut.** The melt is authored in the Japan tariff short. The
+   `melt:gather` token keeps today's look as the default - proven byte-identical by `test_transitions_e47` and the
+   existing `melt*` goldens, not promised - but it grows the melt's token surface beside `weight`, `depth=` and the
+   three endings, and a token whose default is never flipped is how a refused look survives. **HG6 must produce a
+   DEFAULT, not just an approval**: if the operator approves the gather, the ruling has to say whether `melt` bare
+   becomes the gather (and the approved short pinned to `melt:legacy`), or the gather stays opt-in.

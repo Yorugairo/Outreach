@@ -1,13 +1,13 @@
 ---
 id: P46-BRIDGE-ADAPTER
 title: The lane bridge as code - send an order, watch the reply, log the cost; one packet shape for Claude, Gemini and Astra
-status: running
+status: complete
 operation: feature
 risk: standard
 owner: parent
 branch: main
 created: 2026-09-06
-updated: 2026-09-10
+updated: 2026-09-15
 ---
 
 # The lane bridge as code
@@ -68,9 +68,9 @@ GEMINI.md and the hand-off note (pointer edits).
 
 ## Human Gates
 
-- HG1: the packet shape and reply grammar (a cross-lane contract; Astra reviews it through the same bridge).
+- HG1: the packet shape and reply grammar (a cross-lane contract; Astra reviews it through the same bridge). - RETIRED 2026-09-15 (E99 s33: "yes, i dont think i need to approve anything")
 - HG2: the first live send with the tool (one order, the operator names it).
-- HG3: the grace window, the SLA, and the daily RESIDUE budget (tier 1 only - a headless run of a minimal role, ~6k floor after tonight's cuts; tier 0 is Python and free).
+- HG3: the grace window, the SLA, and the daily RESIDUE budget (tier 1 only - a headless run of a minimal role, ~6k floor after tonight's cuts; tier 0 is Python and free). - RETIRED 2026-09-15 (E99 s33: "yes, i dont think i need to approve anything")
 
 ## Mandatory Reads
 
@@ -137,13 +137,13 @@ actionable: the inbox hook for live sessions, the daemon + per-lane handlers for
 - Evidence: 2026-09-06 (junior_developer; parent re-ran the tests, read the bridge_env diff - two hunks in the ledger section only - and scanned for secrets). `bridge_reply.py` (300 lines), `test_bridge_reply.py` (306 lines), `bridge_env.LEDGER_EVENTS = (sent, replied, followup, tier0, tier1, timeout, escalated)` with `ledger_append` refusing anything else. `42 passed in 0.33s` across reply + send; two mutations (followup numbering, event guard) fail 2 tests each. Deltas from the brief, kept: `conversationId` is not in `order.json` - `bridge_send` writes it to `conversation.json` (gemini) / `reply.json` `session_id` (claude), so the resolver falls back through both; send-first-then-record, so a refused send leaves no file, no move, no ledger line. `--packet` takes the full 64-hex id.
 
 ### T4: the packet contract (HG1)
-- Status: pending (2026-09-10: the only open slice. Correction of the same day: the BRIDGE is not retired - what moved off it on 2026-09-08 is Flow IMAGE orders, which we now drive ourselves over CDP (`create_flow_image` via the MCP's stdio) instead of dispatching to Gemini; research and review orders to Gemini and Astra still travel as packets, and Gemini's own close on 2026-09-10 was to keep to research intake and evidence extraction - exactly the traffic this contract shapes)
+- Status: complete (2026-09-15, E99 s33: the contract is a record, not a ratification; Astra's review never ran and is not required)
 - Owner: parent (drafts), Astra via the bridge (reviews), operator ratifies
 - Depends on: T1-T3
 - Write set: `docs/runbooks/BRIDGE-PACKET.md`
 - Acceptance: the doc names the fields, caps, reply grammar, lane register and the file-AND-send rule; Astra's review packet returns no material disagreement or its disagreements are resolved in the doc
 - Validate: `rg -c "packetId|POSITION|NOT FOUND WHERE I LOOKED" docs/runbooks/BRIDGE-PACKET.md`
-- Evidence: pending
+- Evidence: 2026-09-15 - the doc's headings satisfy every acceptance clause: the file-AND-send rule in the opening paragraph (`docs/runbooks/BRIDGE-PACKET.md:3-4`), `## 1. The packet (order.json)` the 15 fields (`:10-23`) and the hard caps (`:25` 6 KB brief, `:57` 250-word reply), `## 2. The reply grammar` the five-line POSITION / PATHS WRITTEN / DISAGREEMENTS / PREREQUISITES / NOT FOUND WHERE I LOOKED block (`:41-47`), `## 3. The lanes` the three-row lane register (`:61-65`). Validate `rg -c "packetId|POSITION|NOT FOUND WHERE I LOOKED" docs/runbooks/BRIDGE-PACKET.md` -> `6`. Two freshness lines fixed today: the title no longer reads "draft for Astra's review" (it is the record of what the tools do, maintained by the agent, no review or ratification step) and `## 6.` is now "Known divergences from P2 (not blocking)"; `## 5. The ledger` now lists all nine events verbatim from `content/video_engine/scripts/bridge_env.py:56`. E99 s33, "Apply: HG1 (the contract ratified) and HG3 (the grace / SLA / residue budget ratified) are withdrawn - `docs/runbooks/BRIDGE-PACKET.md` is the RECORD of what the tools already do (fields, caps, reply grammar, lane register, the file-AND-send rule; grace 10 min, SLA 60 min, 6 runs / 200k tokens as the module's defaults), kept current by the agent, never a question the operator owes; Astra's review packet on the contract never ran and is not required."
 
 ### T5: pointers and the first live order (HG2)
 - Status: complete (HG2 done; the hand procedure is replaced)
@@ -192,6 +192,7 @@ python scripts/prp_validate.py .claude/PRPs/plans/P46-BRIDGE-ADAPTER.plan.md
 
 ## Evidence And Handoff
 
+- Closed 2026-09-15 on E99 s33; the tools (`bridge_send.py`, `bridge_watch.py`, `bridge_reply.py`, `bridge_daemon.py`) and `docs/runbooks/BRIDGE-PACKET.md` are the deliverable; the daemon runs detached.
 - 2026-09-06 00:43-00:52: the worked example - order sent by hand (conversation 7aaa9146), Gemini abstained with roots named at step 80, corrected by `send-message` with the source path, completed at step 103: contract block appended at the source, `video-researcher.md` created (3,492 bytes), synced to every workspace; verified on disk.
 - Observed inbound: six Astra → Claude packet sessions on 2026-09-05 (19:13-21:11), one packet each, one structured reply each.
 - Not observed: any Gemini → Claude or Astra ↔ Gemini session in the stores readable from here.

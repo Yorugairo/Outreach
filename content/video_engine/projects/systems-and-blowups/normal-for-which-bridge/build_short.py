@@ -81,7 +81,9 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
 
     rows: list[tuple] = [
         # ---- the bridge, opened at its apex: the hook, the mechanism, and the light on today's load
-        (0.0, t_num, f"ledger:{LOAD}:line:{LOAD_LAST}:right:{OPEN_ENTER}:cut", (0, 0, 0), [], "suck:0.5,0.52", [
+        # E47: the exit is the transition INTO this scene (E99 s19, 2026-09-15) - nothing transitions INTO the first scene,
+        # so the suck authored here never played; it now sits on the row it takes this page away on (below).
+        (0.0, t_num, f"ledger:{LOAD}:line:{LOAD_LAST}:right:{OPEN_ENTER}:cut", (0, 0, 0), [], "cut", [
             # M11 + the Apex Chart Read (2026-09-12 research): on the AXES register the line finishes at 3.0 s, so
             # the light goes on the latest datum inside the 1.5 s after THAT - on the word that says a yield is a
             # weight, which is the sentence the light is illustrating (it used to sit on "heavier." at 7.9 s, which
@@ -91,7 +93,9 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
             {"kind": "spotlight", "at": at("weight,"), "dur": 2.6, "target": {"kind": "datum", "index": LOAD_LAST}},
         ]),
         # ---- the number: what the long end pays, two weeks apart
-        (t_num, t_load, f"ledger:{LONG}:line:{IDX_AUG}:right:axes:cut", (0, 0, 0), [], "cut", [
+        # E47: the exit is the transition INTO this scene (E99 s19, 2026-09-15): the suck takes the OUTGOING
+        # world (the bridge page) into its point and spins this page in - so it is authored here, not on s01.
+        (t_num, t_load, f"ledger:{LONG}:line:{IDX_AUG}:right:axes:cut", (0, 0, 0), [], "suck:0.5,0.52", [
             {"kind": "build_to", "at": at("Two weeks ago"), "dur": 1.6,
              "target": {"kind": "datum", "index": IDX_AUG}},
             # review 2: no "4.66%" figure - it sat on the 10-year line under the tag and the 4.83% ring landed on both
@@ -106,7 +110,9 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
         # arrives drawn by the vortex; the sentences mark the two loads on the line that is already there.
         # ---- THE TURN, on the one picture the chart cannot draw: the bridge, bending under the load (E61 use=bridge)
         (t_load, t_81, f"{plate};use=bridge", (0.04, 0, -10), [], None, []),
-        (t_81, t_bill, f"ledger:{LOAD}:line:{LOAD_LAST}:right:spiral:cut", (0, 0, 0), [], "melt", [
+        # E47: the exit is the transition INTO this scene (E99 s19, 2026-09-15) - the world before this one is the bridge
+        # PLATE, and a melt takes a ledger page's ink; the spiral is this page's own arrival, so the boundary cuts.
+        (t_81, t_bill, f"ledger:{LOAD}:line:{LOAD_LAST}:right:spiral:cut", (0, 0, 0), [], "cut", [
             # review 1: no callout on 1981 - it fired inside the spiral (M25) and its ring sat on the figure below
             {"kind": "figure", "at": at("thirty-one percent"), "dur": 1.6, "text": "31% of GDP",
              "target": {"kind": "datum", "index": IDX81}, "dy": -0.8},
@@ -115,7 +121,9 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
              "target": {"kind": "datum", "index": LOAD_LAST}, "color": "neg", "dy": -1.0},
         ]),
         # ---- what the load costs
-        (t_bill, t_ring, f"ledger:{BILL}:line:{BILL_LAST}:right::cut", (0, 0, 0), [], "cut", [
+        # E47: the exit is the transition INTO this scene (E99 s19, 2026-09-15): the melt takes the OUTGOING page
+        # (the bridge on its spiral, a ledger page) - its chart sags off the board and this one forms after it.
+        (t_bill, t_ring, f"ledger:{BILL}:line:{BILL_LAST}:right::cut", (0, 0, 0), [], "melt", [
             {"kind": "build_to", "at": at("Federal interest runs"), "dur": 2.6,
              "target": {"kind": "datum", "index": BILL_LAST}},
             # review 1: no figure here - "$1.25T a year" stood over the series' own "$1.25T Interest paid" tag

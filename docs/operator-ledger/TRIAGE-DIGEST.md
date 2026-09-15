@@ -11,8 +11,13 @@ Verdicts from 12 read-only explorer batches, merged and checked by the parent. O
 | memory | 13 |
 | craft | 8 |
 | ruling-candidate | 7 |
-| gate-candidate | 5 |
+| gate-candidate | 7 |
 | conflict | 3 |
+
+Two gate candidates - **ring-on-tip-label** and **name-on-neighbour-line** - were found writing P54 T5,
+outside the 12 triage batches, and are carried here by `P54-THE-OPERATOR-LEDGER.plan.md:274-277`. They are
+not rows in `TRIAGE.jsonl` (whose `gate-candidate` count stays 5); their ledger row `8086dab785f2` is triaged
+there as `recorded` / `cream-stage-mount-only` for its empty-cream half only.
 
 ## Conflicts - a record contradicts the operator (3)
 
@@ -50,7 +55,7 @@ Verdicts from 12 read-only explorer batches, merged and checked by the parent. O
   - A reproducible DERIVED figure is our originality layer, not a liability. The per-chart choreography ask is already in japan-tariff-trick/CHART-CHOREOGRAPHY.md
   - > Better, but Did you review the rest of the video or only that chart?  also 6240 is reproducible by taking the $30k car and applying the 25% tariffs. Derived isn't a bad thing, it's our added layer which is required for "original content" these days. We kept the cars at $30k a piece for simplicity, even though in real life trucks cost more.  But I do think that the chart itself should probably be a
 
-## Gate candidates (5)
+## Gate candidates (7)
 
 - **spoken-chart-not-on-screen** - `dc64bab50209` 2026-08-29T20:15
   - Gate: any line that names or points at a visual ("the spike", "the chart") must have a matching dock or page on screen in that window. No gate measures this.
@@ -67,6 +72,12 @@ Verdicts from 12 read-only explorer batches, merged and checked by the parent. O
 - **black-frame-at-seam** - `ec736d324128` 2026-09-05T10:45
   - Black flash at a scene change before the wipe/mount. Gate: flag near-black frames at a boundary with no declared dip. Only M29 (sound) is registered; E47 found it by hand
   - > we're having a frame glitch on the wipe timings, our timing is off i tihnk because we've delt with this before, probably broke on the-build. as soon as the scene change happens there's a black flash, THEN the page wipes
+- **ring-on-tip-label** - `8086dab785f2` 2026-09-13T03:11 - source `.claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:274-277`, fixed in `41bf55c` with no gate
+  - Gate: measure a line's terminal name against a ring or callout's resolved ellipse. M28 reads a page's labels against each other, not a label against a species' ellipse, so every gate passed on the frame the operator caught. The fix stamps `tip_mark` at compile time, so an unstamped page draws the collision again. The case: `docs/agent-memory/operator/casebook/ring-on-the-tip-label/CASE.md`
+  - > the host is offline.  But it sounds like there were some engine improvements related to albels you should improve. The empty cream stage isnt supposed to be on stage during the exits. You misinterpreted that wrong.  It doesnt make sense to do that when transitioning from chart-to-chart, that is used for mounting a ledger plate to a narrative plate
+- **name-on-neighbour-line** - `8086dab785f2` 2026-09-13T03:11 - source `.claude/PRPs/plans/P54-THE-OPERATOR-LEDGER.plan.md:274-277`, fixed in `41bf55c` with no gate
+  - Gate: measure a direct label's box against OTHER series' paths, not only against other labels. On a portrait page a terminal name is written 30 px above its own tip and lands on the line above it. The first fix measured a fixed 330 px span and put the name straight back on the neighbour - only a frame caught it. The case: `docs/agent-memory/operator/casebook/name-on-the-neighbour-line/CASE.md`
+  - > the host is offline.  But it sounds like there were some engine improvements related to albels you should improve. The empty cream stage isnt supposed to be on stage during the exits. You misinterpreted that wrong.  It doesnt make sense to do that when transitioning from chart-to-chart, that is used for mounting a ledger plate to a narrative plate
 
 ## Craft notes (unrecorded) (8)
 
