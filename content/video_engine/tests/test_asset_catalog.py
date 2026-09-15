@@ -543,15 +543,60 @@ def test_every_icon_cutout_is_kind_icon_and_every_catalog_schema_accepts_it(sche
     assert validator.is_valid("prop"), "adding icon keeps every existing kind"
 
 
-def test_the_icons_catalog_hash_matches_its_assets_under_the_extractor_serialization():
-    import hashlib
+def test_the_icons_catalog_hash_is_the_validators_canonical_sha256():
+    # 2026-09-15: finance_channel.canonical_sha256 is the contract (the other finance
+    # catalogs pass it); the extractor imports it instead of hashing its assets its own way.
+    from content.video_engine.src.services.finance_channel import canonical_sha256
 
     catalog = json.loads(_ICONS_CATALOG.read_text(encoding="utf-8"))
-    serialized = json.dumps(catalog["assets"], sort_keys=True)
 
-    assert catalog["artifact_hash"] == hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+    assert catalog["artifact_hash"] == canonical_sha256(catalog)
     catalogue_md = (_ICONS_CATALOG.parent / "CATALOGUE.md").read_text(encoding="utf-8")
     assert f"**Artifact SHA-256:** `{catalog['artifact_hash']}`" in catalogue_md
+
+
+def test_the_icons_catalog_validates_with_zero_errors():
+    # 2026-09-15 (E99 s32): operator_approved/approved states; the four badges carry names, not facts.
+    from content.video_engine.src.services.finance_channel import validate_asset_catalog
+
+    catalog = json.loads(_ICONS_CATALOG.read_text(encoding="utf-8"))
+    validated = validate_asset_catalog(catalog, _VIDEO_ENGINE)
+
+    assert {(a["review_state"], a["rights_state"], a["render_eligible"]) for a in validated["assets"]} == {
+        ("operator_approved", "approved", True)
+    }
+    assert {a["asset_id"] for a in validated["assets"] if "text_note" in a} == {
+        "prop-badge-dram-memory-etf-v1", "prop-badge-pe-ratio-valuation-v1",
+        "prop-badge-soxx-semiconductor-etf-v1", "prop-badge-sp500-us-index-v1",
+    }
+
+
+def _icons_schema_and_hash_errors(catalog: dict) -> list[str]:
+    from content.video_engine.src.services import finance_channel
+
+    return finance_channel._schema_errors(catalog) + finance_channel._hash_errors(catalog)
+
+
+def test_an_icon_with_one_tag_edited_fails_the_hash_check():
+    catalog = json.loads(_ICONS_CATALOG.read_text(encoding="utf-8"))
+    assert not [e for e in _icons_schema_and_hash_errors(catalog) if "artifact_hash" in e]
+
+    catalog["assets"][0]["semantic_tags"][0] = "edited-tag"
+
+    assert any("artifact_hash is stale" in e for e in _icons_schema_and_hash_errors(catalog))
+
+
+def _approval_errors(catalog: dict) -> list[str]:
+    return [e for e in _icons_schema_and_hash_errors(catalog) if "approval" in e or "supersedes_removed" in e]
+
+
+def test_the_v1_schema_accepts_the_e94_approval_and_rejects_a_malformed_one():
+    catalog = json.loads(_ICONS_CATALOG.read_text(encoding="utf-8"))
+    assert _approval_errors(catalog) == []
+
+    catalog["assets"][0]["approval"] = {"by": "operator", "date": 20260913, "words": "", "ruling": "E94"}
+
+    assert len(_approval_errors(catalog)) == 2
 
 
 def test_a_tier_two_icon_resolves_exactly_as_a_tier_two_prop_did():

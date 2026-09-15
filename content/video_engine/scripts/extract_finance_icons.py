@@ -3,9 +3,9 @@ Extract, segment, antialias, and catalogue 44 finance icons from Icons1.png - Ic
 
 Adheres strictly to content video engine doctrine:
 - kind: 'icon' (tier 2; the operator 2026-09-15: "the icon kind should be icon")
-- rights_state: 'original_review_only'
-- review_state: 'review_only'
-- render_eligible: False
+- review_state: 'operator_approved', rights_state: 'approved', render_eligible: True
+  (the operator approved the set 2026-09-13, E94; each entry carries the approval)
+- a label/ticker badge is not factual text; it carries a text_note (E99 s32)
 - sha256 checksums on all outputs
 - Schema-compliant catalogue: finance_icons_catalog.v1.json
 """
@@ -13,9 +13,32 @@ Adheres strictly to content video engine doctrine:
 import hashlib
 import json
 import os
+import sys
 from pathlib import Path
 import cv2
 import numpy as np
+
+_REPO_ROOT = Path(__file__).resolve().parents[3]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
+# 2026-09-15: the catalog's artifact_hash is the validator's contract, not a local formula.
+from content.video_engine.src.services.finance_channel import canonical_sha256  # noqa: E402
+
+
+# The operator's approval of the set (2026-09-13, E94), carried on every entry.
+E94_APPROVAL = {
+    "by": "operator",
+    "date": "2026-09-13",
+    "words": "delete the replaced V1's, then approve use of the icons.",
+    "ruling": "E94",
+}
+# The clipped v1 cutouts the v2 re-cuts replaced and removed (E94).
+SUPERSEDES_REMOVED = {
+    "prop-icon-central-bank-fx-v2": "prop-icon-central-bank-fx-v1",
+    "prop-icon-crude-oil-energy-v2": "prop-icon-crude-oil-energy-v1",
+    "prop-icon-interest-rates-monetary-policy-v2": "prop-icon-interest-rates-monetary-policy-v1",
+}
 
 
 BASE_DIR = Path(r"C:\Users\Snipe\Downloads\Outreach Program\content\video_engine")
@@ -448,7 +471,8 @@ ICONS4_META = [
         "macro": "The definitive benchmark for US large-cap equities, passive ETF inflows (SPY/VOO), index concentration, and core portfolio returns.",
         "tags": ["sp500-index", "us-equities-benchmark", "passive-investing", "large-cap-stocks", "wall-street-core"],
         "lenses": ["equities", "benchmarks", "passive-investing"],
-        "factual_text": True,
+        "factual_text": False,
+        "text_note": "label or ticker only (S&P 500), no figure - the operator, 2026-09-15 (E99 s32)",
     },
     {
         "slot": 1,
@@ -459,7 +483,8 @@ ICONS4_META = [
         "macro": "iShares Semiconductor ETF (SOXX), benchmark tracking cyclical chipmakers, fabless designers, and semiconductor capital equipment.",
         "tags": ["soxx-etf", "semiconductor-index", "chipmakers-basket", "hardware-beta", "ishares-semiconductor"],
         "lenses": ["semiconductors", "etfs", "hardware-cycles"],
-        "factual_text": True,
+        "factual_text": False,
+        "text_note": "label or ticker only (SOXX), no figure - the operator, 2026-09-15 (E99 s32)",
     },
     {
         "slot": 2,
@@ -470,7 +495,8 @@ ICONS4_META = [
         "macro": "Thematic memory sector basket tracking cyclical memory manufacturers, DRAM supply-demand cycles, and high-bandwidth memory exposure.",
         "tags": ["dram-etf", "memory-chip-basket", "micron-samsung-hynix", "cyclical-memory", "storage-etf"],
         "lenses": ["semiconductors", "memory-hardware", "etfs"],
-        "factual_text": True,
+        "factual_text": False,
+        "text_note": "label or ticker only (DRAM ETF), no figure - the operator, 2026-09-15 (E99 s32)",
     },
     {
         "slot": 3,
@@ -481,7 +507,8 @@ ICONS4_META = [
         "macro": "Price-to-Earnings fundamental valuation, multiple expansion vs compression, earnings yield, and valuation multiples.",
         "tags": ["pe-ratio", "valuation-multiple", "equity-valuation", "fundamental-analysis", "accounting-calculator"],
         "lenses": ["valuation", "fundamental-analysis", "accounting"],
-        "factual_text": True,
+        "factual_text": False,
+        "text_note": "label or ticker only (P/E), no figure - the operator, 2026-09-15 (E99 s32)",
     },
     {
         "slot": 4,
@@ -696,17 +723,16 @@ def main():
             "resolution_tier": 2,
             "generated": True,
             "contains_factual_text": meta["factual_text"],
-            "rights_state": "original_review_only",
-            "review_state": "review_only",
-            "render_eligible": False,
+            "rights_state": "approved",
+            "review_state": "operator_approved",
+            "render_eligible": True,
+            "approval": dict(E94_APPROVAL),
+            **({"text_note": meta["text_note"]} if meta.get("text_note") else {}),
+            **({"supersedes_removed": SUPERSEDES_REMOVED[meta["asset_id"]]} if meta["asset_id"] in SUPERSEDES_REMOVED else {}),
         })
 
     # Sort deterministically by asset_id
     catalog_entries.sort(key=lambda a: a["asset_id"])
-
-    # Compute deterministic artifact hash
-    serialized_assets = json.dumps(catalog_entries, sort_keys=True)
-    catalog_artifact_hash = hashlib.sha256(serialized_assets.encode("utf-8")).hexdigest()
 
     catalog_data = {
         "schema_version": "finance_asset_catalog.v1",
@@ -719,8 +745,11 @@ def main():
             "bespoke_plate",
         ],
         "assets": catalog_entries,
-        "artifact_hash": catalog_artifact_hash,
     }
+    # Deterministic artifact hash: finance_channel.canonical_sha256 over the whole catalog
+    # (sorted keys, compact, artifact_hash excluded) - what validate_asset_catalog checks.
+    catalog_artifact_hash = canonical_sha256(catalog_data)
+    catalog_data["artifact_hash"] = catalog_artifact_hash
 
     catalog_json_path = ICONS_DIR / "finance_icons_catalog.v1.json"
     with open(catalog_json_path, "w", encoding="utf-8") as f:
@@ -734,7 +763,7 @@ def main():
         "# Finance & Macro Icons Catalogue (44 Cutouts)",
         "",
         "Extracted, segmented, and defringed from `Icons1.png` - `Icons4.png`.",
-        "Registered under doctrine tier 2 as `kind: icon`, `rights_state: original_review_only`, `review_state: review_only`, `render_eligible: false`.",
+        "Registered under doctrine tier 2 as `kind: icon`, `review_state: operator_approved`, `rights_state: approved`, `render_eligible: true` (the operator, 2026-09-13, E94).",
         "",
         "## Summary",
         f"- **Total Cutouts:** {len(all_assets)}",

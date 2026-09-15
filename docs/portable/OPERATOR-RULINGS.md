@@ -2779,7 +2779,7 @@ can be stamped on after each sentence is read or something like that"*.
 
 **Ruling (the operator):** *"delete the replaced V1's, then approve use of the icons."* The 44 woodblock icon cutouts in
 `content/video_engine/assets/icons/cutouts/` (cut from the operator's sheets `Icons1.png`-`Icons4.png`, tagged and
-catalogued in `finance_icons_catalog.v1.json`) are `review_state: approved`, `rights_state: operator_approved`,
+catalogued in `finance_icons_catalog.v1.json`) are `review_state: operator_approved`, `rights_state: approved` (the two values were written swapped until E99 s32),
 `render_eligible: true`, each entry carrying the approval's words and date. The three clipped v1 cutouts (central bank,
 crude oil, interest rates) were replaced by their v2 re-cuts and removed (sent to the Recycle Bin, 2026-09-13).
 
@@ -3117,3 +3117,15 @@ precedent was stopped before it committed - that precedent is the mistake); (2) 
 (`content/video_engine/assets/props/manifest.json`, `finance_props_catalog.v1`) are approved to render, their tags verified by the
 operator; (3) the retrieval layer covers research runs the way it covers docs, and the prop and icon libraries are searchable by
 name, tag and category from `docs_find` - an asset that exists and cannot be found is treated as not existing.
+
+**E99 s32 - The icon catalogue passes its validator: the approval states in the contract's order, and the four text badges are names,
+not facts.** Told the icon catalogue failed its own validator (181 errors, found while relabelling the icons): *"should probably fix
+the validator"*. Two contract conflicts were put to the operator, who chose both recommendations: (1) **the status values are swapped
+in the catalogue, not widened in the validator** - every icon carries `review_state: operator_approved`, `rights_state: approved`,
+the values `finance_channel.validate_asset_catalog`, `asset_catalog.schema.json` and the other catalogues use (E94's apply line
+had them the other way round and is corrected; the approval itself is unchanged); (2) **the four badges whose paintings carry text -
+"DRAM ETF", "P/E", "SOXX", "S&P 500" - are names, not facts**: a label or a ticker with no figure is not factual text, so they
+carry `contains_factual_text: false` with a note saying so and stay render-eligible, and the validator's rule (a generated image
+may not carry factual text) stands unchanged. Also fixed without a ruling: the E94 approval fields are allowed by the v1 schema
+(E94 requires "each entry carrying the approval's words and date"), and the catalogue's `artifact_hash` uses the validator's
+`canonical_sha256`, which `extract_finance_icons.py` now imports.
