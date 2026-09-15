@@ -29,7 +29,7 @@ REQUIRED_SECTIONS = {
     "Verification",
     "Evidence And Handoff",
 }
-PLAN_STATUSES = {"draft", "approved", "running", "review", "blocked", "complete"}
+PLAN_STATUSES = {"draft", "approved", "running", "review", "blocked", "complete", "retired"}
 TASK_FIELDS = {"Status", "Owner", "Depends on", "Write set", "Acceptance", "Validate", "Evidence"}
 
 

@@ -1,16 +1,18 @@
 ---
 id: P13-VISUAL-V3-ORIGINAL-ART
 title: P13 Visual V3 Original Art And Explanation System
-status: review
+status: retired
 operation: feature
 risk: standard
 owner: parent
 branch: claude/content-generation-system-52f077
 created: 2026-07-30
-updated: 2026-07-30
+updated: 2026-09-14
 ---
 
 # P13 Visual V3 — Original Art and Explanation System
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** T5 waited at the Visual Direction gate; plate direction is set by E22 and the plate library.
 
 ## Summary
 

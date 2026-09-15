@@ -1,16 +1,18 @@
 ---
 id: P29-REMOTION-PRODUCTION-CONSOLE-OPTIMIZATION
 title: Optimize Remotion around a local Production Console
-status: running
+status: retired
 operation: feature
 risk: high
 owner: parent
 branch: codex/p29-remotion-production-console
 created: 2026-08-10
-updated: 2026-08-10
+updated: 2026-09-14
 ---
 
 # Remotion Production Console Optimization
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** T8-T10 were superseded by P30 (P30:24), itself retired here.
 
 ## Summary
 

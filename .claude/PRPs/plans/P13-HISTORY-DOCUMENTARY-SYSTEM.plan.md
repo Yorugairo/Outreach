@@ -1,16 +1,18 @@
 ---
 id: P13-HISTORY-DOCUMENTARY-SYSTEM
 title: P13 History Documentary V4 Research Rights And Editorial Motion System
-status: running
+status: retired
 operation: feature
 risk: standard
 owner: parent
 branch: claude/content-generation-system-52f077
 created: 2026-07-30
-updated: 2026-07-31
+updated: 2026-09-14
 ---
 
 # P13 History Documentary V4 — Research, Rights, and Editorial Motion
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** T7's Gates A and B never ruled; the history lane's pattern was deprecated by C1.
 
 ## Summary
 

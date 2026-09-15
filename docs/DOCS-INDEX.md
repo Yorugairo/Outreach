@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-4470 records across 381 files.
+4473 records across 381 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -2190,6 +2190,9 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L185 [2] P56 APPROVED - next implementation (2026-09-13 night) — `.claude/PRPs/plans/P56-EFFECT-RECIPES-AND-THE-ONE-SHOT-FLOOR.plan.md` on MAIN, status approved (the operator: "A sounds righ <on-disk; on-screen; proven-recipe; re-derive; BEAT-PLAN; SELF-WATCH>
 - L196 [2] P56 COMPLETE (2026-09-13 night) - uncommitted; the operator's HG2 open — Ten slices landed in the main checkout: `configs/effect_recipe.schema.json` (`effect_recipes.v1`; proven REQUIRES proof + count>=1, <effect_recipes.v1; re-derived; enters-during; effects_card.py "badge ladder"; dock_option:badge; plate_option:{world,clip,ken}; preset; for_act; --propose; single-species; pre-edit; byte-identical>
 - L217 [2] 2026-09-14 - the reds triage, the second batch, push authorized — Day one's batch: 5 commits on main (engine 3a6a645, P55 364ecb9, P56 3e7f736, docs 7c59dfa, projects 2684c2c). Day two: the <video-engine; core.autocrlf=true; hash-bound; .gitattributes -text; re-pins; src; repo-root; src.config; editorial-motion; motion-energy; mechanism-town-v1; un-landed>
+- L231 [2] 2026-09-14 late - pushed; P57 drafted, awaiting "approved" — Main pushed to origin at `5ccc484` (bb31d28 the reds 62->0 + LF re-pins + restored assets; 54a47cd the research ingestion gate; <5ccc484; re-pins; Video-engine; byte-identical; lives>
+- L244 [2] 2026-09-14 night - P57 RUNNING (the operator's word was `/goal /prp-implement P57`; the five recommendations stand) — - Committed on main, NOT pushed (no push word): `4376de6` docs(backlog) T1-T5 (rows R26-93/94/74/69/110/90/92/63/64 closed; ledger 20 runs 0 orphan; new rows R2 <4376de6; operator-set; 527617f; step-off; figClearY; chart_to compare; compare-morph; own-line; re-based; PROMOTION-recipe; Working-tree; build-review>
+- L259 [2] 2026-09-14 evening - ready for /prp-implement P58 (the 2.5D stage) — - P57 COMPLETE + the same-day corrections: compare = ball-first full morph (T12c, contour.mjs, 40 modules, 67 goldens identical). Rulings E76 s4/s5, E88 s5/s6/s <same-day; ball-first; session-local; one-transparent-asset-per-layer; re-dispatch; OPERATOR-RULINGS; standalone-env; docs-index; gpt-image; re-composes; read-only; BUILD-PIPELINE>
 
 ## docs/agent-memory/operator/shorts-lane-phase1-standard.md
 

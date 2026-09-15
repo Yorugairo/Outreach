@@ -16,7 +16,7 @@ terms. Purpose, terms and defines are truncated here to keep the file cheap to g
 the whole record, plus `mentions` and `byline`, is in `DOCS-MANIFEST.jsonl`. A per-item
 folder is one row under `## folders` (COLLAPSED_FAMILIES in the builder).
 
-455 documents across 13 kinds.
+456 documents across 13 kinds.
 
 ## doctrine
 
@@ -293,5 +293,5 @@ folder is one row under `## folders` (COLLAPSED_FAMILIES in the builder).
 - content/video_engine/sources/reference_analyses/us-japan-bond-yield-shock/ — one video's reference-analysis dossier — 1 document
 - content/video_engine/sources/reference_analyses/why-us-bond-yields-are-surging-again-do-this-asap/ — one video's reference-analysis dossier — 4 documents
 - docs/agent-memory/explorer/ — agent memory copies, one file per memory — 2 documents, index MEMORY.md: explorer - durable memory (reviewed) — Promoted from worker scratch by the parent after review.
-- docs/agent-memory/operator/ — agent memory copies, one file per memory — 76 documents, index MEMORY.md: MEMORY.md — Cause → outcome → impact, briefly — operator: too verbose, unclear on cause/impact; lead decisions with one line each (c
+- docs/agent-memory/operator/ — agent memory copies, one file per memory — 77 documents, index MEMORY.md: MEMORY.md — Cause → outcome → impact, briefly — operator: too verbose, unclear on cause/impact; lead decisions with one line each (c
 - docs/agent-memory/operator/casebook/ — operator casebook, one CASE.md per case — 5 documents, index README.md: The casebook - defects the operator caught in a frame, and what fixed them — Each case is a folder: `before.png` and `after.png` (540x960, half of the 9:16 stage, seeked with the engine's own captu

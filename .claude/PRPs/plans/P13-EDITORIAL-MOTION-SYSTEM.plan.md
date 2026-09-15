@@ -1,16 +1,18 @@
 ---
 id: P13-EDITORIAL-MOTION-SYSTEM
 title: P13 Deterministic Editorial Motion System
-status: review
+status: retired
 operation: feature
 risk: standard
 owner: parent
 branch: claude/content-generation-system-52f077
 created: 2026-08-01
-updated: 2026-08-01
+updated: 2026-09-14
 ---
 
 # P13 Deterministic Editorial Motion System
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** the V9 proof gate never reviewed; motion is carried by the kinetics plans (P38, P43, P47-P49, P58).
 
 ## Summary
 

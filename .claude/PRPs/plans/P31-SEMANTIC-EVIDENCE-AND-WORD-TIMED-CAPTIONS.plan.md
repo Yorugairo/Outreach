@@ -1,16 +1,18 @@
 ---
 id: P31-SEMANTIC-EVIDENCE-AND-WORD-TIMED-CAPTIONS
 title: Bind PowerPoint evidence to world plates and add word-timed captions
-status: review
+status: retired
 operation: feature
 risk: high
 owner: parent
 branch: codex/p31-semantic-evidence-and-word-timed-captions
 created: 2026-08-11
-updated: 2026-08-11
+updated: 2026-09-14
 ---
 
 # Semantic Evidence And Word-Timed Captions
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** T6 and T7 never built; word-timed captions shipped with STAGE mode and M08.
 
 ## Summary
 

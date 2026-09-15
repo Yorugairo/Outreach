@@ -1,16 +1,18 @@
 ---
 id: P14-DIRECTOR-AND-SCENE-BOARD
 title: Script-to-Scene-Board Director and Multi-Lane Animation Substrate
-status: running
+status: retired
 operation: feature
 risk: elevated
 owner: parent
 branch: claude/content-generation-system-52f077
 created: 2026-08-22
-updated: 2026-08-22
+updated: 2026-09-14
 ---
 
 # Script-to-Scene-Board Director and Multi-Lane Animation Substrate
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** T8-T12 and T18 never built; the script-to-scene step is the row proposer (P53 T8) and the species-by-sentence map (P50 T1).
 
 ## Summary
 

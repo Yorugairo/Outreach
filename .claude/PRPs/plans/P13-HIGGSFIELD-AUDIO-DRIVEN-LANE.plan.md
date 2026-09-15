@@ -1,16 +1,18 @@
 ---
 id: P13-HIGGSFIELD-AUDIO-DRIVEN-LANE
 title: P13 Higgsfield Audio-Driven Explainer Lane
-status: review
+status: retired
 operation: feature
 risk: external-provider
 owner: parent
 branch: claude/content-generation-system-52f077
 created: 2026-07-31
-updated: 2026-08-01
+updated: 2026-09-14
 ---
 
 # P13 Higgsfield Audio-Driven Explainer Lane
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** T5's proof clip never reviewed; generated video is the START/END-frame exception (E40).
 
 ## Summary
 

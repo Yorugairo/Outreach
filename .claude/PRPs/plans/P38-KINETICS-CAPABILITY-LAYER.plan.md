@@ -1,16 +1,18 @@
 ---
 id: P38-KINETICS-CAPABILITY-LAYER
 title: The kinetics layer - the six designed-out capabilities, each with the test that fails without it
-status: draft
+status: retired
 operation: feature
 risk: standard
 owner: parent
 branch: main
 created: 2026-09-04
-updated: 2026-09-05
+updated: 2026-09-14
 ---
 
 # The Kinetics Capability Layer
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** P43 took T1-T4 (e247853); the ARAP morph shipped later (kinetics/arap.mjs); DQS skinning and prop attachment were never built.
 
 > **2026-09-05: T1-T4 moved to [P43-KINETICS-WAVE-2](P43-KINETICS-WAVE-2.plan.md)** (the operator's pick from the backlog read: the stroke, K-M ink, the squash helper, the rest of the spring). T5-T8 stay here, waiting on an object page. The flags and `springPop` / `minJerk` already ship (see P43's summary).
 

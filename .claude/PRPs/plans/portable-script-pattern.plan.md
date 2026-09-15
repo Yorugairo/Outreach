@@ -1,16 +1,18 @@
 ---
 id: P10-PORTABLE-SCRIPT-PATTERN
 title: Portable script pattern + prompt guides (full 30-minute map)
-status: running — all task slices done; remaining: gate 3 (operator eyeball)
+status: retired
 operation: feature
 risk: standard
 owner: parent
 branch: claude/content-generation-system-52f077
 created: 2026-08-24
-updated: 2026-08-24
+updated: 2026-09-14
 ---
 
 # Portable Script Pattern + Prompt Guides
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** gates 2 and 3 never ruled and the kit is out of date against the script gates shipped since (G2 short mode, S01-S08, M13).
 
 ## Summary
 

@@ -20,3 +20,16 @@ def test_prp_validator_rejects_missing_contract(tmp_path: Path) -> None:
 
     assert any(error.startswith("missing frontmatter:") for error in errors)
     assert "missing task slices" in errors
+
+def test_prp_validator_accepts_a_retired_plan(tmp_path: Path) -> None:
+    """E99 s27: a plan withdrawn by the operator carries `status: retired`, not a false `complete`."""
+    template = (REPO_ROOT / ".claude" / "PRPs" / "templates" / "prp-template.md").read_text(encoding="utf-8")
+    retired = tmp_path / "retired.plan.md"
+    retired.write_text(template.replace("status: draft", "status: retired", 1), encoding="utf-8")
+
+    assert validate(retired) == []
+
+    unknown = tmp_path / "unknown.plan.md"
+    unknown.write_text(template.replace("status: draft", "status: shelved", 1), encoding="utf-8")
+
+    assert "invalid status: shelved" in validate(unknown)

@@ -1,16 +1,18 @@
 ---
 id: P10-TRUSTED-SCORING-DURABLE-CLIENT-REPORTS
 title: Trusted Scoring, Agentic Analysis, and Durable Client Reports
-status: review
+status: retired
 operation: feature
 risk: high
 owner: parent
 branch: main
 created: 2026-07-26
-updated: 2026-07-26
+updated: 2026-09-14
 ---
 
 # Trusted Scoring, Agentic Analysis, and Durable Client Reports
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** T14's calibration pilot ran on synthetic data only; a real run needs provider calls and a human review.
 
 ## Summary
 

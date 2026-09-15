@@ -1,16 +1,18 @@
 ---
 id: P13-REMOTION-INSTALL-AND-HYPERFRAMES-LANE
 title: Remotion Install Hardening + HyperFrames Render Lane
-status: draft
+status: retired
 operation: feature
 risk: standard
 owner: parent
 branch: claude/content-generation-system-52f077
 created: 2026-08-08
-updated: 2026-08-08
+updated: 2026-09-14
 ---
 
 # Plan: Remotion Install Hardening + HyperFrames Render Lane
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** T6's port spike never ran; the plan already sat in completed/.
 
 ## Summary
 

@@ -1,16 +1,18 @@
 ---
 id: P13-LIVING-SCENE-COMMUNICATION-SYSTEM
 title: P13 Living Scene and Communication System
-status: running
+status: retired
 operation: feature
 risk: external-provider
 owner: parent
 branch: claude/content-generation-system-52f077
 created: 2026-07-31
-updated: 2026-08-02
+updated: 2026-09-14
 ---
 
 # P13 Living Scene and Communication System
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** T10 running, T11 pending; the scene-evidence engine (doc 29) carries the living scene.
 
 ## Summary
 

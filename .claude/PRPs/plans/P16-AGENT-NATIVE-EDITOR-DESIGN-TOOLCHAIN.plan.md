@@ -1,16 +1,18 @@
 ---
 id: P16-AGENT-NATIVE-EDITOR-DESIGN-TOOLCHAIN
 title: Agent-Native Editorial And Design Toolchain
-status: running
+status: retired
 operation: feature
 risk: high
 owner: parent
 branch: codex/p16-agent-native-editor-design-toolchain
 created: 2026-08-07
-updated: 2026-08-07
+updated: 2026-09-14
 ---
 
 # Agent-Native Editorial And Design Toolchain
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** T4 waited on Gate A; the editor returned as P51, and E99 s17 closed it as not yet useful to a person, the timeline first.
 
 ## Summary
 

@@ -1,16 +1,18 @@
 ---
 id: P30-INTERACTIVE-REMOTION-PRODUCTION-EDITOR
 title: Build the interactive Remotion Production Editor
-status: running
+status: retired
 operation: feature
 risk: high
 owner: parent
 branch: codex/p30-interactive-remotion-production-editor
 created: 2026-08-10
-updated: 2026-08-11
+updated: 2026-09-14
 ---
 
 # Interactive Remotion Production Editor
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** Gates A-D never ruled; the editor returned as P51 (E99 s17); R26-102's ruling is this one.
 
 ## Summary
 

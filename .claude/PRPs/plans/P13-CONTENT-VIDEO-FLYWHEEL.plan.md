@@ -1,16 +1,18 @@
 ---
 id: P13-CONTENT-VIDEO-FLYWHEEL
 title: Content-to-Video Flywheel Engine — Phase 0 thin slice + pilot
-status: blocked
+status: retired
 operation: feature
 risk: standard
 owner: parent
 branch: claude/content-generation-system-52f077
 created: 2026-07-28
-updated: 2026-07-28
+updated: 2026-09-14
 ---
 
 # Content-to-Video Flywheel Engine — Phase 0 Thin Slice + Pilot
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** T7 waited on Gate B and T8 on the E5 corpus; the history lane's pattern was deprecated by C1.
 
 ## Summary
 

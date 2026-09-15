@@ -1,16 +1,18 @@
 ---
 id: P28-DECK-ASSET-CONTEXT-EXTRACTION
 title: Extract deck assets with durable semantic context
-status: review
+status: complete
 operation: feature
 risk: standard
 owner: parent
 branch: codex/stickly-woodblock-variant
 created: 2026-08-10
-updated: 2026-08-10
+updated: 2026-09-14
 ---
 
 # Deck Asset Extraction With Context
+
+> **CLOSED COMPLETE 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** T1-T5 complete, the proof render on disk, landed in `52148c2`.
 
 ## Summary
 

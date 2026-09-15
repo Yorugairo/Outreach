@@ -7,7 +7,7 @@ risk: standard
 owner: parent
 branch: main
 created: 2026-09-13
-updated: 2026-09-13 (running: the operator invoked /prp-implement P54 T1-T6 - HG1 given for T1-T6; T7 not in this run)
+updated: 2026-09-14
 ---
 
 # The operator ledger
@@ -161,22 +161,22 @@ T1 (its quotes come from the ledger). T6 after T2, T4 and T5 exist. T7 last.
 - Evidence: pending
 
 ### T4: The Claude memories promoted into the repo
-- Status: done in the worktree 2026-09-13 (parent-reviewed; integration into main pending - see Deviations)
+- Status: complete (integrated into main; the plan line was never updated - corrected 2026-09-14)
 - Owner: junior_developer
 - Depends on: none
 - Write set: `docs/agent-memory/operator/**/*.md`, `content/video_engine/scripts/sync_operator_memory.py`
 - Acceptance: A4. All memory files under `docs/agent-memory/operator/` with `MEMORY.md` as the index; `[[slug]]` links become relative Markdown links; a README says the repo copy is canonical, the pack is prose with quotes (not the explorer's anchors-only rule), and who writes it (the parent). `sync_operator_memory.py --check` diffs the repo copy against `~/.claude/projects/C--Users-Snipe-Downloads-Outreach-Program/memory/` and exits 1 on drift; `--export` refreshes the repo copy.
 - Validate: `python content/video_engine/scripts/sync_operator_memory.py --check` and a link check that every relative link resolves
-- Evidence: pending
+- Evidence: the pack is tracked in main - 90 files under `docs/agent-memory/` (committed with `7c59dfa`, the rulings E80-E97 commit that carried "the memories export and routing"); refreshed 2026-09-14 with `sync_operator_memory.py --export` (3 written: `gpt-image-2-5-generator.md` new, `MEMORY.md` and `resume-2026-09-12.md` drifted; 73 unchanged) and `--check` -> in sync (76 files).
 
 ### T5: The frame casebook, three cases to start
-- Status: written 2026-09-13 - four cases (frames in main, CASE.md + index in the worktree); the `.gitignore` negation lands at integration
+- Status: complete (integrated into main; corrected 2026-09-14)
 - Owner: parent (frame judgement)
 - Depends on: T1
 - Write set: `docs/agent-memory/operator/casebook/**`, `.gitignore` (one negation block for the casebook's frames)
 - Acceptance: A5. Three cases from 2026-09-12/13, each a folder with `before.png`, `after.png` (seeked frames of `normal-for-which-bridge` review-v1 vs build-review at 41bf55c, 1080 px portrait, at most 300 KB each) and `CASE.md`: the operator's words (ledger timestamp), the defect, the fix commit, the gate that now catches it. (1) the dashed ring on "x3.9 Federal debt" at 0:57 - `tip_mark`; (2) the empty cream after the melt at 0:34 - M31; (3) the thin one-shot - no gate catches it (JUDGE), the rule is `first-pass-additive-capability-led`. An index lists cases by defect family so later cases slot in.
 - Validate: `git check-ignore` returns nothing for the casebook frames; every `CASE.md` names a commit that `git cat-file -e` accepts
-- Evidence: pending
+- Evidence: the casebook is tracked in main - 12 files under `docs/agent-memory/operator/casebook/` (the frames, each `CASE.md` and the index).
 
 ### T6: Routing, not the pack
 - Status: done 2026-09-13 (parent, not speedster: the worktree's copies of the entry files are older than main's, so a delegated write would have clobbered them). EVIDENCE: one route line in `docs/AGENTS-VIDEO-ENGINE.md` (item 5), `GEMINI.md` (retrieval order), `CLAUDE.md` (fast routes), `docs/agent-context/SKILL_ROUTER.md` (a lane row) - 12 insertions; `AGENTS.md` untouched (asserted); `build_docs_layers.py --write` then `--check` every layer in sync; `docs_find "operator ledger"` -> `docs/operator-ledger/README.md`, `docs_find "casebook"` -> `docs/agent-memory/operator/casebook/README.md`
@@ -197,13 +197,13 @@ T1 (its quotes come from the ledger). T6 after T2, T4 and T5 exist. T7 last.
 - Evidence: pending
 
 ### T8: Fix the stale records the audit found (the operator: "fix them")
-- Status: running 2026-09-13 - four implementation_luna lanes write edit pairs to the scratchpad (subagents cannot write main from this worktree); the parent reviews each pair against its source and applies them to main
+- Status: complete (landed in main with `daa7506`; the plan line was never updated - corrected 2026-09-14)
 - Owner: parent (integration), implementation_luna x4 (drafts)
 - Depends on: T3
 - Write set: `docs/portable/{BUILD-PIPELINE,MOTION-GRAMMAR,SOUND-SOURCING,CHART-DISCIPLINE,OUTRO-CTA-PLAYBOOK,PACKAGING-PLAYBOOK,DOCTRINE-CORE,VOICE-PACK}.md`, docs 29/37/39/08/21, `PIPELINE.md`, `.agents/skills/brand-voice/SKILL.md`, the shorts memory (source + export), the entry files' DOCTRINE-CORE routing
 - Acceptance: every PORTABLE-AUDIT claim fixed or left with a stated reason; DOCTRINE-CORE re-scoped as the NotebookLM export (the operator: "doctrine core was originally just supposed to be for notebook LM ... the agents in this repo should be reading the full doc set and using our index system") at <= 10,000 characters, and no entry file tells repo agents to load it
 - Validate: each edit's `old` unique before apply; `build_docs_layers.py --check`; DOCTRINE-CORE `len` <= 10,000
-- Evidence: pending
+- Evidence: `daa7506` "the stale portable claims fixed and the reasoning pass filed"; `docs/portable/DOCTRINE-CORE.md` is 9,852 characters (<= 10,000). Not re-audited claim by claim on 2026-09-14: a stale claim found later is a new row, not this slice.
 
 ### T9: Two gates the operator approved - the black frame at a seam (M32) and narration pointing at a visual that is not on stage (M33)
 - Status: wired 2026-09-13. EVIDENCE: `measure_seam_frames.py`, `measure_spoken_visuals.py`, `test_seam_and_spoken.py` (15 passed) integrated into main; measured on the approved Japan short (11 boundaries), the Tokyo remake (6) and the bridge review (5): no flash, no jump, no black outside a dip on any cut, suck or melt; near-black threshold 8 luma MEASURED on Japan's six approved dips (darkest 0-6; cuts never under 52); the only holds are the two approved outro dips into clips at luma ~18 (`dark_world`); one pointing phrase on Japan ("But look at what nobody explained", a figure of speech). Tiers from the approved shorts: M32 FAIL on flash / jump / outside / a hold over a normal world, INFO on a dark-world hold; M33 WARN on an uncovered pointer. `gate_motion_density.py` `_seam_gate` / `_spoken_visual_gate` + `test_m32_*` / `test_m33_*` (motion gate + seam + stamps: 128 passed). The measure also found the exit convention read backwards elsewhere (Deviations)

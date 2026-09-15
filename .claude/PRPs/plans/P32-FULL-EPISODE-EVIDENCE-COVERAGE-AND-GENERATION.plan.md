@@ -1,16 +1,18 @@
 ---
 id: P32-FULL-EPISODE-EVIDENCE-COVERAGE-AND-GENERATION
 title: Map and complete full-episode evidence coverage
-status: running
+status: retired
 operation: feature
 risk: high
 owner: parent
 branch: codex/p31-semantic-evidence-and-word-timed-captions
 created: 2026-08-15
-updated: 2026-08-15
+updated: 2026-09-14
 ---
 
 # Full-Episode Evidence Coverage And Generation
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** T2 running and T3-T6 pending with Gates B-E unruled; ep1's evidence lane closed with the episode.
 
 ## Summary
 

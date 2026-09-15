@@ -3060,3 +3060,11 @@ depth or tilt is used only as a transition (the evidence door of E98 s7, a pull,
 front of it; the P58 T4 page plane is kept because it is the door's material. The planes sheet (the depth split's four layers, magenta
 where a layer is transparent) and the mid-arrival compare's difference map (white where the layered and the flat frame differ) are the
 agent's evidence and never belong on a review card (E99 s14).
+
+**E99 s27 - The plans before P46 are retired (P28 closed complete; the portable script pattern retired).** In the session, after the
+audit of every plan still marked open (`scratchpad/prp-audit/OLD-PRPS.md`: 17 of 19 stopped at a human gate never ruled or at slices
+never built, their work carried by later plans): *"retire the portable script pattern & the old plans (prior to p46)"*. Apply: P10,
+the eight P13 plans (flywheel, video-engine implementation, visual v3, living scene, history documentary, editorial motion,
+Higgsfield, the Remotion install / HyperFrames lane), P14, P16, P29, P30, P31, P32, P33, P38 and the portable script pattern carry
+`status: retired` - their unruled gates are withdrawn, not answered, and no queue or agent asks them again; P28 closes `complete`
+(T1-T5 done, `52148c2`). Work a retired plan named that is still wanted returns as a row or a new plan, never by reopening it.

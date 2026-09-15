@@ -1,16 +1,18 @@
 ---
 id: P33-FIRST-FIVE-MINUTE-PLATE-AND-EVIDENCE-REPAIR
 title: Repair first-five-minute plate directness and evidence coverage
-status: review
+status: retired
 operation: feature
 risk: high
 owner: parent
 branch: codex/p31-semantic-evidence-and-word-timed-captions
 created: 2026-08-16
-updated: 2026-08-16
+updated: 2026-09-14
 ---
 
 # First-Five-Minute Plate And Evidence Repair
+
+> **RETIRED 2026-09-14 (E99 s27, the operator: "retire the portable script pattern & the old plans (prior to p46)").** Gate B's 0-90s render never recorded; ep1 shipped.
 
 ## Summary
 
