@@ -44,6 +44,7 @@ import difflib
 import json
 import re
 import sys
+from functools import lru_cache
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
@@ -78,6 +79,7 @@ TEMPLATE_DIAL_SCALARS = ("MOUNT_STEPS", "DISSOLVE_S", "LP_MOUNT_RISE", "CAP_LAST
 SIG_MAX = 200            # the cap on a signature, so a one-line object cannot flood the md
 VALUE_MAX = 120
 EVIDENCE_MAX = 6         # evidence entries kept per record, sorted
+EVIDENCE_KEPT = 3        # use sites kept per source (template, tests, modules) before the sort
 CONTEXT_COMMENTS = 8     # comment lines read around a declaration for its citations
 
 # --- patterns -----------------------------------------------------------------------------
@@ -90,6 +92,7 @@ FLAG_MENTION = re.compile(r"kinetics\.([a-z][a-z0-9_]*)")
 # inlined copies then read as player code (120 lines of region against sync_kinetics' 4406, 2026-09-12)
 KIN_BEGIN = re.compile(r"^\s*/\*\s*KINETICS:BEGIN\s+(\w+)\s*\*/\s*$")
 KIN_END = re.compile(r"^\s*/\*\s*KINETICS:END\s*\*/\s*$")
+KIN_CALL = re.compile(r'kin\("([^"]*)"\)')   # the flag a template line reads, for the per-file table
 DEFAULTS_BLOCK = re.compile(r"KINETICS_DEFAULTS\s*=\s*Object\.freeze\(\{(.*?)\}\)", re.S)
 DEFAULT_KEY = re.compile(r"^\s*([a-z][a-z0-9_]*)\s*:", re.M)
 OBJECT_KEY = re.compile(r"([A-Za-z_$][\w$]*)\s*:")
@@ -167,7 +170,53 @@ def word_re(name: str) -> re.Pattern:
     return re.compile(r"(?<![\w$.])" + re.escape(name) + r"(?![\w$])")
 
 
+WORD_RUN = re.compile(r"[\w$]+")
+
+
+def word_tokens(text: str) -> frozenset[str]:
+    r"""Every name `word_re(name).search(text)` can find: each maximal `[\w$]+` run not preceded by a dot.
+
+    `word_re` refuses a run that touches a word character or a `$` on either side, and refuses one a dot
+    precedes, so a name it matches is always one of those runs. The table turns "does this file name it?"
+    into a set lookup instead of a regex sweep of the whole file, once per name (P63 T3)."""
+    return frozenset(m.group(0) for m in WORD_RUN.finditer(text)
+                     if m.start() == 0 or text[m.start() - 1] != ".")
+
+
 # --- the corpus ---------------------------------------------------------------------------
+
+class FileScan:
+    """One file, classified ONCE: its lines and their casefolded twins, the header length, the per-line
+    code mask, the inlined regions, and the two lookup tables (name -> lines, kinetics flag -> lines).
+
+    Everything here is a function of the file alone, so nothing may be recomputed per record. It used to
+    be: `code_lines_only` ran 3294 times - every module and the template re-classified once per exported
+    KEY - for 124 s of a 219 s profiled `--check` (P63 T3, the session's `anim_profile.txt`)."""
+
+    __slots__ = ("rel", "text", "lower", "lines", "lower_lines", "header", "code", "inlined",
+                 "name_lines", "kin_lines")
+
+    def __init__(self, rel: str, text: str, inlined: list[tuple[int, int]] | None = None) -> None:
+        self.rel = rel
+        self.text = text
+        self.lower = text.casefold()
+        self.lines = split_lines(text)
+        self.lower_lines = [line.casefold() for line in self.lines]
+        self.header = header_lines(text)
+        self.code = code_lines_only(text)
+        self.inlined = frozenset(i for lo, hi in (inlined or ()) for i in range(lo, hi + 1))
+        # the tables are built over the LIVE lines only: a use inside an inlined KINETICS region is the
+        # module using itself, and no caller of them ever wants one back.
+        self.name_lines: dict[str, list[int]] = {}
+        self.kin_lines: dict[str, list[int]] = {}
+        for i, line in enumerate(self.lines):
+            if i in self.inlined:
+                continue
+            for token in word_tokens(line):
+                self.name_lines.setdefault(token, []).append(i)
+            for match in KIN_CALL.finditer(line):
+                self.kin_lines.setdefault(match.group(1), []).append(i)
+
 
 class Corpus:
     """Every file the registry reads, loaded once, addressed by repo-relative path."""
@@ -192,6 +241,14 @@ class Corpus:
                       and "__pycache__" not in p.parts}
         self.gates = {rel_of(self.root, p): p.read_text(encoding="utf-8", errors="replace")
                       for p in sorted((self.root / SCRIPTS_DIR).glob("gate_*.py"))}
+        # --- the per-file tables every classifier reads (P63 T3) -------------------------------
+        self.template_scan = FileScan(self.template_rel, self.template, self.inlined)
+        self.module_scans = [FileScan(rel, text) for rel, text in self.modules.items()]
+        # the order `key_uses` and `token_hits` walk: the modules first, then the template, so the
+        # module that implements a law is the evidence and the template's copy of it is not
+        self.use_scans = self.module_scans + [self.template_scan]
+        self.scans = {scan.rel: scan for scan in self.use_scans}
+        self.test_tokens = {rel: word_tokens(text) for rel, text in self.tests.items()}
         self.rows = table_rows(self.root)
         self.research = Research(self.root, formula_files(self.root))
         self._bodies: dict[str, list[tuple[str, str, int, int]]] = {}
@@ -294,8 +351,16 @@ def inlined_spans(lines: list[str]) -> list[tuple[int, int]]:
     return spans
 
 
+@lru_cache(maxsize=8)
+def _span_lines(spans: tuple[tuple[int, int], ...]) -> frozenset[int]:
+    return frozenset(i for lo, hi in spans for i in range(lo, hi + 1))
+
+
 def in_spans(index: int, spans: list[tuple[int, int]]) -> bool:
-    return any(lo <= index <= hi for lo, hi in spans)
+    """Is the line index inside one of the spans? The membership table is built once per span list
+    (in practice one: the template's inlined regions), not walked per call - it was walked 8.3 M
+    times in the profiled run. The hot loops read `FileScan.inlined` and never come here."""
+    return index in _span_lines(tuple(spans))
 
 
 # --- javascript object literals -------------------------------------------------------------
@@ -472,18 +537,33 @@ def decl_re(name: str) -> re.Pattern:
 
 def template_sites(corpus: Corpus, name: str, flag: str | None) -> list[int]:
     """Template lines (1-based) reading `kin("<flag>")` or using the name outside its OWN declaration,
-    the inlined KINETICS regions excluded."""
+    the inlined KINETICS regions excluded.
+
+    The candidates come from the file's tables - the lines that carry this name as a word, plus the lines
+    that call this flag - and each is then put to the same test as before, so the answer is unchanged and
+    the 15 885-line template is no longer swept once per record (P63 T3)."""
+    scan = corpus.template_scan
     word, kin, decl = word_re(name), (f'kin("{flag}")' if flag else None), decl_re(name)
+    if WORD_RUN.fullmatch(name):
+        candidates = set(scan.name_lines.get(name, ()))
+        if flag:
+            candidates.update(scan.kin_lines.get(flag, ()))
+        candidates = sorted(candidates)
+    else:   # a name the table cannot key (never today: every symbol and key is a word run)
+        candidates = [i for i in range(len(scan.lines)) if i not in scan.inlined]
     out = []
-    for i, line in enumerate(corpus.template_lines):
-        if in_spans(i, corpus.inlined):
-            continue
+    for i in candidates:
+        line = scan.lines[i]
         if (kin and kin in line) or (word.search(line) and not decl.match(line)):
             out.append(i + 1)
     return out
 
 
 def test_files(corpus: Corpus, name: str) -> list[str]:
+    """The test files that name the symbol - a set lookup per file against the tokens read once at load,
+    not a regex over 3.6 MB of tests per record (20 s of the profiled run, P63 T3)."""
+    if WORD_RUN.fullmatch(name):
+        return [rel for rel in corpus.tests if name in corpus.test_tokens[rel]]
     word = word_re(name)
     return [rel for rel, text in corpus.tests.items() if word.search(text)]
 
@@ -653,30 +733,35 @@ def key_uses(corpus: Corpus, name: str, key: str, own_module: str, own_line: int
     dotted = word_re(name)
     prop = re.compile(r"\.\s*" + re.escape(key) + r"(?![\w$])")
     out: list[str] = []
-    for rel, text in list(corpus.modules.items()) + [(corpus.template_rel, corpus.template)]:
-        own, head, is_code = rel == own_module, header_lines(text), code_lines_only(text)
-        for i, line in enumerate(split_lines(text)):
-            if i < head or (own and i + 1 == own_line) or COMMENT_LINE.match(line) or not is_code[i]:
+    for scan in corpus.use_scans:                     # the modules, then the template
+        own = scan.rel == own_module
+        for i, line in enumerate(scan.lines):
+            # both patterns spell the key out, so a line without it can answer neither (P63 T3)
+            if key not in line or i < scan.header or (own and i + 1 == own_line):
                 continue
-            if rel == corpus.template_rel and in_spans(i, corpus.inlined):
+            if i in scan.inlined or COMMENT_LINE.match(line) or not scan.code[i]:
                 continue
             if dotted.search(line) or (own and prop.search(line)):
-                out.append(f"{rel}:{i + 1}")
-    return out[:3]
+                out.append(f"{scan.rel}:{i + 1}")
+                if len(out) == EVIDENCE_KEPT:
+                    return out
+    return out[:EVIDENCE_KEPT]
 
 
 def module_uses(corpus: Corpus, name: str, own_module: str, own_line: int) -> list[str]:
     """Kinetics lines that USE the name: not its own declaration, not a comment, and not a module
     header - a header that explains a symbol is prose, not a call site."""
     word, out = word_re(name), []
-    for rel, text in corpus.modules.items():
-        head = header_lines(text)
-        for i, line in enumerate(split_lines(text)):
-            if i < head or (rel == own_module and i + 1 == own_line):
+    for scan in corpus.module_scans:
+        for i, line in enumerate(scan.lines):
+            # `word_re` spells the name out, so a line without it cannot match (P63 T3)
+            if name not in line or i < scan.header or (scan.rel == own_module and i + 1 == own_line):
                 continue
             if word.search(line) and not COMMENT_LINE.match(line):
-                out.append(f"{rel}:{i + 1}")
-    return out[:3]
+                out.append(f"{scan.rel}:{i + 1}")
+                if len(out) == EVIDENCE_KEPT:
+                    return out
+    return out[:EVIDENCE_KEPT]
 
 
 def formula_status(rec: dict, corpus: Corpus, code: list[dict], rows: list[tuple[str, int, str]],
@@ -736,12 +821,19 @@ def row_status(corpus: Corpus, rows: list[tuple[str, int, str]]) -> tuple[str, l
 def token_hits(corpus: Corpus, tokens: tuple[str, ...]) -> list[str]:
     """Kinetics and template lines naming the formula - the modules first, so the module that
     implements a law is the evidence and the template's inlined copy of it is not."""
-    out = []
-    for rel, text in list(corpus.modules.items()) + [(corpus.template_rel, corpus.template)]:
-        for i, line in enumerate(split_lines(text)):
-            if mentions(line, tokens) and not (rel == corpus.template_rel and i in corpus.declared):
-                out.append(f"{rel}:{i + 1}")
-    return out[:3]
+    low, out = tuple(token.casefold() for token in tokens), []
+    for scan in corpus.use_scans:
+        if not any(token in scan.lower for token in low):    # the file names none of them
+            continue
+        for i, line in enumerate(scan.lower_lines):
+            if not any(token in line for token in low):
+                continue
+            if scan.rel == corpus.template_rel and i in corpus.declared:
+                continue
+            out.append(f"{scan.rel}:{i + 1}")
+            if len(out) == EVIDENCE_KEPT:
+                return out
+    return out[:EVIDENCE_KEPT]
 
 
 def first_line(text: str, name: str) -> int:
@@ -775,8 +867,9 @@ def render_jsonl(records: list[dict]) -> str:
     return "".join(json.dumps(r, ensure_ascii=False) + "\n" for r in records)
 
 
-def rendered(root: Path = REPO) -> dict[str, str]:
-    records = build(root)
+def rendered(root: Path = REPO, records: list[dict] | None = None) -> dict[str, str]:
+    """Both artifacts as text. `records` lets a caller that already built them skip a second build."""
+    records = build(root) if records is None else records
     return {JSONL_REL: render_jsonl(records), MD_REL: render_md(records)}
 
 
@@ -789,10 +882,10 @@ def write(root: Path = REPO) -> list[dict]:
     return build(root)
 
 
-def check(root: Path = REPO) -> list[str]:
+def check(root: Path = REPO, records: list[dict] | None = None) -> list[str]:
     """One entry per stale artifact: "<path> (+added/-removed lines)". Empty means in sync."""
     problems = []
-    for rel, want in rendered(root).items():
+    for rel, want in rendered(root, records).items():
         path = Path(root) / rel
         if not path.is_file():
             problems.append(f"{rel} (missing)")
@@ -826,11 +919,12 @@ def main(argv: list[str] | None = None) -> int:
     root = a.repo.resolve()
     if a.write:
         print(f"build_animation_registry: {summary(write(root))} -> {JSONL_REL} + {MD_REL}")
-    problems = check(root)
+    records = build(root)                 # one build answers both the diff and the summary
+    problems = check(root, records)
     if problems:
         print("build_animation_registry: STALE - " + "; ".join(problems) + " - run --write")
         return 1
-    print(f"build_animation_registry: in sync ({summary(build(root))})")
+    print(f"build_animation_registry: in sync ({summary(records)})")
     return 0
 
 

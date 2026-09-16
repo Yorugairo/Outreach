@@ -14,8 +14,10 @@ and the three citation orphans the 2026-09-05 triage found (07 §1.2, the dampin
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
+import time
 from pathlib import Path
 
 import pytest
@@ -37,6 +39,11 @@ CHECKS_REL = "docs/content-video-engine/47-FINDINGS-TO-CHECKS.md"
 TEST_REL = "content/video_engine/tests/test_fake_kinetics.py"
 RESEARCH_REL = f"{BAR.SOURCES_DIR}/07_academic_literature_fake.md"
 RESEARCH_INDEX_REL = BAR.RESEARCH_INDEX_REL
+
+# The fixture corpus rendered by the build as it stood BEFORE P63 T3 made the corpus classify each file
+# once (sha256 of `render_jsonl(records) + render_md(records)`). It pins the refactor: precomputed tables,
+# same bytes. Re-pin it - deliberately, in the same commit - only when the fixture or the render changes.
+FIXTURE_RENDER_SHA = "42ded9cc70019c7ae0b545b5582b4e548103b6abe1f5bf5105ef92be5f70bf71"
 
 MODULE = (
     "/* kinetics/fake.mjs - the fake stroke (42 s42.1; FINDING-the-fake-math s1). Inlined into\n"  # 1
@@ -483,6 +490,52 @@ def test_the_markdown_groups_by_module_by_status_and_ends_on_the_orphan_list(tmp
     assert all(f"### {status} (" in text for status in BAR.STATUS_ORDER)
     orphans = text[text.index("## Orphaned"):]
     assert "**On-1s / On-2s**" in orphans and "**zero-slip**" not in orphans
+
+
+def test_the_render_is_byte_for_byte_what_it_was_before_the_per_file_tables(tmp_path: Path) -> None:
+    """P63 T3: the corpus precomputes per file what was recomputed per record. Nothing may move."""
+    records = BAR.build(_tree(tmp_path))
+
+    blob = BAR.render_jsonl(records) + ARR.render_md(records)
+
+    assert hashlib.sha256(blob.encode("utf-8")).hexdigest() == FIXTURE_RENDER_SHA
+
+
+def test_the_per_file_tables_say_exactly_what_a_direct_scan_of_the_file_says(tmp_path: Path) -> None:
+    """The tables are the same classification, hoisted: `code_lines_only` / `header_lines` per file, and a
+    name table that answers `word_re(name).search(line)` for every line of every file."""
+    corpus = BAR.Corpus(_tree(tmp_path))
+
+    assert [scan.rel for scan in corpus.use_scans] == [MODULE_REL, TEMPLATE_REL]
+    for scan in corpus.use_scans:
+        assert scan.lines == BAR.split_lines(scan.text)
+        assert scan.code == BAR.code_lines_only(scan.text)
+        assert scan.header == BAR.header_lines(scan.text)
+        assert scan.lower_lines == [line.casefold() for line in scan.lines]
+        names = {name for line in scan.lines for name in BAR.word_tokens(line)}
+        for name in names:
+            direct = [i for i, line in enumerate(scan.lines)
+                      if BAR.word_re(name).search(line) and i not in scan.inlined]
+            assert scan.name_lines.get(name, []) == direct, (scan.rel, name)
+    for rel, text in corpus.tests.items():
+        assert corpus.test_tokens[rel] == BAR.word_tokens(text)
+
+    # the template's inlined copy of the module is out of the tables, and its flag calls are in
+    assert corpus.template_scan.inlined == frozenset(range(6, 10))       # KINETICS:BEGIN..END, 0-based
+    assert corpus.template_scan.kin_lines["curvature_stroke"] == [12]    # line 13, the only live `kin(...)`
+
+
+def test_the_check_of_the_fixture_corpus_is_fast(tmp_path: Path) -> None:
+    """The ceiling the minute-long `--check` broke: this corpus is a handful of small files (P63 T3)."""
+    root = _tree(tmp_path)
+    BAR.write(root)
+
+    start = time.perf_counter()
+    code = BAR.main(["--check", "--repo", str(root)])
+    elapsed = time.perf_counter() - start
+
+    assert code == 0
+    assert elapsed < 2.0, f"--check took {elapsed:.2f}s on the fixture corpus"
 
 
 # --- the real repository ------------------------------------------------------------------
