@@ -126,7 +126,7 @@ that page only with the operator's ruling written to `docs/portable/OPERATOR-RUL
 | **HG4** | T4b | `p58-hg3-forms-mount-not-scribble` | "The formed page arriving by the two-plate cross-fade and by the soak, each leaving by the soak's recede (E99 s35). Watch both enters and the leave. Approve, or name what still reads wrong." **RULED 2026-09-15 (E99 s41): approved** |
 | **HG5** | T5 | `r26-118-metallic-ball` | "The ball, before and after: more shadow, a dark Fresnel rim, a metallic band, one point of deep shadow depth. Does it read metallic and heavy now, or still glossy?" **RULED 2026-09-15 (E99 s42): refused - the prior ball + the darkness; T5b** **HG5b RULED 2026-09-16 (E99 s49): the reference body; T5c** |
 | **HG6** | T6 | `r26-76-melt-endings-in-motion` | "The melt as the vortex's motion gathered into one dense, heavy, vibrating point, splashing into a full chart / world plate. Watch the gather and the splash. Approve the new default, or keep today's look behind the flag." **PROOF B LANDED 2026-09-16 via T3: card open (watch, both clips)** **RULED 2026-09-16 (E99 s51): the gather approved; the splash becomes a throw - T6b** **HG6-2 RULED 2026-09-16 (E99 s56): approved; R26-157 the off-screen throw** |
-| **HG7** | T7 | `r26-82-verdict-stack-choreography` | "The verdict stack on a short with Steel and Paper's choreography - cards that move, then the burst. Watch it beside the Steel and Paper reference clip. Approve, or name the phase that is still flat." **RULED 2026-09-15 (E99 s43): rails in reading order; T7b** **HG7b RULED 2026-09-16 (E99 s59): the pair method right; the last card centre, the gather, the tighter burst - T7c** |
+| **HG7** | T7 | `r26-82-verdict-stack-choreography` | "The verdict stack on a short with Steel and Paper's choreography - cards that move, then the burst. Watch it beside the Steel and Paper reference clip. Approve, or name the phase that is still flat." **RULED 2026-09-15 (E99 s43): rails in reading order; T7b** **HG7b RULED 2026-09-16 (E99 s59): the pair method right; the last card centre, the gather, the tighter burst - T7c** **HG7c open 2026-09-16 (watch): the centre landing, the gather, the tighter burst - three clips** |
 | **HG8** | T8 | `r26-80-agenda-page-owed` | "The beautified agenda page - the plate version of the list effect, each row with its catalogued icon stamped after its sentence (E93). Beside today's three plain rows. Approve, or name the change." **RULED 2026-09-15 (E99 s44): approved as a build** |
 | **HG9** | T9 | `p55-gallery-speed-and-motion` | "The gallery: its build time before and after, and three effects a still cannot show now carrying a clip. Is it fast enough and clear enough? Approve, or name what is still unreadable." |
 | **HG10** | T10 | `r26-84-engine-saved-states` | "Three routes to parallel agents without worktrees, each with its cost and what it breaks, and the agent's recommendation. Which route do we take - or does it need its own plan?" **RULED 2026-09-15 (E99 s47): worktrees with both agents aware; P62 = the register** |
@@ -940,7 +940,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   `dock_payload:stack` names the reading order.
 
 ### T7c: THE VERDICT STACK GATHERS BEFORE IT BURSTS - the last card centre, the gather read off Steel and Paper, the burst tighter (E99 s59)
-- Status: pending
+- Status: complete (2026-09-16) - HG7c open on the queue as `r26-82-verdict-stack-choreography` (watch, three clips)
 - Owner: `implementation_luna` (**ENGINE LOCK**)
 - Depends on: T7b, HG7b (ruled E99 s59)
 - Write set: `content/video_engine/scripts/species/verdict.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the stack region),
@@ -955,7 +955,27 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python -m pytest content/video_engine/tests/test_verdict_stack.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --force --only r26-82-verdict-stack-choreography`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T7c.md`. THE REFERENCE MEASURED FIRST (build-f 701.8-728.0 s, 787 frames): the last proof
+  ends at (1543.8, 778.6) - not the centre; the settled rails move 5.7-11.2 px net in the 3.29 s before the burst - NO gather exists to copy;
+  the burst 60 ms apart over 0.50 s, the wall gone 0.99 s after the clear, throws 427-1116 px (2.61:1). BUILT (`species/verdict.mjs`):
+  `verdictNextAt` returns `clearAt` for the last item, so the last proof never recedes - 9:16 proof 9 at (443.5, 820.0), 16:9 proof 6 at
+  (1015.7, 463.3), the focus spot on each; a sixth phase `verdictGather` / `verdictGatherXf` (GATHER_LEAD 0.9, PULL 0.22, CORE 0.5,
+  GAP 16): over the last 0.9 s every railed card draws 22 % toward the centre card on an out-cubic, its rail idle fading, never into the
+  core - 67.6-113.3 px on 9:16, 83.5-178.7 px on 16:9; the burst BURST_STAGGER 0.06 -> 0.035, BURST_S 0.50 -> 0.42, the throw's origin
+  the card's own gathered pose (no snap: <= 2 px, was up to 8 px of idle), BURST_CENTRE_BY 1.0 (the centre card last, straight down
+  and at the viewer): nine cards fire over 0.280 s, the wall gone 0.70 s after the clear (0.71x the reference), throws 884-1470 px
+  (1.66:1). The five earlier phases value-identical outside the gather window - five of nine verdict goldens byte-identical;
+  `@proof-burst` re-baselined on both forms, `@proof-gather` new on both. PARENT'S READ of the frames: 9:16 idle 15.40 vs gather 15.79 -
+  1/2 and 5/6 drawn down onto the green card, 3/4 and 7/8 drawn up, the gaps closed, the wall one object; burst 16.75 - 1/2 out the top
+  corners, 5/6 climbing, 3/4/7/8 leaving low, the verdict card standing; 16:9 gather 19.29 - 1-4 down onto the pink card, 5 in from
+  the left; burst 20.25 - the pink card last. DEVIATION RATIFIED: `tests/kinetics/verdict.test.mjs` (the module's own unit test carried
+  the four numbers s59 moved; the gather's pure-layer test added). OWED to the compiler (a backlog row): `build_scene_timeline_f.py`
+  `STACK_BURST_STAGGER 0.06` / `STACK_BURST_S 0.5` / the `STACK_RECEDE_LEAD` name only SIZE the host dock's window (the mirror test now
+  holds them as a ceiling) - bring them to 0.035 / 0.42 / `STACK_GATHER_LEAD`. NAMED, not built: the burst's angular fan untouched (a
+  radial wall has no axis to compress toward; the gathered departure points and evener throws are what tightened it); on 16:9 'the
+  centre' is the focus spot (40 px right / 88 px above the stage centre). Validate: node 611/611; sync in sync; pytest 164 passed
+  (test_verdict_stack 19 = 13 kept + 6 new, the two browser readers on one playwright driver); effects_catalog_check 0 failures;
+  page-boxes 44 (player_sha256 d4621c99b66e -> c3e6166e89ff, sha-only). Card `dock_payload:stack` gains the gather phase.
 
 ### T8: THE BEAUTIFIED AGENDA PAGE - the plate version of the list effect
 - Status: complete (2026-09-15) - HG8 open on the queue as `r26-80-agenda-page-owed` (watch)

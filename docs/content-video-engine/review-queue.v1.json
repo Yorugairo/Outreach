@@ -3210,32 +3210,41 @@
         "P61 HG7",
         "E99 s43 (the rails re-laid)",
         "P61 HG7b",
-        "E99 s59"
+        "E99 s59 (the gather, the last card centre, the burst tighter)",
+        "P61 HG7c"
       ],
       "kind": "watch",
-      "title": "The verdict stack on a short, its rails in READING ORDER",
-      "judge": "Your ruling (E99 s43): 1-2 on top left to right, 3-4 on the bottom, 5-6 top, 7-8 bottom - the eye never scattered. The rails are re-laid in reading bands: 1 and 2 across the top, 3 and 4 across the bottom, 5 and 6 under 1-2 (a second row - two cards spend the portrait width), 7 and 8 under 3-4, the ninth beside 6; the focus card large in the middle between the bands; the enter, the focus, the idle and the radial burst as before. Watch 1.9-17.5 s. Does the recede now send your eye where a reader expects the next card? Approve, or name the card that lands out of order. (The 16:9 wall was read against the same rule: it already runs top line, middle, bottom, each left to right, but fills the top line four-wide before it goes down - it does not alternate by pairs; say if you want the pair alternation there too.)",
+      "title": "The verdict stack: the last card lands at the centre, the wall gathers on it, then the tighter burst",
+      "judge": "Your ruling (E99 s59): the pair method is right and is the vertical frame's nature; the last card lands in the middle so the wall can gather before the burst; watch Steel and Paper - we were missing the gather; the burst tighter. Built on both forms: the LAST proof lands at the centre and never recedes (the wall ends on it); over the last 0.9 s every railed card draws in toward it while its idle fades (a GATHER - 68-113 px on the short, 84-179 px on the full frame); the burst then leaves from the gathered wall, 35 ms apart over 0.42 s, the wall gone 0.70 s after the clear (Steel and Paper's own, measured: 60 ms apart, gone in 0.99 s), the centre card the last to leave, straight at you. Watch the short 1.9-17.5 s (the gather 15.6-16.5, the burst 16.5-17.2) and the full frame 2.4-21.5 s beside the reference. Is that the gather you meant - and is the burst tight enough now, or should the wall draw in further before it fires?",
       "where": [
         {
-          "label": "the mosaic (13.6 s) - 1 red / 2 blue top, 5 purple / 6 pink under them, 8 the focus card centre, 3 green / 4 gold bottom, 7 blue under",
-          "path": "content/video_engine/tests/golden/frames/verdict-stack-9x16.png"
+          "label": "the short, the gather mid-draw (15.79 s) - 1/2 and 5/6 drawn down onto the green verdict card, 3/4 and 7/8 drawn up, the gaps closed",
+          "path": "content/video_engine/tests/golden/frames/verdict-stack-9x16@proof-gather.png"
         },
         {
-          "label": "idle (15.4 s) - the nine at rest in their bands, 9 the focus",
+          "label": "the short at rest before it (15.40 s) - the same wall on its rails, for the difference",
           "path": "content/video_engine/tests/golden/frames/verdict-stack-9x16@proof-idle.png"
         },
         {
-          "label": "enter (2.25 s) / focus (3.1 s) / burst (16.75 s) - the phases unchanged",
+          "label": "the short, the burst (16.75 s) - 1 and 2 out of the top corners, 5/6 climbing, 3/4/7/8 leaving low, the verdict card still standing",
           "path": "content/video_engine/tests/golden/frames/verdict-stack-9x16@proof-burst.png"
         },
         {
-          "label": "verdict.mjs :99-140 - VERDICT_9X16's bands: TOP line0 1,2 / BOTTOM line0 3,4 / TOP line1 5,6,9 / BOTTOM line1 7,8, each left to right; the 16:9 VERDICT read at :39-42 and not changed",
+          "label": "the full frame, the gather (19.29 s) - 1-4 drawn down across the top onto the pink card, 5 drawn in from the left",
+          "path": "content/video_engine/tests/golden/frames/verdict-stack@proof-gather.png"
+        },
+        {
+          "label": "the full frame, the burst (20.25 s)",
+          "path": "content/video_engine/tests/golden/frames/verdict-stack@proof-burst.png"
+        },
+        {
+          "label": "MEASURED against Steel and Paper build-f 701.8-728.0 s (787 frames): its rails move 5.7-11.2 px in the 3.29 s before its burst - no gather to copy, so the gather is ours, read off its shape; its burst 60 ms apart over 0.50 s, gone in 0.99 s; ours 35 ms over 0.42 s, gone in 0.70 s",
           "path": "content/video_engine/scripts/species/verdict.mjs"
         }
       ],
       "options": [],
-      "recommendation": "Approve. Read at 13.6 and 15.4 s: the bands hold left to right and alternate top / bottom by pairs; the second row under each pair is the portrait width's cost (two cards take 688 of 776 px), not a scatter; every card inside the safe box; the focus card owns the middle. The 16:9 wall already reads as a raster and needs a card only if you want the pair alternation on the full frame.",
-      "blocks": "nothing - ruled E99 s59 (2026-09-16): the pair method right; the last card centre, the gather, the tighter burst - T7c",
+      "recommendation": "Approve. Read at 15.79 against 15.40: the wall visibly closes on the verdict card and reads as one object before it fires; at 16.75 the verdict card is the last thing standing. Two things named, not built, for your call: the gather draws 22 % of the way in (the rails never reach the centre card's core, so the verdict stays readable) - say if it should draw further; and on the full frame 'the centre' is the focus spot, 40 px right and 88 px above the geometric centre, the pose T7 pinned.",
+      "blocks": "HG7c",
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md (E99 s21)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s21)",
@@ -3248,22 +3257,44 @@
         "docs/portable/OPERATOR-RULINGS.md (E99 s43)",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T7b)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s59)",
-        "docs/content-video-engine/review-answers.jsonl (2026-09-16)"
+        "docs/content-video-engine/review-answers.jsonl (2026-09-16)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s59)",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T7c)"
       ],
-      "status": "ruled",
-      "ruling": "E99 s59",
-      "was_kind": "owed",
-      "owed": "Delivered 2026-09-16 (P61 T7b): the rails re-laid in reading bands, five goldens, the clip",
+      "status": "open",
+      "ruling": null,
+      "was_kind": "watch",
+      "owed": "Delivered 2026-09-16 (P61 T7c): the centre landing, the gather, the tighter burst on both forms; four goldens; three clips",
       "proofs": [
         {
           "type": "clip",
-          "label": "the verdict stack on a short, rails in reading order: nine proofs enter one at a time from depth, hold large near centre, recede to their band spots (1-2 top, 3-4 bottom, 5-6 top, 7-8 bottom), idle, burst",
+          "label": "THE SHORT (9:16): nine proofs enter, focus, recede to their reading bands, idle - then the GATHER on the ninth at the centre and the tighter burst",
           "surface": "verdict-stack-9x16",
           "aspect": "9:16",
           "t0": 1.9,
           "t1": 17.5,
           "flags": {},
           "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "THE FULL FRAME (16:9), which moved this time too: the raster kept (no pair alternation, s59), the sixth at the centre, the gather, the burst",
+          "surface": "verdict-stack",
+          "aspect": "16:9",
+          "t0": 2.4,
+          "t1": 21.5,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "THE REFERENCE (16:9) - Steel and Paper's own verdict beat, ev-holds-stack-v1: nine proofs 702.87-723.69 s and its burst at 726.98",
+          "build": "content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f",
+          "page": "player.html",
+          "aspect": "16:9",
+          "t0": 702.87,
+          "t1": 727.6,
+          "route": "review_queue_proofs.py --clips: the frozen build-f player served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent) - the approved cut, never rebuilt (E45)"
         }
       ]
     },

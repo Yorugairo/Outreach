@@ -217,6 +217,13 @@ def test_a_clip_whose_proof_changed_is_rendered_again_not_served_by_name(tmp_pat
     assert key1["source_sha256"] and key1 != RQP.clip_key(proof), "a source on disk is part of the key"
     (golden / f"{proof['surface']}.png").write_bytes(b"frame v2 - the engine re-laid it")
     assert RQP.clip_key(proof, tmp_path / "golden") != key1, "the same window over a moved golden is a different clip"
+    # the third defect (T7c, the gather): the base frame unchanged, the ENGINE changed - the motion is the engine's
+    engine = tmp_path / "golden" / "docs" / "content-video-engine" / "samples" / "scene-evidence-engine.mjs"
+    engine.parent.mkdir(parents=True)
+    engine.write_bytes(b"engine v1")
+    key2 = RQP.clip_key(proof, tmp_path / "golden")
+    engine.write_bytes(b"engine v2 - a gather phase")
+    assert RQP.clip_key(proof, tmp_path / "golden") != key2, "the same golden under a changed engine is a different clip"
     rendered = []
     monkeypatch.setattr(RQP, "render_clip", lambda p, o: rendered.append(o) or o.write_bytes(b"new clip"))
     live = tmp_path / "queue.json"

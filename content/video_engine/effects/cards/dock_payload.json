@@ -196,7 +196,7 @@
           "source": "operator 2026-09-13 (P55 plan HG1)"
         }
       ],
-      "does": "Already-shown proofs fly in from depth one at a time on their own phrases, each held large near centre while spoken, then receding in READING ORDER to a rail spot so the page re-composes as a mosaic; the rails idle, then all burst radially.",
+      "does": "Proofs fly in from depth one at a time on their phrases, each held large near centre, then receding in READING ORDER to a rail spot; the LAST lands centre and stays; the wall gathers in around it, then bursts radially.",
       "when": "the sentence lists N proofs of one claim in a row ('three things say so') - each flies in on its word; a list, not one chart",
       "when_source": "docs/content-video-engine/CAPABILITIES.md:169",
       "author": {
@@ -238,18 +238,18 @@
         {
           "name": "recede",
           "does": "the card eases back to its RAIL SPOT - nine asymmetric spots around the page, the centre kept open - so the page fills as a mosaic around the talking card",
-          "trigger": "items[i + 1].at (the last card: clear_at - 0.9)",
+          "trigger": "items[i + 1].at - and the LAST proof never recedes (E99 s59): the wall ends on it, at the focus spot",
           "dials": {
             "DUR_S": "1.0",
             "ease": "in-out cubic",
             "SPOTS_left_top_width_pct": "[[2, 5, 24], [27, 3, 22], [51, 4, 22], [74, 5, 24], [1, 40, 22], [77, 40, 22], [4, 62, 26], [37, 66, 24], [68, 62, 26]]",
             "layout": "16:9 - four across the top, the mid-frame flanks, three along the bottom; each row left to right",
-            "layout_9x16": "READING BANDS (E99 s43): proofs 1-2 across the TOP band left to right, 3-4 across the BOTTOM, 5-6 top, 7-8 bottom, 9 top - the focus card large between the bands"
+            "layout_9x16": "READING BANDS (E99 s43): proofs 1-2 across the TOP band left to right, 3-4 across the BOTTOM, 5-6 top, 7-8 bottom - four pairs, the ninth proof at the CENTRE (E99 s59), the focus card large between the bands"
           }
         },
         {
           "name": "idle",
-          "does": "railed cards float almost still at their tilt",
+          "does": "railed cards float almost still at their tilt - until the gather, where that float fades out",
           "trigger": "a = 0 (railed)",
           "dials": {
             "drift_x_px": "sin(t x 0.55 + i x 1.7) x 8",
@@ -258,19 +258,35 @@
           }
         },
         {
+          "name": "gather",
+          "does": "the wall CLOSES: every railed card draws toward the centre card (sliding under it, z 7 beneath z 9) while its idle fades out, so the burst leaves a gathered wall and not the rails",
+          "trigger": "clear_at - 0.9 (GATHER_LEAD) - the same lead Steel and Paper spends on its last station change",
+          "dials": {
+            "DUR_S": "0.9",
+            "ease": "cubic out 1 - (1 - g)^3 - the reference's own ARRIVAL law (an in-out open is slower than the idle drift, and a gather slower than the drift IS drift)",
+            "pull": "0.22 of the card's own distance to the centre card (65-173 px measured on the two golden walls)",
+            "guard": "never past the centre card's CORE (0.5 of its rect) + 16 px, so no rail vanishes beneath it",
+            "idle": "the railed drift/breath is multiplied by (1 - ease): the wall holds its breath as it closes",
+            "reference": "Steel and Paper HAS no gather - its settled rails move a net -7.7 to +11.2 px in the 3.29 s before the burst (measured 2026-09-16)",
+            "goldens": "verdict-stack@proof-gather (19.29) and verdict-stack-9x16@proof-gather (15.79) - the wall mid-draw on both forms"
+          }
+        },
+        {
           "name": "burst",
-          "does": "every card is thrown RADIALLY along its own bearing from stage centre, spinning, scaling up and fading, staggered",
+          "does": "every card is thrown RADIALLY along its own bearing FROM ITS GATHERED POSE, spinning, scaling up and fading, staggered - the centre card has no outward bearing, so it goes straight down and at the viewer, last of the wall",
           "trigger": "clear_at - the pivot line",
           "dials": {
-            "stagger_s": "0.06",
-            "DUR_S": "0.5",
+            "stagger_s": "0.035 (E99 s59 tighter: the Steel and Paper reference measures 0.06, nine cards over 0.48 s; 0.035 fires them over 0.28 s)",
+            "DUR_S": "0.42 (the reference's own is 0.50: the wall is gone 0.70 s after the clear instead of its measured 0.99 s)",
             "ease": "ease-in quad (cb^2)",
             "throw_px": "560 x bx, 420 x by (bx, by = the card centre's offset from stage centre over 700/1920 and 460/1080 of the stage)",
             "translateZ_px": "340",
             "spin_deg": "tilt + 24 x dir",
             "scale": "1 -> 1.22",
             "opacity": "1 -> 0",
-            "teardown": "the .stackbox is removed at t > clear_at + 1.4 s or t < dock enter - 0.5 s"
+            "teardown": "the .stackbox is removed at t > clear_at + 1.4 s or t < dock enter - 0.5 s",
+            "origin": "the card's OWN pose at clear_at - the gathered wall, so nothing snaps back to its rail on the first burst frame",
+            "centre_card": "bx 0, by 1: straight down, plus the same translateZ - the verdict is the last thing to leave"
           }
         }
       ],

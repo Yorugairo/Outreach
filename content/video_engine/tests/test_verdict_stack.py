@@ -13,7 +13,10 @@ instants, read the way `gate_vertical_safe_box.py` reads a built player:
   * ORDER  - and laid in READING BANDS (P61 T7b, E99 s43): 1-2 across the top left to right, 3-4 across the
              bottom, 5-6 top, 7-8 bottom, 9 top - so the recede hands the eye to the place a reader looks next
   * IDLE   - the railed cards move, every one of them, and by a few px (E49, a named kind)
-  * BURST  - radial from the mosaic's own centre, 60 ms apart
+  * CENTRE - the LAST proof lands in the MIDDLE and stays there: the wall ends on it (P61 T7c, E99 s59)
+  * GATHER - and over the last GATHER_LEAD every railed card draws IN toward it, monotonically, so the
+             burst leaves a gathered wall (E99 s59: "we're missing the gather")
+  * BURST  - radial from the mosaic's own centre, TIGHTER than Steel and Paper's own measured beat
 
 plus: every card stays inside G-l's safe box for its whole life, two seeks to one t give one frame, and the
 FULL-FRAME dials are untouched (its goldens are test_golden_frames.py's business; what is pinned here is that
@@ -38,13 +41,41 @@ import build_scene_timeline_f as BST  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
 SURFACE = "verdict-stack-9x16"
+SURFACE_16 = "verdict-stack"                     # the FULL-FRAME form: same choreography, its own raster (E99 s59)
 MODULE = ROOT / "content/video_engine/scripts/species/verdict.mjs"
 STAGE_W, STAGE_H = RB.STAGE["9:16"]
+STAGE16_W, STAGE16_H = RB.STAGE["16:9"]
 SAFE_X, SAFE_Y = (80, 880), (280, 1340)          # gate_vertical_safe_box.py SAFE_X / SAFE_Y
 ITEMS_AT = [2.0, 3.5, 5.0, 6.4, 7.8, 9.2, 10.6, 12.2, 13.8]   # build_golden_sources.STACK9_ITEMS_AT
 CLEAR_AT = 16.5                                               # build_golden_sources.STACK9_CLEAR_AT
+ITEMS16_AT = [3.0, 5.0, 7.0, 9.0, 11.0, 13.0]                 # build_golden_sources.STACK_ITEMS_AT
+CLEAR16_AT = 20.0                                             # build_golden_sources.STACK_CLEAR_AT
 T_ENTER, T_FOCUS, T_MOSAIC, T_IDLE, T_BURST = 2.25, 3.1, 13.6, 15.4, 16.75
-STAGGER = 0.06                                                # verdict.mjs BURST_STAGGER
+T_GATHER, T_GATHER16 = 15.79, 19.29              # render_baseline.PROOF_FRAMES - the two @proof-gather instants
+
+
+def _dial(name: str, portrait: bool = False) -> float:
+    """A dial off the module's text: the FIRST match is VERDICT's, the second (if any) the short's override."""
+    src = MODULE.read_text(encoding="utf-8")
+    hits = re.findall(rf"^\s*{name}:\s*(-?[\d.]+),", src, re.M)
+    assert hits, f"{name} is no longer a dial of the verdict stack"
+    return float(hits[1] if portrait and len(hits) > 1 else hits[0])
+
+
+STAGGER = _dial("BURST_STAGGER")                 # verdict.mjs BURST_STAGGER (0.06 -> 0.035, P61 T7c)
+BURST_S = _dial("BURST_S")
+GATHER_LEAD = _dial("GATHER_LEAD")
+GATHER_PULL = _dial("GATHER_PULL")
+
+# THE REFERENCE, measured 2026-09-16 frame by frame off Steel and Paper's frozen build-f player over
+# 701.80-728.00 s (`ev-holds-stack-v1`, nine proofs, clear_at 726.98) - the numbers "tighter" is measured against,
+# and the numbers the gather's clock and easing were read from. See scratchpad/assembly/P61-T7c.md section 1.
+REF = {"stagger": 0.06,          # card i fired 60 ms after card i-1: the nine over 0.48 s
+       "burst_s": 0.50,          # each throw's own clock
+       "gone_after": 0.99,       # the last frame with any card above opacity 0.05 was clear_at + 0.99
+       "station_s": 0.90,        # the lead the beat leaves its last station change - the gather's window
+       "station_px": 495.0,      # how far that move carries a card in those 0.9 s - the gather's speed budget
+       "rail_drift_px": 11.2}    # the WHOLE of a settled rail's travel in the 3.29 s before the burst - no gather
 
 RECTS_JS = """() => {
   const st = document.getElementById('stage').getBoundingClientRect();
@@ -88,24 +119,35 @@ class Reader:
 
 
 @pytest.fixture(scope="module")
-def reader():
+def playwright():
+    """ONE driver for the whole module: a second `sync_playwright()` inside the first one's loop is refused, and
+    since P61 T7c this module reads two surfaces (the short's and the full frame's)."""
     from playwright.sync_api import sync_playwright
-    tl, uris, _t, aspect = RB.load_surface(SURFACE)
-    assert aspect == "9:16", f"{SURFACE} is not a portrait surface"
+    with sync_playwright() as pw:
+        yield pw
+
+
+def _reader(pw, surface: str, aspect: str, size: tuple[int, int]):
+    tl, uris, _t, got = RB.load_surface(surface)
+    assert got == aspect, f"{surface} is not a {aspect} surface"
     with tempfile.TemporaryDirectory() as td:
-        page_path = Path(td) / "surface.html"
+        page_path = Path(td) / f"{surface}.html"
         page_path.write_text(RB.instantiate(tl, uris), encoding="utf-8")
         srv, port = RB.serve(Path(td))
         try:
-            with sync_playwright() as pw:
-                browser = pw.chromium.launch(headless=True)
-                page = browser.new_context(viewport={"width": STAGE_W, "height": STAGE_H}).new_page()
-                page.goto(f"http://127.0.0.1:{port}/surface.html", wait_until="networkidle", timeout=180000)
-                RB.prepare_page(page, STAGE_W, STAGE_H)
-                yield Reader(page)
-                browser.close()
+            browser = pw.chromium.launch(headless=True)
+            page = browser.new_context(viewport={"width": size[0], "height": size[1]}).new_page()
+            page.goto(f"http://127.0.0.1:{port}/{surface}.html", wait_until="networkidle", timeout=180000)
+            RB.prepare_page(page, size[0], size[1])
+            yield Reader(page)
+            browser.close()
         finally:
             srv.shutdown()
+
+
+@pytest.fixture(scope="module")
+def reader(playwright):
+    yield from _reader(playwright, SURFACE, "9:16", (STAGE_W, STAGE_H))
 
 
 # --------------------------------------------------------------------- the compiler's own times
@@ -116,7 +158,8 @@ def test_stack_entry_derives_the_host_docks_window_from_the_beats() -> None:
     assert payload["clear_at"] == CLEAR_AT and payload["form"] == "9:16"
     assert [it["at"] for it in payload["items"]] == ITEMS_AT
     assert enter == round(ITEMS_AT[0] - BST.STACK_ENTER_LEAD, 2)
-    # nine cards, 60 ms apart, 0.5 s each = 0.98 s, so doc 29's own ~1 s floor is what holds here
+    # nine cards, the COMPILER's 60 ms apart, 0.5 s each = 0.98 s, so doc 29's own ~1 s floor is what holds here
+    # (the painter's own burst is tighter since E99 s59 - the window the compiler sizes is a ceiling, not a copy)
     assert exitt == round(CLEAR_AT + max(BST.STACK_HOLD_AFTER,
                                          (len(ITEMS_AT) - 1) * BST.STACK_BURST_STAGGER + BST.STACK_BURST_S), 2)
     # ... and with enough cards the stagger takes over: 20 of them outlast the floor
@@ -141,16 +184,26 @@ def test_stack_entry_refuses_a_window_that_cuts_the_choreography() -> None:
 
 
 def test_the_compilers_stack_dials_still_mirror_the_module() -> None:
-    """One timing fact in one file (doc 29 s9.24): the compiler cannot import the painter, so it copies three
-    numbers - and a copy that is not checked is a drift waiting to happen."""
+    """One timing fact in one file (doc 29 s9.24): the compiler cannot import the painter, so it copies four
+    numbers - and a copy that is not checked is a drift waiting to happen.
+
+    P61 T7c: two of the four are still EXACT (they open the window: the enter's lead, and the lead the last proof
+    holds before the clear - which is now the GATHER's window, the same 0.9 s). The two BURST numbers became a
+    CEILING instead of a copy: the compiler uses them only to size the host dock's exit, and E99 s59 made the burst
+    TIGHTER, so a module value at or below the compiler's can never cut the choreography - while a module value
+    ABOVE it would, and still fails here. `build_scene_timeline_f.py` is outside this slice's write set; bringing
+    STACK_BURST_STAGGER / STACK_BURST_S down to 0.035 / 0.42 (and renaming STACK_RECEDE_LEAD) is a one-line
+    compiler follow-up the lane reported and did not take."""
     src = MODULE.read_text(encoding="utf-8")
-    for name, value in (("LAST_RECEDE_LEAD", BST.STACK_RECEDE_LEAD),
-                        ("BURST_STAGGER", BST.STACK_BURST_STAGGER),
-                        ("BURST_S", BST.STACK_BURST_S),
+    for name, value in (("GATHER_LEAD", BST.STACK_RECEDE_LEAD),
                         ("MOUNT_LEAD", BST.STACK_ENTER_LEAD)):
         m = re.search(rf"^\s*{name}:\s*([\d.]+),", src, re.M)
         assert m, f"{name} is no longer a dial of VERDICT"
         assert float(m.group(1)) == value, f"{name}: verdict.mjs says {m.group(1)}, the compiler says {value}"
+    assert STAGGER <= BST.STACK_BURST_STAGGER, \
+        f"the burst is {STAGGER}s apart but the compiler sizes the window on {BST.STACK_BURST_STAGGER}s - it would cut it"
+    assert BURST_S <= BST.STACK_BURST_S, \
+        f"the burst runs {BURST_S}s but the compiler sizes the window on {BST.STACK_BURST_S}s - it would cut it"
 
 
 def test_the_full_frame_dials_are_untouched() -> None:
@@ -322,8 +375,11 @@ def test_every_card_stays_inside_the_vertical_safe_box(reader) -> None:
 @needs_browser
 def test_the_railed_cards_idle_and_none_of_them_is_still(reader) -> None:
     """E49: nothing ever goes truly still. Every railed card has moved a little 0.35s later - and only a little."""
-    before = {r["i"]: r for r in reader.visible(T_IDLE) if r["z"] != "9"}
-    after = {r["i"]: r for r in reader.visible(T_IDLE + 0.35) if r["z"] != "9"}
+    # both samples sit BEFORE the gather opens (CLEAR_AT - GATHER_LEAD): what is pinned here is the idle, and
+    # once the wall draws in the rails move by tens of px on purpose (P61 T7c).
+    assert T_IDLE < CLEAR_AT - GATHER_LEAD
+    before = {r["i"]: r for r in reader.visible(T_IDLE - 0.35) if r["z"] != "9"}
+    after = {r["i"]: r for r in reader.visible(T_IDLE) if r["z"] != "9"}
     assert len(before) == 8 and set(before) == set(after)
     for i, r in before.items():
         moved = max(abs(after[i]["cx"] - r["cx"]), abs(after[i]["cy"] - r["cy"]),
@@ -333,7 +389,7 @@ def test_the_railed_cards_idle_and_none_of_them_is_still(reader) -> None:
 
 
 @needs_browser
-def test_the_burst_is_radial_from_the_mosaics_centre_and_60ms_apart(reader) -> None:
+def test_the_burst_is_radial_from_the_mosaics_centre_and_staggered(reader) -> None:
     rest = {r["i"]: r for r in reader.at(CLEAR_AT - 0.01)}
     box_cx, box_cy = sum(SAFE_X) / 2, sum(SAFE_Y) / 2
     n = len(rest)
@@ -342,19 +398,25 @@ def test_the_burst_is_radial_from_the_mosaics_centre_and_60ms_apart(reader) -> N
         r = [x for x in reader.at(round(t, 3)) if x["i"] == i][0]
         return r["cx"] - rest[i]["cx"], r["cy"] - rest[i]["cy"]
 
-    # EVERY card leaves along its own bearing, away from the wall's centre - not toward one exit
+    # EVERY RAIL leaves along its own bearing, away from the wall's centre - not toward one exit. The CENTRE card
+    # (the last proof, P61 T7c) stands AT that centre and so has no outward bearing: it is thrown straight down and
+    # at the viewer, last of the wall.
     full = {}
     for i in range(n):
-        dx, dy = throw(i, CLEAR_AT + i * STAGGER + BST.STACK_BURST_S)     # cb = 1: the whole throw
+        dx, dy = throw(i, CLEAR_AT + i * STAGGER + BURST_S)     # cb = 1: the whole throw
         bx, by = rest[i]["cx"] - box_cx, rest[i]["cy"] - box_cy
-        assert dx * bx + dy * by > 0, f"card {i} is thrown toward the centre of the wall, not away from it"
+        if i == n - 1:
+            assert dy > 200 and abs(dx) < 40, f"the centre card is not thrown DOWN and out: ({dx:.0f}, {dy:.0f})"
+        else:
+            assert dx * bx + dy * by > 0, f"card {i} is thrown toward the centre of the wall, not away from it"
         full[i] = (dx * dx + dy * dy) ** 0.5
         assert full[i] > 200, f"card {i} barely moves ({full[i]:.0f}px) - the burst is the rhetoric, not a fade"
 
-    # THE 60 ms: card i's throw at t + i x STAGGER is the SAME share of its own bearing as card 0's at t
+    # THE STAGGER (0.035 s since E99 s59; the reference's own is 0.06): card i's throw at t + i x STAGGER is the
+    # SAME share of its own bearing as card 0's at t
     shares = []
     for i in range(n):
-        dx, dy = throw(i, CLEAR_AT + i * STAGGER + 0.25)
+        dx, dy = throw(i, CLEAR_AT + i * STAGGER + 0.2)
         shares.append((dx * dx + dy * dy) ** 0.5 / full[i])
     assert max(shares) - min(shares) < 0.02,         f"the cards are not {STAGGER}s apart: at their own +0.25s they are {min(shares):.3f}-{max(shares):.3f} through"
     assert 0.1 < shares[0] < 0.9, "the instant chosen proves nothing - the throw is over or has not begun"
@@ -364,6 +426,116 @@ def test_the_burst_is_radial_from_the_mosaics_centre_and_60ms_apart(reader) -> N
     moved = [r["i"] for r in fired if abs(r["cx"] - rest[r["i"]]["cx"]) + abs(r["cy"] - rest[r["i"]]["cy"]) > 2]
     assert 3 <= len(moved) <= n - 1, f"{len(moved)} of {n} cards away at {T_BURST}s - the stagger is not legible"
     assert moved == sorted(moved), "the cards leave out of order"
+
+
+# --------------------------------------------------------------------- P61 T7c: the centre, the gather, the burst
+
+
+@pytest.fixture(scope="module")
+def reader16(playwright):
+    """The FULL-FRAME surface, seeked - the same reads on the form that keeps its raster (E99 s59)."""
+    yield from _reader(playwright, SURFACE_16, "16:9", (STAGE16_W, STAGE16_H))
+
+
+def _focus_spot(i: int, portrait: bool) -> tuple[float, float]:
+    """Card i's FOCUS pose centre in stage px - verdictFocusRect, off the module's own dials."""
+    ax, dx = _dial("ACTIVE_X", portrait), _dial("ACTIVE_DX", portrait)
+    ay, rdy = _dial("ACTIVE_Y", portrait), _dial("ACTIVE_ROW_DY", portrait)
+    return ax + (dx if i % 2 else -dx), ay + (i % int(_dial("ACTIVE_ROWS", portrait))) * rdy
+
+
+def _last_card_rests_at_the_centre(rd, items_at, clear_at, portrait) -> None:
+    """E99 s59: *"the last card should land in the middle"* - and STAYS there: the wall ends on it. Read from the
+    last proof's landing (its beat + ENTER_S) to the frame before the clear."""
+    n = len(items_at)
+    fx, fy = _focus_spot(n - 1, portrait)
+    stage_w = STAGE_W if portrait else STAGE16_W
+    t = items_at[-1] + _dial("ENTER_S", portrait)
+    while t < clear_at:
+        card = [r for r in rd.at(round(t, 2)) if r["i"] == n - 1][0]
+        assert card["z"] == "9", f"the last proof left the focus at {t:.2f}s - the wall must END on it"
+        assert abs(card["cx"] - fx) <= 40, f"at {t:.2f}s the last proof is at x {card['cx']:.0f}, not the centre {fx:.0f}"
+        assert abs(card["cy"] - fy) <= 40, f"at {t:.2f}s the last proof is at y {card['cy']:.0f}, not the centre {fy:.0f}"
+        assert card["w"] >= 0.98 * _dial("ACTIVE_W", portrait), \
+            f"at {t:.2f}s the last proof is {card['w']:.0f}px wide on a {stage_w}px stage - it receded off the centre"
+        t += 0.25
+
+
+def _the_wall_only_ever_closes(rd, items_at, clear_at, portrait) -> None:
+    """THE GATHER (E99 s59): over the last GATHER_LEAD every railed card's distance to the CENTRE card falls, frame
+    by frame - and by a real distance, not the reference's 11.2 px of drift."""
+    n = len(items_at)
+    fx, fy = _focus_spot(n - 1, portrait)
+    ds = {i: [] for i in range(n - 1)}
+    t = clear_at - GATHER_LEAD
+    while t < clear_at - 1e-9:
+        for r in rd.at(round(t, 4)):
+            if r["i"] < n - 1:
+                ds[r["i"]].append(((fx - r["cx"]) ** 2 + (fy - r["cy"]) ** 2) ** 0.5)
+        t += 1 / 30
+    for i, seq in ds.items():
+        assert len(seq) >= 26, f"rail {i + 1}: {len(seq)} frames read across the gather"
+        for k, (a, b) in enumerate(zip(seq, seq[1:])):
+            assert b <= a + 0.01, f"rail {i + 1} backs AWAY from the centre card at frame {k} ({a:.1f} -> {b:.1f})"
+        drew = seq[0] - seq[-1]
+        assert drew > REF["rail_drift_px"] * 2, \
+            f"rail {i + 1} draws in {drew:.1f}px - the reference's settled rails already drift {REF['rail_drift_px']}px"
+        # the cap: GATHER_PULL of where it stood, plus the railed idle's own reach - the idle FADES OUT across the
+        # same window (the wall holds its breath), so a card's measured travel carries its last drift with it
+        idle_px = _dial("IDLE_DRIFT_PX", portrait) if portrait else _dial("DRIFT_X_REST")
+        assert drew <= GATHER_PULL * seq[0] + 2 * idle_px, f"rail {i + 1} draws in {drew:.1f}px - past GATHER_PULL"
+        assert drew < REF["station_px"], \
+            f"rail {i + 1} travels {drew:.1f}px in {GATHER_LEAD}s - past the reference's own station change"
+
+
+@needs_browser
+def test_the_last_proof_lands_in_the_middle_and_stays_on_the_short(reader) -> None:
+    _last_card_rests_at_the_centre(reader, ITEMS_AT, CLEAR_AT, True)
+
+
+@needs_browser
+def test_the_last_proof_lands_in_the_middle_and_stays_full_frame(reader16) -> None:
+    _last_card_rests_at_the_centre(reader16, ITEMS16_AT, CLEAR16_AT, False)
+
+
+@needs_browser
+def test_the_wall_gathers_before_it_bursts_on_the_short(reader) -> None:
+    _the_wall_only_ever_closes(reader, ITEMS_AT, CLEAR_AT, True)
+
+
+@needs_browser
+def test_the_wall_gathers_before_it_bursts_full_frame(reader16) -> None:
+    _the_wall_only_ever_closes(reader16, ITEMS16_AT, CLEAR16_AT, False)
+
+
+@needs_browser
+def test_the_burst_is_tighter_than_the_reference_and_leaves_the_gathered_wall(reader) -> None:
+    """E99 s59: *"the burst should be tighter"*, measured against Steel and Paper's own beat (REF above): the
+    spacing, the throw's clock and the time the wall takes to leave, each inside a named tolerance of the target
+    this slice set - and the departure points are the GATHERED ones, closer together than the rails they came from.
+    """
+    assert STAGGER == 0.035 and BURST_S == 0.42, "the tightened dials moved without this test being re-read"
+    assert STAGGER <= 0.6 * REF["stagger"] and BURST_S <= 0.9 * REF["burst_s"]
+    n = len(ITEMS_AT)
+    # the whole wall is gone within the tightened envelope - and well inside the reference's measured 0.99 s
+    gone = (n - 1) * STAGGER + BURST_S
+    assert abs(gone - 0.70) <= 0.02, f"the wall clears in {gone:.3f}s, not the 0.70s this slice set"
+    assert gone <= 0.75 * REF["gone_after"], f"{gone:.3f}s is not tighter than the reference's {REF['gone_after']}s"
+    last = [r for r in reader.at(round(CLEAR_AT + gone + 0.02, 3)) if r["op"] > 0.05]
+    assert not last, f"{len(last)} cards still on the stage {gone + 0.02:.2f}s after the clear"
+    # the departure points: every rail stands closer to the centre card than its own rail spot did
+    rest = {r["i"]: r for r in reader.at(CLEAR_AT - 0.01)}
+    railed = {r["i"]: r for r in reader.at(CLEAR_AT - GATHER_LEAD - 0.01)}
+    fx, fy = _focus_spot(n - 1, True)
+    closer = [((railed[i]["cx"] - fx) ** 2 + (railed[i]["cy"] - fy) ** 2) ** 0.5
+              - ((rest[i]["cx"] - fx) ** 2 + (rest[i]["cy"] - fy) ** 2) ** 0.5 for i in range(n - 1)]
+    assert min(closer) > 20, f"the wall barely closed before the burst: {[round(c) for c in closer]}"
+    # and nothing SNAPS when the throw takes over: the first burst frame is the gathered pose
+    before = {r["i"]: r for r in reader.at(CLEAR_AT - 0.001)}
+    after = {r["i"]: r for r in reader.at(CLEAR_AT)}
+    for i in range(n):
+        jump = max(abs(after[i]["cx"] - before[i]["cx"]), abs(after[i]["cy"] - before[i]["cy"]))
+        assert jump <= 2.0, f"card {i} jumps {jump:.1f}px into the burst - the throw left from the rail, not the wall"
 
 
 @needs_browser

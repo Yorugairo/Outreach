@@ -88,9 +88,9 @@ Non-exempt sections whose first real line is under 40 characters (105).
 - `docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:196` 5. Worked instance
 - `docs/content-video-engine/53-THE-STICKMAN-LANE.md:183` 53.4 What this corrects in my own claims
 - `docs/content-video-engine/P13-GATE-A-ARMBAR-REVIEW.md:38` Locked Defaults
-- `docs/content-video-engine/REVIEW-QUEUE.md:20` Look (0)
-- `docs/content-video-engine/REVIEW-QUEUE.md:24` Rule (0)
-- `docs/content-video-engine/REVIEW-QUEUE.md:28` Approve / push (0)
+- `docs/content-video-engine/REVIEW-QUEUE.md:16` Look (0)
+- `docs/content-video-engine/REVIEW-QUEUE.md:20` Rule (0)
+- `docs/content-video-engine/REVIEW-QUEUE.md:24` Approve / push (0)
 - `docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:1` Alicia Script — Persona Pass (v2)
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:187` The On-1s / On-2s / On-3s Decision Rule (Proposal)
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:435` C3: Nested Coordinate Spaces [Tier 1 Architecture — CLOSED]

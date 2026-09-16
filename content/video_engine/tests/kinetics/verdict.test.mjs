@@ -3,7 +3,8 @@
 // when the next beat lands, burst radially on clear_at. These tests pin the clocks, the blend, the bearing and the stagger.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { VERDICT, verdictGeometry, verdictNextAt, verdictPose, verdictBurst, paintVerdict } from "../../scripts/species/verdict.mjs";
+import { VERDICT, VERDICT_9X16, verdictGeometry, verdictFocusRect, verdictGatherXf, verdictGather,
+         verdictNextAt, verdictPose, verdictBurst, paintVerdict } from "../../scripts/species/verdict.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 const W = 1920, H = 1080;
@@ -13,10 +14,13 @@ test("the dials carry the inline code's values, frozen", () => {
   assert.ok(Object.isFrozen(VERDICT) && Object.isFrozen(VERDICT.SPOTS) && Object.isFrozen(VERDICT.SPOTS[0]));
   assert.equal(VERDICT.ENTER_Z, -700, "the code's depth; doc 29 s9.24's -940 is stale");
   assert.equal(VERDICT.SPOTS.length, 9);
-  assert.deepEqual([VERDICT.ENTER_S, VERDICT.RECEDE_S, VERDICT.LAST_RECEDE_LEAD, VERDICT.ENTER_SWING, VERDICT.ENTER_ROT_Y],
+  assert.deepEqual([VERDICT.ENTER_S, VERDICT.RECEDE_S, VERDICT.GATHER_LEAD, VERDICT.ENTER_SWING, VERDICT.ENTER_ROT_Y],
                    [0.9, 1.0, 0.9, 460, 30]);
+  /* P61 T7c / E99 s59 - TIGHTER, against Steel and Paper's own measured burst (0.06 apart over 0.50 s, the wall
+     gone 0.99 s after the clear): 0.035 apart over 0.42 s puts the same nine cards away in 0.70 s. */
   assert.deepEqual([VERDICT.BURST_X, VERDICT.BURST_Y, VERDICT.BURST_Z, VERDICT.BURST_SPIN, VERDICT.BURST_SCALE, VERDICT.BURST_STAGGER, VERDICT.BURST_S],
-                   [560, 420, 340, 24, 0.22, 0.06, 0.5]);
+                   [560, 420, 340, 24, 0.22, 0.035, 0.42]);
+  assert.deepEqual([VERDICT.GATHER_PULL, VERDICT.GATHER_CORE, VERDICT.GATHER_GAP, VERDICT.BURST_CENTRE_BY], [0.22, 0.5, 16, 1.0]);
   assert.deepEqual([VERDICT.ACTIVE_X, VERDICT.ACTIVE_DX, VERDICT.ACTIVE_Y, VERDICT.ACTIVE_ROW_DY, VERDICT.ACTIVE_W], [930, 70, 400, 26, 840]);
   assert.equal(VERDICT.REMOVE_AFTER, 1.4);
 });
@@ -52,7 +56,10 @@ test("the focus hand-off: a = 1 between beats, 0 once the next beat + RECEDE_S h
   assert.ok(near(verdictPose(its[0], 0, 5.5, next, 20).a, 0.5), "the in-out cubic is half way at half RECEDE_S");
   assert.equal(verdictPose(its[0], 0, 6.0, next, 20).a, 0);
   assert.equal(verdictPose(its[0], 0, 6.5, next, 20).z, 7);
-  assert.ok(near(verdictNextAt(its, 2, 20), 20 - 0.9), "the last card recedes LAST_RECEDE_LEAD before the clear");
+  assert.equal(verdictNextAt(its, 2, 20), 20, "the LAST card never hands the focus on (E99 s59): the wall ends on it");
+  const lastIt = Object.assign({ at: 7 }, verdictGeometry(2, W, H, VERDICT, 3));
+  assert.equal(verdictPose(lastIt, 2, 19.99, verdictNextAt(its, 2, 20), 20).a, 1,
+               "the last proof is still at the centre, full size, one frame before the clear");
 });
 
 test("the burst bearing: a card right of centre moves right, a card left of centre moves left", () => {
@@ -67,14 +74,64 @@ test("the burst bearing: a card right of centre moves right, a card left of cent
 
 test("the stagger: card i starts BURST_STAGGER after card i-1, each over BURST_S", () => {
   const its = items([3, 5, 7, 9]);
+  const S = VERDICT.BURST_STAGGER;
   for (let i = 0; i < its.length; i++) {
-    assert.equal(verdictBurst(its[i], i, 20 + i * 0.06 - 1e-9, 20).cb, 0, `card ${i} still before its start`);
-    assert.ok(verdictBurst(its[i], i, 20 + i * 0.06 + 0.01, 20).cb > 0, `card ${i} has started`);
+    assert.equal(verdictBurst(its[i], i, 20 + i * S - 1e-9, 20).cb, 0, `card ${i} still before its start`);
+    assert.ok(verdictBurst(its[i], i, 20 + i * S + 0.01, 20).cb > 0, `card ${i} has started`);
   }
   for (let i = 1; i < its.length; i++)
-    assert.ok(near(verdictBurst(its[i], i, 20.3 + 0.06, 20).cb, verdictBurst(its[i - 1], i - 1, 20.3, 20).cb, 1e-9));
+    assert.ok(near(verdictBurst(its[i], i, 20.3 + S, 20).cb, verdictBurst(its[i - 1], i - 1, 20.3, 20).cb, 1e-9));
   const done = verdictBurst(its[0], 0, 20.5, 20);
   assert.deepEqual([done.cb, done.opacity, done.tz, done.scale], [1, 0, 340, 1.22]);
+});
+
+/* P61 T7c / E99 s59 - THE GATHER: the wall draws in toward the centre card over the last GATHER_LEAD, and the
+   burst then leaves from where the gather left each card. */
+test("the gather: the clock, the pull, the guard, and a wall that only ever closes", () => {
+  assert.equal(verdictGather(20 - 0.9 - 1e-9, 20), 0, "nothing gathers before its window");
+  assert.equal(verdictGather(20, 20), 1, "the gather is home exactly at the clear");
+  assert.ok(near(verdictGather(20 - 0.9 / 2, 20), 1 - Math.pow(0.5, 3)), "out-cubic: the reference's arrival law");
+  assert.ok(verdictGather(20 - 0.9 + 0.09, 20) > 0.25, "it moves at once - a wall that dawdles reads as drift");
+
+  const n = 6, its = [3, 5, 7, 9, 11, 13].map((at, i) => Object.assign({ at }, verdictGeometry(i, W, H, VERDICT, n)));
+  const f = verdictFocusRect(n - 1, VERDICT);
+  assert.deepEqual([its[n - 1].gx, its[n - 1].gy], [0, 0], "the centre card does not gather toward itself");
+  assert.deepEqual([its[n - 1].bx, its[n - 1].by], [0, VERDICT.BURST_CENTRE_BY], "and it has no outward bearing");
+  for (let i = 0; i < n - 1; i++) {
+    const g = verdictGeometry(i, W, H, VERDICT, n);
+    const cx = g.L / 100 * W + g.W / 100 * W / 2;
+    const cy = g.T / 100 * H + (g.W / 100 * W) * VERDICT.CARD_H / VERDICT.CARD_W / 2;
+    const d0 = Math.hypot(f.cx - cx, f.cy - cy), d1 = Math.hypot(f.cx - cx - g.gx, f.cy - cy - g.gy);
+    assert.ok(d1 < d0, `rail ${i + 1} does not draw IN`);
+    assert.ok(d0 - d1 >= 60, `rail ${i + 1} draws in ${(d0 - d1).toFixed(1)}px - that is a drift, not a gather`);
+    assert.ok(d0 - d1 <= VERDICT.GATHER_PULL * d0 + 1e-9, `rail ${i + 1} draws past GATHER_PULL`);
+  }
+  // the guard: a rail sitting ON the centre card's core cannot move at all
+  assert.deepEqual(verdictGatherXf(f.cx, f.cy, 200, 90, f, VERDICT), { gx: 0, gy: 0 });
+
+  // the pose: every railed card's distance to the centre card falls, frame by frame, across the whole window
+  for (let i = 0; i < n - 1; i++) {
+    const g = verdictGeometry(i, W, H, VERDICT, n);
+    const wpx = g.W / 100 * W;
+    const cx = g.L / 100 * W + wpx / 2, cy = g.T / 100 * H + wpx * VERDICT.CARD_H / VERDICT.CARD_W / 2;
+    let prev = Infinity;
+    for (let k = 0; k <= 27; k++) {
+      const t = 20 - 0.9 + k / 30;
+      const p = verdictPose(its[i], i, t, verdictNextAt(its, i, 20), 20);
+      const d = Math.hypot(f.cx - (cx + p.tx), f.cy - (cy + p.ty));   // to the CENTRE card, the thing it gathers around
+      assert.ok(d < prev + 1e-9, `rail ${i + 1} backs away at t ${t.toFixed(3)} (${d.toFixed(2)} > ${prev.toFixed(2)})`);
+      prev = d;
+    }
+  }
+
+  // the burst LEAVES the gathered wall: its first frame is the pose's last, to the pixel
+  const rest = verdictPose(its[0], 0, 20, verdictNextAt(its, 0, 20), 20);
+  const b0 = verdictBurst(its[0], 0, 20, 20, VERDICT, rest);
+  assert.ok(near(b0.tx, rest.tx) && near(b0.ty, rest.ty), "the throw starts where the gather ended - no snap back");
+  assert.ok(near(b0.scale, rest.scale) && near(b0.rot, rest.rot));
+  // ... and the SHORT's form gathers too, on its own geometry
+  const g9 = verdictGeometry(0, 1080, 1920, VERDICT_9X16, 9);
+  assert.ok(Math.hypot(g9.gx, g9.gy) > 60, "the short's wall gathers as well");
 });
 
 test("a seek IS the play: the same t gives the same bits in any order", () => {

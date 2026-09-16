@@ -124,6 +124,12 @@ def clip_source_sha(proof: dict, root: Path = ROOT) -> str | None:
         p = root / proof["mp4"]                      # an mp4 already on disk - a composed comparison, an ambient-lane render
     elif proof.get("surface"):
         p = root / "content/video_engine/tests/golden/frames" / f"{proof['surface']}.png"
+        # a surface's MOTION lives in the engine, not in its base frame: T7c's gather left verdict-stack-9x16.png
+        # byte-identical and the old clip was served as current - so the engine's bytes are part of the key too
+        engine = root / "docs/content-video-engine/samples/scene-evidence-engine.mjs"
+        if p.is_file() and engine.is_file():
+            h = hashlib.sha256(p.read_bytes()); h.update(engine.read_bytes())
+            return h.hexdigest()
     elif proof.get("build"):
         p = root / proof["build"] / (proof.get("page") or "player.html")
     else:
