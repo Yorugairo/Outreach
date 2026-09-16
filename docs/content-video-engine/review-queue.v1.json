@@ -468,7 +468,8 @@
         "E99 s57 (the scene before)",
         "E99 s60",
         "P61 T3d",
-        "P61 HG2b-3"
+        "P61 HG2b-3",
+        "E99 s62"
       ],
       "kind": "watch",
       "title": "The morph onto a planted element, on a real scene: the panelist's tie becomes the holdings chart",
@@ -497,7 +498,7 @@
       ],
       "options": [],
       "recommendation": "The morph itself is honest: the shape that grows into the chart is the tie's own outline, in the tie's own place, and the ground arrives from it as s52 asked. The seam, read as a viewer, is NOT the morph's - it is the cut: at 11.80 the whole busy plate is gone and a small dark shape stands on near-empty cream for about 0.4 s before the soak reads. That is the committed mechanism (the prop alone, then the ground). If that quiet is the thing you notice, the follow-up is the plate lingering or dissolving under the arriving ground rather than cutting to cream - a card of its own. Gate on the beat: 22 PASS, M11 FAIL only on the 0-10 s window a windowed beat cannot meet, M17 WARN (its invariants were written for a fixture; one real finding, a strip inversion, goes to the backlog).",
-      "blocks": "P48 T5b's proof; P48 HG3; P61 HG2b-3",
+      "blocks": "nothing - ruled E99 s62 (2026-09-16): the morph mechanism valid; the test-bed beat's second light on the crowd refused as authoring (no engine change)",
       "sources": [
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:178-186",
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:412",
@@ -518,8 +519,8 @@
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3d)",
         "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-planted/GATES-MOTION.md"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s62",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-16 (P61 T3d): the real beat in a private test-bed build, its clip on the build route",
       "proofs": [
