@@ -148,7 +148,24 @@ PROOF_FRAMES = {
     "melt-gather-morph@proof-chart": ("melt-gather-morph", {"arap_morph": True, "min_jerk": True}, 19.20),   # THE CHART, built out of that point: the area it became standing on the series, the line stroked along its top, the title and the labels written by the engine's own hand - the "fully assembled chart" of E99 s2
     # P48 T5b / R26-16 - THE PLANTED SOURCE: the same page-enter morph, from a real element of the world before it
     # (the plate's own dark form, traced by kinetics/contour.mjs). No melt anywhere in it - the cut at 15.0 is a cut.
-    "morph-planted@proof-050": ("morph-planted", {"arap_morph": True, "min_jerk": True}, 16.00),   # u 0.50 of the 2.0 s morph: the lobed form half way to the area under the line - still plainly the thing that was planted, and not yet the chart
+    # u 0.50 of the 2.0 s morph: the lobed form half way to the area under the line - still plainly the thing that
+    # was planted, and not yet the chart. Since P61 T3b it is also u 0.67 of the GROUND's own window, so what the
+    # form stands in is the soak at its flood - islands, fingers and dry holes, the board not yet whole. That is the
+    # soak's own middle (`ledger-soak-page`'s mid-frames read the same way), and the instant is kept where it was:
+    # moving it to a tidier frame would be fitting the proof to the picture.
+    "morph-planted@proof-050": ("morph-planted", {"arap_morph": True, "min_jerk": True}, 16.00),
+    # P61 T3b / E99 s52 - THE GROUND ARRIVING, at the instant the base frame (15.02, a cream page under the splotch)
+    # and the midpoint (16.00, the soak well across the board) both miss. 15.30 is u 0.20 of the ground's own window
+    # (MORPH.GROUND * 2.0 s = 1.5 s from the cut): the planted form standing in the field's own ink, exactly as the
+    # plate held it, with the seed stain out from under it on every side and NOTHING else of the board there yet -
+    # the frame the old "soaked from the first frame" law could not produce, because it painted the board whole at
+    # 15.00. Read as a viewer: the form, and a little ink around it.
+    "morph-planted@proof-ground": ("morph-planted", {"arap_morph": True, "min_jerk": True}, 15.30),
+    # ... and its twin on the HANDED page, which is the rule's other half: the melt takes the chart's INK and leaves
+    # the board (E88), so the ground never left and there is nothing for it to arrive by. 16.58 is the last frame
+    # before the hand-over at 16.595, so this and the base golden (16.60) are the pair: the board is the same whole
+    # punched board on both, and what changes across the boundary is the ball becoming the prop and nothing else.
+    "melt-morph@proof-ground": ("melt-morph", {"arap_morph": True, "min_jerk": True}, 16.58),
     # P55 T6: THE VERDICT STACK's last phase - the radial BURST at clear_at (20.0) + 0.25 s: with the 60 ms stagger the
     # first card is half way through its 0.5 s throw and the fifth just leaving, each along its own bearing, spinning
     "verdict-stack@proof-burst": ("verdict-stack", {}, 20.25),

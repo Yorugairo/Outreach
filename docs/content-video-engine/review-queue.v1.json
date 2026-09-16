@@ -462,28 +462,37 @@
         "R26-16",
         "P61 T3",
         "P61 HG2b",
-        "E99 s52"
+        "E99 s52 (the ground arrives)",
+        "P61 HG2b-2"
       ],
       "kind": "watch",
-      "title": "The chart morphs onto a PLANTED element - the silhouette traced from the thing standing in the world",
-      "judge": "R26-16's rule: the morph's source is a real element of the outgoing world at its last frame, never a shape conjured over the clip. Here the narrative plate carries one dark lobed form; its silhouette is traced off that same raster (`contourSilhouette` - canvas raster + marching squares, the outlines are ours) into `world.morph.poly`, and from the page's first frame the prop stands exactly where the form stood, then deforms into the area under the series and the page builds on it. Watch 14.4-20.3 s. Does the morph land on the planted thing honestly - the same shape, the same place - or does the seam show? Approve, or name the seam.",
+      "title": "The morph onto a planted element - the board's ink now spreads out from the splotch, never snapping in around it",
+      "judge": "Your ruling (E99 s52): the morph is fine, the full fill appearing instantly around the splotch is the problem. What painted it was P47 T3's 'soaked from the first frame' law - the field's crisp rect opaque on the page's first frame (charcoal 5.5 % -> 66.8 % of the stage in one frame). Now the soak's first stain is seeded on the prop itself and the ink spreads out from the splotch over 1.5 s under the morph; the board is whole only when the soak has done its work; the morph itself is untouched. Watch 14.4-20.3 s. Does the ground arrive honestly now? Approve, or name the frame.",
       "where": [
         {
-          "label": "the page's first frame (15.02) - the traced form standing where the plate's form stood",
+          "label": "the page's first frame (15.00) - the planted form alone on the cream, no board around it (was: the full charcoal fill)",
           "path": "content/video_engine/tests/golden/frames/morph-planted.png"
         },
         {
-          "label": "half way (16.00) - the lobed form stretched toward the area under the line, plainly still the planted thing",
+          "label": "the ground arriving (@proof-ground) - the soak's ink spreading out from the splotch",
+          "path": "content/video_engine/tests/golden/frames/morph-planted@proof-ground.png"
+        },
+        {
+          "label": "half way (16.00) - the form stretching toward the area, the board filling under it",
           "path": "content/video_engine/tests/golden/frames/morph-planted@proof-050.png"
         },
         {
-          "label": "contour.mjs: contourSilhouette / contourLuma; the compiler refuses a poly with fewer than 3 points, a self-crossing one, or one off the stage - by name",
-          "path": "content/video_engine/scripts/kinetics/contour.mjs"
+          "label": "the engine: `handed` moved above the field beat; groundS = morphS x MORPH.GROUND (1.5 s); the soak's nearest stain seeded on the prop's centroid (SEED_R, SEED_POW, SEED_LAG); buildMorph's morph-ground path keeps the prop ink until the board is",
+          "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs"
+        },
+        {
+          "label": "the compiler stamps field=soak on a morph page naming none",
+          "path": "content/video_engine/scripts/build_scene_timeline_f.py"
         }
       ],
       "options": [],
-      "recommendation": "Approve. The prop is the plate's own form - a test re-traces the silhouette off the raster and refuses a drift - so nothing is conjured. Two limits named: the page's field and punch beats still run under an ordinary morph page (P47 T3's law), so the board zooms over the morph's last half second - if the ground reads as moving, the fix is the one line the handed path already has; and a deep C-shaped silhouette would lose its bay (the strip is x-monotone) - blobs, balls, plates and heads are fine, a horseshoe is not, and nothing refuses one yet.",
-      "blocks": "nothing - ruled E99 s52 (2026-09-16): the morph fine; the board's fill may not snap in (T3b)",
+      "recommendation": "Approve. Measured: the board's filled share at the page's first frame is 0.0004 (was 1.00); the worst change between consecutive frames is 0.043 under the soak and 0.086 at the punch, against a threshold of 0.125 (an eighth of the board) a test now pins. The handed ball's page (melt-morph) never had the fault - its board never leaves (E88) - and reads the same rule.",
+      "blocks": "HG2b-2",
       "sources": [
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:178-186",
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:412",
@@ -496,16 +505,18 @@
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md (T5b)",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s52)",
-        "docs/content-video-engine/review-answers.jsonl (2026-09-16)"
+        "docs/content-video-engine/review-answers.jsonl (2026-09-16)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s52)",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3b)"
       ],
-      "status": "ruled",
-      "ruling": "E99 s52",
+      "status": "open",
+      "ruling": null,
       "was_kind": "owed",
-      "owed": "Delivered 2026-09-16 (P61 T3): world.morph.poly, contourSilhouette, the goldens, the clip",
+      "owed": "Delivered 2026-09-16 (P61 T3b): the ground arrives by the soak seeded on the prop; two goldens + @proof-ground; the clip",
       "proofs": [
         {
           "type": "clip",
-          "label": "the planted source: the plate's form, the cut, the traced silhouette standing where it stood, deforming into the area under the series, the page built on it",
+          "label": "the planted source with its ground arriving: the plate's form, the cut, the traced silhouette alone on the cream, the soak spreading out from it while it deforms into the area, the page built on it",
           "surface": "morph-planted",
           "aspect": "16:9",
           "t0": 14.4,

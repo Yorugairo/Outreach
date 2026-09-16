@@ -299,7 +299,7 @@
      "source": "docs/content-video-engine/CAPABILITIES.md:111"
     }
    ],
-   "does": "The page's prop outline - a named shape, a PLANTED element's traced silhouette, or the melt's own ball - deforms by ARAP into the area under its series, then the build lands.",
+   "does": "The page's prop outline - a named shape, a PLANTED element's traced silhouette, or the melt's own ball - deforms by ARAP into the area under its series while the page's GROUND arrives under it by its field entry; then the build lands.",
    "when": "The morph (P47 T3) is that device.",
    "when_source": "docs/portable/OPERATOR-RULINGS.md:1485",
    "author": {
@@ -317,6 +317,17 @@
       "STRIP.EPS_X": "0.004",
       "STRIP.MIN_H": "0.02",
       "MORPH.COLS": "48"
+     }
+    },
+    {
+     "name": "the ground arrives",
+     "does": "a planted page's charcoal field soaks in from the splotch itself (the seed stain sits on the prop's centroid and the rest open by distance) over MORPH.GROUND of the morph's seconds - never a board painted whole around the prop (E99 s52); a HANDED page's board never left, so it is whole from frame one",
+     "trigger": "the page's first frame",
+     "dials": {
+      "MORPH.GROUND": "0.75",
+      "MORPH.SEED_LAG": "0.6",
+      "MORPH.SEED_R": "0.6",
+      "MORPH.SEED_POW": "0.7"
      }
     },
     {
@@ -349,6 +360,11 @@
      "token": "card",
      "means": "Morph prop: card: The page is born from a card outline with eased corners.",
      "source_set": "MORPH_SHAPES"
+    },
+    {
+     "token": "field",
+     "means": "E99 s52: the GROUND a morph page arrives on - `;field=soak|plates|scribble`. Stamped `soak` when the row names none: the prop is already ink, so the ink spreads out of it.",
+     "source_set": "PAGE_FIELDS"
     },
     {
      "token": "hand",
@@ -384,16 +400,19 @@
     "also": [
      "buildMorph",
      "lpMorphInWorld",
+     "lpMorphSeedPoint",
      "morphOn",
      "morphProp",
      "paintLedger",
      "polyStrip"
     ],
-    "note": "paintMorph / buildMorph / lpMorphInWorld (+ kinetics/arap.mjs polyStrip; paintLedger const morphOn, handed)"
+    "note": "paintMorph / buildMorph / lpMorphInWorld / lpMorphSeedPoint (+ kinetics/arap.mjs polyStrip; paintLedger const morphOn, handed, groundS, bRect)"
    },
    "doctrine": [
     "E48 s4",
-    "E87 s2"
+    "E87 s2",
+    "E99 s35",
+    "E99 s52"
    ],
    "status": "wired",
    "proof": {

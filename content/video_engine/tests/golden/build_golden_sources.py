@@ -2547,14 +2547,21 @@ MORPH_KINETICS = {"arap_morph": True, "min_jerk": True}   # the morph and its cl
 #   would make every mid-morph proof a frame of the finished shape). Nothing else - the melt's ball is `melt-page`'s.
 
 
-def _morph_target_page() -> dict:
+def _morph_target_page(field: str | None = None) -> dict:
     """Scene 2's FULL chart: the same four series over their last MORPH_TAIL points - a real sub-window."""
     raw = json.loads(SERIES.read_text(encoding="utf-8"))
     tail = {"title": "The same four, their last two years", "sub": raw.get("sub", ""), "src": raw.get("src", ""),
             "unit": raw.get("unit", ""),
             "series": [dict(sr, pts=sr["pts"][-MORPH_TAIL:]) for sr in raw["series"]]}
     page = LPG.build_spec(tail, "line", None, "right")
-    page["field"] = "scribble"   # the same board as scene 1's: the board is shared across the hand-over
+    # P61 T3b / E99 s52 - THE FIELD. A PLANTED morph page names none, so `stamp_transition_pages` stamps the soak
+    # on it: the ground has to arrive, and the entry it arrives by is the one a prop that is already ink spreads
+    # out of. A HANDED page names scene 1's own field, because its board NEVER LEFT (E88: a melt takes the chart's
+    # ink and leaves the board) - the field it carries is the board it is continuing, and saying anything else
+    # would swap the layer under an unchanged board. Before T3b every morph page said `scribble` and none of it
+    # was read: `b` was pinned to 1, so the board was the finished rect on the page's first frame.
+    if field is not None:
+        page["field"] = field
     return page
 
 
@@ -2566,7 +2573,7 @@ def melt_morph() -> tuple[dict, dict]:
     page = LPG.build_spec(series, "line", None, "right")
     page["field"] = "scribble"
     page["exit"] = "cut"   # LEDGER_EXITS / E40 #5, R26-60: NO RETRACT - the melt is how this chart leaves
-    page2 = _morph_target_page()
+    page2 = _morph_target_page(page["field"])   # the HANDED page carries scene 1's own field: its board never left
     page2["enter"] = "morph"   # what _melt_boundary stamps on this boundary, written out so the fixture says it
     scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
                "exit": "cut", "span": [0.0, MORPH_CUT], "docks": [], "species": []},
@@ -2632,7 +2639,7 @@ def melt_gather_morph() -> tuple[dict, dict]:
     page = LPG.build_spec(series, "line", None, "right")
     page["field"] = "scribble"
     page["exit"] = "cut"
-    page2 = _morph_target_page()
+    page2 = _morph_target_page(page["field"])   # the HANDED page carries scene 1's own field: its board never left
     page2["enter"] = "morph"
     scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
                "exit": "cut", "span": [0.0, MORPH_CUT], "docks": [], "species": []},

@@ -7216,6 +7216,22 @@ async function mount(doc) {
     const m = planeMatrix(quad.map((p) => [p[0] * STAGE_W, p[1] * STAGE_H]), STAGE_W, STAGE_H, STAGE_W / 2, oy);
     return m ? cssMatrix3d(m) + " " : "";
   };
+  /* P61 T3b / E99 s52 - WHERE THE SOAK STARTS ON A MORPH PAGE: the planted prop's own area centroid, carried into the
+     FIELD's viewBox. `world.morph.poly` is in STAGE fractions (P48 T5b - it is where the element stood), the field div
+     is the board box `bd` in fractions of the page, and its svg has preserveAspectRatio="none" over that box, so the
+     carry is one rectangle into another. Null - and the soak is untouched - for every page that is not a flagged morph
+     page with a PLANTED poly: a named prop (tab | plate | card) is conjured on the target and has no place on the page
+     before it, and a HANDED ball's board never left (its ground is whole from its first frame, and must be). */
+  const lpMorphSeedPoint = (pg, scene, bd, fw, fh) => {
+    if (!pg || pg.enter !== "morph" || !kin("arap_morph")) return null;
+    const src = ((scene || {}).world || {}).morph;
+    if (!src || typeof src !== "object" || !Array.isArray(src.poly) || src.poly.length < 3 || src.hand) return null;
+    const P = src.poly.map((p) => [+p[0], +p[1]]), c = centroid(P);
+    if (!isFinite(c[0]) || !isFinite(c[1]) || !(bd.w > 0) || !(bd.h > 0)) return null;
+    const toF = (p) => [(p[0] - bd.x) / bd.w * fw, (p[1] - bd.y) / bd.h * fh];
+    const cf = toF(c), r = P.reduce((s, p) => s + Math.hypot(...[0, 1].map((k) => toF(p)[k] - cf[k])), 0) / P.length;
+    return { x: Math.min(fw, Math.max(0, cf[0])), y: Math.min(fh, Math.max(0, cf[1])), r };   /* r: the splotch's own mean radius, the size the seed stain starts at */
+  };
   const buildLedger = (el, scene) => {
     const pg = scene.world.page || {}, seed = 0x1B1EEDCA ^ (scene.scene_id || "").length;
     el.querySelectorAll(".lp").forEach((x) => x.remove());
@@ -7285,6 +7301,25 @@ async function mount(doc) {
         const c = lpEl("path", "", goo, Object.assign({ d: d + " Z", fill: "#25313C", transform: "translate(" + cx.toFixed(1) + " " + cy.toFixed(1) + ") scale(0)" },
                                                     kin("km_ink") ? { fill: SOAK.MESH ? "url(#lpsoakgr" + seed + ")" : "#fff", style: "mix-blend-mode:plus-lighter" } : {}));
         blobs.push({ c, cx, cy, R: (620 + lpHash(seed, i, 4) * 420) * fk, lag: lpHash(seed, i, 5) * 0.35, i });
+      }
+      /* P61 T3b / E99 s52 - THE SOAK'S SEED IS THE SPLOTCH. The soak has no single origin: its ORDER is the nine
+         stains' own `lag` (above - a seeded number in [0, 0.35), which stain opens when) over their 3 x 3 grid. On a
+         PLANTED morph page that order is the wrong one, because the page is arriving around a shape that is already
+         ink and already somewhere. So the prop's AREA CENTROID becomes the seed: the nearest stain is moved onto it
+         and opens at lag 0, and every other stain's lag is its DISTANCE from that point, scaled to MORPH.SEED_LAG -
+         the ink spreads out from the splotch. A handed ball takes none of this (its board never left, below), and a
+         page with no planted prop is the page it was: same centres, same seeded lags, byte for byte. */
+      const mSeed = lpMorphSeedPoint(pg, scene, bd, fw, fh);
+      if (mSeed) {
+        let near = 0, dn = Infinity;
+        blobs.forEach((bl) => { const d = Math.hypot(bl.cx - mSeed.x, bl.cy - mSeed.y); if (d < dn) { dn = d; near = bl.i; } });
+        const b0 = blobs[near];
+        b0.cx = mSeed.x; b0.cy = mSeed.y;   /* the first stain IS the splotch's place ... */
+        b0.r0 = MORPH.SEED_R * mSeed.r;     /* ... and its SIZE: it opens already the splotch's own width, so it is hidden UNDER the opaque prop at u = 0 and the first thing seen of it is ink coming out past the prop's edge - the splotch wetting the paper, never a stain switched on */
+        b0.pow = MORPH.SEED_POW;            /* and on its own curve: the other stains creep then flood (u^1.5), the seed has to be OUT from under the prop in the first fifth of the window or there is nothing to watch */
+        const far = Math.max(1e-6, ...blobs.map((bl) => Math.hypot(bl.cx - mSeed.x, bl.cy - mSeed.y)));
+        for (const bl of blobs) bl.lag = MORPH.SEED_LAG * (Math.hypot(bl.cx - mSeed.x, bl.cy - mSeed.y) / far);
+        b0.c.setAttribute("transform", "translate(" + b0.cx.toFixed(1) + " " + b0.cy.toFixed(1) + ") scale(0)");
       }
     } else {
       for (let r = 0; r < LP.STROKES; r++) {
@@ -10289,7 +10324,25 @@ async function mount(doc) {
      on a min-jerk clock; the build then strokes the line along the morphed area's top edge and the fill fades with the
      build. Behind kinetics.arap_morph: with the flag off a morph page behaves as a mount of the same length, so an old
      render is one flag away. The three match-cut invariants (the brief B4) are computed by __morphInvariants for M17. */
-  const MORPH = { S: 2.0, FILL_A: 0.28, COLS: 48, TEAR: 14, TAB_W: 0.92, TAB_H: 0.85 };   /* dials (42 s42.5): the morph's seconds, the fill, the strip's columns, the tab's tear (viewBox px) and its size as a share of the target's box */
+  const MORPH = { S: 2.0, FILL_A: 0.28, COLS: 48, TEAR: 14, TAB_W: 0.92, TAB_H: 0.85,
+                  GROUND: 0.75, SEED_LAG: 0.6, SEED_R: 0.6, SEED_POW: 0.7, INK: "#25313C" };   /* dials (42 s42.5): the morph's seconds, the fill, the strip's columns, the tab's tear (viewBox px) and its size as a share of the target's box */
+  /* P61 T3b / E99 s52 - THE GROUND'S OWN THREE DIALS. The operator, on the planted morph: "the actual morph is fine,
+     but going from the ink splotch to the full fill on the board instantly around it is the problem here."
+       GROUND    the share of the morph's OWN seconds the page's field takes to arrive. 0.75 of the 2.0 s default is
+                 1.5 s, which is exactly morphS - LP.PUNCH: the board is whole at the instant the punch opens, so the
+                 punch and the build (which starts at morphS) both land on a finished ground, and nothing about the
+                 morph's own clock moves.
+       SEED_LAG  how much of that window the FARTHEST stain waits before it opens. The nearest stain - the one moved
+                 onto the prop's own centroid - opens at 0, so the ink spreads OUT FROM the splotch (E99 s35's soak,
+                 seeded where the prop stands) instead of appearing everywhere at once.
+       SEED_R    that seed stain's STARTING width, as a share of the splotch's own mean radius. 0.6 puts it strictly
+                 inside the opaque prop on the first frame, so nothing is switched on: the first ink seen is ink
+                 coming out past the prop's edge.
+       SEED_POW  and its growth curve. The other stains creep then flood (u^1.5, which is 3 % of the way at a fifth
+                 of the clock); the seed has to be out from under the prop by then or the first half-second holds a
+                 bare cream page, so it runs on u^0.7 - 32 % of the way at the same instant.
+       INK       the field's charcoal, the colour the planted prop is painted in while the ground is still cream.
+                 The splotch is ALREADY ink (that is what was traced), so it stays ink until the board is. */
   /* the two shapes as STRIPS of MORPH.COLS columns (arap.mjs stripMesh): the target is the series sampled at n x-positions over
      its baseline; the prop is a strip of the same columns placed on the target's area centroid and turned to its dominant
      axis, so the centroid and axis invariants hold by construction and the morph is a change of SHAPE, not a move. A fan
@@ -10348,10 +10401,21 @@ async function mount(doc) {
     const svg = lpEl("svg", "lp-chart lp-morph", st.page, { viewBox: st.chart.getAttribute("viewBox") });
     svg.setAttribute("style", st.chart.getAttribute("style") || "");
     const col = (st.paths.filter((pp) => !pp.muted)[0] || {}).p; const stroke = col ? col.getAttribute("stroke") : "var(--lp-chalk)";
+    /* P61 T3b / E99 s52 - THE PROP IS ALREADY INK. A planted prop arrives over a board that is still CREAM (the
+       ground is soaking in around it, above), and the chart's paint - a series colour at FILL_A under a chalk line -
+       is a paint for CHARCOAL: on cream it is a pale tint with a white outline, and the dark splotch the plate held
+       one frame earlier would vanish at the cut. So the prop is painted TWICE and cross-faded on the ground's own
+       clock: this path, the field's own charcoal, opaque and outline-free (the splotch as it was traced), under the
+       chart's paint, which fades in exactly as the board fills. At g = 1 the ground path is gone and the frame is
+       the paint P47 T3 always drew - which is every handed morph, every named prop and every flag-off page, so no
+       frame outside a planted morph's ground moves. */
+    const ground = sPoly && !src.hand
+      ? lpEl("path", "morph-ground", svg, { d: outlinePath(A), fill: MORPH.INK, "fill-opacity": 1, stroke: "none" })
+      : null;   /* PLANTED only: a handed ball is painted by the melt itself and a named prop was never on a cream board */
     const path = lpEl("path", "morph", svg, { d: outlinePath(A), fill: stroke, "fill-opacity": MORPH.FILL_A, stroke: "var(--lp-chalk)", "stroke-width": 3 });
-    return { svg, path, prep, A, B, W: G.W, stroke, hand: !!(sPoly && src.hand) };
+    return { svg, ground, path, prep, A, B, W: G.W, stroke, hand: !!(sPoly && src.hand) };
   };
-  const paintMorph = (st, pg, world, u, c) => {
+  const paintMorph = (st, pg, world, u, c, g = 1) => {   /* `g` (P61 T3b): how far the page's GROUND has arrived - 1 on every page whose board was already there */
     if (st.morph === undefined) st.morph = buildMorph(st, pg, world);
     const M = st.morph; if (!M) return;
     const k = kin("min_jerk") ? minJerk(u) : expoOut(clamp01(u));
@@ -10365,8 +10429,19 @@ async function mount(doc) {
        hand what carries the outline is the page's area. A named prop takes none of this (hk = 1 from the first frame
        and no stroke-opacity is written at all), so a morph page that is not handed a ball is the page it was. */
     const hk = M.hand ? clamp01(u / MELT.M_FADE) : 1;
-    M.path.setAttribute("fill-opacity", (MORPH.FILL_A * hk * (u < 1 ? 1 : 1 - clamp01(c))).toFixed(3));   /* the fill leaves as the line draws */
-    if (M.hand) M.path.setAttribute("stroke-opacity", hk.toFixed(3));
+    /* P61 T3b / E99 s52: the chart's paint rises as the GROUND does, and the field's own ink carries the shape until
+       it has. gk is 1 for every page whose board was already there, so nothing but a planted morph's first second
+       is touched - and the SHAPE this frame (M.pts, the `d` both paths take) is not a function of g at all. */
+    const gk = clamp01(g);
+    M.path.setAttribute("fill-opacity", (MORPH.FILL_A * hk * gk * (u < 1 ? 1 : 1 - clamp01(c))).toFixed(3));   /* the fill leaves as the line draws */
+    /* written on every frame of a handed OR a planted morph (never on a named prop, which is the page P47 T3 shipped):
+       an attribute set only while it is under 1 would stay at its last value and pin the chalk there for good - and a
+       frame's paint has to be a function of t alone, on any seek order. */
+    if (M.hand || M.ground) M.path.setAttribute("stroke-opacity", (hk * gk).toFixed(3));
+    if (M.ground) {
+      M.ground.setAttribute("d", outlinePath(pts));
+      M.ground.setAttribute("fill-opacity", ((1 - gk) * (u < 1 ? 1 : 1 - clamp01(c))).toFixed(3));
+    }
     M.svg.style.opacity = (u < 1 || c < 1) ? "1" : "0";
     M.u = u;
   };
@@ -11333,11 +11408,28 @@ async function mount(doc) {
     /* beat 3: the field. SOAK: seeps spread and saturate, never contract - paper taking ink;
        SCRIBBLE: strokes accumulate one at a time with the nib at the front. Either ends on the
        crisp rect. */
-    const b = morphOn ? 1 : mount ? mu : clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD);   /* R26-50: a mounting page's soak runs over mount_s from the scene's first frame (its cream is already the ground); a morph page's board is soaked from its first frame */
+    /* P61 T3 / R26-117: a page HANDED THE MELT'S BALL arrives on a board that never left - the melt took the chart's
+       ink and the board stayed (E88). Read here, before the field, because it is the question the field asks too. */
+    const handed = morphOn && !!((scene.world.morph || {}).hand);
+    /* P61 T3b / E99 s52 - THE MORPH PAGE'S GROUND ARRIVES; IT NEVER SNAPS IN AROUND THE PROP. Until this slice a
+       morph page took `b = 1` - its field's END STATE - on its first frame, so the crisp rect (below, at b > 0.78)
+       painted the WHOLE board solid in one frame around a shape that a frame earlier stood on a cream plate. The
+       operator, 2026-09-16: "the actual morph is fine, but going from the ink splotch to the full fill on the board
+       instantly around it is the problem here." So the ground now ARRIVES, by the field entry the row names (E99
+       s35: the soak for a new idea - and for a planted page the soak is seeded on the splotch itself, above - the
+       two-plate cross-fade for continuity), on ITS OWN CLOCK under the morph: MORPH.GROUND of the morph's seconds
+       from the page's first frame, which for the 2.0 s default ends exactly where the punch opens. The HANDED page
+       keeps b = 1, and that is not an exception to the rule but the rule: its ground did not leave, so there is
+       nothing for it to arrive by, and any ramp there would fade a board OUT from under the ball. */
+    const groundS = morphOn && !handed ? Math.max(0.05, morphS * MORPH.GROUND) : 0;
+    const b = morphOn ? (handed ? 1 : clamp01((t - scene.span[0]) / groundS)) : mount ? mu : clamp01((tr - LP.ROLL - LP.SAVOR) / LP.FIELD);   /* R26-50: a mounting page's soak runs over mount_s from the scene's first frame (its cream is already the ground) */
     for (const bl of st.blobs) {
       /* STEP MOTION under km_ink (operator: "too smooth"): a stain's progress is a seeded staircase on the stepped clock, its own phase */
       const u = kin("km_ink") ? soakStepped(clamp01((b - bl.lag) / (1 - bl.lag)), (k) => lpHash(st.seed, bl.i + 1, 200 + k)) : clamp01((b - bl.lag) / (1 - bl.lag));
-      bl.c.setAttribute("transform", "translate(" + bl.cx.toFixed(1) + " " + bl.cy.toFixed(1) + ") scale(" + (bl.R * Math.pow(u, 1.5)).toFixed(2) + ")");   /* stains creep, then flood */
+      /* stains creep, then flood - from nothing (r0 0, the seeded default) or, for a morph page's SEED stain, from the
+         splotch's own width on its own curve (P61 T3b). r0 0 and pow 1.5 is the line this always was, to the digit. */
+      const r0 = bl.r0 || 0;
+      bl.c.setAttribute("transform", "translate(" + bl.cx.toFixed(1) + " " + bl.cy.toFixed(1) + ") scale(" + (r0 + (bl.R - r0) * Math.pow(u, bl.pow || 1.5)).toFixed(2) + ")");
       bl.c.setAttribute("opacity", ((0.55 + 0.45 * u) * (kin("km_ink") ? INK.COVERAGE : 1)).toFixed(2));
     }
     if (st.soakFx && b > 0 && b < 1) {   /* the fields move only while the soak runs: idle frames touch nothing */
@@ -11358,7 +11450,11 @@ async function mount(doc) {
       st.nib.setAttribute("opacity", nibAt ? 1 : 0);
       if (nibAt) { st.nib.setAttribute("cx", nibAt.x.toFixed(1)); st.nib.setAttribute("cy", nibAt.y.toFixed(1)); }
     }
-    st.rect.setAttribute("opacity", clamp01((b - 0.78) / 0.22).toFixed(2));
+    /* THE CRISP RECT: the field resolving to a definite edge over the last fifth of the soak. P61 T3b reads the same
+       fraction twice - it is also the beat at which a planted prop stops being ink (paintMorph's `g`), because the
+       instant the BOARD becomes charcoal is the instant a shape drawn in charcoal stops standing out of it. */
+    const bRect = clamp01((b - 0.78) / 0.22);
+    st.rect.setAttribute("opacity", bRect.toFixed(2));
     if (st.fieldPlate) st.fieldPlate.style.opacity = expoOut(b).toFixed(3);   /* the inked plate arrives over the cream */
     /* beat 4: ink writes title/source once the field has soaked - no outline (E22 addendum 7: the deckle is the edge) */
     const t3 = tr - LP.ROLL - LP.SAVOR - LP.FIELD;
@@ -11370,7 +11466,6 @@ async function mount(doc) {
        the savor and the soak are already behind it. Without this the outgoing punched board hands over to an
        un-punched one and the ground CHANGES SIZE in a single frame: a cut, under a morph that is not one. It also
        makes the page's envelope constant across the hand, which is what lets buildMorph measure its boxes once. */
-    const handed = morphOn && !!((scene.world.morph || {}).hand);
     const pk = handed ? 1 : (pg.punch === false || PORTRAIT) ? 0 : expoOut(clamp01(t3 / LP.PUNCH));   /* a host plate skips the punch: his gesture is the direction; portrait has no margin to spend (P41) */
     const bdc = st.boardCentre || { x: 50, y: 50 };
     st.page.style.transformOrigin = bdc.x.toFixed(2) + "% " + bdc.y.toFixed(2) + "%";
@@ -11461,7 +11556,7 @@ async function mount(doc) {
        fraction c - and because every builder's law is written as "at c the chart is this far drawn", running c back
        to zero IS an un-draw, whatever the builder. That is what a recast leaves on. */
     lpPaintStates(st, scene, c, t3, t);
-    if (morphOn) paintMorph(st, pg, scene.world, clamp01((t - scene.span[0]) / morphS), c);   /* P47 T3: the prop becomes the area under the line, then the line draws over it */
+    if (morphOn) paintMorph(st, pg, scene.world, clamp01((t - scene.span[0]) / morphS), c, bRect);   /* P47 T3: the prop becomes the area under the line, then the line draws over it. P61 T3b: `bRect` is the GROUND's last beat - the prop stays the ink it was traced from until the board it stands on is charcoal */
     /* badges: floored at the build's end, each springs in over LP_BADGE_IN with the dock's back-out overshoot */
     const tb = t3 - LP.PUNCH - (st.buildDur || LP.BUILD);
     const arrP = arriveOf(scene.world), massP = scene.world.mass || "paper";   /* P47 T1: the page's pills may ARRIVE by a throw or a landing (`;arrive=land;mass=metal` on the plate id - the compiler writes it on the world) */

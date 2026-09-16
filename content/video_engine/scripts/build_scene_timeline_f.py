@@ -2217,6 +2217,33 @@ def stamp_transition_pages(scenes: list[dict]) -> list[str]:
         if fpg is not None and not fpg.get("enter") and float((first.get("span") or [1.0])[0]) <= 0.05:
             fpg["enter"] = "axes"
             notes.append(f"{first.get('scene_id', '?')}: enter=axes stamped - the hook opens on the axes register and is answered on the ledger")
+    notes += _stamp_morph_page_fields(scenes)   # E99 s52, LAST: every enter=morph is stamped by now (the hand-over's above)
+    return notes
+
+
+MORPH_PAGE_FIELD = "soak"   # E99 s52 / E99 s35: the ground a MORPH page arrives on when its row names none
+
+
+def _stamp_morph_page_fields(scenes: list[dict]) -> list[str]:
+    """E99 s52 - A MORPH PAGE'S GROUND HAS TO ARRIVE, so it must name the entry it arrives by.
+
+    The operator, 2026-09-16, on the planted morph: *"going from the ink splotch to the full fill on the board
+    instantly around it is the problem here."* The engine now runs a morph page's field on its own clock under the
+    morph (MORPH.GROUND), which means the page needs a field, and the DEFAULT for a morph page is the SOAK: the prop
+    is already ink, so the ink spreads out from it (E99 s35's soak, seeded on the splotch - the player's
+    `lpMorphSeedPoint`). A row that names its own `;field=` is never touched: `field=plates` on a morph page is the
+    cross-fade for continuity, exactly as s35 wrote it, and `field=scribble` is still the opt-in back-up.
+
+    Returns one line per stamp. Run after every other stamp, so a page whose `enter=morph` was stamped by the
+    melt's own boundary rule (`_melt_boundary`) is seen here too."""
+    notes: list[str] = []
+    for sc in scenes:
+        pg = _page_of(sc)
+        if pg is None or pg.get("enter") != "morph" or pg.get("field"):
+            continue
+        pg["field"] = MORPH_PAGE_FIELD
+        notes.append(f"{sc.get('scene_id', '?')}: field={MORPH_PAGE_FIELD} stamped - a morph page's ground ARRIVES, "
+                     "and the soak is the entry a prop that is already ink spreads out of (E99 s52)")
     return notes
 
 

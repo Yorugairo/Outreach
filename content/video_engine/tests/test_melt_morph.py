@@ -516,10 +516,188 @@ def test_the_gather_and_the_morph_compose_and_neither_changes_the_other() -> Non
 
 
 @pytest.mark.parametrize("name", ["melt-morph", "melt-morph@proof-ball", "melt-morph@proof-050",
-                                  "melt-morph@proof-built", "morph-planted", "morph-planted@proof-050",
+                                  "melt-morph@proof-built", "melt-morph@proof-ground",
+                                  "morph-planted", "morph-planted@proof-050", "morph-planted@proof-ground",
                                   "melt-gather-morph", "melt-gather-morph@proof-point",
                                   "melt-gather-morph@proof-chart"])
 def test_the_slices_own_goldens_are_on_disk_and_are_their_own_sha256(name: str) -> None:
     p = FRAMES / f"{name}.png"
     assert p.is_file(), p
     assert hashlib.sha256(RB.render_surface(name)).hexdigest() == hashlib.sha256(p.read_bytes()).hexdigest()
+
+
+
+# ---- 8. P61 T3b / E99 s52: THE MORPH PAGE'S GROUND ARRIVES, NEVER SNAPS IN AROUND THE PROP -----------
+#
+# The operator, 2026-09-16, on `p48-hg3-morph-onto-planted`: *"The actual morph is fine, but going from the ink
+# splotch to the full fill on the board instantly around it is the problem here."* Measured before this slice:
+# `morph-planted` went from a cream plate carrying one dark splotch at 14.98 to the WHOLE charcoal board at 15.00,
+# because `paintLedger` pinned a morph page's field beat to `b = 1` (its end state) on the page's first frame and
+# the field's crisp rect is opaque at b >= 1. One frame delivered 61 % of the stage.
+#
+# THE METRIC - INK COVERAGE, not a colour count. The field arrives partly by OPACITY (the seeps' own alpha, the
+# crisp rect's ramp), and a binary "is this pixel charcoal" count flips a whole board in the two frames an opacity
+# crosses its threshold - it would report a gradual darkening as a snap and a snap as gradual. Coverage is what
+# "filled area" means: per pixel, how far it has travelled from the page's cream to the field's charcoal, clamped
+# to [0, 1] and averaged over the stage. FILL normalises that to the page's own first frame (0) and the board once
+# whole (1), so the thresholds below are shares OF THE BOARD and not of the metric.
+ENGINE_SRC = RB.ENGINE.read_text(encoding="utf-8")
+CREAM_L, INK_L = 230.0, 47.0     # #F4E6C7, the ledger page's cream; #25313C, the field's charcoal
+FRAME_S = 0.02                   # the scrub's own step - the player seeks in hundredths and a 50 fps frame is two
+GROUND_STEP_MAX = 0.125          # no two consecutive frames may fill more than an EIGHTH of the board (see below)
+GROUND_FIRST_MAX = 0.05          # ... and the page's first frame carries at most a twentieth of it
+
+
+def _morph_dial(name: str) -> float:
+    """One of `MORPH`'s dials, read off the engine's own source - never copied into this file."""
+    import re
+    m = re.search(r"const MORPH = \{(.*?)\};", ENGINE_SRC, re.S)
+    assert m, "the engine has no MORPH dials"
+    d = re.search(rf"\b{re.escape(name)}:\s*([0-9.]+)", m.group(1))
+    assert d, f"MORPH has no dial {name}: {m.group(1)}"
+    return float(d.group(1))
+
+
+def _coverage(png: bytes) -> float:
+    import io as _io
+
+    import numpy as np
+    from PIL import Image
+    a = np.asarray(Image.open(_io.BytesIO(png)).convert("RGB"), dtype=np.float32)
+    lum = 0.299 * a[:, :, 0] + 0.587 * a[:, :, 1] + 0.114 * a[:, :, 2]
+    return float(np.clip((CREAM_L - lum) / (CREAM_L - INK_L), 0.0, 1.0).mean())
+
+
+def _sweep(page, size, t0: float, t1: float) -> list[tuple[float, float]]:
+    """(t, coverage) at the player's own frame step across [t0, t1]."""
+    out, n = [], int(round((t1 - t0) / FRAME_S))
+    for i in range(n + 1):
+        t = round(t0 + i * FRAME_S, 4)
+        out.append((t, _coverage(RB.frame_png(page, t, size))))
+    return out
+
+
+@browser_only
+def test_the_planted_morph_pages_ground_arrives_and_never_snaps_in_around_the_prop() -> None:
+    """E99 s52, measured on the frames themselves.
+
+    THE THRESHOLDS, and why. The board's full coverage is measured on this run, never assumed: `full` is the
+    highest coverage inside the ground's own window. GROUND_FIRST_MAX 0.05 is the ruling itself - the page's
+    first frame may not arrive with its board already on it (before this slice that frame read 1.00).
+    GROUND_STEP_MAX 0.125 is an eighth of the board per frame: it forbids the ground arriving in fewer than
+    eight frames (0.16 s), which is the shortest run anything can take and still be watched rather than cut,
+    and it clears both beats that legitimately move a lot of area in one frame - the PUNCH's first expoOut
+    frame (measured 0.086 of the board) and the soak's own steepest (0.043) - by about 1.5x, so a re-tuned
+    dial does not fail it and a choreography collapsing back toward a snap does."""
+    groundS = _morph_dial("S") * _morph_dial("GROUND")
+    with _player("morph-planted", FLAGS) as (page, size):
+        rows = _sweep(page, size, CUT, CUT + 2.0)
+    base = rows[0][1]
+    full = max(c for t, c in rows if t <= CUT + groundS + 1e-9)
+    span = full - base
+    assert span > 0.3, f"the board never filled at all: base {base:.4f} full {full:.4f}"
+    fill = [(t, (c - base) / span) for t, c in rows]
+    # 1. THE RULING: the page's FIRST frame is a cream page under the splotch, not a filled board.
+    assert fill[1][1] <= GROUND_FIRST_MAX, f"the board is {fill[1][1]:.3f} filled on the page's first frame"
+    # 2. ... and no single frame of the whole window delivers more than an eighth of it.
+    steps = [(fill[i][0], fill[i][1] - fill[i - 1][1]) for i in range(1, len(fill))]
+    worst_t, worst = max(steps, key=lambda r: abs(r[1]))
+    assert abs(worst) <= GROUND_STEP_MAX, f"the board's fill jumped {worst:+.3f} at t={worst_t} (max {GROUND_STEP_MAX})"
+    # 3. and it ARRIVES: the ground is soaking IN over its own window, whole by the end of it, never contracting.
+    during = [f for t, f in fill if t <= CUT + groundS + 1e-9]
+    assert during[-1] > 0.98, f"the ground is only {during[-1]:.3f} arrived when its window closes"
+    assert min(during[i] - during[i - 1] for i in range(1, len(during))) > -0.02, "a soak never contracts"
+
+
+@browser_only
+def test_the_handed_pages_board_never_left_so_nothing_arrives_across_the_hand_over() -> None:
+    """The rule's other half (E88): a melt takes the CHART's ink and leaves the board, so the page handed the
+    ball arrives on a board that never went away. Its ground is therefore whole on its first frame - a ramp
+    there would fade a board out from under the ball - and nothing about the board may move across the
+    hand-over. Measured: the coverage over the hand is flat to a hundredth."""
+    at, _secs = _hand_window()
+    with _player("melt-morph", FLAGS) as (page, size):
+        rows = _sweep(page, size, at - 0.10, at + 0.20)
+    lo, hi = min(c for _t, c in rows), max(c for _t, c in rows)
+    assert lo > 0.85, f"the handed page's board is not whole across the hand-over (min coverage {lo:.4f})"
+    assert hi - lo < 0.01, f"the board moved across the hand-over: {lo:.4f} .. {hi:.4f}"
+    worst = max(abs(rows[i][1] - rows[i - 1][1]) for i in range(1, len(rows)))
+    assert worst < 0.005, f"a frame of the hand-over changed the board by {worst:.4f}"
+
+
+FIELD_PROBE = r"""() => {
+  const worlds = [...document.querySelectorAll('.ledger')].filter((e) => e.__lp);
+  const w = worlds.find((e) => e.__lp.morph) || worlds[worlds.length - 1];
+  const st = w ? w.__lp : null;
+  if (!st) return null;
+  return {
+    blobs: (st.blobs || []).map((b) => ({ i: b.i, cx: +b.cx.toFixed(2), cy: +b.cy.toFixed(2),
+                                          lag: +b.lag.toFixed(4), r0: +(b.r0 || 0).toFixed(2), pow: b.pow || 1.5 })),
+    strokes: (st.strokes || []).length,
+    rect: +(st.rect.getAttribute('opacity') || 0),
+  };
+}"""
+
+
+def _field_at(page, t: float) -> dict:
+    page.evaluate("t => { const s = document.getElementById('scrub');"
+                  " s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+    return page.evaluate(FIELD_PROBE)
+
+
+@browser_only
+def test_the_soaks_seed_is_the_splotch_and_the_rest_open_by_distance() -> None:
+    """E99 s52 asks for the soak spreading OUT FROM the splotch. The soak's own order is its nine stains'
+    `lag`; on a planted morph page that order is replaced by DISTANCE from the prop's area centroid, the
+    nearest stain is moved onto that point and opens at lag 0 already the splotch's own width (so the first
+    ink seen is ink coming out from under an opaque prop, never a stain switched on), and the farthest waits
+    MORPH.SEED_LAG of the ground's window."""
+    with _player("morph-planted", FLAGS) as (page, _size):
+        st = _field_at(page, CUT + 0.02)
+    assert st and st["strokes"] == 0, "the morph page's field is the SOAK, not the scribble (the stamped default)"
+    seeds = [b for b in st["blobs"] if b["r0"] > 0]
+    assert len(seeds) == 1, f"exactly one stain is the seed: {[b['i'] for b in seeds]}"
+    seed = seeds[0]
+    assert seed["lag"] == 0.0, f"the seed stain opens at once: lag {seed['lag']}"
+    assert seed["pow"] == _morph_dial("SEED_POW"), f"and on its own faster curve: pow {seed['pow']}"
+    assert seed["r0"] > 40, f"and already the splotch's own width: r0 {seed['r0']}"
+    # every other stain's lag rises with its distance from the seed, and the farthest is the last to open
+    others = sorted(st["blobs"], key=lambda b: (b["cx"] - seed["cx"]) ** 2 + (b["cy"] - seed["cy"]) ** 2)
+    lags = [b["lag"] for b in others]
+    assert lags == sorted(lags), f"the stains do not open outward from the splotch: {lags}"
+    assert abs(lags[-1] - _morph_dial("SEED_LAG")) < 1e-3, f"the farthest stain waits MORPH.SEED_LAG: {lags[-1]}"
+    assert st["rect"] == 0, "and the crisp rect - the whole board - is not painted on the page's first frame"
+
+
+def test_a_morph_page_is_stamped_the_soak_and_a_row_that_names_its_field_stands() -> None:
+    """E99 s52 / E99 s35: a morph page's ground has to ARRIVE, so a morph page that names no `;field=` is
+    stamped `soak` - the entry a prop that is already ink spreads out of. A row that names one is untouched."""
+    _pg1, pg2 = _pages()
+    pg2["enter"] = "morph"
+    notes = B.stamp_transition_pages(_scenes("cut", {"kind": "ledger", "page": pg2, "ken_burns": {"scale": 0, "x": 0, "y": 0}}))
+    assert pg2["field"] == "soak", pg2.get("field")
+    assert any("field=soak stamped" in n for n in notes), notes
+    # ... and the cross-fade (continuity) or the scribble (the opt-in back-up) stand where a row names them
+    for named in ("plates", "scribble"):
+        _pgA, pgB = _pages()
+        pgB["enter"] = "morph"
+        pgB["field"] = named
+        B.stamp_transition_pages(_scenes("cut", {"kind": "ledger", "page": pgB, "ken_burns": {"scale": 0, "x": 0, "y": 0}}))
+        assert pgB["field"] == named, f"a row that says field={named} is not overwritten"
+    # a page that does NOT enter by a morph is never touched by this stamp
+    _pgC, pgD = _pages()
+    B.stamp_transition_pages(_scenes("cut", {"kind": "ledger", "page": pgD, "ken_burns": {"scale": 0, "x": 0, "y": 0}}))
+    assert pgD.get("field") is None, pgD.get("field")
+
+
+def test_the_morph_goldens_carry_the_field_each_kind_of_morph_owes() -> None:
+    """The PLANTED fixture proves the stamped default rather than restating it (`_morph_target_page` names no
+    field, and the compiler writes `soak`); the two HANDED fixtures name scene 1's OWN field, because a melt
+    leaves the board it took the ink off (E88) and the page handed the ball is continuing that board."""
+    tl, _u, _t, _a = RB.load_surface("morph-planted")
+    assert tl["scenes"][1]["world"]["page"]["field"] == "soak"
+    for surface in ("melt-morph", "melt-gather-morph"):
+        tl, _u, _t, _a = RB.load_surface(surface)
+        out, arrive = tl["scenes"][0]["world"]["page"], tl["scenes"][1]["world"]["page"]
+        assert arrive["enter"] == "morph"
+        assert arrive["field"] == out["field"], (surface, out.get("field"), arrive.get("field"))

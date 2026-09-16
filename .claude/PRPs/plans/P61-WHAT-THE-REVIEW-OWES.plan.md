@@ -463,7 +463,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   source. Closes **P48 T5b** and its card; `P48:185` (HG3) can then be answered
 
 ### T3b: THE MORPH PAGE'S GROUND ARRIVES, NEVER SNAPS IN AROUND THE PROP (E99 s52)
-- Status: pending
+- Status: complete (2026-09-16) - HG2b-2 open on the queue as `p48-hg3-morph-onto-planted` (watch)
 - Owner: `implementation_luna` (**ENGINE LOCK**)
 - Depends on: T3, HG2b (ruled E99 s52); T4b's field entries
 - Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the morph page's field / punch beats under a morph enter), `content/video_engine/scripts/species/melt.mjs`
@@ -477,7 +477,21 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   `python -m pytest content/video_engine/tests/test_melt_morph.py content/video_engine/tests/test_transitions_e47.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/effects_catalog_check.py` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only p48-hg3-morph-onto-planted`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T3b.md`. MEASURED FIRST: `scene-evidence-engine.mjs:11336` `const b = morphOn ? 1 : ...`
+  (P47 T3's 'soaked from the first frame' law) painted the field's crisp rect opaque on the page's first frame - `morph-planted`
+  14.98 -> 15.00: charcoal 0.055 -> 0.668 of the stage, +0.613 in one frame; `melt-morph` 16.50 -> 17.00 already flat (max 0.0001)
+  - the board never leaves (E88). BUILT: `handed` moved above the field beat; `groundS = morphS x MORPH.GROUND` (0.75 -> 1.5 s =
+  morphS - LP.PUNCH); the soak has no seed, so its order (`lag`, :7290) is replaced - the nearest stain moved onto the prop's area
+  centroid at lag 0, starting at SEED_R of the splotch's radius on u^SEED_POW, the rest by distance to SEED_LAG; `buildMorph`
+  gains a `morph-ground` path (planted only) so the prop stays ink until `bRect` says the board is; the compiler stamps
+  `field=soak` on a morph page naming none (:2228); melt.mjs untouched. MEASURED AFTER: the filled share at the first frame 0.0004
+  (was 1.00); the worst per-0.02 s change 0.043 (the soak) / 0.086 (the punch); threshold 0.125 (an eighth of the board), pinned
+  by a browser probe (test_melt_morph section 8, +5 tests). Parent's read: the page's first frame is the prop alone on the cream;
+  @proof-ground shows the grey ink spreading out from the splotch; the mid-frame the form stretching with the board filling under
+  it. GOLDENS: `morph-planted` + `@proof-050` re-baselined, `@proof-ground` new; `melt-morph@proof-ground` new (its board never
+  left); every other golden byte-identical (render_baseline --check 135 identical). Card `page_enter:morph` says the ground arrives
+  by the field entry. Validate: node 600/600; sync in sync; pytest 249 passed; effects_catalog_check 0; page-boxes 44 (sha-only).
+  Left to T11: CAPABILITIES row 119 still states the retired 'soaked from the first frame' law; the catalogue layer.
 
 ### T3c: THE CHART-TO-BALL IS A VISIBLE FUSION, NOT A SNAP (E99 s53)
 - Status: pending
