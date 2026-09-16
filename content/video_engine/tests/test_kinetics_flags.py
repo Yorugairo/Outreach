@@ -109,7 +109,7 @@ def _idle_const(name: str) -> str:
 
 def test_the_compilers_drift_floor_is_the_modules_own_constant() -> None:
     assert B.PLATE_DRIFT_FLOOR == float(_idle_const("DRIFT_PX")),         "the compiler refuses under a floor the player raises to - the two must be one number"
-    assert (B.PLATE_DRIFT_LONG, B.PLATE_DRIFT_SHORTS) == (30.0, 40.0), "E99 s55's two named settings"
+    assert (B.PLATE_DRIFT_LONG, B.PLATE_DRIFT_SHORTS) == (20.0, 40.0), "E99 s63's long-form setting (it amended s55's 30 on the watch: \"maybe 20 px drift\") and s55's shorts one"
 
 
 def test_the_amplitude_has_no_global_default() -> None:

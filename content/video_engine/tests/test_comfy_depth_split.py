@@ -1,4 +1,5 @@
-"""P58 T1 route (b): the depth split's pure functions and its serverless `--depth` path.
+"""P58 T1 route (b): the depth split's pure functions and its serverless `--depth` path, and P61 T14b's
+EDGE PASS (E99 s63 - a layered plate ships the processed planes, never the split's raw matte).
 
 No ComfyUI is touched here - the server path is exercised only by the run. Every test below runs on a
 synthetic plate with a hand-made depth map.
@@ -303,3 +304,92 @@ def test_the_override_reaches_the_layers_and_the_split_json(tmp_path):
 
 def test_sam_points_take_comfy_sam2_masks_coordinate_form():
     assert json.loads(cds.sam_points("10,20;30,40")) == [{"x": 10, "y": 20}, {"x": 30, "y": 40}]
+
+
+# ---------------------------------------------------------------- P61 T14b: the edge pass (E99 s63)
+# The defect the pass exists for: a SAM matte grown by N px carries the BACKGROUND into the plane's alpha, and
+# the plane paints at its own k, so the carried background slides off the real one and reads as a rim. The fix is
+# geometric (shrink the matte) plus, where the shrink cannot reach, a nearest-interior recolour - never a blur.
+
+
+def _rim_plate(size: int = 64, grow: int = 4) -> tuple[np.ndarray, np.ndarray]:
+    """A warm disc on a teal ground, and a matte GROWN by `grow` px - so the plane carries `grow` px of ground."""
+    yy, xx = np.mgrid[0:size, 0:size]
+    disc = (yy - size // 2) ** 2 + (xx - size // 2) ** 2 <= (size // 4) ** 2
+    rgb = np.zeros((size, size, 3), dtype=np.uint8)
+    rgb[...] = (40, 110, 150)           # the teal ground
+    rgb[disc] = (190, 150, 90)          # the warm subject
+    alpha = cds.dilate(disc, grow)
+    return np.dstack([rgb, np.where(alpha, 255, 0).astype(np.uint8)]), disc
+
+
+def test_erode_is_the_inverse_of_dilate_and_keeps_a_full_mask_full():
+    m = np.zeros((32, 32), dtype=bool)
+    m[12:20, 12:20] = True
+    assert cds.erode(cds.dilate(m, 3), 3).sum() == m.sum()
+    assert cds.erode(np.ones((16, 16), dtype=bool), 4).all(), "no matte, nothing to erode - the far wall is opaque"
+    assert cds.erode(m, 0).tolist() == m.tolist(), "radius 0 is the identity, and never mutates its input"
+
+
+def test_edge_band_is_the_outermost_pixels_inside_the_matte():
+    m = np.zeros((32, 32), dtype=bool)
+    m[8:24, 8:24] = True
+    band = cds.edge_band(m, 2)
+    assert band.sum() == m.sum() - cds.erode(m, 2).sum()
+    assert not (band & cds.erode(m, 2)).any()
+
+
+def test_edge_ring_stats_reads_the_carried_ground_and_then_the_subject():
+    rgba, _ = _rim_plate(grow=4)
+    mask = rgba[..., 3] > 0
+    outer = cds.edge_ring_stats(rgba[..., :3], mask, 0)
+    inner = cds.edge_ring_stats(rgba[..., :3], mask, 6)
+    assert outer["chroma"] > 15 and 200 < outer["hue"] < 300, "the outermost ring IS the teal ground"
+    assert inner["hue"] < 120, "six px in, the warm subject - the hue has flipped"
+    assert cds.edge_ring_stats(rgba[..., :3], mask, 999) == {"depth": 999, "n": 0}
+
+
+def test_the_shrink_alone_drops_the_carried_ground_and_leaves_the_plates_own_pixels():
+    rgba, disc = _rim_plate(grow=4)
+    out, rec = cds.process_matte(rgba, shrink_px=4, band_px=0)
+    assert rec["alpha_px_after"] < rec["alpha_px_before"]
+    kept = out[..., 3] > 0
+    assert not (kept & ~disc).any(), "E99 s63: the plane no longer carries one pixel of the ground"
+    assert (out[..., :3][kept] == rgba[..., :3][kept]).all(), "the colours are the flat plate's own - dE 0 by construction"
+    assert cds.edge_ring_stats(out[..., :3], kept, 0)["hue"] < 120
+
+
+def test_the_decontamination_takes_the_nearest_interior_colour_and_never_averages():
+    rgba, _ = _rim_plate(grow=0)
+    rgba[..., :3][cds.edge_band(rgba[..., 3] > 0, 2)] = (0, 255, 0)     # a screaming green fringe
+    out, rec = cds.process_matte(rgba, shrink_px=0, band_px=2)
+    kept = out[..., 3] > 0
+    assert rec["decontaminated_px"] > 0
+    assert not (out[..., :3][kept] == np.array([0, 255, 0])).all(-1).any(), "the fringe is gone"
+    colours = {tuple(c) for c in out[..., :3][kept]}
+    assert colours == {(190, 150, 90)}, "every band pixel took an INTERIOR colour - a blur would invent new ones"
+
+
+def test_an_opaque_plane_is_returned_untouched():
+    rgba = np.dstack([np.full((16, 16, 3), 200, np.uint8), np.full((16, 16), 255, np.uint8)])
+    out, rec = cds.process_matte(rgba, shrink_px=3, band_px=2)
+    assert rec["opaque"] is True and rec["dropped_px"] == 0
+    assert (out == rgba).all()
+
+
+def test_a_shrink_that_would_erase_the_whole_matte_is_refused_by_name():
+    rgba, _ = _rim_plate(size=48, grow=0)
+    with pytest.raises(SystemExit, match="erases the plane's whole matte"):
+        cds.process_matte(rgba, shrink_px=30, band_px=0)
+
+
+def test_process_plane_file_keeps_the_raw_beside_it_and_records_the_rim(tmp_path):
+    rgba, _ = _rim_plate(grow=4)
+    src = tmp_path / "plane-near.png"
+    Image.fromarray(rgba, mode="RGBA").save(src)
+    raw = tmp_path / "plane-near.raw.png"
+    rec = cds.process_plane_file(src, src, 4, 0, keep_raw=raw)
+    assert raw.exists(), "E99 s63 keeps the split's raw matte on disk; what SHIPS is the processed plane"
+    assert 200 < rec["rings_before"][0]["hue"] < 300, "the raw rim IS the ground (on the Tokyo dock: h 254.8, the sky's own)"
+    assert rec["rings_after"][0]["hue"] < 120, "the processed rim is the subject's own colour"
+    assert (np.asarray(Image.open(src).convert("RGBA"))[..., 3] > 0).sum() == rec["alpha_px_after"]

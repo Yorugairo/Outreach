@@ -50,7 +50,7 @@
    "token": "drift",
    "title": "The drift idle",
    "aliases": [],
-   "does": "The held thing walks a bounded Lissajous path, its half-width the AUTHORED amplitude `;drift=<px>` / `plate_idle_drift_px` (30 long form, 40 shorts; IDLE.DRIFT_PX 2 px the floor).",
+   "does": "The held thing walks a bounded Lissajous path, its half-width the AUTHORED amplitude `;drift=<px>` / `plate_idle_drift_px` (20 long form since E99 s63, 30-40 shorts; IDLE.DRIFT_PX 2 px the floor).",
    "when": null,
    "when_source": null,
    "author": {
@@ -70,12 +70,13 @@
     "form": "module",
     "path": "content/video_engine/scripts/kinetics/idle.mjs",
     "symbol": "drift",
-    "note": "drift; DRIFT_PX 2.0 is the FLOOR, not the setting - the amplitude is per scene (`world.idle_drift_px`) then `KIN.plate_idle_drift_px`, resolved by idleDriftPx (E99 s55)"
+    "note": "drift; DRIFT_PX 2.0 is the FLOOR, not the setting - the amplitude is per scene (`world.idle_drift_px`) then `KIN.plate_idle_drift_px`, resolved by idleDriftPx (E99 s55/s63)"
    },
    "doctrine": [
     "E49",
     "E99 s38",
-    "E99 s55"
+    "E99 s55",
+    "E99 s63"
    ],
    "status": "live",
    "proof": {
@@ -168,7 +169,7 @@
     "also": [
      "IDLE_KINDS"
     ],
-    "note": "breath + drift; the drift half sizes to the same authored amplitude (idleDriftPx, E99 s55)"
+    "note": "breath + drift; the drift half sizes to the same authored amplitude (idleDriftPx, E99 s55/s63)"
    },
    "doctrine": [
     "E49"

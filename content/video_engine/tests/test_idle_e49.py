@@ -123,14 +123,14 @@ def test_golden_sources_carry_no_idle_flag_so_they_stay_byte_identical():
 
 
 def test_the_two_drift_goldens_are_the_only_sources_the_idle_is_the_subject_of():
-    """The exception above, pinned the other way round: exactly those two carry it, and both PAINT it (E99 s55)."""
+    """The exception above, pinned the other way round: exactly those two carry it, and both PAINT it (E99 s55, at s63's 20 px)."""
     carry = {p.name[: -len(".timeline.json")] for p in sorted(SOURCES.glob("*.timeline.json"))
              if (json.loads(p.read_text(encoding="utf-8")).get("kinetics") or {}).get("idle")}
     assert carry == IDLE_IS_THE_SUBJECT
     for name in sorted(carry):
         tl = json.loads((SOURCES / f"{name}.timeline.json").read_text(encoding="utf-8"))
         assert tl["kinetics"].get("plate_idle_paints") is True, f"{name}: the walk must PAINT (R26-133's cure)"
-        assert tl["scenes"][0]["world"]["idle_drift_px"] == 30.0, f"{name}: at E99 s55's long-form amplitude"
+        assert tl["scenes"][0]["world"]["idle_drift_px"] == 20.0, f"{name}: at E99 s63's long-form amplitude (it amended s55's 30)"
 
 
 # ---- the gate: M18 frozen frames --------------------------------------------------------------

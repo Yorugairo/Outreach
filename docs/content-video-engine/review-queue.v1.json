@@ -84,36 +84,41 @@
         "P61 T14",
         "P61 HG-drift-2",
         "E99 s63",
-        "P61 T14b"
+        "P61 T14b",
+        "P61 HG-drift-3"
       ],
-      "kind": "owed",
-      "title": "The alive plate under the full depth stack: the harbour water alive, the planes over it, one camera, the 30 px drift",
-      "judge": "Owed by the agent - see `owed`. The question, once the planes are processed and the drift is at 20: is the lamp clean, and is 20 px the long-form drift, or 30?",
+      "kind": "watch",
+      "title": "The alive plate with its planes cleaned, and the long-form drift at 20 px beside 30",
+      "judge": "Your answer (E99 s63): the lamp's green was back, and 30 px might still be too much - maybe 20. Why the green: the alive plate reused the depth split's raw cut-outs, and the split's mask around the lamp had been grown 6 px, carrying the sky into the shade's edge (the approved flat plate never had a matte, so nothing had been 'removed' - the record, not a memory). Built: a named matte pass on the split's planes (shrink 5 px on the near plane, 1 on mid and subject, the edge filled from the nearest interior colour, never a blur) - the shade's 3 px edge band now matches the flat plate exactly (dE 0.00; the raw band WAS the sky) - and the same planes on the flat layered plate, so the camera-layers and dock-depth goldens moved by under 1 % of pixels each. The drift: the beat rebuilt at 20 px, and a second page at 30 for the difference. Watch the 20 px beat, then the 30. Is the lamp clean, and which drift is the long form's: 20 or 30?",
       "where": [
         {
-          "label": "the alive golden at t 6.56 (u 0.28 of the focus zoom, 2.50 s into the water's 4.06 s loop): the planes displaced, the water moved",
+          "label": "the lamp at 3x, the same instant of the same beat: BEFORE (raw planes, a teal halo round the shade) vs AFTER (the processed planes) - the rendered ring vs the sky: dL -7.09 / dC -5.34 before, -2.28 / -1.02 after",
           "path": "content/video_engine/tests/golden/frames/plate-alive.png"
         },
         {
-          "label": "the same plate, drift only, at the long-form 30 px (was the 2 px E99 s38 refused)",
+          "label": "the three rim numbers (3 px edge band, CIE L*a*b*): the sky C* 25.60 h 255.1; the RAW plane C* 25.27 h 254.8 (dE 0.58 to the sky - the rim IS the sky); the PROCESSED plane C* 8.14 h 254.7; the flat approved plate's same band C* 8.14 h 254.7 - dE(processed, flat) 0.0000",
+          "path": "content/video_engine/scripts/comfy_depth_split.py"
+        },
+        {
+          "label": "the split's record: sam.grow 6 with the three occluder points on the lamp; P58's HG1 sheet had already noted 'a soft blue bloom behind it'",
+          "path": "docs/research/runs/p58-2-5d/HG1-SHEET.md"
+        },
+        {
+          "label": "the drift golden at the 20 px long-form setting (was 30; the 2 px constant the floor; shorts 30-40)",
           "path": "content/video_engine/tests/golden/frames/plate-drift.png"
         },
         {
-          "label": "MEASURED - the water: in-mask MAD 9.84 vs out-of-mask 0.03 between t 0.00 and 2.50 (328:1; outside the life mask the wall is the still to the codec floor); in the rendered stage the harbour band MAD 2.92, the sky above it 0.008",
-          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-alive/GATES-MOTION.md"
-        },
-        {
-          "label": "MEASURED - a layer parallaxed: layered vs the flat composite, camera locked at t 5.90 = 0.49 % of the stage differs (the water, the control); at t 6.56 = 16.92 %, the container stack (k 1.15) 27.9 px off the flat composite (NCC 0.955); the drift at 30 px alone MAD 21.67",
-          "path": "content/video_engine/scripts/kinetics/idle.mjs"
-        },
-        {
-          "label": "the beat's one row: world-tokyo-customs-dock-v1-alive;idle=drift;drift=30, a spotlight on the water at 'Japan holds', an authored camera key 4.54 -> 6.37 s (zoom 1.0 -> 1.14) - an authored key, not a landing (E51 is the law for a shipping cut; a locked camera paints the flat composite exactly, so a locked beat cannot show the parallax)",
+          "label": "named for you: the lamp is 5 px thinner at full size now - that is the sky coming off the matte, but it is a silhouette change; and the decontamination band is built and set to 0 (the shrink alone matches the flat plate; band 2 would move the edge away from it)",
           "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-alive/build_alive.py"
         }
       ],
-      "options": [],
-      "recommendation": "",
-      "blocks": "P61 T14b; the R26-133 fix's ruling; P58 HG2 ruling 4",
+      "options": [
+        "20 px - the long form's drift; the lamp clean",
+        "30 px; the lamp clean",
+        "the lamp still shows - name the instant"
+      ],
+      "recommendation": "20 px and the lamp clean. Read at 3x on the same instant: the halo round the shade is gone and the outline sits on the sky; the 20 px beat still breathes (the harbour alive under it) without the whole picture sliding, which is what 30 started to do on a long-form frame. Your eye decides the 5 px thinner silhouette.",
+      "blocks": "HG-drift-3; the R26-133 ruling; P58 HG2 ruling 4",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:565",
         "docs/research/runs/p58-2-5d/HG2-SHEET.md:51-52",
@@ -128,13 +133,64 @@
         "docs/portable/OPERATOR-RULINGS.md (E99 s55)",
         "docs/content-video-engine/review-answers.jsonl (2026-09-16)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s55)",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T14)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T14)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s63 + its correction)",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T14b)"
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": "watch",
-      "owed": "E99 s63 (2026-09-16): the lamp's green rim is back (the alive plate carries the depth split's RAW cut-outs; the flat plate had the edge processed out) and 30 px may be too much. Owed (P61 T14b): the processed planes on the alive plate (and the flat layered plate), the rim measured before / after; the beat and the plate-drift golden at 20 px with a 30 px clip beside for the difference; then ONE question.",
-      "proofs": []
+      "was_kind": "owed",
+      "owed": "Delivered 2026-09-16 (P61 T14b): the processed planes on both layered plates, the rim measured, the beat at 20 beside 30, the goldens",
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "THE ASK - the beat at 20 px: the alive dock, the PROCESSED planes, the light, the push, the long-form drift",
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-alive",
+          "page": "player.html",
+          "aspect": "16:9",
+          "t0": 0.0,
+          "t1": 6.57,
+          "route": "review_queue_proofs.py --clips: the private build's player served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent); the approved Tokyo cut untouched (E45)"
+        },
+        {
+          "type": "clip",
+          "label": "THE SAME BEAT at 30 px - s55's first number, for the difference (its own page, so the 20 px link never moves)",
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-alive",
+          "page": "player-30.html",
+          "aspect": "16:9",
+          "t0": 0.0,
+          "t1": 6.57,
+          "route": "review_queue_proofs.py --clips: the private build's player served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent); the approved Tokyo cut untouched (E45)"
+        },
+        {
+          "type": "clip",
+          "label": "the mechanism, golden 1 - THE ALIVE PLATE with the processed planes: the water alive, the planes over it, one camera, 20 px",
+          "surface": "plate-alive",
+          "aspect": "16:9",
+          "t0": 0.0,
+          "t1": 10.0,
+          "flags": {
+            "idle": true,
+            "plate_idle_paints": true,
+            "camera": true,
+            "stop_action": true
+          },
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "the mechanism, golden 2 - THE DRIFT alone at 20 px on the flat plate",
+          "surface": "plate-drift",
+          "aspect": "16:9",
+          "t0": 0.0,
+          "t1": 4.0,
+          "flags": {
+            "idle": true,
+            "plate_idle_paints": true
+          },
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        }
+      ]
     },
     {
       "id": "r26-123-caption-default",

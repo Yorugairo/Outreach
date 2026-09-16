@@ -132,6 +132,13 @@ def clip_source_sha(proof: dict, root: Path = ROOT) -> str | None:
             return h.hexdigest()
     elif proof.get("build"):
         p = root / proof["build"] / (proof.get("page") or "player.html")
+        # a build's page loads its timeline and assets by name: T14b rebuilt the 20 px beat into the SAME player.html bytes
+        # and the old clip was served as current - so every top-level .json beside the page is part of the key too
+        if p.is_file():
+            h = hashlib.sha256(p.read_bytes())
+            for side in sorted(p.parent.glob("*.json")):
+                h.update(side.name.encode()); h.update(side.read_bytes())
+            return h.hexdigest()
     else:
         return None
     return hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else None

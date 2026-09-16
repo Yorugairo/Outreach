@@ -2763,18 +2763,20 @@ FRAME_T["door-open"] = DOOR_CUT + DOOR_S   # u = 1: edge-on, the plate alone - t
 # The `idle` flag is ON in the source because without it `idleOf` returns "none" and there is no idle to paint at
 # all (the engine's IDLE_CLASS / idleOf); the flag alone still renders a still plate - that is the HELD frame.
 PLATE_DRIFT_RUNTIME = 4.0   # a short hold: the four proof frames are its seconds 0, 1, 2, 3
-PLATE_DRIFT_PX = 30.0       # E99 s55: the named LONG-FORM amplitude (40 is the shorts one) - build_scene_timeline_f.PLATE_DRIFT_LONG
+PLATE_DRIFT_PX = 20.0       # E99 s63: the named LONG-FORM amplitude, amending s55's 30 ("30 px drift might still be too much, maybe 20 px drift"); 30-40 is the shorts range - build_scene_timeline_f.PLATE_DRIFT_LONG
 
 
 def plate_drift() -> tuple[dict, dict]:
-    """R26-133, re-authored by P61 T14 to the ruling that CLOSED it (E99 s55): a plate authored `;idle=drift`, the
-    dial PAINTING it, at the amplitude the operator named - `;drift=30`, the long-form setting.
+    """R26-133, re-authored by P61 T14 to the ruling that CLOSED it (E99 s55) and re-cut by T14b to the ruling that
+    AMENDED it (E99 s63): a plate authored `;idle=drift`, the dial PAINTING it, at the amplitude the operator named
+    on the watch - `;drift=20`, the long-form setting ("also 30 px drift might still be too much, maybe 20 px
+    drift"). 30-40 is the shorts range; the difference clip at 30 is the beat's second timeline, not this golden.
 
     What the first pin proved and E99 s38 then refused: at IDLE.DRIFT_PX (2.0) the walk is 2.3 px of excursion at
     about eight frames per pixel, and the operator could not judge it - *"i don't even notice it while i'm watching
     ... it's not realy a visible shift"*. So the dial the cure needed was never the boolean alone; it is the
     AMPLITUDE, and it is authored per scene. At 30 the same walk - the same two rates, the same Lissajous, so it can
-    never become jitter - moves the whole plate about ten px a second.
+    never become jitter - moves the whole plate about seven px a second.
 
     `drift` opens at [0, 0] and walks +-`idle_drift_px` in x, +-0.6 of it in y, on two rates whose common period is
     100 s, so four seconds carries four different poses and none of them repeats. Judged at 2.0 - a second clear of
@@ -2787,7 +2789,7 @@ def plate_drift() -> tuple[dict, dict]:
                "exit": "cut", "span": [0.0, PLATE_DRIFT_RUNTIME], "docks": [], "species": []}]
     uris = _base_uris()
     uris[aid] = BST.data_uri(DOCK_PLATE)      # the same committed input camera-layers reads, flat
-    tl = _timeline("Golden: a plate world at its drift idle, 30 px", scenes, {}, None)
+    tl = _timeline("Golden: a plate world at its drift idle, 20 px", scenes, {}, None)
     tl["runtime_s"] = PLATE_DRIFT_RUNTIME
     tl["captions"], tl["caption_pages"] = [], []   # nothing on the stage but the plate
     # E49's switch, and E99 s55's two: the walk PAINTS (R26-133's cure) at the authored amplitude. The amplitude is
@@ -2816,7 +2818,8 @@ FRAME_T["plate-drift"] = 2.0
 #                     lamp, the same four planes `camera-layers` reads, over that wall
 #   CAPABILITIES:147  the camera over layers - ONE authored move, each plane at its own k, and the move has the
 #                     only reason E51 allows: a card LANDS on the quay and the eye goes to it
-#   E99 s55 / E49     the drift, painted, at 30 px - the plate's own idle, shared per plane at its own share of k
+#   E99 s55 / s63 / E49  the drift, painted, at 20 px (s63 amended s55's 30 on the watch) - the plate's own idle,
+#                     shared per plane at its own share of k
 # The frame is judged at the instant where BOTH halves of the claim are on screen: the water has moved off its
 # first frame AND the near planes have led the far one. Nothing here is a fixture: it is a beat a short could carry.
 DOCK_ALIVE = HERE / "inputs" / "dock-alive"
@@ -2827,7 +2830,7 @@ PLATE_ALIVE_T = 6.56   # u 0.28 of the focus zoom (the instant `camera-layers@pr
 
 def plate_alive() -> tuple[dict, dict]:
     """P61 T14 / E99 s55 - THE ALIVE PLATE: a layered plate whose BACKGROUND WALL is a clip, with the parallax
-    planes, the one camera and the 30 px drift composing over it.
+    planes, the one camera and the 20 px drift composing over it (E99 s63 amended s55's 30 on the watch).
 
     The plate is `world-tokyo-customs-dock-v1-alive` - the same Tokyo customs dock every layered golden reads, its
     `-far` layer replaced by the ambient lane's generated harbour water (everything outside the life mask is that

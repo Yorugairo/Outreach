@@ -224,6 +224,13 @@ def test_a_clip_whose_proof_changed_is_rendered_again_not_served_by_name(tmp_pat
     key2 = RQP.clip_key(proof, tmp_path / "golden")
     engine.write_bytes(b"engine v2 - a gather phase")
     assert RQP.clip_key(proof, tmp_path / "golden") != key2, "the same golden under a changed engine is a different clip"
+    # the fourth defect (T14b): a BUILD route's page loads its timeline by name - the same player.html over a rebuilt timeline
+    bdir = tmp_path / "golden" / "some-build"; bdir.mkdir()
+    (bdir / "player.html").write_bytes(b"<html>"); (bdir / "x.timeline.json").write_bytes(b"{\"drift\": 30}")
+    bproof = {"type": "clip", "label": "b", "t0": 0.0, "t1": 1.0, "build": "some-build", "page": "player.html"}
+    key3 = RQP.clip_key(bproof, tmp_path / "golden")
+    (bdir / "x.timeline.json").write_bytes(b"{\"drift\": 20}")
+    assert RQP.clip_key(bproof, tmp_path / "golden") != key3, "the same page over a rebuilt timeline is a different clip"
     rendered = []
     monkeypatch.setattr(RQP, "render_clip", lambda p, o: rendered.append(o) or o.write_bytes(b"new clip"))
     live = tmp_path / "queue.json"

@@ -25,6 +25,13 @@ THE INPAINTER: `INPAINT_LoadInpaintModel -> INPAINT_InpaintWithModel` with `big-
 weight is on disk and the node accepts it; otherwise `cv2.inpaint(..., INPAINT_TELEA)`. The split json
 always records which one ran under `"inpainter"` - the slice must SAY which.
 
+THE EDGE PASS (E99 s63, P61 T14b) - a layered plate ships the PROCESSED planes, never this split's raw matte.
+`--process <plane.png> --shrink N [--band M]` shrinks a plane's matte by the measured contamination depth and
+(optionally) replaces what is left of the edge band with its nearest interior colour - never a blur, never a
+feather. `--process --rings` MEASURES first: it walks 1 px rings inward and prints each one's L*a*b*, chroma and
+hue, so the width is read off the picture instead of guessed. The split itself still emits the raw matte; the
+pass is a separate, deterministic, server-free stage so a plane can be reprocessed without re-running Comfy.
+
 Deterministic: the same plate and the same flags give byte-identical layer PNGs.
 """
 from __future__ import annotations
@@ -33,6 +40,7 @@ import argparse
 import io
 import json
 import math
+import sys
 import threading
 import time
 import urllib.request
@@ -190,6 +198,118 @@ def lab_match(rgb: np.ndarray, region: np.ndarray, ring: np.ndarray) -> np.ndarr
 def ring_of(region: np.ndarray, width: int) -> np.ndarray:
     """The band of real pixels hugging `region` - the reference the fill is matched to."""
     return dilate(region, max(1, width)) & ~region
+
+
+# ---------------------------------------------------------------- the edge pass (E99 s63)
+# THE RULE (the operator, 2026-09-16): *"the processing we had done on the lamp previously had removed the green,
+# now it's back in the ask, why?"* - a layered plate ships the PROCESSED planes, never a split's raw matte. There
+# was no such processing on the record (docs_find "despill" / "matte" / "fringe" return the P60 PROPS lane and
+# nothing on a plate); the flat plate simply has no matte at all, so its lamp edge cannot travel. A split's matte
+# CAN: the occluder here was cut by a SAM mask deliberately GROWN by `--grow` px, so that many px of SKY sit
+# inside the plane's alpha, and the plane paints at k = 1.40 - the carried sky slides off the real sky behind it
+# and reads as a teal-green rim around the shade.
+#
+# THE PASS, two stages, neither of them a blur:
+#   1. SHRINK  - erode the binary alpha by `shrink_px`, dropping the contaminated band off the plane entirely.
+#                Because a split plane's RGB is the FLAT PLATE'S OWN RGB, what is left is the approved plate's
+#                pixels exactly - the processed edge band measures identical to the flat plate by construction.
+#   2. DECONTAMINATE - replace the remaining outer `band_px` band's colour with its NEAREST INTERIOR colour
+#                (exact nearest neighbour by distance transform, never an average and never a blur), for the case
+#                where the shrink cannot reach far enough without eating the subject. `band_px = 0` skips it, and
+#                0 is the right answer whenever stage 1 already lands on the plate's own pixels - MEASURE, do not
+#                assume: on the Tokyo dock's lamp, `shrink 5 / band 0` matches the flat plate to dC* 0.00 / dh 0.0
+#                while `shrink 5 / band 2` moves it away by dC* -1.81.
+# The width is not a guess either: walk `edge_ring_stats` inward and read where the sky's hue stops.
+
+
+def erode(mask: np.ndarray, radius: int) -> np.ndarray:
+    """The inverse of `dilate` - the frame's border is kept (cv2's erode border is +inf), so a full mask stays full."""
+    if radius <= 0:
+        return np.array(mask, dtype=bool, copy=True)
+    k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * radius + 1, 2 * radius + 1))
+    return cv2.erode(mask.astype(np.uint8), k, iterations=1).astype(bool)
+
+
+def edge_band(mask: np.ndarray, width: int) -> np.ndarray:
+    """The outermost `width` px INSIDE `mask` - the band a matte contaminates first."""
+    return np.array(mask, dtype=bool, copy=True) & ~erode(mask, width)
+
+
+def edge_ring_stats(rgb: np.ndarray, mask: np.ndarray, depth: int) -> dict:
+    """The 1 px ring at `depth` inside `mask`, in CIE L*a*b*: the mean L*, a*, b*, chroma and hue.
+
+    The measurement the rim is judged by - the sky is a high-chroma blue-green (C* ~ 25, h ~ 255 on this plate),
+    a painted interior is warm (h ~ 77). Hue is the hue OF THE MEAN a*/b*, not the mean of per-pixel hues (which
+    is meaningless across a neutral band).
+    """
+    ring = erode(mask, depth) & ~erode(mask, depth + 1)
+    if not ring.any():
+        return {"depth": depth, "n": 0}
+    lab = cv2.cvtColor(np.ascontiguousarray(rgb[..., :3]), cv2.COLOR_RGB2LAB).astype(np.float64)
+    ell = float(lab[..., 0][ring].mean()) * 100.0 / 255.0
+    a = float(lab[..., 1][ring].mean()) - 128.0
+    b = float(lab[..., 2][ring].mean()) - 128.0
+    return {"depth": depth, "n": int(ring.sum()), "L": round(ell, 2), "a": round(a, 2), "b": round(b, 2),
+            "chroma": round(float(np.hypot(a, b)), 2), "hue": round(float(np.degrees(np.arctan2(b, a)) % 360.0), 1)}
+
+
+def nearest_interior_fill(rgb: np.ndarray, interior: np.ndarray, band: np.ndarray) -> np.ndarray:
+    """Every `band` pixel takes the colour of the NEAREST `interior` pixel. Exact, deterministic, no blur."""
+    out = np.array(rgb, dtype=rgb.dtype, copy=True)
+    if not band.any() or not interior.any():
+        return out
+    src = np.where(interior, 0, 255).astype(np.uint8)
+    _, labels = cv2.distanceTransformWithLabels(src, cv2.DIST_L2, 5, labelType=cv2.DIST_LABEL_PIXEL)
+    ys, xs = np.nonzero(interior)
+    ly = np.zeros(int(labels.max()) + 1, dtype=np.int32)
+    lx = np.zeros_like(ly)
+    inside = labels[interior]
+    ly[inside], lx[inside] = ys, xs
+    out[band] = rgb[ly[labels[band]], lx[labels[band]]]
+    return out
+
+
+def process_matte(rgba: np.ndarray, shrink_px: int, band_px: int = 0) -> tuple[np.ndarray, dict]:
+    """E99 s63's edge pass on ONE plane: shrink the matte, then decontaminate what is left. Returns (rgba, record).
+
+    The alpha stays BINARY (the split writes a binary alpha; a feather here would be the blur the ruling refuses).
+    An opaque plane (the `far` wall) has no matte and is returned untouched.
+    """
+    alpha = np.asarray(rgba[..., 3]) > 0
+    rec = {"shrink_px": int(shrink_px), "band_px": int(band_px),
+           "alpha_px_before": int(alpha.sum()), "opaque": bool(alpha.all())}
+    if alpha.all() or (shrink_px <= 0 and band_px <= 0):
+        rec["alpha_px_after"] = int(alpha.sum())
+        rec["dropped_px"] = 0
+        return np.array(rgba, dtype=rgba.dtype, copy=True), rec
+    keep = erode(alpha, shrink_px)
+    if not keep.any():
+        raise SystemExit(f"edge pass: shrink {shrink_px} px erases the plane's whole matte "
+                         f"({int(alpha.sum())} px) - measure the contamination depth with edge_ring_stats first")
+    interior = erode(keep, band_px) if band_px > 0 else keep
+    band = keep & ~interior
+    rgb = nearest_interior_fill(rgba[..., :3], interior, band) if band.any() else np.array(rgba[..., :3], copy=True)
+    out = np.dstack([rgb, np.where(keep, 255, 0).astype(np.uint8)])
+    rec["alpha_px_after"] = int(keep.sum())
+    rec["dropped_px"] = int(alpha.sum() - keep.sum())
+    rec["decontaminated_px"] = int(band.sum())
+    return out, rec
+
+
+def process_plane_file(src: Path, dst: Path, shrink_px: int, band_px: int, keep_raw: Path | None = None) -> dict:
+    """Run the edge pass over one plane PNG on disk, recording the rim it measured before and after."""
+    rgba = np.asarray(Image.open(src).convert("RGBA"))
+    before = [edge_ring_stats(rgba[..., :3], rgba[..., 3] > 0, d) for d in range(0, 8)]
+    out, rec = process_matte(rgba, shrink_px, band_px)
+    after = [edge_ring_stats(out[..., :3], out[..., 3] > 0, d) for d in range(0, 3)]
+    if keep_raw is not None and not keep_raw.exists():
+        keep_raw.write_bytes(Path(src).read_bytes())
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    Image.fromarray(out, mode="RGBA").save(dst)
+    rec.update({"src": str(src).replace("\\", "/"), "dst": str(dst).replace("\\", "/"),
+                "raw_kept": str(keep_raw).replace("\\", "/") if keep_raw else None,
+                "rings_before": before, "rings_after": after})
+    return rec
 
 
 def read_depth_png(path: Path) -> tuple[np.ndarray, int]:
@@ -491,7 +611,43 @@ def split(plate: Path, out_dir: Path, *, model_key: str = "vitl_fp16", bands: in
     return meta
 
 
+def process_main(argv: list[str]) -> int:
+    """`--process <plane.png> ...` - E99 s63's edge pass over planes that are already on disk.
+
+    The planes a plate ships are processed here, not re-split: re-running the split would need the Comfy server,
+    the same weights and the same seed, and the pass is a pure function of the PNG.
+    """
+    ap = argparse.ArgumentParser(description="E99 s63: the edge pass over a layered plate's planes")
+    ap.add_argument("--process", type=Path, nargs="+", required=True, help="plane PNGs, processed IN PLACE")
+    ap.add_argument("--shrink", type=int, default=1, help="px of matte to erode (measure it: --rings)")
+    ap.add_argument("--band", type=int, default=0, help="px of edge band to decontaminate after the shrink")
+    ap.add_argument("--keep-raw", action="store_true", help="write <plane>.raw.png beside each plane first")
+    ap.add_argument("--record", type=Path, default=None, help="where the .process.json record goes")
+    ap.add_argument("--rings", action="store_true", help="only MEASURE: print the inward rings, change nothing")
+    a = ap.parse_args(argv)
+    recs = []
+    for src in a.process:
+        if a.rings:
+            rgba = np.asarray(Image.open(src).convert("RGBA"))
+            print(src.name)
+            for d in range(0, 11):
+                print("   ", edge_ring_stats(rgba[..., :3], rgba[..., 3] > 0, d))
+            continue
+        raw = src.with_suffix(".raw.png") if a.keep_raw else None
+        rec = process_plane_file(src, src, a.shrink, a.band, keep_raw=raw)
+        recs.append(rec)
+        print(f"{src.name}: shrink={a.shrink} band={a.band} alpha {rec['alpha_px_before']} -> "
+              f"{rec['alpha_px_after']} (-{rec['dropped_px']}); rim C* "
+              f"{rec['rings_before'][0].get('chroma')} h {rec['rings_before'][0].get('hue')} -> "
+              f"{rec['rings_after'][0].get('chroma')} h {rec['rings_after'][0].get('hue')}")
+    if recs and a.record:
+        a.record.write_text(json.dumps({"ruling": "E99 s63", "planes": recs}, indent=2), encoding="utf-8")
+    return 0
+
+
 def main() -> int:
+    if "--process" in sys.argv[1:]:
+        return process_main(sys.argv[1:])
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     ap.add_argument("--plate", type=Path, required=True)
     ap.add_argument("--out", type=Path, required=True)

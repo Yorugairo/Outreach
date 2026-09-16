@@ -30,7 +30,7 @@
    "world": {
     "asset_id": "plate-drift",
     "idle": "drift",
-    "idle_drift_px": 30.0,
+    "idle_drift_px": 20.0,
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -43,5 +43,5 @@
  "schema_version": "scene_evidence_timeline.v1",
  "sound": [],
  "subtitle": "P39 golden surface",
- "title": "Golden: a plate world at its drift idle, 30 px"
+ "title": "Golden: a plate world at its drift idle, 20 px"
 }

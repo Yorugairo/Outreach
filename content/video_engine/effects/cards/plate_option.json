@@ -118,7 +118,7 @@
    "when_source": "docs/content-video-engine/CAPABILITIES.md:64",
    "author": {
     "key": "plate id suffix `;idle=<kind>` (IDLE_KINDS), with `;drift=<px>` beside it on `drift` / `live`",
-    "example": "'world-tokyo-customs-dock-v1-alive;idle=drift;drift=30'",
+    "example": "'world-tokyo-customs-dock-v1-alive;idle=drift;drift=20'",
     "example_source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-alive/SHOT-TABLE-ALIVE.py:3",
     "check": "plate"
    },
@@ -127,7 +127,7 @@
    "options": [
     {
      "token": "drift",
-     "means": "The drift's AMPLITUDE for this scene, in stage px: 30 long form, 40 shorts (E99 s55). IDLE.DRIFT_PX 2 is the floor, PLATE_DRIFT_MAX 90 the ceiling; both refused by name.",
+     "means": "The drift's AMPLITUDE for this scene, in stage px: 20 long form (E99 s63), 30-40 shorts. IDLE.DRIFT_PX 2 is the floor, PLATE_DRIFT_MAX 90 the ceiling; both refused by name.",
      "source_set": "PLATE_OPTS"
     }
    ],
@@ -147,7 +147,7 @@
    "doctrine": [
     "E49",
     "E99 s38 (a 2 px walk is not a difference the operator can see)",
-    "E99 s55 (the amplitude is authored: 30 long form, 40 shorts)",
+    "E99 s55 + s63 (the amplitude is authored: 20 long form, 30-40 shorts)",
     "CAPABILITIES idle"
    ],
    "status": "live",
@@ -720,7 +720,7 @@
    "when_source": "docs/portable/OPERATOR-RULINGS.md:3228",
    "author": {
     "key": "no row syntax - the PLATE declares it: a `background` layer in `<plate>.layers.json` whose `path` is an .mp4, `generator: \"vace\"`, `alpha: false`, `life: {still, mask, job}`",
-    "example": "'world-tokyo-customs-dock-v1-alive;idle=drift;drift=30'",
+    "example": "'world-tokyo-customs-dock-v1-alive;idle=drift;drift=20'",
     "example_source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-alive/SHOT-TABLE-ALIVE.py:3",
     "check": "none"
    },

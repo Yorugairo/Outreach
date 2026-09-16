@@ -1,4 +1,4 @@
-"""P61 T14 - THE ALIVE PLATE UNDER THE WHOLE DEPTH STACK (a private test-bed beat, never a fixture).
+"""P61 T14 / T14b - THE ALIVE PLATE UNDER THE WHOLE DEPTH STACK (a private test-bed beat, never a fixture).
 
 E99 s55 (the operator, 2026-09-16, closing R26-133): *"i think we need both the drift painted as an
 option and the alive. Maybe we need the ken burns + alive or parallax+ alive or maybe we need a
@@ -13,8 +13,16 @@ the flat still alone. This beat is the composition that question asks for, with 
     CAPABILITIES:145-6 the layered plate and its sidecar - the containers, the clerk's desk and the
                        hanging lamp, the same planes `camera-layers` reads, standing over that wall
     CAPABILITIES:147   the camera over layers - ONE authored camera, each plane at its own k
-    E99 s55 / E49      the drift, PAINTED, at 30 px - the plate's own idle, shared per plane at its
-                       own share of k
+    E99 s55/s63 / E49  the drift, PAINTED, at 20 px - the plate's own idle, shared per plane at its
+                       own share of k. E99 s63 amended s55's 30 on the watch: *"also 30 px drift
+                       might still be too much, maybe 20 px drift"*. `--drift 30` re-authors the
+                       same beat at 30 as `tokyo-alive-30.timeline.json` + `player-30.html`, so the
+                       card can put the two side by side and the operator can pick.
+    E99 s63 (planes)   The mid / subject / occluder planes are the PROCESSED ones: the split's raw
+                       matte carried the sky into the hanging lamp's edge (the SAM mask was grown
+                       6 px) and painted it at k = 1.40 - the teal-green rim the operator caught at
+                       4x. `comfy_depth_split.py --process --shrink 5` drops that band; what is left
+                       is the approved flat plate's own pixels (dE76 0.0000).
 
 THE BEAT (Tokyo is the test bed; the approved cut is untouched, E45). One window of the REAL take
 (`vo-short/audio/scene_1.words.json`), the REAL words, the real plate:
@@ -36,7 +44,8 @@ could not show the parallax at all.
 
 NO APPROVED CUT IS TOUCHED and nothing is rendered: this directory holds the beat.
 
-    python build_alive.py
+    python build_alive.py            # the beat at 20 px - the long-form setting
+    python build_alive.py --drift 30 # the same beat at 30, for the card's difference clip
 """
 from __future__ import annotations
 
@@ -64,7 +73,8 @@ OPEN_PHRASE = "The Treasury's table"      # the beat opens on the cut before thi
 LAST_WORD = "February."                   # ... and ends when the sentence ends
 TAIL_S = 0.6
 
-DRIFT_PX = 30                             # E99 s55: the named LONG-FORM amplitude
+DRIFT_LONG = 20                           # E99 s63: the named LONG-FORM amplitude (it amended s55's 30)
+DRIFT_ALT = 30                            # ... and the number it amended, kept as the card's comparison
 # the harbour band, in stage fractions of the 16:9 stage (the plate is cover-fitted): the water the
 # ambient lane actually generated - the life mask's own box, read off the rendered stage.
 WATER_BAND = {"kind": "region", "x0": 0.219, "y0": 0.450, "x1": 0.998, "y1": 0.640}
@@ -91,10 +101,10 @@ def cut_take(t0: float, t1: float, ws: list[dict]) -> Path:
     return out
 
 
-def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
+def shot_table(ws: list[dict], runtime_s: float, drift_px: int) -> list[tuple]:
     at = lambda phrase: W.at(ws, phrase)                                  # noqa: E731
     push_at = at("selling since")
-    # THE ROW. The plate id carries E49's idle and E99 s55's amplitude: `;idle=drift;drift=30`. Its LAYERS
+    # THE ROW. The plate id carries E49's idle and E99 s63's amplitude: `;idle=drift;drift=20`. Its LAYERS
     # come from its own sidecar (P58 T2) - the compiler reads them, the background one is the alive clip.
     camera = {"attention": "locked",
               "keys": [{"t": 0.0, "zoom": 1.0, "look": [0.5, 0.5]},
@@ -102,13 +112,16 @@ def shot_table(ws: list[dict], runtime_s: float) -> list[tuple]:
                        {"t": round(min(push_at + 2.0, runtime_s - 0.2), 2), "zoom": 1.14,
                         "look": [0.60, 0.53], "ease": "cubic"}]}
     return [
-        (0.0, round(runtime_s, 2), f"{PLATE_ID};idle=drift;drift={DRIFT_PX}", (0, 0, 0), [], None,
+        (0.0, round(runtime_s, 2), f"{PLATE_ID};idle=drift;drift={drift_px}", (0, 0, 0), [], None,
          [{"kind": "spotlight", "at": at("Japan holds"), "dur": "hold", "target": WATER_BAND}],
          camera),
     ]
 
 
 def main() -> int:
+    drift_px = int(sys.argv[sys.argv.index("--drift") + 1]) if "--drift" in sys.argv else DRIFT_LONG
+    alt = drift_px != DRIFT_LONG
+    timeline_name = f"tokyo-alive-{drift_px}.timeline.json" if alt else TIMELINE_NAME
     t0, t1, wsrc = take_window()
     take = cut_take(t0, t1, wsrc)
     ep = Project(here=BUILD, build=BUILD, take=take, take_stem="scene_1",
@@ -121,13 +134,13 @@ def main() -> int:
     print(f"  take        : {t0:.2f}-{t1:.2f}s of the Tokyo take ({runtime_s:.2f}s, {len(ws)} words)")
     T.caption_pages(BUILD, char_budget=28, max_words=6)
     (BUILD / "evidence-dock.json").write_text("[]\n", encoding="utf-8")
-    rows = shot_table(ws, runtime_s)
+    rows = shot_table(ws, runtime_s, drift_px)
     T.write_shot_table(BUILD / "SHOT-TABLE-ALIVE.py", rows,
-                       '"""P61 T14 - AUTHORED shot table, timed from the take by build_alive.py. Do not hand-edit."""\n')
+                       f'"""P61 T14b - AUTHORED shot table at {drift_px} px, timed from the take by build_alive.py. Do not hand-edit."""\n')
     T.print_rows(rows)
-    return T.compile_timeline(
+    rc = T.compile_timeline(
         BUILD, BUILD,
-        timeline_name=TIMELINE_NAME,
+        timeline_name=timeline_name,
         shot_table_file="SHOT-TABLE-ALIVE.py",
         title="Tokyo Tea Break", subtitle="Money Physics - P61 T14 test bed (the alive plate)",
         episode_id="tokyo-tea-break",
@@ -135,6 +148,12 @@ def main() -> int:
         caption_style="phrase",
         kinetics={"analytic_spring": True, "min_jerk": True, "curvature_stroke": True,
                   "plate_idle_paints": True})
+    if rc == 0 and alt:
+        # the comparison page gets its OWN player, so the 20 px beat's link never moves under the
+        # operator (memory `review-link-frozen-copy`): `player.html` is always the 20 px take
+        shutil.copy2(BUILD / "player.html", BUILD / f"player-{drift_px}.html")
+        print(f"  comparison  : player-{drift_px}.html + {timeline_name} (the card's difference clip)")
+    return rc
 
 
 if __name__ == "__main__":

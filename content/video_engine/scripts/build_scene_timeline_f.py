@@ -87,15 +87,17 @@ IDLE_KINDS = ("none", "breath", "drift", "pulse", "figure", "live")   # live (20
 IDLE_OPT = ";idle="
 # E99 s55 (R26-133 closed; the operator, 2026-09-16: "maybe we need a slightly smaller drift (maybe 30 px?) AND the
 # alive water ... for youtube the 40 px drift would be too much motion for a long form, but it looks like it might
-# work really well for shorts and certain scenes"). The drift's AMPLITUDE, authored PER SCENE on the plate id:
-# `;idle=drift;drift=30`. `kinetics/idle.mjs` IDLE.DRIFT_PX (2.0) is the FLOOR, not a default to go under - it is
+# work really well for shorts and certain scenes"), AMENDED the same day by E99 s63 on the watch: "also 30 px drift
+# might still be too much, maybe 20 px drift" - so the named LONG-FORM setting is 20 and 30-40 is the shorts range.
+# The drift's AMPLITUDE, authored PER SCENE on the plate id:
+# `;idle=drift;drift=20`. `kinetics/idle.mjs` IDLE.DRIFT_PX (2.0) is the FLOOR, not a default to go under - it is
 # E49's "nothing ever goes truly still", which E99 s38 found invisible and which no dial may switch off - so a
 # smaller number is a REFUSAL by name here, and the player raises one to the floor rather than disagree.
 # `test_kinetics_flags.py` reads the module's own constant and holds the two to each other.
 PLATE_DRIFT_OPT = "drift"
 PLATE_DRIFT_FLOOR = 2.0     # kinetics/idle.mjs IDLE.DRIFT_PX - E49's floor
-PLATE_DRIFT_LONG = 30.0     # E99 s55: the named LONG-FORM setting
-PLATE_DRIFT_SHORTS = 40.0   # E99 s55: "it might work really well for shorts and certain scenes"
+PLATE_DRIFT_LONG = 20.0     # E99 s63: the named LONG-FORM setting ("maybe 20 px drift"; s55's 30 was the first try)
+PLATE_DRIFT_SHORTS = 40.0   # E99 s55: "it might work really well for shorts and certain scenes" (the shorts range is 30-40)
 # the geometric ceiling: `.world` is inset -5 %, so past ~96 px of x (and 0.6 * that in y) the plate's own EDGE
 # walks onto the stage. 90 keeps the whole walk inside the overhang at 16:9 - measured on the drift lane's own
 # three-way proof (`review/assembly/r26-133-drift-idle-paints-nothing/`).
@@ -106,7 +108,7 @@ MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
 RACE_PATHS = ("eased", "clothoid")   # E91 s1 (R26-78): the path a racing mark takes BETWEEN two period knots - `eased` is the engine as it is (each coordinate on its own easing), `clothoid` is the fit through the SAME knots (P52 T17 arm B). The period clock, the knots and the ranks are identical in both: this names the SHAPE of the move and never its timing, and the operator chose it where the beat wants energy rather than smoothness
-PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field")   # E99 s55: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (30 long form, 40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field")   # E99 s55 + s63: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (20 long form, 30-40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
@@ -2754,7 +2756,7 @@ def thread_mark_error(prev_world: dict | None, key: str, where: str) -> str | No
 
 
 def plate_drift_px(value, where: str) -> float:
-    """E99 s55: ``;drift=<px>`` - the plate idle walk's half-width in stage px, for THIS scene. ValueError names the
+    """E99 s55, amended s63: ``;drift=<px>`` - the plate idle walk's half-width in stage px, for THIS scene. ValueError names the
     floor, the ceiling and the two ruled settings; the caller names the row. The floor is
     ``kinetics/idle.mjs`` IDLE.DRIFT_PX itself (E49: nothing ever goes truly still), so a number under it is not a
     quieter drift, it is an attempt to switch E49 off - refused here rather than silently raised."""
@@ -2762,12 +2764,12 @@ def plate_drift_px(value, where: str) -> float:
         px = float(str(value).strip())
     except ValueError:
         raise ValueError(f"{where}: drift {value!r} is not a number of stage px "
-                         f"({PLATE_DRIFT_LONG:g} = the long-form setting, {PLATE_DRIFT_SHORTS:g} = shorts; E99 s55)") from None
+                         f"({PLATE_DRIFT_LONG:g} = the long-form setting, {PLATE_DRIFT_SHORTS:g} = shorts; E99 s63)") from None
     if px < PLATE_DRIFT_FLOOR:
         raise ValueError(f"{where}: drift {px:g} px is under the floor {PLATE_DRIFT_FLOOR:g} px - that floor is "
                          f"kinetics/idle.mjs IDLE.DRIFT_PX, E49's 'nothing ever goes truly still', and it is not a "
                          f"dial to go under. Name {PLATE_DRIFT_LONG:g} (long form) or {PLATE_DRIFT_SHORTS:g} "
-                         f"(shorts), or drop drift= and take the floor (E99 s55)")
+                         f"(shorts), or drop drift= and take the floor (E99 s63)")
     if px > PLATE_DRIFT_MAX:
         raise ValueError(f"{where}: drift {px:g} px is past the ceiling {PLATE_DRIFT_MAX:g} px - `.world` is inset "
                          f"-5 %, so a wider walk carries the plate's own EDGE onto the stage. A move bigger than "

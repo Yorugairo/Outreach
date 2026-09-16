@@ -211,7 +211,7 @@
      "x": 0,
      "y": 0
     },
-    "idle_drift_px": 20.0,
+    "idle_drift_px": 30.0,
     "idle": "drift",
     "layers": [
      {
