@@ -572,7 +572,8 @@
         "E99 s3",
         "P61 HG5",
         "E99 s42 (the prior ball back)",
-        "P61 HG5b"
+        "P61 HG5b",
+        "E99 s49"
       ],
       "kind": "look",
       "title": "The prior ball, back, with the darkness kept - and the same ball in slate grey and in the reference black",
@@ -609,7 +610,7 @@
         "reference black"
       ],
       "recommendation": "orange - the prior ball as it was, with the darker contact core kept: it is the ball you preferred, sharper than T5's by measurement (silhouette 120.6 vs 64.2, the edge one path again), and the chart's own colour so the melt still reads as the chart's ink. The pit reads as a smudge on it - my read is that it should go (one dial, W_PIT_ON). Slate melts into its own board (41 against the board's 47) and loses the ball; the reference black has no form but its highlight.",
-      "blocks": "HG5b; T3's ball (the ball into the next full chart) inherits whichever body is chosen",
+      "blocks": "nothing - ruled E99 s49 (2026-09-16): the reference body; the blend and the full-page melt opened as rows",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:550",
         "docs/content-video-engine/BACKLOG.md:563",
@@ -624,10 +625,12 @@
         "docs/content-video-engine/review-answers.jsonl (2026-09-15)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s42)",
         "content/video_engine/tests/test_ball_material.py",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T5b)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T5b)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s49)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-16)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s49",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-15 (P61 T5b): the prior surface back, the darkness kept, two body colours, four goldens, three clips",
       "proofs": [
@@ -811,7 +814,7 @@
       ],
       "kind": "watch",
       "title": "Bars -> line, rebuilt: the bars collapse to the apex point, the line draws back to the root",
-      "judge": "Your ruling on the first cut (E99 s39): collapse to the single apex point, then draw the line back to the root - never slide and snap the whole line together. This clip is only bars -> line, rebuilt that way: every bar's ink gathers into one point at the highest bar's top, and the page's own stroke then draws the line from that point back to the first datum, the axes handing over on the same clock. Watch 11.6-14.9 s. Does it read as manipulating the world, not a cut in a costume? Approve, or name what still snaps.",
+      "judge": "CORRECTED 2026-09-16: the clip you watched was T2's line -> bars file, kept under the same name by the queue's clip cache (fixed: a clip is current only when its sidecar names the proof's source and window). THIS clip is bars -> line. Your ruling on the first cut (E99 s39): collapse to the single apex point, then draw the line back to the root - never slide and snap the whole line together. This clip is only bars -> line, rebuilt that way: every bar's ink gathers into one point at the highest bar's top, and the page's own stroke then draws the line from that point back to the first datum, the axes handing over on the same clock. Watch 11.6-14.9 s. Does it read as manipulating the world, not a cut in a costume? Approve, or name what still snaps.",
       "where": [
         {
           "label": "mid-gather (12.36 s, the new base frame) - five rings in flight, no longer bars, not yet the point",
@@ -852,7 +855,8 @@
         "docs/content-video-engine/review-answers.jsonl (2026-09-15)",
         "docs/portable/OPERATOR-RULINGS.md:3196 (E99 s39)",
         "content/video_engine/tests/test_whole_chart_morph.py",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T2b)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T2b)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-16: 'the proof clip you shared is line to bars')"
       ],
       "status": "open",
       "ruling": null,

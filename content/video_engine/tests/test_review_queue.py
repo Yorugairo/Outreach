@@ -195,6 +195,32 @@ def test_a_player_link_that_did_not_answer_is_never_a_link(data):
     assert f'href="{url}"' in alive
 
 
+def test_a_clip_whose_proof_changed_is_rendered_again_not_served_by_name(tmp_path, monkeypatch, data):
+    """2026-09-16: the bars -> line card's proofs were rewritten and the operator watched the OLD clip under the same
+    name. A clip is current only when its sidecar carries the proof's source and window."""
+    item, n, proof = RQP.clip_proofs(data, None)[0]
+    out = tmp_path / RQP.clip_name(item["id"], n)
+    out.write_bytes(b"old clip")
+    assert not RQP.clip_is_current(proof, out), "no sidecar - never trusted by name alone"
+    RQP.clip_sidecar(out).write_text(json.dumps(RQP.clip_key(proof)), encoding="utf-8")
+    assert RQP.clip_is_current(proof, out)
+    changed = dict(proof, t0=proof["t0"] + 1.0)
+    assert not RQP.clip_is_current(changed, out), "a different window is a different clip"
+    other = dict(proof, surface="some-other-surface")
+    assert not RQP.clip_is_current(other, out), "a different source is a different clip"
+    rendered = []
+    monkeypatch.setattr(RQP, "render_clip", lambda p, o: rendered.append(o) or o.write_bytes(b"new clip"))
+    live = tmp_path / "queue.json"
+    d2 = copy.deepcopy(data)
+    for it in d2["items"]:
+        if it["id"] == item["id"]:
+            it["proofs"][n]["t0"] = proof["t0"] + 1.0
+    live.write_text(json.dumps(d2), encoding="utf-8")
+    assert RQP.main(["--clips", "--only", item["id"], "--data", str(live), "--clips-dir", str(tmp_path)]) == 0
+    assert out in rendered and out.read_bytes() == b"new clip"
+    assert json.loads(RQP.clip_sidecar(out).read_text(encoding="utf-8"))["t0"] == proof["t0"] + 1.0
+
+
 def test_a_clip_proof_names_its_build_and_time_range(data, page):
     rec, n, proof = RQP.clip_proofs(data, "p58-hg3-chart-forms")[0]
     card = card_of(page, rec["id"])

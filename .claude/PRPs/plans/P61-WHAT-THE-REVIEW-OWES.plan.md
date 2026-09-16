@@ -124,7 +124,7 @@ that page only with the operator's ruling written to `docs/portable/OPERATOR-RUL
 | **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" |
 | **HG3** | T4a | `p58-hg3-extruded-bar-leave` | "`form-extruded-bar@proof-leave` beside `form-tilted-line@proof-leave`, as clips. Do the prism's shapes break down enough now? Approve, or say 'more'." **RULED 2026-09-15 (E99 s40): approved** |
 | **HG4** | T4b | `p58-hg3-forms-mount-not-scribble` | "The formed page arriving by the two-plate cross-fade and by the soak, each leaving by the soak's recede (E99 s35). Watch both enters and the leave. Approve, or name what still reads wrong." **RULED 2026-09-15 (E99 s41): approved** |
-| **HG5** | T5 | `r26-118-metallic-ball` | "The ball, before and after: more shadow, a dark Fresnel rim, a metallic band, one point of deep shadow depth. Does it read metallic and heavy now, or still glossy?" **RULED 2026-09-15 (E99 s42): refused - the prior ball + the darkness; T5b** |
+| **HG5** | T5 | `r26-118-metallic-ball` | "The ball, before and after: more shadow, a dark Fresnel rim, a metallic band, one point of deep shadow depth. Does it read metallic and heavy now, or still glossy?" **RULED 2026-09-15 (E99 s42): refused - the prior ball + the darkness; T5b** **HG5b RULED 2026-09-16 (E99 s49): the reference body; T5c** |
 | **HG6** | T6 | `r26-76-melt-endings-in-motion` | "The melt as the vortex's motion gathered into one dense, heavy, vibrating point, splashing into a full chart / world plate. Watch the gather and the splash. Approve the new default, or keep today's look behind the flag." |
 | **HG7** | T7 | `r26-82-verdict-stack-choreography` | "The verdict stack on a short with Steel and Paper's choreography - cards that move, then the burst. Watch it beside the Steel and Paper reference clip. Approve, or name the phase that is still flat." **RULED 2026-09-15 (E99 s43): rails in reading order; T7b** |
 | **HG8** | T8 | `r26-80-agenda-page-owed` | "The beautified agenda page - the plate version of the list effect, each row with its catalogued icon stamped after its sentence (E93). Beside today's three plain rows. Approve, or name the change." **RULED 2026-09-15 (E99 s44): approved as a build** |
@@ -612,6 +612,21 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   577/577; sync in sync (41); pytest 176 passed; effects_catalog_check 0; page-boxes sha-only (44); registry 966, 0 orphaned.
   Known: `build_golden_sources.py` drifts on two unrelated surfaces (`tiers-two`, `treemap-cross`) when run - restored by the lane,
   a row for T11. Card: three crops (prior vs restored / slate / reference) + three clips 15.0-17.75 s; options argued by E99 s42.
+
+### T5c: THE REFERENCE BLACK IS THE WEIGHT BALL'S DEFAULT BODY (E99 s49)
+- Status: pending
+- Owner: `junior_developer` (**ENGINE LOCK** - one default + the goldens)
+- Depends on: T5b, HG5b (ruled E99 s49); after T3 (the same file)
+- Write set: `content/video_engine/scripts/species/melt.mjs`, `content/video_engine/scripts/build_scene_timeline_f.py` (the default
+  body word), `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the melt region), `content/video_engine/tests/test_ball_material.py`,
+  `content/video_engine/tests/golden/` (the weight-ball goldens re-baselined, listed by name), `content/video_engine/effects/cards/exit.json`
+- Acceptance: E99 s49 - *"I like the reference"*: a `melt:weight` ball with no `body=` word renders the reference black (the
+  blueprint's near-black metal, `W_BODY_SHADE` 1); `body=chart` keeps the restored orange; `body=slate` unchanged; the default melt
+  (no weight token) byte-identical; the goldens that move are exactly the weight-ball ones, named; T3's hand-over ball inherits it.
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python -m pytest content/video_engine/tests/test_ball_material.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/effects_catalog_check.py`
+- Evidence: pending
 
 ### T6: THE MELT GATHERS TO ONE DENSE, HEAVY, VIBRATING POINT - and splashes into a full chart or a world plate
 - Status: complete for proof A (2026-09-15); proof B appends to `r26-76-melt-endings-in-motion` when T3 lands; HG6 asked once with both

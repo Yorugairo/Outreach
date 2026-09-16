@@ -112,6 +112,30 @@ def _clip_source(proof: dict, tmp: Path) -> tuple[Path, str, str]:
     return ROOT / proof["build"], proof.get("page", "player.html"), proof.get("aspect", "16:9")
 
 
+CLIP_KEYS = ("surface", "build", "page", "aspect", "t0", "t1", "flags")
+
+
+def clip_key(proof: dict) -> dict:
+    """What a clip IS: its source and window. A clip on disk is current only if its sidecar carries this key -
+    2026-09-16 a card's proofs were rewritten and the old clip kept serving under the same name."""
+    return {k: proof.get(k) for k in CLIP_KEYS if proof.get(k) is not None}
+
+
+def clip_sidecar(out_mp4: Path) -> Path:
+    return out_mp4.with_suffix(out_mp4.suffix + ".json")
+
+
+def clip_is_current(proof: dict, out_mp4: Path) -> bool:
+    """The mp4 exists AND its sidecar names the same source and window."""
+    side = clip_sidecar(out_mp4)
+    if not out_mp4.is_file() or not side.is_file():
+        return False
+    try:
+        return json.loads(side.read_text(encoding="utf-8")) == clip_key(proof)
+    except ValueError:
+        return False
+
+
 def render_clip(proof: dict, out_mp4: Path) -> Path:
     """Capture [t0, t1) at CLIP_FPS from one browser and encode a silent H.264 mp4 at card width."""
     import render_baseline as RB
@@ -180,11 +204,13 @@ def main(argv: list[str] | None = None) -> int:
         return 1 if bad else 0
     for item, n, proof in clip_proofs(data, args.only):
         out = args.clips_dir / clip_name(item["id"], n)
-        if out.is_file() and not args.force:
+        if clip_is_current(proof, out) and not args.force:
             print(f"have  {out.name}")
             continue
-        print(f"clip  {out.name}: {proof.get('surface') or proof.get('build')} {proof['t0']}-{proof['t1']} s", flush=True)
+        why = "stale" if out.is_file() else "clip"
+        print(f"{why:5s} {out.name}: {proof.get('surface') or proof.get('build')} {proof['t0']}-{proof['t1']} s", flush=True)
         render_clip(proof, out)
+        clip_sidecar(out).write_text(json.dumps(clip_key(proof), sort_keys=True), encoding="utf-8")
     return 0
 
 
