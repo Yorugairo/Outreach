@@ -183,3 +183,4 @@ docs/research/runs/bridge/
 !docs/agent-memory/operator/casebook/*/*.png
 # P55 T9: the generated effects gallery (a review page built from docs/EFFECTS-CATALOG.jsonl + copied golden frames)
 content/video_engine/effects/gallery/
+docs/.layers/

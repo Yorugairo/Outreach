@@ -5,8 +5,20 @@ manifest, the topic index and the gates registry all read `docs/DOCS-INDEX.jsonl
 that rebuilds one and forgets the next ships a stale layer that still looks fresh. This runs them
 in dependency order, in one process tree, and prints one summary line per layer.
 
-    python content/video_engine/scripts/build_docs_layers.py --check   # exit 1 on the first stale
-    python content/video_engine/scripts/build_docs_layers.py --write   # regenerate, then re-check
+    python content/video_engine/scripts/build_docs_layers.py --check   # digests: exit 1 on the first stale
+    python content/video_engine/scripts/build_docs_layers.py --ensure  # rebuild only what went stale
+    python content/video_engine/scripts/build_docs_layers.py --write   # regenerate everything, then re-check
+
+The table itself - what each layer reads, what it writes, what it depends on - lives in
+`docs_layers.py`, because the readers (`docs_find.py` and the runtime readers) ensure their own
+layers from it. Three passes, three different questions:
+
+* `--check` asks the DIGEST question: for every layer, is the sha256 of its inputs (the files its
+  builder reads, its upstream layers' artifacts, and the builder script) the one stamped in
+  `docs/.layers/<name>.digest`? No builder runs; the whole pass is under 2 s.
+* `--ensure` rebuilds exactly the layers whose digest moved, upstream first (`docs_layers.ensure`).
+* `--write` is unchanged: every builder, in the table's order, then the byte `--check` pass each
+  tool implements, and then every digest is stamped from what is now on disk.
 
     | order | layer          | tool                    | artifact                            |
     |-------|----------------|-------------------------|-------------------------------------|
@@ -25,66 +37,24 @@ in dependency order, in one process tree, and prints one summary line per layer.
 
 A tool that is not in the tree yet is SKIPPED with a printed note, never silently: the stack grows
 a layer at a time and a missing script is a fact about this checkout, not a failure. The audit
-writes a report rather than a checkable artifact, so it runs in `--write` only. Standard library
-only; every tool runs as a subprocess of this interpreter, so it sees the same Python.
+writes a report rather than a checkable artifact, so its TOOL runs in `--write` only - its digest
+is checked like everyone else's. Standard library only; every tool runs as a subprocess of this
+interpreter, so it sees the same Python.
 """
 from __future__ import annotations
 
 import argparse
-import subprocess
 import sys
-from dataclasses import dataclass
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from docs_layers import (  # noqa: E402  (the table and the digest live there; the readers share them)
+    LAYERS, REPORT_REL, Layer, LayerError, digest, ensure, last_line, run_script, script_path,
+    stamp, stored_digest)
 
 SCRIPTS = Path(__file__).resolve().parent
 REPO = SCRIPTS.parents[2]
-
-REPORT_REL = "docs/DOCS-STANDARD.md"
-
-
-@dataclass(frozen=True)
-class Layer:
-    """One tool in the stack. `check_args` is None for a layer that only writes a report;
-    `repo_flag` is the flag that tool names the repository root with."""
-    name: str
-    script: str
-    write_args: tuple[str, ...] = ("--write",)
-    check_args: tuple[str, ...] | None = ("--check",)
-    repo_flag: str = "--repo"
-
-
-LAYERS = (
-    Layer("docs-index", "build_docs_index.py"),
-    Layer("capabilities-index", "build_capabilities_index.py"),  # one record per CAPABILITIES.md row
-    Layer("asset-index", "build_asset_index.py"),   # one record per prop / icon / glyph under assets/
-    Layer("research-ledger", "build_research_ledger.py"),  # the ingestion gate: runs vs what cites them
-    Layer("effects-catalog", "build_effects_catalog.py"),   # after the index: its doctrine cites resolve there
-    Layer("docs-manifest", "build_docs_manifest.py"),
-    Layer("topic-index", "build_topic_index.py"),
-    Layer("gates-registry", "build_gates_registry.py"),
-    Layer("animation-registry", "build_animation_registry.py"),
-    Layer("craft-map", "build_craft_map.py"),
-    Layer("doc-overlap", "report_doc_overlap.py"),
-    Layer("docs-standard", "audit_docs_standard.py",
-          write_args=("--report", REPORT_REL), check_args=None, repo_flag="--root"),
-)
-
-
-def run_script(script: Path, args: tuple[str, ...], repo: Path) -> tuple[int, str]:
-    """(exit code, combined output) of the tool, run by this interpreter from the repo root."""
-    proc = subprocess.run([sys.executable, str(script), *args], cwd=str(repo),
-                          capture_output=True, text=True, encoding="utf-8", errors="replace")
-    return proc.returncode, (proc.stdout or "") + (proc.stderr or "")
-
-
-def last_line(output: str) -> str:
-    """The tool's own summary - its last non-empty line - or a stand-in when it printed nothing."""
-    lines = [line.strip() for line in output.splitlines() if line.strip()]
-    return lines[-1] if lines else "(no output)"
-
-
-def script_path(layer: Layer, scripts_dir: Path = SCRIPTS) -> Path:
-    return Path(scripts_dir) / layer.script
 
 
 def run_layer(layer: Layer, args: tuple[str, ...], repo: Path, scripts_dir: Path) -> tuple[int, str]:
@@ -116,27 +86,75 @@ def pass_over(layers, phase: str, repo: Path, scripts_dir: Path) -> list[str]:
     return failures
 
 
+def digest_pass(layers, repo: Path, scripts_dir: Path) -> list[str]:
+    """The cheap check: one line per layer, stopping at the first whose input digest moved.
+
+    One hash cache for the whole pass, so a document that feeds seven layers is read once."""
+    behind: list[str] = []
+    cache: dict = {}
+    for layer in layers:
+        if not script_path(layer, scripts_dir).is_file():
+            report("SKIP", layer, f"{layer.script} not in this checkout yet")
+            continue
+        stored = stored_digest(repo, layer.name)
+        current = digest(layer, repo, scripts_dir, cache, tuple(layers))
+        if stored == current:
+            report("ok", layer, f"digest current ({current[:12]})")
+            continue
+        behind.append(layer.name)
+        report("STALE", layer, "never built in this checkout"
+               if stored is None else f"inputs moved: {stored[:12]} -> {current[:12]}")
+        break            # the first stale layer stops the pass: the ones after it read its artifact
+    return behind
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--check", action="store_true",
-                    help="exit 1 naming the first stale layer (default)")
+                    help="exit 1 naming the first layer whose input digest moved (default)")
     ap.add_argument("--write", action="store_true", help="regenerate every layer, then re-check")
+    ap.add_argument("--ensure", action="store_true",
+                    help="rebuild only the layers whose inputs moved, upstream first")
+    ap.add_argument("--only", metavar="LAYER", default=None,
+                    help="with --ensure: this layer and its upstream, not the whole stack")
     ap.add_argument("--repo", type=Path, default=REPO, help="repository root (default: this checkout)")
     a = ap.parse_args(argv)
     repo = Path(a.repo).resolve()
     scripts_dir = SCRIPTS
+    layers = LAYERS
+
+    if a.ensure:
+        names = [a.only] if a.only else None
+        try:
+            rebuilt = ensure(names, repo, scripts_dir, layers=layers)
+        except LayerError as exc:
+            print(f"build_docs_layers: FAILED to build {exc.layer} - {exc.detail}")
+            return 1
+        print(f"build_docs_layers: rebuilt {', '.join(rebuilt)}" if rebuilt
+              else "build_docs_layers: every layer already current")
+        return 0
 
     if a.write:
-        failed = pass_over(LAYERS, "write", repo, scripts_dir)
+        failed = pass_over(layers, "write", repo, scripts_dir)
         if failed:
             print(f"build_docs_layers: FAILED to build {failed[0]} - fix it before the re-check")
             return 1
-    stale = pass_over(LAYERS, "check", repo, scripts_dir)
-    if stale:
-        print(f"build_docs_layers: {stale[0]} is stale - "
-              f"run build_docs_layers.py --write")
+        stale_layers = pass_over(layers, "check", repo, scripts_dir)
+        if stale_layers:
+            print(f"build_docs_layers: {stale_layers[0]} is stale - "
+                  f"run build_docs_layers.py --write")
+            return 1
+        stamped = stamp(None, repo, scripts_dir, layers=layers)
+        print(f"build_docs_layers: every layer in sync ({len(layers)} layers, "
+              f"{len(stamped)} digests stamped)")
+        return 0
+
+    behind = digest_pass(layers, repo, scripts_dir)
+    if behind:
+        print(f"build_docs_layers: {behind[0]} is stale - "
+              f"run build_docs_layers.py --ensure (or --write for a full pass)")
         return 1
-    print(f"build_docs_layers: every layer in sync ({len(LAYERS)} layers)")
+    print(f"build_docs_layers: every layer in sync ({len(layers)} layers)")
     return 0
 
 
