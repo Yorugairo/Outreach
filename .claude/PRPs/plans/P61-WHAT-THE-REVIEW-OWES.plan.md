@@ -850,7 +850,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - CAPABILITIES row changed: **:184** (THE VERDICT STACK) gains the short's form with its five phases named
 
 ### T7b: THE VERDICT STACK'S RAILS IN READING ORDER (E99 s43)
-- Status: pending
+- Status: complete (2026-09-16) - HG7b open on the queue as `r26-82-verdict-stack-choreography` (watch)
 - Owner: `implementation_luna` (**ENGINE LOCK**)
 - Depends on: T7, HG7 (ruled E99 s43)
 - Write set: `content/video_engine/scripts/species/verdict.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the
@@ -865,7 +865,20 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python -m pytest content/video_engine/tests/test_verdict_stack.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-82-verdict-stack-choreography`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T7b.md`. `VERDICT_9X16` (`species/verdict.mjs:99-140`) re-laid in reading BANDS: TOP line 0
+  cards 1, 2 / BOTTOM line 0 cards 3, 4 / TOP line 1 cards 5, 6, 9 / BOTTOM line 1 cards 7, 8 - each left to right; 5-6 take a second
+  row because the portrait width is spent (348 + 340 of 776 px; four across would be 194 px cards, 18 %); 9 sits right of 6 because
+  the band height is spent (y 286-614, lines at 286-476 and 452-605); the focus card unchanged, owning y 614-1010; every spot inside
+  x 80-880, y 280-1340; the union 45 % of the stage; five column starts. Asymmetric in size and tilt, never in order (s43 amending
+  s21). THE 16:9 `VERDICT` READ, not changed (`:39-42`): a strict raster - top line 1-4 left to right, middle 5-6, bottom 7-9 - so
+  it already obeys the reading rule but fills the top line four-wide before going down (a 1920 px line has the width; a 1080 px one
+  does not) - the pair alternation there is a card if the operator wants it. Parent's read of the mosaic and the idle: 1 red / 2
+  blue top, 5 purple / 6 pink under them, the focus card centre, 3 green / 4 gold bottom, 7 blue / 8 orange under - the order the
+  operator named. Tests: test_verdict_stack.py gains the rail-order assertions (left of the next within a band; the bands alternate
+  top / bottom by pairs) beside the eight browser reads. Goldens: the five verdict-stack-9x16 frames re-baselined through
+  `render_baseline.py --surface`, sources untouched; every other golden byte-identical. Validate: node 597/597; sync in sync; pytest
+  147 passed; effects_catalog_check 0 failures (the voice lane restored its test); page-boxes 44; registry in sync. Card
+  `dock_payload:stack` names the reading order.
 
 ### T8: THE BEAUTIFIED AGENDA PAGE - the plate version of the list effect
 - Status: complete (2026-09-15) - HG8 open on the queue as `r26-80-agenda-page-owed` (watch)

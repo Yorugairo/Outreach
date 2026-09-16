@@ -115,10 +115,29 @@ def _clip_source(proof: dict, tmp: Path) -> tuple[Path, str, str]:
 CLIP_KEYS = ("surface", "build", "page", "aspect", "t0", "t1", "flags")
 
 
-def clip_key(proof: dict) -> dict:
-    """What a clip IS: its source and window. A clip on disk is current only if its sidecar carries this key -
-    2026-09-16 a card's proofs were rewritten and the old clip kept serving under the same name."""
-    return {k: proof.get(k) for k in CLIP_KEYS if proof.get(k) is not None}
+def clip_source_sha(proof: dict, root: Path = ROOT) -> str | None:
+    """The bytes the clip is rendered FROM: a golden surface's base frame, or a build's player page. An engine change
+    re-lays the same surface under the same window - 2026-09-16 the verdict card's clip kept the old rails - so the sha of
+    the rendered source is part of what a clip is. None when the source is not on disk (the fixture's surfaces)."""
+    import hashlib
+    if proof.get("surface"):
+        p = root / "content/video_engine/tests/golden/frames" / f"{proof['surface']}.png"
+    elif proof.get("build"):
+        p = root / proof["build"] / (proof.get("page") or "player.html")
+    else:
+        return None
+    return hashlib.sha256(p.read_bytes()).hexdigest() if p.is_file() else None
+
+
+def clip_key(proof: dict, root: Path = ROOT) -> dict:
+    """What a clip IS: its source, its window, and the bytes of the source it was rendered from. A clip on disk is
+    current only if its sidecar carries this key - 2026-09-16 a card's proofs were rewritten and the old clip kept
+    serving under the same name; the same night a re-laid surface kept its old clip under the same window."""
+    key = {k: proof.get(k) for k in CLIP_KEYS if proof.get(k) is not None}
+    sha = clip_source_sha(proof, root)
+    if sha:
+        key["source_sha256"] = sha
+    return key
 
 
 def clip_sidecar(out_mp4: Path) -> Path:

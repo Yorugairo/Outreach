@@ -208,6 +208,15 @@ def test_a_clip_whose_proof_changed_is_rendered_again_not_served_by_name(tmp_pat
     assert not RQP.clip_is_current(changed, out), "a different window is a different clip"
     other = dict(proof, surface="some-other-surface")
     assert not RQP.clip_is_current(other, out), "a different source is a different clip"
+    # 2026-09-16, the second defect: the SAME surface re-rendered by an engine change is a different clip - the key
+    # carries the golden's sha256, so a golden that moves invalidates every clip cut from it
+    golden = tmp_path / "golden" / "content" / "video_engine" / "tests" / "golden" / "frames"
+    golden.mkdir(parents=True)
+    (golden / f"{proof['surface']}.png").write_bytes(b"frame v1")
+    key1 = RQP.clip_key(proof, tmp_path / "golden")
+    assert key1["source_sha256"] and key1 != RQP.clip_key(proof), "a source on disk is part of the key"
+    (golden / f"{proof['surface']}.png").write_bytes(b"frame v2 - the engine re-laid it")
+    assert RQP.clip_key(proof, tmp_path / "golden") != key1, "the same window over a moved golden is a different clip"
     rendered = []
     monkeypatch.setattr(RQP, "render_clip", lambda p, o: rendered.append(o) or o.write_bytes(b"new clip"))
     live = tmp_path / "queue.json"

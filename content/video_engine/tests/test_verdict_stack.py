@@ -10,6 +10,8 @@ instants, read the way `gate_vertical_safe_box.py` reads a built player:
   * ENTER  - one card at a time, arriving from depth (translateZ, rotateY), not appearing
   * FOCUS  - large near the safe box's centre while its phrase is spoken
   * MOSAIC - the rails scattered over the whole height of the box, NEVER a horizontal row
+  * ORDER  - and laid in READING BANDS (P61 T7b, E99 s43): 1-2 across the top left to right, 3-4 across the
+             bottom, 5-6 top, 7-8 bottom, 9 top - so the recede hands the eye to the place a reader looks next
   * IDLE   - the railed cards move, every one of them, and by a few px (E49, a named kind)
   * BURST  - radial from the mosaic's own centre, 60 ms apart
 
@@ -173,6 +175,60 @@ def test_the_short_names_an_idle_kind_that_the_idle_module_knows() -> None:
         f"{kind.group(1)} is not one of idle.mjs's IDLE_KINDS"
 
 
+SPOT_RE = re.compile(r"Object\.freeze\(\[([\d.]+), ([\d.]+), ([\d.]+)\]\)")
+CARD_RATIO = 480 / 1056          # verdict.mjs CARD_H / CARD_W
+
+
+def _spots_9x16() -> list[tuple[float, float, float, float]]:
+    """The short's nine rail spots as stage rects (x0, y0, x1, y1) - read off the module, no browser needed."""
+    src = MODULE.read_text(encoding="utf-8")
+    block = re.search(r"const VERDICT_SPOTS_9X16 = Object\.freeze\(\[(.*?)\]\);", src, re.S)
+    assert block, "VERDICT_SPOTS_9X16 is no longer a frozen array in the module"
+    rects = []
+    for L, T, W in SPOT_RE.findall(block.group(1)):
+        x, y, w = float(L) / 100 * STAGE_W, float(T) / 100 * STAGE_H, float(W) / 100 * STAGE_W
+        rects.append((x, y, x + w, y + w * CARD_RATIO))
+    return rects
+
+
+def test_the_rails_are_laid_in_reading_bands() -> None:
+    """E99 s43 verbatim, the operator on the first mosaic: *"I realized we probably don't want to be sending peoples
+    eyes scattered everywhere, probably to do 1-2 on top, left to right since thats how people read. then 3-4, on
+    bottom, 5-6 on top, 7-8 on bottom etc."*
+
+    THE RULE, on the spots themselves: the pairs alternate TOP band / BOTTOM band, and inside a band the proofs run
+    left to right along a line and only ever wrap DOWN to the next one - a reading path. s21's "asymmetric spots" is
+    amended by s43: the asymmetry is in SIZE and TILT (checked by the mosaic test), never in ORDER."""
+    rects = _spots_9x16()
+    assert len(rects) == 9, f"{len(rects)} rail spots - the short's wall is nine proofs"
+    mid = sum(SAFE_Y) / 2
+    bands = []
+    for i, (_x0, y0, _x1, y1) in enumerate(rects):
+        if y1 <= mid:
+            bands.append("top")
+        elif y0 >= mid:
+            bands.append("bot")
+        else:
+            pytest.fail(f"proof {i + 1} straddles the focus card's band (y {y0:.0f}-{y1:.0f}) - it is in no band")
+    assert bands == ["top", "top", "bot", "bot", "top", "top", "bot", "bot", "top"], \
+        f"the bands do not alternate by pairs: {bands}"
+    for a, b in ((0, 1), (2, 3), (4, 5), (6, 7)):
+        assert rects[a][0] < rects[b][0], \
+            f"proof {b + 1} is not to the RIGHT of proof {a + 1} ({rects[b][0]:.0f} vs {rects[a][0]:.0f}) - " \
+            "a pair reads left to right"
+    for name in ("top", "bot"):
+        seq = [i for i, b in enumerate(bands) if b == name]
+        for prev, i in zip(seq, seq[1:]):
+            p, r = rects[prev], rects[i]
+            share = (min(p[3], r[3]) - max(p[1], r[1])) / min(p[3] - p[1], r[3] - r[1])
+            if share > 0.5:          # the same line of the band
+                assert r[0] > p[0], \
+                    f"proof {i + 1} sits LEFT of proof {prev + 1} on one line of the {name} band - the eye goes back"
+            else:                    # a new line: a reading path wraps DOWN, never up
+                assert (r[1] + r[3]) / 2 > (p[1] + p[3]) / 2, \
+                    f"the {name} band climbs back up from proof {prev + 1} to proof {i + 1} instead of wrapping down"
+
+
 # --------------------------------------------------------------------- the five phases, on the stage
 
 @needs_browser
@@ -221,6 +277,30 @@ def test_the_mosaic_is_never_a_horizontal_row(reader) -> None:
     assert columns >= 4, f"the rails stand in {columns} columns - a grid, not a scatter: {[round(x) for x in lefts]}"
     widths = {round(r["w"]) for r in rails}
     assert len(widths) >= 5, f"the rails come in {len(widths)} sizes - a wall of one size is a grid"
+
+
+@needs_browser
+def test_the_mosaic_on_the_stage_reads_in_bands_and_buries_nothing(reader) -> None:
+    """The same rule as `test_the_rails_are_laid_in_reading_bands`, on the RENDERED rectangles (tilt, idle and breath
+    included) - and the other half of s43's layout: the focus card is large BETWEEN the bands, so no rail is behind
+    it. The first lay-out of this form lost a whole card behind proof 8."""
+    on = reader.visible(T_MOSAIC)
+    focus = [r for r in on if r["z"] == "9"]
+    rails = {r["i"]: r for r in on if r["z"] != "9"}
+    assert len(focus) == 1 and len(rails) == 7
+    mid = sum(SAFE_Y) / 2
+    bands = ["top" if rails[i]["cy"] < mid else "bot" for i in sorted(rails)]
+    assert bands == ["top", "top", "bot", "bot", "top", "top", "bot"], \
+        f"the rendered bands do not alternate by pairs: {bands}"
+    for a, b in ((0, 1), (2, 3), (4, 5)):
+        assert rails[a]["x"] < rails[b]["x"], \
+            f"proof {b + 1} is not to the RIGHT of proof {a + 1} on the stage"
+    f = focus[0]
+    for i, r in rails.items():
+        ox = max(0.0, min(r["x"] + r["w"], f["x"] + f["w"]) - max(r["x"], f["x"]))
+        oy = max(0.0, min(r["y"] + r["h"], f["y"] + f["h"]) - max(r["y"], f["y"]))
+        assert ox * oy <= 0.02 * r["w"] * r["h"], \
+            f"rail {i} is {100 * ox * oy / (r['w'] * r['h']):.0f}% behind the focus card - not overlapped, BURIED"
 
 
 @needs_browser

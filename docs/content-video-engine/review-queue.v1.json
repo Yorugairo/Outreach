@@ -3196,44 +3196,33 @@
         "R26-82",
         "E99 s21",
         "P61 HG7",
-        "E99 s43"
+        "E99 s43 (the rails re-laid)",
+        "P61 HG7b"
       ],
       "kind": "watch",
-      "title": "The verdict stack on a short, beside Steel and Paper's own beat",
-      "judge": "Two clips. OURS (9:16, 1.9-17.5 s): nine proofs enter one at a time from depth, each holds large near the centre of the safe box while its phrase would be spoken, recedes to its own rail spot so the wall re-composes as a mosaic, the rails idle on a named breath, then the radial burst 60 ms apart from the mosaic's own centre. THE REFERENCE (16:9, 702.87-727.6 s of Steel and Paper's frozen build): the choreography you named in E99 s21, through its burst. Watch both. Approve, or name the phase that is still flat.",
+      "title": "The verdict stack on a short, its rails in READING ORDER",
+      "judge": "Your ruling (E99 s43): 1-2 on top left to right, 3-4 on the bottom, 5-6 top, 7-8 bottom - the eye never scattered. The rails are re-laid in reading bands: 1 and 2 across the top, 3 and 4 across the bottom, 5 and 6 under 1-2 (a second row - two cards spend the portrait width), 7 and 8 under 3-4, the ninth beside 6; the focus card large in the middle between the bands; the enter, the focus, the idle and the radial burst as before. Watch 1.9-17.5 s. Does the recede now send your eye where a reader expects the next card? Approve, or name the card that lands out of order. (The 16:9 wall was read against the same rule: it already runs top line, middle, bottom, each left to right, but fills the top line four-wide before it goes down - it does not alternate by pairs; say if you want the pair alternation there too.)",
       "where": [
         {
-          "label": "enter (2.25 s) - one card, from depth",
-          "path": "content/video_engine/tests/golden/frames/verdict-stack-9x16@proof-enter.png"
-        },
-        {
-          "label": "focus (3.1 s) - the card alone, 63.9% of the stage near the box's centre",
-          "path": "content/video_engine/tests/golden/frames/verdict-stack-9x16@proof-focus.png"
-        },
-        {
-          "label": "the mosaic (13.6 s) - eight cards, four x-clusters, five widths, six tilts, none buried",
+          "label": "the mosaic (13.6 s) - 1 red / 2 blue top, 5 purple / 6 pink under them, 8 the focus card centre, 3 green / 4 gold bottom, 7 blue under",
           "path": "content/video_engine/tests/golden/frames/verdict-stack-9x16.png"
         },
         {
-          "label": "idle (15.4 s) - every railed card moved 0.3-25 px on the live idle",
+          "label": "idle (15.4 s) - the nine at rest in their bands, 9 the focus",
           "path": "content/video_engine/tests/golden/frames/verdict-stack-9x16@proof-idle.png"
         },
         {
-          "label": "burst (16.75 s) - five cards gone along five bearings, four still at rest",
+          "label": "enter (2.25 s) / focus (3.1 s) / burst (16.75 s) - the phases unchanged",
           "path": "content/video_engine/tests/golden/frames/verdict-stack-9x16@proof-burst.png"
         },
         {
-          "label": "VERDICT_9X16 (verdict.mjs) - nine rail spots in the safe box; VERDICT untouched",
+          "label": "verdict.mjs :99-140 - VERDICT_9X16's bands: TOP line0 1,2 / BOTTOM line0 3,4 / TOP line1 5,6,9 / BOTTOM line1 7,8, each left to right; the 16:9 VERDICT read at :39-42 and not changed",
           "path": "content/video_engine/scripts/species/verdict.mjs"
-        },
-        {
-          "label": "stack_entry (the compiler): the payload AND the host dock's window from one set of times; six refusals",
-          "path": "content/video_engine/scripts/build_scene_timeline_f.py"
         }
       ],
       "options": [],
-      "recommendation": "Approve. Read beside the reference, every phase matches its character: one card at a time from depth; the focus card relatively larger (a short is read at arm's length); the mosaic banded rather than ringed because the portrait focus card owns a full-width band - the safe box's cost, not a flattening (the rails span 45% of the stage's height, no 60 px band holds more than three of seven); the idle now a NAMED kind; the fan wider because down and up is where a short has room. Where it falls short: the reference's wall is nine real documents of six shapes on a painted plate, ours nine synthetic cards of one aspect on a flat plate - richer for reasons this slice does not own.",
-      "blocks": "nothing - ruled E99 s43 (2026-09-15): rails in reading order - T7b",
+      "recommendation": "Approve. Read at 13.6 and 15.4 s: the bands hold left to right and alternate top / bottom by pairs; the second row under each pair is the portrait width's cost (two cards take 688 of 776 px), not a scatter; every card inside the safe box; the focus card owns the middle. The 16:9 wall already reads as a raster and needs a card only if you want the pair alternation on the full frame.",
+      "blocks": "HG7b",
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md (E99 s21)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s21)",
@@ -3242,32 +3231,24 @@
         "content/video_engine/tests/test_verdict_stack.py",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T7)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s43)",
-        "docs/content-video-engine/review-answers.jsonl (2026-09-15)"
+        "docs/content-video-engine/review-answers.jsonl (2026-09-15)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s43)",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T7b)"
       ],
-      "status": "ruled",
-      "ruling": "E99 s43",
+      "status": "open",
+      "ruling": null,
       "was_kind": "owed",
-      "owed": "Delivered 2026-09-15 (P61 T7): VERDICT_9X16, five phase goldens, stack_entry, the two clips",
+      "owed": "Delivered 2026-09-16 (P61 T7b): the rails re-laid in reading bands, five goldens, the clip",
       "proofs": [
         {
           "type": "clip",
-          "label": "OURS (9:16) - the verdict stack on a short: proofs enter one at a time from depth, hold large near centre, recede to their rail spots as a mosaic, idle, then burst radially 60 ms apart",
+          "label": "the verdict stack on a short, rails in reading order: nine proofs enter one at a time from depth, hold large near centre, recede to their band spots (1-2 top, 3-4 bottom, 5-6 top, 7-8 bottom), idle, burst",
           "surface": "verdict-stack-9x16",
           "aspect": "9:16",
           "t0": 1.9,
           "t1": 17.5,
           "flags": {},
           "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
-        },
-        {
-          "type": "clip",
-          "label": "THE REFERENCE (16:9) - Steel and Paper's own verdict beat, ev-holds-stack-v1: nine proofs 702.87-723.69 s and its burst at 726.98 - the choreography E99 s21 names",
-          "build": "content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f",
-          "page": "player.html",
-          "aspect": "16:9",
-          "t0": 702.87,
-          "t1": 727.6,
-          "route": "review_queue_proofs.py --clips: the frozen build-f player seeked across the window in one headless browser at 15 fps, piped to ffmpeg (silent H.264); the build is read, never modified"
         }
       ]
     },

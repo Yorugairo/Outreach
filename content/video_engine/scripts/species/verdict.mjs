@@ -21,8 +21,9 @@
      focus  - large near stage centre (ACTIVE_X +/- ACTIVE_DX, ACTIVE_Y + row * ACTIVE_ROW_DY, ACTIVE_W px wide)
               while its phrase is spoken, drifting (the hyperframes-opening-v1 focus hand-off).
      recede - when the NEXT card's beat lands (the last card: LAST_RECEDE_LEAD before clear_at) it returns over
-              RECEDE_S on an in-out cubic to one of the nine asymmetric SPOTS - the page re-composes as a mosaic
-              (remotion-bits mosaic-reframe).
+              RECEDE_S on an in-out cubic to one of the nine SPOTS - the page re-composes as a mosaic (remotion-bits
+              mosaic-reframe). On the SHORT's form those spots are laid in READING BANDS (E99 s43): 1-2 across the
+              top left to right, 3-4 across the bottom, 5-6 top, 7-8 bottom, 9 top.
      idle   - railed cards float on the drift (DRIFT_* / BOB_*), tilted by TILTS; on the SHORT's form that float is a
               NAMED idle kind (E49: IDLE_KIND "live" = breath + drift), sized by IDLE_DRIFT_PX / IDLE_BREATH_AMP and
               phased IDLE_PHASE per card, so no two rails breathe in step.
@@ -98,31 +99,44 @@ const VERDICT_SAFE_9X16 = Object.freeze([80, 880, 280, 1340]);
    them (measured on the golden forced to 9:16, 2026-09-15): SPOTS 1-4 are % of a 16:9 frame, so they land at y 53-92
    of 1920 - a horizontal row, inside the platform's top chrome - while both flank spots (1 % and 77 %) hang off the
    edges at x -88 and x 1061, and the focus pose (ACTIVE_X 930, ACTIVE_W 840) runs 223 px past the right edge.
-   The nine spots here are a SCATTER, five above the focus band and four below it: no two share a row, no two share a
-   column, the widths run 25-34 %, the tilts cycle, and every card overlaps a neighbour without repeating its offset -
-   so the page re-composes as a MOSAIC and no phase is a row. They cover 48 % of the box, close to the reference's
-   45 % of its frame: doc 29 s9.24's "scattered asymmetric SPOTS keep the plate visible through the gaps" is a DENSITY
-   as much as a placement, and a wall that tiles its box is a collage, not evidence. Their centres straddle the safe
-   box's centre on both axes, which is what makes the burst a radial fan rather than a landscape throw.
-   THE CENTRE STAYS OPEN - the rule the landscape SPOTS already state, and the one a portrait frame makes expensive.
-   The focus card is 690 x 314 px, so it owns the band y[619, 1015] across nearly the whole safe width; a rail spot
-   inside that band is not overlapped, it is BURIED (the first lay-out of this form lost a whole card behind proof 8).
-   Every spot below therefore ends above y 591 or begins below y 1025, and the focus card's extremes clear both.
-   THE ORDER IS PART OF THE LAYOUT. The spots are listed in the order the proofs take them, and that order alternates
-   band and side (top-left, low-right, top-left, low-right, top-right, low-left, top-right, low-left, top-centre)
-   instead of filling top-down. A portrait wall built top-down leaves the bottom third of the box empty for two thirds
-   of the beat - and the burst's 60 ms stagger then reads as a sweep down the frame instead of a fan. Alternating,
-   every instant from the third proof on is already a mosaic. */
+   THE NINE SPOTS ARE LAID IN READING BANDS (P61 T7b; E99 s43, the operator on the first mosaic: "I realized we
+   probably don't want to be sending peoples eyes scattered everywhere, probably to do 1-2 on top, left to right since
+   thats how people read. then 3-4, on bottom, 5-6 on top, 7-8 on bottom etc."). Two bands - one ABOVE the focus card,
+   one BELOW it - take the proofs two at a time, and inside a band the pair runs LEFT TO RIGHT:
+       TOP    row 0: proofs 1, 2         BOTTOM row 0: proofs 3, 4
+       TOP    row 1: proofs 5, 6, 9      BOTTOM row 1: proofs 7, 8
+   so every recede hands the eye to the place a reader looks next instead of to a random hole. s21's "asymmetric
+   SPOTS" is AMENDED by s43: the asymmetry lives in SIZE (22.2-32.2 % wide) and TILT, never in ORDER.
+   WHY 5 AND 6 TAKE A SECOND ROW rather than standing to the right of 1 and 2: the width is spent. Proofs 1 and 2 are
+   348 + 340 px of the 776 px the safe box leaves once a card's tilt, idle walk and breath are allowed for; four
+   across that line puts every top card at 194 px - 18 % of the stage, under the focus card's 1.4x rail bar and under
+   reading size. Two rows of two is the same reading path, one line further down.
+   WHY PROOF 9 STANDS TO THE RIGHT OF 6 rather than opening a third row: the band's HEIGHT is spent. The top band runs
+   y[286, 614] - 328 px - and its two rows already use y[286, 476] and y[452, 605]; a third row would crush all five
+   cards in the band. Its WIDTH was not spent: 288 + 272 + 240 = 800 px with two 6-12 % corner overlaps, and proof 9
+   is the smallest card of the nine, which is what lets that line hold three.
+   THE BANDS CLEAR THE FOCUS CARD, which is the rule the landscape SPOTS state as "the centre stays open". It is
+   690 x 314 px centred at (480, 790-834), so with its own drift and breath it owns y[614, 1010] across nearly the
+   whole safe width; a rail spot inside that band is not overlapped, it is BURIED (the first lay-out of this form lost
+   a whole card behind proof 8). Every spot below ends above y 605 or begins below y 1019, and every one of them -
+   its tilt's bounding box, its 6.5 px idle walk and its 1 % breath included - sits inside x[80, 880] y[280, 1340].
+   They cover 45 % of the box, the reference's own 45 %: doc 29 s9.24's "scattered asymmetric SPOTS keep the plate
+   visible through the gaps" is a DENSITY as much as a placement, and the density survives the bands - the rows
+   overlap by a card corner, never by a face. Their centres straddle the safe box's centre on both axes, which is what
+   makes the burst a radial fan rather than a landscape throw.
+   THE BANDS ARE NOT A TABLE. The two bands start at different left margins (104 / 175 px) and row 1 is staggered
+   under row 0's aisle, so the seven rails standing at the mosaic take FIVE column starts - a reading path, not a
+   ruled grid. */
 const VERDICT_SPOTS_9X16 = Object.freeze([
-  Object.freeze([8.8, 15.4, 33.0]),    /* [left %, top %, width %] - proof 1 opens at the top left ... */
-  Object.freeze([46.0, 53.7, 34.0]),   /* ... proof 2 answers it from below and right, the far corner */
-  Object.freeze([16.5, 23.3, 27.0]),   /* proof 3 tucks under proof 1, half a card to its right */
-  Object.freeze([41.0, 60.4, 33.0]),   /* proof 4 takes the bottom right */
-  Object.freeze([44.0, 22.6, 32.0]),   /* proof 5 closes the top right */
-  Object.freeze([9.0, 60.7, 28.0]),    /* proof 6 the bottom left */
-  Object.freeze([51.0, 15.9, 28.0]),   /* proof 7 the top right corner */
-  Object.freeze([11.5, 53.4, 31.0]),   /* proof 8 the last hole below left */
-  Object.freeze([30.6, 19.4, 25.0])]); /* proof 9 - the smallest card, into the last gap on the top row's centre */
+  Object.freeze([9.6, 15.6, 32.2]),    /* [left %, top %, width %] - TOP band, row 0: proof 1 opens the line at the left ... */
+  Object.freeze([45.0, 16.2, 31.5]),   /* ... proof 2 finishes it to the right - "1-2 on top, left to right" */
+  Object.freeze([16.2, 53.6, 31.1]),   /* BOTTOM band, row 0: proof 3 opens the line under the focus card ... */
+  Object.freeze([48.9, 54.2, 29.6]),   /* ... proof 4 to its right - "then 3-4, on bottom" */
+  Object.freeze([9.3, 24.1, 26.7]),    /* TOP band, row 1: proof 5 back at the left margin, the next line up top ... */
+  Object.freeze([33.0, 24.5, 25.2]),   /* ... proof 6 to its right - "5-6 on top" */
+  Object.freeze([9.3, 61.4, 27.8]),    /* BOTTOM band, row 1: proof 7 at the left ... */
+  Object.freeze([40.0, 61.0, 29.3]),   /* ... proof 8 to its right - "7-8 on bottom" */
+  Object.freeze([56.7, 23.8, 22.2])]); /* TOP band, row 1: proof 9 - the smallest card - closes that line to the right of 6 */
 
 export const VERDICT_9X16 = Object.freeze(Object.assign({}, VERDICT, {
   SPOTS: VERDICT_SPOTS_9X16,

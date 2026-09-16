@@ -196,7 +196,7 @@
           "source": "operator 2026-09-13 (P55 plan HG1)"
         }
       ],
-      "does": "Already-shown proofs fly in from depth one at a time on their own phrases, each held large near centre while spoken, then receding to an asymmetric rail spot so the page re-composes as a mosaic; the rails idle, then all burst radially.",
+      "does": "Already-shown proofs fly in from depth one at a time on their own phrases, each held large near centre while spoken, then receding in READING ORDER to a rail spot so the page re-composes as a mosaic; the rails idle, then all burst radially.",
       "when": "the sentence lists N proofs of one claim in a row ('three things say so') - each flies in on its word; a list, not one chart",
       "when_source": "docs/content-video-engine/CAPABILITIES.md:169",
       "author": {
@@ -243,7 +243,8 @@
             "DUR_S": "1.0",
             "ease": "in-out cubic",
             "SPOTS_left_top_width_pct": "[[2, 5, 24], [27, 3, 22], [51, 4, 22], [74, 5, 24], [1, 40, 22], [77, 40, 22], [4, 62, 26], [37, 66, 24], [68, 62, 26]]",
-            "layout": "four across the top, the mid-frame flanks, three along the bottom"
+            "layout": "16:9 - four across the top, the mid-frame flanks, three along the bottom; each row left to right",
+            "layout_9x16": "READING BANDS (E99 s43): proofs 1-2 across the TOP band left to right, 3-4 across the BOTTOM, 5-6 top, 7-8 bottom, 9 top - the focus card large between the bands"
           }
         },
         {
@@ -313,7 +314,7 @@
         },
         {
           "token": "9:16",
-          "means": "the SHORT's layout (VERDICT_9X16) - nine rail spots inside G-l's safe box, the focus card 63.9 % of the stage, a named `live` idle on the rails, the burst radial from the box's centre",
+          "means": "the SHORT's layout (VERDICT_9X16) - nine rail spots in READING BANDS inside G-l's safe box: 1-2 across the top left to right, 3-4 bottom, 5-6 top, 7-8 bottom, 9 top (E99 s43)",
           "source_set": "STACK_FORMS"
         }
       ],
@@ -333,7 +334,7 @@
           "VERDICT_9X16",
           "verdictDials"
         ],
-        "note": "P55 T7 lifted it out of drawStack byte-identically; P61 T7 added the 9:16 form (VERDICT_9X16, verdictDials) - the same five phases re-laid for a short, every landscape frame unchanged"
+        "note": "P55 T7 lifted it out of drawStack byte-identically; P61 T7 added the 9:16 form (VERDICT_9X16, verdictDials), T7b laid its spots in reading bands (E99 s43); every landscape frame unchanged"
       },
       "doctrine": [
         "29 s9.24",
@@ -341,7 +342,8 @@
         "MOTION-GRAMMAR",
         "CAPABILITIES verdict stack",
         "BACKLOG R26-82",
-        "E49"
+        "E49",
+        "E99 s43"
       ],
       "status": "live",
       "backlog": [
