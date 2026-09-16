@@ -1638,7 +1638,7 @@ MELT_ENDINGS = ("throw", "splash:chart", "splash:plate", "morph")   # E88 / R26-
 MELT_MATERIALS = ("metal", "ink", "paper", "liquid")       # R26-118 / E88 s7: what `melt:weight:<material>` may name - species/melt.mjs MELT_MATERIALS
 DEPTH_SUFFIX = "depth="   # P58 T6 (b) / E98 s4: the plane a MECHANISM happens at, as an exit suffix - `melt:...:depth=<k>` and `slide:<dir>[:<s>]:depth=<k_out>,<k_in>` (P58 T6 (c)); species/melt.mjs and the engine's slideOpts read the same string on the player's side
 BODY_SUFFIX = "body="     # P61 T5b / E99 s42: the ball's BODY COLOUR - `melt:weight:...:body=<word>`; species/melt.mjs MELT_BODY
-MELT_BODIES = ("chart", "slate", "reference")   # P61 T5b / E99 s42: chart (the ball that shipped - the chart's own ink), slate (the BOARD's ink, `--lp-char: #25313C`, docs/content-video-engine/samples/scene-evidence-player.template.html:50), reference (the blueprint's near-black metal, LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md s3.3 :198-201 "the albedo base color is pure black", gate tier PLAUSIBLE); species/melt.mjs MELT_BODIES
+MELT_BODIES = ("chart", "slate", "reference")   # P61 T5b / E99 s42, default `reference` since P61 T5c / E99 s49: chart (the ball that shipped - the chart's own ink), slate (the BOARD's ink, `--lp-char: #25313C`, docs/content-video-engine/samples/scene-evidence-player.template.html:50), reference (the blueprint's near-black metal, LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md s3.3 :198-201 "the albedo base color is pure black", gate tier PLAUSIBLE); species/melt.mjs MELT_BODIES
 
 
 def _is_number(bit: str) -> bool:
@@ -1670,10 +1670,12 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool, st
     and amassing on it, no blur and no wipe anywhere in the window. It is opt-in the same way, and a `melt:gather`
     that declares no length of its own runs its window plus MELT_G_S. E99 s34: it stays OFF the approved Japan short.
 
-    P61 T5b / E99 s42 adds ``body=<word>`` - the ball's BODY COLOUR (``chart``, the default and the ball that always
-    shipped; ``slate``, the board's own ink; ``reference``, the blueprint's near-black metal). It is a suffix of its
+    P61 T5b / E99 s42 adds ``body=<word>`` - the ball's BODY COLOUR (``chart``, the ball that always shipped;
+    ``slate``, the board's own ink; ``reference``, the blueprint's near-black metal). It is a suffix of its
     own and NOT a fifth material, because a material is the ball's mass and damping and a body is only its colour.
     A ball is one colour, so a row names at most one, and a word this engine does not have is refused BY NAME.
+    P61 T5c / E99 s49 ("I like the reference") makes ``reference`` the DEFAULT for a WEIGHT ball that names no word;
+    a melt with no ``weight`` token has no ball surface to shade and stays ``chart``, so its frames cannot move.
 
     species/melt.mjs ``meltOpts`` reads exactly this grammar on the player's side; the two have to agree, and
     test_transitions_e47 pins the pair. Returns (ending, the declared length or None for MELT_S, the declared
@@ -1683,6 +1685,7 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool, st
     depth: float | None = None   # P58 T6 (b): validated here, carried to the player on the exit string itself
     gather = False               # P61 T6 / E99 s2: the phase token, carried to the player on the exit string too
     body: str | None = None      # P61 T5b / E99 s42: the ball's body colour, validated here and carried on the string
+    weight = False               # P61 T5c / E99 s49: did the row ask for the ball? only a WEIGHT ball has a body to shade
     point = False
     bits = str(exit_id).split(":")[1:]
     i = 0
@@ -1724,6 +1727,7 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool, st
                 raise ValueError(f"exit {exit_id!r}: {body!r} is not a body colour - body= takes " + ", ".join(MELT_BODIES))
             continue
         if bit == "weight":   # R26-118: the weight phase, and the material the ball is made of
+            weight = True
             nxt = bits[i].strip() if i < len(bits) else ""
             if nxt and "," not in nxt and nxt not in ("throw", "splash", "gather", "morph") and not nxt.startswith(DEPTH_SUFFIX) and not nxt.startswith(BODY_SUFFIX) and not _is_number(nxt):
                 if nxt not in MELT_MATERIALS:
@@ -1754,7 +1758,9 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool, st
     ending = ending or "throw"
     if point and ending != "throw":
         raise ValueError(f"exit {exit_id!r}: an x,y point is where a THROW goes - a splash lands on the board")
-    return ending, secs, depth, gather, body or "chart"
+    # P61 T5c / E99 s49: the DEFAULT body, resolved in ONE place on this side (species/melt.mjs `meltOpts` resolves
+    # the same one on the player's) - a WEIGHT ball with no word wears `reference`, everything else stays `chart`.
+    return ending, secs, depth, gather, body or ("reference" if weight else "chart")
 
 
 def melt_depth(exit_id: str | None) -> float | None:
@@ -1773,9 +1779,10 @@ def melt_gather(exit_id: str | None) -> bool:
 
 
 def melt_body(exit_id: str | None) -> str:
-    """P61 T5b / E99 s42: which BODY COLOUR this melt's ball wears - `chart` (the ball that shipped, the chart's own
-    ink) unless the row says `body=slate` or `body=reference`. `chart` for every other exit and for every melt on the
-    record, which is why the default melt's frames are byte-identical."""
+    """P61 T5b / E99 s42 + T5c / E99 s49: which BODY COLOUR this melt's ball wears - `reference` (the blueprint's
+    near-black metal) for a `melt:weight` that names no word, and whatever `body=chart|slate|reference` says when the
+    row says one. `chart` for a melt with no weight token and for every other exit - there is no ball surface to
+    shade there, which is why the default melt's frames are byte-identical."""
     if not exit_id or str(exit_id).split(":")[0] != "melt":
         return "chart"
     return _melt_parts(str(exit_id))[4]

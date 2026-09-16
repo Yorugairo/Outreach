@@ -32,6 +32,11 @@ So the rim and the band are OFF (`MELT.W_RIM_ON` / `W_BAND_ON`, both false; ever
 kept and still tested here), the darkness the operator kept stays, and the ball's BODY COLOUR
 becomes an authored option (`melt:weight:...:body=slate|reference`, `MELT_BODIES`).
 
+P61 T5c / E99 s49, on those three balls: *"Otherwise, I like the reference."* So the WEIGHT ball's
+DEFAULT body is `reference` (resolved once per side - `meltOpts` after its loop, `_melt_parts`'s
+return), the restored orange stays authorable as `body=chart`, and a melt with no weight token has
+no ball surface to shade and is byte for byte the melt that shipped.
+
 Four things, each a NAMED dial with a measured default:
 
   (a) more cast/contact shadow   `MELT.W_OCCL_*`  - the OCCLUSION CORE over the cast slit  [ON]
@@ -62,6 +67,7 @@ import json
 import math
 import re
 import subprocess
+import tempfile
 import sys
 from pathlib import Path
 
@@ -319,12 +325,34 @@ def _ball(png: bytes):
     return cx, cy, r, lum, im.size
 
 
+def _render_body(word: str, t: float) -> bytes:
+    """`melt-ball-roll` at one instant with the ball's BODY word forced, rendered in memory: the golden
+    source is read, its one exit string rewritten, and the page instantiated in a temp dir - the file on
+    disk is never touched and no new golden surface is added. P61 T5c / E99 s49 made `reference` the
+    default, so a measurement that needs a legible body renders `body=chart` - the prior ball exactly."""
+    tl, uris, _t, aspect = RB.load_surface("melt-ball-roll")
+    src = json.dumps(tl)
+    assert src.count('"melt:weight"') == 1, "melt-ball-roll no longer carries exactly one bare weight exit"
+    tl = json.loads(src.replace('"melt:weight"', f'"melt:weight:body={word}"'))
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / f"melt-ball-body-{word}.html"
+        html.write_text(RB.instantiate(tl, uris), encoding="utf-8")
+        return RB.render_frame(html, t, aspect)
+
+
 @browser
 def test_the_rim_and_the_band_are_OFF_so_the_silhouette_is_NOT_darker_than_the_body() -> None:
     """E99 s42, the INVERSE of T5's rim assertion. T5 asserted `rim < 0.75 * body` and the operator
     refused the look it produced. The silhouette must now be back where the prior ball had it: not
-    darker than the body, because the grazing rim is off. Measured on the frame, not on the diff."""
-    png = RB.render_surface("melt-ball-roll@proof-settle")
+    darker than the body, because the grazing rim is off. Measured on the frame, not on the diff.
+
+    P61 T5c / E99 s49 moved the DEFAULT ball to the reference black, whose body AND silhouette both
+    sit at luminance 0 - a ratio there is 0 > 0.8 * 0, degenerate, and proves nothing either way. The
+    two gates are body-independent (`MELT.W_RIM_ON` / `W_BAND_ON` are read before any colour), so the
+    ramp is measured on the `body=chart` ball - the prior ball exactly, rendered IN MEMORY so no new
+    golden surface is needed and the source on disk is never touched - and the default black ball is
+    then held to the only claim it can still carry: its silhouette is not DARKER than its body."""
+    png = _render_body("chart", RB.PROOF_FRAMES["melt-ball-roll@proof-settle"][2])
     cx, cy, r, lum, _ = _ball(png)
     ring = [lum(int(cx + 0.96 * r * math.cos(a)), int(cy + 0.96 * r * math.sin(a)))
             for a in [i * math.pi / 18 for i in range(36)]]
@@ -346,6 +374,14 @@ def test_the_rim_and_the_band_are_OFF_so_the_silhouette_is_NOT_darker_than_the_b
     for i in range(1, len(seg)):
         assert seg[i][1] <= seg[i - 1][1] + 2.0, \
             f"a ridge on the light axis at p={seg[i][0]:.2f} (BAND_P is {band_p}): {seg[i - 1][1]:.1f} -> {seg[i][1]:.1f}"
+    # P61 T5c: and the DEFAULT (reference) ball - both readings at 0, so the inequality is the whole claim
+    cx, cy, r, lum, _ = _ball(RB.render_surface("melt-ball-roll@proof-settle"))
+    ring = [lum(int(cx + 0.96 * r * math.cos(a)), int(cy + 0.96 * r * math.sin(a)))
+            for a in [i * math.pi / 18 for i in range(36)]]
+    body = [lum(int(cx + 0.20 * r * math.cos(a)), int(cy + 0.20 * r * math.sin(a)))
+            for a in [i * math.pi / 6 for i in range(12)]]
+    rim, mid = sum(ring) / len(ring), sum(body) / len(body)
+    assert rim >= mid - 2.0, f"the default ball's silhouette is darker than its body: rim {rim:.1f} against body {mid:.1f}"
 
 
 @browser
@@ -411,7 +447,7 @@ def test_an_unknown_material_or_body_word_is_refused_BY_NAME() -> None:
         with pytest.raises(ValueError) as e:
             B.parse_exit("melt:weight:body=" + bad)
         assert bad in str(e.value) and "body colour" in str(e.value), str(e.value)
-    assert B.melt_body("melt") == "chart" and B.melt_body("melt:weight") == "chart"
+    assert B.melt_body("melt") == "chart" and B.melt_body("melt:weight") == "reference"
     assert B.melt_body("melt:weight:body=slate") == "slate"
     assert B.melt_body("melt:weight:metal:body=reference:2.8") == "reference"
     with pytest.raises(ValueError):
@@ -419,10 +455,33 @@ def test_an_unknown_material_or_body_word_is_refused_BY_NAME() -> None:
     said = _node("(() => { const out = []; for (const w of ['charcoal', 'orange', 'gray']) { "
                  "try { meltOpts('melt:weight:body=' + w); out.push(null); } catch (e) { out.push(e.message); } } "
                  "return { said: out, bodies: Object.keys(MELT_BODIES), "
-                 "def: meltOpts('melt').wbody, slate: meltOpts('melt:weight:body=slate').wbody }; })()")
+                 "def: meltOpts('melt').wbody, weight: meltOpts('melt:weight').wbody, "
+                 "chart: meltOpts('melt:weight:body=chart').wbody, "
+                 "slate: meltOpts('melt:weight:body=slate').wbody }; })()")
     assert said["bodies"] == list(B.MELT_BODIES), "the two sides name different body colours"
     assert all(m and "is not a body colour" in m for m in said["said"]), said["said"]
     assert said["def"] == "chart" and said["slate"] == "slate"
+
+
+def test_the_weight_ball_s_DEFAULT_BODY_is_the_reference_black_and_both_sides_agree() -> None:
+    """P61 T5c / E99 s49 (the operator, 2026-09-16, on the three balls: *"Otherwise, I like the
+    reference."*): a `melt:weight` that names no `body=` word wears the REFERENCE black - the
+    blueprint's near-black metal - and the restored orange stays authorable as `body=chart`.
+    The default is resolved in ONE place per side (`meltOpts` after its loop, `_melt_parts`'s
+    return), and this pins the two to each other over the whole grammar. A melt with NO weight
+    token has no ball surface to shade, so it stays `chart` and its frames cannot move."""
+    import build_scene_timeline_f as B
+    want = {"melt": "chart", "melt:morph": "chart", "melt:gather:morph": "chart",
+            "melt:splash:chart": "chart", "melt:splash:plate": "chart",
+            "melt:weight": "reference", "melt:weight:metal": "reference",
+            "melt:weight:depth=1.15": "reference", "melt:gather:weight:splash:plate": "reference",
+            "melt:weight:body=chart": "chart", "melt:weight:body=slate": "slate",
+            "melt:weight:body=reference": "reference"}
+    got = _node("(() => { const o = {}; for (const e of " + json.dumps(sorted(want))
+                + ") o[e] = meltOpts(e).wbody; return o; })()")
+    for exit_id, word in want.items():
+        assert B.melt_body(exit_id) == word, f"the compiler paints {exit_id} {B.melt_body(exit_id)}, not {word}"
+        assert got[exit_id] == word, f"the player paints {exit_id} {got[exit_id]}, not {word}"
 
 
 def test_the_default_body_writes_the_string_the_ball_always_had() -> None:

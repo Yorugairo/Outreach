@@ -345,13 +345,14 @@ def test_a_melt_may_name_the_ball_s_BODY_COLOUR_and_every_melt_without_one_is_th
     the slate gray or the reference color also to see what that looks like"*): `body=<word>` is a suffix of its own,
     beside `depth=`, anywhere after the name and composable with every other token. It is NOT a fifth MATERIAL: a
     material is the ball's mass and its damping (MASS / DROP.MAT), a body is only its colour, and `MELT_MATERIALS`
-    stays the four it has. `chart` is the default and writes nothing, so every melt on the record parses to the tuple
-    it always did and its frames cannot move. species/melt.mjs `meltOpts` reads the same word, and
-    test_ball_material pins the two lists to each other."""
+    stays the four it has. P61 T5c / E99 s49 ("I like the reference") then made `reference` the WEIGHT ball's default
+    body; `chart` writes nothing on a plain melt, which has no ball surface to shade, so every melt on the record with
+    no `weight` token parses to the tuple it always did and its frames cannot move. species/melt.mjs `meltOpts` reads
+    the same word and resolves the same default, and test_ball_material pins the two lists to each other."""
     assert B.MELT_BODIES == ("chart", "slate", "reference"), "species/melt.mjs MELT_BODIES"
     assert B.MELT_MATERIALS == ("metal", "ink", "paper", "liquid"), "a body is not a material - the four are the four"
-    assert B.melt_body("melt") == "chart" and B.melt_body("melt:weight") == "chart"
-    assert B.melt_body("melt:weight:metal") == "chart" and B.melt_body("dip") == "chart"
+    assert B.melt_body("melt") == "chart" and B.melt_body("melt:weight") == "reference"
+    assert B.melt_body("melt:weight:metal") == "reference" and B.melt_body("dip") == "chart"
     for word in B.MELT_BODIES:
         assert B.parse_exit(f"melt:weight:body={word}") == (f"melt:weight:body={word}", None)
         assert B.melt_body(f"melt:weight:body={word}") == word

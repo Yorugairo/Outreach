@@ -444,7 +444,7 @@
    "options": [
     {
      "token": "body",
-     "means": "P61 T5b / E99 s42: the ball's BODY colour - `body=slate` (the board's own ink #25313C) or `body=reference` (the blueprint's near-black metal); default `chart`, the ball that shipped.",
+     "means": "P61 T5c / E99 s49: the ball's BODY colour. Default (weight, no word) `reference` - the blueprint's near-black metal; `body=chart` is the ball that shipped, `body=slate` the board's ink #25313C.",
      "source_set": "MELT_BODIES"
     },
     {

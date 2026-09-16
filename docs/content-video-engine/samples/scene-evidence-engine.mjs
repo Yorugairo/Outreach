@@ -3000,8 +3000,10 @@ async function mount(doc) {
     /* ---- P61 T5b / E99 s42 - THE BALL'S BODY COLOUR (`melt:weight:...:body=<word>`) ---------------------------------
        The operator: "I would be interested in seeing it just melt to the slate gray or the reference color also to see
        what that looks like." So the body colour is an AUTHORED option on the weight token, read in exactly one place
-       per side (`meltOpts` here, `_melt_parts` in build_scene_timeline_f.py), an unknown word refused BY NAME, and the
-       DEFAULT - `chart`, no word at all - is the ball that always shipped, byte for byte. MELT_BODIES holds the targets;
+       per side (`meltOpts` here, `_melt_parts` in build_scene_timeline_f.py), an unknown word refused BY NAME.
+       P61 T5c / E99 s49 ("I like the reference") then made `reference` the DEFAULT for a WEIGHT ball with no word at
+       all; the ball that always shipped is `body=chart`, and a melt with no weight token has no ball surface to shade,
+       so it stays `chart` and is byte for byte the melt that shipped. MELT_BODIES holds the targets;
        this is how far the ball's ink is taken toward the one it names. */
     W_BODY_SHADE: 1,       /* 1 = the named colour exactly, at each stop's OWN level: the stop's target is the body
                               colour scaled by that stop's share of the LIT stop's luminance, so the ball keeps its own
@@ -3106,7 +3108,8 @@ async function mount(doc) {
      is a suffix of its own and not a fifth material - test_transitions_e47 pins MELT_MATERIALS at the four it has.
        chart      the ball carries the CHART's own ink, by Kubelka-Munk - the ball that always shipped, and the look
                   E99 s42 called "the prior work ... better". No target: `meltBodyInk` returns `meltInkOf` untouched,
-                  so the default melt's every string is the string it was.
+                  so a melt with no weight token writes every string it always wrote. Since P61 T5c / E99 s49 it is
+                  AUTHORED (`body=chart`) rather than the weight ball's default.
        slate      the BOARD's own ink: `--lp-char: #25313C` (docs/content-video-engine/samples/
                   scene-evidence-player.template.html:50), the same charcoal the brand tokens carry as `color.charcoal`
                   (content/video_engine/channel-assets/money-physics/brand-tokens.json:12, "ink: contours, wordmark,
@@ -3131,7 +3134,7 @@ async function mount(doc) {
   const meltOpts = (exit, o = {}) => {
     const P = Object.assign({}, MELT, o), bits = String(exit == null ? "" : exit).split(":");
     const out = { name: bits[0] || "", secs: P.S, ending: null, to: null, weight: false, wmass: P.W_MASS, depth: 0, gather: false,
-                  wbody: "chart" };   /* P61 T5b / E99 s42: the ball's body colour - `chart` is the ball that shipped */
+                  wbody: null };   /* P61 T5c / E99 s49: the ball's body colour, UNSET here - the default is resolved once, below */
     let said = false;   /* did the row declare its own length? a weight phase lengthens only the DEFAULT window */
     const setEnding = (e) => {
       if (out.ending) throw new Error("melt: two endings (" + out.ending + " and " + e + ") - a melt ends one way");
@@ -3186,6 +3189,11 @@ async function mount(doc) {
       out.secs = v; said = true;
     }
     out.ending = out.ending || "throw";
+    /* P61 T5c / E99 s49 ("I like the reference"): THE DEFAULT BODY, resolved in ONE place. A WEIGHT ball with no
+       `body=` word wears `reference` - the blueprint's near-black metal; the chart's own ink stays authorable as
+       `body=chart`. A melt with no weight token has no ball surface to shade, so it stays `chart` and every default
+       melt's string is the string it was. build_scene_timeline_f._melt_parts resolves the same default. */
+    out.wbody = out.wbody || (out.weight ? "reference" : "chart");
     if (!said) {   /* a row that declared its own length gets exactly it; a default window makes room for what was asked for */
       if (out.weight) out.secs = P.S + P.W_S;   /* the four beats need their own seconds, not the compile's */
       if (out.gather) out.secs += P.G_S;        /* P61 T6: and the travel needs its own - three turns in 0.48 s is a jump */

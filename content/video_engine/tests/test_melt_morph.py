@@ -176,7 +176,7 @@ def test_parse_exit_of_a_bare_melt_is_the_tuple_it_was() -> None:
     assert B.parse_exit("melt") == ("melt", None)
     assert B.parse_exit("melt:splash:chart") == ("melt:splash:chart", None)
     assert B._melt_parts("melt") == ("throw", None, None, False, "chart")
-    assert B._melt_parts("melt:weight") == ("throw", None, None, False, "chart")
+    assert B._melt_parts("melt:weight") == ("throw", None, None, False, "reference")   # P61 T5c / E99 s49: the WEIGHT ball's default body
 
 
 def test_the_melt_that_never_asks_for_a_morph_has_the_window_it_had() -> None:

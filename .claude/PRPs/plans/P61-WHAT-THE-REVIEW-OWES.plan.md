@@ -670,7 +670,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   a row for T11. Card: three crops (prior vs restored / slate / reference) + three clips 15.0-17.75 s; options argued by E99 s42.
 
 ### T5c: THE REFERENCE BLACK IS THE WEIGHT BALL'S DEFAULT BODY (E99 s49)
-- Status: pending
+- Status: complete (2026-09-16) - the ruling's default in the engine; no card (HG5b ruled E99 s49)
 - Owner: `junior_developer` (**ENGINE LOCK** - one default + the goldens)
 - Depends on: T5b, HG5b (ruled E99 s49); after T3 (the same file)
 - Write set: `content/video_engine/scripts/species/melt.mjs`, `content/video_engine/scripts/build_scene_timeline_f.py` (the default
@@ -682,7 +682,17 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python -m pytest content/video_engine/tests/test_ball_material.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/effects_catalog_check.py`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T5c.md`. The default in ONE place per side: `species/melt.mjs:428` `out.wbody = out.wbody
+  || (out.weight ? "reference" : "chart")` and `build_scene_timeline_f.py:1762` `body or ("reference" if weight else "chart")`; a new
+  test_ball_material test pins the two agree over twelve exit strings (`melt` -> chart, `melt:weight` -> reference, `melt:weight:metal`
+  -> reference, `melt:weight:body=chart` -> chart, `melt:gather:weight:splash:plate` -> reference, `melt:morph` -> chart, `dip` -> chart).
+  GOLDENS: 6 of 136 moved - `melt-ball-roll` x3, `melt-depth` x2, `melt-gather@proof-point` (shas in the report); `melt-morph` and
+  `melt-gather-morph` carry NO weight token and do not move - the reference body reaches T3's hand-over ball only when a row authors
+  `weight` (or `body=`); `melt-page`, the slate and the reference goldens unchanged. Parent's read: `melt-ball-roll@proof-settle` is the
+  black ball with its specular spot and the contact shadow kept, and it is BYTE-IDENTICAL to `melt-ball-reference@proof-settle` (the
+  lane measured it: one sha). Card `exit:melt` body option names the default. Page-boxes re-pinned sha-only. DEVIATIONS ratified by the
+  parent: `test_transitions_e47.py:353-354` and `test_melt_morph.py:179` pinned the old default and were updated to the ruling's
+  (each a one-line expectation). Validate: node 0; sync in sync; pytest ball_material + transitions_e47 + melt_morph + golden_frames 236 passed (exit 0); page-boxes 44 (sha-only); registry 0 orphaned; effects_catalog_check red only on the voice lane's `plate_option:use`.
 
 ### T6: THE MELT GATHERS TO ONE DENSE, HEAVY, VIBRATING POINT - and splashes into a full chart or a world plate
 - Status: complete (proof A 2026-09-15, proof B 2026-09-16 via T3) - HG6 open on `r26-76-melt-endings-in-motion` (watch, both clips)
