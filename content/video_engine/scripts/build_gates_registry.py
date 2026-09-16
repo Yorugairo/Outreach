@@ -79,6 +79,7 @@ FAMILIES = ("opening-long", "opening-short", "opening-shared", "motion", "floor"
 
 LEVELS = ("FAIL", "WARN", "PASS", "JUDGE", "INFO")
 LEVEL_RE = re.compile(r"\b(" + "|".join(LEVELS) + r")\b")
+TOKEN_RUN = re.compile(r"[\w-]+")           # what tests_naming can match: see token_runs
 ROLE_FIELDS = {"id": "id", "code": "code", "level": "level", "src": "rule",
                "rule": "rule", "message": "message", "msg": "message"}
 SLUG_MAX = 60
@@ -422,9 +423,42 @@ def read_tests(root: Path) -> list[tuple[str, str]]:
     return [(p.name, p.read_text(encoding="utf-8", errors="replace")) for p in files]
 
 
-def tests_naming(token: str, sources: list[tuple[str, str]]) -> list[str]:
+def token_runs(text: str) -> frozenset[str]:
+    r"""Every maximal `[\w-]+` run in the text - the candidates `tests_naming`'s regex can match.
+
+    That regex refuses a token that touches a word character or a `-` on either side, so any run it
+    matches inside a file is a maximal run, and every run of the token itself lands on one too. The
+    table turns "does this test name it?" into a set lookup instead of a regex sweep of every file,
+    once per id (P64 T2, the shape P63 T3 gave `build_animation_registry.word_tokens`)."""
+    return frozenset(m.group(0) for m in TOKEN_RUN.finditer(text))
+
+
+def test_tokens(sources: list[tuple[str, str]]) -> list[frozenset[str]]:
+    """The per-file candidate table, in `sources` order: the file's runs and its name's."""
+    return [token_runs(text) | token_runs(name) for name, text in sources]
+
+
+def tests_naming(token: str, sources: list[tuple[str, str]],
+                 tokens: list[frozenset[str]] | None = None) -> list[str]:
+    """Every test file that names the token, by name or in its text.
+
+    `tokens` is `test_tokens(sources)` built once per corpus; without it the table is built here, so a
+    direct call still answers the same. A token that is one whole run is answered by the set alone;
+    anything else (a rule text) uses the set as a filter and still faces the original regex."""
+    runs = TOKEN_RUN.findall(token)
+    if tokens is None:
+        tokens = test_tokens(sources)
     pat = re.compile(r"(?<![\w-])" + re.escape(token) + r"(?![\w-])")
-    return sorted({name for name, text in sources if pat.search(text) or pat.search(name)})
+    if not runs:                                    # no run at all: only the regex can answer
+        return sorted({name for name, text in sources if pat.search(text) or pat.search(name)})
+    exact = len(runs) == 1 and runs[0] == token
+    out: set[str] = set()
+    for (name, text), table in zip(sources, tokens):
+        if any(run not in table for run in runs):
+            continue
+        if exact or pat.search(text) or pat.search(name):
+            out.add(name)
+    return sorted(out)
 
 
 # ---- extraction -------------------------------------------------------------
@@ -503,6 +537,7 @@ def build(repo_root: Path = REPO) -> list[dict]:
     root = Path(repo_root)
     index = load_docs_index(root)
     sources = read_tests(root)
+    tokens = test_tokens(sources)
     records: dict[tuple[str, str, str], dict] = {}
     for tool in sorted(FAMILY):
         path = root / SCRIPTS_REL / tool
@@ -519,7 +554,7 @@ def build(repo_root: Path = REPO) -> list[dict]:
                     "id": ident, "tool": row.tool, "family": row.family, "rule": row.rule,
                     "levels": list(row.levels),
                     "cites": find_cites(row.rule, index),
-                    "tests": tests_naming(row.token, sources),
+                    "tests": tests_naming(row.token, sources, tokens),
                     "source": {"path": f"{SCRIPTS_REL}/{row.tool}", "line": row.line},
                 }
                 continue
@@ -654,23 +689,27 @@ def render_md(records: list[dict], repo_root: Path = REPO) -> str:
     return "\n".join(head + body)
 
 
-def rendered(repo_root: Path = REPO) -> dict[str, str]:
-    records = build(repo_root)
+def rendered(repo_root: Path = REPO, records: list[dict] | None = None) -> dict[str, str]:
+    """Both artifacts' text. `records` is a corpus already built - one `--check` builds once (P64 T2)."""
+    if records is None:
+        records = build(repo_root)
     return {JSONL_REL: render_jsonl(records), MD_REL: render_md(records, repo_root)}
 
 
-def write(repo_root: Path = REPO) -> int:
-    for rel, text in rendered(repo_root).items():
+def write(repo_root: Path = REPO, records: list[dict] | None = None) -> int:
+    if records is None:
+        records = build(repo_root)
+    for rel, text in rendered(repo_root, records).items():
         path = Path(repo_root) / rel
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(text.encode("utf-8"))
-    return len(build(repo_root))
+    return len(records)
 
 
-def check(repo_root: Path = REPO) -> list[str]:
+def check(repo_root: Path = REPO, records: list[dict] | None = None) -> list[str]:
     """One entry per stale artifact: "<path> (+added/-removed lines)". Empty = in sync."""
     problems: list[str] = []
-    for rel, want in rendered(repo_root).items():
+    for rel, want in rendered(repo_root, records).items():
         path = Path(repo_root) / rel
         if not path.is_file():
             problems.append(f"{rel} (missing)")
@@ -692,16 +731,16 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--repo", type=Path, default=REPO, help="repository root (default: this checkout)")
     args = ap.parse_args(argv)
     root = args.repo.resolve()
+    records = build(root)                       # once per run: rendering and the summary share it
     if args.write:
-        count = write(root)
-        by_family = {f: sum(1 for r in build(root) if r["family"] == f) for f in FAMILIES}
+        count = write(root, records)
+        by_family = {f: sum(1 for r in records if r["family"] == f) for f in FAMILIES}
         print(f"build_gates_registry: {count} record(s) -> {JSONL_REL} + {MD_REL}")
         print("build_gates_registry: " + ", ".join(f"{f}={n}" for f, n in by_family.items()))
-    stale = check(root)
+    stale = check(root, records)
     if stale:
         print("build_gates_registry: STALE - " + "; ".join(stale) + " - run --write")
         return 1
-    records = build(root)
     cited = [c for r in records for c in r["cites"]]
     print(f"build_gates_registry: in sync ({len(records)} records, "
           f"{len({r['id'] for r in records})} ids, "

@@ -12,11 +12,17 @@ The real-repo smoke pins that the gates the docs cite by id are actually in the 
 with rule text (`G15b`, `S02`, `M16`, `V01`, `J50`), that `S02` cites land in doc 51, and
 that no call site in a checker went unparsed. `M13` is asserted ABSENT: doc 47 s208 lists
 it as settled but "the gate lands with the edit pass", so a registry line for it would be
-a claim the code does not make - if this flips, M13 shipped and the row is real."""
+a claim the code does not make - if this flips, M13 shipped and the row is real.
+
+The last block pins P64 T2's speed-up: the per-file token table answers exactly what a direct
+regex sweep answers, the mini-repo render still hashes to the sha256 taken before that edit, and
+one `--check` reads the test corpus once."""
 from __future__ import annotations
 
 import json
+import re
 import sys
+import time
 from pathlib import Path
 
 import pytest
@@ -301,3 +307,75 @@ def test_the_composition_block_quotes_the_runner() -> None:
     assert text.index("audit_script_doctrine.py") < text.index("gate_opening_structure.py")
     assert "--defer-opening" in text
     assert "SHORT_MAX_S" in text          # is_short's own words, not a paraphrase
+
+
+# ---- the per-file token table and the single build (P64 T2) -----------------
+
+# the fixture render's sha256, taken with the code as it stood BEFORE the token table landed
+FIXTURE_SHA = {
+    "docs/GATES-REGISTRY.jsonl": "43e59eba54374e8acf7db3ce8ea1c7905798dcee03812e3eee4a532aee1daead",
+    "docs/GATES-REGISTRY.md": "5589b7837b7c236c917f6a0a43409ad0811f3966c5bb2fbb54b00823e1d168db",
+}
+
+# ids, an id-less slug's words, a rule text with spaces and braces, near-misses and non-matches
+TOKENS = ("X01", "X0", "01", "PASSIVE_RATIO", "PASSIVE", "passive_ratio", "test_mini.py",
+          "test_x01_and_passive", "doc 37 sec 1", "a rehook every {SHORT_CYCLE_S=30.0} s",
+          "51.2", "G15b", "M13", "-X01", "X01-", "{", "", "no-such-token")
+
+TRICKY = [
+    ('test_alpha.py', 'assert "X01" and X01-B and -X01 and X01x and x_X01\nPASSIVE_RATIO = 1\n'),
+    ("test_X01.py", "nothing in the body names any gate at all\n"),
+    ("test_beta.py", "doc 37 sec 1 sits in a sentence; {SHORT_CYCLE_S=30.0} does too\n"),
+    ("test_gamma-51.2.py", "51.2 is in the name and the text says 51.2b instead\n"),
+]
+
+
+def _sweep(token: str, sources: list[tuple[str, str]]) -> list[str]:
+    """`tests_naming` as it was before the table: the regex against every file, per token."""
+    pat = re.compile(r"(?<![\w-])" + re.escape(token) + r"(?![\w-])")
+    return sorted({name for name, text in sources if pat.search(text) or pat.search(name)})
+
+
+@pytest.mark.parametrize("token", TOKENS)
+def test_the_token_table_agrees_with_a_direct_regex_sweep(mini_repo: Path, token: str) -> None:
+    sources = BGR.read_tests(mini_repo) + TRICKY
+    tokens = BGR.test_tokens(sources)
+
+    assert BGR.tests_naming(token, sources, tokens) == _sweep(token, sources)
+    assert BGR.tests_naming(token, sources) == _sweep(token, sources)   # and without the table
+
+
+def test_the_token_table_agrees_on_the_real_test_corpus(real: list[dict]) -> None:
+    sources = BGR.read_tests(ROOT)
+    tokens = BGR.test_tokens(sources)
+    sample = sorted({r["rule"] for r in real})[:6] + sorted({r["id"] for r in real})[:12]
+
+    for token in sample:
+        assert BGR.tests_naming(token, sources, tokens) == _sweep(token, sources), token
+
+
+def test_the_fixture_render_still_hashes_to_the_pin(mini_repo: Path) -> None:
+    import hashlib
+
+    out = BGR.rendered(mini_repo)
+
+    assert {rel: hashlib.sha256(text.encode("utf-8")).hexdigest()
+            for rel, text in out.items()} == FIXTURE_SHA
+
+
+def test_a_check_reads_the_test_corpus_once(mini_repo: Path, monkeypatch) -> None:
+    BGR.write(mini_repo)
+    reads: list[Path] = []
+    real_read = BGR.read_tests
+    monkeypatch.setattr(BGR, "read_tests", lambda root: reads.append(root) or real_read(root))
+
+    assert BGR.main(["--check", "--repo", str(mini_repo)]) == 0
+    assert len(reads) == 1, f"the corpus was built {len(reads)} times"
+
+
+def test_the_fixture_check_stays_under_its_ceiling(mini_repo: Path) -> None:
+    BGR.write(mini_repo)
+
+    start = time.perf_counter()
+    assert BGR.check(mini_repo) == []
+    assert time.perf_counter() - start < 1.0
