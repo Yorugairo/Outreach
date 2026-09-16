@@ -552,8 +552,8 @@ def run_short(text: str, timeline: list[dict] | None, sents, marks, ring: str | 
     for tag, off in marks:
         if tag in beat_tags.BEAT_TAGS or tag in ("post-key", "pre-key"):   # the key marks are settle marks, not beat tags - the short reads them as the mechanism
             k = host(off)
-            if k >= 1 and off < _first_alnum(text, sents[k][3]):
-                k -= 1                      # a mark leading chunk k settles sentence k-1
+            if tag in ("post-key", "pre-key") and k >= 1 and off < _first_alnum(text, sents[k][3]):
+                k -= 1                      # delivery marks settle backward; structural tags introduce the next sentence
             if k < len(sents):
                 beats.setdefault(tag, []).append(k)
     # S01 the hook: the claim in the first 3 s, and it answers the packaging (G45 / J12 shared)

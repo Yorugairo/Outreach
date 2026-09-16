@@ -33,6 +33,38 @@ needs_ep1 = pytest.mark.skipif(not (SCRIPT.exists() and TIMELINE.exists()),
 FILLER = "The mechanism underneath moved and almost nobody on the desk looked at it. "
 
 
+@pytest.mark.parametrize("tag", ["ring", "new", "rehook"])
+@pytest.mark.parametrize("position", [0, 1, 2])
+def test_short_leading_structural_tag_belongs_to_following_sentence(tag, position):
+    sentences = [
+        "You finish the first complete task before the clock runs out.",
+        "The second complete task needs another person to check its output.",
+        "The final complete task returns to your desk for another correction.",
+    ]
+    sentences[position] = f"[{tag}] " + sentences[position]
+    text = "\n\n".join(sentences)
+    timed = G._sentences_timed(text, None)
+    _, stats = G.run(text, short=True)
+    start = timed[position][0]
+    expected = f"{int(start // 60)}:{int(start % 60):02d}"
+    assert stats["beats_declared"][tag] == [expected]
+
+
+@pytest.mark.parametrize("tag", ["pre-key", "post-key"])
+def test_short_delivery_tag_still_settles_preceding_sentence(tag):
+    text = (
+        "You finish the first complete task before the clock runs out.\n\n"
+        f"[{tag}] [new] [rehook] The second task needs another person to check its output."
+    )
+    timed = G._sentences_timed(text, None)
+    _, stats = G.run(text, short=True)
+    start = timed[1][0]
+    expected = f"{int(start // 60)}:{int(start % 60):02d}"
+    assert stats["beats_declared"][tag] == ["0:00"]
+    assert stats["beats_declared"]["new"] == [expected]
+    assert stats["beats_declared"]["rehook"] == [expected]
+
+
 def _by_id(gates):
     return {g.id: g for g in gates}
 
