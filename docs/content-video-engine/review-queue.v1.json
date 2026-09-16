@@ -942,40 +942,33 @@
         "E99 s2",
         "E99 s39",
         "E99 s50",
-        "E99 s53"
+        "E99 s53 (the compile re-timed)",
+        "P61 HG2-2"
       ],
       "kind": "watch",
-      "title": "The ball becomes the next FULL chart - melt:morph, the fourth ending",
-      "judge": "The page melts, balls up, and the BALL is handed to the next page as its prop: its body deforms into the area under the next chart's first series, and the page then builds the chart on what it became - the line stroked along the area's top edge, the other series, the axes, the labels and the title by the engine's own hand, no cut anywhere (the ground is the same punched board on both sides). Watch 14.6-21.2 s: the chart read, the sag and the ball, the hand-over at 16.6, the lens that is neither ball nor chart, the chart built out of it. Does the hand-over hold as one continuous thing being manipulated (E99 s39's bar), or does it read as a jump? Approve, or name the frame that breaks.",
+      "title": "The chart-to-ball is now one visible closing - the melt's compile re-timed (the hand-over unchanged)",
+      "judge": "Your ruling (E99 s53): the ball into the next chart is good, but the chart-to-ball at the start is a rushed snap. Measured, it was: the ink vanished at a silhouette 29.9x the ball's area, 72 % of the travel in one frame, then the ball stood frozen for half the phase. Now the compile is ONE closing on 2s: the ink shrinks and the last drips arrive into the ball, the circle is the end of a visible closing; worst frame-to-frame step 10 % of the ball's area (a test pins 12 %). Watch the melt:morph clip 14.8-18.6 s (the closing 15.48-16.45, the ball, then the approved hand-over) and the default melt 14.8-16.8 s (the same closing on the engine's shortest window). Does the chart become the ball now, rather than snap? Approve, or name the frame. One thing to know: the default melt's window (1.6 s) gives its closing only ~6 poses on 2s (worst step 18 %) - a longer default window would move every melt golden's instants, so it is your call, not a dial.",
       "where": [
         {
-          "label": "the last frame of the ball (16.50) - nothing of the next chart anywhere",
-          "path": "content/video_engine/tests/golden/frames/melt-morph@proof-ball.png"
+          "label": "melt:morph - the fusion midpoint (16.22): the ink closing into the ball, the last drips arriving",
+          "path": "content/video_engine/tests/golden/frames/melt-morph@proof-fuse.png"
         },
         {
-          "label": "THE HAND-OVER (16.60) - the same ball, the same place; the page beneath has swapped and you cannot see it",
-          "path": "content/video_engine/tests/golden/frames/melt-morph.png"
+          "label": "the default melt - its fusion midpoint (15.68)",
+          "path": "content/video_engine/tests/golden/frames/melt-page@proof-fuse.png"
         },
         {
-          "label": "half way (17.25) - one lens, wider than the ball, not yet the area, wearing the ball's gradient with the page's outline coming up round it",
-          "path": "content/video_engine/tests/golden/frames/melt-morph@proof-050.png"
+          "label": "the default melt at 0.45 - now one pose short of the circle (was the finished ball)",
+          "path": "content/video_engine/tests/golden/frames/melt-page@proof-045.png"
         },
         {
-          "label": "past the morph (18.30) - the shape landed as the area under series 0, the nib stroking the line along its top, the other series drawing, the title written",
-          "path": "content/video_engine/tests/golden/frames/melt-morph@proof-built.png"
-        },
-        {
-          "label": "melt.mjs: the fourth ending (M_S / M_FADE), meltHandAt / meltHandRing - the melt's last frame IS the morph's first; arap.mjs polyStrip (any closed outline as the strip mesh, det J > 0 throughout)",
+          "label": "melt.mjs: the closing u 0.165 -> 0.500 of the window (:131-174, :701-776); the ink's opacity leaves at 1.16 r of the ball (was 5.46 r) - `inkOpacity = 1 - mEase(kq / INK_OUT)` against an eased squeeze was the snap",
           "path": "content/video_engine/scripts/species/melt.mjs"
-        },
-        {
-          "label": "the compiler: melt:morph refused on a non-page, a second enter, a page with no area under a line, or a page naming its own prop ('the BALL is the prop')",
-          "path": "content/video_engine/scripts/build_scene_timeline_f.py"
         }
       ],
       "options": [],
-      "recommendation": "Approve. Read at the four instants: the ball stands alone; the hand-over frame is indistinguishable from the frame before it (the first build cut the GROUND here - the outgoing page is punched, a morph page's board was not - found on the frame and fixed); the mid-frame is one lens no cut can produce; the chart is MADE on the shape. Honest limits on the card: the morph's fill (the brown area) is still standing at the built instant and leaves as the lines draw; two pages with different series colours are untested (the goldens use one file for both); the ball's body colour (HG5b: reference black) is not on this golden yet - T5c re-renders it.",
-      "blocks": "nothing - ruled E99 s53 (2026-09-16): good; the chart-to-ball snap re-timed (T3c)",
+      "recommendation": "Approve the closing as built; on the default window, my read is that six poses read as a fast fusion, not a snap, and the approved cuts are frozen either way - lengthen `MELT.S` only if the default melt reads rushed to you.",
+      "blocks": "HG2-2",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:549 (R26-117)",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md:333-369 (T3)",
@@ -983,20 +976,32 @@
         "content/video_engine/tests/test_melt_morph.py",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s53)",
-        "docs/content-video-engine/review-answers.jsonl (2026-09-16)"
+        "docs/content-video-engine/review-answers.jsonl (2026-09-16)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s53)",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3c)"
       ],
-      "status": "ruled",
-      "ruling": "E99 s53",
+      "status": "open",
+      "ruling": null,
       "was_kind": "owed",
-      "owed": "Delivered 2026-09-16 (P61 T3): melt:morph, polyStrip, the hand-over goldens, the clip",
+      "owed": "Delivered 2026-09-16 (P61 T3c): the compile as one closing, measured; two fusion goldens; the clips",
       "proofs": [
         {
           "type": "clip",
-          "label": "melt:morph - the finished chart, the sag, the ball, the hand-over with no cut, the ball's body becoming the area under the next series, the page building the full chart on it",
+          "label": "melt:morph - the chart, the closing into the ball (15.48-16.45), the ball standing, the approved hand-over into the next full chart",
           "surface": "melt-morph",
           "aspect": "16:9",
-          "t0": 14.6,
-          "t1": 21.2,
+          "t0": 14.8,
+          "t1": 18.6,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "the default melt - the same closing on the shortest window (15.26-15.80), into the throw",
+          "surface": "melt-page",
+          "aspect": "16:9",
+          "t0": 14.8,
+          "t1": 16.8,
           "flags": {},
           "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
         }

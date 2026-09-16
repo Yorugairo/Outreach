@@ -23,10 +23,15 @@
                             the GOOEY THRESHOLD (a Gaussian blur re-steepened by a linear alpha ramp - HyperFrames'
                             morph-text trick, our K-M chain's `feFuncA slope`), so neighbouring marks FUSE into one liquid
                             body; the ink box's outline sags over seeded drips as its mask.
-     ball   u 0.30 - 0.55   the ink SQUEEZES toward its centroid while the outline MORPHS to a circle of BALL_R (morph_a,
-                            the vertex method) on the STEPPED clock (stopaction `stepped`, hold 2 - on 2s), and a DENSE
-                            ink body - the marks' own colours mixed by Kubelka-Munk and concentrated DENSITY times - comes
-                            up opaque over it: the chart compiles into a heavy ball.
+     ball   u 0.30 - 0.55   THE COMPILE. Since P61 T3c / E99 s53 it is ONE CLOSING and not a cross-fade: the melting
+                            body's ring MORPHS to a circle of BALL_R (morph_a, the vertex method) on the STEPPED clock
+                            (stopaction `stepped`, hold 2 - on 2s) while the ink SQUEEZES into it. The closing opens
+                            already inside the SAG's last FUSE_FROM - so the drips that are still opening are the last
+                            ink to arrive INTO the ball - and it LANDS at FUSE_END of this phase, after which the ball
+                            stands. The DENSE ink body (the marks' own colours mixed by Kubelka-Munk and concentrated
+                            DENSITY times) is that SAME ring run BODY_LEAD further along the same morph, its paint
+                            rising under the ink until the two land on the circle together: the circle is the END of a
+                            visible closing and no frame carries the ink as one shape and the next as a ball.
      end    u 0.55 - 1      one of three AUTHORED endings:
        throw          the ball lands in its own weight (stopaction impactSquash on MASS, SQUASH, on 2s) for ANTIC of the
                       phase, then is THROWN off the stage (throwXf run backwards: a landing played in reverse IS a launch),
@@ -69,7 +74,7 @@ import { squashMatrix, scaleBy } from "../kinetics/squash.mjs";
 import { CADENCE, stepped, throwXf, impactSquash, rollXf, contactShadow, groundDip, groundShake, rebound, massImpact, MASS, STOP } from "../kinetics/stopaction.mjs";
 import { DROP, dropRing, dropModes, dropSpecular, dropRimAlpha, dropBandAlpha, dropPitAlpha, dropDeepPoint, dropLightAxis } from "../kinetics/drop.mjs";
 import { centroid } from "../kinetics/arap.mjs";
-import { morphAPrepare, morphAAt, morphAPath } from "../kinetics/morph_a.mjs";
+import { morphAPrepare, morphAAt, morphAPath, morphAArea, morphAPerimeter } from "../kinetics/morph_a.mjs";
 
 export const MELT = Object.freeze({
   S: 1.6,            /* the exit's default length [DERIVED: the suck's 0.3 s is one phase of collapse; a melt is three
@@ -105,13 +110,68 @@ export const MELT = Object.freeze({
   FPS: CADENCE.FPS,
   SQUEEZE: 1.15,     /* the ink box is squeezed until its longer side is SQUEEZE ball-diameters: the chart compiles INTO the
                         ball instead of being cropped by it */
-  BODY_FROM: 0,      /* the ball is a CRISP opaque disc from the first frame of its phase (a ramp over the whole box read as
-                        a jelly slab; one that waited for the squeeze read as a soft chart silhouette at 045 - the parent's
-                        two reads, 2026-09-13) ... */
-  BODY_TO: 0.15,     /* ... fully opaque from here */
-  BODY_GROW: 0.4,    /* it GROWS from BODY_SEED of its radius to all of it by here of the ball phase, while ... */
-  BODY_SEED: 0.25,
-  INK_OUT: 0.45,     /* ... the squeezed ink fades into it, gone by here: at 045 there is only the round ball */
+  /* ---- P61 T3c / E99 s53 - THE COMPILE IS A VISIBLE FUSION, NOT A SNAP -------------------------------------------
+     The operator on the `melt:morph` clip, 2026-09-16 (OPERATOR-RULINGS.md:3224): "this is good, i think there's a
+     rushed snap at the end transforming the chart to a ball, but the rest is good."
+     MEASURED FIRST, on `melt-morph` and `melt-page`, every frame of the window at the render clock (24 fps), the
+     outline's area and perimeter off the DOM and the ink's own pixels off the rendered frame. What it was:
+       * the ink's opacity ran out on a clock of its OWN (`INK_OUT` 0.45 of the ball phase) while the squeeze was only
+         `mEase(0.45)` = 0.425 of its way - so the ink VANISHED at scale 0.770 (melt-morph) / 0.685 (melt-page), i.e.
+         at a silhouette of 627 619 px2, TWENTY-NINE TIMES the ball's 21 013 px2, and the next frame the only thing on
+         the board was the ball: ONE FRAME carrying 72.4 % of the whole compile's travel (79.0 % on melt-page);
+       * the rendered ink fell 152 163 -> 21 990 px in that one frame (-85.5 %) while the ball's disc gained 42.2 % of
+         its final area in another (10 546.6 -> 19 410.7 px2, perimeter 364.1 -> 493.9);
+       * and then nothing: the ball was finished and MOTIONLESS for 53 % of its own phase (64 % on melt-page). The
+         compile was never a fusion - it was a cross-fade between a page-sized sagged blob and a small dense disc.
+     WHAT IT IS NOW: ONE CLOSING of ONE shape, on a clock that takes a LONGER SHARE OF THE WINDOW without moving a
+     single phase boundary (MELT_END, BALL_END, the hand-over, the release, the weight phase and the gather are all
+     exactly where they were - and so is `MELT.S`): it OPENS inside the sag's own tail and LANDS before the ball phase
+     ends, 0.335 of the window against the 0.11 the old compile actually used - three times longer, and every ring
+     between the chart and the circle drawn. */
+  FUSE_FROM: 0.55,   /* the share of the SAG at which the closing opens. The drips are at mSlump(0.55) = 0.30 of their
+                        depth there and still opening, so what draws in while they open IS "the last drips arriving
+                        INTO the ball" - and everything before it (the goo, the run, the words' streak, the sag's own
+                        first half, `melt-page@proof-015` at u 0.15) is the frame it always was [DERIVED, HG7c] */
+  FUSE_END: 0.80,    /* ... and the share of the BALL phase at which it LANDS. The last fifth is the ball STANDING,
+                        finished, before the ending or the hand-over takes it - 0.145 s on `melt:morph`, which is why
+                        `melt-morph@proof-ball` (16.50) is still "the ball finished" and the hand-over frame (16.595)
+                        is still a ball that has not moved for three frames [DERIVED] */
+  FUSE_EASE: 0.15,   /* THE EASE, and it is a TRAPEZOID rate and not a smoothstep: the closing accelerates over this
+                        share of its clock, runs at a constant rate, and decelerates onto the circle over the same.
+                        Its PEAK rate is 1 / (1 - FUSE_EASE) = 1.18 of its mean; a smoothstep's peak is 1.50, and a
+                        compile that is only ~6 poses long on the default melt cannot afford the difference - the peak
+                        rate IS the worst frame-to-frame step, which is the thing E99 s53 refused [DERIVED] */
+  FUSE_RATE: 0.20,   /* THE THRESHOLD the test refuses above (test_melt_morph section 9, melt.test.mjs): no frame of
+                        the compile may change the melting body's silhouette by more than this share of the CLOSING'S
+                        OWN TRAVEL - the effective radius sqrt(area / pi), from the ring at the closing's first frame
+                        to the ball's radius. A fifth, because the melt holds on 2s (HOLD 2 at 24 fps = 12 poses/s)
+                        and the shortest compile the engine renders - the default 1.6 s melt's - is ~6 poses long: a
+                        fifth is that floor, and it makes "the ink is one shape and the next frame a ball"
+                        arithmetically impossible. Measured before this slice: 72.4 % on `melt-morph`, 79.0 % on
+                        `melt-page`. The share of the BALL'S FINAL AREA is deliberately NOT the gate: the ball is no
+                        longer a disc growing out of nothing (area ~ R^2 makes the last pose of a shape that closes
+                        from OUTSIDE read as 40 % while its size moves 3 %) - what the eye follows is the silhouette's
+                        SIZE, so the travel is measured in radius [DERIVED from the measurement above] */
+  FUSE_NEAR: 1.60,   /* and the second half of the same law: the ink may not reach zero while the silhouette is still
+                        wider than this many ball radii. It is the defect stated as a fact - the ink used to go out at
+                        5.46 radii (a silhouette 29.9 x the ball's area), and now it goes out at 1.21 on `melt:morph`
+                        and 1.52 on the default melt. 1.60 is the DEFAULT melt's own floor and not a target: its ball
+                        phase is 0.40 s, so on 2s it has no pose between 0.87 and 1.00 of the closing and the last
+                        inked pose lands where the pose grid puts it. A longer melt does better by arithmetic alone
+                        [DERIVED from the measurement] */
+  BODY_FROM: 0.55,   /* THE DENSE BODY, on the closing's own clock: its paint opens here (well inside the ball phase -
+                        the sag/ball boundary sits at 0.40 of this clock), ... */
+  BODY_TO: 0.86,     /* ... and is solid here, a little before the closing lands, so the last stretch is unambiguously
+                        the ball. Over that whole stretch it is the SAME ring the ink wears, which is why no frame can
+                        show a disc arriving whole */
+  BODY_LEAD: 0.55,   /* how far ahead of the ink's own ring the body runs, as a share of what is left of the morph
+                        (m -> m + BODY_LEAD * (1 - m)): the body is always INSIDE the silhouette the eye is following,
+                        it is the same family of shapes, and it lands on the circle exactly when the ink does. 0 would
+                        make the body the ink's own outline (nothing to see through), 1 would make it the finished
+                        ball from its first frame - which is the snap [DERIVED, read on the fusion's midpoint] */
+  INK_OUT: 0.62,     /* the share of the CLOSING at which the squeezed ink begins to give way to that body - and it is
+                        gone EXACTLY as the closing lands on the circle, never before: that is the one line the old
+                        compile broke */
   TINT_MELT: 0,      /* how far the marks have turned to the ink by the sag's end (all the way by the ball's middle). 0: through
                         the sag every mark runs in its OWN colour - 0.6 turned the pale series and the grid salmon-pink */
   INK_DEEP: 3,       /* THE INK: the chart's DOMINANT stroke (its first series) concentrated this many times by K-M - the
@@ -635,14 +695,14 @@ export const ballCircle = (c, r, n) => {
   for (let i = 0; i < n; i++) { const a = 2 * Math.PI * (i / n); out.push([c[0] + r * Math.cos(a), c[1] + r * Math.sin(a)]); }
   return out;
 };
-export const ballAt = (rect, k, rnd, o = {}) => {
-  const P = Object.assign({}, MELT, o), src = meltOutline(rect, 1, rnd, P);
-  const c = centroid(src), r = P.BALL_R * rect.h;
-  /* WITHOUT the weight phase the target is the circle it always was; WITH it the target is the LIVING DROP's ring at
-     the window's own t (E88 s7) - the ball that forms is already wriggling to contain itself. */
-  const prep = morphAPrepare(src, meltBallRing(c, r, P), { n: P.RING_N });
-  return { outline: morphAAt(prep, mEase(k)).outline, centre: c, r, k: mc01(k) };
-};
+/* THE BALL at the closing's progress k: `meltClosingAt` run from the LAST sagged outline, which is the ball phase's
+   own source. WITHOUT the weight phase the target is the circle it always was; WITH it the target is the LIVING
+   DROP's ring at the window's own t (E88 s7) - the ball that forms is already wriggling to contain itself. */
+export const ballAt = (rect, k, rnd, o = {}) => meltClosingAt(rect, 1, k, rnd, o);
+/* THE SILHOUETTE the eye follows, as ONE number: the effective radius sqrt(area / pi) of the ring the melting body
+   wears this frame. It is what E99 s53's threshold is measured in (FUSE_RATE) - a shape's SIZE, which is what reads,
+   rather than its area, which moves as the square of it. */
+export const meltRingR = (pts) => Math.sqrt(Math.max(0, morphAArea(pts || [])) / Math.PI);
 /* the ball's boundary: a plain circle, or - under `melt:weight` - drop.mjs's Rayleigh ring at `te` (the window's own
    stepped seconds), excited by `excite` and turned by `spin` (the roll). Area-renormalised there, so it never grows. */
 export const meltBallRing = (c, r, o = {}) => {
@@ -655,21 +715,63 @@ export const meltBallRing = (c, r, o = {}) => {
   if (+P.vib > 0) ring.FLOOR = meltVibFloor(+P.vib, P);
   return dropRing(c, r, +P.te || 0, meltWeightMass(P), P.excite || [], ring);
 };
-/* THE SQUEEZE: the ink's scale about the ball's centre at ball-phase progress k - 1 at the start, and at the end the ink
-   box's longer side is SQUEEZE ball-diameters. Monotone in k. */
+/* ---- P61 T3c / E99 s53: THE CLOSING - one shape, one clock ------------------------------------------------------ */
+/* WHERE the compile runs, as a span of the WINDOW's own u: it opens at FUSE_FROM of the SAG and lands at FUSE_END of
+   the BALL phase. Both ends are shares of phases whose own boundaries are untouched, so a melt with a weight phase
+   (which shortens every other phase by its share) gets the same closing, scaled with them. */
+export const meltFuseSpan = (o = {}) => {
+  const P = Object.assign({}, MELT, o), r = 1 - meltWeightShare(P.secs, P);
+  return { from: P.MELT_END * r * P.FUSE_FROM, to: r * (P.MELT_END + (P.BALL_END - P.MELT_END) * P.FUSE_END) };
+};
+/* the closing's clock at the window's u: 0 before it opens, 1 from the frame it lands. Every frame with kc = 0 is the
+   frame this module always wrote - which is what keeps the sag's first half and its goldens where they are. */
+export const meltFuseAt = (u, o = {}) => {
+  const s = meltFuseSpan(o);
+  return mc01((mc01(u) - s.from) / Math.max(1e-6, s.to - s.from));
+};
+/* THE CLOSING'S EASE - a TRAPEZOID rate, not a smoothstep (see FUSE_EASE): it opens over FUSE_EASE of the clock, runs
+   at a constant rate, and decelerates onto the circle over the same. Peak rate 1 / (1 - FUSE_EASE) of the mean, which
+   is the bound on the worst frame-to-frame step, which is the whole of E99 s53. Exact at both ends. */
+export const meltFuseEase = (x, o = {}) => {
+  const P = Object.assign({}, MELT, o), a = Math.min(0.49, Math.max(1e-4, +P.FUSE_EASE)), k = mc01(x), d = 2 * a * (1 - a);
+  if (k < a) return k * k / d;
+  if (k > 1 - a) return 1 - (1 - k) * (1 - k) / d;
+  return (k - a / 2) / (1 - a);
+};
+/* THE MELTING BODY'S RING at the closing's clock `kc`: morph_a's vertex lerp from the sagged outline AS IT STANDS this
+   frame (`k` is the sag's own progress - in the closing's first stretch the drips are still opening) to the ball's own
+   boundary, which is a plain circle or, under `melt:weight` / a gather, drop.mjs's living ring. Every intermediate ring
+   is DRAWN: the circle is the end of the closing and never a target the shape is snapped to. The prep is returned so a
+   caller can read the SAME morph at a second position (the dense body runs BODY_LEAD ahead of the ink - meltBodyLead). */
+export const meltClosingAt = (rect, k, kc, rnd, o = {}) => {
+  const P = Object.assign({}, MELT, o), last = meltOutline(rect, 1, rnd, P);
+  const c = centroid(last), r = P.BALL_R * rect.h;
+  const src = k >= 1 ? last : meltOutline(rect, mc01(k), rnd, P);
+  const prep = morphAPrepare(src, meltBallRing(c, r, P), { n: P.RING_N }), m = meltFuseEase(kc, P);
+  return { prep, m, outline: morphAAt(prep, m).outline, centre: c, r, k: mc01(kc) };
+};
+/* WHERE THE DENSE BODY IS ON THAT MORPH: the same ring, run this much further along what is left of it. It is always
+   inside the silhouette the eye is following, it is the same shape, and at kc = 1 it IS the ball. */
+export const meltBodyLead = (m, o = {}) => {
+  const P = Object.assign({}, MELT, o), k = mc01(m);
+  return k + P.BODY_LEAD * (1 - k);
+};
+/* THE SQUEEZE: the ink's scale about the ball's centre at the CLOSING's progress k - 1 at the start, and at the end the
+   ink box's longer side is SQUEEZE ball-diameters. Monotone in k, and it now LANDS (the marks are inside the ball) on
+   the same frame the ink gives out, which is the line P61 T3c repaired. */
 export const meltSqueeze = (rect, r, k, o = {}) => {
   const P = Object.assign({}, MELT, o), end = Math.min(1, P.SQUEEZE * 2 * r / Math.max(1e-6, rect.w, rect.h));
-  return 1 + (end - 1) * mEase(k);
+  return 1 + (end - 1) * meltFuseEase(k, P);
 };
-/* the ink body's opacity at ball-phase progress k: none, then up to solid before the ball moves */
+/* the dense body's opacity at the CLOSING's progress k: none, then up to solid a little before the closing lands */
 export const meltBodyAlpha = (k, o = {}) => {
   const P = Object.assign({}, MELT, o);
   return mEase(mc01((k - P.BODY_FROM) / Math.max(1e-6, P.BODY_TO - P.BODY_FROM)));
 };
-/* the ball's radius as a share of BALL_R at ball-phase progress k: from a seed to whole, monotone */
-export const meltBodyGrow = (k, o = {}) => {
+/* the ink's own opacity at the CLOSING's progress k: whole until INK_OUT, and gone EXACTLY as the closing lands */
+export const meltInkAlpha = (k, o = {}) => {
   const P = Object.assign({}, MELT, o);
-  return P.BODY_SEED + (1 - P.BODY_SEED) * mEase(mc01(k / Math.max(1e-6, P.BODY_GROW)));
+  return 1 - mEase(mc01((mc01(k) - P.INK_OUT) / Math.max(1e-6, 1 - P.INK_OUT)));
 };
 export const ballFlat = (outline, c, k, o = {}) => {
   const P = Object.assign({}, MELT, o), f = 1 - P.FLAT * mEase(k), g = 1 + (1 / Math.max(0.05, f) - 1) * 0.5;
@@ -892,11 +994,24 @@ export const meltState = (t0, t, o = {}, rnd) => {
     return st;
   }
   if (ph.name === "melt") {
-    st.outline = meltOutline(rect, ph.k, rnd, P);
-    st.path = morphAPath(st.outline);
     st.run = meltRun("melt", ph.k, rect, P);
     st.tint = meltTint("melt", ph.k, P);
     st.textOpacity = meltTextAlpha(ph.k);   /* the words run down as their own glyphs and are gone by the ball */
+    /* P61 T3c / E99 s53 - THE CLOSING OPENS INSIDE THIS PHASE'S OWN TAIL. Before FUSE_FROM `kc` is 0 and every string
+       written here is the string this module always wrote (the sag's first half, its goldens, its drips). From there
+       the melting body's ring is already drawing in toward the ball WHILE the drips go on opening - which is the
+       ruling's "the last drips arriving INTO the ball", and it is why the compile is three times longer without one
+       phase boundary moving. */
+    const kc = meltFuseAt(u, P);
+    if (kc <= 0) { st.outline = meltOutline(rect, ph.k, rnd, P); st.path = morphAPath(st.outline); return st; }
+    const bS = P.MELT_END * (1 - meltWeightShare(secs, P)) * secs;   /* the compile's own excitation, stamped where the ball phase opens */
+    const b = meltClosingAt(rect, ph.k, kc, rnd, Object.assign({}, P, { te: stepped(Math.max(0, t - t0), P.HOLD, P.FPS), excite: [{ at: bS, a: DROP.A }] }));
+    const s = meltSqueeze(rect, b.r, kc, P);
+    st.centre = b.centre; st.r = b.r; st.scale = s;
+    /* the mask is in the ink's own px, and the ink is squeezed by s about the centre: the same body, unsqueezed */
+    st.outline = b.outline.map((p) => [b.centre[0] + (p[0] - b.centre[0]) / s, b.centre[1] + (p[1] - b.centre[1]) / s]);
+    st.path = morphAPath(st.outline);
+    st.inkBlur += P.BALL_FUSE * meltFuseEase(kc, P);   /* the marks FUSE into one body as they compact */
     return st;
   }
   /* the ball and the ending run on the STEPPED clock, each on its own phase-local seconds (a pure quantisation of t) */
@@ -912,19 +1027,30 @@ export const meltState = (t0, t, o = {}, rnd) => {
     /* P61 T6: under a gather the point is ALREADY there and already alive - the ink amassed on it - so the ball phase
        only lets the vibration settle (meltVibGain falls to 0 across G_VIB_FALL) and the ink is gone, not squeezed. */
     const vib = meltVibGain("ball", kq, P);
-    const b = ballAt(rect, kq, rnd, Object.assign({}, P, { te: tqw, excite: born, vib })), s = meltSqueeze(rect, b.r, kq, P);
+    /* P61 T3c: this phase is the SECOND half of the one closing that opened in the sag's tail. `kc` is that clock,
+       read at this phase's own STEPPED seconds (on 2s), and it LANDS at FUSE_END - after which the ball stands. */
+    const uM = P.MELT_END * rest0, uB = P.BALL_END * rest0;
+    const kc = meltFuseAt(uM + kq * (uB - uM), P);
+    const b = ballAt(rect, kc, rnd, Object.assign({}, P, { te: tqw, excite: born, vib })), s = meltSqueeze(rect, b.r, kc, P);
     st.k = kq; st.centre = b.centre; st.r = b.r; st.scale = s;
-    st.bodyOutline = b.outline; st.bodyAlpha = P.gather ? 1 : meltBodyAlpha(kq, P);
-    /* the SOLID ball: a crisp circle, never the box - and under `melt:weight` (or a gather) the living drop's own ring */
-    st.body = morphAPath(meltBallRing(b.centre, b.r * (P.gather ? 1 : meltBodyGrow(kq, P)), Object.assign({}, P, { te: tqw, excite: born, vib })));
-    if (P.weight || P.gather) { st.mass = true; st.hl = dropSpecular(b.centre, b.r * (P.gather ? 1 : meltBodyGrow(kq, P)), dropModes(tqw, b.r, wMass, born, { FLOOR: meltVibFloor(vib, P) })); }
+    /* THE DENSE BODY: under a gather the point's own living ring, as it always was; otherwise the SAME closing ring
+       the ink wears, run BODY_LEAD further along the same morph - so the thing that becomes the ball is the thing
+       the eye has been following, and the circle is the end of a visible closing (E99 s53). */
+    const bodyOut = P.gather ? meltBallRing(b.centre, b.r, Object.assign({}, P, { te: tqw, excite: born, vib }))
+                             : morphAAt(b.prep, meltBodyLead(b.m, P)).outline;
+    st.bodyOutline = bodyOut; st.bodyAlpha = P.gather ? 1 : meltBodyAlpha(kc, P);
+    st.body = morphAPath(bodyOut);
+    if (P.weight || P.gather) {
+      st.mass = true;
+      st.hl = dropSpecular(b.centre, P.gather ? b.r : meltRingR(bodyOut), dropModes(tqw, b.r, wMass, born, { FLOOR: meltVibFloor(vib, P) }));
+    }
     st.tint = meltTint("ball", kq, P);
-    st.inkBlur = P.gather ? 0 : st.inkBlur + P.BALL_FUSE * mEase(kq);   /* the marks FUSE into one body as they compact - a GATHER has no ink left to fuse, and writes no blur anywhere in its window */
+    st.inkBlur = P.gather ? 0 : st.inkBlur + P.BALL_FUSE * meltFuseEase(kc, P);   /* the marks FUSE into one body as they compact - a GATHER has no ink left to fuse, and writes no blur anywhere in its window */
     /* the mask is in the ink's own px, and the ink is squeezed by s about the centre: the same body, unsqueezed */
     st.outline = b.outline.map((p) => [b.centre[0] + (p[0] - b.centre[0]) / s, b.centre[1] + (p[1] - b.centre[1]) / s]);
     st.path = morphAPath(st.outline);
     st.run = meltRun("ball", kq, rect, P);
-    st.inkOpacity = P.gather ? 0 : 1 - mEase(mc01(kq / Math.max(1e-6, P.INK_OUT)));
+    st.inkOpacity = P.gather ? 0 : meltInkAlpha(kc, P);
     return st;
   }
   /* the compiled ball: its centre and radius are the geometry's, whatever its surface is doing */

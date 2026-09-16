@@ -111,7 +111,16 @@ PROOF_FRAMES = {
     # which is what makes them proofs and not flag frames. The other two endings are their own surfaces:
     # `frames/melt-splash.png` (splash:chart) and `frames/melt-plate.png` (splash:plate). In every one the board stays.
     "melt-page@proof-015": ("melt-page", {}, 15.0 + 0.15 * 1.6),   # THE SAG: the chart's marks swelling and running down under the goo, the board whole behind them
-    "melt-page@proof-045": ("melt-page", {}, 15.0 + 0.45 * 1.6),   # THE BALL, forming: the ink squeezed toward the centre on the stepped clock, the dense body coming up over it
+    "melt-page@proof-045": ("melt-page", {}, 15.0 + 0.45 * 1.6),   # THE BALL, forming - and since P61 T3c / E99 s53 it is STILL forming here: kc 0.87 of the closing, the body solid and all but round with the last scallops of the chart's own ink on its rim, one pose short of the circle (it used to be a finished ball by 0.42 of the phase, and then nothing for the rest of it)
+    # P61 T3c / E99 s53 - THE FUSION'S OWN MIDPOINT, the instant neither the chart's frame nor the ball's can show:
+    # the frame where the chart's ink and the dense body each carry HALF the paint, on ONE closing shape. The compile
+    # is one closing (species/melt.mjs FUSE_FROM -> FUSE_END, u 0.165 -> 0.500 of the window on both surfaces); the ink
+    # gives way over its last stretch (INK_OUT 0.62) while the body rises over BODY_FROM 0.55 -> BODY_TO 0.86, and the
+    # two cross at kc ~ 0.75 - which is u 0.416 of the window and is the instant taken here. Read as a viewer: one
+    # lumpy mass, part compacted chart and part ball, a third the size the chart was and twice the size the ball will
+    # be. No flag on either: the compile is what a melt IS, not a capability behind a switch.
+    "melt-morph@proof-fuse": ("melt-morph", {"arap_morph": True, "min_jerk": True}, 16.22),   # the 2.9 s `melt:morph` window: kc 0.746, the ink at 0.74 and the body at 0.69, the silhouette 2.3 ball radii
+    "melt-page@proof-fuse": ("melt-page", {}, 15.68),   # ... and the default 1.6 s melt at the same place on its own clock (kc 0.714): the ink at 0.85, the body at 0.54
     "melt-page@proof-075": ("melt-page", {}, 15.0 + 0.75 * 1.6),   # THE THROW: the heavy ball in flight off the bottom right, the next chart drawing on the same board
     "melt-page@proof-100": ("melt-page", {}, 15.0 + 1.00 * 1.6),   # GONE: the next chart on its board, drawing, nothing left of the ink that melted
     # R26-118 / E88 s6-s7: THE BALL WITH MASS, at the two instants its mid-roll golden cannot show. The same two pages

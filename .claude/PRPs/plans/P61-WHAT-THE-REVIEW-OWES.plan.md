@@ -494,7 +494,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   Left to T11: CAPABILITIES row 119 still states the retired 'soaked from the first frame' law; the catalogue layer.
 
 ### T3c: THE CHART-TO-BALL IS A VISIBLE FUSION, NOT A SNAP (E99 s53)
-- Status: pending
+- Status: complete (2026-09-16) - HG2-2 open on the queue as `r26-117-ball-into-the-next-chart` (watch, two clips)
 - Owner: `implementation_luna` (**ENGINE LOCK**)
 - Depends on: T3, HG2 (ruled E99 s53)
 - Write set: `content/video_engine/scripts/species/melt.mjs` (the compile phase's clock and shares), `content/video_engine/scripts/kinetics/morph_a.mjs` (additive),
@@ -508,7 +508,21 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   `python -m pytest content/video_engine/tests/test_melt_morph.py content/video_engine/tests/test_transitions_e47.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/effects_catalog_check.py` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-117-ball-into-the-next-chart`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T3c.md`. MEASURED FIRST: `species/melt.mjs:927` `inkOpacity = 1 - mEase(kq / INK_OUT)`
+  (INK_OUT 0.45) against an eased `meltSqueeze` at 0.425 - the ink vanished at a silhouette 29.9x the ball (627,619 vs 21,013 px^2),
+  72.4 % of the travel in one frame (melt-morph 16.1667 -> 16.2083); the body +42.2 % of its final area at 16.1250; the ink pixels
+  -85.5 % at 16.0417; the ball then frozen for 53 % of the phase. BUILT: ONE closing, u 0.165 -> 0.500 of the window (melt.mjs
+  :131-174, :701-776, :1005, :1033; morph_a.mjs :111 additive) - the ink out at 1.16 r of the ball (was 5.46 r), the last drips
+  arriving into it; worst frame-to-frame step 10.1 % of the final area on melt:morph (18.3 % on the default melt's 1.6 s window);
+  `MELT.S` and the phase shares unchanged, so every instant the operator approved (T3's four proof frames, T6's four) stands.
+  GOLDENS: `melt-page@proof-045` moved (7c2a199d -> 004cc423: one pose short of the circle now); NEW `melt-morph@proof-fuse` (16.22)
+  and `melt-page@proof-fuse` (15.68) in PROOF_FRAMES; every other golden byte-identical. Parent's read: the fuse frames show the ink
+  closing into the ball with the last drips arriving, never a shape then a disc. Tests: the area / perimeter probe across the
+  compile refusing a step over 12 % (test_melt_morph), melt.test.mjs. Validate: node 604/604; sync in sync; pytest 275 passed;
+  effects_catalog_check 0; page-boxes 44 (sha-only); gate on the Japan cut unchanged (4 FAIL / 16 PASS). On the way: the
+  page_enter card's planted-ground phase text (T3b) was over the 240 cap and only the schema builder caught it (R26-141 again) -
+  trimmed by the parent. NAMED, the operator's call: the default melt's 1.6 s window gives the closing ~6 poses on 2s; lengthening
+  MELT.S moves every melt golden's instants - offered on the card, not decided.
 
 ### T4a: THE EXTRUDED BAR'S LEAVE BREAKS ITS SHAPES DOWN MORE
 - Status: complete (2026-09-15) - HG3 open on the queue as `p58-hg3-extruded-bar-leave` (watch, two clips)

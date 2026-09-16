@@ -22,6 +22,12 @@ What this file pins:
                     P57 T12c / P61 T2); at u = 1 the shape's top edge sits ON series 0, within 1 unit; and
                     no frame of the window draws a series of the arriving chart while the morph runs.
   6. THE SEEK       two seeks of the same instant are the same bytes.
+  9. THE COMPILE    P61 T3c / E99 s53 - the chart-to-ball is a VISIBLE FUSION: measured in a browser, frame
+     (section 9)   by frame at the render clock across the whole closing, the melting body's outline (area
+                   and perimeter, read off the DOM and carried onto the screen by the ink's own squeeze)
+                   falls monotonically and no frame carries more than MELT.FUSE_RATE of the closing's own
+                   travel; the ink does not go out until the silhouette IS the ball (MELT.FUSE_NEAR); and
+                   the fusion's midpoint has a golden (`melt-morph@proof-fuse`, `melt-page@proof-fuse`).
   7. THE PLANTED    `world.morph = {poly: [...]}` - a real element's own traced silhouette. Its three
      SOURCE        refusals by name (under three points, self-intersecting, off the stage), and the poly the
                    `morph-planted` golden carries RE-TRACED by `kinetics/contour.mjs` from the same raster
@@ -34,6 +40,7 @@ from __future__ import annotations
 import contextlib
 import hashlib
 import json
+import math
 import subprocess
 import sys
 import tempfile
@@ -65,7 +72,7 @@ def _node(src: str):
 
 
 def _melt(expr: str):
-    return _node(f'import {{ MELT, MELT_ENDINGS, meltOpts, meltHandAt, meltHandDelay, meltHandSecs }} '
+    return _node(f'import {{ MELT, MELT_ENDINGS, meltOpts, meltHandAt, meltHandDelay, meltHandSecs, meltFuseSpan }} '
                  f'from {json.dumps(MELT_MJS.as_uri())};\nconsole.log(JSON.stringify(({expr})));\n')
 
 
@@ -701,3 +708,127 @@ def test_the_morph_goldens_carry_the_field_each_kind_of_morph_owes() -> None:
         out, arrive = tl["scenes"][0]["world"]["page"], tl["scenes"][1]["world"]["page"]
         assert arrive["enter"] == "morph"
         assert arrive["field"] == out["field"], (surface, out.get("field"), arrive.get("field"))
+
+
+# ---- 9. P61 T3c / E99 s53: THE CHART-TO-BALL IS A VISIBLE FUSION, NOT A SNAP -------------------------
+# The operator, 2026-09-16, on the `melt:morph` clip (`docs/portable/OPERATOR-RULINGS.md:3224`): *"this is
+# good, i think there's a rushed snap at the end transforming the chart to a ball, but the rest is good."*
+# MEASURED before the slice, on this very rig: the ink's opacity ran out on a clock of its own while the
+# squeeze was 42 % of its way, so the melting body VANISHED at a silhouette 29.9 x the ball's area and the
+# next frame carried only the ball - ONE FRAME with 72.4 % of the compile's whole travel (79.0 % on the
+# default melt), the ball's disc gaining 42.2 % of its final area in another, and then a finished, motionless
+# ball for 53 % of the phase. What follows is that measurement as a law: the compile is ONE closing, it is
+# read frame by frame at the RENDER clock, and a step above MELT.FUSE_RATE of its own travel is refused.
+
+FUSE_PROBE = r"""() => {
+  /* the MELT overlay's own two paths. `m.path` is the melting body's ring (morph_a's, from the sagged outline to
+     the ball's circle) in the INK's own px - the ink is squeezed about the ball's centre by `st.scale`, so what the
+     eye sees is that ring times that scale, which is what this returns. `m.body` is the dense body. */
+  const melt = [...document.querySelectorAll('.world')].find((e) => e.__melt);
+  if (!melt) return null;
+  const m = melt.__melt;
+  const meas = (p) => {
+    const d = p.getAttribute('d') || '';
+    if (!d) return null;
+    const L = p.getTotalLength();
+    if (!(L > 0)) return null;
+    const N = 720; let a = 0, prev = p.getPointAtLength(0); const first = prev;
+    for (let i = 1; i <= N; i++) { const q = p.getPointAtLength(L * i / N); a += prev.x * q.y - q.x * prev.y; prev = q; }
+    a += prev.x * first.y - first.x * prev.y;
+    return { len: L, area: Math.abs(a) / 2 };
+  };
+  const tr = m.ink.style.transform || '', k = /scale\(([-0-9.]+)\)/.exec(tr), s = k ? +k[1] : 1;
+  const ring = meas(m.path), body = meas(m.body);
+  return {
+    scale: s, ring: ring ? { area: ring.area * s * s, len: ring.len * s } : null,
+    body: body, bodyAlpha: +(m.body.getAttribute('opacity') || 0),
+    inkOpacity: +(m.ink.style.opacity || 0), inkHidden: m.ink.style.visibility === 'hidden',
+  };
+}"""
+
+
+def _fuse_rows(surface: str, flags: dict, cut: float, exit_str: str) -> list[dict]:
+    """The silhouette the eye follows, frame by frame at the render clock, across the whole closing: the
+    melting body's ring while the ink still carries it, the ball's own body once the ink has gone."""
+    dials = _melt("(() => { const o = meltOpts(" + json.dumps(exit_str) + "), P = Object.assign({}, MELT, o);"
+                  " return { secs: o.secs, span: meltFuseSpan(P), rate: MELT.FUSE_RATE, near: MELT.FUSE_NEAR,"
+                  " fps: MELT.FPS }; })()")
+    secs, span, fps = dials["secs"], dials["span"], dials["fps"]
+    rows: list[dict] = []
+    with _player(surface, flags) as (page, _size):
+        f0, f1 = int(cut * fps + span["from"] * secs * fps), int(cut * fps + span["to"] * secs * fps) + 2
+        for f in range(f0, f1 + 1):
+            t = f / fps
+            page.evaluate("t => { const s = document.getElementById('scrub');"
+                          " s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+            p = page.evaluate(FUSE_PROBE)
+            if not p or p["ring"] is None:
+                continue
+            inked = p["inkOpacity"] > 0.02 and not p["inkHidden"]
+            shape = p["ring"] if inked else p["body"]
+            if not shape:
+                continue
+            rows.append({"t": round(t, 4), "R": math.sqrt(shape["area"] / math.pi), "P": shape["len"],
+                         "ink": p["inkOpacity"] if inked else 0.0, "body": p["bodyAlpha"]})
+    return rows, dials
+
+
+@browser_only
+@pytest.mark.parametrize("surface, flags, exit_str", [
+    ("melt-morph", FLAGS, "melt:morph"),   # the surface E99 s53 was ruled on
+    ("melt-page", {}, "melt"),             # ... and the DEFAULT melt, whose 1.6 s window is the engine's shortest compile
+])
+def test_no_frame_of_the_compile_carries_more_than_FUSE_RATE_of_its_travel(surface, flags, exit_str) -> None:
+    rows, dials = _fuse_rows(surface, flags, CUT, exit_str)
+    assert len(rows) >= 8, f"{surface}: only {len(rows)} frames of closing"
+    travel = rows[0]["R"] - rows[-1]["R"]
+    assert travel > 0.5 * rows[0]["R"], f"{surface}: the closing hardly travels ({travel:.1f} px)"
+    worst, worst_at = 0.0, None
+    for a, b in zip(rows, rows[1:]):
+        assert b["R"] <= a["R"] + 0.5, f"{surface}: the silhouette GREW at t={b['t']} ({a['R']:.1f} -> {b['R']:.1f})"
+        if a["R"] - b["R"] > worst:
+            worst, worst_at = a["R"] - b["R"], b["t"]
+    assert worst / travel <= dials["rate"], (
+        f"{surface}: one frame carried {100 * worst / travel:.1f} % of the closing at t={worst_at} "
+        f"(FUSE_RATE {dials['rate']}) - that is the snap E99 s53 refused")
+
+
+@browser_only
+@pytest.mark.parametrize("surface, flags, exit_str", [("melt-morph", FLAGS, "melt:morph"), ("melt-page", {}, "melt")])
+def test_the_last_drips_arrive_INTO_the_ball_and_the_circle_is_the_end_of_the_closing(surface, flags, exit_str) -> None:
+    """The ruling's own two sentences, as two measurements. (a) The ink may not reach zero while the melting
+    body is still wider than FUSE_NEAR ball radii - it used to go out at 5.46 of them. (b) The perimeter of
+    what is on the board falls monotonically from the ball phase on: the drips are replaced by nothing, they
+    are pulled in until the ring IS the circle."""
+    rows, dials = _fuse_rows(surface, flags, CUT, exit_str)
+    r_ball = rows[-1]["R"]
+    inked = [q for q in rows if q["ink"] > 0.02]
+    assert inked, surface
+    assert inked[-1]["R"] <= dials["near"] * r_ball * 1.02, (
+        f"{surface}: the ink went out at {inked[-1]['R'] / r_ball:.2f} ball radii (FUSE_NEAR {dials['near']})")
+    assert rows[-1]["ink"] == 0, f"{surface}: and it IS out by the closing's landing"
+    # the dense body and the ink overlap on ONE shape: there is a frame where each carries a real share of the paint
+    assert any(q["ink"] > 0.15 and q["body"] > 0.15 for q in rows), f"{surface}: no frame carries both paints"
+    # the perimeter, from the ball phase on (through the sag's tail the drips are still OPENING, by design)
+    tail = [q for q in rows if q["t"] >= CUT + 0.30 * dials["secs"]]
+    for a, b in zip(tail, tail[1:]):
+        assert b["P"] <= a["P"] + 0.5, f"{surface}: the perimeter grew at t={b['t']} ({a['P']:.1f} -> {b['P']:.1f})"
+    assert tail[-1]["P"] < 0.25 * tail[0]["P"], "and it ends on the circle's own perimeter"
+
+
+@browser_only
+def test_the_compile_does_not_move_the_hand_over_or_anything_after_it() -> None:
+    """T3's hand-over stays exactly as it was approved: the closing lands at FUSE_END of the ball phase, so by
+    the hand-over frame the ball has been a finished circle for several frames and nothing about the hand,
+    its clock or its geometry has moved."""
+    at, secs = _hand_window()
+    landed = _melt("(() => { const o = meltOpts('melt:morph'), P = Object.assign({}, MELT, o);"
+                   " return meltFuseSpan(P).to * o.secs; })()")
+    assert CUT + landed < at, f"the closing lands at {CUT + landed}, before the hand-over at {at}"
+    assert at - (CUT + landed) > 2 / 24, "with at least two frames of a standing ball before it"
+    with _player("melt-morph", FLAGS) as (page, _size):
+        boxes = [_at(page, at - k / 24)["ballBox"] for k in (3, 2, 1)]
+        for a, b in zip(boxes, boxes[1:]):
+            assert max(abs(x - y) for x, y in zip(a, b)) < 0.5, f"the ball was still moving into the hand-over: {boxes}"
+        p = _at(page, at + 0.005)
+        assert p["hand"] and p["u"] < 0.02 and p["ballAlpha"] > 0.98

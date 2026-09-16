@@ -8,8 +8,9 @@ import { MELT, MELT_ENDINGS, MELT_CSS, meltOpts, meltShares, meltPhase, meltBlur
          meltDepth, meltTop, meltOutline, meltRun, ballCircle, ballAt, meltSqueeze, meltBodyAlpha, ballFlat, meltSettle,
          meltMixInk, splashDrops, splashStains, meltThrowAt, meltState, meltFilterMarkup, meltMaskMarkup,
          meltInkFilterMarkup, meltRevealMarkup, meltBodyTransform, meltIsBoard, meltInkOf, meltTint, meltSplatPath, splashSats,
-         meltSpring, meltBodyGrow, meltTextFilterMarkup, MELT_MATERIALS, meltWeightShare, meltWeightMass, meltWeightAt,
-         meltRollDir, meltMarkAt, meltBallRing } from "../../scripts/species/melt.mjs";
+         meltSpring, meltBodyLead, meltTextFilterMarkup, MELT_MATERIALS, meltWeightShare, meltWeightMass, meltWeightAt,
+         meltRollDir, meltMarkAt, meltBallRing, meltFuseSpan, meltFuseAt, meltFuseEase, meltClosingAt, meltInkAlpha,
+         meltRingR } from "../../scripts/species/melt.mjs";
 import { stepped, MASS, STOP, rollXf } from "../../scripts/kinetics/stopaction.mjs";
 import { DROP, dropArea } from "../../scripts/kinetics/drop.mjs";
 import { hexToLin } from "../../scripts/kinetics/ink.mjs";
@@ -133,13 +134,15 @@ test("the ink is SQUEEZED into the ball, not cropped by it, and the body comes u
   let last = 2;
   for (const k of [0, 0.3, 0.6, 1]) { const s = meltSqueeze(RECT, r, k); assert.ok(s <= last + 1e-12); last = s; }
   assert.equal(meltBodyAlpha(0), 0);
-  assert.equal(meltBodyGrow(0), MELT.BODY_SEED);
-  assert.equal(meltBodyGrow(MELT.BODY_GROW), 1, "whole by BODY_GROW");
-  const at45 = meltState(4.0, 4.0 + 0.45 * MELT.S, OPTS(), rnd);
-  assert.ok(at45.bodyAlpha === 1 && at45.inkOpacity === 0, "by 045 the chart is a round, solid ball and nothing else");
-  const nums45 = at45.body.match(/-?\d+(\.\d+)?/g).map(Number), rr45 = [];
-  for (let i = 0; i + 1 < nums45.length; i += 2) rr45.push(Math.hypot(nums45[i] - at45.centre[0], nums45[i + 1] - at45.centre[1]));
-  assert.ok(Math.abs(Math.max(...rr45) - at45.r) < at45.r * 0.05, "at its full radius");
+  // P61 T3c / E99 s53: the dense body is the SAME closing ring, run BODY_LEAD further along what is left of the morph
+  assert.equal(meltBodyLead(0), MELT.BODY_LEAD);
+  assert.equal(meltBodyLead(1), 1, "and at the closing's landing it IS the ball");
+  for (const m of [0, 0.2, 0.5, 0.9, 1]) assert.ok(meltBodyLead(m) >= m - 1e-12, "never behind the ink's own ring");
+  const done = meltState(4.0, 4.0 + (MELT.MELT_END + (MELT.BALL_END - MELT.MELT_END) * MELT.FUSE_END + 0.02) * MELT.S, OPTS(), rnd);
+  assert.ok(done.phase === "ball" && done.bodyAlpha === 1 && done.inkOpacity === 0, "past FUSE_END the ball stands, finished, and nothing else is on the board");
+  const nums45 = done.body.match(/-?\d+(\.\d+)?/g).map(Number), rr45 = [];
+  for (let i = 0; i + 1 < nums45.length; i += 2) rr45.push(Math.hypot(nums45[i] - done.centre[0], nums45[i + 1] - done.centre[1]));
+  assert.ok(Math.abs(Math.max(...rr45) - done.r) < done.r * 0.05, "at its full radius");
   assert.ok(meltState(4.0, 4.0 + 0.15 * MELT.S, OPTS(), rnd).textOpacity > 0.3 && meltState(4.0, 4.0 + 0.45 * MELT.S, OPTS(), rnd).textOpacity === 0, "the words run and are gone by the ball");
   assert.equal(meltBodyAlpha(MELT.BODY_TO), 1, "solid from BODY_TO");
   assert.equal(meltBodyAlpha(1), 1);
@@ -149,7 +152,99 @@ test("the ink is SQUEEZED into the ball, not cropped by it, and the body comes u
   assert.ok(b.scale < 1 && b.body.length > 0, "mid-ball: squeezed, with a body");
   const c = b.centre, bodyFar = Math.max(...b.bodyOutline.map((p) => Math.hypot(p[0] - c[0], p[1] - c[1])));
   const maskFar = Math.max(...b.outline.map((p) => Math.hypot(p[0] - c[0], p[1] - c[1])));
-  assert.ok(Math.abs(maskFar * b.scale - bodyFar) < 1e-6, "the mask is the body, unsqueezed into the ink's own px");
+  assert.ok(bodyFar < maskFar * b.scale + 1e-6, "the dense body is INSIDE the ink's own silhouette, never over it");
+});
+
+// ---- P61 T3c / E99 s53: THE COMPILE IS A VISIBLE FUSION -------------------------------------------------------------
+// The operator, 2026-09-16: "there's a rushed snap at the end transforming the chart to a ball". Measured before the
+// slice, on the served player at 24 fps: the ink's alpha ran out at a silhouette 29.9x the ball's area and the next
+// frame carried only the ball - ONE FRAME with 72.4 % of the compile's whole travel. These pin the law that replaced it.
+const fuseSeries = (opts) => {
+  // the SILHOUETTE the eye follows, frame by frame at the RENDER clock, over the whole closing: the melting body's
+  // ring while the ink still carries it, the ball's own body once the ink has gone. In effective radius (px).
+  const P = Object.assign({}, MELT, opts), secs = P.secs, span = meltFuseSpan(P), out = [];
+  const f0 = Math.floor(span.from * secs * MELT.FPS), f1 = Math.ceil(span.to * secs * MELT.FPS) + 2;
+  for (let f = f0; f <= f1; f++) {
+    const st = meltState(0, f / MELT.FPS, Object.assign({ rect: RECT, stagebox: SB }, opts), rnd);
+    if (st.phase !== "melt" && st.phase !== "ball") break;
+    if (!st.centre) continue;   /* before FUSE_FROM there is no closing yet - the sag as it always was */
+    const ink = st.inkOpacity > 0.02 && st.outline;
+    const pts = ink ? st.outline.map((p) => [st.centre[0] + (p[0] - st.centre[0]) * st.scale,
+                                             st.centre[1] + (p[1] - st.centre[1]) * st.scale])
+                    : st.bodyOutline;
+    if (!pts) continue;
+    out.push({ f, t: f / MELT.FPS, R: meltRingR(pts), ink: st.inkOpacity, r: st.r, body: st.bodyAlpha });
+  }
+  return out;
+};
+
+test("the compile is ONE closing: it opens inside the sag, lands before the ball phase ends, and nothing before it moves", () => {
+  const span = meltFuseSpan(Object.assign({}, MELT, { secs: MELT.S }));
+  assert.ok(Math.abs(span.from - MELT.MELT_END * MELT.FUSE_FROM) < 1e-12, "it opens in the SAG's own tail");
+  assert.ok(span.from < MELT.MELT_END && span.to > MELT.MELT_END, "so it straddles the sag/ball boundary");
+  assert.ok(span.to < MELT.BALL_END, "and lands before the ending takes the ball");
+  assert.ok(span.to - span.from > 3 * (MELT.BALL_END - MELT.MELT_END) * MELT.FUSE_END * 0.45,
+            "a LONGER share of the window than the compile that shipped actually used");
+  // every frame before FUSE_FROM is the frame this module always wrote: no squeeze, no closing, no body
+  const early = meltState(0, (MELT.MELT_END * MELT.FUSE_FROM - 0.01) * MELT.S, OPTS(), rnd);
+  assert.equal(meltFuseAt(early.u, Object.assign({}, MELT, OPTS())), 0);
+  assert.equal(early.scale, 1);
+  assert.equal(early.centre, null);
+  assert.deepEqual(early.outline, meltOutline(RECT, early.k, rnd, Object.assign({}, MELT, OPTS())));
+  // the ease is a TRAPEZOID: exact at both ends, monotone, and its peak rate is 1 / (1 - FUSE_EASE), not 1.5
+  assert.equal(meltFuseEase(0), 0);
+  assert.equal(meltFuseEase(1), 1);
+  let prev = -1, peak = 0;
+  for (let i = 0; i <= 2000; i++) {
+    const v = meltFuseEase(i / 2000);
+    assert.ok(v >= prev - 1e-12, "monotone");
+    if (i) peak = Math.max(peak, (v - prev) * 2000);
+    prev = v;
+  }
+  assert.ok(Math.abs(peak - 1 / (1 - MELT.FUSE_EASE)) < 0.02, `peak rate ${peak}`);
+});
+
+test("no frame of the compile carries more than FUSE_RATE of its travel, on the default melt and on melt:morph", () => {
+  for (const exit of ["melt", "melt:morph", "melt:splash:chart", "melt:weight"]) {
+    const opts = meltOpts(exit), rows = fuseSeries(opts);
+    assert.ok(rows.length >= 8, `${exit}: ${rows.length} frames of closing`);
+    const travel = rows[0].R - rows[rows.length - 1].R;
+    assert.ok(travel > 0.5 * rows[0].R, `${exit}: the closing travels ${travel}`);
+    let worst = 0, worstAt = null;
+    for (let i = 1; i < rows.length; i++) {
+      const d = rows[i - 1].R - rows[i].R;
+      assert.ok(d >= -1e-6, `${exit}: the silhouette GREW at t=${rows[i].t} (${rows[i - 1].R} -> ${rows[i].R})`);
+      if (d > worst) { worst = d; worstAt = rows[i]; }
+    }
+    assert.ok(worst / travel <= MELT.FUSE_RATE,
+              `${exit}: one frame carried ${(100 * worst / travel).toFixed(1)} % of the closing at t=${worstAt && worstAt.t} (FUSE_RATE ${MELT.FUSE_RATE})`);
+    // ... and the ink does not go out until the silhouette IS the ball (FUSE_NEAR), which is the defect as a fact
+    const lastInked = rows.filter((q) => q.ink > 0.02).pop();
+    assert.ok(lastInked && lastInked.R <= MELT.FUSE_NEAR * lastInked.r,
+              `${exit}: the ink went out at ${(lastInked.R / lastInked.r).toFixed(2)} ball radii (FUSE_NEAR ${MELT.FUSE_NEAR})`);
+    assert.equal(rows[rows.length - 1].ink, 0, `${exit}: and it IS out by the closing's landing`);
+  }
+});
+
+test("the ink gives way only over the closing's last stretch, and is gone exactly as it lands", () => {
+  assert.equal(meltInkAlpha(0), 1);
+  assert.equal(meltInkAlpha(MELT.INK_OUT), 1, "whole until INK_OUT");
+  assert.equal(meltInkAlpha(1), 0, "and gone AT the landing, never before");
+  let prev = 2;
+  for (let i = 0; i <= 100; i++) { const v = meltInkAlpha(i / 100); assert.ok(v <= prev + 1e-12); prev = v; }
+  assert.ok(MELT.INK_OUT > MELT.BODY_FROM, "the dense body opens BEFORE the ink starts to go: they overlap on one shape");
+  assert.ok(MELT.BODY_TO < 1, "and it is solid a little before the landing");
+});
+
+test("the closing runs from the sagged outline AS IT STANDS, so the drips that are still opening arrive INTO the ball", () => {
+  const P = Object.assign({}, MELT, OPTS());
+  const early = meltClosingAt(RECT, 0.6, 0, rnd, P), late = meltClosingAt(RECT, 1, 0, rnd, P);
+  const boxR = (b) => Math.max(...b.outline.map((p) => p[1])) - Math.min(...b.outline.map((p) => p[1]));
+  assert.ok(boxR(early) < boxR(late), "the drips are still shallower at the closing's own opening");
+  assert.deepEqual(early.centre, late.centre, "but both close onto the SAME point - the ball's own centre");
+  const landed = meltClosingAt(RECT, 1, 1, rnd, P);
+  const rr = landed.outline.map((p) => Math.hypot(p[0] - landed.centre[0], p[1] - landed.centre[1]));
+  assert.ok(Math.max(...rr) - Math.min(...rr) < 1e-6, "and at kc = 1 the ring IS the circle - the END of the closing");
 });
 
 test("the ball ink is the marks' own mix, concentrated: the same family, darker", () => {

@@ -347,16 +347,23 @@
     },
     {
      "name": "ball",
-     "does": "on the stepped clock (on 2s) the ink squeezes to its centroid while the outline morphs to a circle and an opaque K-M-concentrated body grows over it",
-     "trigger": "u = MELT_END (the sag's end)",
+     "does": "one CLOSING on 2s: the melting body's ring morphs to the circle while the ink squeezes into it, and the K-M-concentrated body is that same ring further along - so the circle is the END of a visible closing, never a disc arriving whole",
+     "trigger": "it OPENS at FUSE_FROM of the sag and LANDS at FUSE_END of this phase, after which the ball stands (E99 s53: a rushed compile is a snap and is re-timed)",
      "dials": {
       "BALL_END": "0.55",
       "BALL_R": "0.085",
       "HOLD": "2",
       "SQUEEZE": "1.15",
       "BALL_FUSE": "40",
-      "BODY_GROW": "0.4",
-      "INK_OUT": "0.45",
+      "FUSE_FROM": "0.55",
+      "FUSE_END": "0.80",
+      "FUSE_EASE": "0.15",
+      "FUSE_RATE": "0.20",
+      "FUSE_NEAR": "1.60",
+      "BODY_FROM": "0.55",
+      "BODY_TO": "0.86",
+      "BODY_LEAD": "0.55",
+      "INK_OUT": "0.62",
       "INK_DEEP": "3",
       "CORE": "12"
      }
