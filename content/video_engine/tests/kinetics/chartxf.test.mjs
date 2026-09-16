@@ -2,7 +2,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { xfLerp, xfPoint, xfPath, xfFade, xfInside, xfRect, XF,
-         xfSpanTop, xfStripRing, xfBarRing, xfRingPath, xfRemakeClock, xfRemakeTravel, REMAKE, REMAKE_BEAT } from "../../scripts/kinetics/chartxf.mjs";
+         xfSpanTop, xfStripRing, xfBarRing, xfRingPath, xfRemakeClock, xfRemakeTravel, REMAKE, REMAKE_BEAT,
+         xfRemakeLineClock, xfGatherK, xfRingTo, xfDrawWindow, REMAKE_LINE } from "../../scripts/kinetics/chartxf.mjs";
 import { morphAPrepare, morphAAt } from "../../scripts/kinetics/morph_a.mjs";
 
 const mapA = (x, v) => [100 + x * 10, 400 - v * 2];       // scale A: 10 px per x, 2 px per unit
@@ -109,11 +110,11 @@ test("xfRingPath writes a closed POLYLINE - never a cubic, so a landed bar is a 
   assert.equal(xfRingPath([]), "");
 });
 
-test("xfRemakeClock: one clock, four phases, exact at both ends", () => {
+test("xfRemakeClock: one clock, three phases, exact at both ends", () => {
   const z = xfRemakeClock(0);
-  assert.deepEqual([z.leave, z.travel, z.hand, z.draw], [0, 0, 0, 0], "u=0 is the exact source: nothing has begun");
+  assert.deepEqual([z.leave, z.travel, z.hand], [0, 0, 0], "u=0 is the exact source: nothing has begun");
   const o = xfRemakeClock(1);
-  assert.deepEqual([o.leave, o.travel, o.hand, o.draw], [1, 1, 1, 1], "u=1 is the exact target: every phase is done");
+  assert.deepEqual([o.leave, o.travel, o.hand], [1, 1, 1], "u=1 is the exact target: every phase is done");
   assert.deepEqual(xfRemakeClock(-1), xfRemakeClock(0));
   assert.deepEqual(xfRemakeClock(2), xfRemakeClock(1));
   const half = xfRemakeClock(0.5);
@@ -123,16 +124,70 @@ test("xfRemakeClock: one clock, four phases, exact at both ends", () => {
 });
 
 test("REMAKE's phases are ordered and inside the clock", () => {
-  assert.ok(0 < REMAKE.LEAVE && REMAKE.LEAVE < REMAKE.DRAW && REMAKE.DRAW < REMAKE.TRAVEL && REMAKE.TRAVEL < 1);
+  assert.ok(0 < REMAKE.LEAVE && REMAKE.LEAVE < REMAKE.TRAVEL && REMAKE.TRAVEL < 1);
   assert.ok(REMAKE.COLS >= 4);
 });
 
-test("xfRemakeClock's travel ends where the TARGET's own ink begins: at TRAVEL for bars, at DRAW for a line", () => {
+test("xfRemakeClock's travel ends where the TARGET's own bars begin, at REMAKE.TRAVEL", () => {
   assert.equal(xfRemakeClock(REMAKE.TRAVEL).travel, 1);
-  assert.ok(xfRemakeClock(REMAKE.DRAW).travel < 1, "a bars target is still travelling at DRAW");
-  assert.equal(xfRemakeClock(REMAKE.DRAW, true).travel, 1, "a LINE target's rings have landed before its line strokes");
-  assert.equal(xfRemakeClock(1, true).travel, 1);
-  assert.equal(xfRemakeClock(0, true).travel, 0);
+  assert.equal(xfRemakeClock(REMAKE.TRAVEL).hand, 0, "the hand-over starts exactly where the travel ends");
+  assert.ok(xfRemakeClock(REMAKE.LEAVE + 0.01).travel > 0 && xfRemakeClock(REMAKE.LEAVE).travel === 0);
+});
+
+// ---- P61 T2b (E99 s39) - BARS -> LINE: the collapse to the apex, and the draw back to the root -----
+test("xfRemakeLineClock: gather, settle, draw, hand - exact at both ends, pure in u", () => {
+  const z = xfRemakeLineClock(0);
+  assert.deepEqual([z.gather, z.settle, z.draw, z.hand], [0, 0, 0, 0], "u=0 is the exact bars page");
+  const o = xfRemakeLineClock(1);
+  assert.deepEqual([o.gather, o.settle, o.draw, o.hand], [1, 1, 1, 1], "u=1 is the whole line, drawn");
+  assert.deepEqual(xfRemakeLineClock(-1), xfRemakeLineClock(0));
+  assert.deepEqual(xfRemakeLineClock(2), xfRemakeLineClock(1));
+  assert.equal(xfRemakeLineClock(REMAKE_LINE.GATHER).gather, 1, "every bar's ink is at the apex by GATHER");
+  assert.equal(xfRemakeLineClock(REMAKE_LINE.GATHER).settle, 0, "and only then does the point carry itself");
+  assert.equal(xfRemakeLineClock(REMAKE_LINE.SETTLE).settle, 1);
+  assert.equal(xfRemakeLineClock(REMAKE_LINE.SETTLE).draw, 0, "the stroke starts where the point lands - never before");
+});
+
+test("at half the clock the frame is the POINT and a PARTIAL stroke - the ruling's own instant", () => {
+  const h = xfRemakeLineClock(0.5);
+  assert.equal(h.gather, 1, "the bars' ink is gathered");
+  assert.equal(h.settle, 1, "the point stands on the line's own apex datum");
+  assert.ok(h.draw > 0.05 && h.draw < 0.95, `the line is part drawn, not formed: ${h.draw}`);
+  assert.equal(h.hand, 0, "and nothing has handed over");
+  assert.ok(REMAKE_LINE.GATHER < REMAKE_LINE.SETTLE && REMAKE_LINE.SETTLE < 0.5 && REMAKE_LINE.HOLD < 1);
+});
+
+test("xfGatherK: the FARTHEST ring leaves first and every ring lands together", () => {
+  assert.equal(xfGatherK(1, 0, 5, 0.25), 1);
+  assert.equal(xfGatherK(1, 4, 5, 0.25), 1, "they land together - a collapse ends as ONE point");
+  assert.equal(xfGatherK(0, 0, 5, 0.25), 0);
+  assert.ok(xfGatherK(0.2, 0, 5, 0.25) > xfGatherK(0.2, 4, 5, 0.25), "rank 0 is the farthest, and it is already moving");
+  assert.equal(xfGatherK(0.2, 4, 5, 0.25), 0, "the nearest has not started at a fifth of the gather");
+  assert.equal(xfGatherK(0.5, 2, 1, 0.25), 0.5, "one ring has no stagger to spread");
+  assert.equal(xfGatherK(0.5, 0, 5, 0), 0.5, "spread 0 is every ring on one clock");
+});
+
+test("xfRingTo takes every vertex to ONE point: at k=1 the ring has no area to carry ink", () => {
+  const ring = xfBarRing({ x: 0, y: 100, w: 40, h: 100, base: 200 }, 4);
+  assert.deepEqual(xfRingTo(ring, [10, 10], 0), ring, "k=0 is the bar, exactly");
+  const gone = xfRingTo(ring, [10, 10], 1);
+  assert.ok(gone.every((q) => q[0] === 10 && q[1] === 10), "k=1 is the point itself");
+  const half = xfRingTo(ring, [0, 0], 0.5);
+  assert.ok(half.every((q, i) => Math.abs(q[0] - ring[i][0] / 2) < 1e-9 && Math.abs(q[1] - ring[i][1] / 2) < 1e-9));
+  assert.deepEqual(xfRingTo(null, [0, 0], 0.5), []);
+});
+
+test("xfDrawWindow grows out of the apex: the root side first, exact at both ends", () => {
+  const z = xfDrawWindow(1, 0);
+  assert.deepEqual([z.s, z.e], [1, 1], "k=0 is the bare point at the apex - no stroke at all");
+  const o = xfDrawWindow(1, 1);
+  assert.deepEqual([o.s, o.e], [0, 1], "k=1 is the whole path, root to apex");
+  const h = xfDrawWindow(1, 0.5);
+  assert.deepEqual([h.s, h.e], [0.5, 1], "half the path, drawn BACK from the apex");
+  const mid = xfDrawWindow(0.4, 0.5);   // an apex in the middle: the far side draws with the root side, so u=1 is the whole line
+  assert.deepEqual([mid.s, mid.e], [0.2, 0.7]);
+  assert.deepEqual([xfDrawWindow(0.4, 1).s, xfDrawWindow(0.4, 1).e], [0, 1]);
+  assert.deepEqual([xfDrawWindow(2, -1).s, xfDrawWindow(2, -1).e], [1, 1], "both arguments clamp");
 });
 
 test("xfRemakeTravel: the ink is in the columns before the columns have gone anywhere", () => {

@@ -685,21 +685,25 @@ parameter of an effect is an option on its card, never a card.
 
 ### The whole-chart remake
 
-- **id** `chart_to:remake` - **does** A full chart becomes a full chart on one clock: every series, datum, axis, label and the title transform, line <-> bars.
+- **id** `chart_to:remake` - **does** A full chart becomes a full chart on one clock - every series, datum, axis, label, title. line -> bars: each datum's column becomes its bar. bars -> line: the ink collapses to ONE point at the apex, then the line draws back to the root.
 - **when** the sentence turns the SAME data into the other whole chart ('month by month, this is what it did') - every series, datum, axis, label and the title transform on one clock, line <-> bars; when only the scale, the window or the form changes, the verb is rescale, extend or recast (content/video_engine/scripts/build_scene_timeline_f.py CHART_TO_WHEN)
 - **example** `{'kind': 'chart_to', 'at': 12.0, 'dur': 2.4, 'to': 'remake', 'state': 1}` (authored; key: chart_to {"to": "remake"}; check: species)
 - **phases**
-  1. **the history leaves** - the dash window slides from the line's start to the first keyed datum; the bars page's own numbers un-write (trigger: the chart_to's `at`; dials: `LEAVE`=0.28)
-  2. **the ink drops into the columns** - each keyed datum's share of the source's ink fills as the stroke over it leaves (trigger: LEAVE share of `dur`; dials: `INK`=0.35 of the travel)
-  3. **the shapes travel** - every ring morphs into its counterpart by morph_a, the datum marks travel to their bars' tops, the axes hand over and the labels re-write (trigger: MOVE share of the travel; dials: `MOVE`=0.2 of the travel)
-  4. **the target's own ink takes over** - a bars target's rectangles take the landed rings' place and their numbers write; a line target strokes along the landed top edge while the fill leaves with it (trigger: DRAW (a line) / TRAVEL (bars) share of `dur`; dials: `DRAW`=0.62, `TRAVEL`=0.9)
+  1. **line -> bars: the history leaves** - the dash window slides from the line's start to the first keyed datum; the axes begin handing over (trigger: the chart_to's `at`; dials: `LEAVE`=0.28)
+  2. **line -> bars: the ink drops in** - each keyed datum's share of the source's ink fills its column as the stroke over it leaves (trigger: LEAVE share of `dur`; dials: `INK`=0.35 of the travel)
+  3. **line -> bars: the shapes travel** - every ring morphs into its bar by morph_a, the datum marks travel to their tops, the labels re-write (trigger: MOVE share of the travel; dials: `MOVE`=0.2 of the travel)
+  4. **line -> bars: the bars take over** - the target's own rectangles take the landed rings' place and their numbers write at the landed data (trigger: TRAVEL share of `dur`; dials: `TRAVEL`=0.9)
+  5. **bars -> line: the gather** - every bar's ring collapses into ONE point at the apex (the highest bar's top), the farthest leaving first and all landing together; the bars' own numbers un-write (trigger: the chart_to's `at`; dials: `GATHER`=0.24, `SPREAD`=0.25)
+  6. **bars -> line: the point settles** - the gathered point carries itself to where the arriving line's own apex datum stands (trigger: GATHER share of `dur`; dials: `SETTLE`=0.32)
+  7. **bars -> line: the line draws back** - the page's own stroke draws OUT of the apex to the root, nib live, while the axes finish handing over - never a whole line arriving (E99 s39) (trigger: SETTLE share of `dur`; dials: `HOLD`=0.86)
 - **blend** E99 s34 a morph reads as a transformation, not a cut -> the whole arc (recorded; docs/portable/OPERATOR-RULINGS.md:3143)
 - **blend** E64 the data-keyed recast (the datum travels, the axes hand over) -> the correspondence and the hand-over (recorded; docs/content-video-engine/BACKLOG.md:455)
-- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `lpPaintRemake` - also `lpRemakeFor`, `lpAxisHandOver` - lpPaintRemake (+ kinetics/chartxf.mjs's rings and clock, kinetics/morph_a.mjs's pairing)
-- **dials** `REMAKE` in `content/video_engine/scripts/kinetics/chartxf.mjs`: `COLS`=8, `LEAVE`=0.28, `DRAW`=0.62, `TRAVEL`=0.9
+- **blend** E99 s39 a morph is proof we are manipulating the world, not tricking them -> the bars -> line ending: the collapse to the apex and the draw back to the root (recorded; docs/portable/OPERATOR-RULINGS.md:3196)
+- **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `lpPaintRemake` - also `lpPaintRemakeToLine`, `lpRemakeDrawBack`, `lpRemakeFor`, `lpAxisHandOver` - lpPaintRemake (line -> bars) / lpPaintRemakeToLine + lpRemakeDrawBack (bars -> line, the page's own dash pair) + kinetics/chartxf.mjs's rings, clocks and windows
+- **dials** `REMAKE` in `content/video_engine/scripts/kinetics/chartxf.mjs`: `COLS`=8, `LEAVE`=0.28, `TRAVEL`=0.9
 - **status** wired - **callable** yes
 - **proof** golden remake-line-to-bars - test content/video_engine/tests/test_whole_chart_morph.py::test_at_u_050_neither_chart_is_drawable_as_itself - first use none
-- **doctrine** E99 -> docs/portable/OPERATOR-RULINGS.md:2901; E64 -> docs/portable/OPERATOR-RULINGS.md:2079; E50 -> docs/portable/OPERATOR-RULINGS.md:1520
+- **doctrine** E99 -> docs/portable/OPERATOR-RULINGS.md:2901; E99 s39 -> docs/portable/OPERATOR-RULINGS.md:2901; E64 -> docs/portable/OPERATOR-RULINGS.md:2079; E50 -> docs/portable/OPERATOR-RULINGS.md:1520
 - **aliases** "the whole-chart morph" (docs/portable/OPERATOR-RULINGS.md:3143)
 
 ### The rescale chart-to verb

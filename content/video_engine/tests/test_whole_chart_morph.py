@@ -6,10 +6,17 @@ morphed - both is a transformation."*
 
 Two halves. The first is the COMPILER: a remake is admitted only on a line <-> bars pair whose bars ARE the
 line's own data, and every refusal names what it could not key and which verb can. The second is the PLAYER,
-read in a browser at the instants that matter - and the one that decides it is u = 0.50, where NEITHER chart
-is drawable as itself: the line has gone into its columns and the bars have not been drawn, so no cut, no
-crossfade and no jump can produce the frame. The goldens `remake-line-to-bars` / `remake-bars-to-line` are
-judged at exactly that instant (their quarter and three-quarter frames ride PROOF_FRAMES).
+read in a browser at the instants that matter - and the two runs have their own, because E99 s39 ruled that
+they are two choreographies rather than one read backwards.
+
+LINE -> BARS (taken as built, s39): the instant that decides it is u = 0.50, where NEITHER chart is drawable
+as itself - the line has gone into its columns and the bars have not been drawn, so no cut, no crossfade and
+no jump can produce the frame; its golden is judged there.
+
+BARS -> LINE (P61 T2b, s39): *"it all collapse to the single apex point and then draw the line back to the
+root ... if the whole thing is magically formed that is basically a snap/cut."* Its three beats are each
+pinned - the ink mid-gather (its own golden, u 0.15), ONE point at the apex (@proof-025), and the point with
+a PARTIAL stroke (@proof-050, the ruling's own frame) - and no frame of the window draws both charts flat.
 """
 from __future__ import annotations
 
@@ -153,7 +160,7 @@ def _chromium_available() -> bool:
 
 browser_only = pytest.mark.skipif(not _chromium_available(), reason="playwright chromium not installed")
 
-PROBE = """() => {
+PROBE = r"""() => {
   const world = [...document.querySelectorAll('.ledger')].find((e) => e.__lp);
   if (!world) return null;
   const st = world.__lp, states = st.states || [st], xf = st.xfNow;
@@ -165,8 +172,15 @@ PROBE = """() => {
   const L = states.find((S) => (S.paths || []).length) || {};
   const B = states.find((S) => (S.bars || []).length) || {};
   const lines = (L.paths || []).map((pp) => {
-    const off = Math.abs(parseFloat(pp.p.getAttribute('stroke-dashoffset') || '0'));
-    return { vis: pp.len ? Math.max(0, pp.len - off) / pp.len : 1, hidden: pp.p.style.opacity === '0' };
+    /* ONE formula for both of the engine's dash forms: the DRAW (dasharray = the path's length, offset = the
+       undrawn share, E:10163) and the WINDOW (a negative offset that starts the visible run at s - E:10369,
+       and P61 T2b's apex draw). `from` is where the visible run begins, as a share of the length. */
+    const da = (pp.p.getAttribute('stroke-dasharray') || '').trim().split(/[\s,]+/).map(Number);
+    const off = parseFloat(pp.p.getAttribute('stroke-dashoffset') || '0'), len = pp.len || 1;
+    const d0 = da.length && isFinite(da[0]) ? da[0] : len, s = off < 0 ? -off : 0;
+    const drawn = off < 0 ? Math.max(0, Math.min(len, s + d0) - s) / len : Math.max(0, len - off) / len;
+    return { vis: +drawn.toFixed(4), from: +(s / len).toFixed(4), hidden: pp.p.style.opacity === '0',
+             nib: +(pp.tip.getAttribute('opacity') || 0) };
   });
   const bars = (B.bars || []).map((bb) => ({
     transform: bb.bar.style.transform || '', opacity: bb.bar.style.opacity || '',
@@ -213,26 +227,20 @@ def _shot(page, t: float, size) -> bytes:
 
 
 @browser_only
-@pytest.mark.parametrize("surface", ["remake-line-to-bars", "remake-bars-to-line"])
-def test_at_u_050_neither_chart_is_drawable_as_itself(surface: str) -> None:
-    """The invariant a jump cannot satisfy. At half the clock the source's own ink is inside the rings and
-    the target's has not been drawn: what stands is n shapes that are neither chart's."""
-    with _player(surface) as (page, _size):
+def test_at_u_050_neither_chart_is_drawable_as_itself() -> None:
+    """LINE -> BARS, the invariant a jump cannot satisfy. At half the clock the line's own ink is inside the
+    rings and the bars have not been drawn: what stands is five shapes that are neither chart's.
+
+    (The other run is judged by its own three beats below: E99 s39 ruled that bars -> line is not this
+    mechanism read backwards, so it does not share this frame.)"""
+    with _player("remake-line-to-bars") as (page, _size):
         p0 = _at(page, AT)
         p5 = _at(page, AT + 0.50 * DUR)
         assert p0 and p5 and p5["remake"] and abs(p5["u"] - 0.5) < 1e-6
 
-        # the SOURCE is not drawable as itself
-        if surface == "remake-line-to-bars":
-            assert all(q["vis"] < 0.02 or q["hidden"] for q in p5["lines"]), p5["lines"]
-        else:
-            assert all(b["opacity"] == "0" for b in p5["bars"]), [b["opacity"] for b in p5["bars"]]
-        # the TARGET is not drawable as itself
-        if surface == "remake-line-to-bars":
-            assert all(b["transform"].startswith("scaleY(0") for b in p5["bars"]), [b["transform"] for b in p5["bars"]]
-            assert all(b["val"] == 0 for b in p5["bars"]), "no bar has its number yet"
-        else:
-            assert all(q["vis"] < 0.02 or q["hidden"] for q in p5["lines"]), p5["lines"]
+        assert all(q["vis"] < 0.02 or q["hidden"] for q in p5["lines"]), p5["lines"]   # the SOURCE is not drawable
+        assert all(b["transform"].startswith("scaleY(0") for b in p5["bars"]), [b["transform"] for b in p5["bars"]]
+        assert all(b["val"] == 0 for b in p5["bars"]), "no bar has its number yet"     # nor is the TARGET
         # and what DOES stand is neither: every ring has left its own shape and has not reached its bar
         assert len(p5["rings"]) == 5 and all(r["fill"] > 0.9 for r in p5["rings"]), p5["rings"]
         bars = p5["bars"]
@@ -240,6 +248,73 @@ def test_at_u_050_neither_chart_is_drawable_as_itself(surface: str) -> None:
             start = p0["rings"][k]["bbox"]
             assert max(abs(a - b) for a, b in zip(r["bbox"], start)) > 2.0, f"ring {k} has not left its own shape"
             assert max(abs(a - b) for a, b in zip(r["bbox"], bars[k]["rect"])) > 2.0, f"ring {k} is already its bar"
+
+
+# ---- P61 T2b / E99 s39 - BARS -> LINE: the collapse to the apex, and the draw back to the root ---
+def _one_point(probe: dict) -> tuple[float, float]:
+    """The rings' common point, asserted to BE one point: every ring a zero-area bbox in the same place."""
+    boxes = probe["rings"]
+    assert boxes, "the run has rings"
+    for b in boxes:
+        assert b["bbox"][2] < 0.5 and b["bbox"][3] < 0.5, f"a ring still has area: {b['bbox']}"
+    xs = {round(b["bbox"][0], 1) for b in boxes}
+    ys = {round(b["bbox"][1], 1) for b in boxes}
+    assert len(xs) == 1 and len(ys) == 1, f"the ink collapsed to {len(xs)}x{len(ys)} places, not to ONE point"
+    return (xs.pop(), ys.pop())
+
+
+@browser_only
+def test_the_bars_ink_collapses_into_one_point_at_the_apex() -> None:
+    """E99 s39, the operator: *"I'd like to see it all collapse to the single apex point"*. By the gather's
+    end every bar's ring is a zero-area ring in ONE place, and that place is the highest bar's own top."""
+    with _player("remake-bars-to-line") as (page, _size):
+        p0 = _at(page, AT)
+        top = min(b["rect"][1] for b in p0["bars"])                   # the highest top on the page
+        apex = [b for b in p0["bars"] if b["rect"][1] == top][0]
+        mid = _at(page, AT + 0.15 * DUR)
+        assert any(b["bbox"][2] > 1 for b in mid["rings"]), "mid-gather the ink is still shapes, in flight"
+        assert all(b["opacity"] == "0" for b in mid["bars"]), "and no bar of the page is drawn under them"
+        x, y = _one_point(_at(page, AT + 0.25 * DUR))
+        assert abs(x - (apex["rect"][0] + apex["rect"][2] / 2)) < 3.0, f"the point is not over the apex bar: {x}"
+        assert abs(y - top) < 3.0, f"the point is not at the apex bar's TOP: {y} vs {top}"
+
+
+@browser_only
+def test_at_u_050_the_frame_is_the_point_and_a_partial_stroke() -> None:
+    """THE RULING'S OWN FRAME (`remake-bars-to-line@proof-050`): *"then draw the line back to the root ... if
+    the whole thing is magically formed that is basically a snap/cut"*. At half the clock the point stands on
+    the arriving line's own apex datum and the stroke is PART drawn, out of the apex, its nib live."""
+    with _player("remake-bars-to-line") as (page, _size):
+        p5 = _at(page, AT + 0.50 * DUR)
+        assert p5["remake"] and abs(p5["u"] - 0.5) < 1e-6
+        _one_point(p5)                                                # the point is still one point
+        assert all(b["opacity"] == "0" for b in p5["bars"]), "no bar is drawn"
+        line = p5["lines"][0]
+        assert 0.05 < line["vis"] < 0.95, f"the line is formed rather than being drawn: {line['vis']}"
+        assert line["from"] > 0.0, "the stroke starts inside the path - it is growing BACK from the apex"
+        assert line["nib"] == 1 and not line["hidden"], "the pen is live at the end that is moving"
+
+
+@browser_only
+def test_the_stroke_grows_out_of_the_apex_and_no_frame_draws_both_charts() -> None:
+    """The draw is monotone out of the apex - never a line that appears - and across the WHOLE window no
+    frame has both charts standing (the cut this verb exists to avoid)."""
+    with _player("remake-bars-to-line") as (page, _size):
+        seen = []
+        for i in range(21):
+            u = i / 20
+            p = _at(page, AT + u * DUR)
+            line = p["lines"][0]
+            bars_flat = all(b["opacity"] != "0" and b["transform"].startswith("scaleY(1") for b in p["bars"])
+            line_flat = line["vis"] > 0.99 and not line["hidden"]
+            assert not (bars_flat and line_flat), f"u={u}: both charts are drawn flat in one frame"
+            if p["remake"]:
+                seen.append((u, line["vis"], line["from"]))
+        assert seen[0][1] == 0, "nothing is drawn at u=0"
+        for (ua, va, fa), (ub, vb, fb) in zip(seen, seen[1:]):
+            assert vb >= va - 1e-9, f"the stroke went backwards between u={ua} and u={ub}"
+            assert fb <= fa + 1e-9, f"the window's start moved AWAY from the root between u={ua} and u={ub}"
+        assert seen[-1][1] > 0.9, "and by the end of the clock the line is all but whole"
 
 
 @browser_only

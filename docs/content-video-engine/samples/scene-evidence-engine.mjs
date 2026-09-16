@@ -4123,7 +4123,6 @@ async function mount(doc) {
   const REMAKE = Object.freeze({
     COLS: 8,        /* the columns a datum's share is described by: 8 per side is 16 vertices a bar's rectangle is still exactly a rectangle at, and the line's own leg inside one datum's share is straight [DERIVED: MORPH.COLS 48 describes a WHOLE line; a column of it needs the corner, not the curve] */
     LEAVE: 0.28,    /* the share of the clock the source's own ink takes to leave into its area (XF_MORPH.LEAVE 0.3's law, one notch earlier because the travel is longer here) */
-    DRAW: 0.62,     /* a LINE target strokes on from here, along the landed top edge, while the area's fill leaves with it (lpPaintMorphHold's own law) */
     TRAVEL: 0.9,    /* every ring has landed on its counterpart by here - the clock's last tenth belongs to the target's own ink (KEYED_TAG_HAND 0.92's law: hand over on the CLOCK, not on the eased travel) */
   });
 
@@ -4169,19 +4168,16 @@ async function mount(doc) {
   const xfRingPath = (pts) => (!pts || !pts.length ? ""
     : pts.map((p, i) => (i ? "L" : "M") + (+p[0]).toFixed(1) + " " + (+p[1]).toFixed(1)).join(" ") + " Z");
 
-  /* xfRemakeClock - ONE clock, four shares of it. `leave`: the source's own ink into its area. `travel`: every ring onto
-     its counterpart. `draw`: a line target's stroke along the landed edge. `hand`: the target's own ink taking the rings'
-     place. Exact at both ends by construction, and every phase is a pure function of u - the caller eases each one.
-     `toLine` says which way the remake runs: a BARS target takes over at REMAKE.TRAVEL, so the rings travel until then;
-     a LINE target must have its rings LANDED before its own stroke runs along their top edge, so on that run the travel
-     ends at REMAKE.DRAW and the last share of the clock is the line drawing while the area's fill leaves with it. */
-  const xfRemakeClock = (u, toLine) => {
+  /* xfRemakeClock - ONE clock, three shares of it, for the LINE -> BARS run. `leave`: the source's own ink into its
+     area. `travel`: every ring onto its counterpart, ending at REMAKE.TRAVEL where the target's own bars take over.
+     `hand`: the target's own ink taking the rings' place. Exact at both ends by construction, and every phase is a pure
+     function of u - the caller eases each one. The other run has its own clock (xfRemakeLineClock): E99 s39 ruled that
+     bars -> line is NOT this travel read backwards. */
+  const xfRemakeClock = (u) => {
     const c = Math.min(1, Math.max(0, u)), cl = (v) => Math.min(1, Math.max(0, v));
-    const end = toLine ? REMAKE.DRAW : REMAKE.TRAVEL;
     return {
       leave: cl(c / REMAKE.LEAVE),
-      travel: cl((c - REMAKE.LEAVE) / (end - REMAKE.LEAVE)),
-      draw: cl((c - REMAKE.DRAW) / (1 - REMAKE.DRAW)),
+      travel: cl((c - REMAKE.LEAVE) / (REMAKE.TRAVEL - REMAKE.LEAVE)),
       hand: cl((c - REMAKE.TRAVEL) / (1 - REMAKE.TRAVEL)),
     };
   };
@@ -4194,6 +4190,58 @@ async function mount(doc) {
     ink: Math.min(1, Math.max(0, travel / REMAKE_BEAT.INK)),
     move: Math.min(1, Math.max(0, (travel - REMAKE_BEAT.MOVE) / (1 - REMAKE_BEAT.MOVE))),
   });
+
+  /* ---- P61 T2b - BARS -> LINE: COLLAPSE TO THE APEX, THEN DRAW BACK TO THE ROOT (E99 s39) --------------------------
+     The operator, on T2's first build: *"for bars-> line I'd like to see it all collapse to the single apex point and
+     then draw the line back to the root instead of sliding and snapping together and the whole line is formed -- if the
+     whole thing is magically formed that is basically a snap/cut, and not the morph we're looking for. A morph should be
+     proof of form/function to the audience, that we're really manipulating the world they're watching, not tricking
+     them."* So this run does NOT read the line -> bars travel backwards. It has its own clock and three beats: every
+     bar's ring GATHERS into one point at the apex (the highest bar's top), that point SETTLES where the arriving line's
+     own apex datum stands, and the page's own stroke DRAWS from there back to the root.
+     WHY NOT morph_a, which carries the other run: a correspondence machine needs two rings, and the destination here is
+     one POINT - an ARAP fit onto a zero-area ring is undefined (its polar decomposition divides by a vanishing area),
+     while a ring's own vertices lerping to a point is exact, pure and free. The ring machinery still says WHAT collapses
+     (xfBarRing describes the bar exactly as it does on the other run); only the destination is not another ring. */
+  const REMAKE_LINE = Object.freeze({
+    GATHER: 0.24,   /* the share of the clock every bar's ink takes to reach the apex [DERIVED: 0.58 s of the goldens' 2.4 s row - one decisive gather, and the clock's REST belongs to the draw, which is what the ruling is about] */
+    SETTLE: 0.32,   /* by here the gathered point has carried itself from the highest bar's top to the arriving line's own apex datum - the two are not the same place (135 px apart on the golden's pages), and the line must start where IT stands */
+    SPREAD: 0.25,   /* the stagger across the rings: the one FARTHEST from the apex leaves first and every ring lands together, so the gather has a direction rather than five independent shrinks [DERIVED: E99 s34, "it reads as intentional"] */
+    HOLD: 0.86,     /* the apex point stands until here - it is what the line came out of - and leaves over the last share as the target's own ink takes the frame (KEYED_TAG_HAND 0.92's law, one notch earlier because a dot is larger than a glyph) */
+  });
+
+  /* xfRemakeLineClock - the bars -> line clock: `gather`, `settle`, `draw`, `hand`. Exact at both ends, pure in u. */
+  const xfRemakeLineClock = (u) => {
+    const c = Math.min(1, Math.max(0, u)), cl = (v) => Math.min(1, Math.max(0, v));
+    return {
+      gather: cl(c / REMAKE_LINE.GATHER),
+      settle: cl((c - REMAKE_LINE.GATHER) / (REMAKE_LINE.SETTLE - REMAKE_LINE.GATHER)),
+      draw: cl((c - REMAKE_LINE.SETTLE) / (1 - REMAKE_LINE.SETTLE)),
+      hand: cl((c - REMAKE_LINE.HOLD) / (1 - REMAKE_LINE.HOLD)),
+    };
+  };
+
+  /* xfGatherK - one ring's own share of the gather. `rank` 0 is the ring FARTHEST from the apex: it starts first because
+     it has the farthest to travel, and every ring lands exactly together at the gather's end (so the collapse ends as ONE
+     point, not as a queue). spread 0 is every ring on the same clock. */
+  const xfGatherK = (k, rank, n, spread) => {
+    const s = Math.min(0.9, Math.max(0, spread == null ? REMAKE_LINE.SPREAD : spread));
+    const d = n > 1 ? s * (Math.min(n - 1, Math.max(0, rank)) / (n - 1)) : 0;
+    return Math.min(1, Math.max(0, (k - d) / (1 - d)));
+  };
+
+  /* xfRingTo - every vertex of a ring to ONE point. At k = 1 the ring IS that point: zero area, so it carries no ink -
+     nothing is faded out and nothing is left behind, which is the difference between a collapse and a dissolve. */
+  const xfRingTo = (pts, p, k) => (pts || []).map((q) => [xfLerp(q[0], p[0], k), xfLerp(q[1], p[1], k)]);
+
+  /* xfDrawWindow - the stroke's visible interval as SHARES of the path's length, growing out of the apex: the root side
+     (the ruling's own direction) and, when the apex is not the last datum, the far side with it, so the ends are exact -
+     k = 0 is the bare point at `apex`, k = 1 is the whole path. The caller writes it with the page's own dash pair
+     (dasharray from the path's length, a negative dashoffset starting the window: the engine's own window form). */
+  const xfDrawWindow = (apex, k) => {
+    const a = Math.min(1, Math.max(0, apex)), c = Math.min(1, Math.max(0, k));
+    return { s: a * (1 - c), e: a + (1 - a) * c };
+  };
   /* KINETICS:END */
   /* KINETICS:BEGIN camera */
   /* kinetics/camera.mjs - THE CAMERA (P49 T1-T3): one persistent 2D similarity per timeline - a zoom s, the world point it
@@ -10186,6 +10234,7 @@ async function mount(doc) {
     if (!S || !S.xfDirty) return;
     for (const pp of S.paths || []) {
       if (pp.d0 && pp.p.getAttribute("d") !== pp.d0) { pp.p.setAttribute("d", pp.d0); pp.p.setAttribute("stroke-dasharray", pp.len0); pp.len = pp.len0; }
+      if (pp.__xfDash) { pp.p.setAttribute("stroke-dasharray", pp.len); pp.__xfDash = false; }   /* P61 T2b: the apex draw's WINDOW is the page's own dash pair with a second number - the page gets its one back (a seek is the play) */
       if (pp.p.hasAttribute("clip-path")) pp.p.removeAttribute("clip-path");
       if (pp.p.hasAttribute("transform")) pp.p.removeAttribute("transform");
     }
@@ -10629,57 +10678,120 @@ async function mount(doc) {
     const dots = lpDataDots(A, map, { parent: svg, stroke: lead.p ? lead.p.getAttribute("stroke") : "var(--lp-chalk)" });
     return (st.morphTo[key] = { svg, pairs, dots, map, lineIsFrom, L, BR, hold: lpRemakeHold(A, Bs), u: 0 });
   };
-  const lpPaintRemake = (st, states, xf, t3, scene, t) => {
-    const A = states[xf.from], Bs = states[xf.to], u = xf.u, R = lpRemakeFor(st, xf), lineIsFrom = xf.line_at !== "to";
-    const ph = xfRemakeClock(u, !lineIsFrom), bt = xfRemakeTravel(ph.travel);
-    const kL = segEase(ph.leave), kT = minJerk(bt.move), kI = segEase(bt.ink), kD = segEase(ph.draw), hand = ph.hand;
+  const lpPaintRemake = (st, states, xf, t3, scene, t) => {   /* LINE -> BARS: each datum's column of the area under the line becomes its bar */
+    const A = states[xf.from], Bs = states[xf.to], u = xf.u, R = lpRemakeFor(st, xf);
+    const ph = xfRemakeClock(u), bt = xfRemakeTravel(ph.travel);
+    const kL = segEase(ph.leave), kT = minJerk(bt.move), kI = segEase(bt.ink), hand = ph.hand;
     for (let i = 0; i < states.length; i++) if (i !== xf.from && i !== xf.to) lpPaintChart(states[i], 0, t3, scene, t);
     lpPaintChart(A, 1, t3, scene, t);
     A.chart.style.opacity = "1";   /* E99 s1: the axes are the hand-over's business - this layer never fades */
-    lpPaintChart(Bs, lineIsFrom ? 0 : kD, t3, scene, t);   /* a LINE target strokes on over the landed edge by its own law */
+    lpPaintChart(Bs, 0, t3, scene, t);   /* the arriving bars' furniture only: their own ink waits for the rings to land */
     A.xfDirty = true; Bs.xfDirty = true;
-    if (lineIsFrom) {   /* the HISTORY leaves first and what the bars need STANDS until its ink drops into the columns
-                           (lpPaintRecastData's own law, E:9723-9730): the dash window slides from the start to the first
-                           keyed datum on the leave clock, and the rest follows as the columns fill */
-      const off0 = (A.windowOffsets || [])[0] | 0, keep = ((xf.mark_map || [])[0] || {}).datum | 0;
-      for (const pp of A.paths || []) {
-        if (!pp.pts || !pp.pts.length) continue;
-        const fk = lpPathFrac(pp, keep - off0 - (pp.k0 | 0)), gone = fk * kL + (1 - fk) * kI;
-        pp.p.setAttribute("stroke-dashoffset", (-(pp.len * gone)).toFixed(1));
-        pp.p.style.opacity = gone > 0.996 ? "0" : "";   /* E50 (the third watch, "dots that linger"): a fully slid dash window still paints its round cap at the path's end - a stray mark left behind by a line that has gone */
-        pp.tip.setAttribute("opacity", 0);
-        if (pp.pill) pp.pill.g.setAttribute("opacity", 0);
-        pp.name.setAttribute("opacity", (1 - kL).toFixed(2));
-      }
+    /* the HISTORY leaves first and what the bars need STANDS until its ink drops into the columns
+       (lpPaintRecastData's own law, E:9723-9730): the dash window slides from the start to the first
+       keyed datum on the leave clock, and the rest follows as the columns fill */
+    const off0 = (A.windowOffsets || [])[0] | 0, keep = ((xf.mark_map || [])[0] || {}).datum | 0;
+    for (const pp of A.paths || []) {
+      if (!pp.pts || !pp.pts.length) continue;
+      const fk = lpPathFrac(pp, keep - off0 - (pp.k0 | 0)), gone = fk * kL + (1 - fk) * kI;
+      pp.p.setAttribute("stroke-dashoffset", (-(pp.len * gone)).toFixed(1));
+      pp.p.style.opacity = gone > 0.996 ? "0" : "";   /* E50 (the third watch, "dots that linger"): a fully slid dash window still paints its round cap at the path's end - a stray mark left behind by a line that has gone */
+      pp.tip.setAttribute("opacity", 0);
+      if (pp.pill) pp.pill.g.setAttribute("opacity", 0);
+      pp.name.setAttribute("opacity", (1 - kL).toFixed(2));
     }
     lpHideMorphs(st, R); if (!R) return;
     R.svg.style.opacity = "1"; R.u = u;
     R.pairs.forEach((q, k) => {
       const pts = kT <= 0 ? q.A : (kT >= 1 ? q.B : morphAAt(q.prep, kT).outline);
       q.path.setAttribute("d", xfRingPath(pts));
-      /* the ring's ink: it FILLS as the line leaves, and on the other run it stands from the first frame in the bar's
-         own place and colour (two congruent shapes in one ink: no frame differs) and leaves as the line draws over it */
-      const inked = lineIsFrom ? kI * (1 - hand) : (u > 0 ? 1 - kD : 0);
-      q.path.setAttribute("fill-opacity", inked.toFixed(3));
+      q.path.setAttribute("fill-opacity", (kI * (1 - hand)).toFixed(3));   /* the ring's ink FILLS as the line leaves: nothing fades, the ink moves */
       const rec = q.bar.rec || {};
-      if (lineIsFrom) {   /* the target's own bar takes the landed ring's place - the same rectangle, in the same ink */
-        if (rec.bar) { rec.bar.style.transform = "scaleY(" + (hand > 0 ? 1 : 0).toFixed(4) + ")"; }
-        if (rec.val) rec.val.setAttribute("opacity", hand.toFixed(3));   /* the bar's number takes the landed datum's place */
-        if (rec.lab) { rec.lab.setAttribute("opacity", clamp01((kT - 0.25) / 0.35).toFixed(3)); lpWriteText(rec.lab, clamp01((kT - 0.3) / 0.5)); }
-      } else if (rec.bar) rec.bar.style.opacity = u > 0 ? "0" : "";   /* the leaving bar is its ring from the first frame on */
+      /* the target's own bar takes the landed ring's place - the same rectangle, in the same ink */
+      if (rec.bar) { rec.bar.style.transform = "scaleY(" + (hand > 0 ? 1 : 0).toFixed(4) + ")"; }
+      if (rec.val) rec.val.setAttribute("opacity", hand.toFixed(3));   /* the bar's number takes the landed datum's place */
+      if (rec.lab) { rec.lab.setAttribute("opacity", clamp01((kT - 0.25) / 0.35).toFixed(3)); lpWriteText(rec.lab, clamp01((kT - 0.3) / 0.5)); }
       const dot = (R.dots.dots || [])[k];
       if (dot) {   /* the datum travels to its counterpart - born as the source's ink leaves, gone as the target's arrives */
         dot.setAttribute("cx", xfLerp(q.p0[0], q.p1[0], kT).toFixed(1));
         dot.setAttribute("cy", xfLerp(q.p0[1], q.p1[1], kT).toFixed(1));
-        dot.setAttribute("opacity", ((lineIsFrom ? kI : minJerk(clamp01(u / (REMAKE.LEAVE * 0.6)))) * (1 - hand) * (lineIsFrom ? 1 : 1 - kD)).toFixed(3));
+        dot.setAttribute("opacity", (kI * (1 - hand)).toFixed(3));
       }
     });
     if ((R.dots.dots || []).length > R.pairs.length) R.dots.dots[R.dots.dots.length - 1].setAttribute("opacity", 0);   /* the data key's anchor dot is not this verb's */
-    if (!lineIsFrom) {   /* the bars page's own strings leave by the same hand that re-writes the axes - never a fade */
-      lpRemakeWrite((A.marks || []).filter((m) => m.role === "value").map((m) => m.el), clamp01(u / AXIS_HAND.OUT), false);
-      lpRemakeWrite((A.marks || []).filter((m) => m.role === "xlabel").map((m) => m.el), clamp01(u / AXIS_HAND.OUT), false);
-    }
     lpAxisHandOver(A, Bs, u, R.hold);   /* the axes hand over on the WHOLE clock: the travel is only its middle */
+  };
+  /* ---- P61 T2b - BARS -> LINE (E99 s39) --------------------------------------------------------------------------
+     The operator, on T2's first build of this run: *"for bars-> line I'd like to see it all collapse to the single apex
+     point and then draw the line back to the root instead of sliding and snapping together and the whole line is formed
+     -- if the whole thing is magically formed that is basically a snap/cut, and not the morph we're looking for. A morph
+     should be proof of form/function to the audience, that we're really manipulating the world they're watching, not
+     tricking them."* So this run is not the line -> bars travel read backwards, and it has its own clock
+     (xfRemakeLineClock). Three beats: GATHER - every bar's ring collapses into ONE point at the apex (the highest bar's
+     top), the farthest leaving first so the collapse has a direction and they land together; SETTLE - that point carries
+     itself to where the arriving line's own apex datum stands; DRAW - the page's own stroke runs from the apex back to
+     the root, by the dash pair lpPaintChart draws every ledger line with (E:10163) in the window form the keyed recast
+     uses (E:10369). Nothing is "formed": at every instant the frame holds either ink on its way to the point or a stroke
+     with a live end, and the axes hand over on the whole clock exactly as they do on the other run. */
+  const lpRemakeApex = (R, Bs) => {   /* the APEX: the highest bar's top, where the arriving line's datum for it stands, and how far each ring is from it */
+    if (R.apex) return R.apex;
+    let best = 0;
+    R.pairs.forEach((q, k) => { if (q.p0[1] < R.pairs[best].p0[1]) best = k; });   /* the smallest y IS the highest top - a negative bar's tip is its own end, so the sign is carried, not flipped */
+    const far = R.pairs.map((q, k) => ({ k, d: Math.hypot(q.p0[0] - R.pairs[best].p0[0], q.p0[1] - R.pairs[best].p0[1]) }))
+                       .sort((a, b) => b.d - a.d);
+    const rank = []; far.forEach((e, i) => { rank[e.k] = i; });   /* rank 0 is the FARTHEST: it has the longest way to go, so it starts first */
+    const off0 = (Bs.windowOffsets || [])[0] | 0;
+    return (R.apex = { k: best, from: R.pairs[best].p0, to: R.pairs[best].p1, j: (((R.map || [])[best] || {}).datum | 0) - off0, rank });
+  };
+  const lpRemakeDrawBack = (Bs, ap, k) => {   /* the page's OWN stroke, run from the apex outward: the root side is the ruling's direction */
+    for (const pp of Bs.paths || []) {
+      if (!pp.pts || !pp.pts.length) continue;
+      const f = strokeFrac(pp.p, pp.len, k) ?? minJerk(k);   /* the pen, never a constant-velocity mask (E:10133); min-jerk is the hand-over's own ease where the flag is off (E64) */
+      const w = xfDrawWindow(lpPathFrac(pp, ap.j - (pp.k0 | 0)), f), s = pp.len * w.s, d = pp.len * (w.e - w.s);
+      pp.p.setAttribute("stroke-dasharray", d.toFixed(1) + " " + (pp.len + 1).toFixed(1));   /* ONE dash, one gap longer than the path: the window cannot repeat */
+      pp.p.setAttribute("stroke-dashoffset", (-s).toFixed(1));                                /* negative: the window STARTS at the apex */
+      pp.__xfDash = true;   /* lpRestoreState puts the page's own dasharray back the moment no transition is on */
+      pp.p.style.opacity = d > 0.4 ? "" : "0";   /* E50: a zero-length round-capped dash paints a dot where the line has not reached */
+      pp.name.setAttribute("opacity", clamp01((f - 0.9) / 0.1).toFixed(2));   /* the series' name arrives with the last of the stroke */
+      if (pp.pill) pp.pill.g.setAttribute("opacity", 0);
+      const live = f > 0.004 && f < 0.995 && !!pp.p.getPointAtLength;
+      if (live) { const q = pp.p.getPointAtLength(s); pp.tip.setAttribute("cx", q.x); pp.tip.setAttribute("cy", q.y); }   /* the nib rides the ROOT-side end: the pen the ruling names */
+      pp.tip.setAttribute("opacity", live ? 1 : 0);
+    }
+  };
+  const lpPaintRemakeToLine = (st, states, xf, t3, scene, t) => {
+    const A = states[xf.from], Bs = states[xf.to], u = xf.u, R = lpRemakeFor(st, xf);
+    const ph = xfRemakeLineClock(u), kS = minJerk(ph.settle), hand = ph.hand;
+    for (let i = 0; i < states.length; i++) if (i !== xf.from && i !== xf.to) lpPaintChart(states[i], 0, t3, scene, t);
+    lpPaintChart(A, 1, t3, scene, t);
+    A.chart.style.opacity = "1";   /* E99 s1: the axes are the hand-over's business - this layer never fades */
+    lpPaintChart(Bs, ph.draw, t3, scene, t);   /* the arriving page builds on the DRAW's clock; its stroke is written below */
+    A.xfDirty = true; Bs.xfDirty = true;
+    lpHideMorphs(st, R); if (!R) return;
+    R.svg.style.opacity = "1"; R.u = u;
+    const ap = lpRemakeApex(R, Bs);
+    const P = [xfLerp(ap.from[0], ap.to[0], kS), xfLerp(ap.from[1], ap.to[1], kS)];   /* THE POINT: the highest bar's top, carrying itself to the line's own apex datum */
+    const born = minJerk(clamp01(u / (REMAKE_LINE.GATHER * 0.5)));
+    R.pairs.forEach((q, k) => {
+      const kg = minJerk(xfGatherK(ph.gather, ap.rank[k], R.pairs.length, REMAKE_LINE.SPREAD));
+      q.path.setAttribute("d", xfRingPath(xfRingTo(q.A, P, kg)));
+      q.path.setAttribute("fill-opacity", (u > 0 && kg < 1 ? 1 : 0).toFixed(3));   /* the ink never fades: at kg = 1 the ring IS the point and has no area to carry it */
+      const rec = q.bar.rec || {};
+      if (rec.bar) rec.bar.style.opacity = u > 0 ? "0" : "";   /* the leaving bar is its ring from the first frame on - two congruent shapes in one ink, so no frame differs */
+      const dot = (R.dots.dots || [])[k];
+      if (dot) {   /* the datum rides its own ink in, and the merged point stands until the line has come out of it */
+        dot.setAttribute("cx", xfLerp(q.p0[0], P[0], kg).toFixed(1));
+        dot.setAttribute("cy", xfLerp(q.p0[1], P[1], kg).toFixed(1));
+        dot.setAttribute("opacity", (born * (1 - hand)).toFixed(3));
+      }
+    });
+    if ((R.dots.dots || []).length > R.pairs.length) R.dots.dots[R.dots.dots.length - 1].setAttribute("opacity", 0);   /* the data key's anchor dot is not this verb's */
+    lpRemakeDrawBack(Bs, ap, ph.draw);
+    /* the bars page's own strings leave by the same hand that re-writes the axes - never a fade - and they are gone by
+       the time their ink reaches the point, so nothing of the leaving chart is left standing over the draw */
+    lpRemakeWrite((A.marks || []).filter((m) => m.role === "value").map((m) => m.el), clamp01(u / REMAKE_LINE.SETTLE), false);
+    lpRemakeWrite((A.marks || []).filter((m) => m.role === "xlabel").map((m) => m.el), clamp01(u / REMAKE_LINE.SETTLE), false);
+    lpAxisHandOver(A, Bs, u, R.hold);   /* the axes hand over on the WHOLE clock, exactly as T2 built them */
   };
   const PARK_ORIGIN = Object.freeze({ top: "0 0", bottom: "0 100%", left: "0 0", right: "100% 0" });
   const lpPaintPark = (S, sp, t, fromScale) => {
@@ -10749,10 +10861,11 @@ async function mount(doc) {
       if (t < sp.at + d) { cCur = 1 - segEase(clamp01((t - sp.at) / d)); leaving = true; plain = { from: cur, to: k, u: clamp01((t - sp.at) / d) }; break; }   /* the standing chart is leaving - E64: with its axes handing over to the one arriving */
       cur = k; cCur = clamp01((t - (sp.at + d)) / (states[k].buildDur || LP.BUILD));
     }
-    st.active = xf ? ((xf.extend && xf.u >= XF_EXTEND.RESCALE) || (xf.morph && xf.u >= XF_MORPH.LEAVE) || (xf.remake && xf.u >= REMAKE.TRAVEL) ? xf.to : xf.from) : cur;   /* the state a species target resolves against (P48 T2; P61 T2: a remake's marks are in flight until they land) */
+    st.active = xf ? ((xf.extend && xf.u >= XF_EXTEND.RESCALE) || (xf.morph && xf.u >= XF_MORPH.LEAVE) || (xf.remake && xf.u >= (xf.line_at === "to" ? REMAKE_LINE.HOLD : REMAKE.TRAVEL)) ? xf.to : xf.from) : cur;   /* the state a species target resolves against (P48 T2; P61 T2: a remake's marks are in flight until they land; T2b: a bars -> line run's target is drawable when the point has handed over to the drawn line) */
     st.xfNow = xf ? { from: xf.from, to: xf.to, u: xf.u, extend: !!xf.extend, keyed: !!xf.keyed, morph: !!xf.morph, remake: !!xf.remake } : null;   /* R26-28: the perform layer lerps its anchors on this clock. P61 T2 (T1's gap 8): the WHOLE-CHART phase is named here, so a species anchored to the chart resolves against the state that is actually drawable and never lerps across a pair the page keyed mark by mark */
     if (!(xf && (xf.morph || xf.remake)) && !(!xf && hold)) lpHideMorphs(st, null);   /* P48 T5: a morph's strip (P61 T2: a remake's rings) shows only while it morphs or holds under the target's build */
-    if (xf && xf.remake) { for (const S of states) { lpRestoreState(S); S.extendCap = null; } lpPaintRemake(st, states, xf, t3, scene, t); }
+    if (xf && xf.remake) { for (const S of states) { lpRestoreState(S); S.extendCap = null; }
+      (xf.line_at === "to" ? lpPaintRemakeToLine : lpPaintRemake)(st, states, xf, t3, scene, t); }   /* P61 T2b: the two runs are two choreographies, not one read backwards (E99 s39) */
     else if (xf && xf.extend) { lpPaintExtend(states, xf, t3, scene, t); }
     else if (xf && xf.morph) { for (const S of states) { lpRestoreState(S); S.extendCap = null; } lpPaintMorphTo(st, states, xf, t3, scene, t); }
     else if (xf && xf.keyed) { for (const S of states) lpRestoreState(S); (xf.keyed === "data" ? lpPaintRecastData : lpPaintRecastKeyed)(states, xf, t3, scene, t); }

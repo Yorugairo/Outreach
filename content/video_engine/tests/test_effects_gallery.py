@@ -112,7 +112,8 @@ def test_the_pin_catches_a_one_value_css_change(tmp_path, monkeypatch) -> None:
 
 # ---- (c) MOTION - an effect a still cannot show -------------------------------------------------
 
-MOTION_CARDS = ["chart_to:compare", "exit:melt", "dock_payload:stack"]
+MOTION_CARDS = ["chart_to:compare", "chart_to:remake", "exit:melt"]   # re-derived 2026-09-15 under the rule below: the remake
+# (7 phases, 2 instants) now outranks the melt and the stack (5 phases, 1 instant) drops out; the older clips stay beside the page
 
 
 def test_the_three_motion_cards_are_the_ones_the_rule_picks() -> None:

@@ -362,7 +362,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   the blocker is gone.
 
 ### T2b: BARS -> LINE COLLAPSES TO THE APEX AND DRAWS BACK TO THE ROOT (E99 s39)
-- Status: pending
+- Status: complete (2026-09-15) - HG1b open on the queue as `r26-70-compare-morph` (watch, the rebuilt clip only)
 - Owner: `implementation_luna` (**ENGINE LOCK**)
 - Depends on: T2, HG1 (ruled E99 s39)
 - Write set: `content/video_engine/scripts/kinetics/chartxf.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the
@@ -379,7 +379,26 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   `python -m pytest content/video_engine/tests/test_whole_chart_morph.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/effects_catalog_check.py` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-70-compare-morph`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T2b.md`. THE COLLAPSE cannot ride morph_a (a correspondence needs two rings; the
+  destination is one POINT), so `kinetics/chartxf.mjs` gains a dedicated clock: `REMAKE_LINE` (GATHER 0.24 / SETTLE 0.32 / SPREAD
+  0.25 / HOLD 0.86), `xfRemakeLineClock`, `xfGatherK` (rank 0 = the ring FARTHEST from the apex starts first and every ring lands
+  together - the collapse ends as one point, never a queue), `xfRingTo` (every vertex of a ring to one point), `xfDrawWindow` (the
+  stroke's visible interval growing out of the apex toward the root). `xfBarRing` still says WHAT collapses. Dead code removed
+  with it (`REMAKE.DRAW`, the `toLine` branch); `xfRemakeClock` numerically identical on line -> bars. THE ENGINE: `lpPaintRemake`
+  is the line -> bars painter only (its three goldens byte-identical); `lpRemakeApex` (the smallest tip y, sign carried),
+  `lpRemakeDrawBack` - THE PAGE'S OWN STROKE: the same dasharray/dashoffset pair `lpPaintChart` draws every ledger line with, a
+  NEGATIVE offset starting the window at the apex, the pen `strokeFrac ?? minJerk` (never constant velocity), the nib on the
+  root-side end, `lpRestoreState` putting the page's dasharray back; `lpPaintRemakeToLine` - gather / settle / draw back, the axes
+  on `lpAxisHandOver` over the whole clock, the bars page's numbers and categories un-written over SETTLE (gone as their ink
+  reaches the point). GOLDENS: `remake-bars-to-line` base MOVED from u 0.50 to u 0.15 (12.36 s, mid-gather: five rings in flight)
+  so the new `@proof-050` (13.2 s) is not the same instant twice - ratified by the parent; `@proof-025` (the point alone with its
+  figure), `@proof-050` (the point + a partial stroke, the nib on the root side), `@proof-075` (most of the line, the labels
+  un-writing). Parent's read: the collapse converges, the point stands, the stroke grows out of it - a point and a partial stroke
+  at u 0.5, the frame a snap cannot produce. Card `chart_to:remake` phases 4 -> 7; page-boxes re-pinned sha-only. Tests: chartxf
+  +5 node tests (the clock's ends, farthest-first / land-together, the k=1 point, root-first growth, the ruling's instant) and
+  the browser probe in test_whole_chart_morph (drawn length at u 0.5 strictly inside (0.05, 0.95); no frame draws both charts
+  flat). Validate: node 577/577 EXIT 0; sync_kinetics in sync; pytest test_whole_chart_morph + test_golden_frames 141 passed; effects_catalog_check 0 failures; page-boxes re-pinned sha-only (44 passed); registry 966 records, 0 orphaned. Deviation: the lane patched main-checkout files by an exact-string patcher (Edit refuses
+  main paths from a worktree session) - verified by node --check, the node tests and the goldens; ratified.
 
 ### T3: THE BALL BECOMES THE NEXT FULL CHART - R26-117's third ending, and P48 T5b's planted source
 - Status: pending

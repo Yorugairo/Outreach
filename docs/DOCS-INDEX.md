@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-4474 records across 381 files.
+4553 records across 396 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -52,6 +52,59 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L149 [2] Act III — The circle is magic because everybody agrees it is — 6:00–10:15 — [VISUAL: A gold circle draws itself around two MC silhouettes. Outside it: {[VISUAL: A gold circle draws itself around two MC silhouette; MARSHALL:} <mm-play-boundary; Huizinga 1950; play-as-contest; forty-eight; mm-ritual-insult-rules; Labov et al.; PLAIN-LANGUAGE>
 - L215 [2] Act IV — Your enemy is secretly your co-star — 10:15–13:20 — [VISUAL: The two silhouettes fire gold verbal shockwaves toward each other. {[VISUAL: The two silhouettes fire gold verbal shockwaves tow; MARSHALL:; [LOCAL SOURCE CARD: ERVING GOFFMAN / PERFORMANCE AND COLLUSI} <mm-co-performance; Goffman 1959; co-stars>
 - L260 [2] Final round — 13:20–15:10 — [VISUAL: The gorilla, knight, and MC silhouette stand in a single row. Their {[VISUAL: The gorilla, knight, and MC silhouette stand in a s; MARSHALL:} <old-school>
+
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/AUDIO-B-RECEIPT.md
+
+- L1 [1] Audio B preparation receipt — pending blind-viewer clearance — Status: PREPARED ONLY. No synthesis, alignment, tempo edit, network call, or <SCRIPT-B-VO.txt; align_take.py --script; retime_take.py --out; GEMINI_TTS_API_KEY; kokoro; numpy; soundfile; faster-whisper; small.en; ffmpeg; ffprobe; final-word>
+- L7 [2] Reflowed payload — - Source: `SCRIPT-B-VO.txt` (latest B script; gate hash `c30f08af1ee69f5ceb4240d49e422ce233b528650103746597316f690647ea68`). <SCRIPT-B-VO.txt>
+- L17 [2] Commands — do not run until parent clearance — Run from the repository root. Separate output directories keep the raw voice <align_take.py --script; retime_take.py --out>
+- L38 [2] Requirements / gates — - Chirp: `GEMINI_TTS_API_KEY` in `docs/local.env`; this is the only networked <GEMINI_TTS_API_KEY; kokoro; numpy; soundfile; faster-whisper; small.en; ffmpeg; ffprobe; final-word; YouTube>
+
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/EVIDENCE-DOSSIER.md
+
+- L1 [1] AI usefulness thesis — facts, model, argument <we-must-pace-the-frontier; publication-sensitive; per-step; US-collapse; Millennium-problem; inference-market-share>
+- L3 [2] Factual news peg — Primary: https://darioamodei.com/post/we-must-pace-the-frontier — page labelled September2026, checked2026-09-15. Amodei advocates pacing capability advancement <we-must-pace-the-frontier; publication-sensitive>
+- L6 [2] Our mathematical exhibit (illustrative, NOT an AI evaluation) — Assumptions: twenty required steps, identical per-step probability p, independent outcomes, any error means not cleanly completed; no retries or recovery includ <per-step>
+- L10 [2] Our argument, not established causality — If practical failure rates improve, more identical workflows finish cleanly. Resource allocation toward memory, tool integration and checking could improve reli
+- L15 [2] Explicit exclusions — No US-collapse forecast; no political recommendation or alleged hidden motives; no daily Millennium-problem claim; no normalized Trends value represented as vol <US-collapse; Millennium-problem; inference-market-share>
+
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/outreach/PACKAGE.md
+
+- L1 [1] Money Physics — AI usefulness package — REVIEW DRAFT · UNSENT · UNPUBLISHED. Video and thumbnail paths added after render verification. Target channels: https://www.youtube.com/@MoneyPhysicsHQ and htt <MoneyPhysicsHQ; YouTube; data-center; we-must-pace-the-frontier; organizational-investment; direct-labelled; shown-in-feed; viewed-vs-swiped; traffic-source; agent-tooling; per-step; J-curve>
+- L5 [2] YouTube — Title: How slowing AI development could make it more useful {How slowing AI development could make it more useful} <data-center; we-must-pace-the-frontier; organizational-investment>
+- L24 [2] Facebook — native post — A brilliant answer isn't the same thing as a finished job. <YouTube>
+- L33 [2] Companion chart post — Headline: Small reliability gains. More finished work. {Small reliability gains. More finished work.} <direct-labelled>
+- L44 [2] Posting order and measurement — 1. Operator reviews the player/MP4, thumbnail and voice. Confirm “This week” still matches Sept12announcement; otherwise use a dated revised take. <YouTube; shown-in-feed; viewed-vs-swiped; traffic-source>
+- L51 [2] Unsent outreach angles — These are draft replies/share notes tied to specific public source material, not a bulk mailing list. Check community rules and relevance before posting; ask be <we-must-pace-the-frontier; agent-tooling; per-step; organizational-investment; J-curve>
+- L54 [3] Discussion of Amodei's pacing essay — “We made a short exploring a narrower economic argument inside the pacing debate: could effort moved into reliability make existing models finish more work? The <we-must-pace-the-frontier>
+- L58 [3] AI implementation / agent-tooling discussion — “We visualized how per-step reliability compounds across a workflow. It's not a benchmark—just95%^20 versus99%^20 with assumptions visible. The interesting disa <per-step>
+- L62 [3] Productivity / organizational-investment discussion — “Our new Money Physics short argues that useful AI progress and frontier progress needn't move together. It draws on the idea of complementary investment, witho <J-curve>
+- L66 [2] Release restrictions — No claims of confirmed search-volume growth. The browser check is a qualitative five-term comparison, not a forecast of this video's demand. No political advoca <search-volume; five-term>
+
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/PRODUCTION-LEDGER.md
+
+- L1 [1] AI slower, useful faster — new Money Physics package — Status: running, review-only. Latest operator clarification permits an argued entertainment thesis: explain logically how it could be true; distinguish supporti <review-only; first-pass; per-step; whole-workflow; resource-allocation; THREE-SHORTS-PLAN; scene-evidence; blind-viewer; phone-legible; YouTube; self-approval; independent-step>
+- L5 [2] Superseded first-pass premise (preserved, not production authority) — Title: How slowing AI development could make it more useful. <per-step; whole-workflow; resource-allocation>
+- L10 [2] Acceptance — Operator now requests three standalone 70–90s shorts, detailed in review/THREE-SHORTS-PLAN.md. Each requires current scene-evidence engine; current script/gates <THREE-SHORTS-PLAN; scene-evidence; blind-viewer; phone-legible; YouTube; self-approval>
+- L13 [2] Evidence boundary — Current event: Amodei September2026 pacing essay, primary checked. Quantitative proof is OUR explicitly illustrative independent-step probability model, not mea <independent-step; EVIDENCE-DOSSIER; no-pullback>
+- L17 [2] Ownership / execution — Parent owns script, semantics, claim review and integration. All new code/assets/build outputs stay under this project. Existing engine only; no writes to origi
+- L20 [2] Next steps — Mechanical script gates -> JUDGE/thumbnail/viewer -> both scratch voices and local forced alignment -> authored beat plan -> private build/render/current gates
+- L23 [2] Execution ledger — - Shared evidence order SENT: packet d21f03d49daf6e1ea412ae0627305380ba81976e8fe5c060b8f2692281d54553, conversation 9cea0c38-053a-4f03-8465-0b225d33c1af; receip <ai-three-clocks; spoken-register; thumbnail-b; contact-sheet; first-frame; action-led; THREE-SHORTS-PLAN; still-needs-you; first-frame-human-review; YouTube; RESEARCH-RECALL-B; scratch-chirp-tight>
+
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/scratch/SCRATCH-INDEX.md
+
+- L1 [1] SCRATCH INDEX - jump points for the ear pass — kokoro 1.2 min for 982 chars -> 13.29 chars/s actual (estimators assume 16.05 c/s / 165.6 wpm) <ninety-five; thirty-six; ninety-nine; eighty-two>
+
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/SCRIPT-REVIEW.md
+
+- L1 [1] Working script review — AI usefulness thesis <SCRIPT-SHORT-GATES; Publication-relative; re-upload; long-form; post-key; ninety-five; ninety-nine; eighty-two; independent-step; resource-allocation; per-step; whole-job>
+- L3 [2] TOOLS — Mechanical run PASS, estimated: lint0FAIL, audit0FAIL/2WARN, opening0FAIL/1WARN/12PASS/3JUDGE. Full output SCRIPT-SHORT-GATES.md. Publication-relative “This wee <SCRIPT-SHORT-GATES; Publication-relative; re-upload; long-form>
+- L6 [2] DECLARED — - ring “Slower development could make AI useful faster.” True: explicit argued possibility, not a prediction reported as fact. <post-key; ninety-five; ninety-nine; eighty-two; independent-step; resource-allocation>
+- L17 [2] JUDGE — J12 pending thumbnail view. Title and hook both pose useful-progress-under-slower-frontier-development. <per-step; whole-job>
+- L23 [2] L0 reader log, in order — 1 possibility owned, immediately concrete proof to follow. 2 distinguishes model from system; never measure “same AI” as an actual product test. 3 source attrib <user-facing>
+- L26 [2] SCREENS / LOOP — Seven emitted candidates: X1 and deixis “This week” are a calendar reference, not dangling causal referent; screen at release. Five sound-pattern candidates (s, <sound-pattern; tongue-twister; single-variable>
+- L29 [2] P3–P6 / ROSTER — Short-mode doc51 supersedes long-form battle/pivot pin/Glass ratios/foreshadow trio/anaphora/tell architecture; none fabricated to satisfy long-form slots. Reve <Short-mode; long-form; per-step; Peak-end; Never-repeat; Mechanisms-not-prescriptions>
+- L32 [2] REWRITES / EVIDENCE / VIEWER / DECISIONS — Only spoken rewrite: final “That's useful progress, even when the frontier slows” -> “Slower development wins when useful work gets finished faster” to close th
 
 ## content/video_engine/projects/systems-and-blowups/ASSET-SPRINT-2026-08-25.md
 
@@ -285,6 +338,59 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L53 [3] B. The Ledger Page Chalkboard Component — - Component ID: `<LedgerChalkboardDeckle />` (Remotion / SVG) {Component ID:; Parameters:}
 - L66 [3] C. The Equity Cushion Balance Scale — - Component ID: `<EquityCushionBalanceScale />` (Remotion Physics Engine) {Component ID:; Governing Physics:; Deflection Calibrations:} <1982 State; 2026 State>
 - L74 [3] D. The Carrying Capacity Diagnostic Worksheet — - Component ID: `<CarryingCapacityWorksheet />` (SVG / Dynamic Typography) {Component ID:; Fields:} <Coverage; Maturity; Pricing Power; Gross Margin Delta (8 Quarters)>
+
+## content/video_engine/projects/systems-and-blowups/new-package-2026-09-15/EVIDENCE-DOSSIER.md
+
+- L1 [1] Evidence dossier — refinancing lag candidate — Status: draft review, not approved. No current US debt or interest totals asserted. This is a controlled example explaining fixed-coupon refinancing, not a fore <fixed-coupon; TreasuryDirect; marketable-securities; treasury-notes; secondary-market; understanding-pricing; on-screen; floating-rate; primary-source>
+- L5 [2] Primary mechanism checked by parent — TreasuryDirect, Treasury Notes: https://www.treasurydirect.gov/marketable-securities/treasury-notes/ — read 2026-09-15. Notes have a fixed rate until maturity; <TreasuryDirect; marketable-securities; treasury-notes; secondary-market; understanding-pricing>
+- L10 [2] Illustrative data, not observations — All on-screen figures must carry an immediately legible ILLUSTRATIVE / FIXED DEBT label. No dates implying a historical series. <on-screen>
+- L28 [2] Caveats to keep in source notes and framing — Fixed principal, fixed coupons, one refinance at par. Actual Treasury financing includes bills, floating-rate notes, TIPS, new deficits, different maturities an <floating-rate>
+- L31 [2] Pending — Gemini's primary-source extracts and historical demonstration are still being collected. No historical figure will enter this script without separate verificati <primary-source>
+
+## content/video_engine/projects/systems-and-blowups/new-package-2026-09-15/PRODUCTION-LEDGER.md
+
+- L1 [1] New Money Physics package — Status: preproduction; review-only, unpublished. Latest user request controls: NEW package following script guidelines, build short and outreach artifacts. Exis <review-only; single-mechanism; first-line; Primary-source; scene-evidence; YouTube; self-assigned; money-physics-demand; WORK-ORDER; evidence-led; Follow-up; data-center>
+- L5 [2] Acceptance — - New 45–60 second, single-mechanism script with title/thumbnail/first-line agreement. <single-mechanism; first-line; Primary-source; scene-evidence; YouTube; self-assigned>
+- L14 [2] Current frontier — OPERATOR ANSWER ARRIVED: topic selection must follow current finance/tech search demand, considering frontier AI pullback / Trump action / rising yields and gov <money-physics-demand; WORK-ORDER; evidence-led; Follow-up; data-center; we-must-pace-the-frontier; pacing-not-halting>
+- L19 [2] Recall — - docs/runbooks/ONE-SHOT.md: complete first-pass short, not a component test. <ONE-SHOT; first-pass; content-video-engine; THE-SHORTS-FORMAT; EVIDENCE-MOTION-STANDARDS; same-data>
+- L25 [2] Jobs — - CURRENT topic demand/premise research: conversation `fa4ad306-7c37-4bac-aaed-c4da1f191256`, packet `c2ffbe512d4da335412a7cb6764ae544d659f013c9f6a375e36c27b68a <fa4ad306-7c37-4bac-aaed-c4da1f191256; YouTube; 001bdb4e-1e5f-4799-aea5-5b3e112ec2f2; unsupported-looking; new-package; two-attempt>
+- L33 [2] Next runnable step — Collect current demand research, verify its observations, then resolve timely topic before resuming production. Align job `8451` COMPLETE: 142 script tokens, re <8451; scratch-chirp; 97284; TreasuryDirect; fixed-coupon; new-package>
+
+## content/video_engine/projects/systems-and-blowups/new-package-2026-09-15/scratch/SCRATCH-INDEX.md
+
+- L1 [1] SCRATCH INDEX - jump points for the ear pass — kokoro 1.1 min for 869 chars -> 13.13 chars/s actual (estimators assume 16.05 c/s / 165.6 wpm) <two-percent>
+
+## content/video_engine/projects/systems-and-blowups/new-package-2026-09-15/SCRIPT-REVIEW.md
+
+- L1 [1] Script review — working record, not completion <long-form; Re-run; SCRIPT-SHORT-GATES; post-key; two-percent; fixed-coupon; short-mode; line-by-line; Secondary-market; Five-percent; contract-price; tongue-twister>
+- L3 [2] TOOLS — Latest run: lint exit 0 / zero FAIL; audit exit 0 / zero FAIL, three WARN (short sentence mean, spread, long-form anchor heuristic); opening exit 0 / zero FAIL, <long-form; Re-run; SCRIPT-SHORT-GATES>
+- L6 [2] DECLARED — - ring: “Lower rates can leave a bigger bill.” True: conditional paradox, resolved by the final refinancing comparison. <post-key; two-percent>
+- L18 [2] JUDGE — - J12 pending final thumbnail inspection. Hook answers RATES DOWN. BILL UP?; no actual US trend will be implied by image labels. <fixed-coupon; short-mode>
+- L24 [2] L0 — line-by-line reader pass — 1. Conditional claim, clear bill referent supplied immediately; no historical claim. <Secondary-market; Five-percent; contract-price>
+- L42 [2] SCREENS / LOOP — X1 four referents checked above: that debt, that tranche, lower new rate, demonstrated refinance. Four deixis candidates share these explicit antecedents. Five <tongue-twister; short-run>
+- L46 [2] P3–P6 / ROSTER — Long-form battle, midpoint pin, Glass phase ratios, foreshadow trio, tell thresholds, anaphora and triad architecture: not applied to 45–60s short per doc51. Sh <Long-form; Peak-end; Never-repeat>
+- L49 [2] REWRITE LOG — - Draft 0 -> 1: “yesterday” became “before” (remove spurious current-date implication); “That's the…” became “You can see that…” (address viewer); maturity line <current-date; blank-separated>
+- L55 [2] EVIDENCE / VIEWER / DECISIONS — All numeric relationships are exact illustrative arithmetic in EVIDENCE-DOSSIER.md; no primary quote used in VO. Parent checked TreasuryDirect coupon premise. B <EVIDENCE-DOSSIER; TreasuryDirect>
+
+## content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/package-2026-09-15/baseline/BASELINE-COMPARISON.md
+
+- L1 [1] Baseline comparison — Audit date: 2026-09-15. The selected current build was `build-review`; 33 files were copied into `baseline/build-review/`. `review-v1` remains a read-only histo <build-review; review-v1; read-only; one-shot; self-watch; RUN-SUMMARY.tsv; compiled-timeline; word-timeline; HASHES.tsv>
+
+## content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/package-2026-09-15/baseline/COMMANDS.md
+
+- L1 [1] Private-package command references — These are the existing commands for a future private package. They are reference-only; no authoring, voice, alignment, or render command in this file was run fo <reference-only; PowerShell; source-door; SHOT-TABLE; self-watch; RUN-SUMMARY>
+
+## content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/package-2026-09-15/baseline/INCIDENT-2026-09-15.md
+
+- L1 [1] Baseline audit incident ledger — The first discovery pass mistakenly invoked `build_short.py --help`. That entry point ignores the help flag and ran the original build. It wrote the original pr <build_short.py --help; build-short; build_timeline_f.py --help; steel-and-paper; build_render_f.py --help; align_take_whisper.py --help; RUN-SUMMARY>
+
+## content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/package-2026-09-15/baseline/TASK.md
+
+- L1 [1] T1 baseline audit ledger — Status: complete; no live tool/session handles <build-review; self-watch; review-v1; scratch-voice; Anti-goals; original-build; read-only; One-shot; RUN-SUMMARY.tsv; HASHES.tsv>
+- L6 [2] Acceptance criteria — - Preserve the watched source builds; write only under this `baseline/` directory. <build-review; self-watch; review-v1; scratch-voice>
+- L19 [2] Anti-goals — - No new script, shot table, media, Flow order, voice, network request, render, <original-build>
+- L26 [2] Write set — `baseline/` only. The source project and its existing `review-v1` and <review-v1; build-review; read-only>
+- L31 [2] Checkpoint — - Copied 33 files from `build-review/` into `baseline/build-review/`. <One-shot; Self-watch; RUN-SUMMARY.tsv; HASHES.tsv>
 
 ## content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/review-v1/GATES-MOTION.md
 
@@ -4389,13 +4495,13 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
 ## docs/content-video-engine/REVIEW-QUEUE.md
 
-- L1 [1] REVIEW QUEUE - what the operator can judge now — Generated from [`review-queue.v1.json`](review-queue.v1.json) by `content/video_engine/scripts/build_review_queue.py --write`; do not edit this file by hand. It {As of; E99 s14:} <review-queue.v1.json; review-queue; OPEN-GATES-AND-QUESTIONS; 9c9c358; approved; review-answers.jsonl; build_review_queue.py --answers; review_queue_proofs.py --clips; r26-133-drift-idle-paints-nothing; painted-vs-held; mask-pinned; r26-76-melt-endings-in-motion>
-- L10 [2] Watch (0) — Nothing open.
-- L14 [2] Look (0) — Nothing open.
-- L18 [2] Rule (0) — Nothing open.
-- L22 [2] Approve / push (0) — Nothing open.
-- L26 [2] Owed by the agent before it comes back to you (5) — | id | item | what the agent owes | blocks | {A plate's drift idle paints nothing} <r26-133-drift-idle-paints-nothing; painted-vs-held; mask-pinned; r26-76-melt-endings-in-motion; p48-hg3-morph-onto-planted; chart-to-chart; r26-117-ball-into-the-next-chart; hand-over; ball-into-the-next-chart; p54-hg3-astra-fable-bakeoff; Astra-vs-Fable; bake-off>
-- L36 [2] Ruled since the last pass — | id | item | ruling / evidence | sources | {The first 2.5D cut (Japan); The caption's default setting, by ear} <p58-hg2-first-2-5d-cut; content-video-engine; r26-123-caption-default; HG-HANDOFF; THE-BACKLOG-BURNDOWN; OPERATOR-RULINGS; p52-gate3-species-proof-motion; OPEN-GATES-AND-QUESTIONS; p51-editor-gates-2-3; OPERATOR-DECISIONS; THE-ANIMATORS-LOOP; p58-hg3-chart-forms>
+- L1 [1] REVIEW QUEUE - what the operator can judge now — Generated from [`review-queue.v1.json`](review-queue.v1.json) by `content/video_engine/scripts/build_review_queue.py --write`; do not edit this file by hand. It {As of; E99 s14:} <review-queue.v1.json; review-queue; OPEN-GATES-AND-QUESTIONS; 9c9c358; approved; review-answers.jsonl; build_review_queue.py --answers; review_queue_proofs.py --clips; r26-70-compare-morph; r26-70-compare-morph-0.mp4; remake-bars-to-line; mid-gather>
+- L10 [2] Watch (1) — | id | item | what to judge | proof | documents | options | agent's recommendation | blocks | sources | {Bars -> line, rebuilt: the bars collapse to the apex point,} <r26-70-compare-morph; r26-70-compare-morph-0.mp4; remake-bars-to-line; mid-gather; un-writing; xfRemakeLineClock; xfGatherK; xfRingTo; xfDrawWindow; lpRemakeApex; lpRemakeDrawBack; dash-offset>
+- L16 [2] Look (0) — Nothing open.
+- L20 [2] Rule (0) — Nothing open.
+- L24 [2] Approve / push (0) — Nothing open.
+- L28 [2] Owed by the agent before it comes back to you (5) — | id | item | what the agent owes | blocks | {A plate's drift idle paints nothing} <r26-133-drift-idle-paints-nothing; painted-vs-held; mask-pinned; r26-76-melt-endings-in-motion; p48-hg3-morph-onto-planted; chart-to-chart; r26-117-ball-into-the-next-chart; hand-over; ball-into-the-next-chart; p54-hg3-astra-fable-bakeoff; Astra-vs-Fable; bake-off>
+- L38 [2] Ruled since the last pass — | id | item | ruling / evidence | sources | {The first 2.5D cut (Japan); The caption's default setting, by ear} <p58-hg2-first-2-5d-cut; content-video-engine; r26-123-caption-default; HG-HANDOFF; THE-BACKLOG-BURNDOWN; OPERATOR-RULINGS; p52-gate3-species-proof-motion; OPEN-GATES-AND-QUESTIONS; p51-editor-gates-2-3; OPERATOR-DECISIONS; THE-ANIMATORS-LOOP; p58-hg3-chart-forms>
 
 ## docs/content-video-engine/RULE-abstract-to-concrete.md
 
@@ -4931,6 +5037,24 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L94 [3] 4. Where to set the fader (industry numbers) — - General practice: music −18 to −22 dB nominal (WeVideo); under {under dialogue specifically −30 to −35 dB} <WeVideo; high-pass; Dialogue-anchored; YouTube; full-mix>
 - L103 [2] Operational spec for Steel and Paper (and MP default) — 1. VO anchor: master the mix so integrated loudness lands ≈ {VO anchor:; Bed level:; −28 LU below the VO} <YouTube; sub-threshold; long-form; BED_LU = {youtube: -20, facebook: -20}; transition-swell; env: [[t, dB], …]; BED_SWELL_DB = 4; envGain; measured-interference; number-dense; high-load; complex-task>
 - L161 [2] Confidence & gaps — - HIGH: subliminal-audio null result; lyrics-are-speech; instrumental <subliminal-audio; lyrics-are-speech; room-tone>
+
+## docs/research/audio/VOICE_PREFERENCES_AND_TTS_ENGAGEMENT_RESEARCH_BLUEPRINT.md
+
+- L1 [1] Voice Preferences, TTS Prosody, and Audience Engagement — Research Blueprint — Pass-1 discovery brief · 2026-09-15 · sources: Academic CTML + PNAS Prosody + YouTube RecSys/Analytics Case Studies · for: Money Physics / Outreach Video Engine <YouTube; RecSys; post-processing; drop-off; Mayer 2003; Atkinson 2005; Craig & Schroeder 2017; Dinçer 2022; Zhao & Mayer 2023; high-stakes; ElevenLabs; low-effort>
+- L5 [2] The question — What does empirical cognitive science, acoustic prosody research, and platform retention data reveal about audience preferences for voiceover audio? Specificall <YouTube; post-processing; drop-off>
+- L12 [2] Verdict up front — 1. The Modern Voice Principle Split (Comprehension vs Affective Trust): {The Modern Voice Principle Split (Comprehension vs Affective} <Mayer 2003; Atkinson 2005; Craig & Schroeder 2017; Dinçer 2022; Zhao & Mayer 2023; high-stakes; YouTube; ElevenLabs; low-effort; custom-trained; F_0; sing-song>
+- L28 [2] 1. Mayer's Voice Principle: Objective Recall vs Affective Engagement — In multimedia learning theory, the Voice Principle states that people learn more deeply from an authentic human voice than from a machine-synthesized voice. {Historical Foundation (Robotic TTS):} <machine-synthesized; voice-preferences; Mautone 2003; Merrill 2005; wave-net; Craig & Schroeder 2017; Dincer 2022; Meta-Analysis; Zhao & Mayer 2023; Mayer 2024>
+- L47 [2] 2. Acoustic Prosody & Perceived Authority: F0 Dynamics and Declination — Human perception of competence, institutional authority, and credibility is governed by subtle micro-prosodic dynamics rather than lexical vocabulary alone. {Fundamental Frequency ($F_0$) Declination and Dominance:} <micro-prosodic; Reverse-correlation; voice-preferences; Ponsot et al.; Rodero & Lucas 2021; drop-off; High-Stakes; Torre et al.; micro-tremors; Belin et al.>
+- L65 [2] 3. The 30-Second "AI Slop" Bounce: YouTube Audience Retention & Algorithmic Clustering — On YouTube, audience retention is dominated by front-door heuristics in the first 30 seconds. {The Pattern-Matching Penalty:} <front-door; ElevenLabs; TikTok; Drop-off; voice-preferences; Clanker 2026; case-studies; youtube-retention-voice-comparison; youtube-voiceover-retention-ai-vs-human; agent-memory; voice-lane-split; inside-youtube>
+- L81 [2] 4. Speech Rate Dynamics & Cognitive Pacing Waves — Pacing must not be treated as a static global knob (e.g. "1.1x speed"). Human narration naturally breathes and contracts based on informational density. {Comprehension Thresholds:; The 3-Tier Choreographed Speech Wave:} <voice-preferences; Rayner & Clifton 2009; Micro-Payoff; YouTube; ITU-R; R-REC-BS; zero-cross; Blueprint 2026>
+- L97 [2] 5. Voice Engineering Transformation: What Needs to Change in the Pipeline — To transition from a flagged synthetic track to an authoritative, high-retention institutional explainer, execute the following five-pillar overhaul: <high-retention; five-pillar; ElevenLabs; Multi-Voice; YouTube; voice-vector; line-broken; em-dashes; em-dash; [tempo: fast]; [tempo: standard]; [tempo: deliberate]>
+- L101 [3] 1. Model Tier: Migrate from Public Stock to Bespoke Voice Clone — - Action: Stop using public library presets (ElevenLabs "Adam", Chirp "Charon"). {Action:; Implementation:; Professional Voice Clone (PVC); Alternative (Multi-Voice Latent Blending):} <ElevenLabs; YouTube; voice-vector>
+- L106 [3] 2. Intonation Reset Elimination via Payload Reflowing — - Action: Stop feeding raw, line-broken display scripts into the TTS engine. {Action:; Implementation:; Movement Reflow Rule; Punctuation Architecture:} <line-broken; em-dashes; em-dash>
+- L111 [3] 3. Dynamic Prosodic Pacing Map — - Action: Replace uniform speed multipliers with structural tempo mapping. {Action:; Implementation:; never} <[tempo: fast]; [tempo: standard]; [tempo: deliberate]>
+- L117 [3] 4. Acoustic Harmonization & Spectral Conditioning — - Action: Eliminate the "clinical plastic" digital finish of raw TTS. {Action:; DSP Chain:} <High-Pass; sub-bass; micro-harmonics; Soft-knee>
+- L126 [3] 5. Continuous Room-Tone & Subthreshold Music Bed — - Action: Never permit zero-cross digital silence between words. {Action:; Implementation:; -20 LU to -22 LU below dialogue; -28 LU below dialogue} <zero-cross; long-form>
+- L134 [2] Sources — 1. Mayer, R. E., Sobko, K., & Mautone, P. D. (2003). Social cues in multimedia learning: Role of speaker's voice. Journal of Educational Psychology, 95(4), 803– <Re-examining; Text-to-Speech; meta-analysis; affective-cognitive; YouTube; Long-Form; case-studies; youtube-retention-voice-comparison; youtube-voiceover-retention-ai-vs-human; ITU-R; true-peak; R-REC-BS>
+- L153 [2] NOT FOUND WHERE I LOOKED — 1. Controlled Double-Blind YouTube Retention Tests on ElevenLabs v3 vs ElevenMultilingual v2: {Controlled Double-Blind YouTube Retention Tests on ElevenLab; YouTube Recommendation System Exact Weight for Voice Embeddi} <ElevenLabs; ElevenMultilingual; third-party; RecSys>
 
 ## docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md
 

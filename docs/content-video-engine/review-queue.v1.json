@@ -756,48 +756,41 @@
         "E99 s1",
         "E99 s34",
         "P61 HG1",
-        "E99 s39"
+        "E99 s39 (bars -> line rebuilt)",
+        "P61 HG1b"
       ],
       "kind": "watch",
-      "title": "The whole chart becomes the whole other chart (chart_to remake)",
-      "judge": "Watch the two clips end to end (11.6-14.9 s; the verb runs 12.0-14.4 s). Line -> bars: the line's history wipes, its last five months' ink drops into five blocks, the blocks fly to their bars with their own data riding them, the axes hand over and the title re-writes. Bars -> line: the same run the other way. Does it read as a transformation, not a cut, and read as intentional (E99 s34)? The entire chart should transform - every series, datum and axis. Approve, or name what cuts or reads as accidental.",
+      "title": "Bars -> line, rebuilt: the bars collapse to the apex point, the line draws back to the root",
+      "judge": "Your ruling on the first cut (E99 s39): collapse to the single apex point, then draw the line back to the root - never slide and snap the whole line together. This clip is only bars -> line, rebuilt that way: every bar's ink gathers into one point at the highest bar's top, and the page's own stroke then draws the line from that point back to the first datum, the axes handing over on the same clock. Watch 11.6-14.9 s. Does it read as manipulating the world, not a cut in a costume? Approve, or name what still snaps.",
       "where": [
         {
-          "label": "line -> bars at u 0.25 (the history gone, the tail standing, labels mid-un-write)",
-          "path": "content/video_engine/tests/golden/frames/remake-line-to-bars@proof-025.png"
-        },
-        {
-          "label": "line -> bars at u 0.50 (five shapes that are neither chart - the frame no cut can produce)",
-          "path": "content/video_engine/tests/golden/frames/remake-line-to-bars.png"
-        },
-        {
-          "label": "line -> bars at u 0.75 (almost bars, the new labels arriving)",
-          "path": "content/video_engine/tests/golden/frames/remake-line-to-bars@proof-075.png"
-        },
-        {
-          "label": "bars -> line at u 0.25 / 0.50 / 0.75",
-          "path": "content/video_engine/tests/golden/frames/remake-bars-to-line@proof-025.png"
-        },
-        {
-          "label": "bars -> line, the base golden (u 0.50)",
+          "label": "mid-gather (12.36 s, the new base frame) - five rings in flight, no longer bars, not yet the point",
           "path": "content/video_engine/tests/golden/frames/remake-bars-to-line.png"
         },
         {
-          "label": "bars -> line at u 0.75 (the line drawn across, the fill receding behind the tail)",
+          "label": "THE POINT (u 0.25) - one dot at the apex, its figure standing, the bars gone",
+          "path": "content/video_engine/tests/golden/frames/remake-bars-to-line@proof-025.png"
+        },
+        {
+          "label": "the stroke drawing back from the apex (u 0.50) - the point, a partial stroke, the nib on the root side",
+          "path": "content/video_engine/tests/golden/frames/remake-bars-to-line@proof-050.png"
+        },
+        {
+          "label": "most of the line drawn (u 0.75), the bars page's labels un-writing",
           "path": "content/video_engine/tests/golden/frames/remake-bars-to-line@proof-075.png"
         },
         {
-          "label": "the probe: at u 0.50 neither chart is drawable as itself; both layers at opacity 1 (no crossfade)",
-          "path": "content/video_engine/tests/test_whole_chart_morph.py"
+          "label": "chartxf.mjs: REMAKE_LINE, xfRemakeLineClock, xfGatherK (farthest ring first, all land together), xfRingTo, xfDrawWindow",
+          "path": "content/video_engine/scripts/kinetics/chartxf.mjs"
         },
         {
-          "label": "the verb's law (rings, clock)",
-          "path": "content/video_engine/scripts/kinetics/chartxf.mjs"
+          "label": "the engine: lpRemakeApex, lpRemakeDrawBack (the page's own dash-offset stroke, a negative offset from the apex), lpPaintRemakeToLine",
+          "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs"
         }
       ],
       "options": [],
-      "recommendation": "Approve as the whole-chart standard. One thing to read for: with 15 data and 5 bars the un-keyed first ten months WIPE by the dash window (E50's law) rather than becoming something - every keyed datum transforms; a page that wants the whole line to become bars authors n bars for n data. If that wipe reads as 'left behind', say so and the verb gains a rule. The compare frames that used to sit here are one figure balling up, refused as a morph proof by E99 s1; the ball -> next-chart ending is R26-117's own card now.",
-      "blocks": "nothing - ruled E99 s39 (2026-09-15): line -> bars taken; bars -> line rebuilt in T2b (collapse to the apex, draw back to the root)",
+      "recommendation": "Approve. Read as a viewer at the four instants: the rings leave their bars and converge (the farthest first, all landing together, so the collapse ends as ONE point and not a queue); the point stands alone with its figure; the stroke grows out of it toward the root with the nib riding its end; at u 0.5 the frame is a point and a partial stroke - the frame a snap cannot produce, pinned by a test. Line -> bars untouched, byte-identical.",
+      "blocks": "HG1b; T3 (already unblocked on line -> bars) reads this pair's law for the ball's hand-over",
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md:3143 (E99 s34)",
         "docs/portable/OPERATOR-RULINGS.md:2901 (E99 s1)",
@@ -806,32 +799,25 @@
         "content/video_engine/scripts/kinetics/chartxf.mjs (REMAKE, xfRemakeClock)",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md:261-331 (T2)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s39)",
-        "docs/content-video-engine/review-answers.jsonl (2026-09-15)"
+        "docs/content-video-engine/review-answers.jsonl (2026-09-15)",
+        "docs/portable/OPERATOR-RULINGS.md:3196 (E99 s39)",
+        "content/video_engine/tests/test_whole_chart_morph.py",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T2b)"
       ],
-      "status": "ruled",
-      "ruling": "E99 s39",
+      "status": "open",
+      "ruling": null,
       "was_kind": "owed",
-      "owed": "Delivered 2026-09-15 (P61 T2): chart_to remake, both pairs, six goldens, the two clips",
+      "owed": "Delivered 2026-09-15 (P61 T2b): bars -> line via the apex, four goldens, the clip",
       "proofs": [
         {
           "type": "clip",
-          "surface": "remake-line-to-bars",
-          "t0": 11.6,
-          "t1": 14.9,
-          "aspect": "16:9",
-          "flags": {},
-          "route": "review_queue_proofs.py --clips: the golden surface instantiated, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)",
-          "label": "line -> bars: the whole chart becomes the whole other chart on one clock - the history wipes, the last five months' ink drops into five blocks, the blocks fly to their bars with their own data riding them, the axes hand over and the title re-writes"
-        },
-        {
-          "type": "clip",
+          "label": "bars -> line, rebuilt (E99 s39): the bars gather into one point at the apex, then the line is drawn back to the root by the page's own stroke while the axes hand over",
           "surface": "remake-bars-to-line",
+          "aspect": "16:9",
           "t0": 11.6,
           "t1": 14.9,
-          "aspect": "16:9",
           "flags": {},
-          "route": "review_queue_proofs.py --clips: the golden surface instantiated, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)",
-          "label": "bars -> line: the same mechanism run the other way - five bars become the area under the arriving line, the data travel back to their places, and the line strokes along the landed edge as the fill leaves with it"
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
         }
       ]
     },

@@ -62,7 +62,6 @@ export const xfRect = (ga, gb, u) => ({ x: xfLerp(ga.x, gb.x, u), y: xfLerp(ga.y
 export const REMAKE = Object.freeze({
   COLS: 8,        /* the columns a datum's share is described by: 8 per side is 16 vertices a bar's rectangle is still exactly a rectangle at, and the line's own leg inside one datum's share is straight [DERIVED: MORPH.COLS 48 describes a WHOLE line; a column of it needs the corner, not the curve] */
   LEAVE: 0.28,    /* the share of the clock the source's own ink takes to leave into its area (XF_MORPH.LEAVE 0.3's law, one notch earlier because the travel is longer here) */
-  DRAW: 0.62,     /* a LINE target strokes on from here, along the landed top edge, while the area's fill leaves with it (lpPaintMorphHold's own law) */
   TRAVEL: 0.9,    /* every ring has landed on its counterpart by here - the clock's last tenth belongs to the target's own ink (KEYED_TAG_HAND 0.92's law: hand over on the CLOCK, not on the eased travel) */
 });
 
@@ -108,19 +107,16 @@ export const xfBarRing = (g, n) => {
 export const xfRingPath = (pts) => (!pts || !pts.length ? ""
   : pts.map((p, i) => (i ? "L" : "M") + (+p[0]).toFixed(1) + " " + (+p[1]).toFixed(1)).join(" ") + " Z");
 
-/* xfRemakeClock - ONE clock, four shares of it. `leave`: the source's own ink into its area. `travel`: every ring onto
-   its counterpart. `draw`: a line target's stroke along the landed edge. `hand`: the target's own ink taking the rings'
-   place. Exact at both ends by construction, and every phase is a pure function of u - the caller eases each one.
-   `toLine` says which way the remake runs: a BARS target takes over at REMAKE.TRAVEL, so the rings travel until then;
-   a LINE target must have its rings LANDED before its own stroke runs along their top edge, so on that run the travel
-   ends at REMAKE.DRAW and the last share of the clock is the line drawing while the area's fill leaves with it. */
-export const xfRemakeClock = (u, toLine) => {
+/* xfRemakeClock - ONE clock, three shares of it, for the LINE -> BARS run. `leave`: the source's own ink into its
+   area. `travel`: every ring onto its counterpart, ending at REMAKE.TRAVEL where the target's own bars take over.
+   `hand`: the target's own ink taking the rings' place. Exact at both ends by construction, and every phase is a pure
+   function of u - the caller eases each one. The other run has its own clock (xfRemakeLineClock): E99 s39 ruled that
+   bars -> line is NOT this travel read backwards. */
+export const xfRemakeClock = (u) => {
   const c = Math.min(1, Math.max(0, u)), cl = (v) => Math.min(1, Math.max(0, v));
-  const end = toLine ? REMAKE.DRAW : REMAKE.TRAVEL;
   return {
     leave: cl(c / REMAKE.LEAVE),
-    travel: cl((c - REMAKE.LEAVE) / (end - REMAKE.LEAVE)),
-    draw: cl((c - REMAKE.DRAW) / (1 - REMAKE.DRAW)),
+    travel: cl((c - REMAKE.LEAVE) / (REMAKE.TRAVEL - REMAKE.LEAVE)),
     hand: cl((c - REMAKE.TRAVEL) / (1 - REMAKE.TRAVEL)),
   };
 };
@@ -133,3 +129,55 @@ export const xfRemakeTravel = (travel) => ({
   ink: Math.min(1, Math.max(0, travel / REMAKE_BEAT.INK)),
   move: Math.min(1, Math.max(0, (travel - REMAKE_BEAT.MOVE) / (1 - REMAKE_BEAT.MOVE))),
 });
+
+/* ---- P61 T2b - BARS -> LINE: COLLAPSE TO THE APEX, THEN DRAW BACK TO THE ROOT (E99 s39) --------------------------
+   The operator, on T2's first build: *"for bars-> line I'd like to see it all collapse to the single apex point and
+   then draw the line back to the root instead of sliding and snapping together and the whole line is formed -- if the
+   whole thing is magically formed that is basically a snap/cut, and not the morph we're looking for. A morph should be
+   proof of form/function to the audience, that we're really manipulating the world they're watching, not tricking
+   them."* So this run does NOT read the line -> bars travel backwards. It has its own clock and three beats: every
+   bar's ring GATHERS into one point at the apex (the highest bar's top), that point SETTLES where the arriving line's
+   own apex datum stands, and the page's own stroke DRAWS from there back to the root.
+   WHY NOT morph_a, which carries the other run: a correspondence machine needs two rings, and the destination here is
+   one POINT - an ARAP fit onto a zero-area ring is undefined (its polar decomposition divides by a vanishing area),
+   while a ring's own vertices lerping to a point is exact, pure and free. The ring machinery still says WHAT collapses
+   (xfBarRing describes the bar exactly as it does on the other run); only the destination is not another ring. */
+export const REMAKE_LINE = Object.freeze({
+  GATHER: 0.24,   /* the share of the clock every bar's ink takes to reach the apex [DERIVED: 0.58 s of the goldens' 2.4 s row - one decisive gather, and the clock's REST belongs to the draw, which is what the ruling is about] */
+  SETTLE: 0.32,   /* by here the gathered point has carried itself from the highest bar's top to the arriving line's own apex datum - the two are not the same place (135 px apart on the golden's pages), and the line must start where IT stands */
+  SPREAD: 0.25,   /* the stagger across the rings: the one FARTHEST from the apex leaves first and every ring lands together, so the gather has a direction rather than five independent shrinks [DERIVED: E99 s34, "it reads as intentional"] */
+  HOLD: 0.86,     /* the apex point stands until here - it is what the line came out of - and leaves over the last share as the target's own ink takes the frame (KEYED_TAG_HAND 0.92's law, one notch earlier because a dot is larger than a glyph) */
+});
+
+/* xfRemakeLineClock - the bars -> line clock: `gather`, `settle`, `draw`, `hand`. Exact at both ends, pure in u. */
+export const xfRemakeLineClock = (u) => {
+  const c = Math.min(1, Math.max(0, u)), cl = (v) => Math.min(1, Math.max(0, v));
+  return {
+    gather: cl(c / REMAKE_LINE.GATHER),
+    settle: cl((c - REMAKE_LINE.GATHER) / (REMAKE_LINE.SETTLE - REMAKE_LINE.GATHER)),
+    draw: cl((c - REMAKE_LINE.SETTLE) / (1 - REMAKE_LINE.SETTLE)),
+    hand: cl((c - REMAKE_LINE.HOLD) / (1 - REMAKE_LINE.HOLD)),
+  };
+};
+
+/* xfGatherK - one ring's own share of the gather. `rank` 0 is the ring FARTHEST from the apex: it starts first because
+   it has the farthest to travel, and every ring lands exactly together at the gather's end (so the collapse ends as ONE
+   point, not as a queue). spread 0 is every ring on the same clock. */
+export const xfGatherK = (k, rank, n, spread) => {
+  const s = Math.min(0.9, Math.max(0, spread == null ? REMAKE_LINE.SPREAD : spread));
+  const d = n > 1 ? s * (Math.min(n - 1, Math.max(0, rank)) / (n - 1)) : 0;
+  return Math.min(1, Math.max(0, (k - d) / (1 - d)));
+};
+
+/* xfRingTo - every vertex of a ring to ONE point. At k = 1 the ring IS that point: zero area, so it carries no ink -
+   nothing is faded out and nothing is left behind, which is the difference between a collapse and a dissolve. */
+export const xfRingTo = (pts, p, k) => (pts || []).map((q) => [xfLerp(q[0], p[0], k), xfLerp(q[1], p[1], k)]);
+
+/* xfDrawWindow - the stroke's visible interval as SHARES of the path's length, growing out of the apex: the root side
+   (the ruling's own direction) and, when the apex is not the last datum, the far side with it, so the ends are exact -
+   k = 0 is the bare point at `apex`, k = 1 is the whole path. The caller writes it with the page's own dash pair
+   (dasharray from the path's length, a negative dashoffset starting the window: the engine's own window form). */
+export const xfDrawWindow = (apex, k) => {
+  const a = Math.min(1, Math.max(0, apex)), c = Math.min(1, Math.max(0, k));
+  return { s: a * (1 - c), e: a + (1 - a) * c };
+};

@@ -184,8 +184,13 @@ PROOF_FRAMES = {
     # the other. No flag: the verb is authored on the row, not switched on.
     "remake-line-to-bars@proof-025": ("remake-line-to-bars", {}, 12.6),   # u 0.25: the line gone into its six columns, the data born, the rings just moving
     "remake-line-to-bars@proof-075": ("remake-line-to-bars", {}, 13.8),   # u 0.75: the columns nearly their bars, the data over their tops, the arriving labels writing
-    "remake-bars-to-line@proof-025": ("remake-bars-to-line", {}, 12.6),   # u 0.25: the bars' own rectangles moving as rings, their numbers un-writing
-    "remake-bars-to-line@proof-075": ("remake-bars-to-line", {}, 13.8),   # u 0.75: the rings landed as the area under the line, the line striking along their top edge
+    # P61 T2b / E99 s39 re-choreographed the bars -> line run: the bars' ink collapses into ONE point at the apex
+    # and the line is DRAWN from it back to the root, so this surface's three instants are the three beats - the
+    # gathered point, the point with a PARTIAL stroke (the ruling's own frame: never a whole line arriving), and
+    # the stroke three quarters of the way home.
+    "remake-bars-to-line@proof-025": ("remake-bars-to-line", {}, 12.6),   # u 0.25: every bar's ink collapsed into the single point at the apex (the highest bar's top), nothing drawn yet
+    "remake-bars-to-line@proof-050": ("remake-bars-to-line", {}, 13.2),   # u 0.50: THE RULING'S FRAME - the point standing on the arriving line's own apex datum, and the stroke part way back to the root behind its nib
+    "remake-bars-to-line@proof-075": ("remake-bars-to-line", {}, 13.8),   # u 0.75: three quarters of the line drawn back from the apex, the arriving labels writing under it
 }
 # P52 T18 / R26-55, HUMAN GATE 7: THE FACE OF A PULLED PHRASE. The phrase is live type now, so it has a face, and
 # the face is the OPERATOR's to choose - never ours. The `press_face` DIAL names one of the three candidates

@@ -54,7 +54,7 @@ needs_browser = pytest.mark.skipif(not _chromium_available(), reason="playwright
 def test_chart_to_is_a_page_species_with_a_verb_and_a_state():
     assert "chart_to" in B.SPECIES_KINDS and "chart_to" in B.PAGE_SPECIES
     assert B.SPECIES_TARGETS["chart_to"] == ()
-    assert B.CHART_TO_KINDS == ("recast", "rescale", "extend", "park", "morph", "compare"), "the six verbs (P48 T2-T5, P57 T11 the compare)"
+    assert B.CHART_TO_KINDS == ("recast", "rescale", "extend", "park", "morph", "compare", "remake"), "the seven verbs (P48 T2-T5, P57 T11 the compare, P61 T2 the remake)"
     assert B.STATE_MAX == 3
 
 

@@ -543,7 +543,7 @@
           "source": "docs/portable/OPERATOR-RULINGS.md:3143"
         }
       ],
-      "does": "A full chart becomes a full chart on one clock: every series, datum, axis, label and the title transform, line <-> bars.",
+      "does": "A full chart becomes a full chart on one clock - every series, datum, axis, label, title. line -> bars: each datum's column becomes its bar. bars -> line: the ink collapses to ONE point at the apex, then the line draws back to the root.",
       "when": null,
       "when_source": null,
       "author": {
@@ -554,36 +554,60 @@
       },
       "phases": [
         {
-          "name": "the history leaves",
-          "does": "the dash window slides from the line's start to the first keyed datum; the bars page's own numbers un-write",
+          "name": "line -> bars: the history leaves",
+          "does": "the dash window slides from the line's start to the first keyed datum; the axes begin handing over",
           "trigger": "the chart_to's `at`",
           "dials": {
             "LEAVE": "0.28"
           }
         },
         {
-          "name": "the ink drops into the columns",
-          "does": "each keyed datum's share of the source's ink fills as the stroke over it leaves",
+          "name": "line -> bars: the ink drops in",
+          "does": "each keyed datum's share of the source's ink fills its column as the stroke over it leaves",
           "trigger": "LEAVE share of `dur`",
           "dials": {
             "INK": "0.35 of the travel"
           }
         },
         {
-          "name": "the shapes travel",
-          "does": "every ring morphs into its counterpart by morph_a, the datum marks travel to their bars' tops, the axes hand over and the labels re-write",
+          "name": "line -> bars: the shapes travel",
+          "does": "every ring morphs into its bar by morph_a, the datum marks travel to their tops, the labels re-write",
           "trigger": "MOVE share of the travel",
           "dials": {
             "MOVE": "0.2 of the travel"
           }
         },
         {
-          "name": "the target's own ink takes over",
-          "does": "a bars target's rectangles take the landed rings' place and their numbers write; a line target strokes along the landed top edge while the fill leaves with it",
-          "trigger": "DRAW (a line) / TRAVEL (bars) share of `dur`",
+          "name": "line -> bars: the bars take over",
+          "does": "the target's own rectangles take the landed rings' place and their numbers write at the landed data",
+          "trigger": "TRAVEL share of `dur`",
           "dials": {
-            "DRAW": "0.62",
             "TRAVEL": "0.9"
+          }
+        },
+        {
+          "name": "bars -> line: the gather",
+          "does": "every bar's ring collapses into ONE point at the apex (the highest bar's top), the farthest leaving first and all landing together; the bars' own numbers un-write",
+          "trigger": "the chart_to's `at`",
+          "dials": {
+            "GATHER": "0.24",
+            "SPREAD": "0.25"
+          }
+        },
+        {
+          "name": "bars -> line: the point settles",
+          "does": "the gathered point carries itself to where the arriving line's own apex datum stands",
+          "trigger": "GATHER share of `dur`",
+          "dials": {
+            "SETTLE": "0.32"
+          }
+        },
+        {
+          "name": "bars -> line: the line draws back",
+          "does": "the page's own stroke draws OUT of the apex to the root, nib live, while the axes finish handing over - never a whole line arriving (E99 s39)",
+          "trigger": "SETTLE share of `dur`",
+          "dials": {
+            "HOLD": "0.86"
           }
         }
       ],
@@ -599,6 +623,12 @@
           "became": "the correspondence and the hand-over",
           "record": "docs/content-video-engine/BACKLOG.md:455",
           "tie": "recorded"
+        },
+        {
+          "source": "E99 s39 a morph is proof we are manipulating the world, not tricking them",
+          "became": "the bars -> line ending: the collapse to the apex and the draw back to the root",
+          "record": "docs/portable/OPERATOR-RULINGS.md:3196",
+          "tie": "recorded"
         }
       ],
       "options": [],
@@ -611,13 +641,16 @@
         "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
         "symbol": "lpPaintRemake",
         "also": [
+          "lpPaintRemakeToLine",
+          "lpRemakeDrawBack",
           "lpRemakeFor",
           "lpAxisHandOver"
         ],
-        "note": "lpPaintRemake (+ kinetics/chartxf.mjs's rings and clock, kinetics/morph_a.mjs's pairing)"
+        "note": "lpPaintRemake (line -> bars) / lpPaintRemakeToLine + lpRemakeDrawBack (bars -> line, the page's own dash pair) + kinetics/chartxf.mjs's rings, clocks and windows"
       },
       "doctrine": [
         "E99",
+        "E99 s39",
         "E64",
         "E50"
       ],

@@ -2692,12 +2692,17 @@ def remake_line_to_bars() -> tuple[dict, dict]:
 
 
 def remake_bars_to_line() -> tuple[dict, dict]:
-    """THE SAME MECHANISM, run the other way: bars -> line (the direction no verb had at all - T1's gap 1).
+    """THE OTHER RUN, re-choreographed by E99 s39 (P61 T2b) - bars -> line is NOT the twin read backwards.
 
-    Each bar hands its rectangle to its ring, the rings become the columns of the area under the arriving
-    line, the data travel back to their places on it, and the line strokes along the landed top edge over
-    the clock's last share while the area's fill leaves with it (lpPaintMorphHold's own law). Judged at
-    u 0.50, the same instant as its twin."""
+    The operator: *"for bars-> line I'd like to see it all collapse to the single apex point and then draw
+    the line back to the root instead of sliding and snapping together and the whole line is formed."* So
+    every bar hands its rectangle to its ring, the rings COLLAPSE into one point at the apex (the highest
+    bar's top, the farthest leaving first so they land together), the point carries itself to where the
+    arriving line's own apex datum stands, and the page's own stroke DRAWS from there back to the root.
+
+    Judged mid-GATHER (u 0.15): five rings in flight that are no longer the bars and are not yet the point -
+    the frame the collapse cannot be faked at. Its other three beats ride PROOF_FRAMES, and @proof-050 is the
+    ruling's own instant: the point, and a partial stroke."""
     return _remake("bars-to-line")
 
 
@@ -2705,8 +2710,11 @@ SURFACES.update({
     "remake-line-to-bars": remake_line_to_bars,
     "remake-bars-to-line": remake_bars_to_line,
 })
-FRAME_T["remake-line-to-bars"] = REMAKE_AT + 0.50 * REMAKE_S   # 13.2 - THE INVARIANT INSTANT (@proof-050's own): neither
-FRAME_T["remake-bars-to-line"] = REMAKE_AT + 0.50 * REMAKE_S   # chart is drawable as itself, so no cut can produce it
+FRAME_T["remake-line-to-bars"] = REMAKE_AT + 0.50 * REMAKE_S   # 13.2 - THE INVARIANT INSTANT: neither chart is drawable
+# as itself there, so no cut can produce the frame (this run is E99 s39's "taken as built" half - untouched by T2b).
+FRAME_T["remake-bars-to-line"] = REMAKE_AT + 0.15 * REMAKE_S   # 12.36 - P61 T2b: this run's own instant is MID-GATHER (the
+# rings collapsing toward the apex). Its u 0.50 - the point and the partial stroke E99 s39 asks for - is pinned beside it
+# as `remake-bars-to-line@proof-050`, so the two are four distinct frames over the three beats rather than one twice.
 
 
 
