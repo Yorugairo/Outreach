@@ -45,5 +45,5 @@ waiting for. When a reference exercises the parked thing, the trigger has fired.
 |---|---|---|
 | `R26-107` | 539 | field on parked rows (R26-61's is the model) that names what re-surfaces them, and a review of parked rows when a reference (Bravos) exercises the parked thing. |
 | `R26-108` | 540 | the next long-form build, or the compiler emitting a `species` array for the long form's shot table - a compiler plan, not a catalogue one) - `exit:wipe_right` (32 Steel and Paper uses; folded as an o... |
-| `D8` | 669 | the first shot that turns a head. |
-| `D9` | 670 | the first two-handed prop. |
+| `D8` | 676 | the first shot that turns a head. |
+| `D9` | 677 | the first two-handed prop. |

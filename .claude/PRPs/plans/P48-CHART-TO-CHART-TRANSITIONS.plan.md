@@ -409,7 +409,7 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   by LENGTH, and in the reverse order it was drawn, so a highlighted tail does not float off the end as a stray mark).
 
 ### T5: `morph_to` - ARAP between two shapes on the page
-- Status: **complete for the chart-state source (2026-09-10)**; the planted-element source (R26-16, the tie) stays open as T5b - see the deviation
+- Status: **complete for the chart-state source (2026-09-10)**; the planted-element source (R26-16, the tie) stays open as T5b - see the deviation; P61 T3 (2026-09-15, pending on P61 HG1) owns it and closes T5b with its card `p48-hg3-morph-onto-planted`
 - Owner: `implementation_luna` (bounded: the mesh and the invariants exist from P47 T3)
 - Depends on: T1
 - Write set: the template (`morphOn` generalised from the page ENTER to a species), `scripts/kinetics/arap.mjs` (only if a

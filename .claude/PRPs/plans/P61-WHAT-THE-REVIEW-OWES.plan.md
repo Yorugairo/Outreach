@@ -311,7 +311,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   recipe:chart-recast-into-the-other-form - The argument keeps the data and changes its form"*; `docs_find "chart_to"`
   -> nine capability rows (`:27 :28 :104 :113 :114 :115 :116 :117 :270`), so a SEVENTH verb must justify itself
   against six that exist. Nothing in any layer claims a WHOLE-chart morph - that is the gap.
-- Validate: `node --test content/video_engine/tests/kinetics/` then
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then
   `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python -m pytest content/video_engine/tests/test_whole_chart_morph.py content/video_engine/tests/test_golden_frames.py content/video_engine/tests/test_kinetics_sync.py -q` then
   `python content/video_engine/scripts/effects_catalog_check.py` then
@@ -392,7 +392,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   -> *"[effects] content/video_engine/scripts/species/melt.mjs - The melt scene exit - exit:melt - Only the outgoing
   chart's ink sags, fuses and compiles on 2s into a dense heavy ball wh..."* - the ball exists; only the third ending
   does not.
-- Validate: `node --test content/video_engine/tests/kinetics/` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python -m pytest content/video_engine/tests/test_melt_morph.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/effects_catalog_check.py` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-117-ball-into-the-next-chart` then
@@ -507,7 +507,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   *"[manifest] docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md - Research Blueprint - The Living
   Metallic Drop: Surface Modes, Damping, the High..."* and its `:148` *"2.1 Impact Phenomenology & Mode
   Decomposition"* - released by E99 s24, usable findings only.
-- Validate: `node --test content/video_engine/tests/kinetics/` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python -m pytest content/video_engine/tests/test_ball_material.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-118-metallic-ball`
 - Evidence: report `scratchpad/assembly/P61-T5.md`. The ball today (lane's read, parent's agreed): a rubber bouncy ball - one
@@ -594,7 +594,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   *"[index] docs/content-video-engine/INTAKE-INK-BLOOM-2026-09-08.md:19 - What the preset is (the source, kept
   verbatim below) - A Canvas 2D bloom from the frame centre: a 40-segment blob whose radius carries two-harmonic
   n..."* - the accepted route is a preset already on disk, not a new one.
-- Validate: `node --test content/video_engine/tests/kinetics/` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python -m pytest content/video_engine/tests/test_melt_gather.py content/video_engine/tests/test_transitions_e47.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/effects_catalog_check.py` then
   `python content/video_engine/scripts/gate_motion_density.py content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short`
@@ -640,7 +640,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   must not flatten any phase into a horizontal row. A golden at EACH of the five phases. The Steel and Paper reference
   (`build-f/evidence-dock.json` `ev-holds-stack-v1`, nine proofs 702.87-723.69 s, BACKLOG R26-82 `:488`) is rendered
   as a side-by-side reference clip for the card - read, never modified.
-- Validate: `node --test content/video_engine/tests/kinetics/` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python -m pytest content/video_engine/tests/test_verdict_stack.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/effects_catalog_check.py` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-82-verdict-stack-choreography`
@@ -674,7 +674,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - CAPABILITIES row changed: **:184** (THE VERDICT STACK) gains the short's form with its five phases named
 
 ### T8: THE BEAUTIFIED AGENDA PAGE - the plate version of the list effect
-- Status: pending
+- Status: complete (2026-09-15) - HG8 open on the queue as `r26-80-agenda-page-owed` (watch)
 - Owner: `implementation_luna` (**ENGINE LOCK #8**)
 - Depends on: none
 - Write set: `content/video_engine/scripts/species/agenda.mjs`,
@@ -694,7 +694,25 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python content/video_engine/scripts/effects_catalog_check.py` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-80-agenda-page-owed`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T8.md`. Today's agenda read cold: a flat plate, the upper two-thirds empty, three
+  rows in the bottom-right corner (30% x 35%), no ground, no heading, no mark per row, the figure in footnote grey. The MODEL
+  (Steel and Paper's TEST card) read beside it: mounted, titled, column heads, a mark per row, fills its box, closes itself,
+  and the rows happen. BUILT: `form: "page"` on the agenda declaration - `paintAgenda` branches on `agendaIsPage` as its first
+  statement and the dock form's body is untouched (every committed golden byte-identical). `agendaPageLayout` (the board inset,
+  the title's room, rows dividing the rest exactly, ONE scale for the block - the dock's cap of 1 was what kept rows body-sized
+  on a plate), `agendaRowRead` (E93's instant), `agendaStampF` (nothing until the sentence is read, then a fall from 1.45 with a
+  stop-motion squash at impact), `paintAgendaPage` (title + rule, per row: mount, the medallion the nib draws, numeral, the
+  rule along the row's bottom edge, text, the sub as a gold FIGURE, the icon as an <image> from the catalogue). The COMPILER:
+  the first render path to the operator's catalogue - `catalogue_icon` refuses by name an id not in the catalogue, not kind
+  icon, not operator_approved, not render_eligible (E94), not on disk, or whose bytes no longer hash to the recorded sha; the
+  page form's region must cover >= 0.55 on both axes (E99 s16: the page fills its own plate); a row without an icon, an icon on
+  a dock, a title on a dock - all refused with the fix named. Goldens: `agenda-page` (12.0 s, the page at rest) + @proof-first-row
+  5.54 (the sentence written, its icon NOT yet there - E93's order in a frame) / @proof-stamp 7.39 (mid-fall) / @proof-full 9.30.
+  Parent's read: a titled board, each row on its own mount with a drawn medallion numeral, the figure in gold, the operator's own
+  icons (Liberty/flag, the falling percent, the household basket) stamped on - beside today's corner list it is the beautified
+  plate. Deviation named: the five new classes are styled as presentation attributes because the player template is outside
+  the write set; moving the four palette dials into the template's CSS is a one-line follow-up (T11 backlog). Validation: see the
+  report's final lines (recorded by the parent after the lane's resumed run).
 - CAPABILITIES row changed: **:43** (THE NUMBERED AGENDA) gains the page/plate form
 
 ### T9: THE GALLERY - a faster build, and a clip where a still cannot show the effect
@@ -845,7 +863,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - CAPABILITIES rows changed: **:75** (stop-action mechanics gains the render clock) and the plate-life line of **:121**
 
 ### T11: THE RECORD - the CAPABILITIES rows, the backlog rows, the queue, the layers
-- Status: pending
+- Status: in progress (2026-09-15) - the record of what was BUILT is written; the rulings half waits on the gates (HG1, HG3, HG4, HG5, HG7, HG8, HG10 open; HG6 asked once proof B lands with T3)
 - Owner: parent (Claude/Fable docs lane)
 - Depends on: every gate ruled
 - Write set: `docs/content-video-engine/CAPABILITIES.md`, `docs/content-video-engine/BACKLOG.md` (rows R26-70, R26-76,
@@ -863,14 +881,29 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   `python content/video_engine/scripts/build_docs_layers.py --check` then
   `python -m pytest content/video_engine/tests/test_build_docs_index.py -q` then
   `python scripts/prp_validate.py .claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md`
-- Evidence: pending
+- Evidence: the built half (2026-09-15) - CAPABILITIES - rows amended by script (`scratchpad/assembly/record_t11.py`, every anchor
+  unique): THE NUMBERED AGENDA (the page form, T8), LEDGER PAGE species (the field by its job, E99 s35, T4b), stop-action mechanics
+  (the render clock, E99 s36, T12), the E64 recast row (the pointer to the seventh verb), `morph_to` (the pointer + P48 T5b's owner),
+  THE MELT EXIT (the ball's shadows T5 + the gather T6, status cell), MOTION MENU species (plate life 12 fps), Two chart forms in 2.5D
+  (the prism's leave T4a + the field T4b, the 'owed' clause retired), THE VERDICT STACK (the short's form T7, status + goldens), The
+  effects catalogue (the gallery's speed, pin and motion examples T9, HG9 closed); ONE NEW ROW 'THE WHOLE-CHART MORPH' (`remake`, T2)
+  after `morph_to`. BACKLOG - the verdict written VERBATIM IN BOLD on R26-70 (BUILT, T2), R26-76 (BUILT proof A, T6), R26-80 (BUILT,
+  T8; its stale E94 line corrected), R26-82 (BUILT, T7), R26-84 (DESIGNED, T10), R26-86 (HG9 CLOSED, T9), R26-117 (CARD CREATED),
+  R26-118 (BUILT, T5); SEVEN NEW ROWS R26-137 the Japan re-render carrying M44's FAIL reading (E99 s34), R26-138 the shared
+  `kinetics/vortex.mjs`, R26-139 the axis hairlines, R26-140 the warm-pixel drift, R26-141 the catalogue-check schema gap, R26-142
+  the agenda palette dials + the 9:16 golden, R26-143 the remake's 6 px corner detail. Doc 41 s2 beat 3 rewritten to E99 s35. This
+  plan's six `node --test <dir>` lines corrected to the `*.test.mjs` glob (node 24). P47 T6 / T7 status lines: the BLOCKER removed by
+  T2, the third watch still P47's to schedule; P48 T5b: P61 T3 named as its owner. The queue's cards are the slices' own records
+  (HG1 / HG3 / HG4 / HG5 / HG7 / HG8 / HG10 open; HG9 and p55-gallery ruled). STILL OWED by T11 when the gates are ruled: each
+  ruling verbatim into OPERATOR-RULINGS with its Apply line, each card moved to 'Ruled since the last pass', the plan to `complete`.
 
 ## Verification
 
 **Per slice, in this order, each command run UNPIPED** (memory `never-pipe-gated-steps-to-tail`: `tail`'s exit code
 masks a FAIL, and a failure shipped twice that way):
 
-1. `node --test content/video_engine/tests/kinetics/` - the pure-function tests for any kinetics module touched.
+1. `node --test content/video_engine/tests/kinetics/*.test.mjs` - the pure-function tests for any kinetics module touched (the bare
+   directory form fails on node 24 - CJS directory resolution - identical on a pristine HEAD; T2 found it, T11 corrected the line).
 2. `python content/video_engine/scripts/sync_kinetics.py --check` - the engine's mirrored regions are in sync.
 3. `python -m pytest <the slice's new test file> content/video_engine/tests/test_golden_frames.py -q` - the new
    behaviour proven AND every pre-existing golden byte-identical.
