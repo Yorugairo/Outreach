@@ -88,7 +88,8 @@
         "P61 HG-drift-3",
         "E99 s64",
         "P61 T14c",
-        "P61 HG-drift-4"
+        "P61 HG-drift-4",
+        "E99 s65"
       ],
       "kind": "watch",
       "title": "The alive dock at 20 px, the lamp clean: with parallax beside with Ken Burns",
@@ -122,7 +123,7 @@
         "B - Ken Burns; drop the drift"
       ],
       "recommendation": "A, with the drift. In A the drift is what keeps the three depths breathing between the camera's two keys; in B it walks one flat picture, which is the Ken Burns itself by another name. If B reads better to you, the honest answer is that the parallax is not earning its cost on this plate, not that the drift is.",
-      "blocks": "HG-drift-4; the R26-133 ruling; P58 HG2 ruling 4; P61's close",
+      "blocks": "nothing - ruled E99 s65 (2026-09-16): Ken Burns + the 20 px drift is the long-form plate life (directional); parallax planes under a free drift read as random motion",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:565",
         "docs/research/runs/p58-2-5d/HG2-SHEET.md:51-52",
@@ -143,8 +144,8 @@
         "docs/portable/OPERATOR-RULINGS.md (E99 s64)",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T14c)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s65",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-16 (P61 T14c): the far plane's fill, the still re-pinned, the glow 0 px at three instants, A and B at 20 px",
       "proofs": [

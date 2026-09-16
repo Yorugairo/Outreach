@@ -1,7 +1,7 @@
 ---
 id: P61-WHAT-THE-REVIEW-OWES
 title: What the review owes - the BUILD group of the 2026-09-15 queue sort: the whole-chart morph first (it unblocks P47 T6/T7 and P48 T5b), then the two 2.5D fixes, the ball's shadows, the melt gathered to a dense point, the verdict stack's choreography and the agenda page, the gallery's speed and its motion examples, and a DESIGN slice for saved states - each slice returning as a queue card with a proof a person can judge
-status: running
+status: complete
 operation: feature
 risk: standard
 owner: parent
@@ -1373,7 +1373,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   a module split for the backlog.
 
 ### T11: THE RECORD - the CAPABILITIES rows, the backlog rows, the queue, the layers
-- Status: in progress (2026-09-16, evening) - EVERY BUILD SLICE HAS LANDED (T1-T14 incl. T2b, T3b, T3c, T3d, T5b, T5c, T6b, T7b, T7c, T7d); CAPABILITIES rows for the stack (s59 / s61), the planted morph (s62), the ambient lane + the alive plate + the drift dial (T14); rulings s39-s62 recorded verbatim; HG-drift-3 RULED E99 s64; T14c landed - HG-drift-4 open (A parallax beside B Ken Burns at 20 px, the lamp clean at three instants); the plan closes on its ruling; the record of each is written (CAPABILITIES rows 37 / 75 / 119 / 43 / 56 / 116 / 117 / 121 / 147 / 184 / 318, BACKLOG R26-137..155, doc 41, doc 43 s43.5.1, the lane register); rulings E99 s39-s53 recorded verbatim. OPEN: the four cards the operator has not yet answered (HG7b rails, HG2b-2 the planted ground, HG2-2 the closing, HG6-2 the throw) and their rulings into OPERATOR-RULINGS; the drift plate's visible three-way proof (E99 s38, a lane running); the docs layers rebuilt once the voice lane's staged commit lands (CAPABILITIES is shared with it); then the plan closes
+- Status: complete (2026-09-16, night) - every build slice landed (T1-T14c and the letters), every gate RULED (E99 s39-s65 recorded verbatim with Apply lines), every CAPABILITIES row named in the slices carries its change, every backlog row its verdict in bold; the queue 0 answerable / 1 owed (p54, not P61) / 77 ruled; the layers rebuild themselves (P63 / P64)
 - Owner: parent (Claude/Fable docs lane)
 - Depends on: every gate ruled
 - Write set: `docs/content-video-engine/CAPABILITIES.md`, `docs/content-video-engine/BACKLOG.md` (rows R26-70, R26-76,
