@@ -1634,7 +1634,7 @@ def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str, str | Non
     return series_id, variant, emphasize, quiet_zone, enter, exit_
 
 
-MELT_ENDINGS = ("throw", "splash:chart", "splash:plate")   # E88 / R26-76: the three authored endings - species/melt.mjs MELT_ENDINGS
+MELT_ENDINGS = ("throw", "splash:chart", "splash:plate", "morph")   # E88 / R26-76: the authored endings - species/melt.mjs MELT_ENDINGS   # P61 T3 / R26-117: `morph` is the fourth - the melt ends AT the ball and hands its one ring to the next page's `page_enter:morph` as that page's prop outline, on one clock (`melt_morph_error` refuses a row whose next page does not enter by morph)
 MELT_MATERIALS = ("metal", "ink", "paper", "liquid")       # R26-118 / E88 s7: what `melt:weight:<material>` may name - species/melt.mjs MELT_MATERIALS
 DEPTH_SUFFIX = "depth="   # P58 T6 (b) / E98 s4: the plane a MECHANISM happens at, as an exit suffix - `melt:...:depth=<k>` and `slide:<dir>[:<s>]:depth=<k_out>,<k_in>` (P58 T6 (c)); species/melt.mjs and the engine's slideOpts read the same string on the player's side
 BODY_SUFFIX = "body="     # P61 T5b / E99 s42: the ball's BODY COLOUR - `melt:weight:...:body=<word>`; species/melt.mjs MELT_BODY
@@ -1691,6 +1691,11 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool, st
         i += 1
         if bit == "":
             continue
+        if bit == "morph":   # P61 T3 / R26-117: the ball becomes the next page's prop outline
+            if ending is not None:
+                raise ValueError(f"exit {exit_id!r}: two endings ({ending} and morph) - a melt ends one way")
+            ending = "morph"
+            continue
         if bit in ("throw", "splash"):
             end = bit
             if bit == "splash":
@@ -1720,7 +1725,7 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool, st
             continue
         if bit == "weight":   # R26-118: the weight phase, and the material the ball is made of
             nxt = bits[i].strip() if i < len(bits) else ""
-            if nxt and "," not in nxt and nxt not in ("throw", "splash", "gather") and not nxt.startswith(DEPTH_SUFFIX) and not nxt.startswith(BODY_SUFFIX) and not _is_number(nxt):
+            if nxt and "," not in nxt and nxt not in ("throw", "splash", "gather", "morph") and not nxt.startswith(DEPTH_SUFFIX) and not nxt.startswith(BODY_SUFFIX) and not _is_number(nxt):
                 if nxt not in MELT_MATERIALS:
                     raise ValueError(f"exit {exit_id!r}: {nxt!r} is not a material - melt:weight takes "
                                      + ", ".join(MELT_MATERIALS))
@@ -1742,7 +1747,7 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool, st
             secs = float(bit)
         except ValueError:
             raise ValueError(f"exit {exit_id!r}: {bit!r} is neither a length in seconds, nor an ending "
-                             "(throw, splash:chart, splash:plate), nor a phase (gather, weight), nor an "
+                             "(throw, splash:chart, splash:plate, morph), nor a phase (gather, weight), nor an "
                              "x,y point") from None
         if secs <= 0:
             raise ValueError(f"exit {exit_id!r}: a length must be positive")
@@ -1800,6 +1805,76 @@ def melt_ending(exit_id: str | None) -> str | None:
     if not exit_id or str(exit_id).split(":")[0] != "melt":
         return None
     return _melt_parts(str(exit_id))[0]
+
+
+# ---- P48 T5b / R26-16: THE PLANTED SOURCE a page-enter morph starts from -----------------------------------------
+# `world.morph` names the PROP OUTLINE the arriving page's `page_enter:morph` deforms into the area under its series
+# (P47 T3). It was three NAMED shapes and nothing else (MORPH_SHAPES: tab, plate, card - `morphProp` builds them as
+# strips about the target's own centroid). P48 T5b adds the form R26-16's tie asks for: `{"poly": [[x, y], ...]}`, a
+# real element's own silhouette - "a real element of the outgoing world at its last frame, never a shape conjured
+# over the clip". The tracer that produces one from a still is `kinetics/contour.mjs` (`contourSilhouette`: the
+# element's own pixels rastered, thresholded, walked with marching squares, the largest non-hole ring simplified) -
+# ours, no library - and the player re-expresses whatever it is handed as a strip of columns (`arap.mjs polyStrip`).
+# THE UNITS ARE STAGE FRACTIONS, the melt's own vocabulary for a point on the board (`melt:...:<x>,<y>`), so a poly
+# is read the same on either aspect and against neither page's viewBox.
+# THE THREE REFUSALS, each BY NAME, because a bad poly is a silent bad morph the render only shows afterwards:
+# fewer than three points is not an outline; a self-intersecting ring has no inside for a mesh to carry (arapPrepare's
+# Laplacian is not positive definite on the flipped triangles it makes); a point off the stage is a prop the frame
+# never held, which is the exact thing R26-16 refuses.
+MORPH_POLY_MIN = 3
+
+
+def _seg_cross(a, b, c, d) -> bool:
+    """Do the open segments ab and cd properly cross? (Orientation signs, strict - a shared endpoint is not a crossing.)"""
+    def side(p, q, r) -> float:
+        return (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])
+    d1, d2, d3, d4 = side(a, b, c), side(a, b, d), side(c, d, a), side(c, d, b)
+    return ((d1 > 0) != (d2 > 0)) and ((d3 > 0) != (d4 > 0))
+
+
+def morph_poly_error(poly, where: str) -> str | None:
+    """A `world.morph` poly's message, or None. The units are STAGE FRACTIONS (0..1 on each axis)."""
+    if not isinstance(poly, (list, tuple)):
+        return f"{where}: morph poly is {type(poly).__name__}, not a list of [x, y] points in stage fractions"
+    pts: list[tuple[float, float]] = []
+    for i, p in enumerate(poly):
+        if not (isinstance(p, (list, tuple)) and len(p) == 2):
+            return f"{where}: morph poly point {i} is {p!r} - each point is a pair [x, y] in stage fractions"
+        try:
+            pts.append((float(p[0]), float(p[1])))
+        except (TypeError, ValueError):
+            return f"{where}: morph poly point {i} is {p!r} - each point is a pair of numbers"
+    if len(pts) < MORPH_POLY_MIN:
+        return (f"{where}: morph poly has {len(pts)} point(s) - an outline needs at least {MORPH_POLY_MIN}; "
+                "kinetics/contour.mjs contourSilhouette traces one off a planted element's own pixels")
+    for i, (x, y) in enumerate(pts):
+        if not (0.0 <= x <= 1.0 and 0.0 <= y <= 1.0):
+            return (f"{where}: morph poly point {i} is ({x:g}, {y:g}), outside the stage - a planted source is a shape "
+                    "the frame actually held (R26-16); the units are stage fractions, 0..1 on each axis")
+    n = len(pts)
+    for i in range(n):
+        a, b = pts[i], pts[(i + 1) % n]
+        for j in range(i + 1, n):
+            if j == i or (j + 1) % n == i or (i + 1) % n == j:
+                continue
+            if _seg_cross(a, b, pts[j], pts[(j + 1) % n]):
+                return (f"{where}: morph poly crosses itself (edge {i}-{(i + 1) % n} through edge {j}-{(j + 1) % n}) - "
+                        "a ring with no inside cannot be carried by a strip mesh (arap.mjs polyStrip / arapPrepareMesh)")
+    return None
+
+
+def morph_source_error(world: dict | None, where: str) -> str | None:
+    """`world.morph`: a NAMED prop (MORPH_SHAPES), a traced poly (P48 T5b), or absent (the tab, the default)."""
+    src = (world or {}).get("morph") if isinstance(world, dict) else None
+    if src is None:
+        return None
+    if isinstance(src, str):
+        return None if src in MORPH_SHAPES else (f"{where}: morph={src!r} is not one of {'|'.join(MORPH_SHAPES)} - "
+                                                 "or a planted element's own outline, {\"poly\": [[x, y], ...]}")
+    if isinstance(src, dict) and "poly" in src:
+        return morph_poly_error(src.get("poly"), where)
+    return (f"{where}: world.morph is {src!r} - a named prop ({'|'.join(MORPH_SHAPES)}) or a planted element's own "
+            "outline, {\"poly\": [[x, y], ...]} in stage fractions (P48 T5b / R26-16)")
 
 
 def _melt_exit(exit_id: str) -> float | None:
@@ -2035,9 +2110,31 @@ def _melt_boundary(prev: dict, sc: dict, ppg: dict | None, pg: dict | None) -> l
     _err = melt_depth_page_error(sc.get("exit"), ppg)
     if _err:
         raise ValueError(f"{row}: {_err}")
-    if ending in ("throw", "splash:chart") and pg is None:
+    if ending in ("throw", "splash:chart", "morph") and pg is None:
         raise ValueError(f"{row}: a {ending} hands the same board to the next chart (E88) - the incoming world is not a ledger page; "
                          "say melt:splash:plate to paint a plate")
+    # P61 T3 / R26-117 - THE HAND-OVER's two ends must both be there, or the row is refused by name. The melt ends AT
+    # the ball and the ball IS the next page's prop outline, so the next page must be a page that enters BY MORPH and
+    # whose morph has an area to land on (MORPH_BUILDERS: the area under a LINE). A row that declares no enter gets
+    # `morph` stamped, exactly as a splash:chart's page gets `built` - the transition names the arrival.
+    if ending == "morph":
+        if ((sc.get("world") or {}).get("morph")) is not None:
+            raise ValueError(f"{row}: a melt:morph's page names no prop - the BALL is the prop it starts from (R26-117), "
+                             "and world.morph is what the engine hands it; drop world.morph, or drop the morph ending")
+        if not pg.get("enter"):
+            pg["enter"] = "morph"
+            if pg.get("builder") not in MORPH_BUILDERS:
+                raise ValueError(f"{row}: a melt:morph hands the ball to the next page's page_enter:morph, which deforms it into "
+                                 f"the AREA UNDER A LINE ({'|'.join(MORPH_BUILDERS)}) - the incoming page's builder is "
+                                 f"{pg.get('builder')!r}; melt:splash:chart arrives on any builder")
+            return [f"{sc.get('scene_id', '?')}: enter=morph stamped - a melt:morph's page IS the ball's morph, not a build under it (R26-117)"]
+        if pg.get("enter") != "morph":
+            raise ValueError(f"{row}: a melt:morph's page arrives BY the morph (R26-117: the ball is the prop it starts from) - "
+                             f"enter={pg.get('enter')} would cut from the ball to a build; drop the enter or say morph")
+        if pg.get("builder") not in MORPH_BUILDERS:
+            raise ValueError(f"{row}: a melt:morph hands the ball to the next page's page_enter:morph, which deforms it into "
+                             f"the AREA UNDER A LINE ({'|'.join(MORPH_BUILDERS)}) - the incoming page's builder is "
+                             f"{pg.get('builder')!r}; melt:splash:chart arrives on any builder")
     if ending == "splash:plate" and pg is not None:
         raise ValueError(f"{row}: a splash:plate paints a narrative plate (E88) - the incoming world is a ledger page; "
                          "say melt:splash:chart")
@@ -2085,6 +2182,10 @@ def stamp_transition_pages(scenes: list[dict]) -> list[str]:
 
     A row that declares its own enter or exit is never touched. Returns one line per stamp, for the build to print."""
     notes: list[str] = []
+    for sc in scenes:   # P48 T5b / R26-16: the planted source a page-enter morph starts from, checked wherever it is authored
+        _err = morph_source_error(sc.get("world"), f"{sc.get('scene_id', '?')}: world.morph")
+        if _err:
+            raise ValueError(_err)
     for i in range(1, len(scenes)):
         prev, sc = scenes[i - 1], scenes[i]
         kind = str(sc.get("exit") or "").split(":")[0]

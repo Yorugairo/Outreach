@@ -223,11 +223,12 @@
         "E88",
         "E99 s2",
         "P61 HG6",
-        "R26-76"
+        "R26-76",
+        "P61 T3 (proof B)"
       ],
-      "kind": "owed",
-      "title": "The melt gathers to one dense, heavy, vibrating point and splashes into a world plate (proof A) - into a full chart (proof B) to follow",
-      "judge": "Owed by the agent until proof B: E99 s2 - the melt as the page vortex's motion gathered into ONE point (not a whirlpool), dense and heavy (T5's ball) and vibrating, splashing into a scenic high-resolution world plate (proof A, built) and into a fully assembled chart (proof B, after T3 / HG1). Then HG6, asked once with both: watch the gather and the splash - approve the new default, or keep today's look behind the flag.",
+      "kind": "watch",
+      "title": "The melt gathers to one dense point and splashes into a world plate (A) and becomes a fully assembled chart (B)",
+      "judge": "E99 s2: the melt as the swirl's motion gathered into ONE point - dense, heavy, vibrating - that splashes into a scenic world plate or a fully assembled chart. Two clips. PROOF A (melt-gather, 14.7-18.9 s): the four series curl into one spiral on the point, the point wears the ball's material and vibrates, the splash paints the world plate up through the ink. PROOF B (melt-gather-morph, 14.6-22.1 s): the same gather to the same point, and the point is handed to the next page and becomes the full chart, built by the page's own hand. Watch both. Approve the gather as the melt's new form, or keep today's sag behind the flag.",
       "where": [
         {
           "label": "melt-splash",
@@ -278,11 +279,23 @@
         {
           "label": "the gather (melt.mjs: meltOpts 'gather', meltGatherAt, G_KEEP / G_VIB; the compiler's _melt_parts / melt_gather)",
           "path": "content/video_engine/scripts/species/melt.mjs"
+        },
+        {
+          "label": "PROOF B - the gather at its midpoint (15.57): the four series curled into one spiral converging on the point",
+          "path": "content/video_engine/tests/golden/frames/melt-gather-morph.png"
+        },
+        {
+          "label": "PROOF B - THE POINT (16.60): the whole chart amassed on it, nothing of the next chart anywhere",
+          "path": "content/video_engine/tests/golden/frames/melt-gather-morph@proof-point.png"
+        },
+        {
+          "label": "PROOF B - THE CHART (19.20): built out of that point - the area it became, the line along its top, the title and labels written",
+          "path": "content/video_engine/tests/golden/frames/melt-gather-morph@proof-chart.png"
         }
       ],
       "options": [],
-      "recommendation": "Proof A reads as the ruling's words: the swirl collecting into one point that is dense, heavy and alive, and a splash that lands IN the plate - no blur, no wipe (ink spread 265.5 -> 59.9 px, peak contrast unchanged at 575). Ask HG6 once proof B is on the card, unless you want to rule on proof A alone sooner - say so and it becomes a watch.",
-      "blocks": "HG6 (both proofs); the default melt stays today's look until ruled; the Japan short untouched (E99 s34)",
+      "recommendation": "Approve the gather as the melt's form. Both landings the ruling named are on the card: the plate (A) and the fully assembled chart (B), and B needed no new code - the gather is a phase and the morph an ending, and they compose. Known and named: the axis hairlines still turn rigidly in the gather (R26-139); the vortex map is written twice (R26-138).",
+      "blocks": "HG6",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:482",
         "docs/content-video-engine/CAPABILITIES.md:37",
@@ -290,12 +303,14 @@
         "docs/portable/OPERATOR-RULINGS.md:2912-2920 (E99 s2)",
         "content/video_engine/scripts/species/melt.mjs",
         "content/video_engine/tests/test_melt_gather.py",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T6)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T6)",
+        "content/video_engine/tests/test_melt_morph.py (the gather and the morph compose)",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3, T6)"
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": "watch",
-      "owed": "Proof A delivered 2026-09-15 (P61 T6): melt:gather + the splash into the dock plate, four goldens, the clip. Still owed: proof B - the same gather splashing into a fully assembled chart built to T2/T3's standard (after T3, which waits on HG1). HG6 is asked once with both.",
+      "was_kind": "owed",
+      "owed": "Delivered: proof A 2026-09-15 (T6), proof B 2026-09-16 (T3)",
       "proofs": [
         {
           "type": "clip",
@@ -304,6 +319,16 @@
           "aspect": "16:9",
           "t0": 14.7,
           "t1": 18.9,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "PROOF B - melt:gather:morph: the gather to one point, the point handed to the next page, the fully assembled chart built out of it",
+          "surface": "melt-gather-morph",
+          "aspect": "16:9",
+          "t0": 14.6,
+          "t1": 22.1,
           "flags": {},
           "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
         }
@@ -431,31 +456,30 @@
         "P48 HG3",
         "P48 T5b",
         "P48 HG1 (no explicit close, unverified)",
-        "R26-16"
+        "R26-16",
+        "P61 T3",
+        "P61 HG2b"
       ],
-      "kind": "owed",
-      "title": "The chart-to-chart transform onto a planted element",
-      "judge": "The morph onto a PLANTED element (R26-16, the tie) - T5b is unbuilt; HG1 (the rescale / extend read) has no explicit close in the plan (unverified).",
+      "kind": "watch",
+      "title": "The chart morphs onto a PLANTED element - the silhouette traced from the thing standing in the world",
+      "judge": "R26-16's rule: the morph's source is a real element of the outgoing world at its last frame, never a shape conjured over the clip. Here the narrative plate carries one dark lobed form; its silhouette is traced off that same raster (`contourSilhouette` - canvas raster + marching squares, the outlines are ours) into `world.morph.poly`, and from the page's first frame the prop stands exactly where the form stood, then deforms into the area under the series and the page builds on it. Watch 14.4-20.3 s. Does the morph land on the planted thing honestly - the same shape, the same place - or does the seam show? Approve, or name the seam.",
       "where": [
         {
-          "label": "the morph onto a planted element (P48 T5b, unbuilt)",
-          "missing": true
+          "label": "the page's first frame (15.02) - the traced form standing where the plate's form stood",
+          "path": "content/video_engine/tests/golden/frames/morph-planted.png"
         },
         {
-          "label": "Tokyo v2 player",
-          "url": "http://127.0.0.1:8738/player.html",
-          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short.v2/",
-          "stale": true,
-          "note": "nothing answered on this port at the 2026-09-14 build and it is not in .claude/launch.json"
+          "label": "half way (16.00) - the lobed form stretched toward the area under the line, plainly still the planted thing",
+          "path": "content/video_engine/tests/golden/frames/morph-planted@proof-050.png"
         },
         {
-          "label": "the casebook: empty cream chart to chart",
-          "path": "docs/agent-memory/operator/casebook/empty-cream-chart-to-chart/CASE.md"
+          "label": "contour.mjs: contourSilhouette / contourLuma; the compiler refuses a poly with fewer than 3 points, a self-crossing one, or one off the stage - by name",
+          "path": "content/video_engine/scripts/kinetics/contour.mjs"
         }
       ],
       "options": [],
-      "recommendation": null,
-      "blocks": "P48 completion (running)",
+      "recommendation": "Approve. The prop is the plate's own form - a test re-traces the silhouette off the raster and refuses a drift - so nothing is conjured. Two limits named: the page's field and punch beats still run under an ordinary morph page (P47 T3's law), so the board zooms over the morph's last half second - if the ground reads as moving, the fix is the one line the handed path already has; and a deep C-shaped silhouette would lose its bay (the strip is x-monotone) - blobs, balls, plates and heads are fine, a horseshoe is not, and nothing refuses one yet.",
+      "blocks": "HG2b; P48 T5b closes on it; P48 HG3 can be answered",
       "sources": [
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:178-186",
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:412",
@@ -463,12 +487,27 @@
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:480-481",
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:521",
         "docs/agent-memory/operator/one-shot-floor-recipes-not-events.md:3",
-        "docs/agent-memory/operator/one-shot-floor-recipes-not-events.md:15"
+        "docs/agent-memory/operator/one-shot-floor-recipes-not-events.md:15",
+        "content/video_engine/tests/test_melt_morph.py",
+        ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md (T5b)",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3)"
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": "watch",
-      "owed": "Missing proof: P48 T5b, the morph onto a planted element, is unbuilt, so there is nothing to watch."
+      "was_kind": "owed",
+      "owed": "Delivered 2026-09-16 (P61 T3): world.morph.poly, contourSilhouette, the goldens, the clip",
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "the planted source: the plate's form, the cut, the traced silhouette standing where it stood, deforming into the area under the series, the page built on it",
+          "surface": "morph-planted",
+          "aspect": "16:9",
+          "t0": 14.4,
+          "t1": 20.3,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        }
+      ]
     },
     {
       "id": "p58-hg3-chart-forms",
@@ -883,32 +922,65 @@
         "R26-117",
         "P61 HG2",
         "E99 s1",
-        "E99 s2"
+        "E99 s2",
+        "E99 s39",
+        "E99 s50"
       ],
-      "kind": "owed",
-      "title": "The page melts, balls up, and the ball becomes the NEXT full chart",
-      "judge": "Owed by the agent - R26-117: exit melt:morph hands the ball's one ring to the next page's page_enter:morph as its prop outline on one clock, and the page it opens into is a full chart built to the whole-chart standard (P61 T2). Then: watch 0:00-0:08 - does the hand-over hold, or does it read as a jump?",
+      "kind": "watch",
+      "title": "The ball becomes the next FULL chart - melt:morph, the fourth ending",
+      "judge": "The page melts, balls up, and the BALL is handed to the next page as its prop: its body deforms into the area under the next chart's first series, and the page then builds the chart on what it became - the line stroked along the area's top edge, the other series, the axes, the labels and the title by the engine's own hand, no cut anywhere (the ground is the same punched board on both sides). Watch 14.6-21.2 s: the chart read, the sag and the ball, the hand-over at 16.6, the lens that is neither ball nor chart, the chart built out of it. Does the hand-over hold as one continuous thing being manipulated (E99 s39's bar), or does it read as a jump? Approve, or name the frame that breaks.",
       "where": [
         {
-          "label": "the hand-over golden (not built)",
-          "missing": true
+          "label": "the last frame of the ball (16.50) - nothing of the next chart anywhere",
+          "path": "content/video_engine/tests/golden/frames/melt-morph@proof-ball.png"
         },
         {
-          "label": "the ball today (exit:melt), the prop-outline page enter today (page_enter:morph)",
+          "label": "THE HAND-OVER (16.60) - the same ball, the same place; the page beneath has swapped and you cannot see it",
+          "path": "content/video_engine/tests/golden/frames/melt-morph.png"
+        },
+        {
+          "label": "half way (17.25) - one lens, wider than the ball, not yet the area, wearing the ball's gradient with the page's outline coming up round it",
+          "path": "content/video_engine/tests/golden/frames/melt-morph@proof-050.png"
+        },
+        {
+          "label": "past the morph (18.30) - the shape landed as the area under series 0, the nib stroking the line along its top, the other series drawing, the title written",
+          "path": "content/video_engine/tests/golden/frames/melt-morph@proof-built.png"
+        },
+        {
+          "label": "melt.mjs: the fourth ending (M_S / M_FADE), meltHandAt / meltHandRing - the melt's last frame IS the morph's first; arap.mjs polyStrip (any closed outline as the strip mesh, det J > 0 throughout)",
           "path": "content/video_engine/scripts/species/melt.mjs"
+        },
+        {
+          "label": "the compiler: melt:morph refused on a non-page, a second enter, a page with no area under a line, or a page naming its own prop ('the BALL is the prop')",
+          "path": "content/video_engine/scripts/build_scene_timeline_f.py"
         }
       ],
       "options": [],
-      "recommendation": null,
-      "blocks": "P61 T3; P48 T5b's planted source rides the same slice",
+      "recommendation": "Approve. Read at the four instants: the ball stands alone; the hand-over frame is indistinguishable from the frame before it (the first build cut the GROUND here - the outgoing page is punched, a morph page's board was not - found on the frame and fixed); the mid-frame is one lens no cut can produce; the chart is MADE on the shape. Honest limits on the card: the morph's fill (the brown area) is still standing at the built instant and leaves as the lines draw; two pages with different series colours are untested (the goldens use one file for both); the ball's body colour (HG5b: reference black) is not on this golden yet - T5c re-renders it.",
+      "blocks": "HG2; T5c re-renders this golden with the reference body",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:549 (R26-117)",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md:333-369 (T3)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md:333-369 (T3)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s39, s50)",
+        "content/video_engine/tests/test_melt_morph.py",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3)"
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": null,
-      "owed": "P61 T3 builds the third melt ending (melt:morph) and the hand-over golden; the card returns as a clip through review_queue_proofs.py --clips --only r26-117-ball-into-the-next-chart"
+      "was_kind": "owed",
+      "owed": "Delivered 2026-09-16 (P61 T3): melt:morph, polyStrip, the hand-over goldens, the clip",
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "melt:morph - the finished chart, the sag, the ball, the hand-over with no cut, the ball's body becoming the area under the next series, the page building the full chart on it",
+          "surface": "melt-morph",
+          "aspect": "16:9",
+          "t0": 14.6,
+          "t1": 21.2,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        }
+      ]
     },
     {
       "id": "r26-124-slide-seam-and-swap-lane",

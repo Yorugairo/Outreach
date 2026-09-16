@@ -120,12 +120,12 @@ that page only with the operator's ruling written to `docs/portable/OPERATOR-RUL
 | gate | slice | queue card | the ONE question the card asks |
 | --- | --- | --- | --- |
 | **HG1** | T2 | `r26-70-compare-morph` (rewritten) | "Watch the two clips end to end. Does it **read as a transformation, not a cut, and read as intentional** (E99 s34)? The entire chart should transform - every series, datum and axis. Approve, or name what cuts or reads as accidental." **RULED 2026-09-15 (E99 s39): line -> bars taken; bars -> line rebuilt in T2b** **HG1b RULED 2026-09-16 (E99 s50): bars -> line approved; closed** |
-| **HG2** | T3 | `r26-117-ball-into-the-next-chart` (**created by the parent at T3's dispatch** - it does not exist today; it supersedes the `"missing": true` line on `r26-70-compare-morph`) | "The page melts, balls up, and the ball becomes the NEXT FULL CHART with no cut between. Watch 0:00-0:08. Does the hand-over hold, or does it read as a jump?" |
-| **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" |
+| **HG2** | T3 | `r26-117-ball-into-the-next-chart` (**created by the parent at T3's dispatch** - it does not exist today; it supersedes the `"missing": true` line on `r26-70-compare-morph`) | "The page melts, balls up, and the ball becomes the NEXT FULL CHART with no cut between. Watch 0:00-0:08. Does the hand-over hold, or does it read as a jump?" **T3 LANDED 2026-09-16: card open (watch, clip 14.6-21.2 s)** |
+| **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" **T3 LANDED 2026-09-16: card open (watch, clip 14.4-20.3 s)** |
 | **HG3** | T4a | `p58-hg3-extruded-bar-leave` | "`form-extruded-bar@proof-leave` beside `form-tilted-line@proof-leave`, as clips. Do the prism's shapes break down enough now? Approve, or say 'more'." **RULED 2026-09-15 (E99 s40): approved** |
 | **HG4** | T4b | `p58-hg3-forms-mount-not-scribble` | "The formed page arriving by the two-plate cross-fade and by the soak, each leaving by the soak's recede (E99 s35). Watch both enters and the leave. Approve, or name what still reads wrong." **RULED 2026-09-15 (E99 s41): approved** |
 | **HG5** | T5 | `r26-118-metallic-ball` | "The ball, before and after: more shadow, a dark Fresnel rim, a metallic band, one point of deep shadow depth. Does it read metallic and heavy now, or still glossy?" **RULED 2026-09-15 (E99 s42): refused - the prior ball + the darkness; T5b** **HG5b RULED 2026-09-16 (E99 s49): the reference body; T5c** |
-| **HG6** | T6 | `r26-76-melt-endings-in-motion` | "The melt as the vortex's motion gathered into one dense, heavy, vibrating point, splashing into a full chart / world plate. Watch the gather and the splash. Approve the new default, or keep today's look behind the flag." |
+| **HG6** | T6 | `r26-76-melt-endings-in-motion` | "The melt as the vortex's motion gathered into one dense, heavy, vibrating point, splashing into a full chart / world plate. Watch the gather and the splash. Approve the new default, or keep today's look behind the flag." **PROOF B LANDED 2026-09-16 via T3: card open (watch, both clips)** |
 | **HG7** | T7 | `r26-82-verdict-stack-choreography` | "The verdict stack on a short with Steel and Paper's choreography - cards that move, then the burst. Watch it beside the Steel and Paper reference clip. Approve, or name the phase that is still flat." **RULED 2026-09-15 (E99 s43): rails in reading order; T7b** |
 | **HG8** | T8 | `r26-80-agenda-page-owed` | "The beautified agenda page - the plate version of the list effect, each row with its catalogued icon stamped after its sentence (E93). Beside today's three plain rows. Approve, or name the change." **RULED 2026-09-15 (E99 s44): approved as a build** |
 | **HG9** | T9 | `p55-gallery-speed-and-motion` | "The gallery: its build time before and after, and three effects a still cannot show now carrying a clip. Is it fast enough and clear enough? Approve, or name what is still unreadable." |
@@ -401,7 +401,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   main paths from a worktree session) - verified by node --check, the node tests and the goldens; ratified.
 
 ### T3: THE BALL BECOMES THE NEXT FULL CHART - R26-117's third ending, and P48 T5b's planted source
-- Status: pending
+- Status: complete (2026-09-16) - HG2 open as `r26-117-ball-into-the-next-chart` and HG2b as `p48-hg3-morph-onto-planted` (watch); proof B on `r26-76-melt-endings-in-motion` (HG6)
 - Owner: `implementation_luna` (**ENGINE LOCK #2**)
 - Depends on: T2, HG1 (ruled E99 s39 on line -> bars: T3 is UNBLOCKED)
 - Write set: `content/video_engine/scripts/species/melt.mjs`, `content/video_engine/scripts/build_scene_timeline_f.py`
@@ -436,7 +436,29 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   `python content/video_engine/scripts/effects_catalog_check.py` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-117-ball-into-the-next-chart` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only p48-hg3-morph-onto-planted`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T3.md`. ONE DOOR, TWO SOURCES: `world.morph` takes either the HANDED ball's ring or a
+  PLANTED `poly`. `arap.mjs` `polyStrip` re-expresses any closed outline as the strip `stripMesh` carries (STRIP.EPS_X 0.004 /
+  MIN_H 0.02; minDet 1.000 -> 0.261 across t, det J > 0 throughout). `melt.mjs` the fourth ending: `meltHandAt` / `meltHandDelay` /
+  `meltHandSecs` / `meltHandRing` - delay + secs == the melt's window, so the melt's last frame IS the morph's first; the ball does
+  not vanish - `meltState`'s morph branch gives its body the outline the page carries this frame (`lpMorphInWorld` -> `ctx.hand`)
+  and its paint gives way to the page's ink over `M_FADE` 0.85. FOUND ON THE FRAME, NOT THE DIFF: the first hand-over frame cut
+  the GROUND (the outgoing page is punched, a morph page's board was not) - `handed -> pk = 1`. `contour.mjs` gains
+  `contourSilhouette` / `contourLuma` (the planted form traced off its own raster; a test re-traces and refuses a drift).
+  REFUSALS by name: a poly with < 3 points / self-crossing / off-stage; melt:morph on a non-page, a second enter, a page with
+  no area under a line, a page naming its own prop ('the BALL is the prop'). GOLDENS: `melt-morph` (the hand-over 16.60) +
+  @proof-ball 16.50 / @proof-050 17.25 / @proof-built 18.30; `morph-planted` (15.02) + @proof-050 (16.00); T6 PROOF B composes by
+  construction (a phase token and an ending in different branches of the same parsers; the window makes room, S + G_S + M_S =
+  3.8 s) - `melt-gather-morph` + @proof-point / @proof-chart, pinned by a test. Parent's read of the frames: the ball alone; the
+  hand-over frame indistinguishable from the one before it; the mid-frame one lens with the page's outline rising round it - the
+  frame no cut can produce; the chart made on the shape (the morph's fill still standing at the built instant, leaving as the
+  lines draw - named on the card); the planted form standing where the plate's form stood and stretching toward the area.
+  Tests: test_melt_morph.py (46), morphsrc.test.mjs (20), melt.test.mjs (MELT_ENDINGS is four). Validate: node 597/597; sync in
+  sync; pytest 214 passed; page-boxes sha-only (44); registry 974, 0 orphaned; effects_catalog_check EXIT 1 ONLY on
+  `plate_option:use` (the voice lane's deleted test - pre-existing, not this slice's); gate on the Japan cut unchanged (4 FAIL /
+  16 PASS since M44). DEVIATIONS ratified: `test_transitions_e47.py` (MELT_ENDINGS tuple of four), `test_golden_frames.py`
+  SURFACES (+2 base goldens), the EFFECTS-CATALOG regenerated. NAMED for the backlog (T11): the field/punch beats under an
+  ordinary morph page; two pages with different series colours untested; `buildMorph` targets series 0 only with no refusal;
+  `polyStrip` is x-monotone (a C-shaped silhouette loses its bay, nothing refuses one). Closes P48 T5b; HG2 / HG2b / HG6 on the queue.
 - CAPABILITIES rows changed: **:37** (the melt exit) gains the third ending; **:118** / **:116** gain the planted
   source. Closes **P48 T5b** and its card; `P48:185` (HG3) can then be answered
 
@@ -629,7 +651,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - Evidence: pending
 
 ### T6: THE MELT GATHERS TO ONE DENSE, HEAVY, VIBRATING POINT - and splashes into a full chart or a world plate
-- Status: complete for proof A (2026-09-15); proof B appends to `r26-76-melt-endings-in-motion` when T3 lands; HG6 asked once with both
+- Status: complete (proof A 2026-09-15, proof B 2026-09-16 via T3) - HG6 open on `r26-76-melt-endings-in-motion` (watch, both clips)
 - Owner: `implementation_luna` (**ENGINE LOCK #6**)
 - Depends on: **T5 only** (the point IS the ball; its material must land first). **T6 is NOT held behind T2/HG1.** The
   operator ranked the melt second, and putting it behind the whole-chart morph would park the second-ranked item

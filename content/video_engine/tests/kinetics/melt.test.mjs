@@ -27,7 +27,7 @@ const lum = (hex) => { const l = hexToLin(hex); return 0.2126 * l[0] + 0.7152 * 
 
 // ---- the authored form -------------------------------------------------------------------------------------------
 test("E88's grammar: throw is the default, a splash names its ending, and a bare splash is refused", () => {
-  assert.deepEqual(MELT_ENDINGS, ["throw", "splash:chart", "splash:plate"]);
+  assert.deepEqual(MELT_ENDINGS, ["throw", "splash:chart", "splash:plate", "morph"]);   // P61 T3 / R26-117: the fourth
   assert.equal(meltOpts("melt").ending, "throw", "a bare melt is a THROW");
   assert.equal(meltOpts("melt").secs, MELT.S);
   assert.deepEqual(meltOpts("melt").to, [MELT.TO[0], MELT.TO[1]]);

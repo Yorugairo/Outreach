@@ -409,7 +409,7 @@ acceptance - if a single golden byte moves, the model is wrong and nothing else 
   by LENGTH, and in the reverse order it was drawn, so a highlighted tail does not float off the end as a stray mark).
 
 ### T5: `morph_to` - ARAP between two shapes on the page
-- Status: **complete for the chart-state source (2026-09-10)**; the planted-element source (R26-16, the tie) stays open as T5b - see the deviation; P61 T3 (2026-09-15, pending on P61 HG1) owns it and closes T5b with its card `p48-hg3-morph-onto-planted`
+- Status: **complete for the chart-state source (2026-09-10)**; the planted-element source (R26-16, the tie) - T5b - BUILT 2026-09-16 by P61 T3: `world.morph = {poly}` traced off the planted form's own raster (`contourSilhouette`, canvas raster + marching squares), `polyStrip` carrying any closed outline as the strip mesh, the poly refused by name when < 3 points / self-crossing / off-stage; goldens `morph-planted` + `@proof-050`; its card `p48-hg3-morph-onto-planted` carries the first clip (14.4-20.3 s) - HG3 answerable on it
 - Owner: `implementation_luna` (bounded: the mesh and the invariants exist from P47 T3)
 - Depends on: T1
 - Write set: the template (`morphOn` generalised from the page ENTER to a species), `scripts/kinetics/arap.mjs` (only if a

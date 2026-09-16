@@ -1,948 +1,972 @@
 {
-  "schema_version": "effect_cards.v1",
-  "axis": "page_enter",
-  "cards": [
+ "schema_version": "effect_cards.v1",
+ "axis": "page_enter",
+ "cards": [
+  {
+   "id": "page_enter:axes",
+   "axis": "page_enter",
+   "token": "axes",
+   "title": "The axes page enter",
+   "aliases": [
     {
-      "id": "page_enter:axes",
-      "axis": "page_enter",
-      "token": "axes",
-      "title": "The axes page enter",
-      "aliases": [
-        {
-          "name": "axes register",
-          "source": "docs/portable/OPERATOR-RULINGS.md:2344"
-        }
-      ],
-      "does": "The charcoal page lands with its ground, ruled line, title, labels and axes already drawn, and the chart draws from the first frame.",
-      "when": "hook should open on the axes register, then we immediately answer it on the ledger.",
-      "when_source": "docs/portable/OPERATOR-RULINGS.md:2344",
-      "author": {
-        "key": "ledger id 6th part ':axes' (validator: parse_ledger_id (after split_plate_opts)); stamped by stamp_transition_pages on the hook and on chart-to-chart",
-        "example": "'ledger:ev-federal-load-v1:line:240:right:axes:cut'",
-        "example_source": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/SHOT-TABLE-SHORT.py:3",
-        "check": "enter"
-      },
-      "phases": [
-        {
-          "name": "lands on its axes",
-          "does": "paper, ruled line, title, labels and axes are already on frame 0 (the clock starts at the punch's end)",
-          "trigger": "the scene boundary",
-          "dials": {
-            "ROLL": "0.7",
-            "SAVOR": "0.8",
-            "FIELD": "2.4",
-            "PUNCH": "0.5"
-          }
-        },
-        {
-          "name": "build",
-          "does": "the chart draws from the first frame",
-          "trigger": "the scene boundary",
-          "dials": {
-            "BUILD": "3.0"
-          }
-        }
-      ],
-      "blends": [],
-      "options": [],
-      "dials": null,
-      "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "paintLedger",
-        "also": [
-          "axesIn"
-        ],
-        "note": "paintLedger const axesIn (tr offset)"
-      },
-      "doctrine": [
-        "E73",
-        "SHORT-FORM-SHAPE s1"
-      ],
-      "status": "wired",
-      "proof": {
-        "golden": "melt-page",
-        "test": "content/video_engine/tests/test_page_performs.py::test_enter_axes_lands_the_page_and_builds_the_data",
-        "first_use": {
-          "project": "normal-for-which-bridge",
-          "build": "not recorded in the table",
-          "t": 0.0
-        }
-      },
-      "callable": {
-        "today": true,
-        "why": "in LEDGER_ENTERS; the stamped default for a hook page and a page after a page"
-      }
-    },
-    {
-      "id": "page_enter:built",
-      "axis": "page_enter",
-      "token": "built",
-      "title": "The built page enter",
-      "aliases": [
-        {
-          "name": "still sibling",
-          "source": "content/video_engine/scripts/build_scene_timeline_f.py:56"
-        }
-      ],
-      "does": "The whole page, data included, is on stage at its first frame; its span is all deployed life under the idle.",
-      "when": "i think that's only for the first frame or when we need speed",
-      "when_source": "docs/portable/OPERATOR-RULINGS.md:2347",
-      "author": {
-        "key": "ledger id 6th part ':built' (validator: parse_ledger_id (after split_plate_opts)); stamped by a melt:splash:chart",
-        "example": "'ledger:ev-x:line:5:right:built:cut'",
-        "example_source": null,
-        "check": "enter"
-      },
-      "phases": [],
-      "blends": [],
-      "options": [],
-      "dials": null,
-      "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "paintLedger",
-        "note": "paintLedger const built (tr offset)"
-      },
-      "doctrine": [
-        "E73",
-        "E50"
-      ],
-      "status": "wired",
-      "proof": {
-        "golden": "melt-splash",
-        "test": "content/video_engine/tests/test_page_performs.py::test_a_page_that_arrives_built_plays_one_beat",
-        "first_use": null
-      },
-      "callable": {
-        "today": true,
-        "why": "in LEDGER_ENTERS"
-      }
-    },
-    {
-      "id": "page_enter:camera",
-      "axis": "page_enter",
-      "token": "camera",
-      "title": "The camera arrival page enter",
-      "aliases": [
-        {
-          "name": "The camera arrival",
-          "source": "docs/content-video-engine/CAPABILITIES.md:77"
-        },
-        {
-          "name": "the eye goes to the landed card",
-          "source": "docs/content-video-engine/CAPABILITIES.md:77"
-        }
-      ],
-      "does": "The card lands on the previous scene, the camera zooms the outgoing world and the card together over 0.45 s until the card fills the stage, and the page shows at the match.",
-      "when": "a thrown card becomes the world (E59 reason 3) - the eye goes to it",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:77",
-      "author": {
-        "key": "ledger id 6th part ':camera=<dock asset>' (validator: parse_ledger_id (after split_plate_opts)); extend_camera_cards",
-        "example": "'ledger:ev-fed-vs-yields-v1:line:0:right:camera=dock-h-fed-vs-yields:cut'",
-        "example_source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-SHORT.py:9",
-        "check": "enter"
-      },
-      "phases": [
-        {
-          "name": "card lands",
-          "does": "the card lands as a dock on the previous scene",
-          "trigger": "the dock's own enter"
-        },
-        {
-          "name": "the eye goes",
-          "does": "the camera zooms the outgoing world and the card together toward the fill scale while carrying the card to stage centre, with a whoosh blur on the arrival's speed",
-          "trigger": "the scene boundary",
-          "dials": {
-            "CAMERA_ARRIVAL_S": "0.45",
-            "SNAP_BLUR": "6"
-          }
-        },
-        {
-          "name": "the match",
-          "does": "at u = 1 the frustum is the card; the page shows at identity and the card hides on the same predicate",
-          "trigger": "u = 1 (CAMERA_ARRIVAL_S elapsed)"
-        }
-      ],
-      "blends": [
-        {
-          "source": "camArrivalState (kinetics/camera.mjs)",
-          "became": "the whole arc",
-          "record": "content/video_engine/scripts/kinetics/camera.mjs:106",
-          "tie": "recorded"
-        },
-        {
-          "source": "the snap's own blur envelope",
-          "became": "the whole arc",
-          "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs:10067",
-          "tie": "recorded"
-        }
-      ],
-      "options": [],
-      "dials": {
-        "module": "content/video_engine/scripts/kinetics/camera.mjs",
-        "object": "CAM"
-      },
-      "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "camInSc",
-        "also": [
-          "camArr",
-          "camArrivalState"
-        ],
-        "note": "render const camInSc / camArr + dock-loop arrival (kinetics/camera.mjs camArrivalState)"
-      },
-      "doctrine": [
-        "E59 s3",
-        "CAPABILITIES camera arrival"
-      ],
-      "status": "wired",
-      "proof": {
-        "golden": null,
-        "test": "content/video_engine/tests/test_camera.py::test_the_compiler_admits_enter_camera_and_the_gate_ties_the_arrival_to_its_card",
-        "first_use": {
-          "project": "tokyo-tea-break",
-          "build": "build-short-p53t10",
-          "t": 76.83
-        }
-      },
-      "callable": {
-        "today": true,
-        "why": "in LEDGER_ENTERS; opt-in until its HG2 watch"
-      }
-    },
-    {
-      "id": "page_enter:drop",
-      "axis": "page_enter",
-      "token": "drop",
-      "title": "The drop page enter",
-      "aliases": [
-        {
-          "name": "falling down into the frame",
-          "source": "content/video_engine/scripts/build_scene_timeline_f.py:56"
-        }
-      ],
-      "does": "The page falls into the frame from just above over DROP_S 0.55 s and lands as the world.",
-      "when": null,
-      "when_source": null,
-      "author": {
-        "key": "ledger id 6th part ':drop' (validator: parse_ledger_id (after split_plate_opts))",
-        "example": "'ledger:ev-x:line:5:right:drop:cut'",
-        "example_source": null,
-        "check": "enter"
-      },
-      "phases": [
-        {
-          "name": "fall",
-          "does": "the page falls from just above the frame, easing in",
-          "trigger": "the scene boundary",
-          "dials": {
-            "DROP_S": "0.55",
-            "DROP_FROM_H": "1.1"
-          }
-        },
-        {
-          "name": "land + settle",
-          "does": "the impact and the material settle; it rests as the world",
-          "trigger": "the fall's end",
-          "dials": {
-            "THROW_SETTLE_S": "1.2"
-          }
-        }
-      ],
-      "blends": [
-        {
-          "source": "the dock's landXf with the drop from above the frame",
-          "became": "the whole arc",
-          "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs:6678",
-          "tie": "recorded"
-        }
-      ],
-      "options": [],
-      "dials": null,
-      "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "paintLedger",
-        "also": [
-          "throwIn"
-        ],
-        "note": "paintLedger const dropped + render const throwIn (shared with throw)"
-      },
-      "doctrine": [
-        "CAPABILITIES card-then-snap (refused on the watch, kept as opt-in)"
-      ],
-      "status": "wired",
-      "proof": {
-        "golden": null,
-        "test": null,
-        "first_use": null
-      },
-      "callable": {
-        "today": true,
-        "why": "compiles; refused on the operator's watch 2026-09-08 and kept only as an opt-in"
-      }
-    },
-    {
-      "id": "page_enter:morph",
-      "axis": "page_enter",
-      "token": "morph",
-      "title": "The morph page enter",
-      "aliases": [
-        {
-          "name": "one element transforming into the next",
-          "source": "docs/portable/OPERATOR-RULINGS.md:2637"
-        },
-        {
-          "name": "The morph: the object becomes the chart",
-          "source": "docs/content-video-engine/CAPABILITIES.md:111"
-        }
-      ],
-      "does": "The page's prop outline (tab, plate or card) deforms by ARAP into the chart's shape, then the build lands; with the arap_morph flag off it is a mount of the same length.",
-      "when": "The morph (P47 T3) is that device.",
-      "when_source": "docs/portable/OPERATOR-RULINGS.md:1485",
-      "author": {
-        "key": "ledger id 6th part ':morph' or ':morph=<s>' + ';morph=<shape>' (validator: parse_ledger_id (after split_plate_opts)); SIGNATURE_ENTERS",
-        "example": "'ledger:ev-x:line:5:right:morph=2.5:cut'",
-        "example_source": null,
-        "check": "enter"
-      },
-      "phases": [
-        {
-          "name": "the prop deforms",
-          "does": "the tab/plate/card outline deforms by ARAP into the chart's shape",
-          "trigger": "the scene boundary",
-          "dials": {
-            "MORPH.S": "2.0"
-          }
-        },
-        {
-          "name": "build",
-          "does": "the page's build lands after the morph (its clock is offset by morph_s)",
-          "trigger": "morph_s elapsed",
-          "dials": {
-            "BUILD": "3.0"
-          }
-        }
-      ],
-      "blends": [
-        {
-          "source": "ARAP / the object->chart morph (doc 43 s43.5)",
-          "became": "the whole arc",
-          "record": "docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:62",
-          "tie": "recorded"
-        }
-      ],
-      "options": [
-        {
-          "token": "card",
-          "means": "Morph prop: card: The page is born from a card outline with eased corners.",
-          "source_set": "MORPH_SHAPES"
-        },
-        {
-          "token": "morph",
-          "means": "The morph's prop outline: Names the prop outline (tab, plate, card) a morph-entering page starts from.",
-          "source_set": "PLATE_OPTS"
-        },
-        {
-          "token": "plate",
-          "means": "Morph prop: plate: The page is born from a plate outline with eased corners.",
-          "source_set": "MORPH_SHAPES"
-        },
-        {
-          "token": "tab",
-          "means": "Morph prop: tab: The page is born from a tab outline (the default prop).",
-          "source_set": "MORPH_SHAPES"
-        }
-      ],
-      "dials": null,
-      "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "paintMorph",
-        "also": [
-          "paintLedger",
-          "morphOn"
-        ],
-        "note": "paintMorph (+ kinetics/arap.mjs; paintLedger const morphOn)"
-      },
-      "doctrine": [
-        "E48 s4",
-        "E87 s2"
-      ],
-      "status": "wired",
-      "proof": {
-        "golden": null,
-        "test": "content/video_engine/tests/test_morph.py::test_the_ledger_id_takes_a_morph_enter_with_its_seconds",
-        "first_use": null
-      },
-      "callable": {
-        "today": true,
-        "why": "compiles; paints only behind kinetics.arap_morph, else falls back to a mount"
-      }
-    },
-    {
-      "id": "page_enter:mount",
-      "axis": "page_enter",
-      "token": "mount",
-      "title": "The cream mount page enter",
-      "aliases": [
-        {
-          "name": "cream mount",
-          "source": "docs/portable/OPERATOR-RULINGS.md:2626"
-        },
-        {
-          "name": "THE DANCE",
-          "source": "docs/content-video-engine/CAPABILITIES.md:57"
-        },
-        {
-          "name": "fade/mount transition",
-          "source": "docs/portable/OPERATOR-RULINGS.md:1364"
-        }
-      ],
-      "does": "On the cut the page's cream is the ground at once (the outgoing world is gone, R26-50), the field soaks in over mount_s while the page rises on a 5-step staircase, then the title inks, the board punches in and the chart builds.",
-      "when": "The mount (a page arriving for the first time)",
-      "when_source": "docs/portable/OPERATOR-RULINGS.md:1433",
-      "author": {
-        "key": "ledger id 6th part ':mount' or ':mount=<s>' (validator: parse_ledger_id (after split_plate_opts)); SIGNATURE_ENTERS",
-        "example": "'ledger:ev-parts-cascade-v1:bars:0:right:mount=0.8:cut;idle=live'",
-        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:6",
-        "check": "enter"
-      },
-      "phases": [
-        {
-          "name": "the cream lands",
-          "does": "the page's cream is the ground from the scene's first frame; the outgoing world is cut, never cross-faded (R26-50)",
-          "trigger": "the scene boundary"
-        },
-        {
-          "name": "the soak rises",
-          "does": "the field soaks in while the page rises on a stepped staircase",
-          "trigger": "the scene boundary (mount window = the soak)",
-          "dials": {
-            "MOUNT_STEPS": "5",
-            "LP_MOUNT_RISE": "28",
-            "mount_s default (LP.FIELD)": "2.4"
-          }
-        },
-        {
-          "name": "ink",
-          "does": "title and source write per glyph once the field has soaked",
-          "trigger": "the soak's end (mount_s)",
-          "dials": {
-            "INK": "2.0"
-          }
-        },
-        {
-          "name": "punch-in",
-          "does": "the board punches in",
-          "trigger": "the ledger clock (beat 5)",
-          "dials": {
-            "PUNCH": "0.5"
-          }
-        },
-        {
-          "name": "build",
-          "does": "the chart builds onto its exact value strings",
-          "trigger": "the ledger clock (beat 6)",
-          "dials": {
-            "BUILD": "3.0"
-          }
-        }
-      ],
-      "blends": [
-        {
-          "source": "the soak (paper taking ink)",
-          "became": "ink",
-          "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs:6698",
-          "tie": "recorded"
-        },
-        {
-          "source": "the mount is a build, not a transition",
-          "became": "build",
-          "record": "docs/portable/OPERATOR-RULINGS.md:1477",
-          "tie": "recorded"
-        }
-      ],
-      "options": [],
-      "dials": null,
-      "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "paintLedger",
-        "also": [
-          "LP_MOUNT_RISE",
-          "mountIn"
-        ],
-        "note": "paintLedger mount branch (const mount / mk / LP_MOUNT_RISE) + render const mountIn"
-      },
-      "doctrine": [
-        "29 s9.31 (the mount)",
-        "E45",
-        "E47 s2",
-        "E48 s3",
-        "E73",
-        "E87 s2"
-      ],
-      "status": "live",
-      "proof": {
-        "golden": null,
-        "test": "content/video_engine/tests/test_page_performs.py::test_the_mounting_pages_soak_opens_on_the_scenes_first_frame_and_its_ink_follows_mount_s",
-        "first_use": {
-          "project": "japan-tariff-trick",
-          "build": "build-short",
-          "t": 17.42
-        }
-      },
-      "callable": {
-        "today": true,
-        "why": "in LEDGER_ENTERS; a signature (no dip in front)"
-      }
-    },
-    {
-      "id": "page_enter:snap",
-      "axis": "page_enter",
-      "token": "snap",
-      "title": "The card-then-snap page enter",
-      "aliases": [
-        {
-          "name": "Card-then-snap",
-          "source": "docs/content-video-engine/CAPABILITIES.md:69"
-        }
-      ],
-      "does": "The page arrives built, grown from the landed chart card's rectangle to the stage over SNAP_S 0.45 s with a velocity blur.",
-      "when": "the hook's own chart must be on screen inside a second and then BECOME the world",
-      "when_source": "docs/content-video-engine/CAPABILITIES.md:69",
-      "author": {
-        "key": "ledger id 6th part ':snap=<dock asset>' (validator: parse_ledger_id (after split_plate_opts))",
-        "example": "'ledger:ev-japan-holdings-v1:line:315:right:snap=dock-b-holdings:cut;idle=live'",
-        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:4",
-        "check": "enter"
-      },
-      "phases": [
-        {
-          "name": "card thrown",
-          "does": "the chart card lands as a dock on the previous scene on the stop-action throw",
-          "trigger": "the dock's own enter (a word, authored on the previous row)",
-          "dials": {
-            "FLIGHT_S": "0.45",
-            "ARC": "0.22",
-            "SPIN_DEG": "9"
-          }
-        },
-        {
-          "name": "snap to fill",
-          "does": "the page, built, grows from the card's rectangle to the stage under a velocity blur",
-          "trigger": "the scene boundary",
-          "dials": {
-            "SNAP_S": "0.45",
-            "SNAP_BLUR": "6"
-          }
-        },
-        {
-          "name": "holds built",
-          "does": "the card page rests at the frame size",
-          "trigger": "SNAP_S elapsed",
-          "dials": {
-            "CARD_SCALE": "1"
-          }
-        }
-      ],
-      "blends": [
-        {
-          "source": "the Tokyo dock throw reused for the card",
-          "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:69",
-          "tie": "recorded"
-        }
-      ],
-      "options": [
-        {
-          "token": "card",
-          "means": "The page as a card: A ledger page keeps the card's rounded corners and hard-edge shadow at full size (yes|no; a snapped page is a card by default).",
-          "source_set": "PLATE_OPTS"
-        }
-      ],
-      "dials": null,
-      "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "paintLedger",
-        "also": [
-          "snapIn",
-          "SNAP_FROM",
-          "SNAP_S"
-        ],
-        "note": "paintLedger const snap + render const snapIn (SNAP_FROM, SNAP_S)"
-      },
-      "doctrine": [
-        "E50",
-        "CAPABILITIES card-then-snap"
-      ],
-      "status": "live",
-      "proof": {
-        "golden": null,
-        "test": "content/video_engine/tests/test_gate_motion_density.py::test_a_spiral_page_lands_when_its_unwind_ends_never_on_its_first_frame",
-        "first_use": {
-          "project": "japan-tariff-trick",
-          "build": "build-short",
-          "t": 1.82
-        }
-      },
-      "callable": {
-        "today": true,
-        "why": "in LEDGER_ENTERS; needs a thrown chart-card dock to snap from"
-      }
-    },
-    {
-      "id": "page_enter:spiral",
-      "axis": "page_enter",
-      "token": "spiral",
-      "title": "The spiral page enter",
-      "aliases": [
-        {
-          "name": "the hero",
-          "source": "docs/portable/OPERATOR-RULINGS.md:1472"
-        },
-        {
-          "name": "swirl",
-          "source": "docs/portable/OPERATOR-RULINGS.md:1472"
-        },
-        {
-          "name": "page VORTEX",
-          "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2095"
-        }
-      ],
-      "does": "A page that was already drawn returns by running the vortex backwards over 1.6 s from its point - no roll, soak, ink or build.",
-      "when": "the spiral (a page returning)",
-      "when_source": "docs/portable/OPERATOR-RULINGS.md:1433",
-      "author": {
-        "key": "ledger id 6th part ':spiral' (validator: parse_ledger_id (after split_plate_opts)); SIGNATURE_ENTERS",
-        "example": "'ledger:ev-federal-load-v1:line:240:right:spiral:cut'",
-        "example_source": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/SHOT-TABLE-SHORT.py:6",
-        "check": "enter"
-      },
-      "phases": [
-        {
-          "name": "stains surface",
-          "does": "the field's stains come up out of the drain first",
-          "trigger": "the scene start (ui 0 - 0.55 of LP_RETRACT.IN)",
-          "dials": {
-            "IN": "1.6",
-            "TURNS": "3.0"
-          }
-        },
-        {
-          "name": "colours unwind",
-          "does": "every glyph, bar, pill and series point unwinds from the vortex point along the closed-form map",
-          "trigger": "ui 0.4 - 1.0 of LP_RETRACT.IN (overlapping the stains)",
-          "dials": {
-            "IN": "1.6",
-            "TURNS": "3.0",
-            "LAG": "0.25"
-          }
-        },
-        {
-          "name": "holds built",
-          "does": "the page stands drawn - its roll, soak, ink and build clocks are all behind it",
-          "trigger": "the unwind's end"
-        }
-      ],
-      "blends": [
-        {
-          "source": "the page VORTEX retract run backwards (closed form in time)",
-          "became": "the whole arc",
-          "record": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2095",
-          "tie": "recorded"
-        },
-        {
-          "source": "Analytic in t (FINDING-the-animation-math s3)",
-          "became": "the whole arc",
-          "record": "docs/content-video-engine/CAPABILITIES.md:50",
-          "tie": "recorded"
-        }
-      ],
-      "options": [],
-      "dials": null,
-      "lives": {
-        "form": "module",
-        "path": "content/video_engine/scripts/species/spiral.mjs",
-        "symbol": "lpSpiral",
-        "also": [
-          "LP_RETRACT",
-          "spiralClocks",
-          "lpVortex",
-          "lpParticles",
-          "spiralLineWidth"
-        ],
-        "note": "P57 T22: the RETURN and the retract are one module (both cards point here); the engine's render const spiralIn takes the wipe off the boundary"
-      },
-      "doctrine": [
-        "29 s9.31",
-        "E48 s2",
-        "E47 s2",
-        "SHORT-FORM-SHAPE s3"
-      ],
-      "status": "live",
-      "proof": {
-        "golden": null,
-        "test": "content/video_engine/tests/test_gate_motion_density.py::test_a_spiral_page_lands_when_its_unwind_ends_never_on_its_first_frame",
-        "first_use": {
-          "project": "tokyo-tea-break",
-          "build": "build-short.v2 (render approved by the operator 2026-09-06, render/APPROVALS.json)",
-          "t": 44.88
-        }
-      },
-      "callable": {
-        "today": true,
-        "why": "in LEDGER_ENTERS; a signature, so the default exit cuts"
-      }
-    },
-    {
-      "id": "page_enter:stamped",
-      "axis": "page_enter",
-      "token": "stamped",
-      "title": "The stamped chart-to-chart page enter",
-      "aliases": [],
-      "does": "A ledger page that follows a ledger page with no declared enter arrives already on its axes, whatever the transition, so no empty cream stage shows between two charts.",
-      "when": "chart to chart: the compiler stamps enter=axes (enter=built under a chart splash) and exit=cut on a page a suck or melt takes",
-      "when_source": "content/video_engine/scripts/build_scene_timeline_f.py",
-      "author": {
-        "key": "a ledger id with an empty enter part after a ledger page (stamp_transition_pages)",
-        "example": "'ledger:ev-interest-bill-v1:line:105:right::cut'",
-        "example_source": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/SHOT-TABLE-SHORT.py:7",
-        "check": "enter"
-      },
-      "phases": [],
-      "blends": [],
-      "options": [],
-      "dials": null,
-      "lives": {
-        "form": "compiler-only",
-        "path": "content/video_engine/scripts/build_scene_timeline_f.py",
-        "symbol": "stamp_transition_pages",
-        "also": [
-          "_melt_boundary"
-        ],
-        "note": "stamps enter=axes / enter=built / exit=cut; painted by the axes and built enters (decision 3)"
-      },
-      "doctrine": [
-        "E88",
-        "R26-60",
-        "SHORT-FORM-SHAPE s2"
-      ],
-      "status": "wired",
-      "implicit": true,
-      "proof": {
-        "golden": null,
-        "test": "content/video_engine/tests/test_transition_stamps.py::test_chart_to_chart_the_next_page_is_on_its_axes_whatever_the_transition",
-        "first_use": null
-      },
-      "callable": {
-        "today": true,
-        "why": "implicit: stamped by the compiler"
-      }
-    },
-    {
-      "id": "page_enter:throw",
-      "axis": "page_enter",
-      "token": "throw",
-      "title": "The throw page enter",
-      "aliases": [
-        {
-          "name": "the whole page is THROWN onto the world",
-          "source": "content/video_engine/scripts/build_scene_timeline_f.py:56"
-        }
-      ],
-      "does": "The whole page flies in on the stop-action throw (arc, spin, squash) and lands built as the world.",
-      "when": null,
-      "when_source": null,
-      "author": {
-        "key": "ledger id 6th part ':throw' or ':throw=<grow>,<from>,<s>' (validator: parse_ledger_id (after split_plate_opts))",
-        "example": "'ledger:ev-x:line:5:right:throw:cut'",
-        "example_source": null,
-        "check": "enter"
-      },
-      "phases": [
-        {
-          "name": "flight",
-          "does": "the whole page flies in on a ballistic chord with tumble",
-          "trigger": "the scene boundary",
-          "dials": {
-            "THROW_S": "1.1",
-            "THROW_ARC": "1.5",
-            "THROW_SPIN": "9"
-          }
-        },
-        {
-          "name": "settle",
-          "does": "the material's squash and spring settle it as the world, built",
-          "trigger": "the flight's end",
-          "dials": {
-            "THROW_SETTLE_S": "1.2"
-          }
-        }
-      ],
-      "blends": [
-        {
-          "source": "throwXf (kinetics/stopaction.mjs)",
-          "became": "the whole arc",
-          "record": "content/video_engine/scripts/kinetics/stopaction.mjs:152",
-          "tie": "recorded"
-        }
-      ],
-      "options": [],
-      "dials": null,
-      "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "paintLedger",
-        "also": [
-          "throwXf",
-          "throwIn"
-        ],
-        "note": "paintLedger throw block (const thrown, throwXf) + render const throwIn"
-      },
-      "doctrine": [
-        "CAPABILITIES card-then-snap (refused on the watch, kept as opt-in)"
-      ],
-      "status": "wired",
-      "proof": {
-        "golden": null,
-        "test": "content/video_engine/tests/test_page_performs.py::test_enter_throw_arrives_built_and_is_a_known_enter",
-        "first_use": null
-      },
-      "callable": {
-        "today": true,
-        "why": "compiles; refused on the operator's watch 2026-09-08 and kept only as an opt-in"
-      }
-    },
-    {
-      "id": "page_enter:field_soak",
-      "axis": "page_enter",
-      "token": "field_soak",
-      "title": "The soak field (a page introducing an idea)",
-      "aliases": [
-        {
-          "name": "the soak field",
-          "source": "docs/portable/OPERATOR-RULINGS.md:3156"
-        }
-      ],
-      "does": "Beat 3 of the page's arrival: seeded charcoal stains creep and then flood through the cream to the deckle, deepening where they overlap, and end on the crisp rect. The eye has more to watch than a cross-fade gives it.",
-      "when": "When we are trying to maintain continuity, connecting ideas, speaking across plates i think the cross-fade is the answer, when we are building an idea or introducing a new idea or looking to fill space to separate ideas, the soak is the transition.",
-      "when_source": "docs/portable/OPERATOR-RULINGS.md:3156",
-      "author": {
-        "key": "`;field=soak` on a ledger page - or no field at all: the soak is the engine's own default",
-        "example": "'ledger:ev-x:bars;field=soak'",
-        "example_source": null,
-        "check": "none"
-      },
-      "phases": [
-        {
-          "name": "the stains creep",
-          "does": "each seeded stain grows from its own lag on the field clock, deepening where two overlap",
-          "trigger": "the roll and the savor behind it (the scene's first frame on a mount)",
-          "dials": {
-            "FIELD": "2.4",
-            "SEEPS": "9"
-          }
-        },
-        {
-          "name": "the ground closes",
-          "does": "the crisp charcoal rect takes over the last fifth, so the ground is flat before the title inks",
-          "trigger": "b 0.78 of the field clock",
-          "dials": {
-            "rect": "0.78 -> 1.0"
-          }
-        }
-      ],
-      "blends": [],
-      "options": [],
-      "dials": null,
-      "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "buildLedger",
-        "also": [
-          "lpPlateRecede"
-        ],
-        "note": "the soak branch of the field beat; the same stains are what the page's leave recedes"
-      },
-      "doctrine": [
-        "E99 s35",
-        "E22"
-      ],
-      "status": "wired",
-      "implicit": true,
-      "proof": {
-        "golden": "form-extruded-bar",
-        "test": "content/video_engine/tests/test_chart_forms_2_5d.py::test_the_field_is_named_on_the_row_and_the_soak_is_the_default",
-        "first_use": null
-      },
-      "callable": {
-        "today": true,
-        "why": "implicit: the ground of every page that names no field"
-      }
-    },
-    {
-      "id": "page_enter:field_plates",
-      "axis": "page_enter",
-      "token": "field_plates",
-      "title": "The two-plate cross-fade field (a page keeping continuity)",
-      "aliases": [
-        {
-          "name": "the two-plate cross-fade",
-          "source": "docs/portable/OPERATOR-RULINGS.md:3156"
-        }
-      ],
-      "does": "Beat 3 of the page's arrival, the decided signature: the generated charcoal-filled deckle fades in over the generated cream page on the field clock; the ground arrives smooth and whole and the chart draws inside the deckle's board.",
-      "when": "When we are trying to maintain continuity, connecting ideas, speaking across plates i think the cross-fade is the answer, when we are building an idea or introducing a new idea or looking to fill space to separate ideas, the soak is the transition.",
-      "when_source": "docs/portable/OPERATOR-RULINGS.md:3156",
-      "author": {
-        "key": "`;field=plates` on a ledger page whose build gave it plate + field_plate + board",
-        "example": "'ledger:ev-x:bars;field=plates'",
-        "example_source": null,
-        "check": "none"
-      },
-      "phases": [
-        {
-          "name": "the inked plate arrives",
-          "does": "the charcoal filled to the deckle fades in over the cream page on expoOut of the field clock",
-          "trigger": "the roll and the savor behind it",
-          "dials": {
-            "FIELD": "2.4"
-          }
-        }
-      ],
-      "blends": [],
-      "options": [],
-      "dials": null,
-      "lives": {
-        "form": "inline",
-        "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
-        "symbol": "buildLedger",
-        "also": [
-          "lpPlateRecede"
-        ],
-        "note": "the fieldPlate branch of the field beat (page.field_plate over page.plate); it LEAVES by the soak's recede, never by fading back out (E99 s35)"
-      },
-      "doctrine": [
-        "E99 s35",
-        "E22",
-        "41 s2"
-      ],
-      "status": "wired",
-      "implicit": true,
-      "proof": {
-        "golden": "form-tilted-line",
-        "test": "content/video_engine/tests/test_chart_forms_2_5d.py::test_a_cross_fade_page_leaves_by_the_soaks_recede",
-        "first_use": null
-      },
-      "callable": {
-        "today": true,
-        "why": "implicit: the page's own plate keys; `;field=plates` is the row's way to ask"
-      }
+     "name": "axes register",
+     "source": "docs/portable/OPERATOR-RULINGS.md:2344"
     }
-  ]
+   ],
+   "does": "The charcoal page lands with its ground, ruled line, title, labels and axes already drawn, and the chart draws from the first frame.",
+   "when": "hook should open on the axes register, then we immediately answer it on the ledger.",
+   "when_source": "docs/portable/OPERATOR-RULINGS.md:2344",
+   "author": {
+    "key": "ledger id 6th part ':axes' (validator: parse_ledger_id (after split_plate_opts)); stamped by stamp_transition_pages on the hook and on chart-to-chart",
+    "example": "'ledger:ev-federal-load-v1:line:240:right:axes:cut'",
+    "example_source": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/SHOT-TABLE-SHORT.py:3",
+    "check": "enter"
+   },
+   "phases": [
+    {
+     "name": "lands on its axes",
+     "does": "paper, ruled line, title, labels and axes are already on frame 0 (the clock starts at the punch's end)",
+     "trigger": "the scene boundary",
+     "dials": {
+      "ROLL": "0.7",
+      "SAVOR": "0.8",
+      "FIELD": "2.4",
+      "PUNCH": "0.5"
+     }
+    },
+    {
+     "name": "build",
+     "does": "the chart draws from the first frame",
+     "trigger": "the scene boundary",
+     "dials": {
+      "BUILD": "3.0"
+     }
+    }
+   ],
+   "blends": [],
+   "options": [],
+   "dials": null,
+   "lives": {
+    "form": "inline",
+    "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+    "symbol": "paintLedger",
+    "also": [
+     "axesIn"
+    ],
+    "note": "paintLedger const axesIn (tr offset)"
+   },
+   "doctrine": [
+    "E73",
+    "SHORT-FORM-SHAPE s1"
+   ],
+   "status": "wired",
+   "proof": {
+    "golden": "melt-page",
+    "test": "content/video_engine/tests/test_page_performs.py::test_enter_axes_lands_the_page_and_builds_the_data",
+    "first_use": {
+     "project": "normal-for-which-bridge",
+     "build": "not recorded in the table",
+     "t": 0.0
+    }
+   },
+   "callable": {
+    "today": true,
+    "why": "in LEDGER_ENTERS; the stamped default for a hook page and a page after a page"
+   }
+  },
+  {
+   "id": "page_enter:built",
+   "axis": "page_enter",
+   "token": "built",
+   "title": "The built page enter",
+   "aliases": [
+    {
+     "name": "still sibling",
+     "source": "content/video_engine/scripts/build_scene_timeline_f.py:56"
+    }
+   ],
+   "does": "The whole page, data included, is on stage at its first frame; its span is all deployed life under the idle.",
+   "when": "i think that's only for the first frame or when we need speed",
+   "when_source": "docs/portable/OPERATOR-RULINGS.md:2347",
+   "author": {
+    "key": "ledger id 6th part ':built' (validator: parse_ledger_id (after split_plate_opts)); stamped by a melt:splash:chart",
+    "example": "'ledger:ev-x:line:5:right:built:cut'",
+    "example_source": null,
+    "check": "enter"
+   },
+   "phases": [],
+   "blends": [],
+   "options": [],
+   "dials": null,
+   "lives": {
+    "form": "inline",
+    "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+    "symbol": "paintLedger",
+    "note": "paintLedger const built (tr offset)"
+   },
+   "doctrine": [
+    "E73",
+    "E50"
+   ],
+   "status": "wired",
+   "proof": {
+    "golden": "melt-splash",
+    "test": "content/video_engine/tests/test_page_performs.py::test_a_page_that_arrives_built_plays_one_beat",
+    "first_use": null
+   },
+   "callable": {
+    "today": true,
+    "why": "in LEDGER_ENTERS"
+   }
+  },
+  {
+   "id": "page_enter:camera",
+   "axis": "page_enter",
+   "token": "camera",
+   "title": "The camera arrival page enter",
+   "aliases": [
+    {
+     "name": "The camera arrival",
+     "source": "docs/content-video-engine/CAPABILITIES.md:77"
+    },
+    {
+     "name": "the eye goes to the landed card",
+     "source": "docs/content-video-engine/CAPABILITIES.md:77"
+    }
+   ],
+   "does": "The card lands on the previous scene, the camera zooms the outgoing world and the card together over 0.45 s until the card fills the stage, and the page shows at the match.",
+   "when": "a thrown card becomes the world (E59 reason 3) - the eye goes to it",
+   "when_source": "docs/content-video-engine/CAPABILITIES.md:77",
+   "author": {
+    "key": "ledger id 6th part ':camera=<dock asset>' (validator: parse_ledger_id (after split_plate_opts)); extend_camera_cards",
+    "example": "'ledger:ev-fed-vs-yields-v1:line:0:right:camera=dock-h-fed-vs-yields:cut'",
+    "example_source": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/SHOT-TABLE-SHORT.py:9",
+    "check": "enter"
+   },
+   "phases": [
+    {
+     "name": "card lands",
+     "does": "the card lands as a dock on the previous scene",
+     "trigger": "the dock's own enter"
+    },
+    {
+     "name": "the eye goes",
+     "does": "the camera zooms the outgoing world and the card together toward the fill scale while carrying the card to stage centre, with a whoosh blur on the arrival's speed",
+     "trigger": "the scene boundary",
+     "dials": {
+      "CAMERA_ARRIVAL_S": "0.45",
+      "SNAP_BLUR": "6"
+     }
+    },
+    {
+     "name": "the match",
+     "does": "at u = 1 the frustum is the card; the page shows at identity and the card hides on the same predicate",
+     "trigger": "u = 1 (CAMERA_ARRIVAL_S elapsed)"
+    }
+   ],
+   "blends": [
+    {
+     "source": "camArrivalState (kinetics/camera.mjs)",
+     "became": "the whole arc",
+     "record": "content/video_engine/scripts/kinetics/camera.mjs:106",
+     "tie": "recorded"
+    },
+    {
+     "source": "the snap's own blur envelope",
+     "became": "the whole arc",
+     "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs:10067",
+     "tie": "recorded"
+    }
+   ],
+   "options": [],
+   "dials": {
+    "module": "content/video_engine/scripts/kinetics/camera.mjs",
+    "object": "CAM"
+   },
+   "lives": {
+    "form": "inline",
+    "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+    "symbol": "camInSc",
+    "also": [
+     "camArr",
+     "camArrivalState"
+    ],
+    "note": "render const camInSc / camArr + dock-loop arrival (kinetics/camera.mjs camArrivalState)"
+   },
+   "doctrine": [
+    "E59 s3",
+    "CAPABILITIES camera arrival"
+   ],
+   "status": "wired",
+   "proof": {
+    "golden": null,
+    "test": "content/video_engine/tests/test_camera.py::test_the_compiler_admits_enter_camera_and_the_gate_ties_the_arrival_to_its_card",
+    "first_use": {
+     "project": "tokyo-tea-break",
+     "build": "build-short-p53t10",
+     "t": 76.83
+    }
+   },
+   "callable": {
+    "today": true,
+    "why": "in LEDGER_ENTERS; opt-in until its HG2 watch"
+   }
+  },
+  {
+   "id": "page_enter:drop",
+   "axis": "page_enter",
+   "token": "drop",
+   "title": "The drop page enter",
+   "aliases": [
+    {
+     "name": "falling down into the frame",
+     "source": "content/video_engine/scripts/build_scene_timeline_f.py:56"
+    }
+   ],
+   "does": "The page falls into the frame from just above over DROP_S 0.55 s and lands as the world.",
+   "when": null,
+   "when_source": null,
+   "author": {
+    "key": "ledger id 6th part ':drop' (validator: parse_ledger_id (after split_plate_opts))",
+    "example": "'ledger:ev-x:line:5:right:drop:cut'",
+    "example_source": null,
+    "check": "enter"
+   },
+   "phases": [
+    {
+     "name": "fall",
+     "does": "the page falls from just above the frame, easing in",
+     "trigger": "the scene boundary",
+     "dials": {
+      "DROP_S": "0.55",
+      "DROP_FROM_H": "1.1"
+     }
+    },
+    {
+     "name": "land + settle",
+     "does": "the impact and the material settle; it rests as the world",
+     "trigger": "the fall's end",
+     "dials": {
+      "THROW_SETTLE_S": "1.2"
+     }
+    }
+   ],
+   "blends": [
+    {
+     "source": "the dock's landXf with the drop from above the frame",
+     "became": "the whole arc",
+     "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs:6678",
+     "tie": "recorded"
+    }
+   ],
+   "options": [],
+   "dials": null,
+   "lives": {
+    "form": "inline",
+    "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+    "symbol": "paintLedger",
+    "also": [
+     "throwIn"
+    ],
+    "note": "paintLedger const dropped + render const throwIn (shared with throw)"
+   },
+   "doctrine": [
+    "CAPABILITIES card-then-snap (refused on the watch, kept as opt-in)"
+   ],
+   "status": "wired",
+   "proof": {
+    "golden": null,
+    "test": null,
+    "first_use": null
+   },
+   "callable": {
+    "today": true,
+    "why": "compiles; refused on the operator's watch 2026-09-08 and kept only as an opt-in"
+   }
+  },
+  {
+   "id": "page_enter:morph",
+   "axis": "page_enter",
+   "token": "morph",
+   "title": "The morph page enter",
+   "aliases": [
+    {
+     "name": "one element transforming into the next",
+     "source": "docs/portable/OPERATOR-RULINGS.md:2637"
+    },
+    {
+     "name": "The morph: the object becomes the chart",
+     "source": "docs/content-video-engine/CAPABILITIES.md:111"
+    }
+   ],
+   "does": "The page's prop outline - a named shape, a PLANTED element's traced silhouette, or the melt's own ball - deforms by ARAP into the area under its series, then the build lands.",
+   "when": "The morph (P47 T3) is that device.",
+   "when_source": "docs/portable/OPERATOR-RULINGS.md:1485",
+   "author": {
+    "key": "ledger id 6th part ':morph' or ':morph=<s>' + ';morph=<shape>' (validator: parse_ledger_id (after split_plate_opts)); SIGNATURE_ENTERS",
+    "example": "'ledger:ev-x:line:5:right:morph=2.5:cut'",
+    "example_source": null,
+    "check": "enter"
+   },
+   "phases": [
+    {
+     "name": "the source",
+     "does": "the prop outline is a named shape placed on the target's centroid and axis, or a traced poly / the melt's ball left exactly where it stood, re-expressed as a strip by arap.polyStrip",
+     "trigger": "the first frame the morph paints",
+     "dials": {
+      "STRIP.EPS_X": "0.004",
+      "STRIP.MIN_H": "0.02",
+      "MORPH.COLS": "48"
+     }
+    },
+    {
+     "name": "the prop deforms",
+     "does": "the tab/plate/card outline deforms by ARAP into the chart's shape",
+     "trigger": "the scene boundary",
+     "dials": {
+      "MORPH.S": "2.0"
+     }
+    },
+    {
+     "name": "build",
+     "does": "the page's build lands after the morph (its clock is offset by morph_s)",
+     "trigger": "morph_s elapsed",
+     "dials": {
+      "BUILD": "3.0"
+     }
+    }
+   ],
+   "blends": [
+    {
+     "source": "ARAP / the object->chart morph (doc 43 s43.5)",
+     "became": "the whole arc",
+     "record": "docs/content-video-engine/43-SCENE-GRAPH-AND-TRANSFORM.md:62",
+     "tie": "recorded"
+    }
+   ],
+   "options": [
+    {
+     "token": "card",
+     "means": "Morph prop: card: The page is born from a card outline with eased corners.",
+     "source_set": "MORPH_SHAPES"
+    },
+    {
+     "token": "hand",
+     "means": "P61 T3 / R26-117: the poly the ENGINE hands in under `exit: melt:morph` - the ball's ring. The page's own ink rises under the ball over MELT.M_FADE instead of appearing over it.",
+     "source_set": null
+    },
+    {
+     "token": "morph",
+     "means": "The morph's prop outline: Names the prop outline (tab, plate, card) a morph-entering page starts from.",
+     "source_set": "PLATE_OPTS"
+    },
+    {
+     "token": "plate",
+     "means": "Morph prop: plate: The page is born from a plate outline with eased corners.",
+     "source_set": "MORPH_SHAPES"
+    },
+    {
+     "token": "poly",
+     "means": "P48 T5b / R26-16: world.morph = {poly: [[x, y], ...]} in stage fractions - a PLANTED element's own silhouette, traced by kinetics/contour.mjs. Refused under 3 points, self-crossing, off stage.",
+     "source_set": null
+    },
+    {
+     "token": "tab",
+     "means": "Morph prop: tab: The page is born from a tab outline (the default prop).",
+     "source_set": "MORPH_SHAPES"
+    }
+   ],
+   "dials": null,
+   "lives": {
+    "form": "inline",
+    "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+    "symbol": "paintMorph",
+    "also": [
+     "buildMorph",
+     "lpMorphInWorld",
+     "morphOn",
+     "morphProp",
+     "paintLedger",
+     "polyStrip"
+    ],
+    "note": "paintMorph / buildMorph / lpMorphInWorld (+ kinetics/arap.mjs polyStrip; paintLedger const morphOn, handed)"
+   },
+   "doctrine": [
+    "E48 s4",
+    "E87 s2"
+   ],
+   "status": "wired",
+   "proof": {
+    "golden": "morph-planted",
+    "test": "content/video_engine/tests/test_melt_morph.py::test_the_planted_morph_starts_on_the_element_and_ends_on_the_series",
+    "first_use": null
+   },
+   "callable": {
+    "today": true,
+    "why": "compiles; paints only behind kinetics.arap_morph, else falls back to a mount"
+   }
+  },
+  {
+   "id": "page_enter:mount",
+   "axis": "page_enter",
+   "token": "mount",
+   "title": "The cream mount page enter",
+   "aliases": [
+    {
+     "name": "cream mount",
+     "source": "docs/portable/OPERATOR-RULINGS.md:2626"
+    },
+    {
+     "name": "THE DANCE",
+     "source": "docs/content-video-engine/CAPABILITIES.md:57"
+    },
+    {
+     "name": "fade/mount transition",
+     "source": "docs/portable/OPERATOR-RULINGS.md:1364"
+    }
+   ],
+   "does": "On the cut the page's cream is the ground at once (the outgoing world is gone, R26-50), the field soaks in over mount_s while the page rises on a 5-step staircase, then the title inks, the board punches in and the chart builds.",
+   "when": "The mount (a page arriving for the first time)",
+   "when_source": "docs/portable/OPERATOR-RULINGS.md:1433",
+   "author": {
+    "key": "ledger id 6th part ':mount' or ':mount=<s>' (validator: parse_ledger_id (after split_plate_opts)); SIGNATURE_ENTERS",
+    "example": "'ledger:ev-parts-cascade-v1:bars:0:right:mount=0.8:cut;idle=live'",
+    "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:6",
+    "check": "enter"
+   },
+   "phases": [
+    {
+     "name": "the cream lands",
+     "does": "the page's cream is the ground from the scene's first frame; the outgoing world is cut, never cross-faded (R26-50)",
+     "trigger": "the scene boundary"
+    },
+    {
+     "name": "the soak rises",
+     "does": "the field soaks in while the page rises on a stepped staircase",
+     "trigger": "the scene boundary (mount window = the soak)",
+     "dials": {
+      "MOUNT_STEPS": "5",
+      "LP_MOUNT_RISE": "28",
+      "mount_s default (LP.FIELD)": "2.4"
+     }
+    },
+    {
+     "name": "ink",
+     "does": "title and source write per glyph once the field has soaked",
+     "trigger": "the soak's end (mount_s)",
+     "dials": {
+      "INK": "2.0"
+     }
+    },
+    {
+     "name": "punch-in",
+     "does": "the board punches in",
+     "trigger": "the ledger clock (beat 5)",
+     "dials": {
+      "PUNCH": "0.5"
+     }
+    },
+    {
+     "name": "build",
+     "does": "the chart builds onto its exact value strings",
+     "trigger": "the ledger clock (beat 6)",
+     "dials": {
+      "BUILD": "3.0"
+     }
+    }
+   ],
+   "blends": [
+    {
+     "source": "the soak (paper taking ink)",
+     "became": "ink",
+     "record": "docs/content-video-engine/samples/scene-evidence-engine.mjs:6698",
+     "tie": "recorded"
+    },
+    {
+     "source": "the mount is a build, not a transition",
+     "became": "build",
+     "record": "docs/portable/OPERATOR-RULINGS.md:1477",
+     "tie": "recorded"
+    }
+   ],
+   "options": [],
+   "dials": null,
+   "lives": {
+    "form": "inline",
+    "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+    "symbol": "paintLedger",
+    "also": [
+     "LP_MOUNT_RISE",
+     "mountIn"
+    ],
+    "note": "paintLedger mount branch (const mount / mk / LP_MOUNT_RISE) + render const mountIn"
+   },
+   "doctrine": [
+    "29 s9.31 (the mount)",
+    "E45",
+    "E47 s2",
+    "E48 s3",
+    "E73",
+    "E87 s2"
+   ],
+   "status": "live",
+   "proof": {
+    "golden": null,
+    "test": "content/video_engine/tests/test_page_performs.py::test_the_mounting_pages_soak_opens_on_the_scenes_first_frame_and_its_ink_follows_mount_s",
+    "first_use": {
+     "project": "japan-tariff-trick",
+     "build": "build-short",
+     "t": 17.42
+    }
+   },
+   "callable": {
+    "today": true,
+    "why": "in LEDGER_ENTERS; a signature (no dip in front)"
+   }
+  },
+  {
+   "id": "page_enter:snap",
+   "axis": "page_enter",
+   "token": "snap",
+   "title": "The card-then-snap page enter",
+   "aliases": [
+    {
+     "name": "Card-then-snap",
+     "source": "docs/content-video-engine/CAPABILITIES.md:69"
+    }
+   ],
+   "does": "The page arrives built, grown from the landed chart card's rectangle to the stage over SNAP_S 0.45 s with a velocity blur.",
+   "when": "the hook's own chart must be on screen inside a second and then BECOME the world",
+   "when_source": "docs/content-video-engine/CAPABILITIES.md:69",
+   "author": {
+    "key": "ledger id 6th part ':snap=<dock asset>' (validator: parse_ledger_id (after split_plate_opts))",
+    "example": "'ledger:ev-japan-holdings-v1:line:315:right:snap=dock-b-holdings:cut;idle=live'",
+    "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:4",
+    "check": "enter"
+   },
+   "phases": [
+    {
+     "name": "card thrown",
+     "does": "the chart card lands as a dock on the previous scene on the stop-action throw",
+     "trigger": "the dock's own enter (a word, authored on the previous row)",
+     "dials": {
+      "FLIGHT_S": "0.45",
+      "ARC": "0.22",
+      "SPIN_DEG": "9"
+     }
+    },
+    {
+     "name": "snap to fill",
+     "does": "the page, built, grows from the card's rectangle to the stage under a velocity blur",
+     "trigger": "the scene boundary",
+     "dials": {
+      "SNAP_S": "0.45",
+      "SNAP_BLUR": "6"
+     }
+    },
+    {
+     "name": "holds built",
+     "does": "the card page rests at the frame size",
+     "trigger": "SNAP_S elapsed",
+     "dials": {
+      "CARD_SCALE": "1"
+     }
+    }
+   ],
+   "blends": [
+    {
+     "source": "the Tokyo dock throw reused for the card",
+     "became": "the whole arc",
+     "record": "docs/content-video-engine/CAPABILITIES.md:69",
+     "tie": "recorded"
+    }
+   ],
+   "options": [
+    {
+     "token": "card",
+     "means": "The page as a card: A ledger page keeps the card's rounded corners and hard-edge shadow at full size (yes|no; a snapped page is a card by default).",
+     "source_set": "PLATE_OPTS"
+    }
+   ],
+   "dials": null,
+   "lives": {
+    "form": "inline",
+    "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+    "symbol": "paintLedger",
+    "also": [
+     "snapIn",
+     "SNAP_FROM",
+     "SNAP_S"
+    ],
+    "note": "paintLedger const snap + render const snapIn (SNAP_FROM, SNAP_S)"
+   },
+   "doctrine": [
+    "E50",
+    "CAPABILITIES card-then-snap"
+   ],
+   "status": "live",
+   "proof": {
+    "golden": null,
+    "test": "content/video_engine/tests/test_gate_motion_density.py::test_a_spiral_page_lands_when_its_unwind_ends_never_on_its_first_frame",
+    "first_use": {
+     "project": "japan-tariff-trick",
+     "build": "build-short",
+     "t": 1.82
+    }
+   },
+   "callable": {
+    "today": true,
+    "why": "in LEDGER_ENTERS; needs a thrown chart-card dock to snap from"
+   }
+  },
+  {
+   "id": "page_enter:spiral",
+   "axis": "page_enter",
+   "token": "spiral",
+   "title": "The spiral page enter",
+   "aliases": [
+    {
+     "name": "the hero",
+     "source": "docs/portable/OPERATOR-RULINGS.md:1472"
+    },
+    {
+     "name": "swirl",
+     "source": "docs/portable/OPERATOR-RULINGS.md:1472"
+    },
+    {
+     "name": "page VORTEX",
+     "source": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2095"
+    }
+   ],
+   "does": "A page that was already drawn returns by running the vortex backwards over 1.6 s from its point - no roll, soak, ink or build.",
+   "when": "the spiral (a page returning)",
+   "when_source": "docs/portable/OPERATOR-RULINGS.md:1433",
+   "author": {
+    "key": "ledger id 6th part ':spiral' (validator: parse_ledger_id (after split_plate_opts)); SIGNATURE_ENTERS",
+    "example": "'ledger:ev-federal-load-v1:line:240:right:spiral:cut'",
+    "example_source": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/SHOT-TABLE-SHORT.py:6",
+    "check": "enter"
+   },
+   "phases": [
+    {
+     "name": "stains surface",
+     "does": "the field's stains come up out of the drain first",
+     "trigger": "the scene start (ui 0 - 0.55 of LP_RETRACT.IN)",
+     "dials": {
+      "IN": "1.6",
+      "TURNS": "3.0"
+     }
+    },
+    {
+     "name": "colours unwind",
+     "does": "every glyph, bar, pill and series point unwinds from the vortex point along the closed-form map",
+     "trigger": "ui 0.4 - 1.0 of LP_RETRACT.IN (overlapping the stains)",
+     "dials": {
+      "IN": "1.6",
+      "TURNS": "3.0",
+      "LAG": "0.25"
+     }
+    },
+    {
+     "name": "holds built",
+     "does": "the page stands drawn - its roll, soak, ink and build clocks are all behind it",
+     "trigger": "the unwind's end"
+    }
+   ],
+   "blends": [
+    {
+     "source": "the page VORTEX retract run backwards (closed form in time)",
+     "became": "the whole arc",
+     "record": "docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:2095",
+     "tie": "recorded"
+    },
+    {
+     "source": "Analytic in t (FINDING-the-animation-math s3)",
+     "became": "the whole arc",
+     "record": "docs/content-video-engine/CAPABILITIES.md:50",
+     "tie": "recorded"
+    }
+   ],
+   "options": [],
+   "dials": null,
+   "lives": {
+    "form": "module",
+    "path": "content/video_engine/scripts/species/spiral.mjs",
+    "symbol": "lpSpiral",
+    "also": [
+     "LP_RETRACT",
+     "spiralClocks",
+     "lpVortex",
+     "lpParticles",
+     "spiralLineWidth"
+    ],
+    "note": "P57 T22: the RETURN and the retract are one module (both cards point here); the engine's render const spiralIn takes the wipe off the boundary"
+   },
+   "doctrine": [
+    "29 s9.31",
+    "E48 s2",
+    "E47 s2",
+    "SHORT-FORM-SHAPE s3"
+   ],
+   "status": "live",
+   "proof": {
+    "golden": null,
+    "test": "content/video_engine/tests/test_gate_motion_density.py::test_a_spiral_page_lands_when_its_unwind_ends_never_on_its_first_frame",
+    "first_use": {
+     "project": "tokyo-tea-break",
+     "build": "build-short.v2 (render approved by the operator 2026-09-06, render/APPROVALS.json)",
+     "t": 44.88
+    }
+   },
+   "callable": {
+    "today": true,
+    "why": "in LEDGER_ENTERS; a signature, so the default exit cuts"
+   }
+  },
+  {
+   "id": "page_enter:stamped",
+   "axis": "page_enter",
+   "token": "stamped",
+   "title": "The stamped chart-to-chart page enter",
+   "aliases": [],
+   "does": "A ledger page that follows a ledger page with no declared enter arrives already on its axes, whatever the transition, so no empty cream stage shows between two charts.",
+   "when": "chart to chart: the compiler stamps enter=axes (enter=built under a chart splash) and exit=cut on a page a suck or melt takes",
+   "when_source": "content/video_engine/scripts/build_scene_timeline_f.py",
+   "author": {
+    "key": "a ledger id with an empty enter part after a ledger page (stamp_transition_pages)",
+    "example": "'ledger:ev-interest-bill-v1:line:105:right::cut'",
+    "example_source": "content/video_engine/projects/systems-and-blowups/normal-for-which-bridge/SHOT-TABLE-SHORT.py:7",
+    "check": "enter"
+   },
+   "phases": [],
+   "blends": [],
+   "options": [],
+   "dials": null,
+   "lives": {
+    "form": "compiler-only",
+    "path": "content/video_engine/scripts/build_scene_timeline_f.py",
+    "symbol": "stamp_transition_pages",
+    "also": [
+     "_melt_boundary"
+    ],
+    "note": "stamps enter=axes / enter=built / exit=cut; painted by the axes and built enters (decision 3)"
+   },
+   "doctrine": [
+    "E88",
+    "R26-60",
+    "SHORT-FORM-SHAPE s2"
+   ],
+   "status": "wired",
+   "implicit": true,
+   "proof": {
+    "golden": null,
+    "test": "content/video_engine/tests/test_transition_stamps.py::test_chart_to_chart_the_next_page_is_on_its_axes_whatever_the_transition",
+    "first_use": null
+   },
+   "callable": {
+    "today": true,
+    "why": "implicit: stamped by the compiler"
+   }
+  },
+  {
+   "id": "page_enter:throw",
+   "axis": "page_enter",
+   "token": "throw",
+   "title": "The throw page enter",
+   "aliases": [
+    {
+     "name": "the whole page is THROWN onto the world",
+     "source": "content/video_engine/scripts/build_scene_timeline_f.py:56"
+    }
+   ],
+   "does": "The whole page flies in on the stop-action throw (arc, spin, squash) and lands built as the world.",
+   "when": null,
+   "when_source": null,
+   "author": {
+    "key": "ledger id 6th part ':throw' or ':throw=<grow>,<from>,<s>' (validator: parse_ledger_id (after split_plate_opts))",
+    "example": "'ledger:ev-x:line:5:right:throw:cut'",
+    "example_source": null,
+    "check": "enter"
+   },
+   "phases": [
+    {
+     "name": "flight",
+     "does": "the whole page flies in on a ballistic chord with tumble",
+     "trigger": "the scene boundary",
+     "dials": {
+      "THROW_S": "1.1",
+      "THROW_ARC": "1.5",
+      "THROW_SPIN": "9"
+     }
+    },
+    {
+     "name": "settle",
+     "does": "the material's squash and spring settle it as the world, built",
+     "trigger": "the flight's end",
+     "dials": {
+      "THROW_SETTLE_S": "1.2"
+     }
+    }
+   ],
+   "blends": [
+    {
+     "source": "throwXf (kinetics/stopaction.mjs)",
+     "became": "the whole arc",
+     "record": "content/video_engine/scripts/kinetics/stopaction.mjs:152",
+     "tie": "recorded"
+    }
+   ],
+   "options": [],
+   "dials": null,
+   "lives": {
+    "form": "inline",
+    "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+    "symbol": "paintLedger",
+    "also": [
+     "throwXf",
+     "throwIn"
+    ],
+    "note": "paintLedger throw block (const thrown, throwXf) + render const throwIn"
+   },
+   "doctrine": [
+    "CAPABILITIES card-then-snap (refused on the watch, kept as opt-in)"
+   ],
+   "status": "wired",
+   "proof": {
+    "golden": null,
+    "test": "content/video_engine/tests/test_page_performs.py::test_enter_throw_arrives_built_and_is_a_known_enter",
+    "first_use": null
+   },
+   "callable": {
+    "today": true,
+    "why": "compiles; refused on the operator's watch 2026-09-08 and kept only as an opt-in"
+   }
+  },
+  {
+   "id": "page_enter:field_soak",
+   "axis": "page_enter",
+   "token": "field_soak",
+   "title": "The soak field (a page introducing an idea)",
+   "aliases": [
+    {
+     "name": "the soak field",
+     "source": "docs/portable/OPERATOR-RULINGS.md:3156"
+    }
+   ],
+   "does": "Beat 3 of the page's arrival: seeded charcoal stains creep and then flood through the cream to the deckle, deepening where they overlap, and end on the crisp rect. The eye has more to watch than a cross-fade gives it.",
+   "when": "When we are trying to maintain continuity, connecting ideas, speaking across plates i think the cross-fade is the answer, when we are building an idea or introducing a new idea or looking to fill space to separate ideas, the soak is the transition.",
+   "when_source": "docs/portable/OPERATOR-RULINGS.md:3156",
+   "author": {
+    "key": "`;field=soak` on a ledger page - or no field at all: the soak is the engine's own default",
+    "example": "'ledger:ev-x:bars;field=soak'",
+    "example_source": null,
+    "check": "none"
+   },
+   "phases": [
+    {
+     "name": "the stains creep",
+     "does": "each seeded stain grows from its own lag on the field clock, deepening where two overlap",
+     "trigger": "the roll and the savor behind it (the scene's first frame on a mount)",
+     "dials": {
+      "FIELD": "2.4",
+      "SEEPS": "9"
+     }
+    },
+    {
+     "name": "the ground closes",
+     "does": "the crisp charcoal rect takes over the last fifth, so the ground is flat before the title inks",
+     "trigger": "b 0.78 of the field clock",
+     "dials": {
+      "rect": "0.78 -> 1.0"
+     }
+    }
+   ],
+   "blends": [],
+   "options": [],
+   "dials": null,
+   "lives": {
+    "form": "inline",
+    "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+    "symbol": "buildLedger",
+    "also": [
+     "lpPlateRecede"
+    ],
+    "note": "the soak branch of the field beat; the same stains are what the page's leave recedes"
+   },
+   "doctrine": [
+    "E99 s35",
+    "E22"
+   ],
+   "status": "wired",
+   "implicit": true,
+   "proof": {
+    "golden": "form-extruded-bar",
+    "test": "content/video_engine/tests/test_chart_forms_2_5d.py::test_the_field_is_named_on_the_row_and_the_soak_is_the_default",
+    "first_use": null
+   },
+   "callable": {
+    "today": true,
+    "why": "implicit: the ground of every page that names no field"
+   }
+  },
+  {
+   "id": "page_enter:field_plates",
+   "axis": "page_enter",
+   "token": "field_plates",
+   "title": "The two-plate cross-fade field (a page keeping continuity)",
+   "aliases": [
+    {
+     "name": "the two-plate cross-fade",
+     "source": "docs/portable/OPERATOR-RULINGS.md:3156"
+    }
+   ],
+   "does": "Beat 3 of the page's arrival, the decided signature: the generated charcoal-filled deckle fades in over the generated cream page on the field clock; the ground arrives smooth and whole and the chart draws inside the deckle's board.",
+   "when": "When we are trying to maintain continuity, connecting ideas, speaking across plates i think the cross-fade is the answer, when we are building an idea or introducing a new idea or looking to fill space to separate ideas, the soak is the transition.",
+   "when_source": "docs/portable/OPERATOR-RULINGS.md:3156",
+   "author": {
+    "key": "`;field=plates` on a ledger page whose build gave it plate + field_plate + board",
+    "example": "'ledger:ev-x:bars;field=plates'",
+    "example_source": null,
+    "check": "none"
+   },
+   "phases": [
+    {
+     "name": "the inked plate arrives",
+     "does": "the charcoal filled to the deckle fades in over the cream page on expoOut of the field clock",
+     "trigger": "the roll and the savor behind it",
+     "dials": {
+      "FIELD": "2.4"
+     }
+    }
+   ],
+   "blends": [],
+   "options": [],
+   "dials": null,
+   "lives": {
+    "form": "inline",
+    "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs",
+    "symbol": "buildLedger",
+    "also": [
+     "lpPlateRecede"
+    ],
+    "note": "the fieldPlate branch of the field beat (page.field_plate over page.plate); it LEAVES by the soak's recede, never by fading back out (E99 s35)"
+   },
+   "doctrine": [
+    "E99 s35",
+    "E22",
+    "41 s2"
+   ],
+   "status": "wired",
+   "implicit": true,
+   "proof": {
+    "golden": "form-tilted-line",
+    "test": "content/video_engine/tests/test_chart_forms_2_5d.py::test_a_cross_fade_page_leaves_by_the_soaks_recede",
+    "first_use": null
+   },
+   "callable": {
+    "today": true,
+    "why": "implicit: the page's own plate keys; `;field=plates` is the row's way to ask"
+   }
+  }
+ ]
 }

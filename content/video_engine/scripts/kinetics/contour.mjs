@@ -201,3 +201,39 @@ export const contourShape = (bmp, o = {}) => {
     return { pts: map ? pts.map(map) : pts, hole: r.hole, parent: r.parent };
   });
 };
+
+/* ---- THE SILHOUETTE OF A STILL (P48 T5b / R26-16) ------------------------------------------------------------- */
+/* A PLANTED ELEMENT'S OWN OUTLINE, and nothing else. `world.morph = {poly: [...]}` - the page-enter morph's source
+   - must be a shape that was REALLY ON THE BOARD (R26-16's tie: a real element of the outgoing world at its last
+   frame, never a shape conjured over the clip). This is how one is obtained from a still: raster the element the
+   way it is drawn (a canvas, its own pixels), threshold it, walk the 0.5 level with `contourRings` above, and take
+   the LARGEST ring that is not a hole - the element's silhouette, holes discarded, because a strip mesh carries an
+   outline and not a topology. No library: `contourWalk` is ours, and so is the simplification.
+   `map` carries it out of sample space into the caller's units (stage fractions, for `world.morph`).
+   The bitmap is the caller's: `contourBitmap(alpha, w, h)` for a cutout with an alpha channel; `contourLuma` below
+   for a still that has none, where ink is what is DARKER (or lighter) than the ground.
+   Pure, and null when the raster holds no ink at all - a caller never gets a poly it did not measure. */
+export const contourSilhouette = (bmp, o = {}) => {
+  const rings = contourRings(bmp).filter((r) => !r.hole);
+  if (!rings.length) return null;
+  const r = rings[0];   /* contourRings sorts by area, largest first */
+  const pts = simplifyRing(r.pts, +o.tol || 0);
+  if (pts.length < 3) return null;
+  const map = typeof o.map === "function" ? o.map : null;
+  return map ? pts.map(map) : pts;
+};
+
+/* THE OTHER THRESHOLD: LUMA, for a still with no alpha to read. `dark` (the default) calls a sample ink when it is
+   DARKER than `level` of white - charcoal ink on cream paper, which is what our board is; `dark: false` reads the
+   lit element off a dark ground. Rec. 709 luma, the same weights `meltBodyInk` and the brand tokens use. */
+export const contourLuma = (src, w, h, level = CONTOUR.LEVEL, o = {}) => {
+  const W = Math.max(0, w | 0), H = Math.max(0, h | 0), dark = o.dark !== false;
+  const cut = Math.max(0, Math.min(1, +level)) * 255, stride = Math.max(1, (o.stride | 0) || 4);
+  const data = new Uint8Array(W * H);
+  for (let i = 0; i < W * H; i++) {
+    const j = i * stride, a = stride >= 4 ? src[j + 3] / 255 : 1;
+    const y = (0.2126 * src[j] + 0.7152 * src[j + 1] + 0.0722 * src[j + 2]) * a + 255 * (1 - a);
+    data[i] = (dark ? y <= cut : y >= cut) ? 1 : 0;
+  }
+  return { w: W, h: H, data };
+};

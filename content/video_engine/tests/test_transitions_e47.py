@@ -310,7 +310,7 @@ def test_a_melt_parses_with_and_without_its_own_length_register_and_point():
     assert B.parse_exit("melt:splash:chart:1.2") == ("melt:splash:chart:1.2", 1.2)
     assert B.parse_exit("melt:throw:1.2:0.9,1.1") == ("melt:throw:1.2:0.9,1.1", 1.2)
     assert [B.melt_ending(x) for x in ("melt", "melt:throw", "melt:splash:chart", "melt:1.2:splash:plate", "dip")] ==         ["throw", "throw", "splash:chart", "splash:plate", None]
-    assert B.MELT_ENDINGS == ("throw", "splash:chart", "splash:plate")
+    assert B.MELT_ENDINGS == ("throw", "splash:chart", "splash:plate", "morph")   # P61 T3 / R26-117: `morph` is the fourth
     assert "melt" in B.SCENE_EXITS and "melt" in B.TIMED_EXITS
     assert B.MELT_S == 1.6, "the default length the player's MELT.S carries too"
     for bad in ("melt:sideways", "melt:-2", "melt:0", "melt:1,2,3", "melt:1,x", "melt:splash", "melt:splash:sideways",

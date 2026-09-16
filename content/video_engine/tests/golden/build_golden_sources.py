@@ -2466,6 +2466,191 @@ FRAME_T["melt-gather"] = 15.375   # THE GATHER at its midpoint (0.5 of 15.00 -> 
                                   # the board whole behind them - and not one blurred pixel (MELT.G_* / meltBlur = 0)
 
 
+# ---- P61 T3 / R26-117: THE BALL BECOMES THE NEXT FULL CHART, and P48 T5b's PLANTED SOURCE ---------
+# Two surfaces off one mechanism - `world.morph` is either the melt's own ball or a planted element's
+# traced outline, and the arriving page cannot tell them apart.
+#
+# `melt-morph`   Scene 1 is `melt_page`'s own four-series line page, given the whole 15 s to draw itself, so what
+#                melts is a chart that has been read. Scene 2's `exit` is `melt:morph` - E47, an exit names the
+#                transition INTO the scene it sits on - so the melt takes scene 1's chart ink as scene 2 begins, the
+#                ink balls up, and AT the ball the ring is handed to scene 2's page as the prop its `page_enter:morph`
+#                deforms into the area under its own series. Scene 2 is a FULL dense-line chart of the same four
+#                series over their LAST TWO YEARS - real data, a real sub-window of the same file, a different shape -
+#                so what arrives is a whole chart built to T2/T2b's standard, its axes and labels written by the
+#                engine's own hand as the build runs out of the morph. The exit declares no length, so the window is
+#                MELT.S + MELT.M_S = 2.9 s from the cut: sag 15.00 -> 15.87, ball 15.87 -> 16.595, HAND 16.595 ->
+#                17.90, and the page's own build from 17.90. E99 s34: `morph` is authored HERE and nowhere near the
+#                approved Japan short.
+# `morph-planted` The same page arriving by the same morph, from a PLANTED ELEMENT instead of a ball (P48 T5b /
+#                R26-16: "a real element of the outgoing world at its last frame, never a shape conjured over the
+#                clip"). Scene 1 is a narrative plate whose one dark form is PLANTED_BLOB below; scene 2's
+#                `world.morph` is that form's own silhouette, traced off the same raster by our own marching squares
+#                (kinetics/contour.mjs contourSilhouette), in stage fractions. Nothing is conjured: the poly is the
+#                shape the frame held, and `test_melt_morph.py` re-traces it and refuses a drift.
+MORPH_CUT = 15.0        # both surfaces hand over here, the cut every melt golden uses
+MORPH_TAIL = 9          # the last N points of each series: scene 2's window, a real sub-window of the same file
+MORPH_EXIT = "melt:morph"
+# THE PLANTED ELEMENT, defined once and used twice: `png_planted` rasters it into the plate, and the node tracer
+# rasters the same shape the same way and walks its 0.5 level. A star-shaped lobed blob - star-shaped so `polyStrip`
+# describes it column by column without a fold, lobed so its silhouette is plainly not a circle or a named prop.
+PLANTED_W, PLANTED_H = 320, 180
+PLANTED_C = (144.0, 92.0)
+PLANTED_R = 30.0
+
+
+def planted_inside(x: float, y: float) -> bool:
+    """Is image pixel-centre (x, y) inside the planted form? The tracer's own `inside`, to the digit."""
+    dx, dy = x - PLANTED_C[0], y - PLANTED_C[1]
+    th = math.atan2(dy, dx)
+    r = PLANTED_R * (1 + 0.22 * math.cos(3 * th + 0.6) + 0.12 * math.sin(5 * th - 0.3))
+    return math.hypot(dx, dy) <= r
+
+
+def png_planted(w: int = PLANTED_W, h: int = PLANTED_H) -> bytes:
+    """The PLATE that plants the element: a cream ground under a soft warm wash, with one dark lobed form on it."""
+    ground, wash, ink = (238, 230, 214), (214, 200, 178), (46, 42, 44)
+    raw = bytearray()
+    for y in range(h):
+        line = bytearray(b"\x00")
+        for x in range(w):
+            k = y / max(1, h - 1)
+            c = tuple(int(ground[i] + (wash[i] - ground[i]) * k) for i in range(3))
+            if planted_inside(x, y):
+                c = ink
+            line += bytes(c)
+        raw += line
+
+    def chunk(tag: bytes, data: bytes) -> bytes:
+        return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
+
+    return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0))
+            + chunk(b"IDAT", zlib.compress(bytes(raw), 9)) + chunk(b"IEND", b""))
+
+
+# THE POLY, traced - not drawn. Produced by `kinetics/contour.mjs contourSilhouette` over the bitmap
+# `planted_inside` makes (320 x 180, the 0.5 level, Douglas-Peucker at 0.6 sample px), then carried out of sample
+# space: sample (i, j) is the CENTRE of pixel (i, j), so the image fraction is ((i + 0.5)/W, (j + 0.5)/H), and a
+# `.world` is inset -5% under `background-size: cover`, so the STAGE fraction is that * 1.1 - 0.05. Committed as a
+# literal the way the newsreel headlines are, and `test_melt_morph.py` re-runs the tracer and refuses any drift.
+PLANTED_BLOB = [[0.37281, 0.31361], [0.39859, 0.31056], [0.40203, 0.31667], [0.40891, 0.31667], [0.45703, 0.39],
+                [0.46734, 0.39], [0.48797, 0.37167], [0.51891, 0.37167], [0.53266, 0.38389], [0.54469, 0.41139],
+                [0.55156, 0.43583], [0.555, 0.46639], [0.56188, 0.48472], [0.56188, 0.50306], [0.56531, 0.50917],
+                [0.56531, 0.55194], [0.56188, 0.55806], [0.56188, 0.57028], [0.54984, 0.59167], [0.53609, 0.60389],
+                [0.52578, 0.60389], [0.52234, 0.61], [0.49141, 0.61], [0.47938, 0.6375], [0.47938, 0.65583],
+                [0.46563, 0.71083], [0.43984, 0.75056], [0.41922, 0.75056], [0.39688, 0.71694], [0.38656, 0.68028],
+                [0.38313, 0.64972], [0.37281, 0.61306], [0.36594, 0.60083], [0.35563, 0.55806], [0.35563, 0.5275],
+                [0.3625, 0.49694], [0.3625, 0.4725], [0.35906, 0.46639], [0.35906, 0.44806], [0.35219, 0.4175],
+                [0.35219, 0.35639], [0.35563, 0.35028], [0.35563, 0.33806]]
+MORPH_KINETICS = {"arap_morph": True, "min_jerk": True}   # the morph and its clock. `arap_morph` is what P47 T3 put the
+#   page-enter morph behind and `build_kinetics` turns on for every compiled timeline; `min_jerk` is the morph's own
+#   clock (paintMorph: minJerk under the flag, expoOut without it, and expoOut is 93 % done by the halfway frame, which
+#   would make every mid-morph proof a frame of the finished shape). Nothing else - the melt's ball is `melt-page`'s.
+
+
+def _morph_target_page() -> dict:
+    """Scene 2's FULL chart: the same four series over their last MORPH_TAIL points - a real sub-window."""
+    raw = json.loads(SERIES.read_text(encoding="utf-8"))
+    tail = {"title": "The same four, their last two years", "sub": raw.get("sub", ""), "src": raw.get("src", ""),
+            "unit": raw.get("unit", ""),
+            "series": [dict(sr, pts=sr["pts"][-MORPH_TAIL:]) for sr in raw["series"]]}
+    page = LPG.build_spec(tail, "line", None, "right")
+    page["field"] = "scribble"   # the same board as scene 1's: the board is shared across the hand-over
+    return page
+
+
+def melt_morph() -> tuple[dict, dict]:
+    """P61 T3 / R26-117 - THE BALL BECOMES THE NEXT FULL CHART, on one clock, with no cut between."""
+    import build_scene_timeline_f as BST
+    assert BST.melt_ending(MORPH_EXIT) == "morph", MORPH_EXIT     # the COMPILER's own grammar, not a hand-written string
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", None, "right")
+    page["field"] = "scribble"
+    page["exit"] = "cut"   # LEDGER_EXITS / E40 #5, R26-60: NO RETRACT - the melt is how this chart leaves
+    page2 = _morph_target_page()
+    page2["enter"] = "morph"   # what _melt_boundary stamps on this boundary, written out so the fixture says it
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, MORPH_CUT], "docks": [], "species": []},
+              {"scene_id": "s02", "world": {"kind": "ledger", "page": page2, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": MORPH_EXIT, "span": [MORPH_CUT, RUNTIME], "docks": [], "species": []}]
+    BST.stamp_transition_pages(scenes)   # the compiler's own boundary rules run over the fixture, refusals and all
+    tl = _timeline("Golden: the melt's ball becomes the next full chart", scenes, {}, None)
+    tl["kinetics"] = dict(MORPH_KINETICS)
+    return tl, _base_uris()
+
+
+def morph_planted() -> tuple[dict, dict]:
+    """P48 T5b / R26-16 - THE PLANTED SOURCE: the page morphs out of a real element of the world before it."""
+    import build_scene_timeline_f as BST
+    err = BST.morph_poly_error(PLANTED_BLOB, "morph-planted: world.morph")
+    assert err is None, err     # the COMPILER's own three refusals run over the fixture before it is written
+    page2 = _morph_target_page()
+    page2["enter"] = "morph"
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-planted", "sha256": "0" * 64,
+                                            "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, MORPH_CUT], "docks": [], "species": []},
+              {"scene_id": "s02", "world": {"kind": "ledger", "page": page2, "morph": {"poly": PLANTED_BLOB},
+                                            "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [MORPH_CUT, RUNTIME], "docks": [], "species": []}]
+    BST.stamp_transition_pages(scenes)
+    uris = _base_uris()
+    uris["plate-planted"] = uri("image/png", png_planted())
+    tl = _timeline("Golden: the page morphs out of a planted element's own silhouette", scenes, {}, None)
+    tl["kinetics"] = dict(MORPH_KINETICS)
+    return tl, uris
+
+
+SURFACES.update({   # P61 T3 / E99 s1, s34, s39: the hand-over, and the planted source it shares its door with
+    "melt-morph": melt_morph,
+    "morph-planted": morph_planted,
+})
+FRAME_T["melt-morph"] = 16.60      # THE HAND-OVER FRAME, 0.005 s past it: the ball finished and the page's morph at
+                                   # u ~ 0.004 - the ring is the prop, the prop is the ring, and the page's own ink
+                                   # has not begun to rise under it (hk = u / MELT.M_FADE)
+FRAME_T["morph-planted"] = 15.02   # THE SOURCE AS PLANTED, u 0.01 of MORPH.S (2.0 s from the cut at 15.0): the traced
+                                   # silhouette standing on the page's board exactly where the plate's own dark form
+                                   # stood one frame earlier - same place, same size, same lobes (R26-16)
+
+
+# P61 T6 proof B (E99 s2, HG6) - THE GATHER INTO A FULLY ASSEMBLED CHART. E99 s2 asks for two landings, *"a
+# scenic, high-resolution world plate or fully assembled chart"*; T6 shipped the first (`melt-gather`, the dock
+# plate) and left the second owed on `r26-76-melt-endings-in-motion` until T3 could build a full chart to land in.
+# The two COMPOSE BY CONSTRUCTION: `gather` is a PHASE token and `morph` an ENDING, read in different branches of
+# the same two parsers, so `melt:gather:morph` needs no new code at all - the page's marks travel the vortex and
+# amass on the point, and the point is then handed to the next page as its prop and becomes the chart.
+# Its own surface rather than a `melt-gather@proof-*` key, because a proof frame rides ITS SURFACE's timeline and
+# `melt-gather`'s exit is `melt:gather:weight:splash:plate` - a different landing is a different exit string.
+# Window: MELT.S + MELT.G_S + MELT.M_S = 3.8 s from the cut - gather 15.00 -> 16.14, point 16.14 -> 17.09,
+# HAND 17.09 -> 18.80, and the page's own build from there.
+GATHER_MORPH_EXIT = "melt:gather:morph"
+
+
+def melt_gather_morph() -> tuple[dict, dict]:
+    """P61 T6 proof B - the gather amasses into ONE point and that point becomes the next FULL chart."""
+    import build_scene_timeline_f as BST
+    assert BST.melt_gather(GATHER_MORPH_EXIT) and BST.melt_ending(GATHER_MORPH_EXIT) == "morph", GATHER_MORPH_EXIT
+    series = LPG.load_series(SERIES)
+    page = LPG.build_spec(series, "line", None, "right")
+    page["field"] = "scribble"
+    page["exit"] = "cut"
+    page2 = _morph_target_page()
+    page2["enter"] = "morph"
+    scenes = [{"scene_id": "s01", "world": {"kind": "ledger", "page": page, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, MORPH_CUT], "docks": [], "species": []},
+              {"scene_id": "s02", "world": {"kind": "ledger", "page": page2, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": GATHER_MORPH_EXIT, "span": [MORPH_CUT, RUNTIME], "docks": [], "species": []}]
+    BST.stamp_transition_pages(scenes)
+    tl = _timeline("Golden: the melt gathers to one point and that point becomes the next full chart", scenes, {}, None)
+    tl["kinetics"] = dict(MORPH_KINETICS)
+    return tl, _base_uris()
+
+
+SURFACES.update({"melt-gather-morph": melt_gather_morph})
+FRAME_T["melt-gather-morph"] = 15.57   # THE GATHER at its own midpoint (15.00 -> 16.14): the four series curled
+                                       # into one spiral converging on the point, the page's words streaming in
+                                       # after them - T6's own mechanism, now on its way to a CHART. Its point
+                                       # and the chart it becomes ride PROOF_FRAMES.
+
+
 # ---- P58 T6 (c): THE SLIDE THROUGH THE DEPTH -----------------------------------------------------
 # E98 s4: *"the docks, the ball and the slide move THROUGH the depth"*. The two pages are `slide-mid`'s own, and the
 # two things added are `melt-depth`'s: a card that lands on the outgoing page and the one focus zoom tied to that

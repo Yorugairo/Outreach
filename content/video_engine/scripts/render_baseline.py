@@ -132,6 +132,23 @@ PROOF_FRAMES = {
     "melt-gather@proof-point": ("melt-gather", {}, 15.71),     # THE POINT: the ink amassed on it, the point wearing T5's material (dark grazing rim, metallic band, deep-shadow well, the spot on the light) and VIBRATING on drop.mjs's own floor at G_VIB
     "melt-gather@proof-splash": ("melt-gather", {}, 18.27),    # MID-BLOOM: the splat's stains opening through the board's reveal mask, the dock plate coming up through them (the ink-bloom route, INTAKE-INK-BLOOM-2026-09-08)
     "melt-gather@proof-plate": ("melt-gather", {}, 18.62),     # THE PLATE LANDED: the bloom cleared, the scenic plate whole on the board, springing to rest - and no cut anywhere in the window (E47: the splash IS the transition into it)
+    # P61 T3 / R26-117 - THE BALL BECOMES THE NEXT FULL CHART (`melt:morph`, a 2.9 s window off the cut at 15.0:
+    # sag 15.00 -> 15.87, ball -> 16.595, HAND 16.595 -> 17.90, and the page's own build from there). The base frame
+    # is the HAND-OVER itself; these are the three instants it cannot show. They carry `arap_morph` because the
+    # page-enter morph has always been behind that flag (P47 T3) - the ENDING is authored on the exit string, like
+    # every other melt ending, and a melt that does not say `morph` renders what it always did.
+    "melt-morph@proof-ball": ("melt-morph", {"arap_morph": True, "min_jerk": True}, 16.50),    # THE BALL FINISHED, 0.095 s before the hand: the ink compiled, the board whole, and not one mark of the next chart anywhere
+    "melt-morph@proof-050": ("melt-morph", {"arap_morph": True, "min_jerk": True}, 17.25),     # HALF WAY THROUGH THE HAND: neither the ball nor the chart is drawable as itself - one shape, part ring and part area, with the page's own ink already carrying it
+    "melt-morph@proof-built": ("melt-morph", {"arap_morph": True, "min_jerk": True}, 18.30),   # PAST THE MORPH (17.90), c 0.27 of the build: the area that WAS the ball standing on the series, the page's own nib stroking the orange line along its top edge, the second series behind it, the title written and the subtitle mid-write - the axes, the rules and the labels arriving by the engine's own hand (lpAxisHandOver / lpWriteText)
+    # P61 T6 proof B (E99 s2, HG6) - THE GATHER INTO A FULLY ASSEMBLED CHART. `melt:gather:morph`: the phase token
+    # and the ending are read in different branches of the same two parsers, so they compose by construction and
+    # this needed no code. A 3.8 s window off the cut at 15.0 - gather 15.00 -> 16.14, point -> 17.09, HAND -> 18.80,
+    # the page's own build from there. The base frame is the gather at its midpoint; these are the two it cannot show.
+    "melt-gather-morph@proof-point": ("melt-gather-morph", {"arap_morph": True, "min_jerk": True}, 16.60),   # THE POINT: the page's whole chart amassed on it, dense, wearing its material - and nothing of the next chart yet
+    "melt-gather-morph@proof-chart": ("melt-gather-morph", {"arap_morph": True, "min_jerk": True}, 19.20),   # THE CHART, built out of that point: the area it became standing on the series, the line stroked along its top, the title and the labels written by the engine's own hand - the "fully assembled chart" of E99 s2
+    # P48 T5b / R26-16 - THE PLANTED SOURCE: the same page-enter morph, from a real element of the world before it
+    # (the plate's own dark form, traced by kinetics/contour.mjs). No melt anywhere in it - the cut at 15.0 is a cut.
+    "morph-planted@proof-050": ("morph-planted", {"arap_morph": True, "min_jerk": True}, 16.00),   # u 0.50 of the 2.0 s morph: the lobed form half way to the area under the line - still plainly the thing that was planted, and not yet the chart
     # P55 T6: THE VERDICT STACK's last phase - the radial BURST at clear_at (20.0) + 0.25 s: with the 60 ms stagger the
     # first card is half way through its 0.5 s throw and the fifth just leaving, each along its own bearing, spinning
     "verdict-stack@proof-burst": ("verdict-stack", {}, 20.25),

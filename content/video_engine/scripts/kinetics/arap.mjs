@@ -125,6 +125,43 @@ export const stripMesh = (top, bot) => {
   return { verts: [...top, ...bot], tris, n };
 };
 export const stripOutline = (verts, n) => [...verts.slice(0, n), ...verts.slice(n, 2 * n).reverse()];
+/* ANY CLOSED OUTLINE AS A STRIP OF n COLUMNS (P61 T3 / R26-117, P48 T5b). The page-enter morph's target is the area
+   under a series - an x-monotone strip - and `stripMesh` is the topology that never inverts on one. Its SOURCE was
+   three named props built as strips by hand (`morphProp`: tab, plate, card). A ball's ring and a planted element's
+   traced silhouette are neither, so they are re-expressed here: at n evenly spaced x positions across the outline's
+   own x-range, the TOP is the smallest y the boundary reaches at that x and the BOT the largest - the outline's own
+   vertical extent, column by column. For a convex shape (a ball) the strip IS the shape, to the sampling; for a
+   lumpy silhouette it is the shape's shadow on each column, which is what a strip can carry and what reads.
+   THE TWO GUARDS, both DERIVED and both about the mesh rather than the picture:
+     - the end columns are inset by EPS_X of the width, because a vertical line through the extreme x of a smooth
+       outline crosses it once (a tangent) and a column needs two crossings to have a height at all;
+     - a column thinner than MIN_H of the outline's height is opened symmetrically to it, because two coincident
+       vertices are a degenerate triangle and arapPrepare's Cholesky refuses the Laplacian they make. At 0.02 of the
+       height on a 96-vertex circle the flattening is under a pixel at our sizes and every det J stays positive.
+   Pure: the same outline and n give the same strip, vertex for vertex. */
+export const STRIP = Object.freeze({ EPS_X: 0.004, MIN_H: 0.02 });
+export const polyStrip = (poly, n = 48, o = {}) => {
+  const P = Object.assign({}, STRIP, o), pts = (poly || []).filter((p) => Array.isArray(p) && Number.isFinite(+p[0]) && Number.isFinite(+p[1])).map((p) => [+p[0], +p[1]]);
+  if (pts.length < 3 || !(n >= 2)) return null;
+  const B = bbox(pts);
+  if (!(B.w > 0 && B.h > 0)) return null;
+  const inset = B.w * P.EPS_X, x0 = B.x + inset, x1 = B.x + B.w - inset, minH = B.h * P.MIN_H;
+  const top = [], bot = [];
+  for (let i = 0; i < n; i++) {
+    const x = x0 + (i / (n - 1)) * (x1 - x0);
+    let lo = Infinity, hi = -Infinity;
+    for (let k = 0, m = pts.length; k < m; k++) {
+      const a = pts[k], b = pts[(k + 1) % m];
+      if ((a[0] > x) === (b[0] > x)) continue;   /* the edge does not straddle this column */
+      const y = a[1] + (b[1] - a[1]) * ((x - a[0]) / (b[0] - a[0]));
+      lo = Math.min(lo, y); hi = Math.max(hi, y);
+    }
+    if (!(hi > -Infinity)) { lo = hi = (B.y + B.h / 2); }   /* a column the boundary misses: the outline's own middle */
+    if (hi - lo < minH) { const c = (lo + hi) / 2; lo = c - minH / 2; hi = c + minH / 2; }
+    top.push([x, lo]); bot.push([x, hi]);
+  }
+  return { top, bot, n };
+};
 /* the prepared morph for ANY shared-topology mesh: rest verts in `mesh`, target verts `Bv`, one pinned vertex that travels the chord */
 export const arapPrepareMesh = (mesh, Bv, pin) => {
   const V = mesh.verts, n = V.length;

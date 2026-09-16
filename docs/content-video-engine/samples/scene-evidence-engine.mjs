@@ -2048,6 +2048,43 @@ async function mount(doc) {
     return { verts: [...top, ...bot], tris, n };
   };
   const stripOutline = (verts, n) => [...verts.slice(0, n), ...verts.slice(n, 2 * n).reverse()];
+  /* ANY CLOSED OUTLINE AS A STRIP OF n COLUMNS (P61 T3 / R26-117, P48 T5b). The page-enter morph's target is the area
+     under a series - an x-monotone strip - and `stripMesh` is the topology that never inverts on one. Its SOURCE was
+     three named props built as strips by hand (`morphProp`: tab, plate, card). A ball's ring and a planted element's
+     traced silhouette are neither, so they are re-expressed here: at n evenly spaced x positions across the outline's
+     own x-range, the TOP is the smallest y the boundary reaches at that x and the BOT the largest - the outline's own
+     vertical extent, column by column. For a convex shape (a ball) the strip IS the shape, to the sampling; for a
+     lumpy silhouette it is the shape's shadow on each column, which is what a strip can carry and what reads.
+     THE TWO GUARDS, both DERIVED and both about the mesh rather than the picture:
+       - the end columns are inset by EPS_X of the width, because a vertical line through the extreme x of a smooth
+         outline crosses it once (a tangent) and a column needs two crossings to have a height at all;
+       - a column thinner than MIN_H of the outline's height is opened symmetrically to it, because two coincident
+         vertices are a degenerate triangle and arapPrepare's Cholesky refuses the Laplacian they make. At 0.02 of the
+         height on a 96-vertex circle the flattening is under a pixel at our sizes and every det J stays positive.
+     Pure: the same outline and n give the same strip, vertex for vertex. */
+  const STRIP = Object.freeze({ EPS_X: 0.004, MIN_H: 0.02 });
+  const polyStrip = (poly, n = 48, o = {}) => {
+    const P = Object.assign({}, STRIP, o), pts = (poly || []).filter((p) => Array.isArray(p) && Number.isFinite(+p[0]) && Number.isFinite(+p[1])).map((p) => [+p[0], +p[1]]);
+    if (pts.length < 3 || !(n >= 2)) return null;
+    const B = bbox(pts);
+    if (!(B.w > 0 && B.h > 0)) return null;
+    const inset = B.w * P.EPS_X, x0 = B.x + inset, x1 = B.x + B.w - inset, minH = B.h * P.MIN_H;
+    const top = [], bot = [];
+    for (let i = 0; i < n; i++) {
+      const x = x0 + (i / (n - 1)) * (x1 - x0);
+      let lo = Infinity, hi = -Infinity;
+      for (let k = 0, m = pts.length; k < m; k++) {
+        const a = pts[k], b = pts[(k + 1) % m];
+        if ((a[0] > x) === (b[0] > x)) continue;   /* the edge does not straddle this column */
+        const y = a[1] + (b[1] - a[1]) * ((x - a[0]) / (b[0] - a[0]));
+        lo = Math.min(lo, y); hi = Math.max(hi, y);
+      }
+      if (!(hi > -Infinity)) { lo = hi = (B.y + B.h / 2); }   /* a column the boundary misses: the outline's own middle */
+      if (hi - lo < minH) { const c = (lo + hi) / 2; lo = c - minH / 2; hi = c + minH / 2; }
+      top.push([x, lo]); bot.push([x, hi]);
+    }
+    return { top, bot, n };
+  };
   /* the prepared morph for ANY shared-topology mesh: rest verts in `mesh`, target verts `Bv`, one pinned vertex that travels the chord */
   const arapPrepareMesh = (mesh, Bv, pin) => {
     const V = mesh.verts, n = V.length;
@@ -2459,6 +2496,42 @@ async function mount(doc) {
       const pts = simplifyRing(r.pts, tol);
       return { pts: map ? pts.map(map) : pts, hole: r.hole, parent: r.parent };
     });
+  };
+
+  /* ---- THE SILHOUETTE OF A STILL (P48 T5b / R26-16) ------------------------------------------------------------- */
+  /* A PLANTED ELEMENT'S OWN OUTLINE, and nothing else. `world.morph = {poly: [...]}` - the page-enter morph's source
+     - must be a shape that was REALLY ON THE BOARD (R26-16's tie: a real element of the outgoing world at its last
+     frame, never a shape conjured over the clip). This is how one is obtained from a still: raster the element the
+     way it is drawn (a canvas, its own pixels), threshold it, walk the 0.5 level with `contourRings` above, and take
+     the LARGEST ring that is not a hole - the element's silhouette, holes discarded, because a strip mesh carries an
+     outline and not a topology. No library: `contourWalk` is ours, and so is the simplification.
+     `map` carries it out of sample space into the caller's units (stage fractions, for `world.morph`).
+     The bitmap is the caller's: `contourBitmap(alpha, w, h)` for a cutout with an alpha channel; `contourLuma` below
+     for a still that has none, where ink is what is DARKER (or lighter) than the ground.
+     Pure, and null when the raster holds no ink at all - a caller never gets a poly it did not measure. */
+  const contourSilhouette = (bmp, o = {}) => {
+    const rings = contourRings(bmp).filter((r) => !r.hole);
+    if (!rings.length) return null;
+    const r = rings[0];   /* contourRings sorts by area, largest first */
+    const pts = simplifyRing(r.pts, +o.tol || 0);
+    if (pts.length < 3) return null;
+    const map = typeof o.map === "function" ? o.map : null;
+    return map ? pts.map(map) : pts;
+  };
+
+  /* THE OTHER THRESHOLD: LUMA, for a still with no alpha to read. `dark` (the default) calls a sample ink when it is
+     DARKER than `level` of white - charcoal ink on cream paper, which is what our board is; `dark: false` reads the
+     lit element off a dark ground. Rec. 709 luma, the same weights `meltBodyInk` and the brand tokens use. */
+  const contourLuma = (src, w, h, level = CONTOUR.LEVEL, o = {}) => {
+    const W = Math.max(0, w | 0), H = Math.max(0, h | 0), dark = o.dark !== false;
+    const cut = Math.max(0, Math.min(1, +level)) * 255, stride = Math.max(1, (o.stride | 0) || 4);
+    const data = new Uint8Array(W * H);
+    for (let i = 0; i < W * H; i++) {
+      const j = i * stride, a = stride >= 4 ? src[j + 3] / 255 : 1;
+      const y = (0.2126 * src[j] + 0.7152 * src[j + 1] + 0.0722 * src[j + 2]) * a + 255 * (1 - a);
+      data[i] = (dark ? y <= cut : y >= cut) ? 1 : 0;
+    }
+    return { w: W, h: H, data };
   };
   /* KINETICS:END */
   /* KINETICS:BEGIN drop */
@@ -2987,13 +3060,41 @@ async function mount(doc) {
                               boundary. A path turned rigidly reads as a stick swung across the board - the first build's
                               own defect, read on the frame; 160 samples hold an area band's jagged top and a four-year
                               line's shape while they curl [DERIVED, read on melt-gather's midpoint] */
+    /* P61 T3 / R26-117 - THE THIRD ENDING: THE BALL BECOMES THE NEXT FULL CHART. The ball is already a closed outline
+       on the board; `page_enter:morph` (P47 T3) already deforms a named prop outline into the area under the arriving
+       page's series by ARAP. R26-117 is the one sentence that joins them - "the ball is the prop it starts from" - so
+       `melt:morph` ENDS the melt at the ball and hands its ONE ring to the next page as that page's prop outline. The
+       two run on ONE clock: the melt's window is the sag, the ball and then the HAND, and the hand's seconds ARE the
+       arriving page's morph seconds (`meltHandSecs`), so there is no cut and no gap between them to fill.
+       What the ball's body does in the hand is the whole of the reading: it does NOT vanish and the page's area does
+       NOT fade up over it. The body wears the MORPHING OUTLINE ITSELF (the engine hands it back through `hand`), so
+       the thing the eye has been watching is the thing that deforms; over M_FADE its paint gives way to the page's
+       own ink, which is the only cross-over in the window and it happens on ONE shape, in one place, mid-deformation.
+       E99 s39's test - "a morph should be proof of form/function to the audience, that we're really manipulating the
+       world they're watching" - is what that is for: nothing is formed magically, because the shape at every instant
+       is the shape the frame before it was. The ball's BODY COLOUR (MELT_BODIES) never enters any of it: the ring is
+       geometry and the paint is read off the ball as painted, whatever HG5b settles it to. */
+    M_S: 1.3,              /* what the MORPH ending adds to the default window, the way W_S and G_S do: the hand's own
+                              share of a 1.6 s melt is 0.72 s, and an ARAP deformation of a whole chart's area in 0.72 s
+                              reads as a snap (MORPH.S, the page-enter morph's own default, is 2.0 s standing still).
+                              With it a bare `melt:morph` runs 2.9 s - sag 0.87, ball 0.72, hand 1.31 - and the hand is
+                              within a notch of the page morph's own pace [DERIVED, HG7 tunes it on the frames]. A row
+                              that declares its own length gets exactly that length, here as everywhere */
+    M_FADE: 0.85,          /* the share of the HAND over which the ball's paint gives way to the page's own ink, on the
+                              shared deforming outline. LINEARLY, and across nearly the whole hand: the cross-over is
+                              the only one in the window, so it is spread as thin as it will go - at the hand's midpoint
+                              the ball is at 0.41 and the page's area at 0.59, and no single frame carries a swap. It
+                              ends a little before the shape lands so the last stretch is unambiguously the page's own
+                              area arriving on its series [DERIVED, read on melt-morph@proof-050] */
     G_S: 0.9,              /* how much a gather adds to the DEFAULT window, the way W_S does: the sag's own share of a
                               1.6 s melt is 0.48 s, and three turns in 0.48 s is a jump, not a swirl. With it the
                               gather runs MELT_END of (S + G_S) = 0.75 s [DERIVED, HG6]. A row that declares its own
                               length gets exactly that length, gather or not */
   });
 
-  const MELT_ENDINGS = Object.freeze(["throw", "splash:chart", "splash:plate"]);
+  /* the authored endings - build_scene_timeline_f.MELT_ENDINGS is the same tuple, and test_melt_morph pins the pair.
+     P61 T3 / R26-117 adds `morph`: the ball is handed to the next page's `page_enter:morph` as its prop outline. */
+  const MELT_ENDINGS = Object.freeze(["throw", "splash:chart", "splash:plate", "morph"]);
   /* P58 T6 (b): the suffix that names the plane a mechanism happens at - build_scene_timeline_f.DEPTH_SUFFIX */
   const MELT_DEPTH = "depth=";
   /* the materials `melt:weight:<material>` may name (stopaction MASS / drop DROP.MAT); metal is the default, E88 s7 */
@@ -3040,6 +3141,7 @@ async function mount(doc) {
       const b = bits[i].trim();
       if (b === "") continue;
       if (b === "throw") { setEnding("throw"); continue; }
+      if (b === "morph") { setEnding("morph"); continue; }   /* P61 T3 / R26-117: the ball becomes the next page's prop outline */
       if (b.indexOf(MELT_DEPTH) === 0) {   /* P58 T6 (b): the PLANE the ball melts at - the compiler's own vocabulary, range and words */
         if (out.depth) throw new Error("melt: two depths - a melt happens at ONE plane");
         const v = Number(b.slice(MELT_DEPTH.length));
@@ -3058,7 +3160,7 @@ async function mount(doc) {
       if (b === "weight") {   /* R26-118: the weight phase, and the material it is made of (metal unless it says) */
         out.weight = true;
         const nx = (bits[i + 1] || "").trim();
-        if (nx && nx.indexOf(",") < 0 && nx !== "throw" && nx !== "splash" && nx !== "gather" && nx.indexOf(MELT_DEPTH) !== 0 && nx.indexOf(MELT_BODY) !== 0 && !Number.isFinite(Number(nx))) {
+        if (nx && nx.indexOf(",") < 0 && nx !== "throw" && nx !== "splash" && nx !== "gather" && nx !== "morph" && nx.indexOf(MELT_DEPTH) !== 0 && nx.indexOf(MELT_BODY) !== 0 && !Number.isFinite(Number(nx))) {
           if (MELT_MATERIALS.indexOf(nx) < 0) {
             throw new Error("melt: " + nx + " is not a material - melt:weight takes " + MELT_MATERIALS.join(", "));
           }
@@ -3080,13 +3182,14 @@ async function mount(doc) {
         out.to = xy; continue;
       }
       const v = Number(b);
-      if (!(Number.isFinite(v) && v > 0)) throw new Error("melt: " + b + " is neither a length in seconds, nor an ending (throw, splash:chart, splash:plate), nor a phase (gather, weight), nor an x,y point");
+      if (!(Number.isFinite(v) && v > 0)) throw new Error("melt: " + b + " is neither a length in seconds, nor an ending (throw, splash:chart, splash:plate, morph), nor a phase (gather, weight), nor an x,y point");
       out.secs = v; said = true;
     }
     out.ending = out.ending || "throw";
     if (!said) {   /* a row that declared its own length gets exactly it; a default window makes room for what was asked for */
       if (out.weight) out.secs = P.S + P.W_S;   /* the four beats need their own seconds, not the compile's */
       if (out.gather) out.secs += P.G_S;        /* P61 T6: and the travel needs its own - three turns in 0.48 s is a jump */
+      if (out.ending === "morph") out.secs += P.M_S;   /* P61 T3: and so does the HAND - the arriving page's morph runs in it */
     }
     if (out.to && out.ending !== "throw") throw new Error("melt: an x,y point is where a THROW goes - a splash lands on the board");
     out.to = out.to || [P.TO[0], P.TO[1]];
@@ -3138,6 +3241,38 @@ async function mount(doc) {
        too, and its window is longer), so the caller need not know which phases this melt has */
     (opts && opts.ending === "throw" && incomingIsPage)
       ? meltRelease(Object.assign({}, opts, o)) * Math.max(0.05, +opts.secs || MELT.S) : 0;
+
+  /* ---- P61 T3 / R26-117: THE HAND-OVER ----------------------------------------------------------------------------- */
+  /* WHERE the ball is finished and the next page's morph begins, as a share of the window: the end of the ball phase,
+     after the weight phase when there is one. It is `meltRelease` without the throw's ANTIC - a hand-over has no
+     wind-up, because the thing that moves next is the shape itself. */
+  const meltHandAt = (o = {}) => {
+    const P = Object.assign({}, MELT, o), w = meltWeightShare(P.secs, P);
+    return P.BALL_END * (1 - w) + w;
+  };
+  /* how long the engine holds the NEXT page's clock under a `melt:morph` - exactly to the hand-over, so the page's
+     morph opens on the frame the ball is finished on. Mirrors meltDrawDelay and returns 0 for every other ending. */
+  const meltHandDelay = (opts, incomingIsPage, o = {}) =>
+    (opts && opts.ending === "morph" && incomingIsPage)
+      ? meltHandAt(Object.assign({}, opts, o)) * Math.max(0.05, +opts.secs || MELT.S) : 0;
+  /* ... and the SECONDS that hand runs for, which are the arriving page's `morph_s`: one clock, no gap. */
+  const meltHandSecs = (opts, o = {}) => {
+    const P = Object.assign({}, MELT, opts, o);
+    return (1 - meltHandAt(P)) * Math.max(0.05, +P.secs || MELT.S);
+  };
+  /* THE RING THE PAGE IS HANDED, in the melting world's own px: the ball as it stands at the hand-over - where it
+     compiled, plus the distance a `melt:weight` rolled it. A pure function of the ink box, the options and the seed,
+     computed by the caller BEFORE the arriving page paints, so the page's prop outline is the ball's own geometry on
+     the frame the ball is finished on, never a copy taken from the DOM a frame late. */
+  const meltHandRing = (o = {}, rnd) => {
+    const P = Object.assign({}, MELT, o), rect = P.rect;
+    if (!rect) return null;
+    const b = ballAt(rect, 1, rnd, Object.assign({}, P, { weight: false }));
+    const secs = Math.max(0.05, +P.secs || P.S), wSpan = meltWeightShare(secs, P) * secs;
+    const rest = P.weight ? meltWeightAt(wSpan, wSpan, b.r, Object.assign({}, P, { dir: meltRollDir(b.centre, rect, P) })) : null;
+    const c = [b.centre[0] + (rest ? rest.x : 0), b.centre[1]];
+    return { c, r: b.r, ring: ballCircle(c, b.r, P.CIRCLE_N) };
+  };
 
   /* ---- the sag ---------------------------------------------------------------------------------------------------- */
   const dripBump = (dx, w) => { const k = mc01(Math.abs(dx) / Math.max(1e-6, w)); const c = Math.cos(k * Math.PI / 2); return c * c; };
@@ -3579,6 +3714,27 @@ async function mount(doc) {
       st.hl = dropSpecular(b.centre, b.r, dropModes(tqw, b.r, wMass, excite, { spin }));
       st.mass = true;
     }
+    if (ending === "morph") {
+      /* P61 T3 / R26-117 - THE HAND. The ball is finished; the arriving page's `page_enter:morph` opened on this very
+         frame with the ball's ring as its prop (`meltHandRing` -> `world.morph.poly`), and from here the two are one
+         shape on one clock. `P.hand` is that shape as the page has it THIS frame, carried back into this world's px by
+         the caller: the ball's body wears it, so what deforms is the body the eye has been watching and not a copy of
+         it. Its paint gives way to the page's own ink over M_FADE - the one cross-over in the window, on a single
+         shape, mid-deformation, which is why no frame here is a cut in a costume (E99 s39).
+         With no hand yet (the page not laid out, the flag off) the body stays the ball's own circle: a `melt:morph`
+         that cannot find its page holds the ball and ends, and never invents a shape. */
+      const hand = Array.isArray(P.hand) && P.hand.length >= 3 ? P.hand : null;
+      st.bodyOutline = hand || circle;
+      st.body = morphAPath(st.bodyOutline);
+      st.bodyAlpha = 1 - mc01(kq / Math.max(1e-6, P.M_FADE));   /* LINEAR: an eased fade front-loads and the swap lands in a few frames */
+      if (restX && !hand) st.xf = { x: restX, y: 0, rot: 0 };   /* a handed outline is already where it is */
+      /* THE BOARD HANDS OVER HERE, exactly as a throw's does at its release: the arriving page's charcoal has been the
+         ground under this world since its own first frame (a morph page skips the roll, the savor and the soak), so the
+         outgoing board steps aside and the page's rising ink is no longer behind it. The ball rides on, in the overlay
+         above both. */
+      st.boardUp = false;
+      return st;
+    }
     if (ending === "throw") {
       st.bodyOutline = circle; st.body = morphAPath(circle);
       if (kq < P.ANTIC) {
@@ -3982,7 +4138,10 @@ async function mount(doc) {
     if (!wA.__melt && !wA.querySelector(".lp-page")) return null;
     if (wA.__melt && !(wA.__melt.svg && wA.__melt.svg.isConnected)) clearMelt(wA);   /* a stale mount: its clone and classes go first */
     const m = wA.__melt ? wA.__melt : meltMount(wA, el, id, ctx.opts);   /* P61 T5b: the exit's own opts, so the ball's gradient is built in its authored BODY colour */
-    const st = meltState(ctx.t0, ctx.t, Object.assign({ rect: m.rect, stagebox: meltStageBox(wA) }, ctx.opts), rnd);
+    /* P61 T3: `ctx.hand` is the ARRIVING page's morph outline this frame, already in this world's px - the caller owns
+       that carry because it is the one that knows both boxes. Undefined for every other melt, so `P.hand` is undefined
+       and every string this painter writes is the string it wrote before. */
+    const st = meltState(ctx.t0, ctx.t, Object.assign({ rect: m.rect, stagebox: meltStageBox(wA), hand: ctx.hand }, ctx.opts), rnd);
     m.svg.style.left = wA.offsetLeft + "px"; m.svg.style.top = wA.offsetTop + "px";
     m.svg.style.width = wA.offsetWidth + "px"; m.svg.style.height = wA.offsetHeight + "px";
     m.svg.setAttribute("viewBox", "0 0 " + wA.offsetWidth + " " + wA.offsetHeight);
@@ -10115,25 +10274,72 @@ async function mount(doc) {
     const B = stripOutline([...topB, ...botB], n), c = centroid(B), th = dominantAxis(B);
     const w = extentAlong(B, th) * MORPH.TAB_W, h = extentAlong(B, th + Math.PI / 2) * MORPH.TAB_H, cs = Math.cos(th), sn = Math.sin(th);   /* sized in the target's principal frame */
     const place = ([x, y]) => [c[0] + x * cs - y * sn, c[1] + x * sn + y * cs];
-    const prop = morphProp(world.morph || "tab", n, w, h), topA = prop.top.map(place), botA = prop.bot.map(place);
+    /* P48 T5b / R26-16 - THE PLANTED SOURCE. `world.morph` is a NAMED prop (tab | plate | card, built above about the
+       target's own centroid and axis, so the centroid and axis invariants hold by construction) or, since P48 T5b, a
+       real element's own outline: `{poly: [[x, y], ...]}` in STAGE FRACTIONS, traced off a planted element's pixels by
+       kinetics/contour.mjs (`contourSilhouette`). A traced poly is NOT re-placed on the target - it stays exactly where
+       the element stood, which is the whole of R26-16's tie, so the morph carries a TRANSLATION as well as a change of
+       shape and the centroid invariant is the gate's reading rather than a construction. It is re-expressed as a strip
+       of the same columns by arap.mjs's `polyStrip`, because a strip is the topology that never inverts on the area
+       under a series. P61 T3 hands the melt's BALL in through the same door - the ring is geometry, and this path does
+       not know or care whether it came from a still or from a ball. */
+    const src = world && world.morph, sPoly = src && typeof src === "object" && Array.isArray(src.poly) ? src.poly : null;
+    let topA, botA;
+    if (sPoly) {
+      /* THROUGH THE RENDERED BOXES, not the CSS ones: a page carries its own envelope (the punch's scale, a card, a
+         plane), and a stage fraction is a place ON THE SCREEN. `lpChartBox` is pre-transform - right for the thread,
+         which carries between two pages standing still - so the two client rects are what this needs. Measured once,
+         with the morph, and the page's envelope is constant across a handed morph by construction (`handed`, below,
+         puts the punch behind it) - a planted morph's punch then carries the prop along with everything else on the
+         page, which is what a prop drawn INSIDE the page should do. */
+      const pr = st.root.getBoundingClientRect(), cr = st.chart.getBoundingClientRect();
+      const fit = threadFit({ x: cr.left - pr.left, y: cr.top - pr.top, w: cr.width, h: cr.height }, G.W, G.H);
+      const lw = pr.width || G.W, lh = pr.height || G.H;
+      const S = polyStrip(sPoly.map((p) => threadToLocal(fit, [p[0] * lw, p[1] * lh])), n);
+      if (!S) return null;
+      topA = S.top; botA = S.bot;
+    } else {
+      const prop = morphProp(typeof src === "string" ? src : "tab", n, w, h);
+      topA = prop.top.map(place); botA = prop.bot.map(place);
+    }
     const mesh = stripMesh(topA, botA), prep = arapPrepareMesh(mesh, [...topB, ...botB], n + (n >> 1));   /* the pinned vertex: the bottom middle, on the chord */
     const A = stripOutline(mesh.verts, n);
     const svg = lpEl("svg", "lp-chart lp-morph", st.page, { viewBox: st.chart.getAttribute("viewBox") });
     svg.setAttribute("style", st.chart.getAttribute("style") || "");
     const col = (st.paths.filter((pp) => !pp.muted)[0] || {}).p; const stroke = col ? col.getAttribute("stroke") : "var(--lp-chalk)";
     const path = lpEl("path", "morph", svg, { d: outlinePath(A), fill: stroke, "fill-opacity": MORPH.FILL_A, stroke: "var(--lp-chalk)", "stroke-width": 3 });
-    return { svg, path, prep, A, B, W: G.W, stroke };
+    return { svg, path, prep, A, B, W: G.W, stroke, hand: !!(sPoly && src.hand) };
   };
   const paintMorph = (st, pg, world, u, c) => {
     if (st.morph === undefined) st.morph = buildMorph(st, pg, world);
     const M = st.morph; if (!M) return;
     const k = kin("min_jerk") ? minJerk(u) : expoOut(clamp01(u));
     const pts = u >= 1 ? M.B : arapAt(M.prep, k).outline;
+    M.pts = pts;   /* P61 T3: the shape THIS frame, so the melt's ball can wear the very outline the page is carrying */
     M.path.setAttribute("d", outlinePath(pts));
     M.path.setAttribute("stroke", u >= 1 ? M.stroke : "var(--lp-chalk)");
-    M.path.setAttribute("fill-opacity", (MORPH.FILL_A * (u < 1 ? 1 : 1 - clamp01(c))).toFixed(3));   /* the fill leaves as the line draws */
+    /* P61 T3 / R26-117 - THE HAND. Under a `melt:morph` the prop IS the ball, and the ball is still painted (opaque,
+       lit, in its own ink) by the melt's overlay above this page. So the page's own ink does not appear over it: it
+       RISES under it over MELT.M_FADE while the ball's paint falls away on the same shape, and by the middle of the
+       hand what carries the outline is the page's area. A named prop takes none of this (hk = 1 from the first frame
+       and no stroke-opacity is written at all), so a morph page that is not handed a ball is the page it was. */
+    const hk = M.hand ? clamp01(u / MELT.M_FADE) : 1;
+    M.path.setAttribute("fill-opacity", (MORPH.FILL_A * hk * (u < 1 ? 1 : 1 - clamp01(c))).toFixed(3));   /* the fill leaves as the line draws */
+    if (M.hand) M.path.setAttribute("stroke-opacity", hk.toFixed(3));
     M.svg.style.opacity = (u < 1 || c < 1) ? "1" : "0";
     M.u = u;
+  };
+  /* P61 T3: the morph's outline THIS frame, carried back into the MELTING world's own px - the one carry the melt
+     cannot make for itself (it knows neither chart box nor viewBox). The inverse of buildMorph's own step, through
+     the same two fits, so the ball's body stands on exactly the pixels the page's area stands on. */
+  const lpMorphInWorld = (st, wA) => {
+    const M = st && st.morph;
+    if (!M || !Array.isArray(M.pts) || M.pts.length < 3 || !st.root || !st.geom) return null;
+    const pr = st.root.getBoundingClientRect(), cr = st.chart.getBoundingClientRect();
+    const fit = threadFit({ x: cr.left - pr.left, y: cr.top - pr.top, w: cr.width, h: cr.height }, st.geom.W, st.geom.H);
+    const lw = pr.width || st.geom.W, lh = pr.height || st.geom.H;
+    const sb = meltStageBox(wA);
+    return M.pts.map((p) => { const q = threadToStage(fit, p); return [sb.x + (q[0] / lw) * sb.w, sb.y + (q[1] / lh) * sb.h]; });
   };
   /* ---- THE BREAKTHROUGH's run (2026-09-10): seconds since the ordinary build ended, a pure function of them ------------
      burst: the bar shoots from the comparator's level to its true height while the scale rewrites (hi0 -> hi1) under every
@@ -11118,7 +11324,13 @@ async function mount(doc) {
     const n = Math.max(1, st.glyphs.length), per = LP.INK / n;
     st.glyphs.forEach((g, j) => setW(g, clamp01((t3 - j * per) / (per * 1.6))));   /* R26-46: the page's own ink records what it wrote, so the title's erase scales that and not its own last answer */
     /* beat 5: PUNCH IN on the board - the line and the deckle margin are the room we spend (E22 addendum 6) */
-    const pk = (pg.punch === false || PORTRAIT) ? 0 : expoOut(clamp01(t3 / LP.PUNCH));   /* a host plate skips the punch: his gesture is the direction; portrait has no margin to spend (P41) */
+    /* P61 T3 / R26-117: a page HANDED THE MELT'S BALL arrives on a board that never left - the melt took the chart's
+       ink and the board stayed (E88) - so its ground is the punched board from its first frame, exactly as the roll,
+       the savor and the soak are already behind it. Without this the outgoing punched board hands over to an
+       un-punched one and the ground CHANGES SIZE in a single frame: a cut, under a morph that is not one. It also
+       makes the page's envelope constant across the hand, which is what lets buildMorph measure its boxes once. */
+    const handed = morphOn && !!((scene.world.morph || {}).hand);
+    const pk = handed ? 1 : (pg.punch === false || PORTRAIT) ? 0 : expoOut(clamp01(t3 / LP.PUNCH));   /* a host plate skips the punch: his gesture is the direction; portrait has no margin to spend (P41) */
     const bdc = st.boardCentre || { x: 50, y: 50 };
     st.page.style.transformOrigin = bdc.x.toFixed(2) + "% " + bdc.y.toFixed(2) + "%";
     let snapCss = "";
@@ -14232,6 +14444,24 @@ async function mount(doc) {
     const meltOn = prev && exitName(sc.exit) === "melt" && prev.world && prev.world.kind === "ledger"
       ? (() => { try { return meltOpts(sc.exit); } catch (e) { return null; } })() : null;
     const meltDelay = meltOn ? meltDrawDelay(meltOn, !!(sc.world && sc.world.kind === "ledger")) : 0;
+    /* P61 T3 / R26-117 - THE BALL BECOMES THE NEXT FULL CHART. `melt:morph` ends the melt AT the ball and hands its
+       ONE ring to this scene's page as the prop outline its `page_enter:morph` deforms into the area under its series.
+       ONE CLOCK: the page's clock is held to the hand-over (`meltHandDelay`) and its morph runs for exactly the rest
+       of the melt's window (`meltHandSecs`), so the melt's last frame is the morph's last frame and there is no gap
+       between them to cut. The ring is computed HERE, before the page paints, out of the melt's own ink box, options
+       and seed - a pure function of them, never a copy taken off the DOM a frame late - and carried in STAGE
+       FRACTIONS, which is the one space both worlds agree on. The ball's BODY COLOUR is not in any of it. */
+    const meltRnd = (k) => lpHash(0x3E17 ^ ((sc.scene_id || "").length * 131), k, 977);
+    const handOn = !!(meltOn && meltOn.ending === "morph" && sc.world && sc.world.kind === "ledger");
+    const handDelay = handOn ? meltHandDelay(meltOn, true) : 0;
+    const handProp = handOn ? (() => {
+      const rect = (wA.__melt && wA.__melt.rect) || meltInkRect(wA);
+      if (!rect) return null;
+      const h = meltHandRing(Object.assign({ rect, stagebox: meltStageBox(wA) }, meltOn), meltRnd);
+      if (!h || !h.ring || h.ring.length < 3) return null;
+      const sb = meltStageBox(wA);
+      return { poly: h.ring.map((p) => [(p[0] - sb.x) / sb.w, (p[1] - sb.y) / sb.h]), hand: true };
+    })() : null;
     /* E47 (operator 2026-09-06): DIP and BLURZOOM straddle the boundary, so a scene reads its OWN exit for the
        half after its start and the NEXT scene's exit for the half before its end. `exit` names the transition INTO
        the scene it sits on - the same law the wipe, the suck and the dissolve above already follow. The switch
@@ -14312,8 +14542,14 @@ async function mount(doc) {
     wB.style.clipPath = sc.exit === "wipe_right"
       ? `inset(0 0 0 ${(1-wk)*100}%)` : `inset(0 ${(1-wk)*100}% 0 0)`;
     paint(wA, prev || sc);
-    /* E88: under a throw the next chart draws once the ball has launched - its page's clock starts meltDelay later */
-    paint(wB, meltDelay > 0 ? Object.assign({}, sc, { span: [sc.span[0] + meltDelay, sc.span[1]] }) : sc);
+    /* E88: under a throw the next chart draws once the ball has launched - its page's clock starts meltDelay later.
+       P61 T3: under a MORPH the same hold runs to the hand-over, and the page's morph is given the melt's remaining
+       seconds and the ball's ring as its prop - one clock, one shape, no cut. */
+    const paintDelay = meltDelay || handDelay;
+    let scB = paintDelay > 0 ? Object.assign({}, sc, { span: [sc.span[0] + paintDelay, sc.span[1]] }) : sc;
+    if (handProp) scB = Object.assign({}, scB, { world: Object.assign({}, sc.world, { morph: handProp,
+        page: Object.assign({}, sc.world.page || {}, { morph_s: meltHandSecs(meltOn) }) }) });
+    paint(wB, scB);
     /* HF-17: the plate's foreground, over the cards. One layer per scene - a plate has one front - and it is up
        exactly while the dock that declared it is up, so a scene with no occluded dock costs nothing. */
     { const fgEl = document.getElementById("fgover");
@@ -14419,7 +14655,10 @@ async function mount(doc) {
     if (meltOn) paintMelt({ wA, wB, t, t0: sc.span[0], el: lpEl, opts: meltOn,
                             /* P58 T6 (b): the plane the ball melts at - the OUTGOING world's own camera, read at k */
                             worldCss: camDepthSwap(wA, prev, t, +meltOn.depth || 0),
-                            rnd: (k) => lpHash(0x3E17 ^ ((sc.scene_id || "").length * 131), k, 977) });
+                            /* P61 T3: the arriving page's morph outline THIS frame, in this world's px - read after
+                               the page has painted, so the ball's body wears the shape the page is actually carrying */
+                            hand: handOn ? lpMorphInWorld(wB.__lp, wA) : undefined,
+                            rnd: meltRnd });
     else if (wA.__melt) clearMelt(wA);   /* the same reset the suck does above, and only for a world that melted */
     seam.style.opacity = seaming ? 1 : 0;
     seam.style.transform = `translateX(${(sc.exit === "wipe_right" ? (1-wk) : wk) * STAGE_W}px)`;
