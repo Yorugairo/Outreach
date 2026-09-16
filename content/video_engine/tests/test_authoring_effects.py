@@ -197,9 +197,11 @@ def buildable(tmp_path: Path) -> Path:
     return tmp_path
 
 
-def test_a_stale_catalogue_is_rebuilt_before_it_is_read(buildable):
+def test_a_stale_catalogue_is_rebuilt_before_it_is_read_when_the_caller_waits(buildable):
+    """P64 T1 renamed this from `test_a_stale_catalogue_is_rebuilt_before_it_is_read`: it is the
+    `wait=True` path now - the default reads what is on disk and only SAYS it is behind."""
     # Act
-    cards = E.load(buildable)
+    cards = E.load(buildable, wait=True)
 
     # Assert: the card that came back is the rebuilt one, and the digest was stamped
     assert [c["does"] for c in cards] == ["the REBUILT line"]
@@ -216,11 +218,24 @@ def test_no_ensure_reads_the_catalogue_as_it_sits(buildable):
     assert not (buildable / DL.CACHE_REL).exists()
 
 
+def test_the_default_says_the_catalogue_is_stale_and_builds_nothing(buildable, capsys):
+    """The operator's rule (P64 T1): the author keeps moving; the WRITE is what starts the rebuild."""
+    # Act
+    cards = E.load(buildable)
+
+    # Assert: the STALE card answered, one line said so, and nothing was built or stamped
+    assert [c["does"] for c in cards] == ["the STALE line"]
+    assert capsys.readouterr().err.splitlines() == [
+        "[layers] stale: docs-index, effects-catalog "
+        "(no refresh running - run build_docs_layers.py --refresh)"]
+    assert not (buildable / DL.CACHE_REL).exists()
+
+
 def test_the_check_runs_once_per_process_and_then_stays_out_of_the_way(buildable):
     # Act
-    first = E.ensure_catalog(buildable)
-    again = E.ensure_catalog(buildable)
-    forced = E.ensure_catalog(buildable, force=True)
+    first = E.ensure_catalog(buildable, wait=True)
+    again = E.ensure_catalog(buildable, wait=True)
+    forced = E.ensure_catalog(buildable, force=True, wait=True)
 
     # Assert: built once; the second call is the memo; `force` re-checks and finds it current
     assert first == ["docs-index", "effects-catalog"]      # the sentinel IS docs-index's builder
@@ -249,7 +264,7 @@ def test_a_builder_that_fails_is_named_and_the_catalogue_still_answers(buildable
     E._ENSURED.clear()
 
     # Act
-    cards = E.load(buildable)
+    cards = E.load(buildable, wait=True)
 
     # Assert
     assert [c["does"] for c in cards] == ["the STALE line"]

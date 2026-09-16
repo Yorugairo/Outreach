@@ -226,3 +226,106 @@ def test_the_committed_tree_passes_check():
         "report_doc_overlap.py", "audit_docs_standard.py"]
     DL.ensure(None, ROOT)                    # a no-op when nothing moved; the honest cost when it did
     assert BDL.main(["--check", "--repo", str(ROOT)]) == 0
+
+
+# --- --refresh, --status and the child's --then-recheck (P64 T1) ----------------------------------
+
+import os    # noqa: E402
+
+
+def test_refresh_returns_at_once_and_says_what_it_started(stubbed, monkeypatch, capsys):
+    """`--refresh` is what a write hook calls: it must never build in-process and never fail."""
+    # Arrange
+    started: list = []
+    monkeypatch.setattr(DL, "start_refresh",
+                        lambda repo, names, scripts=None: started.append(list(names)) or 4242)
+    monkeypatch.setattr(DL, "run_script", lambda *a, **k: pytest.fail("--refresh built in-process"))
+
+    # Act
+    assert BDL.main(["--refresh", "--repo", str(stubbed)]) == 0
+
+    # Assert
+    assert started == [["first", "second", "report"]]           # every stub layer, none built here
+    assert "refreshing first, second, report in the background (pid 4242" in capsys.readouterr().out
+
+
+def test_refresh_does_nothing_while_a_live_lock_holds_the_checkout(stubbed, monkeypatch, capsys):
+    # Arrange: a lock held by this very process - certainly alive
+    DL.write_lock(stubbed, os.getpid(), ["first"])
+    monkeypatch.setattr(DL, "start_refresh", lambda *a, **k: pytest.fail("a second refresh started"))
+
+    # Act
+    assert BDL.main(["--refresh", "--repo", str(stubbed)]) == 0
+
+    # Assert
+    assert f"already running (pid {os.getpid()}" in capsys.readouterr().out
+    DL.clear_lock(stubbed, os.getpid())
+
+
+def test_status_prints_the_stale_set_the_lock_and_the_last_line_without_building(stubbed, monkeypatch,
+                                                                                 capsys):
+    # Arrange
+    monkeypatch.setattr(DL, "run_script", lambda *a, **k: pytest.fail("--status built something"))
+    DL.write_lock(stubbed, os.getpid(), ["first"])
+    DL.log_path(stubbed).write_text("build_docs_layers: rebuilt first\n", encoding="utf-8")
+
+    # Act
+    assert BDL.main(["--status", "--repo", str(stubbed)]) == 0
+
+    # Assert
+    out = capsys.readouterr().out
+    assert "stale: first, second, report" in out
+    assert f"refresh: running, pid {os.getpid()}" in out
+    assert "last line: build_docs_layers: rebuilt first" in out
+    DL.clear_lock(stubbed, os.getpid())
+
+
+def test_the_child_goes_again_when_a_write_lands_during_its_pass_and_stops_after_three_rounds(
+        stubbed, monkeypatch, capsys):
+    """A write landing WHILE a layer is rebuilt would otherwise wait for the next write to be noticed."""
+    # Arrange: every "build" rewrites a builder script - an input - so the tree is never current
+    rounds: list = []
+
+    def churn(script, args, repo):
+        """Every build rewrites the OTHER layer's script - the write that lands mid-pass."""
+        rounds.append(Path(script).name)
+        other = "stub_second.py" if Path(script).name == "stub_first.py" else "stub_first.py"
+        (Path(stubbed) / "scripts" / other).write_text(f"# {len(rounds)}\n", encoding="utf-8")
+        return 0, "stub: line\n"
+
+    monkeypatch.setattr(DL, "run_script", churn)
+    DL.write_lock(stubbed, os.getpid(), ["first"])
+
+    # Act
+    assert BDL.main(["--ensure", "--then-recheck", "--repo", str(stubbed)]) == 0
+
+    # Assert: it goes again, it is BOUNDED, it says so - and it takes its own lock off on the way out
+    out = capsys.readouterr().out
+    assert out.count("going again") == DL.REFRESH_ROUNDS - 1
+    assert f"stopped after {DL.REFRESH_ROUNDS} rounds, still stale:" in out
+    assert not DL.lock_path(stubbed).exists()
+
+
+def test_the_child_stops_at_the_first_clean_recheck_and_clears_the_lock(stubbed, monkeypatch, capsys):
+    # Arrange: a well-behaved build - nothing moves under it
+    monkeypatch.setattr(DL, "run_script", Recorder())
+    DL.write_lock(stubbed, os.getpid(), ["first"])
+
+    # Act
+    assert BDL.main(["--ensure", "--then-recheck", "--repo", str(stubbed)]) == 0
+
+    # Assert
+    out = capsys.readouterr().out
+    assert "refresh done in 1 round(s), every layer current" in out and "going again" not in out
+    assert not DL.lock_path(stubbed).exists()
+
+
+def test_only_takes_a_comma_separated_list_and_ensure_without_recheck_is_unchanged(stubbed, monkeypatch,
+                                                                                   capsys):
+    recorder = Recorder()
+    monkeypatch.setattr(DL, "run_script", recorder)
+
+    assert BDL.main(["--ensure", "--only", "first,second", "--repo", str(stubbed)]) == 0
+
+    assert recorder.names("--write") == ["stub_first.py", "stub_second.py"]
+    assert "rebuilt first, second" in capsys.readouterr().out

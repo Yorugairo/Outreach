@@ -504,15 +504,32 @@ def fake_repo(tmp_path: Path, monkeypatch) -> Path:
     return repo
 
 
-def test_a_stale_catalogue_is_rebuilt_before_the_floor_reads_it(fake_repo: Path) -> None:
+def test_a_stale_catalogue_is_rebuilt_before_the_floor_reads_it_when_it_waits(fake_repo: Path) -> None:
+    """P64 T1 renamed this from `test_a_stale_catalogue_is_rebuilt_before_the_floor_reads_it`: the gate
+    runs on what is on disk by default and names the staleness in its header; `--wait` is this path."""
     # Act
-    rebuilt = FLOOR.ensure_catalog(fake_repo / FLOOR.CATALOG_REL)
+    rebuilt = FLOOR.ensure_catalog(fake_repo / FLOOR.CATALOG_REL, wait=True)
 
     # Assert: the recipes the gate goes on to read are the rebuilt ones
     assert rebuilt == ["docs-index", "effects-catalog"]          # the sentinel IS docs-index's builder
     assert [r["id"] for r in FLOOR.load_recipes(fake_repo / FLOOR.CATALOG_REL)] == ["recipe:rebuilt"]
     assert DL.stored_digest(fake_repo, FLOOR.CATALOG_LAYER)
-    assert FLOOR.ensure_catalog(fake_repo / FLOOR.CATALOG_REL) == []   # nothing moved: nothing rebuilt
+    assert FLOOR.ensure_catalog(fake_repo / FLOOR.CATALOG_REL, wait=True) == []   # nothing moved
+
+
+def test_the_default_builds_nothing_and_the_staleness_goes_in_the_report_header(fake_repo: Path) -> None:
+    """The verdict depends on a current catalogue, so the reader is TOLD how current it was - and the
+    gate still runs on what is there (P64 T1: nothing blocks)."""
+    # Act
+    rebuilt = FLOOR.ensure_catalog(fake_repo / FLOOR.CATALOG_REL)
+    note = FLOOR.catalog_note(fake_repo / FLOOR.CATALOG_REL)
+
+    # Assert
+    assert rebuilt == [] and not (fake_repo / DL.CACHE_REL).exists()
+    assert note == ("[layers] stale: docs-index, effects-catalog "
+                    "(no refresh running - run build_docs_layers.py --refresh)")
+    assert [r["id"] for r in FLOOR.load_recipes(fake_repo / FLOOR.CATALOG_REL)] == ["recipe:stale"]
+    assert FLOOR.catalog_note(Path("somewhere/else.jsonl")) is None      # not this repo's artifact
 
 
 def test_a_catalogue_that_is_not_this_repos_own_artifact_is_never_rebuilt(fake_repo: Path,
@@ -522,7 +539,7 @@ def test_a_catalogue_that_is_not_this_repos_own_artifact_is_never_rebuilt(fake_r
     mine.write_text(STALE_LINE + "\n", encoding="utf-8")
 
     # Act
-    rebuilt = FLOOR.ensure_catalog(mine)
+    rebuilt = FLOOR.ensure_catalog(mine, wait=True)
 
     # Assert
     assert rebuilt == []
@@ -538,7 +555,7 @@ def test_a_tree_with_no_builders_in_it_is_never_rebuilt(tmp_path: Path, monkeypa
     monkeypatch.setattr(FLOOR, "REPO", repo)
 
     # Act / Assert
-    assert FLOOR.ensure_catalog(repo / FLOOR.CATALOG_REL) == []
+    assert FLOOR.ensure_catalog(repo / FLOOR.CATALOG_REL, wait=True) == []
     assert not (repo / DL.CACHE_REL).exists()
 
 
@@ -549,7 +566,7 @@ def test_a_builder_that_fails_is_named_and_the_floor_still_runs(fake_repo: Path,
         + 'sys.exit(2)' + "\n", encoding="utf-8")
 
     # Act
-    rebuilt = FLOOR.ensure_catalog(fake_repo / FLOOR.CATALOG_REL)
+    rebuilt = FLOOR.ensure_catalog(fake_repo / FLOOR.CATALOG_REL, wait=True)
 
     # Assert: the gate reads the catalogue as it sits, and says what happened
     assert rebuilt == []

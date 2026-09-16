@@ -38,11 +38,15 @@ hit's window is its one row (`sed -n <line>p`), since a row runs to kilobytes, a
 on the name, `what`, paths, cards or state ranks before a hit on the row's prose `terms`. A missing layer
 file prints one line and never raises; the
 term is compiled as a case-insensitive regex and falls back to a literal when it is not valid regex, so
-`42§42.2` and `f(t) = t^2` are searchable as typed. Before it scans, it ENSURES the layers it is about
-to scan (`docs_layers.ensure`, P63): each one is rebuilt iff the digest of its inputs moved, upstream first,
-so the answer is current on a checkout nobody has run a build in - `--layer X` ensures only X and its
-upstream, `--no-ensure` skips it (a fixture tree, and the tests). A rebuild says so in ONE line on stderr,
-`[layers] rebuilt: a, b`; stdout stays one hit per line, which is what a recall receipt quotes. A PLAIN query (letters, digits and spaces only) reads a
+`42§42.2` and `f(t) = t^2` are searchable as typed. It NEVER REBUILDS a layer (P64 T1): it reads what is on
+disk and answers in ~0.8 s, stale or not, because the operator's rule is that a reader keeps the agent
+moving while the system updates. When a layer it just scanned is behind it says so in ONE line on stderr -
+`[layers] stale: a, b (a refresh is running, pid N, started HH:MM:SS)`, or `... (no refresh running - run
+build_docs_layers.py --refresh)` - and the WRITE that made it stale is what starts the refresh (the Edit /
+Write hook, or `post-commit`). `--wait` is for the caller who must be current: it blocks on
+`docs_layers.ensure` first and prints `[layers] rebuilt: a, b`. `--no-ensure` is now a no-op alias of the
+default, kept because the tests and a few runbooks pass it. stdout stays one hit per line, which is what a
+recall receipt quotes. A PLAIN query (letters, digits and spaces only) reads a
 space as any run of space, hyphen or underscore, so `federal reserve` hits a `federal-reserve` tag; and when a
 multi-word plain query hits nothing as a phrase, it runs once more matching records that carry EVERY word
 (any order, any searched field) and the summary says `(all words)`; in a field-ranked layer the fallback
@@ -428,7 +432,7 @@ def builders_of(layer_names: Iterable[str]) -> list[str]:
 
 
 def ensure_layers(layer_names: Iterable[str], repo: Path) -> list[str]:
-    """Rebuild the artifacts about to be scanned iff their inputs moved; return what was rebuilt.
+    """`--wait` only: rebuild the artifacts about to be scanned iff their inputs moved, and BLOCK.
 
     `docs_layers.ensure` pulls each layer's upstream in with it and is a NO-OP on a tree with no
     builders, which is every test fixture. A builder that fails must not swallow the answer: it
@@ -441,6 +445,17 @@ def ensure_layers(layer_names: Iterable[str], repo: Path) -> list[str]:
     except DL.LayerError as exc:
         print(f"[layers] {exc.layer} failed to rebuild: {exc.detail}", file=sys.stderr)
         return []
+
+
+def report_stale(layer_names: Iterable[str], repo: Path) -> str | None:
+    """The default path (P64 T1): READ what is there, and say on stderr if it is behind.
+
+    Only the layers this query actually scanned - a stale research ledger is not this answer's
+    problem - and nothing is built, started or waited on here."""
+    wanted = builders_of(layer_names)
+    if not wanted:
+        return None
+    return DL.report_stale(repo, wanted)
 
 
 def report_rebuilt(rebuilt: Sequence[str]) -> None:
@@ -623,8 +638,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--state", help="with --capabilities: only this state (LIVE, WIRED, BUILT, ...)")
     parser.add_argument("--section", help="with --capabilities: only sections containing this text")
     parser.add_argument("--repo", type=Path, default=REPO, help="repository root (default: this checkout)")
+    parser.add_argument("--wait", action="store_true",
+                        help="rebuild a stale layer and BLOCK on it before scanning (the caller who "
+                             "must be current); the default reads what is on disk and says if it is behind")
     parser.add_argument("--no-ensure", action="store_true",
-                        help="scan the layers as they sit on disk, without rebuilding a stale one")
+                        help="a no-op since P64 T1 - no query rebuilds anything - kept for callers that pass it")
     args = parser.parse_args(argv)
     if not args.capabilities and not args.term:
         parser.error("a term is required (or --capabilities for the list)")
@@ -632,8 +650,10 @@ def main(argv: list[str] | None = None) -> int:
     use_utf8(sys.stdout, sys.stderr)
     names = ["capabilities"] if args.capabilities else (
         list(ALL_ORDER) if args.layer == "all" else [args.layer])
-    if not args.no_ensure:
+    if args.wait:
         report_rebuilt(ensure_layers(names, Path(args.repo)))
+    else:
+        report_stale(names, Path(args.repo))
     if args.capabilities:
         for line in list_capabilities(Path(args.repo), args.state, args.section):
             print(line)

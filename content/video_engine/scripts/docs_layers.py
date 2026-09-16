@@ -30,10 +30,14 @@ from __future__ import annotations
 
 import fnmatch
 import hashlib
+import json
+import os
 import re
 import subprocess
 import sys
+import time
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parent
@@ -41,6 +45,11 @@ REPO = SCRIPTS.parents[2]
 
 SCRIPTS_REL = "content/video_engine/scripts"
 CACHE_REL = "docs/.layers"          # one `<name>.digest` per layer, gitignored: build output's receipt
+LOCK_REL = "docs/.layers/REBUILD.lock"   # {pid, started, names} while ONE background refresh runs
+LOG_REL = "docs/.layers/REBUILD.log"     # that refresh's stdout+stderr; its last line is what a reader prints
+LOCK_MAX_AGE_S = 600.0              # a lock older than this is taken over, pid alive or not (P64 T1)
+REFRESH_ROUNDS = 3                  # --then-recheck: at most three passes, then it stops and says so
+LAST_LINE_CHARS = 140               # how much of a failing builder's last line a reader's ONE line carries
 SENTINEL = "build_docs_index.py"    # no builders under SCRIPTS_REL => a fixture tree => ensure() is a no-op
 REPORT_REL = "docs/DOCS-STANDARD.md"
 
@@ -466,12 +475,20 @@ def stale(names=None, repo: Path = REPO, scripts_dir: Path | None = None,
 
 
 def ensure(names=None, repo: Path = REPO, scripts_dir: Path | None = None,
-           layers: tuple[Layer, ...] = LAYERS) -> list[str]:
+           layers: tuple[Layer, ...] = LAYERS, wait: bool = True) -> list[str]:
     """Rebuild every selected layer whose inputs moved, upstream first; return what was rebuilt.
 
     A no-op returning [] on a tree with no builders (a fixture). A builder that exits non-zero
     raises `LayerError` carrying its last output line - the digest is NOT stamped, so the next
-    call tries again."""
+    call tries again.
+
+    `wait=True` (the default, and the only behaviour before P64 T1) BLOCKS until every stale layer
+    is rebuilt: the caller that must be current - a record slice, a strict gate, a test. `wait=False`
+    hands the work to `refresh` (one detached builder behind a lock) and returns [] at once, because
+    nothing HAS been rebuilt by the time it returns."""
+    if not wait:
+        refresh(repo, names, scripts_dir, layers)
+        return []
     repo = Path(repo).resolve()
     scripts = scripts_of(repo, scripts_dir)
     if not has_builders(repo, scripts):
@@ -506,3 +523,224 @@ def stamp(names=None, repo: Path = REPO, scripts_dir: Path | None = None,
         write_digest(repo, one.name, digest(one, repo, scripts, cache, layers))
         done.append(one.name)
     return done
+
+
+# --- the background refresh: the WRITE refreshes, the READ never rebuilds (P64 T1) ----------------
+#
+# The rule the operator set: "can't we move to a system where the agents are able to keep progressing
+# while the system updates" and "i think docs_find doesnt need to rebuild the stale layer every
+# answer". So `ensure` - blocking, and minutes of it after a CAPABILITIES edit - is off the read path.
+# A WRITE calls `refresh`, which starts ONE detached builder behind `docs/.layers/REBUILD.lock`; a
+# READ calls `status`, which hashes the inputs (0.6 s over the whole stack here) and never builds.
+# Every checkout - every worktree - carries its own `docs/.layers/`, so a refresh in one never
+# touches another.
+
+def lock_path(repo: Path) -> Path:
+    return Path(repo) / LOCK_REL
+
+
+def log_path(repo: Path) -> Path:
+    return Path(repo) / LOG_REL
+
+
+def read_lock(repo: Path) -> dict | None:
+    """The lock as it sits, or None when there is none (or it is not the JSON object we wrote)."""
+    try:
+        data = json.loads(lock_path(repo).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    return data if isinstance(data, dict) and isinstance(data.get("pid"), int) else None
+
+
+def pid_alive(pid: int) -> bool:
+    """Is that process still running? Stdlib only, and never a signal on Windows.
+
+    `os.kill(pid, 0)` on Windows does NOT probe - it calls TerminateProcess with the signal as the
+    exit code, i.e. it would KILL the very refresh we are asking about - so Windows goes through
+    OpenProcess / GetExitCodeProcess by ctypes instead."""
+    if not isinstance(pid, int) or pid <= 0:
+        return False
+    if os.name == "nt":
+        import ctypes                                    # Windows only, and only here
+        PROCESS_QUERY_LIMITED_INFORMATION, STILL_ACTIVE = 0x1000, 259
+        kernel32 = ctypes.windll.kernel32
+        handle = kernel32.OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, False, pid)
+        if not handle:
+            return False
+        try:
+            code = ctypes.c_ulong()
+            ok = kernel32.GetExitCodeProcess(handle, ctypes.byref(code))
+            return bool(ok) and code.value == STILL_ACTIVE
+        finally:
+            kernel32.CloseHandle(handle)
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except PermissionError:                              # someone else's process: alive, not ours
+        return True
+    return True
+
+
+def lock_age_s(lock: dict) -> float | None:
+    """Seconds since the lock was written, by its own ISO `started`; None when that is unreadable."""
+    try:
+        return max(0.0, time.time() - datetime.fromisoformat(str(lock.get("started"))).timestamp())
+    except (TypeError, ValueError):
+        return None
+
+
+def live_lock(repo: Path) -> dict | None:
+    """The lock of a refresh that is really running, or None - a lock whose pid is dead or that is
+    older than ten minutes is TAKEN OVER, so a crashed or killed builder wedges nothing."""
+    lock = read_lock(repo)
+    if lock is None:
+        return None
+    age = lock_age_s(lock)
+    if age is not None and age > LOCK_MAX_AGE_S:
+        return None
+    return lock if pid_alive(lock["pid"]) else None
+
+
+def write_lock(repo: Path, pid: int, names) -> dict:
+    """Stamp {pid, started, names} beside the layers and return it."""
+    lock = {"pid": int(pid), "started": datetime.now().isoformat(timespec="seconds"),
+            "names": list(names or [])}
+    path = lock_path(repo)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(lock) + "\n", encoding="utf-8")
+    return lock
+
+
+def clear_lock(repo: Path, pid: int | None = None) -> bool:
+    """Remove the lock - only if it is OURS when `pid` is given. True when one was removed."""
+    lock = read_lock(repo)
+    if lock is None or (pid is not None and lock.get("pid") != pid):
+        return False
+    try:
+        lock_path(repo).unlink()
+    except OSError:
+        return False
+    return True
+
+
+def last_log_line(repo: Path) -> str | None:
+    """The refresh log's last non-empty line - the builder's own summary, for the next reader."""
+    try:
+        text = log_path(repo).read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return None
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    return lines[-1] if lines else None
+
+
+def start_refresh(repo: Path, names, scripts_dir: Path | None = None) -> int | None:
+    """Start ONE detached `build_docs_layers.py --ensure --only ... --then-recheck`; return its pid.
+
+    Detached on purpose: it must outlive the hook, the CLI or the reader that started it. Its stdout
+    and stderr go to `docs/.layers/REBUILD.log`, truncated per refresh so the last line is THIS
+    refresh's. The lock is written immediately after the spawn - the child needs ~150 ms to boot
+    before it could possibly clear it, and if it ever won that race the lock's pid would then be
+    dead, which the next `live_lock` takes over. None when this checkout has no builder to run."""
+    repo = Path(repo).resolve()
+    script = scripts_of(repo, scripts_dir) / "build_docs_layers.py"
+    if not script.is_file():
+        return None
+    log = log_path(repo)
+    log.parent.mkdir(parents=True, exist_ok=True)
+    cmd = [sys.executable, str(script), "--ensure", "--then-recheck", "--repo", str(repo)]
+    if names:
+        cmd += ["--only", ",".join(names)]
+    kwargs: dict = {}
+    if os.name == "nt":
+        DETACHED_PROCESS, CREATE_NEW_PROCESS_GROUP = 0x00000008, 0x00000200
+        kwargs["creationflags"] = DETACHED_PROCESS | CREATE_NEW_PROCESS_GROUP
+    else:
+        kwargs["start_new_session"] = True
+    handle = log.open("wb")
+    try:
+        proc = subprocess.Popen(cmd, cwd=str(repo), stdin=subprocess.DEVNULL, stdout=handle,
+                                stderr=subprocess.STDOUT, close_fds=True, **kwargs)
+    finally:
+        handle.close()
+    write_lock(repo, proc.pid, names)
+    return proc.pid
+
+
+def refresh(repo: Path = REPO, names=None, scripts_dir: Path | None = None,
+            layers: tuple[Layer, ...] = LAYERS) -> dict:
+    """Start a background rebuild of whatever is stale and RETURN AT ONCE. Never raises.
+
+    `{"stale": [...], "started": pid | None, "running": {pid, started, names} | None}`. ONE refresh
+    per checkout at a time: when one is already live the stale set is not re-hashed - that is the
+    running child's `--then-recheck` job, and this sits on a write hook's path, where it must cost
+    nothing - so the set reported is the one that refresh is working on.
+
+    Note the argument order: `repo` FIRST, unlike `ensure` / `stale` / `stamp`, because a caller of
+    this one almost never names layers; it says "this checkout was written to, get on with it"."""
+    repo = Path(repo).resolve()
+    scripts = scripts_of(repo, scripts_dir)
+    running = live_lock(repo)
+    if running is not None:
+        return {"stale": list(running.get("names") or []), "started": None, "running": running}
+    behind = stale(names, repo, scripts, layers)
+    if not behind:
+        return {"stale": [], "started": None, "running": None}
+    pid = start_refresh(repo, behind, scripts)
+    return {"stale": behind, "started": pid, "running": read_lock(repo) if pid else None}
+
+
+_STATUS_CACHE: dict = {}          # (repo, names) -> (monotonic stamp, stale names): the TTL memo
+
+
+def status(repo: Path = REPO, names=None, scripts_dir: Path | None = None,
+           layers: tuple[Layer, ...] = LAYERS, max_age: float | None = None) -> dict:
+    """What a READER is allowed to know: `{"stale": [...], "running": {...} | None, "last_line": str | None}`.
+
+    It NEVER builds and never starts anything. The stale set costs one digest pass (0.6 s over the
+    whole stack on this repo); a long-lived reader answering the same question on every request
+    passes `max_age` to reuse the last pass for that many seconds - the lock and the log are re-read
+    every time either way, being two small files."""
+    repo = Path(repo).resolve()
+    scripts = scripts_of(repo, scripts_dir)
+    key = (str(repo), None if names is None else tuple(sorted(
+        [names] if isinstance(names, str) else names)))
+    cached = _STATUS_CACHE.get(key)
+    if max_age is not None and cached is not None and (time.monotonic() - cached[0]) < max_age:
+        behind = cached[1]
+    else:
+        behind = stale(names, repo, scripts, layers)
+        _STATUS_CACHE[key] = (time.monotonic(), behind)
+    return {"stale": behind, "running": live_lock(repo), "last_line": last_log_line(repo)}
+
+
+def stale_note(state: dict) -> str | None:
+    """The ONE line a reader prints when a layer it just read is behind - None when none is.
+
+    `[layers] stale: a, b (a refresh is running, pid 123, started 21:04:11)`, or `... (no refresh
+    running - run build_docs_layers.py --refresh)`; when the last refresh FAILED, its own last line
+    is carried along, because the reader after a failure is the one who needs to see why."""
+    behind = state.get("stale") or []
+    if not behind:
+        return None
+    running = state.get("running")
+    if running:
+        started = str(running.get("started") or "")
+        clock = started.split("T")[-1] or started
+        note = f"a refresh is running, pid {running.get('pid')}, started {clock}"
+    else:
+        note = "no refresh running - run build_docs_layers.py --refresh"
+        last = state.get("last_line") or ""
+        if "FAILED" in last:                     # a builder's own line runs to hundreds of characters
+            note += f"; last: {last[:LAST_LINE_CHARS]}" + ("..." if len(last) > LAST_LINE_CHARS else "")
+    return f"[layers] stale: {', '.join(behind)} ({note})"
+
+
+def report_stale(repo: Path = REPO, names=None, scripts_dir: Path | None = None,
+                 layers: tuple[Layer, ...] = LAYERS, stream=None,
+                 max_age: float | None = None) -> str | None:
+    """Print `stale_note` on stderr - stdout is the answer, and a recall receipt quotes stdout."""
+    note = stale_note(status(repo, names, scripts_dir, layers, max_age))
+    if note:
+        print(note, file=stream if stream is not None else sys.stderr)
+    return note

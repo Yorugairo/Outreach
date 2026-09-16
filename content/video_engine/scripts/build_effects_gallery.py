@@ -40,19 +40,24 @@ RECIPE_AXIS = "recipe"
 NO_PROOF_MARKER = "no proof yet"
 
 
-def ensure_catalog(catalog: Path) -> list[str]:
-    """Rebuild THIS repository's catalogue iff its inputs moved, before the page is generated (P63).
+def ensure_catalog(catalog: Path, *, wait: bool = False) -> list[str]:
+    """Say whether the catalogue behind the page is behind - and with `wait`, rebuild it first.
 
-    The gallery is itself build output (`.gitignore`, P55 T9), so it must never be generated from a
-    stale catalogue: a card edited this morning belongs on the page. Only the repo's own artifact -
-    a `--catalog` pointing anywhere else is the caller's file. `docs_layers` is imported here rather
-    than at the top for the same reason `argparse` is (the flagless build pays 23 ms less to start).
-    A builder that fails is named on stderr and the page is built from the catalogue as it sits."""
+    The gallery is itself build output (`.gitignore`, P55 T9). Since P64 T1 the DEFAULT builds
+    nothing: it prints one `[layers] stale: ...` line and generates the page from the catalogue as it
+    sits, because the write to a card is what starts the refresh. `--wait` is for the pass that must
+    carry this morning's card. Only the repo's own artifact - a `--catalog` pointing anywhere else is
+    the caller's file. `docs_layers` is imported here rather than at the top for the same reason
+    `argparse` is (the flagless build pays 23 ms less to start). A builder that fails is named on
+    stderr and the page is built from the catalogue as it sits."""
     if catalog.resolve() != (ROOT / CATALOG_REL).resolve():
         return []
     if str(SCRIPTS) not in sys.path:
         sys.path.insert(0, str(SCRIPTS))
     import docs_layers as DL
+    if not wait:
+        DL.report_stale(ROOT, [CATALOG_LAYER])
+        return []
     try:
         return DL.ensure([CATALOG_LAYER], ROOT)
     except DL.LayerError as exc:
@@ -532,12 +537,15 @@ def parse_args(argv: list[str] | None) -> SimpleNamespace:
     ap.add_argument("--pin", action="store_true",
                     help="re-capture the page's three golden frames into tests/golden/frames/")
     ap.add_argument("--pin-into", type=Path, help="write the pinned frames here instead (to compare a pair)")
+    ap.add_argument("--wait", action="store_true",
+                    help="rebuild a stale catalogue and block on it first (P64 T1: the default "
+                         "builds the page from what is on disk and names the staleness on stderr)")
     return ap.parse_args(flags)
 
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
-    ensure_catalog(args.catalog)
+    ensure_catalog(args.catalog, wait=args.wait)
     if not args.catalog.is_file():
         print(f"catalogue not found: {args.catalog}", file=sys.stderr)
         return 2

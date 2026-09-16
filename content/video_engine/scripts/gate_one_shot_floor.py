@@ -160,6 +160,7 @@ class Measures:
     compositions: int = 0
     builds: int = 0
     ref_warn: str | None = None                             # the reference this run could not read, if any
+    layers_note: str | None = None                          # the catalogue's staleness, for the header (P64 T1)
 
     @property
     def name(self) -> str:
@@ -632,6 +633,7 @@ def report_text(gates: Sequence[Gate], m: Measures, ref: Measures | None) -> str
                                          else "not on disk - E96's own numbers only"),
              f"  {'predates E96':>20}: " + ("yes (M35, M36 INFO - HG1 A)"
                                             if predates_e96(m.build, m.timeline_path) else "no"),
+             *([f"  {'catalogue':>20}: {m.layers_note}"] if m.layers_note else []),
              ""]
     order = {rid: i for i, rid in enumerate(ROW_ORDER)}
     for g in sorted(gates, key=lambda g: order.get(g.id, 99)):
@@ -646,16 +648,32 @@ def fail_count(gates: Sequence[Gate]) -> int:
     return sum(1 for g in gates if g.level == "FAIL")
 
 
-def ensure_catalog(catalog: Path) -> list[str]:
-    """Rebuild THIS repository's catalogue iff its inputs moved, before the gate reads it (P63).
+def is_own_catalog(catalog: Path) -> bool:
+    """Is this the repo's own generated artifact, or a `--catalog` the caller pointed somewhere else?
 
-    Only the repo's own generated artifact: a `--catalog` pointing anywhere else is the caller's file
-    and is read exactly as given. A builder that fails is named on stderr and the gate runs on the
-    catalogue as it sits - a broken card must not take the floor's other seven rows down."""
+    Anything else is the caller's file, read exactly as given - never checked, never rebuilt."""
     try:
-        if catalog.resolve() != (REPO / CATALOG_REL).resolve():
-            return []
+        return catalog.resolve() == (REPO / CATALOG_REL).resolve()
     except OSError:
+        return False
+
+
+def catalog_note(catalog: Path) -> str | None:
+    """The staleness line for the report HEADER - this gate's verdict depends on a current catalogue,
+    so the reader is told, in the report, exactly how current the catalogue behind it was (P64 T1).
+
+    It still RUNS on what is on disk: the operator's rule is that nothing blocks. `--wait` is there
+    for the run that must be current."""
+    return DL.stale_note(DL.status(REPO, [CATALOG_LAYER])) if is_own_catalog(catalog) else None
+
+
+def ensure_catalog(catalog: Path, *, wait: bool = False) -> list[str]:
+    """With `wait`, rebuild THIS repository's catalogue iff its inputs moved before the gate reads it.
+
+    The DEFAULT builds nothing (P64 T1) - `catalog_note` puts the staleness in the report header and
+    the gate runs on the catalogue as it sits. A builder that fails is named on stderr and the gate
+    runs anyway - a broken card must not take the floor's other seven rows down."""
+    if not wait or not is_own_catalog(catalog):
         return []
     try:
         return DL.ensure([CATALOG_LAYER], REPO)
@@ -665,17 +683,19 @@ def ensure_catalog(catalog: Path) -> list[str]:
 
 
 def run(build: Path, project: Path | None = None, reference: Path | None = None, catalog: Path | None = None,
-        timeline_name: str | None = None) -> tuple:
+        timeline_name: str | None = None, wait: bool = False) -> tuple:
     """Measure the build (and the reference, with the same functions) and return (rows, the cut, the reference).
 
     A reference that is absent, holds no compiled timeline or cannot be parsed never kills the run (the P56 review):
     `m.ref_warn` carries the path and the three reference rows say so while holding the rule's own number.
     """
     catalog = Path(catalog or REPO / CATALOG_REL)
-    ensure_catalog(catalog)
+    ensure_catalog(catalog, wait=wait)
+    note = catalog_note(catalog)
     recipes, options = load_recipes(catalog), card_options(catalog)
     registry = recipe_registry(catalog)
     m = measure(Path(build), project, recipes, options, timeline_name, registry)
+    m.layers_note = note
     ref_dir = Path(reference) if reference else REPO / REFERENCE_REL
     ref: Measures | None = None
     if ref_dir.resolve() == Path(build).resolve():
@@ -695,10 +715,13 @@ def main() -> int:
     ap.add_argument("--reference", type=Path, help=f"the reference build (default {REFERENCE_REL})")
     ap.add_argument("--catalog", type=Path, help=f"the effects catalogue (default {CATALOG_REL})")
     ap.add_argument("--timeline", help="the compiled timeline's file name inside the build dir")
+    ap.add_argument("--wait", action="store_true",
+                    help="rebuild a stale catalogue and block on it first (the default runs on what is "
+                         "on disk and names its staleness in the header)")
     args = ap.parse_args()
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-    gates, m, ref = run(args.build, args.project, args.reference, args.catalog, args.timeline)
+    gates, m, ref = run(args.build, args.project, args.reference, args.catalog, args.timeline, args.wait)
     print(report_text(gates, m, ref))
     return 1 if fail_count(gates) else 0
 

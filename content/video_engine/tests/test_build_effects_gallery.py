@@ -203,9 +203,10 @@ def fake_repo(tmp_path: Path, monkeypatch) -> Path:
 
 
 def test_the_page_is_generated_from_a_rebuilt_catalogue_not_a_stale_one(fake_repo: Path, tmp_path, capsys):
+    """Since P64 T1 that is the `--wait` pass: the default generates from what is on disk (below)."""
     # Act
     code = BEG.main(["--catalog", str(fake_repo / BEG.CATALOG_REL), "--frames", str(tmp_path / "frames"),
-                     "--out", str(tmp_path / "out")])
+                     "--out", str(tmp_path / "out"), "--wait"])
 
     # Assert
     assert code == 0
@@ -214,13 +215,25 @@ def test_the_page_is_generated_from_a_rebuilt_catalogue_not_a_stale_one(fake_rep
     assert DL.stored_digest(fake_repo, BEG.CATALOG_LAYER)
 
 
+def test_the_default_builds_nothing_and_says_the_catalogue_is_stale(fake_repo: Path, tmp_path, capsys):
+    # Act
+    code = BEG.main(["--catalog", str(fake_repo / BEG.CATALOG_REL), "--frames", str(tmp_path / "frames"),
+                     "--out", str(tmp_path / "out")])
+
+    # Assert: the page carries the catalogue as it sits, one stderr line says it is behind
+    assert code == 0
+    assert "The STALE card" in (tmp_path / "out/index.html").read_text(encoding="utf-8")
+    assert "[layers] stale: docs-index, effects-catalog" in capsys.readouterr().err
+    assert not (fake_repo / DL.CACHE_REL).exists()
+
+
 def test_a_catalogue_that_is_not_this_repos_own_artifact_is_never_rebuilt(fake_repo: Path, tmp_path):
     # Arrange
     mine = tmp_path / "mine.jsonl"
     mine.write_text(json.dumps(CARD) + "\n", encoding="utf-8")
 
     # Act / Assert
-    assert BEG.ensure_catalog(mine) == []
+    assert BEG.ensure_catalog(mine, wait=True) == []
     assert not (fake_repo / DL.CACHE_REL).exists()
 
 
@@ -232,5 +245,5 @@ def test_a_tree_with_no_builders_in_it_is_never_rebuilt(tmp_path, monkeypatch):
     monkeypatch.setattr(BEG, "ROOT", repo)
 
     # Act / Assert
-    assert BEG.ensure_catalog(repo / BEG.CATALOG_REL) == []
+    assert BEG.ensure_catalog(repo / BEG.CATALOG_REL, wait=True) == []
     assert not (repo / DL.CACHE_REL).exists()

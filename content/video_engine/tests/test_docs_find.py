@@ -535,9 +535,11 @@ def test_a_fixture_tree_with_no_builders_in_it_is_never_rebuilt(capsys, tree):
     assert not (tree / DL.CACHE_REL).exists()
 
 
-def test_a_stale_layer_is_rebuilt_before_the_scan_and_the_rebuild_is_one_stderr_line(capsys, buildable):
+def test_wait_rebuilds_a_stale_layer_before_the_scan_and_says_so_in_one_stderr_line(capsys, buildable):
+    """P64 T1 renamed this from `test_a_stale_layer_is_rebuilt_before_the_scan_...`: it is the `--wait`
+    path now, because the DEFAULT no longer rebuilds anything. The claim it pins is unchanged."""
     # Act
-    assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable)]) == 0
+    assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable), "--wait"]) == 0
     out, err = capsys.readouterr()
 
     # Assert: the answer carries the REBUILT record, and the note is on stderr, once, out of the way
@@ -547,23 +549,67 @@ def test_a_stale_layer_is_rebuilt_before_the_scan_and_the_rebuild_is_one_stderr_
     assert DL.stored_digest(buildable, "effects-catalog")
 
     # Act again: nothing moved, so nothing is rebuilt and stderr is silent
-    assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable)]) == 0
+    assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable), "--wait"]) == 0
     assert capsys.readouterr().err == ""
 
 
+def test_the_default_never_rebuilds_and_names_the_stale_layers_on_stderr(capsys, buildable):
+    """The operator's rule (P64 T1): a query answers from what is on disk and says if it is behind."""
+    # Act
+    assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable)]) == 0
+    out, err = capsys.readouterr()
+
+    # Assert: the STALE record answered, nothing was built or stamped, and ONE line said so
+    assert "REBUILT" not in out and "The widget lands on its beat." in out
+    assert err.splitlines() == ["[layers] stale: docs-index, effects-catalog "
+                                "(no refresh running - run build_docs_layers.py --refresh)"]
+    assert not (buildable / DL.CACHE_REL).exists()
+    assert not (buildable / DL.LOCK_REL).exists()          # a READER never starts a refresh either
+
+
+def test_the_default_does_not_call_ensure_at_all(monkeypatch, capsys, buildable):
+    """Not "it happens to find nothing to build" - `ensure` is not on the read path (P64 T1)."""
+    # Arrange
+    def explode(*a, **k):
+        raise AssertionError("docs_find called ensure on the default path")
+    monkeypatch.setattr(DL, "ensure", explode)
+
+    # Act / Assert
+    assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable)]) == 0
+    assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable), "--no-ensure"]) == 0
+    assert "The widget lands on its beat." in capsys.readouterr().out
+
+
+def test_the_stale_line_names_the_running_refresh_when_one_holds_the_lock(capsys, buildable):
+    # Arrange: a live lock (this test's own process - certainly alive)
+    import os
+    DL.write_lock(buildable, os.getpid(), ["effects-catalog"])
+
+    # Act
+    assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable)]) == 0
+
+    # Assert
+    err = capsys.readouterr().err
+    assert err.startswith("[layers] stale: docs-index, effects-catalog (a refresh is running, pid "
+                          f"{os.getpid()}, started ")
+
+
 def test_no_ensure_reads_the_layers_as_they_sit(capsys, buildable):
+    """`--no-ensure` is a no-op alias of the default since P64 T1; the callers that pass it still work."""
     # Act
     assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable), "--no-ensure"]) == 0
     out, err = capsys.readouterr()
 
-    # Assert: the stale record answered, and no builder ran
+    # Assert: the stale record answered, no builder ran, and the one stale line is the only stderr
     assert "REBUILT" not in out and "The widget lands on its beat." in out
-    assert err == "" and not (buildable / DL.CACHE_REL).exists()
+    assert err.splitlines() == ["[layers] stale: docs-index, effects-catalog "
+                                "(no refresh running - run build_docs_layers.py --refresh)"]
+    assert not (buildable / DL.CACHE_REL).exists()
 
 
 def test_only_the_named_layer_and_its_upstream_are_ensured(capsys, buildable):
     # Act: the capabilities layer alone - the catalogue is not in its selection
-    assert DF.main(["widget", "--layer", "capabilities", "--repo", str(buildable)]) == 0
+    assert DF.main(["widget", "--layer", "capabilities", "--repo", str(buildable), "--wait"]) == 0
     err = capsys.readouterr().err
 
     # Assert: no builder for capabilities-index in this tree, so nothing was built at all
@@ -577,7 +623,7 @@ def test_a_builder_that_fails_reports_itself_and_the_scan_still_answers(capsys, 
         FAILING_BUILDER, encoding="utf-8")
 
     # Act
-    assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable)]) == 0
+    assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable), "--wait"]) == 0
     out, err = capsys.readouterr()
 
     # Assert: the stale catalogue still answers, and the failure is named on stderr

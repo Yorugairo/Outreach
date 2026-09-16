@@ -13,12 +13,14 @@ The layer also carries the RECIPES (`axis: "recipe"`, P56 T4): a record with no 
 tiers key on what a record HAS, so a recipe resolves by id, title or alias, and an exact card token still
 wins over a recipe whose title merely contains the word (the catalogue's retrieval budget, P56 risks).
 
-The layer is BUILD OUTPUT (P63): `load()` ensures it before it reads it, so a card edited since the last
-build is in the card this returns and no agent runs a builder by hand. `load(..., ensure=False)` reads the
-file as it sits; a tree with no builders in it (every test fixture) is never rebuilt. The check costs a
-0.44 s digest of the catalogue's inputs, and a caller resolves a dozen names in a row (`card()` loads for
-each), so it runs ONCE PER PROCESS per repository - a CLI, a build or a test session pays it once. A process
-that outlives an edit to the cards asks for another pass with `ensure_catalog(repo, force=True)`.
+The layer is BUILD OUTPUT (P63), and since P64 T1 this reader NEVER BUILDS it: `load()` checks whether the
+catalogue is behind (a 0.44 s digest of its inputs) and says so in one stderr line - `[layers] stale: ...` -
+then reads what is on disk. The WRITE to a card is what starts the rebuild (the Edit / Write hook running
+`build_docs_layers.py --refresh`), so an author keeps moving while the catalogue catches up. A caller that
+must be current passes `wait=True` (`load(repo, wait=True)`, `ensure_catalog(repo, wait=True)`) and blocks
+on `docs_layers.ensure` as before. `load(..., ensure=False)` skips even the check; a tree with no builders
+in it (every test fixture) is never rebuilt either way. The check runs ONCE PER PROCESS per repository - a
+caller resolves a dozen names in a row and `card()` loads for each - and `force=True` asks for another.
 """
 from __future__ import annotations
 
@@ -52,14 +54,22 @@ def normalise(name: str) -> str:
     return _SEPARATORS.sub("", _ARTICLE.sub("", spaced))
 
 
-def ensure_catalog(repo: Path, *, force: bool = False) -> list[str]:
-    """Rebuild the catalogue (and its upstream) iff their inputs moved; return what was rebuilt.
+def ensure_catalog(repo: Path, *, force: bool = False, wait: bool = False) -> list[str]:
+    """Check whether the catalogue is behind (and with `wait`, rebuild it) - the names rebuilt.
+
+    The DEFAULT builds nothing (P64 T1): it reads the status and prints one `[layers] stale: ...`
+    line on stderr, returning []. `wait=True` is the old path - `docs_layers.ensure`, blocking,
+    upstream first - for a caller that cannot answer from a catalogue that is a card behind.
 
     Once per process per repository unless `force`. A no-op on a tree with no builders - a fixture. A
     builder that fails is NAMED on stderr and the catalogue is read as it sits: a broken card in
     someone else's lane must not take this reader down with it."""
     key = str(Path(repo).resolve())
     if key in _ENSURED and not force:
+        return []
+    if not wait:
+        DL.report_stale(repo, [CATALOG_LAYER])
+        _ENSURED.add(key)
         return []
     try:
         rebuilt = DL.ensure([CATALOG_LAYER], repo)
@@ -70,11 +80,11 @@ def ensure_catalog(repo: Path, *, force: bool = False) -> list[str]:
     return rebuilt
 
 
-def load(repo: Path | str | None = None, *, ensure: bool = True) -> list[dict]:
-    """Every record of the generated catalogue, in file order - ensured first (P63)."""
+def load(repo: Path | str | None = None, *, ensure: bool = True, wait: bool = False) -> list[dict]:
+    """Every record of the generated catalogue, in file order - its staleness reported first (P64)."""
     repo = Path(repo or REPO)
     if ensure:
-        ensure_catalog(repo)
+        ensure_catalog(repo, wait=wait)
     path = repo / CATALOG_REL
     if not path.is_file():
         raise FileNotFoundError(f"{path} is missing - run build_effects_catalog.py --write")

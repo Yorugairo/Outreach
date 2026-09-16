@@ -6,8 +6,17 @@ that rebuilds one and forgets the next ships a stale layer that still looks fres
 in dependency order, in one process tree, and prints one summary line per layer.
 
     python content/video_engine/scripts/build_docs_layers.py --check   # digests: exit 1 on the first stale
-    python content/video_engine/scripts/build_docs_layers.py --ensure  # rebuild only what went stale
+    python content/video_engine/scripts/build_docs_layers.py --ensure  # rebuild only what went stale (BLOCKS)
+    python content/video_engine/scripts/build_docs_layers.py --refresh # start that rebuild in the BACKGROUND, return now
+    python content/video_engine/scripts/build_docs_layers.py --status  # who is rebuilding what, and the last line
     python content/video_engine/scripts/build_docs_layers.py --write   # regenerate everything, then re-check
+
+Since P64 T1 the WRITE refreshes and the READ never rebuilds. `--refresh` is what a write hook (Edit,
+Write, a commit) calls: it returns at once, having started ONE detached `--ensure --then-recheck`
+behind `docs/.layers/REBUILD.lock` with its output in `docs/.layers/REBUILD.log`, or having found one
+already running. `--then-recheck` is the child's own flag: when its pass ends it re-computes the stale
+set and goes again if a write landed while it was building, at most REFRESH_ROUNDS times, then stops
+and says so. Readers (`docs_find.py` and the five runtime readers) only ever call `docs_layers.status`.
 
 The table itself - what each layer reads, what it writes, what it depends on - lives in
 `docs_layers.py`, because the readers (`docs_find.py` and the runtime readers) ensure their own
@@ -44,14 +53,16 @@ interpreter, so it sees the same Python.
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from docs_layers import (  # noqa: E402  (the table and the digest live there; the readers share them)
-    LAYERS, REPORT_REL, Layer, LayerError, digest, ensure, last_line, run_script, script_path,
-    stamp, stored_digest)
+    LAYERS, REFRESH_ROUNDS, REPORT_REL, Layer, LayerError, clear_lock, digest, ensure, last_line,
+    last_log_line, live_lock, lock_path, log_path, read_lock, refresh, run_script, script_path,
+    stale, stamp, stored_digest, write_lock)
 
 SCRIPTS = Path(__file__).resolve().parent
 REPO = SCRIPTS.parents[2]
@@ -108,31 +119,112 @@ def digest_pass(layers, repo: Path, scripts_dir: Path) -> list[str]:
     return behind
 
 
+def ensure_pass(repo: Path, names, scripts_dir: Path, layers, then_recheck: bool = False) -> int:
+    """The blocking rebuild - and, as the background child, the re-check that follows it.
+
+    A write that lands WHILE a layer is being rebuilt would otherwise be invisible until the next
+    write: the child's pass ends, the lock comes off, and the tree is stale with nobody coming. So
+    the child re-computes the stale set over the WHOLE stack when its pass ends and goes again, at
+    most REFRESH_ROUNDS times - bounded, because a tree being written to continuously must not hold
+    one process forever.
+
+    The lock is TAKEN OVER in this process's own pid first, and removed only if it is still ours
+    (`clear_lock(pid=...)`). `refresh` had to stamp it with the pid `Popen` returned, which on a
+    venv whose `python.exe` is a redirector is the shim, not this interpreter (measured: Popen said
+    30568, the child was 11460) - so the pid a reader probes for liveness is the one really doing
+    the work, and the removal at the end cannot take a newer refresh's lock off by accident."""
+    if then_recheck:
+        prior = read_lock(repo) or {}
+        write_lock(repo, os.getpid(), names or prior.get("names") or [])
+    try:
+        for round_n in range(1, (REFRESH_ROUNDS if then_recheck else 1) + 1):
+            try:
+                rebuilt = ensure(names, repo, scripts_dir, layers=layers)
+            except LayerError as exc:
+                print(f"build_docs_layers: FAILED to build {exc.layer} - {exc.detail}")
+                return 1
+            print(f"build_docs_layers: rebuilt {', '.join(rebuilt)}" if rebuilt
+                  else "build_docs_layers: every layer already current")
+            if not then_recheck:
+                return 0
+            names = stale(None, repo, scripts_dir, layers=layers)
+            if not names:
+                print(f"build_docs_layers: refresh done in {round_n} round(s), every layer current")
+                return 0
+            if round_n == REFRESH_ROUNDS:
+                break
+            print(f"build_docs_layers: a write landed during round {round_n} - "
+                  f"{', '.join(names)} went stale, going again")
+        print(f"build_docs_layers: stopped after {REFRESH_ROUNDS} rounds, still stale: "
+              f"{', '.join(names or [])} - the tree is being written to faster than it builds")
+        return 0
+    finally:
+        if then_recheck:
+            clear_lock(repo, os.getpid())
+
+
+def refresh_pass(repo: Path, names, scripts_dir: Path, layers) -> int:
+    """What a write hook calls: one line, exit 0, nothing waited on. Never fails a commit or an edit."""
+    state = refresh(repo, names, scripts_dir, layers)
+    if state["started"]:
+        print(f"build_docs_layers: refreshing {', '.join(state['stale'])} in the background "
+              f"(pid {state['started']}, log {log_path(repo).as_posix()})")
+    elif state["running"]:
+        running = state["running"]
+        print(f"build_docs_layers: a refresh is already running (pid {running['pid']}, started "
+              f"{running['started']}, {', '.join(running.get('names') or [])})")
+    elif state["stale"]:
+        print(f"build_docs_layers: {', '.join(state['stale'])} stale and no builder here to run")
+    else:
+        print("build_docs_layers: every layer in sync (nothing to refresh)")
+    return 0
+
+
+def status_pass(repo: Path, names, scripts_dir: Path, layers) -> int:
+    """The reader's question, answered without building anything: exit 0 either way."""
+    running = live_lock(repo)
+    behind = stale(names, repo, scripts_dir, layers=layers)
+    last = last_log_line(repo)
+    print(f"build_docs_layers: stale: {', '.join(behind) if behind else '(none)'}")
+    print(f"build_docs_layers: refresh: " + (
+        f"running, pid {running['pid']}, started {running['started']}, "
+        f"{', '.join(running.get('names') or [])}" if running else "none running"))
+    print(f"build_docs_layers: last line: {last if last else '(no log yet)'}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--check", action="store_true",
                     help="exit 1 naming the first layer whose input digest moved (default)")
     ap.add_argument("--write", action="store_true", help="regenerate every layer, then re-check")
     ap.add_argument("--ensure", action="store_true",
-                    help="rebuild only the layers whose inputs moved, upstream first")
-    ap.add_argument("--only", metavar="LAYER", default=None,
-                    help="with --ensure: this layer and its upstream, not the whole stack")
+                    help="rebuild only the layers whose inputs moved, upstream first (blocks)")
+    ap.add_argument("--refresh", action="store_true",
+                    help="start that rebuild in the background behind the lock and return at once")
+    ap.add_argument("--status", action="store_true",
+                    help="what is stale, what is rebuilding it and its last line - builds nothing")
+    ap.add_argument("--then-recheck", action="store_true", dest="then_recheck",
+                    help="with --ensure (the background child): re-check after the pass and go again "
+                         f"if a write landed meanwhile, at most {REFRESH_ROUNDS} rounds")
+    ap.add_argument("--only", metavar="LAYER[,LAYER...]", default=None,
+                    help="with --ensure/--refresh: these layers and their upstream, not the whole stack")
     ap.add_argument("--repo", type=Path, default=REPO, help="repository root (default: this checkout)")
     a = ap.parse_args(argv)
     repo = Path(a.repo).resolve()
     scripts_dir = SCRIPTS
     layers = LAYERS
 
+    names = [one.strip() for one in a.only.split(",") if one.strip()] if a.only else None
+
+    if a.refresh:
+        return refresh_pass(repo, names, scripts_dir, layers)
+
+    if a.status:
+        return status_pass(repo, names, scripts_dir, layers)
+
     if a.ensure:
-        names = [a.only] if a.only else None
-        try:
-            rebuilt = ensure(names, repo, scripts_dir, layers=layers)
-        except LayerError as exc:
-            print(f"build_docs_layers: FAILED to build {exc.layer} - {exc.detail}")
-            return 1
-        print(f"build_docs_layers: rebuilt {', '.join(rebuilt)}" if rebuilt
-              else "build_docs_layers: every layer already current")
-        return 0
+        return ensure_pass(repo, names, scripts_dir, layers, a.then_recheck)
 
     if a.write:
         failed = pass_over(layers, "write", repo, scripts_dir)

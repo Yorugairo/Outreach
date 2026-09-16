@@ -40,11 +40,20 @@ AGING_THRESHOLD_DAYS = 90
 
 
 
-def ensure_index(repo: Path = REPO) -> list[str]:
-    """Rebuild `docs/DOCS-INDEX.jsonl` iff the documents behind it moved, before this audit reads it.
+def index_note(repo: Path = REPO) -> str | None:
+    """The index's staleness, for the audit's HEADER: this audit's verdict depends on a current index,
+    so it says how current the one it read was - and audits it anyway (P64 T1: nothing blocks)."""
+    return DL.stale_note(DL.status(repo, [INDEX_LAYER]))
 
-    A no-op on a tree with no builders in it, which is what leaves the `[MISSING INDEX]` warning below
-    reachable. A builder that fails is named and the audit goes on against the index as it sits."""
+
+def ensure_index(repo: Path = REPO, *, wait: bool = False) -> list[str]:
+    """With `wait`, rebuild `docs/DOCS-INDEX.jsonl` iff the documents behind it moved, before the read.
+
+    The DEFAULT builds nothing (P64 T1): `index_note` states the staleness in the header and the audit
+    runs against the index as it sits. A no-op on a tree with no builders in it, which is what leaves
+    the `[MISSING INDEX]` warning below reachable. A builder that fails is named and the audit goes on."""
+    if not wait:
+        return []
     try:
         rebuilt = DL.ensure([INDEX_LAYER], repo)
     except DL.LayerError as exc:
@@ -107,6 +116,9 @@ def check_url(url: str, timeout: int = 7) -> tuple[bool, str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Audit research provenance and evidence layer integrity.")
     parser.add_argument("--verify-urls", action="store_true", help="Issue HTTP requests to test remote source URLs.")
+    parser.add_argument("--wait", action="store_true",
+                        help="rebuild a stale docs index and block on it first (P64 T1: the default "
+                             "audits what is on disk and states its staleness in the report).")
     args = parser.parse_args()
 
     if hasattr(sys.stdout, "reconfigure"):
@@ -206,7 +218,10 @@ def main() -> int:
 
     # 5. Check docs layer sync
     print("\n--- Checking Docs Layer Index Synchronization ---")
-    ensure_index()
+    ensure_index(wait=getattr(args, "wait", False))
+    note = index_note()
+    if note:
+        print(f"[INFO] [LAYERS] {note}")
     if not DOCS_INDEX_JSONL.exists():
         print("[WARN] [MISSING INDEX] docs/DOCS-INDEX.jsonl not found. Run build_docs_layers.py --write.")
         warnings += 1

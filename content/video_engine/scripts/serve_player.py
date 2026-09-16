@@ -83,7 +83,7 @@ SCRIPTS = Path(__file__).resolve().parent
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
-import docs_layers as DL  # noqa: E402  (the catalogue is build output; this server ensures it, P63 T2)
+import docs_layers as DL  # noqa: E402  (the catalogue is build output; this server only READS it, P64 T1)
 
 POLL_S = 0.25          # the watcher's tick: no third-party watcher, just os.stat
 HOLD_S = 25.0          # how long /reload holds a request before answering on the timeout
@@ -93,7 +93,8 @@ EDITOR_HTML = SCRIPTS.parent / "editor" / "editor.html"   # P51 T7: served from 
 REPO = SCRIPTS.parents[2]
 CATALOG_ROUTE = "/docs/EFFECTS-CATALOG.jsonl"             # P55 T8: read-only, off the repo, never copied
 CATALOG_JSONL = REPO / "docs" / "EFFECTS-CATALOG.jsonl"
-CATALOG_LAYER = "effects-catalog"                         # P63 T2: ensured on every GET of that route
+CATALOG_LAYER = "effects-catalog"                         # P64 T1: STATUS only on a GET, never a rebuild
+CATALOG_STATUS_TTL_S = 30.0                               # how long one digest pass answers this route for
 FRAMES_ROUTE = "/content/video_engine/tests/golden/frames/"
 GOLDEN_FRAMES = SCRIPTS.parent / "tests" / "golden" / "frames"
 FRAME_NAME = re.compile(r"[A-Za-z0-9._@-]+\.png")         # fullmatch: no slash, no separator, png only
@@ -101,6 +102,31 @@ CHECK_MAX = 6          # instants the server's own determinism check renders (th
 
 
 # ---- the static side (what the two projects' servers always were) ------------------------------------------------
+
+
+# --- the catalogue's staleness, off the request thread (P64 T1) ----------------------------------
+
+_CATALOG_NOTE: list = [0.0, None]        # [monotonic stamp of the last pass, the line to log or None]
+_CATALOG_BUSY = threading.Lock()
+
+
+def _catalog_note_due() -> bool:
+    """True when the memo is older than its TTL and no pass is already running - and CLAIMS the pass."""
+    if (time.monotonic() - _CATALOG_NOTE[0]) < CATALOG_STATUS_TTL_S:
+        return False
+    return _CATALOG_BUSY.acquire(blocking=False)
+
+
+def _refresh_catalog_note() -> None:
+    """One digest pass (~0.4 s) in a daemon thread; the GET that triggered it has long since answered."""
+    try:
+        _CATALOG_NOTE[1] = DL.stale_note(DL.status(REPO, [CATALOG_LAYER]))
+    except OSError:                                    # a checkout being rewritten under us: try later
+        _CATALOG_NOTE[1] = None
+    finally:
+        _CATALOG_NOTE[0] = time.monotonic()
+        _CATALOG_BUSY.release()
+
 
 class RangeFileWrapper:
     def __init__(self, f, length):
@@ -145,7 +171,7 @@ class ReviewHandler(SimpleHTTPRequestHandler):
         if path == "/editor.html":
             return self._editor()
         if path == CATALOG_ROUTE:
-            self._ensure_catalog()
+            self._catalog_status()
             return self._repo_file(CATALOG_JSONL, "application/x-ndjson; charset=utf-8")
         decoded = unquote(path)
         if decoded.startswith(FRAMES_ROUTE):
@@ -177,19 +203,18 @@ class ReviewHandler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
-    def _ensure_catalog(self):
-        """The catalogue is BUILD OUTPUT (P63): rebuild it iff its inputs moved, on every GET.
+    def _catalog_status(self):
+        """The catalogue is BUILD OUTPUT (P63) and this route NEVER REBUILDS IT (P64 T1).
 
-        The editor fetches this route once per page load, and the digest of the cards, the recipes and
-        the modules behind them is ~0.4 s against a ~1 ms read - so the editor never opens on a
-        catalogue that predates the card someone edited a minute ago, and a served page still costs
-        nothing to keep open. A builder that fails is logged and the file is served as it sits."""
-        try:
-            rebuilt = DL.ensure([CATALOG_LAYER], REPO)
-        except DL.LayerError as exc:
-            return self.log_message("layers: %s failed to rebuild - %s", exc.layer, exc.detail)
-        if rebuilt:
-            self.log_message("layers: rebuilt %s", ", ".join(rebuilt))
+        Ensuring it on every GET cost 418 ms of digest per page load, and on a cold checkout minutes of
+        builder while the editor waited on a 1 ms file. The write to a card is what starts the refresh
+        now (the Edit / Write hook -> `build_docs_layers.py --refresh`); this only says, in the server
+        log, when what it is serving is behind - and it says it from a memo refreshed OFF the request
+        thread (the review-queue server's pattern), so no GET ever waits on a digest pass."""
+        if _catalog_note_due():
+            threading.Thread(target=_refresh_catalog_note, daemon=True).start()
+        if _CATALOG_NOTE[1]:
+            self.log_message("%s", _CATALOG_NOTE[1])
 
     def _repo_file(self, file: Path, ctype: str):
         """One read-only file off the repo tree (P55 T8), never a copy in the build."""
