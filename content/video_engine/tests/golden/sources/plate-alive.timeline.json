@@ -1,0 +1,130 @@
+{
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [],
+ "captions": [],
+ "episode_id": "golden",
+ "evidence": {
+  "ev-quay-card": {
+   "badges": [
+    {
+     "accent": "cobalt",
+     "label": "MAMAA",
+     "tag": "matches the index",
+     "value": "+20%"
+    },
+    {
+     "accent": "ink",
+     "label": "S&P 500",
+     "tag": "12 months",
+     "value": "+21%"
+    }
+   ],
+   "document": {
+    "path": "golden",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "source": "P61 T14",
+   "species": "deck",
+   "title": "The card the eye goes to"
+  }
+ },
+ "kinetics": {
+  "camera": true,
+  "idle": true,
+  "plate_idle_paints": true,
+  "stop_action": true
+ },
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 10.0,
+ "scenes": [
+  {
+   "docks": [
+    {
+     "arrive": "land",
+     "badge_at": [
+      7.05,
+      8.35
+     ],
+     "enter": 5.0,
+     "exit": 10.0,
+     "park": true,
+     "park_s": 0.7,
+     "place": {
+      "h": 400,
+      "w": 640,
+      "x": 1160,
+      "y": 600
+     },
+     "read_s": 1.2,
+     "slide": "ev-quay-card",
+     "slot": 0
+    }
+   ],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    10.0
+   ],
+   "species": [
+    {
+     "at": 6.0,
+     "dur": 2.0,
+     "kind": "focus_zoom",
+     "target": {
+      "kind": "region",
+      "x0": 0.6041666666666666,
+      "x1": 0.9375,
+      "y0": 0.5555555555555556,
+      "y1": 0.9259259259259259
+     }
+    }
+   ],
+   "world": {
+    "asset_id": "plate-alive",
+    "idle": "drift",
+    "idle_drift_px": 30.0,
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "layers": [
+     {
+      "clip": true,
+      "k": 1.0,
+      "key": "ly:plate-alive:background",
+      "role": "background"
+     },
+     {
+      "k": 1.15,
+      "key": "ly:plate-alive:mid",
+      "role": "mid"
+     },
+     {
+      "k": 1.275,
+      "key": "ly:plate-alive:subject",
+      "role": "subject"
+     },
+     {
+      "k": 1.4,
+      "key": "ly:plate-alive:occluder",
+      "role": "occluder"
+     }
+    ],
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: the alive plate under the whole depth stack"
+}

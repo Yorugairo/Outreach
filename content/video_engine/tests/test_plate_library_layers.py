@@ -119,7 +119,8 @@ def test_a_declared_depth_wins_over_the_default(tmp_path):
 
 def test_both_origins_are_legal_and_named_per_layer(tmp_path):
     assert L.LAYER_GENERATORS == ("gpt-image-2.5", "gpt-image-2.0", "depth-split",
-                                  "depth-split-sam", "flow")
+                                  "depth-split-sam", "flow",
+                                  "vace")   # + E99 s55 (P61 T14): the ambient lane's own backend, for an ALIVE plane
     entries = _planes(tmp_path)
     for e, g in zip(entries, ("gpt-image-2.5", "gpt-image-2.0", "depth-split", "flow")):
         e["generator"] = g
@@ -256,8 +257,8 @@ def index() -> dict:
 
 
 def test_the_count_is_the_back_catalogue_plus_the_probes_one_new_plate(index):
-    assert index["count"] == len(index["plates"]) == 328
-    assert sum(1 for p in index["plates"] if p.get("layers")) == 2
+    assert index["count"] == len(index["plates"]) == 329   # + P61 T14: world-tokyo-customs-dock-v1-alive (E99 s55)
+    assert sum(1 for p in index["plates"] if p.get("layers")) == 3   # + the alive twin of the dock (P61 T14)
 
 
 def test_every_record_keeps_every_field_it_had_and_reads_flat_or_layered(index):
@@ -313,3 +314,72 @@ def test_the_banker_sidecar_keeps_the_plate_it_sits_beside(index):
     assert side.is_file()
     body = json.loads(side.read_text(encoding="utf-8"))
     assert set(body) >= {"layers"} and isinstance(body["layers"], list)
+
+
+# ---- E99 s55 (P61 T14): THE ALIVE PLANE - the background WALL is a clip -------------------------
+# The operator, 2026-09-16, closing R26-133: *"i think we need both the drift painted as an option and the alive"*,
+# then *"when you ran vace did you also run the rest of our depth stack etc?"* The composition's home is this
+# sidecar: one layer whose file is an .mp4. Everything else - the parallax planes, the camera at each k, the drift -
+# already composes over a background, so nothing new is asked of it. What IS asked is traceability: an alive plane
+# that cannot name the still it was pinned to, the region the model was allowed to touch, and the job that made it,
+# is an unattributable video, which E10 and E98 s6 both forbid.
+ALIVE = (PROJECTS / "tokyo-tea-break/assets/plates/world-tokyo-customs-dock-v1-alive.png")
+
+
+def _alive_entry(tmp_path: Path, **over) -> dict:
+    (tmp_path / "wall.mp4").write_bytes(bytes([0, 0, 0, 24]) + b"ftypmp42")     # the suffix is what makes it a clip
+    _png(tmp_path / "wall-still.png", alpha=False)
+    _png(tmp_path / "wall-mask.png", alpha=False)
+    (tmp_path / "wall.job.json").write_text(json.dumps(
+        {"backend": "vace", "model": "wan2.1_vace_1.3B_fp16.safetensors", "width": 480, "height": 320,
+         "num_frames": 65, "fps": 16, "cfg": 4.5, "steps": 25, "seed": 4242, "prompt": "harbour water"}),
+        encoding="utf-8")
+    e = {"path": "wall.mp4", "role": "background", "alpha": False, "generator": "vace",
+         "life": {"still": "wall-still.png", "mask": "wall-mask.png", "job": "wall.job.json"}}
+    e.update(over)
+    return e
+
+
+def test_an_alive_plane_is_a_clip_with_its_life_recorded(tmp_path):
+    entries = [_alive_entry(tmp_path)] + _planes(tmp_path, roles=("mid", "subject", "occluder"))
+    layers = L.plate_depth_layers(_plate(tmp_path, entries))
+    wall = layers[0]
+    assert wall["clip"] is True and wall["role"] == "background" and wall["depth"] == 1.0
+    assert wall["generator"] == "vace"
+    assert set(wall["life"]) >= {"still", "mask", "job", "settings"}
+    assert Path(wall["life"]["still_file"]).is_file() and Path(wall["life"]["job_file"]).is_file()
+    assert wall["life"]["settings"]["seed"] == 4242 and wall["life"]["settings"]["cfg"] == 4.5
+    assert wall["life"]["settings"]["backend"] == "vace"
+    assert all("clip" not in l for l in layers[1:]), "a still plane is untouched by any of this"
+
+
+def test_every_way_an_alive_plane_goes_wrong_is_refused_by_name(tmp_path):
+    still = _planes(tmp_path, roles=("mid", "subject", "occluder"))
+    def refuse(**over) -> str:
+        return _refusal(tmp_path, [_alive_entry(tmp_path, **over)] + still)
+    assert "carries no 'life' record" in refuse(life=None)
+    assert "life.mask is missing" in refuse(life={"still": "wall-still.png", "job": "wall.job.json"})
+    assert "is not on disk" in refuse(life={"still": "nope.png", "mask": "wall-mask.png", "job": "wall.job.json"})
+    assert "an alive plane's generator is one of" in refuse(generator="depth-split")
+    assert "a generated clip carries no transparency" in refuse(alpha=True)
+    # a clip at any role but the wall: the lane pins everything outside its region to the still
+    _png(tmp_path / "world-fixture-v1-background.png", alpha=False)
+    wall = {"path": "world-fixture-v1-background.png", "role": "background", "alpha": False,
+            "generator": "depth-split-sam"}
+    msg = _refusal(tmp_path, [wall, _alive_entry(tmp_path, role="mid", alpha=False)])
+    assert "is a CLIP plane at role 'mid'" in msg
+
+
+def test_the_tokyo_dock_ships_an_alive_twin_and_the_index_carries_it(index):
+    """The plate P61 T14 registered: the same layered dock, its wall alive. The mp4 is gitignored
+    (E99 s31) - what is committed is this sidecar, the life mask and the generator's job JSON."""
+    assert ALIVE.is_file(), "the alive plate's own still is missing - run build_plate_library.py"
+    rec = {p["id"]: p for p in index["plates"]}["world-tokyo-customs-dock-v1-alive"]
+    roles = [l["role"] for l in rec["layers"]]
+    assert roles == ["background", "mid", "subject", "occluder"]
+    wall = rec["layers"][0]
+    assert wall["clip"] is True and wall["generator"] == "vace"
+    assert wall["file"].endswith(".mp4") and Path(wall["file"]).is_file()
+    assert wall["life"]["settings"]["seed"] == 4242
+    assert rec["state"] == "review_only" and rec["render_eligible"] is False
+

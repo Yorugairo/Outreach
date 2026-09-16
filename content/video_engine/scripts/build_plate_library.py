@@ -103,8 +103,24 @@ LAYER_PLANES: dict[str, tuple[str, float]] = {   # role -> (doc 24 `depth_layer`
     "occluder": ("foreground_cutout", 1.40),
 }
 LAYER_DEPTH_DERIVED = ("subject",)               # the roles whose default doc 24 does not state
-LAYER_GENERATORS = ("gpt-image-2.5", "gpt-image-2.0", "depth-split", "depth-split-sam", "flow")
+LAYER_GENERATORS = ("gpt-image-2.5", "gpt-image-2.0", "depth-split", "depth-split-sam", "flow",
+                    "vace")   # E99 s55: the ambient lane's WORKING backend - Wan 2.1 VACE 1.3B (LTX-Video 2B distilled returned a frozen region in five runs and is not a generator of anything)
 FLAT_BACK_CATALOGUE = "pre-E98 back catalogue"
+
+# ---- E99 s55: THE ALIVE PLANE -----------------------------------------------------------------
+# The operator, 2026-09-16, closing R26-133: a plate's life is BOTH - the painted drift at a real
+# amplitude AND "the alive water" the local ambient lane generates. The alive composite is not a
+# new format and not a new index: it is a LAYER of a layered plate whose file is a CLIP instead of
+# a PNG - the background wall, alive - and the parallax planes, the camera (CAPABILITIES:147) and
+# the drift compose over it exactly as they compose over a still wall.
+# What a plate library owes such a plane, and refuses it by name for want of: its SOURCE STILL (the
+# approved plate the life was pinned to), its LIFE MASK (the region the model was allowed to touch
+# - everything outside it is the still), and its GENERATOR RECORD (the job JSON `comfy_vace_ambient.py`
+# wrote beside the mp4: model, size, frames, fps, cfg, steps, seed, prompt). Without those three an
+# alive plane is an unattributable video, which is the one thing E10 and E98 s6 both forbid.
+LAYER_CLIP_SUFFIXES = (".mp4",)
+LAYER_LIFE_KEYS = ("still", "mask", "job")
+LAYER_CLIP_GENERATORS = ("vace",)   # the backends that actually produced motion on this lane
 
 
 def png_has_alpha(p: Path) -> bool:
@@ -138,6 +154,44 @@ def flat_reason(plate: Path, sidecar: dict | None = None) -> str:
     return own.strip() if isinstance(own, str) and own.strip() else FLAT_BACK_CATALOGUE
 
 
+def _layer_life(plate: Path, entry: dict, tag: str) -> dict:
+    """E99 s55: the three things an ALIVE plane records, or the refusal that names the missing one.
+
+    ``life`` is ``{still, mask, job}``, each a path beside the plate, exactly as ``path`` is. It is
+    the ambient lane's own output set (``comfy_sam2_mask.py`` wrote the mask, ``comfy_vace_ambient.py``
+    the clip and the job JSON), carried onto the index so a frame of generated water can always be
+    traced back to the approved still it was pinned to and the settings that made it.
+    """
+    life = entry.get("life")
+    if not isinstance(life, dict):
+        raise ValueError(f"{tag} is a CLIP plane and carries no 'life' record - an alive plane names "
+                         f"{{{', '.join(LAYER_LIFE_KEYS)}}}: the approved STILL it was pinned to, the LIFE MASK "
+                         "the model was allowed to touch, and the generator's job JSON (E99 s55)")
+    out: dict = {}
+    for key in LAYER_LIFE_KEYS:
+        rel = life.get(key)
+        if not isinstance(rel, str) or not rel.strip():
+            raise ValueError(f"{tag}: life.{key} is missing - an alive plane records all of "
+                             f"{', '.join(LAYER_LIFE_KEYS)} (E99 s55)")
+        f = (Path(plate).parent / rel.strip()).resolve()
+        if not f.is_file():
+            raise ValueError(f"{tag}: life.{key} points at {rel!r}, which is not on disk (it resolves "
+                             f"beside the plate, at {f})")
+        out[key] = rel.strip()
+        out[key + "_file"] = str(f)
+    settings = {}
+    try:
+        job = json.loads(Path(out["job_file"]).read_text(encoding="utf-8"))
+        settings = job if isinstance(job, dict) else {}
+    except (OSError, ValueError) as exc:
+        raise ValueError(f"{tag}: life.job {out['job']!r} is not readable JSON - it is the generator's "
+                         f"own record, written beside the clip ({exc})") from None
+    out["settings"] = {k: settings[k] for k in
+                       ("backend", "model", "width", "height", "num_frames", "frames", "fps", "cfg",
+                        "steps", "shift", "seed", "denoise", "prompt") if k in settings}
+    return out
+
+
 def _layer_record(plate: Path, entry, i: int, where: str) -> dict:
     """One declared plane, every default filled - or the refusal that names what to fix."""
     tag = f"{where}: layers[{i}]"
@@ -156,6 +210,11 @@ def _layer_record(plate: Path, entry, i: int, where: str) -> dict:
     if not f.is_file():
         raise ValueError(f"{tag} points at {rel!r}, which is not on disk - generate the plane or "
                          f"fix the path (it resolves beside the plate, at {f})")
+    clip = f.suffix.lower() in LAYER_CLIP_SUFFIXES   # E99 s55: this plane is ALIVE - a generated clip, not a still
+    if clip and role != "background":
+        raise ValueError(f"{tag} is a CLIP plane at role {role!r} - the ambient lane pins everything outside its "
+                         "life region to the still, so an alive plane IS the opaque wall: declare it "
+                         "'background' and keep the parallax planes over it as stills (E99 s55)")
     depth = entry.get("depth", LAYER_PLANES[role][1])
     if isinstance(depth, bool) or not isinstance(depth, (int, float)) or not 0 < float(depth) <= 4:
         raise ValueError(f"{tag} has depth {depth!r} - depth is doc 24's parallax FACTOR k in "
@@ -165,7 +224,10 @@ def _layer_record(plate: Path, entry, i: int, where: str) -> dict:
     if not isinstance(alpha, bool):
         raise ValueError(f"{tag} has alpha {alpha!r} - alpha is true or false (does the PNG carry "
                          "a transparency channel)")
-    if alpha and not png_has_alpha(f):
+    if alpha and clip:
+        raise ValueError(f"{tag} declares alpha: true on a CLIP - a generated clip carries no transparency; "
+                         "the wall is opaque and the planes over it are the stills that are not (E99 s55)")
+    if alpha and not clip and not png_has_alpha(f):
         raise ValueError(f"{tag} declares alpha: true but {f.name} has no alpha channel - "
                          "re-export it as RGBA (doc 24: -far is opaque, every other plane is "
                          "transparent), or declare alpha: false")
@@ -174,8 +236,16 @@ def _layer_record(plate: Path, entry, i: int, where: str) -> dict:
         raise ValueError(f"{tag} has generator {gen!r} - every plane records its origin "
                          f"(ruling E98 s6: generated, or split out of a flat plate): one of "
                          f"{', '.join(LAYER_GENERATORS)}")
-    return {"path": rel.strip(), "file": str(f), "role": role, "plane": LAYER_PLANES[role][0],
-            "depth": round(float(depth), 4), "alpha": alpha, "generator": gen}
+    if clip and gen not in LAYER_CLIP_GENERATORS:
+        raise ValueError(f"{tag} is a CLIP generated by {gen!r} - an alive plane's generator is one of "
+                         f"{', '.join(LAYER_CLIP_GENERATORS)} (E99 s55: LTX-Video 2B distilled returned a frozen "
+                         "region in five runs and is not the backend that made this)")
+    rec = {"path": rel.strip(), "file": str(f), "role": role, "plane": LAYER_PLANES[role][0],
+           "depth": round(float(depth), 4), "alpha": alpha, "generator": gen}
+    if clip:   # E99 s55: the alive wall, and the three things that make it traceable
+        rec["clip"] = True
+        rec["life"] = _layer_life(plate, entry, tag)
+    return rec
 
 
 def _refuse_layer_set(layers: list[dict], where: str) -> None:

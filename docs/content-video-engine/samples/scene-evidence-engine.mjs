@@ -83,6 +83,13 @@ async function mount(doc) {
        a defect's cure held behind a switch until the operator has seen it - the five drift plates of an APPROVED cut
        move the day it goes on. Absent = the scale-only read every approved cut was rendered under. */
     plate_idle_paints: "true = a plate world's idle paints its dx/dy (absent = the scale-only read)",
+    /* E99 s55 (R26-133 closed): the drift's AMPLITUDE. `plate_idle_paints` says the walk paints; this says how far
+       it walks - the half-width in stage px, the number E99 s38's "i don't even notice it" was about. Read by
+       `idleDriftPx` BELOW the scene's own `;drift=<px>`, so a row outranks the build and a build that names neither
+       renders at IDLE.DRIFT_PX (2.0) - E49's floor, and exactly the string every approved cut was rendered with.
+       30 is the named long-form setting, 40 the shorts one; a value under the floor is raised to it here and
+       refused by name in the compiler. */
+    plate_idle_drift_px: "the plate idle drift's half-width in stage px (absent = IDLE.DRIFT_PX 2.0, the floor; 30 long form, 40 shorts)",
   });
   const KIN = Object.assign({}, KINETICS_DEFAULTS,
     (TL.kinetics && typeof TL.kinetics === "object") ? TL.kinetics : {});
@@ -1539,6 +1546,24 @@ async function mount(doc) {
     const s = Number.isFinite(kk) ? kk : 1;
     const px = (+(x && x.dx) || 0) * s, py = (+(x && x.dy) || 0) * s;
     return (px === 0 && py === 0) ? "" : " translate(" + px.toFixed(2) + "px," + py.toFixed(2) + "px)";
+  };
+
+  /* R26-133 / E99 s55 (the operator, 2026-09-16: "maybe we need a slightly smaller drift (maybe 30 px?) AND the alive
+     water ... for youtube the 40 px drift would be too much motion for a long form, but it looks like it might work
+     really well for shorts and certain scenes"): the drift's AMPLITUDE, resolved for ONE plate. E99 s38 closed the 2 px
+     walk as a motion nobody can see - "8 frames to move 1 pixel is probably not even enough to realy register" - so the
+     amplitude is AUTHORED, and authored per scene: the row's own `;drift=<px>` first, then the timeline's
+     `plate_idle_drift_px` dial, then DRIFT_PX itself. There is NO global default on purpose (E45: the approved cuts
+     render through their frozen players and must not move under this), and DRIFT_PX 2.0 is the FLOOR, never a setting
+     to go under - it is E49's "nothing ever goes truly still", which no dial may switch off. A value under the floor is
+     refused by the compiler by name; here it is raised to the floor, so the two sides can never disagree about what a
+     too-small number means. 30 px is the named long-form setting, 40 the shorts one. */
+  const idleDriftPx = (...asked) => {
+    for (const a of asked) {
+      const n = +a;
+      if (a !== null && a !== undefined && a !== "" && Number.isFinite(n) && n > 0) return Math.max(IDLE.DRIFT_PX, n);
+    }
+    return IDLE.DRIFT_PX;
   };
   /* KINETICS:END */
 
@@ -14785,6 +14810,9 @@ async function mount(doc) {
     return v;
   };
   (TL.scenes || []).forEach((sc) => { if (sc.world && sc.world.kind === "clip" && A[sc.world.asset_id]) clipFor(sc.world.asset_id); });
+  /* E99 s55: an ALIVE PLANE's clip is pooled at load for the same reason a world clip is - a <video> created at the
+     cut has no decoded frame and paints black behind the planes that stand on it. */
+  (TL.scenes || []).forEach((sc) => (((sc.world || {}).layers) || []).forEach((ly) => { if (ly && ly.clip && A[ly.key]) clipFor(ly.key); }));
   /* a VIDEO DOCK's clip is pooled at load for the same reason a world clip is: a <video> created at
      the mount has no decoded frame and paints black under the card's 0.75s rise */
   const dockIsVideo = (aid) => ((TL.evidence || {})[aid] || {}).kind === "video";
@@ -14794,7 +14822,10 @@ async function mount(doc) {
   (TL.scenes || []).forEach((sc) => (sc.docks || []).forEach((d) => {
     if (dockIsVideo(d.slide) && A[d.slide]) clipFor(d.slide).loop = true;
   }));
-  const parkClips = (el) => el.querySelectorAll("video.clipv").forEach((x) => { x.pause(); clipHold.appendChild(x); });
+  /* `:scope >` on purpose (E99 s55): a clip WORLD's video is a child of `.world` itself, an ALIVE PLANE's is a child
+     of that plane's own element inside it. Parking the world's clip must not empty a plane that the stack will not
+     rebuild (it rebuilds on a key change, and a held scene's keys do not change). */
+  const parkClips = (el) => el.querySelectorAll(":scope > video.clipv").forEach((x) => { x.pause(); clipHold.appendChild(x); });
   /* THE ONE SEEK. Every <video> in this player - the world clip and the VIDEO DOCK alike - lands on
      its frame through this function. render(t) resolves fully from t, so there is exactly one answer
      to "which frame is on screen at t" and exactly one thing the renderer waits on (__clipsSeeked).
@@ -14860,7 +14891,7 @@ async function mount(doc) {
      depth ASCENDING toward the viewer. HF-17's `#fgover` cutout still sits ABOVE all of them - it is mounted over
      the dock layer, outside `.world` entirely - and so do the docks, the species and the caption. */
   const WLY = "wly";
-  const paintPlanes = (el, plies, xf, rest, idleAt) => {
+  const paintPlanes = (el, plies, xf, rest, idleAt, tLocal) => {
     let els = Array.prototype.slice.call(el.querySelectorAll("." + WLY));
     if (els.length !== plies.length || els.some((e, i) => e.dataset.key !== plies[i].key)) {
       els.forEach((e) => e.remove());
@@ -14869,12 +14900,29 @@ async function mount(doc) {
         d.className = WLY; d.setAttribute("aria-hidden", "true"); d.dataset.key = ly.key;
         d.style.cssText = "position:absolute; inset:0; background-size:cover; background-position:center; "
           + "background-repeat:no-repeat; transform-origin:50% 50%; pointer-events:none; will-change:transform;";
-        d.style.backgroundImage = 'url("' + A[ly.key] + '")';
+        /* E99 s55 (the operator, 2026-09-16: "i think we need both the drift painted as an option and the alive"):
+           an ALIVE PLANE. The plate library's sidecar may declare the BACKGROUND wall as a CLIP - the local ambient
+           lane's generated life, pinned to the still outside its own mask (CAPABILITIES:143) - and it is mounted
+           here as the same pooled <video> a clip world uses, INSIDE the plane's element. So nothing else changes:
+           the element still takes the camera at its own k, the world's rest term and the idle's share of the walk,
+           which is exactly what "the depth stack composes OVER the alive water" means. A still plane is untouched. */
+        if (ly.clip && A[ly.key]) { const v = clipFor(ly.key); v.pause(); v.loop = true; d.appendChild(v); }
+        else d.style.backgroundImage = 'url("' + A[ly.key] + '")';
         el.appendChild(d);
         return d;
       });
     }
     els.forEach((d, i) => { d.style.transform = camCssAt(xf, plies[i].k) + rest + (idleAt ? idleAt(plies[i].k) : ""); });   /* R26-133: the world's idle drifts each plane at its own share of the same walk */
+    /* THE ONE SEEK, for an alive plane: the scene's own clock, LOOPED (the ambient lane generates a loop, and a
+       plane holding its last frame is the still wall this exists to remove). Pure in t, and it joins `clipSeeks`,
+       so render_baseline's `__clipsSeeked` waits for it exactly as it waits for a clip world. */
+    if (tLocal !== undefined) els.forEach((d, i) => {
+      if (!plies[i].clip) return;
+      const v = d.querySelector("video.clipv");
+      if (!v) return;
+      const dur = Number.isFinite(v.duration) && v.duration > 0 ? v.duration : 0;
+      seekVideo(v, dur ? Math.min(tLocal % dur, Math.max(0, dur - 0.05)) : tLocal);
+    });
   };
   const render = (t) => {
     let si = 0;
@@ -14940,8 +14988,13 @@ async function mount(doc) {
          of one scene judged in isolation. The authored Ken Burns is the
          only world motion. */
       /* E49: an IMAGE plate that holds, holds at its idle - a ledger page and a clip carry their own motion */
+      /* E99 s55: the amplitude the walk is sized at - the ROW's `;drift=<px>` first (per scene, the shot-table
+         grammar), then the build's `plate_idle_drift_px` dial, then the module's own DRIFT_PX. Named neither, this
+         is 2.0 and `Object.assign({}, IDLE, {DRIFT_PX: 2.0})` is IDLE: the pose, and every string below it, is the
+         one the engine has always written. */
+      const idleAmp = idleDriftPx(scene.world.idle_drift_px, KIN.plate_idle_drift_px);
       const idlePose = (isLedger || isClip || isVecmap) ? { scale: 1, dx: 0, dy: 0 }
-        : idleXf(idleOf("plate", scene.world.idle), t, lpHash(Math.round(scene.span[0] * 100), 0, 977));   /* a vecmap breathes INSIDE its svg (vmIdle), so a species over it can ride the same pose */
+        : idleXf(idleOf("plate", scene.world.idle), t, lpHash(Math.round(scene.span[0] * 100), 0, 977), { DRIFT_PX: idleAmp });   /* a vecmap breathes INSIDE its svg (vmIdle), so a species over it can ride the same pose */
       const zi = idlePose.scale;
       /* R26-133: this block read the plate's idle for its `.scale` ALONE, so `drift` ({scale: 1, dx, dy}) delivered
          nothing and a plate authored `;idle=drift` held perfectly still. The dx/dy now PAINT - on the world's rest
@@ -14965,7 +15018,7 @@ async function mount(doc) {
         el.dataset.worldPose = camCss(camXfNow) + restFlat;
         if (el.dataset.worldRest !== undefined) delete el.dataset.worldRest;   /* P58 T6: the camera is on the planes, not under this element */
         el.style.transform = "";
-        paintPlanes(el, plies, camXfNow, worldRest, idleDrift);
+        paintPlanes(el, plies, camXfNow, worldRest, idleDrift, Math.max(0, t - scene.span[0]));
       } else if (pageK) {
         /* the page took the camera down onto its own plane; the element keeps what the page's GROUND shares with it
            - the authored Ken Burns and the wipe's push - and `data-world-pose` carries the k = 1 pose, so

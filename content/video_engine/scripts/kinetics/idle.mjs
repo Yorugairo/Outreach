@@ -124,3 +124,21 @@ export const idleDriftCss = (x, k = 1) => {
   const px = (+(x && x.dx) || 0) * s, py = (+(x && x.dy) || 0) * s;
   return (px === 0 && py === 0) ? "" : " translate(" + px.toFixed(2) + "px," + py.toFixed(2) + "px)";
 };
+
+/* R26-133 / E99 s55 (the operator, 2026-09-16: "maybe we need a slightly smaller drift (maybe 30 px?) AND the alive
+   water ... for youtube the 40 px drift would be too much motion for a long form, but it looks like it might work
+   really well for shorts and certain scenes"): the drift's AMPLITUDE, resolved for ONE plate. E99 s38 closed the 2 px
+   walk as a motion nobody can see - "8 frames to move 1 pixel is probably not even enough to realy register" - so the
+   amplitude is AUTHORED, and authored per scene: the row's own `;drift=<px>` first, then the timeline's
+   `plate_idle_drift_px` dial, then DRIFT_PX itself. There is NO global default on purpose (E45: the approved cuts
+   render through their frozen players and must not move under this), and DRIFT_PX 2.0 is the FLOOR, never a setting
+   to go under - it is E49's "nothing ever goes truly still", which no dial may switch off. A value under the floor is
+   refused by the compiler by name; here it is raised to the floor, so the two sides can never disagree about what a
+   too-small number means. 30 px is the named long-form setting, 40 the shorts one. */
+export const idleDriftPx = (...asked) => {
+  for (const a of asked) {
+    const n = +a;
+    if (a !== null && a !== undefined && a !== "" && Number.isFinite(n) && n > 0) return Math.max(IDLE.DRIFT_PX, n);
+  }
+  return IDLE.DRIFT_PX;
+};

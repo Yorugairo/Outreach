@@ -85,12 +85,28 @@ SPECIES_LEDGER = "ledger"          # timeline["species"] entry; the player keys 
 SCENE_EXITS = ("cut", "dip", "blurzoom", "dissolve", "wipe", "wipe_right", "suck", "melt", "slide", "door")   # door (E98 s7, R26-134): the EVIDENCE DOOR - the outgoing world swings open on one stage edge, away from the viewer, onto the incoming world mounted beneath it - `door[:<left|right|top|bottom>][:<s>]`, refused out of a page at a depth or on a plane and across a live dock   # slide (R26-75, E87 s3): the incoming frame pushes the outgoing one off along one axis, both moving together - `slide:<left|right|up|down>[:<s>]`, the direction never defaulted   # melt (P52 T9, R26-15): the outgoing world sags into drips, balls up on 2s and is thrown off the stage or splashed - `melt`, `melt:<s>`, `melt:splash`, `melt:<x>,<y>` (the exit point in stage fractions), the suffixes in any order
 IDLE_KINDS = ("none", "breath", "drift", "pulse", "figure", "live")   # live (2026-09-08): breath + drift - the breath has a fixed point at the centre, so a chart at the page centre read as still; the drift moves every pixel   # E49 / P47 T5: the player's named idles; `;idle=<kind>` on any plate id (`none` is explicit stillness)
 IDLE_OPT = ";idle="
+# E99 s55 (R26-133 closed; the operator, 2026-09-16: "maybe we need a slightly smaller drift (maybe 30 px?) AND the
+# alive water ... for youtube the 40 px drift would be too much motion for a long form, but it looks like it might
+# work really well for shorts and certain scenes"). The drift's AMPLITUDE, authored PER SCENE on the plate id:
+# `;idle=drift;drift=30`. `kinetics/idle.mjs` IDLE.DRIFT_PX (2.0) is the FLOOR, not a default to go under - it is
+# E49's "nothing ever goes truly still", which E99 s38 found invisible and which no dial may switch off - so a
+# smaller number is a REFUSAL by name here, and the player raises one to the floor rather than disagree.
+# `test_kinetics_flags.py` reads the module's own constant and holds the two to each other.
+PLATE_DRIFT_OPT = "drift"
+PLATE_DRIFT_FLOOR = 2.0     # kinetics/idle.mjs IDLE.DRIFT_PX - E49's floor
+PLATE_DRIFT_LONG = 30.0     # E99 s55: the named LONG-FORM setting
+PLATE_DRIFT_SHORTS = 40.0   # E99 s55: "it might work really well for shorts and certain scenes"
+# the geometric ceiling: `.world` is inset -5 %, so past ~96 px of x (and 0.6 * that in y) the plate's own EDGE
+# walks onto the stage. 90 keeps the whole walk inside the overhang at 16:9 - measured on the drift lane's own
+# three-way proof (`review/assembly/r26-133-drift-idle-paints-nothing/`).
+PLATE_DRIFT_MAX = 90.0
+DRIFT_IDLES = ("drift", "live")   # the two idle kinds whose pose HAS a dx/dy for an amplitude to size
 ARRIVALS = ("spring", "throw", "land")            # P47 T1: how a dock or a page's pills ARRIVE (spring = E45's pop, the default)
 MASSES = ("paper", "metal", "liquid", "ink")      # P47 T1: the material presets (stopaction.mjs MASS) a throw or a landing settles by
 MORPH_SHAPES = ("tab", "plate", "card")           # P47 T3: the named prop outline a morph page starts from (`;morph=<shape>`; tab is the default)
 PLATE_USES = ("landing", "bridge", "reset")   # E61: the three things a plate is - a landing surface, a bridge, a reset; `;use=<one>` names it on the row
 RACE_PATHS = ("eased", "clothoid")   # E91 s1 (R26-78): the path a racing mark takes BETWEEN two period knots - `eased` is the engine as it is (each coordinate on its own easing), `clothoid` is the fit through the SAME knots (P52 T17 arm B). The period clock, the knots and the ranks are identical in both: this names the SHAPE of the move and never its timing, and the operator chose it where the beat wants energy rather than smoothness
-PLATE_OPTS = ("idle", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field")   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
+PLATE_OPTS = ("idle", "drift", "arrive", "mass", "morph", "then", "card", "use", "pill", "thread", "path", "depth", "plane", "form", "field")   # E99 s55: drift=<px> - the AMPLITUDE of the plate idle's walk, per scene (30 long form, 40 shorts; PLATE_DRIFT_FLOOR 2.0 is the floor, PLATE_DRIFT_MAX 90 the geometric ceiling), refused beside an idle that has no dx/dy   # E99 s35: field=soak|plates|scribble - which GROUND the page's charcoal arrives on, chosen by the sentence's JOB: the two-plate cross-fade for continuity (connecting ideas, speaking across plates), the soak for a new idea or a separator, the scribble as the opt-in back-up   # P58 T5 / E98 s3: form=extruded_bar | tilted_line[:<deg>] - the two 2.5D CHART FORMS, how the page's marks are drawn (a prism per bar; the line on a tilted plane). Opt-in, refused by name when the page's builder cannot draw it, and refused beside plane= (one plane per page)   # P58 T4 / E98 s3: depth=<k> - the page is a card at a DEPTH, taking that share of the camera's move (kinetics/camera.mjs PARALLAX); plane=tilt:<deg>[,<axis>]|quad:<8 numbers> - the surface it is drawn on, projected by the embed grammar's own homography. Both opt-in; the flat page is the reading form   # path=eased|clothoid: E91 s1 - the RACE page's path setting, both shipped, neither discarded (P57 T15)   # thread=<mark key>: HF-16 - ONE mark of the page before this one survives the cut and is the arriving page's ground (P50 T15)   # pill=yes|no|<datum index>: R26-34's tip-riding pill on a dense-line page, popping at that datum (P50 T11)   # card=yes|no: a ledger page keeps the card's rounded corners and a hard-edge shadow at full size (2026-09-08; a snapped page is a card by default)  # the `;key=value` options a plate id may carry
 # P48 T4: `;then=<series>:<variant>[:<emphasize>]` names ANOTHER chart the same page can become - a second full
 # ledger_page.v1 spec on `world.page_states`, built at load and hidden until a `chart_to` reaches it. Repeat the
 # option for a third. STATE_MAX bounds it: a fourth chart is a new page or a card, and the reader's memory says so.
@@ -2737,6 +2753,28 @@ def thread_mark_error(prev_world: dict | None, key: str, where: str) -> str | No
     return None
 
 
+def plate_drift_px(value, where: str) -> float:
+    """E99 s55: ``;drift=<px>`` - the plate idle walk's half-width in stage px, for THIS scene. ValueError names the
+    floor, the ceiling and the two ruled settings; the caller names the row. The floor is
+    ``kinetics/idle.mjs`` IDLE.DRIFT_PX itself (E49: nothing ever goes truly still), so a number under it is not a
+    quieter drift, it is an attempt to switch E49 off - refused here rather than silently raised."""
+    try:
+        px = float(str(value).strip())
+    except ValueError:
+        raise ValueError(f"{where}: drift {value!r} is not a number of stage px "
+                         f"({PLATE_DRIFT_LONG:g} = the long-form setting, {PLATE_DRIFT_SHORTS:g} = shorts; E99 s55)") from None
+    if px < PLATE_DRIFT_FLOOR:
+        raise ValueError(f"{where}: drift {px:g} px is under the floor {PLATE_DRIFT_FLOOR:g} px - that floor is "
+                         f"kinetics/idle.mjs IDLE.DRIFT_PX, E49's 'nothing ever goes truly still', and it is not a "
+                         f"dial to go under. Name {PLATE_DRIFT_LONG:g} (long form) or {PLATE_DRIFT_SHORTS:g} "
+                         f"(shorts), or drop drift= and take the floor (E99 s55)")
+    if px > PLATE_DRIFT_MAX:
+        raise ValueError(f"{where}: drift {px:g} px is past the ceiling {PLATE_DRIFT_MAX:g} px - `.world` is inset "
+                         f"-5 %, so a wider walk carries the plate's own EDGE onto the stage. A move bigger than "
+                         f"this is a CAMERA move (E49: a camera move is a camera move; a hold holds at its idle)")
+    return px
+
+
 def _check_opt(key: str, value, where: str) -> None:
     if key == "thread":   # HF-16: the shape here, the page before it in `thread_mark_error` (which needs that page)
         if THREAD_KEY_RE.match(str(value)):
@@ -2755,6 +2793,9 @@ def _check_opt(key: str, value, where: str) -> None:
         err = page_plane_error(page_plane_spec(str(value), where), where)
         if err:
             raise ValueError(err)
+        return
+    if key == PLATE_DRIFT_OPT:   # E99 s55: the plate idle drift's half-width in stage px, authored per scene
+        plate_drift_px(value, where)
         return
     if key == "form":   # P58 T5: the NAME and the tilt are the row's own grammar; the fit to the page's builder
         page_form_geom(str(value), where)   # needs the page, and is checked where the page is read (ledger_world)
@@ -3535,6 +3576,21 @@ def world_for_plate(plate_id: str, ken: tuple, ep_dir: Path, meta: dict | None =
             raise ValueError(f"{plate_id!r}: field= is a LEDGER PAGE option - it names the GROUND a page's charcoal "
                              "arrives on (E99 s35); a plate is a picture and is its own ground")
         world["page"]["field"] = page_field_spec(str(fld), world["page"], repr(plate_id))
+    drift_px = opts.pop(PLATE_DRIFT_OPT, None)
+    if drift_px is not None:
+        # E99 s55: the AMPLITUDE of this scene's plate idle walk. A PLATE option, the mirror of the ledger page's
+        # own `depth=` / `form=` / `field=`: the player's idle pose is read for a PLATE alone (a page, a vector map
+        # and a clip each carry their own motion and take the identity pose there), so the row is refused by name
+        # rather than writing a number nothing will read. `;idle=` must already name a kind whose pose HAS a dx/dy.
+        kind = world.get("kind")
+        if kind in (SPECIES_LEDGER, VECMAP_KIND, SPECIES_CLIP):
+            raise ValueError(f"{plate_id!r}: drift= is a PLATE option - it sizes the idle WALK of a picture plate "
+                             f"(E99 s55). A {kind} world carries its own motion and takes no plate idle pose")
+        if opts.get("idle") not in DRIFT_IDLES:
+            raise ValueError(f"{plate_id!r}: drift= sizes the walk of an idle that HAS one - name "
+                             f"{' or '.join(';idle=' + k for k in DRIFT_IDLES)} on the same plate id "
+                             f"(this row's idle is {opts.get('idle') or 'unset'!r})")
+        world["idle_drift_px"] = plate_drift_px(drift_px, repr(plate_id))
     world.update(opts)   # idle (E49), arrive / mass (P47 T1), use (E61) - written only when the row names them
     if thens:   # P48 T4: the other charts this page can become, each a full spec built at load
         if world.get("kind") != SPECIES_LEDGER:
@@ -4747,8 +4803,14 @@ def build_kinetics() -> dict:
     IDLE is on for every timeline this compiler writes - a build that wants stillness says so (``KINETICS["idle"] =
     False``); the goldens' frozen sources carry no flag and stay byte-identical. E99 s46: the span's two DIALS ride
     with them at the ruled default (``KINETICS["span_tone"] = "light"`` puts one build back to the chalk wash)."""
-    return {"idle": True, "stop_action": True, "arap_morph": True, "camera": True,
-            **SPAN_DIAL_DEFAULTS, **KINETICS}   # P47 T1: an authored `arrive` is the switch; the flag only guards the goldens; P49 T2: the camera is one state per frame (the species pixel-identical)
+    k = {"idle": True, "stop_action": True, "arap_morph": True, "camera": True,
+         **SPAN_DIAL_DEFAULTS, **KINETICS}   # P47 T1: an authored `arrive` is the switch; the flag only guards the goldens; P49 T2: the camera is one state per frame (the species pixel-identical)
+    # E99 s55: the drift's amplitude has NO global default here on purpose - unset, the player takes
+    # kinetics/idle.mjs IDLE.DRIFT_PX, which is the string every approved cut was rendered with (E45). A build that
+    # names one is checked by the SAME refusal a row's `;drift=` gets, so the two ways of asking cannot disagree.
+    if "plate_idle_drift_px" in k:
+        k["plate_idle_drift_px"] = plate_drift_px(k["plate_idle_drift_px"], "KINETICS['plate_idle_drift_px']")
+    return k
 
 
 # ------------------------------------------------------------------ P51 T5: THE OVERRIDE SIDECAR
@@ -5174,8 +5236,13 @@ def main() -> int:
             except ValueError as exc:
                 raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s) world {world['asset_id']!r}: {exc}") from exc
             if _planes:
+                # E99 s55: a plane whose file is a CLIP is ALIVE - the ambient lane's generated life as the
+                # background wall. The only thing the player needs beyond the still case is that it IS one
+                # (`clip: true`), so it mounts a <video> instead of a background image; `data_uri` already embeds
+                # an mp4 raw, keyed the same way. A plate with no alive plane writes the key it always wrote.
                 world["layers"] = [{"key": f"{LY_PREFIX}{world['asset_id']}:{p['role']}",
-                                    "k": p["depth"], "role": p["role"]} for p in _planes]
+                                    "k": p["depth"], "role": p["role"],
+                                    **({"clip": True} if p.get("clip") else {})} for p in _planes]
                 for _p, _ly in zip(_planes, world["layers"]):
                     uris[_ly["key"]] = data_uri(Path(_p["file"]))   # RAW: the capped path would drop the alpha
         # P50 T7: the SURFACES this plate declares, read once - the docks below land on them and the camera aims at

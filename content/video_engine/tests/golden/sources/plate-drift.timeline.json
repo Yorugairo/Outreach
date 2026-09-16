@@ -8,7 +8,8 @@
  "episode_id": "golden",
  "evidence": {},
  "kinetics": {
-  "idle": true
+  "idle": true,
+  "plate_idle_paints": true
  },
  "narration": {
   "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
@@ -29,6 +30,7 @@
    "world": {
     "asset_id": "plate-drift",
     "idle": "drift",
+    "idle_drift_px": 30.0,
     "ken_burns": {
      "scale": 0,
      "x": 0,
@@ -41,5 +43,5 @@
  "schema_version": "scene_evidence_timeline.v1",
  "sound": [],
  "subtitle": "P39 golden surface",
- "title": "Golden: a plate world at its drift idle"
+ "title": "Golden: a plate world at its drift idle, 30 px"
 }

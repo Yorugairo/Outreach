@@ -1,270 +1,275 @@
 {
-  "schema_version": "effect_cards.v1",
-  "axis": "idle",
-  "cards": [
-    {
-      "id": "idle:breath",
-      "axis": "idle",
-      "token": "breath",
-      "title": "The breath idle",
-      "aliases": [],
-      "does": "The held thing scales a hair in and out around its centre.",
-      "when": null,
-      "when_source": null,
-      "author": {
-        "key": "plate option ;idle=breath  or  species {\"idle\": \"breath\"}",
-        "example": "'plate-07;idle=breath'",
-        "example_source": null,
-        "check": "idle"
-      },
-      "phases": [],
-      "blends": [],
-      "options": [],
-      "dials": {
-        "module": "content/video_engine/scripts/kinetics/idle.mjs",
-        "object": "IDLE"
-      },
-      "lives": {
-        "form": "module",
-        "path": "content/video_engine/scripts/kinetics/idle.mjs",
-        "symbol": "breath",
-        "note": "breath; default: the IDLE_CLASS default for held things - every compiled build runs it (E49)"
-      },
-      "doctrine": [
-        "E49"
-      ],
-      "status": "live",
-      "proof": {
-        "golden": "ledger-soak-page@idle",
-        "test": "content/video_engine/tests/test_idle_e49.py::test_the_idle_is_a_named_kind_and_the_module_carries_its_tags",
-        "first_use": null
-      },
-      "callable": {
-        "today": true,
-        "why": null
-      }
-    },
-    {
-      "id": "idle:drift",
-      "axis": "idle",
-      "token": "drift",
-      "title": "The drift idle",
-      "aliases": [],
-      "does": "The held thing walks a bounded Lissajous path of a few pixels.",
-      "when": null,
-      "when_source": null,
-      "author": {
-        "key": "plate option ;idle=drift  or  species {\"idle\": \"drift\"}",
-        "example": "'plate-podium;idle=drift'",
-        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:3",
-        "check": "idle"
-      },
-      "phases": [],
-      "blends": [],
-      "options": [],
-      "dials": {
-        "module": "content/video_engine/scripts/kinetics/idle.mjs",
-        "object": "IDLE"
-      },
-      "lives": {
-        "form": "module",
-        "path": "content/video_engine/scripts/kinetics/idle.mjs",
-        "symbol": "drift",
-        "note": "drift"
-      },
-      "doctrine": [
-        "E49"
-      ],
-      "status": "live",
-      "proof": {
-        "golden": null,
-        "test": "content/video_engine/tests/test_idle_e49.py::test_the_idle_is_a_named_kind_and_the_module_carries_its_tags",
-        "first_use": {
-          "project": "japan-tariff-trick",
-          "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
-          "t": 0.0
-        }
-      },
-      "callable": {
-        "today": true,
-        "why": null
-      }
-    },
-    {
-      "id": "idle:figure",
-      "axis": "idle",
-      "token": "figure",
-      "title": "The figure idle",
-      "aliases": [],
-      "does": "An asymmetric breath with a sway, for a figure (doc 48 s48.4).",
-      "when": null,
-      "when_source": null,
-      "author": {
-        "key": "plate option ;idle=figure  or  species {\"idle\": \"figure\"}",
-        "example": "'plate-07;idle=figure'",
-        "example_source": null,
-        "check": "idle"
-      },
-      "phases": [],
-      "blends": [],
-      "options": [],
-      "dials": {
-        "module": "content/video_engine/scripts/kinetics/idle.mjs",
-        "object": "IDLE"
-      },
-      "lives": {
-        "form": "module",
-        "path": "content/video_engine/scripts/kinetics/idle.mjs",
-        "symbol": "figureBreath"
-      },
-      "doctrine": [
-        "E49",
-        "48 s48.4"
-      ],
-      "status": "wired",
-      "proof": {
-        "golden": null,
-        "test": "content/video_engine/tests/test_idle_e49.py::test_the_idle_is_a_named_kind_and_the_module_carries_its_tags",
-        "first_use": null
-      },
-      "callable": {
-        "today": true,
-        "why": null
-      }
-    },
-    {
-      "id": "idle:live",
-      "axis": "idle",
-      "token": "live",
-      "title": "The live idle",
-      "aliases": [
-        {
-          "name": "Idle `live`: nothing truly still",
-          "source": "docs/content-video-engine/CAPABILITIES.md:72"
-        }
-      ],
-      "does": "Breath plus drift together: the held page inhales a little and walks a pixel or two, so even a chart at the page centre is never still (E49).",
-      "when": null,
-      "when_source": null,
-      "author": {
-        "key": "plate option ;idle=live  or  species {\"idle\": \"live\"}",
-        "example": "'ledger:ev-japan-holdings-v1:line:315:right:snap=dock-b-holdings:cut;idle=live'",
-        "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:4",
-        "check": "idle"
-      },
-      "phases": [],
-      "blends": [],
-      "options": [],
-      "dials": null,
-      "lives": {
-        "form": "module",
-        "path": "content/video_engine/scripts/kinetics/idle.mjs",
-        "symbol": "idleXf",
-        "also": [
-          "IDLE_KINDS"
-        ],
-        "note": "breath + drift; REGRESSED 2026-09-10 (235832a re-synced the idle region from a module that never had live) and RESTORED 2026-09-13 (R26-93)"
-      },
-      "doctrine": [
-        "E49"
-      ],
-      "status": "live",
-      "backlog": [
-        "R26-93"
-      ],
-      "proof": {
-        "golden": null,
-        "test": "content/video_engine/tests/test_idle_e49.py::test_every_compiler_idle_kind_is_a_kind_the_module_paints",
-        "first_use": {
-          "project": "japan-tariff-trick",
-          "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
-          "t": 1.82
-        }
-      },
-      "callable": {
-        "today": true,
-        "why": null
-      }
-    },
-    {
-      "id": "idle:none",
-      "axis": "idle",
-      "token": "none",
-      "title": "The no-idle setting",
-      "aliases": [],
-      "does": "Explicit stillness: the held thing carries the identity transform.",
-      "when": null,
-      "when_source": null,
-      "author": {
-        "key": "plate option ;idle=none  or  species {\"idle\": \"none\"}",
-        "example": "'ledger:x:line;idle=none'",
-        "example_source": null,
-        "check": "idle"
-      },
-      "phases": [],
-      "blends": [],
-      "options": [],
-      "dials": null,
-      "lives": {
-        "form": "module",
-        "path": "content/video_engine/scripts/kinetics/idle.mjs",
-        "symbol": "IDLE_KINDS"
-      },
-      "doctrine": [
-        "E49"
-      ],
-      "status": "wired",
-      "proof": {
-        "golden": null,
-        "test": "content/video_engine/tests/test_idle_e49.py::test_the_idle_is_a_named_kind_and_the_module_carries_its_tags",
-        "first_use": null
-      },
-      "callable": {
-        "today": true,
-        "why": null
-      }
-    },
-    {
-      "id": "idle:pulse",
-      "axis": "idle",
-      "token": "pulse",
-      "title": "The pulse idle",
-      "aliases": [],
-      "does": "The held thing's luminance dips and returns.",
-      "when": null,
-      "when_source": null,
-      "author": {
-        "key": "plate option ;idle=pulse  or  species {\"idle\": \"pulse\"}",
-        "example": "'plate-07;idle=pulse'",
-        "example_source": null,
-        "check": "idle"
-      },
-      "phases": [],
-      "blends": [],
-      "options": [],
-      "dials": {
-        "module": "content/video_engine/scripts/kinetics/idle.mjs",
-        "object": "IDLE"
-      },
-      "lives": {
-        "form": "module",
-        "path": "content/video_engine/scripts/kinetics/idle.mjs",
-        "symbol": "pulse",
-        "note": "pulse"
-      },
-      "doctrine": [
-        "E49"
-      ],
-      "status": "wired",
-      "proof": {
-        "golden": null,
-        "test": "content/video_engine/tests/test_idle_e49.py::test_the_idle_is_a_named_kind_and_the_module_carries_its_tags",
-        "first_use": null
-      },
-      "callable": {
-        "today": true,
-        "why": null
-      }
+ "schema_version": "effect_cards.v1",
+ "axis": "idle",
+ "cards": [
+  {
+   "id": "idle:breath",
+   "axis": "idle",
+   "token": "breath",
+   "title": "The breath idle",
+   "aliases": [],
+   "does": "The held thing scales a hair in and out around its centre.",
+   "when": null,
+   "when_source": null,
+   "author": {
+    "key": "plate option ;idle=breath  or  species {\"idle\": \"breath\"}",
+    "example": "'plate-07;idle=breath'",
+    "example_source": null,
+    "check": "idle"
+   },
+   "phases": [],
+   "blends": [],
+   "options": [],
+   "dials": {
+    "module": "content/video_engine/scripts/kinetics/idle.mjs",
+    "object": "IDLE"
+   },
+   "lives": {
+    "form": "module",
+    "path": "content/video_engine/scripts/kinetics/idle.mjs",
+    "symbol": "breath",
+    "note": "breath; default: the IDLE_CLASS default for held things - every compiled build runs it (E49)"
+   },
+   "doctrine": [
+    "E49"
+   ],
+   "status": "live",
+   "proof": {
+    "golden": "ledger-soak-page@idle",
+    "test": "content/video_engine/tests/test_idle_e49.py::test_the_idle_is_a_named_kind_and_the_module_carries_its_tags",
+    "first_use": null
+   },
+   "callable": {
+    "today": true,
+    "why": null
+   }
+  },
+  {
+   "id": "idle:drift",
+   "axis": "idle",
+   "token": "drift",
+   "title": "The drift idle",
+   "aliases": [],
+   "does": "The held thing walks a bounded Lissajous path, its half-width the AUTHORED amplitude `;drift=<px>` / `plate_idle_drift_px` (30 long form, 40 shorts; IDLE.DRIFT_PX 2 px the floor).",
+   "when": null,
+   "when_source": null,
+   "author": {
+    "key": "plate option ;idle=drift  or  species {\"idle\": \"drift\"}",
+    "example": "'plate-podium;idle=drift'",
+    "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:3",
+    "check": "idle"
+   },
+   "phases": [],
+   "blends": [],
+   "options": [],
+   "dials": {
+    "module": "content/video_engine/scripts/kinetics/idle.mjs",
+    "object": "IDLE"
+   },
+   "lives": {
+    "form": "module",
+    "path": "content/video_engine/scripts/kinetics/idle.mjs",
+    "symbol": "drift",
+    "note": "drift; DRIFT_PX 2.0 is the FLOOR, not the setting - the amplitude is per scene (`world.idle_drift_px`) then `KIN.plate_idle_drift_px`, resolved by idleDriftPx (E99 s55)"
+   },
+   "doctrine": [
+    "E49",
+    "E99 s38",
+    "E99 s55"
+   ],
+   "status": "live",
+   "proof": {
+    "golden": "plate-drift",
+    "test": "content/video_engine/tests/kinetics/plate-idle.test.mjs",
+    "first_use": {
+     "project": "japan-tariff-trick",
+     "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
+     "t": 0.0
     }
-  ]
+   },
+   "callable": {
+    "today": true,
+    "why": null
+   }
+  },
+  {
+   "id": "idle:figure",
+   "axis": "idle",
+   "token": "figure",
+   "title": "The figure idle",
+   "aliases": [],
+   "does": "An asymmetric breath with a sway, for a figure (doc 48 s48.4).",
+   "when": null,
+   "when_source": null,
+   "author": {
+    "key": "plate option ;idle=figure  or  species {\"idle\": \"figure\"}",
+    "example": "'plate-07;idle=figure'",
+    "example_source": null,
+    "check": "idle"
+   },
+   "phases": [],
+   "blends": [],
+   "options": [],
+   "dials": {
+    "module": "content/video_engine/scripts/kinetics/idle.mjs",
+    "object": "IDLE"
+   },
+   "lives": {
+    "form": "module",
+    "path": "content/video_engine/scripts/kinetics/idle.mjs",
+    "symbol": "figureBreath"
+   },
+   "doctrine": [
+    "E49",
+    "48 s48.4"
+   ],
+   "status": "wired",
+   "proof": {
+    "golden": null,
+    "test": "content/video_engine/tests/test_idle_e49.py::test_the_idle_is_a_named_kind_and_the_module_carries_its_tags",
+    "first_use": null
+   },
+   "callable": {
+    "today": true,
+    "why": null
+   }
+  },
+  {
+   "id": "idle:live",
+   "axis": "idle",
+   "token": "live",
+   "title": "The live idle",
+   "aliases": [
+    {
+     "name": "Idle `live`: nothing truly still",
+     "source": "docs/content-video-engine/CAPABILITIES.md:72"
+    }
+   ],
+   "does": "Breath plus drift together: the held page inhales a little and walks a pixel or two, so even a chart at the page centre is never still (E49).",
+   "when": null,
+   "when_source": null,
+   "author": {
+    "key": "plate option ;idle=live  or  species {\"idle\": \"live\"}",
+    "example": "'ledger:ev-japan-holdings-v1:line:315:right:snap=dock-b-holdings:cut;idle=live'",
+    "example_source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/SHOT-TABLE-SHORT.py:4",
+    "check": "idle"
+   },
+   "phases": [],
+   "blends": [],
+   "options": [],
+   "dials": {
+    "module": "content/video_engine/scripts/kinetics/idle.mjs",
+    "object": "IDLE"
+   },
+   "lives": {
+    "form": "module",
+    "path": "content/video_engine/scripts/kinetics/idle.mjs",
+    "symbol": "idleXf",
+    "also": [
+     "IDLE_KINDS"
+    ],
+    "note": "breath + drift; the drift half sizes to the same authored amplitude (idleDriftPx, E99 s55)"
+   },
+   "doctrine": [
+    "E49"
+   ],
+   "status": "live",
+   "backlog": [
+    "R26-93"
+   ],
+   "proof": {
+    "golden": null,
+    "test": "content/video_engine/tests/test_idle_e49.py::test_every_compiler_idle_kind_is_a_kind_the_module_paints",
+    "first_use": {
+     "project": "japan-tariff-trick",
+     "build": "build-short (APPROVED 2026-09-09, REVIEW-CLAUDE.md:5; table read today, timeline rebuilt 2026-09-10T10:01 after the render 2026-09-09T07:44)",
+     "t": 1.82
+    }
+   },
+   "callable": {
+    "today": true,
+    "why": null
+   }
+  },
+  {
+   "id": "idle:none",
+   "axis": "idle",
+   "token": "none",
+   "title": "The no-idle setting",
+   "aliases": [],
+   "does": "Explicit stillness: the held thing carries the identity transform.",
+   "when": null,
+   "when_source": null,
+   "author": {
+    "key": "plate option ;idle=none  or  species {\"idle\": \"none\"}",
+    "example": "'ledger:x:line;idle=none'",
+    "example_source": null,
+    "check": "idle"
+   },
+   "phases": [],
+   "blends": [],
+   "options": [],
+   "dials": null,
+   "lives": {
+    "form": "module",
+    "path": "content/video_engine/scripts/kinetics/idle.mjs",
+    "symbol": "IDLE_KINDS"
+   },
+   "doctrine": [
+    "E49"
+   ],
+   "status": "wired",
+   "proof": {
+    "golden": null,
+    "test": "content/video_engine/tests/test_idle_e49.py::test_the_idle_is_a_named_kind_and_the_module_carries_its_tags",
+    "first_use": null
+   },
+   "callable": {
+    "today": true,
+    "why": null
+   }
+  },
+  {
+   "id": "idle:pulse",
+   "axis": "idle",
+   "token": "pulse",
+   "title": "The pulse idle",
+   "aliases": [],
+   "does": "The held thing's luminance dips and returns.",
+   "when": null,
+   "when_source": null,
+   "author": {
+    "key": "plate option ;idle=pulse  or  species {\"idle\": \"pulse\"}",
+    "example": "'plate-07;idle=pulse'",
+    "example_source": null,
+    "check": "idle"
+   },
+   "phases": [],
+   "blends": [],
+   "options": [],
+   "dials": {
+    "module": "content/video_engine/scripts/kinetics/idle.mjs",
+    "object": "IDLE"
+   },
+   "lives": {
+    "form": "module",
+    "path": "content/video_engine/scripts/kinetics/idle.mjs",
+    "symbol": "pulse",
+    "note": "pulse"
+   },
+   "doctrine": [
+    "E49"
+   ],
+   "status": "wired",
+   "proof": {
+    "golden": null,
+    "test": "content/video_engine/tests/test_idle_e49.py::test_the_idle_is_a_named_kind_and_the_module_carries_its_tags",
+    "first_use": null
+   },
+   "callable": {
+    "today": true,
+    "why": null
+   }
+  }
+ ]
 }

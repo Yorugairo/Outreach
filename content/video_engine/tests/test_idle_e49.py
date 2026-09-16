@@ -107,10 +107,30 @@ def test_every_compiled_timeline_turns_the_idle_on_unless_the_build_says_otherwi
     assert k["idle"] is False and k["analytic_spring"] is True, "stillness is explicit"
 
 
+# R26-133's own goldens are the exception this test has to name, because the idle is their SUBJECT: without E49's
+# switch `idleOf` returns "none" and there is no idle to paint at all (build_golden_sources.plate_drift's own
+# comment). `plate-drift` has carried the flag since it was pinned; `plate-alive` (P61 T14 / E99 s55) carries it for
+# the same reason. Every OTHER source stays flagless, which is what keeps the rest of the wall byte-identical.
+IDLE_IS_THE_SUBJECT = {"plate-drift", "plate-alive"}
+
+
 def test_golden_sources_carry_no_idle_flag_so_they_stay_byte_identical():
     for p in sorted(SOURCES.glob("*.timeline.json")):
+        if p.name[: -len(".timeline.json")] in IDLE_IS_THE_SUBJECT:
+            continue
         tl = json.loads(p.read_text(encoding="utf-8"))
         assert not (tl.get("kinetics") or {}).get("idle"), p.name
+
+
+def test_the_two_drift_goldens_are_the_only_sources_the_idle_is_the_subject_of():
+    """The exception above, pinned the other way round: exactly those two carry it, and both PAINT it (E99 s55)."""
+    carry = {p.name[: -len(".timeline.json")] for p in sorted(SOURCES.glob("*.timeline.json"))
+             if (json.loads(p.read_text(encoding="utf-8")).get("kinetics") or {}).get("idle")}
+    assert carry == IDLE_IS_THE_SUBJECT
+    for name in sorted(carry):
+        tl = json.loads((SOURCES / f"{name}.timeline.json").read_text(encoding="utf-8"))
+        assert tl["kinetics"].get("plate_idle_paints") is True, f"{name}: the walk must PAINT (R26-133's cure)"
+        assert tl["scenes"][0]["world"]["idle_drift_px"] == 30.0, f"{name}: at E99 s55's long-form amplitude"
 
 
 # ---- the gate: M18 frozen frames --------------------------------------------------------------

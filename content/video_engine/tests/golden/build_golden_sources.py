@@ -2763,25 +2763,37 @@ FRAME_T["door-open"] = DOOR_CUT + DOOR_S   # u = 1: edge-on, the plate alone - t
 # The `idle` flag is ON in the source because without it `idleOf` returns "none" and there is no idle to paint at
 # all (the engine's IDLE_CLASS / idleOf); the flag alone still renders a still plate - that is the HELD frame.
 PLATE_DRIFT_RUNTIME = 4.0   # a short hold: the four proof frames are its seconds 0, 1, 2, 3
+PLATE_DRIFT_PX = 30.0       # E99 s55: the named LONG-FORM amplitude (40 is the shorts one) - build_scene_timeline_f.PLATE_DRIFT_LONG
 
 
 def plate_drift() -> tuple[dict, dict]:
-    """R26-133: a plate authored `;idle=drift` - the case the player read for its `.scale` alone, so it held
-    perfectly still. `drift` opens at [0, 0] and walks a bounded Lissajous of +-DRIFT_PX (2.0 stage px) x, +-0.6 of
-    it in y, on two rates whose common period is 100 s, so four seconds carries four different poses and none of
-    them repeats. Judged at 2.0 - a second clear of the rest it opens from (FRAME_T)."""
+    """R26-133, re-authored by P61 T14 to the ruling that CLOSED it (E99 s55): a plate authored `;idle=drift`, the
+    dial PAINTING it, at the amplitude the operator named - `;drift=30`, the long-form setting.
+
+    What the first pin proved and E99 s38 then refused: at IDLE.DRIFT_PX (2.0) the walk is 2.3 px of excursion at
+    about eight frames per pixel, and the operator could not judge it - *"i don't even notice it while i'm watching
+    ... it's not realy a visible shift"*. So the dial the cure needed was never the boolean alone; it is the
+    AMPLITUDE, and it is authored per scene. At 30 the same walk - the same two rates, the same Lissajous, so it can
+    never become jitter - moves the whole plate about ten px a second.
+
+    `drift` opens at [0, 0] and walks +-`idle_drift_px` in x, +-0.6 of it in y, on two rates whose common period is
+    100 s, so four seconds carries four different poses and none of them repeats. Judged at 2.0 - a second clear of
+    the rest it opens from (FRAME_T)."""
     import build_scene_timeline_f as BST
     aid = "plate-drift"
     scenes = [{"scene_id": "s01",
                "world": {"asset_id": aid, "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0},
-                         "idle": "drift"},
+                         "idle": "drift", "idle_drift_px": PLATE_DRIFT_PX},
                "exit": "cut", "span": [0.0, PLATE_DRIFT_RUNTIME], "docks": [], "species": []}]
     uris = _base_uris()
     uris[aid] = BST.data_uri(DOCK_PLATE)      # the same committed input camera-layers reads, flat
-    tl = _timeline("Golden: a plate world at its drift idle", scenes, {}, None)
+    tl = _timeline("Golden: a plate world at its drift idle, 30 px", scenes, {}, None)
     tl["runtime_s"] = PLATE_DRIFT_RUNTIME
     tl["captions"], tl["caption_pages"] = [], []   # nothing on the stage but the plate
-    tl["kinetics"] = {"idle": True}                # E49's switch: without it there is no idle to read
+    # E49's switch, and E99 s55's two: the walk PAINTS (R26-133's cure) at the authored amplitude. The amplitude is
+    # on the WORLD, not here - `plate_idle_drift_px` in the kinetics map is the build-wide fallback, and this golden
+    # authors the row's own so the pair reads the grammar an episode actually writes.
+    tl["kinetics"] = {"idle": True, "plate_idle_paints": True}
     return tl, uris
 
 
@@ -2789,6 +2801,71 @@ SURFACES.update({   # R26-133: the drift plate, held (this source) and painted (
     "plate-drift": plate_drift,
 })
 FRAME_T["plate-drift"] = 2.0
+
+
+# ---- P61 T14 / E99 s55: THE ALIVE PLATE, WITH THE WHOLE DEPTH STACK OVER IT ---------------------
+# The operator, 2026-09-16, closing R26-133: *"i think we need both the drift painted as an option and the alive.
+# Maybe we need the ken burns + alive or parallax+ alive or maybe we need a slightly smaller drift (maybe 30 px?)
+# AND the alive water."* - and, when the drift lane's three-way proof had run VACE over the flat still alone:
+# *"when you ran vace did you also run the rest of our depth stack etc?"* It had not. This surface is the answer,
+# and it is a COMPOSITION of four things the record already holds, not a new mechanism:
+#   CAPABILITIES:143  the mask-pinned ambient lane - the harbour water, generated (Wan 2.1 VACE 1.3B), pinned to
+#                     the still outside its own mask, here re-composited over the depth split's `-far` layer so the
+#                     alive region IS the background wall
+#   CAPABILITIES:145-146  the layered plate and its sidecar - the mid containers, the clerk's desk, the hanging
+#                     lamp, the same four planes `camera-layers` reads, over that wall
+#   CAPABILITIES:147  the camera over layers - ONE authored move, each plane at its own k, and the move has the
+#                     only reason E51 allows: a card LANDS on the quay and the eye goes to it
+#   E99 s55 / E49     the drift, painted, at 30 px - the plate's own idle, shared per plane at its own share of k
+# The frame is judged at the instant where BOTH halves of the claim are on screen: the water has moved off its
+# first frame AND the near planes have led the far one. Nothing here is a fixture: it is a beat a short could carry.
+DOCK_ALIVE = HERE / "inputs" / "dock-alive"
+ALIVE_PLATE = DOCK_ALIVE / "world-tokyo-customs-dock-v1-alive.png"   # the committed input set, as `camera-layers` reads dock-layers
+PLATE_ALIVE_RUNTIME = 10.0
+PLATE_ALIVE_T = 6.56   # u 0.28 of the focus zoom (the instant `camera-layers@proof-mid` reads the parallax at), and 2.50 s into the water's own loop
+
+
+def plate_alive() -> tuple[dict, dict]:
+    """P61 T14 / E99 s55 - THE ALIVE PLATE: a layered plate whose BACKGROUND WALL is a clip, with the parallax
+    planes, the one camera and the 30 px drift composing over it.
+
+    The plate is `world-tokyo-customs-dock-v1-alive` - the same Tokyo customs dock every layered golden reads, its
+    `-far` layer replaced by the ambient lane's generated harbour water (everything outside the life mask is that
+    committed layer, pixel for pixel). The mid / subject / occluder planes are the flat plate's own.
+    """
+    import build_scene_timeline_f as BST
+    aid = "plate-alive"
+    planes = BST.plate_depth_planes(ALIVE_PLATE)
+    layers = [{"key": f"{BST.LY_PREFIX}{aid}:{p['role']}", "k": p["depth"], "role": p["role"],
+               **({"clip": True} if p.get("clip") else {})} for p in planes]
+    dock = BST.dock_entry("ev-quay-card", 0, CAMERA_LAYERS_ENTER, PLATE_ALIVE_RUNTIME, 2, BST.DOCK_KIND_IMAGE,
+                          CAMERA_LAYERS_PLACE, "land")
+    ev = {"ev-quay-card": {"title": "The card the eye goes to", "source": "P61 T14", "species": "deck",
+                           "document": {"path": "golden", "sha256": "0" * 64}, "badges": _badges()[:2]}}
+    P = CAMERA_LAYERS_PLACE
+    species = [{"kind": "focus_zoom", "at": CAMERA_LAYERS_AT, "dur": CAMERA_LAYERS_DUR,
+                "target": {"kind": "region", "x0": P["x"] / 1920, "y0": P["y"] / 1080,
+                           "x1": (P["x"] + P["w"]) / 1920, "y1": (P["y"] + P["h"]) / 1080}}]
+    scenes = [{"scene_id": "s01",
+               "world": {"asset_id": aid, "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0},
+                         "idle": "drift", "idle_drift_px": PLATE_DRIFT_PX, "layers": layers},
+               "exit": "cut", "span": [0.0, PLATE_ALIVE_RUNTIME], "docks": [dock], "species": species}]
+    uris = _base_uris()
+    uris[aid] = BST.data_uri(ALIVE_PLATE)                    # the flat still the compiler always embeds (unpainted: the planes ARE the picture)
+    for pl, ly in zip(planes, layers):
+        uris[ly["key"]] = BST.data_uri(Path(pl["file"]))     # RAW - the alpha IS the plane, and an mp4 is embedded whole
+    uris["ev-quay-card"] = uri("image/png", png_solid(640, 400, (23, 105, 194)))
+    tl = _timeline("Golden: the alive plate under the whole depth stack", scenes, ev, None)
+    tl["runtime_s"] = PLATE_ALIVE_RUNTIME
+    tl["captions"], tl["caption_pages"] = [], []             # nothing on the stage but the plate and the card it is judged by
+    tl["kinetics"] = {"idle": True, "plate_idle_paints": True, "camera": True, "stop_action": True}
+    return tl, uris
+
+
+SURFACES.update({   # P61 T14 / E99 s55: the alive wall, the planes, the camera and the drift, composing
+    "plate-alive": plate_alive,
+})
+FRAME_T["plate-alive"] = PLATE_ALIVE_T
 
 
 # ---- P61 T9 (b): THE EFFECTS GALLERY'S OWN PAGE ------------------------------------------------

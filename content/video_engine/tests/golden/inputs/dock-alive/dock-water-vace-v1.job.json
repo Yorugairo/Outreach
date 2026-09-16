@@ -1,0 +1,25 @@
+{
+ "model": "wan2.1_vace_1.3B_fp16.safetensors",
+ "num_frames": 65,
+ "cfg": 4.5,
+ "steps": 25,
+ "shift": 3.0,
+ "text_encoder": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+ "vae": "wan_2.1_vae.safetensors",
+ "width": 480,
+ "height": 320,
+ "fps": 16,
+ "life": [
+  0.219,
+  0.45,
+  1.0,
+  0.644
+ ],
+ "prompt": "harbour water at sunset with waves rolling toward the quay, the swell rising and falling, ripples travelling left across the surface, bright orange sun glints flickering and sliding on the moving water, the city reflection breaking and reforming, locked static camera, flat illustrated screen-print poster style",
+ "still": "content\\video_engine\\review\\assembly\\r26-133-drift-idle-paints-nothing\\alive\\still-plate.png",
+ "seed": 4242,
+ "backend": "vace",
+ "composited_over": "content/video_engine/tests/golden/inputs/dock-layers/world-tokyo-customs-dock-v1-far.png",
+ "source_run": "content/video_engine/review/assembly/r26-133-drift-idle-paints-nothing/alive/alive-water-vace-4s-pinned.mp4",
+ "note": "P61 T14 / E99 s55. The drift lane's VACE run (R26-133's three-way proof), pinned to its still and then re-composited over the depth split's own -far layer, so the ALIVE region is the background WALL of a layered plate and the mid / subject / occluder planes parallax over it. Everything outside the life mask is the committed far layer, pixel for pixel."
+}

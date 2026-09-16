@@ -91,6 +91,54 @@ def test_the_player_takes_the_span_tone_from_the_module_and_nowhere_else() -> No
     assert 'KIN.span_tone === "dark"' not in src, "a second default in the engine is exactly the drift this pins"
 
 
+# ------------------------------------------------------------------ E99 s55: THE DRIFT'S AMPLITUDE DIAL
+# The operator, 2026-09-16, closing R26-133: *"i think we need both the drift painted as an option and the alive ...
+# maybe we need a slightly smaller drift (maybe 30 px?) AND the alive water. I think for youtube the 40 px drift would
+# be too much motion fora long form, but it looks like it might work really well for shorts and certain scenes."*
+# Like the span's two dials, the amplitude defaults in two places that must say the same thing - and unlike them it
+# has NO global default at all: unset, the player takes `kinetics/idle.mjs` IDLE.DRIFT_PX, which is the string every
+# APPROVED cut was rendered with (E45). What is pinned here is the FLOOR on both sides and the refusal.
+IDLE_MODULE = ROOT / "content/video_engine/scripts/kinetics/idle.mjs"
+
+
+def _idle_const(name: str) -> str:
+    m = re.search(rf"^\s*{name}:\s*([^,]+),", IDLE_MODULE.read_text(encoding="utf-8"), re.M)
+    assert m, f"kinetics/idle.mjs has no IDLE.{name}"
+    return m.group(1).strip()
+
+
+def test_the_compilers_drift_floor_is_the_modules_own_constant() -> None:
+    assert B.PLATE_DRIFT_FLOOR == float(_idle_const("DRIFT_PX")),         "the compiler refuses under a floor the player raises to - the two must be one number"
+    assert (B.PLATE_DRIFT_LONG, B.PLATE_DRIFT_SHORTS) == (30.0, 40.0), "E99 s55's two named settings"
+
+
+def test_the_amplitude_has_no_global_default() -> None:
+    assert "plate_idle_drift_px" not in B.build_kinetics(),         "E45: a default here would move the drift plates of every approved cut - the dial is authored, never assumed"
+
+
+def test_a_build_level_dial_goes_through_the_same_refusal(monkeypatch) -> None:
+    monkeypatch.setattr(B, "KINETICS", {"plate_idle_drift_px": 30})
+    assert B.build_kinetics()["plate_idle_drift_px"] == 30.0
+    monkeypatch.setattr(B, "KINETICS", {"plate_idle_drift_px": 1})
+    with pytest.raises(ValueError, match="under the floor"):
+        B.build_kinetics()
+
+
+def test_the_row_authors_the_amplitude_per_scene() -> None:
+    bare, opts = B.split_plate_opts("world-x;idle=drift;drift=30")
+    assert (bare, opts) == ("world-x", {"idle": "drift", "drift": "30"})
+    assert B.plate_drift_px("40", "row") == 40.0
+    for bad, why in ((0.5, "under the floor"), (-2, "under the floor"), (200, "past the ceiling"), ("x", "not a number")):
+        with pytest.raises(ValueError, match=why):
+            B.plate_drift_px(bad, "row")
+
+
+def test_the_player_reads_the_amplitude_and_nowhere_else() -> None:
+    src = RB.player_text()
+    assert "const idleAmp = idleDriftPx(scene.world.idle_drift_px, KIN.plate_idle_drift_px);" in src,         "the row's px before the build's dial, the module's floor behind both"
+    assert "plate_idle_drift_px: \"the plate idle drift's half-width in stage px" in src, "named in KINETICS_DIALS"
+
+
 def _chromium_available() -> bool:
     try:
         from playwright.sync_api import sync_playwright

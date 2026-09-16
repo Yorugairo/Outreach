@@ -1247,7 +1247,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   effects_catalog_check 0 failures; page-boxes 44. The registry regenerates with T11 (another lane holds it staged).
 
 ### T14: THE DRIFT'S AMPLITUDE DIAL AND THE ALIVE PLATE AS A ROUTE (E99 s55)
-- Status: pending
+- Status: complete (2026-09-16) - HG-drift-2 open on the queue as `r26-133-drift-idle-paints-nothing` (watch: the beat + the golden pair)
 - Owner: `implementation_luna` (**ENGINE LOCK**)
 - Depends on: HG-drift (ruled E99 s55)
 - Write set: `content/video_engine/scripts/kinetics/idle.mjs`, `content/video_engine/scripts/build_scene_timeline_f.py` (KINETICS_DIALS `plate_idle_drift_px`),
@@ -1261,7 +1261,32 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python -m pytest content/video_engine/tests/test_kinetics_flags.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/effects_catalog_check.py`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T14.md`. THE DIAL threaded as `plate_idle_paints` is: the engine `idleDriftPx(scene.world.idle_drift_px,
+  KIN.plate_idle_drift_px)` -> `idleXf(..., {DRIFT_PX: idleAmp})`; unset = the 2 px constant, so every existing render is byte-identical (E45);
+  the compiler `world_for_plate` -> `world['idle_drift_px'] = plate_drift_px(...)`, per scene by `;idle=drift;drift=30` (`PLATE_OPTS`), no
+  build-level default; refusals under the 2 px floor (named: E49), over a 90 px ceiling, non-numeric, on a ledger / vecmap / clip world,
+  beside an idle with no dx/dy. THE ALIVE PLATE is not a new format: the BACKGROUND LAYER of an ordinary layered plate whose path is
+  an .mp4 (a clip WORLD takes no planes and no idle - the wrong shape); the sidecar contract: `clip: true` from the suffix, generator
+  must be `vace`, alpha refused, role background, `life: {still, mask, job}` mandatory (`build_plate_library.py`, PLATE-LIBRARY.json,
+  Tokyo's plates.json: `world-tokyo-customs-dock-v1-alive`). THE COMPOSITION holds end to end: compiler -> `world.layers[0].clip` -> the
+  pooled <video> inside the plane -> the camera at k, the rest and the idle's share on the same element. MEASURED: the water, wall t 0.00
+  vs 2.50, in-mask MAD 9.84 vs out-of-mask 0.03 (328:1); in the rendered stage the harbour band MAD 2.92, the sky 0.008. A layer
+  parallaxed, layered vs the FLAT composite: camera locked t 5.90 = 0.49 % of the stage (the water, the control); t 6.56 (u 0.28 of the
+  focus zoom) = 16.92 %, the container stack (k 1.15) 27.9 px off (NCC 0.955); the drift alone at 30 px MAD 21.67 (s38's refused case
+  was the same measurement at 2 px). GOLDEN PAIR: `plate-drift` re-authored at 30 px (FRAME_T 2.0); `plate-alive` new (FRAME_T 6.56;
+  its source carries the VACE clip as a 480x320 base64 proxy the way every golden carries its stills - s31's fixture rule extended
+  to a small clip; `tests/golden/inputs/dock-alive/` stays gitignored). THE BEAT `build-p61-alive/`: the real take 20.77-27.34 s, one
+  row `world-tokyo-customs-dock-v1-alive;idle=drift;drift=30`, a spotlight on the water at 'Japan holds', an authored camera key
+  4.54 -> 6.37 s (zoom 1.0 -> 1.14) on the sentence's turn - an authored key, NOT a landing (E51 is the shipping law; a locked camera
+  paints the flat composite exactly). PARENT'S READ: the plate-alive golden - the harbour band moved against a still sky, the
+  container stack displaced from the flat frame; the beat's clip frames read below on the card. CAPABILITIES: the ambient-lane row
+  and the LTX row amended (VACE works - 65 f @ 16 fps, CFG 4.5, seed 4242; LTX no motion in five runs, dropped), the drift dial on
+  the plate-idle row, the alive plate as a layered plate's background. Cards `idle.json` / `plate_option.json`. Validate: node
+  617/617; sync in sync; pytest kinetics flags + goldens 165 passed; effects_catalog_check 0; gate_motion_density on the beat 1 FAIL
+  (M11: a 6.57 s plate window has no chart - content, not the composition; M01 1.3 s, M16 0 gaps, 22 events); page-boxes 44
+  (sha-only, 17e88952 -> a17feace); animation registry 0 orphaned, `idleDriftPx` tracked. DEVIATION RATIFIED: `test_idle_e49.py`
+  was already failing at HEAD (plate-drift's source carried `idle: true` since it was pinned) - the lane named the exception
+  `IDLE_IS_THE_SUBJECT = {plate-drift, plate-alive}` and pinned it the other way; no test deleted or renamed.
 
 ### T11: THE RECORD - the CAPABILITIES rows, the backlog rows, the queue, the layers
 - Status: in progress (2026-09-16) - EVERY BUILD SLICE HAS LANDED (T1-T13 incl. T2b, T3b, T3c, T5b, T5c, T6b, T7b); the record of each is written (CAPABILITIES rows 37 / 75 / 119 / 43 / 56 / 116 / 117 / 121 / 147 / 184 / 318, BACKLOG R26-137..155, doc 41, doc 43 s43.5.1, the lane register); rulings E99 s39-s53 recorded verbatim. OPEN: the four cards the operator has not yet answered (HG7b rails, HG2b-2 the planted ground, HG2-2 the closing, HG6-2 the throw) and their rulings into OPERATOR-RULINGS; the drift plate's visible three-way proof (E99 s38, a lane running); the docs layers rebuilt once the voice lane's staged commit lands (CAPABILITIES is shared with it); then the plan closes

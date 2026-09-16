@@ -29,7 +29,8 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "press-stack",  # P50 T3: three press cards stacked, the newest lit, the underline drawn on its phrase
             "flow-swap",    # P50 T4: the three-node diagram after its swap - the new node in place, both clothoid arrows standing, the year stamped
             "span-decade",  # P50 T4: a ledger line page with a named stretch of time shaded behind it
-            "plate-drift",  # R26-133: a plate world authored `idle: "drift"`, HELD - the `.scale`-only read the player shipped, against which the `plate_idle_paints` dial's painted frames are judged
+            "plate-drift",  # R26-133, re-authored by P61 T14 to the ruling that closed it (E99 s55): the plate world authored `idle: "drift"`, the dial PAINTING it at `;drift=30` - the amplitude the operator named for long form, after E99 s38 refused the 2 px walk as a motion nobody can see
+            "plate-alive",  # P61 T14 / E99 s55: THE ALIVE PLATE under the whole depth stack - the ambient lane's generated harbour water as the background WALL, the split's mid / subject / occluder planes over it, the one camera at each plane's k and the 30 px drift, judged at u 0.28 of the focus zoom and 2.50 s into the water's own loop
             "tiers-two",    # P50 T9: two bands on one shared x, each with its own scale and honest zero, the second drawn on its own word and its drop measured as a bar
             "treemap-cross",  # P50 T6: the census page - a squarified treemap, three partners crossed on a word and their share written
             "tags-to-bars",   # P50 T11: two terminal tags mid-flight into their two bars, the lines un-drawing beneath them

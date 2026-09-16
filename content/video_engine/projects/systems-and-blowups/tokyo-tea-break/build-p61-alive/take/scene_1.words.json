@@ -1,0 +1,104 @@
+{
+ "words": [
+  {
+   "w": "The",
+   "start_s": 0.07,
+   "end_s": 0.186
+  },
+  {
+   "w": "Treasury's",
+   "start_s": 0.232,
+   "end_s": 0.662
+  },
+  {
+   "w": "table",
+   "start_s": 0.708,
+   "end_s": 1.01
+  },
+  {
+   "w": "shows",
+   "start_s": 1.045,
+   "end_s": 1.289
+  },
+  {
+   "w": "Japan",
+   "start_s": 1.347,
+   "end_s": 1.73
+  },
+  {
+   "w": "holds",
+   "start_s": 1.8,
+   "end_s": 2.032
+  },
+  {
+   "w": "over",
+   "start_s": 2.078,
+   "end_s": 2.276
+  },
+  {
+   "w": "a",
+   "start_s": 2.345,
+   "end_s": 2.38
+  },
+  {
+   "w": "trillion",
+   "start_s": 2.45,
+   "end_s": 2.903
+  },
+  {
+   "w": "dollars",
+   "start_s": 2.961,
+   "end_s": 3.297
+  },
+  {
+   "w": "of",
+   "start_s": 3.332,
+   "end_s": 3.39
+  },
+  {
+   "w": "our",
+   "start_s": 3.448,
+   "end_s": 3.564
+  },
+  {
+   "w": "debt,",
+   "start_s": 3.622,
+   "end_s": 3.971
+  },
+  {
+   "w": "and",
+   "start_s": 4.017,
+   "end_s": 4.168
+  },
+  {
+   "w": "it's",
+   "start_s": 4.215,
+   "end_s": 4.331
+  },
+  {
+   "w": "been",
+   "start_s": 4.365,
+   "end_s": 4.493
+  },
+  {
+   "w": "selling",
+   "start_s": 4.54,
+   "end_s": 4.853
+  },
+  {
+   "w": "since",
+   "start_s": 4.911,
+   "end_s": 5.132
+  },
+  {
+   "w": "February.",
+   "start_s": 5.167,
+   "end_s": 5.968
+  },
+  {
+   "w": "I",
+   "start_s": 6.478,
+   "end_s": 6.548
+  }
+ ]
+}
