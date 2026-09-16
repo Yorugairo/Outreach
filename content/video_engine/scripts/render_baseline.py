@@ -190,10 +190,9 @@ PROOF_FRAMES = {
     "melt-morph@proof-ground": ("melt-morph", {"arap_morph": True, "min_jerk": True}, 16.58),
     # P55 T6: THE VERDICT STACK's last phase - the radial BURST at clear_at (20.0) + 0.25 s: with the 60 ms stagger the
     # first card is half way through its 0.5 s throw and the fifth just leaving, each along its own bearing, spinning
-    # P61 T7c / E99 s59 - THE GATHER, at the instant the mosaic and the burst both cannot show: the wall drawn in
-    # toward the centre card, mid-draw. The gather opens at clear_at - GATHER_LEAD (20.0 - 0.9 = 19.1) on the
-    # reference's own arrival easing, so u 0.206 is where it is exactly half way home - a wall still visibly closing.
-    "verdict-stack@proof-gather": ("verdict-stack", {}, 19.29),
+    # P61 T7d / E99 s61 - THE FULL FRAME HAS NO GATHER: the operator, with the two clips and the reference side by
+    # side, kept the reference on this form ("on horizontal i still prefer the reference"), so `@proof-gather` on
+    # 16:9 retires with the phase it proved. The gather's frame lives on the SHORT's surface below.
     "verdict-stack@proof-burst": ("verdict-stack", {}, 20.25),
     # P61 T7 / R26-82, E99 s21 - THE SAME FIVE PHASES ON A SHORT, one golden each, so "it didn't just place them
     # horizontally" is answered by a frame per phase and not by a diff. The surface is 9:16 and its nine proofs land

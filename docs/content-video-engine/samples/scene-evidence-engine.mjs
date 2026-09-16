@@ -6698,19 +6698,23 @@ async function mount(doc) {
        recede - when the NEXT card's beat lands it returns over RECEDE_S on an in-out cubic to one of the nine SPOTS -
                 the page re-composes as a mosaic (remotion-bits mosaic-reframe). On the SHORT's form those spots are
                 laid in READING BANDS (E99 s43): 1-2 across the top left to right, 3-4 across the bottom, 5-6 top,
-                7-8 bottom. THE LAST PROOF NEVER RECEDES (E99 s59): the wall ENDS on it, large at the focus spot.
+                7-8 bottom. ON A GATHERING FORM THE LAST PROOF NEVER RECEDES (E99 s59): the wall ENDS on it, large at
+                the focus spot. On the full frame it recedes like the rest, LAST_RECEDE_LEAD before the clear (E99 s61).
        idle   - railed cards float on the drift (DRIFT_* / BOB_*), tilted by TILTS; on the SHORT's form that float is a
                 NAMED idle kind (E49: IDLE_KIND "live" = breath + drift), sized by IDLE_DRIFT_PX / IDLE_BREATH_AMP and
                 phased IDLE_PHASE per card, so no two rails breathe in step.
-       gather - the last GATHER_LEAD before clear_at: every railed card draws GATHER_PULL of the way toward the CENTRE
-                card (under it - z 7 below z 9 - and never over its core, GATHER_CORE), on the reference's own arrival
-                easing (out-cubic), while its railed idle fades out. The wall closes, holds its breath, and the burst
-                then leaves from a GATHERED wall instead of from the rails (E99 s59: "the last card should land in the
-                middle so that we can have a gather before the burst ... we're missing the gather").
-       burst  - on clear_at each card is thrown radially along its own bearing FROM ITS GATHERED POSE (the pose at
-                clear_at is the throw's origin, so nothing jumps), spinning, BURST_STAGGER apart over BURST_S
-                (remotion-bits fracture-reassemble, inferred); removed at clear_at + REMOVE_AFTER. The centre card has
-                no outward bearing - it is thrown BURST_CENTRE_BY straight down and at the viewer, last of the nine.
+       gather - THE SHORT'S FORM ONLY (V.GATHER; E99 s61). The last GATHER_LEAD before clear_at: every railed card
+                draws GATHER_PULL of the way toward the CENTRE card (under it - z 7 below z 9 - and never over its
+                core, GATHER_CORE), on the reference's own arrival easing (out-cubic), while its railed idle fades
+                out. The wall closes, holds its breath, and the burst then leaves from a GATHERED wall instead of from
+                the rails (E99 s59: "the last card should land in the middle so that we can have a gather before the
+                burst ... we're missing the gather"). The full frame has no gather phase at all.
+       burst  - on clear_at each card is thrown radially along its own bearing, spinning, BURST_STAGGER apart over
+                BURST_S (remotion-bits fracture-reassemble, inferred); removed at clear_at + REMOVE_AFTER. On a
+                gathering form the throw leaves ITS GATHERED POSE (the pose at clear_at is the origin, so nothing
+                jumps) and the centre card has no outward bearing - it is thrown BURST_CENTRE_BY straight down and at
+                the viewer, last of the nine. On the full frame it leaves the RAIL, 60 ms apart over 0.50 s, which is
+                the reference's own beat (E99 s61).
 
      THE REFERENCE RULES THE NUMBERS (E99 s59; measured 2026-09-16 frame by frame off Steel and Paper's own beat, the
      frozen build-f player, `ev-holds-stack-v1`, nine proofs 702.87-723.69 s, clear_at 726.98 - read-only):
@@ -6725,11 +6729,16 @@ async function mount(doc) {
        * the burst, measured: every card fires within one frame of clear_at, 60 ms apart, throws 427-1116 px (2.61:1)
          over 0.50 s along nine bearings spread 336.5 deg (gaps 25-69 deg), and the wall is gone 0.99 s after the
          clear. TIGHTER (the operator: "then the burst should be tighter") is measured against exactly those numbers:
-         BURST_STAGGER 0.06 -> 0.035 and BURST_S 0.50 -> 0.42, so the nine fire over 0.28 s instead of 0.48 s and the
-         wall is gone in 0.70 s - 0.71x the reference - and the bearings leave from the GATHERED wall, whose departure
-         points stand 65-173 px closer to the centre than the rails they came from.
-     TWO SURFACES, ONE CHOREOGRAPHY (P61 T7): `VERDICT` is the full-frame form; `VERDICT_9X16` re-lays the SAME five
-     phases for a short. `verdictDials(portrait)` hands the painter one or the other - nothing else differs.
+         on the SHORT BURST_STAGGER 0.06 -> 0.035 and BURST_S 0.50 -> 0.42, so the nine fire over 0.28 s instead of
+         0.48 s and the wall is gone in 0.70 s - 0.71x the reference - and the bearings leave from the GATHERED wall,
+         whose departure points stand 65-113 px closer to the centre than the rails they came from.
+     A RULING ON A FORM IS A RULING ON THAT FORM (E99 s61, P61 T7d). The operator, with the 9:16 clip, the 16:9 clip
+     and the reference side by side: *"that vertical is great. on horizontal i still prefer the reference."* So the
+     gather, the centre landing and the tighter burst are `VERDICT_9X16`'s dials, and `VERDICT` carries the
+     reference's numbers again - LAST_RECEDE_LEAD 0.9, BURST_STAGGER 0.06, BURST_S 0.50, no gather, no centre-last -
+     which is the engine as it stood before T7c on that form, byte for byte in its goldens.
+     TWO SURFACES, ONE CHOREOGRAPHY (P61 T7): `VERDICT` is the full-frame form; `VERDICT_9X16` re-lays the SAME
+     phases for a short and names the two it adds. `verdictDials(portrait)` hands the painter one or the other.
      The dials below are ours to tune (42 s42.5), not findings. doc 29 s9.24's translateZ -940 is stale: the code is -700. */
 
 
@@ -6760,12 +6769,13 @@ async function mount(doc) {
     ENTER_Z: -700,         /* the enter's depth: translateZ px (doc 29 s9.24's -940 is stale) */
     ENTER_ROT_Y: 30,       /* the enter's rotateY in deg, signed by dir */
     RECEDE_S: 1.0,         /* the recede's clock (in-out cubic) */
-    GATHER_LEAD: 0.9,      /* THE GATHER's window: the last card holds the centre and the wall draws in over this long
-                              before clear_at. The reference's own measured lead (it spends the same 0.9 s on its last
-                              station change); the compiler mirrors it as the floor between the last proof and the clear. */
-    GATHER_PULL: 0.22,     /* a railed card draws this share of the way toward the CENTRE card (173 px at the widest) ... */
-    GATHER_CORE: 0.5,      /* ... but never so far that its box reaches the centre card's CORE - this share of its rect ... */
-    GATHER_GAP: 16,        /* ... plus this margin in px, which the tilt's bounding box spends */
+    GATHER: false,         /* E99 s61 - THE GATHER IS THE VERTICAL FORM'S. The operator, with the 9:16 clip, the 16:9
+                              clip and Steel and Paper side by side: "that vertical is great. on horizontal i still
+                              prefer the reference." So the full frame keeps the reference's own choreography - the
+                              last card recedes to its raster spot, no gather, the burst from the rails - and every
+                              dial T7c moved lives on VERDICT_9X16 below. Two dial sets of ONE species. */
+    LAST_RECEDE_LEAD: 0.9, /* the last card recedes this long before clear_at (the gathering form has no use for it:
+                              there the wall ends on the last proof, and GATHER_LEAD is that window instead) */
     DRIFT_W: 0.55,         /* the x drift's angular rate (rad/s) ... */
     DRIFT_PHASE: 1.7,      /* ... phased per index */
     DRIFT_X_REST: 8,       /* the x drift amplitude on the rail ... */
@@ -6784,12 +6794,9 @@ async function mount(doc) {
     BURST_Z: 340,          /* the burst's translateZ toward the viewer */
     BURST_SPIN: 24,        /* the burst's spin in deg, signed by dir */
     BURST_SCALE: 0.22,     /* the burst's added scale */
-    BURST_CENTRE_BY: 1.0,  /* the CENTRE card's bearing: it has no outward one, so it is thrown straight down (and at
-                              the viewer on BURST_Z), last of the wall - the verdict is the last thing to leave */
-    BURST_STAGGER: 0.035,  /* card i bursts this long after card i-1 (E99 s59 "the burst should be tighter": the
-                              reference's measured 0.06 strings nine cards over 0.48 s; 0.035 fires them over 0.28 s) */
-    BURST_S: 0.42,         /* each card's burst clock (quadratic in; the reference's is 0.50 - the wall is gone 0.70 s
-                              after the clear instead of the reference's measured 0.99 s) */
+    BURST_STAGGER: 0.06,   /* card i bursts this long after card i-1 - Steel and Paper's own measured spacing (E99 s61:
+                              on the full frame the reference is preferred as it is; the short tightens it to 0.035) */
+    BURST_S: 0.5,          /* each card's burst clock (quadratic in) - the reference's own 0.50 */
     REMOVE_AFTER: 1.4,     /* the stackbox is removed this long after clear_at ... */
     MOUNT_LEAD: 0.5,       /* ... and when t is earlier than the dock's enter less this */
   });
@@ -6866,6 +6873,23 @@ async function mount(doc) {
     IDLE_DRIFT_PX: 6.5,    /* ... the walk's half-width in stage px (idle.mjs's 2.0 is for a pill, not a 400 px card) ... */
     IDLE_BREATH_AMP: 0.010,/* ... and a 1.0 % inhale, above rest only */
     IDLE_PHASE: 0.137,     /* ... phased this far apart per card, so no two rails breathe in step */
+    /* THE GATHER AND THE TIGHTER BURST ARE THIS FORM'S (P61 T7c built them on both forms; E99 s61 kept them here).
+       The operator, with the two clips and the reference side by side: *"that vertical is great. on horizontal i
+       still prefer the reference."* On a 1080x1920 stage the wall is tall and the eye has nowhere to rest, so the
+       close-then-throw reads; on the full frame the reference's own beat already reads, and it stays. */
+    GATHER: true,          /* this form gathers: the last proof holds the centre to the clear and the rails draw in */
+    GATHER_LEAD: 0.9,      /* THE GATHER's window: the wall draws in over this long before clear_at. The reference's
+                              own measured lead (it spends the same 0.9 s on its last station change); the compiler
+                              mirrors it as the floor between the last proof and the clear. */
+    GATHER_PULL: 0.22,     /* a railed card draws this share of the way toward the CENTRE card (113 px at the widest) ... */
+    GATHER_CORE: 0.5,      /* ... but never so far that its box reaches the centre card's CORE - this share of its rect ... */
+    GATHER_GAP: 16,        /* ... plus this margin in px, which the tilt's bounding box spends */
+    BURST_CENTRE_BY: 1.0,  /* the CENTRE card's bearing: it has no outward one, so it is thrown straight down (and at
+                              the viewer on BURST_Z), last of the wall - the verdict is the last thing to leave */
+    BURST_STAGGER: 0.035,  /* card i bursts this long after card i-1 (E99 s59 "the burst should be tighter": the
+                              reference's measured 0.06 strings nine cards over 0.48 s; 0.035 fires them over 0.28 s) */
+    BURST_S: 0.42,         /* each card's burst clock (quadratic in; the reference's is 0.50 - the wall is gone 0.70 s
+                              after the clear instead of the reference's measured 0.99 s) */
   }));
 
   /* WHICH DIALS: the stage's own shape, unless the payload names a form (build_scene_timeline_f.stack_entry). */
@@ -6896,16 +6920,18 @@ async function mount(doc) {
 
   /* THE RAIL SPOT and the focus pose of card i, from the stage size: the base CSS rect is the rail spot, the focus
      pose is a transform relative to it; bx/by are the burst's normalised offset from the stage centre; gx/gy are the
-     gather's offset toward the centre card. `n` is the wall's own count - with it, card n-1 is the CENTRE card (the
-     wall ends on it: no rail spot to return to, no gather of its own, and its own bearing out); without it the
-     geometry is what it was before the gather (P61 T7c), which is all a caller that knows one card can ask for. */
+     gather's offset toward the centre card. `n` is the wall's own count - ON A GATHERING FORM (V.GATHER, the short's:
+     E99 s61) card n-1 is the CENTRE card (the wall ends on it: no rail spot to return to, no gather of its own, and
+     its own bearing out). Without a gather - the full frame, which keeps the reference - `last` is false, gx/gy are 0
+     and every bearing is the radial one, which is the geometry as it stood before P61 T7c, number for number. */
   const verdictGeometry = (i, stageW, stageH, V = VERDICT, n = 0) => {
     const [L, T, W] = V.SPOTS[i % V.SPOTS.length];
     const wpx = W / 100 * stageW, hpx = wpx * V.CARD_H / V.CARD_W;
     const cx = L / 100 * stageW + wpx / 2, cy = T / 100 * stageH + hpx / 2;
     const f = verdictFocusRect(i, V);
-    const last = n > 0 && i === n - 1;
-    const g = n > 0 && !last ? verdictGatherXf(cx, cy, wpx, hpx, verdictFocusRect(n - 1, V), V) : { gx: 0, gy: 0 };
+    const gathers = !!V.GATHER && n > 0;
+    const last = gathers && i === n - 1;
+    const g = gathers && !last ? verdictGatherXf(cx, cy, wpx, hpx, verdictFocusRect(n - 1, V), V) : { gx: 0, gy: 0 };
     return { L, T, W, last,
              tilt: V.TILTS[i % V.TILTS.length],
              dir: i % 2 ? 1 : -1,
@@ -6915,11 +6941,12 @@ async function mount(doc) {
              by: last ? V.BURST_CENTRE_BY : (cy - V.ORIGIN_Y * stageH) / (stageH * V.BURST_NORM_Y / V.REF_H) };
   };
 
-  /* when card i hands the focus on: the next card's beat - and the LAST card never hands it on (E99 s59). Returning
-     clearAt leaves its recede blend at 0 for every t the pose is asked for, so the wall ENDS on the last proof, large
-     at the centre, and the gather has something to gather AROUND. */
+  /* when card i hands the focus on: the next card's beat. The LAST card hands it on LAST_RECEDE_LEAD before the clear
+     and recedes to its raster spot - the reference's own beat, which the full frame keeps (E99 s61) - UNLESS the form
+     gathers, where returning clearAt leaves its recede blend at 0 for every t the pose is asked for, so the wall ENDS
+     on the last proof, large at the centre, and the gather has something to gather AROUND (E99 s59, the short). */
   const verdictNextAt = (items, i, clearAt, V = VERDICT) =>
-    i + 1 < items.length ? items[i + 1].at : clearAt;
+    i + 1 < items.length ? items[i + 1].at : (V.GATHER ? clearAt : clearAt - V.LAST_RECEDE_LEAD);
 
   /* THE GATHER's clock: 0 until GATHER_LEAD before the clear, then the reference's own ARRIVAL easing (out-cubic -
      the enter's law, so the wall closes at once and settles) to 1 exactly at clear_at, where the burst takes over. */
@@ -6941,11 +6968,12 @@ async function mount(doc) {
        drift/bob it shipped with, expression for expression - every landscape frame is byte-identical. */
     const ix = V.IDLE_KIND ? idleXf(V.IDLE_KIND, t, i * V.IDLE_PHASE,
                                     { DRIFT_PX: V.IDLE_DRIFT_PX, BREATH_AMP: V.IDLE_BREATH_AMP }) : null;
-    /* THE GATHER (E99 s59): over the last GATHER_LEAD the RAILED share of the idle fades out (`hold`) while the card
-       draws toward the centre card - the wall closes and holds its breath. Before that window `ge` is 0 and `hold` is
-       1, so every frame outside it is the expression it was, value for value. The FOCUS share is untouched: the
-       centre card keeps its own drift, because it is the thing being read. */
-    const ge = verdictGather(t, clearAt, V), hold = 1 - ge;
+    /* THE GATHER (E99 s59, the SHORT's form only since E99 s61): over the last GATHER_LEAD the RAILED share of the
+       idle fades out (`hold`) while the card draws toward the centre card - the wall closes and holds its breath.
+       Before that window - and on a form that does not gather at all, where `ge` is 0 for every t - `hold` is 1, so
+       the expression is the one it was, value for value (x * 1 and x + 0 are exact). The FOCUS share is untouched:
+       the centre card keeps its own drift, because it is the thing being read. */
+    const ge = V.GATHER ? verdictGather(t, clearAt, V) : 0, hold = 1 - ge;
     const dx = ix ? item.adx * a + ix.dx * (1 - a) * hold + drift * V.DRIFT_X_ACTIVE * a
                   : item.adx * a + drift * (V.DRIFT_X_REST * hold + V.DRIFT_X_ACTIVE * a);
     const dy = ix ? item.ady * a + ix.dy * (1 - a) * hold + Math.cos(t * V.BOB_W + i * V.BOB_PHASE) * V.BOB_ACTIVE * a
@@ -6971,6 +6999,32 @@ async function mount(doc) {
              rot: r.rot + cbe * V.BURST_SPIN * item.dir, scale: r.scale * (1 + cbe * V.BURST_SCALE), opacity: 1 - cb };
   };
 
+  /* THE BURST's own paint, in the two forms the operator ruled (E99 s61). On a GATHERING form the throw's origin is
+     the card's OWN pose at clear_at - the gathered wall - and the transform is written rounded, which is what pins
+     that pose to the frame (P61 T7c). On the form that keeps the REFERENCE the origin is the rail and the string is
+     the inline code's own, unrounded: the two together are what make the full frame's burst frame byte-identical to
+     the engine as it stood before T7c. */
+  function paintBurstCard(st, it, i, t, V) {
+    if (V.GATHER) {
+      const rest = verdictPose(it, i, st.clear_at, verdictNextAt(st.items, i, st.clear_at, V), st.clear_at, V);
+      const b = verdictBurst(it, i, t, st.clear_at, V, rest);
+      it.card.style.opacity = b.opacity.toFixed(2);
+      it.card.style.transform =
+        `translate(${b.tx.toFixed(1)}px, ${b.ty.toFixed(1)}px)` +
+        ` translateZ(${b.tz}px)` +
+        ` rotate(${b.rot.toFixed(2)}deg)` +
+        ` scale(${b.scale.toFixed(3)})`;
+      return;
+    }
+    const b = verdictBurst(it, i, t, st.clear_at, V);
+    it.card.style.opacity = b.opacity.toFixed(2);
+    it.card.style.transform =
+      `translate(${b.tx}px, ${b.ty}px)` +
+      ` translateZ(${b.tz}px)` +
+      ` rotate(${b.rot}deg)` +
+      ` scale(${b.scale})`;
+  }
+
   /* THE PAINTER: writes every card's pose at t. Returns false when the stack is outside its life (the stackbox is
      removed - the caller forgets its state), true otherwise. */
   function paintVerdict(st, t, d, V = VERDICT) {
@@ -6979,15 +7033,7 @@ async function mount(doc) {
     }
     st.items.forEach((it, i) => {
       if (t >= st.clear_at) {
-        /* the throw's origin is the card's OWN pose at clear_at - the gathered wall (P61 T7c) */
-        const rest = verdictPose(it, i, st.clear_at, verdictNextAt(st.items, i, st.clear_at, V), st.clear_at, V);
-        const b = verdictBurst(it, i, t, st.clear_at, V, rest);
-        it.card.style.opacity = b.opacity.toFixed(2);
-        it.card.style.transform =
-          `translate(${b.tx.toFixed(1)}px, ${b.ty.toFixed(1)}px)` +
-          ` translateZ(${b.tz}px)` +
-          ` rotate(${b.rot.toFixed(2)}deg)` +
-          ` scale(${b.scale.toFixed(3)})`;
+        paintBurstCard(st, it, i, t, V);
         return;
       }
       const p = verdictPose(it, i, t, verdictNextAt(st.items, i, st.clear_at, V), st.clear_at, V);

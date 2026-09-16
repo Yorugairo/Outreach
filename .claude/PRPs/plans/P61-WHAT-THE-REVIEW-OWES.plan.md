@@ -996,7 +996,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   page-boxes 44 (player_sha256 d4621c99b66e -> c3e6166e89ff, sha-only). Card `dock_payload:stack` gains the gather phase.
 
 ### T7d: THE FULL FRAME KEEPS THE REFERENCE - the gather, the centre landing and the tighter burst are 9:16-only (E99 s61)
-- Status: pending
+- Status: complete (2026-09-16) - the card ruled E99 s61; no further watch (the 16:9 goldens are byte-identical to the pre-T7c frames)
 - Owner: `implementation_luna` (**ENGINE LOCK**)
 - Depends on: T7c, HG7c (ruled E99 s61)
 - Write set: `content/video_engine/scripts/species/verdict.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the stack region by
@@ -1016,7 +1016,24 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   `python -m pytest content/video_engine/tests/test_verdict_stack.py content/video_engine/tests/test_golden_frames.py -q`;
   `python content/video_engine/scripts/effects_catalog_check.py`; `python content/video_engine/scripts/measure_page_boxes.py --write` then
   `python -m pytest content/video_engine/tests/test_page_boxes.py -q`; the sha256 table of the five 16:9 goldens against the pre-T7c commit
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T7d.md`. A form FLAG, not a second species: `GATHER: false` on `VERDICT` (16:9), `GATHER: true` on
+  `VERDICT_9X16`; T7c's dials (GATHER_LEAD / PULL / CORE / GAP, BURST_CENTRE_BY, BURST_STAGGER 0.035, BURST_S 0.42) moved onto `VERDICT_9X16`;
+  `VERDICT` carries LAST_RECEDE_LEAD 0.9, BURST_STAGGER 0.06, BURST_S 0.5 again; `verdictNextAt` hands the last card on at clearAt -
+  LAST_RECEDE_LEAD on the reference form. THE ONE THING THAT WAS NOT A DIAL: T7c had also changed the burst painter's number formatting
+  (`${b.tx}` -> `.toFixed(1)`, rot `.toFixed(2)`, scale `.toFixed(3)`) - a transform rounded to 0.1 px renders different anti-aliasing
+  and would have broken the byte identity with every dial reverted; the burst paint is now `paintBurstCard(st, it, i, t, V)`, the gathering
+  form throwing from `rest` with the rounded string, the reference form from the rail with dddccb2's unrounded string verbatim. A brief
+  correction: only two 16:9 verdict goldens exist (`verdict-stack.png`, `@proof-burst`); enter / focus / idle are the short's. BYTE IDENTITY,
+  verified by the parent with `git show`: verdict-stack.png 9981063ad3c5bf15... = dddccb2; verdict-stack@proof-burst.png 34bdd8056c33ea15...
+  = dddccb2 (re-baselined back); the six 9:16 goldens = HEAD (f4e1291c..., c7c1bea7..., 47257d99..., b4bef1f7..., and the enter / focus
+  pair); `verdict-stack@proof-gather.png` deleted from disk and from PROOF_FRAMES (no FRAME_T entry existed). Renames, none deleted: node
+  `the gather:` -> `the gather on the SHORT's form:` (+ a new full-frame test: no gather, the last card recedes, the throw leaves the rail);
+  pytest `test_the_last_proof_lands_in_the_middle_and_stays_full_frame` -> `test_the_last_proof_recedes_to_its_raster_spot_full_frame`,
+  `test_the_wall_gathers_before_it_bursts_full_frame` -> `test_the_full_frame_wall_does_not_gather`. The mirror test asserts the compiler's
+  STACK_BURST_STAGGER / STACK_BURST_S / STACK_RECEDE_LEAD EXACT against 16:9 and a ceiling for 9:16 - T7c's owed compiler follow-up is
+  CANCELLED by the ruling (no backlog row). `dock_payload:stack` says the gather is the vertical form's. Validate: node 612/612; sync in
+  sync; pytest verdict + goldens 163 passed; effects_catalog_check 0 failures; page-boxes 44 (player_sha256 c3e6166e89ff -> 17e8895223d0,
+  byte count 25185 unchanged).
 
 ### T8: THE BEAUTIFIED AGENDA PAGE - the plate version of the list effect
 - Status: complete (2026-09-15) - HG8 open on the queue as `r26-80-agenda-page-owed` (watch)

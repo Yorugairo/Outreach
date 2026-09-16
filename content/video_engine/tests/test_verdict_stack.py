@@ -18,6 +18,12 @@ instants, read the way `gate_vertical_safe_box.py` reads a built player:
              burst leaves a gathered wall (E99 s59: "we're missing the gather")
   * BURST  - radial from the mosaic's own centre, TIGHTER than Steel and Paper's own measured beat
 
+The last three - CENTRE, GATHER and the tightened BURST - are the SHORT's alone since E99 s61 (P61 T7d). The
+operator, with the 9:16 clip, the 16:9 clip and the reference side by side: *"that vertical is great. on horizontal
+i still prefer the reference."* So the FULL FRAME is read here for the opposite facts: its last card hands the
+focus on LAST_RECEDE_LEAD before the clear and recedes to its raster spot, and its wall does NOT close. Its goldens
+are byte-identical to the engine as it stood before T7c.
+
 plus: every card stays inside G-l's safe box for its whole life, two seeks to one t give one frame, and the
 FULL-FRAME dials are untouched (its goldens are test_golden_frames.py's business; what is pinned here is that
 nothing in this slice moved a landscape number).
@@ -51,7 +57,8 @@ CLEAR_AT = 16.5                                               # build_golden_sou
 ITEMS16_AT = [3.0, 5.0, 7.0, 9.0, 11.0, 13.0]                 # build_golden_sources.STACK_ITEMS_AT
 CLEAR16_AT = 20.0                                             # build_golden_sources.STACK_CLEAR_AT
 T_ENTER, T_FOCUS, T_MOSAIC, T_IDLE, T_BURST = 2.25, 3.1, 13.6, 15.4, 16.75
-T_GATHER, T_GATHER16 = 15.79, 19.29              # render_baseline.PROOF_FRAMES - the two @proof-gather instants
+T_GATHER = 15.79                                 # render_baseline.PROOF_FRAMES - the SHORT's @proof-gather instant
+                                                 # (the 16:9 @proof-gather retired with the phase, P61 T7d / E99 s61)
 
 
 def _dial(name: str, portrait: bool = False) -> float:
@@ -62,10 +69,15 @@ def _dial(name: str, portrait: bool = False) -> float:
     return float(hits[1] if portrait and len(hits) > 1 else hits[0])
 
 
-STAGGER = _dial("BURST_STAGGER")                 # verdict.mjs BURST_STAGGER (0.06 -> 0.035, P61 T7c)
-BURST_S = _dial("BURST_S")
-GATHER_LEAD = _dial("GATHER_LEAD")
-GATHER_PULL = _dial("GATHER_PULL")
+# PER FORM since E99 s61: the first match in the module is VERDICT's (the full frame, which kept the reference's
+# own numbers), the second VERDICT_9X16's (the short, which kept T7c's). The gather's dials exist on the short only.
+STAGGER = _dial("BURST_STAGGER", True)           # the SHORT's burst spacing (0.035, E99 s59) ...
+BURST_S = _dial("BURST_S", True)                 # ... and its throw's clock (0.42)
+STAGGER16 = _dial("BURST_STAGGER")               # the FULL FRAME's: Steel and Paper's own 0.06 ...
+BURST_S16 = _dial("BURST_S")                     # ... over 0.50 (E99 s61: the reference, as it is) ...
+LAST_RECEDE_LEAD16 = _dial("LAST_RECEDE_LEAD")   # ... and its last card hands the focus on this long before the clear
+GATHER_LEAD = _dial("GATHER_LEAD", True)         # the short's own window - the full frame has no such dial
+GATHER_PULL = _dial("GATHER_PULL", True)
 
 # THE REFERENCE, measured 2026-09-16 frame by frame off Steel and Paper's frozen build-f player over
 # 701.80-728.00 s (`ev-holds-stack-v1`, nine proofs, clear_at 726.98) - the numbers "tighter" is measured against,
@@ -187,23 +199,33 @@ def test_the_compilers_stack_dials_still_mirror_the_module() -> None:
     """One timing fact in one file (doc 29 s9.24): the compiler cannot import the painter, so it copies four
     numbers - and a copy that is not checked is a drift waiting to happen.
 
-    P61 T7c: two of the four are still EXACT (they open the window: the enter's lead, and the lead the last proof
-    holds before the clear - which is now the GATHER's window, the same 0.9 s). The two BURST numbers became a
-    CEILING instead of a copy: the compiler uses them only to size the host dock's exit, and E99 s59 made the burst
-    TIGHTER, so a module value at or below the compiler's can never cut the choreography - while a module value
-    ABOVE it would, and still fails here. `build_scene_timeline_f.py` is outside this slice's write set; bringing
-    STACK_BURST_STAGGER / STACK_BURST_S down to 0.035 / 0.42 (and renaming STACK_RECEDE_LEAD) is a one-line
-    compiler follow-up the lane reported and did not take."""
+    P61 T7d / E99 s61 put the compiler back on an EXACT mirror of the FULL FRAME, which is the form that kept the
+    reference: STACK_RECEDE_LEAD == VERDICT.LAST_RECEDE_LEAD, STACK_ENTER_LEAD == VERDICT.MOUNT_LEAD,
+    STACK_BURST_STAGGER == VERDICT.BURST_STAGGER (0.06) and STACK_BURST_S == VERDICT.BURST_S (0.50) - the four
+    numbers the compiler was written from, and the beat the operator preferred on the full frame. For the SHORT,
+    whose burst E99 s59 tightened to 0.035 / 0.42, the same two are a CEILING: the compiler uses them only to size
+    the host dock's exit, so a painter at or below them can never be cut, while one above them would - and still
+    fails here."""
     src = MODULE.read_text(encoding="utf-8")
-    for name, value in (("GATHER_LEAD", BST.STACK_RECEDE_LEAD),
+    for name, value in (("LAST_RECEDE_LEAD", BST.STACK_RECEDE_LEAD),
                         ("MOUNT_LEAD", BST.STACK_ENTER_LEAD)):
         m = re.search(rf"^\s*{name}:\s*([\d.]+),", src, re.M)
         assert m, f"{name} is no longer a dial of VERDICT"
         assert float(m.group(1)) == value, f"{name}: verdict.mjs says {m.group(1)}, the compiler says {value}"
-    assert STAGGER <= BST.STACK_BURST_STAGGER, \
-        f"the burst is {STAGGER}s apart but the compiler sizes the window on {BST.STACK_BURST_STAGGER}s - it would cut it"
-    assert BURST_S <= BST.STACK_BURST_S, \
-        f"the burst runs {BURST_S}s but the compiler sizes the window on {BST.STACK_BURST_S}s - it would cut it"
+    # THE FULL FRAME: exact, both ways - the compiler's window IS the painter's beat again (E99 s61)
+    assert STAGGER16 == BST.STACK_BURST_STAGGER, (
+        f"the full frame bursts {STAGGER16}s apart, the compiler sizes on "
+        f"{BST.STACK_BURST_STAGGER}s - since E99 s61 they are one beat")
+    assert BURST_S16 == BST.STACK_BURST_S, (
+        f"the full frame's throw runs {BURST_S16}s, the compiler sizes on "
+        f"{BST.STACK_BURST_S}s - since E99 s61 they are one beat")
+    # THE SHORT: a ceiling, because E99 s59 made its burst tighter than the window the compiler sizes
+    assert STAGGER <= BST.STACK_BURST_STAGGER, (
+        f"the short bursts {STAGGER}s apart but the compiler sizes the window on "
+        f"{BST.STACK_BURST_STAGGER}s - it would cut it")
+    assert BURST_S <= BST.STACK_BURST_S, (
+        f"the short's throw runs {BURST_S}s but the compiler sizes the window on "
+        f"{BST.STACK_BURST_S}s - it would cut it")
 
 
 def test_the_full_frame_dials_are_untouched() -> None:
@@ -216,6 +238,11 @@ def test_the_full_frame_dials_are_untouched() -> None:
     for line in ("ACTIVE_X: 930,", "ACTIVE_Y: 400,", "ACTIVE_W: 840,", "ENTER_SWING: 460,", "ENTER_Z: -700,",
                  "BURST_NORM_X: 700,", "BURST_NORM_Y: 460,", "ORIGIN_X: 0.5,", "IDLE_KIND: null,"):
         assert line in src, f"the full-frame dial `{line}` moved"
+    # P61 T7d / E99 s61 - and the CHOREOGRAPHY dials are the reference's again: no gather, the last card receding
+    # 0.9s before the clear, the burst 60ms apart over 0.50s. These four are what the byte identity rests on.
+    assert "GATHER: false," in src, "the full frame gathers - E99 s61 kept the reference on this form"
+    assert STAGGER16 == 0.06 and BURST_S16 == 0.5 and LAST_RECEDE_LEAD16 == 0.9,         f"the full frame's beat moved off the reference: {STAGGER16} / {BURST_S16} / {LAST_RECEDE_LEAD16}"
+    assert _dial("GATHER_LEAD") == _dial("GATHER_LEAD", True),         "GATHER_LEAD is declared on the full frame too - the gather's dials are the short's alone (E99 s61)"
 
 
 def test_the_short_names_an_idle_kind_that_the_idle_module_knows() -> None:
@@ -494,8 +521,22 @@ def test_the_last_proof_lands_in_the_middle_and_stays_on_the_short(reader) -> No
 
 
 @needs_browser
-def test_the_last_proof_lands_in_the_middle_and_stays_full_frame(reader16) -> None:
-    _last_card_rests_at_the_centre(reader16, ITEMS16_AT, CLEAR16_AT, False)
+def test_the_last_proof_recedes_to_its_raster_spot_full_frame(reader16) -> None:
+    """P61 T7d / E99 s61 - the OPPOSITE of the short, and deliberately so: on the full frame the operator prefers
+    the reference, where the last proof does NOT stay in the middle. It holds the focus until LAST_RECEDE_LEAD
+    before the clear, then recedes to its own rail spot like every card before it, and the burst leaves the raster.
+    (This test was `test_the_last_proof_lands_in_the_middle_and_stays_full_frame` under T7c - re-targeted, not
+    deleted: the same reader, the same instants, the ruling's own answer.)"""
+    n = len(ITEMS16_AT)
+    fx, fy = _focus_spot(n - 1, False)
+    # it IS at the centre while its phrase is read - up to the frame the recede opens
+    held = [r for r in reader16.at(round(CLEAR16_AT - LAST_RECEDE_LEAD16 - 0.02, 2)) if r["i"] == n - 1][0]
+    assert abs(held["cx"] - fx) <= 40 and abs(held["cy"] - fy) <= 40,         f"the last proof is at ({held['cx']:.0f}, {held['cy']:.0f}), not the focus spot ({fx:.0f}, {fy:.0f})"
+    assert held["w"] >= 0.98 * _dial("ACTIVE_W"), "the last proof is not at focus size while its phrase is read"
+    # ... and it has LEFT it by the clear: back on its raster spot, rail-sized (the reference's own beat)
+    gone = [r for r in reader16.at(CLEAR16_AT - 0.01) if r["i"] == n - 1][0]
+    assert ((gone["cx"] - fx) ** 2 + (gone["cy"] - fy) ** 2) ** 0.5 > 300,         f"the last proof is still {((gone['cx'] - fx) ** 2 + (gone['cy'] - fy) ** 2) ** 0.5:.0f}px from the focus spot - it did not recede"
+    assert gone["w"] <= 0.6 * _dial("ACTIVE_W"),         f"the last proof is {gone['w']:.0f}px wide at the clear - it never went back to its rail"
 
 
 @needs_browser
@@ -504,8 +545,26 @@ def test_the_wall_gathers_before_it_bursts_on_the_short(reader) -> None:
 
 
 @needs_browser
-def test_the_wall_gathers_before_it_bursts_full_frame(reader16) -> None:
-    _the_wall_only_ever_closes(reader16, ITEMS16_AT, CLEAR16_AT, False)
+def test_the_full_frame_wall_does_not_gather(reader16) -> None:
+    """P61 T7d / E99 s61 - the gather is OFF on this form, not tuned down: over the window the short spends closing
+    (GATHER_LEAD before the clear) no landscape rail travels further than its own idle drift. T7c's gather carried
+    these same rails 83.5-178.7px; the reference's settled rails move 11.2px in 3.29s. The cap below is 25px - a
+    number no drift reaches and no gather stays under. (This test was `test_the_wall_gathers_before_it_bursts_full_frame`
+    under T7c - re-targeted, not deleted.)"""
+    n = len(ITEMS16_AT)
+    fx, fy = _focus_spot(n - 1, False)
+    ds: dict[int, list[float]] = {i: [] for i in range(n - 1)}
+    t = CLEAR16_AT - GATHER_LEAD
+    while t < CLEAR16_AT - 1e-9:
+        for r in reader16.at(round(t, 4)):
+            if r["i"] < n - 1:
+                ds[r["i"]].append(((fx - r["cx"]) ** 2 + (fy - r["cy"]) ** 2) ** 0.5)
+        t += 1 / 30
+    drift_cap = 25.0      # the inline drift/bob is 8px in x and 5px in y, either way, and nothing else moves a rail
+    for i, seq in ds.items():
+        assert len(seq) >= 26, f"rail {i + 1}: {len(seq)} frames read across the window"
+        travel = max(seq) - min(seq)
+        assert travel <= drift_cap,             f"rail {i + 1} moves {travel:.1f}px in the {GATHER_LEAD}s before the clear - that is a gather, and the full frame has none"
 
 
 @needs_browser
