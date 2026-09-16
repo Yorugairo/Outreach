@@ -13,9 +13,9 @@ item, a quote, a table row or a fence.
 
 | Group | Files | Headings | Lead % | Termed % | Generic | Median score |
 |---|---:|---:|---:|---:|---:|---:|
-| Research (`docs/research/**`) | 22 | 454 | 96.0% | 94.1% | 3 | 98.0 |
-| Process (everything else) | 374 | 3764 | 97.7% | 91.8% | 19 | 100.0 |
-| All docs | 396 | 4218 | 97.5% | 92.1% | 22 | 100.0 |
+| Research (`docs/research/**`) | 23 | 463 | 96.1% | 94.2% | 3 | 98.0 |
+| Process (everything else) | 384 | 3783 | 97.7% | 91.8% | 19 | 100.0 |
+| All docs | 407 | 4246 | 97.5% | 92.1% | 22 | 100.0 |
 
 ## The 20 lowest-scoring docs
 
@@ -24,6 +24,7 @@ item, a quote, a table row or a fence.
 | 22 | `content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-G-GATES-2026-09-03-at-record.md` | 5 | 0/5 | 1/5 | 0 |
 | 54 | `docs/research/motion/WEALTH_LOGIC_TRANSITIONS_RESEARCH_BLUEPRINT.md` | 13 | 8/13 | 4/13 | 2 |
 | 64 | `docs/content-video-engine/REVIEW-QUEUE.md` | 7 | 4/7 | 4/7 | 0 |
+| 65 | `content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/scratch-f/SCRATCH-INDEX.md` | 1 | 1/1 | 0/1 | 0 |
 | 65 | `content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/PINNED-COMMENT.md` | 2 | 2/2 | 0/2 | 0 |
 | 70 | `docs/seo-insights-platform-implementation-plan.md` | 27 | 17/27 | 18/27 | 0 |
 | 73 | `docs/seo-ingestion-implementation-tasks.md` | 14 | 10/14 | 9/14 | 0 |
@@ -40,13 +41,13 @@ item, a quote, a table row or a fence.
 | 82 | `content/video_engine/projects/systems-and-blowups/steel-and-paper/packaging/VIDEO-DESCRIPTION.md` | 2 | 2/2 | 1/2 | 0 |
 | 82 | `content/video_engine/projects/systems-and-blowups/style-spine.woodblock-vox-newsprint.v2.md` | 4 | 4/4 | 2/4 | 0 |
 | 82 | `docs/content-video-engine/patterns/INJECTION.md` | 6 | 6/6 | 3/6 | 0 |
-| 85 | `docs/portable/DOCTRINE-CORE.md` | 12 | 12/12 | 7/12 | 0 |
 
 ## Appendix A - sections missing a lead line
 
-Non-exempt sections whose first real line is under 40 characters (104).
+Non-exempt sections whose first real line is under 40 characters (105).
 
 - `content/video_engine/projects/martial-matters/pilots/marshall-monday-001/script-draft.md:1` Why Rap Violence is Actually a Sign of Peace | Marshall Matters Ep. 1
+- `content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/MEDIA-C-RECEIPT.md:23` Valid run
 - `content/video_engine/projects/systems-and-blowups/japan-tariff-trick/HANDOFF-PACK.md:13` Titles & Click Contracts
 - `content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-caption-grammar.v1.md:1` World Plate, Evidence, and Caption Grammar v1
 - `content/video_engine/projects/systems-and-blowups/learning/world-plate-evidence-rail-breakthrough.v1.md:1` World Plate + Evidence Rail Breakthrough v1
@@ -83,13 +84,13 @@ Non-exempt sections whose first real line is under 40 characters (104).
 - `docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:51` Audio identity and rights boundary
 - `docs/content-video-engine/17-TIMESTAMPED-PLATE-PRODUCTION.md:135` 5. Episode 1 commands
 - `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:267` Part 8 — The scene-evidence lane (default production pattern)
-- `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:463` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30)
+- `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:466` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30)
 - `docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:196` 5. Worked instance
 - `docs/content-video-engine/53-THE-STICKMAN-LANE.md:183` 53.4 What this corrects in my own claims
 - `docs/content-video-engine/P13-GATE-A-ARMBAR-REVIEW.md:38` Locked Defaults
-- `docs/content-video-engine/REVIEW-QUEUE.md:16` Look (0)
-- `docs/content-video-engine/REVIEW-QUEUE.md:20` Rule (0)
-- `docs/content-video-engine/REVIEW-QUEUE.md:24` Approve / push (0)
+- `docs/content-video-engine/REVIEW-QUEUE.md:20` Look (0)
+- `docs/content-video-engine/REVIEW-QUEUE.md:24` Rule (0)
+- `docs/content-video-engine/REVIEW-QUEUE.md:28` Approve / push (0)
 - `docs/content-video-engine/briefs/ALICIA-SCRIPT-PERSONA-PASS.md:1` Alicia Script — Persona Pass (v2)
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:187` The On-1s / On-2s / On-3s Decision Rule (Proposal)
 - `docs/content-video-engine/briefs/ANSWERS-RESEARCH-BRIEF-animation-craft.md:435` C3: Nested Coordinate Spaces [Tier 1 Architecture — CLOSED]

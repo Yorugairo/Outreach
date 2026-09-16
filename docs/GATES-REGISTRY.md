@@ -169,9 +169,9 @@ A gate whose rule text differs between branches has one line per distinct rule t
 - **audit:doc-32-sec-1** - doc 32 sec 1 - levels: WARN - cites: doc 32 sec 1 -> docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:22 - tests: none - audit_script_doctrine.py:330
 - **audit:doc-32-sec-1-doc-33** - doc 32 sec 1 / doc 33 - levels: WARN - cites: doc 32 sec 1 -> docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:22, doc 33 -> docs/content-video-engine/33-VOICE-PROFILE.md:1 - tests: none - audit_script_doctrine.py:323
 - **audit:doc-35-rule-2** - doc 35 rule 2 - levels: FAIL, WARN, INFO - cites: doc 35 rule 2 -> docs/content-video-engine/35-ANSWER-FORMAT-DOCTRINE.md:1 - tests: test_audit_defers.py, test_build_craft_map.py, test_run_script_gates.py - audit_script_doctrine.py:454
-- **audit:doc-37-sec-1** - doc 37 sec 1 - levels: FAIL - cites: doc 37 sec 1 -> docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:24 - tests: test_audit_break_ration.py, test_build_gates_registry.py - audit_script_doctrine.py:287
-- **audit:doc-37-sec-4** - doc 37 sec 4 - levels: FAIL - cites: doc 37 sec 4 -> docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:150 - tests: none - audit_script_doctrine.py:305
-- **audit:doc-37-sec-8** - doc 37 sec 8 - levels: INFO - cites: doc 37 sec 8 -> docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:265 - tests: none - audit_script_doctrine.py:281
+- **audit:doc-37-sec-1** - doc 37 sec 1 - levels: FAIL - cites: doc 37 sec 1 -> docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:27 - tests: test_audit_break_ration.py, test_build_gates_registry.py - audit_script_doctrine.py:287
+- **audit:doc-37-sec-4** - doc 37 sec 4 - levels: FAIL - cites: doc 37 sec 4 -> docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:153 - tests: none - audit_script_doctrine.py:305
+- **audit:doc-37-sec-8** - doc 37 sec 8 - levels: INFO - cites: doc 37 sec 8 -> docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:268 - tests: none - audit_script_doctrine.py:281
 - **audit:doc-38-b1-b4** - doc 38 B1-B4 - levels: INFO - cites: doc 38 -> docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1 - tests: test_audit_defers.py - audit_script_doctrine.py:363
 - **audit:doc-38-beat-1** - doc 38 beat 1 - levels: FAIL, WARN - cites: doc 38 beat 1 -> docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:53 - tests: test_audit_defers.py - audit_script_doctrine.py:223
 - **audit:doc-38-beat-2** - doc 38 beat 2 - levels: FAIL - cites: doc 38 beat 2 -> docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:68 - tests: test_audit_defers.py - audit_script_doctrine.py:233
@@ -193,7 +193,7 @@ A gate whose rule text differs between branches has one line per distinct rule t
 - **lint:passive-ratio** - passive voice in {hits}/{len(sentences)} sentences - levels: FAIL - cites: none - tests: test_build_gates_registry.py, test_lint_script_pattern.py - lint_script_pattern.py:168
 - **lint:pause-ration** - {pauses} pause marks in ~{minutes} min exceeds ration - levels: FAIL - cites: none - tests: test_lint_script_pattern.py - lint_script_pattern.py:192
 - **lint:rehook** - no rehook-family construction found - levels: WARN - cites: none - tests: test_build_gates_registry.py - lint_script_pattern.py:253
-- **lint:ring** - no opening token recurs in the close - levels: FAIL - cites: none - tests: build_golden_sources.py, test_gate_collision_ledger.py, test_gate_ring_mechanism.py, test_lint_script_pattern.py - lint_script_pattern.py:223
+- **lint:ring** - no opening token recurs in the close - levels: FAIL - cites: none - tests: build_golden_sources.py, test_gate_collision_ledger.py, test_gate_ring_mechanism.py, test_lint_script_pattern.py, test_melt_morph.py - lint_script_pattern.py:223
 - **lint:sentence-mean** - mean sentence length {mean} outside {low}-{high} - levels: FAIL - cites: none - tests: test_lint_script_pattern.py - lint_script_pattern.py:150
 - **lint:tautology** - narration captions its visual ({overlap}): '{direction[:60]}' - levels: FAIL - cites: none - tests: test_lint_script_pattern.py - lint_script_pattern.py:206
 - **lint:unknown-mark** - unrecognized marks: {', '.join(unknown)} - levels: FAIL - cites: none - tests: test_lint_script_pattern.py - lint_script_pattern.py:187

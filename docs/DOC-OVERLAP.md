@@ -488,29 +488,29 @@ _none._
 
 ### DELTA — nothing like it in the target — THIS IS THE LIFT LIST
 
-- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:1` — Audio Fix Runbook — `current-bubble-mechanism` mispronunciation — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:463` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.12 / b 0.00 — 1 rule
+- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:1` — Audio Fix Runbook — `current-bubble-mechanism` mispronunciation — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:466` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.12 / b 0.00 — 1 rule
     - `:3` STATUS: DEPRECATED. Kept for the reasoning trail; superseded by 37 §8, Recording Standards v2 (master-take rule; splice-repair banned). Do not follow this docum
-- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:9` — The defect, located exactly — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:282` The MASTER TAKE rule — h 0.00 / j 0.05 / b 0.00 — 0 rules
-- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:31` — Source artifacts — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:463` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.06 / b 0.00 — 0 rules
-- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:43` — Blocker: there is no narration audio on disk — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:463` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.15 / b 0.17 — 5 rules
+- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:9` — The defect, located exactly — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:285` The MASTER TAKE rule — h 0.00 / j 0.05 / b 0.00 — 0 rules
+- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:31` — Source artifacts — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:466` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.06 / b 0.00 — 0 rules
+- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:43` — Blocker: there is no narration audio on disk — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:466` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.15 / b 0.17 — 5 rules
     - `:45` Searched the whole pilot directory — no `.mp3`, `.wav` or `.m4a` exists. Only
     - `:63` Get the stem. In order of preference:
     - `:65` 1. ElevenLabs history — `GET /v1/history/{history_item_id}/audio` returns the
     - `:67` 2. Re-synthesise take `scene_9002` only (249.3s) — avoids splicing entirely.
     - `:68` 3. Locate the stem wherever it actually lives; it is not in this worktree.
-- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:70` — Structural notes — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:463` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.09 / b 0.00 — 4 rules
+- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:70` — Structural notes — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:466` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.09 / b 0.00 — 4 rules
     - `:72` - The 99 "blocks" in `canonical-audio.v1.json` are a derived 10-second timing
     - `:75` - Block `word_timings` overlap — 99 blocks sum to 4,889 entries against a
     - `:76` 2,445-word master. Always read the master `words_path`; never reassemble from
     - `:79` - `canonical-audio.v1.json` carries `storyboard_hash: ""`. The schema treats absent
-- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:82` — The pronunciation rule — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:169` 4b. Non-US currencies — the won problem (observed failure, resolved) — h 0.00 / j 0.10 / b 0.00 — 6 rules
+- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:82` — The pronunciation rule — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:172` 4b. Non-US currencies — the won problem (observed failure, resolved) — h 0.00 / j 0.10 / b 0.00 — 6 rules
     - `:84` The obvious rule is dead. `preview` against the real 2,445-word script:
     - `:86` | Candidate rule | Matches |
     - `:88` | `"Korean won"` | 0 — the script never says this |
     - `:92` Use the scoped rule:
     - `:105` which silently ignores phoneme tags. Phoneme rules only work on
     - `:107` phoneme rules become available — but this alias works on every model, so use it
-- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:110` — Procedure — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:227` 7. Implementation status (built 2026-08-24, TDD, 18/18 tests green) — h 0.00 / j 0.06 / b 0.00 — 9 rules
+- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:110` — Procedure — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:230` 7. Implementation status (built 2026-08-24, TDD, 18/18 tests green) — h 0.00 / j 0.06 / b 0.00 — 9 rules
     - `:112` 1. Obtain the stem (see blocker above). Verify it before use:
     - `:113` inter-word seams must sit at least 20 dB below the speech mean.
     - `:114` 2. Build the dictionary and confirm the rule fires:
@@ -520,7 +520,7 @@ _none._
     - `:124` 5. Patch and re-time. T18 is specified but not built — see the plan. Until
     - `:126` 6. Re-time coverage automatically:
     - `:132` 7. Re-mix, then re-render.
-- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:134` — What re-timing already guarantees — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:463` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.10 / b 0.00 — 2 rules
+- `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:134` — What re-timing already guarantees — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:466` 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — h 0.00 / j 0.10 / b 0.00 — 2 rules
     - `:138` silently re-timed. A re-record with identical text reconciles cleanly — only the
     - `:142` came back at 980.806s — 67s and 6.8% out. That gap is why render never runs off
 - `docs/content-video-engine/22-AUDIO-FIX-RUNBOOK.md:145` — Related — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 3 rules
@@ -785,7 +785,7 @@ _none._
 
 ### DELTA — nothing like it in the target — THIS IS THE LIFT LIST
 
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:1` — Open gates and open questions - 2026-09-12 — `docs/content-video-engine/REVIEW-QUEUE.md:1` REVIEW QUEUE - what the operator can judge now — h 0.00 / j 0.08 / b 0.00 — 6 rules
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:1` — Open gates and open questions - 2026-09-12 — `docs/content-video-engine/REVIEW-QUEUE.md:1` REVIEW QUEUE - what the operator can judge now — h 0.00 / j 0.10 / b 0.00 — 6 rules
     - `:5` Everything waiting on a decision after P52 THE SWEEP, in one place. Written because the gates and the questions
     - `:9` - Head: 290a481, `main`, pushed. P52 is `status: complete` (`.claude/PRPs/plans/P52-THE-SWEEP.plan.md`).
     - `:10` - Nothing here blocks a build. Every gate's subject is built; the gates rule on form, not on whether it works.
@@ -805,7 +805,7 @@ _none._
     - `:66` | So the gate is | Confirm that reading, or overrule it after looking at the pairs. |
 - `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:68` — Gate 6 - The publish folder's first use (T16) - RULED 2026-09-13, E92: a reference, not the final form — `docs/content-video-engine/REVIEW-QUEUE.md:38` Ruled since the last pass — h 0.00 / j 0.03 / b 0.00 — 0 rules
 - `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:75` — Gate 7 - The press card's face (T18) - RULED 2026-09-13, E89: serif — `docs/content-video-engine/REVIEW-QUEUE.md:38` Ruled since the last pass — h 0.00 / j 0.01 / b 0.00 — 0 rules
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:82` — Gate 8 - Push authorization — `docs/content-video-engine/REVIEW-QUEUE.md:24` Approve / push (0) — h 0.00 / j 0.20 / b 0.25 — 0 rules
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:82` — Gate 8 - Push authorization — `docs/content-video-engine/REVIEW-QUEUE.md:28` Approve / push (0) — h 0.00 / j 0.20 / b 0.25 — 0 rules
 - `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:88` — Part 2 - Open rulings that are not gates — `docs/content-video-engine/REVIEW-QUEUE.md:38` Ruled since the last pass — h 0.00 / j 0.09 / b 0.00 — 13 rules
     - `:90` 2026-09-13: the head with a news band -> E86 (a surface holds video and images; someone else's words play on the TV, R26-74); the strobe ceiling's space -> a Ge
     - `:92` 1. RULED 2026-09-13 (E83): yes. Does a DOCK's own landing license a transient cue inside 0:05-0:12? M29 as built reads E44 2a literally:
@@ -825,9 +825,9 @@ _none._
     - `:125` build that does (a chip board, a flow diagram, a map), widen the rule in that commit, regenerate the goldens it
     - `:127` 2. R26-58 - a thrown dock's flight differs warm versus cold (`BACKLOG.md:463`). At Tokyo 75.79 the contact
     - `:131` 3. `ON1_PX_S` 250 against the brief's own 100 px/s (E2 7). Neither number is measured on our own motion. Do
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:136` — Part 4 - Settled in the sweep, listed so nothing reads as missing — `docs/content-video-engine/REVIEW-QUEUE.md:28` Owed by the agent before it comes back to you (5) — h 0.00 / j 0.03 / b 0.00 — 1 rule
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:136` — Part 4 - Settled in the sweep, listed so nothing reads as missing — `docs/content-video-engine/REVIEW-QUEUE.md:10` Watch (5) — h 0.00 / j 0.04 / b 0.00 — 1 rule
     - `:145` The rule that came out of it: a triage verdict is not real until a row carries it verbatim. The 2026-09-05
-- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:151` — Part 5 - Known defects and loose ends — `docs/content-video-engine/REVIEW-QUEUE.md:10` Watch (1) — h 0.00 / j 0.02 / b 0.00 — 3 rules
+- `docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:151` — Part 5 - Known defects and loose ends — no target section scores above zero — h 0.00 / j 0.00 / b 0.00 — 3 rules
     - `:153` 1. One known red, pre-existing: `test_measure_motion_energy::test_headless_sampling_returns_stage_elements_smoke`
     - `:156` 2. The plan's `updated:` line says 2026-09-13 while the commit clock says 09-12
     - `:158` 3. A bridge reply is waiting: `f4541f7f6808`, a review of "The Myth of Historical Normal" returning REQUEST
@@ -943,14 +943,14 @@ _none._
 
 ### DELTA — nothing like it in the target — THIS IS THE LIFT LIST
 
-- `docs/operator-ledger/PORTABLE-AUDIT.md:1` — The portable docs, audited against the later record (P54 T3, 2026-09-13) — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:490` 18. The half-beat - chart reads breathe at the reveal (operator, 2026-08-30) — h 0.00 / j 0.07 / b 0.00 — 2 rules
+- `docs/operator-ledger/PORTABLE-AUDIT.md:1` — The portable docs, audited against the later record (P54 T3, 2026-09-13) — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:493` 18. The half-beat - chart reads breathe at the reveal (operator, 2026-08-30) — h 0.00 / j 0.07 / b 0.00 — 2 rules
     - `:4` `docs/portable/` is loaded by any agent doing video work, so a stale claim there teaches every lane the wrong rule.
     - `:6` Three read-only explorers read each doc whole, listed its concrete claims, and checked each against the rulings dated
-- `docs/operator-ledger/PORTABLE-AUDIT.md:12` — Ranked — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:490` 18. The half-beat - chart reads breathe at the reveal (operator, 2026-08-30) — h 0.00 / j 0.07 / b 0.00 — 3 rules
+- `docs/operator-ledger/PORTABLE-AUDIT.md:12` — Ranked — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:493` 18. The half-beat - chart reads breathe at the reveal (operator, 2026-08-30) — h 0.00 / j 0.07 / b 0.00 — 3 rules
     - `:16` | 1 | `BUILD-PIPELINE.md` | 2026-08-30 | 14 | high | several gate-FAILing defaults: the 20 s ceiling E69 withdrew, the wipe on every plate (E47), a chart held a
     - `:23` | 8 | `MOTION-GRAMMAR.md` | 2026-08-30 | 3 | low | "slow sine wander" vs E49's named idle; "full-frame, never framed" over a ledger page vs E45/E63; CSS eases v
     - `:25` 46 stale claims in 8 docs. The two always-loaded files (`DOCTRINE-CORE`, `VOICE-PACK`) carry 13 of them.
-- `docs/operator-ledger/PORTABLE-AUDIT.md:27` — Stale outside `docs/portable/`, found on the way — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:398` 14. Kill the dead space, THEN add the breaks (operator, 2026-08-30) — h 0.00 / j 0.03 / b 0.00 — 9 rules
+- `docs/operator-ledger/PORTABLE-AUDIT.md:27` — Stale outside `docs/portable/`, found on the way — `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:401` 14. Kill the dead space, THEN add the breaks (operator, 2026-08-30) — h 0.00 / j 0.03 / b 0.00 — 9 rules
     - `:29` - `docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md` §9.15 item 2 still lets evidence persist across a boundary (E25/§9.30 ban a chart held across plat
     - `:30` - `docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md` §1 and §18 still carry the "~3 tags" cap that its own §21 retired.
     - `:31` - `docs/content-video-engine/39-EVIDENCE-CHART-SYSTEM.md` line ~165 lists "Part-to-whole: stacked bar, <= 4 segments" (E53 §2: no stacked bars); §10.1 rule 5 ho

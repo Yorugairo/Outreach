@@ -91,3 +91,33 @@ failure written down before moving on (what was tried, why it failed), in the sa
 
 For a subjective media edit — a plate, a look, a motion — generate two or three cheap preview candidates
 before committing to one; image generation is cheap, a re-roll is a new order file, the operator picks.
+
+
+## The second receipt, beside this one - test deletions (2026-09-16)
+
+Same shape, same refusal-not-reminder principle, chained into the same `commit-msg` hook: **a commit that
+removes a test names it**, or it does not land.
+
+    Tests-removed: <test name> - <why it went>
+
+A removed `def test_*` that still exists somewhere in the staged tree is a move or a rename; the gate lets
+it through silently. Only a name that exists NOWHERE after the commit has to be declared.
+
+**What earned it.** An agent rewrote `content/video_engine/tests/test_authoring_kit.py` - a patch took
+`t.index(marker)` and sliced to END OF FILE - appended nineteen tests and dropped the file's last ten
+(HEAD lines 234-323: the shot table, plate `use` options, the kit's module list, the TR13 gap rules; four
+unrelated subjects, one contiguous tail). It was invisible for two reasons worth remembering: the test
+COUNT rose, 36 -> 45, so "45 passed" read as success; and a passing suite structurally cannot see a test
+that no longer exists. Nothing in the suite noticed. `build_docs_layers.py` did - an effects card named
+`test_a_plate_may_name_its_use` as its on-disk proof and the proof had gone, which is the registry
+discipline doing the job the tests could not.
+
+**The rule for an agent, before the hook ever fires:** when you rewrite a test file, diff the FUNCTION-NAME
+list before and after, never the count.
+
+    git show HEAD:<file> | grep -o "^def test_[a-z0-9_]*" | sort > /tmp/h.txt
+    grep -o "^def test_[a-z0-9_]*" <file> | sort > /tmp/n.txt
+    comm -23 /tmp/h.txt /tmp/n.txt        # anything printed is lost
+
+Tool: `scripts/hooks/test_deletions.py` (`--message "<msg>" --staged` to check by hand).
+Tests: `content/video_engine/tests/test_hook_test_deletions.py`.

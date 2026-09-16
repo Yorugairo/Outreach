@@ -14,7 +14,7 @@ Levels 1-6 are Markdown heading depth; level 7 is a table row (CAPABILITIES, BAC
 A `{...}` tail lists the section's bold phrases; a `<...>` tail its body terms - code
 spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
-4553 records across 396 files.
+4583 records across 407 files.
 
 ## content/video_engine/projects/history-of-bjj/episode-1-research-brief.md
 
@@ -60,6 +60,14 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L17 [2] Commands — do not run until parent clearance — Run from the repository root. Separate output directories keep the raw voice <align_take.py --script; retime_take.py --out>
 - L38 [2] Requirements / gates — - Chirp: `GEMINI_TTS_API_KEY` in `docs/local.env`; this is the only networked <GEMINI_TTS_API_KEY; kokoro; numpy; soundfile; faster-whisper; small.en; ffmpeg; ffprobe; final-word; YouTube>
 
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/BEAT-PLAN-F.md
+
+- L1 [1] F authored beat plan — private review cut — Clock: `scratch-f/scratch-chirp-pace.words.json` (238 tokens; measured speech ends 72.72s). The take, script, and <TrumpSam; read-only; scene-evidence; chart-to; Anthropic · Dario Amodei; finished-looking; punch-then-callout; wrong-number; ninety-nine; two-line; ten-tile; parent-provided>
+
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/BUILD-F-RECEIPT.md
+
+- L1 [1] BUILD-F private assembly receipt — Scope: `ai-slower-useful-faster`; frozen script/take unchanged; output is quarantined for parent review. <ai-slower-useful-faster; SCRIPT-F-VO.txt; scene-evidence; reliability-compare; reliability-bars; reliability-bars-recast; reliability-progress; one-shot; chart-to; narrative-balance>
+
 ## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/EVIDENCE-DOSSIER.md
 
 - L1 [1] AI usefulness thesis — facts, model, argument <we-must-pace-the-frontier; publication-sensitive; per-step; US-collapse; Millennium-problem; inference-market-share>
@@ -67,6 +75,33 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L6 [2] Our mathematical exhibit (illustrative, NOT an AI evaluation) — Assumptions: twenty required steps, identical per-step probability p, independent outcomes, any error means not cleanly completed; no retries or recovery includ <per-step>
 - L10 [2] Our argument, not established causality — If practical failure rates improve, more identical workflows finish cleanly. Resource allocation toward memory, tool integration and checking could improve reli
 - L15 [2] Explicit exclusions — No US-collapse forecast; no political recommendation or alleged hidden motives; no daily Millennium-problem claim; no normalized Trends value represented as vol <US-collapse; Millennium-problem; inference-market-share>
+
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/MEDIA-C-RECEIPT.md
+
+- L1 [1] Media C receipt — isolated blind viewer — Status: viewer run complete; review-only. This is a mechanical blind-reader {viewer run complete; review-only.} <blind-reader; operator-approval; systems-and-blowups; ai-slower-useful-faster; SCRIPT-C-VO; viewer-c; SCRIPT-C-HASH-SNAPSHOT-FINAL; post-run; SCRIPT-C-VIEWER-WINDOWS-FINAL; thumbnail-b; still-needs-you; thumb-file>
+- L7 [2] Frozen input — - Script: content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/SCRIPT-C-VO.txt <systems-and-blowups; ai-slower-useful-faster; SCRIPT-C-VO; viewer-c; SCRIPT-C-HASH-SNAPSHOT-FINAL; post-run; SCRIPT-C-VIEWER-WINDOWS-FINAL; thumbnail-b; still-needs-you>
+- L23 [2] Valid run — Exact command: <systems-and-blowups; ai-slower-useful-faster; SCRIPT-C-VO; thumb-file; thumbnail-b; still-needs-you; viewer-c; SCRIPT-C-VIEWER-WINDOWS-FINAL; SCRIPT-C-VIEWER-REPORTS-FINAL; run-dir; run-codex-final; SCRIPT-C-VIEWER-FINAL>
+- L54 [2] Superseded attempt — The pre-freeze attempt is retained at viewer-c/SCRIPT-C-VIEWER-REPORTS.json <pre-freeze; viewer-c; SCRIPT-C-VIEWER-REPORTS; run-codex; KeyboardInterrupt>
+
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/MEDIA-D-RECEIPT.md
+
+- L1 [1] Media D receipt — Flow poster checkpoint — - Claim: `mp-ai-useful-faster-trump-poster-v1` <mp-ai-useful-faster-trump-poster-v1; 1376x768 RGB; approved=false; render_eligible=false; approvals.json; 94844; 01a0a8cd-f485-7cd3-ad1d-5ca1ab5db311; Existing-service; world_board; 1536x1024; 1376x768; review-only>
+
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/MEDIA-F-RECEIPT.md
+
+- L1 [1] Media F receipt — isolated blind viewer — - Script: `SCRIPT-F-VO.txt`; title: `Slowing AI Could Speed Up the Economy` <SCRIPT-F-VO.txt; Slowing AI Could Speed Up the Economy; C:\Users\Snipe\Downloads\TrumpSam.png; SCRIPT-F-VIEWER-WINDOWS; viewer-f; SCRIPT-F-VIEWER-REPORTS; SCRIPT-F-VIEWER; [new]; [rehook]; open-loop; 27911>
+
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/OPERATOR-DIRECTION-2026-09-15-thumbnail.md
+
+- L1 [1] Operator direction - the thumbnail and the hook (2026-09-15, late) — Written by the P61 parent (Claude/Fable) from the operator's chat message, verbatim, for the package lane that owns this {Thumbnail:} <recruiting-poster; on-screen; [verify]; SOURCES-TO-VERIFY; title-word>
+
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/outreach/PACKAGE-F.md
+
+- L1 [1] First short — outreach drafts — Status: unsent draft, paired with SCRIPT-F-VO.txt and operator-selected TrumpSam.png. Final render and voice/release review outstanding. Voice basis: existing s <SCRIPT-F-VO; operator-selected; TrumpSam; source-derived; VOICE-PACK; YouTube; twenty-step; ten-job; ten-run; we-must-pace-the-frontier>
+- L5 [2] YouTube — Title: Slowing AI Could Speed Up the Economy <twenty-step>
+- L17 [2] Facebook — AI hands you a finished job. Then you find the wrong number, the missing source, and the file it never saved.
+- L23 [2] Pinned source note — either platform — The job comparison uses twenty independent required steps, identical success odds per step, and no retries or recovery. At95% per step, clean completion is abou <ten-job; ten-run; we-must-pace-the-frontier>
+- L31 [2] Release checks still required — - Inspect actual final video and confirm every platform claim matches it. <YouTube>
 
 ## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/outreach/PACKAGE.md
 
@@ -89,7 +124,11 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L13 [2] Evidence boundary — Current event: Amodei September2026 pacing essay, primary checked. Quantitative proof is OUR explicitly illustrative independent-step probability model, not mea <independent-step; EVIDENCE-DOSSIER; no-pullback>
 - L17 [2] Ownership / execution — Parent owns script, semantics, claim review and integration. All new code/assets/build outputs stay under this project. Existing engine only; no writes to origi
 - L20 [2] Next steps — Mechanical script gates -> JUDGE/thumbnail/viewer -> both scratch voices and local forced alignment -> authored beat plan -> private build/render/current gates
-- L23 [2] Execution ledger — - Shared evidence order SENT: packet d21f03d49daf6e1ea412ae0627305380ba81976e8fe5c060b8f2692281d54553, conversation 9cea0c38-053a-4f03-8465-0b225d33c1af; receip <ai-three-clocks; spoken-register; thumbnail-b; contact-sheet; first-frame; action-led; THREE-SHORTS-PLAN; still-needs-you; first-frame-human-review; YouTube; RESEARCH-RECALL-B; scratch-chirp-tight>
+- L23 [2] Execution ledger — - Paced alignment68639 completed238tokens/235matched/3interpolated, spoken72.72s; starts monotonic. Parent adapted only timing field names into scratch-f/gate-t <scratch-f; gate-timeline; schema-mismatch; nowPASS; identityWARN; PACKAGE-F; viewer-f; on-screen; bundlePASS; SCRIPT-F-REVIEW; localKokoro; RawChirp68>
+
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/scratch-f/SCRATCH-INDEX.md
+
+- L1 [1] SCRATCH INDEX - jump points for the ear pass — kokoro 1.6 min for 1,414 chars -> 14.90 chars/s actual (estimators assume 16.05 c/s / 165.6 wpm)
 
 ## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/scratch/SCRATCH-INDEX.md
 
@@ -105,6 +144,10 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L26 [2] SCREENS / LOOP — Seven emitted candidates: X1 and deixis “This week” are a calendar reference, not dangling causal referent; screen at release. Five sound-pattern candidates (s, <sound-pattern; tongue-twister; single-variable>
 - L29 [2] P3–P6 / ROSTER — Short-mode doc51 supersedes long-form battle/pivot pin/Glass ratios/foreshadow trio/anaphora/tell architecture; none fabricated to satisfy long-form slots. Reve <Short-mode; long-form; per-step; Peak-end; Never-repeat; Mechanisms-not-prescriptions>
 - L32 [2] REWRITES / EVIDENCE / VIEWER / DECISIONS — Only spoken rewrite: final “That's useful progress, even when the frontier slows” -> “Slower development wins when useful work gets finished faster” to close th
+
+## content/video_engine/projects/systems-and-blowups/ai-slower-useful-faster/viewer-c/V01-DIAGNOSIS.md
+
+- L1 [1] C viewer V01 diagnosis — Observed result: V01 is 7/9; [ring] w0 and [stakes] w2 are unperceived <viewer-c; SCRIPT-C-VIEWER-FINAL; tag-position>
 
 ## content/video_engine/projects/systems-and-blowups/ASSET-SPRINT-2026-08-25.md
 
@@ -2362,16 +2405,16 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
 ## docs/CAPABILITIES-INDEX.md
 
-- L1 [1] Capabilities index - one line per capability — Generated from `docs/content-video-engine/CAPABILITIES.md` by `content/video_engine/scripts/build_capabilities_index.py` {185 capabilities: 107 LIVE, 52 WIRED, 11 BUILT, 4 REFERENCE,} <--write; sed -n <line>p; docs_find.py "<term>"; Scene-evidence; cross-reveal; snap-to-boundary; dock-owned; Record-document; per-word; Live-chart; Narration-keyed; word-punch>
+- L1 [1] Capabilities index - one line per capability — Generated from `docs/content-video-engine/CAPABILITIES.md` by `content/video_engine/scripts/build_capabilities_index.py` {187 capabilities: 109 LIVE, 52 WIRED, 11 BUILT, 4 REFERENCE,} <--write; sed -n <line>p; docs_find.py "<term>"; Scene-evidence; cross-reveal; snap-to-boundary; dock-owned; Record-document; per-word; Live-chart; Narration-keyed; word-punch>
 - L10 [2] Rendering & playback — - Scene-evidence player - LIVE - the review renderer: cross-reveal wipe with carried light, coalesced docks, snap-to-boundary, dock-owned sides… (CAPABILITIES.m <Scene-evidence; cross-reveal; snap-to-boundary; dock-owned; Record-document; per-word; Live-chart; Narration-keyed; word-punch; RE-WRITING; data-keyed; hand-over>
-- L126 [2] Generative video, 2.5D parallax & driver automation (2026-09) — - ComfyUI 2.5D Parallax Engine - LIVE - zero-hallucination monocular metric depth (Depth Anything v2) + virtual 3D camera trajectory displacement (Depthflow… (C <ComfyUI; zero-hallucination; Mask-pinned; LaMa; depth-split; ART-embed; hard-edge; k_out; k_in; LTX-Video; DiT; zero-credit>
-- L146 [2] Evidence & assets — - Flow character pack - LIVE - the host identity as a validated, hashed, non-renderable contract: finance-host-v1 (retention: full suit detail, the… (CAPABILITI <non-renderable; finance-host; all-time; dot-com; CHANNEL-AWARE; money-physics; martial-matters; real-data; instrument-memory; mechanism-ladder; three-manias; Teacher-stamped>
-- L158 [2] Script & voice — - Strength loop - LIVE - multi-scale fixpoint (L0–L6 + X1–X5), rewrite budget, oscillation escalation (CAPABILITIES.md:192) <multi-scale; Opening-structure; mini-payoff; Script-gate; Opening-minute; drop-off; operator-verified; long-form; Declared-beat; split-on-pause; credits-for-both-parts; dirty-tag>
-- L186 [2] External evidence sources — - SCML ledger - REFERENCE - the operator's Korea/memory intelligence base (CAPABILITIES.md:223)
-- L190 [2] Reference builds (locked) — - current-bubble-five-minute-v4 - REFERENCE - THE motion gold standard (doc 29 §9.16) — side-by-side before any motion change ships (CAPABILITIES.md:229) <current-bubble-five-minute; side-by-side>
-- L195 [2] The enforcement layer (P37, 2026-09-04) — - M14 - LIVE - a camera move never overlaps an evidence build (entrance through the last badge settle) (CAPABILITIES.md:263) <ViT-L; ViT; safe-box; eye-line; feet-anchored; hard-coded; Muted-caption; over-dense; near-black; re-justifies; side-by-side; same-unit>
-- L213 [2] The effects catalogue, the recipes and the one-shot floor (P55 / P56, 2026-09-13) — - The effects catalogue - LIVE - one card per effect the engine performs (129 cards on 18 axes: id <axis>:<token>, aliases with sources, does, the… (CAPABILITIE <chart-to-chart>
-- L219 [2] Rows the doc should fix — - line 117: THE WHOLE-CHART MORPH: chart_to {to: "remake"} - a FULL line chart becomes a FULL bars chart and back, every series, datum, axis and label on one cl <WHOLE-CHART; extra-pipes; current-bubble-five-minute>
+- L127 [2] Generative video, 2.5D parallax & driver automation (2026-09) — - ComfyUI 2.5D Parallax Engine - LIVE - zero-hallucination monocular metric depth (Depth Anything v2) + virtual 3D camera trajectory displacement (Depthflow… (C <ComfyUI; zero-hallucination; Mask-pinned; LaMa; depth-split; ART-embed; hard-edge; k_out; k_in; LTX-Video; DiT; zero-credit>
+- L147 [2] Evidence & assets — - Flow character pack - LIVE - the host identity as a validated, hashed, non-renderable contract: finance-host-v1 (retention: full suit detail, the… (CAPABILITI <non-renderable; finance-host; all-time; dot-com; CHANNEL-AWARE; money-physics; martial-matters; real-data; instrument-memory; mechanism-ladder; three-manias; Teacher-stamped>
+- L159 [2] Script & voice — - Strength loop - LIVE - multi-scale fixpoint (L0–L6 + X1–X5), rewrite budget, oscillation escalation (CAPABILITIES.md:193) <multi-scale; Opening-structure; mini-payoff; Script-gate; Opening-minute; drop-off; operator-verified; long-form; Declared-beat; split-on-pause; credits-for-both-parts; dirty-tag>
+- L187 [2] External evidence sources — - SCML ledger - REFERENCE - the operator's Korea/memory intelligence base (CAPABILITIES.md:224)
+- L191 [2] Reference builds (locked) — - current-bubble-five-minute-v4 - REFERENCE - THE motion gold standard (doc 29 §9.16) — side-by-side before any motion change ships (CAPABILITIES.md:230) <current-bubble-five-minute; side-by-side>
+- L196 [2] The enforcement layer (P37, 2026-09-04) — - M14 - LIVE - a camera move never overlaps an evidence build (entrance through the last badge settle) (CAPABILITIES.md:264) <ViT-L; ViT; safe-box; eye-line; feet-anchored; hard-coded; test-deletion; Tests-removed; Muted-caption; over-dense; near-black; re-justifies>
+- L215 [2] The effects catalogue, the recipes and the one-shot floor (P55 / P56, 2026-09-13) — - The effects catalogue - LIVE - one card per effect the engine performs (129 cards on 18 axes: id <axis>:<token>, aliases with sources, does, the… (CAPABILITIE <chart-to-chart>
+- L221 [2] Rows the doc should fix — - line 117: THE WHOLE-CHART MORPH: chart_to {to: "remake"} - a FULL line chart becomes a FULL bars chart and back, every series, datum, axis and label on one cl <WHOLE-CHART; extra-pipes; current-bubble-five-minute>
 
 ## docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md
 
@@ -3032,37 +3075,37 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
 ## docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md
 
-- L1 [1] 37 — TTS Delivery Standards (ElevenLabs) — *Research 2026-08-24 · ElevenLabs official docs (primary source throughout) · {our doctrine is aligned, our pipeline is under-using the API} <deep-research; writing-for-the-ear; VOICE-PROFILE; eleven_multilingual_v2; mp3_44100_128; voice_settings; apply_text_normalization; pronunciation_dictionary_locators; seed; api-reference; text-to-speech; convert-with-timestamps>
-- L12 [2] 0. Current pipeline state (audited) — `audio_synth.py` calls `/text-to-speech/{voice}/with-timestamps` with {not} <eleven_multilingual_v2; mp3_44100_128; voice_settings; apply_text_normalization; pronunciation_dictionary_locators; seed; api-reference; text-to-speech; convert-with-timestamps; pronunciation-dictionary>
-- L24 [2] 1. Pause marks — the compiler rule — Docs 32/33 mandate `[pre-key]` / `[post-key]` marks in scripts. ElevenLabs' {model-dependent; Max 3 seconds.; No SSML at all.} <[pre-key]; [post-key]; ElevenLabs; help-center; core-capabilities; text-to-speech; how-can-i-add-pauses; [pause]; [short pause]; [long pause]; pre-key; breathing-room>
-- L100 [2] 2. Voice settings — codified baseline — Official guidance ([voice settings](https://elevenlabs.io/docs/eleven-creative/playground/text-to-speech), {Operator baseline (2026-08-24 — supersedes the generic canon; 0.40; 0.75; 0.20} <eleven-creative; text-to-speech; best-practices; per-segment; ElevenLabs; judge-by-ear; non-deterministic; seed; YouTube; 1c2bf03ce42d>
-- L133 [2] 3. Long-form consistency — request stitching (unused, highest-value gap) — Chunked generation (our per-beat/per-slot model) produces prosody jumps {ignored; Standard:} <per-beat; per-slot; eleven-api; how-to; text-to-speech; request-stitching; previous_request_ids; previous_text; next_text; text-only; next_request_ids; zero-retention>
-- L150 [2] 4. Numbers — the narration/badge split (doctrine clarification) — The verbatim-figure rule (registration pack, badges) governs what is {what is printed on screen; Model policy:; Belt and suspenders:} <verbatim-figure; enterprise-gated; apply_text_normalization: "on"; Writer-side; ninety-three>
-- L169 [2] 4b. Non-US currencies — the won problem (observed failure, resolved) — Operator recall checked against the record: the actual observed failure {"5,370 trillion won" read as the past tense of *win; ₩ is absent from their own example code} <AUDIO-FIX-RUNBOOK; ElevenLabs; $ £ € ¥; Non-big-four; break-tag; Writer-side; spell-out; "trillion won"; "trillion wahn"; currency-context>
-- L202 [2] 5. Pronunciation — wire the dictionary we already version — The repo schema is model-aware and correct: phoneme rules (IPA/CMU) work {phoneme rules; v3 uses inline IPA natively; multilingual v2 ignores phoneme tags — alias rules only} <model-aware; help-center; alias-first; ElevenLabs; pronunciation_dictionary_locators; Finance-name; A-V-A-V; AeroVironment>
-- L215 [2] 6. Model policy — `eleven_multilingual_v2` stays the production default — officially "the {`eleven_multilingual_v2` stays the production default; Eleven v3 is not production-ready for us:} <post-production>
-- L227 [2] 7. Implementation status (built 2026-08-24, TDD, 18/18 tests green) — All five gaps closed in `content/video_engine/src/services/audio_synth.py`: {Pause-mark compiler; Request stitching} <compile_pause_marks; strip_pause_markup; [pre-key]; [post-key]; break-tag; word-timing; re-synthesizes; previous_request_ids; request-id; apply_text_normalization: "on"; ELEVENLABS_TEXT_NORMALIZATION; pronunciation_dictionary_locators>
-- L255 [2] Sources — 1. [How can I add pauses?](https://elevenlabs.io/docs/help-center/product/core-capabilities/text-to-speech/how-can-i-add-pauses) — break tag syntax, 3s cap, art <help-center; core-capabilities; text-to-speech; how-can-i-add-pauses; best-practices; eleven-creative; api-reference; convert-with-timestamps; eleven-api; how-to; request-stitching; per-model>
-- L265 [2] §8 — Recording Standards v2 (post-Steel-and-Paper, 2026-08-25) — The first episode's audio failed review: spoken editorial flags, speed-ups {10,000 chars; ~10 min} <speed-ups; break-tag; ElevenLabs; long-form; with-timestamps; re-encode; mid-argument; mid-scene; Post-take; chars-per-second; spot-listen; judge-by-ear>
-- L282 [3] The MASTER TAKE rule — 1. An episode of ≤ ~9,000 compiled characters records as ONE request {An episode of ≤ ~9,000 compiled characters records as ONE re; Episodes over the cap; Silence belongs to the edit, not the voice.} <with-timestamps; re-encode; mid-argument; mid-scene; speed-ups; break-tag; Post-take; chars-per-second; spot-listen; judge-by-ear; seed-locked; per-chapter>
-- L316 [3] §8.1 Client timeout and retries — learned the expensive way (2026-08-29) — The first Script C master take timed out and returned no audio, while {timed out and returned no audio, while consuming 13,746 char; retried twice — and every attempt is charged.; Rules for any master take:} <per-scene; mid-generation; ELEVENLABS_TIMEOUT_S; round-trip; ELEVENLABS_MAX_ATTEMPTS = 1; master-take>
-- L353 [2] 12. The whisper gate (operator, 2026-08-30) — Provider alignment maps the INTENDED text onto the waveform; it is {INSERTED; DELETED} <faster-whisper; sequence-diff>
-- L376 [2] 13. Probe-first recording (operator, 2026-08-30) — Whisper cannot generate a read - it only transcribes. So "test before {Why 2:00 exactly} <re-hook; record_chained_take.py --probe [--go]; verify_take_whisper.py --probe; settings-dependent>
-- L398 [2] 14. Kill the dead space, THEN add the breaks (operator, 2026-08-30) — The take comes back carrying dead air the model produced - mid-sentence <mid-sentence; YouTube; intra-sentence; inter-sentence; break-tag>
-- L420 [2] 15. Name Bravos, not "they" (script gate, 2026-08-30) — The named-subject rule applied to the opponent: any "they/their" whose <named-subject>
-- L428 [2] 16. Stage zero: the scratch take (operator, 2026-08-30) — Before any credit moves, `scratch_take.py` renders the FULL script free, {Chirp 3 HD; Kokoro-82M; The hook figure overstates the transfer.} <SCRATCH-INDEX; per-episode; Kokoro-to-EL; 52d62876faff; 5320e2cc4a79; c75df7bb9b50; ElevenLabs; script-level>
-- L463 [2] 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — script <TOPIC-EXIT; full-length; ElevenLabs>
-- L490 [2] 18. The half-beat - chart reads breathe at the reveal (operator, 2026-08-30) — Chart-read delivery has a rhythm problem the full-second pause class is {when the voice names a thing, opens a list, or sets up a rev; naming -> list; reveal callout; threshold settle} <Chart-read; full-second; mega-caps; house-style; half-beats; edit-pause; dead-space; chart-sync>
-- L517 [2] 19. The pause grammar (operator, probe listen, 2026-08-30) — The probe's word timings turned the ear notes into a grammar. Four {Aphorism framing; Citation weight; Attention redirect} <edit-pause; over-emphasizes; half-beat; YouTube; chart-read; stop-start; tighten_runs; re-inserted; [post-key]>
-- L549 [2] 20. THE TEMPO FIELD - one choreography across script AND video (operator-approved 2026-08-30) — The realization (obvious only in hindsight, and only reachable through {the literary graph, the pause plan, and the animation reveal; The model:} <FULL-VIDEO-MAP; edit-pause; re-accelerates; YouTube; operator-caught; Segment-concat; Mm-Meta; silence-gap; micro-chunks; Vo-voice; MICRO-GAPS; vo-oice>
-- L615 [2] 21. BREAK TAGS RETIRED from the provider payload (operator-driven, 2026-08-30) — The final thumb: a micro-probe with a PERFECTLY COMPILED break tag came <micro-probe; Break-tag; ELEVENLABS_NO_BREAK_TAGS=1; edit-pause; key-pre; key-post; vo-oice; punctuation-only; re-parse; em-dashes; Micro-probes; ear-check>
-- L637 [2] 22. The BREATHING field - v7 (operator, 2026-08-30) — Retiring break tags exposed what the tags had really been doing: the {A settle-dip into EVERY inserted pause} <Tag-free; inter-word; un-breathed; re-ties; cut-in; over-held; pause-anchored; full-beat; half-beats; snap-fragments>
-- L664 [2] 23. Micro-repair - the editor excises what the provider stutters (operator, 2026-08-30) — Amends the old splice ban. When the provider RENDERS a sub-word defect {Locate by envelope, not by whisper; Preview candidates first, free.} <sub-word; re-render; hump-dip-hump; in-memory; ZERO-CROSS; zero-crossing; words.json; micro_repairs; .prerepair; Re-run>
-- L690 [2] 24. Next-voice track: ElevenLabs Professional Voice Clone (seeded 2026-08-30) — Episode one ships on the stock voice - the operator's ruling: "get it <deep-voice; take-to-take; Re-voicing; speech-to-speech; on-screen; 8ca78c7291bd; 6cca5ae18a48; per-cue; mid-phrase; rate-fitting; speakingRate; 9821f0386743>
-- L716 [3] 23b. Stutter auto-scan: attempted, NEGATIVE (2026-08-30) — Tried to scan for class-5c stutters mechanically (energy envelope vs <island-in-gap; double-burst-in-gap; gap-fill; Word-final; co-articulated; phoneme-level>
-- L740 [3] 23c. Micro-repair round two - the whole cluster goes (operator, 2026-08-30) — The 'Builted' fix took two rounds; the corrections are doctrine: {Excise the WHOLE junk cluster, keep exactly ONE release.; A crossfade can MASK an incomplete cut} <un-excised; Fade-free; episode-paused; operator-accepted>
-- L760 [3] 22b. Field v7.2 - the video choreography joins the field (operator, s11 review) — The operator on s11: dense information sped up too much and the field {Dock-anchor settles; Number-density cap} <script-side; evidence-dock>
-- L778 [3] 19b. The grammar turns GENERATIVE - derive_pauses.py (operator, 2026-08-30) — The 'two-thirds' miss: the pause grammar described classes but nothing <two-thirds; hand-placed; ear-flagged; stat-settle; era-shift; stat-settles; count-phrases; false-fire; enumeration-internal; operator-named>
+- L1 [1] 37 — TTS Delivery Standards (ElevenLabs) — *Research 2026-08-24 · ElevenLabs official docs (primary source throughout) · {our doctrine is aligned, our pipeline is under-using the API} <deep-research; writing-for-the-ear; VOICE-PROFILE; eleven_multilingual_v2; mp3_44100_192; mp3_44100_128; voice_settings; apply_text_normalization; pronunciation_dictionary_locators; seed; api-reference; text-to-speech>
+- L12 [2] 0. Current pipeline state (audited) — `audio_synth.py` calls `/text-to-speech/{voice}/with-timestamps` with {not} <eleven_multilingual_v2; mp3_44100_192; mp3_44100_128; voice_settings; apply_text_normalization; pronunciation_dictionary_locators; seed; api-reference; text-to-speech; convert-with-timestamps; pronunciation-dictionary>
+- L27 [2] 1. Pause marks — the compiler rule — Docs 32/33 mandate `[pre-key]` / `[post-key]` marks in scripts. ElevenLabs' {model-dependent; Max 3 seconds.; No SSML at all.} <[pre-key]; [post-key]; ElevenLabs; help-center; core-capabilities; text-to-speech; how-can-i-add-pauses; [pause]; [short pause]; [long pause]; pre-key; breathing-room>
+- L103 [2] 2. Voice settings — codified baseline — Official guidance ([voice settings](https://elevenlabs.io/docs/eleven-creative/playground/text-to-speech), {Operator baseline (2026-08-24 — supersedes the generic canon; 0.40; 0.75; 0.20} <eleven-creative; text-to-speech; best-practices; per-segment; ElevenLabs; judge-by-ear; non-deterministic; seed; YouTube; 1c2bf03ce42d>
+- L136 [2] 3. Long-form consistency — request stitching (unused, highest-value gap) — Chunked generation (our per-beat/per-slot model) produces prosody jumps {ignored; Standard:} <per-beat; per-slot; eleven-api; how-to; text-to-speech; request-stitching; previous_request_ids; previous_text; next_text; text-only; next_request_ids; zero-retention>
+- L153 [2] 4. Numbers — the narration/badge split (doctrine clarification) — The verbatim-figure rule (registration pack, badges) governs what is {what is printed on screen; Model policy:; Belt and suspenders:} <verbatim-figure; enterprise-gated; apply_text_normalization: "on"; Writer-side; ninety-three>
+- L172 [2] 4b. Non-US currencies — the won problem (observed failure, resolved) — Operator recall checked against the record: the actual observed failure {"5,370 trillion won" read as the past tense of *win; ₩ is absent from their own example code} <AUDIO-FIX-RUNBOOK; ElevenLabs; $ £ € ¥; Non-big-four; break-tag; Writer-side; spell-out; "trillion won"; "trillion wahn"; currency-context>
+- L205 [2] 5. Pronunciation — wire the dictionary we already version — The repo schema is model-aware and correct: phoneme rules (IPA/CMU) work {phoneme rules; v3 uses inline IPA natively; multilingual v2 ignores phoneme tags — alias rules only} <model-aware; help-center; alias-first; ElevenLabs; pronunciation_dictionary_locators; Finance-name; A-V-A-V; AeroVironment>
+- L218 [2] 6. Model policy — `eleven_multilingual_v2` stays the production default — officially "the {`eleven_multilingual_v2` stays the production default; Eleven v3 is not production-ready for us:} <post-production>
+- L230 [2] 7. Implementation status (built 2026-08-24, TDD, 18/18 tests green) — All five gaps closed in `content/video_engine/src/services/audio_synth.py`: {Pause-mark compiler; Request stitching} <compile_pause_marks; strip_pause_markup; [pre-key]; [post-key]; break-tag; word-timing; re-synthesizes; previous_request_ids; request-id; apply_text_normalization: "on"; ELEVENLABS_TEXT_NORMALIZATION; pronunciation_dictionary_locators>
+- L258 [2] Sources — 1. [How can I add pauses?](https://elevenlabs.io/docs/help-center/product/core-capabilities/text-to-speech/how-can-i-add-pauses) — break tag syntax, 3s cap, art <help-center; core-capabilities; text-to-speech; how-can-i-add-pauses; best-practices; eleven-creative; api-reference; convert-with-timestamps; eleven-api; how-to; request-stitching; per-model>
+- L268 [2] §8 — Recording Standards v2 (post-Steel-and-Paper, 2026-08-25) — The first episode's audio failed review: spoken editorial flags, speed-ups {10,000 chars; ~10 min} <speed-ups; break-tag; ElevenLabs; long-form; with-timestamps; re-encode; mid-argument; mid-scene; Post-take; chars-per-second; spot-listen; judge-by-ear>
+- L285 [3] The MASTER TAKE rule — 1. An episode of ≤ ~9,000 compiled characters records as ONE request {An episode of ≤ ~9,000 compiled characters records as ONE re; Episodes over the cap; Silence belongs to the edit, not the voice.} <with-timestamps; re-encode; mid-argument; mid-scene; speed-ups; break-tag; Post-take; chars-per-second; spot-listen; judge-by-ear; seed-locked; per-chapter>
+- L319 [3] §8.1 Client timeout and retries — learned the expensive way (2026-08-29) — The first Script C master take timed out and returned no audio, while {timed out and returned no audio, while consuming 13,746 char; retried twice — and every attempt is charged.; Rules for any master take:} <per-scene; mid-generation; ELEVENLABS_TIMEOUT_S; round-trip; ELEVENLABS_MAX_ATTEMPTS = 1; master-take>
+- L356 [2] 12. The whisper gate (operator, 2026-08-30) — Provider alignment maps the INTENDED text onto the waveform; it is {INSERTED; DELETED} <faster-whisper; sequence-diff>
+- L379 [2] 13. Probe-first recording (operator, 2026-08-30) — Whisper cannot generate a read - it only transcribes. So "test before {Why 2:00 exactly} <re-hook; record_chained_take.py --probe [--go]; verify_take_whisper.py --probe; settings-dependent>
+- L401 [2] 14. Kill the dead space, THEN add the breaks (operator, 2026-08-30) — The take comes back carrying dead air the model produced - mid-sentence <mid-sentence; YouTube; intra-sentence; inter-sentence; break-tag>
+- L423 [2] 15. Name Bravos, not "they" (script gate, 2026-08-30) — The named-subject rule applied to the opponent: any "they/their" whose <named-subject>
+- L431 [2] 16. Stage zero: the scratch take (operator, 2026-08-30) — Before any credit moves, `scratch_take.py` renders the FULL script free, {Chirp 3 HD; Kokoro-82M; The hook figure overstates the transfer.} <SCRATCH-INDEX; per-episode; Kokoro-to-EL; 52d62876faff; 5320e2cc4a79; c75df7bb9b50; ElevenLabs; script-level>
+- L466 [2] 17. THE AUDIO PATH — canonical, one block (operator-confirmed 2026-08-30) — script <TOPIC-EXIT; full-length; ElevenLabs>
+- L493 [2] 18. The half-beat - chart reads breathe at the reveal (operator, 2026-08-30) — Chart-read delivery has a rhythm problem the full-second pause class is {when the voice names a thing, opens a list, or sets up a rev; naming -> list; reveal callout; threshold settle} <Chart-read; full-second; mega-caps; house-style; half-beats; edit-pause; dead-space; chart-sync>
+- L520 [2] 19. The pause grammar (operator, probe listen, 2026-08-30) — The probe's word timings turned the ear notes into a grammar. Four {Aphorism framing; Citation weight; Attention redirect} <edit-pause; over-emphasizes; half-beat; YouTube; chart-read; stop-start; tighten_runs; re-inserted; [post-key]>
+- L552 [2] 20. THE TEMPO FIELD - one choreography across script AND video (operator-approved 2026-08-30) — The realization (obvious only in hindsight, and only reachable through {the literary graph, the pause plan, and the animation reveal; The model:} <FULL-VIDEO-MAP; edit-pause; re-accelerates; YouTube; operator-caught; Segment-concat; Mm-Meta; silence-gap; micro-chunks; Vo-voice; tempo_edit.py --verify; strict-rate-step>
+- L632 [2] 21. BREAK TAGS RETIRED from the provider payload (operator-driven, 2026-08-30) — The final thumb: a micro-probe with a PERFECTLY COMPILED break tag came <micro-probe; Break-tag; ELEVENLABS_NO_BREAK_TAGS=1; edit-pause; key-pre; key-post; vo-oice; punctuation-only; re-parse; em-dashes; Micro-probes; ear-check>
+- L654 [2] 22. The BREATHING field - v7 (operator, 2026-08-30) — Retiring break tags exposed what the tags had really been doing: the {A settle-dip into EVERY inserted pause} <Tag-free; inter-word; un-breathed; re-ties; cut-in; over-held; pause-anchored; full-beat; half-beats; snap-fragments>
+- L681 [2] 23. Micro-repair - the editor excises what the provider stutters (operator, 2026-08-30) — Amends the old splice ban. When the provider RENDERS a sub-word defect {Locate by envelope, not by whisper; Preview candidates first, free.} <sub-word; re-render; hump-dip-hump; in-memory; ZERO-CROSS; zero-crossing; words.json; micro_repairs; .prerepair; Re-run>
+- L707 [2] 24. Next-voice track: ElevenLabs Professional Voice Clone (seeded 2026-08-30) — Episode one ships on the stock voice - the operator's ruling: "get it <deep-voice; take-to-take; Re-voicing; speech-to-speech; on-screen; 8ca78c7291bd; 6cca5ae18a48; per-cue; mid-phrase; rate-fitting; speakingRate; 9821f0386743>
+- L733 [3] 23b. Stutter auto-scan: attempted, NEGATIVE (2026-08-30) — Tried to scan for class-5c stutters mechanically (energy envelope vs <island-in-gap; double-burst-in-gap; gap-fill; Word-final; co-articulated; phoneme-level>
+- L757 [3] 23c. Micro-repair round two - the whole cluster goes (operator, 2026-08-30) — The 'Builted' fix took two rounds; the corrections are doctrine: {Excise the WHOLE junk cluster, keep exactly ONE release.; A crossfade can MASK an incomplete cut} <un-excised; Fade-free; episode-paused; operator-accepted>
+- L777 [3] 22b. Field v7.2 - the video choreography joins the field (operator, s11 review) — The operator on s11: dense information sped up too much and the field {Dock-anchor settles; Number-density cap} <script-side; evidence-dock>
+- L795 [3] 19b. The grammar turns GENERATIVE - derive_pauses.py (operator, 2026-08-30) — The 'two-thirds' miss: the pause grammar described classes but nothing <two-thirds; hand-placed; ear-flagged; stat-settle; era-shift; stat-settles; count-phrases; false-fire; enumeration-internal; operator-named>
 
 ## docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md
 
@@ -3161,10 +3204,11 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L20 [2] 43.2 The anchor sandwich — the single most common defect — Without the sandwich, scaling drifts diagonally and rotating an arm disconnects the {Without the sandwich, scaling drifts diagonally and rotating} <at: "datum">
 - L37 [2] 43.3 The Z-stack — Painter's algorithm, strictly back-to-front. Depth cue without 3D: {This is the safe way to get depth on a page that §45 forbids} <back-to-front>
 - L55 [2] 43.4 Dirty flags — Each node holds `localMatrix`, `worldMatrix`, `isDirty`. A property change marks the node <localMatrix; worldMatrix; isDirty>
-- L62 [2] 43.5 The morph — two methods, and when each applies — Method A — vertex-based (Flubber / d3-interpolate-path), from `02` §2.3. Cheap, {Method A — vertex-based (Flubber / d3-interpolate-path), fro; Rotational alignment:; Method B — triangle-based ARAP (`07` Pillar 2).} <already-available; Ring-normalise; inside-out; J = D′D⁻¹; polar-decomposed; c_ij = ½(cot α_ij + cot β_ij); back-substitution; Outline-to-outline; object → chart>
-- L99 [2] 43.6 The host is a cutout rig, not a generation — Forensic proof, from the dossier §3: frame_0020 of the reference carries three {Forensic proof, from the dossier §3:; That proves the reference composites independent vector asse} <thin-line; thick-line; retro-cartoon>
-- L120 [2] 43.7 Bounded biharmonic weights and 2D dual quaternions — For props that must bend rather than pivot: BBW (Jacobson et al. 2011) gives C¹ {Defer until a prop needs it} <Jacobson et al.; dual-quaternion>
-- L127 [2] 43.8 Sources — Alexa, Cohen-Or & Levin 2000 · Sorkine & Alexa 2007 · Igarashi, Moscovich & Hughes 2005 · <Cohen-Or; Or & Levin 2000; Sorkine & Alexa 2007; Moscovich & Hughes 2005; Jacobson et al.; Hertzmann & Zorin 2000>
+- L62 [2] 43.5 The morph — two methods, and when each applies — Method A — vertex-based (Flubber / d3-interpolate-path), from `02` §2.3. Cheap, {Method A — vertex-based (Flubber / d3-interpolate-path), fro; Rotational alignment:; Method B — triangle-based ARAP (`07` Pillar 2).} <already-available; Ring-normalise; inside-out; J = D′D⁻¹; polar-decomposed; c_ij = ½(cot α_ij + cot β_ij); back-substitution; Outline-to-outline; object → chart; @proof-050; remake-line-to-bars; remake-bars-to-line>
+- L99 [3] 43.5.1 The morph's test (E99 s39, the operator, 2026-09-15) — > "A morph should be proof of form/function to the audience, that we're really manipulating the world they're watching, not tricking them." <@proof-050; remake-line-to-bars; remake-bars-to-line; melt-morph; morph-planted; chart-to-chart; recast; morph_to; remake; page-enter; melt:morph; re-timed>
+- L105 [2] 43.6 The host is a cutout rig, not a generation — Forensic proof, from the dossier §3: frame_0020 of the reference carries three {Forensic proof, from the dossier §3:; That proves the reference composites independent vector asse} <thin-line; thick-line; retro-cartoon>
+- L126 [2] 43.7 Bounded biharmonic weights and 2D dual quaternions — For props that must bend rather than pivot: BBW (Jacobson et al. 2011) gives C¹ {Defer until a prop needs it} <Jacobson et al.; dual-quaternion>
+- L133 [2] 43.8 Sources — Alexa, Cohen-Or & Levin 2000 · Sorkine & Alexa 2007 · Igarashi, Moscovich & Hughes 2005 · <Cohen-Or; Or & Levin 2000; Sorkine & Alexa 2007; Moscovich & Hughes 2005; Jacobson et al.; Hertzmann & Zorin 2000>
 
 ## docs/content-video-engine/44-INK-AND-SURFACE.md
 
@@ -3511,25 +3555,25 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L520 [7] R26-97 Promote `species:callout` to a module (P55 T11 queue) — engine symbol paintSpecies `sp.kind === "callout"` + calloutPath (17 lines); rank 306 - 9 uses, live; golden `chart-callout` exists; golden first: none new: `ch
 - L521 [7] R26-98 Promote `page_species:figure` to a module (P55 T11 queue) — engine symbol paintFigure (17 lines); rank 204 - 6 uses, live (Japan t 77.02); golden first: a `page-figure` golden (the written number landed); queue: a ledger
 - L522 [7] R26-99 Promote `dock_payload:record` to a module (P55 T11 queue) — engine symbol drawRecord (the typewriter + highlighter); rank 140 - group B's rank (below the checklist 488, now a module via T7); golden first: a `record-typew
-- L578 [2] P45 triage — 2026-09-05 (the corpus reconciled with what is built) — The judgment pass over the generated registries: [TRIAGE-2026-09-05.md](TRIAGE-2026-09-05.md) — {Every row below carries its triage id and nothing was added; pending D3 / D6} <CORPUS-RECONCILIATION; write-up; ANIMATION-REGISTRY.md:582; hand-tuned; SOAK_STEP.FPS 8; ANIMATION-REGISTRY.md:84; SP.LIFE_FPS 10; :231; BACKLOG.md:218; briefs:187; :545; zero-slip>
-- L587 [3] TOP — the next list (each becomes its own order, plan:67) — | id | item — what and where | why / evidence | cost | {P45 O1 → P47 T1 BUILT 2026-09-06; The cadence kinetics module; R2 + D7.} <ANIMATION-REGISTRY.md:582; hand-tuned; SOAK_STEP.FPS 8; ANIMATION-REGISTRY.md:84; SP.LIFE_FPS 10; :231; BACKLOG.md:218; briefs:187; :545; zero-slip; min-jerk; 48-THE-FIGURE-AND-THE-GROUND.md:16,26>
-- L596 [3] BACKLOG — real work, owned by a plan or a row, not now (29 of 31; two held below) — | id | item — what and where | why / evidence | cost | {P45 O6; C3 nested coordinate spaces; P45 O8 → P47 T3 BUILT 2026-09-07; 43.5 the morph, two methods} <BACKLOG.md:289; cotangent-weight; 43-SCENE-GRAPH-AND-TRANSFORM.md:91; BACKLOG.md:247; κ; 48…:163; G-i; G-j; BACKLOG.md:235; :316; ANIMATION-REGISTRY.md:530; zero-area>
-- L630 [3] EXPLORE — the first step is a measurement or a read, not a build (6) — | id | item — what and where | why / evidence | cost | {P45 S2; Figure kinematics / biomechanics; P45 S5; Secondary motion and placement dynamics} <FK-vs-IK; two-bone; ÿ+2ζω₀ẏ+ω₀²y = −ẍ_base; φ; :383; motion-cohesion; :283-285; follow-through; M_p; BACKLOG.md:516; secondary-motion; [DERIVED]>
-- L641 [3] RETIRE — struck from the triage list only; no doc line is deleted (R7) (12) — | id | item — what and where | why / evidence | cost | {P45 O2; Dynamic nib pooling; P45 O3; The five overlapping synergies} <corner-dwell; LAMBDA_W 0.12; ALPHA_W 1; mass-spring-damper; mẍ+cẋ+kx=0; ω₀; ζ; 47-FINDINGS-TO-CHECKS.md:199; BACKLOG.md:526-528; 47-FINDINGS-TO-CHECKS.md:150; BACKLOG.md:229; arc-length>
-- L658 [3] D3 / D6 — ruled 2026-09-06 (E42): poses first; tag all thirteen — | id | item — what and where | why / evidence | cost | {P45 O9; 48.2 balance — the gesturing figure's hips; D3; E42: BACKLOG; P45 T5} <Hof 2005; 48-THE-FIGURE-AND-THE-GROUND.md:39; zero-slip; ANIMATION-REGISTRY.md:366-367; BACKLOG.md:249; [DERIVED]; G-c; intensity ≤ 0.18; 45-PARALLAX-AND-PLATE-MOTION.md:53; G-o; 50-THE-PHONE-IS-THE-SCREEN.md:36,41-48>
-- L666 [2] Routed from the demoted list (47 §4) — Demoted from doctrine — not dropped. Each lands as a build item, an exploration, or a closure. {Euler-spiral generator; Build, do not gate.; Per-material `ζ` / `ω₀` values; Exploration X10.; RESOLVED 2026-09-04} <Secondary-motion; M_p; Dirty-flag; hand-tuning; three-quarters; Two-handed; dual-quaternion; designed-out; shot-length>
-- L672 [7] D1 Euler-spiral generator — for procedural curves (arrows, balance arms, connectors, axes)
-- L673 [7] D2 Per-material `ζ` / `ω₀` values — paper, metal, fabric, liquid, ink
-- L674 [7] D3 Secondary-motion ratio — RESOLVED 2026-09-04 by 48 §48.6 — the analytic phase lag `φ = arctan(2ζ(ω_d/ω₀)/(1−(ω_d/ω₀)²))` on the `M_p` we already adopted. No invented ratio needed.
-- L675 [7] D4 Dirty-flag propagation — in the scene graph
-- L676 [7] D8 Pseudo-3D head turns — cylindrical projection, the 35–45° three-quarters gate, sprite swap over 2–3 frames at peak angular velocity (09 §2.6)
-- L677 [7] D9 Two-handed closed kinematic chains — the prop is the master, both wrists lock to its sockets (09 §3.7)
-- L678 [7] D5 BBW / 2D dual-quaternion skinning — Trigger corrected 2026-09-04 (48 §48.3): not a bending prop — rigging a figure. Elbows and knees need it immediately, because linear blend skinning returns the
-- L679 [7] D6 A1 timing chart — Closed. Superseded by `M_p = exp(−πζ/√(1−ζ²))` — the model replaces the table.
-- L680 [7] D7 Grow the shot-length tail — Deprioritised by ruling — see below.
-- L682 [2] Deprioritised by ruling — - Grow the shot-length tail. Our median and CPM match the reference; only the spread {Grow the shot-length tail.; Coffee-ring edge and anisotropic wicking}
-- L690 [2] Withdrawn — - G-f "the actor must be a rig, not a generation." Withdrawn by the operator {G-f "the actor must be a rig, not a generation."; N1 "M10 measures the wrong thing."} <gate_motion_density.py:277; PLATE_HOLD_MAX_S = 20.0; two-dock>
-- L704 [2] Carried debt — - `f10b` plate rehome — 55 indexed plates still resolve into the codex worktree. {`f10b` plate rehome; Steel and Paper's timeline uses absolute worktree paths.; Flow driver has no README; Drive connector needs reconnecting.; Tokyo `plate-01-*`; The Steel and Paper re-script} <npm install; character-binding; REWRITE-ORDER-G; G-g>
+- L590 [2] P45 triage — 2026-09-05 (the corpus reconciled with what is built) — The judgment pass over the generated registries: [TRIAGE-2026-09-05.md](TRIAGE-2026-09-05.md) — {Every row below carries its triage id and nothing was added; pending D3 / D6} <CORPUS-RECONCILIATION; write-up; ANIMATION-REGISTRY.md:582; hand-tuned; SOAK_STEP.FPS 8; ANIMATION-REGISTRY.md:84; SP.LIFE_FPS 10; :231; BACKLOG.md:218; briefs:187; :545; zero-slip>
+- L599 [3] TOP — the next list (each becomes its own order, plan:67) — | id | item — what and where | why / evidence | cost | {P45 O1 → P47 T1 BUILT 2026-09-06; The cadence kinetics module; R2 + D7.} <ANIMATION-REGISTRY.md:582; hand-tuned; SOAK_STEP.FPS 8; ANIMATION-REGISTRY.md:84; SP.LIFE_FPS 10; :231; BACKLOG.md:218; briefs:187; :545; zero-slip; min-jerk; 48-THE-FIGURE-AND-THE-GROUND.md:16,26>
+- L608 [3] BACKLOG — real work, owned by a plan or a row, not now (29 of 31; two held below) — | id | item — what and where | why / evidence | cost | {P45 O6; C3 nested coordinate spaces; P45 O8 → P47 T3 BUILT 2026-09-07; 43.5 the morph, two methods} <BACKLOG.md:289; cotangent-weight; 43-SCENE-GRAPH-AND-TRANSFORM.md:91; BACKLOG.md:247; κ; 48…:163; G-i; G-j; BACKLOG.md:235; :316; ANIMATION-REGISTRY.md:530; zero-area>
+- L642 [3] EXPLORE — the first step is a measurement or a read, not a build (6) — | id | item — what and where | why / evidence | cost | {P45 S2; Figure kinematics / biomechanics; P45 S5; Secondary motion and placement dynamics} <FK-vs-IK; two-bone; ÿ+2ζω₀ẏ+ω₀²y = −ẍ_base; φ; :383; motion-cohesion; :283-285; follow-through; M_p; BACKLOG.md:516; secondary-motion; [DERIVED]>
+- L653 [3] RETIRE — struck from the triage list only; no doc line is deleted (R7) (12) — | id | item — what and where | why / evidence | cost | {P45 O2; Dynamic nib pooling; P45 O3; The five overlapping synergies} <corner-dwell; LAMBDA_W 0.12; ALPHA_W 1; mass-spring-damper; mẍ+cẋ+kx=0; ω₀; ζ; 47-FINDINGS-TO-CHECKS.md:199; BACKLOG.md:526-528; 47-FINDINGS-TO-CHECKS.md:150; BACKLOG.md:229; arc-length>
+- L670 [3] D3 / D6 — ruled 2026-09-06 (E42): poses first; tag all thirteen — | id | item — what and where | why / evidence | cost | {P45 O9; 48.2 balance — the gesturing figure's hips; D3; E42: BACKLOG; P45 T5} <Hof 2005; 48-THE-FIGURE-AND-THE-GROUND.md:39; zero-slip; ANIMATION-REGISTRY.md:366-367; BACKLOG.md:249; [DERIVED]; G-c; intensity ≤ 0.18; 45-PARALLAX-AND-PLATE-MOTION.md:53; G-o; 50-THE-PHONE-IS-THE-SCREEN.md:36,41-48>
+- L678 [2] Routed from the demoted list (47 §4) — Demoted from doctrine — not dropped. Each lands as a build item, an exploration, or a closure. {Euler-spiral generator; Build, do not gate.; Per-material `ζ` / `ω₀` values; Exploration X10.; RESOLVED 2026-09-04} <Secondary-motion; M_p; Dirty-flag; hand-tuning; three-quarters; Two-handed; dual-quaternion; designed-out; shot-length>
+- L684 [7] D1 Euler-spiral generator — for procedural curves (arrows, balance arms, connectors, axes)
+- L685 [7] D2 Per-material `ζ` / `ω₀` values — paper, metal, fabric, liquid, ink
+- L686 [7] D3 Secondary-motion ratio — RESOLVED 2026-09-04 by 48 §48.6 — the analytic phase lag `φ = arctan(2ζ(ω_d/ω₀)/(1−(ω_d/ω₀)²))` on the `M_p` we already adopted. No invented ratio needed.
+- L687 [7] D4 Dirty-flag propagation — in the scene graph
+- L688 [7] D8 Pseudo-3D head turns — cylindrical projection, the 35–45° three-quarters gate, sprite swap over 2–3 frames at peak angular velocity (09 §2.6)
+- L689 [7] D9 Two-handed closed kinematic chains — the prop is the master, both wrists lock to its sockets (09 §3.7)
+- L690 [7] D5 BBW / 2D dual-quaternion skinning — Trigger corrected 2026-09-04 (48 §48.3): not a bending prop — rigging a figure. Elbows and knees need it immediately, because linear blend skinning returns the
+- L691 [7] D6 A1 timing chart — Closed. Superseded by `M_p = exp(−πζ/√(1−ζ²))` — the model replaces the table.
+- L692 [7] D7 Grow the shot-length tail — Deprioritised by ruling — see below.
+- L694 [2] Deprioritised by ruling — - Grow the shot-length tail. Our median and CPM match the reference; only the spread {Grow the shot-length tail.; Coffee-ring edge and anisotropic wicking}
+- L702 [2] Withdrawn — - G-f "the actor must be a rig, not a generation." Withdrawn by the operator {G-f "the actor must be a rig, not a generation."; N1 "M10 measures the wrong thing."} <gate_motion_density.py:277; PLATE_HOLD_MAX_S = 20.0; two-dock>
+- L716 [2] Carried debt — - `f10b` plate rehome — 55 indexed plates still resolve into the codex worktree. {`f10b` plate rehome; Steel and Paper's timeline uses absolute worktree paths.; Flow driver has no README; Drive connector needs reconnecting.; Tokyo `plate-01-*`; The Steel and Paper re-script} <npm install; character-binding; REWRITE-ORDER-G; G-g>
 
 ## docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md
 
@@ -3872,97 +3916,99 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L121 [7] Surface grammar + census — page vs dock vs plate-life vs none, decided by rule (A1–A3 earn the page, B1–B4 keep the dock, C1–C6 choreography at a boundary, D1–D4 the E21 density link); th
 - L122 [7] MOTION MENU species — the targeting law as code: shot rows carry `species` entries with DECLARED targets (datum | point | region | span); `validate_species` fails the build on a poin
 - L123 [7] Page sound cues — paper slide (roll-out), drop settle (bleed), chalk stroke (outline draw-complete): CC0 Freesound, trimmed ≤1.5s, matched to the whoosh at −14 LUFS ±1 LU; page-r
-- L124 [7] Choreography ledger + gates — every enter/exit/side/how-it-leaves, gated per slot; FAIL blocks the build
-- L125 [7] Whiteboard reveal engine — serpentine SVG mask + hand follower, pose set with per-pose nib calibration
-- L126 [7] Remotion Production Console — local timeline/canvas editor + Python bridge (`127.0.0.1:4317`): scrub/zoom/drag/trim, hash-bound immutable revisions, recompiles without touching narration or
-- L127 [7] Remotion composition registry — single source of truth for editor compositions (Editorial, Documentary, motion variants, finance proofs, production evidence/timeline, 3D prototypes)
-- L128 [7] Editor fixtures — editorial-motion two-shot with render harness (`render.mjs`), canonical audio fixture
-- L129 [7] remotion-ui registry — (external, MIT) — ~200 copy-in `.tsx` components: captions, data/live metrics, SVG draw-on paths, TransitionSeries transitions, motion primitives; MCP server (`
-- L130 [7] Hyperframes — HTML-to-video rendering framework & motion system (DOM `data-*` timeline, clips, tracks, sub-compositions, 7 runtime adapters [GSAP, Lottie, Three.js, Anime.js,
-- L132 [2] Generative video, 2.5D parallax & driver automation (2026-09) — Rescued onto main 2026-09-03: this stack was written UNTRACKED in the main checkout {ComfyUI 2.5D Parallax Engine} <127.0.0.1:8188; zero-hallucination; Depth Anything v2; Depthflow; re-generates; *.mp4; Mask-pinned; bit-for-bit; LTX-Video; --denoise; LaMa; depth-split>
-- L141 [7] ComfyUI 2.5D Parallax Engine — zero-hallucination monocular metric depth (`Depth Anything v2`) + virtual 3D camera trajectory displacement (`Depthflow` GLSL: dolly, zoom, circle, horizontal,
-- L142 [7] Mask-pinned AMBIENT lane (local ComfyUI) — an approved still, a SAM 2 object mask, a LIFE region, a prompt -> an mp4 where everything outside the region is the still bit-for-bit and only the region is ge
-- L143 [7] SAM 2 + LaMa occlusion inpainting — (ComfyUI nodes) - the precondition for parallax on any plate carrying an actor: SAM 2 cuts the subject to an alpha PNG, LaMa fills the hole behind it (~0.3s), a
-- L144 [7] The layered plate - generated, or depth-split as the fallback — (P58 T1, E98 s6) - a plate is GENERATED one layer at a time (far / board / mid / near), never cut out of a stacked generation; an existing flat plate may be spl
-- L145 [7] The plate library knows its layers — (P58 T2) - a plate's sidecar `<plate>.layers.json` lists `layers[] {path, role, depth, alpha, generator}` back to front (`depth` = the parallax k; generator gpt
-- L146 [7] The camera over layers — (P58 T3, E59/E49) - a layered world paints each plane with the ONE camera read at its own k (doc 24's planes: far 1.0, board 1.05, mid 1.15, near 1.40), so para
-- L147 [7] The ledger page as a card at a depth — (P58 T4, E98 s3) - page options `;depth=<k>` and `;plane=tilt:<deg>[,y
-- L148 [7] Two chart forms in 2.5D — (P58 T5, E98 s3) - `;form=extruded_bar` (a prism per bar, one light, a hard-edge cast shadow, every label where the flat bar puts it, a drop extruding down from
-- L149 [7] The docks and the melt's ball at a depth — (P58 T6 (a)(b), E98 s4) - a dock option `depth=<k>` takes the camera's move at its plane (0..4; refused nearer than the occluder's 1.40 with `behind=`, and with
-- L150 [7] The slide through the depth — (P58 T6c, E98 s4 / E87 s3) - `slide:<dir>[:<s>]:depth=<k_out>,<k_in>`: the outgoing board eases to k_out as it leaves and the incoming eases from k_in as it lan
-- L151 [7] The first 2.5D cut — (P58 T7, E98 / E49 / E59) - the Japan tariff short rebuilt privately with its ship plate layered under the receipt page's camera arrival, that page at depth 1.1
-- L152 [7] LTX-Video 2B DiT ambient engine — (ComfyUI node) - local physical motion loops (haze, embers, drifting cloud, water) on a still plate, ~12s on the local GPU, zero cloud credits; SAM 2's mask pin
-- L153 [7] Google Flow driver — zero-credit multi-reference generative diffusion over an ACTIVE Chrome CDP session (port 9222); the CDP path is the ONLY live one - `src/cdp-driver.mjs` + `dag-
-- L154 [7] Video engine MCP - TWO surfaces, verified by live handshake 2026-09-03
-- L155 [7] Flow stdio dispatcher + character A/B — (2026-09-08) — `create_flow_image` over the MCP's stdio JSON-RPC, one order file per prompt (`omni-video/dispatch_crossings_map.py`, `*.order.json` v1-v8), the
-- L156 [7] Chrome extension + native messaging host + the `flow-queue` MCP surface — the pre-CDP bridge: a packaged extension (`extension/`), a native messaging host (`native-host/`) and 11 queue/bridge tools (`flow_enqueue_batch`, `flow_bridge_
-- L157 [7] Video perception (`/watch`) — acquisition via `yt-dlp`, frame extraction via `ffmpeg` (scene-aware or keyframe), timestamped transcript from native captions or Whisper
-- L164 [2] Evidence & assets — Martial Matters episode 1 (merged from p16, 2026-08-29): 192 asset files {Martial Matters episode 1; Flow character pack} <martial-matters; word-timed; candidate; non-renderable; finance-host-v1; finance-host-stick-v1; three-quarter; paper-toy; operator-approved; @Mike; dab5d902; @MikeMasterV3>
-- L177 [7] Flow character pack — the host identity as a validated, hashed, non-renderable contract: `finance-host-v1` (retention: full suit detail, the recognised woodblock print + vox newspape
-- L178 [7] THE RAILWAY YARDSTICK — recurring channel instrument: tech share of ALL US capital formation (narrow 28% all-time high vs 23% dot-com; broad 65%; UK railways ~50% one-technology refere
-- L179 [7] Plate library — 326 plates indexed by SEMANTIC across all worktrees and CHANNEL-AWARE (money-physics 134 / martial-matters 192); channels are identity walls — the resolver refu
-- L180 [7] Chart builders — real-data charts (yfinance/FRED), verbatim end labels, month/year axes, series sidecars
-- L181 [7] Live HTML evidence sources — karp/leases/macdonald records, instrument-memory, mechanism-ladder, three-manias
-- L182 [7] Teacher-stamped catalog — 86 production slides keyed `image_id` → `extracted_path`
-- L183 [7] Two-tier palette — graphic tier for lines/fills, lifted text tier for numerals on dark pills
-- L185 [7] THE VERDICT STACK - the operator's "evidence wall" — (card `dock_payload:stack`) — FIVE phases over the world plate, full-stage: each already-docked proof ENTERS one at a time from depth on its own verbatim phrase
-- L186 [7] Chart self-containment gates — auto-fit checklist columns, skew-pivot highlighter sweeps, nowrap pills, mark backing chips + dotted leaders, named reference series, log-chart date ticks, head
-- L188 [2] Script & voice — | Capability | Where | State | Proof | {Strength loop; Doctrine audit + pattern lint; Opening-structure gate} <multi-scale; script-writer; mini-payoff; head-fake; loop-close; kit_spec.a3_anchor_s; unit_windows; CHECK-RESPONSIBILITIES; Script-gate; main(); script_hash; VERDICT>
-- L192 [7] Strength loop — multi-scale fixpoint (L0–L6 + X1–X5), rewrite budget, oscillation escalation
-- L193 [7] Doctrine audit + pattern lint — timed gates from text via dual rate estimators (16.29 c/s, 170.9 wpm)
-- L194 [7] Opening-structure gate — G01–G44 + J01–J11: the doc-38 / P1 / P2 shape as a real gate (3s grab, 8s paradox, "you" by 0:30, mini-payoff then the promise by 0:60, A1/A2/A3 with A3 = 10% o
-- L195 [7] Script-gate RUNNER + recording refusal — ONE command runs lint → audit → opening gate → screens through each tool's own `main()`, writes `<script>-GATES.md` (the §5 TOOLS block, every stdout verbatim,
-- L196 [7] Opening-minute gates (E24) — the analyst's drop-off review (operator-verified against analytics) as gates, doc 29 §9.29–9.30: G45 packaging echo — the title/thumbnail content words (`--titl
-- L197 [7] G2 short mode (doc 51 s51.2 as gates) — a MEASURED clock under 3:00 (or `--short`) routes `gate_opening_structure` to the shorts shape instead of the long-form geometry: S01 hook lands in 0:00–0:03; S
-- L198 [7] Docs index (retrieval layer) — one flat, greppable record per heading under `docs/` (path, line, level, doc id, heading, lead line, up to six bold labels) plus every CAPABILITIES and BACKLOG
-- L199 [7] The docs retrieval layers — the index's six siblings, run and checked by one command: the manifest (one record per document: bylines, every heading, labels, leads), the topic index + citat
-- L200 [7] Declared-beat enumeration — `<script>-SCREENS.md` gains a DECLARED section: every beat tag with its clock, the gate's window verdict, the sentence under it and a blank verdict column the a
-- L201 [7] Recorder preflight — 16 gates: split-on-pause, tag cap, paragraph density, stacked pauses, credits-for-both-parts
-- L202 [7] Pause compilation — marks → break tags, backticks consumed, dirty-tag guard RAISES
-- L203 [7] Scratch take (stage zero) — free full-script render before any credit: Chirp 3 HD (fast listen, key in local.env) + Kokoro-82M local (word timestamps, jump index, real chars/sec)
-- L204 [7] Tempo field edit — one-pass PCM edit: dead-space caps, tighten runs, pauses, and a continuous tempo curve (speed limits at reveal anchors, 1.10x cruise, 1.6s ramps; words never sp
-- L205 [7] Checklist species = THE TEST CARD — (card `chart_dock:checklist`) — live procedural cards: rows land narration-keyed; question cells TYPE on, answer cells take a marker-highlight sweep (technique
-- L206 [7] SCML monitor cards — the ledger's instruments as evidence: tripwire board (FRED DFF vs Bravos' 5.50 trigger + memory trigger, contagion status verbatim) and the memory monitor (cust
-- L207 [7] Whisper gate — transcribe the take blind, diff vs script; FAIL on insertions/deletions, WER > 5%
-- L208 [7] Defended join — part-1 tail faded to silence after last word + generated settle; provider-appended junk dies by construction
-- L209 [7] Edit-pause insertion — the ~3-tag practice's owed silences cut into the take at verbatim anchors; timeline shifted
-- L210 [7] Retime pass — docks pin to anchors' new word times; plates warp between control points; same-slide gaps stitch
-- L211 [7] Caption pages regen — ~3-word kinetic pages with k-flags from the current timeline
-- L212 [7] Topic-exit audit — E11 enumeration of every dock vs the narration it serves; exits authored to topic ends
-- L213 [7] Choreography clash gates — same-slot overlap + >2 concurrent docks FAIL
-- L215 [7] Pause grammar, GENERATIVE — scans the VO for grammar classes (stat-settle→era-shift FULL; snap settles / era breaths / reveal leads HALF), diffs against the standing plan; run before every
-- L216 [7] Micro-repair — sub-word provider stutters excised free: envelope-localize, fade-free preview candidates, zero-cross butt splice, words.json shifted, verify from the EDITED mas
-- L217 [7] Stutter auto-scan — NEGATIVE result, do not rebuild: three envelope detectors all failed validation against the known case; ear detects, envelope localizes
-- L219 [2] External evidence sources — | Source | Where | Gives | Rule | {SCML ledger; memory export tracker} <DART-filed; cross-validate; value-per-kg; primary-source; read-only; cross-checked>
-- L223 [7] SCML ledger — the operator's Korea/memory intelligence base
-- L225 [2] Reference builds (locked) — | Reference | Where | Governs | {current-bubble-five-minute-v4; Gemini showcases} <side-by-side>
-- L229 [7] current-bubble-five-minute-v4
-- L230 [7] Gemini showcases
-- L232 [2] The research reference layer (2026-09-04) — Docs 42–46 condense the research evidence bundle into what is applicable here. {42–46; every heading of every bundle document} <RESEARCH-INDEX; DRAWING-KINETICS; closed-form; SCENE-GRAPH-AND-TRANSFORM; Z-stack; INK-AND-SURFACE; PARALLAX-AND-PLATE-MOTION; REFERENCE-RHYTHM; FINDINGS-TO-CHECKS; THE-FIGURE-AND-THE-GROUND; GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE; THE-PHONE-IS-THE-SCREEN>
-- L257 [2] The enforcement layer (P37, 2026-09-04) — The research of 2026-09-04 as checks that run - each shown failing before passing (47 §5b). {M14; Comfy / parallax config gate} <_build_clashes; ViT-L; ViT; plate-kind; safe-box; eye-line; feet-anchored; INFO-then-FAIL; hard-coded; #stage; viewBox; full-stage>
-- L263 [7] M14 — a camera move never overlaps an evidence build (entrance through the last badge settle)
-- L264 [7] Comfy / parallax config gate — dials (intensity 0.10-0.12, tiling none, ssaa >= 1.5, quality >= 80, ViT-L), Wan 4k+1 / LTX 8n+1, CFG <= 4.5, FP8/quantized checks, plate-kind matrix
-- L265 [7] Vertical safe-box gate — 9:16 docks in x[80,880] y[280,1340], caption in the strip; static CSS reader + rendered rectangles
-- L266 [7] Transform lint — scale/rotate without a declared origin
-- L267 [7] G15b ring mechanism — the close returns the P1 claim's content stems, not just the token
-- L268 [7] Grounding gates — eye-line on the horizon, feet-anchored sprites, solver per contact beat
-- L269 [7] Portrait parity gate — (2026-09-08) — operator: "how do we make sure that anything that is hard-coded to landscape is actually responsive to mobile?" A lint on the template (no 1920/1
-- L270 [7] The recall receipt — (2026-09-08) — a commit touching the player template, `kinetics/`, the timeline compiler, the motion gate or a short's `build_short.py` must carry `Recall: <pat
-- L271 [7] M23 — chart transitions — (2026-09-10, P48 T6) — every `chart_to` listed with its scene, verb and clock; WARN inside the page's build beat or within 0.5 s of its exit; FAIL on a page wit
-- L272 [7] Muted-caption judge — a model reads the captionless frame; verdict + `scenery` / `over-dense` diagnosis owned by code
-- L273 [7] M32 / M33 / M34 - the seam's black frame, the spoken visual, the collision ledger — (2026-09-13, `5aa0f8f`; P54 T9 + K9) - M32: `measure_seam_frames.py` seeks every boundary FRAME BY FRAME and FAILs near-black (mean luma < 8 `[MEASURED on the a
-- L274 [7] G13 by FUNCTION, and G46 / G47 / G47b / G48 - what a script promises about itself — (2026-09-13, `5aa0f8f`) - G13: the PLATFORM rehook slots A1 ~0:30 and A2 ~1:00 are scored by FUNCTION - a line that re-justifies the next stretch (a declared `[
-- L275 [7] The E79 scale WARN - side-by-side panels of the same measure share ONE scale — (2026-09-13, `5aa0f8f`; the operator) - `ledger_page.scale_warnings`: on a `tiers` page the builder groups the panels by UNIT and, where a same-unit group carri
-- L276 [7] A GATED STEP NEVER LOSES ITS EXIT CODE TO `tail` / `head` — (2026-09-13, `5aa0f8f`) - twice the pipe ate the verdict: a join's drift gate FAILED behind `
-- L277 [7] The viewer (P36) — a blind, windowed perception test: an agent that knows no doctrine reads the script cold in 15s windows with a two-window memory; a deterministic scorer measure
-- L279 [2] The golden-frame harness (P39 T2/T3, 2026-09-04) — Four committed surfaces - ledger page mid-build, chart with a callout, 16:9 dock pair, {our} <mid-build; one-value; prepare_page(); wall-clock; fit-scaled>
-- L298 [2] The frozen baseline (P39 T1, 2026-09-04) — The last known-good player is tagged `player-baseline-2026-09-04` (annotated; the {`player-baseline-2026-09-04`} <known-good; 3a0e092; byte-identical; git hash-object; rev-parse; per-capability>
-- L312 [2] The effects catalogue, the recipes and the one-shot floor (P55 / P56, 2026-09-13) — E96: a beat is authored as a RECIPE - a proven combination of catalogue effects with offsets - and a cut is measured against {The effects catalogue} <<axis>:<token>; does; lives; docs_find; build_effects_catalog.py --write; effects_card.py "<name>"; scandir; FrameIndex; copy_if_stale; re-copying; gallery-top; gallery-axis-kinetics>
-- L319 [7] The effects catalogue — (P55) - one card per effect the engine performs (129 cards on 18 axes: id `<axis>:<token>`, aliases with sources, `does`, the compiler's own WHEN, phases + blen
-- L320 [7] Recipe cards — (P56 T1-T4, T9) - a recipe = ORDERED members (card ids, an option token where the member names one, offsets from the first member, a role each, `optional` where
-- L321 [7] The one-shot floor v2 — (P56 T6-T7; E96, HG1 = A) - rows M35-M42 measured from a compiled timeline: M35 distinct chart forms >= 3; M36 chart-to-chart transforms >= 1 (a `chart_to` spec
-- L323 [2] What is NOT built yet — [`BACKLOG.md`](BACKLOG.md) — the hand-maintained open work, and the scope shift <hand-maintained; auto-generated>
-- L330 [2] The recall rule — 1. `ls` and read the index before searching (PIPELINE.md, this file, PLATE-LIBRARY, CHOREOGRAPHY). {in the same commit; closes its BACKLOG.md row in the same commit} <PLATE-LIBRARY>
+- L124 [7] VO tone chain + gate — the voice's measured EQ, applied once between the join and the timeline: a 70 Hz high-pass, −3.2 dB at 280 Hz, +5 narrow at 800 Hz, −4 at 1400 Hz, +6 narrow at
+- L125 [7] Choreography ledger + gates — every enter/exit/side/how-it-leaves, gated per slot; FAIL blocks the build
+- L126 [7] Whiteboard reveal engine — serpentine SVG mask + hand follower, pose set with per-pose nib calibration
+- L127 [7] Remotion Production Console — local timeline/canvas editor + Python bridge (`127.0.0.1:4317`): scrub/zoom/drag/trim, hash-bound immutable revisions, recompiles without touching narration or
+- L128 [7] Remotion composition registry — single source of truth for editor compositions (Editorial, Documentary, motion variants, finance proofs, production evidence/timeline, 3D prototypes)
+- L129 [7] Editor fixtures — editorial-motion two-shot with render harness (`render.mjs`), canonical audio fixture
+- L130 [7] remotion-ui registry — (external, MIT) — ~200 copy-in `.tsx` components: captions, data/live metrics, SVG draw-on paths, TransitionSeries transitions, motion primitives; MCP server (`
+- L131 [7] Hyperframes — HTML-to-video rendering framework & motion system (DOM `data-*` timeline, clips, tracks, sub-compositions, 7 runtime adapters [GSAP, Lottie, Three.js, Anime.js,
+- L133 [2] Generative video, 2.5D parallax & driver automation (2026-09) — Rescued onto main 2026-09-03: this stack was written UNTRACKED in the main checkout {ComfyUI 2.5D Parallax Engine} <127.0.0.1:8188; zero-hallucination; Depth Anything v2; Depthflow; re-generates; *.mp4; Mask-pinned; bit-for-bit; LTX-Video; --denoise; LaMa; depth-split>
+- L142 [7] ComfyUI 2.5D Parallax Engine — zero-hallucination monocular metric depth (`Depth Anything v2`) + virtual 3D camera trajectory displacement (`Depthflow` GLSL: dolly, zoom, circle, horizontal,
+- L143 [7] Mask-pinned AMBIENT lane (local ComfyUI) — an approved still, a SAM 2 object mask, a LIFE region, a prompt -> an mp4 where everything outside the region is the still bit-for-bit and only the region is ge
+- L144 [7] SAM 2 + LaMa occlusion inpainting — (ComfyUI nodes) - the precondition for parallax on any plate carrying an actor: SAM 2 cuts the subject to an alpha PNG, LaMa fills the hole behind it (~0.3s), a
+- L145 [7] The layered plate - generated, or depth-split as the fallback — (P58 T1, E98 s6) - a plate is GENERATED one layer at a time (far / board / mid / near), never cut out of a stacked generation; an existing flat plate may be spl
+- L146 [7] The plate library knows its layers — (P58 T2) - a plate's sidecar `<plate>.layers.json` lists `layers[] {path, role, depth, alpha, generator}` back to front (`depth` = the parallax k; generator gpt
+- L147 [7] The camera over layers — (P58 T3, E59/E49) - a layered world paints each plane with the ONE camera read at its own k (doc 24's planes: far 1.0, board 1.05, mid 1.15, near 1.40), so para
+- L148 [7] The ledger page as a card at a depth — (P58 T4, E98 s3) - page options `;depth=<k>` and `;plane=tilt:<deg>[,y
+- L149 [7] Two chart forms in 2.5D — (P58 T5, E98 s3) - `;form=extruded_bar` (a prism per bar, one light, a hard-edge cast shadow, every label where the flat bar puts it, a drop extruding down from
+- L150 [7] The docks and the melt's ball at a depth — (P58 T6 (a)(b), E98 s4) - a dock option `depth=<k>` takes the camera's move at its plane (0..4; refused nearer than the occluder's 1.40 with `behind=`, and with
+- L151 [7] The slide through the depth — (P58 T6c, E98 s4 / E87 s3) - `slide:<dir>[:<s>]:depth=<k_out>,<k_in>`: the outgoing board eases to k_out as it leaves and the incoming eases from k_in as it lan
+- L152 [7] The first 2.5D cut — (P58 T7, E98 / E49 / E59) - the Japan tariff short rebuilt privately with its ship plate layered under the receipt page's camera arrival, that page at depth 1.1
+- L153 [7] LTX-Video 2B DiT ambient engine — (ComfyUI node) - local physical motion loops (haze, embers, drifting cloud, water) on a still plate, ~12s on the local GPU, zero cloud credits; SAM 2's mask pin
+- L154 [7] Google Flow driver — zero-credit multi-reference generative diffusion over an ACTIVE Chrome CDP session (port 9222); the CDP path is the ONLY live one - `src/cdp-driver.mjs` + `dag-
+- L155 [7] Video engine MCP - TWO surfaces, verified by live handshake 2026-09-03
+- L156 [7] Flow stdio dispatcher + character A/B — (2026-09-08) — `create_flow_image` over the MCP's stdio JSON-RPC, one order file per prompt (`omni-video/dispatch_crossings_map.py`, `*.order.json` v1-v8), the
+- L157 [7] Chrome extension + native messaging host + the `flow-queue` MCP surface — the pre-CDP bridge: a packaged extension (`extension/`), a native messaging host (`native-host/`) and 11 queue/bridge tools (`flow_enqueue_batch`, `flow_bridge_
+- L158 [7] Video perception (`/watch`) — acquisition via `yt-dlp`, frame extraction via `ffmpeg` (scene-aware or keyframe), timestamped transcript from native captions or Whisper
+- L165 [2] Evidence & assets — Martial Matters episode 1 (merged from p16, 2026-08-29): 192 asset files {Martial Matters episode 1; Flow character pack} <martial-matters; word-timed; candidate; non-renderable; finance-host-v1; finance-host-stick-v1; three-quarter; paper-toy; operator-approved; @Mike; dab5d902; @MikeMasterV3>
+- L178 [7] Flow character pack — the host identity as a validated, hashed, non-renderable contract: `finance-host-v1` (retention: full suit detail, the recognised woodblock print + vox newspape
+- L179 [7] THE RAILWAY YARDSTICK — recurring channel instrument: tech share of ALL US capital formation (narrow 28% all-time high vs 23% dot-com; broad 65%; UK railways ~50% one-technology refere
+- L180 [7] Plate library — 326 plates indexed by SEMANTIC across all worktrees and CHANNEL-AWARE (money-physics 134 / martial-matters 192); channels are identity walls — the resolver refu
+- L181 [7] Chart builders — real-data charts (yfinance/FRED), verbatim end labels, month/year axes, series sidecars
+- L182 [7] Live HTML evidence sources — karp/leases/macdonald records, instrument-memory, mechanism-ladder, three-manias
+- L183 [7] Teacher-stamped catalog — 86 production slides keyed `image_id` → `extracted_path`
+- L184 [7] Two-tier palette — graphic tier for lines/fills, lifted text tier for numerals on dark pills
+- L186 [7] THE VERDICT STACK - the operator's "evidence wall" — (card `dock_payload:stack`) — FIVE phases over the world plate, full-stage: each already-docked proof ENTERS one at a time from depth on its own verbatim phrase
+- L187 [7] Chart self-containment gates — auto-fit checklist columns, skew-pivot highlighter sweeps, nowrap pills, mark backing chips + dotted leaders, named reference series, log-chart date ticks, head
+- L189 [2] Script & voice — | Capability | Where | State | Proof | {Strength loop; Doctrine audit + pattern lint; Opening-structure gate} <multi-scale; script-writer; mini-payoff; head-fake; loop-close; kit_spec.a3_anchor_s; unit_windows; CHECK-RESPONSIBILITIES; Script-gate; main(); script_hash; VERDICT>
+- L193 [7] Strength loop — multi-scale fixpoint (L0–L6 + X1–X5), rewrite budget, oscillation escalation
+- L194 [7] Doctrine audit + pattern lint — timed gates from text via dual rate estimators (16.29 c/s, 170.9 wpm)
+- L195 [7] Opening-structure gate — G01–G44 + J01–J11: the doc-38 / P1 / P2 shape as a real gate (3s grab, 8s paradox, "you" by 0:30, mini-payoff then the promise by 0:60, A1/A2/A3 with A3 = 10% o
+- L196 [7] Script-gate RUNNER + recording refusal — ONE command runs lint → audit → opening gate → screens through each tool's own `main()`, writes `<script>-GATES.md` (the §5 TOOLS block, every stdout verbatim,
+- L197 [7] Opening-minute gates (E24) — the analyst's drop-off review (operator-verified against analytics) as gates, doc 29 §9.29–9.30: G45 packaging echo — the title/thumbnail content words (`--titl
+- L198 [7] G2 short mode (doc 51 s51.2 as gates) — a MEASURED clock under 3:00 (or `--short`) routes `gate_opening_structure` to the shorts shape instead of the long-form geometry: S01 hook lands in 0:00–0:03; S
+- L199 [7] Docs index (retrieval layer) — one flat, greppable record per heading under `docs/` (path, line, level, doc id, heading, lead line, up to six bold labels) plus every CAPABILITIES and BACKLOG
+- L200 [7] The docs retrieval layers — the index's six siblings, run and checked by one command: the manifest (one record per document: bylines, every heading, labels, leads), the topic index + citat
+- L201 [7] Declared-beat enumeration — `<script>-SCREENS.md` gains a DECLARED section: every beat tag with its clock, the gate's window verdict, the sentence under it and a blank verdict column the a
+- L202 [7] Recorder preflight — 16 gates: split-on-pause, tag cap, paragraph density, stacked pauses, credits-for-both-parts
+- L203 [7] Pause compilation — marks → break tags, backticks consumed, dirty-tag guard RAISES
+- L204 [7] Scratch take (stage zero) — free full-script render before any credit: Chirp 3 HD (fast listen, key in local.env) + Kokoro-82M local (word timestamps, jump index, real chars/sec)
+- L205 [7] Tempo field edit — one-pass PCM edit: dead-space caps, tighten runs, pauses, and a continuous tempo curve (speed limits at reveal anchors, 1.10x cruise, 1.6s ramps; words never sp
+- L206 [7] Checklist species = THE TEST CARD — (card `chart_dock:checklist`) — live procedural cards: rows land narration-keyed; question cells TYPE on, answer cells take a marker-highlight sweep (technique
+- L207 [7] SCML monitor cards — the ledger's instruments as evidence: tripwire board (FRED DFF vs Bravos' 5.50 trigger + memory trigger, contagion status verbatim) and the memory monitor (cust
+- L208 [7] Whisper gate — transcribe the take blind, diff vs script; FAIL on insertions/deletions, WER > 5%
+- L209 [7] Defended join — part-1 tail faded to silence after last word + generated settle; provider-appended junk dies by construction
+- L210 [7] Edit-pause insertion — the ~3-tag practice's owed silences cut into the take at verbatim anchors; timeline shifted
+- L211 [7] Retime pass — docks pin to anchors' new word times; plates warp between control points; same-slide gaps stitch
+- L212 [7] Caption pages regen — ~3-word kinetic pages with k-flags from the current timeline
+- L213 [7] Topic-exit audit — E11 enumeration of every dock vs the narration it serves; exits authored to topic ends
+- L214 [7] Choreography clash gates — same-slot overlap + >2 concurrent docks FAIL
+- L216 [7] Pause grammar, GENERATIVE — scans the VO for grammar classes (stat-settle→era-shift FULL; snap settles / era breaths / reveal leads HALF), diffs against the standing plan; run before every
+- L217 [7] Micro-repair — sub-word provider stutters excised free: envelope-localize, fade-free preview candidates, zero-cross butt splice, words.json shifted, verify from the EDITED mas
+- L218 [7] Stutter auto-scan — NEGATIVE result, do not rebuild: three envelope detectors all failed validation against the known case; ear detects, envelope localizes
+- L220 [2] External evidence sources — | Source | Where | Gives | Rule | {SCML ledger; memory export tracker} <DART-filed; cross-validate; value-per-kg; primary-source; read-only; cross-checked>
+- L224 [7] SCML ledger — the operator's Korea/memory intelligence base
+- L226 [2] Reference builds (locked) — | Reference | Where | Governs | {current-bubble-five-minute-v4; Gemini showcases} <side-by-side>
+- L230 [7] current-bubble-five-minute-v4
+- L231 [7] Gemini showcases
+- L233 [2] The research reference layer (2026-09-04) — Docs 42–46 condense the research evidence bundle into what is applicable here. {42–46; every heading of every bundle document} <RESEARCH-INDEX; DRAWING-KINETICS; closed-form; SCENE-GRAPH-AND-TRANSFORM; Z-stack; INK-AND-SURFACE; PARALLAX-AND-PLATE-MOTION; REFERENCE-RHYTHM; FINDINGS-TO-CHECKS; THE-FIGURE-AND-THE-GROUND; GENERATIVE-VIDEO-AND-THE-VERTICAL-STAGE; THE-PHONE-IS-THE-SCREEN>
+- L258 [2] The enforcement layer (P37, 2026-09-04) — The research of 2026-09-04 as checks that run - each shown failing before passing (47 §5b). {M14; Comfy / parallax config gate} <_build_clashes; ViT-L; ViT; plate-kind; safe-box; eye-line; feet-anchored; INFO-then-FAIL; hard-coded; #stage; viewBox; full-stage>
+- L264 [7] M14 — a camera move never overlaps an evidence build (entrance through the last badge settle)
+- L265 [7] Comfy / parallax config gate — dials (intensity 0.10-0.12, tiling none, ssaa >= 1.5, quality >= 80, ViT-L), Wan 4k+1 / LTX 8n+1, CFG <= 4.5, FP8/quantized checks, plate-kind matrix
+- L266 [7] Vertical safe-box gate — 9:16 docks in x[80,880] y[280,1340], caption in the strip; static CSS reader + rendered rectangles
+- L267 [7] Transform lint — scale/rotate without a declared origin
+- L268 [7] G15b ring mechanism — the close returns the P1 claim's content stems, not just the token
+- L269 [7] Grounding gates — eye-line on the horizon, feet-anchored sprites, solver per contact beat
+- L270 [7] Portrait parity gate — (2026-09-08) — operator: "how do we make sure that anything that is hard-coded to landscape is actually responsive to mobile?" A lint on the template (no 1920/1
+- L271 [7] The recall receipt — (2026-09-08) — a commit touching the player template, `kinetics/`, the timeline compiler, the motion gate or a short's `build_short.py` must carry `Recall: <pat
+- L272 [7] The test-deletion receipt — (2026-09-16) - a commit that REMOVES a test names it in the message (`Tests-removed: <name> - <why>`) or is refused. A removed `def test_*` that still exists an
+- L273 [7] M23 — chart transitions — (2026-09-10, P48 T6) — every `chart_to` listed with its scene, verb and clock; WARN inside the page's build beat or within 0.5 s of its exit; FAIL on a page wit
+- L274 [7] Muted-caption judge — a model reads the captionless frame; verdict + `scenery` / `over-dense` diagnosis owned by code
+- L275 [7] M32 / M33 / M34 - the seam's black frame, the spoken visual, the collision ledger — (2026-09-13, `5aa0f8f`; P54 T9 + K9) - M32: `measure_seam_frames.py` seeks every boundary FRAME BY FRAME and FAILs near-black (mean luma < 8 `[MEASURED on the a
+- L276 [7] G13 by FUNCTION, and G46 / G47 / G47b / G48 - what a script promises about itself — (2026-09-13, `5aa0f8f`) - G13: the PLATFORM rehook slots A1 ~0:30 and A2 ~1:00 are scored by FUNCTION - a line that re-justifies the next stretch (a declared `[
+- L277 [7] The E79 scale WARN - side-by-side panels of the same measure share ONE scale — (2026-09-13, `5aa0f8f`; the operator) - `ledger_page.scale_warnings`: on a `tiers` page the builder groups the panels by UNIT and, where a same-unit group carri
+- L278 [7] A GATED STEP NEVER LOSES ITS EXIT CODE TO `tail` / `head` — (2026-09-13, `5aa0f8f`) - twice the pipe ate the verdict: a join's drift gate FAILED behind `
+- L279 [7] The viewer (P36) — a blind, windowed perception test: an agent that knows no doctrine reads the script cold in 15s windows with a two-window memory; a deterministic scorer measure
+- L281 [2] The golden-frame harness (P39 T2/T3, 2026-09-04) — Four committed surfaces - ledger page mid-build, chart with a callout, 16:9 dock pair, {our} <mid-build; one-value; prepare_page(); wall-clock; fit-scaled>
+- L300 [2] The frozen baseline (P39 T1, 2026-09-04) — The last known-good player is tagged `player-baseline-2026-09-04` (annotated; the {`player-baseline-2026-09-04`} <known-good; 3a0e092; byte-identical; git hash-object; rev-parse; per-capability>
+- L314 [2] The effects catalogue, the recipes and the one-shot floor (P55 / P56, 2026-09-13) — E96: a beat is authored as a RECIPE - a proven combination of catalogue effects with offsets - and a cut is measured against {The effects catalogue} <<axis>:<token>; does; lives; docs_find; build_effects_catalog.py --write; effects_card.py "<name>"; scandir; FrameIndex; copy_if_stale; re-copying; gallery-top; gallery-axis-kinetics>
+- L321 [7] The effects catalogue — (P55) - one card per effect the engine performs (129 cards on 18 axes: id `<axis>:<token>`, aliases with sources, `does`, the compiler's own WHEN, phases + blen
+- L322 [7] Recipe cards — (P56 T1-T4, T9) - a recipe = ORDERED members (card ids, an option token where the member names one, offsets from the first member, a role each, `optional` where
+- L323 [7] The one-shot floor v2 — (P56 T6-T7; E96, HG1 = A) - rows M35-M42 measured from a compiled timeline: M35 distinct chart forms >= 3; M36 chart-to-chart transforms >= 1 (a `chart_to` spec
+- L325 [2] What is NOT built yet — [`BACKLOG.md`](BACKLOG.md) — the hand-maintained open work, and the scope shift <hand-maintained; auto-generated>
+- L332 [2] The recall rule — 1. `ls` and read the index before searching (PIPELINE.md, this file, PLATE-LIBRARY, CHOREOGRAPHY). {in the same commit; closes its BACKLOG.md row in the same commit} <PLATE-LIBRARY>
 
 ## docs/content-video-engine/EXPLORATION-INVENTORY-2026-09-10.md
 
@@ -4495,12 +4541,12 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
 ## docs/content-video-engine/REVIEW-QUEUE.md
 
-- L1 [1] REVIEW QUEUE - what the operator can judge now — Generated from [`review-queue.v1.json`](review-queue.v1.json) by `content/video_engine/scripts/build_review_queue.py --write`; do not edit this file by hand. It {As of; E99 s14:} <review-queue.v1.json; review-queue; OPEN-GATES-AND-QUESTIONS; 9c9c358; approved; review-answers.jsonl; build_review_queue.py --answers; review_queue_proofs.py --clips; r26-70-compare-morph; r26-70-compare-morph-0.mp4; remake-bars-to-line; mid-gather>
-- L10 [2] Watch (1) — | id | item | what to judge | proof | documents | options | agent's recommendation | blocks | sources | {Bars -> line, rebuilt: the bars collapse to the apex point,} <r26-70-compare-morph; r26-70-compare-morph-0.mp4; remake-bars-to-line; mid-gather; un-writing; xfRemakeLineClock; xfGatherK; xfRingTo; xfDrawWindow; lpRemakeApex; lpRemakeDrawBack; dash-offset>
-- L16 [2] Look (0) — Nothing open.
-- L20 [2] Rule (0) — Nothing open.
-- L24 [2] Approve / push (0) — Nothing open.
-- L28 [2] Owed by the agent before it comes back to you (5) — | id | item | what the agent owes | blocks | {A plate's drift idle paints nothing} <r26-133-drift-idle-paints-nothing; painted-vs-held; mask-pinned; r26-76-melt-endings-in-motion; p48-hg3-morph-onto-planted; chart-to-chart; r26-117-ball-into-the-next-chart; hand-over; ball-into-the-next-chart; p54-hg3-astra-fable-bakeoff; Astra-vs-Fable; bake-off>
+- L1 [1] REVIEW QUEUE - what the operator can judge now — Generated from [`review-queue.v1.json`](review-queue.v1.json) by `content/video_engine/scripts/build_review_queue.py --write`; do not edit this file by hand. It {As of; E99 s14:} <review-queue.v1.json; review-queue; OPEN-GATES-AND-QUESTIONS; 9c9c358; approved; review-answers.jsonl; build_review_queue.py --answers; review_queue_proofs.py --clips; r26-133-drift-idle-paints-nothing; three-way; HG-drift; r26-133-drift-idle-paints-nothing-0.mp4>
+- L10 [2] Watch (5) — | id | item | what to judge | proof | documents | options | agent's recommendation | blocks | sources | {The same plate three ways: held, the drift painted, and brou} <r26-133-drift-idle-paints-nothing; three-way; HG-drift; r26-133-drift-idle-paints-nothing-0.mp4; r26-133-drift-idle-paints-nothing-1.mp4; plate-drift; r26-133-drift-idle-paints-nothing-2.mp4; r26-133-drift-idle-paints-nothing-3.mp4; r26-133-drift-idle-paints-nothing-4.mp4; held-vs-drift; held-vs-alive; LTX-Video>
+- L20 [2] Look (0) — Nothing open.
+- L24 [2] Rule (0) — Nothing open.
+- L28 [2] Approve / push (0) — Nothing open.
+- L32 [2] Owed by the agent before it comes back to you (1) — | id | item | what the agent owes | blocks | {The Astra-vs-Fable bake-off} <p54-hg3-astra-fable-bakeoff; BAKEOFF-ASTRA-FABLE>
 - L38 [2] Ruled since the last pass — | id | item | ruling / evidence | sources | {The first 2.5D cut (Japan); The caption's default setting, by ear} <p58-hg2-first-2-5d-cut; content-video-engine; r26-123-caption-default; HG-HANDOFF; THE-BACKLOG-BURNDOWN; OPERATOR-RULINGS; p52-gate3-species-proof-motion; OPEN-GATES-AND-QUESTIONS; p51-editor-gates-2-3; OPERATOR-DECISIONS; THE-ANIMATORS-LOOP; p58-hg3-chart-forms>
 
 ## docs/content-video-engine/RULE-abstract-to-concrete.md
@@ -4648,6 +4694,10 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L19 [2] Stamping Onto Any Repository — Run the self-contained stamping CLI: <self-contained; full; AST-grep; web; video; VideoDB; api>
 - L27 [3] Profiles Available — - `full` — All 33 curated skills, full subagent library, AST-grep gates, and 5-journey eval suite. {`full`; `web`; `video`; `api`} <AST-grep; VideoDB>
 - L35 [2] Documentation for Agents — - [Agent Self-Evaluation & Adoption Guide](./AGENT_SELF_EVALUATION_GUIDE.md) — Step-by-step instructions for an agent in an external repo to evaluate and adopt {[Agent Self-Evaluation & Adoption Guide](./AGENT_SELF_EVALUA; [Harness Evaluation Checklist](./HARNESS_EVALUATION_CHECKLIS} <Step-by-step>
+
+## docs/LANE-REGISTER.md
+
+- L1 [1] LANE REGISTER - who is writing what, right now — E99 s47 (2026-09-15): parallel work is the requirement, and the cost is paid with AWARENESS - every agent reads this file at <docs-layer; E99 s<n>; build_docs_layers.py --write; review-queue.v1.json; tempo_edit; ten-test; .env.example; test-deletion; beat-tag; delivery-mark; effects-catalog; verdict-stack>
 
 ## docs/operator-ledger/PORTABLE-AUDIT.md
 
@@ -5025,6 +5075,18 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L143 [2] **Strategic Synthesis and Practical Execution** — Elevating faceless audio-visual scripts requires synthesizing acoustic precision with deep narrative engineering. At the sentence level, scripts must be compose <audio-visual; active-voice; single-idea; high-value; McKee; expectation-reality; long-form; high-impact; podcast-production; Broadcast-Writing; ResearchGate; SocialRevver>
 - L149 [4] **Works cited** — > 1. Radio Production \- Inside Book Publishing, [https://routledgetextbooks.com/textbooks/9781138819979/chapters.php](https://routledgetextbooks.com/textbooks/ <podcast-production; Broadcast-Writing; ResearchGate; McKee; SocialRevver; robert-mckee-story-structure; RobertMcKeeStorypdf; the-anatomy-of-a-story-john-truby; John-Truby-Anatomy-of-Story; well-defined; WritingHub; story-structure>
 
+## docs/research/audio/ELEVENLABS-OUTPUT-FORMAT-TIERS.md
+
+- L1 [1] ElevenLabs TTS `output_format` — values and subscription-tier gates — Date: 2026-09-15 · Role: docs_researcher · Method: ElevenLabs official API <byte-for-byte; mp3_44100_128; DEFAULT_ELEVENLABS_OUTPUT_FORMAT; api-reference; text-to-speech; convert-with-timestamps; paid-tier; per-plan; μ; mu-law; u-law; mp3_44100_192>
+- L13 [2] Sources — | # | URL | What it gives | <api-reference; text-to-speech; convert-with-timestamps; output_format; paid-tier; per-plan>
+- L22 [2] The verbatim tier sentences (S1, S2 — identical text on both pages) — Full `output_format` parameter description, quoted verbatim: <output_format; μ; mu-law; u-law>
+- L38 [2] The three formats in question — | enum | rate / bitrate | documented tier gate | source | {No tier gate stated.; Creator tier or above} <mp3_44100_128; mp3_44100_192; pcm_44100; little-endian>
+- L46 [2] Every `pcm_*` value, with gates — Enum values verbatim from the "Allowed values" list on S1/S2. {Not documented.; Pro tier or above} <pcm_8000; pcm_16000; pcm_22050; pcm_24000; pcm_32000; pcm_44100; pcm_48000; wav_44100; wav_*; wav_8000; wav_32000; wav_48000>
+- L65 [2] Full enum, verbatim (S1 and S2, identical) — `alaw_8000`, `mp3_22050_32`, `mp3_24000_48`, `mp3_44100_128`, `mp3_44100_192`, <alaw_8000; mp3_22050_32; mp3_24000_48; mp3_44100_128; mp3_44100_192; mp3_44100_32; mp3_44100_64; mp3_44100_96; opus_48000_128; opus_48000_192; opus_48000_32; opus_48000_64>
+- L79 [2] Alignment under PCM — the blocker question — The `with-timestamps` response schema (S1), verbatim: <with-timestamps; audio_base64; characters; character_start_times_seconds; character_end_times_seconds; normalized_alignment; character-level; audio-text; output_format; PCM-specific; word-level; mp3_44100_128>
+- L111 [2] Not documented / unknown — | Question | Status | {Not documented.; Not present.} <mp3_44100_128; pcm_48000; wav_48000; pcm_*; ulaw_8000; alaw_8000; per-plan; format-by-tier; output_format; per-format; alignment; mp3_44100_192>
+- L122 [2] Consequence for us — Moving the next record to `pcm_44100` requires Pro tier or above; moving to {Pro tier or above; Creator tier or above} <pcm_44100; mp3_44100_192; mp3_44100_128>
+
 ## docs/research/audio/SUBTHRESHOLD_BACKGROUND_MUSIC_RESEARCH_BLUEPRINT.md
 
 - L1 [1] Sub-threshold Background Music — Research Blueprint — *Pass-1 discovery brief · 2026-09-01 · sources: Exa semantic + Tavily <well-supported; just-audible; room-tone; zero-cross; subliminal-audio; sub-question; Egermann et al.; SPL-verified; Greenwald et al.; double-blind; self-help; detection-without-identification>
@@ -5051,10 +5113,10 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L101 [3] 1. Model Tier: Migrate from Public Stock to Bespoke Voice Clone — - Action: Stop using public library presets (ElevenLabs "Adam", Chirp "Charon"). {Action:; Implementation:; Professional Voice Clone (PVC); Alternative (Multi-Voice Latent Blending):} <ElevenLabs; YouTube; voice-vector>
 - L106 [3] 2. Intonation Reset Elimination via Payload Reflowing — - Action: Stop feeding raw, line-broken display scripts into the TTS engine. {Action:; Implementation:; Movement Reflow Rule; Punctuation Architecture:} <line-broken; em-dashes; em-dash>
 - L111 [3] 3. Dynamic Prosodic Pacing Map — - Action: Replace uniform speed multipliers with structural tempo mapping. {Action:; Implementation:; never} <[tempo: fast]; [tempo: standard]; [tempo: deliberate]>
-- L117 [3] 4. Acoustic Harmonization & Spectral Conditioning — - Action: Eliminate the "clinical plastic" digital finish of raw TTS. {Action:; DSP Chain:} <High-Pass; sub-bass; micro-harmonics; Soft-knee>
-- L126 [3] 5. Continuous Room-Tone & Subthreshold Music Bed — - Action: Never permit zero-cross digital silence between words. {Action:; Implementation:; -20 LU to -22 LU below dialogue; -28 LU below dialogue} <zero-cross; long-form>
-- L134 [2] Sources — 1. Mayer, R. E., Sobko, K., & Mautone, P. D. (2003). Social cues in multimedia learning: Role of speaker's voice. Journal of Educational Psychology, 95(4), 803– <Re-examining; Text-to-Speech; meta-analysis; affective-cognitive; YouTube; Long-Form; case-studies; youtube-retention-voice-comparison; youtube-voiceover-retention-ai-vs-human; ITU-R; true-peak; R-REC-BS>
-- L153 [2] NOT FOUND WHERE I LOOKED — 1. Controlled Double-Blind YouTube Retention Tests on ElevenLabs v3 vs ElevenMultilingual v2: {Controlled Double-Blind YouTube Retention Tests on ElevenLab; YouTube Recommendation System Exact Weight for Voice Embeddi} <ElevenLabs; ElevenMultilingual; third-party; RecSys>
+- L117 [3] 4. Acoustic Harmonization & Spectral Conditioning — > MEASURED AND PARTLY REFUTED 2026-09-15 — E99 s48. Do not propose this chain again as written. {MEASURED AND PARTLY REFUTED 2026-09-15 — E99 s48. Do not pro} <referenced; high-pass; sub-bass; render_episode.py:84; compositor.py:354; double-normalises; bed_gain(VO_LUFS, ...); non-reversible; micro-harmonics; Soft-knee>
+- L144 [3] 5. Continuous Room-Tone & Subthreshold Music Bed — - Action: Never permit zero-cross digital silence between words. {Action:; Implementation:; -20 LU to -22 LU below dialogue; -28 LU below dialogue} <zero-cross; long-form>
+- L152 [2] Sources — 1. Mayer, R. E., Sobko, K., & Mautone, P. D. (2003). Social cues in multimedia learning: Role of speaker's voice. Journal of Educational Psychology, 95(4), 803– <Re-examining; Text-to-Speech; meta-analysis; affective-cognitive; YouTube; Long-Form; case-studies; youtube-retention-voice-comparison; youtube-voiceover-retention-ai-vs-human; ITU-R; true-peak; R-REC-BS>
+- L171 [2] NOT FOUND WHERE I LOOKED — 1. Controlled Double-Blind YouTube Retention Tests on ElevenLabs v3 vs ElevenMultilingual v2: {Controlled Double-Blind YouTube Retention Tests on ElevenLab; YouTube Recommendation System Exact Weight for Voice Embeddi} <ElevenLabs; ElevenMultilingual; third-party; RecSys>
 
 ## docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md
 
@@ -5524,6 +5586,7 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L70 [2] 4. Inspect AND measure — No visual or audio artifact is delivered, and no "fixed" is said, until both: {the frames; the geometry} <render_baseline.serve; frame_png; javascript_tool>
 - L83 [2] 5. When the record is silent — Say so in the receipt; propose the smallest opt-in that leaves the goldens byte-identical {opt-in} <byte-identical>
 - L90 [2] 6. Cheap candidates first — For a subjective media edit — a plate, a look, a motion — generate two or three cheap preview candidates <re-roll>
+- L96 [2] The second receipt, beside this one - test deletions (2026-09-16) — Same shape, same refusal-not-reminder principle, chained into the same `commit-msg` hook: a commit that {a commit that removes a test names it; What earned it.} <refusal-not-reminder; commit-msg; Tests-removed; def test_*; t.index(marker); use; test_a_plate_may_name_its_use; on-disk; FUNCTION-NAME; --message "<msg>" --staged>
 
 ## docs/runbooks/RENDER-REGRESSION.md
 
