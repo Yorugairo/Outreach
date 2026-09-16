@@ -466,36 +466,38 @@
         "E99 s52 (the ground arrives)",
         "P61 HG2b-2",
         "E99 s57 (the scene before)",
-        "E99 s60"
+        "E99 s60",
+        "P61 T3d",
+        "P61 HG2b-3"
       ],
-      "kind": "owed",
-      "title": "The morph onto a planted element - the board's ink now spreads out from the splotch, never snapping in around it",
-      "judge": "Owed by the agent - see `owed`. The question, once the real beat exists: watching the scene as a viewer would, does the chart morph out of the thing that was standing there, honestly, or does the seam show?",
+      "kind": "watch",
+      "title": "The morph onto a planted element, on a real scene: the panelist's tie becomes the holdings chart",
+      "judge": "Your ruling (E99 s60): a fixture held still is not a scene. This is the real Tokyo beat, built in a private test bed: the approved blue-ties panel plate alive under the take (\"Three men in blue ties blame the deficit...\"), the light on the bench, the cut on \"The Treasury's table\" at 11.8 s - and the MIDDLE panelist's tie, traced off the plate's own last frame, is what stands on the cream after the cut. The ground soaks out from it, the tie stretches into the area under the 316-point holdings line, the title writes, the ring lands on February. Watch 0-18.9 s as a viewer would. Does the chart come out of the thing that was standing there, honestly - or does the seam show? Name the instant if it does.",
       "where": [
         {
-          "label": "the page's first frame (15.00) - the planted form alone on the cream, no board around it (was: the full charcoal fill)",
-          "path": "content/video_engine/tests/golden/frames/morph-planted.png"
+          "label": "the scene before (1.0 s): the panel plate, the light on the three men, the caption landing",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-planted/planted-tie-source-frame.png"
         },
         {
-          "label": "the ground arriving (@proof-ground) - the soak's ink spreading out from the splotch",
+          "label": "the last plate frame (11.76 s) - the middle panelist's tie, where the silhouette was traced (42 points, contourSilhouette, bbox x 0.333-0.365 y 0.417-0.464 of the stage)",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-planted/planted-tie.poly.json"
+        },
+        {
+          "label": "the cut (11.80 s): the tie's own silhouette in charcoal, standing where the tie stood; the ground already spreading from it by 12.3 s; the morph lands at 13.55 s; the chart by 17 s with the ring on February",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-planted/GATES-MOTION.md"
+        },
+        {
+          "label": "the mechanism's goldens stand unchanged (the fixture proves the trace, the ground, the morph; it is not served as a scene)",
           "path": "content/video_engine/tests/golden/frames/morph-planted@proof-ground.png"
         },
         {
-          "label": "half way (16.00) - the form stretching toward the area, the board filling under it",
-          "path": "content/video_engine/tests/golden/frames/morph-planted@proof-050.png"
-        },
-        {
-          "label": "the engine: `handed` moved above the field beat; groundS = morphS x MORPH.GROUND (1.5 s); the soak's nearest stain seeded on the prop's centroid (SEED_R, SEED_POW, SEED_LAG); buildMorph's morph-ground path keeps the prop ink until the board is",
-          "path": "docs/content-video-engine/samples/scene-evidence-engine.mjs"
-        },
-        {
-          "label": "the compiler stamps field=soak on a morph page naming none",
-          "path": "content/video_engine/scripts/build_scene_timeline_f.py"
+          "label": "the build: the real take windowed 8.99-27.89 s (never re-timed), the shot table, the trace, the engine pinned to the committed one",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-planted/build_planted.py"
         }
       ],
       "options": [],
-      "recommendation": "",
-      "blocks": "P48 T5b's proof; P48 HG3; P61 T3d",
+      "recommendation": "The morph itself is honest: the shape that grows into the chart is the tie's own outline, in the tie's own place, and the ground arrives from it as s52 asked. The seam, read as a viewer, is NOT the morph's - it is the cut: at 11.80 the whole busy plate is gone and a small dark shape stands on near-empty cream for about 0.4 s before the soak reads. That is the committed mechanism (the prop alone, then the ground). If that quiet is the thing you notice, the follow-up is the plate lingering or dissolving under the arriving ground rather than cutting to cream - a card of its own. Gate on the beat: 22 PASS, M11 FAIL only on the 0-10 s window a windowed beat cannot meet, M17 WARN (its invariants were written for a fixture; one real finding, a strip inversion, goes to the backlog).",
+      "blocks": "P48 T5b's proof; P48 HG3; P61 HG2b-3",
       "sources": [
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:178-186",
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:412",
@@ -511,13 +513,27 @@
         "docs/content-video-engine/review-answers.jsonl (2026-09-16)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s52)",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3b)",
-        "docs/portable/OPERATOR-RULINGS.md (E99 s57)"
+        "docs/portable/OPERATOR-RULINGS.md (E99 s57)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s60)",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3d)",
+        "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-planted/GATES-MOTION.md"
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": "watch",
-      "owed": "E99 s60 (2026-09-16): the clip served was the golden fixture - a synthetic splotch held still on cream - and the operator refused it as a scene (\"we would never do that\"). Owed: a private test-bed build of a real beat - an approved plate with a real planted element (the tie, or a Tokyo / Japan prop), the scene playing, the cut, the morph onto the element, the chart built - and its clip (P61 T3d). The mechanism's goldens stand.",
-      "proofs": []
+      "was_kind": "owed",
+      "owed": "Delivered 2026-09-16 (P61 T3d): the real beat in a private test-bed build, its clip on the build route",
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "THE BEAT (9:16, 18.9 s): the panel alive, the cut, the tie standing, the ground arriving, the morph, the chart, the ring",
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-planted",
+          "page": "player.html",
+          "aspect": "9:16",
+          "t0": 0.0,
+          "t1": 18.9,
+          "route": "review_queue_proofs.py --clips: the private build's player served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent); the approved Tokyo cut untouched (E45)"
+        }
+      ]
     },
     {
       "id": "p58-hg3-chart-forms",
@@ -3211,7 +3227,8 @@
         "E99 s43 (the rails re-laid)",
         "P61 HG7b",
         "E99 s59 (the gather, the last card centre, the burst tighter)",
-        "P61 HG7c"
+        "P61 HG7c",
+        "E99 s61"
       ],
       "kind": "watch",
       "title": "The verdict stack: the last card lands at the centre, the wall gathers on it, then the tighter burst",
@@ -3244,7 +3261,7 @@
       ],
       "options": [],
       "recommendation": "Approve. Read at 15.79 against 15.40: the wall visibly closes on the verdict card and reads as one object before it fires; at 16.75 the verdict card is the last thing standing. Two things named, not built, for your call: the gather draws 22 % of the way in (the rails never reach the centre card's core, so the verdict stays readable) - say if it should draw further; and on the full frame 'the centre' is the focus spot, 40 px right and 88 px above the geometric centre, the pose T7 pinned.",
-      "blocks": "HG7c",
+      "blocks": "nothing - ruled E99 s61 (2026-09-16): the vertical approved as built; the horizontal keeps the reference - T7d returns the 16:9 form to Steel and Paper's numbers",
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md (E99 s21)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s21)",
@@ -3261,8 +3278,8 @@
         "docs/portable/OPERATOR-RULINGS.md (E99 s59)",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T7c)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s61",
       "was_kind": "watch",
       "owed": "Delivered 2026-09-16 (P61 T7c): the centre landing, the gather, the tighter burst on both forms; four goldens; three clips",
       "proofs": [

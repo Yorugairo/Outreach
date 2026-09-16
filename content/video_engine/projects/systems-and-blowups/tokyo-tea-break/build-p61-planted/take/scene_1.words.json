@@ -1,0 +1,274 @@
+{
+ "words": [
+  {
+   "w": "Three",
+   "start_s": 0.101,
+   "end_s": 0.344
+  },
+  {
+   "w": "men",
+   "start_s": 0.391,
+   "end_s": 0.542
+  },
+  {
+   "w": "in",
+   "start_s": 0.6,
+   "end_s": 0.669
+  },
+  {
+   "w": "blue",
+   "start_s": 0.728,
+   "end_s": 0.937
+  },
+  {
+   "w": "ties",
+   "start_s": 0.971,
+   "end_s": 1.308
+  },
+  {
+   "w": "blame",
+   "start_s": 1.366,
+   "end_s": 1.645
+  },
+  {
+   "w": "the",
+   "start_s": 1.68,
+   "end_s": 1.749
+  },
+  {
+   "w": "deficit,",
+   "start_s": 1.796,
+   "end_s": 2.399
+  },
+  {
+   "w": "the",
+   "start_s": 2.515,
+   "end_s": 2.62
+  },
+  {
+   "w": "Fed,",
+   "start_s": 2.69,
+   "end_s": 3.015
+  },
+  {
+   "w": "or",
+   "start_s": 3.05,
+   "end_s": 3.154
+  },
+  {
+   "w": "the",
+   "start_s": 3.2,
+   "end_s": 3.27
+  },
+  {
+   "w": "vibes",
+   "start_s": 3.317,
+   "end_s": 3.746
+  },
+  {
+   "w": "at",
+   "start_s": 3.781,
+   "end_s": 3.862
+  },
+  {
+   "w": "Jackson",
+   "start_s": 3.92,
+   "end_s": 4.292
+  },
+  {
+   "w": "Hole.",
+   "start_s": 4.338,
+   "end_s": 4.814
+  },
+  {
+   "w": "On",
+   "start_s": 5.255,
+   "end_s": 5.43
+  },
+  {
+   "w": "YouTube,",
+   "start_s": 5.499,
+   "end_s": 6.057
+  },
+  {
+   "w": "it's",
+   "start_s": 6.103,
+   "end_s": 6.312
+  },
+  {
+   "w": "sixty-three",
+   "start_s": 6.347,
+   "end_s": 6.927
+  },
+  {
+   "w": "stick",
+   "start_s": 6.95,
+   "end_s": 7.171
+  },
+  {
+   "w": "figures.",
+   "start_s": 7.229,
+   "end_s": 7.81
+  },
+  {
+   "w": "Here's",
+   "start_s": 8.018,
+   "end_s": 8.251
+  },
+  {
+   "w": "what",
+   "start_s": 8.286,
+   "end_s": 8.413
+  },
+  {
+   "w": "nobody",
+   "start_s": 8.483,
+   "end_s": 8.854
+  },
+  {
+   "w": "on",
+   "start_s": 8.924,
+   "end_s": 9.005
+  },
+  {
+   "w": "that",
+   "start_s": 9.052,
+   "end_s": 9.179
+  },
+  {
+   "w": "panel",
+   "start_s": 9.249,
+   "end_s": 9.516
+  },
+  {
+   "w": "is",
+   "start_s": 9.574,
+   "end_s": 9.644
+  },
+  {
+   "w": "watching:",
+   "start_s": 9.714,
+   "end_s": 10.224
+  },
+  {
+   "w": "our",
+   "start_s": 10.468,
+   "end_s": 10.608
+  },
+  {
+   "w": "biggest",
+   "start_s": 10.677,
+   "end_s": 10.967
+  },
+  {
+   "w": "lender.",
+   "start_s": 11.025,
+   "end_s": 11.525
+  },
+  {
+   "w": "The",
+   "start_s": 11.85,
+   "end_s": 11.966
+  },
+  {
+   "w": "Treasury's",
+   "start_s": 12.012,
+   "end_s": 12.442
+  },
+  {
+   "w": "table",
+   "start_s": 12.488,
+   "end_s": 12.79
+  },
+  {
+   "w": "shows",
+   "start_s": 12.825,
+   "end_s": 13.069
+  },
+  {
+   "w": "Japan",
+   "start_s": 13.127,
+   "end_s": 13.51
+  },
+  {
+   "w": "holds",
+   "start_s": 13.58,
+   "end_s": 13.812
+  },
+  {
+   "w": "over",
+   "start_s": 13.858,
+   "end_s": 14.056
+  },
+  {
+   "w": "a",
+   "start_s": 14.125,
+   "end_s": 14.16
+  },
+  {
+   "w": "trillion",
+   "start_s": 14.23,
+   "end_s": 14.683
+  },
+  {
+   "w": "dollars",
+   "start_s": 14.741,
+   "end_s": 15.077
+  },
+  {
+   "w": "of",
+   "start_s": 15.112,
+   "end_s": 15.17
+  },
+  {
+   "w": "our",
+   "start_s": 15.228,
+   "end_s": 15.344
+  },
+  {
+   "w": "debt,",
+   "start_s": 15.402,
+   "end_s": 15.751
+  },
+  {
+   "w": "and",
+   "start_s": 15.797,
+   "end_s": 15.948
+  },
+  {
+   "w": "it's",
+   "start_s": 15.995,
+   "end_s": 16.111
+  },
+  {
+   "w": "been",
+   "start_s": 16.145,
+   "end_s": 16.273
+  },
+  {
+   "w": "selling",
+   "start_s": 16.32,
+   "end_s": 16.633
+  },
+  {
+   "w": "since",
+   "start_s": 16.691,
+   "end_s": 16.912
+  },
+  {
+   "w": "February.",
+   "start_s": 16.947,
+   "end_s": 17.748
+  },
+  {
+   "w": "I",
+   "start_s": 18.258,
+   "end_s": 18.328
+  },
+  {
+   "w": "ran",
+   "start_s": 18.444,
+   "end_s": 18.63
+  }
+ ]
+}

@@ -121,12 +121,12 @@ that page only with the operator's ruling written to `docs/portable/OPERATOR-RUL
 | --- | --- | --- | --- |
 | **HG1** | T2 | `r26-70-compare-morph` (rewritten) | "Watch the two clips end to end. Does it **read as a transformation, not a cut, and read as intentional** (E99 s34)? The entire chart should transform - every series, datum and axis. Approve, or name what cuts or reads as accidental." **RULED 2026-09-15 (E99 s39): line -> bars taken; bars -> line rebuilt in T2b** **HG1b RULED 2026-09-16 (E99 s50): bars -> line approved; closed** |
 | **HG2** | T3 | `r26-117-ball-into-the-next-chart` (**created by the parent at T3's dispatch** - it does not exist today; it supersedes the `"missing": true` line on `r26-70-compare-morph`) | "The page melts, balls up, and the ball becomes the NEXT FULL CHART with no cut between. Watch 0:00-0:08. Does the hand-over hold, or does it read as a jump?" **T3 LANDED 2026-09-16: card open (watch, clip 14.6-21.2 s)** **RULED 2026-09-16 (E99 s53): good; the chart-to-ball snap re-timed - T3c** **HG2-2 RULED 2026-09-16 (E99 s58): approved** |
-| **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" **T3 LANDED 2026-09-16: card open (watch, clip 14.4-20.3 s)** **RULED 2026-09-16 (E99 s52): the morph fine; the fill may not snap in - T3b** **HG2b-2 (E99 s57): the ground reads; the clip re-windowed to the scene before - open** **E99 s60: the fixture is not a scene - OWED again, T3d (a real beat in a test-bed build)** |
+| **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" **T3 LANDED 2026-09-16: card open (watch, clip 14.4-20.3 s)** **RULED 2026-09-16 (E99 s52): the morph fine; the fill may not snap in - T3b** **HG2b-2 (E99 s57): the ground reads; the clip re-windowed to the scene before - open** **E99 s60: the fixture is not a scene - OWED again, T3d (a real beat in a test-bed build)** **HG2b-3 open 2026-09-16 (watch): the real beat - the panelist's tie becomes the chart, on the build route** |
 | **HG3** | T4a | `p58-hg3-extruded-bar-leave` | "`form-extruded-bar@proof-leave` beside `form-tilted-line@proof-leave`, as clips. Do the prism's shapes break down enough now? Approve, or say 'more'." **RULED 2026-09-15 (E99 s40): approved** |
 | **HG4** | T4b | `p58-hg3-forms-mount-not-scribble` | "The formed page arriving by the two-plate cross-fade and by the soak, each leaving by the soak's recede (E99 s35). Watch both enters and the leave. Approve, or name what still reads wrong." **RULED 2026-09-15 (E99 s41): approved** |
 | **HG5** | T5 | `r26-118-metallic-ball` | "The ball, before and after: more shadow, a dark Fresnel rim, a metallic band, one point of deep shadow depth. Does it read metallic and heavy now, or still glossy?" **RULED 2026-09-15 (E99 s42): refused - the prior ball + the darkness; T5b** **HG5b RULED 2026-09-16 (E99 s49): the reference body; T5c** |
 | **HG6** | T6 | `r26-76-melt-endings-in-motion` | "The melt as the vortex's motion gathered into one dense, heavy, vibrating point, splashing into a full chart / world plate. Watch the gather and the splash. Approve the new default, or keep today's look behind the flag." **PROOF B LANDED 2026-09-16 via T3: card open (watch, both clips)** **RULED 2026-09-16 (E99 s51): the gather approved; the splash becomes a throw - T6b** **HG6-2 RULED 2026-09-16 (E99 s56): approved; R26-157 the off-screen throw** |
-| **HG7** | T7 | `r26-82-verdict-stack-choreography` | "The verdict stack on a short with Steel and Paper's choreography - cards that move, then the burst. Watch it beside the Steel and Paper reference clip. Approve, or name the phase that is still flat." **RULED 2026-09-15 (E99 s43): rails in reading order; T7b** **HG7b RULED 2026-09-16 (E99 s59): the pair method right; the last card centre, the gather, the tighter burst - T7c** **HG7c open 2026-09-16 (watch): the centre landing, the gather, the tighter burst - three clips** |
+| **HG7** | T7 | `r26-82-verdict-stack-choreography` | "The verdict stack on a short with Steel and Paper's choreography - cards that move, then the burst. Watch it beside the Steel and Paper reference clip. Approve, or name the phase that is still flat." **RULED 2026-09-15 (E99 s43): rails in reading order; T7b** **HG7b RULED 2026-09-16 (E99 s59): the pair method right; the last card centre, the gather, the tighter burst - T7c** **HG7c open 2026-09-16 (watch): the centre landing, the gather, the tighter burst - three clips** **HG7c RULED 2026-09-16 (E99 s61): the vertical approved; the horizontal keeps the reference - T7d** |
 | **HG8** | T8 | `r26-80-agenda-page-owed` | "The beautified agenda page - the plate version of the list effect, each row with its catalogued icon stamped after its sentence (E93). Beside today's three plain rows. Approve, or name the change." **RULED 2026-09-15 (E99 s44): approved as a build** |
 | **HG9** | T9 | `p55-gallery-speed-and-motion` | "The gallery: its build time before and after, and three effects a still cannot show now carrying a clip. Is it fast enough and clear enough? Approve, or name what is still unreadable." |
 | **HG10** | T10 | `r26-84-engine-saved-states` | "Three routes to parallel agents without worktrees, each with its cost and what it breaks, and the agent's recommendation. Which route do we take - or does it need its own plan?" **RULED 2026-09-15 (E99 s47): worktrees with both agents aware; P62 = the register** |
@@ -525,7 +525,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   MELT.S moves every melt golden's instants - offered on the card, not decided.
 
 ### T3d: THE PLANTED MORPH ON A REAL SCENE - a test-bed beat, not the fixture (E99 s60)
-- Status: pending
+- Status: complete (2026-09-16) - HG2b-3 open on the queue as `p48-hg3-morph-onto-planted` (watch, the build route)
 - Owner: `implementation_luna` (**NO engine lock** - a private build; the engine as committed)
 - Depends on: T3, T3b (the mechanism), E99 s60
 - Write set: a NEW private build directory `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-planted/` (or the Japan
@@ -538,7 +538,25 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   the clip through `review_queue_proofs.py` on the build route. The approved cuts untouched (E45); Tokyo is the test bed (no render asked).
 - Validate: `python content/video_engine/scripts/gate_motion_density.py <the private build>` (M23 / M31 / M25 / M28 at or better than the
   parent's reading) then `python content/video_engine/scripts/review_queue_proofs.py --clips --only p48-hg3-morph-onto-planted`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T3d.md`. A NEW private build `tokyo-tea-break/build-p61-planted/` (nothing outside it written;
+  the approved cut and every engine file untouched): the operator-approved `still-c-blue-ties-panel.png` (APPROVALS.json, 2026-09-05) under
+  the REAL Tokyo take windowed 8.99-27.89 s (ffmpeg cut, word times shifted, never re-timed; 18.90 s, 54 words, 12 caption pages); the
+  light on the three men at the words, a second on the crowd; the cut `cut_before("The Treasury's table")` = 11.79 s (M13); the page
+  `ledger:ev-japan-holdings-v1:line:315:right:morph:cut`, field=soak stamped by the compiler (T3b); the planted source the MIDDLE
+  panelist's tie traced off THIS build's stage frame at t_cut - 1/30 by `contourSilhouette` (42 points from 2160 ink samples, bbox
+  x 0.333-0.365 y 0.417-0.464), written with its source frame's sha and re-checked by the compiler's `morph_poly_error`; @Mike's red
+  tie rejected (~15 px wide, crosses the lapel and beard). The engine PINNED to HEAD's (`git show HEAD:...`, sha 6dbed297..., the plate's
+  last frame byte-identical under both) because T7c held the lock. PARENT'S READ of the clip (frames at 1.0 / 11.73 / 11.83 / 12.3 /
+  12.6 / 13.05 / 13.55 / 17.5): the panel alive with the light; the last plate frame with the tie behind the pointing hand; at the cut
+  the tie's silhouette alone on cream with the soak already spreading from it; the ground wide by 12.3, the board nearly charcoal by
+  13.05 with the morph form's serrated top edge; the area under the line at 13.55 with the title writing; the full chart, the coral
+  last segment, '-9.9% Japan', the source line and the ring on 'February' at 17.5. The honest reservation carried onto the card: the
+  seam is the CUT, not the morph - the busy plate vanishes to near-empty cream for ~0.4 s before the soak reads (the committed
+  mechanism). Gate `gate_motion_density.py`: 1 FAIL / 2 WARN / 22 PASS - M25 / M28 / M31 PASS, M23 not run (no chart_to); M11 FAIL only
+  on the 0-10 s first-chart window a windowed beat cannot meet; M17 WARN: three invariants unreachable for any planted source (written
+  for the fixture) and one real finding, `min det -0.182` - a strip inversion on a tall-thin source (a backlog row for the engine);
+  M34 WARN the series label 120 px from the line's end. `measure_seam_frames` 1 boundary / 0 faults; `measure_spoken_visuals` 0
+  uncovered. Clip `proof-planted.mp4` 720x1280, 284 frames, 18.93 s, on the build route.
 
 ### T4a: THE EXTRUDED BAR'S LEAVE BREAKS ITS SHAPES DOWN MORE
 - Status: complete (2026-09-15) - HG3 open on the queue as `p58-hg3-extruded-bar-leave` (watch, two clips)
@@ -976,6 +994,29 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   centre' is the focus spot (40 px right / 88 px above the stage centre). Validate: node 611/611; sync in sync; pytest 164 passed
   (test_verdict_stack 19 = 13 kept + 6 new, the two browser readers on one playwright driver); effects_catalog_check 0 failures;
   page-boxes 44 (player_sha256 d4621c99b66e -> c3e6166e89ff, sha-only). Card `dock_payload:stack` gains the gather phase.
+
+### T7d: THE FULL FRAME KEEPS THE REFERENCE - the gather, the centre landing and the tighter burst are 9:16-only (E99 s61)
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK**)
+- Depends on: T7c, HG7c (ruled E99 s61)
+- Write set: `content/video_engine/scripts/species/verdict.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the stack region by
+  `sync_kinetics.py --write`), `content/video_engine/tests/kinetics/verdict.test.mjs`, `content/video_engine/tests/test_verdict_stack.py`,
+  `content/video_engine/tests/golden/frames/verdict-stack*.png` (the 16:9 five back to pre-T7c bytes; `verdict-stack@proof-gather.png` deleted),
+  `content/video_engine/scripts/render_baseline.py` (the 16:9 gather PROOF_FRAMES entry removed), `content/video_engine/tests/golden/build_golden_sources.py`
+  (only if FRAME_T carries the 16:9 gather instant), `content/video_engine/effects/cards/dock_payload.json` (the card says which form gathers),
+  `content/video_engine/assets/page-boxes.v1.json` (sha-only re-pin)
+- Acceptance: E99 s61 verbatim - *"that vertical is great. on horizontal i still prefer the reference."* `VERDICT` (16:9) carries the reference's
+  numbers again: the last card hands the focus on 0.9 s before the clear and recedes to its raster spot, no gather (the pull 0 or the phase gated
+  off), BURST_STAGGER 0.06, BURST_S 0.50, the throw from the rail pose, no centre-last; `VERDICT_9X16` carries T7c's - GATHER 0.9 / PULL 0.22 /
+  CORE 0.5 / GAP 16, BURST 0.035 / 0.42, BURST_CENTRE_BY 1.0, the last card at the centre. THE PROOF IS BYTE IDENTITY: `verdict-stack.png`,
+  `verdict-stack@proof-enter/focus/idle/burst.png` equal to `git show <the commit before T7c>:<path>` (sha256 each, written in the report); the
+  four 9:16 T7c goldens byte-identical to T7c's; every other golden untouched. The compiler's `STACK_BURST_STAGGER 0.06` / `STACK_BURST_S 0.5` /
+  `STACK_RECEDE_LEAD` now match the 16:9 form exactly and are a CEILING for 9:16 (the mirror test says which).
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs`; `python content/video_engine/scripts/sync_kinetics.py --check`;
+  `python -m pytest content/video_engine/tests/test_verdict_stack.py content/video_engine/tests/test_golden_frames.py -q`;
+  `python content/video_engine/scripts/effects_catalog_check.py`; `python content/video_engine/scripts/measure_page_boxes.py --write` then
+  `python -m pytest content/video_engine/tests/test_page_boxes.py -q`; the sha256 table of the five 16:9 goldens against the pre-T7c commit
+- Evidence: pending
 
 ### T8: THE BEAUTIFIED AGENDA PAGE - the plate version of the list effect
 - Status: complete (2026-09-15) - HG8 open on the queue as `r26-80-agenda-page-owed` (watch)

@@ -18,7 +18,7 @@ reference as normalised (`42§42.2` - which `46 s46.4` also writes - `29§Part3`
 `E38`, `M13`, `G-j`); a list (`docs 39 and 40`) makes one edge per document, and `to` is
 null when nothing in the index answers it.
 
-5634 topics, 10018 citation edges. The 200 largest topics follow,
+5632 topics, 10048 citation edges. The 200 largest topics follow,
 at most 12 sections each - the JSONL holds every one.
 
 ## youtube (213)
@@ -720,6 +720,24 @@ at most 12 sections each - the JSONL holds every one.
 - content/video_engine/sources/reference_analyses/complete_research_evidence_bundle/MASTER_RESEARCH_INDEX.md:1 — Master Research Index: The High-Retention Video & 2.5D Drawing Engine — Authoritative Knowledge Base, Evidence Inventory, Mathematical Formulation Index, and System Architecture Guide
 - … 19 more in `docs/DOCS-TOPICS.jsonl`
 
+## follow-up (31)
+
+- content/video_engine/projects/systems-and-blowups/new-package-2026-09-15/PRODUCTION-LEDGER.md:1 — New Money Physics package — Status: preproduction; review-only, unpublished. Latest user request controls: NEW package following script guidelines,
+- content/video_engine/projects/systems-and-blowups/new-package-2026-09-15/PRODUCTION-LEDGER.md:14 — Current frontier — OPERATOR ANSWER ARRIVED: topic selection must follow current finance/tech search demand, considering frontier AI pullbac
+- content/video_engine/projects/systems-and-blowups/registration/README.md:50 — Open follow-ups — 1. Merge into the deck manifest in the p29 worktree (cross-branch — deliberate
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:1 — Tokyo Tea Break — review, 2026-09-03 — Reviewed: `SCRIPT-90S-VO.txt` (67 s at the Chirp scratch pace, 194 words) and
+- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:14 — TOOLS (final verdicts) — A finding about our instrument, not the script: 17 of the 90-second short's 23
+- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:1 — Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
+  cited by: docs/content-video-engine/README.md:20
+- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:12 — V4 pivot record — The anchorable 2D experiment improved body ownership but did not remove the
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:133 — What our pipeline does not yet encode — Measured against the 16:21 p34 cut: one visual event every 9.2s (60 evidence
+- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:328 — Voiceover and title doctrine — probed 2026-08-24 — Follow-up probes after the fact-check, plus one live run of the
+- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:181 — 8. Pipeline adoption candidates — 1. Script QC additions (join doc 31 §4's three passes): terminal-stress
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1 — 38 — Script Architecture: the deterministic prompt structure — Operator thesis (2026-08-24), and this document's organizing principle:
+  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:100, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:118, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:137, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:203, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:55, content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:132, +9 more
+- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:19 — 1. Audit — how the script skills address this today — Honest state, per the operator's question:
+- … 19 more in `docs/DOCS-TOPICS.jsonl`
+
 ## high-contrast (31)
 
 - content/video_engine/projects/systems-and-blowups/korea-memory-toll/assets/characters/hollow-stick-mike/CHARACTER-PACK.md:1 — @HollowStickMike — Character Asset Dossier & Prompt Architecture — Registered Asset: `content/video_engine/projects/systems-and-blowups/korea-memory-toll/assets/characters/hollow-stick-mi
@@ -747,7 +765,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/portable/OPERATOR-RULINGS.md:2661 — E88 — The melt takes the chart, not the page: the ink balls up heavy, then leaves or paints what comes next (2026-09-13) — Ruling (the operator, human gate 2 of P52, the melt's four instants): *"for the melt, i actually didn't envision melting
   cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/agent-memory/operator/resume-2026-09-12.md:244, docs/agent-memory/operator/resume-2026-09-12.md:259, docs/CAPABILITIES-INDEX.md:10, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, +9 more
 - docs/portable/OPERATOR-RULINGS.md:2761 — E93 — An agenda row carries an icon, stamped on once its sentence has been read (2026-09-13) — Ruling (the operator, on beautifying P52's numbered agenda, gate 3): *"i think agenda rows should carry icons, the icons
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/REVIEW-QUEUE.md:35, docs/portable/OPERATOR-RULINGS.md:2901
+  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/REVIEW-QUEUE.md:34, docs/portable/OPERATOR-RULINGS.md:2901
 - docs/research/motion/BRIEF-WEIGHT-DENSITY-MASS-2026-09-07.md:1 — Research brief — weight, density and mass in drawing, animation and stop-motion — Asked by: the operator, 2026-09-07, on Tokyo v3's first throw and landing (P47 T1, HG2): *"The throw comes on, but it
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:1 — HyperFrames Motion, Transitions, and Kinetic Transformations — Research Blueprint — Pass-3 deep extraction · 2026-09-06 · sources: HeyGen HyperFrames official documentation (overview, motion, transitions,
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:5 — The question — How does HeyGen HyperFrames structure motion design, scene transitions, stop-motion physics, and transformations, and ho
@@ -755,24 +773,6 @@ at most 12 sections each - the JSONL holds every one.
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:85 — Rule 8 — Handmade Imperfection Stays Reproducible — Handmade, woodblock, paper-cutout, or stop-motion aesthetics require discrete stepped holds (on-twos). To prevent non-de
 - docs/research/motion/HYPERFRAMES_MOTION_TRANSITIONS_RESEARCH_BLUEPRINT.md:179 — 5. Stop-Motion Physics and Deterministic Frame Quantization — For paper-cutout, woodblock, and hand-animated aesthetics (e.g. Money Physics / Tokyo Tea Break), continuous floating-po
 - … 19 more in `docs/DOCS-TOPICS.jsonl`
-
-## follow-up (30)
-
-- content/video_engine/projects/systems-and-blowups/new-package-2026-09-15/PRODUCTION-LEDGER.md:1 — New Money Physics package — Status: preproduction; review-only, unpublished. Latest user request controls: NEW package following script guidelines,
-- content/video_engine/projects/systems-and-blowups/new-package-2026-09-15/PRODUCTION-LEDGER.md:14 — Current frontier — OPERATOR ANSWER ARRIVED: topic selection must follow current finance/tech search demand, considering frontier AI pullbac
-- content/video_engine/projects/systems-and-blowups/registration/README.md:50 — Open follow-ups — 1. Merge into the deck manifest in the p29 worktree (cross-branch — deliberate
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:1 — Tokyo Tea Break — review, 2026-09-03 — Reviewed: `SCRIPT-90S-VO.txt` (67 s at the Chirp scratch pace, 194 words) and
-- content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:14 — TOOLS (final verdicts) — A finding about our instrument, not the script: 17 of the 90-second short's 23
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:1 — Content-to-Video Flywheel — Brainstorm, Challenges, and Decisions — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/content-video-engine/README.md:20
-- docs/content-video-engine/00-BRAINSTORM-AND-DECISIONS.md:12 — V4 pivot record — The anchorable 2D experiment improved body ownership but did not remove the
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:133 — What our pipeline does not yet encode — Measured against the 16:21 p34 cut: one visual event every 9.2s (60 evidence
-- docs/content-video-engine/28-AOY-MCP-EVALUATION.md:328 — Voiceover and title doctrine — probed 2026-08-24 — Follow-up probes after the fact-check, plus one live run of the
-- docs/content-video-engine/32-WRITING-FOR-THE-EAR.md:181 — 8. Pipeline adoption candidates — 1. Script QC additions (join doc 31 §4's three passes): terminal-stress
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:1 — 38 — Script Architecture: the deterministic prompt structure — Operator thesis (2026-08-24), and this document's organizing principle:
-  cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:100, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:118, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-EXTERNAL-REVIEW.md:137, content/video_engine/projects/systems-and-blowups/steel-and-paper/SCRIPT-E-STRENGTH-LOG.md:203, content/video_engine/projects/systems-and-blowups/tokyo-tea-break/REVIEW-2026-09-03.md:55, content/video_engine/sources/reference_analyses/give-me-10-minutes-make-videos-addicting/REPORT.md:132, +9 more
-- docs/content-video-engine/38-SCRIPT-ARCHITECTURE.md:19 — 1. Audit — how the script skills address this today — Honest state, per the operator's question:
-- … 18 more in `docs/DOCS-TOPICS.jsonl`
 
 ## intensity (30)
 
@@ -2242,7 +2242,7 @@ at most 12 sections each - the JSONL holds every one.
   cited by: docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:149
 - docs/content-video-engine/13-GOOGLE-FLOW-CHARACTER-BUILDER-SPEC.md:25 — Browser workflow — 1. Open Google Flow's character builder and select Nano Banana Pro.
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:1 — Art Style Reference Review — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:149, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:1, docs/content-video-engine/REVIEW-QUEUE.md:35, docs/operator-ledger/TRIAGE-DIGEST.md:22, +1 more
+  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:149, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:1, docs/content-video-engine/REVIEW-QUEUE.md:34, docs/operator-ledger/TRIAGE-DIGEST.md:22, +1 more
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:15 — The finding that matters — None of the reference channels animate characters. No articulated limbs, no rigs, no
 - docs/content-video-engine/23-EP1-LIBRARY-INTAKE-REVIEW.md:118 — Accept — cast (15) — Identity holds across all five poses for each character. Garment colours stay
 - … 4 more in `docs/DOCS-TOPICS.jsonl`
@@ -2438,7 +2438,7 @@ at most 12 sections each - the JSONL holds every one.
   cited by: docs/content-video-engine/briefs/RESEARCH-BRIEF-animation-craft.md:118
 - docs/content-video-engine/09-YOUTUBE-REFERENCE-PACK-LEARNINGS.md:20 — Active carry-forward subset — 2026-07-31 — Only the rules in this subsection are operative for the living-scene History
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:1 — Art Style Reference Review — > STATUS: RECORD. A point-in-time research note, review, or planning document. Not maintained, and not current doctrine
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:149, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:1, docs/content-video-engine/REVIEW-QUEUE.md:35, docs/operator-ledger/TRIAGE-DIGEST.md:22, +1 more
+  cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/content-video-engine/54-GOOGLE-FLOW-OMNI-NANO-BANANA-PRODUCTION-RESEARCH.md:149, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/briefs/ALICIA-FORMAT-RECREATION-BRIEF.md:1, docs/content-video-engine/REVIEW-QUEUE.md:34, docs/operator-ledger/TRIAGE-DIGEST.md:22, +1 more
 - docs/content-video-engine/21-ART-STYLE-REFERENCE-REVIEW.md:219 — The natural experiment that reframes everything — Reviewed 2026-08-22 from three operator-supplied sources in one niche (trading
 - docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1113 — 9.11 Rebuild source charts — do not extract frames (operator, 2026-08-25) — Operator ruling, superseding the clip-extraction workflow in 9.10:
   cited by: content/video_engine/projects/systems-and-blowups/steel-and-paper/evidence/EVIDENCE-DOSSIER.md:1, docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:18
@@ -3257,7 +3257,7 @@ at most 12 sections each - the JSONL holds every one.
 - docs/portable/OPERATOR-RULINGS.md:2637 — E87 — The transition is chosen for the scene from the whole kit; no single hand-off rule (2026-09-13) — Ruling (the operator, answering P53 human gate 2, "the hand-off rule"): *"For transitions historically we we had the
   cited by: docs/agent-memory/operator/resume-2026-09-12.md:0, docs/CAPABILITIES-INDEX.md:10, docs/content-video-engine/BACKLOG.md:422, docs/content-video-engine/CAPABILITIES.md:14, docs/content-video-engine/CAPABILITIES.md:133, docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:88
 - docs/portable/OPERATOR-RULINGS.md:2901 — E99 - The review pass of 2026-09-14: a morph proves the whole chart, the melt gathers into a dense point, a transformation is judged in motion (2026-09-14) — The operator's answers, marked in the review queue (`docs/content-video-engine/review-answers.jsonl`, 2026-09-14 18:04-1
-  cited by: docs/agent-memory/operator/resume-2026-09-12.md:259, docs/CAPABILITIES-INDEX.md:10, docs/CAPABILITIES-INDEX.md:221, docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:38, docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:1, docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:12, +16 more
+  cited by: docs/agent-memory/operator/resume-2026-09-12.md:259, docs/CAPABILITIES-INDEX.md:10, docs/CAPABILITIES-INDEX.md:221, docs/content-video-engine/08-TOOLING-ALTERNATIVES.md:38, docs/content-video-engine/14-HIGGSFIELD-AUDIO-DRIVEN-LANE.md:1, docs/content-video-engine/37-TTS-DELIVERY-STANDARDS.md:12, +15 more
 - … 2 more in `docs/DOCS-TOPICS.jsonl`
 
 ## high-frequency (14)

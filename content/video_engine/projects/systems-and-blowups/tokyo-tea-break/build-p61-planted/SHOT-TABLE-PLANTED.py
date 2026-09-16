@@ -1,0 +1,3 @@
+"""P61 T3d - AUTHORED shot table, timed from the take by build_planted.py. Do not hand-edit."""
+W = [(0.0, 11.79, 'plate-c-blue-ties-panel;idle=live', (0, 0, 0), [], None, [{'kind': 'spotlight', 'at': 0.1, 'dur': 'hold', 'target': {'kind': 'region', 'x0': 0.055, 'y0': 0.345, 'x1': 0.905, 'y1': 0.5}}, {'kind': 'spotlight', 'at': 6.35, 'dur': 'hold', 'target': {'kind': 'region', 'x0': 0.02, 'y0': 0.715, 'x1': 0.98, 'y1': 0.985}}]),
+     (11.79, 18.9, 'ledger:ev-japan-holdings-v1:line:315:right:morph:cut', (0, 0, 0), [], None, [{'kind': 'callout', 'at': 16.95, 'dur': 1.4, 'target': {'kind': 'datum', 'index': 315}}])]

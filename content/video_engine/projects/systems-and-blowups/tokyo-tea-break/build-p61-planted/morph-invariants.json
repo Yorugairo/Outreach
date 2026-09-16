@@ -1,0 +1,20 @@
+{
+ "timeline": "tokyo-planted.timeline.json",
+ "html_sha256": "3f2a016ea4f1fd275354b7711079e24bdd266460442d6f481a828fde9d99c573",
+ "scenes": {
+  "s02": {
+   "centroid_shift": 0.2753890963760089,
+   "centroid_ok": false,
+   "axis_deg": 40.7447559083991,
+   "axis_ok": false,
+   "area_ratio": 0.010947759926783308,
+   "area_ok": false,
+   "end_error": 0,
+   "min_det": -0.18182389038194094,
+   "n": 96,
+   "u": 0.5,
+   "method": "arap",
+   "morph_a_offset": null
+  }
+ }
+}

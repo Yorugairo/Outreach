@@ -17,7 +17,7 @@ directory name, the file count and the newest file's date are read.
 | `refinancing-lag-2026-09-15` | 2026-09-15 | 8 | **orphan** | **nothing cites it** |
 | `hyperframes_motion` | 2026-09-06 | 5 | referenced | `docs/content-video-engine/HYPERFRAMES-INTAKE-2026-09-06.md:10`, `docs/runbooks/WORK-ORDER-GEMINI-HYPERFRAMES-TAGS-2026-09-06.md:42` |
 | `macro_chart_journalism` | 2026-09-07 | 6 | referenced | `docs/content-video-engine/MACRO-CHART-INTAKE-2026-09-07.md:4`, `docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md:22`, `docs/research/markets/MACRO_CHART_JOURNALISM_RESEARCH_BLUEPRINT.md:36`, +5 more |
-| `studio_readiness` | 2026-09-13 | 2 | referenced | `docs/agent-memory/operator/resume-2026-09-12.md:171`, `docs/content-video-engine/REVIEW-QUEUE.md:44`, `docs/content-video-engine/STUDIO-READINESS-REVIEW-2026-09-13.md:7` |
+| `studio_readiness` | 2026-09-13 | 2 | referenced | `docs/agent-memory/operator/resume-2026-09-12.md:171`, `docs/content-video-engine/REVIEW-QUEUE.md:43`, `docs/content-video-engine/STUDIO-READINESS-REVIEW-2026-09-13.md:7` |
 | `studio_session_link` | 2026-09-13 | 1 | referenced | `docs/agent-memory/operator/resume-2026-09-12.md:171`, `docs/content-video-engine/STUDIO-READINESS-REVIEW-2026-09-13.md:8`, `docs/content-video-engine/STUDIO-READINESS-REVIEW-2026-09-13.md:104` |
 | `voice-preferences-2026-09` | 2026-09-15 | 1 | referenced | `docs/research/audio/VOICE_PREFERENCES_AND_TTS_ENGAGEMENT_RESEARCH_BLUEPRINT.md:34`, `docs/research/audio/VOICE_PREFERENCES_AND_TTS_ENGAGEMENT_RESEARCH_BLUEPRINT.md:35`, `docs/research/audio/VOICE_PREFERENCES_AND_TTS_ENGAGEMENT_RESEARCH_BLUEPRINT.md:38`, +14 more |
 | `ai-three-clocks-2026-09-15` | 2026-09-15 | 8 | landed | `.claude/PRPs/plans/MP-AI-USEFUL.plan.md:26` |
