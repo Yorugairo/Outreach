@@ -320,6 +320,46 @@ def test_a_body_that_is_not_json_is_refused(server):
     assert answers.read_text(encoding="utf-8") == ""
 
 
+def test_a_card_converted_from_owed_while_the_server_runs_is_answerable_without_a_restart(tmp_path):
+    """2026-09-15: the operator's Save on r26-133 was refused as 'owed' by a server started the day before - it had read
+    the queue once. The index now follows the data file's mtime."""
+    import os
+    import time
+    live = tmp_path / "queue.json"
+    live.write_text(FIXTURE.read_text(encoding="utf-8"), encoding="utf-8")
+    answers = tmp_path / "answers.jsonl"
+    answers.write_text("", encoding="utf-8")
+    httpd = SRQ.make_server(0, live, tmp_path / "page", answers, quiet=True, probe=False)
+    thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+    thread.start()
+    base = f"http://127.0.0.1:{httpd.server_address[1]}"
+    try:
+        code, body = post(base, {"item": OWED_ID, "choice": "other", "note": ""})
+        assert code == 400 and "owed by the agent" in body["error"]
+        assert httpd.queue_index.reloads == 1
+        # the assembly pass converts the owed card into an answerable one: the same shape as the fixture's rule card
+        data = json.loads(live.read_text(encoding="utf-8"))
+        model = next(i for i in data["items"] if i["id"] == "r26-126-push-word")
+        for k, i in enumerate(data["items"]):
+            if i["id"] == OWED_ID:
+                data["items"][k] = dict(copy.deepcopy(model), id=OWED_ID, title=i["title"], was_kind="owed")
+        live.write_text(json.dumps(data, indent=2), encoding="utf-8")
+        st = live.stat()
+        os.utime(live, ns=(st.st_atime_ns, st.st_mtime_ns + 2_000_000_000))   # a coarse-mtime filesystem still sees a change
+        time.sleep(0.05)
+        code, body = post(base, {"item": OWED_ID, "choice": model["options"][0], "note": "answered after the conversion"})
+        assert code == 200 and body["ok"] is True, body
+        assert httpd.queue_index.reloads == 2
+        rows = lines_of(answers)
+        assert len(rows) == 1 and rows[0]["item"] == OWED_ID and rows[0]["choice"] == model["options"][0]
+        # an unchanged file is not re-read
+        post(base, {"item": "r26-126-push-word", "choice": "hold", "note": ""})
+        assert httpd.queue_index.reloads == 2
+    finally:
+        httpd.shutdown()
+        httpd.server_close()
+
+
 def test_get_answers_returns_the_latest_line_per_item(server):
     base, answers = server
     code, body = request(f"{base}/answers")

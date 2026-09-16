@@ -1237,15 +1237,15 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
 ## content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/REPORT.md
 
-- L1 [1] PRODUCTION REFERENCE REPORT: 6 Ways Rich People Make Money With Debt — - Source: `https://www.youtube.com/watch?v=rCHYttyvaw8` {Source:; Duration:; Resolution:; Channel / Creator:; Total Cuts:; 5.92 CPM} <cut-in; status-quo; 100 frames>
+- L1 [1] PRODUCTION REFERENCE REPORT: 6 Ways Rich People Make Money With Debt — - Source: `https://www.youtube.com/watch?v=rCHYttyvaw8` {Source:; Duration:; Resolution:; Channel / Creator:; Total Cuts:; 5.92 CPM} <cut-in; status-quo; stepped-up; 100 frames>
 - L11 [2] Shot Duration Distribution — - Under 3s (Brisk cut-in / punch): 6 {6; 34; 42; 18} <cut-in>
-- L17 [2] 6-Phase Retention Architecture Deconstruction <status-quo>
-- L19 [3] P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 11 shots | 302 words | 201.3 WPM {Pacing; 201.3 WPM; Key Questions; Transcript Sample}
-- L24 [3] P2: The Engine (Foundational Model) [01:30 - 02:52] — - Pacing: 9 shots | 272 words | 198.3 WPM {Pacing; 198.3 WPM; Key Questions; Transcript Sample} <status-quo>
-- L29 [3] P3: The Gap (Mounting Contradiction) [02:52 - 07:36] — - Pacing: 28 shots | 808 words | 170.8 WPM {Pacing; 170.8 WPM; Key Questions; Transcript Sample}
-- L34 [3] P4: The Pivot (45–55% Chiastic Turn) [07:36 - 09:17] — - Pacing: 11 shots | 288 words | 170.6 WPM {Pacing; 170.6 WPM; Key Questions; Transcript Sample}
-- L39 [3] P5: The Payoff & The Tell (Grand Climax) [09:17 - 14:22] — - Pacing: 31 shots | 929 words | 183.3 WPM {Pacing; 183.3 WPM; Key Questions; Transcript Sample}
-- L44 [3] P6: The Close (Resolution & Ring Echo) [14:22 - 16:54] — - Pacing: 15 shots | 483 words | 190.7 WPM {Pacing; 190.7 WPM; Key Questions; Transcript Sample}
+- L17 [2] 6-Phase Retention Architecture Deconstruction <status-quo; stepped-up>
+- L19 [3] P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 11 shots | 449 words | 299.3 WPM {Pacing; 299.3 WPM; Key Questions; Transcript Sample}
+- L24 [3] P2: The Engine (Foundational Model) [01:30 - 02:52] — - Pacing: 9 shots | 359 words | 261.8 WPM {Pacing; 261.8 WPM; Key Questions; Transcript Sample} <status-quo>
+- L29 [3] P3: The Gap (Mounting Contradiction) [02:52 - 07:36] — - Pacing: 28 shots | 992 words | 209.7 WPM {Pacing; 209.7 WPM; Key Questions; Transcript Sample}
+- L34 [3] P4: The Pivot (45–55% Chiastic Turn) [07:36 - 09:17] — - Pacing: 11 shots | 401 words | 237.4 WPM {Pacing; 237.4 WPM; Key Questions; Transcript Sample}
+- L39 [3] P5: The Payoff & The Tell (Grand Climax) [09:17 - 14:21] — - Pacing: 31 shots | 1151 words | 227.1 WPM {Pacing; 227.1 WPM; Key Questions; Transcript Sample} <stepped-up>
+- L44 [3] P6: The Close (Resolution & Ring Echo) [14:21 - 16:53] — - Pacing: 15 shots | 600 words | 236.8 WPM {Pacing; 236.8 WPM; Key Questions; Transcript Sample}
 - L50 [2] Artifact Manifest — - Detailed Shot Ledger: [`SHOT_LEDGER.md`](SHOT_LEDGER.md) <100 frames>
 
 ## content/video_engine/sources/reference_analyses/6-ways-rich-people-make-money-with-debt/SHOT_LEDGER.md
@@ -1403,12 +1403,12 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 - L1 [1] PRODUCTION REFERENCE REPORT: Claude Code (Free Plan) + YouTube = $77,000/Month — - Source: `https://www.youtube.com/watch?v=WVT2FCjhDDY` {Source:; Duration:; Resolution:; Channel / Creator:; Total Cuts:; 8.03 CPM} <cut-in; status-quo; 100 frames>
 - L11 [2] Shot Duration Distribution — - Under 3s (Brisk cut-in / punch): 46 {46; 29; 13; 12} <cut-in>
 - L17 [2] 6-Phase Retention Architecture Deconstruction <YouTube; status-quo>
-- L19 [3] P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 30 shots | 222 words | 148.0 WPM {Pacing; 148.0 WPM; Key Questions; Transcript Sample} <YouTube>
-- L24 [3] P2: The Engine (Foundational Model) [01:30 - 02:07] — - Pacing: 5 shots | 97 words | 157.3 WPM {Pacing; 157.3 WPM; Key Questions; Transcript Sample} <status-quo>
-- L29 [3] P3: The Gap (Mounting Contradiction) [02:07 - 05:36] — - Pacing: 24 shots | 490 words | 140.7 WPM {Pacing; 140.7 WPM; Key Questions; Transcript Sample}
-- L34 [3] P4: The Pivot (45–55% Chiastic Turn) [05:36 - 06:51] — - Pacing: 1 shots | 183 words | 146.4 WPM {Pacing; 146.4 WPM; Key Questions; Transcript Sample}
-- L39 [3] P5: The Payoff & The Tell (Grand Climax) [06:51 - 10:35] — - Pacing: 24 shots | 532 words | 142.5 WPM {Pacing; 142.5 WPM; Key Questions; Transcript Sample}
-- L44 [3] P6: The Close (Resolution & Ring Echo) [10:35 - 12:27] — - Pacing: 21 shots | 277 words | 148.4 WPM {Pacing; 148.4 WPM; Key Questions; Transcript Sample}
+- L19 [3] P1: The Open (0–90s / Hook & Contract) [00:00 - 01:30] — - Pacing: 30 shots | 382 words | 254.7 WPM {Pacing; 254.7 WPM; Key Questions; Transcript Sample} <YouTube>
+- L24 [3] P2: The Engine (Foundational Model) [01:30 - 02:07] — - Pacing: 5 shots | 192 words | 311.4 WPM {Pacing; 311.4 WPM; Key Questions; Transcript Sample} <status-quo>
+- L29 [3] P3: The Gap (Mounting Contradiction) [02:07 - 05:36] — - Pacing: 24 shots | 873 words | 250.4 WPM {Pacing; 250.4 WPM; Key Questions; Transcript Sample}
+- L34 [3] P4: The Pivot (45–55% Chiastic Turn) [05:36 - 06:51] — - Pacing: 1 shots | 219 words | 175.9 WPM {Pacing; 175.9 WPM; Key Questions; Transcript Sample}
+- L39 [3] P5: The Payoff & The Tell (Grand Climax) [06:51 - 10:35] — - Pacing: 24 shots | 899 words | 240.7 WPM {Pacing; 240.7 WPM; Key Questions; Transcript Sample}
+- L44 [3] P6: The Close (Resolution & Ring Echo) [10:35 - 12:27] — - Pacing: 21 shots | 532 words | 284.9 WPM {Pacing; 284.9 WPM; Key Questions; Transcript Sample}
 - L50 [2] Artifact Manifest — - Detailed Shot Ledger: [`SHOT_LEDGER.md`](SHOT_LEDGER.md) <100 frames>
 
 ## content/video_engine/sources/reference_analyses/claude-code-free-plan-youtube-77-000-month/SHOT_LEDGER.md
@@ -4389,12 +4389,12 @@ spans, hyphenated and CamelCase tokens, formula symbols, `Name YYYY` citations.
 
 ## docs/content-video-engine/REVIEW-QUEUE.md
 
-- L1 [1] REVIEW QUEUE - what the operator can judge now — Generated from [`review-queue.v1.json`](review-queue.v1.json) by `content/video_engine/scripts/build_review_queue.py --write`; do not edit this file by hand. It {As of; E99 s14:} <review-queue.v1.json; review-queue; OPEN-GATES-AND-QUESTIONS; 9c9c358; approved; review-answers.jsonl; build_review_queue.py --answers; review_queue_proofs.py --clips; r26-133-drift-idle-paints-nothing; byte-identical; r26-133-drift-idle-paints-nothing-0.mp4; plate-drift>
-- L10 [2] Watch (6) — | id | item | what to judge | proof | documents | options | agent's recommendation | blocks | sources | {A plate's drift idle paints nothing} <r26-133-drift-idle-paints-nothing; byte-identical; r26-133-drift-idle-paints-nothing-0.mp4; plate-drift; r26-133-drift-idle-paints-nothing-1.mp4; paintPlanes; idleDriftCss; content-video-engine; r26-70-compare-morph; re-writes; r26-70-compare-morph-0.mp4; remake-line-to-bars>
-- L21 [2] Look (3) — | id | item | what to judge | proof | documents | options | agent's recommendation | blocks | sources | {The ball's shadows: does it read metallic and heavy now} <r26-118-metallic-ball; melt-ball-roll; opt-in; r26-118-metallic-ball-1.mp4; r26-118-metallic-ball-2.mp4; melt-page; re-baselined; near-black; content-video-engine; OPERATOR-RULINGS; research-gate; metallic-ball>
-- L29 [2] Rule (1) — | id | item | what to judge | proof | documents | options | agent's recommendation | blocks | sources | {Parallel agents without worktrees: which route} <r26-84-engine-saved-states; per-agent; write-back; data-model; byte-identical; re-compile; human-readable; OPERATOR-RULINGS; content-video-engine; saved-states>
-- L35 [2] Approve / push (0) — Nothing open.
-- L39 [2] Owed by the agent before it comes back to you (4) — | id | item | what the agent owes | blocks | {The melt gathers to one dense, heavy, vibrating point and sp} <r26-76-melt-endings-in-motion; p48-hg3-morph-onto-planted; chart-to-chart; r26-117-ball-into-the-next-chart; hand-over; ball-into-the-next-chart; p54-hg3-astra-fable-bakeoff; Astra-vs-Fable; bake-off; BAKEOFF-ASTRA-FABLE>
+- L1 [1] REVIEW QUEUE - what the operator can judge now — Generated from [`review-queue.v1.json`](review-queue.v1.json) by `content/video_engine/scripts/build_review_queue.py --write`; do not edit this file by hand. It {As of; E99 s14:} <review-queue.v1.json; review-queue; OPEN-GATES-AND-QUESTIONS; 9c9c358; approved; review-answers.jsonl; build_review_queue.py --answers; review_queue_proofs.py --clips; r26-70-compare-morph; re-writes; r26-70-compare-morph-0.mp4; remake-line-to-bars>
+- L10 [2] Watch (5) — | id | item | what to judge | proof | documents | options | agent's recommendation | blocks | sources | {The whole chart becomes the whole other chart (chart_to rema} <r26-70-compare-morph; re-writes; r26-70-compare-morph-0.mp4; remake-line-to-bars; r26-70-compare-morph-1.mp4; remake-bars-to-line; mid-un-write; whole-chart; un-keyed; next-chart; OPERATOR-RULINGS; content-video-engine>
+- L20 [2] Look (3) — | id | item | what to judge | proof | documents | options | agent's recommendation | blocks | sources | {The ball's shadows: does it read metallic and heavy now} <r26-118-metallic-ball; melt-ball-roll; opt-in; r26-118-metallic-ball-1.mp4; r26-118-metallic-ball-2.mp4; melt-page; re-baselined; near-black; content-video-engine; OPERATOR-RULINGS; research-gate; metallic-ball>
+- L28 [2] Rule (1) — | id | item | what to judge | proof | documents | options | agent's recommendation | blocks | sources | {Parallel agents without worktrees: which route} <r26-84-engine-saved-states; per-agent; write-back; data-model; byte-identical; re-compile; human-readable; OPERATOR-RULINGS; content-video-engine; saved-states>
+- L34 [2] Approve / push (0) — Nothing open.
+- L38 [2] Owed by the agent before it comes back to you (5) — | id | item | what the agent owes | blocks | {A plate's drift idle paints nothing} <r26-133-drift-idle-paints-nothing; painted-vs-held; mask-pinned; r26-76-melt-endings-in-motion; p48-hg3-morph-onto-planted; chart-to-chart; r26-117-ball-into-the-next-chart; hand-over; ball-into-the-next-chart; p54-hg3-astra-fable-bakeoff; Astra-vs-Fable; bake-off>
 - L48 [2] Ruled since the last pass — | id | item | ruling / evidence | sources | {The first 2.5D cut (Japan); The caption's default setting, by ear} <p58-hg2-first-2-5d-cut; content-video-engine; r26-123-caption-default; HG-HANDOFF; THE-BACKLOG-BURNDOWN; OPERATOR-RULINGS; p52-gate3-species-proof-motion; OPEN-GATES-AND-QUESTIONS; p51-editor-gates-2-3; OPERATOR-DECISIONS; THE-ANIMATORS-LOOP; p58-hg3-chart-forms>
 
 ## docs/content-video-engine/RULE-abstract-to-concrete.md

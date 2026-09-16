@@ -76,11 +76,12 @@
         "R26-133",
         "P58 HG2 ruling 4",
         "R26-131 item 4",
-        "R26-122 (open beside it)"
+        "R26-122 (open beside it)",
+        "E99 s38"
       ],
-      "kind": "watch",
+      "kind": "owed",
       "title": "A plate's drift idle paints nothing",
-      "judge": "Watch the four seconds of one plate world's authored idle, drift, held (today: one byte-identical frame) against painted (the 2 px Lissajous walk the idle was authored for): does the drift read as life, and should it paint on the five drift plates of the approved Japan short?",
+      "judge": "The same plate held, drift-painted, and brought to life by the local ambient lane, the same seconds side by side: which reads as a living plate? - asked only once the proof shows a visible difference (E99 s38)",
       "where": [
         {
           "label": "held t0-t3 and painted t0-t3",
@@ -103,20 +104,22 @@
         "paint",
         "hold"
       ],
-      "recommendation": "paint - the whole excursion is 2.3 px and the fastest step at 15 fps is 0.126 px (eight frames to move one pixel), so it reads as life, never as jitter; it is the E49 idle the five drift plates of the approved Japan short were authored for and have never been given",
-      "blocks": "the R26-133 fix and its gate; P58 HG2 ruling 4",
+      "recommendation": "not yet - the 2.3 px drift proof was invisible (E99 s38); the next proof adds the ambient-lane version (local ComfyUI, the pin proven, the effect proven for life that fills a region) and the parent confirms the difference is visible before the card is served",
+      "blocks": "the R26-133 fix and its gate; P58 HG2 ruling 4 - on a proof with a visible difference (E99 s38)",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:565",
         "docs/research/runs/p58-2-5d/HG2-SHEET.md:51-52",
         "docs/content-video-engine/BACKLOG.md:554",
         "docs/content-video-engine/BACKLOG.md:563",
         "content/video_engine/scripts/kinetics/idle.mjs:109-126",
-        "content/video_engine/tests/golden/build_golden_sources.py:2247-2282"
+        "content/video_engine/tests/golden/build_golden_sources.py:2247-2282",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s38)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-15, r26-133)"
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": "owed",
-      "owed": "Delivered 2026-09-15: the plate-drift golden, held vs painted clips and frames, behind the plate_idle_paints dial",
+      "was_kind": "watch",
+      "owed": "E99 s38 (2026-09-15): the painted-vs-held proof showed no visible shift (2.3 px at eight frames per pixel) - the operator could not judge it, and asked for the plate brought to life by our LOCAL capabilities instead of shifted pixels. Owed: the same held plate three ways - held, the drift painted, and alive through the mask-pinned ambient lane (CAPABILITIES:142, a life region the plate actually has) - as clips of the same seconds; the drift alone is never asked again",
       "proofs": [
         {
           "type": "clip",

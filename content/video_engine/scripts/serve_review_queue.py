@@ -14,6 +14,10 @@ probing every player link so one that does not answer is never shown as a link, 
 Mirrors serve_player.py's write door: one POST route, a validated body, a JSON answer, a named refusal. The answers
 file is append-only - never rewritten, never truncated; the latest line per item is its answer. The server never
 writes a ruling. Stdlib only.
+
+The item index is RE-READ whenever review-queue.v1.json changes on disk (its mtime), so a card the assembly pass
+converts from owed to watch while the server runs is answerable at once - on 2026-09-15 the operator's Save on
+r26-133 was refused as 'owed by the agent' by a server started the day before, on a copy read once at start.
 """
 from __future__ import annotations
 
@@ -63,10 +67,41 @@ def refuse_reason(body: object, items_by_id: dict[str, dict], owed_by_id: dict[s
     return None
 
 
+class QueueIndex:
+    """The answerable and the owed items, keyed by id, re-read from the data file whenever its mtime changes. One
+    lock guards the re-read; a read that fails (a half-written file) keeps the last good index and says so."""
+
+    def __init__(self, data_path: Path, lock: threading.Lock):
+        self.data_path = Path(data_path)
+        self.lock = lock
+        self.mtime_ns: int | None = None
+        self.items_by_id: dict[str, dict] = {}
+        self.owed_by_id: dict[str, dict] = {}
+        self.reloads = 0
+
+    def current(self) -> tuple[dict[str, dict], dict[str, dict]]:
+        with self.lock:
+            try:
+                m = self.data_path.stat().st_mtime_ns
+            except OSError:
+                return self.items_by_id, self.owed_by_id
+            if m != self.mtime_ns:
+                try:
+                    data = BRQ.load_data(self.data_path)
+                except (OSError, ValueError) as exc:
+                    print(f"review queue: {self.data_path.name} changed but did not load ({exc}); keeping the last index",
+                          file=sys.stderr, flush=True)
+                    return self.items_by_id, self.owed_by_id
+                self.items_by_id = {i["id"]: i for i in BRQ.answerable_items(data)}   # a ruled or an owed item takes no answer
+                self.owed_by_id = {i["id"]: i for i in BRQ.owed_items(data)}
+                self.mtime_ns = m
+                self.reloads += 1
+            return self.items_by_id, self.owed_by_id
+
+
 class QueueHandler(SimpleHTTPRequestHandler):
-    def __init__(self, *a, items_by_id=None, owed_by_id=None, answers_path=None, lock=None, quiet=False, **kw):
-        self.items_by_id = items_by_id or {}
-        self.owed_by_id = owed_by_id or {}
+    def __init__(self, *a, index=None, answers_path=None, lock=None, quiet=False, **kw):
+        self.index = index
         self.answers_path = answers_path
         self.lock = lock
         self.quiet = quiet
@@ -114,7 +149,8 @@ class QueueHandler(SimpleHTTPRequestHandler):
 
     def _answer(self):
         body, error = self._read_body()
-        reason = error or refuse_reason(body, self.items_by_id, self.owed_by_id)
+        items_by_id, owed_by_id = self.index.current()   # the data file re-read if it changed since the last answer
+        reason = error or refuse_reason(body, items_by_id, owed_by_id)
         if reason:
             return self._json(400, {"ok": False, "error": reason})
         answer = {"item": body["item"], "choice": body["choice"], "note": body.get("note") or "",
@@ -132,11 +168,14 @@ def make_server(port: int, data_path: Path, out_dir: Path, answers_path: Path, r
     """Regenerate the page from the data, then bind 127.0.0.1:port (0 = a free port). Not yet serving."""
     data = BRQ.load_data(data_path)
     BRQ.build_page(data, root, out_dir, BRQ.probe_players(data) if probe else None)
-    items_by_id = {i["id"]: i for i in BRQ.answerable_items(data)}   # a ruled or an owed item takes no answer
-    owed_by_id = {i["id"]: i for i in BRQ.owed_items(data)}
-    handler = functools.partial(QueueHandler, directory=str(out_dir), items_by_id=items_by_id, owed_by_id=owed_by_id,
-                                answers_path=answers_path, lock=threading.Lock(), quiet=quiet)
-    return ThreadingHTTPServer(("127.0.0.1", port), handler)
+    lock = threading.Lock()
+    index = QueueIndex(data_path, lock)
+    index.current()   # the first read happens now, so a data file that does not load refuses the start by name
+    handler = functools.partial(QueueHandler, directory=str(out_dir), index=index,
+                                answers_path=answers_path, lock=lock, quiet=quiet)
+    httpd = ThreadingHTTPServer(("127.0.0.1", port), handler)
+    httpd.queue_index = index   # type: ignore[attr-defined]  (tests read the reload count)
+    return httpd
 
 
 def main(argv: list[str] | None = None) -> int:
