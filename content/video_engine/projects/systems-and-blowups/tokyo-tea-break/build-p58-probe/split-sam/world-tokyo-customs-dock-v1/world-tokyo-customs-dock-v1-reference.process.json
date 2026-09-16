@@ -1,0 +1,369 @@
+{
+  "ruling": "E99 s63 - a layered plate ships the PROCESSED planes, never the split's raw matte",
+  "pass": "comfy_depth_split.py --process (shrink the binary matte, then decontaminate the remaining band with its nearest interior colour; never a blur)",
+  "why": "the SAM matte was GROWN by 6 px (see .split.json sam.grow) so ~4 px of SKY sat inside the occluder's alpha; at k=1.40 that carried sky slides off the real sky and reads as a teal-green rim around the lamp shade",
+  "chosen": {
+    "near": {
+      "shrink_px": 5,
+      "band_px": 0,
+      "reason": "the inward rings are the sky to depth 3 and transition at 4; shrink 5 lands on the shade's own dark lip, where the plane's RGB IS the flat plate's - band 0 because decontaminating 2 px moves the band AWAY from the approved plate (dC* -1.81) while the shrink alone matches it exactly (dC* 0.00, dh 0.0)"
+    },
+    "mid": {
+      "shrink_px": 1,
+      "band_px": 0,
+      "reason": "no sky carry (its outer rings are dark neutral); the generic 1 px anti-aliased ring off the band boundary"
+    },
+    "subject": {
+      "shrink_px": 1,
+      "band_px": 0,
+      "reason": "no sky carry (outer rings warm, h 67-72); the generic 1 px ring"
+    }
+  },
+  "planes": [
+    {
+      "shrink_px": 5,
+      "band_px": 0,
+      "alpha_px_before": 26114,
+      "opaque": false,
+      "alpha_px_after": 22415,
+      "dropped_px": 3699,
+      "decontaminated_px": 0,
+      "src": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-near.png",
+      "dst": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-near.png",
+      "raw_kept": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-near.raw.png",
+      "rings_before": [
+        {
+          "depth": 0,
+          "n": 671,
+          "L": 43.89,
+          "a": -6.6,
+          "b": -24.43,
+          "chroma": 25.31,
+          "hue": 254.9
+        },
+        {
+          "depth": 1,
+          "n": 842,
+          "L": 43.81,
+          "a": -6.63,
+          "b": -24.38,
+          "chroma": 25.26,
+          "hue": 254.8
+        },
+        {
+          "depth": 2,
+          "n": 665,
+          "L": 43.62,
+          "a": -6.62,
+          "b": -24.35,
+          "chroma": 25.23,
+          "hue": 254.8
+        },
+        {
+          "depth": 3,
+          "n": 809,
+          "L": 43.4,
+          "a": -7.01,
+          "b": -23.0,
+          "chroma": 24.05,
+          "hue": 253.1
+        },
+        {
+          "depth": 4,
+          "n": 712,
+          "L": 34.58,
+          "a": -5.76,
+          "b": -18.13,
+          "chroma": 19.02,
+          "hue": 252.4
+        },
+        {
+          "depth": 5,
+          "n": 657,
+          "L": 15.03,
+          "a": -2.59,
+          "b": -10.29,
+          "chroma": 10.61,
+          "hue": 255.8
+        },
+        {
+          "depth": 6,
+          "n": 803,
+          "L": 11.83,
+          "a": -2.06,
+          "b": -7.29,
+          "chroma": 7.57,
+          "hue": 254.2
+        },
+        {
+          "depth": 7,
+          "n": 651,
+          "L": 16.28,
+          "a": -1.85,
+          "b": -6.18,
+          "chroma": 6.45,
+          "hue": 253.3
+        }
+      ],
+      "rings_after": [
+        {
+          "depth": 0,
+          "n": 657,
+          "L": 15.03,
+          "a": -2.59,
+          "b": -10.29,
+          "chroma": 10.61,
+          "hue": 255.8
+        },
+        {
+          "depth": 1,
+          "n": 823,
+          "L": 11.78,
+          "a": -1.99,
+          "b": -7.36,
+          "chroma": 7.62,
+          "hue": 254.8
+        },
+        {
+          "depth": 2,
+          "n": 651,
+          "L": 16.63,
+          "a": -1.88,
+          "b": -6.02,
+          "chroma": 6.3,
+          "hue": 252.7
+        }
+      ]
+    },
+    {
+      "shrink_px": 1,
+      "band_px": 0,
+      "alpha_px_before": 716960,
+      "opaque": false,
+      "alpha_px_after": 711973,
+      "dropped_px": 4987,
+      "decontaminated_px": 0,
+      "src": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-mid.png",
+      "dst": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-mid.png",
+      "raw_kept": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-mid.raw.png",
+      "rings_before": [
+        {
+          "depth": 0,
+          "n": 4987,
+          "L": 28.51,
+          "a": 0.64,
+          "b": 1.39,
+          "chroma": 1.53,
+          "hue": 65.2
+        },
+        {
+          "depth": 1,
+          "n": 5446,
+          "L": 27.12,
+          "a": 0.97,
+          "b": 1.93,
+          "chroma": 2.16,
+          "hue": 63.4
+        },
+        {
+          "depth": 2,
+          "n": 4971,
+          "L": 31.97,
+          "a": 1.87,
+          "b": 3.8,
+          "chroma": 4.24,
+          "hue": 63.7
+        },
+        {
+          "depth": 3,
+          "n": 5295,
+          "L": 32.88,
+          "a": 1.77,
+          "b": 3.56,
+          "chroma": 3.97,
+          "hue": 63.6
+        },
+        {
+          "depth": 4,
+          "n": 5213,
+          "L": 31.8,
+          "a": 1.26,
+          "b": 2.85,
+          "chroma": 3.12,
+          "hue": 66.1
+        },
+        {
+          "depth": 5,
+          "n": 4923,
+          "L": 34.73,
+          "a": 1.58,
+          "b": 4.69,
+          "chroma": 4.95,
+          "hue": 71.4
+        },
+        {
+          "depth": 6,
+          "n": 5348,
+          "L": 34.79,
+          "a": 1.93,
+          "b": 5.15,
+          "chroma": 5.5,
+          "hue": 69.4
+        },
+        {
+          "depth": 7,
+          "n": 4917,
+          "L": 35.14,
+          "a": 2.33,
+          "b": 5.18,
+          "chroma": 5.68,
+          "hue": 65.8
+        }
+      ],
+      "rings_after": [
+        {
+          "depth": 0,
+          "n": 4974,
+          "L": 27.62,
+          "a": 0.87,
+          "b": 1.97,
+          "chroma": 2.15,
+          "hue": 66.1
+        },
+        {
+          "depth": 1,
+          "n": 5443,
+          "L": 31.09,
+          "a": 1.88,
+          "b": 3.6,
+          "chroma": 4.06,
+          "hue": 62.4
+        },
+        {
+          "depth": 2,
+          "n": 4956,
+          "L": 33.16,
+          "a": 1.79,
+          "b": 3.58,
+          "chroma": 4.0,
+          "hue": 63.4
+        }
+      ]
+    },
+    {
+      "shrink_px": 1,
+      "band_px": 0,
+      "alpha_px_before": 199726,
+      "opaque": false,
+      "alpha_px_after": 197495,
+      "dropped_px": 2231,
+      "decontaminated_px": 0,
+      "src": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-subject.png",
+      "dst": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-subject.png",
+      "raw_kept": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-subject.raw.png",
+      "rings_before": [
+        {
+          "depth": 0,
+          "n": 2231,
+          "L": 36.69,
+          "a": 1.35,
+          "b": 3.24,
+          "chroma": 3.51,
+          "hue": 67.4
+        },
+        {
+          "depth": 1,
+          "n": 2631,
+          "L": 35.09,
+          "a": 1.17,
+          "b": 2.85,
+          "chroma": 3.08,
+          "hue": 67.6
+        },
+        {
+          "depth": 2,
+          "n": 2267,
+          "L": 35.09,
+          "a": 1.21,
+          "b": 3.27,
+          "chroma": 3.49,
+          "hue": 69.8
+        },
+        {
+          "depth": 3,
+          "n": 2572,
+          "L": 31.27,
+          "a": 0.73,
+          "b": 2.22,
+          "chroma": 2.34,
+          "hue": 71.7
+        },
+        {
+          "depth": 4,
+          "n": 2441,
+          "L": 22.78,
+          "a": -0.23,
+          "b": -1.01,
+          "chroma": 1.04,
+          "hue": 257.2
+        },
+        {
+          "depth": 5,
+          "n": 2315,
+          "L": 15.87,
+          "a": -0.93,
+          "b": -4.11,
+          "chroma": 4.21,
+          "hue": 257.2
+        },
+        {
+          "depth": 6,
+          "n": 2665,
+          "L": 18.4,
+          "a": -0.29,
+          "b": -2.29,
+          "chroma": 2.31,
+          "hue": 262.8
+        },
+        {
+          "depth": 7,
+          "n": 2332,
+          "L": 25.72,
+          "a": 1.3,
+          "b": 3.63,
+          "chroma": 3.86,
+          "hue": 70.3
+        }
+      ],
+      "rings_after": [
+        {
+          "depth": 0,
+          "n": 2243,
+          "L": 35.99,
+          "a": 1.27,
+          "b": 3.1,
+          "chroma": 3.35,
+          "hue": 67.8
+        },
+        {
+          "depth": 1,
+          "n": 2655,
+          "L": 34.33,
+          "a": 1.12,
+          "b": 2.99,
+          "chroma": 3.2,
+          "hue": 69.4
+        },
+        {
+          "depth": 2,
+          "n": 2279,
+          "L": 32.53,
+          "a": 0.83,
+          "b": 2.63,
+          "chroma": 2.76,
+          "hue": 72.4
+        }
+      ]
+    }
+  ]
+}

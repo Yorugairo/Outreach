@@ -87,40 +87,42 @@
         "P61 T14b",
         "P61 HG-drift-3",
         "E99 s64",
-        "P61 T14c"
+        "P61 T14c",
+        "P61 HG-drift-4"
       ],
-      "kind": "owed",
-      "title": "The alive plate with its planes cleaned, and the long-form drift at 20 px beside 30",
-      "judge": "Owed by the agent - see `owed`. The question, once both clips exist with the lamp clean: which of the two reads as the plate's life - the parallax or the Ken Burns - and does the 20 px drift earn its place beside the move?",
+      "kind": "watch",
+      "title": "The alive dock at 20 px, the lamp clean: with parallax beside with Ken Burns",
+      "judge": "Your answer (E99 s64): 20 px is the drift; the lamp's green still showed; and you wanted 20 px with parallax beside 20 px with Ken Burns. The green, this time, was the FAR plane: the depth split inpaints the whole hidden area as one region and colour-matches it to one ring, so the small sky hole under the lamp got dock statistics - a quarter brighter than the sky around it - and the moving shade dragged that patch into view. Fixed: the hole filled from the sky beside it (a named step in the split script), the water still re-pinned to the corrected wall (only the still changed, never the generated water; 0 px moved outside the fill's footprint), and the glow measured on the rendered beat at 1.0 / 4.54 / 6.2 s: 4,427 / 2,970 / 1,928 px before, 0 / 0 / 0 after. Two beats from the same take window, both at 20 px, both with the lamp clean: A - the layered alive plate, the water alive, three planes at their own depth, the one authored camera key; B - the same picture FLAT (one plane over the same water), the engine's own Ken Burns lean, no camera. Watch A, then B. Which of the two reads as the plate's life, and does the 20 px drift earn its place beside the move?",
       "where": [
         {
-          "label": "the lamp at 3x, the same instant of the same beat: BEFORE (raw planes, a teal halo round the shade) vs AFTER (the processed planes) - the rendered ring vs the sky: dL -7.09 / dC -5.34 before, -2.28 / -1.02 after",
+          "label": "the lamp at 2x, BEFORE / AFTER the fill, at 1.0 / 4.54 / 6.2 s - the glow 4,427 / 2,970 / 1,928 stage px -> 0 / 0 / 0",
           "path": "content/video_engine/tests/golden/frames/plate-alive.png"
         },
         {
-          "label": "the three rim numbers (3 px edge band, CIE L*a*b*): the sky C* 25.60 h 255.1; the RAW plane C* 25.27 h 254.8 (dE 0.58 to the sky - the rim IS the sky); the PROCESSED plane C* 8.14 h 254.7; the flat approved plate's same band C* 8.14 h 254.7 - dE(processed, flat) 0.0000",
+          "label": "the far plane under the lamp vs its sky ring: dE76 19.69 -> 0.07 (the 480x320 wall the alive plate loads), 20.14 -> 0.19 (the full-size wall of the flat layered plate); the cause: split() inpaints the whole disocclusion as ONE region and lab_matches it to ONE ring",
           "path": "content/video_engine/scripts/comfy_depth_split.py"
         },
         {
-          "label": "the split's record: sam.grow 6 with the three occluder points on the lamp; P58's HG1 sheet had already noted 'a soft blue bloom behind it'",
-          "path": "docs/research/runs/p58-2-5d/HG1-SHEET.md"
+          "label": "the mask-pin proven: the previous wall rebuilt through the identical route came back at the shipped size exactly; every pre-encode frame differs by the 2,993 px the fill moved and 0 px outside its footprint - VACE was not re-run",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/plates/world-tokyo-customs-dock-v1-alive.layers.json"
         },
         {
-          "label": "the drift golden at the 20 px long-form setting (was 30; the 2 px constant the floor; shorts 30-40)",
-          "path": "content/video_engine/tests/golden/frames/plate-drift.png"
+          "label": "B's plate: world-tokyo-customs-dock-v1-alive-flat - the same VACE water composited over the approved flat plate as ONE plane (a layered plate with one plane would still parallax under the 20 px drift, so a flat plate was the honest B)",
+          "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/assets/plates/world-tokyo-customs-dock-v1-alive-flat.layers.json"
         },
         {
-          "label": "named for you: the lamp is 5 px thinner at full size now - that is the sky coming off the matte, but it is a silhouette change; and the decontamination band is built and set to 0 (the shrink alone matches the flat plate; band 2 would move the edge away from it)",
+          "label": "named for you: Ken Burns has no window by grammar (its clock is the scene's own 0 -> 1), so B's zoom matches A's 1.0 -> 1.14 but not its timing; and the drift separates A's depths by a measured 43 % - in B it walks one picture",
           "path": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-alive/build_alive.py"
         }
       ],
       "options": [
-        "20 px - the long form's drift; the lamp clean",
-        "30 px; the lamp clean",
-        "the lamp still shows - name the instant"
+        "A - parallax; the drift earns its place",
+        "A - parallax; drop the drift",
+        "B - Ken Burns; the drift earns its place",
+        "B - Ken Burns; drop the drift"
       ],
-      "recommendation": "",
-      "blocks": "P61 T14c; the R26-133 ruling; P58 HG2 ruling 4",
+      "recommendation": "A, with the drift. In A the drift is what keeps the three depths breathing between the camera's two keys; in B it walks one flat picture, which is the Ken Burns itself by another name. If B reads better to you, the honest answer is that the parallax is not earning its cost on this plate, not that the drift is.",
+      "blocks": "HG-drift-4; the R26-133 ruling; P58 HG2 ruling 4; P61's close",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:565",
         "docs/research/runs/p58-2-5d/HG2-SHEET.md:51-52",
@@ -137,13 +139,51 @@
         "docs/portable/OPERATOR-RULINGS.md (E99 s55)",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T14)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s63 + its correction)",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T14b)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T14b)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s64)",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T14c)"
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": "watch",
-      "owed": "E99 s64 (2026-09-16): 20 px is the drift; the lamp's green STILL shows on the processed planes (the matte pass cleaned the near plane's EDGE, but the far plane UNDER the lamp is the depth split's inpainted hole, and that fill is a lighter, more saturated blue than the sky around it (measured on the 480x320 far layer: under the lamp mean RGB 69/149/206, value 0.81; the sky ring 6 px outside it RGB 58/115/153, value 0.60 - same hue 205 deg, a quarter brighter); under parallax the shade moves against the far plane and the lighter patch shows as a glow around it the whole time (seen at 4x on the beat's 4.54 s frame). The matte was the first rim; the fill is the second.); and the operator wants 20 px with parallax beside 20 px with Ken Burns. Owed (P61 T14c): the far plane's fill under the lamp made the sky's own colour and the water still re-pinned to it, the ring measured on the rendered beat at three instants; two clips at 20 px from the same take window - parallax + camera, and flat + Ken Burns; ONE question.",
-      "proofs": []
+      "was_kind": "owed",
+      "owed": "Delivered 2026-09-16 (P61 T14c): the far plane's fill, the still re-pinned, the glow 0 px at three instants, A and B at 20 px",
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "A - 20 px WITH PARALLAX: the alive dock, the clip wall, three planes at their own depth, one authored camera key; the lamp clean",
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-alive",
+          "page": "player.html",
+          "aspect": "16:9",
+          "t0": 0.0,
+          "t1": 6.57,
+          "route": "review_queue_proofs.py --clips: the private build's player served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent); the approved Tokyo cut untouched (E45)"
+        },
+        {
+          "type": "clip",
+          "label": "B - 20 px WITH KEN BURNS: the same picture FLAT (one plane over the same water), the engine's own ken_burns lean, no camera; the lamp clean",
+          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-alive",
+          "page": "player-kb.html",
+          "aspect": "16:9",
+          "t0": 0.0,
+          "t1": 6.57,
+          "route": "review_queue_proofs.py --clips: the private build's player served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent); the approved Tokyo cut untouched (E45)"
+        },
+        {
+          "type": "clip",
+          "label": "the mechanism golden - the alive plate with the corrected wall under the planes, 20 px",
+          "surface": "plate-alive",
+          "aspect": "16:9",
+          "t0": 0.0,
+          "t1": 10.0,
+          "flags": {
+            "idle": true,
+            "plate_idle_paints": true,
+            "camera": true,
+            "stop_action": true
+          },
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        }
+      ]
     },
     {
       "id": "r26-123-caption-default",

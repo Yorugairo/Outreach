@@ -1,0 +1,270 @@
+{
+ "schema_version": "scene_evidence_timeline.v1",
+ "runtime_s": 6.57,
+ "title": "Tokyo Tea Break",
+ "subtitle": "Money Physics - P61 T14 test bed (the alive plate)",
+ "episode_id": "tokyo-tea-break",
+ "project_id": "systems-and-blowups",
+ "aspect": "16:9",
+ "narration": {
+  "canonical_hash": "809e9e2202a532b3bca3fcde69d1583582e1a8b83c9af791716b13768c41bf92",
+  "words_path": "build-p61-alive/timeline.json"
+ },
+ "captions": [
+  {
+   "at": 0.07,
+   "until": 1.29,
+   "text": "The Treasury's table shows"
+  },
+  {
+   "at": 1.35,
+   "until": 2.9,
+   "text": "Japan holds over a trillion"
+  },
+  {
+   "at": 2.96,
+   "until": 4.17,
+   "text": "dollars of our debt, and"
+  },
+  {
+   "at": 4.21,
+   "until": 5.13,
+   "text": "it's been selling since"
+  },
+  {
+   "at": 5.17,
+   "until": 6.55,
+   "text": "February. I"
+  }
+ ],
+ "caption_pages": [
+  {
+   "s": 0.07,
+   "e": 1.29,
+   "t": [
+    {
+     "w": "The",
+     "s": 0.07,
+     "e": 0.19,
+     "k": false
+    },
+    {
+     "w": "Treasury's",
+     "s": 0.23,
+     "e": 0.66,
+     "k": true
+    },
+    {
+     "w": "table",
+     "s": 0.71,
+     "e": 1.01,
+     "k": false
+    },
+    {
+     "w": "shows",
+     "s": 1.04,
+     "e": 1.29,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 1.35,
+   "e": 2.9,
+   "t": [
+    {
+     "w": "Japan",
+     "s": 1.35,
+     "e": 1.73,
+     "k": true
+    },
+    {
+     "w": "holds",
+     "s": 1.8,
+     "e": 2.03,
+     "k": false
+    },
+    {
+     "w": "over",
+     "s": 2.08,
+     "e": 2.28,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 2.35,
+     "e": 2.38,
+     "k": false
+    },
+    {
+     "w": "trillion",
+     "s": 2.45,
+     "e": 2.9,
+     "k": true
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 2.96,
+   "e": 4.17,
+   "t": [
+    {
+     "w": "dollars",
+     "s": 2.96,
+     "e": 3.3,
+     "k": false
+    },
+    {
+     "w": "of",
+     "s": 3.33,
+     "e": 3.39,
+     "k": false
+    },
+    {
+     "w": "our",
+     "s": 3.45,
+     "e": 3.56,
+     "k": false
+    },
+    {
+     "w": "debt,",
+     "s": 3.62,
+     "e": 3.97,
+     "k": false
+    },
+    {
+     "w": "and",
+     "s": 4.02,
+     "e": 4.17,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 4.21,
+   "e": 5.13,
+   "t": [
+    {
+     "w": "it's",
+     "s": 4.21,
+     "e": 4.33,
+     "k": false
+    },
+    {
+     "w": "been",
+     "s": 4.37,
+     "e": 4.49,
+     "k": false
+    },
+    {
+     "w": "selling",
+     "s": 4.54,
+     "e": 4.85,
+     "k": false
+    },
+    {
+     "w": "since",
+     "s": 4.91,
+     "e": 5.13,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 5.17,
+   "e": 6.55,
+   "t": [
+    {
+     "w": "February.",
+     "s": 5.17,
+     "e": 5.97,
+     "k": true
+    },
+    {
+     "w": "I",
+     "s": 6.48,
+     "e": 6.55,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  }
+ ],
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "sound": [],
+ "evidence": {},
+ "scenes": [
+  {
+   "scene_id": "s01",
+   "world": {
+    "asset_id": "world-tokyo-customs-dock-v1-alive-flat",
+    "sha256": "85d0be935cb5c7d50f2fd00f4ccef9562003922944285bd6c91cfc405185877a",
+    "ken_burns": {
+     "scale": 0.14,
+     "x": -49,
+     "y": -35
+    },
+    "idle_drift_px": 20.0,
+    "idle": "drift",
+    "layers": [
+     {
+      "key": "ly:world-tokyo-customs-dock-v1-alive-flat:background",
+      "k": 1.0,
+      "role": "background",
+      "clip": true
+     }
+    ]
+   },
+   "exit": "cut",
+   "span": [
+    0.0,
+    6.57
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "spotlight",
+     "at": 1.35,
+     "dur": 5.22,
+     "target": {
+      "kind": "region",
+      "x0": 0.219,
+      "y0": 0.45,
+      "x1": 0.998,
+      "y1": 0.64
+     },
+     "id": "s01.species.0",
+     "held": true
+    }
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s01.camera"
+   }
+  }
+ ],
+ "species": [
+  "spotlight"
+ ],
+ "kinetics": {
+  "idle": true,
+  "stop_action": true,
+  "arap_morph": true,
+  "camera": true,
+  "span_tone": "dark",
+  "span_alpha": 0.3,
+  "analytic_spring": true,
+  "min_jerk": true,
+  "curvature_stroke": true,
+  "plate_idle_paints": true
+ },
+ "caption_style": "phrase"
+}

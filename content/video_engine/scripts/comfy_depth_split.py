@@ -32,6 +32,12 @@ feather. `--process --rings` MEASURES first: it walks 1 px rings inward and prin
 hue, so the width is read off the picture instead of guessed. The split itself still emits the raw matte; the
 pass is a separate, deterministic, server-free stage so a plane can be reprocessed without re-running Comfy.
 
+THE HOLE FILL (E99 s64, P61 T14c) - a hole cut in a LOWER plane is filled from THAT plane's own surround.
+`--fill-holes <wall.png> --holes <plane.png ...>` takes the holes from the alpha of the planes that cut them and
+refills each one whose surround is ONE surface (a sky) by the harmonic interpolation of its own boundary - exact
+at the seam, so no halo and no blur that could leave one. A component whose ring crosses more than one surface is
+left to the generator's inpainting and recorded as skipped. `--measure` prints the components and changes nothing.
+
 Deterministic: the same plate and the same flags give byte-identical layer PNGs.
 """
 from __future__ import annotations
@@ -309,6 +315,214 @@ def process_plane_file(src: Path, dst: Path, shrink_px: int, band_px: int, keep_
     rec.update({"src": str(src).replace("\\", "/"), "dst": str(dst).replace("\\", "/"),
                 "raw_kept": str(keep_raw).replace("\\", "/") if keep_raw else None,
                 "rings_before": before, "rings_after": after})
+    return rec
+
+
+# ------------------------------------------------------------- the hole fill (E99 s64)
+# THE RULE (the operator, 2026-09-16): *"the lamp greens till shows basically the entire time on the processed
+# planes."* E99 s63's edge pass cleaned the near plane's EDGE; what still shows is the FAR plane's own hole.
+# `split()` inpaints every pixel a nearer band owns (on the Tokyo dock, 57 % of the plate) as ONE region and then
+# `lab_match`es that whole region's mu/sigma to ONE ring - so the small, sky-surrounded hole under a hanging lamp
+# is normalised to statistics that are mostly DOCK, and it comes back a quarter brighter than the sky it sits in.
+# Under parallax the occluder slides off it and the lighter patch reads as a glow around the shade the whole time.
+#
+# THE FILL: a hole whose own surround is ONE surface (a sky) is filled FROM THAT SURROUND - the harmonic (Laplace)
+# interpolation of its boundary, which matches the boundary exactly at the seam by construction, so there is no
+# halo and no blur to leave one. A hole whose surround is NOT one surface is left alone: that is where the
+# generator's inpainting (LaMa) stays, and the record says so per component, with the numbers it was judged on.
+#
+# Deterministic: a fixed V-cycle (mask-weighted restriction, bilinear prolongation, a fixed number of Jacobi
+# sweeps per level) in float64, no randomness - the same plane and the same flags give byte-identical output.
+
+
+def _restrict(vals: np.ndarray, known: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Halve the grid, averaging only the KNOWN pixels (a hole stays a hole until a coarse cell covers it)."""
+    h, w = (vals.shape[0] // 2) * 2, (vals.shape[1] // 2) * 2
+    v = np.where(known, vals, 0.0)[:h, :w].reshape(h // 2, 2, w // 2, 2).sum(axis=(1, 3))
+    k = known[:h, :w].astype(np.float64).reshape(h // 2, 2, w // 2, 2).sum(axis=(1, 3))
+    return np.where(k > 0, v / np.maximum(k, 1.0), 0.0), k > 0
+
+
+def _jacobi(vals: np.ndarray, known: np.ndarray, sweeps: int) -> np.ndarray:
+    """`sweeps` Jacobi sweeps of the 4-neighbour average; KNOWN pixels never move (the Dirichlet boundary)."""
+    out = np.array(vals, dtype=np.float64, copy=True)
+    for _ in range(sweeps):
+        p = np.pad(out, 1, mode="edge")
+        avg = (p[:-2, 1:-1] + p[2:, 1:-1] + p[1:-1, :-2] + p[1:-1, 2:]) * 0.25
+        out = np.where(known, out, avg)
+    return out
+
+
+def harmonic_fill_channel(vals: np.ndarray, hole: np.ndarray, sweeps: int = 32) -> np.ndarray:
+    """One channel: solve Laplace's equation inside `hole` with the surround as the boundary. Deterministic.
+
+    A V-cycle, so a 200 px hole costs the same handful of sweeps a 5 px one does. A linear ramp IS harmonic, so a
+    plain sky with a gradient comes back exactly - which is the property the test pins this by.
+    """
+    known = ~hole
+    if not hole.any() or not known.any():
+        return np.array(vals, dtype=np.float64, copy=True)
+    h, w = vals.shape
+    out = np.array(vals, dtype=np.float64, copy=True)
+    if min(h, w) > 4 and int(hole.sum()) > 32:
+        coarse, ck = _restrict(out, known)
+        coarse = harmonic_fill_channel(coarse, ~ck, sweeps)
+        guess = cv2.resize(coarse, (w, h), interpolation=cv2.INTER_LINEAR)
+        out = np.where(known, out, guess)
+    return _jacobi(out, known, sweeps)
+
+
+def harmonic_fill(rgb: np.ndarray, hole: np.ndarray, sweeps: int = 32) -> np.ndarray:
+    """Fill `hole` in an RGB image from its own surround. Never touches a pixel outside the hole."""
+    out = np.array(rgb[..., :3], dtype=np.uint8, copy=True)
+    if not hole.any():
+        return out
+    for c in range(3):
+        solved = harmonic_fill_channel(out[..., c].astype(np.float64), hole, sweeps)
+        out[..., c] = np.where(hole, np.clip(np.rint(solved), 0, 255).astype(np.uint8), out[..., c])
+    return out
+
+
+def surround_stats(rgb: np.ndarray, region: np.ndarray, ring_px: int) -> dict:
+    """The ring hugging `region`, in CIE L*a*b*: its mean and - the test that matters here - its SPREAD.
+
+    One surface (a sky) has a small spread; a ring that crosses a quay, a crane and a container stack does not.
+    """
+    ring = ring_of(region, ring_px)
+    if not ring.any():
+        return {"n": 0}
+    lab = cv2.cvtColor(np.ascontiguousarray(rgb[..., :3]), cv2.COLOR_RGB2LAB).astype(np.float64)
+    ell = lab[..., 0][ring] * 100.0 / 255.0
+    a, b = lab[..., 1][ring] - 128.0, lab[..., 2][ring] - 128.0
+    return {"n": int(ring.sum()),
+            "L": round(float(ell.mean()), 2), "a": round(float(a.mean()), 2), "b": round(float(b.mean()), 2),
+            "L_std": round(float(ell.std()), 2), "a_std": round(float(a.std()), 2),
+            "b_std": round(float(b.std()), 2),
+            "chroma": round(float(np.hypot(a.mean(), b.mean())), 2),
+            "hue": round(float(np.degrees(np.arctan2(b.mean(), a.mean())) % 360.0), 1)}
+
+
+def region_stats(rgb: np.ndarray, region: np.ndarray) -> dict:
+    """The same numbers over a region itself, so a fill can be compared with the ring it has to match."""
+    if not region.any():
+        return {"n": 0}
+    lab = cv2.cvtColor(np.ascontiguousarray(rgb[..., :3]), cv2.COLOR_RGB2LAB).astype(np.float64)
+    ell = float(lab[..., 0][region].mean()) * 100.0 / 255.0
+    a = float(lab[..., 1][region].mean()) - 128.0
+    b = float(lab[..., 2][region].mean()) - 128.0
+    return {"n": int(region.sum()), "L": round(ell, 2), "a": round(a, 2), "b": round(b, 2),
+            "chroma": round(float(np.hypot(a, b)), 2),
+            "hue": round(float(np.degrees(np.arctan2(b, a)) % 360.0), 1)}
+
+
+def dE76(x: dict, y: dict) -> float:
+    """CIE76 between two `region_stats`/`surround_stats` readings; -1 when either side is empty."""
+    if not x.get("n") or not y.get("n"):
+        return -1.0
+    return round(float(math.sqrt((x["L"] - y["L"]) ** 2 + (x["a"] - y["a"]) ** 2 + (x["b"] - y["b"]) ** 2)), 2)
+
+
+def fill_holes(rgb: np.ndarray, hole: np.ndarray, *, ring_px: int = 6, tol: float = 6.0,
+               min_px: int = 16, sweeps: int = 32) -> tuple[np.ndarray, dict]:
+    """E99 s64's fill, component by component. Returns (rgb, record). The input is never mutated.
+
+    A component is filled only when its surround CAN carry it - the ring's per-channel L*a*b* spread under `tol`.
+    Anything else is left exactly as the generator painted it, and recorded as skipped with the numbers it failed.
+    """
+    out = np.array(rgb[..., :3], dtype=np.uint8, copy=True)
+    rec: dict = {"ruling": "E99 s64", "ring_px": int(ring_px), "tol": float(tol), "sweeps": int(sweeps),
+                 "hole_px": int(hole.sum()), "components": [], "filled_px": 0, "skipped_px": 0}
+    if not hole.any():
+        return out, rec
+    n, cc, st, _ = cv2.connectedComponentsWithStats(hole.astype(np.uint8), 8)
+    entries = []
+    for i in range(1, n):
+        comp = cc == i
+        area = int(st[i, cv2.CC_STAT_AREA])
+        ring = surround_stats(rgb, comp, ring_px)
+        before = region_stats(rgb, comp)
+        entry = {"bbox": [int(st[i, 0]), int(st[i, 1]), int(st[i, 2]), int(st[i, 3])], "px": area,
+                 "ring": ring, "before": before, "dE76_before": dE76(before, ring)}
+        spread = max(ring.get("L_std", 1e9), ring.get("a_std", 1e9), ring.get("b_std", 1e9))
+        if area < min_px:
+            entry["filled"], entry["why"] = False, f"under min_px {min_px}"
+        elif not ring.get("n"):
+            entry["filled"], entry["why"] = False, "no surround at all"
+        elif spread > tol:
+            entry["filled"] = False
+            entry["why"] = (f"the surround cannot carry it - the ring's spread {spread:.2f} is over tol {tol} "
+                            f"(more than one surface); the generator's inpainting stays")
+        else:
+            out = np.where(comp[..., None], harmonic_fill(out, comp, sweeps), out)
+            entry["filled"], entry["why"] = True, "filled from its own surround (harmonic)"
+            entry["after"] = region_stats(out, comp)
+            entry["dE76_after"] = dE76(entry["after"], ring)
+        entries.append(entry)
+        rec["filled_px" if entry["filled"] else "skipped_px"] += area
+    rec["components"] = sorted(entries, key=lambda e: -e["px"])[:8]
+    rec["component_count"] = len(entries)
+    return out, rec
+
+
+def hole_from_planes(paths: list[Path], size: tuple[int, int], grow_px: int = 0) -> np.ndarray:
+    """The union of the named planes' alphas at `size` (w, h) - the pixels those planes CUT out of the wall.
+
+    `grow_px` widens the mask. A REDUCED copy of a wall needs it: the resampler mixes the hole's colour into the
+    2-3 px just outside the nearest-neighbour mask, so a fill that stops at the mask leaves that fringe behind.
+    """
+    w, h = size
+    hole = np.zeros((h, w), dtype=bool)
+    for path in paths:
+        im = Image.open(path).convert("RGBA")
+        if im.size != (w, h):
+            im = im.resize((w, h), Image.NEAREST)
+        hole |= np.asarray(im)[..., 3] > 0
+    return dilate(hole, grow_px) if grow_px > 0 else hole
+
+
+def _save_like(src_im: Image.Image, rgb: np.ndarray, alpha: np.ndarray | None, changed: np.ndarray,
+               dst: Path) -> str:
+    """Write the corrected wall in the SAME form the source had, so nothing but the fill moves in the file.
+
+    An INDEXED (mode P) plane keeps its own palette and every unchanged pixel keeps its own index byte; only the
+    filled pixels take a new index - the nearest palette entry in RGB, exactly, never a re-quantisation (which
+    would rebuild the palette from the new picture and move the whole image).
+    """
+    if src_im.mode == "P":
+        pal = list(src_im.getpalette() or [])
+        table = np.array(pal[:768], dtype=np.int64).reshape(-1, 3)
+        idx = np.array(np.asarray(src_im), dtype=np.uint8, copy=True)
+        if changed.any():
+            want = rgb[changed].astype(np.int64)
+            d = ((want[:, None, :] - table[None, :, :]) ** 2).sum(axis=2)
+            idx[changed] = np.argmin(d, axis=1).astype(np.uint8)
+        out = Image.fromarray(idx, mode="P")
+        out.putpalette(pal)
+        out.save(dst, "PNG", optimize=True)
+        return "P"
+    mode = "RGBA" if alpha is not None else "RGB"
+    arr = np.dstack([rgb, alpha]) if alpha is not None else rgb
+    Image.fromarray(arr, mode=mode).save(dst)
+    return mode
+
+
+def fill_plane_file(src: Path, dst: Path, hole_paths: list[Path], *, ring_px: int = 6, tol: float = 6.0,
+                    sweeps: int = 32, grow_px: int = 0, keep_raw: Path | None = None) -> dict:
+    """Run the hole fill over one plane PNG on disk, recording every component's numbers before and after."""
+    im = Image.open(src)
+    alpha = np.asarray(im.convert("RGBA"))[..., 3] if im.mode == "RGBA" else None
+    rgb = np.asarray(im.convert("RGB"))
+    hole = hole_from_planes(hole_paths, (rgb.shape[1], rgb.shape[0]), grow_px)
+    filled, rec = fill_holes(rgb, hole, ring_px=ring_px, tol=tol, sweeps=sweeps)
+    if keep_raw is not None and not keep_raw.exists():
+        keep_raw.write_bytes(Path(src).read_bytes())
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    changed = (filled != rgb).any(axis=2)
+    written = _save_like(im, filled, alpha, changed, dst)
+    rec.update({"src": str(src).replace("\\", "/"), "dst": str(dst).replace("\\", "/"),
+                "holes": [str(p).replace("\\", "/") for p in hole_paths], "grow_px": int(grow_px),
+                "written_mode": written, "changed_px": int(changed.sum()),
+                "raw_kept": str(keep_raw).replace("\\", "/") if keep_raw else None})
     return rec
 
 
@@ -645,9 +859,54 @@ def process_main(argv: list[str]) -> int:
     return 0
 
 
+def fill_main(argv: list[str]) -> int:
+    """`--fill-holes <plane.png> --holes <plane.png> ...` - E99 s64's fill of a wall's disocclusion holes.
+
+    The holes are named by the PLANES THAT CUT THEM (their alpha is the cut), so the mask is the split's own
+    record and not a hand-drawn region. Use the RAW planes when the edge pass has already shrunk the shipped
+    ones: the hole in the wall is the width of the matte that cut it.
+    """
+    ap = argparse.ArgumentParser(description="E99 s64: fill a wall plane's holes from its own surround")
+    ap.add_argument("--fill-holes", type=Path, required=True, dest="plane", help="the wall plane, filled IN PLACE")
+    ap.add_argument("--holes", type=Path, nargs="+", required=True, help="the planes whose alpha CUT the holes")
+    ap.add_argument("--ring", type=int, default=6, help="px of surround a component is judged and filled from")
+    ap.add_argument("--tol", type=float, default=6.0, help="max L*a*b* spread of that ring for it to carry a fill")
+    ap.add_argument("--sweeps", type=int, default=32, help="Jacobi sweeps per V-cycle level (determinism, not a dial)")
+    ap.add_argument("--grow", type=int, default=0, help="px to widen the hole (a REDUCED copy needs the resampler's support)")
+    ap.add_argument("--keep-raw", action="store_true", help="write <plane>.raw.png beside the plane first")
+    ap.add_argument("--record", type=Path, default=None, help="where the .fill.json record goes")
+    ap.add_argument("--measure", action="store_true", help="only MEASURE: print each component, change nothing")
+    a = ap.parse_args(argv)
+    if a.measure:
+        arr = np.asarray(Image.open(a.plane).convert("RGB"))
+        hole = hole_from_planes(a.holes, (arr.shape[1], arr.shape[0]), a.grow)
+        _, rec = fill_holes(arr, hole, ring_px=a.ring, tol=a.tol, sweeps=a.sweeps)
+        print(f"{a.plane.name}: {rec['hole_px']} hole px in {rec['component_count']} component(s)")
+        for c in rec["components"]:
+            print(f"   {c['px']:>8} px  bbox {c['bbox']}  ring L*{c['ring'].get('L')} "
+                  f"spread {max(c['ring'].get('L_std', -1), c['ring'].get('a_std', -1), c['ring'].get('b_std', -1))}"
+                  f"  dE76 to its ring {c['dE76_before']}  -> {c['why']}")
+        return 0
+    raw = a.plane.with_suffix(".raw.png") if a.keep_raw else None
+    rec = fill_plane_file(a.plane, a.plane, a.holes, ring_px=a.ring, tol=a.tol, sweeps=a.sweeps,
+                          grow_px=a.grow, keep_raw=raw)
+    print(f"{a.plane.name}: filled {rec['filled_px']} px, left {rec['skipped_px']} px to the generator "
+          f"({rec['component_count']} component(s))")
+    for c in rec["components"]:
+        if c["filled"]:
+            print(f"   {c['px']:>8} px  bbox {c['bbox']}  dE76 to its ring {c['dE76_before']} -> {c['dE76_after']}")
+        else:
+            print(f"   {c['px']:>8} px  bbox {c['bbox']}  SKIPPED: {c['why']}")
+    if a.record:
+        a.record.write_text(json.dumps(rec, indent=2), encoding="utf-8")
+    return 0
+
+
 def main() -> int:
     if "--process" in sys.argv[1:]:
         return process_main(sys.argv[1:])
+    if "--fill-holes" in sys.argv[1:]:
+        return fill_main(sys.argv[1:])
     ap = argparse.ArgumentParser(description=(__doc__ or "").splitlines()[0])
     ap.add_argument("--plate", type=Path, required=True)
     ap.add_argument("--out", type=Path, required=True)

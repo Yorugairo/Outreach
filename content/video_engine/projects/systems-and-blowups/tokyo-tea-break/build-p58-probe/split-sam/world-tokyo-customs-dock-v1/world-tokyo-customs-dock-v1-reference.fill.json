@@ -1,0 +1,58 @@
+{
+  "ruling": "E99 s64",
+  "ring_px": 6,
+  "tol": 6.0,
+  "sweeps": 32,
+  "hole_px": 26114,
+  "components": [
+    {
+      "bbox": [
+        409,
+        0,
+        226,
+        233
+      ],
+      "px": 26114,
+      "ring": {
+        "n": 4459,
+        "L": 44.07,
+        "a": -6.54,
+        "b": -24.59,
+        "L_std": 1.15,
+        "a_std": 0.88,
+        "b_std": 0.92,
+        "chroma": 25.44,
+        "hue": 255.1
+      },
+      "before": {
+        "n": 26114,
+        "L": 59.76,
+        "a": -6.1,
+        "b": -37.12,
+        "chroma": 37.62,
+        "hue": 260.7
+      },
+      "dE76_before": 20.08,
+      "filled": true,
+      "why": "filled from its own surround (harmonic)",
+      "after": {
+        "n": 26114,
+        "L": 44.14,
+        "a": -6.61,
+        "b": -24.43,
+        "chroma": 25.31,
+        "hue": 254.9
+      },
+      "dE76_after": 0.19
+    }
+  ],
+  "filled_px": 26114,
+  "skipped_px": 0,
+  "component_count": 1,
+  "src": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-far.png",
+  "dst": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-far.png",
+  "holes": [
+    "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-near.raw.png"
+  ],
+  "raw_kept": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p58-probe/split-sam/world-tokyo-customs-dock-v1/world-tokyo-customs-dock-v1-reference-far.raw.png"
+}

@@ -1328,7 +1328,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   at full size (the sky coming off the matte - a silhouette change); the decontamination band built and set to 0.
 
 ### T14c: THE FAR PLANE'S FILL UNDER THE LAMP, AND 20 PX WITH PARALLAX BESIDE 20 PX WITH KEN BURNS (E99 s64)
-- Status: pending
+- Status: complete (2026-09-16) - HG-drift-4 open on the queue as `r26-133-drift-idle-paints-nothing` (watch: A parallax, B Ken Burns, the golden)
 - Owner: `implementation_luna` (no engine lock expected - planes, the plate library, two private builds)
 - Depends on: T14b, HG-drift-3 (ruled E99 s64)
 - Write set: `content/video_engine/scripts/comfy_depth_split.py` (the far plane's hole fill - a named step beside `--process`), the split's far plane
@@ -1348,10 +1348,32 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   clip wall + the flat plate's own pixels, no planes) under KEN BURNS - the engine's own push (CAPABILITIES: the Ken Burns / camera route; 
   name the row and the grammar you used); each its own page so neither link moves. The card returns with ONE question.
 - Validate: the golden suite; `gate_motion_density.py` on both builds; `review_queue_proofs.py --clips --only r26-133-drift-idle-paints-nothing`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T14c.md`. THE PARENT'S MEASUREMENT CONFIRMED at both sizes: the far plane under the lamp
+  RGB 69.6/150.5/208.6 (v 0.818) vs its sky ring 56.2/109.6/145.4 (v 0.570), dE76 19.69 on the 480x320 wall the alive plate loads (the
+  VACE still and `inputs/dock-layers/...-far.png` are the same bytes), 20.14 on the full-size wall the flat layered plate loads. THE CAUSE:
+  `split()` inpaints the whole disocclusion (57 % of this plate) as ONE region and `lab_match`es it to ONE ring - a sky-surrounded hole
+  gets dock statistics. THE FILL: `comfy_depth_split.py --fill-holes [--grow N] [--measure]`, deterministic, filled from the plane's own
+  surround; applied at both sizes - T14b's reducer recipe could NOT be reused for the 480x320 copy (re-quantising moves 66.10 % of
+  pixels), so the fill runs at 480x320 with the palette preserved: 1.95 % of index bytes moved, all inside the lamp's bbox. The water
+  still re-pinned to the corrected wall through the identical composite route (the previous wall rebuilt the same way came back at the
+  shipped 122,652 bytes; every pre-encode frame differs by the fill's 2,993 px and 0 px outside) - VACE not re-run. AFTER: plane-space
+  dE76 19.69 -> 0.07 and 20.14 -> 0.19; on the rendered beat the glow (a local L* anomaly over the sky's gradient) 4,427 / 2,970 /
+  1,928 stage px at 1.0 / 4.54 / 6.2 s -> 0 / 0 / 0; seen at 2x. THE TWO BEATS: A `player.html` (the layered alive plate, planes +
+  the authored key; the drift separates the depths by a measured 43 %); B `player-kb.html` on a NEW plate
+  `world-tokyo-customs-dock-v1-alive-flat` (the same VACE water composited over the approved flat plate as ONE plane - a layered
+  plate with the camera dropped would still parallax under the 20 px drift, `paintPlanes` drifts each plane at its own k, and the
+  sidecar refuses equal depths) under `world.ken_burns` (0.14, the engine's lean; no window by grammar - its clock is the scene's
+  own 0 -> 1, so the zoom matches A's 1.0 -> 1.14 but not its timing; named on the card). PARENT'S READ of A/B at 4.54 and 6.2: both
+  lamps clean; A's containers step against the skyline under the push, B's picture leans as one. GOLDENS re-baselined only where the
+  fill explains it: `camera-layers@proof-mid / -start`, `dock-depth@proof-move`, `plate-alive` (all changes y <= 157, the lamp's
+  quarter); `camera-layers`, `dock-depth`, `plate-drift` unchanged. Validate: pytest depth split + goldens + plate library 223
+  passed (5:03); gate_motion_density A 1 FAIL / 15 PASS, B 1 FAIL / 14 PASS (M11 the beat's content; B lacks M24 / M43, the camera
+  checks); effects_catalog_check 0; animation registry 0 orphaned. One pin moved (the plate count 329 -> 330, 3 -> 4 layered); 11
+  tests added, none deleted or renamed; no engine file opened. Named: `comfy_depth_split.py` is 944 lines (over the 800 guideline) -
+  a module split for the backlog.
 
 ### T11: THE RECORD - the CAPABILITIES rows, the backlog rows, the queue, the layers
-- Status: in progress (2026-09-16, evening) - EVERY BUILD SLICE HAS LANDED (T1-T14 incl. T2b, T3b, T3c, T3d, T5b, T5c, T6b, T7b, T7c, T7d); CAPABILITIES rows for the stack (s59 / s61), the planted morph (s62), the ambient lane + the alive plate + the drift dial (T14); rulings s39-s62 recorded verbatim; HG-drift-3 RULED E99 s64 (20 px stands; the lamp still shows; parallax vs Ken Burns) - the card OWED again, T14c; the plan closes on T14c's card; the record of each is written (CAPABILITIES rows 37 / 75 / 119 / 43 / 56 / 116 / 117 / 121 / 147 / 184 / 318, BACKLOG R26-137..155, doc 41, doc 43 s43.5.1, the lane register); rulings E99 s39-s53 recorded verbatim. OPEN: the four cards the operator has not yet answered (HG7b rails, HG2b-2 the planted ground, HG2-2 the closing, HG6-2 the throw) and their rulings into OPERATOR-RULINGS; the drift plate's visible three-way proof (E99 s38, a lane running); the docs layers rebuilt once the voice lane's staged commit lands (CAPABILITIES is shared with it); then the plan closes
+- Status: in progress (2026-09-16, evening) - EVERY BUILD SLICE HAS LANDED (T1-T14 incl. T2b, T3b, T3c, T3d, T5b, T5c, T6b, T7b, T7c, T7d); CAPABILITIES rows for the stack (s59 / s61), the planted morph (s62), the ambient lane + the alive plate + the drift dial (T14); rulings s39-s62 recorded verbatim; HG-drift-3 RULED E99 s64; T14c landed - HG-drift-4 open (A parallax beside B Ken Burns at 20 px, the lamp clean at three instants); the plan closes on its ruling; the record of each is written (CAPABILITIES rows 37 / 75 / 119 / 43 / 56 / 116 / 117 / 121 / 147 / 184 / 318, BACKLOG R26-137..155, doc 41, doc 43 s43.5.1, the lane register); rulings E99 s39-s53 recorded verbatim. OPEN: the four cards the operator has not yet answered (HG7b rails, HG2b-2 the planted ground, HG2-2 the closing, HG6-2 the throw) and their rulings into OPERATOR-RULINGS; the drift plate's visible three-way proof (E99 s38, a lane running); the docs layers rebuilt once the voice lane's staged commit lands (CAPABILITIES is shared with it); then the plan closes
 - Owner: parent (Claude/Fable docs lane)
 - Depends on: every gate ruled
 - Write set: `docs/content-video-engine/CAPABILITIES.md`, `docs/content-video-engine/BACKLOG.md` (rows R26-70, R26-76,

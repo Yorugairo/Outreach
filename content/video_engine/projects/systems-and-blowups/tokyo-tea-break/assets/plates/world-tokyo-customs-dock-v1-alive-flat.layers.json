@@ -1,0 +1,16 @@
+{
+ "note": "P61 T14c / E99 s64 - THE ALIVE PLATE, FLAT. The operator, 2026-09-16: \"I'm also not sure that the drift is really addinga nything that the ken burn doesnt. let me see 20px with parallax and 20px with ken burns.\" This is the alive Tokyo dock as ONE plane: the background wall is the drift lane's water (SAM 2.1 mask + Wan 2.1 VACE 1.3B) composited over the APPROVED FLAT plate, not over the depth split's -far layer - so there are no planes to separate, the 20 px drift walks the whole picture as one, and the move over it is the engine's own Ken Burns (`world.ken_burns`, card plate_option:ken). Its twin world-tokyo-customs-dock-v1-alive is the same beat WITH the planes and the camera. The lamp is clean here by construction: the approved flat plate has no matte and no inpainted hole (E99 s63's correction, P61 T14b), which is exactly what T14c had to give the layered planes.",
+ "layers": [
+  {
+   "path": "../../omni-video/ambient/dock-water-flat-vace-v1.mp4",
+   "role": "background",
+   "alpha": false,
+   "generator": "vace",
+   "life": {
+    "still": "../../omni-video/ambient/dock-water-flat-vace-v1.still.png",
+    "mask": "../../omni-video/ambient/dock-water-flat-vace-v1.life-mask.png",
+    "job": "../../omni-video/ambient/dock-water-flat-vace-v1.job.json"
+   }
+  }
+ ]
+}

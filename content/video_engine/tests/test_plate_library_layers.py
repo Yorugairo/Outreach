@@ -257,8 +257,8 @@ def index() -> dict:
 
 
 def test_the_count_is_the_back_catalogue_plus_the_probes_one_new_plate(index):
-    assert index["count"] == len(index["plates"]) == 329   # + P61 T14: world-tokyo-customs-dock-v1-alive (E99 s55)
-    assert sum(1 for p in index["plates"] if p.get("layers")) == 3   # + the alive twin of the dock (P61 T14)
+    assert index["count"] == len(index["plates"]) == 330   # + P61 T14 the alive dock (E99 s55), T14c its FLAT twin (s64)
+    assert sum(1 for p in index["plates"] if p.get("layers")) == 4   # the alive twin, and the flat alive twin (ONE plane)
 
 
 def test_every_record_keeps_every_field_it_had_and_reads_flat_or_layered(index):

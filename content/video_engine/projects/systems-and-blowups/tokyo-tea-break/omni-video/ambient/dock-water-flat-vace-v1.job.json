@@ -1,0 +1,25 @@
+{
+ "model": "wan2.1_vace_1.3B_fp16.safetensors",
+ "num_frames": 65,
+ "cfg": 4.5,
+ "steps": 25,
+ "shift": 3.0,
+ "text_encoder": "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+ "vae": "wan_2.1_vae.safetensors",
+ "width": 480,
+ "height": 320,
+ "fps": 16,
+ "life": [
+  0.219,
+  0.45,
+  1.0,
+  0.644
+ ],
+ "prompt": "harbour water at sunset with waves rolling toward the quay, the swell rising and falling, ripples travelling left across the surface, bright orange sun glints flickering and sliding on the moving water, the city reflection breaking and reforming, locked static camera, flat illustrated screen-print poster style",
+ "still": "content\\video_engine\\review\\assembly\\r26-133-drift-idle-paints-nothing\\alive\\still-plate.png",
+ "seed": 4242,
+ "backend": "vace",
+ "composited_over": "content/video_engine/tests/golden/inputs/dock-layers/world-tokyo-customs-dock-v1.png",
+ "source_run": "content/video_engine/review/assembly/r26-133-drift-idle-paints-nothing/alive/alive-water-vace-4s-pinned.mp4",
+ "note": "P61 T14c / E99 s64. The SAME drift-lane VACE run as dock-water-vace-v1, re-composited over the FLAT approved plate instead of the depth split's -far layer, so the whole picture is one plane and the beat can be read with NO parallax - the Ken Burns half of the operator's comparison (\"let me see 20px with parallax and 20px with ken burns\"). VACE was not re-run: only the post-composite. Everything outside the life mask is the approved flat plate, pixel for pixel."
+}

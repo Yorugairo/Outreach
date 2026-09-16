@@ -1,5 +1,6 @@
-"""P58 T1 route (b): the depth split's pure functions and its serverless `--depth` path, and P61 T14b's
-EDGE PASS (E99 s63 - a layered plate ships the processed planes, never the split's raw matte).
+"""P58 T1 route (b): the depth split's pure functions and its serverless `--depth` path, P61 T14b's
+EDGE PASS (E99 s63 - a layered plate ships the processed planes, never the split's raw matte) and P61 T14c's
+HOLE FILL (E99 s64 - a hole cut in a lower plane is filled from THAT plane's own surround).
 
 No ComfyUI is touched here - the server path is exercised only by the run. Every test below runs on a
 synthetic plate with a hand-made depth map.
@@ -393,3 +394,162 @@ def test_process_plane_file_keeps_the_raw_beside_it_and_records_the_rim(tmp_path
     assert 200 < rec["rings_before"][0]["hue"] < 300, "the raw rim IS the ground (on the Tokyo dock: h 254.8, the sky's own)"
     assert rec["rings_after"][0]["hue"] < 120, "the processed rim is the subject's own colour"
     assert (np.asarray(Image.open(src).convert("RGBA"))[..., 3] > 0).sum() == rec["alpha_px_after"]
+
+
+# ---------------------------------------------------------------- the hole fill (E99 s64, P61 T14c)
+
+
+def _sky_wall(size: int = 96, hole_box: tuple[int, int, int, int] = (36, 30, 60, 58),
+              fill_rgb: tuple[int, int, int] = (69, 150, 208)) -> tuple[np.ndarray, np.ndarray]:
+    """A wall that is one surface with a vertical ramp, and a hole in it painted a quarter too bright.
+
+    This is the Tokyo dock's defect in miniature: the sky under the hanging lamp came back RGB 69/150/208
+    against a sky ring of 56/110/145 - the same hue, a quarter brighter (E99 s64).
+    """
+    y = np.linspace(0.0, 1.0, size)[:, None]
+    wall = np.dstack([np.full((size, size), 40.0) + 24.0 * y,
+                      np.full((size, size), 96.0) + 32.0 * y,
+                      np.full((size, size), 132.0) + 36.0 * y]).astype(np.uint8)
+    hole = np.zeros((size, size), dtype=bool)
+    x0, y0, x1, y1 = hole_box
+    hole[y0:y1, x0:x1] = True
+    wall[hole] = fill_rgb
+    return wall, hole
+
+
+def test_the_harmonic_fill_reproduces_a_plain_ramp_exactly():
+    """A linear ramp IS harmonic, so the surround carries it back with no error - that is why there is no seam."""
+    size = 96
+    ramp = np.tile((np.linspace(0, 200, size)[:, None]), (1, size))
+    hole = np.zeros((size, size), dtype=bool)
+    hole[30:62, 30:62] = True
+    broken = np.array(ramp, copy=True)
+    broken[hole] = 255.0
+    out = cds.harmonic_fill_channel(broken, hole)
+    assert abs(out[hole] - ramp[hole]).max() < 0.5, "the fill IS the surround's own continuation"
+    assert (out[~hole] == ramp[~hole]).all(), "not one pixel outside the hole moved"
+
+
+def test_the_fill_lands_on_the_surrounds_own_colour_and_the_seam_carries_no_halo():
+    wall, hole = _sky_wall()
+    ring = cds.ring_of(hole, 6)
+    before = cds.dE76(cds.region_stats(wall, hole), cds.surround_stats(wall, hole, 6))
+    out, rec = cds.fill_holes(wall, hole)
+    after = cds.dE76(cds.region_stats(out, hole), cds.surround_stats(out, hole, 6))
+    assert before > 15, "the miniature carries the real defect (the dock's own dE76 was 19.7)"
+    assert after < 1.5, f"E99 s64: the fill is the sky's own colour, not a guess (dE76 {after})"
+    assert rec["filled_px"] == int(hole.sum()) and rec["skipped_px"] == 0
+    # no halo: the 1 px ring just outside the hole is untouched, and the 1 px ring just inside matches it
+    assert (out[ring] == wall[ring]).all(), "a blur would have bled into the surround - this cannot"
+    inner = hole & ~cds.erode(hole, 1)
+    assert cds.dE76(cds.region_stats(out, inner), cds.surround_stats(out, hole, 2)) < 1.5
+
+
+def test_a_component_whose_surround_is_more_than_one_surface_is_left_to_the_generator():
+    wall, hole = _sky_wall()
+    wall[:, 70:] = (20, 20, 20)            # a quay, a crane, a container stack - anything but one sky
+    hole2 = np.zeros_like(hole)
+    hole2[30:58, 62:80] = True             # a hole straddling the sky and that dark mass
+    out, rec = cds.fill_holes(wall, hole2)
+    assert rec["filled_px"] == 0 and rec["skipped_px"] == int(hole2.sum())
+    assert "the surround cannot carry it" in rec["components"][0]["why"]
+    assert (out == wall).all(), "LaMa's fill stays exactly where the surround cannot carry one"
+
+
+def test_every_component_is_judged_on_its_own_ring():
+    wall, hole = _sky_wall()
+    wall[:, 76:] = (20, 20, 20)
+    hole[34:50, 80:92] = True              # a second component, buried in the dark mass
+    out, rec = cds.fill_holes(wall, hole)
+    assert rec["component_count"] == 2
+    verdicts = {c["px"]: c["filled"] for c in rec["components"]}
+    assert sorted(verdicts.values()) == [False, True], "one sky hole filled, one dark hole left alone"
+
+
+def test_the_fill_is_deterministic_to_the_byte():
+    wall, hole = _sky_wall()
+    a, _ = cds.fill_holes(wall, hole)
+    b, _ = cds.fill_holes(wall, hole)
+    assert (a == b).all(), "a fixed V-cycle, float64, no randomness"
+
+
+def test_the_holes_are_taken_from_the_alpha_of_the_planes_that_cut_them(tmp_path):
+    near = np.zeros((48, 48, 4), np.uint8)
+    near[8:20, 8:20] = (10, 10, 10, 255)
+    mid = np.zeros((48, 48, 4), np.uint8)
+    mid[30:40, 30:40] = (10, 10, 10, 255)
+    for name, arr in (("near.png", near), ("mid.png", mid)):
+        Image.fromarray(arr, mode="RGBA").save(tmp_path / name)
+    hole = cds.hole_from_planes([tmp_path / "near.png", tmp_path / "mid.png"], (48, 48))
+    assert hole.sum() == 12 * 12 + 10 * 10, "the union of the cuts, and nothing invented"
+    half = cds.hole_from_planes([tmp_path / "near.png"], (24, 24))
+    assert half.shape == (24, 24) and half.any(), "a plane at another size is resized NEAREST, never smoothed"
+
+
+def test_fill_plane_file_keeps_the_raw_and_records_each_component(tmp_path):
+    wall, hole = _sky_wall()
+    src = tmp_path / "plate-far.png"
+    Image.fromarray(wall, mode="RGB").save(src)
+    cut = np.dstack([np.zeros((96, 96, 3), np.uint8), np.where(hole, 255, 0).astype(np.uint8)])
+    Image.fromarray(cut, mode="RGBA").save(tmp_path / "plate-near.png")
+    raw = tmp_path / "plate-far.raw.png"
+    rec = cds.fill_plane_file(src, src, [tmp_path / "plate-near.png"], keep_raw=raw)
+    assert raw.exists(), "the generator's own fill stays on disk beside the corrected wall"
+    assert rec["components"][0]["dE76_after"] < rec["components"][0]["dE76_before"]
+    out = np.asarray(Image.open(src).convert("RGB"))
+    assert (out[~hole] == wall[~hole]).all(), "only the hole moved"
+
+
+def test_an_opaque_wall_keeps_its_mode_and_an_rgba_wall_keeps_its_alpha(tmp_path):
+    wall, hole = _sky_wall()
+    rgba = np.dstack([wall, np.full((96, 96), 255, np.uint8)])
+    src = tmp_path / "w.png"
+    Image.fromarray(rgba, mode="RGBA").save(src)
+    cut = np.dstack([np.zeros((96, 96, 3), np.uint8), np.where(hole, 255, 0).astype(np.uint8)])
+    Image.fromarray(cut, mode="RGBA").save(tmp_path / "cut.png")
+    cds.fill_plane_file(src, src, [tmp_path / "cut.png"])
+    out = np.asarray(Image.open(src))
+    assert out.shape[2] == 4 and (out[..., 3] == 255).all(), "the wall's own alpha is never a casualty of the fill"
+
+
+def test_the_measure_route_changes_nothing(tmp_path, capsys):
+    wall, hole = _sky_wall()
+    src = tmp_path / "far.png"
+    Image.fromarray(wall, mode="RGB").save(src)
+    cut = np.dstack([np.zeros((96, 96, 3), np.uint8), np.where(hole, 255, 0).astype(np.uint8)])
+    Image.fromarray(cut, mode="RGBA").save(tmp_path / "cut.png")
+    sha = src.read_bytes()
+    rc = cds.fill_main(["--fill-holes", str(src), "--holes", str(tmp_path / "cut.png"), "--measure"])
+    assert rc == 0 and src.read_bytes() == sha, "--measure reads the picture and writes nothing"
+    assert "hole px in" in capsys.readouterr().out
+
+
+def test_an_indexed_plane_keeps_its_palette_and_only_the_filled_indices_move(tmp_path):
+    """The 480x320 copies a golden reads are INDEXED PNGs. Re-quantising one rebuilds its palette from the new
+    picture and moves the WHOLE image (measured on the dock's far plane: 66 % of pixels by more than 2 levels).
+    The fill keeps the palette and rewrites only the indices it filled."""
+    wall, hole = _sky_wall()
+    src = tmp_path / "far.png"
+    Image.fromarray(wall, mode="RGB").quantize(colors=256, method=Image.Quantize.MEDIANCUT).save(src, "PNG")
+    before_idx = np.asarray(Image.open(src))
+    before_pal = Image.open(src).getpalette()
+    cut = np.dstack([np.zeros((96, 96, 3), np.uint8), np.where(hole, 255, 0).astype(np.uint8)])
+    Image.fromarray(cut, mode="RGBA").save(tmp_path / "cut.png")
+    rec = cds.fill_plane_file(src, src, [tmp_path / "cut.png"], grow_px=1)
+    after = Image.open(src)
+    assert rec["written_mode"] == "P" and after.mode == "P"
+    assert after.getpalette() == before_pal, "the palette is the source's own, entry for entry"
+    grown = cds.dilate(hole, 1)
+    assert (np.asarray(after)[~grown] == before_idx[~grown]).all(), "not one index outside the hole moved"
+
+
+def test_growing_the_hole_catches_the_resamplers_own_fringe():
+    wall, hole = _sky_wall()
+    assert cds.hole_from_planes.__doc__ and "resampler" in cds.hole_from_planes.__doc__
+    fringe = cds.ring_of(hole, 2)
+    wall[fringe] = (69, 150, 208)                       # what a LANCZOS reduction leaves just outside the mask
+    tight, _ = cds.fill_holes(wall, hole)
+    wide, _ = cds.fill_holes(wall, cds.dilate(hole, 2))
+    ring = cds.surround_stats(wall, cds.dilate(hole, 2), 6)
+    assert cds.dE76(cds.region_stats(tight, fringe), ring) > 10, "stopping at the mask leaves the fringe behind"
+    assert cds.dE76(cds.region_stats(wide, fringe), ring) < 2.0, "grown by the resampler's support, it is gone"

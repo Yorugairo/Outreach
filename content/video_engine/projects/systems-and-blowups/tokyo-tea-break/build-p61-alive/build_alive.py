@@ -44,8 +44,28 @@ could not show the parallax at all.
 
 NO APPROVED CUT IS TOUCHED and nothing is rendered: this directory holds the beat.
 
-    python build_alive.py            # the beat at 20 px - the long-form setting
-    python build_alive.py --drift 30 # the same beat at 30, for the card's difference clip
+THE TWO BEATS E99 s64 ASKS FOR. The operator, 2026-09-16, on the 20 px watch: *"I'm also not sure that the
+drift is really addinga nything that the ken burn doesnt. let me see 20px with parallax and 20px with ken
+burns."* Same take window, same words, same spotlight, same 20 px drift, the lamp clean on both:
+
+    A  --camera parallax (the default)  ->  player.html     - the LAYERED alive plate: the clip wall, the three
+                                                              processed planes over it, each painted at its own k
+                                                              (CAPABILITIES:147 "The camera over layers"), under
+                                                              ONE authored camera key, zoom 1.0 -> 1.14 over
+                                                              4.54 -> 6.37 s. The drift walks each plane at its
+                                                              own share of k, so the picture separates.
+    B  --camera kenburns                ->  player-kb.html  - the alive plate FLAT: ONE plane
+                                                              (`world-tokyo-customs-dock-v1-alive-flat`, the same
+                                                              VACE water composited over the APPROVED flat plate),
+                                                              no camera at all, under the engine's own KEN BURNS -
+                                                              the shot row's 4th element `ken_burns(scale, x, y)`
+                                                              -> `world.ken_burns` (card `plate_option:ken`,
+                                                              `build_scene_timeline_f.KEN`), the world leaning
+                                                              1 -> 1 + scale across the scene's own 0->1 clock.
+
+    python build_alive.py                    # A at 20 px - the long-form setting
+    python build_alive.py --drift 30         # the same beat at 30, for the card's difference clip
+    python build_alive.py --camera kenburns  # B at 20 px - the Ken Burns half of the comparison
 """
 from __future__ import annotations
 
@@ -66,6 +86,7 @@ from authoring import audio as A, table as T, words as W              # noqa: E4
 
 TIMELINE_NAME = "tokyo-alive.timeline.json"
 PLATE_ID = "world-tokyo-customs-dock-v1-alive"
+PLATE_ID_FLAT = "world-tokyo-customs-dock-v1-alive-flat"    # E99 s64: the same picture with NO planes
 WORDS_SRC = EPISODE / "vo-short/audio/scene_1.words.json"
 AUDIO_SRC = EPISODE / "vo-short/audio/scene_1.mp3"
 
@@ -78,6 +99,14 @@ DRIFT_ALT = 30                            # ... and the number it amended, kept 
 # the harbour band, in stage fractions of the 16:9 stage (the plate is cover-fitted): the water the
 # ambient lane actually generated - the life mask's own box, read off the rendered stage.
 WATER_BAND = {"kind": "region", "x0": 0.219, "y0": 0.450, "x1": 0.998, "y1": 0.640}
+
+# E99 s64, beat B - THE KEN BURNS PUSH. `KEN`'s own proportions (build_scene_timeline_f.KEN: scale 0.04, x 14,
+# y -10) taken to the SAME 14 % A's camera key travels (zoom 1.0 -> 1.14), with the drift's SIGN flipped so the
+# frame leans the way A's look moves (right and down: A ends on look [0.60, 0.53], and a positive ken x slides
+# the WORLD right, which is the eye going left). Two things about it are Ken Burns' grammar and not a choice:
+# it runs over the SCENE's own 0->1 clock, not A's 4.54 -> 6.37 s window, and it takes no camera beside it
+# (card `plate_option:ken`: "never on a row that also carries a camera move").
+KEN_BURNS = (0.14, -49, -35)
 
 
 def take_window() -> tuple[float, float, list[dict]]:
@@ -101,9 +130,16 @@ def cut_take(t0: float, t1: float, ws: list[dict]) -> Path:
     return out
 
 
-def shot_table(ws: list[dict], runtime_s: float, drift_px: int) -> list[tuple]:
+def shot_table(ws: list[dict], runtime_s: float, drift_px: int, camera_mode: str = "parallax") -> list[tuple]:
     at = lambda phrase: W.at(ws, phrase)                                  # noqa: E731
     push_at = at("selling since")
+    if camera_mode == "kenburns":
+        # B: the flat alive plate, no planes, no camera - the world's own Ken Burns lean (E99 s64)
+        return [
+            (0.0, round(runtime_s, 2), f"{PLATE_ID_FLAT};idle=drift;drift={drift_px}", KEN_BURNS, [], None,
+             [{"kind": "spotlight", "at": at("Japan holds"), "dur": "hold", "target": WATER_BAND}],
+             None),
+        ]
     # THE ROW. The plate id carries E49's idle and E99 s63's amplitude: `;idle=drift;drift=20`. Its LAYERS
     # come from its own sidecar (P58 T2) - the compiler reads them, the background one is the alive clip.
     camera = {"attention": "locked",
@@ -120,8 +156,13 @@ def shot_table(ws: list[dict], runtime_s: float, drift_px: int) -> list[tuple]:
 
 def main() -> int:
     drift_px = int(sys.argv[sys.argv.index("--drift") + 1]) if "--drift" in sys.argv else DRIFT_LONG
+    camera_mode = sys.argv[sys.argv.index("--camera") + 1] if "--camera" in sys.argv else "parallax"
+    if camera_mode not in ("parallax", "kenburns"):
+        raise SystemExit(f"--camera {camera_mode!r}: the two beats E99 s64 asks for are 'parallax' and 'kenburns'")
     alt = drift_px != DRIFT_LONG
-    timeline_name = f"tokyo-alive-{drift_px}.timeline.json" if alt else TIMELINE_NAME
+    kb = camera_mode == "kenburns"
+    timeline_name = ("tokyo-alive-kb.timeline.json" if kb else
+                     f"tokyo-alive-{drift_px}.timeline.json" if alt else TIMELINE_NAME)
     t0, t1, wsrc = take_window()
     take = cut_take(t0, t1, wsrc)
     ep = Project(here=BUILD, build=BUILD, take=take, take_stem="scene_1",
@@ -134,9 +175,10 @@ def main() -> int:
     print(f"  take        : {t0:.2f}-{t1:.2f}s of the Tokyo take ({runtime_s:.2f}s, {len(ws)} words)")
     T.caption_pages(BUILD, char_budget=28, max_words=6)
     (BUILD / "evidence-dock.json").write_text("[]\n", encoding="utf-8")
-    rows = shot_table(ws, runtime_s, drift_px)
+    rows = shot_table(ws, runtime_s, drift_px, camera_mode)
     T.write_shot_table(BUILD / "SHOT-TABLE-ALIVE.py", rows,
-                       f'"""P61 T14b - AUTHORED shot table at {drift_px} px, timed from the take by build_alive.py. Do not hand-edit."""\n')
+                       f'"""P61 T14c - AUTHORED shot table at {drift_px} px, camera={camera_mode}, timed from the '
+                       f'take by build_alive.py. Do not hand-edit."""\n')
     T.print_rows(rows)
     rc = T.compile_timeline(
         BUILD, BUILD,
@@ -148,7 +190,19 @@ def main() -> int:
         caption_style="phrase",
         kinetics={"analytic_spring": True, "min_jerk": True, "curvature_stroke": True,
                   "plate_idle_paints": True})
-    if rc == 0 and alt:
+    if rc == 0 and kb:
+        # B gets its OWN page AND ITS OWN ASSET FILE, so A's link never moves under the operator
+        # (memory `review-link-frozen-copy`): the page names its own timeline already (`data-src`), but
+        # `assets.json` is written per build, and B's plate is a different plate - rebuilding A would
+        # otherwise empty B's page. The two beats are then fully independent files in one directory.
+        shutil.copy2(BUILD / "assets.json", BUILD / "assets-kb.json")
+        page = (BUILD / "player.html").read_text(encoding="utf-8").replace(
+            'id="asset-data" type="application/json" data-src="assets.json"',
+            'id="asset-data" type="application/json" data-src="assets-kb.json"')
+        (BUILD / "player-kb.html").write_text(page, encoding="utf-8")
+        print("  ken burns   : player-kb.html + tokyo-alive-kb.timeline.json + assets-kb.json "
+              "(the flat alive plate, no planes, its own files)")
+    elif rc == 0 and alt:
         # the comparison page gets its OWN player, so the 20 px beat's link never moves under the
         # operator (memory `review-link-frozen-copy`): `player.html` is always the 20 px take
         shutil.copy2(BUILD / "player.html", BUILD / f"player-{drift_px}.html")

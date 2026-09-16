@@ -1,2 +1,2 @@
-"""P61 T14b - AUTHORED shot table at 20 px, timed from the take by build_alive.py. Do not hand-edit."""
+"""P61 T14c - AUTHORED shot table at 20 px, camera=parallax, timed from the take by build_alive.py. Do not hand-edit."""
 W = [(0.0, 6.57, 'world-tokyo-customs-dock-v1-alive;idle=drift;drift=20', (0, 0, 0), [], None, [{'kind': 'spotlight', 'at': 1.35, 'dur': 'hold', 'target': {'kind': 'region', 'x0': 0.219, 'y0': 0.45, 'x1': 0.998, 'y1': 0.64}}], {'attention': 'locked', 'keys': [{'t': 0.0, 'zoom': 1.0, 'look': [0.5, 0.5]}, {'t': 4.54, 'zoom': 1.0, 'look': [0.5, 0.5]}, {'t': 6.37, 'zoom': 1.14, 'look': [0.6, 0.53], 'ease': 'cubic'}]})]
