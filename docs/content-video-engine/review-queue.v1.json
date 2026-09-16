@@ -224,7 +224,8 @@
         "E99 s2",
         "P61 HG6",
         "R26-76",
-        "P61 T3 (proof B)"
+        "P61 T3 (proof B)",
+        "E99 s51"
       ],
       "kind": "watch",
       "title": "The melt gathers to one dense point and splashes into a world plate (A) and becomes a fully assembled chart (B)",
@@ -295,7 +296,7 @@
       ],
       "options": [],
       "recommendation": "Approve the gather as the melt's form. Both landings the ruling named are on the card: the plate (A) and the fully assembled chart (B), and B needed no new code - the gather is a phase and the morph an ending, and they compose. Known and named: the axis hairlines still turn rigidly in the gather (R26-139); the vortex map is written twice (R26-138).",
-      "blocks": "HG6",
+      "blocks": "nothing - ruled E99 s51 (2026-09-16): the gather approved; the splash becomes a THROW (T6b)",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:482",
         "docs/content-video-engine/CAPABILITIES.md:37",
@@ -305,10 +306,12 @@
         "content/video_engine/tests/test_melt_gather.py",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T6)",
         "content/video_engine/tests/test_melt_morph.py (the gather and the morph compose)",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3, T6)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3, T6)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s51)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-16)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s51",
       "was_kind": "owed",
       "owed": "Delivered: proof A 2026-09-15 (T6), proof B 2026-09-16 (T3)",
       "proofs": [
@@ -458,7 +461,8 @@
         "P48 HG1 (no explicit close, unverified)",
         "R26-16",
         "P61 T3",
-        "P61 HG2b"
+        "P61 HG2b",
+        "E99 s52"
       ],
       "kind": "watch",
       "title": "The chart morphs onto a PLANTED element - the silhouette traced from the thing standing in the world",
@@ -479,7 +483,7 @@
       ],
       "options": [],
       "recommendation": "Approve. The prop is the plate's own form - a test re-traces the silhouette off the raster and refuses a drift - so nothing is conjured. Two limits named: the page's field and punch beats still run under an ordinary morph page (P47 T3's law), so the board zooms over the morph's last half second - if the ground reads as moving, the fix is the one line the handed path already has; and a deep C-shaped silhouette would lose its bay (the strip is x-monotone) - blobs, balls, plates and heads are fine, a horseshoe is not, and nothing refuses one yet.",
-      "blocks": "HG2b; P48 T5b closes on it; P48 HG3 can be answered",
+      "blocks": "nothing - ruled E99 s52 (2026-09-16): the morph fine; the board's fill may not snap in (T3b)",
       "sources": [
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:178-186",
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:412",
@@ -490,10 +494,12 @@
         "docs/agent-memory/operator/one-shot-floor-recipes-not-events.md:15",
         "content/video_engine/tests/test_melt_morph.py",
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md (T5b)",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s52)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-16)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s52",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-16 (P61 T3): world.morph.poly, contourSilhouette, the goldens, the clip",
       "proofs": [
@@ -924,7 +930,8 @@
         "E99 s1",
         "E99 s2",
         "E99 s39",
-        "E99 s50"
+        "E99 s50",
+        "E99 s53"
       ],
       "kind": "watch",
       "title": "The ball becomes the next FULL chart - melt:morph, the fourth ending",
@@ -957,16 +964,18 @@
       ],
       "options": [],
       "recommendation": "Approve. Read at the four instants: the ball stands alone; the hand-over frame is indistinguishable from the frame before it (the first build cut the GROUND here - the outgoing page is punched, a morph page's board was not - found on the frame and fixed); the mid-frame is one lens no cut can produce; the chart is MADE on the shape. Honest limits on the card: the morph's fill (the brown area) is still standing at the built instant and leaves as the lines draw; two pages with different series colours are untested (the goldens use one file for both); the ball's body colour (HG5b: reference black) is not on this golden yet - T5c re-renders it.",
-      "blocks": "HG2; T5c re-renders this golden with the reference body",
+      "blocks": "nothing - ruled E99 s53 (2026-09-16): good; the chart-to-ball snap re-timed (T3c)",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:549 (R26-117)",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md:333-369 (T3)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s39, s50)",
         "content/video_engine/tests/test_melt_morph.py",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s53)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-16)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s53",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-16 (P61 T3): melt:morph, polyStrip, the hand-over goldens, the clip",
       "proofs": [

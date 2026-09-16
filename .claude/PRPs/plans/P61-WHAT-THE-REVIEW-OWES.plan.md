@@ -120,12 +120,12 @@ that page only with the operator's ruling written to `docs/portable/OPERATOR-RUL
 | gate | slice | queue card | the ONE question the card asks |
 | --- | --- | --- | --- |
 | **HG1** | T2 | `r26-70-compare-morph` (rewritten) | "Watch the two clips end to end. Does it **read as a transformation, not a cut, and read as intentional** (E99 s34)? The entire chart should transform - every series, datum and axis. Approve, or name what cuts or reads as accidental." **RULED 2026-09-15 (E99 s39): line -> bars taken; bars -> line rebuilt in T2b** **HG1b RULED 2026-09-16 (E99 s50): bars -> line approved; closed** |
-| **HG2** | T3 | `r26-117-ball-into-the-next-chart` (**created by the parent at T3's dispatch** - it does not exist today; it supersedes the `"missing": true` line on `r26-70-compare-morph`) | "The page melts, balls up, and the ball becomes the NEXT FULL CHART with no cut between. Watch 0:00-0:08. Does the hand-over hold, or does it read as a jump?" **T3 LANDED 2026-09-16: card open (watch, clip 14.6-21.2 s)** |
-| **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" **T3 LANDED 2026-09-16: card open (watch, clip 14.4-20.3 s)** |
+| **HG2** | T3 | `r26-117-ball-into-the-next-chart` (**created by the parent at T3's dispatch** - it does not exist today; it supersedes the `"missing": true` line on `r26-70-compare-morph`) | "The page melts, balls up, and the ball becomes the NEXT FULL CHART with no cut between. Watch 0:00-0:08. Does the hand-over hold, or does it read as a jump?" **T3 LANDED 2026-09-16: card open (watch, clip 14.6-21.2 s)** **RULED 2026-09-16 (E99 s53): good; the chart-to-ball snap re-timed - T3c** |
+| **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" **T3 LANDED 2026-09-16: card open (watch, clip 14.4-20.3 s)** **RULED 2026-09-16 (E99 s52): the morph fine; the fill may not snap in - T3b** |
 | **HG3** | T4a | `p58-hg3-extruded-bar-leave` | "`form-extruded-bar@proof-leave` beside `form-tilted-line@proof-leave`, as clips. Do the prism's shapes break down enough now? Approve, or say 'more'." **RULED 2026-09-15 (E99 s40): approved** |
 | **HG4** | T4b | `p58-hg3-forms-mount-not-scribble` | "The formed page arriving by the two-plate cross-fade and by the soak, each leaving by the soak's recede (E99 s35). Watch both enters and the leave. Approve, or name what still reads wrong." **RULED 2026-09-15 (E99 s41): approved** |
 | **HG5** | T5 | `r26-118-metallic-ball` | "The ball, before and after: more shadow, a dark Fresnel rim, a metallic band, one point of deep shadow depth. Does it read metallic and heavy now, or still glossy?" **RULED 2026-09-15 (E99 s42): refused - the prior ball + the darkness; T5b** **HG5b RULED 2026-09-16 (E99 s49): the reference body; T5c** |
-| **HG6** | T6 | `r26-76-melt-endings-in-motion` | "The melt as the vortex's motion gathered into one dense, heavy, vibrating point, splashing into a full chart / world plate. Watch the gather and the splash. Approve the new default, or keep today's look behind the flag." **PROOF B LANDED 2026-09-16 via T3: card open (watch, both clips)** |
+| **HG6** | T6 | `r26-76-melt-endings-in-motion` | "The melt as the vortex's motion gathered into one dense, heavy, vibrating point, splashing into a full chart / world plate. Watch the gather and the splash. Approve the new default, or keep today's look behind the flag." **PROOF B LANDED 2026-09-16 via T3: card open (watch, both clips)** **RULED 2026-09-16 (E99 s51): the gather approved; the splash becomes a throw - T6b** |
 | **HG7** | T7 | `r26-82-verdict-stack-choreography` | "The verdict stack on a short with Steel and Paper's choreography - cards that move, then the burst. Watch it beside the Steel and Paper reference clip. Approve, or name the phase that is still flat." **RULED 2026-09-15 (E99 s43): rails in reading order; T7b** |
 | **HG8** | T8 | `r26-80-agenda-page-owed` | "The beautified agenda page - the plate version of the list effect, each row with its catalogued icon stamped after its sentence (E93). Beside today's three plain rows. Approve, or name the change." **RULED 2026-09-15 (E99 s44): approved as a build** |
 | **HG9** | T9 | `p55-gallery-speed-and-motion` | "The gallery: its build time before and after, and three effects a still cannot show now carrying a clip. Is it fast enough and clear enough? Approve, or name what is still unreadable." |
@@ -462,6 +462,40 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - CAPABILITIES rows changed: **:37** (the melt exit) gains the third ending; **:118** / **:116** gain the planted
   source. Closes **P48 T5b** and its card; `P48:185` (HG3) can then be answered
 
+### T3b: THE MORPH PAGE'S GROUND ARRIVES, NEVER SNAPS IN AROUND THE PROP (E99 s52)
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK**)
+- Depends on: T3, HG2b (ruled E99 s52); T4b's field entries
+- Write set: `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the morph page's field / punch beats under a morph enter), `content/video_engine/scripts/species/melt.mjs`
+  (the handed page), `content/video_engine/scripts/build_scene_timeline_f.py` (the morph page's `;field=` word), `content/video_engine/tests/test_melt_morph.py`,
+  `content/video_engine/tests/golden/` (`morph-planted*` + `melt-morph*` re-baselined, a new `@proof-ground` each), `content/video_engine/scripts/render_baseline.py`
+- Acceptance: E99 s52 verbatim - *"going from the ink splotch to the full fill on the board instantly around it is the problem"*. A morph page's charcoal
+  field arrives by the field entry its row names (s35; the soak spreading out from the splotch is the default for a planted page), on its own clock under
+  the morph; a browser probe asserts that no two consecutive frames after the cut differ in the board's filled area by more than a named share; the handed
+  ball's page reads against the same rule; the morph itself untouched (the mid-frames byte-identical where the field is not painted).
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python -m pytest content/video_engine/tests/test_melt_morph.py content/video_engine/tests/test_transitions_e47.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/effects_catalog_check.py` then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only p48-hg3-morph-onto-planted`
+- Evidence: pending
+
+### T3c: THE CHART-TO-BALL IS A VISIBLE FUSION, NOT A SNAP (E99 s53)
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK**)
+- Depends on: T3, HG2 (ruled E99 s53)
+- Write set: `content/video_engine/scripts/species/melt.mjs` (the compile phase's clock and shares), `content/video_engine/scripts/kinetics/morph_a.mjs` (additive),
+  `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the melt region), `content/video_engine/tests/kinetics/melt.test.mjs`, `content/video_engine/tests/test_melt_morph.py`,
+  `content/video_engine/tests/golden/` (every melt golden that carries the compile, re-baselined and named), `content/video_engine/scripts/render_baseline.py`
+- Acceptance: E99 s53 verbatim - *"a rushed snap at the end transforming the chart to a ball"*. The compile (the sagged ink fusing into the ball) takes a
+  longer, eased share of the melt's window on 2s: the last drips arrive INTO the ball, the circle is the end of a visible closing; a test measures the
+  outline's area and perimeter frame to frame across the compile and refuses a jump above a named threshold; a golden at the fusion's midpoint. The default
+  melt's total length unchanged unless the slice argues otherwise in Evidence (E45: the approved cuts render through their frozen players either way).
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python -m pytest content/video_engine/tests/test_melt_morph.py content/video_engine/tests/test_transitions_e47.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/effects_catalog_check.py` then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-117-ball-into-the-next-chart`
+- Evidence: pending
+
 ### T4a: THE EXTRUDED BAR'S LEAVE BREAKS ITS SHAPES DOWN MORE
 - Status: complete (2026-09-15) - HG3 open on the queue as `p58-hg3-extruded-bar-leave` (watch, two clips)
 - Owner: `junior_developer` (**ENGINE LOCK #3**; small)
@@ -734,6 +768,25 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   of its own; (2) the axis hairlines (`<line>` children) still turn rigidly - converting them to sampled polylines finishes the
   swirl. Proof A on the card `r26-76-melt-endings-in-motion` (surface melt-gather 14.7-18.9 s); the card stays owed until proof B.
 - CAPABILITIES row changed: **:37** (THE MELT EXIT) - the gather replaces the sag/ball description behind its flag
+
+### T6b: THE SPLASH IS A THROW - the ball picked up, thrown forward, splatting where it lands (E99 s51)
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK**)
+- Depends on: T6, T5b, HG6 (ruled E99 s51)
+- Write set: `content/video_engine/scripts/species/melt.mjs` (the splash endings), `content/video_engine/scripts/kinetics/stopaction.mjs` (additive: the pick-up),
+  `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the melt region), `content/video_engine/tests/kinetics/*.test.mjs`, `content/video_engine/tests/test_melt_gather.py`,
+  `content/video_engine/tests/golden/` (`melt-gather*`, `melt-splash`, `melt-plate` re-baselined + `@proof-pickup` / `@proof-flight` / `@proof-splat`), `content/video_engine/scripts/render_baseline.py`,
+  `content/video_engine/effects/cards/exit.json`
+- Acceptance: E99 s51 verbatim - *"the ball actually picked up and then thrown forward to splat on the canvas ... I want it to be thrown"*. For `splash:chart`
+  and `splash:plate`: the ball is LIFTED (weight sold first, `landXf` run backwards - an anticipation, the shadow tightening under it), travels FORWARD in a
+  ballistic arc (`throwXf` toward the canvas, the shadow lagging `LAG_FRAMES` behind), and SPLATS at the landing - the splat and the stains grow from the
+  impact point; a test asserts the ball's centre rises before it advances, advances monotonically, and the first stain's centre is the landing point; the
+  bounce-roll-burst reading is gone from the splash (the weight phase's roll stays for `throw`). Every non-splash golden byte-identical.
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python -m pytest content/video_engine/tests/test_melt_morph.py content/video_engine/tests/test_transitions_e47.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/effects_catalog_check.py` then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-76-melt-endings-in-motion`
+- Evidence: pending
 
 ### T7: THE VERDICT STACK ON A SHORT - Steel and Paper's choreography, so the burst lands
 - Status: complete (2026-09-15) - HG7 open on the queue as `r26-82-verdict-stack-choreography` (watch, two clips)
