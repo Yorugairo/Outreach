@@ -434,6 +434,11 @@
       ],
       "options": [
         {
+          "token": "body",
+          "means": "P61 T5b / E99 s42: the ball's BODY colour - `body=slate` (the board's own ink #25313C) or `body=reference` (the blueprint's near-black metal); default `chart`, the ball that shipped.",
+          "source_set": "MELT_BODIES"
+        },
+        {
           "token": "depth",
           "means": "The melt at a depth: melt:...:depth=<k> puts the ink clone and the ball overlay on the camera read at k (camLayerCss), so the ball melts, lands and is thrown at that plane.",
           "source_set": null

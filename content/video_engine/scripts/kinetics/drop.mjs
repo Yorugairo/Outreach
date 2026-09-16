@@ -86,7 +86,16 @@ export const DROP = Object.freeze({
        - the BAND and the DEEP POINT have NO gate-usable finding behind them at all. Their defaults are DERIVED,
          measured by eye against the `melt-ball-roll` goldens, and say so (E99 s24: a dial whose only source is an
          excluded finding gets a DERIVED default and says so - these have no source, excluded or otherwise).
-     All nine are pure functions of position on the ball: the same t twice is the same shading. */
+     All nine are pure functions of position on the ball: the same t twice is the same shading.
+
+     P61 T5b / E99 s42 - WHAT THE OPERATOR KEPT AND WHAT HE REFUSED. The RIM and the BAND are OFF by default
+     (`MELT.W_RIM_ON` / `MELT.W_BAND_ON`, both false; the profiles below are untouched and still tested). The ruling,
+     OPERATOR-RULINGS.md:3202: "the ball is too blurred so the prior work is actually better ... the darkness feels
+     right, but the blur is wrong, and i think the rim is wrong." Named on the frames: the rim's ramp from RIM_AT 0.42
+     to RIM_A 0.97 IS the blur (no filter is involved anywhere - the ball's edge-to-body transition went from 1 px to
+     over 100 px), and because the rim is the only overlay carrying alpha AT the silhouette, its extra antialiased copy
+     of the body path is what crushed a 0.567-covered boundary pixel to 0.988 - the pixelation. The PIT and the
+     occlusion core are the darkness the operator kept, and neither touches the edge. */
   RIM_AT: 0.42,           /* THE DARK GRAZING RIM ("dark fresnel rim"): where the band starts, as a share of R. Inside
                              it the body is untouched; outside it the ink deepens all the way to the silhouette
                              [DERIVED: 0.42 R is the widest band that still clears the specular seat (HL_AT 0.46) on the light side - narrower

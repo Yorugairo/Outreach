@@ -577,7 +577,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - CAPABILITIES rows changed: **:37** (the melt exit's ball) and the `melt:weight` note on R26-118's row
 
 ### T5b: THE PRIOR BALL WITH THE DARKNESS KEPT, AND TWO BODY COLOURS FOR THE OPERATOR'S EYE (E99 s42)
-- Status: pending
+- Status: complete (2026-09-15) - HG5b open on the queue as `r26-118-metallic-ball` (look: three crops + three clips)
 - Owner: `implementation_luna` (**ENGINE LOCK**)
 - Depends on: T5, HG5 (ruled E99 s42)
 - Write set: `content/video_engine/scripts/kinetics/drop.mjs`, `content/video_engine/scripts/species/melt.mjs`,
@@ -594,7 +594,24 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
   `python -m pytest content/video_engine/tests/test_ball_material.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-118-metallic-ball`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T5b.md`. THE FINDING FIRST (no filter blurred anything): the blur was `dropRimAlpha`'s
+  ramp (`kinetics/drop.mjs:99-112`) - the board-to-body transition went from 1 px to 100+ px across the silhouette; the pixelation
+  was four antialiased copies of one path (`species/melt.mjs:1357-1372`): an edge pixel at 0.567 coverage ended at 0.988
+  (1 - (1 - 0.567)^4 = 0.965). THE FIX: `W_RIM_ON: false` / `W_BAND_ON: false` gates (every profile dial kept and tested); the
+  darker contact core and the pit kept. Measured at the settle: silhouette luminance 120.6 (prior 120.7, T5 64.2); contact floor
+  9.8 (T5's darkness kept); the prior-vs-restored diff bbox is only the pit and the core. THE VARIANTS: `melt:weight:...:body=
+  slate|reference` (`build_scene_timeline_f.py:1640-1641`; `meltOpts` :313/329; `meltBodyInk` :997; `W_BODY_SHADE` :244, 1 for
+  both) - slate `#25313C` (the template's page ink, `scene-evidence-player.template.html:50`), reference `#000000` (the living
+  drop blueprint s3.3.1); an unknown body word refused by name. Goldens: `melt-ball-roll` x3 + `melt-depth@proof-ball` re-baselined
+  (six moved incl. `melt-depth`, `melt-gather@proof-point`), NEW `melt-ball-slate` + `@proof-settle`, `melt-ball-reference` +
+  `@proof-settle`. Parent's read of the four settle frames: the restored ball IS the prior ball (the highlight, the clean
+  silhouette) with a deeper contact shadow and a dark pit on its lower right that reads as a smudge - named on the card; the slate
+  ball sinks toward its own board; the reference ball is a black disc with a highlight and no form. Tests: test_ball_material
+  (the flag-off goldens by sha256; rim/band off by default - the silhouette not darker than the body; no filter in the ball's
+  markup; the two bodies measured at the settle; an unknown word refused; two seeks identical); drop.test.mjs. Validate: node
+  577/577; sync in sync (41); pytest 176 passed; effects_catalog_check 0; page-boxes sha-only (44); registry 966, 0 orphaned.
+  Known: `build_golden_sources.py` drifts on two unrelated surfaces (`tiers-two`, `treemap-cross`) when run - restored by the lane,
+  a row for T11. Card: three crops (prior vs restored / slate / reference) + three clips 15.0-17.75 s; options argued by E99 s42.
 
 ### T6: THE MELT GATHERS TO ONE DENSE, HEAVY, VIBRATING POINT - and splashes into a full chart or a world plate
 - Status: complete for proof A (2026-09-15); proof B appends to `r26-76-melt-endings-in-motion` when T3 lands; HG6 asked once with both

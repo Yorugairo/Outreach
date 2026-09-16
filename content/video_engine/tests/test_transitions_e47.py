@@ -340,6 +340,35 @@ def test_a_melt_may_ask_for_the_weight_phase_and_name_its_material():
             B.parse_exit(bad)
 
 
+def test_a_melt_may_name_the_ball_s_BODY_COLOUR_and_every_melt_without_one_is_the_ball_that_shipped():
+    """P61 T5b / E99 s42 (the operator, 2026-09-15, on T5's ball: *"I would be interested in seeing it just melt to
+    the slate gray or the reference color also to see what that looks like"*): `body=<word>` is a suffix of its own,
+    beside `depth=`, anywhere after the name and composable with every other token. It is NOT a fifth MATERIAL: a
+    material is the ball's mass and its damping (MASS / DROP.MAT), a body is only its colour, and `MELT_MATERIALS`
+    stays the four it has. `chart` is the default and writes nothing, so every melt on the record parses to the tuple
+    it always did and its frames cannot move. species/melt.mjs `meltOpts` reads the same word, and
+    test_ball_material pins the two lists to each other."""
+    assert B.MELT_BODIES == ("chart", "slate", "reference"), "species/melt.mjs MELT_BODIES"
+    assert B.MELT_MATERIALS == ("metal", "ink", "paper", "liquid"), "a body is not a material - the four are the four"
+    assert B.melt_body("melt") == "chart" and B.melt_body("melt:weight") == "chart"
+    assert B.melt_body("melt:weight:metal") == "chart" and B.melt_body("dip") == "chart"
+    for word in B.MELT_BODIES:
+        assert B.parse_exit(f"melt:weight:body={word}") == (f"melt:weight:body={word}", None)
+        assert B.melt_body(f"melt:weight:body={word}") == word
+    assert B.parse_exit("melt:weight:metal:body=slate:gather:depth=1.15:2.8") == ("melt:weight:metal:body=slate:gather:depth=1.15:2.8", 2.8)
+    assert B.melt_body("melt:weight:body=reference:splash:chart") == "reference"
+    assert B.melt_ending("melt:weight:body=slate") == "throw", "a body colour does not change the ending"
+    assert B.parse_exit("melt:weight:body=slate")[0] == "melt:weight:body=slate", \
+        "the weight lookahead ate the body word as a material"
+    for bad, says in {"melt:weight:body=charcoal": "is not a body colour",
+                      "melt:weight:body=orange": "is not a body colour",
+                      "melt:weight:body=": "is not a body colour",
+                      "melt:body=slate:body=reference": "a ball is one colour"}.items():
+        with pytest.raises(ValueError) as e:
+            B.parse_exit(bad)
+        assert says in str(e.value), f"{bad}: {e.value}"
+
+
 def test_a_melt_may_ask_for_the_gather_and_every_melt_without_it_parses_to_the_tuple_it_always_did():
     """P61 T6 / E99 s2 (the operator, 2026-09-14: *"instead of a whirlpool, vortexing around a single point, it
     collects and amasses into a single point"*): `gather` is a PHASE token like `weight`, anywhere after the name and

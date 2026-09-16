@@ -2550,7 +2550,16 @@ async function mount(doc) {
          - the BAND and the DEEP POINT have NO gate-usable finding behind them at all. Their defaults are DERIVED,
            measured by eye against the `melt-ball-roll` goldens, and say so (E99 s24: a dial whose only source is an
            excluded finding gets a DERIVED default and says so - these have no source, excluded or otherwise).
-       All nine are pure functions of position on the ball: the same t twice is the same shading. */
+       All nine are pure functions of position on the ball: the same t twice is the same shading.
+
+       P61 T5b / E99 s42 - WHAT THE OPERATOR KEPT AND WHAT HE REFUSED. The RIM and the BAND are OFF by default
+       (`MELT.W_RIM_ON` / `MELT.W_BAND_ON`, both false; the profiles below are untouched and still tested). The ruling,
+       OPERATOR-RULINGS.md:3202: "the ball is too blurred so the prior work is actually better ... the darkness feels
+       right, but the blur is wrong, and i think the rim is wrong." Named on the frames: the rim's ramp from RIM_AT 0.42
+       to RIM_A 0.97 IS the blur (no filter is involved anywhere - the ball's edge-to-body transition went from 1 px to
+       over 100 px), and because the rim is the only overlay carrying alpha AT the silhouette, its extra antialiased copy
+       of the body path is what crushed a 0.567-covered boundary pixel to 0.988 - the pixelation. The PIT and the
+       occlusion core are the darkness the operator kept, and neither touches the edge. */
     RIM_AT: 0.42,           /* THE DARK GRAZING RIM ("dark fresnel rim"): where the band starts, as a share of R. Inside
                                it the body is untouched; outside it the ink deepens all the way to the silhouette
                                [DERIVED: 0.42 R is the widest band that still clears the specular seat (HL_AT 0.46) on the light side - narrower
@@ -2893,6 +2902,38 @@ async function mount(doc) {
                               seat, the same way. Under the rim's 0.88, so the silhouette stays the darkest thing on the
                               ball and the well reads as depth inside it, not as a second outline [DERIVED] */
     W_PIT_STOPS: 6,        /* the stops its falloff is sampled at [DERIVED] */
+    /* ---- P61 T5b / E99 s42 - THE PRIOR SURFACE BACK, THE DARKNESS KEPT ----------------------------------------------
+       The operator on T5's ball (OPERATOR-RULINGS.md:3202): "This doesn't work, the ball is too blurred so the prior
+       work is actually better. this slice is pixelated on the edges now, the darkness feels right, but the blur is
+       wrong, and i think the rim is wrong." NAMED, from the frames, before these two dials were written:
+         THE BLUR is the RIM'S RAMP, not a filter. There is no feGaussianBlur and no CSS blur on the ball anywhere -
+         the only blur T5 added is on the occlusion ELLIPSE, on the board. `dropRimAlpha` runs from DROP.RIM_AT 0.42 to
+         RIM_A 0.97 in near-black ink, so the outer 58 % of the radius is one continuous darkening. Measured across the
+         silhouette at the settle (y=838): the prior ball goes board 37 -> 160 -> 254 and is FLAT, a 1 px edge; T5 goes
+         37 -> 121 -> 122 -> 135 ... 239 and is still climbing 100 px in. A surface with no terminator anywhere is what
+         soft focus looks like. The BAND is the second smear: a Gaussian stripe of half-width 0.055 over 24 stops.
+         THE PIXELATED EDGE is four antialiased copies of the SAME path composited (body + band + pit + rim, each given
+         `st.body` in paintMelt). A boundary pixel of coverage a ends at 1 - (1 - a)^4. Measured on one pixel: coverage
+         0.567 on the prior ball, 0.988 on T5's - and 1 - (1 - 0.567)^4 = 0.965, the rest being RIM_A. The rim is the
+         layer that carries alpha AT the silhouette, so it is the layer that destroys the antialiasing.
+       So both refused things are OFF, and both keep every dial they had - the profiles are still right, still tested,
+       and reachable through an option; NO authored token turns them on, because E99 s42 refused the look. What STAYS is
+       the DARKNESS the operator kept: the occlusion core (W_OCCL_*, on the BOARD) and the point of deep shadow depth
+       (W_PIT_*), whose gradient reaches 0.22 + 0.26 = 0.48 of the body's box against a silhouette at 0.5 - it carries
+       NO alpha at the edge and so cannot harden it. */
+    W_RIM_ON: false,       /* (b) THE DARK GRAZING RIM: OFF (E99 s42, "i think the rim is wrong" - and it is both
+                              defects at once: the ramp is the blur, the alpha at the silhouette is the pixelation) */
+    W_BAND_ON: false,      /* (c) THE METALLIC BAND: OFF (E99 s42, the second soft smear across the body) */
+    /* ---- P61 T5b / E99 s42 - THE BALL'S BODY COLOUR (`melt:weight:...:body=<word>`) ---------------------------------
+       The operator: "I would be interested in seeing it just melt to the slate gray or the reference color also to see
+       what that looks like." So the body colour is an AUTHORED option on the weight token, read in exactly one place
+       per side (`meltOpts` here, `_melt_parts` in build_scene_timeline_f.py), an unknown word refused BY NAME, and the
+       DEFAULT - `chart`, no word at all - is the ball that always shipped, byte for byte. MELT_BODIES holds the targets;
+       this is how far the ball's ink is taken toward the one it names. */
+    W_BODY_SHADE: 1,       /* 1 = the named colour exactly, at each stop's OWN level: the stop's target is the body
+                              colour scaled by that stop's share of the LIT stop's luminance, so the ball keeps its own
+                              light-to-core ramp and only its hue and level change. Below 1 the chart's ink shows
+                              through. 1 is the ruling's own word - "just melt to the slate gray" [DERIVED] */
     /* P58 T6 (b) / E98 s4: THE PLANE THE BALL MELTS AT (`melt:...:depth=<k>`) - kinetics/camera.mjs PARALLAX's own
        range, written here so this module stays self-contained, and build_scene_timeline_f.DOCK_DEPTH's the same three
        numbers (one dial written twice, as MELT.S and MELT_S are; test_transitions_e47 pins the pair). */
@@ -2957,6 +2998,24 @@ async function mount(doc) {
   const MELT_DEPTH = "depth=";
   /* the materials `melt:weight:<material>` may name (stopaction MASS / drop DROP.MAT); metal is the default, E88 s7 */
   const MELT_MATERIALS = Object.freeze(["metal", "ink", "paper", "liquid"]);
+  /* P61 T5b: the suffix that names the ball's BODY COLOUR - build_scene_timeline_f.BODY_SUFFIX */
+  const MELT_BODY = "body=";
+  /* P61 T5b / E99 s42: the body colours `melt:weight:...:body=<word>` may name, and the target each one melts to.
+     A MATERIAL is the ball's mass and its damping (MELT_MATERIALS, above); a BODY is only its colour, which is why it
+     is a suffix of its own and not a fifth material - test_transitions_e47 pins MELT_MATERIALS at the four it has.
+       chart      the ball carries the CHART's own ink, by Kubelka-Munk - the ball that always shipped, and the look
+                  E99 s42 called "the prior work ... better". No target: `meltBodyInk` returns `meltInkOf` untouched,
+                  so the default melt's every string is the string it was.
+       slate      the BOARD's own ink: `--lp-char: #25313C` (docs/content-video-engine/samples/
+                  scene-evidence-player.template.html:50), the same charcoal the brand tokens carry as `color.charcoal`
+                  (content/video_engine/channel-assets/money-physics/brand-tokens.json:12, "ink: contours, wordmark,
+                  body text"). The operator's "slate gray" is that token and not a new colour.
+       reference  the blueprint's near-black metal: LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md s3.3 (:198-201, gate tier
+                  PLAUSIBLE) - "Zero Diffuse Reflectance (k_d = 0) ... The albedo base color is pure black" and "The
+                  droplet silhouette is near-black, illuminated strictly by intense, focused specular highlights". So
+                  the target IS pure black and what makes the rendered ball near-black rather than black is the body
+                  gradient's own sheen stop and the specular spot over it, exactly as the finding describes. */
+  const MELT_BODIES = Object.freeze({ chart: null, slate: "#25313C", reference: "#000000" });
 
   const mc01 = (v) => (v <= 0 ? 0 : v >= 1 ? 1 : v);   /* the engine inlines every module into ONE scope, so a
      private helper carries the module's own prefix - `c01` is ink.mjs's */
@@ -2970,7 +3029,8 @@ async function mount(doc) {
      shot table is a refusal and not a silent default. */
   const meltOpts = (exit, o = {}) => {
     const P = Object.assign({}, MELT, o), bits = String(exit == null ? "" : exit).split(":");
-    const out = { name: bits[0] || "", secs: P.S, ending: null, to: null, weight: false, wmass: P.W_MASS, depth: 0, gather: false };
+    const out = { name: bits[0] || "", secs: P.S, ending: null, to: null, weight: false, wmass: P.W_MASS, depth: 0, gather: false,
+                  wbody: "chart" };   /* P61 T5b / E99 s42: the ball's body colour - `chart` is the ball that shipped */
     let said = false;   /* did the row declare its own length? a weight phase lengthens only the DEFAULT window */
     const setEnding = (e) => {
       if (out.ending) throw new Error("melt: two endings (" + out.ending + " and " + e + ") - a melt ends one way");
@@ -2988,10 +3048,17 @@ async function mount(doc) {
         out.depth = v; continue;
       }
       if (b === "gather") { out.gather = true; continue; }   /* P61 T6 / E99 s2: the sag becomes the vortex, gathered to one point */
+      if (b.indexOf(MELT_BODY) === 0) {   /* P61 T5b / E99 s42: the ball's BODY COLOUR - the compiler's own vocabulary and words */
+        const w = b.slice(MELT_BODY.length);
+        if (!Object.prototype.hasOwnProperty.call(MELT_BODIES, w)) {
+          throw new Error("melt: " + w + " is not a body colour - body= takes " + Object.keys(MELT_BODIES).join(", "));
+        }
+        out.wbody = w; continue;
+      }
       if (b === "weight") {   /* R26-118: the weight phase, and the material it is made of (metal unless it says) */
         out.weight = true;
         const nx = (bits[i + 1] || "").trim();
-        if (nx && nx.indexOf(",") < 0 && nx !== "throw" && nx !== "splash" && nx !== "gather" && nx.indexOf(MELT_DEPTH) !== 0 && !Number.isFinite(Number(nx))) {
+        if (nx && nx.indexOf(",") < 0 && nx !== "throw" && nx !== "splash" && nx !== "gather" && nx.indexOf(MELT_DEPTH) !== 0 && nx.indexOf(MELT_BODY) !== 0 && !Number.isFinite(Number(nx))) {
           if (MELT_MATERIALS.indexOf(nx) < 0) {
             throw new Error("melt: " + nx + " is not a material - melt:weight takes " + MELT_MATERIALS.join(", "));
           }
@@ -3609,14 +3676,29 @@ async function mount(doc) {
      thing from meltInkOf's Kubelka-Munk concentration on purpose: K-M mixes PIGMENT, and more pigment on an orange
      stroke saturates toward a bright red (#fc0c03 at 34x) - it can never reach a shadow. A shadow is less light. */
   const meltShade = (hex, k) => linToHex(hexToLin(hex).map((v) => v * (1 - mc01(k))));
+  /* P61 T5b / E99 s42: THE BALL'S INK AT A DENSITY, IN THE BODY COLOUR IT WAS AUTHORED IN. `chart` (the default, and a
+     melt that names no body at all) has NO target, so this returns `meltInkOf` itself and every default string is the
+     string that shipped - that identity is what keeps the flag-off goldens byte-identical, and a test asserts it.
+     A named body (slate, reference - MELT_BODIES) melts the ink toward its target AT THIS STOP'S OWN LEVEL: the target
+     is scaled by the stop's share of the LIT stop's luminance, so the light-to-core ramp the K-M concentration built is
+     kept and only the hue and the level move. The lerp is in LINEAR light, like meltSheen and meltShade. */
+  const mLum = (lin) => 0.2126 * lin[0] + 0.7152 * lin[1] + 0.0722 * lin[2];
+  const meltBodyInk = (hexes, density, o = {}) => {
+    const P = Object.assign({}, MELT, o), ink = meltInkOf(hexes, density);
+    const to = MELT_BODIES[P.wbody || "chart"];
+    if (!to) return ink;
+    const a = hexToLin(ink), share = mLum(a) / Math.max(1e-6, mLum(hexToLin(meltInkOf(hexes, P.LIGHT))));
+    const t = hexToLin(to).map((v) => v * share), k = mc01(P.W_BODY_SHADE);
+    return linToHex(a.map((v, i) => v + (t[i] - v) * k));
+  };
   /* the ball's body: THE INK, one small highlight up and to the left, the stroke, then concentrated toward its shaded side */
   const meltBodyGradientMarkup = (id, hexes, o = {}) => {
-    const P = Object.assign({}, MELT, o), lit = meltInkOf(hexes, P.LIGHT);
+    const P = Object.assign({}, MELT, o), lit = meltBodyInk(hexes, P.LIGHT, P);
     return '<radialGradient id="' + id + '" cx="0.34" cy="0.3" r="0.8" fx="0.32" fy="0.26">'
       + '<stop offset="0" stop-color="' + meltSheen(lit, P.SHEEN) + '"/>'
       + '<stop offset="0.14" stop-color="' + lit + '"/>'
-      + '<stop offset="0.55" stop-color="' + meltInkOf(hexes, P.INK_DEEP) + '"/>'
-      + '<stop offset="1" stop-color="' + meltInkOf(hexes, P.CORE) + '"/></radialGradient>';
+      + '<stop offset="0.55" stop-color="' + meltBodyInk(hexes, P.INK_DEEP, P) + '"/>'
+      + '<stop offset="1" stop-color="' + meltBodyInk(hexes, P.CORE, P) + '"/></radialGradient>';
   };
   /* ---- P61 T5 / E99 s3: THE BALL'S SHADOWS - the three overlays' paint ---------------------------------------------
      Each of the three wears the BODY'S OWN path (`st.body`), so it is clipped to the living drop's silhouette exactly,
@@ -3656,7 +3738,7 @@ async function mount(doc) {
   /* (d) THE POINT OF DEEP SHADOW DEPTH: a small radial gradient seated OPPOSITE the light (dropDeepPoint, read in the
      body's box where the ball's radius is 0.5), falling off by DROP's PIT_GAMMA - one well of real depth on the ball. */
   const meltPitGradientMarkup = (id, hexes, o = {}) => {
-    const P = Object.assign({}, MELT, o), deep = meltShade(meltInkOf(hexes, P.CORE), P.W_PIT_SHADE), n = Math.max(2, P.W_PIT_STOPS | 0);
+    const P = Object.assign({}, MELT, o), deep = meltShade(meltBodyInk(hexes, P.CORE, P), P.W_PIT_SHADE), n = Math.max(2, P.W_PIT_STOPS | 0);
     const seat = dropDeepPoint([0.5, 0.5], 0.5, P);
     let s = '<radialGradient id="' + id + '" cx="' + seat.x.toFixed(4) + '" cy="' + seat.y.toFixed(4)
       + '" r="' + seat.r.toFixed(4) + '">';
@@ -3844,7 +3926,7 @@ async function mount(doc) {
   /* the overlay, mounted ONCE and kept on wA.__melt: the ink clone (a sibling right after the board, so it rides above
      it), and an svg sibling holding the filters, the masks, the stains' rims, the droplets and the ball. Nothing here reads
      time; the ink box and the colours are read once, from the page as it stands at the boundary. */
-  const meltMount = (wA, el, id) => {
+  const meltMount = (wA, el, id, o = {}) => {   /* P61 T5b: `o` is the exit's own opts - the BODY COLOUR is read here, once, where the ball's one gradient is built */
     const doc = wA.ownerDocument;
     if (!doc.getElementById("meltcss")) { const s = doc.createElement("style"); s.id = "meltcss"; s.textContent = MELT_CSS; doc.head.appendChild(s); }
     const rect = meltInkRect(wA), hexes = meltInkColours(wA);
@@ -3860,7 +3942,7 @@ async function mount(doc) {
     const svg = el("svg", "meltov", wA.parentNode, { "pointer-events": "none" });
     const defs = el("defs", "", svg, {});
     defs.innerHTML = meltFilterMarkup(id + "f", 0) + meltMaskMarkup(id + "m", id + "f") + meltInkFilterMarkup(id + "i")
-      + meltStainFilterMarkup(id + "s") + meltRevealMarkup(id + "r", id + "s") + meltSplatFilterMarkup(id + "p") + meltBodyGradientMarkup(id + "g", hexes)
+      + meltStainFilterMarkup(id + "s") + meltRevealMarkup(id + "r", id + "s") + meltSplatFilterMarkup(id + "p") + meltBodyGradientMarkup(id + "g", hexes, o)
       + meltSplatGradientMarkup(id + "w", hexes) + meltTextFilterMarkup(id + "x");
     const ink0 = meltInkOf(hexes, MELT.INK_DEEP);
     defs.querySelector("#" + id + "i feFlood").setAttribute("flood-color", ink0);
@@ -3899,7 +3981,7 @@ async function mount(doc) {
     const wCss = typeof ctx.worldCss === "string" ? ctx.worldCss : wA.style.transform;
     if (!wA.__melt && !wA.querySelector(".lp-page")) return null;
     if (wA.__melt && !(wA.__melt.svg && wA.__melt.svg.isConnected)) clearMelt(wA);   /* a stale mount: its clone and classes go first */
-    const m = wA.__melt ? wA.__melt : meltMount(wA, el, id);
+    const m = wA.__melt ? wA.__melt : meltMount(wA, el, id, ctx.opts);   /* P61 T5b: the exit's own opts, so the ball's gradient is built in its authored BODY colour */
     const st = meltState(ctx.t0, ctx.t, Object.assign({ rect: m.rect, stagebox: meltStageBox(wA) }, ctx.opts), rnd);
     m.svg.style.left = wA.offsetLeft + "px"; m.svg.style.top = wA.offsetTop + "px";
     m.svg.style.width = wA.offsetWidth + "px"; m.svg.style.height = wA.offsetHeight + "px";
@@ -3950,24 +4032,35 @@ async function mount(doc) {
     m.body.setAttribute("d", st.body || "");
     m.body.setAttribute("opacity", (st.body ? st.bodyAlpha : 0).toFixed(3));
     m.bodyG.setAttribute("transform", meltBodyTransform(st));
-    /* P61 T5 / E99 s3 - THE BALL'S SHADOWS: the METALLIC BAND, the DARK GRAZING RIM and the POINT OF DEEP SHADOW
-       DEPTH, in that order under the roll's mark and the specular spot. All three wear the BODY'S OWN `d`, so each is
-       clipped to the living drop's silhouette exactly at every t - no clipPath, no second geometry to keep in step.
+    /* P61 T5 / E99 s3 + P61 T5b / E99 s42 - THE BALL'S SHADOWS. What is left after the operator's read: the POINT OF
+       DEEP SHADOW DEPTH, under the roll's mark and the specular spot. It wears the BODY'S OWN `d`, so it is clipped to
+       the living drop's silhouette exactly at every t - no clipPath, no second geometry to keep in step - and its
+       gradient reaches 0.48 of the body's box against a silhouette at 0.5, so it carries NO alpha at the edge.
+       THE BAND AND THE RIM ARE OFF (MELT.W_RIM_ON / W_BAND_ON, both false - E99 s42). That is not a cosmetic choice:
+       every one of these paths is antialiased on its own and then composited, so a boundary pixel of coverage `a` ends
+       at 1 - (1 - a)^k for k paths. Measured on the settle frame, one pixel went from 0.567 covered to 0.988 with four
+       paths, which is the "pixelated on the edges" the operator read; with the pit alone the edge is the body's own.
        Mounted (defs and paths together) the first frame `st.mass` is true, which only a `melt:weight` ever makes it:
        a melt without weight writes no gradient into its defs and no path into its body group, so its markup is the
        markup that shipped. `docs_find "Fresnel"` returns only clothoid.mjs's INTEGRAL - nothing here is named for it. */
-    if (st.mass && !m.band) {
-      m.defs.insertAdjacentHTML("beforeend", meltBandGradientMarkup(id + "gb", m.hexes)
-        + meltPitGradientMarkup(id + "gp", m.hexes) + meltRimGradientMarkup(id + "gr", m.hexes));
+    if (st.mass && !m.pit) {
+      const W = Object.assign({}, MELT, ctx.opts);
       /* the order IS the physics: the BAND is a reflection, the PIT is a shadow and occludes it, and the RIM is the
-         silhouette, which is under nothing. */
-      m.band = el("path", "", m.bodyG, { fill: "url(#" + id + "gb)", d: "" });
+         silhouette, which is under nothing. Each is written only if its own gate is on. */
+      if (W.W_BAND_ON) {
+        m.defs.insertAdjacentHTML("beforeend", meltBandGradientMarkup(id + "gb", m.hexes, W));
+        m.band = el("path", "", m.bodyG, { fill: "url(#" + id + "gb)", d: "" });
+      }
+      m.defs.insertAdjacentHTML("beforeend", meltPitGradientMarkup(id + "gp", m.hexes, W));
       m.pit = el("path", "", m.bodyG, { fill: "url(#" + id + "gp)", d: "" });
-      m.rim = el("path", "", m.bodyG, { fill: "url(#" + id + "gr)", d: "" });
+      if (W.W_RIM_ON) {
+        m.defs.insertAdjacentHTML("beforeend", meltRimGradientMarkup(id + "gr", m.hexes, W));
+        m.rim = el("path", "", m.bodyG, { fill: "url(#" + id + "gr)", d: "" });
+      }
     }
-    if (m.band) {
+    if (m.pit) {
       const d = st.mass ? (st.body || "") : "", a = (d ? st.bodyAlpha : 0).toFixed(3);
-      for (const p of [m.band, m.pit, m.rim]) { p.setAttribute("d", d); p.setAttribute("opacity", a); }
+      for (const p of [m.band, m.pit, m.rim]) { if (p) { p.setAttribute("d", d); p.setAttribute("opacity", a); } }
     }
     /* THE WEIGHT PHASE's three things (R26-118), each mounted the first frame it is asked for: a melt that never asked
        for weight never creates one, so its DOM is the DOM it always had - which is why the goldens are byte-identical. */
@@ -3993,7 +4086,7 @@ async function mount(doc) {
       m.occl.style.filter = oc ? "blur(" + oc.blur.toFixed(2) + "px)" : "";
     }
     if (st.mark || m.mark) {
-      if (!m.mark) m.mark = el("ellipse", "meltmark", m.bodyG, { fill: meltInkOf(m.hexes, MELT.CORE) });
+      if (!m.mark) m.mark = el("ellipse", "meltmark", m.bodyG, { fill: meltBodyInk(m.hexes, MELT.CORE, ctx.opts) });   /* P61 T5b: the mark is the ball's own ink, so it follows its body colour */
       const k = st.mark;
       m.mark.setAttribute("cx", k ? k.x.toFixed(2) : "0"); m.mark.setAttribute("cy", k ? k.y.toFixed(2) : "0");
       m.mark.setAttribute("rx", k ? k.rx.toFixed(2) : "0"); m.mark.setAttribute("ry", k ? k.ry.toFixed(2) : "0");
@@ -4001,7 +4094,7 @@ async function mount(doc) {
       m.mark.setAttribute("opacity", k ? (st.bodyAlpha * 0.9).toFixed(3) : "0");
     }
     if (st.hl || m.hl) {
-      if (!m.hl) m.hl = el("ellipse", "melthl", m.bodyG, { fill: meltSheen(meltInkOf(m.hexes, MELT.LIGHT), MELT.HL_SHEEN) });
+      if (!m.hl) m.hl = el("ellipse", "melthl", m.bodyG, { fill: meltSheen(meltBodyInk(m.hexes, MELT.LIGHT, ctx.opts), MELT.HL_SHEEN) });   /* P61 T5b: and so does the one specular spot */
       const h = st.hl;
       m.hl.setAttribute("cx", h ? h.x.toFixed(2) : "0"); m.hl.setAttribute("cy", h ? h.y.toFixed(2) : "0");
       m.hl.setAttribute("rx", h ? h.r.toFixed(2) : "0"); m.hl.setAttribute("ry", h ? (h.r * 0.72).toFixed(2) : "0");

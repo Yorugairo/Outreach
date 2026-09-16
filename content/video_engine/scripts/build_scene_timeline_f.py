@@ -1637,6 +1637,8 @@ def parse_ledger_id(plate_id: str) -> tuple[str, str, int | None, str, str | Non
 MELT_ENDINGS = ("throw", "splash:chart", "splash:plate")   # E88 / R26-76: the three authored endings - species/melt.mjs MELT_ENDINGS
 MELT_MATERIALS = ("metal", "ink", "paper", "liquid")       # R26-118 / E88 s7: what `melt:weight:<material>` may name - species/melt.mjs MELT_MATERIALS
 DEPTH_SUFFIX = "depth="   # P58 T6 (b) / E98 s4: the plane a MECHANISM happens at, as an exit suffix - `melt:...:depth=<k>` and `slide:<dir>[:<s>]:depth=<k_out>,<k_in>` (P58 T6 (c)); species/melt.mjs and the engine's slideOpts read the same string on the player's side
+BODY_SUFFIX = "body="     # P61 T5b / E99 s42: the ball's BODY COLOUR - `melt:weight:...:body=<word>`; species/melt.mjs MELT_BODY
+MELT_BODIES = ("chart", "slate", "reference")   # P61 T5b / E99 s42: chart (the ball that shipped - the chart's own ink), slate (the BOARD's ink, `--lp-char: #25313C`, docs/content-video-engine/samples/scene-evidence-player.template.html:50), reference (the blueprint's near-black metal, LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md s3.3 :198-201 "the albedo base color is pure black", gate tier PLAUSIBLE); species/melt.mjs MELT_BODIES
 
 
 def _is_number(bit: str) -> bool:
@@ -1647,7 +1649,7 @@ def _is_number(bit: str) -> bool:
     return True
 
 
-def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool]:
+def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool, str]:
     """A melt's suffixes, in any order (E88, R26-76): an ENDING - ``throw`` (the default), ``splash:chart`` or
     ``splash:plate`` - a bare number, its LENGTH, and on a throw only an ``x,y`` pair, the point it is thrown to in
     stage fractions. A bare ``splash`` is REFUSED: since E88 a splash has two endings that need two different incoming
@@ -1668,13 +1670,19 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool]:
     and amassing on it, no blur and no wipe anywhere in the window. It is opt-in the same way, and a `melt:gather`
     that declares no length of its own runs its window plus MELT_G_S. E99 s34: it stays OFF the approved Japan short.
 
+    P61 T5b / E99 s42 adds ``body=<word>`` - the ball's BODY COLOUR (``chart``, the default and the ball that always
+    shipped; ``slate``, the board's own ink; ``reference``, the blueprint's near-black metal). It is a suffix of its
+    own and NOT a fifth material, because a material is the ball's mass and damping and a body is only its colour.
+    A ball is one colour, so a row names at most one, and a word this engine does not have is refused BY NAME.
+
     species/melt.mjs ``meltOpts`` reads exactly this grammar on the player's side; the two have to agree, and
     test_transitions_e47 pins the pair. Returns (ending, the declared length or None for MELT_S, the declared
-    depth or None for the flat clone, whether the row asked for the gather)."""
+    depth or None for the flat clone, whether the row asked for the gather, the body colour)."""
     secs: float | None = None
     ending: str | None = None
     depth: float | None = None   # P58 T6 (b): validated here, carried to the player on the exit string itself
     gather = False               # P61 T6 / E99 s2: the phase token, carried to the player on the exit string too
+    body: str | None = None      # P61 T5b / E99 s42: the ball's body colour, validated here and carried on the string
     point = False
     bits = str(exit_id).split(":")[1:]
     i = 0
@@ -1703,9 +1711,16 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool]:
         if bit == "gather":   # P61 T6 / E99 s2: the sag becomes the vortex, gathered to ONE point
             gather = True
             continue
+        if bit.startswith(BODY_SUFFIX):   # P61 T5b / E99 s42: the ball's BODY COLOUR - species/melt.mjs meltOpts reads the same word
+            if body is not None:
+                raise ValueError(f"exit {exit_id!r}: two body colours - a ball is one colour")
+            body = bit[len(BODY_SUFFIX):]
+            if body not in MELT_BODIES:
+                raise ValueError(f"exit {exit_id!r}: {body!r} is not a body colour - body= takes " + ", ".join(MELT_BODIES))
+            continue
         if bit == "weight":   # R26-118: the weight phase, and the material the ball is made of
             nxt = bits[i].strip() if i < len(bits) else ""
-            if nxt and "," not in nxt and nxt not in ("throw", "splash", "gather") and not nxt.startswith(DEPTH_SUFFIX) and not _is_number(nxt):
+            if nxt and "," not in nxt and nxt not in ("throw", "splash", "gather") and not nxt.startswith(DEPTH_SUFFIX) and not nxt.startswith(BODY_SUFFIX) and not _is_number(nxt):
                 if nxt not in MELT_MATERIALS:
                     raise ValueError(f"exit {exit_id!r}: {nxt!r} is not a material - melt:weight takes "
                                      + ", ".join(MELT_MATERIALS))
@@ -1734,7 +1749,7 @@ def _melt_parts(exit_id: str) -> tuple[str, float | None, float | None, bool]:
     ending = ending or "throw"
     if point and ending != "throw":
         raise ValueError(f"exit {exit_id!r}: an x,y point is where a THROW goes - a splash lands on the board")
-    return ending, secs, depth, gather
+    return ending, secs, depth, gather, body or "chart"
 
 
 def melt_depth(exit_id: str | None) -> float | None:
@@ -1750,6 +1765,15 @@ def melt_gather(exit_id: str | None) -> bool:
     if not exit_id or str(exit_id).split(":")[0] != "melt":
         return False
     return _melt_parts(str(exit_id))[3]
+
+
+def melt_body(exit_id: str | None) -> str:
+    """P61 T5b / E99 s42: which BODY COLOUR this melt's ball wears - `chart` (the ball that shipped, the chart's own
+    ink) unless the row says `body=slate` or `body=reference`. `chart` for every other exit and for every melt on the
+    record, which is why the default melt's frames are byte-identical."""
+    if not exit_id or str(exit_id).split(":")[0] != "melt":
+        return "chart"
+    return _melt_parts(str(exit_id))[4]
 
 
 def page_camera_k(page: dict | None) -> float:

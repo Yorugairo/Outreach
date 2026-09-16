@@ -119,6 +119,12 @@ PROOF_FRAMES = {
     # 15.88 - 17.03. No flag: weight is authored on the exit, not switched on.
     "melt-ball-roll@proof-land": ("melt-ball-roll", {}, 16.11),     # THE LANDING: the contact - the board dipped under it, the contact shadow tightened from FAR to NEAR, the surface re-excited by the hit
     "melt-ball-roll@proof-settle": ("melt-ball-roll", {}, 16.98),   # AT REST before the ending: rolled and nudged its whole way, the mark turned round, the drop still wriggling to contain itself (E49)
+    # P61 T5b / E99 s42 - THE SAME SETTLE INSTANT IN THE TWO BODY COLOURS the operator asked to see: "I would be
+    # interested in seeing it just melt to the slate gray or the reference color also to see what that looks like."
+    # Same t as `melt-ball-roll@proof-settle` to the frame, so the three read as one crop; the only difference on the
+    # exit string is `:body=slate` / `:body=reference`. No flag: a body colour is AUTHORED, never switched on.
+    "melt-ball-slate@proof-settle": ("melt-ball-slate", {}, 16.98),          # the ball melted to the BOARD's own ink (--lp-char #25313C)
+    "melt-ball-reference@proof-settle": ("melt-ball-reference", {}, 16.98),  # ... and to the blueprint's near-black metal (LIVING_METALLIC_DROP s3.3: the albedo base colour is pure black, the read is the specular)
     # P61 T6 / E99 s2 - THE GATHER, THE POINT, THE SPLASH AND THE PLATE (`melt:gather:weight:splash:plate`, a 3.65 s
     # window off MELT_CUT: gather 15.00 -> 15.75, ball -> 16.375, weight -> 17.525, splash -> 18.65). The base frame is
     # the gather's own midpoint; these are the three instants it cannot show. No flag: the gather is AUTHORED on the

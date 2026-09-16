@@ -72,6 +72,12 @@ FRAME_T = {
                                    # NUDGE to 16.846, SETTLE to 16.98. 16.28 is half way through the roll: the ball has
                                    # turned ~100 degrees with its own ink MARK, its shadow rides a frame behind it, and
                                    # its surface is out of round. Its landing and its rest ride PROOF_FRAMES
+    # P61 T5b / E99 s42: the two BODY COLOURS, at `melt-ball-roll`'s own base instant so the pair mirrors it exactly.
+    # Neither is in test_golden_frames.SURFACES; the frame the operator is asked to judge is the PROOF at 16.98, the
+    # settle, the same instant as `melt-ball-roll@proof-settle`, so the three read as one crop. `render_baseline
+    # --check` covers these two base frames, which is why each has one.
+    "melt-ball-slate": 16.28,
+    "melt-ball-reference": 16.28,
     "melt-plate": 16.44,            # E88 / R26-76: splash:plate at u 0.90 - the PAINT: the stains have opened from the
                                    # landed drops and the plate shows through them over the charcoal, springing to rest
     "count-array": 8.0,             # P52 T7: all six icons landed (5.0 + 5 * 0.34 + LAND_S = 7.15) and the count written as the claim (+ CLAIM_LAG + CLAIM_S = 7.73) - the field as it is read
@@ -1254,7 +1260,7 @@ def _dock_pair(aspect: str | None) -> tuple[dict, dict]:
     return _timeline(f"Golden: dock pair {aspect or '16:9'}", scenes, ev, aspect), uris
 
 
-def melt_page(ending: str = "throw", weight: bool = False) -> tuple[dict, dict]:
+def melt_page(ending: str = "throw", weight: bool = False, body: str = "chart") -> tuple[dict, dict]:
     """P52 T9 / R26-15, reworked to E88 / R26-76 - THE MELT TAKES THE CHART, NOT THE BOARD.
 
     Scene 1 is the line page every other golden is built from, given the whole 15 s to draw itself, so what melts is a
@@ -1302,6 +1308,13 @@ def melt_page(ending: str = "throw", weight: bool = False) -> tuple[dict, dict]:
     exit_id = "melt" if ending == "throw" else "melt:" + ending
     if weight:
         exit_id += ":weight"   # R26-118: metal, the default - the ball lands, rolls, is nudged and settles first
+    if body != "chart":
+        # P61 T5b / E99 s42: the two body colours the operator asked to SEE - the ball melting to the board's slate
+        # grey and to the blueprint's near-black metal. `chart` writes no token at all, so the default surface's exit
+        # string is character for character the one it had and its goldens cannot move.
+        import build_scene_timeline_f as BST
+        assert body in BST.MELT_BODIES, body
+        exit_id += ":body=" + body
     scenes.append({"scene_id": "s02", "world": world2, "exit": exit_id,
                    "span": [MELT_CUT, RUNTIME], "docks": [], "species": []})
     return _timeline("Golden: the chart melts off its board and is " + ("rolled in its own weight and " if weight else "")
@@ -1702,6 +1715,12 @@ SURFACES = {
     "melt-splash": lambda: melt_page("splash:chart"),        # E88: the splatter forms the next chart
     "melt-plate": lambda: melt_page("splash:plate"),         # E88: the splatter paints a narrative plate
     "melt-ball-roll": lambda: melt_page("throw", weight=True),  # R26-118 / E88 s6-s7: the ball with MASS - it lands, rolls, is nudged and settles before the throw
+    # P61 T5b / E99 s42: the same ball at the same instants, in the two body colours the operator asked to see
+    # ("I would be interested in seeing it just melt to the slate gray or the reference color also to see what that
+    # looks like"). Neither is a SURFACE: each carries one PROOF frame, the settle, so the three-way crop beside
+    # `melt-ball-roll@proof-settle` is one instant read three ways.
+    "melt-ball-slate": lambda: melt_page("throw", weight=True, body="slate"),          # the BOARD's own ink (--lp-char #25313C)
+    "melt-ball-reference": lambda: melt_page("throw", weight=True, body="reference"),  # the blueprint's near-black metal (s3.3)
 }
 
 

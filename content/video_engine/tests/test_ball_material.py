@@ -1,18 +1,44 @@
-"""P61 T5 / E99 s3 - THE BALL'S SHADOWS: the material the melt's ball is made of.
+"""P61 T5 / E99 s3 + P61 T5b / E99 s42 - THE BALL'S SHADOWS, and the surface the operator kept.
 
-The operator, `docs/portable/OPERATOR-RULINGS.md:2922-2925`:
+T5's ruling, `docs/portable/OPERATOR-RULINGS.md:2922-2925`:
 
     "We definitely need more shadows. The shadows are where the weight/mass largely come from
     i think, dark fresnel rim + metallic band and I imagine incorporating at least one point of
     deep shadow depth."
 
+T5b's, on the frames that answered it, `docs/portable/OPERATOR-RULINGS.md:3202` (E99 s42):
+
+    "This doesn't work, the ball is too blurred so the prior work is actually better. this slice
+    is pixelated on the edges now, the darkness feels right, but the blur is wrong,  and i think
+    the rim is wrong. the oter ball was better, I would be interested in seeing it just melt to
+    the slate gray or the reference color also to see what that looks like."
+
+SO, NAMED FROM THE FRAMES BEFORE ANY DIAL MOVED:
+
+  THE BLUR was the RIM'S OWN RAMP, and no filter at all. `dropRimAlpha` runs from `DROP.RIM_AT`
+  0.42 to `RIM_A` 0.97 in near-black ink, so the outer 58 % of the radius was one continuous
+  darkening: the ball's board-to-body transition went from 1 px (prior) to over 100 px (T5),
+  measured on the settle frame's scanline. A surface with no terminator anywhere is soft focus.
+  The BAND was the second smear. There is no `feGaussianBlur` and no CSS `blur()` on the ball in
+  either build - the only blur is on the occlusion ellipse, which is on the BOARD.
+
+  THE PIXELATED EDGE was four antialiased copies of the SAME path composited (body + band + pit +
+  rim, each handed `st.body` in `paintMelt`): a boundary pixel of coverage `a` ends at
+  1 - (1 - a)^4. Measured on one pixel: 0.567 covered on the prior ball, 0.988 on T5's, and
+  1 - (1 - 0.567)^4 = 0.965. The rim is the only overlay carrying alpha AT the silhouette, so it
+  is the one that destroyed the antialiasing.
+
+So the rim and the band are OFF (`MELT.W_RIM_ON` / `W_BAND_ON`, both false; every profile dial
+kept and still tested here), the darkness the operator kept stays, and the ball's BODY COLOUR
+becomes an authored option (`melt:weight:...:body=slate|reference`, `MELT_BODIES`).
+
 Four things, each a NAMED dial with a measured default:
 
-  (a) more cast/contact shadow   `MELT.W_OCCL_*`  - the OCCLUSION CORE over the cast slit
+  (a) more cast/contact shadow   `MELT.W_OCCL_*`  - the OCCLUSION CORE over the cast slit  [ON]
   (b) a DARK grazing rim         `DROP.RIM_*` + `MELT.W_RIM_*`  - grazing-angle DARKENING toward the
-                                 silhouette, never a bright ring
-  (c) a metallic band            `DROP.BAND_*` + `MELT.W_BAND_*`
-  (d) one point of deep shadow   `DROP.PIT_*` + `MELT.W_PIT_*`
+                                 silhouette, never a bright ring                           [OFF, E99 s42]
+  (c) a metallic band            `DROP.BAND_*` + `MELT.W_BAND_*`                           [OFF, E99 s42]
+  (d) one point of deep shadow   `DROP.PIT_*` + `MELT.W_PIT_*`                             [ON]
 
 THE NAME. `docs_find "Fresnel"` returns three hits and not one is a shading term - `clothoid.mjs:115
 fresnel`, `:147 fresnelMoments` and `CAPABILITIES.md:96` are the CLOTHOID fitter's Fresnel INTEGRAL.
@@ -55,6 +81,14 @@ BLUEPRINT = "docs/research/motion/LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md"
 # the flag-ON surfaces - the `melt:weight` opt-in's OWN goldens, and the only ones this slice may move
 WEIGHT_SURFACES = ["melt-ball-roll", "melt-ball-roll@proof-land", "melt-ball-roll@proof-settle",
                    "melt-depth", "melt-depth@proof-ball"]
+# P61 T5b / E99 s42: the two BODY COLOURS, at the settle - the same instant as `melt-ball-roll@proof-settle`
+BODY_SURFACES = {"slate": "melt-ball-slate@proof-settle", "reference": "melt-ball-reference@proof-settle"}
+# and the colour each one must land on. SLATE is the BOARD's own ink token: `--lp-char: #25313C`,
+# docs/content-video-engine/samples/scene-evidence-player.template.html:50, the same charcoal the brand
+# tokens carry as `color.charcoal` (channel-assets/money-physics/brand-tokens.json:12). REFERENCE is the
+# blueprint's near-black metal: LIVING_METALLIC_DROP_RESEARCH_BLUEPRINT.md s3.3 (:198-201, gate tier
+# PLAUSIBLE) - "Zero Diffuse Reflectance (k_d = 0) ... The albedo base color is pure black".
+BODY_TARGET = {"slate": (0x25, 0x31, 0x3C), "reference": (0x00, 0x00, 0x00)}
 # the flag-OFF melt surfaces - a melt that never asked for weight. These must not move by one byte.
 FLAG_OFF_SURFACES = ["melt-page", "melt-page@proof-045", "melt-splash", "melt-plate"]
 
@@ -64,8 +98,9 @@ def _node(expr: str):
     src = (
         f'import {{ DROP, dropRimAlpha, dropBandAlpha, dropPitAlpha, dropDeepPoint, dropLightAxis }} '
         f'from {json.dumps(DROP_MJS.as_uri())};\n'
-        f'import {{ MELT, meltOcclusion, meltRimGradientMarkup, meltBandGradientMarkup, meltPitGradientMarkup, '
-        f'meltShade, meltSheen, meltInkOf }} from {json.dumps(MELT_MJS.as_uri())};\n'
+        f'import {{ MELT, MELT_BODIES, meltOpts, meltOcclusion, meltRimGradientMarkup, meltBandGradientMarkup, '
+        f'meltPitGradientMarkup, meltBodyGradientMarkup, meltBodyInk, meltShade, meltSheen, meltInkOf }} '
+        f'from {json.dumps(MELT_MJS.as_uri())};\n'
         f'console.log(JSON.stringify(({expr})));\n'
     )
     out = subprocess.run([("node.exe" if sys.platform == "win32" else "node"), "--input-type=module", "-e", src],
@@ -79,7 +114,11 @@ def _node(expr: str):
 MATERIAL_DIALS = ["RIM_AT", "RIM_GAMMA", "RIM_A", "BAND_P", "BAND_H", "BAND_A",
                   "PIT_AT", "PIT_R", "PIT_GAMMA", "PIT_A"]
 PAINT_DIALS = ["W_OCCL_A", "W_OCCL_W", "W_OCCL_FLAT", "W_OCCL_BLUR", "W_RIM_SHADE", "W_RIM_STOPS",
-               "W_BAND_K", "W_BAND_STOPS", "W_PIT_SHADE", "W_PIT_STOPS"]
+               "W_BAND_K", "W_BAND_STOPS", "W_PIT_SHADE", "W_PIT_STOPS",
+               "W_BODY_SHADE"]   # P61 T5b / E99 s42: how far the ball's ink goes to its named body colour
+# P61 T5b / E99 s42: the two GATES. Not in PAINT_DIALS because they are booleans, not measured numbers -
+# every profile dial above them is kept exactly as T5 measured it, and these are what turn them off.
+GATE_DIALS = ["W_RIM_ON", "W_BAND_ON"]
 
 
 def test_every_dial_is_declared_with_a_measured_default() -> None:
@@ -93,6 +132,12 @@ def test_every_dial_is_declared_with_a_measured_default() -> None:
                    % (json.dumps(MATERIAL_DIALS), json.dumps(PAINT_DIALS)))
     for k, v in {**values["mat"], **values["paint"]}.items():
         assert isinstance(v, (int, float)) and math.isfinite(v), f"{k} = {v!r}"
+    # P61 T5b / E99 s42: the refused overlays keep every dial they had, and the gates are what is off
+    gates = _node("Object.fromEntries(%s.map(k => [k, MELT[k]]))" % json.dumps(GATE_DIALS))
+    assert gates == {"W_RIM_ON": False, "W_BAND_ON": False}, \
+        f"E99 s42 turned the rim and the band OFF, and they are {gates}"
+    for name in GATE_DIALS:
+        assert re.search(rf"^\s+{name}: false,", melt, re.M), f"{name}: not declared in MELT"
 
 
 def test_every_dial_carries_a_source_or_says_it_is_derived() -> None:
@@ -208,6 +253,45 @@ def _chromium_available() -> bool:
 browser = pytest.mark.skipif(not _chromium_available(), reason="playwright chromium not installed")
 
 
+def _melt_dom(surface: str, t: float) -> dict:
+    """P61 T5b: the melt overlay's LIVE DOM at one instant - how many paths the ball wears, whether any
+    of them carries a filter, and how many gradients the ball's defs hold. `render_baseline` renders a
+    PNG; this walks the same page the same way and reads the markup instead, so "no blur on the ball" is
+    an assertion about what the player built and not about what the source says."""
+    import tempfile
+    from playwright.sync_api import sync_playwright
+    tl, uris, _t, aspect = RB.load_surface(surface)
+    w, h = RB.STAGE[aspect]
+    with tempfile.TemporaryDirectory() as td:
+        html = Path(td) / f"{surface}.html"
+        html.write_text(RB.instantiate(tl, uris, RB.TEMPLATE), encoding="utf-8")
+        srv, port = RB.serve(html.parent)
+        try:
+            with sync_playwright() as pw:
+                browser_ = pw.chromium.launch(headless=True)
+                page = browser_.new_context(viewport={"width": w, "height": h}).new_page()
+                page.goto(f"http://127.0.0.1:{port}/{html.name}", wait_until="networkidle", timeout=120000)
+                RB.prepare_page(page, w, h)
+                page.evaluate("t => { const s = document.getElementById('scrub');"
+                              " s.value = t; s.dispatchEvent(new Event('input', {bubbles:true})); }", t)
+                out = page.evaluate(
+                    "() => { const g = document.querySelector('svg.meltov g.meltbody');"
+                    " if (!g) return { paths: 0, filters: ['no meltbody group'], grads: 0 };"
+                    " const paths = [...g.querySelectorAll('path')].filter(p => (p.getAttribute('d') || '').length > 1);"
+                    " const filters = [];"
+                    " for (const n of [g, ...g.children]) {"
+                    "   const f = n.getAttribute('filter') || (n.style && n.style.filter) || '';"
+                    "   if (f) filters.push(n.tagName + ':' + f); }"
+                    r" const ids = new Set(paths.map(p => (p.getAttribute('fill') || '').replace(/^url\(#|\)$/g, '')));"
+                    " const defs = document.querySelector('svg.meltov defs');"
+                    " const grads = [...defs.children].filter(n => /Gradient$/.test(n.tagName) && ids.has(n.id)).length;"
+                    " return { paths: paths.length, filters, grads }; }")
+                browser_.close()
+        finally:
+            srv.shutdown()
+    return out
+
+
 @browser
 @pytest.mark.parametrize("surface", FLAG_OFF_SURFACES)
 def test_a_melt_that_never_asked_for_weight_renders_the_bytes_it_always_did(surface: str) -> None:
@@ -236,9 +320,10 @@ def _ball(png: bytes):
 
 
 @browser
-def test_the_flag_on_ball_wears_a_DARK_rim_a_band_and_a_deep_point() -> None:
-    import io
-    from PIL import Image
+def test_the_rim_and_the_band_are_OFF_so_the_silhouette_is_NOT_darker_than_the_body() -> None:
+    """E99 s42, the INVERSE of T5's rim assertion. T5 asserted `rim < 0.75 * body` and the operator
+    refused the look it produced. The silhouette must now be back where the prior ball had it: not
+    darker than the body, because the grazing rim is off. Measured on the frame, not on the diff."""
     png = RB.render_surface("melt-ball-roll@proof-settle")
     cx, cy, r, lum, _ = _ball(png)
     ring = [lum(int(cx + 0.96 * r * math.cos(a)), int(cy + 0.96 * r * math.sin(a)))
@@ -246,36 +331,114 @@ def test_the_flag_on_ball_wears_a_DARK_rim_a_band_and_a_deep_point() -> None:
     body = [lum(int(cx + 0.20 * r * math.cos(a)), int(cy + 0.20 * r * math.sin(a)))
             for a in [i * math.pi / 6 for i in range(12)]]
     rim, mid = sum(ring) / len(ring), sum(body) / len(body)
-    # (b) the DARK rim: the silhouette is the dark part and the body is the lit part - the opposite of
-    # what shipped, where the silhouette read BRIGHTER than nothing (120.7 against a body of 141.4)
-    assert rim < 0.75 * mid, f"the silhouette is not dark: rim {rim:.1f} against body {mid:.1f}"
-    # and it darkens MONOTONICALLY outward over the rim's own band, read on the frame
-    prof = [sum(lum(int(cx + s * r * math.cos(a)), int(cy + s * r * math.sin(a)))
-                for a in [i * math.pi / 18 for i in range(36)]) / 36
-            for s in [0.50, 0.65, 0.80, 0.90, 0.96]]
-    for i in range(1, len(prof)):
-        assert prof[i] <= prof[i - 1] + 1.0, f"the rim lightens outward: {prof}"
-    # (d) the point of deep shadow depth: the disc at its seat is darker than its own iso-radius ring
+    assert rim > 0.80 * mid, f"the silhouette is dark again - the rim is back on: rim {rim:.1f} against body {mid:.1f}"
+    th = math.radians(_node("DROP.LIGHT_DEG"))
+    axis = [(p, lum(int(cx + (0.5 - p) * 2 * r * 0.88 * math.cos(th)),
+                    int(cy + (0.5 - p) * 2 * r * 0.88 * math.sin(th))))
+            for p in [i / 100 for i in range(20, 90)]]
+    # T5 asserted a RIDGE at DROP.BAND_P (`max(win) > mean(out) + 6`). With the band off, the light axis
+    # falls off MONOTONICALLY across the band's own window, so a local maximum in it is a band coming
+    # back. The window stops at +-0.12 of BAND_P on purpose: further out on the dark side the light axis
+    # climbs again out of the POINT OF DEEP SHADOW DEPTH, which is the darkness E99 s42 kept.
+    band_p, band_h = _node("DROP.BAND_P"), _node("DROP.BAND_H")
+    seg = [(p, v) for p, v in axis if abs(p - band_p) <= 0.12]
+    assert len(seg) > 2 * 0.12 / 0.01 - 2 and 0.12 > 2 * band_h, (len(seg), band_h)
+    for i in range(1, len(seg)):
+        assert seg[i][1] <= seg[i - 1][1] + 2.0, \
+            f"a ridge on the light axis at p={seg[i][0]:.2f} (BAND_P is {band_p}): {seg[i - 1][1]:.1f} -> {seg[i][1]:.1f}"
+
+
+@browser
+def test_the_darkness_the_operator_kept_is_still_there() -> None:
+    """E99 s42: "the darkness feels right". The contact/occlusion core and the point of deep shadow
+    depth are the two that stayed, and both are measured on the frame."""
+    import io
+    from PIL import Image
+    png = RB.render_surface("melt-ball-roll@proof-settle")
+    cx, cy, r, lum, _ = _ball(png)
     d = _node("({ seat: dropDeepPoint([0, 0], 1), at: DROP.PIT_AT })")
     sx, sy = cx + d["seat"]["x"] * r, cy + d["seat"]["y"] * r
     pit = sum(lum(int(sx + dx), int(sy + dy)) for dx in (-6, 0, 6) for dy in (-6, 0, 6)) / 9
     around = [lum(int(cx + d["at"] * r * math.cos(a)), int(cy + d["at"] * r * math.sin(a)))
               for a in [i * math.pi / 12 for i in range(24)]]
     assert pit < sum(around) / len(around), f"no well at the seat: {pit:.1f} against {sum(around) / len(around):.1f}"
-    # (c) the metallic band: a luminance RIDGE along the light axis, past the equator, not the highlight
-    th = math.radians(_node("DROP.LIGHT_DEG"))
-    axis = [(p, lum(int(cx + (0.5 - p) * 2 * r * 0.88 * math.cos(th)),
-                    int(cy + (0.5 - p) * 2 * r * 0.88 * math.sin(th))))
-            for p in [i / 100 for i in range(20, 90)]]
-    band_p = _node("DROP.BAND_P")
-    win = [v for p, v in axis if abs(p - band_p) < 0.06]
-    out = [v for p, v in axis if 0.12 < abs(p - band_p) < 0.24]
-    assert max(win) > sum(out) / len(out) + 6, f"no band ridge: peak {max(win):.1f} against {sum(out) / len(out):.1f}"
-    # (a) more cast/contact shadow: the board under the ball is darker than the board itself
     im = Image.open(io.BytesIO(png)).convert("RGB")
     bl = lambda x, y: 0.2126 * im.getpixel((x, y))[0] + 0.7152 * im.getpixel((x, y))[1] + 0.0722 * im.getpixel((x, y))[2]
     floor = min(bl(x, cy + r + 8) for x in range(cx - r, cx + r, 3))
-    assert floor < 0.5 * bl(100, 100), f"the contact shadow does not read: {floor:.1f} against the board"
+    assert floor < 0.35 * bl(100, 100), f"the contact shadow does not read: {floor:.1f} against the board (T5 took it to 21%, E99 s42 kept it)"
+
+
+@browser
+def test_the_ball_carries_no_blur_filter_in_its_markup_by_default() -> None:
+    """E99 s42: "the blur is wrong". The ball's own DOM - the body group and every path in it - must
+    carry no filter at all. The only blur a melt writes is on the two shadow ELLIPSES, which are on
+    the BOARD. Read off the live DOM at the settle, not off the source."""
+    dom = _melt_dom("melt-ball-roll", 16.98)
+    assert dom["paths"] >= 1, "no ball in the body group at the settle"
+    assert dom["filters"] == [], f"the ball's own markup carries a filter: {dom['filters']}"
+    assert dom["paths"] == 2, f"the ball wears {dom['paths']} stacked paths - E99 s42 left it the body and the pit"
+    assert dom["grads"] == 2, f"the ball's gradients are {dom['grads']} - the body's and the pit's, no rim and no band"
+
+
+@browser
+@pytest.mark.parametrize("word", sorted(BODY_SURFACES))
+def test_the_two_body_colours_land_on_the_colour_they_name(word: str) -> None:
+    """E99 s42: "I would be interested in seeing it just melt to the slate gray or the reference
+    color". Measured on the rendered ball at the settle, away from the specular spot and the well:
+    the body's own colour IS the token it names."""
+    import io
+    from PIL import Image
+    png = RB.render_surface(BODY_SURFACES[word])
+    cx, cy, r, _, _ = _ball(RB.render_surface("melt-ball-roll@proof-settle"))   # the DEFAULT ball's geometry: same instant, same drop
+    im = Image.open(io.BytesIO(png)).convert("RGB")
+    th = math.radians(_node("DROP.LIGHT_DEG"))
+    pts = [im.getpixel((int(cx + 0.62 * r * math.cos(th + a)), int(cy + 0.62 * r * math.sin(th + a))))
+           for a in [-0.9, -0.45, 0.45, 0.9]]
+    got = tuple(round(sum(p[i] for p in pts) / len(pts)) for i in range(3))
+    want = BODY_TARGET[word]
+    assert max(abs(got[i] - want[i]) for i in range(3)) <= 12, f"the {word} ball's body is {got}, not {want}"
+
+
+def test_an_unknown_material_or_body_word_is_refused_BY_NAME() -> None:
+    """R26-118 / E88 s7 for the material, E99 s42 for the body: a word this engine does not have is
+    refused BY NAME on both sides of the grammar, never painted as the default."""
+    import build_scene_timeline_f as B
+    for bad in ("bronze", "steel"):
+        with pytest.raises(ValueError) as e:
+            B.parse_exit("melt:weight:" + bad)
+        assert bad in str(e.value) and "material" in str(e.value), str(e.value)
+    for bad in ("charcoal", "orange", "gray"):
+        with pytest.raises(ValueError) as e:
+            B.parse_exit("melt:weight:body=" + bad)
+        assert bad in str(e.value) and "body colour" in str(e.value), str(e.value)
+    assert B.melt_body("melt") == "chart" and B.melt_body("melt:weight") == "chart"
+    assert B.melt_body("melt:weight:body=slate") == "slate"
+    assert B.melt_body("melt:weight:metal:body=reference:2.8") == "reference"
+    with pytest.raises(ValueError):
+        B.parse_exit("melt:weight:body=slate:body=reference")
+    said = _node("(() => { const out = []; for (const w of ['charcoal', 'orange', 'gray']) { "
+                 "try { meltOpts('melt:weight:body=' + w); out.push(null); } catch (e) { out.push(e.message); } } "
+                 "return { said: out, bodies: Object.keys(MELT_BODIES), "
+                 "def: meltOpts('melt').wbody, slate: meltOpts('melt:weight:body=slate').wbody }; })()")
+    assert said["bodies"] == list(B.MELT_BODIES), "the two sides name different body colours"
+    assert all(m and "is not a body colour" in m for m in said["said"]), said["said"]
+    assert said["def"] == "chart" and said["slate"] == "slate"
+
+
+def test_the_default_body_writes_the_string_the_ball_always_had() -> None:
+    """The byte-identity the flag-off goldens rest on: `chart` has no target, so `meltBodyInk` IS
+    `meltInkOf` and every default string is character for character the one that shipped."""
+    d = _node("({ same: meltBodyGradientMarkup('g', ['#fe5a2d']) === meltBodyGradientMarkup('g', ['#fe5a2d'], { wbody: 'chart' }), "
+              "  chart: meltBodyInk(['#fe5a2d'], MELT.CORE), km: meltInkOf(['#fe5a2d'], MELT.CORE), "
+              "  slate: meltBodyInk(['#fe5a2d'], MELT.LIGHT, { wbody: 'slate' }), "
+              "  ref: meltBodyInk(['#fe5a2d'], MELT.LIGHT, { wbody: 'reference' }), "
+              "  targets: MELT_BODIES, rim: MELT.W_RIM_ON, band: MELT.W_BAND_ON })")
+    assert d["same"], "a `chart` body writes a different gradient from no body at all"
+    assert d["chart"] == d["km"], "the default ball's ink is no longer meltInkOf's"
+    assert d["targets"]["chart"] is None, "the default must have NO target"
+    assert d["slate"].lower() == "#25313c", "slate is not the board's ink: " + d["slate"]
+    assert d["ref"] == "#000000", "reference is not the blueprint's pure-black albedo: " + d["ref"]
+    assert d["rim"] is False and d["band"] is False, "E99 s42: the rim and the band are OFF by default"
 
 
 @browser
@@ -298,6 +461,14 @@ def test_the_inlined_engine_carries_every_dial_and_mounts_nothing_without_weight
         assert fn in engine, f"{fn}: not inlined into the player"
     # the gate itself: every overlay and the core hang off `st.mass` / `st.occl`, which only a
     # `melt:weight` ever sets - so a melt without it writes no gradient and no path
-    assert "if (st.mass && !m.band)" in engine, "the overlays are not behind the opt-in"
+    assert "if (st.mass && !m.pit)" in engine, "the overlays are not behind the opt-in"
     assert "if (st.occl || m.occl)" in engine, "the occlusion core is not behind the opt-in"
     assert "band: null, rim: null, pit: null, occl: null" in engine, "the mount must start with none of them"
+    # P61 T5b / E99 s42: the two refused overlays are gated OFF in the player too, and the body
+    # colours are the same three words the compiler validates
+    assert "W_RIM_ON: false" in engine and "W_BAND_ON: false" in engine, "the rim / band gates are not inlined, or not off"
+    assert "if (W.W_BAND_ON) {" in engine and "if (W.W_RIM_ON) {" in engine, "the player paints them unconditionally"
+    for fn in ["meltBodyInk", "MELT_BODIES"]:
+        assert fn in engine, f"{fn}: not inlined into the player"
+    import build_scene_timeline_f as B
+    assert _node("Object.keys(MELT_BODIES)") == list(B.MELT_BODIES), "the two sides name different body colours"
