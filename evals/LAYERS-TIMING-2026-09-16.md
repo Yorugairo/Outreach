@@ -60,3 +60,13 @@ TOTAL check 90.8s
 | a `git commit` | the 91 s check, refused if ANY lane's edit made a layer stale | no layers check at all |
 | `docs_find.py` on a current tree | 0.12 s | 0.73 s (the digest) |
 | generated text in git | 15 MB, rewritten 60/60 commits | none (24 outputs untracked; `DOCS-INDEX.config.json` stays) |
+
+## After P64 (the same evening)
+
+| step | after P63 | after P64 |
+| --- | --- | --- |
+| `docs_find.py` on a STALE tree | a blocking ensure: 27 s (a doc edit) to 2 m 55 s (a CAPABILITIES edit) | 0.84 s, one stderr line; the refresh runs behind a pid lock, started by the Edit/Write hook |
+| the hook on an Edit under docs/ | - | 0.95 s, silent |
+| the player server's catalogue GET | 420 ms (a digest per GET) | 21 ms first, then 1.6-5.0 ms (status only) |
+| `build_gates_registry.py --check` | 14.7 s | 0.8 s, byte-identical |
+| a CAPABILITIES edit to fresh layers | ~3 min, paid by the next reader | ~1 min in the background, paid by no one |

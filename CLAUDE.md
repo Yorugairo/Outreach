@@ -27,8 +27,8 @@ rather than restating it.
   `docs/DOCS-CITATIONS.jsonl` (across docs; who cites what), `docs/GATES-REGISTRY.md`
   (every gate by id), `docs/ANIMATION-REGISTRY.md` (every formula, dial, law with
   status), `docs/CRAFT-MAP.md` (every writing device). Never say "we don't have it"
-  before the manifest grep. The layers are BUILD OUTPUT (P63, 2026-09-16): `docs_find.py` and every reader rebuild a stale
-  layer by input digest before reading, nothing is committed; `build_docs_layers.py --write` only for a full pass.
+  before the manifest grep. The layers are BUILD OUTPUT (P63 / P64, 2026-09-16): the Edit/Write hook refreshes them in the
+  background, `docs_find.py` never rebuilds (it says on stderr if a layer is stale; `--wait` when you must be fresh), nothing is committed.
 - **Author a beat: a recipe, not an effect** → author a beat as a RECIPE (a proven combination, E96): `python content/video_engine/scripts/effects_card.py "<recipe>"` (the catalogue `docs/EFFECTS-CATALOG.md` Recipes section; the floor before a watch: `gate_one_shot_floor.py <build>`, rows M35-M42 in SELF-WATCH).
 - **Name an effect: what it does, how to call it** → `python content/video_engine/scripts/effects_card.py "<name>"` (the operator's word, a record's word or the token; several matches list their ids; the generated catalogue is `docs/EFFECTS-CATALOG.md`, cards in `content/video_engine/effects/cards/`).
 - **What has the operator corrected about X, and why?** → `docs_find` first, then
