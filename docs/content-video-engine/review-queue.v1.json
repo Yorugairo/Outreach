@@ -810,7 +810,8 @@
         "E99 s34",
         "P61 HG1",
         "E99 s39 (bars -> line rebuilt)",
-        "P61 HG1b"
+        "P61 HG1b",
+        "E99 s50"
       ],
       "kind": "watch",
       "title": "Bars -> line, rebuilt: the bars collapse to the apex point, the line draws back to the root",
@@ -843,7 +844,7 @@
       ],
       "options": [],
       "recommendation": "Approve. Read as a viewer at the four instants: the rings leave their bars and converge (the farthest first, all landing together, so the collapse ends as ONE point and not a queue); the point stands alone with its figure; the stroke grows out of it toward the root with the nib riding its end; at u 0.5 the frame is a point and a partial stroke - the frame a snap cannot produce, pinned by a test. Line -> bars untouched, byte-identical.",
-      "blocks": "HG1b; T3 (already unblocked on line -> bars) reads this pair's law for the ball's hand-over",
+      "blocks": "nothing - ruled E99 s50 (2026-09-16): bars -> line approved; the whole-chart morph taken both ways",
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md:3143 (E99 s34)",
         "docs/portable/OPERATOR-RULINGS.md:2901 (E99 s1)",
@@ -856,10 +857,11 @@
         "docs/portable/OPERATOR-RULINGS.md:3196 (E99 s39)",
         "content/video_engine/tests/test_whole_chart_morph.py",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T2b)",
-        "docs/content-video-engine/review-answers.jsonl (2026-09-16: 'the proof clip you shared is line to bars')"
+        "docs/content-video-engine/review-answers.jsonl (2026-09-16: 'the proof clip you shared is line to bars')",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s50 - the operator in chat, 2026-09-16)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s50",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-15 (P61 T2b): bars -> line via the apex, four goldens, the clip",
       "proofs": [

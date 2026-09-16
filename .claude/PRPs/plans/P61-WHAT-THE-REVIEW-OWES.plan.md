@@ -119,7 +119,7 @@ that page only with the operator's ruling written to `docs/portable/OPERATOR-RUL
 
 | gate | slice | queue card | the ONE question the card asks |
 | --- | --- | --- | --- |
-| **HG1** | T2 | `r26-70-compare-morph` (rewritten) | "Watch the two clips end to end. Does it **read as a transformation, not a cut, and read as intentional** (E99 s34)? The entire chart should transform - every series, datum and axis. Approve, or name what cuts or reads as accidental." **RULED 2026-09-15 (E99 s39): line -> bars taken; bars -> line rebuilt in T2b** |
+| **HG1** | T2 | `r26-70-compare-morph` (rewritten) | "Watch the two clips end to end. Does it **read as a transformation, not a cut, and read as intentional** (E99 s34)? The entire chart should transform - every series, datum and axis. Approve, or name what cuts or reads as accidental." **RULED 2026-09-15 (E99 s39): line -> bars taken; bars -> line rebuilt in T2b** **HG1b RULED 2026-09-16 (E99 s50): bars -> line approved; closed** |
 | **HG2** | T3 | `r26-117-ball-into-the-next-chart` (**created by the parent at T3's dispatch** - it does not exist today; it supersedes the `"missing": true` line on `r26-70-compare-morph`) | "The page melts, balls up, and the ball becomes the NEXT FULL CHART with no cut between. Watch 0:00-0:08. Does the hand-over hold, or does it read as a jump?" |
 | **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" |
 | **HG3** | T4a | `p58-hg3-extruded-bar-leave` | "`form-extruded-bar@proof-leave` beside `form-tilted-line@proof-leave`, as clips. Do the prism's shapes break down enough now? Approve, or say 'more'." **RULED 2026-09-15 (E99 s40): approved** |
@@ -362,7 +362,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   the blocker is gone.
 
 ### T2b: BARS -> LINE COLLAPSES TO THE APEX AND DRAWS BACK TO THE ROOT (E99 s39)
-- Status: complete (2026-09-15) - HG1b open on the queue as `r26-70-compare-morph` (watch, the rebuilt clip only)
+- Status: complete (2026-09-15); HG1b RULED 2026-09-16 (E99 s50): approved
 - Owner: `implementation_luna` (**ENGINE LOCK**)
 - Depends on: T2, HG1 (ruled E99 s39)
 - Write set: `content/video_engine/scripts/kinetics/chartxf.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the
