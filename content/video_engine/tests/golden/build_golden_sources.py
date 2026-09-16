@@ -64,7 +64,7 @@ FRAME_T = {
                                    # eight came back with 15 pixels of that edge off by 2 (a Chromium filter-raster
                                    # flake, measured 2026-09-12) - a golden is a byte-exact pin and takes the instant
                                    # with no fractional band to flake
-    "melt-splash": 16.08,           # E88 / R26-76: splash:chart at u 0.675 - the BURST: the ball hit the board, flattening
+    "melt-splash": 16.85,           # E88 / R26-76: splash:chart - the BURST: the ball hit the board, flattening
                                    # and fading into its droplets, which are out along their rays toward where they
                                    # land; no stain has opened yet, so no blur is on screen and the pin is byte-exact
     "melt-ball-roll": 16.28,        # R26-118 / E88 s6: MID-ROLL. The window is MELT_CUT + MELT.S + MELT.W_S (2.75 s),
@@ -78,7 +78,7 @@ FRAME_T = {
     # --check` covers these two base frames, which is why each has one.
     "melt-ball-slate": 16.28,
     "melt-ball-reference": 16.28,
-    "melt-plate": 16.44,            # E88 / R26-76: splash:plate at u 0.90 - the PAINT: the stains have opened from the
+    "melt-plate": 17.21,            # E88 / R26-76: splash:plate - the PAINT: the stains have opened from the
                                    # landed drops and the plate shows through them over the charcoal, springing to rest
     "count-array": 8.0,             # P52 T7: all six icons landed (5.0 + 5 * 0.34 + LAND_S = 7.15) and the count written as the claim (+ CLAIM_LAG + CLAIM_S = 7.73) - the field as it is read
     "agenda-two": 7.2,              # P52 T8: both rows revealed (5.0 and 6.2 + NUM_LEAD + ROW_S = 6.74) and both rules fully drawn - the agenda as it stands

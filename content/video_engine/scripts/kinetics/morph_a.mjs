@@ -104,14 +104,3 @@ export const morphAMinDet = (rest, verts, tris) => {
 
 /* the ring's area, for a caller reporting a frame without re-deriving it (the centroid is arap.mjs's `centroid`) */
 export const morphAArea = (pts) => Math.abs(polyArea(pts));
-/* ... and its PERIMETER, the ring's other half. P61 T3c / E99 s53 measures a compile frame to frame in BOTH (the
-   operator's rushed snap shows in the area as a collapse and in the perimeter as the drips being replaced by a
-   circle), and a morph's own test should not have to re-derive the second one. Of the POLYGON, closed - the same
-   ring `morphAArea` reads, not the cubic reconstruction `morphAPath` draws through it. */
-export const morphAPerimeter = (pts) => {
-  const P = pts || [], n = P.length;
-  if (n < 2) return 0;
-  let s = 0;
-  for (let i = 0; i < n; i++) { const a = P[i], b = P[(i + 1) % n]; s += Math.hypot(b[0] - a[0], b[1] - a[1]); }
-  return s;
-};

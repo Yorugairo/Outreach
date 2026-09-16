@@ -74,7 +74,7 @@ import { squashMatrix, scaleBy } from "../kinetics/squash.mjs";
 import { CADENCE, stepped, throwXf, pickUpXf, impactSquash, rollXf, contactShadow, groundDip, groundShake, rebound, massImpact, MASS, STOP } from "../kinetics/stopaction.mjs";
 import { DROP, dropRing, dropModes, dropSpecular, dropRimAlpha, dropBandAlpha, dropPitAlpha, dropDeepPoint, dropLightAxis } from "../kinetics/drop.mjs";
 import { centroid } from "../kinetics/arap.mjs";
-import { morphAPrepare, morphAAt, morphAPath, morphAArea, morphAPerimeter } from "../kinetics/morph_a.mjs";
+import { morphAPrepare, morphAAt, morphAPath, morphAArea } from "../kinetics/morph_a.mjs";
 
 export const MELT = Object.freeze({
   S: 1.6,            /* the exit's default length [DERIVED: the suck's 0.3 s is one phase of collapse; a melt is three
