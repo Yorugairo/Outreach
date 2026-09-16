@@ -124,6 +124,14 @@ PROOF_FRAMES = {
     # P55 T6: THE VERDICT STACK's last phase - the radial BURST at clear_at (20.0) + 0.25 s: with the 60 ms stagger the
     # first card is half way through its 0.5 s throw and the fifth just leaving, each along its own bearing, spinning
     "verdict-stack@proof-burst": ("verdict-stack", {}, 20.25),
+    # P61 T7 / R26-82, E99 s21 - THE SAME FIVE PHASES ON A SHORT, one golden each, so "it didn't just place them
+    # horizontally" is answered by a frame per phase and not by a diff. The surface is 9:16 and its nine proofs land
+    # at 2.0 / 3.5 / 5.0 / 6.4 / 7.8 / 9.2 / 10.6 / 12.2 / 13.8 with clear_at 16.5. The MOSAIC is the base golden
+    # (FRAME_T 13.6). No flag: a surface's aspect is authored on its timeline, not switched on.
+    "verdict-stack-9x16@proof-enter": ("verdict-stack-9x16", {}, 2.25),   # ENTER: proof 1 alone, 0.25 s into its 0.9 s flight from translateZ -700, swung 300 px off its spot - arriving THROUGH the frame, not appearing
+    "verdict-stack-9x16@proof-focus": ("verdict-stack-9x16", {}, 3.1),    # FOCUS: proof 1 landed LARGE (690 px, 63.9 % of the stage) near the safe box's centre while its phrase is spoken, drifting; nothing else on screen
+    "verdict-stack-9x16@proof-idle": ("verdict-stack-9x16", {}, 15.4),    # IDLE: eight cards on their rails carrying the named `live` idle (E49) - breath + drift, phased 0.137 apart - while proof 9 holds the focus
+    "verdict-stack-9x16@proof-burst": ("verdict-stack-9x16", {}, 16.75),  # BURST: clear_at + 0.25 - five cards away along their own bearings from the MOSAIC's centre, 60 ms apart, the last four still at rest
     # P57 T12 / R26-70b, E76, re-goldened by T12b and again by T12c: THE COMPARE, at the instants its landed frame
     # cannot show. The row runs 12.0 -> 14.4 (the base golden `compare-morph` is judged at 14.9, held). No flag: the
     # verb is authored on the row, not switched on - and since T12b the FORM is too, so each form has its own surface

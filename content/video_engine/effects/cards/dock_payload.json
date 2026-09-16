@@ -196,7 +196,7 @@
           "source": "operator 2026-09-13 (P55 plan HG1)"
         }
       ],
-      "does": "Already-shown proofs fly in from depth one at a time on their own phrases, each held large at centre while spoken, then receding to one of nine rail spots as a mosaic; railed cards float, and on the pivot line all burst radially.",
+      "does": "Already-shown proofs fly in from depth one at a time on their own phrases, each held large near centre while spoken, then receding to an asymmetric rail spot so the page re-composes as a mosaic; the rails idle, then all burst radially.",
       "when": "the sentence lists N proofs of one claim in a row ('three things say so') - each flies in on its word; a list, not one chart",
       "when_source": "docs/content-video-engine/CAPABILITIES.md:169",
       "author": {
@@ -305,7 +305,18 @@
           "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "16:9",
+          "means": "the FULL-FRAME layout (VERDICT) - the nine landscape spots, the focus pose at ACTIVE_X 930. The default on a 16:9 stage; naming it is how a payload says so when it travels",
+          "source_set": "STACK_FORMS"
+        },
+        {
+          "token": "9:16",
+          "means": "the SHORT's layout (VERDICT_9X16) - nine rail spots inside G-l's safe box, the focus card 63.9 % of the stage, a named `live` idle on the rails, the burst radial from the box's centre",
+          "source_set": "STACK_FORMS"
+        }
+      ],
       "dials": {
         "module": "content/video_engine/scripts/species/verdict.mjs",
         "object": "VERDICT"
@@ -318,9 +329,11 @@
           "VERDICT",
           "verdictPose",
           "verdictBurst",
-          "verdictGeometry"
+          "verdictGeometry",
+          "VERDICT_9X16",
+          "verdictDials"
         ],
-        "note": "P55 T7: extracted from the engine's drawStack + the fillDock .stackbox mount with every golden byte-identical; the engine's drawStack calls paintVerdict by name (no DOCK_PAINTERS registry)"
+        "note": "P55 T7 lifted it out of drawStack byte-identically; P61 T7 added the 9:16 form (VERDICT_9X16, verdictDials) - the same five phases re-laid for a short, every landscape frame unchanged"
       },
       "doctrine": [
         "29 s9.24",
@@ -345,7 +358,7 @@
       },
       "callable": {
         "today": true,
-        "why": "long form 16:9: author the stack META (items + clear_at) and a host dock window past clear_at; the compiler has no validator for it and it has never been laid out for 9:16 (BACKLOG R26-82)"
+        "why": "both aspects: author the items + clear_at through the compiler's `stack_entry`, which derives the host dock's window from the beats, and on a short pass form 9:16 - or let the stage's shape choose"
       }
     }
   ]

@@ -16,7 +16,7 @@ lives (module | inline | compiler-only | declared-unbuilt, the path and the one 
 module - status and callable - proof - doctrine cites resolved to path:line - aliases. A token that is only a
 parameter of an effect is an option on its card, never a card.
 
-142 cards, 83 options, 18 axes. 42 recipes (15 proven).
+142 cards, 85 options, 18 axes. 44 recipes (15 proven).
 
 | axis | cards | options | live | wired | draft | declared | planned | retired |
 |---|---|---|---|---|---|---|---|---|
@@ -26,7 +26,7 @@ parameter of an effect is an option on its card, never a card.
 | page_builder | 11 | 3 | 2 | 5 | 0 | 4 | 0 | 0 |
 | overflow | 2 | 1 | 0 | 2 | 0 | 0 | 0 | 0 |
 | dock_kind | 4 | 1 | 2 | 2 | 0 | 0 | 0 | 0 |
-| dock_payload | 3 | 0 | 3 | 0 | 0 | 0 | 0 | 0 |
+| dock_payload | 3 | 2 | 3 | 0 | 0 | 0 | 0 | 0 |
 | chart_dock | 5 | 1 | 5 | 0 | 0 | 0 | 0 | 0 |
 | dock_option | 9 | 14 | 3 | 6 | 0 | 0 | 0 | 0 |
 | plate_option | 13 | 9 | 4 | 9 | 0 | 0 | 0 | 0 |
@@ -975,7 +975,7 @@ parameter of an effect is an option on its card, never a card.
 
 ### The verdict stack
 
-- **id** `dock_payload:stack` - **does** Already-shown proofs fly in from depth one at a time on their own phrases, each held large at centre while spoken, then receding to one of nine rail spots as a mosaic; railed cards float, and on the pivot line all burst radially.
+- **id** `dock_payload:stack` - **does** Already-shown proofs fly in from depth one at a time on their own phrases, each held large near centre while spoken, then receding to an asymmetric rail spot so the page re-composes as a mosaic; the rails idle, then all burst radially.
 - **when** the sentence lists N proofs of one claim in a row ('three things say so') - each flies in on its word; a list, not one chart (docs/content-video-engine/CAPABILITIES.md:169)
 - **example** `("ev-holds-stack-v1",0,701.73,727.63)` (content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:136; key: dock META entry `species: "stack"` with `stack: {items: [{id, at}], clear_at}` in <build>/evidence-dock.json, docked by a shot-table tuple whose window runs past clear_at; check: dock)
 - **phases**
@@ -989,9 +989,10 @@ parameter of an effect is an option on its card, never a card.
 - **blend** remotion-bits mosaic-reframe (https://remotion-bits.dev/docs/bits/mosaic-reframe/) -> recede to the rail SPOTS - the page re-composing as a mosaic on every beat (inferred; docs/operator-ledger/LEDGER.jsonl:575; docs/content-video-engine/samples/scene-evidence-engine.mjs:3227; docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1400; docs/content-video-engine/BACKLOG.md:488)
 - **blend** remotion-bits fracture-reassemble (https://remotion-bits.dev/docs/bits/fracture-reassemble/) -> burst (the radial throw on clear_at) (inferred; docs/operator-ledger/LEDGER.jsonl:575; docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1378; docs/content-video-engine/BACKLOG.md:488; commit 270b131 (2026-08-30) names the burst ('burst radially on go further than Bravos') without naming fracture-reassemble)
 - **blend** the idle float (inline sine drift in drawStack, s68) -> idle (railed cards) and the focus drift (recorded; docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1377; docs/portable/MOTION-GRAMMAR.md:25; docs/portable/OPERATOR-RULINGS.md:1494)
-- **lives** module - `content/video_engine/scripts/species/verdict.mjs` - symbol `paintVerdict` - also `VERDICT`, `verdictPose`, `verdictBurst`, `verdictGeometry` - P55 T7: extracted from the engine's drawStack + the fillDock .stackbox mount with every golden byte-identical; the engine's drawStack calls paintVerdict by name (no DOCK_PAINTERS registry)
-- **dials** `VERDICT` in `content/video_engine/scripts/species/verdict.mjs`: `SPOTS`=Object.freeze([ /* the nine rail spots [left %, top %, width %]: four across the top, mid-frame flanks, three along the, `TILTS`=Object.freeze([-3, 2, -2, 3, -2.5, 2.5]), `CARD_W`=1056, `CARD_H`=480, `ACTIVE_X`=930, `ACTIVE_DX`=70, `ACTIVE_Y`=400, `ACTIVE_ROW_DY`=26, `ACTIVE_ROWS`=3, `ACTIVE_W`=840, `BURST_NORM_X`=700, `BURST_NORM_Y`=460, `REF_W`=1920, `REF_H`=1080, `ENTER_S`=0.9, `ENTER_SWING`=460, `ENTER_RISE`=-90, `ENTER_Z`=-700, `ENTER_ROT_Y`=30, `RECEDE_S`=1.0, `LAST_RECEDE_LEAD`=0.9, `DRIFT_W`=0.55, `DRIFT_PHASE`=1.7, `DRIFT_X_REST`=8, `DRIFT_X_ACTIVE`=26, `BOB_W`=0.7, `BOB_PHASE`=2.1, `BOB_REST`=5, `BOB_ACTIVE`=14, `DRIFT_SCALE`=0.008, `DRIFT_ROT`=0.6, `Z_SWITCH`=0.5, `Z_ACTIVE`=9, `Z_RAIL`=7, `BURST_X`=560, `BURST_Y`=420, `BURST_Z`=340, `BURST_SPIN`=24, `BURST_SCALE`=0.22, `BURST_STAGGER`=0.06, `BURST_S`=0.5, `REMOVE_AFTER`=1.4, `MOUNT_LEAD`=0.5
-- **status** live (backlog R26-82) - **callable** yes: long form 16:9: author the stack META (items + clear_at) and a host dock window past clear_at; the compiler has no validator for it and it has never been laid out for 9:16 (BACKLOG R26-82)
+- **options** `16:9` the FULL-FRAME layout (VERDICT) - the nine landscape spots, the focus pose at ACTIVE_X 930. The default on a 16:9 stage; naming it is how a payload says so when it travels (STACK_FORMS); `9:16` the SHORT's layout (VERDICT_9X16) - nine rail spots inside G-l's safe box, the focus card 63.9 % of the stage, a named `live` idle on the rails, the burst radial from the box's centre (STACK_FORMS)
+- **lives** module - `content/video_engine/scripts/species/verdict.mjs` - symbol `paintVerdict` - also `VERDICT`, `verdictPose`, `verdictBurst`, `verdictGeometry`, `VERDICT_9X16`, `verdictDials` - P55 T7 lifted it out of drawStack byte-identically; P61 T7 added the 9:16 form (VERDICT_9X16, verdictDials) - the same five phases re-laid for a short, every landscape frame unchanged
+- **dials** `VERDICT` in `content/video_engine/scripts/species/verdict.mjs`: `SPOTS`=Object.freeze([ /* the nine rail spots [left %, top %, width %]: four across the top, mid-frame flanks, three along the, `TILTS`=Object.freeze([-3, 2, -2, 3, -2.5, 2.5]), `CARD_W`=1056, `CARD_H`=480, `ACTIVE_X`=930, `ACTIVE_DX`=70, `ACTIVE_Y`=400, `ACTIVE_ROW_DY`=26, `ACTIVE_ROWS`=3, `ACTIVE_W`=840, `BURST_NORM_X`=700, `BURST_NORM_Y`=460, `ORIGIN_X`=0.5, `ORIGIN_Y`=0.5, `IDLE_KIND`=null, `REF_W`=1920, `REF_H`=1080, `ENTER_S`=0.9, `ENTER_SWING`=460, `ENTER_RISE`=-90, `ENTER_Z`=-700, `ENTER_ROT_Y`=30, `RECEDE_S`=1.0, `LAST_RECEDE_LEAD`=0.9, `DRIFT_W`=0.55, `DRIFT_PHASE`=1.7, `DRIFT_X_REST`=8, `DRIFT_X_ACTIVE`=26, `BOB_W`=0.7, `BOB_PHASE`=2.1, `BOB_REST`=5, `BOB_ACTIVE`=14, `DRIFT_SCALE`=0.008, `DRIFT_ROT`=0.6, `Z_SWITCH`=0.5, `Z_ACTIVE`=9, `Z_RAIL`=7, `BURST_X`=560, `BURST_Y`=420, `BURST_Z`=340, `BURST_SPIN`=24, `BURST_SCALE`=0.22, `BURST_STAGGER`=0.06, `BURST_S`=0.5, `REMOVE_AFTER`=1.4, `MOUNT_LEAD`=0.5
+- **status** live (backlog R26-82) - **callable** yes: both aspects: author the items + clear_at through the compiler's `stack_entry`, which derives the host dock's window from the beats, and on a short pass form 9:16 - or let the stage's shape choose
 - **proof** golden verdict-stack - test content/video_engine/tests/kinetics/verdict.test.mjs - first use steel-and-paper build-f t=701.73
 - **doctrine** 29 s9.24 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364; 29 s9.24b -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1; MOTION-GRAMMAR -> unresolved; CAPABILITIES verdict stack -> docs/content-video-engine/CAPABILITIES.md:184; BACKLOG R26-82 -> docs/content-video-engine/BACKLOG.md:488; E49 -> docs/portable/OPERATOR-RULINGS.md:1494
 - **aliases** "evidence wall" (operator 2026-09-13 (P55 plan Summary)); "VERDICT STACK species" (docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364); "the evidence wall" (docs/content-video-engine/BACKLOG.md:488); "evidence-wall recap" (docs/agent-memory/operator/resume-2026-09-12.md:113); "nine-proof wall" (docs/content-video-engine/CAPABILITIES.md:169); "the verdict pile-up" (content/video_engine/scripts/build_scene_timeline_f.py:3992); "STACK species" (docs/content-video-engine/samples/scene-evidence-engine.mjs:3225); "pull back in all of our evidence cards" (operator 2026-09-13 (P55 plan HG1))
@@ -2084,7 +2085,7 @@ a decoration; one that fires four times is a grammar.
 | status | recipes | members | fires (sum of count) |
 |---|---|---|---|
 | proven | 15 | 59 | 94 |
-| candidate | 27 | 102 | 0 |
+| candidate | 29 | 112 | 0 |
 
 ### The badge ladder
 
@@ -2213,6 +2214,19 @@ a decoration; one that fires four times is a grammar.
   - +5.4s -> `species:spotlight` (The feathered spotlight species) - the light lands on the bar the page had already marked, now that the form has changed
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R14 slot)
 - **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+
+### The chart remade into the other chart
+
+- **id** `recipe:chart-remade-into-the-other-form` - **does** The same data is re-drawn as the other whole chart with no cut: the standing chart is read, then every series, axis, label and the title travel on one clock into the other form, which lands and is held alive.
+- **acts** TURNS, EXPLAINS - **window** 8s
+- **members**
+  - +0s -> `page_builder:line` (The line ledger page) - the chart standing: the page's series is drawn in ink and read for a sentence before any of it turns
+  - +0s -> `plate_option:then` (The then plate option (the next chart state)) - declares the SECOND whole chart - its series, axes, labels and title - built at load and hidden until a chart_to verb reaches it
+  - +2.6s -> `page_species:chart_to` (The chart-to page species) - the page changes STATE on the sentence instead of cutting to a second chart of the same data (E58)
+  - +2.6s -> `chart_to:remake` (The whole-chart remake) - every series, datum, axis, label and the title travel on ONE clock, line <-> bars - the whole chart, not a recast of its marks (kinetics:chartxf REMAKE)
+  - +5.6s -> `plate_option:idle` (The idle plate option) - the landed chart is held and names its idle, so the form the sentence arrived at is never still (E49)
+- **status** candidate - **count** 0 (unfired) - **source** P61 T2 golden remake-line-to-bars (the card's own proof frame) - no approved cut has carried it
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; E99 -> docs/portable/OPERATOR-RULINGS.md:2901; E64 -> docs/portable/OPERATOR-RULINGS.md:2079; E58 -> docs/portable/OPERATOR-RULINGS.md:1854; E49 -> docs/portable/OPERATOR-RULINGS.md:1494
 
 ### The window the sentence is about
 
@@ -2535,6 +2549,19 @@ a decoration; one that fires four times is a grammar.
   - +4.8s -> `page_species:note` (The handwritten note page species) - the side fact the chart cannot show, in the quiet zone
 - **status** candidate - **count** 0 (unfired) - **source** recipes_r1 s4 (R14 slot)
 - **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
+
+### The ground the page arrives on, chosen by its job
+
+- **id** `recipe:the-page-ground-chosen-by-its-job` - **does** A page's ground is chosen by the beat's job: the cross-fade when the idea carries on from the plate before, the soak when the idea is new or two ideas are being separated - then the title inks and the chart builds.
+- **acts** SETS, EXPLAINS - **window** 6s
+- **members**
+  - +0s -> `plate_option:field` (The field plate option (the page's ground)) - names the GROUND the page's charcoal arrives on; a page that names none takes the soak, the engine's own default
+  - +0s -> `page_enter:field_plates` (The two-plate cross-fade field (a page keeping continuity)) - the cross-fade ground: the charcoal deckle fades over the cream page - the choice when the beat carries the idea on from the plate before - optional
+  - +0s -> `page_enter:field_soak` (The soak field (a page introducing an idea)) - the soak ground: seeded stains creep and flood the cream to the deckle - the choice when a new idea starts or two ideas need separating - optional
+  - +2.4s -> `page_enter:mount` (The cream mount page enter) - the arrival's ink beat - title and source write per glyph once the field has soaked (mount_s 2.4, INK 2.0); the card is the whole mount, the offset is its ink phase
+  - +4.9s -> `page_builder:line` (The line ledger page) - the chart builds onto its exact value strings inside the deckle the field laid down (the line page here; any builder takes the same beat)
+- **status** candidate - **count** 0 (unfired) - **source** P61 T4b goldens form-extruded-bar (the soak) and form-tilted-line (the cross-fade) - no approved cut has carried it
+- **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; E99 s35 -> docs/portable/OPERATOR-RULINGS.md:2901; E22 -> docs/portable/OPERATOR-RULINGS.md:614
 
 ### The card lands and the camera takes it
 

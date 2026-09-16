@@ -4263,6 +4263,74 @@ def solo_centre_by_clock(world: dict | None, aspect: str | None, n_docks: int, s
     return float(enter) >= land - 1e-6
 
 
+# ---- THE VERDICT STACK's payload and its host dock's WINDOW, from ONE set of times (P61 T7; doc 29 s9.24) --------
+# s9.24's own lesson: "the stack's beat times lived in evidence-dock.json while its dock window, which carries the
+# background dimming, lived in the shot table; a re-clock moved one and not the other and the dimming drifted 0.77 s
+# from its content". `stack_entry` derives the window FROM the beats, so the two cannot shift separately.
+# The dials mirror species/verdict.mjs - a module the compiler cannot import, so the three it needs are named here
+# and `test_verdict_stack.py` pins them against the module's own frozen object.
+STACK_FORMS = ("16:9", "9:16")   # which layout of the five phases: full-frame, or the SHORT's (VERDICT / VERDICT_9X16)
+STACK_ENTER_LEAD = 0.5           # the host dock enters this long before the first proof's beat (verdict.mjs MOUNT_LEAD)
+STACK_HOLD_AFTER = 1.0           # doc 29 s9.24: its window runs ~1 s past clear_at so the burst finishes ticking
+STACK_RECEDE_LEAD = 0.9          # verdict.mjs LAST_RECEDE_LEAD - the last proof hands the focus back this early
+STACK_BURST_STAGGER = 0.06       # verdict.mjs BURST_STAGGER - card i is thrown this long after card i-1
+STACK_BURST_S = 0.5              # verdict.mjs BURST_S - each card's own throw
+
+
+def stack_window(items: list[dict], clear_at: float) -> tuple[float, float]:
+    """(enter, exit) for the stack's host dock - a lifecycle anchor whose window has to cover the whole choreography.
+
+    It opens STACK_ENTER_LEAD before the first proof's beat (the stackbox mounts then) and closes once the LAST card's
+    throw has finished: the stagger pushes card n-1's start to (n - 1) x STACK_BURST_STAGGER after clear_at, and each
+    throw runs STACK_BURST_S - never less than doc 29's own ~1 s."""
+    hold = max(STACK_HOLD_AFTER, (len(items) - 1) * STACK_BURST_STAGGER + STACK_BURST_S)
+    return round(float(items[0]["at"]) - STACK_ENTER_LEAD, 2), round(float(clear_at) + hold, 2)
+
+
+def stack_entry(items, clear_at: float, form: str | None = None,
+                enter: float | None = None, exitt: float | None = None) -> tuple[dict, float, float]:
+    """The `stack` evidence payload AND its host dock's window, derived from one set of times.
+
+    ``items`` is [{id, at}] on the authoring clock, one per verbatim phrase, in the order they are spoken; ``clear_at``
+    is the pivot line the wall bursts on. ``form`` names the layout when the stage cannot say it (the player defaults
+    to the stage's own shape). An explicit ``enter`` / ``exitt`` is honoured but refused when it would cut the
+    choreography: a window that opens after the first beat, or closes before the last card has been thrown.
+
+    Returns (payload, enter, exit) - hand the last two straight to ``dock_entry``."""
+    rows = [dict(it) for it in items]
+    if len(rows) < 2:
+        raise ValueError(f"stack: {len(rows)} item(s) - the verdict stack re-presents a LIST of proofs (2 or more)")
+    for n, it in enumerate(rows, 1):
+        if not it.get("id") or it.get("at") is None:
+            raise ValueError(f"stack: item {n} needs an `id` (a document docked earlier) and an `at` (its verbatim beat)")
+        it["at"] = round(float(it["at"]), 2)
+    for a, b in zip(rows, rows[1:]):
+        if b["at"] <= a["at"]:
+            raise ValueError(f"stack: {b['id']} lands at {b['at']} s, not after {a['id']} at {a['at']} s - the cards "
+                             "enter ONE AT A TIME, each on its own phrase (doc 29 s9.24)")
+    clear_at = round(float(clear_at), 2)
+    if clear_at < rows[-1]["at"] + STACK_RECEDE_LEAD:
+        raise ValueError(f"stack: clear_at {clear_at} s is {round(clear_at - rows[-1]['at'], 2)} s after the last "
+                         f"proof's beat ({rows[-1]['at']} s) - the last card holds the focus until "
+                         f"clear_at - {STACK_RECEDE_LEAD} s, so it would never be read")
+    if form is not None and form not in STACK_FORMS:
+        raise ValueError(f"stack: form={form!r} is not one of {'|'.join(STACK_FORMS)}")
+    want_enter, want_exit = stack_window(rows, clear_at)
+    enter = want_enter if enter is None else round(float(enter), 2)
+    exitt = want_exit if exitt is None else round(float(exitt), 2)
+    if enter > rows[0]["at"]:
+        raise ValueError(f"stack: the host dock enters at {enter} s, after the first proof's beat ({rows[0]['at']} s) - "
+                         "the stack mounts with its dock, so the first card would be missed")
+    if exitt < want_exit:
+        raise ValueError(f"stack: the host dock leaves at {exitt} s, before the burst finishes at {want_exit} s "
+                         f"({len(rows)} cards, {STACK_BURST_STAGGER} s apart, {STACK_BURST_S} s each) - doc 29 s9.24: "
+                         "the window runs past clear_at so the burst finishes ticking")
+    payload = {"items": [{"id": it["id"], "at": it["at"]} for it in rows], "clear_at": clear_at}
+    if form is not None:
+        payload["form"] = form
+    return payload, enter, exitt
+
+
 def dock_entry(aid: str, slot: int, enter: float, exitt: float, n_badges: int,
                kind: str = DOCK_KIND_IMAGE, place: dict | None = None, arrive: str | None = None, mass: str | None = None,
                centre: bool = False, read_place: dict | None = None, read_s: float | None = None, park_s: float | None = None,

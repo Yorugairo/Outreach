@@ -1,0 +1,49 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:the-page-ground-chosen-by-its-job",
+  "title": "The ground the page arrives on, chosen by its job",
+  "aliases": [],
+  "acts": [
+    "SETS",
+    "EXPLAINS"
+  ],
+  "members": [
+    {
+      "card": "plate_option:field",
+      "offset_s": 0.0,
+      "role": "names the GROUND the page's charcoal arrives on; a page that names none takes the soak, the engine's own default"
+    },
+    {
+      "card": "page_enter:field_plates",
+      "offset_s": 0.0,
+      "optional": true,
+      "role": "the cross-fade ground: the charcoal deckle fades over the cream page - the choice when the beat carries the idea on from the plate before"
+    },
+    {
+      "card": "page_enter:field_soak",
+      "offset_s": 0.0,
+      "optional": true,
+      "role": "the soak ground: seeded stains creep and flood the cream to the deckle - the choice when a new idea starts or two ideas need separating"
+    },
+    {
+      "card": "page_enter:mount",
+      "offset_s": 2.4,
+      "role": "the arrival's ink beat - title and source write per glyph once the field has soaked (mount_s 2.4, INK 2.0); the card is the whole mount, the offset is its ink phase"
+    },
+    {
+      "card": "page_builder:line",
+      "offset_s": 4.9,
+      "role": "the chart builds onto its exact value strings inside the deckle the field laid down (the line page here; any builder takes the same beat)"
+    }
+  ],
+  "window_s": 6.0,
+  "does": "A page's ground is chosen by the beat's job: the cross-fade when the idea carries on from the plate before, the soak when the idea is new or two ideas are being separated - then the title inks and the chart builds.",
+  "doctrine": [
+    "E96",
+    "E99 s35",
+    "E22"
+  ],
+  "status": "candidate",
+  "source": "P61 T4b goldens form-extruded-bar (the soak) and form-tilted-line (the cross-fade) - no approved cut has carried it",
+  "count": 0
+}

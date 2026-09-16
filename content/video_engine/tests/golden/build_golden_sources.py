@@ -110,6 +110,10 @@ FRAME_T["slide-landed"] = SLIDE_CUT + SLIDE_S     # THE LANDING: u = 1 - the out
 FRAME_T["verdict-stack"] = 12.5   # mid-pile: cards 1-4 (3.0 / 5.0 / 7.0 / 9.0) receded to their rail spots (each recede is 1.0 s off the next
                                   # item's `at`), card 5 (at 11.0) fully entered (+0.9) and ACTIVE large near centre, card 6 (13.0) not yet in.
                                   # Its @proof-burst instant (clear_at + 0.25) rides render_baseline.PROOF_FRAMES
+FRAME_T["verdict-stack-9x16"] = 13.6   # P61 T7 - THE MOSAIC on a short: proofs 1-7 (2.0 ... 10.6) receded to their rail spots,
+                                  # proof 8 (12.2) fully entered and ACTIVE large near the safe box's centre, proof 9 (13.8) not yet in.
+                                  # The frame that answers E99 s21: eight cards over the whole height of the box, no two in a band, none a row.
+                                  # Its other four phases ride render_baseline.PROOF_FRAMES (@proof-enter / focus / idle / burst)
 FRAME_T["test-card"] = 11.4       # tRel = t - enter(2.0) - CARD_IN * 0.6 = 8.95: rows 1-2 (delays 1.0 / 4.0) fully typed and both answers swept;
                                   # row 3 (delay 7.0) typed (17 chars x 0.045 s), its where-cell in (+0.6), its left answer swept (+1.0 + 0.55),
                                   # its right answer fully faded in (+1.6 + 0.35) with the marker 0.64 of the way through its sweep
@@ -1405,10 +1409,16 @@ def species_proof() -> tuple[dict, dict]:
 SEVEN_SEG = {"a": (0.0, 0.0, 1.0, 0.12), "b": (0.84, 0.0, 1.0, 0.54), "c": (0.84, 0.46, 1.0, 1.0),
              "d": (0.0, 0.88, 1.0, 1.0), "e": (0.0, 0.46, 0.16, 1.0), "f": (0.0, 0.0, 0.16, 0.54),
              "g": (0.0, 0.44, 1.0, 0.56)}
-DIGIT_SEGS = {1: "bc", 2: "abged", 3: "abgcd", 4: "fgbc", 5: "afgcd", 6: "afgedc"}
+DIGIT_SEGS = {1: "bc", 2: "abged", 3: "abgcd", 4: "fgbc", 5: "afgcd", 6: "afgedc",
+              7: "abc", 8: "abcdefg", 9: "abcdfg"}   # P61 T7: 7-9, so the SHORT's nine-proof wall is read by number too
 STACK_COLOURS = [(196, 58, 64), (38, 110, 196), (30, 150, 120), (214, 150, 20), (128, 72, 176), (226, 110, 150)]
 STACK_ITEMS_AT = [3.0, 5.0, 7.0, 9.0, 11.0, 13.0]
 STACK_CLEAR_AT = 20.0
+# P61 T7 - THE SHORT's wall: NINE proofs, the count Steel and Paper's own verdict beat carries (`ev-holds-stack-v1`,
+# 702.87-723.69 s), on a short's clock - 1.4-1.6 s a proof instead of 2-3 s, and a pivot line 2.7 s after the last.
+STACK9_COLOURS = STACK_COLOURS + [(84, 140, 200), (188, 96, 52), (60, 132, 96)]
+STACK9_ITEMS_AT = [2.0, 3.5, 5.0, 6.4, 7.8, 9.2, 10.6, 12.2, 13.8]
+STACK9_CLEAR_AT = 16.5
 
 
 def png_numbered_card(n: int, rgb: tuple[int, int, int]) -> bytes:
@@ -1445,6 +1455,32 @@ def verdict_stack() -> tuple[dict, dict]:
     for i, it in enumerate(items):
         uris[it["id"]] = uri("image/png", png_numbered_card(i + 1, STACK_COLOURS[i]))
     return _timeline("Golden: the verdict stack", scenes, evidence, None), uris
+
+
+def verdict_stack_9x16() -> tuple[dict, dict]:
+    """P61 T7 - THE VERDICT STACK ON A SHORT (dock payload `stack`, form 9:16; doc 29 s9.24 / s9.24b, BACKLOG R26-82).
+
+    The same payload as `verdict-stack` on a 1080x1920 stage, with NINE members (Steel and Paper's own count) and the
+    layout `species/verdict.mjs` VERDICT_9X16 re-lays for a short: nine asymmetric rail spots down the whole height of
+    G-l's safe box x[80,880] y[280,1340], a focus card 63.9 % of the stage width near the box's centre, a named E49
+    idle on the rails, and a burst thrown radially from the MOSAIC's centre on the portrait frame's own axes.
+
+    Its window comes from `stack_entry`, so the beats and the host dock's life are ONE fact (doc 29 s9.24's 0.77 s
+    dimming drift). Judged at the MOSAIC (FRAME_T 13.6); its other four phases ride PROOF_FRAMES."""
+    import build_scene_timeline_f as BST
+    host = "ev-golden-verdict-stack-9x16"
+    items = [{"id": f"ev-golden-stack9-{i + 1}", "at": at} for i, at in enumerate(STACK9_ITEMS_AT)]
+    stack, enter, exitt = BST.stack_entry(items, STACK9_CLEAR_AT, form="9:16")
+    evidence = {host: {"title": "Everything we checked holds", "source": "golden", "species": "stack",
+                       "document": {"path": "golden", "sha256": "0" * 64}, "badges": [], "stack": stack}}
+    docks = [BST.dock_entry(host, 0, enter, exitt, 0)]
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": docks, "species": []}]
+    uris = _base_uris()
+    uris[host] = uri("image/png", png_solid(64, 29, (22, 24, 28)))
+    for i, it in enumerate(items):
+        uris[it["id"]] = uri("image/png", png_numbered_card(i + 1, STACK9_COLOURS[i]))
+    return _timeline("Golden: the verdict stack on a short", scenes, evidence, "9:16"), uris
 
 
 def test_card() -> tuple[dict, dict]:
@@ -1516,6 +1552,9 @@ SURFACES.update({   # P52 T6: the newsreel band and the two readings of the bott
 SURFACES.update({   # P55 T6: the two inline dock painters, pinned before T7 promotes them
     "verdict-stack": verdict_stack,
     "test-card": test_card,
+})
+SURFACES.update({   # P61 T7 / R26-82: the same five phases on a SHORT - the mosaic is the base frame, the rest ride PROOF_FRAMES
+    "verdict-stack-9x16": verdict_stack_9x16,
 })
 SURFACES.update({   # P58 T5: the two 2.5D chart forms, each beside a flat golden of the same data (human gate 3)
     "form-extruded-bar": form_extruded_bar,

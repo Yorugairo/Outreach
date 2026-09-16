@@ -3000,22 +3000,79 @@
       "id": "r26-82-verdict-stack-choreography",
       "ids": [
         "R26-82",
-        "E99 s21"
+        "E99 s21",
+        "P61 HG7"
       ],
-      "kind": "owed",
-      "title": "The verdict stack on a short: Steel and Paper's choreography",
-      "judge": "Owed by the agent - E99 s21: cards that move rather than a horizontal line, and the burst that choreography earned in Steel and Paper",
-      "where": [],
+      "kind": "watch",
+      "title": "The verdict stack on a short, beside Steel and Paper's own beat",
+      "judge": "Two clips. OURS (9:16, 1.9-17.5 s): nine proofs enter one at a time from depth, each holds large near the centre of the safe box while its phrase would be spoken, recedes to its own rail spot so the wall re-composes as a mosaic, the rails idle on a named breath, then the radial burst 60 ms apart from the mosaic's own centre. THE REFERENCE (16:9, 702.87-727.6 s of Steel and Paper's frozen build): the choreography you named in E99 s21, through its burst. Watch both. Approve, or name the phase that is still flat.",
+      "where": [
+        {
+          "label": "enter (2.25 s) - one card, from depth",
+          "path": "content/video_engine/tests/golden/frames/verdict-stack-9x16@proof-enter.png"
+        },
+        {
+          "label": "focus (3.1 s) - the card alone, 63.9% of the stage near the box's centre",
+          "path": "content/video_engine/tests/golden/frames/verdict-stack-9x16@proof-focus.png"
+        },
+        {
+          "label": "the mosaic (13.6 s) - eight cards, four x-clusters, five widths, six tilts, none buried",
+          "path": "content/video_engine/tests/golden/frames/verdict-stack-9x16.png"
+        },
+        {
+          "label": "idle (15.4 s) - every railed card moved 0.3-25 px on the live idle",
+          "path": "content/video_engine/tests/golden/frames/verdict-stack-9x16@proof-idle.png"
+        },
+        {
+          "label": "burst (16.75 s) - five cards gone along five bearings, four still at rest",
+          "path": "content/video_engine/tests/golden/frames/verdict-stack-9x16@proof-burst.png"
+        },
+        {
+          "label": "VERDICT_9X16 (verdict.mjs) - nine rail spots in the safe box; VERDICT untouched",
+          "path": "content/video_engine/scripts/species/verdict.mjs"
+        },
+        {
+          "label": "stack_entry (the compiler): the payload AND the host dock's window from one set of times; six refusals",
+          "path": "content/video_engine/scripts/build_scene_timeline_f.py"
+        }
+      ],
       "options": [],
-      "recommendation": null,
-      "blocks": "the item's next review",
+      "recommendation": "Approve. Read beside the reference, every phase matches its character: one card at a time from depth; the focus card relatively larger (a short is read at arm's length); the mosaic banded rather than ringed because the portrait focus card owns a full-width band - the safe box's cost, not a flattening (the rails span 45% of the stage's height, no 60 px band holds more than three of seven); the idle now a NAMED kind; the fan wider because down and up is where a short has room. Where it falls short: the reference's wall is nine real documents of six shapes on a painted plate, ours nine synthetic cards of one aspect on a flat plate - richer for reasons this slice does not own.",
+      "blocks": "HG7; the CAPABILITIES row :184 (T11)",
       "sources": [
-        "docs/portable/OPERATOR-RULINGS.md (E99 s21)"
+        "docs/portable/OPERATOR-RULINGS.md (E99 s21)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s21)",
+        "docs/content-video-engine/BACKLOG.md:488 (R26-82)",
+        "content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f/evidence-dock.json (ev-holds-stack-v1)",
+        "content/video_engine/tests/test_verdict_stack.py",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T7)"
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": null,
-      "owed": "E99 s21: cards that move rather than a horizontal line, and the burst that choreography earned in Steel and Paper"
+      "was_kind": "owed",
+      "owed": "Delivered 2026-09-15 (P61 T7): VERDICT_9X16, five phase goldens, stack_entry, the two clips",
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "OURS (9:16) - the verdict stack on a short: proofs enter one at a time from depth, hold large near centre, recede to their rail spots as a mosaic, idle, then burst radially 60 ms apart",
+          "surface": "verdict-stack-9x16",
+          "aspect": "9:16",
+          "t0": 1.9,
+          "t1": 17.5,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "THE REFERENCE (16:9) - Steel and Paper's own verdict beat, ev-holds-stack-v1: nine proofs 702.87-723.69 s and its burst at 726.98 - the choreography E99 s21 names",
+          "build": "content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f",
+          "page": "player.html",
+          "aspect": "16:9",
+          "t0": 702.87,
+          "t1": 727.6,
+          "route": "review_queue_proofs.py --clips: the frozen build-f player seeked across the window in one headless browser at 15 fps, piped to ffmpeg (silent H.264); the build is read, never modified"
+        }
+      ]
     },
     {
       "id": "r26-84-engine-saved-states",

@@ -1,0 +1,49 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:chart-remade-into-the-other-form",
+  "title": "The chart remade into the other chart",
+  "aliases": [],
+  "acts": [
+    "TURNS",
+    "EXPLAINS"
+  ],
+  "members": [
+    {
+      "card": "page_builder:line",
+      "offset_s": 0.0,
+      "role": "the chart standing: the page's series is drawn in ink and read for a sentence before any of it turns"
+    },
+    {
+      "card": "plate_option:then",
+      "offset_s": 0.0,
+      "role": "declares the SECOND whole chart - its series, axes, labels and title - built at load and hidden until a chart_to verb reaches it"
+    },
+    {
+      "card": "page_species:chart_to",
+      "offset_s": 2.6,
+      "role": "the page changes STATE on the sentence instead of cutting to a second chart of the same data (E58)"
+    },
+    {
+      "card": "chart_to:remake",
+      "offset_s": 2.6,
+      "role": "every series, datum, axis, label and the title travel on ONE clock, line <-> bars - the whole chart, not a recast of its marks (kinetics:chartxf REMAKE)"
+    },
+    {
+      "card": "plate_option:idle",
+      "offset_s": 5.6,
+      "role": "the landed chart is held and names its idle, so the form the sentence arrived at is never still (E49)"
+    }
+  ],
+  "window_s": 8.0,
+  "does": "The same data is re-drawn as the other whole chart with no cut: the standing chart is read, then every series, axis, label and the title travel on one clock into the other form, which lands and is held alive.",
+  "doctrine": [
+    "E96",
+    "E99",
+    "E64",
+    "E58",
+    "E49"
+  ],
+  "status": "candidate",
+  "source": "P61 T2 golden remake-line-to-bars (the card's own proof frame) - no approved cut has carried it",
+  "count": 0
+}

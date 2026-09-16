@@ -623,7 +623,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - CAPABILITIES row changed: **:37** (THE MELT EXIT) - the gather replaces the sag/ball description behind its flag
 
 ### T7: THE VERDICT STACK ON A SHORT - Steel and Paper's choreography, so the burst lands
-- Status: pending
+- Status: complete (2026-09-15) - HG7 open on the queue as `r26-82-verdict-stack-choreography` (watch, two clips)
 - Owner: `implementation_luna` (**ENGINE LOCK #7**)
 - Depends on: none
 - Write set: `content/video_engine/scripts/species/verdict.mjs`,
@@ -644,7 +644,33 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   `python -m pytest content/video_engine/tests/test_verdict_stack.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/effects_catalog_check.py` then
   `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-82-verdict-stack-choreography`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T7.md`. The lane read the REFERENCE first - Steel and Paper's own beat rendered from its
+  frozen build (read-only): every phase measured (enter translateZ -288.8 / rotateY -12.4 / opacity 0.59; focus 840x388 at
+  scale 1.816; the mosaic four across the top at four widths; the burst's opacities 0.50-0.98 along their own bearings). Today's
+  16:9 stack forced to 9:16: four cards in a horizontal row inside the platform's top chrome, both flank cards off the edges, the
+  focus card 223 px past the right edge - the flattening E99 s21 names. BUILT: `VERDICT_9X16` (verdict.mjs) - the same dials with
+  the geometry re-laid: nine rail spots inside G-l's safe box, the focus card 63.9% of the stage near the box's centre (the
+  reference's ratio is 43.8% of a landscape stage), enter swing/rise sized for a 1080-wide stage, the burst radial from the
+  MOSAIC's centre (a short's right 200 px are platform chrome); `verdictDials(portrait)` the one entry; `verdictPose` gains one
+  branch - the railed share of the pose comes from `idleXf` on a NAMED kind (`live`, E49) phased per card; `VERDICT` untouched
+  number for number and the 16:9 goldens byte-identical. The layout was rebuilt THREE times against measurements (coverage
+  73% -> 51%; the fill order alternating band and side; the centre kept open after the focus card buried a whole card). The
+  compiler's `stack_entry` derives the payload AND the host dock's window from ONE set of times (s9.24's 0.77 s dimming drift
+  made mechanical) with six refusals by name. Goldens: `verdict-stack-9x16` (the mosaic, 13.6 s) + @proof-enter 2.25 / @proof-focus
+  3.1 / @proof-idle 15.4 / @proof-burst 16.75 (PROOF_FRAMES). Parent's read of the five: one card from depth; the focus card
+  alone and large; the mosaic asymmetric with the eighth card across the middle and none buried; the rails drifted on the idle;
+  the burst throwing cards off along five bearings - every phase the operator named. Honest shortfall: the reference's wall is
+  nine real documents of six shapes on a painted plate, ours nine synthetic cards on a flat plate. Tests: test_verdict_stack.py
+  (12: stack_entry's refusals, the full-frame dials pinned by text, eight browser reads - one at a time from depth, focus >= 55%
+  and >= 1.4x every rail, rails >= 25% of the height with no 60 px band holding half, every card inside the safe box at every
+  0.25 s, every railed card moved 0.3-25 px, every card thrown AWAY from the centre, card i at t + i x 0.06 at the same share of
+  its throw, two seeks one frame). Validate: node 572/572; sync in sync; 129 passed (117 goldens + 12); both catalogue checks
+  green; page-boxes sha-only; registry regenerated. DEVIATIONS: `render_baseline.py` PROOF_FRAMES (four entries) and the
+  generated EFFECTS-CATALOG ratified. The lane ran a tagged `git stash push` / `apply` / `drop` to prove a failure pre-existing -
+  against the brief; the tree was verified intact and the other session's stash untouched; the finding was real:
+  `test_every_wired_card_is_in_a_recipe` fails on T2's and T4b's four cards (no lane's validate line ran that test) - a
+  recipes lane fixes it. Card: the short's clip 1.9-17.5 s and the reference via the build route 702.87-727.6 s (extended past
+  the brief's 723.69 so the reference's own burst at 726.98 is on the card).
 - CAPABILITIES row changed: **:184** (THE VERDICT STACK) gains the short's form with its five phases named
 
 ### T8: THE BEAUTIFIED AGENDA PAGE - the plate version of the list effect
