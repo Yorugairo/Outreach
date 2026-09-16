@@ -121,7 +121,7 @@ that page only with the operator's ruling written to `docs/portable/OPERATOR-RUL
 | --- | --- | --- | --- |
 | **HG1** | T2 | `r26-70-compare-morph` (rewritten) | "Watch the two clips end to end. Does it **read as a transformation, not a cut, and read as intentional** (E99 s34)? The entire chart should transform - every series, datum and axis. Approve, or name what cuts or reads as accidental." **RULED 2026-09-15 (E99 s39): line -> bars taken; bars -> line rebuilt in T2b** **HG1b RULED 2026-09-16 (E99 s50): bars -> line approved; closed** |
 | **HG2** | T3 | `r26-117-ball-into-the-next-chart` (**created by the parent at T3's dispatch** - it does not exist today; it supersedes the `"missing": true` line on `r26-70-compare-morph`) | "The page melts, balls up, and the ball becomes the NEXT FULL CHART with no cut between. Watch 0:00-0:08. Does the hand-over hold, or does it read as a jump?" **T3 LANDED 2026-09-16: card open (watch, clip 14.6-21.2 s)** **RULED 2026-09-16 (E99 s53): good; the chart-to-ball snap re-timed - T3c** **HG2-2 RULED 2026-09-16 (E99 s58): approved** |
-| **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" **T3 LANDED 2026-09-16: card open (watch, clip 14.4-20.3 s)** **RULED 2026-09-16 (E99 s52): the morph fine; the fill may not snap in - T3b** **HG2b-2 (E99 s57): the ground reads; the clip re-windowed to the scene before - open** |
+| **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" **T3 LANDED 2026-09-16: card open (watch, clip 14.4-20.3 s)** **RULED 2026-09-16 (E99 s52): the morph fine; the fill may not snap in - T3b** **HG2b-2 (E99 s57): the ground reads; the clip re-windowed to the scene before - open** **E99 s60: the fixture is not a scene - OWED again, T3d (a real beat in a test-bed build)** |
 | **HG3** | T4a | `p58-hg3-extruded-bar-leave` | "`form-extruded-bar@proof-leave` beside `form-tilted-line@proof-leave`, as clips. Do the prism's shapes break down enough now? Approve, or say 'more'." **RULED 2026-09-15 (E99 s40): approved** |
 | **HG4** | T4b | `p58-hg3-forms-mount-not-scribble` | "The formed page arriving by the two-plate cross-fade and by the soak, each leaving by the soak's recede (E99 s35). Watch both enters and the leave. Approve, or name what still reads wrong." **RULED 2026-09-15 (E99 s41): approved** |
 | **HG5** | T5 | `r26-118-metallic-ball` | "The ball, before and after: more shadow, a dark Fresnel rim, a metallic band, one point of deep shadow depth. Does it read metallic and heavy now, or still glossy?" **RULED 2026-09-15 (E99 s42): refused - the prior ball + the darkness; T5b** **HG5b RULED 2026-09-16 (E99 s49): the reference body; T5c** |
@@ -523,6 +523,22 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   page_enter card's planted-ground phase text (T3b) was over the 240 cap and only the schema builder caught it (R26-141 again) -
   trimmed by the parent. NAMED, the operator's call: the default melt's 1.6 s window gives the closing ~6 poses on 2s; lengthening
   MELT.S moves every melt golden's instants - offered on the card, not decided.
+
+### T3d: THE PLANTED MORPH ON A REAL SCENE - a test-bed beat, not the fixture (E99 s60)
+- Status: pending
+- Owner: `implementation_luna` (**NO engine lock** - a private build; the engine as committed)
+- Depends on: T3, T3b (the mechanism), E99 s60
+- Write set: a NEW private build directory `content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-planted/` (or the Japan
+  project's, never an approved cut's), its shot table / build script, the traced silhouette's poly, the clip; `docs/content-video-engine/review-queue.v1.json`
+  is the parent's
+- Acceptance: E99 s60 verbatim - *"you showed me a still frame with an ink splotch held for 6 seconds or something...we would never do that."*
+  A real beat in a private build: an approved narrative plate the library holds with a real element the scene plants (R26-16's tie at its last
+  frame, or a prop on a Tokyo / Japan plate), the scene playing as a short would (its docks, its captions, its idle), the cut, the morph onto the
+  planted element (`world.morph.poly` traced off the plate's own raster by `contourSilhouette`), the ground arriving (T3b), the chart built - and
+  the clip through `review_queue_proofs.py` on the build route. The approved cuts untouched (E45); Tokyo is the test bed (no render asked).
+- Validate: `python content/video_engine/scripts/gate_motion_density.py <the private build>` (M23 / M31 / M25 / M28 at or better than the
+  parent's reading) then `python content/video_engine/scripts/review_queue_proofs.py --clips --only p48-hg3-morph-onto-planted`
+- Evidence: pending
 
 ### T4a: THE EXTRUDED BAR'S LEAVE BREAKS ITS SHAPES DOWN MORE
 - Status: complete (2026-09-15) - HG3 open on the queue as `p58-hg3-extruded-bar-leave` (watch, two clips)

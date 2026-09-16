@@ -465,11 +465,12 @@
         "P61 HG2b",
         "E99 s52 (the ground arrives)",
         "P61 HG2b-2",
-        "E99 s57 (the scene before)"
+        "E99 s57 (the scene before)",
+        "E99 s60"
       ],
-      "kind": "watch",
+      "kind": "owed",
       "title": "The morph onto a planted element - the board's ink now spreads out from the splotch, never snapping in around it",
-      "judge": "E99 s57 - you said: this looks good but we have to see the scene before to see if the morph reads. The clip now opens on the plate world four seconds before the cut, the planted form standing in its scene, then the cut, the silhouette alone on the cream, the soak spreading from it, the morph and the build. Watch 11.0-20.3 s. Does the morph read in context? Approve, or name the frame.",
+      "judge": "Owed by the agent - see `owed`. The question, once the real beat exists: watching the scene as a viewer would, does the chart morph out of the thing that was standing there, honestly, or does the seam show?",
       "where": [
         {
           "label": "the page's first frame (15.00) - the planted form alone on the cream, no board around it (was: the full charcoal fill)",
@@ -493,8 +494,8 @@
         }
       ],
       "options": [],
-      "recommendation": "Approve. Measured: the board's filled share at the page's first frame is 0.0004 (was 1.00); the worst change between consecutive frames is 0.043 under the soak and 0.086 at the punch, against a threshold of 0.125 (an eighth of the board) a test now pins. The handed ball's page (melt-morph) never had the fault - its board never leaves (E88) - and reads the same rule.",
-      "blocks": "HG2b-2",
+      "recommendation": "",
+      "blocks": "P48 T5b's proof; P48 HG3; P61 T3d",
       "sources": [
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:178-186",
         ".claude/PRPs/plans/P48-CHART-TO-CHART-TRANSITIONS.plan.md:412",
@@ -514,20 +515,9 @@
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": "owed",
-      "owed": "Delivered 2026-09-16 (P61 T3b): the ground arrives by the soak seeded on the prop; two goldens + @proof-ground; the clip",
-      "proofs": [
-        {
-          "type": "clip",
-          "label": "the scene before, the cut, the planted source: the plate world held, the cut, the traced silhouette alone on the cream, the soak spreading from it, the form deforming into the area, the page built on it",
-          "surface": "morph-planted",
-          "aspect": "16:9",
-          "t0": 11.0,
-          "t1": 20.3,
-          "flags": {},
-          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
-        }
-      ]
+      "was_kind": "watch",
+      "owed": "E99 s60 (2026-09-16): the clip served was the golden fixture - a synthetic splotch held still on cream - and the operator refused it as a scene (\"we would never do that\"). Owed: a private test-bed build of a real beat - an approved plate with a real planted element (the tie, or a Tokyo / Japan prop), the scene playing, the cut, the morph onto the element, the chart built - and its clip (P61 T3d). The mechanism's goldens stand.",
+      "proofs": []
     },
     {
       "id": "p58-hg3-chart-forms",
