@@ -49,6 +49,67 @@ def stitch_brand_line(audio: Path, brand_line: Path, brand_gap: float, runtime_s
     return audio
 
 
+VO_TONE = ("highpass=f=70:poles=2",
+           "equalizer=f=280:t=q:w=0.9:g=-3.2",
+           "equalizer=f=800:t=q:w=2.2:g=5",
+           "equalizer=f=1400:t=q:w=1.3:g=-4",     # cancels the sum of its two neighbours - see WHY
+           "equalizer=f=2600:t=q:w=3.0:g=6",
+           "equalizer=f=11000:t=q:w=1.0:g=5",
+           "treble=f=7000:g=2")
+
+
+VO_TP_TARGET_DBTP = -1.5
+
+
+def vo_tone_filter(makeup_db: float | None = None, stages: tuple[str, ...] = VO_TONE) -> str:
+    """The APPROVED VO tone chain as one ffmpeg -af string (the operator's A/B, chain G, 2026-09-16 -
+    E99 s54, which amends s48's chain C), plus the per-file makeup trim when the caller has measured one.
+
+    WHY these seven. Measured in 1/3-octave bands against two shipped references, the take is hot through
+    200-350 Hz and scooped at 800 Hz, at 2.5-3.2 kHz and above 6 kHz: boxy in the chest, short of the
+    consonant that carries a word on a phone speaker. The rumble cut at 70 Hz is below anything the
+    voice uses.
+
+    WHY NOT JUST MORE OF CHAIN C. s48 shipped a half-correction and the obvious next step was to turn it
+    up. Measured, that barely moved: the mean distance from the reference shape went 4.51 -> 4.25 dB from
+    half to full strength, while 2 kHz went from +5.7 to +7.2 dB OVER the reference. The fault was never
+    gain, it was BELL WIDTH - C's 800 Hz and 2700 Hz bells are wide enough that their skirts SUM in the
+    gap between them, putting 1-2 kHz +4 to +6 dB over a region the raw take already had right. G narrows
+    both bells and spends one stage, the -4 dB at 1400 Hz, cancelling what is left of that sum. Result
+    over 200 Hz-13 kHz: mean error 3.26 -> 2.05 dB, worst band 9.6 -> 4.6 dB, and it holds on a passage
+    it was not fitted to (hook 2.04, held-out mid 2.28). The 11 kHz bell is the air the shelf could not
+    reach on its own; the shelf drops to +2 because the bell now carries the top.
+
+    NOTE the nominal gains are not what a 1/3-octave band reads: +5 at 800 Hz measures +3.2 and +6 at
+    2600 Hz measures +4.5, because a narrow bell is averaged across a band wider than itself. The gate's
+    expectations are the MEASURED numbers, not these.
+
+    WHY A TRIM FOLLOWS IT. The A/B was judged at MATCHED loudness (every variant went through loudnorm
+    before the operator heard it), so the ruling is on TONE and sets no level - and the chain as ruled is
+    not level-neutral: the 280 Hz bell is nearly an octave wide and sits on the take's densest speech
+    energy, so it takes out about a decibel more than the lifts put back, while the peaks rise until the
+    take clips. `vo_makeup_db` sizes ONE flat gain that lands the written take on VO_TP_TARGET_DBTP. Flat
+    is the point: it moves every band by the same number, so it cannot touch the ruled tone, and the
+    headroom is not decoration - `insert_edit_pauses.py` and `compress_dead_space.py` re-encode this take
+    at 192k, and an intermediate sitting at 0 dBTP clips on the re-encode.
+
+    WHAT MUST NOT BE HERE. No loudnorm, no limiter, no compression, no saturation - the finished mix is
+    normalised once, in the compositor, and anything that shapes level dynamically would re-shape the
+    tone the operator ruled on. Nothing that retimes either (no atempo): the word timeline comes from the
+    provider's timestamps, so an equal-length chain is the whole permitted vocabulary.
+
+    The level a bed is hung from moves with the trim, so it is RE-MEASURED, not frozen: `bed_gain` reads
+    an episode's `VO_LUFS` literal, and `master_vo_tone.py --verify` G2 fails when that literal no longer
+    matches the toned take, naming the file and line to correct."""
+    return ",".join((*stages, f"volume={makeup_db:.2f}dB") if makeup_db is not None else stages)
+
+
+def vo_makeup_db(tp_dbtp: float, target: float = VO_TP_TARGET_DBTP) -> float:
+    """The flat trim, in dB, that puts a post-chain take's measured true peak on `target`. One
+    subtraction, kept here so the stage and its gate cannot disagree about what the trim should be."""
+    return round(target - tp_dbtp, 2)
+
+
 def bed_gain(vo_lufs: float, bed_lu: float, bed_lufs: float) -> float:
     """gain = 10^((VO_I - LU - bed_I) / 20): the bed sits `bed_lu` under the voice, measured to
     measured (the sub-threshold blueprint s2; the level itself is the episode's ruling)."""

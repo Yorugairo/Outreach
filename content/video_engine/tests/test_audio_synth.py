@@ -98,7 +98,7 @@ def test_synthesizes_each_scene_writes_mp3_and_words_and_reports_cost(tmp_path: 
 
     assert len(calls) == 2
     assert "/text-to-speech/VOICE_TEST/with-timestamps?" in calls[0]["url"]
-    assert "output_format=mp3_44100_128" in calls[0]["url"]
+    assert "output_format=mp3_44100_192" in calls[0]["url"]
     assert "output_format" not in calls[0]["payload"]
     assert calls[0]["headers"]["xi-api-key"] == "test-key"
     assert summary["scene_count"] == 2
@@ -140,11 +140,13 @@ def test_incomplete_cache_fails_closed_instead_of_fabricating_timings(
     service = AudioSynthService(_config(), request_fn=lambda *args, **kwargs: _response("unused"))
     storyboard = _storyboard("Cache without timings.")
     voice = storyboard["global_settings"]["voice"]
-    from content.video_engine.src.services.audio_synth import _cache_key
+    from content.video_engine.src.services.audio_synth import (
+        DEFAULT_ELEVENLABS_OUTPUT_FORMAT, _cache_key)
 
     cache_dir = tmp_path / "audio" / ".cache"
     cache_dir.mkdir(parents=True)
-    cache_hash = _cache_key(voice["voice_id"], "Cache without timings.", voice["settings"])
+    cache_hash = _cache_key(voice["voice_id"], "Cache without timings.", voice["settings"],
+                            DEFAULT_ELEVENLABS_OUTPUT_FORMAT)
     cache_dir.joinpath(f"{cache_hash}.mp3").write_bytes(b"ID3-incomplete")
 
     with pytest.raises(AudioSynthesisError, match="word-timing sidecar"):
@@ -162,10 +164,12 @@ def test_cache_hit_rejects_word_timings_for_different_narration(
     storyboard = _storyboard(narration)
     service.synthesize_storyboard(storyboard, tmp_path)
 
-    from content.video_engine.src.services.audio_synth import _cache_key
+    from content.video_engine.src.services.audio_synth import (
+        DEFAULT_ELEVENLABS_OUTPUT_FORMAT, _cache_key)
 
     voice = storyboard["global_settings"]["voice"]
-    cache_hash = _cache_key(voice["voice_id"], narration, voice["settings"])
+    cache_hash = _cache_key(voice["voice_id"], narration, voice["settings"],
+                            DEFAULT_ELEVENLABS_OUTPUT_FORMAT)
     stale = {
         "scene_id": 1,
         "duration_s": 1.0,

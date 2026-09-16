@@ -12,7 +12,10 @@ audit found five unused capabilities on the exact endpoint we already call.
 ## 0. Current pipeline state (audited)
 
 `audio_synth.py` calls `/text-to-speech/{voice}/with-timestamps` with
-`eleven_multilingual_v2`, `mp3_44100_128`, and a verbatim
+`eleven_multilingual_v2`, `mp3_44100_192` (moved up from `mp3_44100_128`
+2026-09-15, E99 s48 - the operator is on Creator tier, which is the gate the
+provider documents for 192 kbps; the cache key now includes the format so no
+128 kbps entry is served into a 192 kbps episode), and a verbatim
 `voice_settings` passthrough (observed channel default: stability 0.5,
 similarity 0.75). It does **not** send: pause markup, request stitching,
 `apply_text_normalization`, `pronunciation_dictionary_locators`, or `seed` —
@@ -573,9 +576,23 @@ attention.
    and warble ("if you"): WSOLA duplicates edge context and suffocates
    under ~150ms. WORDS ARE NEVER SPLIT; chunks merge words until the
    curve drifts >0.015x AND a gap >=30ms offers a clean boundary.
+   (The 30ms is STALE - class 5b's v6 raised a cut site to >=120ms of
+   reported silence, and the code uses 0.12. Corrected 2026-09-16.)
 4. Steep field edges -> "black hole dynamics" (operator's phrase - an
    object pulled by two fields). Ramp slope halved; adjacent chunks
    differ <=0.015x, below the perceptual step threshold.
+   **CORRECTED 2026-09-16 - the "<=0.015x" sentence was never true and
+   contradicts class 3 one line above it.** 0.015x is the SPLIT
+   THRESHOLD: a new chunk is cut once the curve has drifted PAST 0.015x,
+   so an adjacent step is at least that and in practice much larger -
+   measured 0.120x max over 15 steps on the probe, 0.135x over 75 steps
+   on part 1 of the Steel and Paper master. That is the audio the
+   operator approved by ear ("This is it", v4), so the ceiling reading
+   is refuted by the shipped take, not merely unenforced. What actually
+   makes a step inaudible is class 5b: a step may only occur across
+   >=120ms of REPORTED SILENCE. `tempo_edit.py --verify` gates it that
+   way - G5b (the step sits in silence) FAILS, G5c (the step size vs
+   0.015x) is a WARN, promoted to FAIL only by --strict-rate-step.
 5b. FALSE MICRO-GAPS -> a chunk boundary INSIDE a word ("vo-oice" -
    the vowel doubled mid-word; the operator heard it survive v4 AND
    v5): provider timestamps are +/-30-60ms loose, so a reported 30-50ms

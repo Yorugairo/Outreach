@@ -7,15 +7,20 @@ facts that must never live in it.
 from __future__ import annotations
 
 import json
+import math
+import re
 import sys
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
+import audio_spectrum as SP  # noqa: E402
 import build_scene_timeline_f as B  # noqa: E402
+import master_vo_tone as MT  # noqa: E402
 from authoring import Project  # noqa: E402
 from authoring import audio as A, docks as D, table as T, words as W  # noqa: E402
 
@@ -228,6 +233,281 @@ def test_outro_clock_pads_to_whichever_finishes_last():
     assert runtime == 85.1, "the card outlasts the brand line here (78.9 + 6.2)"
     # ... and a long brand line pushes the runtime past the card instead
     assert A.outro_clock(79.0, 5.0, outro_lead=0.1, outro_s=6.2, brand_gap=0.7, brand_tail=1.0)[2] == 85.7
+
+
+# ---------------------------------------------------------------- the VO tone chain (the operator's A/B, chain G)
+APPROVED_CHAIN = ("highpass=f=70:poles=2,equalizer=f=280:t=q:w=0.9:g=-3.2,equalizer=f=800:t=q:w=2.2:g=5,"
+                  "equalizer=f=1400:t=q:w=1.3:g=-4,equalizer=f=2600:t=q:w=3.0:g=6,"
+                  "equalizer=f=11000:t=q:w=1.0:g=5,treble=f=7000:g=2")
+
+
+def test_the_vo_tone_chain_is_the_ruling_verbatim():
+    """The operator chose chain G off an A/B (2026-09-16, E99 s54, amending s48's chain C); the kit
+    carries that string and nothing else."""
+    assert A.vo_tone_filter() == APPROVED_CHAIN
+    assert len(A.VO_TONE) == 7 and A.vo_tone_filter().count(",") == 6
+
+
+def test_the_vo_tone_chain_carries_no_rejected_stage():
+    """What the A/B REFUSED must not creep back in: a cut at 3.2 kHz, a notch at 350 Hz, any
+    saturation, and above all any loudnorm - the stage is level-neutral or the bed math drifts."""
+    chain = A.vo_tone_filter()
+    for rejected in ("3200", "3.2k", "f=350", "asoftclip", "aexciter", "acrusher", "acompressor",
+                     "alimiter", "loudnorm", "dynaudnorm", "speechnorm"):
+        assert rejected not in chain, f"a rejected stage came back into the chain: {rejected}"
+    assert "atempo" not in chain and "rubberband" not in chain, "a tone stage may never retime the take"
+
+
+def test_the_trim_is_flat_appended_last_and_sized_off_the_measured_peak():
+    """The A/B was judged at matched loudness, so it ruled TONE and set no level. The level is one flat
+    `volume=` trim, sized per file, LAST - flat moves every band by the same number, so it cannot touch
+    the ruled tone, and the chain in front of it stays byte-identical."""
+    assert A.vo_makeup_db(-2.01) == 0.51 and A.vo_makeup_db(-0.13) == -1.37
+    assert A.vo_makeup_db(-0.13, target=-2.0) == -1.87 and A.VO_TP_TARGET_DBTP == -1.5
+    # -2.01 dBTP is what chain G measured on the Steel and Paper take, so the trim goes UP; chain C's
+    # own -0.13 dBTP pulled it down. The sign is per file, never per chain.
+    trimmed = A.vo_tone_filter(A.vo_makeup_db(-2.01))
+    assert trimmed == APPROVED_CHAIN + ",volume=0.51dB"
+    assert trimmed.startswith(A.vo_tone_filter()), "the ruled chain is untouched in front of the trim"
+    for rejected in ("alimiter", "loudnorm", "acompressor", "asoftclip"):
+        assert rejected not in trimmed, f"level is a flat gain, never {rejected}"
+
+
+def _bell_db(f0: float, q: float, gain_db: float, at_hz: float, fs: int = 48000) -> float:
+    """The dB an ffmpeg `equalizer=t=q` peaking bell puts at `at_hz` - the RBJ biquad, evaluated.
+    Lets a test reason about what the stages do to each OTHER, not just what each one claims."""
+    amp = 10 ** (gain_db / 40)
+    w0 = 2 * math.pi * f0 / fs
+    alpha, cos_w0 = math.sin(w0) / (2 * q), math.cos(w0)
+    b = (1 + alpha * amp, -2 * cos_w0, 1 - alpha * amp)
+    a = (1 + alpha / amp, -2 * cos_w0, 1 - alpha / amp)
+    z = np.exp(-1j * 2 * math.pi * at_hz / fs)
+    return float(20 * np.log10(abs((b[0] + b[1] * z + b[2] * z * z) / (a[0] + a[1] * z + a[2] * z * z))))
+
+
+def test_the_vo_tone_chain_cuts_twice_and_is_no_longer_a_half_correction():
+    """G is a FULL correction, not s48's half one: two cuts (280 Hz and 1400 Hz) against four lifts,
+    and the biggest lift is +6, where chain C's ceiling was +4."""
+    gains = [float(re.search(r"g=(-?[\d.]+)", s).group(1)) for s in A.VO_TONE if "g=" in s]
+    assert [g for g in gains if g < 0] == [-3.2, -4.0], "280 Hz and 1400 Hz, in that order"
+    assert sorted(g for g in gains if g > 0) == [2.0, 5.0, 5.0, 6.0] and max(gains) == 6.0
+    assert A.VO_TONE[0].startswith("highpass=f=70")
+
+
+def test_the_1400_hz_cut_is_not_redundant_and_must_not_be_deleted():
+    """WHY the odd stage exists. C's wide 800 and 2700 bells had skirts that SUMMED in the gap between
+    them, pushing 1-2 kHz over a region the raw take already had right. G narrows both bells AND cuts
+    what is left at 1400. Anyone tempted to delete the cut as redundant should read this test: the
+    narrowing alone does not close the gap, and the cut is doing more than closing it."""
+    c_sum = _bell_db(800, 1.2, 3, 1400) + _bell_db(2700, 0.9, 4, 1400)
+    g_sum = _bell_db(800, 2.2, 5, 1400) + _bell_db(2600, 3.0, 6, 1400)
+    assert c_sum > 2.4, f"chain C really did pile up in the gap: {c_sum:+.2f} dB at 1400 Hz"
+    assert g_sum < c_sum - 1.0, f"narrowing the bells took most of it out: {g_sum:+.2f} dB"
+    assert g_sum > 0.5, f"... but NOT all of it - the gap still sits proud at {g_sum:+.2f} dB"
+    # the cut more than cancels that residue, which is why the measured band reads about -2.8 and not 0
+    net = g_sum + _bell_db(1400, 1.3, -4, 1400) + _bell_db(280, 0.9, -3.2, 1400)
+    assert net < -2.0, f"with the cut, 1400 Hz ends up genuinely down: {net:+.2f} dB"
+    assert abs(net - MT.BAND_TOL[1400.0][0]) < MT.BAND_TOL[1400.0][1], "and the gate expects that number"
+
+
+# ---------------------------------------------------------------- the 1/3-octave measurement the gate reads
+def _spectrum(n: int, seed: int, magnitude=None) -> np.ndarray:
+    """Noise built in the FREQUENCY domain from a chosen magnitude and a random phase - so a test can
+    shape one band exactly and the band power is the magnitude, not a draw. Returned at unit RMS."""
+    freqs = np.fft.rfftfreq(n, 1 / SP.SR)
+    mag = np.ones(freqs.size) if magnitude is None else magnitude(freqs)
+    phase = np.random.default_rng(seed).uniform(0, 2 * np.pi, freqs.size)
+    x = np.fft.irfft(mag * np.exp(1j * phase), n)
+    return (x / np.sqrt((x ** 2).mean())).astype(np.float32)
+
+
+def _noise(n: int = 96000, seed: int = 7) -> np.ndarray:
+    """Flat-spectrum noise at unit RMS."""
+    return _spectrum(n, seed)
+
+
+def _boosted(n: int, lo: float, hi: float, db: float, seed: int = 7) -> np.ndarray:
+    """The same noise with [lo, hi) Hz lifted by `db` - a synthetic equalizer with a known answer.
+    Not renormalised: an absolute band reading has to see the lift where it was applied."""
+    freqs = np.fft.rfftfreq(n, 1 / SP.SR)
+    lift = np.where((freqs >= lo) & (freqs < hi), 10 ** (db / 20), 1.0)
+    phase = np.random.default_rng(seed).uniform(0, 2 * np.pi, freqs.size)
+    flat = np.fft.irfft(np.exp(1j * phase), n)
+    return (np.fft.irfft(lift * np.exp(1j * phase), n) / np.sqrt((flat ** 2).mean())).astype(np.float32)
+
+
+def test_the_third_octave_grid_steps_by_a_third_of_an_octave():
+    centres = SP.iso_third_octave_centres()
+    assert centres[0] == 25.0 and centres[-1] < 17000
+    assert all(round(b / a, 6) == round(2 ** (1 / 3), 6) for a, b in zip(centres, centres[1:]))
+    assert any(abs(fc - 1000) < 10 for fc in centres), "the 1 kHz band is on the grid"
+
+
+def test_band_levels_put_a_tone_in_its_own_band_and_nowhere_else():
+    t = np.arange(96000) / SP.SR
+    sine = np.sin(2 * np.pi * 1000 * t).astype(np.float32)
+    levels = SP.band_levels(sine, centres=[500.0, 1000.0, 2000.0], shape=False)
+    assert levels[1000.0] - max(levels[500.0], levels[2000.0]) > 40, "a pure tone sits in one band"
+
+
+def test_a_known_boost_reads_back_as_the_band_delta():
+    """The gate's whole job: output-minus-input in absolute band dB IS the filter's response."""
+    before = SP.band_levels(_noise(), centres=[500.0, 1000.0, 2000.0], shape=False)
+    after = SP.band_levels(_boosted(96000, 890.0, 1130.0, 6.0), centres=[500.0, 1000.0, 2000.0], shape=False)
+    deltas = SP.band_deltas(before, after)
+    assert abs(deltas[1000.0] - 6.0) < 0.5
+    assert abs(deltas[500.0]) < 0.5 and abs(deltas[2000.0]) < 0.5, "an untouched band does not move"
+
+
+def test_the_shape_reading_is_level_invariant_and_the_absolute_one_is_not():
+    """`shape=True` compares two DIFFERENT files (a reference mastered hotter is not brighter);
+    `shape=False` compares one file before and after a filter, where the gain is the point."""
+    x = _noise()
+    centres = [500.0, 1000.0, 2000.0]
+    quiet, loud = SP.band_levels(x, centres=centres), SP.band_levels(x * 4, centres=centres)
+    assert all(abs(loud[fc] - quiet[fc]) < 0.01 for fc in centres)
+    absolute = SP.band_deltas(SP.band_levels(x, centres=centres, shape=False),
+                              SP.band_levels(x * 4, centres=centres, shape=False))
+    assert all(abs(d - 20 * math.log10(4)) < 0.01 for d in absolute.values())
+
+
+def test_a_falling_spectrum_reads_as_a_falling_band_curve():
+    """Monotonic in, monotonic out: 1/f noise has to step DOWN band by band, or the band edges are wrong."""
+    pink = _spectrum(96000, seed=3, magnitude=lambda f: 1 / np.maximum(f, 1.0))
+    levels = SP.band_levels(pink, centres=[fc for fc in SP.iso_third_octave_centres() if 100 <= fc <= 8000],
+                            shape=False)
+    curve = list(levels.values())
+    # octave by octave (three bands), because one third-octave step is inside the frame gate's own wobble
+    assert all(b < a for a, b in zip(curve, curve[3:])), f"1/f noise did not fall octave by octave: {curve}"
+    assert curve[0] - curve[-1] > 12, "seven octaves of 1/f have to lose real level"
+
+
+def test_the_speech_gate_drops_the_quiet_half_of_the_frames():
+    """Frames under the median frame RMS are not voice; dropping them is what makes two takes with
+    different amounts of silence comparable in shape."""
+    loud, quiet = _noise(96000), _noise(96000, seed=11) * 0.001
+    alternating = np.concatenate([np.concatenate([loud[i:i + 8192], quiet[i:i + 8192]])
+                                  for i in range(0, 8192 * 6, 8192)])
+    rms = lambda a: float(np.sqrt((np.asarray(a, dtype=float) ** 2).mean()))
+    kept = SP.speech_frames(alternating)
+    assert kept.shape[1] == SP.FRAME and 0 < kept.shape[0] < len(alternating) // SP.HOP
+    assert rms(kept) > rms(alternating), "the average moved up: the quiet frames are out of it"
+    assert rms(kept) > 100 * rms(quiet), "... and what it kept is the voice, not the silence"
+    with pytest.raises(ValueError):
+        SP.speech_frames(np.zeros(100, dtype=np.float32))
+
+
+def test_to_json_makes_the_band_reading_round_trip():
+    levels = SP.band_levels(_noise(), centres=[500.0, 1000.0], shape=False)
+    assert json.loads(json.dumps(SP.to_json(levels))) == {"500.0": levels[500.0], "1000.0": levels[1000.0]}
+
+
+# ---------------------------------------------------------------- the gate the tone stage ships with
+def _measured(dur: float, lufs: float, tp: float, bands: dict) -> dict:
+    return {"duration_s": dur, "lufs": lufs, "tp_dbtp": tp, "bands_db": SP.to_json(bands)}
+
+
+UNTONED = _measured(390.326, -18.8, -2.41, {fc: 0.0 for fc in MT.PROBE_BANDS})
+TRIM = 0.51            # what chain G computed on the Steel and Paper take (it measured -2.01 dBTP)
+BIG_TRIM = -1.63       # ... and what chain C computed on the same take, kept because the size matters below
+# chain G's own response, MEASURED on the real take with audio_spectrum.band_levels, no trim applied.
+# Not the nominal gains: +5 at 800 Hz reads +3.16 and +6 at 2600 Hz reads +4.45, because a narrow bell
+# is averaged across a 1/3-octave band wider than itself.
+CHAIN_G = {280.0: -3.16, 800.0: 3.16, 1400.0: -2.75, 2600.0: 4.45, 8000.0: 3.79, 11000.0: 6.96}
+LANDED = {fc: db + TRIM for fc, db in CHAIN_G.items()}
+
+
+def _episode(tmp_path: Path, declared: str | None) -> Path:
+    """A take inside an episode that either declares a VO_LUFS literal or wires no bed at all."""
+    take = tmp_path / "an-episode/vo-f/audio/scene_1.mp3"
+    take.parent.mkdir(parents=True)
+    if declared is not None:
+        (tmp_path / "an-episode/build_short.py").write_text(declared, encoding="utf-8")
+    return take
+
+
+def test_the_tone_gate_passes_a_take_the_chain_and_the_trim_landed_on(tmp_path):
+    take = _episode(tmp_path, "PLATFORM = 'yt'\nVO_LUFS = -20.5   # measured\n")
+    after = _measured(390.326, -20.53, -1.77, LANDED)
+    rows = MT.gate_rows(take, UNTONED, after, TRIM)
+    assert [label.split()[0] for label, _, _ in rows] == [
+        "G1", "G2", "G3", "G4a", "G4b", "G4c", "G4d", "G4e", "G4f", "G5"]
+    assert all(s == MT.PASS for _, s, _ in rows), MT.report_text(take, rows)
+
+
+def test_the_gate_reads_the_band_deltas_with_the_flat_trim_taken_back_out():
+    """The trim moves every band by the same number; G4 is about TONE, so it is removed before the
+    comparison. How much that MATTERS depends on the trim's size, which is why both sizes are pinned."""
+    after = _measured(390.326, -20.53, -1.77, LANDED)
+    assert all(s == MT.PASS for l, s, _ in MT.gate_rows(Path("x.mp3"), UNTONED, after, TRIM) if l.startswith("G4"))
+    # chain G's trim is small (+0.51) against windows of 1.0-2.0, so leaving it in flips NOTHING here:
+    # on this take the subtraction is invisible, and a gate that only works by luck is not a gate.
+    small = [l.split()[0] for l, s, _ in MT.gate_rows(Path("x.mp3"), UNTONED, after, 0.0) if s == MT.FAIL]
+    assert small == []
+    # ... so the size that proves the point is a REAL one this stage produced: chain C's -1.63 on this
+    # same take. Then five of the six rows fail and 11 kHz still scrapes through on its wider window -
+    # exactly the half-working gate the subtraction exists to prevent.
+    big = _measured(390.326, -21.41, -1.77, {fc: db + BIG_TRIM for fc, db in CHAIN_G.items()})
+    left_in = [l.split()[0] for l, s, _ in MT.gate_rows(Path("x.mp3"), UNTONED, big, 0.0) if s == MT.FAIL]
+    assert left_in == ["G4a", "G4b", "G4c", "G4d", "G4e"], "11 kHz (G4f) survives on its +/-2.0 window"
+    assert all(s == MT.PASS for l, s, _ in MT.gate_rows(Path("x.mp3"), UNTONED, big, BIG_TRIM) if l.startswith("G4"))
+
+
+def test_the_tone_gate_fails_a_retime_a_hot_peak_a_missed_trim_and_a_chain_that_never_landed():
+    flat = _measured(390.4, -19.8, -0.13, {fc: 0.0 for fc in MT.PROBE_BANDS})
+    rows = MT.gate_rows(Path("x.mp3"), UNTONED, flat, 0.0)
+    assert [l.split()[0] for l, s, _ in rows if s == MT.FAIL] == [
+        "G1", "G3", "G4a", "G4b", "G4c", "G4d", "G4e", "G4f", "G5"]
+    assert "VERDICT: FAIL (9 FAIL)" in MT.report_text(Path("x.mp3"), rows)
+    # ... and the tolerances are the ruled ones, loose on purpose: this proves the chain ran, it is not an EQ check
+    assert (MT.DUR_TOL_S, MT.VO_LUFS_TOL, MT.TP_CEIL_DBTP, MT.TP_LAND_TOL) == (0.005, 0.3, -1.0, 0.5)
+    assert MT.BAND_TOL == {280.0: (-3.2, 1.0), 800.0: (3.2, 1.5), 1400.0: (-2.8, 1.5),
+                           2600.0: (4.5, 1.5), 8000.0: (3.8, 1.5), 11000.0: (7.0, 2.0)}
+    assert tuple(MT.BAND_TOL) == MT.PROBE_BANDS, "every probed band is gated, in the row order a-f"
+
+
+def test_g2_fails_a_bed_literal_the_toned_take_has_moved_under_and_names_the_line(tmp_path):
+    """The failure nothing else in the pipeline catches: the take is re-mastered, `VO_LUFS` is not, and
+    `bed_gain` puts the bed at the wrong level under every cue in silence."""
+    take = _episode(tmp_path, "BED_LU = 20.0\nVO_LUFS, BED_LU, BED_LUFS = -17.2, 20.0, -13.03\n")
+    label, status, value = MT.vo_lufs_row(take, -19.78)
+    assert status == MT.FAIL and "-17.2 declared vs -19.78 measured (-2.58 LU)" in value
+    assert value.endswith("build_short.py:2"), "the row names the exact line to edit"
+    assert MT.vo_lufs_row(take, -17.0)[1] == MT.PASS, "within the tolerance the literal still stands"
+
+
+def test_g2_is_not_a_failure_for_an_episode_that_wires_no_bed(tmp_path):
+    """Steel and Paper's long-form cut declares no VO_LUFS - there is no bed to drift."""
+    label, status, value = MT.vo_lufs_row(_episode(tmp_path, None), -19.78)
+    assert status == MT.NA and "wires no bed" in value
+    assert MT.NA not in (MT.PASS, MT.FAIL)
+    rows = MT.gate_rows(_episode(tmp_path / "b", None), UNTONED, _measured(390.326, -19.78, -1.5, LANDED), TRIM)
+    assert "VERDICT: PASS (0 FAIL)" in MT.report_text(Path("x.mp3"), rows)
+
+
+def test_the_new_vo_lufs_line_is_paste_ready(tmp_path):
+    line = MT.vo_lufs_line(tmp_path / "scene_1.mp3", -19.78)
+    assert line.startswith("VO_LUFS = -19.8   # ") and "post-tone, measured " in line
+    ns: dict = {}
+    exec(compile(line, "<paste>", "exec"), ns)
+    assert ns["VO_LUFS"] == -19.8, "the printed line has to be valid Python the operator can paste"
+
+
+def test_the_tone_stage_never_composes_its_own_chain():
+    """The ruling lives in the kit; the stage asks for it. A second copy of the string is a second ruling,
+    and the trim is composed in the kit too so the stage cannot append a filter of its own."""
+    import ast
+    src = (ROOT / "content/video_engine/scripts/master_vo_tone.py").read_text(encoding="utf-8")
+    assert "vo_tone_filter(" in src and "vo_makeup_db(" in src
+    tree = ast.parse(src)
+    docs = {id(n.body[0].value) for n in ast.walk(tree)
+            if isinstance(n, (ast.Module, ast.FunctionDef, ast.ClassDef)) and n.body
+            and isinstance(n.body[0], ast.Expr) and isinstance(n.body[0].value, ast.Constant)}
+    literals = [n.value for n in ast.walk(tree)
+                if isinstance(n, ast.Constant) and isinstance(n.value, str) and id(n) not in docs]
+    # prose may NAME the filters (the docstrings explain them); no string the stage actually builds may be one
+    for token in ("equalizer=", "highpass=", "treble=", "volume="):
+        assert not [s for s in literals if token in s], f"the stage composed a filter of its own: {token}"
 
 
 # ---------------------------------------------------------------- the table

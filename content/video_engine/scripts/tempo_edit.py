@@ -8,13 +8,26 @@ v3 - THE TEMPO FIELD (operator, 2026-08-30): tempo is a CONTINUOUS
 CURVE over the timeline, not per-sentence gears. Attention spans (the
 sentences carrying pause anchors - the same sentences the docks and
 badges bind to) impose SPEED LIMITS of 1.0x; between them the curve
-eases up to RUN_RATE through cosine ramps (~RAMP_S). Emission quantizes
-the curve into micro-segments whose rates differ by <= 0.02x, so every
-12ms crossfade joins two nearly identical renders - no cliff, no click,
-even mid-word. The literary graph drives the accelerator.
+eases up to RUN_RATE through cosine ramps (~RAMP_S). Emission cuts the
+curve into chunks at gaps of >=120ms, so every rate step is hosted by
+real silence. The literary graph drives the accelerator.
 
 Usage (preview mode, probe):
     python tempo_edit.py --probe
+
+Usage (chain stage - edits the master, rewrites its timeline):
+    python tempo_edit.py --take
+
+Usage (the gate - renders into a scratch dir and judges the emitted
+timeline against the audio it actually wrote; G1-G5, non-zero on FAIL):
+    python tempo_edit.py --verify --ep <episode> \
+        --words <take.words.json> --audio <take.mp3> --out <scratch>
+
+The warped-timeline emission (`warp_timeline`) is doc 37 s20's stated
+condition for chain promotion: word times scale by their own chunk's
+rate and shift past every inserted pause, as insert_edit_pauses.py does
+for the two-tool path, so docks, captions and choreography ride the
+authored clock.
 """
 from __future__ import annotations
 
@@ -39,6 +52,18 @@ TAG_CAP = 1.00
 HOOK_HOLD_S = 9.0             # the open never runs
 TAIL_HOLD_S = 14.0            # ...and neither does the ring close
 ENDERS = (".", "!", "?", ":")
+
+# --verify thresholds, quoted from doc 37 s20: class 3 "suffocates
+# under ~150ms"; class 5b a cut site needs ">=120ms of reported
+# silence"; class 3 splits a chunk once the curve drifts PAST 0.015x -
+# so a step is at least that by construction, which is why G5c WARNs
+# on the size and G5b FAILs on the silence hosting it.
+CLOCK_TOL_S = 0.050           # G3 - the emitted clock vs the measured audio
+ANCHOR_TOL_S = 0.150          # G4 - construction vs the rendered map
+MIN_CHUNK_S = 0.150
+MIN_STEP_GAP_S = 0.12
+MAX_RATE_STEP = 0.015
+PAUSED_REL = "audio/episode-paused.mp3"
 
 
 def norm(s: str) -> str:
@@ -94,7 +119,27 @@ def xfade_join(pieces: list[np.ndarray]) -> np.ndarray:
     return out
 
 
+def sentence_groups(words: list[dict]) -> list[list[dict]]:
+    """The take's words grouped into sentences by ENDERS - one source
+    for the field's spans AND the emitted timeline's sentence rows, so a
+    sentence means the same thing on both sides of the edit."""
+    groups, cur = [], []
+    for x in words:
+        cur.append(x)
+        if x["w"].rstrip("\"”").endswith(ENDERS):
+            groups.append(cur)
+            cur = []
+    if cur:
+        groups.append(cur)
+    return groups
+
+
 def build(words, plan, audio):
+    """Render the edited take. Returns (pcm, to_edited, meta).
+
+    `to_edited` maps an ORIGINAL take time to the edited clock; `meta`
+    carries the emission's geometry so the warped timeline can be
+    verified against the audio that was written, not just arithmetic."""
     wt = [(t, x) for x in words for t in norm(x["w"]).split()]
     wtoks = [t for t, _ in wt]
 
@@ -106,15 +151,7 @@ def build(words, plan, audio):
                     and wtoks[i + n - 1].startswith(toks[-1])):
                 return wt[i + n - 1][1]["end"] if end else wt[i][1]["start"]
 
-    # sentence spans
-    sents, cur = [], []
-    for x in words:
-        cur.append(x)
-        if x["w"].rstrip("\"”").endswith(ENDERS):
-            sents.append((cur[0]["start"], cur[-1]["end"]))
-            cur = []
-    if cur:
-        sents.append((cur[0]["start"], cur[-1]["end"]))
+    sents = [(g[0]["start"], g[-1]["end"]) for g in sentence_groups(words)]
     sent_ends = {round(b, 3) for _, b in sents}
 
     # attention marks: every pause anchor + every break-tag site.
@@ -263,7 +300,11 @@ def build(words, plan, audio):
         a, b = find(r["start_after"], True), find(r["end_before"], False)
         if a and b:
             runs.append({"a": a, "b": b, **r})
-    ops = []
+    # ONE op shape for both edits to a silence: (a, b, keep, pause) means
+    # emit up to a + keep/2, plant `pause` seconds, resume at b - keep/2.
+    # A cap is (gap start, gap end, target, 0); a bare insertion is
+    # (midpoint, midpoint, 0, seconds).
+    caps = []
     for a, b in zip(words, words[1:]):
         g = b["start"] - a["end"]
         at = round(a["end"], 3)
@@ -271,7 +312,7 @@ def build(words, plan, audio):
             continue
         if at in tag_sites:
             if g > TAG_CAP:
-                ops.append((a["end"], b["start"], TAG_CAP, "cut"))
+                caps.append([a["end"], b["start"], TAG_CAP, 0.0])
             continue
         cap, tgt = ((INTER, INTERT) if at in sent_ends
                     else (INTRA, INTRAT))
@@ -281,18 +322,32 @@ def build(words, plan, audio):
                             if at in sent_ends
                             else (r["intra_cap"], r["intra_tgt"]))
         if g > cap:
-            ops.append((a["end"], b["start"], tgt, "cut"))
+            caps.append([a["end"], b["start"], tgt, 0.0])
+    # A gap can be BOTH over-cap AND pause-anchored - two edits to ONE
+    # silence, not two events at two times - so the pause MERGES into the
+    # cap that owns its gap. Cap first, then plant the pause in the middle
+    # of what SURVIVES: the gap ends up tgt + s with tgt/2 of real room
+    # each side of the breath. As two ops they fought - the cap advanced
+    # the read head to b - tgt/2, the insertion reset it to the RAW
+    # midpoint BEHIND it, and (g - tgt)/2 of capped silence came back
+    # with the pause lopsided (tgt/2 before it, g/2 after).
+    solo = []
     for t, s in att:
-        ops.append((t, t, s, "ins"))
-    ops.sort(key=lambda o: (o[0], o[3]))
+        host = next((c for c in caps if c[0] <= t <= c[1]), None)
+        if host is not None:
+            host[3] += s
+        else:
+            solo.append([t, t, 0.0, s])
+    ops = sorted(caps + solo, key=lambda o: (o[0], o[1]))
 
-    # emission v4 (operator: "black hole dynamics" at field edges):
-    # WORDS ARE NEVER SPLIT and cuts only happen inside real silence
-    # gaps. Consecutive words merge into one chunk until the curve
-    # drifts >0.015x AND a gap >=30ms offers a clean boundary - so every
-    # stretched piece is a healthy 0.5-2s and every transient sits far
-    # from any joint. Adjacent chunks differ by <=~0.015x.
+    # emission v6 (operator: "black hole dynamics" at field edges):
+    # WORDS ARE NEVER SPLIT and a rate step only happens inside real
+    # silence - words merge into one chunk until the curve has drifted
+    # PAST 0.015x AND a gap >=120ms offers a boundary no timestamp
+    # jitter can fake. The step is thus >0.015x by construction (G5c);
+    # what makes it inaudible is the silence hosting it (G5b).
     chunks = []          # (start, end, rate) covering the whole take
+    boundaries = []      # (at, gap_s, rate_before, rate_after) - G5's
     cs = 0.0
     cr = rate_curve(words[0]["start"])
     for x, y in zip(words, words[1:]):
@@ -306,6 +361,7 @@ def build(words, plan, audio):
         if gap >= 0.12 and abs(r - cr) > 0.015:
             mid = (x["end"] + y["start"]) / 2
             chunks.append((cs, mid, cr))
+            boundaries.append((mid, gap, cr, r))
             cs, cr = mid, r
     chunks.append((cs, len(audio) / SR, cr))
 
@@ -325,16 +381,19 @@ def build(words, plan, audio):
 
     pieces = []
     prev = 0.0
+    regressions = []     # ops that rewind the read head - must stay empty
 
-    for a, b, t, kind in ops:
-        if kind == "cut":
-            emit(prev, a + t / 2)
-            prev = b - t / 2
-        else:
-            emit(prev, a)
-            pieces.append({"pcm": np.zeros(int(SR * t), dtype="float32"),
-                           "o0": None, "o1": None, "rate": 1.0})
-            prev = a
+    for a, b, keep, pause in ops:
+        head = a + keep / 2
+        if head < prev - 1e-6:
+            regressions.append({"at": round(a, 3),
+                                "rewind_s": round(prev - head, 3)})
+        emit(prev, head)
+        if pause:
+            pieces.append({"pcm": np.zeros(int(SR * pause), dtype="float32"),
+                           "o0": None, "o1": None, "rate": 1.0,
+                           "ins_s": float(pause)})
+        prev = b - keep / 2
     emit(prev, len(audio) / SR)
 
     # exact original->edited time map (xfade_join overlaps XF per joint)
@@ -356,7 +415,22 @@ def build(words, plan, audio):
                 last = pc["out0"] + (pc["o1"] - pc["o0"]) / pc["rate"]
         return last
 
-    return xfade_join([pc["pcm"] for pc in pieces]), to_edited
+    meta = {
+        "chunks": [{"start": round(c0, 3), "end": round(c1, 3),
+                    "rate": round(r, 4)} for c0, c1, r in chunks],
+        "boundaries": [{"at": round(t0, 3), "gap_s": round(g, 3),
+                        "rate_before": round(r0, 4),
+                        "rate_after": round(r1, 4)}
+                       for t0, g, r0, r1 in boundaries],
+        "pieces": [{"o0": pc["o0"], "o1": pc["o1"], "rate": pc["rate"],
+                    "out0": pc["out0"], "out_s": len(pc["pcm"]) / SR,
+                    "ins_s": pc.get("ins_s")} for pc in pieces],
+        "inserts": [{"at": round(t0, 3), "s": s} for t0, s in att],
+        "cuts": sum(1 for o in ops if o[2] > 0),
+        "merged": sum(1 for o in ops if o[2] > 0 and o[3] > 0),
+        "regressions": regressions,
+    }
+    return xfade_join([pc["pcm"] for pc in pieces]), to_edited, meta
 
 
 def run_probe_mode():
@@ -367,10 +441,64 @@ def run_probe_mode():
              for x in wj]
     plan = json.loads((EP / "SCRIPT-G-EDIT-PAUSES.json")
                       .read_text(encoding="utf-8"))
-    out, _ = build(words, plan, decode(src))
+    out, _, _ = build(words, plan, decode(src))
     dest = EP / "vo-f/audio/probe-tempo-preview.mp3"
     encode(out, dest)
     print(f"{dest.name}: {len(out) / SR:.1f}s")
+
+
+def warp_timeline(tl: dict, to_edited, runtime_s: float, meta: dict,
+                  paused_rel: str = PAUSED_REL) -> dict:
+    """THE WARPED-TIMELINE EMISSION (doc 37 s20, the chain-promotion
+    blocker). Rewrites `tl` IN PLACE onto the edited clock:
+
+    * every word's start/end goes through `to_edited`, so the times
+      inside a stretched chunk scale by THAT chunk's own rate and
+      everything after an inserted pause shifts by it - the same shape
+      `insert_edit_pauses.py` produces for the two-tool path;
+    * sentence spans travel with their words (they are word boundaries,
+      so the same map carries them) and are clamped to the words they
+      contain, never inverted by rounding;
+    * `runtime_s` is the MEASURED length of the rendered audio;
+    * the marker keys downstream really checks are set: `paused_audio`
+      + `edit_pauses_applied` (`build_scene_timeline_f.py` and
+      `render_episode.py` pick the voice track with them),
+      `dead_space_compressed` (the ORDER guard in `insert_edit_pauses.py`
+      / `compress_dead_space.py`), `tempo_field_applied` (re-run refusal).
+
+    Pure apart from the callable: no audio, no filesystem - so the
+    warping arithmetic is testable on a synthetic timeline."""
+    for w in tl["words"]:
+        w["start"] = round(to_edited(w["start"]), 3)
+        w["end"] = round(to_edited(w["end"]), 3)
+    words = tl["words"]
+    for sn in tl.get("sentences", []):
+        sn["start"] = round(to_edited(sn["start"]), 3)
+        sn["end"] = round(to_edited(sn["end"]), 3)
+        if sn["end"] < sn["start"]:
+            sn["end"] = sn["start"]
+    if words:
+        for sn in tl.get("sentences", []):
+            sn["start"] = max(sn["start"], words[0]["start"])
+            sn["end"] = min(sn["end"], words[-1]["end"])
+    rates = [c["rate"] for c in meta["chunks"]]
+    steps = [abs(b["rate_after"] - b["rate_before"])
+             for b in meta["boundaries"]]
+    tl["runtime_s"] = round(runtime_s, 3)
+    tl["tempo_field_applied"] = True
+    tl["edit_pauses_applied"] = True      # downstream guard convention
+    tl["dead_space_compressed"] = True
+    tl["paused_audio"] = paused_rel
+    tl["tempo_field"] = {
+        "chunks": len(meta["chunks"]),
+        "cuts": meta["cuts"],
+        "inserts": len(meta["inserts"]),
+        "inserted_s": round(sum(i["s"] for i in meta["inserts"]), 3),
+        "rate_min": round(min(rates), 4) if rates else None,
+        "rate_max": round(max(rates), 4) if rates else None,
+        "max_rate_step": round(max(steps), 4) if steps else 0.0,
+    }
+    return tl
 
 
 def run_take_mode():
@@ -389,23 +517,183 @@ def run_take_mode():
     plan = json.loads((EP / "SCRIPT-G-EDIT-PAUSES.json")
                       .read_text(encoding="utf-8"))
     audio = decode(EP / "build-f/audio/episode.mp3")
-    out, to_edited = build(tl["words"], plan, audio)
-    encode(out, EP / "build-f/audio/episode-paused.mp3")
-    for w in tl["words"]:
-        w["start"] = round(to_edited(w["start"]), 3)
-        w["end"] = round(to_edited(w["end"]), 3)
-    for sn in tl.get("sentences", []):
-        sn["start"] = round(to_edited(sn["start"]), 3)
-        sn["end"] = round(to_edited(sn["end"]), 3)
-    tl["runtime_s"] = round(len(out) / SR, 3)
-    tl["tempo_field_applied"] = True
-    tl["edit_pauses_applied"] = True      # downstream guard convention
-    tl["dead_space_compressed"] = True
-    tl["paused_audio"] = "audio/episode-paused.mp3"
+    out, to_edited, meta = build(tl["words"], plan, audio)
+    dest = EP / "build-f" / PAUSED_REL
+    encode(out, dest)
+    warp_timeline(tl, to_edited, measure_duration(dest), meta)
     tl_path.write_text(json.dumps(tl, indent=1), encoding="utf-8")
-    print(f"episode-paused.mp3 (tempo field): {len(out) / SR:.1f}s; "
+    print(f"episode-paused.mp3 (tempo field): {tl['runtime_s']:.1f}s; "
           f"timeline rewritten onto the edited clock")
     return 0
+
+
+def row(gid: str, name: str, ok: bool, detail: str,
+        warn: bool = False) -> dict:
+    return {"id": gid, "name": name,
+            "verdict": "WARN" if (warn and not ok) else
+                       ("PASS" if ok else "FAIL"),
+            "detail": detail}
+
+
+def gate_monotonic(words: list[dict]) -> dict:
+    """G1 - starts and ends non-decreasing, no word overlapping the
+    next: a dock pinned to an inverted word lands in the wrong shot."""
+    bad = []
+    for i, w in enumerate(words):
+        if w["end"] < w["start"] - 1e-9:
+            bad.append(f"[{i}] {w['w']!r} end<start")
+        if i and w["start"] < words[i - 1]["end"] - 1e-9:
+            over = words[i - 1]["end"] - w["start"]
+            bad.append(f"[{i}] {w['w']!r} starts {over:.3f}s "
+                       f"before {words[i - 1]['w']!r} ends")
+    return row("G1", "word monotonicity", not bad,
+               f"{len(words)} words, {len(bad)} violations"
+               + (f"; first: {bad[0]}" if bad else ""))
+
+
+def gate_words_preserved(src: list[dict], out: list[dict]) -> dict:
+    """G2 - the edit authors silence and tempo, never text (s20's ladder
+    of authority): same words, same order, same spelling."""
+    if len(src) != len(out):
+        return row("G2", "word count preserved", False,
+                   f"input {len(src)} words, emitted {len(out)}")
+    diff = [i for i, (a, b) in enumerate(zip(src, out)) if a["w"] != b["w"]]
+    return row("G2", "word count preserved", not diff,
+               f"{len(out)} words, order and text identical"
+               if not diff else
+               f"{len(diff)} words differ; first at [{diff[0]}]: "
+               f"{src[diff[0]]['w']!r} -> {out[diff[0]]['w']!r}")
+
+
+def gate_clock(runtime_s: float, measured_s: float) -> dict:
+    """G3 - the authored clock IS the audio's clock, measured with
+    ffprobe on the written file. Arithmetic is not evidence here."""
+    d = abs(runtime_s - measured_s)
+    return row("G3", "clock matches audio", d <= CLOCK_TOL_S,
+               f"timeline runtime_s {runtime_s:.3f}s vs ffprobe "
+               f"{measured_s:.3f}s = {d * 1000:.1f}ms "
+               f"(tol {CLOCK_TOL_S * 1000:.0f}ms)")
+
+
+def constructed_time(t: float, pieces: list[dict]) -> float:
+    """The edited time of an original instant, from the geometry alone:
+    every preceding span over ITS chunk's rate, plus every inserted pause,
+    less a crossfade per joint - independent of the rendered lengths."""
+    acc = 0.0
+    for i, pc in enumerate(pieces):
+        if i:
+            acc -= XF / SR
+        if pc["o0"] is None:
+            acc += pc["ins_s"]
+            continue
+        if pc["o0"] - 1e-3 <= t <= pc["o1"] + 1e-3:
+            return acc + (t - pc["o0"]) / pc["rate"]
+        acc += (pc["o1"] - pc["o0"]) / pc["rate"]
+    return acc
+
+
+def sample_indices(words: list[dict], n: int) -> list[int]:
+    """Evenly spaced words with enough body to carry energy."""
+    meaty = [i for i, w in enumerate(words) if w["end"] - w["start"] >= 0.15]
+    pool = meaty or list(range(len(words)))
+    if len(pool) <= n:
+        return pool
+    step = len(pool) / n
+    return [pool[int(k * step)] for k in range(n)]
+
+
+def speech_frames(pcm: np.ndarray, frame_s: float = 0.02):
+    n = max(1, int(SR * frame_s))
+    usable = len(pcm) // n * n
+    rms = np.sqrt((pcm[:usable].reshape(-1, n) ** 2).mean(axis=1))
+    floor = max(float(np.percentile(rms, 95)) * 0.05, 1e-5)
+    return rms, floor, n
+
+
+def gate_anchors(src_words: list[dict], out_words: list[dict],
+                 meta: dict, pcm: np.ndarray, n: int = 24) -> dict:
+    """G4 - a sampled word's emitted time still points at the audio it
+    pointed at before, checked two ways: (a) BY CONSTRUCTION, summing the
+    preceding chunk scalings and inserted pauses (`constructed_time`);
+    (b) ACOUSTICALLY, re-decoding the file that was actually written and
+    requiring the word's window to hold speech, not silence."""
+    idx = sample_indices(src_words, n)
+    worst, worst_i = 0.0, -1
+    for i in idx:
+        d = abs(constructed_time(src_words[i]["start"], meta["pieces"])
+                - out_words[i]["start"])
+        if d > worst:
+            worst, worst_i = d, i
+    rms, floor, fn = speech_frames(pcm)
+    silent = []
+    for i in idx:
+        a = int(out_words[i]["start"] * SR) // fn
+        b = max(a + 1, int(out_words[i]["end"] * SR) // fn)
+        if b > len(rms) or float(rms[a:b].max(initial=0.0)) <= floor:
+            silent.append(i)
+    ok = worst <= ANCHOR_TOL_S and not silent
+    detail = (f"{len(idx)} sampled words: max |constructed - emitted| = "
+              f"{worst * 1000:.1f}ms (tol {ANCHOR_TOL_S * 1000:.0f}ms"
+              + (f", worst {src_words[worst_i]['w']!r}"
+                 if worst_i >= 0 else "")
+              + f"); {len(idx) - len(silent)}/{len(idx)} land on speech "
+              f"in the written audio (frame RMS > {floor:.5f})")
+    if silent:
+        detail += f"; silent: {[out_words[i]['w'] for i in silent[:5]]}"
+    return row("G4", "anchors land", ok, detail)
+
+
+def gate_rate_sanity(meta: dict, strict: bool = False) -> list[dict]:
+    """G5 - the tempo field's own laws (doc 37 s20 classes 3/4/5b)."""
+    chunks, bounds = meta["chunks"], meta["boundaries"]
+    spans = [c["end"] - c["start"] for c in chunks]
+    short = [x for x in spans if x < MIN_CHUNK_S]
+    rows = [row("G5a", "chunk minimum duration", not short,
+                f"{len(chunks)} chunks, shortest "
+                f"{min(spans, default=0):.3f}s "
+                f"(floor {MIN_CHUNK_S:.3f}s, class 3); {len(short)} under")]
+    tight = [b for b in bounds if b["gap_s"] < MIN_STEP_GAP_S]
+    rows.append(row("G5b", "rate step sits in silence", not tight,
+                    f"{len(bounds)} rate steps, smallest host gap "
+                    f"{min((b['gap_s'] for b in bounds), default=0):.3f}s "
+                    f"(floor {MIN_STEP_GAP_S:.3f}s, class 5b); "
+                    f"{len(tight)} too tight"))
+    steps = [abs(b["rate_after"] - b["rate_before"]) for b in bounds]
+    big = [s for s in steps if s > MAX_RATE_STEP + 1e-9]
+    rows.append(row("G5c", "rate step size", not big,
+                    f"max adjacent step {max(steps, default=0.0):.4f}x vs "
+                    f"class 4's {MAX_RATE_STEP}x; {len(big)}/{len(steps)} over"
+                    + ("" if strict else
+                       " - WARN not FAIL: the split rule only cuts a new "
+                       "chunk once the curve has drifted PAST 0.015x, so "
+                       "the step is larger by construction "
+                       "(--strict-rate-step enforces the doc)"),
+                    warn=not strict))
+    return rows
+
+
+def print_table(rows: list[dict]) -> int:
+    width = max(len(r["name"]) for r in rows)
+    print(f"\n{'GATE':<5} {'CHECK':<{width}}  VERDICT  DETAIL")
+    for r in rows:
+        print(f"{r['id']:<5} {r['name']:<{width}}  {r['verdict']:<7}  "
+              f"{r['detail']}")
+    fails = [r for r in rows if r["verdict"] == "FAIL"]
+    warns = [r for r in rows if r["verdict"] == "WARN"]
+    print(f"\n{len(rows) - len(fails) - len(warns)} PASS / {len(warns)} WARN "
+          f"/ {len(fails)} FAIL")
+    return 1 if fails else 0
+
+
+def measure_duration(path: Path) -> float:
+    """The WRITTEN file's duration, measured - never inferred from the
+    arithmetic that produced it (xfade_join only overlaps pieces long
+    enough to cross-fade, and the encoder pads)."""
+    out = subprocess.run(
+        ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+         "-of", "default=nw=1:nk=1", str(path)],
+        check=True, capture_output=True, text=True)
+    return float(out.stdout.strip())
 
 
 def encode(pcm, dest: Path):
@@ -417,11 +705,91 @@ def encode(pcm, dest: Path):
                        check=True)
 
 
+def load_source_timeline(path: Path) -> dict:
+    """A pre-edit timeline from either shape the chain produces: a
+    build's `timeline.json`, or a take's `<scene>.words.json` (the
+    provider's `start_s` / `end_s`), whose sentences are derived with
+    the same grouping the field uses."""
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    if raw.get("tempo_field_applied") or raw.get("edit_pauses_applied"):
+        raise SystemExit(f"{path.name} is already on an edited clock - "
+                         "--verify needs the take's own timeline")
+    if raw["words"] and "start_s" in raw["words"][0]:
+        words = [{"w": x["w"], "start": x["start_s"], "end": x["end_s"]}
+                 for x in raw["words"]]
+        sents = [{"text": " ".join(w["w"] for w in g),
+                  "start": g[0]["start"], "end": g[-1]["end"]}
+                 for g in sentence_groups(words)]
+        return {"source": path.name, "words": words, "sentences": sents,
+                "runtime_s": words[-1]["end"] if words else 0.0}
+    return raw
+
+
+def run_verify_mode(a) -> int:
+    """THE GATE. Renders the edit into --out, emits the warped timeline
+    beside it, then judges that timeline against the audio that was
+    actually written. Nothing is read from or written to the episode's
+    own build."""
+    out_dir = Path(a.out)
+    (out_dir / "audio").mkdir(parents=True, exist_ok=True)
+    src_tl = load_source_timeline(Path(a.words))
+    src_words = [dict(w) for w in src_tl["words"]]
+    plan = json.loads((EP / a.plan).read_text(encoding="utf-8"))
+    audio = decode(Path(a.audio))
+    print(f"verify: {len(src_words)} words, {len(audio) / SR:.1f}s of take, "
+          f"plan {a.plan}")
+    pcm, to_edited, meta = build(src_tl["words"], plan, audio)
+    dest = out_dir / PAUSED_REL
+    encode(pcm, dest)
+    measured = measure_duration(dest)
+    warp_timeline(src_tl, to_edited, measured, meta)
+    (out_dir / "timeline.json").write_text(
+        json.dumps(src_tl, indent=1), encoding="utf-8")
+    written = decode(dest)
+    rows = [
+        gate_monotonic(src_tl["words"]),
+        gate_words_preserved(src_words, src_tl["words"]),
+        gate_clock(src_tl["runtime_s"], measured),
+        gate_anchors(src_words, src_tl["words"], meta, written, a.sample),
+    ] + gate_rate_sanity(meta, a.strict_rate_step)
+    if meta["regressions"]:
+        print(f"\nNOTE: {len(meta['regressions'])} ops rewind the read "
+              f"head - two edits fighting over one silence, the class the "
+              f"merge retired. A NEW defect: {meta['regressions']}")
+    print(f"\nemitted: {dest} ({measured:.3f}s), "
+          f"{out_dir / 'timeline.json'}")
+    return print_table(rows)
+
+
 def main() -> int:
+    global EP
     ap = argparse.ArgumentParser()
     ap.add_argument("--probe", action="store_true")
     ap.add_argument("--take", action="store_true")
+    ap.add_argument("--verify", action="store_true",
+                    help="render + emit the warped timeline into --out and "
+                         "gate it (G1-G5); non-zero exit on any FAIL")
+    ap.add_argument("--ep", help="episode root (default: steel-and-paper)")
+    ap.add_argument("--words", help="--verify: the take's pre-edit timeline "
+                                    "or <scene>.words.json")
+    ap.add_argument("--audio", help="--verify: the take's audio")
+    ap.add_argument("--out", help="--verify: where the gate writes")
+    ap.add_argument("--plan", default="SCRIPT-G-EDIT-PAUSES.json",
+                    help="--verify: the edit-pause plan, relative to --ep")
+    ap.add_argument("--sample", type=int, default=24,
+                    help="--verify: words sampled by G4")
+    ap.add_argument("--strict-rate-step", action="store_true",
+                    help="--verify: G5c FAILs instead of WARNs")
     a = ap.parse_args()
+    if a.ep:
+        EP = Path(a.ep)
+    if a.verify:
+        missing = [f"--{k}" for k in ("words", "audio", "out")
+                   if not getattr(a, k)]
+        if missing:
+            print(f"--verify needs {', '.join(missing)}")
+            return 2
+        return run_verify_mode(a)
     if a.take:
         return run_take_mode() or 0
     run_probe_mode()

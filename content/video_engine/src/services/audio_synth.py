@@ -41,7 +41,7 @@ LOGGER = logging.getLogger(__name__)
 
 DEFAULT_ELEVENLABS_BASE_URL = "https://api.elevenlabs.io/v1"
 DEFAULT_ELEVENLABS_MODEL_ID = "eleven_multilingual_v2"
-DEFAULT_ELEVENLABS_OUTPUT_FORMAT = "mp3_44100_128"
+DEFAULT_ELEVENLABS_OUTPUT_FORMAT = "mp3_44100_192"
 DEFAULT_TIMEOUT_S = 60.0
 DEFAULT_MAX_ATTEMPTS = 3
 DEFAULT_RETRY_BACKOFF_S = 0.5
@@ -487,13 +487,24 @@ def group_word_timings(
     return words, duration_s
 
 
-def _cache_key(voice_id: str, narration_text: str, settings: Mapping[str, Any]) -> str:
+def _cache_key(
+    voice_id: str,
+    narration_text: str,
+    settings: Mapping[str, Any],
+    output_format: str,
+) -> str:
+    # output_format is part of the key: the same text at 128 and at 192 kbps are
+    # different masters, and a chained take that joined a cached 128 part onto a
+    # fresh 192 part would splice two bitrates into one episode.  Including it
+    # retires every entry cached before the 192 move - which is the point.
     material = (
         voice_id
         + "|"
         + narration_text
         + "|"
         + json.dumps(dict(settings), sort_keys=True)
+        + "|"
+        + output_format
     )
     return hashlib.sha256(material.encode("utf-8")).hexdigest()
 
@@ -681,7 +692,7 @@ class AudioSynthService:
             raise AudioSynthesisError(
                 f"scene {scene_id} narration contains only pause markup"
             )
-        cache_hash = _cache_key(voice_id, compiled, settings)
+        cache_hash = _cache_key(voice_id, compiled, settings, config.output_format)
         cache_path = Path(cache_dir) / f"{cache_hash}.mp3"
         audio_path = Path(audio_dir) / f"scene_{scene_id}.mp3"
         words_path = Path(audio_dir) / f"scene_{scene_id}.words.json"
