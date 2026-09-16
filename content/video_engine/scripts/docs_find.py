@@ -38,7 +38,11 @@ hit's window is its one row (`sed -n <line>p`), since a row runs to kilobytes, a
 on the name, `what`, paths, cards or state ranks before a hit on the row's prose `terms`. A missing layer
 file prints one line and never raises; the
 term is compiled as a case-insensitive regex and falls back to a literal when it is not valid regex, so
-`42§42.2` and `f(t) = t^2` are searchable as typed. A PLAIN query (letters, digits and spaces only) reads a
+`42§42.2` and `f(t) = t^2` are searchable as typed. Before it scans, it ENSURES the layers it is about
+to scan (`docs_layers.ensure`, P63): each one is rebuilt iff the digest of its inputs moved, upstream first,
+so the answer is current on a checkout nobody has run a build in - `--layer X` ensures only X and its
+upstream, `--no-ensure` skips it (a fixture tree, and the tests). A rebuild says so in ONE line on stderr,
+`[layers] rebuilt: a, b`; stdout stays one hit per line, which is what a recall receipt quotes. A PLAIN query (letters, digits and spaces only) reads a
 space as any run of space, hyphen or underscore, so `federal reserve` hits a `federal-reserve` tag; and when a
 multi-word plain query hits nothing as a phrase, it runs once more matching records that carry EVERY word
 (any order, any searched field) and the summary says `(all words)`; in a field-ranked layer the fallback
@@ -56,6 +60,10 @@ from typing import Any, Callable, Iterable, Sequence
 
 SCRIPTS = Path(__file__).resolve().parent
 REPO = SCRIPTS.parents[2]
+if str(SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS))
+
+import docs_layers as DL  # noqa: E402  (the layer table, the digest and the rebuild live there, P63 T1)
 
 MAX_LINE = 220
 SNIPPET_CHARS = 100
@@ -400,6 +408,47 @@ def scan_layer(layer: Layer, pattern: Any, repo: Path) -> list[Hit] | None:
     return [hit for _, _, hit in sorted(ranked, key=lambda item: (item[0], item[1]))]
 
 
+# --------------------------------------------------------------------------- ensuring the layers
+
+def builder_of(name: str) -> str | None:
+    """The `docs_layers` layer that GENERATES this layer's artifact, found by the artifact itself.
+
+    Read off `docs_layers.LAYERS` rather than written down twice: a renamed artifact then breaks
+    loudly here (and in `test_docs_find`) instead of silently ensuring nothing."""
+    rel = BY_NAME[name].rel
+    for layer in DL.LAYERS:
+        if rel in layer.outputs:
+            return layer.name
+    return None
+
+
+def builders_of(layer_names: Iterable[str]) -> list[str]:
+    """Every generating layer behind these layers, deduplicated (topics and cites share one)."""
+    return sorted({found for name in layer_names for found in (builder_of(name),) if found})
+
+
+def ensure_layers(layer_names: Iterable[str], repo: Path) -> list[str]:
+    """Rebuild the artifacts about to be scanned iff their inputs moved; return what was rebuilt.
+
+    `docs_layers.ensure` pulls each layer's upstream in with it and is a NO-OP on a tree with no
+    builders, which is every test fixture. A builder that fails must not swallow the answer: it
+    says so on stderr and the scan reads the layers as they sit."""
+    wanted = builders_of(layer_names)
+    if not wanted:
+        return []
+    try:
+        return DL.ensure(wanted, repo)
+    except DL.LayerError as exc:
+        print(f"[layers] {exc.layer} failed to rebuild: {exc.detail}", file=sys.stderr)
+        return []
+
+
+def report_rebuilt(rebuilt: Sequence[str]) -> None:
+    """ONE line, on stderr: stdout is the answer, and a recall receipt quotes stdout."""
+    if rebuilt:
+        print(f"[layers] rebuilt: {', '.join(rebuilt)}", file=sys.stderr)
+
+
 # --------------------------------------------------------------------------- the search
 
 @dataclass
@@ -466,6 +515,8 @@ def top_up(found: dict[str, list[Hit]], taken: dict[str, int], scanned: Sequence
 def render(result: Result, found: dict[str, list[Hit]], taken: dict[str, int]) -> None:
     for name in result.scanned:
         if name in result.missing:
+            # unreachable on a real checkout since P63 T2 (main ensures the layer first); it still
+            # answers for a tree where `ensure` is a no-op - a fixture, or a checkout with no builders
             result.lines.append(f"[{name}] not built (run build_docs_layers.py --write)")
             continue
         kept = found[name][: taken[name]]
@@ -572,16 +623,21 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--state", help="with --capabilities: only this state (LIVE, WIRED, BUILT, ...)")
     parser.add_argument("--section", help="with --capabilities: only sections containing this text")
     parser.add_argument("--repo", type=Path, default=REPO, help="repository root (default: this checkout)")
+    parser.add_argument("--no-ensure", action="store_true",
+                        help="scan the layers as they sit on disk, without rebuilding a stale one")
     args = parser.parse_args(argv)
     if not args.capabilities and not args.term:
         parser.error("a term is required (or --capabilities for the list)")
 
     use_utf8(sys.stdout, sys.stderr)
+    names = ["capabilities"] if args.capabilities else (
+        list(ALL_ORDER) if args.layer == "all" else [args.layer])
+    if not args.no_ensure:
+        report_rebuilt(ensure_layers(names, Path(args.repo)))
     if args.capabilities:
         for line in list_capabilities(Path(args.repo), args.state, args.section):
             print(line)
         return 0
-    names = list(ALL_ORDER) if args.layer == "all" else [args.layer]
     result = search(args.term, names, Path(args.repo), max(0, args.limit))
     if args.json:
         print(render_json(args.term, result))

@@ -4,7 +4,9 @@ Validates that:
 1. Every Tier 3 evidence tag in docs/research/ points to an existing local file in docs/research/runs/.
 2. Every line anchor (#L<line>) is within the target file's actual line count.
 3. Every Tier 2 evidence file in docs/research/runs/ exists, is non-empty (>0 bytes), and is valid.
-4. All research blueprints are registered in docs/DOCS-INDEX.jsonl (docs layers in sync).
+4. All research blueprints are registered in docs/DOCS-INDEX.jsonl (docs layers in sync). The index is
+   BUILD OUTPUT (P63): it is ensured - rebuilt iff the digest of the documents behind it moved - before it
+   is read, so a blueprint written since the last build counts as registered instead of failing the audit.
 5. (Optional `--verify-urls`): Validates that primary source URLs return HTTP 200/301/302.
 
 Standard library only.
@@ -24,12 +26,33 @@ from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parent
 REPO = SCRIPTS.parents[2]
+if str(SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS))
+
+import docs_layers as DL  # noqa: E402  (the index is build output; this audit ensures it, P63 T2)
+
+INDEX_LAYER = "docs-index"      # docs_layers' name for the builder that writes DOCS_INDEX_JSONL
 
 RUNS_DIR = REPO / "docs" / "research" / "runs"
 RESEARCH_DIR = REPO / "docs" / "research"
 DOCS_INDEX_JSONL = REPO / "docs" / "DOCS-INDEX.jsonl"
 AGING_THRESHOLD_DAYS = 90
 
+
+
+def ensure_index(repo: Path = REPO) -> list[str]:
+    """Rebuild `docs/DOCS-INDEX.jsonl` iff the documents behind it moved, before this audit reads it.
+
+    A no-op on a tree with no builders in it, which is what leaves the `[MISSING INDEX]` warning below
+    reachable. A builder that fails is named and the audit goes on against the index as it sits."""
+    try:
+        rebuilt = DL.ensure([INDEX_LAYER], repo)
+    except DL.LayerError as exc:
+        print(f"[WARN] [LAYER BUILD FAILED] {exc.layer}: {exc.detail}")
+        return []
+    if rebuilt:
+        print(f"[INFO] [LAYERS REBUILT] {', '.join(rebuilt)}")
+    return rebuilt
 
 
 def find_research_blueprints(root: Path) -> list[Path]:
@@ -183,6 +206,7 @@ def main() -> int:
 
     # 5. Check docs layer sync
     print("\n--- Checking Docs Layer Index Synchronization ---")
+    ensure_index()
     if not DOCS_INDEX_JSONL.exists():
         print("[WARN] [MISSING INDEX] docs/DOCS-INDEX.jsonl not found. Run build_docs_layers.py --write.")
         warnings += 1

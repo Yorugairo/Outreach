@@ -80,6 +80,11 @@ from pathlib import Path
 from urllib.parse import parse_qs, unquote, urlparse
 
 SCRIPTS = Path(__file__).resolve().parent
+if str(SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS))
+
+import docs_layers as DL  # noqa: E402  (the catalogue is build output; this server ensures it, P63 T2)
+
 POLL_S = 0.25          # the watcher's tick: no third-party watcher, just os.stat
 HOLD_S = 25.0          # how long /reload holds a request before answering on the timeout
 MANIFEST_NAME = "player.json"
@@ -88,6 +93,7 @@ EDITOR_HTML = SCRIPTS.parent / "editor" / "editor.html"   # P51 T7: served from 
 REPO = SCRIPTS.parents[2]
 CATALOG_ROUTE = "/docs/EFFECTS-CATALOG.jsonl"             # P55 T8: read-only, off the repo, never copied
 CATALOG_JSONL = REPO / "docs" / "EFFECTS-CATALOG.jsonl"
+CATALOG_LAYER = "effects-catalog"                         # P63 T2: ensured on every GET of that route
 FRAMES_ROUTE = "/content/video_engine/tests/golden/frames/"
 GOLDEN_FRAMES = SCRIPTS.parent / "tests" / "golden" / "frames"
 FRAME_NAME = re.compile(r"[A-Za-z0-9._@-]+\.png")         # fullmatch: no slash, no separator, png only
@@ -139,6 +145,7 @@ class ReviewHandler(SimpleHTTPRequestHandler):
         if path == "/editor.html":
             return self._editor()
         if path == CATALOG_ROUTE:
+            self._ensure_catalog()
             return self._repo_file(CATALOG_JSONL, "application/x-ndjson; charset=utf-8")
         decoded = unquote(path)
         if decoded.startswith(FRAMES_ROUTE):
@@ -169,6 +176,20 @@ class ReviewHandler(SimpleHTTPRequestHandler):
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
+
+    def _ensure_catalog(self):
+        """The catalogue is BUILD OUTPUT (P63): rebuild it iff its inputs moved, on every GET.
+
+        The editor fetches this route once per page load, and the digest of the cards, the recipes and
+        the modules behind them is ~0.4 s against a ~1 ms read - so the editor never opens on a
+        catalogue that predates the card someone edited a minute ago, and a served page still costs
+        nothing to keep open. A builder that fails is logged and the file is served as it sits."""
+        try:
+            rebuilt = DL.ensure([CATALOG_LAYER], REPO)
+        except DL.LayerError as exc:
+            return self.log_message("layers: %s failed to rebuild - %s", exc.layer, exc.detail)
+        if rebuilt:
+            self.log_message("layers: rebuilt %s", ", ".join(rebuilt))
 
     def _repo_file(self, file: Path, ctype: str):
         """One read-only file off the repo tree (P55 T8), never a copy in the build."""

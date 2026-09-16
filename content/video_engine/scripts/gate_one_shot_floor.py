@@ -20,6 +20,10 @@ they live:
   M41  the beat plan covers every beat                      FAIL / PASS  (WARN when there is no plan on disk)
   M42  events/min, compositions/min, builds:compositions    INFO         (never a floor - E96 (3))
 
+The catalogue M38 reads is BUILD OUTPUT (P63): `run` ensures `docs/EFFECTS-CATALOG.jsonl` (by the digest of the
+cards, the recipes and the modules behind them) before it reads it, so a recipe added since the last build is in
+the coverage. A `--catalog` that is not this repository's own artifact is read exactly as given, never rebuilt.
+
 HOW IT MEASURES (definitions from `scene_evidence_timeline.v1`, identical to T2's `derive_seeds.py`, so the numbers
 in `docs/research/runs/p56-recipe-seeds/measures.md` are reproduced by this tool):
 
@@ -72,10 +76,12 @@ REPO = SCRIPTS.parents[2]
 if str(SCRIPTS) not in sys.path:
     sys.path.insert(0, str(SCRIPTS))
 
+import docs_layers as DL  # noqa: E402  (the catalogue is build output; this gate ensures it, P63 T2)
 import lint_species_choice as LSC  # noqa: E402  (`load_sentences` - the sentence shape lives once, there)
 import recipe_walk as RW  # noqa: E402  (the walk and the co-occurrence matcher live once, there)
 
 CATALOG_REL = "docs/EFFECTS-CATALOG.jsonl"
+CATALOG_LAYER = "effects-catalog"      # docs_layers' name for the builder that writes CATALOG_REL
 PROJECTS_REL = "content/video_engine/projects/systems-and-blowups"
 REFERENCE_REL = f"{PROJECTS_REL}/japan-tariff-trick/build-short"   # the best approved short (09-09), the reference
 BEAT_PLAN_NAME = "BEAT-PLAN.jsonl"
@@ -640,6 +646,24 @@ def fail_count(gates: Sequence[Gate]) -> int:
     return sum(1 for g in gates if g.level == "FAIL")
 
 
+def ensure_catalog(catalog: Path) -> list[str]:
+    """Rebuild THIS repository's catalogue iff its inputs moved, before the gate reads it (P63).
+
+    Only the repo's own generated artifact: a `--catalog` pointing anywhere else is the caller's file
+    and is read exactly as given. A builder that fails is named on stderr and the gate runs on the
+    catalogue as it sits - a broken card must not take the floor's other seven rows down."""
+    try:
+        if catalog.resolve() != (REPO / CATALOG_REL).resolve():
+            return []
+    except OSError:
+        return []
+    try:
+        return DL.ensure([CATALOG_LAYER], REPO)
+    except DL.LayerError as exc:
+        print(f"[layers] {exc.layer} failed to rebuild: {exc.detail}", file=sys.stderr)
+        return []
+
+
 def run(build: Path, project: Path | None = None, reference: Path | None = None, catalog: Path | None = None,
         timeline_name: str | None = None) -> tuple:
     """Measure the build (and the reference, with the same functions) and return (rows, the cut, the reference).
@@ -648,6 +672,7 @@ def run(build: Path, project: Path | None = None, reference: Path | None = None,
     `m.ref_warn` carries the path and the three reference rows say so while holding the rule's own number.
     """
     catalog = Path(catalog or REPO / CATALOG_REL)
+    ensure_catalog(catalog)
     recipes, options = load_recipes(catalog), card_options(catalog)
     registry = recipe_registry(catalog)
     m = measure(Path(build), project, recipes, options, timeline_name, registry)

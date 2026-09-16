@@ -5,6 +5,11 @@ and hops at a 16 % token premium, because an `rg` on a layer returns whole JSONL
 pin the thing the premium comes from: one compact line per hit, the layer order, the per-layer share of the
 cap, the `sed -n` window the summary names, a missing layer that reports instead of crashing - and, over the
 REAL tree, that a five-hit budget still reaches the doctrine document and no line runs past 220 characters.
+
+P63 T2: and that the layers it scans are ENSURED first - a stale artifact is rebuilt before it is read (proven
+on a tmp tree with fake builders, never on this checkout), the rebuild says so on stderr and never on stdout,
+`--no-ensure` skips it, and the hand-written fixture tree below - which has no builders in it - is never
+rebuilt from the real repo.
 """
 from __future__ import annotations
 
@@ -337,7 +342,7 @@ def test_the_real_tree_answers_a_capability_term_from_the_capabilities_layer_fir
     has_row = any(DF.matched_field(r, layer, pattern) for r in DF.read_records(REAL_CAPABILITIES))
 
     # Act
-    assert DF.main([term, "--repo", str(ROOT)]) == 0
+    assert DF.main([term, "--repo", str(ROOT), "--no-ensure"]) == 0
     lines = capsys.readouterr().out.splitlines()
 
     # Assert
@@ -354,7 +359,7 @@ def test_the_real_capabilities_list_is_the_index_page_line_for_line(capsys):
     want = [line for line in body.splitlines() if line.startswith(("- ", "## "))]
 
     # Act
-    assert DF.main(["--capabilities", "--repo", str(ROOT)]) == 0
+    assert DF.main(["--capabilities", "--repo", str(ROOT), "--no-ensure"]) == 0
     lines = capsys.readouterr().out.splitlines()
 
     # Assert
@@ -365,7 +370,7 @@ def test_the_real_capabilities_list_is_the_index_page_line_for_line(capsys):
                     reason="the layers are not built in this checkout (build_docs_layers.py --write)")
 def test_the_real_tree_reaches_the_doctrine_document_inside_a_five_hit_budget(capsys):
     # Act
-    assert DF.main(["minimum-jerk", "--limit", "5", "--repo", str(ROOT)]) == 0
+    assert DF.main(["minimum-jerk", "--limit", "5", "--repo", str(ROOT), "--no-ensure"]) == 0
     lines = capsys.readouterr().out.splitlines()
 
     # Assert: the doctrine doc, not the research bundle, and every line stays readable
@@ -455,3 +460,127 @@ def test_what_an_asset_is_ranks_before_a_word_inside_another_assets_id(capsys, t
     assert lines[0].startswith("[assets] content/video_engine/assets/props/cutouts/prop-desk-v1.png — Desk — props prop")
     assert lines[1].startswith("[assets] content/video_engine/assets/icons/cutouts/prop-icon-desk-v1.png — Desk badge — icons icon")
     assert lines[-1].startswith("2 hit(s) in assets")
+
+
+# --------------------------------------------------------------------------- the layers are ensured (P63 T2)
+
+import docs_layers as DL  # noqa: E402  (the table the reader ensures through)
+
+INDEX_BUILDER = """import sys
+from pathlib import Path
+
+repo = Path(sys.argv[sys.argv.index("--repo") + 1])
+(repo / "docs").mkdir(parents=True, exist_ok=True)
+(repo / "docs/DOCS-INDEX.jsonl").write_text('{"path": "docs/alpha.md", "line": 1, "heading": "h"}\\n')
+(repo / "docs/DOCS-INDEX.md").write_text("# index\\n")
+print("fake index: written")
+"""
+
+CATALOG_BUILDER = """import json, sys
+from pathlib import Path
+
+repo = Path(sys.argv[sys.argv.index("--repo") + 1])
+record = json.loads(Path(sys.argv[0]).with_name("record.json").read_text(encoding="utf-8"))
+(repo / "docs").mkdir(parents=True, exist_ok=True)
+(repo / "docs/EFFECTS-CATALOG.jsonl").write_text(json.dumps(record) + "\\n", encoding="utf-8")
+(repo / "docs/EFFECTS-CATALOG.md").write_text("# catalogue\\n", encoding="utf-8")
+print("fake catalogue: written")
+"""
+
+FAILING_BUILDER = """import sys
+
+print("fake: the card is malformed", file=sys.stderr)
+sys.exit(2)
+"""
+
+FRESH_EFFECT = {**EFFECT, "does": "The widget lands on its beat, REBUILT."}
+
+
+@pytest.fixture()
+def buildable(tree: Path) -> Path:
+    """The fixture tree plus two FAKE builders, so `ensure` is live on it and no real builder runs.
+
+    `docs/EFFECTS-CATALOG.jsonl` on disk is the STALE one (the `tree` fixture wrote it); the fake
+    builder writes `FRESH_EFFECT`. Nothing is stamped, so the first read rebuilds."""
+    scripts = tree / DL.SCRIPTS_REL
+    scripts.mkdir(parents=True)
+    (scripts / DL.SENTINEL).write_text(INDEX_BUILDER, encoding="utf-8")
+    (scripts / "build_effects_catalog.py").write_text(CATALOG_BUILDER, encoding="utf-8")
+    (scripts / "record.json").write_text(json.dumps(FRESH_EFFECT), encoding="utf-8")
+    return tree
+
+
+def test_every_searched_layer_names_the_build_layer_that_generates_its_artifact():
+    """The mapping is read off `docs_layers.LAYERS` by artifact, so a rename cannot leave a layer
+    silently un-ensured - it shows up here as a None."""
+    # Act
+    pairs = {name: DF.builder_of(name) for name in DF.CHOICES if name != "all"}
+
+    # Assert
+    assert None not in pairs.values(), pairs
+    assert pairs["capabilities"] == "capabilities-index" and pairs["assets"] == "asset-index"
+    assert pairs["effects"] == "effects-catalog" and pairs["index"] == "docs-index"
+    assert pairs["topics"] == pairs["cites"] == "topic-index"        # one builder writes both
+    assert DF.builders_of(DF.ALL_ORDER) == sorted(set(DF.builders_of(DF.ALL_ORDER)))
+    assert len(DF.builders_of(("topics", "cites"))) == 1
+
+
+def test_a_fixture_tree_with_no_builders_in_it_is_never_rebuilt(capsys, tree):
+    # Act: the default path, ensure and all
+    lines = run(capsys, tree, "widget")
+
+    # Assert: the answer is the hand-written one, nothing was built, no cache was stamped
+    assert lines == [*EXPECTED, SUMMARY]
+    assert capsys.readouterr().err == ""
+    assert not (tree / DL.CACHE_REL).exists()
+
+
+def test_a_stale_layer_is_rebuilt_before_the_scan_and_the_rebuild_is_one_stderr_line(capsys, buildable):
+    # Act
+    assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable)]) == 0
+    out, err = capsys.readouterr()
+
+    # Assert: the answer carries the REBUILT record, and the note is on stderr, once, out of the way
+    assert "REBUILT" in out.splitlines()[0]
+    assert err.splitlines() == ["[layers] rebuilt: docs-index, effects-catalog"]   # upstream first
+    assert not [line for line in out.splitlines() if line.startswith("[layers]")]
+    assert DL.stored_digest(buildable, "effects-catalog")
+
+    # Act again: nothing moved, so nothing is rebuilt and stderr is silent
+    assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable)]) == 0
+    assert capsys.readouterr().err == ""
+
+
+def test_no_ensure_reads_the_layers_as_they_sit(capsys, buildable):
+    # Act
+    assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable), "--no-ensure"]) == 0
+    out, err = capsys.readouterr()
+
+    # Assert: the stale record answered, and no builder ran
+    assert "REBUILT" not in out and "The widget lands on its beat." in out
+    assert err == "" and not (buildable / DL.CACHE_REL).exists()
+
+
+def test_only_the_named_layer_and_its_upstream_are_ensured(capsys, buildable):
+    # Act: the capabilities layer alone - the catalogue is not in its selection
+    assert DF.main(["widget", "--layer", "capabilities", "--repo", str(buildable)]) == 0
+    err = capsys.readouterr().err
+
+    # Assert: no builder for capabilities-index in this tree, so nothing was built at all
+    assert err == ""
+    assert DL.stored_digest(buildable, "effects-catalog") is None
+
+
+def test_a_builder_that_fails_reports_itself_and_the_scan_still_answers(capsys, buildable):
+    # Arrange: the catalogue builder breaks
+    (buildable / DL.SCRIPTS_REL / "build_effects_catalog.py").write_text(
+        FAILING_BUILDER, encoding="utf-8")
+
+    # Act
+    assert DF.main(["widget", "--layer", "effects", "--repo", str(buildable)]) == 0
+    out, err = capsys.readouterr()
+
+    # Assert: the stale catalogue still answers, and the failure is named on stderr
+    assert "The widget lands on its beat." in out
+    assert err.splitlines()[-1] == ("[layers] effects-catalog failed to rebuild: "
+                                    "fake: the card is malformed")

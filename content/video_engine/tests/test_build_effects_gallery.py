@@ -62,9 +62,10 @@ def test_a_card_without_a_golden_shows_the_no_proof_marker(built):
         assert BEG.NO_PROOF_MARKER in tile_of(page, c["id"])
 
 
-def test_the_verdict_stack_tile_lists_five_phases(built):
+def test_the_verdict_stack_tile_lists_six_phases(built):
+    """Five since P61 T7; six since P61 T7c / E99 s59-s61 - the GATHER before the burst (the vertical form's)."""
     _, _, page = built
-    assert len(re.findall(r'<li class="phase">', tile_of(page, VERDICT_ID))) == 5
+    assert len(re.findall(r'<li class="phase">', tile_of(page, VERDICT_ID))) == 6
 
 
 def test_no_network_string_outside_examples_and_blends(built):
@@ -159,3 +160,77 @@ def test_callable_false_renders_its_why_as_a_warning(tmp_path):
             "proof": {"golden": None, "test": None}, "callable": {"today": False, "why": "no compiler path"}}
     html_text = BEG.render_card(card, tmp_path)
     assert '<p class="warn">not callable today: no compiler path</p>' in html_text
+
+
+# ---------------------------------------------------------------- the catalogue is ensured (P63 T2)
+
+import docs_layers as DL  # noqa: E402  (the table the gallery ensures the catalogue through)
+
+CARD = {"id": "dock_payload:stack", "axis": "dock_payload", "token": "stack", "status": "live",
+        "title": "TITLE", "does": "it does the thing", "aliases": [], "phases": [],
+        "lives": {"form": "inline", "path": "docs/alpha.mjs", "symbol": "drawStack"}}
+
+BUILDER = """import json, sys
+from pathlib import Path
+
+repo = Path(sys.argv[sys.argv.index("--repo") + 1])
+record = json.loads(Path(sys.argv[0]).with_name("record.json").read_text(encoding="utf-8"))
+(repo / "docs").mkdir(parents=True, exist_ok=True)
+(repo / "docs/EFFECTS-CATALOG.jsonl").write_text(json.dumps(record) + "\\n", encoding="utf-8")
+(repo / "docs/EFFECTS-CATALOG.md").write_text("# catalogue", encoding="utf-8")
+print("fake catalogue: written")
+"""
+
+
+@pytest.fixture()
+def fake_repo(tmp_path: Path, monkeypatch) -> Path:
+    """A miniature repo with a FAKE catalogue builder; `BEG.ROOT` points at it for the test.
+
+    The gallery is build output and so is its input, so the page must never be generated from a stale
+    catalogue. The real checkout is never rebuilt by a test."""
+    repo = tmp_path / "repo"
+    scripts = repo / DL.SCRIPTS_REL
+    scripts.mkdir(parents=True)
+    (scripts / DL.SENTINEL).write_text("import sys", encoding="utf-8")   # the sentinel: ensure is live
+    (scripts / "build_effects_catalog.py").write_text(BUILDER, encoding="utf-8")
+    (scripts / "record.json").write_text(json.dumps({**CARD, "title": "The REBUILT card"}),
+                                         encoding="utf-8")
+    (repo / "docs").mkdir()
+    (repo / BEG.CATALOG_REL).write_text(json.dumps({**CARD, "title": "The STALE card"}) + "\n",
+                                        encoding="utf-8")
+    monkeypatch.setattr(BEG, "ROOT", repo)
+    return repo
+
+
+def test_the_page_is_generated_from_a_rebuilt_catalogue_not_a_stale_one(fake_repo: Path, tmp_path, capsys):
+    # Act
+    code = BEG.main(["--catalog", str(fake_repo / BEG.CATALOG_REL), "--frames", str(tmp_path / "frames"),
+                     "--out", str(tmp_path / "out")])
+
+    # Assert
+    assert code == 0
+    page = (tmp_path / "out/index.html").read_text(encoding="utf-8")
+    assert "The REBUILT card" in page and "The STALE card" not in page
+    assert DL.stored_digest(fake_repo, BEG.CATALOG_LAYER)
+
+
+def test_a_catalogue_that_is_not_this_repos_own_artifact_is_never_rebuilt(fake_repo: Path, tmp_path):
+    # Arrange
+    mine = tmp_path / "mine.jsonl"
+    mine.write_text(json.dumps(CARD) + "\n", encoding="utf-8")
+
+    # Act / Assert
+    assert BEG.ensure_catalog(mine) == []
+    assert not (fake_repo / DL.CACHE_REL).exists()
+
+
+def test_a_tree_with_no_builders_in_it_is_never_rebuilt(tmp_path, monkeypatch):
+    # Arrange
+    repo = tmp_path / "bare"
+    (repo / "docs").mkdir(parents=True)
+    (repo / BEG.CATALOG_REL).write_text(json.dumps(CARD) + "\n", encoding="utf-8")
+    monkeypatch.setattr(BEG, "ROOT", repo)
+
+    # Act / Assert
+    assert BEG.ensure_catalog(repo / BEG.CATALOG_REL) == []
+    assert not (repo / DL.CACHE_REL).exists()

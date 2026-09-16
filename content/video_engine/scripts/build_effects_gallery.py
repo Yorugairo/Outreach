@@ -28,7 +28,9 @@ from pathlib import Path
 from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[3]
+SCRIPTS = Path(__file__).resolve().parent
 CATALOG_REL = "docs/EFFECTS-CATALOG.jsonl"
+CATALOG_LAYER = "effects-catalog"      # docs_layers' name for the builder that writes CATALOG_REL
 FRAMES_REL = "content/video_engine/tests/golden/frames"
 OUT_REL = "content/video_engine/effects/gallery"
 FRAMES_SUBDIR = "frames"
@@ -36,6 +38,26 @@ CLIP_SUFFIX = ".mp4"      # P61 T9 (c): a motion example, rendered by review_que
 STATUSES = ("live", "wired", "draft", "declared", "planned")
 RECIPE_AXIS = "recipe"
 NO_PROOF_MARKER = "no proof yet"
+
+
+def ensure_catalog(catalog: Path) -> list[str]:
+    """Rebuild THIS repository's catalogue iff its inputs moved, before the page is generated (P63).
+
+    The gallery is itself build output (`.gitignore`, P55 T9), so it must never be generated from a
+    stale catalogue: a card edited this morning belongs on the page. Only the repo's own artifact -
+    a `--catalog` pointing anywhere else is the caller's file. `docs_layers` is imported here rather
+    than at the top for the same reason `argparse` is (the flagless build pays 23 ms less to start).
+    A builder that fails is named on stderr and the page is built from the catalogue as it sits."""
+    if catalog.resolve() != (ROOT / CATALOG_REL).resolve():
+        return []
+    if str(SCRIPTS) not in sys.path:
+        sys.path.insert(0, str(SCRIPTS))
+    import docs_layers as DL
+    try:
+        return DL.ensure([CATALOG_LAYER], ROOT)
+    except DL.LayerError as exc:
+        print(f"[layers] {exc.layer} failed to rebuild: {exc.detail}", file=sys.stderr)
+        return []
 
 
 def esc(value: object) -> str:
@@ -515,6 +537,7 @@ def parse_args(argv: list[str] | None) -> SimpleNamespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+    ensure_catalog(args.catalog)
     if not args.catalog.is_file():
         print(f"catalogue not found: {args.catalog}", file=sys.stderr)
         return 2

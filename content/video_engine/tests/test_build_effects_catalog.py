@@ -353,14 +353,15 @@ def test_every_card_file_validates_against_the_schema_and_sits_in_its_axis_file(
         assert doc["axis"] == stem and all(c["axis"] == stem for c in doc["cards"])
 
 
-def test_the_verdict_stack_keeps_all_five_phases():
+def test_the_verdict_stack_keeps_all_five_phases_and_the_gather():
     # Act
     doc = json.loads((CARDS_DIR / "dock_payload.json").read_text(encoding="utf-8"))
     stack = next(c for c in doc["cards"] if c["id"] == "dock_payload:stack")
 
     # Assert: the operator's correction - enter one at a time, focus, recede to the mosaic, idle, burst
     assert stack["title"] == "The verdict stack"
-    assert [p["name"] for p in stack["phases"]] == ["enter", "focus", "recede", "idle", "burst"]
+    # P61 T7c / E99 s59-s61: the GATHER before the burst (the vertical form's; the full frame keeps the reference)
+    assert [p["name"] for p in stack["phases"]] == ["enter", "focus", "recede", "idle", "gather", "burst"]
     assert "evidence wall" in [a["name"] for a in stack["aliases"]]
     assert stack["phases"][0]["dials"]["translateZ_from_px"] == "-700"
 

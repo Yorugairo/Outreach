@@ -92,13 +92,15 @@ def test_find_is_empty_for_an_empty_name():
     assert E.find("   ") == []
 
 
-def test_the_verdict_stacks_printed_card_lists_its_five_phases(capsys):
+def test_the_verdict_stacks_printed_card_lists_its_six_phases(capsys):
+    """Five since P61 T7 (enter, focus, recede, idle, burst); SIX since P61 T7c / E99 s59-s61 - the GATHER before the burst,
+    the vertical form's own (the full frame keeps the reference)."""
     code = effects_card.main(["evidence wall"])
     out = capsys.readouterr().out
     assert code == 0
     assert len(out.splitlines()) <= 40
     phases = [ln for ln in out.splitlines() if re.match(r"^\s+\d+\. ", ln)]
-    assert len(phases) == 5
+    assert len(phases) == 6
     assert "dock_payload:stack" in out
     assert '("ev-holds-stack-v1",0,701.73,727.63)' in out   # the example, verbatim
 
@@ -156,3 +158,107 @@ def test_the_kit_module_names_no_episode():
     src = (ROOT / "content/video_engine/scripts/authoring/effects.py").read_text(encoding="utf-8").lower()
     hits = sorted(n for n in names if re.search(rf"(?<![\w-]){re.escape(n.lower())}(?![\w-])", src))
     assert names and hits == []
+
+
+# --------------------------------------------------------------------------- the layer is ensured (P63 T2)
+
+import docs_layers as DL  # noqa: E402  (the table `load()` ensures through)
+
+BUILDER = """import json, sys
+from pathlib import Path
+
+repo = Path(sys.argv[sys.argv.index("--repo") + 1])
+record = json.loads(Path(sys.argv[0]).with_name("record.json").read_text(encoding="utf-8"))
+(repo / "docs").mkdir(parents=True, exist_ok=True)
+(repo / "docs/EFFECTS-CATALOG.jsonl").write_text(json.dumps(record) + "\\n", encoding="utf-8")
+(repo / "docs/EFFECTS-CATALOG.md").write_text("# catalogue", encoding="utf-8")
+print("fake catalogue: written")
+"""
+
+STALE_CARD = {"id": "dock_payload:stack", "axis": "dock_payload", "token": "stack",
+              "title": "The verdict stack", "aliases": [], "does": "the STALE line"}
+FRESH_CARD = {**STALE_CARD, "does": "the REBUILT line"}
+
+
+@pytest.fixture()
+def buildable(tmp_path: Path) -> Path:
+    """A miniature repo with a FAKE catalogue builder, the only tree where `ensure` may run here.
+
+    The artifact on disk is the stale card; the builder writes the fresh one. Nothing is stamped, so
+    the first `load()` rebuilds - which is the whole claim: the reader never reads a stale layer."""
+    scripts = tmp_path / DL.SCRIPTS_REL
+    scripts.mkdir(parents=True)
+    (scripts / DL.SENTINEL).write_text("import sys", encoding="utf-8")   # the sentinel: ensure is live
+    (scripts / "build_effects_catalog.py").write_text(BUILDER, encoding="utf-8")
+    (scripts / "record.json").write_text(json.dumps(FRESH_CARD), encoding="utf-8")
+    (tmp_path / "docs").mkdir()
+    (tmp_path / E.CATALOG_REL).write_text(json.dumps(STALE_CARD) + "\n", encoding="utf-8")
+    E._ENSURED.clear()
+    return tmp_path
+
+
+def test_a_stale_catalogue_is_rebuilt_before_it_is_read(buildable):
+    # Act
+    cards = E.load(buildable)
+
+    # Assert: the card that came back is the rebuilt one, and the digest was stamped
+    assert [c["does"] for c in cards] == ["the REBUILT line"]
+    assert E.card("verdict stack", buildable)["does"] == "the REBUILT line"
+    assert DL.stored_digest(buildable, E.CATALOG_LAYER)
+
+
+def test_no_ensure_reads_the_catalogue_as_it_sits(buildable):
+    # Act
+    cards = E.load(buildable, ensure=False)
+
+    # Assert
+    assert [c["does"] for c in cards] == ["the STALE line"]
+    assert not (buildable / DL.CACHE_REL).exists()
+
+
+def test_the_check_runs_once_per_process_and_then_stays_out_of_the_way(buildable):
+    # Act
+    first = E.ensure_catalog(buildable)
+    again = E.ensure_catalog(buildable)
+    forced = E.ensure_catalog(buildable, force=True)
+
+    # Assert: built once; the second call is the memo; `force` re-checks and finds it current
+    assert first == ["docs-index", "effects-catalog"]      # the sentinel IS docs-index's builder
+    assert again == [] and forced == []
+
+
+def test_a_tree_with_no_builders_in_it_is_never_rebuilt(tmp_path):
+    """Every fixture here and in the gate's tests is such a tree - `ensure` must be a no-op on it."""
+    # Arrange
+    (tmp_path / "docs").mkdir()
+    (tmp_path / E.CATALOG_REL).write_text(json.dumps(STALE_CARD) + "\n", encoding="utf-8")
+    E._ENSURED.clear()
+
+    # Act
+    cards = E.load(tmp_path)
+
+    # Assert
+    assert [c["does"] for c in cards] == ["the STALE line"]
+    assert not (tmp_path / DL.CACHE_REL).exists()
+
+
+def test_a_builder_that_fails_is_named_and_the_catalogue_still_answers(buildable, capsys):
+    # Arrange
+    (buildable / DL.SCRIPTS_REL / "build_effects_catalog.py").write_text(
+        FAILING, encoding="utf-8")
+    E._ENSURED.clear()
+
+    # Act
+    cards = E.load(buildable)
+
+    # Assert
+    assert [c["does"] for c in cards] == ["the STALE line"]
+    assert capsys.readouterr().err.strip() == ("[layers] effects-catalog failed to rebuild: "
+                                               "fake: the card is malformed")
+
+
+FAILING = """import sys
+
+print("fake: the card is malformed", file=sys.stderr)
+sys.exit(2)
+"""

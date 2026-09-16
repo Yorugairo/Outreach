@@ -466,3 +466,93 @@ def test_a_dock_with_no_window_is_held_for_its_whole_scene(tmp_path: Path) -> No
     # Act / Assert
     assert m.docks == [{"scene": "s1", "slide": "ev-a", "enter": 0.0, "exit": 9.0, "chart": True}]
     assert m.dock_beats == 1 and row(FLOOR.rows(m, None, predates=False), "M37").level == "PASS"
+
+
+# ---------------------------------------------------------------- the catalogue is ensured (P63 T2)
+
+import docs_layers as DL  # noqa: E402  (the table the gate ensures the catalogue through)
+
+BUILDER = """import json, sys
+from pathlib import Path
+
+repo = Path(sys.argv[sys.argv.index("--repo") + 1])
+(repo / "docs").mkdir(parents=True, exist_ok=True)
+(repo / "docs/EFFECTS-CATALOG.jsonl").write_text(
+    json.dumps({"id": "recipe:rebuilt", "axis": "recipe", "title": "The rebuilt recipe",
+                "status": "proven", "window_s": 2.0, "members": [], "aliases": []}) + "\\n", encoding="utf-8")
+(repo / "docs/EFFECTS-CATALOG.md").write_text("# catalogue", encoding="utf-8")
+print("fake catalogue: written")
+"""
+
+STALE_LINE = '{"id": "recipe:stale", "axis": "recipe", "title": "The stale recipe", "status": "proven", "window_s": 2.0, "members": [], "aliases": []}'
+
+
+@pytest.fixture()
+def fake_repo(tmp_path: Path, monkeypatch) -> Path:
+    """A miniature repo whose catalogue has a FAKE builder; `FLOOR.REPO` points at it for the test.
+
+    The real checkout is never rebuilt by a test, and the tree the gate's other fixtures use has no
+    builders in it at all - `ensure` is a no-op there by construction."""
+    repo = tmp_path / "repo"
+    scripts = repo / DL.SCRIPTS_REL
+    scripts.mkdir(parents=True)
+    (scripts / DL.SENTINEL).write_text("import sys", encoding="utf-8")   # the sentinel: ensure is live
+    (scripts / "build_effects_catalog.py").write_text(BUILDER, encoding="utf-8")
+    (repo / "docs").mkdir()
+    (repo / FLOOR.CATALOG_REL).write_text(STALE_LINE + "\n", encoding="utf-8")
+    monkeypatch.setattr(FLOOR, "REPO", repo)
+    return repo
+
+
+def test_a_stale_catalogue_is_rebuilt_before_the_floor_reads_it(fake_repo: Path) -> None:
+    # Act
+    rebuilt = FLOOR.ensure_catalog(fake_repo / FLOOR.CATALOG_REL)
+
+    # Assert: the recipes the gate goes on to read are the rebuilt ones
+    assert rebuilt == ["docs-index", "effects-catalog"]          # the sentinel IS docs-index's builder
+    assert [r["id"] for r in FLOOR.load_recipes(fake_repo / FLOOR.CATALOG_REL)] == ["recipe:rebuilt"]
+    assert DL.stored_digest(fake_repo, FLOOR.CATALOG_LAYER)
+    assert FLOOR.ensure_catalog(fake_repo / FLOOR.CATALOG_REL) == []   # nothing moved: nothing rebuilt
+
+
+def test_a_catalogue_that_is_not_this_repos_own_artifact_is_never_rebuilt(fake_repo: Path,
+                                                                          tmp_path: Path) -> None:
+    # Arrange: the caller's own file, outside the repo
+    mine = tmp_path / "mine.jsonl"
+    mine.write_text(STALE_LINE + "\n", encoding="utf-8")
+
+    # Act
+    rebuilt = FLOOR.ensure_catalog(mine)
+
+    # Assert
+    assert rebuilt == []
+    assert not (fake_repo / DL.CACHE_REL).exists()
+    assert [r["id"] for r in FLOOR.load_recipes(mine)] == ["recipe:stale"]
+
+
+def test_a_tree_with_no_builders_in_it_is_never_rebuilt(tmp_path: Path, monkeypatch) -> None:
+    # Arrange: every other fixture in this file is such a tree
+    repo = tmp_path / "bare"
+    (repo / "docs").mkdir(parents=True)
+    (repo / FLOOR.CATALOG_REL).write_text(STALE_LINE + "\n", encoding="utf-8")
+    monkeypatch.setattr(FLOOR, "REPO", repo)
+
+    # Act / Assert
+    assert FLOOR.ensure_catalog(repo / FLOOR.CATALOG_REL) == []
+    assert not (repo / DL.CACHE_REL).exists()
+
+
+def test_a_builder_that_fails_is_named_and_the_floor_still_runs(fake_repo: Path, capsys) -> None:
+    # Arrange
+    (fake_repo / DL.SCRIPTS_REL / "build_effects_catalog.py").write_text(
+        'import sys' + "\n" + 'print("fake: the card is malformed", file=sys.stderr)' + "\n"
+        + 'sys.exit(2)' + "\n", encoding="utf-8")
+
+    # Act
+    rebuilt = FLOOR.ensure_catalog(fake_repo / FLOOR.CATALOG_REL)
+
+    # Assert: the gate reads the catalogue as it sits, and says what happened
+    assert rebuilt == []
+    assert [r["id"] for r in FLOOR.load_recipes(fake_repo / FLOOR.CATALOG_REL)] == ["recipe:stale"]
+    assert capsys.readouterr().err.strip().endswith(
+        "[layers] effects-catalog failed to rebuild: fake: the card is malformed")
