@@ -96,6 +96,12 @@ per frame.
 prop deforms into a chart with real rotation → Method B. Start on A for the first
 `object → chart` page; escalate when a shape actually collapses.
 
+### 43.5.1 The morph's test (E99 s39, the operator, 2026-09-15)
+
+> *"A morph should be proof of form/function to the audience, that we're really manipulating the world they're watching, not tricking them."*
+
+Every morph in this engine is read against that sentence before it is served, whichever method it uses: at every instant the shape on the stage is the shape the frame before it was, changed by a motion a viewer can follow; nothing is left behind and nothing arrives from nowhere; a whole line or a whole chart that is "magically formed" is a cut in a costume and is refused (the bars -> line rebuild of P61 T2b: the bars collapse to the apex point and the line is drawn back to the root - E99 s39 / s50). The frame at u = 0.5 must be a shape that is neither the source nor the target and that no cut could produce (the `@proof-050` goldens: `remake-line-to-bars`, `remake-bars-to-line`, `melt-morph`, `morph-planted`). The chart-to-chart verbs (`recast`, `morph_to`, `remake`), the page-enter morph (a prop, a planted element, or the handed ball of `melt:morph`) and the melt's own compile all answer to it; a rushed compile is a snap (E99 s53) and is re-timed, never excused.
+
 ## 43.6 The host is a cutout rig, not a generation
 
 **Forensic proof, from the dossier §3:** frame_0020 of the reference carries three
