@@ -1288,8 +1288,25 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   was already failing at HEAD (plate-drift's source carried `idle: true` since it was pinned) - the lane named the exception
   `IDLE_IS_THE_SUBJECT = {plate-drift, plate-alive}` and pinned it the other way; no test deleted or renamed.
 
+### T14b: THE PROCESSED PLANES ON THE ALIVE PLATE, AND THE DRIFT AT 20 PX (E99 s63)
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK** only if `idle.mjs` / the compiler's named setting moves; the planes and the goldens need none)
+- Depends on: T14, HG-drift-2 (ruled E99 s63)
+- Write set: the split's planes for `world-tokyo-customs-dock-v1` (`tests/golden/inputs/dock-layers/*-mid/-near/-subject.png` and the plate library's
+  own copies), `world-tokyo-customs-dock-v1-alive.layers.json` + `.layers.json` of the flat plate if the paths move, the plate intake script that
+  carries the despill (find it - `docs_find.py "despill"`, `"matte"`, `"fringe"`, the P58 T1 notes, `build_plate_library.py`), `tests/golden/frames/plate-drift.png`
+  + `plate-alive.png` + their sources (20 px), `build_scene_timeline_f.py` ONLY for the named long-form setting's comment / refusal text (20),
+  `build-p61-alive/` (the beat at 20; a second timeline at 30 for the card), `effects/cards/idle.json` (the setting), CAPABILITIES the alive-plate row
+- Acceptance: E99 s63 verbatim - *"the processing we had done on the lamp previously had removed the green, now it's back in the ask, why? also 30 px drift
+  might still be too much, maybe 20 px drift"*. The lamp's rim measured (the mean hue / chroma of the shade's 3 px edge band against the sky) on the
+  raw plane, the processed plane and the flat approved plate - the processed plane matches the flat plate; the alive plate and the flat layered
+  plate both carry the processed planes; the `camera-layers*` goldens re-baselined if their planes moved (say so). The drift at 20 px on the beat
+  and the golden, a 30 px clip beside it. The card returns with ONE question.
+- Validate: the golden suite; `gate_motion_density.py` on the beat; `review_queue_proofs.py --clips --only r26-133-drift-idle-paints-nothing`
+- Evidence: pending
+
 ### T11: THE RECORD - the CAPABILITIES rows, the backlog rows, the queue, the layers
-- Status: in progress (2026-09-16, evening) - EVERY BUILD SLICE HAS LANDED (T1-T14 incl. T2b, T3b, T3c, T3d, T5b, T5c, T6b, T7b, T7c, T7d); CAPABILITIES rows for the stack (s59 / s61), the planted morph (s62), the ambient lane + the alive plate + the drift dial (T14); rulings s39-s62 recorded verbatim; ONE card open - HG-drift-2 (`r26-133`, the alive plate under the depth stack); the plan closes on its ruling; the record of each is written (CAPABILITIES rows 37 / 75 / 119 / 43 / 56 / 116 / 117 / 121 / 147 / 184 / 318, BACKLOG R26-137..155, doc 41, doc 43 s43.5.1, the lane register); rulings E99 s39-s53 recorded verbatim. OPEN: the four cards the operator has not yet answered (HG7b rails, HG2b-2 the planted ground, HG2-2 the closing, HG6-2 the throw) and their rulings into OPERATOR-RULINGS; the drift plate's visible three-way proof (E99 s38, a lane running); the docs layers rebuilt once the voice lane's staged commit lands (CAPABILITIES is shared with it); then the plan closes
+- Status: in progress (2026-09-16, evening) - EVERY BUILD SLICE HAS LANDED (T1-T14 incl. T2b, T3b, T3c, T3d, T5b, T5c, T6b, T7b, T7c, T7d); CAPABILITIES rows for the stack (s59 / s61), the planted morph (s62), the ambient lane + the alive plate + the drift dial (T14); rulings s39-s62 recorded verbatim; HG-drift-2 RULED E99 s63 (the lamp's rim; 20 px) - the card OWED again, T14b; the plan closes on T14b's card; the record of each is written (CAPABILITIES rows 37 / 75 / 119 / 43 / 56 / 116 / 117 / 121 / 147 / 184 / 318, BACKLOG R26-137..155, doc 41, doc 43 s43.5.1, the lane register); rulings E99 s39-s53 recorded verbatim. OPEN: the four cards the operator has not yet answered (HG7b rails, HG2b-2 the planted ground, HG2-2 the closing, HG6-2 the throw) and their rulings into OPERATOR-RULINGS; the drift plate's visible three-way proof (E99 s38, a lane running); the docs layers rebuilt once the voice lane's staged commit lands (CAPABILITIES is shared with it); then the plan closes
 - Owner: parent (Claude/Fable docs lane)
 - Depends on: every gate ruled
 - Write set: `docs/content-video-engine/CAPABILITIES.md`, `docs/content-video-engine/BACKLOG.md` (rows R26-70, R26-76,
