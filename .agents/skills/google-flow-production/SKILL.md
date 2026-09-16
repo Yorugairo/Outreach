@@ -21,6 +21,7 @@ description: Production best practices, prompt engineering, character persistenc
 > | Two-phase kinetics at second 5 · cowboy shot | **plausible, untested** | backlog X17 / X18 — cheap to test on one roll. |
 > | 3 ingredients max, > 1024 px, pre-cropped | consistent | the driver already caps uploads at 3. |
 > | prose paragraph · `@Name` with no re-description · 10 s native · silent video · Nano Banana at 0 credits | **confirmed** | X15 closed from our metadata; E29; E34; "Generating will use 0 credits" on every roll today. |
+> | Assembly: "Remotion / HyperFrames / CapCut" | **corrected → repo scene-evidence player & compiler** | We assemble and render exclusively via our own player/editor (`scene-evidence-engine.mjs`, `build_scene_timeline_f.py`, `serve_player.py`). Capabilities are indexed in `docs/content-video-engine/CAPABILITIES.md`, effects in `docs/EFFECTS-CATALOG.md`, and patterns in `content/video_engine/patterns/` (`SCRIPT-PATTERN-KIT.md`, `FULL-VIDEO-MAP.md`). |
 >
 > **What the body does not know, because it was written from documentation and the UI moved
 > the same morning:** Flow is `flow.google.com`; the `@` picker is a listbox whose search field
@@ -56,8 +57,11 @@ It is specifically calibrated for **token-efficient, slim-LLM pipelines** (Claud
 |      │                                                   │                                |
 |      └─────────────────────────┬─────────────────────────┘                                |
 |                                ▼                                                          |
-|  [Assembly & Post-Production] (Remotion / HyperFrames / CapCut)                           |
-|  - 10s Clip Multiplier: 2-3 Digital Punch-Ins (1.0x -> 1.25x -> 1.0x every 3-4s)          |
+|  [Assembly & Timeline Engine] (Proprietary Player / Timeline Compiler: CAPABILITIES.md)    |
+|  - Capabilities: docs/content-video-engine/CAPABILITIES.md & docs/EFFECTS-CATALOG.md      |
+|  - Script Patterns: content/video_engine/patterns/ (SCRIPT-PATTERN-KIT.md, FULL-VIDEO-MAP) |
+|  - Timeline Compiler & Runtime: build_scene_timeline_f.py + scene-evidence-engine.mjs     |
+|  - 10s Clip Multiplier: Camera push / punch-ins via E59 camera grammar (1.0x -> 1.25x)    |
 |  - Universal Clean Canvas: X ∈ [10%, 90%], Y ∈ [20%, 75%] for Mobile UI Safe Zones        |
 +───────────────────────────────────────────────────────────────────────────────────────────+
 ```
@@ -66,7 +70,7 @@ It is specifically calibrated for **token-efficient, slim-LLM pipelines** (Claud
 *   **Architecture:** Omni 1.1 Flash is a **Unified Multimodal Autoregressive Transformer**, not a latent diffusion transformer (DiT) with a frozen T5 text encoder like Veo. It natively reasons over visual tokens, understanding abstract 2D line art, stickmen, and diagrams without trying to turn them into photorealistic 3D humans.
 *   **Speed & Latency:** 15–30 seconds per clip (70% faster than Veo’s 60–90s generation time).
 *   **Credit Economics:** 10 credits per 6s / 15 credits per 10s clip at 720p x1 (50–60% cheaper than Veo 3.1).
-*   **Native Duration:** Generates **10.0-second native clips**. A single 10s clip allows 2–3 digital punch-in cuts ($1.0\times \to 1.25\times \to 1.0\times$) in Remotion/CapCut, resetting viewer attention every 3–4 seconds without burning extra generation credits.
+*   **Native Duration:** Generates **10.0-second native clips**. A single 10s clip allows 2–3 camera punch-in cuts ($1.0\times \to 1.25\times \to 1.0\times$) via our camera grammar (E59) and scene-evidence player, resetting viewer attention every 3–4 seconds without burning extra generation credits. All assembly and choreography is governed by [`CAPABILITIES.md`](../../docs/content-video-engine/CAPABILITIES.md), [`EFFECTS-CATALOG.md`](../../docs/EFFECTS-CATALOG.md), and [`SCRIPT-PATTERN-KIT.md`](../../content/video_engine/patterns/SCRIPT-PATTERN-KIT.md).
 *   **Audio Decoupling Rule:** All video prompts must specify completely silent video. Generative video models hallucinate random voice timbres across seeds. Master voiceover is generated separately via ElevenLabs at **~180 WPM** (measured: ep1 182.8, reference 183.6; ~30 words per 10s clip) and cut on Whisper acoustic gaps (threshold 0.30 s vs 0.45 s still open — P40 T1).
 
 ---
@@ -348,3 +352,139 @@ is implemented in `tools/google-flow-driver/src/cdp-driver.mjs`.
 | Nano Banana Pro stills | `Generating will use 0 credits` on every roll today | read the meter for video; 15 credits / 10 s is not yet observed |
 
 Provenance: `provider-jobs/finance-host-model-sheets-001.google-flow-job.v1.json` `roll_log` (seven attempts, each with what broke and what fixed it).
+
+
+---
+
+## 11. The Flow Worker Pattern & Context Quarantine Protocol
+
+> **Core Rationale:** Monolithic chat sessions that drive Google Flow directly in the primary agent thread cause catastrophic context bloat. Browser automation (CDP retries, DOM tree snapshots, status polling, Python image processing tracebacks, edge despill iterations) generates hundreds of thousands of tokens per batch—rapidly exhausting the operator's 5-hour rate window (e.g. 24.5M tokens burned).
+>
+> Borrowing the proven multi-agent design of `/teamwork-preview` and `/boost`, Flow asset production is strictly decoupled into an **isolated worker process governed by an automated script gate and a compact receipt contract**.
+
+```
++───────────────────────────────────────────────────────────────────────────────────────────+
+|                            FLOW WORKER TEAMWORK ARCHITECTURE                              |
+|                                                                                           |
+|  [Operator / User] ──> [Parent Agent (Coordinator)]                                       |
+|                             │                                                             |
+|                             ▼                                                             |
+|                   [Dispatches WORK-ORDER.md & Acceptance Criteria]                        |
+|                             │                                                             |
+|    ┌────────────────────────┴───────────────────────────────────────────────────────┐     |
+|    │ ISOLATED SUBAGENT CONTEXT (QUARANTINE ZONE — O(N) Tokens Absorbed & Discarded) │     |
+|    │                                                                                │     |
+|    │  [Flow Worker Subagent] (Lightweight Model / Flash Tier)                       │     |
+|    │  • Drives Browser MCP / CDP (`google-flow` or `cdp-driver.mjs`)                 │     |
+|    │  • Captures raw stills / video outputs to disk                                 │     |
+|    │  • Executes local post-processing (`prepare_props.py`, matting, despill)       │     |
+|    │                        │                                                       │     |
+|    │                        ▼                                                       │     |
+|    │  [Verification Gate] (Deterministic Script Auditor)                            │     |
+|    │  • `prepare_props.py --check` / `bridge_check.py`                              │     |
+|    │  • Validates: exact dimensions, key distance < 48.0, 0 enclosed hole blowouts, │     |
+|    │    hard alpha edges, valid SHA-256 digests                                     │     |
+|    │  • Blocks self-certification: repeats cycle until criteria PASS                │     |
+|    │                        │                                                       │     |
+|    └────────────────────────┼───────────────────────────────────────────────────────┘     |
+|                             │                                                             |
+|                             ▼ Compact Receipt Contract (~200 Words / ~15k Tokens)         |
+|                   [Parent Evaluates Receipt & Contact Sheet]                              |
+|                             │                                                             |
+|                             ▼                                                             |
+|                   [Delivers Clean Verdict & Assets to Operator]                           |
++───────────────────────────────────────────────────────────────────────────────────────────+
+```
+
+### 11.1 The 3-Role Separation (Implementer–Auditor Split)
+
+1. **Parent Coordinator (The Architect & Reviewer):**
+   - **Role:** Owns conversation context, high-level pipeline orchestration, operator communication, and final delivery presentation.
+   - **Contract:** Never drives CDP directly, never polls Flow DOM elements, never runs interactive matting loops in primary context.
+   - **Actions:** Formulates `WORK-ORDER.md` with explicit, unambiguous acceptance criteria up front, invokes the worker subagent via `invoke_subagent`, and waits for the completion signal.
+
+2. **Flow Worker Subagent (The Producer):**
+   - **Role:** Disposable execution specialist running in an isolated subagent sandbox (using a fast, cost-effective model like `flash`).
+   - **Contract:** Absorbs 100% of the operational churn: browser connection setup, prompt typing, mention chip binding, canvas tile polling, raw PNG/MP4 downloading, alpha thresholding, and script execution.
+   - **Lifespan:** Discarded immediately upon delivery of the compact receipt. Its internal ~375k token execution churn never leaks into the parent thread.
+
+3. **Deterministic Verification Gate (The Independent Auditor):**
+   - **Role:** Eliminates LLM self-certification. The worker agent cannot "certify" its own outputs through conversational prose.
+   - **Contract:** A Python/Bash script suite (`prepare_props.py --check`, `bridge_check.py`) inspects output files on disk against mathematical criteria:
+     - Aspect ratio and exact dimensions (e.g. $1920 \times 1080$ or $1080 \times 1920$).
+     - Background key distance threshold ($< 48.0$).
+     - Zero enclosed hole blowouts (connected component topology check).
+     - Alpha rim tolerances ($< 1.5\%$ partial-alpha transition fringe).
+     - Deterministic SHA-256 calculation matching file bytes.
+
+### 11.2 "Specify What, Not How" + Acceptance Criteria Up Front
+
+Before invoking the subagent, the Parent Coordinator writes or passes a `WORK-ORDER.md` detailing exact measurable gates:
+
+```markdown
+### Target Deliverables & Acceptance Criteria
+1. **Asset IDs:** `prop-crate-short`, `prop-lever-magenta`, `bg-dark-vignette`
+2. **Resolution & Mode:** PNG 24-bit RGB or 32-bit RGBA, 16:9 ($1920 \times 1080$)
+3. **Alpha Matting:** True RGBA transparency, outer background key distance $< 48.0$
+4. **Hole Integrity:** 0 internal enclosed white/cream holes punched in line art
+5. **Edge Fringe:** $\le 1\text{ px}$ transition boundary; zero dark/light halo on `#F4E6C7`
+6. **Artifact Output:** Saved under `review/<claim_id>/`, SHA-256 recorded in `manifest.json`, `approvals.json` written last.
+```
+
+### 11.3 The Compact Receipt Contract
+
+The worker subagent must **never** return raw base64 images, verbose console logs, or full page DOM trees to the parent. It returns strictly a compact, structured JSON receipt:
+
+```json
+{
+  "status": "ready_for_review",
+  "claim_id": "flow-claim-20260914-01",
+  "delivery_dir": "review/flow-claim-20260914-01/",
+  "contact_sheet": "review/flow-claim-20260914-01/contact_sheet.html",
+  "verification_gate": "PASS",
+  "cases": [
+    {
+      "id": "prop-crate-short",
+      "path": "review/flow-claim-20260914-01/prop-crate-short.png",
+      "sha256": "9208578f5641472851d2e...",
+      "dimensions": "1920x1080",
+      "alpha_coverage": "58.8%",
+      "edge_fringe": "0px",
+      "gate_status": "PASS"
+    },
+    {
+      "id": "prop-lever-magenta",
+      "path": "review/flow-claim-20260914-01/prop-lever-magenta.png",
+      "sha256": "36607760921471ba9803...",
+      "dimensions": "1920x1080",
+      "alpha_coverage": "34.2%",
+      "edge_fringe": "0px",
+      "gate_status": "PASS"
+    }
+  ]
+}
+```
+
+### 11.4 Subagent Invocation Template
+
+When commissioning Google Flow generations from the primary thread:
+
+```python
+invoke_subagent(Subagents=[{
+    "TypeName": "self",
+    "Role": "Flow Asset Producer",
+    "Model": "flash",
+    "Prompt": (
+        "You are the isolated Flow Asset Producer. "
+        "Execute generation work order: `review/claim-001/WORK-ORDER.md`.\n"
+        "1. Drive the Google Flow browser MCP / CDP driver to generate the requested assets.\n"
+        "2. Save raw outputs to `review/claim-001/raw/`.\n"
+        "3. Run `python scripts/prepare_props.py --claim-dir review/claim-001/` to extract alpha and despill.\n"
+        "4. Run `python scripts/prepare_props.py --check review/claim-001/` to verify all acceptance criteria.\n"
+        "5. Generate `contact_sheet.html` and write `approvals.json`.\n"
+        "6. Return ONLY the Compact Receipt JSON to the parent agent. "
+        "Do NOT stream browser logs, DOM trees, or trial-and-error transcripts."
+    )
+}])
+```
+

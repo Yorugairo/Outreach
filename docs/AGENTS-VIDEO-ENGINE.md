@@ -89,3 +89,8 @@ Three rules bind agents generating assets here:
    conflicts await the operator), `docs/operator-ledger/TRIAGE.jsonl` + `LEDGER.jsonl` (the operator's words
    verbatim), `docs/agent-memory/operator/` (the promoted memories) and its `casebook/` (defects caught in a frame,
    before/after). A `superseded` verdict is never a live rule.
+6. **Google Flow asset generation runs in an isolated subagent** (`flow-asset-producer`, `.agents/agents/flow-asset-producer.md`):
+   multi-step browser automation, CDP actions, and interactive tool loops are strictly delegated via `invoke_subagent`.
+   Subagents absorb execution churn under context quarantine and return only the Compact Receipt JSON contract (~200 words)
+   with verified SHA-256 digests and `prepare_props.py --check` pass status.
+

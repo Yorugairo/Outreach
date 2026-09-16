@@ -88,4 +88,16 @@ library before authoring new motion — the catalogue's resolution-order
 principle applied to movement. Design-authored HTML prototypes are a valid
 *source*, but enter only as ported, validated HyperFrames units.
 
+## Context quarantine & the subagent worker contract (2026-09-14)
+
+Image and scene generation on interactive browser interfaces (Google Flow, Nano Banana Pro, Omni 1.1 Flash) must never run directly in the primary conversation thread. Multi-step CDP polling, DOM inspection, and trial-and-error post-processing burn millions of tokens in the parent context.
+
+Generation runs under **strict subagent quarantine** (`invoke_subagent`):
+- **Worker Subagent:** Absorbs 100% of the browser automation churn and local matting scripts (`prepare_props.py`). It is discarded upon completion.
+- **Implementer-Auditor Split:** The worker cannot self-certify. An automated verification script enforces objective acceptance criteria (dimensions, background key distance < 48.0, 0 hole blowout, valid SHA-256).
+- **Compact Receipt Contract:** The subagent returns only a compact JSON receipt (`id`, `sha256`, dimensions, alpha/edge stats, and pass/fail verdict) and path to `contact_sheet.html`.
+
+Full doctrine specification: `.agents/skills/google-flow-production/SKILL.md §11`.
+
 Runbook: `docs/runbooks/HEADLESS_CLAIM_RESUME.md`.
+

@@ -29,7 +29,7 @@ working on the video/content side of this repo. (Antigravity also reads
 | Visuals, evidence, motion | `29-EVIDENCE-MOTION-STANDARDS.md` — the production bar for every channel (Part 3 = linked-evidence choreography, Part 8 = the scene-evidence lane, Part 9 = corrections, §9.15 = wipe + caption safe zone); doc 16 partially superseded, doc 15 record — 29 wins on motion |
 | Narration recording | `37-TTS-DELIVERY-STANDARDS.md` (§8 = recording standards) |
 | Image generation claims | `26-AGENT-GENERATION-LOOP.md` |
-| Google Flow video / scene generation | `.agents/skills/google-flow-production/SKILL.md` (doctrine & slim-LLM prompts), `tools/google-flow-driver/` — driven by `FlowDagEngine` (`src/dag-engine.mjs`) and the `google-flow` MCP server. CLI fallback: `node tools/google-flow-driver/scripts/run-batch.mjs <batch.json>` |
+| Google Flow video / scene generation | `.agents/skills/google-flow-production/SKILL.md` (doctrine & slim-LLM prompts), `tools/google-flow-driver/`, and subagent `flow-asset-producer` (`.agents/agents/flow-asset-producer.md`). Driven by `FlowDagEngine` (`src/dag-engine.mjs`) or `google-flow` MCP in an isolated subagent. CLI fallback: `node tools/google-flow-driver/scripts/run-batch.mjs <batch.json>` |
 | Channel strategy | `31-FACELESS-CHANNEL-DOCTRINE.md` |
 
 Paths above are relative to `docs/content-video-engine/` (unless tool path given).
@@ -51,6 +51,12 @@ Two rules bind every generating agent (see rulings E1–E3):
 - **A dispatched work order is frozen.** Corrections open a new claim.
 - **Output stays quarantined until the operator approves a contact
   sheet.** Free generation does not remove the review step.
+- **MCP and browser execution runs in an isolated subagent.** Do not drive
+  multi-turn CDP/Flow browser loops or heavy data probes directly in the
+  primary agent thread. Dispatch to the `flow-asset-producer` subagent via
+  `invoke_subagent`. Subagents absorb execution churn and return only the
+  manifest, hashes, and completion receipt to keep parent context lean.
+
 
 ## Research intake (the context-sponge lane, 2026-09-05)
 
