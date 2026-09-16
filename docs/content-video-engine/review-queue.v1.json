@@ -85,11 +85,13 @@
         "P61 HG-drift-2",
         "E99 s63",
         "P61 T14b",
-        "P61 HG-drift-3"
+        "P61 HG-drift-3",
+        "E99 s64",
+        "P61 T14c"
       ],
-      "kind": "watch",
+      "kind": "owed",
       "title": "The alive plate with its planes cleaned, and the long-form drift at 20 px beside 30",
-      "judge": "Your answer (E99 s63): the lamp's green was back, and 30 px might still be too much - maybe 20. Why the green: the alive plate reused the depth split's raw cut-outs, and the split's mask around the lamp had been grown 6 px, carrying the sky into the shade's edge (the approved flat plate never had a matte, so nothing had been 'removed' - the record, not a memory). Built: a named matte pass on the split's planes (shrink 5 px on the near plane, 1 on mid and subject, the edge filled from the nearest interior colour, never a blur) - the shade's 3 px edge band now matches the flat plate exactly (dE 0.00; the raw band WAS the sky) - and the same planes on the flat layered plate, so the camera-layers and dock-depth goldens moved by under 1 % of pixels each. The drift: the beat rebuilt at 20 px, and a second page at 30 for the difference. Watch the 20 px beat, then the 30. Is the lamp clean, and which drift is the long form's: 20 or 30?",
+      "judge": "Owed by the agent - see `owed`. The question, once both clips exist with the lamp clean: which of the two reads as the plate's life - the parallax or the Ken Burns - and does the 20 px drift earn its place beside the move?",
       "where": [
         {
           "label": "the lamp at 3x, the same instant of the same beat: BEFORE (raw planes, a teal halo round the shade) vs AFTER (the processed planes) - the rendered ring vs the sky: dL -7.09 / dC -5.34 before, -2.28 / -1.02 after",
@@ -117,8 +119,8 @@
         "30 px; the lamp clean",
         "the lamp still shows - name the instant"
       ],
-      "recommendation": "20 px and the lamp clean. Read at 3x on the same instant: the halo round the shade is gone and the outline sits on the sky; the 20 px beat still breathes (the harbour alive under it) without the whole picture sliding, which is what 30 started to do on a long-form frame. Your eye decides the 5 px thinner silhouette.",
-      "blocks": "HG-drift-3; the R26-133 ruling; P58 HG2 ruling 4",
+      "recommendation": "",
+      "blocks": "P61 T14c; the R26-133 ruling; P58 HG2 ruling 4",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:565",
         "docs/research/runs/p58-2-5d/HG2-SHEET.md:51-52",
@@ -139,58 +141,9 @@
       ],
       "status": "open",
       "ruling": null,
-      "was_kind": "owed",
-      "owed": "Delivered 2026-09-16 (P61 T14b): the processed planes on both layered plates, the rim measured, the beat at 20 beside 30, the goldens",
-      "proofs": [
-        {
-          "type": "clip",
-          "label": "THE ASK - the beat at 20 px: the alive dock, the PROCESSED planes, the light, the push, the long-form drift",
-          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-alive",
-          "page": "player.html",
-          "aspect": "16:9",
-          "t0": 0.0,
-          "t1": 6.57,
-          "route": "review_queue_proofs.py --clips: the private build's player served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent); the approved Tokyo cut untouched (E45)"
-        },
-        {
-          "type": "clip",
-          "label": "THE SAME BEAT at 30 px - s55's first number, for the difference (its own page, so the 20 px link never moves)",
-          "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-p61-alive",
-          "page": "player-30.html",
-          "aspect": "16:9",
-          "t0": 0.0,
-          "t1": 6.57,
-          "route": "review_queue_proofs.py --clips: the private build's player served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent); the approved Tokyo cut untouched (E45)"
-        },
-        {
-          "type": "clip",
-          "label": "the mechanism, golden 1 - THE ALIVE PLATE with the processed planes: the water alive, the planes over it, one camera, 20 px",
-          "surface": "plate-alive",
-          "aspect": "16:9",
-          "t0": 0.0,
-          "t1": 10.0,
-          "flags": {
-            "idle": true,
-            "plate_idle_paints": true,
-            "camera": true,
-            "stop_action": true
-          },
-          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
-        },
-        {
-          "type": "clip",
-          "label": "the mechanism, golden 2 - THE DRIFT alone at 20 px on the flat plate",
-          "surface": "plate-drift",
-          "aspect": "16:9",
-          "t0": 0.0,
-          "t1": 4.0,
-          "flags": {
-            "idle": true,
-            "plate_idle_paints": true
-          },
-          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
-        }
-      ]
+      "was_kind": "watch",
+      "owed": "E99 s64 (2026-09-16): 20 px is the drift; the lamp's green STILL shows on the processed planes (the matte pass cleaned the near plane's EDGE, but the far plane UNDER the lamp is the depth split's inpainted hole, and that fill is a lighter, more saturated blue than the sky around it (measured on the 480x320 far layer: under the lamp mean RGB 69/149/206, value 0.81; the sky ring 6 px outside it RGB 58/115/153, value 0.60 - same hue 205 deg, a quarter brighter); under parallax the shade moves against the far plane and the lighter patch shows as a glow around it the whole time (seen at 4x on the beat's 4.54 s frame). The matte was the first rim; the fill is the second.); and the operator wants 20 px with parallax beside 20 px with Ken Burns. Owed (P61 T14c): the far plane's fill under the lamp made the sky's own colour and the water still re-pinned to it, the ring measured on the rendered beat at three instants; two clips at 20 px from the same take window - parallax + camera, and flat + Ken Burns; ONE question.",
+      "proofs": []
     },
     {
       "id": "r26-123-caption-default",

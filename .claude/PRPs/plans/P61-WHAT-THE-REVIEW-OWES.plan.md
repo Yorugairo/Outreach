@@ -1327,8 +1327,31 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   amended too (where 'the long-form setting' was stated). No test deleted or renamed. Named for the operator: the lamp is 5 px thinner
   at full size (the sky coming off the matte - a silhouette change); the decontamination band built and set to 0.
 
+### T14c: THE FAR PLANE'S FILL UNDER THE LAMP, AND 20 PX WITH PARALLAX BESIDE 20 PX WITH KEN BURNS (E99 s64)
+- Status: pending
+- Owner: `implementation_luna` (no engine lock expected - planes, the plate library, two private builds)
+- Depends on: T14b, HG-drift-3 (ruled E99 s64)
+- Write set: `content/video_engine/scripts/comfy_depth_split.py` (the far plane's hole fill - a named step beside `--process`), the split's far plane
+  for `world-tokyo-customs-dock-v1` (`tests/golden/inputs/dock-layers/*-far.png` + the plate library's copy), the VACE still `omni-video/ambient/
+  dock-water-vace-v1.still.png` re-pinned (+ its `.layers.json` record), `build-p61-alive/` (a second build script / page for the Ken Burns
+  variant - `build_alive.py --camera kenburns` -> `player-kb.html` + its timeline; the parallax page stays `player.html`), the goldens that the
+  far plane explains (`plate-alive`, `camera-layers*`, `dock-depth*` - re-baseline only what the fill explains, sha table), the effects card if
+  the KB route needs naming, CAPABILITIES the alive-plate row (one clause)
+- Acceptance: E99 s64 verbatim - *"20 px is the right drift but the lamp greens till shows basically the entire time on the processed planes.
+  I'm also not sure that the drift is really addinga nything that the ken burn doesnt. let me see 20px with parallax and 20px with ken burns"*.
+  FIRST measure where the green sits on the RENDERED beat at 1.0 / 4.54 / 6.2 s (the 3 px ring around the shade vs the sky beside it, and the
+  far plane under the lamp vs its sky ring) - the parent's measurement is in the ruling; confirm or correct it. Then the fill: the far plane's
+  hole under the lamp the sky's own colour (fill from the surround / the sky rows; LaMa only if the surround cannot carry it; never a blur that
+  leaves a halo), the water still re-pinned to the corrected far plane so the wall outside the water mask IS the corrected plane, the ring
+  measured after at the same three instants (target: within the sky ring's own variance). Then TWO beats at 20 px from the same 20.77-27.34 s
+  take window, the lamp clean on both: (A) the alive layered plate, parallax planes + the camera as T14 authored; (B) the alive plate FLAT (the
+  clip wall + the flat plate's own pixels, no planes) under KEN BURNS - the engine's own push (CAPABILITIES: the Ken Burns / camera route; 
+  name the row and the grammar you used); each its own page so neither link moves. The card returns with ONE question.
+- Validate: the golden suite; `gate_motion_density.py` on both builds; `review_queue_proofs.py --clips --only r26-133-drift-idle-paints-nothing`
+- Evidence: pending
+
 ### T11: THE RECORD - the CAPABILITIES rows, the backlog rows, the queue, the layers
-- Status: in progress (2026-09-16, evening) - EVERY BUILD SLICE HAS LANDED (T1-T14 incl. T2b, T3b, T3c, T3d, T5b, T5c, T6b, T7b, T7c, T7d); CAPABILITIES rows for the stack (s59 / s61), the planted morph (s62), the ambient lane + the alive plate + the drift dial (T14); rulings s39-s62 recorded verbatim; HG-drift-2 RULED E99 s63 (the lamp's rim; 20 px); T14b landed - HG-drift-3 open (the beat at 20 beside 30, the planes cleaned); the plan closes on its ruling; the record of each is written (CAPABILITIES rows 37 / 75 / 119 / 43 / 56 / 116 / 117 / 121 / 147 / 184 / 318, BACKLOG R26-137..155, doc 41, doc 43 s43.5.1, the lane register); rulings E99 s39-s53 recorded verbatim. OPEN: the four cards the operator has not yet answered (HG7b rails, HG2b-2 the planted ground, HG2-2 the closing, HG6-2 the throw) and their rulings into OPERATOR-RULINGS; the drift plate's visible three-way proof (E99 s38, a lane running); the docs layers rebuilt once the voice lane's staged commit lands (CAPABILITIES is shared with it); then the plan closes
+- Status: in progress (2026-09-16, evening) - EVERY BUILD SLICE HAS LANDED (T1-T14 incl. T2b, T3b, T3c, T3d, T5b, T5c, T6b, T7b, T7c, T7d); CAPABILITIES rows for the stack (s59 / s61), the planted morph (s62), the ambient lane + the alive plate + the drift dial (T14); rulings s39-s62 recorded verbatim; HG-drift-3 RULED E99 s64 (20 px stands; the lamp still shows; parallax vs Ken Burns) - the card OWED again, T14c; the plan closes on T14c's card; the record of each is written (CAPABILITIES rows 37 / 75 / 119 / 43 / 56 / 116 / 117 / 121 / 147 / 184 / 318, BACKLOG R26-137..155, doc 41, doc 43 s43.5.1, the lane register); rulings E99 s39-s53 recorded verbatim. OPEN: the four cards the operator has not yet answered (HG7b rails, HG2b-2 the planted ground, HG2-2 the closing, HG6-2 the throw) and their rulings into OPERATOR-RULINGS; the drift plate's visible three-way proof (E99 s38, a lane running); the docs layers rebuilt once the voice lane's staged commit lands (CAPABILITIES is shared with it); then the plan closes
 - Owner: parent (Claude/Fable docs lane)
 - Depends on: every gate ruled
 - Write set: `docs/content-video-engine/CAPABILITIES.md`, `docs/content-video-engine/BACKLOG.md` (rows R26-70, R26-76,
