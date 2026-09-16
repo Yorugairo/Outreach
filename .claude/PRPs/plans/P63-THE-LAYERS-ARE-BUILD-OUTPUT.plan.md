@@ -1,7 +1,7 @@
 ---
 id: P63-THE-LAYERS-ARE-BUILD-OUTPUT
 title: The layers are build output - the docs retrieval layers leave git and the commit path, rebuild lazily by input digest on the reader's side, and the animation registry stops costing a minute; the docs half of the dual bottleneck removed, the engine half left to P62
-status: running
+status: complete
 operation: refactor
 risk: standard
 owner: parent
@@ -245,7 +245,7 @@ Until T4 lands the standing rule holds: one `build_docs_layers.py --write` at a 
   card validates.
 
 ### T5: THE RECORD
-- Status: pending
+- Status: complete (2026-09-16)
 - Owner: parent
 - Depends on: T4
 - Write set: `docs/content-video-engine/CAPABILITIES.md` (the retrieval-layers row: "build output, ensured by digest on
@@ -257,7 +257,11 @@ Until T4 lands the standing rule holds: one `build_docs_layers.py --write` at a 
   one anyone has to claim in the register) and `--check` clean;
   `npm run prp:validate -- .claude/PRPs/plans/P63-THE-LAYERS-ARE-BUILD-OUTPUT.plan.md`
 - Validate: as above
-- Evidence: pending
+- Evidence: CAPABILITIES:201 (the retrieval layers row) says build output with the numbers; BACKLOG R26-158 (closed, the dual
+  bottleneck) and R26-159..162 (open: the gates registry's 15 s, the registry's line cap, the LayerError fold + the GET's 418 ms,
+  the committed-tree test); `evals/LAYERS-TIMING-2026-09-16.md`; `docs/LANE-REGISTER.md` rule retired. No ruling appended:
+  the operator's words are quoted in this plan and R26-158, and the change was approved as a plan (HG1), not ruled on a card.
+  `build_docs_layers.py --write` once as the last full pass anyone had to claim; `--check` clean.
 
 ## Verification
 
