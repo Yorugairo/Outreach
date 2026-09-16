@@ -51,7 +51,7 @@ timestamps) and written with LF endings.
     | docs/** named seo-*, *-contract.md,         | spec          |
     |   *-spec.md, *-plan.md, *-schema-notes.md,  |               |
     |   production-*.md, ARCHITECTURE_DECISION_*, |               |
-    |   STATE-OF-WORK.md                          |               |
+    |   WORKTREE-REGISTER.md                      |               |
     | anything else                               | other         |
 """
 from __future__ import annotations
@@ -141,7 +141,7 @@ KIND_RULES = (
     ("docs-name", "*-schema-notes.md", "spec"),
     ("docs-name", "production-*.md", "spec"),
     ("docs-name", "ARCHITECTURE_DECISION_*", "spec"),
-    ("docs-name", "STATE-OF-WORK.md", "spec"),
+    ("docs-name", "WORKTREE-REGISTER.md", "spec"),
 )
 
 DOCS_PREFIX = "docs/"

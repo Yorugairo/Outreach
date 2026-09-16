@@ -46,3 +46,7 @@ rather than restating it.
   (`speedster` Sonnet); the Fable parent keeps judgement, integration and the
   operator. Recall = `explorer`, review = `reviewer`, git = `release_steward`.
   Policy: `docs/runbooks/PRP_EXECUTION.md` "Dispatch mapping".
+- **A second agent, a worktree, a merge to main** → `docs/WORKTREE-REGISTER.md` first (read at start; your row
+  before your first commit; claim a ruling number there before writing it), then the checklist in
+  `docs/runbooks/PRP_EXECUTION.md` "Worktrees and lanes": merge main in, run the register + golden tests, fast-forward,
+  never force (P62).

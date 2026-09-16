@@ -327,8 +327,8 @@ floors before it is offered for a watch. Every artifact below is GENERATED from 
 
 [`BACKLOG.md`](BACKLOG.md) — the hand-maintained open work, and the scope shift
 behind it. This file says what exists; the backlog says what is asked for and
-what is blocked on an operator decision. `STATE-OF-WORK.md` is neither: it is
-the auto-generated worktree census.
+what is blocked on an operator decision. `docs/WORKTREE-REGISTER.md` is neither: it is
+the board of every checkout and who is writing what in it (P62; `git worktree list` is the census).
 
 ## The recall rule
 

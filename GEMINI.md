@@ -28,6 +28,7 @@ working on the video/content side of this repo. (Antigravity also reads
 | Voice / persona | `36-WRITER-PERSONA.md`, `33-VOICE-PROFILE.md`, `32-WRITING-FOR-THE-EAR.md` |
 | Visuals, evidence, motion | `29-EVIDENCE-MOTION-STANDARDS.md` — the production bar for every channel (Part 3 = linked-evidence choreography, Part 8 = the scene-evidence lane, Part 9 = corrections, §9.15 = wipe + caption safe zone); doc 16 partially superseded, doc 15 record — 29 wins on motion |
 | Narration recording | `37-TTS-DELIVERY-STANDARDS.md` (§8 = recording standards) |
+| A second agent, a worktree, a merge to main | `docs/WORKTREE-REGISTER.md` (read at start; your row before your first commit; a ruling number claimed there before it is written), then `docs/runbooks/PRP_EXECUTION.md` "Worktrees and lanes" - the merge-before-main checklist (P62) |
 | Image generation claims | `26-AGENT-GENERATION-LOOP.md` |
 | Google Flow video / scene generation | `.agents/skills/google-flow-production/SKILL.md` (doctrine & slim-LLM prompts), `tools/google-flow-driver/`, and subagent `flow-asset-producer` (`.agents/agents/flow-asset-producer.md`). Driven by `FlowDagEngine` (`src/dag-engine.mjs`) or `google-flow` MCP in an isolated subagent. CLI fallback: `node tools/google-flow-driver/scripts/run-batch.mjs <batch.json>` |
 | Channel strategy | `31-FACELESS-CHANNEL-DOCTRINE.md` |

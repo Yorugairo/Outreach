@@ -70,7 +70,26 @@ dispatch is the saving.
 | `architect_sol` | `architect_sol` | Opus 5 | `.claude/PRPs/plans/` and named planning evidence only |
 | `release_steward` | `release_steward` | Opus 5 | `git add <paths>` / `git commit`; push only with the operator's CURRENT authorization quoted in the brief |
 
-### Lane write sets (three harnesses, one checkout - interim until P2's order contract)
+### Worktrees and lanes (P62, 2026-09-16; the write sets below since 2026-09-05)
+
+E99 s47: parallel work is the requirement - a second agent works in its own worktree off main, and the cost is
+paid with awareness. Three rules and one checklist, no tools beyond git:
+
+- **Read `docs/WORKTREE-REGISTER.md` at start**; a new worktree (`git worktree add <path> -b <lane>/<slug> main` -
+  never a clone) gets its row before its first commit, and the row is updated at every commit.
+- **Claim a ruling number in the register before writing it** - the next free `E99 s<n>`, read from disk at run
+  time; the register test fails a merge that carries a duplicate.
+- **One engine writer per worktree**; the register names the holder and the slice.
+- **Before anything reaches main** (the steward runs this; `.claude/agents/release_steward.md` carries it verbatim):
+
+  1. In the lane's worktree: `git fetch`, then `git merge main` - a merge, never a rebase of a shared branch.
+  2. Run, unpiped, from that worktree: `python -m pytest content/video_engine/tests/test_worktree_register.py content/video_engine/tests/test_golden_frames.py -q` (a duplicate ruling number or an unregistered worktree fails here, before main).
+  3. A conflict on `OPERATOR-RULINGS.md` or `review-answers.jsonl`: keep both sides. A duplicate ruling number: the INCOMING lane takes the next free number and fixes its citations in the same commit (`rg "E99 s<n>"`).
+  4. If the engine moved on either side: the goldens re-pinned ONCE, in one commit, the sha table in the message.
+  5. From main: `git merge --ff-only <branch>`; then update the lane's row in `docs/WORKTREE-REGISTER.md` (last merge).
+  6. Never `--force`, never amend after a push, never delete a branch or a worktree without the operator's word, never `git add -A`; deletions in an index-only commit. Push only on the operator's fresh word in chat.
+
+The lane write sets (one checkout or several - the boundary is the same):
 
 | lane | owns (may write without a cross-lane brief) | never writes |
 | --- | --- | --- |

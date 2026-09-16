@@ -35,7 +35,7 @@ Recall: docs_find 0 hits for "camera arrival"
 template, `content/video_engine/scripts/kinetics/`, `build_scene_timeline_f.py`, `gate_motion_density.py`
 or a short's `build_short.py` without a `Recall:` line is refused by `scripts/hooks/recall_receipt.py`.
 
-**Installed 2026-09-08** (operator: "install the hooks") in `.git/hooks/commit-msg`, which the main checkout and every worktree share; the script resolves from the main checkout so a worktree on an older branch is gated too. Hooks are local to a clone - a fresh clone re-runs:
+**Installed 2026-09-08** (operator: "install the hooks") in `.git/hooks/commit-msg`, which the main checkout and every worktree share; the script resolves from the main checkout so a worktree on an older branch is gated too. Hooks are local to a clone - a fresh clone re-runs: (a WORKTREE shares them and needs nothing; P62: the number a ruling takes is claimed in `docs/WORKTREE-REGISTER.md` before it is written, and `test_worktree_register.py` fails the merge on a duplicate)
 
 ```bash
 printf '#!/bin/sh\npython scripts/hooks/recall_receipt.py "$1"\n' > .git/hooks/commit-msg && chmod +x .git/hooks/commit-msg

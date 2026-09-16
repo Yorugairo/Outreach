@@ -212,7 +212,7 @@ def test_kind_is_decided_by_path_prefix_and_filename() -> None:
         "docs/ARCHITECTURE_DECISION_SEO_PLATFORM.md": "spec",
         "docs/run-centric-schema-notes.md": "spec",
         "docs/production-api-ui-database.md": "spec",
-        "docs/STATE-OF-WORK.md": "spec",
+        "docs/WORKTREE-REGISTER.md": "spec",
         # the spec rules are last and only catch `docs/`: an earlier rule and another tree win
         "docs/runbooks/PROMOTION-plan.md": "runbook",
         "content/video_engine/seo-notes.md": "other",

@@ -13,9 +13,9 @@ IMMEDIATELY, separate from episode content. When an episode stage
 completes (script locked, evidence built, table authored), that layer
 merges. Worktrees are isolation, not storage.
 
-Counts of unmerged work go stale fast - `survey_worktrees.py`
-regenerates docs/STATE-OF-WORK.md; run it instead of trusting any
-remembered census. (2026-08-29 harvest: sweet-villani + p31 + p16
+Counts of unmerged work go stale fast - `git worktree list` and
+`git log main..<branch>` are the census, `docs/WORKTREE-REGISTER.md`
+the board (P62, 2026-09-16); never trust a remembered census. (2026-08-29 harvest: sweet-villani + p31 + p16
 merged to main; big player.html blobs must be STRIPPED before pushing -
 filter-branch was needed once for 81-367MB blobs; keep build outputs
 out of pushes.)
