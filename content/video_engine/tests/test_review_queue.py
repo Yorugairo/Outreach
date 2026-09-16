@@ -230,6 +230,22 @@ def test_a_clip_whose_proof_changed_is_rendered_again_not_served_by_name(tmp_pat
     assert json.loads(RQP.clip_sidecar(out).read_text(encoding="utf-8"))["t0"] == proof["t0"] + 1.0
 
 
+def test_a_clip_proof_may_be_an_mp4_already_on_disk(tmp_path, monkeypatch) -> None:
+    """E99 s38's three-way drift proof and an ambient-lane render are mp4s no browser can re-render: a clip proof may
+    name `mp4`, the render step copies it, and the sidecar pins the file's own sha256."""
+    src = tmp_path / "proof.mp4"
+    src.write_bytes(b"mp4 bytes v1")
+    monkeypatch.setattr(RQP, "ROOT", tmp_path)
+    proof = {"type": "clip", "label": "x", "t0": 0.0, "t1": 4.0, "mp4": "proof.mp4", "route": "composed"}
+    out = tmp_path / "clips" / "item-0.mp4"
+    assert RQP.render_clip(proof, out) == out and out.read_bytes() == b"mp4 bytes v1"
+    key = RQP.clip_key(proof, tmp_path)
+    assert key["mp4"] == "proof.mp4" and key["source_sha256"]
+    src.write_bytes(b"mp4 bytes v2")
+    assert RQP.clip_key(proof, tmp_path)["source_sha256"] != key["source_sha256"], "a changed file is a different clip"
+    BRQ.validate_proof("item", proof)   # a clip with an mp4 and no surface / build is a valid proof
+
+
 def test_a_clip_proof_names_its_build_and_time_range(data, page):
     rec, n, proof = RQP.clip_proofs(data, "p58-hg3-chart-forms")[0]
     card = card_of(page, rec["id"])

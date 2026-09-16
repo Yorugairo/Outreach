@@ -112,7 +112,7 @@ def _clip_source(proof: dict, tmp: Path) -> tuple[Path, str, str]:
     return ROOT / proof["build"], proof.get("page", "player.html"), proof.get("aspect", "16:9")
 
 
-CLIP_KEYS = ("surface", "build", "page", "aspect", "t0", "t1", "flags")
+CLIP_KEYS = ("surface", "build", "page", "aspect", "t0", "t1", "flags", "mp4")
 
 
 def clip_source_sha(proof: dict, root: Path = ROOT) -> str | None:
@@ -120,7 +120,9 @@ def clip_source_sha(proof: dict, root: Path = ROOT) -> str | None:
     re-lays the same surface under the same window - 2026-09-16 the verdict card's clip kept the old rails - so the sha of
     the rendered source is part of what a clip is. None when the source is not on disk (the fixture's surfaces)."""
     import hashlib
-    if proof.get("surface"):
+    if proof.get("mp4"):
+        p = root / proof["mp4"]                      # an mp4 already on disk - a composed comparison, an ambient-lane render
+    elif proof.get("surface"):
         p = root / "content/video_engine/tests/golden/frames" / f"{proof['surface']}.png"
     elif proof.get("build"):
         p = root / proof["build"] / (proof.get("page") or "player.html")
@@ -161,6 +163,13 @@ def render_clip(proof: dict, out_mp4: Path) -> Path:
     from playwright.sync_api import sync_playwright
     t0, t1 = float(proof["t0"]), float(proof["t1"])
     out_mp4.parent.mkdir(parents=True, exist_ok=True)
+    if proof.get("mp4"):   # already rendered elsewhere (E99 s38's three-way proof): the queue carries it as it is
+        import shutil
+        src = ROOT / proof["mp4"]
+        if not src.is_file():
+            raise FileNotFoundError(f"clip proof names an mp4 that is not on disk: {proof['mp4']}")
+        shutil.copyfile(src, out_mp4)
+        return out_mp4
     with tempfile.TemporaryDirectory() as td:
         directory, page_name, aspect = _clip_source(proof, Path(td))
         w, h = RB.STAGE[aspect]
@@ -227,7 +236,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"have  {out.name}")
             continue
         why = "stale" if out.is_file() else "clip"
-        print(f"{why:5s} {out.name}: {proof.get('surface') or proof.get('build')} {proof['t0']}-{proof['t1']} s", flush=True)
+        print(f"{why:5s} {out.name}: {proof.get('surface') or proof.get('build') or proof.get('mp4')} {proof['t0']}-{proof['t1']} s", flush=True)
         render_clip(proof, out)
         clip_sidecar(out).write_text(json.dumps(clip_key(proof), sort_keys=True), encoding="utf-8")
     return 0

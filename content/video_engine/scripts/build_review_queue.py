@@ -72,8 +72,8 @@ def validate_proof(name: str, proof: object) -> None:
     missing = [k for k in PROOF_FIELDS[proof["type"]] if k not in proof]
     if missing:
         raise QueueError(f"{name}: a {proof['type']} proof is missing {', '.join(missing)}")
-    if proof["type"] == "clip" and not (proof.get("surface") or proof.get("build")):
-        raise QueueError(f"{name}: a clip proof names its surface or its build")
+    if proof["type"] == "clip" and not (proof.get("surface") or proof.get("build") or proof.get("mp4")):
+        raise QueueError(f"{name}: a clip proof names its surface, its build, or an mp4 already on disk")
 
 
 def validate_record(rec: object, n: int, seen: set[str]) -> None:
@@ -184,7 +184,8 @@ def md_where(entry: dict) -> str:
 
 def md_proof(item_id: str, n: int, p: dict) -> str:
     if p["type"] == "clip":
-        src = p.get("surface") and f"golden `{p['surface']}`" or f"build `{p['build']}`"
+        src = (f"golden `{p['surface']}`" if p.get("surface") else f"build `{p['build']}`" if p.get("build")
+               else f"mp4 `{p['mp4']}`")
         return f"clip `{RQP.clip_name(item_id, n)}` - {p['label']} ({src}, {p['t0']}-{p['t1']} s)"
     if p["type"] == "player":
         return f"player {p['url']} - {p['label']} (build `{p['build']}`; {p['confirmed']})"
@@ -301,7 +302,8 @@ def page_where(entry: dict, root: Path) -> str:
 
 def proof_clip(rec: dict, n: int, p: dict, root: Path) -> str:
     name = RQP.clip_name(rec["id"], n)
-    source = f"golden {p['surface']}" if p.get("surface") else f"build {p['build']}"
+    source = (f"golden {p['surface']}" if p.get("surface") else f"build {p['build']}" if p.get("build")
+              else f"mp4 {p['mp4']}")
     caption = (f'<p class="plabel"><b>{esc(p["label"])}</b><br><span class="small">{esc(source)} - '
                f'{p["t0"]:g} to {p["t1"]:g} s - silent, loops</span></p>')
     if not (root / OUT_REL / CLIPS_SUBDIR / name).is_file():

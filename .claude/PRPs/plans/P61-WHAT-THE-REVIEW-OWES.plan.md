@@ -1135,7 +1135,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   effects_catalog_check 0 failures; page-boxes 44. The registry regenerates with T11 (another lane holds it staged).
 
 ### T11: THE RECORD - the CAPABILITIES rows, the backlog rows, the queue, the layers
-- Status: in progress (2026-09-15) - the built half written; the operator ruled HG1 / HG3 / HG4 / HG5 / HG7 / HG8 / HG10 and the span and the cutout-dock cards the same night (E99 s39-s47, all nine recorded verbatim, the cards ruled, the rows carried); open: HG6 (asked once proof B lands with T3), the drift plate's visible proof (E99 s38), and the four follow-up slices T2b / T5b / T7b / T13 the rulings opened
+- Status: in progress (2026-09-16) - EVERY BUILD SLICE HAS LANDED (T1-T13 incl. T2b, T3b, T3c, T5b, T5c, T6b, T7b); the record of each is written (CAPABILITIES rows 37 / 75 / 119 / 43 / 56 / 116 / 117 / 121 / 147 / 184 / 318, BACKLOG R26-137..155, doc 41, doc 43 s43.5.1, the lane register); rulings E99 s39-s53 recorded verbatim. OPEN: the four cards the operator has not yet answered (HG7b rails, HG2b-2 the planted ground, HG2-2 the closing, HG6-2 the throw) and their rulings into OPERATOR-RULINGS; the drift plate's visible three-way proof (E99 s38, a lane running); the docs layers rebuilt once the voice lane's staged commit lands (CAPABILITIES is shared with it); then the plan closes
 - Owner: parent (Claude/Fable docs lane)
 - Depends on: every gate ruled
 - Write set: `docs/content-video-engine/CAPABILITIES.md`, `docs/content-video-engine/BACKLOG.md` (rows R26-70, R26-76,
