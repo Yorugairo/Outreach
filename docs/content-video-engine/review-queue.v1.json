@@ -79,7 +79,8 @@
         "R26-122 (open beside it)",
         "E99 s38",
         "E99 s38 (the three-way proof)",
-        "P61 HG-drift"
+        "P61 HG-drift",
+        "E99 s55"
       ],
       "kind": "watch",
       "title": "The same plate three ways: held, the drift painted, and brought to life by the local ambient lane",
@@ -108,7 +109,7 @@
         "neither"
       ],
       "recommendation": "alive. The drift at 40 px is visible but it is the whole picture sliding - a Ken Burns by another name, the blunt cure E49 retired; the ambient lane moves the water inside a still picture, which is what a living plate is. Two facts for the ruling: LTX-Video produced no motion in five runs, VACE did (the capability row's backend claim needs amending); and if you choose the drift, the engine needs a real amplitude dial first.",
-      "blocks": "the R26-133 fix and its gate; P58 HG2 ruling 4; CAPABILITIES:142-143's backend claim",
+      "blocks": "nothing - ruled E99 s55 (2026-09-16): both: the drift as a dialled option (30 / 40 px) and the alive plate; T14",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:565",
         "docs/research/runs/p58-2-5d/HG2-SHEET.md:51-52",
@@ -119,10 +120,12 @@
         "docs/portable/OPERATOR-RULINGS.md (E99 s38)",
         "docs/content-video-engine/review-answers.jsonl (2026-09-15, r26-133)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s38)",
-        "content/video_engine/review/assembly/r26-133-drift-idle-paints-nothing/alive (the job JSON)"
+        "content/video_engine/review/assembly/r26-133-drift-idle-paints-nothing/alive (the job JSON)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s55)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-16)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s55",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-16 (P61, the drift lane): the three-way clip, the strip, the ambient run and its finding",
       "proofs": [
@@ -250,7 +253,8 @@
         "R26-76",
         "P61 T3 (proof B)",
         "E99 s51 (the splash is a throw)",
-        "P61 HG6-2"
+        "P61 HG6-2",
+        "E99 s56"
       ],
       "kind": "watch",
       "title": "The splash is a THROW now - the ball picked up, thrown forward, splatting where it lands",
@@ -279,7 +283,7 @@
       ],
       "options": [],
       "recommendation": "Approve. Read at the three instants: the ball presses and lifts, it is in the air with its shadow left behind on the board, and the splat opens where it lands, not where it sat - chords of 422 and 566 px, every other phase keeping its seconds, MELT.S untouched, the approved instants standing.",
-      "blocks": "HG6-2",
+      "blocks": "nothing - ruled E99 s56 (2026-09-16): approved; the off-screen throw variant is R26-157",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:482",
         "docs/content-video-engine/CAPABILITIES.md:37",
@@ -293,10 +297,12 @@
         "docs/portable/OPERATOR-RULINGS.md (E99 s51)",
         "docs/content-video-engine/review-answers.jsonl (2026-09-16)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s51)",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T6b)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T6b)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s56)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-16)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s56",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-16 (P61 T6b): the pitch phase - pick-up, arc, splat at the landing; ten goldens; the clips",
       "proofs": [
@@ -458,11 +464,12 @@
         "P61 T3",
         "P61 HG2b",
         "E99 s52 (the ground arrives)",
-        "P61 HG2b-2"
+        "P61 HG2b-2",
+        "E99 s57 (the scene before)"
       ],
       "kind": "watch",
       "title": "The morph onto a planted element - the board's ink now spreads out from the splotch, never snapping in around it",
-      "judge": "Your ruling (E99 s52): the morph is fine, the full fill appearing instantly around the splotch is the problem. What painted it was P47 T3's 'soaked from the first frame' law - the field's crisp rect opaque on the page's first frame (charcoal 5.5 % -> 66.8 % of the stage in one frame). Now the soak's first stain is seeded on the prop itself and the ink spreads out from the splotch over 1.5 s under the morph; the board is whole only when the soak has done its work; the morph itself is untouched. Watch 14.4-20.3 s. Does the ground arrive honestly now? Approve, or name the frame.",
+      "judge": "E99 s57 - you said: this looks good but we have to see the scene before to see if the morph reads. The clip now opens on the plate world four seconds before the cut, the planted form standing in its scene, then the cut, the silhouette alone on the cream, the soak spreading from it, the morph and the build. Watch 11.0-20.3 s. Does the morph read in context? Approve, or name the frame.",
       "where": [
         {
           "label": "the page's first frame (15.00) - the planted form alone on the cream, no board around it (was: the full charcoal fill)",
@@ -502,7 +509,8 @@
         "docs/portable/OPERATOR-RULINGS.md (E99 s52)",
         "docs/content-video-engine/review-answers.jsonl (2026-09-16)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s52)",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3b)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3b)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s57)"
       ],
       "status": "open",
       "ruling": null,
@@ -511,10 +519,10 @@
       "proofs": [
         {
           "type": "clip",
-          "label": "the planted source with its ground arriving: the plate's form, the cut, the traced silhouette alone on the cream, the soak spreading out from it while it deforms into the area, the page built on it",
+          "label": "the scene before, the cut, the planted source: the plate world held, the cut, the traced silhouette alone on the cream, the soak spreading from it, the form deforming into the area, the page built on it",
           "surface": "morph-planted",
           "aspect": "16:9",
-          "t0": 14.4,
+          "t0": 11.0,
           "t1": 20.3,
           "flags": {},
           "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
@@ -938,7 +946,8 @@
         "E99 s39",
         "E99 s50",
         "E99 s53 (the compile re-timed)",
-        "P61 HG2-2"
+        "P61 HG2-2",
+        "E99 s58"
       ],
       "kind": "watch",
       "title": "The chart-to-ball is now one visible closing - the melt's compile re-timed (the hand-over unchanged)",
@@ -963,7 +972,7 @@
       ],
       "options": [],
       "recommendation": "Approve the closing as built; on the default window, my read is that six poses read as a fast fusion, not a snap, and the approved cuts are frozen either way - lengthen `MELT.S` only if the default melt reads rushed to you.",
-      "blocks": "HG2-2",
+      "blocks": "nothing - ruled E99 s58 (2026-09-16): approved",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:549 (R26-117)",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md:333-369 (T3)",
@@ -973,10 +982,12 @@
         "docs/portable/OPERATOR-RULINGS.md (E99 s53)",
         "docs/content-video-engine/review-answers.jsonl (2026-09-16)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s53)",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3c)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3c)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s58)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-16)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s58",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-16 (P61 T3c): the compile as one closing, measured; two fusion goldens; the clips",
       "proofs": [
@@ -3208,7 +3219,8 @@
         "E99 s21",
         "P61 HG7",
         "E99 s43 (the rails re-laid)",
-        "P61 HG7b"
+        "P61 HG7b",
+        "E99 s59"
       ],
       "kind": "watch",
       "title": "The verdict stack on a short, its rails in READING ORDER",
@@ -3233,7 +3245,7 @@
       ],
       "options": [],
       "recommendation": "Approve. Read at 13.6 and 15.4 s: the bands hold left to right and alternate top / bottom by pairs; the second row under each pair is the portrait width's cost (two cards take 688 of 776 px), not a scatter; every card inside the safe box; the focus card owns the middle. The 16:9 wall already reads as a raster and needs a card only if you want the pair alternation on the full frame.",
-      "blocks": "HG7b",
+      "blocks": "nothing - ruled E99 s59 (2026-09-16): the pair method right; the last card centre, the gather, the tighter burst - T7c",
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md (E99 s21)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s21)",
@@ -3244,10 +3256,12 @@
         "docs/portable/OPERATOR-RULINGS.md (E99 s43)",
         "docs/content-video-engine/review-answers.jsonl (2026-09-15)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s43)",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T7b)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T7b)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s59)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-16)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s59",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-16 (P61 T7b): the rails re-laid in reading bands, five goldens, the clip",
       "proofs": [

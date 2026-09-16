@@ -120,13 +120,13 @@ that page only with the operator's ruling written to `docs/portable/OPERATOR-RUL
 | gate | slice | queue card | the ONE question the card asks |
 | --- | --- | --- | --- |
 | **HG1** | T2 | `r26-70-compare-morph` (rewritten) | "Watch the two clips end to end. Does it **read as a transformation, not a cut, and read as intentional** (E99 s34)? The entire chart should transform - every series, datum and axis. Approve, or name what cuts or reads as accidental." **RULED 2026-09-15 (E99 s39): line -> bars taken; bars -> line rebuilt in T2b** **HG1b RULED 2026-09-16 (E99 s50): bars -> line approved; closed** |
-| **HG2** | T3 | `r26-117-ball-into-the-next-chart` (**created by the parent at T3's dispatch** - it does not exist today; it supersedes the `"missing": true` line on `r26-70-compare-morph`) | "The page melts, balls up, and the ball becomes the NEXT FULL CHART with no cut between. Watch 0:00-0:08. Does the hand-over hold, or does it read as a jump?" **T3 LANDED 2026-09-16: card open (watch, clip 14.6-21.2 s)** **RULED 2026-09-16 (E99 s53): good; the chart-to-ball snap re-timed - T3c** |
-| **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" **T3 LANDED 2026-09-16: card open (watch, clip 14.4-20.3 s)** **RULED 2026-09-16 (E99 s52): the morph fine; the fill may not snap in - T3b** |
+| **HG2** | T3 | `r26-117-ball-into-the-next-chart` (**created by the parent at T3's dispatch** - it does not exist today; it supersedes the `"missing": true` line on `r26-70-compare-morph`) | "The page melts, balls up, and the ball becomes the NEXT FULL CHART with no cut between. Watch 0:00-0:08. Does the hand-over hold, or does it read as a jump?" **T3 LANDED 2026-09-16: card open (watch, clip 14.6-21.2 s)** **RULED 2026-09-16 (E99 s53): good; the chart-to-ball snap re-timed - T3c** **HG2-2 RULED 2026-09-16 (E99 s58): approved** |
+| **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" **T3 LANDED 2026-09-16: card open (watch, clip 14.4-20.3 s)** **RULED 2026-09-16 (E99 s52): the morph fine; the fill may not snap in - T3b** **HG2b-2 (E99 s57): the ground reads; the clip re-windowed to the scene before - open** |
 | **HG3** | T4a | `p58-hg3-extruded-bar-leave` | "`form-extruded-bar@proof-leave` beside `form-tilted-line@proof-leave`, as clips. Do the prism's shapes break down enough now? Approve, or say 'more'." **RULED 2026-09-15 (E99 s40): approved** |
 | **HG4** | T4b | `p58-hg3-forms-mount-not-scribble` | "The formed page arriving by the two-plate cross-fade and by the soak, each leaving by the soak's recede (E99 s35). Watch both enters and the leave. Approve, or name what still reads wrong." **RULED 2026-09-15 (E99 s41): approved** |
 | **HG5** | T5 | `r26-118-metallic-ball` | "The ball, before and after: more shadow, a dark Fresnel rim, a metallic band, one point of deep shadow depth. Does it read metallic and heavy now, or still glossy?" **RULED 2026-09-15 (E99 s42): refused - the prior ball + the darkness; T5b** **HG5b RULED 2026-09-16 (E99 s49): the reference body; T5c** |
-| **HG6** | T6 | `r26-76-melt-endings-in-motion` | "The melt as the vortex's motion gathered into one dense, heavy, vibrating point, splashing into a full chart / world plate. Watch the gather and the splash. Approve the new default, or keep today's look behind the flag." **PROOF B LANDED 2026-09-16 via T3: card open (watch, both clips)** **RULED 2026-09-16 (E99 s51): the gather approved; the splash becomes a throw - T6b** |
-| **HG7** | T7 | `r26-82-verdict-stack-choreography` | "The verdict stack on a short with Steel and Paper's choreography - cards that move, then the burst. Watch it beside the Steel and Paper reference clip. Approve, or name the phase that is still flat." **RULED 2026-09-15 (E99 s43): rails in reading order; T7b** |
+| **HG6** | T6 | `r26-76-melt-endings-in-motion` | "The melt as the vortex's motion gathered into one dense, heavy, vibrating point, splashing into a full chart / world plate. Watch the gather and the splash. Approve the new default, or keep today's look behind the flag." **PROOF B LANDED 2026-09-16 via T3: card open (watch, both clips)** **RULED 2026-09-16 (E99 s51): the gather approved; the splash becomes a throw - T6b** **HG6-2 RULED 2026-09-16 (E99 s56): approved; R26-157 the off-screen throw** |
+| **HG7** | T7 | `r26-82-verdict-stack-choreography` | "The verdict stack on a short with Steel and Paper's choreography - cards that move, then the burst. Watch it beside the Steel and Paper reference clip. Approve, or name the phase that is still flat." **RULED 2026-09-15 (E99 s43): rails in reading order; T7b** **HG7b RULED 2026-09-16 (E99 s59): the pair method right; the last card centre, the gather, the tighter burst - T7c** |
 | **HG8** | T8 | `r26-80-agenda-page-owed` | "The beautified agenda page - the plate version of the list effect, each row with its catalogued icon stamped after its sentence (E93). Beside today's three plain rows. Approve, or name the change." **RULED 2026-09-15 (E99 s44): approved as a build** |
 | **HG9** | T9 | `p55-gallery-speed-and-motion` | "The gallery: its build time before and after, and three effects a still cannot show now carrying a clip. Is it fast enough and clear enough? Approve, or name what is still unreadable." |
 | **HG10** | T10 | `r26-84-engine-saved-states` | "Three routes to parallel agents without worktrees, each with its cost and what it breaks, and the agent's recommendation. Which route do we take - or does it need its own plan?" **RULED 2026-09-15 (E99 s47): worktrees with both agents aware; P62 = the register** |
@@ -923,6 +923,24 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   147 passed; effects_catalog_check 0 failures (the voice lane restored its test); page-boxes 44; registry in sync. Card
   `dock_payload:stack` names the reading order.
 
+### T7c: THE VERDICT STACK GATHERS BEFORE IT BURSTS - the last card centre, the gather read off Steel and Paper, the burst tighter (E99 s59)
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK**)
+- Depends on: T7b, HG7b (ruled E99 s59)
+- Write set: `content/video_engine/scripts/species/verdict.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the stack region),
+  `content/video_engine/tests/test_verdict_stack.py`, `content/video_engine/tests/golden/` (`verdict-stack*` on both forms + `@proof-gather`), `content/video_engine/scripts/render_baseline.py`,
+  `content/video_engine/effects/cards/dock_payload.json`, `content/video_engine/assets/page-boxes.v1.json`
+- Acceptance: E99 s59 verbatim - *"the last card should land in the middle so that we can have a gather before the burst ... we're missing the gather, and then
+  the burst should be tighter"*. FIRST measure Steel and Paper's own beat (build-f 702.87-727.6 s, `ev-holds-stack-v1`): what the railed cards do between the
+  last landing and the burst (how far they draw in, over how long, on what easing), and the burst's spacing and bearings. THEN: on both forms the LAST proof
+  lands in the centre and stays; a GATHER phase draws the railed cards toward it on the reference's numbers; the burst leaves from the gathered wall with
+  bearings closer and spacing tighter than 60 ms (the reference rules); the 16:9 keeps its raster, the 9:16 its pairs; goldens at the gather and the burst
+  on both forms; every other golden byte-identical; the card returns with the 9:16 clip beside the reference clip.
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python -m pytest content/video_engine/tests/test_verdict_stack.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --force --only r26-82-verdict-stack-choreography`
+- Evidence: pending
+
 ### T8: THE BEAUTIFIED AGENDA PAGE - the plate version of the list effect
 - Status: complete (2026-09-15) - HG8 open on the queue as `r26-80-agenda-page-owed` (watch)
 - Owner: `implementation_luna` (**ENGINE LOCK #8**)
@@ -1133,6 +1151,23 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   frozen player untouched (E45); `gate_motion_density` on it unchanged: 4 FAIL / 0 WARN / 16 PASS / 1 JUDGE / 8 INFO. Card
   `page_species` span dials name the default. Page-boxes re-pinned sha-only. Validate: node 600/600; sync in sync; pytest 148;
   effects_catalog_check 0 failures; page-boxes 44. The registry regenerates with T11 (another lane holds it staged).
+
+### T14: THE DRIFT'S AMPLITUDE DIAL AND THE ALIVE PLATE AS A ROUTE (E99 s55)
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK**)
+- Depends on: HG-drift (ruled E99 s55)
+- Write set: `content/video_engine/scripts/kinetics/idle.mjs`, `content/video_engine/scripts/build_scene_timeline_f.py` (KINETICS_DIALS `plate_idle_drift_px`),
+  `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the plate idle pose), `content/video_engine/tests/test_kinetics_flags.py`, `content/video_engine/tests/kinetics/idle.test.mjs`,
+  `content/video_engine/tests/golden/` (`plate-drift` re-authored at 30 px + a `plate-alive` golden from the ambient composite as a clip plate), the plate library's
+  intake for the alive composite (`plate-library` scripts, the manifest), `content/video_engine/effects/cards/*.json` (the drift dial; the alive route),
+  `docs/content-video-engine/CAPABILITIES.md` rows 142-143 (the backend claim: VACE works, LTX did not)
+- Acceptance: E99 s55 verbatim - both: a real amplitude dial (`plate_idle_drift_px`, 30 the long-form setting, 40 the shorts setting, the 2 px module constant the floor,
+  never a global default) authored per scene; the alive composite (the still with its generated life region) as a clip plate a row names, with the drift, Ken
+  Burns and the parallax layers composing over it; a golden pair; the approved cuts untouched (E45).
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python -m pytest content/video_engine/tests/test_kinetics_flags.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/effects_catalog_check.py`
+- Evidence: pending
 
 ### T11: THE RECORD - the CAPABILITIES rows, the backlog rows, the queue, the layers
 - Status: in progress (2026-09-16) - EVERY BUILD SLICE HAS LANDED (T1-T13 incl. T2b, T3b, T3c, T5b, T5c, T6b, T7b); the record of each is written (CAPABILITIES rows 37 / 75 / 119 / 43 / 56 / 116 / 117 / 121 / 147 / 184 / 318, BACKLOG R26-137..155, doc 41, doc 43 s43.5.1, the lane register); rulings E99 s39-s53 recorded verbatim. OPEN: the four cards the operator has not yet answered (HG7b rails, HG2b-2 the planted ground, HG2-2 the closing, HG6-2 the throw) and their rulings into OPERATOR-RULINGS; the drift plate's visible three-way proof (E99 s38, a lane running); the docs layers rebuilt once the voice lane's staged commit lands (CAPABILITIES is shared with it); then the plan closes
