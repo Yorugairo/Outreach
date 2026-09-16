@@ -21,6 +21,7 @@ import argparse
 import datetime as dt
 import json
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -253,7 +254,8 @@ def _process_env(env: dict[str, Any]) -> dict[str, str]:
 
 def claude_argv(order: dict[str, Any], profile: str | None) -> list[str]:
     packet = json.dumps({"packetId": order["packetId"], "brief": order["brief"]}, ensure_ascii=False)
-    argv = ["claude", "-p", "--output-format", "json"]
+    claude_bin = shutil.which("claude") or "claude"
+    argv = [claude_bin, "-p", "--output-format", "json"]
     if profile:
         argv += ["--agent", profile]
     argv.append(packet)
@@ -276,7 +278,7 @@ def send_claude(args: argparse.Namespace, order: dict[str, Any], folder: Path, l
 
     sent_at = dt.datetime.now().astimezone().isoformat(timespec="seconds")
     started = time.time()
-    proc = subprocess.run(argv, capture_output=True, text=True)
+    proc = subprocess.run(argv, capture_output=True, text=True, shell=(os.name == "nt"))
     seconds = round(time.time() - started, 1)
     payload = _parse_json(proc.stdout)
     reply_text = payload.get("result") if isinstance(payload, dict) else None
