@@ -81,7 +81,7 @@ retrievable and is not evidence.
    - **Tier 3 (Master Blueprint Citation & Claim Linking):** In `docs/research/<area>/<TOPIC>_RESEARCH_BLUEPRINT.md`, every data row or key claim must link both forward to the primary web URL and backward to the local evidence run file:
      `[Metric | exact value with units | Local Evidence: docs/research/runs/<slug>/findings_<track>.md#L45 | primary authority | URL: https://… | Verified YYYY-MM-DD]`.
      A figure without a live URL is written `[UNVERIFIED]` and listed under SOURCES-TO-VERIFY; it never enters a script or ruling until verified. A figure computed rather than found carries `[DERIVED: from <sources>, <how>]`.
-   - **Tier 4 (Retrieval Layer Synchronization):** Compiled by `python content/video_engine/scripts/build_docs_layers.py --write` into JSONL layers (`docs/DOCS-INDEX.jsonl`, `DOCS-MANIFEST.jsonl`) for single-line agent retrieval via `docs_find.py`.
+   - **Tier 4 (Retrieval Layer Synchronization):** JSONL layers (`docs/DOCS-INDEX.jsonl`, `DOCS-MANIFEST.jsonl`, ten siblings) are BUILD OUTPUT, gitignored since P63 (2026-09-16): `docs_find.py` rebuilds a stale layer by input digest before it reads (`docs_layers.ensure`), so run `docs_find.py` and never a build by hand; `build_docs_layers.py --write` is a full pass, `--ensure` the incremental one.
 4. **90-Day Freshness Lifecycle:**
    Research blueprints are living documents. Any blueprint whose `Verified YYYY-MM-DD` or header date is older than **90 days** is flagged with `[AGING - RE-VERIFICATION RECOMMENDED]` by the provenance audit. To refresh, re-verify claims against Tier 1/2 sources, update the date, and log updates in a Changelog.
 5. **Python Research Provenance & Evidence Audit Gate:**

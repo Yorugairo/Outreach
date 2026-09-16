@@ -133,7 +133,8 @@ governs how deep research goes and how well attention holds over a long integrat
 
 **Guards that enforce this policy mechanically (user-level hooks, zero model calls, 2026-09-05):**
 `~/.claude/hooks/context_guard.py` on PreToolUse Read|Bash denies a `Read` over 400 lines with no `limit`, a bare
-`cat` of such a file with no narrowing pipe, and a `git commit` while `docs/DOCS-INDEX.jsonl` is stale (each denial
+`cat` of such a file with no narrowing pipe (the `git commit`-while-stale clause was retired by P63 T4 on 2026-09-16: the
+layers are build output, rebuilt by digest on read, and no commit waits on them) (each denial
 carries the fix); `~/.claude/hooks/dispatch_ledger.py` on SubagentStop appends every dispatch to
 `evals/DISPATCH-LOG.jsonl`. Both pipe-tested; hooks load at session start. The always-loaded layer was cut the same
 day: AGENTS.md sections 2-8 (the SEO platform) moved to `docs/AGENTS-SEO-PLATFORM.md` (15.4 -> 9.9 KB), the ECC meta

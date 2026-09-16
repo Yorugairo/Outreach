@@ -184,3 +184,29 @@ docs/research/runs/bridge/
 # P55 T9: the generated effects gallery (a review page built from docs/EFFECTS-CATALOG.jsonl + copied golden frames)
 content/video_engine/effects/gallery/
 docs/.layers/
+# P63 T4 (2026-09-16): the twelve docs retrieval layers are BUILD OUTPUT - rebuilt by digest on read
+# (docs_layers.ensure), never tracked; docs/DOCS-INDEX.config.json is an input and stays tracked
+docs/DOCS-INDEX.jsonl
+docs/DOCS-INDEX.md
+docs/CAPABILITIES-INDEX.jsonl
+docs/CAPABILITIES-INDEX.md
+docs/ASSETS-INDEX.jsonl
+docs/ASSETS-INDEX.md
+docs/RESEARCH-LEDGER.jsonl
+docs/RESEARCH-LEDGER.md
+docs/EFFECTS-CATALOG.jsonl
+docs/EFFECTS-CATALOG.md
+docs/DOCS-MANIFEST.jsonl
+docs/DOCS-MANIFEST.md
+docs/DOCS-TOPICS.jsonl
+docs/DOCS-TOPICS.md
+docs/DOCS-CITATIONS.jsonl
+docs/GATES-REGISTRY.jsonl
+docs/GATES-REGISTRY.md
+docs/ANIMATION-REGISTRY.jsonl
+docs/ANIMATION-REGISTRY.md
+docs/CRAFT-MAP.jsonl
+docs/CRAFT-MAP.md
+docs/DOC-OVERLAP.jsonl
+docs/DOC-OVERLAP.md
+docs/DOCS-STANDARD.md

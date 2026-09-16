@@ -258,3 +258,18 @@ def test_stamp_writes_every_digest_without_building(mini):
     assert DL.stamp(None, repo, scripts, layers=layers) == ["up", "down"]
     assert builds(repo) == []
     assert DL.stale(None, repo, scripts, layers=layers) == []
+
+def test_every_layer_output_is_build_output_ignored_and_untracked() -> None:
+    """P63 T4 (2026-09-16): the layers are build output. Every output path is gitignored and none is tracked, so no
+    commit can be blocked or conflicted by a generated layer; docs/DOCS-INDEX.config.json is an INPUT and stays tracked."""
+    import subprocess
+    repo = Path(__file__).resolve().parents[3]
+    if not (repo / ".git").exists():
+        pytest.skip("not a git checkout")
+    outputs = [o for layer in DL.LAYERS for o in layer.outputs]
+    ignored = subprocess.run(["git", "check-ignore", "--", *outputs], cwd=repo, capture_output=True, text=True)
+    assert sorted(ignored.stdout.split()) == sorted(outputs), "an output is not ignored"
+    tracked = subprocess.run(["git", "ls-files", "--", *outputs], cwd=repo, capture_output=True, text=True)
+    assert tracked.stdout.strip() == "", f"tracked build output: {tracked.stdout}"
+    cfg = subprocess.run(["git", "ls-files", "--", "docs/DOCS-INDEX.config.json"], cwd=repo, capture_output=True, text=True)
+    assert cfg.stdout.strip() == "docs/DOCS-INDEX.config.json"
