@@ -78,6 +78,9 @@ export const STOP = Object.freeze({
   /* THE RECEIVER: mass reads as the SURFACE dipping and settling - 2-6 px, 4-8 frames [DERIVED in the report, Q3] - never as a
      stage shake, which reads as violence [source on file, Q3]; the shake stays as an opt-in for a hit that IS violent */
   DIP_PX: 4,            /* the dip at impact 1.0 (metal 6, paper 2.8, liquid 2, ink 4) */
+  PRESS_PX: 6,          /* THE PICK-UP's press (E99 s51): how far a thing sinks into the surface as its weight is sold, before
+                           it is lifted off [DERIVED: the top of the report's own 2-6 px surface-dip range (Q3), because the
+                           thing being picked up here is the densest on the board; `pickUpXf` reads it through `o`] */
   SHAKE_PX: [[6, -3], [-4, 2], [0, 0]],   /* the violent hit's three-frame stage shake (opt-in: `violent`) */
   G_PX_S2: 2400,        /* the rebound's gravity in px/s^2 [DERIVED: a 48 px drop over 0.14 s] */
   LAG_FRAMES: 1,     /* [DERIVED: HyperFrames /prompting/motion, verified 2026-09-06; measure on ours] */
@@ -213,6 +216,32 @@ export const rollXf = (dist, radius, decel, ts) => {
   if (!(ts > 0)) return { s: 0, v: v0, turn: 0, T, done: !(D > 0) };
   const t = Math.min(ts, T), s = v0 * t - 0.5 * a * t * t;
   return { s, v: Math.max(0, v0 - a * t), turn: s / r, T, done: ts >= T };
+};
+
+/* THE PICK-UP (E99 s51, P61 T6b: "the ball actually picked up and then thrown forward to splat on the canvas"): a
+   LANDING RUN BACKWARDS, with the anticipation moved to the FRONT, because the weight is sold before the thing moves
+   either way (48 s48.6) and on a pick-up what is sold is the PRESS - the thing settles INTO the surface a moment
+   before it is lifted off it. Two beats, in landXf's own proportions (ANTIC_S : DROP_S) so the module states the
+   split once:
+     PRESS   the thing sinks `PRESS_PX` into the surface and takes the clamp (a negative alpha: compressed along the
+             axis, stretched across it), a half-sine out and back - the receiver's own dip, doc 48's 2-6 px [Q3]
+     LIFT    `landXf`'s drop read at t' = ANTIC_S + DROP_S * (1 - u): the drop eases IN, so read backwards it leaves
+             the surface fast and slows as it comes off - which is a launch, exactly as `throwXf` run backwards is
+     the one the melt's `throw` ending already uses. `DROP_PX` (through `o`) is how far it is lifted.
+   `t` is seconds into the pick-up and `S` its whole length. Pure; it paints nothing. Added 2026-09-16 with NO change
+   to anything this module already painted - `landXf` itself is called, not copied. */
+export const pickUpXf = (mass, t, S, o = {}) => {
+  const P = Object.assign({}, STOP, o), T = Math.max(0.05, S);
+  const press = T * P.ANTIC_S / Math.max(1e-6, P.ANTIC_S + P.DROP_S);
+  if (t < press) {
+    const u = sa01(t / Math.max(1e-6, press)), bump = Math.sin(Math.PI * u), dip = (P.PRESS_PX || 0) * bump;
+    return { x: 0, y: dip, rot: 0, alpha: -P.ANTIC_SQUASH * bump, theta: Math.PI / 2, phase: "press", u,
+             h: 0, ground: dip, shake: { x: 0, y: 0 } };
+  }
+  const u = sa01((t - press) / Math.max(1e-6, T - press));
+  const st = landXf(mass, P.ANTIC_S + P.DROP_S * (1 - u), o);
+  return { x: 0, y: st.y, rot: 0, alpha: st.alpha, theta: st.theta, phase: "lift", u, h: Math.max(0, -st.y),
+           ground: 0, shake: { x: 0, y: 0 } };
 };
 
 /* the CSS a painter appends: translate, the tumble, the area-preserving squash - fixed decimals. A negative alpha is a

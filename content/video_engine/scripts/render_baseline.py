@@ -134,13 +134,26 @@ PROOF_FRAMES = {
     # exit string is `:body=slate` / `:body=reference`. No flag: a body colour is AUTHORED, never switched on.
     "melt-ball-slate@proof-settle": ("melt-ball-slate", {}, 16.98),          # the ball melted to the BOARD's own ink (--lp-char #25313C)
     "melt-ball-reference@proof-settle": ("melt-ball-reference", {}, 16.98),  # ... and to the blueprint's near-black metal (LIVING_METALLIC_DROP s3.3: the albedo base colour is pure black, the read is the specular)
-    # P61 T6 / E99 s2 - THE GATHER, THE POINT, THE SPLASH AND THE PLATE (`melt:gather:weight:splash:plate`, a 3.65 s
-    # window off MELT_CUT: gather 15.00 -> 15.75, ball -> 16.375, weight -> 17.525, splash -> 18.65). The base frame is
-    # the gather's own midpoint; these are the three instants it cannot show. No flag: the gather is AUTHORED on the
-    # exit string, like the weight phase and the depth - a melt that does not say `gather` renders the sag it always did.
+    # P61 T6 / E99 s2 - THE GATHER, THE POINT, THE SPLASH AND THE PLATE (`melt:gather:weight:splash:plate`, a 4.42 s
+    # window off MELT_CUT: gather 15.00 -> 15.75, ball -> 16.375, weight -> 17.525, PITCH -> 18.295, splash -> 19.42).
+    # The base frame is the gather's own midpoint; these are the instants it cannot show. No flag: the gather is
+    # AUTHORED on the exit string, like the weight phase and the depth - a melt that does not say `gather` renders the
+    # sag it always did. P61 T6b / E99 s51 inserted the PITCH (`MELT.T_S` 0.77 s: the pick-up and the flight), which
+    # takes its share out of what is LEFT - so every phase before it keeps its seconds to the frame (`@proof-point` is
+    # byte-identical) and the two instants after it are the SAME instants of the ending, 0.77 s later.
     "melt-gather@proof-point": ("melt-gather", {}, 15.71),     # THE POINT: the ink amassed on it, the point wearing T5's material (dark grazing rim, metallic band, deep-shadow well, the spot on the light) and VIBRATING on drop.mjs's own floor at G_VIB
-    "melt-gather@proof-splash": ("melt-gather", {}, 18.27),    # MID-BLOOM: the splat's stains opening through the board's reveal mask, the dock plate coming up through them (the ink-bloom route, INTAKE-INK-BLOOM-2026-09-08)
-    "melt-gather@proof-plate": ("melt-gather", {}, 18.62),     # THE PLATE LANDED: the bloom cleared, the scenic plate whole on the board, springing to rest - and no cut anywhere in the window (E47: the splash IS the transition into it)
+    "melt-gather@proof-pickup": ("melt-gather", {}, 17.80),    # P61 T6b - THE BALL IS PICKED UP: its weight sold first (it pressed 6 px into the board and took the clamp), now LIFTED 45 px off it, the contact shadow under it gone soft and wide - and it has not travelled one pixel yet
+    "melt-gather@proof-flight": ("melt-gather", {}, 18.05),    # ... MID-FLIGHT: 293 px along a 566 px ballistic chord toward the board's own centre, stretched ALONG the travel by the squash tensor, its shadow 47 px behind it (LAG_FRAMES) and 152 px below it on the line from the seat to the landing
+    "melt-gather@proof-splat": ("melt-gather", {}, 18.38),     # ... AND SPLATS WHERE IT LANDS: the ball flat at the board's centre, the 14 droplets thrown out from the impact point (not from the seat it was compiled on), the board answering with groundShake
+    "melt-gather@proof-splash": ("melt-gather", {}, 19.04),    # MID-BLOOM: the splat's stains opening through the board's reveal mask, the dock plate coming up through them (the ink-bloom route, INTAKE-INK-BLOOM-2026-09-08)
+    "melt-gather@proof-plate": ("melt-gather", {}, 19.39),     # THE PLATE LANDED: the bloom cleared, the scenic plate whole on the board, springing to rest - and no cut anywhere in the window (E47: the splash IS the transition into it)
+    # P61 T6b / E99 s51 - THE SAME THREE INSTANTS ON THE PLAIN SPLASH (`melt:splash:chart`, no gather and no weight
+    # phase: a 2.37 s window off the cut at 15.0 - sag 15.00 -> 15.48, ball -> 15.88, PITCH -> 16.65, splash -> 17.37).
+    # The operator, E99 s51: "the ball actually picked up and then thrown forward to splat on the canvas ... I want it
+    # to be thrown." These three are that sentence, in order, with nothing else in the window to read them by.
+    "melt-splash@proof-pickup": ("melt-splash", {}, 16.13),    # PICKED UP: off the board by 39 px, stretched along the lift, the shadow left on the ground line under it - and not one pixel along the chord yet
+    "melt-splash@proof-flight": ("melt-splash", {}, 16.39),    # THROWN FORWARD: 125 px of the 422 px chord, high over the board on the arc, the shadow 29 px behind and 124 px below it
+    "melt-splash@proof-splat": ("melt-splash", {}, 16.76),     # SPLAT: at the board's own centre, the droplets out along their rays from the impact, the flattened ball still on top of them
     # P61 T3 / R26-117 - THE BALL BECOMES THE NEXT FULL CHART (`melt:morph`, a 2.9 s window off the cut at 15.0:
     # sag 15.00 -> 15.87, ball -> 16.595, HAND 16.595 -> 17.90, and the page's own build from there). The base frame
     # is the HAND-OVER itself; these are the three instants it cannot show. They carry `arap_morph` because the

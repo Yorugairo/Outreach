@@ -62,7 +62,8 @@ def _node(expr: str):
     """Evaluate an expression against the three modules and return its JSON."""
     src = (
         f'import {{ MELT, meltOpts, meltBlur, meltState, meltGatherAt, meltGatherSpread, meltGatherCore, '
-        f'meltGatherCss, meltGatherSvg, meltVibGain, meltVibFloor, meltBallRing }} '
+        f'meltGatherCss, meltGatherSvg, meltVibGain, meltVibFloor, meltBallRing, meltShares, meltPhase, '
+        f'meltPitchShare, meltLandingAt }} '
         f'from {json.dumps(MELT_MJS.as_uri())};\n'
         f'import {{ DROP, dropRing }} from {json.dumps(DROP_MJS.as_uri())};\n'
         f'import {{ LP_RETRACT, lpVortex }} from {json.dumps(SPIRAL_MJS.as_uri())};\n'
@@ -433,3 +434,153 @@ def test_the_golden_splashes_into_the_committed_dock_plate_with_no_cut() -> None
     short = ROOT / "content/video_engine/projects/systems-and-blowups/japan-tariff-trick"
     hits = [p for p in short.rglob("*.py") if "gather" in p.read_text(encoding="utf-8", errors="ignore")]
     assert not hits, f"E99 s34: melt:gather must stay off the approved Japan short - {hits}"
+
+
+# ---- 8. P61 T6b / E99 s51: THE SPLASH IS A THROW --------------------------------------------------------------------
+# The operator on THIS card's two clips, 2026-09-16 (`docs/portable/OPERATOR-RULINGS.md:3220`):
+#
+#     "This is good, but I'd want to see the ball actually picked up and then thrown forward to splat on the
+#      canvas, right now it looks more like it just bounces, rolls, then bursts. I want it to be thrown."
+#
+# Measured before the build, on the served player and frame by frame: the ball's body group carried ONE transform
+# string from the ball's first frame to the last stain - it never rose and never advanced, it flattened on the seat it
+# was compiled on (747.79, 882.45 in the world's px) and the stains grew from there. What follows pins the three beats
+# that replace that, and the one thing that must not move: every phase BEFORE the pitch, to the frame.
+
+# the geometry the probes below are read in - the golden's own, measured off `__melt.rect` and the world's box
+WORLD = {"w": 2112, "h": 1188}
+INK_RECT = {"x": 162.87379455566406, "y": 97.86691284179688, "w": 1163.697494506836, "h": 962.1655578613281}
+STAGE_BOX = {"x": WORLD["w"] / 22, "y": WORLD["h"] / 22, "w": WORLD["w"] * 10 / 11, "h": WORLD["h"] * 10 / 11}
+PITCH_JS = ("const rect = " + json.dumps(INK_RECT) + ", sb = " + json.dumps(STAGE_BOX) + ";\n"
+            "const O = (x) => Object.assign({ rect, stagebox: sb }, meltOpts(x));\n"
+            "const walk = (x) => { const o = O(x), out = []; "
+            "for (let f = 0; f <= Math.round(o.secs * MELT.FPS); f++) "
+            "out.push(meltState(0, f / MELT.FPS, o, (k) => 0.5)); return out; };\n")
+
+
+def test_the_pitch_lengthens_the_window_and_moves_no_phase_that_came_before_it() -> None:
+    """`MELT.T_S` is inserted the way `W_S`, `G_S` and `M_S` are: the pitch's share comes out of what is LEFT, so the
+    sag, the compile, the gather and the weight phase keep their seconds EXACTLY - which is why `melt-gather` and
+    `melt-gather@proof-point`, the two frames the operator approved on this card, are byte-identical below."""
+    got = _node("""(() => {
+      const secsWas = 1.6 + MELT.G_S + MELT.W_S, secsNow = meltOpts(""" + json.dumps(GATHER_EXIT) + """).secs;
+      const was = meltShares({ secs: secsWas, ending: "throw", weight: true, gather: true }).map((s) => s * secsWas);
+      const now = meltShares(Object.assign({}, meltOpts(""" + json.dumps(GATHER_EXIT) + """))).map((s) => s * secsNow);
+      return { secsWas, secsNow, was, now, plain: meltOpts("melt").secs, throwS: meltOpts("melt:throw").secs,
+               pitchOnThrow: meltPitchShare(1.6, meltOpts("melt:throw")),
+               pitchOnMorph: meltPitchShare(2.9, meltOpts("melt:morph")) }; })()""")
+    assert got["secsNow"] == pytest.approx(got["secsWas"] + 0.77), "the window grew by exactly T_S"
+    assert got["now"][0] == pytest.approx(got["was"][0], abs=1e-9), "the gather keeps its seconds"
+    assert got["now"][1] == pytest.approx(got["was"][1], abs=1e-9), "and the ball phase its own"
+    assert got["now"][2] == pytest.approx(got["was"][2], abs=1e-9), "and the weight phase its own"
+    assert got["was"][3] == 0, "the reference window is the one with no pitch at all"
+    assert got["now"][4] == pytest.approx(got["was"][4], abs=1e-9), "and the ending its own"
+    assert got["now"][3] == pytest.approx(0.77), "the pitch is T_S long"
+    assert got["plain"] == 1.6 and got["throwS"] == 1.6, "a melt that is not a splash is the window it always was"
+    assert got["pitchOnThrow"] == 0 and got["pitchOnMorph"] == 0, "and has no pitch at all"
+
+
+def test_the_ball_is_PICKED_UP_it_rises_before_it_advances() -> None:
+    """E99 s51's first clause, measured: the weight is sold first (the ball presses INTO the board and takes the clamp
+    squash), then it is LIFTED off it - and not one pixel along the chord has been covered when it is at the top."""
+    got = _node("(() => {" + PITCH_JS + """
+      const w = walk(""" + json.dumps(GATHER_EXIT) + """).filter((s) => s.phase === "pitch");
+      const beats = w.map((s) => s.pitch), ys = w.map((s) => s.xf.y), xs = w.map((s) => s.xf.x);
+      const x0 = xs[0];
+      return { beats: [...new Set(beats)], n: w.length,
+               press: Math.max(...w.filter((s) => s.pitch === "press").map((s) => s.xf.y)),
+               clamp: Math.min(...w.map((s) => s.squash.a)),
+               lift: Math.min(...w.filter((s) => s.pitch === "lift").map((s) => s.xf.y)),
+               liftMoved: Math.max(...w.filter((s) => s.pitch === "lift").map((s) => Math.abs(s.xf.x - x0))),
+               firstRise: ys.findIndex((y) => y < -1e-9), firstAdvance: xs.findIndex((x) => Math.abs(x - x0) > 1e-9),
+               r: w[0].r }; })()""")
+    assert got["beats"] == ["press", "lift", "flight"], "three beats, in the ruling's own order"
+    assert got["press"] > 1, f"the ball never pressed into the board: {got['press']}"
+    assert got["clamp"] < 0, "and never took the clamp squash (a negative alpha: compressed, 48 s48.6)"
+    assert got["lift"] < -0.4 * got["r"] * 0.55, f"it was not lifted off the board: {got['lift']} px"
+    assert got["liftMoved"] == 0, "and it advanced while being lifted - the rise must come first"
+    assert 0 <= got["firstRise"] < got["firstAdvance"], \
+        f"the ball advanced before it rose: rise at f{got['firstRise']}, advance at f{got['firstAdvance']}"
+
+
+def test_the_flight_ADVANCES_MONOTONICALLY_onto_the_landing_and_the_shadow_trails_it() -> None:
+    """The second clause: "thrown forward". The ball closes on the landing at every pose of the flight and never once
+    moves away from it; the shadow reads the clock LAG_FRAMES late (HF-2), so it is always BEHIND the ball."""
+    got = _node("(() => {" + PITCH_JS + """
+      const w = walk(""" + json.dumps(GATHER_EXIT) + """).filter((s) => s.phase === "pitch" && s.pitch === "flight");
+      const land = meltLandingAt(sb, O(""" + json.dumps(GATHER_EXIT) + """));
+      const pt = (s) => [s.centre[0] + s.xf.x, s.centre[1] + s.xf.y];
+      const gaps = w.map((s) => Math.hypot(pt(s)[0] - land[0], pt(s)[1] - land[1]));
+      const lag = w.map((s) => [s.xf.x - s.shadowX, s.xf.y - s.shadowY]);
+      return { land, n: w.length, xs: w.map((s) => s.xf.x), gaps, lag,
+               chord: Math.hypot(land[0] - w[0].centre[0] - w[0].xf.x, land[1] - w[0].centre[1] - w[0].xf.y),
+               blur: w.map((s) => s.shadow.blur) }; })()""")
+    assert got["land"] == [WORLD["w"] / 2, WORLD["h"] / 2], "the landing IS the board's own centre"
+    assert got["n"] >= 5, f"the flight is {got['n']} poses"
+    xs = got["xs"]
+    assert all(b >= a - 1e-9 for a, b in zip(xs, xs[1:])), f"the flight went backwards: {xs}"
+    assert all(b <= a + 1e-9 for a, b in zip(got["gaps"], got["gaps"][1:])), \
+        f"the flight moved away from the landing: {got['gaps']}"
+    assert got["gaps"][-1] < got["gaps"][0] * 0.2, "and it is all but on the landing at the last pose"
+    for dx, dy in got["lag"][1:]:
+        assert dx > 0, "the shadow is not behind the ball along the travel"
+        assert dy < 0, "and not below it on the line from the seat to the landing"
+    assert max(got["blur"]) > 5 and min(got["blur"]) < 4, \
+        f"the shadow's blur does not carry the height off the board: {got['blur']}"
+
+
+def test_the_first_stain_IS_the_landing_point() -> None:
+    """The third clause: "to splat on the canvas". The splat and the stains grow from the point of IMPACT - the core
+    stain is exactly the landing, and every droplet leaves it - never from the seat the ball was compiled on, which is
+    what the operator watched and called a burst. The tolerance is 1e-6 px: it is the same point, not a near one."""
+    got = _node("(() => {" + PITCH_JS + """
+      const w = walk(""" + json.dumps(GATHER_EXIT) + """).filter((s) => s.phase === "fly");
+      const land = meltLandingAt(sb, O(""" + json.dumps(GATHER_EXIT) + """));
+      const hit = w[0], paint = w.find((s) => s.stains.length);
+      const core = paint.stains[paint.stains.length - 1];
+      return { land, seat: [hit.centre[0], hit.centre[1]],
+               ball: [hit.centre[0] + hit.xf.x, hit.centre[1] + hit.xf.y],
+               core: [core.x, core.y],
+               drops: hit.drops.map((d) => Math.hypot(d.x - land[0], d.y - land[1])),
+               shake: w.slice(0, 4).map((s) => [s.shake.x, s.shake.y]),
+               lastShake: w[w.length - 1].shake }; })()""")
+    assert abs(got["core"][0] - got["land"][0]) < 1e-6 and abs(got["core"][1] - got["land"][1]) < 1e-6, \
+        f"the first stain is not the landing: {got['core']} vs {got['land']}"
+    assert math.hypot(got["core"][0] - got["seat"][0], got["core"][1] - got["seat"][1]) > 300, \
+        "and it is a long way from the seat the ball was compiled on - the defect this slice repaired"
+    assert max(got["drops"]) < 4, "every droplet leaves the impact point"
+    assert any(abs(x) > 0 or abs(y) > 0 for x, y in got["shake"]), "the board answers the hit (groundShake)"
+    assert got["lastShake"] == {"x": 0, "y": 0}, "and is still again by the end - three frames, then exactly zero"
+
+
+@pytest.mark.parametrize("name,sha", [
+    # THE THREE NEW PROOFS, on the surface the operator watched (PROOF_FRAMES in render_baseline.py)
+    ("melt-gather@proof-pickup", "b734ae334f940a2be9bcd625fa212bf627114512327aad82d041b45f500e12d9"),
+    ("melt-gather@proof-flight", "51a3063acf17595db514eeee9bb37b262b49e68ce5029bfcf4eb959764f14e86"),
+    ("melt-gather@proof-splat", "e90b95b1ff1c93e327aac04fe54c16823260f01555a05e115b142e584263e8c9"),
+    # ... and the two instants of the ending that moved with it, 0.77 s later
+    ("melt-gather@proof-splash", "3570a95171ed67f5ff0bdebc5e6f7acb52f652a76d3095434819fbf359ff5131"),
+    ("melt-gather@proof-plate", "b31c39b3186cca9b26c90c72048e85d52d956be4f9e60a59de22ee15069666a2"),
+    # THE TWO THAT MUST NOT MOVE: the gather's own midpoint and the point - the frames E99 s51 approved
+    ("melt-gather", "78bbada0891a5f526afa205cf2478bdc3000cc4897c35c4735d9784835477a86"),
+    ("melt-gather@proof-point", "27192ed0ce1b3f96f213c03b9e7feed97a8b864baaa5eff927522438f2943908"),
+    # ... and the melts that name no splash, which have no pitch at all
+    ("melt-page", "7c2a199da7ff00c3a27c64adf6503907fd9ebb9724a8462865331c654ac24455"),
+    ("melt-morph", "47832a8548dcebe7e8e9b411ee97b7d24c1616effee6c0299d3dc719f841e18b"),
+    ("melt-ball-roll", "2186e64413f495c8f42f84b2b3c908d4c7001aa237728c797201981f54d0041b"),
+    ("melt-depth", "0b0c145050461022c437b6f2b83e02113a81693d8cf41384e34c9cf030a549ee"),
+])
+def test_the_pitchs_goldens_are_their_own_sha256(name: str, sha: str) -> None:
+    """A golden that moves is named here with its hash, and one that must not move is named here too: this is the
+    record of exactly what E99 s51 changed on disk."""
+    import hashlib
+    got = hashlib.sha256((FRAMES / f"{name}.png").read_bytes()).hexdigest()
+    assert got == sha, f"{name}: {got}"
+
+
+def test_two_seeks_of_the_flight_are_the_same_bytes() -> None:
+    """The pitch is `throwXf` and `pickUpXf` on a stepped clock and nothing else - no integration, no state - so a cold
+    render of mid-flight is the warm one, to the byte."""
+    first = RB.render_surface("melt-gather@proof-flight")
+    assert first == RB.render_surface("melt-gather@proof-flight")
+    assert first == (FRAMES / "melt-gather@proof-flight.png").read_bytes(), "and it is the pinned golden"

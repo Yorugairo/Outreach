@@ -374,6 +374,21 @@
      "trigger": "u = BALL_END (the ball's end)"
     },
     {
+     "name": "pitch",
+     "does": "the ball is PICKED UP - pressed into the board, its weight sold, then lifted off it - and THROWN forward on a ballistic arc to the board's centre, its shadow a frame behind; the splat opens where it lands",
+     "trigger": "u = the ball's end (after the weight phase when one is authored), on a `splash` ending only - every other ending has no pitch at all and its window is unchanged",
+     "dials": {
+      "T_S": "0.77",
+      "PK_S": "0.32",
+      "FL_S": "0.45",
+      "T_MAX": "0.35",
+      "T_AT": "0.5, 0.5",
+      "T_LIFT_R": "0.55",
+      "T_PRESS_PX": "6",
+      "T_ARC": "0.18"
+     }
+    },
+    {
      "name": "hand",
      "does": "on `melt:morph` the ending IS the hand-over: the ball's ring is the next page's prop, its body wears the morphing outline, and its paint gives way to the page's own ink on that one shape",
      "trigger": "u = the ball's end (meltHandAt), on `melt:morph` only - and it runs for the rest of the window",
@@ -476,12 +491,12 @@
     },
     {
      "token": "splash:chart",
-     "means": "The melt: splash into the next chart: The ink ball splatters back onto the board and the splatter forms the next chart, which arrives built.",
+     "means": "The melt: splash into the next chart: the ball is picked up, thrown forward and splats at the board's centre; the splatter forms the next chart, which arrives built.",
      "source_set": "MELT_ENDINGS"
     },
     {
      "token": "splash:plate",
-     "means": "The melt: splash that paints a plate: The ink ball splatters and a narrative plate springs up out of it, reading as painted by that ink.",
+     "means": "The melt: splash that paints a plate: the ball is picked up and thrown at the board's centre, and a narrative plate springs up out of the splat, as if painted by that ink.",
      "source_set": "MELT_ENDINGS"
     },
     {

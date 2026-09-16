@@ -225,78 +225,37 @@
         "P61 HG6",
         "R26-76",
         "P61 T3 (proof B)",
-        "E99 s51"
+        "E99 s51 (the splash is a throw)",
+        "P61 HG6-2"
       ],
       "kind": "watch",
-      "title": "The melt gathers to one dense point and splashes into a world plate (A) and becomes a fully assembled chart (B)",
-      "judge": "E99 s2: the melt as the swirl's motion gathered into ONE point - dense, heavy, vibrating - that splashes into a scenic world plate or a fully assembled chart. Two clips. PROOF A (melt-gather, 14.7-18.9 s): the four series curl into one spiral on the point, the point wears the ball's material and vibrates, the splash paints the world plate up through the ink. PROOF B (melt-gather-morph, 14.6-22.1 s): the same gather to the same point, and the point is handed to the next page and becomes the full chart, built by the page's own hand. Watch both. Approve the gather as the melt's new form, or keep today's sag behind the flag.",
+      "title": "The splash is a THROW now - the ball picked up, thrown forward, splatting where it lands",
+      "judge": "Your ruling (E99 s51): the gather is good, but the ball should be picked up and thrown forward to splat on the canvas - not bounce, roll and burst. Measured, the splash had no travel at all: the ball burst on its own seat. Now a PITCH phase of its own (0.77 s): the ball presses into the board and is lifted (the anticipation, the shadow tightening under it), flies forward in a ballistic arc toward the canvas's centre (the shadow lagging behind), and SPLATS where it lands - the stains grow from the impact point. Two clips: the gather into the plate (14.7-19.6 s) and the plain splash into the chart (14.7-17.5 s). Does it read as thrown now? Approve, or name what still reads as a bounce. (One composition to know: with `weight` authored before a splash, the roll still runs AWAY from the landing as a wind-up - say if it should roll toward it.)",
       "where": [
         {
-          "label": "melt-splash",
-          "path": "content/video_engine/tests/golden/frames/melt-splash.png"
+          "label": "the pick-up (melt-gather@proof-pickup) - the black ball lifting off the board, its shadow tightening",
+          "path": "content/video_engine/tests/golden/frames/melt-gather@proof-pickup.png"
         },
         {
-          "label": "melt-plate",
-          "path": "content/video_engine/tests/golden/frames/melt-plate.png"
+          "label": "in flight (melt-splash@proof-flight) - the ball stretched along its arc, its shadow on the board behind it",
+          "path": "content/video_engine/tests/golden/frames/melt-splash@proof-flight.png"
         },
         {
-          "label": "melt-page@proof-015",
-          "path": "content/video_engine/tests/golden/frames/melt-page@proof-015.png"
+          "label": "the splat (melt-splash@proof-splat) - the ball flattening at the landing, the stains opening from the impact",
+          "path": "content/video_engine/tests/golden/frames/melt-splash@proof-splat.png"
         },
         {
-          "label": "melt-page@proof-045",
-          "path": "content/video_engine/tests/golden/frames/melt-page@proof-045.png"
+          "label": "the gather's own splat (melt-gather@proof-splat) and the plate growing through it (@proof-plate)",
+          "path": "content/video_engine/tests/golden/frames/melt-gather@proof-splat.png"
         },
         {
-          "label": "melt-page@proof-075",
-          "path": "content/video_engine/tests/golden/frames/melt-page@proof-075.png"
-        },
-        {
-          "label": "melt-page@proof-100",
-          "path": "content/video_engine/tests/golden/frames/melt-page@proof-100.png"
-        },
-        {
-          "label": "the throw / chart / plate frames (session scratch, unverified)",
-          "path": "scratchpad/lanes/melt/proof/",
-          "stale": true,
-          "note": "a session-relative scratch path, not under the checkout"
-        },
-        {
-          "label": "proof A - the gather's midpoint (the series curl into one spiral converging on the point)",
-          "path": "content/video_engine/tests/golden/frames/melt-gather.png"
-        },
-        {
-          "label": "proof A - the point: T5's ball with the last words streaming in, vibrating on the drop's own floor",
-          "path": "content/video_engine/tests/golden/frames/melt-gather@proof-point.png"
-        },
-        {
-          "label": "proof A - the splash mid-bloom, painting the dock plate up through the ink",
-          "path": "content/video_engine/tests/golden/frames/melt-gather@proof-splash.png"
-        },
-        {
-          "label": "proof A - the plate landed whole",
-          "path": "content/video_engine/tests/golden/frames/melt-gather@proof-plate.png"
-        },
-        {
-          "label": "the gather (melt.mjs: meltOpts 'gather', meltGatherAt, G_KEEP / G_VIB; the compiler's _melt_parts / melt_gather)",
+          "label": "stopaction.mjs pickUpXf (landXf run backwards, PRESS_PX 6); melt.mjs the PITCH phase (T_S 0.77 = PK_S 0.32 + FL_S 0.45, T_AT the canvas centre, T_ARC 0.18, T_LIFT_R 0.55); the splash had st.xf = {0,0} on every ending frame (:1129)",
           "path": "content/video_engine/scripts/species/melt.mjs"
-        },
-        {
-          "label": "PROOF B - the gather at its midpoint (15.57): the four series curled into one spiral converging on the point",
-          "path": "content/video_engine/tests/golden/frames/melt-gather-morph.png"
-        },
-        {
-          "label": "PROOF B - THE POINT (16.60): the whole chart amassed on it, nothing of the next chart anywhere",
-          "path": "content/video_engine/tests/golden/frames/melt-gather-morph@proof-point.png"
-        },
-        {
-          "label": "PROOF B - THE CHART (19.20): built out of that point - the area it became, the line along its top, the title and labels written",
-          "path": "content/video_engine/tests/golden/frames/melt-gather-morph@proof-chart.png"
         }
       ],
       "options": [],
-      "recommendation": "Approve the gather as the melt's form. Both landings the ruling named are on the card: the plate (A) and the fully assembled chart (B), and B needed no new code - the gather is a phase and the morph an ending, and they compose. Known and named: the axis hairlines still turn rigidly in the gather (R26-139); the vortex map is written twice (R26-138).",
-      "blocks": "nothing - ruled E99 s51 (2026-09-16): the gather approved; the splash becomes a THROW (T6b)",
+      "recommendation": "Approve. Read at the three instants: the ball presses and lifts, it is in the air with its shadow left behind on the board, and the splat opens where it lands, not where it sat - chords of 422 and 566 px, every other phase keeping its seconds, MELT.S untouched, the approved instants standing.",
+      "blocks": "HG6-2",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:482",
         "docs/content-video-engine/CAPABILITIES.md:37",
@@ -308,26 +267,38 @@
         "content/video_engine/tests/test_melt_morph.py (the gather and the morph compose)",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T3, T6)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s51)",
-        "docs/content-video-engine/review-answers.jsonl (2026-09-16)"
+        "docs/content-video-engine/review-answers.jsonl (2026-09-16)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s51)",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T6b)"
       ],
-      "status": "ruled",
-      "ruling": "E99 s51",
+      "status": "open",
+      "ruling": null,
       "was_kind": "owed",
-      "owed": "Delivered: proof A 2026-09-15 (T6), proof B 2026-09-16 (T3)",
+      "owed": "Delivered 2026-09-16 (P61 T6b): the pitch phase - pick-up, arc, splat at the landing; ten goldens; the clips",
       "proofs": [
         {
           "type": "clip",
-          "label": "proof A - melt:gather:splash:plate - 0.3 s of the finished chart, the gather (15.0-15.75 s), the point, the weight phase, the splash and the landed plate",
+          "label": "THE GATHER, THROWN: the four series curl into one point, the point is picked up, thrown forward and splats into the world plate",
           "surface": "melt-gather",
           "aspect": "16:9",
           "t0": 14.7,
-          "t1": 18.9,
+          "t1": 19.6,
           "flags": {},
           "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
         },
         {
           "type": "clip",
-          "label": "PROOF B - melt:gather:morph: the gather to one point, the point handed to the next page, the fully assembled chart built out of it",
+          "label": "THE PLAIN SPLASH, THROWN: the chart melts, balls up, is picked up, thrown forward and splats into the next chart",
+          "surface": "melt-splash",
+          "aspect": "16:9",
+          "t0": 14.7,
+          "t1": 17.5,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        },
+        {
+          "type": "clip",
+          "label": "PROOF B unchanged - melt:gather:morph: the gather to one point, handed to the next page as the full chart",
           "surface": "melt-gather-morph",
           "aspect": "16:9",
           "t0": 14.6,

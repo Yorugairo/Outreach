@@ -10,7 +10,7 @@ import { MELT, MELT_ENDINGS, MELT_CSS, meltOpts, meltShares, meltPhase, meltBlur
          meltInkFilterMarkup, meltRevealMarkup, meltBodyTransform, meltIsBoard, meltInkOf, meltTint, meltSplatPath, splashSats,
          meltSpring, meltBodyLead, meltTextFilterMarkup, MELT_MATERIALS, meltWeightShare, meltWeightMass, meltWeightAt,
          meltRollDir, meltMarkAt, meltBallRing, meltFuseSpan, meltFuseAt, meltFuseEase, meltClosingAt, meltInkAlpha,
-         meltRingR } from "../../scripts/species/melt.mjs";
+         meltRingR, meltPitchShare, meltRestShare, meltPitchAt, meltLandingAt } from "../../scripts/species/melt.mjs";
 import { stepped, MASS, STOP, rollXf } from "../../scripts/kinetics/stopaction.mjs";
 import { DROP, dropArea } from "../../scripts/kinetics/drop.mjs";
 import { hexToLin } from "../../scripts/kinetics/ink.mjs";
@@ -67,11 +67,14 @@ test("the board and the ink are split by class: grain, roll edge, field and fiel
 
 // ---- the phases --------------------------------------------------------------------------------------------------
 test("the four phases: three shares that sum to 1, and the fourth is the end", () => {
-  const sh = meltShares();   /* four now (R26-118): melt, ball, WEIGHT, the ending - and the weight's is exactly 0
-                                unless the exit asked for it, which is why every melt that shipped is untouched */
+  const sh = meltShares();   /* FIVE now (P61 T6b): melt, ball, WEIGHT, PITCH, the ending - and the weight's and the
+                                pitch's are exactly 0 unless the exit asked for them (a weight phase, a splash), which
+                                is why every melt that shipped is untouched */
+  assert.equal(sh.length, 5);
   assert.ok(Math.abs(sh.reduce((a, b) => a + b, 0) - 1) < 1e-12);
   assert.equal(sh[2], 0, "no weight phase unless `melt:weight` says so");
-  assert.ok([sh[0], sh[1], sh[3]].every((s) => s > 0));
+  assert.equal(sh[3], 0, "and no pitch unless the ending is a splash");
+  assert.ok([sh[0], sh[1], sh[4]].every((s) => s > 0));
   assert.equal(meltPhase(0.29).name, "melt");
   assert.equal(meltPhase(MELT.MELT_END).name, "ball");
   assert.equal(meltPhase(MELT.BALL_END).name, "fly");
@@ -346,21 +349,154 @@ test("meltState walks each ending: the board is up and never melts, the ink goes
     const g = at(1.0, ending);
     assert.ok(g.gone && !g.boardUp && g.inkOpacity === 0);
   }
-  const s = at(0.62, "splash:chart");
-  assert.equal(s.xf, null, "a splash does not travel");
+  /* P61 T6b / E99 s51: a splash's window carries the PITCH, so its instants are read off the phases and not off the
+     old cuts of u - the burst opens where the ending's own phase does, and the ball TRAVELS to it. */
+  const SPS = MELT.S + MELT.T_S, spOpts = (ending) => OPTS({ ending, secs: SPS });
+  const spAt = (u, ending) => meltState(t0, t0 + u * SPS, spOpts(ending), rnd);
+  const uFly = 1 - meltShares(spOpts("splash:chart"))[4];
+  const s = spAt(uFly + 0.10 * (1 - uFly), "splash:chart");
+  assert.equal(s.phase, "fly");
+  const land = meltLandingAt(SB, spOpts("splash:chart"));
+  assert.ok(Math.hypot(s.centre[0] + s.xf.x - land[0], s.centre[1] + s.xf.y - land[1]) < 8,
+            "a splash now travels - the ball bursts AT the landing, not on its own seat");
+  assert.ok(Math.hypot(s.xf.x, s.xf.y) > 100, "and that is a real distance from where it was compiled");
   assert.equal(s.drops.length, MELT.DROPS);
   assert.ok(s.boardUp && !s.reveal, "the burst lands on a whole board");
-  const p = at(0.85, "splash:chart");
+  const p = spAt(uFly + 0.55 * (1 - uFly), "splash:chart");
   assert.ok(p.reveal && p.stains.length === MELT.DROPS + 1 && p.boardUp, "then the board is painted through");
   assert.equal(p.spring, 1, "a chart does not spring");
-  assert.notEqual(at(0.85, "splash:plate").spring, 1, "a plate springs as it is painted");
+  assert.notEqual(spAt(uFly + 0.55 * (1 - uFly), "splash:plate").spring, 1, "a plate springs as it is painted");
   const sp = []; for (let g = 0; g <= 1.0001; g += 0.02) sp.push(meltSpring(g));
   assert.ok(Math.min(...sp) <= 1 - MELT.SPRING + 1e-9 && Math.max(...sp) > 1.02, `up from small, over its rest: ${Math.min(...sp)} ${Math.max(...sp)}`);
   assert.equal(meltSpring(1), 1, "and settled");
-  assert.ok(at(0.999, "splash:plate").cover < 0.05, "and the board's cover is all but gone by the end");
-  assert.ok(at(0.62, "splash:chart").dropAlpha === 1 && at(0.95, "splash:chart").dropAlpha < 0.05, "a landed drop soaks into its stain");
-  assert.ok(at(0.75, "splash:chart").dropAlpha < 0.5 && at(0.75, "splash:chart").dropScale < 1, "by 075 the splats are receding into the chart, never at full ink over it");
-  assert.equal(at(0.75, "splash:plate").dropScale, 1, "the plate's splats keep their size");
+  assert.ok(spAt(0.999, "splash:plate").cover < 0.05, "and the board's cover is all but gone by the end");
+  assert.ok(spAt(uFly + 0.10 * (1 - uFly), "splash:chart").dropAlpha === 1 && spAt(0.99, "splash:chart").dropAlpha < 0.05, "a landed drop soaks into its stain");
+  const late = spAt(uFly + 0.55 * (1 - uFly), "splash:chart");
+  assert.ok(late.dropAlpha < 0.5 && late.dropScale < 1, "past the burst the splats are receding into the chart, never at full ink over it");
+  assert.equal(spAt(uFly + 0.55 * (1 - uFly), "splash:plate").dropScale, 1, "the plate's splats keep their size");
+});
+
+// ---- P61 T6b / E99 s51: THE SPLASH IS A THROW ----------------------------------------------------------------------
+// The operator, OPERATOR-RULINGS.md:3220: "I'd want to see the ball actually picked up and then thrown forward to splat
+// on the canvas, right now it looks more like it just bounces, rolls, then bursts. I want it to be thrown."
+const SPS = MELT.S + MELT.T_S;
+const spOPTS = (extra = {}) => OPTS(Object.assign({ ending: "splash:chart", secs: SPS }, extra));
+const spWalk = (extra = {}) => {
+  const o = spOPTS(extra), out = [];
+  for (let f = 0; f <= Math.round(o.secs * MELT.FPS); f++) {
+    const st = meltState(0, f / MELT.FPS, o, rnd);
+    out.push({ f, t: f / MELT.FPS, st });
+  }
+  return out;
+};
+
+test("the pitch is a phase of its own, 0 for every ending that is not a splash, and it lengthens only the DEFAULT window", () => {
+  assert.equal(meltPitchShare(MELT.S, { ending: "throw" }), 0);
+  assert.equal(meltPitchShare(MELT.S, { ending: "morph" }), 0);
+  assert.equal(meltPitchShare(MELT.S, {}), 0, "no ending named: nothing is inserted");
+  assert.ok(Math.abs(meltPitchShare(SPS, { ending: "splash:chart" }) * SPS - MELT.T_S) < 1e-12);
+  assert.equal(meltPitchShare(SPS, { ending: "splash:plate" }), meltPitchShare(SPS, { ending: "splash:chart" }));
+  assert.ok(Math.abs(meltPitchShare(1.0, { ending: "splash:chart" }) - MELT.T_MAX) < 1e-12, "capped on a short declared window");
+  assert.equal(MELT.T_S, MELT.PK_S + MELT.FL_S, "T_S is the two beats' own seconds, written out");
+  assert.equal(MELT.PK_S, STOP.ANTIC_S + STOP.DROP_S, "the pick-up is landXf's own pre-settle length, run backwards");
+  assert.equal(MELT.FL_S, STOP.FLIGHT_S, "and the flight is a throw's time in the air");
+  assert.equal(meltOpts("melt:splash:chart").secs, MELT.S + MELT.T_S, "the default window makes room for it");
+  assert.equal(meltOpts("melt:splash:chart:1.2").secs, 1.2, "a declared length is exactly itself");
+  assert.equal(meltOpts("melt").secs, MELT.S, "and a melt with no splash is the window it always was");
+  assert.equal(meltOpts("melt:morph").secs, MELT.S + MELT.M_S);
+  /* EVERY OTHER PHASE KEEPS ITS SECONDS: the pitch's share comes out of what is LEFT, so the sag, the compile and the
+     ending are frame for frame the ones that shipped - which is why no instant the operator approved moved. */
+  const was = meltShares({ secs: MELT.S, ending: "throw" }).map((s) => s * MELT.S);
+  const now = meltShares(spOPTS()).map((s) => s * SPS);
+  assert.ok(Math.abs(now[0] - was[0]) < 1e-9 && Math.abs(now[1] - was[1]) < 1e-9 && Math.abs(now[4] - was[4]) < 1e-9,
+            `the sag, the ball and the ending keep their seconds: ${was} -> ${now}`);
+  assert.ok(Math.abs(now[3] - MELT.T_S) < 1e-9, "and the pitch is exactly T_S long");
+  assert.equal(meltRestShare(MELT.S, { ending: "throw" }), 1);
+});
+
+test("THE BALL IS PICKED UP: it rises before it advances, and its weight is sold before it rises", () => {
+  const w = spWalk().filter((r) => r.st.phase === "pitch");
+  assert.ok(w.length >= 6, `the pitch is ${w.length} frames`);
+  assert.deepEqual([...new Set(w.map((r) => r.st.pitch))], ["press", "lift", "flight"], "three beats, in this order");
+  const press = w.filter((r) => r.st.pitch === "press"), lift = w.filter((r) => r.st.pitch === "lift");
+  /* THE WEIGHT, SOLD FIRST (48 s48.6): the ball goes DOWN into the board and takes the clamp squash before it lifts */
+  assert.ok(Math.max(...press.map((r) => r.st.xf.y)) > 1, "the ball presses into the board");
+  assert.ok(Math.min(...press.map((r) => r.st.squash.a)) < 0, "and takes the clamp (a negative alpha: compressed)");
+  assert.ok(press.every((r) => Math.abs(r.st.xf.x) < 1e-9), "nothing advances while the weight is being sold");
+  /* THE LIFT: off the board, and still nowhere along the chord */
+  assert.ok(Math.min(...lift.map((r) => r.st.xf.y)) < -0.4 * MELT.T_LIFT_R * w[0].st.r, "it is lifted off the board");
+  assert.ok(lift.every((r) => Math.abs(r.st.xf.x) < 1e-9), "and it has not advanced yet: it RISES before it travels");
+  const firstAdvance = w.find((r) => Math.abs(r.st.xf.x) > 1e-9);
+  const firstRise = w.find((r) => r.st.xf.y < -1e-9);
+  assert.ok(firstRise.f < firstAdvance.f, `the rise (f${firstRise.f}) comes before the advance (f${firstAdvance.f})`);
+});
+
+test("THE FLIGHT: it advances monotonically onto the landing, and the shadow trails it", () => {
+  const o = spOPTS(), land = meltLandingAt(SB, o);
+  const w = spWalk().filter((r) => r.st.phase === "pitch" && r.st.pitch === "flight");
+  const seat = w[0].st.centre[0] + 0;          /* the ball's own seat: st.centre is where it compiled */
+  let last = -Infinity, lastGap = Infinity;
+  for (const r of w) {
+    const x = r.st.centre[0] + r.st.xf.x, gap = Math.hypot(x - land[0], r.st.centre[1] + r.st.xf.y - land[1]);
+    assert.ok(x >= last - 1e-9, `the flight went backwards: ${last} -> ${x}`);
+    assert.ok(gap <= lastGap + 1e-9, `the flight moved away from the landing: ${lastGap} -> ${gap}`);
+    last = x; lastGap = gap;
+  }
+  assert.ok(w[w.length - 1].st.xf.x > 0.8 * (land[0] - seat), "and it is all but on the landing at the last pose");
+  /* THE SHADOW READS THE CLOCK LAG_FRAMES LATE (HF-2) - it is BEHIND the ball along the travel, never under it */
+  const mid = w[Math.floor(w.length / 2)].st;
+  assert.ok(mid.shadowX < mid.xf.x - 1, `the shadow is not trailing: ${mid.shadowX} vs ${mid.xf.x}`);
+  assert.ok(mid.shadowY > mid.xf.y + 1, "and it is below the ball, on the line from the seat to the landing");
+  /* ... and its BLUR carries the height off the board (Kersten 1997, STOP.SHADOW_*): loose in the air, tight on both
+     contacts - which is the one cue that says the ball left the board at all */
+  const press0 = spWalk().find((r) => r.st.pitch === "press" && r.st.shadow);
+  assert.ok(press0.st.shadow.blur < 1.5, "tight on the board before the lift");
+  assert.ok(Math.max(...w.map((r) => r.st.shadow.blur)) > 5, "loose in the air");
+});
+
+test("THE SPLAT: the stains grow from the point of impact, and the board answers the hit", () => {
+  const o = spOPTS(), land = meltLandingAt(SB, o);
+  const w = spWalk().filter((r) => r.st.phase === "fly");
+  const hit = w[0].st;
+  /* the ball is AT the landing on the contact frame ... */
+  assert.ok(Math.hypot(hit.centre[0] + hit.xf.x - land[0], hit.centre[1] + hit.xf.y - land[1]) < 8,
+            "the ball bursts where it landed");
+  /* ... every droplet is thrown from it ... */
+  const d0 = hit.drops.map((d) => Math.hypot(d.x - land[0], d.y - land[1]));
+  assert.ok(Math.max(...d0) < 4, "the droplets leave the impact point, not the ball's old seat");
+  /* ... and the CORE stain - the one under the ball's own impact - IS the landing, within a pose's travel */
+  const paint = w.find((r) => r.st.stains.length).st;
+  const core = paint.stains[paint.stains.length - 1];
+  assert.ok(Math.hypot(core.x - land[0], core.y - land[1]) < 1e-6,
+            `the first stain is not at the landing: ${core.x},${core.y} vs ${land}`);
+  /* THE BOARD ANSWERS: three frames of shake off the hit, then exactly zero (groundShake), and the ball rides the
+     surface's own dip (groundDip) - the same two laws the weight phase's landing already uses */
+  assert.ok(Math.abs(w[0].st.shake.x) > 0 || Math.abs(w[1].st.shake.x) > 0, "the board takes the hit");
+  assert.deepEqual(w[w.length - 1].st.shake, { x: 0, y: 0 }, "and is still again by the end");
+  assert.ok(w[1].st.xf.y > w[0].st.xf.y - 1e-9, "the ball rides the dip down, never up into the board");
+  /* the shadow is under the SPLAT, not under the seat the ball was compiled on */
+  assert.ok(Math.abs(hit.shadowX - hit.xf.x) < 1e-9 && Math.abs(hit.shadowY - hit.xf.y) < 8);
+});
+
+test("a melt that names no splash has no pitch at all, and every frame of it is the frame it was", () => {
+  for (const ending of ["throw", "morph"]) {
+    const o = OPTS({ ending }), n = Math.round(o.secs * MELT.FPS);
+    for (let f = 0; f <= n; f++) {
+      const st = meltState(0, f / MELT.FPS, o, rnd);
+      assert.notEqual(st.phase, "pitch", `${ending} f${f}`);
+      assert.equal(st.pitch, null);
+      assert.equal(st.shadowY, 0, "and nothing moves its shadow off the ground line");
+    }
+  }
+});
+
+test("the pitch is a pure function of t: the same instant twice is the same object", () => {
+  const o = spOPTS();
+  for (const u of [0.40, 0.45, 0.50, 0.55, 0.62, 0.70, 0.75]) {
+    const t = u * o.secs;
+    assert.deepEqual(meltState(0, t, o, rnd), meltState(0, t, o, rnd), `u=${u}`);
+    assert.deepEqual(meltPitchAt(0.2, MELT.T_S, 80, [300, -280]), meltPitchAt(0.2, MELT.T_S, 80, [300, -280]));
+  }
 });
 
 test("meltState is a pure function of t: the same instant twice is the same object", () => {
