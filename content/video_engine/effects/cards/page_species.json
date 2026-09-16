@@ -3,6 +3,120 @@
   "axis": "page_species",
   "cards": [
     {
+      "id": "page_species:agenda",
+      "axis": "page_species",
+      "token": "agenda",
+      "title": "The agenda page",
+      "aliases": [
+        {
+          "name": "THE AGENDA PAGE",
+          "source": "docs/portable/OPERATOR-RULINGS.md:2988"
+        },
+        {
+          "name": "the plate version of the list effect",
+          "source": "operator 2026-09-14 (E99 s16)"
+        }
+      ],
+      "does": "The list takes a plate of its own: a title over rows that divide the whole board, each on its mount with its numeral in a medallion, and each row's catalogued icon stamped on once its sentence has been read.",
+      "when": null,
+      "when_source": null,
+      "serves": [
+        "SETS",
+        "NAMES"
+      ],
+      "author": {
+        "key": "species[] {\"kind\": \"agenda\", \"form\": \"page\", \"at\", \"dur\", \"title\", \"rows\": [{\"text\", \"icon\"}], \"target\"} (shot row 7th element)",
+        "example": "{\"kind\": \"agenda\", \"form\": \"page\", \"at\": 5.0, \"dur\": 9.0, \"idle\": \"breath\", \"title\": \"WHAT THE BILL IS MADE OF\", \"rows\": [{\"text\": \"A Treasury page\", \"icon\": \"prop-icon-us-sovereign-markets-v1\"}, {\"text\": \"The rate they pay\", \"at\": 6.6, \"icon\": \"prop-icon-interest-rates-monetary-policy-v2\"}, {\"text\": \"Your bill\", \"at\": 8.2, \"sub\": \"$4,500\", \"icon\": \"prop-icon-cpi-inflation-basket-v1\"}], \"target\": {\"kind\": \"region\", \"x0\": 0.05, \"y0\": 0.08, \"x1\": 0.95, \"y1\": 0.94}}",
+        "example_source": "content/video_engine/tests/golden/build_golden_sources.py:1364",
+        "check": "species"
+      },
+      "phases": [
+        {
+          "name": "the title writes",
+          "does": "the title fades in and the nib draws its rule under it, closing the title's room off the list",
+          "trigger": "the block's own `at`, over ROW_S",
+          "dials": {
+            "PAGE_TITLE_H": "158",
+            "ROW_S": "0.42"
+          }
+        },
+        {
+          "name": "a row is mounted and numbered",
+          "does": "the row's plate fades up, the nib draws its medallion and the numeral is written in it",
+          "trigger": "the row's own `at` (else STEP after the row before)",
+          "dials": {
+            "PAGE_PLATE_A": "0.30",
+            "PAGE_MED": "0.30"
+          }
+        },
+        {
+          "name": "the sentence is written",
+          "does": "the row's text rises into place, its sub lands beside it as a figure, and the rule draws along the row's bottom edge",
+          "trigger": "NUM_LEAD after the row's `at`, over ROW_S",
+          "dials": {
+            "NUM_LEAD": "0.12",
+            "ROW_DY": "26",
+            "RULE_S": "0.5"
+          }
+        },
+        {
+          "name": "the icon stamps",
+          "does": "the row's catalogued cutout falls from PAGE_STAMP_FROM and squashes on impact - never before that row's sentence has been read (E93)",
+          "trigger": "PAGE_STAMP_LAG after the row's sentence is fully written",
+          "dials": {
+            "PAGE_STAMP_LAG": "0.12",
+            "PAGE_STAMP_S": "0.26",
+            "PAGE_STAMP_FROM": "1.45",
+            "PAGE_SQUASH": "0.14"
+          }
+        },
+        {
+          "name": "hold alive",
+          "does": "every row holds on its own phase of the named idle (E49)",
+          "trigger": "continuous"
+        }
+      ],
+      "blends": [
+        {
+          "source": "Steel and Paper's three-question TEST card (the operator's pointer, E93)",
+          "became": "the mount, the title and the mark per row",
+          "record": "content/video_engine/scripts/species/checklist.mjs",
+          "tie": "recorded"
+        },
+        {
+          "source": "E94 the operator's 44 woodblock cutouts, approved for render",
+          "became": "the stamped icon",
+          "record": "docs/portable/OPERATOR-RULINGS.md:2778",
+          "tie": "recorded"
+        }
+      ],
+      "options": [],
+      "dials": {
+        "module": "content/video_engine/scripts/species/agenda.mjs",
+        "object": "AGENDA"
+      },
+      "lives": {
+        "form": "module",
+        "path": "content/video_engine/scripts/species/agenda.mjs",
+        "symbol": "paintAgendaPage"
+      },
+      "doctrine": [
+        "E93",
+        "E94",
+        "BACKLOG R26-80"
+      ],
+      "status": "wired",
+      "proof": {
+        "golden": "agenda-page",
+        "test": "content/video_engine/tests/test_agenda_page.py",
+        "first_use": null
+      },
+      "callable": {
+        "today": true,
+        "why": null
+      }
+    },
+    {
       "id": "page_species:bracket",
       "axis": "page_species",
       "token": "bracket",

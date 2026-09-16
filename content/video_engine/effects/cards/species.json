@@ -13,7 +13,7 @@
           "source": "docs/content-video-engine/CAPABILITIES.md:37"
         }
       ],
-      "does": "Two to four numbered rows are revealed one per word and hold at a named idle.",
+      "does": "Two to four numbered rows are revealed one per word and hold at a named idle; form \"page\" gives the same list a plate of its own, each row stamped with its catalogued icon once its sentence has been read.",
       "when": null,
       "when_source": null,
       "author": {
@@ -53,6 +53,16 @@
           "name": "hold alive",
           "does": "each row holds on its own phase of the idle (breath by default)",
           "trigger": "continuous"
+        },
+        {
+          "name": "icon stamps (page form)",
+          "does": "the row's catalogued cutout falls onto the page and squashes on impact, once that row's sentence has been read (E93)",
+          "trigger": "PAGE_STAMP_LAG after the row's own `at` + NUM_LEAD + ROW_S",
+          "dials": {
+            "PAGE_STAMP_LAG": "0.12",
+            "PAGE_STAMP_S": "0.26",
+            "PAGE_SQUASH": "0.14"
+          }
         }
       ],
       "blends": [
@@ -63,13 +73,24 @@
           "tie": "recorded"
         },
         {
-          "source": "E93 an agenda row carries an icon (ruled, not in this painter)",
-          "became": "the whole arc",
-          "record": "docs/portable/OPERATOR-RULINGS.md:2723",
+          "source": "E93 an agenda row carries an icon, stamped on once its sentence has been read",
+          "became": "the page form's stamp",
+          "record": "docs/portable/OPERATOR-RULINGS.md:2761",
           "tie": "recorded"
         }
       ],
-      "options": [],
+      "options": [
+        {
+          "token": "form",
+          "means": "`form: \"page\"` is the agenda's ONE named form - the plate version of the list (E99 s16). Absent is the dock form, byte-identical to what it always was; any other word is refused by name.",
+          "source_set": null
+        },
+        {
+          "token": "page",
+          "means": "form=page: the rows divide the whole board, each on a mount with its numeral in a medallion, under a title, and each carries a catalogued icon (E93/E94) stamped on after its sentence.",
+          "source_set": null
+        }
+      ],
       "dials": {
         "module": "content/video_engine/scripts/species/agenda.mjs",
         "object": "AGENDA"

@@ -1,0 +1,37 @@
+{
+  "schema_version": "effect_recipes.v1",
+  "id": "recipe:the-agenda-page",
+  "title": "The agenda page, stamped row by row",
+  "aliases": [],
+  "acts": [
+    "SETS",
+    "NAMES"
+  ],
+  "members": [
+    {
+      "card": "page_species:agenda",
+      "offset_s": 0.0,
+      "role": "the list takes the plate: a title over rows that divide the board, one row written per spoken clause"
+    },
+    {
+      "card": "idle:breath",
+      "offset_s": 0.0,
+      "role": "every row holds alive on its own phase between its arrival and the next (E49)"
+    },
+    {
+      "card": "page_species:agenda",
+      "offset_s": 1.6,
+      "role": "the next row is written and its catalogued icon is stamped on once its sentence has been read (E93)"
+    }
+  ],
+  "window_s": 10.0,
+  "does": "The promise is set on a plate of its own: a titled board fills with numbered rows one per clause, and each row's woodblock icon is stamped onto it the moment its sentence has been read.",
+  "doctrine": [
+    "E93",
+    "E99 s16",
+    "BACKLOG R26-80"
+  ],
+  "status": "candidate",
+  "source": "P61 T8 - born with the agenda-page golden (E99 s16: the plate version of our list effect)",
+  "count": 0
+}

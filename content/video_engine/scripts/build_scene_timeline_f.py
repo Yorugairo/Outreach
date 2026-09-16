@@ -169,6 +169,15 @@ ICON_TAGS = ("path", "circle", "rect", "line", "polyline", "polygon", "ellipse")
 ICON_ATTRS = ("d", "cx", "cy", "r", "rx", "ry", "x", "y", "width", "height", "x1", "y1", "x2", "y2", "points")
 CHIP_STATES = ("on", "crossed")   # a chip lands lit, or lands already crossed (a board read back after the fact)
 
+# P61 T8 (E93 / E94): THE OPERATOR'S OWN ICON CATALOGUE - the 44 woodblock cutouts, `review_state:
+# operator_approved`, `render_eligible: true`. A catalogued cutout is a PICTURE, not geometry, so it rides the
+# asset map as `prop:<asset_id>` (a data URI of the file on disk) rather than the `icon:` geometry the chip and
+# the count array carry. The engine reads the same key by name (species/agenda.mjs AGENDA.PROP_KEY).
+PROP_PREFIX = "prop:"
+ICON_CATALOG = ICONS_DIR / "finance_icons_catalog.v1.json"
+PROP_ID = re.compile(r"^[a-z0-9][a-z0-9-]*$")
+_CATALOG_CACHE: dict[str, dict] | None = None
+
 
 def icon_file(name: str) -> Path:
     """The sourced SVG behind one icon name (existence is the caller's check)."""
@@ -194,6 +203,61 @@ def icon_geometry(name: str) -> str:
     if not els:
         raise ValueError(f"icon {name!r}: {p.name} carries no geometry the player accepts ({'|'.join(ICON_TAGS)})")
     return json.dumps({"vb": vb, "el": els}, separators=(",", ":"))
+
+
+def icon_catalog() -> dict[str, dict]:
+    """The operator's icon catalogue, keyed by `asset_id` (read once). A missing catalogue is a ValueError the
+    first caller raises with the path - never a silent empty set."""
+    global _CATALOG_CACHE
+    if _CATALOG_CACHE is None:
+        if not ICON_CATALOG.is_file():
+            raise ValueError(f"the icon catalogue is not on disk at {ICON_CATALOG} - E94's 44 cutouts are what a row may name")
+        data = json.loads(ICON_CATALOG.read_text(encoding="utf-8"))
+        _CATALOG_CACHE = {a["asset_id"]: a for a in data.get("assets", []) if isinstance(a, dict) and a.get("asset_id")}
+    return _CATALOG_CACHE
+
+
+def catalogue_icon(asset_id: str) -> dict:
+    """One catalogued cutout's entry, or a ValueError naming the id AND the reason (E93 / E94):
+
+    an id that is not in the catalogue (never invent an image), an entry that is not an `icon`, one the operator
+    has not approved (`review_state`), one that is not `render_eligible`, a file that is not on disk, or a file
+    whose bytes no longer hash to the sha the catalogue recorded - the record is what makes the picture citable.
+    """
+    if not (isinstance(asset_id, str) and PROP_ID.match(asset_id)):
+        raise ValueError(f"icon {asset_id!r}: an icon id is lowercase letters, digits and hyphens")
+    entry = icon_catalog().get(asset_id)
+    if entry is None:
+        raise ValueError(f"icon {asset_id!r}: not in {ICON_CATALOG.name} - name one of the operator's own cutouts, never invent an image")
+    if entry.get("kind") != "icon":
+        raise ValueError(f"icon {asset_id!r}: the catalogue calls it a {entry.get('kind')!r}, not an icon")
+    if entry.get("review_state") != "operator_approved":
+        raise ValueError(f"icon {asset_id!r}: review_state {entry.get('review_state')!r} - only an operator-approved cutout renders (E94)")
+    if entry.get("render_eligible") is not True:
+        raise ValueError(f"icon {asset_id!r}: render_eligible is {entry.get('render_eligible')!r} - E93: the icons render once the operator approves them")
+    p = REPO / (json.loads(ICON_CATALOG.read_text(encoding="utf-8")).get("project_root") or "content/video_engine") / str(entry.get("path") or "")
+    if not p.is_file():
+        raise ValueError(f"icon {asset_id!r}: the catalogue's path {entry.get('path')!r} is not on disk at {p}")
+    sha = hashlib.sha256(p.read_bytes()).hexdigest()
+    if entry.get("sha256") and sha != entry["sha256"]:
+        raise ValueError(f"icon {asset_id!r}: {p.name} hashes {sha[:12]} and the catalogue recorded {str(entry['sha256'])[:12]} - the record and the file disagree")
+    return dict(entry, file=p, sha256_measured=sha)
+
+
+def catalogue_icon_uri(asset_id: str) -> str:
+    """One catalogued cutout as the asset map carries it: a data URI of the FILE ON DISK, byte for byte (a
+    cutout carries alpha, so it is never re-encoded down a JPEG path the way a plate is)."""
+    return data_uri(catalogue_icon(asset_id)["file"])
+
+
+def species_props(entry) -> list[str]:
+    """Every CATALOGUED cutout one species entry carries, in declaration order: the page-form agenda's one icon
+    per row (P61 T8 / E93). The asset map is keyed ``prop:<asset_id>`` - the picture travels in the player."""
+    if not isinstance(entry, dict) or entry.get("kind") != SPECIES_AGENDA:
+        return []
+    if entry.get("form") not in AGENDA_FORMS:
+        return []
+    return [r["icon"] for r in (entry.get("rows") or []) if isinstance(r, dict) and isinstance(r.get("icon"), str)]
 
 
 # Ken Burns: doc 29 §1.4 — the world plate drifts while evidence holds locked,
@@ -268,6 +332,9 @@ COUNT_ARRAY_N = (2, 12)   # a count of one is a chip; past a dozen the number is
 COUNT_ARRAY_WORDS = {2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine",
                      10: "ten", 11: "eleven", 12: "twelve"}   # ... and the count may be written in words: "six plants" IS the number
 AGENDA_ROWS = (2, 4)      # one row is a note; five is a checklist nobody holds at phone size (species/agenda.mjs)
+AGENDA_FORMS = ("page",)  # P61 T8 (E99 s16): the agenda's ONE named form - the plate version of the list; absent = the dock form
+AGENDA_PAGE_COVER = 0.55  # ... and what "the page fills its own plate" means: a page form's region takes at least this
+                          # share of the frame on BOTH axes, so the corner block R26-80 found can never be called a page
 RING_FORMS = ("dashed",)  # the one form the module paints - the closed circle stays the callout's (E56 unchanged)
 # the three clocks the grammar has to know to refuse a row that cannot FIT its window. Mirrored from the modules'
 # own dials (species/countarray.mjs COUNT.STEP / LAND_S, species/agenda.mjs AGENDA.STEP / NUM_LEAD + ROW_S), which
@@ -1296,8 +1363,57 @@ def _validate_count_array(entry: dict) -> list[str]:
     return errs
 
 
+def _agenda_page_errors(entry: dict, rows: list) -> list[str]:
+    """P61 T8 - THE PAGE FORM's own rules (E99 s16, E93, E94), and the dock form's refusals of its words.
+
+    A form word that is not `page` is refused BY NAME; a page form parked in a corner is refused with the box it
+    was given (E99 s16: the page fills its own plate); a page row's `icon` must be a catalogued cutout the
+    operator approved and the engine may render (E93 / E94), and the dock form has no icon and no title to give.
+    """
+    errs: list[str] = []
+    form = entry.get("form")
+    if form is not None and (not isinstance(form, str) or form not in AGENDA_FORMS):
+        return [f"agenda: form {form!r} is not one the agenda has - {' | '.join(AGENDA_FORMS)} (absent is the dock form)"]
+    page = form in AGENDA_FORMS
+    if not page:
+        if entry.get("title") is not None:
+            errs.append("agenda: 'title' belongs to the page form - a docked block has no title's room (form: \"page\")")
+        for i, row in enumerate(rows):
+            if isinstance(row, dict) and row.get("icon") is not None:
+                errs.append(f"agenda: row {i + 1} names an icon, which is the page form's stamp (E93) - write form: \"page\"")
+        return errs
+    tgt = entry.get("target") or {}
+    if tgt.get("kind") == "region":
+        try:
+            w = float(tgt["x1"]) - float(tgt["x0"])
+            h = float(tgt["y1"]) - float(tgt["y0"])
+        except (KeyError, TypeError, ValueError):
+            w = h = None
+        if w is not None and (w < AGENDA_PAGE_COVER or h < AGENDA_PAGE_COVER):
+            errs.append(f"agenda: the page form's region is {w:.2f} x {h:.2f} of the frame and the page fills its own "
+                        f"plate - at least {AGENDA_PAGE_COVER:.2f} on both axes (E99 s16), or drop `form` and dock it")
+    else:
+        errs.append("agenda: the page form is laid out inside a REGION - a point gives the page no box to fill")
+    if entry.get("title") is not None and (not isinstance(entry["title"], str) or not entry["title"].strip()):
+        errs.append("agenda: 'title' must be a non-empty string - the title says what the list IS (the test card's own lesson)")
+    for i, row in enumerate(rows):
+        if not isinstance(row, dict):
+            continue
+        icon = row.get("icon")
+        if icon is None:
+            errs.append(f"agenda: row {i + 1} carries no icon - E93: an agenda row carries an icon, stamped on once its sentence has been read")
+            continue
+        try:
+            catalogue_icon(icon)
+        except ValueError as exc:
+            errs.append(f"agenda: row {i + 1}: {exc}")
+    return errs
+
+
 def _validate_agenda(entry: dict) -> list[str]:
-    """P52 T8: the numbered agenda. 2-4 rows, each with words of its own, revealed in order and inside the window."""
+    """P52 T8: the numbered agenda. 2-4 rows, each with words of its own, revealed in order and inside the window.
+
+    P61 T8: and its PAGE form (`form: "page"`) - the plate version of the list, whose own rules are next door."""
     errs: list[str] = []
     rows = entry.get("rows")
     lo, hi = AGENDA_ROWS
@@ -1336,7 +1452,7 @@ def _validate_agenda(entry: dict) -> list[str]:
         if prev + AGENDA_ROW_S > at + entry["dur"]:
             errs.append(f"agenda: the last row is revealed at {prev} and the window ends at {at + entry['dur']} - "
                         "a row that cannot finish arriving is not revealed, it flashes")
-    return errs
+    return errs + _agenda_page_errors(entry, list(rows))
 
 
 def _validate_ring(entry: dict) -> list[str]:
@@ -4848,6 +4964,11 @@ def main() -> int:
             for _icon in species_icons(e):   # P50 T4: a flow's nodes and its swap ride the same route as the chip's one
                 try:
                     uris[ICON_PREFIX + _icon] = icon_geometry(_icon)
+                except ValueError as exc:
+                    raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
+            for _prop in species_props(e):   # P61 T8 / E93: the page-form agenda's stamped cutouts, the same route
+                try:
+                    uris[PROP_PREFIX + _prop] = catalogue_icon_uri(_prop)
                 except ValueError as exc:
                     raise SystemExit(f"FAIL: shot row {i + 1} ({a}-{b}s): {exc}") from exc
         # a ledger page is drawn, not embedded (doc 29 s9.26); a bad or

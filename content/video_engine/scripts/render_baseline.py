@@ -72,6 +72,11 @@ PROOF_FRAMES = {
     # P58 T6 (b) - THE MELT'S BALL AT A DEPTH, at the instant the ending cannot show: the ball formed, the weight
     # phase opening, the eye mid-move - the ball at 1.15 and the board it came off at 1.0, parted.
     "melt-depth@proof-ball": ("melt-depth", {"camera": True}, 15.88),
+    # P61 T8 / E99 s16 + E93 - THE AGENDA PAGE, at the three instants the held page cannot show. No flag: the page
+    # form is AUTHORED on the row (`form: "page"`), never switched on, and the stamps are the rows' own clock.
+    "agenda-page@proof-first-row": ("agenda-page", {}, 5.54),   # row 1's SENTENCE just fully written (5.0 + NUM_LEAD + ROW_S) and its icon NOT yet on the page - E93's order, in a frame
+    "agenda-page@proof-stamp": ("agenda-page", {}, 7.325),      # row 2's icon MID-FALL: its sentence is read at 7.14, the stamp opens at 7.26 and lands at 7.52, and this is u 0.25 of that fall - the cubic ease is most of the way home by half, so a quarter is where a falling stamp is still visibly falling
+    "agenda-page@proof-full": ("agenda-page", {}, 9.30),        # THE PAGE FULL: three rows written, three icons stamped, the last squash settled (9.26)
     # E98 s7 / R26-134 - THE EVIDENCE DOOR, at the two instants its landing cannot show: the flat chart swinging open on
     # its left edge onto the plate mounted beneath it (the min-jerk clock from the cut at 15.0 over 0.9 s). No flag: a
     # door is an authored exit, not a capability behind a switch.

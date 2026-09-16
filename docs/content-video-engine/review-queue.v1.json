@@ -2814,23 +2814,70 @@
       "ids": [
         "R26-80",
         "E93",
-        "E99 s16"
+        "E99 s16",
+        "P61 HG8"
       ],
-      "kind": "owed",
-      "title": "The beautified agenda page",
-      "judge": "Owed by the agent: the agenda page beautified as the plate version of the list effect (E99 s16).",
-      "where": [],
+      "kind": "watch",
+      "title": "The beautified agenda page - the plate version of the list effect",
+      "judge": "The agenda's PAGE form, beside today's three plain rows parked in a corner: a titled board, each row on its own mount with a medallion numeral the nib draws, the sentence written by the hand on its beat, the figure in gold, and each row's CATALOGUED icon stamped on - a fall with a squash - only once its sentence has been read (E93). Watch the page fill (4.5-10 s). Approve, or name the change.",
+      "where": [
+        {
+          "label": "today: three plain rows bottom-right, the upper two-thirds empty (28.5 s)",
+          "path": "content/video_engine/tests/golden/frames/species-proof@proof-agenda.png"
+        },
+        {
+          "label": "row 1 written, its icon NOT yet on the page (5.54 s) - E93's order in a frame",
+          "path": "content/video_engine/tests/golden/frames/agenda-page@proof-first-row.png"
+        },
+        {
+          "label": "row 2's icon mid-fall (7.39 s)",
+          "path": "content/video_engine/tests/golden/frames/agenda-page@proof-stamp.png"
+        },
+        {
+          "label": "the page complete (9.30 s)",
+          "path": "content/video_engine/tests/golden/frames/agenda-page@proof-full.png"
+        },
+        {
+          "label": "the page at rest (12.0 s)",
+          "path": "content/video_engine/tests/golden/frames/agenda-page.png"
+        },
+        {
+          "label": "the model: Steel and Paper's three-question TEST card",
+          "path": "content/video_engine/tests/golden/frames/test-card.png"
+        },
+        {
+          "label": "agenda.mjs: agendaPageLayout / agendaRowRead / agendaStampF / paintAgendaPage; the compiler's catalogue_icon refusals",
+          "path": "content/video_engine/scripts/species/agenda.mjs"
+        }
+      ],
       "options": [],
-      "recommendation": null,
-      "blocks": "the agenda page on a short",
+      "recommendation": "Approve. It has what the TEST card has and the corner list lacked: a ground, a title, a mark per row, the fill and a close - without losing the row's own arrival. The icons are the operator's own catalogued cutouts, refused by name if not approved and render-eligible (the first render path to the catalogue). The dock form is untouched.",
+      "blocks": "HG8; the CAPABILITIES row :43 (T11)",
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md (E99 s16)",
-        "docs/content-video-engine/BACKLOG.md (R26-80)"
+        "docs/content-video-engine/BACKLOG.md (R26-80)",
+        "docs/portable/OPERATOR-RULINGS.md:2761 (E93)",
+        "docs/portable/OPERATOR-RULINGS.md:2988 (E99 s16)",
+        "content/video_engine/scripts/species/agenda.mjs",
+        "content/video_engine/tests/test_agenda_page.py",
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T8)"
       ],
       "status": "open",
       "ruling": null,
-      "proofs": null,
-      "owed": "E99 s16: the beautified agenda page, the plate version of the list effect"
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "the agenda's page form: the title and its rule, three rows written on their beats, each icon stamped on after its sentence, the page full",
+          "surface": "agenda-page",
+          "aspect": "16:9",
+          "t0": 4.5,
+          "t1": 10.0,
+          "flags": {},
+          "route": "review_queue_proofs.py --clips: the golden surface instantiated from tests/golden/sources, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        }
+      ],
+      "owed": "Delivered 2026-09-15 (P61 T8): the page form, the catalogue render path, four goldens, the clip",
+      "was_kind": "owed"
     },
     {
       "id": "p58-hg3-forms-mount-not-scribble",

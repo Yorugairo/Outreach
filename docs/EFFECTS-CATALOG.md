@@ -16,12 +16,12 @@ lives (module | inline | compiler-only | declared-unbuilt, the path and the one 
 module - status and callable - proof - doctrine cites resolved to path:line - aliases. A token that is only a
 parameter of an effect is an option on its card, never a card.
 
-142 cards, 85 options, 18 axes. 44 recipes (15 proven).
+143 cards, 87 options, 18 axes. 45 recipes (15 proven).
 
 | axis | cards | options | live | wired | draft | declared | planned | retired |
 |---|---|---|---|---|---|---|---|---|
-| species | 23 | 1 | 7 | 13 | 0 | 3 | 0 | 0 |
-| page_species | 12 | 0 | 2 | 10 | 0 | 0 | 0 | 0 |
+| species | 23 | 3 | 7 | 13 | 0 | 3 | 0 | 0 |
+| page_species | 13 | 0 | 2 | 11 | 0 | 0 | 0 | 0 |
 | chart_to | 7 | 9 | 0 | 7 | 0 | 0 | 0 | 0 |
 | page_builder | 11 | 3 | 2 | 5 | 0 | 4 | 0 | 0 |
 | overflow | 2 | 1 | 0 | 2 | 0 | 0 | 0 | 0 |
@@ -43,7 +43,7 @@ parameter of an effect is an option on its card, never a card.
 
 ### The numbered agenda species
 
-- **id** `species:agenda` - **does** Two to four numbered rows are revealed one per word and hold at a named idle.
+- **id** `species:agenda` - **does** Two to four numbered rows are revealed one per word and hold at a named idle; form "page" gives the same list a plate of its own, each row stamped with its catalogued icon once its sentence has been read.
 - **when** the sentence SETS an agenda ('two numbers', 'three things') - 2 to 4 numbered rows, each revealed on its own word, holding at a named idle until the sentence that takes them one by one (content/video_engine/scripts/build_scene_timeline_f.py SPECIES_WHEN)
 - **example** `{"kind": "agenda", "at": 5.0, "dur": 14.0, "idle": "breath", "rows": [{"text": "A Treasury page", "sub": "the sellers"}, {"text": "Your phone", "at": 6.2, "sub": "the bill"}], "target": {"kind": "region", "x0": 0.30, "y0": 0.50, "x1": 0.95, "y1": 0.95}}` (content/video_engine/tests/golden/build_golden_sources.py:1030; key: species[] {"kind": "agenda", "at", "dur", "target"} (shot row 7th element); check: species)
 - **phases**
@@ -51,10 +51,12 @@ parameter of an effect is an option on its card, never a card.
   2. **rule draws** - the nib draws the hairline under the row (trigger: the row's `at`; dials: `RULE_S`=0.5)
   3. **text rises** - the row's text rises ROW_DY and fades in (trigger: NUM_LEAD after the row's `at`; dials: `NUM_LEAD`=0.12, `ROW_DY`=26)
   4. **hold alive** - each row holds on its own phase of the idle (breath by default) (trigger: continuous)
+  5. **icon stamps (page form)** - the row's catalogued cutout falls onto the page and squashes on impact, once that row's sentence has been read (E93) (trigger: PAGE_STAMP_LAG after the row's own `at` + NUM_LEAD + ROW_S; dials: `PAGE_STAMP_LAG`=0.12, `PAGE_STAMP_S`=0.26, `PAGE_SQUASH`=0.14)
 - **blend** Bravos 'China's Gameplan 1 | 2' board -> the whole arc (recorded; content/video_engine/scripts/species/agenda.mjs:3)
-- **blend** E93 an agenda row carries an icon (ruled, not in this painter) -> the whole arc (recorded; docs/portable/OPERATOR-RULINGS.md:2723)
+- **blend** E93 an agenda row carries an icon, stamped on once its sentence has been read -> the page form's stamp (recorded; docs/portable/OPERATOR-RULINGS.md:2761)
+- **options** `form` `form: "page"` is the agenda's ONE named form - the plate version of the list (E99 s16). Absent is the dock form, byte-identical to what it always was; any other word is refused by name.; `page` form=page: the rows divide the whole board, each on a mount with its numeral in a medallion, under a title, and each carries a catalogued icon (E93/E94) stamped on after its sentence.
 - **lives** module - `content/video_engine/scripts/species/agenda.mjs` - symbol `paintAgenda`
-- **dials** `AGENDA` in `content/video_engine/scripts/species/agenda.mjs`: `MIN_ROWS`=2, `MAX_ROWS`=4, `ROW_H`=132, `NUM_W`=92, `NUM_SIZE`=64, `TEXT_SIZE`=54, `SUB_SIZE`=34, `ROW_S`=0.42, `ROW_DY`=26, `RULE_S`=0.5, `RULE_DY`=22, `NUM_LEAD`=0.12, `STEP`=0.34, `MIN_K`=0.45
+- **dials** `AGENDA` in `content/video_engine/scripts/species/agenda.mjs`: `MIN_ROWS`=2, `MAX_ROWS`=4, `ROW_H`=132, `NUM_W`=92, `NUM_SIZE`=64, `TEXT_SIZE`=54, `SUB_SIZE`=34, `ROW_S`=0.42, `ROW_DY`=26, `RULE_S`=0.5, `RULE_DY`=22, `NUM_LEAD`=0.12, `STEP`=0.34, `MIN_K`=0.45, `PAGE_FORM`="page", `PROP_KEY`="prop:", `PAGE_PAD`=48, `PAGE_TITLE_H`=158, `PAGE_TITLE_SIZE`=62, `PAGE_TITLE_K`=1.15, `PAGE_MAX_K`=1.8, `PAGE_ROW_PAD`=28, `PAGE_MED`=0.30, `PAGE_MED_W`=3.5, `PAGE_ICON`=0.70, `PAGE_ICON_GAP`=44, `PAGE_TEXT_Y`=0.46, `PAGE_SUB_Y`=0.79, `PAGE_PLATE_A`=0.30, `PAGE_PLATE_R`=14, `PAGE_STAMP_LAG`=0.12, `PAGE_STAMP_S`=0.26, `PAGE_STAMP_FROM`=1.45, `PAGE_SETTLE_S`=0.14, `PAGE_SQUASH`=0.14, `PAGE_FADE_S`=0.1, `PAGE_INK`="#05131e", `PAGE_EDGE`="#8a94a0", `PAGE_GOLD`="#F5B72E", `PAGE_CHALK`="#F2F2F2", `PAGE_HALO`="rgba(27,30,35,.85)", `PAGE_FACE`="Inter, Arial, sans-serif"
 - **status** wired - **callable** yes
 - **proof** golden agenda-two - test content/video_engine/tests/kinetics/agenda.test.mjs - first use none
 - **doctrine** CAPABILITIES NUMBERED AGENDA -> docs/content-video-engine/CAPABILITIES.md:43; E93 -> docs/portable/OPERATOR-RULINGS.md:2761
@@ -405,6 +407,26 @@ parameter of an effect is an option on its card, never a card.
 - **aliases** "Trace HOPS" (docs/content-video-engine/CAPABILITIES.md:71)
 
 ## page_species
+
+### The agenda page
+
+- **id** `page_species:agenda` - **does** The list takes a plate of its own: a title over rows that divide the whole board, each on its mount with its numeral in a medallion, and each row's catalogued icon stamped on once its sentence has been read.
+- **when** the sentence SETS an agenda ('two numbers', 'three things') - 2 to 4 numbered rows, each revealed on its own word, holding at a named idle until the sentence that takes them one by one (content/video_engine/scripts/build_scene_timeline_f.py SPECIES_WHEN)
+- **example** `{"kind": "agenda", "form": "page", "at": 5.0, "dur": 9.0, "idle": "breath", "title": "WHAT THE BILL IS MADE OF", "rows": [{"text": "A Treasury page", "icon": "prop-icon-us-sovereign-markets-v1"}, {"text": "The rate they pay", "at": 6.6, "icon": "prop-icon-interest-rates-monetary-policy-v2"}, {"text": "Your bill", "at": 8.2, "sub": "$4,500", "icon": "prop-icon-cpi-inflation-basket-v1"}], "target": {"kind": "region", "x0": 0.05, "y0": 0.08, "x1": 0.95, "y1": 0.94}}` (content/video_engine/tests/golden/build_golden_sources.py:1364; key: species[] {"kind": "agenda", "form": "page", "at", "dur", "title", "rows": [{"text", "icon"}], "target"} (shot row 7th element); check: species)
+- **phases**
+  1. **the title writes** - the title fades in and the nib draws its rule under it, closing the title's room off the list (trigger: the block's own `at`, over ROW_S; dials: `PAGE_TITLE_H`=158, `ROW_S`=0.42)
+  2. **a row is mounted and numbered** - the row's plate fades up, the nib draws its medallion and the numeral is written in it (trigger: the row's own `at` (else STEP after the row before); dials: `PAGE_PLATE_A`=0.30, `PAGE_MED`=0.30)
+  3. **the sentence is written** - the row's text rises into place, its sub lands beside it as a figure, and the rule draws along the row's bottom edge (trigger: NUM_LEAD after the row's `at`, over ROW_S; dials: `NUM_LEAD`=0.12, `ROW_DY`=26, `RULE_S`=0.5)
+  4. **the icon stamps** - the row's catalogued cutout falls from PAGE_STAMP_FROM and squashes on impact - never before that row's sentence has been read (E93) (trigger: PAGE_STAMP_LAG after the row's sentence is fully written; dials: `PAGE_STAMP_LAG`=0.12, `PAGE_STAMP_S`=0.26, `PAGE_STAMP_FROM`=1.45, `PAGE_SQUASH`=0.14)
+  5. **hold alive** - every row holds on its own phase of the named idle (E49) (trigger: continuous)
+- **blend** Steel and Paper's three-question TEST card (the operator's pointer, E93) -> the mount, the title and the mark per row (recorded; content/video_engine/scripts/species/checklist.mjs)
+- **blend** E94 the operator's 44 woodblock cutouts, approved for render -> the stamped icon (recorded; docs/portable/OPERATOR-RULINGS.md:2778)
+- **lives** module - `content/video_engine/scripts/species/agenda.mjs` - symbol `paintAgendaPage`
+- **dials** `AGENDA` in `content/video_engine/scripts/species/agenda.mjs`: `MIN_ROWS`=2, `MAX_ROWS`=4, `ROW_H`=132, `NUM_W`=92, `NUM_SIZE`=64, `TEXT_SIZE`=54, `SUB_SIZE`=34, `ROW_S`=0.42, `ROW_DY`=26, `RULE_S`=0.5, `RULE_DY`=22, `NUM_LEAD`=0.12, `STEP`=0.34, `MIN_K`=0.45, `PAGE_FORM`="page", `PROP_KEY`="prop:", `PAGE_PAD`=48, `PAGE_TITLE_H`=158, `PAGE_TITLE_SIZE`=62, `PAGE_TITLE_K`=1.15, `PAGE_MAX_K`=1.8, `PAGE_ROW_PAD`=28, `PAGE_MED`=0.30, `PAGE_MED_W`=3.5, `PAGE_ICON`=0.70, `PAGE_ICON_GAP`=44, `PAGE_TEXT_Y`=0.46, `PAGE_SUB_Y`=0.79, `PAGE_PLATE_A`=0.30, `PAGE_PLATE_R`=14, `PAGE_STAMP_LAG`=0.12, `PAGE_STAMP_S`=0.26, `PAGE_STAMP_FROM`=1.45, `PAGE_SETTLE_S`=0.14, `PAGE_SQUASH`=0.14, `PAGE_FADE_S`=0.1, `PAGE_INK`="#05131e", `PAGE_EDGE`="#8a94a0", `PAGE_GOLD`="#F5B72E", `PAGE_CHALK`="#F2F2F2", `PAGE_HALO`="rgba(27,30,35,.85)", `PAGE_FACE`="Inter, Arial, sans-serif"
+- **status** wired - **callable** yes
+- **proof** golden agenda-page - test content/video_engine/tests/test_agenda_page.py - first use none
+- **doctrine** E93 -> docs/portable/OPERATOR-RULINGS.md:2761; E94 -> docs/portable/OPERATOR-RULINGS.md:2778; BACKLOG R26-80 -> docs/content-video-engine/BACKLOG.md:486
+- **aliases** "THE AGENDA PAGE" (docs/portable/OPERATOR-RULINGS.md:2988); "the plate version of the list effect" (operator 2026-09-14 (E99 s16))
 
 ### The bracket page species
 
@@ -954,7 +976,7 @@ parameter of an effect is an option on its card, never a card.
 - **lives** inline - `docs/content-video-engine/samples/scene-evidence-engine.mjs` - symbol `drawChart` - also `fillDock` - drawChart + the fillDock chart mount
 - **status** live - **callable** yes: a .series.json beside a docked asset
 - **proof** golden none - test none - first use steel-and-paper build-f t=9.5
-- **doctrine** 29 s9.22 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1285; 29 s9.23 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1330; CAPABILITIES chart self-containment -> docs/content-video-engine/CAPABILITIES.md:185
+- **doctrine** 29 s9.22 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1285; 29 s9.23 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1330; CAPABILITIES chart self-containment -> docs/content-video-engine/CAPABILITIES.md:186
 - **aliases** "LIVE CHART payload" (content/video_engine/scripts/build_scene_timeline_f.py:3996)
 
 ### The record document dock payload
@@ -994,7 +1016,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `VERDICT` in `content/video_engine/scripts/species/verdict.mjs`: `SPOTS`=Object.freeze([ /* the nine rail spots [left %, top %, width %]: four across the top, mid-frame flanks, three along the, `TILTS`=Object.freeze([-3, 2, -2, 3, -2.5, 2.5]), `CARD_W`=1056, `CARD_H`=480, `ACTIVE_X`=930, `ACTIVE_DX`=70, `ACTIVE_Y`=400, `ACTIVE_ROW_DY`=26, `ACTIVE_ROWS`=3, `ACTIVE_W`=840, `BURST_NORM_X`=700, `BURST_NORM_Y`=460, `ORIGIN_X`=0.5, `ORIGIN_Y`=0.5, `IDLE_KIND`=null, `REF_W`=1920, `REF_H`=1080, `ENTER_S`=0.9, `ENTER_SWING`=460, `ENTER_RISE`=-90, `ENTER_Z`=-700, `ENTER_ROT_Y`=30, `RECEDE_S`=1.0, `LAST_RECEDE_LEAD`=0.9, `DRIFT_W`=0.55, `DRIFT_PHASE`=1.7, `DRIFT_X_REST`=8, `DRIFT_X_ACTIVE`=26, `BOB_W`=0.7, `BOB_PHASE`=2.1, `BOB_REST`=5, `BOB_ACTIVE`=14, `DRIFT_SCALE`=0.008, `DRIFT_ROT`=0.6, `Z_SWITCH`=0.5, `Z_ACTIVE`=9, `Z_RAIL`=7, `BURST_X`=560, `BURST_Y`=420, `BURST_Z`=340, `BURST_SPIN`=24, `BURST_SCALE`=0.22, `BURST_STAGGER`=0.06, `BURST_S`=0.5, `REMOVE_AFTER`=1.4, `MOUNT_LEAD`=0.5
 - **status** live (backlog R26-82) - **callable** yes: both aspects: author the items + clear_at through the compiler's `stack_entry`, which derives the host dock's window from the beats, and on a short pass form 9:16 - or let the stage's shape choose
 - **proof** golden verdict-stack - test content/video_engine/tests/kinetics/verdict.test.mjs - first use steel-and-paper build-f t=701.73
-- **doctrine** 29 s9.24 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364; 29 s9.24b -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1; MOTION-GRAMMAR -> unresolved; CAPABILITIES verdict stack -> docs/content-video-engine/CAPABILITIES.md:184; BACKLOG R26-82 -> docs/content-video-engine/BACKLOG.md:488; E49 -> docs/portable/OPERATOR-RULINGS.md:1494
+- **doctrine** 29 s9.24 -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364; 29 s9.24b -> docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1; MOTION-GRAMMAR -> unresolved; CAPABILITIES verdict stack -> docs/content-video-engine/CAPABILITIES.md:185; BACKLOG R26-82 -> docs/content-video-engine/BACKLOG.md:488; E49 -> docs/portable/OPERATOR-RULINGS.md:1494
 - **aliases** "evidence wall" (operator 2026-09-13 (P55 plan Summary)); "VERDICT STACK species" (docs/content-video-engine/29-EVIDENCE-MOTION-STANDARDS.md:1364); "the evidence wall" (docs/content-video-engine/BACKLOG.md:488); "evidence-wall recap" (docs/agent-memory/operator/resume-2026-09-12.md:113); "nine-proof wall" (docs/content-video-engine/CAPABILITIES.md:169); "the verdict pile-up" (content/video_engine/scripts/build_scene_timeline_f.py:3992); "STACK species" (docs/content-video-engine/samples/scene-evidence-engine.mjs:3225); "pull back in all of our evidence cards" (operator 2026-09-13 (P55 plan HG1))
 
 ## chart_dock
@@ -1025,7 +1047,7 @@ parameter of an effect is an option on its card, never a card.
 - **dials** `CHECKLIST` in `content/video_engine/scripts/species/checklist.mjs`: `COLORS`=Object.freeze(["#f4f6f8", "#dce3ea", "#3bc9b0", "#ff8a8c"]), `HEAD_DY`=18, `ROW0_DY`=64, `ROW_PITCH`=58, `ROW_DELAY_S`=3, `HL_FROM_COL`=2, `BAND_INSET`=8, `BAND_RISE`=21, `BAND_H`=30, `BAND_W0`=10, `BAND_RX`=4, `BAND_ALPHA`=0.28, `KM_GROUND`="#16181c", `RULE_DY`=18, `RULE_COLOR`="#24262b", `RULE_W`=1.5, `FIT_MARGIN`=28, `FIT_MIN_W`=40, `FIT_PAD`=26, `FIT_CHAR_W`=10, `FIT_X0`=64, `FIT_ROOM_SLACK`=8, `CHISEL_DEG`=-7, `RECAP_S`=12, `RECAP_ROW_S`=0.8, `OFFS`=Object.freeze([0, 0.6, 1.0, 1.6]), `RECAP_OFFS`=Object.freeze([0, 0.25, 0.45, 0.7]), `CELL_FADE_S`=0.35, `TYPE_S`=0.045, `SWEEP_S`=0.55, `SWEEP_W_FALLBACK`=300, `SWEEP_PAD`=18, `SWEEP_ROOM_PAD`=12
 - **status** live (backlog R26-81) - **callable** yes: 16:9 long-form dock via .series.json; never on a short (R26-81: tokens, 9:16 rows, no frame on disk)
 - **proof** golden test-card - test content/video_engine/tests/kinetics/checklist.test.mjs - first use steel-and-paper build-f t=492.3
-- **doctrine** CAPABILITIES checklist species -> docs/content-video-engine/CAPABILITIES.md:204; CAPABILITIES auto-fit -> unresolved; E93 #3 -> docs/portable/OPERATOR-RULINGS.md:2761; BACKLOG R26-81 -> docs/content-video-engine/BACKLOG.md:487; BACKLOG R26-80 -> docs/content-video-engine/BACKLOG.md:486; ledger_page UNCHARTABLE -> unresolved
+- **doctrine** CAPABILITIES checklist species -> docs/content-video-engine/CAPABILITIES.md:205; CAPABILITIES auto-fit -> unresolved; E93 #3 -> docs/portable/OPERATOR-RULINGS.md:2761; BACKLOG R26-81 -> docs/content-video-engine/BACKLOG.md:487; BACKLOG R26-80 -> docs/content-video-engine/BACKLOG.md:486; ledger_page UNCHARTABLE -> unresolved
 - **aliases** "test list" (operator 2026-09-13 (P55 plan Summary)); "three-question test card" (operator 2026-09-13 (P55 plan Summary)); "THE TEST card" (operator 2026-09-13 (P55 plan Summary)); "The three-question TEST card" (docs/content-video-engine/BACKLOG.md:487); "the three-question TEST table card" (docs/agent-memory/operator/resume-2026-09-12.md:113); "Steel and Paper's three-question test card" (docs/portable/OPERATOR-RULINGS.md:2735); "Checklist species" (docs/content-video-engine/CAPABILITIES.md:189); "the scorecard" (content/video_engine/projects/systems-and-blowups/steel-and-paper/SHOT-TABLE-F.py:142); "tripwire board" (docs/content-video-engine/CAPABILITIES.md:189); "CHECKLIST v2" (docs/content-video-engine/samples/scene-evidence-engine.mjs:3582); "checklist" (operator 2026-09-13 (P55 plan HG1))
 
 ### The panels chart card
@@ -2085,7 +2107,7 @@ a decoration; one that fires four times is a grammar.
 | status | recipes | members | fires (sum of count) |
 |---|---|---|---|
 | proven | 15 | 59 | 94 |
-| candidate | 29 | 112 | 0 |
+| candidate | 30 | 115 | 0 |
 
 ### The badge ladder
 
@@ -2527,6 +2549,17 @@ a decoration; one that fires four times is a grammar.
 - **status** proven - **count** 5 (a grammar) - **source** recipes_r1 R5; docs/research/runs/p56-recipe-seeds/seeds.jsonl seed R5
 - **doctrine** E96 -> docs/portable/OPERATOR-RULINGS.md:2797; BACKLOG R26-103 -> docs/content-video-engine/BACKLOG.md:535
 - **aliases** "The test card, rows anchored to spoken words" (docs/research/runs/grill_pipeline-value/recipes_r1.md:124)
+
+### The agenda page, stamped row by row
+
+- **id** `recipe:the-agenda-page` - **does** The promise is set on a plate of its own: a titled board fills with numbered rows one per clause, and each row's woodblock icon is stamped onto it the moment its sentence has been read.
+- **acts** SETS, NAMES - **window** 10s
+- **members**
+  - +0s -> `page_species:agenda` (The agenda page) - the list takes the plate: a title over rows that divide the board, one row written per spoken clause
+  - +0s -> `idle:breath` (The breath idle) - every row holds alive on its own phase between its arrival and the next (E49)
+  - +1.6s -> `page_species:agenda` (The agenda page) - the next row is written and its catalogued icon is stamped on once its sentence has been read (E93)
+- **status** candidate - **count** 0 (unfired) - **source** P61 T8 - born with the agenda-page golden (E99 s16: the plate version of our list effect)
+- **doctrine** E93 -> docs/portable/OPERATOR-RULINGS.md:2761; E99 s16 -> docs/portable/OPERATOR-RULINGS.md:2901; BACKLOG R26-80 -> docs/content-video-engine/BACKLOG.md:486
 
 ### The decline drawn down, then taken back
 

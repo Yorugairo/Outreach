@@ -39,6 +39,7 @@ SURFACES = ["ledger-page-mid-build", "chart-callout", "dock-pair-16x9", "dock-pa
             "art-embed",    # P50 T7: a press card projected onto the plate's declared poster and a still card on its paper - the ART world, the room darkened around them
             "count-array",  # P52 T7: six identical sourced icons on a 2:1 rhombus lattice, the count written as the claim
             "agenda-two",   # P52 T8: two numbered rows revealed one per word, each holding at its own breath
+            "agenda-page",  # P61 T8 / E99 s16: the same species' PAGE form - the plate version of the list: the rows filling the board on their own mounts, a title over them, and each row's CATALOGUED icon (E93/E94) stamped on after its sentence (its three moving instants ride PROOF_FRAMES)
             "ring-dashed-chip",   # P52 T8: the ring's DASHED form round a datum with its flag chip - E56's use, a new form
             "species-proof",      # P52 T7 + T8: the proof page for human gate 3 - the three species on one clock (its other two instants are FLAG_FRAMES)
             "newsreel-band",        # P52 T6: the newsreel band 16:9 - the wire crawling under a docked surface, mid-run

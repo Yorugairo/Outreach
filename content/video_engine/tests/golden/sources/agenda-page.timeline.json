@@ -1,0 +1,74 @@
+{
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "caption_pages": [],
+ "captions": [],
+ "episode_id": "golden",
+ "evidence": {},
+ "narration": {
+  "canonical_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "words_path": ""
+ },
+ "project_id": "golden",
+ "runtime_s": 30.0,
+ "scenes": [
+  {
+   "docks": [],
+   "exit": "cut",
+   "scene_id": "s01",
+   "span": [
+    0.0,
+    30.0
+   ],
+   "species": [
+    {
+     "at": 5.0,
+     "dur": 9.0,
+     "form": "page",
+     "idle": "breath",
+     "kind": "agenda",
+     "rows": [
+      {
+       "icon": "prop-icon-us-sovereign-markets-v1",
+       "text": "A Treasury page"
+      },
+      {
+       "at": 6.6,
+       "icon": "prop-icon-interest-rates-monetary-policy-v2",
+       "text": "The rate they pay"
+      },
+      {
+       "at": 8.2,
+       "icon": "prop-icon-cpi-inflation-basket-v1",
+       "sub": "$4,500",
+       "text": "Your bill"
+      }
+     ],
+     "target": {
+      "kind": "region",
+      "x0": 0.05,
+      "x1": 0.95,
+      "y0": 0.08,
+      "y1": 0.94
+     },
+     "title": "WHAT THE BILL IS MADE OF"
+    }
+   ],
+   "world": {
+    "asset_id": "plate-plain",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+   }
+  }
+ ],
+ "schema_version": "scene_evidence_timeline.v1",
+ "sound": [],
+ "subtitle": "P39 golden surface",
+ "title": "Golden: the agenda PAGE - the plate version of the list"
+}

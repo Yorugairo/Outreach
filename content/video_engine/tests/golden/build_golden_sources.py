@@ -76,6 +76,7 @@ FRAME_T = {
                                    # landed drops and the plate shows through them over the charcoal, springing to rest
     "count-array": 8.0,             # P52 T7: all six icons landed (5.0 + 5 * 0.34 + LAND_S = 7.15) and the count written as the claim (+ CLAIM_LAG + CLAIM_S = 7.73) - the field as it is read
     "agenda-two": 7.2,              # P52 T8: both rows revealed (5.0 and 6.2 + NUM_LEAD + ROW_S = 6.74) and both rules fully drawn - the agenda as it stands
+    "agenda-page": 12.0,            # P61 T8: the agenda PAGE at rest - all three rows written, all three catalogued icons stamped and settled (the last at 8.2 + 0.54 + 0.12 + 0.26 + 0.14 = 9.26), the board full and breathing. Its three moving instants ride PROOF_FRAMES (@proof-first-row / @proof-stamp / @proof-full)
     "ring-dashed-chip": 10.6,       # P52 T8: the page has built (3.9 + 0.5 + 3.0), the dashed ellipse has closed round the datum (9.0 + DRAW_S) and the flag chip has landed beside it (+ FLAG_LAG + CHIP.LAND_S = 10.24)
     "species-proof": 12.6,          # P52 T7/T8, HUMAN GATE 3: the proof page's FIRST instant (the ring closed with its flag on the fully built page). Its other two are FLAG_FRAMES entries on the same clock (species-proof@proof-count / @proof-agenda), so the operator reads all three as frames and then plays the one file
     "ledger-keyed": 12.75,          # P48 T4b: mid-phase-2 of the keyed recast (12 s + 2 s; the golden's expoOut clock is half done at u 0.37): the lines have left half their history, their ends and values are in flight to the bar tops, the bars are half grown         # P48 T3: mid-extend - the axis has retargeted (the first 0.45 of the 2 s clock), the nib is ~half through the new tail on the golden's expoOut pen (rescale at 8 s, extend at 12 s)
@@ -127,6 +128,124 @@ def png_solid(w: int, h: int, rgb: tuple[int, int, int]) -> bytes:
 
     return (b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 2, 0, 0, 0))
             + chunk(b"IDAT", zlib.compress(raw, 9)) + chunk(b"IEND", b""))
+
+
+# P61 T8 (E99 s31: an approved cutout never enters git) - THE ICON PROXY. The agenda page's stamps are the
+# operator's OWN woodblock cutouts (~300 px square, ~200 KB each); a golden source carrying their bytes whole
+# would put three quarters of a megabyte of approved artwork in the tree. The fixture carries a PROXY instead:
+# the same picture, box-filtered down to about the size the page draws it at, by INTEGER arithmetic and zlib
+# alone - no Pillow, so the bytes are identical on any machine (a golden source that depended on an imaging
+# library's version would silently re-baseline four committed frames whenever that library moved).
+# THE RECORD IS UNTOUCHED: the compiler still resolves each icon through the catalogue before this is called
+# (id, kind, review_state, render_eligible, and the sha256 of the file on disk - build_scene_timeline_f
+# .catalogue_icon), and a BUILD still embeds the full-resolution file through catalogue_icon_uri. This is a
+# test fixture's proxy, and it says so.
+ICON_PROXY_PX = 192      # the longest side a proxy is reduced toward: the page draws a stamp at ~159 px at rest
+                         # (AGENDA.PAGE_ICON x the row's height), and reduction is by an INTEGER factor, so the
+                         # three cutouts land at 151x159, 142x147 and 160x152 - a hair over the drawn box
+
+
+def png_chunk(tag: bytes, data: bytes) -> bytes:
+    return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", zlib.crc32(tag + data) & 0xFFFFFFFF)
+
+
+def png_read_rgba(p: Path) -> tuple[int, int, bytearray]:
+    """One 8-bit RGBA, non-interlaced PNG as (w, h, pixels) - the standard library alone.
+
+    Anything else (a palette, 16 bits, an interlace) is a ValueError naming the file and what it carries: a
+    silent fallback here would be a fixture nobody could reproduce."""
+    b = p.read_bytes()
+    if b[:8] != b"\x89PNG\r\n\x1a\n":
+        raise ValueError(f"{p.name}: not a PNG")
+    w = h = None
+    idat = bytearray()
+    i = 8
+    while i + 8 <= len(b):
+        ln = struct.unpack(">I", b[i:i + 4])[0]
+        tag, data = b[i + 4:i + 8], b[i + 8:i + 8 + ln]
+        i += 12 + ln
+        if tag == b"IHDR":
+            w, h, depth, colour, comp, filt, inter = struct.unpack(">IIBBBBB", data)
+            if (depth, colour, comp, filt, inter) != (8, 6, 0, 0, 0):
+                raise ValueError(f"{p.name}: depth {depth}, colour type {colour}, interlace {inter} - this reader "
+                                 "takes an 8-bit RGBA non-interlaced PNG, which is what every cutout is")
+        elif tag == b"IDAT":
+            idat += data
+        elif tag == b"IEND":
+            break
+    if w is None:
+        raise ValueError(f"{p.name}: no IHDR")
+    raw = zlib.decompress(bytes(idat))
+    stride = w * 4
+    out, prev, pos = bytearray(h * stride), bytearray(stride), 0
+    for y in range(h):
+        f = raw[pos]
+        pos += 1
+        line = bytearray(raw[pos:pos + stride])
+        pos += stride
+        if f == 1:                                     # Sub
+            for x in range(4, stride):
+                line[x] = (line[x] + line[x - 4]) & 255
+        elif f == 2:                                   # Up
+            for x in range(stride):
+                line[x] = (line[x] + prev[x]) & 255
+        elif f == 3:                                   # Average
+            for x in range(stride):
+                a = line[x - 4] if x >= 4 else 0
+                line[x] = (line[x] + ((a + prev[x]) >> 1)) & 255
+        elif f == 4:                                   # Paeth
+            for x in range(stride):
+                a = line[x - 4] if x >= 4 else 0
+                c = prev[x - 4] if x >= 4 else 0
+                up = prev[x]
+                pa, pb, pc = abs(up - c), abs(a - c), abs(a + up - 2 * c)
+                pred = a if (pa <= pb and pa <= pc) else (up if pb <= pc else c)
+                line[x] = (line[x] + pred) & 255
+        elif f != 0:
+            raise ValueError(f"{p.name}: filter {f} on row {y}")
+        out[y * stride:(y + 1) * stride] = line
+        prev = line
+    return w, h, out
+
+
+def png_rgba(w: int, h: int, px: bytes) -> bytes:
+    """An 8-bit RGBA PNG, every row unfiltered - the same writer png_solid uses, with alpha."""
+    raw = b"".join(b"\x00" + bytes(px[y * w * 4:(y + 1) * w * 4]) for y in range(h))
+    return (b"\x89PNG\r\n\x1a\n" + png_chunk(b"IHDR", struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0))
+            + png_chunk(b"IDAT", zlib.compress(raw, 9)) + png_chunk(b"IEND", b""))
+
+
+def png_proxy(p: Path, cap: int = ICON_PROXY_PX) -> bytes:
+    """A cutout reduced to about `cap` on its longest side by an INTEGER box filter, alpha kept.
+
+    The factor is `round(longest / cap)`, so the reduction is a whole number of source pixels per proxy pixel
+    and no interpolation kernel (and no float rounding mode) is in it. The colour is averaged PREMULTIPLIED -
+    sum(c x a) / sum(a) - because a cutout's fully transparent pixels carry arbitrary colour, and averaging
+    that colour straight is exactly what puts a dark fringe round a woodblock edge. A picture already at or
+    under the cap is returned as it is."""
+    w, h, px = png_read_rgba(p)
+    k = max(1, round(max(w, h) / cap))
+    if k == 1:
+        return p.read_bytes()
+    w2, h2 = w // k, h // k
+    out, n = bytearray(w2 * h2 * 4), k * k
+    for y in range(h2):
+        for x in range(w2):
+            sr = sg = sb = sa = 0
+            for dy in range(k):
+                o = ((y * k + dy) * w + x * k) * 4
+                for dx in range(k):
+                    q = o + dx * 4
+                    a = px[q + 3]
+                    sr += px[q] * a
+                    sg += px[q + 1] * a
+                    sb += px[q + 2] * a
+                    sa += a
+            j = (y * w2 + x) * 4
+            if sa:
+                out[j], out[j + 1], out[j + 2] = sr // sa, sg // sa, sb // sa
+            out[j + 3] = sa // n
+    return png_rgba(w2, h2, bytes(out))
 
 
 def png_bars(w: int, h: int, rgb: tuple[int, int, int], bars: list[tuple[float, float, float, float]],
@@ -1350,6 +1469,47 @@ def agenda_two() -> tuple[dict, dict]:
     return _timeline("Golden: the numbered agenda", scenes, {}, None), _base_uris()
 
 
+# P61 T8 - THE AGENDA PAGE (E99 s16: *"still need the beautified agenda page, which i think we discussed as
+# basically just being the plate version of our list effect."*). The same species, its PAGE form: the block takes
+# the whole plate, a title says what the list is, and each row carries one of the OPERATOR'S OWN catalogued
+# cutouts (E93 / E94, `finance_icons_catalog.v1.json`, `render_eligible`), stamped on after that row's sentence
+# has been read. The icons are chosen by the catalogue's `semantic_tags` against the row's own words:
+#   us-treasuries -> prop-icon-us-sovereign-markets-v1, federal-funds-rate -> prop-icon-interest-rates-monetary-policy-v2,
+#   cost-of-living -> prop-icon-cpi-inflation-basket-v1.
+AGENDA_PAGE_ROWS = [{"text": "A Treasury page", "icon": "prop-icon-us-sovereign-markets-v1"},
+                    {"text": "The rate they pay", "at": 6.6, "icon": "prop-icon-interest-rates-monetary-policy-v2"},
+                    {"text": "Your bill", "at": 8.2, "sub": "$4,500", "icon": "prop-icon-cpi-inflation-basket-v1"}]
+AGENDA_PAGE = {"kind": "agenda", "form": "page", "at": 5.0, "dur": 9.0, "idle": "breath",
+               "title": "WHAT THE BILL IS MADE OF", "rows": AGENDA_PAGE_ROWS,
+               "target": {"kind": "region", "x0": 0.05, "y0": 0.08, "x1": 0.95, "y1": 0.94}}   # the BOARD: the page's own quiet zone
+
+
+def agenda_page() -> tuple[dict, dict]:
+    """P61 T8 (E99 s16, E93, R26-80): THE AGENDA PAGE - the plate version of the list effect.
+
+    The dock form (`agenda-two`, `species-proof@proof-agenda`) parks its rows in the box it was given and leaves
+    the upper two thirds of the plate empty. This is the same declaration with `form: "page"`: the rows divide
+    the whole board between them, each on its own mount with its numeral in a medallion, and each row's
+    CATALOGUED icon is stamped on PAGE_STAMP_LAG after that row's sentence has been read (E93) - never before.
+    No captions: the page form fills the frame, so what the golden reads is the page and not a caption over it
+    (the same reason the race arms clear theirs)."""
+    import build_scene_timeline_f as BST
+    block = dict(AGENDA_PAGE)
+    errs = BST.validate_species([block], (0, 0, 0), "plate-plain")
+    assert not errs, errs
+    scenes = [{"scene_id": "s01", "world": {"asset_id": "plate-plain", "sha256": "0" * 64, "ken_burns": {"scale": 0, "x": 0, "y": 0}},
+               "exit": "cut", "span": [0.0, RUNTIME], "docks": [], "species": [block]}]
+    tl = _timeline("Golden: the agenda PAGE - the plate version of the list", scenes, {}, None)
+    tl["captions"], tl["caption_pages"] = [], []
+    uris = _base_uris()
+    for name in [r["icon"] for r in AGENDA_PAGE_ROWS]:
+        # `prop:<asset_id>`: a DOWNSCALED PROXY of the operator's cutout (E99 s31 - an approved cutout does not
+        # enter git at full resolution). `catalogue_icon` is what resolves it: the id, the kind, the operator's
+        # approval, `render_eligible`, and the sha256 of the file on disk, all checked before a byte is read.
+        uris[BST.PROP_PREFIX + name] = uri("image/png", png_proxy(BST.catalogue_icon(name)["file"]))
+    return tl, uris
+
+
 def ring_dashed_chip() -> tuple[dict, dict]:
     """P52 T8 (EXPLORATION-REVIEW-2026-09-10.md:57 #5): the ring's DASHED-ELLIPSE form round a datum of a ledger
     line page, with a flag chip beside it. The form widens, the USE does not - E56 still holds, and this row is
@@ -1535,6 +1695,7 @@ SURFACES = {
     "treemap-cross": treemap_cross,
     "count-array": count_array,          # P52 T7
     "agenda-two": agenda_two,            # P52 T8
+    "agenda-page": agenda_page,          # P61 T8: the plate version of the list (E99 s16)
     "ring-dashed-chip": ring_dashed_chip,   # P52 T8
     "species-proof": species_proof,      # P52 T7 + T8: the proof page for human gate 3
     "melt-page": melt_page,                                  # E88: the throw
