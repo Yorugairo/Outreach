@@ -24,6 +24,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "content/video_engine/scripts"))
 
+import build_scene_timeline_f as B  # noqa: E402
 import render_baseline as RB  # noqa: E402
 
 CAPABILITIES = ["curvature_stroke", "analytic_spring", "area_squash", "arap_morph", "dqs_skinning", "prop_attach",
@@ -52,6 +53,42 @@ def test_template_reads_the_flags_from_the_timeline() -> None:
     src = RB.player_text()
     assert "TL.kinetics" in src
     assert "const kin = (name) => KIN[name] === true" in src
+
+
+# ------------------------------------------------------------------ E99 s46: THE DARK SPAN IS THE DEFAULT
+# The operator, 2026-09-15, on `r26-68-span-darker`: *"yes"* - `span_tone` dark at `span_alpha` 0.30. A DIAL is not a
+# capability flag (it carries a value, not a switch), so it defaults in two places that must say the same thing: the
+# PLAYER's, for a timeline that names neither dial (species/span.mjs SPAN.TONE / SPAN.ALPHA_DARK, read by
+# `spanToneIsDark` / `spanAlphaOf`), and the COMPILER's, which writes both dials into every timeline it builds so a
+# frozen player that predates the default still renders the ruling. These tests hold the two to each other.
+SPAN_MODULE = ROOT / "content/video_engine/scripts/species/span.mjs"
+
+
+def _span_const(name: str) -> str:
+    m = re.search(rf"^\s*{name}:\s*([^,]+),", SPAN_MODULE.read_text(encoding="utf-8"), re.M)
+    assert m, f"species/span.mjs has no SPAN.{name}"
+    return m.group(1).strip().strip('"')
+
+
+def test_the_span_defaults_are_the_ruled_ones_on_both_sides() -> None:
+    assert _span_const("TONE") == "dark", "E99 s46: a span whose build names no tone is DARK"
+    assert float(_span_const("ALPHA_DARK")) == 0.30, "... at 0.30"
+    assert float(_span_const("ALPHA")) == 0.16, "the LIGHT tone keeps the law it was tuned at"
+    k = B.build_kinetics()
+    assert k["span_tone"] == _span_const("TONE"), "the compiler and the player must not default differently"
+    assert k["span_alpha"] == float(_span_const("ALPHA_DARK"))
+
+
+def test_a_build_can_still_ask_for_the_chalk_wash_by_name(monkeypatch) -> None:
+    monkeypatch.setattr(B, "KINETICS", {"span_tone": "light"})
+    assert B.build_kinetics()["span_tone"] == "light", "the old wash is authorable - the default is not a removal"
+
+
+def test_the_player_takes_the_span_tone_from_the_module_and_nowhere_else() -> None:
+    src = RB.player_text()
+    assert "spanGround(KIN.span_tone, col)" in src, "the builder hands the raw dial to species/span.mjs"
+    assert "alpha: KIN.span_alpha, tone: KIN.span_tone" in src, "both dials are read ONCE onto the built span"
+    assert 'KIN.span_tone === "dark"' not in src, "a second default in the engine is exactly the drift this pins"
 
 
 def _chromium_available() -> bool:

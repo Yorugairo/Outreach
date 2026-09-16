@@ -1070,7 +1070,7 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
 - CAPABILITIES rows changed: **:75** (stop-action mechanics gains the render clock) and the plate-life line of **:121**
 
 ### T13: THE DARK SPAN BECOMES THE DEFAULT (E99 s46)
-- Status: pending
+- Status: complete (2026-09-16) - the ruling's default in the engine; no card (r26-68 ruled E99 s46)
 - Owner: `junior_developer` (**ENGINE LOCK** - one dial default)
 - Depends on: HG-span ruled (E99 s46)
 - Write set: `content/video_engine/scripts/species/span.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the span
@@ -1081,7 +1081,15 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   through their frozen players (E45); the goldens that move are exactly the ones carrying a span, named in Evidence.
 - Validate: `python -m pytest content/video_engine/tests/test_kinetics_flags.py content/video_engine/tests/test_golden_frames.py -q` then
   `python content/video_engine/scripts/sync_kinetics.py --check` then `python content/video_engine/scripts/effects_catalog_check.py`
-- Evidence: pending
+- Evidence: report `scratchpad/assembly/P61-T13.md`. `species/span.mjs:61-62` `TONE: "dark"`, `ALPHA_DARK: 0.30`; `spanToneIsDark` /
+  `spanGround` (:170-178); `spanAlphaOf` falls back by tone (0.30 dark / 0.16 light, :187-191); the engine's span region re-inlined
+  (`spanGround(KIN.span_tone, col)` :10129); the compiler's `SPAN_DIAL_DEFAULTS = {span_tone: dark, span_alpha: 0.30}` (:4715) into
+  `build_kinetics()`; the two sides' agreement pinned in `test_kinetics_flags.py:57-91`; `span.test.mjs` 0.160 -> 0.300 + 3 tests.
+  GOLDENS: exactly one moved - `span-decade` (b6bfdecf -> e089cb23); every other byte-identical. Parent's read: the run-up band
+  sits darker than the page under the untouched name, the gridlines and the four figures read through it. The Japan build-short's
+  frozen player untouched (E45); `gate_motion_density` on it unchanged: 4 FAIL / 0 WARN / 16 PASS / 1 JUDGE / 8 INFO. Card
+  `page_species` span dials name the default. Page-boxes re-pinned sha-only. Validate: node 600/600; sync in sync; pytest 148;
+  effects_catalog_check 0 failures; page-boxes 44. The registry regenerates with T11 (another lane holds it staged).
 
 ### T11: THE RECORD - the CAPABILITIES rows, the backlog rows, the queue, the layers
 - Status: in progress (2026-09-15) - the built half written; the operator ruled HG1 / HG3 / HG4 / HG5 / HG7 / HG8 / HG10 and the span and the cutout-dock cards the same night (E99 s39-s47, all nine recorded verbatim, the cards ruled, the rows carried); open: HG6 (asked once proof B lands with T3), the drift plate's visible proof (E99 s38), and the four follow-up slices T2b / T5b / T7b / T13 the rulings opened

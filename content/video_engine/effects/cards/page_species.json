@@ -698,7 +698,7 @@
           "source": "docs/content-video-engine/CAPABILITIES.md:91"
         }
       ],
-      "does": "A shaded stretch of time sits behind the chart with its name above it.",
+      "does": "A shaded stretch of time sits behind the chart with its name above it. The shade is DARKER than the page by default (E99 s46: span_tone dark at span_alpha 0.30); span_tone light is the old chalk wash, by name.",
       "when": null,
       "when_source": null,
       "author": {
@@ -710,11 +710,13 @@
       "phases": [
         {
           "name": "shade arrives",
-          "does": "the band fades in behind the chart",
+          "does": "the band fades in behind the chart, darkening it",
           "trigger": "the species' `at`",
           "dials": {
             "IN_S": "0.45",
-            "ALPHA": "0.16"
+            "TONE": "dark (the default, E99 s46)",
+            "ALPHA_DARK": "0.30",
+            "ALPHA": "0.16 (the light tone's own law)"
           }
         },
         {

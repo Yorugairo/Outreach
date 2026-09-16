@@ -4706,11 +4706,22 @@ def narration_key_delays(chart: dict, dock_enter: float, tl: dict) -> dict:
     return chart
 
 
+# E99 s46, the operator on `r26-68-span-darker`: *"yes"* - the span reads as a DARKER region behind the line, at
+# `span_alpha` 0.30. THE COMPILER'S HALF of that default: every timeline this compiler writes carries the two dials
+# by name, so a build is dark whichever player it is mounted in - including a player frozen before the dials could
+# default (E45: an approved cut renders through its OWN frozen copy and does not move). THE PLAYER'S half is
+# `species/span.mjs` SPAN.TONE / SPAN.ALPHA_DARK, which is where a timeline that names neither dial gets the same
+# answer; `test_kinetics_flags.py` holds the two numbers to each other, so neither side can drift alone.
+SPAN_DIAL_DEFAULTS: dict = {"span_tone": "dark", "span_alpha": 0.30}
+
+
 def build_kinetics() -> dict:
     """The flags a compiled timeline carries. P39: every capability defaults OFF in the template. E49 (P47 T5): the
     IDLE is on for every timeline this compiler writes - a build that wants stillness says so (``KINETICS["idle"] =
-    False``); the goldens' frozen sources carry no flag and stay byte-identical."""
-    return {"idle": True, "stop_action": True, "arap_morph": True, "camera": True, **KINETICS}   # P47 T1: an authored `arrive` is the switch; the flag only guards the goldens; P49 T2: the camera is one state per frame (the species pixel-identical)
+    False``); the goldens' frozen sources carry no flag and stay byte-identical. E99 s46: the span's two DIALS ride
+    with them at the ruled default (``KINETICS["span_tone"] = "light"`` puts one build back to the chalk wash)."""
+    return {"idle": True, "stop_action": True, "arap_morph": True, "camera": True,
+            **SPAN_DIAL_DEFAULTS, **KINETICS}   # P47 T1: an authored `arrive` is the switch; the flag only guards the goldens; P49 T2: the camera is one state per frame (the species pixel-identical)
 
 
 # ------------------------------------------------------------------ P51 T5: THE OVERRIDE SIDECAR

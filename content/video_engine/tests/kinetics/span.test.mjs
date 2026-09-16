@@ -5,7 +5,8 @@
 // recorders with no DOM - it reaches the engine's perform layer only through its ctx.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { SPAN, spanIsIndex, spanEdgeX, spanExtent, spanBand, spanLabelY, spanPose, spanGlyph, paintSpan } from "../../scripts/species/span.mjs";
+import { SPAN, spanIsIndex, spanEdgeX, spanExtent, spanBand, spanLabelY, spanPose, spanGlyph, paintSpan,
+         spanToneIsDark, spanGround, spanAlphaOf } from "../../scripts/species/span.mjs";
 
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 /* lpPointsNow's own shape: the PAGE's datum index and the point in the chart's viewBox */
@@ -17,6 +18,32 @@ test("the dials are the span's, and the shade never fights the line it stands be
   assert.ok(SPAN.IN_S > 0 && SPAN.WRITE > 0 && SPAN.WRITE <= 1);
   assert.ok(SPAN.ALPHA > 0 && SPAN.ALPHA < 0.3, "a span is the room the argument happens in, not the argument");
   assert.ok(SPAN.PAD_T > 0 && SPAN.PAD_B > 0 && SPAN.MIN_W > 0);
+});
+
+// ---------------------------------------------------------------- the tone and its depth (E99 s46)
+test("THE DEFAULT is the DARK span at 0.30 - the operator's own numbers, pinned here (E99 s46)", () => {
+  assert.equal(SPAN.TONE, "dark", "E99 s46: 'yes' to the dark span - a span whose build names no tone is dark");
+  assert.equal(SPAN.ALPHA_DARK, 0.30, "... at 0.30, the depth ruled with it");
+  assert.equal(SPAN.ALPHA, 0.16, "and the LIGHT tone keeps its own law - chalk at 0.30 is the washed-out region s7 refused");
+});
+
+test("the tone is resolved in ONE place: absence and nonsense take the default, `light` is kept by name", () => {
+  for (const absent of [undefined, null, ""]) assert.equal(spanToneIsDark(absent), true, JSON.stringify(absent));
+  assert.equal(spanToneIsDark("dark"), true);
+  assert.equal(spanToneIsDark("light"), false, "a build that says light gets the chalk wash it always had");
+  assert.equal(spanToneIsDark("murky"), true, "an unknown value is not a third tone - it is the default");
+  assert.equal(spanGround(undefined, "var(--lp-chalk)"), SPAN.DARK, "the ground darkens ...");
+  assert.equal(spanGround("light", "var(--lp-chalk)"), "var(--lp-chalk)", "... unless the build asked for its colour");
+});
+
+test("the settled depth is the build's number, else the TONE's own law", () => {
+  assert.equal(spanAlphaOf({}), SPAN.ALPHA_DARK, "no dial at all is the ruled default");
+  assert.equal(spanAlphaOf({ tone: "light" }), SPAN.ALPHA, "the light tone stays at the law it was tuned at");
+  assert.equal(spanAlphaOf({ alpha: 0.42, tone: "light" }), 0.42, "a number the build hands down wins either way");
+  assert.equal(spanAlphaOf({ alpha: 0, tone: "light" }), SPAN.ALPHA, "a zero is a MISSING shade, not a darker one");
+  assert.equal(spanAlphaOf({ alpha: -1 }), SPAN.ALPHA_DARK);
+  assert.equal(spanAlphaOf({ alpha: "0.5" }), 0.5);
+  assert.equal(spanAlphaOf({ alpha: 4 }), 1, "1 is an opacity's ceiling");
 });
 
 // ---------------------------------------------------------------- the two edges
@@ -147,9 +174,9 @@ test("THE PAINTER paints the band and the name through its ctx, and nothing at a
   paintSpan(sd, t0, st, ctx);
   const band = spanBand(pts, [pts], sd.sp.from, sd.sp.to, 560);
   assert.deepEqual(sd.rect.at, { x: band.x.toFixed(1), y: band.y.toFixed(1), width: band.w.toFixed(1),
-                                 height: band.h.toFixed(1), "fill-opacity": SPAN.ALPHA.toFixed(3) });
+                                 height: band.h.toFixed(1), "fill-opacity": SPAN.ALPHA_DARK.toFixed(3) });
   assert.equal(sd.rect.at.x, "180.0");
-  assert.equal(sd.rect.at["fill-opacity"], "0.160", "the shade is in, and it is the dial's own alpha");
+  assert.equal(sd.rect.at["fill-opacity"], "0.300", "the shade is in at the DEFAULT depth - E99 s46's dark span at 0.30");
   assert.deepEqual(sd.label.at, { opacity: 1, x: band.cx.toFixed(1), y: spanLabelY(band, sd.fs).toFixed(1) });
   assert.equal(sd.label.at.y, "140.0", "the name stands over the band");
   assert.deepEqual(sd.lg.map((g) => g.at.opacity), sd.lg.map(() => "0.000"), "not a glyph until the shade is in");

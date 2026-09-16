@@ -66,15 +66,16 @@ async function mount(doc) {
   const KINETICS_DIALS = Object.freeze({
     press_face: "the press card's display face: house | serif | condensed",
     /* E99 s7 / R26-68, the operator: "that light of gray makes it read washed out". The span's SETTLED shade, 0..1.
-       Absent - which is every timeline on disk - leaves species/span.mjs SPAN.ALPHA (0.16), so no committed frame
-       moves; a build that carries a number darkens the wash and nothing else about the span. */
-    span_alpha: "the span's settled shade, 0 .. 1 (absent = span.mjs SPAN.ALPHA)",
+       Absent, the depth is the TONE's own law in species/span.mjs - ALPHA_DARK (0.30) for the dark ground E99 s46
+       made the default, ALPHA (0.16) for the light one; a build that carries a number overrides both. */
+    span_alpha: "the span's settled shade, 0 .. 1 (absent = span.mjs ALPHA_DARK on dark, ALPHA on light)",
     /* E99 s7 again, the design call (2026-09-15): `span_alpha` alone could not answer the operator, because the
-       default wash is CHALK over a charcoal page - every increase of the alpha lifts the region toward white,
+       old default wash was CHALK over a charcoal page - every increase of the alpha lifts the region toward white,
        measured +24 L over the page at 0.16 and +62 L at 0.36. `dark` parts the shade from its name: the GROUND
        goes to SPAN.DARK at the alpha (a darkening region, tinting nothing) and the label keeps `col` - the chalk,
-       or the span's own `sp.color`. Default "light" is the chalk-at-alpha every committed frame carries. */
-    span_tone: "the span's ground: light (the span's own colour, today) | dark (SPAN.DARK under the same name)",
+       or the span's own `sp.color`. E99 s46 ("yes") made DARK the default (species/span.mjs SPAN.TONE); a build
+       that wants the old chalk wash says `light`, and every approved cut keeps it through its FROZEN player (E45). */
+    span_tone: "the span's ground: dark (SPAN.DARK under the same name - the default) | light (the span's own colour)",
     /* R26-133: a plate world's idle is read for its `.scale` alone, so `drift` ({scale: 1, dx, dy}) holds perfectly
        still. True lets the dx/dy PAINT - on the world's rest term, and on a layered plate per plane at its own share
        k, the way camLayerState shares the camera's translation. It is a DIAL and not a capability flag on purpose:
@@ -764,6 +765,8 @@ async function mount(doc) {
     MIN_W: 6,         /* a band narrower than this is not a period - it is two adjacent data, which is a bracket's job */
     LABEL_CLEAR: 0.55,/* R26-68: how far short of a page label's baseline the shade's top stops, in the span's own label sizes - a page's series tag is the DATA's name and reads on the ground, never inside a wash */
     DARK: "#000",     /* E99 s7: the DARK tone's ground. The shade and its name part company - the name keeps the span's own colour, the ground goes to this at ALPHA. Black and not a palette token on purpose: a shade must DARKEN whatever it stands on and tint it with nothing, and the palette's only dark (`--lp-char`) IS the charcoal page, so on the page the operator was reading it is invisible. On a cream page it is the same shade, read the other way up. */
+    TONE: "dark",     /* E99 s46, the operator on `r26-68-span-darker`: "yes" - the DEFAULT tone of a span whose build names none. A span is a darker region behind the line; `light` (the chalk-at-ALPHA every frame before 2026-09-15 carried) stays authorable by name on the `span_tone` dial, and the approved cuts keep it because they render through their own FROZEN players (E45). */
+    ALPHA_DARK: 0.30, /* ... and the depth ruled WITH it: the dark ground settles here, where ALPHA (0.16) stays the light tone's law. Measured on the operator's own frame (build-short-axes 38.0 s): the band reads 21 L DARKER than the page, the gridlines and both figures still reading through it. */
   });
 
   const span01 = (v) => Math.min(1, Math.max(0, v));
@@ -867,15 +870,31 @@ async function mount(doc) {
   const spanLabelY = (band, fs) => { const y = band.yTop != null ? band.yTop : band.y;
     return y >= fs * SPAN.LABEL_ROOM ? y - SPAN.LABEL_DY : y + fs * SPAN.LABEL_IN; };
 
+  /* THE TONE a span is grounded in (E99 s7 -> s46). ONE PLACE, and this is it: the `span_tone` dial names `dark`
+     (SPAN.DARK under the span's own name) or `light` (the span's own colour, the chalk); anything else, and ABSENCE,
+     is SPAN.TONE - and E99 s46 made that DARK. The engine hands the dial's raw value straight in, so a timeline that
+     says nothing gets the ruled default and one that says `light` keeps the wash it always had. */
+  const spanToneIsDark = (tone) => {
+    const v = tone === null || tone === undefined || tone === "" ? SPAN.TONE : String(tone);
+    return (v === "light" || v === "dark" ? v : SPAN.TONE) === "dark";
+  };
+
+  /* THE GROUND the shade is painted in: the dark tone darkens whatever it stands on and tints it with nothing, the
+     light tone is the span's own colour. The NAME never comes here - it keeps `col` either way (E99 s7: the shade and
+     its name part company), which is why the caller passes the colour in rather than the painter reaching for it. */
+  const spanGround = (tone, col) => (spanToneIsDark(tone) ? SPAN.DARK : col);
+
   /* THE SHADE'S SETTLED DEPTH for a BUILT span (E99 s7, the operator: "that light of gray makes it read washed
-     out"). SPAN.ALPHA is the law and stays it; a build that wants a darker wash hands the number down ON the built
-     span as `sd.alpha`, which the engine fills from the `span_alpha` kinetics dial - absent -> undefined -> ALPHA, so
-     every frame rendered before this is the frame it was. It arrives BY NAME on `sd`, never as a free identifier, so
-     `node --test` still calls the painter with no engine around it. A zero, a negative or a nonsense value is not a
-     darker shade but a missing one, so it falls back to the law; 1 is the ceiling an opacity has. */
+     out"; E99 s46, "yes" to the dark span at 0.30). A build that wants its own wash hands the number down ON the
+     built span as `sd.alpha`, which the engine fills from the `span_alpha` kinetics dial; absent, the depth is the
+     TONE's own law - ALPHA_DARK (0.30) for the dark ground the ruling made the default, ALPHA (0.16) for the light
+     one, because chalk at 0.30 over a charcoal page is the washed-out region s7 refused. Both arrive BY NAME on `sd`,
+     never as free identifiers, so `node --test` still calls the painter with no engine around it. A zero, a negative
+     or a nonsense value is not a darker shade but a missing one, so it falls back to the law; 1 is an opacity's ceiling. */
   const spanAlphaOf = (sd) => {
     const a = +(sd && sd.alpha);
-    return Number.isFinite(a) && a > 0 ? Math.min(1, a) : SPAN.ALPHA;
+    if (Number.isFinite(a) && a > 0) return Math.min(1, a);
+    return spanToneIsDark(sd && sd.tone) ? SPAN.ALPHA_DARK : SPAN.ALPHA;
   };
 
   /* THE POSE at t: is it up, how deep is the shade, how far has the hand written. */
@@ -10107,12 +10126,12 @@ async function mount(doc) {
        every line; the name is ink, on top, written glyph by glyph by the hand. */
     const spans = pageSpecies(scene, "span").map((sp) => {
       const col = sp.color ? (PS_PAL[sp.color] || sp.color) : "var(--lp-chalk)";
-      const ground = KIN.span_tone === "dark" ? SPAN.DARK : col;   /* E99 s7: the shade and its NAME part company - the ground darkens, the name keeps `col`. Any other value, and absence, is "light": the one colour it has always been. */
+      const ground = spanGround(KIN.span_tone, col);   /* E99 s7 / s46: the shade and its NAME part company - the ground darkens, the name keeps `col`. The dial's raw value goes to species/span.mjs, which owns the default (SPAN.TONE, dark since s46). */
       const rect = lpEl("rect", "lp-span", surf, { x: 0, y: 0, width: 0, height: 0, fill: ground, "fill-opacity": 0 });
       surf.insertBefore(rect, surf.firstChild);
       const label = lpEl("text", "spanlab", surf, { x: 0, y: 0, "text-anchor": "middle", opacity: 0, style: "font-size:" + fs + "px;fill:" + col });
       const lg = [...String(sp.label || "")].map((ch) => { const ts = lpEl("tspan", "", label, { opacity: 0 }); ts.textContent = ch === " " ? "\u00a0" : ch; return ts; });
-      return { sp, si: sp.series | 0, rect, label, lg, fs, alpha: KIN.span_alpha };   /* E99 s7: the span_alpha dial, read ONCE onto the built span - spanAlphaOf falls back to SPAN.ALPHA when it is absent */
+      return { sp, si: sp.series | 0, rect, label, lg, fs, alpha: KIN.span_alpha, tone: KIN.span_tone };   /* E99 s7 / s46: both dials, read ONCE onto the built span - absent, spanAlphaOf takes the TONE's own law (0.30 dark, 0.16 light) */
     });
     /* THE CENSUS'S X MARKS (P50 T6; E53 s1's second amendment, 2026-09-10; Bravos shots 89-91). The
        named cells take an X and dim; the crossed SHARE is written by the hand above the map. Both halves
