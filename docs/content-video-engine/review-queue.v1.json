@@ -570,7 +570,8 @@
         "R26-131 item 2",
         "E88 s7",
         "E99 s3",
-        "P61 HG5"
+        "P61 HG5",
+        "E99 s42"
       ],
       "kind": "look",
       "title": "The ball's shadows: does it read metallic and heavy now",
@@ -599,7 +600,7 @@
       ],
       "options": [],
       "recommendation": "Heavy: yes - the silhouette went from brighter than the body to 43% of it and the contact shadow to 22% of the board. Metal: not yet, for two nameable reasons. The body is still the chart's saturated orange because the melt's conceit is that the ball IS the chart's ink; the blueprint's metal is a near-black body lit only by speculars, and going there is a ruling (the ball stops carrying the chart's colour), not a dial. And the band is a straight stripe of constant width where a real reflection on a sphere curves toward the silhouette; one SVG gradient cannot do that, a mesh could. Approve the weight, and say whether the ball may lose its colour.",
-      "blocks": "whether the weight phase enters the default melt (it stays opt-in until ruled); T6's gathered point is this ball",
+      "blocks": "nothing - ruled E99 s42 (2026-09-15): refused - the prior ball, plus the darkness; T5b renders slate-grey and reference-colour variants",
       "sources": [
         "docs/content-video-engine/BACKLOG.md:550",
         "docs/content-video-engine/BACKLOG.md:563",
@@ -609,10 +610,12 @@
         "docs/research/runs/p58-2-5d/research-gate-2026-09-14.md (R26-119: PLAUSIBLE; the ink row EXCLUDED)",
         "content/video_engine/scripts/kinetics/drop.mjs:60-108",
         "content/video_engine/scripts/species/melt.mjs:182-215",
-        "content/video_engine/review/assembly/r26-118-metallic-ball/crop-record.json"
+        "content/video_engine/review/assembly/r26-118-metallic-ball/crop-record.json",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s42)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-15)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s42",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-15 (P61 T5): the four shadow dials behind melt:weight, the before/after crop, the clips",
       "proofs": [
@@ -752,7 +755,8 @@
         "R26-70 T12c",
         "E99 s1",
         "E99 s34",
-        "P61 HG1"
+        "P61 HG1",
+        "E99 s39"
       ],
       "kind": "watch",
       "title": "The whole chart becomes the whole other chart (chart_to remake)",
@@ -793,17 +797,19 @@
       ],
       "options": [],
       "recommendation": "Approve as the whole-chart standard. One thing to read for: with 15 data and 5 bars the un-keyed first ten months WIPE by the dash window (E50's law) rather than becoming something - every keyed datum transforms; a page that wants the whole line to become bars authors n bars for n data. If that wipe reads as 'left behind', say so and the verb gains a rule. The compare frames that used to sit here are one figure balling up, refused as a morph proof by E99 s1; the ball -> next-chart ending is R26-117's own card now.",
-      "blocks": "T3 (the ball becomes the next full chart) and P47 T6/T7's blocker; the CAPABILITIES rows :116 / :27 (T11)",
+      "blocks": "nothing - ruled E99 s39 (2026-09-15): line -> bars taken; bars -> line rebuilt in T2b (collapse to the apex, draw back to the root)",
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md:3143 (E99 s34)",
         "docs/portable/OPERATOR-RULINGS.md:2901 (E99 s1)",
         "docs/content-video-engine/BACKLOG.md:476",
         "content/video_engine/scripts/build_scene_timeline_f.py:280 (CHART_TO_KINDS), :2113 (remake_mark_map), :2199-2234 (the refusals)",
         "content/video_engine/scripts/kinetics/chartxf.mjs (REMAKE, xfRemakeClock)",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md:261-331 (T2)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md:261-331 (T2)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s39)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-15)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s39",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-15 (P61 T2): chart_to remake, both pairs, six goldens, the two clips",
       "proofs": [
@@ -1068,7 +1074,8 @@
         "P53 HG4",
         "R26-59",
         "OG Part 2 item 2",
-        "R26-87"
+        "R26-87",
+        "E99 s45"
       ],
       "kind": "look",
       "title": "The cutout dock's first frame",
@@ -1089,7 +1096,7 @@
         "no"
       ],
       "recommendation": "yes - and with it R26-59 and the P53 T7 \"STILL OPEN\" line close. The re-render was already on disk; what was missing was the pair that shows what changed.",
-      "blocks": "P53 completion",
+      "blocks": "nothing - ruled E99 s45 (2026-09-15): both options; the framed card the lean",
       "sources": [
         ".claude/PRPs/plans/P53-WHAT-THE-ONE-SHOT-TAUGHT.plan.md:10",
         ".claude/PRPs/plans/P53-WHAT-THE-ONE-SHOT-TAUGHT.plan.md:114",
@@ -1097,10 +1104,12 @@
         ".claude/PRPs/plans/P53-WHAT-THE-ONE-SHOT-TAUGHT.plan.md:249",
         "docs/content-video-engine/BACKLOG.md:464",
         "docs/content-video-engine/BACKLOG.md:500",
-        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:93-97"
+        "docs/content-video-engine/OPEN-GATES-AND-QUESTIONS-2026-09-12.md:93-97",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s45)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-15)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s45",
       "proofs": [
         {
           "type": "crop",
@@ -2673,7 +2682,8 @@
       "ids": [
         "P58 HG3",
         "E99 s4",
-        "P61 HG3"
+        "P61 HG3",
+        "E99 s40"
       ],
       "kind": "watch",
       "was_kind": "owed",
@@ -2700,14 +2710,16 @@
       ],
       "options": [],
       "recommendation": "Approve. Read side by side the two are now the same kind of event - a page coming apart into pieces that each go their own way - and each piece is still a hard-edged face of a prism (doc 29 s1.2 holds).",
-      "blocks": "P58 HG3",
-      "status": "open",
-      "ruling": null,
+      "blocks": "nothing - ruled E99 s40 (2026-09-15): approved",
+      "status": "ruled",
+      "ruling": "E99 s40",
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md:2927-2934 (E99 s4)",
         "docs/content-video-engine/review-answers.jsonl (p58-hg3-chart-forms)",
         "docs/content-video-engine/samples/scene-evidence-engine.mjs:6661-6712,10450",
-        "content/video_engine/tests/test_chart_forms_2_5d.py:246-285"
+        "content/video_engine/tests/test_chart_forms_2_5d.py:246-285",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s40)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-15)"
       ],
       "proofs": [
         {
@@ -2737,7 +2749,8 @@
       "ids": [
         "R26-68",
         "P57 HG1",
-        "E99 s7"
+        "E99 s7",
+        "E99 s46"
       ],
       "kind": "look",
       "was_kind": "owed",
@@ -2764,13 +2777,15 @@
         "too dark"
       ],
       "recommendation": "span_tone dark at span_alpha 0.30 - the band sits 21 L BELOW the page instead of 24 L above it, the gridlines and both figures still read through it, and the name is untouched",
-      "blocks": "P57 HG1 (R26-68)",
-      "status": "open",
-      "ruling": null,
+      "blocks": "nothing - ruled E99 s46 (2026-09-15): yes - the dark span at 0.30 becomes the default (T13)",
+      "status": "ruled",
+      "ruling": "E99 s46",
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md:2943-2947 (E99 s7)",
         "docs/research/runs/p57-burndown/HG-HANDOFF.md",
-        "content/video_engine/scripts/species/span.mjs:60,170-173"
+        "content/video_engine/scripts/species/span.mjs:60,170-173",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s46)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-15)"
       ],
       "proofs": [
         {
@@ -2818,7 +2833,8 @@
         "R26-80",
         "E93",
         "E99 s16",
-        "P61 HG8"
+        "P61 HG8",
+        "E99 s44"
       ],
       "kind": "watch",
       "title": "The beautified agenda page - the plate version of the list effect",
@@ -2855,7 +2871,7 @@
       ],
       "options": [],
       "recommendation": "Approve. It has what the TEST card has and the corner list lacked: a ground, a title, a mark per row, the fill and a close - without losing the row's own arrival. The icons are the operator's own catalogued cutouts, refused by name if not approved and render-eligible (the first render path to the catalogue). The dock form is untouched.",
-      "blocks": "HG8; the CAPABILITIES row :43 (T11)",
+      "blocks": "nothing - ruled E99 s44 (2026-09-15): approved as a build",
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md (E99 s16)",
         "docs/content-video-engine/BACKLOG.md (R26-80)",
@@ -2863,10 +2879,12 @@
         "docs/portable/OPERATOR-RULINGS.md:2988 (E99 s16)",
         "content/video_engine/scripts/species/agenda.mjs",
         "content/video_engine/tests/test_agenda_page.py",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T8)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T8)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s44)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-15)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s44",
       "proofs": [
         {
           "type": "clip",
@@ -2888,7 +2906,8 @@
         "P58 HG3",
         "E99 s18",
         "E99 s35",
-        "P61 HG4"
+        "P61 HG4",
+        "E99 s41"
       ],
       "kind": "watch",
       "title": "The chart forms: the soak or the cross-fade by the sentence's job, the leave by the soak",
@@ -2917,16 +2936,18 @@
       ],
       "options": [],
       "recommendation": "Approve. The recede on the cross-fade page is one lumpy ink island with the plate's own cream paper eaten in - the soak clip's event - where the old two-plate leave was flat cream a second early. The two arrivals are the two you ruled first-class; the scribble stays the opt-in and untouched.",
-      "blocks": "the item's next review",
+      "blocks": "nothing - ruled E99 s41 (2026-09-15): approved",
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md (E99 s18, corrected 2026-09-15; E99 s35)",
         ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T4b)",
         "docs/content-video-engine/samples/scene-evidence-engine.mjs:6705-6728,10472",
         "content/video_engine/scripts/build_scene_timeline_f.py:2929-2963",
-        "content/video_engine/tests/test_chart_forms_2_5d.py:307-382"
+        "content/video_engine/tests/test_chart_forms_2_5d.py:307-382",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s41)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-15)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s41",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-15 (P61 T4b): the recede, the field grammar, the two entries as cards, the goldens, the three clips",
       "proofs": [
@@ -3051,7 +3072,8 @@
       "ids": [
         "R26-82",
         "E99 s21",
-        "P61 HG7"
+        "P61 HG7",
+        "E99 s43"
       ],
       "kind": "watch",
       "title": "The verdict stack on a short, beside Steel and Paper's own beat",
@@ -3088,17 +3110,19 @@
       ],
       "options": [],
       "recommendation": "Approve. Read beside the reference, every phase matches its character: one card at a time from depth; the focus card relatively larger (a short is read at arm's length); the mosaic banded rather than ringed because the portrait focus card owns a full-width band - the safe box's cost, not a flattening (the rails span 45% of the stage's height, no 60 px band holds more than three of seven); the idle now a NAMED kind; the fan wider because down and up is where a short has room. Where it falls short: the reference's wall is nine real documents of six shapes on a painted plate, ours nine synthetic cards of one aspect on a flat plate - richer for reasons this slice does not own.",
-      "blocks": "HG7; the CAPABILITIES row :184 (T11)",
+      "blocks": "nothing - ruled E99 s43 (2026-09-15): rails in reading order - T7b",
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md (E99 s21)",
         "docs/portable/OPERATOR-RULINGS.md (E99 s21)",
         "docs/content-video-engine/BACKLOG.md:488 (R26-82)",
         "content/video_engine/projects/systems-and-blowups/steel-and-paper/build-f/evidence-dock.json (ev-holds-stack-v1)",
         "content/video_engine/tests/test_verdict_stack.py",
-        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T7)"
+        ".claude/PRPs/plans/P61-WHAT-THE-REVIEW-OWES.plan.md (T7)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s43)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-15)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s43",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-15 (P61 T7): VERDICT_9X16, five phase goldens, stack_entry, the two clips",
       "proofs": [
@@ -3129,7 +3153,8 @@
       "ids": [
         "R26-84",
         "E99 s23",
-        "P61 HG10"
+        "P61 HG10",
+        "E99 s47"
       ],
       "kind": "rule",
       "title": "Parallel agents without worktrees: which route",
@@ -3154,7 +3179,7 @@
         "route 3 - per-agent engine copies"
       ],
       "recommendation": "Route 2, as its own plan P62 (data-model work, AGENTS.md section 9), proven by byte-identical re-compile plus determinism_check.py --against. Route 3 is E99 s23's sprawl inside one checkout with fewer tools. Whichever route: one P61 slice fixes apply_sidecar so two builds off one episode stop rewriting the episode's shot table; that fix moves the human-readable 'what was compiled' literal into the build dir, which is a doctrine change the operator rules on, not the agent.",
-      "blocks": "P62 (saved states) or the P61 sidecar slice; R26-84's next review",
+      "blocks": "nothing - ruled E99 s47 (2026-09-15): worktrees with both agents aware of every worktree; sprawl accepted until merged back",
       "sources": [
         "docs/portable/OPERATOR-RULINGS.md:3037-3041 (E99 s23)",
         "docs/content-video-engine/BACKLOG.md:490 (R26-84)",
@@ -3163,10 +3188,12 @@
         "docs/research/runs/p61-saved-states/OPTIONS.md:187-229 (route 3)",
         "docs/research/runs/p61-saved-states/OPTIONS.md:233-257 (the recommendation)",
         "content/video_engine/scripts/authoring/table.py:59,69 (the write-back)",
-        "content/video_engine/scripts/render_baseline.py:276,283 (engine copy + engine_sha256)"
+        "content/video_engine/scripts/render_baseline.py:276,283 (engine copy + engine_sha256)",
+        "docs/portable/OPERATOR-RULINGS.md (E99 s47)",
+        "docs/content-video-engine/review-answers.jsonl (2026-09-15)"
       ],
-      "status": "open",
-      "ruling": null,
+      "status": "ruled",
+      "ruling": "E99 s47",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-15 (P61 T10): the options sheet at docs/research/runs/p61-saved-states/OPTIONS.md"
     }

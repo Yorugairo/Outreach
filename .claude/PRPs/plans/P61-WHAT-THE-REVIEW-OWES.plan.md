@@ -119,17 +119,17 @@ that page only with the operator's ruling written to `docs/portable/OPERATOR-RUL
 
 | gate | slice | queue card | the ONE question the card asks |
 | --- | --- | --- | --- |
-| **HG1** | T2 | `r26-70-compare-morph` (rewritten) | "Watch the two clips end to end. Does it **read as a transformation, not a cut, and read as intentional** (E99 s34)? The entire chart should transform - every series, datum and axis. Approve, or name what cuts or reads as accidental." |
+| **HG1** | T2 | `r26-70-compare-morph` (rewritten) | "Watch the two clips end to end. Does it **read as a transformation, not a cut, and read as intentional** (E99 s34)? The entire chart should transform - every series, datum and axis. Approve, or name what cuts or reads as accidental." **RULED 2026-09-15 (E99 s39): line -> bars taken; bars -> line rebuilt in T2b** |
 | **HG2** | T3 | `r26-117-ball-into-the-next-chart` (**created by the parent at T3's dispatch** - it does not exist today; it supersedes the `"missing": true` line on `r26-70-compare-morph`) | "The page melts, balls up, and the ball becomes the NEXT FULL CHART with no cut between. Watch 0:00-0:08. Does the hand-over hold, or does it read as a jump?" |
 | **HG2b** | T3 (the planted-element half) | `p48-hg3-morph-onto-planted` (**exists**; today reads "Missing proof: P48 T5b ... is unbuilt") | "The chart morphs onto a PLANTED element - the prop outline traced from the thing already standing in the world (R26-16's tie). Watch the seam. Does the morph land on the planted thing honestly, or does the seam show?" |
-| **HG3** | T4a | `p58-hg3-extruded-bar-leave` | "`form-extruded-bar@proof-leave` beside `form-tilted-line@proof-leave`, as clips. Do the prism's shapes break down enough now? Approve, or say 'more'." |
-| **HG4** | T4b | `p58-hg3-forms-mount-not-scribble` | "The formed page arriving by the two-plate cross-fade and by the soak, each leaving by the soak's recede (E99 s35). Watch both enters and the leave. Approve, or name what still reads wrong." |
-| **HG5** | T5 | `r26-118-metallic-ball` | "The ball, before and after: more shadow, a dark Fresnel rim, a metallic band, one point of deep shadow depth. Does it read metallic and heavy now, or still glossy?" |
+| **HG3** | T4a | `p58-hg3-extruded-bar-leave` | "`form-extruded-bar@proof-leave` beside `form-tilted-line@proof-leave`, as clips. Do the prism's shapes break down enough now? Approve, or say 'more'." **RULED 2026-09-15 (E99 s40): approved** |
+| **HG4** | T4b | `p58-hg3-forms-mount-not-scribble` | "The formed page arriving by the two-plate cross-fade and by the soak, each leaving by the soak's recede (E99 s35). Watch both enters and the leave. Approve, or name what still reads wrong." **RULED 2026-09-15 (E99 s41): approved** |
+| **HG5** | T5 | `r26-118-metallic-ball` | "The ball, before and after: more shadow, a dark Fresnel rim, a metallic band, one point of deep shadow depth. Does it read metallic and heavy now, or still glossy?" **RULED 2026-09-15 (E99 s42): refused - the prior ball + the darkness; T5b** |
 | **HG6** | T6 | `r26-76-melt-endings-in-motion` | "The melt as the vortex's motion gathered into one dense, heavy, vibrating point, splashing into a full chart / world plate. Watch the gather and the splash. Approve the new default, or keep today's look behind the flag." |
-| **HG7** | T7 | `r26-82-verdict-stack-choreography` | "The verdict stack on a short with Steel and Paper's choreography - cards that move, then the burst. Watch it beside the Steel and Paper reference clip. Approve, or name the phase that is still flat." |
-| **HG8** | T8 | `r26-80-agenda-page-owed` | "The beautified agenda page - the plate version of the list effect, each row with its catalogued icon stamped after its sentence (E93). Beside today's three plain rows. Approve, or name the change." |
+| **HG7** | T7 | `r26-82-verdict-stack-choreography` | "The verdict stack on a short with Steel and Paper's choreography - cards that move, then the burst. Watch it beside the Steel and Paper reference clip. Approve, or name the phase that is still flat." **RULED 2026-09-15 (E99 s43): rails in reading order; T7b** |
+| **HG8** | T8 | `r26-80-agenda-page-owed` | "The beautified agenda page - the plate version of the list effect, each row with its catalogued icon stamped after its sentence (E93). Beside today's three plain rows. Approve, or name the change." **RULED 2026-09-15 (E99 s44): approved as a build** |
 | **HG9** | T9 | `p55-gallery-speed-and-motion` | "The gallery: its build time before and after, and three effects a still cannot show now carrying a clip. Is it fast enough and clear enough? Approve, or name what is still unreadable." |
-| **HG10** | T10 | `r26-84-engine-saved-states` | "Three routes to parallel agents without worktrees, each with its cost and what it breaks, and the agent's recommendation. Which route do we take - or does it need its own plan?" |
+| **HG10** | T10 | `r26-84-engine-saved-states` | "Three routes to parallel agents without worktrees, each with its cost and what it breaks, and the agent's recommendation. Which route do we take - or does it need its own plan?" **RULED 2026-09-15 (E99 s47): worktrees with both agents aware; P62 = the register** |
 
 **HG10 is the only gate with options**, and the record argues each (E99 s14's bar). No other card offers a menu.
 
@@ -361,10 +361,30 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   (`docs/agent-memory/operator/tokyo-short-render.md:79-93`). The watch stays P47's to schedule; T11 records only that
   the blocker is gone.
 
+### T2b: BARS -> LINE COLLAPSES TO THE APEX AND DRAWS BACK TO THE ROOT (E99 s39)
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK**)
+- Depends on: T2, HG1 (ruled E99 s39)
+- Write set: `content/video_engine/scripts/kinetics/chartxf.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the
+  chart-to region via `sync_kinetics.py --write`), `content/video_engine/scripts/build_scene_timeline_f.py` (only if the pair's grammar
+  needs a word), `content/video_engine/tests/kinetics/*.test.mjs`, `content/video_engine/tests/test_whole_chart_morph.py`,
+  `content/video_engine/tests/golden/` (`remake-bars-to-line*` re-baselined + sources), `content/video_engine/effects/cards/chart_to.json`
+- Acceptance: E99 s39 verbatim - *"for bars-> line I'd like to see it all collapse to the single apex point and then draw the line back
+  to the root instead of sliding and snapping together and the whole line is formed -- if the whole thing is magically formed that is
+  basically a snap/cut"*. Every bar's ink collapses into ONE point at the apex datum (the highest bar's top); the line is then DRAWN from
+  the apex back to the root (the first datum) by the page's own stroke; the axes hand over on the same clock; at u 0.5 the frame shows
+  the point and a partial stroke, never a whole line arriving (a browser probe asserts the drawn length is strictly between 0 and 1 at
+  u 0.5). line -> bars is untouched and its goldens byte-identical. The card `r26-70-compare-morph` reopens with the new clip only.
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python -m pytest content/video_engine/tests/test_whole_chart_morph.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/effects_catalog_check.py` then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-70-compare-morph`
+- Evidence: pending
+
 ### T3: THE BALL BECOMES THE NEXT FULL CHART - R26-117's third ending, and P48 T5b's planted source
 - Status: pending
 - Owner: `implementation_luna` (**ENGINE LOCK #2**)
-- Depends on: T2, HG1
+- Depends on: T2, HG1 (ruled E99 s39 on line -> bars: T3 is UNBLOCKED)
 - Write set: `content/video_engine/scripts/species/melt.mjs`, `content/video_engine/scripts/build_scene_timeline_f.py`
   (the `melt:morph` ending + `world.morph` planted source), `docs/content-video-engine/samples/scene-evidence-engine.mjs`
   (the melt + page-enter regions), `content/video_engine/tests/test_melt_morph.py` (NEW),
@@ -537,6 +557,26 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   the weight clip + the default melt clip.
 - CAPABILITIES rows changed: **:37** (the melt exit's ball) and the `melt:weight` note on R26-118's row
 
+### T5b: THE PRIOR BALL WITH THE DARKNESS KEPT, AND TWO BODY COLOURS FOR THE OPERATOR'S EYE (E99 s42)
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK**)
+- Depends on: T5, HG5 (ruled E99 s42)
+- Write set: `content/video_engine/scripts/kinetics/drop.mjs`, `content/video_engine/scripts/species/melt.mjs`,
+  `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the melt region), `content/video_engine/tests/kinetics/drop.test.mjs`,
+  `content/video_engine/tests/test_ball_material.py`, `content/video_engine/tests/golden/` (the ball goldens + sources)
+- Acceptance: E99 s42 verbatim - *"the ball is too blurred so the prior work is actually better. this slice is pixelated on the edges
+  now, the darkness feels right, but the blur is wrong, and i think the rim is wrong ... I would be interested in seeing it just melt to
+  the slate gray or the reference color"*. FIRST the slice names, from the T5 diff, what blurred the ball and what pixelated its edge
+  (evidence before any dial). THEN: the surface returns to the pre-`d719e21` look (the highlight, the clean silhouette; no blur, no
+  pixelated edge - the pre-T5 goldens are the reference, read side by side), the darkness stays (the deeper contact core and shadow
+  depth), the dark rim and the band are OFF by default; two further variants render the same instants with the body melting to the
+  board's SLATE GREY and to the REFERENCE colour (`W_BODY_SHADE`), as an authored option. The card `r26-118-metallic-ball` reopens as a
+  three-way crop + clips (prior / slate / reference). Every non-ball golden byte-identical; the default melt byte-identical.
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python -m pytest content/video_engine/tests/test_ball_material.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-118-metallic-ball`
+- Evidence: pending
+
 ### T6: THE MELT GATHERS TO ONE DENSE, HEAVY, VIBRATING POINT - and splashes into a full chart or a world plate
 - Status: complete for proof A (2026-09-15); proof B appends to `r26-76-melt-endings-in-motion` when T3 lands; HG6 asked once with both
 - Owner: `implementation_luna` (**ENGINE LOCK #6**)
@@ -672,6 +712,24 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   recipes lane fixes it. Card: the short's clip 1.9-17.5 s and the reference via the build route 702.87-727.6 s (extended past
   the brief's 723.69 so the reference's own burst at 726.98 is on the card).
 - CAPABILITIES row changed: **:184** (THE VERDICT STACK) gains the short's form with its five phases named
+
+### T7b: THE VERDICT STACK'S RAILS IN READING ORDER (E99 s43)
+- Status: pending
+- Owner: `implementation_luna` (**ENGINE LOCK**)
+- Depends on: T7, HG7 (ruled E99 s43)
+- Write set: `content/video_engine/scripts/species/verdict.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the
+  stack region), `content/video_engine/tests/test_verdict_stack.py`, `content/video_engine/tests/golden/` (`verdict-stack-9x16*`
+  re-baselined + sources), `content/video_engine/effects/cards/dock_payload.json`
+- Acceptance: E99 s43 verbatim - *"1-2 on top, left to right since thats how people read. then 3-4, on bottom, 5-6 on top, 7-8 on
+  bottom etc."* `VERDICT_9X16`'s rail spots are re-laid in reading bands (cards 1-2 across the top left to right, 3-4 across the
+  bottom left to right, 5-6 top, 7-8 bottom, the ninth by the same rule), the focus card large near the centre between the bands, the
+  five phases and the burst unchanged; a test asserts the rail order (card k's spot is left of card k+1's within a band, and the band
+  alternates top / bottom by pairs); the 16:9 `VERDICT` is read against the rule and reported, not changed. The card
+  `r26-82-verdict-stack-choreography` reopens with the new clip.
+- Validate: `node --test content/video_engine/tests/kinetics/*.test.mjs` then `python content/video_engine/scripts/sync_kinetics.py --check` then
+  `python -m pytest content/video_engine/tests/test_verdict_stack.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/review_queue_proofs.py --clips --only r26-82-verdict-stack-choreography`
+- Evidence: pending
 
 ### T8: THE BEAUTIFIED AGENDA PAGE - the plate version of the list effect
 - Status: complete (2026-09-15) - HG8 open on the queue as `r26-80-agenda-page-owed` (watch)
@@ -862,8 +920,22 @@ Human gates, briefs, the diff reads and the completion claim stay with the paren
   10 fps corrected by the parent with the catalogue rebuilt.
 - CAPABILITIES rows changed: **:75** (stop-action mechanics gains the render clock) and the plate-life line of **:121**
 
+### T13: THE DARK SPAN BECOMES THE DEFAULT (E99 s46)
+- Status: pending
+- Owner: `junior_developer` (**ENGINE LOCK** - one dial default)
+- Depends on: HG-span ruled (E99 s46)
+- Write set: `content/video_engine/scripts/species/span.mjs`, `docs/content-video-engine/samples/scene-evidence-engine.mjs` (the span
+  region), `content/video_engine/scripts/build_scene_timeline_f.py` (`KINETICS_DIALS` span_tone / span_alpha defaults),
+  `content/video_engine/tests/test_kinetics_flags.py`, `content/video_engine/tests/golden/` (every golden with a span re-baselined,
+  listed by name), `content/video_engine/effects/cards/*.json` (the span card's default)
+- Acceptance: E99 s46 - `span_tone` dark at `span_alpha` 0.30 is the default for a new build; the approved cuts render byte-identical
+  through their frozen players (E45); the goldens that move are exactly the ones carrying a span, named in Evidence.
+- Validate: `python -m pytest content/video_engine/tests/test_kinetics_flags.py content/video_engine/tests/test_golden_frames.py -q` then
+  `python content/video_engine/scripts/sync_kinetics.py --check` then `python content/video_engine/scripts/effects_catalog_check.py`
+- Evidence: pending
+
 ### T11: THE RECORD - the CAPABILITIES rows, the backlog rows, the queue, the layers
-- Status: in progress (2026-09-15) - the record of what was BUILT is written; the rulings half waits on the gates (HG1, HG3, HG4, HG5, HG7, HG8, HG10 open; HG6 asked once proof B lands with T3)
+- Status: in progress (2026-09-15) - the built half written; the operator ruled HG1 / HG3 / HG4 / HG5 / HG7 / HG8 / HG10 and the span and the cutout-dock cards the same night (E99 s39-s47, all nine recorded verbatim, the cards ruled, the rows carried); open: HG6 (asked once proof B lands with T3), the drift plate's visible proof (E99 s38), and the four follow-up slices T2b / T5b / T7b / T13 the rulings opened
 - Owner: parent (Claude/Fable docs lane)
 - Depends on: every gate ruled
 - Write set: `docs/content-video-engine/CAPABILITIES.md`, `docs/content-video-engine/BACKLOG.md` (rows R26-70, R26-76,
