@@ -272,3 +272,17 @@ enumerable; and the writer can declare what the text cannot signal. It
 ships with a red test on a known-real failure and a green test on a
 conforming case (doc 40 MEDIA-TDD), and the row here moves from §3 to §2 in
 the same commit. Rows that fail the test stay JUDGE and get printed.
+
+## 4. The director-critic (P67, E99 s68) - two JUDGE scores that are never a verdict
+
+A whole cut reaches the operator's queue after a **different reader** has read it: the `reviewer` role on Opus, in a
+fresh context, writes `<build>/CRITIC.md` against `docs/content-video-engine/CRITIC-REPORT.md` - table 1 mechanism
+correctness (per approved mechanism: `present` / `absent` / `replaced by <what>` / `not owed`, each at an instant),
+table 2 attribution quality (per shot-table row: the receipt line whose quoted span states the rule, or
+`UNATTRIBUTED`, claim-level never document-level), and two fractions with their denominators. Both scores are
+**JUDGE** rows in the sense of section 0: a reader decided them, so they are the agent's kind, verdicted row by row
+with the instant cited (R3, R5) - and because they are JUDGE they are **never laundered into a mechanical result**
+(R1): no gate reads them, `self_watch.py` does not read them, `build_review_queue.py` requires the report's presence
+for a whole-cut watch card and reads nothing inside it. They ride the card as INFO. The builder's own read
+(`SELF-WATCH.md` O1-O11) is input to the critic, not its authority - one-shot #3 was CLEAN by its builder's read and
+refused by the operator (E99 s67); that gap is what the second reader measures.

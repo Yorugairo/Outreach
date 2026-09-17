@@ -11,6 +11,8 @@ hands the build to `build_scene_timeline_f`. It never authors a row.
 from __future__ import annotations
 
 import json
+import os
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROW_SPECIES = 6      # the row's 7th element: the species list
@@ -112,9 +114,14 @@ def caption_pages(build: Path, char_budget: int, max_words: int) -> None:
 
 def compile_timeline(ep: Path, build: Path, *, timeline_name: str, shot_table_file: str,
                      title: str, subtitle: str, episode_id: str, aspect: str,
-                     caption_style: str | None, kinetics: dict, render: bool = False) -> int:
+                     caption_style: str | None, kinetics: dict, render: bool = False,
+                     no_receipt: str | None = None) -> int:
     """Stage 6-8's hand-off: point the compiler at this episode's build and run it. `render` also
-    points the render door at the same pair (a build whose assets are resolved by id)."""
+    points the render door at the same pair (a build whose assets are resolved by id).
+
+    P67 T2: the receipt is decided BEFORE the compiler is touched - a first compile without a
+    passing `## Recall` block (and without a named `no_receipt` reason) raises and writes nothing."""
+    receipt = recall_receipt_block(ep, build, no_receipt)
     import build_scene_timeline_f as C
     if render:
         import build_render_f as R
@@ -131,11 +138,68 @@ def compile_timeline(ep: Path, build: Path, *, timeline_name: str, shot_table_fi
     if rc == 0:
         write_compile_manifest(ep, build, timeline_name=timeline_name, shot_table_file=shot_table_file,
                                title=title, subtitle=subtitle, episode_id=episode_id, aspect=aspect,
-                               caption_style=caption_style, kinetics=dict(kinetics), render=render)
+                               caption_style=caption_style, kinetics=dict(kinetics), render=render,
+                               **{RECEIPT_KEY: receipt})
     return rc
 
 
 MANIFEST_NAME = "player.json"   # written by render_baseline.write_split; this adds the compile block
+RECEIPT_KEY = "recall_receipt"            # P67 T2: which receipt this cut compiled under, kept in the manifest
+LEGACY_REASON = "legacy build (pre-P67)"  # a build dir that first compiled before the door existed
+
+
+def _manifest_receipt(build: Path) -> tuple[bool, dict | None]:
+    """Has this build dir compiled before, and under which receipt? -> (a compile block exists, its receipt block)."""
+    path = Path(build) / MANIFEST_NAME
+    if not path.is_file():
+        return False, None
+    try:
+        manifest = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return True, None
+    block = manifest.get("compile") if isinstance(manifest, dict) else None
+    if not isinstance(block, dict):
+        # the manifest exists but no compile has written it (render_baseline writes player.json first): the FIRST
+        # compile is still ahead, so the door runs - "compiled before" means the compile block, not the file
+        return False, None
+    carried = block.get(RECEIPT_KEY)
+    return True, carried if isinstance(carried, dict) else None
+
+
+def recall_receipt_block(ep: Path, build: Path, no_receipt: str | None = None) -> dict:
+    """THE COMPILE DOOR (P67 T2): the receipt block this compile goes in under - or SystemExit, and no timeline.
+
+    The door binds the FIRST compile of a build dir only, because `serve_player --watch` and
+    `change_report.py` re-compile EXISTING builds and must keep working:
+
+      * a manifest that already carries a receipt -> that block, unchanged (the recompile is the same cut);
+      * a manifest with no receipt (every build made before P67) -> `legacy build (pre-P67)`, stamped;
+      * no manifest at all -> the first compile, and the door runs.
+
+    On that first compile the project's `## Recall` block is re-read off disk line by line
+    (`recall_verify.verify`) - citation is not grounding (arXiv 2606.04990) - and a refusal stops the
+    build with the verifier's text VERBATIM. The escape is a NAMED reason, never a silent flag: it is
+    written into the manifest word for word and stays with the cut for the rest of its life."""
+    seen, carried = _manifest_receipt(build)
+    if seen:
+        return dict(carried) if carried is not None else {"skipped_reason": LEGACY_REASON}
+    if no_receipt is not None:
+        if not isinstance(no_receipt, str) or not no_receipt.strip():
+            raise SystemExit(f"FAIL: no_receipt={no_receipt!r} is not a reason - the escape is a NAMED reason "
+                             "(a non-empty string, e.g. \"recipe lab candidate 12\"), written verbatim into "
+                             "the compile manifest")
+        return {"skipped_reason": no_receipt}
+    import recall_verify as RV
+    ok, lines = RV.verify(RV.REPO, Path(ep))
+    if not ok:
+        raise SystemExit("\n".join(lines))
+    ledger = RV.resolve_ledger(Path(ep))
+    block = RV.parse_block(ledger.read_text(encoding="utf-8", errors="replace"))
+    return {"ledger": os.path.relpath(ledger, Path(build)).replace("\\", "/"),
+            "sha256": block.sha256(),
+            "stages": block.stage_counts(),
+            "verdict": "pass",
+            "checked_at": datetime.now(timezone.utc).isoformat(timespec="seconds")}
 
 
 def write_compile_manifest(ep: Path, build: Path, **fields) -> Path:

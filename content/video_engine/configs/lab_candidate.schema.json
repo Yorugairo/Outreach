@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "lab_candidates.v1",
+  "title": "Recipe-lab candidates v1 - one record per line in content/video_engine/effects/lab/candidates.jsonl (P65 T1)",
+  "description": "A candidate is ONE point of the finite combination space the lab enumerates as data (beat shape x the catalogue's members x the gates' clocks): a stable id, the shape it fills, the ordered members with their offsets, the clock values it was generated against, and where it came from - never an episode and never an allocation. The fixed reason list a judgement may cite lives ONLY in lab_judgement.schema.json ($defs.judgement.properties.reason.enum), and every tool imports it from that schema rather than restating it.",
+  "$ref": "#/$defs/candidate",
+  "$defs": {
+    "candidate_id": {
+      "type": "string",
+      "pattern": "^lab:[a-z0-9-]+:[0-9a-f]{8}$",
+      "description": "lab:<shape>:<members-digest> - the digest is the first 8 hex of the hash of the ordered members, so the id is stable across runs"
+    },
+    "member": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "card",
+        "offset_s",
+        "role"
+      ],
+      "properties": {
+        "card": {
+          "type": "string",
+          "minLength": 1,
+          "description": "a card id <axis>:<token> from docs/EFFECTS-CATALOG.jsonl (or a recipe id), resolved through authoring/effects.py so no candidate can name a token the compiler refuses"
+        },
+        "option": {
+          "type": "string",
+          "minLength": 1,
+          "description": "a token listed in that card's `options` (how a member names exit:wipe + wipe_right); refused when the card does not list it"
+        },
+        "offset_s": {
+          "type": "number",
+          "minimum": 0,
+          "description": "seconds from the candidate's first member (the first member is 0.0)"
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1,
+          "description": "one line: what this member does IN the combination - the slot it fills in the beat shape"
+        }
+      }
+    },
+    "clocks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "m44_plate_s",
+        "m16_gap_s",
+        "m12_dock_s",
+        "m11_first_light_s",
+        "page_build_end_s"
+      ],
+      "description": "every gate value this candidate was generated against, as it stood at generation - a candidate is only ever judged on the clocks recorded here (R26-168: the fifteen proven recipes were proved against clocks that no longer exist)",
+      "properties": {
+        "m44_plate_s": {
+          "type": "number",
+          "description": "M44's plate floor in seconds - a world plate shorter than this is a flash the eye cannot take in (6.0 today)"
+        },
+        "m16_gap_s": {
+          "type": "number",
+          "description": "M16's event-gap ceiling in seconds - the longest the screen may go without an event (2.5 today)"
+        },
+        "m12_dock_s": {
+          "type": "number",
+          "description": "M12's dock clock in seconds - how long a dock is held"
+        },
+        "m11_first_light_s": {
+          "type": "number",
+          "description": "M11's first-light instant in seconds - the light lands after the build, never on arrival"
+        },
+        "page_build_end_s": {
+          "type": "number",
+          "description": "the second the page finishes BUILDING and holds built (E99 s67); the light and the card are placed against it (7.4 today)"
+        }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "shape",
+        "members",
+        "clocks",
+        "status",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/candidate_id"
+        },
+        "shape": {
+          "type": "string",
+          "minLength": 1,
+          "description": "the beat shape's slug from content/video_engine/effects/lab/beat-shapes.json (a plate carrying a card; a page whose number lands at +N s; a page-to-page transform; a return; the open ON the chart)"
+        },
+        "members": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/member"
+          },
+          "description": "ORDERED; the first member's offset_s is 0.0"
+        },
+        "clocks": {
+          "$ref": "#/$defs/clocks"
+        },
+        "status": {
+          "enum": [
+            "enumerated",
+            "built",
+            "survivor",
+            "carded",
+            "approved",
+            "denied",
+            "retired"
+          ],
+          "description": "enumerated (emitted by lab_enumerate.py) -> built (rendered on the Tokyo bed) -> survivor (no gate FAIL) -> carded (on a batch card) -> approved | denied (the operator's bit) -> retired"
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "description": "what produced this record: the enumerator and its table ('lab_enumerate.py beat-shapes.json <shape>') or the re-proof run ('r26-168 reproof-r1 <recipe id>')"
+        },
+        "exploration": {
+          "type": "boolean",
+          "description": "true when the candidate was drawn for a batch WITHOUT reference to the learner (about a quarter of each batch); the draw is seeded and the seed is recorded on the batch"
+        },
+        "calibration": {
+          "type": "boolean",
+          "description": "true when a previously approved candidate rides along in a batch as a calibration probe (the log held one older than 14 days)"
+        },
+        "batch": {
+          "type": "string",
+          "minLength": 1,
+          "description": "the batch id this candidate was built and carded under; names content/video_engine/effects/lab/runs/<batch>.jsonl"
+        }
+      }
+    }
+  }
+}

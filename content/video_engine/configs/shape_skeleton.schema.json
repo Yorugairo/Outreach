@@ -1,0 +1,370 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "shape_skeletons.v1",
+  "title": "Shape skeletons v1 - one file per skeleton under content/video_engine/effects/skeletons/<id>.json (P66 T1)",
+  "description": "A skeleton is a DATA file: the approved shape of one beat written as a TEMPLATE of the kit's row grammar (authoring/table.py:1-16 - a row is the tuple (start, end, plate_id, ken_burns, [docks], exit[, species[, camera]])) with named holes the build fills from its AUTHORED beat plan; a NEW skeleton is added by writing a file plus its `source` cite in an approved table, with no code change (P66 T1), which is how P65's promotions widen the library.",
+  "$ref": "#/$defs/skeleton",
+  "$defs": {
+    "act": {
+      "enum": [
+        "QUOTES",
+        "RANKS",
+        "COMPARES",
+        "DIVIDES",
+        "NAMES",
+        "EXPLAINS",
+        "TURNS",
+        "BREAKS",
+        "SPANS",
+        "SETS",
+        "RETRACTS",
+        "COUNTS"
+      ],
+      "description": "the 11 sentence acts as docs/content-video-engine/SPECIES-BY-SENTENCE.md spells them (section 0 at a glance, section 1 rows 1-10, section 2 row 11 BREAKS); the same 11 as effect_card.schema.json `serves` and effect_recipe.schema.json `acts`"
+    },
+    "signature": {
+      "enum": [
+        "axes",
+        "mount",
+        "spiral",
+        "suck",
+        "cut",
+        "dip",
+        "card",
+        "hold"
+      ],
+      "description": "the ONE word M46 counts for this skeleton - the move a viewer would name; M46 refuses the same signature on two consecutive beats and WARNs over the approved maximum share"
+    },
+    "time_hole": {
+      "oneOf": [
+        {
+          "type": "number",
+          "minimum": 0
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^\\{t[01]\\}([+-][0-9]+(\\.[0-9]+)?)?$"
+        }
+      ],
+      "description": "a second in the take's clock, or one of the time holes {t0} / {t1} with an optional offset ({t0}+0.5); the build resolves it from the beat plan"
+    },
+    "open_map": {
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "number",
+          "string",
+          "boolean",
+          "array",
+          "object",
+          "null"
+        ]
+      },
+      "description": "an OPEN map (typed values, no fixed keys) - the only place this schema does not close an object, because the compiler's own option vocabulary is not this file's to freeze"
+    },
+    "dock": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "a dock id template - the named holes the build fills: {page} (the beat's series id), {plate} (the beat's plate id), {dock} (the beat's evidence dock), {t0} / {t1} (the beat's start and end from BEAT-PLAN.jsonl)"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "id"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "the dock id template; may carry the {dock} or {page} hole"
+            },
+            "at": {
+              "$ref": "#/$defs/time_hole",
+              "description": "when the dock lands"
+            },
+            "read_s": {
+              "type": "number",
+              "minimum": 0,
+              "description": "how long it reads centred before it parks (SPECIES-BY-SENTENCE row 13, the dock read->park)"
+            },
+            "park_s": {
+              "type": "number",
+              "minimum": 0,
+              "description": "the layout move to its slot in the page's own room (E65)"
+            },
+            "options": {
+              "$ref": "#/$defs/open_map",
+              "description": "the dock's own opts (centre, read, card_aspect ...); never an episode fact"
+            }
+          },
+          "description": "a dock that reads then parks, written out"
+        }
+      ]
+    },
+    "species": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "minLength": 2,
+          "description": "the targeted species kind (punch, callout, focus_zoom, spotlight, squiggle, pull_back, plate_life, trace, steam ...) - PIPELINE.md stage 7's `validate_species` vocabulary"
+        },
+        "at": {
+          "$ref": "#/$defs/time_hole"
+        },
+        "dur": {
+          "oneOf": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            {
+              "type": "string",
+              "const": "hold"
+            }
+          ],
+          "description": "seconds, or \"hold\" until the sentence has a reason to leave (E25 amended)"
+        },
+        "target": {
+          "type": "object",
+          "additionalProperties": {
+            "type": [
+              "number",
+              "string",
+              "boolean",
+              "array",
+              "object",
+              "null"
+            ]
+          },
+          "required": [
+            "kind"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "datum",
+                "point",
+                "region",
+                "span",
+                "country",
+                "mappoint"
+              ]
+            }
+          },
+          "description": "the target the species declares - OPEN beyond `kind` (a datum's index and series, a region's box); a pointing species with no declared target is a hard build error"
+        },
+        "options": {
+          "$ref": "#/$defs/open_map",
+          "description": "the rest of the species dict, carried verbatim into the row's 7th element"
+        }
+      },
+      "description": "a TEMPLATE species; a light is placed only on a sentence that POINTS and never before the page's build ends (E99 s67 Apply 1-2; `rules.light_after_build`)"
+    },
+    "row": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "start",
+        "end",
+        "plate",
+        "ken",
+        "docks",
+        "exit"
+      ],
+      "properties": {
+        "start": {
+          "$ref": "#/$defs/time_hole",
+          "description": "the row's start - usually the hole {t0}"
+        },
+        "end": {
+          "$ref": "#/$defs/time_hole",
+          "description": "the row's end - usually the hole {t1}; the compiler checks `rules.plate_min_s` against the resolved pair"
+        },
+        "plate": {
+          "type": "string",
+          "minLength": 1,
+          "description": "the plate id template in PIPELINE.md stage 7's grammar: a page as ledger:{page}:<variant>[:<emphasize>[:<quiet_zone>]] with an entry suffix (axes | mount=<s> | spiral | snap=<dock> | built) and an optional :cut, or a plate as {plate};idle=drift;drift=35. Holes: the named holes the build fills: {page} (the beat's series id), {plate} (the beat's plate id), {dock} (the beat's evidence dock), {t0} / {t1} (the beat's start and end from BEAT-PLAN.jsonl)"
+        },
+        "ken": {
+          "oneOf": [
+            {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "number"
+              },
+              "description": "the Ken Burns triple (zoom, dx, dy)"
+            },
+            {
+              "type": "null",
+              "description": "no move - a page is STILL"
+            },
+            {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^\\{[a-z0-9_]+\\}$",
+              "description": "a hole the build fills with a triple"
+            }
+          ],
+          "description": "the row's 4th element; a page carries none, an alive FLAT plate carries a directional drift"
+        },
+        "docks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dock"
+          },
+          "description": "the row's 5th element - the evidence that arrives over the world; may be empty"
+        },
+        "exit": {
+          "type": "string",
+          "minLength": 3,
+          "pattern": "^(cut|dip|blurzoom|dissolve|wipe|wipe_right|suck|melt|slide|door)(:[A-Za-z0-9_.,{}+-]+)*$",
+          "description": "how the world leaves (build_scene_timeline_f.SCENE_EXITS): `dip` when the world CHANGES (E47), `suck` or `cut` page to page and never into a mount; a suffix carries its length or point (dip:<s>, suck:<x>,<y>) and may itself carry a hole"
+        },
+        "species": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/species"
+          },
+          "description": "the row's optional 7th element - the targeted species this skeleton places"
+        }
+      },
+      "description": "ONE template row of the kit's grammar; the build resolves the holes and `table.write_shot_table` writes the tuple"
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mount_at_or_after_s",
+        "plate_min_s",
+        "event_gap_max_s",
+        "light_after_build"
+      ],
+      "properties": {
+        "mount_at_or_after_s": {
+          "type": "number",
+          "minimum": 0,
+          "default": 7.0,
+          "description": "a page whose number lands this many seconds or more after its entry gets mount=<s>, never built (E99 s67 Apply 3)"
+        },
+        "plate_min_s": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "default": 6.0,
+          "description": "no plate row is shorter than this (M44)"
+        },
+        "event_gap_max_s": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "default": 2.5,
+          "description": "the longest gap between two events inside the skeleton (M16)"
+        },
+        "light_after_build": {
+          "type": "boolean",
+          "default": true,
+          "description": "a light is placed only after the page's build ends (gate_motion_density.PAGE_BUILD_END_S; E99 s67 Apply 1-2)"
+        }
+      },
+      "description": "the clocks this skeleton must satisfy; all four are stated in every file so a reader never has to remember a default"
+    },
+    "aspect_limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "no_badge_rail_at_9_16",
+        "no_park_at_9_16"
+      ],
+      "properties": {
+        "no_badge_rail_at_9_16": {
+          "type": "boolean",
+          "const": true,
+          "description": "R26-171: no `badges` rail is emitted at 9:16"
+        },
+        "no_park_at_9_16": {
+          "type": "boolean",
+          "const": true,
+          "description": "R26-172: no `chart_to park` is emitted at 9:16"
+        }
+      },
+      "description": "what the skeleton may NOT emit in portrait; both are const true - a skeleton that wants otherwise is not a skeleton"
+    },
+    "skeleton": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "shape",
+        "acts",
+        "signature",
+        "rows",
+        "rules",
+        "source",
+        "aspect_limits"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "minLength": 3,
+          "description": "the slug, and the file name (open-on-the-chart-axes.json)"
+        },
+        "shape": {
+          "type": "string",
+          "minLength": 3,
+          "description": "the beat shape this skeleton serves - the shapes P65's beat-shapes.json names. A free string HERE on purpose (the two files are written by different plans) and the TWO FILES MUST AGREE: a shape named here that beat-shapes.json does not name is a bug in one of them, caught by T2's test, never by this schema"
+        },
+        "acts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/act"
+          },
+          "description": "the sentence acts whose beats this skeleton may serve; `shapes.choose` reads them"
+        },
+        "signature": {
+          "$ref": "#/$defs/signature"
+        },
+        "rows": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/row"
+          },
+          "description": "the template rows, in order"
+        },
+        "rules": {
+          "$ref": "#/$defs/rules"
+        },
+        "source": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_./-]+\\.py:\\d+(-\\d+)?$",
+          "description": "path:line in an APPROVED table where this shape was played (tokyo-tea-break / japan-tariff-trick / memory-trades-the-calendar build_short.py); T2's test opens the file at the line and greps it for the mechanism claimed, as effects_catalog_check.check_anchors does for a card's `lives`"
+        },
+        "aspect_limits": {
+          "$ref": "#/$defs/aspect_limits"
+        },
+        "does": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 240,
+          "description": "one sentence: what the viewer sees this beat DO"
+        },
+        "schema_version": {
+          "const": "shape_skeletons.v1",
+          "description": "optional, as a recipe file carries effect_recipes.v1"
+        }
+      }
+    }
+  }
+}

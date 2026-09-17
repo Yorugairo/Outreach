@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "lab_judgements.v1",
+  "title": "Recipe-lab judgements v1 - one record per line in content/video_engine/effects/lab/judgements.jsonl (P65 T1)",
+  "description": "A judgement is the operator's bit on ONE candidate, derived by lab_log.py from review-answers.jsonl only and never hand-typed: approve or deny, one reason from the fixed nine-item list, the instant of proof (the clip a card showed and the second inside it), who judged and when. The nine reason categories live ONLY here, in $defs.judgement.properties.reason.enum - every tool (build_review_queue.py, serve_review_queue.py, lab_log.py) imports the list from this schema rather than restating it.",
+  "$ref": "#/$defs/judgement",
+  "$defs": {
+    "candidate_id": {
+      "type": "string",
+      "pattern": "^lab:[a-z0-9-]+:[0-9a-f]{8}$",
+      "description": "the candidate this judgement is about - lab_candidates.v1 `id`; an unknown candidate is refused by name"
+    },
+    "proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "clip",
+        "t"
+      ],
+      "description": "the instant the operator judged - a proof is a scene (E99 s60), so the clip is a beat a short could carry, never a fixture",
+      "properties": {
+        "clip": {
+          "type": "string",
+          "minLength": 1,
+          "description": "the clip the card showed (the path or the clip id the batch record named)"
+        },
+        "t": {
+          "type": "number",
+          "minimum": 0,
+          "description": "the second inside that clip the answer named, defaulting to the clip's t0 when none is named"
+        }
+      }
+    },
+    "judgement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate",
+        "bit",
+        "reason",
+        "proof",
+        "at",
+        "by",
+        "answer_at"
+      ],
+      "properties": {
+        "candidate": {
+          "$ref": "#/$defs/candidate_id"
+        },
+        "bit": {
+          "enum": [
+            "approve",
+            "deny"
+          ],
+          "description": "the operator's bit for this candidate - the choice POSTed as {item: \"<card>#<candidate>\", choice}"
+        },
+        "reason": {
+          "enum": [
+            "reads-as-noise",
+            "too-fast",
+            "too-slow",
+            "unattributable-motion",
+            "illegible-at-9-16",
+            "wrong-for-the-sentence",
+            "duplicate-of-an-approved",
+            "off-doctrine",
+            "good"
+          ],
+          "description": "THE fixed reason list (P65 T1, the plan's queue grammar). Short and closed on purpose: a reason the learner can carry per feature, not free text. `good` is the reason an approve carries; the other eight are why a deny landed. A note may qualify it; it may not replace it."
+        },
+        "proof": {
+          "$ref": "#/$defs/proof"
+        },
+        "at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "when lab_log.py derived this record (ISO 8601)"
+        },
+        "by": {
+          "type": "string",
+          "minLength": 1,
+          "description": "who judged - the answer's `by` (the operator), carried through unchanged"
+        },
+        "answer_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "the answer's own timestamp from review-answers.jsonl (ISO 8601) - the ordering key: a later answer for the same candidate supersedes the earlier one"
+        },
+        "note": {
+          "type": "string",
+          "description": "the free text after the reason in the answer's note; it qualifies the reason, never replaces it"
+        },
+        "superseded": {
+          "type": "boolean",
+          "description": "true on the earlier record when the same candidate was re-judged (the earlier judgement is kept, never rewritten)"
+        }
+      }
+    }
+  }
+}

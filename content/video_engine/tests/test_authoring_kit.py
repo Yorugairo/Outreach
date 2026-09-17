@@ -601,3 +601,116 @@ def test_tr13_an_estimated_take_keeps_the_gap_rule_and_says_so():
     assert W.is_estimated(est) and not W.is_estimated(TAKE)
     assert W.cut_rule(est) == "gap" and W.cut_before(est, "Your costs") == 1.80
     assert W.cut_before(est, "Your costs", rule="onset") == 1.90
+
+
+# ---------------------------------------------------------------- P67 T2: the compile door
+# The door binds the FIRST compile of a build dir: no passing `## Recall` receipt and no named
+# reason, no timeline. A recompile of an existing build (the live editor, `change_report.py`) keeps
+# working - it carries the block it compiled under, or is stamped as a pre-P67 build.
+import recall_verify as RV  # noqa: E402
+
+FIXTURE_DOC = "docs/FIXTURE.md"
+FIXTURE_SPAN = "the world is a plate"
+TIMELINE_X = "timeline-x.json"
+
+
+def _receipt_repo(tmp_path: Path, stages=RV.STAGES, ledger: bool = True) -> tuple[Path, Path]:
+    """A synthetic repo: one cited doc, a project whose ledger cites it once per stage, an empty build dir.
+
+    `RV.REPO` is pointed here by the caller, so no citation depends on a real doc's line numbers."""
+    (tmp_path / "docs").mkdir(exist_ok=True)
+    (tmp_path / FIXTURE_DOC).write_text(
+        "# a fixture doc\n\n" + FIXTURE_SPAN + " and the plate is alive\n", encoding="utf-8")
+    ep = tmp_path / "an-episode"
+    (ep / "build").mkdir(parents=True, exist_ok=True)
+    if ledger:
+        lines = ["## Recall", ""]
+        lines += [f'- Recall({s}): {FIXTURE_DOC}:3 "{FIXTURE_SPAN}" (the fixture)' for s in stages]
+        (ep / "PRODUCTION-LEDGER.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return ep, ep / "build"
+
+
+def _stub_compiler(monkeypatch) -> None:
+    """The compiler, stubbed to write its timeline and return green: the DOOR is what is under test."""
+    def main() -> int:
+        Path(B.BUILD, B.TIMELINE_NAME).write_text("{}", encoding="utf-8")
+        return 0
+    monkeypatch.setattr(B, "main", main)
+
+
+def _compile(ep: Path, build: Path, **kw) -> int:
+    return T.compile_timeline(ep, build, timeline_name=TIMELINE_X, shot_table_file="SHOT-TABLE-SHORT.py",
+                              title="a title", subtitle="a subtitle", episode_id="an-episode",
+                              aspect="16:9", caption_style=None, kinetics={}, **kw)
+
+
+def _manifest(build: Path) -> dict:
+    return json.loads((build / T.MANIFEST_NAME).read_text(encoding="utf-8"))
+
+
+def test_p67_a_verified_receipt_compiles_and_the_manifest_carries_the_block(tmp_path, monkeypatch):
+    monkeypatch.setattr(RV, "REPO", tmp_path)
+    _stub_compiler(monkeypatch)
+    ep, build = _receipt_repo(tmp_path)
+    assert _compile(ep, build) == 0
+    block = _manifest(build)["compile"][T.RECEIPT_KEY]
+    assert block["verdict"] == "pass"
+    assert block["stages"] == {s: 1 for s in RV.STAGES} and len(block["stages"]) == 9
+    assert block["sha256"] == RV.parse_block((ep / "PRODUCTION-LEDGER.md").read_text(encoding="utf-8")).sha256()
+    assert block["ledger"] == "../PRODUCTION-LEDGER.md" and block["checked_at"].startswith("20")
+    assert (build / TIMELINE_X).is_file()
+
+
+def test_p67_a_missing_stage_refuses_by_name_and_no_timeline_is_written(tmp_path, monkeypatch):
+    monkeypatch.setattr(RV, "REPO", tmp_path)
+    _stub_compiler(monkeypatch)
+    ep, build = _receipt_repo(tmp_path, stages=[s for s in RV.STAGES if s != "world"])
+    with pytest.raises(SystemExit) as e:
+        _compile(ep, build)
+    assert 'REFUSED stage "world"' in str(e.value), "the refusal carries the verifier's text verbatim"
+    assert not (build / TIMELINE_X).exists() and not (build / T.MANIFEST_NAME).exists()
+
+
+def test_p67_the_escape_is_a_named_reason_written_into_the_manifest_verbatim(tmp_path, monkeypatch):
+    monkeypatch.setattr(RV, "REPO", tmp_path)
+    _stub_compiler(monkeypatch)
+    ep, build = _receipt_repo(tmp_path, ledger=False)   # the lab authors no episode: there is no ledger at all
+    assert _compile(ep, build, no_receipt="recipe lab candidate x") == 0
+    assert _manifest(build)["compile"][T.RECEIPT_KEY] == {"skipped_reason": "recipe lab candidate x"}
+
+
+@pytest.mark.parametrize("reason", ["", "   ", True])
+def test_p67_an_empty_string_or_a_bare_flag_is_not_a_reason(tmp_path, monkeypatch, reason):
+    monkeypatch.setattr(RV, "REPO", tmp_path)
+    _stub_compiler(monkeypatch)
+    ep, build = _receipt_repo(tmp_path, ledger=False)
+    with pytest.raises(SystemExit) as e:
+        _compile(ep, build, no_receipt=reason)
+    assert "not a reason" in str(e.value)
+    assert not (build / TIMELINE_X).exists()
+
+
+def test_p67_a_pre_p67_build_recompiles_and_is_stamped_legacy(tmp_path, monkeypatch):
+    monkeypatch.setattr(RV, "REPO", tmp_path)
+    _stub_compiler(monkeypatch)
+    ep, build = _receipt_repo(tmp_path, ledger=False)   # no receipt exists, and the recompile still runs
+    (build / T.MANIFEST_NAME).write_text(json.dumps({"compile": {"episode_dir": ".."}}), encoding="utf-8")
+    assert _compile(ep, build) == 0
+    assert _manifest(build)["compile"][T.RECEIPT_KEY] == {"skipped_reason": T.LEGACY_REASON}
+    # a manifest written by the render baseline BEFORE any compile (no `compile` block) is NOT legacy: the first
+    # compile is still ahead, so the door runs - and with no receipt and no reason it refuses (parent, P67 T2 review)
+    (build / T.MANIFEST_NAME).write_text(json.dumps({"engine_sha": "abc"}), encoding="utf-8")
+    with pytest.raises(SystemExit):
+        _compile(ep, build)
+
+
+def test_p67_a_build_that_already_carries_a_receipt_recompiles_under_it_unchanged(tmp_path, monkeypatch):
+    monkeypatch.setattr(RV, "REPO", tmp_path)
+    _stub_compiler(monkeypatch)
+    ep, build = _receipt_repo(tmp_path, stages=["world"])   # a ledger that WOULD be refused on a first compile
+    carried = {"ledger": "../PRODUCTION-LEDGER.md", "sha256": "0" * 64, "stages": {s: 1 for s in RV.STAGES},
+               "verdict": "pass", "checked_at": "2026-09-16T00:00:00+00:00"}
+    (build / T.MANIFEST_NAME).write_text(
+        json.dumps({"compile": {"episode_dir": "..", T.RECEIPT_KEY: carried}}), encoding="utf-8")
+    assert _compile(ep, build) == 0, "the live editor's recompile is not the door"
+    assert _manifest(build)["compile"][T.RECEIPT_KEY] == carried
