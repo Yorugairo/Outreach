@@ -1,0 +1,175 @@
+{
+  "schema_version": "approved_mix.v1",
+  "generated_by": "content/video_engine/scripts/derive_approved_mix.py",
+  "measured_with": "content/video_engine/scripts/recipe_walk.py events()",
+  "measured": "the APPROVED cuts' own compiled timelines; never typed (P66 T2)",
+  "signatures": [
+    "axes",
+    "mount",
+    "spiral",
+    "suck",
+    "cut",
+    "dip",
+    "card",
+    "hold"
+  ],
+  "method": "one signature per SCENE (the beat M46 counts), from recipe_walk.events grouped by scene, first rung wins: (1) page_enter:spiral -> spiral; (2) page_enter:mount -> mount; (3) page_enter:axes -> axes; (4) page_enter:{snap,camera,built,throw} (the page arrives from a card the viewer already met) -> card; (5) no page but a dock arrives over the world (cls dock_enter) -> card; (6) no page and no dock: the transition that brought this world - the PREVIOUS scene's exit (exit:suck -> suck, exit:dip -> dip, every other token including the schema default wipe_left -> cut); (7) nothing brought it (the first frame) -> hold.",
+  "approved": [
+    {
+      "build": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short",
+      "timeline": "content/video_engine/projects/systems-and-blowups/tokyo-tea-break/build-short/tokyo-short.timeline.json",
+      "scenes": 7,
+      "per_scene": [
+        "hold",
+        "mount",
+        "cut",
+        "spiral",
+        "mount",
+        "card",
+        "cut"
+      ],
+      "counts": {
+        "mount": 2,
+        "spiral": 1,
+        "cut": 2,
+        "card": 1,
+        "hold": 1
+      },
+      "shares": {
+        "mount": 0.2857,
+        "spiral": 0.1429,
+        "cut": 0.2857,
+        "card": 0.1429,
+        "hold": 0.1429
+      },
+      "consecutive_repeats": []
+    },
+    {
+      "build": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short",
+      "timeline": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short/japan-short.timeline.json",
+      "scenes": 12,
+      "per_scene": [
+        "card",
+        "card",
+        "cut",
+        "mount",
+        "card",
+        "card",
+        "cut",
+        "mount",
+        "cut",
+        "dip",
+        "mount",
+        "cut"
+      ],
+      "counts": {
+        "mount": 3,
+        "cut": 4,
+        "dip": 1,
+        "card": 4
+      },
+      "shares": {
+        "mount": 0.25,
+        "cut": 0.3333,
+        "dip": 0.0833,
+        "card": 0.3333
+      },
+      "consecutive_repeats": [
+        [
+          1,
+          "card"
+        ],
+        [
+          5,
+          "card"
+        ]
+      ]
+    }
+  ],
+  "target": {
+    "scenes": 19,
+    "counts": {
+      "mount": 5,
+      "spiral": 1,
+      "cut": 6,
+      "dip": 1,
+      "card": 5,
+      "hold": 1
+    },
+    "shares": {
+      "mount": 0.2632,
+      "spiral": 0.0526,
+      "cut": 0.3158,
+      "dip": 0.0526,
+      "card": 0.2632,
+      "hold": 0.0526
+    }
+  },
+  "max_share": {
+    "value": 0.3333,
+    "at": [
+      {
+        "signature": "card",
+        "cut": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short",
+        "count": 4,
+        "of": 12
+      },
+      {
+        "signature": "cut",
+        "cut": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build-short",
+        "count": 4,
+        "of": 12
+      }
+    ],
+    "note": "the maximum share ONE signature reaches inside a single approved cut - the number M46 leans on"
+  },
+  "beside": [
+    {
+      "build": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-oneshot-3",
+      "timeline": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-oneshot-3/calendar-short.timeline.json",
+      "scenes": 12,
+      "per_scene": [
+        "axes",
+        "dip",
+        "dip",
+        "mount",
+        "axes",
+        "axes",
+        "dip",
+        "axes",
+        "card",
+        "dip",
+        "spiral",
+        "cut"
+      ],
+      "counts": {
+        "axes": 4,
+        "mount": 1,
+        "spiral": 1,
+        "cut": 1,
+        "dip": 4,
+        "card": 1
+      },
+      "shares": {
+        "axes": 0.3333,
+        "mount": 0.0833,
+        "spiral": 0.0833,
+        "cut": 0.0833,
+        "dip": 0.3333,
+        "card": 0.0833
+      },
+      "consecutive_repeats": [
+        [
+          2,
+          "dip"
+        ],
+        [
+          5,
+          "axes"
+        ]
+      ],
+      "approved": false,
+      "note": "reworked to E99 s67, on the queue"
+    }
+  ]
+}

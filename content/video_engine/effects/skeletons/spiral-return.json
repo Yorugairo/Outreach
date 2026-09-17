@@ -1,0 +1,59 @@
+{
+  "schema_version": "shape_skeletons.v1",
+  "id": "spiral-return",
+  "shape": "return",
+  "does": "The page the cut opened on RETURNS by the spiral - unwound from its point, never drawn like new - the last datum lit on its word and the ring on its one use.",
+  "acts": [
+    "SETS",
+    "TURNS"
+  ],
+  "signature": "spiral",
+  "rows": [
+    {
+      "start": "{t0}",
+      "end": "{t1}",
+      "plate": "ledger:{page}:spiral:cut;idle=live",
+      "ken": [
+        0,
+        0,
+        0
+      ],
+      "docks": [],
+      "exit": "cut",
+      "species": [
+        {
+          "kind": "spotlight",
+          "at": "{t0}+1.0",
+          "dur": "hold",
+          "target": {
+            "kind": "datum",
+            "index": "{datum}"
+          },
+          "options": {
+            "until": "{t1}"
+          }
+        },
+        {
+          "kind": "callout",
+          "at": "{t1}-1.5",
+          "dur": 1.3,
+          "target": {
+            "kind": "datum",
+            "index": "{datum_b}"
+          }
+        }
+      ]
+    }
+  ],
+  "rules": {
+    "mount_at_or_after_s": 7.0,
+    "plate_min_s": 6.0,
+    "event_gap_max_s": 2.5,
+    "light_after_build": true
+  },
+  "source": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build_short.py:150-152",
+  "aspect_limits": {
+    "no_badge_rail_at_9_16": true,
+    "no_park_at_9_16": true
+  }
+}

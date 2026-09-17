@@ -261,13 +261,13 @@ operator's word. Every gated step runs UNPIPED.
 - Deviation: drafted by `junior_developer` from the plan's fixed list and reviewed by the parent (COUNTS and `schema_version` added on review).
 
 ### T2: The skeleton library and the approved mix, derived from the three approved tables
-- Status: pending
+- Status: done
 - Owner: `implementation_luna`
 - Depends on: T1
 - Write set: `content/video_engine/effects/skeletons/*.json`, `content/video_engine/effects/skeletons/approved-mix.json`, `content/video_engine/tests/test_shape_skeletons.py`
 - Acceptance: every skeleton in T1's table exists as a file valid against `shape_skeletons.v1`, its `source` resolving to a real `path:line` whose text still contains the mechanism it claims (the test opens the file and greps the line, as `effects_catalog_check.check_anchors` does for a card's `lives`); at least TWO skeletons carry each `shape`. `approved-mix.json` is MEASURED, not typed: the signature counts and shares of the three approved cuts read from their compiled timelines with `recipe_walk.events`, each with the timeline path and the count behind it, plus the maximum share any one signature reaches in an approved cut (the number M46 will lean on). The test asserts the mix is re-derivable (re-running the deriver reproduces the file byte for byte) and that no skeleton emits a 9:16 rail or park.
 - Validate: `python -m pytest content/video_engine/tests/test_shape_skeletons.py -q`
-- Evidence: pending
+- Evidence: 13 skeleton files under `effects/skeletons/` (open-on-the-chart 2, page-number-lands-at-n 2, held-page-hosts-the-docks 2, plate-carries-a-card 2, page-to-page-transform 2, return 3), each citing a line inside an approved `shot_table` (two cites corrected: the Japan card `:279-281`, the memory suck `:211-213`; Japan `:174`'s 'returns by the spiral' is stale - its ring mounts a new page at `:313`); `approved-mix.json` MEASURED on the compiled timelines by `scripts/derive_approved_mix.py` (Tokyo 7 scenes, Japan 12; max share 0.3333; one-shot #3 beside, approved: false); `tests/test_shape_skeletons.py` 128 passed (the parent re-ran it). For T5: the approved cuts carry consecutive repeats (Japan's throw -> snap pair reads card, card), so M46's consecutive rule counts SKELETONS, not signature words.
 
 ### T3: `authoring/shapes.py` - the beat plan in, the approved skeleton out
 - Status: pending

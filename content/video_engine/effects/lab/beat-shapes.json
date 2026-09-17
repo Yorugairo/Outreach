@@ -1,0 +1,324 @@
+{
+  "schema_version": "lab_beat_shapes.v1",
+  "description": "THE BEAT SHAPES - the finite combination space the lab enumerates, as DATA (P65 T2; R26-176, E99 s67). A shape is a beat's skeleton: ordered member SLOTS, each naming the catalogue AXES it accepts, the candidate cards it can actually carry (resolved at generation through authoring/effects.py against docs/EFFECTS-CATALOG.jsonl, so no candidate can name a token the compiler refuses), and the offset it sits at in whole steps of the gates' own clocks. A NEW SHAPE OR A NEW SLOT ENTRY IS A DATA CHANGE HERE - lab_enumerate.py holds no shape of its own and invents no member. The slot tables are kept SMALL and principled on purpose: a slot lists the members the shape can actually carry, never every card on the axis, because the product is capped by MAX_CANDIDATES in content/video_engine/scripts/lab_enumerate.py (400 today; the space is expected in the low hundreds) and a shape whose slot table pushes the product past that ceiling is REFUSED BY NAME - a batch the operator cannot read in one sitting is not a batch. The five clock values are never typed here either: they are read from content/video_engine/scripts/gate_motion_density.py by name (see `clocks` below) and every offset is an expression over them.",
+  "ceiling": "MAX_CANDIDATES in content/video_engine/scripts/lab_enumerate.py (400): the enumerated space, summed over every shape, may not pass it. A shape whose slot table pushes the product past the ceiling is refused by name, with its own product printed.",
+  "clocks": {
+    "m44_plate_s": "gate_motion_density.PLATE_MIN_S - M44: a world plate the eye can take in (6.0)",
+    "m16_gap_s": "gate_motion_density.SHORT_PULSE_MAX_S - M16: the longest gap between visual events on a short (2.5)",
+    "m12_dock_s": "gate_motion_density.OPENING_CHART_HOLD_MAX_S - M12/E25: a dock on a chart is the proof, not homework (6.0)",
+    "m11_first_light_s": "gate_motion_density.ANNOTATE_TOL_S - M11/E24: the targeted species fires within this of the page's build landing, never over the build (1.5)",
+    "page_build_end_s": "gate_motion_density.PAGE_BUILD_END_S - E99 s67: the second a ledger page finishes BUILDING and holds built (7.4)"
+  },
+  "offset_grammar": "An offset is an expression over the clock names above, in whole steps: `0`, `m16_gap_s`, `2 * m16_gap_s`, `page_build_end_s + m16_gap_s`. Terms are joined by + or -; a term is a number, a clock name, or <int> * <clock name>. Anything else is refused by name. A slot carries `offsets_s` as a LIST: one entry is a fixed offset, several entries are the range of offsets the slot may sit at and each is enumerated.",
+  "rules": {
+    "plate_min_s": "the seconds from `slot` to `until` (a slot name, or `window`) are at least m44_plate_s - a plate slot is never under M44's floor",
+    "after_build_s": "`slot` sits at least page_build_end_s after `after`, and no later than page_build_end_s + m11_first_light_s - the light lands after the page has BUILT (E99 s67), inside M11's tolerance, never on arrival and never over the build",
+    "gap_max_s": "consecutive events are never further apart than m16_gap_s; with `from`, the pulse is measured from that instant on (the span before it is the page BUILDING on screen, which is continuous motion, E99 s67) and the instant itself counts as an event",
+    "dock_hold_max_s": "a dock on a chart page is never held past m12_dock_s, measured from `slot` to `until` (E25: the chart is the proof, not the homework)"
+  },
+  "shapes": [
+    {
+      "id": "plate-carries-a-card",
+      "title": "A plate carrying a card",
+      "does": "A narrative plate holds its six seconds and lives while a card is handed to it, read, and the world leaves.",
+      "window_s": "m44_plate_s",
+      "slots": [
+        {
+          "name": "plate",
+          "axes": ["plate_option"],
+          "role": "the world plate the beat stands on - it holds M44's six seconds and it is never still",
+          "offsets_s": ["0"],
+          "members": [
+            {"card": "plate_option:alive"},
+            {"card": "plate_option:ken"}
+          ]
+        },
+        {
+          "name": "dock",
+          "axes": ["dock_kind"],
+          "role": "the evidence still handed to the plate - a dock is a still or a document, never a chart card (E99 s67)",
+          "offsets_s": ["m16_gap_s"],
+          "members": [
+            {"card": "dock_kind:image"},
+            {"card": "dock_kind:cutout"},
+            {"card": "dock_kind:press"}
+          ]
+        },
+        {
+          "name": "arrival",
+          "axes": ["arrival"],
+          "role": "how that card arrives and what it is made of - the mass the landing settles by",
+          "offsets_s": ["m16_gap_s"],
+          "members": [
+            {"card": "arrival:throw", "option": "paper"},
+            {"card": "arrival:throw", "option": "metal"},
+            {"card": "arrival:land"}
+          ]
+        },
+        {
+          "name": "life",
+          "axes": ["species"],
+          "role": "the plate's own life while the card is read - the pulse between the landing and the leave",
+          "offsets_s": ["2 * m16_gap_s"],
+          "members": [
+            {"card": "species:plate_life"}
+          ]
+        },
+        {
+          "name": "exit",
+          "axes": ["exit"],
+          "role": "how the world leaves once the card has been read",
+          "offsets_s": ["m44_plate_s"],
+          "members": [
+            {"card": "exit:dip"},
+            {"card": "exit:cut"},
+            {"card": "exit:suck"}
+          ]
+        }
+      ],
+      "clocks": [
+        {"rule": "plate_min_s", "clock": "m44_plate_s", "slot": "plate", "until": "exit",
+         "note": "the plate is never under M44's six seconds - the eye cannot take in a flash, and this one also carries a dock"},
+        {"rule": "gap_max_s", "clock": "m16_gap_s",
+         "note": "the landing, the plate's life and the leave keep the screen inside M16's 2.5 s pulse for the whole hold"}
+      ]
+    },
+    {
+      "id": "page-number-lands-at-n",
+      "title": "A page whose number lands at +N s",
+      "does": "A ledger page enters on its own signature, BUILDS on screen, holds built, and its number is lit at +N - after the build, never on arrival.",
+      "window_s": "page_build_end_s + 2 * m16_gap_s",
+      "slots": [
+        {
+          "name": "enter",
+          "axes": ["page_enter"],
+          "role": "the page's own signature entry - axes, mount or spiral (the kit's default: a page enters by axes or mount unless told)",
+          "offsets_s": ["0"],
+          "members": [
+            {"card": "page_enter:axes"},
+            {"card": "page_enter:mount"},
+            {"card": "page_enter:spiral"}
+          ]
+        },
+        {
+          "name": "builder",
+          "axes": ["page_builder"],
+          "role": "what the page is - the chart that draws itself across the build",
+          "offsets_s": ["0"],
+          "members": [
+            {"card": "page_builder:bars"},
+            {"card": "page_builder:line"},
+            {"card": "page_builder:decline"}
+          ]
+        },
+        {
+          "name": "light",
+          "axes": ["species"],
+          "role": "the light on the number, at +N after the build lands - or none at all",
+          "optional": true,
+          "offsets_s": ["page_build_end_s", "page_build_end_s + m11_first_light_s"],
+          "members": [
+            {"card": "species:spotlight"},
+            {"card": "species:focus_zoom"}
+          ]
+        },
+        {
+          "name": "hold",
+          "axes": ["page_species"],
+          "role": "the number written on the page while it is said - the page holds BUILT and does not go still (E99 s67)",
+          "offsets_s": ["page_build_end_s + m16_gap_s"],
+          "members": [
+            {"card": "page_species:figure"}
+          ]
+        },
+        {
+          "name": "exit",
+          "axes": ["page_exit"],
+          "role": "how the page leaves once its number has been said",
+          "offsets_s": ["page_build_end_s + 2 * m16_gap_s"],
+          "members": [
+            {"card": "page_exit:retract"},
+            {"card": "page_exit:cut"}
+          ]
+        }
+      ],
+      "clocks": [
+        {"rule": "after_build_s", "clock": "page_build_end_s", "tolerance": "m11_first_light_s", "slot": "light", "after": "enter",
+         "note": "E99 s67: the page builds with the effects and only then is lit - the light lands inside M11's 1.5 s of the build's end, never over it"},
+        {"rule": "gap_max_s", "clock": "m16_gap_s", "from": "page_build_end_s",
+         "note": "the span before the build's end is the page BUILDING on screen (continuous motion); from the build's end the 2.5 s pulse binds again"}
+      ]
+    },
+    {
+      "id": "page-to-page-transform",
+      "title": "A page-to-page transform",
+      "does": "One page becomes the next through the chart itself - the change is the transition, with no cream between.",
+      "window_s": "page_build_end_s + 3 * m16_gap_s",
+      "slots": [
+        {
+          "name": "from_page",
+          "axes": ["page_builder"],
+          "role": "the page the viewer is already reading, built and held",
+          "offsets_s": ["0"],
+          "members": [
+            {"card": "page_builder:bars"},
+            {"card": "page_builder:line"}
+          ]
+        },
+        {
+          "name": "transform",
+          "axes": ["chart_to"],
+          "role": "the verb that carries the first page into the second - the chart itself does the travelling (chart_to:park is left off the table: no park at 9:16, R26-172)",
+          "offsets_s": ["page_build_end_s"],
+          "members": [
+            {"card": "chart_to:morph"},
+            {"card": "chart_to:rescale"},
+            {"card": "chart_to:recast"},
+            {"card": "chart_to:extend"},
+            {"card": "chart_to:remake"}
+          ]
+        },
+        {
+          "name": "light",
+          "axes": ["species"],
+          "role": "the light on what the transform landed on - the sentence's own point",
+          "offsets_s": ["page_build_end_s + m16_gap_s"],
+          "members": [
+            {"card": "species:spotlight"},
+            {"card": "species:focus_zoom"}
+          ]
+        },
+        {
+          "name": "exit",
+          "axes": ["page_exit"],
+          "role": "how the second page leaves",
+          "offsets_s": ["page_build_end_s + 2 * m16_gap_s"],
+          "members": [
+            {"card": "page_exit:retract"},
+            {"card": "page_exit:cut"}
+          ]
+        }
+      ],
+      "clocks": [
+        {"rule": "after_build_s", "clock": "page_build_end_s", "tolerance": "m11_first_light_s", "slot": "transform", "after": "from_page",
+         "note": "the first page is allowed to finish BUILDING and hold built before the transform takes it - a change over a build is the same defect the light has"},
+        {"rule": "gap_max_s", "clock": "m16_gap_s", "from": "page_build_end_s",
+         "note": "from the first page's build end the transform, the light and the leave each land inside the 2.5 s pulse"}
+      ]
+    },
+    {
+      "id": "return",
+      "title": "A return",
+      "does": "The world comes back to a page it already showed, and the thing that was said about it has changed.",
+      "window_s": "3 * m16_gap_s",
+      "slots": [
+        {
+          "name": "enter",
+          "axes": ["page_enter"],
+          "role": "the way a page the viewer has already read comes back - it arrives drawn, because it was already built once",
+          "offsets_s": ["0"],
+          "members": [
+            {"card": "page_enter:spiral"},
+            {"card": "page_enter:stamped"}
+          ]
+        },
+        {
+          "name": "mark",
+          "axes": ["page_species"],
+          "role": "what is different this time - the mark that makes the return worth making",
+          "offsets_s": ["m16_gap_s"],
+          "members": [
+            {"card": "page_species:retitle"},
+            {"card": "page_species:relight"},
+            {"card": "page_species:span"},
+            {"card": "page_species:figure"}
+          ]
+        },
+        {
+          "name": "light",
+          "axes": ["species"],
+          "role": "the light on the changed thing - punctuation for the sentence that points at it",
+          "offsets_s": ["2 * m16_gap_s"],
+          "members": [
+            {"card": "species:spotlight"},
+            {"card": "species:callout"}
+          ]
+        },
+        {
+          "name": "exit",
+          "axes": ["page_exit"],
+          "role": "how the returned page leaves the second time",
+          "offsets_s": ["3 * m16_gap_s"],
+          "members": [
+            {"card": "page_exit:retract"},
+            {"card": "page_exit:cut"}
+          ]
+        }
+      ],
+      "clocks": [
+        {"rule": "gap_max_s", "clock": "m16_gap_s",
+         "note": "a return carries no build to hide inside - the page is back on its first frame, so M16's pulse binds from 0"}
+      ]
+    },
+    {
+      "id": "open-on-the-chart",
+      "title": "The open ON the chart",
+      "does": "The first frame IS the chart on its axes, drawing - one of the few places a chart may stand fully drawn (E99 s67).",
+      "window_s": "page_build_end_s + m16_gap_s + m12_dock_s",
+      "slots": [
+        {
+          "name": "enter",
+          "axes": ["page_enter"],
+          "role": "the open's first frame of motion - the page is already there, on its axes or standing drawn",
+          "offsets_s": ["0"],
+          "members": [
+            {"card": "page_enter:axes"},
+            {"card": "page_enter:built"}
+          ]
+        },
+        {
+          "name": "builder",
+          "axes": ["page_builder"],
+          "role": "the chart the open stands on",
+          "offsets_s": ["0"],
+          "members": [
+            {"card": "page_builder:line"},
+            {"card": "page_builder:bars"},
+            {"card": "page_builder:decline"},
+            {"card": "page_builder:share"}
+          ]
+        },
+        {
+          "name": "first_move",
+          "axes": ["species"],
+          "role": "the first thing said about the chart, pointed at once the page has built",
+          "offsets_s": ["page_build_end_s"],
+          "members": [
+            {"card": "species:callout"},
+            {"card": "species:punch"},
+            {"card": "species:focus_zoom"}
+          ]
+        },
+        {
+          "name": "dock",
+          "axes": ["dock_kind"],
+          "role": "the evidence still that lands on the built page and is read - or none",
+          "optional": true,
+          "offsets_s": ["page_build_end_s + m16_gap_s"],
+          "members": [
+            {"card": "dock_kind:image"},
+            {"card": "dock_kind:cutout"}
+          ]
+        }
+      ],
+      "clocks": [
+        {"rule": "after_build_s", "clock": "page_build_end_s", "tolerance": "m11_first_light_s", "slot": "first_move", "after": "enter",
+         "note": "even on the open the point is made after the chart has drawn itself - M11's window, never over the build"},
+        {"rule": "gap_max_s", "clock": "m16_gap_s", "from": "page_build_end_s",
+         "note": "the chart draws from the first frame; from its landing the pulse binds"},
+        {"rule": "dock_hold_max_s", "clock": "m12_dock_s", "slot": "dock", "until": "window",
+         "note": "E25: a dock on the chart is the proof, not the homework - it is not held past M12's six seconds"}
+      ]
+    }
+  ]
+}

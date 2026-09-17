@@ -266,13 +266,13 @@ pushed without the operator's word. Every gated step runs UNPIPED.
 - Deviation: the schemas were drafted by `junior_developer` from the plan's fixed reason list and reviewed by the parent (the decisions were already in the plan; the typing was not judgement).
 
 ### T2: The enumerator - the space as DATA, finite and closed
-- Status: pending
+- Status: done
 - Owner: `implementation_luna`
 - Depends on: T1
 - Write set: `content/video_engine/scripts/lab_enumerate.py`, `content/video_engine/effects/lab/beat-shapes.json`, `content/video_engine/effects/lab/candidates.jsonl`, `content/video_engine/tests/test_lab_enumerate.py`
 - Acceptance: `beat-shapes.json` names at least the five shapes R26-176 and s67 give - a plate carrying a card; a page whose number lands at +N s; a page-to-page transform; a return; the open ON the chart - each with its member SLOTS (the axes a slot accepts, resolved against `docs/EFFECTS-CATALOG.jsonl` through `authoring/effects.py`, so no candidate can name a token the compiler refuses) and the clocks that bind it. `lab_enumerate.py --write` emits the full cross product as `candidates.jsonl`, one record per candidate, stable id, sorted, LF, byte-identical on a re-run; `--check` exits 1 when stale. The tool has NO `--n`, no `--fill` and no sampling: the test asserts the emitted count equals the product computed from the tables, that the count stays under a stated CEILING (`MAX_CANDIDATES`, a named constant - the space is expected in the low hundreds; a shape whose slot table pushes the product past it is refused by name, since a batch the operator cannot read in one sitting is not a batch), that every member resolves to a card or a listed option, and that a candidate violating its own clock (a plate under M44's 6 s, a light before the build ends, a gap over M16's 2.5 s) is refused by name at generation. The module docstring carries the reconciliation sentence: the lab generates candidates for a test bed and authors no episode (`recipes.py:1-20`, `PIPELINE.md:33`).
 - Validate: `python -m pytest content/video_engine/tests/test_lab_enumerate.py -q` then `python content/video_engine/scripts/lab_enumerate.py --check`
-- Evidence: pending
+- Evidence: `scripts/lab_enumerate.py` (`--write` / `--check`, `MAX_CANDIDATES = 400`, clocks imported from `gate_motion_density.py`), `effects/lab/beat-shapes.json` (five shapes with slot tables at clock offsets; a new shape or slot is a data change), `effects/lab/candidates.jsonl` (288 candidates: plate-carries-a-card 54, page-number-lands-at-n 90, page-to-page-transform 40, return 32, open-on-the-chart 72; every record valid against lab_candidates.v1), `tests/test_lab_enumerate.py` 18 passed (the parent re-ran it); `--check` in sync. The first write refused all 90 page candidates on a 5.0 s light-to-leave gap: the TABLE was fixed (a `hold` slot - the figure written while the number is said, E99 s67), never the clock (report `scratchpad/assembly/P65-T2.md`).
 
 ### T3: The test-bed builder and the gate + probe filter
 - Status: pending

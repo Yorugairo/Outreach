@@ -1,0 +1,70 @@
+{
+  "schema_version": "shape_skeletons.v1",
+  "id": "return-as-callback-docks",
+  "shape": "return",
+  "does": "The ring's page mounts and the worlds the cut has already used come BACK as docks on their own words - the callback returns as evidence, not as a scene.",
+  "acts": [
+    "NAMES",
+    "EXPLAINS",
+    "TURNS"
+  ],
+  "signature": "card",
+  "rows": [
+    {
+      "start": "{t0}",
+      "end": "{t1}",
+      "plate": "ledger:{page}:mount={mount_s}:cut;idle=live",
+      "ken": [
+        0,
+        0,
+        0
+      ],
+      "docks": [
+        {
+          "id": "{dock}",
+          "at": "{t0}+7.45",
+          "read_s": 1.2,
+          "park_s": 0.7
+        },
+        {
+          "id": "{dock_b}",
+          "at": "{t1}-4.0",
+          "read_s": 1.2,
+          "park_s": 0.7
+        }
+      ],
+      "exit": "cut",
+      "species": [
+        {
+          "kind": "build_to",
+          "at": "{t0}+4.4",
+          "dur": 3.0,
+          "target": {
+            "kind": "datum",
+            "index": "{datum}"
+          }
+        },
+        {
+          "kind": "spotlight",
+          "at": "{t0}+7.45",
+          "dur": "hold",
+          "target": {
+            "kind": "datum",
+            "index": "{datum_b}"
+          }
+        }
+      ]
+    }
+  ],
+  "rules": {
+    "mount_at_or_after_s": 7.0,
+    "plate_min_s": 6.0,
+    "event_gap_max_s": 2.5,
+    "light_after_build": true
+  },
+  "source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short.py:309-315",
+  "aspect_limits": {
+    "no_badge_rail_at_9_16": true,
+    "no_park_at_9_16": true
+  }
+}

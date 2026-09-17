@@ -1,0 +1,49 @@
+{
+  "schema_version": "shape_skeletons.v1",
+  "id": "plate-carries-a-card",
+  "shape": "plate-carries-a-card",
+  "does": "A world plate on its own directional life carries one card: the card is THROWN onto it, lands with weight and reads there until the world changes.",
+  "acts": [
+    "NAMES",
+    "EXPLAINS",
+    "TURNS"
+  ],
+  "signature": "card",
+  "rows": [
+    {
+      "start": "{t0}",
+      "end": "{t1}",
+      "plate": "{plate};idle=drift;drift=35",
+      "ken": [
+        0.06,
+        6,
+        -4
+      ],
+      "docks": [
+        {
+          "id": "{dock}",
+          "at": "{t0}+1.0",
+          "read_s": 1.2,
+          "park_s": 0.7,
+          "options": {
+            "arrive": "throw",
+            "mass": "paper",
+            "centre": true
+          }
+        }
+      ],
+      "exit": "dip"
+    }
+  ],
+  "rules": {
+    "mount_at_or_after_s": 7.0,
+    "plate_min_s": 6.0,
+    "event_gap_max_s": 2.5,
+    "light_after_build": true
+  },
+  "source": "content/video_engine/projects/systems-and-blowups/japan-tariff-trick/build_short.py:279-281",
+  "aspect_limits": {
+    "no_badge_rail_at_9_16": true,
+    "no_park_at_9_16": true
+  }
+}
