@@ -106,6 +106,7 @@ MIX_NAME = "approved-mix.json"
 # --- the gates' constants, imported and never re-typed -----------------------------------------
 PAGE_BUILD_END_S = MD.PAGE_BUILD_END_S          # 7.4: a rolled-out page's chart lands here (M11's annotation clock)
 ANNOTATE_TOL_S = MD.ANNOTATE_TOL_S              # M11 1.5: the first chart's species fires WITH its landing
+ANNOTATED_KINDS = MD.ANNOTATED_KINDS            # M11: the kinds that ANNOTATE a chart's divergence (+ the build_to's cap)
 CHART_HOLD_MAX_S = MD.OPENING_CHART_HOLD_MAX_S  # M12 6.0: a chart is never held as homework
 PULSE_MAX_S = MD.SHORT_PULSE_MAX_S              # M16 2.5: MEASURED by `event_gaps`, never filled (no allocator)
 PLATE_MIN_S = MD.PLATE_MIN_S                    # M44 6.0: no world plate row under six seconds
@@ -138,6 +139,11 @@ POINTS_AT = ("datum", "index", "region", "point", "bracket", "spread", "peak",
 NUMBER_WORDS = ("percent", "billion", "trillion", "million", "thousand", "hundred", "dollars",
                 "half", "twice", "double", "a tenth")
 LIGHT_KINDS = ("spotlight", "callout", "focus_zoom", "ring", "punch", "figure", "note")
+# E99 s67 Apply 1-2 is about the LIGHT over the build - the lamp that darkens the page around a point.
+# It is not about the marks that ANNOTATE the chart as it lands: a `build_to` IS the build (M11 counts
+# its cap as the annotation), and a callout, a figure or a note on the number's word is the sentence's
+# own mark, which the approved cuts write at the word and not a beat later (P66 T3c, the third pass).
+LIGHT_AFTER_BUILD_KINDS = ("spotlight", "focus_zoom")
 ENTRY_SUFFIX = re.compile(r":(axes|spiral|built|(?:mount|snap|camera)=(?:[A-Za-z0-9_.-]+|\{[a-z0-9_]+\}))")
 TIME_HOLE = re.compile(r"^\{(t[01])\}([+-][0-9.]+)?$")
 HOLE = re.compile(r"\{([a-z0-9_]+)\}")
@@ -151,6 +157,13 @@ MOUNT_S_DEFAULT = MD.LP_FIELD_S  # the player's own default when a spec carries 
 # --- the beat's named MOVES (P66 T3 continued) --------------------------------------------------
 MOVE_DOCK = "dock"               # the one move kind that is not a species: a CARD arrives over the world
 MOVE_SLOT = "slot"               # a dock move's lane, the dock tuple's 2nd element - an option here, not a DOCK_OPT
+
+# --- E65: the card's ROOM on a page (P66 T3c) ---------------------------------------------------
+CARD_PLACE_KEYS = ("centre_x", "centre_y", "centre_w")   # the AUTHOR's own placement: kept verbatim (E99 s66)
+CARD_ROOM_ASPECT = 1.0   # the height a room must hold per unit of card WIDTH when the card's own aspect is not
+                         # known here (the asset is registered by the EPISODE at build time, never by the kit):
+                         # the approved cards measure 0.59-1.00, and a row that docks a portrait CHART card
+                         # names its own `card_aspect`, which this placer keeps verbatim with the rest
 MOVE_KEYS = ("kind", "at_word", "target", "label", "dur", "asset", "options")
 CAMERA_MOVES = ("punch", "focus_zoom", "pull_back")   # s9.28 C3: one per row, and never over a Ken Burns
 LABEL_FIELD = {"figure": "text", "note": "text", "retitle": "text", "stamp": "text",
@@ -313,6 +326,198 @@ def move_kinds() -> tuple:
 def dock_option_keys() -> tuple:
     """Every option a `dock` move may carry: the compiler's own `DOCK_OPTS`, plus the lane."""
     return tuple(compiler().DOCK_OPTS) + (MOVE_SLOT,)
+
+
+# --------------------------------------------------------------------------- the card's room on a page
+
+_PAGER = None
+
+
+def pager():
+    """`ledger_page`, imported LAZILY and once - the module that BUILDS a page and reports where its
+    ink lands (`page_boxes`). The placer below reads a page's geometry through that one path, which
+    is the same path the compiler's own placer and `probe.py` read it through (P50 T16: one
+    placement truth, measured when the fixture holds the player's numbers for this ink)."""
+    global _PAGER
+    if _PAGER is None:
+        import ledger_page as LPG
+        _PAGER = LPG
+    return _PAGER
+
+
+def _meets(a: dict, b: dict, pad: float = 0.0) -> bool:
+    """Do these two rectangles meet, with `b` grown by `pad` on every side? (the compiler's own test)"""
+    return (a["x"] < b["x"] + b["w"] + pad and a["x"] + a["w"] > b["x"] - pad
+            and a["y"] < b["y"] + b["h"] + pad and a["y"] + a["h"] > b["y"] - pad)
+
+
+def page_ink(page: dict, aspect: str) -> list[dict]:
+    """Every rectangle of a page a card may NOT settle on: its type (the title, the sub, the source
+    line, the badge rail), its axis labels, and the DATA's own cells - the boxes M25 scores
+    (`gate_motion_density` LAYOUT_INK + `page.data`), read from the page builder's own report."""
+    boxes = pager().page_boxes(page, aspect)
+    out = [boxes[k] for k in ("title", "sub", "source", "rail") if boxes.get(k) and boxes[k]["h"] > 0]
+    out += [b for b in ((boxes.get("axis") or {}).get("x"), (boxes.get("axis") or {}).get("y")) if b]
+    return out
+
+
+def clear_strips(band: dict, ink: list[dict]) -> list[dict]:
+    """The strips of one free band that NO line of the page's ink crosses.
+
+    `free_bands` hands a card the title and the sub ("a card parks over the title", E45 s1) - and
+    M25 scores a card on either of them as a fault, which is how the third pass' cards read over the
+    page's sub. So the band is cut at every piece of ink that reaches into it, and what is left is
+    room a card can settle in without covering a word."""
+    cuts = sorted((max(band["y"], b["y"]), min(band["y"] + band["h"], b["y"] + b["h"]))
+                  for b in ink if _meets(band, b))
+    out, top = [], band["y"]
+    for lo, hi in cuts + [(band["y"] + band["h"], band["y"] + band["h"])]:
+        if lo - top > 0:
+            out.append({"x": band["x"], "y": top, "w": band["w"], "h": lo - top})
+        top = max(top, hi)
+    return out
+
+
+def rooms_of(page: dict, aspect: str) -> list[dict]:
+    """Every rectangle on this page a card may settle in, largest first: the plot's own empty rooms
+    (E65's `mask_rooms`, read off the page's measured mask) and the strips of the bands outside the
+    plot that carry no ink (`clear_strips`). One list, one order, no episode named."""
+    C = compiler()
+    boxes = pager().page_boxes(page, aspect)
+    if not boxes.get("plot"):
+        return []
+    ink = page_ink(page, aspect)
+    out = list(C.mask_rooms(boxes))
+    for band in C.free_bands(boxes):
+        out += clear_strips(band, ink)
+    return sorted(out, key=lambda r: -(r["w"] * r["h"]))
+
+
+def card_rooms(page: dict, aspect: str, n: int) -> list[dict]:
+    """`n` boxes a card can settle in on this page, none of them sharing a pixel with another or
+    with the page's ink - E65's own rooms, largest first, at the quiet-zone end.
+
+    E65 and R26-172 together: *"parking is not a way to make room for a card on 9:16; the page's own
+    empty room is"*. The rooms are the rectangles the DATA's ink does not touch
+    (`build_scene_timeline_f.mask_rooms`, read off the page's measured mask), and the card takes the
+    end of its room the plate's own `quiet_zone` token names (`right` / `left`). Fewer than `n` boxes
+    come back when the page has not got the room - the caller leaves those cards to the compiler's
+    placer and says so. Pure: the page spec is never mutated."""
+    C, LPG = compiler(), pager()
+    boxes = LPG.page_boxes(page, aspect)
+    if not boxes.get("plot"):
+        return []
+    stage, pad = boxes["stage"], C.DOCK_PLACE_PAD
+    want = round(C.DOCK_ON_PAGE_W * stage["w"])
+    floor = C.PLACE_FLOOR_H.get(aspect, C.PLACE_FLOOR_H["16:9"])
+    quiet, ink = boxes.get("quiet_zone"), page_ink(page, aspect)
+    out: list[dict] = []
+    for room in rooms_of(page, aspect):
+        if len(out) >= n:
+            break
+        room_h = room["h"] - 2 * pad
+        w = min(float(want), room["w"] - 2 * pad)
+        if w * CARD_ROOM_ASPECT > room_h:
+            w = room_h / CARD_ROOM_ASPECT                # the card gives its SCALE before its place (E65) - so the
+        h = min(float(C.dock_card_h(int(w))), room_h)    # room holds it even if the asset is a square one, and a
+                                                         # room that cannot hold THAT is refused below, not filled
+                                                         # with a wide flat card the asset may be twice the height of
+        if w < C.DOCK_ON_PAGE_MIN_W or h < floor:        # under the floor a card has stopped being evidence
+            continue
+        x = room["x"] + pad if quiet == "left" else room["x"] + room["w"] - pad - w
+        # the card sits at the HEAD of its room: the box is the compiler's own 16:9 estimate, and a taller
+        # asset (the kit cannot read one - it is registered by the episode at build time) grows DOWN into the
+        # room's own empty space rather than out of it
+        box = {"x": round(x), "y": round(room["y"] + pad), "w": round(w), "h": round(h)}
+        if any(_meets(box, other) for other in ink + out):
+            continue
+        out.append(box)
+    return out
+
+
+def room_options(box: dict, aspect: str) -> dict:
+    """One room as the dock options that PLACE a card in it: the compiler's own centred placement,
+    authored. No `read` is written with it, and that is the point - *"a centred card with no `read`
+    has no pop at all"* (`build_scene_timeline_f`:5304), so the card lands in the page's room and
+    never flashes at the solo card's 800 px over the page's ink first (E63, M25)."""
+    sw, sh = pager().STAGE_PX[aspect]
+    return {"centre": True,
+            "centre_w": round(box["w"] / sw, 4),
+            "centre_x": round((box["x"] + box["w"] / 2) / sw, 4),
+            "centre_y": round((box["y"] + box["h"] / 2) / sh, 4)}
+
+
+def placed(options) -> bool:
+    """Does this dock's options carry the AUTHOR's own placement? Then it is kept verbatim."""
+    return any(k in (options or {}) for k in CARD_PLACE_KEYS)
+
+
+def place_cards(docks: list, page: dict | None, aspect: str, notes: list) -> list:
+    """Every card on one page row, placed in the page's own room - and never two of them in one box.
+
+    A card the plan placed itself (`centre_x` / `centre_y` / `centre_w`) is untouched. Every other
+    card on a LEDGER page takes a room of its own: the rooms are ordered by size, and a card is
+    given the first room no card LIVE AT THE SAME INSTANT already holds, so two cards over one page
+    never share a rectangle. A page with fewer rooms than cards leaves the rest to the compiler's
+    own placer, and the row's `why` says which and why."""
+    if page is None or not docks:
+        return docks
+    free = [d for d in docks if not placed(d[4])]
+    if not free:
+        return docks
+    slots: list[int] = []
+    for i, d in enumerate(free):
+        taken = {slots[j] for j, o in enumerate(free[:i]) if float(o[3]) > float(d[2]) and float(o[2]) < float(d[3])}
+        slots.append(next(k for k in range(len(free)) if k not in taken))
+    rooms = card_rooms(page, aspect, max(slots) + 1)
+    for d, k in zip(free, slots):
+        if k < len(rooms):
+            d[4] = {**d[4], **room_options(rooms[k], aspect)}
+        elif d[4].get("centre"):
+            d[4] = {key: v for key, v in d[4].items() if key != "centre"}
+            notes.append(f"{d[0]} loses its bare `centre`: the page has no {k + 1}th room clear of its ink, and a "
+                         "centred card with no box of its own reads at the stage's centre, over the page (E65 / "
+                         "R26-172 - the page's own room is how room is made at 9:16, never the stage's middle)")
+        else:
+            notes.append(f"{d[0]} keeps the compiler's own placer: the page has no {k + 1}th room clear of its "
+                         "ink for a card (E65's ladder decides it at compile time)")
+    if rooms:
+        notes.append(f"{len(free)} card(s) placed in the page's own room, off its ink (E65; R26-172: parking is "
+                     "not how room is made at 9:16) - " + ", ".join(
+                         f"{d[0]} {'x'.join(str(rooms[k][v]) for v in ('w', 'h'))} at ({rooms[k]['x']}, {rooms[k]['y']})"
+                         for d, k in zip(free, slots) if k < len(rooms)))
+    return docks
+
+
+CHART_STATE_KINDS = ("chart_to",)   # the species that REDRAW a page's chart UNDER a card
+
+
+def bound_by_state(docks: list, species: list, notes: list) -> list:
+    """A card parks in the page's room AS THE PAGE STANDS - so it leaves when the chart is redrawn.
+
+    E65 places a card in the rectangle the page's DATA does not touch. A `chart_to` (rescale, recast,
+    park) draws a different chart in the same plot, and the room the card was given is then wherever
+    the new line goes: the third pass measured exactly that - the panel card parked in the holdings
+    page's empty room at 0:09 and read over the RESCALED line from 0:22 to 0:38, nine of M25's
+    twenty-nine faults. The card keeps the row's end when the change comes before it could read and
+    park (leaving would make it a flash), and the row's `why` names that risk instead."""
+    C = compiler()
+    states = sorted(float(s["at"]) for s in species if s.get("kind") in CHART_STATE_KINDS)
+    for d in docks:
+        t_in, t_out = float(d[2]), float(d[3])
+        nxt = next((t for t in states if t > t_in + EPS), None)
+        if nxt is None or nxt >= t_out - EPS:
+            continue
+        opts = d[4] or {}
+        need = float(opts.get("read_s") or C.DOCK_READ_S) + float(opts.get("park_s") or C.DOCK_PARK_S)
+        if nxt - t_in < need:
+            notes.append(f"{d[0]} holds past the chart's own state change at {nxt:.2f}s: it lands at {t_in:.2f}s and "
+                         f"needs {need:.2f}s to read and park - the room it sits in is the page BEFORE that change")
+            continue
+        d[3] = round(nxt, 2)
+        notes.append(f"{d[0]} leaves at the chart's state change ({nxt:.2f}s) and not at the row's end ({t_out:.2f}s): "
+                     "its room is the page's empty room as the page STANDS, and a chart_to redraws the ink under it (E65)")
+    return docks
 
 
 def moves_of(record) -> list[dict]:
@@ -624,12 +829,82 @@ def _species(spec, fills, beat, skeleton, t0, t1, land, defaults) -> tuple[dict 
         out[k] = _time(v, t0, t1) if isinstance(v, str) and TIME_HOLE.match(v) else v
     if land is not None and out["kind"] == "build_to" and isinstance(out.get("dur"), float):
         out["at"] = round(max(t0, t0 + land - out["dur"]), 2)
-    elif land is not None and out["kind"] in LIGHT_KINDS and defaults.get("light_after_build", True):
+    elif land is not None and out["kind"] in LIGHT_AFTER_BUILD_KINDS and defaults.get("light_after_build", True):
         out["at"] = round(max(out["at"], t0 + land), 2)
     if out["at"] >= t1 - SPECIES_TAIL_S:
         return None, (f"the {out['kind']} on beat {beat.get('beat', '?')} has no room left on this row after the "
                       f"page's chart lands: dropped rather than fired over the build (E99 s67 Apply 2)")
     return out, None
+
+
+def hold_room(sp: dict, species: list, docks: list, t1: float) -> float:
+    """The seconds a HELD species has before the next event on its row - the compiler's own clock for
+    a `dur: "hold"` (`build_scene_timeline_f`:5158-5175: held until the next species' `at`, a card
+    ARRIVING counted as an event, or the row's end, and `until` when the row named one)."""
+    ats = sorted([float(x["at"]) for x in species if isinstance(x.get("at"), (int, float))]
+                 + [float(d[2]) for d in (docks or [])])
+    end = next((a for a in ats if a > float(sp["at"]) + 1e-6), float(t1))
+    if isinstance(sp.get("until"), (int, float)) and not isinstance(sp.get("until"), bool):
+        end = min(end, float(sp["until"]))
+    return round(end - float(sp["at"]), 2)
+
+
+def flashes(sp: dict, species: list, docks: list, t1: float) -> bool:
+    """Would the compiler DROP this species as a flash? A held light with less than its `HOLD_MIN_S`
+    of room before the next event is dropped there, so a base that emits one is describing a cut
+    that will not have it (found by the third pass: the open's held spotlight, 0.64 s before the
+    build, was dropped at compile time and M11 read the chart as unannotated)."""
+    return sp.get("dur") == "hold" and hold_room(sp, species, docks, t1) < compiler().HOLD_MIN_S
+
+
+def annotate_first_chart(species: list, docks: list, t0: float, t1: float, land: float, notes: list) -> None:
+    """M11 on the cut's FIRST chart: it never stands full and unannotated.
+
+    The gate's own reading (`gate_motion_density._first_chart_gate`): the page is annotated when one
+    of `ANNOTATED_KINDS` fires inside [the landing, the landing + `ANNOTATE_TOL_S`], **or** when a
+    `build_to`'s CAP lands within that tolerance of it - *"the line ends ON the datum and the nib
+    rests there ... which points at the divergence harder than a ring drawn around it"* (P47 T2). So
+    the BUILD is the annotation, and the row's own first build_to is placed to END on the landing
+    rather than a beat after its word; a plan that names no build has its first mark pulled back into
+    the window instead. E99 s67 Apply 6: the open is one of the few places a chart may stand fully
+    drawn - and it is still annotated inside M11's 1.5 s. Mutates in place and records what it did."""
+    lo, hi = round(t0 + land, 2), round(t0 + land + ANNOTATE_TOL_S, 2)
+    if any(s["kind"] in ANNOTATED_KINDS and lo - EPS <= float(s["at"]) <= hi + EPS
+           and not flashes(s, species, docks, t1) for s in species):
+        return
+    build = next((s for s in species if s["kind"] == "build_to" and isinstance(s.get("dur"), (int, float))), None)
+    if build is not None:
+        was, dur = float(build["at"]), float(build["dur"])
+        if abs(was + dur - lo) <= ANNOTATE_TOL_S + EPS:
+            return
+        build["at"] = round(max(t0, lo - dur), 2)
+        notes.append(f"the first chart's BUILD is placed to END on the page's landing at {lo:.2f}s and not "
+                     f"{dur:.1f}s after its own word at {was:.2f}s - the build IS the annotation M11 counts "
+                     "(P47 T2: the line ends on the datum), and the open never stands full and unannotated")
+        return
+    mark = next((s for s in species if s["kind"] in ANNOTATED_KINDS), None)
+    if mark is not None:
+        was = float(mark["at"])
+        mark["at"] = round(min(max(was, lo), hi), 2)
+        if abs(was - float(mark["at"])) > EPS:
+            notes.append(f"the open's {mark['kind']} moves from {was:.2f}s to {mark['at']:.2f}s: the plan names no "
+                         f"build on the first chart, so its own first mark lands inside M11's {ANNOTATE_TOL_S:.1f}s "
+                         f"after the page's landing at {lo:.2f}s (E99 s67 Apply 6)")
+        return
+    notes.append(f"M11 UNANSWERED: the plan names neither a build nor a mark on the first chart (landing {lo:.2f}s) "
+                 "- the open's skeleton carries no annotation to place and the compiler invents no datum")
+
+
+def drop_flashes(species: list, docks: list, t1: float, notes: list) -> list:
+    """The held species the compiler would drop as flashes, dropped HERE - so the base's rows say
+    what the cut will actually carry (`build_scene_timeline_f`:5174, HOLD_MIN_S)."""
+    kept = [s for s in species if not flashes(s, species, docks, t1)]
+    for s in species:
+        if s not in kept:
+            notes.append(f"the held {s['kind']} at {float(s['at']):.2f}s is dropped: "
+                         f"{hold_room(s, species, docks, t1):.2f}s of room before the next event, under the "
+                         f"compiler's {compiler().HOLD_MIN_S:.1f}s - a held light with no room is a flash")
+    return kept
 
 
 def _aspect_clean(row_docks: list, row_species: list, aspect: str, defaults: dict) -> tuple[list, list, list]:
@@ -703,7 +978,7 @@ def _exit(g: dict, nxt: dict | None, skeleton: dict, next_entry: str | None) -> 
 # --------------------------------------------------------------------------- the compiler
 
 def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9",
-            library: list[dict] | None = None) -> tuple[list[tuple], list[dict]]:
+            library: list[dict] | None = None, pages=None) -> tuple[list[tuple], list[dict]]:
     """The AUTHORED beat plan as the approved skeleton: `(rows, why)`.
 
     `rows` are the kit's own tuples - what `table.write_shot_table` takes and `table.load_rows`
@@ -713,6 +988,12 @@ def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9"
     `plan` is the records (or the path to `BEAT-PLAN.jsonl`), `words` the take's words (either the
     aligner's `start_s` / `end_s` or `timeline.json`'s `start` / `end`), `defaults` the six
     documented keys of `DEFAULTS`, `aspect` `"16:9"` or `"9:16"`.
+
+    `pages` is the caller's PAGE RESOLVER - `pages(<a resolved ledger plate id>) -> the
+    `ledger_page.v1` spec, or None`. The kit names no episode, and a page's ink lives in the
+    episode's own `evidence/objects/`, so the CLI hands the resolver in (`generate_base_table.py`).
+    With it, every card on a page is placed in the page's OWN room, off its ink (E65, `place_cards`);
+    without it the compiler's placer decides at compile time and the row's `why` says so.
     """
     plan = load_plan(plan) if isinstance(plan, (str, Path)) else list(plan)
     check_plan(plan)
@@ -724,7 +1005,7 @@ def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9"
     spans = _windows(gs, ws, [p["exit"] for p in picks], float(d.get("plate_hold_s", PLATE_MIN_S)))
     rows, why = [], []
     for i, (g, pick, (t0, t1)) in enumerate(zip(gs, picks, spans)):
-        rows.append(_row(g, pick, t0, t1, d, aspect, first=i == 0, ws=ws))
+        rows.append(_row(g, pick, t0, t1, d, aspect, first=i == 0, ws=ws, pages=pages))
         why.append({"beat": int(g["beats"][0]["beat"]), "skeleton": pick["skeleton"]["id"],
                     "act": str(g["act"] or ""), "rule": "; ".join([pick["rule"], *pick["notes"]]),
                     "signature": pick["skeleton"]["signature"]})
@@ -834,8 +1115,26 @@ def _clock_entry(g: dict, shape: str, d: dict) -> tuple[str, str]:
         else "the axes because no number lands on this page (E99 s67 Apply 6)")
 
 
+def _page_spec(plate: str, pages, notes: list) -> dict | None:
+    """The `ledger_page.v1` spec behind a resolved ledger plate, through the CALLER's own resolver -
+    or None when the caller handed none (the kit never opens an episode's evidence itself) or when
+    the page cannot be read, which is a note on the row and never a refusal: a base whose cards keep
+    the compiler's placer is still a base."""
+    if pages is None or not str(plate).startswith("ledger:"):
+        return None
+    try:
+        page = pages(plate)
+    except (ValueError, OSError, KeyError, TypeError) as exc:
+        notes.append(f"the page's own geometry could not be read ({exc}) - its cards keep the compiler's placer")
+        return None
+    if not isinstance(page, dict) or not page:
+        notes.append("the page resolver names no page for this plate - its cards keep the compiler's placer")
+        return None
+    return page
+
+
 def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first: bool,
-         ws: list[dict] | None = None) -> tuple:
+         ws: list[dict] | None = None, pages=None) -> tuple:
     """One skeleton's template row, resolved onto one group's window - then the group's beats' own
     NAMED MOVES realised on it, each timed on the word it belongs to."""
     skeleton, beat, notes = pick["skeleton"], g["beats"][0], pick["notes"]
@@ -863,9 +1162,6 @@ def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first:
         on = _beat_at(g, _time(spec.get("at", "{t0}"), t0, t1))
         out, why = _species(spec, {**fills, **_datum_fills(on, g)}, on, skeleton, t0, t1, land, d)
         (species.append(out) if out else notes.append(why))
-    if first and land is not None and species:
-        species[0]["at"] = round(min(species[0]["at"], t0 + land + ANNOTATE_TOL_S), 2)
-        notes.append(f"the first chart's light lands with its build, +{land:.1f}s (M11)")
     ken = tuple(tpl["ken"]) if isinstance(tpl["ken"], list) else tpl["ken"]
     # THE BEAT'S NAMED MOVES, after the skeleton's own: the plan is the intelligence, and it already
     # says what this sentence does. The skeleton gives the row its SHAPE; the moves give it its beats.
@@ -889,6 +1185,17 @@ def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first:
     docks = kept + made_docks
     docks, species, aspect_notes = _aspect_clean(docks, species, aspect, d)
     notes.extend(aspect_notes)
+    docks.sort(key=lambda x: (float(x[2]), str(x[0])))
+    species.sort(key=lambda x: (float(x["at"]), str(x["kind"])))
+    # E65: every card that did not place itself takes a room of the PAGE's own, and never a room a
+    # card beside it already holds (the third pass: four of the five cards read at the stage's centre,
+    # over the page's ink, because a bare `centre: True` is a stage placement and not a page one)
+    if land is not None:
+        docks = bound_by_state(docks, species, notes)   # E65: the room is the page as it stands ...
+    docks = place_cards(docks, _page_spec(plate, pages, notes), aspect, notes)   # ... and then it is given
+    if first and land is not None:
+        annotate_first_chart(species, docks, t0, t1, land, notes)   # M11: the open is annotated as it lands
+    species = drop_flashes(species, docks, t1, notes)               # ... and the base says what the cut will carry
     if g["world"] != "page" and round(t1 - t0, 2) + 1e-9 < float(d.get("plate_hold_s", PLATE_MIN_S)):
         notes.append("the plate could not reach its six seconds (M44)")
     docks.sort(key=lambda x: (float(x[2]), str(x[0])))
@@ -918,7 +1225,7 @@ def _move(mv: dict, beat, ws, t0: float, t1: float, ken, land, d: dict) -> tuple
     if kind in CAMERA_MOVES and ken and ken[0]:
         raise Refused(f"beat {n}: a {kind} over Ken Burns scale {ken[0]} - a camera move and a Ken Burns never "
                       "share a window (s9.28 C3); the move or the skeleton's ken has to give")
-    if land is not None and kind in LIGHT_KINDS and d.get("light_after_build", True) and t < t0 + land - EPS:
+    if land is not None and kind in LIGHT_AFTER_BUILD_KINDS and d.get("light_after_build", True) and t < t0 + land - EPS:
         raise Refused(f"beat {n}: the {kind} on {mv['at_word']!r} fires at {t:.2f}s, before this page's own chart "
                       f"lands at {t0 + land:.2f}s - a light is punctuation, not a cover for the build (E99 s67 "
                       "Apply 1-2). The compiler refuses it rather than move the author's beat.")

@@ -27,17 +27,44 @@ PROJECTS = ROOT / "content/video_engine/projects/systems-and-blowups"
 TOKYO = PROJECTS / "tokyo-tea-break/build-short"
 JAPAN = PROJECTS / "japan-tariff-trick/build-short"
 LIGHTS = SH.LIGHT_KINDS
+CLOCKED = SH.LIGHT_AFTER_BUILD_KINDS   # P66 T3c: the lights the "after the build" clock binds - and only those
 
 
 def _words(build: Path) -> list[dict]:
     return json.loads((build / "timeline.json").read_text(encoding="utf-8"))["words"]
 
 
+def _pages(build: Path):
+    """The CLI's own page resolver, on this build's project - `shapes` reads a page's geometry only
+    through the caller (`generate_base_table.page_resolver`; the kit names no episode)."""
+    def pages(plate: str):
+        C = SH.compiler()
+        return (C.ledger_world(C.split_plate_opts(str(plate))[0], (0, 0, 0), build.parent) or {}).get("page")
+    return pages
+
+
 def _base(build: Path, aspect: str = "9:16"):
     """(the plan, the rows, the ROW records of `why`) - `SH.silent_why` reads the rest (P66 T3b)."""
     plan = SH.load_plan(build / "BEAT-PLAN.jsonl")
-    rows, why = SH.compile(plan, _words(build), SH.DEFAULTS, aspect)
+    rows, why = SH.compile(plan, _words(build), SH.DEFAULTS, aspect, pages=_pages(build))
     return plan, rows, SH.rows_why(why)
+
+
+def _card_box(options: dict, aspect: str = "9:16") -> dict | None:
+    """The stage rectangle a row's own placement puts a card in - the compiler's own arithmetic
+    (`centred_place` with an authored centre: the width is `centre_w` of the stage, the height the
+    card's 16:9 frame and its chrome)."""
+    if not SH.placed(options):
+        return None
+    sw, sh = SH.pager().STAGE_PX[aspect]
+    w = round(float(options["centre_w"]) * sw)
+    h = round(w * float(options["card_aspect"])) if options.get("card_aspect") else SH.compiler().dock_card_h(w)
+    return {"x": round(float(options["centre_x"]) * sw - w / 2), "y": round(float(options["centre_y"]) * sh - h / 2),
+            "w": w, "h": h}
+
+
+def _page(build: Path, plate: str):
+    return _pages(build)(plate) if str(plate).startswith("ledger:") else None
 
 
 @pytest.fixture(scope="module")
@@ -166,26 +193,121 @@ def test_portrait_emits_no_rail_and_no_park(tokyo, japan):
         assert "badges" not in repr(rows) and "'park'" not in repr(rows)
 
 
+def _is_page_build(sp: dict, row) -> bool:
+    """The page's OWN build: a `build_to` whose cap lands with the page's chart (P47 T2). It belongs
+    to the page's arrival, not to the sentence speaking at that instant."""
+    return (sp.get("kind") == "build_to" and isinstance(sp.get("dur"), (int, float))
+            and abs(float(sp["at"]) + float(sp["dur"]) - (row[0] + _land(row[2]))) <= SH.ANNOTATE_TOL_S)
+
+
 def test_a_light_only_points_and_only_after_the_page_has_built(tokyo, japan):
     """E99 s67 Apply 1-2: a light is punctuation, not filler - it fires only on a sentence the plan
-    says POINTS, and never before the page's own chart lands."""
+    says POINTS, and never before the page's own chart lands.
+
+    P66 T3c narrowed WHICH species the clock binds: the LIGHT proper (the lamp that darkens the page
+    around a point - `LIGHT_AFTER_BUILD_KINDS`). A `build_to` IS the build and a callout, a figure or
+    a note is the sentence's own mark - both land on their word (M11 counts the build's cap)."""
     for plan, rows, _ in (tokyo, japan):
         gs = SH.groups(plan)
         for r, g in zip(rows, gs):
             for sp in r[6] or []:
-                if r[2].startswith("ledger:") and sp["kind"] in LIGHTS:
+                if r[2].startswith("ledger:") and sp["kind"] in CLOCKED:
                     assert sp["at"] + 1e-6 >= r[0] + _land(r[2]), (sp, r[2])
-                if "target" in sp:
+                if "target" in sp and not _is_page_build(sp, r):
                     assert SH.points(SH._beat_at(g, sp["at"])), (sp, r[2])
 
 
 def test_the_first_chart_is_annotated_with_its_own_landing(tokyo):
-    """M11 (`ANNOTATE_TOL_S`): the first chart carries a targeted species WITH its landing."""
+    """M11, by the GATE's own rule (`gate_motion_density._first_chart_gate`): the first chart carries
+    one of `ANNOTATED_KINDS` inside [the landing, the landing + `ANNOTATE_TOL_S`], **or** a `build_to`
+    whose CAP lands there - the line ending ON the datum is the annotation (P47 T2)."""
     _, rows, _ = tokyo
     first = rows[0]
     assert first[2].startswith("ledger:")
     land = first[0] + _land(first[2])
-    assert any(land - 1e-6 <= s["at"] <= land + SH.ANNOTATE_TOL_S for s in first[6] or []), first[6]
+    marks = [s for s in first[6] or []
+             if s["kind"] in SH.ANNOTATED_KINDS and land - 1e-6 <= s["at"] <= land + SH.ANNOTATE_TOL_S]
+    caps = [s for s in first[6] or [] if _is_page_build(s, first)]
+    assert marks or caps, first[6]
+
+
+def test_the_opens_build_lands_with_the_page_and_not_on_its_own_word(tokyo):
+    """P66 T3c: the plan's `build_to` on beat 3 is spoken at "climbed" (7.6 s) while the open's page
+    lands at 5.5 s - three seconds of build AFTER the chart is there reads as a chart standing full
+    and unannotated (M11 FAIL on the first generated base). The build is placed to END on the landing
+    instead, and the row's `why` says so."""
+    _, rows, why = tokyo
+    land = rows[0][0] + _land(rows[0][2])
+    build = next(s for s in rows[0][6] if s["kind"] == "build_to")
+    assert abs(build["at"] + build["dur"] - land) <= 1e-6, build
+    assert "END on the page's landing" in why[0]["rule"]
+
+
+def test_no_held_light_the_compiler_would_drop_as_a_flash_is_emitted(tokyo, japan):
+    """`build_scene_timeline_f` drops a held species with under `HOLD_MIN_S` before the next event -
+    so a base that emits one describes a cut that will not have it (the open's held spotlight, 0.64 s
+    before the build, was dropped at compile time and M11 then read the chart as unannotated)."""
+    for _, rows, _ in (tokyo, japan):
+        for r in rows:
+            for sp in r[6] or []:
+                assert not SH.flashes(sp, r[6], list(r[4] or []), r[1]), (sp, r[0])
+
+
+# ---------------------------------------------------------------- E65: the card's room on the page
+def test_every_card_on_a_page_is_placed_in_the_pages_own_room(tokyo):
+    """E65 / R26-172 (*"parking is not a way to make room for a card on 9:16; the page's own empty
+    room is"*): a card that does not place itself is given a rectangle of the page's own, and its box
+    touches no line of the page's ink and none of its data. A bare `centre: True` - which reads at the
+    STAGE's centre, over the chart - never leaves the compiler."""
+    _, rows, _ = tokyo
+    seen = 0
+    for r in rows:
+        page = _page(TOKYO, r[2])
+        if page is None:
+            continue
+        ink = SH.page_ink(page, "9:16")
+        boxes = SH.pager().page_boxes(page, "9:16")
+        for d in r[4] or []:
+            if not SH.placed(d[4]):
+                assert not d[4].get("centre"), d      # never the stage's centre over a page
+                continue
+            box = _card_box(d[4])
+            seen += 1
+            assert all(not SH._meets(box, b) for b in ink), (d[0], box, ink)
+            assert SH.compiler().mask_is_clear(boxes, box) or not boxes.get("data_mask"), (d[0], box)
+    assert seen >= 4, "the Tokyo bed docks five cards on its pages"
+
+
+def test_two_cards_live_at_one_instant_never_share_a_box(tokyo):
+    """The third pass: the record and the plant both read at the stage's centre on 0:56 - one box,
+    two cards, and both over the page's sub. A card takes the first room no card beside it holds."""
+    _, rows, _ = tokyo
+    for r in rows:
+        placed = [d for d in r[4] or [] if SH.placed(d[4])]
+        for i, a in enumerate(placed):
+            for b in placed[i + 1:]:
+                if float(b[2]) >= float(a[3]) or float(a[2]) >= float(b[3]):
+                    continue                          # never on screen together
+                assert not SH._meets(_card_box(a[4]), _card_box(b[4])), (a[0], b[0])
+
+
+def test_a_card_the_plan_placed_itself_is_kept_verbatim():
+    """E99 s66: the plan is the intelligence. A move that names its own `centre_*` is not re-placed."""
+    place = {"centre": True, "centre_w": 0.42, "centre_x": 0.76, "centre_y": 0.316}
+    docks = [["dock-x", 0, 1.0, 9.0, dict(place)]]
+    notes: list = []
+    out = SH.place_cards(docks, {"schema_version": "ledger_page.v1", "surface": "page"}, "9:16", notes)
+    assert out[0][4] == place and not notes
+
+
+def test_a_card_leaves_when_the_chart_is_redrawn_under_it(tokyo):
+    """E65: the room is the page's empty room AS THE PAGE STANDS. The panel card was parked in it at
+    0:09 and read over the RESCALED line from 0:22 - nine of M25's twenty-nine faults."""
+    _, rows, why = tokyo
+    panel = next(d for d in rows[0][4] if d[0] == "dock-c-blue-ties-panel")
+    rescale = next(s["at"] for s in rows[0][6] if s["kind"] == "chart_to")
+    assert float(panel[3]) == pytest.approx(rescale), (panel, rescale)
+    assert "leaves at the chart's state change" in why[0]["rule"]
 
 
 # ---------------------------------------------------------------- the row grammar
@@ -204,7 +326,7 @@ def test_a_second_compile_is_byte_identical(tokyo):
     """Acceptance 1: re-running on the same plan changes nothing - no clock, no set ordering, no
     dict iteration leaks into the output."""
     plan, rows, why = tokyo
-    rows2, why2 = SH.compile(plan, _words(TOKYO), SH.DEFAULTS, "9:16")
+    rows2, why2 = SH.compile(plan, _words(TOKYO), SH.DEFAULTS, "9:16", pages=_pages(TOKYO))
     assert repr(rows2) == repr(rows) and repr(SH.rows_why(why2)) == repr(why)
 
 

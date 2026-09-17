@@ -93,14 +93,31 @@ def read_words(build: Path) -> list | None:
     return json.loads(path.read_text(encoding="utf-8")).get("words")
 
 
-def compile_base(build: Path, aspect: str) -> tuple[list[tuple], list[dict]]:
-    """The build's AUTHORED plan as the approved skeleton. Refusals keep `shapes`' own words."""
+def page_resolver(project: Path):
+    """`pages(<a resolved ledger plate id>) -> that page's `ledger_page.v1` spec` for `shapes.compile`.
+
+    It is the COMPILER's own reader (`build_scene_timeline_f.ledger_world`: the series file under
+    `<project>/evidence/objects/`, built into the spec the player draws), so the base places a card
+    by the geometry the page will actually have - one placement truth (P50 T16), read here through
+    the same door. The kit names no episode; the project is this CLI's own argument."""
+    def pages(plate: str):
+        C = SH.compiler()
+        return (C.ledger_world(C.split_plate_opts(str(plate))[0], (0, 0, 0), project) or {}).get("page")
+    return pages
+
+
+def compile_base(build: Path, aspect: str, project: Path | None = None) -> tuple[list[tuple], list[dict]]:
+    """The build's AUTHORED plan as the approved skeleton. Refusals keep `shapes`' own words.
+
+    With `project`, every card on a page is placed by that page's OWN geometry (`page_resolver`);
+    without it the compiler's placer decides at compile time and each row's `why` says so."""
     plan = build / PLAN_NAME
     if not plan.is_file():
         raise Refused(f"FAIL: no {PLAN_NAME} in {rel(build)} - the compiler's INPUT is AUTHORED (E99 s66, M41); "
                       "this tool never writes one")
     try:
-        return SH.compile(SH.load_plan(plan), read_words(build), SH.DEFAULTS, aspect)
+        return SH.compile(SH.load_plan(plan), read_words(build), SH.DEFAULTS, aspect,
+                          pages=page_resolver(project) if project is not None else None)
     except SH.Refused as exc:
         raise Refused(f"FAIL: {rel(plan)}: {exc}") from None
 
@@ -204,7 +221,7 @@ def write_base(project: Path, build: Path, table: Path, aspect: str,
                force: str | None) -> tuple[list[tuple], list[dict]]:
     """The base on disk: the table literal and `BASE-TABLE.md`. Refuses a table NEWER than the plan whose bytes
     differ from the base - that is an edit, and an edit is never overwritten without a named reason."""
-    rows, why = compile_base(build, aspect)
+    rows, why = compile_base(build, aspect, project)
     text = table_text(rows, header(build, aspect))
     plan = build / PLAN_NAME
     if table.is_file() and table.stat().st_mtime > plan.stat().st_mtime and table.read_bytes() != text:
@@ -318,7 +335,7 @@ def documented(dep: dict, entries: list[dict]) -> bool:
 
 def report_departures(project: Path, build: Path, table: Path, aspect: str) -> int:
     """One line per departure, then the verdict: 1 when any is unnamed (or the ledger cannot answer), else 0."""
-    base, _ = compile_base(build, aspect)
+    base, _ = compile_base(build, aspect, project)
     final = final_rows(project, build, table, aspect)
     found = departures(base, final)
     print(f"{rel(table)} vs the base generated from {rel(build / PLAN_NAME)}: {len(found)} departures "
