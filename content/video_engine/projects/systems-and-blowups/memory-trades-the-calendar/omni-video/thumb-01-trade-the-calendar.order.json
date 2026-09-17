@@ -1,0 +1,15 @@
+{
+  "_contract": "ONE-SHOT #3 (E99 s66) - the Fable parent's own pass; the operator: 'Flow is up if you need any stills or clips' (2026-09-16). Dispatch: python omni-video/dispatch_order.py thumb-01-trade-the-calendar.order.json",
+  "_beat": "THE THUMBNAIL - E27: sentence one answers it ('Memory stocks don't trade the news. They trade the calendar.'). Must read at 168 px.",
+  "prompt": "9:16 vertical YouTube thumbnail, bold, high-contrast 2D editorial graphic illustration on a clean solid cream ground. A light application of woodblock print and vox newspaper meets rich anime colors. Centre: one giant paper wall-calendar page, its days in a grid, the 15th circled in thick red ink. Above the calendar, large hand-lettered charcoal block capitals on a sunflower-yellow pill: THEY TRADE THE CALENDAR. Below the calendar a small simple bar chart of eight bars, seven red bars pointing DOWN and one teal bar pointing UP, and beside it big charcoal numerals: 7 of 8. The character in his indigo suit and copper tie stands at the lower left, pointing up at the circled date, deadpan. Thick charcoal border line at the edges. No other text.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "ratio": "9:16",
+  "outputPath": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/thumbnails/thumb-01-trade-the-calendar.png",
+  "budget": {
+    "kind": "zero_credit",
+    "model": "Nano Banana Pro"
+  },
+  "review_state": "quarantined until the operator approves the frame"
+}

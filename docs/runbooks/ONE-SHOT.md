@@ -51,7 +51,8 @@ Every command below was run with `--help` on 2026-09-14. Paths are repo-relative
 
 ## Known gaps (BACKLOG R26-135, R26-136)
 
-- No tool writes `BEAT-PLAN.jsonl`, and `authoring/recipes.py` is a library with no command line: step 4 is authored by hand today.
+- Step 4's beat plan and step 2's script are INTELLIGENCE work, not a tool's (E99 s66, 2026-09-16: "a tool can't realistically write the beat
+  plan or the script, those always have to come from intelligence") - `BEAT-PLAN.jsonl` is written by the agent doing the one-shot; no writer is owed.
 - The approved Japan and Tokyo shorts do NOT pass today's motion gate (Japan `3 FAIL`, Tokyo v2 `1 FAIL`) - they predate it. The
   one-shot floor measures against Japan as its reference; a new cut is held to today's gates, not to the approved cuts' scores.
 - The silence-cut rule (M13) is enforced in `cut_before` and has no row in `docs/GATES-REGISTRY.md`.

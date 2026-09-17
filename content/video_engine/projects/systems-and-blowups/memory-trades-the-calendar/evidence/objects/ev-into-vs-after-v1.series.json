@@ -1,0 +1,38 @@
+{
+ "title": "The month's gain lands before the print",
+ "sub": "hynix + Micron, mean move in the half-month INTO the print vs the half-month AFTER it - 25 prints, Aug '24 - Aug '26",
+ "src": "Operator backtest 2026-08-30 (EPISODE-SEEDS act three): hynix + Micron vs the KCS print calendar, 25 months Aug '24 - Aug '26; n = 25, one regime",
+ "unit": "%",
+ "bars": [
+  {
+   "label": "INTO the print",
+   "value": 6.8,
+   "color": "teal",
+   "note": "+6.8%"
+  },
+  {
+   "label": "AFTER the print",
+   "value": 2.2,
+   "color": "deemph",
+   "note": "+2.2%"
+  }
+ ],
+ "badges": [
+  {
+   "label": "FRONT-RUN",
+   "value": "3x",
+   "tag": "the gain lands before the news",
+   "accent": "sunflower"
+  }
+ ],
+ "status": "FIRST-PARTY",
+ "fetched": "2026-08-30",
+ "facts": {
+  "into_pct_mean": 6.8,
+  "into_positive": "18 of 25",
+  "after_pct_mean": 2.2,
+  "months": 25
+ },
+ "src_style": "compact",
+ "hlines": []
+}

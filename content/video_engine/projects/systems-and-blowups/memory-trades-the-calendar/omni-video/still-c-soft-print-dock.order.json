@@ -1,0 +1,15 @@
+{
+  "_contract": "ONE-SHOT #3 (E99 s66) - the Fable parent's own pass; the operator: 'Flow is up if you need any stills or clips' (2026-09-16). Dispatch: python omni-video/dispatch_order.py still-c-soft-print-dock.order.json",
+  "_beat": "THE WEAK PRINT - B5/B6 (0:40-1:05): the port when the soft print lands; the weak-prints bars and the daily line mount over it.",
+  "prompt": "9:16 vertical, full bleed. A light application of woodblock print and vox newspaper meets rich anime colors, cream paper ground, charcoal contour ink, one cobalt accent. The character in his indigo suit and copper tie. A single still frame, no text unless named. Busan container dock at dawn under a grey sky, seen from the quay: one crane idle, a row of containers with one gap in it, and a paper customs print sheet blowing across the wet concrete in the foreground, its numbers in red. The character stands small at the left edge holding a torn calendar page for July, looking down at the sheet. Generous empty grey-cream sky in the upper half for a chart page to land on.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "ratio": "9:16",
+  "outputPath": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/omni-video/stills/still-c-soft-print-dock.png",
+  "budget": {
+    "kind": "zero_credit",
+    "model": "Nano Banana Pro"
+  },
+  "review_state": "quarantined until the operator approves the frame"
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": "viewer_reports.v1",
+  "prompt_version": "v2",
+  "script": "SCRIPT-SHORT-VO.txt",
+  "windows_file": "SCRIPT-SHORT-VIEWER-WINDOWS.json",
+  "model": "(codex default)",
+  "effort": "high",
+  "lane": "codex",
+  "started_at": "2026-09-17T03:57:33+00:00",
+  "finished_at": "2026-09-17T03:58:39+00:00",
+  "windows_run": 5,
+  "package": {
+    "status": "asked",
+    "title": "Memory stocks trade the calendar, not the news",
+    "thumb_file": "content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\thumbnails\\thumb-01-trade-the-calendar.png",
+    "promised": "An explanation of why memory-stock prices seem to rise and fall on a predictable calendar rather than reacting directly to headlines. I expect to learn which points in the memory cycle matter and why the market anticipates them."
+  },
+  "reports": [
+    {
+      "i": 0,
+      "span": "0:00-0:15",
+      "new_things": [
+        "Memory-stock prices are said to trade around a calendar rather than directly on news.",
+        "Around the fifteenth of each month, Korean customs publishes memory-chip export prices.",
+        "That monthly print is presented as an important timing signal for memory-stock investors.",
+        "Hynix and Micron are said to move around the print before it comes out, not afterward."
+      ],
+      "held_question": "Why does that Korean customs price print matter enough for the market to anticipate it?",
+      "asked_of_me": "",
+      "could_not_follow": [],
+      "promise_answered": "not yet",
+      "answered_by": ""
+    },
+    {
+      "i": 1,
+      "span": "0:15-0:30",
+      "new_things": [
+        "The comparison covers 25 monthly prints from August 2024 through August 2026.",
+        "In the half-month before the print, the stocks averaged a 6.8% gain.",
+        "The video is comparing gains before versus after the monthly print."
+      ],
+      "held_question": "What is the average gain in the half-month after the print, and does that show the move mostly happens beforehand?",
+      "asked_of_me": "Watch where the month's gain actually lands.",
+      "could_not_follow": [
+        "The after-print average is cut off after 'plus two point'."
+      ]
+    },
+    {
+      "i": 2,
+      "span": "0:30-0:45",
+      "new_things": [
+        "The two weeks after the print averaged a 2.2% gain.",
+        "The move is described as front-run, so a strong print is already reflected in prices.",
+        "After 14 strong prints, the following two weeks averaged a 3.4% gain.",
+        "Eight of those 14 strong-print periods were up.",
+        "There were eight weak prints in the 25-month period."
+      ],
+      "held_question": "What happened to the stocks after the weak memory-price prints?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 3,
+      "span": "0:45-1:00",
+      "new_things": [
+        "After seven of the eight weak prints, the stocks fell.",
+        "After weak prints, the average stock move was down 6.9 percent.",
+        "The latest weak print was in July, and stocks fell 14 percent over the following two weeks.",
+        "The chip price was 16 percent higher one month after that latest weak print.",
+        "The video calls this mismatch between stock performance and chip-price performance asymmetry."
+      ],
+      "held_question": "Why do weak prints punish the stocks even when the chip price itself rises afterward?",
+      "asked_of_me": "",
+      "could_not_follow": []
+    },
+    {
+      "i": 4,
+      "span": "1:00-1:15",
+      "new_things": [
+        "Good news is already priced in before the print arrives.",
+        "Bad news is the remaining surprise that can move stocks.",
+        "The key is knowing the earnings-print calendar rather than reading the print faster than the market.",
+        "Stocks trade the print on the day it lands."
+      ],
+      "held_question": "When is the next print due?",
+      "asked_of_me": "Know the calendar for when the print lands.",
+      "could_not_follow": []
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+ "schema": "publish_package.v1",
+ "episode": "memory-trades-the-calendar",
+ "project": "memory-trades-the-calendar",
+ "build": "build-oneshot-3",
+ "title": "Memory stocks trade the calendar, not the news",
+ "subtitle": "Money Physics - short",
+ "channel": "Money Physics - short",
+ "channel_slug": "money-physics-short",
+ "channel_line": null,
+ "channel_path": null,
+ "aspect": "9:16",
+ "runtime_s": 77.644,
+ "script": "SCRIPT-SHORT-VO.txt",
+ "take": "vo-short",
+ "master": null,
+ "master_bytes": null,
+ "first_frame": "frame-0000.0.png",
+ "thumbnail": null,
+ "fetched": null,
+ "keywords": "memory stocks trade the calendar, not the news",
+ "tags": [
+  "#MoneyPhysicsShort",
+  "#MemoryStocksTradeTheCalendarNotTheNews",
+  "#Shorts"
+ ],
+ "inputs": {
+  "build:timeline.json": "5f93b6bb65c76e44",
+  "build:calendar-short.timeline.json": "50aa823a9e112403"
+ },
+ "missing": [
+  "the evidence dossier (EVIDENCE-DOSSIER.md)",
+  "the channel's own words (channel-assets/money-physics-short/CHANNEL-DESCRIPTION.md)",
+  "the fetched sources' links (evidence/sources/*)",
+  "the 1440p master (render/)",
+  "the thumbnail (*thumb*.png)"
+ ],
+ "counts": {
+  "hook": 3,
+  "figures": 4,
+  "close": 2,
+  "dossier_sources": 0,
+  "links": 0,
+  "onscreen_sources": 6
+ }
+}

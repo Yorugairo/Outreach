@@ -1,0 +1,31 @@
+{
+ "title": "A strong print is already paid for",
+ "sub": "The 14 strong customs prints, Aug '24 - Aug '26: was the stock basket UP or DOWN in the half-month after? (mean +3.4 %)",
+ "src": "Operator backtest 2026-08-30 (EPISODE-SEEDS act three): hynix + Micron vs the KCS print calendar, 25 months Aug '24 - Aug '26; n = 25, one regime",
+ "shares": [
+  {
+   "label": "UP",
+   "value": 8,
+   "color": "teal"
+  },
+  {
+   "label": "DOWN",
+   "value": 6,
+   "color": "crimson"
+  }
+ ],
+ "emphasize": 0,
+ "peel": {
+  "index": 0,
+  "value": 8,
+  "value_string": "8 of 14",
+  "label": "a coin flip with drift"
+ },
+ "status": "FIRST-PARTY",
+ "fetched": "2026-08-30",
+ "facts": {
+  "strong_prints": 14,
+  "up_after": 8,
+  "mean_after_pct": 3.4
+ }
+}

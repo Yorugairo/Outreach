@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-17T03:35:09.053Z",
+  "prompt": "9:16 vertical, full bleed. A light application of woodblock print and vox newspaper meets rich anime colors, cream paper ground, charcoal contour ink, one cobalt accent. The character in his indigo suit and copper tie. A single still frame, no text unless named. Interior of a Korean customs office at Busan port at dusk, seen from the doorway: a tall window on the right with container cranes and stacked containers glowing in the last light. On the left wall a very large paper wall calendar for one month, its days in a grid, with the 15th circled in bold red ink - the only red in the room. On the desk under it a small wooden metronome, its arm mid-swing, beside a stamped customs ledger. The character stands beside the desk, one hand resting on the ledger, looking at the circled date. Uncluttered, generous empty cream wall above the calendar for a chart to land on.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "Generating will use 0 credits",
+    "modelText": "🍌 Nano Banana Pro",
+    "credits": 0
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\omni-video\\stills\\still-a-customs-calendar.png",
+      "sha256": "0386e449c8f26fe4b1e22075f3d2fc9087178f1babee0823a4a1fa9430309506"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\omni-video\\stills\\still-a-customs-calendar-raw.png",
+      "sha256": "0386e449c8f26fe4b1e22075f3d2fc9087178f1babee0823a4a1fa9430309506"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\omni-video\\stills\\still-a-customs-calendar-raw.png",
+        "sha256": "0386e449c8f26fe4b1e22075f3d2fc9087178f1babee0823a4a1fa9430309506"
+      }
+    ]
+  }
+}

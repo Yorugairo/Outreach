@@ -1,0 +1,3783 @@
+{
+ "schema_version": "scene_evidence_timeline.v1",
+ "runtime_s": 77.644,
+ "title": "Memory stocks trade the calendar, not the news",
+ "subtitle": "Money Physics - short",
+ "episode_id": "memory-trades-the-calendar",
+ "project_id": "systems-and-blowups",
+ "aspect": "9:16",
+ "narration": {
+  "canonical_hash": "13cf25aee8ea456312b8459ae72ab07b8e1936105f510c2276651b10ae1c5b50",
+  "words_path": "build-oneshot-3/timeline.json"
+ },
+ "captions": [
+  {
+   "at": 0.0,
+   "until": 1.76,
+   "text": "Memory stocks don't trade"
+  },
+  {
+   "at": 1.76,
+   "until": 3.08,
+   "text": "the news. They trade the"
+  },
+  {
+   "at": 3.08,
+   "until": 4.22,
+   "text": "calendar. Around the"
+  },
+  {
+   "at": 4.22,
+   "until": 5.36,
+   "text": "fifteenth of every month,"
+  },
+  {
+   "at": 5.64,
+   "until": 6.84,
+   "text": "Korean customs prints the"
+  },
+  {
+   "at": 6.84,
+   "until": 7.76,
+   "text": "price of memory chips"
+  },
+  {
+   "at": 7.76,
+   "until": 9.3,
+   "text": "crossing its border. If you"
+  },
+  {
+   "at": 9.3,
+   "until": 10.56,
+   "text": "own the stocks, that print"
+  },
+  {
+   "at": 10.56,
+   "until": 12.24,
+   "text": "is your metronome. Hynix and"
+  },
+  {
+   "at": 12.24,
+   "until": 13.64,
+   "text": "Micron move around it, not"
+  },
+  {
+   "at": 13.64,
+   "until": 15.46,
+   "text": "after it. But here's the"
+  },
+  {
+   "at": 15.46,
+   "until": 16.54,
+   "text": "part the headline hides:"
+  },
+  {
+   "at": 17.0,
+   "until": 17.9,
+   "text": "when does the month's gain"
+  },
+  {
+   "at": 17.9,
+   "until": 19.36,
+   "text": "actually land? Twenty-five"
+  },
+  {
+   "at": 19.36,
+   "until": 20.4,
+   "text": "months of prints, August"
+  },
+  {
+   "at": 20.4,
+   "until": 21.44,
+   "text": "twenty-four to August"
+  },
+  {
+   "at": 21.44,
+   "until": 22.76,
+   "text": "twenty-six. In the"
+  },
+  {
+   "at": 22.76,
+   "until": 23.8,
+   "text": "half-month into the print,"
+  },
+  {
+   "at": 23.98,
+   "until": 25.04,
+   "text": "the stocks average plus six"
+  },
+  {
+   "at": 25.04,
+   "until": 26.78,
+   "text": "point eight percent. In the"
+  },
+  {
+   "at": 26.78,
+   "until": 28.34,
+   "text": "half-month after: plus two"
+  },
+  {
+   "at": 28.34,
+   "until": 29.88,
+   "text": "point two. The move is"
+  },
+  {
+   "at": 29.88,
+   "until": 31.54,
+   "text": "front-run. A strong print?"
+  },
+  {
+   "at": 32.14,
+   "until": 33.0,
+   "text": "Already paid for."
+  },
+  {
+   "at": 33.62,
+   "until": 34.84,
+   "text": "After the fourteen strong"
+  },
+  {
+   "at": 34.84,
+   "until": 36.18,
+   "text": "prints, the next two weeks"
+  },
+  {
+   "at": 36.18,
+   "until": 37.47,
+   "text": "averaged plus three point"
+  },
+  {
+   "at": 37.47,
+   "until": 39.12,
+   "text": "four. Eight of fourteen up."
+  },
+  {
+   "at": 39.7,
+   "until": 41.4,
+   "text": "A coin flip with drift. But"
+  },
+  {
+   "at": 41.4,
+   "until": 42.8,
+   "text": "now the weak prints. Eight"
+  },
+  {
+   "at": 42.8,
+   "until": 43.54,
+   "text": "of them in twenty-five"
+  },
+  {
+   "at": 43.54,
+   "until": 45.14,
+   "text": "months. After seven of the"
+  },
+  {
+   "at": 45.14,
+   "until": 46.0,
+   "text": "eight, the stocks fell."
+  },
+  {
+   "at": 46.32,
+   "until": 47.74,
+   "text": "Average: minus six point"
+  },
+  {
+   "at": 47.74,
+   "until": 49.4,
+   "text": "nine. The latest landed in"
+  },
+  {
+   "at": 49.4,
+   "until": 51.48,
+   "text": "July. One soft print, and"
+  },
+  {
+   "at": 51.48,
+   "until": 52.48,
+   "text": "the stocks dropped fourteen"
+  },
+  {
+   "at": 52.48,
+   "until": 54.1,
+   "text": "percent in two weeks. The"
+  },
+  {
+   "at": 54.1,
+   "until": 54.96,
+   "text": "chip price itself?"
+  },
+  {
+   "at": 55.56,
+   "until": 56.76,
+   "text": "Sixteen percent higher a"
+  },
+  {
+   "at": 56.76,
+   "until": 58.66,
+   "text": "month later. In finance, we"
+  },
+  {
+   "at": 58.66,
+   "until": 59.62,
+   "text": "call this asymmetry."
+  },
+  {
+   "at": 60.22,
+   "until": 61.46,
+   "text": "Good news is priced before"
+  },
+  {
+   "at": 61.46,
+   "until": 63.2,
+   "text": "it lands. Bad news is the"
+  },
+  {
+   "at": 63.2,
+   "until": 64.92,
+   "text": "only surprise left. So you"
+  },
+  {
+   "at": 64.92,
+   "until": 65.92,
+   "text": "don't have to read the print"
+  },
+  {
+   "at": 65.92,
+   "until": 67.56,
+   "text": "faster than the market. You"
+  },
+  {
+   "at": 67.56,
+   "until": 68.44,
+   "text": "have to know the calendar:"
+  },
+  {
+   "at": 68.96,
+   "until": 70.04,
+   "text": "the day the print lands is"
+  },
+  {
+   "at": 70.04,
+   "until": 71.22,
+   "text": "the day the stocks trade it."
+  }
+ ],
+ "caption_pages": [
+  {
+   "s": 0.0,
+   "e": 1.76,
+   "t": [
+    {
+     "w": "Memory",
+     "s": 0.0,
+     "e": 0.68,
+     "k": false
+    },
+    {
+     "w": "stocks",
+     "s": 0.68,
+     "e": 1.02,
+     "k": false
+    },
+    {
+     "w": "don't",
+     "s": 1.02,
+     "e": 1.6,
+     "k": false
+    },
+    {
+     "w": "trade",
+     "s": 1.6,
+     "e": 1.76,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 1.76,
+   "e": 3.08,
+   "t": [
+    {
+     "w": "the",
+     "s": 1.76,
+     "e": 1.92,
+     "k": false
+    },
+    {
+     "w": "news.",
+     "s": 1.92,
+     "e": 2.24,
+     "k": false
+    },
+    {
+     "w": "They",
+     "s": 2.52,
+     "e": 2.64,
+     "k": false
+    },
+    {
+     "w": "trade",
+     "s": 2.64,
+     "e": 2.92,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 2.92,
+     "e": 3.08,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 3.08,
+   "e": 4.22,
+   "t": [
+    {
+     "w": "calendar.",
+     "s": 3.08,
+     "e": 3.48,
+     "k": false
+    },
+    {
+     "w": "Around",
+     "s": 3.98,
+     "e": 4.06,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 4.06,
+     "e": 4.22,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 4.22,
+   "e": 5.36,
+   "t": [
+    {
+     "w": "fifteenth",
+     "s": 4.22,
+     "e": 4.76,
+     "k": false
+    },
+    {
+     "w": "of",
+     "s": 4.76,
+     "e": 4.8,
+     "k": false
+    },
+    {
+     "w": "every",
+     "s": 4.8,
+     "e": 5.06,
+     "k": false
+    },
+    {
+     "w": "month,",
+     "s": 5.06,
+     "e": 5.36,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 5.64,
+   "e": 6.84,
+   "t": [
+    {
+     "w": "Korean",
+     "s": 5.64,
+     "e": 5.9,
+     "k": true
+    },
+    {
+     "w": "customs",
+     "s": 5.9,
+     "e": 6.28,
+     "k": false
+    },
+    {
+     "w": "prints",
+     "s": 6.28,
+     "e": 6.62,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 6.62,
+     "e": 6.84,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 6.84,
+   "e": 7.76,
+   "t": [
+    {
+     "w": "price",
+     "s": 6.84,
+     "e": 7.02,
+     "k": false
+    },
+    {
+     "w": "of",
+     "s": 7.02,
+     "e": 7.24,
+     "k": false
+    },
+    {
+     "w": "memory",
+     "s": 7.24,
+     "e": 7.46,
+     "k": false
+    },
+    {
+     "w": "chips",
+     "s": 7.46,
+     "e": 7.76,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 7.76,
+   "e": 9.3,
+   "t": [
+    {
+     "w": "crossing",
+     "s": 7.76,
+     "e": 8.08,
+     "k": false
+    },
+    {
+     "w": "its",
+     "s": 8.08,
+     "e": 8.36,
+     "k": false
+    },
+    {
+     "w": "border.",
+     "s": 8.36,
+     "e": 8.68,
+     "k": false
+    },
+    {
+     "w": "If",
+     "s": 9.04,
+     "e": 9.12,
+     "k": false
+    },
+    {
+     "w": "you",
+     "s": 9.12,
+     "e": 9.3,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 9.3,
+   "e": 10.56,
+   "t": [
+    {
+     "w": "own",
+     "s": 9.3,
+     "e": 9.46,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 9.46,
+     "e": 9.64,
+     "k": false
+    },
+    {
+     "w": "stocks,",
+     "s": 9.64,
+     "e": 9.88,
+     "k": false
+    },
+    {
+     "w": "that",
+     "s": 10.18,
+     "e": 10.38,
+     "k": false
+    },
+    {
+     "w": "print",
+     "s": 10.38,
+     "e": 10.56,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 10.56,
+   "e": 12.24,
+   "t": [
+    {
+     "w": "is",
+     "s": 10.56,
+     "e": 10.74,
+     "k": false
+    },
+    {
+     "w": "your",
+     "s": 10.74,
+     "e": 10.86,
+     "k": false
+    },
+    {
+     "w": "metronome.",
+     "s": 10.86,
+     "e": 11.32,
+     "k": false
+    },
+    {
+     "w": "Hynix",
+     "s": 11.82,
+     "e": 11.98,
+     "k": false
+    },
+    {
+     "w": "and",
+     "s": 11.98,
+     "e": 12.24,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 12.24,
+   "e": 13.64,
+   "t": [
+    {
+     "w": "Micron",
+     "s": 12.24,
+     "e": 12.62,
+     "k": true
+    },
+    {
+     "w": "move",
+     "s": 12.62,
+     "e": 12.84,
+     "k": false
+    },
+    {
+     "w": "around",
+     "s": 12.84,
+     "e": 13.18,
+     "k": false
+    },
+    {
+     "w": "it,",
+     "s": 13.18,
+     "e": 13.42,
+     "k": false
+    },
+    {
+     "w": "not",
+     "s": 13.52,
+     "e": 13.64,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 13.64,
+   "e": 15.46,
+   "t": [
+    {
+     "w": "after",
+     "s": 13.64,
+     "e": 13.98,
+     "k": false
+    },
+    {
+     "w": "it.",
+     "s": 13.98,
+     "e": 14.3,
+     "k": false
+    },
+    {
+     "w": "But",
+     "s": 14.9,
+     "e": 15.14,
+     "k": false
+    },
+    {
+     "w": "here's",
+     "s": 15.14,
+     "e": 15.32,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 15.32,
+     "e": 15.46,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 15.46,
+   "e": 16.54,
+   "t": [
+    {
+     "w": "part",
+     "s": 15.46,
+     "e": 15.64,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 15.64,
+     "e": 15.86,
+     "k": false
+    },
+    {
+     "w": "headline",
+     "s": 15.86,
+     "e": 16.14,
+     "k": false
+    },
+    {
+     "w": "hides:",
+     "s": 16.14,
+     "e": 16.54,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 17.0,
+   "e": 17.9,
+   "t": [
+    {
+     "w": "when",
+     "s": 17.0,
+     "e": 17.06,
+     "k": false
+    },
+    {
+     "w": "does",
+     "s": 17.06,
+     "e": 17.2,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 17.2,
+     "e": 17.36,
+     "k": false
+    },
+    {
+     "w": "month's",
+     "s": 17.36,
+     "e": 17.76,
+     "k": false
+    },
+    {
+     "w": "gain",
+     "s": 17.76,
+     "e": 17.9,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 17.9,
+   "e": 19.36,
+   "t": [
+    {
+     "w": "actually",
+     "s": 17.9,
+     "e": 18.44,
+     "k": false
+    },
+    {
+     "w": "land?",
+     "s": 18.44,
+     "e": 18.82,
+     "k": false
+    },
+    {
+     "w": "Twenty-five",
+     "s": 19.32,
+     "e": 19.36,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 19.36,
+   "e": 20.4,
+   "t": [
+    {
+     "w": "months",
+     "s": 19.36,
+     "e": 19.56,
+     "k": false
+    },
+    {
+     "w": "of",
+     "s": 19.56,
+     "e": 19.76,
+     "k": false
+    },
+    {
+     "w": "prints,",
+     "s": 19.76,
+     "e": 19.96,
+     "k": false
+    },
+    {
+     "w": "August",
+     "s": 20.26,
+     "e": 20.4,
+     "k": true
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 20.4,
+   "e": 21.44,
+   "t": [
+    {
+     "w": "twenty-four",
+     "s": 20.4,
+     "e": 20.96,
+     "k": false
+    },
+    {
+     "w": "to",
+     "s": 20.96,
+     "e": 21.2,
+     "k": false
+    },
+    {
+     "w": "August",
+     "s": 21.2,
+     "e": 21.44,
+     "k": true
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 21.44,
+   "e": 22.76,
+   "t": [
+    {
+     "w": "twenty-six.",
+     "s": 21.44,
+     "e": 22.0,
+     "k": false
+    },
+    {
+     "w": "In",
+     "s": 22.5,
+     "e": 22.66,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 22.66,
+     "e": 22.76,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 22.76,
+   "e": 23.8,
+   "t": [
+    {
+     "w": "half-month",
+     "s": 22.76,
+     "e": 23.12,
+     "k": false
+    },
+    {
+     "w": "into",
+     "s": 23.12,
+     "e": 23.4,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 23.4,
+     "e": 23.58,
+     "k": false
+    },
+    {
+     "w": "print,",
+     "s": 23.58,
+     "e": 23.8,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 23.98,
+   "e": 25.04,
+   "t": [
+    {
+     "w": "the",
+     "s": 23.98,
+     "e": 24.0,
+     "k": false
+    },
+    {
+     "w": "stocks",
+     "s": 24.0,
+     "e": 24.24,
+     "k": false
+    },
+    {
+     "w": "average",
+     "s": 24.24,
+     "e": 24.58,
+     "k": false
+    },
+    {
+     "w": "plus",
+     "s": 24.58,
+     "e": 24.94,
+     "k": false
+    },
+    {
+     "w": "six",
+     "s": 24.94,
+     "e": 25.04,
+     "k": true
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 25.04,
+   "e": 26.78,
+   "t": [
+    {
+     "w": "point",
+     "s": 25.04,
+     "e": 25.21,
+     "k": false
+    },
+    {
+     "w": "eight",
+     "s": 25.21,
+     "e": 25.38,
+     "k": true
+    },
+    {
+     "w": "percent.",
+     "s": 25.38,
+     "e": 25.62,
+     "k": true
+    },
+    {
+     "w": "In",
+     "s": 26.16,
+     "e": 26.68,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 26.68,
+     "e": 26.78,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 26.78,
+   "e": 28.34,
+   "t": [
+    {
+     "w": "half-month",
+     "s": 26.78,
+     "e": 27.12,
+     "k": false
+    },
+    {
+     "w": "after:",
+     "s": 27.12,
+     "e": 27.58,
+     "k": false
+    },
+    {
+     "w": "plus",
+     "s": 27.9,
+     "e": 28.04,
+     "k": false
+    },
+    {
+     "w": "two",
+     "s": 28.04,
+     "e": 28.34,
+     "k": true
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 28.34,
+   "e": 29.88,
+   "t": [
+    {
+     "w": "point",
+     "s": 28.34,
+     "e": 28.82,
+     "k": false
+    },
+    {
+     "w": "two.",
+     "s": 28.82,
+     "e": 29.12,
+     "k": true
+    },
+    {
+     "w": "The",
+     "s": 29.12,
+     "e": 29.26,
+     "k": false
+    },
+    {
+     "w": "move",
+     "s": 29.26,
+     "e": 29.56,
+     "k": false
+    },
+    {
+     "w": "is",
+     "s": 29.56,
+     "e": 29.88,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 29.88,
+   "e": 31.54,
+   "t": [
+    {
+     "w": "front-run.",
+     "s": 29.88,
+     "e": 30.3,
+     "k": false
+    },
+    {
+     "w": "A",
+     "s": 30.8,
+     "e": 30.92,
+     "k": false
+    },
+    {
+     "w": "strong",
+     "s": 30.92,
+     "e": 31.24,
+     "k": false
+    },
+    {
+     "w": "print?",
+     "s": 31.24,
+     "e": 31.54,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 32.14,
+   "e": 33.0,
+   "t": [
+    {
+     "w": "Already",
+     "s": 32.14,
+     "e": 32.42,
+     "k": false
+    },
+    {
+     "w": "paid",
+     "s": 32.42,
+     "e": 32.7,
+     "k": false
+    },
+    {
+     "w": "for.",
+     "s": 32.7,
+     "e": 33.0,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 33.62,
+   "e": 34.84,
+   "t": [
+    {
+     "w": "After",
+     "s": 33.62,
+     "e": 33.88,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 33.88,
+     "e": 34.08,
+     "k": false
+    },
+    {
+     "w": "fourteen",
+     "s": 34.08,
+     "e": 34.5,
+     "k": false
+    },
+    {
+     "w": "strong",
+     "s": 34.5,
+     "e": 34.84,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 34.84,
+   "e": 36.18,
+   "t": [
+    {
+     "w": "prints,",
+     "s": 34.84,
+     "e": 35.16,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 35.46,
+     "e": 35.54,
+     "k": false
+    },
+    {
+     "w": "next",
+     "s": 35.54,
+     "e": 35.74,
+     "k": false
+    },
+    {
+     "w": "two",
+     "s": 35.74,
+     "e": 35.94,
+     "k": true
+    },
+    {
+     "w": "weeks",
+     "s": 35.94,
+     "e": 36.18,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 36.18,
+   "e": 37.47,
+   "t": [
+    {
+     "w": "averaged",
+     "s": 36.18,
+     "e": 36.52,
+     "k": false
+    },
+    {
+     "w": "plus",
+     "s": 36.52,
+     "e": 36.88,
+     "k": false
+    },
+    {
+     "w": "three",
+     "s": 36.88,
+     "e": 37.17,
+     "k": true
+    },
+    {
+     "w": "point",
+     "s": 37.17,
+     "e": 37.47,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 37.47,
+   "e": 39.12,
+   "t": [
+    {
+     "w": "four.",
+     "s": 37.47,
+     "e": 37.7,
+     "k": true
+    },
+    {
+     "w": "Eight",
+     "s": 38.2,
+     "e": 38.34,
+     "k": true
+    },
+    {
+     "w": "of",
+     "s": 38.34,
+     "e": 38.48,
+     "k": false
+    },
+    {
+     "w": "fourteen",
+     "s": 38.48,
+     "e": 38.86,
+     "k": false
+    },
+    {
+     "w": "up.",
+     "s": 38.86,
+     "e": 39.12,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 39.7,
+   "e": 41.4,
+   "t": [
+    {
+     "w": "A",
+     "s": 39.7,
+     "e": 39.8,
+     "k": false
+    },
+    {
+     "w": "coin",
+     "s": 39.8,
+     "e": 40.06,
+     "k": false
+    },
+    {
+     "w": "flip",
+     "s": 40.06,
+     "e": 40.32,
+     "k": false
+    },
+    {
+     "w": "with",
+     "s": 40.32,
+     "e": 40.5,
+     "k": false
+    },
+    {
+     "w": "drift.",
+     "s": 40.5,
+     "e": 40.76,
+     "k": false
+    },
+    {
+     "w": "But",
+     "s": 41.26,
+     "e": 41.4,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 41.4,
+   "e": 42.8,
+   "t": [
+    {
+     "w": "now",
+     "s": 41.4,
+     "e": 41.56,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 41.56,
+     "e": 41.7,
+     "k": false
+    },
+    {
+     "w": "weak",
+     "s": 41.7,
+     "e": 41.86,
+     "k": false
+    },
+    {
+     "w": "prints.",
+     "s": 41.86,
+     "e": 42.14,
+     "k": false
+    },
+    {
+     "w": "Eight",
+     "s": 42.68,
+     "e": 42.8,
+     "k": true
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 42.8,
+   "e": 43.54,
+   "t": [
+    {
+     "w": "of",
+     "s": 42.8,
+     "e": 42.9,
+     "k": false
+    },
+    {
+     "w": "them",
+     "s": 42.9,
+     "e": 43.0,
+     "k": false
+    },
+    {
+     "w": "in",
+     "s": 43.0,
+     "e": 43.12,
+     "k": false
+    },
+    {
+     "w": "twenty-five",
+     "s": 43.12,
+     "e": 43.54,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 43.54,
+   "e": 45.14,
+   "t": [
+    {
+     "w": "months.",
+     "s": 43.54,
+     "e": 43.88,
+     "k": false
+    },
+    {
+     "w": "After",
+     "s": 44.32,
+     "e": 44.58,
+     "k": false
+    },
+    {
+     "w": "seven",
+     "s": 44.58,
+     "e": 44.9,
+     "k": true
+    },
+    {
+     "w": "of",
+     "s": 44.9,
+     "e": 45.02,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 45.02,
+     "e": 45.14,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 45.14,
+   "e": 46.0,
+   "t": [
+    {
+     "w": "eight,",
+     "s": 45.14,
+     "e": 45.3,
+     "k": true
+    },
+    {
+     "w": "the",
+     "s": 45.36,
+     "e": 45.44,
+     "k": false
+    },
+    {
+     "w": "stocks",
+     "s": 45.44,
+     "e": 45.7,
+     "k": false
+    },
+    {
+     "w": "fell.",
+     "s": 45.7,
+     "e": 46.0,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 46.32,
+   "e": 47.74,
+   "t": [
+    {
+     "w": "Average:",
+     "s": 46.32,
+     "e": 46.58,
+     "k": false
+    },
+    {
+     "w": "minus",
+     "s": 46.58,
+     "e": 47.18,
+     "k": false
+    },
+    {
+     "w": "six",
+     "s": 47.18,
+     "e": 47.39,
+     "k": true
+    },
+    {
+     "w": "point",
+     "s": 47.39,
+     "e": 47.74,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 47.74,
+   "e": 49.4,
+   "t": [
+    {
+     "w": "nine.",
+     "s": 47.74,
+     "e": 48.02,
+     "k": true
+    },
+    {
+     "w": "The",
+     "s": 48.52,
+     "e": 48.7,
+     "k": false
+    },
+    {
+     "w": "latest",
+     "s": 48.7,
+     "e": 48.9,
+     "k": false
+    },
+    {
+     "w": "landed",
+     "s": 48.9,
+     "e": 49.16,
+     "k": false
+    },
+    {
+     "w": "in",
+     "s": 49.16,
+     "e": 49.4,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 49.4,
+   "e": 51.48,
+   "t": [
+    {
+     "w": "July.",
+     "s": 49.4,
+     "e": 49.7,
+     "k": true
+    },
+    {
+     "w": "One",
+     "s": 49.7,
+     "e": 50.42,
+     "k": true
+    },
+    {
+     "w": "soft",
+     "s": 50.42,
+     "e": 50.72,
+     "k": false
+    },
+    {
+     "w": "print,",
+     "s": 50.72,
+     "e": 50.98,
+     "k": false
+    },
+    {
+     "w": "and",
+     "s": 51.38,
+     "e": 51.48,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 51.48,
+   "e": 52.48,
+   "t": [
+    {
+     "w": "the",
+     "s": 51.48,
+     "e": 51.58,
+     "k": false
+    },
+    {
+     "w": "stocks",
+     "s": 51.58,
+     "e": 51.8,
+     "k": false
+    },
+    {
+     "w": "dropped",
+     "s": 51.8,
+     "e": 52.08,
+     "k": false
+    },
+    {
+     "w": "fourteen",
+     "s": 52.08,
+     "e": 52.48,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 52.48,
+   "e": 54.1,
+   "t": [
+    {
+     "w": "percent",
+     "s": 52.48,
+     "e": 52.84,
+     "k": true
+    },
+    {
+     "w": "in",
+     "s": 52.84,
+     "e": 53.04,
+     "k": false
+    },
+    {
+     "w": "two",
+     "s": 53.04,
+     "e": 53.2,
+     "k": true
+    },
+    {
+     "w": "weeks.",
+     "s": 53.2,
+     "e": 53.48,
+     "k": false
+    },
+    {
+     "w": "The",
+     "s": 54.0,
+     "e": 54.1,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 54.1,
+   "e": 54.96,
+   "t": [
+    {
+     "w": "chip",
+     "s": 54.1,
+     "e": 54.3,
+     "k": false
+    },
+    {
+     "w": "price",
+     "s": 54.3,
+     "e": 54.58,
+     "k": false
+    },
+    {
+     "w": "itself?",
+     "s": 54.58,
+     "e": 54.96,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 55.56,
+   "e": 56.76,
+   "t": [
+    {
+     "w": "Sixteen",
+     "s": 55.56,
+     "e": 55.92,
+     "k": false
+    },
+    {
+     "w": "percent",
+     "s": 55.92,
+     "e": 56.28,
+     "k": true
+    },
+    {
+     "w": "higher",
+     "s": 56.28,
+     "e": 56.56,
+     "k": false
+    },
+    {
+     "w": "a",
+     "s": 56.56,
+     "e": 56.76,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 56.76,
+   "e": 58.66,
+   "t": [
+    {
+     "w": "month",
+     "s": 56.76,
+     "e": 56.88,
+     "k": false
+    },
+    {
+     "w": "later.",
+     "s": 56.88,
+     "e": 57.22,
+     "k": false
+    },
+    {
+     "w": "In",
+     "s": 57.72,
+     "e": 57.82,
+     "k": false
+    },
+    {
+     "w": "finance,",
+     "s": 57.82,
+     "e": 58.22,
+     "k": false
+    },
+    {
+     "w": "we",
+     "s": 58.58,
+     "e": 58.66,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 58.66,
+   "e": 59.62,
+   "t": [
+    {
+     "w": "call",
+     "s": 58.66,
+     "e": 58.82,
+     "k": false
+    },
+    {
+     "w": "this",
+     "s": 58.82,
+     "e": 59.02,
+     "k": false
+    },
+    {
+     "w": "asymmetry.",
+     "s": 59.02,
+     "e": 59.62,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 60.22,
+   "e": 61.46,
+   "t": [
+    {
+     "w": "Good",
+     "s": 60.22,
+     "e": 60.34,
+     "k": false
+    },
+    {
+     "w": "news",
+     "s": 60.34,
+     "e": 60.64,
+     "k": false
+    },
+    {
+     "w": "is",
+     "s": 60.64,
+     "e": 60.88,
+     "k": false
+    },
+    {
+     "w": "priced",
+     "s": 60.88,
+     "e": 61.12,
+     "k": false
+    },
+    {
+     "w": "before",
+     "s": 61.12,
+     "e": 61.46,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 61.46,
+   "e": 63.2,
+   "t": [
+    {
+     "w": "it",
+     "s": 61.46,
+     "e": 61.6,
+     "k": false
+    },
+    {
+     "w": "lands.",
+     "s": 61.6,
+     "e": 61.84,
+     "k": false
+    },
+    {
+     "w": "Bad",
+     "s": 62.36,
+     "e": 62.5,
+     "k": false
+    },
+    {
+     "w": "news",
+     "s": 62.5,
+     "e": 62.84,
+     "k": false
+    },
+    {
+     "w": "is",
+     "s": 62.84,
+     "e": 63.06,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 63.06,
+     "e": 63.2,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 63.2,
+   "e": 64.92,
+   "t": [
+    {
+     "w": "only",
+     "s": 63.2,
+     "e": 63.42,
+     "k": false
+    },
+    {
+     "w": "surprise",
+     "s": 63.42,
+     "e": 63.76,
+     "k": false
+    },
+    {
+     "w": "left.",
+     "s": 63.76,
+     "e": 64.14,
+     "k": false
+    },
+    {
+     "w": "So",
+     "s": 64.64,
+     "e": 64.8,
+     "k": false
+    },
+    {
+     "w": "you",
+     "s": 64.8,
+     "e": 64.92,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 64.92,
+   "e": 65.92,
+   "t": [
+    {
+     "w": "don't",
+     "s": 64.92,
+     "e": 65.06,
+     "k": false
+    },
+    {
+     "w": "have",
+     "s": 65.06,
+     "e": 65.24,
+     "k": false
+    },
+    {
+     "w": "to",
+     "s": 65.24,
+     "e": 65.36,
+     "k": false
+    },
+    {
+     "w": "read",
+     "s": 65.36,
+     "e": 65.52,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 65.52,
+     "e": 65.7,
+     "k": false
+    },
+    {
+     "w": "print",
+     "s": 65.7,
+     "e": 65.92,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 65.92,
+   "e": 67.56,
+   "t": [
+    {
+     "w": "faster",
+     "s": 65.92,
+     "e": 66.26,
+     "k": false
+    },
+    {
+     "w": "than",
+     "s": 66.26,
+     "e": 66.54,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 66.54,
+     "e": 66.64,
+     "k": false
+    },
+    {
+     "w": "market.",
+     "s": 66.64,
+     "e": 66.88,
+     "k": false
+    },
+    {
+     "w": "You",
+     "s": 67.38,
+     "e": 67.56,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 67.56,
+   "e": 68.44,
+   "t": [
+    {
+     "w": "have",
+     "s": 67.56,
+     "e": 67.7,
+     "k": false
+    },
+    {
+     "w": "to",
+     "s": 67.7,
+     "e": 67.82,
+     "k": false
+    },
+    {
+     "w": "know",
+     "s": 67.82,
+     "e": 67.92,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 67.92,
+     "e": 68.06,
+     "k": false
+    },
+    {
+     "w": "calendar:",
+     "s": 68.06,
+     "e": 68.44,
+     "k": false
+    }
+   ],
+   "cap_mode": "stage"
+  },
+  {
+   "s": 68.96,
+   "e": 70.04,
+   "t": [
+    {
+     "w": "the",
+     "s": 68.96,
+     "e": 69.04,
+     "k": false
+    },
+    {
+     "w": "day",
+     "s": 69.04,
+     "e": 69.18,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 69.18,
+     "e": 69.32,
+     "k": false
+    },
+    {
+     "w": "print",
+     "s": 69.32,
+     "e": 69.5,
+     "k": false
+    },
+    {
+     "w": "lands",
+     "s": 69.5,
+     "e": 69.8,
+     "k": false
+    },
+    {
+     "w": "is",
+     "s": 69.8,
+     "e": 70.04,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  },
+  {
+   "s": 70.04,
+   "e": 71.22,
+   "t": [
+    {
+     "w": "the",
+     "s": 70.04,
+     "e": 70.18,
+     "k": false
+    },
+    {
+     "w": "day",
+     "s": 70.18,
+     "e": 70.34,
+     "k": false
+    },
+    {
+     "w": "the",
+     "s": 70.34,
+     "e": 70.46,
+     "k": false
+    },
+    {
+     "w": "stocks",
+     "s": 70.46,
+     "e": 70.78,
+     "k": false
+    },
+    {
+     "w": "trade",
+     "s": 70.78,
+     "e": 71.06,
+     "k": false
+    },
+    {
+     "w": "it.",
+     "s": 71.06,
+     "e": 71.22,
+     "k": false
+    }
+   ],
+   "cap_mode": "anchor"
+  }
+ ],
+ "caption_modes": [
+  "stage",
+  "anchor"
+ ],
+ "sound": [
+  {
+   "slot": "page enter 2 (snap)",
+   "at": 8.97,
+   "gain": 0.12,
+   "fade_in": 0.0,
+   "env": [],
+   "variants": {
+    "A": "__snd_0_A__",
+    "B": "__snd_0_B__",
+    "C": "__snd_0_C__"
+   }
+  },
+  {
+   "slot": "hook bed",
+   "at": 0.0,
+   "gain": 0.0376,
+   "fade_in": 1.5,
+   "env": [
+    [
+     1.26,
+     0.0
+    ],
+    [
+     1.56,
+     4.0
+    ],
+    [
+     9.42,
+     4.0
+    ],
+    [
+     10.22,
+     0.0
+    ],
+    [
+     48.85,
+     0.0
+    ],
+    [
+     49.15,
+     4.0
+    ],
+    [
+     54.45,
+     4.0
+    ],
+    [
+     55.25,
+     0.0
+    ]
+   ],
+   "variants": {
+    "A": "__snd_1_A__",
+    "B": "__snd_1_B__"
+   }
+  },
+  {
+   "slot": "turn bed",
+   "at": 41.16,
+   "gain": 0.0376,
+   "fade_in": 3.0,
+   "env": [],
+   "variants": {
+    "A": "__snd_2_A__",
+    "B": "__snd_2_B__"
+   }
+  }
+ ],
+ "evidence": {
+  "dock-b-calendar": {
+   "title": "They trade the calendar",
+   "source": "Yahoo Finance 000660.KS, MU; Korean customs HS 8542.32 via SCML",
+   "species": "chart",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\build-oneshot-3\\docks\\dock-b-calendar.png",
+    "sha256": "6bd9bed08ce01d5a543a381b2528b1501e2b88c8147760f1de6ca9cd603f1a7e"
+   },
+   "badges": []
+  },
+  "dock-f-desk-host": {
+   "title": "Counting the strong prints",
+   "source": "HollowStickMike - Money Physics",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\build-oneshot-3\\docks\\dock-f-desk-host.png",
+    "sha256": "c7bae304ab42ad0ed4108c40e9ad20b6f23682c0321427e7b443bf7a381faeef"
+   },
+   "badges": []
+  },
+  "dock-m-metronome": {
+   "title": "One soft print, and the stocks dropped",
+   "source": "Yahoo Finance 000660.KS, MU; Korean customs HS 8542.32 via SCML",
+   "species": "chart",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\build-oneshot-3\\docks\\dock-m-metronome.png",
+    "sha256": "b7925f52fe781036daf759b29d03ae7152177b620979aae05b6c09da747537e3"
+   },
+   "badges": []
+  },
+  "dock-stack": {
+   "title": "Good news is priced before it lands",
+   "source": "the two charts of this short that were docked, each shown with its own source above",
+   "species": "stack",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\build-oneshot-3\\docks\\dock-b-calendar.png",
+    "sha256": "6bd9bed08ce01d5a543a381b2528b1501e2b88c8147760f1de6ca9cd603f1a7e"
+   },
+   "badges": [],
+   "stack": {
+    "items": [
+     {
+      "id": "dock-b-calendar",
+      "at": 60.22
+     },
+     {
+      "id": "dock-m-metronome",
+      "at": 62.36
+     }
+    ],
+    "clear_at": 63.31
+   }
+  },
+  "dock-g-july-host": {
+   "title": "July's page",
+   "source": "HollowStickMike - Money Physics",
+   "species": "deck",
+   "document": {
+    "path": "Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\build-oneshot-3\\docks\\dock-g-july-host.png",
+    "sha256": "4f26583b532a3675ec63104f4746afe79b37b40a451ed45324786d3c70d9e268"
+   },
+   "badges": []
+  }
+ },
+ "scenes": [
+  {
+   "scene_id": "s01",
+   "world": {
+    "asset_id": "plate-customs",
+    "sha256": "0386e449c8f26fe4b1e22075f3d2fc9087178f1babee0823a4a1fa9430309506",
+    "ken_burns": {
+     "scale": 0.06,
+     "x": 6,
+     "y": -4
+    },
+    "idle_drift_px": 35.0,
+    "idle": "drift"
+   },
+   "exit": "dip",
+   "span": [
+    0.0,
+    8.97
+   ],
+   "docks": [
+    {
+     "id": "s01.dock.dock-b-calendar",
+     "slide": "dock-b-calendar",
+     "slot": 0,
+     "enter": 1.56,
+     "exit": 8.97,
+     "badge_at": [],
+     "arrive": "throw",
+     "mass": "paper",
+     "caption_band": null
+    }
+   ],
+   "species": [
+    {
+     "kind": "spotlight",
+     "at": 4.22,
+     "dur": 2.06,
+     "until": 6.28,
+     "target": {
+      "kind": "point",
+      "x": 0.2,
+      "y": 0.52
+     },
+     "id": "s01.species.0",
+     "held": true
+    },
+    {
+     "kind": "spotlight",
+     "at": 6.28,
+     "dur": 1.48,
+     "until": 7.76,
+     "target": {
+      "kind": "point",
+      "x": 0.2,
+      "y": 0.82
+     },
+     "id": "s01.species.1",
+     "held": true
+    },
+    {
+     "kind": "spotlight",
+     "at": 7.76,
+     "dur": 1.21,
+     "until": 8.97,
+     "target": {
+      "kind": "point",
+      "x": 0.8,
+      "y": 0.42
+     },
+     "id": "s01.species.2",
+     "held": true
+    }
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s01.camera"
+   }
+  },
+  {
+   "scene_id": "s02",
+   "world": {
+    "kind": "ledger",
+    "page": {
+     "schema_version": "ledger_page.v1",
+     "surface": "page",
+     "builder": "dense-line",
+     "variant": "line",
+     "title": "They trade the calendar",
+     "sub": "The chip price (Korean customs, $/kg) vs hynix + Micron, indexed to 1 Dec 2025 - each print lands mid-month",
+     "source": "Yahoo Finance - 000660.KS, MU; Korean customs HS 8542.32 via SCML monitor; KCS release schedule",
+     "quiet_zone": "right",
+     "labels": [
+      "CHIPS",
+      "STOCKS"
+     ],
+     "values": [],
+     "value_strings": [],
+     "colors": [],
+     "series": [
+      {
+       "label": "+267%",
+       "name": "CHIPS",
+       "color": "teal",
+       "pts": [
+        [
+         "2025.9583",
+         "100.0"
+        ],
+        [
+         "2026.0417",
+         "149.7"
+        ],
+        [
+         "2026.125",
+         "203.0"
+        ],
+        [
+         "2026.2083",
+         "232.5"
+        ],
+        [
+         "2026.2917",
+         "280.2"
+        ],
+        [
+         "2026.375",
+         "326.9"
+        ],
+        [
+         "2026.4583",
+         "314.8"
+        ],
+        [
+         "2026.5417",
+         "366.6"
+        ]
+       ]
+      },
+      {
+       "label": "\u221234%",
+       "name": "STOCKS",
+       "color": "crimson",
+       "delay": "1.2",
+       "pts": [
+        [
+         "2025.9144",
+         "100.0"
+        ],
+        [
+         "2025.9172",
+         "101.7"
+        ],
+        [
+         "2025.9199",
+         "100.0"
+        ],
+        [
+         "2025.9227",
+         "97.5"
+        ],
+        [
+         "2025.9254",
+         "99.9"
+        ],
+        [
+         "2025.9336",
+         "105.0"
+        ],
+        [
+         "2025.9363",
+         "105.1"
+        ],
+        [
+         "2025.9391",
+         "109.4"
+        ],
+        [
+         "2025.9418",
+         "106.3"
+        ],
+        [
+         "2025.9446",
+         "103.2"
+        ],
+        [
+         "2025.9528",
+         "100.9"
+        ],
+        [
+         "2025.9555",
+         "97.6"
+        ],
+        [
+         "2025.9582",
+         "98.1"
+        ],
+        [
+         "2025.961",
+         "103.0"
+        ],
+        [
+         "2025.9637",
+         "106.1"
+        ],
+        [
+         "2025.9719",
+         "111.4"
+        ],
+        [
+         "2025.9747",
+         "111.7"
+        ],
+        [
+         "2025.9774",
+         "114.3"
+        ],
+        [
+         "2025.9829",
+         "114.9"
+        ],
+        [
+         "2025.9911",
+         "120.7"
+        ],
+        [
+         "2025.9938",
+         "121.4"
+        ],
+        [
+         "2026.0027",
+         "128.5"
+        ],
+        [
+         "2026.011",
+         "129.6"
+        ],
+        [
+         "2026.0137",
+         "138.9"
+        ],
+        [
+         "2026.0164",
+         "139.6"
+        ],
+        [
+         "2026.0192",
+         "138.3"
+        ],
+        [
+         "2026.0219",
+         "140.9"
+        ],
+        [
+         "2026.0301",
+         "141.6"
+        ],
+        [
+         "2026.0329",
+         "138.9"
+        ],
+        [
+         "2026.0356",
+         "138.3"
+        ],
+        [
+         "2026.0383",
+         "139.6"
+        ],
+        [
+         "2026.0411",
+         "145.7"
+        ],
+        [
+         "2026.052",
+         "145.0"
+        ],
+        [
+         "2026.0548",
+         "149.7"
+        ],
+        [
+         "2026.0575",
+         "152.9"
+        ],
+        [
+         "2026.0602",
+         "154.4"
+        ],
+        [
+         "2026.0684",
+         "149.3"
+        ],
+        [
+         "2026.0712",
+         "159.7"
+        ],
+        [
+         "2026.0739",
+         "168.7"
+        ],
+        [
+         "2026.0767",
+         "170.7"
+        ],
+        [
+         "2026.0794",
+         "170.8"
+        ],
+        [
+         "2026.0876",
+         "168.2"
+        ],
+        [
+         "2026.0903",
+         "171.5"
+        ],
+        [
+         "2026.0931",
+         "162.6"
+        ],
+        [
+         "2026.0958",
+         "157.9"
+        ],
+        [
+         "2026.0986",
+         "160.1"
+        ],
+        [
+         "2026.1068",
+         "162.2"
+        ],
+        [
+         "2026.1095",
+         "159.1"
+        ],
+        [
+         "2026.1123",
+         "165.3"
+        ],
+        [
+         "2026.115",
+         "168.6"
+        ],
+        [
+         "2026.1177",
+         "167.4"
+        ],
+        [
+         "2026.1342",
+         "169.9"
+        ],
+        [
+         "2026.1369",
+         "177.3"
+        ],
+        [
+         "2026.1451",
+         "176.0"
+        ],
+        [
+         "2026.1478",
+         "180.4"
+        ],
+        [
+         "2026.1506",
+         "183.8"
+        ],
+        [
+         "2026.1533",
+         "188.8"
+        ],
+        [
+         "2026.1561",
+         "184.6"
+        ],
+        [
+         "2026.167",
+         "166.4"
+        ],
+        [
+         "2026.1697",
+         "162.4"
+        ],
+        [
+         "2026.1725",
+         "170.2"
+        ],
+        [
+         "2026.1752",
+         "163.1"
+        ],
+        [
+         "2026.1834",
+         "158.8"
+        ],
+        [
+         "2026.1862",
+         "171.2"
+        ],
+        [
+         "2026.1889",
+         "176.0"
+        ],
+        [
+         "2026.1916",
+         "170.9"
+        ],
+        [
+         "2026.1944",
+         "173.4"
+        ],
+        [
+         "2026.2026",
+         "182.6"
+        ],
+        [
+         "2026.2053",
+         "186.4"
+        ],
+        [
+         "2026.2081",
+         "194.4"
+        ],
+        [
+         "2026.2108",
+         "186.7"
+        ],
+        [
+         "2026.2136",
+         "181.7"
+        ],
+        [
+         "2026.2218",
+         "171.0"
+        ],
+        [
+         "2026.2245",
+         "174.1"
+        ],
+        [
+         "2026.2272",
+         "172.1"
+        ],
+        [
+         "2026.23",
+         "160.8"
+        ],
+        [
+         "2026.2327",
+         "161.2"
+        ],
+        [
+         "2026.2409",
+         "148.3"
+        ],
+        [
+         "2026.2437",
+         "145.4"
+        ],
+        [
+         "2026.2464",
+         "160.1"
+        ],
+        [
+         "2026.2491",
+         "153.5"
+        ],
+        [
+         "2026.2601",
+         "161.1"
+        ],
+        [
+         "2026.2628",
+         "163.9"
+        ],
+        [
+         "2026.2656",
+         "180.8"
+        ],
+        [
+         "2026.2683",
+         "180.6"
+        ],
+        [
+         "2026.271",
+         "183.1"
+        ],
+        [
+         "2026.2793",
+         "185.6"
+        ],
+        [
+         "2026.282",
+         "199.6"
+        ],
+        [
+         "2026.2847",
+         "200.7"
+        ],
+        [
+         "2026.2875",
+         "202.7"
+        ],
+        [
+         "2026.2902",
+         "199.7"
+        ],
+        [
+         "2026.2984",
+         "201.9"
+        ],
+        [
+         "2026.3012",
+         "207.5"
+        ],
+        [
+         "2026.3039",
+         "215.3"
+        ],
+        [
+         "2026.3066",
+         "214.3"
+        ],
+        [
+         "2026.3094",
+         "217.1"
+        ],
+        [
+         "2026.3176",
+         "229.5"
+        ],
+        [
+         "2026.3203",
+         "226.0"
+        ],
+        [
+         "2026.3231",
+         "228.3"
+        ],
+        [
+         "2026.3258",
+         "227.4"
+        ],
+        [
+         "2026.3368",
+         "254.7"
+        ],
+        [
+         "2026.3422",
+         "287.8"
+        ],
+        [
+         "2026.345",
+         "288.6"
+        ],
+        [
+         "2026.3477",
+         "312.4"
+        ],
+        [
+         "2026.3559",
+         "340.6"
+        ],
+        [
+         "2026.3587",
+         "330.4"
+        ],
+        [
+         "2026.3614",
+         "351.2"
+        ],
+        [
+         "2026.3641",
+         "344.9"
+        ],
+        [
+         "2026.3669",
+         "320.2"
+        ],
+        [
+         "2026.3751",
+         "313.2"
+        ],
+        [
+         "2026.3778",
+         "307.9"
+        ],
+        [
+         "2026.3806",
+         "314.8"
+        ],
+        [
+         "2026.3833",
+         "339.2"
+        ],
+        [
+         "2026.386",
+         "337.0"
+        ],
+        [
+         "2026.397",
+         "377.5"
+        ],
+        [
+         "2026.3997",
+         "402.0"
+        ],
+        [
+         "2026.4025",
+         "405.4"
+        ],
+        [
+         "2026.4052",
+         "419.3"
+        ],
+        [
+         "2026.4134",
+         "435.5"
+        ],
+        [
+         "2026.4162",
+         "441.2"
+        ],
+        [
+         "2026.4216",
+         "421.3"
+        ],
+        [
+         "2026.4244",
+         "372.6"
+        ],
+        [
+         "2026.4326",
+         "375.5"
+        ],
+        [
+         "2026.4353",
+         "401.0"
+        ],
+        [
+         "2026.4381",
+         "376.3"
+        ],
+        [
+         "2026.4408",
+         "402.9"
+        ],
+        [
+         "2026.4435",
+         "404.5"
+        ],
+        [
+         "2026.4517",
+         "439.5"
+        ],
+        [
+         "2026.4545",
+         "434.2"
+        ],
+        [
+         "2026.4572",
+         "451.9"
+        ],
+        [
+         "2026.46",
+         "486.0"
+        ],
+        [
+         "2026.4709",
+         "523.9"
+        ],
+        [
+         "2026.4736",
+         "456.8"
+        ],
+        [
+         "2026.4764",
+         "462.3"
+        ],
+        [
+         "2026.4791",
+         "524.2"
+        ],
+        [
+         "2026.4819",
+         "484.6"
+        ],
+        [
+         "2026.4901",
+         "483.1"
+        ],
+        [
+         "2026.4928",
+         "487.0"
+        ],
+        [
+         "2026.4956",
+         "453.2"
+        ],
+        [
+         "2026.4983",
+         "406.7"
+        ],
+        [
+         "2026.5092",
+         "423.2"
+        ],
+        [
+         "2026.512",
+         "400.3"
+        ],
+        [
+         "2026.5147",
+         "390.8"
+        ],
+        [
+         "2026.5175",
+         "410.0"
+        ],
+        [
+         "2026.5202",
+         "406.8"
+        ],
+        [
+         "2026.5284",
+         "366.8"
+        ],
+        [
+         "2026.5311",
+         "382.8"
+        ],
+        [
+         "2026.5339",
+         "382.1"
+        ],
+        [
+         "2026.5366",
+         "349.1"
+        ],
+        [
+         "2026.5476",
+         "344.4"
+        ],
+        [
+         "2026.5503",
+         "373.0"
+        ],
+        [
+         "2026.553",
+         "370.1"
+        ],
+        [
+         "2026.5558",
+         "384.8"
+        ],
+        [
+         "2026.5585",
+         "355.5"
+        ],
+        [
+         "2026.5667",
+         "356.5"
+        ],
+        [
+         "2026.5695",
+         "315.1"
+        ],
+        [
+         "2026.5722",
+         "284.3"
+        ],
+        [
+         "2026.5749",
+         "305.2"
+        ],
+        [
+         "2026.5777",
+         "331.3"
+        ],
+        [
+         "2026.5859",
+         "318.6"
+        ],
+        [
+         "2026.5886",
+         "332.7"
+        ],
+        [
+         "2026.5914",
+         "341.2"
+        ],
+        [
+         "2026.5941",
+         "322.7"
+        ],
+        [
+         "2026.5969",
+         "315.1"
+        ],
+        [
+         "2026.6051",
+         "311.4"
+        ],
+        [
+         "2026.6078",
+         "313.5"
+        ],
+        [
+         "2026.6105",
+         "329.7"
+        ],
+        [
+         "2026.6133",
+         "346.0"
+        ],
+        [
+         "2026.616",
+         "355.4"
+        ],
+        [
+         "2026.627",
+         "350.6"
+        ],
+        [
+         "2026.6297",
+         "334.7"
+        ],
+        [
+         "2026.6324",
+         "360.3"
+        ],
+        [
+         "2026.6352",
+         "362.3"
+        ],
+        [
+         "2026.6434",
+         "345.1"
+        ],
+        [
+         "2026.6461",
+         "350.4"
+        ],
+        [
+         "2026.6489",
+         "352.5"
+        ],
+        [
+         "2026.6516",
+         "355.8"
+        ],
+        [
+         "2026.6543",
+         "348.1"
+        ]
+       ]
+      }
+     ],
+     "axes": {
+      "xticks": [
+       [
+        "2025.92",
+        "Dec"
+       ],
+       [
+        "2026.12",
+        "Feb"
+       ],
+       [
+        "2026.29",
+        "Apr"
+       ],
+       [
+        "2026.46",
+        "Jun"
+       ],
+       [
+        "2026.62",
+        "Aug"
+       ]
+      ],
+      "marks": [
+       {
+        "x": "2026.1232",
+        "y": "167.4",
+        "label": "January print: +50%",
+        "sub": "the explosion, confirmed"
+       },
+       {
+        "x": "2026.4928",
+        "y": "524.2",
+        "label": "the paper's top: +424%",
+        "sub": "then the July slide"
+       },
+       {
+        "x": "2026.616",
+        "y": "355.4",
+        "label": "July print: +16.4%",
+        "sub": "steel at new highs - paper hasn't followed"
+       }
+      ],
+      "name_clear": true,
+      "yfmt": "none"
+     },
+     "unit": "",
+     "judge": [],
+     "badges": [],
+     "emphasize": 1,
+     "enter": "snap",
+     "snap_from": "dock-b-calendar",
+     "exit": "cut"
+    },
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "idle": "live"
+   },
+   "exit": "dip",
+   "span": [
+    8.97,
+    14.78
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "spotlight",
+     "at": 9.82,
+     "dur": 2.0,
+     "until": 15.28,
+     "target": {
+      "kind": "datum",
+      "index": 1,
+      "series": 0
+     },
+     "id": "s02.species.0",
+     "held": true
+    },
+    {
+     "kind": "retitle",
+     "at": 11.82,
+     "dur": 1.4,
+     "text": "They move around the print",
+     "id": "s02.species.1"
+    },
+    {
+     "kind": "spotlight",
+     "at": 13.52,
+     "dur": 1.26,
+     "until": 14.78,
+     "target": {
+      "kind": "datum",
+      "index": 177,
+      "series": 1
+     },
+     "id": "s02.species.2",
+     "held": true
+    }
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s02.camera"
+   }
+  },
+  {
+   "scene_id": "s03",
+   "world": {
+    "asset_id": "plate-desk",
+    "sha256": "4e1ab92eb68d6e325ea78fc95ca1b9e77d8f70bcbc7e663ec259d4e34d91a7e0",
+    "ken_burns": {
+     "scale": 0.06,
+     "x": 6,
+     "y": -4
+    },
+    "idle_drift_px": 35.0,
+    "idle": "drift"
+   },
+   "exit": "dip",
+   "span": [
+    14.78,
+    22.5
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "spotlight",
+     "at": 15.86,
+     "dur": 1.9,
+     "until": 17.76,
+     "target": {
+      "kind": "point",
+      "x": 0.27,
+      "y": 0.645
+     },
+     "id": "s03.species.0",
+     "held": true
+    },
+    {
+     "kind": "ticker",
+     "at": 17.76,
+     "dur": 4.64,
+     "target": {
+      "kind": "region",
+      "x0": 0.09,
+      "y0": 0.43,
+      "x1": 0.41,
+      "y1": 0.58
+     },
+     "density": 0.22,
+     "paper": "#16222E",
+     "tilt": 0,
+     "id": "s03.species.1"
+    }
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s03.camera"
+   }
+  },
+  {
+   "scene_id": "s04",
+   "world": {
+    "kind": "ledger",
+    "page": {
+     "schema_version": "ledger_page.v1",
+     "surface": "page",
+     "builder": "story",
+     "variant": "bars",
+     "title": "The month's gain lands before the print",
+     "sub": "hynix + Micron, mean move in the half-month INTO the print vs the half-month AFTER it - 25 prints, Aug '24 - Aug '26",
+     "source": "Operator backtest 2026-08-30 (EPISODE-SEEDS act three): hynix + Micron vs the KCS print calendar, 25 months Aug '24 - Aug '26; n = 25, one regime",
+     "quiet_zone": "right",
+     "src_style": "compact",
+     "labels": [
+      "INTO the print",
+      "AFTER the print"
+     ],
+     "values": [
+      6.8,
+      2.2
+     ],
+     "value_strings": [
+      "6.8",
+      "2.2"
+     ],
+     "colors": [
+      "teal",
+      "deemph"
+     ],
+     "axes": {
+      "hlines": []
+     },
+     "unit": "%",
+     "judge": [],
+     "badges": [
+      {
+       "label": "FRONT-RUN",
+       "value": "3x",
+       "tag": "the gain lands before the news",
+       "accent": "sunflower",
+       "inline": false
+      }
+     ],
+     "emphasize": 0,
+     "enter": "built",
+     "exit": "cut"
+    },
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "idle": "live"
+   },
+   "exit": "cut",
+   "span": [
+    22.5,
+    30.7
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "spotlight",
+     "at": 22.9,
+     "dur": 2.44,
+     "until": 26.16,
+     "target": {
+      "kind": "datum",
+      "index": 0,
+      "series": 0
+     },
+     "id": "s04.species.0",
+     "held": true
+    },
+    {
+     "kind": "figure",
+     "at": 25.34,
+     "dur": 1.2,
+     "target": {
+      "kind": "datum",
+      "index": 0,
+      "series": 0
+     },
+     "text": "+6.8%",
+     "sub": "into the print",
+     "color": "pos",
+     "dy": -0.9,
+     "id": "s04.species.1"
+    },
+    {
+     "kind": "spotlight",
+     "at": 26.16,
+     "dur": 2.96,
+     "until": 29.12,
+     "target": {
+      "kind": "datum",
+      "index": 1,
+      "series": 0
+     },
+     "id": "s04.species.2",
+     "held": true
+    },
+    {
+     "kind": "chart_to",
+     "at": 29.12,
+     "dur": 0.9,
+     "to": "compare",
+     "form": "melt",
+     "then": "splash",
+     "hold": "gone",
+     "metric": {
+      "value": 6.8,
+      "text": "+6.8%",
+      "label": "into the print"
+     },
+     "comparator": {
+      "value": 3.0909,
+      "text": "3x",
+      "label": "the gain before the news, against the gain after it"
+     },
+     "inputs": {
+      "into": 6.8,
+      "after": 2.2
+     },
+     "derive": "into / after",
+     "source": "[DERIVED: from the operator's backtest (EPISODE-SEEDS act three, 2026-08-30) - the mean half-month move into the print over the mean move after it, 6.8 / 2.2]",
+     "id": "s04.species.3"
+    }
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s04.camera"
+   }
+  },
+  {
+   "scene_id": "s05",
+   "world": {
+    "kind": "ledger",
+    "page": {
+     "schema_version": "ledger_page.v1",
+     "surface": "page",
+     "builder": "share",
+     "variant": "share",
+     "title": "A strong print is already paid for",
+     "sub": "The 14 strong customs prints, Aug '24 - Aug '26: was the stock basket UP or DOWN in the half-month after? (mean +3.4 %)",
+     "source": "Operator backtest 2026-08-30 (EPISODE-SEEDS act three): hynix + Micron vs the KCS print calendar, 25 months Aug '24 - Aug '26; n = 25, one regime",
+     "quiet_zone": "right",
+     "labels": [
+      "UP",
+      "DOWN"
+     ],
+     "values": [
+      8.0,
+      6.0
+     ],
+     "value_strings": [
+      "8",
+      "6"
+     ],
+     "colors": [
+      "teal",
+      "crimson"
+     ],
+     "short_labels": [
+      "UP",
+      "DOWN"
+     ],
+     "peel": {
+      "index": 0,
+      "value": 8,
+      "value_string": "8 of 14",
+      "label": "a coin flip with drift"
+     },
+     "unit": "",
+     "judge": [],
+     "badges": [],
+     "emphasize": 0,
+     "enter": "built",
+     "exit": "cut"
+    },
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "idle": "live"
+   },
+   "exit": "cut",
+   "span": [
+    30.7,
+    41.16
+   ],
+   "docks": [
+    {
+     "id": "s05.dock.dock-f-desk-host",
+     "slide": "dock-f-desk-host",
+     "slot": 0,
+     "enter": 32.14,
+     "exit": 41.16,
+     "badge_at": [],
+     "place": {
+      "x": 713,
+      "y": 504,
+      "w": 302,
+      "h": 298
+     },
+     "read_s": 1.2,
+     "park_s": 0.7,
+     "park": true,
+     "place_room": "outside",
+     "centre": true,
+     "caption_band": {
+      "y": 1297,
+      "h": 143,
+      "band": "quiet"
+     }
+    }
+   ],
+   "species": [
+    {
+     "kind": "spotlight",
+     "at": 31.1,
+     "dur": 1.04,
+     "until": 36.88,
+     "target": {
+      "kind": "datum",
+      "index": 0,
+      "series": 0
+     },
+     "id": "s05.species.0",
+     "held": true
+    },
+    {
+     "kind": "spotlight",
+     "at": 36.88,
+     "dur": 1.32,
+     "until": 38.2,
+     "target": {
+      "kind": "datum",
+      "index": 0,
+      "series": 0
+     },
+     "id": "s05.species.1",
+     "held": true
+    },
+    {
+     "kind": "peel",
+     "at": 38.2,
+     "dur": 1.6,
+     "id": "s05.species.2"
+    },
+    {
+     "kind": "retitle",
+     "at": 39.7,
+     "dur": 1.2,
+     "text": "A coin flip with drift",
+     "id": "s05.species.3"
+    }
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s05.camera"
+   }
+  },
+  {
+   "scene_id": "s06",
+   "world": {
+    "kind": "ledger",
+    "page": {
+     "schema_version": "ledger_page.v1",
+     "surface": "page",
+     "builder": "story",
+     "variant": "bars",
+     "title": "After a weak print, the stocks fell",
+     "sub": "hynix + Micron in the half-month after each weak customs print (m/m <= -3 %): the 8 weak prints in 25 months, in order, Oct '24 to Jul '26",
+     "source": "Korean customs HS 8542.32 via SCML monitor; hynix + Micron basket, Yahoo Finance - 8 weak prints in 25 months",
+     "quiet_zone": "right",
+     "labels": [
+      "Oct '24",
+      "Dec",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Jun",
+      "Jul",
+      "Jul '26"
+     ],
+     "values": [
+      -3.9,
+      -12.4,
+      -5.3,
+      -10.5,
+      -11.3,
+      10.9,
+      -8.7,
+      -13.8
+     ],
+     "value_strings": [
+      "-3.9",
+      "-12.4",
+      "-5.3",
+      "-10.5",
+      "-11.3",
+      "10.9",
+      "-8.7",
+      "-13.8"
+     ],
+     "colors": [
+      "crimson",
+      "crimson",
+      "crimson",
+      "crimson",
+      "crimson",
+      "teal",
+      "crimson",
+      "crimson"
+     ],
+     "axes": {
+      "ymin": -18
+     },
+     "unit": "%",
+     "judge": [],
+     "badges": [
+      {
+       "label": "AFTER A WEAK PRINT",
+       "value": "7 of 8",
+       "tag": "the paper fell",
+       "accent": "coral",
+       "inline": false
+      },
+      {
+       "label": "LATEST",
+       "value": "\u221213.8%",
+       "tag": "Jul '26",
+       "accent": "sunflower",
+       "inline": false
+      }
+     ],
+     "emphasize": 7,
+     "enter": "built",
+     "exit": "cut"
+    },
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "idle": "live"
+   },
+   "exit": "dip",
+   "span": [
+    41.16,
+    48.42
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "spotlight",
+     "at": 41.56,
+     "dur": 2.76,
+     "until": 44.32,
+     "target": {
+      "kind": "datum",
+      "index": 5,
+      "series": 0
+     },
+     "id": "s06.species.0",
+     "held": true
+    },
+    {
+     "kind": "spotlight",
+     "at": 45.32,
+     "dur": 1.26,
+     "until": 46.58,
+     "target": {
+      "kind": "datum",
+      "index": 7,
+      "series": 0
+     },
+     "id": "s06.species.1",
+     "held": true
+    },
+    {
+     "kind": "retitle",
+     "at": 44.32,
+     "dur": 1.4,
+     "text": "Seven of the eight fell",
+     "id": "s06.species.2"
+    },
+    {
+     "kind": "figure",
+     "at": 46.58,
+     "dur": 1.4,
+     "target": {
+      "kind": "datum",
+      "index": 7,
+      "series": 0
+     },
+     "text": "avg \u22126.9%",
+     "sub": "the half-month after a weak print",
+     "color": "neg",
+     "dy": -0.9,
+     "id": "s06.species.3"
+    }
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s06.camera"
+   }
+  },
+  {
+   "scene_id": "s07",
+   "world": {
+    "asset_id": "plate-dock",
+    "sha256": "bbc435c4260817e2f46ebbab447e4a62033427e2275615097d8b7cdcf8ce1b91",
+    "ken_burns": {
+     "scale": 0.06,
+     "x": 6,
+     "y": -4
+    },
+    "idle_drift_px": 35.0,
+    "idle": "drift"
+   },
+   "exit": "dip",
+   "span": [
+    48.42,
+    57.62
+   ],
+   "docks": [
+    {
+     "id": "s07.dock.dock-m-metronome",
+     "slide": "dock-m-metronome",
+     "slot": 0,
+     "enter": 49.15,
+     "exit": 54.0,
+     "badge_at": [],
+     "arrive": "throw",
+     "mass": "paper",
+     "caption_band": null
+    }
+   ],
+   "species": [
+    {
+     "kind": "spotlight",
+     "at": 52.08,
+     "dur": 3.48,
+     "until": 55.56,
+     "target": {
+      "kind": "point",
+      "x": 0.42,
+      "y": 0.82
+     },
+     "id": "s07.species.1",
+     "held": true
+    },
+    {
+     "kind": "spotlight",
+     "at": 55.56,
+     "dur": 2.06,
+     "until": 57.62,
+     "target": {
+      "kind": "point",
+      "x": 0.14,
+      "y": 0.8
+     },
+     "id": "s07.species.2",
+     "held": true
+    }
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s07.camera"
+   }
+  },
+  {
+   "scene_id": "s08",
+   "world": {
+    "kind": "clip",
+    "asset_id": "clip-two-fingers",
+    "sha256": "99fca9a2578c29af624f30b5d70f21df53ec0930ddfed23e2b7142f308b36426",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "dip",
+   "span": [
+    57.62,
+    64.54
+   ],
+   "docks": [
+    {
+     "id": "s08.dock.dock-stack",
+     "slide": "dock-stack",
+     "slot": 0,
+     "enter": 59.72,
+     "exit": 64.54,
+     "badge_at": [],
+     "caption_band": null
+    }
+   ],
+   "species": [
+    {
+     "kind": "life",
+     "at": 57.62,
+     "dur": 6.92,
+     "id": "s08.species.0"
+    }
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s08.camera"
+   }
+  },
+  {
+   "scene_id": "s09",
+   "world": {
+    "asset_id": "plate-customs",
+    "sha256": "0386e449c8f26fe4b1e22075f3d2fc9087178f1babee0823a4a1fa9430309506",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    },
+    "idle_drift_px": 35.0,
+    "idle": "drift"
+   },
+   "exit": "dip",
+   "span": [
+    64.54,
+    71.44
+   ],
+   "docks": [
+    {
+     "id": "s09.dock.dock-g-july-host",
+     "slide": "dock-g-july-host",
+     "slot": 0,
+     "enter": 68.96,
+     "exit": 71.44,
+     "badge_at": [],
+     "caption_band": null
+    }
+   ],
+   "species": [
+    {
+     "kind": "spotlight",
+     "at": 65.36,
+     "dur": 2.46,
+     "until": 67.82,
+     "target": {
+      "kind": "point",
+      "x": 0.2,
+      "y": 0.82
+     },
+     "id": "s09.species.0",
+     "held": true
+    },
+    {
+     "kind": "punch",
+     "at": 67.82,
+     "dur": 1.1,
+     "target": {
+      "kind": "point",
+      "x": 0.2,
+      "y": 0.52
+     },
+     "id": "s09.species.1"
+    },
+    {
+     "kind": "spotlight",
+     "at": 69.56,
+     "dur": 1.88,
+     "until": 71.444,
+     "idle": "live",
+     "target": {
+      "kind": "point",
+      "x": 0.2,
+      "y": 0.52
+     },
+     "id": "s09.species.2",
+     "held": true
+    }
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s09.camera"
+   }
+  },
+  {
+   "scene_id": "s10",
+   "world": {
+    "kind": "clip",
+    "asset_id": "outro-v2",
+    "sha256": "e87be3bf3b3cd81ee9090d5e93cf0820589a6dd5fbd277395f7f0be9eff8da2e",
+    "ken_burns": {
+     "scale": 0,
+     "x": 0,
+     "y": 0
+    }
+   },
+   "exit": "dip",
+   "span": [
+    71.44,
+    77.64
+   ],
+   "docks": [],
+   "species": [
+    {
+     "kind": "life",
+     "at": 71.444,
+     "dur": 6.2,
+     "id": "s10.species.0"
+    }
+   ],
+   "camera": {
+    "keys": [],
+    "attention": "locked",
+    "id": "s10.camera"
+   }
+  }
+ ],
+ "species": [
+  "ledger",
+  "spotlight",
+  "retitle",
+  "ticker",
+  "figure",
+  "chart_to",
+  "peel",
+  "life",
+  "punch"
+ ],
+ "kinetics": {
+  "idle": true,
+  "stop_action": true,
+  "arap_morph": true,
+  "camera": true,
+  "span_tone": "dark",
+  "span_alpha": 0.3,
+  "analytic_spring": true,
+  "min_jerk": true,
+  "area_squash": true,
+  "km_ink": false,
+  "curvature_stroke": true
+ },
+ "caption_style": "phrase"
+}

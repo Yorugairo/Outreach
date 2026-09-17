@@ -3367,6 +3367,63 @@
       "ruling": "E99 s47",
       "was_kind": "owed",
       "owed": "Delivered 2026-09-15 (P61 T10): the options sheet at docs/research/runs/p61-saved-states/OPTIONS.md"
+    },
+    {
+      "id": "one-shot-3-fable-memory-calendar",
+      "status": "open",
+      "kind": "watch",
+      "title": "ONE-SHOT #3 (the Fable parent's own): Memory stocks trade the calendar, not the news - 72 s",
+      "ids": [
+        "E99 s66",
+        "E96",
+        "P62 (the register's first live row)"
+      ],
+      "judge": "The first of the three one-shots (E99 s66): my own pass, no input taken - the subject from EPISODE-SEEDS (the print calendar), the figures from the trim-proof card and your backtest, three stills and the thumbnail on the bound host from Flow, the Chirp scratch as the clock, eight build passes read on contact sheets. Gates: script PASS, blind viewer PASS (7/7 beats felt), floor 3 forms / 1 transform / docks 0.41 / narrative 1.00 / plan 32 of 32; NOT clean: recipes 0.03 (the proven set does not fit six-second plates and built pages - finding 1 in the ledger), one 4.7 s gap, one 10.6 px axis label, the weak page's labels under its bars (a builder gap). Watch it as a viewer, then answer one thing.",
+      "where": [
+        {
+          "label": "the cut's ledger: every decision taken without you, and eight findings about the system",
+          "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/PRODUCTION-LEDGER.md"
+        },
+        {
+          "label": "the figures and their tiers",
+          "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/EVIDENCE-DOSSIER.md"
+        },
+        {
+          "label": "the self-watch with the O-rows in my read; the parity table against Japan",
+          "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-oneshot-3/SELF-WATCH.md"
+        },
+        {
+          "label": "the thumbnail (Flow, HollowStickMike)",
+          "path": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/thumbnails/thumb-01-trade-the-calendar.png"
+        }
+      ],
+      "proofs": [
+        {
+          "type": "clip",
+          "label": "the whole short, 9:16, the Chirp scratch as the voice (E70: not the shipping voice)",
+          "build": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/build-oneshot-3",
+          "page": "player.html",
+          "aspect": "9:16",
+          "t0": 0.0,
+          "t1": 77.6,
+          "route": "review_queue_proofs.py --clips: the private build's player served read-only, one headless browser seeking #scrub, 15 fps, ffmpeg H.264 (silent)"
+        }
+      ],
+      "options": [
+        "Good enough to go to Opus and Astra as the task",
+        "Not yet - name what a viewer would drop on",
+        "The gates' floors are wrong where the ledger says (finding 1)",
+        "Retire the subject"
+      ],
+      "recommendation": "Go to Opus with the same task now; fix finding 1 (the recipe floor vs the newer gates) before Astra so the three are measured on one bar.",
+      "blocks": "E99 s66 step 2 (the Opus one-shot); the comparison of the three",
+      "sources": [
+        "docs/portable/OPERATOR-RULINGS.md (E99 s66, E96)",
+        "docs/runbooks/ONE-SHOT.md"
+      ],
+      "ruling": "",
+      "was_kind": "",
+      "owed": ""
     }
   ]
 }

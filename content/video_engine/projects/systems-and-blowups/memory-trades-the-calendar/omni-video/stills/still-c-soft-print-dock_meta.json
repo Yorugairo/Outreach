@@ -1,0 +1,32 @@
+{
+  "schema_version": "google_flow_output.v1",
+  "created_at": "2026-09-17T03:36:39.845Z",
+  "prompt": "9:16 vertical, full bleed. A light application of woodblock print and vox newspaper meets rich anime colors, cream paper ground, charcoal contour ink, one cobalt accent. The character in his indigo suit and copper tie. A single still frame, no text unless named. Busan container dock at dawn under a grey sky, seen from the quay: one crane idle, a row of containers with one gap in it, and a paper customs print sheet blowing across the wet concrete in the foreground, its numbers in red. The character stands small at the left edge holding a torn calendar page for July, looking down at the sheet. Generous empty grey-cream sky in the upper half for a chart page to land on.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "settings": {
+    "pillText": "🍌 Nano Banana Pro crop_9_16 x1",
+    "creditsText": "",
+    "modelText": "",
+    "credits": null
+  },
+  "requested_ratio": "9:16",
+  "mode": "image",
+  "files": {
+    "image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\omni-video\\stills\\still-c-soft-print-dock.png",
+      "sha256": "bbc435c4260817e2f46ebbab447e4a62033427e2275615097d8b7cdcf8ce1b91"
+    },
+    "raw_image": {
+      "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\omni-video\\stills\\still-c-soft-print-dock-raw.png",
+      "sha256": "bbc435c4260817e2f46ebbab447e4a62033427e2275615097d8b7cdcf8ce1b91"
+    },
+    "raw_images": [
+      {
+        "path": "C:\\Users\\Snipe\\Downloads\\Outreach Program\\content\\video_engine\\projects\\systems-and-blowups\\memory-trades-the-calendar\\omni-video\\stills\\still-c-soft-print-dock-raw.png",
+        "sha256": "bbc435c4260817e2f46ebbab447e4a62033427e2275615097d8b7cdcf8ce1b91"
+      }
+    ]
+  }
+}

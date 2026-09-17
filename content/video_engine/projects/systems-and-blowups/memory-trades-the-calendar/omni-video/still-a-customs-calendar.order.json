@@ -1,0 +1,15 @@
+{
+  "_contract": "ONE-SHOT #3 (E99 s66) - the Fable parent's own pass; the operator: 'Flow is up if you need any stills or clips' (2026-09-16). Dispatch: python omni-video/dispatch_order.py still-a-customs-calendar.order.json",
+  "_beat": "THE HOOK WORLD - B1/B2 (0:00-0:10) and the ring's return (B8): the customs office where the print is born; the calendar IS the mechanism.",
+  "prompt": "9:16 vertical, full bleed. A light application of woodblock print and vox newspaper meets rich anime colors, cream paper ground, charcoal contour ink, one cobalt accent. The character in his indigo suit and copper tie. A single still frame, no text unless named. Interior of a Korean customs office at Busan port at dusk, seen from the doorway: a tall window on the right with container cranes and stacked containers glowing in the last light. On the left wall a very large paper wall calendar for one month, its days in a grid, with the 15th circled in bold red ink - the only red in the room. On the desk under it a small wooden metronome, its arm mid-swing, beside a stamped customs ledger. The character stands beside the desk, one hand resting on the ledger, looking at the circled date. Uncluttered, generous empty cream wall above the calendar for a chart to land on.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "ratio": "9:16",
+  "outputPath": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/omni-video/stills/still-a-customs-calendar.png",
+  "budget": {
+    "kind": "zero_credit",
+    "model": "Nano Banana Pro"
+  },
+  "review_state": "quarantined until the operator approves the frame"
+}

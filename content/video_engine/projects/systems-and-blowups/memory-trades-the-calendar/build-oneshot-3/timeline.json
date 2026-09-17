@@ -1,0 +1,1553 @@
+{
+ "episode": "memory-trades-the-calendar",
+ "script": "SCRIPT-SHORT-VO.txt",
+ "take": "vo-short",
+ "runtime_s": 77.644,
+ "words": [
+  {
+   "w": "Memory",
+   "start": 0.0,
+   "end": 0.68,
+   "part": 1
+  },
+  {
+   "w": "stocks",
+   "start": 0.68,
+   "end": 1.02,
+   "part": 1
+  },
+  {
+   "w": "don't",
+   "start": 1.02,
+   "end": 1.6,
+   "part": 1
+  },
+  {
+   "w": "trade",
+   "start": 1.6,
+   "end": 1.76,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 1.76,
+   "end": 1.92,
+   "part": 1
+  },
+  {
+   "w": "news.",
+   "start": 1.92,
+   "end": 2.24,
+   "part": 1
+  },
+  {
+   "w": "They",
+   "start": 2.52,
+   "end": 2.64,
+   "part": 1
+  },
+  {
+   "w": "trade",
+   "start": 2.64,
+   "end": 2.92,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 2.92,
+   "end": 3.08,
+   "part": 1
+  },
+  {
+   "w": "calendar.",
+   "start": 3.08,
+   "end": 3.48,
+   "part": 1
+  },
+  {
+   "w": "Around",
+   "start": 3.98,
+   "end": 4.06,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 4.06,
+   "end": 4.22,
+   "part": 1
+  },
+  {
+   "w": "fifteenth",
+   "start": 4.22,
+   "end": 4.76,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 4.76,
+   "end": 4.8,
+   "part": 1
+  },
+  {
+   "w": "every",
+   "start": 4.8,
+   "end": 5.06,
+   "part": 1
+  },
+  {
+   "w": "month,",
+   "start": 5.06,
+   "end": 5.36,
+   "part": 1
+  },
+  {
+   "w": "Korean",
+   "start": 5.64,
+   "end": 5.9,
+   "part": 1
+  },
+  {
+   "w": "customs",
+   "start": 5.9,
+   "end": 6.28,
+   "part": 1
+  },
+  {
+   "w": "prints",
+   "start": 6.28,
+   "end": 6.62,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 6.62,
+   "end": 6.84,
+   "part": 1
+  },
+  {
+   "w": "price",
+   "start": 6.84,
+   "end": 7.02,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 7.02,
+   "end": 7.24,
+   "part": 1
+  },
+  {
+   "w": "memory",
+   "start": 7.24,
+   "end": 7.46,
+   "part": 1
+  },
+  {
+   "w": "chips",
+   "start": 7.46,
+   "end": 7.76,
+   "part": 1
+  },
+  {
+   "w": "crossing",
+   "start": 7.76,
+   "end": 8.08,
+   "part": 1
+  },
+  {
+   "w": "its",
+   "start": 8.08,
+   "end": 8.36,
+   "part": 1
+  },
+  {
+   "w": "border.",
+   "start": 8.36,
+   "end": 8.68,
+   "part": 1
+  },
+  {
+   "w": "If",
+   "start": 9.04,
+   "end": 9.12,
+   "part": 1
+  },
+  {
+   "w": "you",
+   "start": 9.12,
+   "end": 9.3,
+   "part": 1
+  },
+  {
+   "w": "own",
+   "start": 9.3,
+   "end": 9.46,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 9.46,
+   "end": 9.64,
+   "part": 1
+  },
+  {
+   "w": "stocks,",
+   "start": 9.64,
+   "end": 9.88,
+   "part": 1
+  },
+  {
+   "w": "that",
+   "start": 10.18,
+   "end": 10.38,
+   "part": 1
+  },
+  {
+   "w": "print",
+   "start": 10.38,
+   "end": 10.56,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 10.56,
+   "end": 10.74,
+   "part": 1
+  },
+  {
+   "w": "your",
+   "start": 10.74,
+   "end": 10.86,
+   "part": 1
+  },
+  {
+   "w": "metronome.",
+   "start": 10.86,
+   "end": 11.32,
+   "part": 1
+  },
+  {
+   "w": "Hynix",
+   "start": 11.82,
+   "end": 11.98,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 11.98,
+   "end": 12.24,
+   "part": 1
+  },
+  {
+   "w": "Micron",
+   "start": 12.24,
+   "end": 12.62,
+   "part": 1
+  },
+  {
+   "w": "move",
+   "start": 12.62,
+   "end": 12.84,
+   "part": 1
+  },
+  {
+   "w": "around",
+   "start": 12.84,
+   "end": 13.18,
+   "part": 1
+  },
+  {
+   "w": "it,",
+   "start": 13.18,
+   "end": 13.42,
+   "part": 1
+  },
+  {
+   "w": "not",
+   "start": 13.52,
+   "end": 13.64,
+   "part": 1
+  },
+  {
+   "w": "after",
+   "start": 13.64,
+   "end": 13.98,
+   "part": 1
+  },
+  {
+   "w": "it.",
+   "start": 13.98,
+   "end": 14.3,
+   "part": 1
+  },
+  {
+   "w": "But",
+   "start": 14.9,
+   "end": 15.14,
+   "part": 1
+  },
+  {
+   "w": "here's",
+   "start": 15.14,
+   "end": 15.32,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 15.32,
+   "end": 15.46,
+   "part": 1
+  },
+  {
+   "w": "part",
+   "start": 15.46,
+   "end": 15.64,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 15.64,
+   "end": 15.86,
+   "part": 1
+  },
+  {
+   "w": "headline",
+   "start": 15.86,
+   "end": 16.14,
+   "part": 1
+  },
+  {
+   "w": "hides:",
+   "start": 16.14,
+   "end": 16.54,
+   "part": 1
+  },
+  {
+   "w": "when",
+   "start": 17.0,
+   "end": 17.06,
+   "part": 1
+  },
+  {
+   "w": "does",
+   "start": 17.06,
+   "end": 17.2,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 17.2,
+   "end": 17.36,
+   "part": 1
+  },
+  {
+   "w": "month's",
+   "start": 17.36,
+   "end": 17.76,
+   "part": 1
+  },
+  {
+   "w": "gain",
+   "start": 17.76,
+   "end": 17.9,
+   "part": 1
+  },
+  {
+   "w": "actually",
+   "start": 17.9,
+   "end": 18.44,
+   "part": 1
+  },
+  {
+   "w": "land?",
+   "start": 18.44,
+   "end": 18.82,
+   "part": 1
+  },
+  {
+   "w": "Twenty-five",
+   "start": 19.32,
+   "end": 19.36,
+   "part": 1
+  },
+  {
+   "w": "months",
+   "start": 19.36,
+   "end": 19.56,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 19.56,
+   "end": 19.76,
+   "part": 1
+  },
+  {
+   "w": "prints,",
+   "start": 19.76,
+   "end": 19.96,
+   "part": 1
+  },
+  {
+   "w": "August",
+   "start": 20.26,
+   "end": 20.4,
+   "part": 1
+  },
+  {
+   "w": "twenty-four",
+   "start": 20.4,
+   "end": 20.96,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 20.96,
+   "end": 21.2,
+   "part": 1
+  },
+  {
+   "w": "August",
+   "start": 21.2,
+   "end": 21.44,
+   "part": 1
+  },
+  {
+   "w": "twenty-six.",
+   "start": 21.44,
+   "end": 22.0,
+   "part": 1
+  },
+  {
+   "w": "In",
+   "start": 22.5,
+   "end": 22.66,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 22.66,
+   "end": 22.76,
+   "part": 1
+  },
+  {
+   "w": "half-month",
+   "start": 22.76,
+   "end": 23.12,
+   "part": 1
+  },
+  {
+   "w": "into",
+   "start": 23.12,
+   "end": 23.4,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 23.4,
+   "end": 23.58,
+   "part": 1
+  },
+  {
+   "w": "print,",
+   "start": 23.58,
+   "end": 23.8,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 23.98,
+   "end": 24.0,
+   "part": 1
+  },
+  {
+   "w": "stocks",
+   "start": 24.0,
+   "end": 24.24,
+   "part": 1
+  },
+  {
+   "w": "average",
+   "start": 24.24,
+   "end": 24.58,
+   "part": 1
+  },
+  {
+   "w": "plus",
+   "start": 24.58,
+   "end": 24.94,
+   "part": 1
+  },
+  {
+   "w": "six",
+   "start": 24.94,
+   "end": 25.042,
+   "part": 1
+  },
+  {
+   "w": "point",
+   "start": 25.042,
+   "end": 25.212,
+   "part": 1
+  },
+  {
+   "w": "eight",
+   "start": 25.212,
+   "end": 25.382,
+   "part": 1
+  },
+  {
+   "w": "percent.",
+   "start": 25.382,
+   "end": 25.62,
+   "part": 1
+  },
+  {
+   "w": "In",
+   "start": 26.16,
+   "end": 26.68,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 26.68,
+   "end": 26.78,
+   "part": 1
+  },
+  {
+   "w": "half-month",
+   "start": 26.78,
+   "end": 27.12,
+   "part": 1
+  },
+  {
+   "w": "after:",
+   "start": 27.12,
+   "end": 27.58,
+   "part": 1
+  },
+  {
+   "w": "plus",
+   "start": 27.9,
+   "end": 28.04,
+   "part": 1
+  },
+  {
+   "w": "two",
+   "start": 28.04,
+   "end": 28.335,
+   "part": 1
+  },
+  {
+   "w": "point",
+   "start": 28.335,
+   "end": 28.825,
+   "part": 1
+  },
+  {
+   "w": "two.",
+   "start": 28.825,
+   "end": 29.12,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 29.12,
+   "end": 29.26,
+   "part": 1
+  },
+  {
+   "w": "move",
+   "start": 29.26,
+   "end": 29.56,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 29.56,
+   "end": 29.88,
+   "part": 1
+  },
+  {
+   "w": "front-run.",
+   "start": 29.88,
+   "end": 30.3,
+   "part": 1
+  },
+  {
+   "w": "A",
+   "start": 30.8,
+   "end": 30.92,
+   "part": 1
+  },
+  {
+   "w": "strong",
+   "start": 30.92,
+   "end": 31.24,
+   "part": 1
+  },
+  {
+   "w": "print?",
+   "start": 31.24,
+   "end": 31.54,
+   "part": 1
+  },
+  {
+   "w": "Already",
+   "start": 32.14,
+   "end": 32.42,
+   "part": 1
+  },
+  {
+   "w": "paid",
+   "start": 32.42,
+   "end": 32.7,
+   "part": 1
+  },
+  {
+   "w": "for.",
+   "start": 32.7,
+   "end": 33.0,
+   "part": 1
+  },
+  {
+   "w": "After",
+   "start": 33.62,
+   "end": 33.88,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 33.88,
+   "end": 34.08,
+   "part": 1
+  },
+  {
+   "w": "fourteen",
+   "start": 34.08,
+   "end": 34.5,
+   "part": 1
+  },
+  {
+   "w": "strong",
+   "start": 34.5,
+   "end": 34.84,
+   "part": 1
+  },
+  {
+   "w": "prints,",
+   "start": 34.84,
+   "end": 35.16,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 35.46,
+   "end": 35.54,
+   "part": 1
+  },
+  {
+   "w": "next",
+   "start": 35.54,
+   "end": 35.74,
+   "part": 1
+  },
+  {
+   "w": "two",
+   "start": 35.74,
+   "end": 35.94,
+   "part": 1
+  },
+  {
+   "w": "weeks",
+   "start": 35.94,
+   "end": 36.18,
+   "part": 1
+  },
+  {
+   "w": "averaged",
+   "start": 36.18,
+   "end": 36.52,
+   "part": 1
+  },
+  {
+   "w": "plus",
+   "start": 36.52,
+   "end": 36.88,
+   "part": 1
+  },
+  {
+   "w": "three",
+   "start": 36.88,
+   "end": 37.173,
+   "part": 1
+  },
+  {
+   "w": "point",
+   "start": 37.173,
+   "end": 37.466,
+   "part": 1
+  },
+  {
+   "w": "four.",
+   "start": 37.466,
+   "end": 37.7,
+   "part": 1
+  },
+  {
+   "w": "Eight",
+   "start": 38.2,
+   "end": 38.34,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 38.34,
+   "end": 38.48,
+   "part": 1
+  },
+  {
+   "w": "fourteen",
+   "start": 38.48,
+   "end": 38.86,
+   "part": 1
+  },
+  {
+   "w": "up.",
+   "start": 38.86,
+   "end": 39.12,
+   "part": 1
+  },
+  {
+   "w": "A",
+   "start": 39.7,
+   "end": 39.8,
+   "part": 1
+  },
+  {
+   "w": "coin",
+   "start": 39.8,
+   "end": 40.06,
+   "part": 1
+  },
+  {
+   "w": "flip",
+   "start": 40.06,
+   "end": 40.32,
+   "part": 1
+  },
+  {
+   "w": "with",
+   "start": 40.32,
+   "end": 40.5,
+   "part": 1
+  },
+  {
+   "w": "drift.",
+   "start": 40.5,
+   "end": 40.76,
+   "part": 1
+  },
+  {
+   "w": "But",
+   "start": 41.26,
+   "end": 41.4,
+   "part": 1
+  },
+  {
+   "w": "now",
+   "start": 41.4,
+   "end": 41.56,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 41.56,
+   "end": 41.7,
+   "part": 1
+  },
+  {
+   "w": "weak",
+   "start": 41.7,
+   "end": 41.86,
+   "part": 1
+  },
+  {
+   "w": "prints.",
+   "start": 41.86,
+   "end": 42.14,
+   "part": 1
+  },
+  {
+   "w": "Eight",
+   "start": 42.68,
+   "end": 42.8,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 42.8,
+   "end": 42.9,
+   "part": 1
+  },
+  {
+   "w": "them",
+   "start": 42.9,
+   "end": 43.0,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 43.0,
+   "end": 43.12,
+   "part": 1
+  },
+  {
+   "w": "twenty-five",
+   "start": 43.12,
+   "end": 43.54,
+   "part": 1
+  },
+  {
+   "w": "months.",
+   "start": 43.54,
+   "end": 43.88,
+   "part": 1
+  },
+  {
+   "w": "After",
+   "start": 44.32,
+   "end": 44.58,
+   "part": 1
+  },
+  {
+   "w": "seven",
+   "start": 44.58,
+   "end": 44.9,
+   "part": 1
+  },
+  {
+   "w": "of",
+   "start": 44.9,
+   "end": 45.02,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 45.02,
+   "end": 45.14,
+   "part": 1
+  },
+  {
+   "w": "eight,",
+   "start": 45.14,
+   "end": 45.3,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 45.36,
+   "end": 45.44,
+   "part": 1
+  },
+  {
+   "w": "stocks",
+   "start": 45.44,
+   "end": 45.7,
+   "part": 1
+  },
+  {
+   "w": "fell.",
+   "start": 45.7,
+   "end": 46.0,
+   "part": 1
+  },
+  {
+   "w": "Average:",
+   "start": 46.32,
+   "end": 46.58,
+   "part": 1
+  },
+  {
+   "w": "minus",
+   "start": 46.58,
+   "end": 47.18,
+   "part": 1
+  },
+  {
+   "w": "six",
+   "start": 47.18,
+   "end": 47.39,
+   "part": 1
+  },
+  {
+   "w": "point",
+   "start": 47.39,
+   "end": 47.74,
+   "part": 1
+  },
+  {
+   "w": "nine.",
+   "start": 47.74,
+   "end": 48.02,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 48.52,
+   "end": 48.7,
+   "part": 1
+  },
+  {
+   "w": "latest",
+   "start": 48.7,
+   "end": 48.9,
+   "part": 1
+  },
+  {
+   "w": "landed",
+   "start": 48.9,
+   "end": 49.16,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 49.16,
+   "end": 49.4,
+   "part": 1
+  },
+  {
+   "w": "July.",
+   "start": 49.4,
+   "end": 49.7,
+   "part": 1
+  },
+  {
+   "w": "One",
+   "start": 49.7,
+   "end": 50.42,
+   "part": 1
+  },
+  {
+   "w": "soft",
+   "start": 50.42,
+   "end": 50.72,
+   "part": 1
+  },
+  {
+   "w": "print,",
+   "start": 50.72,
+   "end": 50.98,
+   "part": 1
+  },
+  {
+   "w": "and",
+   "start": 51.38,
+   "end": 51.48,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 51.48,
+   "end": 51.58,
+   "part": 1
+  },
+  {
+   "w": "stocks",
+   "start": 51.58,
+   "end": 51.8,
+   "part": 1
+  },
+  {
+   "w": "dropped",
+   "start": 51.8,
+   "end": 52.08,
+   "part": 1
+  },
+  {
+   "w": "fourteen",
+   "start": 52.08,
+   "end": 52.485,
+   "part": 1
+  },
+  {
+   "w": "percent",
+   "start": 52.485,
+   "end": 52.84,
+   "part": 1
+  },
+  {
+   "w": "in",
+   "start": 52.84,
+   "end": 53.04,
+   "part": 1
+  },
+  {
+   "w": "two",
+   "start": 53.04,
+   "end": 53.2,
+   "part": 1
+  },
+  {
+   "w": "weeks.",
+   "start": 53.2,
+   "end": 53.48,
+   "part": 1
+  },
+  {
+   "w": "The",
+   "start": 54.0,
+   "end": 54.1,
+   "part": 1
+  },
+  {
+   "w": "chip",
+   "start": 54.1,
+   "end": 54.3,
+   "part": 1
+  },
+  {
+   "w": "price",
+   "start": 54.3,
+   "end": 54.58,
+   "part": 1
+  },
+  {
+   "w": "itself?",
+   "start": 54.58,
+   "end": 54.96,
+   "part": 1
+  },
+  {
+   "w": "Sixteen",
+   "start": 55.56,
+   "end": 55.92,
+   "part": 1
+  },
+  {
+   "w": "percent",
+   "start": 55.92,
+   "end": 56.28,
+   "part": 1
+  },
+  {
+   "w": "higher",
+   "start": 56.28,
+   "end": 56.56,
+   "part": 1
+  },
+  {
+   "w": "a",
+   "start": 56.56,
+   "end": 56.76,
+   "part": 1
+  },
+  {
+   "w": "month",
+   "start": 56.76,
+   "end": 56.88,
+   "part": 1
+  },
+  {
+   "w": "later.",
+   "start": 56.88,
+   "end": 57.22,
+   "part": 1
+  },
+  {
+   "w": "In",
+   "start": 57.72,
+   "end": 57.82,
+   "part": 1
+  },
+  {
+   "w": "finance,",
+   "start": 57.82,
+   "end": 58.22,
+   "part": 1
+  },
+  {
+   "w": "we",
+   "start": 58.58,
+   "end": 58.66,
+   "part": 1
+  },
+  {
+   "w": "call",
+   "start": 58.66,
+   "end": 58.82,
+   "part": 1
+  },
+  {
+   "w": "this",
+   "start": 58.82,
+   "end": 59.02,
+   "part": 1
+  },
+  {
+   "w": "asymmetry.",
+   "start": 59.02,
+   "end": 59.62,
+   "part": 1
+  },
+  {
+   "w": "Good",
+   "start": 60.22,
+   "end": 60.34,
+   "part": 1
+  },
+  {
+   "w": "news",
+   "start": 60.34,
+   "end": 60.64,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 60.64,
+   "end": 60.88,
+   "part": 1
+  },
+  {
+   "w": "priced",
+   "start": 60.88,
+   "end": 61.12,
+   "part": 1
+  },
+  {
+   "w": "before",
+   "start": 61.12,
+   "end": 61.46,
+   "part": 1
+  },
+  {
+   "w": "it",
+   "start": 61.46,
+   "end": 61.6,
+   "part": 1
+  },
+  {
+   "w": "lands.",
+   "start": 61.6,
+   "end": 61.84,
+   "part": 1
+  },
+  {
+   "w": "Bad",
+   "start": 62.36,
+   "end": 62.5,
+   "part": 1
+  },
+  {
+   "w": "news",
+   "start": 62.5,
+   "end": 62.84,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 62.84,
+   "end": 63.06,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 63.06,
+   "end": 63.2,
+   "part": 1
+  },
+  {
+   "w": "only",
+   "start": 63.2,
+   "end": 63.42,
+   "part": 1
+  },
+  {
+   "w": "surprise",
+   "start": 63.42,
+   "end": 63.76,
+   "part": 1
+  },
+  {
+   "w": "left.",
+   "start": 63.76,
+   "end": 64.14,
+   "part": 1
+  },
+  {
+   "w": "So",
+   "start": 64.64,
+   "end": 64.8,
+   "part": 1
+  },
+  {
+   "w": "you",
+   "start": 64.8,
+   "end": 64.92,
+   "part": 1
+  },
+  {
+   "w": "don't",
+   "start": 64.92,
+   "end": 65.06,
+   "part": 1
+  },
+  {
+   "w": "have",
+   "start": 65.06,
+   "end": 65.24,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 65.24,
+   "end": 65.36,
+   "part": 1
+  },
+  {
+   "w": "read",
+   "start": 65.36,
+   "end": 65.52,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 65.52,
+   "end": 65.7,
+   "part": 1
+  },
+  {
+   "w": "print",
+   "start": 65.7,
+   "end": 65.92,
+   "part": 1
+  },
+  {
+   "w": "faster",
+   "start": 65.92,
+   "end": 66.26,
+   "part": 1
+  },
+  {
+   "w": "than",
+   "start": 66.26,
+   "end": 66.54,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 66.54,
+   "end": 66.64,
+   "part": 1
+  },
+  {
+   "w": "market.",
+   "start": 66.64,
+   "end": 66.88,
+   "part": 1
+  },
+  {
+   "w": "You",
+   "start": 67.38,
+   "end": 67.56,
+   "part": 1
+  },
+  {
+   "w": "have",
+   "start": 67.56,
+   "end": 67.7,
+   "part": 1
+  },
+  {
+   "w": "to",
+   "start": 67.7,
+   "end": 67.82,
+   "part": 1
+  },
+  {
+   "w": "know",
+   "start": 67.82,
+   "end": 67.92,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 67.92,
+   "end": 68.06,
+   "part": 1
+  },
+  {
+   "w": "calendar:",
+   "start": 68.06,
+   "end": 68.44,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 68.96,
+   "end": 69.04,
+   "part": 1
+  },
+  {
+   "w": "day",
+   "start": 69.04,
+   "end": 69.18,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 69.18,
+   "end": 69.32,
+   "part": 1
+  },
+  {
+   "w": "print",
+   "start": 69.32,
+   "end": 69.5,
+   "part": 1
+  },
+  {
+   "w": "lands",
+   "start": 69.5,
+   "end": 69.8,
+   "part": 1
+  },
+  {
+   "w": "is",
+   "start": 69.8,
+   "end": 70.04,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 70.04,
+   "end": 70.18,
+   "part": 1
+  },
+  {
+   "w": "day",
+   "start": 70.18,
+   "end": 70.34,
+   "part": 1
+  },
+  {
+   "w": "the",
+   "start": 70.34,
+   "end": 70.46,
+   "part": 1
+  },
+  {
+   "w": "stocks",
+   "start": 70.46,
+   "end": 70.78,
+   "part": 1
+  },
+  {
+   "w": "trade",
+   "start": 70.78,
+   "end": 71.06,
+   "part": 1
+  },
+  {
+   "w": "it.",
+   "start": 71.06,
+   "end": 71.22,
+   "part": 1
+  }
+ ],
+ "sentences": [
+  {
+   "text": "Memory stocks don't trade the news.",
+   "start": 0.0,
+   "end": 2.24,
+   "part": 1
+  },
+  {
+   "text": "They trade the calendar.",
+   "start": 2.52,
+   "end": 3.48,
+   "part": 1
+  },
+  {
+   "text": "Around the fifteenth of every month, Korean customs prints the price of memory chips crossing its border.",
+   "start": 3.98,
+   "end": 8.68,
+   "part": 1
+  },
+  {
+   "text": "If you own the stocks, that print is your metronome.",
+   "start": 9.04,
+   "end": 11.32,
+   "part": 1
+  },
+  {
+   "text": "Hynix and Micron move around it, not after it.",
+   "start": 11.82,
+   "end": 14.3,
+   "part": 1
+  },
+  {
+   "text": "But here's the part the headline hides:",
+   "start": 14.9,
+   "end": 16.54,
+   "part": 1
+  },
+  {
+   "text": "when does the month's gain actually land?",
+   "start": 17.0,
+   "end": 18.82,
+   "part": 1
+  },
+  {
+   "text": "Twenty-five months of prints, August twenty-four to August twenty-six.",
+   "start": 19.32,
+   "end": 22.0,
+   "part": 1
+  },
+  {
+   "text": "In the half-month into the print, the stocks average plus six point eight percent.",
+   "start": 22.5,
+   "end": 25.62,
+   "part": 1
+  },
+  {
+   "text": "In the half-month after:",
+   "start": 26.16,
+   "end": 27.58,
+   "part": 1
+  },
+  {
+   "text": "plus two point two.",
+   "start": 27.9,
+   "end": 29.12,
+   "part": 1
+  },
+  {
+   "text": "The move is front-run.",
+   "start": 29.12,
+   "end": 30.3,
+   "part": 1
+  },
+  {
+   "text": "A strong print?",
+   "start": 30.8,
+   "end": 31.54,
+   "part": 1
+  },
+  {
+   "text": "Already paid for.",
+   "start": 32.14,
+   "end": 33.0,
+   "part": 1
+  },
+  {
+   "text": "After the fourteen strong prints, the next two weeks averaged plus three point four.",
+   "start": 33.62,
+   "end": 37.7,
+   "part": 1
+  },
+  {
+   "text": "Eight of fourteen up.",
+   "start": 38.2,
+   "end": 39.12,
+   "part": 1
+  },
+  {
+   "text": "A coin flip with drift.",
+   "start": 39.7,
+   "end": 40.76,
+   "part": 1
+  },
+  {
+   "text": "But now the weak prints.",
+   "start": 41.26,
+   "end": 42.14,
+   "part": 1
+  },
+  {
+   "text": "Eight of them in twenty-five months.",
+   "start": 42.68,
+   "end": 43.88,
+   "part": 1
+  },
+  {
+   "text": "After seven of the eight, the stocks fell.",
+   "start": 44.32,
+   "end": 46.0,
+   "part": 1
+  },
+  {
+   "text": "Average:",
+   "start": 46.32,
+   "end": 46.58,
+   "part": 1
+  },
+  {
+   "text": "minus six point nine.",
+   "start": 46.58,
+   "end": 48.02,
+   "part": 1
+  },
+  {
+   "text": "The latest landed in July.",
+   "start": 48.52,
+   "end": 49.7,
+   "part": 1
+  },
+  {
+   "text": "One soft print, and the stocks dropped fourteen percent in two weeks.",
+   "start": 49.7,
+   "end": 53.48,
+   "part": 1
+  },
+  {
+   "text": "The chip price itself?",
+   "start": 54.0,
+   "end": 54.96,
+   "part": 1
+  },
+  {
+   "text": "Sixteen percent higher a month later.",
+   "start": 55.56,
+   "end": 57.22,
+   "part": 1
+  },
+  {
+   "text": "In finance, we call this asymmetry.",
+   "start": 57.72,
+   "end": 59.62,
+   "part": 1
+  },
+  {
+   "text": "Good news is priced before it lands.",
+   "start": 60.22,
+   "end": 61.84,
+   "part": 1
+  },
+  {
+   "text": "Bad news is the only surprise left.",
+   "start": 62.36,
+   "end": 64.14,
+   "part": 1
+  },
+  {
+   "text": "So you don't have to read the print faster than the market.",
+   "start": 64.64,
+   "end": 66.88,
+   "part": 1
+  },
+  {
+   "text": "You have to know the calendar:",
+   "start": 67.38,
+   "end": 68.44,
+   "part": 1
+  },
+  {
+   "text": "the day the print lands is the day the stocks trade it.",
+   "start": 68.96,
+   "end": 71.22,
+   "part": 1
+  }
+ ],
+ "edit_pauses_applied": false
+}

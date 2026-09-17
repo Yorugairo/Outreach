@@ -1,0 +1,52 @@
+[
+ {
+  "asset": "dock-b-calendar",
+  "title": "They trade the calendar",
+  "source": "Yahoo Finance 000660.KS, MU; Korean customs HS 8542.32 via SCML",
+  "species": "chart",
+  "badges": []
+ },
+ {
+  "asset": "dock-m-metronome",
+  "title": "One soft print, and the stocks dropped",
+  "source": "Yahoo Finance 000660.KS, MU; Korean customs HS 8542.32 via SCML",
+  "species": "chart",
+  "badges": []
+ },
+ {
+  "asset": "dock-f-desk-host",
+  "title": "Counting the strong prints",
+  "source": "HollowStickMike - Money Physics",
+  "species": "deck",
+  "badges": []
+ },
+ {
+  "asset": "dock-g-july-host",
+  "title": "July's page",
+  "source": "HollowStickMike - Money Physics",
+  "species": "deck",
+  "badges": []
+ },
+ {
+  "asset": "dock-stack",
+  "species": "stack",
+  "title": "Good news is priced before it lands",
+  "source": "the two charts of this short that were docked, each shown with its own source above",
+  "anchor": "In finance, we call this asymmetry",
+  "anchor_kind": "claim",
+  "badges": [],
+  "stack": {
+   "items": [
+    {
+     "id": "dock-b-calendar",
+     "at": 60.22
+    },
+    {
+     "id": "dock-m-metronome",
+     "at": 62.36
+    }
+   ],
+   "clear_at": 63.31
+  }
+ }
+]

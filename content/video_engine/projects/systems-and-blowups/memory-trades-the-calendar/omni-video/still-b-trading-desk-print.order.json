@@ -1,0 +1,15 @@
+{
+  "_contract": "ONE-SHOT #3 (E99 s66) - the Fable parent's own pass; the operator: 'Flow is up if you need any stills or clips' (2026-09-16). Dispatch: python omni-video/dispatch_order.py still-b-trading-desk-print.order.json",
+  "_beat": "THE PRINT LANDS - B3/B4 (0:10-0:40): the desk where the stocks trade the print; the into/after bars and the strong-print share page mount over it.",
+  "prompt": "9:16 vertical, full bleed. A light application of woodblock print and vox newspaper meets rich anime colors, cream paper ground, charcoal contour ink, one cobalt accent. The character in his indigo suit and copper tie. A single still frame, no text unless named. A trading desk at night seen straight on: a wide dark terminal screen showing one simple rising price line in teal, and under it a single bold ticker strip reading PRINT with a small calendar icon. The character sits at the desk in profile, leaning toward the screen, one finger raised as if counting. A wall clock reads 3 o'clock. The room dark and quiet, the screen's glow the only light. Generous empty dark space in the upper half for a chart page to land on.",
+  "references": [
+    "HollowStickMike"
+  ],
+  "ratio": "9:16",
+  "outputPath": "content/video_engine/projects/systems-and-blowups/memory-trades-the-calendar/omni-video/stills/still-b-trading-desk-print.png",
+  "budget": {
+    "kind": "zero_credit",
+    "model": "Nano Banana Pro"
+  },
+  "review_state": "quarantined until the operator approves the frame"
+}
