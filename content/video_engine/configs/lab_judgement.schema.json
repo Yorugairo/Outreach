@@ -7,8 +7,8 @@
   "$defs": {
     "candidate_id": {
       "type": "string",
-      "pattern": "^lab:[a-z0-9-]+:[0-9a-f]{8}$",
-      "description": "the candidate this judgement is about - lab_candidates.v1 `id`; an unknown candidate is refused by name"
+      "pattern": "^(lab:[a-z0-9-]+:[0-9a-f]{8}|recipe:[a-z0-9-]+)$",
+      "description": "the candidate this judgement is about - a lab candidate `lab:<shape>:<8 hex>` (lab_candidates.v1) or a re-proved recipe `recipe:<name>` (T8's cards, 2026-09-17); an unknown candidate is refused by name"
     },
     "proof": {
       "type": "object",

@@ -1,0 +1,392 @@
+{
+  "schema_version": "lab_approval_rates.v1",
+  "at": "2026-09-17T20:22:58+00:00",
+  "source": "content/video_engine/effects/lab/judgements.jsonl (derived from docs/content-video-engine/review-answers.jsonl by lab_log.py --write; nothing hand-typed)",
+  "limit": "THE LEARNER IS A TABLE, NOT A MODEL. Every cell is a count and a shrunk share; no ranking model and no head-to-head preference model is fitted anywhere in lab_log.py, and none will be until this log holds 300+ judgements (arXiv 2411.04991). The reason categories are carried beside every rate and never collapsed into it (Gao et al. 2022): the rate says how often, only the reason says why, and the reason is the part an agent can act on. A cell's rate is its count shrunk toward the log's own prior, so a feature seen once never reads 1.00 or 0.00 - read the n before the rate.",
+  "citations": [
+    "arXiv 2411.04991 (a preference model fitted at small N is noise wearing a number)",
+    "Gao et al. 2022 (optimising an imperfect proxy at small N costs the thing you wanted)"
+  ],
+  "judgements": {
+    "live": 6,
+    "approve": 2,
+    "deny": 4,
+    "superseded": 1,
+    "candidates": 6
+  },
+  "prior": {
+    "family": "Beta",
+    "strength": 2.0,
+    "rate": 0.3333,
+    "observed_rate": 0.3333,
+    "a": 0.6667,
+    "b": 1.3333,
+    "held_off_the_ends": [
+      0.1,
+      0.9
+    ],
+    "rule": "rate = (approvals + a) / (n + a + b)"
+  },
+  "features": [
+    {
+      "feature": "shape:return",
+      "kind": "shape",
+      "n": 3,
+      "approve": 1,
+      "deny": 2,
+      "reasons": {
+        "good": 1,
+        "off-doctrine": 1,
+        "reads-as-noise": 1
+      },
+      "candidates": [
+        "recipe:dock-lands-page-renames",
+        "recipe:read-park-build-write",
+        "recipe:spotlight-held-past-the-cut"
+      ],
+      "raw_rate": 0.3333,
+      "rate": 0.3333
+    },
+    {
+      "feature": "shape:open-on-the-chart",
+      "kind": "shape",
+      "n": 1,
+      "approve": 0,
+      "deny": 1,
+      "reasons": {
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:card-becomes-the-chart"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.2222
+    },
+    {
+      "feature": "shape:page-number-lands-at-n",
+      "kind": "shape",
+      "n": 1,
+      "approve": 0,
+      "deny": 1,
+      "reasons": {
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:plate-dock-wipe"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.2222
+    },
+    {
+      "feature": "shape:plate-carries-a-card",
+      "kind": "shape",
+      "n": 1,
+      "approve": 1,
+      "deny": 0,
+      "reasons": {
+        "good": 1
+      },
+      "candidates": [
+        "recipe:badge-ladder"
+      ],
+      "raw_rate": 1.0,
+      "rate": 0.5556
+    },
+    {
+      "feature": "member:dock_kind:image",
+      "kind": "member",
+      "n": 2,
+      "approve": 1,
+      "deny": 1,
+      "reasons": {
+        "good": 1,
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:badge-ladder",
+        "recipe:plate-dock-wipe"
+      ],
+      "raw_rate": 0.5,
+      "rate": 0.4167
+    },
+    {
+      "feature": "member:dock_option:badge",
+      "kind": "member",
+      "n": 2,
+      "approve": 1,
+      "deny": 1,
+      "reasons": {
+        "good": 1,
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:badge-ladder",
+        "recipe:plate-dock-wipe"
+      ],
+      "raw_rate": 0.5,
+      "rate": 0.4167
+    },
+    {
+      "feature": "member:dock_option:read",
+      "kind": "member",
+      "n": 2,
+      "approve": 1,
+      "deny": 1,
+      "reasons": {
+        "good": 1,
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:dock-lands-page-renames",
+        "recipe:read-park-build-write"
+      ],
+      "raw_rate": 0.5,
+      "rate": 0.4167
+    },
+    {
+      "feature": "member:page_enter:snap",
+      "kind": "member",
+      "n": 2,
+      "approve": 0,
+      "deny": 2,
+      "reasons": {
+        "off-doctrine": 1,
+        "reads-as-noise": 1
+      },
+      "candidates": [
+        "recipe:card-becomes-the-chart",
+        "recipe:spotlight-held-past-the-cut"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.1667
+    },
+    {
+      "feature": "member:arrival:throw",
+      "kind": "member",
+      "n": 1,
+      "approve": 0,
+      "deny": 1,
+      "reasons": {
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:card-becomes-the-chart"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.2222
+    },
+    {
+      "feature": "member:dock_payload:chart",
+      "kind": "member",
+      "n": 1,
+      "approve": 0,
+      "deny": 1,
+      "reasons": {
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:plate-dock-wipe"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.2222
+    },
+    {
+      "feature": "member:exit:wipe",
+      "kind": "member",
+      "n": 1,
+      "approve": 0,
+      "deny": 1,
+      "reasons": {
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:plate-dock-wipe"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.2222
+    },
+    {
+      "feature": "member:idle:drift",
+      "kind": "member",
+      "n": 1,
+      "approve": 0,
+      "deny": 1,
+      "reasons": {
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:card-becomes-the-chart"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.2222
+    },
+    {
+      "feature": "member:page_enter:mount",
+      "kind": "member",
+      "n": 1,
+      "approve": 0,
+      "deny": 1,
+      "reasons": {
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:dock-lands-page-renames"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.2222
+    },
+    {
+      "feature": "member:page_species:build_to",
+      "kind": "member",
+      "n": 1,
+      "approve": 1,
+      "deny": 0,
+      "reasons": {
+        "good": 1
+      },
+      "candidates": [
+        "recipe:read-park-build-write"
+      ],
+      "raw_rate": 1.0,
+      "rate": 0.5556
+    },
+    {
+      "feature": "member:page_species:figure",
+      "kind": "member",
+      "n": 1,
+      "approve": 1,
+      "deny": 0,
+      "reasons": {
+        "good": 1
+      },
+      "candidates": [
+        "recipe:read-park-build-write"
+      ],
+      "raw_rate": 1.0,
+      "rate": 0.5556
+    },
+    {
+      "feature": "member:page_species:retitle",
+      "kind": "member",
+      "n": 1,
+      "approve": 0,
+      "deny": 1,
+      "reasons": {
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:dock-lands-page-renames"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.2222
+    },
+    {
+      "feature": "member:plate_option:ken",
+      "kind": "member",
+      "n": 1,
+      "approve": 0,
+      "deny": 1,
+      "reasons": {
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:plate-dock-wipe"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.2222
+    },
+    {
+      "feature": "member:plate_option:world",
+      "kind": "member",
+      "n": 1,
+      "approve": 0,
+      "deny": 1,
+      "reasons": {
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:plate-dock-wipe"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.2222
+    },
+    {
+      "feature": "member:species:spotlight",
+      "kind": "member",
+      "n": 1,
+      "approve": 0,
+      "deny": 1,
+      "reasons": {
+        "reads-as-noise": 1
+      },
+      "candidates": [
+        "recipe:spotlight-held-past-the-cut"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.2222
+    },
+    {
+      "feature": "clock:window_s=6.0",
+      "kind": "clock",
+      "n": 3,
+      "approve": 2,
+      "deny": 1,
+      "reasons": {
+        "good": 2,
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:badge-ladder",
+        "recipe:card-becomes-the-chart",
+        "recipe:read-park-build-write"
+      ],
+      "raw_rate": 0.6667,
+      "rate": 0.5333
+    },
+    {
+      "feature": "clock:window_s=11.0",
+      "kind": "clock",
+      "n": 1,
+      "approve": 0,
+      "deny": 1,
+      "reasons": {
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:dock-lands-page-renames"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.2222
+    },
+    {
+      "feature": "clock:window_s=12.0",
+      "kind": "clock",
+      "n": 1,
+      "approve": 0,
+      "deny": 1,
+      "reasons": {
+        "reads-as-noise": 1
+      },
+      "candidates": [
+        "recipe:spotlight-held-past-the-cut"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.2222
+    },
+    {
+      "feature": "clock:window_s=31.0",
+      "kind": "clock",
+      "n": 1,
+      "approve": 0,
+      "deny": 1,
+      "reasons": {
+        "off-doctrine": 1
+      },
+      "candidates": [
+        "recipe:plate-dock-wipe"
+      ],
+      "raw_rate": 0.0,
+      "rate": 0.2222
+    }
+  ]
+}
