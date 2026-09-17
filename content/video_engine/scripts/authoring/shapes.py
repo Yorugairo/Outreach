@@ -807,6 +807,69 @@ def place_cards(docks: list, page: dict | None, aspect: str, notes: list,
     return docks
 
 
+# --- E67: THE CHART'S INKS ARE ELECTRIC; THE CHART IS THE THUMBNAIL -----------------------------
+# (CAPABILITIES.md:34; OPERATOR-RULINGS.md:2176, the operator 2026-09-12: *"we need to use bolder
+# primary, high-contrast line colors for our default the chart instead of gray. that way our charts
+# can become our thumbnails ... the Teal and a Claude orange would work."*)
+#
+# WHERE A PAGE'S INKS ARE DECIDED - measured before this was written, not recalled. NOT here, and not
+# on the shot row. A page's ink is a TOKEN named in the EPISODE's own series file
+# (`evidence/objects/<object>.series.json`: `series[].color`, `bars[].color`, `colors[]`), carried
+# onto the page spec verbatim by `build_scene_timeline_f.ledger_world`, and resolved to a hex by the
+# PLAYER's one table (`scene-evidence-engine.mjs` LP_INK: crimson `#FF8A4C` - the Claude orange sits
+# in the crimson slot so every object file stays valid - teal `#34F5C5`, cobalt `#4FC3FF`, amber
+# `#F5B72E`). A series that declares NO colour takes the electric cycle by index (LP_CYCLE, E67
+# Apply 3) or, alone, its own sign colour - and never grey. There is no `ink=` plate option: the
+# compiler cannot choose a page's ink from the table, and rewriting a bed's series file to fix a base
+# is not a compiler's business (E99 s11 - an approved cut's own files are never moved under it).
+#
+# So the base emits E67's inks BY DEFAULT wherever the plan's series names none (the engine's cycle
+# IS the default), and where a series names its own the row's `why` says which - and WARNS when that
+# set predates E67: a raw hex or an unknown token the electric table cannot resolve, or a page whose
+# every series is `deemph` (E67 Apply 3: grey is never a default, it is an author's de-emphasis).
+E67_CYCLE = ("teal", "crimson", "cobalt", "amber")   # LP_CYCLE's own order - what an undeclared series takes
+E67_DEEMPH = "deemph"
+E67_SIGN = ("var(--lp-neg)", "var(--lp-pos)")       # the SIGN colours on the field (E67, CAPABILITIES.md:34:
+# `#3DDC84` up / `#FF4D4D` down, E28 standing) - authored exactly this way, resolved by the engine's own `lpVarHex`
+# beside LP_INK (`PS_PAL = { ...LP_INK, neg: "var(--lp-neg)", pos: "var(--lp-pos)" }`), and what a LONE series takes
+# when it declares nothing. They are E67's, not the old palette, so they are never WARNed as predating it.
+E67_TOKENS = E67_CYCLE + (E67_DEEMPH,) + E67_SIGN
+E67_CITE = "E67, CAPABILITIES.md:34 (the chart is the thumbnail)"
+INK_LISTS = ("series", "bars", "shares")             # the page-spec lists whose items may name a colour
+
+
+def page_inks(page: dict) -> list[str]:
+    """Every ink TOKEN a `ledger_page.v1` spec declares, in the order the page reads them."""
+    out = [str(c) for c in (page.get("colors") or []) if c]
+    for name in INK_LISTS:
+        for item in page.get(name) or []:
+            if isinstance(item, dict) and item.get("color"):
+                out.append(str(item["color"]))
+    return out
+
+
+def ink_note(page: dict | None) -> str | None:
+    """What this page's INKS are, for the row's `why` - and a WARN when they predate E67."""
+    if not page:
+        return None
+    declared = page_inks(page)
+    if not declared:
+        return ("this page's series declare no ink, so it takes E67's ELECTRIC cycle by index "
+                f"({', '.join(E67_CYCLE)} - crimson is the Claude orange #FF8A4C) or, alone, its own "
+                f"sign colour; grey is never a default ({E67_CITE})")
+    old = sorted({c for c in declared if c not in E67_TOKENS})
+    if old:
+        return (f"WARN this page's series predates E67 - its inks are the old palette ({', '.join(old)}): "
+                f"E67's field set is {', '.join(E67_CYCLE)}, measured against the charcoal #25313C, and a "
+                "token the player's LP_INK table cannot resolve is drawn as written. The series file is the "
+                f"EPISODE's, not the compiler's, so it is named here and never rewritten ({E67_CITE}; E99 s11)")
+    if all(c == E67_DEEMPH for c in declared):
+        return (f"WARN every series on this page is `{E67_DEEMPH}` - grey is never a default, it is an "
+                f"explicit de-emphasis an author writes (E67 Apply 3; {E67_CITE})")
+    return (f"this page's series name their own E67 inks ({', '.join(declared)}) and the electric table "
+            f"resolves them; the cycle a page that declares none would take opens on {E67_CYCLE[0]} ({E67_CITE})")
+
+
 CHART_STATE_KINDS = ("chart_to",)   # the species that REDRAW a page's chart UNDER a card
 
 
@@ -1442,23 +1505,118 @@ OUTRO_IS_THE_AUTHORS = ("the outro is the author's - the approved cut ends on it
                         "declared for the clip's own seconds, the dip into it)")
 
 
+# THE OUTRO ATTACHED (E99 s72, BACKLOG R26-187). The operator's second read of the base: *"You didn't
+# attach the outro either."* E41 (2026-09-05): the brand line *"Not a panic. Not a plot. Mechanics."* is a
+# CHANNEL ASSET, recorded once and STITCHED under the Remotion-kit outro card - a script never writes the
+# triad. So when the project defines an outro the base's closing row IS that row: the caller resolves the
+# project's own values (`generate_base_table.outro_resolver` reads them off `build_short.py` without
+# running it) and hands them here, and the compiler writes exactly what the approved cut writes -
+# the clip from `t_outro` to the runtime, `life` declared for the clip's own seconds so the pulse gate
+# credits its drift, the DIP into it (E47: the card is a world change), and the row BEFORE it ending at
+# `t_outro` rather than at the take's last word. The brand line is not a row - it is stitched into the
+# take (`audio.stitch_brand_line`, `brand_gap` after the last word) - so its instant is RECORDED in `why`
+# and nothing on the table pretends to play it.
+OUTRO_EXIT = "dip"          # `build_short.py:443`: E47 - the outro card is a world change, so the dip
+OUTRO_LIFE = "life"         # ... and the clip's own drift is declared, so M05 credits it
+OUTRO_SIGNATURE = {"dip": "dip", "suck": "suck"}     # `approved-mix.json` method rung 9: the scene's own exit token
+OUTRO_SKELETON = "the project's own outro row"
+OUTRO_REQUIRED = ("world", "at", "runtime")
+OUTRO_LEAD_MAX_S = MD.DIP_S       # the MOST an outro card may begin before the take's last word: the DIP's own
+# length, the world change into it (E47; `gate_motion_density.DIP_S`, measured on the reference's 35 dips). The
+# approved cut starts the card `OUTRO_LEAD` 0.1 s early and DISSOLVES it in over the ring (`audio.outro_clock`),
+# which is inside that; anything earlier is not a lead, it is the card playing OVER words still being spoken.
+OUTRO_RUNTIME_EPS = 0.02          # two runtimes this close are ONE runtime (a rounding, not a disagreement) - the
+# same number as `generate_base_table.EPS_RUNTIME`, which is what `outro_resolver` reconciles the clock and the
+# build with before it ever reaches here; `test_generate_base_table.py` pins the two together.
+
+
+def check_outro(outro: dict, runtime: float | None = None, last_word_end: float | None = None) -> None:
+    """The three things an outro must name, or a refusal BY NAME: the world (the clip the project
+    keeps), the instant it starts, and the runtime it plays to. Nothing is defaulted - an outro the
+    caller could not resolve is no outro, and the tail goes back to the author in words.
+
+    With the caller's own `runtime` the two must be the SAME runtime: the take on disk is padded to
+    the build's, so a closing row that plays to a different number is a base that ends where nothing
+    ends. With the take's `last_word_end` the card may not begin more than `OUTRO_LEAD_MAX_S` before
+    it - an outro resolved at 5 s under a 40 s take would silently cut 33 s of SPOKEN take off the
+    table, which is a refusal, never a trim (E99 s11: the compiler never quietly moves a cut)."""
+    missing = [k for k in OUTRO_REQUIRED if outro.get(k) in (None, "")]
+    if missing:
+        raise Refused(f"the outro names no {', '.join(missing)} - the closing row is the PROJECT's own "
+                      "(`build_short.py:443-446`), and the kit names no episode's file")
+    if float(outro["runtime"]) <= float(outro["at"]) + EPS:
+        raise Refused(f"the outro's runtime ({float(outro['runtime']):.2f}s) is not past its start "
+                      f"({float(outro['at']):.2f}s)")
+    if runtime is not None and abs(float(outro["runtime"]) - float(runtime)) > OUTRO_RUNTIME_EPS:
+        raise Refused(f"the outro plays to {float(outro['runtime']):.2f}s and the build's own runtime is "
+                      f"{float(runtime):.2f}s - the take on disk is padded to the BUILD's runtime, so the "
+                      "closing row cannot end anywhere else (`generate_base_table.outro_resolver` takes "
+                      "the build's when the clock disagrees)")
+    if last_word_end is not None and float(outro["at"]) < float(last_word_end) - OUTRO_LEAD_MAX_S - EPS:
+        raise Refused(f"the outro starts at {float(outro['at']):.2f}s and the take's last word ends at "
+                      f"{float(last_word_end):.2f}s - the card would play over {float(last_word_end) - float(outro['at']):.2f}s "
+                      f"of SPOKEN take. It dissolves in at most {OUTRO_LEAD_MAX_S:.2f}s early (the dip's own "
+                      "length, `gate_motion_density.DIP_S`; the approved cut's lead is 0.1s)")
+
+
+def outro_row(outro: dict) -> tuple:
+    """The project's outro AS A ROW - the approved cut's own shape (`build_short.py:443-446`)."""
+    t0, t1 = round(float(outro["at"]), 2), round(float(outro["runtime"]), 2)
+    return (t0, t1, str(outro["world"]), (0, 0, 0), [], str(outro.get("exit") or OUTRO_EXIT),
+            [{"kind": OUTRO_LIFE, "at": t0, "dur": round(t1 - t0, 2)}])
+
+
+def outro_why(outro: dict, rec: dict) -> dict:
+    """The outro row's own `why`: the row it is, where its values came from, and the brand line's
+    instant - the one thing the table cannot carry (E41: the line is stitched into the take)."""
+    t0, t1 = round(float(outro["at"]), 2), round(float(outro["runtime"]), 2)
+    exit_ = str(outro.get("exit") or OUTRO_EXIT)
+    line = outro.get("brand_line_at")
+    rule = (f"the cut CLOSES on the project's own outro row - `{outro['world']}` from {t0:.2f}s to "
+            f"{t1:.2f}s, `{OUTRO_LIFE}` declared for its {round(t1 - t0, 2):.2f}s and the `{exit_}` into it "
+            f"(E47: the card is a world change), the row before it ending at {t0:.2f}s and not at the "
+            f"take's last word. Source: {outro.get('source') or 'the caller'}")
+    rule += (f". The BRAND LINE is stitched into the take at {float(line):.2f}s, under the card "
+             "(E41, `authoring.audio.stitch_brand_line`) - a channel asset recorded once, never a row "
+             "and never a script line" if line is not None else
+             ". No brand line was resolved - E41 stitches one under the card when the channel has it")
+    return {"beat": rec.get("beat"), "group": rec.get("group"), "skeleton": OUTRO_SKELETON,
+            "act": None, "rule": rule, "signature": OUTRO_SIGNATURE.get(exit_, "cut"), "outro": True}
+
+
 def with_idle(plate: str, kind: str = CLOSE_IDLE) -> tuple[str, bool]:
     """`(the plate id carrying an idle, whether one was added)` - E49: nothing ever goes truly still."""
     return ((plate, False) if IDLE_OPT in str(plate)
             else (f"{plate}{IDLE_OPT}{kind}", True))
 
 
-def close_the_cut(rows: list[tuple], why: list[dict], runtime: float | None = None) -> list[tuple]:
+def close_the_cut(rows: list[tuple], why: list[dict], runtime: float | None = None,
+                  outro: dict | None = None, last_word_end: float | None = None) -> list[tuple]:
     """The cut's LAST row, read against the runtime the build will play - and named in `why`.
 
-    Nothing is invented: a closing world is emitted only where the plan names one, the hold only
-    where the caller names a runtime, and otherwise the tail is handed back to the author in words.
-    The rows are given back (the last one replaced when it is held)."""
+    Nothing is invented: the OUTRO row is emitted only where the caller resolved the project's own
+    (E41 / E99 s72), a closing world only where the plan names one, the hold only where the caller
+    names a runtime, and otherwise the tail is handed back to the author in words. The rows are
+    given back (the last one replaced when it is held or trimmed to the outro's start)."""
     recs = rows_why(why)
     if not rows or not recs:
         return rows
     last, rec = list(rows[-1]), recs[-1]
     end = round(float(last[1]), 2)
+    if outro:
+        check_outro(outro, runtime, last_word_end)
+        t0 = round(float(outro["at"]), 2)
+        if t0 <= float(last[0]) + EPS:
+            raise Refused(f"the outro starts at {t0:.2f}s, at or before the last row's own start "
+                          f"({float(last[0]):.2f}s) - the closing row cannot swallow the beat before it")
+        if abs(t0 - end) > EPS:
+            last[1] = t0
+            rows[-1] = tuple(last)
+            rec["rule"] += (f"; this row ends at the OUTRO's start ({t0:.2f}s) rather than at {end:.2f}s - "
+                            "the approved cut's last page row ends on `t_outro` (`build_short.py:443`)")
+        rows.append(outro_row(outro))
+        why.append(outro_why(outro, rec))
+        return rows
     if world_of(str(last[2])) != "page":
         rec["rule"] += (f"; the cut ends on the closing world the plan's last beat names, held to {end:.2f}s - "
                         "a world of its own carries the seconds after the last word, which is what the approved "
@@ -1488,7 +1646,8 @@ def close_the_cut(rows: list[tuple], why: list[dict], runtime: float | None = No
 
 def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9",
             library: list[dict] | None = None, pages=None, worlds=None,
-            runtime: float | None = None) -> tuple[list[tuple], list[dict]]:
+            runtime: float | None = None, outro: dict | None = None,
+            last_word_end: float | None = None) -> tuple[list[tuple], list[dict]]:
     """The AUTHORED beat plan as the approved skeleton: `(rows, why)`.
 
     `rows` are the kit's own tuples - what `table.write_shot_table` takes and `table.load_rows`
@@ -1512,6 +1671,16 @@ def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9"
     row the runtime for its end whatever the table says, so with it the last row is held to the
     runtime and the table says what will play; without it the tail is named in `why` and handed back
     to the author (`close_the_cut`).
+
+    `outro` is the PROJECT's own outro row, resolved by the caller (`generate_base_table.outro_resolver`):
+    `{world, at, runtime, exit?, brand_line_at?, source?}`. With it the cut CLOSES on that row - the clip
+    from `t_outro` to the runtime with its `life`, the dip into it, the row before it ending at `t_outro`
+    (E41 / E99 s72, `build_short.py:443-446`); without it the tail is the runtime hold or the author's.
+
+    `last_word_end` is the instant the take's last word ENDS - the one an outro is clocked off
+    (`audio.outro_clock`). The caller may hand its own (`generate_base_table` already computes it);
+    otherwise it is read from `words`. An outro that starts more than the dip before it is REFUSED,
+    never trimmed: it would be playing a card over words still being spoken (`check_outro`).
 
     `worlds` is the caller's WORLD resolver - `worlds(<a plate or clip id>) -> the id the table should
     carry`. The plan names the hook's world as the cut recorded it (`clip:<name>`), and where that file
@@ -1539,7 +1708,9 @@ def compile(plan, words=None, defaults: dict | None = None, aspect: str = "16:9"
     orphans = camera_entries_with_no_card(rows)
     if orphans:
         raise Refused("a page arrives by a card no row carries: " + "; ".join(orphans))
-    rows = close_the_cut(rows, why, runtime)
+    if last_word_end is None and ws:
+        last_word_end = max(float(w["end_s"]) for w in ws)
+    rows = close_the_cut(rows, why, runtime, outro, last_word_end)
     if ws:
         T.hold_until(rows, ws)
     return rows, why
@@ -2012,8 +2183,12 @@ def _row(g: dict, pick: dict, t0: float, t1: float, d: dict, aspect: str, first:
         notes.append(f"`{becomes}` keeps the throw the plan gave it and takes no room of this page's: it is the card "
                      "the NEXT world grows out of - the camera pushes to it, or it snaps up, on the row after this "
                      "one (E99 s71; CAPABILITIES.md:76 and :84; `build_short.py:403-420`)")
+    page = _page_spec(plate, pages, notes)               # the page's own geometry - and its own INKS (E67)
+    ink = ink_note(page)
+    if ink:
+        notes.append(ink)
     docks = place_cards([x for x in docks if str(x[0]) != becomes],   # ... and then it is given -
-                        _page_spec(plate, pages, notes), aspect, notes,
+                        page, aspect, notes,
                         species, t1, d) + thrown        # ... and the page PARKS when it has none to give
     for sp in species:                                  # the parks the placer just made are checked like the rest
         if str(sp.get("kind")) == "chart_to":

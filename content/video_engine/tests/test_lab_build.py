@@ -583,7 +583,10 @@ def test_a_world_change_inside_a_recipe_is_its_own_row_so_m44_can_measure_it(tmp
     # the hook page rendered as a card, and the page grows out of THAT. Never an arbitrary bed still, and never one
     # of the bed's clips (the player measures the rect off the card's `img`; a video card's img is empty)
     card = LB.LAB_CARD.format(series=LB.parse_ledger(str(page[2]))["series"])
-    assert plate[5] == "dip" and f"snap={card}" in str(page[2])
+    # E99 s72 (fd2861b): the recipe LOST its `exit:dip` member by the operator's own word - "We don't do a fade/dip
+    # before what is already it's own transition" - so the plate row carries NO veil and the snap IS the transition
+    assert plate[5] is None, "no dip before a snap - a transition before a transition (E47, E99 s72)"
+    assert f"snap={card}" in str(page[2])
     assert plate[4][-1][0] == card, "the dock the snap names is the page's own card"
     assert float(page[1]) - float(page[0]) >= LB.GMD.PLATE_MIN_S - 0.01, "the last world of a beat is never a flash"
 
@@ -965,7 +968,8 @@ def test_the_whole_table_mode_builds_the_generated_base_and_writes_neither_appro
     assert approved_pair() == before, ("the project's sound/SOUND-PLAN.json and SHOT-TABLE-SHORT.py are the APPROVED "
                                        "cut's - `build_short.main` writes both, so it is never called")
     record = assert_the_base_built(BASE_TABLE, into, runs, "p66-base-t")
-    assert record["rows"] == 6, "the P66 base is six rows since the fourth pass (the hook's world row under the mount, cc16776)"
+    assert record["rows"] == 7, ("the P66 base is seven rows since the sixth pass: the hook's world row under the mount "
+                                 "(cc16776) and the project's OUTRO as the closing row (E41; E99 s72 Apply 6)")
 
 
 def test_the_whole_table_mode_takes_any_whole_table_and_leaves_the_approved_pair(tmp_path, monkeypatch):

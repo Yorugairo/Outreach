@@ -985,6 +985,33 @@ def embed_cues(bed, build: Path, cues: list[dict], timeline_name: str = TIMELINE
     return missing
 
 
+def bind_embedded_cues(build: Path, plan_path: Path, timeline_name: str) -> list[str]:
+    """E99 s72's second fault closed AT THE SOURCE: once the plan is embedded, every cue whose effect does not fire
+    at its instant in the COMPILED timeline is dropped from the timeline's `sound` and from the private plan, and
+    named. The binder (`authoring.audio.bind_cues`) chooses no sound, adds no cue and moves no gain; a slot it
+    cannot judge (a bed, a press pack) survives. Runs here, after `embed_cues`, so a rebuild never re-embeds an
+    unbound cue - the sixth pass bound them from the outside (`generate_base_table.py --bind-cues`) and every
+    `--table` rebuild put the five back. An instant the map has no cue for stays silent (E99 s37); `cue_notes`
+    already names those, so only the DROPPED cues are returned here."""
+    from authoring import audio as A
+    tl_path = Path(build) / timeline_name
+    if not tl_path.is_file():
+        return []
+    tl = json.loads(tl_path.read_text(encoding="utf-8"))
+    kept, dropped = A.bind_cues(list(tl.get("sound") or []), tl)
+    if dropped:
+        tl["sound"] = kept
+        tl_path.write_text(json.dumps(tl, indent=1), encoding="utf-8")
+    if Path(plan_path).is_file():
+        plan = json.loads(Path(plan_path).read_text(encoding="utf-8"))
+        plan_kept, plan_dropped = A.bind_cues(list(plan.get("cues") or []), tl)
+        plan["cues"] = plan_kept
+        plan["bound"] = (f"bound to {timeline_name} by lab_build.py after the embed (E99 s72): every cue whose "
+                         f"effect does not fire at its instant is dropped; {len(plan_dropped)} dropped")
+        Path(plan_path).write_text(json.dumps(plan, indent=1), encoding="utf-8")
+    return [f"DROPPED {d['slot']} at {d['at']:.2f}s: {d['why']}" for d in dropped]
+
+
 def resound(bed, build: Path, rows: list[tuple], t0: float, t1: float) -> dict:
     """The candidate's window re-sounded, and the record's own `sound` block: how many approved cues were kept, which
     were dropped with the landings they marked, which the candidate's rows derived, and every gap named."""
@@ -2373,6 +2400,7 @@ def build_table(repo: Path, table: Path, into: Path, label: str, dry_run: bool, 
         else:
             notes = cue_notes(cues, row_landings(rows, 0.0, end_s)) + embed_cues(bed, into, cues,
                                                                                 TABLE_TIMELINE_NAME)
+            notes += bind_embedded_cues(into, plan_path, TABLE_TIMELINE_NAME)   # E99 s72: bound to what fires
             record["sound"]["notes"] = [n for n in notes if n]
             for line in record["sound"]["notes"]:
                 print(f"      [sound] {line}")

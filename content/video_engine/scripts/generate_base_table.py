@@ -3,6 +3,7 @@
     python content/video_engine/scripts/generate_base_table.py <project> <build> [--aspect 9:16]
         [--table PATH] [--force "<reason>"]
     python content/video_engine/scripts/generate_base_table.py <project> <build> --departures
+    python content/video_engine/scripts/generate_base_table.py <project> <build> --bind-cues
 
 E99 s68: *"the compiler outcome doesn't have to be the final solution, the agent can use it to establish the base of
 the video and then modify."* **The output is a BASE, never a cut.** This CLI is the door: it reads the build's
@@ -33,11 +34,24 @@ THE TABLE'S PATH. `<project>/SHOT-TABLE-SHORT.py` is where a project's `build_sh
 `table.apply_sidecar` and the compiler read it. A PRIVATE build never writes over the project's approved table
 (`lab_build.py:96` writes its own inside the build): pass `--table <build>/SHOT-TABLE-SHORT.py` for one.
 
+THE CUT'S CLOSE (E41 / E99 s72). Where the project defines an outro - the Remotion-kit card and the brand line
+stitched under it - the base's closing row IS that row: `outro_resolver` READS the project's own `build_short.py`
+with `ast` (never runs it) for `OUTRO`, `OUTRO_S`, `OUTRO_LEAD` and the brand line's dials, clocks them through
+`authoring.audio.outro_clock` off the take's last word, and `shapes.close_the_cut` writes the clip from `t_outro`
+to the runtime with its `life` and the dip into it - the row before it ending at `t_outro`. The `why` names the
+outro row, where its values came from, and the brand line's instant (which is stitched into the take, not a row).
+
+THE CUE PLAN (E99 s72). `--bind-cues` binds a BUILT build's cues to what its compiled timeline actually plays
+(`authoring.audio.bind_cues`): the audit cue by cue, then the plan and the timeline's `sound` with every cue whose
+effect does not fire at its instant DROPPED and named. It runs after the build because the bed's cue plan is
+written from the rows before anything is compiled, and a row token is not what the frame plays.
+
 It names no episode: the project, the build, the aspect and every path are arguments, read off disk.
 """
 from __future__ import annotations
 
 import argparse
+import ast
 import json
 import re
 import sys
@@ -49,7 +63,7 @@ if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
 import lint_species_choice as LSC  # noqa: E402  (TABLE_NAME - what a project's build writes; never re-typed here)
-from authoring import shapes as SH, table as T  # noqa: E402
+from authoring import audio as A, shapes as SH, table as T  # noqa: E402
 
 REPO = SH.REPO
 PLAN_NAME = "BEAT-PLAN.jsonl"
@@ -68,6 +82,7 @@ ASPECTS = ("16:9", "9:16")
 DEFAULT_ASPECT = "9:16"                       # the shorts lane R26-171 / R26-172 bind; --aspect 16:9 for a long form
 ABSENT = "<no row>"
 VALUE_MAX = 160                               # how much of a field's value a departure line prints
+EPS_RUNTIME = 0.02                            # two runtimes this close are the same runtime (a rounding, not a disagreement)
 
 
 class Refused(SystemExit):
@@ -153,10 +168,12 @@ def compile_base(build: Path, aspect: str, project: Path | None = None) -> tuple
     if not plan.is_file():
         raise Refused(f"FAIL: no {PLAN_NAME} in {rel(build)} - the compiler's INPUT is AUTHORED (E99 s66, M41); "
                       "this tool never writes one")
+    worlds = world_resolver(project, build) if project is not None else None
     try:
         return SH.compile(SH.load_plan(plan), read_words(build), SH.DEFAULTS, aspect, runtime=read_runtime(build),
-                          pages=page_resolver(project) if project is not None else None,
-                          worlds=world_resolver(project, build) if project is not None else None)
+                          pages=page_resolver(project) if project is not None else None, worlds=worlds,
+                          outro=outro_resolver(project, build, worlds) if project is not None else None,
+                          last_word_end=last_word_end(build))
     except SH.Refused as exc:
         raise Refused(f"FAIL: {rel(plan)}: {exc}") from None
 
@@ -274,6 +291,223 @@ def write_base(project: Path, build: Path, table: Path, aspect: str,
     doc = build / BASE_DOC_NAME
     doc.write_text(base_doc(project, build, table, rows, why, aspect, force), encoding="utf-8")
     return rows, why
+
+
+# ---------------------------------------------------------------- the project's own outro (E41 / E99 s72)
+#
+# The operator, on the generated base v7: *"You didn't attach the outro either."* E41 (2026-09-05): the
+# brand line *"Not a panic. Not a plot. Mechanics."* is a CHANNEL ASSET, recorded once and STITCHED under
+# the Remotion-kit outro card - so the closing row is the PROJECT's outro clip, not the last page held to
+# the runtime. The kit names no episode, so the values are resolved HERE, off the project's own
+# `build_short.py` - and READ, never run: the module is parsed with `ast` and its module-level literals are
+# evaluated by hand. Importing it would execute an episode's build-time paths and side effects, and running
+# `main()` would write the APPROVED cut's own files (`lab_build.py:260` refuses to for the same reason).
+OUTRO_BED = "build_short.py"          # where a project keeps the values its own outro row is built from
+OUTRO_CONSTS = ("OUTRO", "OUTRO_S", "OUTRO_LEAD", "BRAND_LINE", "BRAND_GAP", "BRAND_TAIL")
+OUTRO_NEEDED = ("OUTRO", "OUTRO_S", "OUTRO_LEAD")     # without these three there is no outro row to write
+OUTRO_CLIP_FN = "clip"                                # the bed's own `clip(<name>, OUTRO)` helper
+OUTRO_SUFFIX = ".mp4"                                 # what `docks.seekable_clip` writes into <build>/clips/
+
+
+def _const(node, project: Path):
+    """One module-level literal of a bed: a number, a string, or a path built off `HERE` (the project).
+
+    The two path shapes a bed writes are `HERE / "<rel>"` and `HERE.parents[<n>] / "<rel>"`; anything
+    else returns None and the caller names what it could not read rather than guessing at it."""
+    if isinstance(node, ast.Constant):
+        return node.value
+    if isinstance(node, ast.Name) and node.id == "HERE":
+        return project
+    if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Attribute) \
+            and node.value.attr == "parents" and isinstance(node.value.value, ast.Name) \
+            and node.value.value.id == "HERE" and isinstance(node.slice, ast.Constant):
+        try:
+            return project.parents[int(node.slice.value)]
+        except (IndexError, TypeError, ValueError):
+            return None      # a depth this project does not have, or a subscript that is not an int:
+            # unreadable, like anything else this hand evaluator does not understand, and the caller
+            # NAMES what it could not read rather than dying on a bed it only meant to parse
+    if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
+        left, right = _const(node.left, project), _const(node.right, project)
+        if isinstance(left, Path) and isinstance(right, str):
+            return left / right
+    return None
+
+
+def bed_constants(bed: Path, project: Path, names: tuple[str, ...]) -> dict:
+    """The named module-level constants of a bed, READ with `ast` - `a, b = 1, 2` unpacked as the
+    module writes it. A name the reader cannot evaluate is simply absent from the result."""
+    tree = ast.parse(bed.read_text(encoding="utf-8"), filename=str(bed))
+    out: dict = {}
+    for node in tree.body:
+        if not isinstance(node, ast.Assign):
+            continue
+        for target in node.targets:
+            pairs = (zip(target.elts, node.value.elts)
+                     if isinstance(target, ast.Tuple) and isinstance(node.value, ast.Tuple)
+                     else [(target, node.value)])
+            for name, value in pairs:
+                if isinstance(name, ast.Name) and name.id in names:
+                    got = _const(value, project)
+                    if got is not None:
+                        out[name.id] = got
+    return out
+
+
+def outro_clip_name(bed: Path, fallback: Path) -> str:
+    """The NAME the bed's outro row gives its clip - read off its own `clip("<name>", OUTRO)` call, so
+    the base points at the file the build already wrote (`docks.seekable_clip` writes it into
+    `<build>/clips/`). Absent, the source's own stem at `.mp4`, which is what that helper would make."""
+    for node in ast.walk(ast.parse(bed.read_text(encoding="utf-8"), filename=str(bed))):
+        if (isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == OUTRO_CLIP_FN
+                and len(node.args) > 1 and isinstance(node.args[0], ast.Constant)
+                and isinstance(node.args[1], ast.Name) and node.args[1].id == "OUTRO"):
+            return str(node.args[0].value)
+    return Path(fallback).with_suffix(OUTRO_SUFFIX).name
+
+
+def last_word_end(build: Path) -> float | None:
+    """The take's LAST WORD - the instant the outro clock is measured from (`build_short.main`:
+    `t_vo_end` is the timeline's runtime BEFORE the outro extends it)."""
+    words = read_words(build) or []
+    ends = [float(w.get("end", w.get("end_s", 0)) or 0) for w in words]
+    return round(max(ends), 3) if ends else None
+
+
+def outro_resolver(project: Path, build: Path, worlds=None) -> dict | None:
+    """The project's OWN outro as `shapes.close_the_cut` takes it, or None when it defines none.
+
+    `{world, at, runtime, exit, brand_line_at, source}` - the same values `build_short.main` computes,
+    through the same kit function (`authoring.audio.outro_clock`), off the same constants. The runtime
+    the BUILD already carries wins when the two disagree, because the take on disk is padded to it."""
+    bed = project / OUTRO_BED
+    if not bed.is_file():
+        return None
+    try:
+        got = bed_constants(bed, project, OUTRO_CONSTS)
+    except SyntaxError as exc:
+        raise Refused(f"FAIL: {rel(bed)} cannot be parsed for its outro constants ({exc})") from None
+    if any(k not in got for k in OUTRO_NEEDED):
+        return None
+    t_vo_end = last_word_end(build)
+    if t_vo_end is None:
+        return None
+    brand = got.get("BRAND_LINE")
+    line_s, line_note = 0.0, None
+    if isinstance(brand, Path) and brand.is_file():
+        try:
+            line_s = A.probe_duration(brand)
+        except (OSError, ValueError) as exc:
+            # no ffprobe on PATH (`FileNotFoundError`), a probe that died (`OSError`), or a stream that
+            # reports no duration (`float("N/A")`). The brand line is a CHANNEL asset and its length only
+            # moves the runtime the clock proposes - the build's own runtime stands over that anyway - so
+            # the tool reads it as 0.0, SAYS so in the source, and never crashes the base on it.
+            line_s, line_note = 0.0, f"brand line duration unreadable: {exc}"
+    gap, tail = float(got.get("BRAND_GAP") or 0.0), float(got.get("BRAND_TAIL") or 0.0)
+    at, t_line, runtime = A.outro_clock(t_vo_end, line_s, outro_lead=float(got["OUTRO_LEAD"]),
+                                        outro_s=float(got["OUTRO_S"]), brand_gap=gap, brand_tail=tail)
+    built = read_runtime(build)
+    source = (f"`{rel(bed)}` read with ast (OUTRO {rel(Path(got['OUTRO']))}, OUTRO_S {got['OUTRO_S']}, "
+              f"OUTRO_LEAD {got['OUTRO_LEAD']}), clocked by `authoring.audio.outro_clock` off the take's "
+              f"last word at {t_vo_end:.2f}s")
+    if line_note:
+        source += f"; {line_note}"
+    if built is not None and abs(float(built) - runtime) > EPS_RUNTIME:
+        source += (f"; the BUILD's own runtime ({float(built):.2f}s) stands over the clock's "
+                   f"({runtime:.2f}s) - the take on disk is padded to it")
+        runtime = round(float(built), 2)
+    world = f"clip:{outro_clip_name(bed, Path(got['OUTRO']))}"
+    return {"world": str(worlds(world)) if worlds else world, "at": at, "runtime": runtime,
+            "exit": SH.OUTRO_EXIT, "brand_line_at": t_line if line_s else None, "source": source}
+
+
+# ---------------------------------------------------------------- the cues bound to what fires (E99 s72)
+#
+# The operator, on the generated base v7: *"Sound effects are way off, we're playing spiral and whirls when
+# there's no spiral or whirl effect."* The bed's cue map keys every page cue on the ROW TOKEN, and a token
+# is not what the frame plays (`authoring.audio.bind_cues` carries the whole finding). The cue plan a
+# private build gets is written from the rows BEFORE anything is compiled (`lab_build.write_cue_plan`), so
+# the binding has to run AFTER the compile, against the compiled timeline - which is this mode:
+#
+#     generate_base_table.py <project> <build> --bind-cues [--timeline base.timeline.json]
+#
+# It prints the audit cue by cue (what it claims, whether that effect fires there), then keeps only the
+# bound cues in BOTH places a build carries them - `<build>/SOUND-PLAN.json` (the plan) and the compiled
+# timeline's own `sound` list (what the player and `gate_motion_density` read) - and names every firing
+# effect the map leaves silent. It ADDS no cue and chooses no file: dropping needs no sound on disk, and
+# inventing one is refused by E99 s37.
+CUE_PLAN_NAME = "SOUND-PLAN.json"          # `lab_build.CUE_PLAN_NAME` - the PRIVATE plan, never the project's
+BASE_TIMELINE_NAME = "base.timeline.json"  # `lab_build.TABLE_TIMELINE_NAME` - what the whole-table mode compiles
+
+
+def cue_audit(cues: list[dict], timeline: dict) -> list[str]:
+    """The audit as a markdown table: one row per cue - its instant, what it claims fires, and what the
+    COMPILED timeline actually plays there. This is the evidence; the drop is its consequence.
+
+    Read off `audio.bind_report`, the SAME nearest-first, consume-once pairing the binder applies, so the
+    table can never print a YES for a cue the binder then drops (two arrivals of one kind inside the
+    tolerance take a cue each, and a third cue on them is the one left over)."""
+    out = ["| cue | at | claims | does it fire there? |", "|---|---|---|---|"]
+    for r in A.bind_report(cues, timeline)["cues"]:
+        key, at, got = r["key"], r["at"], r["fire"]
+        if key is None:
+            out.append(f"| `{r['cue'].get('slot')}` | {at:.2f} | - (a bed or an unmapped slot) | kept - not this "
+                       "binder's to judge |")
+            continue
+        claim = f"{key['kind']} ({key['what']})" + (f", {key['mass']}" if key.get("mass") else "")
+        verdict = (f"YES - {got['kind']} ({got['what']}) at {got['at']:.2f}s on {got['scene']}" if got
+                   else f"NO - {r['why']}")
+        out.append(f"| `{r['cue'].get('slot')}` | {at:.2f} | {claim} | {verdict} |")
+    return out
+
+
+def refuse_by_name(build: Path) -> None:
+    """`build-short*`, by NAME - the same guard the sibling writer carries (`lab_build.refuse_by_name`,
+    `lab_build.py:683`), in the same words and off the same constant.
+
+    `--bind-cues` REWRITES a timeline and a cue plan in place, and `build` is whatever the CLI is handed:
+    pointed at the episode's `build-short/` with `--timeline timeline.json` it would drop cues out of the
+    APPROVED cut. Nothing is read and nothing is written before this."""
+    from lab_build import REFUSED_PREFIX        # the one place the name lives (`lab_build.py:138`)
+    build = Path(build)
+    if build.name.startswith(REFUSED_PREFIX) or any(q.name.startswith(REFUSED_PREFIX) for q in build.parents):
+        raise Refused(f"FAIL: {build.name}: this tool never binds cues inside `{REFUSED_PREFIX}*` - that is the "
+                      f"approved cut and every watched variant beside it, and a served build is never rewritten "
+                      f"under the operator (memory `review-link-frozen-copy`, E99 s11). Bind the PRIVATE build "
+                      f"the lab compiled (`lab_build.py --table ... --into ...`)")
+
+
+def bind_build_cues(build: Path, timeline_name: str) -> int:
+    """The build's cues bound to its compiled timeline, in the plan AND in the timeline. Exit 0."""
+    refuse_by_name(build)
+    tl_path = build / timeline_name
+    if not tl_path.is_file():
+        raise Refused(f"FAIL: no {rel(tl_path)} - the cues are bound to what the COMPILED timeline plays, "
+                      "so the build is compiled first (`lab_build.py --table ... --into ...`)")
+    timeline = json.loads(tl_path.read_text(encoding="utf-8"))
+    plan_path = build / CUE_PLAN_NAME
+    plan = json.loads(plan_path.read_text(encoding="utf-8")) if plan_path.is_file() else None
+    embedded = list(timeline.get("sound") or [])
+    source = (plan or {}).get("cues") if plan else embedded
+    print("\n".join(cue_audit(list(source or []), timeline)))
+    kept_tl, dropped_tl = A.bind_cues(embedded, timeline)
+    timeline["sound"] = kept_tl
+    tl_path.write_text(json.dumps(timeline, indent=1), encoding="utf-8")
+    dropped = dropped_tl
+    if plan is not None:
+        kept, dropped = A.bind_cues(list(plan.get("cues") or []), timeline)
+        plan["cues"] = kept
+        plan["bound"] = (f"bound to {timeline_name} by generate_base_table.py --bind-cues (E99 s72): every cue "
+                         f"whose effect does not fire at its instant is dropped; {len(dropped)} dropped")
+        plan_path.write_text(json.dumps(plan, indent=1), encoding="utf-8")
+    print(f"\n{rel(tl_path)}: {len(embedded)} cues -> {len(kept_tl)} bound ({len(dropped_tl)} dropped)")
+    for d in dropped:
+        print(f"  DROPPED {d['slot']} at {d['at']:.2f}s: {d['why']}")
+    for note in A.unsounded(kept_tl, timeline):
+        print(f"  [sound] {note}")
+    if plan is not None:
+        print(f"{rel(plan_path)}: {len(plan['cues'])} cues kept")
+    return 0
 
 
 # ---------------------------------------------------------------- the departures
@@ -413,6 +647,11 @@ def parse_args(argv: list[str] | None) -> argparse.Namespace:
                     help="overwrite a table newer than the plan; the REASON is recorded in BASE-TABLE.md")
     ap.add_argument("--departures", action="store_true",
                     help="write nothing: diff the build's table (and its sidecar) against the base, read the ledger")
+    ap.add_argument("--bind-cues", action="store_true",
+                    help="write no table: bind the BUILT build's cues to what its compiled timeline plays "
+                         "(E99 s72) - the audit, then the plan and the timeline with the unbound cues dropped")
+    ap.add_argument("--timeline", default=BASE_TIMELINE_NAME,
+                    help=f"--bind-cues' compiled timeline inside the build (default {BASE_TIMELINE_NAME})")
     return ap.parse_args(argv)
 
 
@@ -423,6 +662,8 @@ def main(argv: list[str] | None = None) -> int:
         print("FAIL: --force takes a REASON - it is written into BASE-TABLE.md and stays with the cut", file=sys.stderr)
         return 1
     try:
+        if args.bind_cues:
+            return bind_build_cues(build, args.timeline)
         if args.departures:
             return report_departures(project, build, final_table_path(project, build, args.table), args.aspect)
         table = args.table if args.table is not None else project / TABLE_NAME

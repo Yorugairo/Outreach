@@ -10,6 +10,7 @@ from __future__ import annotations
 import math
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 STOP_MODULE = Path(__file__).resolve().parents[1] / "kinetics/stopaction.mjs"
@@ -184,3 +185,270 @@ def bed_envelope(rows, swell_db: float, snap_s: float, fallback_end, *,
                 env += [[round(t_throw - lead_s, 2), 0.0], [round(t_throw, 2), swell_db],
                         [round(t_end, 2), swell_db], [round(t_end + fall_s, 2), 0.0]]
     return env
+
+
+# --- THE CUE IS BOUND TO WHAT FIRES (E99 s72, BACKLOG R26-187) ----------------------------------
+#
+# The operator, on the first generated base (v7, 2026-09-17): *"Sound effects are way off, we're
+# playing spiral and whirls when there's no spiral or whirl effect."* He was right twice over, and
+# both faults are one fault - a cue keyed on the ROW TOKEN instead of on the frame:
+#
+#   * `page_transitions` above reads `:cut` off the RAW plate id, and a page carrying a `;then=` or
+#     `;idle=` tail no longer ENDS with `:cut` (`LEGACY_SUFFIX_OPTS` - the reading the shipped cue
+#     plans were built on, which must not move under them). So a page that leaves ON THE CUT was
+#     given a WHIRL, the retract's own sound, at every scene the base carries a chained page.
+#   * the map plays its page-ROLL at any entry that is not a mount or a spiral, and three of the
+#     base's four pages enter by `axes`, `snap` or `camera` - entries with no cream roll-out at all
+#     (`gate_motion_density.ARRIVES_BUILT`; P53 T1: the axes page LANDS with its ground drawn).
+#
+# The COMPILED timeline knows, because the PLAYER's own clocks read it: `spiralClocks` in
+# `scene-evidence-engine.mjs` retracts a page only when `world.page.exit !== "cut"`, over the scene's
+# last `LP_RETRACT.COLOURS + CHARCOAL` seconds, and unwinds one in only when `enter === "spiral"`.
+# So the truth stream is the compiled timeline's, walked by `recipe_walk.events` - the same walk the
+# drift gate and the one-shot floor already read - and a cue whose effect DOES NOT FIRE at its instant
+# is DROPPED and named.
+#
+# NOTHING IS INVENTED HERE. No file is chosen, no gain is set, no cue is added: the episode's own map
+# still says WHICH sound and how loud (E99 s37 - no sound is invented for an instant that has none),
+# and an instant the map leaves silent is NAMED by `unsounded`, as `lab_build.cue_notes` names one.
+# This binder only ever removes a cue the frame does not play, and says why.
+#
+# It is a KIT function, not the bed's: `build_short.sound_cues` is an APPROVED cut's cue map and is
+# never edited to fix a base (E99 s11). The approved cuts keep the plans they shipped with.
+
+ROLL_OUT = "roll-out"          # a page with NO declared entry rolls its cream out - the ONLY entry the page-roll cue belongs to
+SPIRAL = "spiral"
+NO_RETRACT = "cut"             # build_scene_timeline_f.LEDGER_EXITS: `exit=cut` is the only no-retract page exit
+WHIRL, FLIP = "whirl", "flip"  # the bed's own map: a page that arrived by spiral drains as a WHIRL, any other as a FLIP
+SUCK = "suck"
+BOUND_KINDS = ("page enter", "page retract", "landing", SUCK)   # the cue kinds this binder has a truth for
+CUE_SLOT = re.compile(r"^(?P<kind>page enter|page retract|landing|suck|press)"
+                      r"(?:\s+(?P<n>\d+))?(?:\s*\((?P<what>[^)]*)\))?\s*$")
+CUE_ROW_ID = "s{n:02d}"        # `build_scene_timeline_f.scene_row_id`: the nth ROW names its scene `s01`, `s02`, ...
+                               # and a slot is numbered by its row (`build_short.sound_cues`) - the one handle a cue
+                               # has on WHERE it belongs, and the difference between row 5's landing and row 2's
+
+
+def _scripts_on_path() -> None:
+    root = str(Path(__file__).resolve().parents[1])
+    if root not in sys.path:
+        sys.path.insert(0, root)
+
+
+def walk():
+    """`recipe_walk`, imported lazily - the ONE walk of a compiled timeline both gates already read."""
+    _scripts_on_path()
+    import recipe_walk
+    return recipe_walk
+
+
+def gates():
+    """`gate_motion_density`, imported lazily - the retract's own seconds and the cue tolerance, by
+    name (`LP_RETRACT_S`, `CUE_TOL_S`), never re-typed here."""
+    _scripts_on_path()
+    import gate_motion_density
+    return gate_motion_density
+
+
+def scene_page(scene) -> dict | None:
+    page = ((scene or {}).get("world") or {}).get("page")
+    return page if isinstance(page, dict) else None
+
+
+def page_entry(page: dict) -> str:
+    """A page's entry AS THE SOUND MAP MUST READ IT: an absent `enter` is the cream ROLL-OUT.
+
+    `recipe_walk` writes `page_enter:mount` for an absent entry (its own default), and a mount is the
+    one entry with no page turn at all - so the walk's card cannot be the cue's key and the page block
+    is read instead. Everything else is the compiler's own vocabulary (`LEDGER_ENTERS`)."""
+    return str(page.get("enter") or ROLL_OUT).split("=", 1)[0]
+
+
+def fired(timeline, dials: dict | None = None) -> list[dict]:
+    """Every transition and arrival the COMPILED timeline actually PLAYS, as the cue map names them.
+
+    `[{kind, what, at, until, scene, ref}]` in time order: a page ENTER at the scene's start (its
+    `what` the page's own entry, `roll-out` when it declares none), a page RETRACT over the scene's
+    last `LP_RETRACT_S` where the page does not leave on the cut (`whirl` when it arrived by spiral,
+    `flip` otherwise - the bed's own map), a LANDING at each weighted dock's CONTACT frame
+    (`landing_contact`, so the sound cannot drift from the motion), and a SUCK at a scene that ends
+    on one. These are the instants a cue may be bound to; every other instant is silence the map
+    never mapped."""
+    W, G = walk(), gates()
+    scenes = list((timeline or {}).get("scenes") or [])
+    by_id = {str(s.get("scene_id") or i): s for i, s in enumerate(scenes)}
+    dials = dials or stop_dials()
+    out: list[dict] = []
+    for e in W.events(timeline):
+        scene = by_id.get(e.scene) or {}
+        span = list(scene.get("span") or [e.t, e.t])
+        t1 = float(span[1] if len(span) > 1 else span[0])
+        if e.cls == "page_enter":
+            page = scene_page(scene) or {}
+            enter = page_entry(page)
+            out.append({"kind": "page enter", "what": enter, "at": e.t, "until": e.t,
+                        "scene": e.scene, "ref": e.ref})
+            if str(page.get("exit") or "") != NO_RETRACT:
+                out.append({"kind": "page retract", "what": WHIRL if enter == SPIRAL else FLIP,
+                            "at": round(t1 - sum(G.LP_RETRACT_S), 2), "until": round(t1, 2),
+                            "scene": e.scene, "ref": e.ref})
+        elif e.cls == "arrival":
+            arrive = str(e.card).split(":", 1)[1]
+            contact = round(landing_contact(e.t, arrive, dials), 2)
+            out.append({"kind": "landing", "what": arrive, "at": contact, "until": contact,
+                        "scene": e.scene, "ref": e.ref, "mass": e.option or "paper"})
+        elif e.cls == "exit" and str(e.ref or "").split(":", 1)[0] == SUCK:
+            out.append({"kind": SUCK, "what": SUCK, "at": round(t1, 2), "until": round(t1, 2),
+                        "scene": e.scene, "ref": e.ref})
+    return sorted(out, key=lambda r: (r["at"], r["kind"], r["what"]))
+
+
+def cue_key(cue: dict) -> dict | None:
+    """What a cue CLAIMS fires, read off its slot: `{kind, what, mass, n}` - or None when the slot names
+    nothing this binder has a truth for (a bed, a press pack, a slot a later map invents). A cue the
+    binder cannot judge is never dropped. `n` is the slot's own ROW number, KEPT (`cue_scene` turns it
+    into the scene that row compiled to) - it is the difference between a cue for row 5's landing and
+    row 2's, which are the same kind and the same `what` one tolerance apart."""
+    m = CUE_SLOT.match(str(cue.get("slot") or "").strip())
+    if m is None or m.group("kind") not in BOUND_KINDS:
+        return None
+    kind, what = m.group("kind"), (m.group("what") or "").strip()
+    n = int(m.group("n")) if m.group("n") else None
+    parts = [p.strip() for p in what.split(",")] if what else []
+    if kind == "page enter":
+        return {"kind": kind, "what": parts[0] if parts else ROLL_OUT, "mass": None, "n": n}
+    if kind == "page retract":
+        return {"kind": kind, "what": parts[0] if parts else FLIP, "mass": None, "n": n}
+    if kind == "landing":
+        return {"kind": kind, "what": parts[0] if parts else "",
+                "mass": parts[1] if len(parts) > 1 else None, "n": n}
+    return {"kind": kind, "what": SUCK, "mass": None, "n": n}
+
+
+def cue_scene(key: dict, timeline) -> str | None:
+    """The SCENE a cue's slot number names, or None when this timeline does not carry that row.
+
+    A slot is numbered by its ROW (`build_short.sound_cues`: `f"landing {i + 1} ({arr}, {mass})"`) and
+    the compiler names the nth row's scene `s{n:02d}` (`build_scene_timeline_f.scene_row_id`), so the
+    two meet on that id and nowhere else. A timeline whose scenes do not carry it (a hand-written one,
+    a row that compiled to no scene of its own) resolves to None and the cue is bound BY TIME ALONE:
+    a row that cannot be resolved must never narrow the match, because a wrong narrowing DROPS a cue
+    and this binder's every failure has to fall on the side of keeping one."""
+    n = (key or {}).get("n")
+    if not n:
+        return None
+    want = CUE_ROW_ID.format(n=int(n))
+    ids = {str(s.get("scene_id") or "") for s in (timeline or {}).get("scenes") or []}
+    return want if want in ids else None
+
+
+def fire_matches(key: dict, at: float, f: dict, tol: float, scene: str | None = None) -> bool:
+    """Whether this cue MAY be bound to this fire: the same kind and `what`, at an instant inside the
+    effect's own span widened by `tol` (the gate's own `CUE_TOL_S` - a cue lands WITH the thing it
+    marks, never two beats from it), the same MASS where both sides carry one (a `metal` cue does not
+    play over a `paper` landing), and on the scene the slot's row names where that row resolves."""
+    if f["kind"] != key["kind"] or f["what"] != key["what"]:
+        return False
+    if not (f["at"] - tol <= at <= f["until"] + tol):
+        return False
+    if key.get("mass") and f.get("mass") and str(key["mass"]) != str(f["mass"]):
+        return False
+    return not (scene is not None and str(f.get("scene") or "") != scene)
+
+
+def fire_distance(at: float, f: dict) -> float:
+    """How far a cue's instant sits from the effect's own span - 0 anywhere inside it."""
+    return round(max(f["at"] - at, at - f["until"], 0.0), 6)
+
+
+def cue_fires(key: dict, at: float, fires: list[dict], tol: float, scene: str | None = None,
+              taken: set | None = None) -> dict | None:
+    """The NEAREST firing effect this cue may be bound to, or None - skipping any fire already taken
+    by another cue. One cue, read alone; `bind_report` is the whole list, where the nearest pair wins
+    first and every fire is consumed exactly once."""
+    cands = [f for i, f in enumerate(fires)
+             if i not in (taken or set()) and fire_matches(key, at, f, tol, scene)]
+    return min(cands, key=lambda f: (fire_distance(at, f), f["at"])) if cands else None
+
+
+def drop_why(key: dict, at: float, scene: str | None, fires: list[dict], tol: float) -> str:
+    """Why this cue is not bound, in the frame's own terms - and which of the four reasons it is."""
+    claim = f"{key['kind']} ({key['what']})"
+    near = [f for f in fires if f["at"] - tol <= at <= f["until"] + tol]
+    same = [f for f in near if f["kind"] == key["kind"] and f["what"] == key["what"]]
+    plays = ", ".join(sorted({f"{f['kind']} ({f['what']})" for f in near})) or "nothing"
+    if not same:
+        return (f"no `{claim}` fires within {tol:.1f}s of {at:.2f}s - the compiled timeline plays "
+                f"{plays} there")
+    masses = sorted({str(f["mass"]) for f in same if f.get("mass")})
+    if key.get("mass") and masses and str(key["mass"]) not in masses:
+        return (f"the `{claim}` within {tol:.1f}s of {at:.2f}s lands {'/'.join(masses)}, not "
+                f"`{key['mass']}` - a cue plays the weight the frame plays")
+    on = sorted({str(f.get("scene") or "?") for f in same})
+    if scene is not None and scene not in on:
+        return (f"the `{claim}` within {tol:.1f}s of {at:.2f}s fires on {', '.join(on)}, not on "
+                f"`{scene}` - the slot's own row ({key['n']}) is that scene "
+                "(`build_scene_timeline_f.scene_row_id`)")
+    return (f"every `{claim}` within {tol:.1f}s of {at:.2f}s is already bound to a NEARER cue - one "
+            "fire sounds once, and this cue is the one left over")
+
+
+def bind_report(cues: list[dict], timeline, tol: float | None = None) -> dict:
+    """The ONE pairing of cues to fires every reader here shares: NEAREST-FIRST and CONSUMED.
+
+    `{fires, tol, cues: [{cue, key, at, scene, fire, why}], silent: [the fires no cue took]}`. Each
+    cue binds to at most one fire and each fire to at most one cue: every admissible pair is scored by
+    its distance and the nearest is taken first, so two arrivals of one kind inside the tolerance -
+    ordinary in a dense beat - take a cue each, and the one the map leaves out is NAMED rather than
+    silenced by its neighbour's cue (E99 s37: an instant the map has no sound for stays silent, and
+    says so). A cue the binder has no truth for carries `key is None` and is never dropped."""
+    fires = fired(timeline)
+    tol = gates().CUE_TOL_S if tol is None else float(tol)
+    keys = [cue_key(c) for c in cues]
+    ats = [float(c.get("at") or 0.0) for c in cues]
+    scenes = [cue_scene(k, timeline) if k is not None else None for k in keys]
+    pairs = sorted((fire_distance(ats[ci], f), ci, fi)
+                   for ci, key in enumerate(keys) if key is not None
+                   for fi, f in enumerate(fires) if fire_matches(key, ats[ci], f, tol, scenes[ci]))
+    bound: dict[int, int] = {}
+    taken: set[int] = set()
+    for _d, ci, fi in pairs:
+        if ci not in bound and fi not in taken:
+            bound[ci] = fi
+            taken.add(fi)
+    rows = [{"cue": cue, "key": keys[ci], "at": ats[ci], "scene": scenes[ci],
+             "fire": fires[bound[ci]] if ci in bound else None,
+             "why": None if keys[ci] is None or ci in bound
+                    else drop_why(keys[ci], ats[ci], scenes[ci], fires, tol)}
+            for ci, cue in enumerate(cues)]
+    return {"fires": fires, "tol": tol, "cues": rows,
+            "silent": [f for fi, f in enumerate(fires) if fi not in taken]}
+
+
+def bind_cues(cues: list[dict], timeline, tol: float | None = None) -> tuple[list[dict], list[dict]]:
+    """`(the cues the frame plays, the cues dropped)` - the whole of E99 s72's second fault.
+
+    Every dropped record carries the cue and a `why` naming the effect it claimed and what the
+    compiled timeline plays on that instant instead. The kept list keeps the cues' own order, their
+    files, their gains and their envelopes: this function chooses no sound."""
+    kept, dropped = [], []
+    for r in bind_report(cues, timeline, tol)["cues"]:
+        if r["key"] is None or r["fire"] is not None:
+            kept.append(r["cue"])
+        else:
+            dropped.append({"cue": r["cue"], "at": r["at"], "slot": r["cue"].get("slot"), "why": r["why"]})
+    return kept, dropped
+
+
+def unsounded(cues: list[dict], timeline, tol: float | None = None) -> list[str]:
+    """Every firing effect the cue list leaves SILENT, named - never filled (E99 s37: no sound is
+    invented for an instant the episode's map has none for). The shape `lab_build.cue_notes` prints.
+
+    Read off the SAME pairing the binder uses, so the two can never disagree: a fire one cue took is
+    sounded, and a second fire of the same kind one tolerance away is not - it is named here."""
+    out: list[str] = []
+    for f in bind_report(cues, timeline, tol)["silent"]:
+        note = f"no cue mapped for {f['kind']} ({f['what']}) at {f['at']:.2f}s on {f['scene']}"
+        if note not in out:
+            out.append(note)
+    return out

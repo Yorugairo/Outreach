@@ -1029,3 +1029,166 @@ def test_the_plots_holes_are_not_room_while_the_row_marks_them():
     strips = SH.clear_strips(band, SH.page_ink(page, "9:16"))
     assert strips, "the quiet zone has room on this page when nothing is written in it"
     assert all(r in marked and r not in hushed for r in strips), (strips, hushed)
+
+
+# --- THE INKS (E67 / E99 s72) -------------------------------------------------------------------
+# The operator on base v7: *"the charts don't have their 'life' or Bravos lessons - we changed colors
+# to be more visible on thumbnails if you recall."* MEASURED before these were written: a page's ink
+# is a TOKEN in the episode's series file, resolved to a hex by the PLAYER's LP_INK table (E67's
+# electric set), so the compiler cannot choose one - it reads what the page carries and says so.
+
+
+def test_a_page_that_declares_no_ink_takes_e67s_electric_cycle():
+    note = SH.ink_note({"series": [{"name": "a"}, {"name": "b"}]})
+    assert note and not note.startswith("WARN")
+    assert "ELECTRIC cycle" in note and "teal" in note and "grey is never a default" in note
+
+
+def test_a_page_whose_inks_the_electric_table_cannot_resolve_is_WARNED_not_rewritten():
+    note = SH.ink_note({"series": [{"color": "#c0392b"}, {"color": "teal"}]})
+    assert note.startswith("WARN") and "predates E67" in note and "#c0392b" in note
+    assert "never rewritten" in note, "the series file is the episode's (E99 s11)"
+
+
+def test_a_page_that_is_all_deemph_is_WARNED_because_grey_is_never_a_default():
+    note = SH.ink_note({"colors": ["deemph", "deemph"]})
+    assert note.startswith("WARN") and "grey is never a default" in note
+
+
+def test_a_page_that_names_its_own_e67_inks_is_named_and_passes():
+    note = SH.ink_note({"colors": ["cobalt", "crimson"]})
+    assert not note.startswith("WARN") and "cobalt, crimson" in note
+    assert SH.ink_note(None) is None and SH.ink_note({}) is None
+
+
+def test_page_inks_reads_every_list_a_page_spec_may_carry():
+    assert SH.page_inks({"colors": ["teal"], "series": [{"color": "cobalt"}],
+                         "bars": [{"color": "amber"}], "shares": [{"color": "crimson"}]}) == \
+        ["teal", "cobalt", "amber", "crimson"]
+
+
+def test_every_page_row_of_the_tokyo_base_names_its_inks_in_why():
+    """The base the compiler emits carries E67's citation on every page row - the Tokyo bed's series
+    declare `crimson` and `cobalt` (both E67 tokens: crimson is the Claude orange), so no row WARNs."""
+    _plan, rows, why = _base(TOKYO)
+    pages = [(r, w) for r, w in zip(rows, why) if str(r[2]).startswith("ledger:")]
+    assert pages, "the Tokyo plan carries ledger pages"
+    for row, w in pages:
+        assert "E67, CAPABILITIES.md:34" in w["rule"], (row[2], w["rule"])
+        assert "predates E67" not in w["rule"], (row[2], w["rule"])
+
+
+# --- THE OUTRO ATTACHED (E41 / E99 s72) ---------------------------------------------------------
+# *"You didn't attach the outro either."* The closing row is the PROJECT's outro row, and the row
+# before it ends at `t_outro` - the approved cut's own shape (`build_short.py:443-446`).
+
+OUTRO = {"world": "clip:outro-v2.mp4", "at": 82.62, "runtime": 88.82, "exit": "dip",
+         "brand_line_at": 83.42, "source": "the test"}
+
+
+def test_the_closing_row_is_the_projects_outro_and_the_row_before_it_ends_at_its_start():
+    plan = SH.load_plan(TOKYO / "BEAT-PLAN.jsonl")
+    rows, why = SH.compile(plan, _words(TOKYO), SH.DEFAULTS, "9:16",
+                           pages=_pages(TOKYO), outro=OUTRO)
+    recs = SH.rows_why(why)
+    assert len(recs) == len(rows)
+    last, before = rows[-1], rows[-2]
+    assert (round(last[0], 2), round(last[1], 2)) == (82.62, 88.82)
+    assert last[2] == "clip:outro-v2.mp4" and last[5] == "dip" and not last[4]
+    assert last[6] == [{"kind": "life", "at": 82.62, "dur": 6.2}], "the clip's own seconds (M05)"
+    assert round(before[1], 2) == 82.62, "the row before the outro ends on t_outro, not the last word"
+    rule = recs[-1]["rule"]
+    assert recs[-1]["skeleton"] == SH.OUTRO_SKELETON and recs[-1]["signature"] == "dip"
+    assert "83.42s" in rule and "E41" in rule and "stitched" in rule, rule
+    assert "the test" in rule, "the why names where the outro came from"
+
+
+def test_without_an_outro_the_tail_is_the_runtime_hold_it_has_always_been():
+    plan = SH.load_plan(TOKYO / "BEAT-PLAN.jsonl")
+    rows, why = SH.compile(plan, _words(TOKYO), SH.DEFAULTS, "9:16",
+                           pages=_pages(TOKYO), runtime=88.82)
+    assert str(rows[-1][2]).startswith("ledger:") and round(rows[-1][1], 2) == 88.82
+    assert SH.OUTRO_IS_THE_AUTHORS.split("(")[0].strip() in SH.rows_why(why)[-1]["rule"]
+
+
+@pytest.mark.parametrize("outro, says", [
+    ({"at": 1.0, "runtime": 2.0}, "names no world"),
+    ({"world": "clip:x.mp4", "runtime": 2.0}, "names no at"),
+    ({"world": "clip:x.mp4", "at": 1.0}, "names no runtime"),
+    ({"world": "clip:x.mp4", "at": 5.0, "runtime": 5.0}, "is not past its start"),
+])
+def test_an_outro_the_caller_could_not_resolve_is_refused_by_name(outro, says):
+    with pytest.raises(SH.Refused) as exc:
+        SH.check_outro(outro)
+    assert says in str(exc.value)
+
+
+def test_an_outro_that_would_swallow_the_beat_before_it_is_refused():
+    rows = [(0.0, 10.0, "ledger:x:line:0:right:axes:cut", (0, 0, 0), [], "cut", [])]
+    why = [{"beat": 1, "skeleton": "s", "act": None, "rule": "r", "signature": "axes"}]
+    with pytest.raises(SH.Refused) as exc:
+        SH.close_the_cut(rows, why, None, {**OUTRO, "at": 0.0, "runtime": 6.0})
+    assert "at or before the last row's own start" in str(exc.value)
+
+
+# --- THE OUTRO NEVER TRUNCATES THE TAKE (the sixth pass' review, finding 4) ----------------------
+# `close_the_cut(outro=)` read neither the caller's runtime nor the take's last word, so an outro
+# resolved at 5 s for 12 s under a 40 s build silently cut 33 s of spoken take off the table and
+# discarded the build's own runtime - with no refusal from the function whose job is refusals.
+
+TRUNCATING = [(0.0, 3.0, "page:x", (0, 0, 0), [], "cut", []),
+              (3.0, 38.0, "page:y", (0, 0, 0), [], "cut", [])]
+
+
+def _tail_why(n: int) -> list[dict]:
+    return [{"beat": i + 1, "skeleton": "s", "act": None, "rule": "r", "signature": "axes"} for i in range(n)]
+
+
+def test_an_outro_whose_runtime_is_not_the_builds_is_refused_by_name():
+    with pytest.raises(SH.Refused) as exc:
+        SH.check_outro({**OUTRO, "at": 5.0, "runtime": 12.0}, runtime=40.0)
+    assert "12.00s" in str(exc.value) and "40.00s" in str(exc.value), str(exc.value)
+    SH.check_outro(OUTRO, runtime=OUTRO["runtime"])                    # the two agree: no refusal
+    SH.check_outro(OUTRO, runtime=OUTRO["runtime"] + SH.EPS / 2)       # a rounding is not a disagreement
+
+
+def test_an_outro_that_starts_before_the_takes_last_word_is_refused_and_the_rows_are_untouched():
+    """The reviewer's input: rows to 38 s, an outro at 5 s - 33 s of spoken take under the card."""
+    rows, why = [r for r in TRUNCATING], _tail_why(2)
+    with pytest.raises(SH.Refused) as exc:
+        SH.close_the_cut(rows, why, 12.0, {"world": "clip:o.mp4", "at": 5.0, "runtime": 12.0},
+                         last_word_end=38.0)
+    assert "5.00s" in str(exc.value) and "38.00s" in str(exc.value), str(exc.value)
+    assert rows == TRUNCATING and len(why) == 2, "it REFUSES by name - it never truncates the take"
+
+
+def test_the_approved_shape_is_not_refused_the_card_dissolves_in_over_the_last_word():
+    """`audio.outro_clock`: `t_outro = t_vo_end - OUTRO_LEAD` (0.1 s on the approved cut) - the card
+    begins its dissolve BEFORE the last word by design, so the guard is the dip's own length."""
+    SH.check_outro(OUTRO, last_word_end=OUTRO["at"] + 0.1)
+    SH.check_outro(OUTRO, last_word_end=OUTRO["at"] + SH.OUTRO_LEAD_MAX_S)
+    with pytest.raises(SH.Refused):
+        SH.check_outro(OUTRO, last_word_end=OUTRO["at"] + SH.OUTRO_LEAD_MAX_S + 0.5)
+
+
+def test_the_generated_base_still_closes_on_the_outro_with_the_runtime_and_the_last_word_read():
+    plan = SH.load_plan(TOKYO / "BEAT-PLAN.jsonl")
+    ws = _words(TOKYO)
+    last = max(float(w.get("end", w.get("end_s", 0)) or 0) for w in ws)
+    rows, why = SH.compile(plan, ws, SH.DEFAULTS, "9:16", pages=_pages(TOKYO), outro=OUTRO,
+                           runtime=OUTRO["runtime"], last_word_end=last)
+    assert (round(rows[-1][0], 2), round(rows[-1][1], 2)) == (82.62, 88.82)
+    assert round(rows[-2][1], 2) == 82.62
+
+
+# --- A SERIES IN ITS SIGN COLOUR IS NOT PRE-E67 (the sixth pass' review, finding 8) --------------
+
+def test_a_series_authored_in_its_sign_colour_is_not_warned_as_pre_e67():
+    """E67 / CAPABILITIES.md:34 names the sign colours on the field (`#3DDC84` up, `#FF4D4D` down) and
+    the engine resolves `var(--lp-neg)` / `var(--lp-pos)` like any other ink - so they are not the old
+    palette. The raw hex still WARNs (the test above)."""
+    for ink in SH.E67_SIGN:
+        note = SH.ink_note({"series": [{"color": ink}, {"color": "teal"}]})
+        assert note and "WARN" not in note, (ink, note)
+        assert ink in note, note
+    assert "WARN" in (SH.ink_note({"series": [{"color": "#c0392b"}]}) or ""), "a raw hex is still named"

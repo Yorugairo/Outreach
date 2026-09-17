@@ -715,3 +715,209 @@ def test_p67_a_build_that_already_carries_a_receipt_recompiles_under_it_unchange
         json.dumps({"compile": {"episode_dir": "..", T.RECEIPT_KEY: carried}}), encoding="utf-8")
     assert _compile(ep, build) == 0, "the live editor's recompile is not the door"
     assert _manifest(build)["compile"][T.RECEIPT_KEY] == carried
+
+
+# ---------------------------------------------------------------- the cue bound to what fires (E99 s72)
+#
+# *"Sound effects are way off, we're playing spiral and whirls when there's no spiral or whirl
+# effect."* Synthetic timelines only: a page that enters by spiral and retracts, a page that enters
+# on its axes and leaves on the cut, and one thrown card - the three shapes the base got wrong.
+
+STOP = {"FLIGHT_S": 0.4, "ANTIC_S": 0.12, "DROP_S": 0.18}
+
+
+def _scene(sid, t0, t1, page=None, docks=(), exit_="cut") -> dict:
+    world = {"page": dict(page)} if page else {"asset_id": "plate-x"}
+    return {"scene_id": sid, "span": [t0, t1], "world": world, "docks": list(docks), "exit": exit_}
+
+
+def _timeline(*scenes) -> dict:
+    return {"scenes": list(scenes), "evidence": {}}
+
+
+SPIRAL_RETRACTS = _timeline(
+    _scene("s01", 0.0, 10.0, page={"builder": "dense-line", "variant": "line", "enter": "spiral"}),
+    _scene("s02", 10.0, 20.0, page={"builder": "dense-line", "variant": "line", "enter": "axes", "exit": "cut"},
+           docks=[{"slide": "dock-a", "enter": 12.0, "exit": 16.0, "arrive": "throw", "mass": "paper"}]))
+
+
+def _cue(slot, at):
+    return {"slot": slot, "at": at, "gain": 0.12, "variants": {"A": "x.mp3"}}
+
+
+def test_the_compiled_timeline_says_what_fires_and_when():
+    fires = A.fired(SPIRAL_RETRACTS, STOP)
+    got = [(f["kind"], f["what"], f["at"], f["scene"]) for f in fires]
+    assert ("page enter", "spiral", 0.0, "s01") in got
+    # s01 declares no `exit`, so it RETRACTS over its last LP_RETRACT_S - and it came in by spiral,
+    # so the bed's map calls that drain a WHIRL; s02 leaves on the cut and retracts not at all
+    assert ("page retract", "whirl", 10.0 - sum(A.gates().LP_RETRACT_S), "s01") in got
+    assert not [f for f in fires if f["kind"] == "page retract" and f["scene"] == "s02"]
+    assert ("page enter", "axes", 10.0, "s02") in got
+    # the landing is the CONTACT frame, not the dock's enter (a throw flies on the stepped clock)
+    assert ("landing", "throw", round(A.landing_contact(12.0, "throw", STOP), 2), "s02") in got
+
+
+def test_a_spiral_cue_is_kept_only_where_a_spiral_fires():
+    cues = [_cue("page enter 1 (spiral)", 0.0), _cue("page enter 2 (spiral)", 10.0)]
+    kept, dropped = A.bind_cues(cues, SPIRAL_RETRACTS)
+    assert [c["slot"] for c in kept] == ["page enter 1 (spiral)"]
+    assert len(dropped) == 1 and dropped[0]["slot"] == "page enter 2 (spiral)"
+    assert "page enter (axes)" in dropped[0]["why"], dropped[0]["why"]
+
+
+def test_a_whirl_is_kept_on_the_page_that_retracts_and_dropped_on_the_one_that_cuts():
+    keep = _cue("page retract 1 (whirl)", 10.0 - 2.2)
+    drop = _cue("page retract 2 (whirl)", 20.0 - 2.2)
+    kept, dropped = A.bind_cues([keep, drop], SPIRAL_RETRACTS)
+    assert [c["slot"] for c in kept] == ["page retract 1 (whirl)"]
+    assert "no `page retract (whirl)` fires" in dropped[0]["why"]
+
+
+def test_a_roll_out_enter_is_dropped_on_a_page_that_does_not_roll():
+    """The map plays its page-ROLL at any entry that is not a mount or a spiral; `axes`, `snap` and
+    `camera` have no cream roll-out at all, and three of the base's four pages entered that way."""
+    kept, dropped = A.bind_cues([_cue("page enter 2", 10.0)], SPIRAL_RETRACTS)
+    assert not kept and len(dropped) == 1
+    assert "page enter (roll-out)" in dropped[0]["why"]
+    # ... and a page that declares NO entry is exactly the one the roll belongs to
+    rolls = _timeline(_scene("s01", 0.0, 8.0, page={"builder": "dense-line", "variant": "line", "exit": "cut"}))
+    kept, dropped = A.bind_cues([_cue("page enter 1", 0.0)], rolls)
+    assert len(kept) == 1 and not dropped
+
+
+def test_a_landing_cue_is_kept_one_frame_early_and_dropped_where_nothing_lands():
+    contact = A.landing_contact(12.0, "throw", STOP)
+    kept, dropped = A.bind_cues([_cue("landing 2 (throw, paper)", round(contact - 1 / 24, 2)),
+                                 _cue("landing 1 (land, metal)", 5.0)], SPIRAL_RETRACTS)
+    assert [c["slot"] for c in kept] == ["landing 2 (throw, paper)"]
+    assert dropped[0]["slot"] == "landing 1 (land, metal)"
+
+
+def test_a_bed_and_a_slot_the_binder_cannot_judge_are_never_dropped():
+    beds = [{"slot": "hook bed", "at": 0.0, "gain": 0.1}, _cue("press 3", 4.0)]
+    kept, dropped = A.bind_cues(beds, SPIRAL_RETRACTS)
+    assert kept == beds and not dropped
+    assert A.cue_key({"slot": "hook bed"}) is None and A.cue_key({"slot": "press 3"}) is None
+
+
+def test_the_binder_names_every_firing_effect_the_map_leaves_silent():
+    notes = A.unsounded([_cue("page enter 1 (spiral)", 0.0)], SPIRAL_RETRACTS)
+    assert any("page retract (whirl)" in n for n in notes)
+    assert any("landing (throw)" in n for n in notes)
+    assert all(n.startswith("no cue mapped for ") for n in notes), notes
+
+
+def test_the_binder_adds_nothing_and_never_reorders_what_it_keeps():
+    cues = [_cue("page enter 1 (spiral)", 0.0), {"slot": "hook bed", "at": 0.0},
+            _cue("landing 2 (throw, paper)", round(A.landing_contact(12.0, "throw", STOP) - 1 / 24, 2))]
+    kept, _dropped = A.bind_cues(cues, SPIRAL_RETRACTS)
+    assert kept == [c for c in cues], "the cues keep their order, their files and their gains"
+
+
+def test_an_absent_page_entry_reads_as_the_roll_out_not_as_the_walks_mount_default():
+    """`recipe_walk` writes `page_enter:mount` for an absent entry (its own default) and a mount has
+    no page turn at all - so the page block is read, not the walk's card."""
+    assert A.page_entry({}) == A.ROLL_OUT
+    assert A.page_entry({"enter": "camera=dock-h"}) == "camera", "the entry's head, not its argument"
+
+
+# --- NEAREST-FIRST AND CONSUMED (the sixth pass' review, findings 2 / 3 / 5) ---------------------
+# The binder's first cut silenced a fire with ANY cue of the same kind inside the tolerance, compared
+# no mass and read no scene: two paper landings 1.0 s apart - ordinary in a dense beat - left the
+# first one silent AND unnamed, a `metal` cue was kept over a `paper` landing, and a cue authored for
+# row 5 could bind to row 2's landing. A fire sounds ONCE and a cue binds ONCE.
+
+TWO_LANDINGS = _timeline(
+    _scene("s01", 0.0, 10.0, page={"builder": "dense-line", "variant": "line", "enter": "axes", "exit": "cut"},
+           docks=[{"slide": "dock-a", "enter": 2.0, "exit": 6.0, "arrive": "throw", "mass": "paper"},
+                  {"slide": "dock-b", "enter": 3.0, "exit": 7.0, "arrive": "throw", "mass": "paper"}]))
+
+
+def _contacts(timeline) -> list[float]:
+    return [f["at"] for f in A.fired(timeline) if f["kind"] == "landing"]
+
+
+def test_one_cue_binds_to_one_fire_and_the_landing_it_leaves_silent_is_NAMED():
+    """The reviewer's own fixture: two paper landings 1.0 s apart, ONE cue on the second."""
+    first, second = _contacts(TWO_LANDINGS)
+    assert round(second - first, 2) == 1.0 < A.gates().CUE_TOL_S, "both landings sit inside one tolerance"
+    cues = [_cue("landing 1 (throw, paper)", second)]
+    kept, dropped = A.bind_cues(cues, TWO_LANDINGS)
+    assert [c["slot"] for c in kept] == ["landing 1 (throw, paper)"] and not dropped
+    notes = A.unsounded(kept, TWO_LANDINGS)
+    assert any(f"landing (throw) at {first:.2f}s" in n for n in notes), notes
+    assert not any(f"landing (throw) at {second:.2f}s" in n for n in notes), notes
+
+
+def test_the_nearer_cue_takes_the_fire_and_the_second_cue_takes_the_other_one():
+    first, second = _contacts(TWO_LANDINGS)
+    kept, dropped = A.bind_cues([_cue("landing 1 (throw, paper)", second),
+                                 _cue("landing 1 (throw, paper)", first)], TWO_LANDINGS)
+    assert len(kept) == 2 and not dropped, "two fires, two cues - each bound to its own"
+    notes = A.unsounded(kept, TWO_LANDINGS)
+    assert not [n for n in notes if "landing" in n], notes   # both landings are sounded; the page enter is not
+
+
+def test_a_third_cue_on_two_fires_is_DROPPED_because_a_fire_sounds_once():
+    first, second = _contacts(TWO_LANDINGS)
+    cues = [_cue("landing 1 (throw, paper)", first), _cue("landing 1 (throw, paper)", second),
+            _cue("landing 1 (throw, paper)", round((first + second) / 2, 2))]
+    kept, dropped = A.bind_cues(cues, TWO_LANDINGS)
+    assert len(kept) == 2 and len(dropped) == 1
+    assert dropped[0]["at"] == round((first + second) / 2, 2), "the FARTHEST cue is the one left over"
+    assert "already bound" in dropped[0]["why"], dropped[0]["why"]
+
+
+def test_a_metal_cue_does_not_bind_to_a_paper_landing_and_the_drop_names_the_weight():
+    first, _second = _contacts(TWO_LANDINGS)
+    kept, dropped = A.bind_cues([_cue("landing 1 (throw, metal)", first)], TWO_LANDINGS)
+    assert not kept and len(dropped) == 1
+    assert "paper" in dropped[0]["why"] and "metal" in dropped[0]["why"], dropped[0]["why"]
+    # ... and the same cue over a metal landing IS kept: the mass is compared, never invented
+    metal = _timeline(_scene("s01", 0.0, 10.0, page={"builder": "dense-line", "variant": "line", "exit": "cut"},
+                             docks=[{"slide": "dock-a", "enter": 2.0, "exit": 6.0, "arrive": "throw",
+                                     "mass": "metal"}]))
+    kept, dropped = A.bind_cues([_cue("landing 1 (throw, metal)", _contacts(metal)[0])], metal)
+    assert len(kept) == 1 and not dropped
+
+
+def test_a_cue_whose_slot_names_no_mass_binds_to_a_landing_of_any_weight():
+    """`cue_key` compares a mass only when BOTH sides carry one - a slot that names none is not judged on it."""
+    first, _second = _contacts(TWO_LANDINGS)
+    kept, dropped = A.bind_cues([_cue("landing 1 (throw)", first)], TWO_LANDINGS)
+    assert len(kept) == 1 and not dropped
+
+
+TWO_SCENES = _timeline(
+    _scene("s01", 0.0, 10.0, page={"builder": "dense-line", "variant": "line", "enter": "axes", "exit": "cut"},
+           docks=[{"slide": "dock-a", "enter": 2.0, "exit": 6.0, "arrive": "throw", "mass": "paper"}]),
+    _scene("s02", 10.0, 20.0, page={"builder": "dense-line", "variant": "line", "enter": "axes", "exit": "cut"},
+           docks=[{"slide": "dock-b", "enter": 12.0, "exit": 16.0, "arrive": "throw", "mass": "paper"}]))
+
+
+def test_a_cue_binds_only_on_the_ROW_its_slot_numbers():
+    """The slot's own index is the ROW (`build_short.sound_cues`: `landing {i + 1}`), and the compiler
+    names the nth row's scene `s{n:02d}` (`build_scene_timeline_f.scene_row_id`)."""
+    on_s01 = _contacts(TWO_SCENES)[0]
+    kept, dropped = A.bind_cues([_cue("landing 2 (throw, paper)", on_s01)], TWO_SCENES)
+    assert not kept and len(dropped) == 1, "row 2's cue never binds to row 1's landing"
+    assert "s01" in dropped[0]["why"] and "s02" in dropped[0]["why"], dropped[0]["why"]
+    kept, dropped = A.bind_cues([_cue("landing 1 (throw, paper)", on_s01)], TWO_SCENES)
+    assert len(kept) == 1 and not dropped
+
+
+def test_a_row_the_timeline_does_not_carry_binds_by_time_alone():
+    """A slot numbering a row this timeline has no scene for narrows nothing - a row that cannot be
+    resolved must never DROP a cue."""
+    on_s01 = _contacts(TWO_SCENES)[0]
+    assert A.cue_scene({"n": 9}, TWO_SCENES) is None and A.cue_scene({"n": 2}, TWO_SCENES) == "s02"
+    kept, dropped = A.bind_cues([_cue("landing 9 (throw, paper)", on_s01)], TWO_SCENES)
+    assert len(kept) == 1 and not dropped
+
+
+def test_the_unsounded_notes_are_the_fires_no_KEPT_cue_took():
+    """`unsounded` reads the same pairing the binder does, so the two can never disagree."""
+    rep = A.bind_report([_cue("landing 1 (throw, paper)", _contacts(TWO_LANDINGS)[1])], TWO_LANDINGS)
+    assert [f["at"] for f in rep["silent"] if f["kind"] == "landing"] == [_contacts(TWO_LANDINGS)[0]]
+    assert sum(1 for r in rep["cues"] if r["fire"] is not None) == 1
