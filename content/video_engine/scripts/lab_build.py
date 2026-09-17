@@ -115,6 +115,7 @@ if str(SCRIPTS) not in sys.path:
 import gate_motion_density as GMD  # noqa: E402  (_is_bed / CUE_TOL_S / PLATE_MIN_S: the gate's own sound and
                                    #  world clocks - the lab never keeps a second opinion about a threshold)
 import gate_one_shot_floor as OSF  # noqa: E402  (ROW_ORDER: the WHOLE-CUT floors, named by the gate itself)
+import build_scene_timeline_f as BSTF  # noqa: E402  (scene_exit: the compiler's own hybrid exit rule, never mirrored)
 import lab_enumerate as LE  # noqa: E402  (the shapes, the clocks and the offset grammar - one source, never a copy)
 import ledger_page as LPG  # noqa: E402  (badges_for: a badge is the SERIES' own, never typed here)
 import recipe_walk as RW  # noqa: E402  (events / match / flatten: what a FIRE is, shared with the floor gate)
@@ -165,6 +166,41 @@ SNAP_HOLD_S = 0.45               # SNAP_S (player.html:2612): the page grows out
 ARRIVAL_LANDS_S = {"throw": CARD_FLIGHT_S, "land": CARD_DROP_S, "drop": CARD_DROP_S}
 FRAME_S = 0.033                  # one frame at the reference's 30 fps (GMD.DIP_S's own measurement)
 SPECIES_READ_S = 0.3             # a species is READ a moment after it fires, never on the frame it starts
+BADGE_IN_S = 0.36                # LP_BADGE_IN (player.html): a pill springs in over this - a badge stamp is read
+                                 # when the pill has SETTLED, and each stamp of a ladder is its own tile
+BLACK_LUMA = 8.0                 # M32's own reading of near-black (`SRC_M32`: "near-black = mean luma < 8"), the
+                                 # threshold the first tile of a window has to clear
+# THE CAPTION LAYER OWNS ITS BAND, and a card's RAIL is never under it (the parent, 2026-09-17: "the eye sees one
+# static $617 pill with META NO clipped behind the words"). The player names the strip itself:
+CAPTION_TOP_PX = 1340            # `html[data-aspect="9:16"] #caption.stage.onpage` - "the caption strip y1340-1440
+                                 # (G-l), never over the chart or a plate's subject" (the player's own comment)
+SAFE_TOP_F = 0.12                # the Shorts chrome band at the top (GMD's SAFE_WARN_SHARE: "top 12 %, bottom 20 %")
+RAIL_COLS = 2                    # `.rail { grid-template-columns: 1fr 1fr }` - a rail of pills, two to a row
+RAIL_ROW_PX, RAIL_GAP_PX, RAIL_MARGIN_PX = 39, 9, 11     # `.pill` / `.rail` in the player's CSS; MEASURED on this
+                                 # bed at rows y 1420 and 1468 (48 = 39 + 9) with the rail 11 px under the frame
+
+
+def rail_px(n_badges: int) -> int:
+    """The height a rail of `n` pills takes UNDER the card - the player's own grid, counted."""
+    rows = max(1, -(-int(n_badges) // RAIL_COLS))
+    return RAIL_MARGIN_PX + rows * RAIL_ROW_PX + (rows - 1) * RAIL_GAP_PX
+
+
+def rail_clear_place(card_aspect: float, n_badges: int) -> dict:
+    """The dock options that put a carded rail in the room BETWEEN the top chrome and the caption strip.
+
+    A card on a PLATE gets no box from the placer (`dock_place` reads a PAGE's geometry), so it takes the player's
+    default dock box and its rail lands in the caption band. Naming `centre_y` takes `centred_place`'s own first
+    branch (`build_scene_timeline_f.py:4027`), which writes a box for any row: the card is sized to the room that
+    is left once the top chrome and the rail's own height are taken out of it."""
+    sw, sh = 1080, 1920
+    top = round(SAFE_TOP_F * sh)
+    room = CAPTION_TOP_PX - rail_px(n_badges) - top
+    h = min(room, BSTF.CENTRE_MAX_H * sh)
+    w = min(h / float(card_aspect or 1.0), BSTF.CENTRE_W * sw)
+    h = w * float(card_aspect or 1.0)
+    return {"centre": True, "card_aspect": round(float(card_aspect), 4),
+            "centre_w": round(w / sw, 4), "centre_y": round((top + h / 2) / sh, 4)}
 DOCK_TAIL_S = CARD_LEAVE_S       # a card leaves before the window does, never on its cut (E40 #5), and its retract
                                  # finishes inside the row that carries it
 MIN_REMNANT_S = 0.5              # a remnant of an approved row shorter than this is a FLASH, not a plate (M44)
@@ -315,24 +351,46 @@ def exit_kind(row: tuple) -> tuple[str, float | None]:
 
 
 def veil_s(rows: list[tuple], t: float) -> float:
-    """The seconds of BLACK a dip puts on the boundary at `t` - its incoming half.
+    """The seconds of BLACK a transition puts at the boundary `t` - the half of it that falls AFTER `t`.
 
-    E47 #1 as the compiler writes it (`build_scene_timeline_f.py:5147`): "a plain LINEAR ramp to black over the last
-    DIP_S/2 of the outgoing scene and back over the first DIP_S/2 of the incoming one. Both halves reach 1 at the
-    boundary, so the boundary frame IS black". A window that opens on that boundary opens on the veil, which is what
-    the parent read on batch-r1's sheets (2026-09-17: "three candidates open on a BLACK frame")."""
-    for r in rows:
-        name, own = exit_kind(r)
-        if abs(float(r[1]) - t) < EPS and name == "dip":
-            return round((own if own else GMD.TRANSITION_S["dip"]) / 2, 2)
+    WHOSE TRANSITION IT IS, in the player's own words (the dip block, E47, operator 2026-09-06): *"DIP and BLURZOOM
+    straddle the boundary, so a scene reads its OWN exit for the half after its start and the NEXT scene's exit for
+    the half before its end. `exit` names the transition INTO the scene it sits on."* So the veil at a boundary
+    belongs to the row that BEGINS there, not to the one that ends - which is why the first correction did not hold:
+    the lab read the outgoing row's exit, and on this bed the incoming row's own (the compiler defaults a row with
+    docks to a dip, E47) was the one painting the frame black.
+
+    MEASURED on the badge-ladder rendition (2026-09-17, `probe.png` mean luma): 0.0 at 38.96 s, 13.6 at 39.00,
+    45.3 at 39.10, 76.7 at 39.20 - the black clears at the half-width, 0.235 s, exactly as the ramp says."""
+    for i, r in enumerate(rows):
+        if i == 0 or abs(float(r[0]) - t) >= EPS:      # the cut's first row has no boundary before it, so no veil
+            continue
+        name, own = row_exit(rows, i)
+        if name in GMD.TRANSITION_S:
+            return round((own if own else GMD.TRANSITION_S[name]) / 2, 2)
     return 0.0
+
+
+def row_exit(rows: list[tuple], i: int) -> tuple[str, float | None]:
+    """The transition INTO row `i`, as the COMPILER resolves it - `build_scene_timeline_f.scene_exit`, called here
+    rather than mirrored. An authored 6th element wins; otherwise the dip is the default wherever the world actually
+    changes and the incoming page does not carry a signature enter (E47 as corrected 2026-09-12). The world change
+    is read off the plate ids, which is what the row tuple carries."""
+    r = rows[i]
+    authored = r[5] if len(r) > 5 else None
+    page = parse_ledger(str(r[2])) or {}
+    changed = str(r[2]).split(";")[0] != str(rows[i - 1][2]).split(";")[0]
+    return BSTF.scene_exit(authored, bool(r[4]), page.get("enter") or None, changed)
 
 
 def readable_window(rows: list[tuple], t0: float, t1: float) -> tuple[float, float]:
     """The window's own READABLE bounds: after the veil the boundary at `t0` puts on the frame, and the last frame
     that is still this candidate's (`t1` is the NEXT row's first frame, and a dip takes the ones before it)."""
-    lo = round(t0 + veil_s(rows, t0), 2)
-    hi = round(t1 - max(veil_s(rows, t1), FRAME_S), 2)
+    # one frame PAST the veil's own half-width: the ramp reaches full picture at the half, and a frame is what the
+    # measurement above has between 45.3 and 76.7 luma
+    veil, out = veil_s(rows, t0), veil_s(rows, t1)
+    lo = round(t0 + (veil + FRAME_S if veil else 0.0), 2)
+    hi = round(t1 - (out + FRAME_S if out else FRAME_S), 2)
     return lo, max(lo, hi)
 
 
@@ -345,6 +403,8 @@ def member_lands_s(card: Any, options: Mapping | None = None) -> float:
     axis, token = member_axis(card), member_token(card)
     if axis == "arrival":
         return ARRIVAL_LANDS_S.get(token, CARD_FLIGHT_S)
+    if axis == "dock_option" and token == "badge":
+        return BADGE_IN_S            # the pill's own spring: the stamp is at the offset, the tile a spring later
     if axis in DOCK_AXES:
         return float((options or {}).get("lands_s") or CARD_IN_S)
     if axis == "page_enter":
@@ -437,11 +497,18 @@ def species_for(bed, kind: str, at: float, on_page: bool, binds: dict) -> dict:
     return sp
 
 
-def chart_to_for(bed, verb: str, at: float, page: dict) -> dict:
+def chart_to_for(bed, verb: str, at: float, page: dict, rows: "list[tuple] | tuple" = ()) -> dict:
     """A `chart_to` member: the verb, and the state or window the bed's own page can actually travel to (E58)."""
     sp = {"kind": "chart_to", "at": round(at, 2), "dur": SPECIES_DUR_S["chart_to"], "to": verb}
     if verb == "rescale":
         sp["window"] = bed.HOLDINGS_WINDOW
+    elif verb == "park":
+        # R26-172 is WITHDRAWN (2026-09-17): the park IS how a page makes room for a card on this stage, and the
+        # approved Tokyo cut parks twice (`chart_to park` at 36.18 s scale 0.55 and at 54.91 s scale 0.52, anchor
+        # top) with the card landing in the room it makes. The dials are the BED's own, read off its rows.
+        own = bed_chart_to(list(rows or ()), "park")
+        sp.update({k: own[k] for k in ("scale", "anchor") if k in own} if own else
+                  {"scale": PARK_SCALE, "anchor": "top"})
     elif verb == "extend":
         sp["to_index"] = bed.LAST_IDX
     else:                                            # morph / recast / remake travel to a declared page STATE
@@ -978,8 +1045,6 @@ MEMBER_DROPS: dict[str, str] = {
     # R26-171 is AMENDED (2026-09-17, the parent's read of the badge-ladder rendition under E99 s71): *the rail is
     # SCALED to the stage, never dropped - dropping it at 9:16 left the badge ladder a still card for five seconds,
     # the recipe's whole point gone.* So `dock_option:badge` is no longer a drop; it is realised (see `badge_card`).
-    "chart_to:park": "R26-172: `chart_to park` shrinks the page's pills under 11 px at any scale below ~0.85 (M25) "
-                     "- parking is not how room is made on 9:16; the page's own empty room is (E65)",
     "dock_payload:stack": "the Tokyo bed carries no stack payload - the verdict wall is Steel's (steel-and-paper/"
                           "build-f) and this cut has no card that opens into a rail of proofs",
     "chart_dock:checklist": "the Tokyo bed carries no checklist chart card - the procedure table is Steel's, and a "
@@ -1060,6 +1125,19 @@ def segment_of(at: float, m: Mapping, segs: list[dict], end: float) -> int:
     return max(i for i in range(len(segs)) if segs[i]["at"] <= at + EPS)
 
 
+PARK_SCALE = 0.52     # the approved Tokyo row's own park (54.91 s), used only when the bed's rows are not to hand
+
+
+def bed_chart_to(rows: list[tuple], verb: str) -> dict | None:
+    """The `chart_to <verb>` species the BED itself authored, with its own scale and anchor - never a dial invented
+    here (the approved cut parks at 0.52 / anchor top, and that is what a lab park is)."""
+    for r in rows:
+        for s in (r[6] if len(r) > 6 else None) or []:
+            if isinstance(s, dict) and s.get("kind") == "chart_to" and str(s.get("to")) == verb:
+                return {k: v for k, v in s.items() if k not in ("at", "dur")}
+    return None
+
+
 def bed_species(rows: list[tuple], kind: str) -> dict | None:
     """The species dict the BED itself authored for this kind, if the approved table carries one - its regions, its
     densities, its paper colour, its target datum. A lab candidate never invents a dial (`authoring/__init__`)."""
@@ -1119,6 +1197,8 @@ DOCK_RANK = {"lab_card": -1, "dock_payload": 0, "dock_kind": 1, "dock_option": 2
 
 LAB_CARD = "dock-lab-{series}"    # a card the LAB registers on the bed: the SERIES' own page, rendered once
 CARD_ASPECT = "9:16"              # the stage the bed is authored at - the card is rendered for the stage it lands on
+RAIL_CARD_ASPECT = "16:9"         # ... except a card that carries a RAIL: a portrait card is so tall on a plate row
+                                  # that the player's default dock box puts its pills off the bottom of the stage
 
 
 def series_obj(bed, series: str) -> dict:
@@ -1145,7 +1225,8 @@ def write_dock_meta(bed) -> None:
     (bed.BUILD / "evidence-dock.json").write_text(json.dumps(bed.DOCK_META, indent=1), encoding="utf-8")
 
 
-def lab_chart_card(bed, series: str, variant: str, dry_run: bool, badges: bool = False) -> str:
+def lab_chart_card(bed, series: str, variant: str, dry_run: bool, badges: bool = False,
+                   aspect: str = CARD_ASPECT) -> str:
     """`authoring.docks.chart_card` of the SERIES a page row names - the card that page grows out of (the parent,
     2026-09-17: the proof cut throws the chart's own card, not an arbitrary bed still), with the series' OWN badges
     when a recipe asks for a rail. Every string is the series file's: nothing is typed here and no figure is made.
@@ -1154,13 +1235,16 @@ def lab_chart_card(bed, series: str, variant: str, dry_run: bool, badges: bool =
     `evidence-dock.json` is rewritten, because the badges a card carries live on the EVIDENCE record - the dock
     tuple only says WHEN each is stamped (`build_scene_timeline_f.dock_entry`: enter + 0.75 + 1.3 n)."""
     obj = series_obj(bed, series)
-    aid = LAB_CARD.format(series=series)
+    # THE ASPECT IS PART OF THE ASSET'S NAME: `docks.chart_card` only re-renders when the series or the renderer is
+    # newer than the card on disk, so a card first rendered portrait would stay portrait forever under one id (it
+    # did, on the first landscape run - measured: the rail painted nothing because the old PNG was still there).
+    aid = LAB_CARD.format(series=series) + ("" if aspect == CARD_ASPECT else "-" + aspect.replace(":", "x"))
     entry = {"asset": aid, "title": str(obj.get("title") or ""), "source": str(obj.get("source") or ""),
              "species": "chart", "badges": LPG.badges_for(obj) if badges else []}
     meta = [m for m in bed.DOCK_META if m.get("asset") != aid] + [entry]
     bed.DOCK_META[:] = meta
     if not dry_run:
-        bed.dock_chart(aid, series, variant=series_variant(obj, variant), aspect=CARD_ASPECT)
+        bed.dock_chart(aid, series, variant=series_variant(obj, variant), aspect=aspect)
         write_dock_meta(bed)
     return aid
 
@@ -1183,7 +1267,13 @@ def recipe_dock(bed, card: str, at: float, leave: float, ws: list[dict], dry_run
     """One dock member as the row's dock tuple `(asset_id, slot, enter, exit, opts)` - the BED's own cards only."""
     axis, token = member_axis(card), member_token(card)
     if axis == "lab_card":                           # a card the LAB registered on the bed (a chart card of a series)
-        return (token, 0, round(at, 2), round(leave, 2), {"arrive": "land", "mass": "paper"})
+        # CENTRED, so the compiler places it in the band ABOVE the caption strip (`CENTRE_BAND`, the portrait
+        # stage's own device): the parked card's RAIL is what the badge ladder is about, and at the default dock
+        # place it lands under the captions.
+        opts = {"arrive": "land", "mass": "paper", "centre": True}
+        if not dry_run:
+            opts["card_aspect"] = bed.D.card_aspect(token, bed.BUILD)
+        return (token, 0, round(at, 2), round(leave, 2), opts)
     if axis == "dock_kind" and token == "video":
         return (video_dock(bed, n, dry_run), 0, round(at, 2), round(leave, 2),
                 {"centre": True, "card_aspect": 0.5911, "centre_w": bed.FAB_W, "centre_x": bed.FAB_CX,
@@ -1267,7 +1357,7 @@ def recipe_rows(bed, rec: Mapping, beat: dict, ws: list[dict], dry_run: bool, ro
                 sp.update(m.get("options") or {})    # the recipe's own dials (a trace's bow, draw_s, width)
                 species.append(sp)
             elif axis == "chart_to":
-                species.append(chart_to_for(bed, token, at, page))
+                species.append(chart_to_for(bed, token, at, page, rows))
             elif axis == "idle":
                 world = ALIVE_PLATE
             elif axis == "plate_option":
@@ -1281,6 +1371,17 @@ def recipe_rows(bed, rec: Mapping, beat: dict, ws: list[dict], dry_run: bool, ro
                     world = world or BED_PLATE
             elif axis in DOCK_AXES:
                 dock_members.setdefault(at, []).append(card)
+                # A CARD THAT PARKS OVER A PAGE NEEDS THE ROOM THE PAGE'S PARK MAKES (R26-172 WITHDRAWN,
+                # 2026-09-17): `dock_option:read` carrying the option `park_s` is the recipe's own PARK member
+                # ("a second card takes the same place and parks, clearing the chart for what comes next"), and the
+                # approved Tokyo cut does exactly that - `chart_to park` at 54.91 s (scale 0.52, anchor top) and
+                # the card landing in the room at 56.72 s. The park is planted a park's own length AHEAD of the
+                # card, so the room exists when the card arrives, never over a plot the page still fills.
+                if str(m.get("option") or "") == "park_s" and seg["kind"] == "page":
+                    # AT THE SEGMENT'S START, the earliest the room can open: the approved cut parks 0.4 s before
+                    # its card arrives (54.91 -> 55.31), and this recipe's first card lands on the row's own first
+                    # frame, so the park cannot start any sooner than the beat does.
+                    species.append(chart_to_for(bed, "park", s, page, rows))
             elif axis == "arrival":
                 arrivals.append((at, {"arrive": token,
                                       "mass": m.get("option") or ARRIVAL_MASS.get(token, "paper")}))
@@ -1306,7 +1407,11 @@ def recipe_rows(bed, rec: Mapping, beat: dict, ws: list[dict], dry_run: bool, ro
                     drops.append(f"dock_option:badge: the ladder asks {len(badge_ats)} pills and the bed's richest "
                                  f"series ({series}) carries {have} - {have} are stamped, the rest are NOT on this "
                                  f"bed (a badge is the document's own, never typed)")
-                badge_card = lab_chart_card(bed, series, page.get("variant") or "line", dry_run, badges=True)
+                # A LANDSCAPE card for a rail (MEASURED, 2026-09-17): the portrait card is 802 x 1473 stage px on
+                # this bed and its rail falls to y 2020-2107 of a 1920 stage - off the frame entirely (hiding the
+                # standing pills changes no pixel). The same page rendered 16:9 is a card whose rail lands on stage.
+                badge_card = lab_chart_card(bed, series, page.get("variant") or "line", dry_run, badges=True,
+                                            aspect=RAIL_CARD_ASPECT)
                 dock_members[ats[0]] = [c for c in dock_members[ats[0]] if member_axis(c) != "dock_kind"]
                 dock_members[ats[0]].insert(0, f"lab_card:{badge_card}")
         for j, at in enumerate(ats):
@@ -1318,6 +1423,9 @@ def recipe_rows(bed, rec: Mapping, beat: dict, ws: list[dict], dry_run: bool, ro
             dock = recipe_dock(bed, cards[0], at, until, ws, dry_run, j)
             for extra in cards[1:]:
                 dock = dock[:4] + ({**dock[4], **recipe_dock(bed, extra, at, until, ws, dry_run, j)[4]},)
+            if badge_ats and j == 0 and dock[4].get("card_aspect"):
+                # THE RAIL CLEARS THE CAPTION STRIP: the card is sized and placed to the room above it
+                dock = dock[:4] + ({**dock[4], **rail_clear_place(dock[4]["card_aspect"], len(badge_ats))},)
             docks.append(dock)
         for at, arrival in arrivals:
             if docks:
@@ -1803,6 +1911,59 @@ def proof_dir_of(rec: Mapping, repo: Path) -> Path | None:
     return path.parent if path.is_file() else None
 
 
+def _mean_luma(png: bytes) -> float:
+    """The tile's own mean luminance - the reading M32 makes of a frame (`near-black = mean luma < 8`)."""
+    import io
+    from PIL import Image
+    im = Image.open(io.BytesIO(png)).convert("L")
+    px = list(im.getdata())
+    return sum(px) / len(px) if px else 0.0
+
+
+_HIDE = "(sel) => { document.querySelectorAll(sel).forEach(e => e.style.visibility = 'hidden'); }"
+_SHOW = "(sel) => { document.querySelectorAll(sel).forEach(e => e.style.visibility = ''); }"
+PIXEL_DELTA = 20                 # a channel difference this size is a pixel the element actually painted
+
+
+def _painted(probe, base, sel: str) -> tuple | None:
+    """The box an element actually PAINTS on the frame: hide it, take the frame again, and read the bounding box of
+    what changed. A layout box is not a frame - this bed's rail measured y 2020-2107 in the DOM while its pills were
+    off a 1920 stage entirely, and hiding them changed no pixel (2026-09-17)."""
+    import io
+    from PIL import Image, ImageChops
+    probe.page.evaluate(_HIDE, sel)
+    other = Image.open(io.BytesIO(probe.page.screenshot())).convert("RGB")
+    probe.page.evaluate(_SHOW, sel)
+    diff = ImageChops.difference(base, other).convert("L").point(lambda v: 255 if v > PIXEL_DELTA else 0)
+    return diff.getbbox()
+
+
+def _overlap(a: tuple | None, b: tuple | None) -> int:
+    """The area two painted boxes share, in stage px - 0 when either painted nothing."""
+    if not a or not b:
+        return 0
+    w = min(a[2], b[2]) - max(a[0], b[0])
+    h = min(a[3], b[3]) - max(a[1], b[1])
+    return int(w * h) if w > 0 and h > 0 else 0
+
+
+def _rail_read(probe, t: float) -> dict:
+    """What the RAIL and the CAPTION STRIP actually paint at `t`, and how much of each other they cover.
+
+    A rail is never under the captions (the parent, 2026-09-17), and the claim has to be the FRAME's: both boxes are
+    read by hiding the element and diffing the frame, never off the DOM."""
+    import io
+    from PIL import Image
+    probe.seek(t)
+    on = int(probe.page.evaluate("() => document.querySelectorAll('.pill.on').length"))
+    if not on:
+        return {"on": 0, "rail": None, "caption": None, "over": 0}
+    base = Image.open(io.BytesIO(probe.page.screenshot())).convert("RGB")
+    rail, cap = _painted(probe, base, ".pill.on"), _painted(probe, base, "#caption")
+    return {"on": on, "rail": list(rail) if rail else None, "caption": list(cap) if cap else None,
+            "over": _overlap(rail, cap)}
+
+
 def member_sheets(repo: Path, build: Path, rec: Mapping | None, members: list[tuple[float, dict]], beat: dict,
                   rows: list[tuple], dry_run: bool) -> dict:
     """`<build>/lab-members.png`: this build's frames at the members' own LANDINGS over the proof cut's frames at its
@@ -1825,6 +1986,16 @@ def member_sheets(repo: Path, build: Path, rec: Mapping | None, members: list[tu
         import probe as P                                   # imported here: the batch's other modes need no browser
         with P.Probe(Path(build), TIMELINE_NAME) as q:
             top = [(t, q.png(t)) for t in at]
+            # WHAT THE FRAME ACTUALLY CARRIES, measured in the same session the sheet is drawn in, so the record can
+            # be READ against the tiles: the mean luminance of every tile (a window that opens on the veil is a
+            # black first tile - M32's own reading of near-black is mean luma < 8) and the number of PILLS standing
+            # (a badge ladder is a rail that grows, 1 -> 2 -> 3, not one pill held for five seconds).
+            out["luma"] = [round(_mean_luma(png), 1) for _t, png in top]
+            rails = [_rail_read(q, t) for t in at]
+            out["pills"] = [m["on"] for m in rails]
+            out["rail_boxes"] = [m["rail"] for m in rails]
+            out["rail_over_caption"] = [m["over"] for m in rails]
+            out["caption_boxes"] = [m["caption"] for m in rails]
             bottom = [(t, q.png(t)) for t in (lo, hi)] if pdir is None else []
         if pdir is not None:
             shots = [{"recipe": str(rec.get("id")), "proof_dir": pdir, "proof_at": proof_at}]

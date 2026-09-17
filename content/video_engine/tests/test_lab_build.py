@@ -197,7 +197,7 @@ def test_one_candidate_of_each_shape_authors_rows_the_kit_accepts(tmp_path, monk
     rows = T.load_rows(build / LB.SHOT_TABLE_NAME)
     assert rows == sorted(rows, key=lambda r: (r[0], r[1])), "the spliced table is in clock order"
     record = records_of(runs)[0]
-    t0, t1 = record["clip"]["t0"], record["clip"]["t1"]
+    t0, t1 = record["beat"]["t0"], record["beat"]["t1"]      # the BEAT's window; `clip` opens past the veil (E47)
     planted = [r for r in rows if abs(float(r[0]) - t0) < 0.01 and abs(float(r[1]) - t1) < 0.01]
     assert len(planted) == 1, "the candidate is exactly one row of the cut"
     row = planted[0]
@@ -516,9 +516,10 @@ def test_the_badge_rail_is_realised_on_the_charts_own_card_never_dropped(tmp_pat
     record = records_of(runs)[0]
     assert "dock_option:badge" not in LB.MEMBER_DROPS, "the amendment retires the drop"
     rows = T.load_rows(tmp_path / "build-lab-rail" / LB.short_id("recipe:badge-ladder") / LB.SHOT_TABLE_NAME)
-    planted = [r for r in rows if abs(float(r[0]) - record["clip"]["t0"]) < 0.01]
+    planted = [r for r in rows if abs(float(r[0]) - record["beat"]["t0"]) < 0.01]
     assert len(planted) == 1 and len(planted[0][4]) == 1, "one card, one rail - never a card per pill"
     assert planted[0][4][0][0].startswith(LB.LAB_CARD.format(series="")), planted[0][4][0]
+    assert planted[0][4][0][0].endswith(LB.RAIL_CARD_ASPECT.replace(":", "x")),         "a card that carries a RAIL is rendered landscape - a portrait card's pills fall off the stage"
     # the bed's richest series carries three pills; the fourth is NOT on this bed and the record says so, because a
     # badge numeral is the document's own and is never typed here
     assert any("dock_option:badge" in d and "never typed" in d for d in record["dropped"]), record["dropped"]
@@ -533,11 +534,19 @@ def test_the_stamp_clock_is_the_compilers_own(tmp_path, monkeypatch):
     assert ats == [round(enter + 0.75 + 1.3 * (n + 1), 2) for n in range(len(ats))]
 
 
-def test_park_is_dropped_at_9_16_too_and_a_bed_bind_that_is_missing_is_named():
-    """R26-172 (`chart_to park` under 11 px pills) and the two Steel-only payloads: every drop names its reason."""
-    assert "R26-172" in LB.MEMBER_DROPS["chart_to:park"]
+def test_the_park_is_realised_with_the_beds_own_dials_and_a_missing_bind_is_named():
+    """R26-172 is WITHDRAWN (2026-09-17): the park IS how a page makes room for a card on this stage, and the
+    approved Tokyo cut parks twice. The dials are the BED's, read off its own rows - never invented here. The two
+    Steel-only payloads stay drops, and each names its reason."""
+    assert "chart_to:park" not in LB.MEMBER_DROPS, "the withdrawal retires the drop"
     assert "Steel" in LB.MEMBER_DROPS["dock_payload:stack"]
     assert "Steel" in LB.MEMBER_DROPS["chart_dock:checklist"]
+    approved = [(44.88, 61.76, "ledger:x", (0, 0, 0), [], "cut",
+                 [{"kind": "chart_to", "at": 54.91, "dur": 0.9, "to": "park", "scale": 0.52, "anchor": "top"}])]
+    park = LB.chart_to_for(None, "park", 46.0, {"opts": ""}, approved)
+    assert park == {"kind": "chart_to", "at": 46.0, "dur": LB.SPECIES_DUR_S["chart_to"], "to": "park",
+                    "scale": 0.52, "anchor": "top"}
+    assert LB.chart_to_for(None, "park", 46.0, {"opts": ""}, [])["scale"] == LB.PARK_SCALE
 
 
 def test_a_recipes_members_land_at_their_own_offsets_on_the_windows_clock(tmp_path, monkeypatch, proven):
@@ -564,7 +573,8 @@ def test_a_world_change_inside_a_recipe_is_its_own_row_so_m44_can_measure_it(tmp
     assert [s["kind"] for s in record["segments"]] == ["plate", "page"]
     rows = T.load_rows(tmp_path / "build-lab-cbtc" / LB.short_id("recipe:card-becomes-the-chart")
                        / LB.SHOT_TABLE_NAME)
-    t0, t1 = record["clip"]["t0"], record["clip"]["t1"]
+    # the BEAT's own window - `clip.t0` opens PAST the veil the boundary paints (E47), which is a reading instant
+    t0, t1 = record["beat"]["t0"], record["beat"]["t1"]
     mine = [r for r in rows if t0 - 0.01 <= float(r[0]) and float(r[1]) <= t1 + 0.01]
     assert len(mine) == 2
     plate, page = mine
@@ -586,12 +596,12 @@ def test_one_card_per_offset_and_the_box_is_handed_on(tmp_path, monkeypatch):
     assert rc == 0
     clip = next(r["clip"] for r in records_of(tmp_path / "d.jsonl") if r["recipe"] == "recipe:plate-dock-wipe")
     rows = T.load_rows(tmp_path / "build-lab-d" / LB.short_id("recipe:plate-dock-wipe") / LB.SHOT_TABLE_NAME)
-    row = next(r for r in rows if abs(float(r[0]) - clip["t0"]) < 0.01)
+    row = next(r for r in rows if abs(float(r[0]) - clip["t0"]) < 0.5)
     assert len(row[4]) == 1 and row[5] == "wipe_right"
     runs = tmp_path / "d.jsonl"
     clip = next(r["clip"] for r in records_of(runs) if r["recipe"] == "recipe:read-park-build-write")
     rows = T.load_rows(tmp_path / "build-lab-d" / LB.short_id("recipe:read-park-build-write") / LB.SHOT_TABLE_NAME)
-    row = next(r for r in rows if abs(float(r[0]) - clip["t0"]) < 0.01)
+    row = next(r for r in rows if abs(float(r[0]) - clip["t0"]) < 0.5)
     assert len(row[4]) == 2
     assert row[4][0][0] != row[4][1][0], "a second READ is a second card, never the same asset docked twice"
     assert abs(float(row[4][0][3]) - float(row[4][1][2])) < 0.01, "the box is handed on"
@@ -731,17 +741,13 @@ def test_a_thrown_page_sized_card_that_goes_nowhere_is_named(tmp_path):
     assert LB.throw_notes([small, floats], 0.0, 11.12) == [], "a hand-sized prop is not a page"
 
 
-def test_a_member_todays_clocks_drop_is_not_a_bed_that_lacks_it(tmp_path, monkeypatch):
-    """`badge-ladder`'s rails are dropped by R26-171 (13 stage px at 9:16) - that is TODAY'S CLOCK refusing a
-    member, not a bind the bed has not got, so the candidate is still buildable and the record says so."""
-    rc, runs = recipes(tmp_path, monkeypatch, ["recipe:badge-ladder"], batch="bl")
-    assert rc == 0
-    record = records_of(runs)[0]
-    assert not record["diagnosis"].startswith(LB.DIAG_NOT_ON_BED)
-    assert record["survivor"] is True
-    # ... and the WALK missing the member it dropped does not turn a clock into a bed either (batch reproof-r2)
+def test_a_member_todays_clocks_drop_is_not_a_bed_that_lacks_it(monkeypatch):
+    """A member TODAY'S CLOCKS refuse is not a bind the bed has not got: the candidate around it still builds, and
+    the walk missing that member does not turn a clock into a bed either. (R26-171 and R26-172, the two clock drops
+    this table used to carry, were amended and withdrawn on 2026-09-17; the rule outlives its examples.)"""
+    monkeypatch.setitem(LB.MEMBER_DROPS, "species:relight", "a clock refuses it, the bed has it")
     walked = {"clip": {"t0": 38.96}, "decided_by": [],
-              "fires": {"count": 0, "why": "chart_to:park never fired inside 38.96-45.05s - the member is not "
+              "fires": {"count": 0, "why": "species:relight never fired inside 38.96-45.05s - the member is not "
                                            "on the built timeline at all"}}
     assert LB.missing_member(walked) is None
     assert LB.diagnose(walked) == LB.DIAG_AS_IS
@@ -798,16 +804,79 @@ def test_a_page_with_no_landed_card_before_it_says_the_bed_has_not_got_the_membe
     assert record["survivor"] is False
 
 
-def test_a_dip_puts_black_on_the_boundary_so_the_window_opens_after_it():
-    """E47 #1 as the compiler writes it: both halves of the dip reach 1 AT the boundary, so the boundary frame is
-    black. A window that opens there opens on the veil - three of batch-r1's sheets did (2026-09-17)."""
-    dipped = [(30.0, 38.96, "plate-p-viewers-desk", (0, 0, 0), [], "dip", []),
-              (38.96, 45.05, "plate-p-viewers-desk", (0, 0, 0), [], "cut", [])]
-    assert LB.veil_s(dipped, 38.96) == round(LB.GMD.DIP_S / 2, 2)
-    lo, hi = LB.readable_window(dipped, 38.96, 45.05)
-    assert lo == round(38.96 + LB.veil_s(dipped, 38.96), 2) and lo > 38.96 and hi < 45.05
-    cut = [(30.0, 38.96, "plate-p-viewers-desk", (0, 0, 0), [], "cut", [])] + dipped[1:]
-    assert LB.veil_s(cut, 38.96) == 0.0 and LB.readable_window(cut, 38.96, 45.05)[0] == 38.96
+def test_the_veil_belongs_to_the_row_that_begins_at_the_boundary():
+    """E47 in the player's own words: *"a scene reads its OWN exit for the half after its start and the NEXT scene's
+    exit for the half before its end; `exit` names the transition INTO the scene it sits on"*. The first correction
+    read the OUTGOING row and the windows still opened on black (the parent, 2026-09-17), because on this bed it is
+    the incoming row's own default dip (E47: a row with docks dips in) that paints the boundary frame."""
+    rows = [(30.0, 38.96, "plate-p-viewers-desk", (0, 0, 0), [], "cut", []),
+            (38.96, 45.05, "plate-p-viewers-desk", (0, 0, 0), [], "dip", []),
+            (45.05, 50.0, "plate-p-viewers-desk", (0, 0, 0), [], "dip", [])]
+    assert LB.veil_s(rows, 38.96) == round(LB.GMD.DIP_S / 2, 2), "the row that BEGINS there owns the veil"
+    assert LB.veil_s(rows, 30.0) == 0.0, "a row that begins on a cut has no veil"
+    lo, hi = LB.readable_window(rows, 38.96, 45.05)
+    assert lo > 38.96 + LB.GMD.DIP_S / 2 - 0.001 and lo <= 38.96 + LB.GMD.DIP_S / 2 + LB.FRAME_S + 0.001
+    assert hi <= round(45.05 - LB.GMD.DIP_S / 2, 2), "the veil before t1 is the NEXT row's, and it is black too"
+    plain = [rows[0], (38.96, 45.05, "plate-p-viewers-desk", (0, 0, 0), [], "cut", [])]
+    assert LB.veil_s(plain, 38.96) == 0.0 and LB.readable_window(plain, 38.96, 45.05)[0] == 38.96
+
+
+def test_every_windows_first_tile_clears_the_black_threshold_on_the_built_batch():
+    """THE MEASUREMENT, not the derivation (the parent read a black first tile on all eight sheets, 2026-09-17):
+    every record of the re-proof batch carries the MEAN LUMINANCE of the frames its sheet drew, and the first one -
+    the window's own opening frame - is above M32's near-black reading (mean luma < 8)."""
+    path = ROOT / "content/video_engine/effects/lab/batches/reproof-r2.jsonl"
+    if not path.is_file():
+        pytest.skip("the re-proof batch has not been built in this checkout")
+    for rec in [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip()]:
+        luma = (rec.get("sheets") or {}).get("luma") or []
+        assert luma, f"{rec['id']}: the record carries no measured luminance - re-run lab_build.py --batch"
+        assert luma[0] > LB.BLACK_LUMA, (f"{rec['id']}: the window opens on a frame at mean luma {luma[0]} "
+                                         f"(near-black is < {LB.BLACK_LUMA}) - the veil, not the beat")
+
+
+def test_the_parked_page_makes_the_room_the_card_lands_in_on_the_built_batch():
+    """R26-172 WITHDRAWN (2026-09-17): the park IS how a page makes room for a card. On the built batch, no row
+    inside `read-park-build-write`'s own window says a card reads over the page's ink any more - the fault the
+    parent read on the sheet ("the wafer card lands over the plot's lower half")."""
+    path = ROOT / "content/video_engine/effects/lab/batches/reproof-r2.jsonl"
+    if not path.is_file():
+        pytest.skip("the re-proof batch has not been built in this checkout")
+    rec = next((json.loads(l) for l in path.read_text(encoding="utf-8").splitlines()
+                if l.strip() and json.loads(l).get("recipe") == "recipe:read-park-build-write"), None)
+    assert rec, "read-park-build-write is in the re-proof set"
+    over = [r for r in rec["decided_by"] if LB.row_id(r) in ("M25", "M27") and "under" in r or "reads on" in r]
+    assert not over, f"the card is still on the page's ink: {over}"
+    rows = T.load_rows(ROOT / rec["build"] / LB.SHOT_TABLE_NAME)
+    parked = [sp for r in rows for sp in (r[6] or []) if sp.get("kind") == "chart_to" and sp.get("to") == "park"
+              and rec["beat"]["t0"] - 0.01 <= float(sp["at"]) <= rec["beat"]["t1"]]
+    assert parked and parked[0]["scale"] < 1.0 and parked[0]["anchor"] == "top", parked
+
+
+def test_the_badge_ladder_stamps_pill_after_pill_on_the_built_batch():
+    """A LADDER IS A RAIL THAT GROWS (the parent, 2026-09-17: "the sheet shows one static $617 pill for five seconds
+    where the proof cut stamps badge after badge"). The record carries the pills STANDING at each of its member
+    instants, counted off the player's own `.pill.on`, and the ladder's rise is read from that."""
+    path = ROOT / "content/video_engine/effects/lab/batches/reproof-r2.jsonl"
+    if not path.is_file():
+        pytest.skip("the re-proof batch has not been built in this checkout")
+    rec = next((json.loads(l) for l in path.read_text(encoding="utf-8").splitlines()
+                if l.strip() and json.loads(l).get("recipe") == "recipe:badge-ladder"), None)
+    assert rec, "the badge ladder is in the re-proof set"
+    sheets = rec.get("sheets") or {}
+    pills = sheets.get("pills") or []
+    rail = [n for n in pills if n]
+    assert rail == sorted(rail) and len(set(rail)) >= 3 and max(rail) >= 3, \
+        f"the rail has to GROW across the ladder's own stamps, and it reads {pills}"
+    # ... and A RAIL IS NEVER UNDER THE CAPTIONS: what the frame PAINTS is the claim, so both boxes are read by
+    # HIDING the element and diffing the frame - never off the DOM, which put this bed's portrait card's pills at
+    # y 2020-2107 of a 1920 stage while they painted nothing at all (2026-09-17)
+    boxes, caps = sheets.get("rail_boxes") or [], sheets.get("caption_boxes") or []
+    assert len([b for b in boxes if b]) >= 3, f"the standing pills paint nothing on the frame: {boxes}"
+    assert all(o == 0 for o in sheets.get("rail_over_caption") or [1]), (
+        f"the caption strip covers the rail: {sheets.get('rail_over_caption')}")
+    for b, cap in zip(boxes, caps):
+        assert not (b and cap) or b[3] <= cap[1], f"a pill's box {b} runs into the caption band {cap}"
 
 
 def test_the_instants_are_the_members_own_landings_inside_the_window():
@@ -896,7 +965,7 @@ def test_the_whole_table_mode_builds_the_generated_base_and_writes_neither_appro
     assert approved_pair() == before, ("the project's sound/SOUND-PLAN.json and SHOT-TABLE-SHORT.py are the APPROVED "
                                        "cut's - `build_short.main` writes both, so it is never called")
     record = assert_the_base_built(BASE_TABLE, into, runs, "p66-base-t")
-    assert record["rows"] == 5, "the P66 base is five rows (T4's evidence)"
+    assert record["rows"] == 6, "the P66 base is six rows since the fourth pass (the hook's world row under the mount, cc16776)"
 
 
 def test_the_whole_table_mode_takes_any_whole_table_and_leaves_the_approved_pair(tmp_path, monkeypatch):
