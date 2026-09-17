@@ -238,7 +238,9 @@ def compiled_with(build: Path, sidecar: dict | None, dest: Path, log=print) -> P
     import build_render_f as R
     import render_baseline as RB
     R.STAMPED.update(block.get("stamped") or {})
-    fields = {k: v for k, v in block.items() if k not in ("episode_dir", "stamped")}
+    # the manifest's block also carries WHICH receipt the cut compiled under (P67 T2, `T.RECEIPT_KEY`); it is
+    # not a compiler argument - a recompile of the same build dir carries its block through `recall_receipt_block`
+    fields = {k: v for k, v in block.items() if k not in ("episode_dir", "stamped", T.RECEIPT_KEY)}
     fields["kinetics"] = dict(fields.get("kinetics") or {})
     keep_sidecar, keep_split = T.apply_sidecar, RB.write_split
     T.apply_sidecar = lambda *_a, **_k: []
